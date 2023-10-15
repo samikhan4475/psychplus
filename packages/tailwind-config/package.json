@@ -1,0 +1,15 @@
+{
+  "name": "@psychplus/tailwind-config",
+  "version": "0.1.0",
+  "private": true,
+  "exports": {
+    ".": "./index.ts",
+    "./postcss": "./postcss.js"
+  },
+  "scripts": {
+    "clean": "rimraf .turbo node_modules"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.3.3"
+  }
+}
