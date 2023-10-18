@@ -21,6 +21,8 @@
     }
   },
   "globalEnv": [
+    "APP_NAME",
+    "NODE_ENV",
     "PORT",
     "SPEED",
     "API_URL",

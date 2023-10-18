@@ -27,6 +27,37 @@ importers:
         specifier: ^1.10.15
         version: 1.10.15
 
+  packages/api:
+    dependencies:
+      '@psychplus/auth':
+        specifier: ^0.1.0
+        version: link:../auth
+      next:
+        specifier: ^13.5.5
+        version: 13.5.5(@babel/core@7.23.2)(react-dom@18.2.0)(react@18.2.0)
+      react:
+        specifier: ^18.2.0
+        version: 18.2.0
+    devDependencies:
+      '@psychplus/eslint-config':
+        specifier: ^0.1.0
+        version: link:../../tooling/eslint-config
+      '@psychplus/tsconfig':
+        specifier: ^0.1.0
+        version: link:../../tooling/tsconfig
+      '@psychplus/types':
+        specifier: ^0.1.0
+        version: link:../types
+      '@types/react':
+        specifier: ^18.2.25
+        version: 18.2.25
+      eslint:
+        specifier: ^8.50.0
+        version: 8.51.0
+      typescript:
+        specifier: ^5.2.2
+        version: 5.2.2
+
   packages/auth:
     dependencies:
       next:
