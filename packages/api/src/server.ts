@@ -1,5 +1,4 @@
 import { cache } from 'react'
-import getConfig from 'next/config'
 import { headers as nextHeaders } from 'next/headers'
 import type {
   Patient,
@@ -8,8 +7,6 @@ import type {
   User,
 } from '@psychplus/types'
 import { getAuthToken } from '@psychplus/auth'
-
-const { publicRuntimeConfig } = getConfig()
 
 const API_URL = process.env.API_URL
 
@@ -21,8 +18,11 @@ const createHeaders = (params: TokenParams) => {
   headers.set('Authorization', `Bearer ${params.token ?? getAuthToken()}`)
 
   // Set required PsychPlus headers.
-  headers.set('PsychPlus-Application', `${process.env.APP_NAME ?? ''}`)
-  headers.set('PsychPlus-AppVersion', `${publicRuntimeConfig?.version ?? ''}`)
+  headers.set('PsychPlus-Application', `${process.env.APP_CODE ?? ''}`)
+  headers.set(
+    'PsychPlus-AppVersion',
+    `${process.env.npm_package_version ?? ''}`,
+  )
   headers.set('PsychPlus-RunEnvironment', `${process.env.NODE_ENV ?? ''}`)
   headers.set('PsychPlus-Device', `${nextHeaders().get('user-agent') ?? ''}`)
 

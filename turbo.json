@@ -21,7 +21,8 @@
     }
   },
   "globalEnv": [
-    "APP_NAME",
+    "npm_package_version",
+    "APP_CODE",
     "NODE_ENV",
     "PORT",
     "SPEED",
