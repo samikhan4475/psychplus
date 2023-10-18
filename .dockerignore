@@ -1,5 +1,11 @@
+.editorconfig
+.npmrc
+.env
+.github
+
 **/node_modules
 **/npm-debug.log
+**/dist
 **/out
 **/umd
 **/.turbo

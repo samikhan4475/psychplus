@@ -1,0 +1,64 @@
+version: "3"
+
+services:
+  api:
+    container_name: api
+    build:
+      context: .
+      dockerfile: ./apps/api/Dockerfile
+    ports:
+      - 8080:80
+    networks:
+      - psychplus
+  platform:
+    container_name: platform
+    build:
+      context: .
+      dockerfile: ./apps/platform/Dockerfile
+    environment:
+      - KRAKEN_URL=http://localhost:3002
+      - HYDRA_URL=http://localhost:3003
+      - LOGIN_ENDPOINT=http://api:80/api/login
+    ports:
+      - 3000:80
+    networks:
+      - psychplus
+  ehr:
+    container_name: ehr
+    build:
+      context: .
+      dockerfile: ./apps/ehr/Dockerfile
+    environment:
+      - API_URL=http://api:80
+      - KRAKEN_URL=http://localhost:3002
+      - HYDRA_URL=http://localhost:3003
+      - LOGIN_ENDPOINT=http://api:80/api/login
+    ports:
+      - 3001:80
+    networks:
+      - psychplus
+  kraken:
+    container_name: kraken
+    build:
+      context: .
+      dockerfile: ./apps/kraken/Dockerfile
+    environment:
+      - API_URL=http://api:80
+    ports:
+      - 3002:80
+    networks:
+      - psychplus
+  hydra:
+    container_name: hydra
+    build:
+      context: .
+      dockerfile: ./apps/hydra/Dockerfile
+    environment:
+      - API_URL=http://api:80
+    ports:
+      - 3003:80
+    networks:
+      - psychplus
+
+networks:
+  psychplus:

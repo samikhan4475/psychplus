@@ -1,0 +1,21 @@
+{
+  "name": "@psychplus/auth",
+  "version": "0.1.0",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "clean": "rimraf .turbo *.tsbuildinfo node_modules",
+    "lint": "tsc --noEmit && eslint \"src/**/*.ts*\"",
+    "lint:fix": "tsc --noEmit && eslint --fix \"src/**/*.ts*\""
+  },
+  "dependencies": {
+    "next": "^13.5.5"
+  },
+  "devDependencies": {
+    "@psychplus/eslint-config": "^0.1.0",
+    "@psychplus/tsconfig": "^0.1.0",
+    "eslint": "^8.50.0",
+    "typescript": "^5.2.2"
+  }
+}
