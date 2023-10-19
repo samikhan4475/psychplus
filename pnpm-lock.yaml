@@ -79,6 +79,108 @@ importers:
 
   packages/components:
     dependencies:
+      '@psychplus/api':
+        specifier: ^0.1.0
+        version: link:../api
+      '@psychplus/ui':
+        specifier: ^0.1.0
+        version: link:../ui
+      '@radix-ui/themes':
+        specifier: ^2.0.0
+        version: 2.0.0(@types/react@18.2.25)(react-dom@18.2.0)(react@18.2.0)
+      lucide-react:
+        specifier: ^0.288.0
+        version: 0.288.0(react@18.2.0)
+      next:
+        specifier: ^13.5.5
+        version: 13.5.5(@babel/core@7.23.2)(react-dom@18.2.0)(react@18.2.0)
+      react:
+        specifier: ^18.2.0
+        version: 18.2.0
+    devDependencies:
+      '@psychplus/eslint-config':
+        specifier: ^0.1.0
+        version: link:../../tooling/eslint-config
+      '@psychplus/tsconfig':
+        specifier: ^0.1.0
+        version: link:../../tooling/tsconfig
+      '@types/react':
+        specifier: ^18.2.25
+        version: 18.2.25
+      eslint:
+        specifier: ^8.50.0
+        version: 8.51.0
+      typescript:
+        specifier: ^5.2.2
+        version: 5.2.2
+
+  packages/middleware:
+    dependencies:
+      '@psychplus/auth':
+        specifier: ^0.1.0
+        version: link:../auth
+      next:
+        specifier: ^13.5.5
+        version: 13.5.5(@babel/core@7.23.2)(react-dom@18.2.0)(react@18.2.0)
+    devDependencies:
+      '@psychplus/eslint-config':
+        specifier: ^0.1.0
+        version: link:../../tooling/eslint-config
+      '@psychplus/tsconfig':
+        specifier: ^0.1.0
+        version: link:../../tooling/tsconfig
+      eslint:
+        specifier: ^8.50.0
+        version: 8.51.0
+      typescript:
+        specifier: ^5.2.2
+        version: 5.2.2
+
+  packages/store:
+    dependencies:
+      react:
+        specifier: ^18.2.0
+        version: 18.2.0
+      zustand:
+        specifier: ^4.4.3
+        version: 4.4.3(@types/react@18.2.25)(react@18.2.0)
+    devDependencies:
+      '@psychplus/eslint-config':
+        specifier: ^0.1.0
+        version: link:../../tooling/eslint-config
+      '@psychplus/tsconfig':
+        specifier: ^0.1.0
+        version: link:../../tooling/tsconfig
+      '@psychplus/types':
+        specifier: ^0.1.0
+        version: link:../types
+      '@types/react':
+        specifier: ^18.2.25
+        version: 18.2.25
+      eslint:
+        specifier: ^8.50.0
+        version: 8.51.0
+      typescript:
+        specifier: ^5.2.2
+        version: 5.2.2
+
+  packages/types:
+    devDependencies:
+      '@psychplus/eslint-config':
+        specifier: ^0.1.0
+        version: link:../../tooling/eslint-config
+      '@psychplus/tsconfig':
+        specifier: ^0.1.0
+        version: link:../../tooling/tsconfig
+      eslint:
+        specifier: ^8.50.0
+        version: 8.51.0
+      typescript:
+        specifier: ^5.2.2
+        version: 5.2.2
+
+  packages/ui:
+    dependencies:
       '@radix-ui/react-alert-dialog':
         specifier: ^1.0.5
         version: 1.0.5(@types/react@18.2.25)(react-dom@18.2.0)(react@18.2.0)
@@ -136,6 +238,9 @@ importers:
       '@tanstack/react-table':
         specifier: ^8.10.4
         version: 8.10.4(react-dom@18.2.0)(react@18.2.0)
+      clsx:
+        specifier: ^2.0.0
+        version: 2.0.0
       cmdk:
         specifier: ^0.2.0
         version: 0.2.0(@types/react@18.2.25)(react-dom@18.2.0)(react@18.2.0)
@@ -143,14 +248,17 @@ importers:
         specifier: ^2.30.0
         version: 2.30.0
       lucide-react:
-        specifier: ^0.255.0
-        version: 0.255.0(react@18.2.0)
+        specifier: ^0.288.0
+        version: 0.288.0(react@18.2.0)
       react:
         specifier: ^18.2.0
         version: 18.2.0
       react-day-picker:
         specifier: ^8.8.2
         version: 8.8.2(date-fns@2.30.0)(react@18.2.0)
+      tailwind-merge:
+        specifier: ^1.14.0
+        version: 1.14.0
     devDependencies:
       '@psychplus/eslint-config':
         specifier: ^0.1.0
@@ -168,14 +276,26 @@ importers:
         specifier: ^5.2.2
         version: 5.2.2
 
-  packages/middleware:
+  packages/widgets:
     dependencies:
+      '@psychplus/api':
+        specifier: ^0.1.0
+        version: link:../api
       '@psychplus/auth':
         specifier: ^0.1.0
         version: link:../auth
-      next:
-        specifier: ^13.5.5
-        version: 13.5.5(@babel/core@7.23.2)(react-dom@18.2.0)(react@18.2.0)
+      '@psychplus/components':
+        specifier: ^0.1.0
+        version: link:../components
+      '@psychplus/store':
+        specifier: ^0.1.0
+        version: link:../store
+      react:
+        specifier: ^18.2.0
+        version: 18.2.0
+      zustand:
+        specifier: ^4.4.3
+        version: 4.4.3(@types/react@18.2.25)(react@18.2.0)
     devDependencies:
       '@psychplus/eslint-config':
         specifier: ^0.1.0
@@ -183,21 +303,12 @@ importers:
       '@psychplus/tsconfig':
         specifier: ^0.1.0
         version: link:../../tooling/tsconfig
-      eslint:
-        specifier: ^8.50.0
-        version: 8.51.0
-      typescript:
-        specifier: ^5.2.2
-        version: 5.2.2
-
-  packages/types:
-    devDependencies:
-      '@psychplus/eslint-config':
+      '@psychplus/types':
         specifier: ^0.1.0
-        version: link:../../tooling/eslint-config
-      '@psychplus/tsconfig':
-        specifier: ^0.1.0
-        version: link:../../tooling/tsconfig
+        version: link:../types
+      '@types/react':
+        specifier: ^18.2.25
+        version: 18.2.25
       eslint:
         specifier: ^8.50.0
         version: 8.51.0
@@ -2746,6 +2857,11 @@ packages:
       mimic-response: 1.0.1
     dev: false
 
+  /clsx@2.0.0:
+    resolution: {integrity: sha512-rQ1+kcj+ttHG0MKVGBUXwayCCF1oh39BF5COIpRzuCEv8Mwjv0XucrI2ExNTOn9IlLifGClWQcU9BrZORvtw6Q==}
+    engines: {node: '>=6'}
+    dev: false
+
   /cmdk@0.2.0(@types/react@18.2.25)(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-JQpKvEOb86SnvMZbYaFKYhvzFntWBeSZdyii0rZPhKJj9uwJBxu4DaVYDrRN7r3mPop56oPhRw+JYWTKs66TYw==}
     peerDependencies:
@@ -4134,8 +4250,8 @@ packages:
     dependencies:
       yallist: 4.0.0
 
-  /lucide-react@0.255.0(react@18.2.0):
-    resolution: {integrity: sha512-BsnpjPy2Dv3nqzZGgb6e/2WFp327Sa5sre5pFTBlAsSmmvOJ9y6tQ2VhgG7+mwaBS+9nYMR3BNaGLasAdCbhbQ==}
+  /lucide-react@0.288.0(react@18.2.0):
+    resolution: {integrity: sha512-ikhb/9LOkq9orPoLV9lLC4UYyoXQycBhIgH7H59ahOkk0mkcAqkD52m84RXedE/qVqZHW8rEJquInT4xGmsNqw==}
     peerDependencies:
       react: ^16.5.1 || ^17.0.0 || ^18.0.0
     dependencies:
@@ -5103,6 +5219,10 @@ packages:
     engines: {node: '>= 0.4'}
     dev: true
 
+  /tailwind-merge@1.14.0:
+    resolution: {integrity: sha512-3mFKyCo/MBcgyOTlrY8T7odzZFx+w+qKSMAmdFzRvqBfLlSigU6TZnlFHK0lkMwj9Bj8OYU+9yW9lmGuS0QEnQ==}
+    dev: false
+
   /tailwindcss@3.3.3:
     resolution: {integrity: sha512-A0KgSkef7eE4Mf+nKJ83i75TMyq8HqY3qmFIJSWy8bNt0v1lG7jUcpGpoTFxAwYcWOphcTBLPPJg+bDfhDf52w==}
     engines: {node: '>=14.0.0'}
@@ -5392,6 +5512,14 @@ packages:
       tslib: 2.6.2
     dev: false
 
+  /use-sync-external-store@1.2.0(react@18.2.0):
+    resolution: {integrity: sha512-eEgnFxGQ1Ife9bzYs6VLi8/4X6CObHMw9Qr9tPY43iKwsPw8xE8+EFsf/2cFZ5S3esXgpWgtSCtLNS41F+sKPA==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0
+    dependencies:
+      react: 18.2.0
+    dev: false
+
   /util-deprecate@1.0.2:
     resolution: {integrity: sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==}
     dev: true
@@ -5513,3 +5641,23 @@ packages:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
     engines: {node: '>=10'}
     dev: true
+
+  /zustand@4.4.3(@types/react@18.2.25)(react@18.2.0):
+    resolution: {integrity: sha512-oRy+X3ZazZvLfmv6viIaQmtLOMeij1noakIsK/Y47PWYhT8glfXzQ4j0YcP5i0P0qI1A4rIB//SGROGyZhx91A==}
+    engines: {node: '>=12.7.0'}
+    peerDependencies:
+      '@types/react': '>=16.8'
+      immer: '>=9.0'
+      react: '>=16.8'
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+      immer:
+        optional: true
+      react:
+        optional: true
+    dependencies:
+      '@types/react': 18.2.25
+      react: 18.2.0
+      use-sync-external-store: 1.2.0(react@18.2.0)
+    dev: false

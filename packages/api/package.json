@@ -1,6 +1,7 @@
 {
   "name": "@psychplus/api",
   "version": "0.1.0",
+  "private": true,
   "exports": {
     "./server": "./src/server.ts",
     "./client": "./src/client.ts"

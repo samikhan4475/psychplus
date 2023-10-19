@@ -14,7 +14,7 @@
       "cache": true
     },
     "lint:fix": {
-      "cache": true
+      "cache": false
     },
     "clean": {
       "cache": false

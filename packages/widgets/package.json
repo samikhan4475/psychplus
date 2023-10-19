@@ -1,18 +1,29 @@
 {
-  "name": "@psychplus/types",
+  "name": "@psychplus/widgets",
   "version": "0.1.0",
   "private": true,
   "exports": {
-    ".": "./src/index.ts"
+    "./client": "./src/client.ts",
+    "./server": "./src/server.ts"
   },
   "scripts": {
     "clean": "rimraf .turbo *.tsbuildinfo node_modules",
     "lint": "tsc --noEmit && eslint \"src/**/*.ts*\"",
     "lint:fix": "tsc --noEmit && eslint --fix \"src/**/*.ts*\""
   },
+  "dependencies": {
+    "@psychplus/api": "^0.1.0",
+    "@psychplus/auth": "^0.1.0",
+    "@psychplus/components": "^0.1.0",
+    "@psychplus/store": "^0.1.0",
+    "react": "^18.2.0",
+    "zustand": "^4.4.3"
+  },
   "devDependencies": {
     "@psychplus/eslint-config": "^0.1.0",
     "@psychplus/tsconfig": "^0.1.0",
+    "@psychplus/types": "^0.1.0",
+    "@types/react": "^18.2.25",
     "eslint": "^8.50.0",
     "typescript": "^5.2.2"
   }
