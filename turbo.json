@@ -25,7 +25,7 @@
     "APP_CODE",
     "NODE_ENV",
     "PORT",
-    "SPEED",
+    "API_DELAY",
     "API_URL",
     "KRAKEN_URL",
     "HYDRA_URL",
