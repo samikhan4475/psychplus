@@ -3,7 +3,7 @@ interface SearchParams {
 }
 
 interface TokenParams {
-  token?: string
+  token: string
 }
 
 interface PatientParams {

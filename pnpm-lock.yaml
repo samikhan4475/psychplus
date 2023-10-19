@@ -145,15 +145,15 @@ importers:
 
   apps/hydra:
     dependencies:
+      '@psychplus/api':
+        specifier: ^0.1.0
+        version: link:../../packages/api
       '@psychplus/components':
         specifier: ^0.1.0
         version: link:../../packages/components
-      '@psychplus/ui':
+      '@psychplus/store':
         specifier: ^0.1.0
-        version: link:../../packages/ui
-      '@psychplus/widgets':
-        specifier: ^0.1.0
-        version: link:../../packages/widgets
+        version: link:../../packages/store
       next:
         specifier: ^13.5.5
         version: 13.5.5(@babel/core@7.23.2)(react-dom@18.2.0)(react@18.2.0)
@@ -163,6 +163,9 @@ importers:
       react-dom:
         specifier: ^18.2.0
         version: 18.2.0(react@18.2.0)
+      zustand:
+        specifier: ^4.4.3
+        version: 4.4.3(@types/react@18.2.25)(react@18.2.0)
     devDependencies:
       '@psychplus/eslint-config':
         specifier: ^0.1.0
@@ -200,15 +203,15 @@ importers:
 
   apps/kraken:
     dependencies:
+      '@psychplus/api':
+        specifier: ^0.1.0
+        version: link:../../packages/api
       '@psychplus/components':
         specifier: ^0.1.0
         version: link:../../packages/components
-      '@psychplus/ui':
+      '@psychplus/store':
         specifier: ^0.1.0
-        version: link:../../packages/ui
-      '@psychplus/widgets':
-        specifier: ^0.1.0
-        version: link:../../packages/widgets
+        version: link:../../packages/store
       next:
         specifier: ^13.5.5
         version: 13.5.5(@babel/core@7.23.2)(react-dom@18.2.0)(react@18.2.0)
@@ -218,6 +221,9 @@ importers:
       react-dom:
         specifier: ^18.2.0
         version: 18.2.0(react@18.2.0)
+      zustand:
+        specifier: ^4.4.3
+        version: 4.4.3(@types/react@18.2.25)(react@18.2.0)
     devDependencies:
       '@psychplus/eslint-config':
         specifier: ^0.1.0

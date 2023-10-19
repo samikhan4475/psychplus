@@ -10,7 +10,7 @@ import { getAuthToken } from '@psychplus/auth'
 
 const API_URL = process.env.API_URL
 
-const createHeaders = (params: TokenParams) => {
+const createHeaders = (params: Partial<TokenParams>) => {
   const headers = new Headers()
 
   // Set Authorization header. By default, the provided token is used if it exists.
@@ -29,7 +29,7 @@ const createHeaders = (params: TokenParams) => {
   return headers
 }
 
-const getUser = async ({ token }: TokenParams): Promise<User> => {
+const getUser = async ({ token }: Partial<TokenParams>): Promise<User> => {
   const response = await fetch(`${API_URL}/api/user`, {
     cache: 'no-store',
     headers: createHeaders({ token }),
@@ -39,13 +39,13 @@ const getUser = async ({ token }: TokenParams): Promise<User> => {
     throw new Error()
   }
 
-  return response.json() as Promise<User>
+  return response.json()
 }
 
 const getPatient = async ({
   token,
   patientId,
-}: TokenParams & PatientParams): Promise<Patient> => {
+}: Partial<TokenParams> & PatientParams): Promise<Patient> => {
   const response = await fetch(`${API_URL}/api/patients/${patientId}`, {
     cache: 'no-store',
     headers: createHeaders({ token }),
@@ -55,7 +55,7 @@ const getPatient = async ({
     throw new Error()
   }
 
-  return response.json() as Promise<Patient>
+  return response.json()
 }
 
 const getUserCached = cache(getUser)

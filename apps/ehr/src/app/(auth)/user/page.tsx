@@ -1,9 +1,8 @@
-import { getAuthToken } from '@psychplus/auth'
-import { UserWidgetPortal } from '@psychplus/widgets/client'
+import { UserWidget } from '@psychplus/widgets'
 
 const UserPage = () => (
   <div className="h-[400px]">
-    <UserWidgetPortal token={getAuthToken()} />
+    <UserWidget />
   </div>
 )
 
