@@ -1,8 +1,7 @@
+import { REVCYCLE_URL } from '@psychplus/env'
 import type { PatientParams } from '@psychplus/types'
 import { getAuthToken } from '@psychplus/auth'
 import { PortalContainer } from '@psychplus/components'
-
-const HYDRA_URL = process.env.HYDRA_URL
 
 type Props = PatientParams
 
@@ -21,7 +20,7 @@ const PatientWidget = (props: Props) => {
 
   return (
     <PortalContainer
-      src={`${HYDRA_URL}/widgets/patient?${params.toString()}`}
+      src={`${REVCYCLE_URL}/widgets/patient?${params.toString()}`}
     />
   )
 }

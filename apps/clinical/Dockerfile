@@ -8,7 +8,7 @@ WORKDIR /app
 
 RUN yarn global add turbo@1.10.6
 COPY . .
-RUN turbo prune --scope=@psychplus/hydra --docker
+RUN turbo prune --scope=@psychplus/clinical --docker
 
 # Install dependencies
 FROM base AS builder
@@ -34,7 +34,7 @@ COPY --from=pruner /app/turbo.json turbo.json
 # ARG TURBO_TOKEN
 # ENV TURBO_TOKEN=$TURBO_TOKEN
 
-RUN yarn turbo run build --filter=@psychplus/hydra...
+RUN yarn turbo run build --filter=@psychplus/clinical...
 
 FROM base AS runner
 WORKDIR /app
@@ -44,18 +44,18 @@ RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 USER nextjs
 
-COPY --from=builder /app/apps/hydra/next.config.js .
-COPY --from=builder /app/apps/hydra/package.json .
+COPY --from=builder /app/apps/clinical/next.config.js .
+COPY --from=builder /app/apps/clinical/package.json .
 
 # Automatically leverage output traces to reduce image size
 # https://nextjs.org/docs/advanced-features/output-file-tracing
-COPY --from=builder --chown=nextjs:nodejs /app/apps/hydra/.next/standalone ./
-COPY --from=builder --chown=nextjs:nodejs /app/apps/hydra/.next/static ./apps/hydra/.next/static
-COPY --from=builder --chown=nextjs:nodejs /app/apps/hydra/public ./apps/hydra/public
+COPY --from=builder --chown=nextjs:nodejs /app/apps/clinical/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/apps/clinical/.next/static ./apps/clinical/.next/static
+COPY --from=builder --chown=nextjs:nodejs /app/apps/clinical/public ./apps/clinical/public
 
 EXPOSE 80
 ENV PORT 80
 
-ENV APP_CODE p+hydra-ui
+ENV APP_CODE p+clinical-ui
 
-CMD ["node", "apps/hydra/server.js"]
+CMD ["node", "apps/clinical/server.js"]

@@ -27,8 +27,8 @@
     "PORT",
     "API_DELAY",
     "API_URL",
-    "KRAKEN_URL",
-    "HYDRA_URL",
+    "CLINICAL_URL",
+    "REVCYCLE_URL",
     "LOGIN_ENDPOINT"
   ]
 }

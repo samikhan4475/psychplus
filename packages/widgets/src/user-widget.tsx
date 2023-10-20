@@ -1,7 +1,6 @@
+import { CLINICAL_URL } from '@psychplus/env'
 import { getAuthToken } from '@psychplus/auth'
 import { PortalContainer } from '@psychplus/components'
-
-const KRAKEN_URL = process.env.KRAKEN_URL
 
 const UserWidget = () => {
   const params = new URLSearchParams()
@@ -13,7 +12,9 @@ const UserWidget = () => {
   }
 
   return (
-    <PortalContainer src={`${KRAKEN_URL}/widgets/user?${params.toString()}`} />
+    <PortalContainer
+      src={`${CLINICAL_URL}/widgets/user?${params.toString()}`}
+    />
   )
 }
 

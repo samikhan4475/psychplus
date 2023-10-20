@@ -16,8 +16,8 @@ services:
       context: .
       dockerfile: ./apps/platform/Dockerfile
     environment:
-      - KRAKEN_URL=http://localhost:3002
-      - HYDRA_URL=http://localhost:3003
+      - CLINICAL_URL=http://localhost:3002
+      - REVCYCLE_URL=http://localhost:3003
       - LOGIN_ENDPOINT=http://api:80/api/login
     ports:
       - 3000:80
@@ -30,29 +30,29 @@ services:
       dockerfile: ./apps/ehr/Dockerfile
     environment:
       - API_URL=http://api:80
-      - KRAKEN_URL=http://localhost:3002
-      - HYDRA_URL=http://localhost:3003
+      - CLINICAL_URL=http://localhost:3002
+      - REVCYCLE_URL=http://localhost:3003
       - LOGIN_ENDPOINT=http://api:80/api/login
     ports:
       - 3001:80
     networks:
       - psychplus
-  kraken:
-    container_name: kraken
+  clinical:
+    container_name: clinical
     build:
       context: .
-      dockerfile: ./apps/kraken/Dockerfile
+      dockerfile: ./apps/clinical/Dockerfile
     environment:
       - API_URL=http://api:80
     ports:
       - 3002:80
     networks:
       - psychplus
-  hydra:
-    container_name: hydra
+  revcycle:
+    container_name: revcycle
     build:
       context: .
-      dockerfile: ./apps/hydra/Dockerfile
+      dockerfile: ./apps/revcycle/Dockerfile
     environment:
       - API_URL=http://api:80
     ports:

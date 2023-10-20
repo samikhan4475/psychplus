@@ -1,8 +1,8 @@
 'use client'
 
 import { useSearchParams } from 'next/navigation'
-import { Button } from '@psychplus/ui/button'
 import * as api from '@psychplus/api/client'
+import { Button } from '@psychplus/ui/button'
 
 const LoginPage = () => {
   const searchParams = useSearchParams()

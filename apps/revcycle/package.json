@@ -1,11 +1,11 @@
 {
-  "name": "@psychplus/hydra",
+  "name": "@psychplus/revcycle",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "build": "next build",
     "clean": "rimraf .next .turbo *.tsbuildinfo node_modules",
-    "dev": "APP_CODE=p+hydra-ui next dev -p 3003",
+    "dev": "APP_CODE=p+revcycle-ui next dev -p 3003",
     "lint:next": "next lint",
     "lint": "tsc --noEmit && eslint \"src/**/*.ts*\"",
     "lint:fix": "tsc --noEmit && eslint --fix \"src/**/*.ts*\""

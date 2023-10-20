@@ -1,5 +1,6 @@
 import { cache } from 'react'
 import { headers as nextHeaders } from 'next/headers'
+import { API_URL } from '@psychplus/env'
 import type {
   Patient,
   PatientParams,
@@ -7,8 +8,6 @@ import type {
   User,
 } from '@psychplus/types'
 import { getAuthToken } from '@psychplus/auth'
-
-const API_URL = process.env.API_URL
 
 const createHeaders = (params: Partial<TokenParams>) => {
   const headers = new Headers()

@@ -8,7 +8,7 @@ WORKDIR /app
 
 RUN yarn global add turbo@1.10.6
 COPY . .
-RUN turbo prune --scope=@psychplus/kraken --docker
+RUN turbo prune --scope=@psychplus/revcycle --docker
 
 # Install dependencies
 FROM base AS builder
@@ -34,7 +34,7 @@ COPY --from=pruner /app/turbo.json turbo.json
 # ARG TURBO_TOKEN
 # ENV TURBO_TOKEN=$TURBO_TOKEN
 
-RUN yarn turbo run build --filter=@psychplus/kraken...
+RUN yarn turbo run build --filter=@psychplus/revcycle...
 
 FROM base AS runner
 WORKDIR /app
@@ -44,18 +44,18 @@ RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 USER nextjs
 
-COPY --from=builder /app/apps/kraken/next.config.js .
-COPY --from=builder /app/apps/kraken/package.json .
+COPY --from=builder /app/apps/revcycle/next.config.js .
+COPY --from=builder /app/apps/revcycle/package.json .
 
 # Automatically leverage output traces to reduce image size
 # https://nextjs.org/docs/advanced-features/output-file-tracing
-COPY --from=builder --chown=nextjs:nodejs /app/apps/kraken/.next/standalone ./
-COPY --from=builder --chown=nextjs:nodejs /app/apps/kraken/.next/static ./apps/kraken/.next/static
-COPY --from=builder --chown=nextjs:nodejs /app/apps/kraken/public ./apps/kraken/public
+COPY --from=builder --chown=nextjs:nodejs /app/apps/revcycle/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/apps/revcycle/.next/static ./apps/revcycle/.next/static
+COPY --from=builder --chown=nextjs:nodejs /app/apps/revcycle/public ./apps/revcycle/public
 
 EXPOSE 80
 ENV PORT 80
 
-ENV APP_CODE p+kraken-ui
+ENV APP_CODE p+revcycle-ui
 
-CMD ["node", "apps/kraken/server.js"]
+CMD ["node", "apps/revcycle/server.js"]

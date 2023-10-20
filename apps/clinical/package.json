@@ -1,11 +1,11 @@
 {
-  "name": "@psychplus/kraken",
+  "name": "@psychplus/clinical",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "build": "next build",
     "clean": "rimraf .next .turbo *.tsbuildinfo node_modules",
-    "dev": "APP_CODE=p+kraken-ui next dev -p 3002",
+    "dev": "APP_CODE=p+clinical-ui next dev -p 3002",
     "lint:next": "next lint",
     "lint": "tsc --noEmit && eslint \"src/**/*.ts*\"",
     "lint:fix": "tsc --noEmit && eslint --fix \"src/**/*.ts*\""
