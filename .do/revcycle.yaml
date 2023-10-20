@@ -17,7 +17,7 @@ services:
   envs:
   - key: API_URL
     scope: RUN_AND_BUILD_TIME
-    value: https://api-yqhtw.ondigitalocean.app
+    value: https://api-f4p62.ondigitalocean.app
   github:
     branch: main
     deploy_on_push: false

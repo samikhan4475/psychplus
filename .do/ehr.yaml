@@ -23,10 +23,10 @@ services:
     value: https://api-yqhtw.ondigitalocean.app/api/login
   - key: CLINICAL_URL
     scope: RUN_AND_BUILD_TIME
-    value: https://clinical-7p4f2.ondigitalocean.app
+    value: https://clinical-cemcf.ondigitalocean.app
   - key: REVCYCLE_URL
     scope: RUN_AND_BUILD_TIME
-    value: https://revcycle-fm7vj.ondigitalocean.app
+    value: https://revcycle-bmuz3.ondigitalocean.app
   github:
     branch: main
     deploy_on_push: false
