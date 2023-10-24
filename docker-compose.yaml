@@ -16,11 +16,11 @@ services:
       context: .
       dockerfile: ./apps/platform/Dockerfile
     environment:
-      - CLINICAL_URL=http://localhost:3002
-      - REVCYCLE_URL=http://localhost:3003
+      - CLINICAL_URL=http://localhost:8000
+      - REVCYCLE_URL=http://localhost:8001
       - LOGIN_ENDPOINT=http://api:80/api/login
     ports:
-      - 3000:80
+      - 4000:80
     networks:
       - psychplus
   ehr:
@@ -30,8 +30,20 @@ services:
       dockerfile: ./apps/ehr/Dockerfile
     environment:
       - API_URL=http://api:80
-      - CLINICAL_URL=http://localhost:3002
-      - REVCYCLE_URL=http://localhost:3003
+      - CLINICAL_URL=http://localhost:8000
+      - REVCYCLE_URL=http://localhost:8001
+      - LOGIN_ENDPOINT=http://api:80/api/login
+    ports:
+      - 3000:80
+    networks:
+      - psychplus
+  patient:
+    container_name: patient
+    build:
+      context: .
+      dockerfile: ./apps/patient/Dockerfile
+    environment:
+      - API_URL=http://api:80
       - LOGIN_ENDPOINT=http://api:80/api/login
     ports:
       - 3001:80
@@ -45,7 +57,7 @@ services:
     environment:
       - API_URL=http://api:80
     ports:
-      - 3002:80
+      - 8000:80
     networks:
       - psychplus
   revcycle:
@@ -56,7 +68,7 @@ services:
     environment:
       - API_URL=http://api:80
     ports:
-      - 3003:80
+      - 8001:80
     networks:
       - psychplus
 

@@ -9,3 +9,9 @@
   @tailwind components;
   @tailwind utilities;
 }
+
+@layer base {
+  html, body {
+    height: 100%;
+  }  
+}
