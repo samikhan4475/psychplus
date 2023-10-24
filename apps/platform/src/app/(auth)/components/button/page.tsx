@@ -12,9 +12,7 @@ const ButtonComponentPage = () => (
     <PageHeader title={TITLE} description={DESCRIPTION} />
 
     <Box mb="7">
-      <Flex align="center" gap="3">
-        <Button>Edit profile</Button>
-      </Flex>
+      <Button>Edit profile</Button>
     </Box>
 
     <Box mb="7">
@@ -47,6 +45,7 @@ const ButtonComponentPage = () => (
         </Button>
       </Flex>
     </Box>
+
     <Box mb="7">
       <Box mb="3">
         <Heading size="5">High-contrast</Heading>
@@ -111,12 +110,17 @@ const ButtonComponentPage = () => (
       <Box mb="3">
         <Heading size="5">Icon</Heading>
       </Box>
-      <Flex gap="3">
-        <Button variant="soft">
-          <PencilIcon size="16" />
-          Edit profile
-        </Button>
-      </Flex>
+      <Button variant="soft">
+        <PencilIcon size="16" />
+        Edit profile
+      </Button>
+    </Box>
+
+    <Box mb="7">
+      <Box mb="3">
+        <Heading size="5">Disabled</Heading>
+      </Box>
+      <Button disabled>Edit profile</Button>
     </Box>
   </>
 )

@@ -22,6 +22,14 @@ const navMenuItems: MenuItem[] = [
     label: 'Select',
     href: '/components/select',
   },
+  {
+    label: 'Text Area',
+    href: '/components/text-area',
+  },
+  {
+    label: 'Text Field',
+    href: '/components/text-field',
+  },
 ]
 
 const ComponentsLayout = ({ children }: { children: React.ReactNode }) => (

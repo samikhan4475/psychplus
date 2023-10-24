@@ -263,6 +263,25 @@ const DropdownMenuComponentPage = () => (
         </DropdownMenu.Root>
       </Grid>
     </Box>
+
+    <Box mb="7">
+      <Box mb="3">
+        <Heading size="5">Disabled</Heading>
+      </Box>
+      <Flex gap="3" align="center">
+        <DropdownMenu.Root>
+          <DropdownMenu.Trigger disabled>
+            <Button>
+              Options
+              <CaretDownIcon width="16" height="16" />
+            </Button>
+          </DropdownMenu.Trigger>
+          <DropdownMenu.Content size="2">
+            <DropdownMenu.Item shortcut="⌘ E">Edit</DropdownMenu.Item>
+          </DropdownMenu.Content>
+        </DropdownMenu.Root>
+      </Flex>
+    </Box>
   </>
 )
 
