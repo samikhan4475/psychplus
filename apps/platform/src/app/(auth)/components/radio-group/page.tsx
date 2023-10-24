@@ -2,7 +2,6 @@
 
 import { Box, Flex, Grid, Heading, Text } from '@radix-ui/themes'
 import { RadioGroup } from '@psychplus/ui/radio-group'
-import { Switch } from '@psychplus/ui/switch'
 import { PageHeader } from '../../shared/page-header'
 
 const TITLE = 'Radio Group'

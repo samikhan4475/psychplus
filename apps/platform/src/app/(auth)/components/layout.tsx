@@ -31,6 +31,10 @@ const navMenuItems: MenuItem[] = [
     href: '/components/switch',
   },
   {
+    label: 'Table',
+    href: '/components/table',
+  },
+  {
     label: 'Text Area',
     href: '/components/text-area',
   },
