@@ -1,4 +1,3 @@
-import '@radix-ui/themes/styles.css'
 import './base.css'
 import { Theme, ThemePanel } from '@radix-ui/themes'
 

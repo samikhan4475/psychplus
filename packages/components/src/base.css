@@ -1,10 +1,11 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@layer tw_base, tw_components_utils;
+@import "@radix-ui/themes/styles.css";
 
-@layer base {
-  html,
-  body {
-    height: 100%;
-  }
+@layer tw_base {
+  @tailwind base;
+}
+
+@layer tw_components_utils {
+  @tailwind components;
+  @tailwind utilities;
 }

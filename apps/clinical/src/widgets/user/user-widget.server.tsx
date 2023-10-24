@@ -7,10 +7,6 @@ import { UserWidgetClient } from './user-widget.client'
 type UserWidgetProps = TokenParams
 
 const UserWidgetServer = async ({ token }: UserWidgetProps) => {
-  if (!token) {
-    return <div>Token is required</div>
-  }
-
   const user = await api.getUser({ token })
 
   return (
