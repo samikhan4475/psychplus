@@ -1,6 +1,6 @@
 'use client'
 
-import { Box, Flex, Heading, Text } from '@radix-ui/themes'
+import { Box, Flex, Text } from '@radix-ui/themes'
 import { Button } from '@psychplus/ui/button'
 import { Dialog } from '@psychplus/ui/dialog'
 import { TextField } from '@psychplus/ui/text-field'

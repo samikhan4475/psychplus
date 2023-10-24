@@ -18,6 +18,10 @@ const navMenuItems: MenuItem[] = [
     label: 'Dropdown Menu',
     href: '/components/dropdown-menu',
   },
+  {
+    label: 'Select',
+    href: '/components/select',
+  },
 ]
 
 const ComponentsLayout = ({ children }: { children: React.ReactNode }) => (
