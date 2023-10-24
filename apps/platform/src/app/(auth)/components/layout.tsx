@@ -23,6 +23,10 @@ const navMenuItems: MenuItem[] = [
     href: '/components/select',
   },
   {
+    label: 'Switch',
+    href: '/components/switch',
+  },
+  {
     label: 'Text Area',
     href: '/components/text-area',
   },

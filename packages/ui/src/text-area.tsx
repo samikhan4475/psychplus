@@ -1,3 +1,3 @@
-import { TextArea } from "@radix-ui/themes";
+import { TextArea } from '@radix-ui/themes'
 
 export { TextArea }
