@@ -1,6 +1,6 @@
 import { Box, Heading, Text } from '@radix-ui/themes'
 
-const SectionHeader = ({
+const PageHeader = ({
   title,
   description,
 }: {
@@ -15,4 +15,4 @@ const SectionHeader = ({
   </Box>
 )
 
-export { SectionHeader }
+export { PageHeader }

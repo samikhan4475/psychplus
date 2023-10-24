@@ -4,19 +4,16 @@ import { CaretDownIcon } from '@radix-ui/react-icons'
 import { Box, Flex, Grid, Heading } from '@radix-ui/themes'
 import { Button } from '@psychplus/ui/button'
 import { DropdownMenu } from '@psychplus/ui/dropdown-menu'
-import { SectionHeader } from '../../shared/section-header'
+import { PageHeader } from '../../shared/page-header'
 
 const TITLE = 'Dropdown Menu'
 const DESCRIPTION = 'Menu representing a set of actions, triggered by a button.'
 
 const DropdownMenuComponentPage = () => (
   <>
-    <SectionHeader title={TITLE} description={DESCRIPTION} />
+    <PageHeader title={TITLE} description={DESCRIPTION} />
 
     <Box mb="7">
-      <Box mb="3">
-        <Heading size="5">Default</Heading>
-      </Box>
       <Flex align="center" gap="3">
         <DropdownMenu.Root>
           <DropdownMenu.Trigger>
@@ -30,18 +27,15 @@ const DropdownMenuComponentPage = () => (
             <DropdownMenu.Item shortcut="⌘ D">Duplicate</DropdownMenu.Item>
             <DropdownMenu.Separator />
             <DropdownMenu.Item shortcut="⌘ N">Archive</DropdownMenu.Item>
-
             <DropdownMenu.Sub>
               <DropdownMenu.SubTrigger>More</DropdownMenu.SubTrigger>
               <DropdownMenu.SubContent>
                 <DropdownMenu.Item>Move to project…</DropdownMenu.Item>
                 <DropdownMenu.Item>Move to folder…</DropdownMenu.Item>
-
                 <DropdownMenu.Separator />
                 <DropdownMenu.Item>Advanced options…</DropdownMenu.Item>
               </DropdownMenu.SubContent>
             </DropdownMenu.Sub>
-
             <DropdownMenu.Separator />
             <DropdownMenu.Item>Share</DropdownMenu.Item>
             <DropdownMenu.Item>Add to favorites</DropdownMenu.Item>
@@ -56,7 +50,7 @@ const DropdownMenuComponentPage = () => (
 
     <Box mb="7">
       <Box mb="3">
-        <Heading size="5">Sizes</Heading>
+        <Heading size="5">Size</Heading>
       </Box>
       <Flex gap="3" align="center">
         <DropdownMenu.Root>
@@ -71,14 +65,12 @@ const DropdownMenuComponentPage = () => (
             <DropdownMenu.Item shortcut="⌘ D">Duplicate</DropdownMenu.Item>
             <DropdownMenu.Separator />
             <DropdownMenu.Item shortcut="⌘ N">Archive</DropdownMenu.Item>
-
             <DropdownMenu.Separator />
             <DropdownMenu.Item shortcut="⌘ ⌫" color="red">
               Delete
             </DropdownMenu.Item>
           </DropdownMenu.Content>
         </DropdownMenu.Root>
-
         <DropdownMenu.Root>
           <DropdownMenu.Trigger>
             <Button variant="soft" size="1">
@@ -91,7 +83,6 @@ const DropdownMenuComponentPage = () => (
             <DropdownMenu.Item shortcut="⌘ D">Duplicate</DropdownMenu.Item>
             <DropdownMenu.Separator />
             <DropdownMenu.Item shortcut="⌘ N">Archive</DropdownMenu.Item>
-
             <DropdownMenu.Separator />
             <DropdownMenu.Item shortcut="⌘ ⌫" color="red">
               Delete
@@ -103,7 +94,7 @@ const DropdownMenuComponentPage = () => (
 
     <Box mb="7">
       <Box mb="3">
-        <Heading size="5">Variants</Heading>
+        <Heading size="5">Variant</Heading>
       </Box>
       <Flex gap="3" align="center">
         <DropdownMenu.Root>
@@ -118,14 +109,12 @@ const DropdownMenuComponentPage = () => (
             <DropdownMenu.Item shortcut="⌘ D">Duplicate</DropdownMenu.Item>
             <DropdownMenu.Separator />
             <DropdownMenu.Item shortcut="⌘ N">Archive</DropdownMenu.Item>
-
             <DropdownMenu.Separator />
             <DropdownMenu.Item shortcut="⌘ ⌫" color="red">
               Delete
             </DropdownMenu.Item>
           </DropdownMenu.Content>
         </DropdownMenu.Root>
-
         <DropdownMenu.Root>
           <DropdownMenu.Trigger>
             <Button variant="soft">
@@ -138,7 +127,6 @@ const DropdownMenuComponentPage = () => (
             <DropdownMenu.Item shortcut="⌘ D">Duplicate</DropdownMenu.Item>
             <DropdownMenu.Separator />
             <DropdownMenu.Item shortcut="⌘ N">Archive</DropdownMenu.Item>
-
             <DropdownMenu.Separator />
             <DropdownMenu.Item shortcut="⌘ ⌫" color="red">
               Delete
@@ -150,7 +138,7 @@ const DropdownMenuComponentPage = () => (
 
     <Box mb="7">
       <Box mb="3">
-        <Heading size="5">Colors</Heading>
+        <Heading size="5">Color</Heading>
       </Box>
       <Flex gap="3">
         <DropdownMenu.Root>
@@ -167,7 +155,6 @@ const DropdownMenuComponentPage = () => (
             <DropdownMenu.Item shortcut="⌘ N">Archive</DropdownMenu.Item>
           </DropdownMenu.Content>
         </DropdownMenu.Root>
-
         <DropdownMenu.Root>
           <DropdownMenu.Trigger>
             <Button variant="soft" color="cyan">
@@ -182,7 +169,6 @@ const DropdownMenuComponentPage = () => (
             <DropdownMenu.Item shortcut="⌘ N">Archive</DropdownMenu.Item>
           </DropdownMenu.Content>
         </DropdownMenu.Root>
-
         <DropdownMenu.Root>
           <DropdownMenu.Trigger>
             <Button variant="soft" color="orange">
@@ -197,7 +183,6 @@ const DropdownMenuComponentPage = () => (
             <DropdownMenu.Item shortcut="⌘ N">Archive</DropdownMenu.Item>
           </DropdownMenu.Content>
         </DropdownMenu.Root>
-
         <DropdownMenu.Root>
           <DropdownMenu.Trigger>
             <Button variant="soft" color="crimson">
@@ -217,7 +202,7 @@ const DropdownMenuComponentPage = () => (
 
     <Box mb="7">
       <Box mb="3">
-        <Heading size="5">High Contrast</Heading>
+        <Heading size="5">High-contrast</Heading>
       </Box>
       <Grid columns="2" gap="3" display="inline-grid">
         <DropdownMenu.Root>
@@ -234,7 +219,6 @@ const DropdownMenuComponentPage = () => (
             <DropdownMenu.Item shortcut="⌘ N">Archive</DropdownMenu.Item>
           </DropdownMenu.Content>
         </DropdownMenu.Root>
-
         <DropdownMenu.Root>
           <DropdownMenu.Trigger>
             <Button variant="solid" highContrast>
@@ -249,7 +233,6 @@ const DropdownMenuComponentPage = () => (
             <DropdownMenu.Item shortcut="⌘ N">Archive</DropdownMenu.Item>
           </DropdownMenu.Content>
         </DropdownMenu.Root>
-
         <DropdownMenu.Root>
           <DropdownMenu.Trigger>
             <Button variant="soft">
@@ -264,7 +247,6 @@ const DropdownMenuComponentPage = () => (
             <DropdownMenu.Item shortcut="⌘ N">Archive</DropdownMenu.Item>
           </DropdownMenu.Content>
         </DropdownMenu.Root>
-
         <DropdownMenu.Root>
           <DropdownMenu.Trigger>
             <Button variant="soft" highContrast>

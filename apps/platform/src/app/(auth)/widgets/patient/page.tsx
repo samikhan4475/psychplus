@@ -1,12 +1,13 @@
 import { PatientWidget } from '@psychplus/widgets'
-import { SectionHeader } from '../../shared/section-header'
+import { PageHeader } from '../../shared/page-header'
 
 const TITLE = 'Patient Widget'
 const DESCRIPTION = 'Displays patient information.'
 
 const PatientWidgetPage = () => (
   <>
-    <SectionHeader title={TITLE} description={DESCRIPTION} />
+    <PageHeader title={TITLE} description={DESCRIPTION} />
+
     <div className="h-[400px] w-[800px]">
       <PatientWidget patientId="10560" />
     </div>

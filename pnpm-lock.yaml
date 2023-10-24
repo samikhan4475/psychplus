@@ -717,6 +717,12 @@ importers:
 
   tooling/tailwind-config:
     devDependencies:
+      autoprefixer:
+        specifier: ^10.4.16
+        version: 10.4.16(postcss@8.4.31)
+      postcss-import:
+        specifier: ^15.1.0
+        version: 15.1.0(postcss@8.4.31)
       tailwindcss:
         specifier: ^3.3.3
         version: 3.3.3

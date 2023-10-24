@@ -1,7 +1,7 @@
 import { Box, Flex, Heading } from '@radix-ui/themes'
 import { PencilIcon } from 'lucide-react'
 import { Button } from '@psychplus/ui/button'
-import { SectionHeader } from '../../shared/section-header'
+import { PageHeader } from '../../shared/page-header'
 
 const TITLE = 'Button'
 const DESCRIPTION =
@@ -9,19 +9,17 @@ const DESCRIPTION =
 
 const ButtonComponentPage = () => (
   <>
-    <SectionHeader title={TITLE} description={DESCRIPTION} />
+    <PageHeader title={TITLE} description={DESCRIPTION} />
 
     <Box mb="7">
-      <Box mb="3">
-        <Heading size="5">Default</Heading>
-      </Box>
       <Flex align="center" gap="3">
         <Button>Edit profile</Button>
       </Flex>
     </Box>
+
     <Box mb="7">
       <Box mb="3">
-        <Heading size="5">Variants</Heading>
+        <Heading size="5">Variant</Heading>
       </Box>
       <Flex align="center" gap="3">
         <Button variant="classic">Edit profile</Button>
@@ -32,9 +30,10 @@ const ButtonComponentPage = () => (
         <Button variant="ghost">Edit profile</Button>
       </Flex>
     </Box>
+
     <Box mb="7">
       <Box mb="3">
-        <Heading size="5">Sizes</Heading>
+        <Heading size="5">Size</Heading>
       </Box>
       <Flex gap="3" align="center">
         <Button size="3" variant="soft">
@@ -50,7 +49,7 @@ const ButtonComponentPage = () => (
     </Box>
     <Box mb="7">
       <Box mb="3">
-        <Heading size="5">High Contrast</Heading>
+        <Heading size="5">High-contrast</Heading>
       </Box>
       <Flex gap="3">
         <Button variant="classic" highContrast>
@@ -70,6 +69,7 @@ const ButtonComponentPage = () => (
         </Button>
       </Flex>
     </Box>
+
     <Box mb="7">
       <Box mb="3">
         <Heading size="5">Radius</Heading>
@@ -86,9 +86,10 @@ const ButtonComponentPage = () => (
         </Button>
       </Flex>
     </Box>
+
     <Box mb="7">
       <Box mb="3">
-        <Heading size="5">Colors</Heading>
+        <Heading size="5">Color</Heading>
       </Box>
       <Flex gap="3">
         <Button color="indigo" variant="soft">
@@ -105,9 +106,10 @@ const ButtonComponentPage = () => (
         </Button>
       </Flex>
     </Box>
+
     <Box mb="7">
       <Box mb="3">
-        <Heading size="5">Icons</Heading>
+        <Heading size="5">Icon</Heading>
       </Box>
       <Flex gap="3">
         <Button variant="soft">

@@ -1,5 +1,6 @@
-@layer tw_base, tw_components_utils;
-@import "@radix-ui/themes/styles.css";
+@layer tw_base, radix_ui, tw_components_utils, base;
+
+@import "@radix-ui/themes/styles.css" layer(radix_ui);
 
 @layer tw_base {
   @tailwind base;
