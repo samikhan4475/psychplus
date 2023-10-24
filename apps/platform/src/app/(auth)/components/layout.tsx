@@ -19,6 +19,10 @@ const navMenuItems: MenuItem[] = [
     href: '/components/dropdown-menu',
   },
   {
+    label: 'Radio Group',
+    href: '/components/radio-group',
+  },
+  {
     label: 'Select',
     href: '/components/select',
   },
