@@ -6,7 +6,7 @@ const DataTableSelectedRowLabel = <TData,>({
 }: {
   table: ReactTable<TData>
 }) => (
-  <Text size="2">
+  <Text size="2" color="gray">
     {table.getFilteredSelectedRowModel().rows.length} of{' '}
     {table.getFilteredRowModel().rows.length} row(s) selected.
   </Text>

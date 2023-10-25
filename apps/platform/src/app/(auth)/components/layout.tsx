@@ -3,6 +3,10 @@ import { NavigationMenu, type MenuItem } from '../shared/navigation-menu'
 
 const navMenuItems: MenuItem[] = [
   {
+    label: 'Badge',
+    href: '/components/badge',
+  },
+  {
     label: 'Button',
     href: '/components/button',
   },
@@ -23,12 +27,20 @@ const navMenuItems: MenuItem[] = [
     href: '/components/dropdown-menu',
   },
   {
+    label: 'Popover',
+    href: '/components/popover',
+  },
+  {
     label: 'Radio Group',
     href: '/components/radio-group',
   },
   {
     label: 'Select',
     href: '/components/select',
+  },
+  {
+    label: 'Separator',
+    href: '/components/separator',
   },
   {
     label: 'Switch',

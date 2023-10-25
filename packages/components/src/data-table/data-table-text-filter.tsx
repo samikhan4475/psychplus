@@ -20,4 +20,4 @@ const DataTableTextFilter = <TData,>({
   />
 )
 
-export { DataTableTextFilter, type DataTableTextFilterProps }
+export { DataTableTextFilter }
