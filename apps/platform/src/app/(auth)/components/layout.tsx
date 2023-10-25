@@ -11,6 +11,10 @@ const navMenuItems: MenuItem[] = [
     href: '/components/checkbox',
   },
   {
+    label: 'Data Table',
+    href: '/components/data-table',
+  },
+  {
     label: 'Dialog',
     href: '/components/dialog',
   },
