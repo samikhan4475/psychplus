@@ -27,6 +27,10 @@ const navMenuItems: MenuItem[] = [
     href: '/components/dropdown-menu',
   },
   {
+    label: 'Icon Button',
+    href: '/components/icon-button',
+  },
+  {
     label: 'Popover',
     href: '/components/popover',
   },
@@ -57,6 +61,10 @@ const navMenuItems: MenuItem[] = [
   {
     label: 'Text Field',
     href: '/components/text-field',
+  },
+  {
+    label: 'Tooltip',
+    href: '/components/tooltip',
   },
 ]
 

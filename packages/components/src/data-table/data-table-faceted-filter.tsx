@@ -39,9 +39,7 @@ const DataTableFacetedFilter = <TData, TValue>({
               </Badge>
               <Box className="hidden lg:flex">
                 {selectedValues.size > 2 ? (
-                  <Badge variant="soft">
-                    {selectedValues.size} selected
-                  </Badge>
+                  <Badge variant="soft">{selectedValues.size} selected</Badge>
                 ) : (
                   <Flex gap="1">
                     {options
@@ -89,7 +87,7 @@ const DataTableFacetedFilter = <TData, TValue>({
                         className={cn(
                           'h-4 w-4 rounded-sm border',
                           isSelected
-                            ? 'bg-primary text-foreground border-transparent'
+                            ? 'border-transparent bg-primary text-foreground'
                             : '[&_svg]:invisible',
                         )}
                       >
