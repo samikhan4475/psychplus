@@ -8,7 +8,14 @@ export default {
     './src/**/*.tsx',
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        primary: 'var(--indigo-9)',
+        foreground: 'var(--indigo-9-contrast)',
+        background: 'var(--indigo-a2)',
+        border: 'var(--gray-4)',
+      },
+    },
   },
   plugins: [],
 } satisfies Config

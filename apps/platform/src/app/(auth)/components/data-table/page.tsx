@@ -9,8 +9,10 @@ import {
   DataTable,
   DataTableColumnHeader,
   DataTableColumnVisibilitySelector,
+  DataTableFacetedFilter,
   DataTablePageNavigation,
   DataTablePageSizeSelector,
+  DataTableResetFilterButton,
   DataTableSelectedRowLabel,
   DataTableTextFilter,
 } from '@psychplus/components'
@@ -43,7 +45,7 @@ const data: Payment[] = [
   {
     id: '5kma53ae',
     amount: 874,
-    status: 'success',
+    status: 'pending',
     email: 'smudfinger12@gmail.com',
   },
   {
@@ -64,13 +66,16 @@ type Payment = {
 const columns: ColumnDef<Payment>[] = [
   createDataTableSelectColumn(),
   {
+    id: 'status',
     accessorKey: 'status',
     header: () => <Text>Status</Text>,
     cell: ({ row }) => (
       <div className="capitalize">{row.getValue('status')}</div>
     ),
+    filterFn: (row, id, value) => value.includes(row.getValue(id)),
   },
   {
+    id: 'email',
     accessorKey: 'email',
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Email" />
@@ -79,6 +84,7 @@ const columns: ColumnDef<Payment>[] = [
     enableHiding: false,
   },
   {
+    id: 'amount',
     accessorKey: 'amount',
     header: ({ column }) => (
       <DataTableColumnHeader
@@ -130,15 +136,47 @@ const columns: ColumnDef<Payment>[] = [
   },
 ]
 
-const DataTableHeader = (table: ReactTable<Payment>) => (
-  <Flex align="center" justify="between" py="3">
-    <DataTableTextFilter
-      placeholder="Filter emails..."
-      column={table.getColumn('email')}
-    />
-    <DataTableColumnVisibilitySelector table={table} />
-  </Flex>
-)
+const statuses = [
+  {
+    label: 'Success',
+    value: 'success',
+  },
+  {
+    label: 'Pending',
+    value: 'pending',
+  },
+  {
+    label: 'Processing',
+    value: 'processing',
+  },
+  {
+    label: 'Failed',
+    value: 'failed',
+  },
+]
+
+const DataTableHeader = (table: ReactTable<Payment>) => {
+  return (
+    <Flex align="center" justify="between" py="3">
+      <Flex align="center" gap="4">
+        <DataTableTextFilter
+          placeholder="Filter emails..."
+          column={table.getColumn('email')}
+        />
+        {table.getColumn('status') && (
+          <DataTableFacetedFilter
+            column={table.getColumn('status')}
+            title="Status"
+            options={statuses}
+          />
+        )}
+        <DataTableResetFilterButton table={table} />
+      </Flex>
+
+      <DataTableColumnVisibilitySelector table={table} />
+    </Flex>
+  )
+}
 
 const DataTableFooter = (table: ReactTable<Payment>) => (
   <Flex py="3" align="center" justify="between">
@@ -151,7 +189,7 @@ const DataTableFooter = (table: ReactTable<Payment>) => (
 )
 
 const DataTableComponentPage = () => (
-  <Box className="min-w-[650px]">
+  <Box className="min-w-[800px]">
     <PageHeader title={TITLE} description={DESCRIPTION} />
 
     <Box mb="7">
