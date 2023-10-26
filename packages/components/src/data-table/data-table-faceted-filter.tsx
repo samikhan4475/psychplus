@@ -34,12 +34,12 @@ const DataTableFacetedFilter = <TData, TValue>({
           {selectedValues?.size > 0 && (
             <>
               <Separator orientation="vertical" />
-              <Badge variant="soft" radius="large" className="lg:hidden">
+              <Badge variant="soft" className="lg:hidden">
                 {selectedValues.size}
               </Badge>
               <Box className="hidden lg:flex">
                 {selectedValues.size > 2 ? (
-                  <Badge variant="soft" radius="large">
+                  <Badge variant="soft">
                     {selectedValues.size} selected
                   </Badge>
                 ) : (
@@ -47,7 +47,7 @@ const DataTableFacetedFilter = <TData, TValue>({
                     {options
                       .filter((option) => selectedValues.has(option.value))
                       .map((option) => (
-                        <Badge variant="soft" radius="large" key={option.value}>
+                        <Badge variant="soft" key={option.value}>
                           {option.label}
                         </Badge>
                       ))}
