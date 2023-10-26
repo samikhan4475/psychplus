@@ -20,8 +20,8 @@ const NavigationMenu = ({ items }: { items: MenuItem[] }) => {
       <Link
         key={item.href}
         href={item.href}
-        className={cn('rounded-lg px-3', {
-          'bg-slate-100': active,
+        className={cn('rounded-item px-3', {
+          'bg-accent-4': active,
           'hover:underline': !active,
         })}
       >

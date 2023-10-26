@@ -12,7 +12,7 @@ const Root = React.forwardRef<
   <CommandPrimitive
     ref={ref}
     className={cn(
-      'bg-popover text-popover-foreground flex h-full w-full flex-col overflow-hidden rounded-md',
+      'flex h-full w-full flex-col overflow-hidden bg-panel',
       className,
     )}
     {...props}
@@ -25,12 +25,15 @@ const Input = React.forwardRef<
   React.ElementRef<typeof CommandPrimitive.Input>,
   React.ComponentPropsWithoutRef<typeof CommandPrimitive.Input>
 >(({ className, ...props }, ref) => (
-  <div className="flex items-center border-b px-3" cmdk-input-wrapper="">
+  <div
+    className="flex items-center border-b border-b-gray-5 px-3"
+    cmdk-input-wrapper=""
+  >
     <MagnifyingGlassIcon className="mr-2 h-4 w-4 shrink-0 opacity-50" />
     <CommandPrimitive.Input
       ref={ref}
       className={cn(
-        'h-10 w-full rounded-md bg-transparent py-3 text-sm outline-none disabled:cursor-not-allowed disabled:opacity-50',
+        'h-10 w-full rounded-item bg-transparent py-3 text-3 outline-none disabled:cursor-not-allowed disabled:opacity-50',
         className,
       )}
       {...props}
@@ -59,7 +62,7 @@ const Empty = React.forwardRef<
 >((props, ref) => (
   <CommandPrimitive.Empty
     ref={ref}
-    className="py-6 text-center text-sm"
+    className="py-6 text-center text-2 text-gray-10"
     {...props}
   />
 ))
@@ -85,7 +88,7 @@ const Separator = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <CommandPrimitive.Separator
     ref={ref}
-    className={cn('-mx-1 h-px bg-border', className)}
+    className={cn('-mx-1 h-px bg-gray-5', className)}
     {...props}
   />
 ))
@@ -99,7 +102,7 @@ const Item = React.forwardRef<
   <CommandPrimitive.Item
     ref={ref}
     className={cn(
-      'relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none aria-selected:bg-background data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
+      'relative flex cursor-default select-none items-center rounded-1 px-2 py-1.5 text-3 outline-none aria-selected:bg-accent-3 data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
       className,
     )}
     {...props}

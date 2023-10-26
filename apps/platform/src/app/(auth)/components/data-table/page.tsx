@@ -160,13 +160,14 @@ const DataTableHeader = (table: ReactTable<Payment>) => {
     <Flex align="center" justify="between" py="3">
       <Flex align="center" gap="4">
         <DataTableTextFilter
-          placeholder="Filter emails..."
+          placeholder="Filter emails…"
           column={table.getColumn('email')}
         />
         {table.getColumn('status') && (
           <DataTableFacetedFilter
             column={table.getColumn('status')}
             title="Status"
+            placeholder="Search statuses…"
             options={statuses}
           />
         )}

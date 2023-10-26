@@ -256,8 +256,8 @@ const SelectComponentPage = () => (
       <Box mb="3">
         <Heading size="5">Disabled</Heading>
       </Box>
-      <Select.Root>
-        <Select.Trigger placeholder="Pick a fruit" disabled />
+      <Select.Root disabled>
+        <Select.Trigger placeholder="Pick a fruit" />
         <Select.Content>
           <Select.Item value="orange">Orange</Select.Item>
           <Select.Item value="apple">Apple</Select.Item>

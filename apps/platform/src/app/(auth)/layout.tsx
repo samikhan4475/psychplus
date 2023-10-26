@@ -9,11 +9,11 @@ export const metadata: Metadata = {
 
 const IndexLayout = ({ children }: { children: React.ReactNode }) => (
   <>
-    <div className="flex items-center border-b px-8 py-4">
+    <div className="flex items-center border-b border-b-gray-6 px-8 py-4">
       <Link href="/" className="mr-8">
-        <span className="text-xl font-semibold">P+ Platform</span>
+        <span className="text-4 font-bold">P+ Platform</span>
       </Link>
-      <div className="flex gap-3">
+      <div className="flex gap-4 text-3">
         <Link href="/widgets" className="hover:underline">
           Widgets
         </Link>

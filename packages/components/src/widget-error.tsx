@@ -2,7 +2,7 @@
 
 const WidgetError = () => (
   <div className="flex h-full w-full items-center justify-center">
-    <div className="text-md italic text-gray-400">Something went wrong!</div>
+    <div className="text-3 italic text-gray-9">Something went wrong!</div>
   </div>
 )
 

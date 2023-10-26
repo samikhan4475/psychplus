@@ -1,3 +1,4 @@
+import { radixThemePreset } from 'radix-themes-tw'
 import { type Config } from 'tailwindcss'
 
 export default {
@@ -9,13 +10,9 @@ export default {
   ],
   theme: {
     extend: {
-      colors: {
-        primary: 'var(--indigo-9)',
-        foreground: 'var(--indigo-9-contrast)',
-        background: 'var(--indigo-a2)',
-        border: 'var(--gray-4)',
-      },
+      colors: {},
     },
   },
   plugins: [],
+  presets: [radixThemePreset],
 } satisfies Config

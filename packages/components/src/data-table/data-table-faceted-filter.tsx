@@ -11,6 +11,7 @@ import { Separator } from '@psychplus/ui/separator'
 interface DataTableFacetedFilterProps<TData, TValue> {
   column?: Column<TData, TValue>
   title?: string
+  placeholder?: string
   options: {
     label: string
     value: string
@@ -20,6 +21,7 @@ interface DataTableFacetedFilterProps<TData, TValue> {
 const DataTableFacetedFilter = <TData, TValue>({
   column,
   title,
+  placeholder,
   options,
 }: DataTableFacetedFilterProps<TData, TValue>) => {
   const facets = column?.getFacetedUniqueValues()
@@ -59,7 +61,7 @@ const DataTableFacetedFilter = <TData, TValue>({
       <Popover.Content className="w-[200px]">
         <Inset>
           <Command.Root>
-            <Command.Input placeholder={title} />
+            <Command.Input placeholder={placeholder} />
             <Command.List>
               <Command.Empty>No results found.</Command.Empty>
               <Command.Group>
@@ -85,9 +87,9 @@ const DataTableFacetedFilter = <TData, TValue>({
                         justify="center"
                         mr="2"
                         className={cn(
-                          'h-4 w-4 rounded-sm border',
+                          'h-4 w-4 rounded-1 border border-gray-7',
                           isSelected
-                            ? 'border-transparent bg-primary text-foreground'
+                            ? 'border-transparent bg-accent-9 text-accent-9-contrast'
                             : '[&_svg]:invisible',
                         )}
                       >
@@ -98,7 +100,7 @@ const DataTableFacetedFilter = <TData, TValue>({
                         <Flex
                           align="center"
                           justify="center"
-                          className="ml-auto h-4 w-4 font-mono text-xs"
+                          className="ml-auto h-4 w-4 font-mono text-2"
                         >
                           {facets.get(option.value)}
                         </Flex>

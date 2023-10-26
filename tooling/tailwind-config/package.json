@@ -10,8 +10,10 @@
     "clean": "rimraf .turbo node_modules"
   },
   "devDependencies": {
+    "@psychplus/tsconfig": "^0.1.0",
     "autoprefixer": "^10.4.16",
     "postcss-import": "^15.1.0",
+    "radix-themes-tw": "^0.0.8",
     "tailwindcss": "^3.3.3"
   }
 }

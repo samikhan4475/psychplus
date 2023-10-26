@@ -113,7 +113,7 @@ const SwitchComponentPage = () => (
 
     <Box mb="7">
       <Box mb="3">
-        <Heading size="5">Alignment</Heading>
+        <Heading size="5">Disabled</Heading>
       </Box>
       <Flex direction="column" gap="2">
         <Text as="label" size="2">
