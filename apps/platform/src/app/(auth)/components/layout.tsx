@@ -63,6 +63,10 @@ const navMenuItems: MenuItem[] = [
     href: '/components/table',
   },
   {
+    label: 'Tabs',
+    href: '/components/tabs',
+  },
+  {
     label: 'Text Area',
     href: '/components/text-area',
   },

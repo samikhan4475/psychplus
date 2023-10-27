@@ -32,7 +32,7 @@ const Calendar = ({
       row: 'flex w-full mt-2',
       day: 'flex items-center justify-center w-8 h-8 cursor-pointer [&:not([aria-selected])]:hover:bg-accent-3 [&:not([aria-selected])]:rounded-2',
       day_selected: '!text-accent-9-contrast bg-accent-9',
-      day_today: 'font-bold bg-gray-4',
+      day_today: 'font-bold [&:not([aria-selected])]:bg-gray-4',
       day_outside:
         '[&:not([aria-selected])]:text-gray-11 [&:not([aria-selected])]:opacity-50',
       day_disabled: 'text-gray-11 opacity-50',
