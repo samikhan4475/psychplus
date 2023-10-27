@@ -11,12 +11,20 @@ const navMenuItems: MenuItem[] = [
     href: '/components/button',
   },
   {
+    label: 'Calendar',
+    href: '/components/calendar',
+  },
+  {
     label: 'Checkbox',
     href: '/components/checkbox',
   },
   {
     label: 'Data Table',
     href: '/components/data-table',
+  },
+  {
+    label: 'Date Picker',
+    href: '/components/date-picker',
   },
   {
     label: 'Dialog',
