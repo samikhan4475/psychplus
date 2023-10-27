@@ -30,12 +30,11 @@ const Calendar = ({
       head_row: 'flex',
       head_cell: 'text-gray-12 w-8 font-regular text-[0.8rem]',
       row: 'flex w-full mt-2',
-      day: 'flex items-center justify-center w-8 h-8 cursor-pointer hover:bg-accent-3 [&:not([aria-selected])]:rounded-2',
-      day_selected:
-        '!text-accent-9-contrast [&:not(.day-range-start)]:!bg-accent-9 [&:not(.day-range-end)]:!bg-accent-9',
+      day: 'flex items-center justify-center w-8 h-8 cursor-pointer [&:not([aria-selected])]:hover:bg-accent-3 [&:not([aria-selected])]:rounded-2',
+      day_selected: '!text-accent-9-contrast bg-accent-9',
       day_today: 'font-bold bg-gray-4',
       day_outside:
-        '[&:not([aria-selected])]:text-gray-11  [&:not([aria-selected])]:opacity-50',
+        '[&:not([aria-selected])]:text-gray-11 [&:not([aria-selected])]:opacity-50',
       day_disabled: 'text-gray-11 opacity-50',
       day_range_middle: 'rounded-[0] !bg-accent-5 !text-gray-12',
       day_hidden: 'invisible',
