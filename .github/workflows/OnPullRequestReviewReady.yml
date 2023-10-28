@@ -1,0 +1,60 @@
+name: On-Demand Environment Configure for PR
+
+on:
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - synchronize
+      - ready_for_review
+
+jobs:
+  which-projects:
+    if: '! github.event.pull_request.draft'
+    uses: Psychplus/ReactUI/.github/workflows/ProjectFilter.yml@main
+
+  configure_ode_namespace:
+    if: '! github.event.pull_request.draft'
+    runs-on: ubuntu-latest
+    needs: which-projects
+    steps:
+      - uses: actions/checkout@v2
+      - run: echo "PR REVIEW- github=${{ needs.which-projects.outputs.github }} k8s=${{ needs.which-projects.outputs.k8s }} "
+      - run: echo "platform=${{ needs.which-projects.outputs.platform }} clinical=${{ needs.which-projects.outputs.clinical }} patient=${{ needs.which-projects.outputs.patient }} revcycle=${{ needs.which-projects.outputs.revcycle }}"
+
+  build_docker_image_platform:      
+    needs: which-projects
+    if: '! github.event.pull_request.draft && needs.which-projects.outputs.platform == "true"'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build the Docker image - platform
+        run: docker build . --file apps/platform/Dockerfile --tag galaxy-ui-platform:$(date +%s)
+
+  build_docker_image_clinical:
+    needs: which-projects
+    if: '! github.event.pull_request.draft && needs.which-projects.outputs.clinical == "true"'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build the Docker image - clinical
+        run: docker build . --file apps/clinical/Dockerfile --tag galaxy-ui-clinical:$(date +%s)
+
+  build_docker_image_patient:
+    needs: which-projects
+    if: '! github.event.pull_request.draft && needs.which-projects.outputs.patient == "true"'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build the Docker image - patient
+        run: docker build . --file apps/patient/Dockerfile --tag galaxy-ui-patient:$(date +%s)
+
+  build_docker_image_revcycle:
+    needs: which-projects
+    if: '! github.event.pull_request.draft && needs.which-projects.outputs.revcycle == "true"'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build the Docker image - revcycle
+        run: docker build . --file apps/revcycle/Dockerfile --tag galaxy-ui-revcycle:$(date +%s)
+            
