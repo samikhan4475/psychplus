@@ -1,0 +1,19 @@
+name: Commit Workflow
+
+on:
+  push: 
+    branches:
+      - main
+
+jobs:
+
+  which-projects:
+    uses: Psychplus/ReactUI/.github/workflows/ProjectFilter.yml@main
+
+
+  test_all:
+    runs-on: ubuntu-latest
+    needs: which-projects
+    steps:
+      - run: echo "platform=${{ needs.which-projects.outputs.platform }} clinical=${{ needs.which-projects.outputs.clinical }}"
+
