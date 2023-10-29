@@ -16,5 +16,5 @@ jobs:
     needs: which-projects
     steps:
       - uses: actions/checkout@v2
-      - run: echo "PUSH- github=${{ needs.which-projects.outputs.github }} k8s=${{ needs.which-projects.outputs.k8s }} "
+      - run: echo "PUSH- github=${{ needs.which-projects.outputs.github }} helm=${{ needs.which-projects.outputs.helm }}"
       - run: echo "platform=${{ needs.which-projects.outputs.platform }} clinical=${{ needs.which-projects.outputs.clinical }} patient=${{ needs.which-projects.outputs.patient }} revcycle=${{ needs.which-projects.outputs.revcycle }}"
