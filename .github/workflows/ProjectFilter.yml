@@ -46,7 +46,7 @@ jobs:
           filters: |
             github:
               - '.github/**'
-              helm:
+            helm:
               - 'helm/**'
             platform:
               - 'apps/platform/**'
