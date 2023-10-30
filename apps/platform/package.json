@@ -5,7 +5,7 @@
   "scripts": {
     "build": "next build",
     "clean": "rimraf .next .turbo *.tsbuildinfo node_modules",
-    "dev": "APP_CODE=p+platform-ui next dev -p 4000",
+    "dev": "cross-env APP_CODE=p+platform-ui next dev -p 4000",
     "lint:next": "next lint",
     "lint": "tsc --noEmit && eslint \"src/**/*.ts*\"",
     "lint:fix": "tsc --noEmit && eslint --fix \"src/**/*.ts*\""
@@ -30,6 +30,7 @@
     "@types/react": "^18.2.25",
     "@types/react-dom": "^18.2.10",
     "autoprefixer": "^10.4.16",
+    "cross-env": "^7.0.3",
     "eslint": "^8.50.0",
     "postcss": "^8.4.31",
     "tailwindcss": "^3.3.3",
