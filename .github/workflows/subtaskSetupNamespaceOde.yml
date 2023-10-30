@@ -1,4 +1,4 @@
-name: Subtask Setup On-Demand Environment (ODE) Namespace
+name: Subtask Setup Namespace for On-Demand Environment (ODE)
 
 on:
   workflow_call:

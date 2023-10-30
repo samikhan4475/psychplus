@@ -1,4 +1,4 @@
-name: Subtask Which Project(s)
+name: Subtask Determine Which Project(s)
 
 on:
   workflow_call:

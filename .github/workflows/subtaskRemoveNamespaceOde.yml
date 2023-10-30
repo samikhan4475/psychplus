@@ -1,4 +1,4 @@
-name: Subtask Remove On-Demand Environment (ODE) Namespace
+name: Subtask Remove Namespace for On-Demand Environment (ODE)
 
 on:
   workflow_dispatch:

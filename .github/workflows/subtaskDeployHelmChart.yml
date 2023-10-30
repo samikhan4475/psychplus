@@ -1,4 +1,4 @@
-name: Subtask Deploy Chart and Image
+name: Subtask Deploy Helm Chart
 
 on:
   workflow_call:
