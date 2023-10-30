@@ -1,0 +1,58 @@
+name: Subtask Setup On-Demand Environment (ODE) Namespace
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        description: Deployment Environment
+        type: string
+        default: development
+
+      pull_request_id:
+        description: ID for the PR to be deployed to an on-demand environment
+        type: string
+        required: true
+  
+jobs:
+  setup_ode_namespace:
+    permissions:
+      actions: read
+      contents: read
+      id-token: write
+
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: azure/use-kubelogin@v1
+        with:
+          kubelogin-version: 'v0.0.31'
+
+      - uses: azure/login@v1
+        name: Azure login
+        with:
+          client-id: ${{ secrets.ODE_AZURE_CLIENT_ID }}
+          subscription-id: ${{ secrets.ODE_AKS_SUBSCRIPTION_ID }}
+          tenant-id: ${{ secrets.ODE_AZURE_TENANT_ID }}
+
+      - uses: Azure/aks-set-context@v3
+        name: Get K8s context
+        with:
+          cluster-name: ${{ secrets.ODE_AKS_NAME }}
+          resource-group: ${{ secrets.ODE_AKS_RESOURCE_GROUP }}
+          admin: false
+          use-kubelogin: true
+
+      - name: Configure namespace
+        run: |
+          kubectl create namespace env-ode-pr-${{ inputs.pull_request_id }} --dry-run=client -o yaml | kubectl apply -f -
+          kubectl annotate namespace env-ode-pr-${{ inputs.pull_request_id }} linkerd.io/inject=enabled
+          kubectl get secret ehr-secrets --namespace=env-integration -o yaml | \
+          awk '!/creationTimestamp: /' | \
+          awk '!/resourceVersion: /' | \
+          awk '!/uid: /' | \
+          sed 's/namespace: env-integration/namespace: env-ode-pr-${{ inputs.pull_request_id }}/g' | \
+          kubectl apply --namespace=env-ode-pr-${{ inputs.pull_request_id }} -f -
+          kubectl apply --namespace=env-ode-pr-${{ inputs.pull_request_id }} -f src/k8s/app-config.integration.yml

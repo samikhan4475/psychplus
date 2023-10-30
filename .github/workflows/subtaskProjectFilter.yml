@@ -1,4 +1,4 @@
-name: Which Project(s)
+name: Subtask Which Project(s)
 
 on:
   workflow_call:
@@ -11,6 +11,10 @@ on:
         description: "Is helm changed"
         value: ${{ jobs.paths-filter.outputs.helm }}
   
+      k8s:
+        description: "Is k8s changed"
+        value: ${{ jobs.paths-filter.outputs.k8s }}
+    
       platform:
         description: "Is platform build"
         value: ${{ jobs.paths-filter.outputs.platform }}
@@ -33,6 +37,7 @@ jobs:
     outputs:
       github: ${{ steps.filter.outputs.github}}
       helm: ${{ steps.filter.outputs.helm}}
+      k8s: ${{ steps.filter.outputs.k8s}}
       platform: ${{ steps.filter.outputs.platform}}
       clinical: ${{ steps.filter.outputs.clinical}}
       patient: ${{ steps.filter.outputs.patient}}
@@ -48,6 +53,8 @@ jobs:
               - '.github/**'
             helm:
               - 'helm/**'
+            k8s:
+              - 'k8s/**'
             platform:
               - 'apps/platform/**'
               - 'apps/api/**'

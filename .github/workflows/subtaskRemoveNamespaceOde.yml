@@ -1,0 +1,52 @@
+name: Subtask Remove On-Demand Environment (ODE) Namespace
+
+on:
+  workflow_dispatch:
+    inputs:
+      namespace_name:
+        description: Name for the namespace to configure as an on-demand environment
+        type: string
+        required: true
+
+  workflow_call:
+    inputs:
+      namespace_name:
+        description: Name for the namespace to configure as an on-demand environment
+        type: string
+        required: true
+
+jobs:
+  delete_ode_namespace_if_exists:
+    permissions:
+      actions: read
+      contents: read
+      id-token: write
+
+    runs-on: ubuntu-latest
+    environment: development
+
+    steps:
+      - uses: azure/use-kubelogin@v1
+        with:
+          kubelogin-version: 'v0.0.31'
+
+      - uses: azure/login@v1
+        name: Azure login
+        with:
+          client-id: ${{ secrets.ODE_AZURE_CLIENT_ID }}
+          subscription-id: ${{ secrets.ODE_AKS_SUBSCRIPTION_ID }}
+          tenant-id: ${{ secrets.ODE_AZURE_TENANT_ID }}
+
+      - uses: Azure/aks-set-context@v3
+        name: Get K8s context
+        with:
+          cluster-name: ${{ secrets.ODE_AKS_NAME }}
+          resource-group: ${{ secrets.ODE_AKS_RESOURCE_GROUP }}
+          admin: false
+          use-kubelogin: true
+
+      - name: Remove namespace if it exists
+        run: |
+          if kubectl get namespace ${{ inputs.namespace_name }} ; then
+            kubectl delete namespace ${{ inputs.namespace_name }}
+          fi

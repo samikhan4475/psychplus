@@ -1,0 +1,189 @@
+name: Subtask Build & Push Image
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        description: Deployment Environment
+        type: string
+        default: development
+
+      project:
+        description: The project
+        type: string
+        required: true
+
+      image_tag:
+        description: Tag of image to build
+        type: string
+        required: true
+  
+      build_configuration:
+        description: Either Debug or Release
+        type: string
+        required: true
+
+      build_version_prefix:
+        description: Short 3-part version, like <major>.<minor>.<patch>
+        type: string
+        required: true
+
+      build_version:
+        description: SemVer version without trailing metadata and with only one numeric part after a label, like <major>.<minor>.<patch>-<label>.<count>, where the hyphenated suffix is optional
+        type: string
+        required: true
+        
+      build_assembly_file_version:
+        description: 4-part version, like <major>.<minor>.<patch>.<ci_build_counter>
+        type: string
+        required: true
+
+      build_full_version:
+        description: Full SemVer version including trailing metadata differing only in that only a single number should appear between the label and the metadata, like <major>.<minor>.<patch>-<label>.<count>+<additional_info>
+        type: string
+        required: true
+
+      deployment_namespace_suffix:
+        description: Suffix of k8s namespace for deployment; `env-<deployment_namespace_suffix>`
+        type: string
+        required: true
+  
+      deployment_url_domain:
+        description: Domain for ingress urls
+        type: string
+        required: true
+
+      deployment_url_subdomain:
+        description: Subdomain for ingress urls
+        type: string
+        required: true
+
+      should_minimize_resources_for_testing:
+        description: Used for blue-green deployment validation. Will minimize resource usage.
+        type: boolean
+        default: false
+        
+      use_wildcard_safe_subdomain:
+        description: Used when creating a deeper sub-domain may break a SSL cert. Replaces dot with hyphen.
+        type: boolean
+        default: false
+  
+      force:
+        description: If true, then the release will be installed even if it has already been installed
+        type: boolean
+        default: false
+  
+jobs:
+  build_and_push_image:
+    permissions:
+      contents: read
+      id-token: write
+    
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    
+    steps:
+      - uses: actions/checkout@v3
+    
+      - uses: azure/login@v1
+        name: Azure login
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          subscription-id: ${{ secrets.ACR_SUBSCRIPTION_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+    
+      - name: Build and push image to ACR
+        run: |
+          az acr build \
+            --platform Linux/amd64 \
+            --image ui-${{ inputs.project }}:${{ inputs.image_tag }} \
+            --registry ${{ secrets.ACR_NAME }} \
+            --resource-group ${{ secrets.ACR_RESOURCE_GROUP }} \
+            --file apps/${{ inputs.project }}/Dockerfile . \
+            --build-arg Configuration="${{ inputs.build_configuration }}" \
+            --build-arg VersionPrefix="${{ inputs.build_version_prefix }}" \
+            --build-arg Version="${{ inputs.build_version }}" \
+            --build-arg AssemblyFileVersion="${{ inputs.build_assembly_file_version }}" \
+            --build-arg FullVersion="${{ inputs.build_full_version }}"
+  
+  deploy_variables:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    steps:
+      - name: Set deploy variables
+        id: deploy_variables
+        shell: pwsh
+        run: |
+          $use_wildcard_safe_subdomain = "${{ inputs.use_wildcard_safe_subdomain }}";
+          if ($use_wildcard_safe_subdomain -eq 'true')
+          {
+            echo "using wildcard-safe subdomain for deployment"
+            $service_name_delimiter = '-'
+          }
+          else
+          {
+            $service_name_delimiter = '.'
+          }
+          
+          if ('${{ inputs.deployment_url_subdomain }}' -eq '')
+          {
+            $ingress_url = "api${service_name_delimiter}${{ inputs.deployment_url_domain }}"
+          }
+          else
+          {
+            $ingress_url = "api${service_name_delimiter}${{ inputs.deployment_url_subdomain }}.${{ inputs.deployment_url_domain }}"
+          }
+          echo "ingress_url=$ingress_url" >> $env:GITHUB_OUTPUT
+          echo "output ingress_url: $ingress_url"
+
+          $should_minimize_resources_for_testing = "${{ inputs.should_minimize_resources_for_testing }}";
+          if ($should_minimize_resources_for_testing -eq 'true')
+          {
+            echo "overriding min and max replicas to minimize resource usage"
+            echo "autoscaling_min_replicas=1" >> $env:GITHUB_OUTPUT
+            echo "output autoscaling_min_replicas: 1"
+            echo "autoscaling_max_replicas=1" >> $env:GITHUB_OUTPUT
+            echo "output autoscaling_max_replicas: 1"
+          }
+          else
+          {
+            $autoscaling_min_replicas = [int]"${{ vars.API_AUTOSCALING_MIN_REPLICAS }}";
+            if ($autoscaling_min_replicas -lt 1)
+            {
+              $autoscaling_min_replicas = 1
+            }
+            echo "autoscaling_min_replicas=$autoscaling_min_replicas" >> $env:GITHUB_OUTPUT
+            echo "output autoscaling_min_replicas: $autoscaling_min_replicas"
+          
+            $autoscaling_max_replicas = [int]"${{ vars.API_AUTOSCALING_MAX_REPLICAS }}";
+            if ($autoscaling_max_replicas -lt $autoscaling_min_replicas)
+            {
+              $autoscaling_max_replicas = $autoscaling_min_replicas
+            }
+            echo "autoscaling_max_replicas=$autoscaling_max_replicas" >> $env:GITHUB_OUTPUT
+            echo "output autoscaling_max_replicas: $autoscaling_max_replicas"
+          }
+    outputs:
+      ingress_url: ${{ steps.deploy_variables.outputs.ingress_url }}
+      autoscaling_min_replicas: ${{ steps.deploy_variables.outputs.autoscaling_min_replicas }}
+      autoscaling_max_replicas: ${{ steps.deploy_variables.outputs.autoscaling_max_replicas }}
+          
+  deploy:
+    needs: [deploy_variables, build_and_push_image]
+    uses: ./.github/workflows/subtaskDeployHelmChart.yml
+    with:
+      environment: ${{ inputs.environment }}
+      release_name: ui-${{ inputs.project }}
+      chart_path: ./helm/ui
+      helm_chart_version: ${{ inputs.build_version }}
+      helm_app_version: ${{ inputs.build_full_version }}
+      image_name: ui-${{ inputs.project }}
+      image_tag: ${{ inputs.image_tag }}
+      node_selector_os: linux
+      target_namespace: env-${{ inputs.deployment_namespace_suffix }}
+      ingress_url: ${{ needs.deploy_variables.outputs.ingress_url }}
+      autoscaling_min_replicas: ${{ needs.deploy_variables.outputs.autoscaling_min_replicas }}
+      autoscaling_max_replicas: ${{ needs.deploy_variables.outputs.autoscaling_max_replicas }}
+      force: ${{ inputs.force }}
+    secrets: inherit
+              

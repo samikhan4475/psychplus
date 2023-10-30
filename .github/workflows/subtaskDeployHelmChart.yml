@@ -1,0 +1,168 @@
+name: Deploy Chart & Image
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        description: Deployment Environment
+        type: string
+        default: development
+
+      release_name:
+        description: Name of the installed application in k8s
+        type: string
+        required: true
+
+      chart_path:
+        description: Path to helm chart
+        type: string
+        required: true
+
+      helm_chart_version:
+        description: Override version for the helm chart
+        type: string
+        required: true
+
+      helm_app_version:
+        description: Override appVersion for the helm chart
+        type: string
+        required: true
+
+      image_name:
+        description: Name of the image to build
+        type: string
+        required: true
+
+      image_tag:
+        description: Tag of image to deploy
+        type: string
+        required: true
+
+      node_selector_os:
+        description: OS node selector value
+        type: string
+        required: true
+
+      target_namespace:
+        description: K8s Deployment Namespace
+        type: string
+        required: true
+
+      ingress_url:
+        description: Ingress URL
+        type: string
+        required: true
+
+      autoscaling_min_replicas:
+        description: Minimum number of replicas if the helm chart has autoscaling enabled, otherwise ignored
+        type: string
+        default: '1'
+
+      autoscaling_max_replicas:
+        description: Maximum number of replicas if the helm chart has autoscaling enabled, otherwise ignored
+        type: string
+        default: '1'
+
+      enable_ingress_auth_if_supported:
+        description: Enable basic password auth on ingress if the helm chart supports it. Will be ignored if there is no support.
+        type: boolean
+        default: false
+        
+      force:
+        description: If true, then the release will be installed even if it has already been installed, and a rolling restart will run
+        type: boolean
+        default: false
+
+jobs:
+  deploy:
+    permissions:
+      actions: read
+      contents: read
+      id-token: write
+
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: azure/use-kubelogin@v1
+        with:
+          kubelogin-version: 'v0.0.31'
+
+      - uses: azure/login@v1
+        name: Azure login
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          subscription-id: ${{ secrets.AKS_SUBSCRIPTION_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+
+      - uses: Azure/aks-set-context@v3
+        name: Get K8s context
+        with:
+          cluster-name: ${{ secrets.AKS_NAME }}
+          resource-group: ${{ secrets.AKS_RESOURCE_GROUP }}
+          admin: false
+          use-kubelogin: true
+
+      - name: Helm chart version
+        if: ${{ inputs.helm_chart_version }} != ''
+        shell: pwsh
+        run: |
+          $chart = Get-Content -Path '${{ inputs.chart_path }}/Chart.yaml'
+          $chart = $chart -replace '^version: "?\d+\.\d+\.\d+"?$', 'version: ${{ inputs.helm_chart_version }}'
+          $chart | Set-Content -Path '${{ inputs.chart_path }}/Chart.yaml'
+
+      - name: Helm app version
+        if: ${{ inputs.helm_app_version }} != ''
+        shell: pwsh
+        # The chart's appVersion does not allow '+', while SemVer does, so any unsupported '+' will be replaced with a supported '_'
+        run: |
+          $version = "${{ inputs.helm_app_version }}" -replace '\+', '_'
+          $chart = Get-Content -Path '${{ inputs.chart_path }}/Chart.yaml'
+          $chart = $chart -replace '^appVersion: "?\d+\.\d+\.\d+"?$', "appVersion: ""$version"""
+          $chart | Set-Content -Path '${{ inputs.chart_path }}/Chart.yaml'
+
+      - name: Helm chart output for log
+        shell: pwsh
+        run: |
+          $chart = Get-Content -Path '${{ inputs.chart_path }}/Chart.yaml'
+          echo "Contents of Chart.yaml"
+          echo "======================"
+          echo $chart
+
+      - uses: azure/k8s-bake@v2
+        name: Bake deployment
+        with:
+          renderEngine: helm
+          helm-version: latest
+          helmChart: ${{ inputs.chart_path }}
+          releaseName: ${{ inputs.release_name }}
+          overrides: |
+            image.repository:${{ secrets.ACR_NAME }}.azurecr.io/${{ inputs.image_name }}
+            image.tag:${{ inputs.image_tag }}
+            ingress.hosts[0].host:${{ inputs.ingress_url }}
+            ingress.hosts[0].paths[0].path:/
+            ingress.hosts[0].paths[0].pathType:Prefix
+            ingress.tls[0].hosts[0]:${{ inputs.ingress_url }}
+            ingress.tls[0].secretName:${{ inputs.release_name }}-psychplus-tls
+            ingressAuth.enabled:${{ inputs.enable_ingress_auth_if_supported }}
+            nodeSelector.kubernetes\.io/os:${{ inputs.node_selector_os }}
+            autoscaling.minReplicas:${{ inputs.autoscaling_min_replicas }}
+            autoscaling.maxReplicas:${{ inputs.autoscaling_max_replicas }}
+        id: bake
+
+      - uses: Azure/k8s-deploy@v4
+        name: Deploy application
+        with:
+          action: deploy
+          strategy: basic
+          manifests: ${{ steps.bake.outputs.manifestsBundle }}
+          images: ${{ secrets.ACR_NAME }}.azurecr.io/${{ inputs.image_name }}:${{ inputs.image_tag }}
+          pull-images: false
+          namespace: ${{ inputs.target_namespace }}
+          force: ${{ inputs.force }}
+
+      - name: Optionally force pod restart
+        if: ${{ inputs.force }}
+        run: kubectl --namespace ${{ inputs.target_namespace }} rollout restart deployment/${{ inputs.release_name }}
