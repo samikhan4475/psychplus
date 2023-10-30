@@ -1,4 +1,4 @@
-name: On-Demand Environment Configure for PR
+name: On Pull Request Workflow
 
 on:
   pull_request:

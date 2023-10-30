@@ -1,4 +1,4 @@
-name: Deploy Chart & Image
+name: Subtask Deploy Chart and Image
 
 on:
   workflow_call:

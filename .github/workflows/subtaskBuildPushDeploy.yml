@@ -1,4 +1,4 @@
-name: Subtask Build & Push Image
+name: Subtask Build, Push, and Deploy Image
 
 on:
   workflow_call:
