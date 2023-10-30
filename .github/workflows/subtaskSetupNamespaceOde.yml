@@ -12,6 +12,11 @@ on:
         description: ID for the PR to be deployed to an on-demand environment
         type: string
         required: true
+
+      env_namespace:
+        description: k8s namespace for deployment
+        type: string
+        required: true
   
 jobs:
   setup_ode_namespace:
@@ -47,12 +52,12 @@ jobs:
 
       - name: Configure namespace
         run: |
-          kubectl create namespace env-ode-pr-${{ inputs.pull_request_id }} --dry-run=client -o yaml | kubectl apply -f -
-          kubectl annotate namespace env-ode-pr-${{ inputs.pull_request_id }} linkerd.io/inject=enabled
+          kubectl create namespace ${{ inputs.env_namespace }} --dry-run=client -o yaml | kubectl apply -f -
+          kubectl annotate namespace ${{ inputs.env_namespace }} linkerd.io/inject=enabled
           kubectl get secret ehr-secrets --namespace=env-integration -o yaml | \
           awk '!/creationTimestamp: /' | \
           awk '!/resourceVersion: /' | \
           awk '!/uid: /' | \
-          sed 's/namespace: env-integration/namespace: env-ode-pr-${{ inputs.pull_request_id }}/g' | \
-          kubectl apply --namespace=env-ode-pr-${{ inputs.pull_request_id }} -f -
-          kubectl apply --namespace=env-ode-pr-${{ inputs.pull_request_id }} -f src/k8s/app-config.integration.yml
+          sed 's/namespace: env-integration/namespace: ${{ inputs.env_namespace }}/g' | \
+          kubectl apply --namespace=${{ inputs.env_namespace }} -f -
+          kubectl apply --namespace=${{ inputs.env_namespace }} -f src/k8s/app-config.integration.yml

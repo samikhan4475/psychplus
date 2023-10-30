@@ -43,8 +43,8 @@ on:
         type: string
         required: true
 
-      deployment_namespace_suffix:
-        description: Suffix of k8s namespace for deployment; `env-<deployment_namespace_suffix>`
+      env_namespace:
+        description: k8s namespace for deployment; `env-<deployment_namespace_suffix>`
         type: string
         required: true
   
@@ -180,7 +180,7 @@ jobs:
       image_name: ui-${{ inputs.project }}
       image_tag: ${{ inputs.image_tag }}
       node_selector_os: linux
-      target_namespace: env-${{ inputs.deployment_namespace_suffix }}
+      env_namespace: ${{ inputs.env_namespace }}
       ingress_url: ${{ needs.deploy_variables.outputs.ingress_url }}
       autoscaling_min_replicas: ${{ needs.deploy_variables.outputs.autoscaling_min_replicas }}
       autoscaling_max_replicas: ${{ needs.deploy_variables.outputs.autoscaling_max_replicas }}

@@ -24,9 +24,12 @@ jobs:
   configure_ode_namespace:
     if: '! github.event.pull_request.draft'
 
+    needs: [which-projects, build-configuration]
+
     uses: ./.github/workflows/subtaskSetupNamespaceOde.yml
     with:
       pull_request_id: ${{ github.event.pull_request.number }}
+      env_namespace: ${{ needs.build-configuration.outputs.env_namespace }}
     secrets: inherit
     
   ode_build_push:
@@ -45,14 +48,13 @@ jobs:
         with:
           environment: development
           project: platform
-          namespace_name: ${{ needs.build-configuration.outputs.env_namespace }}
+          env_namespace: ${{ needs.build-configuration.outputs.env_namespace }}
           image_tag: ${{ needs.build-configuration.outputs.image_tag }}
           build_configuration: ${{ needs.build-configuration.outputs.build_configuration }}
           build_version_prefix: ${{ needs.build-configuration.outputs.build_version_prefix }}
           build_version: ${{ needs.build-configuration.outputs.build_version }}
           build_assembly_file_version: ${{ needs.build-configuration.outputs.build_assembly_file_version }}
           build_full_version: ${{ needs.build-configuration.outputs.build_full_version }}
-          deployment_namespace_suffix: ${{ needs.build-configuration.outputs.deployment_namespace_suffix }}
           deployment_url_domain: ${{ needs.build-configuration.outputs.deployment_url_domain }}
           deployment_url_subdomain: ${{ needs.build-configuration.outputs.deployment_url_subdomain }}
           should_minimize_resources_for_testing: true
@@ -67,14 +69,13 @@ jobs:
         with:
           environment: development
           project: clinic
-          namespace_name: ${{ needs.build-configuration.outputs.env_namespace }}
+          env_namespace: ${{ needs.build-configuration.outputs.env_namespace }}
           image_tag: ${{ needs.build-configuration.outputs.image_tag }}
           build_configuration: ${{ needs.build-configuration.outputs.build_configuration }}
           build_version_prefix: ${{ needs.build-configuration.outputs.build_version_prefix }}
           build_version: ${{ needs.build-configuration.outputs.build_version }}
           build_assembly_file_version: ${{ needs.build-configuration.outputs.build_assembly_file_version }}
           build_full_version: ${{ needs.build-configuration.outputs.build_full_version }}
-          deployment_namespace_suffix: ${{ needs.build-configuration.outputs.deployment_namespace_suffix }}
           deployment_url_domain: ${{ needs.build-configuration.outputs.deployment_url_domain }}
           deployment_url_subdomain: ${{ needs.build-configuration.outputs.deployment_url_subdomain }}
           should_minimize_resources_for_testing: true
@@ -89,14 +90,13 @@ jobs:
         with:
           environment: development
           project: patient
-          namespace_name: ${{ needs.build-configuration.outputs.env_namespace }}
+          env_namespace: ${{ needs.build-configuration.outputs.env_namespace }}
           image_tag: ${{ needs.build-configuration.outputs.image_tag }}
           build_configuration: ${{ needs.build-configuration.outputs.build_configuration }}
           build_version_prefix: ${{ needs.build-configuration.outputs.build_version_prefix }}
           build_version: ${{ needs.build-configuration.outputs.build_version }}
           build_assembly_file_version: ${{ needs.build-configuration.outputs.build_assembly_file_version }}
           build_full_version: ${{ needs.build-configuration.outputs.build_full_version }}
-          deployment_namespace_suffix: ${{ needs.build-configuration.outputs.deployment_namespace_suffix }}
           deployment_url_domain: ${{ needs.build-configuration.outputs.deployment_url_domain }}
           deployment_url_subdomain: ${{ needs.build-configuration.outputs.deployment_url_subdomain }}
           should_minimize_resources_for_testing: true
@@ -111,14 +111,13 @@ jobs:
         with:
           environment: development
           project: revcycle
-          namespace_name: ${{ needs.build-configuration.outputs.env_namespace }}
+          env_namespace: ${{ needs.build-configuration.outputs.env_namespace }}
           image_tag: ${{ needs.build-configuration.outputs.image_tag }}
           build_configuration: ${{ needs.build-configuration.outputs.build_configuration }}
           build_version_prefix: ${{ needs.build-configuration.outputs.build_version_prefix }}
           build_version: ${{ needs.build-configuration.outputs.build_version }}
           build_assembly_file_version: ${{ needs.build-configuration.outputs.build_assembly_file_version }}
           build_full_version: ${{ needs.build-configuration.outputs.build_full_version }}
-          deployment_namespace_suffix: ${{ needs.build-configuration.outputs.deployment_namespace_suffix }}
           deployment_url_domain: ${{ needs.build-configuration.outputs.deployment_url_domain }}
           deployment_url_subdomain: ${{ needs.build-configuration.outputs.deployment_url_subdomain }}
           should_minimize_resources_for_testing: true

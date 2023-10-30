@@ -59,10 +59,6 @@ jobs:
           echo "env_namespace=$env_namespace" >> $env:GITHUB_OUTPUT
           echo "output env_namespace: $env_namespace"
 
-          $deployment_namespace_suffix = "ode-pr-${{ inputs.pull_request_id }}"
-          echo "deployment_namespace_suffix=$deployment_namespace_suffix" >> $env:GITHUB_OUTPUT
-          echo "output deployment_namespace_suffix: $deployment_namespace_suffix"
-
           $image_tag = "ode-pr-${{ inputs.pull_request_id }}"
           echo "image_tag=$image_tag" >> $env:GITHUB_OUTPUT
           echo "output image_tag: $image_tag"
@@ -81,7 +77,6 @@ jobs:
       build_assembly_file_version: ${{ steps.build_variables.outputs.build_assembly_file_version }}
       build_full_version: ${{ steps.build_variables.outputs.build_full_version }}
       env_namespace: ${{ steps.build_variables.outputs.env_namespace }}
-      deployment_namespace_suffix: ${{ steps.build_variables.outputs.deployment_namespace_suffix }}
       image_tag: ${{ steps.build_variables.outputs.image_tag }}
       deployment_url_domain: ${{ steps.build_variables.outputs.deployment_url_domain }}
       deployment_url_subdomain: ${{ steps.build_variables.outputs.deployment_url_subdomain }}

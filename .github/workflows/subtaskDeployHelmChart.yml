@@ -43,7 +43,7 @@ on:
         type: string
         required: true
 
-      target_namespace:
+      env_namespace:
         description: K8s Deployment Namespace
         type: string
         required: true
@@ -160,9 +160,9 @@ jobs:
           manifests: ${{ steps.bake.outputs.manifestsBundle }}
           images: ${{ secrets.ACR_NAME }}.azurecr.io/${{ inputs.image_name }}:${{ inputs.image_tag }}
           pull-images: false
-          namespace: ${{ inputs.target_namespace }}
+          namespace: ${{ inputs.env_namespace }}
           force: ${{ inputs.force }}
 
       - name: Optionally force pod restart
         if: ${{ inputs.force }}
-        run: kubectl --namespace ${{ inputs.target_namespace }} rollout restart deployment/${{ inputs.release_name }}
+        run: kubectl --namespace ${{ inputs.env_namespace }} rollout restart deployment/${{ inputs.release_name }}
