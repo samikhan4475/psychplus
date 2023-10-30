@@ -42,7 +42,7 @@ jobs:
 
     steps:
       - name: Platform
-        if: 'needs.which-projects.outputs.platform == "true"'
+        if: needs.which-projects.outputs.platform == 'true'
 
         uses: ./.github/workflows/subtaskBuildPushDeploy.yml
         with:
@@ -63,7 +63,7 @@ jobs:
           secrets: inherit
 
       - name: Clinic
-        if: 'needs.which-projects.outputs.clinic == "true"'
+        if: needs.which-projects.outputs.clinic == 'true'
 
         uses: ./.github/workflows/subtaskBuildPushDeploy.yml
         with:
@@ -84,7 +84,7 @@ jobs:
           secrets: inherit
 
       - name: Patient
-        if: 'needs.which-projects.outputs.patient == "true"'
+        if: needs.which-projects.outputs.patient == 'true'
 
         uses: ./.github/workflows/subtaskBuildPushDeploy.yml
         with:
@@ -105,7 +105,7 @@ jobs:
           secrets: inherit
 
       - name: RevCycle
-        if: 'needs.which-projects.outputs.revcycle == "true"'
+        if: needs.which-projects.outputs.revcycle == 'true'
 
         uses: ./.github/workflows/subtaskBuildPushDeploy.yml
         with:
