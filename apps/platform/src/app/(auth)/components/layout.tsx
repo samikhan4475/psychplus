@@ -3,6 +3,10 @@ import { NavigationMenu, type MenuItem } from '../shared/navigation-menu'
 
 const navMenuItems: MenuItem[] = [
   {
+    label: 'Avatar',
+    href: '/components/avatar',
+  },
+  {
     label: 'Badge',
     href: '/components/badge',
   },
