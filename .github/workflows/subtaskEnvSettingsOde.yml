@@ -7,77 +7,97 @@ on:
           description: ID for the PR to be deployed to an on-demand environment
           type: string
           required: true
-  
+
+      outputs:
+        build_configuration: 
+          value: ${{ jobs.build_variables.outputs.build_configuration }}
+        build_version_prefix: 
+          value: ${{ jobs.build_variables.outputs.build_version_prefix }}
+        build_version: 
+          value: ${{ jobs.build_variables.outputs.build_version }}
+        build_assembly_file_version: 
+          value: ${{ jobs.build_variables.outputs.build_assembly_file_version }}
+        build_full_version: 
+          value: ${{ jobs.build_variables.outputs.build_full_version }}
+        env_namespace: 
+          value: ${{ jobs.build_variables.outputs.env_namespace }}
+        image_tag: 
+          value: ${{ jobs.build_variables.outputs.image_tag }}
+        deployment_url_domain: 
+          value: ${{ jobs.build_variables.outputs.deployment_url_domain }}
+        deployment_url_subdomain: 
+          value: ${{ jobs.build_variables.outputs.deployment_url_subdomain }}
+        
 jobs:
   build_variables:
+    name: Set Build variables
     runs-on: ubuntu-latest
     environment: development
+    outputs:
+      build_configuration: ${{ steps.set_variables.outputs.build_configuration }}
+      build_version_prefix: ${{ steps.set_variables.outputs.build_version_prefix }}
+      build_version: ${{ steps.set_variables.outputs.build_version }}
+      build_assembly_file_version: ${{ steps.set_variables.outputs.build_assembly_file_version }}
+      build_full_version: ${{ steps.set_variables.outputs.build_full_version }}
+      env_namespace: ${{ steps.set_variables.outputs.env_namespace }}
+      image_tag: ${{ steps.set_variables.outputs.image_tag }}
+      deployment_url_domain: ${{ steps.set_variables.outputs.deployment_url_domain }}
+      deployment_url_subdomain: ${{ steps.set_variables.outputs.deployment_url_subdomain }}
 
     steps:
-      - name: Set Build variables
-        id: build_variables
-        shell: pwsh
-        # Auto-deploy to odes will be compiled in debug mode with a 0.0.1-ode.<build_number> version
-        run: |
-          $build_configuration = "Debug"
-          echo "build_configuration=$build_configuration" >> $env:GITHUB_OUTPUT
-          echo "output build_configuration: $build_configuration"
-          
-          $build_configuration = 'Debug'
-          $build_major_version = '0'
-          $build_minor_version = '0'
-          $build_patch_version = '1'
-          $build_prerelease_label = 'ode'
-          $build_prerelease_counter = $env:GITHUB_RUN_NUMBER 
-          $build_ci_counter = $env:GITHUB_RUN_NUMBER
-          $build_unique_id = Get-Date -Format yyyyMMddHHmmssfffffff
-          
-          $build_version_prefix = "$build_major_version.$build_minor_version.$build_patch_version"
-          echo "build_version_prefix=$build_version_prefix" >> $env:GITHUB_OUTPUT
-          echo "output build_version_prefix: $build_version_prefix"
+        - id: set_variables
+          shell: pwsh
+          # Auto-deploy to odes will be compiled in debug mode with a 0.0.1-ode.<build_number> version
+          run: |
+            $build_configuration = "Debug"
+            echo "build_configuration=$build_configuration" >> $env:GITHUB_OUTPUT
+            echo "output build_configuration: $build_configuration"
+            
+            $build_configuration = 'Debug'
+            $build_major_version = '0'
+            $build_minor_version = '0'
+            $build_patch_version = '1'
+            $build_prerelease_label = 'ode'
+            $build_prerelease_counter = $env:GITHUB_RUN_NUMBER 
+            $build_ci_counter = $env:GITHUB_RUN_NUMBER
+            $build_unique_id = Get-Date -Format yyyyMMddHHmmssfffffff
+            
+            $build_version_prefix = "$build_major_version.$build_minor_version.$build_patch_version"
+            echo "build_version_prefix=$build_version_prefix" >> $env:GITHUB_OUTPUT
+            echo "output build_version_prefix: $build_version_prefix"
 
-          if ($build_prerelease_label)
-          {
-            $build_version = "$build_version_prefix-$build_prerelease_label.$build_prerelease_counter"
-          }
-          else
-          {
-            $build_version = $build_version_prefix
-          }
-          echo "build_version=$build_version" >> $env:GITHUB_OUTPUT
-          echo "output build_version: $build_version"
+            if ($build_prerelease_label)
+            {
+              $build_version = "$build_version_prefix-$build_prerelease_label.$build_prerelease_counter"
+            }
+            else
+            {
+              $build_version = $build_version_prefix
+            }
+            echo "build_version=$build_version" >> $env:GITHUB_OUTPUT
+            echo "output build_version: $build_version"
 
-          $build_full_version = "$build_version+$build_ci_counter.$build_unique_id"
-          echo "build_full_version=$build_full_version" >> $env:GITHUB_OUTPUT
-          echo "output build_full_version: $build_full_version"
+            $build_full_version = "$build_version+$build_ci_counter.$build_unique_id"
+            echo "build_full_version=$build_full_version" >> $env:GITHUB_OUTPUT
+            echo "output build_full_version: $build_full_version"
 
-          $build_assembly_file_version = "$build_version_prefix.$build_ci_counter"
-          echo "build_assembly_file_version=$build_assembly_file_version" >> $env:GITHUB_OUTPUT
-          echo "output build_assembly_file_version: $build_assembly_file_version"
+            $build_assembly_file_version = "$build_version_prefix.$build_ci_counter"
+            echo "build_assembly_file_version=$build_assembly_file_version" >> $env:GITHUB_OUTPUT
+            echo "output build_assembly_file_version: $build_assembly_file_version"
 
-          $env_namespace = "env-ode-pr-${{ inputs.pull_request_id }}"
-          echo "env_namespace=$env_namespace" >> $env:GITHUB_OUTPUT
-          echo "output env_namespace: $env_namespace"
+            $env_namespace = "env-ode-pr-${{ inputs.pull_request_id }}"
+            echo "env_namespace=$env_namespace" >> $env:GITHUB_OUTPUT
+            echo "output env_namespace: $env_namespace"
 
-          $image_tag = "ode-pr-${{ inputs.pull_request_id }}"
-          echo "image_tag=$image_tag" >> $env:GITHUB_OUTPUT
-          echo "output image_tag: $image_tag"
+            $image_tag = "ode-pr-${{ inputs.pull_request_id }}"
+            echo "image_tag=$image_tag" >> $env:GITHUB_OUTPUT
+            echo "output image_tag: $image_tag"
 
-          $deployment_url_domain = "psychplus.dev"
-          echo "deployment_url_domain=$deployment_url_domain" >> $env:GITHUB_OUTPUT
-          echo "output deployment_url_domain: $deployment_url_domain"
+            $deployment_url_domain = "psychplus.dev"
+            echo "deployment_url_domain=$deployment_url_domain" >> $env:GITHUB_OUTPUT
+            echo "output deployment_url_domain: $deployment_url_domain"
 
-          $deployment_url_subdomain = "pr-${{ inputs.pull_request_id }}.ode"
-          echo "deployment_url_subdomain=$deployment_url_subdomain" >> $env:GITHUB_OUTPUT
-          echo "output deployment_url_subdomain: $deployment_url_subdomain"
-    outputs:
-      build_configuration: ${{ steps.build_variables.outputs.build_configuration }}
-      build_version_prefix: ${{ steps.build_variables.outputs.build_version_prefix }}
-      build_version: ${{ steps.build_variables.outputs.build_version }}
-      build_assembly_file_version: ${{ steps.build_variables.outputs.build_assembly_file_version }}
-      build_full_version: ${{ steps.build_variables.outputs.build_full_version }}
-      env_namespace: ${{ steps.build_variables.outputs.env_namespace }}
-      image_tag: ${{ steps.build_variables.outputs.image_tag }}
-      deployment_url_domain: ${{ steps.build_variables.outputs.deployment_url_domain }}
-      deployment_url_subdomain: ${{ steps.build_variables.outputs.deployment_url_subdomain }}
+            $deployment_url_subdomain = "pr-${{ inputs.pull_request_id }}.ode"
+            echo "deployment_url_subdomain=$deployment_url_subdomain" >> $env:GITHUB_OUTPUT
+            echo "output deployment_url_subdomain: $deployment_url_subdomain"
 

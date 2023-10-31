@@ -24,10 +24,13 @@ jobs:
   configure_ode_namespace:
     if: '! github.event.pull_request.draft'
 
-    needs: [which-projects, build-configuration]
+    needs: 
+      - which-projects
+      - build-configuration
 
     uses: ./.github/workflows/subtaskSetupNamespaceOde.yml
     with:
+      environment: development
       pull_request_id: ${{ github.event.pull_request.number }}
       env_namespace: ${{ needs.build-configuration.outputs.env_namespace }}
     secrets: inherit
