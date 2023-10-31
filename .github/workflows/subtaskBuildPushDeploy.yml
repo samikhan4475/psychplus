@@ -147,7 +147,7 @@ jobs:
           }
           else
           {
-            $autoscaling_min_replicas = [int]"${{ vars.API_AUTOSCALING_MIN_REPLICAS }}";
+            $autoscaling_min_replicas = [int]"${{ vars.AUTOSCALING_MIN_REPLICAS }}";
             if ($autoscaling_min_replicas -lt 1)
             {
               $autoscaling_min_replicas = 1
@@ -155,7 +155,7 @@ jobs:
             echo "autoscaling_min_replicas=$autoscaling_min_replicas" >> $env:GITHUB_OUTPUT
             echo "output autoscaling_min_replicas: $autoscaling_min_replicas"
           
-            $autoscaling_max_replicas = [int]"${{ vars.API_AUTOSCALING_MAX_REPLICAS }}";
+            $autoscaling_max_replicas = [int]"${{ vars.AUTOSCALING_MAX_REPLICAS }}";
             if ($autoscaling_max_replicas -lt $autoscaling_min_replicas)
             {
               $autoscaling_max_replicas = $autoscaling_min_replicas
