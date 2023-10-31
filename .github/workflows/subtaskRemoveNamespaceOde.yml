@@ -33,15 +33,15 @@ jobs:
       - uses: azure/login@v1
         name: Azure login
         with:
-          client-id: ${{ secrets.ODE_AZURE_CLIENT_ID }}
-          subscription-id: ${{ secrets.ODE_AKS_SUBSCRIPTION_ID }}
-          tenant-id: ${{ secrets.ODE_AZURE_TENANT_ID }}
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          subscription-id: ${{ secrets.AKS_SUBSCRIPTION_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
 
       - uses: Azure/aks-set-context@v3
         name: Get K8s context
         with:
-          cluster-name: ${{ secrets.ODE_AKS_NAME }}
-          resource-group: ${{ secrets.ODE_AKS_RESOURCE_GROUP }}
+          cluster-name: ${{ secrets.AKS_NAME }}
+          resource-group: ${{ secrets.AKS_RESOURCE_GROUP }}
           admin: false
           use-kubelogin: true
 
