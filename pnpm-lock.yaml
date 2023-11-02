@@ -84,9 +84,18 @@ importers:
       '@psychplus/components':
         specifier: ^0.1.0
         version: link:../../packages/components
+      '@psychplus/middleware':
+        specifier: ^0.1.0
+        version: link:../../packages/middleware
       '@psychplus/store':
         specifier: ^0.1.0
         version: link:../../packages/store
+      '@psychplus/widgets':
+        specifier: ^0.1.0
+        version: link:../../packages/widgets
+      '@radix-ui/themes':
+        specifier: ^2.0.0
+        version: 2.0.0(@types/react-dom@18.2.10)(@types/react@18.2.25)(react-dom@18.2.0)(react@18.2.0)
       next:
         specifier: ^13.5.5
         version: 13.5.5(@babel/core@7.23.2)(react-dom@18.2.0)(react@18.2.0)
@@ -249,6 +258,9 @@ importers:
       autoprefixer:
         specifier: ^10.4.16
         version: 10.4.16(postcss@8.4.31)
+      cross-env:
+        specifier: ^7.0.3
+        version: 7.0.3
       eslint:
         specifier: ^8.50.0
         version: 8.51.0
