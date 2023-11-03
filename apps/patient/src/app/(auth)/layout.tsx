@@ -1,6 +1,7 @@
 import * as React from 'react'
 import { type Metadata } from 'next'
 import Link from 'next/link'
+import { Flex, Text } from '@radix-ui/themes'
 
 export const metadata: Metadata = {
   title: 'title',
@@ -9,16 +10,18 @@ export const metadata: Metadata = {
 
 const IndexLayout = ({ children }: { children: React.ReactNode }) => (
   <>
-    <div className="flex items-center border-b px-8 py-4">
+    <Flex align="center" px="8" py="4" className="border-b border-b-gray-5">
       <Link href="/" className="mr-8">
-        <span className="text-xl font-semibold">P+</span>
+        <Text size="4" weight="bold">
+          P+
+        </Text>
       </Link>
-      <div className="flex gap-3">
-        <Link href="/example" className="hover:underline">
-          Example
+      <Flex gap="4">
+        <Link href="/patient" className="hover:underline">
+          <Text weight="medium">Example</Text>
         </Link>
-      </div>
-    </div>
+      </Flex>
+    </Flex>
     <main className="p-4">{children}</main>
   </>
 )

@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 
 const IndexLayout = ({ children }: { children: React.ReactNode }) => (
   <>
-    <Flex align="center" px="8" py="4" className=" border-b border-b-gray-5">
+    <Flex align="center" px="8" py="4" className="border-b border-b-gray-5">
       <Link href="/" className="mr-8">
         <Text size="4" weight="bold">
           P+

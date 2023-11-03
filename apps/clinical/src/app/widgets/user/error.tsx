@@ -1,5 +1,5 @@
 'use client'
 
-import { WidgetError } from '@psychplus/components'
+import { WidgetError } from '@psychplus/components/widget'
 
 export default WidgetError

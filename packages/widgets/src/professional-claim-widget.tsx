@@ -1,6 +1,6 @@
 import { REVCYCLE_URL } from '@psychplus/env'
 import { getAuthToken } from '@psychplus/auth'
-import { PortalContainer } from '@psychplus/components'
+import { PortalContainer } from '@psychplus/components/widget'
 
 interface Props {
   claimId?: string
