@@ -19,7 +19,7 @@
     "@radix-ui/themes": "^2.0.0",
     "@tanstack/react-table": "^8.10.7",
     "lucide-react": "^0.288.0",
-    "next": "^13.5.5",
+    "next": "^14.0.1",
     "react": "^18.2.0",
     "react-hook-form": "^7.47.0"
   },

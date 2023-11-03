@@ -11,7 +11,7 @@
     "lint:fix": "tsc --noEmit && eslint --fix \"src/**/*.ts*\""
   },
   "dependencies": {
-    "next": "^13.5.5"
+    "next": "^14.0.1"
   },
   "devDependencies": {
     "@psychplus/eslint-config": "^0.1.0",
