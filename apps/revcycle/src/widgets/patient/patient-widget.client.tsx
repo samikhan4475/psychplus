@@ -1,14 +1,13 @@
 'use client'
 
-import { getPatient } from '@psychplus/store/patient'
 import { useStore } from './store'
 
 const PatientWidgetClient = () => {
-  const patient = getPatient(useStore)
+  const patient = useStore().getPatient()
 
   return (
     <div className="h-full w-full p-4">
-      <div className="text-xl">
+      <div>
         This example widget will fetch and display the patient&apos;s name.
       </div>
       <div>

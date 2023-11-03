@@ -30,6 +30,7 @@
     "CLINICAL_URL",
     "PATIENT_URL",
     "REVCYCLE_URL",
-    "LOGIN_ENDPOINT"
+    "LOGIN_ENDPOINT",
+    "MOCK_API_URL"
   ]
 }

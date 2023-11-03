@@ -1,7 +1,6 @@
 import { NextResponse, type NextRequest } from 'next/server'
+import { LOGIN_ENDPOINT } from '@psychplus/env'
 import { getAuthToken, setAuthTokenCookie } from '@psychplus/auth'
-
-const LOGIN_ENDPOINT = process.env.LOGIN_ENDPOINT
 
 interface MiddlewareConfig {
   index: string

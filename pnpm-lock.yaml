@@ -148,6 +148,9 @@ importers:
 
   apps/patient:
     dependencies:
+      '@psychplus/api':
+        specifier: ^0.1.0
+        version: link:../../packages/api
       '@psychplus/auth':
         specifier: ^0.1.0
         version: link:../../packages/auth
@@ -157,6 +160,9 @@ importers:
       '@psychplus/middleware':
         specifier: ^0.1.0
         version: link:../../packages/middleware
+      '@psychplus/store':
+        specifier: ^0.1.0
+        version: link:../../packages/store
       '@psychplus/ui':
         specifier: ^0.1.0
         version: link:../../packages/ui
@@ -175,6 +181,9 @@ importers:
       react-dom:
         specifier: ^18.2.0
         version: 18.2.0(react@18.2.0)
+      zustand:
+        specifier: ^4.4.3
+        version: 4.4.3(@types/react@18.2.25)(react@18.2.0)
     devDependencies:
       '@psychplus/eslint-config':
         specifier: ^0.1.0
@@ -475,6 +484,9 @@ importers:
       '@psychplus/auth':
         specifier: ^0.1.0
         version: link:../auth
+      '@psychplus/env':
+        specifier: ^0.1.0
+        version: link:../env
       next:
         specifier: ^14.0.1
         version: 14.0.1(@babel/core@7.23.2)(react-dom@18.2.0)(react@18.2.0)

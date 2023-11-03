@@ -43,6 +43,11 @@ export const createServer = (): Express => {
     res.status(201).json({ token: '12345' })
   })
 
+  app.get('/api/metadata/codesets', async (req, res) => {
+    await wait(API_DELAY)
+    res.status(200).json({ message: 'foo' })
+  })
+
   app.get('/api/user', async (req, res) => {
     await wait(API_DELAY)
     // @ts-ignore

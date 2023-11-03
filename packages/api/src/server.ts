@@ -1,7 +1,8 @@
 import { cache } from 'react'
 import { headers as nextHeaders } from 'next/headers'
-import { API_URL } from '@psychplus/env'
+import { API_URL, MOCK_API_URL } from '@psychplus/env'
 import type {
+  CodeSet,
   Patient,
   PatientParams,
   TokenParams,
@@ -28,8 +29,25 @@ const createHeaders = (params: Partial<TokenParams>) => {
   return headers
 }
 
+const getCodeSets = async ({ token }: Partial<TokenParams> = {}): Promise<
+  CodeSet[]
+> => {
+  const response = await fetch(`${API_URL}/api/metadata/codesets`, {
+    headers: createHeaders({ token }),
+    next: {
+      revalidate: 3600,
+    },
+  })
+
+  if (!response.ok) {
+    throw new Error()
+  }
+
+  return response.json()
+}
+
 const getUser = async ({ token }: Partial<TokenParams>): Promise<User> => {
-  const response = await fetch(`${API_URL}/api/user`, {
+  const response = await fetch(`${MOCK_API_URL}/api/user`, {
     cache: 'no-store',
     headers: createHeaders({ token }),
   })
@@ -45,7 +63,7 @@ const getPatient = async ({
   token,
   patientId,
 }: Partial<TokenParams> & PatientParams): Promise<Patient> => {
-  const response = await fetch(`${API_URL}/api/patients/${patientId}`, {
+  const response = await fetch(`${MOCK_API_URL}/api/patients/${patientId}`, {
     cache: 'no-store',
     headers: createHeaders({ token }),
   })
@@ -57,7 +75,12 @@ const getPatient = async ({
   return response.json()
 }
 
+const getCodeSetsCached = cache(getCodeSets)
 const getUserCached = cache(getUser)
 const getPatientCached = cache(getPatient)
 
-export { getUserCached as getUser, getPatientCached as getPatient }
+export {
+  getCodeSetsCached as getCodeSets,
+  getUserCached as getUser,
+  getPatientCached as getPatient,
+}
