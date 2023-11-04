@@ -25,8 +25,13 @@ jobs:
       - run: echo "env_namespace=${{ needs.build-configuration.outputs.env_namespace }}"
 
   test_login:
+    permissions:
+      actions: read
+      contents: read
+      id-token: write
     runs-on: ubuntu-latest
     needs: [which-projects, build-configuration]
+    environment: development
 
     steps:
       - uses: actions/checkout@v3
@@ -38,7 +43,6 @@ jobs:
       - uses: azure/login@v1
         name: Azure login
         with:
-          environment: development
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
           subscription-id: ${{ secrets.AKS_SUBSCRIPTION_ID }}
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
