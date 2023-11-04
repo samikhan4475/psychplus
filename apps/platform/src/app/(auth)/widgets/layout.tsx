@@ -10,6 +10,10 @@ const navMenuItems: MenuItem[] = [
     label: 'Patient',
     href: '/widgets/patient',
   },
+  {
+    label: 'Professional Claim',
+    href: '/widgets/professional-claim',
+  },
 ]
 
 const WidgetsLayout = ({ children }: { children: React.ReactNode }) => (

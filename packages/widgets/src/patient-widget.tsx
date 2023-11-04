@@ -1,7 +1,7 @@
 import { REVCYCLE_URL } from '@psychplus/env'
 import type { PatientParams } from '@psychplus/types'
 import { getAuthToken } from '@psychplus/auth'
-import { PortalContainer } from '@psychplus/components'
+import { PortalContainer } from '@psychplus/components/widget'
 
 type Props = PatientParams
 

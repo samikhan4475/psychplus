@@ -6,12 +6,22 @@ import type { Patient } from '@psychplus/types'
 
 interface PatientState {
   patient?: Patient
+  getPatient: () => Patient
   setPatient: (patient: Patient) => void
 }
 
 type StoreType = UseBoundStore<StoreApi<PatientState>>
 
-const createPatientStore: StateCreator<PatientState> = (set) => ({
+const createPatientStore: StateCreator<PatientState> = (set, get) => ({
+  getPatient: () => {
+    const patient = get().patient
+
+    if (!patient) {
+      throw new Error()
+    }
+
+    return patient
+  },
   setPatient: (patient) => set({ patient }),
 })
 
@@ -23,24 +33,15 @@ const PatientPreloader = ({
   store: StoreType[]
 }) => {
   const loaded = useRef(false)
-  const setters = store.map((s) => s((state) => state.setPatient))
 
   if (!loaded.current) {
     loaded.current = true
+
+    const setters = store.map((s) => s((state) => state.setPatient))
     setters.forEach((set) => set(patient))
   }
 
   return null
 }
 
-const getPatient = (store: StoreType) => {
-  const patient = store((state) => state.patient)
-
-  if (!patient) {
-    throw new Error()
-  }
-
-  return patient
-}
-
-export { type PatientState, createPatientStore, PatientPreloader, getPatient }
+export { type PatientState, createPatientStore, PatientPreloader }

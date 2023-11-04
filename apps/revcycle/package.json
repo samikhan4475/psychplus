@@ -5,7 +5,7 @@
   "scripts": {
     "build": "next build",
     "clean": "rimraf .next .turbo *.tsbuildinfo node_modules",
-    "dev": "cross-env APP_CODE=p+revcycle-ui next dev -p 8001",
+    "dev": "cross-env APP_CODE=p+revcycle-ui next dev -p 8003",
     "lint:next": "next lint",
     "lint": "tsc --noEmit && eslint \"src/**/*.ts*\"",
     "lint:fix": "tsc --noEmit && eslint --fix \"src/**/*.ts*\""
@@ -14,7 +14,10 @@
     "@psychplus/api": "^0.1.0",
     "@psychplus/components": "^0.1.0",
     "@psychplus/store": "^0.1.0",
-    "next": "^13.5.5",
+    "@psychplus/ui": "^0.1.0",
+    "@radix-ui/react-icons": "^1.3.0",
+    "@radix-ui/themes": "^2.0.0",
+    "next": "^14.0.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "zustand": "^4.4.3"

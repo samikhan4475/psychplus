@@ -6,35 +6,36 @@ import type { User } from '@psychplus/types'
 
 interface UserState {
   user?: User
+  getUser: () => User
   setUser: (user: User) => void
 }
 
 type StoreType = UseBoundStore<StoreApi<UserState>>
 
-const createUserStore: StateCreator<UserState> = (set) => ({
+const createUserStore: StateCreator<UserState> = (set, get) => ({
+  getUser: () => {
+    const user = get().user
+
+    if (!user) {
+      throw new Error()
+    }
+
+    return user
+  },
   setUser: (user) => set({ user }),
 })
 
 const UserPreloader = ({ user, store }: { user: User; store: StoreType[] }) => {
   const loaded = useRef(false)
-  const setters = store.map((s) => s((state) => state.setUser))
 
   if (!loaded.current) {
     loaded.current = true
+
+    const setters = store.map((s) => s((state) => state.setUser))
     setters.forEach((set) => set(user))
   }
 
   return null
 }
 
-const getUser = (store: StoreType) => {
-  const user = store((state) => state.user)
-
-  if (!user) {
-    throw new Error()
-  }
-
-  return user
-}
-
-export { type UserState, createUserStore, UserPreloader, getUser }
+export { type UserState, createUserStore, UserPreloader }

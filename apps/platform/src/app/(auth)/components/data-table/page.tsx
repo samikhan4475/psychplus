@@ -15,7 +15,7 @@ import {
   DataTableResetFilterButton,
   DataTableSelectedRowLabel,
   DataTableTextFilter,
-} from '@psychplus/components'
+} from '@psychplus/components/data-table'
 import { Button } from '@psychplus/ui/button'
 import { DropdownMenu } from '@psychplus/ui/dropdown-menu'
 import { PageHeader } from '../../shared/page-header'

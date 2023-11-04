@@ -5,7 +5,7 @@
   "scripts": {
     "build": "next build",
     "clean": "rimraf .next .turbo *.tsbuildinfo node_modules",
-    "dev": "cross-env APP_CODE=p+platform-ui next dev -p 4000",
+    "dev": "cross-env APP_CODE=p+platform-ui next dev -p 8000",
     "lint:next": "next lint",
     "lint": "tsc --noEmit && eslint \"src/**/*.ts*\"",
     "lint:fix": "tsc --noEmit && eslint --fix \"src/**/*.ts*\""
@@ -19,7 +19,7 @@
     "@radix-ui/themes": "^2.0.0",
     "@tanstack/react-table": "^8.10.7",
     "lucide-react": "^0.288.0",
-    "next": "^13.5.5",
+    "next": "^14.0.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },

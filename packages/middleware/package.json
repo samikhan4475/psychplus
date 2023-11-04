@@ -12,7 +12,8 @@
   },
   "dependencies": {
     "@psychplus/auth": "^0.1.0",
-    "next": "^13.5.5"
+    "@psychplus/env": "^0.1.0",
+    "next": "^14.0.1"
   },
   "devDependencies": {
     "@psychplus/eslint-config": "^0.1.0",
