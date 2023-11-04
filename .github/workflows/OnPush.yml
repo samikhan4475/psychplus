@@ -6,7 +6,6 @@ on:
       - main
 
 jobs:
-
   which-projects:
     uses: ./.github/workflows/subtaskProjectFilter.yml
 
@@ -19,6 +18,7 @@ jobs:
   
   test_all:
     runs-on: ubuntu-latest
+    environment: development
     needs: [which-projects, build-configuration]
     steps:
       - run: echo "PUSH- github=${{ needs.which-projects.outputs.github }} helm=${{ needs.which-projects.outputs.helm }} k8s=${{ needs.which-projects.outputs.k8s }}"
