@@ -28,6 +28,8 @@ jobs:
   test_login:
     runs-on: ubuntu-latest
     needs: [which-projects, build-configuration]
+    environment: development
+
     steps:
       - uses: actions/checkout@v3
 
