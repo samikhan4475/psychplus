@@ -18,7 +18,6 @@ jobs:
   
   test_all:
     runs-on: ubuntu-latest
-    environment: development
     needs: [which-projects, build-configuration]
     steps:
       - run: echo "PUSH- github=${{ needs.which-projects.outputs.github }} helm=${{ needs.which-projects.outputs.helm }} k8s=${{ needs.which-projects.outputs.k8s }}"
@@ -39,6 +38,7 @@ jobs:
       - uses: azure/login@v1
         name: Azure login
         with:
+          environment: development
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
           subscription-id: ${{ secrets.AKS_SUBSCRIPTION_ID }}
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
