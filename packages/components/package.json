@@ -14,6 +14,7 @@
   "dependencies": {
     "@hookform/error-message": "^2.0.1",
     "@psychplus/api": "^0.1.0",
+    "@psychplus/constants": "^0.1.0",
     "@psychplus/ui": "^0.1.0",
     "@radix-ui/react-icons": "^1.3.0",
     "@radix-ui/themes": "^2.0.0",

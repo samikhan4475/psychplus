@@ -1,6 +1,6 @@
 @layer tw_base, radix_ui, tw_components_utils, base;
 
-@import "@radix-ui/themes/styles.css" layer(radix_ui);
+@import '@radix-ui/themes/styles.css' layer(radix_ui);
 
 @layer tw_base {
   @tailwind base;
@@ -12,7 +12,14 @@
 }
 
 @layer base {
-  html, body {
+  html,
+  body {
     height: 100%;
+  }
+  /* to remove the toggle inside the number type input */
+  input[type='number']::-webkit-inner-spin-button,
+  input[type='number']::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
   }
 }

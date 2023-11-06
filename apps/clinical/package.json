@@ -11,15 +11,19 @@
     "lint:fix": "tsc --noEmit && eslint --fix \"src/**/*.ts*\""
   },
   "dependencies": {
+    "@hookform/error-message": "^2.0.1",
     "@psychplus/api": "^0.1.0",
     "@psychplus/components": "^0.1.0",
+    "@psychplus/constants": "^0.1.0",
     "@psychplus/middleware": "^0.1.0",
     "@psychplus/store": "^0.1.0",
+    "@psychplus/ui": "^0.1.0",
     "@psychplus/widgets": "^0.1.0",
     "@radix-ui/themes": "^2.0.0",
     "next": "^14.0.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-hook-form": "^7.47.0",
     "zustand": "^4.4.3"
   },
   "devDependencies": {

@@ -4,7 +4,11 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": [
+        "./src/*",
+        "../../packages/ui/src/*",
+        "../../packages/components/src/*"
+      ]
     }
   },
   "include": ["src", "next.config.js", "next-env.d.ts", ".next/types/**/*.ts"],
