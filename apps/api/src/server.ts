@@ -2,7 +2,7 @@ import { json, urlencoded } from 'body-parser'
 import cors from 'cors'
 import express, { Express } from 'express'
 import morgan from 'morgan'
-import { patients, users } from './data'
+import { patientReferrals, patients, users } from './data'
 import { wait } from './utils'
 
 const ANON = ['/api/login']
@@ -65,6 +65,16 @@ export const createServer = (): Express => {
     }
 
     res.status(200).json(patient)
+  })
+
+  app.get('/api/patients/:id/referrals', async (req, res) => {
+    await wait(API_DELAY)
+
+    const referrals = patientReferrals.filter(
+      (referral) => referral.patientId === Number(req.params.id),
+    )
+
+    res.status(200).json(referrals)
   })
 
   return app

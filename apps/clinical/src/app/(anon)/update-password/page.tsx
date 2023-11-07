@@ -5,7 +5,7 @@ import { COPYRIGHT_TEXT } from '@psychplus/constants/strings'
 import { Flex, Heading, Link, Text } from '@radix-ui/themes'
 import { UpdatePasswordForm } from './update-password-form'
 
-const ForgotPasswordPage = () => (
+const UpdatePasswordPage = () => (
   <Flex height="100%">
     <div className="hidden bg-accent-9 md:block md:w-4/12" />
     <Flex direction="column" justify="center" grow="1" py="4" px="6">
@@ -40,4 +40,4 @@ const ForgotPasswordPage = () => (
   </Flex>
 )
 
-export default ForgotPasswordPage
+export default UpdatePasswordPage

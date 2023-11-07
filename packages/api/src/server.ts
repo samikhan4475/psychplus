@@ -5,6 +5,7 @@ import type {
   CodeSet,
   Patient,
   PatientParams,
+  PatientReferral,
   TokenParams,
   User,
 } from '@psychplus/types'
@@ -75,12 +76,33 @@ const getPatient = async ({
   return response.json()
 }
 
+const getPatientReferrals = async ({
+  token,
+  patientId,
+}: Partial<TokenParams> & PatientParams): Promise<PatientReferral[]> => {
+  const response = await fetch(
+    `${MOCK_API_URL}/api/patients/${patientId}/referrals`,
+    {
+      cache: 'no-store',
+      headers: createHeaders({ token }),
+    },
+  )
+
+  if (!response.ok) {
+    throw new Error()
+  }
+
+  return response.json()
+}
+
 const getCodeSetsCached = cache(getCodeSets)
 const getUserCached = cache(getUser)
 const getPatientCached = cache(getPatient)
+const getPatientReferralsCached = cache(getPatientReferrals)
 
 export {
   getCodeSetsCached as getCodeSets,
   getUserCached as getUser,
   getPatientCached as getPatient,
+  getPatientReferralsCached as getPatientReferrals,
 }

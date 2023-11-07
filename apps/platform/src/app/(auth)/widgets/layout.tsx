@@ -14,6 +14,10 @@ const navMenuItems: MenuItem[] = [
     label: 'Professional Claim',
     href: '/widgets/professional-claim',
   },
+  {
+    label: 'Patient Referrals',
+    href: '/widgets/patient-referrals',
+  },
 ]
 
 const WidgetsLayout = ({ children }: { children: React.ReactNode }) => (
@@ -28,7 +32,7 @@ const WidgetsLayout = ({ children }: { children: React.ReactNode }) => (
     </Box>
     <Box grow="1">
       <Flex justify="center">
-        <Section>{children}</Section>
+        <Section px="4">{children}</Section>
       </Flex>
     </Box>
   </Flex>

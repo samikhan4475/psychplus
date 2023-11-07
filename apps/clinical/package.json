@@ -20,6 +20,7 @@
     "@psychplus/ui": "^0.1.0",
     "@psychplus/widgets": "^0.1.0",
     "@radix-ui/themes": "^2.0.0",
+    "@tanstack/react-table": "^8.10.7",
     "next": "^14.0.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
