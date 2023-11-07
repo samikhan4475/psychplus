@@ -86,7 +86,7 @@ const PinCode = ({
     <Flex ref={wrapperRef} gap="2" data-testid={dataTestId}>
       {value.map((c, i) => (
         <input
-          key={i}
+          key={`pincode-${i}`}
           type="number"
           value={c && isPassword ? '•' : c}
           autoFocus={i === 0 && autoFocus}

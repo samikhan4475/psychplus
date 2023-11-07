@@ -8,22 +8,22 @@ import { Button } from '@psychplus/ui/button'
 import { Dialog } from '@psychplus/ui/dialog'
 import { PinCode } from '@psychplus/ui/pin-code'
 
-interface SignupFormFields {
+interface ForgotPasswordFormFields {
   email: string
 }
 
-const SignupForm = () => {
+const ForgotPasswordForm = () => {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<SignupFormFields>({
+  } = useForm<ForgotPasswordFormFields>({
     criteriaMode: 'all',
   })
 
   const [otpDialogOpen, setOtpDialogOpen] = useState(false)
 
-  const onSubmit: SubmitHandler<SignupFormFields> = async () => {
+  const onSubmit: SubmitHandler<ForgotPasswordFormFields> = async () => {
     await new Promise<void>((resolve) => {
       setTimeout(() => {
         resolve()
@@ -36,6 +36,7 @@ const SignupForm = () => {
   const submitOTP = async () => {
     // Api implementation in next phase
     console.log('submitOTP pressed')
+    location.assign('/update-password')
   }
 
   const resendOTP = async () => {
@@ -48,15 +49,14 @@ const SignupForm = () => {
       <form onSubmit={handleSubmit(onSubmit)}>
         <FormTextInput
           name="email"
-          type="email"
           register={register}
           errors={errors}
           placeholder="Email"
-          data-testid="signup-email-input"
+          data-testid="forgot-password-email-input"
         />
         <Dialog.Root open={otpDialogOpen} onOpenChange={setOtpDialogOpen}>
-          <Button data-testid="signup-button" size="3" type="submit">
-            Sign up
+          <Button data-testid="forgot-password-button" size="3" type="submit">
+            Submit
           </Button>
           <Dialog.Content className="w-fit px-24 py-8">
             <Flex direction="column" align="center">
@@ -73,12 +73,12 @@ const SignupForm = () => {
                 onChange={(value: string) => {
                   console.log(value)
                 }}
-                data-testid="signup-otp-input"
+                data-testid="forgot-password-otp-input"
               />
               <Flex gap="3" mt="5">
                 <Button
                   variant="soft"
-                  data-testid="signup-resend-otp-button"
+                  data-testid="forgot-password-resend-otp-button"
                   color="gray"
                   onClick={() => {
                     void resendOTP()
@@ -89,7 +89,7 @@ const SignupForm = () => {
 
                 <Dialog.Close>
                   <Button
-                    data-testid="signup-submit-otp-button"
+                    data-testid="forgot-password-submit-otp-button"
                     onClick={() => {
                       void submitOTP()
                     }}
@@ -106,4 +106,4 @@ const SignupForm = () => {
   )
 }
 
-export { SignupForm }
+export { ForgotPasswordForm }

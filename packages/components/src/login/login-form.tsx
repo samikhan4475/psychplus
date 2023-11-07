@@ -37,6 +37,7 @@ const LoginForm = () => {
       <form onSubmit={handleSubmit(onSubmit)}>
         <FormTextInput
           name="username"
+          type="email"
           register={register}
           errors={errors}
           placeholder="Email"
@@ -44,6 +45,7 @@ const LoginForm = () => {
         />
         <FormTextInput
           name="password"
+          type="password"
           register={register}
           errors={errors}
           placeholder="Password"
@@ -55,7 +57,7 @@ const LoginForm = () => {
               <Checkbox
                 defaultChecked
                 data-testid="login-remember-me-checkbox"
-              />{' '}
+              />
               Remember me
             </Flex>
           </Text>
@@ -64,7 +66,7 @@ const LoginForm = () => {
               href="/forgot-password"
               data-testid="login-forgot-password-link"
             >
-              Forgot Password?
+              Forgot password?
             </NextLink>
           </Link>
         </Flex>
