@@ -4,15 +4,15 @@ import { useRef } from 'react'
 import type { StateCreator, StoreApi, UseBoundStore } from 'zustand'
 import type { PatientReferral } from '@psychplus/types'
 
-interface PatientReferralsState {
+interface PatientReferralState {
   referrals?: PatientReferral[]
   getReferrals: () => PatientReferral[]
   setReferrals: (patient: PatientReferral[]) => void
 }
 
-type StoreType = UseBoundStore<StoreApi<PatientReferralsState>>
+type StoreType = UseBoundStore<StoreApi<PatientReferralState>>
 
-const createPatientReferralsStore: StateCreator<PatientReferralsState> = (
+const createPatientReferralStore: StateCreator<PatientReferralState> = (
   set,
   get,
 ) => ({
@@ -36,11 +36,10 @@ const PatientReferralsPreloader = ({
   store: StoreType[]
 }) => {
   const loaded = useRef(false)
+  const setters = store.map((s) => s((state) => state.setReferrals))
 
   if (!loaded.current) {
     loaded.current = true
-
-    const setters = store.map((s) => s((state) => state.setReferrals))
     setters.forEach((set) => set(referrals))
   }
 
@@ -48,7 +47,7 @@ const PatientReferralsPreloader = ({
 }
 
 export {
-  type PatientReferralsState,
-  createPatientReferralsStore,
+  type PatientReferralState,
+  createPatientReferralStore,
   PatientReferralsPreloader,
 }

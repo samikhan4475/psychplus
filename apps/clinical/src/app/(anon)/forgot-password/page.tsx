@@ -15,7 +15,7 @@ const ForgotPasswordPage = () => (
             Forgot Password
           </Heading>
           <ForgotPasswordForm />
-          <Text size="2" mt="4">
+          <Text size="2">
             Aleady have an account?
             <Link size="2" ml="1" asChild>
               <NextLink href="/login" data-testid="forget-password-login-link">

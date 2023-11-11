@@ -1,4 +1,5 @@
 import { Text } from '@radix-ui/themes'
+import { Tooltip } from './tooltip'
 
 interface TableCellEmptyProps {
   label?: string
@@ -30,14 +31,16 @@ const TableCellLongText = ({
   }
 
   return (
-    <Text
-      style={{
-        maxWidth: `${maxWidth}px`,
-      }}
-      className="block overflow-hidden text-ellipsis whitespace-nowrap"
-    >
-      {text}
-    </Text>
+    <Tooltip content={text} delayDuration={250} className="max-w-[200px]">
+      <Text
+        style={{
+          maxWidth: `${maxWidth}px`,
+        }}
+        className="block overflow-hidden text-ellipsis whitespace-nowrap"
+      >
+        {text}
+      </Text>
+    </Tooltip>
   )
 }
 

@@ -15,7 +15,7 @@ const SignupPage = () => (
             Sign up
           </Heading>
           <SignupForm />
-          <Text size="2" mt="4">
+          <Text size="2">
             Aleady have an account?
             <Link size="2" ml="1" asChild>
               <NextLink href="/login" data-testid="signup-login-link">

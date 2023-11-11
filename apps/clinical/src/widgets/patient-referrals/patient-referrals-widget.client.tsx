@@ -1,7 +1,7 @@
 'use client'
 
 import { Box } from '@radix-ui/themes'
-import PatientReferralsTable from './patient-referrals-table'
+import { PatientReferralsTable } from './components'
 
 const PatientReferralsWidgetClient = () => {
   return (

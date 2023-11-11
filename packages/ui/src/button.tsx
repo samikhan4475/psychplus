@@ -1,3 +1,5 @@
 import { Button } from '@radix-ui/themes'
 
-export { Button }
+type ButtonProps = React.ComponentProps<typeof Button>
+
+export { Button, type ButtonProps }

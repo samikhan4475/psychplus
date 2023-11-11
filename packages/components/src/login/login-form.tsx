@@ -2,30 +2,35 @@
 
 import NextLink from 'next/link'
 import { useSearchParams } from 'next/navigation'
+import {
+  Form,
+  FormSubmitButton,
+  FormTextInput,
+  useForm,
+  validate,
+} from '@psychplus/form'
 import { Flex, Link, Text } from '@radix-ui/themes'
-import { useForm, type SubmitHandler } from 'react-hook-form'
+import { type SubmitHandler } from 'react-hook-form'
+import { z } from 'zod'
 import * as api from '@psychplus/api/client'
-import { Button } from '@psychplus/ui/button'
 import { Checkbox } from '@psychplus/ui/checkbox'
-import { FormTextInput } from '@/form'
 
-interface LoginFormFields {
-  username: string
-  password: string
-}
+const schema = z.object({
+  username: validate.email,
+  password: validate.requiredString,
+})
+
+type SchemaType = z.infer<typeof schema>
 
 const LoginForm = () => {
   const searchParams = useSearchParams()
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<LoginFormFields>({
+  const form = useForm({
+    schema,
     criteriaMode: 'all',
   })
 
-  const onSubmit: SubmitHandler<LoginFormFields> = (data) => {
+  const onSubmit: SubmitHandler<SchemaType> = (data) => {
     api.login({ username: data.username, password: data.password }).then(() => {
       const next = searchParams.get('next') ?? '/'
       location.assign(next)
@@ -33,48 +38,43 @@ const LoginForm = () => {
   }
 
   return (
-    <Flex direction="column" gap="4" asChild>
-      <form onSubmit={handleSubmit(onSubmit)}>
+    <Form form={form} onSubmit={onSubmit}>
+      <Flex direction="column" gap="4" mb="4">
         <FormTextInput
-          name="username"
-          type="email"
-          register={register}
-          errors={errors}
+          type="text"
+          label="Email"
           placeholder="Email"
           data-testid="login-username-input"
+          {...form.register('username')}
         />
         <FormTextInput
-          name="password"
           type="password"
-          register={register}
-          errors={errors}
+          label="Password"
           placeholder="Password"
           data-testid="login-password-input"
+          {...form.register('password')}
         />
-        <Flex align="center" justify="between">
-          <Text as="label" size="2">
-            <Flex gap="2">
-              <Checkbox
-                defaultChecked
-                data-testid="login-remember-me-checkbox"
-              />
-              Remember me
-            </Flex>
-          </Text>
-          <Link size="2" asChild>
-            <NextLink
-              href="/forgot-password"
-              data-testid="login-forgot-password-link"
-            >
-              Forgot password?
-            </NextLink>
-          </Link>
-        </Flex>
-        <Button type="submit" size="3" data-testid="login-button">
-          Sign in
-        </Button>
-      </form>
-    </Flex>
+      </Flex>
+      <Flex align="center" justify="between" mb="4">
+        <Text as="label" size="2">
+          <Flex gap="2">
+            <Checkbox defaultChecked data-testid="login-remember-me-checkbox" />
+            Remember me
+          </Flex>
+        </Text>
+        <Link size="2" asChild>
+          <NextLink
+            href="/forgot-password"
+            data-testid="login-forgot-password-link"
+          >
+            Forgot password?
+          </NextLink>
+        </Link>
+      </Flex>
+      <FormSubmitButton data-testid="login-submit-button">
+        Sign in
+      </FormSubmitButton>
+    </Form>
   )
 }
 

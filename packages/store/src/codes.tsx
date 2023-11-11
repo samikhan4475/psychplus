@@ -81,11 +81,10 @@ const CodeSetPreloader = ({
   store: StoreType[]
 }) => {
   const loaded = useRef(false)
+  const setters = store.map((s) => s((state) => state.setCodes))
 
   if (!loaded.current) {
     loaded.current = true
-
-    const setters = store.map((s) => s((state) => state.setCodes))
     setters.forEach((set) => set(codes))
   }
 

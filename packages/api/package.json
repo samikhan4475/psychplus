@@ -3,8 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "exports": {
-    "./server": "./src/server.ts",
-    "./client": "./src/client.ts"
+    "./*": "./src/*/index.ts"
   },
   "scripts": {
     "clean": "rimraf .turbo *.tsbuildinfo node_modules",

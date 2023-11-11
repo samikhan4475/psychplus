@@ -14,7 +14,7 @@ import {
   DataTableResetFilterButton,
 } from '@psychplus/components/data-table'
 import { TableCellLongText, TableCellText } from '@psychplus/ui/table-cell'
-import { useStore } from './store'
+import { useStore } from '@/widgets/patient-referrals/store'
 
 const columns: ColumnDef<PatientReferral>[] = [
   {
@@ -140,11 +140,11 @@ const DataTableFooter = (table: ReactTable<PatientReferral>) => (
 )
 
 const PatientReferralsTable = () => {
-  const referrals = useStore().getReferrals()
+  const data = useStore((state) => state.getReferrals())
 
   return (
     <DataTable
-      data={referrals}
+      data={data}
       columns={columns}
       renderHeader={DataTableHeader}
       renderFooter={DataTableFooter}
@@ -152,4 +152,4 @@ const PatientReferralsTable = () => {
   )
 }
 
-export default PatientReferralsTable
+export { PatientReferralsTable }

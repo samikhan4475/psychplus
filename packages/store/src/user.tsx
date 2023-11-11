@@ -27,11 +27,10 @@ const createUserStore: StateCreator<UserState> = (set, get) => ({
 
 const UserPreloader = ({ user, store }: { user: User; store: StoreType[] }) => {
   const loaded = useRef(false)
+  const setters = store.map((s) => s((state) => state.setUser))
 
   if (!loaded.current) {
     loaded.current = true
-
-    const setters = store.map((s) => s((state) => state.setUser))
     setters.forEach((set) => set(user))
   }
 

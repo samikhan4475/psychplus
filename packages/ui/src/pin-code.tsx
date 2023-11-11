@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react'
 import { Flex } from '@radix-ui/themes'
-import { NativeInputEvent, PropsWithTestId } from '@/types'
+import { NativeInputEvent, PropsWithTestId } from './types'
 
 interface PinCodeProps extends PropsWithTestId {
   autoFocus?: boolean

@@ -1,25 +1,35 @@
 'use client'
 
+import {
+  Form,
+  FormSubmitButton,
+  FormTextInput,
+  useForm,
+  validate,
+} from '@psychplus/form'
 import { Flex } from '@radix-ui/themes'
-import { useForm, type SubmitHandler } from 'react-hook-form'
-import { FormTextInput } from '@psychplus/components/form'
-import { Button } from '@psychplus/ui/button'
+import { type SubmitHandler } from 'react-hook-form'
+import { z } from 'zod'
 
-interface UpdatePasswordFormFields {
-  password: string
-  confirmPassword: string
-}
+const schema = z
+  .object({
+    password: validate.password,
+    confirmPassword: validate.password,
+  })
+  .refine((values) => values.password === values.confirmPassword, {
+    message: 'Passwords do not match',
+    path: ['confirmPassword'],
+  })
+
+type SchemaType = z.infer<typeof schema>
 
 const UpdatePasswordForm = () => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<UpdatePasswordFormFields>({
+  const form = useForm({
+    schema,
     criteriaMode: 'all',
   })
 
-  const onSubmit: SubmitHandler<UpdatePasswordFormFields> = async () => {
+  const onSubmit: SubmitHandler<SchemaType> = async () => {
     await new Promise<void>((resolve) => {
       setTimeout(() => {
         resolve()
@@ -29,29 +39,27 @@ const UpdatePasswordForm = () => {
   }
 
   return (
-    <Flex direction="column" gap="4" asChild>
-      <form onSubmit={handleSubmit(onSubmit)}>
+    <Form form={form} onSubmit={onSubmit}>
+      <Flex direction="column" gap="4" mb="4">
         <FormTextInput
-          name="password"
           type="password"
-          register={register}
-          errors={errors}
-          placeholder="password"
+          label="New Password"
+          placeholder="Choose a new password"
           data-testid="update-password-password-input"
+          {...form.register('password')}
         />
         <FormTextInput
-          name="confirmPassword"
           type="password"
-          register={register}
-          errors={errors}
-          placeholder="confirm password"
+          label="Confirm Password"
+          placeholder="Confirm your new password"
           data-testid="update-password-confirm-input"
+          {...form.register('confirmPassword')}
         />
-        <Button data-testid="update-password-button" size="3" type="submit">
-          Submit
-        </Button>
-      </form>
-    </Flex>
+      </Flex>
+      <FormSubmitButton data-testid="update-password-submit-button">
+        Submit
+      </FormSubmitButton>
+    </Form>
   )
 }
 

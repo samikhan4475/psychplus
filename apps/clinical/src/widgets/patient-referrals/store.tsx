@@ -1,19 +1,24 @@
 'use client'
 
-import { create } from 'zustand'
+import { shallow } from 'zustand/shallow'
+import { createWithEqualityFn } from 'zustand/traditional'
 import { createPatientStore, type PatientState } from '@psychplus/store/patient'
 import {
-  createPatientReferralsStore,
-  type PatientReferralsState,
+  createPatientReferralStore,
+  type PatientReferralState,
 } from '@psychplus/store/patient-referrals'
 import { createUserStore, type UserState } from '@psychplus/store/user'
+import { combineStateCreators } from '@psychplus/store/utils'
 
-const useStore = create<UserState & PatientState & PatientReferralsState>()(
-  (...a) => ({
-    ...createUserStore(...a),
-    ...createPatientStore(...a),
-    ...createPatientReferralsStore(...a),
-  }),
+type StoreType = UserState & PatientState & PatientReferralState
+
+const useStore = createWithEqualityFn<StoreType>(
+  combineStateCreators(
+    createUserStore,
+    createPatientStore,
+    createPatientReferralStore,
+  ),
+  shallow,
 )
 
 export { useStore }

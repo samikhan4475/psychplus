@@ -13,8 +13,10 @@
   "dependencies": {
     "@hookform/error-message": "^2.0.1",
     "@psychplus/api": "^0.1.0",
+    "@psychplus/codeset": "^0.1.0",
     "@psychplus/components": "^0.1.0",
     "@psychplus/constants": "^0.1.0",
+    "@psychplus/form": "^0.1.0",
     "@psychplus/middleware": "^0.1.0",
     "@psychplus/store": "^0.1.0",
     "@psychplus/ui": "^0.1.0",
@@ -25,6 +27,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.47.0",
+    "zod": "^3.22.4",
     "zustand": "^4.4.3"
   },
   "devDependencies": {

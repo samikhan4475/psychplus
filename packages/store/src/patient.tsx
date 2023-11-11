@@ -33,11 +33,10 @@ const PatientPreloader = ({
   store: StoreType[]
 }) => {
   const loaded = useRef(false)
+  const setters = store.map((s) => s((state) => state.setPatient))
 
   if (!loaded.current) {
     loaded.current = true
-
-    const setters = store.map((s) => s((state) => state.setPatient))
     setters.forEach((set) => set(patient))
   }
 

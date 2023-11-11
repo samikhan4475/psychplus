@@ -1,9 +1,9 @@
 import * as React from 'react'
 import { type Metadata } from 'next'
 import Link from 'next/link'
+import { CodeSetPreloader } from '@psychplus/codeset'
+import { getCodeSets } from '@psychplus/codeset/api/server'
 import { Flex, Text } from '@radix-ui/themes'
-import { CodeSetPreloader } from '@psychplus/store/codes'
-import * as api from '@psychplus/api/server'
 import { useStore } from '@/store'
 
 export const metadata: Metadata = {
@@ -12,11 +12,11 @@ export const metadata: Metadata = {
 }
 
 const IndexLayout = async ({ children }: { children: React.ReactNode }) => {
-  const codes = await api.getCodeSets()
+  const codeSets = await getCodeSets()
 
   return (
     <>
-      <CodeSetPreloader codes={codes} store={[useStore]} />
+      <CodeSetPreloader codeSets={codeSets} store={[useStore]} />
       <Flex align="center" px="8" py="4" className="border-b border-b-gray-5">
         <Link href="/" className="mr-8">
           <Text size="4" weight="bold">

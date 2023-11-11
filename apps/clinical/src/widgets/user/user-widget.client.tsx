@@ -3,7 +3,7 @@
 import { useStore } from './store'
 
 const UserWidgetClient = () => {
-  const user = useStore().getUser()
+  const user = useStore((state) => state.getUser())
 
   return (
     <div className="h-full w-full p-4">

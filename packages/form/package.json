@@ -1,0 +1,28 @@
+{
+  "name": "@psychplus/form",
+  "version": "0.1.0",
+  "private": true,
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "clean": "rimraf .turbo *.tsbuildinfo node_modules",
+    "lint": "tsc --noEmit && eslint \"src/**/*.ts*\"",
+    "lint:fix": "tsc --noEmit && eslint --fix \"src/**/*.ts*\""
+  },
+  "dependencies": {
+    "@hookform/resolvers": "^3.3.2",
+    "@psychplus/ui": "^0.1.0",
+    "@radix-ui/themes": "^2.0.0",
+    "react": "^18.2.0",
+    "react-hook-form": "^7.47.0",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "@psychplus/eslint-config": "^0.1.0",
+    "@psychplus/tsconfig": "^0.1.0",
+    "@types/react": "^18.2.25",
+    "eslint": "^8.50.0",
+    "typescript": "^5.2.2"
+  }
+}
