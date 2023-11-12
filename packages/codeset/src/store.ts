@@ -1,4 +1,4 @@
-import type { StateCreator, StoreApi, UseBoundStore } from 'zustand'
+import { type StateCreator, type StoreApi, type UseBoundStore } from 'zustand'
 import { CodeSet, CodeSetIndex } from './types'
 
 interface CodeSetState {

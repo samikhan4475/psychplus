@@ -3,8 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "exports": {
-    ".": "./src/index.ts",
-    "./api/server": "./src/api/server/index.ts"
+    ".": "./src/index.ts"
   },
   "scripts": {
     "clean": "rimraf .turbo *.tsbuildinfo node_modules",
@@ -13,8 +12,7 @@
   },
   "dependencies": {
     "@psychplus/api": "^0.1.0",
-    "@psychplus/env": "^0.1.0",
-    "@psychplus/types": "^0.1.0",
+    "@psychplus/utils": "^0.1.0",
     "next": "^14.0.1",
     "react": "^18.2.0",
     "zustand": "^4.4.3"

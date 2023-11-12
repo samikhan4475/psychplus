@@ -1,16 +1,15 @@
-import type { PatientParams, TokenParams } from '@psychplus/types'
-import { PatientPreloader } from '@psychplus/store/patient'
-import * as api from '@psychplus/api/server'
+import {
+  getPatient,
+  PatientPreloader,
+  type PatientParams,
+} from '@psychplus/patient'
 import { PatientWidgetClient } from './patient-widget.client'
 import { useStore } from './store'
 
-type PatientWidgetProps = TokenParams & PatientParams
+type PatientWidgetProps = PatientParams
 
-const PatientWidgetServer = async ({
-  token,
-  patientId,
-}: PatientWidgetProps) => {
-  const patient = await api.getPatient({ token, patientId })
+const PatientWidgetServer = async ({ patientId }: PatientWidgetProps) => {
+  const patient = await getPatient({ patientId })
 
   return (
     <>

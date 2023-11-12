@@ -1,5 +1,8 @@
 'use client'
 
+import { Flex } from '@radix-ui/themes'
+import { type SubmitHandler } from 'react-hook-form'
+import { z } from 'zod'
 import {
   Form,
   FormSubmitButton,
@@ -7,9 +10,6 @@ import {
   useForm,
   validate,
 } from '@psychplus/form'
-import { Flex } from '@radix-ui/themes'
-import { type SubmitHandler } from 'react-hook-form'
-import { z } from 'zod'
 
 const schema = z
   .object({

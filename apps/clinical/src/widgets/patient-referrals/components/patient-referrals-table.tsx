@@ -2,8 +2,7 @@
 
 import * as React from 'react'
 import { Flex, Text } from '@radix-ui/themes'
-import { type ColumnDef, type Table as ReactTable } from '@tanstack/react-table'
-import { PatientReferral } from '@psychplus/types'
+import { type ColumnDef, type Table } from '@tanstack/react-table'
 import {
   DataTable,
   DataTableColumnHeader,
@@ -12,9 +11,10 @@ import {
   DataTablePageNavigation,
   DataTablePageSizeSelector,
   DataTableResetFilterButton,
-} from '@psychplus/components/data-table'
+} from '@psychplus/ui/data-table'
 import { TableCellLongText, TableCellText } from '@psychplus/ui/table-cell'
-import { useStore } from '@/widgets/patient-referrals/store'
+import { useStore } from '../store'
+import { PatientReferral } from '../types'
 
 const columns: ColumnDef<PatientReferral>[] = [
   {
@@ -100,7 +100,7 @@ const columns: ColumnDef<PatientReferral>[] = [
   },
 ]
 
-const DataTableHeader = (table: ReactTable<PatientReferral>) => {
+const DataTableHeader = (table: Table<PatientReferral>) => {
   const services = Array.from(
     new Set(
       table
@@ -130,7 +130,7 @@ const DataTableHeader = (table: ReactTable<PatientReferral>) => {
   )
 }
 
-const DataTableFooter = (table: ReactTable<PatientReferral>) => (
+const DataTableFooter = (table: Table<PatientReferral>) => (
   <Flex py="3" align="center" justify="end">
     <Flex gap="3">
       <DataTablePageSizeSelector table={table} />

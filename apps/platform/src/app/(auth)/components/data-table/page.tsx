@@ -3,7 +3,8 @@
 import * as React from 'react'
 import { DotsHorizontalIcon } from '@radix-ui/react-icons'
 import { Box, Flex, Text } from '@radix-ui/themes'
-import { type ColumnDef, type Table as ReactTable } from '@tanstack/react-table'
+import { type ColumnDef, type Table } from '@tanstack/react-table'
+import { Button } from '@psychplus/ui/button'
 import {
   createDataTableSelectColumn,
   DataTable,
@@ -15,8 +16,7 @@ import {
   DataTableResetFilterButton,
   DataTableSelectedRowLabel,
   DataTableTextFilter,
-} from '@psychplus/components/data-table'
-import { Button } from '@psychplus/ui/button'
+} from '@psychplus/ui/data-table'
 import { DropdownMenu } from '@psychplus/ui/dropdown-menu'
 import { PageHeader } from '../../shared/page-header'
 
@@ -155,7 +155,7 @@ const statuses = [
   },
 ]
 
-const DataTableHeader = (table: ReactTable<Payment>) => {
+const DataTableHeader = (table: Table<Payment>) => {
   return (
     <Flex align="center" justify="between" py="3">
       <Flex align="center" gap="4">
@@ -179,7 +179,7 @@ const DataTableHeader = (table: ReactTable<Payment>) => {
   )
 }
 
-const DataTableFooter = (table: ReactTable<Payment>) => (
+const DataTableFooter = (table: Table<Payment>) => (
   <Flex py="3" align="center" justify="between">
     <DataTableSelectedRowLabel table={table} />
     <Flex gap="3">

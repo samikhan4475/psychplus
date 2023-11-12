@@ -1,12 +1,8 @@
-import type { SearchParams } from '@psychplus/types'
+import { withAPI } from '@psychplus/ui/with-api'
 import { UserWidgetServer } from '@/widgets/user'
 
-const UserWidgetPage = ({ searchParams }: { searchParams: SearchParams }) => {
-  if (!searchParams.token) {
-    return <div>Token is required</div>
-  }
-
-  return <UserWidgetServer token={searchParams.token} />
+const UserWidgetPage = () => {
+  return <UserWidgetServer />
 }
 
-export default UserWidgetPage
+export default withAPI(UserWidgetPage)

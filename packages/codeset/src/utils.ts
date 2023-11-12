@@ -1,4 +1,4 @@
-import { Code } from './types'
+import { type Code } from './types'
 
 const getCodeAttribute = (code: Code, name: string) =>
   code.attributes?.find((attr) => attr.name === name)?.value ?? 'N/A'

@@ -1,17 +1,15 @@
-import { TokenParams } from '@psychplus/types'
 import { ProfessionalClaimWidgetClient } from './professional-claim-widget.client'
 
-type ProfessionalClaimWidgetProps = TokenParams & {
+interface ProfessionalClaimWidgetProps {
   claimId?: string
 }
 
 const ProfessionalClaimWidgetServer = ({
-  token,
   claimId,
 }: ProfessionalClaimWidgetProps) => {
   return (
     <>
-      <ProfessionalClaimWidgetClient token={token} />
+      <ProfessionalClaimWidgetClient />
     </>
   )
 }

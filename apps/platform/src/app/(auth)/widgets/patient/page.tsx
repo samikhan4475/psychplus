@@ -1,4 +1,4 @@
-import { PatientWidget } from '@psychplus/widgets'
+import { PatientWidget } from '@psychplus/widgets/revcycle'
 import { PageHeader } from '../../shared/page-header'
 
 const TITLE = 'Patient Widget'

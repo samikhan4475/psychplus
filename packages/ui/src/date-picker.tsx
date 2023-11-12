@@ -2,9 +2,9 @@
 
 import { CalendarIcon } from '@radix-ui/react-icons'
 import { format } from 'date-fns'
-import { Button } from '@psychplus/ui/button'
-import { Calendar } from '@psychplus/ui/calendar'
-import { Popover } from '@psychplus/ui/popover'
+import { Button } from './button'
+import { Calendar } from './calendar'
+import { Popover } from './popover'
 
 const DatePicker = ({
   date,

@@ -1,4 +1,4 @@
-import { PatientReferralsWidget } from '@psychplus/widgets'
+import { PatientReferralsWidget } from '@psychplus/widgets/clinical'
 import { PageHeader } from '../../shared/page-header'
 
 const TITLE = 'Patient Referrals Widget'

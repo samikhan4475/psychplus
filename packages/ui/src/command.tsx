@@ -3,7 +3,7 @@
 import * as React from 'react'
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons'
 import { Command as CommandPrimitive } from 'cmdk'
-import { cn } from '@psychplus/ui/cn'
+import { cn } from './cn'
 
 const Root = React.forwardRef<
   React.ElementRef<typeof CommandPrimitive>,

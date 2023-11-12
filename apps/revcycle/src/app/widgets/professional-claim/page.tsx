@@ -1,4 +1,5 @@
-import type { SearchParams } from '@psychplus/types'
+import { withAPI } from '@psychplus/ui/with-api'
+import { type SearchParams } from '@psychplus/utils/url'
 import { ProfessionalClaimWidgetServer } from '@/widgets/professional-claim'
 
 const ProfessionalClaimWidgetPage = ({
@@ -6,16 +7,7 @@ const ProfessionalClaimWidgetPage = ({
 }: {
   searchParams: SearchParams
 }) => {
-  if (!searchParams.token) {
-    return <div>Token is required</div>
-  }
-
-  return (
-    <ProfessionalClaimWidgetServer
-      token={searchParams.token}
-      claimId={searchParams.claimId}
-    />
-  )
+  return <ProfessionalClaimWidgetServer claimId={searchParams.claimId} />
 }
 
-export default ProfessionalClaimWidgetPage
+export default withAPI(ProfessionalClaimWidgetPage)

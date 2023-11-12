@@ -1,4 +1,4 @@
-import { createMiddleware } from '@psychplus/middleware'
+import { createMiddleware } from '@psychplus/auth'
 
 const REQUIRE_AUTH = ['/', '/widgets', '/components']
 const REQUIRE_ANON = ['/login']

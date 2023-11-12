@@ -1,5 +1,5 @@
 {
-  "name": "@psychplus/platform",
+  "name": "@psychplus/platform-app",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -11,8 +11,7 @@
     "lint:fix": "tsc --noEmit && eslint --fix \"src/**/*.ts*\""
   },
   "dependencies": {
-    "@psychplus/components": "^0.1.0",
-    "@psychplus/middleware": "^0.1.0",
+    "@psychplus/auth": "^0.1.0",
     "@psychplus/ui": "^0.1.0",
     "@psychplus/widgets": "^0.1.0",
     "@radix-ui/react-icons": "^1.3.0",

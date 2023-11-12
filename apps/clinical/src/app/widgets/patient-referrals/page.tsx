@@ -1,4 +1,5 @@
-import type { SearchParams } from '@psychplus/types'
+import { withAPI } from '@psychplus/ui/with-api'
+import { type SearchParams } from '@psychplus/utils/url'
 import { PatientReferralsWidgetServer } from '@/widgets/patient-referrals'
 
 const PatientReferralsWidgetPage = ({
@@ -6,20 +7,11 @@ const PatientReferralsWidgetPage = ({
 }: {
   searchParams: SearchParams
 }) => {
-  if (!searchParams.token) {
-    return <div>Token is required</div>
-  }
-
   if (!searchParams.patientId) {
     return <div>Patient ID is required</div>
   }
 
-  return (
-    <PatientReferralsWidgetServer
-      token={searchParams.token}
-      patientId={searchParams.patientId}
-    />
-  )
+  return <PatientReferralsWidgetServer patientId={searchParams.patientId} />
 }
 
-export default PatientReferralsWidgetPage
+export default withAPI(PatientReferralsWidgetPage)

@@ -84,27 +84,27 @@ importers:
       '@psychplus/api':
         specifier: ^0.1.0
         version: link:../../packages/api
+      '@psychplus/auth':
+        specifier: ^0.1.0
+        version: link:../../packages/auth
       '@psychplus/codeset':
         specifier: ^0.1.0
         version: link:../../packages/codeset
-      '@psychplus/components':
-        specifier: ^0.1.0
-        version: link:../../packages/components
-      '@psychplus/constants':
-        specifier: ^0.1.0
-        version: link:../../packages/constants
       '@psychplus/form':
         specifier: ^0.1.0
         version: link:../../packages/form
-      '@psychplus/middleware':
+      '@psychplus/patient':
         specifier: ^0.1.0
-        version: link:../../packages/middleware
-      '@psychplus/store':
-        specifier: ^0.1.0
-        version: link:../../packages/store
+        version: link:../../packages/patient
       '@psychplus/ui':
         specifier: ^0.1.0
         version: link:../../packages/ui
+      '@psychplus/user':
+        specifier: ^0.1.0
+        version: link:../../packages/user
+      '@psychplus/utils':
+        specifier: ^0.1.0
+        version: link:../../packages/utils
       '@psychplus/widgets':
         specifier: ^0.1.0
         version: link:../../packages/widgets
@@ -142,9 +142,6 @@ importers:
       '@psychplus/tsconfig':
         specifier: ^0.1.0
         version: link:../../tooling/tsconfig
-      '@psychplus/types':
-        specifier: ^0.1.0
-        version: link:../../packages/types
       '@types/react':
         specifier: ^18.2.25
         version: 18.2.25
@@ -181,18 +178,12 @@ importers:
       '@psychplus/codeset':
         specifier: ^0.1.0
         version: link:../../packages/codeset
-      '@psychplus/components':
-        specifier: ^0.1.0
-        version: link:../../packages/components
-      '@psychplus/middleware':
-        specifier: ^0.1.0
-        version: link:../../packages/middleware
-      '@psychplus/store':
-        specifier: ^0.1.0
-        version: link:../../packages/store
       '@psychplus/ui':
         specifier: ^0.1.0
         version: link:../../packages/ui
+      '@psychplus/utils':
+        specifier: ^0.1.0
+        version: link:../../packages/utils
       '@psychplus/widgets':
         specifier: ^0.1.0
         version: link:../../packages/widgets
@@ -248,12 +239,9 @@ importers:
 
   apps/platform:
     dependencies:
-      '@psychplus/components':
+      '@psychplus/auth':
         specifier: ^0.1.0
-        version: link:../../packages/components
-      '@psychplus/middleware':
-        specifier: ^0.1.0
-        version: link:../../packages/middleware
+        version: link:../../packages/auth
       '@psychplus/ui':
         specifier: ^0.1.0
         version: link:../../packages/ui
@@ -321,15 +309,21 @@ importers:
       '@psychplus/api':
         specifier: ^0.1.0
         version: link:../../packages/api
-      '@psychplus/components':
+      '@psychplus/auth':
         specifier: ^0.1.0
-        version: link:../../packages/components
-      '@psychplus/store':
+        version: link:../../packages/auth
+      '@psychplus/patient':
         specifier: ^0.1.0
-        version: link:../../packages/store
+        version: link:../../packages/patient
       '@psychplus/ui':
         specifier: ^0.1.0
         version: link:../../packages/ui
+      '@psychplus/utils':
+        specifier: ^0.1.0
+        version: link:../../packages/utils
+      '@psychplus/widgets':
+        specifier: ^0.1.0
+        version: link:../../packages/widgets
       '@radix-ui/react-icons':
         specifier: ^1.3.0
         version: 1.3.0(react@18.2.0)
@@ -358,9 +352,6 @@ importers:
       '@psychplus/tsconfig':
         specifier: ^0.1.0
         version: link:../../tooling/tsconfig
-      '@psychplus/types':
-        specifier: ^0.1.0
-        version: link:../../packages/types
       '@types/react':
         specifier: ^18.2.25
         version: 18.2.25
@@ -388,15 +379,6 @@ importers:
 
   packages/api:
     dependencies:
-      '@psychplus/auth':
-        specifier: ^0.1.0
-        version: link:../auth
-      '@psychplus/env':
-        specifier: ^0.1.0
-        version: link:../env
-      next:
-        specifier: ^14.0.1
-        version: 14.0.1(@babel/core@7.23.2)(react-dom@18.2.0)(react@18.2.0)
       react:
         specifier: ^18.2.0
         version: 18.2.0
@@ -407,9 +389,9 @@ importers:
       '@psychplus/tsconfig':
         specifier: ^0.1.0
         version: link:../../tooling/tsconfig
-      '@psychplus/types':
-        specifier: ^0.1.0
-        version: link:../types
+      '@types/node':
+        specifier: ^20.8.2
+        version: 20.8.6
       '@types/react':
         specifier: ^18.2.25
         version: 18.2.25
@@ -422,40 +404,27 @@ importers:
 
   packages/auth:
     dependencies:
+      '@psychplus/form':
+        specifier: ^0.1.0
+        version: link:../form
+      '@psychplus/ui':
+        specifier: ^0.1.0
+        version: link:../ui
+      '@psychplus/utils':
+        specifier: ^0.1.0
+        version: link:../utils
+      '@radix-ui/themes':
+        specifier: ^2.0.0
+        version: 2.0.0(@types/react-dom@18.2.10)(@types/react@18.2.25)(react-dom@18.2.0)(react@18.2.0)
       next:
         specifier: ^14.0.1
         version: 14.0.1(@babel/core@7.23.2)(react-dom@18.2.0)(react@18.2.0)
-    devDependencies:
-      '@psychplus/eslint-config':
-        specifier: ^0.1.0
-        version: link:../../tooling/eslint-config
-      '@psychplus/tsconfig':
-        specifier: ^0.1.0
-        version: link:../../tooling/tsconfig
-      eslint:
-        specifier: ^8.50.0
-        version: 8.51.0
-      typescript:
-        specifier: ^5.2.2
-        version: 5.2.2
-
-  packages/codeset:
-    dependencies:
-      '@psychplus/api':
-        specifier: ^0.1.0
-        version: link:../api
-      '@psychplus/env':
-        specifier: ^0.1.0
-        version: link:../env
-      '@psychplus/types':
-        specifier: ^0.1.0
-        version: link:../types
-      next:
-        specifier: ^14.0.1
-        version: 14.0.1(@babel/core@7.23.2)(react-dom@18.2.0)(react@18.2.0)
-      react:
-        specifier: ^18.2.0
-        version: 18.2.0
+      react-hook-form:
+        specifier: ^7.47.0
+        version: 7.47.0(react@18.2.0)
+      zod:
+        specifier: ^3.22.4
+        version: 3.22.4
       zustand:
         specifier: ^4.4.3
         version: 4.4.3(@types/react@18.2.25)(react@18.2.0)
@@ -476,47 +445,23 @@ importers:
         specifier: ^5.2.2
         version: 5.2.2
 
-  packages/components:
+  packages/codeset:
     dependencies:
-      '@hookform/error-message':
-        specifier: ^2.0.1
-        version: 2.0.1(react-dom@18.2.0)(react-hook-form@7.47.0)(react@18.2.0)
       '@psychplus/api':
         specifier: ^0.1.0
         version: link:../api
-      '@psychplus/constants':
+      '@psychplus/utils':
         specifier: ^0.1.0
-        version: link:../constants
-      '@psychplus/form':
-        specifier: ^0.1.0
-        version: link:../form
-      '@psychplus/ui':
-        specifier: ^0.1.0
-        version: link:../ui
-      '@radix-ui/react-icons':
-        specifier: ^1.3.0
-        version: 1.3.0(react@18.2.0)
-      '@radix-ui/themes':
-        specifier: ^2.0.0
-        version: 2.0.0(@types/react-dom@18.2.10)(@types/react@18.2.25)(react-dom@18.2.0)(react@18.2.0)
-      '@tanstack/react-table':
-        specifier: ^8.10.7
-        version: 8.10.7(react-dom@18.2.0)(react@18.2.0)
-      lucide-react:
-        specifier: ^0.288.0
-        version: 0.288.0(react@18.2.0)
+        version: link:../utils
       next:
         specifier: ^14.0.1
         version: 14.0.1(@babel/core@7.23.2)(react-dom@18.2.0)(react@18.2.0)
       react:
         specifier: ^18.2.0
         version: 18.2.0
-      react-hook-form:
-        specifier: ^7.47.0
-        version: 7.47.0(react@18.2.0)
-      zod:
-        specifier: ^3.22.4
-        version: 3.22.4
+      zustand:
+        specifier: ^4.4.3
+        version: 4.4.3(@types/react@18.2.25)(react@18.2.0)
     devDependencies:
       '@psychplus/eslint-config':
         specifier: ^0.1.0
@@ -527,39 +472,6 @@ importers:
       '@types/react':
         specifier: ^18.2.25
         version: 18.2.25
-      eslint:
-        specifier: ^8.50.0
-        version: 8.51.0
-      typescript:
-        specifier: ^5.2.2
-        version: 5.2.2
-
-  packages/constants:
-    devDependencies:
-      '@psychplus/eslint-config':
-        specifier: ^0.1.0
-        version: link:../../tooling/eslint-config
-      '@psychplus/tsconfig':
-        specifier: ^0.1.0
-        version: link:../../tooling/tsconfig
-      eslint:
-        specifier: ^8.50.0
-        version: 8.51.0
-      typescript:
-        specifier: ^5.2.2
-        version: 5.2.2
-
-  packages/env:
-    devDependencies:
-      '@psychplus/eslint-config':
-        specifier: ^0.1.0
-        version: link:../../tooling/eslint-config
-      '@psychplus/tsconfig':
-        specifier: ^0.1.0
-        version: link:../../tooling/tsconfig
-      '@types/node':
-        specifier: ^20.8.2
-        version: 20.8.6
       eslint:
         specifier: ^8.50.0
         version: 8.51.0
@@ -604,33 +516,17 @@ importers:
         specifier: ^5.2.2
         version: 5.2.2
 
-  packages/middleware:
+  packages/patient:
     dependencies:
-      '@psychplus/auth':
+      '@psychplus/api':
         specifier: ^0.1.0
-        version: link:../auth
-      '@psychplus/env':
+        version: link:../api
+      '@psychplus/utils':
         specifier: ^0.1.0
-        version: link:../env
+        version: link:../utils
       next:
         specifier: ^14.0.1
         version: 14.0.1(@babel/core@7.23.2)(react-dom@18.2.0)(react@18.2.0)
-    devDependencies:
-      '@psychplus/eslint-config':
-        specifier: ^0.1.0
-        version: link:../../tooling/eslint-config
-      '@psychplus/tsconfig':
-        specifier: ^0.1.0
-        version: link:../../tooling/tsconfig
-      eslint:
-        specifier: ^8.50.0
-        version: 8.51.0
-      typescript:
-        specifier: ^5.2.2
-        version: 5.2.2
-
-  packages/store:
-    dependencies:
       react:
         specifier: ^18.2.0
         version: 18.2.0
@@ -644,42 +540,24 @@ importers:
       '@psychplus/tsconfig':
         specifier: ^0.1.0
         version: link:../../tooling/tsconfig
-      '@psychplus/types':
-        specifier: ^0.1.0
-        version: link:../types
       '@types/react':
         specifier: ^18.2.25
         version: 18.2.25
       eslint:
         specifier: ^8.50.0
         version: 8.51.0
-      typescript:
-        specifier: ^5.2.2
-        version: 5.2.2
-
-  packages/types:
-    devDependencies:
-      '@psychplus/eslint-config':
-        specifier: ^0.1.0
-        version: link:../../tooling/eslint-config
-      '@psychplus/tsconfig':
-        specifier: ^0.1.0
-        version: link:../../tooling/tsconfig
-      '@types/react':
-        specifier: ^18.2.25
-        version: 18.2.25
-      eslint:
-        specifier: ^8.50.0
-        version: 8.51.0
-      react:
-        specifier: ^18.2.0
-        version: 18.2.0
       typescript:
         specifier: ^5.2.2
         version: 5.2.2
 
   packages/ui:
     dependencies:
+      '@psychplus/api':
+        specifier: ^0.1.0
+        version: link:../api
+      '@psychplus/utils':
+        specifier: ^0.1.0
+        version: link:../utils
       '@radix-ui/react-alert-dialog':
         specifier: ^1.0.5
         version: 1.0.5(@types/react-dom@18.2.10)(@types/react@18.2.25)(react-dom@18.2.0)(react@18.2.0)
@@ -737,6 +615,9 @@ importers:
       '@radix-ui/themes':
         specifier: ^2.0.0
         version: 2.0.0(@types/react-dom@18.2.10)(@types/react@18.2.25)(react-dom@18.2.0)(react@18.2.0)
+      '@tanstack/react-table':
+        specifier: ^8.10.7
+        version: 8.10.7(react-dom@18.2.0)(react@18.2.0)
       clsx:
         specifier: ^2.0.0
         version: 2.0.0
@@ -749,6 +630,9 @@ importers:
       lucide-react:
         specifier: ^0.288.0
         version: 0.288.0(react@18.2.0)
+      next:
+        specifier: ^14.0.1
+        version: 14.0.1(@babel/core@7.23.2)(react-dom@18.2.0)(react@18.2.0)
       react:
         specifier: ^18.2.0
         version: 18.2.0
@@ -775,23 +659,17 @@ importers:
         specifier: ^5.2.2
         version: 5.2.2
 
-  packages/widgets:
+  packages/user:
     dependencies:
       '@psychplus/api':
         specifier: ^0.1.0
         version: link:../api
-      '@psychplus/auth':
+      '@psychplus/utils':
         specifier: ^0.1.0
-        version: link:../auth
-      '@psychplus/components':
-        specifier: ^0.1.0
-        version: link:../components
-      '@psychplus/env':
-        specifier: ^0.1.0
-        version: link:../env
-      '@psychplus/store':
-        specifier: ^0.1.0
-        version: link:../store
+        version: link:../utils
+      next:
+        specifier: ^14.0.1
+        version: 14.0.1(@babel/core@7.23.2)(react-dom@18.2.0)(react@18.2.0)
       react:
         specifier: ^18.2.0
         version: 18.2.0
@@ -805,9 +683,71 @@ importers:
       '@psychplus/tsconfig':
         specifier: ^0.1.0
         version: link:../../tooling/tsconfig
-      '@psychplus/types':
+      '@types/react':
+        specifier: ^18.2.25
+        version: 18.2.25
+      eslint:
+        specifier: ^8.50.0
+        version: 8.51.0
+      typescript:
+        specifier: ^5.2.2
+        version: 5.2.2
+
+  packages/utils:
+    dependencies:
+      next:
+        specifier: ^14.0.1
+        version: 14.0.1(@babel/core@7.23.2)(react-dom@18.2.0)(react@18.2.0)
+      zustand:
+        specifier: ^4.4.3
+        version: 4.4.3(@types/react@18.2.25)(react@18.2.0)
+    devDependencies:
+      '@psychplus/eslint-config':
         specifier: ^0.1.0
-        version: link:../types
+        version: link:../../tooling/eslint-config
+      '@psychplus/tsconfig':
+        specifier: ^0.1.0
+        version: link:../../tooling/tsconfig
+      '@types/node':
+        specifier: ^20.8.2
+        version: 20.8.6
+      eslint:
+        specifier: ^8.50.0
+        version: 8.51.0
+      typescript:
+        specifier: ^5.2.2
+        version: 5.2.2
+
+  packages/widgets:
+    dependencies:
+      '@psychplus/patient':
+        specifier: ^0.1.0
+        version: link:../patient
+      '@psychplus/ui':
+        specifier: ^0.1.0
+        version: link:../ui
+      '@psychplus/utils':
+        specifier: ^0.1.0
+        version: link:../utils
+      '@radix-ui/themes':
+        specifier: ^2.0.0
+        version: 2.0.0(@types/react-dom@18.2.10)(@types/react@18.2.25)(react-dom@18.2.0)(react@18.2.0)
+      lucide-react:
+        specifier: ^0.288.0
+        version: 0.288.0(react@18.2.0)
+      react:
+        specifier: ^18.2.0
+        version: 18.2.0
+      zustand:
+        specifier: ^4.4.3
+        version: 4.4.3(@types/react@18.2.25)(react@18.2.0)
+    devDependencies:
+      '@psychplus/eslint-config':
+        specifier: ^0.1.0
+        version: link:../../tooling/eslint-config
+      '@psychplus/tsconfig':
+        specifier: ^0.1.0
+        version: link:../../tooling/tsconfig
       '@types/react':
         specifier: ^18.2.25
         version: 18.2.25
@@ -3776,6 +3716,17 @@ packages:
       ms: 2.0.0
     dev: false
 
+  /debug@3.2.7:
+    resolution: {integrity: sha512-CFjzYYAi4ThfiQvizrFQevTTXHtnCqWfe7x1AhgEscTz6ZbLbfoLRLPugTQyBth6f8ZERVUSyWHFD/7Wu4t1XQ==}
+    peerDependencies:
+      supports-color: '*'
+    peerDependenciesMeta:
+      supports-color:
+        optional: true
+    dependencies:
+      ms: 2.1.3
+    dev: true
+
   /debug@3.2.7(supports-color@5.5.0):
     resolution: {integrity: sha512-CFjzYYAi4ThfiQvizrFQevTTXHtnCqWfe7x1AhgEscTz6ZbLbfoLRLPugTQyBth6f8ZERVUSyWHFD/7Wu4t1XQ==}
     peerDependencies:
@@ -4092,7 +4043,7 @@ packages:
   /eslint-import-resolver-node@0.3.9:
     resolution: {integrity: sha512-WFj2isz22JahUv+B788TlO3N6zL3nNJGU8CcZbPZvVEkBPaJdCV4vy5wyghty5ROFbCRnm132v8BScu5/1BQ8g==}
     dependencies:
-      debug: 3.2.7(supports-color@5.5.0)
+      debug: 3.2.7
       is-core-module: 2.13.0
       resolve: 1.22.8
     transitivePeerDependencies:
@@ -4144,7 +4095,7 @@ packages:
         optional: true
     dependencies:
       '@typescript-eslint/parser': 5.62.0(eslint@8.51.0)(typescript@5.2.2)
-      debug: 3.2.7(supports-color@5.5.0)
+      debug: 3.2.7
       eslint: 8.51.0
       eslint-import-resolver-node: 0.3.9
       eslint-import-resolver-typescript: 3.6.1(@typescript-eslint/parser@5.62.0)(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.28.1)(eslint@8.51.0)
@@ -4167,7 +4118,7 @@ packages:
       array.prototype.findlastindex: 1.2.3
       array.prototype.flat: 1.3.2
       array.prototype.flatmap: 1.3.2
-      debug: 3.2.7(supports-color@5.5.0)
+      debug: 3.2.7
       doctrine: 2.1.0
       eslint: 8.51.0
       eslint-import-resolver-node: 0.3.9
@@ -5301,7 +5252,6 @@ packages:
 
   /ms@2.1.3:
     resolution: {integrity: sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA==}
-    dev: false
 
   /mz@2.7.0:
     resolution: {integrity: sha512-z81GNO7nnYMEhrGh9LeymoE4+Yr0Wn5McHIZMK5cfQCl+NDX08sCZgUc9/6MHni9IWuFLm1Z3HTCXu2z9fN62Q==}
@@ -5971,6 +5921,7 @@ packages:
     engines: {node: '>=0.10.0'}
     dependencies:
       loose-envify: 1.4.0
+    dev: false
 
   /read-cache@1.0.0:
     resolution: {integrity: sha512-Owdv/Ft7IjOgm/i0xvNDZ1LrRANRfew4b2prF3OWMQLxLfu3bS8FVhCsrSCMK4lR56Y9ya+AThoTpDCTxCmpRA==}

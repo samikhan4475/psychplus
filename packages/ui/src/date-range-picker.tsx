@@ -3,9 +3,9 @@
 import { CalendarIcon } from '@radix-ui/react-icons'
 import { format } from 'date-fns'
 import { type DateRange } from 'react-day-picker'
-import { Button } from '@psychplus/ui/button'
-import { Calendar } from '@psychplus/ui/calendar'
-import { Popover } from '@psychplus/ui/popover'
+import { Button } from './button'
+import { Calendar } from './calendar'
+import { Popover } from './popover'
 
 const getDateLabel = (date?: DateRange) => {
   if (date?.from && date?.to) {

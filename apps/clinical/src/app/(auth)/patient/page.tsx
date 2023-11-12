@@ -1,4 +1,4 @@
-import { PatientWidget } from '@psychplus/widgets'
+import { PatientWidget } from '@psychplus/widgets/revcycle'
 
 const PatientPage = () => (
   <div className="h-[400px]">

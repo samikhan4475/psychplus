@@ -1,8 +1,8 @@
 'use client'
 
 import { useRef } from 'react'
-import { CodeSetStoreType } from './store'
-import { CodeSet } from './types'
+import { type CodeSetStoreType } from './store'
+import { type CodeSet } from './types'
 
 const CodeSetPreloader = ({
   codeSets,

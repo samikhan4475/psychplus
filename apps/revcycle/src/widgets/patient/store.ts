@@ -1,10 +1,15 @@
 'use client'
 
-import { create } from 'zustand'
-import { createPatientStore, type PatientState } from '@psychplus/store/patient'
+import { shallow } from 'zustand/shallow'
+import { createWithEqualityFn } from 'zustand/traditional'
+import { createPatientStore, type PatientState } from '@psychplus/patient'
+import { combineStateCreators } from '@psychplus/utils/store'
 
-const useStore = create<PatientState>()((...a) => ({
-  ...createPatientStore(...a),
-}))
+type StoreType = PatientState
+
+const useStore = createWithEqualityFn<StoreType>(
+  combineStateCreators(createPatientStore),
+  shallow,
+)
 
 export { useStore }

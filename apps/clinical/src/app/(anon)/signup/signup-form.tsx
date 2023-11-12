@@ -1,6 +1,9 @@
 'use client'
 
 import { useState } from 'react'
+import { Flex, Heading, Text } from '@radix-ui/themes'
+import { type SubmitHandler } from 'react-hook-form'
+import { z } from 'zod'
 import {
   Form,
   FormSubmitButton,
@@ -8,9 +11,6 @@ import {
   useForm,
   validate,
 } from '@psychplus/form'
-import { Flex, Heading, Text } from '@radix-ui/themes'
-import { type SubmitHandler } from 'react-hook-form'
-import { z } from 'zod'
 import { Button } from '@psychplus/ui/button'
 import { Dialog } from '@psychplus/ui/dialog'
 import { PinCode } from '@psychplus/ui/pin-code'

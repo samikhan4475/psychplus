@@ -1,8 +1,8 @@
 'use client'
 
 import NextLink from 'next/link'
-import { COPYRIGHT_TEXT } from '@psychplus/constants/strings'
 import { Flex, Heading, Link, Text } from '@radix-ui/themes'
+import { COPYRIGHT_TEXT } from '@psychplus/utils/constants'
 import { ForgotPasswordForm } from './forgot-password-form'
 
 const ForgotPasswordPage = () => (
