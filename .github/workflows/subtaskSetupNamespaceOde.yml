@@ -60,4 +60,4 @@ jobs:
           awk '!/uid: /' | \
           sed 's/namespace: env-integration/namespace: ${{ inputs.env_namespace }}/g' | \
           kubectl apply --namespace=${{ inputs.env_namespace }} -f -
-          kubectl apply --namespace=${{ inputs.env_namespace }} -f src/k8s/app-config.integration.yml
+          kubectl apply --namespace=${{ inputs.env_namespace }} -f k8s/app-config.integration.yml

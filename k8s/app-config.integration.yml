@@ -5,3 +5,4 @@ metadata:
 data:
   aspNetCoreEnvironment: 'Integration'
   aspNetCoreUrls: 'http://+:80'
+  cachingCodeSetCacheExpireMinutes: '15'

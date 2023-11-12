@@ -38,7 +38,7 @@ jobs:
   ode_build_push_platform:
     needs: [which-projects, build-configuration, configure_ode_namespace]
 
-    if: '! github.event.pull_request.draft && needs.which-projects.outputs.platform'
+    if: ${{ (! github.event.pull_request.draft) && (needs.which-projects.outputs.platform == 'true') }}
 
     uses: ./.github/workflows/subtaskBuildPushDeploy.yml
     with:
@@ -61,7 +61,7 @@ jobs:
   ode_build_push_clinical:
     needs: [which-projects, build-configuration, configure_ode_namespace]
 
-    if: '! github.event.pull_request.draft && needs.which-projects.outputs.clinical'
+    if: ${{ (! github.event.pull_request.draft) && (needs.which-projects.outputs.clinical == 'true') }}
 
     uses: ./.github/workflows/subtaskBuildPushDeploy.yml
     with:
@@ -84,7 +84,7 @@ jobs:
   ode_build_push_patient:
     needs: [which-projects, build-configuration, configure_ode_namespace]
 
-    if: '! github.event.pull_request.draft && needs.which-projects.outputs.patient'
+    if: ${{ (! github.event.pull_request.draft) && (needs.which-projects.outputs.patient == 'true') }}
 
     uses: ./.github/workflows/subtaskBuildPushDeploy.yml
     with:
@@ -107,7 +107,7 @@ jobs:
   ode_build_push_revcycle:
     needs: [which-projects, build-configuration, configure_ode_namespace]
 
-    if: '! github.event.pull_request.draft && needs.which-projects.outputs.revcycle'
+    if: ${{ (! github.event.pull_request.draft) && (needs.which-projects.outputs.revcycle == 'true') }}
 
     uses: ./.github/workflows/subtaskBuildPushDeploy.yml
     with:

@@ -2,6 +2,12 @@
 .env
 .github
 
+!.git/**
+!.git*
+!.gitignore
+!**/.gitignore
+!.gitignore/**
+
 **/node_modules
 **/npm-debug.log
 **/dist

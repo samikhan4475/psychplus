@@ -1,0 +1,130 @@
+image:
+  repository: ''
+  pullPolicy: Always
+  tag: ''
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  annotations: {}
+
+podAnnotations: {}
+
+podSecurityContext: {}
+
+securityContext: {}
+
+container:
+  portName: http
+  containerPort: 3000
+  protocol: TCP
+
+service:
+  enabled: true
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: true
+  className: nginx
+  annotations:
+    # use issuer instead of cluster-issuer for namespace scope
+    cert-manager.io/cluster-issuer: letsencrypt
+    nginx.ingress.kubernetes.io/service-upstream: "true"
+  hosts:
+  - host: ui.integration.psychplus.dev
+    paths:
+    - path: /
+      pathType: Prefix
+  tls:
+  - hosts:
+    - ui.integration.psychplus.dev
+    secretName: ui-psychplus-io-tls
+
+ingressAuth:
+  enabled: false
+
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+autoscaling:
+  enabled: true
+  minReplicas: 3
+  maxReplicas: 5
+  targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: 80
+
+startupProbeEnabled: false
+startupProbe:
+  httpGet:
+    path: /health/liveness_F15EC2B7-A0E7-45eb-9D34-8D36B537B358
+    port: http
+  periodSeconds: 30
+  timeoutSeconds: 30
+
+livenessProbeEnabled: false
+livenessProbe:
+  httpGet:
+    path: /health/liveness_F15EC2B7-A0E7-45eb-9D34-8D36B537B358
+    port: http
+  periodSeconds: 10
+  timeoutSeconds: 5
+
+readinessProbeEnabled: false
+readinessProbe:
+  httpGet:
+    path: /health/readiness_F15EC2B7-A0E7-45eb-9D34-8D36B537B358
+    port: http
+  periodSeconds: 10
+  timeoutSeconds: 1
+
+nodeSelector:
+  kubernetes.io/os: linux
+
+tolerations: []
+
+affinity: {}
+
+env:
+  # CONFIG: ASP NET
+
+  - name: RUN_ENVIRONMENT
+    valueFrom:
+      configMapKeyRef:
+        name: app-config
+        key: aspNetCoreEnvironment
+
+  - name: ASPNETCORE_URLS
+    valueFrom:
+      configMapKeyRef:
+        name: app-config
+        key: aspNetCoreUrls
+  
+  # CONFIG: Caching
+
+  - name: APPSETTINGS_Caching__CodeSetCacheExpireMinutes
+    valueFrom:
+      configMapKeyRef:
+        name: app-config
+        key: cachingCodeSetCacheExpireMinutes
+
+  # SECRETS: Google
+
+  - name: APPSETTINGS_Google__MapsKey
+    valueFrom:
+      secretKeyRef:
+        name: ehr-secrets
+        key: googleMapsKey
+  

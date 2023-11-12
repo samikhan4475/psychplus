@@ -85,11 +85,11 @@ jobs:
             echo "build_assembly_file_version=$build_assembly_file_version" >> $env:GITHUB_OUTPUT
             echo "output build_assembly_file_version: $build_assembly_file_version"
 
-            $env_namespace = "env-ode-pr-${{ inputs.pull_request_id }}"
+            $env_namespace = "env-ui-ode-pr-${{ inputs.pull_request_id }}"
             echo "env_namespace=$env_namespace" >> $env:GITHUB_OUTPUT
             echo "output env_namespace: $env_namespace"
 
-            $image_tag = "ode-pr-${{ inputs.pull_request_id }}"
+            $image_tag = "ui-ode-pr-${{ inputs.pull_request_id }}"
             echo "image_tag=$image_tag" >> $env:GITHUB_OUTPUT
             echo "output image_tag: $image_tag"
 

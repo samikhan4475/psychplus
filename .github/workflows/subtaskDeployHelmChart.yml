@@ -53,6 +53,12 @@ on:
         type: string
         required: true
 
+      ingress_path:
+        description: Ingress path
+        type: string
+        required: true
+
+
       autoscaling_min_replicas:
         description: Minimum number of replicas if the helm chart has autoscaling enabled, otherwise ignored
         type: string
@@ -71,7 +77,7 @@ on:
       force:
         description: If true, then the release will be installed even if it has already been installed, and a rolling restart will run
         type: boolean
-        default: false
+        default: true
 
 jobs:
   deploy:
@@ -142,7 +148,7 @@ jobs:
             image.repository:${{ secrets.ACR_NAME }}.azurecr.io/${{ inputs.image_name }}
             image.tag:${{ inputs.image_tag }}
             ingress.hosts[0].host:${{ inputs.ingress_url }}
-            ingress.hosts[0].paths[0].path:/
+            ingress.hosts[0].paths[0].path:${{ inputs.ingress_path}}
             ingress.hosts[0].paths[0].pathType:Prefix
             ingress.tls[0].hosts[0]:${{ inputs.ingress_url }}
             ingress.tls[0].secretName:${{ inputs.release_name }}-psychplus-tls
@@ -151,6 +157,7 @@ jobs:
             autoscaling.minReplicas:${{ inputs.autoscaling_min_replicas }}
             autoscaling.maxReplicas:${{ inputs.autoscaling_max_replicas }}
         id: bake
+
 
       - uses: Azure/k8s-deploy@v4
         name: Deploy application

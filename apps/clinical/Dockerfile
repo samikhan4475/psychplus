@@ -1,3 +1,5 @@
+# [peter] change to trigger clinical :) 5
+# [aamir] change to trigger clinical -4
 FROM node:18-alpine AS base
 
 # Prune workspace
@@ -16,9 +18,9 @@ RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
 RUN yarn global add pnpm@8.6.3
-COPY .gitignore .gitignore
+# [peter] temp until figured out: COPY .gitignore .gitignore
 COPY --from=pruner /app/out/json/ .
-COPY --from=pruner /app/out/pnpm-*.yaml .
+COPY --from=pruner /app/out/pnpm-*.yaml ./
 RUN pnpm install --frozen-lockfile
 
 ENV NEXT_TELEMETRY_DISABLED 1
@@ -53,8 +55,8 @@ COPY --from=builder --chown=nextjs:nodejs /app/apps/clinical/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/apps/clinical/.next/static ./apps/clinical/.next/static
 COPY --from=builder --chown=nextjs:nodejs /app/apps/clinical/public ./apps/clinical/public
 
-EXPOSE 80
-ENV PORT 80
+EXPOSE 3000
+ENV PORT 3000
 
 ENV APP_CODE p+clinical-ui
 

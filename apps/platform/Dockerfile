@@ -1,3 +1,4 @@
+# [peter] change to trigger clinical :) 2
 FROM node:18-alpine AS base
 
 # Prune workspace
@@ -16,9 +17,9 @@ RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
 RUN yarn global add pnpm@8.6.3
-COPY .gitignore .gitignore
+# [peter] temp until figured out: COPY .gitignore .gitignore
 COPY --from=pruner /app/out/json/ .
-COPY --from=pruner /app/out/pnpm-*.yaml .
+COPY --from=pruner /app/out/pnpm-*.yaml ./
 RUN pnpm install --frozen-lockfile
 
 ENV NEXT_TELEMETRY_DISABLED 1

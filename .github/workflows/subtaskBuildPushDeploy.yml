@@ -76,6 +76,7 @@ on:
 jobs:
   build_and_push_image:
     permissions:
+      actions: read
       contents: read
       id-token: write
     
@@ -127,14 +128,25 @@ jobs:
           
           if ('${{ inputs.deployment_url_subdomain }}' -eq '')
           {
-            $ingress_url = "api${service_name_delimiter}${{ inputs.deployment_url_domain }}"
+            $ingress_url = "ui${service_name_delimiter}${{ inputs.deployment_url_domain }}"
           }
           else
           {
-            $ingress_url = "api${service_name_delimiter}${{ inputs.deployment_url_subdomain }}.${{ inputs.deployment_url_domain }}"
+            $ingress_url = "ui${service_name_delimiter}${{ inputs.deployment_url_subdomain }}.${{ inputs.deployment_url_domain }}"
           }
           echo "ingress_url=$ingress_url" >> $env:GITHUB_OUTPUT
           echo "output ingress_url: $ingress_url"
+
+          if ('${{ inputs.project }}' -eq 'platform')
+          {
+            $ingress_path = "/"
+          }
+          else 
+          {
+            $ingress_path = "/${{ inputs.project }}"
+          }
+          echo "ingress_path=$ingress_path" >> $env:GITHUB_OUTPUT
+          echo "output ingress_path: $ingress_path"
 
           $should_minimize_resources_for_testing = "${{ inputs.should_minimize_resources_for_testing }}";
           if ($should_minimize_resources_for_testing -eq 'true')
@@ -165,6 +177,7 @@ jobs:
           }
     outputs:
       ingress_url: ${{ steps.deploy_variables.outputs.ingress_url }}
+      ingress_path: ${{ steps.deploy_variables.outputs.ingress_path }}
       autoscaling_min_replicas: ${{ steps.deploy_variables.outputs.autoscaling_min_replicas }}
       autoscaling_max_replicas: ${{ steps.deploy_variables.outputs.autoscaling_max_replicas }}
           
@@ -174,7 +187,7 @@ jobs:
     with:
       environment: ${{ inputs.environment }}
       release_name: ui-${{ inputs.project }}
-      chart_path: ./helm/ui
+      chart_path: ./helm/${{ inputs.project }}
       helm_chart_version: ${{ inputs.build_version }}
       helm_app_version: ${{ inputs.build_full_version }}
       image_name: ui-${{ inputs.project }}
@@ -182,6 +195,7 @@ jobs:
       node_selector_os: linux
       env_namespace: ${{ inputs.env_namespace }}
       ingress_url: ${{ needs.deploy_variables.outputs.ingress_url }}
+      ingress_path: ${{ needs.deploy_variables.outputs.ingress_path }}
       autoscaling_min_replicas: ${{ needs.deploy_variables.outputs.autoscaling_min_replicas }}
       autoscaling_max_replicas: ${{ needs.deploy_variables.outputs.autoscaling_max_replicas }}
       force: ${{ inputs.force }}

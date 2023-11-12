@@ -32,7 +32,7 @@ ingress:
   hosts:
   - host: ui.integration.psychplus.dev
     paths:
-    - path: /
+    - path: /revcycle
       pathType: Prefix
   tls:
   - hosts:
@@ -64,7 +64,7 @@ autoscaling:
 startupProbeEnabled: true
 startupProbe:
   httpGet:
-    path: /health/liveness_3EC0F9AD-81F1-4d53-9B7F-B7D7AC97CD66
+    path: /health/liveness_73C8DD3A-DF35-43f6-BA56-F3944E006637
     port: http
   periodSeconds: 30
   timeoutSeconds: 30
@@ -72,7 +72,7 @@ startupProbe:
 livenessProbeEnabled: true
 livenessProbe:
   httpGet:
-    path: /health/liveness_3EC0F9AD-81F1-4d53-9B7F-B7D7AC97CD66
+    path: /health/liveness_73C8DD3A-DF35-43f6-BA56-F3944E006637
     port: http
   periodSeconds: 10
   timeoutSeconds: 5
@@ -80,7 +80,7 @@ livenessProbe:
 readinessProbeEnabled: true
 readinessProbe:
   httpGet:
-    path: /health/readiness_3EC0F9AD-81F1-4d53-9B7F-B7D7AC97CD66
+    path: /health/readiness_73C8DD3A-DF35-43f6-BA56-F3944E006637
     port: http
   periodSeconds: 10
   timeoutSeconds: 1
