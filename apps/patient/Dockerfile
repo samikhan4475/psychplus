@@ -8,7 +8,7 @@ WORKDIR /app
 
 RUN yarn global add turbo@1.10.6
 COPY . .
-RUN turbo prune --scope=@psychplus/patient --docker
+RUN turbo prune --scope=@psychplus/patient-app --docker
 
 # Install dependencies
 FROM base AS builder
@@ -16,9 +16,9 @@ RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
 RUN yarn global add pnpm@8.6.3
-COPY .gitignore .gitignore
+# [peter] temp until figured out: COPY .gitignore .gitignore
 COPY --from=pruner /app/out/json/ .
-COPY --from=pruner /app/out/pnpm-*.yaml .
+COPY --from=pruner /app/out/pnpm-*.yaml ./
 RUN pnpm install --frozen-lockfile
 
 ENV NEXT_TELEMETRY_DISABLED 1
@@ -34,7 +34,7 @@ COPY --from=pruner /app/turbo.json turbo.json
 # ARG TURBO_TOKEN
 # ENV TURBO_TOKEN=$TURBO_TOKEN
 
-RUN yarn turbo run build --filter=@psychplus/patient...
+RUN yarn turbo run build --filter=@psychplus/patient-app...
 
 FROM base AS runner
 WORKDIR /app

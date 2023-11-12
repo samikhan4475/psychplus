@@ -10,7 +10,7 @@ WORKDIR /app
 
 RUN yarn global add turbo@1.10.6
 COPY . .
-RUN turbo prune --scope=@psychplus/clinical --docker
+RUN turbo prune --scope=@psychplus/clinical-app --docker
 
 # Install dependencies
 FROM base AS builder
@@ -36,7 +36,7 @@ COPY --from=pruner /app/turbo.json turbo.json
 # ARG TURBO_TOKEN
 # ENV TURBO_TOKEN=$TURBO_TOKEN
 
-RUN yarn turbo run build --filter=@psychplus/clinical...
+RUN yarn turbo run build --filter=@psychplus/clinical-app...
 
 FROM base AS runner
 WORKDIR /app

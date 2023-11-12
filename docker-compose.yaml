@@ -1,4 +1,4 @@
-version: "3"
+version: '3'
 
 services:
   api:
@@ -16,24 +16,14 @@ services:
       context: .
       dockerfile: ./apps/platform/Dockerfile
     environment:
+      - API_URL=https://api-pr-2000.ode.psychplus.dev
       - CLINICAL_URL=http://localhost:8001
       - PATIENT_URL=http://localhost:8002
       - REVCYCLE_URL=http://localhost:8003
       - LOGIN_ENDPOINT=http://api:80/api/login
+      - MOCK_API_URL=http://api:8080
     ports:
-      - 4000:80
-    networks:
-      - psychplus
-  patient:
-    container_name: patient
-    build:
-      context: .
-      dockerfile: ./apps/patient/Dockerfile
-    environment:
-      - API_URL=http://api:80
-      - LOGIN_ENDPOINT=http://api:80/api/login
-    ports:
-      - 3001:80
+      - 8000:3000
     networks:
       - psychplus
   clinical:
@@ -42,10 +32,30 @@ services:
       context: .
       dockerfile: ./apps/clinical/Dockerfile
     environment:
-      - API_URL=http://api:80
-      - LOGIN_ENDPOINT=http://localhost:8080/api/login
+      - API_URL=https://api-pr-2000.ode.psychplus.dev
+      - CLINICAL_URL=http://localhost:8001
+      - PATIENT_URL=http://localhost:8002
+      - REVCYCLE_URL=http://localhost:8003
+      - LOGIN_ENDPOINT=http://api:80/api/login
+      - MOCK_API_URL=http://api:8080
     ports:
-      - 8000:80
+      - 8001:3000
+    networks:
+      - psychplus
+  patient:
+    container_name: patient
+    build:
+      context: .
+      dockerfile: ./apps/patient/Dockerfile
+    environment:
+      - API_URL=https://api-pr-2000.ode.psychplus.dev
+      - CLINICAL_URL=http://localhost:8001
+      - PATIENT_URL=http://localhost:8002
+      - REVCYCLE_URL=http://localhost:8003
+      - LOGIN_ENDPOINT=http://api:80/api/login
+      - MOCK_API_URL=http://api:8080
+    ports:
+      - 8002:3000
     networks:
       - psychplus
   revcycle:
@@ -54,9 +64,14 @@ services:
       context: .
       dockerfile: ./apps/revcycle/Dockerfile
     environment:
-      - API_URL=http://api:80
+      - API_URL=https://api-pr-2000.ode.psychplus.dev
+      - CLINICAL_URL=http://localhost:8001
+      - PATIENT_URL=http://localhost:8002
+      - REVCYCLE_URL=http://localhost:8003
+      - LOGIN_ENDPOINT=http://api:80/api/login
+      - MOCK_API_URL=http://api:8080
     ports:
-      - 8001:80
+      - 8003:3000
     networks:
       - psychplus
 
