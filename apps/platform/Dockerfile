@@ -54,8 +54,8 @@ COPY --from=builder --chown=nextjs:nodejs /app/apps/platform/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/apps/platform/.next/static ./apps/platform/.next/static
 COPY --from=builder --chown=nextjs:nodejs /app/apps/platform/public ./apps/platform/public
 
-EXPOSE 80
-ENV PORT 80
+EXPOSE 3099
+ENV PORT 3099
 
 ENV APP_CODE p+platform-ui
 

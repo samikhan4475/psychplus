@@ -53,8 +53,8 @@ COPY --from=builder --chown=nextjs:nodejs /app/apps/patient/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/apps/patient/.next/static ./apps/patient/.next/static
 COPY --from=builder --chown=nextjs:nodejs /app/apps/patient/public ./apps/patient/public
 
-EXPOSE 80
-ENV PORT 80
+EXPOSE 3000
+ENV PORT 3000
 
 ENV APP_CODE p+patient-ui
 

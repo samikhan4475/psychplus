@@ -53,8 +53,8 @@ COPY --from=builder --chown=nextjs:nodejs /app/apps/revcycle/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/apps/revcycle/.next/static ./apps/revcycle/.next/static
 COPY --from=builder --chown=nextjs:nodejs /app/apps/revcycle/public ./apps/revcycle/public
 
-EXPOSE 80
-ENV PORT 80
+EXPOSE 3002
+ENV PORT 3002
 
 ENV APP_CODE p+revcycle-ui
 

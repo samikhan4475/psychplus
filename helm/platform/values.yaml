@@ -17,10 +17,15 @@ podSecurityContext: {}
 
 securityContext: {}
 
+container:
+  portName: http
+  containerPort: 3099
+  protocol: TCP
+
 service:
   enabled: true
   type: ClusterIP
-  port: 80
+  port: 3099
 
 ingress:
   enabled: true
@@ -32,7 +37,7 @@ ingress:
   hosts:
   - host: ui.integration.psychplus.dev
     paths:
-    - path: /
+    - path: /platform
       pathType: Prefix
   tls:
   - hosts:

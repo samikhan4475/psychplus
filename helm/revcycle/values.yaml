@@ -17,10 +17,15 @@ podSecurityContext: {}
 
 securityContext: {}
 
+container:
+  portName: http
+  containerPort: 3002
+  protocol: TCP
+
 service:
   enabled: true
   type: ClusterIP
-  port: 80
+  port: 3002
 
 ingress:
   enabled: true

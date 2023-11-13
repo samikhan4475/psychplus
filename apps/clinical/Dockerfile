@@ -55,8 +55,9 @@ COPY --from=builder --chown=nextjs:nodejs /app/apps/clinical/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/apps/clinical/.next/static ./apps/clinical/.next/static
 COPY --from=builder --chown=nextjs:nodejs /app/apps/clinical/public ./apps/clinical/public
 
-EXPOSE 3000
-ENV PORT 3000
+EXPOSE 3001
+ENV PORT 3001
+
 
 ENV APP_CODE p+clinical-ui
 
