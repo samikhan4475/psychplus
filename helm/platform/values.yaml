@@ -23,7 +23,6 @@ container:
   protocol: TCP
 
 service:
-  name: platformSvc
   enabled: true
   type: ClusterIP
   port: 3099
@@ -35,16 +34,12 @@ ingress:
     # use issuer instead of cluster-issuer for namespace scope
     cert-manager.io/cluster-issuer: letsencrypt
     nginx.ingress.kubernetes.io/service-upstream: "true"
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
   hosts:
   - host: ui.integration.psychplus.dev
     paths:
-    - path: /platform
+    - path: /platform(/|$)(.*)
       pathType: Prefix
-      backend:
-        service:
-          name: platformSvc
-          port:
-            number: 3099
   tls:
   - hosts:
     - ui.integration.psychplus.dev

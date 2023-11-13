@@ -23,7 +23,6 @@ container:
   protocol: TCP
 
 service:
-  name: revcycleSvc
   enabled: true
   type: ClusterIP
   port: 3002
@@ -40,11 +39,6 @@ ingress:
     paths:
     - path: /revcycle
       pathType: Prefix
-      backend:
-        service:
-          name: revcycleSvc
-          port:
-            number: 3002
   tls:
   - hosts:
     - ui.integration.psychplus.dev
