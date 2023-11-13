@@ -12,6 +12,7 @@ const PortalContainer = ({ src }: { src: string }) => {
     <Box
       height="100%"
       width="100%"
+      p="3"
       className="rounded-2 border border-gray-2 shadow-3"
     >
       {!loaded ? <WidgetLoading /> : null}

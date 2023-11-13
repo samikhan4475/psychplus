@@ -312,12 +312,21 @@ importers:
       '@psychplus/auth':
         specifier: ^0.1.0
         version: link:../../packages/auth
+      '@psychplus/codeset':
+        specifier: ^0.1.0
+        version: link:../../packages/codeset
+      '@psychplus/form':
+        specifier: ^0.1.0
+        version: link:../../packages/form
       '@psychplus/patient':
         specifier: ^0.1.0
         version: link:../../packages/patient
       '@psychplus/ui':
         specifier: ^0.1.0
         version: link:../../packages/ui
+      '@psychplus/user':
+        specifier: ^0.1.0
+        version: link:../../packages/user
       '@psychplus/utils':
         specifier: ^0.1.0
         version: link:../../packages/utils
@@ -330,6 +339,9 @@ importers:
       '@radix-ui/themes':
         specifier: ^2.0.0
         version: 2.0.0(@types/react-dom@18.2.10)(@types/react@18.2.25)(react-dom@18.2.0)(react@18.2.0)
+      '@tanstack/react-table':
+        specifier: ^8.10.7
+        version: 8.10.7(react-dom@18.2.0)(react@18.2.0)
       next:
         specifier: ^14.0.1
         version: 14.0.1(@babel/core@7.23.2)(react-dom@18.2.0)(react@18.2.0)
@@ -339,6 +351,12 @@ importers:
       react-dom:
         specifier: ^18.2.0
         version: 18.2.0(react@18.2.0)
+      react-hook-form:
+        specifier: ^7.47.0
+        version: 7.47.0(react@18.2.0)
+      zod:
+        specifier: ^3.22.4
+        version: 3.22.4
       zustand:
         specifier: ^4.4.3
         version: 4.4.3(@types/react@18.2.25)(react@18.2.0)

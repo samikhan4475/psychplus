@@ -58,6 +58,7 @@ const ForgotPasswordForm = () => {
           label="Email"
           placeholder="Enter your email"
           data-testid="forgot-password-email-input"
+          autoFocus
           {...form.register('email')}
         />
         <FormSubmitButton data-testid="forgot-password-submit-button">

@@ -1,0 +1,50 @@
+import * as React from 'react'
+import { Controller } from 'react-hook-form'
+import { Select } from '@psychplus/ui/select'
+import { FormField, useFormField, type UseFormFieldProps } from './form-field'
+
+interface Props
+  extends UseFormFieldProps,
+    React.ComponentProps<typeof Select.Root> {
+  name: string
+  label: string
+  options: {
+    label: string
+    value: string
+  }[]
+}
+
+const FormSelect = React.forwardRef<HTMLButtonElement, Props>((props, ref) => {
+  const { formFieldProps, childProps } = useFormField(props)
+
+  return (
+    <FormField {...formFieldProps}>
+      <Controller
+        name={childProps.id}
+        render={({ field }) => {
+          return (
+            <Select.Root
+              size="3"
+              onValueChange={field.onChange}
+              value={field.value}
+              {...childProps}
+            >
+              <Select.Trigger ref={ref} id={formFieldProps.id} />
+              <Select.Content>
+                {childProps.options.map((option) => (
+                  <Select.Item value={option.value} key={option.value}>
+                    {option.label}
+                  </Select.Item>
+                ))}
+              </Select.Content>
+            </Select.Root>
+          )
+        }}
+      />
+    </FormField>
+  )
+})
+
+FormSelect.displayName = 'FormSelect'
+
+export { FormSelect }

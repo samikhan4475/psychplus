@@ -45,6 +45,7 @@ const LoginForm = () => {
           label="Email"
           placeholder="Email"
           data-testid="login-username-input"
+          autoFocus
           {...form.register('username')}
         />
         <FormTextInput

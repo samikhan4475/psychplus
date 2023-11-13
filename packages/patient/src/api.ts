@@ -4,7 +4,7 @@ import { MOCK_API_URL } from '@psychplus/utils/constants'
 import { type Patient, type PatientParams } from './types'
 
 const getPatient = async ({ patientId }: PatientParams): Promise<Patient> =>
-  api(`${MOCK_API_URL}/api/patients/${[patientId]}`)
+  api(`${MOCK_API_URL}/api/patients/${[patientId]}`, { cache: 'no-store' })
 
 const getPatientCached = cache(getPatient)
 

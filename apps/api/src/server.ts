@@ -2,16 +2,14 @@ import { json, urlencoded } from 'body-parser'
 import cors from 'cors'
 import express, { Express } from 'express'
 import morgan from 'morgan'
-import { patientReferrals, patients, users } from './data'
+import { codeSets, patientReferrals, patients, users } from './data'
 import { wait } from './utils'
 
 const ANON = ['/api/login']
 
 const ONE_SECOND = 1000
 
-const API_DELAY = process.env.API_DELAY
-  ? Number(process.env.API_DELAY)
-  : ONE_SECOND
+const API_DELAY = process.env.API_DELAY ? Number(process.env.API_DELAY) : 0
 
 export const createServer = (): Express => {
   const app = express()
@@ -43,15 +41,15 @@ export const createServer = (): Express => {
     res.status(201).json({ token: '12345' })
   })
 
-  app.get('/api/metadata/codesets', async (req, res) => {
-    await wait(API_DELAY)
-    res.status(200).json({ message: 'foo' })
-  })
-
   app.get('/api/user', async (req, res) => {
     await wait(API_DELAY)
     // @ts-ignore
     res.status(200).json(req.user)
+  })
+
+  app.get('/api/metadata/codesets', async (req, res) => {
+    await wait(API_DELAY)
+    res.status(200).json(codeSets)
   })
 
   app.get('/api/patients/:id', async (req, res) => {
@@ -63,7 +61,6 @@ export const createServer = (): Express => {
     if (!patient) {
       return res.status(404).send()
     }
-
     res.status(200).json(patient)
   })
 
@@ -73,7 +70,6 @@ export const createServer = (): Express => {
     const referrals = patientReferrals.filter(
       (referral) => referral.patientId === Number(req.params.id),
     )
-
     res.status(200).json(referrals)
   })
 

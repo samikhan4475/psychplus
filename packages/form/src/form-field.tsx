@@ -1,4 +1,4 @@
-import { Box, Text } from '@radix-ui/themes'
+import { Flex, Text } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
 
 interface UseFormFieldProps extends React.PropsWithChildren {
@@ -25,19 +25,17 @@ const FormField = ({ children, name, id, label }: FormFieldProps) => {
   const state = ctx.getFieldState(name, ctx.formState)
 
   return (
-    <Box>
-      <label htmlFor={id}>
-        <Text as="div" size="2" mb="1" weight="bold">
-          {label}
-        </Text>
-      </label>
+    <Flex direction="column" gap="1">
+      <Text as="label" size="2" weight="bold" htmlFor={id}>
+        {label}
+      </Text>
       {children}
       {state.error && (
         <Text size="2" color="red">
           {state.error.message}
         </Text>
       )}
-    </Box>
+    </Flex>
   )
 }
 

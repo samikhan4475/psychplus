@@ -1,0 +1,1719 @@
+[
+  {
+    "code": "AddressType",
+    "display": "Address type",
+    "isReadOnly": true,
+    "source": "Psych+Enum",
+    "codes": [
+      {
+        "code": "Home",
+        "display": "Home"
+      },
+      {
+        "code": "Mailing",
+        "display": "Mailing"
+      },
+      {
+        "code": "Business",
+        "display": "Business"
+      }
+    ]
+  },
+  {
+    "code": "AppointmentStatus",
+    "display": "Appointment status",
+    "isReadOnly": true,
+    "source": "Psych+Enum",
+    "codes": [
+      {
+        "code": "Scheduled",
+        "display": "Scheduled"
+      },
+      {
+        "code": "Confirmed",
+        "display": "Confirmed"
+      },
+      {
+        "code": "CheckedIn",
+        "display": "Checked in"
+      },
+      {
+        "code": "InRoom",
+        "display": "In room"
+      },
+      {
+        "code": "CheckedOut",
+        "display": "Checked out"
+      },
+      {
+        "code": "CancelledS",
+        "display": "Cancelled by Staff"
+      },
+      {
+        "code": "CancelledP",
+        "display": "Cancelled by Patient"
+      },
+      {
+        "code": "NoShow",
+        "display": "No show"
+      },
+      {
+        "code": "Rescheduled",
+        "display": "Rescheduled"
+      },
+      {
+        "code": "Cancelled",
+        "display": "Cancelled"
+      },
+      {
+        "code": "Closed",
+        "display": "Closed"
+      },
+      {
+        "code": "ConfirmedS",
+        "display": "Confirmed by Staff"
+      }
+    ]
+  },
+  {
+    "code": "AppointmentType",
+    "display": "Appointment type",
+    "isReadOnly": true,
+    "source": "Psych+Enum",
+    "codes": [
+      {
+        "code": "InPerson",
+        "display": "In-Person"
+      },
+      {
+        "code": "TeleVisit",
+        "display": "Tele Visit"
+      },
+      {
+        "code": "Either",
+        "display": "Either"
+      }
+    ]
+  },
+  {
+    "code": "ChargePerType",
+    "display": "Charge Unit",
+    "isReadOnly": true,
+    "source": "Psych+Enum",
+    "codes": [
+      {
+        "code": "Day",
+        "display": "Day"
+      },
+      {
+        "code": "Month",
+        "display": "Month"
+      },
+      {
+        "code": "Year",
+        "display": "Year"
+      },
+      {
+        "code": "Transaction",
+        "display": "Transaction"
+      },
+      {
+        "code": "Visit",
+        "display": "Visit"
+      }
+    ]
+  },
+  {
+    "code": "ClaimDueTo",
+    "display": "Claim Due To type",
+    "isReadOnly": true,
+    "source": "Psych+Enum",
+    "codes": [
+      {
+        "code": "None",
+        "display": "None"
+      },
+      {
+        "code": "Insurance",
+        "display": "Insurance"
+      },
+      {
+        "code": "Patient",
+        "display": "Patient"
+      }
+    ]
+  },
+  {
+    "code": "ContactMadeStatus",
+    "display": "Contact made statuses",
+    "isReadOnly": true,
+    "source": "Psych+Enum",
+    "codes": [
+      {
+        "code": "Pending",
+        "display": "Pending",
+        "attributes": [
+          {
+            "name": "IsUserSelectable",
+            "value": "True"
+          }
+        ]
+      },
+      {
+        "code": "AttemptedContact",
+        "display": "Attempted",
+        "attributes": [
+          {
+            "name": "IsUserSelectable",
+            "value": "True"
+          }
+        ]
+      },
+      {
+        "code": "Refused",
+        "display": "Refused",
+        "attributes": [
+          {
+            "name": "IsUserSelectable",
+            "value": "True"
+          }
+        ]
+      },
+      {
+        "code": "AuthInProcess",
+        "display": "Auth in Process",
+        "attributes": [
+          {
+            "name": "IsUserSelectable",
+            "value": "True"
+          }
+        ]
+      },
+      {
+        "code": "Scheduled",
+        "display": "Scheduled",
+        "attributes": [
+          {
+            "name": "IsUserSelectable",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "code": "Cancelled",
+        "display": "Cancelled",
+        "attributes": [
+          {
+            "name": "IsUserSelectable",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "code": "Admitted",
+        "display": "Admitted",
+        "attributes": [
+          {
+            "name": "IsUserSelectable",
+            "value": "True"
+          }
+        ]
+      },
+      {
+        "code": "Error",
+        "display": "Error",
+        "attributes": [
+          {
+            "name": "IsUserSelectable",
+            "value": "True"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "code": "Gender",
+    "display": "Gender",
+    "isReadOnly": true,
+    "source": "Psych+Enum",
+    "codes": [
+      {
+        "code": "NotSpecified",
+        "display": "Not Specified"
+      },
+      {
+        "code": "Male",
+        "display": "Male"
+      },
+      {
+        "code": "Female",
+        "display": "Female"
+      },
+      {
+        "code": "Undetermined",
+        "display": "Undetermined"
+      }
+    ]
+  },
+  {
+    "code": "GuardianRelationship",
+    "display": "Guardian relationship",
+    "isReadOnly": true,
+    "source": "Psych+Enum",
+    "codes": [
+      {
+        "code": "Parent",
+        "display": "Parent"
+      },
+      {
+        "code": "Guardian",
+        "display": "Guardian"
+      },
+      {
+        "code": "Conservator",
+        "display": "Conservator"
+      },
+      {
+        "code": "HealthCareSurrogate",
+        "display": "Health Care Surrogate"
+      },
+      {
+        "code": "PowerOfAttorneyForHealthcare",
+        "display": "Power of Attorney for Health Care"
+      },
+      {
+        "code": "ExecutorAdministrator",
+        "display": "Executor / Administrator"
+      }
+    ]
+  },
+  {
+    "code": "ImageSide",
+    "display": "Image side",
+    "isReadOnly": true,
+    "source": "Psych+Enum",
+    "codes": [
+      {
+        "code": "Front",
+        "display": "Front"
+      },
+      {
+        "code": "Back",
+        "display": "Back"
+      }
+    ]
+  },
+  {
+    "code": "InsurancePolicyPriority",
+    "display": "Insurance policy priority",
+    "isReadOnly": true,
+    "source": "Psych+Enum",
+    "codes": [
+      {
+        "code": "Primary",
+        "display": "Primary"
+      },
+      {
+        "code": "Secondary",
+        "display": "Secondary"
+      },
+      {
+        "code": "Tertiary",
+        "display": "Tertiary"
+      },
+      {
+        "code": "Other",
+        "display": "Other"
+      }
+    ]
+  },
+  {
+    "code": "InsuranceRelationship",
+    "display": "Insurance Relationship",
+    "isReadOnly": true,
+    "source": "Psych+Enum",
+    "codes": [
+      {
+        "code": "Spouse",
+        "display": "Spouse"
+      },
+      {
+        "code": "Child",
+        "display": "Child"
+      },
+      {
+        "code": "OtherAdult",
+        "display": "Other Adult"
+      },
+      {
+        "code": "Guardian",
+        "display": "Guardian"
+      }
+    ]
+  },
+  {
+    "code": "InsuranceType",
+    "display": "Insurance type",
+    "isReadOnly": true,
+    "source": "Psych+Enum",
+    "codes": [
+      {
+        "code": "Unknown",
+        "display": "Unknown"
+      },
+      {
+        "code": "Ppo",
+        "display": "PPO"
+      },
+      {
+        "code": "Hmo",
+        "display": "HMO"
+      },
+      {
+        "code": "Medicaid",
+        "display": "Medicaid"
+      },
+      {
+        "code": "Medicare",
+        "display": "Medicare"
+      },
+      {
+        "code": "WorkersCompensation",
+        "display": "Workers Compensation"
+      }
+    ]
+  },
+  {
+    "code": "Language",
+    "display": "Language",
+    "isReadOnly": true,
+    "source": "Psych+Enum",
+    "codes": [
+      {
+        "code": "English",
+        "display": "English"
+      },
+      {
+        "code": "Spanish",
+        "display": "Spanish"
+      },
+      {
+        "code": "HindiUrdu",
+        "display": "Hindi/Urdu"
+      },
+      {
+        "code": "Arabic",
+        "display": "Arabic"
+      },
+      {
+        "code": "French",
+        "display": "French"
+      },
+      {
+        "code": "German",
+        "display": "German"
+      },
+      {
+        "code": "Italian",
+        "display": "Italian"
+      },
+      {
+        "code": "Chinese",
+        "display": "Chinese"
+      },
+      {
+        "code": "Other",
+        "display": "Other"
+      }
+    ]
+  },
+  {
+    "code": "MembershipType",
+    "display": "Membership type",
+    "isReadOnly": true,
+    "source": "Psych+Enum",
+    "codes": [
+      {
+        "code": "Plus",
+        "display": "Plus"
+      }
+    ]
+  },
+  {
+    "code": "PayerType",
+    "display": "Payer type",
+    "isReadOnly": true,
+    "source": "Psych+Enum",
+    "codes": [
+      {
+        "code": "BlueCrossBlueShield",
+        "display": "BlueCross BlueShield"
+      },
+      {
+        "code": "CommercialInsuranceCompany",
+        "display": "Commercial Insurance Company"
+      },
+      {
+        "code": "Medicaid",
+        "display": "Medicaid"
+      },
+      {
+        "code": "Medicare",
+        "display": "Medicare"
+      },
+      {
+        "code": "TricareChampus",
+        "display": "Tricare Champus"
+      },
+      {
+        "code": "WorkersCompensation",
+        "display": "Workers Compensation"
+      },
+      {
+        "code": "HospitalContractedPayer",
+        "display": "Hospital Contracted Payer"
+      },
+      {
+        "code": "SelfPay",
+        "display": "Self Pay"
+      },
+      {
+        "code": "Hmo",
+        "display": "HMO"
+      },
+      {
+        "code": "FederalEmployeesProgram",
+        "display": "Federal Employees Program"
+      },
+      {
+        "code": "SelfAdministeredGroup",
+        "display": "Self Administered Group"
+      },
+      {
+        "code": "Auto",
+        "display": "Auto"
+      },
+      {
+        "code": "Disability",
+        "display": "Disability"
+      },
+      {
+        "code": "Liability",
+        "display": "Liability"
+      }
+    ]
+  },
+  {
+    "code": "ReferralSource",
+    "display": "Referral Source",
+    "isReadOnly": true,
+    "source": "Psych+Enum",
+    "codes": [
+      {
+        "code": "Internet",
+        "display": "Internet"
+      },
+      {
+        "code": "Insurance",
+        "display": "Insurance"
+      },
+      {
+        "code": "Hospital",
+        "display": "Hospital"
+      },
+      {
+        "code": "Physician",
+        "display": "Physician"
+      },
+      {
+        "code": "Therapist",
+        "display": "Therapist"
+      },
+      {
+        "code": "CurrentPatient",
+        "display": "Current Patient"
+      },
+      {
+        "code": "Other",
+        "display": "Other"
+      }
+    ]
+  },
+  {
+    "code": "ResourceStatus",
+    "display": "Resource status",
+    "isReadOnly": true,
+    "source": "Psych+Enum",
+    "codes": [
+      {
+        "code": "Incomplete",
+        "display": "Incomplete"
+      },
+      {
+        "code": "Completed",
+        "display": "Completed"
+      },
+      {
+        "code": "Active",
+        "display": "Active"
+      },
+      {
+        "code": "Deleted",
+        "display": "Deleted"
+      }
+    ]
+  },
+  {
+    "code": "RuntimeEnvironment",
+    "display": "Referral Source",
+    "isReadOnly": true,
+    "source": "Psych+Enum",
+    "codes": [
+      {
+        "code": "Development",
+        "display": "Development"
+      },
+      {
+        "code": "Integration",
+        "display": "Integration"
+      },
+      {
+        "code": "Staging",
+        "display": "Staging"
+      },
+      {
+        "code": "Production",
+        "display": "Production"
+      }
+    ]
+  },
+  {
+    "code": "ServicesOffered",
+    "display": "Services offered",
+    "isReadOnly": true,
+    "source": "Psych+Enum",
+    "codes": [
+      {
+        "code": "Psychiatry",
+        "display": "Psychiatry",
+        "attributes": [
+          {
+            "name": "IsEmergencyStatusAllowed",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "code": "Therapy",
+        "display": "Therapy",
+        "attributes": [
+          {
+            "name": "IsEmergencyStatusAllowed",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "code": "CouplesFamilyTherapy",
+        "display": "Couples/Family Therapy",
+        "attributes": [
+          {
+            "name": "IsEmergencyStatusAllowed",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "code": "GroupTherapy",
+        "display": "Group Therapy",
+        "attributes": [
+          {
+            "name": "IsEmergencyStatusAllowed",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "code": "Tms",
+        "display": "Transcranial Magnetic Stimulation",
+        "attributes": [
+          {
+            "name": "IsEmergencyStatusAllowed",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "code": "Spravato",
+        "display": "Spravato",
+        "attributes": [
+          {
+            "name": "IsEmergencyStatusAllowed",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "code": "Ect",
+        "display": "Electroconvulsive Therapy",
+        "attributes": [
+          {
+            "name": "IsEmergencyStatusAllowed",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "code": "Aba",
+        "display": "Applied Behavior Analysis",
+        "attributes": [
+          {
+            "name": "IsEmergencyStatusAllowed",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "code": "PartialHospital",
+        "display": "Partial Hospital Program",
+        "attributes": [
+          {
+            "name": "IsEmergencyStatusAllowed",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "code": "IntensiveOutpatient",
+        "display": "Intensive Outpatient Program",
+        "attributes": [
+          {
+            "name": "IsEmergencyStatusAllowed",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "code": "Detox",
+        "display": "Detox",
+        "attributes": [
+          {
+            "name": "IsEmergencyStatusAllowed",
+            "value": "True"
+          }
+        ]
+      },
+      {
+        "code": "EmergencyRoom",
+        "display": "Emergency Room",
+        "attributes": [
+          {
+            "name": "IsEmergencyStatusAllowed",
+            "value": "True"
+          }
+        ]
+      },
+      {
+        "code": "InpatientPsych",
+        "display": "Inpatient Psychiatry",
+        "attributes": [
+          {
+            "name": "IsEmergencyStatusAllowed",
+            "value": "True"
+          }
+        ]
+      },
+      {
+        "code": "InpatientSubstanceUseResidential",
+        "display": "Inpatient Substance Use Residential",
+        "attributes": [
+          {
+            "name": "IsEmergencyStatusAllowed",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "code": "InpatientMentalHealthResidential",
+        "display": "Inpatient Mental Health Residential",
+        "attributes": [
+          {
+            "name": "IsEmergencyStatusAllowed",
+            "value": "False"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "code": "ServicesStatus",
+    "display": "Service status",
+    "isReadOnly": true,
+    "source": "Psych+Enum",
+    "codes": [
+      {
+        "code": "Emergency",
+        "display": "Emergency"
+      },
+      {
+        "code": "Routine",
+        "display": "Routine"
+      }
+    ]
+  },
+  {
+    "code": "TelephoneType",
+    "display": "Telephone type",
+    "isReadOnly": true,
+    "source": "Psych+Enum",
+    "codes": [
+      {
+        "code": "Home",
+        "display": "Home"
+      },
+      {
+        "code": "Mobile",
+        "display": "Mobile"
+      },
+      {
+        "code": "Business",
+        "display": "Business"
+      },
+      {
+        "code": "BusinessFax",
+        "display": "Business FAX"
+      },
+      {
+        "code": "Contact",
+        "display": "Contact"
+      },
+      {
+        "code": "Other",
+        "display": "Other"
+      }
+    ]
+  },
+  {
+    "code": "VerificationStatus",
+    "display": "Verification Status",
+    "isReadOnly": true,
+    "source": "Psych+Enum",
+    "codes": [
+      {
+        "code": "Verified",
+        "display": "Verified"
+      },
+      {
+        "code": "Pending",
+        "display": "Pending"
+      },
+      {
+        "code": "Unverifiable",
+        "display": "Unverifiable"
+      }
+    ]
+  },
+  {
+    "code": "ClaimStatus",
+    "display": "Claim Status type",
+    "isReadOnly": false,
+    "source": "Psych+Db-claim_status",
+    "codes": [
+      {
+        "code": "1",
+        "display": "Rejected at Clearinghouse",
+        "metadata": {
+          "createdOn": "2023-11-04T10:06:24",
+          "createdBy": "1401",
+          "createdByFullName": "Peter C Berkman"
+        },
+        "attributes": [
+          {
+            "name": "DueTo",
+            "value": "Insurance"
+          },
+          {
+            "name": "IsActive",
+            "value": "True"
+          },
+          {
+            "name": "IsDeleted",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "code": "2",
+        "display": "Rejected at Insurance",
+        "metadata": {
+          "createdOn": "2023-11-04T10:07:04",
+          "createdBy": "1401",
+          "createdByFullName": "Peter C Berkman"
+        },
+        "attributes": [
+          {
+            "name": "DueTo",
+            "value": "Insurance"
+          },
+          {
+            "name": "IsActive",
+            "value": "True"
+          },
+          {
+            "name": "IsDeleted",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "code": "3",
+        "display": "Submitted Medical Records",
+        "metadata": {
+          "createdOn": "2023-11-04T10:07:28",
+          "createdBy": "1401",
+          "createdByFullName": "Peter C Berkman"
+        },
+        "attributes": [
+          {
+            "name": "DueTo",
+            "value": "Insurance"
+          },
+          {
+            "name": "IsActive",
+            "value": "True"
+          },
+          {
+            "name": "IsDeleted",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "code": "4",
+        "display": "ECT Denial of Service",
+        "metadata": {
+          "createdOn": "2023-11-04T10:07:55",
+          "createdBy": "1401",
+          "createdByFullName": "Peter C Berkman"
+        },
+        "attributes": [
+          {
+            "name": "DueTo",
+            "value": "Insurance"
+          },
+          {
+            "name": "IsActive",
+            "value": "True"
+          },
+          {
+            "name": "IsDeleted",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "code": "5",
+        "display": "Claim Denied After MR Submitted",
+        "metadata": {
+          "createdOn": "2023-11-04T10:08:43",
+          "createdBy": "1401",
+          "createdByFullName": "Peter C Berkman"
+        },
+        "attributes": [
+          {
+            "name": "DueTo",
+            "value": "Insurance"
+          },
+          {
+            "name": "IsActive",
+            "value": "True"
+          },
+          {
+            "name": "IsDeleted",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "code": "6",
+        "display": "Denied Insurance Not-In-Network",
+        "metadata": {
+          "createdOn": "2023-11-04T10:09:08",
+          "createdBy": "1401",
+          "createdByFullName": "Peter C Berkman"
+        },
+        "attributes": [
+          {
+            "name": "DueTo",
+            "value": "Insurance"
+          },
+          {
+            "name": "IsActive",
+            "value": "True"
+          },
+          {
+            "name": "IsDeleted",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "code": "7",
+        "display": "Denied for No Auth, Precert, Referral by Insurance",
+        "metadata": {
+          "createdOn": "2023-11-04T10:09:41",
+          "createdBy": "1401",
+          "createdByFullName": "Peter C Berkman"
+        },
+        "attributes": [
+          {
+            "name": "DueTo",
+            "value": "Insurance"
+          },
+          {
+            "name": "IsActive",
+            "value": "True"
+          },
+          {
+            "name": "IsDeleted",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "code": "8",
+        "display": "Medical Records Needed per Insurance",
+        "metadata": {
+          "createdOn": "2023-11-04T10:10:22",
+          "createdBy": "1401",
+          "createdByFullName": "Peter C Berkman"
+        },
+        "attributes": [
+          {
+            "name": "DueTo",
+            "value": "Insurance"
+          },
+          {
+            "name": "IsActive",
+            "value": "True"
+          },
+          {
+            "name": "IsDeleted",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "code": "9",
+        "display": "Denied at Insurance",
+        "metadata": {
+          "createdOn": "2023-11-04T10:10:42",
+          "createdBy": "1401",
+          "createdByFullName": "Peter C Berkman"
+        },
+        "attributes": [
+          {
+            "name": "DueTo",
+            "value": "None"
+          },
+          {
+            "name": "IsActive",
+            "value": "True"
+          },
+          {
+            "name": "IsDeleted",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "code": "10",
+        "display": "Rejected by Peter",
+        "metadata": {
+          "createdOn": "2023-11-05T22:49:15",
+          "createdBy": "1401",
+          "createdByFullName": "Peter C Berkman"
+        },
+        "attributes": [
+          {
+            "name": "DueTo",
+            "value": "None"
+          },
+          {
+            "name": "IsActive",
+            "value": "True"
+          },
+          {
+            "name": "IsDeleted",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "code": "11",
+        "display": "Rejected by Peter 3",
+        "metadata": {
+          "createdOn": "2023-11-05T22:57:49",
+          "createdBy": "1401",
+          "createdByFullName": "Peter C Berkman",
+          "updatedOn": "2023-11-05T23:49:46",
+          "updatedBy": "1401",
+          "updatedByFullName": "Peter C Berkman"
+        },
+        "attributes": [
+          {
+            "name": "DueTo",
+            "value": "Patient"
+          },
+          {
+            "name": "IsActive",
+            "value": "True"
+          },
+          {
+            "name": "IsDeleted",
+            "value": "False"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "code": "EncounterType",
+    "display": "Encounter type",
+    "isReadOnly": true,
+    "source": "Psych+Db-encounter_types",
+    "codes": [
+      {
+        "code": "1",
+        "display": "New Pt, Outpatient Office Visit",
+        "metadata": {
+          "updatedOn": "2022-06-10T18:24:14"
+        },
+        "attributes": [
+          {
+            "name": "IsForNewPatient",
+            "value": "True"
+          }
+        ]
+      },
+      {
+        "code": "2",
+        "display": "Est Pt, Outpatient Office Visit",
+        "metadata": {
+          "updatedOn": "2022-06-10T18:24:50"
+        },
+        "attributes": [
+          {
+            "name": "IsForNewPatient",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "code": "7",
+        "display": "T - New Pt, Outpatient Office Visit",
+        "metadata": {
+          "updatedOn": "2022-06-10T18:26:41"
+        },
+        "attributes": [
+          {
+            "name": "IsForNewPatient",
+            "value": "True"
+          }
+        ]
+      },
+      {
+        "code": "8",
+        "display": "T - Est Pt, Outpatient Office Visit",
+        "metadata": {
+          "updatedOn": "2022-06-10T18:27:09"
+        },
+        "attributes": [
+          {
+            "name": "IsForNewPatient",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "code": "14",
+        "display": "Est Pt, Transitional Care Mngt",
+        "metadata": {
+          "updatedOn": "2022-06-10T18:29:25"
+        },
+        "attributes": [
+          {
+            "name": "IsForNewPatient",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "code": "15",
+        "display": "T - Est Pt, Transitional Care Mngt",
+        "metadata": {
+          "updatedOn": "2022-06-10T18:29:47"
+        },
+        "attributes": [
+          {
+            "name": "IsForNewPatient",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "code": "19",
+        "display": "Initial Hospital Care",
+        "metadata": {},
+        "attributes": [
+          {
+            "name": "IsForNewPatient",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "code": "20",
+        "display": "Subsequent Hospital Care",
+        "metadata": {},
+        "attributes": [
+          {
+            "name": "IsForNewPatient",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "code": "21",
+        "display": "Discharge Hospital Care",
+        "metadata": {},
+        "attributes": [
+          {
+            "name": "IsForNewPatient",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "code": "22",
+        "display": "T - Initial Hospital Care",
+        "metadata": {},
+        "attributes": [
+          {
+            "name": "IsForNewPatient",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "code": "23",
+        "display": "T - Subsequent Hospital Care",
+        "metadata": {},
+        "attributes": [
+          {
+            "name": "IsForNewPatient",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "code": "24",
+        "display": "T - Discharge Hospital Care",
+        "metadata": {},
+        "attributes": [
+          {
+            "name": "IsForNewPatient",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "code": "25",
+        "display": "TMS Visit",
+        "metadata": {
+          "updatedOn": "2023-01-10T11:44:44"
+        },
+        "attributes": [
+          {
+            "name": "IsForNewPatient",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "code": "29",
+        "display": "New Pt, Psychotherapy",
+        "metadata": {},
+        "attributes": [
+          {
+            "name": "IsForNewPatient",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "code": "30",
+        "display": "Est Pt, Psychotherapy",
+        "metadata": {},
+        "attributes": [
+          {
+            "name": "IsForNewPatient",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "code": "31",
+        "display": "New Pt, Family/Couple Psychotherapy",
+        "metadata": {
+          "updatedOn": "2023-02-02T07:26:30"
+        },
+        "attributes": [
+          {
+            "name": "IsForNewPatient",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "code": "32",
+        "display": "T - New Pt, Psychotherapy",
+        "metadata": {},
+        "attributes": [
+          {
+            "name": "IsForNewPatient",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "code": "33",
+        "display": "T - Est Pt, Psychotherapy",
+        "metadata": {},
+        "attributes": [
+          {
+            "name": "IsForNewPatient",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "code": "34",
+        "display": "T - New Pt, Family/Couple Psychotherapy",
+        "metadata": {
+          "updatedOn": "2023-02-02T07:26:52"
+        },
+        "attributes": [
+          {
+            "name": "IsForNewPatient",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "code": "36",
+        "display": "Spravato Visit",
+        "metadata": {},
+        "attributes": [
+          {
+            "name": "IsForNewPatient",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "code": "37",
+        "display": "New Pt, Transitional Care Mngt",
+        "metadata": {},
+        "attributes": [
+          {
+            "name": "IsForNewPatient",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "code": "38",
+        "display": "T - New Pt, Transitional Care Mngt",
+        "metadata": {},
+        "attributes": [
+          {
+            "name": "IsForNewPatient",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "code": "39",
+        "display": "New Pt, Resident/Asst Living/Mem Care",
+        "metadata": {
+          "updatedOn": "2023-08-17T21:03:52"
+        },
+        "attributes": [
+          {
+            "name": "IsForNewPatient",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "code": "40",
+        "display": "T - New Pt, Resident/Asst Living/Mem Care",
+        "metadata": {
+          "updatedOn": "2023-08-17T21:04:52"
+        },
+        "attributes": [
+          {
+            "name": "IsForNewPatient",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "code": "41",
+        "display": "Est Pt, Resident/Asst Living/Mem Care",
+        "metadata": {
+          "updatedOn": "2023-08-17T21:05:52"
+        },
+        "attributes": [
+          {
+            "name": "IsForNewPatient",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "code": "42",
+        "display": "T - Est Pt, Resident/Asst Living/Mem Care",
+        "metadata": {
+          "updatedOn": "2023-08-17T21:06:52"
+        },
+        "attributes": [
+          {
+            "name": "IsForNewPatient",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "code": "43",
+        "display": "Est Pt, Family/Couple Psychotherapy",
+        "metadata": {
+          "updatedOn": "2023-09-04T21:02:52"
+        },
+        "attributes": [
+          {
+            "name": "IsForNewPatient",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "code": "44",
+        "display": "T - Est Pt, Family/Couple Psychotherapy",
+        "metadata": {
+          "updatedOn": "2023-09-04T21:04:22"
+        },
+        "attributes": [
+          {
+            "name": "IsForNewPatient",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "code": "45",
+        "display": "Group Therapy",
+        "metadata": {
+          "updatedOn": "2023-09-07T22:02:52"
+        },
+        "attributes": [
+          {
+            "name": "IsForNewPatient",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "code": "46",
+        "display": "T - Group Therapy",
+        "metadata": {
+          "updatedOn": "2023-09-07T22:04:22"
+        },
+        "attributes": [
+          {
+            "name": "IsForNewPatient",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "code": "47",
+        "display": "Initial Nursing Home Care",
+        "metadata": {
+          "updatedOn": "2023-09-07T22:02:52"
+        },
+        "attributes": [
+          {
+            "name": "IsForNewPatient",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "code": "48",
+        "display": "T - Initial Nursing Home Care",
+        "metadata": {
+          "updatedOn": "2023-09-07T22:04:22"
+        },
+        "attributes": [
+          {
+            "name": "IsForNewPatient",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "code": "49",
+        "display": "Subsequent Nursing Home Care",
+        "metadata": {
+          "updatedOn": "2023-09-07T22:02:52"
+        },
+        "attributes": [
+          {
+            "name": "IsForNewPatient",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "code": "50",
+        "display": "T - Subsequent Nursing Home Care",
+        "metadata": {
+          "updatedOn": "2023-09-07T22:04:22"
+        },
+        "attributes": [
+          {
+            "name": "IsForNewPatient",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "code": "51",
+        "display": "Discharge Nursing Home Care",
+        "metadata": {
+          "updatedOn": "2023-09-07T22:02:52"
+        },
+        "attributes": [
+          {
+            "name": "IsForNewPatient",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "code": "52",
+        "display": "T - Discharge Nursing Home Care",
+        "metadata": {
+          "updatedOn": "2023-09-07T22:04:22"
+        },
+        "attributes": [
+          {
+            "name": "IsForNewPatient",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "code": "53",
+        "display": "ECT Visit",
+        "metadata": {
+          "updatedOn": "2023-09-07T22:04:22"
+        },
+        "attributes": [
+          {
+            "name": "IsForNewPatient",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "code": "54",
+        "display": "Initial ED Visit",
+        "metadata": {
+          "updatedOn": "2023-09-13T16:04:22"
+        },
+        "attributes": [
+          {
+            "name": "IsForNewPatient",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "code": "55",
+        "display": "T - Initial ED Visit",
+        "metadata": {
+          "updatedOn": "2023-09-13T16:05:46"
+        },
+        "attributes": [
+          {
+            "name": "IsForNewPatient",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "code": "56",
+        "display": "Subsequent ED Visit",
+        "metadata": {
+          "updatedOn": "2023-09-13T16:06:12"
+        },
+        "attributes": [
+          {
+            "name": "IsForNewPatient",
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "code": "57",
+        "display": "T - Subsequent ED Visit",
+        "metadata": {
+          "updatedOn": "2023-09-13T16:07:37"
+        },
+        "attributes": [
+          {
+            "name": "IsForNewPatient",
+            "value": "False"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "code": "SpecialistType",
+    "display": "Specialist type",
+    "isReadOnly": true,
+    "source": "Psych+Db-specialist",
+    "codes": [
+      {
+        "code": "1",
+        "display": "Psychiatrist",
+        "metadata": {
+          "createdOn": "2020-04-02T16:32:42",
+          "createdBy": "Admin",
+          "updatedOn": "2020-04-02T16:32:42",
+          "updatedBy": "Admin"
+        }
+      },
+      {
+        "code": "2",
+        "display": "Therapist",
+        "metadata": {
+          "createdOn": "2020-04-02T17:49:03",
+          "createdBy": "Admin",
+          "updatedOn": "2020-04-02T17:49:03",
+          "updatedBy": "Admin"
+        }
+      }
+    ]
+  },
+  {
+    "code": "StaffRole",
+    "display": "Staff role",
+    "isReadOnly": true,
+    "source": "Psych+Db-staff_role",
+    "codes": [
+      {
+        "code": "1",
+        "display": "Independent Prescriber",
+        "metadata": {
+          "createdOn": "2020-04-01T17:37:40",
+          "createdBy": "Admin",
+          "updatedOn": "2020-04-01T17:37:40",
+          "updatedBy": "Admin"
+        }
+      },
+      {
+        "code": "2",
+        "display": "Medical Assistant",
+        "metadata": {
+          "createdOn": "2020-04-01T17:37:59",
+          "createdBy": "Admin",
+          "updatedOn": "2020-04-01T17:37:59",
+          "updatedBy": "Admin"
+        }
+      },
+      {
+        "code": "3",
+        "display": "Scheduler",
+        "metadata": {
+          "createdOn": "2020-04-01T17:38:17",
+          "createdBy": "Admin",
+          "updatedOn": "2020-04-01T17:38:17",
+          "updatedBy": "Admin"
+        }
+      },
+      {
+        "code": "4",
+        "display": "Biller",
+        "metadata": {
+          "createdOn": "2020-04-01T17:38:21",
+          "createdBy": "Admin",
+          "updatedOn": "2020-04-01T17:38:21",
+          "updatedBy": "Admin"
+        }
+      }
+    ]
+  },
+  {
+    "code": "UserRole",
+    "display": "User role",
+    "isReadOnly": true,
+    "source": "Psych+Db-users_role",
+    "codes": [
+      {
+        "code": "1",
+        "display": "Admin",
+        "metadata": {
+          "createdOn": "2020-03-18T18:00:22",
+          "createdBy": "Admin",
+          "updatedOn": "2020-03-18T18:00:22",
+          "updatedBy": "Admin"
+        }
+      },
+      {
+        "code": "2",
+        "display": "Patient",
+        "metadata": {
+          "createdOn": "2020-03-18T18:00:38",
+          "createdBy": "Admin",
+          "updatedOn": "2020-03-18T18:00:38",
+          "updatedBy": "Admin"
+        }
+      },
+      {
+        "code": "3",
+        "display": "Staff",
+        "metadata": {
+          "createdOn": "2020-03-18T18:00:47",
+          "createdBy": "Admin",
+          "updatedOn": "2020-03-18T18:00:47",
+          "updatedBy": "Admin"
+        }
+      },
+      {
+        "code": "4",
+        "display": "Service",
+        "metadata": {
+          "createdOn": "2023-09-04T17:09:04",
+          "createdBy": "Admin",
+          "updatedOn": "2023-09-04T17:09:11",
+          "updatedBy": "Admin"
+        }
+      }
+    ]
+  }
+]

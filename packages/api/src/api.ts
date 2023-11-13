@@ -9,13 +9,12 @@ const options: ApiOptions = {}
 
 const api = async <T>(input: RequestInfo, init?: RequestInit): Promise<T> => {
   const response = await fetch(input, {
-    cache: 'no-store',
     headers: createCommonHeaders(options),
     ...init,
   })
 
   if (!response.ok) {
-    throw new Error()
+    throw new Error(await response.text())
   }
 
   return response.json()

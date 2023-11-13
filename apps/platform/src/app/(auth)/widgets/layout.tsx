@@ -15,6 +15,10 @@ const navMenuItems: MenuItem[] = [
     href: '/widgets/professional-claim',
   },
   {
+    label: 'Claim Status Configuration',
+    href: '/widgets/claim-status-config',
+  },
+  {
     label: 'Patient Referrals',
     href: '/widgets/patient-referrals',
   },

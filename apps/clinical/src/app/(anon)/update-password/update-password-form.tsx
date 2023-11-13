@@ -46,6 +46,7 @@ const UpdatePasswordForm = () => {
           label="New Password"
           placeholder="Choose a new password"
           data-testid="update-password-password-input"
+          autoFocus
           {...form.register('password')}
         />
         <FormTextInput

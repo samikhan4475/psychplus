@@ -1,19 +1,21 @@
 'use client'
 
+import { Flex, Text } from '@radix-ui/themes'
+import { useUser } from '@psychplus/user'
 import { useStore } from './store'
 
 const UserWidgetClient = () => {
-  const user = useStore((state) => state.getUser())
+  const user = useUser(useStore)
 
   return (
-    <div className="h-full w-full p-4">
-      <div>
+    <Flex direction="column" height="100%" width="100%">
+      <Text>
         This example widget will fetch and display the current user&apos;s name.
-      </div>
-      <div>
+      </Text>
+      <Text>
         <b>User:</b> {user.fullName}
-      </div>
-    </div>
+      </Text>
+    </Flex>
   )
 }
 

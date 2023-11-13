@@ -13,15 +13,21 @@
   "dependencies": {
     "@psychplus/api": "^0.1.0",
     "@psychplus/auth": "^0.1.0",
+    "@psychplus/codeset": "^0.1.0",
+    "@psychplus/form": "^0.1.0",
     "@psychplus/patient": "^0.1.0",
     "@psychplus/ui": "^0.1.0",
+    "@psychplus/user": "^0.1.0",
     "@psychplus/utils": "^0.1.0",
     "@psychplus/widgets": "^0.1.0",
     "@radix-ui/react-icons": "^1.3.0",
     "@radix-ui/themes": "^2.0.0",
+    "@tanstack/react-table": "^8.10.7",
     "next": "^14.0.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-hook-form": "^7.47.0",
+    "zod": "^3.22.4",
     "zustand": "^4.4.3"
   },
   "devDependencies": {

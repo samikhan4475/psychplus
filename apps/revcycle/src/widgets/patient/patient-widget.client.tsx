@@ -1,20 +1,21 @@
 'use client'
 
-import { Box } from '@radix-ui/themes'
+import { Flex, Text } from '@radix-ui/themes'
+import { usePatient } from '@psychplus/patient'
 import { useStore } from './store'
 
 const PatientWidgetClient = () => {
-  const patient = useStore((state) => state.getPatient())
+  const patient = usePatient(useStore)
 
   return (
-    <Box height="100%" width="100%" p="4">
-      <div>
+    <Flex direction="column" height="100%" width="100%">
+      <Text>
         This example widget will fetch and display the patient&apos;s name.
-      </div>
-      <div>
+      </Text>
+      <Text>
         <b>Patient:</b> {patient.fullName}
-      </div>
-    </Box>
+      </Text>
+    </Flex>
   )
 }
 

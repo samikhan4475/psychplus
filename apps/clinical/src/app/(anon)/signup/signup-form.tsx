@@ -57,6 +57,7 @@ const SignupForm = () => {
           label="Email"
           placeholder="Enter your email"
           data-testid="signup-email-input"
+          autoFocus
           {...form.register('email')}
         />
         <FormSubmitButton data-testid="signup-submit-button">

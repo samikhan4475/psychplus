@@ -5,22 +5,13 @@ import { type Patient } from './types'
 
 interface PatientState {
   patient?: Patient
-  getPatient: () => Patient
   setPatient: (patient: Patient) => void
 }
 
 type PatientStoreType = UseBoundStore<StoreApi<PatientState>>
 
 const createPatientStore: StateCreator<PatientState> = (set, get) => ({
-  getPatient: () => {
-    const patient = get().patient
-
-    if (!patient) {
-      throw new Error()
-    }
-
-    return patient
-  },
+  patient: undefined,
   setPatient: (patient) => set({ patient }),
 })
 
