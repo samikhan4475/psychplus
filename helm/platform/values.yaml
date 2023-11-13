@@ -23,6 +23,7 @@ container:
   protocol: TCP
 
 service:
+  name: platformSvc
   enabled: true
   type: ClusterIP
   port: 3099
@@ -39,6 +40,11 @@ ingress:
     paths:
     - path: /platform
       pathType: Prefix
+      backend:
+        service:
+          name: platformSvc
+          port:
+            number: 3099
   tls:
   - hosts:
     - ui.integration.psychplus.dev

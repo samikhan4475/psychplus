@@ -23,6 +23,7 @@ container:
   protocol: TCP
 
 service:
+  name: clinicalSvc
   enabled: true
   type: ClusterIP
   port: 3001
@@ -39,6 +40,11 @@ ingress:
     paths:
     - path: /galaxy
       pathType: Prefix
+      backend:
+        service:
+          name: clinicalSvc
+          port:
+            number: 3001
   tls:
   - hosts:
     - ui.integration.psychplus.dev

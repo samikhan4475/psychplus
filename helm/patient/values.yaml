@@ -23,6 +23,7 @@ container:
   protocol: TCP
 
 service:
+  name: patientSvc
   enabled: true
   type: ClusterIP
   port: 3000
@@ -39,6 +40,11 @@ ingress:
     paths:
     - path: /
       pathType: Prefix
+      backend:
+        service:
+          name: patientSvc
+          port:
+            number: 3000
   tls:
   - hosts:
     - ui.integration.psychplus.dev
