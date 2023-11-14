@@ -43,6 +43,10 @@ const navMenuItems: MenuItem[] = [
     href: '/components/icon-button',
   },
   {
+    label: 'Phone Number Input',
+    href: '/components/phone-number-input',
+  },
+  {
     label: 'Popover',
     href: '/components/popover',
   },

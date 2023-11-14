@@ -8,7 +8,7 @@ const ClaimStatusConfigWidgetPage = () => (
   <>
     <PageHeader title={TITLE} description={DESCRIPTION} />
 
-    <div className="h-[635px] w-[900px]">
+    <div className="h-[675px] w-[900px]">
       <ClaimStatusConfigWidget />
     </div>
   </>

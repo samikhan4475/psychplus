@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { TextField, TextFieldInputProps } from '@psychplus/ui/text-field'
+import { TextField, type TextFieldInputProps } from '@psychplus/ui/text-field'
 import { FormField, useFormField, UseFormFieldProps } from './form-field'
 
 type FormTextInputProps = UseFormFieldProps & TextFieldInputProps
