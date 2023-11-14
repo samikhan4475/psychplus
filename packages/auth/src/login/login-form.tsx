@@ -18,7 +18,6 @@ import * as api from './api'
 const schema = z.object({
   username: validate.email,
   password: validate.requiredString,
-  phoneNumber: validate.phoneNumber,
 })
 
 type SchemaType = z.infer<typeof schema>
