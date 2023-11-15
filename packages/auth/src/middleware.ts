@@ -1,6 +1,8 @@
 import { cookies } from 'next/headers'
 import { NextResponse, type NextRequest } from 'next/server'
 import {
+  APP_ENV,
+  APP_PATH,
   AUTH_TOKEN_COOKIE_NAME,
   LOGIN_ENDPOINT,
 } from '@psychplus/utils/constants'
@@ -50,7 +52,10 @@ const handlePageRequest = (request: NextRequest, config: MiddlewareConfig) => {
     config.requireAuth.includes('/') &&
     !authToken
   ) {
-    return NextResponse.redirect(new URL('/login', request.url))
+    const loginUrl =
+      APP_ENV !== 'development' ? `/${APP_PATH ?? ''}/login` : '/login'
+
+    return NextResponse.redirect(new URL(loginUrl, request.url))
   }
 
   // If user must be authenticated and an auth token is not present,

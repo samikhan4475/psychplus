@@ -34,6 +34,10 @@ COPY --from=pruner /app/turbo.json turbo.json
 # ARG TURBO_TOKEN
 # ENV TURBO_TOKEN=$TURBO_TOKEN
 
+ENV APP_CODE p+patient-app
+ENV APP_PATH ""
+ENV APP_ENV production
+
 RUN yarn turbo run build --filter=@psychplus/patient-app...
 
 FROM base AS runner
@@ -55,7 +59,5 @@ COPY --from=builder --chown=nextjs:nodejs /app/apps/patient/public ./apps/patien
 
 EXPOSE 3000
 ENV PORT 3000
-
-ENV APP_CODE p+patient-ui
 
 CMD ["node", "apps/patient/server.js"]

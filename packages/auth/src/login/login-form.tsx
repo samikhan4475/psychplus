@@ -1,6 +1,5 @@
 'use client'
 
-import NextLink from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import { Flex, Link, Text } from '@radix-ui/themes'
 import { type SubmitHandler } from 'react-hook-form'
@@ -12,6 +11,7 @@ import {
   useForm,
   validate,
 } from '@psychplus/form'
+import { AppLink } from '@psychplus/ui/app-link'
 import { Checkbox } from '@psychplus/ui/checkbox'
 import * as api from './api'
 
@@ -72,12 +72,12 @@ const LoginForm = () => {
             </Flex>
           </Text>
           <Link size="2" asChild>
-            <NextLink
+            <AppLink
               href="/forgot-password"
               data-testid="login-forgot-password-link"
             >
               Forgot password?
-            </NextLink>
+            </AppLink>
           </Link>
         </Flex>
         <FormSubmitButton data-testid="login-submit-button">

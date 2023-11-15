@@ -34,6 +34,10 @@ COPY --from=pruner /app/turbo.json turbo.json
 # ARG TURBO_TOKEN
 # ENV TURBO_TOKEN=$TURBO_TOKEN
 
+ENV APP_CODE p+revcycle-app
+ENV APP_PATH revcycle
+ENV APP_ENV production
+
 RUN yarn turbo run build --filter=@psychplus/revcycle-app...
 
 FROM base AS runner
@@ -55,7 +59,5 @@ COPY --from=builder --chown=nextjs:nodejs /app/apps/revcycle/public ./apps/revcy
 
 EXPOSE 3002
 ENV PORT 3002
-
-ENV APP_CODE p+revcycle-ui
 
 CMD ["node", "apps/revcycle/server.js"]

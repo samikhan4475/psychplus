@@ -1,7 +1,7 @@
 'use client'
 
-import NextLink from 'next/link'
 import { Flex, Heading, Link, Text } from '@radix-ui/themes'
+import { AppLink } from '@psychplus/ui/app-link'
 import { COPYRIGHT_TEXT } from '@psychplus/utils/constants'
 import { UpdatePasswordForm } from './update-password-form'
 
@@ -18,9 +18,9 @@ const UpdatePasswordPage = () => (
           <Text size="2" mt="4">
             Aleady have an account?
             <Link size="2" ml="1" asChild>
-              <NextLink href="/login" data-testid="update-password-login-link">
+              <AppLink href="/login" data-testid="update-password-login-link">
                 Sign in
-              </NextLink>
+              </AppLink>
             </Link>
           </Text>
         </Flex>
@@ -28,10 +28,10 @@ const UpdatePasswordPage = () => (
       <Flex direction="column" gap="2" align="center" justify="between">
         <Flex gap="3">
           <Link size="2" asChild data-testid="update-password-terms-link">
-            <NextLink href="/">Terms & Conditions</NextLink>
+            <AppLink href="/">Terms & Conditions</AppLink>
           </Link>
           <Link size="2" asChild data-testid="update-password-privacy-link">
-            <NextLink href="/">Privacy Policy</NextLink>
+            <AppLink href="/">Privacy Policy</AppLink>
           </Link>
         </Flex>
         <Text size="2">{COPYRIGHT_TEXT}</Text>

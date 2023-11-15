@@ -35,6 +35,10 @@ COPY --from=pruner /app/turbo.json turbo.json
 # ARG TURBO_TOKEN
 # ENV TURBO_TOKEN=$TURBO_TOKEN
 
+ENV APP_CODE p+platform-app
+ENV APP_PATH platform
+ENV APP_ENV production
+
 RUN yarn turbo run build --filter=@psychplus/platform-app...
 
 FROM base AS runner
@@ -56,7 +60,5 @@ COPY --from=builder --chown=nextjs:nodejs /app/apps/platform/public ./apps/platf
 
 EXPOSE 3099
 ENV PORT 3099
-
-ENV APP_CODE p+platform-ui
 
 CMD ["node", "apps/platform/server.js"]

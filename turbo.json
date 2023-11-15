@@ -22,15 +22,17 @@
   },
   "globalEnv": [
     "npm_package_version",
-    "APP_CODE",
-    "NODE_ENV",
     "PORT",
+    "NODE_ENV",
+    "APP_CODE",
+    "APP_PATH",
+    "APP_ENV",
     "API_DELAY",
     "API_URL",
+    "MOCK_API_URL",
     "CLINICAL_URL",
     "PATIENT_URL",
     "REVCYCLE_URL",
-    "LOGIN_ENDPOINT",
-    "MOCK_API_URL"
+    "LOGIN_ENDPOINT"
   ]
 }
