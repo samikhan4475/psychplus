@@ -1,15 +1,15 @@
 import { cache } from 'react'
-import { api } from '@psychplus/api'
-import { API_URL, MOCK_API_URL } from '@psychplus/utils/constants'
+import { APP_HOST } from '@psychplus/utils/constants'
+import { forwardQuery } from '@psychplus/utils/server'
 import { type CodeSet } from './types'
 
 const getCodeSets = async (): Promise<CodeSet[]> =>
-  api(`${MOCK_API_URL}/api/metadata/codesets`, {
+  fetch(forwardQuery(`${APP_HOST}/api/metadata/codesets`), {
     next: {
       revalidate: 3600,
       tags: ['codesets'],
     },
-  })
+  }).then((res) => res.json())
 
 const getCodeSetsCached = cache(getCodeSets)
 

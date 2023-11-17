@@ -10,7 +10,7 @@ interface UserState {
 
 type UserStoreType = UseBoundStore<StoreApi<UserState>>
 
-const createUserStore: StateCreator<UserState> = (set, get) => ({
+const createUserStore: StateCreator<UserState> = (set) => ({
   user: undefined,
   setUser: (user) => set({ user }),
 })

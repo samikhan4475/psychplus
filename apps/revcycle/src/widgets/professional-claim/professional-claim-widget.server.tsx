@@ -1,3 +1,4 @@
+import { unstable_noStore as noStore } from 'next/cache'
 import { ProfessionalClaimWidgetClient } from './professional-claim-widget.client'
 
 interface ProfessionalClaimWidgetProps {
@@ -7,6 +8,8 @@ interface ProfessionalClaimWidgetProps {
 const ProfessionalClaimWidgetServer = ({
   claimId,
 }: ProfessionalClaimWidgetProps) => {
+  noStore()
+
   return (
     <>
       <ProfessionalClaimWidgetClient />

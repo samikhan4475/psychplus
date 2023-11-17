@@ -1,4 +1,3 @@
-import { withAPI } from '@psychplus/ui/with-api'
 import { type SearchParams } from '@psychplus/utils/url'
 import { PatientReferralsWidgetServer } from '@/widgets/patient-referrals'
 
@@ -14,4 +13,4 @@ const PatientReferralsWidgetPage = ({
   return <PatientReferralsWidgetServer patientId={searchParams.patientId} />
 }
 
-export default withAPI(PatientReferralsWidgetPage)
+export default PatientReferralsWidgetPage

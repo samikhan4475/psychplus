@@ -38,7 +38,6 @@ COPY --from=pruner /app/turbo.json turbo.json
 
 ENV APP_CODE p+clinical-app
 ENV APP_PATH clinical
-ENV APP_ENV production
 
 RUN yarn turbo run build --filter=@psychplus/clinical-app...
 

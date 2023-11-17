@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./*": "./src/*.ts"
   },
   "scripts": {
     "clean": "rimraf .turbo *.tsbuildinfo node_modules",
@@ -11,7 +12,6 @@
     "lint:fix": "tsc --noEmit && eslint --fix \"src/**/*.ts*\""
   },
   "dependencies": {
-    "@psychplus/api": "^0.1.0",
     "@psychplus/utils": "^0.1.0",
     "next": "^14.0.1",
     "react": "^18.2.0",

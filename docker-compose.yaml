@@ -1,0 +1,95 @@
+version: '3'
+
+services:
+  api:
+    container_name: api
+    build:
+      context: .
+      dockerfile: ./apps/api/Dockerfile
+    ports:
+      - 8080:80
+    networks:
+      - psychplus
+  platform:
+    container_name: platform
+    build:
+      context: .
+      dockerfile: ./apps/platform/Dockerfile
+    environment:
+      - APP_CODE=p+platform-app
+      - APP_PATH=platform
+      - APP_ENV=development
+      - APP_HOST=http://platform:3099
+      - API_URL=https://api-pr-2000.ode.psychplus.dev
+      - MOCK_API_URL=http://api:80
+      - CLINICAL_URL=http://localhost:8001
+      - PATIENT_URL=http://localhost:8002
+      - REVCYCLE_URL=http://localhost:8003
+      - LOGIN_ENDPOINT=http://api:80/api/login
+    ports:
+      - 8000:3099
+    networks:
+      - psychplus
+  clinical:
+    container_name: clinical
+    build:
+      context: .
+      dockerfile: ./apps/clinical/Dockerfile
+    environment:
+      - APP_CODE=p+galaxy-app
+      - APP_PATH=galaxy
+      - APP_ENV=development
+      - APP_HOST=http://clinical:3001
+      - API_URL=https://api-pr-2000.ode.psychplus.dev
+      - MOCK_API_URL=http://api:80
+      - CLINICAL_URL=http://localhost:8001
+      - PATIENT_URL=http://localhost:8002
+      - REVCYCLE_URL=http://localhost:8003
+      - LOGIN_ENDPOINT=http://api:80/api/login
+    ports:
+      - 8001:3001
+    networks:
+      - psychplus
+  patient:
+    container_name: patient
+    build:
+      context: .
+      dockerfile: ./apps/patient/Dockerfile
+    environment:
+      - APP_CODE=p+patient-app
+      - APP_PATH=
+      - APP_ENV=development
+      - APP_HOST=http://patient:3000
+      - API_URL=https://api-pr-2000.ode.psychplus.dev
+      - MOCK_API_URL=http://api:80
+      - CLINICAL_URL=http://localhost:8001
+      - PATIENT_URL=http://localhost:8002
+      - REVCYCLE_URL=http://localhost:8003
+      - LOGIN_ENDPOINT=http://api:80/api/login
+    ports:
+      - 8002:3000
+    networks:
+      - psychplus
+  revcycle:
+    container_name: revcycle
+    build:
+      context: .
+      dockerfile: ./apps/revcycle/Dockerfile
+    environment:
+      - APP_CODE=p+revcycle-app
+      - APP_PATH=revcycle
+      - APP_ENV=development
+      - APP_HOST=http://revcycle:3002
+      - API_URL=https://api-pr-2000.ode.psychplus.dev
+      - MOCK_API_URL=http://api:80
+      - CLINICAL_URL=http://localhost:8001
+      - PATIENT_URL=http://localhost:8002
+      - REVCYCLE_URL=http://localhost:8003
+      - LOGIN_ENDPOINT=http://api:80/api/login
+    ports:
+      - 8003:3002
+    networks:
+      - psychplus
+
+networks:
+  psychplus:

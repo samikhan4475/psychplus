@@ -12,7 +12,6 @@
   },
   "dependencies": {
     "@hookform/error-message": "^2.0.1",
-    "@psychplus/api": "^0.1.0",
     "@psychplus/auth": "^0.1.0",
     "@psychplus/codeset": "^0.1.0",
     "@psychplus/form": "^0.1.0",

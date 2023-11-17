@@ -10,7 +10,7 @@ interface PatientState {
 
 type PatientStoreType = UseBoundStore<StoreApi<PatientState>>
 
-const createPatientStore: StateCreator<PatientState> = (set, get) => ({
+const createPatientStore: StateCreator<PatientState> = (set) => ({
   patient: undefined,
   setPatient: (patient) => set({ patient }),
 })

@@ -37,7 +37,6 @@ COPY --from=pruner /app/turbo.json turbo.json
 
 ENV APP_CODE p+platform-app
 ENV APP_PATH platform
-ENV APP_ENV production
 
 RUN yarn turbo run build --filter=@psychplus/platform-app...
 

@@ -1,38 +1,21 @@
-'use client'
-
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-import { Box, Text } from '@radix-ui/themes'
-import { cn } from '@psychplus/ui/cn'
+import { AppLink } from '@psychplus/ui/app-link'
+import { NavigationMenuLink } from './navigation-menu-link'
 
 interface MenuItem {
   label: string
   href: string
 }
 
-const NavigationMenu = ({ items }: { items: MenuItem[] }) => {
-  const pathname = usePathname()
+interface NavigationMenuProps {
+  items: MenuItem[]
+}
 
-  return items.map((item) => {
-    const active = pathname === item.href
-
-    return (
-      <Link
-        key={item.href}
-        href={item.href}
-        className={cn('rounded-item px-3', {
-          'bg-accent-4': active,
-          'hover:underline': !active,
-        })}
-      >
-        <Box py="1">
-          <Text size="2" weight={active ? 'bold' : 'regular'}>
-            {item.label}
-          </Text>
-        </Box>
-      </Link>
-    )
-  })
+const NavigationMenu = ({ items }: NavigationMenuProps) => {
+  return items.map((item) => (
+    <AppLink key={item.href} href={item.href}>
+      <NavigationMenuLink href={item.href}>{item.label}</NavigationMenuLink>
+    </AppLink>
+  ))
 }
 
 export { NavigationMenu, type MenuItem }

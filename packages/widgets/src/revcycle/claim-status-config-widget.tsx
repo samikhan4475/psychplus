@@ -1,13 +1,16 @@
 import { REVCYCLE_URL } from '@psychplus/utils/constants'
-import { createUrlParams } from '@psychplus/utils/url'
+import { getAuthToken } from '@psychplus/utils/cookies'
+import { createSearchParams } from '@psychplus/utils/url'
 import { PortalContainer } from '../components'
 
 const ClaimStatusConfigWidget = () => {
-  const params = createUrlParams()
+  const searchParams = createSearchParams({
+    token: getAuthToken(),
+  })
 
   return (
     <PortalContainer
-      src={`${REVCYCLE_URL}/widgets/claim-status-config?${params.toString()}`}
+      src={`${REVCYCLE_URL}/widgets/claim-status-config?${searchParams.toString()}`}
     />
   )
 }

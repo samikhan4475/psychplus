@@ -1,10 +1,24 @@
 import { cookies } from 'next/headers'
 import { NextResponse, type NextRequest } from 'next/server'
 import {
+  APP_CODE,
   APP_ENV,
   APP_PATH,
+  APP_VERSION,
   AUTH_TOKEN_COOKIE_NAME,
+  BEARER_AUTHENTICATION,
+  CONTENT_TYPE_APPLICATION_JSON,
+  HEADER_AUTHORIZATION,
+  HEADER_CONTENT_TYPE,
+  HEADER_PSYCHPLUS_APP_VERSION,
+  HEADER_PSYCHPLUS_APPLICATION,
+  HEADER_PSYCHPLUS_DEVICE,
+  HEADER_PSYCHPLUS_RUN_ENVIRONMENT,
+  HEADER_X_URL,
   LOGIN_ENDPOINT,
+  MOCK_API_URL,
+  QUERY_TOKEN,
+  QUERY_USER_AGENT,
 } from '@psychplus/utils/constants'
 
 interface MiddlewareConfig {
@@ -27,7 +41,7 @@ const createConfig = (
   requireAnon: config.requireAnon ?? DEFAULT_CONFIG.requireAnon,
 })
 
-// middleware runs in between a request being made and when it completes.
+// Middleware runs in between a request being made and when it completes.
 // It can be used for cross-cutting concerns like setting headers and cookies,
 // as well as request redirects and rewrites (proxying).
 const createMiddleware = (config?: Partial<MiddlewareConfig>) => {
@@ -36,6 +50,9 @@ const createMiddleware = (config?: Partial<MiddlewareConfig>) => {
   return (request: NextRequest) => {
     if (request.nextUrl.pathname === '/api/login') {
       return handleLoginApiRequest(request)
+    }
+    if (request.nextUrl.pathname.startsWith('/api/')) {
+      return handleApiRequest(request)
     }
     return handlePageRequest(request, newConfig)
   }
@@ -52,10 +69,7 @@ const handlePageRequest = (request: NextRequest, config: MiddlewareConfig) => {
     config.requireAuth.includes('/') &&
     !authToken
   ) {
-    const loginUrl =
-      APP_ENV !== 'development' ? `/${APP_PATH ?? ''}/login` : '/login'
-
-    return NextResponse.redirect(new URL(loginUrl, request.url))
+    return redirectToLogin(request)
   }
 
   // If user must be authenticated and an auth token is not present,
@@ -66,12 +80,7 @@ const handlePageRequest = (request: NextRequest, config: MiddlewareConfig) => {
     ) &&
     !authToken
   ) {
-    return NextResponse.redirect(
-      new URL(
-        `/login?next=${request.nextUrl.pathname}${request.nextUrl.search}`,
-        request.url,
-      ),
-    )
+    return redirectToLogin(request)
   }
 
   // If user must be anonymous and an auth token is present,
@@ -85,8 +94,32 @@ const handlePageRequest = (request: NextRequest, config: MiddlewareConfig) => {
     return NextResponse.redirect(new URL(config.index, request.url))
   }
 
+  const headers = new Headers(request.headers)
+  headers.set(HEADER_X_URL, request.url)
+
   // Continue routing as-is.
-  return NextResponse.next()
+  return NextResponse.next({
+    headers,
+  })
+}
+
+// handleApiRequest acts as a proxy middleware between the client and the end API server.
+// It handles common cross-cutting concerns such as setting Authorization headers and
+// other common headers.
+const handleApiRequest = async (request: NextRequest) => {
+  const headers = createHeaders(request)
+
+  request.nextUrl.searchParams.delete(QUERY_TOKEN)
+  request.nextUrl.searchParams.delete(QUERY_USER_AGENT)
+
+  return NextResponse.rewrite(
+    `${MOCK_API_URL}${
+      request.nextUrl.pathname
+    }?${request.nextUrl.searchParams.toString()}`,
+    {
+      headers,
+    },
+  )
 }
 
 // handleLoginApiRequest handles requests to /api/login.
@@ -98,7 +131,7 @@ const handleLoginApiRequest = async (request: NextRequest) => {
     method: 'POST',
     body: request.body,
     headers: {
-      'Content-Type': 'application/json',
+      [HEADER_CONTENT_TYPE]: CONTENT_TYPE_APPLICATION_JSON,
     },
   })
 
@@ -116,17 +149,60 @@ const handleLoginApiRequest = async (request: NextRequest) => {
   return nextResponse
 }
 
+// Redirect user to login page. The previously requested page is added as a query param
+// to allow navigation to continue after a successful login attempt.
+const redirectToLogin = (request: NextRequest) => {
+  const appPath = APP_PATH ? `/${APP_PATH}` : ''
+
+  const loginRedirectPath =
+    APP_ENV !== 'development' ? `${appPath}/login` : '/login'
+
+  return NextResponse.redirect(
+    new URL(
+      `${loginRedirectPath}?next=${request.nextUrl.pathname}${request.nextUrl.search}`,
+      request.url,
+    ),
+  )
+}
+
 // Set the auth token cookie with the httpOnly attribute
 // making in inaccessible to client-side JavaScript and
 // mitigating XSS attacks.
 const setAuthTokenCookie = (response: NextResponse, token: string) => {
   response.cookies.set({
-    name: `${AUTH_TOKEN_COOKIE_NAME}`,
+    name: AUTH_TOKEN_COOKIE_NAME,
     value: token,
     secure: true,
     httpOnly: true,
     sameSite: 'lax',
   })
+}
+
+// Add common headers to API requests.
+const createHeaders = (request: NextRequest) => {
+  const headers = new Headers(request.headers)
+
+  // Set Content-Type header.
+  headers.set(HEADER_CONTENT_TYPE, CONTENT_TYPE_APPLICATION_JSON)
+
+  const token =
+    request.nextUrl.searchParams.get(QUERY_TOKEN) ??
+    cookies().get(AUTH_TOKEN_COOKIE_NAME)?.value
+
+  // Set Authorization header with token if provided.
+  if (token) {
+    headers.set(HEADER_AUTHORIZATION, `${BEARER_AUTHENTICATION} ${token}`)
+  }
+
+  const userAgent = request.nextUrl.searchParams.get(QUERY_USER_AGENT)
+
+  // Set required PsychPlus headers.
+  headers.set(HEADER_PSYCHPLUS_APPLICATION, `${APP_CODE ?? ''}`)
+  headers.set(HEADER_PSYCHPLUS_APP_VERSION, `${APP_VERSION ?? ''}`)
+  headers.set(HEADER_PSYCHPLUS_RUN_ENVIRONMENT, `${APP_ENV ?? ''}`)
+  headers.set(HEADER_PSYCHPLUS_DEVICE, `${userAgent ?? ''}`)
+
+  return headers
 }
 
 export { createMiddleware }

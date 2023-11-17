@@ -36,7 +36,6 @@ COPY --from=pruner /app/turbo.json turbo.json
 
 ENV APP_CODE p+revcycle-app
 ENV APP_PATH revcycle
-ENV APP_ENV production
 
 RUN yarn turbo run build --filter=@psychplus/revcycle-app...
 

@@ -1,3 +1,5 @@
 export * from './strings'
-export * from './cookie'
+export * from './query'
+export * from './cookies'
+export * from './headers'
 export * from './env'

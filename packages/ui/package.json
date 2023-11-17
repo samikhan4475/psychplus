@@ -15,7 +15,6 @@
     "lint:fix": "tsc --noEmit && eslint --fix \"src/**/*.ts*\""
   },
   "dependencies": {
-    "@psychplus/api": "^0.1.0",
     "@psychplus/utils": "^0.1.0",
     "@radix-ui/react-alert-dialog": "^1.0.5",
     "@radix-ui/react-avatar": "^1.0.4",

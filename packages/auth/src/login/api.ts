@@ -4,7 +4,7 @@ interface LoginRequest {
 }
 
 const login = async (request: LoginRequest): Promise<void> => {
-  const response = await fetch(`/api/login`, {
+  const response = await fetch('/api/login', {
     method: 'POST',
     body: JSON.stringify(request),
   })

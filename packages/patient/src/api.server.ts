@@ -1,10 +1,12 @@
 import { cache } from 'react'
-import { api } from '@psychplus/api'
-import { MOCK_API_URL } from '@psychplus/utils/constants'
+import { APP_HOST } from '@psychplus/utils/constants'
+import { forwardQuery } from '@psychplus/utils/server'
 import { type Patient, type PatientParams } from './types'
 
 const getPatient = async ({ patientId }: PatientParams): Promise<Patient> =>
-  api(`${MOCK_API_URL}/api/patients/${[patientId]}`, { cache: 'no-store' })
+  fetch(forwardQuery(`${APP_HOST}/api/patients/${patientId}`), {
+    cache: 'no-store',
+  }).then((res) => res.json())
 
 const getPatientCached = cache(getPatient)
 
