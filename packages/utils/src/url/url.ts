@@ -1,12 +1,3 @@
-import { headers } from 'next/headers'
-import { HEADER_X_URL } from '../constants'
-
-const getUrl = () => new URL(headers().get(HEADER_X_URL)!)
-
-const getPathname = () => getUrl().pathname
-
-const getSearchParams = () => getUrl().searchParams
-
 const createSearchParams = (
   items: Record<string, string | null | undefined>,
 ) => {
@@ -20,4 +11,4 @@ const createSearchParams = (
   return searchParams
 }
 
-export { getUrl, getPathname, getSearchParams, createSearchParams }
+export { createSearchParams }

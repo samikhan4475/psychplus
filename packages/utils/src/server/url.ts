@@ -1,6 +1,16 @@
 import { headers } from 'next/headers'
-import { HEADER_USER_AGENT, QUERY_TOKEN, QUERY_USER_AGENT } from '../constants'
-import { getSearchParams } from '../url'
+import {
+  HEADER_USER_AGENT,
+  HEADER_X_URL,
+  QUERY_TOKEN,
+  QUERY_USER_AGENT,
+} from '../constants'
+
+const getUrl = () => new URL(headers().get(HEADER_X_URL)!)
+
+const getPathname = () => getUrl().pathname
+
+const getSearchParams = () => getUrl().searchParams
 
 const forwardQuery = (urlString: string) => {
   const url = new URL(urlString)
@@ -20,4 +30,4 @@ const forwardQuery = (urlString: string) => {
   return url.toString()
 }
 
-export { forwardQuery }
+export { forwardQuery, getUrl, getPathname, getSearchParams }

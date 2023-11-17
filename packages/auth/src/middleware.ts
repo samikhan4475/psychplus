@@ -1,9 +1,7 @@
-import { cookies } from 'next/headers'
 import { NextResponse, type NextRequest } from 'next/server'
 import {
   APP_CODE,
   APP_ENV,
-  APP_PATH,
   APP_VERSION,
   AUTH_TOKEN_COOKIE_NAME,
   BEARER_AUTHENTICATION,
@@ -20,6 +18,11 @@ import {
   QUERY_TOKEN,
   QUERY_USER_AGENT,
 } from '@psychplus/utils/constants'
+import { getAuthToken } from '@psychplus/utils/cookies'
+import { createSearchParams, wrapPath } from '@psychplus/utils/url'
+
+const INDEX_PATH = wrapPath('/')
+const LOGIN_PATH = wrapPath('/login')
 
 interface MiddlewareConfig {
   index: string
@@ -28,7 +31,7 @@ interface MiddlewareConfig {
 }
 
 const DEFAULT_CONFIG: MiddlewareConfig = {
-  index: '/',
+  index: wrapPath('/'),
   requireAuth: [],
   requireAnon: [],
 }
@@ -61,12 +64,12 @@ const createMiddleware = (config?: Partial<MiddlewareConfig>) => {
 // handlePageRequest handles requests for Next pages.
 const handlePageRequest = (request: NextRequest, config: MiddlewareConfig) => {
   // Extract auth token from cookies.
-  const authToken = cookies().get(AUTH_TOKEN_COOKIE_NAME)?.value ?? undefined
+  const authToken = getAuthToken()
 
   // If index requires auth and auth token is not present, redirect user to the login page.
   if (
-    request.nextUrl.pathname === '/' &&
-    config.requireAuth.includes('/') &&
+    request.nextUrl.pathname === INDEX_PATH &&
+    config.requireAuth.includes(INDEX_PATH) &&
     !authToken
   ) {
     return redirectToLogin(request)
@@ -76,7 +79,8 @@ const handlePageRequest = (request: NextRequest, config: MiddlewareConfig) => {
   // redirect user to the login page.
   if (
     config.requireAuth.some(
-      (route) => route !== '/' && request.nextUrl.pathname.startsWith(route),
+      (route) =>
+        route !== INDEX_PATH && request.nextUrl.pathname.startsWith(route),
     ) &&
     !authToken
   ) {
@@ -87,7 +91,8 @@ const handlePageRequest = (request: NextRequest, config: MiddlewareConfig) => {
   // redirect user to the index page.
   if (
     config.requireAnon.some(
-      (route) => route !== '/' && request.nextUrl.pathname.startsWith(route),
+      (route) =>
+        route !== INDEX_PATH && request.nextUrl.pathname.startsWith(route),
     ) &&
     authToken
   ) {
@@ -144,7 +149,16 @@ const handleLoginApiRequest = async (request: NextRequest) => {
     status: 204,
   })
 
-  setAuthTokenCookie(nextResponse, data.token)
+  // Set the auth token cookie with the httpOnly attribute
+  // making in inaccessible to client-side JavaScript and
+  // mitigating XSS attacks.
+  nextResponse.cookies.set({
+    name: AUTH_TOKEN_COOKIE_NAME,
+    value: data.token,
+    secure: true,
+    httpOnly: true,
+    sameSite: 'lax',
+  })
 
   return nextResponse
 }
@@ -152,30 +166,14 @@ const handleLoginApiRequest = async (request: NextRequest) => {
 // Redirect user to login page. The previously requested page is added as a query param
 // to allow navigation to continue after a successful login attempt.
 const redirectToLogin = (request: NextRequest) => {
-  const appPath = APP_PATH ? `/${APP_PATH}` : ''
-
-  const loginRedirectPath =
-    APP_ENV !== 'development' ? `${appPath}/login` : '/login'
+  const next = `${request.nextUrl.pathname}${request.nextUrl.search}`
+  const nextParams = createSearchParams({
+    next: next === '/' ? null : next,
+  })
 
   return NextResponse.redirect(
-    new URL(
-      `${loginRedirectPath}?next=${request.nextUrl.pathname}${request.nextUrl.search}`,
-      request.url,
-    ),
+    new URL(`${LOGIN_PATH}?${nextParams.toString()}`, request.url),
   )
-}
-
-// Set the auth token cookie with the httpOnly attribute
-// making in inaccessible to client-side JavaScript and
-// mitigating XSS attacks.
-const setAuthTokenCookie = (response: NextResponse, token: string) => {
-  response.cookies.set({
-    name: AUTH_TOKEN_COOKIE_NAME,
-    value: token,
-    secure: true,
-    httpOnly: true,
-    sameSite: 'lax',
-  })
 }
 
 // Add common headers to API requests.
@@ -185,9 +183,7 @@ const createHeaders = (request: NextRequest) => {
   // Set Content-Type header.
   headers.set(HEADER_CONTENT_TYPE, CONTENT_TYPE_APPLICATION_JSON)
 
-  const token =
-    request.nextUrl.searchParams.get(QUERY_TOKEN) ??
-    cookies().get(AUTH_TOKEN_COOKIE_NAME)?.value
+  const token = request.nextUrl.searchParams.get(QUERY_TOKEN) ?? getAuthToken()
 
   // Set Authorization header with token if provided.
   if (token) {
