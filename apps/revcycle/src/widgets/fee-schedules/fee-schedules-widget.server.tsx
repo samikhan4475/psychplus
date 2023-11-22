@@ -1,5 +1,7 @@
-import { CodeSetPreloader, getCodeSets } from '@psychplus/codeset'
-import { getUser, UserPreloader } from '@psychplus/user'
+import { CodeSetPreloader } from '@psychplus/codeset'
+import { getCodeSets } from '@psychplus/codeset/api.server'
+import { UserPreloader } from '@psychplus/user'
+import { getUser } from '@psychplus/user/api.server'
 import { FeeSchedulesWidgetClient } from './fee-schedules-widget.client'
 import { useStore } from './store'
 

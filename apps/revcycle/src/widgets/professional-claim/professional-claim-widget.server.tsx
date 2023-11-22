@@ -1,14 +1,15 @@
 import { unstable_noStore as noStore } from 'next/cache'
+import { CodeSetPreloader } from '@psychplus/codeset'
+import { getCodeSets } from '@psychplus/codeset/api.server'
+import { UserPreloader } from '@psychplus/user'
+import { getUser } from '@psychplus/user/api.server'
 import { ProfessionalClaimWidgetClient } from './professional-claim-widget.client'
-import { CodeSetPreloader, getCodeSets } from '@psychplus/codeset'
-import { getUser, UserPreloader } from '@psychplus/user'
 import { useStore } from './store'
 
 const ProfessionalClaimWidgetServer = async () => {
-  const [user, codeSets] = await Promise.all([getUser(), getCodeSets()])
-
-const ProfessionalClaimWidgetServer = () => {
   noStore()
+
+  const [user, codeSets] = await Promise.all([getUser(), getCodeSets()])
 
   return (
     <>

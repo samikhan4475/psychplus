@@ -1,9 +1,9 @@
 import { REVCYCLE_URL } from '@psychplus/utils/constants'
-import { createUrlParams } from '@psychplus/utils/url'
+import { createSearchParams } from '@psychplus/utils/url'
 import { PortalContainer } from '../components'
 
 const FeeSchedulesWidget = () => {
-  const params = createUrlParams()
+  const params = createSearchParams({})
 
   return (
     <PortalContainer
