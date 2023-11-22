@@ -1,5 +1,7 @@
 import { NextResponse, type NextRequest } from 'next/server'
+import { handleRequest } from '@psychplus/utils/api'
 import {
+  API_URL,
   APP_CODE,
   APP_ENV,
   APP_VERSION,
@@ -12,6 +14,7 @@ import {
   HEADER_PSYCHPLUS_APPLICATION,
   HEADER_PSYCHPLUS_DEVICE,
   HEADER_PSYCHPLUS_RUN_ENVIRONMENT,
+  HEADER_USER_AGENT,
   HEADER_X_URL,
   LOGIN_ENDPOINT,
   MOCK_API_URL,
@@ -20,6 +23,7 @@ import {
 } from '@psychplus/utils/constants'
 import { getAuthToken } from '@psychplus/utils/cookies'
 import { createSearchParams, wrapPath } from '@psychplus/utils/url'
+import { type LoginResponse } from './types'
 
 const INDEX_PATH = wrapPath('/')
 const LOGIN_PATH = wrapPath('/login')
@@ -117,14 +121,16 @@ const handleApiRequest = async (request: NextRequest) => {
   request.nextUrl.searchParams.delete(QUERY_TOKEN)
   request.nextUrl.searchParams.delete(QUERY_USER_AGENT)
 
-  return NextResponse.rewrite(
-    `${MOCK_API_URL}${
-      request.nextUrl.pathname
-    }?${request.nextUrl.searchParams.toString()}`,
-    {
-      headers,
-    },
-  )
+  const baseUrl =
+    request.nextUrl.searchParams.get('mock') === 'true' ? MOCK_API_URL : API_URL
+  const searchParams = request.nextUrl.searchParams.toString()
+
+  let endpoint = `${baseUrl}${request.nextUrl.pathname}`
+  if (searchParams) {
+    endpoint += `?${searchParams}`
+  }
+
+  return NextResponse.rewrite(endpoint, { headers })
 }
 
 // handleLoginApiRequest handles requests to /api/login.
@@ -132,35 +138,44 @@ const handleApiRequest = async (request: NextRequest) => {
 // which will be used to set a secure HttpOnly cookie in the browser.
 const handleLoginApiRequest = async (request: NextRequest) => {
   // Make request to external login endpoint to retrieve auth token.
-  const loginResponse = await fetch(`${LOGIN_ENDPOINT}`, {
-    method: 'POST',
-    body: request.body,
-    headers: {
-      [HEADER_CONTENT_TYPE]: CONTENT_TYPE_APPLICATION_JSON,
-    },
-  })
+  const headers = {
+    [HEADER_CONTENT_TYPE]: CONTENT_TYPE_APPLICATION_JSON,
+  }
 
-  const data = (await loginResponse.json()) as { token: string }
+  try {
+    const response = await handleRequest<LoginResponse>(
+      fetch(`${LOGIN_ENDPOINT}`, {
+        method: 'POST',
+        body: request.body,
+        headers,
+      }),
+    )
 
-  // Create a new response with an empty response body. The
-  // returned auth token is set as a cookie by the server, it
-  // is unnecessary to send it to the client in the response body.
-  const nextResponse = new NextResponse(null, {
-    status: 204,
-  })
+    // Create a new response with an empty response body. The
+    // returned auth token is set as a cookie by the server, it
+    // is unnecessary to send it to the client in the response body.
+    const nextResponse = new NextResponse(null, {
+      status: 204,
+    })
 
-  // Set the auth token cookie with the httpOnly attribute
-  // making in inaccessible to client-side JavaScript and
-  // mitigating XSS attacks.
-  nextResponse.cookies.set({
-    name: AUTH_TOKEN_COOKIE_NAME,
-    value: data.token,
-    secure: true,
-    httpOnly: true,
-    sameSite: 'lax',
-  })
+    // Set the auth token cookie with the httpOnly attribute
+    // making in inaccessible to client-side JavaScript and
+    // mitigating XSS attacks.
+    nextResponse.cookies.set({
+      name: AUTH_TOKEN_COOKIE_NAME,
+      value: response.accessToken,
+      secure: true,
+      httpOnly: true,
+      sameSite: 'lax',
+    })
 
-  return nextResponse
+    return nextResponse
+  } catch (error) {
+    return new NextResponse(JSON.stringify(error), {
+      status: 401,
+      headers,
+    })
+  }
 }
 
 // Redirect user to login page. The previously requested page is added as a query param
@@ -190,7 +205,9 @@ const createHeaders = (request: NextRequest) => {
     headers.set(HEADER_AUTHORIZATION, `${BEARER_AUTHENTICATION} ${token}`)
   }
 
-  const userAgent = request.nextUrl.searchParams.get(QUERY_USER_AGENT)
+  const userAgent =
+    request.nextUrl.searchParams.get(QUERY_USER_AGENT) ??
+    headers.get(HEADER_USER_AGENT)
 
   // Set required PsychPlus headers.
   headers.set(HEADER_PSYCHPLUS_APPLICATION, `${APP_CODE ?? ''}`)

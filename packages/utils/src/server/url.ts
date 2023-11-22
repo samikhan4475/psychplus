@@ -22,6 +22,7 @@ const forwardQuery = (urlString: string) => {
     url.searchParams.append(QUERY_TOKEN, token)
   }
 
+  // Preserve the User-Agent header when rewriting requests to the API.
   const userAgent = headers().get(HEADER_USER_AGENT)
   if (userAgent) {
     url.searchParams.append(QUERY_USER_AGENT, userAgent)

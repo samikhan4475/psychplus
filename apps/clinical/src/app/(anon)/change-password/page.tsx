@@ -3,18 +3,18 @@
 import { Flex, Heading, Link, Text } from '@radix-ui/themes'
 import { AppLink } from '@psychplus/ui/app-link'
 import { COPYRIGHT_TEXT } from '@psychplus/utils/constants'
-import { UpdatePasswordForm } from './update-password-form'
+import { ChangePasswordForm } from './change-password-form'
 
-const UpdatePasswordPage = () => (
+const ChangePasswordPage = () => (
   <Flex height="100%">
     <div className="hidden bg-accent-9 md:block md:w-4/12" />
     <Flex direction="column" justify="center" grow="1" py="4" px="6">
       <Flex align="center" justify="center" grow="1">
         <Flex direction="column" className="w-full xs:w-80">
           <Heading size="7" align="center" mb="6">
-            Update Password
+            Change Password
           </Heading>
-          <UpdatePasswordForm />
+          <ChangePasswordForm />
           <Text size="2" mt="4">
             Aleady have an account?
             <Link size="2" ml="1" asChild>
@@ -40,4 +40,4 @@ const UpdatePasswordPage = () => (
   </Flex>
 )
 
-export default UpdatePasswordPage
+export default ChangePasswordPage

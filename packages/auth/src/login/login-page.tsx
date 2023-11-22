@@ -5,7 +5,11 @@ import { AppLink } from '@psychplus/ui/app-link'
 import { COPYRIGHT_TEXT } from '@psychplus/utils/constants'
 import { LoginForm } from './login-form'
 
-const LoginPage = () => (
+interface LoginPageProps {
+  showSignupLink?: boolean
+}
+
+const LoginPage = ({ showSignupLink = true }: LoginPageProps) => (
   <Flex height="100%">
     <div className="hidden bg-accent-9 md:block md:w-4/12" />
     <Flex direction="column" justify="center" grow="1" py="4" px="6">
@@ -15,14 +19,16 @@ const LoginPage = () => (
             Sign in
           </Heading>
           <LoginForm />
-          <Text size="2" mt="4">
-            Don&apos;t have an account?
-            <Link size="2" ml="1" asChild>
-              <AppLink href="/signup" data-testid="login-signup-link">
-                Sign up
-              </AppLink>
-            </Link>
-          </Text>
+          {showSignupLink ? (
+            <Text size="2" mt="4">
+              Don&apos;t have an account?
+              <Link size="2" ml="1" asChild>
+                <AppLink href="/signup" data-testid="login-signup-link">
+                  Sign up
+                </AppLink>
+              </Link>
+            </Text>
+          ) : null}
         </Flex>
       </Flex>
 

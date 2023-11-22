@@ -1,0 +1,3 @@
+const SESSION_KEY_RESET_PASSWORD_EMAIL = 'reset-password-email'
+
+export { SESSION_KEY_RESET_PASSWORD_EMAIL }

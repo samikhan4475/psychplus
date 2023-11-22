@@ -1,17 +1,17 @@
+import { handleRequest } from '@psychplus/utils/api'
+import { forwardQuery } from '@psychplus/utils/client'
+
 interface LoginRequest {
   username: string
   password: string
 }
 
-const login = async (request: LoginRequest): Promise<void> => {
-  const response = await fetch('/api/login', {
-    method: 'POST',
-    body: JSON.stringify(request),
-  })
-
-  if (!response.ok) {
-    throw new Error()
-  }
-}
+const login = async (request: LoginRequest) =>
+  handleRequest<void>(
+    fetch(forwardQuery('/api/login'), {
+      method: 'POST',
+      body: JSON.stringify(request),
+    }),
+  )
 
 export { login }

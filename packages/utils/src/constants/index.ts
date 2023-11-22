@@ -1,5 +1,6 @@
 export * from './strings'
 export * from './query'
 export * from './cookies'
+export * from './session'
 export * from './headers'
 export * from './env'

@@ -1,19 +1,21 @@
 import React, { useRef, useState } from 'react'
 import { Flex } from '@radix-ui/themes'
-import { NativeInputEvent, PropsWithTestId } from './types'
+import { NativeInputEvent } from './types'
 
-interface PinCodeProps extends PropsWithTestId {
+interface PinCodeProps {
   autoFocus?: boolean
   isPassword?: boolean
   pinLength?: number
-  onChange: (value: string) => void
+  onChange?: (value: string) => void
+  onFinish?: (value: string) => void
 }
 
 const PinCode = ({
   autoFocus,
   isPassword,
-  pinLength = 4,
-  'data-testid': dataTestId,
+  pinLength = 5,
+  onChange,
+  onFinish,
 }: PinCodeProps) => {
   const wrapperRef = useRef<HTMLInputElement>(null)
   const [value, setValue] = useState(new Array<string>(pinLength).fill(''))
@@ -41,6 +43,11 @@ const PinCode = ({
     value[index] = nativeEvent.data
     setValue(value.slice())
     setFocus(index + 1)
+    const code = value.toString().replaceAll(',', '')
+    onChange?.(code)
+    if (code.length === pinLength) {
+      onFinish?.(code)
+    }
   }
 
   const handlePaste = (
@@ -79,11 +86,13 @@ const PinCode = ({
       value[index] = ''
       setValue(value.slice())
       setFocus(index - 1)
+      const code = value.toString().replaceAll(',', '')
+      onChange?.(code)
     }
   }
 
   return (
-    <Flex ref={wrapperRef} gap="2" data-testid={dataTestId}>
+    <Flex ref={wrapperRef} gap="2" data-testid="otp-input-container">
       {value.map((c, i) => (
         <input
           key={`pincode-${i}`}
@@ -99,5 +108,7 @@ const PinCode = ({
     </Flex>
   )
 }
+
+export type OtpState = { resetCode: string }
 
 export { PinCode }

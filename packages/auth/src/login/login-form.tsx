@@ -13,7 +13,7 @@ import {
 } from '@psychplus/form'
 import { AppLink } from '@psychplus/ui/app-link'
 import { Checkbox } from '@psychplus/ui/checkbox'
-import * as api from './api'
+import { login } from './api'
 
 const schema = z.object({
   username: validate.email,
@@ -35,10 +35,17 @@ const LoginForm = () => {
   })
 
   const onSubmit: SubmitHandler<SchemaType> = (data) => {
-    api.login({ username: data.username, password: data.password }).then(() => {
-      const next = searchParams.get('next') ?? '/'
-      location.assign(next)
+    login({
+      username: data.username,
+      password: data.password,
     })
+      .then(() => {
+        const next = searchParams.get('next') ?? '/'
+        location.assign(next)
+      })
+      .catch((error) => {
+        alert(error.message)
+      })
   }
 
   return (

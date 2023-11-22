@@ -38,7 +38,7 @@ export const createServer = (): Express => {
 
   app.post('/api/login', async (req, res) => {
     await wait(API_DELAY)
-    res.status(201).json({ token: '12345' })
+    res.status(201).json({ accessToken: '12345' })
   })
 
   app.get('/api/user', async (req, res) => {
