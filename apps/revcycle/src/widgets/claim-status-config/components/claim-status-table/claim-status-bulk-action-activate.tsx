@@ -1,7 +1,7 @@
 import { type PropsWithRows } from '@psychplus/ui/data-table'
 import { DropdownMenu } from '@psychplus/ui/dropdown-menu'
-import { useStore } from '../store'
-import { type ClaimStatus } from '../types'
+import { useStore } from '../../store'
+import { type ClaimStatus } from '../../types'
 
 const ClaimStatusBulkActionActivate = ({
   rows,

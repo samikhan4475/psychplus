@@ -1,7 +1,7 @@
 import { type PropsWithRow } from '@psychplus/ui/data-table'
 import { DropdownMenu } from '@psychplus/ui/dropdown-menu'
-import { useStore } from '../store'
-import { type ClaimStatus } from '../types'
+import { useStore } from '../../store'
+import { type ClaimStatus } from '../../types'
 
 const ClaimStatusRowActionEdit = ({
   row: { original: claimStatus },

@@ -11,8 +11,8 @@ import {
 } from '@psychplus/form'
 import { Button } from '@psychplus/ui/button'
 import { Dialog } from '@psychplus/ui/dialog'
-import { CLAIM_STATUS_DUE_TO_OPTIONS } from '../constants'
-import { useStore } from '../store'
+import { CLAIM_STATUS_DUE_TO_OPTIONS } from '../../constants'
+import { useAddClaimStatus } from './hooks'
 
 const schema = z.object({
   claimStatusName: validate.requiredString,
@@ -21,40 +21,25 @@ const schema = z.object({
 
 type SchemaType = z.infer<typeof schema>
 
-const EditClaimStatusForm = () => {
-  const { claimStatusForEdit, clearClaimStatusForEdit, addClaimStatusDiff } =
-    useStore((state) => ({
-      claimStatusForEdit: state.claimStatusForEdit,
-      clearClaimStatusForEdit: state.clearClaimStatusForEdit,
-      addClaimStatusDiff: state.addClaimStatusDiff,
-    }))
-
+const AddClaimStatusForm = () => {
   const form = useForm({
     schema,
     criteriaMode: 'all',
     defaultValues: {
-      claimStatusName: claimStatusForEdit?.name,
-      claimStatusDueTo: claimStatusForEdit?.dueTo,
+      claimStatusName: undefined,
+      claimStatusDueTo: undefined,
     },
   })
 
-  const onSubmit: SubmitHandler<SchemaType> = async (data) => {
-    if (!claimStatusForEdit) {
-      return
-    }
+  const { closeDialog } = useAddClaimStatus()
 
-    // TODO: api to edit claim status
+  const onSubmit: SubmitHandler<SchemaType> = async (data) => {
+    // TODO: api to add claim status
     await new Promise((resolve) => {
       setTimeout(resolve, 1500)
     })
 
-    addClaimStatusDiff({
-      id: claimStatusForEdit.id,
-      name: data.claimStatusName,
-      dueTo: data.claimStatusDueTo,
-    })
-
-    clearClaimStatusForEdit()
+    closeDialog()
   }
 
   return (
@@ -62,14 +47,14 @@ const EditClaimStatusForm = () => {
       <Flex direction="column" gap="4" mb="4">
         <FormTextInput
           type="text"
-          label="Name"
+          label="Claim Status Name"
           placeholder="Enter claim status name"
-          data-testid="edit-claim-status-name-input"
+          data-testid="add-claim-status-name-input"
           {...form.register('claimStatusName')}
         />
         <FormSelect
           label="Due To"
-          data-testid="edit-claim-status-due-to-select"
+          data-testid="add-claim-status-due-to-select"
           options={CLAIM_STATUS_DUE_TO_OPTIONS}
           {...form.register('claimStatusDueTo')}
         />
@@ -80,10 +65,7 @@ const EditClaimStatusForm = () => {
             Cancel
           </Button>
         </Dialog.Close>
-        <FormSubmitButton
-          size="2"
-          data-testid="edit-claim-status-submit-button"
-        >
+        <FormSubmitButton size="2" data-testid="add-claim-status-submit-button">
           Save
         </FormSubmitButton>
       </Flex>
@@ -91,4 +73,4 @@ const EditClaimStatusForm = () => {
   )
 }
 
-export { EditClaimStatusForm }
+export { AddClaimStatusForm }

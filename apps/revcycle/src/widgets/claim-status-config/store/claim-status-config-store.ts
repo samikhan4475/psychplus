@@ -12,6 +12,11 @@ interface ClaimStatusConfigState extends CodeSetState {
   claimStatusForEdit?: ClaimStatus
   setClaimStatusForEdit: (claimStatus: ClaimStatus) => void
   clearClaimStatusForEdit: () => void
+  claimStatusesForDeactivation?: ClaimStatus[]
+  setClaimStatusesForDeactivation: (claimStatuses: ClaimStatus[]) => void
+  clearClaimStatusesForDeactivation: () => void
+  addClaimStatusDialogOpen: boolean
+  setAddClaimStatusDialogOpen: (open: boolean) => void
 }
 
 type ClaimStatusConfigStoreType = UseBoundStore<
@@ -26,6 +31,10 @@ const createClaimStatusConfigStore: StateCreator<ClaimStatusConfigState> = (
   ...createCodeSetStore(set, get, store),
   claimStatusDiff: undefined,
   claimStatusForEdit: undefined,
+  claimStatusesForDeactivation: undefined,
+  addClaimStatusDialogOpen: false,
+  setAddClaimStatusDialogOpen: (open) =>
+    set({ addClaimStatusDialogOpen: open }),
   addClaimStatusDiff: (...diffs) => {
     set((state) => ({
       claimStatusDiff: mergeClaimStatusDiffs(state.claimStatusDiff, ...diffs),
@@ -33,6 +42,10 @@ const createClaimStatusConfigStore: StateCreator<ClaimStatusConfigState> = (
   },
   setClaimStatusForEdit: (claimStatusForEdit) => set({ claimStatusForEdit }),
   clearClaimStatusForEdit: () => set({ claimStatusForEdit: undefined }),
+  setClaimStatusesForDeactivation: (claimStatusesForDeactivation) =>
+    set({ claimStatusesForDeactivation }),
+  clearClaimStatusesForDeactivation: () =>
+    set({ claimStatusesForDeactivation: undefined }),
 })
 
 const mergeClaimStatusDiffs = (

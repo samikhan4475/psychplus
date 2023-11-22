@@ -14,9 +14,9 @@ import {
   type RowAction,
 } from '@psychplus/ui/data-table'
 import { TableCellText } from '@psychplus/ui/table-cell'
-import { useClaimStatuses } from '../store'
-import { ClaimStatus } from '../types'
-import { AddClaimStatusButton } from './add-claim-status-button'
+import { useClaimStatuses } from '../../store'
+import { ClaimStatus } from '../../types'
+import { AddClaimStatusButton } from '../add-claim-status'
 import { ClaimStatusBulkActionActivate } from './claim-status-bulk-action-activate'
 import { ClaimStatusBulkActionDeactivate } from './claim-status-bulk-action-deactivate'
 import { ClaimStatusRowActionActivate } from './claim-status-row-action-activate'

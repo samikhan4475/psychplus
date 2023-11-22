@@ -1,5 +1,5 @@
 import { Dialog } from '@psychplus/ui/dialog'
-import { useStore } from '../store'
+import { useStore } from '../../store'
 import { EditClaimStatusForm } from './edit-claim-status-form'
 
 const EditClaimStatusDialog = () => {

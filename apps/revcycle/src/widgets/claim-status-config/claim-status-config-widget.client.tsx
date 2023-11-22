@@ -1,10 +1,17 @@
 'use client'
 
-import { ClaimStatusTable, EditClaimStatusDialog } from './components'
+import {
+  AddClaimStatusDialog,
+  ClaimStatusTable,
+  EditClaimStatusDialog,
+  ReassignClaimDialog,
+} from './components'
 
 const ClaimStatusConfigWidgetClient = () => {
   return (
     <>
+      <AddClaimStatusDialog />
+      <ReassignClaimDialog />
       <EditClaimStatusDialog />
       <ClaimStatusTable />
     </>
