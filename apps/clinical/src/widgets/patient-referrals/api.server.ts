@@ -9,9 +9,12 @@ const getPatientReferrals = ({
   patientId,
 }: PatientParams): Promise<PatientReferral[]> =>
   handleRequest(
-    fetch(forwardQuery(`${APP_HOST}/api/patients/${patientId}/referrals`), {
-      cache: 'no-store',
-    }),
+    fetch(
+      forwardQuery(`${APP_HOST}/api/patients/${patientId}/referrals?mock=true`),
+      {
+        cache: 'no-store',
+      },
+    ),
   )
 
 const getPatientReferralsCached = cache(getPatientReferrals)

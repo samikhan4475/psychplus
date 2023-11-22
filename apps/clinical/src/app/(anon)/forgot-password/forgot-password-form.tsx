@@ -10,7 +10,7 @@ import {
   useForm,
   validate,
 } from '@psychplus/form'
-import * as api from './api'
+import { forgotPassword } from './api'
 
 const schema = z.object({
   emailAddress: validate.email,
@@ -28,10 +28,9 @@ const ForgotPasswordForm = () => {
   })
 
   const onSubmit: SubmitHandler<SchemaType> = async (data) => {
-    api
-      .forgotPassword({
-        emailAddress: data.emailAddress,
-      })
+    forgotPassword({
+      emailAddress: data.emailAddress,
+    })
       .then(() => {
         sessionStorage.setItem('reset-password-email', data.emailAddress)
         location.assign('/change-password')

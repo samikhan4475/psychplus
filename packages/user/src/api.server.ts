@@ -6,7 +6,7 @@ import { type User } from './types'
 
 const getUser = async (): Promise<User> =>
   handleRequest(
-    fetch(forwardQuery(`${APP_HOST}/api/user`), {
+    fetch(forwardQuery(`${APP_HOST}/api/user?mock=true`), {
       cache: 'no-store',
     }),
   )

@@ -6,7 +6,7 @@ import { type Patient, type PatientParams } from './types'
 
 const getPatient = async ({ patientId }: PatientParams): Promise<Patient> =>
   handleRequest(
-    fetch(forwardQuery(`${APP_HOST}/api/patients/${patientId}`), {
+    fetch(forwardQuery(`${APP_HOST}/api/patients/${patientId}?mock=true`), {
       cache: 'no-store',
     }),
   )
