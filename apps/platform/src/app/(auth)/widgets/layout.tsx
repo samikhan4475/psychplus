@@ -22,6 +22,10 @@ const navMenuItems: MenuItem[] = [
     label: 'Patient Referrals',
     href: '/widgets/patient-referrals',
   },
+  {
+    label: 'Fee Schedules',
+    href: '/widgets/fee-schedules',
+  },
 ]
 
 const WidgetsLayout = ({ children }: { children: React.ReactNode }) => (
