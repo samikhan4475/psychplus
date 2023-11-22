@@ -8,3 +8,5 @@ export * from './additional-info-tab'
 export * from './ambulance-info-tab'
 export * from './claim-tab'
 export * from './charges-tab'
+
+export * from './professional-claim-tables'

@@ -1,8 +1,8 @@
 import { ProfessionalClaimWidget } from '@psychplus/widgets/revcycle'
 import { PageHeader } from '../../shared/page-header'
 
-const TITLE = 'Professional Claim'
-const DESCRIPTION = 'Add/Edit Professional Claim'
+const TITLE = 'Professional Claims'
+const DESCRIPTION = 'Manage Professional Claims'
 
 const ProfessionalClaimWidgetPage = () => (
   <>
