@@ -1,6 +1,7 @@
 'use client'
 
 import * as React from 'react'
+import { useState } from 'react'
 import { PatternFormat } from 'react-number-format'
 import { cn } from './cn'
 import { TextField, type TextFieldInputProps } from './text-field'
@@ -26,6 +27,8 @@ const PhoneNumberInput = React.forwardRef<
     }: PhoneNumberInputProps,
     ref,
   ) => {
+    const [_value, _setValue] = useState(value)
+
     return (
       <PatternFormat
         size={size}
@@ -33,21 +36,20 @@ const PhoneNumberInput = React.forwardRef<
         getInputRef={ref}
         type="tel"
         inputMode="tel"
-        format="(###)˗###˗####"
+        format="(###)-###-####"
         mask="_"
         allowEmptyFormatting
         name={name}
         value={value as string}
         disabled={disabled}
         onValueChange={({ value }) => {
-          if (onValueChange) {
-            onValueChange(value)
-          }
+          _setValue(value)
+          onValueChange?.(value)
         }}
         onBlur={onBlur}
         customInput={TextField.Input}
-        className={cn(`font-[Courier] tracking-[-1px]`, className, {
-          ['text-gray-8']: !value,
+        className={cn(className, {
+          ['text-gray-8']: !_value,
         })}
       />
     )

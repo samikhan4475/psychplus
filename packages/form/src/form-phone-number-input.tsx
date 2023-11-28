@@ -1,10 +1,14 @@
+import * as React from 'react'
 import { Controller } from 'react-hook-form'
 import { PhoneNumberInput } from '@psychplus/ui/phone-number-input'
 import { FormField, useFormField, UseFormFieldProps } from './form-field'
 
-type FormTextInputProps = UseFormFieldProps
+type FormPhoneNumberInputProps = UseFormFieldProps
 
-const FormPhoneNumberInput = (props: FormTextInputProps) => {
+const FormPhoneNumberInput = React.forwardRef<
+  HTMLInputElement,
+  FormPhoneNumberInputProps
+>((props, ref) => {
   const { formFieldProps, childProps } = useFormField(props)
 
   return (
@@ -30,6 +34,8 @@ const FormPhoneNumberInput = (props: FormTextInputProps) => {
       />
     </FormField>
   )
-}
+})
+
+FormPhoneNumberInput.displayName = 'FormPhoneNumberInput'
 
 export { FormPhoneNumberInput }

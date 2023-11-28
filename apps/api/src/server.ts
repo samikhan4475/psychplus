@@ -27,7 +27,7 @@ export const createServer = (): Express => {
     }
 
     const token = req.headers.authorization?.toLowerCase().trim()
-    if (token !== 'bearer 12345') {
+    if (!token) {
       return res.status(401).send()
     }
 

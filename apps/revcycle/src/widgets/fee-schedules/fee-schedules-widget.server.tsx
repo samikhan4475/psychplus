@@ -1,10 +1,10 @@
+import React from 'react'
 import { CodeSetPreloader } from '@psychplus/codeset'
 import { getCodeSets } from '@psychplus/codeset/api.server'
 import { UserPreloader } from '@psychplus/user'
 import { getUser } from '@psychplus/user/api.server'
 import { FeeSchedulesWidgetClient } from './fee-schedules-widget.client'
 import { useStore } from './store'
-import React from 'react'
 
 const FeeSchedulesWidgetServer: React.FC = async () => {
   const [user, codeSets] = await Promise.all([getUser(), getCodeSets()])
