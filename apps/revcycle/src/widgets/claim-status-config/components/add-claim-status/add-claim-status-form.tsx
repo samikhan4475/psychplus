@@ -1,6 +1,8 @@
 import { Flex } from '@radix-ui/themes'
 import { type SubmitHandler } from 'react-hook-form'
 import { z } from 'zod'
+import { Code } from '@psychplus/codeset'
+import { addCodeSet } from '@psychplus/codeset/api.client'
 import {
   Form,
   FormSelect,
@@ -11,7 +13,7 @@ import {
 } from '@psychplus/form'
 import { Button } from '@psychplus/ui/button'
 import { Dialog } from '@psychplus/ui/dialog'
-import { CLAIM_STATUS_DUE_TO_OPTIONS } from '../../constants'
+import { useClaimDueTo } from '../../store'
 import { useAddClaimStatus } from './hooks'
 
 const schema = z.object({
@@ -33,11 +35,29 @@ const AddClaimStatusForm = () => {
 
   const { closeDialog } = useAddClaimStatus()
 
+  const claimDueToOptions = useClaimDueTo()
+
   const onSubmit: SubmitHandler<SchemaType> = async (data) => {
-    // TODO: api to add claim status
-    await new Promise((resolve) => {
-      setTimeout(resolve, 1500)
-    })
+    const reqObj: Code = {
+      code: 'x',
+      display: data.claimStatusName,
+      attributes: [
+        {
+          name: 'DueTo',
+          value: data.claimStatusDueTo,
+        },
+        {
+          name: 'IsActive',
+          value: 'True',
+        },
+        {
+          name: 'IsDeleted',
+          value: 'False',
+        },
+      ],
+    }
+    const res = await addCodeSet(reqObj, 'ClaimStatus')
+    console.log('addCodeSet', res)
 
     closeDialog()
   }
@@ -55,7 +75,7 @@ const AddClaimStatusForm = () => {
         <FormSelect
           label="Due To"
           data-testid="add-claim-status-due-to-select"
-          options={CLAIM_STATUS_DUE_TO_OPTIONS}
+          options={claimDueToOptions}
           {...form.register('claimStatusDueTo')}
         />
       </Flex>

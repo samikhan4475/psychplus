@@ -1,6 +1,8 @@
 import { Flex } from '@radix-ui/themes'
 import { type SubmitHandler } from 'react-hook-form'
 import { z } from 'zod'
+import { Code } from '@psychplus/codeset'
+import { editCodeSet } from '@psychplus/codeset/api.client'
 import {
   Form,
   FormSelect,
@@ -11,8 +13,7 @@ import {
 } from '@psychplus/form'
 import { Button } from '@psychplus/ui/button'
 import { Dialog } from '@psychplus/ui/dialog'
-import { CLAIM_STATUS_DUE_TO_OPTIONS } from '../../constants'
-import { useStore } from '../../store'
+import { useClaimDueTo, useStore } from '../../store'
 
 const schema = z.object({
   claimStatusName: validate.requiredString,
@@ -38,15 +39,25 @@ const EditClaimStatusForm = () => {
     },
   })
 
+  const claimDueToOptions = useClaimDueTo()
+
   const onSubmit: SubmitHandler<SchemaType> = async (data) => {
     if (!claimStatusForEdit) {
       return
     }
 
-    // TODO: api to edit claim status
-    await new Promise((resolve) => {
-      setTimeout(resolve, 1500)
-    })
+    const reqObj: Code = {
+      code: claimStatusForEdit.id,
+      display: data.claimStatusName,
+      attributes: [
+        {
+          name: 'DueTo',
+          value: data.claimStatusDueTo,
+        },
+      ],
+    }
+
+    await editCodeSet(reqObj, 'ClaimStatus', claimStatusForEdit.id)
 
     addClaimStatusDiff({
       id: claimStatusForEdit.id,
@@ -70,7 +81,7 @@ const EditClaimStatusForm = () => {
         <FormSelect
           label="Due To"
           data-testid="edit-claim-status-due-to-select"
-          options={CLAIM_STATUS_DUE_TO_OPTIONS}
+          options={claimDueToOptions}
           {...form.register('claimStatusDueTo')}
         />
       </Flex>

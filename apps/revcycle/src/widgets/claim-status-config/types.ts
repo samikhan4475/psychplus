@@ -6,8 +6,13 @@ interface ClaimStatus {
   isActive: boolean
 }
 
+interface ClaimDueTo {
+  value: string
+  label: string
+}
+
 type ClaimStatusDiff = Partial<ClaimStatus> & { id: string }
 
 type ClaimStatusDiffs = { [key: string]: ClaimStatusDiff | undefined }
 
-export type { ClaimStatus, ClaimStatusDiff, ClaimStatusDiffs }
+export type { ClaimStatus, ClaimStatusDiff, ClaimStatusDiffs, ClaimDueTo }

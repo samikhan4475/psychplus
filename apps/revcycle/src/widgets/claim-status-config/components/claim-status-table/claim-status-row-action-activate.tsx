@@ -2,6 +2,7 @@ import { type PropsWithRow } from '@psychplus/ui/data-table'
 import { DropdownMenu } from '@psychplus/ui/dropdown-menu'
 import { useStore } from '../../store'
 import { type ClaimStatus } from '../../types'
+import { toggleActivateClaimStatus } from '../../utils'
 
 const ClaimStatusRowActionActivate = ({
   row: { original: claimStatus },
@@ -14,10 +15,7 @@ const ClaimStatusRowActionActivate = ({
   )
 
   const activateClaimStatus = async () => {
-    // TODO: api to activate
-    await new Promise((resolve) => {
-      setTimeout(resolve, 1000)
-    })
+    await toggleActivateClaimStatus({ ...claimStatus, isActive: true })
 
     addClaimStatusDiff({
       id: claimStatus.id,

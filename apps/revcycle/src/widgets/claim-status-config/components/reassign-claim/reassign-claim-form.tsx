@@ -12,6 +12,7 @@ import { Button } from '@psychplus/ui/button'
 import { Dialog } from '@psychplus/ui/dialog'
 import { useClaimStatuses, useStore } from '../../store'
 import { ClaimStatus } from '../../types'
+import { toggleActivateClaimStatus } from '../../utils'
 
 const schema = z.object({
   reassignClaimStatus: validate.requiredString,
@@ -41,10 +42,11 @@ const ReassignClaimForm = () => {
   })
 
   const onSubmit: SubmitHandler<SchemaType> = async () => {
-    // TODO: api to reassign claim
-    await new Promise((resolve) => {
-      setTimeout(resolve, 1500)
-    })
+    if (claimStatusesForDeactivation) {
+      for (const claimStatus of claimStatusesForDeactivation) {
+        await toggleActivateClaimStatus({ ...claimStatus, isActive: false })
+      }
+    }
 
     addClaimStatusDiff(
       ...claimStatusesForDeactivation!.map((claimStatus) => ({

@@ -7,10 +7,7 @@ import { type CodeSet } from './types'
 const getCodeSets = async (): Promise<CodeSet[]> =>
   handleRequest(
     fetch(forwardQuery(`${APP_HOST}/api/metadata/codesets`), {
-      next: {
-        revalidate: 3600,
-        tags: ['codesets'],
-      },
+      cache: 'no-store',
     }),
   )
 

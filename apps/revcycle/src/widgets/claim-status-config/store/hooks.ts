@@ -3,10 +3,11 @@ import {
   getCodeMetadata,
   type Code,
 } from '@psychplus/codeset'
-import { type ClaimStatus } from '../types'
+import { ClaimDueTo, type ClaimStatus } from '../types'
 import { useStore } from './combined'
 
 const CODE_SET_CLAIM_STATUS = 'ClaimStatus'
+const CODE_SET_CLAIM_DUE_TO = 'ClaimDueTo'
 
 const useClaimStatuses = (): ClaimStatus[] =>
   useStore(
@@ -25,4 +26,17 @@ const convertCodeToClaimStatus = (code: Code): ClaimStatus => ({
   isActive: getCodeAttribute(code, 'IsActive') === 'True',
 })
 
-export { useClaimStatuses }
+const convertCodeToClaimDueTo = (code: Code): ClaimDueTo => ({
+  value: code.code,
+  label: code.display,
+})
+
+const useClaimDueTo = (): ClaimDueTo[] =>
+  useStore(
+    (state) =>
+      state.codeSetIndex[CODE_SET_CLAIM_DUE_TO]?.map((code) => ({
+        ...convertCodeToClaimDueTo(code),
+      })) ?? [],
+  )
+
+export { useClaimStatuses, useClaimDueTo }
