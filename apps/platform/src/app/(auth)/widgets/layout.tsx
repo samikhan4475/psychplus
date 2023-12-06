@@ -23,6 +23,10 @@ const navMenuItems: MenuItem[] = [
     href: '/widgets/patient-referrals',
   },
   {
+    label: 'Patient Lookup',
+    href: '/widgets/patient-lookup',
+  },
+  {
     label: 'Patient Information',
     href: '/widgets/patient-information',
   },

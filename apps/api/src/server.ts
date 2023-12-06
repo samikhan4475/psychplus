@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import { json, urlencoded } from 'body-parser'
 import cors from 'cors'
 import express, { Express } from 'express'
@@ -7,7 +8,7 @@ import { wait } from './utils'
 
 const ANON = ['/api/login']
 
-const ONE_SECOND = 1000
+// const ONE_SECOND = 1000
 
 const API_DELAY = process.env.API_DELAY ? Number(process.env.API_DELAY) : 0
 
