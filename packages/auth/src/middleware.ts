@@ -116,6 +116,7 @@ const handlePageRequest = (request: NextRequest, config: MiddlewareConfig) => {
 // It handles common cross-cutting concerns such as setting Authorization headers and
 // other common headers.
 const handleApiRequest = async (request: NextRequest) => {
+
   const headers = createHeaders(request)
 
   request.nextUrl.searchParams.delete(QUERY_TOKEN)
