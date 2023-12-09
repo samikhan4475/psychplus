@@ -33,12 +33,14 @@ ingress:
   annotations:
     # use issuer instead of cluster-issuer for namespace scope
     cert-manager.io/cluster-issuer: letsencrypt
+    # nginx.ingress.kubernetes.io/app-root: /revcycle
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
     nginx.ingress.kubernetes.io/service-upstream: "true"
   hosts:
   - host: ui.integration.psychplus.dev
     paths:
-    - path: /revcycle
-      pathType: Prefix
+    - path: /revcycle(/|$)(.*)
+      pathType: ImplementationSpecific
   tls:
   - hosts:
     - ui.integration.psychplus.dev
@@ -66,7 +68,7 @@ autoscaling:
   targetCPUUtilizationPercentage: 80
   targetMemoryUtilizationPercentage: 80
 
-startupProbeEnabled: true
+startupProbeEnabled: false
 startupProbe:
   httpGet:
     path: /health/liveness_73C8DD3A-DF35-43f6-BA56-F3944E006637
@@ -74,7 +76,7 @@ startupProbe:
   periodSeconds: 30
   timeoutSeconds: 30
 
-livenessProbeEnabled: true
+livenessProbeEnabled: false
 livenessProbe:
   httpGet:
     path: /health/liveness_73C8DD3A-DF35-43f6-BA56-F3944E006637
@@ -82,7 +84,7 @@ livenessProbe:
   periodSeconds: 10
   timeoutSeconds: 5
 
-readinessProbeEnabled: true
+readinessProbeEnabled: false
 readinessProbe:
   httpGet:
     path: /health/readiness_73C8DD3A-DF35-43f6-BA56-F3944E006637
@@ -128,3 +130,7 @@ env:
         name: ehr-secrets
         key: googleMapsKey
   
+  - name: APP_PATH
+    value: "revcycle"
+  - name: APP_ENV
+    value: "production"

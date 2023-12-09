@@ -52,15 +52,19 @@ jobs:
             github:
               - '.github/**'
             helm:
-              - 'helm/**'
+              - 'ui-chart/**'
             k8s:
               - 'k8s/**'
             platform:
               - 'apps/platform/**'
               - 'apps/api/**'
+              - 'environments/dev/platform/**'
             clinical:
               - 'apps/clinical/**'
+              - 'environments/dev/clinical/**' 
             patient:
               - 'apps/patient/**'
+              - 'environments/dev/patient/**'
             revcycle:
               - 'apps/revcycle/**'
+              - 'environments/dev/revcycle/**'

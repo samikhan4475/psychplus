@@ -33,12 +33,14 @@ ingress:
   annotations:
     # use issuer instead of cluster-issuer for namespace scope
     cert-manager.io/cluster-issuer: letsencrypt
+    # nginx.ingress.kubernetes.io/app-root: /galaxy
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
     nginx.ingress.kubernetes.io/service-upstream: "true"
   hosts:
   - host: ui.integration.psychplus.dev
     paths:
-    - path: /galaxy
-      pathType: Prefix
+    - path: /galaxy(/|$)(.*)
+      pathType: ImplementationSpecific
   tls:
   - hosts:
     - ui.integration.psychplus.dev
@@ -128,3 +130,7 @@ env:
         name: ehr-secrets
         key: googleMapsKey
   
+  - name: APP_PATH
+    value: "galaxy"
+  - name: APP_ENV
+    value: "production"

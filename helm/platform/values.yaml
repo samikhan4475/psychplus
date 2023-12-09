@@ -33,13 +33,14 @@ ingress:
   annotations:
     # use issuer instead of cluster-issuer for namespace scope
     cert-manager.io/cluster-issuer: letsencrypt
-    nginx.ingress.kubernetes.io/service-upstream: "true"
+    # nginx.ingress.kubernetes.io/app-root: /platform
     nginx.ingress.kubernetes.io/rewrite-target: /$2
+    nginx.ingress.kubernetes.io/service-upstream: "true"
   hosts:
   - host: ui.integration.psychplus.dev
     paths:
     - path: /platform(/|$)(.*)
-      pathType: Prefix
+      pathType: ImplementationSpecific
   tls:
   - hosts:
     - ui.integration.psychplus.dev
@@ -67,7 +68,7 @@ autoscaling:
   targetCPUUtilizationPercentage: 80
   targetMemoryUtilizationPercentage: 80
 
-startupProbeEnabled: true
+startupProbeEnabled: false
 startupProbe:
   httpGet:
     path: /health/liveness_60AF6F94-4BB7-4828-8989-5C0E25B06D14
@@ -75,7 +76,7 @@ startupProbe:
   periodSeconds: 30
   timeoutSeconds: 30
 
-livenessProbeEnabled: true
+livenessProbeEnabled: false
 livenessProbe:
   httpGet:
     path: /health/liveness_60AF6F94-4BB7-4828-8989-5C0E25B06D14
@@ -83,7 +84,7 @@ livenessProbe:
   periodSeconds: 10
   timeoutSeconds: 5
 
-readinessProbeEnabled: true
+readinessProbeEnabled: false
 readinessProbe:
   httpGet:
     path: /health/readiness_60AF6F94-4BB7-4828-8989-5C0E25B06D14
@@ -129,3 +130,8 @@ env:
         name: ehr-secrets
         key: googleMapsKey
   
+
+  - name: APP_PATH
+    value: "platform"
+  - name: APP_ENV
+    value: "production"

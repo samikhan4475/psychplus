@@ -92,12 +92,5 @@ jobs:
             $image_tag = "ui-ode-pr-${{ inputs.pull_request_id }}"
             echo "image_tag=$image_tag" >> $env:GITHUB_OUTPUT
             echo "output image_tag: $image_tag"
-
-            $deployment_url_domain = "psychplus.dev"
-            echo "deployment_url_domain=$deployment_url_domain" >> $env:GITHUB_OUTPUT
-            echo "output deployment_url_domain: $deployment_url_domain"
-
-            $deployment_url_subdomain = "pr-${{ inputs.pull_request_id }}.ode"
-            echo "deployment_url_subdomain=$deployment_url_subdomain" >> $env:GITHUB_OUTPUT
-            echo "output deployment_url_subdomain: $deployment_url_subdomain"
+            
 

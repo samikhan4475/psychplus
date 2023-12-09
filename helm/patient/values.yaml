@@ -38,7 +38,7 @@ ingress:
   - host: ui.integration.psychplus.dev
     paths:
     - path: /
-      pathType: Prefix
+      pathType: ImplementationSpecific
   tls:
   - hosts:
     - ui.integration.psychplus.dev
@@ -66,7 +66,7 @@ autoscaling:
   targetCPUUtilizationPercentage: 80
   targetMemoryUtilizationPercentage: 80
 
-startupProbeEnabled: true
+startupProbeEnabled: false
 startupProbe:
   httpGet:
     path: /health/liveness_CF796DFC-2BE3-415f-9F86-63C29517DF8B
@@ -74,7 +74,7 @@ startupProbe:
   periodSeconds: 30
   timeoutSeconds: 30
 
-livenessProbeEnabled: true
+livenessProbeEnabled: false
 livenessProbe:
   httpGet:
     path: /health/liveness_CF796DFC-2BE3-415f-9F86-63C29517DF8B
@@ -82,7 +82,7 @@ livenessProbe:
   periodSeconds: 10
   timeoutSeconds: 5
 
-readinessProbeEnabled: true
+readinessProbeEnabled: false
 readinessProbe:
   httpGet:
     path: /health/readiness_CF796DFC-2BE3-415f-9F86-63C29517DF8B
@@ -128,3 +128,7 @@ env:
         name: ehr-secrets
         key: googleMapsKey
   
+  - name: APP_PATH
+    value: ""
+  - name: APP_ENV
+    value: "production"

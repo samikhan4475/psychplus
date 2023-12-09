@@ -1,0 +1,48 @@
+name: Subtask Build, Push, and Deploy Image
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        description: Deployment Environment
+        type: string
+        default: development
+
+      project:
+        description: The project
+        type: string
+        required: true
+
+      image_tag:
+        description: Tag of image to build
+        type: string
+        required: true
+        
+jobs:
+  build_and_push_image:
+    permissions:
+      actions: read
+      contents: read
+      id-token: write
+    
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    
+    steps:
+      - uses: actions/checkout@v3
+    
+      - uses: azure/login@v1
+        name: Azure login
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          subscription-id: ${{ secrets.ACR_SUBSCRIPTION_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+    
+      - name: Build and push image to ACR
+        run: |
+          az acr build \
+            --platform Linux/amd64 \
+            --image ui-${{ inputs.project }}:${{ inputs.image_tag }} \
+            --registry ${{ secrets.ACR_NAME }} \
+            --resource-group ${{ secrets.ACR_RESOURCE_GROUP }} \
+            --file apps/${{ inputs.project }}/Dockerfile . 
