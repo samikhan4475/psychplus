@@ -1,3 +1,12 @@
-const IndexPage = () => <div className="p-4">Index</div>
+import { Box } from '@radix-ui/themes'
+import { FooterMenuCard } from '@/components'
 
-export default IndexPage
+const HomePage = () => {
+  return (
+    <Box py="5" px="9">
+      <FooterMenuCard />
+    </Box>
+  )
+}
+
+export default HomePage

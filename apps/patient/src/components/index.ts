@@ -1,2 +1,4 @@
 export * from './psychplus-membership-dialog'
 export * from './book-appointment/book-appointment-dialog'
+export * from './feature-coming-soon-dialog'
+export * from './footer-menu-card'

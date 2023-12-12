@@ -1,0 +1,67 @@
+'use client'
+
+import {
+  BellIcon,
+  CalendarIcon,
+  ChatBubbleIcon,
+  EnvelopeClosedIcon,
+  FileTextIcon,
+} from '@radix-ui/react-icons'
+import { Flex, Text } from '@radix-ui/themes'
+import {
+  FeatureComingSoonDialog,
+  useFeatureComingSoon,
+} from '../feature-coming-soon-dialog'
+
+const menuItems = [
+  { icon: <CalendarIcon height={22} width={22} />, name: 'Past Appointments' },
+  { icon: <EnvelopeClosedIcon height={22} width={22} />, name: 'Letters' },
+  { icon: <ChatBubbleIcon height={22} width={22} />, name: 'Live Chat' },
+  { icon: <BellIcon height={22} width={22} />, name: 'After Visit Summary' },
+  {
+    icon: <FileTextIcon height={22} width={22} />,
+    name: 'Prescription Refill',
+  },
+]
+
+const FooterMenuCard = () => {
+  const { isDialogOpen, toggleDialog } = useFeatureComingSoon()
+
+  return (
+    <Flex
+      className="gap-8 rounded-6 border border-gray-2 shadow-3"
+      justify="center"
+      py="6"
+    >
+      {menuItems.map((item) => (
+        <FooterMenuSection
+          key={item.name}
+          {...item}
+          toggleDialog={toggleDialog}
+        />
+      ))}
+
+      <FeatureComingSoonDialog
+        isDialogOpen={isDialogOpen}
+        toggleDialog={toggleDialog}
+      />
+    </Flex>
+  )
+}
+
+const FooterMenuSection = ({ icon, name, toggleDialog }) => (
+  <Flex
+    align="center"
+    direction="column"
+    className="h-28 w-44 gap-2 rounded-5 border-2 border-blue-11 p-3 text-blue-11 transition duration-500 hover:bg-blue-11 hover:text-accent-1"
+    onClick={toggleDialog}
+  >
+    {icon}
+
+    <Text size="3" align="center">
+      {name}
+    </Text>
+  </Flex>
+)
+
+export { FooterMenuCard }
