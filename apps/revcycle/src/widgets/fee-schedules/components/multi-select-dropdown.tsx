@@ -4,14 +4,14 @@ import { Button } from '@psychplus/ui/button'
 import { Checkbox } from '@psychplus/ui/checkbox'
 import { DropdownMenu } from '@psychplus/ui/dropdown-menu'
 
-interface Data {
+interface MultiSelectOption {
   value: string
   label: string
 }
 
 const getDisplayLabel = (
   selectedValues: string[],
-  data: Data[],
+  options: MultiSelectOption[],
   placeholder: string,
 ) => {
   if (selectedValues.length === 0) {
@@ -19,23 +19,28 @@ const getDisplayLabel = (
   }
 
   if (selectedValues.length === 1) {
-    return data.find((item) => item.value === selectedValues[0])?.label ?? ''
+    return (
+      options.find((option) => option.value === selectedValues[0])?.label ?? ''
+    )
   }
 
   return `${selectedValues.length} selected`
 }
 
 interface Props {
-  data: Data[]
+  options: MultiSelectOption[]
   placeholder?: string
   onChange?: (selectedValues: string[]) => void
+  width?: string
 }
 
 const MultiSelectDropdown: React.FC<Props> = ({
-  data,
+  options,
   placeholder = 'Select...',
   onChange,
+  width,
 }) => {
+  const ddMenuContentClasses = `max-h-[300px] 'w-[${width ? width : '200px'}]}`
   const [selectedValues, setSelectedValues] = useState<string[]>([])
 
   const handleChange = (value: string) => {
@@ -60,12 +65,12 @@ const MultiSelectDropdown: React.FC<Props> = ({
           variant="outline"
           className="flex w-[200px] items-center justify-between space-x-2"
         >
-          <span>{getDisplayLabel(selectedValues, data, placeholder)}</span>
+          <span>{getDisplayLabel(selectedValues, options, placeholder)}</span>
           <ChevronDownIcon />
         </Button>
       </DropdownMenu.Trigger>
-      <DropdownMenu.Content className="max-h-[200px] w-[200px]">
-        {data.map((item) => (
+      <DropdownMenu.Content className={ddMenuContentClasses}>
+        {options.map((item) => (
           <DropdownMenu.Item
             key={item.value}
             onSelect={(e) => e.preventDefault()}
@@ -83,4 +88,4 @@ const MultiSelectDropdown: React.FC<Props> = ({
   )
 }
 
-export { MultiSelectDropdown }
+export { MultiSelectDropdown, type MultiSelectOption }
