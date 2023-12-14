@@ -29,7 +29,7 @@ const FooterMenuCard = () => {
 
   return (
     <Flex
-      className="gap-8 rounded-6 border border-gray-2 shadow-3"
+      className="flex-wrap gap-8 rounded-6 border border-gray-2 shadow-3"
       justify="center"
       py="6"
     >
@@ -52,8 +52,9 @@ const FooterMenuCard = () => {
 const FooterMenuSection = ({ icon, name, toggleDialog }) => (
   <Flex
     align="center"
+    justify="center"
     direction="column"
-    className="h-28 w-44 gap-2 rounded-5 border-2 border-blue-11 p-3 text-blue-11 transition duration-500 hover:bg-blue-11 hover:text-accent-1"
+    className="h-28 gap-2 rounded-5 border-2 border-blue-11 p-3 text-blue-11 transition duration-500 hover:bg-blue-11 hover:text-accent-1 max-xs:w-1/2 xs:w-1/3 sm:w-1/3 md:w-1/3 lg:w-44"
     onClick={toggleDialog}
   >
     {icon}

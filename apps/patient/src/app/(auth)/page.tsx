@@ -1,11 +1,12 @@
-import { Box } from '@radix-ui/themes'
-import { FooterMenuCard } from '@/components'
+import { Flex } from '@radix-ui/themes'
+import { CarePlanCard, FooterMenuCard } from '@/components'
 
 const HomePage = () => {
   return (
-    <Box py="5" px="9">
+    <Flex px={{ md: '8', lg: '9' }} p="4" py="5" direction={'column'} gap="8">
+      <CarePlanCard />
       <FooterMenuCard />
-    </Box>
+    </Flex>
   )
 }
 

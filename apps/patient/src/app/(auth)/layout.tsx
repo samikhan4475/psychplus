@@ -30,7 +30,7 @@ const IndexLayout = async ({ children }: { children: React.ReactNode }) => {
           <BookAppointmentDialog />
         </Flex>
       </Flex>
-      <main className="p-4">{children}</main>
+      <main>{children}</main>
     </>
   )
 }

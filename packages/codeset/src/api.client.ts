@@ -5,6 +5,9 @@ import { type Code, type CodeSet } from './types'
 const getCodeSets = async (): Promise<CodeSet[]> =>
   handleRequest(fetch(forwardQuery(`/api/metadata/codesets`)))
 
+const getCodeSet = async (codesetCode: string): Promise<CodeSet> =>
+  handleRequest(fetch(forwardQuery(`/api/metadata/codesets/${codesetCode}`)))
+
 const addCodeSet = async (
   reqBody: Code,
   codesetCode: string,
@@ -33,4 +36,4 @@ const editCodeSet = async (
   )
 }
 
-export { getCodeSets, addCodeSet, editCodeSet }
+export { getCodeSets, getCodeSet, addCodeSet, editCodeSet }
