@@ -4,17 +4,13 @@ on:
     types: [opened, reopened, synchronize, ready_for_review]
 
 jobs:
-  changed-projects:
-    uses: ./.github/workflows/subtaskProjectFilter.yml
-
   build-configuration:
     uses: ./.github/workflows/subtaskEnvSettingsOde.yml
     with:
       pull_request_id: ${{ github.event.pull_request.number }}
 
   configure_ode_namespace:
-    needs: [changed-projects, build-configuration]
-
+    needs: [build-configuration]
     uses: ./.github/workflows/subtaskSetupNamespaceOde.yml
     with:
       environment: development
@@ -23,55 +19,50 @@ jobs:
     secrets: inherit
 
   build_push_platform:
-    needs: [changed-projects, build-configuration, configure_ode_namespace]
-    if: ${{ needs.changed-projects.outputs.platform == 'true' }}
+    needs: [build-configuration, configure_ode_namespace]
     uses: ./.github/workflows/subtaskBuildPushImage.yml
     with:
       environment: development
       project: platform
-      image_tag: ${{ github.event.pull_request.number }}
+      image_tag: ${{ needs.build-configuration.outputs.image_tag }}
     secrets: inherit
 
   build_push_clinical:
-    needs: [changed-projects, build-configuration, configure_ode_namespace]
-    if: ${{ needs.changed-projects.outputs.platform == 'true' }}
+    needs: [build-configuration, configure_ode_namespace]
     uses: ./.github/workflows/subtaskBuildPushImage.yml
     with:
       environment: development
       project: clinical
-      image_tag: ${{ github.event.pull_request.number }}
+      image_tag: ${{ needs.build-configuration.outputs.image_tag }}
     secrets: inherit
 
   build_push_patient:
-    needs: [changed-projects, build-configuration, configure_ode_namespace]
-    if: ${{ needs.changed-projects.outputs.platform == 'true' }}
+    needs: [build-configuration, configure_ode_namespace]
     uses: ./.github/workflows/subtaskBuildPushImage.yml
     with:
       environment: development
       project: patient
-      image_tag: ${{ github.event.pull_request.number }}
+      image_tag: ${{ needs.build-configuration.outputs.image_tag }}
     secrets: inherit
 
   build_push_revcycle:
-    needs: [changed-projects, build-configuration, configure_ode_namespace]
-    if: ${{ needs.changed-projects.outputs.platform == 'true' }}
+    needs: [build-configuration, configure_ode_namespace]
     uses: ./.github/workflows/subtaskBuildPushImage.yml
     with:
       environment: development
       project: revcycle
-      image_tag: ${{ github.event.pull_request.number }}
+      image_tag: ${{ needs.build-configuration.outputs.image_tag }}
     secrets: inherit
 
   deploy_platform:
     needs: [build-configuration, build_push_platform]
-    if: ${{ needs.changed-projects.outputs.platform == 'true' }}
     uses: ./.github/workflows/subtaskDeployHelmChart.yml
     with:
       environment: development
       project: platform
       helm_chart_version: ${{ needs.build-configuration.outputs.build_version }}
       helm_app_version: ${{ needs.build-configuration.outputs.build_full_version }}
-      image_tag: ${{ github.event.pull_request.number }}
+      image_tag: ${{ needs.build-configuration.outputs.image_tag }}
       env_namespace: ${{ needs.build-configuration.outputs.env_namespace }}
       ingress_url: ui-pr-${{ github.event.pull_request.number }}.ode.psychplus.dev
       autoscaling_min_replicas: 1
@@ -80,14 +71,13 @@ jobs:
 
   deploy_clinical:
     needs: [build-configuration, build_push_clinical]
-    if: ${{ needs.changed-projects.outputs.clinical == 'true' }}
     uses: ./.github/workflows/subtaskDeployHelmChart.yml
     with:
       environment: development
       project: clinical
       helm_chart_version: ${{ needs.build-configuration.outputs.build_version }}
       helm_app_version: ${{ needs.build-configuration.outputs.build_full_version }}
-      image_tag: ${{ github.event.pull_request.number }}
+      image_tag: ${{ needs.build-configuration.outputs.image_tag }}
       env_namespace: ${{ needs.build-configuration.outputs.env_namespace }}
       ingress_url: ui-pr-${{ github.event.pull_request.number }}.ode.psychplus.dev
       autoscaling_min_replicas: 1
@@ -96,14 +86,13 @@ jobs:
 
   deploy_patient:
     needs: [build-configuration, build_push_patient]
-    if: ${{ needs.changed-projects.outputs.patient == 'true' }}
     uses: ./.github/workflows/subtaskDeployHelmChart.yml
     with:
       environment: development
       project: patient
       helm_chart_version: ${{ needs.build-configuration.outputs.build_version }}
       helm_app_version: ${{ needs.build-configuration.outputs.build_full_version }}
-      image_tag: ${{ github.event.pull_request.number }}
+      image_tag: ${{ needs.build-configuration.outputs.image_tag }}
       env_namespace: ${{ needs.build-configuration.outputs.env_namespace }}
       ingress_url: ui-pr-${{ github.event.pull_request.number }}.ode.psychplus.dev
       autoscaling_min_replicas: 1
@@ -112,14 +101,13 @@ jobs:
 
   deploy_revcycle:
     needs: [build-configuration, build_push_revcycle]
-    if: ${{ needs.changed-projects.outputs.revcycle == 'true' }}
     uses: ./.github/workflows/subtaskDeployHelmChart.yml
     with:
       environment: development
       project: revcycle
       helm_chart_version: ${{ needs.build-configuration.outputs.build_version }}
       helm_app_version: ${{ needs.build-configuration.outputs.build_full_version }}
-      image_tag: ${{ github.event.pull_request.number }}
+      image_tag: ${{ needs.build-configuration.outputs.image_tag }}
       env_namespace: ${{ needs.build-configuration.outputs.env_namespace }}
       ingress_url: ui-pr-${{ github.event.pull_request.number }}.ode.psychplus.dev
       autoscaling_min_replicas: 1
