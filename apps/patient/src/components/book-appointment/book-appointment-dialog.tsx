@@ -51,7 +51,7 @@ const BookAppointmentDialog = () => {
           </Flex>
 
           <Flex direction="column" ml="9">
-            <Flex className="mb-2" align={'center'}>
+            <Flex className="mb-2" align="center">
               {/* Need stethoscope icon not found from redis icons*/}
               <CalendarIcon color="#007bff" />
 
@@ -61,21 +61,21 @@ const BookAppointmentDialog = () => {
               </Text>
             </Flex>
 
-            <Flex className="mb-2" align={'center'}>
+            <Flex className="mb-2" align="center">
               <CalendarIcon color="#007bff" />
               <Text size="3" ml="2">
                 {slotInformation.date} {slotInformation.time}
               </Text>
             </Flex>
 
-            <Flex className="mb-2" align={'center'}>
+            <Flex className="mb-2" align="center">
               <VideoIcon color="#007bff" />
               <Text size="3" ml="2">
                 Blue Shield
               </Text>
             </Flex>
 
-            <Flex className="mb-2" align={'center'}>
+            <Flex className="mb-2" align="center">
               {/* Need map icon not found from redis icons*/}
               <VideoIcon color="#007bff" />
 

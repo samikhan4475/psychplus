@@ -160,7 +160,7 @@ const BookAppointmentForm = () => {
         </Flex>
       </Flex>
 
-      <Flex mt="5" align={'center'}>
+      <Flex mt="5" align="center">
         <Checkbox
           data-testid="agreeToTerms-checkbox"
           onCheckedChange={(checked) => {
@@ -173,7 +173,7 @@ const BookAppointmentForm = () => {
       </Flex>
       <FormFieldError message={form.formState.errors.agreeToTerms?.message} />
 
-      <Flex justify={'center'} mt="6">
+      <Flex justify="center" mt="6">
         <Button
           data-testid="credit-card-submit-button"
           size="3"

@@ -22,12 +22,12 @@ const CarePlanCard = () => {
     <Flex
       className="w-full rounded-6 border border-gray-2 font-bold shadow-3"
       direction="column"
-      align={'center'}
+      align="center"
       py="6"
       p="2"
       gap="5"
     >
-      <Text size="6" align={'center'}>
+      <Text size="6" align="center">
         Your Personalized Care Plans
       </Text>
 
@@ -36,7 +36,7 @@ const CarePlanCard = () => {
           <Flex
             key={code.code}
             justify="center"
-            align={'center'}
+            align="center"
             className={`h-12  w-1/4 rounded-2 border-2 border-blue-11 text-blue-11 transition duration-500 hover:bg-blue-11 hover:text-accent-1 max-xs:w-full`}
             onClick={toggleDialog}
           >
