@@ -8,18 +8,18 @@ const PatientInformationWidgetClient = () => {
   const data = useStore((state) => state.getPatientProfileInformation())
   return (
     <>
-      <Flex gap={'2'}>
+      <Flex gap="2">
         <Card className="mt-2 w-3/6">
-          <Heading size={'3'} className="mb-3">
+          <Heading size='3' className="mb-3">
             Patient Info
           </Heading>
-          <Flex gap={'6'}>
+          <Flex gap='6'>
             <Avatar
               size="8"
               src="https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?&w=256&h=256&q=70&crop=focalpoint&fp-x=0.5&fp-y=0.3&fp-z=1&fit=crop"
               fallback="A"
             />
-            <Flex wrap={'wrap'} gap={'6'}>
+            <Flex wrap='wrap' gap='6'>
               <LabelAndValue
                 label="First Name"
                 value={data.legalName.firstName}
@@ -38,10 +38,10 @@ const PatientInformationWidgetClient = () => {
         </Card>
 
         <Card className="mt-2  w-3/6">
-          <Heading size={'3'} className="mb-3">
+          <Heading size='3' className="mb-3">
             Address
           </Heading>
-          <Flex wrap={'wrap'} gap={'8'}>
+          <Flex wrap='wrap' gap='8'>
             {data.contactDetails.addresses.map((address) => (
               <>
                 <LabelAndValue label="Type" value={address.type} />
@@ -56,10 +56,10 @@ const PatientInformationWidgetClient = () => {
       </Flex>
       <Flex>
         <Card className="mt-2 w-full">
-          <Heading size={'3'} className="mb-3">
+          <Heading size='3' className="mb-3">
             Gender
           </Heading>
-          <Flex wrap={'wrap'} gap={'6'}>
+          <Flex wrap='wrap' gap='6'>
             <LabelAndValue label="Gender" value={data.gender} />
           </Flex>
         </Card>

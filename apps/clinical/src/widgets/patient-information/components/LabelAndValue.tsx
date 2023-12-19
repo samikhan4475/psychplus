@@ -3,7 +3,7 @@ import { Flex, Text } from '@radix-ui/themes'
 
 const LabelAndValue = ({ label, value }: { label: string; value: string | number }) => {
   return (
-    <Flex direction={'column'}>
+    <Flex direction="column">
       <Text as="div" size="2" weight="bold">
         {label}
       </Text>

@@ -16,7 +16,7 @@ const PatientLookupWidgetServer = async () => {
       <CodeSetPreloader codeSets={codeSets} store={[useStore]} />
       <Flex p="5" direction="column">
         <PageHeader
-          title={'Patient Lookup'}
+          title="Patient Lookup"
           description={
             'Please choose any of the filter to search the patient(s).'
           }

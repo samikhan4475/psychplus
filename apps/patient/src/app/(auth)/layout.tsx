@@ -1,8 +1,6 @@
 import * as React from 'react'
 import { type Metadata } from 'next'
-import { Flex, Text } from '@radix-ui/themes'
-import { AppLink } from '@psychplus/ui/app-link'
-import { BookAppointmentDialog, PsychplusMembershipDialog } from '@/components'
+import { PatientsHeader } from '@/components'
 
 export const metadata: Metadata = {
   title: 'title',
@@ -12,24 +10,7 @@ export const metadata: Metadata = {
 const IndexLayout = async ({ children }: { children: React.ReactNode }) => {
   return (
     <>
-      <Flex align="center" px="8" py="4" className="border-b border-b-gray-5">
-        <AppLink href="/" className="mr-8">
-          <Text size="4" weight="bold">
-            P+
-          </Text>
-        </AppLink>
-        <Flex gap="4">
-          <AppLink href="/patient" className="hover:underline">
-            <Text weight="medium">Example</Text>
-          </AppLink>
-        </Flex>
-        <Flex gap="4" ml="3">
-          <PsychplusMembershipDialog />
-        </Flex>
-        <Flex gap="4" ml="3">
-          <BookAppointmentDialog />
-        </Flex>
-      </Flex>
+      <PatientsHeader />
       <main>{children}</main>
     </>
   )
