@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   description: 'description',
 }
 
-const IndexLayout = async ({ children }: { children: React.ReactNode }) => {
+const DashboardLayout = async ({ children }: { children: React.ReactNode }) => {
   return (
     <>
       <PatientsHeader />
@@ -16,4 +16,4 @@ const IndexLayout = async ({ children }: { children: React.ReactNode }) => {
   )
 }
 
-export default IndexLayout
+export default DashboardLayout
