@@ -49,7 +49,6 @@ const LoginForm = () => {
   }
 
   return (
-    <>
       <Form form={form} onSubmit={onSubmit}>
         <Flex direction="column" gap="4" mb="4">
           <FormTextInput
@@ -91,7 +90,6 @@ const LoginForm = () => {
           Sign in
         </FormSubmitButton>
       </Form>
-    </>
   )
 }
 
