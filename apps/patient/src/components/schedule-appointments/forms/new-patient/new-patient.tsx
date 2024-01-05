@@ -66,15 +66,15 @@ const NewPatient = ({ onclose }: NewPatientProps) => {
           Do you want to see a Psychiatrist or a Therapist?
         </Flex>
         <Flex className="">
-          <ToggleGroup.Root type="single" defaultValue="psychiatrist" onValueChange={(value) => onScheduleChange('providerType', value)}>
+          <ToggleGroup.Root type="single" defaultValue="Psychiatrist" onValueChange={(value) => onScheduleChange('providerType', value)}>
             <ToggleGroup.Item
-              value="psychiatrist"
+              value="Psychiatrist"
               className={toggleGroupItemClasses + ' h-[60px] w-[320px]'}
             >
               Psychiatrist <span className="text-1 font-light">(Daignosis/Medication)</span>
             </ToggleGroup.Item>
             <ToggleGroup.Item
-              value="therapist"
+              value="Therapist"
               className={toggleGroupItemClasses + ' h-[60px] w-[215px]'}
             >
               Therapist <span className="text-1 font-light">(Counseling)</span>
@@ -87,15 +87,15 @@ const NewPatient = ({ onclose }: NewPatientProps) => {
           Would you like to meet in-person or virtually?
         </Flex>
         <Flex className="">
-          <ToggleGroup.Root type="single" defaultValue="virtual" onValueChange={(value) => onScheduleChange('appointmentType', value)}>
+          <ToggleGroup.Root type="single" defaultValue="Virtual" onValueChange={(value) => onScheduleChange('appointmentType', value)}>
             <ToggleGroup.Item
-              value="virtual"
+              value="Virtual"
               className={'h-[60px] w-[157px] ' + toggleGroupItemClasses}
             >
               Virtual
             </ToggleGroup.Item>
             <ToggleGroup.Item
-              value="in-person"
+              value="In-Person"
               className={'h-[60px] w-[178px] ' + toggleGroupItemClasses}
             >
               In-Person

@@ -1,0 +1,8 @@
+export const psychPlusBlueColor = '#151B4A'
+export const goldColor = '#F2DB77'
+export const starRatingColor = '#FFC700'
+export const Lagoon = '#194595'
+export const MintFreshColor = '#8BD5C9'
+export const grayColor = '#E8E8E8'
+export const darkGrayColor = '#575759'
+export const whiteColor = '#FFFFFF'

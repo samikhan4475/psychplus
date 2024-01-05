@@ -10,4 +10,11 @@ export * from './header'
 export * from './psychplus-membership-dialog'
 export * from './feature-coming-soon-dialog'
 export * from './book-appointment/book-appointment-dialog'
+
+export * from './colors'
+export * from './icons'
+
+export * from './star-ratings'
 export * from './schedule-appointments'
+export * from './self-scheduling'
+
