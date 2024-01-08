@@ -2,10 +2,10 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import * as ToggleGroup from '@radix-ui/react-toggle-group'
 import { Flex } from '@radix-ui/themes'
 import { DatePicker } from '@psychplus/ui/date-picker'
 import { TextField } from '@psychplus/ui/text-field'
-import * as ToggleGroup from '@radix-ui/react-toggle-group'
 
 interface NewPatientProps {
   onclose?: () => void
@@ -22,41 +22,43 @@ interface ScheduledAppointment {
 }
 
 const NewPatient = ({ onclose }: NewPatientProps) => {
+  const router = useRouter()
 
-  const router = useRouter();
-  
   //TODO: use react hook form to change this.
-  const [schedule, setSchedule] = useState<ScheduledAppointment>({  
+  const [schedule, setSchedule] = useState<ScheduledAppointment>({
     providerType: 'Psychiatrist',
     appointmentType: 'Virtual',
     dateOfBirth: new Date().toISOString(),
     zipCode: '',
-  });
+  })
 
   const onScheduleChange = (key: keyof ScheduledAppointment, value: string) => {
-    setSchedule((prev) => ({ ...prev, [key]: value }));
-  };
+    setSchedule((prev) => ({ ...prev, [key]: value }))
+  }
 
   const search = () => {
     if (schedule.zipCode.length !== 5) {
-      alert('Please enter a valid zip code');
-      return;
+      alert('Please enter a valid zip code')
+      return
     }
 
-    //TODO: check with designer if the UI is changed for younger users. 
+    //TODO: check with designer if the UI is changed for younger users.
     if (compareDate(schedule.dateOfBirth)) {
-      alert('You must be 18 years or older to schedule an appointment');
-      return;
+      alert('You must be 18 years or older to schedule an appointment')
+      return
     }
 
-    const queryString = Object.entries(schedule).filter((key) => key[0] !== 'dateOfBirth').map((key) => `${key[0]}=${key[1]}`).join('&');
-    router.push(`/schedule-appointment?${queryString}`);
-  };
+    const queryString = Object.entries(schedule)
+      .filter((key) => key[0] !== 'dateOfBirth')
+      .map((key) => `${key[0]}=${key[1]}`)
+      .join('&')
+    router.push(`/schedule-appointment?${queryString}`)
+  }
 
   const compareDate = (date: string | Date) => {
-    const tdate = typeof date === 'string' ? new Date(date) : date;
-    const today = new Date();
-    return (tdate.getFullYear() - today.getFullYear()) < 18;
+    const tdate = typeof date === 'string' ? new Date(date) : date
+    const today = new Date()
+    return tdate.getFullYear() - today.getFullYear() < 18
   }
 
   return (
@@ -66,12 +68,17 @@ const NewPatient = ({ onclose }: NewPatientProps) => {
           Do you want to see a Psychiatrist or a Therapist?
         </Flex>
         <Flex className="">
-          <ToggleGroup.Root type="single" defaultValue="Psychiatrist" onValueChange={(value) => onScheduleChange('providerType', value)}>
+          <ToggleGroup.Root
+            type="single"
+            defaultValue="Psychiatrist"
+            onValueChange={(value) => onScheduleChange('providerType', value)}
+          >
             <ToggleGroup.Item
               value="Psychiatrist"
               className={toggleGroupItemClasses + ' h-[60px] w-[320px]'}
             >
-              Psychiatrist <span className="text-1 font-light">(Daignosis/Medication)</span>
+              Psychiatrist{' '}
+              <span className="text-1 font-light">(Daignosis/Medication)</span>
             </ToggleGroup.Item>
             <ToggleGroup.Item
               value="Therapist"
@@ -87,7 +94,13 @@ const NewPatient = ({ onclose }: NewPatientProps) => {
           Would you like to meet in-person or virtually?
         </Flex>
         <Flex className="">
-          <ToggleGroup.Root type="single" defaultValue="Virtual" onValueChange={(value) => onScheduleChange('appointmentType', value)}>
+          <ToggleGroup.Root
+            type="single"
+            defaultValue="Virtual"
+            onValueChange={(value) =>
+              onScheduleChange('appointmentType', value)
+            }
+          >
             <ToggleGroup.Item
               value="Virtual"
               className={'h-[60px] w-[157px] ' + toggleGroupItemClasses}
@@ -107,18 +120,22 @@ const NewPatient = ({ onclose }: NewPatientProps) => {
         <Flex gap="6">
           <Flex direction="column">
             <p>Date of Birth</p>
-            <DatePicker 
+            <DatePicker
               date={new Date(schedule.dateOfBirth)}
-              onSelect={(date) => onScheduleChange('dateOfBirth', date?.toISOString() ?? '')}
+              onSelect={(date) =>
+                onScheduleChange('dateOfBirth', date?.toISOString() ?? '')
+              }
             />
           </Flex>
           <Flex direction="column">
             <p>Enter ZIP Code</p>
-            <TextField.Input size="3" placeholder="zip code"
+            <TextField.Input
+              size="3"
+              placeholder="zip code"
               value={schedule.zipCode}
               onChange={(e) => onScheduleChange('zipCode', e.target.value)}
-              className='w-[300px] h-[56px] rounded-6 border border-blue-12 px-4 text-2 font-light'
-             />
+              className="h-[56px] w-[300px] rounded-6 border border-blue-12 px-4 text-2 font-light"
+            />
           </Flex>
         </Flex>
       </Flex>

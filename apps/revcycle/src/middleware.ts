@@ -1,15 +1,14 @@
 import { createMiddleware } from '@psychplus/auth'
-import { wrapPath } from '@psychplus/utils/url'
 
-const REQUIRE_AUTH = ['/'].map(wrapPath)
-const REQUIRE_ANON = ['/login'].map(wrapPath)
+const REQUIRE_AUTH = ['/']
+const REQUIRE_ANON = ['/login']
 
 export const config = {
   matcher: '/((?!.*\\.).*)',
 }
 
 export const middleware = createMiddleware({
-  index: wrapPath('/'),
+  index: '/',
   requireAuth: REQUIRE_AUTH,
   requireAnon: REQUIRE_ANON,
 })

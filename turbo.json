@@ -21,19 +21,17 @@
     }
   },
   "globalEnv": [
-    "npm_package_version",
-    "PORT",
     "NODE_ENV",
     "APP_CODE",
     "APP_PATH",
+    "DISABLE_APP_PATH",
+    "APP_VERSION",
     "APP_ENV",
-    "APP_HOST",
-    "API_URL",
-    "MOCK_API_URL",
-    "API_DELAY",
     "CLINICAL_URL",
     "PATIENT_URL",
     "REVCYCLE_URL",
+    "PLATFORM_URL",
+    "API_URL",
     "LOGIN_ENDPOINT",
     "NEXT_PUBLIC_GOOGLE_MAPS_API_KEY",
     "NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN"

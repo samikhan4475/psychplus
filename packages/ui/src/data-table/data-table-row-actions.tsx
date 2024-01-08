@@ -26,7 +26,7 @@ const DataTableRowActions = <TData,>({
 }: DataTableRowActionsProps<TData>) => (
   <DropdownMenu.Root>
     <DropdownMenu.Trigger>
-      <IconButton variant="ghost">
+      <IconButton size="1" variant="ghost" mr="1">
         <DotsHorizontalIcon height={16} width={16} />
       </IconButton>
     </DropdownMenu.Trigger>

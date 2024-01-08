@@ -8,9 +8,11 @@ interface Props
     React.ComponentProps<typeof Select.Root> {
   name: string
   label: string
+  placeholder?: string
   options: {
     label: string
     value: string
+    disabled?: boolean
   }[]
 }
 
@@ -27,12 +29,21 @@ const FormSelect = React.forwardRef<HTMLButtonElement, Props>((props, ref) => {
               size="3"
               onValueChange={field.onChange}
               value={field.value}
+              defaultValue={props.defaultValue}
               {...childProps}
             >
-              <Select.Trigger ref={ref} id={formFieldProps.id} />
+              <Select.Trigger
+                ref={ref}
+                id={formFieldProps.id}
+                placeholder={props.placeholder}
+              />
               <Select.Content>
                 {childProps.options.map((option) => (
-                  <Select.Item value={option.value} key={option.value}>
+                  <Select.Item
+                    value={option.value}
+                    key={option.value}
+                    disabled={option.disabled}
+                  >
                     {option.label}
                   </Select.Item>
                 ))}

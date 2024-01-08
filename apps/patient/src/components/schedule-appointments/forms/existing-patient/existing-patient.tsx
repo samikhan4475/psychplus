@@ -1,13 +1,11 @@
-import { LoginForm } from "@psychplus/auth/login";
+import { LoginForm } from '@psychplus/auth/login'
 
 interface ExistingPatientProps {
   onlogin?: () => void
 }
 
 const ExistingPatient = ({ onlogin }: ExistingPatientProps) => {
-  return (
-    <LoginForm />
-  );
-};
+  return <LoginForm />
+}
 
-export { ExistingPatient };
+export { ExistingPatient }

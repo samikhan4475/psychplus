@@ -1,3 +1,5 @@
 import { TextArea } from '@radix-ui/themes'
 
-export { TextArea }
+type TextAreaInputProps = React.ComponentPropsWithRef<typeof TextArea>
+
+export { TextArea, type TextAreaInputProps }

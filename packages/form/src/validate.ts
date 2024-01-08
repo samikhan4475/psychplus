@@ -42,7 +42,7 @@ const validate = {
   nullOrBoolean,
   nullOrString,
   nullOrChar,
-  nullOrNumber
+  nullOrNumber,
 }
 
 export { validate }

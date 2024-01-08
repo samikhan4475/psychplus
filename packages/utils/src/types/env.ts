@@ -1,3 +1,3 @@
-type AppEnv = 'development' | 'staging' | 'production' | undefined
+type AppEnv = 'development' | 'staging' | 'production'
 
 export type { AppEnv }

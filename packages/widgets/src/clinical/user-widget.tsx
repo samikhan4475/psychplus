@@ -1,7 +1,8 @@
 import { CLINICAL_URL } from '@psychplus/utils/constants'
 import { getAuthToken } from '@psychplus/utils/cookies'
 import { createSearchParams } from '@psychplus/utils/url'
-import { PortalContainer } from '../components'
+import { USER_WIDGET } from '..'
+import { WidgetPortal } from '../components'
 
 const UserWidget = () => {
   const searchParams = createSearchParams({
@@ -9,8 +10,9 @@ const UserWidget = () => {
   })
 
   return (
-    <PortalContainer
+    <WidgetPortal
       src={`${CLINICAL_URL}/widgets/user?${searchParams.toString()}`}
+      name={USER_WIDGET}
     />
   )
 }

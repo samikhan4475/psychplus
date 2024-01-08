@@ -4,8 +4,15 @@ import React from 'react'
 import { Button, Flex, Link, Text } from '@radix-ui/themes'
 import { Avatar } from '@psychplus/ui/avatar'
 
-//We will fetch this from API
-const careTeam = [
+type TeamMember = {
+  name: string
+  credentials: string
+  type: string
+  profilePicUrl: string
+}
+
+// We will fetch this from API
+const careTeam: TeamMember[] = [
   {
     name: 'DR TEST3',
     credentials: 'MD',
@@ -44,39 +51,42 @@ const CareTeamCard = () => {
   )
 }
 
-const renderTeamMember = (teamMember, notAvailableMessage) => {
-  if (teamMember) {
-    return (
-      <Flex direction="column" gap="3">
-        <Flex gap="4" align="center">
-          <Avatar
-            size="6"
-            src={teamMember.profilePicUrl}
-            fallback="A"
-            radius="full"
-          />
-          <Flex direction="column" gap="1" className="font-bold">
-            <Text size="5">{`${teamMember.name}, ${teamMember.credentials}`}</Text>
-            <Text size="2">{teamMember.type}</Text>
-          </Flex>
-        </Flex>
-        <Button size="3" color="blue" className="whitespace-nowrap">
-          BOOK APPOINTMENT
-        </Button>
-        <Flex justify="end" mt="-2" className="font-bold">
-          <Link color="blue" size="2">
-            Change Provider
-          </Link>
-        </Flex>
-      </Flex>
-    )
-  } else {
+const renderTeamMember = (
+  teamMember?: TeamMember,
+  notAvailableMessage = 'Not available.',
+) => {
+  if (!teamMember) {
     return (
       <Text className="font-bold" align="center">
         {notAvailableMessage}
       </Text>
     )
   }
+
+  return (
+    <Flex direction="column" gap="3">
+      <Flex gap="4" align="center">
+        <Avatar
+          size="6"
+          src={teamMember.profilePicUrl}
+          fallback="A"
+          radius="full"
+        />
+        <Flex direction="column" gap="1" className="font-bold">
+          <Text size="5">{`${teamMember.name}, ${teamMember.credentials}`}</Text>
+          <Text size="2">{teamMember.type}</Text>
+        </Flex>
+      </Flex>
+      <Button size="3" color="blue" className="whitespace-nowrap">
+        BOOK APPOINTMENT
+      </Button>
+      <Flex justify="end" mt="-2" className="font-bold">
+        <Link color="blue" size="2">
+          Change Provider
+        </Link>
+      </Flex>
+    </Flex>
+  )
 }
 
 export { CareTeamCard }

@@ -1,17 +1,50 @@
-interface Patient {
-  id: number
+interface PatientMetadata {
+  createdOn: string
+  createdBy: number
+  createdByFullName: string
+  updatedOn: string
+  updatedBy: number
+  updatedByFullName: string
+}
+
+interface PatientName {
   firstName: string
   lastName: string
-  fullName: string
-  dob: string
-  age: number
-  phone: string
+}
+
+interface PatientPhoneNumber {
+  type: string
+  number: string
+}
+
+interface PatientAddress {
+  type: 'Home' | 'Mailing'
+  street1: string
+  city: string
+  state: string
+  postalCode: string
+}
+
+interface PatientContactDetails {
   email: string
-  addressLine1: string
+  phoneNumbers: PatientPhoneNumber[]
+  addresses: PatientAddress[]
+}
+
+interface Patient {
+  id: number
+  userId: number
+  legalName: PatientName
+  birthdate: string
+  gender: string
+  contactDetails: PatientContactDetails
+  metadata: PatientMetadata
+  isPlusMember: boolean
+  hasPhoto: boolean
 }
 
 interface PatientParams {
-  patientId: string
+  patientId: number
 }
 
 export type { Patient, PatientParams }

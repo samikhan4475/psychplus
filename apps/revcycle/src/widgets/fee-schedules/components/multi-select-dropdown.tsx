@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { ChevronDownIcon } from '@radix-ui/react-icons'
 import { Button } from '@psychplus/ui/button'
 import { Checkbox } from '@psychplus/ui/checkbox'

@@ -9,12 +9,13 @@ interface PatientProfileInformationState {
   setPatientProfileInformation: (patient: PatientProfileInformation) => void
 }
 
-type PatientProfileInformationStoreType = UseBoundStore<StoreApi<PatientProfileInformationState>>
+type PatientProfileInformationStoreType = UseBoundStore<
+  StoreApi<PatientProfileInformationState>
+>
 
-const createPatientProfileInformationStore: StateCreator<PatientProfileInformationState> = (
-  set,
-  get,
-) => ({
+const createPatientProfileInformationStore: StateCreator<
+  PatientProfileInformationState
+> = (set, get) => ({
   getPatientProfileInformation: () => {
     const patientProfileInformation = get().patientProfileInformation
 
@@ -24,7 +25,8 @@ const createPatientProfileInformationStore: StateCreator<PatientProfileInformati
 
     return patientProfileInformation
   },
-  setPatientProfileInformation: (patientProfileInformation) => set({ patientProfileInformation }),
+  setPatientProfileInformation: (patientProfileInformation) =>
+    set({ patientProfileInformation }),
 })
 
 export {

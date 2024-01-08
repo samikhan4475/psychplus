@@ -1,6 +1,5 @@
 'use client'
 
-import React from 'react'
 import { Cross2Icon } from '@radix-ui/react-icons'
 import { Dialog } from '@psychplus/ui/dialog'
 

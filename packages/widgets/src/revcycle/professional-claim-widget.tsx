@@ -16,6 +16,7 @@ const ProfessionalClaimWidget = (props: Props) => {
   return (
     <PortalContainer
       src={`${REVCYCLE_URL}/widgets/professional-claim?${searchParams.toString()}`}
+      name="professional-claim"
     />
   )
 }

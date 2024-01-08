@@ -16,7 +16,7 @@ const DataTableResetFilterButton = <TData,>({
   }
 
   return (
-    <Button variant="ghost" size="2" onClick={() => table.resetColumnFilters()}>
+    <Button variant="ghost" size="1" onClick={() => table.resetColumnFilters()}>
       Reset
       <Cross2Icon className="h-4 w-4" />
     </Button>

@@ -1,4 +1,4 @@
-import { Contact, Metadata } from '../../shared/types'
+import type { Contact, Metadata } from './shared'
 
 interface Clinic {
   id: number

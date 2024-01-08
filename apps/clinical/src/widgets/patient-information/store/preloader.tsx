@@ -12,7 +12,9 @@ const PatientInformationPreloader = ({
   store: PatientProfileInformationStoreType[]
 }) => {
   const loaded = useRef(false)
-  const setters = store.map((s) => s((state) => state.setPatientProfileInformation))
+  const setters = store.map((s) =>
+    s((state) => state.setPatientProfileInformation),
+  )
 
   if (!loaded.current) {
     loaded.current = true

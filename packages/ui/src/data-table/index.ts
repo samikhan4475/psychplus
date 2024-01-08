@@ -1,6 +1,7 @@
 export * from './data-table'
 export * from './data-table-text-filter'
 export * from './data-table-page-navigation'
+export * from './data-table-pagination-label'
 export * from './data-table-page-size-selector'
 export * from './data-table-selected-row-label'
 export * from './data-table-column-visibility-selector'

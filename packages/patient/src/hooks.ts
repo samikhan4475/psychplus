@@ -9,4 +9,6 @@ const usePatient = (store: PatientStoreType) => {
   return patient
 }
 
-export { usePatient }
+const usePatientId = (store: PatientStoreType) => usePatient(store).id
+
+export { usePatient, usePatientId }

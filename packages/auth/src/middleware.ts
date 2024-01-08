@@ -12,21 +12,18 @@ import {
   HEADER_CONTENT_TYPE,
   HEADER_PSYCHPLUS_APP_VERSION,
   HEADER_PSYCHPLUS_APPLICATION,
-  HEADER_PSYCHPLUS_DEVICE,
   HEADER_PSYCHPLUS_RUN_ENVIRONMENT,
-  HEADER_USER_AGENT,
   HEADER_X_URL,
   LOGIN_ENDPOINT,
-  MOCK_API_URL,
-  QUERY_TOKEN,
-  QUERY_USER_AGENT,
 } from '@psychplus/utils/constants'
 import { getAuthToken } from '@psychplus/utils/cookies'
 import { createSearchParams, wrapPath } from '@psychplus/utils/url'
 import { type LoginResponse } from './types'
 
-const INDEX_PATH = wrapPath('/')
-const LOGIN_PATH = wrapPath('/login')
+const INDEX_PATH = '/'
+const API_PATH = '/api'
+const API_LOGIN_PATH = '/api/login'
+const LOGIN_REDIRECT_PATH = wrapPath('/login')
 
 interface MiddlewareConfig {
   index: string
@@ -35,7 +32,7 @@ interface MiddlewareConfig {
 }
 
 const DEFAULT_CONFIG: MiddlewareConfig = {
-  index: wrapPath('/'),
+  index: '/',
   requireAuth: [],
   requireAnon: [],
 }
@@ -55,10 +52,10 @@ const createMiddleware = (config?: Partial<MiddlewareConfig>) => {
   const newConfig = createConfig(config)
 
   return (request: NextRequest) => {
-    if (request.nextUrl.pathname === '/api/login') {
+    if (request.nextUrl.pathname === API_LOGIN_PATH) {
       return handleLoginApiRequest(request)
     }
-    if (request.nextUrl.pathname.startsWith('/api/')) {
+    if (request.nextUrl.pathname.startsWith(API_PATH)) {
       return handleApiRequest(request)
     }
     return handlePageRequest(request, newConfig)
@@ -100,7 +97,7 @@ const handlePageRequest = (request: NextRequest, config: MiddlewareConfig) => {
     ) &&
     authToken
   ) {
-    return NextResponse.redirect(new URL(config.index, request.url))
+    return NextResponse.redirect(new URL(wrapPath(config.index), request.url))
   }
 
   const headers = new Headers(request.headers)
@@ -116,21 +113,16 @@ const handlePageRequest = (request: NextRequest, config: MiddlewareConfig) => {
 // It handles common cross-cutting concerns such as setting Authorization headers and
 // other common headers.
 const handleApiRequest = async (request: NextRequest) => {
-
   const headers = createHeaders(request)
 
-  request.nextUrl.searchParams.delete(QUERY_TOKEN)
-  request.nextUrl.searchParams.delete(QUERY_USER_AGENT)
-
-  const baseUrl =
-    request.nextUrl.searchParams.get('mock') === 'true' ? MOCK_API_URL : API_URL
   const searchParams = request.nextUrl.searchParams.toString()
 
-  let endpoint = `${baseUrl}${request.nextUrl.pathname}`
+  let endpoint = `${API_URL}${request.nextUrl.pathname}`
   if (searchParams) {
     endpoint += `?${searchParams}`
   }
 
+  console.debug(`${request.method} ${endpoint}`)
   return NextResponse.rewrite(endpoint, { headers })
 }
 
@@ -188,33 +180,27 @@ const redirectToLogin = (request: NextRequest) => {
   })
 
   return NextResponse.redirect(
-    new URL(`${LOGIN_PATH}?${nextParams.toString()}`, request.url),
+    new URL(`${LOGIN_REDIRECT_PATH}?${nextParams.toString()}`, request.url),
   )
 }
 
 // Add common headers to API requests.
 const createHeaders = (request: NextRequest) => {
   const headers = new Headers(request.headers)
+  const authHeader = headers.get(HEADER_AUTHORIZATION)
 
-  // Set Content-Type header.
-  headers.set(HEADER_CONTENT_TYPE, CONTENT_TYPE_APPLICATION_JSON)
-
-  const token = request.nextUrl.searchParams.get(QUERY_TOKEN) ?? getAuthToken()
-
-  // Set Authorization header with token if provided.
-  if (token) {
-    headers.set(HEADER_AUTHORIZATION, `${BEARER_AUTHENTICATION} ${token}`)
+  if (!authHeader) {
+    const token = getAuthToken()
+    // Set Authorization header with token if provided.
+    if (token) {
+      headers.set(HEADER_AUTHORIZATION, `${BEARER_AUTHENTICATION} ${token}`)
+    }
   }
 
-  const userAgent =
-    request.nextUrl.searchParams.get(QUERY_USER_AGENT) ??
-    headers.get(HEADER_USER_AGENT)
-
   // Set required PsychPlus headers.
-  headers.set(HEADER_PSYCHPLUS_APPLICATION, `${APP_CODE ?? ''}`)
-  headers.set(HEADER_PSYCHPLUS_APP_VERSION, `${APP_VERSION ?? ''}`)
-  headers.set(HEADER_PSYCHPLUS_RUN_ENVIRONMENT, `${APP_ENV ?? ''}`)
-  headers.set(HEADER_PSYCHPLUS_DEVICE, `${userAgent ?? ''}`)
+  headers.set(HEADER_PSYCHPLUS_APPLICATION, APP_CODE)
+  headers.set(HEADER_PSYCHPLUS_APP_VERSION, APP_VERSION)
+  headers.set(HEADER_PSYCHPLUS_RUN_ENVIRONMENT, APP_ENV)
 
   return headers
 }

@@ -1,0 +1,13 @@
+const USER_WIDGET = 'user'
+const PATIENT_WIDGET = 'patient'
+const PATIENT_REFERRALS_LIST_WIDGET = 'patient-referrals'
+const CREATE_REFERRAL_WIDGET = 'create-referral'
+const EDIT_REFERRAL_WIDGET = 'edit-referral'
+
+export {
+  USER_WIDGET,
+  PATIENT_WIDGET,
+  PATIENT_REFERRALS_LIST_WIDGET,
+  CREATE_REFERRAL_WIDGET,
+  EDIT_REFERRAL_WIDGET,
+}

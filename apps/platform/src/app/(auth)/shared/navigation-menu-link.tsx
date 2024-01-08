@@ -19,7 +19,7 @@ const NavigationMenuLink = ({
   return (
     <Box
       py="1"
-      className={cn('rounded-item px-3', {
+      className={cn('whitespace-nowrap rounded-item px-3', {
         'bg-accent-4': active,
         'hover:underline': !active,
       })}

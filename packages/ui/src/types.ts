@@ -1,5 +1,3 @@
-import * as React from 'react'
-
 interface NativeInputEvent
   extends React.BaseSyntheticEvent<Event, EventTarget & HTMLInputElement> {
   inputType: string

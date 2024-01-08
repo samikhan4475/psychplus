@@ -15,19 +15,16 @@ const MapboxComponent: React.FC<MapboxComponentProps> = ({
   locations,
 }) => {
   useEffect(() => {
-    mapboxgl.accessToken = NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN
-    const map = new mapboxgl.Map(
-      {
-        container: 'map',
-        style: 'mapbox://styles/mapbox/streets-v11',
-        center: [-73.9903106, 40.7331154],
-        zoom,
-      },
-      [locations],
-    )
+    mapboxgl.accessToken = NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN ?? ''
+    const map = new mapboxgl.Map({
+      container: 'map',
+      style: 'mapbox://styles/mapbox/streets-v11',
+      center: [-73.9903106, 40.7331154],
+      zoom,
+    })
 
     map.on('load', () => {
-      locations.forEach((location, index) => {
+      locations.forEach((location) => {
         const { geoCoordinates } = location
         const { latitude, longitude } = geoCoordinates
 
@@ -41,7 +38,7 @@ const MapboxComponent: React.FC<MapboxComponentProps> = ({
     return () => {
       map.remove()
     }
-  }, [locations])
+  }, [locations, zoom])
 
   return <Flex id="map" style={{ width, height }} />
 }

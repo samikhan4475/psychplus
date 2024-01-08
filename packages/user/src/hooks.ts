@@ -1,4 +1,4 @@
-import { type UserStoreType } from './store'
+import { type StaffStoreType, type UserStoreType } from './store'
 
 const useUser = (store: UserStoreType) => {
   const user = store((state) => state.user)
@@ -9,4 +9,13 @@ const useUser = (store: UserStoreType) => {
   return user
 }
 
-export { useUser }
+const useStaff = (store: StaffStoreType) => {
+  const staff = store((state) => state.staff)
+
+  if (!staff) {
+    throw new Error()
+  }
+  return staff
+}
+
+export { useUser, useStaff }

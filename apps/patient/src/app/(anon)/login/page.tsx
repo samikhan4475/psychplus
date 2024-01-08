@@ -1,5 +1,7 @@
 'use client'
 
-import { LoginPage } from '@psychplus/auth/login'
+import { LoginPage as BaseLoginPage } from '@psychplus/auth/login'
+
+const LoginPage = () => <BaseLoginPage />
 
 export default LoginPage

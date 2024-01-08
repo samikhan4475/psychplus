@@ -1,5 +1,5 @@
 import { handleRequest } from '@psychplus/utils/api'
-import { forwardQuery } from '@psychplus/utils/client'
+import { createHeaders } from '@psychplus/utils/client'
 
 interface ChangePasswordRequest {
   emailAddress: string
@@ -10,9 +10,10 @@ interface ChangePasswordRequest {
 
 const changePassword = (request: ChangePasswordRequest): Promise<void> =>
   handleRequest(
-    fetch(forwardQuery('/api/users/self/forgotpassword'), {
+    fetch('/api/users/self/forgotpassword', {
       method: 'PATCH',
       body: JSON.stringify(request),
+      headers: createHeaders(),
     }),
   )
 

@@ -130,8 +130,19 @@ env:
         name: ehr-secrets
         key: googleMapsKey
   
-
-  - name: APP_PATH
-    value: "platform"
   - name: APP_ENV
     value: "production"
+  - name: APP_VERSION
+    value: "1.0.0"
+  - name: API_URL
+    value: "https://api-pr-2000.ode.psychplus.dev"
+  - name: LOGIN_ENDPOINT
+    value: "https://auth-pr-2000.ode.psychplus.dev/login"
+  - name: CLINICAL_URL
+    value: "https://ui-pr-85.ode.psychplus.dev/galaxy"
+  - name: PLATFORM_URL
+    value: "https://ui-pr-85.ode.psychplus.dev/platform"
+  - name: REVCYCLE_URL
+    value: "https://ui-pr-85.ode.psychplus.dev/revcycle"
+  - name: PATIENT_URL
+    value: "https://ui-pr-85.ode.psychplus.dev"

@@ -1,5 +1,6 @@
 import {
   getCodeAttribute,
+  getCodeAttributeBoolean,
   getCodeMetadata,
   type Code,
 } from '@psychplus/codeset'
@@ -23,7 +24,7 @@ const convertCodeToClaimStatus = (code: Code): ClaimStatus => ({
   name: code.display,
   dueTo: getCodeAttribute(code, 'DueTo'),
   createdBy: getCodeMetadata(code, 'createdByFullName'),
-  isActive: getCodeAttribute(code, 'IsActive') === 'True',
+  isActive: getCodeAttributeBoolean(code, 'IsActive'),
 })
 
 const convertCodeToClaimDueTo = (code: Code): ClaimDueTo => ({

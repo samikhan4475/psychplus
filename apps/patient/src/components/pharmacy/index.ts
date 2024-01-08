@@ -1,1 +1,1 @@
-export * from './pharmacy.component';
+export * from './pharmacy.component'

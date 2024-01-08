@@ -9,11 +9,11 @@ import { Button } from '../button'
 
 const renderSortIcon = (sortDir: SortDirection | false) => {
   if (!sortDir) {
-    return <CaretSortIcon className="ml-2 h-4 w-4" />
+    return <CaretSortIcon className="ml-1 h-4 w-4" />
   }
   return {
-    asc: <CaretUpIcon className="ml-2 h-4 w-4" />,
-    desc: <CaretDownIcon className="ml-2 h-4 w-4" />,
+    asc: <CaretUpIcon className="ml-1 h-4 w-4" />,
+    desc: <CaretDownIcon className="ml-1 h-4 w-4" />,
   }[sortDir]
 }
 
@@ -35,17 +35,17 @@ const DataTableColumnHeader = <TData, TValue>({
   const sortDir = column.getIsSorted()
 
   return (
-    <Box className={className}>
-      <Button
-        variant="ghost"
-        onClick={() => {
-          column.toggleSorting(sortDir === 'asc')
-        }}
-      >
-        {title}
-        {renderSortIcon(sortDir)}
-      </Button>
-    </Box>
+    <Button
+      size="1"
+      variant="ghost"
+      onClick={() => {
+        column.toggleSorting(sortDir === 'asc')
+      }}
+      className="whitespace-nowrap"
+    >
+      {title}
+      {renderSortIcon(sortDir)}
+    </Button>
   )
 }
 

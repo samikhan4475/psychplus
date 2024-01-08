@@ -13,12 +13,14 @@
   },
   "dependencies": {
     "next": "^14.0.1",
+    "react": "^18.2.0",
     "zustand": "^4.4.3"
   },
   "devDependencies": {
     "@psychplus/eslint-config": "^0.1.0",
     "@psychplus/tsconfig": "^0.1.0",
-    "@types/node": "^20.8.2",
+    "@types/node": "^20.10.4",
+    "@types/react": "^18.2.25",
     "eslint": "^8.50.0",
     "typescript": "^5.2.2"
   }

@@ -1,7 +1,6 @@
-import { cache } from 'react'
 import { handleRequest } from '@psychplus/utils/api'
-import { forwardQuery } from '@psychplus/utils/client'
-import { Clinic, ClinicsDistanceRequest } from '.'
+import { createHeaders } from '@psychplus/utils/client'
+import type { Clinic, ClinicsDistanceRequest } from './types'
 
 const getClinicsDistanceForUnauthenticatedUser = async (
   request: ClinicsDistanceRequest,
@@ -10,17 +9,13 @@ const getClinicsDistanceForUnauthenticatedUser = async (
 
   return handleRequest(
     fetch(
-      forwardQuery(
-        `/api/clinics/distance/unauthenticated?miles=${miles}&latitude=${latitude}&longitude=${longitude}&postalcode=${request.postalcode}&includeTest=false`,
-      ),
+      `/api/clinics/distance/unauthenticated?miles=${miles}&latitude=${latitude}&longitude=${longitude}&postalcode=${request.postalcode}&includeTest=false`,
       {
         cache: 'no-store',
+        headers: createHeaders(),
       },
     ),
   )
 }
 
-const getClinicsDistanceForUnauthenticatedUserCached = cache(
-  getClinicsDistanceForUnauthenticatedUser,
-)
-export { getClinicsDistanceForUnauthenticatedUserCached as getClinicsDistanceForUnauthenticatedUser }
+export { getClinicsDistanceForUnauthenticatedUser }

@@ -9,12 +9,13 @@ type Props = PatientParams
 const PatientInformationWidget = (props: Props) => {
   const searchParams = createSearchParams({
     token: getAuthToken(),
-    patientId: props.patientId,
+    patientId: `${props.patientId}`,
   })
 
   return (
     <PortalContainer
       src={`${CLINICAL_URL}/widgets/patient-information?${searchParams.toString()}`}
+      name="patient-information"
     />
   )
 }

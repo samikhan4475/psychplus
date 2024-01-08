@@ -1,6 +1,5 @@
 'use client'
 
-import NextLink from 'next/link'
 import { Box, Flex, Link, Text } from '@radix-ui/themes'
 import { type SubmitHandler } from 'react-hook-form'
 import { z } from 'zod'
@@ -13,6 +12,7 @@ import {
   useForm,
   validate,
 } from '@psychplus/form'
+import { AppLink } from '@psychplus/ui/app-link'
 import { Checkbox } from '@psychplus/ui/checkbox'
 import { RadioGroup } from '@psychplus/ui/radio-group'
 
@@ -196,11 +196,11 @@ const SignupForm = () => {
                 <Text>
                   I agree to electronically sign the{' '}
                   <Link size="2" asChild data-testid="signup-terms-link">
-                    <NextLink href="#">Terms of Service </NextLink>
+                    <AppLink href="#">Terms of Service </AppLink>
                   </Link>
                   and{' '}
                   <Link size="2" asChild data-testid="signup-privacy-link">
-                    <NextLink href="#">Privacy Policy</NextLink>
+                    <AppLink href="#">Privacy Policy</AppLink>
                   </Link>
                 </Text>
               </Flex>

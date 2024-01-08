@@ -1,6 +1,5 @@
 'use client'
 
-import * as React from 'react'
 import { DotsHorizontalIcon } from '@radix-ui/react-icons'
 import { Box, Flex, Text } from '@radix-ui/themes'
 import { type ColumnDef, type Table } from '@tanstack/react-table'

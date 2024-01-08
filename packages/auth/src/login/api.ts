@@ -1,5 +1,4 @@
 import { handleRequest } from '@psychplus/utils/api'
-import { forwardQuery } from '@psychplus/utils/client'
 
 interface LoginRequest {
   username: string
@@ -8,7 +7,7 @@ interface LoginRequest {
 
 const login = async (request: LoginRequest) =>
   handleRequest<void>(
-    fetch(forwardQuery('/api/login'), {
+    fetch('/api/login', {
       method: 'POST',
       body: JSON.stringify(request),
     }),

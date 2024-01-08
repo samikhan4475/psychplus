@@ -39,6 +39,10 @@ const navMenuItems: MenuItem[] = [
     href: '/components/dropdown-menu',
   },
   {
+    label: 'Dropdown Menu Search',
+    href: '/components/dropdown-menu-search',
+  },
+  {
     label: 'Icon Button',
     href: '/components/icon-button',
   },

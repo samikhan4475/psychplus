@@ -1,4 +1,6 @@
 export * from './user-widget'
-export * from './patient-referrals-widget'
+export * from './create-referral-widget'
+export * from './edit-referral-widget'
+export * from './patient-referrals-list-widget'
 export * from './patient-lookup-widget'
 export * from './patient-information-widget'

@@ -1,7 +1,7 @@
 'use client'
 
 import { type StateCreator, type StoreApi, type UseBoundStore } from 'zustand'
-import { type User } from './types'
+import type { Staff, User } from './types'
 
 interface UserState {
   user?: User
@@ -15,4 +15,23 @@ const createUserStore: StateCreator<UserState> = (set) => ({
   setUser: (user) => set({ user }),
 })
 
-export { type UserState, type UserStoreType, createUserStore }
+interface StaffState {
+  staff?: Staff
+  setStaff: (staff: Staff) => void
+}
+
+type StaffStoreType = UseBoundStore<StoreApi<StaffState>>
+
+const createStaffStore: StateCreator<StaffState> = (set) => ({
+  staff: undefined,
+  setStaff: (staff) => set({ staff }),
+})
+
+export {
+  type UserState,
+  type StaffState,
+  type UserStoreType,
+  type StaffStoreType,
+  createUserStore,
+  createStaffStore,
+}

@@ -1,13 +1,14 @@
 import { cache } from 'react'
 import { handleRequest } from '@psychplus/utils/api'
-import { APP_HOST } from '@psychplus/utils/constants'
-import { forwardQuery } from '@psychplus/utils/server'
+import { API_URL } from '@psychplus/utils/constants'
+import { createHeaders } from '@psychplus/utils/server'
 import { type Patient, type PatientParams } from './types'
 
 const getPatient = async ({ patientId }: PatientParams): Promise<Patient> =>
   handleRequest(
-    fetch(forwardQuery(`${APP_HOST}/api/patients/${patientId}?mock=true`), {
+    fetch(`${API_URL}/api/patients/${patientId}/profile`, {
       cache: 'no-store',
+      headers: createHeaders(),
     }),
   )
 

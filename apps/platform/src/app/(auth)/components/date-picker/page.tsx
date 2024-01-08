@@ -1,6 +1,6 @@
 'use client'
 
-import * as React from 'react'
+import { useState } from 'react'
 import { Box, Heading } from '@radix-ui/themes'
 import { addDays } from 'date-fns'
 import { DatePicker } from '@psychplus/ui/date-picker'
@@ -14,10 +14,10 @@ const DESCRIPTION = 'A date picker component with range and presets.'
 const today = new Date()
 
 const DatePickerComponentPage = () => {
-  const [date, setDate] = React.useState<Date | undefined>(new Date())
-  const [date2, setDate2] = React.useState<Date | undefined>(undefined)
-  const [date3, setDate3] = React.useState<Date | undefined>(undefined)
-  const [date4, setDate4] = React.useState<any>({
+  const [date, setDate] = useState<Date | undefined>(new Date())
+  const [date2, setDate2] = useState<Date | undefined>(undefined)
+  const [date3, setDate3] = useState<Date | undefined>(undefined)
+  const [date4, setDate4] = useState<any>({
     from: today,
     to: addDays(today, 10),
   })

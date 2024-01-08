@@ -1,4 +1,3 @@
-import * as React from 'react'
 import { type Metadata } from 'next'
 import { Flex, Text } from '@radix-ui/themes'
 import { AppLink } from '@psychplus/ui/app-link'

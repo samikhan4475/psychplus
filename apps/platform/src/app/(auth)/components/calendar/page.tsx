@@ -1,6 +1,6 @@
 'use client'
 
-import * as React from 'react'
+import { useState } from 'react'
 import { Box, Flex } from '@radix-ui/themes'
 import { Calendar } from '@psychplus/ui/calendar'
 import { PageHeader } from '../../shared/page-header'
@@ -10,7 +10,7 @@ const DESCRIPTION =
   'A date field component that allows users to enter and edit dates.'
 
 const CalendarComponentPage = () => {
-  const [date, setDate] = React.useState<Date | undefined>(new Date())
+  const [date, setDate] = useState<Date | undefined>(new Date())
 
   return (
     <>

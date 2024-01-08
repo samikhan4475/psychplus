@@ -1,39 +1,41 @@
 import { handleRequest } from '@psychplus/utils/api'
-import { forwardQuery } from '@psychplus/utils/client'
-import { type Code, type CodeSet } from './types'
+import { createHeaders } from '@psychplus/utils/client'
+import type { Code, CodeSet } from './types'
 
 const getCodeSets = async (): Promise<CodeSet[]> =>
-  handleRequest(fetch(forwardQuery(`/api/metadata/codesets`)))
-
-const getCodeSet = async (codesetCode: string): Promise<CodeSet> =>
-  handleRequest(fetch(forwardQuery(`/api/metadata/codesets/${codesetCode}`)))
-
-const addCodeSet = async (
-  reqBody: Code,
-  codesetCode: string,
-): Promise<CodeSet> => {
-  return handleRequest(
-    fetch(forwardQuery(`/api/metadata/codesets/${codesetCode}/codes/`), {
-      method: 'POST',
-      body: JSON.stringify(reqBody),
+  handleRequest(
+    fetch(`/api/metadata/codesets`, {
+      headers: createHeaders(),
     }),
   )
-}
+
+const getCodeSet = async (name: string): Promise<CodeSet> =>
+  handleRequest(
+    fetch(`/api/metadata/codesets/${name}`, {
+      headers: createHeaders(),
+    }),
+  )
+
+const addCodeSet = async (req: Code, name: string): Promise<CodeSet> =>
+  handleRequest(
+    fetch(`/api/metadata/codesets/${name}/codes/`, {
+      method: 'POST',
+      body: JSON.stringify(req),
+      headers: createHeaders(),
+    }),
+  )
 
 const editCodeSet = async (
-  reqBody: Code,
-  codesetCode: string,
-  codeTypeId: string,
-): Promise<CodeSet> => {
-  return handleRequest(
-    fetch(
-      forwardQuery(`/api/metadata/codesets/${codesetCode}/codes/${codeTypeId}`),
-      {
-        method: 'PUT',
-        body: JSON.stringify(reqBody),
-      },
-    ),
+  req: Code,
+  name: string,
+  code: string,
+): Promise<CodeSet> =>
+  handleRequest(
+    fetch(`/api/metadata/codesets/${name}/codes/${code}`, {
+      method: 'PUT',
+      body: JSON.stringify(req),
+      headers: createHeaders(),
+    }),
   )
-}
 
 export { getCodeSets, getCodeSet, addCodeSet, editCodeSet }

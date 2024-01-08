@@ -12,7 +12,7 @@ const StarRating = ({ filledStars }: { filledStars: number }) => {
       ),
     )
   }
-  return stars
+  return <>{stars}</>
 }
 
 export { StarRating }

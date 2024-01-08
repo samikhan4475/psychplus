@@ -9,7 +9,7 @@ interface CodeSetState {
 
 type CodeSetStoreType = UseBoundStore<StoreApi<CodeSetState>>
 
-const createCodeSetStore: StateCreator<CodeSetState> = (set) => ({
+const createCodeSetStore: StateCreator<CodeSetState> = (set, get) => ({
   codeSets: [],
   codeSetIndex: {},
   setCodeSets: (codeSets) => {

@@ -1,6 +1,6 @@
 import { handleRequest } from '@psychplus/utils/api'
-import { forwardQuery } from '@psychplus/utils/client'
-import { Insurance } from './types'
+import { createHeaders } from '@psychplus/utils/client'
+import type { Insurance } from './types'
 
 const getInsuranceByPayers = (
   includePlans = true,
@@ -11,9 +11,8 @@ const getInsuranceByPayers = (
 ): Promise<Insurance[]> =>
   handleRequest(
     fetch(
-      forwardQuery(
-        `/api/insurance/payers?includePlans=${includePlans}&includeInactive=${includeInactive}&includeTest=${includeTest}&offset=${offset}&limit=${limit}`,
-      ),
+      `/api/insurance/payers?includePlans=${includePlans}&includeInactive=${includeInactive}&includeTest=${includeTest}&offset=${offset}&limit=${limit}`,
+      { headers: createHeaders() },
     ),
   )
 

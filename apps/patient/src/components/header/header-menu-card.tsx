@@ -24,7 +24,11 @@ const HeaderMenuCard = () => {
   )
 }
 
-const HeaderMenuSection = ({ icon, name, items: items }: HeaderMenuSectionProps) => {
+const HeaderMenuSection = ({
+  icon,
+  name,
+  items: items,
+}: HeaderMenuSectionProps) => {
   return (
     <DropdownMenu.Root>
       <DropdownMenu.Trigger>

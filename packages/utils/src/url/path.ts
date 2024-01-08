@@ -1,8 +1,11 @@
-import { APP_ENV, APP_PATH } from '@psychplus/utils/constants'
+import { APP_PATH, DISABLE_APP_PATH } from '@psychplus/utils/constants'
 
 const wrapPath = (path: string) => {
   const appPath = APP_PATH ? `/${APP_PATH}` : ''
-  const wrappedPath = APP_ENV !== 'development' ? `${appPath}${path}` : path
+  const wrappedPath =
+    process.env.NODE_ENV !== 'development' && !DISABLE_APP_PATH
+      ? `${appPath}${path}`
+      : path
   return wrappedPath
 }
 

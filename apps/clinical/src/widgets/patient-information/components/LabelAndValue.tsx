@@ -1,7 +1,12 @@
-import React from 'react'
 import { Flex, Text } from '@radix-ui/themes'
 
-const LabelAndValue = ({ label, value }: { label: string; value: string | number }) => {
+const LabelAndValue = ({
+  label,
+  value,
+}: {
+  label: string
+  value: string | number
+}) => {
   return (
     <Flex direction="column">
       <Text as="div" size="2" weight="bold">

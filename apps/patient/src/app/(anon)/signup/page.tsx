@@ -1,7 +1,7 @@
 'use client'
 
-import NextLink from 'next/link'
 import { Flex, Heading, Link, Text } from '@radix-ui/themes'
+import { AppLink } from '@psychplus/ui/app-link'
 import { SignupForm } from './signup-form'
 
 const SignupPage = () => (
@@ -17,9 +17,9 @@ const SignupPage = () => (
           <Text size="2" mb="5">
             Already have an account?
             <Link size="2" ml="1" asChild>
-              <NextLink href="/login" data-testid="signup-login-link">
+              <AppLink href="/login" data-testid="signup-login-link">
                 Sign in
-              </NextLink>
+              </AppLink>
             </Link>
           </Text>
         </Flex>

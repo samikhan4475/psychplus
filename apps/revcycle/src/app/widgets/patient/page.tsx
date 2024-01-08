@@ -10,7 +10,7 @@ const PatientWidgetPage = ({
     return <div>Patient ID is required</div>
   }
 
-  return <PatientWidgetServer patientId={searchParams.patientId} />
+  return <PatientWidgetServer patientId={Number(searchParams.patientId)} />
 }
 
 export default PatientWidgetPage

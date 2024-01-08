@@ -49,7 +49,15 @@ const FooterMenuCard = () => {
   )
 }
 
-const FooterMenuSection = ({ icon, name, toggleDialog }) => (
+const FooterMenuSection = ({
+  icon,
+  name,
+  toggleDialog,
+}: {
+  icon: React.ReactNode
+  name: string
+  toggleDialog: () => void
+}) => (
   <Flex
     align="center"
     justify="center"

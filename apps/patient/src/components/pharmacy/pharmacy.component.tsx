@@ -5,7 +5,7 @@ interface IconProps {
 const PharmacyIcon = (props: IconProps) => (
   <svg
     width={props.width ?? 25}
-    height={props.height ?? 25 }
+    height={props.height ?? 25}
     fill="currentColor"
     viewBox="0 0 28 28"
     xmlns="http://www.w3.org/2000/svg"
@@ -19,4 +19,4 @@ const PharmacyIcon = (props: IconProps) => (
   </svg>
 )
 
-export { PharmacyIcon };
+export { PharmacyIcon }

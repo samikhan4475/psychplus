@@ -9,7 +9,7 @@ const PatientWidgetPage = () => (
     <PageHeader title={TITLE} description={DESCRIPTION} />
 
     <div className="h-[400px] w-[800px]">
-      <PatientWidget patientId="10560" />
+      <PatientWidget patientId={1278} />
     </div>
   </>
 )

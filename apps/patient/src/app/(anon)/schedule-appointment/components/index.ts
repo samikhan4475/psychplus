@@ -1,4 +1,4 @@
-export * from './Filter'
+export * from './filter'
 export * from './calender-row'
 export * from './map-view'
 export * from './providers-component'

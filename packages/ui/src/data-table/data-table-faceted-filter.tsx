@@ -11,6 +11,7 @@ import { Separator } from '../separator'
 interface DataTableFacetedFilterProps<TData, TValue> {
   column?: Column<TData, TValue>
   title?: string
+  search?: boolean
   placeholder?: string
   options: {
     label: string
@@ -21,6 +22,7 @@ interface DataTableFacetedFilterProps<TData, TValue> {
 const DataTableFacetedFilter = <TData, TValue>({
   column,
   title,
+  search = true,
   placeholder,
   options,
 }: DataTableFacetedFilterProps<TData, TValue>) => {
@@ -30,24 +32,31 @@ const DataTableFacetedFilter = <TData, TValue>({
   return (
     <Popover.Root>
       <Popover.Trigger>
-        <Button variant="outline" size="2">
+        <Button variant="outline" size="1">
           <PlusCircledIcon />
           {title}
           {selectedValues?.size > 0 && (
             <>
               <Separator orientation="vertical" />
-              <Badge variant="soft" className="lg:hidden">
+              <Badge size="1" variant="soft" className="h-[15px] lg:hidden">
                 {selectedValues.size}
               </Badge>
               <Box className="hidden lg:flex">
                 {selectedValues.size > 2 ? (
-                  <Badge variant="soft">{selectedValues.size} selected</Badge>
+                  <Badge size="1" variant="soft" className="h-[15px]">
+                    {selectedValues.size} selected
+                  </Badge>
                 ) : (
                   <Flex gap="1">
                     {options
                       .filter((option) => selectedValues.has(option.value))
                       .map((option) => (
-                        <Badge variant="soft" key={option.value}>
+                        <Badge
+                          key={option.value}
+                          size="1"
+                          variant="soft"
+                          className="h-[15px]"
+                        >
                           {option.label}
                         </Badge>
                       ))}
@@ -58,10 +67,13 @@ const DataTableFacetedFilter = <TData, TValue>({
           )}
         </Button>
       </Popover.Trigger>
-      <Popover.Content className="w-[200px]">
+      <Popover.Content className="max-h-[300px] min-w-[150px]">
+        <Popover.Close id="popover-close">
+          <div />
+        </Popover.Close>
         <Inset>
           <Command.Root>
-            <Command.Input placeholder={placeholder} />
+            {search ? <Command.Input placeholder={placeholder} /> : null}
             <Command.List>
               <Command.Empty>No results found.</Command.Empty>
               <Command.Group>

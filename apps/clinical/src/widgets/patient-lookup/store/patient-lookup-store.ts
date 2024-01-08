@@ -2,8 +2,8 @@
 
 import { type StateCreator, type StoreApi, type UseBoundStore } from 'zustand'
 import { createCodeSetStore, type CodeSetState } from '@psychplus/codeset'
-import { type Patients  } from '../types'
-import { GetDropdown,  type Dropdown } from './hooks'
+import { type Patients } from '../types'
+import { GetDropdown, type Dropdown } from './hooks'
 
 interface PatientLookupState extends CodeSetState {
   patients?: Patients[]
@@ -22,7 +22,7 @@ const createPatientLookupStore: StateCreator<PatientLookupState> = (
   ...createCodeSetStore(set, get, store),
   getPatients: () => get().patients || [],
   setPatients: (patients) => set({ patients }),
-  getDropdowns: (key) => GetDropdown(key) || []
+  getDropdowns: (key) => GetDropdown(key) || [],
 })
 
 export {
