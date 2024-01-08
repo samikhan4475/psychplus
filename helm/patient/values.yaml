@@ -127,20 +127,42 @@ env:
       secretKeyRef:
         name: ehr-secrets
         key: googleMapsKey
-  
+
+  - name: APP_CODE
+    value: "p+patient-ui"
+  - name: APP_PATH
+    value: ""
   - name: APP_ENV
     value: "production"
   - name: APP_VERSION
     value: "1.0.0"
-  - name: API_URL
-    value: "https://api-pr-2000.ode.psychplus.dev"
-  - name: LOGIN_ENDPOINT
-    value: "https://auth-pr-2000.ode.psychplus.dev/login"
   - name: CLINICAL_URL
-    value: "https://ui-pr-85.ode.psychplus.dev/galaxy"
-  - name: PLATFORM_URL
-    value: "https://ui-pr-85.ode.psychplus.dev/platform"
-  - name: REVCYCLE_URL
-    value: "https://ui-pr-85.ode.psychplus.dev/revcycle"
+    valueFrom:
+      configMapKeyRef:
+        name: app-config
+        key: reactAppClinicalUrl
   - name: PATIENT_URL
-    value: "https://ui-pr-85.ode.psychplus.dev"
+    valueFrom:
+      configMapKeyRef:
+        name: app-config
+        key: reactAppPatientUrl
+  - name: REVCYCLE_URL
+    valueFrom:
+      configMapKeyRef:
+        name: app-config
+        key: reactAppRevCycleUrl
+  - name: PLATFORM_URL
+    valueFrom:
+      configMapKeyRef:
+        name: app-config
+        key: reactAppPlatformUrl
+  - name: API_URL
+    valueFrom:
+      configMapKeyRef:
+        name: app-config
+        key: apiUrl
+  - name: AUTH_API_URL
+    valueFrom:
+      configMapKeyRef:
+        name: app-config
+        key: authApiUrl

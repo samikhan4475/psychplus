@@ -10,7 +10,8 @@ const PATIENT_URL = process.env.PATIENT_URL
 const REVCYCLE_URL = process.env.REVCYCLE_URL
 const PLATFORM_URL = process.env.PLATFORM_URL
 const API_URL = process.env.API_URL
-const LOGIN_ENDPOINT = process.env.LOGIN_ENDPOINT
+const AUTH_API_URL = process.env.AUTH_API_URL
+const LOGIN_ENDPOINT = `${AUTH_API_URL}/login`
 
 const ALLOWED_ORIGINS = new Set(
   [CLINICAL_URL, PATIENT_URL, REVCYCLE_URL, PLATFORM_URL]
