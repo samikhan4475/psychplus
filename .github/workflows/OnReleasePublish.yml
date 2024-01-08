@@ -7,7 +7,11 @@ on:
 jobs:
   build_variables:
     runs-on: ubuntu-latest
-    environment: production
+    environment: staging
+    outputs:
+      image_tag: ${{ steps.build_variables.outputs.image_tag }}
+      build_version: ${{ steps.build_variables.outputs.build_version }}
+      build_full_version: ${{ steps.build_variables.outputs.build_full_version }}
     steps:
       - name: Extract Tag Name
         id: build_variables
@@ -20,14 +24,9 @@ jobs:
           build_version=$tag_name
           build_full_version="$build_version+$build_ci_counter.$build_unique_id"
           image_tag="v-$build_version"
-
-          echo "image_tag=$image_tag" >> $GITHUB_OUTPUT
-          echo "build_version=$build_version" >> $GITHUB_OUTPUT
-          echo "build_full_version=$build_full_version" >> $GITHUB_OUTPUT
-    outputs:
-      image_tag: ${{ steps.build_variables.outputs.image_tag }}
-      build_version: ${{ steps.build_variables.outputs.build_version }}
-      build_full_version: ${{ steps.build_variables.outputs.build_full_version }}
+          echo "image_tag=$image_tag" >> "$GITHUB_OUTPUT"
+          echo "build_version=$build_version" >> "$GITHUB_OUTPUT"
+          echo "build_full_version=$build_full_version" >> "$GITHUB_OUTPUT"
 
   build_push_platform:
     needs: [build_variables]
@@ -68,7 +67,7 @@ jobs:
 
 
   deploy_platform:
-    needs: [build_push_platform]
+    needs: [build_variables, build_push_platform]
     uses: ./.github/workflows/subtaskDeployHelmChart.yml
     with:
       environment: production
@@ -81,7 +80,7 @@ jobs:
     secrets: inherit
 
   deploy_clinical:
-    needs: [build_push_clinical]
+    needs: [build_variables, build_push_clinical]
     uses: ./.github/workflows/subtaskDeployHelmChart.yml
     with:
       environment: production
@@ -94,7 +93,7 @@ jobs:
     secrets: inherit
 
   deploy_patient:
-    needs: [build_push_patient]
+    needs: [build_variables, build_push_patient]
     uses: ./.github/workflows/subtaskDeployHelmChart.yml
     with:
       environment: production
@@ -105,7 +104,7 @@ jobs:
     secrets: inherit
 
   deploy_revcycle:
-    needs: [build_push_revcycle]
+    needs: [build_variables, build_push_revcycle]
     uses: ./.github/workflows/subtaskDeployHelmChart.yml
     with:
       environment: production
