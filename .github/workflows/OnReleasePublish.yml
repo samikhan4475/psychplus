@@ -18,6 +18,7 @@ jobs:
         run: |
           tag_ref='${{ github.ref }}'
           tag_name=$(echo "$tag_ref" | sed 's|refs/tags/||')
+          tag_name="${tag_name:2}"
           echo "Tag Name: $tag_name"
           build_ci_counter="$GITHUB_RUN_NUMBER"
           build_unique_id=$(date +%Y%m%d%H%M%S%N)
