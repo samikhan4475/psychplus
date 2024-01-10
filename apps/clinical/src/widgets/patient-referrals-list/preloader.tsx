@@ -4,11 +4,11 @@ import { useRef } from 'react'
 import { type StoreApi, type UseBoundStore } from 'zustand'
 import { type CodeSet } from '@psychplus/codeset'
 import { type Patient } from '@psychplus/patient'
+import type { Referral } from '@psychplus/referrals'
 import { type User } from '@psychplus/user'
-import { type StoreType } from './store'
-import type { Referral } from './types'
+import { type ReferralsStoreType } from './store'
 
-type BoundStoreType = UseBoundStore<StoreApi<StoreType>>
+type BoundStoreType = UseBoundStore<StoreApi<ReferralsStoreType>>
 
 interface PreloaderProps {
   store: BoundStoreType

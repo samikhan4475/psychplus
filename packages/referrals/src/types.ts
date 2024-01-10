@@ -11,9 +11,15 @@ interface ReferredByName {
   honors?: string
 }
 
+interface PatientName {
+  firstName: string
+  lastName: string
+}
+
 interface Referral {
   id: string
   patientId: number
+  patientName: PatientName
   service: string
   referralDate: string
   visitDateTime?: string

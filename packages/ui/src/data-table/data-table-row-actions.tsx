@@ -30,7 +30,7 @@ const DataTableRowActions = <TData,>({
         <DotsHorizontalIcon height={16} width={16} />
       </IconButton>
     </DropdownMenu.Trigger>
-    <DropdownMenu.Content align="end">
+    <DropdownMenu.Content align="end" size="1">
       {actions.map((action, idx) => (
         <React.Fragment key={`${action.id}-${idx}`}>
           {action.render({ row })}

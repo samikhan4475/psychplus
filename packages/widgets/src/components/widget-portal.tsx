@@ -39,12 +39,9 @@ const WidgetPortal = ({ src, name }: PortalContainerProps) => {
           height: `${size.height}px`,
           width: `${size.width}px`,
         }}
-        className={cn(
-          'min-h-[395px] min-w-full overflow-clip rounded-3 shadow-3',
-          {
-            invisible: !loaded,
-          },
-        )}
+        className={cn('min-w-full overflow-clip shadow-3', {
+          invisible: !loaded,
+        })}
       >
         <iframe title={name} src={src} className="h-full w-full"></iframe>
       </Box>

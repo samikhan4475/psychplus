@@ -1,12 +1,24 @@
-import { type PatientParams } from '@psychplus/patient'
+import type { PatientParams } from '@psychplus/patient'
 import { handleRequest } from '@psychplus/utils/api'
 import { createHeaders } from '@psychplus/utils/client'
-import { type Referral } from './types'
+import type { Referral } from './types'
 
-const getReferrals = ({ patientId }: PatientParams): Promise<Referral[]> =>
+const getPatientReferrals = ({
+  patientId,
+}: PatientParams): Promise<Referral[]> =>
   handleRequest(
     fetch(`/api/patients/${patientId}/referrals`, {
       cache: 'no-store',
+      headers: createHeaders(),
+    }),
+  )
+
+const searchReferrals = (): Promise<Referral[]> =>
+  handleRequest(
+    fetch(`/api/referrals/search?limit=500`, {
+      method: 'POST',
+      cache: 'no-store',
+      body: JSON.stringify({}),
       headers: createHeaders(),
     }),
   )
@@ -20,4 +32,4 @@ const updatePatientReferral = (referral: Referral): Promise<void> =>
     }),
   )
 
-export { getReferrals, updatePatientReferral }
+export { getPatientReferrals, searchReferrals, updatePatientReferral }

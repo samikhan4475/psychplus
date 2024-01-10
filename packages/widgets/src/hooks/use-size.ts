@@ -1,4 +1,5 @@
-import { RefObject, useEffect, useState } from 'react'
+import { RefObject, useEffect, useLayoutEffect, useState } from 'react'
+import useResizeObserver from '@react-hook/resize-observer'
 import { usePubsub } from '@psychplus/utils/event'
 import { EventType } from '../events'
 
@@ -9,15 +10,24 @@ interface Size {
 
 const usePublishSize = (name: string, ref: RefObject<HTMLDivElement>) => {
   const { publish } = usePubsub()
+  const [size, setSize] = useState<DOMRect>()
+
+  useLayoutEffect(() => {
+    setSize(ref.current?.getBoundingClientRect())
+  }, [ref])
 
   useEffect(() => {
-    if (ref.current) {
+    if (size) {
       publish(`${name}:${EventType.Size}`, {
-        height: ref.current.clientHeight,
-        width: ref.current.clientWidth,
+        height: size.height,
+        width: size.width,
       })
     }
-  }, [ref, name, publish])
+  }, [size, name, publish])
+
+  useResizeObserver(ref, (entry) => {
+    setSize(entry.contentRect)
+  })
 }
 
 const useSubscribeSize = (name: string) => {

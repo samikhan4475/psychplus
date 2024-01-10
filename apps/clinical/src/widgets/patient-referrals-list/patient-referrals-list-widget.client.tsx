@@ -1,7 +1,7 @@
 'use client'
 
 import { useRef } from 'react'
-import { Box } from '@radix-ui/themes'
+import { Flex } from '@radix-ui/themes'
 import { PATIENT_REFERRALS_LIST_WIDGET } from '@psychplus/widgets'
 import {
   usePublishLoaded,
@@ -20,9 +20,13 @@ const PatientReferralsListWidgetClient = () => {
   useRefetchReferrals()
 
   return (
-    <Box p="2" width="100%" className="h-full min-w-fit" ref={ref}>
+    <Flex
+      direction="column"
+      className="h-fit min-h-[200px] min-w-fit"
+      ref={ref}
+    >
       <PatientReferralsTable />
-    </Box>
+    </Flex>
   )
 }
 

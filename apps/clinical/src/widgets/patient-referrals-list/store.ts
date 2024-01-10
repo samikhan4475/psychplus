@@ -5,9 +5,9 @@ import { shallow } from 'zustand/shallow'
 import { createWithEqualityFn } from 'zustand/traditional'
 import { createCodeSetStore, type CodeSetState } from '@psychplus/codeset'
 import { createPatientStore, type PatientState } from '@psychplus/patient'
+import type { Referral } from '@psychplus/referrals'
 import { createUserStore, type UserState } from '@psychplus/user'
 import { combineStateCreators } from '@psychplus/utils/store'
-import type { Referral } from './types'
 
 interface State {
   referrals: Referral[]
@@ -19,9 +19,9 @@ const createStore: StateCreator<State> = (set) => ({
   setReferrals: (referrals) => set({ referrals }),
 })
 
-type StoreType = UserState & PatientState & CodeSetState & State
+type ReferralsStoreType = UserState & PatientState & CodeSetState & State
 
-const useStore = createWithEqualityFn<StoreType>(
+const useStore = createWithEqualityFn<ReferralsStoreType>(
   combineStateCreators(
     createStore,
     createUserStore,
@@ -31,4 +31,4 @@ const useStore = createWithEqualityFn<StoreType>(
   shallow,
 )
 
-export { useStore, type StoreType }
+export { useStore, type ReferralsStoreType }

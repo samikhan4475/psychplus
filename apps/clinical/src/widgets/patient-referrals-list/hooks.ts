@@ -6,12 +6,12 @@ import {
   type CodeSetIndex,
 } from '@psychplus/codeset'
 import { usePatientId } from '@psychplus/patient'
+import { getPatientReferrals } from '@psychplus/referrals/api.client'
 import { usePubsub } from '@psychplus/utils/event'
 import {
   EVENT_REFERRAL_CREATED,
   EVENT_REFERRAL_EDITED,
 } from '@psychplus/widgets/events'
-import { getReferrals } from './api.client'
 import { useStore } from './store'
 
 const CODE_SET_SERVICES_OFFERED = 'ServicesOffered'
@@ -104,7 +104,7 @@ const useRefetchReferrals = () => {
 
   const refetch = useMemo(
     () => () => {
-      getReferrals({ patientId })
+      getPatientReferrals({ patientId })
         .then(setReferrals)
         .catch((err) => alert(err.message))
     },

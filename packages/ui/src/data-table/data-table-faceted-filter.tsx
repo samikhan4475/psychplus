@@ -67,7 +67,7 @@ const DataTableFacetedFilter = <TData, TValue>({
           )}
         </Button>
       </Popover.Trigger>
-      <Popover.Content className="max-h-[300px] min-w-[150px]">
+      <Popover.Content className="max-h-[150px] min-w-[150px]">
         <Popover.Close id="popover-close">
           <div />
         </Popover.Close>
@@ -99,20 +99,20 @@ const DataTableFacetedFilter = <TData, TValue>({
                         justify="center"
                         mr="2"
                         className={cn(
-                          'h-4 w-4 rounded-1 border border-gray-7',
+                          'h-3 w-3 rounded-1 border border-gray-7',
                           isSelected
                             ? 'border-transparent bg-accent-9 text-accent-9-contrast'
                             : '[&_svg]:invisible',
                         )}
                       >
-                        <CheckIcon className={cn('h-4 w-4')} />
+                        <CheckIcon className={cn('h-3 w-3')} />
                       </Flex>
                       <span>{option.label}</span>
                       {facets?.get(option.value) && (
                         <Flex
                           align="center"
                           justify="center"
-                          className="ml-auto h-4 w-4 font-mono text-2"
+                          className="ml-auto h-3 w-3 font-mono text-1"
                         >
                           {facets.get(option.value)}
                         </Flex>

@@ -17,7 +17,7 @@ const WidgetErrorView = () => (
     align="center"
     justify="center"
     width="100%"
-    className="h-[573px] min-h-full rounded-3 shadow-3"
+    className="min-h-full rounded-3 shadow-3"
   >
     <Text size="2" className="italic text-gray-9">
       Something went wrong!

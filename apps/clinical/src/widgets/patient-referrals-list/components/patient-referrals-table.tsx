@@ -3,6 +3,7 @@
 import { useSearchParams } from 'next/navigation'
 import { Flex, Text } from '@radix-ui/themes'
 import { type ColumnDef, type Table } from '@tanstack/react-table'
+import { type Referral } from '@psychplus/referrals'
 import {
   DataTable,
   DataTableColumnHeader,
@@ -26,7 +27,6 @@ import {
   useStatusLabel,
 } from '../hooks'
 import { useStore } from '../store'
-import type { Referral } from '../types'
 import { AddReferralButton } from './add-referral-button'
 import { RowActionDetails } from './row-action-details'
 import { RowActionEdit } from './row-action-edit'

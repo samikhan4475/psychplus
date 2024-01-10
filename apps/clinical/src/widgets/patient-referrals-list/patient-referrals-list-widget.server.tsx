@@ -2,8 +2,8 @@ import { unstable_noStore as noStore } from 'next/cache'
 import { getCodeSets } from '@psychplus/codeset/api.server'
 import { type PatientParams } from '@psychplus/patient'
 import { getPatient } from '@psychplus/patient/api.server'
+import { getPatientReferrals } from '@psychplus/referrals/api.server'
 import { getUser } from '@psychplus/user/api.server'
-import { getReferrals } from './api.server'
 import { PatientReferralsListWidgetClient } from './patient-referrals-list-widget.client'
 import { Preloader } from './preloader'
 import { useStore } from './store'
@@ -19,7 +19,7 @@ const PatientReferralsListWidgetServer = async ({
     getCodeSets(),
     getUser(),
     getPatient({ patientId }),
-    getReferrals({ patientId }),
+    getPatientReferrals({ patientId }),
   ])
 
   return (

@@ -29,11 +29,11 @@ const Input = React.forwardRef<
     className="flex items-center border-b border-b-gray-5 px-3"
     cmdk-input-wrapper=""
   >
-    <MagnifyingGlassIcon className="mr-2 h-4 w-4 shrink-0 opacity-50" />
+    <MagnifyingGlassIcon className="mr-2 h-3 w-3 shrink-0 opacity-50" />
     <CommandPrimitive.Input
       ref={ref}
       className={cn(
-        'h-10 w-full rounded-item bg-transparent py-3 text-3 outline-none disabled:cursor-not-allowed disabled:opacity-50',
+        'h-8 w-full rounded-item bg-transparent py-3 text-2 outline-none disabled:cursor-not-allowed disabled:opacity-50',
         className,
       )}
       {...props}
@@ -62,7 +62,7 @@ const Empty = React.forwardRef<
 >((props, ref) => (
   <CommandPrimitive.Empty
     ref={ref}
-    className="py-6 text-center text-2 text-gray-10"
+    className="py-3 text-center text-1 text-gray-10"
     {...props}
   />
 ))
@@ -102,7 +102,7 @@ const Item = React.forwardRef<
   <CommandPrimitive.Item
     ref={ref}
     className={cn(
-      'relative flex cursor-default select-none items-center rounded-1 px-2 py-1.5 text-2 outline-none aria-selected:bg-accent-3 data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
+      'relative flex cursor-default select-none items-center rounded-1 px-1 py-[2px] text-1 outline-none aria-selected:bg-accent-3 data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
       className,
     )}
     {...props}

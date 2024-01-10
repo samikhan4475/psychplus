@@ -70,7 +70,7 @@ const DataTable = <TData, TValue>({
   })
 
   return (
-    <Flex direction="column" height="100%" justify="between">
+    <Flex grow="1" direction="column" height="100%" justify="between">
       <Box>
         {renderHeader ? renderHeader(table) : null}
         <Table.Root
@@ -123,7 +123,7 @@ const DataTable = <TData, TValue>({
             ) : (
               <Table.Row>
                 <Table.Cell colSpan={columns.length}>
-                  <Flex align="center" justify="center" className="h-[265px]">
+                  <Flex align="center" justify="center" className="h-[50px]">
                     No results.
                   </Flex>
                 </Table.Cell>
