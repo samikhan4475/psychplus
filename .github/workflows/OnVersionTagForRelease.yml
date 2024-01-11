@@ -85,7 +85,7 @@ jobs:
       helm_chart_version: ${{ needs.build_variables.outputs.build_version }}
       helm_app_version: ${{ needs.build_variables.outputs.build_full_version }}
       image_tag: ${{ needs.build_variables.outputs.image_tag }}
-      env_namespace: env-production
+      env_namespace: env-ehr
       ingress_url: ui.psychplus.io
     secrets: inherit
 
@@ -98,7 +98,7 @@ jobs:
       helm_chart_version: ${{ needs.build_variables.outputs.build_version }}
       helm_app_version: ${{ needs.build_variables.outputs.build_full_version }}
       image_tag: ${{ needs.build_variables.outputs.image_tag }}
-      env_namespace: env-production
+      env_namespace: env-ehr
       ingress_url: ui.psychplus.io
     secrets: inherit
 
@@ -111,7 +111,7 @@ jobs:
       helm_chart_version: ${{ needs.build_variables.outputs.build_version }}
       helm_app_version: ${{ needs.build_variables.outputs.build_full_version }}
       image_tag: ${{ needs.build_variables.outputs.image_tag }}
-      env_namespace: env-production
+      env_namespace: env-ehr
       ingress_url: ui.psychplus.io
     secrets: inherit
 
@@ -124,12 +124,12 @@ jobs:
       helm_chart_version: ${{ needs.build_variables.outputs.build_version }}
       helm_app_version: ${{ needs.build_variables.outputs.build_full_version }}
       image_tag: ${{ needs.build_variables.outputs.image_tag }}
-      env_namespace: env-production
+      env_namespace: env-ehr
       ingress_url: ui.psychplus.io
     secrets: inherit
 
   publish_draft_release:
-    needs: create_draft_release
+    needs: [create_draft_release, deploy_platform, deploy_clinical, deploy_patient, deploy_revcycle]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
