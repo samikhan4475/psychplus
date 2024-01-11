@@ -1,13 +1,14 @@
 name: Deploy Release To Production
 
 on:
-  release:
-    types: [released]
+  push:
+    tags:
+      - 'v-[0-9]+.[0-9]+.[0-9]+'
 
 jobs:
   build_variables:
     runs-on: ubuntu-latest
-    environment: staging
+    environment: production
     outputs:
       image_tag: ${{ steps.build_variables.outputs.image_tag }}
       build_version: ${{ steps.build_variables.outputs.build_version }}
@@ -29,6 +30,16 @@ jobs:
           echo "build_version=$build_version" >> "$GITHUB_OUTPUT"
           echo "build_full_version=$build_full_version" >> "$GITHUB_OUTPUT"
 
+  create_draft_release:
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: Create draft release
+        uses: softprops/action-gh-release@v1
+        with:
+          draft: true
+          generate_release_notes: true
+
   build_push_platform:
     needs: [build_variables]
     uses: ./.github/workflows/subtaskBuildPushImage.yml
@@ -47,7 +58,6 @@ jobs:
       image_tag: ${{ needs.build_variables.outputs.image_tag }}
     secrets: inherit
 
-
   build_push_patient:
     needs: [build_variables]
     uses: ./.github/workflows/subtaskBuildPushImage.yml
@@ -65,7 +75,6 @@ jobs:
       project: revcycle
       image_tag: ${{ needs.build_variables.outputs.image_tag }}
     secrets: inherit
-
 
   deploy_platform:
     needs: [build_variables, build_push_platform]
@@ -102,6 +111,8 @@ jobs:
       helm_chart_version: ${{ needs.build_variables.outputs.build_version }}
       helm_app_version: ${{ needs.build_variables.outputs.build_full_version }}
       image_tag: ${{ needs.build_variables.outputs.image_tag }}
+      env_namespace: env-production
+      ingress_url: ui.psychplus.io
     secrets: inherit
 
   deploy_revcycle:
@@ -116,3 +127,29 @@ jobs:
       env_namespace: env-production
       ingress_url: ui.psychplus.io
     secrets: inherit
+
+  publish_draft_release:
+    needs: create_draft_release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Get Draft Release ID
+        id: get_release_id
+        run: |
+          release_id=$(curl -s -X GET -H "Authorization: token ${{ secrets.GH_TOKEN }}" "https://api.github.com/repos/${{ github.repository }}/releases?per_page=100" | jq -r '.[] | select(.draft == true).id')
+          echo "Release ID: $release_id"
+          echo "::set-output name=release_id::$release_id"
+
+      - name: Publish Draft Release
+        if: steps.get_release_id.outputs.release_id != 'null'
+        run: |
+          release_id="${{ steps.get_release_id.outputs.release_id }}"
+          response=$(curl -s -X PATCH -H "Authorization: token ${{ secrets.GH_TOKEN }}" -d '{"draft": false}' "https://api.github.com/repos/${{ github.repository }}/releases/$release_id")
+          if [ "$(echo "$response" | jq -r '.draft')" == "false" ]; then
+            echo "Draft release published successfully."
+          else
+            echo "Failed to publish draft release."
+            exit 1
+          fi
