@@ -14,9 +14,9 @@ const PatientReferralsListWidgetPage = () => {
     <>
       <Client />
       <PageHeader title={TITLE} description={DESCRIPTION} />
-      <CreateReferralWidget patientId={1279} />
+      <CreateReferralWidget patientId={1278} />
       <EditReferralWidget />
-      <PatientReferralsListWidget patientId={1279} includeInactive />
+      <PatientReferralsListWidget patientId={1278} includeInactive />
     </>
   )
 }

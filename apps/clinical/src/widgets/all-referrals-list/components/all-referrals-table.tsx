@@ -50,9 +50,7 @@ const columns: ColumnDef<Referral>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Date" />
     ),
-    cell: ({ row }) => (
-      <TableCellDateTime date={row.original.metadata.createdOn} />
-    ),
+    cell: ({ row }) => <TableCellDateTime date={row.original.referralDate} />,
     enableHiding: false,
   },
   {

@@ -5,7 +5,7 @@ import { PubsubProvider } from '@psychplus/utils/event'
 const RootLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <html lang="en">
-      <body className="!bg-transparent overflow-hidden">
+      <body className="overflow-hidden !bg-transparent">
         <Theme
           accentColor="cyan"
           radius="medium"
