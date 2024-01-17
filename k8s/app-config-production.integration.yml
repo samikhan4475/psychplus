@@ -10,6 +10,6 @@ data:
   reactAppPatientUrl: http://localhost:8002
   reactAppRevCycleUrl: http://localhost:8003
   reactAppPlatformUrl: http://localhost:8000
-  apiUrl: https://api-pr-2000.ode.psychplus.dev
-  authApiUrl: https://auth-pr-2000.ode.psychplus.dev
-  APP_ENV: development
+  apiUrl: https://psychplus.io
+  authApiUrl: https://psychplus.io
+  APP_ENV: production

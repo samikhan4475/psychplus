@@ -1,0 +1,45 @@
+name: Deploy ConfigMap
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        description: Deployment Environment
+        type: string
+        default: development
+  
+jobs:
+  setup_configmap:
+    permissions:
+      actions: read
+      contents: read
+      id-token: write
+
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: azure/use-kubelogin@v1
+        with:
+          kubelogin-version: 'v0.0.31'
+
+      - uses: azure/login@v1
+        name: Azure login
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          subscription-id: ${{ secrets.AKS_SUBSCRIPTION_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+
+      - uses: Azure/aks-set-context@v3
+        name: Get K8s context
+        with:
+          cluster-name: ${{ secrets.AKS_NAME }}
+          resource-group: ${{ secrets.AKS_RESOURCE_GROUP }}
+          admin: false
+          use-kubelogin: true
+
+      - name: Configure namespace
+        run: |
+          kubectl apply --namespace=${{ inputs.env_namespace }} -f k8s/app-config-${{ inputs.environment }}.integration.yml

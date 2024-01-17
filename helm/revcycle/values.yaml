@@ -135,7 +135,10 @@ env:
   - name: APP_PATH
     value: "revcycle"
   - name: APP_ENV
-    value: "production"
+    valueFrom:
+      configMapKeyRef:
+        name: app-config
+        key: APP_ENV
   - name: APP_VERSION
     value: "1.0.0"
   - name: CLINICAL_URL

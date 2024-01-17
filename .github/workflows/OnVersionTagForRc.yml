@@ -30,8 +30,17 @@ jobs:
           echo "image_tag=$image_tag" >> "$GITHUB_OUTPUT"
           echo "build_version=$build_version" >> "$GITHUB_OUTPUT"
           echo "build_full_version=$build_full_version" >> "$GITHUB_OUTPUT"
-  build_push_platform:
+
+  deploy_config_map:
     needs: [build_variables]
+    uses: ./.github/workflows/DeployConfigMap.yml
+    with:
+      environment: staging
+      env_namespace: env-staging
+    secrets: inherit
+
+  build_push_platform:
+    needs: [build_variables, deploy_config_map]
     uses: ./.github/workflows/subtaskBuildPushImage.yml
     with:
       environment: staging
@@ -40,7 +49,7 @@ jobs:
     secrets: inherit
 
   build_push_clinical:
-    needs: [build_variables]
+    needs: [build_variables, deploy_config_map]
     uses: ./.github/workflows/subtaskBuildPushImage.yml
     with:
       environment: staging
@@ -50,7 +59,7 @@ jobs:
 
 
   build_push_patient:
-    needs: [build_variables]
+    needs: [build_variables, deploy_config_map]
     uses: ./.github/workflows/subtaskBuildPushImage.yml
     with:
       environment: staging
@@ -59,7 +68,7 @@ jobs:
     secrets: inherit
 
   build_push_revcycle:
-    needs: [build_variables]
+    needs: [build_variables, deploy_config_map]
     uses: ./.github/workflows/subtaskBuildPushImage.yml
     with:
       environment: staging
