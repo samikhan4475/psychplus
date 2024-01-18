@@ -98,6 +98,15 @@ tolerations: []
 affinity: {}
 
 env:
+  - name: APP_CODE
+    value: "p+patient-ui"
+
+  - name: APP_PATH
+    value: ""
+
+  - name: APP_VERSION
+    value: "1.0.0"
+
   # CONFIG: ASP NET
 
   - name: RUN_ENVIRONMENT
@@ -120,52 +129,78 @@ env:
         name: app-config
         key: cachingCodeSetCacheExpireMinutes
 
-  # SECRETS: Google
+  # CONFIG: APPs
 
-  - name: APPSETTINGS_Google__MapsKey
-    valueFrom:
-      secretKeyRef:
-        name: ehr-secrets
-        key: googleMapsKey
-
-  - name: APP_CODE
-    value: "p+patient-ui"
-  - name: APP_PATH
-    value: ""
   - name: APP_ENV
     valueFrom:
       configMapKeyRef:
         name: app-config
         key: APP_ENV
-  - name: APP_VERSION
-    value: "1.0.0"
+
   - name: CLINICAL_URL
     valueFrom:
       configMapKeyRef:
         name: app-config
         key: reactAppClinicalUrl
+
   - name: PATIENT_URL
     valueFrom:
       configMapKeyRef:
         name: app-config
         key: reactAppPatientUrl
+
   - name: REVCYCLE_URL
     valueFrom:
       configMapKeyRef:
         name: app-config
         key: reactAppRevCycleUrl
+
   - name: PLATFORM_URL
     valueFrom:
       configMapKeyRef:
         name: app-config
         key: reactAppPlatformUrl
+
   - name: API_URL
     valueFrom:
       configMapKeyRef:
         name: app-config
         key: apiUrl
+
   - name: AUTH_API_URL
     valueFrom:
       configMapKeyRef:
         name: app-config
         key: authApiUrl
+
+  # SECRETS: Google
+
+  - name: NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
+    valueFrom:
+      secretKeyRef:
+        name: ehr-secrets
+        key: googleMapsKey
+
+  # SECRETS: Stripe
+
+  - name: NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
+    valueFrom:
+      secretKeyRef:
+        name: ehr-secrets
+        key: stripePublishableApiKey
+
+  # SECRETS: Recaptcha
+
+  - name: NEXT_PUBLIC_RECAPTCHA_V2_KEY
+    valueFrom:
+      secretKeyRef:
+        name: ehr-secrets
+        key: recaptchaV2Key
+
+  # SECRETS: Mapbox
+
+  - name: NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN
+    valueFrom:
+      secretKeyRef:
+        name: ehr-secrets
+        key: mapboxAccessToken
