@@ -177,7 +177,7 @@ env:
 
   # SECRETS: Google
 
-  - name: NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
+  - name: GOOGLE_MAPS_API_KEY
     valueFrom:
       secretKeyRef:
         name: ehr-secrets
@@ -185,7 +185,7 @@ env:
 
   # SECRETS: Stripe
 
-  - name: NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
+  - name: STRIPE_PUBLISHABLE_KEY
     valueFrom:
       secretKeyRef:
         name: ehr-secrets
@@ -193,7 +193,7 @@ env:
 
   # SECRETS: Recaptcha
 
-  - name: NEXT_PUBLIC_RECAPTCHA_V2_KEY
+  - name: RECAPTCHA_V2_KEY
     valueFrom:
       secretKeyRef:
         name: ehr-secrets
@@ -201,7 +201,7 @@ env:
 
   # SECRETS: Mapbox
 
-  - name: NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN
+  - name: MAPBOX_ACCESS_TOKEN
     valueFrom:
       secretKeyRef:
         name: ehr-secrets
