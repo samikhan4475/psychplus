@@ -40,8 +40,8 @@ FROM base AS builder
     # ARG TURBO_TOKEN
     # ENV TURBO_TOKEN=$TURBO_TOKEN
 
-    ENV NEXT_PUBLIC_APP_CODE p+revcycle-app
-    ENV NEXT_PUBLIC_APP_PATH revcycle
+    ENV APP_CODE p+revcycle-app
+    ENV APP_PATH revcycle
 
     RUN turbo run build --filter=@psychplus/revcycle-app...
 

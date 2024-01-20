@@ -1,5 +1,6 @@
 'use client'
 
+import type { Referral } from '@psychplus/referrals'
 import { CloseDialogTrigger } from '@psychplus/ui/close-dialog-trigger'
 import { Dialog } from '@psychplus/ui/dialog'
 import { usePubsub } from '@psychplus/utils/event'
@@ -7,7 +8,6 @@ import { EDIT_REFERRAL_WIDGET } from '@psychplus/widgets'
 import { EventType } from '@psychplus/widgets/events'
 import { useDialog, usePublishLoaded } from '@psychplus/widgets/hooks'
 import { EditReferralForm } from './components'
-import type { Referral } from './types'
 
 const EditReferralWidgetClient = () => {
   const { publish } = usePubsub()

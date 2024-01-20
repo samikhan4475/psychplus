@@ -155,6 +155,7 @@ const columns: ColumnDef<Referral>[] = [
 const DataTableHeader = (table: Table<Referral>) => {
   const params = useSearchParams()
   const showFilters = params.get('hideFilters') !== 'true'
+  const title = params.get('title')
 
   const services = new Set(
     table.getPreFilteredRowModel().rows.flatMap((row) => row.original.service),
@@ -183,54 +184,61 @@ const DataTableHeader = (table: Table<Referral>) => {
   )
 
   return (
-    <Flex align="center" justify="between" p="1" mb="1">
-      {showFilters ? (
-        <Flex align="center" gap="4">
-          <Flex align="center" gap="2">
-            {table.getColumn('service') && (
-              <DataTableFacetedFilter
-                column={table.getColumn('service')}
-                title="Service"
-                placeholder="Search"
-                options={serviceOptions}
-              />
-            )}
-            {table.getColumn('service status') && (
-              <DataTableFacetedFilter
-                column={table.getColumn('service status')}
-                title="Type"
-                search={false}
-                options={['Routine', 'Emergency'].map((status) => ({
-                  label: status,
-                  value: status,
-                }))}
-              />
-            )}
-            {table.getColumn('contact status') && (
-              <DataTableFacetedFilter
-                column={table.getColumn('contact status')}
-                title="Contact"
-                search={false}
-                options={contactStatusOptions}
-              />
-            )}
-            {table.getColumn('referral status') && (
-              <DataTableFacetedFilter
-                column={table.getColumn('referral status')}
-                title="Status"
-                search={false}
-                options={referralStatuses.map((status) => ({
-                  label: status,
-                  value: status,
-                }))}
-              />
-            )}
+    <Flex align="center" justify="between" p="1">
+      <Flex align="center" gap="2">
+        {title ? (
+          <Text className="text-accent-11" weight="bold" size="3">
+            {title}
+          </Text>
+        ) : null}
+        {showFilters ? (
+          <Flex align="center" gap="3">
+            <Flex align="center" gap="1">
+              {table.getColumn('service') && (
+                <DataTableFacetedFilter
+                  column={table.getColumn('service')}
+                  title="Service"
+                  placeholder="Search"
+                  options={serviceOptions}
+                />
+              )}
+              {table.getColumn('service status') && (
+                <DataTableFacetedFilter
+                  column={table.getColumn('service status')}
+                  title="Type"
+                  search={false}
+                  options={['Routine', 'Emergency'].map((status) => ({
+                    label: status,
+                    value: status,
+                  }))}
+                />
+              )}
+              {table.getColumn('contact status') && (
+                <DataTableFacetedFilter
+                  column={table.getColumn('contact status')}
+                  title="Contact"
+                  search={false}
+                  options={contactStatusOptions}
+                />
+              )}
+              {table.getColumn('referral status') && (
+                <DataTableFacetedFilter
+                  column={table.getColumn('referral status')}
+                  title="Status"
+                  search={false}
+                  options={referralStatuses.map((status) => ({
+                    label: status,
+                    value: status,
+                  }))}
+                />
+              )}
+            </Flex>
+            <DataTableResetFilterButton table={table} />
           </Flex>
-          <DataTableResetFilterButton table={table} />
-        </Flex>
-      ) : (
-        <div></div>
-      )}
+        ) : (
+          <div></div>
+        )}
+      </Flex>
       <AddReferralButton />
     </Flex>
   )

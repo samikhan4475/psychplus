@@ -7,6 +7,7 @@ import { WidgetPortal } from '../components'
 interface Props {
   hideFilters?: boolean
   includeInactive?: boolean
+  title?: string
 }
 
 const AllReferralsListWidget = (props: Props) => {
@@ -14,6 +15,7 @@ const AllReferralsListWidget = (props: Props) => {
     token: getAuthToken(),
     hideFilters: `${props.hideFilters}`,
     includeInactive: `${props.includeInactive}`,
+    title: props.title,
   })
 
   return (

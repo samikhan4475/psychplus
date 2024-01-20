@@ -123,7 +123,7 @@ const DataTable = <TData, TValue>({
             ) : (
               <Table.Row>
                 <Table.Cell colSpan={columns.length}>
-                  <Flex align="center" justify="center" className="h-[50px]">
+                  <Flex align="center" justify="center">
                     No results.
                   </Flex>
                 </Table.Cell>

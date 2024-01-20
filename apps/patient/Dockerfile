@@ -40,8 +40,8 @@ FROM base AS builder
     # ARG TURBO_TOKEN
     # ENV TURBO_TOKEN=$TURBO_TOKEN
 
-    ENV NEXT_PUBLIC_APP_CODE p+patient-app
-    ENV NEXT_PUBLIC_APP_PATH ""
+    ENV APP_CODE p+patient-app
+    ENV APP_PATH ""
 
     RUN turbo run build --filter=@psychplus/patient-app...
 

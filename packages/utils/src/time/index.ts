@@ -22,4 +22,6 @@ const formatTime = (date: Date) => {
   return `${hours}:${minutes}`
 }
 
-export { isEmptyDate, daysAgo, formatDate, formatTime }
+const formatDateTime = (date: Date) => `${formatDate(date)} ${formatTime(date)}`
+
+export { isEmptyDate, daysAgo, formatDate, formatTime, formatDateTime }

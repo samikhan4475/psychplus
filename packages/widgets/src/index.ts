@@ -4,6 +4,7 @@ const PATIENT_REFERRALS_LIST_WIDGET = 'patient-referrals'
 const ALL_REFERRALS_LIST_WIDGET = 'all-referrals'
 const CREATE_REFERRAL_WIDGET = 'create-referral'
 const EDIT_REFERRAL_WIDGET = 'edit-referral'
+const REFERRAL_DETAILS_WIDGET = 'referral-details'
 
 export {
   USER_WIDGET,
@@ -12,4 +13,5 @@ export {
   ALL_REFERRALS_LIST_WIDGET,
   CREATE_REFERRAL_WIDGET,
   EDIT_REFERRAL_WIDGET,
+  REFERRAL_DETAILS_WIDGET,
 }

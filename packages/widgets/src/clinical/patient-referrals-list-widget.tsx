@@ -8,6 +8,7 @@ import { WidgetPortal } from '../components'
 interface Props extends PatientParams {
   hideFilters?: boolean
   includeInactive?: boolean
+  title?: string
 }
 
 const PatientReferralsListWidget = (props: Props) => {
@@ -16,6 +17,7 @@ const PatientReferralsListWidget = (props: Props) => {
     patientId: `${props.patientId}`,
     hideFilters: `${props.hideFilters}`,
     includeInactive: `${props.includeInactive}`,
+    title: props.title,
   })
 
   return (

@@ -37,7 +37,6 @@ const WidgetPortal = ({ src, name }: PortalContainerProps) => {
       <Box
         style={{
           height: `${size.height}px`,
-          width: `${size.width}px`,
         }}
         className={cn('min-w-full overflow-clip shadow-3', {
           invisible: !loaded,

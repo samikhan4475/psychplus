@@ -2,6 +2,7 @@ import {
   CreateReferralWidget,
   EditReferralWidget,
   PatientReferralsListWidget,
+  ReferralDetailsWidget,
 } from '@psychplus/widgets/clinical'
 import { PageHeader } from '../../shared/page-header'
 import { Client } from './client'
@@ -16,7 +17,12 @@ const PatientReferralsListWidgetPage = () => {
       <PageHeader title={TITLE} description={DESCRIPTION} />
       <CreateReferralWidget patientId={1278} />
       <EditReferralWidget />
-      <PatientReferralsListWidget patientId={1278} includeInactive />
+      <ReferralDetailsWidget />
+      <PatientReferralsListWidget
+        patientId={1278}
+        title="Referrals"
+        includeInactive
+      />
     </>
   )
 }

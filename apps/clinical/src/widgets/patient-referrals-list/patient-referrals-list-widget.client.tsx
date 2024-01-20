@@ -20,11 +20,7 @@ const PatientReferralsListWidgetClient = () => {
   useRefetchReferrals()
 
   return (
-    <Flex
-      direction="column"
-      className="h-fit min-h-[200px] min-w-fit"
-      ref={ref}
-    >
+    <Flex direction="column" className="h-fit min-w-fit" ref={ref}>
       <PatientReferralsTable />
     </Flex>
   )
