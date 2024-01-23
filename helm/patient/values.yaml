@@ -135,7 +135,7 @@ env:
     valueFrom:
       configMapKeyRef:
         name: app-config
-        key: APP_ENV
+        key: aspNetCoreEnvironment
 
   - name: CLINICAL_URL
     valueFrom:

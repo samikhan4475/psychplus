@@ -70,7 +70,7 @@ jobs:
     secrets: inherit
 
   deploy_platform:
-    needs: [build_variables]
+    needs: [build_variables, build_push_platform]
     uses: ./.github/workflows/subtaskDeployHelmChart.yml
     with:
       environment: production
