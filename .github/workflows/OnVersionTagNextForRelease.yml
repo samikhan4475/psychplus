@@ -19,13 +19,14 @@ jobs:
         run: |
           tag_ref='${{ github.ref }}'
           tag_name=$(echo "$tag_ref" | sed 's|refs/tags/||')
+          tag_next="${tag_name}"
           tag_name="${tag_name:2}"
           echo "Tag Name: $tag_name"
           build_ci_counter="$GITHUB_RUN_NUMBER"
           build_unique_id=$(date +%Y%m%d%H%M%S%N)
           build_version=$tag_name
           build_full_version="$build_version+$build_ci_counter.$build_unique_id"
-          tag_name="${tag_ref:2:${#tag_ref}-7}"
+          tag_name="${tag_next:2:${#tag_next}-7}"
           image_tag="v-$tag_name"
           echo "Tag Name: $image_tag"
           echo "image_tag=$image_tag" >> "$GITHUB_OUTPUT"
@@ -33,7 +34,7 @@ jobs:
           echo "build_full_version=$build_full_version" >> "$GITHUB_OUTPUT"
 
   build_push_platform:
-    needs: [build_variables, deploy_config_map]
+    needs: [build_variables]
     uses: ./.github/workflows/subtaskBuildPushImage.yml
     with:
       environment: production
