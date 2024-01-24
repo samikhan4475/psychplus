@@ -136,3 +136,8 @@ jobs:
             --set ingress.tls[0].secretName=ui-${{ inputs.project }}-psychplus-tls \
             --values helm/${{ inputs.project }}/values.yaml
           fi
+
+      - name: Restart The Deployment
+        if: ${{ github.event_name == 'pull_request' && github.event.action != 'opened' && inputs.environment == 'development' }}
+        run: |
+          kubectl rollout restart deployment/ui-${{ inputs.project }} -n ${{ inputs.env_namespace }}
