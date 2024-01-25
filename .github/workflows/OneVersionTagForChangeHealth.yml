@@ -1,9 +1,9 @@
-name: Deploy Release To Next
+name: Build and Deploy ChangeHealth on Version Tag
 
 on:
   push:
     tags:
-      - 'v-[0-9]+.[0-9]+.[0-9]+-next'
+      - 'v-[0-9]+.[0-9]+.[0-9]+-changehealth'
 
 jobs:
   build_variables:
@@ -77,8 +77,8 @@ jobs:
       helm_chart_version: ${{ needs.build_variables.outputs.build_version }}
       helm_app_version: ${{ needs.build_variables.outputs.build_full_version }}
       image_tag: ${{ needs.build_variables.outputs.image_tag }}
-      env_namespace: env-next
-      ingress_url: ui.next.psychplus.io
+      env_namespace: env-changehealth
+      ingress_url: ui.changehealth.psychplus.io
     secrets: inherit
 
   deploy_clinical:
@@ -90,8 +90,8 @@ jobs:
       helm_chart_version: ${{ needs.build_variables.outputs.build_version }}
       helm_app_version: ${{ needs.build_variables.outputs.build_full_version }}
       image_tag: ${{ needs.build_variables.outputs.image_tag }}
-      env_namespace: env-next
-      ingress_url: ui.next.psychplus.io
+      env_namespace: env-changehealth
+      ingress_url: ui.changehealth.psychplus.io
     secrets: inherit
 
   deploy_patient:
@@ -103,8 +103,8 @@ jobs:
       helm_chart_version: ${{ needs.build_variables.outputs.build_version }}
       helm_app_version: ${{ needs.build_variables.outputs.build_full_version }}
       image_tag: ${{ needs.build_variables.outputs.image_tag }}
-      env_namespace: env-next
-      ingress_url: ui.next.psychplus.io
+      env_namespace: env-changehealth
+      ingress_url: ui.changehealth.psychplus.io
     secrets: inherit
 
   deploy_revcycle:
@@ -116,6 +116,6 @@ jobs:
       helm_chart_version: ${{ needs.build_variables.outputs.build_version }}
       helm_app_version: ${{ needs.build_variables.outputs.build_full_version }}
       image_tag: ${{ needs.build_variables.outputs.image_tag }}
-      env_namespace: env-next
-      ingress_url:  ui.next.psychplus.io
+      env_namespace: env-changehealth
+      ingress_url:  ui.changehealth.psychplus.io
     secrets: inherit
