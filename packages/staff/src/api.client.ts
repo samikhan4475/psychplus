@@ -1,12 +1,12 @@
 import { cache } from 'react'
 import { handleRequest } from '@psychplus/utils/api'
 import { createHeaders } from '@psychplus/utils/client'
-import type { Staff, StaffRequest } from './types'
+import { Staff, StaffPayload } from '.'
 
 const getStaffForUnauthenticatedUser = async (
-  request: StaffRequest,
-): Promise<Staff[]> =>
-  handleRequest(
+  request: StaffPayload,
+): Promise<Staff[]> => {
+  return handleRequest(
     fetch(
       '/api/staff/search/unauthenticated?includeInactive=false&offset=0&limit=0&orderBy=legalName%20asc',
       {
@@ -17,15 +17,23 @@ const getStaffForUnauthenticatedUser = async (
       },
     ),
   )
-const getStaffProfilePicture = async (staffId: number): Promise<Staff> =>
-  handleRequest(
-    fetch(`/api/staff/${staffId}/profileimage`, {
-      next: {
-        revalidate: 3600,
-      },
-      headers: createHeaders(),
-    }),
-  )
+}
+
+const getStaffProfilePicture = async (staffId?: number) => {
+  const response = await fetch(`/api/staff/${staffId}/profileimage`, {
+    next: {
+      revalidate: 3600,
+    },
+    headers: createHeaders(),
+  })
+
+  if (response.ok) {
+    const blob = await response.blob()
+    const url = URL.createObjectURL(blob)
+    return url
+  }
+  return 'Staff does not have a photo assigned'
+}
 
 const getStaffProfilePictureCached = cache(getStaffProfilePicture)
 

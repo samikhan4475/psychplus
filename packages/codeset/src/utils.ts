@@ -13,9 +13,13 @@ const getCodeAttributeBoolean = (code: Code, name: string) =>
 const getCodeMetadata = (code: Code, name: string) =>
   code.metadata ? code.metadata[name] ?? 'N/A' : 'N/A'
 
+const getCodeDisplay = (codes?: Code[], value?: string) =>
+  codes?.find((code) => code.code === value?.toString())?.display
+
 export {
   getCodeValueExcludeEmpty,
   getCodeAttribute,
   getCodeAttributeBoolean,
   getCodeMetadata,
+  getCodeDisplay,
 }

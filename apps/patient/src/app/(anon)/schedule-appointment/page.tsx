@@ -3,58 +3,100 @@
 import { useEffect, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { Flex, Text } from '@radix-ui/themes'
-import { CodeSet } from '@psychplus/codeset'
-import { getCodeSet } from '@psychplus/codeset/api.client'
-import { psychPlusBlueColor } from '@/components'
+import { useDebounce } from 'use-debounce'
+import { StaffAppointmentAvailabilities } from '@psychplus/appointments'
+import { getAppointmentAvailabilityForUnauthenticatedUser } from '@psychplus/appointments/api.client'
+import { getCodeSets } from '@psychplus/codeset/api.client'
+import { formatDateYmd } from '@psychplus/utils/time'
 import {
-  AvailableSlots,
-  CalendarRow,
-  Filter,
-  MapboxComponent,
-  ProvidersComponent,
-} from './components'
-import { useStore } from './store'
-import { DUMMY_LOCATIONS, DUMMY_STAFF, Filters } from './types'
+  FilterPanel,
+  ProviderWithClinicAndWeeklyAvailability,
+  WeekCalendarRow,
+} from '@/widgets/schedule-appointment-list/components'
+import { useStore } from '@/widgets/schedule-appointment-list/store'
+import type { StaffWithClinicsAndSlots } from '@/widgets/schedule-appointment-list/types'
+import {
+  applyFilters,
+  groupStaffWithClinicsAndSlots,
+} from '@/widgets/schedule-appointment-list/utils'
 
 const ScheduleAppointmentPage = () => {
   const searchParams = useSearchParams()
-  const { setCodeSets, setStaff } = useStore()
-  const [languageCodeSet, setLanguageCodeSet] = useState<CodeSet>()
-  const [specialistTypeCodeSet, setSpecialistTypeCodeSet] = useState<CodeSet>()
-  const [filters, setFilters] = useState<Filters>({
-    providerType: searchParams.get('providerType') || '',
-    appointmentType: searchParams.get('appointmentType') || '',
-    zipCode: searchParams.get('zipCode') || '',
-    sortBy: '',
-    language: '',
-  })
+
+  const {
+    filters,
+    staffWithClinicsAndSlots,
+    filteredStaffAppointmentAvailabilities,
+    setCodeSets,
+    setStaffWithAvailableSlots,
+    setFilteredStaffAppointmentAvailabilities,
+    handleFiltersChange,
+  } = useStore()
+
+  const [staffWithClinicsAndSlotsState, setStaffWithClinicsAndSlotsState] =
+    useState<StaffWithClinicsAndSlots[] | []>([])
+
+  const [staffAppointmentAvailabilities, setStaffAppointmentAvailabilities] =
+    useState<StaffAppointmentAvailabilities | []>([])
+
+  const [zipCodeState, setZipCodeState] = useState(filters.zipCode)
+
+  const [debouncedZipCode] = useDebounce(zipCodeState, 500)
 
   useEffect(() => {
-    getCodeSet('Language').then(setLanguageCodeSet)
-    getCodeSet('SpecialistType').then(setSpecialistTypeCodeSet)
+    setZipCodeState(filters.zipCode)
+  }, [filters.zipCode])
+
+  useEffect(() => {
+    getCodeSets().then(setCodeSets)
+    handleFiltersChange({
+      providerType: searchParams.get('providerType') || '',
+      appointmentType: searchParams.get('appointmentType') || '',
+      zipCode: searchParams.get('zipCode') || '',
+      sortBy: '',
+      language: '',
+      startingDate: formatDateYmd(new Date()),
+    })
   }, [])
 
-  setCodeSets(languageCodeSet, specialistTypeCodeSet)
-  setStaff(DUMMY_STAFF)
+  useEffect(() => {
+    getAppointmentAvailabilityForUnauthenticatedUser({
+      postalCode: filters.zipCode,
+      type: filters.appointmentType === 'In-Person' ? 'InPerson' : 'TeleVisit',
+      specialistTypeCode: filters.providerType === 'Psychiatrist' ? 1 : 2,
+      startingDate: filters.startingDate,
+      maxDaysOutToLook: 6,
+    }).then(setStaffAppointmentAvailabilities)
+  }, [
+    debouncedZipCode,
+    filters.providerType,
+    filters.appointmentType,
+    filters.startingDate,
+  ])
 
-  const handleFilterChange = (key: keyof Filters, value: string) => {
-    setFilters((prevFilters) => ({ ...prevFilters, [key]: value }))
-  }
+  useEffect(() => {
+    setFilteredStaffAppointmentAvailabilities(
+      applyFilters(
+        filters.language,
+        filters.sortBy.replace(/\s/g, ''),
+        staffAppointmentAvailabilities,
+      ),
+    )
+  }, [staffAppointmentAvailabilities, filters.sortBy, filters.language])
 
-  const filteredStaff = DUMMY_STAFF.filter(
-    (provider) =>
-      ((filters.providerType === 'Psychiatrist' &&
-        provider.staffRoleCode === '1') ||
-        (filters.providerType === 'Therapist' &&
-          provider.staffRoleCode === '2')) &&
-      (filters.language
-        ? provider?.spokenLanguages?.[0] === filters.language
-        : true),
-  )
+  useEffect(() => {
+    setStaffWithAvailableSlots(
+      groupStaffWithClinicsAndSlots(filteredStaffAppointmentAvailabilities),
+    )
+  }, [filteredStaffAppointmentAvailabilities])
+
+  useEffect(() => {
+    setStaffWithClinicsAndSlotsState(staffWithClinicsAndSlots)
+  }, [staffWithClinicsAndSlots])
 
   return (
     <Flex direction="column" className="w-full">
-      <Filter filters={filters} onFilterChange={handleFilterChange} />
+      <FilterPanel />
 
       <Flex
         className="w-full border border-gray-3"
@@ -63,16 +105,13 @@ const ScheduleAppointmentPage = () => {
         align="center"
       >
         <Flex style={{ flex: 1 }}>
-          <Flex
-            style={{
-              color: psychPlusBlueColor,
-              flex: 1,
-            }}
-          >
-            <Text size="5">{filteredStaff.length} Providers</Text>
+          <Flex className="text-[#151B4A]" style={{ flex: 1 }}>
+            <Text size="5">
+              {staffWithClinicsAndSlotsState?.length} Providers
+            </Text>
           </Flex>
           <Flex style={{ flex: 2.3 }}>
-            <CalendarRow />
+            <WeekCalendarRow />
           </Flex>
         </Flex>
         <Flex
@@ -83,27 +122,22 @@ const ScheduleAppointmentPage = () => {
       </Flex>
 
       <Flex className="w-full">
-        <Flex direction="column" style={{ flex: 1 }}>
-          {filteredStaff.map((provider) => (
+        <Flex
+          className="max-h-full overflow-y-auto"
+          direction="column"
+          pb="7"
+          style={{ flex: 1 }}
+        >
+          {staffWithClinicsAndSlotsState?.map((staffWithClinicsAndSlots) => (
             <Flex
               py="5"
               px="7"
-              className="border-b border-b-gray-3"
-              key={provider.id}
+              className="h-auto w-full border-b border-b-gray-3"
+              key={staffWithClinicsAndSlots.staff.id}
             >
-              <Flex style={{ flex: 1 }}>
-                <ProvidersComponent
-                  staff={provider}
-                  appointmentType={filters.appointmentType}
-                />
-              </Flex>
-              <Flex
-                style={{
-                  flex: filters.appointmentType === 'In-Person' ? 1.9 : 2,
-                }}
-              >
-                <AvailableSlots />
-              </Flex>
+              <ProviderWithClinicAndWeeklyAvailability
+                staffWithClinicsAndSlots={staffWithClinicsAndSlots}
+              />
             </Flex>
           ))}
         </Flex>
@@ -114,15 +148,16 @@ const ScheduleAppointmentPage = () => {
             flex: filters.appointmentType === 'In-Person' ? 0.28 : 0,
           }}
         >
-          {filters.appointmentType === 'In-Person' && (
-            <MapboxComponent
-              key={JSON.stringify(DUMMY_LOCATIONS)}
-              width={350}
-              height={700}
-              zoom={17}
-              locations={DUMMY_LOCATIONS}
-            />
-          )}
+          {/*{filters.appointmentType === 'In-Person' && (*/}
+          {/*  <LocationMap*/}
+          {/*    width={350}*/}
+          {/*    height={640}*/}
+          {/*    zoom={17}*/}
+          {/*    locations={extractLocations(*/}
+          {/*      filteredStaffAppointmentAvailabilities,*/}
+          {/*    )}*/}
+          {/*  />*/}
+          {/*)}*/}
         </Flex>
       </Flex>
     </Flex>

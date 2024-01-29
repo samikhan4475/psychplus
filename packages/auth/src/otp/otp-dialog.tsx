@@ -13,6 +13,7 @@ interface OTPDialogProps {
   onSubmit: (value: string) => void
   onResend: () => void
   sendStatus: OTPSendStatus
+  customStatusMessage?: string
 }
 
 const OTPDialog = ({
@@ -22,6 +23,7 @@ const OTPDialog = ({
   onSubmit,
   onResend,
   sendStatus,
+  customStatusMessage,
 }: OTPDialogProps) => {
   const [value, setValue] = useState('')
 
@@ -50,23 +52,28 @@ const OTPDialog = ({
               Submit
             </Button>
           </Flex>
-          {renderSendStatus(sendStatus)}
+          {renderSendStatus(sendStatus, customStatusMessage)}
         </Flex>
       </Dialog.Content>
     </Dialog.Root>
   )
 }
 
-const renderSendStatus = (sendStatus: OTPSendStatus) => {
+const renderSendStatus = (
+  sendStatus: OTPSendStatus,
+  customStatusMessage: string | undefined,
+) => {
   if (sendStatus !== 'sent' && sendStatus !== 'error') {
     return null
   }
 
   const color = sendStatus === 'sent' ? 'green' : 'red'
   const label =
-    sendStatus === 'sent'
+    customStatusMessage ??
+    (sendStatus === 'sent'
       ? 'A code has been sent to your email'
-      : 'There was a problem with sending the code'
+      : 'There was a problem with sending the code')
+
   const icon =
     sendStatus === 'sent' ? <CheckCircledIcon /> : <CrossCircledIcon />
 

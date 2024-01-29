@@ -11,7 +11,7 @@ interface Staff {
   virtualRoomLink?: string
 }
 
-type StaffRequest = {
+type StaffPayload = {
   staffIds?: number[]
   clinicIds?: number[]
   name?: string
@@ -20,4 +20,4 @@ type StaffRequest = {
   spokenLanguage?: string
 }
 
-export type { Staff, StaffRequest }
+export type { Staff, StaffPayload }

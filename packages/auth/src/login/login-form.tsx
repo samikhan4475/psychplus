@@ -3,6 +3,7 @@
 import { unstable_noStore as noStore } from 'next/cache'
 import { useSearchParams } from 'next/navigation'
 import { Flex, Link, Text } from '@radix-ui/themes'
+import ReCAPTCHA from 'react-google-recaptcha-v2'
 import { type SubmitHandler } from 'react-hook-form'
 import { z } from 'zod'
 import {
@@ -14,6 +15,7 @@ import {
 } from '@psychplus/form'
 import { AppLink } from '@psychplus/ui/app-link'
 import { Checkbox } from '@psychplus/ui/checkbox'
+import { NEXT_PUBLIC_RECAPTCHA_V2_KEY } from '@psychplus/utils/constants'
 import { wrapPath } from '@psychplus/utils/url'
 import { login } from './api'
 
@@ -24,7 +26,23 @@ const schema = z.object({
 
 type SchemaType = z.infer<typeof schema>
 
-const LoginForm = () => {
+interface LoginFormProps {
+  inputClassName?: string
+  buttonClassName?: string
+  redirect?: string
+  showCaptcha?: boolean
+  hideRememberMe?: boolean
+  hideForgotPassword?: boolean
+}
+
+const LoginForm = ({
+  inputClassName,
+  buttonClassName,
+  redirect,
+  showCaptcha,
+  hideRememberMe,
+  hideForgotPassword,
+}: LoginFormProps) => {
   noStore()
 
   const searchParams = useSearchParams()
@@ -44,8 +62,12 @@ const LoginForm = () => {
       password: data.password,
     })
       .then(() => {
-        const next = searchParams.get('next') ?? `/`
-        location.assign(wrapPath(next))
+        if (redirect) {
+          window.location.replace(redirect)
+        } else {
+          const next = searchParams.get('next') ?? `/`
+          location.assign(wrapPath(next))
+        }
       })
       .catch((error) => {
         alert(error.message)
@@ -61,6 +83,7 @@ const LoginForm = () => {
           placeholder="Email"
           data-testid="login-username-input"
           autoFocus
+          className={inputClassName ?? ''}
           {...form.register('username')}
         />
         <FormTextInput
@@ -68,26 +91,42 @@ const LoginForm = () => {
           label="Password"
           placeholder="Password"
           data-testid="login-password-input"
+          className={inputClassName ?? ''}
           {...form.register('password')}
         />
       </Flex>
+      {showCaptcha && (
+        <Flex align="center" justify="between" mb="4">
+          <ReCAPTCHA sitekey={NEXT_PUBLIC_RECAPTCHA_V2_KEY} />
+        </Flex>
+      )}
       <Flex align="center" justify="between" mb="4">
-        <Text as="label" size="2">
-          <Flex gap="2">
-            <Checkbox defaultChecked data-testid="login-remember-me-checkbox" />
-            Remember me
-          </Flex>
-        </Text>
-        <Link size="2" asChild>
-          <AppLink
-            href="/forgot-password"
-            data-testid="login-forgot-password-link"
-          >
-            Forgot password?
-          </AppLink>
-        </Link>
+        {!hideRememberMe && (
+          <Text as="label" size="2">
+            <Flex gap="2">
+              <Checkbox
+                defaultChecked
+                data-testid="login-remember-me-checkbox"
+              />
+              Remember me
+            </Flex>
+          </Text>
+        )}
+        {!hideForgotPassword && (
+          <Link size="2" asChild>
+            <AppLink
+              href="/forgot-password"
+              data-testid="login-forgot-password-link"
+            >
+              Forgot password?
+            </AppLink>
+          </Link>
+        )}
       </Flex>
-      <FormSubmitButton data-testid="login-submit-button">
+      <FormSubmitButton
+        className={buttonClassName ?? ''}
+        data-testid="login-submit-button"
+      >
         Sign in
       </FormSubmitButton>
     </Form>

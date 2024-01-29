@@ -1,7 +1,7 @@
 import { cache } from 'react'
 import { handleRequest } from '@psychplus/utils/api'
 import { createHeaders } from '@psychplus/utils/client'
-import { type MarketingBenefit } from './types'
+import { ConfigurationProtected, type MarketingBenefit } from './types'
 
 const getPlusMembershipBenefits = async (): Promise<MarketingBenefit> =>
   handleRequest(
@@ -15,4 +15,16 @@ const getPlusMembershipBenefits = async (): Promise<MarketingBenefit> =>
 
 const getPlusMembershipBenefitsCached = cache(getPlusMembershipBenefits)
 
-export { getPlusMembershipBenefitsCached as getPlusMembershipBenefits }
+const getConfigurationProtected = async (): Promise<ConfigurationProtected> =>
+  handleRequest(
+    fetch('/api/metadata/configuration/protected', {
+      headers: createHeaders(),
+    }),
+  )
+
+const getConfigurationProtectedCached = cache(getConfigurationProtected)
+
+export {
+  getPlusMembershipBenefitsCached as getPlusMembershipBenefits,
+  getConfigurationProtectedCached as getConfigurationProtected,
+}

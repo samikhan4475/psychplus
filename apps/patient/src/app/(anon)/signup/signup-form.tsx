@@ -106,6 +106,7 @@ const SignupForm = () => {
         />
         <FormTextInput
           type="date"
+          max="9999-12-31"
           label="Date of Birth"
           data-testid="signup-date-of-birth-input"
           {...form.register('dateOfBirth')}

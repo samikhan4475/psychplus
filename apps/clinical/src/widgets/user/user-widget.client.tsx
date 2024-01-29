@@ -31,7 +31,7 @@ const UserWidgetClient = () => {
         This example widget will fetch and display the current user&apos;s name.
       </Text>
       <Text>
-        <b>User:</b> {user.legalName.firstName}
+        <b>User:</b> {user.legalName?.firstName}
       </Text>
     </Flex>
   )

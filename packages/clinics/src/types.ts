@@ -25,11 +25,11 @@ interface Clinic {
   distanceInMiles: 0
 }
 
-type ClinicsDistanceRequest = {
-  postalcode: number
+type ClinicsDistancePayload = {
+  postalcode: string
   latitude?: number
   longitude?: number
   miles?: number
 }
 
-export type { Clinic, ClinicsDistanceRequest }
+export type { Clinic, ClinicsDistancePayload }

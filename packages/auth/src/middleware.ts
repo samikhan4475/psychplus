@@ -159,7 +159,7 @@ const handleLoginApiRequest = async (request: NextRequest) => {
       value: response.accessToken,
       secure: true,
       httpOnly: true,
-      sameSite: 'lax',
+      sameSite: 'none',
     })
 
     return nextResponse

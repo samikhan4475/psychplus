@@ -3,7 +3,9 @@ import { Controller } from 'react-hook-form'
 import { PhoneNumberInput } from '@psychplus/ui/phone-number-input'
 import { FormField, useFormField, UseFormFieldProps } from './form-field'
 
-type FormPhoneNumberInputProps = UseFormFieldProps
+type FormPhoneNumberInputProps = UseFormFieldProps & {
+  className?: string
+}
 
 const FormPhoneNumberInput = React.forwardRef<
   HTMLInputElement,
@@ -28,6 +30,7 @@ const FormPhoneNumberInput = React.forwardRef<
               onValueChange={(value) => {
                 field.onChange(value)
               }}
+              className={childProps.className ?? ''}
             />
           )
         }}

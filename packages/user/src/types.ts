@@ -10,6 +10,8 @@ interface Name {
   lastName: string
   middleName?: string
   honors?: string
+  preferredName?: string
+  title?: string
 }
 
 interface PhoneNumber {
@@ -19,10 +21,17 @@ interface PhoneNumber {
 
 interface Address {
   type: 'Home' | 'Mailing'
-  street1: string
-  city: string
-  state: string
-  postalCode: string
+  street1?: string
+  street2?: string
+  city?: string
+  state?: string
+  country?: string
+  postalCode?: string
+  geoCoordinates?: {
+    longitude?: number
+    latitude?: number
+    altitude?: number
+  }
 }
 
 interface ContactInfo {
@@ -31,12 +40,20 @@ interface ContactInfo {
   addresses?: Address[]
 }
 
+interface Guardian {
+  name: Name
+  isEmergencyContact?: boolean
+  relationship?: string
+  contact?: ContactInfo
+}
+
 interface User {
-  id: number
-  legalName: Name
-  userRoleCode: string
-  contactInfo: ContactInfo
+  id?: number
+  legalName?: Name
+  userRoleCode?: string
+  contactInfo?: ContactInfo
   avatar?: string
+  dateOfBirth?: string
 }
 
 interface Staff {
@@ -49,4 +66,4 @@ interface Staff {
   virtualRoomLink?: string
 }
 
-export type { User, Staff }
+export type { User, Staff, Name, ContactInfo, Guardian }

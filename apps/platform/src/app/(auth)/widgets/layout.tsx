@@ -35,6 +35,10 @@ const navMenuItems: MenuItem[] = [
     href: '/widgets/edit-referral',
   },
   {
+    label: 'OTP Dialog',
+    href: '/widgets/otp-dialog',
+  },
+  {
     label: 'Patient Lookup',
     href: '/widgets/patient-lookup',
   },
@@ -45,6 +49,14 @@ const navMenuItems: MenuItem[] = [
   {
     label: 'Fee Schedules',
     href: '/widgets/fee-schedules',
+  },
+  {
+    label: 'Schedule Appointment Dialog',
+    href: '/widgets/schedule-appointment-dialog',
+  },
+  {
+    label: 'Schedule Appointment',
+    href: '/widgets/schedule-appointment-list',
   },
 ]
 

@@ -1,5 +1,5 @@
 import { type Metadata } from 'next'
-import { RootLayout } from '@psychplus/ui/root-layout'
+import { RootLayout } from '@psychplus/ui/patient-root-layout'
 
 export const metadata: Metadata = {
   title: 'title',

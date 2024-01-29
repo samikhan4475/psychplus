@@ -3,6 +3,14 @@ interface MarketingBenefit {
   priceLevels: PriceLevel[]
 }
 
+interface ConfigurationProtected {
+  configuration: {
+    display: string
+    tag: string
+    value: string
+  }[]
+}
+
 interface PriceLevel {
   cost: number
   costPer: string
@@ -17,4 +25,9 @@ interface PaymentService {
   paymentPlanId?: string
 }
 
-export type { MarketingBenefit, PriceLevel, PaymentService }
+export type {
+  MarketingBenefit,
+  PriceLevel,
+  PaymentService,
+  ConfigurationProtected,
+}

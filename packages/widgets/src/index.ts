@@ -5,6 +5,9 @@ const ALL_REFERRALS_LIST_WIDGET = 'all-referrals'
 const CREATE_REFERRAL_WIDGET = 'create-referral'
 const EDIT_REFERRAL_WIDGET = 'edit-referral'
 const REFERRAL_DETAILS_WIDGET = 'referral-details'
+const SCHEDULE_APPOINTMENT_DIALOG = 'schedule-appointment-dialog'
+const SCHEDULE_APPOINTMENT_LIST = 'schedule-appointment-list'
+const OTP_DIALOG = 'otp-dialog'
 
 export {
   USER_WIDGET,
@@ -14,4 +17,7 @@ export {
   CREATE_REFERRAL_WIDGET,
   EDIT_REFERRAL_WIDGET,
   REFERRAL_DETAILS_WIDGET,
+  SCHEDULE_APPOINTMENT_DIALOG,
+  SCHEDULE_APPOINTMENT_LIST,
+  OTP_DIALOG,
 }

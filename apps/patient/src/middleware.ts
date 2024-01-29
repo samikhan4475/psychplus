@@ -1,13 +1,11 @@
 import { createMiddleware } from '@psychplus/auth'
 
-const REQUIRE_AUTH = ['/dashboard']
-const REQUIRE_ANON = [
-  '/',
-  '/login',
-  '/signup',
-  '/schedule-appointment',
-  '/schedule-appointment/personal-details',
+const REQUIRE_AUTH = [
+  '/dashboard',
+  '/schedule-appointment/insurance-payment',
+  '/schedule-appointment/confirmation',
 ]
+const REQUIRE_ANON = ['/', '/login', '/signup']
 
 export const config = {
   matcher: '/((?!.*\\.).*)',

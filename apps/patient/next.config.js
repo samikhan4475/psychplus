@@ -11,6 +11,9 @@ const config = {
   swcMinify: true,
   output: 'standalone',
   transpilePackages: [],
+  env: {
+    APP_ENV: process.env.APP_ENV,
+  },
 }
 
 module.exports = config

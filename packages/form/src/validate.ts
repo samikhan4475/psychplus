@@ -3,13 +3,20 @@ import { z } from 'zod'
 // ======= Regex ========
 const phoneRegex = /^\+?[1-9]\d{7,14}$/
 const charRegex = /^[A-Za-z]*$/
+const passwordRegex =
+  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@#!()%*?&])[A-Za-z\d$@#!()%*?&]{8,16}$/
 
 const requiredString = z.string().min(1, 'Required')
+const nullableString = z.string().nullable().default(null)
 const email = requiredString.email()
 const phoneNumber = requiredString.regex(phoneRegex, 'Invalid phone number')
 const password = requiredString.min(
   8,
   'Password must contain at least 8 characters',
+)
+const passwordStrong = requiredString.regex(
+  passwordRegex,
+  'Password requires atleast one uppercase, number, and special character.',
 )
 
 const anyString = z.coerce.string()
@@ -30,8 +37,10 @@ const nullOrNumber = z.union([z.null(), numberOnly])
 
 const validate = {
   requiredString,
+  nullableString,
   email,
   password,
+  passwordStrong,
   phoneNumber,
 
   anyString,

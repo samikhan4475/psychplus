@@ -10,6 +10,7 @@ export * from './header'
 export * from './psychplus-membership-dialog'
 export * from './feature-coming-soon-dialog'
 export * from './book-appointment/book-appointment-dialog'
+export * from './image-uploader'
 
 export * from './colors'
 export * from './icons'

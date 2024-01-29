@@ -1,9 +1,9 @@
 import { handleRequest } from '@psychplus/utils/api'
 import { createHeaders } from '@psychplus/utils/client'
-import type { Clinic, ClinicsDistanceRequest } from './types'
+import { Clinic, ClinicsDistancePayload } from '.'
 
 const getClinicsDistanceForUnauthenticatedUser = async (
-  request: ClinicsDistanceRequest,
+  request: ClinicsDistancePayload,
 ): Promise<Clinic[]> => {
   const { latitude = 0, longitude = 0, miles = 20 } = request
 

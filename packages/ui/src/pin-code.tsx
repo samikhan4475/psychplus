@@ -69,6 +69,11 @@ const PinCode = ({
 
       setValue([...value])
       setFocus(value.length - 1)
+
+      onChange?.(pastedData)
+      if (pastedData.length === pinLength) {
+        onFinish?.(pastedData)
+      }
     }
   }
 
