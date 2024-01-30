@@ -57,7 +57,7 @@ const FilterPanel = () => {
         <FilterOptionsDropDown
           prefix="Sort by"
           filterType="sortBy"
-          options={['Ratings', 'Nearest', 'First Available']}
+          options={['Nearest', 'First Available']}
           onFilterChange={handleFiltersChange}
           placeholder="Sort by"
         />

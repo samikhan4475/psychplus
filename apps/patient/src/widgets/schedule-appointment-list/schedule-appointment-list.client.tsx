@@ -7,6 +7,7 @@ import { useDebounce } from 'use-debounce'
 import { StaffAppointmentAvailabilities } from '@psychplus/appointments'
 import { getAppointmentAvailabilityForUnauthenticatedUser } from '@psychplus/appointments/api.client'
 import { getCodeSets } from '@psychplus/codeset/api.client'
+import { Popover } from '@psychplus/ui/popover'
 import { formatDateYmd } from '@psychplus/utils/time'
 import { SCHEDULE_APPOINTMENT_LIST } from '@psychplus/widgets'
 import {

@@ -1,12 +1,12 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { CheckIcon, GlobeIcon } from '@radix-ui/react-icons'
 import { Box, Flex, Text } from '@radix-ui/themes'
 import { getCodeDisplay } from '@psychplus/codeset'
 import { getStaffProfilePicture } from '@psychplus/staff/api.client'
-import { DropdownMenu } from '@psychplus/ui/dropdown-menu'
-import { DownArrowIcon, psychPlusBlueColor, StarRating } from '@/components'
+import { Popover } from '@psychplus/ui/popover'
+import { DownArrowIcon, psychPlusBlueColor } from '@/components'
 import { DistanceIcon } from '@/components/icons/distance-icon'
 import { LocationMarkerIcon } from '@/components/icons/location-marker-icon'
 import { WeeklyAvailabilitySlots } from '../../components'
@@ -46,7 +46,6 @@ const ProviderWithClinicAndWeeklyAvailability = ({
           </Text>
 
           <Flex align="center">
-            <StarRating filledStars={3} />
             <Text size="1" className="text-[#194595]" ml="1">
               {getCodeDisplay(
                 specialistTypeCodeSet,
@@ -87,7 +86,7 @@ const renderLanguageAndLocation = (
   <Flex direction="column" mt="4" gap="3" className="w-52">
     {appointmentType === 'In-Person' && (
       <Flex gap="2">
-        <Flex>
+        <Flex mt="1">
           <LocationMarkerIcon />
         </Flex>
         <ClinicsDropDown
@@ -136,16 +135,29 @@ const ClinicsDropDown = ({
   onClinicSelect: (id: number) => void
   selectedClinicId: number
 }) => {
+  const closeRef = useRef<HTMLButtonElement>(null)
+
+  const closeMenu = useCallback(() => {
+    if (closeRef.current) {
+      closeRef.current.click()
+    }
+  }, [closeRef])
+
   const defaultClinic = clinics.find(
     (clinic) => clinic.clinic.id === selectedClinicId,
   )
+
   const uniqueClinics = clinics.filter(
     (clinic, index, self) =>
       index === self.findIndex((c) => c.clinic.id === clinic.clinic.id),
   )
+
   return (
-    <DropdownMenu.Root>
-      <DropdownMenu.Trigger>
+    <Popover.Root>
+      <Popover.Close ref={closeRef} id="popover-close">
+        <div />
+      </Popover.Close>
+      <Popover.Trigger className="cursor-pointer rounded-3 p-1 hover:bg-gray-2">
         <Flex key={defaultClinic?.clinic.id}>
           <Text className="text-[#575759]" size="2">
             {defaultClinic?.clinic.name}{' '}
@@ -159,45 +171,42 @@ const ClinicsDropDown = ({
             <DownArrowIcon height={18} width={18} />
           </Flex>
         </Flex>
-      </DropdownMenu.Trigger>
-
-      <DropdownMenu.Content
+      </Popover.Trigger>
+      <Popover.Content
         align="end"
-        className="max-h-[300px] overflow-y-auto"
+        className="max-h-[300px] overflow-y-auto p-2"
       >
-        {uniqueClinics.map((clinic, index) => (
-          <Box key={clinic.clinic.id}>
-            <DropdownMenu.Item
-              className="py-6 text-[#575759] hover:bg-[#151B4A] hover:text-[#FFFFFF]"
-              key={clinic.clinic.id}
-              onClick={() => onClinicSelect(clinic.clinic.id)}
-            >
-              <Flex>
-                <Flex className="w-7">
-                  {clinic.clinic.id === selectedClinicId && (
-                    <CheckIcon color="#151B4A" height={18} width={18} />
-                  )}
-                </Flex>
-                <Flex pr="7">
-                  <Text size="2">
-                    {clinic.clinic.name}{' '}
-                    {clinic.clinic.contact?.addresses?.[0].street1}
-                    <br />
-                    {clinic.clinic.contact?.addresses?.[0].city}
-                    {', '}
-                    {clinic.clinic.contact?.addresses?.[0].state}{' '}
-                    {clinic.clinic.contact?.addresses?.[0].postalCode}
-                  </Text>
-                </Flex>
+        {uniqueClinics.map((clinic) => (
+          <Box
+            key={clinic.clinic.id}
+            className="cursor-pointer rounded-3 py-2 text-[#575759] hover:bg-[#151B4A] hover:text-[#FFFFFF]"
+            onClick={() => {
+              onClinicSelect(clinic.clinic.id)
+              closeMenu()
+            }}
+          >
+            <Flex>
+              <Flex className="w-7">
+                {clinic.clinic.id === selectedClinicId && (
+                  <CheckIcon color="#151B4A" height={18} width={18} />
+                )}
               </Flex>
-            </DropdownMenu.Item>
-            {index < uniqueClinics.length - 1 && (
-              <DropdownMenu.Separator className="mx-0 bg-[#F3F6FE]" />
-            )}
+              <Flex pr="7">
+                <Text size="2">
+                  {clinic.clinic.name}{' '}
+                  {clinic.clinic.contact?.addresses?.[0].street1}
+                  <br />
+                  {clinic.clinic.contact?.addresses?.[0].city}
+                  {', '}
+                  {clinic.clinic.contact?.addresses?.[0].state}{' '}
+                  {clinic.clinic.contact?.addresses?.[0].postalCode}
+                </Text>
+              </Flex>
+            </Flex>
           </Box>
         ))}
-      </DropdownMenu.Content>
-    </DropdownMenu.Root>
+      </Popover.Content>
+    </Popover.Root>
   )
 }
 
