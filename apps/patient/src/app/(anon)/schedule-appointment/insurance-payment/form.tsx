@@ -224,6 +224,7 @@ const InsurancePaymentForm = ({
     const payer = await fetchInsurancePayer(payerId)
     form.setValue('insurancePayerId', payerId)
     setInsurancePlans(payer.plans ?? [])
+    form.trigger('insurancePayerId')
   }
 
   return (
@@ -332,9 +333,10 @@ const InsurancePaymentForm = ({
                 size="3"
                 name="insurancePlanId"
                 value={form.watch('insurancePlanId') ?? ''}
-                onValueChange={(value) =>
+                onValueChange={(value) => {
                   form.setValue('insurancePlanId', value)
-                }
+                  form.trigger('insurancePlanId')
+                }}
               >
                 <Select.Trigger
                   placeholder="Select Insurance Plan"
@@ -407,11 +409,11 @@ const InsurancePaymentForm = ({
                 max="9999-12-31"
                 onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                   const selectedDate = event.target.value
-                  console.log('selectedDate', selectedDate)
                   const [effectiveDate] = new Date(selectedDate)
                     .toISOString()
                     .split('T')
                   form.setValue('effectiveDate', effectiveDate)
+                  form.trigger('effectiveDate')
                 }}
                 className="mr-2 mt-2 h-[50px] w-full text-3 font-regular text-gray-10"
               />
