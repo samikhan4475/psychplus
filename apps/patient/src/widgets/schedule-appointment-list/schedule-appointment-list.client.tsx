@@ -75,7 +75,7 @@ const ScheduleAppointmentListClient = () => {
       type: filters.appointmentType === 'In-Person' ? 'InPerson' : 'TeleVisit',
       specialistTypeCode: filters.providerType === 'Psychiatrist' ? 1 : 2,
       startingDate: filters.startingDate,
-      maxDaysOutToLook: 6,
+      maxDaysOutToLook: 7,
     }).then(setStaffAppointmentAvailabilities)
   }, [
     debouncedZipCode,
