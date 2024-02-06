@@ -1,4 +1,12 @@
+'use client'
+
+import { useEffect, useState } from 'react'
 import { Flex } from '@radix-ui/themes'
+import { CareTeam, Patient } from '@psychplus/patient'
+import {
+  getLoggedInPatientCareTeam,
+  getLoggedInPatientProfile,
+} from '@psychplus/patient/api.client'
 import {
   ActiveMedicationCard,
   CarePlanCard,
@@ -7,8 +15,28 @@ import {
   ScheduledAppointmentCard,
 } from '@/components'
 import { PatientProfileCard } from '@/components/patient-profile-card'
+import { useStore } from '../store'
 
 const HomePage = () => {
+  const { patient, setPatient, patientCareTeam, setPatientCareTeam } =
+    useStore()
+
+  const [patientState, setPatientState] = useState<Patient>()
+  const [patientCareTeamState, setPatientCareTeamState] = useState<CareTeam>()
+
+  useEffect(() => {
+    getLoggedInPatientProfile().then(setPatient)
+    getLoggedInPatientCareTeam().then(setPatientCareTeam)
+  }, [])
+
+  useEffect(() => {
+    setPatientState(patient)
+  }, [patient])
+
+  useEffect(() => {
+    setPatientCareTeamState(patientCareTeam)
+  }, [patientCareTeam])
+
   return (
     <Flex px={{ md: '8', lg: '9' }} p="4" py="5" direction="column" gap="8">
       <CarePlanCard />
@@ -21,8 +49,8 @@ const HomePage = () => {
           gap="6"
           direction="column"
         >
-          <PatientProfileCard />
-          <CareTeamCard />
+          <PatientProfileCard patient={patientState} />
+          <CareTeamCard careTeam={patientCareTeamState} />
         </Flex>
         <Flex className="w-full">
           <ScheduledAppointmentCard />

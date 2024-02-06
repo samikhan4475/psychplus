@@ -25,10 +25,10 @@ const ScheduledAppointmentCard = () => {
             </Text>
           </Flex>
           <Flex gap="4">
-            <Button size="3" color="blue" className="w-48 whitespace-nowrap">
+            <Button size="3" className="w-48 whitespace-nowrap">
               PSYCHIATRIST
             </Button>
-            <Button size="3" color="blue" className="w-48 whitespace-nowrap">
+            <Button size="3" className="w-48 whitespace-nowrap">
               THERAPIST
             </Button>
           </Flex>

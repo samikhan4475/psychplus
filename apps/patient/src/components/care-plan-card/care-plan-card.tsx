@@ -37,7 +37,7 @@ const CarePlanCard = () => {
             key={code.code}
             justify="center"
             align="center"
-            className={`h-12  w-1/4 rounded-2 border-2 border-blue-11 text-blue-11 transition duration-500 hover:bg-blue-11 hover:text-accent-1 max-xs:w-full`}
+            className="h-12 w-1/4 rounded-2 border-2 border-accent-11 text-accent-11 transition duration-500 hover:bg-accent-11 hover:text-accent-1 max-xs:w-full"
             onClick={toggleDialog}
           >
             <Text size="4">{code.display}</Text>

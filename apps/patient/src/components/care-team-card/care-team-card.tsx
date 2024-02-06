@@ -1,37 +1,18 @@
 'use client'
 
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Button, Flex, Link, Text } from '@radix-ui/themes'
+import { type CareTeam, type CareTeamMember } from '@psychplus/patient'
+import { getPatientProfileImage } from '@psychplus/patient/api.client'
 import { Avatar } from '@psychplus/ui/avatar'
 
-type TeamMember = {
-  name: string
-  credentials: string
-  type: string
-  profilePicUrl: string
-}
-
-// We will fetch this from API
-const careTeam: TeamMember[] = [
-  {
-    name: 'DR TEST3',
-    credentials: 'MD',
-    type: 'Psychiatrist',
-    profilePicUrl:
-      'https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?&w=256&h=256&q=70&crop=focalpoint&fp-x=0.5&fp-y=0.3&fp-z=1&fit=crop',
-  },
-  {
-    name: 'test luke',
-    credentials: 'LCP',
-    type: 'Therapist',
-    profilePicUrl:
-      'https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?&w=256&h=256&q=70&crop=focalpoint&fp-x=0.5&fp-y=0.3&fp-z=1&fit=crop',
-  },
-]
-
-const CareTeamCard = () => {
-  const psychiatrist = careTeam.find((member) => member.type === 'Psychiatrist')
-  const therapist = careTeam.find((member) => member.type === 'Therapist')
+const CareTeamCard = ({ careTeam }: { careTeam: CareTeam | undefined }) => {
+  const psychiatrist = careTeam?.careTeam.find(
+    (member) => member.primary && member.specialist === 'Psychiatrist',
+  )
+  const therapist = careTeam?.careTeam.find(
+    (member) => member.primary && member.specialist === 'Therapist',
+  )
 
   return (
     <Flex
@@ -44,17 +25,25 @@ const CareTeamCard = () => {
       <Text size="7" className="font-bold" align="center">
         Your Care Team
       </Text>
-      {renderTeamMember(psychiatrist, 'No psychiatrist available.')}
+      {RenderTeamMember(psychiatrist, 'No psychiatrist available.')}
 
-      {renderTeamMember(therapist, 'No therapist available.')}
+      {RenderTeamMember(therapist, 'No therapist available.')}
     </Flex>
   )
 }
 
-const renderTeamMember = (
-  teamMember?: TeamMember,
-  notAvailableMessage = 'Not available.',
+const RenderTeamMember = (
+  teamMember: CareTeamMember | undefined,
+  notAvailableMessage: string,
 ) => {
+  const [profileImage, setProfileImage] = useState<string>('')
+
+  useEffect(() => {
+    if (teamMember) {
+      getPatientProfileImage(teamMember.id).then(setProfileImage)
+    }
+  }, [teamMember?.id])
+
   if (!teamMember) {
     return (
       <Text className="font-bold" align="center">
@@ -68,22 +57,27 @@ const renderTeamMember = (
       <Flex gap="4" align="center">
         <Avatar
           size="6"
-          src={teamMember.profilePicUrl}
-          fallback="A"
+          src={profileImage}
+          color="gray"
+          fallback={teamMember.staffDetails.legalName.firstName[0] ?? 'A'}
           radius="full"
         />
         <Flex direction="column" gap="1" className="font-bold">
-          <Text size="5">{`${teamMember.name}, ${teamMember.credentials}`}</Text>
-          <Text size="2">{teamMember.type}</Text>
+          <Text size="5">
+            {`${teamMember.staffDetails.legalName.firstName}
+            ${teamMember.staffDetails.legalName.lastName},
+            ${teamMember.staffDetails.legalName.honors}`}
+          </Text>
+          <Text size="4" className="font-medium">
+            {teamMember.specialist}
+          </Text>
         </Flex>
       </Flex>
-      <Button size="3" color="blue" className="whitespace-nowrap">
+      <Button size="4" className="whitespace-nowrap font-bold">
         BOOK APPOINTMENT
       </Button>
-      <Flex justify="end" mt="-2" className="font-bold">
-        <Link color="blue" size="2">
-          Change Provider
-        </Link>
+      <Flex justify="end" mt="-2" className="font-medium">
+        <Link size="4">Change Provider</Link>
       </Flex>
     </Flex>
   )

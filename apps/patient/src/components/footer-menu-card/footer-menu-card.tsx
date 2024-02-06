@@ -62,7 +62,7 @@ const FooterMenuSection = ({
     align="center"
     justify="center"
     direction="column"
-    className="h-28 gap-2 rounded-5 border-2 border-blue-11 p-3 text-blue-11 transition duration-500 hover:bg-blue-11 hover:text-accent-1 max-xs:w-1/2 xs:w-1/3 sm:w-1/3 md:w-1/3 lg:w-44"
+    className="h-28 gap-2 rounded-5 border-2 border-accent-11 p-3 text-accent-11 transition duration-500 hover:bg-accent-11 hover:text-accent-1 max-xs:w-1/2 xs:w-1/3 sm:w-1/3 md:w-1/3 lg:w-44"
     onClick={toggleDialog}
   >
     {icon}

@@ -7,9 +7,10 @@ import { LoginForm } from './login-form'
 
 interface LoginPageProps {
   showSignupLink?: boolean
+  redirectTo?: string
 }
 
-const LoginPage = ({ showSignupLink = true }: LoginPageProps) => (
+const LoginPage = ({ showSignupLink = true, redirectTo }: LoginPageProps) => (
   <Flex height="100%">
     <div className="hidden bg-accent-9 md:block md:w-4/12" />
     <Flex direction="column" justify="center" grow="1" py="4" px="6">
@@ -18,7 +19,7 @@ const LoginPage = ({ showSignupLink = true }: LoginPageProps) => (
           <Heading size="7" align="center" mb="6">
             Sign in
           </Heading>
-          <LoginForm />
+          <LoginForm redirect={redirectTo ?? undefined} />
           {showSignupLink ? (
             <Text size="2" mt="4">
               Don&apos;t have an account?

@@ -5,7 +5,13 @@ const REQUIRE_AUTH = [
   '/schedule-appointment/insurance-payment',
   '/schedule-appointment/confirmation',
 ]
-const REQUIRE_ANON = ['/', '/login', '/signup']
+const REQUIRE_ANON = [
+  '/',
+  '/login',
+  '/signup',
+  '/schedule-appointment',
+  '/schedule-appointment/personal-details',
+]
 
 export const config = {
   matcher: '/((?!.*\\.).*)',

@@ -1,3 +1,5 @@
+import type { LegalName, Metadata } from '@psychplus/clinics/shared'
+
 interface PatientMetadata {
   createdOn: string
   createdBy: number
@@ -47,4 +49,27 @@ interface PatientParams {
   patientId: number
 }
 
-export type { Patient, PatientParams }
+interface CareTeamMember {
+  id: number
+  metadata: PatientMetadata
+  primary: boolean
+  admin: boolean
+  specialist: string
+  medicalAssistant: boolean
+  staffDetails: {
+    id: number
+    metadata: Metadata
+    isTest: boolean
+    legalName: LegalName
+    staffRoleCode: string
+    contactInfo: PatientContactDetails
+    spokenLanguages: string[]
+    virtualRoomLink: string
+  }
+}
+
+interface CareTeam {
+  careTeam: CareTeamMember[]
+}
+
+export type { Patient, PatientParams, CareTeamMember, CareTeam }

@@ -17,6 +17,7 @@
     "@psychplus/codeset": "^0.1.0",
     "@psychplus/form": "^0.1.0",
     "@psychplus/metadata": "^0.1.0",
+    "@psychplus/patient": "^0.1.0",
     "@psychplus/staff": "^0.1.0",
     "@psychplus/ui": "^0.1.0",
     "@psychplus/user": "^0.1.0",

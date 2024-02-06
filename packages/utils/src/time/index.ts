@@ -99,6 +99,21 @@ const formatLocaleDate = (date: Date) => {
 
 const formatDateTime = (date: Date) => `${formatDate(date)} ${formatTime(date)}`
 
+const calculateAge = (date?: string | Date) => {
+  const today = new Date()
+  const birthDate = new Date(date ?? '')
+  const age =
+    today.getFullYear() -
+    birthDate.getFullYear() -
+    (today.getMonth() - birthDate.getMonth() < 0 ||
+    (today.getMonth() === birthDate.getMonth() &&
+      today.getDate() < birthDate.getDate())
+      ? 1
+      : 0)
+
+  return age
+}
+
 export {
   isEmptyDate,
   daysAgo,
@@ -110,4 +125,5 @@ export {
   formatLocaleDate,
   formatDateTime,
   formatDateToCst,
+  calculateAge,
 }

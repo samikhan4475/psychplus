@@ -144,6 +144,9 @@ importers:
       '@psychplus/metadata':
         specifier: ^0.1.0
         version: link:../../packages/metadata
+      '@psychplus/patient':
+        specifier: ^0.1.0
+        version: link:../../packages/patient
       '@psychplus/staff':
         specifier: ^0.1.0
         version: link:../../packages/staff
@@ -618,6 +621,9 @@ importers:
 
   packages/patient:
     dependencies:
+      '@psychplus/clinics':
+        specifier: ^0.1.0
+        version: link:../clinics
       '@psychplus/utils':
         specifier: ^0.1.0
         version: link:../utils
