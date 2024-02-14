@@ -1,6 +1,7 @@
 'use client'
 
-import { Button, Flex, Text } from '@radix-ui/themes'
+import { Flex, Text } from '@radix-ui/themes'
+import { ScheduleAppointmentDialog } from '@/components'
 
 //we will fetch this Data from API
 const nextAvailableAppointments = []
@@ -20,17 +21,13 @@ const ScheduledAppointmentCard = () => {
       ) : (
         <Flex justify="center" direction="column" align="center" gap="3">
           <Flex>
-            <Text size="5" className="font-bold">
+            <Text size="7" className="font-bold">
               Book an appointment
             </Text>
           </Flex>
-          <Flex gap="4">
-            <Button size="3" className="w-48 whitespace-nowrap">
-              PSYCHIATRIST
-            </Button>
-            <Button size="3" className="w-48 whitespace-nowrap">
-              THERAPIST
-            </Button>
+          <Flex gap="4" className="flex-row max-xs:flex-col">
+            <ScheduleAppointmentDialog title="PSYCHIATRIST" />
+            <ScheduleAppointmentDialog title="THERAPIST" />
           </Flex>
         </Flex>
       )}

@@ -17,3 +17,4 @@ export * from './icons'
 
 export * from './star-ratings'
 export * from './schedule-appointments'
+export * from './schedule-appointment-dialog'

@@ -5,6 +5,7 @@ const phoneRegex = /^\+?[1-9]\d{7,14}$/
 const charRegex = /^[A-Za-z]*$/
 const passwordRegex =
   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@#!()%*?&])[A-Za-z\d$@#!()%*?&]{8,16}$/
+const zipCodeRegex = /(^\d{5}$)|(^\d{5}-\d{4}$)/
 
 const requiredString = z.string().min(1, 'Required')
 const nullableString = z.string().nullable().default(null)
@@ -18,6 +19,8 @@ const passwordStrong = requiredString.regex(
   passwordRegex,
   'Password requires atleast one uppercase, number, and special character.',
 )
+
+const zipCode = requiredString.regex(zipCodeRegex, 'Invalid zip code format!')
 
 const anyString = z.coerce.string()
 const numberOnly = z.coerce.number()
@@ -42,6 +45,8 @@ const validate = {
   password,
   passwordStrong,
   phoneNumber,
+  zipCode,
+  zipCodeRegex,
 
   anyString,
   numberOnly,
