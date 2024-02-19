@@ -93,7 +93,8 @@ const handlePageRequest = (request: NextRequest, config: MiddlewareConfig) => {
   if (
     config.requireAnon.some(
       (route) =>
-        route !== INDEX_PATH && request.nextUrl.pathname.startsWith(route),
+        route !== INDEX_PATH &&
+        request.nextUrl.pathname.replace(/\/$/, '') === route,
     ) &&
     authToken
   ) {

@@ -21,11 +21,13 @@ const ScheduleAppointment = () => {
           Schedule Appointment
         </Button>
       </Dialog.Trigger>
-      <Dialog.Content className="relative max-w-[720px] rounded-6 p-12 font-bold text-[#151B4A]">
+      <Dialog.Content className="relative max-w-[720px] rounded-6 px-5 py-12 font-bold text-[#151B4A] sm:p-12">
         <Dialog.Close className="absolute right-4 top-4 cursor-pointer">
           <Cross2Icon />
         </Dialog.Close>
-        <Dialog.Title size="8">Schedule an appointment</Dialog.Title>
+        <Dialog.Title className="text-7 max-sm:text-6 max-xs:text-5 sm:text-8 md:text-8 lg:text-8 xl:text-8">
+          Schedule an appointment
+        </Dialog.Title>
         <ScheduleTabs onClose={onClose} />
       </Dialog.Content>
     </Dialog.Root>

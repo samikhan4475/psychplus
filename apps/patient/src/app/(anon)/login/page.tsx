@@ -2,6 +2,6 @@
 
 import { LoginPage as BaseLoginPage } from '@psychplus/auth/login'
 
-const LoginPage = () => <BaseLoginPage redirectTo="/dashboard" />
+const LoginPage = () => <BaseLoginPage />
 
 export default LoginPage

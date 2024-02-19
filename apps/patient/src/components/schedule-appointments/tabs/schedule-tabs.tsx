@@ -9,12 +9,12 @@ interface ScheduleTabsProps {
 }
 
 const tabsItemClasses =
-  'w-[172px] h-[40px] text-[#79808F] text-5 justify-evenly items-center border-t-none border-x-none font-sans font-light transition duration-1000 data-[state=active]:border-[#151B4A] data-[state=active]:border-b-4 outline-none data-[state=active]:text-[#151B4A] data-[state=active]:text-6 data-[state=active]:font-bold mt-3'
+  'w-[172px] sm:text-6 h-[40px] text-[#79808F] text-5 justify-evenly items-center border-t-none border-x-none font-sans font-light transition duration-1000 data-[state=active]:border-[#151B4A] data-[state=active]:border-b-4 outline-none data-[state=active]:text-[#151B4A] data-[state=active]:font-bold mt-3'
 
 const ScheduleTabs = ({ onClose }: ScheduleTabsProps) => {
   return (
     <Tabs.Root defaultValue="new_patient" className="">
-      <Tabs.List className="flex gap-20 border-b border-[#D4D4D4]">
+      <Tabs.List className="gap-15 flex border-b border-[#D4D4D4] sm:gap-20">
         <Tabs.Trigger className={tabsItemClasses} value="new_patient">
           New Patient
         </Tabs.Trigger>

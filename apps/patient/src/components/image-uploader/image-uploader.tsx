@@ -35,17 +35,16 @@ const ImageUploader = ({
   return (
     <button
       type="button"
-      className="flex h-[257px] w-[312px] cursor-pointer rounded-[20px] border border-dashed border-[#bebebe]"
+      className="flex h-auto w-2/4 max-w-[312px] cursor-pointer justify-center rounded-[20px] border border-dashed border-[#bebebe]"
       onClick={handleFileInputClick}
       onKeyDown={(e) => e.stopPropagation()}
     >
       {previewImage ? (
-        <div className="relative h-full w-full overflow-hidden">
+        <div className="relative h-full w-full overflow-hidden rounded-[20px]">
           <Image
             src={previewImage}
             layout="fill"
             objectFit="cover"
-            className="rounded-[20px] p-1"
             alt="Preview"
           />
         </div>
@@ -53,15 +52,10 @@ const ImageUploader = ({
         <Flex
           display="inline-flex"
           direction="column"
-          className="relative left-[95px] top-[46px] inline-flex items-center"
+          className="items-center p-4"
         >
-          <Image
-            src="/images/upload-icon.svg"
-            alt=""
-            width={120}
-            height={120}
-          />
-          <div className="text-center text-[14px]">
+          <Image src="/images/upload-icon.svg" alt="" width={80} height={80} />
+          <div className="mt-2 text-center text-[12px]">
             <Text dangerouslySetInnerHTML={{ __html: displayText }} />
           </div>
         </Flex>

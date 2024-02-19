@@ -254,7 +254,7 @@ const PersonalDetailsForm = () => {
             />
           </Flex>
 
-          <Flex gap="4">
+          <Flex className="flex-col sm:flex-row" gap="4">
             <Flex direction="column" gap="1" className="w-full">
               <Text>First name</Text>
               <FormTextInput
@@ -277,7 +277,7 @@ const PersonalDetailsForm = () => {
             </Flex>
           </Flex>
 
-          <Flex gap="4">
+          <Flex className="flex-col sm:flex-row" gap="4">
             <Flex direction="column" gap="1" className="w-full">
               <Text>Date of birth</Text>
               <FormTextInput
@@ -321,10 +321,10 @@ const PersonalDetailsForm = () => {
           </Flex>
         </Flex>
 
-        <Flex>
+        <Flex className="flex-col gap-2 sm:flex-row">
           <Text size="4">Do you have a parent/guardian?</Text>
 
-          <Flex justify="end" className="flex-auto">
+          <Flex className="flex-auto justify-start sm:justify-end">
             <RadioGroup.Root
               value={form.watch('isParentOrGuardian') ? 'Yes' : 'No'}
               data-testid="is-parent-or-guardian-input"
@@ -347,7 +347,7 @@ const PersonalDetailsForm = () => {
         </Flex>
 
         {form.watch('isParentOrGuardian') && (
-          <Flex gap="4">
+          <Flex gap="4" className="mb-2 flex-col sm:flex-row">
             <Flex direction="column" gap="1" className="w-full">
               <Text>First name</Text>
               <FormTextInput
@@ -397,13 +397,13 @@ const PersonalDetailsForm = () => {
           />
         </Flex>
 
-        <Flex align="center" gap="6">
+        <Flex align="center" className="gap-5 sm:gap-6">
           <FormSubmitButton
             data-testid="signup-submit-button"
             radius="full"
-            className="h-16 w-40 bg-[#151B4A] text-[#FFFFFF]"
+            className="h-8 w-16 bg-[#151B4A] text-[#FFFFFF] sm:h-16 sm:w-40"
           >
-            <Text size="5" className="font-bold">
+            <Text className="text-2 font-bold sm:text-5">
               {isLoading ? 'Loading...' : 'Next'}
             </Text>
           </FormSubmitButton>

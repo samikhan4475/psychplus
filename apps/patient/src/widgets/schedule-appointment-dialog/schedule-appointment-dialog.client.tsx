@@ -26,11 +26,13 @@ const ScheduleAppointmentDialogClient = () => {
         }
       }}
     >
-      <Dialog.Content className="relative max-w-[720px] rounded-6 p-12 font-bold text-[#151B4A]">
+      <Dialog.Content className="relative max-w-[720px] rounded-6 px-5 py-12 font-bold text-[#151B4A] sm:p-12">
         <Dialog.Close className="absolute right-4 top-4 cursor-pointer">
           <Cross2Icon />
         </Dialog.Close>
-        <Dialog.Title size="8">Schedule an appointment</Dialog.Title>
+        <Dialog.Title className="text-center text-7 sm:text-left sm:text-8">
+          Schedule an appointment
+        </Dialog.Title>
         {open && <ScheduleTabs onClose={onClose} />}
       </Dialog.Content>
     </Dialog.Root>

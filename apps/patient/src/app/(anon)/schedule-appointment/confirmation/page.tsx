@@ -50,12 +50,12 @@ const ConfirmationPage = () => {
   return (
     <Flex direction="column" className="w-full" ref={ref}>
       <Container
-        className="px-[32%]"
+        className="px-6 sm:px-[32%]"
         style={{
           color: psychPlusBlueColor,
         }}
       >
-        <Text as="p" className="text-[32px] font-bold">
+        <Text as="p" className="text-[26px] font-bold sm:text-[32px]">
           Your appointment is booked!
         </Text>
 
@@ -73,7 +73,7 @@ const ConfirmationPage = () => {
         >
           <Flex justify="between">
             <Flex className="flex flex-col" gap="2">
-              <Text as="p" className="text-[18px] text-[#151B4A]">
+              <Text as="p" className="text-[18px] font-bold text-[#151B4A]">
                 {bookedSlotState?.clinic?.name}
               </Text>
               {bookedSlotState?.type === 'In-Person' && (
@@ -106,7 +106,7 @@ const ConfirmationPage = () => {
             </Flex>
             <Flex className="w-1/2" justify="end" align="end">
               <button
-                className="w-[50%] rounded-[100px] border py-[10px] text-[14px]"
+                className="w-[70%] rounded-[100px] border py-[10px] text-[14px] sm:w-[50%]"
                 onClick={() => window.open(googleEventLink, '_blank')}
               >
                 Add to Calendar
@@ -137,6 +137,9 @@ const ConfirmationPage = () => {
               </Flex>
             )}
         </Flex>
+        <Text as="p" className="mt-4 text-[18px] font-bold text-[#151B4A]">
+          Notes for your visit
+        </Text>
         <ul className="mt-5 list-disc">
           {appointmentConfirmationNotes.map((note) => (
             <li className="mb-2 leading-6 text-[#575759]" key={note}>
@@ -146,7 +149,7 @@ const ConfirmationPage = () => {
         </ul>
 
         <button
-          className="mt-6 rounded-[40px] px-[56px] py-[16px] text-5 font-bold"
+          className="mt-6 rounded-[40px] px-[40px] py-[13px] text-5 font-bold sm:px-[56px] sm:py-[16px]"
           style={{
             color: whiteColor,
             background: psychPlusBlueColor,

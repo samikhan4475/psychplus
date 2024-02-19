@@ -24,10 +24,10 @@ const FilterPanel = () => {
   }, [filters])
 
   return (
-    <Flex pt="1" pb="6" px="7" className="w-full flex-wrap" gap="5">
-      <Flex gap="7" className="flex-1">
-        <Flex gap="4" align="center">
-          <Text size="5">Appointment</Text>
+    <Flex pt="1" pb="6" className="w-full flex-wrap px-4 sm:px-7" gap="5">
+      <Flex className="flex-1 flex-col gap-6 sm:flex-row sm:gap-7">
+        <Flex align="center" className="gap-2 sm:gap-4">
+          <Text className="sm:text-5">Appointment</Text>
           {['Psychiatrist', 'Therapist'].map((option) => (
             <FilterOptionButton
               key={option}
@@ -53,7 +53,7 @@ const FilterPanel = () => {
         </Flex>
       </Flex>
 
-      <Flex gap="4">
+      <Flex className="gap-1 sm:gap-4">
         <FilterOptionsDropDown
           prefix="Sort by"
           filterType="sortBy"
@@ -72,7 +72,7 @@ const FilterPanel = () => {
           type="text"
           placeholder="ZIP Code"
           value={filtersState?.zipCode}
-          className="w-44 rounded-4 border border-gray-7 px-3 focus:border-blue-12 focus:outline-none"
+          className="sm:max-w-auto max-w-[25%] flex-1 rounded-4 border border-gray-7 px-3 focus:border-blue-12 focus:outline-none"
           style={{ color: psychPlusBlueColor }}
           onChange={(e) => handleFiltersChange({ zipCode: e.target.value })}
         />

@@ -6,6 +6,7 @@ import {
 } from '@psychplus/appointments'
 import { type Clinic } from '@psychplus/clinics'
 import { type Staff } from '@psychplus/staff'
+import { isMobile } from '@psychplus/utils/client'
 import { APP_ENV, TIMEZONE_FORMAT } from '@psychplus/utils/constants'
 import { type Location, type StaffWithClinicsAndSlots } from '../types'
 
@@ -194,9 +195,10 @@ function organizeSlotsByDate(slots: Slot[] | undefined, startingDate: string) {
   const slotsByDate: Record<string, Slot[]> = {}
   const [year, month, day] = startingDate.split('-').map(Number)
 
+  const daysToAdd = isMobile() ? 1 : 7
   let currentDay = day
   currentDay += 1
-  for (let i = 0; i < 7; i++) {
+  for (let i = 0; i < daysToAdd; i++) {
     const currentDate = new Date(year, month - 1, currentDay + i)
     const cstDateString = currentDate.toLocaleString('en-US', {
       timeZone: TIMEZONE_FORMAT,

@@ -231,7 +231,7 @@ const InsurancePaymentForm = ({
     <Form form={form} onSubmit={submitHandler}>
       <AppointmentDetailCard />
 
-      <Text size="8" className="my-5 font-bold">
+      <Text className="my-5 text-6 font-bold sm:text-7 md:text-8">
         Do you want to use your insurance
         <br />
         for this visit?
@@ -242,7 +242,7 @@ const InsurancePaymentForm = ({
           <button
             type="button"
             key={option.key}
-            className="border-darkblue mr-3 box-border rounded-[40px] border border-solid px-[40px] py-[15px]"
+            className="border-darkblue mr-3 box-border rounded-[40px] border border-solid px-[25px] py-[8px] sm:px-[40px] sm:py-[15px]"
             style={{
               color:
                 hasInsurance === option.value ? whiteColor : psychPlusBlueColor,

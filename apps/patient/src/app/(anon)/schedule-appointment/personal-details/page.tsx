@@ -12,7 +12,7 @@ const PersonalDetails = () => {
   usePublishSize(SCHEDULE_APPOINTMENT_LIST, ref)
 
   return (
-    <Flex justify="center" ref={ref}>
+    <Flex justify="center" ref={ref} className="px-5">
       <Flex direction="column" gap="6">
         <AppointmentDetailCard />
         <Flex direction="column" gap="2">

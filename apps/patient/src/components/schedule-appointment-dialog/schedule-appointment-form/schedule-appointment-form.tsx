@@ -51,7 +51,9 @@ const ScheduleAppointmentDialogForm = ({ onclose, title }: NewPatientProps) => {
           <Flex gap="3" className="flex-wrap">
             <ToggleGroup.Item
               value="Psychiatrist"
-              className={toggleGroupItemClasses + ' h-[60px] w-[292px]'}
+              className={
+                toggleGroupItemClasses + ' h-[60px] w-[268px] sm:w-[292px]'
+              }
             >
               Psychiatrist <Text size="1">(Diagnosis / Medications)</Text>
             </ToggleGroup.Item>

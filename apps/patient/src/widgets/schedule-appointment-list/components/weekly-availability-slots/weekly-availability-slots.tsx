@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { Button, Flex, Text } from '@radix-ui/themes'
 import { Slot } from '@psychplus/appointments'
 import { Staff } from '@psychplus/staff'
+import { isMobile } from '@psychplus/utils/client'
 import { formatTimeWithAmPm } from '@psychplus/utils/time'
 import { useStore } from '../../store'
 import type { ClinicWithSlots } from '../../types'
@@ -22,14 +23,14 @@ const WeeklyAvailabilitySlots = ({
   const { filters } = useStore()
 
   return (
-    <Flex gap="4">
+    <Flex gap="4" className="w-full">
       {Object.entries(
         organizeSlotsByDate(
           clinicWithSlots?.availableSlots,
           filters.startingDate,
         ),
       ).map(([date, slots], i) => (
-        <Flex className="w-20" key={`${date}-${i}`}>
+        <Flex className="w-full sm:w-20" key={`${date}-${i}`}>
           <SlotComponent
             slots={slots}
             clinicWithSlots={clinicWithSlots}
@@ -71,16 +72,21 @@ const SlotComponent = ({
   }
 
   return (
-    <Flex direction="column" gap="2">
-      {slots.slice(0, showAll ? slots.length : 3).map((slot, i) => (
-        <SlotItem
-          key={`${slot.startDate}-${i}`}
-          slot={slot}
-          onBookedSlot={setBookedSlotDetails}
-        />
-      ))}
+    <Flex
+      className="flex-row overflow-x-auto whitespace-nowrap pb-4 sm:flex-col"
+      gap="2"
+    >
+      {slots
+        .slice(0, showAll || isMobile() ? slots.length : 3)
+        .map((slot, i) => (
+          <SlotItem
+            key={`${slot.startDate}-${i}`}
+            slot={slot}
+            onBookedSlot={setBookedSlotDetails}
+          />
+        ))}
 
-      {slots.length > 3 && (
+      {!isMobile() && slots.length > 3 && (
         <Button
           className="h-[38px] rounded-3 bg-[white] text-[#151B4A] hover:bg-[#151B4A] hover:text-[white]"
           style={{ border: '1px solid #151B4A' }}
@@ -101,7 +107,7 @@ const SlotItem = ({
   onBookedSlot: (slot: Slot) => void
 }) => (
   <Flex
-    className="h-[38px] w-20 cursor-pointer rounded-3 border border-[#151B4A] text-[#151B4A] hover:bg-[#151B4A] hover:text-[white]"
+    className="h-[38px] w-20 cursor-pointer rounded-[20px] border border-[#151B4A] text-[#151B4A] hover:bg-[#151B4A] hover:text-[white] sm:rounded-3"
     align="center"
     justify="center"
     p="2"

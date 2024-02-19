@@ -7,7 +7,7 @@ import { useDebounce } from 'use-debounce'
 import { StaffAppointmentAvailabilities } from '@psychplus/appointments'
 import { getAppointmentAvailabilityForUnauthenticatedUser } from '@psychplus/appointments/api.client'
 import { getCodeSets } from '@psychplus/codeset/api.client'
-import { Popover } from '@psychplus/ui/popover'
+import { isMobile } from '@psychplus/utils/client'
 import { formatDateYmd } from '@psychplus/utils/time'
 import { SCHEDULE_APPOINTMENT_LIST } from '@psychplus/widgets'
 import {
@@ -128,11 +128,13 @@ const ScheduleAppointmentListClient = () => {
             <WeekCalendarRow />
           </Flex>
         </Flex>
-        <Flex
-          style={{
-            flex: filters.appointmentType === 'In-Person' ? 0.28 : 0,
-          }}
-        ></Flex>
+        {!isMobile() && (
+          <Flex
+            style={{
+              flex: filters.appointmentType === 'In-Person' ? 0.28 : 0,
+            }}
+          ></Flex>
+        )}
       </Flex>
 
       <Flex className="w-full">
@@ -156,23 +158,25 @@ const ScheduleAppointmentListClient = () => {
           ))}
         </Flex>
 
-        <Flex
-          justify="end"
-          style={{
-            flex: filters.appointmentType === 'In-Person' ? 0.28 : 0,
-          }}
-        >
-          {/*{filters.appointmentType === 'In-Person' && (*/}
-          {/*  <LocationMap*/}
-          {/*    width={350}*/}
-          {/*    height={640}*/}
-          {/*    zoom={17}*/}
-          {/*    locations={extractLocations(*/}
-          {/*      filteredStaffAppointmentAvailabilities,*/}
-          {/*    )}*/}
-          {/*  />*/}
-          {/*)}*/}
-        </Flex>
+        {!isMobile() && (
+          <Flex
+            justify="end"
+            style={{
+              flex: filters.appointmentType === 'In-Person' ? 0.28 : 0,
+            }}
+          >
+            {/*{filters.appointmentType === 'In-Person' && (*/}
+            {/*  <LocationMap*/}
+            {/*    width={350}*/}
+            {/*    height={640}*/}
+            {/*    zoom={17}*/}
+            {/*    locations={extractLocations(*/}
+            {/*      filteredStaffAppointmentAvailabilities,*/}
+            {/*    )}*/}
+            {/*  />*/}
+            {/*)}*/}
+          </Flex>
+        )}
       </Flex>
     </Flex>
   )

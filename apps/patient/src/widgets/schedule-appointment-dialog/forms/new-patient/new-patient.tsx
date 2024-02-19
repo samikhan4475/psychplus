@@ -120,13 +120,18 @@ const NewPatient = ({ onclose }: NewPatientProps) => {
         >
           <ToggleGroup.Item
             value="Psychiatrist"
-            className={toggleGroupItemClasses + ' h-[60px] w-[292px]'}
+            className={
+              toggleGroupItemClasses + ' h-[60px] w-[268px] sm:w-[292px]'
+            }
           >
             Psychiatrist <Text size="1">(Diagnosis / Medications)</Text>
           </ToggleGroup.Item>
           <ToggleGroup.Item
             value="Therapist"
-            className={toggleGroupItemClasses + ' ml-3 h-[60px] w-[207px]'}
+            className={
+              toggleGroupItemClasses +
+              ' mt-2 h-[60px] w-[207px] sm:ml-3 sm:mt-0'
+            }
           >
             Therapist <Text size="1">(Counseling)</Text>
           </ToggleGroup.Item>
@@ -146,13 +151,15 @@ const NewPatient = ({ onclose }: NewPatientProps) => {
           >
             <ToggleGroup.Item
               value="Virtual"
-              className={'h-[60px] w-[157px] ' + toggleGroupItemClasses}
+              className={'mr-3 h-[60px] w-[157px] ' + toggleGroupItemClasses}
             >
               Virtual
             </ToggleGroup.Item>
             <ToggleGroup.Item
               value="In-Person"
-              className={'ml-3 h-[60px] w-[178px] ' + toggleGroupItemClasses}
+              className={
+                'mt-2 h-[60px] w-[178px] sm:mt-0 ' + toggleGroupItemClasses
+              }
             >
               In-Person
             </ToggleGroup.Item>
@@ -161,7 +168,7 @@ const NewPatient = ({ onclose }: NewPatientProps) => {
       </Flex>
       <Form form={form} onSubmit={onSubmit}>
         <Flex className="gap-6 max-md:w-full" direction="column" py="2">
-          <Flex gap="6">
+          <Flex className="flex-col sm:flex-row" gap="6">
             <Flex direction="column" className="font-regular">
               <Text size="4" mb="3">
                 Date of Birth
@@ -173,7 +180,7 @@ const NewPatient = ({ onclose }: NewPatientProps) => {
                 data-testid="date-of-birth-input"
                 {...form.register('dateOfBirth')}
                 style={{ marginRight: 12 }}
-                className="h-[56px] w-[300px] rounded-2 text-4"
+                className="h-[56px] w-full rounded-2 text-4 sm:w-[300px]"
               />
             </Flex>
             <Flex direction="column" className="font-regular">
@@ -192,13 +199,7 @@ const NewPatient = ({ onclose }: NewPatientProps) => {
           </Flex>
         </Flex>
         <Flex className="gap-6 max-md:w-full" direction="column" mt="5">
-          <Flex gap="3" direction="row-reverse">
-            <FormSubmitButton
-              radius="full"
-              className="h-[40px] w-[100px] cursor-pointer items-center justify-center bg-[#151B4A] px-4 font-bold"
-            >
-              <Text size="3">Search</Text>
-            </FormSubmitButton>
+          <Flex gap="3" direction="row" className="sm:justify-end">
             <Button
               radius="full"
               className="h-[40px] w-[80px] cursor-pointer items-center justify-center border-[#151B4A] bg-[white] px-4 text-[#151B4A] outline"
@@ -206,6 +207,12 @@ const NewPatient = ({ onclose }: NewPatientProps) => {
             >
               <Text size="3">Cancel</Text>
             </Button>
+            <FormSubmitButton
+              radius="full"
+              className="h-[40px] w-[100px] cursor-pointer items-center justify-center bg-[#151B4A] px-4 font-bold"
+            >
+              <Text size="3">Search</Text>
+            </FormSubmitButton>
           </Flex>
         </Flex>
       </Form>

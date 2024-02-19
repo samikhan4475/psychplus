@@ -26,7 +26,7 @@ const ScheduleAppointmentInsurancePage = () => {
   return (
     <Flex direction="column" className="w-full" ref={ref}>
       <Container
-        className="px-[25%]"
+        className="px-5 sm:px-[25%]"
         style={{
           color: psychPlusBlueColor,
         }}

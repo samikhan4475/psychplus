@@ -24,7 +24,7 @@ const ScheduleAppointmentDialog = ({ title }: { title: string }) => {
         <Dialog.Close className="absolute right-4 top-4 cursor-pointer">
           <Cross2Icon />
         </Dialog.Close>
-        <Dialog.Title className="max-sm:text-6 max-xs:text-5 xs:text-7 sm:text-8 md:text-8 lg:text-8 xl:text-8">
+        <Dialog.Title className="text-7 max-sm:text-6 max-xs:text-5 sm:text-8 md:text-8 lg:text-8 xl:text-8">
           Schedule an appointment
         </Dialog.Title>
         <ScheduleAppointmentDialogForm onclose={onClose} title={title} />
