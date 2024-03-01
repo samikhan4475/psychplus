@@ -11,6 +11,8 @@ import {
   PatientPolicy,
   PolicyCardRequest,
   StaffAppointmentAvailabilities,
+  type UpcomingAppointments,
+  type UpcomingAppointmentsPayload,
 } from '.'
 
 const getAppointmentAvailabilityForUnauthenticatedUser = async (
@@ -32,6 +34,20 @@ const getAppointmentAvailabilityForUnauthenticatedUser = async (
 const getAppointmentAvailabilityForUnauthenticatedUserCached = cache(
   getAppointmentAvailabilityForUnauthenticatedUser,
 )
+
+const getUpcomingAppointments = async (
+  request: UpcomingAppointmentsPayload,
+): Promise<UpcomingAppointments> =>
+  handleRequest(
+    fetch('api/appointments/upcoming/search?offset=0&limit=0', {
+      method: 'POST',
+      body: JSON.stringify(request),
+      cache: 'no-store',
+      headers: createHeaders(),
+    }),
+  )
+
+const getUpcomingAppointmentsCached = cache(getUpcomingAppointments)
 
 const bookAppointment = async (request: BookAppointmentPayload) =>
   handleRequest(
@@ -115,6 +131,7 @@ const submitPatientPolicyCard = async (
 
 export {
   getAppointmentAvailabilityForUnauthenticatedUserCached as getAppointmentAvailabilityForUnauthenticatedUser,
+  getUpcomingAppointmentsCached as getUpcomingAppointments,
   bookAppointment,
   fetchCreditCardsCached as fetchCreditCards,
   addCreditCard,

@@ -2,6 +2,7 @@ import { createMiddleware } from '@psychplus/auth'
 
 const REQUIRE_AUTH = [
   '/dashboard',
+  '/dashboard/schedule-appointment',
   '/schedule-appointment/insurance-payment',
   '/schedule-appointment/confirmation',
 ]

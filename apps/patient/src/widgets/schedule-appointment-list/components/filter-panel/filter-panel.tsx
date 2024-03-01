@@ -4,7 +4,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { Button, Flex, Text } from '@radix-ui/themes'
 import { cn } from '@psychplus/ui/cn'
 import { Select } from '@psychplus/ui/select'
-import { psychPlusBlueColor } from '@/components'
+import { isVirtualAppointmentType, psychPlusBlueColor } from '@/components'
 import { useStore } from '../../store'
 import type {
   FilterOptionButtonProps,
@@ -68,14 +68,16 @@ const FilterPanel = () => {
           onFilterChange={handleFiltersChange}
           placeholder="Language"
         />
-        <input
-          type="text"
-          placeholder="ZIP Code"
-          value={filtersState?.zipCode}
-          className="sm:max-w-auto max-w-[25%] flex-1 rounded-4 border border-gray-7 px-3 focus:border-blue-12 focus:outline-none"
-          style={{ color: psychPlusBlueColor }}
-          onChange={(e) => handleFiltersChange({ zipCode: e.target.value })}
-        />
+        {!isVirtualAppointmentType(filtersState?.appointmentType) && (
+          <input
+            type="text"
+            placeholder="ZIP Code"
+            value={filtersState?.zipCode}
+            className="sm:max-w-auto max-w-[25%] flex-1 rounded-4 border border-gray-7 px-3 focus:border-blue-12 focus:outline-none"
+            style={{ color: psychPlusBlueColor }}
+            onChange={(e) => handleFiltersChange({ zipCode: e.target.value })}
+          />
+        )}
       </Flex>
     </Flex>
   )

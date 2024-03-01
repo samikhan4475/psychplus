@@ -149,6 +149,31 @@ type PolicyCardRequest = {
   image: File
 }
 
+type UpcomingAppointmentsPayload = {
+  maxFutureDays: number
+}
+
+type Appointment = {
+  id: number
+  metadata: MetaData
+  status: string
+  type: string
+  encounterNumber: string
+  encounterTypeCode: number
+  clinic: Clinic
+  specialist: Staff
+  specialistTypeCode: number
+  startDate: string
+  endDate: string
+  duration: number
+  coPay: number
+  virtualRoomLink: string
+}
+
+interface UpcomingAppointments {
+  appointments: Appointment[]
+}
+
 export type {
   StaffAppointmentAvailabilities,
   StaffAppointmentAvailabilty,
@@ -163,4 +188,7 @@ export type {
   InsurancePlans,
   PatientPolicy,
   PolicyCardRequest,
+  UpcomingAppointmentsPayload,
+  UpcomingAppointments,
+  Appointment,
 }

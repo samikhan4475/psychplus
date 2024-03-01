@@ -3,12 +3,12 @@
 import { ChangeEvent } from 'react'
 import { useRouter } from 'next/navigation'
 import * as ToggleGroup from '@radix-ui/react-toggle-group'
-import { Button, Flex, Text } from '@radix-ui/themes'
+import { Flex, Text } from '@radix-ui/themes'
 import { type SubmitHandler } from 'react-hook-form'
 import { Form, FormSubmitButton, FormTextInput, useForm } from '@psychplus/form'
 import { schema, SchemaType } from './schema'
 
-const ScheduleAppointmentDialogForm = ({ onclose, title }: NewPatientProps) => {
+const ScheduleAppointmentDialogForm = ({ title }: NewPatientProps) => {
   const router = useRouter()
   const providerTypeDefaultValue = toCamelCase(title)
 
@@ -24,7 +24,7 @@ const ScheduleAppointmentDialogForm = ({ onclose, title }: NewPatientProps) => {
   const onSubmit: SubmitHandler<SchemaType> = () => {
     const queryString = new URLSearchParams(form.getValues()).toString()
 
-    router.push(`/schedule-appointment?${queryString}`)
+    router.push(`/dashboard/schedule-appointment?${queryString}`)
   }
 
   const handleZipCodeChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -115,22 +115,13 @@ const ScheduleAppointmentDialogForm = ({ onclose, title }: NewPatientProps) => {
           />
         </Flex>
       )}
-      <Flex direction="column" mt="5" gap="6">
-        <Flex gap="3" direction="row-reverse">
-          <FormSubmitButton
-            radius="full"
-            className="h-[40px] w-[100px] bg-[#151B4A] px-4 font-bold"
-          >
-            <Text size="3">Search</Text>
-          </FormSubmitButton>
-          <Button
-            radius="full"
-            className="h-[40px] w-[80px] border-[#151B4A] bg-[white] px-4 text-[#151B4A] outline"
-            onClick={onclose}
-          >
-            <Text size="3">Cancel</Text>
-          </Button>
-        </Flex>
+      <Flex mt="5" justify="end">
+        <FormSubmitButton
+          radius="full"
+          className="h-[40px] w-[100px] bg-[#151B4A] px-4 font-bold"
+        >
+          <Text size="3">Search</Text>
+        </FormSubmitButton>
       </Flex>
     </Form>
   )
@@ -140,7 +131,6 @@ const toggleGroupItemClasses =
   'bg-[#E8E8E8] text-3 data-[state=on]:bg-[#151B4A] data-[state=on]:text-accent-1 rounded-4 px-2'
 
 interface NewPatientProps {
-  onclose?: () => void
   title: string
 }
 

@@ -114,6 +114,14 @@ const calculateAge = (date?: string | Date) => {
   return age
 }
 
+const formatCurrency = (amount: number): string => {
+  return amount.toLocaleString('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    minimumFractionDigits: 2,
+  })
+}
+
 export {
   isEmptyDate,
   daysAgo,
@@ -126,4 +134,5 @@ export {
   formatDateTime,
   formatDateToCst,
   calculateAge,
+  formatCurrency,
 }

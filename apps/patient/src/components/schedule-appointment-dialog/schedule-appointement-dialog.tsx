@@ -1,17 +1,13 @@
 'use client'
 
-import { useState } from 'react'
 import { Cross2Icon } from '@radix-ui/react-icons'
 import { Button } from '@psychplus/ui/button'
 import { Dialog } from '@psychplus/ui/dialog'
 import { ScheduleAppointmentDialogForm } from './schedule-appointment-form/schedule-appointment-form'
 
 const ScheduleAppointmentDialog = ({ title }: { title: string }) => {
-  const [open, setOpen] = useState(false)
-  const onClose = () => setOpen(false)
-
   return (
-    <Dialog.Root open={open} onOpenChange={setOpen}>
+    <Dialog.Root>
       <Dialog.Trigger>
         <Button
           className="h-12 w-48 bg-accent-11 text-4 font-bold text-[white]"
@@ -27,7 +23,7 @@ const ScheduleAppointmentDialog = ({ title }: { title: string }) => {
         <Dialog.Title className="text-7 max-sm:text-6 max-xs:text-5 sm:text-8 md:text-8 lg:text-8 xl:text-8">
           Schedule an appointment
         </Dialog.Title>
-        <ScheduleAppointmentDialogForm onclose={onClose} title={title} />
+        <ScheduleAppointmentDialogForm title={title} />
       </Dialog.Content>
     </Dialog.Root>
   )

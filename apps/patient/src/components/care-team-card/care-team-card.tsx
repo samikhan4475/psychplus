@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { Button, Flex, Link, Text } from '@radix-ui/themes'
 import { type CareTeam, type CareTeamMember } from '@psychplus/patient'
 import { getPatientProfileImage } from '@psychplus/patient/api.client'
@@ -37,6 +38,7 @@ const RenderTeamMember = (
   notAvailableMessage: string,
 ) => {
   const [profileImage, setProfileImage] = useState<string>('')
+  const router = useRouter()
 
   useEffect(() => {
     if (teamMember) {
@@ -50,6 +52,18 @@ const RenderTeamMember = (
         {notAvailableMessage}
       </Text>
     )
+  }
+
+  const redirectToScheduleAppointmentList = () => {
+    const queryParams = {
+      staffId: teamMember.staffDetails.id.toString(),
+      providerType: teamMember.specialist,
+      appointmentType: 'Virtual',
+    }
+
+    const queryString = new URLSearchParams(queryParams).toString()
+
+    router.push(`/dashboard/schedule-appointment?${queryString}`)
   }
 
   return (
@@ -73,7 +87,11 @@ const RenderTeamMember = (
           </Text>
         </Flex>
       </Flex>
-      <Button size="4" className="whitespace-nowrap font-bold">
+      <Button
+        size="4"
+        className="whitespace-nowrap font-bold"
+        onClick={redirectToScheduleAppointmentList}
+      >
         BOOK APPOINTMENT
       </Button>
       <Flex justify="end" mt="-2" className="font-medium">

@@ -53,6 +53,8 @@ const ScheduleAppointmentListClient = () => {
 
   const [debouncedZipCode] = useDebounce(zipCodeState, 500)
 
+  const staffIdParam = parseInt(searchParams.get('staffId') ?? '')
+
   useEffect(() => {
     setZipCodeState(filters.zipCode)
   }, [filters.zipCode])
@@ -76,6 +78,7 @@ const ScheduleAppointmentListClient = () => {
       specialistTypeCode: filters.providerType === 'Psychiatrist' ? 1 : 2,
       startingDate: filters.startingDate,
       maxDaysOutToLook: 7,
+      staffIds: staffIdParam ? [staffIdParam] : [],
     }).then(setStaffAppointmentAvailabilities)
   }, [
     debouncedZipCode,
@@ -118,7 +121,7 @@ const ScheduleAppointmentListClient = () => {
         px="7"
         align="center"
       >
-        <Flex style={{ flex: 1 }}>
+        <Flex style={{ flex: 1 }} align="center">
           <Flex className="text-[#151B4A]" style={{ flex: 1 }}>
             <Text size="5">
               {staffWithClinicsAndSlotsState?.length} Providers
