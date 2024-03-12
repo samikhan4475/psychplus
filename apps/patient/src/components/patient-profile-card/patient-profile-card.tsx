@@ -1,12 +1,12 @@
 'use client'
 
 import React, { useEffect, useState } from 'react'
-import { Pencil2Icon } from '@radix-ui/react-icons'
-import { Flex, Text, Tooltip } from '@radix-ui/themes'
+import { Flex, Text } from '@radix-ui/themes'
 import { type Patient } from '@psychplus/patient'
 import { getPatientProfileImage } from '@psychplus/patient/api.client'
 import { Avatar } from '@psychplus/ui/avatar'
 import { calculateAge } from '@psychplus/utils/time'
+import { EditPatientProfielDialog } from './edit-patient-profile/edit-patient-profile'
 
 const PatientProfileCard = ({ patient }: { patient: Patient | undefined }) => {
   const [profileImage, setProfileImage] = useState<string>('')
@@ -23,14 +23,7 @@ const PatientProfileCard = ({ patient }: { patient: Patient | undefined }) => {
       px="6"
       gap="4"
     >
-      <Tooltip content="Edit Profile" delayDuration={250}>
-        <Flex
-          className="absolute right-5 top-3 cursor-pointer text-blue-11"
-          onClick={() => alert('Edit clicked')}
-        >
-          <Pencil2Icon height={22} width={22} />
-        </Flex>
-      </Tooltip>
+      <EditPatientProfielDialog patient={patient} profileImage={profileImage} />
 
       <Avatar
         size="6"

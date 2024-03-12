@@ -12,6 +12,10 @@ interface PatientMetadata {
 interface PatientName {
   firstName: string
   lastName: string
+  middleName?: string
+  preferredName?: string
+  title?: string
+  honors?: string
 }
 
 interface PatientPhoneNumber {

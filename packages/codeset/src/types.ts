@@ -21,6 +21,31 @@ interface CodeMetadata {
   [key: string]: string | undefined
 }
 
+interface AuthorityCode {
+  code: string
+  codeSetId: string
+  displayName: string
+  id: string
+  metadata: CodeMetadata
+  recordStatus: string
+}
+
+interface AuthorityCodeSet {
+  assigningAuthorityId: string
+  codeSystemName: string
+  codes: AuthorityCode[]
+  displayName: string
+  metadata: CodeMetadata
+  recordStatus: string
+}
+
 type CodeSetIndex = { [key: string]: Code[] | undefined }
 
-export type { CodeSet, Code, CodeAttribute, CodeSetIndex }
+export type {
+  CodeSet,
+  Code,
+  CodeAttribute,
+  CodeSetIndex,
+  AuthorityCodeSet,
+  AuthorityCode,
+}

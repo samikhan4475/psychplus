@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { Flex } from '@radix-ui/themes'
+import { getCodeSets } from '@psychplus/codeset/api.client'
 import { CareTeam, Patient } from '@psychplus/patient'
 import {
   getLoggedInPatientCareTeam,
@@ -18,13 +19,19 @@ import { PatientProfileCard } from '@/components/patient-profile-card'
 import { useStore } from '../store'
 
 const HomePage = () => {
-  const { patient, setPatient, patientCareTeam, setPatientCareTeam } =
-    useStore()
+  const {
+    patient,
+    setPatient,
+    patientCareTeam,
+    setPatientCareTeam,
+    setCodeSets,
+  } = useStore()
 
   const [patientState, setPatientState] = useState<Patient>()
   const [patientCareTeamState, setPatientCareTeamState] = useState<CareTeam>()
 
   useEffect(() => {
+    getCodeSets().then(setCodeSets)
     getLoggedInPatientProfile().then(setPatient)
     getLoggedInPatientCareTeam().then(setPatientCareTeam)
   }, [])

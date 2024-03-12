@@ -1,6 +1,6 @@
 import { handleRequest } from '@psychplus/utils/api'
 import { createHeaders } from '@psychplus/utils/client'
-import type { Code, CodeSet } from './types'
+import type { AuthorityCodeSet, Code, CodeSet } from './types'
 
 const getCodeSets = async (): Promise<CodeSet[]> =>
   handleRequest(
@@ -38,4 +38,11 @@ const editCodeSet = async (
     }),
   )
 
-export { getCodeSets, getCodeSet, addCodeSet, editCodeSet }
+const getUsStates = async (): Promise<AuthorityCodeSet> =>
+  handleRequest(
+    fetch(`/api/codeset/authorities/PsychPlusPublic/codesets/UsStates`, {
+      headers: createHeaders(),
+    }),
+  )
+
+export { getCodeSets, getCodeSet, addCodeSet, editCodeSet, getUsStates }
