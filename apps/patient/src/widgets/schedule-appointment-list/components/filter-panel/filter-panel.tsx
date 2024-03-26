@@ -23,6 +23,11 @@ const FilterPanel = () => {
     setFiltersState(filters)
   }, [filters])
 
+  const handleZipCodeChange = (value: string) => {
+    const zipCode = value.slice(0, 5)
+    handleFiltersChange({ zipCode })
+  }
+
   return (
     <Flex pt="1" pb="6" className="w-full flex-wrap px-4 sm:px-7" gap="5">
       <Flex className="flex-1 flex-col gap-6 sm:flex-row sm:gap-7">
@@ -75,7 +80,7 @@ const FilterPanel = () => {
             value={filtersState?.zipCode}
             className="sm:max-w-auto max-w-[25%] flex-1 rounded-4 border border-gray-7 px-3 focus:border-blue-12 focus:outline-none"
             style={{ color: psychPlusBlueColor }}
-            onChange={(e) => handleFiltersChange({ zipCode: e.target.value })}
+            onChange={(e) => handleZipCodeChange(e.target.value)}
           />
         )}
       </Flex>

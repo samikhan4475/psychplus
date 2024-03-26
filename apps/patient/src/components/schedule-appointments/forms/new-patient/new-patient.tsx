@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { ChangeEvent, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import * as ToggleGroup from '@radix-ui/react-toggle-group'
 import { Button, Flex, Text } from '@radix-ui/themes'
@@ -82,6 +82,13 @@ const NewPatient = ({ onclose }: NewPatientProps) => {
 
   const onScheduleChange = (key: keyof ScheduledAppointment, value: string) => {
     setSchedule((prev) => ({ ...prev, [key]: value }))
+  }
+
+  const handleZipCodeChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const zipCode = event.target.value.slice(0, 5)
+    form.setValue('zipCode', zipCode)
+
+    if (form.formState.isSubmitted) form.trigger('zipCode')
   }
 
   const onSubmit: SubmitHandler<SchemaType> = () => {
@@ -192,6 +199,7 @@ const NewPatient = ({ onclose }: NewPatientProps) => {
                 data-testid="zip-code-input"
                 {...form.register('zipCode')}
                 className="h-[56px] w-[300px] text-4"
+                onChange={handleZipCodeChange}
               />
             </Flex>
           </Flex>
