@@ -186,7 +186,7 @@ const InsurancePaymentForm = ({
       effectiveDate: data.effectiveDate ?? '',
       hasCardFrontImage: !!cardFrontImage,
       hasCardBackImage: !!cardBackImage,
-      insurancePolicyPriority: InsurancePolicyPriority.OTHER,
+      insurancePolicyPriority: InsurancePolicyPriority.PRIMARY,
       isPatientPolicyHolder: true,
       isActive: true,
     })
