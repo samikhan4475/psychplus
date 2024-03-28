@@ -5,6 +5,7 @@ const REQUIRE_AUTH = [
   '/dashboard/schedule-appointment',
   '/schedule-appointment/insurance-payment',
   '/schedule-appointment/confirmation',
+  '/rating'
 ]
 const REQUIRE_ANON = [
   '/',

@@ -20,4 +20,11 @@ type StaffPayload = {
   spokenLanguage?: string
 }
 
-export type { Staff, StaffPayload }
+type StaffRatingPayload = {
+  appointmentId: number
+  rating: number
+  staffId: number
+  comment?: string
+}
+
+export type { Staff, StaffPayload, StaffRatingPayload }

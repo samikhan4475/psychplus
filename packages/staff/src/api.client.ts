@@ -1,7 +1,7 @@
 import { cache } from 'react'
 import { handleRequest } from '@psychplus/utils/api'
 import { createHeaders } from '@psychplus/utils/client'
-import { Staff, StaffPayload } from '.'
+import { Staff, StaffPayload, StaffRatingPayload } from '.'
 
 const getStaffForUnauthenticatedUser = async (
   request: StaffPayload,
@@ -35,6 +35,19 @@ const getStaffProfilePicture = async (staffId?: number) => {
   return 'Staff does not have a photo assigned'
 }
 
+const addStaffStarRating = async (request: StaffRatingPayload) => {
+  const { staffId, ...staffIdExcludedObj } = { ...request }
+
+  return handleRequest(
+    fetch(`/api/staff/${request.staffId}/ratings`, {
+      method: 'POST',
+      body: JSON.stringify(staffIdExcludedObj),
+      cache: 'no-store',
+      headers: createHeaders(),
+    }),
+  )
+}
+
 const getStaffProfilePictureCached = cache(getStaffProfilePicture)
 
 const getStaffForUnauthenticatedUserCached = cache(
@@ -43,3 +56,4 @@ const getStaffForUnauthenticatedUserCached = cache(
 
 export { getStaffProfilePictureCached as getStaffProfilePicture }
 export { getStaffForUnauthenticatedUserCached as getStaffForUnauthenticatedUser }
+export { addStaffStarRating }
