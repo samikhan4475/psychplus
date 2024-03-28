@@ -65,7 +65,7 @@ resources:
 
 autoscaling:
   enabled: true
-  minReplicas: 3
+  minReplicas: 1
   maxReplicas: 5
   targetCPUUtilizationPercentage: 80
   targetMemoryUtilizationPercentage: 80
@@ -92,7 +92,7 @@ readinessProbe:
     path: /health/readiness_CF796DFC-2BE3-415f-9F86-63C29517DF8B
     port: http
   periodSeconds: 10
-  timeoutSeconds: 1
+  timeoutSeconds: 5
 
 nodeSelector:
   kubernetes.io/os: linux
