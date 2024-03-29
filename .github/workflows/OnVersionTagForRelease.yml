@@ -128,8 +128,49 @@ jobs:
       ingress_url: ui.psychplus.io
     secrets: inherit
 
-  publish_draft_release:
+  remove_release_from_next:
     needs: [create_draft_release, deploy_platform, deploy_clinical, deploy_patient, deploy_revcycle]
+    permissions:
+      actions: read
+      contents: read
+      id-token: write
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - uses: azure/use-kubelogin@v1
+        with:
+          kubelogin-version: 'v0.0.31'
+
+      - uses: azure/login@v2
+        name: Azure login
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          subscription-id: ${{ secrets.AKS_SUBSCRIPTION_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+
+      - uses: Azure/aks-set-context@v3
+        name: Get K8s context
+        with:
+          cluster-name: ${{ secrets.AKS_NAME }}
+          resource-group: ${{ secrets.AKS_RESOURCE_GROUP }}
+          admin: false
+          use-kubelogin: true
+
+      - name: Install Helm
+        uses: azure/setup-helm@v4
+
+      - name: Clean up Next
+        run: |
+          helm uninstall ui-patient -n env-next
+          helm uninstall ui-clinical -n env-next
+          helm uninstall ui-platform -n env-next
+          helm uninstall ui-revcycle -n env-next
+
+  publish_draft_release:
+    needs: [create_draft_release, deploy_platform, deploy_clinical, deploy_patient, deploy_revcycle, remove_release_from_next]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
