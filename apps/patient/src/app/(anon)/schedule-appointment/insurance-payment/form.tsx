@@ -168,6 +168,7 @@ const InsurancePaymentForm = ({
           name: data.cardHolderName,
           numberLastFour: paymentMethod?.card?.last4 ?? '',
           isActive: true,
+          isPrimary: true,
           expireMonth: paymentMethod?.card?.exp_month ?? 0,
           expireYear: paymentMethod?.card?.exp_year ?? 0,
           cardKey: paymentMethod?.id ?? '',

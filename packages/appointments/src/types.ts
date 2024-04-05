@@ -66,6 +66,7 @@ type Card = {
   name: string
   numberLastFour: string
   isActive: boolean
+  isPrimary?: boolean
   expireMonth: number
   expireYear: number
   billingAddress?: {
