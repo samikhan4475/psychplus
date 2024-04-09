@@ -195,6 +195,12 @@ env:
         name: ehr-secrets
         key: stripePublishableApiKey
 
+  - name: STRIPE_API_KEY
+    valueFrom:
+      secretKeyRef:
+        name: ehr-secrets
+        key: stripeApiKey
+
   # SECRETS: Recaptcha
 
   - name: RECAPTCHA_V2_KEY
