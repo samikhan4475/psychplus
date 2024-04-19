@@ -20,6 +20,7 @@ import {
 } from '@psychplus/form'
 import { RadioGroup } from '@psychplus/ui/radio-group'
 import { usePubsub } from '@psychplus/utils/event'
+import { clickTrack } from '@psychplus/utils/tracking'
 import { OTP_DIALOG, SCHEDULE_APPOINTMENT_LIST } from '@psychplus/widgets'
 import { CrossIcon } from '@/components'
 import { WarningIcon } from '@/components/icons/warning-icon'
@@ -152,6 +153,14 @@ const PersonalDetailsForm = () => {
           })
             .then(() => {
               publish(`${OTP_DIALOG}:closed`)
+
+              clickTrack({
+                productArea: 'Patient',
+                productPageKey: 'Schedule Appointment - Personal Details',
+                clickAction: 'Navigation',
+                clickActionData: 'Clicked Next',
+              })
+
               router.push(`/schedule-appointment/insurance-payment`)
             })
             .catch((error: { message: string }) => {

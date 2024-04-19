@@ -13,6 +13,7 @@ import {
   validate,
 } from '@psychplus/form'
 import { usePubsub } from '@psychplus/utils/event'
+import { clickTrack } from '@psychplus/utils/tracking'
 import { SCHEDULE_APPOINTMENT_DIALOG } from '@psychplus/widgets'
 import { useStore } from '@/widgets/schedule-appointment-list/store'
 
@@ -102,6 +103,13 @@ const NewPatient = ({ onclose }: NewPatientProps) => {
 
     setPatient({
       dateOfBirth: form.getValues().dateOfBirth,
+    })
+
+    clickTrack({
+      productArea: 'Patient',
+      productPageKey: 'Search Schedule Appointment',
+      clickAction: 'Navigation',
+      clickActionData: 'Clicked Search',
     })
 
     const url = `/schedule-appointment?${queryString}`

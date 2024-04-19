@@ -13,6 +13,7 @@ import {
   useForm,
   validate,
 } from '@psychplus/form'
+import { clickTrack } from '@psychplus/utils/tracking'
 import { useStore } from '@/widgets/schedule-appointment-list/store'
 
 interface NewPatientProps {
@@ -103,6 +104,14 @@ const NewPatient = ({ onclose }: NewPatientProps) => {
     setPatient({
       dateOfBirth: form.getValues().dateOfBirth,
     })
+
+    clickTrack({
+      productArea: 'Patient',
+      productPageKey: 'Search Schedule Appointment',
+      clickAction: 'Navigation',
+      clickActionData: 'Clicked Search',
+    })
+
     router.push(`/schedule-appointment?${queryString}`)
   }
 

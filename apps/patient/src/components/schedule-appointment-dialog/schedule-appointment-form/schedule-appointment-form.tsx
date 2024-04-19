@@ -6,6 +6,7 @@ import * as ToggleGroup from '@radix-ui/react-toggle-group'
 import { Flex, Text } from '@radix-ui/themes'
 import { type SubmitHandler } from 'react-hook-form'
 import { Form, FormSubmitButton, FormTextInput, useForm } from '@psychplus/form'
+import { clickTrack } from '@psychplus/utils/tracking'
 import { schema, SchemaType } from './schema'
 
 const ScheduleAppointmentDialogForm = ({ title }: NewPatientProps) => {
@@ -23,6 +24,13 @@ const ScheduleAppointmentDialogForm = ({ title }: NewPatientProps) => {
 
   const onSubmit: SubmitHandler<SchemaType> = () => {
     const queryString = new URLSearchParams(form.getValues()).toString()
+
+    clickTrack({
+      productArea: 'Patient',
+      productPageKey: 'Search Schedule Appointment',
+      clickAction: 'Navigation',
+      clickActionData: 'Clicked Search',
+    })
 
     router.push(`/dashboard/schedule-appointment?${queryString}`)
   }

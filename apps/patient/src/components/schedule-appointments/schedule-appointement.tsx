@@ -1,14 +1,24 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Cross2Icon } from '@radix-ui/react-icons'
 import { Button } from '@psychplus/ui/button'
 import { Dialog } from '@psychplus/ui/dialog'
+import { clickTrack } from '@psychplus/utils/tracking'
 import { ScheduleTabs } from './tabs'
 
 const ScheduleAppointment = () => {
   const [open, setOpen] = useState(false)
   const onClose = () => setOpen(false)
+
+  useEffect(() => {
+    clickTrack({
+      productArea: 'Patient',
+      productPageKey: 'ScheduleAppointment',
+      clickAction: 'Navigation',
+      clickActionData: 'Schedule Appointment Dialog',
+    })
+  }, [])
 
   return (
     <Dialog.Root open={open} onOpenChange={setOpen}>

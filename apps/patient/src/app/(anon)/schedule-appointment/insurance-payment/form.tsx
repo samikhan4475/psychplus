@@ -28,6 +28,7 @@ import {
   validate,
 } from '@psychplus/form'
 import { Select } from '@psychplus/ui/select'
+import { clickTrack } from '@psychplus/utils/tracking'
 import { ImageUploader, psychPlusBlueColor, whiteColor } from '@/components'
 import AppointmentDetailCard from '@/components/appointment-detail-card/appointment-detail-card'
 import { BookedSlot, useStore } from '@/widgets/schedule-appointment-list/store'
@@ -134,6 +135,13 @@ const InsurancePaymentForm = ({
       encounterTypeCode: 0,
     })
       .then(() => {
+        clickTrack({
+          productArea: 'Patient',
+          productPageKey: 'Schedule Appointment - Insurance Payment',
+          clickAction: 'Accepted',
+          clickActionData: 'Appointment Booked',
+        })
+
         router.push('/schedule-appointment/confirmation')
       })
       .catch((err) => {

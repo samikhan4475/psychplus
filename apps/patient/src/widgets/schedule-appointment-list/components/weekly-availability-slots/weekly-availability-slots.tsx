@@ -7,6 +7,7 @@ import { Slot } from '@psychplus/appointments'
 import { Staff } from '@psychplus/staff'
 import { isMobile } from '@psychplus/utils/client'
 import { formatTimeWithAmPm } from '@psychplus/utils/time'
+import { clickTrack } from '@psychplus/utils/tracking'
 import { useStore } from '../../store'
 import type { ClinicWithSlots } from '../../types'
 import { organizeSlotsByDate } from '../../utils'
@@ -68,6 +69,14 @@ const SlotComponent = ({
       startDate: slot.startDate,
       duration: slot.duration,
     })
+
+    clickTrack({
+      productArea: 'Patient',
+      productPageKey: 'Schedule Appointment Screen',
+      clickAction: 'Navigation',
+      clickActionData: 'Clicked Slot',
+    })
+
     router.push(`/schedule-appointment/personal-details`)
   }
 

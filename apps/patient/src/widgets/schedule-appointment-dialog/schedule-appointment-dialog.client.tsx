@@ -1,8 +1,10 @@
 'use client'
 
+import { useEffect } from 'react'
 import { Cross2Icon } from '@radix-ui/react-icons'
 import { Dialog } from '@psychplus/ui/dialog'
 import { usePubsub } from '@psychplus/utils/event'
+import { clickTrack } from '@psychplus/utils/tracking'
 import { SCHEDULE_APPOINTMENT_DIALOG } from '@psychplus/widgets'
 import { EventType } from '@psychplus/widgets/events'
 import { useDialog, usePublishLoaded } from '@psychplus/widgets/hooks'
@@ -16,6 +18,15 @@ const ScheduleAppointmentDialogClient = () => {
   const onClose = () => {
     publish(`${SCHEDULE_APPOINTMENT_DIALOG}:${EventType.Closed}`)
   }
+
+  useEffect(() => {
+    clickTrack({
+      productArea: 'Patient',
+      productPageKey: 'ScheduleAppointment',
+      clickAction: 'Navigation',
+      clickActionData: 'Schedule Appointment Dialog',
+    })
+  }, [])
 
   return (
     <Dialog.Root
