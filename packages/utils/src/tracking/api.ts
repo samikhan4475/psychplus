@@ -5,7 +5,13 @@ import { TrackRequest } from './types'
 
 const clickTrack = async (request: TrackRequest) => {
   if (!request.sessionId) {
-    request.sessionId = uuidv4()
+    let sessionId = localStorage.getItem('sessionId')
+    if (!sessionId) {
+      sessionId = uuidv4()
+      localStorage.setItem('sessionId', sessionId)
+    }
+
+    request.sessionId = sessionId
   }
   return handleRequest<TrackRequest>(
     fetch('/api/clicktrack', {
