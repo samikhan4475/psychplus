@@ -11,6 +11,9 @@ metadata:
   annotations:
     {{- toYaml . | nindent 4 }}
   {{- end }}
+  {{- if ne .Values.environment "development" }}
+    cert-manager.io/cluster-issuer: "letsencrypt"
+  {{- end }}
   {{- if .Values.ingressAuth.enabled -}}
   {{- with .Values.ingressAuth.annotations }}
     {{- toYaml . | nindent 4 }}

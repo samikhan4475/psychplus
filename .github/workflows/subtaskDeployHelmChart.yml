@@ -123,9 +123,10 @@ jobs:
             --set image.tag=${{ inputs.image_tag }} \
             --set ingress.hosts[0].host=${{ inputs.ingress_url }} \
             --set ingress.tls[0].hosts[0]=${{ inputs.ingress_url }} \
-            --set ingress.tls[0].secretName=ui-${{ inputs.project }}-psychplus-tls \
+            --set ingress.tls[0].secretName=wildcard-ode-psychplus-tls \
             --set autoscaling.minReplicas=1 \
             --set autoscaling.maxReplicas=1 \
+            --set environment=${{ inputs.environment }} \
             --values helm/${{ inputs.project }}/values.yaml
           else
             helm upgrade --install ui-${{ inputs.project }} ${{ inputs.chart_path }} --namespace ${{ inputs.env_namespace }} \
@@ -134,7 +135,9 @@ jobs:
             --set ingress.hosts[0].host=${{ inputs.ingress_url }} \
             --set ingress.tls[0].hosts[0]=${{ inputs.ingress_url }} \
             --set ingress.tls[0].secretName=ui-${{ inputs.project }}-psychplus-tls \
+            --set environment=${{ inputs.environment }} \
             --values helm/${{ inputs.project }}/values.yaml
+
           fi
 
       - name: Restart The Deployment

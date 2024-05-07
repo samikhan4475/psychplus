@@ -1,3 +1,4 @@
+environment: ""
 image:
   repository: ''
   pullPolicy: Always
@@ -36,7 +37,7 @@ ingress:
   className: nginx
   annotations:
     # use issuer instead of cluster-issuer for namespace scope
-    cert-manager.io/cluster-issuer: letsencrypt
+    # cert-manager.io/cluster-issuer: letsencrypt
     nginx.ingress.kubernetes.io/service-upstream: "true"
   hosts:
   - host: ui.integration.psychplus.dev
