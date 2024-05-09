@@ -67,3 +67,18 @@ jobs:
           awk '!/uid: /' | \
           sed 's/namespace: env-integration/namespace: ${{ inputs.env_namespace }}/g' | \
           kubectl apply --namespace=${{ inputs.env_namespace }} -f -
+          
+      - name: Annotate namespace
+        run: |    
+          if [[ ",${{ vars.ODE_EXPIRE_EXCLUSIONS }}," == *",${{ inputs.env_namespace }},"* ]]; then
+           echo namespace/${{ inputs.env_namespace }} belongs to ${{ vars.ODE_EXPIRE_EXCLUSIONS }} , Annotation Not Required;
+          else 
+           expires_on_value=$(kubectl get namespace ${{ inputs.env_namespace }} -o jsonpath="{.metadata.annotations.expires-on}")
+           if [ -n "$expires_on_value" ]; then
+              echo namespace/${{ inputs.env_namespace }} does not belongs to ${{ vars.ODE_EXPIRE_EXCLUSIONS }}, Annotation Already Exist;
+              echo "namespace/${{ inputs.env_namespace }} has annotation: $expires_on_value" 
+            else
+              echo namespace/${{ inputs.env_namespace }} does not belongs to ${{ vars.ODE_EXPIRE_EXCLUSIONS }}, Annotation Required ${{ vars.ODE_EXPIRE_DAYS }} days;
+              kubectl annotate namespace ${{ inputs.env_namespace }} expires-on="$(date -d "+${{ vars.ODE_EXPIRE_DAYS }} days" +%Y-%m-%dT%H:%M:%SZ)"
+            fi  
+          fi    
