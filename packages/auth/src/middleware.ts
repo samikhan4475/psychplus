@@ -116,15 +116,35 @@ const handlePageRequest = (request: NextRequest, config: MiddlewareConfig) => {
 const handleApiRequest = async (request: NextRequest) => {
   const headers = createHeaders(request)
 
-  const searchParams = request.nextUrl.searchParams.toString()
+  const customHeaders = new Headers({
+    'Authorization': headers.get('Authorization') ?? '',
+    'PsychPlus-Application': headers.get('PsychPlus-Application') ?? 'p+react-ui',
+    'PsychPlus-AppVersion': headers.get('PsychPlus-App-Version') ?? '1.0.0',
+    'PsychPlus-RunEnvironment': headers.get('PsychPlus-RunEnvironment') ?? 'development',
+    'Psychplus-Device': headers.get('Psychplus-Device') ?? '',
+  })
 
+  if (
+    request.method === 'POST' ||
+    request.method === 'PUT' ||
+    request.method === 'PATCH'
+  ) {
+    customHeaders.set(HEADER_CONTENT_TYPE, CONTENT_TYPE_APPLICATION_JSON)
+  }
+
+  const searchParams = request.nextUrl.searchParams.toString()
   let endpoint = `${API_URL}${request.nextUrl.pathname}`
   if (searchParams) {
     endpoint += `?${searchParams}`
   }
 
   console.debug(`${request.method} ${endpoint}`)
-  return NextResponse.rewrite(endpoint, { headers })
+
+  return fetch(endpoint, {
+    body: request.body,
+    method: request.method,
+    headers: customHeaders,
+  })
 }
 
 // handleLoginApiRequest handles requests to /api/login.

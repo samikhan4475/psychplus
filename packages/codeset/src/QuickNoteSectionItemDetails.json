@@ -1,0 +1,209 @@
+{
+    "id": "a553888d-3f6a-4917-bda0-fa14238edbfe",
+    "metadata": {
+        "createdOn": "2024-04-18T16:56:50Z",
+        "createdBy": 1401,
+        "createdByFullName": "Peter C Berkman"
+    },
+    "recordStatus": "Active",
+    "assigningAuthorityId": "004afb9b-e443-424a-b10d-e5f1254a97da",
+    "codeSystemName": "QuicknoteSectionItemDetail",
+    "displayName": "Quicknote section item details",
+    "codes": [
+        {
+            "id": "72fdefa3-957f-4093-b49e-3acd2cd27aff",
+            "metadata": {
+                "createdOn": "2024-04-18T16:56:50Z",
+                "createdBy": 1401,
+                "createdByFullName": "Peter C Berkman"
+            },
+            "recordStatus": "Active",
+            "codesetId": "a553888d-3f6a-4917-bda0-fa14238edbfe",
+            "code": "DI",
+            "displayName": "Direct Intervention",
+            "groupingCode": "CS",
+            "codeAttributes": [
+                {
+                    "id": "6220bb86-cc6d-4a89-a696-72ef630f1384",
+                    "metadata": {
+                        "createdOn": "2024-04-18T16:56:50Z",
+                        "createdBy": 1401,
+                        "createdByFullName": "Peter C Berkman"
+                    },
+                    "recordStatus": "Active",
+                    "codeId": "72fdefa3-957f-4093-b49e-3acd2cd27aff",
+                    "name": "IsBoxedItem",
+                    "content": "false"
+                },
+                {
+                    "id": "d79533d5-2342-4448-8145-ab74c04d4a86",
+                    "metadata": {
+                        "createdOn": "2024-04-18T16:56:50Z",
+                        "createdBy": 1401,
+                        "createdByFullName": "Peter C Berkman"
+                    },
+                    "recordStatus": "Active",
+                    "codeId": "72fdefa3-957f-4093-b49e-3acd2cd27aff",
+                    "name": "DisplayType",
+                    "content": "CHECKBOX"
+                }
+            ]
+        },
+        {
+            "id": "4b698559-4a34-40d1-9330-b954e56ca0ba",
+            "metadata": {
+                "createdOn": "2024-04-18T16:56:50Z",
+                "createdBy": 1401,
+                "createdByFullName": "Peter C Berkman"
+            },
+            "recordStatus": "Active",
+            "codesetId": "a553888d-3f6a-4917-bda0-fa14238edbfe",
+            "code": "HD",
+            "displayName": "History and Documentation",
+            "groupingCode": "PCI",
+            "codeAttributes": [
+                {
+                    "id": "732f738f-b51d-4041-afa7-638154662dda",
+                    "metadata": {
+                        "createdOn": "2024-04-18T16:56:50Z",
+                        "createdBy": 1401,
+                        "createdByFullName": "Peter C Berkman"
+                    },
+                    "recordStatus": "Active",
+                    "codeId": "4b698559-4a34-40d1-9330-b954e56ca0ba",
+                    "name": "DisplayType",
+                    "content": "CHECKBOX"
+                },
+                {
+                    "id": "0a735017-6354-47ba-923a-75e1cad00a19",
+                    "metadata": {
+                        "createdOn": "2024-04-18T16:56:50Z",
+                        "createdBy": 1401,
+                        "createdByFullName": "Peter C Berkman"
+                    },
+                    "recordStatus": "Active",
+                    "codeId": "4b698559-4a34-40d1-9330-b954e56ca0ba",
+                    "name": "IsBoxedItem",
+                    "content": "false"
+                }
+            ]
+        },
+        {
+            "id": "dbc20776-33eb-4b8c-908a-df784ea9d5fc",
+            "metadata": {
+                "createdOn": "2024-04-18T16:56:50Z",
+                "createdBy": 1401,
+                "createdByFullName": "Peter C Berkman"
+            },
+            "recordStatus": "Active",
+            "codesetId": "a553888d-3f6a-4917-bda0-fa14238edbfe",
+            "code": "OBD",
+            "displayName": "Obtain Baseline Data",
+            "groupingCode": "DO",
+            "codeAttributes": [
+                {
+                    "id": "9936e1df-9efd-45f4-9895-edb4a60276d9",
+                    "metadata": {
+                        "createdOn": "2024-04-18T16:56:50Z",
+                        "createdBy": 1401,
+                        "createdByFullName": "Peter C Berkman"
+                    },
+                    "recordStatus": "Active",
+                    "codeId": "dbc20776-33eb-4b8c-908a-df784ea9d5fc",
+                    "name": "IsBoxedItem",
+                    "content": "false"
+                },
+                {
+                    "id": "208c1eb2-5955-4bfc-acfa-f5457f66c3fb",
+                    "metadata": {
+                        "createdOn": "2024-04-18T16:56:50Z",
+                        "createdBy": 1401,
+                        "createdByFullName": "Peter C Berkman"
+                    },
+                    "recordStatus": "Active",
+                    "codeId": "dbc20776-33eb-4b8c-908a-df784ea9d5fc",
+                    "name": "DisplayType",
+                    "content": "CHECKBOX"
+                }
+            ]
+        },
+        {
+            "id": "9fb00502-eb97-4c5e-bb25-fac62111aed9",
+            "metadata": {
+                "createdOn": "2024-04-18T16:56:50Z",
+                "createdBy": 1401,
+                "createdByFullName": "Peter C Berkman"
+            },
+            "recordStatus": "Active",
+            "codesetId": "a553888d-3f6a-4917-bda0-fa14238edbfe",
+            "code": "PS",
+            "displayName": "Probe Skills",
+            "groupingCode": "DO",
+            "codeAttributes": [
+                {
+                    "id": "98e8b05c-53a4-4e7f-ac03-3e36c884e7dd",
+                    "metadata": {
+                        "createdOn": "2024-04-18T16:56:50Z",
+                        "createdBy": 1401,
+                        "createdByFullName": "Peter C Berkman"
+                    },
+                    "recordStatus": "Active",
+                    "codeId": "9fb00502-eb97-4c5e-bb25-fac62111aed9",
+                    "name": "DisplayType",
+                    "content": "CHECKBOX"
+                },
+                {
+                    "id": "107d1ca7-81f5-4e33-926b-3fca6e6aafef",
+                    "metadata": {
+                        "createdOn": "2024-04-18T16:56:50Z",
+                        "createdBy": 1401,
+                        "createdByFullName": "Peter C Berkman"
+                    },
+                    "recordStatus": "Active",
+                    "codeId": "9fb00502-eb97-4c5e-bb25-fac62111aed9",
+                    "name": "IsBoxedItem",
+                    "content": "false"
+                }
+            ]
+        },
+        {
+            "id": "3a0dd959-a8c7-4311-8adf-1e8e96ecc40e",
+            "metadata": {
+                "createdOn": "2024-04-18T16:56:50Z",
+                "createdBy": 1401,
+                "createdByFullName": "Peter C Berkman"
+            },
+            "recordStatus": "Active",
+            "codesetId": "a553888d-3f6a-4917-bda0-fa14238edbfe",
+            "code": "SA",
+            "displayName": "Standardized Assessments",
+            "groupingCode": "PCI",
+            "codeAttributes": [
+                {
+                    "id": "ca0b5989-8e2a-431e-8e9d-3f1521238342",
+                    "metadata": {
+                        "createdOn": "2024-04-18T16:56:50Z",
+                        "createdBy": 1401,
+                        "createdByFullName": "Peter C Berkman"
+                    },
+                    "recordStatus": "Active",
+                    "codeId": "3a0dd959-a8c7-4311-8adf-1e8e96ecc40e",
+                    "name": "DisplayType",
+                    "content": "CHECKBOX"
+                },
+                {
+                    "id": "811ee353-6d7d-4473-a2d6-7d291b042992",
+                    "metadata": {
+                        "createdOn": "2024-04-18T16:56:50Z",
+                        "createdBy": 1401,
+                        "createdByFullName": "Peter C Berkman"
+                    },
+                    "recordStatus": "Active",
+                    "codeId": "3a0dd959-a8c7-4311-8adf-1e8e96ecc40e",
+                    "name": "IsBoxedItem",
+                    "content": "false"
+                }
+            ]
+        }
+    ]
+}
