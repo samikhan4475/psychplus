@@ -9,7 +9,7 @@ jobs:
   remove_ode_namespace:
     uses: ./.github/workflows/subtaskRemoveNamespaceOde.yml
     with:
-      namespace_name: env-ode-pr-${{ github.event.pull_request.number }}
+      namespace_name: env-ui-ode-pr-${{ github.event.pull_request.number }}
     secrets: inherit
 
   image_cleanup:
