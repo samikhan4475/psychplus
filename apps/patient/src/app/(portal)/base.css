@@ -1,0 +1,90 @@
+@layer tw_base, radix_ui, tw_components, tw_utilities, base;
+
+@import 'tailwindcss/base' layer(tw_base);
+@import 'tailwindcss/components' layer(tw_components);
+@import 'tailwindcss/utilities' layer(tw_utilities);
+@import '@radix-ui/themes/styles.css' layer(radix_ui);
+
+@layer radix_ui {
+  .radix-themes {
+    --cursor-button: pointer;
+    --cursor-checkbox: pointer;
+    --cursor-menu-item: pointer;
+    --heading-font-family: var(--font-spectral);
+    --heading-letter-spacing: -1.25px;
+    --container-4: 1440px;
+    --header-height: 75px;
+    --blue-12: #151b4a;
+    --blue-11: #194595;
+  }
+
+  tbody tr:last-child :is(td, th) {
+    box-shadow: none;
+  }
+
+  .rt-ScrollAreaRoot {
+    border-radius: var(--radius-3);
+  }
+
+  .rt-TextFieldChrome,
+  .rt-SelectTrigger {
+    border-radius: var(--radius-2);
+  }
+
+  :root {
+    --color-page-background: var(--gray-1) !important;
+  }
+}
+
+@layer base {
+  html,
+  body {
+    height: 100%;
+    overflow-x: hidden;
+  }
+}
+
+.react-aria-DateField {
+  color: var(--gray-12);
+}
+
+.react-aria-DateInput {
+  display: flex;
+  padding: 3px;
+  border: 1px solid var(--gray-7);
+  border-radius: 6px;
+  background: #ffffff;
+  width: fit-content;
+  min-width: 150px;
+  white-space: nowrap;
+}
+
+.react-aria-DateInput[data-focus-within] {
+  outline: 2px solid var(--accent-9);
+  outline-offset: -1px;
+}
+
+.react-aria-DateSegment {
+  padding: 0 2px;
+  font-variant-numeric: tabular-nums;
+  text-align: end;
+  color: var(--gray-12);
+}
+
+.react-aria-DateSegment[data-type='literal'] {
+  padding: 0;
+}
+
+.react-aria-DateSegment[data-placeholder] {
+  color: var(--gray-9);
+  font-style: italic;
+}
+
+.react-aria-DateSegment:focus {
+  color: var(--gray-12);
+  font-weight: 500;
+  background: var(--accent-5);
+  outline: none;
+  border-radius: 2px;
+  caret-color: transparent;
+}

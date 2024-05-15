@@ -12,7 +12,7 @@ import {
   FormTextInput,
   useForm,
 } from '@psychplus/form'
-import { useStore } from '@/app/(auth)/store'
+import { useStore } from '@/app/(widgets)/(auth)/store'
 import { DropDownOptions } from './edit-patient-profile'
 import { schema, type SchemaType } from './schema'
 

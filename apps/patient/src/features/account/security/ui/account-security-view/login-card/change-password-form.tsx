@@ -1,0 +1,108 @@
+'use client'
+
+import { useState } from 'react'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { Text } from '@radix-ui/themes'
+import { useForm } from 'react-hook-form'
+import { z } from 'zod'
+import {
+  EditableFieldValue,
+  FormError,
+  FormFieldContainer,
+  FormFieldLabel,
+  LabelAndValue,
+  PasswordInput,
+  PasswordRequirements,
+  ToggleableForm,
+} from '@/components-v2'
+import { changePasswordAction } from '@/features/account/security/actions'
+import { useValidateNewPassword } from '@/hooks'
+
+const schema = z.object({
+  currentPassword: z.string().trim().min(1, 'Required'),
+  newPassword: z.string().trim().min(1, 'Required'),
+  confirmPassword: z.string().trim().min(1, 'Required'),
+})
+
+type SchemaType = z.infer<typeof schema>
+
+const ChangePasswordForm = () => {
+  const [error, setError] = useState<string>()
+
+  const form = useForm<SchemaType>({
+    resolver: zodResolver(schema),
+    reValidateMode: 'onChange',
+    defaultValues: {
+      currentPassword: '',
+      newPassword: '',
+      confirmPassword: '',
+    },
+  })
+
+  const { isValid } = useValidateNewPassword(form.getValues())
+
+  const submitAction = (data: SchemaType) => {
+    setError(undefined)
+    return changePasswordAction(data)
+  }
+
+  const trigger = (
+    <EditableFieldValue>
+      {
+        <Text size="1" className="tracking-[0.5px]">
+          &#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;
+        </Text>
+      }
+    </EditableFieldValue>
+  )
+
+  return (
+    <LabelAndValue label="Password">
+      <ToggleableForm
+        form={form}
+        submitAction={submitAction}
+        onError={setError}
+        trigger={trigger}
+        disabled={!isValid}
+        toastData={{
+          title: 'Successfully changed password',
+        }}
+      >
+        <FormError message={error} />
+        <FormFieldContainer>
+          <FormFieldLabel>Current Password</FormFieldLabel>
+          <PasswordInput
+            size="3"
+            maxLength={32}
+            {...form.register('currentPassword')}
+            value={form.watch('currentPassword')}
+          />
+        </FormFieldContainer>
+        <FormFieldContainer>
+          <FormFieldLabel>New Password</FormFieldLabel>
+          <PasswordInput
+            size="3"
+            maxLength={32}
+            {...form.register('newPassword')}
+            value={form.watch('newPassword')}
+          />
+        </FormFieldContainer>
+        <FormFieldContainer>
+          <FormFieldLabel>Confirm New Password</FormFieldLabel>
+          <PasswordInput
+            size="3"
+            maxLength={32}
+            {...form.register('confirmPassword')}
+            value={form.watch('confirmPassword')}
+          />
+        </FormFieldContainer>
+        <PasswordRequirements
+          newPassword={form.watch('newPassword')}
+          confirmPassword={form.watch('confirmPassword')}
+        />
+      </ToggleableForm>
+    </LabelAndValue>
+  )
+}
+
+export { ChangePasswordForm }

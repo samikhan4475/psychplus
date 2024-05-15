@@ -2,14 +2,18 @@ import { IconProps } from '../types'
 
 const RoundGreenCheckIcon = (props: IconProps) => {
   return (
-    <svg 
+    <svg
       width={props.width ?? 56}
       height={props.height ?? 56}
-      viewBox="0 0 56 56" 
-      fill="none" 
-      xmlns="http://www.w3.org/2000/svg">
-      <rect x="8" y="8" width="40" height="40" rx="24" fill="#D1FADF"/>
-      <path d="M23.5 28L26.5 31L32.5 25M38 28C38 33.5228 33.5228 38 28 38C22.4772 38 18 33.5228 18 28C18 22.4772 22.4772 18 28 18C33.5228 18 38 22.4772 38 28Z" stroke="#039855" />
+      viewBox="0 0 56 56"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <rect x="8" y="8" width="40" height="40" rx="24" fill="#D1FADF" />
+      <path
+        d="M23.5 28L26.5 31L32.5 25M38 28C38 33.5228 33.5228 38 28 38C22.4772 38 18 33.5228 18 28C18 22.4772 22.4772 18 28 18C33.5228 18 38 22.4772 38 28Z"
+        stroke="#039855"
+      />
     </svg>
   )
 }

@@ -5,11 +5,19 @@ metadata:
 data:
   aspNetCoreEnvironment: 'Integration'
   aspNetCoreUrls: 'http://+:80'
+  authAccessTokenCookieName: 'p+_access_token'
+  authAccessTokenExpiryCookieName: 'p+_access_token_expiry'
+  authRefreshTokenCookieName: 'p+_refresh_token'
+  authUserCookieName: 'p+_user'
   cachingCodeSetCacheExpireMinutes: '15'
-  reactAppClinicalUrl: http://localhost:8001
-  reactAppPatientUrl: http://localhost:8002
-  reactAppRevCycleUrl: http://localhost:8003
-  reactAppPlatformUrl: http://localhost:8000
-  apiUrl: https://api-pr-2000.ode.psychplus.dev
-  authApiUrl: https://auth-pr-2000.ode.psychplus.dev
-  APP_ENV: development
+  reactAppClinicalUrl: 'http://localhost:8001'
+  reactAppPatientUrl: 'http://localhost:8002'
+  reactAppRevCycleUrl: 'http://localhost:8003'
+  reactAppPlatformUrl: 'http://localhost:8000'
+  scriptSureBaseApplicationUrl: 'https://stage.scriptsure.com'
+  scriptSureBasePlatformUrl: 'https://stage-platform.scriptsure.com'
+  scriptSureSessionCookieName: 'p+_scriptsure_session'
+  scriptSureSessionCookieCreateAt: 'p+_scriptsure_session_created_at'
+  apiUrl: 'https://api-pr-2000.ode.psychplus.dev'
+  authApiUrl: 'https://auth-pr-2000.ode.psychplus.dev'
+  APP_ENV: 'development'

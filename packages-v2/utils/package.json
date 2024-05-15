@@ -1,0 +1,29 @@
+{
+  "name": "@psychplus-v2/utils",
+  "version": "0.1.0",
+  "private": true,
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "clean": "rimraf .next .turbo *.tsbuildinfo node_modules",
+    "lint": "tsc --noEmit && eslint \"src/**/*.ts*\"",
+    "lint:fix": "tsc --noEmit && eslint --fix \"src/**/*.ts*\""
+  },
+  "dependencies": {
+    "@internationalized/date": "^3.5.2",
+    "@psychplus-v2/constants": "^0.1.0",
+    "clsx": "^2.0.0",
+    "react": "^18.2.0",
+    "tailwind-merge": "^1.14.0",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "@psychplus-v2/eslint-config": "^0.1.0",
+    "@psychplus-v2/tsconfig": "^0.1.0",
+    "@psychplus-v2/types": "^0.1.0",
+    "@types/react": "^18.2.47",
+    "eslint": "^8.50.0",
+    "typescript": "^5.2.2"
+  }
+}

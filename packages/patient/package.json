@@ -12,9 +12,9 @@
     "lint:fix": "tsc --noEmit && eslint --fix \"src/**/*.ts*\""
   },
   "dependencies": {
-    "@psychplus/utils": "^0.1.0",
     "@psychplus/clinics": "^0.1.0",
-    "next": "^14.0.1",
+    "@psychplus/utils": "^0.1.0",
+    "next": "^14.0.4",
     "react": "^18.2.0",
     "zustand": "^4.4.3"
   },

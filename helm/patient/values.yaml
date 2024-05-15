@@ -74,7 +74,7 @@ autoscaling:
 startupProbeEnabled: false
 startupProbe:
   httpGet:
-    path: /health/liveness_CF796DFC-2BE3-415f-9F86-63C29517DF8B
+    path: /healthz/liveness_CF796DFC-2BE3-415f-9F86-63C29517DF8B
     port: http
   periodSeconds: 30
   timeoutSeconds: 30
@@ -82,7 +82,7 @@ startupProbe:
 livenessProbeEnabled: false
 livenessProbe:
   httpGet:
-    path: /health/liveness_CF796DFC-2BE3-415f-9F86-63C29517DF8B
+    path: /healthz/liveness_CF796DFC-2BE3-415f-9F86-63C29517DF8B
     port: http
   periodSeconds: 10
   timeoutSeconds: 5
@@ -90,7 +90,7 @@ livenessProbe:
 readinessProbeEnabled: false
 readinessProbe:
   httpGet:
-    path: /health/readiness_CF796DFC-2BE3-415f-9F86-63C29517DF8B
+    path: /healthz/readiness_CF796DFC-2BE3-415f-9F86-63C29517DF8B
     port: http
   periodSeconds: 10
   timeoutSeconds: 5
@@ -112,28 +112,6 @@ env:
   - name: APP_VERSION
     value: "1.0.0"
 
-  # CONFIG: ASP NET
-
-  - name: RUN_ENVIRONMENT
-    valueFrom:
-      configMapKeyRef:
-        name: app-config
-        key: aspNetCoreEnvironment
-
-  - name: ASPNETCORE_URLS
-    valueFrom:
-      configMapKeyRef:
-        name: app-config
-        key: aspNetCoreUrls
-  
-  # CONFIG: Caching
-
-  - name: APPSETTINGS_Caching__CodeSetCacheExpireMinutes
-    valueFrom:
-      configMapKeyRef:
-        name: app-config
-        key: cachingCodeSetCacheExpireMinutes
-
   # CONFIG: APPs
 
   - name: APP_ENV
@@ -141,6 +119,12 @@ env:
       configMapKeyRef:
         name: app-config
         key: aspNetCoreEnvironment
+
+  - name: API_URL
+    valueFrom:
+      configMapKeyRef:
+        name: app-config
+        key: apiUrl
 
   - name: CLINICAL_URL
     valueFrom:
@@ -166,17 +150,85 @@ env:
         name: app-config
         key: reactAppPlatformUrl
 
-  - name: API_URL
+  # CONFIG: ASP NET
+
+  - name: RUN_ENVIRONMENT
     valueFrom:
       configMapKeyRef:
         name: app-config
-        key: apiUrl
+        key: aspNetCoreEnvironment
+
+  - name: ASPNETCORE_URLS
+    valueFrom:
+      configMapKeyRef:
+        name: app-config
+        key: aspNetCoreUrls
+
+  # AUTH
 
   - name: AUTH_API_URL
     valueFrom:
       configMapKeyRef:
         name: app-config
         key: authApiUrl
+
+  - name: AUTH_ACCESS_TOKEN_COOKIE_NAME
+    valueFrom:
+      configMapKeyRef:
+        name: app-config
+        key: authAccessTokenCookieName
+
+  - name: AUTH_ACCESS_TOKEN_EXPIRY_COOKIE_NAME
+    valueFrom:
+      configMapKeyRef:
+        name: app-config
+        key: authAccessTokenExpiryCookieName
+
+  - name: AUTH_REFRESH_TOKEN_COOKIE_NAME
+    valueFrom:
+      configMapKeyRef:
+        name: app-config
+        key: authRefreshTokenCookieName
+
+  - name: AUTH_USER_COOKIE_NAME
+    valueFrom:
+      configMapKeyRef:
+        name: app-config
+        key: authUserCookieName
+
+  # CONFIG: Caching
+
+  - name: APPSETTINGS_Caching__CodeSetCacheExpireMinutes
+    valueFrom:
+      configMapKeyRef:
+        name: app-config
+        key: cachingCodeSetCacheExpireMinutes
+
+  # CONFIG: SCRIPTSURE
+
+  - name: SCRIPTSURE_BASE_APPLICATION_URL
+    valueFrom:
+      configMapKeyRef:
+        name: app-config
+        key: scriptSureBaseApplicationUrl
+
+  - name: SCRIPTSURE_BASE_PLATFORM_URL
+    valueFrom:
+      configMapKeyRef:
+        name: app-config
+        key: scriptSureBasePlatformUrl
+
+  - name: SCRIPTSURE_SESSION_COOKIE_NAME
+    valueFrom:
+      configMapKeyRef:
+        name: app-config
+        key: scriptSureSessionCookieName
+
+  - name: SCRIPTSURE_SESSION_COOKIE_CREATED_AT
+    valueFrom:
+      configMapKeyRef:
+        name: app-config
+        key: scriptSureSessionCookieCreateAt
 
   # SECRETS: Google
 
@@ -185,6 +237,38 @@ env:
       secretKeyRef:
         name: ehr-secrets
         key: googleMapsKey
+
+  # SECRETS: SCRIPTSURE
+
+  - name: SCRIPTSURE_API_KEY
+    valueFrom:
+      secretKeyRef:
+        name: ehr-secrets
+        key: scriptSureApiKey
+
+  - name: SCRIPTSURE_API_SECRET
+    valueFrom:
+      secretKeyRef:
+        name: ehr-secrets
+        key: scriptSureApiSecret
+
+  - name: SCRIPTSURE_ENCRYPTION_KEY
+    valueFrom:
+      secretKeyRef:
+        name: ehr-secrets
+        key: scriptSureEncryptionKey
+
+  - name: SCRIPTSURE_PATIENT_PORTAL_USER_EMAIL
+    valueFrom:
+      secretKeyRef:
+        name: ehr-secrets
+        key: scriptSurePatientPortalUserEmail
+
+  - name: SCRIPTSURE_PATIENT_PORTAL_USER_EMAIL_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: ehr-secrets
+        key: scriptSurePatientPortalUserPassword
 
   # SECRETS: Stripe
 

@@ -1,0 +1,29 @@
+{
+  "name": "@psychplus-v2/components",
+  "version": "0.1.0",
+  "private": true,
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "clean": "rimraf .next .turbo *.tsbuildinfo node_modules",
+    "lint": "tsc --noEmit && eslint \"src/**/*.ts*\"",
+    "lint:fix": "tsc --noEmit && eslint --fix \"src/**/*.ts*\""
+  },
+  "dependencies": {
+    "@psychplus-v2/auth": "^0.1.0",
+    "@psychplus-v2/utils": "^0.1.0",
+    "@radix-ui/themes": "^2.0.0",
+    "lucide-react": "0.373.0",
+    "next": "^14.0.4",
+    "react": "^18.2.0",
+    "react-hook-form": "^7.47.0"
+  },
+  "devDependencies": {
+    "@psychplus-v2/eslint-config": "^0.1.0",
+    "@psychplus-v2/tsconfig": "^0.1.0",
+    "@types/react": "^18.2.47",
+    "eslint": "^8.50.0",
+    "typescript": "^5.2.2"
+  }
+}

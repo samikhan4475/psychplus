@@ -1,4 +1,4 @@
-FROM node:18.19-alpine AS alpine
+FROM node:20.11.0-alpine3.18 AS alpine
 
 # Setup pnpm on alpine base
 FROM alpine AS base
@@ -40,7 +40,7 @@ FROM base AS builder
     # ARG TURBO_TOKEN
     # ENV TURBO_TOKEN=$TURBO_TOKEN
 
-    ENV APP_CODE p+patient-app
+    ENV APP_CODE p+patient-ui
     ENV APP_PATH ""
 
     RUN turbo run build --filter=@psychplus/patient-app...

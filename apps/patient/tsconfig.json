@@ -1,18 +1,13 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
-  "extends": "@psychplus/tsconfig/nextjs",
+  "extends": "@psychplus-v2/tsconfig/config",
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]
-    }
+    },
+    "allowImportingTsExtensions": true
   },
-  "include": [
-    "src",
-    "next.config.js",
-    "next-env.d.ts",
-    ".next/types/**/*.ts",
-    "react-google-recaptcha-v2.d.ts"
-  ],
+  "include": ["src", "next.config.js", "next-env.d.ts", ".next/types/**/*.ts"],
   "exclude": ["node_modules"]
 }

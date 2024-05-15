@@ -1,17 +1,19 @@
-import { Box, Flex, Heading, Text, Button } from '@radix-ui/themes'
+import { Box, Button, Flex, Heading, Text } from '@radix-ui/themes'
 import { Select } from '@psychplus/ui/select'
 import { TextField } from '@psychplus/ui/text-field'
 
 const Filters = () => (
-  <Box className="bg-[#ffffff] py-1.5 px-2 rounded-[2px] mb-[1px]">
+  <Box className="mb-[1px] rounded-[2px] bg-[#ffffff] px-2 py-1.5">
     <Flex width="100%" justify="between" align="center">
       <Flex align="center" gap="2">
         <Text className="text-[12px]">Title</Text>
         <Select.Root defaultValue="behavior_identification" size="2" disabled>
-          <Select.Trigger/>
+          <Select.Trigger />
           <Select.Content>
             <Select.Group>
-                <Select.Item value="behavior_identification">Behavior Identification</Select.Item>
+              <Select.Item value="behavior_identification">
+                Behavior Identification
+              </Select.Item>
             </Select.Group>
           </Select.Content>
         </Select.Root>
@@ -20,10 +22,12 @@ const Filters = () => (
       <Flex align="center" gap="2">
         <Text className="text-[12px]">Type</Text>
         <Select.Root defaultValue="behavior_identification" size="2" disabled>
-          <Select.Trigger/>
+          <Select.Trigger />
           <Select.Content>
             <Select.Group>
-                <Select.Item value="behavior_identification">Out Pt, New Pt, In-Person</Select.Item>
+              <Select.Item value="behavior_identification">
+                Out Pt, New Pt, In-Person
+              </Select.Item>
             </Select.Group>
           </Select.Content>
         </Select.Root>
@@ -32,10 +36,12 @@ const Filters = () => (
       <Flex align="center" gap="2">
         <Text className="text-[12px]">Provider</Text>
         <Select.Root defaultValue="behavior_identification" size="2" disabled>
-          <Select.Trigger/>
+          <Select.Trigger />
           <Select.Content>
             <Select.Group>
-                <Select.Item value="behavior_identification">Dr. Andrew Tate</Select.Item>
+              <Select.Item value="behavior_identification">
+                Dr. Andrew Tate
+              </Select.Item>
             </Select.Group>
           </Select.Content>
         </Select.Root>
@@ -44,10 +50,12 @@ const Filters = () => (
       <Flex align="center" gap="2">
         <Text className="text-[12px]">Co-Signer</Text>
         <Select.Root defaultValue="behavior_identification" size="2" disabled>
-          <Select.Trigger/>
+          <Select.Trigger />
           <Select.Content>
             <Select.Group>
-                <Select.Item value="behavior_identification">Roger More</Select.Item>
+              <Select.Item value="behavior_identification">
+                Roger More
+              </Select.Item>
             </Select.Group>
           </Select.Content>
         </Select.Root>
@@ -56,10 +64,12 @@ const Filters = () => (
       <Flex align="center" gap="2">
         <Text className="text-[12px]">Location</Text>
         <Select.Root defaultValue="behavior_identification" size="2" disabled>
-          <Select.Trigger/>
+          <Select.Trigger />
           <Select.Content>
             <Select.Group>
-                <Select.Item value="behavior_identification">Willow Clinic</Select.Item>
+              <Select.Item value="behavior_identification">
+                Willow Clinic
+              </Select.Item>
             </Select.Group>
           </Select.Content>
         </Select.Root>
@@ -67,20 +77,11 @@ const Filters = () => (
 
       <Flex align="center" gap="2">
         <Text className="text-[12px]">Date & Time</Text>
-        <TextField.Input
-          defaultValue="2/9/2024"
-          placeholder="Date"
-          disabled
-        />
+        <TextField.Input defaultValue="2/9/2024" placeholder="Date" disabled />
 
-        <TextField.Input
-          defaultValue="08:00pm"
-          placeholder="Time"
-          disabled
-        />
+        <TextField.Input defaultValue="08:00pm" placeholder="Time" disabled />
       </Flex>
     </Flex>
-    
   </Box>
 )
 

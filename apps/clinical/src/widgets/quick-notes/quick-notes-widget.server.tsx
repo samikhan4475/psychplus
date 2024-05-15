@@ -1,11 +1,7 @@
-import { QuickNotesWidgetClient } from "./quick-notes-widget.client"
+import { QuickNotesWidgetClient } from './quick-notes-widget.client'
 
 const QuickNotesWidgetServer = async () => {
-
-
-  return (
-    <QuickNotesWidgetClient />
-  )
+  return <QuickNotesWidgetClient />
 }
 
 export { QuickNotesWidgetServer }

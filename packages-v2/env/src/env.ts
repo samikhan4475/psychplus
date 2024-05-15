@@ -1,0 +1,65 @@
+type AppEnv = 'development' | 'staging' | 'production'
+
+const APP_CODE = process.env.APP_CODE ?? 'p+ui'
+const APP_VERSION = process.env.APP_VERSION ?? '1.0.0'
+const APP_ENV = (process.env.APP_ENV ?? 'development') as AppEnv
+const ROOT_DOMAIN = process.env.ROOT_DOMAIN
+const PATIENT_APP_URL = process.env.PATIENT_URL ?? ''
+const PROVIDER_APP_URL = process.env.CLINICAL_URL ?? ''
+const API_URL = process.env.API_URL ?? ''
+const AUTH_URL = process.env.AUTH_API_URL ?? ''
+
+// Scriptsure
+const SCRIPTSURE_EMAIL = process.env.SCRIPTSURE_PATIENT_PORTAL_USER_EMAIL ?? ''
+const SCRIPTSURE_API_KEY = process.env.SCRIPTSURE_API_KEY ?? ''
+const SCRIPTSURE_SECRET = process.env.SCRIPTSURE_API_SECRET ?? ''
+const SCRIPTSURE_PLATFORM_URL = process.env.SCRIPTSURE_BASE_PLATFORM_URL ?? ''
+const SCRIPTSURE_APP_URL = process.env.SCRIPTSURE_BASE_APPLICATION_URL ?? ''
+const SCRIPTSURE_ENCRYPTION_KEY = process.env.SCRIPTSURE_ENCRYPTION_KEY ?? ''
+
+// Google Maps
+const GOOGLE_MAPS_API_KEY = process.env.GOOGLE_MAPS_API_KEY ?? ''
+
+// Cookies
+const USER_COOKIE = process.env.AUTH_USER_COOKIE_NAME ?? 'p+_user'
+const ACCESS_TOKEN_COOKIE =
+  process.env.AUTH_ACCESS_TOKEN_COOKIE_NAME ?? 'p+_access_token'
+const ACCESS_TOKEN_EXPIRY_COOKIE =
+  process.env.AUTH_ACCESS_TOKEN_EXPIRY_COOKIE_NAME ?? 'p+_access_token_expiry'
+const REFRESH_TOKEN_COOKIE =
+  process.env.AUTH_REFRESH_TOKEN_COOKIE_NAME ?? 'p+_refresh_token'
+const SCRIPTSURE_SESSION_COOKIE =
+  process.env.SCRIPTSURE_SESSION_COOKIE_NAME ?? 'p+_scriptsure_session'
+const SCRIPTSURE_SESSION_CREATED_AT_COOKIE =
+  process.env.SCRIPTSURE_SESSION_COOKIE_CREATED_AT ??
+  'p+_scriptsure_session_created_at'
+
+//Stripe
+const STRIPE_API_KEY = process.env.STRIPE_API_KEY ?? ''
+const STRIPE_PUBLISHABLE_KEY = process.env.STRIPE_PUBLISHABLE_KEY ?? ''
+
+export {
+  APP_CODE,
+  APP_VERSION,
+  APP_ENV,
+  ROOT_DOMAIN,
+  PATIENT_APP_URL,
+  PROVIDER_APP_URL,
+  API_URL,
+  AUTH_URL,
+  SCRIPTSURE_EMAIL,
+  SCRIPTSURE_API_KEY,
+  SCRIPTSURE_SECRET,
+  SCRIPTSURE_PLATFORM_URL,
+  SCRIPTSURE_APP_URL,
+  SCRIPTSURE_ENCRYPTION_KEY,
+  GOOGLE_MAPS_API_KEY,
+  USER_COOKIE,
+  ACCESS_TOKEN_COOKIE,
+  ACCESS_TOKEN_EXPIRY_COOKIE,
+  REFRESH_TOKEN_COOKIE,
+  SCRIPTSURE_SESSION_COOKIE,
+  SCRIPTSURE_SESSION_CREATED_AT_COOKIE,
+  STRIPE_API_KEY,
+  STRIPE_PUBLISHABLE_KEY,
+}

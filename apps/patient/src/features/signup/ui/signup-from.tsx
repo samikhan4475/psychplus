@@ -1,0 +1,338 @@
+'use client'
+
+import { useEffect, useState } from 'react'
+import NextLink from 'next/link'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { FormContainer } from '@psychplus-v2/components'
+import { DocumentType } from '@psychplus-v2/types'
+import { getAgeFromDate } from '@psychplus-v2/utils'
+import {
+  Button,
+  Checkbox,
+  Flex,
+  Heading,
+  RadioGroup,
+  Text,
+  TextFieldInput,
+} from '@radix-ui/themes'
+import { type DateValue } from 'react-aria-components'
+import { SubmitHandler, useForm } from 'react-hook-form'
+import z from 'zod'
+import {
+  ConsentView,
+  DobInput,
+  FormError,
+  FormField,
+  FormFieldContainer,
+  FormFieldError,
+  FormFieldLabel,
+  FormSubmitButton,
+  PasswordInput,
+  PasswordRequirements,
+  PhoneNumberInput,
+  RadioGroupItem,
+} from '@/components-v2'
+import { useValidateNewPassword } from '@/hooks'
+import { preverifySignupAction, sendSignupOtpAction } from '../actions'
+import { VerifyOtpForm } from './verify-otp-form'
+
+const schema = z
+  .object({
+    firstName: z.string().trim().min(1, 'Required'),
+    lastName: z.string().trim().min(1, 'Required'),
+    dateOfBirth: z.custom<DateValue>().superRefine((val, ctx) => {
+      if (getAgeFromDate(val) < 4) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: 'Must be at least 4 years of age',
+          fatal: true,
+        })
+      }
+    }),
+    phoneNumber: z.string().trim().length(10, 'Invalid phone number'),
+    email: z.string().email().trim(),
+    newPassword: z
+      .string()
+      .min(1, 'Required')
+      .min(8, 'Password must be at least 8 characters'),
+    confirmPassword: z
+      .string()
+      .min(1, 'Required')
+      .min(8, 'Password must be at least 8 characters'),
+    userAgreed: z.coerce.boolean().refine((value) => value === true, {
+      message: 'You must agree to the policies and conditions',
+    }),
+    hasGuardian: z.coerce.boolean(),
+    guardianFirstname: z.string().trim(),
+    guardianLastname: z.string().trim(),
+  })
+  .superRefine((data, ctx) => {
+    if (!data.dateOfBirth) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'Required',
+        path: ['dateOfBirth'],
+      })
+    }
+    if (getAgeFromDate(data.dateOfBirth) < 18 && !data.hasGuardian) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'You must have a guardian if you are under 18',
+        path: ['hasGuardian'],
+      })
+    }
+    if (data.hasGuardian) {
+      if (!data.guardianFirstname) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: 'Required',
+          path: ['guardianFirstname'],
+        })
+      }
+      if (!data.guardianLastname) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: 'Required',
+          path: ['guardianLastname'],
+        })
+      }
+    }
+  })
+
+export type SchemaType = z.infer<typeof schema>
+
+const SignupForm = () => {
+  const [error, setError] = useState<string>()
+  const [openVerifyDialog, setOpenVerifyDialog] = useState(false)
+  const [showConsentView, setShowConsentView] = useState({
+    visible: false,
+    type: DocumentType.TERMS_AND_CONDITIONS,
+  })
+
+  const form = useForm<SchemaType>({
+    resolver: zodResolver(schema),
+    reValidateMode: 'onChange',
+    defaultValues: {
+      firstName: '',
+      lastName: '',
+      dateOfBirth: '',
+      phoneNumber: '',
+      email: '',
+      newPassword: '',
+      confirmPassword: '',
+      userAgreed: false,
+      hasGuardian: false,
+      guardianFirstname: '',
+      guardianLastname: '',
+    },
+  })
+
+  const dobFormValue = form.watch('dateOfBirth')
+  const hasGuardian = form.watch('hasGuardian')
+
+  useEffect(() => {
+    if (dobFormValue && getAgeFromDate(dobFormValue) < 18) {
+      form.setValue('hasGuardian', true)
+    } else {
+      form.setValue('hasGuardian', false)
+    }
+  }, [form, dobFormValue])
+
+  useEffect(() => {
+    if (hasGuardian) {
+      form.setValue('guardianFirstname', '')
+      form.setValue('guardianLastname', '')
+    }
+  }, [form, hasGuardian])
+
+  const { isValid } = useValidateNewPassword({
+    newPassword: form.watch('newPassword'),
+    confirmPassword: form.watch('confirmPassword'),
+  })
+
+  const onSubmit: SubmitHandler<SchemaType> = async (data: SchemaType) => {
+    setError(undefined)
+
+    const preverifyResponse = await preverifySignupAction({
+      contactInfo: {
+        email: data.email,
+      },
+    })
+
+    if (preverifyResponse.state === 'error') {
+      setError(preverifyResponse.error)
+      return
+    }
+
+    const sendSignupOtpResponse = await sendSignupOtpAction({
+      emailAddress: data.email,
+    })
+
+    if (sendSignupOtpResponse.state === 'error') {
+      setError(sendSignupOtpResponse.error)
+      return
+    }
+
+    setOpenVerifyDialog(true)
+  }
+
+  return (
+    <Flex
+      direction="column"
+      className="bg-white w-full max-w-[500px] rounded-3 px-6 py-8 shadow-3 sm:p-12"
+    >
+      <VerifyOtpForm
+        formData={form.getValues()}
+        dialogOpen={openVerifyDialog}
+        setDialogOpen={setOpenVerifyDialog}
+      />
+      <ConsentView
+        open={showConsentView.visible}
+        setOpen={(open) => {
+          setShowConsentView({ ...showConsentView, visible: open })
+        }}
+        documentType={showConsentView.type}
+      />
+      <Heading weight="medium" className="text-[36px] text-accent-12" mb="4">
+        Create Account
+      </Heading>
+      <FormError message={error} />
+      <FormContainer form={form} onSubmit={onSubmit}>
+        <Flex direction="column" gap="3">
+          <FormField name="firstName" label="First Name">
+            <TextFieldInput {...form.register('firstName')} />
+          </FormField>
+          <FormField name="lastName" label="Last Name">
+            <TextFieldInput {...form.register('lastName')} />
+          </FormField>
+          <Flex direction="row" justify="between">
+            <FormField
+              containerClassName="flex-1"
+              name="dateOfBirth"
+              label="Date of Birth"
+            >
+              <DobInput name="dateOfBirth" />
+            </FormField>
+            <FormField
+              containerClassName="flex-1"
+              name="phoneNumber"
+              label="Phone Number"
+            >
+              <PhoneNumberInput size="2" name="phoneNumber" />
+            </FormField>
+          </Flex>
+          <FormField name="email" label="Email">
+            <TextFieldInput {...form.register('email')} />
+          </FormField>
+          <FormField name="newPassword" label="Password">
+            <PasswordInput
+              {...form.register('newPassword')}
+              value={form.watch('newPassword')}
+            />
+          </FormField>
+          <FormField name="confirmPassword" label="Confirm Password">
+            <PasswordInput
+              {...form.register('confirmPassword')}
+              value={form.watch('confirmPassword')}
+            />
+          </FormField>
+          <PasswordRequirements
+            newPassword={form.watch('newPassword')}
+            confirmPassword={form.watch('confirmPassword')}
+          />
+
+          <FormFieldContainer>
+            <FormFieldLabel>Do you have a Parent/Guardian?</FormFieldLabel>
+            <RadioGroup.Root
+              name="example"
+              value={String(form.watch('hasGuardian'))}
+              onValueChange={(value) =>
+                form.setValue('hasGuardian', value === 'true')
+              }
+            >
+              <Flex gap="2">
+                <RadioGroupItem id="true" value="true">
+                  Yes
+                </RadioGroupItem>
+                <RadioGroupItem id="false" value="false">
+                  No
+                </RadioGroupItem>
+              </Flex>
+            </RadioGroup.Root>
+          </FormFieldContainer>
+
+          {
+            // Show guardian form if user is under 18 and has no guardian
+            form.watch('hasGuardian') === true && (
+              <Flex direction="column" gap="3">
+                <FormField name="guardianFirstname" label="Guardian First Name">
+                  <TextFieldInput {...form.register('guardianFirstname')} />
+                </FormField>
+                <FormField name="guardianLastname" label="Guardian Last Name">
+                  <TextFieldInput {...form.register('guardianLastname')} />
+                </FormField>
+              </Flex>
+            )
+          }
+          <FormFieldError name="hasGuardian" />
+          <FormFieldContainer>
+            <Flex direction="row" gap="2" align="center">
+              <Checkbox
+                id="terms-and-conditions-checkbox"
+                size="3"
+                onCheckedChange={(checked: boolean) =>
+                  form.setValue('userAgreed', checked)
+                }
+                {...form.register('userAgreed')}
+                highContrast
+              />
+              <FormFieldLabel className="text-[14px] font-[400]">
+                I agree to electronically sign the{'  '}
+                <Button
+                  className="bg-transparent px-2 pt-[5px]"
+                  variant="ghost"
+                  onClick={() =>
+                    setShowConsentView({
+                      visible: true,
+                      type: DocumentType.TERMS_AND_CONDITIONS,
+                    })
+                  }
+                >
+                  Terms of Service
+                </Button>{' '}
+                and{' '}
+                <Button
+                  className="bg-transparent px-2 pt-[5px]"
+                  variant="ghost"
+                  onClick={() =>
+                    setShowConsentView({
+                      visible: true,
+                      type: DocumentType.PRIVACY_POLICY,
+                    })
+                  }
+                >
+                  Privacy Policy.
+                </Button>
+              </FormFieldLabel>
+            </Flex>
+            <FormFieldError name="userAgreed" />
+          </FormFieldContainer>
+          <FormSubmitButton size="4" className="mt-4" disabled={!isValid}>
+            Submit
+          </FormSubmitButton>
+        </Flex>
+      </FormContainer>
+      <Text align="center" size="2" className="mt-8">
+        Already have an account?
+        <NextLink
+          href="/login"
+          className="ml-1 text-accent-11 underline-offset-2 transition-colors hover:text-accent-12 hover:underline"
+        >
+          Login
+        </NextLink>
+      </Text>
+    </Flex>
+  )
+}
+
+export { SignupForm }

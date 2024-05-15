@@ -1,0 +1,21 @@
+{
+  "name": "@psychplus-v2/constants",
+  "version": "0.1.0",
+  "private": true,
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "clean": "rimraf .next .turbo *.tsbuildinfo node_modules",
+    "lint": "tsc --noEmit && eslint \"src/**/*.ts*\"",
+    "lint:fix": "tsc --noEmit && eslint --fix \"src/**/*.ts*\""
+  },
+  "devDependencies": {
+    "@psychplus-v2/eslint-config": "^0.1.0",
+    "@psychplus-v2/tsconfig": "^0.1.0",
+    "@types/node": "^20.10.4",
+    "@types/react": "^18.2.47",
+    "eslint": "^8.50.0",
+    "typescript": "^5.2.2"
+  }
+}
