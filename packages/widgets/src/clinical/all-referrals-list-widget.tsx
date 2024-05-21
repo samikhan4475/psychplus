@@ -20,7 +20,7 @@ const AllReferralsListWidget = (props: Props) => {
 
   return (
     <WidgetPortal
-      src={`${CLINICAL_URL}/widgets/all-referrals-list?${searchParams.toString()}`}
+      src={`${CLINICAL_URL}/galaxy/widgets/all-referrals-list?${searchParams.toString()}`}
       name={ALL_REFERRALS_LIST_WIDGET}
     />
   )

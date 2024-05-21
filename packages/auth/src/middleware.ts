@@ -4,6 +4,7 @@ import {
   API_URL,
   APP_CODE,
   APP_ENV,
+  APP_PATH,
   APP_VERSION,
   AUTH_TOKEN_COOKIE_NAME,
   BEARER_AUTHENTICATION,
@@ -23,7 +24,7 @@ import { type LoginResponse } from './types'
 const INDEX_PATH = '/'
 const API_PATH = '/api'
 const API_LOGIN_PATH = '/api/login'
-const LOGIN_REDIRECT_PATH = wrapPath('/login')
+const LOGIN_REDIRECT_PATH = '/login'
 
 interface MiddlewareConfig {
   index: string
@@ -117,10 +118,12 @@ const handleApiRequest = async (request: NextRequest) => {
   const headers = createHeaders(request)
 
   const customHeaders = new Headers({
-    'Authorization': headers.get('Authorization') ?? '',
-    'PsychPlus-Application': headers.get('PsychPlus-Application') ?? 'p+react-ui',
+    Authorization: headers.get('Authorization') ?? '',
+    'PsychPlus-Application':
+      headers.get('PsychPlus-Application') ?? 'p+react-ui',
     'PsychPlus-AppVersion': headers.get('PsychPlus-App-Version') ?? '1.0.0',
-    'PsychPlus-RunEnvironment': headers.get('PsychPlus-RunEnvironment') ?? 'development',
+    'PsychPlus-RunEnvironment':
+      headers.get('PsychPlus-RunEnvironment') ?? 'development',
     'Psychplus-Device': headers.get('Psychplus-Device') ?? '',
   })
 
@@ -195,13 +198,20 @@ const handleLoginApiRequest = async (request: NextRequest) => {
 // Redirect user to login page. The previously requested page is added as a query param
 // to allow navigation to continue after a successful login attempt.
 const redirectToLogin = (request: NextRequest) => {
-  const next = `${request.nextUrl.pathname}${request.nextUrl.search}`
+  const next = APP_PATH
+    ? `/${APP_PATH}${request.nextUrl.pathname}${request.nextUrl.search}`
+    : `${request.nextUrl.pathname}${request.nextUrl.search}`
+
   const nextParams = createSearchParams({
     next: next === '/' ? null : next,
   })
 
+  const redirectPath = APP_PATH
+    ? `/${APP_PATH}${LOGIN_REDIRECT_PATH}`
+    : LOGIN_REDIRECT_PATH
+
   return NextResponse.redirect(
-    new URL(`${LOGIN_REDIRECT_PATH}?${nextParams.toString()}`, request.url),
+    new URL(`${redirectPath}?${nextParams.toString()}`, request.url),
   )
 }
 

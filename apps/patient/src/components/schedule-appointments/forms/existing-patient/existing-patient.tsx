@@ -13,6 +13,7 @@ const ExistingPatient = () => {
     <Box mt="3">
       {displayLoginForm ? (
         <LoginForm
+          basePath=""
           inputClassName="h-[56px] rounded-6 px-4 text-2 font-light"
           buttonClassName="h-[64px] w-[164px] rounded-[32px] bg-[#151B4A] text-4 font-medium"
           redirect="/dashboard"

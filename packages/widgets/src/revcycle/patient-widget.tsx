@@ -15,7 +15,7 @@ const PatientWidget = (props: Props) => {
 
   return (
     <WidgetPortal
-      src={`${REVCYCLE_URL}/widgets/patient?${searchParams.toString()}`}
+      src={`${REVCYCLE_URL}/revcycle/widgets/patient?${searchParams.toString()}`}
       name={PATIENT_WIDGET}
     />
   )

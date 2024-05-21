@@ -1,4 +1,4 @@
-import { AppLink } from '@psychplus/ui/app-link'
+import NextLink from 'next/link'
 import { NavigationMenuLink } from './navigation-menu-link'
 
 interface MenuItem {
@@ -12,9 +12,9 @@ interface NavigationMenuProps {
 
 const NavigationMenu = ({ items }: NavigationMenuProps) => {
   return items.map((item) => (
-    <AppLink key={item.href} href={item.href}>
+    <NextLink key={item.href} href={item.href}>
       <NavigationMenuLink href={item.href}>{item.label}</NavigationMenuLink>
-    </AppLink>
+    </NextLink>
   ))
 }
 

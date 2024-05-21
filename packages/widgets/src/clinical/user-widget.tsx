@@ -11,7 +11,7 @@ const UserWidget = () => {
 
   return (
     <WidgetPortal
-      src={`${CLINICAL_URL}/widgets/user?${searchParams.toString()}`}
+      src={`${CLINICAL_URL}/galaxy/widgets/user?${searchParams.toString()}`}
       name={USER_WIDGET}
     />
   )

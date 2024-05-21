@@ -1,6 +1,6 @@
 import { type Metadata } from 'next'
+import NextLink from 'next/link'
 import { Flex, Text } from '@radix-ui/themes'
-import { AppLink } from '@psychplus/ui/app-link'
 
 export const metadata: Metadata = {
   title: 'title',
@@ -11,18 +11,18 @@ const IndexLayout = async ({ children }: { children: React.ReactNode }) => {
   return (
     <>
       <Flex align="center" px="8" py="4" className="border-b border-b-gray-5">
-        <AppLink href="/" className="mr-8">
+        <NextLink href="/" className="mr-8">
           <Text size="4" weight="bold">
             P+
           </Text>
-        </AppLink>
+        </NextLink>
         <Flex gap="4">
-          <AppLink href="/user" className="hover:underline">
+          <NextLink href="/user" className="hover:underline">
             <Text weight="medium">User</Text>
-          </AppLink>
-          <AppLink href="/patient" className="hover:underline">
+          </NextLink>
+          <NextLink href="/patient" className="hover:underline">
             <Text weight="medium">Patient</Text>
-          </AppLink>
+          </NextLink>
         </Flex>
       </Flex>
       <main className="p-4">{children}</main>

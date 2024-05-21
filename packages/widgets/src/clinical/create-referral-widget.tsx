@@ -15,7 +15,7 @@ const CreateReferralWidget = (props: Props) => {
 
   return (
     <DialogPortal
-      src={`${CLINICAL_URL}/widgets/create-referral?${searchParams.toString()}`}
+      src={`${CLINICAL_URL}/galaxy/widgets/create-referral?${searchParams.toString()}`}
       name={CREATE_REFERRAL_WIDGET}
     />
   )

@@ -1,7 +1,7 @@
 'use client'
 
+import NextLink from 'next/link'
 import { Flex, Heading, Link, Text } from '@radix-ui/themes'
-import { AppLink } from '@psychplus/ui/app-link'
 import { COPYRIGHT_TEXT } from '@psychplus/utils/constants'
 import { ForgotPasswordForm } from './forgot-password-form'
 
@@ -18,9 +18,9 @@ const ForgotPasswordPage = () => (
           <Text size="2">
             Aleady have an account?
             <Link size="2" ml="1" asChild>
-              <AppLink href="/login" data-testid="forget-password-login-link">
+              <NextLink href="/login" data-testid="forget-password-login-link">
                 Sign in
-              </AppLink>
+              </NextLink>
             </Link>
           </Text>
         </Flex>
@@ -28,10 +28,10 @@ const ForgotPasswordPage = () => (
       <Flex direction="column" gap="2" align="center" justify="between">
         <Flex gap="3">
           <Link size="2" asChild data-testid="forget-password-terms-link">
-            <AppLink href="/">Terms & Conditions</AppLink>
+            <NextLink href="/">Terms & Conditions</NextLink>
           </Link>
           <Link size="2" asChild data-testid="forget-password-privacy-link">
-            <AppLink href="/">Privacy Policy</AppLink>
+            <NextLink href="/">Privacy Policy</NextLink>
           </Link>
         </Flex>
         <Text size="2">{COPYRIGHT_TEXT}</Text>

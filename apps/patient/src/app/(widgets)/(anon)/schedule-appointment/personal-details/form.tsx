@@ -148,6 +148,7 @@ const PersonalDetailsForm = () => {
 
           // Login user to generate access token
           login({
+            basePath: '',
             username: form.getValues().email,
             password: form.getValues().password,
           })

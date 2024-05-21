@@ -14,7 +14,7 @@ const PatientInformationWidget = (props: Props) => {
 
   return (
     <PortalContainer
-      src={`${CLINICAL_URL}/widgets/patient-information?${searchParams.toString()}`}
+      src={`${CLINICAL_URL}/galaxy/widgets/patient-information?${searchParams.toString()}`}
       name="patient-information"
     />
   )

@@ -11,7 +11,7 @@ const EditReferralWidget = () => {
 
   return (
     <DialogPortal
-      src={`${CLINICAL_URL}/widgets/edit-referral?${searchParams.toString()}`}
+      src={`${CLINICAL_URL}/galaxy/widgets/edit-referral?${searchParams.toString()}`}
       name={EDIT_REFERRAL_WIDGET}
     />
   )

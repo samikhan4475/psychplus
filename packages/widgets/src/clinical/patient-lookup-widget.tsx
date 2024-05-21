@@ -10,7 +10,7 @@ const PatientLookupWidget = () => {
 
   return (
     <PortalContainer
-      src={`${CLINICAL_URL}/widgets/patient-lookup?${searchParams.toString()}`}
+      src={`${CLINICAL_URL}/galaxy/widgets/patient-lookup?${searchParams.toString()}`}
       name="patient-lookup"
     />
   )

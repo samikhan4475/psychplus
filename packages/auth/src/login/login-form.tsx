@@ -1,6 +1,7 @@
 'use client'
 
 import { unstable_noStore as noStore } from 'next/cache'
+import NextLink from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import { Flex, Link, Text } from '@radix-ui/themes'
 import ReCAPTCHA from 'react-google-recaptcha-v2'
@@ -13,7 +14,6 @@ import {
   useForm,
   validate,
 } from '@psychplus/form'
-import { AppLink } from '@psychplus/ui/app-link'
 import { Checkbox } from '@psychplus/ui/checkbox'
 import { NEXT_PUBLIC_RECAPTCHA_V2_KEY } from '@psychplus/utils/constants'
 import { wrapPath } from '@psychplus/utils/url'
@@ -33,6 +33,7 @@ interface LoginFormProps {
   showCaptcha?: boolean
   hideRememberMe?: boolean
   hideForgotPassword?: boolean
+  basePath: string
 }
 
 const LoginForm = ({
@@ -42,6 +43,7 @@ const LoginForm = ({
   showCaptcha,
   hideRememberMe,
   hideForgotPassword,
+  basePath,
 }: LoginFormProps) => {
   noStore()
 
@@ -60,14 +62,11 @@ const LoginForm = ({
     login({
       username: data.username,
       password: data.password,
+      basePath,
     })
       .then(() => {
-        if (redirect) {
-          window.location.replace(redirect)
-        } else {
-          const next = searchParams.get('next') ?? `/`
-          location.assign(wrapPath(next))
-        }
+        const next = searchParams.get('next') ?? basePath ?? '/'
+        location.assign(wrapPath(next))
       })
       .catch((error) => {
         alert(error.message)
@@ -114,12 +113,12 @@ const LoginForm = ({
         )}
         {!hideForgotPassword && (
           <Link size="2" asChild>
-            <AppLink
+            <NextLink
               href="/forgot-password"
               data-testid="login-forgot-password-link"
             >
               Forgot password?
-            </AppLink>
+            </NextLink>
           </Link>
         )}
       </Flex>

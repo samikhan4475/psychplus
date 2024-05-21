@@ -9,15 +9,12 @@ import { API_URL } from '@psychplus-v2/env'
 import { createHeaders } from '@psychplus-v2/headers'
 
 export const config = {
-  matcher: '/((?!.*\\.).*)',
+  matcher: ['/((?!_next/static|_next/image|favicon.ico).*)', { source: '/' }],
 }
 
 const REQUIRES_ANON = ['/login', '/forgot-password', '/signup']
 
 export const middleware = async (request: NextRequest) => {
-  if (request.nextUrl.pathname.startsWith('/foo')) {
-    return new NextResponse('foo')
-  }
   if (request.nextUrl.pathname.startsWith('/widgets')) {
     // Skip middleware for widget requests.
     return NextResponse.next()
@@ -25,6 +22,31 @@ export const middleware = async (request: NextRequest) => {
   if (request.headers.get('next-action') !== null) {
     // Skip middleware if request is part of a Next server action.
     return NextResponse.next()
+  }
+  if (request.nextUrl.pathname.startsWith('/api')) {
+    const headers = createHeaders(request.headers)
+    return fetch(new URL(`${request.nextUrl.pathname}`, API_URL), {
+      body: request.body,
+      method: request.method,
+      headers: {
+        Authorization: headers.get('Authorization') ?? '',
+        'Content-Type': headers.get('Content-Type') ?? 'application/json',
+        'Psychplus-Application':
+          headers.get('Psychplus-Application') ?? 'react-ui',
+        'Psychplus-AppVersion': headers.get('Psychplus-AppVersion') ?? '1.0.0',
+        'Psychplus-RunEnvironment':
+          headers.get('Psychplus-RunEnvironment') ?? 'development',
+      },
+    })
+      .then(async (res) => {
+        if (!res.ok) {
+          console.log(await res.text())
+        }
+        return res
+      })
+      .catch((e) => {
+        console.log(e)
+      })
   }
 
   const auth = getAuthCookies()
@@ -52,15 +74,6 @@ export const middleware = async (request: NextRequest) => {
 
     // Request not authenticated; Clear cookies and redirect to login.
     return clearAuthCookiesResponse(NextResponse.redirect(redirectUrl))
-  }
-
-  if (request.nextUrl.pathname.startsWith('/api')) {
-    return NextResponse.rewrite(
-      new URL(`${request.nextUrl.pathname}`, API_URL),
-      {
-        headers: createHeaders(request.headers),
-      },
-    )
   }
 
   const response = NextResponse.next()

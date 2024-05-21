@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import NextLink from 'next/link'
 import { useRouter } from 'next/navigation'
 import { Cross2Icon } from '@radix-ui/react-icons'
 import { Box, Flex, Link, Text } from '@radix-ui/themes'
@@ -16,7 +17,6 @@ import {
   FormTextInput,
   useForm,
 } from '@psychplus/form'
-import { AppLink } from '@psychplus/ui/app-link'
 import { RadioGroup } from '@psychplus/ui/radio-group'
 import { schema, type SchemaType } from './schema'
 
@@ -261,11 +261,11 @@ const SignupForm = () => {
               <Text htmlFor="signup-agreeToTerms-checkbox" size="2">
                 I agree to electronically sign the{' '}
                 <Link size="2" asChild data-testid="signup-terms-link">
-                  <AppLink href="#">Terms of Service </AppLink>
+                  <NextLink href="#">Terms of Service </NextLink>
                 </Link>
                 and{' '}
                 <Link size="2" asChild data-testid="signup-privacy-link">
-                  <AppLink href="#">Privacy Policy</AppLink>
+                  <NextLink href="#">Privacy Policy</NextLink>
                 </Link>
               </Text>
             </Flex>

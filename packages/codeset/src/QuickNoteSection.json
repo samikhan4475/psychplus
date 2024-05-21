@@ -1,92 +1,92 @@
 {
   "id": "eccd01eb-d676-40ed-ae0d-fcb6959731a4",
   "metadata": {
-      "createdOn": "2024-04-18T16:55:11Z",
-      "createdBy": 1401,
-      "createdByFullName": "Peter C Berkman"
+    "createdOn": "2024-04-18T16:55:11Z",
+    "createdBy": 1401,
+    "createdByFullName": "Peter C Berkman"
   },
   "recordStatus": "Active",
   "assigningAuthorityId": "004afb9b-e443-424a-b10d-e5f1254a97da",
   "codeSystemName": "QuicknoteSection",
   "displayName": "Quicknote sections",
   "codes": [
-      {
-          "id": "0a5322dd-2ae5-40c9-9c79-96d260b06e95",
-          "metadata": {
-              "createdOn": "2024-04-18T16:55:12Z",
-              "createdBy": 1401,
-              "createdByFullName": "Peter C Berkman"
-          },
-          "recordStatus": "Active",
-          "codesetId": "eccd01eb-d676-40ed-ae0d-fcb6959731a4",
-          "code": "ASP",
-          "displayName": "ABA Services Provided",
-          "codeAttributes": [
-              {
-                  "id": "c6706b28-f89f-4b9e-845c-8682ed569e62",
-                  "metadata": {
-                      "createdOn": "2024-04-18T16:55:12Z",
-                      "createdBy": 1401,
-                      "createdByFullName": "Peter C Berkman"
-                  },
-                  "recordStatus": "Active",
-                  "codeId": "0a5322dd-2ae5-40c9-9c79-96d260b06e95",
-                  "name": "IsBoxedItem",
-                  "content": "true"
-              }
-          ]
+    {
+      "id": "0a5322dd-2ae5-40c9-9c79-96d260b06e95",
+      "metadata": {
+        "createdOn": "2024-04-18T16:55:12Z",
+        "createdBy": 1401,
+        "createdByFullName": "Peter C Berkman"
       },
-      {
-          "id": "0249ebf1-9d40-4cd9-93af-c7e4daa433ef",
+      "recordStatus": "Active",
+      "codesetId": "eccd01eb-d676-40ed-ae0d-fcb6959731a4",
+      "code": "ASP",
+      "displayName": "ABA Services Provided",
+      "codeAttributes": [
+        {
+          "id": "c6706b28-f89f-4b9e-845c-8682ed569e62",
           "metadata": {
-              "createdOn": "2024-04-18T16:55:12Z",
-              "createdBy": 1401,
-              "createdByFullName": "Peter C Berkman"
+            "createdOn": "2024-04-18T16:55:12Z",
+            "createdBy": 1401,
+            "createdByFullName": "Peter C Berkman"
           },
           "recordStatus": "Active",
-          "codesetId": "eccd01eb-d676-40ed-ae0d-fcb6959731a4",
-          "code": "ON",
-          "displayName": "Observation Notes",
-          "codeAttributes": [
-              {
-                  "id": "85cfbea0-26fc-4742-b67b-8bb60b268dc8",
-                  "metadata": {
-                      "createdOn": "2024-04-18T16:55:12Z",
-                      "createdBy": 1401,
-                      "createdByFullName": "Peter C Berkman"
-                  },
-                  "recordStatus": "Active",
-                  "codeId": "0249ebf1-9d40-4cd9-93af-c7e4daa433ef",
-                  "name": "IsBoxedItem",
-                  "content": "true"
-              }
-          ]
+          "codeId": "0a5322dd-2ae5-40c9-9c79-96d260b06e95",
+          "name": "IsBoxedItem",
+          "content": "true"
+        }
+      ]
+    },
+    {
+      "id": "0249ebf1-9d40-4cd9-93af-c7e4daa433ef",
+      "metadata": {
+        "createdOn": "2024-04-18T16:55:12Z",
+        "createdBy": 1401,
+        "createdByFullName": "Peter C Berkman"
       },
-      {
-          "id": "f1d197e9-2928-44d1-81b5-319f610a95b8",
+      "recordStatus": "Active",
+      "codesetId": "eccd01eb-d676-40ed-ae0d-fcb6959731a4",
+      "code": "ON",
+      "displayName": "Observation Notes",
+      "codeAttributes": [
+        {
+          "id": "85cfbea0-26fc-4742-b67b-8bb60b268dc8",
           "metadata": {
-              "createdOn": "2024-04-18T16:55:12Z",
-              "createdBy": 1401,
-              "createdByFullName": "Peter C Berkman"
+            "createdOn": "2024-04-18T16:55:12Z",
+            "createdBy": 1401,
+            "createdByFullName": "Peter C Berkman"
           },
           "recordStatus": "Active",
-          "codesetId": "eccd01eb-d676-40ed-ae0d-fcb6959731a4",
-          "code": "TP",
-          "displayName": "Treatment Planning",
-          "codeAttributes": [
-              {
-                  "id": "b796440d-910a-4535-b89d-ab67a2f9b782",
-                  "metadata": {
-                      "createdOn": "2024-04-18T16:55:12Z",
-                      "createdBy": 1401,
-                      "createdByFullName": "Peter C Berkman"
-                  },
-                  "recordStatus": "Active",
-                  "codeId": "f1d197e9-2928-44d1-81b5-319f610a95b8",
-                  "name": "IsBoxedItem",
-                  "content": "true"
-              }
-          ]
-      }
+          "codeId": "0249ebf1-9d40-4cd9-93af-c7e4daa433ef",
+          "name": "IsBoxedItem",
+          "content": "true"
+        }
+      ]
+    },
+    {
+      "id": "f1d197e9-2928-44d1-81b5-319f610a95b8",
+      "metadata": {
+        "createdOn": "2024-04-18T16:55:12Z",
+        "createdBy": 1401,
+        "createdByFullName": "Peter C Berkman"
+      },
+      "recordStatus": "Active",
+      "codesetId": "eccd01eb-d676-40ed-ae0d-fcb6959731a4",
+      "code": "TP",
+      "displayName": "Treatment Planning",
+      "codeAttributes": [
+        {
+          "id": "b796440d-910a-4535-b89d-ab67a2f9b782",
+          "metadata": {
+            "createdOn": "2024-04-18T16:55:12Z",
+            "createdBy": 1401,
+            "createdByFullName": "Peter C Berkman"
+          },
+          "recordStatus": "Active",
+          "codeId": "f1d197e9-2928-44d1-81b5-319f610a95b8",
+          "name": "IsBoxedItem",
+          "content": "true"
+        }
+      ]
+    }
   ]
 }

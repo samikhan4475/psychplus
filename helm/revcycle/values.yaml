@@ -36,16 +36,12 @@ ingress:
   enabled: true
   className: nginx
   annotations:
-    # use issuer instead of cluster-issuer for namespace scope
-    # cert-manager.io/cluster-issuer: letsencrypt
-    # nginx.ingress.kubernetes.io/app-root: /revcycle
-    nginx.ingress.kubernetes.io/rewrite-target: /$2
     nginx.ingress.kubernetes.io/service-upstream: "true"
   hosts:
   - host: ui.integration.psychplus.dev
     paths:
-    - path: /revcycle(/|$)(.*)
-      pathType: ImplementationSpecific
+    - path: /revcycle
+      pathType: Prefix
   tls:
   - hosts:
     - ui.integration.psychplus.dev

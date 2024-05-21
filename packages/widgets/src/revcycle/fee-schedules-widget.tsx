@@ -7,7 +7,7 @@ const FeeSchedulesWidget = () => {
 
   return (
     <PortalContainer
-      src={`${REVCYCLE_URL}/widgets/fee-schedules?${params.toString()}`}
+      src={`${REVCYCLE_URL}/revcycle/widgets/fee-schedules?${params.toString()}`}
       name="fee-schedules"
     />
   )

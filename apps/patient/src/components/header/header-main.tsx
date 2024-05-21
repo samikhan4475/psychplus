@@ -1,6 +1,6 @@
 import Image from 'next/image'
+import NextLink from 'next/link'
 import { Flex } from '@radix-ui/themes'
-import { AppLink } from '@psychplus/ui/app-link'
 import { Button } from '@psychplus/ui/button'
 import { PsychplusMembershipDialog } from '..'
 import { HeaderMenuCard } from './header-menu-card'
@@ -9,7 +9,7 @@ const PatientsHeader = () => {
   return (
     <Flex className="h-32 bg-gray-12" align="center" px="9">
       <Flex className="w-1/2">
-        <AppLink href="/">
+        <NextLink href="/">
           <Image
             src="/images/wight_logo.png"
             alt="pyschplus logo"
@@ -20,7 +20,7 @@ const PatientsHeader = () => {
               objectFit: 'cover',
             }}
           />
-        </AppLink>
+        </NextLink>
       </Flex>
       <Flex className="w-1/2">
         <HeaderMenuCard />

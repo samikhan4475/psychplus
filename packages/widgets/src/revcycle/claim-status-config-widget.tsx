@@ -10,7 +10,7 @@ const ClaimStatusConfigWidget = () => {
 
   return (
     <PortalContainer
-      src={`${REVCYCLE_URL}/widgets/claim-status-config?${searchParams.toString()}`}
+      src={`${REVCYCLE_URL}/revcycle/widgets/claim-status-config?${searchParams.toString()}`}
       name="claim-status-config"
     />
   )

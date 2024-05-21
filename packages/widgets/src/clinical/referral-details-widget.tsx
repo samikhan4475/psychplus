@@ -11,7 +11,7 @@ const ReferralDetailsWidget = () => {
 
   return (
     <DialogPortal
-      src={`${CLINICAL_URL}/widgets/referral-details?${searchParams.toString()}`}
+      src={`${CLINICAL_URL}/galaxy/widgets/referral-details?${searchParams.toString()}`}
       name={REFERRAL_DETAILS_WIDGET}
     />
   )

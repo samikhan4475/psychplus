@@ -1,149 +1,149 @@
 {
-    "id": "317eb126-c28f-45f5-bd57-d8a0329419d4",
-    "metadata": {
-        "createdOn": "2024-04-18T16:56:39Z",
+  "id": "317eb126-c28f-45f5-bd57-d8a0329419d4",
+  "metadata": {
+    "createdOn": "2024-04-18T16:56:39Z",
+    "createdBy": 1401,
+    "createdByFullName": "Peter C Berkman"
+  },
+  "recordStatus": "Active",
+  "assigningAuthorityId": "004afb9b-e443-424a-b10d-e5f1254a97da",
+  "codeSystemName": "QuicknoteSectionItemDetailAttribute",
+  "displayName": "Quicknote section item detail attributes",
+  "codes": [
+    {
+      "id": "f967170a-54b4-43de-ac79-008a00efd3ae",
+      "metadata": {
+        "createdOn": "2024-04-18T16:56:40Z",
         "createdBy": 1401,
         "createdByFullName": "Peter C Berkman"
-    },
-    "recordStatus": "Active",
-    "assigningAuthorityId": "004afb9b-e443-424a-b10d-e5f1254a97da",
-    "codeSystemName": "QuicknoteSectionItemDetailAttribute",
-    "displayName": "Quicknote section item detail attributes",
-    "codes": [
+      },
+      "recordStatus": "Active",
+      "codesetId": "317eb126-c28f-45f5-bd57-d8a0329419d4",
+      "code": "GT",
+      "displayName": "Goals Targeted",
+      "groupingCode": "DI",
+      "codeAttributes": [
         {
-            "id": "f967170a-54b4-43de-ac79-008a00efd3ae",
-            "metadata": {
-                "createdOn": "2024-04-18T16:56:40Z",
-                "createdBy": 1401,
-                "createdByFullName": "Peter C Berkman"
-            },
-            "recordStatus": "Active",
-            "codesetId": "317eb126-c28f-45f5-bd57-d8a0329419d4",
-            "code": "GT",
-            "displayName": "Goals Targeted",
-            "groupingCode": "DI",
-            "codeAttributes": [
-                {
-                    "id": "2bc34c9f-884c-468a-ae0f-16f524102f81",
-                    "metadata": {
-                        "createdOn": "2024-04-18T16:56:40Z",
-                        "createdBy": 1401,
-                        "createdByFullName": "Peter C Berkman"
-                    },
-                    "recordStatus": "Active",
-                    "codeId": "f967170a-54b4-43de-ac79-008a00efd3ae",
-                    "name": "DisplayType",
-                    "content": "CHECKBOX"
-                }
-            ]
-        },
-        {
-            "id": "bfc18c4c-9c54-478e-8fe9-17581ee08c3a",
-            "metadata": {
-                "createdOn": "2024-04-18T16:56:40Z",
-                "createdBy": 1401,
-                "createdByFullName": "Peter C Berkman"
-            },
-            "recordStatus": "Active",
-            "codesetId": "317eb126-c28f-45f5-bd57-d8a0329419d4",
-            "code": "MT",
-            "displayName": "Methodology",
-            "groupingCode": "DI",
-            "codeAttributes": [
-                {
-                    "id": "348ff39d-3fb0-4d93-9138-996ad9f17703",
-                    "metadata": {
-                        "createdOn": "2024-04-18T16:56:40Z",
-                        "createdBy": 1401,
-                        "createdByFullName": "Peter C Berkman"
-                    },
-                    "recordStatus": "Active",
-                    "codeId": "bfc18c4c-9c54-478e-8fe9-17581ee08c3a",
-                    "name": "DisplayType",
-                    "content": "CHECKBOX"
-                }
-            ]
-        },
-        {
-            "id": "00af25c0-f80c-438a-86ea-48c4d3e3d44e",
-            "metadata": {
-                "createdOn": "2024-04-18T16:56:40Z",
-                "createdBy": 1401,
-                "createdByFullName": "Peter C Berkman"
-            },
-            "recordStatus": "Active",
-            "codesetId": "317eb126-c28f-45f5-bd57-d8a0329419d4",
-            "code": "RD",
-            "displayName": "Review of documentation",
-            "groupingCode": "HD",
-            "codeAttributes": [
-                {
-                    "id": "59f6e3b8-0519-41e9-8310-46d6fc3074d1",
-                    "metadata": {
-                        "createdOn": "2024-04-18T16:56:40Z",
-                        "createdBy": 1401,
-                        "createdByFullName": "Peter C Berkman"
-                    },
-                    "recordStatus": "Active",
-                    "codeId": "00af25c0-f80c-438a-86ea-48c4d3e3d44e",
-                    "name": "DisplayType",
-                    "content": "CHECKBOX"
-                }
-            ]
-        },
-        {
-            "id": "68ad9c43-cefc-4149-a4df-25a07de9fbcc",
-            "metadata": {
-                "createdOn": "2024-04-18T16:56:40Z",
-                "createdBy": 1401,
-                "createdByFullName": "Peter C Berkman"
-            },
-            "recordStatus": "Active",
-            "codesetId": "317eb126-c28f-45f5-bd57-d8a0329419d4",
-            "code": "RMB",
-            "displayName": "Review of medical background",
-            "groupingCode": "HD",
-            "codeAttributes": [
-                {
-                    "id": "cc1321ec-52de-4c4c-8671-a95ff8e753de",
-                    "metadata": {
-                        "createdOn": "2024-04-18T16:56:40Z",
-                        "createdBy": 1401,
-                        "createdByFullName": "Peter C Berkman"
-                    },
-                    "recordStatus": "Active",
-                    "codeId": "68ad9c43-cefc-4149-a4df-25a07de9fbcc",
-                    "name": "DisplayType",
-                    "content": "CHECKBOX"
-                }
-            ]
-        },
-        {
-            "id": "6bb9b507-5e12-469c-b4c1-83ada0a69322",
-            "metadata": {
-                "createdOn": "2024-04-18T16:56:40Z",
-                "createdBy": 1401,
-                "createdByFullName": "Peter C Berkman"
-            },
-            "recordStatus": "Active",
-            "codesetId": "317eb126-c28f-45f5-bd57-d8a0329419d4",
-            "code": "VABS111",
-            "displayName": "VABS-111",
-            "groupingCode": "SA",
-            "codeAttributes": [
-                {
-                    "id": "304fb09e-1869-4168-81ca-4cc19101fe9e",
-                    "metadata": {
-                        "createdOn": "2024-04-18T16:56:40Z",
-                        "createdBy": 1401,
-                        "createdByFullName": "Peter C Berkman"
-                    },
-                    "recordStatus": "Active",
-                    "codeId": "6bb9b507-5e12-469c-b4c1-83ada0a69322",
-                    "name": "DisplayType",
-                    "content": "CHECKBOX"
-                }
-            ]
+          "id": "2bc34c9f-884c-468a-ae0f-16f524102f81",
+          "metadata": {
+            "createdOn": "2024-04-18T16:56:40Z",
+            "createdBy": 1401,
+            "createdByFullName": "Peter C Berkman"
+          },
+          "recordStatus": "Active",
+          "codeId": "f967170a-54b4-43de-ac79-008a00efd3ae",
+          "name": "DisplayType",
+          "content": "CHECKBOX"
         }
-    ]
+      ]
+    },
+    {
+      "id": "bfc18c4c-9c54-478e-8fe9-17581ee08c3a",
+      "metadata": {
+        "createdOn": "2024-04-18T16:56:40Z",
+        "createdBy": 1401,
+        "createdByFullName": "Peter C Berkman"
+      },
+      "recordStatus": "Active",
+      "codesetId": "317eb126-c28f-45f5-bd57-d8a0329419d4",
+      "code": "MT",
+      "displayName": "Methodology",
+      "groupingCode": "DI",
+      "codeAttributes": [
+        {
+          "id": "348ff39d-3fb0-4d93-9138-996ad9f17703",
+          "metadata": {
+            "createdOn": "2024-04-18T16:56:40Z",
+            "createdBy": 1401,
+            "createdByFullName": "Peter C Berkman"
+          },
+          "recordStatus": "Active",
+          "codeId": "bfc18c4c-9c54-478e-8fe9-17581ee08c3a",
+          "name": "DisplayType",
+          "content": "CHECKBOX"
+        }
+      ]
+    },
+    {
+      "id": "00af25c0-f80c-438a-86ea-48c4d3e3d44e",
+      "metadata": {
+        "createdOn": "2024-04-18T16:56:40Z",
+        "createdBy": 1401,
+        "createdByFullName": "Peter C Berkman"
+      },
+      "recordStatus": "Active",
+      "codesetId": "317eb126-c28f-45f5-bd57-d8a0329419d4",
+      "code": "RD",
+      "displayName": "Review of documentation",
+      "groupingCode": "HD",
+      "codeAttributes": [
+        {
+          "id": "59f6e3b8-0519-41e9-8310-46d6fc3074d1",
+          "metadata": {
+            "createdOn": "2024-04-18T16:56:40Z",
+            "createdBy": 1401,
+            "createdByFullName": "Peter C Berkman"
+          },
+          "recordStatus": "Active",
+          "codeId": "00af25c0-f80c-438a-86ea-48c4d3e3d44e",
+          "name": "DisplayType",
+          "content": "CHECKBOX"
+        }
+      ]
+    },
+    {
+      "id": "68ad9c43-cefc-4149-a4df-25a07de9fbcc",
+      "metadata": {
+        "createdOn": "2024-04-18T16:56:40Z",
+        "createdBy": 1401,
+        "createdByFullName": "Peter C Berkman"
+      },
+      "recordStatus": "Active",
+      "codesetId": "317eb126-c28f-45f5-bd57-d8a0329419d4",
+      "code": "RMB",
+      "displayName": "Review of medical background",
+      "groupingCode": "HD",
+      "codeAttributes": [
+        {
+          "id": "cc1321ec-52de-4c4c-8671-a95ff8e753de",
+          "metadata": {
+            "createdOn": "2024-04-18T16:56:40Z",
+            "createdBy": 1401,
+            "createdByFullName": "Peter C Berkman"
+          },
+          "recordStatus": "Active",
+          "codeId": "68ad9c43-cefc-4149-a4df-25a07de9fbcc",
+          "name": "DisplayType",
+          "content": "CHECKBOX"
+        }
+      ]
+    },
+    {
+      "id": "6bb9b507-5e12-469c-b4c1-83ada0a69322",
+      "metadata": {
+        "createdOn": "2024-04-18T16:56:40Z",
+        "createdBy": 1401,
+        "createdByFullName": "Peter C Berkman"
+      },
+      "recordStatus": "Active",
+      "codesetId": "317eb126-c28f-45f5-bd57-d8a0329419d4",
+      "code": "VABS111",
+      "displayName": "VABS-111",
+      "groupingCode": "SA",
+      "codeAttributes": [
+        {
+          "id": "304fb09e-1869-4168-81ca-4cc19101fe9e",
+          "metadata": {
+            "createdOn": "2024-04-18T16:56:40Z",
+            "createdBy": 1401,
+            "createdByFullName": "Peter C Berkman"
+          },
+          "recordStatus": "Active",
+          "codeId": "6bb9b507-5e12-469c-b4c1-83ada0a69322",
+          "name": "DisplayType",
+          "content": "CHECKBOX"
+        }
+      ]
+    }
+  ]
 }
