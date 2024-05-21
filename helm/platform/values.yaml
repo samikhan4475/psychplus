@@ -98,7 +98,15 @@ nodeSelector:
 
 tolerations: []
 
-affinity: {}
+affinity:
+  nodeAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: nodepool
+          operator: NotIn
+          values:
+          - system
 
 env:
   - name: APP_CODE
