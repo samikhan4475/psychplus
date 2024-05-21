@@ -6,7 +6,6 @@ import { useRouter } from 'next/navigation'
 import { Flex, Link, Text } from '@radix-ui/themes'
 import { type SubmitHandler } from 'react-hook-form'
 import { z } from 'zod'
-import { login } from '@psychplus/auth/login'
 import { sendOtp } from '@psychplus/auth/otp'
 import { signup } from '@psychplus/auth/signup'
 import {
@@ -22,6 +21,7 @@ import { RadioGroup } from '@psychplus/ui/radio-group'
 import { usePubsub } from '@psychplus/utils/event'
 import { clickTrack } from '@psychplus/utils/tracking'
 import { OTP_DIALOG, SCHEDULE_APPOINTMENT_LIST } from '@psychplus/widgets'
+import { loginAction } from '@/actions'
 import { CrossIcon } from '@/components'
 import { WarningIcon } from '@/components/icons/warning-icon'
 import { useStore } from '@/widgets/schedule-appointment-list/store'
@@ -147,12 +147,18 @@ const PersonalDetailsForm = () => {
           })
 
           // Login user to generate access token
-          login({
-            basePath: '',
+          loginAction({
+            next: null,
+            shouldRedirect: false,
             username: form.getValues().email,
             password: form.getValues().password,
           })
-            .then(() => {
+            .then((res) => {
+              if (res.state === 'error') {
+                alert(res.error)
+                return
+              }
+
               publish(`${OTP_DIALOG}:closed`)
 
               clickTrack({

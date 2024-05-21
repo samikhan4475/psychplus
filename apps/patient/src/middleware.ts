@@ -12,9 +12,16 @@ export const config = {
   matcher: ['/((?!_next/static|_next/image|favicon.ico).*)', { source: '/' }],
 }
 
+const SKIP_MIDDLEWARE = [
+  '/schedule-appointment/personal-details',
+  '/schedule-appointment/insurance-payment',
+]
 const REQUIRES_ANON = ['/login', '/forgot-password', '/signup']
 
 export const middleware = async (request: NextRequest) => {
+  if (SKIP_MIDDLEWARE.includes(request.nextUrl.pathname)) {
+    return NextResponse.next()
+  }
   if (request.nextUrl.pathname.startsWith('/widgets')) {
     // Skip middleware for widget requests.
     return NextResponse.next()
@@ -25,6 +32,7 @@ export const middleware = async (request: NextRequest) => {
   }
   if (request.nextUrl.pathname.startsWith('/api')) {
     const headers = createHeaders(request.headers)
+
     return fetch(new URL(`${request.nextUrl.pathname}`, API_URL), {
       body: request.body,
       method: request.method,
@@ -37,16 +45,9 @@ export const middleware = async (request: NextRequest) => {
         'Psychplus-RunEnvironment':
           headers.get('Psychplus-RunEnvironment') ?? 'development',
       },
+    }).catch((e) => {
+      console.log(e)
     })
-      .then(async (res) => {
-        if (!res.ok) {
-          console.log(await res.text())
-        }
-        return res
-      })
-      .catch((e) => {
-        console.log(e)
-      })
   }
 
   const auth = getAuthCookies()

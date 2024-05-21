@@ -15,10 +15,12 @@ const PATIENT_ROLE = 'Patient'
 
 interface LoginRequest extends AuthRequest {
   next: string | null
+  shouldRedirect?: boolean
 }
 
 const loginAction = async ({
   next,
+  shouldRedirect = true,
   ...request
 }: LoginRequest): Promise<ActionResult<void>> => {
   const loginResponse = await login(request)
@@ -62,6 +64,13 @@ const loginAction = async ({
 
   if (scriptSureSession) {
     setCookie(scriptSureSession)
+  }
+
+  if (!shouldRedirect) {
+    return {
+      state: 'success',
+      data: undefined,
+    }
   }
 
   const redirectUrl = next ? next : '/'

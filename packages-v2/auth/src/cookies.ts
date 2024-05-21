@@ -3,7 +3,6 @@ import { type NextResponse } from 'next/server'
 import {
   ACCESS_TOKEN_COOKIE,
   ACCESS_TOKEN_EXPIRY_COOKIE,
-  APP_ENV,
   REFRESH_TOKEN_COOKIE,
   ROOT_DOMAIN,
   SCRIPTSURE_SESSION_COOKIE,
@@ -38,34 +37,36 @@ const getAuthCookies = (): AuthSession | undefined => {
 }
 
 const setAuthCookies = (value: AuthSession) => {
-  const domain = ROOT_DOMAIN ? ROOT_DOMAIN : undefined
-  const secure = APP_ENV === 'production'
+  const domain = undefined
+  const secure = true
+  const httpOnly = true
+  const sameSite = 'none'
 
   cookies().set(ACCESS_TOKEN_COOKIE, value.accessToken, {
     secure,
-    httpOnly: true,
-    sameSite: 'lax',
+    httpOnly,
+    sameSite,
     domain,
   })
 
   cookies().set(REFRESH_TOKEN_COOKIE, value.refreshToken, {
     secure,
-    httpOnly: true,
-    sameSite: 'lax',
+    httpOnly,
+    sameSite,
     domain,
   })
 
   cookies().set(ACCESS_TOKEN_EXPIRY_COOKIE, value.accessTokenExpiry, {
     secure,
-    httpOnly: true,
-    sameSite: 'lax',
+    httpOnly,
+    sameSite,
     domain,
   })
 
   cookies().set(USER_COOKIE, JSON.stringify(value.user), {
     secure,
-    httpOnly: true,
-    sameSite: 'lax',
+    httpOnly,
+    sameSite,
     domain,
   })
 }
@@ -74,42 +75,44 @@ const setAuthCookiesResponse = (
   response: NextResponse,
   value: Optional<AuthSession, 'user'>,
 ) => {
-  const domain = ROOT_DOMAIN ? ROOT_DOMAIN : undefined
-  const secure = APP_ENV === 'production'
+  const domain = undefined
+  const secure = true
+  const httpOnly = true
+  const sameSite = 'none'
 
   response.cookies.set(ACCESS_TOKEN_COOKIE, value.accessToken, {
     secure,
-    httpOnly: true,
-    sameSite: 'lax',
+    httpOnly,
+    sameSite,
     domain,
   })
 
   response.cookies.set(REFRESH_TOKEN_COOKIE, value.refreshToken, {
     secure,
-    httpOnly: true,
-    sameSite: 'lax',
+    httpOnly,
+    sameSite,
     domain,
   })
 
   response.cookies.set(ACCESS_TOKEN_EXPIRY_COOKIE, value.accessTokenExpiry, {
     secure,
-    httpOnly: true,
-    sameSite: 'lax',
+    httpOnly,
+    sameSite,
     domain,
   })
 
   if (value.user) {
     response.cookies.set(USER_COOKIE, JSON.stringify(value.user), {
       secure,
-      httpOnly: true,
-      sameSite: 'lax',
+      httpOnly,
+      sameSite,
       domain,
     })
   }
 }
 
 const clearAuthCookies = () => {
-  const domain = ROOT_DOMAIN ? ROOT_DOMAIN : undefined
+  const domain = undefined
 
   cookies().delete({
     name: ACCESS_TOKEN_COOKIE,
