@@ -9,6 +9,7 @@ import {
   getMonthLabel,
   getTimeLabel,
 } from '@psychplus-v2/utils'
+import { DashIcon } from '@radix-ui/react-icons'
 import { Flex, Text } from '@radix-ui/themes'
 
 interface AppointmentTimeLabelProps {
@@ -31,17 +32,22 @@ const AppointmentTimeLabel = ({
   const appointmentDate = getCalendarDate(row.startDate)
 
   return (
-    <Flex gap={{ initial: '2', xs: '5' }} mt="1">
+    <Flex mt="1" align="center">
       <Text className="text-[15px] font-[600] text-accent-12">
-        {getTimeLabel(row.startDate)}
+        {getTimeLabel(row.startDate).slice(0, -2)}{' '}
+        <Text weight="regular">
+          {getTimeLabel(row.startDate).slice(-2).toLocaleLowerCase()}
+        </Text>
       </Text>
+
+      <DashIcon height="20" width="20" />
 
       {isToday(appointmentDate, getLocalTimeZone()) ? (
         <Text>Today</Text>
       ) : (
         <Text className="text-[15px] font-[600] text-accent-12">
           {getMonthLabel(appointmentDate).slice(0, 3)} {appointmentDate.day}{' '}
-          {getDayOfWeekLabel(appointmentDate)}
+          <Text weight="regular">{getDayOfWeekLabel(appointmentDate)}</Text>
         </Text>
       )}
     </Flex>

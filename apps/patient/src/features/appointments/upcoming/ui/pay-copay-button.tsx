@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import { PatientProfile } from '@psychplus-v2/types'
 import { formatCurrency } from '@psychplus-v2/utils'
 import { Button, Dialog, Flex, Link, RadioGroup, Text } from '@radix-ui/themes'
+import { ChevronRightIcon } from 'lucide-react'
 import { CloseDialogIcon, FormError, RadioGroupItem } from '@/components-v2'
 import { CreditCard } from '@/features/billing/payments/types'
 import { useToast } from '@/providers'
@@ -74,11 +75,13 @@ const PayCopayButton = ({
       }}
     >
       <Dialog.Trigger>
-        <Flex align="start" gap="2">
-          <Button variant="outline" highContrast>
-            Pay Copay
-          </Button>
-        </Flex>
+        <Button highContrast className="rounded-2 bg-[#194595]">
+          <Flex gap="1" align="center">
+            <Text>Pay Now</Text>
+
+            <ChevronRightIcon height="16" width="16" />
+          </Flex>
+        </Button>
       </Dialog.Trigger>
       <Dialog.Content className="relative max-w-[700px]">
         <CloseDialogIcon />
