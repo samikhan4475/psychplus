@@ -9,6 +9,7 @@ import {
   ProviderAvatar,
 } from '@/components-v2'
 import { getCareTeam } from '../../api'
+import { EditIcon } from '@/components'
 
 const ServerComponent = async () => {
   const response = await getCareTeam()
@@ -56,13 +57,19 @@ const ServerComponent = async () => {
                   size={{ initial: '8', sm: '7' }}
                   provider={row.staffDetails}
                 />
-                <Flex direction="column" align="start">
-                  <Text className="text-[18px] font-[600] leading-2 -tracking-[0.25px]">
-                    {getUserFullName(row.staffDetails.legalName)}
-                  </Text>
-                  <Text className="text-[14px] text-accent-12">
+                <Flex direction="column" align="start" gap="3">
+                  <Flex align="start" gap="2" className="mb-1">
+                    <Text className="text-[18px] text-[#1A1A1A] font-[600] leading-2 -tracking-[0.25px]">
+                      {getUserFullName(row.staffDetails.legalName)}
+                    </Text>
+
+                    <EditIcon />
+                  </Flex>
+
+                  <Text className="text-[14px] text-accent-12 uppercase text-gray-10 font-medium">
                     {row.specialist}
                   </Text>
+
                   <Button
                     variant="outline"
                     size={{ initial: '3', xs: '2', sm: '1' }}
