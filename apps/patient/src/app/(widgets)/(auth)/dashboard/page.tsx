@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { unstable_noStore } from 'next/cache'
 import { Flex } from '@radix-ui/themes'
 import { getCodeSets } from '@psychplus/codeset/api.client'
 import { CareTeam, Patient } from '@psychplus/patient'
@@ -19,6 +20,8 @@ import { PatientProfileCard } from '@/components/patient-profile-card'
 import { useStore } from '../store'
 
 const HomePage = () => {
+  unstable_noStore()
+
   const {
     patient,
     setPatient,

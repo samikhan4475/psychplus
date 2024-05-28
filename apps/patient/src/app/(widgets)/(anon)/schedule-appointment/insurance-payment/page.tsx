@@ -10,8 +10,11 @@ import { SCHEDULE_APPOINTMENT_LIST } from '@psychplus/widgets'
 import { usePublishSize } from '@psychplus/widgets/hooks'
 import { psychPlusBlueColor } from '@/components/colors'
 import InsurancePaymentForm from './form'
+import { unstable_noStore } from 'next/cache'
 
 const ScheduleAppointmentInsurancePage = () => {
+  unstable_noStore()
+
   const ref = React.useRef<HTMLDivElement>(null)
   usePublishSize(SCHEDULE_APPOINTMENT_LIST, ref)
 
