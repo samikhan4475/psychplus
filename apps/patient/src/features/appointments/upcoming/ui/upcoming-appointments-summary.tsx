@@ -102,10 +102,10 @@ const UpcomingAppointmentsSummaryComponent = async () => {
               <Flex>
                 {row?.virtualRoomLink &&
                   row.type === AppointmentType.Virtual && (
-                    <Link href={row?.virtualRoomLink} target="_blank"></Link>
-                    <Button highContrast className="w-full py-5">
-                      Join Virtual Call now
-                    </Button>
+                    <Link href={row?.virtualRoomLink} target="_blank">
+                      <Button highContrast className="w-full py-5">
+                        Join Virtual Call now
+                      </Button>
                     </Link>
                   )}
                 {row.type === AppointmentType.InPerson && (
