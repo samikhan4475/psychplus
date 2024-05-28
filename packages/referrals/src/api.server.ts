@@ -27,7 +27,6 @@ const searchReferrals = (): Promise<Referral[]> =>
 
 const getPatientReferralsCached = cache(getPatientReferrals)
 const searchReferralsCached = cache(searchReferrals)
-
 export {
   getPatientReferralsCached as getPatientReferrals,
   searchReferralsCached as searchReferrals,

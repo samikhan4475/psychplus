@@ -8,7 +8,8 @@ const REFERRAL_DETAILS_WIDGET = 'referral-details'
 const SCHEDULE_APPOINTMENT_DIALOG = 'schedule-appointment-dialog'
 const SCHEDULE_APPOINTMENT_LIST = 'schedule-appointment-list'
 const OTP_DIALOG = 'otp-dialog'
-
+const PREFERRED_PARTNERS_LIST_WIDGET = 'preferred-partners'
+const CREATE_PREFERRED_PARTNER = 'create-preferred-partner'
 export {
   USER_WIDGET,
   PATIENT_WIDGET,
@@ -20,4 +21,6 @@ export {
   SCHEDULE_APPOINTMENT_DIALOG,
   SCHEDULE_APPOINTMENT_LIST,
   OTP_DIALOG,
+  PREFERRED_PARTNERS_LIST_WIDGET,
+  CREATE_PREFERRED_PARTNER,
 }

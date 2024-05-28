@@ -23,6 +23,12 @@ const IndexLayout = async ({ children }: { children: React.ReactNode }) => {
           <NextLink href="/patient" className="hover:underline">
             <Text weight="medium">Patient</Text>
           </NextLink>
+          <NextLink
+            href="widgets/preferred-partners-list"
+            className="hover:underline"
+          >
+            <Text weight="medium">Preferred partner</Text>
+          </NextLink>
         </Flex>
       </Flex>
       <main className="p-4">{children}</main>

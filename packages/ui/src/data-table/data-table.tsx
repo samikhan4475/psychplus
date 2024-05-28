@@ -26,6 +26,14 @@ interface DataTableProps<TData, TValue> {
   renderFooter?: (table: ReactTable<TData>) => React.ReactNode
   initialPageSize?: 10 | 25 | 50 | 100 | 200
   disablePagination?: boolean
+  headerCellClass?: string
+  columnCellClass?: string
+  tableClass?: string
+  tHeadClass?: string
+  toBodyClass?: string
+  thClass?: string
+  isRowPan?: boolean
+  isPreferredPartnerTable?: boolean
 }
 
 const DataTable = <TData, TValue>({
@@ -35,6 +43,14 @@ const DataTable = <TData, TValue>({
   renderFooter,
   initialPageSize = 25,
   disablePagination,
+  headerCellClass,
+  columnCellClass,
+  tableClass,
+  tHeadClass,
+  toBodyClass,
+  thClass,
+  isPreferredPartnerTable = false,
+  isRowPan = false,
 }: DataTableProps<TData, TValue>) => {
   const [sorting, setSorting] = useState<SortingState>([])
   const [pagination, setPagination] = useState<PaginationState>({
@@ -68,58 +84,83 @@ const DataTable = <TData, TValue>({
       pagination,
     },
   })
-
   return (
     <Flex grow="1" direction="column" height="100%" justify="between">
       <Box>
         {renderHeader ? renderHeader(table) : null}
+
         <Table.Root
           variant="ghost"
-          className="[&_.rt-ScrollAreaScrollbar]:!hidden [&_.rt-ScrollAreaViewport]:!overflow-hidden"
+          className={`${tableClass} [&_.rt-ScrollAreaScrollbar]:!hidden [&_.rt-ScrollAreaViewport]:!overflow-hidden`}
         >
-          <Table.Header>
+          <thead className={`${tHeadClass}`}>
             {table.getHeaderGroups().map((headerGroup) => (
-              <Table.Row key={headerGroup.id}>
+              <tr key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
+                  const columnRelativeDepth = header.depth - header.column.depth
+
+                  if (
+                    !header.isPlaceholder &&
+                    columnRelativeDepth > 1 &&
+                    header.id === header.column.id
+                  ) {
+                    return null
+                  }
+
+                  let rowSpan = 1
+                  if (header.isPlaceholder) {
+                    const leafs = header.getLeafHeaders()
+                    rowSpan = leafs[leafs.length - 1].depth - header.depth
+                  }
+
                   return (
-                    <Table.ColumnHeaderCell
+                    <th
                       key={header.id}
-                      className="h-auto px-1 py-1"
-                    >
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext(),
-                          )}
-                    </Table.ColumnHeaderCell>
-                  )
-                })}
-              </Table.Row>
-            ))}
-          </Table.Header>
-          <Table.Body>
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
-                <Table.Row
-                  key={row.id}
-                  data-state={row.getIsSelected() && 'selected'}
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <Table.Cell
-                      key={cell.id}
-                      py="1"
-                      px="1"
-                      className="h-auto align-middle"
+                      className={`${thClass}`}
+                      colSpan={header.colSpan}
+                      rowSpan={isRowPan ? rowSpan : undefined}
                     >
                       {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext(),
+                        header.column.columnDef.header,
+                        header.getContext(),
                       )}
-                    </Table.Cell>
-                  ))}
-                </Table.Row>
-              ))
+                    </th>
+                  )
+                })}
+              </tr>
+            ))}
+          </thead>
+          <Table.Body className={`${toBodyClass}`}>
+            {table.getRowModel().rows?.length ? (
+              table.getRowModel().rows.map((row) => {
+                return (
+                  <Table.Row
+                    key={row.id}
+                    data-state={row.getIsSelected() && 'selected'}
+                    className={
+                      isPreferredPartnerTable &&
+                      (row.original as { paymentStatus: string })
+                        .paymentStatus === 'Failed'
+                        ? 'bg-[#ffdae4]'
+                        : ''
+                    }
+                  >
+                    {row.getVisibleCells().map((cell) => (
+                      <Table.Cell
+                        key={cell.id}
+                        py="1"
+                        px="1"
+                        className={`h-auto cursor-pointer align-middle ${columnCellClass}`}
+                      >
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext(),
+                        )}
+                      </Table.Cell>
+                    ))}
+                  </Table.Row>
+                )
+              })
             ) : (
               <Table.Row>
                 <Table.Cell colSpan={columns.length}>

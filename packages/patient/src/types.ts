@@ -38,7 +38,7 @@ interface PatientContactDetails {
 }
 
 interface Patient {
-  id: number
+  id:  number
   userId: number
   legalName: PatientName
   birthdate: string
@@ -47,6 +47,11 @@ interface Patient {
   metadata: PatientMetadata
   isPlusMember: boolean
   hasPhoto: boolean
+  ppUserId?: number
+  ppUserType?: string
+  medicalRecordNumber?: string
+  verificationStatus?: string
+  ppUserStatus?: string
 }
 
 interface PatientParams {
@@ -76,4 +81,10 @@ interface CareTeam {
   careTeam: CareTeamMember[]
 }
 
-export type { Patient, PatientParams, CareTeamMember, CareTeam }
+export type {
+  Patient,
+  PatientParams,
+  CareTeamMember,
+  CareTeam,
+  PatientContactDetails,
+}

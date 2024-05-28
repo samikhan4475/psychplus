@@ -17,6 +17,7 @@
     "@psychplus/form": "^0.1.0",
     "@psychplus/patient": "^0.1.0",
     "@psychplus/referrals": "^0.1.0",
+    "@psychplus/preferred-partners": "^0.1.0",
     "@psychplus/ui": "^0.1.0",
     "@psychplus/user": "^0.1.0",
     "@psychplus/utils": "^0.1.0",

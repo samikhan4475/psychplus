@@ -58,6 +58,10 @@ const navMenuItems: MenuItem[] = [
     label: 'Schedule Appointment',
     href: '/widgets/schedule-appointment-list',
   },
+  {
+    label: 'Preffered Partners',
+    href: '/widgets/preferred-partners-list',
+  },
 ]
 
 const WidgetsLayout = ({ children }: { children: React.ReactNode }) => {

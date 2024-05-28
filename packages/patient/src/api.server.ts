@@ -12,6 +12,22 @@ const getPatient = async ({ patientId }: PatientParams): Promise<Patient> =>
     }),
   )
 
-const getPatientCached = cache(getPatient)
+const getPatients = async (payload?: {
+  firstNameContains: string
+  lastNameContains: string
+  dateOfBirth: string
+}): Promise<Patient[]> => {
+  return handleRequest(
+    fetch(`${API_URL}/api/patients/search`, {
+      method: 'POST',
+      cache: 'no-store',
+      body: JSON.stringify(payload || {}),
+      headers: createHeaders(),
+    }),
+  )
+}
 
-export { getPatientCached as getPatient }
+const getPatientCached = cache(getPatient)
+const getPatientsCached = cache(getPatients)
+
+export { getPatientCached as getPatient, getPatientsCached as getPatients }

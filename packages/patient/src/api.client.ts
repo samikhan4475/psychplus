@@ -38,6 +38,20 @@ const getLoggedInPatientCareTeam = async (): Promise<CareTeam> =>
     }),
   )
 
+const getPatients = async (payload?: {
+  firstNameContains: string
+  lastNameContains: string
+  dateOfBirth: string
+}): Promise<Patient[]> =>
+  handleRequest(
+    fetch(`/api/patients/search`, {
+      method: 'POST',
+      cache: 'no-store',
+      body: JSON.stringify(payload || {}),
+      headers: createHeaders(),
+    }),
+  )
+
 const getLoggedInPatientProfileCached = cache(getLoggedInPatientProfile)
 
 const getLoggedInPatientCareTeamCached = cache(getLoggedInPatientCareTeam)
@@ -48,4 +62,5 @@ export {
   getLoggedInPatientProfileCached as getLoggedInPatientProfile,
   getLoggedInPatientCareTeamCached as getLoggedInPatientCareTeam,
   getPatientProfileImageCached as getPatientProfileImage,
+  getPatients,
 }

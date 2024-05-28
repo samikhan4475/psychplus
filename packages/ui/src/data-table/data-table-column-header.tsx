@@ -29,7 +29,11 @@ const DataTableColumnHeader = <TData, TValue>({
   className,
 }: DataTableColumnHeaderProps<TData, TValue>) => {
   if (!column.getCanSort()) {
-    return <Text className={className}>{title}</Text>
+    return (
+      <Text size="1" className={className}>
+        {title}
+      </Text>
+    )
   }
 
   const sortDir = column.getIsSorted()
@@ -41,9 +45,11 @@ const DataTableColumnHeader = <TData, TValue>({
       onClick={() => {
         column.toggleSorting(sortDir === 'asc')
       }}
-      className="whitespace-nowrap"
+      className={`whitespace-nowrap ${className}`}
     >
-      {title}
+      <Text size="1" className={className}>
+        {title}
+      </Text>
       {renderSortIcon(sortDir)}
     </Button>
   )
