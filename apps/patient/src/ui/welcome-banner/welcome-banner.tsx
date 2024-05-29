@@ -14,35 +14,26 @@ const WelcomeBanner = () => {
       <ViewContainer className="px-9 py-14">
         <Heading
           weight="bold"
-          mb="4"
           className="text-white text-[32px] leading-8 sm:text-[42px]"
         >
           {`Welcome ${user.firstName}, we're here to help.`}
         </Heading>
-        <Flex direction="column" align="start">
-          <Text weight="medium" mb="2" className="text-white text-[20px]">
-            Schedule a Visit
+        <Flex gap="4" direction={{ initial: 'column', xs: 'row' }} width="100%">
+          <Text weight="medium" className="text-white text-[20px]">
+            Schedule an Appointment
           </Text>
-          <Flex
-            gap="4"
-            mb="3"
-            direction={{ initial: 'column', xs: 'row' }}
-            width="100%"
-          >
-            <BannerAppointmentButton
-              appointmentType={AppointmentType.InPerson}
-            />
-            <BannerAppointmentButton
-              appointmentType={AppointmentType.Virtual}
-            />
-          </Flex>
-          {/* <NextLink
+
+          <NextLink
             href="/appointments/search"
-            className="text-white flex items-center p-2 pl-0 text-[15px] underline-offset-4 hover:underline"
+            className="flex items-center text-[20px] text-[#8BD5C9] underline-offset-4 hover:underline"
           >
-            <Text>View all appointments</Text>
+            <Text>View all Appointments</Text>
             <CaretRightIcon width={20} height={20} className="-ml-[2px]" />
-          </NextLink> */}
+          </NextLink>
+        </Flex>
+        <Flex gap="4" direction={{ initial: 'column', xs: 'row' }} width="100%">
+          <BannerAppointmentButton appointmentType={AppointmentType.InPerson} />
+          <BannerAppointmentButton appointmentType={AppointmentType.Virtual} />
         </Flex>
       </ViewContainer>
     </Flex>
