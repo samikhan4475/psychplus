@@ -13,6 +13,7 @@ import { getProfile } from '@/api'
 import {
   Badge,
   CardContainer,
+  EditIcon,
   FeatureEmpty,
   FileLineIcon,
   LoadingPlaceholder,
@@ -24,6 +25,7 @@ import { getCreditCards } from '../../../billing/payments/api'
 import { ScheduleAppointmentButton } from '../../search'
 import { getUpcomingAppointments } from '../api'
 import { AppointmentTimeLabel } from './appointment-time-label'
+import { CancelAppointment } from './cancel-appointment'
 import { PayCopayButton } from './pay-copay-button'
 
 const UpcomingAppointmentsSummaryComponent = async () => {
@@ -64,6 +66,7 @@ const UpcomingAppointmentsSummaryComponent = async () => {
     <Flex direction="column" gap="4">
       {upcomingAppointments.map((row) => (
         <CardContainer key={row.id}>
+          <CancelAppointment appointmentId={row.id} />
           <Flex direction="column" gap="3">
             <Flex
               direction={{ initial: 'column', xs: 'row' }}
@@ -73,48 +76,53 @@ const UpcomingAppointmentsSummaryComponent = async () => {
               <Flex gap="3">
                 <ProviderAvatar provider={row.specialist} size="6" />
                 <Flex direction="column">
-                  <Text className="text-[20px] font-[600] leading-6 -tracking-[0.25px] text-[#24366B] xs:text-[24px] sm:text-[28px]">
-                    {getUserFullName(row.specialist.legalName)}
-                    {row.specialist.legalName.honors &&
-                      `, ${row.specialist.legalName.honors}`}
-                  </Text>
+                  <Flex align="center" gap="3">
+                    <Text className="text-[20px] font-[600] leading-6 -tracking-[0.25px] text-[#24366B] xs:text-[24px] sm:text-[28px]">
+                      {getUserFullName(row.specialist.legalName)}
+                      {row.specialist.legalName.honors &&
+                        `, ${row.specialist.legalName.honors}`}
+                    </Text>
+                    <EditIcon />
+                  </Flex>
                   <Flex
                     mt="1"
                     direction={{ initial: 'row', xs: 'row' }}
                     align="center"
+                    gap="3"
                   >
-                    <Text className="text-[14px] text-[#194595]">
-                      {getProviderTypeLabel(
-                        row.specialistTypeCode,
-                      ).toLocaleUpperCase()}
-                    </Text>
-                    <DotIcon color="gray" />
-                    <Text className="whitespace-nowrap text-[14px] text-[#194595]">
-                      {getAppointmentTypeLabel(row.type).toLocaleUpperCase()}{' '}
-                      VISIT
-                    </Text>
+                    <Flex>
+                      <Text className="text-[14px] text-[#194595]">
+                        {getProviderTypeLabel(
+                          row.specialistTypeCode,
+                        ).toLocaleUpperCase()}
+                      </Text>
+                      <DotIcon color="gray" />
+                      <Text className="whitespace-nowrap text-[14px] text-[#194595]">
+                        {getAppointmentTypeLabel(row.type).toLocaleUpperCase()}{' '}
+                        VISIT
+                      </Text>
+                    </Flex>
+                    <Flex className="flex-1">
+                      <Button
+                        variant="outline"
+                        highContrast
+                        className="w-full"
+                        color="gray"
+                      >
+                        <Text className="whitespace-nowrap">
+                          {row.type === AppointmentType.InPerson
+                            ? 'Change to Virtual'
+                            : 'Change to In-Person'}
+                        </Text>
+                      </Button>
+                    </Flex>
                   </Flex>
-                  <AppointmentTimeLabel appointment={row} />
+                  <Flex gap="3" align="center">
+                    <AppointmentTimeLabel appointment={row} />
+                    <EditIcon />
+                  </Flex>
                 </Flex>
               </Flex>
-
-              {/* Non functional buttons started from here */}
-              <Flex>
-                {row?.virtualRoomLink &&
-                  row.type === AppointmentType.Virtual && (
-                    <Link href={row?.virtualRoomLink} target="_blank">
-                      <Button highContrast className="w-full py-5">
-                        Join Virtual Call now
-                      </Button>
-                    </Link>
-                  )}
-                {row.type === AppointmentType.InPerson && (
-                  <Button highContrast className="w-full py-5">
-                    Get Direction
-                  </Button>
-                )}
-              </Flex>
-              {/* Non functional buttons ending here */}
             </Flex>
 
             <Flex
@@ -124,10 +132,15 @@ const UpcomingAppointmentsSummaryComponent = async () => {
               gap={{ initial: '2', xs: '6' }}
             >
               {/* Non functional insurance related code started from here */}
-              <Flex align="center" gap="1" ml={{ initial: '0', xs: '3' }}>
-                <ShieldFlashLineIcon />
-                <Text className="text-[12px] xs:text-[15px]">Blue Shield</Text>
-                <Badge label="Pending" type="warning" />
+              <Flex align="center" gap="2" ml={{ initial: '0', xs: '3' }}>
+                <Flex align="center" gap="1">
+                  <ShieldFlashLineIcon />
+                  <Text className="text-[12px] xs:text-[15px]">
+                    Blue Shield
+                  </Text>
+                  <Badge label="Pending" type="warning" />
+                </Flex>
+                <EditIcon />
               </Flex>
               {/* Non functional insurance related code ending here */}
 
@@ -158,6 +171,7 @@ const UpcomingAppointmentsSummaryComponent = async () => {
               align="center"
               justify="between"
               className="w-full"
+              mt="2"
               direction={{ initial: 'column', xs: 'row' }}
             >
               <Flex gap="1" width={{ initial: '100%', xs: 'auto' }}>
@@ -168,7 +182,7 @@ const UpcomingAppointmentsSummaryComponent = async () => {
                   </Text>
                 </Flex>
                 <Badge label="Not Completed" type="warning" addIcon={true} />
-                <Button highContrast className="rounded-2 bg-[#194595]">
+                <Button highContrast className="bg-[#194595]" radius="full">
                   <Flex gap="1" align="center">
                     <Text className="whitespace-nowrap text-[11px] xs:text-[15px]">
                       Fill Now
@@ -178,32 +192,23 @@ const UpcomingAppointmentsSummaryComponent = async () => {
                 </Button>
               </Flex>
 
-              <Flex gap="2" width={{ initial: '100%', xs: 'auto' }}>
-                <Flex className="w-1/3">
-                  <Button
-                    variant="outline"
-                    highContrast
-                    className="w-full px-6 py-5"
-                    color="gray"
-                  >
-                    Edit
+              {/* Non functional buttons started from here */}
+              <Flex width={{ initial: '100%', xs: 'auto' }}>
+                {row?.virtualRoomLink &&
+                  row.type === AppointmentType.Virtual && (
+                    <Link href={row?.virtualRoomLink} target="_blank">
+                      <Button highContrast className="w-full bg-[#194595]">
+                        Join Virtual Call now
+                      </Button>
+                    </Link>
+                  )}
+                {row.type === AppointmentType.InPerson && (
+                  <Button highContrast className="w-full bg-[#194595]">
+                    Get Direction
                   </Button>
-                </Flex>
-                <Flex className="flex-1">
-                  <Button
-                    variant="outline"
-                    highContrast
-                    className="w-full py-5"
-                    color="gray"
-                  >
-                    <Text className="whitespace-nowrap">
-                      {row.type === AppointmentType.InPerson
-                        ? 'Change to Virtual'
-                        : 'Change to In-Person'}
-                    </Text>
-                  </Button>
-                </Flex>
+                )}
               </Flex>
+              {/* Non functional buttons ending here */}
             </Flex>
             {/* Non functional previsit assesment and buttons ending from */}
           </Flex>

@@ -75,7 +75,7 @@ const PayCopayButton = ({
       }}
     >
       <Dialog.Trigger>
-        <Button highContrast className="rounded-2 bg-[#194595]">
+        <Button highContrast className="bg-[#194595]" radius="full">
           <Flex gap="1" align="center">
             <Text>Pay Now</Text>
 

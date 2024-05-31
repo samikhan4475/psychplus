@@ -2,8 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { Cross1Icon } from '@radix-ui/react-icons'
-import { Button, Dialog, Flex, IconButton } from '@radix-ui/themes'
+import { Button, Dialog, Flex, Text } from '@radix-ui/themes'
 import { CloseDialogIcon, FormError } from '@/components-v2'
 import { useToast } from '@/providers'
 import { cancelAppointment } from '../actions'
@@ -45,14 +44,13 @@ const CancelAppointment = ({ appointmentId }: CancelAppointmentParams) => {
   return (
     <Dialog.Root open={open} onOpenChange={setOpen}>
       <Dialog.Trigger>
-        <IconButton
+        <Button
           color="gray"
-          variant="ghost"
-          className="absolute right-4 top-4 h-[30px] w-[30px] transition-colors hover:bg-gray-2 active:bg-gray-3"
+          variant="outline"
+          className="absolute right-8 top-6 text-[#C62A2F] hover:bg-gray-2 active:bg-gray-3"
         >
-          <Cross1Icon width={20} height={20} />
-          <span className="sr-only">Cancel appointment button</span>
-        </IconButton>
+          <Text weight="regular">Cancel</Text>
+        </Button>
       </Dialog.Trigger>
       <Dialog.Content className="relative">
         <CloseDialogIcon />

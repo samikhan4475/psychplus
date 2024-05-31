@@ -21,7 +21,7 @@ const Badge = ({
 
   return (
     <Flex
-      className={`h-[32px] rounded-2 border ${getBadgeColor()}`}
+      className={`h-[32px] rounded-6 border ${getBadgeColor()}`}
       px="2"
       align="center"
       gap="1"
