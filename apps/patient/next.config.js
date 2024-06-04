@@ -27,7 +27,7 @@ const config = {
       },
       {
         source: '/billing',
-        destination: '/billing/payments',
+        destination: '/billing/credit-debit-cards',
         permanent: true,
       },
     ]

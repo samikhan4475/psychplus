@@ -8,7 +8,7 @@ import { formatCurrency } from '@psychplus-v2/utils'
 import { Button, Dialog, Flex, Link, RadioGroup, Text } from '@radix-ui/themes'
 import { ChevronRightIcon } from 'lucide-react'
 import { CloseDialogIcon, FormError, RadioGroupItem } from '@/components-v2'
-import { CreditCard } from '@/features/billing/payments/types'
+import { CreditCard } from '@/features/billing/credit-debit-cards/types'
 import { useToast } from '@/providers'
 import { payCopay } from '../actions'
 
@@ -139,7 +139,7 @@ const PayCopayButton = ({
           <Text>
             You have not added any payment methods to your account. Please{' '}
             <Link asChild>
-              <NextLink href="/billing/payments" prefetch={false}>
+              <NextLink href="/billing/credit-debit-cards" prefetch={false}>
                 add a payment method
               </NextLink>
             </Link>{' '}

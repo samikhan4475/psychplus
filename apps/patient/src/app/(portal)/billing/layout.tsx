@@ -1,10 +1,15 @@
 'use client'
 
 import { Flex } from '@radix-ui/themes'
-import { CrossIcon, WalletIcon } from 'lucide-react'
+import { CreditCardIcon, CrossIcon, WalletIcon } from 'lucide-react'
 import { NavigationSideMenu, ViewContainer } from '@/components-v2'
 
 const LINKS = [
+  {
+    href: '/billing/credit-debit-cards',
+    label: 'Credit/Debit Card',
+    Icon: CreditCardIcon,
+  },
   {
     href: '/billing/payments',
     label: 'Payments',

@@ -3,8 +3,7 @@
 import { useState } from 'react'
 import { type ActionResult } from '@psychplus-v2/api'
 import { cn } from '@psychplus-v2/utils'
-import { Box, Button, Dialog, Flex, Text, Tooltip } from '@radix-ui/themes'
-import { Trash2Icon } from 'lucide-react'
+import { Button, Dialog, Flex, Text, Tooltip } from '@radix-ui/themes'
 import { useToast } from '@/providers'
 import { FormError } from '.'
 import { CloseDialogIcon } from './dialog'
@@ -58,21 +57,16 @@ const DeletableFieldValue = <T,>({
 
   return (
     <Dialog.Root open={open} onOpenChange={setOpen}>
-      <Flex align="start" gap="2">
+      <Flex align="start" className="group cursor-pointer">
         <Text weight="medium" className={cn(textClassName)}>
           {children}
         </Text>
-        <Tooltip
-          content={tooltip}
-          delayDuration={300}
-          className="max-w-[200px]"
-        >
-          <Dialog.Trigger>
-            <Box className="mt-[2px] cursor-pointer text-gray-9 hover:text-accent-12">
-              <Trash2Icon width={20} height={20} strokeWidth={1.75} />
-            </Box>
-          </Dialog.Trigger>
-        </Tooltip>
+
+        <Dialog.Trigger>
+          <Text className="underline" size="2">
+            Remove
+          </Text>
+        </Dialog.Trigger>
       </Flex>
       <Dialog.Content className="relative">
         <CloseDialogIcon />

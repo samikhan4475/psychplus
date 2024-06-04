@@ -21,7 +21,7 @@ import {
   ProviderAvatar,
   ShieldFlashLineIcon,
 } from '@/components-v2'
-import { getCreditCards } from '../../../billing/payments/api'
+import { getCreditCards } from '../../../billing/credit-debit-cards/api'
 import { ScheduleAppointmentButton } from '../../search'
 import { getUpcomingAppointments } from '../api'
 import { AppointmentTimeLabel } from './appointment-time-label'

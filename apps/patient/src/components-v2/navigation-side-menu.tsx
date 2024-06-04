@@ -45,7 +45,7 @@ const NavigationSideMenu = ({
                 className={cn(
                   'flex items-center gap-2 rounded-2 px-4 py-2 font-[500] tracking-[0.25px] hover:bg-accent-2',
                   {
-                    'bg-accent-3 text-accent-12 hover:bg-accent-3': isActive,
+                    'bg-[#F0F4FF] text-accent-12 hover:bg-accent-3': isActive,
                   },
                 )}
               >
@@ -55,7 +55,9 @@ const NavigationSideMenu = ({
                   strokeWidth={1}
                   fill="white"
                 />
-                <Text className="text-[14px]">{link.label}</Text>
+                <Text className="whitespace-nowrap text-[14px]">
+                  {link.label}
+                </Text>
               </NextLink>
             )
           })}

@@ -118,6 +118,11 @@ const ResponsiveMenuLinks = () => {
         label="Billing"
         links={[
           {
+            label: 'Credit Debit Cards',
+            href: '/billing/credit-debit-cards',
+            Icon: ListChecksIcon,
+          },
+          {
             label: 'Payments',
             href: '/billing/payments',
             Icon: ListChecksIcon,

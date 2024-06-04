@@ -232,7 +232,7 @@ const ActivateMembership = ({ creditCards, user }: ActivateMembershipProps) => {
                   setIsMembershipDialogOpen(false)
                 }}
               >
-                <NextLink href="/billing/payments" prefetch={false}>
+                <NextLink href="/billing/credit-debit-cards" prefetch={false}>
                   add a payment method
                 </NextLink>
               </Link>{' '}

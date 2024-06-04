@@ -1,6 +1,6 @@
 'use client'
 
-import { Button } from '@radix-ui/themes'
+import { Button, Text } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
 import { useToggleableFormContext } from './context'
 
@@ -13,6 +13,7 @@ const CancelButton = () => {
     <Button
       size="3"
       variant="outline"
+      color="red"
       onClick={(e) => {
         e.preventDefault()
         setOpen(false)
@@ -21,7 +22,9 @@ const CancelButton = () => {
       }}
       highContrast
     >
-      Cancel
+      <Text size="2" weight="regular" color="red">
+        Cancel
+      </Text>
     </Button>
   )
 }

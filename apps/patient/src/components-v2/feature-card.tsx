@@ -25,13 +25,13 @@ const FeatureCard = ({
   >
     <Flex
       align="center"
-      py="3"
-      px="5"
-      className="border-b border-b-gray-5 bg-gray-2"
+      py="2"
+      px="3"
+      className="rounded-t-2 border-b border-b-gray-5 bg-[#EEF2F6]"
     >
       <Text className="text-[14px] font-[500] xs:text-[16px]">{title}</Text>
     </Flex>
-    <Flex direction="column" py="6" px="5" className={cn(contentClassName)}>
+    <Flex direction="column" py="5" px="5" className={cn(contentClassName)}>
       {children}
     </Flex>
   </Flex>

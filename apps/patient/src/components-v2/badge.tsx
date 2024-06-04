@@ -16,19 +16,24 @@ const Badge = ({
         return 'border-green-6 bg-green-3'
       case 'warning':
         return 'border-[#FBDFB1] bg-[#FEF7EC]'
+      case 'basic':
+        return 'border-[#B9BBC6] bg-[#F9F9FB] text-[#60646C]'
     }
   }
 
   return (
     <Flex
-      className={`h-[32px] rounded-6 border ${getBadgeColor()}`}
-      px="2"
+      className={`h-[27px] rounded-6 border ${getBadgeColor()}`}
+      px="3"
       align="center"
       gap="1"
     >
       {addIcon && <Icon type={type} />}
 
-      <Text className="whitespace-nowrap text-[11px] xs:text-[15px]">
+      <Text
+        className="whitespace-nowrap text-[11px] xs:text-[15px]"
+        weight="regular"
+      >
         {label}
       </Text>
     </Flex>

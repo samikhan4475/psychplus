@@ -18,7 +18,7 @@ const NAV_LINKS = [
   //   label: 'Care Plan',
   // },
   {
-    href: '/billing',
+    href: '/billing/credit-debit-cards',
     label: 'Billing',
   },
   // {
