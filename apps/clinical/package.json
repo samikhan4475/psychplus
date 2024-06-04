@@ -17,6 +17,7 @@
     "@psychplus/form": "^0.1.0",
     "@psychplus/patient": "^0.1.0",
     "@psychplus/referrals": "^0.1.0",
+    "@psychplus/functional-cognitive": "^0.1.0",
     "@psychplus/preferred-partners": "^0.1.0",
     "@psychplus/ui": "^0.1.0",
     "@psychplus/user": "^0.1.0",
@@ -32,7 +33,9 @@
     "react-google-recaptcha-v2": "3.0.0-alpha.1",
     "react-hook-form": "^7.47.0",
     "zod": "^3.22.4",
-    "zustand": "^4.4.3"
+    "zustand": "^4.4.3",
+    "@radix-ui/react-toast": "^1.1.5",
+    "@radix-ui/react-toggle-group": "^1.0.4"
   },
   "devDependencies": {
     "@psychplus/eslint-config": "^0.1.0",

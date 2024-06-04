@@ -41,6 +41,9 @@ importers:
       '@psychplus/form':
         specifier: ^0.1.0
         version: link:../../packages/form
+      '@psychplus/functional-cognitive':
+        specifier: ^0.1.0
+        version: link:../../packages/functional-cognitive
       '@psychplus/patient':
         specifier: ^0.1.0
         version: link:../../packages/patient
@@ -65,6 +68,12 @@ importers:
       '@radix-ui/react-icons':
         specifier: ^1.3.0
         version: 1.3.0(react@18.2.0)
+      '@radix-ui/react-toast':
+        specifier: ^1.1.5
+        version: 1.1.5(@types/react-dom@18.2.10)(@types/react@18.2.47)(react-dom@18.2.0)(react@18.2.0)
+      '@radix-ui/react-toggle-group':
+        specifier: ^1.0.4
+        version: 1.0.4(@types/react-dom@18.2.10)(@types/react@18.2.47)(react-dom@18.2.0)(react@18.2.0)
       '@radix-ui/themes':
         specifier: ^2.0.0
         version: 2.0.3(@types/react-dom@18.2.10)(@types/react@18.2.47)(react-dom@18.2.0)(react@18.2.0)
@@ -874,6 +883,9 @@ importers:
 
   packages/codeset:
     dependencies:
+      '@psychplus/functional-cognitive':
+        specifier: ^0.1.0
+        version: link:../functional-cognitive
       '@psychplus/utils':
         specifier: ^0.1.0
         version: link:../utils
@@ -939,6 +951,37 @@ importers:
       typescript:
         specifier: ^5.2.2
         version: 5.2.2
+
+  packages/functional-cognitive:
+    dependencies:
+      '@psychplus/utils':
+        specifier: ^0.1.0
+        version: link:../utils
+      next:
+        specifier: ^14.0.1
+        version: 14.0.4(@babel/core@7.23.2)(react-dom@18.3.1)(react@18.3.1)
+      react:
+        specifier: ^18.2.0
+        version: 18.3.1
+      zustand:
+        specifier: ^4.4.3
+        version: 4.4.7(@types/react@18.2.48)(react@18.3.1)
+    devDependencies:
+      '@psychplus/eslint-config':
+        specifier: ^0.1.0
+        version: link:../../tooling/eslint-config
+      '@psychplus/tsconfig':
+        specifier: ^0.1.0
+        version: link:../../tooling/tsconfig
+      '@types/react':
+        specifier: ^18.2.47
+        version: 18.2.48
+      eslint:
+        specifier: ^8.50.0
+        version: 8.57.0
+      typescript:
+        specifier: ^5.2.2
+        version: 5.4.5
 
   packages/metadata:
     dependencies:
@@ -11755,4 +11798,24 @@ packages:
       '@types/react': 18.2.48
       react: 18.2.0
       use-sync-external-store: 1.2.0(react@18.2.0)
+    dev: false
+
+  /zustand@4.4.7(@types/react@18.2.48)(react@18.3.1):
+    resolution: {integrity: sha512-QFJWJMdlETcI69paJwhSMJz7PPWjVP8Sjhclxmxmxv/RYI7ZOvR5BHX+ktH0we9gTWQMxcne8q1OY8xxz604gw==}
+    engines: {node: '>=12.7.0'}
+    peerDependencies:
+      '@types/react': '>=16.8'
+      immer: '>=9.0'
+      react: '>=16.8'
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+      immer:
+        optional: true
+      react:
+        optional: true
+    dependencies:
+      '@types/react': 18.2.48
+      react: 18.3.1
+      use-sync-external-store: 1.2.0(react@18.3.1)
     dev: false

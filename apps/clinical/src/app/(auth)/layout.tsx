@@ -29,6 +29,12 @@ const IndexLayout = async ({ children }: { children: React.ReactNode }) => {
           >
             <Text weight="medium">Preferred partner</Text>
           </NextLink>
+          <NextLink
+            href="galaxy/widgets/functional-cognitive-list"
+            className="hover:underline"
+          >
+            <Text weight="medium">Functional Cognitive</Text>
+          </NextLink>
         </Flex>
       </Flex>
       <main className="p-4">{children}</main>

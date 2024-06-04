@@ -1,5 +1,5 @@
 {
-  "name": "@psychplus/codeset",
+  "name": "@psychplus/functional-cognitive",
   "version": "0.1.0",
   "private": true,
   "exports": {
@@ -13,10 +13,9 @@
   },
   "dependencies": {
     "@psychplus/utils": "^0.1.0",
-    "next": "^14.0.4",
+    "next": "^14.0.1",
     "react": "^18.2.0",
-    "zustand": "^4.4.3",
-    "@psychplus/functional-cognitive": "^0.1.0"
+    "zustand": "^4.4.3"
   },
   "devDependencies": {
     "@psychplus/eslint-config": "^0.1.0",
