@@ -5,6 +5,11 @@ interface CodeSet {
   codes: Code[]
 }
 
+interface MetaDataCodeSet {
+  code: string
+  display: string
+}
+
 interface Code {
   code: string
   display: string
@@ -98,4 +103,5 @@ export type {
   CodeSetIndex,
   AuthorityCodeSet,
   AuthorityCode,
+  MetaDataCodeSet,
 }
