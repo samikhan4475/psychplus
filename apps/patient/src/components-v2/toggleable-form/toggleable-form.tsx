@@ -68,7 +68,7 @@ const ToggleableForm = <T extends FieldValues, R>({
 
       onSuccess?.(result.data)
     } else {
-      setError(FORM_SAVE_GENERIC_ERROR_MESSAGE)
+      setError(result.error ?? FORM_SAVE_GENERIC_ERROR_MESSAGE)
       onError?.(result.error)
     }
   }

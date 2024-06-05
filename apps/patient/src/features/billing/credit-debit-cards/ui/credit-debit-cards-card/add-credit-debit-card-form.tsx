@@ -46,9 +46,11 @@ type SchemaType = z.infer<typeof schema>
 const AddCreditCardForm = ({
   trigger,
   creditCard,
+  existingCards,
 }: {
   trigger: any
   creditCard?: CreditCard
+  existingCards?: CreditCard[]
 }) => {
   const router = useRouter()
   const stripe = useStripe()
@@ -89,6 +91,21 @@ const AddCreditCardForm = ({
         state: 'error',
         error:
           stripeResult.error?.message ?? 'Could not collect credit card info',
+      } as ActionErrorState
+    }
+
+    const isDuplicate = existingCards?.some((card) => {
+      return (
+        card.numberLastFour === stripeResult?.paymentMethod?.card?.last4 &&
+        card.expireMonth === stripeResult?.paymentMethod?.card?.exp_month &&
+        card.expireYear === stripeResult?.paymentMethod?.card?.exp_year
+      )
+    })
+
+    if (isDuplicate) {
+      return {
+        state: 'error',
+        error: 'This card is already exists in your account.',
       } as ActionErrorState
     }
 

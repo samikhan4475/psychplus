@@ -18,7 +18,7 @@ const PaymentMethodsForm = ({ creditCards }: { creditCards: CreditCard[] }) => {
           ))}
         </Flex>
       ) : null}
-      <AddCreditCardForm trigger={trigger} />
+      <AddCreditCardForm trigger={trigger} existingCards={creditCards} />
     </Flex>
   )
 }
