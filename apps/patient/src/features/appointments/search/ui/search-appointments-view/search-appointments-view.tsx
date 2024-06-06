@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { AppointmentType } from '@psychplus-v2/constants'
 import { Consent } from '@psychplus-v2/types'
 import { Box, Flex } from '@radix-ui/themes'
+import { clickTrack } from '@psychplus/utils/tracking'
 import { useStore } from '@/features/appointments/search/store'
 import { AppointmentSort } from './appointment-sort'
 import { AvailabilityList } from './availability-list'
@@ -49,6 +50,13 @@ const SearchAppointmentsView = ({
   useEffect(() => {
     useStore.persist.rehydrate()
     setHasHydrated(true)
+
+    clickTrack({
+      productArea: 'Patient',
+      productPageKey: 'Portal Schedule Appointment Screen',
+      clickAction: 'Navigation',
+      clickActionData: 'Landed',
+    })
   }, [])
 
   useEffect(() => {

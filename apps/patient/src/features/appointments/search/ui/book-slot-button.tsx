@@ -25,6 +25,7 @@ import {
 import { CalendarIcon, MapPinIcon, VideoIcon } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import z from 'zod'
+import { clickTrack } from '@psychplus/utils/tracking'
 import { addPolicyConsent } from '@/actions'
 import {
   CancelDialogButton,
@@ -129,6 +130,14 @@ const BookSlotButton = ({
       }
       setPolicyAlreadySigned(true)
     }
+
+    const providerTypeLabel = getProviderTypeLabel(providerType)
+    clickTrack({
+      productArea: 'Patient',
+      productPageKey: 'Portal appointmentBooked',
+      clickAction: 'Accepted',
+      clickActionData: `${providerTypeLabel}|${appointmentType}`,
+    })
 
     setBookingSuccessful(true)
   }
