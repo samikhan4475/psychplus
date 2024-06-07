@@ -31,7 +31,7 @@ const STRIPE_INPUT_STYLE = {
 }
 
 const schema = z.object({
-  fullname: z.string().trim().optional(),
+  fullname: z.string().min(1, 'Required'),
   address: z.string().min(1, 'Required'),
   city: z.string().min(1, 'Required'),
   state: z.string().min(1, 'Required'),
@@ -43,14 +43,16 @@ const schema = z.object({
 
 type SchemaType = z.infer<typeof schema>
 
-const AddCreditCardForm = ({
+const CreditCardForm = ({
   trigger,
   creditCard,
   existingCards,
+  triggerClassName,
 }: {
   trigger: any
   creditCard?: CreditCard
   existingCards?: CreditCard[]
+  triggerClassName?: string
 }) => {
   const router = useRouter()
   const stripe = useStripe()
@@ -63,7 +65,7 @@ const AddCreditCardForm = ({
     resolver: zodResolver(schema),
     reValidateMode: 'onChange',
     defaultValues: {
-      userAgreed: creditCard ? true : false,
+      userAgreed: false,
       fullname: creditCard?.name || '',
       address: creditCard?.billingAddress.street1 || '',
       city: creditCard?.billingAddress.city || '',
@@ -130,7 +132,13 @@ const AddCreditCardForm = ({
 
   const onSuccess = () => {
     router.refresh()
-    form.reset({ fullname: '' })
+    form.reset({
+      fullname: '',
+      address: '',
+      city: '',
+      state: '',
+      postalCode: '',
+    })
   }
 
   return (
@@ -141,8 +149,9 @@ const AddCreditCardForm = ({
       trigger={trigger}
       disabled={!stripe || !elements}
       toastData={{
-        title: 'Added credit card',
+        title: `${creditCard ? 'Updated' : 'Added'} credit card`,
       }}
+      triggerClassName={triggerClassName}
     >
       <Flex gap="4" direction="column" className="w-full">
         <Flex
@@ -175,18 +184,17 @@ const AddCreditCardForm = ({
           gap="4"
         >
           <FormFieldContainer className="flex-1">
-            <FormFieldLabel>Name on Card</FormFieldLabel>
+            <FormFieldLabel required>Name on Card</FormFieldLabel>
 
             <TextFieldInput
               size="3"
               {...form.register('fullname')}
               placeholder="Full name on card"
             />
-            <FormFieldError name="fullname" />
           </FormFieldContainer>
 
           <FormFieldContainer className="flex-1">
-            <FormFieldLabel>Credit Card Number</FormFieldLabel>
+            <FormFieldLabel required>Credit Card Number</FormFieldLabel>
             <Box
               py="2"
               px="3"
@@ -211,6 +219,9 @@ const AddCreditCardForm = ({
             </Box>
           </FormFieldContainer>
         </Flex>
+        <Flex mt="-3">
+          <FormFieldError name="fullname" />
+        </Flex>
 
         <Flex className="w-full  rounded-t-1 bg-[#F0F4FF]" px="2" py="2">
           <Text size="2" weight="medium">
@@ -221,7 +232,7 @@ const AddCreditCardForm = ({
 
       <Flex className="w-full">
         <FormFieldContainer className="w-full">
-          <FormFieldLabel>Address 1</FormFieldLabel>
+          <FormFieldLabel required>Address 1</FormFieldLabel>
           <TextFieldInput
             size="3"
             radius="full"
@@ -234,7 +245,7 @@ const AddCreditCardForm = ({
 
       <Flex className="w-full" gap="4">
         <FormFieldContainer className="flex-1">
-          <FormFieldLabel>Zip Code</FormFieldLabel>
+          <FormFieldLabel required>Zip Code</FormFieldLabel>
           <TextFieldInput
             size="3"
             radius="full"
@@ -245,7 +256,7 @@ const AddCreditCardForm = ({
         </FormFieldContainer>
 
         <FormFieldContainer className="flex-1">
-          <FormFieldLabel>City</FormFieldLabel>
+          <FormFieldLabel required>City</FormFieldLabel>
           <TextFieldInput
             size="3"
             radius="full"
@@ -256,7 +267,7 @@ const AddCreditCardForm = ({
         </FormFieldContainer>
 
         <FormFieldContainer className="flex-1">
-          <FormFieldLabel>State</FormFieldLabel>
+          <FormFieldLabel required>State</FormFieldLabel>
           <CodesetFormSelect
             size="3"
             name={'state'}
@@ -292,4 +303,4 @@ const AddCreditCardForm = ({
   )
 }
 
-export { AddCreditCardForm }
+export { CreditCardForm }

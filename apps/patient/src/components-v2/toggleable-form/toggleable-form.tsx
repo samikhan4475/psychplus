@@ -29,6 +29,7 @@ interface ToggleableFormProps<T extends FieldValues, Response> {
   contentClassName?: string
   deleteButtonProps?: DeleteButtonProps<Response>
   noResetValues?: boolean
+  triggerClassName?: string
 }
 
 const ToggleableForm = <T extends FieldValues, R>({
@@ -43,6 +44,7 @@ const ToggleableForm = <T extends FieldValues, R>({
   contentClassName,
   deleteButtonProps,
   noResetValues,
+  triggerClassName,
 }: React.PropsWithChildren<ToggleableFormProps<T, R>>) => {
   const { toast } = useToast()
   const [open, setOpen] = useState(false)
@@ -86,7 +88,7 @@ const ToggleableForm = <T extends FieldValues, R>({
 
   return (
     <ToggleableFormContext.Provider value={contextValue}>
-      <Flex>
+      <Flex className={triggerClassName}>
         <Trigger>{trigger}</Trigger>
         {!open && deleteButtonProps?.deleteAction ? (
           <DeleteButton {...deleteButtonProps} />

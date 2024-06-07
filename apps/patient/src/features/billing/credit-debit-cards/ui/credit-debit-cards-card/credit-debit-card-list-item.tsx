@@ -1,8 +1,10 @@
 'use client'
 
+import React, { useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { CreditCardType } from '@psychplus-v2/constants'
-import { Box, Flex, Separator, Text } from '@radix-ui/themes'
+import { getBillingAddressLabel } from '@psychplus-v2/utils'
+import { Flex, Separator, Text } from '@radix-ui/themes'
 import { DotIcon } from 'lucide-react'
 import {
   AmericanExpressCardIcon,
@@ -15,72 +17,92 @@ import {
 } from '@/components-v2'
 import { removeCreditCardAction } from '@/features/billing/credit-debit-cards/actions'
 import type { CreditCard } from '@/features/billing/credit-debit-cards/types'
-import { getDefaultCreditCardName } from '@/features/billing/credit-debit-cards/utils'
+import {
+  getCreditCardExpiry,
+  getDefaultCreditCardName,
+} from '@/features/billing/credit-debit-cards/utils'
+import { CreditCardForm } from './credit-debit-card-form'
 
 const CreditCardListItem = ({ creditCard }: { creditCard: CreditCard }) => {
   const router = useRouter()
 
   const onDelete = () => removeCreditCardAction({ id: creditCard.id })
 
+  const updateButtonRef = useRef<HTMLDivElement>(null)
+
+  const trigger = <span ref={updateButtonRef} />
+
   return (
-    <Flex justify="between" gap="2">
-      <Flex direction="column">
-        <Flex gap="3">
-          <CardIcon type={creditCard.cardType} />
+    <Flex direction="column">
+      <Flex justify="between" gap="2">
+        <Flex direction="column">
+          <Flex gap="3">
+            <CardIcon type={creditCard.cardType} />
 
-          <Flex direction="column" gap="1">
-            <Flex align="center" gap="2">
-              <Text weight="bold">{creditCard.cardType}</Text>
-              <Text size="2" className="tracking-[0.5px]">
-                **** **** ****
-              </Text>
-              <Text>{creditCard.numberLastFour}</Text>
-            </Flex>
-            <Flex align="center">
+            <Flex direction="column" gap="2">
               <Flex align="center" gap="2">
-                {creditCard.name.toLowerCase() !==
-                getDefaultCreditCardName(creditCard) ? (
-                  <Text weight="regular" size="2">{`${creditCard.name}`}</Text>
-                ) : null}
-
-                {creditCard.isPrimary && <Badge label="Primary" type="basic" />}
+                <Text weight="bold">{creditCard.cardType}</Text>
+                <Text size="2" className="tracking-[0.5px]">
+                  **** **** ****
+                </Text>
+                <Text>{creditCard.numberLastFour}</Text>
               </Flex>
-              <DotIcon color="gray" />
+              <Flex align="center">
+                <Flex align="center" gap="2">
+                  {creditCard.name.toLowerCase() !==
+                  getDefaultCreditCardName(creditCard) ? (
+                    <Text
+                      weight="regular"
+                      size="2"
+                    >{`${creditCard.name}`}</Text>
+                  ) : null}
 
-              <Text weight="regular" size="2">
-                Expires {creditCard.expireMonth}/
-                {creditCard.expireYear.toString().slice(-2)}
-              </Text>
+                  {creditCard.isPrimary && (
+                    <Badge label="Primary" type="basic" />
+                  )}
+                </Flex>
+                <DotIcon color="gray" />
+
+                <Text weight="regular" size="2">
+                  {getCreditCardExpiry(
+                    creditCard.expireMonth,
+                    creditCard.expireYear,
+                  )}
+                </Text>
+              </Flex>
+
+              <Flex align="center">
+                <EditableFieldValue />
+
+                <Separator className="w-6 rotate-90" />
+
+                <DeletableFieldValue
+                  tooltip="Remove this card"
+                  deleteAction={onDelete}
+                  onSuccess={router.refresh}
+                  confirmTitle="Remove card"
+                  confirmDescription="Are you sure? This will remove the card from your account and it will no longer be able to be used."
+                  confirmActionLabel="Remove card"
+                />
+              </Flex>
             </Flex>
           </Flex>
         </Flex>
-
-        <Flex ml="9" mt="1" align="center">
-          <EditableFieldValue />
-
-          <Separator className="w-6 rotate-90" />
-
-          <DeletableFieldValue
-            tooltip="Remove this card"
-            deleteAction={onDelete}
-            onSuccess={router.refresh}
-            confirmTitle="Remove card"
-            confirmDescription="Are you sure? This will remove the card from your account and it will no longer be able to be used."
-            confirmActionLabel="Remove card"
-          />
+        <Flex
+          className="w-1/3 border-l border-dashed border-gray-6"
+          px="4"
+          direction="column"
+          gap="2"
+        >
+          <Text weight="bold">Billing Address</Text>
+          <Text weight="regular" size="2">
+            {getBillingAddressLabel([creditCard.billingAddress])}
+          </Text>
         </Flex>
       </Flex>
-      <Flex
-        className="w-1/3 border-l border-dashed border-gray-6"
-        px="4"
-        direction="column"
-        gap="2"
-      >
-        <Text weight="bold">Billing Address</Text>
-        <Text weight="regular" size="2">
-          {creditCard.billingAddress.street1}, {creditCard.billingAddress.state}
-          , {creditCard.billingAddress.postalCode}
-        </Text>
+
+      <Flex mt="3">
+        <CreditCardForm creditCard={creditCard} trigger={trigger} />
       </Flex>
     </Flex>
   )

@@ -30,6 +30,13 @@ const getStateAbbreviation = (name: string) => {
   return STATE_ABBREVIATIONS[lowerCaseAbbreviationKey] ?? name
 }
 
+const getStateFullName = (abbreviation: string): string | undefined => {
+  const formattedAbbreviation = abbreviation.toLowerCase()
+  return Object.keys(STATE_ABBREVIATIONS).find(
+    (key) => STATE_ABBREVIATIONS[key].toLowerCase() === formattedAbbreviation,
+  )
+}
+
 const getClinicAddressLabel = (addresses?: Address[]) => {
   const address = addresses?.[0]
 
@@ -40,6 +47,18 @@ const getClinicAddressLabel = (addresses?: Address[]) => {
   const stateAbbreviation = getStateAbbreviation(address.state)
 
   return `${address.street1} ${address.city}, ${stateAbbreviation} ${address.postalCode}`
+}
+
+const getBillingAddressLabel = (addresses?: Address[]) => {
+  const address = addresses?.[0]
+
+  if (!address) {
+    return ''
+  }
+
+  const stateFullName = getStateFullName(address.state)
+
+  return `${address.street1} ${address.city}, ${stateFullName} ${address.postalCode}`
 }
 
 const STATE_ABBREVIATIONS: Record<string, string> = {
@@ -102,4 +121,10 @@ const STATE_ABBREVIATIONS: Record<string, string> = {
   'us minor outlying islands': 'UM',
 }
 
-export { getStateAbbreviation, areAddressesEqual, getClinicAddressLabel }
+export {
+  getStateAbbreviation,
+  getStateFullName,
+  areAddressesEqual,
+  getClinicAddressLabel,
+  getBillingAddressLabel,
+}

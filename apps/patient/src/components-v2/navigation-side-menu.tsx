@@ -1,5 +1,6 @@
 'use client'
 
+import { FC } from 'react'
 import NextLink from 'next/link'
 import { usePathname } from 'next/navigation'
 import { cn } from '@psychplus-v2/utils'
@@ -15,7 +16,7 @@ interface NavigationSideMenuProps {
 interface SideMenuLink {
   href: string
   label: string
-  Icon: LucideIcon
+  Icon: LucideIcon | FC
 }
 
 const NavigationSideMenu = ({
