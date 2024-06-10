@@ -2,6 +2,7 @@ import { Text } from '@radix-ui/themes'
 import { formatDate, formatTime, isEmptyDate } from '@psychplus/utils/time'
 import { cn } from './cn'
 import { Tooltip } from './tooltip'
+import React from 'react'
 
 interface TableCellEmptyProps {
   label?: string
@@ -87,10 +88,33 @@ const TableCellCode = ({ value, getLabel }: TableCellCodeProps) => {
   return <TableCellText text={getLabel(value)} />
 }
 
+interface TableCellInputProps {
+  name: string
+  placeholder?: string
+  className?: string
+}
+
+const TableCellInput = React.forwardRef<HTMLInputElement, TableCellInputProps>(
+  (props, ref) => {
+  const { className, placeholder, ...formFieldProps } = props
+
+  return (
+    <input
+      className={`${className?? ''} outline-none`}
+      placeholder={placeholder?? ''}
+      {...formFieldProps}
+      ref={ref}
+   />
+  )
+})
+
+TableCellInput.displayName = 'TableCellInput'
+
 export {
   TableCellEmpty,
   TableCellText,
   TableCellLongText,
   TableCellDateTime,
   TableCellCode,
+  TableCellInput,
 }

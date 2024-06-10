@@ -25,4 +25,20 @@ const createHeaders = () => {
   return headers
 }
 
-export { createHeaders }
+const createFileHeaders = () => {
+  const headers = new Headers()
+
+  // Set Content-Type header.
+
+  const token = getUrl().searchParams.get(QUERY_TOKEN)
+  if (token) {
+    headers.set(HEADER_AUTHORIZATION, `${BEARER_AUTHENTICATION} ${token}`)
+  }
+
+  // Set required PsychPlus headers.
+  headers.set(HEADER_PSYCHPLUS_DEVICE, `${navigator.userAgent ?? ''}`)
+
+  return headers
+}
+
+export { createHeaders, createFileHeaders }

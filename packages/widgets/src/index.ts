@@ -10,6 +10,10 @@ const SCHEDULE_APPOINTMENT_LIST = 'schedule-appointment-list'
 const OTP_DIALOG = 'otp-dialog'
 const PREFERRED_PARTNERS_LIST_WIDGET = 'preferred-partners'
 const CREATE_PREFERRED_PARTNER = 'create-preferred-partner'
+const ADD_TEMPLATE_WIDGET = 'add-template'
+const EDIT_TEMPLATE_WIDGET = 'edit-template'
+const REPORTS_WIDGET = 'reports-widget'
+
 export {
   USER_WIDGET,
   PATIENT_WIDGET,
@@ -23,4 +27,7 @@ export {
   OTP_DIALOG,
   PREFERRED_PARTNERS_LIST_WIDGET,
   CREATE_PREFERRED_PARTNER,
+  ADD_TEMPLATE_WIDGET,
+  EDIT_TEMPLATE_WIDGET,
+  REPORTS_WIDGET,
 }

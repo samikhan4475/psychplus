@@ -53,6 +53,9 @@ importers:
       '@psychplus/referrals':
         specifier: ^0.1.0
         version: link:../../packages/referrals
+      '@psychplus/reports':
+        specifier: ^0.1.0
+        version: link:../../packages/reports
       '@psychplus/ui':
         specifier: ^0.1.0
         version: link:../../packages/ui
@@ -80,6 +83,9 @@ importers:
       '@tanstack/react-table':
         specifier: ^8.10.7
         version: 8.10.7(react-dom@18.2.0)(react@18.2.0)
+      lucide-react:
+        specifier: 0.373.0
+        version: 0.373.0(react@18.2.0)
       micro-memoize:
         specifier: ^4.1.2
         version: 4.1.2
@@ -1127,6 +1133,52 @@ importers:
       typescript:
         specifier: ^5.2.2
         version: 5.2.2
+
+  packages/reports:
+    dependencies:
+      '@psychplus/codeset':
+        specifier: ^0.1.0
+        version: link:../codeset
+      '@psychplus/form':
+        specifier: ^0.1.0
+        version: link:../form
+      '@psychplus/user':
+        specifier: ^0.1.0
+        version: link:../user
+      '@psychplus/utils':
+        specifier: ^0.1.0
+        version: link:../utils
+      '@psychplus/widgets':
+        specifier: ^0.1.0
+        version: link:../widgets
+      micro-memoize:
+        specifier: ^4.1.2
+        version: 4.1.2
+      next:
+        specifier: ^14.0.1
+        version: 14.0.4(@babel/core@7.23.2)(react-dom@18.3.1)(react@18.3.1)
+      react:
+        specifier: ^18.2.0
+        version: 18.3.1
+      zustand:
+        specifier: ^4.4.3
+        version: 4.4.7(@types/react@18.2.48)(react@18.3.1)
+    devDependencies:
+      '@psychplus/eslint-config':
+        specifier: ^0.1.0
+        version: link:../../tooling/eslint-config
+      '@psychplus/tsconfig':
+        specifier: ^0.1.0
+        version: link:../../tooling/tsconfig
+      '@types/react':
+        specifier: ^18.2.47
+        version: 18.2.48
+      eslint:
+        specifier: ^8.50.0
+        version: 8.57.0
+      typescript:
+        specifier: ^5.2.2
+        version: 5.4.5
 
   packages/staff:
     dependencies:
@@ -9044,7 +9096,7 @@ packages:
       array-union: 2.1.0
       dir-glob: 3.0.1
       fast-glob: 3.3.1
-      ignore: 5.2.4
+      ignore: 5.3.1
       merge2: 1.4.1
       slash: 3.0.0
 
@@ -9194,11 +9246,11 @@ packages:
   /ignore@5.2.4:
     resolution: {integrity: sha512-MAb38BcSbH0eHNBxn7ql2NH/kX33OkB3lZ1BNdh7ENeRChHTYsTvWrMubiIAMNS2llXEEgZ1MUOBtXChP3kaFQ==}
     engines: {node: '>= 4'}
+    dev: true
 
   /ignore@5.3.1:
     resolution: {integrity: sha512-5Fytz/IraMjqpwfd34ke28PTVMjZjJG2MPn5t7OE4eUCUNf8BAa7b5WUS9/Qvr6mwOQS7Mk6vdsMno5he+T8Xw==}
     engines: {node: '>= 4'}
-    dev: true
 
   /import-fresh@3.3.0:
     resolution: {integrity: sha512-veYYhQa+D1QBKznvhUHxb8faxlrwUnxseDAbAp457E0wLNio2bOSKnjYDhMj+YiAq61xrMGhQk9iXVk5FzgQMw==}

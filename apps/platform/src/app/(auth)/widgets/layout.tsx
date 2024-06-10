@@ -62,6 +62,18 @@ const navMenuItems: MenuItem[] = [
     label: 'Preffered Partners',
     href: '/widgets/preferred-partners-list',
   },
+  {
+    label: 'Add Template',
+    href: '/widgets/add-template',
+  },
+  {
+    label: 'Edit Template',
+    href: '/widgets/edit-template',
+  },
+  {
+    label: 'Reports',
+    href: '/widgets/reports',
+  },
 ]
 
 const WidgetsLayout = ({ children }: { children: React.ReactNode }) => {

@@ -9,6 +9,7 @@ interface Props
   name: string
   label: string
   placeholder?: string
+  buttonClassName?: string
   options: {
     label: string
     value: string
@@ -34,6 +35,7 @@ const FormSelect = React.forwardRef<HTMLButtonElement, Props>((props, ref) => {
             >
               <Select.Trigger
                 ref={ref}
+                className={props.buttonClassName?? ''}
                 id={formFieldProps.id}
                 placeholder={props.placeholder}
               />

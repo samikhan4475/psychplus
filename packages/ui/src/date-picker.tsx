@@ -38,21 +38,25 @@ interface DatePickerProps {
     | 'gold'
     | 'bronze'
     | 'gray'
+    dateFormat?: string
   onSelect: (date?: Date) => void
 }
+
+const placeholderStyles = 'font-[400] text-xs text-[#8B8D98]'
 
 const IconAndDate = (
   reverse: boolean | undefined,
   date: Date | undefined,
+  dateFormat: string | undefined,
   placeholder?: string,
 ) => {
   if (reverse) {
     return (
       <>
         {date ? (
-          format(date, 'PPP')
+          format(date, dateFormat?? 'PPP')
         ) : (
-          <span>{placeholder || 'MM/DD/YYYY'}</span>
+          <span className={placeholderStyles}>{placeholder || 'MM/DD/YYYY'}</span>
         )}
         <CalendarIcon className="mr-1 h-5 w-5" />
       </>
@@ -61,7 +65,7 @@ const IconAndDate = (
   return (
     <>
       <CalendarIcon className="mr-1 h-5 w-5" />
-      {date ? format(date, 'PPP') : <span>{placeholder || 'Pick a date'}</span>}
+      {date ? format(date, 'PPP') : <span className={placeholderStyles}>{placeholder || 'Pick a date'}</span>}
     </>
   )
 }
@@ -73,6 +77,7 @@ const DatePicker = ({
   onSelect,
   placeholder,
   color,
+  dateFormat,
 }: DatePickerProps) => (
   <Popover.Root>
     <Popover.Trigger>
@@ -83,7 +88,7 @@ const DatePicker = ({
           buttonClassName ?? 'w-[200px] justify-start text-left font-regular'
         }
       >
-        {IconAndDate(reverse, date, placeholder)}
+        {IconAndDate(reverse, date, dateFormat, placeholder)}
       </Button>
     </Popover.Trigger>
     <Popover.Content className="w-auto p-0">

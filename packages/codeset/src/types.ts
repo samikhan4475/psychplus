@@ -44,6 +44,23 @@ interface AuthorityCodeSet {
   recordStatus: string
 }
 
+interface CodeAttributes {
+  metadata?: CodeMetadata
+  name: string
+  content: string
+}
+
+interface ParameterCodeSet {
+  code: string
+  metadata: CodeMetadata
+  displayName: string
+  codeAttributes: CodeAttributes[]
+}
+interface Parameter {
+  codeSystemName: string
+  displayName: string
+  codes: ParameterCodeSet[]
+}
 type CodeSetIndex = { [key: string]: Code[] | undefined }
 
 export interface RealCodeSet {
@@ -104,4 +121,6 @@ export type {
   AuthorityCodeSet,
   AuthorityCode,
   MetaDataCodeSet,
+  ParameterCodeSet,
+  Parameter,
 }

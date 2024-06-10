@@ -125,6 +125,7 @@ const handleApiRequest = async (request: NextRequest) => {
     'PsychPlus-RunEnvironment':
       headers.get('PsychPlus-RunEnvironment') ?? 'development',
     'Psychplus-Device': headers.get('Psychplus-Device') ?? '',
+    'Content-Type': headers.get('Content-Type')?? '',
   })
 
   if (
@@ -132,6 +133,7 @@ const handleApiRequest = async (request: NextRequest) => {
     request.method === 'PUT' ||
     request.method === 'PATCH'
   ) {
+    if (!customHeaders.get('Content-Type'))
     customHeaders.set(HEADER_CONTENT_TYPE, CONTENT_TYPE_APPLICATION_JSON)
   }
 
