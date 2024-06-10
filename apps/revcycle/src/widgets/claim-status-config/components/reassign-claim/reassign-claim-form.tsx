@@ -49,7 +49,7 @@ const ReassignClaimForm = () => {
     }
 
     addClaimStatusDiff(
-      ...claimStatusesForDeactivation!.map((claimStatus) => ({
+      ...(claimStatusesForDeactivation ?? []).map((claimStatus) => ({
         id: claimStatus.id,
         isActive: false,
       })),
