@@ -26,6 +26,7 @@ import { ScheduleAppointmentButton } from '../../search'
 import { getUpcomingAppointments } from '../api'
 import { AppointmentTimeLabel } from './appointment-time-label'
 import { CancelAppointment } from './cancel-appointment'
+import { ChangePaymentMethodDialog } from './change-payment-method-dialog'
 import { PayCopayButton } from './pay-copay-button'
 
 const UpcomingAppointmentsSummaryComponent = async () => {
@@ -55,7 +56,7 @@ const UpcomingAppointmentsSummaryComponent = async () => {
       <CardContainer className="p-0">
         <FeatureEmpty
           title="No Upcoming Appointments"
-          action={<ScheduleAppointmentButton />}
+          action={<ScheduleAppointmentButton className="justify-center" />}
           Icon={CalendarDaysIcon}
         />
       </CardContainer>
@@ -140,7 +141,7 @@ const UpcomingAppointmentsSummaryComponent = async () => {
                   </Text>
                   <Badge label="Pending" type="warning" />
                 </Flex>
-                <EditIcon />
+                <ChangePaymentMethodDialog />
               </Flex>
               {/* Non functional insurance related code ending here */}
 

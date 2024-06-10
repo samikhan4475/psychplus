@@ -55,9 +55,11 @@ const ScheduleAppointmentButton = (props: ScheduleAppointmentButtonProps) => {
   return (
     <Dialog.Root open={dialogOpen} onOpenChange={setDialogOpen}>
       <Dialog.Trigger>
-        <Button size="3" highContrast {...props}>
-          Schedule Visit
-        </Button>
+        <Flex className={props.className}>
+          <Button size="3" highContrast {...props}>
+            Schedule Visit
+          </Button>
+        </Flex>
       </Dialog.Trigger>
       <Dialog.Content className="relative pt-10">
         <CloseDialogIcon />
