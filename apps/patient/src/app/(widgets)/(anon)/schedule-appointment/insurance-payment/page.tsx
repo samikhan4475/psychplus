@@ -2,18 +2,21 @@
 
 import * as React from 'react'
 import { useEffect, useState } from 'react'
+import { unstable_noStore } from 'next/cache'
 import { Container, Flex } from '@radix-ui/themes'
+import { Elements } from '@stripe/react-stripe-js'
 import { InsurancePayers } from '@psychplus/appointments'
 import { fetchInsurancePayers } from '@psychplus/appointments/api.client'
-import { StripeElement } from '@psychplus/ui/stripe'
+import { useStripe } from '@psychplus/ui/stripe'
 import { SCHEDULE_APPOINTMENT_LIST } from '@psychplus/widgets'
 import { usePublishSize } from '@psychplus/widgets/hooks'
 import { psychPlusBlueColor } from '@/components/colors'
 import InsurancePaymentForm from './form'
-import { unstable_noStore } from 'next/cache'
 
 const ScheduleAppointmentInsurancePage = () => {
   unstable_noStore()
+
+  const { stripePromise } = useStripe()
 
   const ref = React.useRef<HTMLDivElement>(null)
   usePublishSize(SCHEDULE_APPOINTMENT_LIST, ref)
@@ -24,6 +27,8 @@ const ScheduleAppointmentInsurancePage = () => {
     fetchInsurancePayers().then((insurancePayers) =>
       setInsurancePayers(insurancePayers),
     )
+
+    console.log('--testing--')
   }, [])
 
   return (
@@ -34,12 +39,12 @@ const ScheduleAppointmentInsurancePage = () => {
           color: psychPlusBlueColor,
         }}
       >
-        <StripeElement>
+        <Elements stripe={stripePromise}>
           <InsurancePaymentForm
             insuranceOptions={insuranceOptions}
             insurancePayers={insurancePayers}
           />
-        </StripeElement>
+        </Elements>
       </Container>
     </Flex>
   )

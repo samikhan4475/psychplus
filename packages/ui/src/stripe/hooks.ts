@@ -5,7 +5,7 @@ import { getConfigurationProtected } from '@psychplus/metadata/api.client'
 
 // import { STRIPE_PUBLISHABLE_KEY } from '@psychplus/utils/constants'
 
-const useStripe = () => {
+export const useStripe = () => {
   const [stripePromise, setStripePromise] = useState<Promise<Stripe | null>>(
     Promise.resolve(null),
   )
@@ -25,5 +25,3 @@ const useStripe = () => {
 
   return { stripePromise }
 }
-
-export default useStripe
