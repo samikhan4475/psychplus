@@ -42,7 +42,7 @@ jobs:
           subscription-id: ${{ secrets.AKS_SUBSCRIPTION_ID }}
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
 
-      - uses: Azure/aks-set-context@v3
+      - uses: Azure/aks-set-context@v4
         name: Get K8s context
         with:
           cluster-name: ${{ secrets.AKS_NAME }}
