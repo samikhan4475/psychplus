@@ -27,9 +27,7 @@ const columns: ColumnDef<any>[] = [
         className="text-[#000]"
       />
     ),
-    cell: ({ row }) => (
-      <TableCellLongText maxWidth={100} text={row.original.code} />
-    ),
+    cell: ({ row }) => <TableCellLongText text={row.original.code} />,
     enableHiding: true,
   },
   {

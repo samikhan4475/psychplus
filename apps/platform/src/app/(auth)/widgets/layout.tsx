@@ -74,6 +74,10 @@ const navMenuItems: MenuItem[] = [
     label: 'Reports',
     href: '/widgets/reports',
   },
+  {
+    label: 'Coding POS',
+    href: '/widgets/coding-pos',
+  },
 ]
 
 const WidgetsLayout = ({ children }: { children: React.ReactNode }) => {
