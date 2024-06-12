@@ -31,7 +31,7 @@ const getStateAbbreviation = (name: string) => {
 }
 
 const getStateFullName = (abbreviation: string): string | undefined => {
-  const formattedAbbreviation = abbreviation.toLowerCase()
+  const formattedAbbreviation = abbreviation?.toLowerCase()
   return Object.keys(STATE_ABBREVIATIONS).find(
     (key) => STATE_ABBREVIATIONS[key].toLowerCase() === formattedAbbreviation,
   )
