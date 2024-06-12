@@ -189,7 +189,7 @@ const columns: ColumnDef<ClearingHouseReceiver>[] = [
       <DataTableColumnHeader column={column} title="Actions" />
     ),
     enableHiding: false,
-    cell: ({ row }) => <RowActionDropdown />,
+    cell: ({ row }) => <RowActionDropdown data={row.original} />,
   },
 ]
 

@@ -13,6 +13,7 @@ const CREATE_PREFERRED_PARTNER = 'create-preferred-partner'
 const ADD_TEMPLATE_WIDGET = 'add-template'
 const EDIT_TEMPLATE_WIDGET = 'edit-template'
 const REPORTS_WIDGET = 'reports-widget'
+const CREATE_CLEARING_HOUSE_RECEIVER = 'create-clearing-house-receiver'
 
 export {
   USER_WIDGET,
@@ -30,4 +31,5 @@ export {
   ADD_TEMPLATE_WIDGET,
   EDIT_TEMPLATE_WIDGET,
   REPORTS_WIDGET,
+  CREATE_CLEARING_HOUSE_RECEIVER,
 }

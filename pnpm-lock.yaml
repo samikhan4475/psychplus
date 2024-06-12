@@ -422,6 +422,9 @@ importers:
 
   apps/revcycle:
     dependencies:
+      '@hookform/resolvers':
+        specifier: ^3.3.2
+        version: 3.3.2(react-hook-form@7.49.2)
       '@psychplus/auth':
         specifier: ^0.1.0
         version: link:../../packages/auth

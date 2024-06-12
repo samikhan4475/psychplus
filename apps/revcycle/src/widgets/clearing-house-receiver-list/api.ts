@@ -27,4 +27,15 @@ const getClearingHouseReceiverList = (
     }),
   )
 
-export { getClearingHouseReceiverList }
+const deleteClearingHouseReceiver = (
+  id: string,
+): Promise<ClearingHouseReceiver> =>
+  handleRequest(
+    fetch(`/api/clearinghousereceivers/${id}`, {
+      method: 'DELETE',
+      cache: 'no-store',
+      headers: createHeaders(),
+    }),
+  )
+
+export { getClearingHouseReceiverList, deleteClearingHouseReceiver }
