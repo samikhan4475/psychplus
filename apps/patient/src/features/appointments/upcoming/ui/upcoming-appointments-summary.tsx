@@ -139,7 +139,7 @@ const UpcomingAppointmentsSummaryComponent = async () => {
                   <Text className="text-[12px] xs:text-[15px]">
                     Blue Shield
                   </Text>
-                  <Badge label="Pending" type="warning" />
+                  <Badge label="Pending" type="warning" className="h-[32px]" />
                 </Flex>
                 <ChangePaymentMethodDialog />
               </Flex>
@@ -160,7 +160,12 @@ const UpcomingAppointmentsSummaryComponent = async () => {
                 )}
 
                 {row.isCopayPaid && row.coPay > 0 && (
-                  <Badge label="Paid" type="success" addIcon={true} />
+                  <Badge
+                    label="Paid"
+                    type="success"
+                    addIcon={true}
+                    className="h-[32px]"
+                  />
                 )}
               </Flex>
             </Flex>
@@ -175,14 +180,23 @@ const UpcomingAppointmentsSummaryComponent = async () => {
               mt="2"
               direction={{ initial: 'column', xs: 'row' }}
             >
-              <Flex gap="1" width={{ initial: '100%', xs: 'auto' }}>
+              <Flex
+                gap="1"
+                width={{ initial: '100%', xs: 'auto' }}
+                align="center"
+              >
                 <Flex gap="1" align="center">
                   <FileLineIcon />
                   <Text className="whitespace-nowrap text-[12px] xs:text-[15px]">
                     Pre-Visit Assessment
                   </Text>
                 </Flex>
-                <Badge label="Not Completed" type="warning" addIcon={true} />
+                <Badge
+                  label="Not Completed"
+                  type="warning"
+                  addIcon={true}
+                  className="h-[32px]"
+                />
                 <Button highContrast className="bg-[#194595]" radius="full">
                   <Flex gap="1" align="center">
                     <Text className="whitespace-nowrap text-[11px] xs:text-[15px]">

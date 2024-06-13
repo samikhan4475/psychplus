@@ -28,11 +28,16 @@ const CreditDebitCardsView = async () => {
     throw new Error(stripeApiKeyResponse.error)
   }
 
+  const sortCreditCardsByPrimary = () =>
+    creditCardsResponse.data?.sort(
+      (a, b) => Number(b.isPrimary) - Number(a.isPrimary),
+    )
+
   return (
     <CodesetStoreProvider codesets={codesets}>
       <FeatureContainer>
         <PaymentMethodsCard
-          creditCards={creditCardsResponse.data}
+          creditCards={sortCreditCardsByPrimary()}
           stripeApiKey={stripeApiKeyResponse.data}
         />
       </FeatureContainer>

@@ -27,8 +27,6 @@ const ScheduleAppointmentInsurancePage = () => {
     fetchInsurancePayers().then((insurancePayers) =>
       setInsurancePayers(insurancePayers),
     )
-
-    console.log('--testing--')
   }, [])
 
   return (

@@ -12,10 +12,10 @@ interface AddCreditCardParams {
   expireMonth: number
   expireYear: number
   postalCode: string
-  isPrimary: boolean
   address: string
   city: string
   state: string
+  isPrimary: boolean
 }
 
 const addCreditCardAction = async ({

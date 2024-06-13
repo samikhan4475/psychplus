@@ -1,6 +1,5 @@
 'use client'
 
-import React, { useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { CreditCardType } from '@psychplus-v2/constants'
 import { getBillingAddressLabel } from '@psychplus-v2/utils'
@@ -11,7 +10,6 @@ import {
   Badge,
   DeletableFieldValue,
   DiscoverCardIcon,
-  EditableFieldValue,
   MasterCardIcon,
   VisaCardIcon,
 } from '@/components-v2'
@@ -21,16 +19,11 @@ import {
   getCreditCardExpiry,
   getDefaultCreditCardName,
 } from '@/features/billing/credit-debit-cards/utils'
-import { CreditCardForm } from './credit-debit-card-form'
 
 const CreditCardListItem = ({ creditCard }: { creditCard: CreditCard }) => {
   const router = useRouter()
 
   const onDelete = () => removeCreditCardAction({ id: creditCard.id })
-
-  const updateButtonRef = useRef<HTMLDivElement>(null)
-
-  const trigger = <span ref={updateButtonRef} />
 
   return (
     <Flex direction="column">
@@ -60,6 +53,10 @@ const CreditCardListItem = ({ creditCard }: { creditCard: CreditCard }) => {
                   {creditCard.isPrimary && (
                     <Badge label="Primary" type="basic" />
                   )}
+
+                  {creditCard.isActive && (
+                    <Badge label="Active" type="success" addIcon />
+                  )}
                 </Flex>
                 <DotIcon color="gray" />
 
@@ -71,20 +68,24 @@ const CreditCardListItem = ({ creditCard }: { creditCard: CreditCard }) => {
                 </Text>
               </Flex>
 
-              <Flex align="center">
-                <EditableFieldValue />
+              {!creditCard.isPrimary && (
+                <Flex align="center">
+                  <Text className="text-[#194595] underline" size="2">
+                    Set as Primary
+                  </Text>
 
-                <Separator className="w-6 rotate-90" />
+                  <Separator className="w-6 rotate-90" />
 
-                <DeletableFieldValue
-                  tooltip="Remove this card"
-                  deleteAction={onDelete}
-                  onSuccess={router.refresh}
-                  confirmTitle="Remove card"
-                  confirmDescription="Are you sure? This will remove the card from your account and it will no longer be able to be used."
-                  confirmActionLabel="Remove card"
-                />
-              </Flex>
+                  <DeletableFieldValue
+                    tooltip="Remove this card"
+                    deleteAction={onDelete}
+                    onSuccess={router.refresh}
+                    confirmTitle="Remove card"
+                    confirmDescription="Are you sure? This will remove the card from your account and it will no longer be able to be used."
+                    confirmActionLabel="Remove card"
+                  />
+                </Flex>
+              )}
             </Flex>
           </Flex>
         </Flex>
@@ -99,10 +100,6 @@ const CreditCardListItem = ({ creditCard }: { creditCard: CreditCard }) => {
             {getBillingAddressLabel([creditCard.billingAddress])}
           </Text>
         </Flex>
-      </Flex>
-
-      <Flex mt="3">
-        <CreditCardForm creditCard={creditCard} trigger={trigger} />
       </Flex>
     </Flex>
   )

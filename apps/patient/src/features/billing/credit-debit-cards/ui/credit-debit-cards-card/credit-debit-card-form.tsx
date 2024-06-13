@@ -126,7 +126,7 @@ const CreditCardForm = ({
       address: data.address,
       city: data.city,
       state: data.state,
-      isPrimary: true,
+      isPrimary: !existingCards?.length,
     })
   }
 

@@ -1,3 +1,4 @@
+import { cn } from '@psychplus-v2/utils'
 import { Flex, Text } from '@radix-ui/themes'
 import { CheckIcon, CircleAlert } from 'lucide-react'
 
@@ -5,15 +6,17 @@ const Badge = ({
   label,
   type,
   addIcon = false,
+  className,
 }: {
   label: string
   type: string
   addIcon?: boolean
+  className?: string
 }) => {
   const getBadgeColor = () => {
     switch (type) {
       case 'success':
-        return 'border-green-6 bg-green-3'
+        return 'border-[#30A46C] bg-green-3 text-[#18794E]'
       case 'warning':
         return 'border-[#FBDFB1] bg-[#FEF7EC]'
       case 'basic':
@@ -23,8 +26,8 @@ const Badge = ({
 
   return (
     <Flex
-      className={`h-[27px] rounded-6 border ${getBadgeColor()}`}
-      px="3"
+      className={cn('rounded-6 border', getBadgeColor(), className)}
+      px="2"
       align="center"
       gap="1"
     >
