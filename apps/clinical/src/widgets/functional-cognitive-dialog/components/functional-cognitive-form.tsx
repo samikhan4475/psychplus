@@ -122,7 +122,7 @@ const FunctionalCognitiveForm: React.FC<FunctionalCognitiveFormProps> = ({
           form.setValue('symptomCodeDescription', '')
         }}
       >
-        <Flex className="flex-wrap">
+        <Flex>
           <ToggleGroup.Item
             value="ICD"
             className={
@@ -197,9 +197,9 @@ const FunctionalCognitiveForm: React.FC<FunctionalCognitiveFormProps> = ({
         </Box>
         <FormFieldLabel id="notes">Notes</FormFieldLabel>
         <TextArea
-          size="3"
+          size="2"
           id="notes"
-          placeholder="Start typing here"
+          placeholder=""
           {...form.register('notes')}
         />
         <Box className="mt-9 flex justify-end">

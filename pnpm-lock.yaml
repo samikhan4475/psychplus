@@ -35,6 +35,9 @@ importers:
       '@psychplus/auth':
         specifier: ^0.1.0
         version: link:../../packages/auth
+      '@psychplus/ccda-setting-preference':
+        specifier: ^0.1.0
+        version: link:../../packages/ccda-setting-preference
       '@psychplus/codeset':
         specifier: ^0.1.0
         version: link:../../packages/codeset
@@ -107,6 +110,9 @@ importers:
       react-hook-form:
         specifier: ^7.47.0
         version: 7.49.2(react@18.2.0)
+      react-sortable-hoc:
+        specifier: 2.0.0
+        version: 2.0.0(prop-types@15.8.1)(react-dom@18.2.0)(react@18.2.0)
       zod:
         specifier: ^3.22.4
         version: 3.22.4
@@ -855,6 +861,37 @@ importers:
       typescript:
         specifier: ^5.2.2
         version: 5.2.2
+
+  packages/ccda-setting-preference:
+    dependencies:
+      '@psychplus/utils':
+        specifier: ^0.1.0
+        version: link:../utils
+      next:
+        specifier: ^14.0.1
+        version: 14.0.4(@babel/core@7.23.2)(react-dom@18.3.1)(react@18.3.1)
+      react:
+        specifier: ^18.2.0
+        version: 18.3.1
+      zustand:
+        specifier: ^4.4.3
+        version: 4.4.7(@types/react@18.2.48)(react@18.3.1)
+    devDependencies:
+      '@psychplus/eslint-config':
+        specifier: ^0.1.0
+        version: link:../../tooling/eslint-config
+      '@psychplus/tsconfig':
+        specifier: ^0.1.0
+        version: link:../../tooling/tsconfig
+      '@types/react':
+        specifier: ^18.2.47
+        version: 18.2.48
+      eslint:
+        specifier: ^8.50.0
+        version: 8.57.0
+      typescript:
+        specifier: ^5.2.2
+        version: 5.4.5
 
   packages/clinics:
     dependencies:
@@ -10705,6 +10742,20 @@ packages:
       tslib: 2.6.2
       use-callback-ref: 1.3.1(@types/react@18.2.47)(react@18.3.1)
       use-sidecar: 1.1.2(@types/react@18.2.47)(react@18.3.1)
+    dev: false
+
+  /react-sortable-hoc@2.0.0(prop-types@15.8.1)(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-JZUw7hBsAHXK7PTyErJyI7SopSBFRcFHDjWW5SWjcugY0i6iH7f+eJkY8cJmGMlZ1C9xz1J3Vjz0plFpavVeRg==}
+    peerDependencies:
+      prop-types: ^15.5.7
+      react: ^16.3.0 || ^17.0.0
+      react-dom: ^16.3.0 || ^17.0.0
+    dependencies:
+      '@babel/runtime': 7.23.2
+      invariant: 2.2.4
+      prop-types: 15.8.1
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
     dev: false
 
   /react-stately@3.30.1(react@18.2.0):

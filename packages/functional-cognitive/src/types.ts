@@ -51,7 +51,7 @@ const STATUSES = [
 ]
 
 const HISTORYTYPES = [
-  { value: 'Funtional', label: 'Funtional' },
+  { value: 'Functional', label: 'Functional' },
   { value: 'Cognitive', label: 'Cognitive' },
 ]
 

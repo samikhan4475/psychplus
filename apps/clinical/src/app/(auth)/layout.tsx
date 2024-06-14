@@ -41,6 +41,12 @@ const IndexLayout = async ({ children }: { children: React.ReactNode }) => {
           >
             <Text weight="medium">Immunization</Text>
           </NextLink>
+          <NextLink
+            href="galaxy/widgets/ccda-setting-preference"
+            className="hover:underline"
+          >
+            <Text weight="medium">CCDA Setting Preference</Text>
+          </NextLink>
         </Flex>
       </Flex>
       <main className="p-4">{children}</main>
