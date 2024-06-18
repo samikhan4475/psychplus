@@ -1,6 +1,7 @@
 import { Box, Text } from '@radix-ui/themes'
 import { LoginForm } from '@psychplus/auth/login'
 import { usePubsub } from '@psychplus/utils/event'
+import { clickTrack } from '@psychplus/utils/tracking'
 import { SCHEDULE_APPOINTMENT_DIALOG } from '@psychplus/widgets'
 import { getLoginRedirectUrl } from '@/widgets/schedule-appointment-list/utils'
 
@@ -12,6 +13,13 @@ const ExistingPatient = () => {
   const onLoginClick = () => {
     publish(`${SCHEDULE_APPOINTMENT_DIALOG}:existing-login`, {
       url: getLoginRedirectUrl(),
+    })
+
+    clickTrack({
+      productArea: 'Patient',
+      productPageKey: 'Search Schedule Appointment',
+      clickAction: 'Navigation',
+      clickActionData: 'Click Existing User',
     })
   }
 
