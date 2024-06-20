@@ -4,7 +4,7 @@ import type { AuthorityCodeSet, Code, CodeSet } from './types'
 
 const getCodeSets = async (): Promise<CodeSet[]> =>
   handleRequest(
-    fetch(`/api/metadata/codesets`, {
+    fetch(`/revcycle/api/metadata/codesets`, {
       headers: createHeaders(),
     }),
   )

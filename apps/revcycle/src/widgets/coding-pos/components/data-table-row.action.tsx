@@ -2,7 +2,8 @@
 
 import React from 'react'
 import { DotsHorizontalIcon } from '@radix-ui/react-icons'
-import { DropdownMenu, Flex, IconButton, Text } from '@radix-ui/themes'
+import { Flex, IconButton, Text } from '@radix-ui/themes'
+import { DropdownMenu } from '@psychplus/ui/dropdown-menu'
 
 const RowActionDropdown = () => {
   const menuItems = ['Edit', 'Delete']

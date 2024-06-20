@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { Flex } from '@radix-ui/themes'
+import { ClearingHouseReceiverDialogWidgetClient } from '../clearing-house-receiver-dialog'
 import { getClearingHouseReceiverList } from './api'
 import { ReceiverTable } from './components/receiver-table'
 import { Preloader } from './preloader'
@@ -38,7 +39,10 @@ const ClearingHouseReceiverListWidgetClient = () => {
       {isLoading ? (
         <Preloader isLoadingOn={isLoading} />
       ) : (
-        <Flex direction="column" className="h-fit min-w-fit" ref={ref}>
+        <Flex direction="column" className="h-fit min-w-fit p-5" ref={ref}>
+          <Flex justify="end">
+            <ClearingHouseReceiverDialogWidgetClient />
+          </Flex>
           <ReceiverTable />
         </Flex>
       )}

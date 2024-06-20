@@ -19,7 +19,7 @@ const getClearingHouseReceiverList = (
   payload: ClearingHouseReceiverPayload,
 ): Promise<ClearingHouseReceiver[]> =>
   handleRequest(
-    fetch(`/api/clearinghousereceivers/actions/search`, {
+    fetch(`/revcycle/api/clearinghousereceivers/actions/search`, {
       method: 'POST',
       body: JSON.stringify(payload),
       cache: 'no-store',
@@ -31,7 +31,7 @@ const deleteClearingHouseReceiver = (
   id: string,
 ): Promise<ClearingHouseReceiver> =>
   handleRequest(
-    fetch(`/api/clearinghousereceivers/${id}`, {
+    fetch(`/revcycle/api/clearinghousereceivers/${id}`, {
       method: 'DELETE',
       cache: 'no-store',
       headers: createHeaders(),
