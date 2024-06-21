@@ -266,7 +266,7 @@ const WidgetTable = () => {
   }, [])
 
   return (
-    <Box m="7">
+    <Box m="1">
       <Box className="text-right">
         <Button color="gray" variant="solid" highContrast onClick={onAdd}>
           Add
