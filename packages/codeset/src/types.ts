@@ -63,6 +63,41 @@ interface Parameter {
 }
 type CodeSetIndex = { [key: string]: Code[] | undefined }
 
+interface Metadata {
+  createdOn: string
+  createdBy: number
+  createdByFullName: string
+  updatedOn: string
+  updatedBy: number
+  updatedByFullName: string
+  deletedOn: string
+  deletedBy: number
+  deletedByFullName: string
+}
+
+export interface Snomed {
+  codeSystemName: string
+  displayName: string
+  version: string
+  oid: string
+  codes: SnomedCode[]
+}
+
+export interface SnomedCode {
+  code: string
+  displayName: string
+}
+export interface IcdCodes {
+  id: number
+  metadata?: Metadata
+  code: string
+  description: string
+  isFavorite?: boolean
+  isActive?: boolean
+}
+export interface IcdFilters {
+  codeOrDescription?: string
+}
 export interface RealCodeSet {
   id: string
   metadata: CodeSetsMetadata

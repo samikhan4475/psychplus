@@ -41,7 +41,8 @@
     "@psychplus/immunization": "^0.1.0",
     "react-sortable-hoc": "2.0.0",
     "@psychplus/ccda-setting-preference": "^0.1.0",
-    "@psychplus/health-concerns": "^0.1.0"
+    "@psychplus/health-concerns": "^0.1.0",
+    "@psychplus/problems": "^0.1.0"
   },
   "devDependencies": {
     "@psychplus/eslint-config": "^0.1.0",

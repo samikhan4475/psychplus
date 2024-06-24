@@ -1,6 +1,14 @@
+import { cache } from 'react'
 import { handleRequest } from '@psychplus/utils/api'
 import { createHeaders } from '@psychplus/utils/client'
-import type { AuthorityCodeSet, Code, CodeSet } from './types'
+import type {
+  AuthorityCodeSet,
+  Code,
+  CodeSet,
+  IcdCodes,
+  IcdFilters,
+  Snomed,
+} from './types'
 
 const getCodeSets = async (): Promise<CodeSet[]> =>
   handleRequest(
@@ -45,4 +53,40 @@ const getUsStates = async (): Promise<AuthorityCodeSet> =>
     }),
   )
 
-export { getCodeSets, getCodeSet, addCodeSet, editCodeSet, getUsStates }
+const getIcdCodes = (payload?: IcdFilters): Promise<IcdCodes[]> =>
+  handleRequest(
+    fetch(
+      '/galaxy/api/metadata/icd10codes/actions/search?offset=0&limit=0&orderBy=HcpcsCode%20asc',
+      {
+        method: 'POST',
+        body: JSON.stringify(payload),
+        cache: 'no-store',
+        headers: createHeaders(),
+      },
+    ),
+  )
+
+const getSnomedCodes = (payload?: IcdFilters): Promise<Snomed> =>
+  handleRequest(
+    fetch(
+      `/galaxy/api/codeset/authorities/IHTSDO/codesets/SNOMED-CT?${payload?.codeOrDescription}&includeExtraDetails=false&offset=0&orderBy=displayName%20asc`,
+      {
+        method: 'GET',
+        cache: 'no-store',
+        headers: createHeaders(),
+      },
+    ),
+  )
+
+const getIcdCodesCached = cache(getIcdCodes)
+const getSnomedCodesCached = cache(getSnomedCodes)
+
+export {
+  getCodeSets,
+  getCodeSet,
+  addCodeSet,
+  editCodeSet,
+  getUsStates,
+  getIcdCodesCached as getIcdCodes,
+  getSnomedCodesCached as getSnomedCodes,
+}

@@ -14,8 +14,8 @@ const ADD_TEMPLATE_WIDGET = 'add-template'
 const EDIT_TEMPLATE_WIDGET = 'edit-template'
 const REPORTS_WIDGET = 'reports-widget'
 const CREATE_CLEARING_HOUSE_RECEIVER = 'create-clearing-house-receiver'
-
 const HEALTH_CONCERN_LIST_WIDGET = 'health-concern'
+const PROBLEMS_LIST_WIDGET = 'problems'
 export {
   USER_WIDGET,
   PATIENT_WIDGET,
@@ -34,4 +34,5 @@ export {
   REPORTS_WIDGET,
   CREATE_CLEARING_HOUSE_RECEIVER,
   HEALTH_CONCERN_LIST_WIDGET,
+  PROBLEMS_LIST_WIDGET,
 }

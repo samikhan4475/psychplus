@@ -59,6 +59,9 @@ importers:
       '@psychplus/preferred-partners':
         specifier: ^0.1.0
         version: link:../../packages/preferred-partners
+      '@psychplus/problems':
+        specifier: ^0.1.0
+        version: link:../../packages/problems
       '@psychplus/referrals':
         specifier: ^0.1.0
         version: link:../../packages/referrals
@@ -1198,6 +1201,37 @@ importers:
       typescript:
         specifier: ^5.2.2
         version: 5.2.2
+
+  packages/problems:
+    dependencies:
+      '@psychplus/utils':
+        specifier: ^0.1.0
+        version: link:../utils
+      next:
+        specifier: ^14.0.1
+        version: 14.0.4(@babel/core@7.23.2)(react-dom@18.3.1)(react@18.3.1)
+      react:
+        specifier: ^18.2.0
+        version: 18.3.1
+      zustand:
+        specifier: ^4.4.3
+        version: 4.4.7(@types/react@18.2.48)(react@18.3.1)
+    devDependencies:
+      '@psychplus/eslint-config':
+        specifier: ^0.1.0
+        version: link:../../tooling/eslint-config
+      '@psychplus/tsconfig':
+        specifier: ^0.1.0
+        version: link:../../tooling/tsconfig
+      '@types/react':
+        specifier: ^18.2.47
+        version: 18.2.48
+      eslint:
+        specifier: ^8.50.0
+        version: 8.57.0
+      typescript:
+        specifier: ^5.2.2
+        version: 5.4.5
 
   packages/referrals:
     dependencies:
