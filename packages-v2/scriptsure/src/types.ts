@@ -19,7 +19,8 @@ interface DrugHistory {
     doctorName: string
     pharmacy: string
     refill: number
-    prescriptionStatusTypeId: number
+    fillDate: string
+    prescriptionStatusTypeId: PrescriptionStatusTypeKey
     messageStatus: string | null
     PrescriptionScript: {
       drugFormat: string
@@ -30,4 +31,21 @@ interface DrugHistory {
   }[]
 }
 
-export type { Session, Patient, DrugHistory }
+const PrescriptionStatusType = {
+  1: 'Active',
+  2: 'Archived',
+  3: 'Cancelled',
+  4: 'Discontinued',
+  5: 'Awaiting Approval',
+  6: 'Current Medication',
+} as const
+
+type PrescriptionStatusTypeKey = keyof typeof PrescriptionStatusType
+
+export {
+  type Session,
+  type Patient,
+  type DrugHistory,
+  type PrescriptionStatusTypeKey,
+  PrescriptionStatusType,
+}

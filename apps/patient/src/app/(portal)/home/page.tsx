@@ -45,13 +45,13 @@ const HomePage = async () => {
             <Block title="Upcoming Appointments">
               <UpcomingAppointmentsSummary />
             </Block>
-            <Block title="Medications">
-              <CardContainer className="p-0">
-                <ActiveMedicationsTable />
-              </CardContainer>
-            </Block>
           </Flex>
         </Flex>
+        <Block title="Medications">
+          <CardContainer className="p-0">
+            <ActiveMedicationsTable />
+          </CardContainer>
+        </Block>
       </ViewContainer>
     </Flex>
   )
