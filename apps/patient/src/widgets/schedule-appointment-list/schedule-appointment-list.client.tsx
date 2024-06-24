@@ -15,6 +15,7 @@ import {
   usePublishSize,
   useSubscribeClosePopover,
 } from '@psychplus/widgets/hooks'
+import { LoadingPlaceholder } from '@/features/appointments/search/ui/search-appointments-view/loading-placeholder.tsx'
 import {
   FilterPanel,
   ProviderWithClinicAndWeeklyAvailability,
@@ -55,6 +56,8 @@ const ScheduleAppointmentListClient = () => {
 
   const staffIdParam = parseInt(searchParams.get('staffId') ?? '')
 
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+
   useEffect(() => {
     setZipCodeState(filters.zipCode)
   }, [filters.zipCode])
@@ -72,6 +75,8 @@ const ScheduleAppointmentListClient = () => {
   }, [handleFiltersChange, searchParams, setCodeSets])
 
   useEffect(() => {
+    setIsLoading(true)
+
     getAppointmentAvailabilityForUnauthenticatedUser({
       postalCode: filters.zipCode,
       type: filters.appointmentType === 'In-Person' ? 'InPerson' : 'TeleVisit',
@@ -79,7 +84,10 @@ const ScheduleAppointmentListClient = () => {
       startingDate: filters.startingDate,
       maxDaysOutToLook: 7,
       staffIds: staffIdParam ? [staffIdParam] : [],
-    }).then(setStaffAppointmentAvailabilities)
+    }).then((data) => {
+      setStaffAppointmentAvailabilities(data)
+      setIsLoading(false)
+    })
   }, [
     debouncedZipCode,
     filters.providerType,
@@ -111,6 +119,21 @@ const ScheduleAppointmentListClient = () => {
   useEffect(() => {
     setStaffWithClinicsAndSlotsState(staffWithClinicsAndSlots)
   }, [staffWithClinicsAndSlots])
+
+  if (isLoading) {
+    return (
+      <Flex direction="column" className="w-full" ref={ref}>
+        <Flex
+          className="w-full border border-gray-3"
+          py="5"
+          px="7"
+          align="center"
+        >
+          <LoadingPlaceholder />
+        </Flex>
+      </Flex>
+    )
+  }
 
   return (
     <Flex direction="column" className="w-full" ref={ref}>
