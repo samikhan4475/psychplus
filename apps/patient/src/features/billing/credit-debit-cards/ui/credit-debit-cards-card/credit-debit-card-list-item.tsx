@@ -19,6 +19,7 @@ import {
   getCreditCardExpiry,
   getDefaultCreditCardName,
 } from '@/features/billing/credit-debit-cards/utils'
+import { ChangePrimaryCardDialog } from './change-primary-card-dialog'
 
 const CreditCardListItem = ({ creditCard }: { creditCard: CreditCard }) => {
   const router = useRouter()
@@ -70,9 +71,7 @@ const CreditCardListItem = ({ creditCard }: { creditCard: CreditCard }) => {
 
               {!creditCard.isPrimary && (
                 <Flex align="center">
-                  <Text className="text-[#194595] underline" size="2">
-                    Set as Primary
-                  </Text>
+                  <ChangePrimaryCardDialog creditCard={creditCard} />
 
                   <Separator className="w-6 rotate-90" />
 

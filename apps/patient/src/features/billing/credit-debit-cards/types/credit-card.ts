@@ -3,6 +3,7 @@ import { PatientAddress } from '@psychplus-v2/types'
 
 interface CreditCard {
   id: number
+  patientId: number
   cardType: CreditCardType
   name: string
   numberLastFour: string

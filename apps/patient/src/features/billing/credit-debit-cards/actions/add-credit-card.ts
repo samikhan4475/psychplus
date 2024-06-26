@@ -32,7 +32,6 @@ const addCreditCardAction = async ({
 
   const result = await api.POST(`${API_URL}/api/patients/self/creditcards`, {
     ...params,
-    isActive: true,
     name,
     billingAddress: {
       type: 'Billing',
