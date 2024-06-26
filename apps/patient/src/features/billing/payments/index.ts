@@ -1,1 +1,1 @@
-export { PaymentsView } from './ui/payments-view'
+export { InsuranceView } from './ui/insurance-view'

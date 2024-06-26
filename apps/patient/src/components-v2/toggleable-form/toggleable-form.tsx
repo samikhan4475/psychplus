@@ -3,7 +3,7 @@
 import { useMemo, useState } from 'react'
 import { type ActionResult } from '@psychplus-v2/api'
 import { FormContainer } from '@psychplus-v2/components'
-import { Flex } from '@radix-ui/themes'
+import { Box, Flex } from '@radix-ui/themes'
 import {
   type FieldValues,
   type SubmitHandler,

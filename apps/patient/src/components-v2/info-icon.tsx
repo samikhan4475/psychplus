@@ -1,9 +1,14 @@
-const InfoIcon = () => (
+interface IconProps {
+  width?: string | number
+  height?: string | number
+}
+
+const InfoIcon = (props: IconProps) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 25 25"
-    width="18"
-    height="18"
+    width={props.width ?? 18}
+    height={props.height ?? 18}
     className="text-accent-12"
   >
     <g fill="none" stroke="currentColor">

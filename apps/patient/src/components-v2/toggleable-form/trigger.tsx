@@ -10,6 +10,7 @@ const Trigger = ({ children }: React.PropsWithChildren) => {
 
   return (
     <Box
+      className="w-full"
       onClick={() => {
         setOpen(true)
       }}

@@ -296,17 +296,6 @@ const InsuranceForm = ({
     <FieldPlaceholder>+ add insurance</FieldPlaceholder>
   )
 
-  const onDeleteAction = async () => {
-    if (!insurance) {
-      return {
-        state: 'error',
-        error: 'Insurance not found',
-      } as ActionErrorState
-    }
-
-    return deleteInsurance(insurance?.id ?? '')
-  }
-
   return (
     <ToggleableForm
       form={form}
@@ -314,20 +303,6 @@ const InsuranceForm = ({
       trigger={trigger}
       submitAction={onSubmit}
       noResetValues
-      deleteButtonProps={
-        insurance
-          ? {
-              deleteAction: onDeleteAction,
-              confirmTitle: 'Remove Insurance',
-              confirmDescription:
-                'Are you sure you want to remove this insurance?',
-              confirmActionLabel: 'Remove',
-              tooltip: 'Remove insurance',
-              toastTitle: 'Insurance removed',
-              onSuccess: router.refresh,
-            }
-          : undefined
-      }
       contentClassName="mb-2 p-4 border-y border-dashed border-y-gray-5"
     >
       <FormFieldContainer className="w-full">

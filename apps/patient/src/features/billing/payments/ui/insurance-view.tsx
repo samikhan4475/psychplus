@@ -11,10 +11,8 @@ import {
 } from '@/features/billing/payments/api'
 import { CodesetStoreProvider } from '@/providers'
 import { InsuranceCard } from './insurance-card'
-import { PaymentHistoryCard } from './payment-history-card'
-import { PaymentMethodsCard } from './payment-methods-card'
 
-const PaymentsView = async () => {
+const InsuranceView = async () => {
   const [
     creditCardsResponse,
     stripeApiKeyResponse,
@@ -57,26 +55,15 @@ const PaymentsView = async () => {
   return (
     <CodesetStoreProvider codesets={codesets}>
       <Flex direction="column" gap="5">
-        <FeatureHeading>Payments</FeatureHeading>
-        <FeatureContainer>
-          <PaymentMethodsCard
-            creditCards={creditCardsResponse.data}
-            stripeApiKey={stripeApiKeyResponse.data}
-          />
-        </FeatureContainer>
         <FeatureContainer>
           <InsuranceCard
             patientInsurances={patientInsurancesResponse.data}
             insurancePayers={insurancePayerResponse.data}
           />
         </FeatureContainer>
-
-        <FeatureContainer>
-          <PaymentHistoryCard paymentHistory={paymentHistoryResponse.data} />
-        </FeatureContainer>
       </Flex>
     </CodesetStoreProvider>
   )
 }
 
-export { PaymentsView }
+export { InsuranceView }

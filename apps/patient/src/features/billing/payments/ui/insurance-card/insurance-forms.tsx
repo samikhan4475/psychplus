@@ -37,28 +37,26 @@ const InsuranceForms = ({
   }
 
   return (
-    <LabelAndValue label="Insurance">
-      <Flex direction="column" gap="2">
-        {patientInsurances.length > 0 ? (
-          <Flex direction="column" gap="2">
-            {patientInsurances.map((insurance) => (
-              <InsuranceForm
-                key={insurance.id}
-                insurance={insurance}
-                insurancePayers={insurancePayers}
-                insurancePriority={
-                  insurance.insurancePolicyPriority as InsurancePolicyPriority
-                }
-              />
-            ))}
-          </Flex>
-        ) : null}
-        <InsuranceForm
-          insurancePriority={insurancePriority}
-          insurancePayers={insurancePayers}
-        />
-      </Flex>
-    </LabelAndValue>
+    <Flex direction="column" gap="2">
+      {patientInsurances.length > 0 ? (
+        <Flex direction="column" gap="2">
+          {patientInsurances.map((insurance) => (
+            <InsuranceForm
+              key={insurance.id}
+              insurance={insurance}
+              insurancePayers={insurancePayers}
+              insurancePriority={
+                insurance.insurancePolicyPriority as InsurancePolicyPriority
+              }
+            />
+          ))}
+        </Flex>
+      ) : null}
+      <InsuranceForm
+        insurancePriority={insurancePriority}
+        insurancePayers={insurancePayers}
+      />
+    </Flex>
   )
 }
 
