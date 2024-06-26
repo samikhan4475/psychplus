@@ -1,0 +1,11 @@
+.rt-TabsTrigger:where([data-state='active'])::before {
+    content: none;
+}
+
+.rt-TabsTrigger:where([data-state='active']) {
+    background-color: white;
+}
+
+.rt-TabsTrigger:where(:hover) :where(.rt-TabsTriggerInner) {
+    background-color: transparent;
+}

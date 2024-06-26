@@ -12,7 +12,7 @@ import type {
 } from './types'
 
 const getPreferredPartners = (
-  partnerIds: PreferredPartnerPayload,
+  partnerIds?: PreferredPartnerPayload,
 ): Promise<PreferredPartner> =>
   handleRequest(
     fetch(`${API_URL}/api/preferredpartners/actions/search`, {
