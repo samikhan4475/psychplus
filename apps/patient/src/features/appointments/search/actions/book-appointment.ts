@@ -7,7 +7,7 @@ import { API_URL } from '@psychplus-v2/env'
 import type { Appointment } from '@psychplus-v2/types'
 
 interface BookAppointmentParams {
-  clinicId: string
+  locationId: string
   specialistStaffId: number
   specialistTypeCode: number
   type: AppointmentType
@@ -21,7 +21,7 @@ interface BookAppointmentApiResponse {
 }
 
 const bookAppointmentAction = async ({
-  clinicId,
+  locationId,
   specialistStaffId,
   specialistTypeCode,
   type,
@@ -34,7 +34,7 @@ const bookAppointmentAction = async ({
   const result = await api.POST<BookAppointmentApiResponse>(
     `${API_URL}/api/appointments/book`,
     {
-      clinicId,
+      locationId,
       specialistStaffId,
       specialistTypeCode,
       type,

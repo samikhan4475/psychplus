@@ -109,7 +109,7 @@ const BookSlotButton = ({
     setError(undefined)
 
     const result = await bookAppointmentAction({
-      clinicId: clinic.id,
+      locationId: clinic.id,
       specialistStaffId: specialist.id,
       specialistTypeCode: providerType,
       type: appointmentType,
