@@ -125,7 +125,7 @@ const InsurancePaymentForm = ({
     ).toISOString()
 
     bookAppointment({
-      clinicId: bookSlotState?.clinic?.id ?? 0,
+      locationId: bookSlotState?.clinic?.id ?? 0,
       specialistStaffId: bookSlotState?.specialist?.id ?? 0,
       specialistTypeCode: bookSlotState?.specialistTypeCode ?? 0,
       type: appointmentTypeMapper[bookSlotState?.type ?? ''],

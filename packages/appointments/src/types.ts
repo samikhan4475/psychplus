@@ -36,7 +36,7 @@ type AppointmentAvailabilityPayload = {
 }
 
 type BookAppointmentPayload = {
-  clinicId: number
+  locationId: number
   specialistStaffId: number
   specialistTypeCode: number
   type: string
