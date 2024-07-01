@@ -1,15 +1,9 @@
 import { useEffect, useState } from 'react'
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons'
-import {
-  Box,
-  Button,
-  Flex,
-  Select,
-  Text,
-  TextFieldInput,
-} from '@radix-ui/themes'
+import { Box, Button, Flex, Text, TextFieldInput } from '@radix-ui/themes'
 import { format } from 'date-fns'
 import { DatePicker } from 'node_modules/@psychplus/ui/src/date-picker'
+import { Select } from '@psychplus/ui/select'
 import { PreferredPartnersDialogWidgetClient } from '@/widgets/preferred-partners-dialog/preferred-partners-dialog-widget.client'
 import { getPreferredPartners } from '../api'
 import { Filters, useStore } from '../store'

@@ -2,8 +2,9 @@
 
 import React, { useState } from 'react'
 import { DotsHorizontalIcon } from '@radix-ui/react-icons'
-import { DropdownMenu, Flex, IconButton, Text } from '@radix-ui/themes'
+import { Flex, IconButton, Text } from '@radix-ui/themes'
 import { type Row } from '@tanstack/react-table'
+import { DropdownMenu } from '@psychplus/ui/dropdown-menu'
 import { RowActionEdit } from './row-action-edit'
 
 interface RowAction<TData> {

@@ -27,11 +27,7 @@ const columns: ColumnDef<any>[] = [
       />
     ),
     cell: ({ row }) => (
-      <TableCellLongText
-        maxWidth={100}
-        text={row.original.id}
-        row={row.original}
-      />
+      <TableCellLongText text={row.original.id} row={row.original} />
     ),
     enableHiding: true,
   },

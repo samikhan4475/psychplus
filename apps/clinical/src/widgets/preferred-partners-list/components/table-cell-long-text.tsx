@@ -1,20 +1,15 @@
 import { useRouter } from 'next/navigation'
-import { Text, Tooltip } from '@radix-ui/themes'
+import { Text } from '@radix-ui/themes'
 import { TableCellEmpty } from 'node_modules/@psychplus/ui/src/table-cell'
 import { createSearchParams } from '@psychplus/utils/url'
 import { PreferredPartner } from '../types'
 
 interface TableCellLongTextProps {
   text?: string
-  maxWidth?: number
   row?: PreferredPartner
 }
 
-const TableCellLongText = ({
-  text,
-  maxWidth = 300,
-  row,
-}: TableCellLongTextProps) => {
+const TableCellLongText = ({ text, row }: TableCellLongTextProps) => {
   const router = useRouter()
 
   const handlerData = () => {
@@ -31,16 +26,13 @@ const TableCellLongText = ({
     return <TableCellEmpty />
   }
   return (
-    <Tooltip content={text || ''} delayDuration={250} className="max-w-[200px]">
-      <Text
-        size="1"
-        style={{ maxWidth: `${maxWidth}px` }}
-        className="block overflow-hidden text-ellipsis whitespace-nowrap"
-        onClick={handleClick}
-      >
-        {text}
-      </Text>
-    </Tooltip>
+    <Text
+      size="1"
+      className={`block w-[300px] overflow-hidden text-ellipsis whitespace-nowrap`}
+      onClick={handleClick}
+    >
+      {text}
+    </Text>
   )
 }
 
