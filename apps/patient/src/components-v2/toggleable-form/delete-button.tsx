@@ -2,15 +2,13 @@
 
 import { useState } from 'react'
 import { type ActionResult } from '@psychplus-v2/api'
-import { Box, Button, Dialog, Flex, Tooltip } from '@radix-ui/themes'
-import { Trash2Icon } from 'lucide-react'
+import { Box, Button, Dialog, Flex, Text } from '@radix-ui/themes'
 import { useToast } from '@/providers'
 import { CloseDialogIcon, FormError } from '..'
 
 interface DeleteButtonProps<T> {
   deleteAction: () => Promise<ActionResult<T>>
   onSuccess?: () => void
-  tooltip: React.ComponentProps<typeof Tooltip>['content']
   confirmTitle: string
   confirmDescription: string
   confirmActionLabel: string
@@ -18,7 +16,6 @@ interface DeleteButtonProps<T> {
 }
 
 const DeleteButton = <T,>({
-  tooltip,
   deleteAction,
   onSuccess,
   confirmTitle,
@@ -57,15 +54,11 @@ const DeleteButton = <T,>({
     <Dialog.Root open={open} onOpenChange={setOpen}>
       <Dialog.Trigger>
         <Flex align="start" gap="2">
-          <Tooltip
-            content={tooltip}
-            delayDuration={300}
-            className="max-w-[200px]"
-          >
-            <Box className="mt-[2px] cursor-pointer text-gray-9 hover:text-accent-12">
-              <Trash2Icon width={20} height={20} strokeWidth={1.75} />
-            </Box>
-          </Tooltip>
+          <Box className="mt-[-1px] cursor-pointer text-[#194595]" ml="3">
+            <Text className="underline" size="2">
+              Remove
+            </Text>
+          </Box>
         </Flex>
       </Dialog.Trigger>
       <Dialog.Content className="relative">

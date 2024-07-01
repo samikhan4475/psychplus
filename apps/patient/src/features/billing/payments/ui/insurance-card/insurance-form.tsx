@@ -296,6 +296,8 @@ const InsuranceForm = ({
     <FieldPlaceholder>+ add insurance</FieldPlaceholder>
   )
 
+  const onDeleteAction = () => deleteInsurance({ id: insurance?.id })
+
   return (
     <ToggleableForm
       form={form}
@@ -303,6 +305,16 @@ const InsuranceForm = ({
       trigger={trigger}
       submitAction={onSubmit}
       noResetValues
+      deleteButtonProps={
+        insurance ? {
+          deleteAction: onDeleteAction,
+          confirmTitle: 'Remove Insurance',
+          confirmDescription: 'Are you sure? This will remove the card from your account and it will no longer be able to be used.',
+          confirmActionLabel: 'Remove',
+          toastTitle: 'Insurance Removed',
+          onSuccess: router.refresh
+        } : undefined
+      }
       contentClassName="mb-2 p-4 border-y border-dashed border-y-gray-5"
     >
       <FormFieldContainer className="w-full">

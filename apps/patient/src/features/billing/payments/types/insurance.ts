@@ -38,4 +38,26 @@ interface Insurance {
   payerName: string
 }
 
-export type { InsurancePayer, InsurancePlan, Insurance }
+interface InsuranceTag {
+  id: string
+  name: string
+  isActive: boolean
+  isTest: boolean
+  isPublicViewable: boolean
+  payerType: string
+}
+
+enum InsuranceChipVariantType {
+  Pending = 'warning',
+  Unverified = 'danger',
+  Verified = 'success',
+}
+ 
+
+export {
+  type InsurancePayer,
+  type InsurancePlan,
+  type Insurance,
+  type InsuranceTag,
+  InsuranceChipVariantType,
+}

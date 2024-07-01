@@ -1,7 +1,7 @@
 import { CODESETS } from '@psychplus-v2/constants'
 import { Flex } from '@radix-ui/themes'
 import { getCodesets } from '@/api'
-import { FeatureContainer, FeatureHeading } from '@/components-v2'
+import { FeatureContainer } from '@/components-v2'
 import {
   getCreditCards,
   getInsurancePayers,

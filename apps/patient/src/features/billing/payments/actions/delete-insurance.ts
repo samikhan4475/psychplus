@@ -2,13 +2,16 @@
 
 import * as api from '@psychplus-v2/api'
 import { API_URL } from '@psychplus-v2/env'
-import { Insurance } from '@/features/billing/payments/types'
 
-const deleteInsurance = async (
-  policyId: string,
-): Promise<api.ActionResult<Insurance>> => {
-  const result = await api.DELETE<Insurance>(
-    `${API_URL}/api/patients/self/policies/${policyId}`,
+interface RemoveInsuranceParams {
+  id: string | undefined
+}
+
+const deleteInsurance = async ({
+  id,
+}: RemoveInsuranceParams): Promise<api.ActionResult<void>> => {
+  const result = await api.DELETE(
+    `${API_URL}/api/patients/self/policies/${id}`,
   )
 
   if (result.state === 'error') {
@@ -20,8 +23,9 @@ const deleteInsurance = async (
 
   return {
     state: 'success',
-    data: result.data,
+    data: undefined
   }
 }
+
 
 export { deleteInsurance }

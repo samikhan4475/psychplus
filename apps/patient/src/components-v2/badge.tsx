@@ -1,7 +1,6 @@
 import { cn } from '@psychplus-v2/utils'
 import { Flex, Text } from '@radix-ui/themes'
 import { CheckIcon, CircleAlert } from 'lucide-react'
-import { InfoIcon } from './info-icon'
 
 const Badge = ({
   label,
@@ -56,7 +55,7 @@ const Icon = ({ type }: { type: string }) => {
       return <CircleAlert height="16" width="16" color="#B47818" />
 
     case 'warning':
-      return <InfoIcon height="14" width="14" />
+      return <CircleAlert height="16" width="16" color="#B47818" />
   }
 }
 

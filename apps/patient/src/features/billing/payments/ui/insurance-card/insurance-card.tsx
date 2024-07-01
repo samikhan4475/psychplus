@@ -13,7 +13,7 @@ const InsuranceCard = ({
   patientInsurances,
 }: InsuranceCardProps) => {
   return (
-    <FeatureCard title="Insurance" contentClassName="gap-3">
+    <FeatureCard title="Insurance" contentClassName="gap-3 relative">
       <InsuranceForms
         patientInsurances={patientInsurances}
         insurancePayers={insurancePayers}
