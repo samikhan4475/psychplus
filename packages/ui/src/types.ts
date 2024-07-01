@@ -8,4 +8,11 @@ interface PropsWithTestId {
   'data-testid': string
 }
 
-export type { NativeInputEvent, PropsWithTestId }
+interface IconProps {
+  width?: string | number
+  height?: string | number
+  onClick?: () => void
+  className?: string
+}
+
+export type { NativeInputEvent, PropsWithTestId, IconProps }

@@ -1,4 +1,5 @@
 import { MultiSelectDropdown } from '@psychplus/ui/multi-select-search-dropdown'
+import { Box } from '@radix-ui/themes'
 
 const distributionGroupOptions = [
   {
@@ -21,11 +22,14 @@ const distributionGroupOptions = [
 
 const DistributionGroupSelector = () => {
   return (
-    <MultiSelectDropdown
-      options={distributionGroupOptions}
-      label="Distribution Group"
-      disabled
-    />
+    <Box>
+      <MultiSelectDropdown
+        options={distributionGroupOptions}
+        buttonClassName='h-7'
+        label="Distribution Group"
+        disabled
+      />
+    </Box>
   )
 }
 

@@ -14,6 +14,7 @@ import { WidgetLoading } from './widget-loading'
 interface PortalContainerProps {
   src: string
   name: string
+  isShadowLess?: boolean
 }
 
 /**
@@ -24,7 +25,7 @@ interface PortalContainerProps {
  * Non-React applications that also want to embed iframes must provide their own
  * similar container that handles these concerns.
  */
-const WidgetPortal = ({ src, name }: PortalContainerProps) => {
+const WidgetPortal = ({ src, name, isShadowLess }: PortalContainerProps) => {
   const loaded = useSubscribeLoaded(name)
   const error = useSubscribeError(name)
   const size = useSubscribeSize(name)
@@ -38,7 +39,7 @@ const WidgetPortal = ({ src, name }: PortalContainerProps) => {
         style={{
           height: `${size.height}px`,
         }}
-        className={cn('min-w-full overflow-clip shadow-3', {
+        className={cn(`min-w-full overflow-clip ${isShadowLess? '': 'shadow-3'}`, {
           invisible: !loaded,
         })}
       >

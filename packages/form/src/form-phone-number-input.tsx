@@ -4,7 +4,8 @@ import { PhoneNumberInput } from '@psychplus/ui/phone-number-input'
 import { FormField, useFormField, UseFormFieldProps } from './form-field'
 
 type FormPhoneNumberInputProps = UseFormFieldProps & {
-  className?: string
+  className?: string,
+  disabled?: boolean
 }
 
 const FormPhoneNumberInput = React.forwardRef<
@@ -25,7 +26,7 @@ const FormPhoneNumberInput = React.forwardRef<
               ref={field.ref}
               name={field.name}
               value={field.value}
-              disabled={field.disabled}
+              disabled={childProps.disabled}
               onBlur={field.onBlur}
               onValueChange={(value) => {
                 field.onChange(value)

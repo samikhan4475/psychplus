@@ -27,7 +27,38 @@ const getPatients = async (payload?: {
   )
 }
 
+const getPatientHistory = ({
+    patientId,
+  }: PatientParams): Promise<Patient[]> => {
+    const queryParams = new URLSearchParams({
+      offset: '0',
+      limit: '2100',
+    })
+  
+    return handleRequest(
+      fetch(
+        `${API_URL}/api/patients/${patientId}/history/search?${queryParams}`,
+        {
+          method: 'POST',
+          cache: 'no-store',
+          headers: createHeaders(),
+          body: JSON.stringify({
+            historyCreatedFrom: '2024-01-18',
+          }),
+        },
+      ),
+    )
+  }
+
 const getPatientCached = cache(getPatient)
+
+const getPatientHistoryCached = cache(getPatientHistory)
+
 const getPatientsCached = cache(getPatients)
 
-export { getPatientCached as getPatient, getPatientsCached as getPatients }
+
+export { 
+  getPatientCached as getPatient,
+  getPatientHistoryCached as getPatientHistory,
+  getPatientsCached as getPatients,
+}

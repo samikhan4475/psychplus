@@ -4,15 +4,18 @@ import {
   type SubmitHandler,
   type UseFormReturn,
 } from 'react-hook-form'
+import { cn } from '../cn'
 
 interface FormContainerProps<T extends FieldValues> {
   form: UseFormReturn<T>
+  className?: string
   onSubmit: SubmitHandler<T>
 }
 
 const FormContainer = <T extends FieldValues>({
   form,
   onSubmit,
+  className,
   children,
 }: React.PropsWithChildren<FormContainerProps<T>>) => {
   return (
@@ -20,7 +23,7 @@ const FormContainer = <T extends FieldValues>({
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <fieldset
           disabled={form.formState.isSubmitting}
-          className="flex flex-col gap-3"
+          className={cn("flex flex-col gap-3", className)}
         >
           {children}
         </fieldset>

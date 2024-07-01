@@ -7,6 +7,7 @@ import { useDialog } from '../hooks'
 interface DialogPortalProps {
   src: string
   name: string
+  permission?: string
 }
 
 /**
@@ -17,7 +18,7 @@ interface DialogPortalProps {
  * Non-React applications that also want to embed dialog iframes must provide their own
  * similar container that handles these common concerns.
  */
-const DialogPortal = ({ src, name }: DialogPortalProps) => {
+const DialogPortal = ({ src, name, permission }: DialogPortalProps) => {
   const { open } = useDialog(name)
 
   return (
@@ -27,7 +28,16 @@ const DialogPortal = ({ src, name }: DialogPortalProps) => {
         'pointer-events-none': !open,
       })}
     >
-      <iframe title={name} src={src} className="h-full w-full"></iframe>
+      {permission ? (
+        <iframe
+          title={name}
+          src={src}
+          className="h-full w-full"
+          allow={permission}
+        ></iframe>
+      ) : (
+        <iframe title={name} src={src} className="h-full w-full"></iframe>
+      )}
     </Box>
   )
 }

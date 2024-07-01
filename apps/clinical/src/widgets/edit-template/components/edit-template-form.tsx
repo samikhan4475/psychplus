@@ -118,50 +118,56 @@ const EditTemplateForm = ({ template }: EditTemplateFormProps) => {
         </Box>
       </Flex>
       <ParametersTable />
-      <MultiSelectDropdown
-        options={[
-          {
-            label: 'Option1',
-            value: 'Option1',
-          },
-          {
-            label: 'Option2',
-            value: 'Option2',
-          },
-          {
-            label: 'Option3',
-            value: 'Option3',
-          },
-          {
-            label: 'Option4',
-            value: 'Option4',
-          },
-        ]}
-        label="Distribution Group"
-        disabled
-      />
-      <MultiSelectDropdown
-        options={[
-          {
-            label: 'Option1',
-            value: 'Option1',
-          },
-          {
-            label: 'Option2',
-            value: 'Option2',
-          },
-          {
-            label: 'Option3',
-            value: 'Option3',
-          },
-          {
-            label: 'Option4',
-            value: 'Option4',
-          },
-        ]}
-        label="Permission to View"
-        disabled
-      />
+      <Box>
+        <MultiSelectDropdown
+          options={[
+            {
+              label: 'Option1',
+              value: 'Option1',
+            },
+            {
+              label: 'Option2',
+              value: 'Option2',
+            },
+            {
+              label: 'Option3',
+              value: 'Option3',
+            },
+            {
+              label: 'Option4',
+              value: 'Option4',
+            },
+          ]}
+          buttonClassName='h-7'
+          label="Distribution Group"
+          disabled
+        />
+      </Box>
+      <Box>
+        <MultiSelectDropdown
+          options={[
+            {
+              label: 'Option1',
+              value: 'Option1',
+            },
+            {
+              label: 'Option2',
+              value: 'Option2',
+            },
+            {
+              label: 'Option3',
+              value: 'Option3',
+            },
+            {
+              label: 'Option4',
+              value: 'Option4',
+            },
+          ]}
+          buttonClassName='h-7'
+          label="Permission to View"
+          disabled
+        />
+      </Box>
       <Flex className="w-full gap-x-3 text-[12px] mt-2">
         <Flex
           className="w-[37%] cursor-pointer rounded-[4px] bg-[#F0F4FF] px-2 py-1.5 font-[510]"

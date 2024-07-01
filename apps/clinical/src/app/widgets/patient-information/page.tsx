@@ -1,5 +1,6 @@
 import { type SearchParams } from '@psychplus/utils/url'
 import { PatientInformationWidgetServer } from '@/widgets/patient-information'
+import { Text } from '@radix-ui/themes'
 
 const PatientInformationWidgetPage = ({
   searchParams,
@@ -7,7 +8,7 @@ const PatientInformationWidgetPage = ({
   searchParams: SearchParams
 }) => {
   if (!searchParams.patientId) {
-    return <div>Patient ID is required</div>
+    return <Text>Patient ID is required</Text>
   }
 
   return (

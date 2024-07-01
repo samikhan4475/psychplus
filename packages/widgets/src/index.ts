@@ -14,8 +14,16 @@ const ADD_TEMPLATE_WIDGET = 'add-template'
 const EDIT_TEMPLATE_WIDGET = 'edit-template'
 const REPORTS_WIDGET = 'reports-widget'
 const CREATE_CLEARING_HOUSE_RECEIVER = 'create-clearing-house-receiver'
+const PATIENT_INFORMATION_WIDGET = 'patient-info-widget'
+const LINK_ACCOUNT_WIDGET = 'link-account-widget'
+const ADD_RELATIONSHIP_WIDGET = 'add-relationship-widget'
+const PATIENT_RELATIONSHIPS_WIDGET = 'patient-relationships-widget'
+const PATIENT_PREFERRED_PARTNERS_WIDGET = 'patient-preferred-partners-widget'
+const ENLARGE_IMAGE_WIDGET = 'enlarge-image'
+const CAPTURE_IMAGE_WIDGET = 'capture-image'
 const HEALTH_CONCERN_LIST_WIDGET = 'health-concern'
 const PROBLEMS_LIST_WIDGET = 'problems'
+
 export {
   USER_WIDGET,
   PATIENT_WIDGET,
@@ -33,6 +41,13 @@ export {
   EDIT_TEMPLATE_WIDGET,
   REPORTS_WIDGET,
   CREATE_CLEARING_HOUSE_RECEIVER,
+  PATIENT_INFORMATION_WIDGET,
+  LINK_ACCOUNT_WIDGET,
+  ADD_RELATIONSHIP_WIDGET,
+  PATIENT_RELATIONSHIPS_WIDGET,
+  PATIENT_PREFERRED_PARTNERS_WIDGET,
+  ENLARGE_IMAGE_WIDGET,
+  CAPTURE_IMAGE_WIDGET,
   HEALTH_CONCERN_LIST_WIDGET,
   PROBLEMS_LIST_WIDGET,
 }

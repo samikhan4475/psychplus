@@ -1,11 +1,11 @@
 import { cache } from 'react'
 import { handleRequest } from '@psychplus/utils/api'
 import { createHeaders } from '@psychplus/utils/client'
-import { type CareTeam, type Patient, type PatientParams } from './types'
+import { type CareTeam, type Patient } from './types'
 
 const getLoggedInPatientProfile = async (): Promise<Patient> =>
   handleRequest(
-    fetch('/api/patients/self/profile', {
+    fetch('/galaxy/api/patients/self/profile', {
       cache: 'no-store',
       headers: createHeaders(),
     }),
@@ -30,9 +30,43 @@ const getPatientProfileImage = async (patientId?: number) => {
   return 'Patient does not have a photo assigned'
 }
 
+const getPatientDriverLicenseImage = async (patientId: number, side: string) => {
+  const url = `/galaxy/api/patients/${patientId}/driverslicenseimage/${side}`
+
+  const response = await fetch(url, {
+    cache: 'no-store',
+    headers: createHeaders(),
+  })
+
+  if (response.ok) {
+    const blob = await response.blob()
+    const url = URL.createObjectURL(blob)
+    return url
+  }
+
+  return 'Patient does not have a photo assigned'
+}
+
+const getPatientProfileImageByStaff = async (patientId: number) => {
+  const url = `/galaxy/api/patients/${patientId}/profileimage`
+
+  const response = await fetch(url, {
+    cache: 'no-store',
+    headers: createHeaders(),
+  })
+
+  if (response.ok) {
+    const blob = await response.blob()
+    const url = URL.createObjectURL(blob)
+    return url
+  }
+
+  return 'Patient does not have a photo assigned'
+}
+
 const getLoggedInPatientCareTeam = async (): Promise<CareTeam> =>
   handleRequest(
-    fetch('/api/patients/self/careteam', {
+    fetch('/galaxy/api/patients/self/careteam', {
       cache: 'no-store',
       headers: createHeaders(),
     }),
@@ -58,9 +92,15 @@ const getLoggedInPatientCareTeamCached = cache(getLoggedInPatientCareTeam)
 
 const getPatientProfileImageCached = cache(getPatientProfileImage)
 
+const getPatientProfileImageByStaffCached = cache(getPatientProfileImageByStaff)
+
+const getPatientDriverLicenseImageCached = cache(getPatientDriverLicenseImage)
+
 export {
   getLoggedInPatientProfileCached as getLoggedInPatientProfile,
   getLoggedInPatientCareTeamCached as getLoggedInPatientCareTeam,
   getPatientProfileImageCached as getPatientProfileImage,
   getPatients,
+  getPatientDriverLicenseImageCached as getPatientDriverLicenseImage,
+  getPatientProfileImageByStaffCached as getPatientProfileImageByStaff,
 }

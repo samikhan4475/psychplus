@@ -1,36 +1,99 @@
-type MetaDataType = {
-  createdOn: string
-  createdBy: number
-  createdByFullName: string
-  updatedOn: string
-  updatedBy: number
-  updatedByFullName: string
+import type { EmergencyContactDetails, GuardianName, PatientAddress, PatientContactDetails, PatientDriversLicense, PatientMetadata, PatientName, PatientPhoneNumber } from "@psychplus/patient"
+
+interface RaceAndEthnicityCodeSet {
+  codeSystemName: string 
+  displayName: string 
+  codes: Code[] 
 }
 
-type AddressType = {
-  type: string
-  street1: string
-  city: string
-  state: string
-  postalCode: string
+interface AuthorityNameSpace {
+  namespace: string
+  displayName: string
+  codesets: AuthorityCodeSets[]
 }
 
-type ContactType = {
-  email: string
-  phoneNumbers: { type: string; number: string }[]
-  addresses: AddressType[]
+interface AuthorityCodeSets {
+  codeSystemName: string
+  displayName: string
+  codes: Code[]
 }
-interface PatientProfileInformation {
+
+interface Code {
+  code: string
+  displayName: string
+  groupingCode?: string
+  codeAttributes?: CodeAttribute[]
+}
+
+interface CodeAttribute {
+  name: string
+  content: string
+}
+
+interface PatientGuardian {
+  name?: GuardianName
+  isEmergencyContact?: boolean
+  relationship?: string
+  contact?: PatientContactDetails
+}
+
+interface PatientEmergencyContact {
+  name?: GuardianName
+  contact?: EmergencyContactDetails
+  relationship?: string;
+}
+
+interface AlternateContactDetails {
+  email?: string
+  emailVerificationStatus?: string
+  phoneNumbers?: PatientPhoneNumber[]
+  addresses?: PatientAddress[]
+  isMailingAddressSameAsPrimary?: boolean
+}
+interface Patient {
   id: number
-  metadata: MetaDataType
-  userId: number
-  legalName: { firstName: string; lastName: string }
+  userId?: number
+  legalName: PatientName
   birthdate: string
+  hasGuardian: boolean
   gender: string
-  chargeKey: string
-  isPlusMember: boolean
-  hasPhoto: boolean
-  contactDetails: ContactType
+  genderOrientation?: string
+  genderExpression?: string
+  genderPronoun?: string
+  driversLicense?: PatientDriversLicense
+  contactDetails: PatientContactDetails
+  emergencyContact?: PatientEmergencyContact
+  cmdId?: string
+  motherMaidenName?: string
+  alternateOrPreviousName?: PatientName | null
+  alternateOrPreviousContactDetails?: AlternateContactDetails | null
+  language?: string
+  languageAbility?: string
+  languageProficiency?: string
+  religion?: string
+  races?: string[]
+  ethnicities?: string[]
+  preferredLanguage?: string
+  chargeUserId?: string
+  isTest?: boolean
+  metadata?: PatientMetadata
+  isPlusMember?: boolean
+  hasPhoto?: boolean
+  chargeKey?: string
+  medicalRecordNumber?: string
+  socialSecurityNumber?: string
+  guardian?: PatientGuardian
+  verificationStatus?: string
+  status?: string
+}
+interface PatientConsentRequestBody {
+  policyType: string
+  channels: string[]
+  toEmail: string
+  ccEmail?: string
+  cellPhoneNumber: string
 }
 
-export type { PatientProfileInformation }
+type RaceAndEthnicityCodeSetIndex = { [key: string]: Code[] | undefined }
+
+export type { RaceAndEthnicityCodeSet, RaceAndEthnicityCodeSetIndex, AuthorityNameSpace, PatientConsentRequestBody, Patient }

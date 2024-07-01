@@ -11,7 +11,7 @@ const AddTemplateWidget = () => {
 
   return (
     <DialogPortal
-      src={`${CLINICAL_URL}/galaxy/widgets/add-template?${searchParams.toString()}`}
+      src={`${CLINICAL_URL}/widgets/add-template?${searchParams.toString()}`}
       name={ADD_TEMPLATE_WIDGET}
     />
   )

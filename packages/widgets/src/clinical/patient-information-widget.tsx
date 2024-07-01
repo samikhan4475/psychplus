@@ -2,7 +2,8 @@ import { type PatientParams } from '@psychplus/patient'
 import { CLINICAL_URL } from '@psychplus/utils/constants'
 import { getAuthToken } from '@psychplus/utils/cookies'
 import { createSearchParams } from '@psychplus/utils/url'
-import { PortalContainer } from '../components'
+import { WidgetPortal } from '../components'
+import { PATIENT_INFORMATION_WIDGET } from '..'
 
 type Props = PatientParams
 
@@ -13,9 +14,9 @@ const PatientInformationWidget = (props: Props) => {
   })
 
   return (
-    <PortalContainer
-      src={`${CLINICAL_URL}/galaxy/widgets/patient-information?${searchParams.toString()}`}
-      name="patient-information"
+    <WidgetPortal
+      src={`${CLINICAL_URL}/widgets/patient-information?${searchParams.toString()}`}
+      name={PATIENT_INFORMATION_WIDGET}
     />
   )
 }

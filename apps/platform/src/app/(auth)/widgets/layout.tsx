@@ -43,6 +43,26 @@ const navMenuItems: MenuItem[] = [
     href: '/widgets/patient-lookup',
   },
   {
+    label: 'Link Account',
+    href: '/widgets/link-account',
+  },
+  {
+    label: 'Patient Relationship',
+    href: '/widgets/patient-relationship',
+  },
+  {
+    label: 'Add Relationship',
+    href: '/widgets/add-relationship',
+  },
+  {
+    label: 'Patient Preferred Partners',
+    href: '/widgets/patient-preferred-partners',
+  },
+  {
+    label: 'Capture Image',
+    href: '/widgets/image-capture',
+  },
+  {
     label: 'Patient Information',
     href: '/widgets/patient-information',
   },

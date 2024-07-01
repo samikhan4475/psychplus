@@ -13,6 +13,7 @@ const useRelay = () => {
     const iframes = document.querySelectorAll('iframe')
 
     const listener = (message: MessageEvent<TypedEvent>) => {
+
       iframes.forEach((i) => {
         if (message.source === i.contentWindow) {
           return

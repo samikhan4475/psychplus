@@ -1,4 +1,5 @@
 import { MultiSelectDropdown } from '@psychplus/ui/multi-select-search-dropdown'
+import { Box } from '@radix-ui/themes'
 
 const PermissionOptions = [
   {
@@ -21,11 +22,14 @@ const PermissionOptions = [
 
 const PermissionSelector = () => {
   return (
-    <MultiSelectDropdown
-      options={PermissionOptions}
-      label="Permission to View"
-      disabled
-    />
+    <Box>
+      <MultiSelectDropdown
+        options={PermissionOptions}
+        buttonClassName='h-7'
+        label="Permission to View"
+        disabled
+      />
+    </Box>
   )
 }
 

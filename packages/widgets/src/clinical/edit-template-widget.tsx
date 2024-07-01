@@ -11,7 +11,7 @@ const EditTemplateWidget = () => {
 
   return (
     <DialogPortal
-      src={`${CLINICAL_URL}/galaxy/widgets/edit-template/?${searchParams.toString()}`}
+      src={`${CLINICAL_URL}/widgets/edit-template/?${searchParams.toString()}`}
       name={EDIT_TEMPLATE_WIDGET}
     />
   )

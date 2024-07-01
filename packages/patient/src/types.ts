@@ -9,40 +9,88 @@ interface PatientMetadata {
   updatedByFullName: string
 }
 
+interface GeoCoordinates {
+  longitude?: number
+  latitude?: number
+  altitude?: number
+}
+
 interface PatientName {
   firstName: string
   lastName: string
   middleName?: string
   preferredName?: string
   title?: string
+  suffix?: string
   honors?: string
 }
 
 interface PatientPhoneNumber {
-  type: string
+  type?: string
   number: string
+  extension?: string
+  comment?: string
 }
 
 interface PatientAddress {
-  type: 'Home' | 'Mailing'
-  street1: string
+  type: string
+  street1?: string
+  street2?: string
   city: string
   state: string
+  country: string
   postalCode: string
+  geoCoordinates?: GeoCoordinates
 }
 
 interface PatientContactDetails {
   email: string
-  phoneNumbers: PatientPhoneNumber[]
-  addresses: PatientAddress[]
+  emailVerificationStatus?: string
+  phoneNumbers?: PatientPhoneNumber[]
+  addresses?: PatientAddress[]
+  isMailingAddressSameAsPrimary?: boolean
+}
+
+interface EmergencyContactDetails {
+  email?: string
+  emailVerificationStatus?: string
+  phoneNumbers?: PatientPhoneNumber[]
+  addresses?: PatientAddress[]
+  isMailingAddressSameAsPrimary?: boolean
+}
+
+interface GuardianName {
+  firstName?: string | null
+  lastName?: string | null
+  middleName?: string
+  preferredName?: string
+  title?: string
+  suffix?: string
+  honors?: string
+}
+
+interface PatientDriversLicense {
+  type?: string
+  number?: string
+  issuedDate?: string
+  expirationDate?: string
+  issuedBy?: string
+  validIn?: string
+  hasFrontImage?: boolean
+  hasBackImage?: boolean
 }
 
 interface Patient {
-  id:  number
-  userId: number
+  id: number
+  userId?: number
   legalName: PatientName
   birthdate: string
+  hasGuardian: boolean
   gender: string
+  genderOrientation?: string
+  genderExpression?: string
+  genderPronoun?: string
+  driversLicense?: PatientDriversLicense
   contactDetails: PatientContactDetails
   metadata: PatientMetadata
   isPlusMember: boolean
@@ -81,10 +129,33 @@ interface CareTeam {
   careTeam: CareTeamMember[]
 }
 
+interface PreferredPartner {
+  id: string
+  name: string
+  status: string
+  payerStatus: string
+  userId: string
+  userType: string
+  numberOfUsers: string
+  userStatus: string
+  priority: string
+  startDate: string
+  termDate: string
+}
+
 export type {
   Patient,
   PatientParams,
   CareTeamMember,
   CareTeam,
   PatientContactDetails,
+  PreferredPartner,
+  PatientName,
+  GuardianName,
+  EmergencyContactDetails,
+  PatientPhoneNumber,
+  PatientAddress,
+  PatientDriversLicense,
+  PatientMetadata,
 }
+

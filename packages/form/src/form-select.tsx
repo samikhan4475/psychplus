@@ -10,6 +10,7 @@ interface Props
   label: string
   placeholder?: string
   buttonClassName?: string
+  contentClassName?: string
   options: {
     label: string
     value: string
@@ -39,7 +40,7 @@ const FormSelect = React.forwardRef<HTMLButtonElement, Props>((props, ref) => {
                 id={formFieldProps.id}
                 placeholder={props.placeholder}
               />
-              <Select.Content>
+              <Select.Content position='popper' className={props.contentClassName?? ''}>
                 {childProps.options.map((option) => (
                   <Select.Item
                     value={option.value}

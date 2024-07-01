@@ -11,7 +11,7 @@ const ReportsWidget = () => {
 
   return (
     <WidgetPortal
-      src={`${CLINICAL_URL}/galaxy/widgets/reports?${searchParams.toString()}`}
+      src={`${CLINICAL_URL}/widgets/reports?${searchParams.toString()}`}
       name={REPORTS_WIDGET}
     />
   )
