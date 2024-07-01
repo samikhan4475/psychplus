@@ -8,6 +8,8 @@ interface ToggleableFormContextType {
   error?: string
   setError: (error: string | undefined) => void
   disabled?: boolean
+  hasTrigger?: boolean
+  onFormClose?: () => void
 }
 
 const ToggleableFormContext = createContext<

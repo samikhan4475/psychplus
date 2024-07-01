@@ -48,11 +48,13 @@ const CreditCardForm = ({
   creditCard,
   existingCards,
   triggerClassName,
+  onFormClose,
 }: {
-  trigger: any
+  trigger?: any
   creditCard?: CreditCard
   existingCards?: CreditCard[]
   triggerClassName?: string
+  onFormClose?: () => void
 }) => {
   const router = useRouter()
   const stripe = useStripe()
@@ -139,6 +141,7 @@ const CreditCardForm = ({
       state: '',
       postalCode: '',
     })
+    onFormClose?.()
   }
 
   return (
@@ -152,6 +155,7 @@ const CreditCardForm = ({
         title: `${creditCard ? 'Updated' : 'Added'} credit card`,
       }}
       triggerClassName={triggerClassName}
+      onFormClose={onFormClose}
     >
       <Flex gap="4" direction="column" className="w-full">
         <Flex

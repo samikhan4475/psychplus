@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { type ActionResult } from '@psychplus-v2/api'
 import { FormContainer } from '@psychplus-v2/components'
 import { Box, Flex } from '@radix-ui/themes'
@@ -22,7 +22,7 @@ interface ToggleableFormProps<T extends FieldValues, Response> {
   form: UseFormReturn<T>
   submitAction: (data: T) => Promise<ActionResult<Response> | undefined>
   toastData?: ToastData
-  trigger: React.ReactNode
+  trigger?: React.ReactNode
   onSuccess?: (res: Response) => void
   onError?: (error: string) => void
   disabled?: boolean
@@ -30,6 +30,7 @@ interface ToggleableFormProps<T extends FieldValues, Response> {
   deleteButtonProps?: DeleteButtonProps<Response>
   noResetValues?: boolean
   triggerClassName?: string
+  onFormClose?: () => void
 }
 
 const ToggleableForm = <T extends FieldValues, R>({
@@ -45,10 +46,17 @@ const ToggleableForm = <T extends FieldValues, R>({
   deleteButtonProps,
   noResetValues,
   triggerClassName,
+  onFormClose,
 }: React.PropsWithChildren<ToggleableFormProps<T, R>>) => {
   const { toast } = useToast()
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(!trigger)
   const [error, setError] = useState<string>()
+
+  useEffect(() => {
+    if (!trigger) {
+      setOpen(true)
+    }
+  }, [trigger])
 
   const onSubmit: SubmitHandler<T> = async (data, e) => {
     e?.preventDefault()
@@ -82,18 +90,22 @@ const ToggleableForm = <T extends FieldValues, R>({
       error,
       setError,
       disabled,
+      hasTrigger: !!trigger,
+      onFormClose: onFormClose,
     }),
-    [open, setOpen, error, setError, disabled],
+    [open, setOpen, error, setError, disabled, trigger, onFormClose],
   )
 
   return (
     <ToggleableFormContext.Provider value={contextValue}>
-      <Flex className={triggerClassName}>
-        <Trigger>{trigger}</Trigger>
-        {!open && deleteButtonProps?.deleteAction ? (
-          <DeleteButton {...deleteButtonProps} />
-        ) : null}
-      </Flex>
+      {trigger ? (
+        <Flex className={triggerClassName}>
+          <Trigger>{trigger}</Trigger>
+          {!open && deleteButtonProps?.deleteAction ? (
+            <DeleteButton {...deleteButtonProps} />
+          ) : null}
+        </Flex>
+      ) : null}
       <FormContainer form={form} onSubmit={onSubmit}>
         <Content className={contentClassName}>{children}</Content>
       </FormContainer>

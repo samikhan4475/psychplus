@@ -18,4 +18,14 @@ const getCreditCardExpiry = (expireMonth: number, expireYear: number) => {
   return `Expires ${expireMonth}/${expireYear.toString().slice(-2)}`
 }
 
-export { getDefaultCreditCardName, getCreditCardExpiry }
+const sortCreditCardsByPrimary = (creditCards: CreditCard[]) => {
+  return creditCards
+    ?.slice()
+    .sort((a, b) => Number(b.isPrimary) - Number(a.isPrimary))
+}
+
+export {
+  getDefaultCreditCardName,
+  getCreditCardExpiry,
+  sortCreditCardsByPrimary,
+}

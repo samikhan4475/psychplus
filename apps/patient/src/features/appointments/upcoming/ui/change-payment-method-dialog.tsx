@@ -2,16 +2,29 @@
 
 import React, { useState } from 'react'
 import { PaymentType } from '@psychplus-v2/constants'
-import * as Accordion from '@radix-ui/react-accordion'
 import { DialogClose } from '@radix-ui/react-dialog'
-import { Button, Dialog, Flex, RadioGroup, Text } from '@radix-ui/themes'
+import {
+  Button,
+  Dialog,
+  Flex,
+  RadioGroup,
+  Text,
+  Tooltip,
+} from '@radix-ui/themes'
 import {
   CloseDialogIcon,
   EditIcon,
-  PaymentMethodsAccordionItem,
+  PaymentMethodAccordion,
 } from '@/components-v2'
+import { CreditCard } from '@/features/billing/credit-debit-cards/types'
 
-const ChangePaymentMethodDialog = () => {
+const ChangePaymentMethodDialog = ({
+  creditCards,
+  stripeApiKey,
+}: {
+  creditCards: CreditCard[]
+  stripeApiKey: string
+}) => {
   const [isOpen, setIsOpen] = useState(false)
   const [paymentMethod, setPaymentMethod] = useState<PaymentType>(
     PaymentType.Insurance,
@@ -19,11 +32,17 @@ const ChangePaymentMethodDialog = () => {
 
   return (
     <Dialog.Root open={isOpen} onOpenChange={setIsOpen}>
-      <Dialog.Trigger>
-        <Button variant="ghost" className="bg-[white]">
-          <EditIcon />
-        </Button>
-      </Dialog.Trigger>
+      <Tooltip
+        content="Chnage Payment Method"
+        delayDuration={300}
+        className="max-w-[200px]"
+      >
+        <Dialog.Trigger>
+          <Button variant="ghost" className="bg-[white]">
+            <EditIcon />
+          </Button>
+        </Dialog.Trigger>
+      </Tooltip>
       <Dialog.Content className="relative max-w-[850px]">
         <CloseDialogIcon />
         <Dialog.Title
@@ -68,43 +87,11 @@ const ChangePaymentMethodDialog = () => {
           </Flex>
         </Flex>
 
-        {paymentMethod === PaymentType.Insurance && (
-          <Accordion.Root
-            type="single"
-            className="w-full"
-            defaultValue="Insurance on File"
-          >
-            <PaymentMethodsAccordionItem
-              title="Insurance on File"
-              content="Insurance on file listing here"
-            />
-            <PaymentMethodsAccordionItem
-              title="Add/Edit Insurance"
-              content="Add/Edit Insurance form here"
-            />
-            <PaymentMethodsAccordionItem
-              title="Credit Card Details (Optional)"
-              content="Credit Card Details (Optional)"
-            />
-          </Accordion.Root>
-        )}
-
-        {paymentMethod === PaymentType.SelfPay && (
-          <Accordion.Root
-            type="single"
-            className="w-full"
-            defaultValue="Credit/Debit Cards"
-          >
-            <PaymentMethodsAccordionItem
-              title="Credit/Debit Cards"
-              content="Add Credit/Debit Cards Listing here"
-            />
-            <PaymentMethodsAccordionItem
-              title="Add New Card"
-              content="Add New Card here"
-            />
-          </Accordion.Root>
-        )}
+        <PaymentMethodAccordion
+          paymentMethod={paymentMethod}
+          stripeApiKey={stripeApiKey}
+          creditCards={creditCards}
+        />
 
         <Flex gap="3" justify="end" mt="5">
           <DialogClose>

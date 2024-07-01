@@ -7,7 +7,8 @@ import { useToggleableFormContext } from './context'
 const CancelButton = () => {
   const form = useFormContext()
 
-  const { setOpen, setError } = useToggleableFormContext()
+  const { setOpen, setError, hasTrigger, onFormClose } =
+    useToggleableFormContext()
 
   return (
     <Button
@@ -16,7 +17,8 @@ const CancelButton = () => {
       color="red"
       onClick={(e) => {
         e.preventDefault()
-        setOpen(false)
+        hasTrigger && setOpen(false)
+        onFormClose?.()
         setError(undefined)
         form.reset()
       }}
