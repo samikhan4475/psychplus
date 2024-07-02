@@ -3,6 +3,8 @@
 import * as React from 'react'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { ProviderType } from '@psychplus-v2/constants'
+import { getProviderTypeLabel } from '@psychplus-v2/utils'
 import { Flex, Text } from '@radix-ui/themes'
 import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js'
 import { z } from 'zod'
@@ -117,7 +119,7 @@ const InsurancePaymentForm = ({
     }
 
     const appointmentTypeMapper: { [key: string]: string } = {
-      'In-Person': 'inPerson',
+      'In-Person': 'InPerson',
       Virtual: 'TeleVisit',
     }
     const startDate = new Date(
@@ -135,11 +137,17 @@ const InsurancePaymentForm = ({
       encounterTypeCode: 0,
     })
       .then(() => {
+        const providerType =
+          bookedSlot?.specialistTypeCode === 1
+            ? ProviderType.Psychiatrist
+            : ProviderType.Therapist
         clickTrack({
           productArea: 'Patient',
-          productPageKey: 'Schedule Appointment - Insurance Payment',
+          productPageKey: 'Web appointmentBooked',
           clickAction: 'Accepted',
-          clickActionData: 'Appointment Booked',
+          clickActionData: `${getProviderTypeLabel(providerType)}|${
+            appointmentTypeMapper[bookSlotState?.type ?? '']
+          }`,
         })
 
         router.push('/schedule-appointment/confirmation')
