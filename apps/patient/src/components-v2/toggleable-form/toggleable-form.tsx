@@ -99,14 +99,16 @@ const ToggleableForm = <T extends FieldValues, R>({
 
   return (
     <ToggleableFormContext.Provider value={contextValue}>
-      {trigger ? (
-        <Flex className={ cn('relative', triggerClassName)}>
-          <Trigger>{trigger}</Trigger>
-          {!open && deleteButtonProps?.deleteAction ? (
-            <DeleteButton {...deleteButtonProps} />
-          ) : null}
-        </Flex>
-      ) : null}
+      <Flex className={cn('relative', triggerClassName)}>
+        {trigger ? (
+          <Flex>
+            <Trigger>{trigger}</Trigger>
+            {!open && deleteButtonProps?.deleteAction ? (
+              <DeleteButton {...deleteButtonProps} />
+            ) : null}
+          </Flex>
+        ) : null}
+      </Flex>
       <FormContainer form={form} onSubmit={onSubmit}>
         <Content className={contentClassName}>{children}</Content>
       </FormContainer>

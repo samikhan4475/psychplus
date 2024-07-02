@@ -4,14 +4,13 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { type ActionErrorState } from '@psychplus-v2/api'
-import { CODESETS } from '@psychplus-v2/constants'
 import { cn, zipCodeSchema } from '@psychplus-v2/utils'
 import { Box, Checkbox, Flex, Text, TextFieldInput } from '@radix-ui/themes'
 import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js'
 import { useForm } from 'react-hook-form'
 import z from 'zod'
 import {
-  CodesetFormSelect,
+  BillingAddressAutocompleteForm,
   CreditDebitCardsIcon,
   FormFieldContainer,
   FormFieldError,
@@ -19,6 +18,7 @@ import {
   ToggleableForm,
 } from '@/components-v2'
 import { addCreditCardAction } from '@/features/billing/credit-debit-cards/actions'
+import { useGooglePlacesContext } from '@/providers'
 import { CreditCard } from '../../types'
 
 const STRIPE_INPUT_STYLE = {
@@ -140,9 +140,12 @@ const CreditCardForm = ({
       city: '',
       state: '',
       postalCode: '',
+      userAgreed: false,
     })
     onFormClose?.()
   }
+
+  const { loaded } = useGooglePlacesContext()
 
   return (
     <ToggleableForm
@@ -194,6 +197,7 @@ const CreditCardForm = ({
               size="3"
               {...form.register('fullname')}
               placeholder="Full name on card"
+              autoFocus
             />
           </FormFieldContainer>
 
@@ -208,7 +212,6 @@ const CreditCardForm = ({
               })}
             >
               <CardElement
-                onReady={(e) => e.focus()}
                 onFocus={() => {
                   setFocus(true)
                 }}
@@ -234,52 +237,7 @@ const CreditCardForm = ({
         </Flex>
       </Flex>
 
-      <Flex className="w-full">
-        <FormFieldContainer className="w-full">
-          <FormFieldLabel required>Address 1</FormFieldLabel>
-          <TextFieldInput
-            size="3"
-            radius="full"
-            {...form.register('address')}
-            placeholder="Enter Complete Address"
-          />
-          <FormFieldError name="address" />
-        </FormFieldContainer>
-      </Flex>
-
-      <Flex className="w-full" gap="4">
-        <FormFieldContainer className="flex-1">
-          <FormFieldLabel required>Zip Code</FormFieldLabel>
-          <TextFieldInput
-            size="3"
-            radius="full"
-            {...form.register('postalCode')}
-            placeholder="Zip Code"
-          />
-          <FormFieldError name="postalCode" />
-        </FormFieldContainer>
-
-        <FormFieldContainer className="flex-1">
-          <FormFieldLabel required>City</FormFieldLabel>
-          <TextFieldInput
-            size="3"
-            radius="full"
-            {...form.register('city')}
-            placeholder="City"
-          />
-          <FormFieldError name="city" />
-        </FormFieldContainer>
-
-        <FormFieldContainer className="flex-1">
-          <FormFieldLabel required>State</FormFieldLabel>
-          <CodesetFormSelect
-            size="3"
-            name={'state'}
-            codeset={CODESETS.UsStates}
-          />
-          <FormFieldError name="state" />
-        </FormFieldContainer>
-      </Flex>
+      {loaded ? <BillingAddressAutocompleteForm /> : null}
 
       <FormFieldContainer mb="2">
         <Flex direction="row" gap="2" align="center">

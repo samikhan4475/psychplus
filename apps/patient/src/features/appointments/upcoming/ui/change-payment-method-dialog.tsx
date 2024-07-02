@@ -15,6 +15,7 @@ import {
   CloseDialogIcon,
   EditIcon,
   PaymentMethodAccordion,
+  RadioGroupItem,
 } from '@/components-v2'
 import { CreditCard } from '@/features/billing/credit-debit-cards/types'
 
@@ -43,7 +44,7 @@ const ChangePaymentMethodDialog = ({
           </Button>
         </Dialog.Trigger>
       </Tooltip>
-      <Dialog.Content className="relative max-w-[850px]">
+      <Dialog.Content className="relative max-w-[900px]">
         <CloseDialogIcon />
         <Dialog.Title
           className="font-sans -tracking-[0.25px]"
@@ -75,8 +76,13 @@ const ChangePaymentMethodDialog = ({
                     (option) => (
                       <Text size="3" weight="medium" key={option}>
                         <Flex gap="1">
-                          <RadioGroup.Item value={option} />
-                          {option}
+                          <RadioGroupItem
+                            key={option}
+                            id={option}
+                            value={option}
+                          >
+                            {option}
+                          </RadioGroupItem>
                         </Flex>
                       </Text>
                     ),

@@ -4,7 +4,7 @@ import * as RadioGroup from '@radix-ui/react-radio-group'
 
 interface RadioGroupItemProps
   extends React.ComponentProps<typeof RadioGroup.Item> {
-  children: React.ReactNode
+  children?: React.ReactNode
 }
 
 const RadioGroupItem = ({ id, value, children }: RadioGroupItemProps) => {
