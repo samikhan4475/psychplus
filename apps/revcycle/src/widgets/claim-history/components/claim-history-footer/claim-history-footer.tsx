@@ -6,12 +6,12 @@ import {
 } from '@psychplus/ui/data-table'
 
 interface ClaimHistory {
-  date: string
-  name: string
-  section: string
-  field: string
-  previousValue: string
-  currentValue: string
+  changeDate: string
+  changedBy: string
+  sectionName: string
+  fieldName: string
+  oldValue: string
+  newValue: string
 }
 
 const DataTableFooter = ({ table }: { table: Table<ClaimHistory> }) => (
