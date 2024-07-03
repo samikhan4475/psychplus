@@ -12,20 +12,28 @@ interface PreloaderProps {
   store: BoundStoreType
   codeSets: CodeSet[]
   preferredPartners: PreferredPartner[]
+  token: string
 }
 
-const Preloader = ({ store, codeSets, preferredPartners }: PreloaderProps) => {
+const Preloader = ({
+  store,
+  codeSets,
+  preferredPartners,
+  token,
+}: PreloaderProps) => {
   const loaded = useRef(false)
 
-  const { setCodeSets, setPreferredPartners } = store((state) => ({
+  const { setCodeSets, setPreferredPartners, setToken } = store((state) => ({
     setCodeSets: state.setCodeSets,
     setPreferredPartners: state.setPreferredPartners,
+    setToken: state.setToken,
   }))
 
   if (!loaded.current) {
     loaded.current = true
     setCodeSets(codeSets)
     setPreferredPartners(preferredPartners)
+    setToken(token)
   }
 
   return null

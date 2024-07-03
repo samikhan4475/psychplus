@@ -18,6 +18,8 @@ interface PreferredPartnerFiltersState {
 interface PreferredPartnerState extends CodeSetState {
   preferredPartners: PreferredPartner[]
   setPreferredPartners: (value: PreferredPartner[]) => void
+  setToken: (value: string) => void
+  token: string
   getDropdowns: (key: string) => Dropdown
 }
 

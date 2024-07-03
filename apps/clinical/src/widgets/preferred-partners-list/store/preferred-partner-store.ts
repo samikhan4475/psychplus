@@ -12,6 +12,8 @@ const preferredPartnerStore: StateCreator<PreferredPartnerState> = (
 ) => ({
   ...createCodeSetStore(set, get, store),
   preferredPartners: [],
+  token: '',
+  setToken: (token) => set({ token }),
   setPreferredPartners: (preferredPartners) => set({ preferredPartners }),
   getDropdowns: (key) => GetDropdown(key) || [],
 })
