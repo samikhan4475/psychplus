@@ -9,6 +9,10 @@ const SCHEDULE_APPOINTMENT_DIALOG = 'schedule-appointment-dialog'
 const SCHEDULE_APPOINTMENT_LIST = 'schedule-appointment-list'
 const OTP_DIALOG = 'otp-dialog'
 const PREFERRED_PARTNERS_LIST_WIDGET = 'preferred-partners'
+const ASSESSMENT_AND_TREATMENT_PLAN_LIST_WIDGET =
+  'assessment-and-treatment-plans'
+const ASSESSMENT_AND_TREATMENT_PLAN_DETAIL_WIDGET =
+  'assessment-and-treatment-plan-detail'
 const CREATE_PREFERRED_PARTNER = 'create-preferred-partner'
 const ADD_TEMPLATE_WIDGET = 'add-template'
 const EDIT_TEMPLATE_WIDGET = 'edit-template'
@@ -50,4 +54,6 @@ export {
   CAPTURE_IMAGE_WIDGET,
   HEALTH_CONCERN_LIST_WIDGET,
   PROBLEMS_LIST_WIDGET,
+  ASSESSMENT_AND_TREATMENT_PLAN_LIST_WIDGET,
+  ASSESSMENT_AND_TREATMENT_PLAN_DETAIL_WIDGET,
 }

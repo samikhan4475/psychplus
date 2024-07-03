@@ -20,6 +20,7 @@
     "@psychplus/functional-cognitive": "^0.1.0",
     "@psychplus/preferred-partners": "^0.1.0",
     "@psychplus/reports": "^0.1.0",
+    "@psychplus/assessment-and-treatment-plan": "^0.1.0",
     "@psychplus/ui": "^0.1.0",
     "@psychplus/user": "^0.1.0",
     "@psychplus/utils": "^0.1.0",

@@ -34,6 +34,7 @@ interface DataTableProps<TData, TValue> {
   thClass?: string
   isRowPan?: boolean
   isPreferredPartnerTable?: boolean
+  isTreatmentPlan?: boolean
 }
 
 const DataTable = <TData, TValue>({
@@ -51,6 +52,7 @@ const DataTable = <TData, TValue>({
   thClass,
   isPreferredPartnerTable = false,
   isRowPan = false,
+  isTreatmentPlan = false,
 }: DataTableProps<TData, TValue>) => {
   const [sorting, setSorting] = useState<SortingState>([])
   const [pagination, setPagination] = useState<PaginationState>({
@@ -85,7 +87,13 @@ const DataTable = <TData, TValue>({
     },
   })
   return (
-    <Flex grow="1" direction="column" height="100%" justify="between" className='z-10'>
+    <Flex
+      grow="1"
+      direction="column"
+      height="100%"
+      justify="between"
+      className="z-10"
+    >
       <Box>
         {renderHeader ? renderHeader(table) : null}
 
@@ -151,6 +159,18 @@ const DataTable = <TData, TValue>({
                         py="1"
                         px="1"
                         className={`h-auto cursor-pointer align-middle ${columnCellClass}`}
+                        onClick={() => {
+                          if (isTreatmentPlan && cell.column.id !== 'actions') {
+                            const {
+                              patientId,
+                              noteId,
+                              id: rowId,
+                            } = row.original as any
+                            window.location.replace(
+                              `/galaxy/widgets/assessment-and-treatment-plan-detail?patientId=${patientId}&noteId=${noteId}&rowId=${rowId}`,
+                            )
+                          }
+                        }}
                       >
                         {flexRender(
                           cell.column.columnDef.cell,
