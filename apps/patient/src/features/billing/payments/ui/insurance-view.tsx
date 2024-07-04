@@ -30,6 +30,7 @@ const InsuranceView = async () => {
   const codesets = await getCodesets([
     CODESETS.InsuranceRelationship,
     CODESETS.Gender,
+    CODESETS.InsurancePolicyPriority,
   ])
 
   if (creditCardsResponse.state === 'error') {

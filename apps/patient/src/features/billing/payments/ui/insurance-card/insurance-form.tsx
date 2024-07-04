@@ -10,7 +10,7 @@ import {
   getCalendarDate,
   getPaddedDateString,
 } from '@psychplus-v2/utils'
-import { Checkbox, Flex, TextFieldInput } from '@radix-ui/themes'
+import { Box, Flex, Text, TextFieldInput } from '@radix-ui/themes'
 import { DateValue } from 'react-aria-components'
 import { useForm } from 'react-hook-form'
 import z from 'zod'
@@ -26,7 +26,6 @@ import {
 } from '@/components-v2'
 import { Insurance, InsurancePayer } from '@/features/billing/payments/types'
 import {
-  deleteInsurance,
   updateInsuranceAction,
   uploadInsuranceCard,
 } from '../../actions'
@@ -40,6 +39,8 @@ import { EffectiveDateInput } from './effective-date-input'
 import { InsuranceFormTrigger } from './Insurance-form-trigger'
 import { PayerSelect } from './payer-select'
 import { PlanSelect } from './plan-select'
+import { TerminationDateInput } from './termination-date-input'
+import { RadioGroup } from '@psychplus/ui/radio-group'
 
 const schema = z
   .object({
@@ -51,8 +52,10 @@ const schema = z
     isPatientPolicyHolder: z.boolean(),
     policyHolderFirstName: z.string().trim().optional(),
     policyHolderLastName: z.string().trim().optional(),
+    policyHolderMiddleName: z.string().trim().optional(),
     policyHolderGender: z.string().optional(),
     policyHolderRelationship: z.string().optional(),
+    insurancePolicyPriority: z.string().optional(),
     policyHolderDateOfBirth: z
       .custom<DateValue>()
       .optional()
@@ -144,6 +147,14 @@ const schema = z
         path: ['policyHolderRelationship'],
       })
     }
+
+    if (!data.insurancePolicyPriority) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'Required',
+        path: ['insurancePolicyPriority'],
+      })
+    }
   })
 
 type SchemaType = z.infer<typeof schema>
@@ -188,6 +199,7 @@ const InsuranceForm = ({
         ? getCalendarDate(insurance?.policyHolderDateOfBirth)
         : '',
       policyHolderRelationship: insurance?.policyHolderRelationship ?? '',
+      insurancePolicyPriority: insurance?.insurancePolicyPriority ?? '',
       policyHolderSocialSecurityNumber:
         insurance?.policyHolderSocialSecurityNumber ?? '',
       hasCardFrontImage: insurance?.hasCardFrontImage ?? false,
@@ -274,13 +286,14 @@ const InsuranceForm = ({
     } as ActionSuccessState
   }
 
-  const onCheckedChange = (checked: boolean) => {
-    form.setValue('isPatientPolicyHolder', checked)
+  const onCheckedChange = (value: string) => {
+    form.setValue('isPatientPolicyHolder', value === 'Yes')
 
-    if (checked) {
+    if (value === 'Yes') {
       form.reset({
         ...form.getValues(),
         policyHolderFirstName: '',
+        policyHolderMiddleName: '',
         policyHolderLastName: '',
         policyHolderDateOfBirth: '',
         policyHolderGender: '',
@@ -296,8 +309,6 @@ const InsuranceForm = ({
     <FieldPlaceholder>+ add insurance</FieldPlaceholder>
   )
 
-  const onDeleteAction = () => deleteInsurance({ id: insurance?.id })
-
   return (
     <ToggleableForm
       form={form}
@@ -305,17 +316,6 @@ const InsuranceForm = ({
       trigger={trigger}
       submitAction={onSubmit}
       noResetValues
-      deleteButtonProps={
-        insurance ? {
-          deleteAction: onDeleteAction,
-          confirmTitle: 'Remove Insurance',
-          confirmDescription: 'Are you sure? This will remove the card from your account and it will no longer be able to be used.',
-          confirmActionLabel: 'Remove',
-          toastTitle: 'Insurance Removed',
-          onSuccess: router.refresh
-        } : undefined
-      }
-      contentClassName="mb-2 p-4 border-y border-dashed border-y-gray-5"
     >
       <FormFieldContainer className="w-full">
         <FormFieldLabel>Insurance Card</FormFieldLabel>
@@ -352,89 +352,156 @@ const InsuranceForm = ({
           />
         </Flex>
       </FormFieldContainer>
-      <Flex gap="3">
-        <PayerSelect payers={insurancePayers} />
-        <PlanSelect payers={insurancePayers} />
+      <Flex gap="3" width="100%">
+        <Box className="flex-1">
+          <FormField
+            name="insurancePolicyPriority"
+            label="Priority"
+            containerClassName="flex-1"
+          >
+            <CodesetFormSelect
+              name="insurancePolicyPriority"
+              codeset={CODESETS.InsurancePolicyPriority}
+            />
+          </FormField>
+        </Box>
+        <Box className="flex-1">
+          <PayerSelect payers={insurancePayers} />
+        </Box>
+        <Box className="flex-1">
+          <PlanSelect payers={insurancePayers} />
+        </Box>
+        <Box className="flex-1">
+          <FormField name="memberId" label="Member ID">
+            <TextFieldInput {...form.register('memberId')} />
+          </FormField>
+        </Box>
       </Flex>
-      <EffectiveDateInput />
-      <Flex gap="3">
-        <FormField name="memberId" label="Member ID">
-          <TextFieldInput {...form.register('memberId')} />
-        </FormField>
-        <FormField name="groupNumber" label="Group Number">
-          <TextFieldInput {...form.register('groupNumber')} />
-        </FormField>
+
+      <Flex width="100%" gap="3">
+        <Box className="flex-1">
+          <FormField name="groupNumber" label="Group Number">
+            <TextFieldInput {...form.register('groupNumber')} />
+          </FormField>
+        </Box>
+        <Box className="flex-1">
+          <EffectiveDateInput />
+        </Box>
+        <Box className="flex-1">
+          <TerminationDateInput />
+        </Box>
+        <Box className="flex-1">
+          <FormFieldContainer
+            align="start"
+            justify="center"
+            direction="column"
+            className="mt-2 rounded-3 bg-[#F0F4FF] px-3 py-1.5"
+          >
+            <Box>
+              <Text className="font-medium text-[11px]">
+                Are you the primary insurance holder
+              </Text>
+            </Box>
+
+            <RadioGroup.Root
+              id="isPatientPolicyHolder"
+              value={form.watch('isPatientPolicyHolder') ? 'Yes' : 'No'}
+              data-testid="signup-is-parent-or-guardian-input"
+              onValueChange={(value) => {
+                onCheckedChange(value)
+              }}
+            >
+              <Flex gap="4">
+                {['No', 'Yes'].map((option) => (
+                  <Text as="label" key={option} size="2">
+                    <Flex gap="1">
+                      <RadioGroup.Item value={option} />
+                      {option}
+                    </Flex>
+                  </Text>
+                ))}
+              </Flex>
+            </RadioGroup.Root>
+          </FormFieldContainer>
+        </Box>
       </Flex>
-      <FormFieldContainer
-        align="center"
-        gap="2"
-        direction="row"
-        className="mt-2 rounded-3 border border-gray-5 bg-gray-2 p-3"
-      >
-        <Checkbox
-          id="isPatientPolicyHolder"
-          size="3"
-          checked={form.watch('isPatientPolicyHolder')}
-          onCheckedChange={onCheckedChange}
-          highContrast
-        />
-        <FormFieldLabel id="isPatientPolicyHolder">
-          Patient is policyholder
-        </FormFieldLabel>
-      </FormFieldContainer>
 
       {!form.watch('isPatientPolicyHolder') ? (
         <>
-          <Flex gap="3" className="w-full">
-            <FormField
-              name="policyHolderFirstName"
-              label="First Name"
-              containerClassName="flex-1"
-            >
-              <TextFieldInput {...form.register('policyHolderFirstName')} />
-            </FormField>
-            <FormField
-              name="policyHolderLastName"
-              label="Last Name"
-              containerClassName="flex-1"
-            >
-              <TextFieldInput {...form.register('policyHolderLastName')} />
-            </FormField>
-          </Flex>
-          <Flex gap="3" className="w-full">
-            <FormField
-              name="policyHolderRelationship"
-              label="Relationship"
-              containerClassName="flex-1"
-            >
-              <CodesetFormSelect
-                name="policyHolderRelationship"
-                codeset={CODESETS.InsuranceRelationship}
-              />
-            </FormField>
-            <FormField
-              name="policyHolderGender"
-              label="Gender"
-              containerClassName="flex-1"
-            >
-              <CodesetFormSelect
-                name="policyHolderGender"
-                codeset={CODESETS.Gender}
-              />
-            </FormField>
-          </Flex>
-          <Flex gap="3" className="w-full">
-            <FormField name="policyHolderDateOfBirth" label="Date of Birth">
-              <DobInput name="policyHolderDateOfBirth" />
-            </FormField>
+          <Text size="5" className="text-[#151B4A] font-bold mt-6 mb-3">
+            Primary Insurance Holder Details
+          </Text>
 
-            <FormField
-              name="policyHolderSocialSecurityNumber"
-              label="SSN"
-              containerClassName="flex-1"
-            >
-              <SSNInput name="policyHolderSocialSecurityNumber" size="2" />
-            </FormField>
+          <Flex gap="3" className="w-full">
+            <Box className="flex-1">
+              <FormField
+                name="policyHolderFirstName"
+                label="First Name"
+                containerClassName="flex-1"
+              >
+                <TextFieldInput {...form.register('policyHolderFirstName')} />
+              </FormField>
+            </Box>
+            <Box className="flex-1">
+              <FormField
+                name="policyHolderMiddleName"
+                label="Middle Name"
+                containerClassName="flex-1"
+              >
+                <TextFieldInput {...form.register('policyHolderMiddleName')} />
+              </FormField>
+            </Box>
+            <Box className="flex-1">
+              <FormField
+                name="policyHolderLastName"
+                label="Last Name"
+                containerClassName="flex-1"
+              >
+                <TextFieldInput {...form.register('policyHolderLastName')} />
+              </FormField>
+            </Box>
+            <Box className="flex-1">
+              <FormField
+                name="policyHolderGender"
+                label="Gender"
+                containerClassName="flex-1"
+              >
+                <CodesetFormSelect
+                  name="policyHolderGender"
+                  codeset={CODESETS.Gender}
+                />
+              </FormField>
+            </Box>
+          </Flex>
+
+          <Flex gap="3" className="w-full">
+            <Box className="flex-1">
+              <FormField name="policyHolderDateOfBirth" label="Date of Birth">
+                <DobInput name="policyHolderDateOfBirth" />
+              </FormField>
+            </Box>
+            <Box className="flex-1">
+              <FormField
+                name="policyHolderSocialSecurityNumber"
+                label="SSN"
+                containerClassName="flex-1"
+              >
+                <SSNInput name="policyHolderSocialSecurityNumber" size="2" />
+              </FormField>
+            </Box>
+            <Box className="flex-1">
+              <FormField
+                name="policyHolderRelationship"
+                label="Relationship"
+                containerClassName="flex-1"
+              >
+                <CodesetFormSelect
+                  name="policyHolderRelationship"
+                  codeset={CODESETS.InsuranceRelationship}
+                />
+              </FormField>
+            </Box>
+            <Box className="flex-1"></Box>
           </Flex>
         </>
       ) : null}

@@ -36,6 +36,7 @@ interface Insurance {
   policyHolderGender?: string
   policyName: string
   payerName: string
+  policyPriority: string
 }
 
 interface InsuranceTag {

@@ -11,6 +11,7 @@ const CODESETS = {
   Language: 'Language',
   InsuranceRelationship: 'InsuranceRelationship',
   GuardianRelationship: 'GuardianRelationship',
+  InsurancePolicyPriority: 'InsurancePolicyPriority',
 }
 
 export { CODESET_CACHE_SECONDS, CODE_NOT_SET, CODE_NOT_SPECIFIED, CODESETS }
