@@ -2,4 +2,9 @@ interface SearchParams {
   [key: string]: string | undefined
 }
 
-export type { SearchParams }
+interface ScheduleFeeSearchParams {
+  payerId?: string
+  IsPreferredPartnerFeeSchedule: boolean
+}
+
+export type { SearchParams, ScheduleFeeSearchParams }
