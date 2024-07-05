@@ -61,6 +61,16 @@ interface Parameter {
   displayName: string
   codes: ParameterCodeSet[]
 }
+
+interface RoleCode {
+  code: string
+  displayName: string
+}
+interface RelationshipCodeSet {
+  codeSystemName: string
+  displayName: string
+  codes: RoleCode[]
+}
 type CodeSetIndex = { [key: string]: Code[] | undefined }
 
 interface Metadata {
@@ -158,4 +168,5 @@ export type {
   MetaDataCodeSet,
   ParameterCodeSet,
   Parameter,
+  RelationshipCodeSet,
 }

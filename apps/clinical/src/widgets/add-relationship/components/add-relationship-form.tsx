@@ -1,119 +1,186 @@
+import { useMemo } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Box, Flex, Grid } from '@radix-ui/themes'
 import { useForm, type SubmitHandler } from 'react-hook-form'
-import { z } from 'zod'
-import { FormSelect, FormTextInput } from '@psychplus/form'
+import {
+  FormPhoneNumberInput,
+  FormSelect,
+  FormTextInput,
+} from '@psychplus/form'
+import type { PatientRelationship } from '@psychplus/patient'
 import { FormContainer, FormSubmitButton } from '@psychplus/ui/form'
 import { usePubsub } from '@psychplus/utils/event'
 import { ADD_RELATIONSHIP_WIDGET } from '@psychplus/widgets'
-import { EventType } from '@psychplus/widgets/events'
-
-const schema = z.object({
-  firstName: z.string(),
-  middleName: z.string(),
-  lastName: z.string(),
-  relationship: z.string(),
-  address1: z.string(),
-  email: z.string(),
-  homePhone: z.string(),
-  cellPhone: z.string(),
-  maidenName: z.string(),
-})
-
-type SchemaType = z.infer<typeof schema>
+import {
+  EVENT_RELATIONSHIP_CREATED,
+  EVENT_RELATIONSHIP_UPDATED,
+  EventType,
+} from '@psychplus/widgets/events'
+import { PlacesAutocomplete } from '@/components/places-autocomplete'
+import { useGooglePlacesContext } from '@/providers'
+import {
+  createPatientRelationship,
+  updatePatientRelationship,
+} from '../api.client'
+import { useGuardianRelationshipOptions } from '../hooks'
+import { schema, SchemaType } from '../schema'
+import { useStore } from '../store'
+import { MemoizedTable } from './table'
 
 const inputFieldClasses = 'col-span-1 h-7'
 
-const AddRelationshipForm = () => {
+interface AddRelationshipProps {
+  data?: PatientRelationship
+}
+
+const initialData = {
+  name: {
+    firstName: '',
+    middleName: '',
+    lastName: '',
+    preferredName: '',
+    title: '',
+    suffix: '',
+    honors: '',
+  },
+  isEmergencyContact: false,
+  isGuardian: false,
+  guardianRelationshipCode: '',
+  contactDetails: {
+    email: '',
+    phoneNumbers: [
+      {
+        number: '',
+        extension: '',
+        comment: '',
+      },
+    ],
+    addresses: [
+      {
+        type: 'Home',
+        street1: '',
+        street2: '',
+        city: '',
+        state: '',
+        country: '',
+        postalCode: '',
+      },
+    ],
+    isMailingAddressSameAsPrimary: true,
+  },
+  isAllowedToReleaseInformation: false,
+}
+
+const AddRelationshipForm = ({ data }: AddRelationshipProps) => {
   const { publish } = usePubsub()
+  const patient = useStore((state) => state.patient)
+  const { loaded } = useGooglePlacesContext()
+  const tableData: PatientRelationship[] = useMemo(
+    () => (data ? [data] : [initialData]),
+    [data],
+  )
+  const guardianRelationshipOptions = useGuardianRelationshipOptions()
+
   const form = useForm<SchemaType>({
     resolver: zodResolver(schema),
-    defaultValues: {
-      firstName: '',
-      middleName: '',
-      lastName: '',
-      relationship: '',
-      address1: 'Street test, house test',
-      email: '',
-      homePhone: '',
-      cellPhone: '',
-      maidenName: '',
-    },
+    defaultValues: data
+      ? data
+      : {
+          patientId: patient?.id,
+          ...initialData,
+        },
   })
 
-  const onSubmit: SubmitHandler<SchemaType> = (data) => {
-    console.log('data returned: ', data)
-    publish(`${ADD_RELATIONSHIP_WIDGET}:${EventType.Closed}`)
+  const onCreateNew: SubmitHandler<SchemaType> = (data) => {
+    if (patient)
+      createPatientRelationship(data, patient.id).then(() => {
+        publish(`${ADD_RELATIONSHIP_WIDGET}:${EventType.Closed}`)
+        publish(EVENT_RELATIONSHIP_CREATED)
+      })
+  }
+
+  const onUpdate: SubmitHandler<SchemaType> = (data) => {
+    if (data.id && data)
+      updatePatientRelationship(data.patientId, data.id, data).then(() => {
+        publish(`${ADD_RELATIONSHIP_WIDGET}:${EventType.Closed}`)
+        publish(EVENT_RELATIONSHIP_UPDATED)
+      })
   }
 
   return (
-    <FormContainer form={form} onSubmit={onSubmit}>
-      <Grid columns='3' rows='3' className="min-w-[648px] gap-3">
-        <Box className="col-span-1">
+    <FormContainer form={form} onSubmit={data ? onUpdate : onCreateNew}>
+      <Grid columns="12" rows="3" className="min-w-[648px] gap-3">
+        <Box className="col-span-4">
           <FormSelect
             label="Relationship"
-            {...form.register('relationship')}
-            buttonClassName='h-7'
-            options={[
-              { label: 'Father', value: 'Father' },
-              { label: 'Mother', value: 'Mother' },
-              { label: 'Brother', value: 'Brother' },
-            ]}
+            required
+            {...form.register('guardianRelationshipCode')}
+            options={guardianRelationshipOptions}
+            buttonClassName={inputFieldClasses}
           />
         </Box>
-        <FormTextInput
-          label="First Name"
-          required
-          {...form.register('firstName')}
-          className={inputFieldClasses}
-        />
-        <FormTextInput
-          label="Middle Name"
-          {...form.register('middleName')}
-          className={inputFieldClasses}
-        />
-        <FormTextInput
-          label="Last Name"
-          required
-          {...form.register('lastName')}
-          className={inputFieldClasses}
-        />
-        {form.watch('relationship') === 'Mother'? (
+        <Box className="col-span-4">
           <FormTextInput
-            label="Maiden Name"
-            {...form.register('maidenName')}
-            className={inputFieldClasses}
-          />
-        ): null}
-        <FormTextInput
-          label="Phone Number"
-          required
-          {...form.register('homePhone')}
-          className={inputFieldClasses}
-        />
-        <FormTextInput
-          label="Email"
-          required
-          {...form.register('email')}
-          className={inputFieldClasses}
-        />
-        <Box className={`${form.watch('relationship') === 'Mother'? 'col-span-2': 'col-span-3'}`}>
-          <FormTextInput
-            label="Address"
+            label="First Name"
             required
-            {...form.register('address1')}
+            {...form.register('name.firstName')}
             className={inputFieldClasses}
           />
+        </Box>
+        <Box className="col-span-4">
+          <FormTextInput
+            label="Middle Name"
+            {...form.register('name.middleName')}
+            className={inputFieldClasses}
+          />
+        </Box>
+        <Box className="col-span-4">
+          <FormTextInput
+            label="Last Name"
+            required
+            {...form.register('name.lastName')}
+            className={inputFieldClasses}
+          />
+        </Box>
+        <Box className="col-span-4">
+          <FormPhoneNumberInput
+            label="Phone Number"
+            required
+            {...form.register('contactDetails.phoneNumbers.0.number')}
+            className={inputFieldClasses}
+          />
+        </Box>
+        <Box className="col-span-4">
+          <FormTextInput
+            label="Email"
+            required
+            {...form.register('contactDetails.email')}
+            className={inputFieldClasses}
+          />
+        </Box>
+        <Box className="col-span-3">
+          <FormTextInput
+            label="Zip Code"
+            required
+            {...form.register('contactDetails.addresses.0.postalCode')}
+            className={inputFieldClasses}
+          />
+        </Box>
+        <Box className="col-span-9">
+          {loaded && (
+            <PlacesAutocomplete label='Address' required name={'contactDetails.addresses.0'} />
+          )}
         </Box>
       </Grid>
+      <MemoizedTable data={tableData} />
       <Flex justify="end" mt="3">
         <FormSubmitButton
-          className='bg-[#151B4A] text-[#FFF] text-[14px] px-3 py-1.5'
+          className="cursor-pointer bg-[#151B4A] px-3 py-1.5 text-[14px] text-[#FFF]"
           form={form}
         >
           Save
         </FormSubmitButton>
-      </Flex>{' '}
+      </Flex>
     </FormContainer>
   )
 }

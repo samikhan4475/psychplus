@@ -13,7 +13,6 @@ const CODE_SET_CONTACT_MADE_STATUS = 'ContactMadeStatus'
 const CODE_SET_RESOURCE_STATUS = 'ResourceStatus'
 const CODE_SET_VERIFICATION_STATUS = 'VerificationStatus'
 const CODE_SET_CUSTOMER_STATUS = 'CustomerStatus'
-const CODE_SET_GUARDIAN_RELATIONSHIP = 'GuardianRelationship'
 const CODE_SET_PATIENT_CONSENT_POLICY_TYPE = 'PatientConsentPolicyType'
 const CODE_SET_INSURANCE_POLICY_PRIORITY = 'InsurancePolicyPriority'
 const CODE_SET_PATIENT_RACE = 'race'
@@ -95,16 +94,6 @@ const computeVerificationStatus = memoize(
 const computeCustomerStatus = memoize(
   (codeSetIndex: CodeSetIndex) =>
     codeSetIndex[CODE_SET_CUSTOMER_STATUS]?.filter(
-      (code) => code.code !== CODE_NOT_SET,
-    ).map((code) => ({
-      value: code.code,
-      label: code.display,
-    })) ?? [],
-)
-
-const computeGuardianRelationship = memoize(
-  (codeSetIndex: CodeSetIndex) =>
-    codeSetIndex[CODE_SET_GUARDIAN_RELATIONSHIP]?.filter(
       (code) => code.code !== CODE_NOT_SET,
     ).map((code) => ({
       value: code.code,
@@ -266,9 +255,6 @@ const useVerificationStatusOptions = () =>
 
 const useCustomerStatusOptions = () => 
   computeCustomerStatus(useStore(state => state.codeSetIndex))
-   
-const useGuardianRelationshipOptions = () => 
-  computeGuardianRelationship(useStore(state => state.codeSetIndex))
 
 const useConsentsPolicyTypeOptions = () => 
   computePatientPolicyType(useStore(state => state.codeSetIndex))
@@ -337,7 +323,6 @@ export {
   useStatusLabel,
   useVerificationStatusOptions,
   useCustomerStatusOptions,
-  useGuardianRelationshipOptions,
   useConsentsPolicyTypeOptions,
   useInsurancePolicyPriorityOptions,
   usePatientRaceOptions,

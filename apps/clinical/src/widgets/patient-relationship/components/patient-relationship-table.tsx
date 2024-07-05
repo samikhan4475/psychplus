@@ -1,6 +1,7 @@
-import { Box, Flex, Heading, Switch, Text } from '@radix-ui/themes'
+import { PlusIcon } from '@radix-ui/react-icons'
+import { Box, Flex, Heading, Text } from '@radix-ui/themes'
 import { type ColumnDef } from '@tanstack/react-table'
-import { z } from 'zod'
+import { type PatientRelationship } from '@psychplus/patient'
 import { Button } from '@psychplus/ui/button'
 import {
   DataTable,
@@ -11,106 +12,121 @@ import { TableCellText } from '@psychplus/ui/table-cell'
 import { usePubsub } from '@psychplus/utils/event'
 import { ADD_RELATIONSHIP_WIDGET } from '@psychplus/widgets'
 import { EventType } from '@psychplus/widgets/events'
-import { type Guardians } from '../types'
-import { RowActionDetails } from './row-action-details'
+import { useStore } from '../store'
+import { EmergencyContactSwitch } from './emergency-contact-switch'
+import { RowActionDelete } from './row-action-delete'
 import { RowActionEdit } from './row-action-edit'
-import { PlusIcon } from '@radix-ui/react-icons'
+import { RriSwitch } from './rri-switch'
+import { GuardianStatusSwitch } from './guardian-status-switch'
+import { RelationshipTextField } from './relationship-text-field'
 
-const rowActions: RowAction<Guardians>[] = [
+const rowActions: RowAction<PatientRelationship>[] = [
   {
-    id: 'patient-referrals-row-action-details',
-    render: RowActionDetails,
+    id: 'patient-relationships-row-action-edit',
+    render: RowActionEdit,
   },
   {
-    id: 'patient-referrals-row-action-edit',
-    render: RowActionEdit,
+    id: 'patient-relationships-row-action-details',
+    render: RowActionDelete,
   },
 ]
 
-const columns: ColumnDef<Guardians>[] = [
+const columns: ColumnDef<PatientRelationship>[] = [
   {
     id: 'first-name',
-    accessorKey: 'firstName',
+    accessorKey: 'name.firstName',
     header: () => <Text className="font-[400]">First Name</Text>,
     cell: ({ row }) => (
-      <TableCellText className="text-[12px]" text={row.original.firstName} />
+      <TableCellText
+        className="text-[12px]"
+        text={row.original.name?.firstName}
+      />
     ),
   },
   {
     id: 'middle-name',
-    accessorKey: 'middleName',
+    accessorKey: 'name.middleName',
     header: () => <Text className="font-[400]">Middle Name</Text>,
     cell: ({ row }) => (
-      <TableCellText className="text-[12px]" text={row.original.middleName} />
+      <TableCellText
+        className="text-[12px]"
+        text={row.original.name?.middleName}
+      />
     ),
   },
   {
     id: 'last-name',
-    accessorKey: 'lastName',
+    accessorKey: 'name.lastName',
     header: () => <Text className="font-[400]">Last Name</Text>,
     cell: ({ row }) => (
-      <TableCellText className="text-[12px]" text={row.original.lastName} />
+      <TableCellText
+        className="text-[12px]"
+        text={row.original.name?.lastName}
+      />
     ),
   },
   {
     id: 'relationship',
-    accessorKey: 'relationship',
+    accessorKey: 'guardianRelationship',
     header: () => <Text className="font-[400]">Relationship</Text>,
     cell: ({ row }) => (
-      <TableCellText className="text-[12px]" text={row.original.relationship} />
+      <RelationshipTextField row={row} />
     ),
   },
   {
     id: 'address1',
-    accessorKey: 'address1',
+    accessorKey: 'contactDetails.addresses[0].street1',
     header: () => <Text className="font-[400]">Address 1</Text>,
     cell: ({ row }) => (
-      <TableCellText className="text-[12px]" text={row.original.address1} />
+      <TableCellText
+        className="text-[12px]"
+        text={row.original.contactDetails?.addresses?.[0].street1 ?? ''}
+      />
     ),
   },
   {
     id: 'email',
-    accessorKey: 'email',
+    accessorKey: 'contactDetails.email',
     header: () => <Text className="font-[400]">Email</Text>,
     cell: ({ row }) => (
-      <TableCellText className="text-[12px]" text={row.original.email} />
+      <TableCellText
+        className="text-[12px]"
+        text={row.original.contactDetails?.email ?? ''}
+      />
     ),
   },
   {
     id: 'home-phone',
-    accessorKey: 'homePhone',
+    accessorKey: 'contactDetails.phoneNumbers',
     header: () => <Text className="font-[400]">Home Phone</Text>,
     cell: ({ row }) => (
-      <TableCellText className="text-[12px]" text={row.original.homePhone} />
+      <TableCellText
+        className="text-[12px]"
+        text={
+          row.original.contactDetails?.phoneNumbers?.find(
+            (number) => number.type === 'Home',
+          )?.number
+        }
+      />
     ),
   },
   {
     id: 'Emergency Contact',
-    accessorKey: 'emergencyContact',
+    accessorKey: 'isEmergencyContact',
     header: () => <Text className="font-[400]">Emergency Contact</Text>,
-    cell: ({ row }) => (
-      <Text>
-        <Switch defaultChecked color="grass" /> Yes
-      </Text>
-    ),
+    cell: ({ row }) => <EmergencyContactSwitch row={row} />,
   },
   {
     id: 'rri',
-    accessorKey: 'rri',
+    accessorKey: 'isAllowedToReleaseInformation',
     header: () => <Text className="font-[400]">RRI</Text>,
-    cell: ({ row }) => (
-      <Text>
-        <Switch defaultChecked color="grass" /> Yes
-      </Text>
-    ),
+    cell: ({ row }) => <RriSwitch row={row} />,
   },
   {
-    id: 'cell-phone',
-    accessorKey: 'cellPhone',
-    header: () => <Text className="font-[400]">Cell Phone</Text>,
-    cell: ({ row }) => (
-      <TableCellText className="text-[12px]" text={row.original.cellPhone} />
-    ),
+    id: 'Guardian',
+    accessorKey: 'isGuardian',
+    header: () => <Text className="font-[400]">Guardian</Text>,
+    cell: ({ row }) => <GuardianStatusSwitch row={row} />,
   },
   {
     id: 'action',
@@ -124,75 +140,18 @@ const columns: ColumnDef<Guardians>[] = [
   },
 ]
 
-const data = [
-  {
-    firstName: 'Test',
-    middleName: 'Test',
-    lastName: 'Test',
-    relationship: 'test',
-    address1: 'Street test, test, test',
-    email: 'test@test.com',
-    homePhone: '123',
-    cellPhone: '123',
-    emergencyContact: true,
-    rri: true,
-  },
-  {
-    firstName: 'Test',
-    middleName: 'Test',
-    lastName: 'Test',
-    relationship: 'test',
-    address1: 'Street test, test, test',
-    email: 'test@test.com',
-    homePhone: '123',
-    cellPhone: '123',
-    emergencyContact: true,
-    rri: true,
-  },
-  {
-    firstName: 'Test',
-    middleName: 'Test',
-    lastName: 'Test',
-    relationship: 'test',
-    address1: 'Street test, test, test',
-    email: 'test@test.com',
-    homePhone: '123',
-    cellPhone: '123',
-    emergencyContact: true,
-    rri: true,
-  },
-  {
-    firstName: 'Test',
-    middleName: 'Test',
-    lastName: 'Test',
-    relationship: 'test',
-    address1: 'Street test, test, test',
-    email: 'test@test.com',
-    homePhone: '123',
-    cellPhone: '123',
-    emergencyContact: true,
-    rri: true,
-  },
-]
-
-const schema = z.object({
-  firstName: z.string(),
-  middleName: z.string(),
-  lastName: z.string(),
-  relationship: z.string(),
-  guardianAddress: z.string(),
-  phoneNumber: z.string(),
-  email: z.string(),
-})
-type SchemaType = z.infer<typeof schema>
-
 const RelationshipsTable = () => {
   const { publish } = usePubsub()
+  const patientRelationships = useStore((state) => state.patientRelationships)
 
   return (
     <Flex direction="column">
-      <Flex justify="between" className="px-2 pb-[2px] pt-[4px]" align="center">
-        <Heading className='text-[14px]'>Relationship</Heading>
+      <Flex
+        justify="between"
+        className="bg-[#EEF2F6] px-2 pb-[2px] pt-[4px]"
+        align="center"
+      >
+        <Heading className="text-[14px]">Relationship</Heading>
         <Button
           variant="outline"
           className="h-6 cursor-pointer bg-[#FFF] px-2 text-[12px] text-[#000000] [box-shadow:inset_0_0_0_0.4px_#9E9898CC]"
@@ -210,7 +169,7 @@ const RelationshipsTable = () => {
           thClass="[box-shadow:inset_0_0_0_0.2px_#0134DB72] pl-1"
           tableClass="shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)]"
           columnCellClass="[box-shadow:inset_0_0_0_0.1px_#0134DB72] pl-1"
-          data={data}
+          data={patientRelationships}
           columns={columns}
         />
       </Box>
@@ -218,4 +177,4 @@ const RelationshipsTable = () => {
   )
 }
 
-export { RelationshipsTable, type SchemaType as GuardianSchema }
+export { RelationshipsTable }

@@ -2,7 +2,7 @@
 
 import { useRef } from 'react'
 import { type StoreApi, type UseBoundStore } from 'zustand'
-import { type CodeSet } from '@psychplus/codeset'
+import { type RelationshipCodeSet } from '@psychplus/codeset'
 import { type Patient } from '@psychplus/patient'
 import { type User } from '@psychplus/user'
 import { type StoreType } from './store'
@@ -13,30 +13,28 @@ interface PreloaderProps {
   store: BoundStoreType
   user: User
   patient: Patient
-  codeSets: CodeSet[]
+  relationshipsCodeset: RelationshipCodeSet
 }
 
 const Preloader = ({
   store,
   user,
   patient,
-  codeSets,
+  relationshipsCodeset,
 }: PreloaderProps) => {
   const loaded = useRef(false)
 
-  const { setUser, setPatient, setCodeSets } = store(
-    (state) => ({
-      setUser: state.setUser,
-      setPatient: state.setPatient,
-      setCodeSets: state.setCodeSets,
-    }),
-  )
+  const { setUser, setPatient, setRelationshipsCodeset } = store((state) => ({
+    setUser: state.setUser,
+    setPatient: state.setPatient,
+    setRelationshipsCodeset: state.setRelationshipsCodeset,
+  }))
 
   if (!loaded.current) {
     loaded.current = true
     setUser(user)
     setPatient(patient)
-    setCodeSets(codeSets)
+    setRelationshipsCodeset(relationshipsCodeset)
   }
 
   return null

@@ -5,6 +5,8 @@ import { getUser } from '@psychplus/user/api.server'
 import { useStore } from './store'
 import { Preloader } from './preloader'
 import { PatientRelationshipsWidgetClient } from './patient-relationship-widget.client'
+import { getPatientRelationships } from './api.server'
+import { getRelationshipCodeSets } from '@psychplus/codeset/api.server'
 
 type PatientRelationshipWidgetProps = PatientParams
 
@@ -12,7 +14,15 @@ const PatientRelationshipWidgetServer = async ({
   patientId,
 }: PatientRelationshipWidgetProps) => {
   noStore()
-  const user = await getUser()
+  const [
+    user,
+    patientRelationships,
+    relationshipsCodeset,
+  ] = await Promise.all([
+    getUser(),
+    getPatientRelationships({patientId}),
+    getRelationshipCodeSets(),
+  ])
 
   return (
     <>
@@ -20,8 +30,10 @@ const PatientRelationshipWidgetServer = async ({
       <Preloader         
         store={useStore}
         user={user}
+        patientRelationships={patientRelationships}
+        relationshipsCodeset={relationshipsCodeset}
       />
-      <PatientRelationshipsWidgetClient />
+      <PatientRelationshipsWidgetClient patientId={patientId} />
     </>
   )
 }

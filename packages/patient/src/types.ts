@@ -143,6 +143,17 @@ interface PreferredPartner {
   termDate: string
 }
 
+interface PatientRelationship {
+  id?: string
+  name: PatientName
+  patientId?: number
+  isEmergencyContact: boolean
+  isGuardian?: boolean
+  guardianRelationshipCode?: string
+  contactDetails?: PatientContactDetails
+  isAllowedToReleaseInformation: boolean
+}
+
 export type {
   Patient,
   PatientParams,
@@ -157,5 +168,6 @@ export type {
   PatientAddress,
   PatientDriversLicense,
   PatientMetadata,
+  PatientRelationship,
 }
 

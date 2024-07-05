@@ -31,6 +31,7 @@ interface PlacesAutocompleteProps {
   autoFocus?: boolean
   required?: boolean
   disabled?: boolean
+  label?: string
 }
 
 const PlacesAutocomplete = ({
@@ -38,6 +39,7 @@ const PlacesAutocomplete = ({
   autoFocus,
   required,
   disabled = false,
+  label = 'Address 1',
 }: PlacesAutocompleteProps) => {
   const autocompleteRef = useRef<HTMLInputElement | null>(null)
 
@@ -174,7 +176,7 @@ const PlacesAutocomplete = ({
     <Flex direction="column" width="100%" gap="3">
       <Flex position="relative" direction="column" gap="1">
         <Text as="label" size="2" weight="bold" htmlFor={name}>
-          Address 1 {required && <span className="text-[#FF0000]">*</span>}
+          {label} {required && <span className="text-[#FF0000]">*</span>}
         </Text>
         <TextFieldInput
           size="3"

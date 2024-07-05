@@ -249,6 +249,7 @@ const PatientInfo = ({ children }: React.PropsWithChildren) => {
             </Flex>
             <Button
               variant="outline"
+              type='button'
               className="h-6 cursor-pointer bg-[#FFF] px-2 text-[12px] text-[#000000CC] [box-shadow:inset_0_0_0_0.4px_#9E9898CC]"
             >
               <HistoryIcon width={11.2} height={11.2} />
