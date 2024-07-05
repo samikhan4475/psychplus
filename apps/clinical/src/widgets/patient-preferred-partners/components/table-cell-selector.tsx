@@ -1,25 +1,20 @@
 import { Select } from '@psychplus/ui/select'
 import { type PropsWithRow } from '@psychplus/ui/data-table'
-import { PreferredPartner } from '@psychplus/patient/types'
 import { useState } from 'react'
+import { PatientPreferredPartner } from '../types'
 
 const TableCellSelector = ({
     row: {original: preferredPartner}, name
-}: PropsWithRow<PreferredPartner> & { name: string }) => {
-  const [value, setValue] = useState(preferredPartner[name as keyof PreferredPartner])
+}: PropsWithRow<PatientPreferredPartner> & { name: string }) => {
+  const [value, setValue] = useState(preferredPartner[name as keyof PatientPreferredPartner] as string)
   const options = [
-    'test',
-    'test 1',
-    'test 2',
-    'test 3',
-    'test 4',
     'Primary',
     'Secondary',
     'Tertiary'
   ]
 
-  const updateSelection = (value: string) => {
-    setValue(value)
+  const updateSelection = (value: string | undefined) => {
+    if(value) setValue(value)
   }
 
   return (
