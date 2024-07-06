@@ -10,7 +10,7 @@ const ProviderTypeFilter = () => {
 
   return (
     <AppointmentFilterRadioGroup
-      title="Provider Type"
+      title="Appointment"
       value={providerType.toString()}
       onChange={(value) => setProviderType(Number(value))}
       options={[

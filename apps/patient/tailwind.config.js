@@ -16,6 +16,11 @@ const config = {
       colors: {
         white: '#ffffff',
         black: '#000000',
+        "pp-blue-1":'#F0F4FF',
+        "pp-gray-1":'#60646C',
+        "pp-blue-2":'#EEF2F6',
+        "pp-gray-2":'#DDDDE3',
+        "pp-gray-3":'#EBEBEF',
       },
       borderRadius: {
         full: '100%',

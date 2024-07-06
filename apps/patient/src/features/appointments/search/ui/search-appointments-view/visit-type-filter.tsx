@@ -11,7 +11,7 @@ const VisitTypeFilter = () => {
 
   return (
     <AppointmentFilterRadioGroup
-      title="Visit Type"
+      title="Type"
       value={appointmentType}
       onChange={setAppointmentType}
       options={[

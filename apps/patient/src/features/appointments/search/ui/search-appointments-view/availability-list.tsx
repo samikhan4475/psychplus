@@ -9,9 +9,9 @@ import {
   getProviderTypeLabel,
   getUserFullName,
 } from '@psychplus-v2/utils'
+import { StarFilledIcon, StarIcon } from '@radix-ui/react-icons'
 import { Box, Button, Flex, Text } from '@radix-ui/themes'
-import { NavigationIcon } from 'lucide-react'
-import { ProviderAvatar } from '@/components-v2'
+import { DistanceIcon, ProviderAvatar } from '@/components-v2'
 import { useStore } from '@/features/appointments/search/store'
 import type {
   AppointmentAvailability,
@@ -29,8 +29,42 @@ interface AvailabilityListProps {
   userConsents: Consent[]
 }
 
+interface PrimaryProviderAvailabilityCardProps {
+  userConsents: Consent[]
+}
+
+const PrimaryProviderAvailabilityCard = ({
+  userConsents,
+}: PrimaryProviderAvailabilityCardProps) => {
+  const data = useSortedFilteredData()
+
+  const careTeamMember = useStore((state) => state.careTeamMember())
+
+  if (data.length === 0) {
+    return null
+  }
+
+  const primaryProviderAvailabilityData = data.find(
+    (d) => d.specialist.id === careTeamMember?.staffDetails.id,
+  )
+
+  if (!primaryProviderAvailabilityData) {
+    return null
+  }
+
+  return (
+    <ProviderAvailabilityCard
+      userConsents={userConsents}
+      key={primaryProviderAvailabilityData?.specialist.id}
+      data={primaryProviderAvailabilityData}
+    />
+  )
+}
+
 const AvailabilityList = ({ userConsents }: AvailabilityListProps) => {
   const data = useSortedFilteredData()
+
+  const careTeamMember = useStore((state) => state.careTeamMember())
 
   if (data.length === 0) {
     return (
@@ -40,13 +74,21 @@ const AvailabilityList = ({ userConsents }: AvailabilityListProps) => {
     )
   }
 
-  return data.map((availability) => (
-    <ProviderAvailabilityCard
-      userConsents={userConsents}
-      key={availability.specialist.id}
-      data={availability}
-    />
-  ))
+  return data.map((availability) => {
+    if (
+      careTeamMember &&
+      availability.specialist.id === careTeamMember.staffDetails.id
+    ) {
+      return null
+    }
+    return (
+      <ProviderAvailabilityCard
+        userConsents={userConsents}
+        key={availability.specialist.id}
+        data={availability}
+      />
+    )
+  })
 }
 
 const ProviderAvailabilityCard = ({
@@ -57,6 +99,7 @@ const ProviderAvailabilityCard = ({
   data: AppointmentAvailability
 }) => {
   const [selectedClinic, setSelectedClinic] = useState(0)
+  const [showMore, setShowMore] = useState(false)
 
   const { appointmentType, startingDate, sortBy } = useStore((state) => ({
     appointmentType: state.appointmentType,
@@ -105,21 +148,46 @@ const ProviderAvailabilityCard = ({
     setSelectedClinic(minIndex)
   }, [sortBy, data, dateRange])
 
+  const checkHasMoreSlots = () => {
+    const allSlotsByDay = Object.entries(
+      data.clinics[selectedClinic].slotsByDay,
+    )
+    return allSlotsByDay.some(([, value]) => value && value.length > 3)
+  }
+
   return (
     <Flex px="5" py="5" className="bg-white border-b border-b-gray-5">
-      <Flex gap="5" className="w-[325px]">
-        <ProviderAvatar provider={data.specialist} size="7" />
-        <Flex direction="column" gap="2">
-          <Flex direction="column">
-            <Text weight="bold" className="text-[18px] text-accent-12">
+      <Flex direction="column" gap="5" className="mr-[48px] w-[240px]">
+        <Flex gap="4">
+          <ProviderAvatar provider={data.specialist} size="5" />
+          <Flex direction="column" justify="center">
+            <Text weight="bold" className="text-[20px] text-accent-12">
               {`${getUserFullName(data.specialist.legalName)} ${
                 data.specialist.legalName.honors ?? ''
               }`}
             </Text>
-            <Text weight="medium" className="text-[12px] text-accent-11">
-              {getProviderTypeLabel(data.specialistTypeCode)}
-            </Text>
+            <Flex gap="1">
+              <Text
+                weight="medium"
+                className="text-pp-gray-1 text-[12px] uppercase"
+              >
+                {getProviderTypeLabel(data.specialistTypeCode)}
+              </Text>
+              <Flex align="center">
+                {new Array(5).fill(0).map((value) => (
+                  <Box key={value}>
+                    {value <= 3 ? (
+                      <StarFilledIcon height={16} width={16} color="#FFC700" />
+                    ) : (
+                      <StarIcon height={16} width={16} color="#FFC700" />
+                    )}
+                  </Box>
+                ))}
+              </Flex>
+            </Flex>
           </Flex>
+        </Flex>
+        <Flex direction="column">
           {appointmentType === AppointmentType.InPerson ? (
             <ClinicSelector
               clinics={data.clinics}
@@ -127,36 +195,53 @@ const ProviderAvailabilityCard = ({
               onChange={setSelectedClinic}
             />
           ) : null}
-          {renderSpokenLanguages(data)}
-          {renderDistance(data.clinics[selectedClinic])}
+          <Flex gap="2" justify="between">
+            {renderSpokenLanguages(data)}
+            {renderDistance(data.clinics[selectedClinic])}
+          </Flex>
         </Flex>
       </Flex>
-      <Flex className="flex-1 px-[40px]">
-        {dateRange.map((date, i) => (
-          <Box key={`${i}-${date.toString()}`} className="flex-1">
-            <Flex direction="column" align="center" gap="2">
-              {appointmentType === AppointmentType.Virtual ? (
-                <AppointmentTimeSlots
-                  userConsents={userConsents}
-                  clinic={data.clinics[selectedClinic]}
-                  specialist={data.specialist}
-                  slots={data.allSlotsByDay[getCalendarDateLabel(date)]}
-                />
-              ) : (
-                <AppointmentTimeSlots
-                  userConsents={userConsents}
-                  clinic={data.clinics[selectedClinic]}
-                  specialist={data.specialist}
-                  slots={
-                    data.clinics[selectedClinic].slotsByDay[
-                      getCalendarDateLabel(date)
-                    ]
-                  }
-                />
-              )}
-            </Flex>
-          </Box>
-        ))}
+      <Flex className="flex-1 px-[40px] pt-2">
+        <Flex direction="column" gap="4" className="w-full">
+          <Flex>
+            {dateRange.map((date, i) => (
+              <Box key={`${i}-${date.toString()}`} className="flex-1">
+                <Flex direction="column" align="center" gap="4">
+                  {appointmentType === AppointmentType.Virtual ? (
+                    <AppointmentTimeSlots
+                      showMore={showMore}
+                      userConsents={userConsents}
+                      clinic={data.clinics[selectedClinic]}
+                      specialist={data.specialist}
+                      slots={data.allSlotsByDay[getCalendarDateLabel(date)]}
+                    />
+                  ) : (
+                    <AppointmentTimeSlots
+                      showMore={showMore}
+                      userConsents={userConsents}
+                      clinic={data.clinics[selectedClinic]}
+                      specialist={data.specialist}
+                      slots={
+                        data.clinics[selectedClinic].slotsByDay[
+                          getCalendarDateLabel(date)
+                        ]
+                      }
+                    />
+                  )}
+                </Flex>
+              </Box>
+            ))}
+          </Flex>
+          {checkHasMoreSlots() ? (
+            <Button
+              onClick={() => setShowMore((prevState) => !prevState)}
+              size="3"
+              className="bg-pp-blue-1 text-accent-12"
+            >
+              {showMore ? 'See less' : 'See more'}
+            </Button>
+          ) : null}
+        </Flex>
       </Flex>
     </Flex>
   )
@@ -165,15 +250,15 @@ const ProviderAvailabilityCard = ({
 const AppointmentTimeSlots = ({
   slots,
   userConsents,
+  showMore,
   ...rest
 }: {
   userConsents: Consent[]
   slots?: AppointmentSlot[]
   specialist: AppointmentSpecialist
+  showMore: boolean
   clinic: AppointmentClinic
 }) => {
-  const [showMore, setShowMore] = useState(false)
-
   if (!slots || slots.length === 0) {
     return null
   }
@@ -190,30 +275,6 @@ const AppointmentTimeSlots = ({
           {...rest}
         />
       ))}
-      {!showMore && slots.length > 3 ? (
-        <Button
-          variant="outline"
-          highContrast
-          onClick={() => {
-            setShowMore(true)
-          }}
-          className="hover:text-white h-[40px] w-[85px] rounded-2 text-[13px] hover:bg-accent-12"
-        >
-          More
-        </Button>
-      ) : null}
-      {showMore ? (
-        <Button
-          variant="outline"
-          highContrast
-          onClick={() => {
-            setShowMore(false)
-          }}
-          className="hover:text-white h-[40px] w-[85px] rounded-2 text-[13px] hover:bg-accent-12"
-        >
-          Less
-        </Button>
-      ) : null}
     </>
   )
 }
@@ -244,12 +305,7 @@ const renderDistance = (clinic: AppointmentClinic) => {
 
   return (
     <Flex align="center" gap="2">
-      <NavigationIcon
-        width={19}
-        height={19}
-        strokeWidth={1.25}
-        className="text-accent-12"
-      />
+      <DistanceIcon />
       <Text className="text-[12.5px] font-[300]">
         {Math.round(clinic.distanceInMiles * 10) / 10} mi
       </Text>
@@ -257,4 +313,4 @@ const renderDistance = (clinic: AppointmentClinic) => {
   )
 }
 
-export { AvailabilityList }
+export { AvailabilityList, PrimaryProviderAvailabilityCard }

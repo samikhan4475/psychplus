@@ -1,16 +1,8 @@
-import { type ReactNode } from 'react'
 import { Text } from '@radix-ui/themes'
-import { useStore } from '@/features/appointments/search/store'
 import { useSortedFilteredData } from '../../store/hooks'
 
 const ProviderCountLabel = () => {
   const data = useSortedFilteredData()
-
-  const { location, zipCode } = useStore((state) => ({
-    data: state.data,
-    location: state.location,
-    zipCode: state.zipCode,
-  }))
 
   if (!data) {
     return null
@@ -23,28 +15,15 @@ const ProviderCountLabel = () => {
   } else if (data.length === 1) {
     label = '1 provider '
   } else {
-    label = `${data.length} providers `
-  }
-
-  const prefix = data.length === 0 ? '' : 'Showing '
-
-  let suffix: ReactNode = null
-
-  if (location) {
-    suffix = ' near you'
-  } else if (zipCode) {
-    suffix = (
-      <Text>
-        near <Text weight="medium">{zipCode}</Text>
-      </Text>
-    )
+    label = `${data.length} Providers `
   }
 
   return (
-    <Text className="w-[325px] text-[18px] text-accent-12">
-      {prefix}
+    <Text
+      weight="medium"
+      className="mr-[48px] w-[240px] text-[20px] text-accent-12"
+    >
       {label}
-      {suffix}
     </Text>
   )
 }

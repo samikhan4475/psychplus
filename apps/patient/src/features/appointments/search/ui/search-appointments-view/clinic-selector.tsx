@@ -34,16 +34,10 @@ const ClinicSelector = ({
               'cursor-pointer rounded-2 hover:bg-gray-2': hasMultipleClinics,
             })}
           >
-            <Flex direction="column">
-              <Text className="text-[12px] font-[600]">
-                {clinics[selectedClinic].name}
-              </Text>
-              <Text className="text-[12px]">
-                {getClinicAddressLabel(
-                  clinics[selectedClinic].contact.addresses,
-                )}
-              </Text>
-            </Flex>
+            <Text className="text-[12px] font-[600]">
+              {clinics[selectedClinic].name}{' '}
+              {getClinicAddressLabel(clinics[selectedClinic].contact.addresses)}
+            </Text>
             {hasMultipleClinics ? (
               <ChevronDownIcon
                 width={16}

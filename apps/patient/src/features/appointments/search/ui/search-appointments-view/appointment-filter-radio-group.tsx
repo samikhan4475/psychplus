@@ -19,7 +19,7 @@ const AppointmentFilterRadioGroup = <T extends string>({
   options,
 }: AppointmentFilterRadioGroupProps<T>) => {
   return (
-    <Flex direction="column" gap="1" className="flex-1">
+    <Flex gap="1" align="center" className="flex-1">
       <FilterFieldLabel>{title}</FilterFieldLabel>
       <RadioGroup.Root value={value} onValueChange={onChange}>
         <Flex gap={{ initial: '2', sm: '3' }} height="100%">
@@ -27,7 +27,7 @@ const AppointmentFilterRadioGroup = <T extends string>({
             <RadioGroup.Item
               key={option.value}
               value={option.value}
-              className="data-[state=checked]:text-white flex-1 whitespace-nowrap rounded-2 bg-gray-3 px-2 py-2 text-[12px] font-[500] text-accent-12 data-[state=checked]:bg-accent-12 sm:flex-initial sm:px-2 sm:py-2"
+              className="data-[state=checked]:text-white border-pp-gray-2 bg-white text-black flex-1 whitespace-nowrap rounded-6 px-2 py-2 text-[12px] font-[500] data-[state=checked]:border-accent-12 data-[state=checked]:bg-accent-12 sm:flex-initial sm:px-6 sm:py-2"
             >
               {option.label}
             </RadioGroup.Item>

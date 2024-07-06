@@ -1,4 +1,5 @@
 import { CalendarDate } from '@internationalized/date'
+import { CareTeamMember } from '@psychplus-v2/types'
 import { getCalendarDateLabel } from '@psychplus-v2/utils'
 import { SlotsByDay } from '../types'
 
@@ -22,4 +23,9 @@ const getEarliestSlot = (slots: SlotsByDay, dateRange: CalendarDate[]) => {
   }
 }
 
-export { generateDateRange, getEarliestSlot }
+const checkCareTeamExists = (
+  careTeam: CareTeamMember[],
+  providerType: string,
+) => careTeam.some((member) => member.specialist === providerType)
+
+export { generateDateRange, getEarliestSlot, checkCareTeamExists }

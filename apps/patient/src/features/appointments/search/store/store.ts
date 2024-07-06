@@ -1,6 +1,11 @@
 import { getLocalTimeZone, today } from '@internationalized/date'
 import { AppointmentType, ProviderType } from '@psychplus-v2/constants'
-import { getCalendarDate, getCalendarDateLabel } from '@psychplus-v2/utils'
+import { CareTeamMember } from '@psychplus-v2/types'
+import {
+  getCalendarDate,
+  getCalendarDateLabel,
+  getProviderTypeLabel,
+} from '@psychplus-v2/utils'
 import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
 import { searchAppointmentsAction } from '@/features/appointments/search/actions'
@@ -24,6 +29,7 @@ interface Store {
   sortBy?: AppointmentSortBy
   startingDate: string
   location?: CurrentLocation
+  careTeam: CareTeamMember[]
   setProviderType: (value: ProviderType) => void
   setAppointmentType: (value: AppointmentType) => void
   setZipCode: (value: string) => void
@@ -31,6 +37,8 @@ interface Store {
   setSortBy: (value: AppointmentSortBy) => void
   setLocation: (value: CurrentLocation) => void
   setLoading: (value: boolean) => void
+  setCareTeam: (value: CareTeamMember[]) => void
+  careTeamMember: () => CareTeamMember | undefined
   search: () => void
   prev: () => void
   next: () => void
@@ -49,6 +57,8 @@ const useStore = create<Store>()(
       language: undefined,
       sortBy: undefined,
       startingDate: getCalendarDateLabel(today(getLocalTimeZone())),
+      careTeam: [],
+      setCareTeam: (careTeam) => set({ careTeam }),
       setProviderType: (providerType) => set({ providerType }),
       setAppointmentType: (appointmentType) => {
         set((prev) => ({
@@ -80,6 +90,11 @@ const useStore = create<Store>()(
           zipCode: undefined,
         })
       },
+      careTeamMember: () =>
+        get().careTeam.find(
+          (member) =>
+            member.specialist === getProviderTypeLabel(get().providerType),
+        ),
       search: async () => {
         const cacheKey = getCacheKey({
           appointmentType: get().appointmentType,
@@ -155,6 +170,7 @@ const useStore = create<Store>()(
       partialize: (state) => ({
         appointmentType: state.appointmentType,
         providerType: state.providerType,
+        zipCode: state.zipCode,
       }),
       skipHydration: true,
     },

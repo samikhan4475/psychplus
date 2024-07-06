@@ -26,10 +26,12 @@
     border-radius: var(--radius-3);
   }
 
-  .rt-TextFieldChrome,
-  .rt-SelectTrigger {
-    border-radius: var(--radius-2);
-  }
+  .rt-SelectTrigger:where(.rt-variant-surface):where([data-placeholder]) :where(.rt-SelectTriggerInner) {
+    color: var(--accent-12);
+    font-size: 16px;
+    font-weight: 500;
+
+}
 
   :root {
     --color-page-background: var(--gray-1) !important;

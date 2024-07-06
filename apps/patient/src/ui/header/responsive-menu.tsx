@@ -1,6 +1,7 @@
 'use client'
 
 import { type User } from '@psychplus-v2/auth'
+import { CodesetCache } from '@psychplus-v2/types'
 import { cn, getUserInitials } from '@psychplus-v2/utils'
 import {
   Avatar,
@@ -19,9 +20,10 @@ import { useCloseMenu } from './use-close-menu'
 
 interface ResponsiveMenuProps {
   user: User
+  codesets: CodesetCache
 }
 
-const ResponsiveMenu = ({ user }: ResponsiveMenuProps) => {
+const ResponsiveMenu = ({ user, codesets }: ResponsiveMenuProps) => {
   useCloseMenu()
 
   const isOpen = useStore((state) => state.responsiveMenuOpen)
@@ -83,6 +85,7 @@ const ResponsiveMenu = ({ user }: ResponsiveMenuProps) => {
       >
         <Flex py="2" align="center" className="h-[var(--header-height)] w-full">
           <ScheduleAppointmentButton
+            codesets={codesets}
             className="flex-1"
             size={{ initial: '4' }}
             tabIndex={isOpen ? undefined : -1}

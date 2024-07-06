@@ -35,20 +35,20 @@ const RadioGroupInput = ({
           direction={{ initial: 'column', sm: 'row' }}
           justify="start"
           align={{ initial: 'stretch', sm: 'start' }}
-          gap="4"
+          gap="3"
         >
           {options.map((option) => (
             <RadioGroup.Item
               key={option.value}
               value={option.value}
-              className="data-[state=checked]:text-white whitespace-nowrap rounded-3 bg-gray-3 px-4 py-4 font-[600] text-accent-12 data-[state=checked]:bg-accent-12 xs:min-w-[200px]"
+              className="data-[state=checked]:text-white whitespace-nowrap rounded-item bg-gray-3 px-4 py-3 font-[600] text-accent-12 data-[state=checked]:bg-accent-12 xs:min-w-[145px]"
             >
               <Flex
                 align="center"
                 justify="center"
                 direction={{ initial: 'column', xs: 'row' }}
               >
-                <Text>{option.label}</Text>
+                <Text size="2">{option.label}</Text>
                 {option.description ? (
                   <Text className="text-[13px]">
                     &nbsp;{`(${option.description})`}

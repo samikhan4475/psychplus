@@ -11,8 +11,6 @@ import {
   ZipcodeInput,
 } from '@/components-v2'
 import { useStore } from '@/features/appointments/search/store'
-import { FilterFieldLabel } from './filter-field-label'
-import { NearbyLocationsFinder } from './nearby-locations-finder'
 
 const schema = z.object({
   zipCode: zipCodeSchema,
@@ -45,17 +43,14 @@ const ZipCodeSearchForm = () => {
       <FormContainer form={form} onSubmit={onSubmit}>
         <Flex align="end" gap="2">
           <FormFieldContainer className="flex-1">
-            <Flex align="center" gap="2">
-              <FilterFieldLabel>ZIP</FilterFieldLabel>
-              <FormFieldError name="zipCode" />
-            </Flex>
             <ZipcodeInput
               size={{ initial: '2' }}
-              className="sm:w-[105px]"
+              className="sm:w-[110px]"
               {...form.register('zipCode')}
               placeholder="Enter ZIP"
               value={form.watch('zipCode')}
             />
+            <FormFieldError name="zipCode" />
           </FormFieldContainer>
           <FormSubmitButton
             size={{ initial: '2' }}
@@ -65,7 +60,6 @@ const ZipCodeSearchForm = () => {
           </FormSubmitButton>
         </Flex>
       </FormContainer>
-      <NearbyLocationsFinder />
     </Flex>
   )
 }

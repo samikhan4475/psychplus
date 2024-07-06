@@ -65,7 +65,12 @@ const UpcomingAppointmentsSummaryComponent = async () => {
       <CardContainer className="p-0">
         <FeatureEmpty
           title="No Upcoming Appointments"
-          action={<ScheduleAppointmentButton className="justify-center" />}
+          action={
+            <ScheduleAppointmentButton
+              className="justify-center"
+              codesets={codesets}
+            />
+          }
           Icon={CalendarDaysIcon}
         />
       </CardContainer>

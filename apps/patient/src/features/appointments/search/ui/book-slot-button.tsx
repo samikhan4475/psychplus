@@ -162,7 +162,8 @@ const BookSlotButton = ({
           <Button
             variant="outline"
             highContrast
-            className="hover:text-white h-[40px] w-[85px] rounded-2 text-[13px] hover:bg-accent-12"
+            style={{ boxShadow: 'none' }}
+            className="hover:text-white whitespace-nowrap text-[16px] text-[#24366B] outline outline-1 outline-[#b9bbc6] hover:bg-accent-12 hover:outline-accent-12"
           >
             {getTimeLabel(slot.startDate)}
           </Button>

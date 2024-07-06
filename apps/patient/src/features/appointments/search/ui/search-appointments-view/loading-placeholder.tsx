@@ -42,7 +42,7 @@ const BannerPlaceholder = () => (
     className="border-y border-y-gray-5"
   >
     <Skeleton className="h-[40px] w-[125px]" />
-    <Flex gap="6" justify="end" className="flex-1">
+    <Flex gap="6" justify="center" className="flex-1">
       <Skeleton className="h-[30px] w-[75px]" />
       <Skeleton className="h-[30px] w-[75px]" />
       <Skeleton className="h-[30px] w-[75px]" />

@@ -2,6 +2,7 @@ import NextLink from 'next/link'
 import { getUserFullName, withSuspense } from '@psychplus-v2/utils'
 import { Button, Flex, Separator, Text } from '@radix-ui/themes'
 import { StethoscopeIcon } from 'lucide-react'
+import { EditIcon } from '@/components'
 import {
   CardContainer,
   FeatureEmpty,
@@ -9,7 +10,6 @@ import {
   ProviderAvatar,
 } from '@/components-v2'
 import { getCareTeam } from '../../api'
-import { EditIcon } from '@/components'
 
 const ServerComponent = async () => {
   const response = await getCareTeam()
@@ -59,14 +59,14 @@ const ServerComponent = async () => {
                 />
                 <Flex direction="column" align="start" gap="3">
                   <Flex align="start" gap="2" className="mb-1">
-                    <Text className="text-[18px] text-[#1A1A1A] font-[600] leading-2 -tracking-[0.25px]">
+                    <Text className="text-[18px] font-[600] leading-2 -tracking-[0.25px] text-[#1A1A1A]">
                       {getUserFullName(row.staffDetails.legalName)}
                     </Text>
 
                     <EditIcon />
                   </Flex>
 
-                  <Text className="text-[14px] text-accent-12 uppercase text-gray-10 font-medium">
+                  <Text className="text-[14px] font-medium uppercase text-accent-12 text-gray-10">
                     {row.specialist}
                   </Text>
 

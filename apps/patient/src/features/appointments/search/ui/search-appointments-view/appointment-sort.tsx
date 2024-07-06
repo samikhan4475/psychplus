@@ -2,7 +2,6 @@ import { AppointmentType } from '@psychplus-v2/constants'
 import { Flex, Select } from '@radix-ui/themes'
 import { AppointmentSortBy } from '@/features/appointments/search/constants'
 import { useStore } from '@/features/appointments/search/store'
-import { FilterFieldLabel } from './filter-field-label'
 
 const AppointmentSort = () => {
   const { appointmentType, sortBy, setSortBy } = useStore((state) => ({
@@ -13,13 +12,12 @@ const AppointmentSort = () => {
 
   return (
     <Flex direction="column" gap="1" className="flex-1">
-      <FilterFieldLabel>Sort by</FilterFieldLabel>
       <Select.Root
         size={{ initial: '2' }}
         value={sortBy}
         onValueChange={setSortBy}
       >
-        <Select.Trigger placeholder="Sort by" />
+        <Select.Trigger placeholder="Sort By" className="text-accent-12" />
         <Select.Content highContrast position="popper" align="end">
           {appointmentType === AppointmentType.InPerson ? (
             <Select.Item value={AppointmentSortBy.Nearest}>Nearest</Select.Item>
