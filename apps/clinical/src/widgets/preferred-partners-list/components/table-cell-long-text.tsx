@@ -17,6 +17,10 @@ const TableCellLongText = ({ text, row }: TableCellLongTextProps) => {
   const handlerData = () => {
     if (row?.id) {
       const searchParams = createSearchParams({ id: row.id, token })
+      if (document.referrer) {
+        const parentUrl = new URL(document.referrer).origin
+        window.parent.postMessage({ prefferredPartnerId: row.id }, parentUrl)
+      }
       router.push(
         `/widgets/preferred-partner-details?${searchParams.toString()}`,
       )
