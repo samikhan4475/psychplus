@@ -1,8 +1,11 @@
 import { Box } from '@radix-ui/themes'
 import GoogleMapReact from 'google-map-react'
+import { cn } from '@psychplus/ui/cn'
 
 interface ClinicsMapViewProps {
   mapKey: string
+  width?: string
+  height?: string
 }
 
 const DefaultMapProps = {
@@ -13,9 +16,13 @@ const DefaultMapProps = {
   zoom: 11,
 }
 
-const ClinicsMapView = ({ mapKey }: ClinicsMapViewProps) => {
+const ClinicsMapView = ({
+  mapKey,
+  width = 'w-1/5',
+  height = 'h-[900px]',
+}: ClinicsMapViewProps) => {
   return (
-    <Box className="bg-white h-[900px] w-1/5">
+    <Box className={cn('bg-white', height, width)}>
       <GoogleMapReact
         bootstrapURLKeys={{ key: mapKey }}
         defaultCenter={DefaultMapProps.center}

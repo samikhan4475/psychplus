@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
+import NextLink from 'next/link'
 import { parseAbsoluteToLocal } from '@internationalized/date'
 import { GlobeIcon } from '@psychplus-v2/components'
 import { AppointmentType } from '@psychplus-v2/constants'
@@ -7,6 +8,7 @@ import {
   getCalendarDate,
   getCalendarDateLabel,
   getProviderTypeLabel,
+  getTimeLabel,
   getUserFullName,
 } from '@psychplus-v2/utils'
 import { StarFilledIcon, StarIcon } from '@radix-ui/react-icons'
@@ -259,21 +261,53 @@ const AppointmentTimeSlots = ({
   showMore: boolean
   clinic: AppointmentClinic
 }) => {
+  const { appointmentType, providerType } = useStore((state) => ({
+    appointmentType: state.appointmentType,
+    providerType: state.providerType,
+  }))
+
   if (!slots || slots.length === 0) {
     return null
   }
 
   const endIndex = showMore ? slots.length : 3
 
+  const getRedirectToPaymentMethodUrl = (slot: AppointmentSlot) => {
+    const queryParams = {
+      appointmentType: JSON.stringify(appointmentType).toString(),
+      providerType: JSON.stringify(providerType).toString(),
+      slot: JSON.stringify(slot).toString(),
+      specialist: JSON.stringify(rest.specialist).toString(),
+      clinic: JSON.stringify({
+        id: rest.clinic.id,
+        name: rest.clinic.name,
+        isTest: rest.clinic.isTest,
+        contact: rest.clinic.contact,
+        distanceInMiles: rest.clinic.distanceInMiles,
+      }).toString(),
+    }
+
+    const queryString = new URLSearchParams(queryParams).toString()
+
+    return `book?${queryString}`
+  }
+
   return (
     <>
-      {slots.slice(0, endIndex).map((slot) => (
-        <BookSlotButton
-          userConsents={userConsents}
+      {slots.slice(0, endIndex).map((slot: AppointmentSlot) => (
+        <NextLink
+          href={getRedirectToPaymentMethodUrl(slot)}
           key={`${slot.startDate}:${slot.duration}`}
-          slot={slot}
-          {...rest}
-        />
+        >
+          <Button
+            variant="outline"
+            highContrast
+            style={{ boxShadow: 'none' }}
+            className="hover:text-white whitespace-nowrap text-[16px] text-[#24366B] outline outline-1 outline-[#b9bbc6] hover:bg-accent-12 hover:outline-accent-12"
+          >
+            {getTimeLabel(slot.startDate)}
+          </Button>
+        </NextLink>
       ))}
     </>
   )

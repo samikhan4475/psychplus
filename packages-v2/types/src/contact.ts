@@ -8,6 +8,7 @@ interface ContactDetails {
 }
 
 interface ClinicContactDetails {
+  email?: string
   phoneNumbers?: PhoneNumber[]
   addresses?: Address[]
 }

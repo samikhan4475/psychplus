@@ -15,9 +15,13 @@ const InsuranceSummary = ({ data }: InsuranceSummaryProps) => {
       <FeatureEmpty
         title="No Insurance Added"
         action={
-          <NextLink href="/billing/payments">
-            <Button highContrast>Add Insurance</Button>
-          </NextLink>
+          <Flex className="justify-center">
+            <NextLink href="/billing/insurance">
+              <Button highContrast className="justify-center">
+                Add Insurance
+              </Button>
+            </NextLink>
+          </Flex>
         }
         Icon={ShieldAlertIcon}
       />

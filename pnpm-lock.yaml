@@ -358,6 +358,9 @@ importers:
       '@types/react':
         specifier: ^18.2.47
         version: 18.2.47
+      '@types/react-add-to-calendar':
+        specifier: ^0.1.3
+        version: 0.1.3
       '@types/react-dom':
         specifier: ^18.2.10
         version: 18.2.10
@@ -376,6 +379,9 @@ importers:
       postcss:
         specifier: ^8.4.31
         version: 8.4.31
+      react-add-to-calendar:
+        specifier: ^0.1.5
+        version: 0.1.5(react-dom@18.2.0)(react@18.2.0)
       tailwindcss:
         specifier: ^3.3.3
         version: 3.3.3
@@ -7747,6 +7753,12 @@ packages:
   /@types/prop-types@15.7.8:
     resolution: {integrity: sha512-kMpQpfZKSCBqltAJwskgePRaYRFukDkm1oItcAbC3gNELR20XIBcN9VRgg4+m8DKsTfkWeA4m4Imp4DDuWy7FQ==}
 
+  /@types/react-add-to-calendar@0.1.3:
+    resolution: {integrity: sha512-qLZSmpFoqzWBoxpp0KcG+fkW/4o14nb+zm0mzhptCrCsJlLH+yEdHQDLRHgzLRAc+8VCcPFnjHJmZopoyQLvwA==}
+    dependencies:
+      '@types/react': 18.2.48
+    dev: true
+
   /@types/react-dom@18.2.10:
     resolution: {integrity: sha512-5VEC5RgXIk1HHdyN1pHlg0cOqnxHzvPGpMMyGAP5qSaDRmyZNDaQ0kkVAkK6NYlDhP6YBID3llaXlmAS/mdgCA==}
     dependencies:
@@ -10008,6 +10020,12 @@ packages:
     engines: {node: '>=16 || 14 >=14.17'}
     dev: false
 
+  /moment@2.30.1:
+    resolution: {integrity: sha512-uEmtNhbDOrWPFS+hdjFCBfy9f2YoyzRpwcl+DqpC6taX21FzsTLQVbMV/W7PzNSX6x/bhC1zA3c2UQ5NzH6how==}
+    requiresBuild: true
+    dev: true
+    optional: true
+
   /ms@2.1.2:
     resolution: {integrity: sha512-sGkPx+VjMtmA6MX27oA4FBFELFCZZ4S4XqeGOXCv68tT+jb3vk/RyaKWP0PTKyWtmLSM0b+adUTEvbs1PEaH2w==}
 
@@ -10627,6 +10645,18 @@ packages:
       minimist: 1.2.8
       strip-json-comments: 2.0.1
     dev: false
+
+  /react-add-to-calendar@0.1.5(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-DI+q3vvHCiYhxgh+83sg9UrPD9sdyBYcuY77UMcfX3y1MUPMW+f/w/6EG0MZg7B07vLQ4R6nxqk6wtMtcXOicA==}
+    peerDependencies:
+      react: ^15.5.4 || ^16.0.0
+      react-dom: ^15.5.4 || ^16.0.0
+    dependencies:
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+    optionalDependencies:
+      moment: 2.30.1
+    dev: true
 
   /react-aria-components@1.1.1(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-XdgqSbrlh9V1vJEvTwrnr+YGndQWYcVEAbN+Rx104o9g88cAAabclgetU2OUJ9Gbht6+gwnvnA0ksgXzVZog2Q==}
