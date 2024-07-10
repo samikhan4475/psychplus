@@ -1,15 +1,14 @@
-name: Build and Deploy Staging on RC Version Tag
+name: Deploy Release To Next
 
 on:
   push:
     tags:
-      # Push events matching release candidate tags, e.g. v-1.0.0-rc.1, v-21.1.3-rc.5, etc
-      - 'v-[0-9]+.[0-9]+.[0-9]+-rc.[0-9]+'
+      - 'v-[0-9]+.[0-9]+.[0-9]+-next'
 
 jobs:
   build_variables:
     runs-on: ubuntu-latest
-    environment: staging
+    environment: production
     outputs:
       image_tag: ${{ steps.build_variables.outputs.image_tag }}
       build_version: ${{ steps.build_variables.outputs.build_version }}
@@ -26,7 +25,9 @@ jobs:
           build_unique_id=$(date +%Y%m%d%H%M%S%N)
           build_version=$tag_name
           build_full_version="$build_version+$build_ci_counter.$build_unique_id"
-          image_tag="v-$build_version"
+          tag_name=$(echo $tag_name | sed 's/-.*//')
+          image_tag="v-$tag_name"
+          echo "Tag Name: $image_tag"
           echo "image_tag=$image_tag" >> "$GITHUB_OUTPUT"
           echo "build_version=$build_version" >> "$GITHUB_OUTPUT"
           echo "build_full_version=$build_full_version" >> "$GITHUB_OUTPUT"
@@ -35,87 +36,86 @@ jobs:
     needs: [build_variables]
     uses: ./.github/workflows/subtaskBuildPushImage.yml
     with:
-      environment: staging
+      environment: production
       project: platform
-      image_tag:  ${{ needs.build_variables.outputs.image_tag }}
+      image_tag: ${{ needs.build_variables.outputs.image_tag }}
     secrets: inherit
 
   build_push_clinical:
     needs: [build_variables]
     uses: ./.github/workflows/subtaskBuildPushImage.yml
     with:
-      environment: staging
+      environment: production
       project: clinical
-      image_tag:  ${{ needs.build_variables.outputs.image_tag }}
+      image_tag: ${{ needs.build_variables.outputs.image_tag }}
     secrets: inherit
-
 
   build_push_patient:
     needs: [build_variables]
     uses: ./.github/workflows/subtaskBuildPushImage.yml
     with:
-      environment: staging
+      environment: production
       project: patient
-      image_tag:  ${{ needs.build_variables.outputs.image_tag }}
+      image_tag: ${{ needs.build_variables.outputs.image_tag }}
     secrets: inherit
 
   build_push_revcycle:
     needs: [build_variables]
     uses: ./.github/workflows/subtaskBuildPushImage.yml
     with:
-      environment: staging
+      environment: production
       project: revcycle
-      image_tag:  ${{ needs.build_variables.outputs.image_tag }}
+      image_tag: ${{ needs.build_variables.outputs.image_tag }}
     secrets: inherit
 
   deploy_platform:
     needs: [build_variables, build_push_platform]
     uses: ./.github/workflows/subtaskDeployHelmChart.yml
     with:
-      environment: staging
+      environment: production
       project: platform
       helm_chart_version: ${{ needs.build_variables.outputs.build_version }}
       helm_app_version: ${{ needs.build_variables.outputs.build_full_version }}
       image_tag: ${{ needs.build_variables.outputs.image_tag }}
-      env_namespace: env-staging
-      ingress_url: ui.staging.psychplus.dev
+      env_namespace: env-next
+      ingress_url: ui.next.psychplus.io
     secrets: inherit
 
   deploy_clinical:
     needs: [build_variables, build_push_clinical]
     uses: ./.github/workflows/subtaskDeployHelmChart.yml
     with:
-      environment: staging
+      environment: production
       project: clinical
       helm_chart_version: ${{ needs.build_variables.outputs.build_version }}
       helm_app_version: ${{ needs.build_variables.outputs.build_full_version }}
       image_tag: ${{ needs.build_variables.outputs.image_tag }}
-      env_namespace: env-staging
-      ingress_url: ui.staging.psychplus.dev
+      env_namespace: env-next
+      ingress_url: ui.next.psychplus.io
     secrets: inherit
 
   deploy_patient:
     needs: [build_variables, build_push_patient]
     uses: ./.github/workflows/subtaskDeployHelmChart.yml
     with:
-      environment: staging
+      environment: production
       project: patient
       helm_chart_version: ${{ needs.build_variables.outputs.build_version }}
       helm_app_version: ${{ needs.build_variables.outputs.build_full_version }}
       image_tag: ${{ needs.build_variables.outputs.image_tag }}
-      env_namespace: env-staging
-      ingress_url: ui.staging.psychplus.dev
+      env_namespace: env-next
+      ingress_url: ui.next.psychplus.io
     secrets: inherit
 
   deploy_revcycle:
     needs: [build_variables, build_push_revcycle]
     uses: ./.github/workflows/subtaskDeployHelmChart.yml
     with:
-      environment: staging
+      environment: production
       project: revcycle
       helm_chart_version: ${{ needs.build_variables.outputs.build_version }}
       helm_app_version: ${{ needs.build_variables.outputs.build_full_version }}
       image_tag: ${{ needs.build_variables.outputs.image_tag }}
-      env_namespace: env-staging
-      ingress_url: ui.staging.psychplus.dev
+      env_namespace: env-next
+      ingress_url:  ui.next.psychplus.io
     secrets: inherit
