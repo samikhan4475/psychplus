@@ -1,9 +1,8 @@
-name: Build and Deploy ChangeHealth on Version Tag
+name: Deploy Release To Production
 
 on:
-  push:
-    tags:
-      - 'v-[0-9]+.[0-9]+.[0-9]+-changehealth'
+  release:
+    types: [released]
 
 jobs:
   build_variables:
@@ -25,51 +24,49 @@ jobs:
           build_unique_id=$(date +%Y%m%d%H%M%S%N)
           build_version=$tag_name
           build_full_version="$build_version+$build_ci_counter.$build_unique_id"
-          tag_name=$(echo $tag_name | sed 's/-.*//')
-          image_tag="v-$tag_name"
-          echo "Tag Name: $image_tag"
+          image_tag="v-$build_version"
           echo "image_tag=$image_tag" >> "$GITHUB_OUTPUT"
           echo "build_version=$build_version" >> "$GITHUB_OUTPUT"
           echo "build_full_version=$build_full_version" >> "$GITHUB_OUTPUT"
 
-  build_push_platform:
-    needs: [build_variables]
-    uses: ./.github/workflows/subtaskBuildPushImage.yml
+  migrate_platform_image:
+    needs: build_variables
+    uses: ./.github/workflows/MigrateImageFromStageToProd.yml
     with:
       environment: production
-      project: platform
+      image_name: platform
       image_tag: ${{ needs.build_variables.outputs.image_tag }}
     secrets: inherit
 
-  build_push_clinical:
-    needs: [build_variables]
-    uses: ./.github/workflows/subtaskBuildPushImage.yml
+  migrate_clinical_image:
+    needs: build_variables
+    uses: ./.github/workflows/MigrateImageFromStageToProd.yml
     with:
       environment: production
-      project: clinical
+      image_name: clinical
       image_tag: ${{ needs.build_variables.outputs.image_tag }}
     secrets: inherit
 
-  build_push_patient:
-    needs: [build_variables]
-    uses: ./.github/workflows/subtaskBuildPushImage.yml
+  migrate_patient_image:
+    needs: build_variables
+    uses: ./.github/workflows/MigrateImageFromStageToProd.yml
     with:
       environment: production
-      project: patient
+      image_name: patient
       image_tag: ${{ needs.build_variables.outputs.image_tag }}
     secrets: inherit
 
-  build_push_revcycle:
-    needs: [build_variables]
-    uses: ./.github/workflows/subtaskBuildPushImage.yml
+  migrate_revcycle_image:
+    needs: build_variables
+    uses: ./.github/workflows/MigrateImageFromStageToProd.yml
     with:
       environment: production
-      project: revcycle
+      image_name: revcycle
       image_tag: ${{ needs.build_variables.outputs.image_tag }}
     secrets: inherit
 
   deploy_platform:
-    needs: [build_variables, build_push_platform]
+    needs: [build_variables, migrate_platform_image]
     uses: ./.github/workflows/subtaskDeployHelmChart.yml
     with:
       environment: production
@@ -77,12 +74,12 @@ jobs:
       helm_chart_version: ${{ needs.build_variables.outputs.build_version }}
       helm_app_version: ${{ needs.build_variables.outputs.build_full_version }}
       image_tag: ${{ needs.build_variables.outputs.image_tag }}
-      env_namespace: env-changehealth
-      ingress_url: ui.changehealth.psychplus.io
+      env_namespace: env-ehr
+      ingress_url: ui.psychplus.io
     secrets: inherit
 
   deploy_clinical:
-    needs: [build_variables, build_push_clinical]
+    needs: [build_variables, migrate_clinical_image]
     uses: ./.github/workflows/subtaskDeployHelmChart.yml
     with:
       environment: production
@@ -90,12 +87,12 @@ jobs:
       helm_chart_version: ${{ needs.build_variables.outputs.build_version }}
       helm_app_version: ${{ needs.build_variables.outputs.build_full_version }}
       image_tag: ${{ needs.build_variables.outputs.image_tag }}
-      env_namespace: env-changehealth
-      ingress_url: ui.changehealth.psychplus.io
+      env_namespace: env-ehr
+      ingress_url: ui.psychplus.io
     secrets: inherit
 
   deploy_patient:
-    needs: [build_variables, build_push_patient]
+    needs: [build_variables, migrate_patient_image]
     uses: ./.github/workflows/subtaskDeployHelmChart.yml
     with:
       environment: production
@@ -103,12 +100,12 @@ jobs:
       helm_chart_version: ${{ needs.build_variables.outputs.build_version }}
       helm_app_version: ${{ needs.build_variables.outputs.build_full_version }}
       image_tag: ${{ needs.build_variables.outputs.image_tag }}
-      env_namespace: env-changehealth
-      ingress_url: ui.changehealth.psychplus.io
+      env_namespace: env-ehr
+      ingress_url: ui.psychplus.io
     secrets: inherit
 
   deploy_revcycle:
-    needs: [build_variables, build_push_revcycle]
+    needs: [build_variables, migrate_revcycle_image]
     uses: ./.github/workflows/subtaskDeployHelmChart.yml
     with:
       environment: production
@@ -116,6 +113,6 @@ jobs:
       helm_chart_version: ${{ needs.build_variables.outputs.build_version }}
       helm_app_version: ${{ needs.build_variables.outputs.build_full_version }}
       image_tag: ${{ needs.build_variables.outputs.image_tag }}
-      env_namespace: env-changehealth
-      ingress_url:  ui.changehealth.psychplus.io
+      env_namespace: env-ehr
+      ingress_url: ui.psychplus.io
     secrets: inherit

@@ -119,3 +119,18 @@ jobs:
       env_namespace: env-staging
       ingress_url: ui.staging.psychplus.dev
     secrets: inherit
+
+  create_draft_release:
+    runs-on: ubuntu-latest
+    environment: staging
+    needs:
+      - deploy_platform
+      - deploy_clinical
+      - deploy_patient
+      - deploy_revcycle
+    steps:
+      - name: Create draft release
+        uses: softprops/action-gh-release@v1
+        with:
+          draft: true
+          generate_release_notes: true
