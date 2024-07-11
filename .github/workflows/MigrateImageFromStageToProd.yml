@@ -41,7 +41,7 @@ jobs:
       - name: Pull image from staging and push to prod
         run: |
           az acr login -n stgcrppluseus
-          docker pull ${{ secrets.STG_ACR_NAME }}.azurecr.io/${{ inputs.image_name }}:${{ inputs.image_tag }}
-          docker tag ${{ secrets.STG_ACR_NAME }}.azurecr.io/${{ inputs.image_name }}:${{ inputs.image_tag }} ${{ secrets.ACR_NAME }}.azurecr.io/${{ inputs.image_name }}:${{ inputs.image_tag }}
+          docker pull ${{ secrets.STG_ACR_NAME }}.azurecr.io/ui-${{ inputs.image_name }}:${{ inputs.image_tag }}
+          docker tag ${{ secrets.STG_ACR_NAME }}.azurecr.io/ui-${{ inputs.image_name }}:${{ inputs.image_tag }} ${{ secrets.ACR_NAME }}.azurecr.io/ui-${{ inputs.image_name }}:${{ inputs.image_tag }}
           az acr login -n prodcrppluseus
-          docker push ${{ secrets.ACR_NAME }}.azurecr.io/${{ inputs.image_name }}:${{ inputs.image_tag }}
+          docker push ${{ secrets.ACR_NAME }}.azurecr.io/ui-${{ inputs.image_name }}:${{ inputs.image_tag }}
