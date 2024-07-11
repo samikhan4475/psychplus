@@ -14,6 +14,7 @@ jobs:
       image_tag: ${{ steps.build_variables.outputs.image_tag }}
       build_version: ${{ steps.build_variables.outputs.build_version }}
       build_full_version: ${{ steps.build_variables.outputs.build_full_version }}
+      release_tag: ${{ steps.build_variables.outputs.release_tag }}
     steps:
       - name: Extract Tag Name
         id: build_variables
@@ -27,6 +28,11 @@ jobs:
           build_version=$tag_name
           build_full_version="$build_version+$build_ci_counter.$build_unique_id"
           image_tag="v-$build_version"
+          release_tag="v-$build_version"
+          release_tag="${release_tag%-rc.*}"
+          echo "image_tag: $image_tag"
+          echo "release_tag: $release_tag"
+          echo "release_tag=$release_tag" >> "$GITHUB_OUTPUT"
           echo "image_tag=$image_tag" >> "$GITHUB_OUTPUT"
           echo "build_version=$build_version" >> "$GITHUB_OUTPUT"
           echo "build_full_version=$build_full_version" >> "$GITHUB_OUTPUT"
@@ -38,6 +44,7 @@ jobs:
       environment: staging
       project: platform
       image_tag:  ${{ needs.build_variables.outputs.image_tag }}
+      release_tag: ${{ needs.build_variables.outputs.release_tag }}
     secrets: inherit
 
   build_push_clinical:
@@ -47,6 +54,7 @@ jobs:
       environment: staging
       project: clinical
       image_tag:  ${{ needs.build_variables.outputs.image_tag }}
+      release_tag: ${{ needs.build_variables.outputs.release_tag }}
     secrets: inherit
 
 
@@ -57,6 +65,7 @@ jobs:
       environment: staging
       project: patient
       image_tag:  ${{ needs.build_variables.outputs.image_tag }}
+      release_tag: ${{ needs.build_variables.outputs.release_tag }}
     secrets: inherit
 
   build_push_revcycle:
@@ -66,6 +75,7 @@ jobs:
       environment: staging
       project: revcycle
       image_tag:  ${{ needs.build_variables.outputs.image_tag }}
+      release_tag: ${{ needs.build_variables.outputs.release_tag }}
     secrets: inherit
 
   deploy_platform:
@@ -119,18 +129,3 @@ jobs:
       env_namespace: env-staging
       ingress_url: ui.staging.psychplus.dev
     secrets: inherit
-
-  create_draft_release:
-    runs-on: ubuntu-latest
-    environment: staging
-    needs:
-      - deploy_platform
-      - deploy_clinical
-      - deploy_patient
-      - deploy_revcycle
-    steps:
-      - name: Create draft release
-        uses: softprops/action-gh-release@v1
-        with:
-          draft: true
-          generate_release_notes: true

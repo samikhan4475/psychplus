@@ -17,6 +17,11 @@ on:
         description: Tag of image to build
         type: string
         required: true
+
+      release_tag:
+        description: Release tag to build image
+        type: string
+        required: false
         
 jobs:
   build_and_push_image:
@@ -40,9 +45,19 @@ jobs:
     
       - name: Build and push image to ACR
         run: |
-          az acr build \
-            --platform Linux/amd64 \
-            --image ui-${{ inputs.project }}:${{ inputs.image_tag }} \
-            --registry ${{ secrets.ACR_NAME }} \
-            --resource-group ${{ secrets.ACR_RESOURCE_GROUP }} \
-            --file apps/${{ inputs.project }}/Dockerfile . 
+          if [ "${{ inputs.environment }}" == "staging" ]; then
+            az acr build \
+              --platform Linux/amd64 \
+              --image ui-${{ inputs.project }}:${{ inputs.image_tag }} \
+              --image ui-${{ inputs.project }}:${{ inputs.release_tag }} \
+              --registry ${{ secrets.ACR_NAME }} \
+              --resource-group ${{ secrets.ACR_RESOURCE_GROUP }} \
+              --file apps/${{ inputs.project }}/Dockerfile .
+          else
+            az acr build \
+              --platform Linux/amd64 \
+              --image ui-${{ inputs.project }}:${{ inputs.image_tag }} \
+              --registry ${{ secrets.ACR_NAME }} \
+              --resource-group ${{ secrets.ACR_RESOURCE_GROUP }} \
+              --file apps/${{ inputs.project }}/Dockerfile .
+          fi 

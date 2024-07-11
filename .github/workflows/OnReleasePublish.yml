@@ -1,8 +1,9 @@
 name: Deploy Release To Production
 
 on:
-  release:
-    types: [released]
+  push:
+    tags:
+      - 'v-[0-9]+.[0-9]+.[0-9]+'
 
 jobs:
   build_variables:
@@ -116,3 +117,17 @@ jobs:
       env_namespace: env-ehr
       ingress_url: ui.psychplus.io
     secrets: inherit
+
+  publish_release:
+    runs-on: ubuntu-latest
+    environment: staging
+    needs:
+      - deploy_platform
+      - deploy_clinical
+      - deploy_patient
+      - deploy_revcycle
+    steps:
+      - name: Publish release
+        uses: softprops/action-gh-release@v1
+        with:
+          generate_release_notes: true
