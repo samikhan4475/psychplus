@@ -206,7 +206,7 @@ const CreditCardForm = ({
             <Box
               py="2"
               px="3"
-              className={cn('-m-[1px] h-10 rounded-2 border border-gray-6', {
+              className={cn('-m-[1px] h-10 rounded-6 border border-gray-6', {
                 'border-transparent shadow-[0_0_0_2px_var(--color-focus-root)]':
                   focus,
               })}

@@ -27,6 +27,7 @@ import { CodesetStoreProvider, GooglePlacesContextProvider } from '@/providers'
 import { getCreditCards } from '../../../billing/credit-debit-cards/api'
 import { ScheduleAppointmentButton } from '../../search'
 import { getUpcomingAppointments } from '../api'
+import { getClinicAddressDirectionMapUrl } from '../utils'
 import { AppointmentTimeLabel } from './appointment-time-label'
 import { CancelAppointment } from './cancel-appointment'
 import { ChangePaymentMethodDialog } from './change-payment-method-dialog'
@@ -233,8 +234,8 @@ const UpcomingAppointmentsSummaryComponent = async () => {
                       </Flex>
                     </Button>
                   </Flex>
+                  {/* Non functional previsit assesment and buttons ending from */}
 
-                  {/* Non functional buttons started from here */}
                   <Flex width={{ initial: '100%', xs: 'auto' }}>
                     {row?.virtualRoomLink &&
                       row.type === AppointmentType.Virtual && (
@@ -245,14 +246,19 @@ const UpcomingAppointmentsSummaryComponent = async () => {
                         </Link>
                       )}
                     {row.type === AppointmentType.InPerson && (
-                      <Button highContrast className="w-full bg-[#194595]">
-                        Get Direction
-                      </Button>
+                      <Link
+                        href={getClinicAddressDirectionMapUrl(
+                          row.clinic.contact.addresses,
+                        )}
+                        target="_blank"
+                      >
+                        <Button highContrast className="w-full bg-[#194595]">
+                          Get Direction
+                        </Button>
+                      </Link>
                     )}
                   </Flex>
-                  {/* Non functional buttons ending here */}
                 </Flex>
-                {/* Non functional previsit assesment and buttons ending from */}
               </Flex>
             </CardContainer>
           ))}
