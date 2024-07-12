@@ -3,6 +3,7 @@ const GENERIC_ERROR_MESSAGE = 'Something went wrong.'
 interface APIError {
   message: string
   status?: number
+  raw?: unknown
 }
 
 const getError = (error: unknown): APIError => {
@@ -18,6 +19,7 @@ const getError = (error: unknown): APIError => {
   } catch {
     return {
       message: GENERIC_ERROR_MESSAGE,
+      raw: text,
     }
   }
 }
