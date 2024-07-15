@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons'
 import { Box, Button, Flex, Text, TextFieldInput } from '@radix-ui/themes'
 import { type ColumnDef } from '@tanstack/react-table'
-import { MetaDataCodeSet } from '@psychplus/codeset'
+import { MetaDataCodeSet } from '@psychplus/codeset/types'
 import {
   DataTable,
   DataTableColumnHeader,
@@ -12,10 +12,9 @@ import {
   DataTablePaginationLabel,
 } from '@psychplus/ui/data-table'
 import { useStore } from '../store'
-import { RowActionDropdown } from './data-table-row.action'
 import { TableCellLongText } from './table-cell-long-text'
 
-const columns: ColumnDef<any>[] = [
+const columns: ColumnDef<MetaDataCodeSet>[] = [
   {
     id: 'code',
     accessorKey: 'code',
@@ -43,14 +42,6 @@ const columns: ColumnDef<any>[] = [
     ),
     cell: ({ row }) => <TableCellLongText text={row.original.display} />,
     enableHiding: true,
-  },
-  {
-    id: 'actions',
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Actions" />
-    ),
-    enableHiding: false,
-    cell: () => <RowActionDropdown />,
   },
 ]
 
@@ -88,18 +79,25 @@ const POSTable = () => {
 
     for (let index = 0; index < data.length; index++) {
       const element = data[index]
+      const getCode = element.code
+
+      const getCodeDescription = element.display
 
       if (
         (lowerCaseCodeSearchTerm &&
           lowerCaseDisplaySearchTerm &&
-          element.code.toLowerCase() === lowerCaseCodeSearchTerm &&
-          element.display.toLowerCase() === lowerCaseDisplaySearchTerm) ||
+          getCode === lowerCaseCodeSearchTerm &&
+          getCodeDescription
+            .toLocaleLowerCase()
+            .indexOf(lowerCaseDisplaySearchTerm) !== -1) ||
         (!lowerCaseCodeSearchTerm &&
           lowerCaseDisplaySearchTerm &&
-          element.display.toLowerCase() === lowerCaseDisplaySearchTerm) ||
+          getCodeDescription
+            .toLocaleLowerCase()
+            .indexOf(lowerCaseDisplaySearchTerm) !== -1) ||
         (!lowerCaseDisplaySearchTerm &&
           lowerCaseCodeSearchTerm &&
-          element.code.toLowerCase() === lowerCaseCodeSearchTerm)
+          getCode === lowerCaseCodeSearchTerm)
       ) {
         result.push(element)
       }
@@ -114,9 +112,9 @@ const POSTable = () => {
         <Flex
           p="1"
           justify="between"
-          className="border-2 border-[#eaeaea] bg-[#E6E6E6]"
+          className="border-b-2 border-[#eaeaea] p-1"
         >
-          <Text>POS</Text>
+          <Text className="font-bold">POS</Text>
         </Flex>
       </Box>
 

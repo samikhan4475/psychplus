@@ -8,6 +8,7 @@ interface CodeSet {
 interface MetaDataCodeSet {
   code: string
   display: string
+  attributes?: CodeAttribute[]
 }
 
 interface Code {
