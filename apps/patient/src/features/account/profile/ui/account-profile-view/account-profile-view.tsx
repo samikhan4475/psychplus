@@ -5,8 +5,8 @@ import { getCodesets, getProfile } from '@/api'
 import { FeatureContainer } from '@/components-v2'
 import { CodesetStoreProvider, GooglePlacesContextProvider } from '@/providers'
 import { ProfileStoreProvider } from '../../store'
+import { AddressCard } from './address-card'
 import { ProfileAvatar } from './avatar'
-import { ContactInfoCard } from './contact-info-card'
 import { EmergencyContactCard } from './emergency-contact-card'
 import { GenderCard } from './gender-card'
 import { PersonalInfoCard } from './personal-info-card'
@@ -37,8 +37,8 @@ const AccountProfileView = async () => {
             <ProfileAvatar />
             <FeatureContainer>
               <PersonalInfoCard />
+              <AddressCard />
               <GenderCard />
-              <ContactInfoCard />
               <EmergencyContactCard />
             </FeatureContainer>
           </Flex>

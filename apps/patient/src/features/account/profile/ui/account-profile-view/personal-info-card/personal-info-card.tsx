@@ -1,20 +1,19 @@
-import { FeatureCard } from '@/components-v2'
-import { DobForm } from './dob-form'
-import { NameForm } from './name-form'
-import { PreferredLanguageForm } from './preferred-language-form'
-import { PreferredNameForm } from './preferred-name-form'
-import { SSNForm } from './ssn-form'
+'use client'
+
+import { AccountProfileAccordion } from '../account-profile-accordion'
+import { PersonalInfoForm } from './personal-info-form'
 
 const PersonalInfoCard = () => {
   return (
-    <FeatureCard title="Personal Information" contentClassName="gap-3">
-      <NameForm />
-      <PreferredNameForm />
-      <PreferredLanguageForm />
-      <DobForm />
-      <SSNForm />
-    </FeatureCard>
+    <AccountProfileAccordion
+      title="Personal Information"
+      content={renderPersonalInfoForm}
+    />
   )
 }
+
+const renderPersonalInfoForm = (isEdit: boolean, handleSave: () => void) => (
+  <PersonalInfoForm isEdit={isEdit} handleSave={handleSave} />
+)
 
 export { PersonalInfoCard }

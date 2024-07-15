@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { type ActionResult } from '@psychplus-v2/api'
 import { FormContainer } from '@psychplus-v2/components'
+import { cn } from '@psychplus-v2/utils'
 import { Flex } from '@radix-ui/themes'
 import {
   type FieldValues,
@@ -14,7 +15,6 @@ import { Content } from './content'
 import { ToggleableFormContext } from './context'
 import { DeleteButton, DeleteButtonProps } from './delete-button'
 import { Trigger } from './trigger'
-import { cn } from '@psychplus-v2/utils'
 
 const FORM_SAVE_GENERIC_ERROR_MESSAGE =
   'There was a problem saving your changes. Please try again.'
@@ -32,6 +32,7 @@ interface ToggleableFormProps<T extends FieldValues, Response> {
   noResetValues?: boolean
   triggerClassName?: string
   onFormClose?: () => void
+  isEdit?: boolean
 }
 
 const ToggleableForm = <T extends FieldValues, R>({
@@ -48,6 +49,7 @@ const ToggleableForm = <T extends FieldValues, R>({
   noResetValues,
   triggerClassName,
   onFormClose,
+  isEdit = true,
 }: React.PropsWithChildren<ToggleableFormProps<T, R>>) => {
   const { toast } = useToast()
   const [open, setOpen] = useState(!trigger)
@@ -93,8 +95,9 @@ const ToggleableForm = <T extends FieldValues, R>({
       disabled,
       hasTrigger: !!trigger,
       onFormClose: onFormClose,
+      isEdit: isEdit,
     }),
-    [open, setOpen, error, setError, disabled, trigger, onFormClose],
+    [open, setOpen, error, setError, disabled, trigger, onFormClose, isEdit],
   )
 
   return (

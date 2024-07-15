@@ -15,7 +15,7 @@ const Content = ({
   className,
   children,
 }: React.PropsWithChildren<ContentProps>) => {
-  const { open } = useToggleableFormContext()
+  const { open, isEdit } = useToggleableFormContext()
 
   if (!open) {
     return null
@@ -30,10 +30,12 @@ const Content = ({
     >
       {children}
       <ErrorMessage />
-      <Flex gap="2">
-        <SaveButton />
-        <CancelButton />
-      </Flex>
+      {isEdit && (
+        <Flex gap="2">
+          <SaveButton />
+          <CancelButton />
+        </Flex>
+      )}
     </Flex>
   )
 }

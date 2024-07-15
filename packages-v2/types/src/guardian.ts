@@ -3,9 +3,9 @@ import type { LegalName } from './name'
 
 interface PatientGuardian {
   name?: LegalName
-  contact: ContactDetails
-  relationship: string
-  isEmergencyContact: boolean
+  contact?: ContactDetails
+  relationship?: string
+  isEmergencyContact?: boolean
 }
 
 type EmergencyContact = Omit<PatientGuardian, 'isEmergencyContact'>

@@ -10,9 +10,16 @@ type InputProps = Pick<React.ComponentProps<typeof TextField.Input>, 'size'>
 
 interface SSNInputProps extends InputProps {
   name: string
+  editable?: boolean
+  placeholder?: string
 }
 
-const SSNInput = ({ name, ...rest }: SSNInputProps) => {
+const SSNInput = ({
+  name,
+  editable,
+  placeholder = 'SSN',
+  ...rest
+}: SSNInputProps) => {
   const form = useFormContext()
 
   return (
@@ -29,7 +36,7 @@ const SSNInput = ({ name, ...rest }: SSNInputProps) => {
             format="###-##-####"
             mask="_"
             allowEmptyFormatting={false}
-            placeholder="SSN"
+            placeholder={placeholder}
             name={name}
             value={field.value}
             disabled={field.disabled}
@@ -39,6 +46,7 @@ const SSNInput = ({ name, ...rest }: SSNInputProps) => {
             className={cn({
               ['font-mono']: field.value,
             })}
+            readOnly={editable}
             {...rest}
           />
         )

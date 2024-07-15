@@ -10,6 +10,7 @@ interface ToggleableFormContextType {
   disabled?: boolean
   hasTrigger?: boolean
   onFormClose?: () => void
+  isEdit?: boolean
 }
 
 const ToggleableFormContext = createContext<

@@ -10,12 +10,16 @@ interface PhoneNumberInputProps {
   name: string
   size?: React.ComponentProps<typeof TextField.Input>['size']
   autoFocus?: boolean
+  editable?: boolean
+  placeholder?: string
 }
 
 const PhoneNumberInput = ({
   name,
   autoFocus,
   size = '3',
+  editable,
+  placeholder = 'Phone number',
 }: PhoneNumberInputProps) => {
   const form = useFormContext()
 
@@ -34,7 +38,7 @@ const PhoneNumberInput = ({
             format="(###)-###-####"
             mask="_"
             allowEmptyFormatting={false}
-            placeholder="Phone number"
+            placeholder={placeholder}
             name={name}
             value={field.value}
             disabled={field.disabled}
@@ -44,6 +48,7 @@ const PhoneNumberInput = ({
             className={cn({
               'font-mono': field.value,
             })}
+            readOnly={editable}
           />
         )
       }}

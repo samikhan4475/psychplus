@@ -1,0 +1,383 @@
+'use client'
+
+import { useState } from 'react'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { CODESETS } from '@psychplus-v2/constants'
+import { PatientProfile } from '@psychplus-v2/types'
+import { getPatientPhoneNumber, getPatientSsn } from '@psychplus-v2/utils'
+import { Flex, RadioGroup, Text, TextFieldInput } from '@radix-ui/themes'
+import { useForm } from 'react-hook-form'
+import { z } from 'zod'
+import {
+  CodesetFormSelect,
+  FormFieldContainer,
+  FormFieldError,
+  FormFieldLabel,
+  PhoneNumberInput,
+  SSNInput,
+  ToggleableForm,
+} from '@/components-v2'
+import { updateProfileAction } from '@/features/account/profile/actions'
+import { useProfileStore } from '@/features/account/profile/store'
+import { updateDriversLisenceImage } from './api'
+import { schema } from './schema'
+import { DriverLicenseInput } from './upload-driver-license'
+import { getBirthyear } from './utils'
+
+type SchemaType = z.infer<typeof schema>
+
+const PersonalInfoForm = ({
+  isEdit,
+  handleSave,
+}: {
+  isEdit: boolean
+  handleSave: () => void
+}) => {
+  const { profile, setProfile } = useProfileStore((state) => ({
+    profile: state.profile,
+    setProfile: state.setProfile,
+  }))
+
+  const [driverLicenseImageSrc, setDriverLicenseImageSrc] = useState<
+    File | undefined
+  >(undefined)
+
+  const [uploadError, setUploadError] = useState(false)
+
+  const form = useForm<SchemaType>({
+    resolver: zodResolver(schema),
+    reValidateMode: 'onChange',
+    defaultValues: {
+      ...profile.legalName,
+      birthdate: profile.birthdate,
+      phoneNumber: getPatientPhoneNumber(profile.contactDetails.phoneNumbers),
+      email: profile.contactDetails.email,
+      socialSecurityNumber: getPatientSsn(profile.socialSecurityNumber),
+      medicalRecordNumber: profile.medicalRecordNumber,
+      cmdId: profile.cmdId,
+      status: profile.status,
+      driversLicense: {
+        type: profile.driversLicense?.type ?? 'DriversLicense',
+        validIn: profile.driversLicense?.validIn ?? '',
+        hasFrontImage: profile.driversLicense?.hasFrontImage ?? false,
+        number: profile.driversLicense?.number ?? '',
+      },
+      hasGuardian:
+        (isEdit && getBirthyear(profile.birthdate) < 18) || profile.hasGuardian,
+
+      guardianFirstName: profile.guardian?.name?.firstName,
+      guardianLastName: profile.guardian?.name?.lastName,
+    },
+  })
+
+  const submitAction = (data: SchemaType) => {
+    const body: PatientProfile = {
+      ...profile,
+      legalName: {
+        ...profile.legalName,
+        firstName: data.firstName,
+        middleName: data.middleName,
+        lastName: data.lastName,
+      },
+      birthdate: data.birthdate.toString(),
+      socialSecurityNumber: data.socialSecurityNumber,
+      contactDetails: {
+        ...profile.contactDetails,
+        email: data.email,
+        phoneNumbers: [
+          ...(profile.contactDetails.phoneNumbers ?? []),
+          {
+            type: 'Contact',
+            number: data.phoneNumber,
+          },
+        ],
+      },
+      driversLicense: {
+        ...profile.driversLicense,
+        ...data.driversLicense,
+      },
+      hasGuardian: data.hasGuardian,
+      guardian: {
+        ...profile.guardian,
+        name: {
+          firstName: data.guardianFirstName || '',
+          lastName: data.guardianLastName || '',
+        },
+      },
+    }
+
+    if (driverLicenseImageSrc && data.driversLicense)
+      data.driversLicense.hasFrontImage = true
+
+    if (!data.hasGuardian) {
+      delete body.guardian
+    }
+
+    return updateProfileAction(body)
+  }
+
+  const handleUpload = async () => {
+    if (driverLicenseImageSrc) {
+      setUploadError(false)
+
+      const formData = new FormData()
+      formData.append('file', driverLicenseImageSrc)
+
+      const response = await updateDriversLisenceImage(formData)
+
+      if (!response.ok) {
+        setUploadError(true)
+      }
+    }
+  }
+
+  const onSuccess = (data: PatientProfile) => {
+    handleUpload()
+    setProfile(data)
+    handleSave()
+  }
+
+  return (
+    <ToggleableForm
+      form={form}
+      submitAction={submitAction}
+      onSuccess={onSuccess}
+      onFormClose={handleSave}
+      isEdit={isEdit}
+    >
+      <Flex direction="column" gap="3" className="w-full" mb="4">
+        <Flex className="w-full" gap="3">
+          <FormFieldContainer className="w-full">
+            <FormFieldLabel required>First Name</FormFieldLabel>
+            <TextFieldInput
+              size="3"
+              {...form.register('firstName')}
+              disabled={!isEdit}
+            />
+            <FormFieldError name="firstName" />
+          </FormFieldContainer>
+
+          <FormFieldContainer className="w-full">
+            <FormFieldLabel>Middle Name</FormFieldLabel>
+            <TextFieldInput
+              size="3"
+              {...form.register('middleName')}
+              disabled={!isEdit}
+            />
+            <FormFieldError name="middleName" />
+          </FormFieldContainer>
+
+          <FormFieldContainer className="w-full">
+            <FormFieldLabel required>Last Name</FormFieldLabel>
+            <TextFieldInput
+              size="3"
+              {...form.register('lastName')}
+              disabled={!isEdit}
+            />
+            <FormFieldError name="lastName" />
+          </FormFieldContainer>
+        </Flex>
+
+        <Flex className="w-full" gap="3">
+          <FormFieldContainer className="w-full">
+            <FormFieldLabel required>Date of Birth</FormFieldLabel>
+            <TextFieldInput
+              size="3"
+              type="date"
+              max="9999-12-31"
+              data-testid="plan-date"
+              className="mr-4"
+              {...form.register('birthdate')}
+              onChange={(e) => {
+                form.register('birthdate')
+                form.setValue('birthdate', e.target.value)
+                if (form.formState.isSubmitted) form.trigger('birthdate')
+                if (getBirthyear(e.target.value) < 18) {
+                  form.setValue('hasGuardian', true)
+                }
+              }}
+              disabled={!isEdit}
+            />
+
+            <FormFieldError name="birthdate" />
+          </FormFieldContainer>
+
+          <FormFieldContainer className="w-full">
+            <FormFieldLabel required>Phone Number</FormFieldLabel>
+            <PhoneNumberInput
+              name="phoneNumber"
+              editable={!isEdit}
+              placeholder=""
+            />
+            <FormFieldError name="phoneNumber" />
+          </FormFieldContainer>
+
+          <FormFieldContainer className="w-full">
+            <FormFieldLabel required>Email</FormFieldLabel>
+            <TextFieldInput
+              size="3"
+              {...form.register('email')}
+              disabled={!isEdit}
+            />
+            <FormFieldError name="email" />
+          </FormFieldContainer>
+        </Flex>
+
+        <Flex className="w-full" gap="3">
+          <FormFieldContainer className="w-full">
+            <FormFieldLabel>MRN</FormFieldLabel>
+            <TextFieldInput
+              size="3"
+              {...form.register('medicalRecordNumber')}
+              disabled
+            />
+            <FormFieldError name="medicalRecordNumber" />
+          </FormFieldContainer>
+
+          <FormFieldContainer className="w-full">
+            <FormFieldLabel required>SSN</FormFieldLabel>
+            <SSNInput
+              name="socialSecurityNumber"
+              placeholder=""
+              editable={!isEdit}
+            />
+            <FormFieldError name="socialSecurityNumber" />
+          </FormFieldContainer>
+
+          <FormFieldContainer className="w-full">
+            <FormFieldLabel>CMD</FormFieldLabel>
+            <TextFieldInput size="3" {...form.register('cmdId')} disabled />
+            <FormFieldError name="cmdId" />
+          </FormFieldContainer>
+        </Flex>
+
+        <Flex className="w-full" gap="3">
+          <FormFieldContainer className="w-full">
+            <FormFieldLabel>Status</FormFieldLabel>
+            <TextFieldInput size="3" {...form.register('status')} disabled />
+            <FormFieldError name="status" />
+          </FormFieldContainer>
+
+          <FormFieldContainer className="w-full">
+            <FormFieldLabel required>Driving License State</FormFieldLabel>
+            <CodesetFormSelect
+              name="driversLicense.validIn"
+              disabled={!isEdit}
+              placeholder="Select state"
+              codeset={CODESETS.UsStates}
+              size="3"
+            />
+            <FormFieldError name="driversLicense.validIn" />
+          </FormFieldContainer>
+
+          <FormFieldContainer className="w-full">
+            <FormFieldLabel required>Driving License Number</FormFieldLabel>
+            <TextFieldInput
+              size="3"
+              {...form.register('driversLicense.number')}
+              disabled={!isEdit}
+            />
+            <FormFieldError name="driversLicense.number" />
+          </FormFieldContainer>
+        </Flex>
+
+        <FormFieldContainer className="h-auto w-1/3">
+          <FormFieldLabel required>Driving License</FormFieldLabel>
+          <Flex className="h-auto">
+            <DriverLicenseInput
+              className="h-9 w-20 bg-[#194595] text-[16px] text-[white]"
+              savedImg={
+                profile.driversLicense?.hasFrontImage
+                  ? '/api/patients/self/driverslicenseimage/Front'
+                  : undefined
+              }
+              disabled={!isEdit}
+              onImageChanged={(image) => {
+                setDriverLicenseImageSrc(image)
+              }}
+            />
+          </Flex>
+
+          {uploadError ? (
+            <Text size="3" mt="4" className="text-tomato-11">
+              There was a problem uploading your picture.
+            </Text>
+          ) : null}
+        </FormFieldContainer>
+        <Flex
+          align="center"
+          mt="3"
+          gap="3"
+          className="col-span-2 box-border border-y border-gray-6 py-4"
+        >
+          <FormFieldLabel className="text-[17px]">
+            Do you have a Parent/Guardian?
+          </FormFieldLabel>
+
+          <RadioGroup.Root
+            size="3"
+            color="indigo"
+            disabled={!isEdit || getBirthyear(form.watch('birthdate')) < 18}
+            highContrast
+            onValueChange={(value) => {
+              if (value === 'yes') {
+                form.setValue('hasGuardian', true)
+                form.register('guardianFirstName')
+                form.register('guardianLastName')
+              } else {
+                form.setValue('hasGuardian', false)
+                form.unregister('guardianFirstName')
+                form.unregister('guardianLastName')
+              }
+            }}
+            value={form.watch('hasGuardian') ? 'yes' : 'no'}
+          >
+            <Flex gap="3">
+              <Text as="label" size="3">
+                <Flex gap="1">
+                  <RadioGroup.Item className="text-[#151B4A]" value="yes" />
+                  Yes
+                </Flex>
+              </Text>
+              <Text as="label" size="3">
+                <Flex gap="1">
+                  <RadioGroup.Item className="text-[#151B4A]" value="no" />
+                  No
+                </Flex>
+              </Text>
+            </Flex>
+          </RadioGroup.Root>
+        </Flex>
+        {form.watch('hasGuardian') && (
+          <Flex className="w-full" gap="3">
+            <FormFieldContainer className="w-full">
+              <FormFieldLabel required={form.watch('hasGuardian')}>
+                Guardian First Name
+              </FormFieldLabel>
+              <TextFieldInput
+                size="3"
+                {...form.register('guardianFirstName')}
+                disabled={!isEdit}
+              />
+              <FormFieldError name="guardianFirstName" />
+            </FormFieldContainer>
+
+            <FormFieldContainer className="w-full">
+              <FormFieldLabel required={form.watch('hasGuardian')}>
+                Guardian Last Name
+              </FormFieldLabel>
+              <TextFieldInput
+                size="3"
+                {...form.register('guardianLastName')}
+                disabled={!isEdit}
+              />
+              <FormFieldError name="guardianLastName" />
+            </FormFieldContainer>
+          </Flex>
+        )}
+      </Flex>
+    </ToggleableForm>
+  )
+}
+
+export { PersonalInfoForm }

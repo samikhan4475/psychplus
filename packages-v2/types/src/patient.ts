@@ -1,4 +1,5 @@
 import type { ContactDetails } from './contact'
+import { DriversLicense } from './drivers-lisence'
 import type { EmergencyContact, PatientGuardian } from './guardian'
 import type { Metadata } from './metadata'
 import type { LegalName } from './name'
@@ -20,6 +21,11 @@ interface PatientProfile {
   socialSecurityNumber?: string
   hasPhoto?: boolean
   chargeKey?: string
+  medicalRecordNumber?: string
+  cmdId?: string
+  status?: string
+  driversLicense?: DriversLicense
+  hasGuardian?: boolean
 }
 
 export type { PatientProfile }

@@ -1,17 +1,10 @@
 'use client'
 
-import {
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-  type ChangeEvent,
-} from 'react'
+import { useCallback, useRef, useState, type ChangeEvent } from 'react'
 import { CODESETS } from '@psychplus-v2/constants'
 import { Box, Flex, Text, TextFieldInput } from '@radix-ui/themes'
 import useOnclickOutside from 'react-cool-onclickoutside'
 import { useFormContext, type FieldValues } from 'react-hook-form'
-import { PatternFormat } from 'react-number-format'
 import usePlacesAutocomplete, {
   getDetails,
   type DetailsResult,
@@ -22,6 +15,7 @@ import {
   FormFieldContainer,
   FormFieldError,
   FormFieldLabel,
+  ZipcodeInput,
 } from '@/components-v2'
 
 interface AddressForm {
@@ -37,10 +31,15 @@ interface AddressForm {
 
 interface PlacesAutocompleteProps {
   name: string
-  autoFocus?: boolean
+  editable?: boolean
+  label?: string
 }
 
-const PlacesAutocomplete = ({ name, autoFocus }: PlacesAutocompleteProps) => {
+const PlacesAutocomplete = ({
+  name,
+  editable,
+  label,
+}: PlacesAutocompleteProps) => {
   const autocompleteRef = useRef<HTMLInputElement | null>(null)
 
   const street1Field = `${name}Street1`
@@ -56,8 +55,6 @@ const PlacesAutocomplete = ({ name, autoFocus }: PlacesAutocompleteProps) => {
   const values = form.getValues()
   const [isDirty, setIsDirty] = useState(false)
   const [showSuggestions, setShowSuggestions] = useState(false)
-  const [showManualEntryHint, setShowManualEntryHint] = useState(false)
-  const [manualEntryMode, setManualEntryMode] = useState(false)
 
   const {
     ready,
@@ -81,23 +78,19 @@ const PlacesAutocomplete = ({ name, autoFocus }: PlacesAutocompleteProps) => {
     debounce: 300,
   })
 
-  useEffect(() => {
-    if (ready && autocompleteRef.current && autoFocus) {
-      setTimeout(() => {
-        autocompleteRef.current?.focus()
-      }, 0)
-    }
-  }, [ready, autoFocus])
-
   const setFormValues = useCallback(
     (address?: AddressForm) => {
       form.setValue(street1Field, address?.street1)
+      form.trigger(street1Field)
       form.setValue(street2Field, address?.street2)
       form.setValue(streetField, address?.street)
       form.setValue(streetNumberField, address?.streetNumber)
       form.setValue(cityField, address?.city)
+      form.trigger(cityField)
       form.setValue(stateField, address?.state)
+      form.trigger(stateField)
       form.setValue(postalCodeField, address?.postalCode)
+      form.trigger(postalCodeField)
       form.setValue(countryField, address?.country)
     },
     [
@@ -114,58 +107,22 @@ const PlacesAutocomplete = ({ name, autoFocus }: PlacesAutocompleteProps) => {
   )
 
   const ref = useOnclickOutside(() => {
-    if (manualEntryMode || !isDirty) {
-      return
-    }
+    if (!isDirty) return
 
     setShowSuggestions(false)
 
-    // If user has not entered a value, do nothing.
     if (!value) {
+      form.reset({ address: '' })
+      form.trigger('address')
       return
     }
-
-    // If address is complete and user has not modified input after
-    // selection, do nothing.
-    if (!isDirty && isCompleteAddress(form.getValues())) {
-      return
-    }
-
-    // If there are no suggestions or there is more than 1 suggestion,
-    // then we cannot reliably set an address value; show the manual
-    // entry hint.
-    if (data.length === 0 || data.length > 1) {
-      setShowManualEntryHint(true)
-      setFormValues(undefined)
-      return
-    }
-
-    // There is only 1 suggestion, use that to retrieve details
-    // and attempt to set address using the result.
-    getDetails({ placeId: data[0].place_id }).then((result) => {
-      const address = getAddressFromPlacesResult(result)
-
-      setFormValues(address)
-
-      if (isCompleteAddress(address)) {
-        setValue(data[0].description)
-        setShowManualEntryHint(false)
-      } else {
-        if (!address?.street1 && address?.street) {
-          setFormValues({
-            ...address,
-            [street1Field]: address.street,
-          })
-        }
-
-        setShowManualEntryHint(true)
-      }
-    })
   })
 
   const handleInput = (e: ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value)
     setIsDirty(true)
+    form.setValue(street1Field, e.target.value)
+    form.trigger(street1Field)
   }
 
   const handleSelect = (suggestion: Suggestion) => () => {
@@ -186,10 +143,6 @@ const PlacesAutocomplete = ({ name, autoFocus }: PlacesAutocompleteProps) => {
               [street1Field]: address.street,
             })
           }
-
-          setShowManualEntryHint(true)
-        } else {
-          setShowManualEntryHint(false)
         }
       })
       .catch((e) => {
@@ -219,117 +172,78 @@ const PlacesAutocomplete = ({ name, autoFocus }: PlacesAutocompleteProps) => {
       )
     })
 
-  const manualEntryHint =
-    showManualEntryHint && !manualEntryMode ? (
-      <Flex align="center" gap="1">
-        <Text className="text-[14px] text-tomato-11">Having trouble?</Text>
-        <Text
-          className="cursor-pointer text-[14px] text-accent-12 hover:underline"
-          onClick={() => {
-            form.clearErrors()
-            setManualEntryMode(true)
-          }}
-        >
-          Enter address manually
-        </Text>
-      </Flex>
-    ) : null
-
-  const { ref: postalCodeRef, ...postalCodeProps } =
-    form.register(postalCodeField)
-
   return (
     <Flex direction="column" width="100%" gap="3">
-      {!manualEntryMode ? (
-        <Flex ref={ref} direction="column" gap="1">
-          <Box position="relative">
-            <FormFieldContainer>
-              <FormFieldLabel>Address</FormFieldLabel>
-              <TextFieldInput
-                size="3"
-                ref={autocompleteRef}
-                value={value}
-                onChange={handleInput}
-                onFocus={() => {
-                  setShowSuggestions(true)
-                }}
-                disabled={!ready}
-                placeholder="Enter a location"
-                className="text-[15px]"
-              />
-            </FormFieldContainer>
-            {status === 'OK' && showSuggestions ? (
-              <ul className="bg-white absolute top-full z-50 w-full rounded-2 shadow-3">
-                {renderSuggestions()}
-              </ul>
-            ) : null}
-          </Box>
-          {manualEntryHint}
-        </Flex>
-      ) : null}
-      {manualEntryMode ? (
-        <FormFieldContainer>
-          <FormFieldLabel>Address Line 1</FormFieldLabel>
+      <Flex ref={ref} gap="3" className="w-full">
+        <Box className="flex-1" position="relative">
+          <FormFieldContainer>
+            <FormFieldLabel required>{label || name} Address 1</FormFieldLabel>
+            <TextFieldInput
+              size="3"
+              ref={autocompleteRef}
+              value={value}
+              onChange={handleInput}
+              onFocus={() => {
+                setShowSuggestions(true)
+              }}
+              className="text-[15px]"
+              disabled={!ready || editable}
+            />
+            <FormFieldError name={street1Field} />
+          </FormFieldContainer>
+          {status === 'OK' && showSuggestions ? (
+            <ul className="bg-white absolute top-full z-50 w-full rounded-2 shadow-3">
+              {renderSuggestions()}
+            </ul>
+          ) : null}
+        </Box>
+        <FormFieldContainer className="flex-1">
+          <FormFieldLabel>{label || name} Address 2</FormFieldLabel>
           <TextFieldInput
             size="3"
-            placeholder="Address Line 1"
             className="text-[15px]"
-            {...form.register(street1Field)}
+            {...form.register(street2Field)}
+            disabled={editable}
           />
-          <FormFieldError name={street1Field} />
+          <FormFieldError name={street2Field} />
         </FormFieldContainer>
-      ) : null}
-      <FormFieldContainer className="w-full">
-        <FormFieldLabel>Address Line 2</FormFieldLabel>
-        <TextFieldInput
-          size="3"
-          placeholder="Apt, Suite, Floor"
-          className="text-[15px]"
-          {...form.register(street2Field)}
-        />
-        <FormFieldError name={street2Field} />
-      </FormFieldContainer>
-      {manualEntryMode ? (
-        <FormFieldContainer>
-          <FormFieldLabel>City</FormFieldLabel>
+      </Flex>
+
+      <Flex className="w-full" gap="4">
+        <FormFieldContainer className="flex-1">
+          <FormFieldLabel required>City</FormFieldLabel>
           <TextFieldInput
             size="3"
-            placeholder="City"
-            className="text-[15px]"
+            radius="full"
             {...form.register(cityField)}
+            disabled={editable}
           />
           <FormFieldError name={cityField} />
         </FormFieldContainer>
-      ) : null}
-      {manualEntryMode ? (
-        <Flex gap="4">
-          <FormFieldContainer>
-            <FormFieldLabel>State</FormFieldLabel>
-            <CodesetFormSelect
-              size="3"
-              name={stateField}
-              codeset={CODESETS.UsStates}
-            />
-            <FormFieldError name={stateField} />
-          </FormFieldContainer>
-          <FormFieldContainer>
-            <FormFieldLabel>Zip</FormFieldLabel>
-            <PatternFormat
-              size="3"
-              type="text"
-              inputMode="numeric"
-              format="#####"
-              placeholder="Zip"
-              className="text-[15px]"
-              customInput={TextFieldInput}
-              getInputRef={postalCodeRef}
-              {...postalCodeProps}
-              value={form.getValues(postalCodeField)}
-            />
-            <FormFieldError name={postalCodeField} />
-          </FormFieldContainer>
-        </Flex>
-      ) : null}
+
+        <FormFieldContainer className="flex-1">
+          <FormFieldLabel required>State</FormFieldLabel>
+          <CodesetFormSelect
+            size="3"
+            name={stateField}
+            codeset={CODESETS.UsStates}
+            disabled={editable}
+          />
+          <FormFieldError name={stateField} />
+        </FormFieldContainer>
+
+        <FormFieldContainer className="flex-1">
+          <FormFieldLabel required>Zip</FormFieldLabel>
+          <ZipcodeInput
+            size="3"
+            placeholder=""
+            {...form.register(postalCodeField)}
+            value={form.getValues(postalCodeField)}
+            disabled={editable}
+          />
+          <FormFieldError name={postalCodeField} />
+        </FormFieldContainer>
+      </Flex>
     </Flex>
   )
 }

@@ -5,6 +5,7 @@ interface ContactDetails {
   email: string
   phoneNumbers?: PhoneNumber[]
   addresses?: PatientAddress[]
+  isMailingAddressSameAsPrimary?: boolean
 }
 
 interface ClinicContactDetails {
