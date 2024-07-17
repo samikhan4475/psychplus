@@ -27,6 +27,12 @@ const useSortedFilteredData = () => {
     return filteredData
   }
 
+  if (sortBy === AppointmentSortBy.Rating) {
+    return filteredData.sort(
+      (a, b) => b.specialist.rating - a.specialist.rating,
+    )
+  }
+
   const dateRange = generateDateRange(getCalendarDate(startingDate))
 
   return filteredData.sort((a, b) => {

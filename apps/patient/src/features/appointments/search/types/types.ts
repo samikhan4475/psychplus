@@ -14,6 +14,7 @@ interface AppointmentSlot {
   duration: number
   startDate: string
   endDate: string
+  servicesOffered: string[]
 }
 
 interface AppointmentSpecialist {
@@ -21,6 +22,7 @@ interface AppointmentSpecialist {
   isTest?: boolean
   legalName: LegalName
   spokenLanguages?: string[]
+  rating: number
 }
 
 interface AppointmentClinic {

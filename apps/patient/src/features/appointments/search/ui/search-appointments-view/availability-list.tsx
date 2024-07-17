@@ -24,7 +24,6 @@ import type {
 import { AppointmentSortBy } from '../../constants'
 import { useSortedFilteredData } from '../../store/hooks'
 import { generateDateRange, getEarliestSlot } from '../../utils'
-import { BookSlotButton } from '../book-slot-button'
 import { ClinicSelector } from './clinic-selector'
 
 interface AvailabilityListProps {
@@ -42,22 +41,21 @@ const PrimaryProviderAvailabilityCard = ({
 
   const careTeamMember = useStore((state) => state.careTeamMember())
 
-  if (data.length === 0) {
-    return null
-  }
-
   const primaryProviderAvailabilityData = data.find(
     (d) => d.specialist.id === careTeamMember?.staffDetails.id,
   )
 
   if (!primaryProviderAvailabilityData) {
-    return null
+    return (
+      <Flex pt="8" justify="center" className="bg-white">
+        <Text className="text-[18px] text-gray-11">No results</Text>
+      </Flex>
+    )
   }
 
   return (
     <ProviderAvailabilityCard
       userConsents={userConsents}
-      key={primaryProviderAvailabilityData?.specialist.id}
       data={primaryProviderAvailabilityData}
     />
   )
@@ -77,19 +75,14 @@ const AvailabilityList = ({ userConsents }: AvailabilityListProps) => {
   }
 
   return data.map((availability) => {
-    if (
-      careTeamMember &&
-      availability.specialist.id === careTeamMember.staffDetails.id
-    ) {
-      return null
-    }
-    return (
-      <ProviderAvailabilityCard
-        userConsents={userConsents}
-        key={availability.specialist.id}
-        data={availability}
-      />
-    )
+    if (availability.specialist.id !== careTeamMember?.staffDetails.id)
+      return (
+        <ProviderAvailabilityCard
+          userConsents={userConsents}
+          key={availability.specialist.id}
+          data={availability}
+        />
+      )
   })
 }
 
@@ -176,15 +169,21 @@ const ProviderAvailabilityCard = ({
                 {getProviderTypeLabel(data.specialistTypeCode)}
               </Text>
               <Flex align="center">
-                {new Array(5).fill(0).map((value) => (
-                  <Box key={value}>
-                    {value <= 3 ? (
-                      <StarFilledIcon height={16} width={16} color="#FFC700" />
-                    ) : (
-                      <StarIcon height={16} width={16} color="#FFC700" />
-                    )}
-                  </Box>
-                ))}
+                {Array.from({ length: 5 }, (_, index) => index + 1).map(
+                  (value) => (
+                    <Box key={value}>
+                      {value <= (data.specialist.rating ?? 0) ? (
+                        <StarFilledIcon
+                          height={16}
+                          width={16}
+                          color="#FFC700"
+                        />
+                      ) : (
+                        <StarIcon height={16} width={16} color="#FFC700" />
+                      )}
+                    </Box>
+                  ),
+                )}
               </Flex>
             </Flex>
           </Flex>

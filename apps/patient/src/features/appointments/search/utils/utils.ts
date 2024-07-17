@@ -1,7 +1,11 @@
 import { CalendarDate } from '@internationalized/date'
 import { CareTeamMember } from '@psychplus-v2/types'
 import { getCalendarDateLabel } from '@psychplus-v2/utils'
-import { SlotsByDay } from '../types'
+import {
+  AppointmentAvailability,
+  AppointmentClinic,
+  SlotsByDay,
+} from '../types'
 
 const generateDateRange = (start: CalendarDate) => {
   const dateRange = [start]
@@ -28,4 +32,34 @@ const checkCareTeamExists = (
   providerType: string,
 ) => careTeam.some((member) => member.specialist === providerType)
 
-export { generateDateRange, getEarliestSlot, checkCareTeamExists }
+const getAllAvailabilityClinics = (
+  data: AppointmentAvailability[],
+): AppointmentClinic[] => {
+  const allClinics: AppointmentClinic[] = []
+  const seenClinics = new Set<string>()
+
+  for (const availability of data) {
+    for (const clinic of availability.clinics) {
+      const key = `${clinic.id}`
+
+      if (
+        clinic.contact.addresses?.[0].geoCoordinates &&
+        seenClinics.has(key)
+      ) {
+        continue
+      } else {
+        seenClinics.add(key)
+        allClinics.push(clinic)
+      }
+    }
+  }
+
+  return allClinics
+}
+
+export {
+  generateDateRange,
+  getEarliestSlot,
+  checkCareTeamExists,
+  getAllAvailabilityClinics,
+}

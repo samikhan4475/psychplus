@@ -1,7 +1,6 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { AppointmentType } from '@psychplus-v2/constants'
 import { CareTeamMember, Consent } from '@psychplus-v2/types'
 import { getProviderTypeLabel } from '@psychplus-v2/utils'
 import { Box, Flex, Text } from '@radix-ui/themes'
@@ -119,9 +118,7 @@ const SearchAppointmentsView = ({
               <AppointmentSort />
               <ProviderLanguageFilter />
             </Flex>
-            {appointmentType === AppointmentType.InPerson ? (
-              <ZipCodeSearchForm />
-            ) : null}
+            <ZipCodeSearchForm />
           </Flex>
         </Flex>
       </Box>
@@ -134,7 +131,7 @@ const SearchAppointmentsView = ({
               align="center"
               pt="6"
               pb="3"
-              px="6"
+              px="5"
               className="bg-white flex-1 border-b border-b-gray-5"
             >
               {careTeamExists ? (

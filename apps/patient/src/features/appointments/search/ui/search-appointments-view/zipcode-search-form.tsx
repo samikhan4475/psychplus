@@ -6,7 +6,6 @@ import { useForm } from 'react-hook-form'
 import z from 'zod'
 import {
   FormFieldContainer,
-  FormFieldError,
   FormSubmitButton,
   ZipcodeInput,
 } from '@/components-v2'
@@ -50,7 +49,6 @@ const ZipCodeSearchForm = () => {
               placeholder="Enter ZIP"
               value={form.watch('zipCode')}
             />
-            <FormFieldError name="zipCode" />
           </FormFieldContainer>
           <FormSubmitButton
             size={{ initial: '2' }}

@@ -113,6 +113,7 @@ const BookAppointmentButton = ({
       type: appointmentType,
       startDate: slot.startDate,
       duration: slot.duration,
+      serviceId: slot.servicesOffered?.[0],
     })
 
     if (result.state === 'error') {

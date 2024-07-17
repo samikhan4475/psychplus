@@ -14,6 +14,7 @@ interface BookAppointmentParams {
   startDate: string
   duration: number
   reason?: string
+  serviceId: string
 }
 
 interface BookAppointmentApiResponse {
@@ -28,6 +29,7 @@ const bookAppointmentAction = async ({
   startDate,
   duration,
   reason,
+  serviceId,
 }: BookAppointmentParams): Promise<
   ActionResult<BookAppointmentApiResponse>
 > => {
@@ -41,6 +43,7 @@ const bookAppointmentAction = async ({
       startDate,
       duration,
       reason: reason || null,
+      serviceId,
     },
   )
 

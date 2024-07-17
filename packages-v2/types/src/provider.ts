@@ -6,6 +6,7 @@ interface Specialist {
   legalName: LegalName
   spokenLanguages?: string[]
   hasPhoto?: boolean
+  rating: number
 }
 
 export type { Specialist }

@@ -20,6 +20,7 @@ interface AvailabilityApiResponse {
     duration: number
     startDate: string
     endDate: string
+    servicesOffered: string[]
   }[]
   specialist: Specialist
   clinic: Clinic

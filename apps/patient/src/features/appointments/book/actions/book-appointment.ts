@@ -12,6 +12,7 @@ interface BookAppointmentParams {
   startDate: string
   duration: number
   reason?: string
+  serviceId?: string
 }
 
 const bookAppointmentAction = async ({
@@ -21,6 +22,7 @@ const bookAppointmentAction = async ({
   type,
   startDate,
   duration,
+  serviceId,
 }: BookAppointmentParams) => {
   const result = await api.POST(`${API_URL}/api/appointments/book`, {
     locationId,
@@ -29,6 +31,7 @@ const bookAppointmentAction = async ({
     type,
     startDate,
     duration,
+    serviceId,
   })
 
   if (result.state === 'error') {

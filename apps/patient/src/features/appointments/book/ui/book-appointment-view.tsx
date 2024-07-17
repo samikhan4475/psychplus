@@ -7,7 +7,7 @@ import {
   ProviderType,
 } from '@psychplus-v2/constants'
 import { CareTeamMember, Clinic, Consent } from '@psychplus-v2/types'
-import { Flex } from '@radix-ui/themes'
+import { Box, Flex } from '@radix-ui/themes'
 import {
   AppointmentSlot,
   AppointmentSpecialist,
@@ -44,6 +44,7 @@ const BookAppointmentView = ({
   const [paymentMethod, setPaymentMethod] = useState<PaymentType>(
     PaymentType.Insurance,
   )
+
   const bookedSlot = {
     specialist,
     clinic,
@@ -63,14 +64,14 @@ const BookAppointmentView = ({
             paymentMethod={paymentMethod}
             setPaymentMethod={setPaymentMethod}
           />
-          <Flex mt="5">
+          <Box mt="5">
             <BookAppointmentButton
               bookedSlot={bookedSlot}
               careTeam={careTeam}
               userConsents={userConsents}
               setBookingSuccessful={setBookingSuccessful}
             />
-          </Flex>
+          </Box>
         </>
       ) : (
         <ConfirmAppointment bookedSlot={bookedSlot} mapKey={mapKey} />

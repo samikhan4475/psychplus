@@ -15,6 +15,7 @@ interface CareTeamMember {
     virtualRoomLink?: string
     bio?: string
     hasPhoto?: boolean
+    rating: number
   }
 }
 

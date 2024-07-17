@@ -67,10 +67,7 @@ const useStore = create<Store>()(
             appointmentType === AppointmentType.Virtual
               ? undefined
               : prev.location,
-          zipCode:
-            appointmentType === AppointmentType.Virtual
-              ? undefined
-              : prev.zipCode,
+          zipCode: prev.zipCode,
         }))
         set({
           appointmentType,

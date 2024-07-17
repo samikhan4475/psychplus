@@ -25,6 +25,7 @@ const AppointmentSort = () => {
           <Select.Item value={AppointmentSortBy.FirstAvailable}>
             First Available
           </Select.Item>
+          <Select.Item value={AppointmentSortBy.Rating}>Rating</Select.Item>
         </Select.Content>
       </Select.Root>
     </Flex>

@@ -7,6 +7,10 @@ interface Address {
   state: string
   country: string
   postalCode: string
+  geoCoordinates?: {
+    longitude: number
+    latitude: number
+  }
 }
 
 interface PatientAddress extends Address {

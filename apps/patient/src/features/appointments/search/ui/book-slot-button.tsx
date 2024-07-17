@@ -116,6 +116,7 @@ const BookSlotButton = ({
       startDate: slot.startDate,
       duration: slot.duration,
       reason: data.reason,
+      serviceId: slot.servicesOffered?.[0],
     })
 
     if (result.state === 'error') {

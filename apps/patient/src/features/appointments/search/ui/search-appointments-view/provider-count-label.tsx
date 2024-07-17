@@ -13,7 +13,7 @@ const ProviderCountLabel = () => {
   if (data.length === 0) {
     label = 'No results'
   } else if (data.length === 1) {
-    label = '1 provider '
+    label = '1 Provider '
   } else {
     label = `${data.length} Providers `
   }
