@@ -4,7 +4,7 @@ import * as React from 'react'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { ProviderType } from '@psychplus-v2/constants'
-import { getProviderTypeLabel } from '@psychplus-v2/utils'
+import { cn, getProviderTypeLabel } from '@psychplus-v2/utils'
 import { Flex, Text } from '@radix-ui/themes'
 import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js'
 import { z } from 'zod'
@@ -32,6 +32,7 @@ import {
 import { Select } from '@psychplus/ui/select'
 import { clickTrack } from '@psychplus/utils/tracking'
 import { ImageUploader, psychPlusBlueColor, whiteColor } from '@/components'
+import { FormError } from '@/components-v2'
 import AppointmentDetailCard from '@/components/appointment-detail-card/appointment-detail-card'
 import { BookedSlot, useStore } from '@/widgets/schedule-appointment-list/store'
 
@@ -96,11 +97,13 @@ const InsurancePaymentForm = ({
   const [cardBackImage, setCardBackImage] = useState<File | undefined>(
     undefined,
   )
+  const [formError, setFormError] = useState<string | undefined>(undefined)
 
   const router = useRouter()
 
   const submitHandler = async (data: SchemaType) => {
     setIsLoading(true)
+    setFormError(undefined)
 
     if (data.cardHolderName) {
       const cardSubmitted = await handleCardSubmit(data)
@@ -153,7 +156,7 @@ const InsurancePaymentForm = ({
         router.push('/schedule-appointment/confirmation')
       })
       .catch((err) => {
-        alert(err.message)
+        setFormError(err.message)
         setIsLoading(false)
       })
   }
@@ -171,24 +174,34 @@ const InsurancePaymentForm = ({
       })
 
       if (result.error) {
-        alert(result.error.message)
+        setFormError(result.error.message)
         return false
       }
 
       const { paymentMethod } = result
 
       if (data.cardHolderName) {
-        await addCreditCard({
-          patientId: patient?.id ?? 0,
-          cardType: paymentMethod?.card?.brand ?? '',
-          name: data.cardHolderName,
-          numberLastFour: paymentMethod?.card?.last4 ?? '',
-          isActive: true,
-          isPrimary: true,
-          expireMonth: paymentMethod?.card?.exp_month ?? 0,
-          expireYear: paymentMethod?.card?.exp_year ?? 0,
-          cardKey: paymentMethod?.id ?? '',
-        })
+        try {
+          await addCreditCard({
+            patientId: patient?.id ?? 0,
+            cardType: paymentMethod?.card?.brand ?? '',
+            name: data.cardHolderName,
+            numberLastFour: paymentMethod?.card?.last4 ?? '',
+            isActive: true,
+            isPrimary: true,
+            expireMonth: paymentMethod?.card?.exp_month ?? 0,
+            expireYear: paymentMethod?.card?.exp_year ?? 0,
+            cardKey: paymentMethod?.id ?? '',
+          })
+        } catch (err) {
+          const message =
+            err instanceof Error
+              ? err.message
+              : (err as { message: string }).message
+          setFormError(message)
+
+          return false
+        }
       }
     }
 
@@ -228,7 +241,7 @@ const InsurancePaymentForm = ({
         return true
       })
       .catch((error) => {
-        alert(
+        setFormError(
           error.status === 409
             ? 'Duplicate insurance policy found'
             : 'Something went wrong',
@@ -470,9 +483,14 @@ const InsurancePaymentForm = ({
         />
       </Flex>
 
+      <FormError message={formError} className="mt-5" />
+
       <Flex>
         <FormSubmitButton
-          className="mt-10 cursor-pointer rounded-[40px] px-[56px] py-[25px] font-bold"
+          className={cn(
+            formError ? 'mt-5' : 'mt-10',
+            'cursor-pointer rounded-[40px] px-[56px] py-[25px] font-bold',
+          )}
           data-testid="submit-button"
           style={{
             color: whiteColor,
