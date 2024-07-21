@@ -3,7 +3,7 @@
 import { PatientParams } from '@psychplus/patient'
 import { handleRequest } from '@psychplus/utils/api'
 import { createFileHeaders, createHeaders } from '@psychplus/utils/client'
-import { Patient, PatientConsentRequestBody } from './types'
+import { Patient, PatientConsentRequestBody } from '@psychplus/patient-info'
 
 interface UpdateProfileProps extends PatientParams {
   body: Patient

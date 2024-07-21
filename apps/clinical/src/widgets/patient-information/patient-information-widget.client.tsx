@@ -2,16 +2,20 @@
 
 import React, { useRef } from 'react'
 import { Box } from '@radix-ui/themes'
-import { NEXT_PUBLIC_GOOGLE_MAPS_API_KEY } from '@psychplus/utils/constants'
 import { PATIENT_INFORMATION_WIDGET } from '@psychplus/widgets'
 import { usePublishLoaded, usePublishSize } from '@psychplus/widgets/hooks'
 import { GooglePlacesContextProvider } from '@/providers'
 import { Client } from './client'
 import { PatientInfo } from './components'
 
+interface PatientInformationProps {
+  googleApiKey: string
+}
+
 const PatientInformationWidgetClient = ({
+  googleApiKey,
   children,
-}: React.PropsWithChildren) => {
+}: React.PropsWithChildren<PatientInformationProps>) => {
   const ref = useRef<HTMLDivElement>(null)
 
   usePublishLoaded(PATIENT_INFORMATION_WIDGET)
@@ -21,7 +25,7 @@ const PatientInformationWidgetClient = ({
     <Box className="h-screen min-h-[650px] min-w-fit" ref={ref}>
       <Client />
       <GooglePlacesContextProvider
-        apiKey={NEXT_PUBLIC_GOOGLE_MAPS_API_KEY ?? ''}
+        apiKey={googleApiKey ?? ''}
       >
         <PatientInfo>{children}</PatientInfo>
       </GooglePlacesContextProvider>

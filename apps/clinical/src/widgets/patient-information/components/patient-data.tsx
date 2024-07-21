@@ -13,7 +13,7 @@ import { ImageControls } from '@psychplus/ui/image-controls'
 import { FORM_FIELD_CLASSES } from '../constants'
 import { useEditModeContext } from '../context'
 import { useCustomerStatusOptions, useUsStatesOptions } from '../hooks'
-import { useStore } from '../store'
+import { useStore } from '@psychplus/patient-info'
 
 interface PatientDataProps {
   setDriverLicenseImage: (file: File | undefined) => void

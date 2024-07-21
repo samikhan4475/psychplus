@@ -14,11 +14,14 @@ import {
 import { EditModeContext } from '../context'
 import { useVerificationStatusOptions } from '../hooks'
 import { schema, type SchemaType } from '../schema'
-import { useStore } from '../store'
+import { useStore } from '@psychplus/patient-info'
 import AdditionalInfo from './additional-info'
 import CreateUser from './create-user'
 import PatientAddress from './patient-address'
 import Patientdata from './patient-data'
+import { usePubsub } from '@psychplus/utils/event'
+import { PATIENT_HISTORY_WIDGET } from '@psychplus/widgets'
+import { EventType } from '@psychplus/widgets/events'
 
 const initialPhone = {
   type: 'Home',
@@ -45,6 +48,7 @@ const PatientInfo = ({ children }: React.PropsWithChildren) => {
     File | undefined
   >(undefined)
   const [isPageLocked, setIsPageLocked] = useState<boolean>(false)
+  const { publish } = usePubsub()
 
   const form = useForm<SchemaType>({
     resolver: zodResolver(schema),
@@ -210,7 +214,7 @@ const PatientInfo = ({ children }: React.PropsWithChildren) => {
   }
 
   return (
-    <Box className="h-[100%] bg-[#EEF2F6]">
+    <Box className="h-[100%] bg-[#EEF2F6] relative z-0">
       <EditModeContext.Provider value={ctxValue}>
         <FormContainer
           className="gap-0"
@@ -219,7 +223,7 @@ const PatientInfo = ({ children }: React.PropsWithChildren) => {
         >
           <Flex
             gap="3"
-            className="relative bg-[#FFFF] px-2 py-1 drop-shadow-md"
+            className="sticky top-0 bg-[#FFFF] px-2 py-1 drop-shadow-md z-10" 
             align="center"
           >
             <Flex className="w-[1px] grow gap-x-[17px]" align="center">
@@ -251,6 +255,7 @@ const PatientInfo = ({ children }: React.PropsWithChildren) => {
               variant="outline"
               type='button'
               className="h-6 cursor-pointer bg-[#FFF] px-2 text-[12px] text-[#000000CC] [box-shadow:inset_0_0_0_0.4px_#9E9898CC]"
+              onClick={() => publish(`${PATIENT_HISTORY_WIDGET}:${EventType.Opened}`)}
             >
               <HistoryIcon width={11.2} height={11.2} />
               Patient Info Hx

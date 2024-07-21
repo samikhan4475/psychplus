@@ -30,20 +30,16 @@ const getPatients = async (payload?: {
 const getPatientHistory = ({
     patientId,
   }: PatientParams): Promise<Patient[]> => {
-    const queryParams = new URLSearchParams({
-      offset: '0',
-      limit: '2100',
-    })
-  
+
     return handleRequest(
       fetch(
-        `${API_URL}/api/patients/${patientId}/history/search?${queryParams}`,
+        `${API_URL}/api/patients/${patientId}/history/search`,
         {
           method: 'POST',
           cache: 'no-store',
           headers: createHeaders(),
           body: JSON.stringify({
-            historyCreatedFrom: '2024-01-18',
+            historyCreatedFrom: "2024-05-20T01:24:08.290Z",
           }),
         },
       ),

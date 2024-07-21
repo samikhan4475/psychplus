@@ -1,0 +1,1 @@
+export const TEXT_FIELD_STYLES = 'h-7 text-[12px]'

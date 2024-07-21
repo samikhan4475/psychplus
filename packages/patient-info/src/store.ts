@@ -4,14 +4,14 @@ import { type StateCreator } from 'zustand'
 import { shallow } from 'zustand/shallow'
 import { createWithEqualityFn } from 'zustand/traditional'
 import { createCodeSetStore, type CodeSetState } from '@psychplus/codeset'
-import { createUserStore, type UserState } from '@psychplus/user'
-import { combineStateCreators } from '@psychplus/utils/store'
 import {
+  AuthorityCodeSets,
+  AuthorityCodesetsIndex,
   AuthorityNameSpace,
   Patient,
-  RaceAndEthnicityCodeSet,
-  RaceAndEthnicityCodeSetIndex,
-} from './types'
+} from '@psychplus/patient-info'
+import { createUserStore, type UserState } from '@psychplus/user'
+import { combineStateCreators } from '@psychplus/utils/store'
 
 interface PatientProfileState {
   patientProfile: Patient
@@ -24,9 +24,9 @@ const createPatientProfileStore: StateCreator<PatientProfileState> = (set) => ({
 })
 
 interface RaceAndEthnicityCodeSetState {
-  codeSets: RaceAndEthnicityCodeSet
-  raceAndEthnicityCodeSetIndex: RaceAndEthnicityCodeSetIndex
-  setRaceAndEthnicityCodeSets: (codes: RaceAndEthnicityCodeSet) => void
+  codeSets: AuthorityCodeSets
+  raceAndEthnicityCodeSetIndex: AuthorityCodesetsIndex
+  setRaceAndEthnicityCodeSets: (codes: AuthorityCodeSets) => void
 }
 
 const createRaceAndEthnicityCodeSetStore: StateCreator<
@@ -46,28 +46,33 @@ const createRaceAndEthnicityCodeSetStore: StateCreator<
   },
 })
 
-const createCodeSetIndex = (codeSets: RaceAndEthnicityCodeSet) => ({
+const createCodeSetIndex = (codeSets: AuthorityCodeSets) => ({
   race: codeSets.codes.filter((code) => code.groupingCode?.startsWith('R1')),
-  ethnicity: codeSets.codes.filter((code) => code.groupingCode?.startsWith('E')),
+  ethnicity: codeSets.codes.filter((code) =>
+    code.groupingCode?.startsWith('E'),
+  ),
 })
 
 interface UsStatesCodeSetsState {
-  usStatesCodeSets: RaceAndEthnicityCodeSet
-  setUsStatesCodeSets: (codes: RaceAndEthnicityCodeSet) => void
+  usStatesCodeSets: AuthorityCodeSets
+  setUsStatesCodeSets: (codes: AuthorityCodeSets) => void
 }
 
-const createUsStatesCodeSetsStore: StateCreator<UsStatesCodeSetsState> = (set) => ({
+const createUsStatesCodeSetsStore: StateCreator<UsStatesCodeSetsState> = (
+  set,
+) => ({
   usStatesCodeSets: {
     codeSystemName: '',
     displayName: '',
     codes: [],
   },
-  setUsStatesCodeSets: (usStatesCodeSets: RaceAndEthnicityCodeSet) => set({ usStatesCodeSets })
+  setUsStatesCodeSets: (usStatesCodeSets: AuthorityCodeSets) =>
+    set({ usStatesCodeSets }),
 })
 
 interface DegreeCodeSetsState {
-  degreeCodeSets: RaceAndEthnicityCodeSet
-  setDegreeCodeSets: (codes: RaceAndEthnicityCodeSet) => void
+  degreeCodeSets: AuthorityCodeSets
+  setDegreeCodeSets: (codes: AuthorityCodeSets) => void
 }
 
 const createDegreeCodeSetsStore: StateCreator<DegreeCodeSetsState> = (set) => ({
@@ -76,32 +81,36 @@ const createDegreeCodeSetsStore: StateCreator<DegreeCodeSetsState> = (set) => ({
     displayName: '',
     codes: [],
   },
-  setDegreeCodeSets: (degreeCodeSets: RaceAndEthnicityCodeSet) => set({ degreeCodeSets })
+  setDegreeCodeSets: (degreeCodeSets: AuthorityCodeSets) =>
+    set({ degreeCodeSets }),
 })
 
 interface AuthorityCodeSetsState {
   hlv3CodeSets: AuthorityNameSpace[]
-  hlv3CodeSetsIndex: RaceAndEthnicityCodeSetIndex
+  hlv3CodeSetsIndex: AuthorityCodesetsIndex
   setHlv3CodeSets: (codes: AuthorityNameSpace[]) => void
 }
 
-const createHlv3CodeSetsStore: StateCreator<AuthorityCodeSetsState> = (set) => ({
+const createHlv3CodeSetsStore: StateCreator<AuthorityCodeSetsState> = (
+  set,
+) => ({
   hlv3CodeSets: [],
   hlv3CodeSetsIndex: {},
-  setHlv3CodeSets: (hlv3CodeSets) => set({
-    hlv3CodeSets,
-    hlv3CodeSetsIndex: createAuthorityCodeSetsIndex(hlv3CodeSets)
-  })
+  setHlv3CodeSets: (hlv3CodeSets) =>
+    set({
+      hlv3CodeSets,
+      hlv3CodeSetsIndex: createAuthorityCodeSetsIndex(hlv3CodeSets),
+    }),
 })
 
 const createAuthorityCodeSetsIndex = (codeSets: AuthorityNameSpace[]) =>
- codeSets[0].codesets.reduce(
-   (acc, codeSet) => ({
-    [codeSet?.codeSystemName]: codeSet?.codes,
-    ...acc
-   }),
-   {} as RaceAndEthnicityCodeSetIndex
- )
+  codeSets[0].codesets.reduce(
+    (acc, codeSet) => ({
+      [codeSet?.codeSystemName]: codeSet?.codes,
+      ...acc,
+    }),
+    {} as AuthorityCodesetsIndex,
+  )
 
 type PatientProfileStoreType = UserState &
   CodeSetState &
@@ -124,4 +133,15 @@ const useStore = createWithEqualityFn<PatientProfileStoreType>(
   shallow,
 )
 
-export { useStore, type PatientProfileStoreType }
+export {
+  useStore,
+  createRaceAndEthnicityCodeSetStore,
+  createUsStatesCodeSetsStore,
+  createHlv3CodeSetsStore,
+  createDegreeCodeSetsStore,
+  type PatientProfileStoreType,
+  type RaceAndEthnicityCodeSetState,
+  type UsStatesCodeSetsState,
+  type DegreeCodeSetsState,
+  type AuthorityCodeSetsState, 
+}

@@ -4,8 +4,8 @@ import {
   getCodeAttributeBoolean,
   type CodeSetIndex,
 } from '@psychplus/codeset'
-import { useStore } from './store'
-import {RaceAndEthnicityCodeSet, type RaceAndEthnicityCodeSetIndex } from './types'
+import { useStore } from '@psychplus/patient-info'
+import {AuthorityCodeSets, type AuthorityCodesetsIndex } from '@psychplus/patient-info'
 
 const CODE_SET_SERVICES_OFFERED = 'ServicesOffered'
 const CODE_SET_SERVICES_STATUS = 'ServicesStatus'
@@ -172,7 +172,7 @@ const computeLanguageOptions = memoize(
 )
 
 const computeReligionOptions = memoize(
- (codeSetIndex: RaceAndEthnicityCodeSetIndex) =>
+ (codeSetIndex: AuthorityCodesetsIndex) =>
   codeSetIndex[CODE_SET_RELGIONS]?.filter(
      code => code.code !== CODE_NOT_SET
   ).map(codeset => ({
@@ -182,7 +182,7 @@ const computeReligionOptions = memoize(
 )
 
 const computeDegreeOptions = memoize(
-  (codeSet: RaceAndEthnicityCodeSet) =>
+  (codeSet: AuthorityCodeSets) =>
   codeSet.codes.filter(
       (code) => code.code !== CODE_NOT_SET,
   ).map(code => ({
@@ -192,7 +192,7 @@ const computeDegreeOptions = memoize(
 )
 
 const computeLanguageAbilityOptions = memoize(
- (codeSetIndex: RaceAndEthnicityCodeSetIndex) =>
+ (codeSetIndex: AuthorityCodesetsIndex) =>
   codeSetIndex[CODE_SET_LANGUAGE_ABILITY]?.filter(
     code => code.code !== CODE_NOT_SET
   ).map(codeset => ({
@@ -202,7 +202,7 @@ const computeLanguageAbilityOptions = memoize(
 )
 
 const computeLanguageProficiency = memoize(
- (codeSetIndex: RaceAndEthnicityCodeSetIndex) =>
+ (codeSetIndex: AuthorityCodesetsIndex) =>
   codeSetIndex[CODE_SET_LANGUAGE_PROFICIENCY]?.filter(
     code => code.code !== CODE_NOT_SET
   ).map(codeset => ({
@@ -212,7 +212,7 @@ const computeLanguageProficiency = memoize(
 )
 
 const computeRaceOptions = memoize(
-  (codeSetIndex: RaceAndEthnicityCodeSetIndex) =>
+  (codeSetIndex: AuthorityCodesetsIndex) =>
   codeSetIndex[CODE_SET_PATIENT_RACE]?.filter(
     (code) => code.code !== CODE_NOT_SET,
   ).map((code) => ({
@@ -222,7 +222,7 @@ const computeRaceOptions = memoize(
 )
 
 const computeEthnicityOptions = memoize(
-  (codeSetIndex: RaceAndEthnicityCodeSetIndex) =>
+  (codeSetIndex: AuthorityCodesetsIndex) =>
   codeSetIndex[CODE_SET_PATIENT_ETHNICITY]?.filter(
     (code) => code.code !== CODE_NOT_SET,
   ).map((code) => ({
@@ -232,7 +232,7 @@ const computeEthnicityOptions = memoize(
 )
 
 const computeUsStatesOptions = memoize(
-    (codeSet: RaceAndEthnicityCodeSet) =>
+    (codeSet: AuthorityCodeSets) =>
     codeSet.codes.filter(
         (code) => code.code !== CODE_NOT_SET,
     ).map(code => ({

@@ -80,6 +80,13 @@ interface PatientDriversLicense {
   hasBackImage?: boolean
 }
 
+interface PatientGuardian {
+  name?: GuardianName
+  isEmergencyContact?: boolean
+  relationship?: string
+  contact?: PatientContactDetails
+}
+
 interface Patient {
   id: number
   userId?: number
@@ -100,6 +107,19 @@ interface Patient {
   medicalRecordNumber?: string
   verificationStatus?: string
   ppUserStatus?: string
+  socialSecurityNumber?: string
+  chargeKey?: string
+  guardian?: PatientGuardian
+  status?: string
+  alternateOrPreviousName?: PatientName
+  alternateOrPreviousContactDetails?: PatientContactDetails
+  religion?: string
+  motherMaidenName?: string
+  language?: string
+  languageAbility?: string
+  languageProficiency?: string
+  races?: string[]
+  ethnicities: string[]
 }
 
 interface PatientParams {

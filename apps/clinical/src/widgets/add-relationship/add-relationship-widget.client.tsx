@@ -3,7 +3,6 @@
 import type { PatientRelationship } from '@psychplus/patient'
 import { CloseDialogTrigger } from '@psychplus/ui/close-dialog-trigger'
 import { Dialog } from '@psychplus/ui/dialog'
-import { NEXT_PUBLIC_GOOGLE_MAPS_API_KEY } from '@psychplus/utils/constants'
 import { usePubsub } from '@psychplus/utils/event'
 import { ADD_RELATIONSHIP_WIDGET } from '@psychplus/widgets'
 import { EventType } from '@psychplus/widgets/events'
@@ -11,7 +10,11 @@ import { useDialog, usePublishLoaded } from '@psychplus/widgets/hooks'
 import { GooglePlacesContextProvider } from '@/providers'
 import { AddRelationshipForm } from './components'
 
-const AddRelationshipWidgetClient = () => {
+interface AddRelationshipProps {
+  googleApiKey: string
+}
+
+const AddRelationshipWidgetClient = ({googleApiKey}: AddRelationshipProps) => {
   const { publish } = usePubsub()
   const { open, data } = useDialog<PatientRelationship | undefined>(
     ADD_RELATIONSHIP_WIDGET,
@@ -33,7 +36,7 @@ const AddRelationshipWidgetClient = () => {
         </Dialog.Title>
         <CloseDialogTrigger />
         <GooglePlacesContextProvider
-          apiKey={NEXT_PUBLIC_GOOGLE_MAPS_API_KEY ?? ''}
+          apiKey={googleApiKey}
         >
           {open && <AddRelationshipForm data={data} />}
         </GooglePlacesContextProvider>

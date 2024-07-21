@@ -5,6 +5,7 @@ import { getUser } from '@psychplus/user/api.server'
 import { AddRelationshipWidgetClient } from './add-relationship-widget.client'
 import { Preloader } from './preloader'
 import { useStore } from './store'
+import { GOOGLE_MAPS_API_KEY } from '@psychplus/utils/constants'
 
 interface AddRelationshipWidgetServerProps {
   patientId: number
@@ -29,7 +30,7 @@ const AddRelationshipWidgetServer = async ({
         patient={patient}
         relationshipsCodeset={relationshipsCodeset}
       />
-      <AddRelationshipWidgetClient />
+      <AddRelationshipWidgetClient googleApiKey={GOOGLE_MAPS_API_KEY?? ''} />
     </>
   )
 }

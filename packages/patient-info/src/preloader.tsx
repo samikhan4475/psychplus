@@ -3,10 +3,10 @@
 import { useRef } from 'react'
 import { type StoreApi, type UseBoundStore } from 'zustand'
 import { type CodeSet } from '@psychplus/codeset'
+import type { Patient } from '@psychplus/patient'
 import { type User } from '@psychplus/user'
 import { PatientProfileStoreType } from './store'
-import { AuthorityNameSpace, RaceAndEthnicityCodeSet } from './types'
-import { Patient } from '@psychplus/patient'
+import type { AuthorityCodeSets, AuthorityNameSpace } from './types'
 
 type BoundStoreType = UseBoundStore<StoreApi<PatientProfileStoreType>>
 
@@ -15,16 +15,33 @@ interface PreloaderProps {
   user: User
   codeSets: CodeSet[]
   patientProfile: Patient
-  raceAndEthnicityCodeSet: RaceAndEthnicityCodeSet
-  usStatesCodeSet: RaceAndEthnicityCodeSet
+  raceAndEthnicityCodeSet: AuthorityCodeSets
+  usStatesCodeSet: AuthorityCodeSets
   hl7v3CodeSets: AuthorityNameSpace[]
-  degreeCodeSets: RaceAndEthnicityCodeSet
+  degreeCodeSets: AuthorityCodeSets
 }
 
-const Preloader = ({ store, user, codeSets, patientProfile, raceAndEthnicityCodeSet, usStatesCodeSet, hl7v3CodeSets, degreeCodeSets }: PreloaderProps) => {
+const Preloader = ({
+  store,
+  user,
+  codeSets,
+  patientProfile,
+  raceAndEthnicityCodeSet,
+  usStatesCodeSet,
+  hl7v3CodeSets,
+  degreeCodeSets,
+}: PreloaderProps) => {
   const loaded = useRef(false)
 
-  const { setUser, setCodeSets, setPatientProfile, setRaceAndEthnicityCodeSets, setUsStatesCodeSet, setHlv3CodeSets, setDegreeCodeSets } = store((state) => ({
+  const {
+    setUser,
+    setCodeSets,
+    setPatientProfile,
+    setRaceAndEthnicityCodeSets,
+    setUsStatesCodeSet,
+    setHlv3CodeSets,
+    setDegreeCodeSets,
+  } = store((state) => ({
     setUser: state.setUser,
     setCodeSets: state.setCodeSets,
     setPatientProfile: state.setPatientProfile,

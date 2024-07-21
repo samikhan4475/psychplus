@@ -140,9 +140,9 @@ const CreateUser = () => {
               size="3"
               color="indigo"
               highContrast
-              defaultChecked={getValues('isPlusMember')}
+              defaultChecked={true}
               disabled
-            />{' '}
+            />
             Patient Policy A
           </Flex>
             <Flex gap="2">
@@ -150,7 +150,6 @@ const CreateUser = () => {
                 variant="outline"
                 className="h-5 gap-x-[2px] align-center [box-shadow:none] [border-radius:2px] px-1.5 text-[10px] bg-[#0F6CBD] text-[#FFFF] font-[400] cursor-pointer"
                 type='button'
-                disabled={!getValues('isPlusMember')}
                 onClick={sendSms}
               >
                 <ChatIcon />
@@ -160,7 +159,6 @@ const CreateUser = () => {
                 variant="outline"
                 className="h-5 gap-x-[2px] align-center [box-shadow:none] [border-radius:2px] px-1.5 text-[10px] bg-[#0F6CBD] text-[#FFFF] font-[400] cursor-pointer"
                 type='button'
-                disabled={!getValues('isPlusMember')}
                 onClick={sendEmail}
               >
                 <EmailIcon />

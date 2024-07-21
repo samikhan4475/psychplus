@@ -1,11 +1,5 @@
 import type { EmergencyContactDetails, GuardianName, PatientAddress, PatientContactDetails, PatientDriversLicense, PatientMetadata, PatientName, PatientPhoneNumber } from "@psychplus/patient"
 
-interface RaceAndEthnicityCodeSet {
-  codeSystemName: string 
-  displayName: string 
-  codes: Code[] 
-}
-
 interface AuthorityNameSpace {
   namespace: string
   displayName: string
@@ -50,6 +44,7 @@ interface AlternateContactDetails {
   addresses?: PatientAddress[]
   isMailingAddressSameAsPrimary?: boolean
 }
+
 interface Patient {
   id: number
   userId?: number
@@ -86,6 +81,7 @@ interface Patient {
   verificationStatus?: string
   status?: string
 }
+
 interface PatientConsentRequestBody {
   policyType: string
   channels: string[]
@@ -94,6 +90,6 @@ interface PatientConsentRequestBody {
   cellPhoneNumber: string
 }
 
-type RaceAndEthnicityCodeSetIndex = { [key: string]: Code[] | undefined }
+type AuthorityCodesetsIndex = { [key: string]: Code[] | undefined }
 
-export type { RaceAndEthnicityCodeSet, RaceAndEthnicityCodeSetIndex, AuthorityNameSpace, PatientConsentRequestBody, Patient }
+export type { AuthorityCodesetsIndex, AuthorityNameSpace, PatientConsentRequestBody, Patient, AuthorityCodeSets }

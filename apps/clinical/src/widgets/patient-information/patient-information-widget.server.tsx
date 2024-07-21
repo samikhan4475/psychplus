@@ -10,10 +10,10 @@ import {
   getHl7v3CodeSets,
   getRaceAndEthnicityCodeSets,
   getUsStatesCodeSets,
-} from './api.server'
+} from '@psychplus/patient-info/api.server'
 import { PatientInformationWidgetClient } from './patient-information-widget.client'
-import { Preloader } from './preloader'
-import { useStore } from './store'
+import { Preloader, useStore } from '@psychplus/patient-info'
+import { GOOGLE_MAPS_API_KEY } from '@psychplus/utils/constants'
 
 type PatientInformationWidgetProps = PatientParams
 
@@ -52,7 +52,7 @@ const PatientInformationWidgetServer = async ({
         hl7v3CodeSets={hl7v3CodeSets}
         degreeCodeSets={degreeCodeSet}
       />
-      <PatientInformationWidgetClient>
+      <PatientInformationWidgetClient googleApiKey={GOOGLE_MAPS_API_KEY?? ''}>
         {/* TODO: LinkAccountWidget will be implemented in future */}
         {/* <LinkAccountWidget patientId={patientId} /> */}
         <PreferredPartnersWidget patientId={patientId} />
