@@ -40,6 +40,8 @@ interface SearchAppointmentsActionParams {
   startingDate: string
   maxDaysOutToLook: number
   currentLocation: CurrentLocation | null
+  staffIds?: number[]
+  locationIds?: string[]
 }
 
 const searchAppointmentsAction = async ({
@@ -51,6 +53,8 @@ const searchAppointmentsAction = async ({
   postalCode,
   includeDistance,
   includeStaffBio,
+  staffIds,
+  locationIds,
 }: SearchAppointmentsActionParams): Promise<
   ActionResult<AppointmentAvailability[]>
 > => {
@@ -58,14 +62,24 @@ const searchAppointmentsAction = async ({
   url.searchParams.append('includeDistance', `${includeDistance}`)
   url.searchParams.append('includeStaffBio', `${includeStaffBio}`)
 
-  const result = await api.POST<AppointmentsSearchApiResponse>(url.toString(), {
+  const payload = {
     type: appointmentType,
     specialistTypeCode: providerType,
     startingDate,
     maxDaysOutToLook,
     postalCode,
     currentLocation: currentLocation ?? null,
-  })
+    staffIds: staffIds,
+    locationIds: locationIds,
+  }
+
+  if (staffIds === undefined) delete payload.staffIds
+  if (locationIds === undefined) delete payload.locationIds
+
+  const result = await api.POST<AppointmentsSearchApiResponse>(
+    url.toString(),
+    payload,
+  )
 
   if (result.state === 'error') {
     return {

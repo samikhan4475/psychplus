@@ -10,7 +10,7 @@ import {
 } from '@psychplus-v2/utils'
 import { Button, Flex, Text } from '@radix-ui/themes'
 import { CalendarDaysIcon, ChevronRightIcon, DotIcon } from 'lucide-react'
-import { getCodesets, getProfile } from '@/api'
+import { getCodesets, getConsents, getProfile } from '@/api'
 import {
   Badge,
   CardContainer,
@@ -32,20 +32,30 @@ import { AppointmentTimeLabel } from './appointment-time-label'
 import { CancelAppointment } from './cancel-appointment'
 import { ChangePaymentMethodDialog } from './change-payment-method-dialog'
 import { PayCopayButton } from './pay-copay-button'
+import { UpdateDateAndTimeDialog } from './update-date-and-time-dialog'
 
 const UpcomingAppointmentsSummaryComponent = async () => {
-  const [creditCardResponse, profileResponse, upcomingAppointmentResponse] =
-    await Promise.all([
-      getCreditCards(),
-      getProfile(),
-      getUpcomingAppointments(),
-    ])
+  const [
+    creditCardResponse,
+    profileResponse,
+    upcomingAppointmentResponse,
+    userConsentsResponse,
+  ] = await Promise.all([
+    getCreditCards(),
+    getProfile(),
+    getUpcomingAppointments(),
+    getConsents(),
+  ])
 
   const codesets = await getCodesets([
     CODESETS.InsuranceRelationship,
     CODESETS.Gender,
     CODESETS.UsStates,
   ])
+
+  if (userConsentsResponse.state === 'error') {
+    throw new Error(userConsentsResponse.error)
+  }
 
   if (upcomingAppointmentResponse.state === 'error') {
     throw new Error(upcomingAppointmentResponse.error)
@@ -139,7 +149,7 @@ const UpcomingAppointmentsSummaryComponent = async () => {
                       </Flex>
                       <Flex gap="3" align="center">
                         <AppointmentTimeLabel appointment={row} />
-                        <EditIcon />
+                        <UpdateDateAndTimeDialog appointment={row} />
                       </Flex>
                     </Flex>
                   </Flex>
