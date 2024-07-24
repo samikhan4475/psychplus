@@ -8,7 +8,7 @@ import {
   createClearingHouseReceiver,
   updateClearingHouseReceiver,
 } from '../api'
-import { ClearingHouseReceiver } from '../types'
+import { ClearingHouseReceiver, StateOption } from '../types'
 import AddressComponent from './address-fields'
 import TextFieldLabel from './text-field'
 
@@ -48,9 +48,11 @@ type SchemaType = z.infer<typeof schema>
 const ClearingHouseReceiverForm = ({
   data,
   isEdit = false,
+  usStatesCodeSets,
 }: {
   isEdit?: boolean
   data?: SchemaType
+  usStatesCodeSets?: StateOption[]
 }) => {
   const form = useForm<SchemaType>({
     resolver: zodResolver(schema),
@@ -88,33 +90,27 @@ const ClearingHouseReceiverForm = ({
     } as SchemaType,
   })
 
-  const onSubmit: SubmitHandler<SchemaType> = (formData: {
+  const onSubmit: SubmitHandler<SchemaType> = async (formData: {
     [key: string]: any
   }) => {
     delete formData.id
+    let response
     if (isEdit && data && data.id) {
-      updateClearingHouseReceiver(
+      response = await updateClearingHouseReceiver(
         {
           ...formData,
         } as ClearingHouseReceiver,
         data?.id,
       )
-        .then(() => {
-          window.location.replace(`/widgets/clearing-house-receiver-list`)
-        })
-        .catch((err: Error) => {
-          alert(err)
-        })
     } else {
-      createClearingHouseReceiver({
+      response = await createClearingHouseReceiver({
         ...formData,
       } as ClearingHouseReceiver)
-        .then(() => {
-          window.location.replace(`/widgets/clearing-house-receiver-list`)
-        })
-        .catch((err: Error) => {
-          alert(err)
-        })
+    }
+    if (response) {
+      window.location.reload()
+    } else {
+      alert(response)
     }
   }
   return (
@@ -278,7 +274,7 @@ const ClearingHouseReceiverForm = ({
       </Grid>
 
       <Grid columns="1" className="col-span-1">
-        Receiver
+        Receiver 837
       </Grid>
 
       <Grid columns="6" gap="4" className="col-span-1">
@@ -359,7 +355,12 @@ const ClearingHouseReceiverForm = ({
         </Box>
       </Grid>
 
-      <AddressComponent form={form} isEdit={!isEdit} title="Primary Address" />
+      <AddressComponent
+        form={form}
+        isEdit={!isEdit}
+        title="Primary Address"
+        usStatesCodeSets={usStatesCodeSets}
+      />
 
       <Flex gap="3" justify="end" mt="3">
         <button

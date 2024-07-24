@@ -1,1 +1,1 @@
-export * from './clearing-house-receiver-list-widget.client'
+export * from './clearing-house-receiver-list-widget.server'

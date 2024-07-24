@@ -1,7 +1,7 @@
-import { ClearingHouseReceiverListWidgetClient } from '@/widgets/clearing-house-receiver-list'
+import { ClearingHouseReceiverListWidgetServer } from '@/widgets/clearing-house-receiver-list'
 
 const ClearingHouseReceiverWidgetPage = () => {
-  return <ClearingHouseReceiverListWidgetClient />
+  return <ClearingHouseReceiverListWidgetServer />
 }
 
 export default ClearingHouseReceiverWidgetPage

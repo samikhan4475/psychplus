@@ -6,12 +6,14 @@ import { usePubsub } from '@psychplus/utils/event'
 import { CREATE_CLEARING_HOUSE_RECEIVER } from '@psychplus/widgets'
 import { EventType } from '@psychplus/widgets/events'
 import { ClearingHouseReceiverForm } from './components/clearing-house-receiver-form'
-import { ClearingHouseReceiver } from './types'
+import { ClearingHouseReceiver, StateOption } from './types'
 
 const ClearingHouseReceiverDialogWidgetClient = ({
   data,
+  usStatesCodeSets,
 }: {
   data?: ClearingHouseReceiver
+  usStatesCodeSets?: StateOption[]
 }) => {
   const { publish } = usePubsub()
 
@@ -42,7 +44,10 @@ const ClearingHouseReceiverDialogWidgetClient = ({
         <Dialog.Title size="8">
           {data ? 'Edit Receiver' : 'Add Receiver'}
         </Dialog.Title>
-        <ClearingHouseReceiverForm isEdit={true} />
+        <ClearingHouseReceiverForm
+          isEdit={true}
+          usStatesCodeSets={usStatesCodeSets}
+        />
       </Dialog.Content>
     </Dialog.Root>
   )

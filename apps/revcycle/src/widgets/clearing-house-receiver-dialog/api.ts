@@ -6,7 +6,7 @@ const createClearingHouseReceiver = (
   payload: ClearingHouseReceiver,
 ): Promise<ClearingHouseReceiver> =>
   handleRequest(
-    fetch(`/api/clearinghousereceivers`, {
+    fetch(`/revcycle/api/clearinghousereceivers`, {
       method: 'POST',
       body: JSON.stringify(payload),
       cache: 'no-store',
@@ -19,7 +19,7 @@ const updateClearingHouseReceiver = (
   id: string,
 ): Promise<ClearingHouseReceiver> =>
   handleRequest(
-    fetch(`/api/clearinghousereceivers/${id}`, {
+    fetch(`/revcycle/api/clearinghousereceivers/${id}`, {
       method: 'PUT',
       body: JSON.stringify(payload),
       cache: 'no-store',

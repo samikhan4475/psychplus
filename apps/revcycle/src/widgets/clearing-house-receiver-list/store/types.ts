@@ -1,4 +1,4 @@
-import { ClearingHouseReceiver } from '../types'
+import { ClearingHouseReceiver, RaceAndEthnicityCodeSet } from '../types'
 
 interface Filters {
   receiverIds: string[]
@@ -29,4 +29,5 @@ export type {
   ClearingHouseReceiverFiltersState,
   ClearingHouseReceiverState,
   Filters,
+  RaceAndEthnicityCodeSet,
 }

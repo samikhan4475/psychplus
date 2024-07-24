@@ -2,8 +2,12 @@
 
 import { ClearingHouse } from './components'
 
-const ClearingHouseWidgetClient = () => {
-  return <ClearingHouse />
+const ClearingHouseWidgetClient = ({
+  googleApiKey,
+}: {
+  googleApiKey: string
+}) => {
+  return <ClearingHouse googleApiKey={googleApiKey} />
 }
 
 export { ClearingHouseWidgetClient }

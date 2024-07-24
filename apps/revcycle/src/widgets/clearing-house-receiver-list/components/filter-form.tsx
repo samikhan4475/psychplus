@@ -1,11 +1,14 @@
 import { useEffect, useState } from 'react'
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons'
 import { Box, Button, Flex, Text, TextFieldInput } from '@radix-ui/themes'
-import { getClearingHouseReceiverList } from '../api'
+import { useGooglePlacesContext } from '@/providers'
+import { PlacesAutocomplete } from '../../clearing-house-receiver-dialog/components/places-autocomplete'
+import { getClearingHouseReceiverList } from '../api.client'
 import { Filters, useStore } from '../store'
 import { initialClearingHouseReceiverFilterState } from '../store/clearing-house-receiver-filter-store'
 
 const FilterForm = () => {
+  const { loaded } = useGooglePlacesContext()
   const { handleFiltersChange, setClearingHouseReceivers } = useStore()
   let { filters } = useStore()
   const [filtersState, setFiltersState] = useState<Filters>(
@@ -36,6 +39,28 @@ const FilterForm = () => {
       })
   }
 
+  const setAddressValues = (
+    address:
+      | {
+          street?: string
+          street1?: string
+          city?: string
+          state?: string
+          postalCode?: string
+        }
+      | undefined,
+  ) => {
+    if (address) {
+      handleFiltersChange({
+        address1: address.street,
+        address2: address.street1,
+        city: address.city,
+        state: address.state,
+        zip: address.postalCode,
+      })
+    }
+  }
+
   return (
     <Box my="2">
       <Flex>
@@ -52,12 +77,13 @@ const FilterForm = () => {
           </Box>
 
           <Box className="col-span-1 flex-1">
-            <FilterField
-              label="Address 1"
-              placeholder="Search by address"
-              value={filtersState?.address1}
-              onChange={(value) => handleFiltersChange({ address1: value })}
-            />
+            {loaded && (
+              <PlacesAutocomplete
+                name={'address'}
+                callbackAddress={setAddressValues}
+                isFilter
+              />
+            )}
           </Box>
 
           <Box className="col-span-1 flex-1">
@@ -71,34 +97,12 @@ const FilterForm = () => {
 
           <Box className="col-span-1 flex-1">
             <FilterField
-              label="City"
-              placeholder="Search by city"
-              value={filtersState?.city}
-              onChange={(value) => handleFiltersChange({ city: value })}
-            />
-          </Box>
-
-          <Box className="col-span-1 flex-1">
-            <FilterField
-              label="State"
-              placeholder="Search by state"
-              value={filtersState?.state}
-              onChange={(value) => handleFiltersChange({ state: value })}
-            />
-          </Box>
-
-          <Box className="col-span-1 flex-1">
-            <FilterField
               label="Zip"
               placeholder=""
               value={filtersState?.zip}
               onChange={(value) => handleFiltersChange({ zip: value })}
             />
           </Box>
-        </div>
-      </Flex>
-      <Flex>
-        <div className="col-span-1 grid grid-cols-7 pt-1">
           <Box className="col-span-1 flex-1">
             <FilterField
               label="Phone"
@@ -107,6 +111,10 @@ const FilterForm = () => {
               onChange={(value) => handleFiltersChange({ phone: value })}
             />
           </Box>
+        </div>
+      </Flex>
+      <Flex>
+        <div className="col-span-1 grid grid-cols-7 pt-1">
           <Box className="col-span-1 flex-1">
             <FilterField
               label="Fax"

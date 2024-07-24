@@ -1,32 +1,31 @@
 import { Grid, Text } from '@radix-ui/themes'
 import { UseFormReturn } from 'react-hook-form'
+import { FormSelect } from '@psychplus/form'
+import { useGooglePlacesContext } from '@/providers'
 import { SchemaType } from '.'
+import { StateOption } from '../types'
+import { PlacesAutocomplete } from './places-autocomplete'
 import TextFieldLabel from './text-field'
 
 const AddressComponent = ({
   title,
   isEdit,
   form,
+  usStatesCodeSets,
 }: {
   title?: string
   form: UseFormReturn<SchemaType>
   isEdit: boolean
+  usStatesCodeSets?: StateOption[]
 }) => {
+  const { loaded } = useGooglePlacesContext()
+
   return (
     <>
       {title && <Text size="1">{title}</Text>}
 
       <Grid columns="5" gap="4">
-        <TextFieldLabel
-          label="Address 1"
-          type="text"
-          disabled={isEdit}
-          error={form.formState?.errors?.address1?.message}
-          onChange={(value: string) => {
-            form.setValue(`address1`, value)
-          }}
-          required={true}
-        />
+        {loaded && <PlacesAutocomplete required name={'address'} form={form} />}
         <TextFieldLabel
           label="Address 2"
           type="text"
@@ -35,6 +34,7 @@ const AddressComponent = ({
           onChange={(value: string) => {
             form.setValue(`address2`, value)
           }}
+          register={form.register('address2')}
         />
         <TextFieldLabel
           label="City"
@@ -45,15 +45,15 @@ const AddressComponent = ({
             form.setValue(`city`, value)
           }}
           required={true}
+          register={form.register('city')}
         />
-        <TextFieldLabel
-          type="text"
+
+        <FormSelect
           label="State"
-          disabled={isEdit}
-          error={form.formState?.errors?.state?.message}
-          onChange={(value: string) => {
-            form.setValue(`state`, value)
-          }}
+          size="2"
+          placeholder=""
+          options={usStatesCodeSets ?? []}
+          {...form.register('state')}
           required={true}
         />
 
@@ -66,6 +66,7 @@ const AddressComponent = ({
             form.setValue(`zip`, value)
           }}
           required={true}
+          register={form.register('zip')}
         />
       </Grid>
     </>

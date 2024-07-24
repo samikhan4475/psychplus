@@ -61,6 +61,7 @@ const columns: ColumnDef<ClearingHouseReceiver>[] = [
 
   {
     id: 'city',
+    accessorKey: 'city',
     header: ({ column }) => (
       <DataTableColumnHeader
         column={column}
@@ -74,6 +75,7 @@ const columns: ColumnDef<ClearingHouseReceiver>[] = [
 
   {
     id: 'state',
+    accessorKey: 'state',
     header: ({ column }) => (
       <DataTableColumnHeader
         column={column}
@@ -86,6 +88,7 @@ const columns: ColumnDef<ClearingHouseReceiver>[] = [
   },
   {
     id: 'zip',
+    accessorKey: 'zip',
     header: ({ column }) => (
       <DataTableColumnHeader
         column={column}
@@ -98,6 +101,7 @@ const columns: ColumnDef<ClearingHouseReceiver>[] = [
   },
   {
     id: 'phone',
+    accessorKey: 'phone',
     header: ({ column }) => (
       <DataTableColumnHeader
         column={column}
@@ -123,6 +127,7 @@ const columns: ColumnDef<ClearingHouseReceiver>[] = [
   },
   {
     id: 'email',
+    accessorKey: 'email',
     header: ({ column }) => (
       <DataTableColumnHeader
         column={column}
@@ -135,6 +140,7 @@ const columns: ColumnDef<ClearingHouseReceiver>[] = [
   },
   {
     id: 'website',
+    accessorKey: 'website',
     header: ({ column }) => (
       <DataTableColumnHeader
         column={column}
@@ -147,6 +153,7 @@ const columns: ColumnDef<ClearingHouseReceiver>[] = [
   },
   {
     id: 'submission_method',
+    accessorKey: 'submission_method',
     header: ({ column }) => (
       <DataTableColumnHeader
         column={column}
@@ -161,6 +168,7 @@ const columns: ColumnDef<ClearingHouseReceiver>[] = [
   },
   {
     id: 'rec_name',
+    accessorKey: 'rec_name',
     header: ({ column }) => (
       <DataTableColumnHeader
         column={column}
@@ -173,6 +181,7 @@ const columns: ColumnDef<ClearingHouseReceiver>[] = [
   },
   {
     id: 'rec_id',
+    accessorKey: 'rec_id',
     header: ({ column }) => (
       <DataTableColumnHeader
         column={column}

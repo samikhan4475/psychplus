@@ -3,7 +3,7 @@ import { createHeaders } from '@psychplus/utils/client'
 import { ClearingHouseReceiver } from './types'
 
 interface ClearingHouseReceiverPayload {
-  receiverIds: string[]
+  receiverIds?: string[]
   clearingHouseName?: string
   address1?: string
   address2?: string

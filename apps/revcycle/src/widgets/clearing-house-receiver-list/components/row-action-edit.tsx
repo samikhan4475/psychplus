@@ -1,6 +1,7 @@
 import { Cross2Icon } from '@radix-ui/react-icons'
 import { Dialog } from 'node_modules/@psychplus/ui/src/dialog'
 import { ClearingHouseReceiverForm } from '@/widgets/clearing-house-receiver-dialog/components/clearing-house-receiver-form'
+import { useStore } from '../store'
 import { ClearingHouseReceiver } from '../types'
 
 const RowActionEdit = ({
@@ -12,6 +13,7 @@ const RowActionEdit = ({
   isOpen: boolean
   closeDialog: () => void
 }) => {
+  const usStatesCodeSets = useStore((state) => state.usStatesCodeSets)
   return (
     <Dialog.Root
       open={isOpen}
@@ -24,7 +26,11 @@ const RowActionEdit = ({
           <Cross2Icon />
         </Dialog.Close>
         <Dialog.Title size="8">Edit Receiver</Dialog.Title>
-        <ClearingHouseReceiverForm data={row} isEdit={true} />
+        <ClearingHouseReceiverForm
+          data={row}
+          isEdit={true}
+          usStatesCodeSets={usStatesCodeSets}
+        />
       </Dialog.Content>
     </Dialog.Root>
   )

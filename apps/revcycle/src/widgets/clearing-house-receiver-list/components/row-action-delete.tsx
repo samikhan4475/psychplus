@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Cross2Icon } from '@radix-ui/react-icons'
 import { Button, Flex, Text } from '@radix-ui/themes'
 import { Dialog } from 'node_modules/@psychplus/ui/src/dialog'
-import { deleteClearingHouseReceiver } from '../api'
+import { deleteClearingHouseReceiver } from '../api.client'
 import { ClearingHouseReceiver } from '../types'
 
 const RowActionDelete = ({
@@ -30,10 +30,10 @@ const RowActionDelete = ({
         message = JSON.stringify(error)
       }
       alert(`ERROR: ${message}`)
-      window.location.replace(`/widgets/clearing-house-receiver-list`)
+      window.location.reload()
     } finally {
       setDeleteLoading(false)
-      window.location.replace(`/widgets/clearing-house-receiver-list`)
+      window.location.reload()
     }
   }
 

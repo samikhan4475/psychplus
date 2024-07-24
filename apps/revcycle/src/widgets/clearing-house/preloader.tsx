@@ -2,10 +2,10 @@
 
 import { useRef } from 'react'
 import { type StoreApi, type UseBoundStore } from 'zustand'
-import { ClearingHouseReceiverStoreType } from './store'
+import { ClearingHouseStoreType } from './store'
 import { RaceAndEthnicityCodeSet, StatesOption } from './types'
 
-type BoundStoreType = UseBoundStore<StoreApi<ClearingHouseReceiverStoreType>>
+type BoundStoreType = UseBoundStore<StoreApi<ClearingHouseStoreType>>
 
 interface PreloaderProps {
   store: BoundStoreType

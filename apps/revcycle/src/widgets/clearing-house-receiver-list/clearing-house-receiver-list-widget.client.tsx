@@ -1,22 +1,34 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
-import { Flex } from '@radix-ui/themes'
+import { useEffect, useRef } from 'react'
+import { Box, Flex, Text } from '@radix-ui/themes'
+import { GooglePlacesContextProvider } from '@/providers'
 import { ClearingHouseReceiverDialogWidgetClient } from '../clearing-house-receiver-dialog'
-import { getClearingHouseReceiverList } from './api'
+import { getClearingHouseReceiverList } from './api.client'
 import { ReceiverTable } from './components/receiver-table'
-import { Preloader } from './preloader'
 import { useStore } from './store'
-import { ClearingHouseReceiver } from './types'
+import { ClearingHouseReceiver, StatesOption } from './types'
 
-const ClearingHouseReceiverListWidgetClient = () => {
+const ClearingHouseReceiverListWidgetClient = ({
+  googleApiKey,
+  usStatesCodeSetsProp,
+}: {
+  googleApiKey: string
+  usStatesCodeSetsProp?: StatesOption[]
+}) => {
+  const usStatesCodeSetsState = useStore((state) => state.usStatesCodeSets)
+  const usStatesCodeSetsData = usStatesCodeSetsProp ?? usStatesCodeSetsState
+
   const { setClearingHouseReceivers } = useStore((state) => ({
     setClearingHouseReceivers: state.setClearingHouseReceivers,
   }))
-  const [isLoading, setIsLoading] = useState(true)
+  const { setUsStatesCodeSets } = useStore((state) => ({
+    setUsStatesCodeSets: state.setUsStatesCodeSets,
+  }))
   const ref = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
+    setUsStatesCodeSets(usStatesCodeSetsData)
     fetchReceiversList()
   }, [])
 
@@ -27,26 +39,29 @@ const ClearingHouseReceiverListWidgetClient = () => {
           receiverIds: [],
         })
       setClearingHouseReceivers(clearingHouseList)
-      setIsLoading(false)
     } catch (error) {
       setClearingHouseReceivers([])
-      setIsLoading(false)
     }
   }
 
   return (
-    <>
-      {isLoading ? (
-        <Preloader isLoadingOn={isLoading} />
-      ) : (
-        <Flex direction="column" className="h-fit min-w-fit p-5" ref={ref}>
-          <Flex justify="end">
-            <ClearingHouseReceiverDialogWidgetClient />
-          </Flex>
-          <ReceiverTable />
+    <GooglePlacesContextProvider apiKey={googleApiKey}>
+      <Flex direction="column" className="h-fit min-w-fit p-3" ref={ref}>
+        <Flex className="border-b-2 border-[#eaeaea] p-1">
+          <Box className="flex-1">
+            <Text className="font-bold">Receiver</Text>
+          </Box>
+          <Box className="flex-1">
+            <Flex justify="end">
+              <ClearingHouseReceiverDialogWidgetClient
+                usStatesCodeSets={usStatesCodeSetsData}
+              />
+            </Flex>
+          </Box>
         </Flex>
-      )}
-    </>
+        <ReceiverTable />
+      </Flex>
+    </GooglePlacesContextProvider>
   )
 }
 
