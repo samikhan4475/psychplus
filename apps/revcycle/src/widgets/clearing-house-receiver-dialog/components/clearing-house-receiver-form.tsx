@@ -84,7 +84,7 @@ const ClearingHouseReceiverForm = ({
       address1: data?.address1 || '',
       address2: data?.address2 || '',
       city: data?.city || '',
-      state: data?.city || '',
+      state: data?.state || '',
       zip: data?.zip || '',
       recordStatus: data?.isa01 || '',
     } as SchemaType,

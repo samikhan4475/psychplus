@@ -7,7 +7,7 @@ import React, {
   useState,
   type ChangeEvent,
 } from 'react'
-import { Flex, Text, TextFieldInput } from '@radix-ui/themes'
+import { Button, Flex, Text, TextFieldInput } from '@radix-ui/themes'
 import { type FieldValues } from 'react-hook-form'
 import usePlacesAutocomplete, {
   getDetails,
@@ -27,7 +27,6 @@ const PlacesAutocomplete = ({
   isFilter,
 }: PlacesAutocompleteProps) => {
   const autocompleteRef = useRef<HTMLInputElement | null>(null)
-
   const state = form?.getFieldState('address1', form.formState)
   const values = form?.getValues()
   const [showSuggestions, setShowSuggestions] = useState(false)
@@ -40,10 +39,10 @@ const PlacesAutocomplete = ({
     clearSuggestions,
   } = usePlacesAutocomplete({
     defaultValue: getInitialAutocompleteValue({
-      street1: values && values['address1'],
-      city: values && values['city'],
-      state: values && values['state'],
-      postalCode: values && values['zip'],
+      street1: values?.address1,
+      city: values?.city,
+      state: values?.state,
+      postalCode: values?.zip,
     }),
     requestOptions: {
       types: ['address'],
@@ -65,7 +64,7 @@ const PlacesAutocomplete = ({
   const setFormValues = useCallback(
     (address?: AddressForm) => {
       form?.setValue('address1', address?.street || '')
-      form?.setValue('address2', address?.street2 || '')
+      form?.setValue('address2', address?.street1 || '')
       form?.setValue('city', address?.city || '')
       form?.setValue('state', address?.state || '')
       form?.setValue('zip', address?.postalCode || '')
@@ -83,9 +82,8 @@ const PlacesAutocomplete = ({
 
   const handleSelect = (suggestion: Suggestion) => async () => {
     clearSuggestions()
-
     try {
-      const response = getDetails({ placeId: suggestion.place_id })
+      const response = await getDetails({ placeId: suggestion.place_id })
       const address = getAddressFromPlacesResult(response)
       setFormValues(address)
       setValue(address?.street ?? '')
@@ -99,7 +97,7 @@ const PlacesAutocomplete = ({
   }
 
   const handleKeyPress = (
-    event: React.KeyboardEvent<HTMLLIElement>,
+    event: React.KeyboardEvent<HTMLButtonElement>,
     suggestions: Suggestion,
   ) => {
     if (event.key === 'Enter' || event.key === ' ') {
@@ -136,16 +134,22 @@ const PlacesAutocomplete = ({
               return (
                 <li
                   key={place_id}
-                  onClick={handleSelect(suggestion)}
-                  onKeyDown={(e) => handleKeyPress(e, suggestion)}
-                  tabIndex={0}
-                  className="cursor-pointer border-b border-b-gray-5 px-4 py-2 last:border-b-0 hover:bg-gray-2"
+                  className="border-b border-b-gray-5 last:border-b-0"
                 >
-                  <Text weight="bold" size="2">
-                    {main_text}
-                  </Text>
-                  &nbsp;
-                  <Text size="1">{secondary_text}</Text>
+                  <Button
+                    onClick={handleSelect(suggestion)}
+                    onKeyDown={(e: React.KeyboardEvent<HTMLButtonElement>) =>
+                      handleKeyPress(e, suggestion)
+                    }
+                    tabIndex={0}
+                    className="w-full cursor-pointer bg-transparent p-8 text-left text-[#000] hover:bg-gray-2"
+                  >
+                    <Text weight="bold" size="2">
+                      {main_text}
+                    </Text>
+                    &nbsp;
+                    <Text size="1">{secondary_text}</Text>
+                  </Button>
                 </li>
               )
             })}
