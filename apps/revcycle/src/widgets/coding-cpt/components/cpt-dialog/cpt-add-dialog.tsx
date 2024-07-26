@@ -1,10 +1,12 @@
-import { useEffect, useState } from 'react'
+'use client'
+
+import { Cross2Icon } from '@radix-ui/react-icons'
 import { Dialog } from '@psychplus/ui/dialog'
-import { CPTComponent } from './cpt'
+import { CPTAddForm } from './cpt-add-form'
 
 interface CPT {
   macLocality?: string
-  hcpcsCodes?: string[]
+  hcpcsCodes?: string
   cptCode?: string
   placeOfService?: string
   description?: string
@@ -17,16 +19,19 @@ interface CPT {
   id?: string
 }
 
-const AddDialog = (props: {
+const CPTAddDialog = (props: {
   open: boolean
   setDialogOpen: (flg: boolean) => void
   refresh: () => void
   optionalData: CPT
 }) => (
   <Dialog.Root open={props.open} onOpenChange={props.setDialogOpen}>
-    <Dialog.Content className="z-100 max-w-[600px]">
-      <Dialog.Title>Add CPT</Dialog.Title>
-      <CPTComponent
+    <Dialog.Content className="relative max-w-[1000px] rounded-6 p-6 font-bold text-[#151B4A]">
+      <Dialog.Close className="absolute right-4 top-4 cursor-pointer">
+        <Cross2Icon />
+      </Dialog.Close>
+      <Dialog.Title size="8">Add CPT</Dialog.Title>
+      <CPTAddForm
         refresh={() => {
           props.setDialogOpen(false)
           props.refresh()
@@ -37,4 +42,4 @@ const AddDialog = (props: {
   </Dialog.Root>
 )
 
-export { AddDialog }
+export { CPTAddDialog }

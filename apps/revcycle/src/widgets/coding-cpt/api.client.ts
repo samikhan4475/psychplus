@@ -1,3 +1,4 @@
+import { handleRequest } from '@psychplus/utils/api'
 import { createHeaders } from '@psychplus/utils/client'
 
 const addCPTRecords = (offset = 0, limit = 0, body = {}) =>
@@ -8,13 +9,15 @@ const addCPTRecords = (offset = 0, limit = 0, body = {}) =>
   })
 
 const getCPTSearchedRecords = (offset = 0, limit = 0, body = {}) =>
-  fetch(
-    `/revcycle/api/masterfeeschedules/actions/search?offset=${offset}&limit=${limit}`,
-    {
-      headers: createHeaders(),
-      method: 'POST',
-      body: JSON.stringify(body),
-    },
+  handleRequest(
+    fetch(
+      `/revcycle/api/masterfeeschedules/actions/search?offset=${offset}&limit=${limit}`,
+      {
+        headers: createHeaders(),
+        method: 'POST',
+        body: JSON.stringify(body),
+      },
+    ),
   )
 
 const updateCPTRecords = (id: string, body = {}) =>

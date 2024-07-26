@@ -159,6 +159,11 @@ export interface CodeSetsMetadata {
   createdByFullName: string
 }
 
+interface FeeScheduleCategory {
+  code: string
+  display: string
+}
+
 export type {
   CodeSet,
   Code,
@@ -170,4 +175,5 @@ export type {
   ParameterCodeSet,
   Parameter,
   RelationshipCodeSet,
+  FeeScheduleCategory
 }

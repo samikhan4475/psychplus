@@ -1,6 +1,6 @@
 'use client'
-import { CptmasterfeeClient } from '@/widgets/cptmasterfee'
+import { CodingCPTServer } from '@/widgets/coding-cpt/coding-cpt.server'
 
-const CPTWidgetPage = () => <CptmasterfeeClient />
+const CPTWidgetPage = () => <CodingCPTServer />
 
 export default CPTWidgetPage

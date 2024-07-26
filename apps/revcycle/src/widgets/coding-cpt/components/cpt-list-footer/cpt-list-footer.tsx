@@ -7,7 +7,7 @@ import {
 
 interface CPT {
   macLocality?: string
-  hcpcsCodes?: string[]
+  hcpcsCodes?: string
   cptCode?: string
   placeOfService?: string
   description?: string
@@ -20,7 +20,7 @@ interface CPT {
   id?: string
 }
 
-const DataTableFooter = ({ table }: { table: Table<CPT> }) => (
+const CPTListFooter = ({ table }: { table: Table<CPT> }) => (
   <Flex p="1" align="center" justify="end">
     <Flex gap="3">
       <DataTablePageSizeSelector table={table} />
@@ -29,4 +29,4 @@ const DataTableFooter = ({ table }: { table: Table<CPT> }) => (
   </Flex>
 )
 
-export { DataTableFooter }
+export { CPTListFooter }

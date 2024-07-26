@@ -1,6 +1,6 @@
-import { Button } from '@psychplus/ui/button'
 import { DropdownMenu } from '@psychplus/ui/dropdown-menu'
-
+import { DotsHorizontalIcon } from '@radix-ui/react-icons'
+import { IconButton } from '@radix-ui/themes'
 interface MultiSelectOption {
   value: string
   label: string
@@ -18,14 +18,11 @@ const MultiSelectDropdown: React.FC<Props> = ({
 }) => {
   return (
     <DropdownMenu.Root>
-      <DropdownMenu.Trigger>
-        <Button
-          color="gray" variant="outline"
-          className="flex items-center justify-around"
-        >
-          ...
-        </Button>
-      </DropdownMenu.Trigger>
+       <DropdownMenu.Trigger>
+          <IconButton size="1" variant="ghost" mr="1">
+            <DotsHorizontalIcon height={16} width={16} />
+          </IconButton>
+        </DropdownMenu.Trigger>
       <DropdownMenu.Content>
         {options.map((item) => (
           <DropdownMenu.Item

@@ -1,9 +1,13 @@
-import { CodingPOSWidgetClient } from '@/widgets/coding-pos'
-import { CptmasterfeeServer } from '@/widgets/cptmasterfee/cptmasterfee.server'
+// coding.tsx
 import { Box, Tabs } from '@radix-ui/themes'
+import { CodingPOSWidgetClient } from '@/widgets/coding-pos'
 import './style.css'
+import { CodingCPTClient } from '@/widgets/coding-cpt/coding-cpt.client'
+import { useStore } from '../store'
 
 const Coding = () => {
+  const posCodeSets = useStore((state) => state.posCodeSets)
+  const cptCategoryCodeSets = useStore((state) => state.cptCategoryCodeSets)
   return (
     <Box>
       <Tabs.Root defaultValue="CPT">
@@ -23,7 +27,7 @@ const Coding = () => {
         </Tabs.List>
         <Box px="4" pt="3" pb="2">
           <Tabs.Content value="CPT">
-            <CptmasterfeeServer />
+            <CodingCPTClient posCodeSets={posCodeSets} cptCategoryCodeSets={cptCategoryCodeSets}/>
           </Tabs.Content>
           <Tabs.Content value="POS">
             <CodingPOSWidgetClient />
@@ -35,4 +39,3 @@ const Coding = () => {
 }
 
 export { Coding }
-

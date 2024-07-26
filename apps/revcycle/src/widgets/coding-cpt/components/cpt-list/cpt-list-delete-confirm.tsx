@@ -2,13 +2,13 @@ import { Flex } from '@radix-ui/themes'
 import { Button } from '@psychplus/ui/button'
 import { Dialog } from '@psychplus/ui/dialog'
 
-interface ConfirmDialogProps {
+interface CPTListDeleteConfirmation {
   setConfirm: (confirm: boolean) => void
   confirm: boolean
   setDeleteState: (confirm: boolean) => void
 }
 
-const ConfirmationDialog = (props: ConfirmDialogProps) => {
+const CPTListDeleteConfirmation = (props: CPTListDeleteConfirmation) => {
   return (
     <Dialog.Root open={props.confirm} onOpenChange={props.setConfirm}>
       <Dialog.Content className="max-w-[450px]">
@@ -32,4 +32,4 @@ const ConfirmationDialog = (props: ConfirmDialogProps) => {
   )
 }
 
-export { ConfirmationDialog }
+export { CPTListDeleteConfirmation }
