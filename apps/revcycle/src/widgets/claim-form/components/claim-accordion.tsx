@@ -1,13 +1,17 @@
-import React, { PropsWithChildren, useState } from 'react'
+import { PropsWithChildren, ReactNode, useState } from 'react'
 import * as Accordion from '@radix-ui/react-accordion'
-import { ChevronDownIcon, ChevronUpIcon } from '@radix-ui/react-icons'
 import { Box, Text } from '@radix-ui/themes'
 
 interface ClaimAccordionItemProps extends PropsWithChildren {
   title: string
+  buttons?: ReactNode
 }
 
-const ClaimAccordionItem = ({ title, children }: ClaimAccordionItemProps) => {
+const ClaimAccordionItem = ({
+  title,
+  children,
+  buttons,
+}: ClaimAccordionItemProps) => {
   const [isOpen, setIsOpen] = useState(false)
 
   return (
@@ -21,19 +25,7 @@ const ClaimAccordionItem = ({ title, children }: ClaimAccordionItemProps) => {
             <Text size="3" weight="medium" className="text-gray-800">
               {title}
             </Text>
-            <Box className="transition-transform duration-200">
-              {isOpen ? (
-                <ChevronUpIcon
-                  className="text-gray-700 h-6 w-6"
-                  aria-hidden="true"
-                />
-              ) : (
-                <ChevronDownIcon
-                  className="text-gray-700 h-6 w-6"
-                  aria-hidden="true"
-                />
-              )}
-            </Box>
+            <Box className="transition-transform duration-200">{buttons}</Box>
           </Box>
         </Accordion.Trigger>
       </Accordion.Header>
