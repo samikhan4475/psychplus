@@ -15,6 +15,7 @@ interface BookedSlot {
   type: string
   startDate: string
   duration: number
+  servicesOffered: string[]
 }
 
 interface AppointmentState {

@@ -10,6 +10,7 @@ interface Slot {
   startDate: string
   endDate: string
   duration: number
+  servicesOffered: string[]
 }
 
 interface StaffAppointmentAvailabilty {
@@ -43,7 +44,7 @@ type BookAppointmentPayload = {
   startDate: string
   duration: number
   isFollowup: boolean
-  encounterTypeCode: number
+  serviceId?: string
 }
 
 type MetaData = {

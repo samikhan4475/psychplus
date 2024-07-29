@@ -68,6 +68,7 @@ const SlotComponent = ({
       type: filters.appointmentType,
       startDate: slot.startDate,
       duration: slot.duration,
+      servicesOffered: slot.servicesOffered,
     })
 
     clickTrack({

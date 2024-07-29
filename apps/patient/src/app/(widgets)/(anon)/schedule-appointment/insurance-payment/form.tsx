@@ -137,7 +137,7 @@ const InsurancePaymentForm = ({
       startDate,
       duration: bookSlotState?.duration || 0,
       isFollowup: true,
-      encounterTypeCode: 0,
+      serviceId: bookSlotState?.servicesOffered?.[0],
     })
       .then(() => {
         const providerType =

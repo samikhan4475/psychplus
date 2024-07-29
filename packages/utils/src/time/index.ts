@@ -42,9 +42,9 @@ function formatStartDate(startDate?: string) {
     day: 'numeric',
     hour: 'numeric',
     minute: 'numeric',
-    timeZoneName: 'short',
+    // timeZoneName: 'short',
     hour12: true,
-    timeZone: TIMEZONE_FORMAT,
+    // timeZone: TIMEZONE_FORMAT,
   }
 
   if (startDate) {
@@ -66,7 +66,7 @@ const formatTimeWithAmPm = (date: string) => {
     hour: 'numeric',
     minute: 'numeric',
     hour12: true,
-    timeZone: TIMEZONE_FORMAT,
+    // timeZone: TIMEZONE_FORMAT,
   }
 
   return dateTime.toLocaleTimeString('en-US', options)
@@ -91,7 +91,6 @@ const formatLocaleDate = (date: Date) => {
     hour: 'numeric',
     minute: 'numeric',
     hour12: true,
-    timeZone: TIMEZONE_FORMAT,
   }
 
   return date.toLocaleString('en-US', options)

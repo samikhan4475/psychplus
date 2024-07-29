@@ -62,7 +62,6 @@ const ConfirmationPage = () => {
         <Text as="p" className="mb-6 mt-2 text-[18px] font-bold text-[#194595]">
           See you on{' '}
           {formatLocaleDate(new Date(bookedSlotState?.startDate ?? new Date()))}{' '}
-          CST
         </Text>
 
         <AppointmentDetailCard className="my-3" />
