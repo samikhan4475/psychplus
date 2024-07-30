@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { AppointmentType, CODESETS } from '@psychplus-v2/constants'
+import { AppointmentType, CODESETS, PaymentType } from '@psychplus-v2/constants'
 import { GOOGLE_MAPS_API_KEY, STRIPE_PUBLISHABLE_KEY } from '@psychplus-v2/env'
 import {
   formatCurrency,
@@ -14,6 +14,7 @@ import { getCodesets, getConsents, getProfile } from '@/api'
 import {
   Badge,
   CardContainer,
+  CreditDebitCardIcon,
   EditIcon,
   FeatureEmpty,
   FileLineIcon,
@@ -31,7 +32,10 @@ import {
 import { CodesetStoreProvider, GooglePlacesContextProvider } from '@/providers'
 import { ScheduleAppointmentButton } from '../../search'
 import { getUpcomingAppointments } from '../api'
-import { getClinicAddressDirectionMapUrl } from '../utils'
+import {
+  getClinicAddressDirectionMapUrl,
+  mapVerificationStatusToChipVariant,
+} from '../utils'
 import { AppointmentTimeLabel } from './appointment-time-label'
 import { CancelAppointment } from './cancel-appointment'
 import { ChangePaymentMethodDialog } from './change-payment-method-dialog'
@@ -87,6 +91,8 @@ const UpcomingAppointmentsSummaryComponent = async () => {
   }
 
   const upcomingAppointments = upcomingAppointmentResponse.data.appointments
+  const patientVerification =
+    upcomingAppointmentResponse.data.patientVerification
 
   if (upcomingAppointments.length === 0) {
     return (
@@ -178,18 +184,29 @@ const UpcomingAppointmentsSummaryComponent = async () => {
                   className="lg:ml-20"
                   gap={{ initial: '2', xs: '6' }}
                 >
-                  {/* Non functional insurance related code started from here */}
                   <Flex align="center" gap="2" ml={{ initial: '0', xs: '3' }}>
                     <Flex align="center" gap="1">
-                      <ShieldFlashLineIcon />
+                      {row.isSelfPay ? (
+                        <CreditDebitCardIcon />
+                      ) : (
+                        <ShieldFlashLineIcon />
+                      )}
                       <Text className="text-[12px] xs:text-[15px]">
-                        Blue Shield
+                        {row.isSelfPay
+                          ? PaymentType.SelfPay
+                          : patientVerification.primaryInsuranceName}
                       </Text>
-                      <Badge
-                        label="Pending"
-                        type="warning"
-                        className="h-[32px]"
-                      />
+                      {!row.isSelfPay && patientVerification.hasInsurance && (
+                        <Badge
+                          label={
+                            patientVerification.patientInsuranceVerification
+                          }
+                          type={mapVerificationStatusToChipVariant(
+                            patientVerification?.patientInsuranceVerification,
+                          )}
+                          addIcon
+                        />
+                      )}
                     </Flex>
                     <ChangePaymentMethodDialog
                       creditCards={sortCreditCardsByPrimary(
@@ -200,7 +217,6 @@ const UpcomingAppointmentsSummaryComponent = async () => {
                       insurancePayers={insurancePayerResponse.data}
                     />
                   </Flex>
-                  {/* Non functional insurance related code ending here */}
 
                   <Flex align="center" gap="1">
                     <ParentLineIcon />
@@ -217,12 +233,7 @@ const UpcomingAppointmentsSummaryComponent = async () => {
                     )}
 
                     {row.isCopayPaid && row.coPay > 0 && (
-                      <Badge
-                        label="Paid"
-                        type="success"
-                        addIcon={true}
-                        className="h-[32px]"
-                      />
+                      <Badge label="Paid" type="success" addIcon={true} />
                     )}
                   </Flex>
                 </Flex>
