@@ -5,7 +5,8 @@ import { useRouter } from 'next/navigation'
 import { getLocalTimeZone, today } from '@internationalized/date'
 import { Appointment } from '@psychplus-v2/types'
 import { getCalendarDateLabel } from '@psychplus-v2/utils'
-import { Box, Button, Dialog, Flex, Tooltip } from '@radix-ui/themes'
+import { Box, Button, Flex, Tooltip } from '@radix-ui/themes'
+import { Popover } from '@psychplus/ui/popover'
 import { EditIcon, FormError } from '@/components-v2'
 import { useToast } from '@/providers'
 import { useStore } from '../../search/store'
@@ -65,7 +66,7 @@ const UpdateDateAndTimeDialog = ({
   }
 
   return (
-    <Dialog.Root
+    <Popover.Root
       open={isUpdateDateAndTimeDialog}
       onOpenChange={(open) => {
         setIsUpdateDateAndTimeDialog(open)
@@ -73,50 +74,54 @@ const UpdateDateAndTimeDialog = ({
       }}
     >
       <Tooltip
-        content="Reschedule this appointment"
+        content="Change Date and Time"
         delayDuration={300}
         className="max-w-[200px]"
       >
-        <Dialog.Trigger>
+        <Popover.Trigger>
           <Button variant="ghost" className="bg-[white]">
             <EditIcon />
           </Button>
-        </Dialog.Trigger>
+        </Popover.Trigger>
       </Tooltip>
-      <Dialog.Content className="relative max-w-[800px]">
+      <Popover.Content align="center" className="w-[800px]">
         <FormError message={error} />
         <Box className="border-b border-b-gray-5 pb-3">
           <DaysHeader />
         </Box>
-        <AvailabilityList
-          appointment={appointment}
-          selectedSlot={selectedSlot}
-          setSelectedSlot={setSelectedSlot}
-        />
+        <Box className="max-h-[250px] overflow-x-auto">
+          <AvailabilityList
+            appointment={appointment}
+            selectedSlot={selectedSlot}
+            setSelectedSlot={setSelectedSlot}
+          />
+        </Box>
         <Flex gap="3" mt="4" justify="end">
-          <Dialog.Close>
+          <Popover.Close>
             <Button
               variant="outline"
               color="gray"
               highContrast
               size="3"
+              radius="full"
               className="px-5"
             >
               Close
             </Button>
-          </Dialog.Close>
+          </Popover.Close>
           <Button
             highContrast
             size="3"
             onClick={onSave}
+            radius="full"
             disabled={loading}
             className={`px-5 ${loading && 'bg-gray-3'}`}
           >
             Save
           </Button>
         </Flex>
-      </Dialog.Content>
-    </Dialog.Root>
+      </Popover.Content>
+    </Popover.Root>
   )
 }
 

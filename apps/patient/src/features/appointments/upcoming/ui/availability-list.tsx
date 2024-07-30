@@ -159,6 +159,7 @@ const ProviderAvailabilityCard = ({
         <Button
           onClick={() => setShowMore((prevState) => !prevState)}
           size="3"
+          radius="full"
           className="bg-pp-blue-1 w-full text-accent-12"
         >
           {showMore ? 'See less' : 'See more'}
@@ -191,6 +192,7 @@ const AppointmentTimeSlots = ({
         <Button
           variant="outline"
           color="gray"
+          radius="full"
           className={cn(
             'hover:text-white h-9 w-24 whitespace-nowrap text-[15px] hover:bg-[#151B4A]',
             selectedSlot === slot
