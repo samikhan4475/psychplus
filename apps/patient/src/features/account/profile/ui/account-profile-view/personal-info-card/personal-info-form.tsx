@@ -263,7 +263,7 @@ const PersonalInfoForm = ({
             <CodesetFormSelect
               name="driversLicense.validIn"
               disabled={!isEdit}
-              placeholder="Select state"
+              placeholder={isEdit ? 'Select state' : ''}
               codeset={CODESETS.UsStates}
               size="3"
             />

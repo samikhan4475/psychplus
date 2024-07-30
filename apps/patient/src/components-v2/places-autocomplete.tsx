@@ -228,6 +228,7 @@ const PlacesAutocomplete = ({
             name={stateField}
             codeset={CODESETS.UsStates}
             disabled={editable}
+            placeholder={editable ? 'Select state' : ''}
           />
           <FormFieldError name={stateField} />
         </FormFieldContainer>

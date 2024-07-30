@@ -8,6 +8,7 @@ interface SharedCode {
   value: string
   display: string
   attributes?: SharedCodeAttribute[]
+  groupingCode?: string
 }
 
 interface SharedCodeAttribute {

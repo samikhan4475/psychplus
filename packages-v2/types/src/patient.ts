@@ -26,6 +26,13 @@ interface PatientProfile {
   status?: string
   driversLicense?: DriversLicense
   hasGuardian?: boolean
+  races?: string[]
+  ethnicities?: string[]
+  religion?: string
+  motherMaidenName?: string
+  language?: string
+  languageAbility?: string
+  languageProficiency?: string
 }
 
 export type { PatientProfile }

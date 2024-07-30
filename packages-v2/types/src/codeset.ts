@@ -8,6 +8,7 @@ interface Code {
   code: string
   displayName: string
   codeAttributes?: CodeAttribute[]
+  groupingCode?: string
 }
 
 interface CodeAttribute {

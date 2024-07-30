@@ -8,6 +8,7 @@ interface MetadataCode {
   code: string
   display: string
   attributes?: MetadataCodeAttribute[]
+  groupingCode?: string
 }
 
 interface MetadataCodeAttribute {

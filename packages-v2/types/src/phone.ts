@@ -2,7 +2,8 @@ type PhoneNumberType = 'Contact'
 
 interface PhoneNumber {
   type: PhoneNumberType
-  number: string
+  number?: string
+  comment?: string
 }
 
 export type { PhoneNumber }

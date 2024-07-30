@@ -2,6 +2,7 @@
 
 import { Select } from '@radix-ui/themes'
 import { Controller, useFormContext } from 'react-hook-form'
+import { cn } from '@psychplus/ui/cn'
 import { useCodesetCodes } from '@/providers'
 
 interface CodesetFormSelectProps
@@ -43,7 +44,10 @@ const CodesetFormSelect = ({
             {...rest}
             {...selectProps}
           >
-            <Select.Trigger placeholder={placeholder ?? 'Select'} />
+            <Select.Trigger
+              placeholder={placeholder ?? 'Select'}
+              className={cn(selectProps.disabled && 'bg-gray-3 text-gray-11')}
+            />
             <Select.Content position="popper" align="center" highContrast>
               {items}
             </Select.Content>

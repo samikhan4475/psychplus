@@ -7,8 +7,8 @@ import { CodesetStoreProvider, GooglePlacesContextProvider } from '@/providers'
 import { ProfileStoreProvider } from '../../store'
 import { AddressCard } from './address-card'
 import { ProfileAvatar } from './avatar'
+import { DescriptiveCard } from './descriptive-card'
 import { EmergencyContactCard } from './emergency-contact-card'
-import { GenderCard } from './gender-card'
 import { PersonalInfoCard } from './personal-info-card'
 
 const AccountProfileView = async () => {
@@ -21,6 +21,11 @@ const AccountProfileView = async () => {
       CODESETS.GenderPronoun,
       CODESETS.Language,
       CODESETS.GuardianRelationship,
+      CODESETS.RaceAndEthnicity,
+      CODESETS.ProfSuffix,
+      CODESETS.LanguageProficiency,
+      CODESETS.LanguageAbility,
+      CODESETS.Religion,
     ]),
     getProfile(),
   ])
@@ -38,7 +43,7 @@ const AccountProfileView = async () => {
             <FeatureContainer>
               <PersonalInfoCard />
               <AddressCard />
-              <GenderCard />
+              <DescriptiveCard />
               <EmergencyContactCard />
             </FeatureContainer>
           </Flex>

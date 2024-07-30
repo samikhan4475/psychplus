@@ -45,9 +45,6 @@ const PhoneNumberInput = ({
             onValueChange={({ value }) => field.onChange(value)}
             onBlur={field.onBlur}
             customInput={TextField.Input}
-            className={cn({
-              'font-mono': field.value,
-            })}
             readOnly={editable}
           />
         )

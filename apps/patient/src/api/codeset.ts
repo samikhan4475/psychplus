@@ -65,6 +65,7 @@ const getCodesets = async (names: string[]): Promise<CodesetCache> => {
           name: attr.name,
           value: attr.content,
         })),
+        groupingCode: code.groupingCode,
       })),
     }
   })
@@ -80,6 +81,7 @@ const getCodesets = async (names: string[]): Promise<CodesetCache> => {
       codes: result.data.codes.map((code) => ({
         value: code.code,
         display: code.display,
+        groupingCode: code.groupingCode,
         attributes: code.attributes?.map((attr) => ({
           name: attr.name,
           value: attr.value,

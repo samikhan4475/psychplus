@@ -4,6 +4,7 @@ interface LegalName {
   lastName: string
   preferredName?: string
   title?: string
+  suffix?: string
   honors?: string
 }
 
