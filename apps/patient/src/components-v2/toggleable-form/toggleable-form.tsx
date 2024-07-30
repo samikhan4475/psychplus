@@ -104,7 +104,7 @@ const ToggleableForm = <T extends FieldValues, R>({
     <ToggleableFormContext.Provider value={contextValue}>
       <Flex className={cn('relative', triggerClassName)}>
         {trigger ? (
-          <Flex>
+          <Flex className="w-full">
             <Trigger>{trigger}</Trigger>
             {!open && deleteButtonProps?.deleteAction ? (
               <DeleteButton {...deleteButtonProps} />

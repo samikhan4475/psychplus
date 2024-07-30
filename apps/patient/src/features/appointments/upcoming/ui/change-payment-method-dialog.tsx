@@ -18,13 +18,18 @@ import {
   RadioGroupItem,
 } from '@/components-v2'
 import { CreditCard } from '@/features/billing/credit-debit-cards/types'
+import { Insurance, InsurancePayer } from '@/features/billing/payments/types'
 
 const ChangePaymentMethodDialog = ({
   creditCards,
   stripeApiKey,
+  patientInsurances,
+  insurancePayers
 }: {
   creditCards: CreditCard[]
   stripeApiKey: string
+  patientInsurances: Insurance[]
+  insurancePayers: InsurancePayer[]
 }) => {
   const [isOpen, setIsOpen] = useState(false)
   const [paymentMethod, setPaymentMethod] = useState<PaymentType>(
@@ -44,7 +49,7 @@ const ChangePaymentMethodDialog = ({
           </Button>
         </Dialog.Trigger>
       </Tooltip>
-      <Dialog.Content className="relative max-w-[900px]">
+      <Dialog.Content className="relative max-w-[1000px]">
         <CloseDialogIcon />
         <Dialog.Title
           className="font-sans -tracking-[0.25px]"
@@ -97,6 +102,8 @@ const ChangePaymentMethodDialog = ({
           paymentMethod={paymentMethod}
           stripeApiKey={stripeApiKey}
           creditCards={creditCards}
+          patientInsurances={patientInsurances}
+          insurancePayers={insurancePayers}
         />
 
         <Flex gap="3" justify="end" mt="5">

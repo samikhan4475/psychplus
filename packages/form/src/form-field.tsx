@@ -18,16 +18,17 @@ export const useFormField = <Props extends UseFormFieldProps>(props: Props) => {
 }
 
 interface FormFieldProps extends UseFormFieldProps {
-  id: string
+  id: string,
+  isLabelBold?: boolean
 }
 
-const FormField = ({ children, name, id, label, required }: FormFieldProps) => {
+const FormField = ({ children, name, id, label, required, isLabelBold = true}: FormFieldProps) => {
   const ctx = useFormContext()
   const state = ctx.getFieldState(name, ctx.formState)
 
   return (
     <Flex direction="column" gap="1">
-      <Text as="label" size="2" weight="bold" htmlFor={id}>
+      <Text as="label" size="2" weight={isLabelBold ? 'bold' : 'medium'} htmlFor={id}>
         {label} {required && <span className='text-[#FF0000]'>*</span>}
       </Text>
       {children}

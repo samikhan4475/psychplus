@@ -16,6 +16,8 @@ import { CreditCard } from '@/features/billing/credit-debit-cards/types'
 import { AppointmentDetails, PaymentMethods } from './book-appointment'
 import { BookAppointmentButton } from './book-appointment/book-appointment-button'
 import { ConfirmAppointment } from './book-appointment/confirm-appointment'
+import { Insurance } from '@/features/billing/payments/types'
+import { InsurancePayer } from '@/features/billing/payments/types/insurance'
 
 const BookAppointmentView = ({
   appointmentType,
@@ -28,6 +30,8 @@ const BookAppointmentView = ({
   creditCards,
   userConsents,
   careTeam,
+  patientInsurances,
+  insurancePayers,
 }: {
   appointmentType: AppointmentType
   providerType: ProviderType
@@ -39,6 +43,8 @@ const BookAppointmentView = ({
   creditCards: CreditCard[]
   userConsents: Consent[]
   careTeam: CareTeamMember[]
+  patientInsurances: Insurance[]
+  insurancePayers: InsurancePayer[] 
 }) => {
   const [bookingSuccessful, setBookingSuccessful] = useState(false)
   const [paymentMethod, setPaymentMethod] = useState<PaymentType>(
@@ -63,6 +69,9 @@ const BookAppointmentView = ({
             stripeApiKey={stripeApiKey}
             paymentMethod={paymentMethod}
             setPaymentMethod={setPaymentMethod}
+            patientInsurances={patientInsurances}
+            insurancePayers={insurancePayers}
+            
           />
           <Box mt="5">
             <BookAppointmentButton

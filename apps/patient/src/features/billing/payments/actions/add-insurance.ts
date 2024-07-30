@@ -9,6 +9,7 @@ interface InsuranceParams {
   payerName: string
   insurancePlanId: string
   effectiveDate: string
+  terminationDate: string
   memberId: string
   groupNumber: string
   isPatientPolicyHolder: boolean
@@ -18,8 +19,10 @@ interface InsuranceParams {
   policyHolderName?: {
     firstName: string
     lastName: string
+    middleName: string
   }
   policyHolderGender?: string
+  policyHolderPriority?: string
   policyHolderDateOfBirth?: string
   policyHolderRelationship?: string
   policyHolderSocialSecurityNumber?: string
@@ -32,9 +35,7 @@ const addInsuranceAction = async (
 ): Promise<ActionResult<Insurance>> => {
   const result = await api.POST<Insurance>(
     `${API_URL}/api/patients/self/policies`,
-    {
-      ...params,
-    },
+    params,
   )
 
   if (result.state === 'error') {

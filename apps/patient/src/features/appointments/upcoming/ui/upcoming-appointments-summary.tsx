@@ -23,8 +23,12 @@ import {
   ShieldFlashLineIcon,
 } from '@/components-v2'
 import { sortCreditCardsByPrimary } from '@/features/billing/credit-debit-cards/utils'
+import {
+  getCreditCards,
+  getInsurancePayers,
+  getPatientInsurances,
+} from '@/features/billing/payments/api'
 import { CodesetStoreProvider, GooglePlacesContextProvider } from '@/providers'
-import { getCreditCards } from '../../../billing/credit-debit-cards/api'
 import { ScheduleAppointmentButton } from '../../search'
 import { getUpcomingAppointments } from '../api'
 import { getClinicAddressDirectionMapUrl } from '../utils'
@@ -47,10 +51,23 @@ const UpcomingAppointmentsSummaryComponent = async () => {
     getConsents(),
   ])
 
+  const [insurancePayerResponse, patientInsurancesResponse] = await Promise.all(
+    [getInsurancePayers(), getPatientInsurances()],
+  )
+
+  if (insurancePayerResponse.state === 'error') {
+    throw new Error(insurancePayerResponse.error)
+  }
+
+  if (patientInsurancesResponse.state === 'error') {
+    throw new Error(patientInsurancesResponse.error)
+  }
+
   const codesets = await getCodesets([
     CODESETS.InsuranceRelationship,
     CODESETS.Gender,
     CODESETS.UsStates,
+    CODESETS.InsurancePolicyPriority,
   ])
 
   if (userConsentsResponse.state === 'error') {
@@ -179,6 +196,8 @@ const UpcomingAppointmentsSummaryComponent = async () => {
                         creditCardResponse.data,
                       )}
                       stripeApiKey={STRIPE_PUBLISHABLE_KEY}
+                      patientInsurances={patientInsurancesResponse.data}
+                      insurancePayers={insurancePayerResponse.data}
                     />
                   </Flex>
                   {/* Non functional insurance related code ending here */}

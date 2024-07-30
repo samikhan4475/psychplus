@@ -30,10 +30,12 @@ interface Insurance {
   policyHolderName?: {
     firstName: string
     lastName: string
+    middleName: string
   }
   policyHolderDateOfBirth?: string
   policyHolderSocialSecurityNumber?: string
   policyHolderGender?: string
+  policyHolderPriority?: string
   policyName: string
   payerName: string
   policyPriority: string
@@ -53,7 +55,6 @@ enum InsuranceChipVariantType {
   Unverified = 'danger',
   Verified = 'success',
 }
- 
 
 export {
   type InsurancePayer,

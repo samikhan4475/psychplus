@@ -1,8 +1,9 @@
 import { Flex } from '@radix-ui/themes'
-import { LabelAndValue } from '@/components-v2'
+import { FieldPlaceholder } from '@/components-v2'
 import { InsurancePolicyPriority } from '@/features/billing/payments/constants'
 import { Insurance, InsurancePayer } from '@/features/billing/payments/types'
 import { InsuranceForm } from './insurance-form'
+import { InsuranceFormTrigger } from './Insurance-form-trigger'
 
 interface InsuranceFormProps {
   insurancePayers: InsurancePayer[]
@@ -48,6 +49,7 @@ const InsuranceForms = ({
               insurancePriority={
                 insurance.insurancePolicyPriority as InsurancePolicyPriority
               }
+              trigger={<InsuranceFormTrigger insurance={insurance} />}
             />
           ))}
         </Flex>
@@ -55,6 +57,7 @@ const InsuranceForms = ({
       <InsuranceForm
         insurancePriority={insurancePriority}
         insurancePayers={insurancePayers}
+        trigger={<FieldPlaceholder>+ add insurance</FieldPlaceholder>}
       />
     </Flex>
   )

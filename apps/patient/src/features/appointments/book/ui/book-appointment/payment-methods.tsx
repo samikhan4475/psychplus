@@ -10,6 +10,8 @@ const PaymentMethods = ({
   stripeApiKey,
   paymentMethod,
   setPaymentMethod,
+  patientInsurances,
+  insurancePayers,
 }: PaymentMethodProps) => {
   return (
     <Box>
@@ -52,6 +54,8 @@ const PaymentMethods = ({
         paymentMethod={paymentMethod}
         stripeApiKey={stripeApiKey}
         creditCards={creditCards}
+        patientInsurances={patientInsurances}
+        insurancePayers={insurancePayers}
       />
     </Box>
   )

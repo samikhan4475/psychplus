@@ -6,6 +6,8 @@ import {
 import { CareTeamMember, Clinic, Consent } from '@psychplus-v2/types'
 import { CreditCard } from '@/features/billing/credit-debit-cards/types'
 import { AppointmentSlot, AppointmentSpecialist } from '../../search/types'
+import { Insurance } from '@/features/billing/payments/types'
+import { InsurancePayer } from '@/features/billing/payments/types/insurance'
 
 interface ConfirmationNote {
   appointmentType: string
@@ -54,6 +56,8 @@ interface PaymentMethodProps {
   stripeApiKey: string
   paymentMethod: PaymentType
   setPaymentMethod: (value: PaymentType) => void
+  patientInsurances: Insurance[]
+  insurancePayers: InsurancePayer[]
 }
 
 interface BookedAppointmentProps {

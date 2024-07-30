@@ -1,31 +1,30 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { ActionErrorState, ActionSuccessState } from '@psychplus-v2/api'
 import { CODESETS } from '@psychplus-v2/constants'
 import {
-  getAgeFromDate,
   getCalendarDate,
-  getPaddedDateString,
 } from '@psychplus-v2/utils'
 import { Box, Flex, Text, TextFieldInput } from '@radix-ui/themes'
-import { DateValue } from 'react-aria-components'
 import { useForm } from 'react-hook-form'
 import z from 'zod'
+import { FormTextInput } from '@psychplus/form'
+import { RadioGroup } from '@psychplus/ui/radio-group'
 import {
   CodesetFormSelect,
-  DobInput,
-  FieldPlaceholder,
   FormField,
   FormFieldContainer,
   FormFieldLabel,
   SSNInput,
   ToggleableForm,
 } from '@/components-v2'
+import { getBirthyear } from '@/features/account/profile/ui/account-profile-view/personal-info-card/utils'
 import { Insurance, InsurancePayer } from '@/features/billing/payments/types'
 import {
+  deleteInsurance,
   updateInsuranceAction,
   uploadInsuranceCard,
 } from '../../actions'
@@ -35,20 +34,21 @@ import {
 } from '../../actions/add-insurance'
 import { InsurancePolicyPriority } from '../../constants'
 import { CardInput } from './card-input'
-import { EffectiveDateInput } from './effective-date-input'
-import { InsuranceFormTrigger } from './Insurance-form-trigger'
 import { PayerSelect } from './payer-select'
 import { PlanSelect } from './plan-select'
-import { TerminationDateInput } from './termination-date-input'
-import { RadioGroup } from '@psychplus/ui/radio-group'
 
 const schema = z
   .object({
     payerName: z.string().min(1, 'Required'),
     insurancePlanId: z.string().min(1, 'Required'),
-    effectiveDate: z.custom<DateValue>().or(z.literal('')),
-    memberId: z.string().trim().min(1, 'Required'),
-    groupNumber: z.string().trim().min(1, 'Required'),
+    effectiveDate: z.string(),
+    terminationDate: z.string(),
+    memberId: z.string().trim().min(1, 'Required').max(16, 'Invalid Member ID'),
+    groupNumber: z
+      .string()
+      .trim()
+      .min(1, 'Required')
+      .max(16, 'Invalid Gruop Number'),
     isPatientPolicyHolder: z.boolean(),
     policyHolderFirstName: z.string().trim().optional(),
     policyHolderLastName: z.string().trim().optional(),
@@ -56,11 +56,7 @@ const schema = z
     policyHolderGender: z.string().optional(),
     policyHolderRelationship: z.string().optional(),
     insurancePolicyPriority: z.string().optional(),
-    policyHolderDateOfBirth: z
-      .custom<DateValue>()
-      .optional()
-      .or(z.literal(''))
-      .optional(),
+    policyHolderDateOfBirth: z.string(),
     policyHolderSocialSecurityNumber: z.string().optional(),
     hasCardFrontImage: z.boolean(),
     hasCardBackImage: z.boolean(),
@@ -75,6 +71,14 @@ const schema = z
         code: z.ZodIssueCode.custom,
         message: 'Required',
         path: ['effectiveDate'],
+      })
+    }
+
+    if ((data.terminationDate ?? '') === '') {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'Required',
+        path: ['terminationDate'],
       })
     }
 
@@ -109,7 +113,7 @@ const schema = z
         fatal: true,
         path: ['policyHolderDateOfBirth'],
       })
-    } else if (getAgeFromDate(data.policyHolderDateOfBirth) < 18) {
+    } else if (getBirthyear(data.policyHolderDateOfBirth) < 18) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         message: 'Must be at least 18 years of age',
@@ -163,12 +167,16 @@ interface InsuranceFormProps {
   insurancePayers: InsurancePayer[]
   insurancePriority?: InsurancePolicyPriority
   insurance?: Insurance
+  trigger?: any
+  onFormClose?: () => void
 }
 
 const InsuranceForm = ({
   insurancePayers,
   insurancePriority,
   insurance,
+  trigger,
+  onFormClose,
 }: InsuranceFormProps) => {
   const [cardFrontImage, setCardFrontImage] = useState<File | undefined>(
     undefined,
@@ -176,6 +184,23 @@ const InsuranceForm = ({
   const [cardBackImage, setCardBackImage] = useState<File | undefined>(
     undefined,
   )
+
+  const [maxDate, setMaxDate] = useState<string>('')
+  const [minDate, setMinDate] = useState<string>('')
+
+  useEffect(() => {
+    const today = new Date()
+
+    // Calculate max date (yesterday)
+    const yesterday = new Date(today)
+    yesterday.setDate(today.getDate() - 1)
+    const formattedMaxDate = yesterday.toISOString().split('T')[0]
+    setMaxDate(formattedMaxDate)
+
+    // Set min date to today
+    const formattedMinDate = today.toISOString().split('T')[0]
+    setMinDate(formattedMinDate)
+  }, [])
 
   const router = useRouter()
 
@@ -185,18 +210,22 @@ const InsuranceForm = ({
     criteriaMode: 'all',
     defaultValues: {
       payerName: insurance?.payerName ?? '',
-      insurancePlanId: insurance?.insurancePlanId ?? '',
+      insurancePlanId: insurance?.insurancePlanId,
       effectiveDate: insurance?.effectiveDate
-        ? getCalendarDate(insurance?.effectiveDate)
+        ? getCalendarDate(insurance.effectiveDate).toString()
+        : '',
+      terminationDate: insurance?.terminationDate
+        ? getCalendarDate(insurance.terminationDate).toString()
         : '',
       memberId: insurance?.memberId ?? '',
       groupNumber: insurance?.groupNumber ?? '',
       isPatientPolicyHolder: insurance?.isPatientPolicyHolder ?? true,
       policyHolderFirstName: insurance?.policyHolderName?.firstName ?? '',
       policyHolderLastName: insurance?.policyHolderName?.lastName ?? '',
+      policyHolderMiddleName: insurance?.policyHolderName?.middleName ?? '',
       policyHolderGender: insurance?.policyHolderGender ?? '',
       policyHolderDateOfBirth: insurance?.policyHolderDateOfBirth
-        ? getCalendarDate(insurance?.policyHolderDateOfBirth)
+        ? getCalendarDate(insurance?.policyHolderDateOfBirth).toString()
         : '',
       policyHolderRelationship: insurance?.policyHolderRelationship ?? '',
       insurancePolicyPriority: insurance?.insurancePolicyPriority ?? '',
@@ -212,9 +241,8 @@ const InsuranceForm = ({
       id: insurance?.id,
       payerName: data.payerName,
       insurancePlanId: data.insurancePlanId,
-      effectiveDate: data.effectiveDate
-        ? getPaddedDateString(data.effectiveDate)
-        : '',
+      effectiveDate: data.effectiveDate,
+      terminationDate: data.terminationDate,
       memberId: data.memberId,
       groupNumber: data.groupNumber,
       isPatientPolicyHolder: data.isPatientPolicyHolder,
@@ -227,16 +255,17 @@ const InsuranceForm = ({
     if (!data.isPatientPolicyHolder) {
       payload.policyHolderName = {
         firstName: data.policyHolderFirstName ?? '',
-        lastName: data.policyHolderFirstName ?? '',
+        lastName: data.policyHolderLastName ?? '',
+        middleName: data.policyHolderMiddleName ?? '',
       }
       payload.policyHolderGender = data.policyHolderGender
       payload.policyHolderDateOfBirth = data.policyHolderDateOfBirth
-        ? getPaddedDateString(data.policyHolderDateOfBirth)
-        : ''
       payload.policyHolderRelationship = data.policyHolderRelationship
       payload.policyHolderSocialSecurityNumber =
         data.policyHolderSocialSecurityNumber
     }
+
+    if (!insurance) delete payload.id
 
     //handle the case where insurance is being edited
     const insuranceResponse = insurance
@@ -303,19 +332,42 @@ const InsuranceForm = ({
     }
   }
 
-  const trigger = insurance ? (
-    <InsuranceFormTrigger insurance={insurance} />
-  ) : (
-    <FieldPlaceholder>+ add insurance</FieldPlaceholder>
-  )
+  const onSuccess = () => {
+    router.refresh()
+    // form.reset({
+    //   fullname: '',
+    //   address: '',
+    //   city: '',
+    //   state: '',
+    //   postalCode: '',
+    //   userAgreed: false,
+    // })
+    onFormClose?.()
+  }
+
+  const onDeleteAction = () => deleteInsurance({ id: insurance?.id })
 
   return (
     <ToggleableForm
       form={form}
-      onSuccess={router.refresh}
+      onSuccess={onSuccess}
       trigger={trigger}
       submitAction={onSubmit}
       noResetValues
+      onFormClose={onFormClose}
+      deleteButtonProps={
+        insurance
+          ? {
+              deleteAction: onDeleteAction,
+              confirmTitle: 'Remove Insurance',
+              confirmDescription:
+                'Are you sure you want to remove this insurance?',
+              confirmActionLabel: 'Remove',
+              toastTitle: 'Insurance removed',
+              onSuccess: router.refresh,
+            }
+          : undefined
+      }
     >
       <FormFieldContainer className="w-full">
         <FormFieldLabel>Insurance Card</FormFieldLabel>
@@ -385,10 +437,33 @@ const InsuranceForm = ({
           </FormField>
         </Box>
         <Box className="flex-1">
-          <EffectiveDateInput />
+          <Text className="text-[14px]" weight="medium">
+            Effective Date
+          </Text>
+          <FormTextInput
+            type="date"
+            max={maxDate}
+            label=""
+            data-testid="effective-date-input"
+            {...form.register('effectiveDate')}
+            style={{ marginRight: 12 }}
+            className="h-[32px] w-full rounded-2 text-4 text-[14px]"
+          />
         </Box>
         <Box className="flex-1">
-          <TerminationDateInput />
+          <Text className="text-[14px]" weight="medium">
+            Termination Date
+          </Text>
+          <FormTextInput
+            type="date"
+            max="9999-12-31"
+            min={minDate}
+            label=""
+            data-testid="termination-date-input"
+            {...form.register('terminationDate')}
+            style={{ marginRight: 12 }}
+            className="h-[32px] w-full rounded-2 text-4 text-[14px]"
+          />
         </Box>
         <Box className="flex-1">
           <FormFieldContainer
@@ -398,7 +473,7 @@ const InsuranceForm = ({
             className="mt-2 rounded-3 bg-[#F0F4FF] px-3 py-1.5"
           >
             <Box>
-              <Text className="font-medium text-[11px]">
+              <Text className="text-[11px] font-medium">
                 Are you the primary insurance holder
               </Text>
             </Box>
@@ -412,7 +487,7 @@ const InsuranceForm = ({
               }}
             >
               <Flex gap="4">
-                {['No', 'Yes'].map((option) => (
+                {['Yes', 'No'].map((option) => (
                   <Text as="label" key={option} size="2">
                     <Flex gap="1">
                       <RadioGroup.Item value={option} />
@@ -428,7 +503,7 @@ const InsuranceForm = ({
 
       {!form.watch('isPatientPolicyHolder') ? (
         <>
-          <Text size="5" className="text-[#151B4A] font-bold mt-6 mb-3">
+          <Text size="5" className="mb-3 mt-6 font-bold text-[#151B4A]">
             Primary Insurance Holder Details
           </Text>
 
@@ -476,9 +551,18 @@ const InsuranceForm = ({
 
           <Flex gap="3" className="w-full">
             <Box className="flex-1">
-              <FormField name="policyHolderDateOfBirth" label="Date of Birth">
-                <DobInput name="policyHolderDateOfBirth" />
-              </FormField>
+              <Text className="text-[14px]" weight="medium">
+                Date of Birth
+              </Text>
+              <FormTextInput
+                type="date"
+                max="9999-12-31"
+                label=""
+                data-testid="dob-input"
+                {...form.register('policyHolderDateOfBirth')}
+                style={{ marginRight: 12 }}
+                className="h-[32px] w-full rounded-2 text-4 text-[14px]"
+              />
             </Box>
             <Box className="flex-1">
               <FormField

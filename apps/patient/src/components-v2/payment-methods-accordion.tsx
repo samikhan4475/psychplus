@@ -15,24 +15,59 @@ import {
 import { CreditCard } from '@/features/billing/credit-debit-cards/types'
 import { CreditCardForm } from '@/features/billing/credit-debit-cards/ui/credit-debit-cards-card/credit-debit-card-form'
 import { CreditCardListItem } from '@/features/billing/credit-debit-cards/ui/credit-debit-cards-card/credit-debit-card-list-item'
+import { InsurancePolicyPriority } from '@/features/billing/payments/constants'
+import { Insurance } from '@/features/billing/payments/types'
+import { InsurancePayer } from '@/features/billing/payments/types/insurance'
+import { InsuranceForm } from '@/features/billing/payments/ui/insurance-card/insurance-form'
+import { InsuranceFormTrigger } from '@/features/billing/payments/ui/insurance-card/Insurance-form-trigger'
 
 interface PaymentMethodAccordionProps {
   paymentMethod: PaymentType
   stripeApiKey: string
   creditCards: CreditCard[]
+  patientInsurances: Insurance[]
+  insurancePayers: InsurancePayer[]
 }
 
 const PaymentMethodAccordion = ({
   paymentMethod,
   stripeApiKey,
   creditCards,
+  patientInsurances,
+  insurancePayers,
 }: PaymentMethodAccordionProps) => {
   const stripePromise = useMemo(() => loadStripe(stripeApiKey), [stripeApiKey])
   const [creditCardOpenStateValue, setCreditCardOpenStateValue] =
     useState<string>('Credit/Debit Cards')
+  const [insuranceOpenStateValue, setInsuranceOpenStateValue] =
+    useState<string>('Insurance on File')
+
   const [selectedCreditCard, setSelectedCreditCard] = useState<
     CreditCard | undefined
   >(creditCards?.[0])
+
+  const hasPrimaryInsurance = patientInsurances.some(
+    (insurance) =>
+      insurance.insurancePolicyPriority === InsurancePolicyPriority.Primary,
+  )
+  const hasSecondaryInsurance = patientInsurances.some(
+    (insurance) =>
+      insurance.insurancePolicyPriority === InsurancePolicyPriority.Secondary,
+  )
+  const hasTertiaryInsurance = patientInsurances.some(
+    (insurance) =>
+      insurance.insurancePolicyPriority === InsurancePolicyPriority.Tertiary,
+  )
+
+  let insurancePriority = InsurancePolicyPriority.Other
+
+  if (!hasPrimaryInsurance) {
+    insurancePriority = InsurancePolicyPriority.Primary
+  } else if (!hasSecondaryInsurance) {
+    insurancePriority = InsurancePolicyPriority.Secondary
+  } else if (!hasTertiaryInsurance) {
+    insurancePriority = InsurancePolicyPriority.Tertiary
+  }
 
   const trigger = <FieldPlaceholder>+ Add New Credit Card</FieldPlaceholder>
 
@@ -47,14 +82,34 @@ const PaymentMethodAccordion = ({
           type="single"
           className="w-full"
           defaultValue="Insurance on File"
+          value={insuranceOpenStateValue}
+          onValueChange={(value) => setInsuranceOpenStateValue(value)}
         >
           <PaymentMethodsAccordionItem
             title="Insurance on File"
-            content="Insurance on file listing here"
+            content={patientInsurances.map((insurance) => (
+              <InsuranceForm
+                key={insurance.id}
+                insurance={insurance}
+                insurancePayers={insurancePayers}
+                insurancePriority={
+                  insurance.insurancePolicyPriority as InsurancePolicyPriority
+                }
+                trigger={<InsuranceFormTrigger insurance={insurance} />}
+              />
+            ))}
           />
           <PaymentMethodsAccordionItem
             title="Add/Edit Insurance"
-            content="Add/Edit Insurance form here"
+            content={
+              <InsuranceForm
+                insurancePriority={insurancePriority}
+                insurancePayers={insurancePayers}
+                onFormClose={() =>
+                  setInsuranceOpenStateValue('Insurance on File')
+                }
+              />
+            }
           />
           <PaymentMethodsAccordionItem
             title="Credit Card Details (Optional)"

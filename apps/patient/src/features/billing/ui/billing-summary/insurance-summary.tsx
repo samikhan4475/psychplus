@@ -50,7 +50,7 @@ const InsuranceSummary = ({ data }: InsuranceSummaryProps) => {
           </Text>
         </Flex>
         <NextLink
-          href="/billing/payments"
+          href="/billing/insurance"
           className="flex items-center py-2 pl-0 text-[13px] text-accent-12 underline-offset-4 hover:underline"
         >
           Update insurance

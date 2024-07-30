@@ -54,7 +54,7 @@ const DeleteButton = <T,>({
     <Dialog.Root open={open} onOpenChange={setOpen}>
       <Dialog.Trigger>
         <Flex align="start" gap="2">
-          <Box className="mt-[-1px] cursor-pointer text-[#194595]" ml="3">
+          <Box className="mt-[-1px] cursor-pointer text-[#1C2024]" ml="3">
             <Text className="underline" size="2">
               Remove
             </Text>

@@ -6,6 +6,10 @@ import { getCodesets, getConsents } from '@/api'
 import { BookAppointmentView } from '@/features/appointments/book/ui/book-appointment-view'
 import { getCreditCards } from '@/features/billing/credit-debit-cards/api'
 import { sortCreditCardsByPrimary } from '@/features/billing/credit-debit-cards/utils'
+import {
+  getInsurancePayers,
+  getPatientInsurances,
+} from '@/features/billing/payments/api'
 import { getCareTeam } from '@/features/care-team/api'
 import { CodesetStoreProvider, GooglePlacesContextProvider } from '@/providers'
 
@@ -15,7 +19,6 @@ const SearchAppointmentsPage = async ({
   searchParams: SearchParams
 }) => {
   if (
-    !searchParams ||
     !searchParams.appointmentType ||
     !searchParams.providerType ||
     !searchParams.slot ||
@@ -28,8 +31,19 @@ const SearchAppointmentsPage = async ({
   const { appointmentType, providerType, slot, clinic, specialist } =
     searchParams
 
-  const [creditCardResponse, userConsentsResponse, careTeamResposne] =
-    await Promise.all([getCreditCards(), getConsents(), getCareTeam()])
+  const [
+    creditCardResponse,
+    userConsentsResponse,
+    careTeamResposne,
+    insurancePayerResponse,
+    patientInsurancesResponse,
+  ] = await Promise.all([
+    getCreditCards(),
+    getConsents(),
+    getCareTeam(),
+    getInsurancePayers(),
+    getPatientInsurances(),
+  ])
 
   if (creditCardResponse.state === 'error') {
     throw new Error(creditCardResponse.error)
@@ -43,10 +57,19 @@ const SearchAppointmentsPage = async ({
     throw new Error(userConsentsResponse.error)
   }
 
+  if (insurancePayerResponse.state === 'error') {
+    throw new Error(insurancePayerResponse.error)
+  }
+
+  if (patientInsurancesResponse.state === 'error') {
+    throw new Error(patientInsurancesResponse.error)
+  }
+
   const codesets = await getCodesets([
     CODESETS.InsuranceRelationship,
     CODESETS.Gender,
     CODESETS.UsStates,
+    CODESETS.InsurancePolicyPriority,
   ])
 
   return (
@@ -63,6 +86,8 @@ const SearchAppointmentsPage = async ({
           creditCards={sortCreditCardsByPrimary(creditCardResponse.data)}
           userConsents={userConsentsResponse.data}
           careTeam={careTeamResposne.data.careTeam}
+          patientInsurances={patientInsurancesResponse.data}
+          insurancePayers={insurancePayerResponse.data}
         />
       </GooglePlacesContextProvider>
     </CodesetStoreProvider>
