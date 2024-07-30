@@ -25,7 +25,7 @@ const PayerSelect = ({ payers }: PayerSelectProps) => {
 
   return (
     <FormFieldContainer>
-      <FormFieldLabel>Payer</FormFieldLabel>
+      <FormFieldLabel required>Payer</FormFieldLabel>
       <Controller
         name={'payerName'}
         control={form.control}

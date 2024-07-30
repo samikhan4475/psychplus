@@ -19,7 +19,6 @@ interface InsuranceParams {
   policyHolderName?: {
     firstName: string
     lastName: string
-    middleName: string
   }
   policyHolderGender?: string
   policyHolderPriority?: string

@@ -52,7 +52,6 @@ const schema = z
     isPatientPolicyHolder: z.boolean(),
     policyHolderFirstName: z.string().trim().optional(),
     policyHolderLastName: z.string().trim().optional(),
-    policyHolderMiddleName: z.string().trim().optional(),
     policyHolderGender: z.string().optional(),
     policyHolderRelationship: z.string().optional(),
     insurancePolicyPriority: z.string().optional(),
@@ -119,20 +118,6 @@ const schema = z
         message: 'Must be at least 18 years of age',
         fatal: true,
         path: ['policyHolderDateOfBirth'],
-      })
-    }
-
-    if (!data.policyHolderSocialSecurityNumber) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: 'Required',
-        path: ['policyHolderSocialSecurityNumber'],
-      })
-    } else if (data.policyHolderSocialSecurityNumber?.length !== 9) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: 'Invalid SSN',
-        path: ['policyHolderSocialSecurityNumber'],
       })
     }
 
@@ -222,7 +207,6 @@ const InsuranceForm = ({
       isPatientPolicyHolder: insurance?.isPatientPolicyHolder ?? true,
       policyHolderFirstName: insurance?.policyHolderName?.firstName ?? '',
       policyHolderLastName: insurance?.policyHolderName?.lastName ?? '',
-      policyHolderMiddleName: insurance?.policyHolderName?.middleName ?? '',
       policyHolderGender: insurance?.policyHolderGender ?? '',
       policyHolderDateOfBirth: insurance?.policyHolderDateOfBirth
         ? getCalendarDate(insurance?.policyHolderDateOfBirth).toString()
@@ -255,8 +239,7 @@ const InsuranceForm = ({
     if (!data.isPatientPolicyHolder) {
       payload.policyHolderName = {
         firstName: data.policyHolderFirstName ?? '',
-        lastName: data.policyHolderLastName ?? '',
-        middleName: data.policyHolderMiddleName ?? '',
+        lastName: data.policyHolderLastName ?? ''
       }
       payload.policyHolderGender = data.policyHolderGender
       payload.policyHolderDateOfBirth = data.policyHolderDateOfBirth
@@ -322,7 +305,6 @@ const InsuranceForm = ({
       form.reset({
         ...form.getValues(),
         policyHolderFirstName: '',
-        policyHolderMiddleName: '',
         policyHolderLastName: '',
         policyHolderDateOfBirth: '',
         policyHolderGender: '',
@@ -334,14 +316,6 @@ const InsuranceForm = ({
 
   const onSuccess = () => {
     router.refresh()
-    // form.reset({
-    //   fullname: '',
-    //   address: '',
-    //   city: '',
-    //   state: '',
-    //   postalCode: '',
-    //   userAgreed: false,
-    // })
     onFormClose?.()
   }
 
@@ -406,9 +380,10 @@ const InsuranceForm = ({
       </FormFieldContainer>
       <Flex gap="3" width="100%">
         <Box className="flex-1">
+          <FormFieldLabel required>Priority</FormFieldLabel>
           <FormField
             name="insurancePolicyPriority"
-            label="Priority"
+            label=""
             containerClassName="flex-1"
           >
             <CodesetFormSelect
@@ -424,7 +399,8 @@ const InsuranceForm = ({
           <PlanSelect payers={insurancePayers} />
         </Box>
         <Box className="flex-1">
-          <FormField name="memberId" label="Member ID">
+          <FormField name="memberId" label="" >
+            <FormFieldLabel required>Member ID</FormFieldLabel>
             <TextFieldInput {...form.register('memberId')} />
           </FormField>
         </Box>
@@ -432,14 +408,13 @@ const InsuranceForm = ({
 
       <Flex width="100%" gap="3">
         <Box className="flex-1">
-          <FormField name="groupNumber" label="Group Number">
+          <FormField name="groupNumber" label="">
+            <FormFieldLabel required>Group Number</FormFieldLabel>
             <TextFieldInput {...form.register('groupNumber')} />
           </FormField>
         </Box>
         <Box className="flex-1">
-          <Text className="text-[14px]" weight="medium">
-            Effective Date
-          </Text>
+          <FormFieldLabel required>Effective Date</FormFieldLabel>  
           <FormTextInput
             type="date"
             max={maxDate}
@@ -451,9 +426,7 @@ const InsuranceForm = ({
           />
         </Box>
         <Box className="flex-1">
-          <Text className="text-[14px]" weight="medium">
-            Termination Date
-          </Text>
+          <FormFieldLabel required>Termination Date</FormFieldLabel>  
           <FormTextInput
             type="date"
             max="9999-12-31"
@@ -511,52 +484,42 @@ const InsuranceForm = ({
             <Box className="flex-1">
               <FormField
                 name="policyHolderFirstName"
-                label="First Name"
+                label=""
                 containerClassName="flex-1"
               >
+                <FormFieldLabel required>First Name</FormFieldLabel>  
                 <TextFieldInput {...form.register('policyHolderFirstName')} />
               </FormField>
             </Box>
             <Box className="flex-1">
               <FormField
-                name="policyHolderMiddleName"
-                label="Middle Name"
-                containerClassName="flex-1"
-              >
-                <TextFieldInput {...form.register('policyHolderMiddleName')} />
-              </FormField>
-            </Box>
-            <Box className="flex-1">
-              <FormField
                 name="policyHolderLastName"
-                label="Last Name"
+                label=""
                 containerClassName="flex-1"
               >
+                <FormFieldLabel required>Last Name</FormFieldLabel>  
                 <TextFieldInput {...form.register('policyHolderLastName')} />
               </FormField>
             </Box>
             <Box className="flex-1">
               <FormField
                 name="policyHolderGender"
-                label="Gender"
+                label=""
                 containerClassName="flex-1"
               >
+                <FormFieldLabel required>Gender</FormFieldLabel>  
                 <CodesetFormSelect
                   name="policyHolderGender"
                   codeset={CODESETS.Gender}
                 />
               </FormField>
             </Box>
-          </Flex>
 
-          <Flex gap="3" className="w-full">
             <Box className="flex-1">
-              <Text className="text-[14px]" weight="medium">
-                Date of Birth
-              </Text>
+              <FormFieldLabel required>Date of Birth</FormFieldLabel>  
               <FormTextInput
                 type="date"
-                max="9999-12-31"
+                max="2004-12-31"
                 label=""
                 data-testid="dob-input"
                 {...form.register('policyHolderDateOfBirth')}
@@ -564,6 +527,9 @@ const InsuranceForm = ({
                 className="h-[32px] w-full rounded-2 text-4 text-[14px]"
               />
             </Box>
+          </Flex>
+
+          <Flex gap="3" className="w-full">
             <Box className="flex-1">
               <FormField
                 name="policyHolderSocialSecurityNumber"
@@ -576,15 +542,17 @@ const InsuranceForm = ({
             <Box className="flex-1">
               <FormField
                 name="policyHolderRelationship"
-                label="Relationship"
+                label=""
                 containerClassName="flex-1"
               >
+                <FormFieldLabel required>Relationship</FormFieldLabel>  
                 <CodesetFormSelect
                   name="policyHolderRelationship"
                   codeset={CODESETS.InsuranceRelationship}
                 />
               </FormField>
             </Box>
+            <Box className="flex-1"></Box>
             <Box className="flex-1"></Box>
           </Flex>
         </>

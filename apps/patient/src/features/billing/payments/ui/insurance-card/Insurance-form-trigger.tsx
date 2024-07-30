@@ -15,7 +15,7 @@ const InsuranceFormTrigger = ({ insurance }: { insurance: Insurance }) => {
 
   const trigger = (
     <>
-      <Box className="mb-2 pb-4 last:mb-0">
+      <Box className="pb-4">
         <Flex align="center" justify="between" className="mb-3" width="100%">
           <Flex align="center" gap="2">
             <Heading weight="medium" size="4" className="font-sans text-[18px]">
@@ -58,12 +58,18 @@ const InsuranceFormTrigger = ({ insurance }: { insurance: Insurance }) => {
             {getSlashedDateString(insurance.terminationDate)}
           </Text>
 
-          <Text className="text-[12px] relative text-[#60646C] after:text-[32px] after-ml-[9px] after:leading-[4px] after:content-['.'] after:absolute after:top-[-1px] after:ml-[9px] last:after:hidden">
-            <span className="font-medium text-[#1C2024]">
-              Primary Holder Name:{' '}
-            </span>{' '}
-            {insurance.payerName}
-          </Text>
+          {
+            insurance.policyHolderName?.firstName && insurance.policyHolderName?.lastName 
+            ? <Text className="text-[12px] relative text-[#60646C] after:text-[32px] after-ml-[9px] after:leading-[4px] after:content-['.'] after:absolute after:top-[-1px] after:ml-[9px] last:after:hidden">
+              <span className="font-medium text-[#1C2024]">
+                Primary Holder Name:{' '}
+              </span>{' '}
+              { insurance.policyHolderName?.firstName } { insurance.policyHolderName?.lastName }
+            </Text>
+            
+            : null
+          }
+          
         </Flex>
       </Box>
 

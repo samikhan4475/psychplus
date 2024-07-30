@@ -5,9 +5,7 @@ import { type User } from '@psychplus-v2/auth'
 import { getUserInitials } from '@psychplus-v2/utils'
 import { Avatar, DropdownMenu, Flex, Text } from '@radix-ui/themes'
 import {
-  CalendarDaysIcon,
   LogOutIcon,
-  MessageCircleQuestionIcon,
   UserIcon,
   type LucideIcon,
 } from 'lucide-react'

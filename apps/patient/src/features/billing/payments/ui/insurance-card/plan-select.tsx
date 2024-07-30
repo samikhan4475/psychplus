@@ -46,7 +46,7 @@ const PlanSelect = ({ payers }: { payers: InsurancePayer[] }) => {
 
   return (
     <FormFieldContainer>
-      <FormFieldLabel>Insurance Plan</FormFieldLabel>
+      <FormFieldLabel required>Insurance Plan</FormFieldLabel>
       <Controller
         name="insurancePlanId"
         control={form.control}

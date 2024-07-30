@@ -16,8 +16,7 @@ import { CreditCard } from '@/features/billing/credit-debit-cards/types'
 import { CreditCardForm } from '@/features/billing/credit-debit-cards/ui/credit-debit-cards-card/credit-debit-card-form'
 import { CreditCardListItem } from '@/features/billing/credit-debit-cards/ui/credit-debit-cards-card/credit-debit-card-list-item'
 import { InsurancePolicyPriority } from '@/features/billing/payments/constants'
-import { Insurance } from '@/features/billing/payments/types'
-import { InsurancePayer } from '@/features/billing/payments/types/insurance'
+import { Insurance, InsurancePayer } from '@/features/billing/payments/types'
 import { InsuranceForm } from '@/features/billing/payments/ui/insurance-card/insurance-form'
 import { InsuranceFormTrigger } from '@/features/billing/payments/ui/insurance-card/Insurance-form-trigger'
 
@@ -87,17 +86,22 @@ const PaymentMethodAccordion = ({
         >
           <PaymentMethodsAccordionItem
             title="Insurance on File"
-            content={patientInsurances.map((insurance) => (
-              <InsuranceForm
-                key={insurance.id}
-                insurance={insurance}
-                insurancePayers={insurancePayers}
-                insurancePriority={
-                  insurance.insurancePolicyPriority as InsurancePolicyPriority
+            content={
+              <Flex width="100%" gap="2" direction="column">
+                {
+                  patientInsurances.map((insurance) => (
+                  <InsuranceForm
+                    key={insurance.id}
+                    insurance={insurance}
+                    insurancePayers={insurancePayers}
+                    insurancePriority={ insurance.insurancePolicyPriority as InsurancePolicyPriority
+                    }
+                    trigger={<InsuranceFormTrigger insurance={insurance} />}
+                  />    
+                  ))
                 }
-                trigger={<InsuranceFormTrigger insurance={insurance} />}
-              />
-            ))}
+              </Flex>
+            }
           />
           <PaymentMethodsAccordionItem
             title="Add/Edit Insurance"
