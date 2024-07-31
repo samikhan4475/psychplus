@@ -54,7 +54,7 @@ const BannerAppointmentButton = ({
         )}
       </Flex>
       <Text size="2">
-        {appointmentType === AppointmentType.InPerson ? 'Office ' : 'Remote'}{' '}
+        {appointmentType === AppointmentType.InPerson ? 'In-person' : 'Virtual'}{' '}
         Visit
       </Text>
     </Button>
