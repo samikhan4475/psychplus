@@ -46,7 +46,11 @@ const CodesetFormSelect = ({
           >
             <Select.Trigger
               placeholder={placeholder ?? 'Select'}
-              className={cn(selectProps.disabled && 'bg-gray-3 text-gray-11')}
+              variant="soft"
+              className={cn(
+                'outline outline-1 outline-gray-7',
+                selectProps.disabled ? 'bg-gray-3 text-gray-11' : 'bg-[white]',
+              )}
             />
             <Select.Content position="popper" align="center" highContrast>
               {items}

@@ -80,7 +80,7 @@ const CodesetFormMultipleSelect = ({
                 py="2"
                 align="center"
               >
-                <Text weight="medium" className="cursor-pointer">
+                <Text className="cursor-pointer text-[#888888]">
                   {form.getValues(name).length === 0 && placeholder}
                 </Text>
 

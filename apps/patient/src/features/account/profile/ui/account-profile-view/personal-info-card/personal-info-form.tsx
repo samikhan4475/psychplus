@@ -19,6 +19,7 @@ import {
 } from '@/components-v2'
 import { updateProfileAction } from '@/features/account/profile/actions'
 import { useProfileStore } from '@/features/account/profile/store'
+import { getPlaceholder } from '@/features/account/profile/utils'
 import { updateDriversLisenceImage } from './api'
 import { schema } from './schema'
 import { DriverLicenseInput } from './upload-driver-license'
@@ -153,6 +154,7 @@ const PersonalInfoForm = ({
               size="3"
               {...form.register('firstName')}
               disabled={!isEdit}
+              placeholder={getPlaceholder('firstName', isEdit)}
             />
             <FormFieldError name="firstName" />
           </FormFieldContainer>
@@ -163,6 +165,7 @@ const PersonalInfoForm = ({
               size="3"
               {...form.register('middleName')}
               disabled={!isEdit}
+              placeholder={getPlaceholder('middleName', isEdit)}
             />
             <FormFieldError name="middleName" />
           </FormFieldContainer>
@@ -173,6 +176,7 @@ const PersonalInfoForm = ({
               size="3"
               {...form.register('lastName')}
               disabled={!isEdit}
+              placeholder={getPlaceholder('lastName', isEdit)}
             />
             <FormFieldError name="lastName" />
           </FormFieldContainer>
@@ -207,7 +211,7 @@ const PersonalInfoForm = ({
             <PhoneNumberInput
               name="phoneNumber"
               editable={!isEdit}
-              placeholder=""
+              placeholder={getPlaceholder('phoneNumber', isEdit)}
             />
             <FormFieldError name="phoneNumber" />
           </FormFieldContainer>
@@ -218,6 +222,7 @@ const PersonalInfoForm = ({
               size="3"
               {...form.register('email')}
               disabled={!isEdit}
+              placeholder={getPlaceholder('email', isEdit)}
             />
             <FormFieldError name="email" />
           </FormFieldContainer>
@@ -238,8 +243,8 @@ const PersonalInfoForm = ({
             <FormFieldLabel required>SSN</FormFieldLabel>
             <SSNInput
               name="socialSecurityNumber"
-              placeholder=""
               editable={!isEdit}
+              placeholder={getPlaceholder('ssn', isEdit)}
             />
             <FormFieldError name="socialSecurityNumber" />
           </FormFieldContainer>
@@ -276,6 +281,7 @@ const PersonalInfoForm = ({
               size="3"
               {...form.register('driversLicense.number')}
               disabled={!isEdit}
+              placeholder={getPlaceholder('drivingLicenseNumber', isEdit)}
             />
             <FormFieldError name="driversLicense.number" />
           </FormFieldContainer>
@@ -358,6 +364,7 @@ const PersonalInfoForm = ({
                 size="3"
                 {...form.register('guardianFirstName')}
                 disabled={!isEdit}
+                placeholder={getPlaceholder('guardianFirstName', isEdit)}
               />
               <FormFieldError name="guardianFirstName" />
             </FormFieldContainer>
@@ -370,6 +377,7 @@ const PersonalInfoForm = ({
                 size="3"
                 {...form.register('guardianLastName')}
                 disabled={!isEdit}
+                placeholder={getPlaceholder('guardianLastName', isEdit)}
               />
               <FormFieldError name="guardianLastName" />
             </FormFieldContainer>

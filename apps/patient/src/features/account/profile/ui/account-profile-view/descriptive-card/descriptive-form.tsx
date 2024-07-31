@@ -22,6 +22,7 @@ import {
 } from '@/components-v2'
 import { updateProfileAction } from '@/features/account/profile/actions'
 import { useProfileStore } from '@/features/account/profile/store'
+import { getPlaceholder } from '@/features/account/profile/utils'
 import { schema } from './descriptive-schema'
 
 type SchemaType = z.infer<typeof schema>
@@ -122,6 +123,7 @@ const DescriptiveForm = ({
               size="3"
               {...form.register('preferredName')}
               disabled={!isEdit}
+              placeholder={getPlaceholder('preferredName', isEdit)}
             />
             <FormFieldError name="preferredName" />
           </FormFieldContainer>
@@ -132,6 +134,7 @@ const DescriptiveForm = ({
               size="3"
               {...form.register('prefix')}
               disabled={!isEdit}
+              placeholder={getPlaceholder('prefix', isEdit)}
             />
             <FormFieldError name="prefix" />
           </FormFieldContainer>
@@ -142,6 +145,7 @@ const DescriptiveForm = ({
               size="3"
               {...form.register('suffix')}
               disabled={!isEdit}
+              placeholder={getPlaceholder('suffix', isEdit)}
             />
             <FormFieldError name="suffix" />
           </FormFieldContainer>
@@ -216,6 +220,7 @@ const DescriptiveForm = ({
               size="3"
               {...form.register('comment')}
               disabled={!isEdit}
+              placeholder={getPlaceholder('comment', isEdit)}
             />
             <FormFieldError name="comment" />
           </FormFieldContainer>
@@ -239,6 +244,7 @@ const DescriptiveForm = ({
               size="3"
               {...form.register('motherMaidenName')}
               disabled={!isEdit}
+              placeholder={getPlaceholder('motherMaidenName', isEdit)}
             />
             <FormFieldError name="motherMaidenName" />
           </FormFieldContainer>

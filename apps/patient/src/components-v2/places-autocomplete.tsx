@@ -17,6 +17,7 @@ import {
   FormFieldLabel,
   ZipcodeInput,
 } from '@/components-v2'
+import { getPlaceholder } from '@/features/account/profile/utils'
 
 interface AddressForm {
   street1?: string
@@ -188,6 +189,10 @@ const PlacesAutocomplete = ({
               }}
               className="text-[15px]"
               disabled={!ready || editable}
+              placeholder={getPlaceholder(
+                `${label?.toLocaleLowerCase()}Address 1`,
+                !editable,
+              )}
             />
             <FormFieldError name={street1Field} />
           </FormFieldContainer>
@@ -204,6 +209,10 @@ const PlacesAutocomplete = ({
             className="text-[15px]"
             {...form.register(street2Field)}
             disabled={editable}
+            placeholder={getPlaceholder(
+              `${label?.toLocaleLowerCase()}Address 2`,
+              !editable,
+            )}
           />
           <FormFieldError name={street2Field} />
         </FormFieldContainer>
@@ -217,6 +226,7 @@ const PlacesAutocomplete = ({
             radius="full"
             {...form.register(cityField)}
             disabled={editable}
+            placeholder={getPlaceholder('city', !editable)}
           />
           <FormFieldError name={cityField} />
         </FormFieldContainer>
@@ -228,7 +238,7 @@ const PlacesAutocomplete = ({
             name={stateField}
             codeset={CODESETS.UsStates}
             disabled={editable}
-            placeholder={editable ? 'Select state' : ''}
+            placeholder={editable ? '' : 'Select state'}
           />
           <FormFieldError name={stateField} />
         </FormFieldContainer>
@@ -237,10 +247,10 @@ const PlacesAutocomplete = ({
           <FormFieldLabel required>Zip</FormFieldLabel>
           <ZipcodeInput
             size="3"
-            placeholder=""
             {...form.register(postalCodeField)}
             value={form.getValues(postalCodeField)}
             disabled={editable}
+            placeholder={getPlaceholder('zip', !editable)}
           />
           <FormFieldError name={postalCodeField} />
         </FormFieldContainer>
