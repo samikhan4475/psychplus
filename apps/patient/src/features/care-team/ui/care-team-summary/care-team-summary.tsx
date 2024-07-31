@@ -43,7 +43,7 @@ const ServerComponent = async () => {
   }
 
   return (
-    <CardContainer>
+    <CardContainer className="px-4 py-[30px]">
       {data.map((row, index) => (
         <>
           <Flex key={row.id} direction="column">
@@ -51,31 +51,30 @@ const ServerComponent = async () => {
               <Flex
                 direction={{ initial: 'column', xs: 'row' }}
                 align="start"
-                gap="4"
+                gap="3"
               >
                 <ProviderAvatar
-                  size={{ initial: '8', sm: '7' }}
+                  className="w-[88px] h-[88px]"
                   provider={row.staffDetails}
                 />
-                <Flex direction="column" align="start" gap="3">
-                  <Flex align="start" gap="2" className="mb-1">
-                    <Text className="text-[18px] font-[600] leading-2 -tracking-[0.25px] text-[#1A1A1A]">
+                <Flex direction="column" align="start">
+                  <Flex align="center" gap="2" className="mb-1">
+                    <Text className="text-[18px] font-[600] text-[#1A1A1A]">
                       {getUserFullName(row.staffDetails.legalName)}
                     </Text>
 
-                    <EditIcon />
+                    <NextLink href="/appointments/search" prefetch={false} className="cursor-pointer">
+                      <EditIcon width="13" height="14"/>
+                    </NextLink>
                   </Flex>
 
-                  <Text className="text-[14px] font-medium uppercase text-accent-12 text-gray-10">
+                  <Text className="text-[14px] font-medium uppercase text-accent-12 text-[#60646C] mb-4">
                     {row.specialist}
                   </Text>
 
                   <Button
                     variant="outline"
-                    size={{ initial: '3', xs: '2', sm: '1' }}
-                    mt="2"
-                    mb={{ initial: '1', sm: '2' }}
-                    ml={{ initial: '-2', xs: '0' }}
+                    className="px-6 py-2 text-[14px]"
                     highContrast
                     asChild
                   >
@@ -83,17 +82,17 @@ const ServerComponent = async () => {
                       Book Appointment
                     </NextLink>
                   </Button>
-                  <Text className="cursor-pointer p-2 pl-0 text-[15px] text-accent-12 underline-offset-4 hover:underline xs:text-[13px] sm:p-0">
+                  {/* <Text className="cursor-pointer p-2 pl-0 text-[15px] text-accent-12 underline-offset-4 hover:underline xs:text-[13px] sm:p-0">
                     <NextLink href="/appointments/search" prefetch={false}>
                       Change provider
                     </NextLink>
-                  </Text>
+                  </Text> */}
                 </Flex>
               </Flex>
             </Flex>
           </Flex>
           {index !== data.length - 1 ? (
-            <Separator my="4" className="w-full" />
+            <Separator className="w-full my-[18px]" />
           ) : null}
         </>
       ))}
