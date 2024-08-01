@@ -5,8 +5,8 @@ import { Checkbox, Flex, Grid, Text } from '@radix-ui/themes'
 import { UseFormReturn } from 'react-hook-form'
 import { FormTextInput } from '@psychplus/form'
 import { DatePicker } from '@psychplus/ui/date-picker'
-import { SchemaType } from './components/add-claim-form'
-import ClaimFormSelect from './components/claim-form-select'
+import { SchemaType } from './add-claim-form'
+import ClaimFormSelect from './claim-form-select'
 
 const options = [
   { label: 'Shahbaz MD', value: 'Shahbaz MD' },
@@ -48,7 +48,7 @@ const AccidentAndLab = ({ form }: { form: UseFormReturn<SchemaType> }) => {
         label="Lab Charges"
         placeholder="0"
         data-testid="add-fee-schedule-name-input"
-        className='relative text-right px-1'
+        className="relative px-1 text-right"
         {...form.register('name')}
       />
 

@@ -1,10 +1,10 @@
 'use client'
 
-import { FormTextInput } from '@psychplus/form'
 import { Cross1Icon, MagnifyingGlassIcon } from '@radix-ui/react-icons'
 import { Box, Button, Flex, Text } from '@radix-ui/themes'
 import { UseFormReturn } from 'react-hook-form'
-import { SchemaType } from './components/add-claim-form'
+import { FormTextInput } from '@psychplus/form'
+import { SchemaType } from './add-claim-form'
 
 const Diagnosis = ({ form }: { form: UseFormReturn<SchemaType> }) => {
   return (
@@ -72,4 +72,3 @@ const Diagnosis = ({ form }: { form: UseFormReturn<SchemaType> }) => {
 }
 
 export { Diagnosis }
-

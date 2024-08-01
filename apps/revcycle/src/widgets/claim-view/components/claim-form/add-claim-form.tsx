@@ -1,4 +1,3 @@
-import { Form, useForm, validate } from '@psychplus/form'
 import * as Accordion from '@radix-ui/react-accordion'
 import { FileIcon, PlusCircledIcon } from '@radix-ui/react-icons'
 import {
@@ -12,20 +11,31 @@ import {
 } from '@radix-ui/themes'
 import { type SubmitHandler } from 'react-hook-form'
 import { z } from 'zod'
-import { AccidentAndLab } from '../accident-and-lab'
-import { BillingProvider } from '../billing-provider'
-import { Diagnosis } from '../diagnosis'
-import { InsuranceTable } from '../insurance-table'
+import { Form, useForm, validate } from '@psychplus/form'
+import { AccidentAndLab } from './accident-and-lab'
+import { AuthAndReferrals } from './auth-and-referrals'
+import { BillingProvider } from './billing-provider'
+import { Charges } from './charges'
 import { ClaimAccordionItem } from './claim-accordion'
+import { Diagnosis } from './diagnosis'
+import { InsuranceTable } from './insurance-table'
+import { SubmissionInformation } from './submission-information'
+import { SubmissionResponse } from './submission-response'
 
 const today = new Date()
 
 const schema = z.object({
   name: validate.requiredString,
-  effectiveFrom: z.date().optional(),
-  effectiveTo: z.date().optional(),
+  effectiveFrom: validate.optionalString,
+  effectiveTo: validate.optionalString,
   description: validate.optionalString,
   sequenceNumber: validate.optionalString,
+  authNumber: validate.nullOrString,
+  referralNumber: validate.nullOrString,
+  claimNotes: validate.nullOrString,
+  submission_date: validate.nullOrString,
+  submission_batch: validate.nullOrString,
+  system_validation_message: validate.nullOrString,
 })
 
 type SchemaType = z.infer<typeof schema>
@@ -36,8 +46,8 @@ const AddClaimForm = () => {
     criteriaMode: 'all',
     defaultValues: {
       name: '',
-      effectiveFrom: today,
-      effectiveTo: today,
+      effectiveFrom: today.toISOString(),
+      effectiveTo: today.toISOString(),
       description: '',
       sequenceNumber: '',
     },
@@ -103,97 +113,100 @@ const AddClaimForm = () => {
             </Button>
           </Box>
         </Flex>
+        <Flex className="rounded-[5px] bg-[#EBF3FC] p-2">
+          <Grid
+            columns="2"
+            gap="3"
+            rows="repeat(2)"
+            className=" mr-2 w-2/5 border-r border-solid border-[#a4a4a4]"
+          >
+            <Box>
+              <Text size="2" className="pr-2 font-bold">
+                Patient Name
+              </Text>
+              <Text size="2">Mustaq, Saqlain</Text>
+            </Box>
+            <Box>
+              <Text size="2" className="pr-2 font-bold">
+                Gender
+              </Text>
+              <Text size="2">Male</Text>
+            </Box>
 
-        <Grid
-          columns="6"
-          gap="3"
-          rows="repeat(2)"
-          width="auto"
-          className="mb-2 rounded-[5px] bg-[#d3def6] p-2"
-        >
-          <Box>
-            <Text size="2" className="pr-2 font-bold">
-              Patient Name
-            </Text>
-            <Text size="2">Mustaq. Saqlain</Text>
-          </Box>
-          <Box className="border-r border-solid">
-            <Text size="2" className="pr-2 font-bold">
-              Gender
-            </Text>
-            <Text size="2">Male</Text>
-          </Box>
+            <Box>
+              <Text size="2" className="pr-2 font-bold">
+                DOB
+              </Text>
+              <Text size="2">12/22/2003</Text>
+            </Box>
 
-          <Box>
-            <Text size="2" className="pr-2 font-bold">
-              Billed
-            </Text>
-            <Text size="2">$0.00</Text>
-          </Box>
+            <Box>
+              <Text size="2" className="pr-2 font-bold">
+                Account Number
+              </Text>
+              <Text size="2">31002</Text>
+            </Box>
+          </Grid>
 
-          <Box>
-            <Text size="2" className="pr-2 font-bold">
-              Secondary Paid
-            </Text>
-            <Text size="2">$0.00</Text>
-          </Box>
+          <Grid columns="4" gap="3" rows="repeat(2)" className=" w-3/5">
+            <Box>
+              <Text size="2" className="pr-2 font-bold">
+                Billed
+              </Text>
+              <Text size="2">$0.00</Text>
+            </Box>
 
-          <Box>
-            <Text size="2" className="pr-2 font-bold">
-              Write Off
-            </Text>
-            <Text size="2">$0.00</Text>
-          </Box>
+            <Box>
+              <Text size="2" className="pr-2 font-bold">
+                Secondary Paid
+              </Text>
+              <Text size="2">$0.00</Text>
+            </Box>
 
-          <Box>
-            <Text size="2" className="pr-2 font-bold">
-              Last Modified By
-            </Text>
-            <Text size="2">-</Text>
-          </Box>
+            <Box>
+              <Text size="2" className="pr-2 font-bold">
+                Write Off
+              </Text>
+              <Text size="2">$0.00</Text>
+            </Box>
 
-          <Box>
-            <Text size="2" className="pr-2 font-bold">
-              DOB
-            </Text>
-            <Text size="2">12/22/2003</Text>
-          </Box>
+            <Box>
+              <Text size="2" className="pr-2 font-bold">
+                Last Modified By
+              </Text>
+              <Text size="2">-</Text>
+            </Box>
 
-          <Box className="border-r border-solid">
-            <Text size="2" className="pr-2 font-bold">
-              Account Number
-            </Text>
-            <Text size="2">31002332</Text>
-          </Box>
+            <Box>
+              <Text size="2" className="pr-2 font-bold">
+                Primary Paid
+              </Text>
+              <Text size="2">$0.00</Text>
+            </Box>
 
-          <Box>
-            <Text size="2" className="pr-2 font-bold">
-              Primary Paid
-            </Text>
-            <Text size="2">$0.00</Text>
-          </Box>
+            <Box>
+              <Text size="2" className="pr-2 font-bold">
+                Patient Paid
+              </Text>
+              <Text size="2">$0.00</Text>
+            </Box>
 
-          <Box>
-            <Text size="2" className="pr-2 font-bold">
-              Patient Paid
-            </Text>
-            <Text size="2">$0.00</Text>
-          </Box>
+            <Box>
+              <Text size="2" className="pr-2 font-bold">
+                Balance
+              </Text>
+              <Text size="2">$0.00</Text>
+            </Box>
 
-          <Box>
-            <Text size="2" className="pr-2 font-bold">
-              Balance
-            </Text>
-            <Text size="2">$0.00</Text>
-          </Box>
+            <Box>
+              <Text size="2" className="pr-2 font-bold">
+                Claim Status
+              </Text>
+              <Text size="2">New Charge</Text>
+            </Box>
+          </Grid>
+        </Flex>
 
-          <Box>
-            <Text size="2" className="pr-2 font-bold">
-              Claim Status
-            </Text>
-            <Text size="2">New Charge</Text>
-          </Box>
-        </Grid>
         <Accordion.Root type="single" className="w-full" collapsible>
           <ClaimAccordionItem title="Billing Provider">
             <BillingProvider form={form} />
@@ -246,6 +259,27 @@ const AddClaimForm = () => {
             }
           >
             <InsuranceTable />
+          </ClaimAccordionItem>
+
+          <ClaimAccordionItem title="Charges">
+            <Charges />
+          </ClaimAccordionItem>
+
+          <Flex gap="3">
+            <Box className="flex-1">
+              <ClaimAccordionItem title="Authorizations and Referrals">
+                <AuthAndReferrals form={form} />
+              </ClaimAccordionItem>
+            </Box>
+            <Box className="flex-1">
+              <ClaimAccordionItem title="Submission Information">
+                <SubmissionInformation form={form} />
+              </ClaimAccordionItem>
+            </Box>
+          </Flex>
+
+          <ClaimAccordionItem title="Submission Response">
+            <SubmissionResponse />
           </ClaimAccordionItem>
         </Accordion.Root>
       </Form>

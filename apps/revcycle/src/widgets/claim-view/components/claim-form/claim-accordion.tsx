@@ -1,6 +1,7 @@
 import { PropsWithChildren, ReactNode, useState } from 'react'
 import * as Accordion from '@radix-ui/react-accordion'
-import { Box, Text } from '@radix-ui/themes'
+import { ChevronDownIcon, ChevronUpIcon } from '@radix-ui/react-icons'
+import { Box, Flex, Text } from '@radix-ui/themes'
 
 interface ClaimAccordionItemProps extends PropsWithChildren {
   title: string
@@ -22,10 +23,24 @@ const ClaimAccordionItem = ({
       <Accordion.Header>
         <Accordion.Trigger asChild onClick={() => setIsOpen(!isOpen)}>
           <Box className="flex w-full cursor-pointer items-center justify-between rounded-1 bg-[#eeeeee] p-1">
-            <Text size="3" weight="medium" className="text-gray-800">
-              {title}
-            </Text>
-            <Box className="transition-transform duration-200">{buttons}</Box>
+            <Flex align="center">
+              <Box className="mr-3 transition-transform duration-200">
+                {isOpen ? (
+                  <ChevronUpIcon
+                    className="text-gray-700 h-4 w-4"
+                    aria-hidden="true"
+                  />
+                ) : (
+                  <ChevronDownIcon
+                    className="text-gray-700 h-4 w-4"
+                    aria-hidden="true"
+                  />
+                )}
+              </Box>
+              <Text size="3" weight="medium" className="text-gray-800">
+                {title}
+              </Text>
+            </Flex>
           </Box>
         </Accordion.Trigger>
       </Accordion.Header>

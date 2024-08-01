@@ -3,8 +3,8 @@
 import { Grid } from '@radix-ui/themes'
 import { UseFormReturn } from 'react-hook-form'
 import { FormTextInput } from '@psychplus/form'
-import ClaimFormSelect from './components/claim-form-select'
-import { SchemaType } from './components/add-claim-form'
+import { SchemaType } from './add-claim-form'
+import ClaimFormSelect from './claim-form-select'
 
 const options = [
   { label: 'Shahbaz MD', value: 'Shahbaz MD' },
@@ -64,7 +64,11 @@ const BillingProvider = ({ form }: { form: UseFormReturn<SchemaType> }) => {
         {...form.register('name')}
       />
 
-      <ClaimFormSelect label="POS" options={options} defaultValue="Shahbaz MD" />
+      <ClaimFormSelect
+        label="POS"
+        options={options}
+        defaultValue="Shahbaz MD"
+      />
     </Grid>
   )
 }

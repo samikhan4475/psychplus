@@ -1,6 +1,6 @@
 import { Box, Tabs, Text } from '@radix-ui/themes'
-import { AddClaimForm } from '@/widgets/claim-form/components'
-import { ClaimTable } from '@/widgets/claim-table/components'
+import { AddClaimForm } from './claim-form/add-claim-form'
+import { ClaimTable } from './claim-table/claim-table'
 import './style.css'
 
 const ClaimView = () => {
