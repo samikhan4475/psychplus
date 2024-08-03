@@ -23,6 +23,7 @@ import {
   ProviderAvatar,
   ShieldFlashLineIcon,
 } from '@/components-v2'
+import { ChangeVisitMedium } from '@/features/appointments/upcoming/ui/change-visit-medium.tsx'
 import { sortCreditCardsByPrimary } from '@/features/billing/credit-debit-cards/utils'
 import {
   getCreditCards,
@@ -156,18 +157,7 @@ const UpcomingAppointmentsSummaryComponent = async () => {
                           </Text>
                         </Flex>
                         <Flex className="flex-1">
-                          <Button
-                            variant="outline"
-                            highContrast
-                            className="w-full"
-                            color="gray"
-                          >
-                            <Text className="whitespace-nowrap">
-                              {row.type === AppointmentType.InPerson
-                                ? 'Change to Virtual'
-                                : 'Change to In-Person'}
-                            </Text>
-                          </Button>
+                          <ChangeVisitMedium appointment={row} />
                         </Flex>
                       </Flex>
                       <Flex gap="3" align="center">

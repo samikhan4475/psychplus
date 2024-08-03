@@ -18,6 +18,7 @@ interface Appointment {
   virtualRoomLink: string
   isCopayPaid: boolean
   isSelfPay: boolean
+  serviceId: string
 }
 
 export type { Appointment }
