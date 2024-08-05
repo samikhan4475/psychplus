@@ -41,7 +41,7 @@ const FormSelect = React.forwardRef<HTMLButtonElement, Props>((props, ref) => {
                 placeholder={props.placeholder}
               />
               <Select.Content position='popper' className={props.contentClassName?? ''}>
-                {childProps.options.map((option) => (
+                {childProps?.options?.map((option) => (
                   <Select.Item
                     value={option.value}
                     key={option.value}

@@ -1,8 +1,10 @@
+
 import { Box, Tabs } from '@radix-ui/themes'
 import { ClearingHouseReceiverListWidgetClient } from '@/widgets/clearing-house-receiver-list/clearing-house-receiver-list-widget.client'
-import { SubmitterServer } from '@/widgets/submitter'
+import { ClearingHouseSubmitterServer } from '@/widgets/clearing-house-submitter'
 import { useStore } from '../store'
 import './style.css'
+
 
 const ClearingHouse = ({ googleApiKey }: { googleApiKey: string }) => {
   const usStatesCodeSets = useStore((state) => state.usStatesCodeSets)
@@ -23,7 +25,6 @@ const ClearingHouse = ({ googleApiKey }: { googleApiKey: string }) => {
             Submitter
           </Tabs.Trigger>
         </Tabs.List>
-
         <Box px="4" pt="3" pb="2">
           <Tabs.Content value="Receiver">
             <ClearingHouseReceiverListWidgetClient
@@ -31,9 +32,10 @@ const ClearingHouse = ({ googleApiKey }: { googleApiKey: string }) => {
               usStatesCodeSetsProp={usStatesCodeSets}
             />
           </Tabs.Content>
-
           <Tabs.Content value="Submitter">
-            <SubmitterServer />
+            <ClearingHouseSubmitterServer
+            googleApiKey={googleApiKey}
+            />
           </Tabs.Content>
         </Box>
       </Tabs.Root>
