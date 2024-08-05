@@ -1,19 +1,27 @@
 import { useEffect, useMemo, useState } from 'react'
 import NextLink from 'next/link'
-import { parseAbsoluteToLocal } from '@internationalized/date'
+import { useSearchParams } from 'next/navigation'
+import { CalendarDate, parseAbsoluteToLocal } from '@internationalized/date'
 import { GlobeIcon } from '@psychplus-v2/components'
 import { AppointmentType } from '@psychplus-v2/constants'
 import { Consent } from '@psychplus-v2/types'
 import {
   getCalendarDate,
   getCalendarDateLabel,
+  getDayOfWeekLabel,
+  getMonthLabel,
   getProviderTypeLabel,
   getTimeLabel,
   getUserFullName,
 } from '@psychplus-v2/utils'
 import { StarFilledIcon, StarIcon } from '@radix-ui/react-icons'
 import { Box, Button, Flex, Text } from '@radix-ui/themes'
-import { DistanceIcon, ProviderAvatar } from '@/components-v2'
+import {
+  DistanceIcon,
+  EmptyFileIcon,
+  FeatureEmpty,
+  ProviderAvatar,
+} from '@/components-v2'
 import { useStore } from '@/features/appointments/search/store'
 import type {
   AppointmentAvailability,
@@ -23,7 +31,11 @@ import type {
 } from '@/features/appointments/search/types'
 import { AppointmentSortBy } from '../../constants'
 import { useSortedFilteredData } from '../../store/hooks'
-import { generateDateRange, getEarliestSlot } from '../../utils'
+import {
+  generateDateRange,
+  getEarliestSlot,
+  isDateInNextRange,
+} from '../../utils'
 import { ClinicSelector } from './clinic-selector'
 
 interface AvailabilityListProps {
@@ -32,6 +44,21 @@ interface AvailabilityListProps {
 
 interface PrimaryProviderAvailabilityCardProps {
   userConsents: Consent[]
+}
+
+type RedirectUrlQueryParams = {
+  appointmentId?: string
+  appointmentType: string
+  providerType: string
+  slot: string
+  specialist: string
+  clinic: string
+}
+
+const getNextAvailableDateLabel = (nextSlotDate: CalendarDate) => {
+  return `${getDayOfWeekLabel(nextSlotDate).slice(0, 3)}, ${getMonthLabel(
+    nextSlotDate,
+  ).slice(0, 3)} ${nextSlotDate.day}`
 }
 
 const PrimaryProviderAvailabilityCard = ({
@@ -96,11 +123,24 @@ const ProviderAvailabilityCard = ({
   const [selectedClinic, setSelectedClinic] = useState(0)
   const [showMore, setShowMore] = useState(false)
 
-  const { appointmentType, startingDate, sortBy } = useStore((state) => ({
-    appointmentType: state.appointmentType,
-    startingDate: state.startingDate,
-    sortBy: state.sortBy,
-  }))
+  const { appointmentType, startingDate, sortBy, setStartingDate } = useStore(
+    (state) => ({
+      appointmentType: state.appointmentType,
+      startingDate: state.startingDate,
+      sortBy: state.sortBy,
+      setStartingDate: state.setStartingDate,
+    }),
+  )
+  const nextAvailableSlotDate = Object.keys(data.allSlotsByDay)[0]
+
+  const dateIsInFuture = useMemo(
+    () =>
+      isDateInNextRange(
+        getCalendarDate(startingDate),
+        getCalendarDate(nextAvailableSlotDate),
+      ),
+    [startingDate, nextAvailableSlotDate],
+  )
 
   const dateRange = useMemo(
     () => generateDateRange(getCalendarDate(startingDate)),
@@ -204,44 +244,75 @@ const ProviderAvailabilityCard = ({
       </Flex>
       <Flex className="flex-1 px-[40px] pt-2">
         <Flex direction="column" gap="4" className="w-full">
-          <Flex>
-            {dateRange.map((date, i) => (
-              <Box key={`${i}-${date.toString()}`} className="flex-1">
-                <Flex direction="column" align="center" gap="4">
-                  {appointmentType === AppointmentType.Virtual ? (
-                    <AppointmentTimeSlots
-                      showMore={showMore}
-                      userConsents={userConsents}
-                      clinic={data.clinics[selectedClinic]}
-                      specialist={data.specialist}
-                      slots={data.allSlotsByDay[getCalendarDateLabel(date)]}
-                    />
-                  ) : (
-                    <AppointmentTimeSlots
-                      showMore={showMore}
-                      userConsents={userConsents}
-                      clinic={data.clinics[selectedClinic]}
-                      specialist={data.specialist}
-                      slots={
-                        data.clinics[selectedClinic].slotsByDay[
-                          getCalendarDateLabel(date)
-                        ]
-                      }
-                    />
-                  )}
+          {dateIsInFuture ? (
+            <FeatureEmpty
+              description={`Next available appointment on ${getNextAvailableDateLabel(
+                getCalendarDate(nextAvailableSlotDate),
+              )}`}
+              action={
+                <Flex justify="center">
+                  <Button
+                    size="3"
+                    className="justify-center"
+                    onClick={() =>
+                      setStartingDate(
+                        getCalendarDateLabel(
+                          getCalendarDate(nextAvailableSlotDate),
+                        ),
+                      )
+                    }
+                    highContrast
+                  >
+                    Go to Appointment
+                  </Button>
                 </Flex>
-              </Box>
-            ))}
-          </Flex>
-          {checkHasMoreSlots() ? (
-            <Button
-              onClick={() => setShowMore((prevState) => !prevState)}
-              size="3"
-              className="bg-pp-blue-1 text-accent-12"
-            >
-              {showMore ? 'See less' : 'See more'}
-            </Button>
-          ) : null}
+              }
+              Icon={EmptyFileIcon}
+            />
+          ) : (
+            <>
+              <Flex>
+                {dateRange.map((date, i) => (
+                  <Box key={`${i}-${date.toString()}`} className="flex-1">
+                    <Flex direction="column" align="center" gap="4">
+                      {appointmentType === AppointmentType.Virtual ? (
+                        <AppointmentTimeSlots
+                          showMore={showMore}
+                          userConsents={userConsents}
+                          clinic={data.clinics[selectedClinic]}
+                          specialist={data.specialist}
+                          slots={data.allSlotsByDay[getCalendarDateLabel(date)]}
+                        />
+                      ) : (
+                        <AppointmentTimeSlots
+                          showMore={showMore}
+                          userConsents={userConsents}
+                          clinic={data.clinics[selectedClinic]}
+                          specialist={data.specialist}
+                          slots={
+                            data.clinics[selectedClinic].slotsByDay[
+                              getCalendarDateLabel(date)
+                            ]
+                          }
+                        />
+                      )}
+                    </Flex>
+                  </Box>
+                ))}
+              </Flex>
+              {checkHasMoreSlots() ? (
+                <Button
+                  onClick={() => setShowMore((prevState) => !prevState)}
+                  size="3"
+                  className="bg-pp-blue-1 text-accent-12"
+                >
+                  {showMore ? 'See less' : 'See more'}
+                </Button>
+              ) : (
+                <Box className="h-10" />
+              )}
+            </>
+          )}
         </Flex>
       </Flex>
     </Flex>
@@ -265,6 +336,8 @@ const AppointmentTimeSlots = ({
     providerType: state.providerType,
   }))
 
+  const searchParams = useSearchParams()
+
   if (!slots || slots.length === 0) {
     return null
   }
@@ -272,7 +345,8 @@ const AppointmentTimeSlots = ({
   const endIndex = showMore ? slots.length : 3
 
   const getRedirectToPaymentMethodUrl = (slot: AppointmentSlot) => {
-    const queryParams = {
+    const queryParams: RedirectUrlQueryParams = {
+      appointmentId: searchParams.get('appointmentId')?.toString(),
       appointmentType: JSON.stringify(appointmentType).toString(),
       providerType: JSON.stringify(providerType).toString(),
       slot: JSON.stringify(slot).toString(),
@@ -284,6 +358,10 @@ const AppointmentTimeSlots = ({
         contact: rest.clinic.contact,
         distanceInMiles: rest.clinic.distanceInMiles,
       }).toString(),
+    }
+
+    if (!queryParams.appointmentId) {
+      delete queryParams.appointmentId
     }
 
     const queryString = new URLSearchParams(queryParams).toString()

@@ -32,7 +32,9 @@ const BookAppointmentView = ({
   careTeam,
   patientInsurances,
   insurancePayers,
+  appointmentId,
 }: {
+  appointmentId?: string
   appointmentType: AppointmentType
   providerType: ProviderType
   slot: AppointmentSlot
@@ -74,6 +76,7 @@ const BookAppointmentView = ({
           />
           <Box mt="5">
             <BookAppointmentButton
+              appointmentId={appointmentId}
               bookedSlot={bookedSlot}
               careTeam={careTeam}
               userConsents={userConsents}

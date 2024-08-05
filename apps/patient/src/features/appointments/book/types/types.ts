@@ -40,6 +40,7 @@ interface BookedSlot {
 }
 
 interface BookSlotButtonProps {
+  appointmentId?: string
   bookedSlot: BookedSlot
   careTeam: CareTeamMember[]
   userConsents: Consent[]

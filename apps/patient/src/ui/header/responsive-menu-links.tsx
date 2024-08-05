@@ -137,11 +137,6 @@ const ResponsiveMenuLinks = () => {
             href: '/billing/membership',
             Icon: CrossIcon,
           },
-          // {
-          //   label: 'Payment Methods',
-          //   href: '/billing/payments',
-          //   Icon: WalletIcon,
-          // },
         ]}
       />
     </Accordion.Root>

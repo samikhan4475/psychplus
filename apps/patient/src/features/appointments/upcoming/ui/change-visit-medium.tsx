@@ -36,6 +36,7 @@ const ChangeVisitMedium = ({ appointment }: ChangeVisitMediumProp) => {
       duration: appointment.duration,
       locationId: appointment.clinic.id,
       serviceId: appointment.serviceId,
+      isSelfPay: appointment.isSelfPay,
     })
 
     if (result.state === 'error') {

@@ -127,6 +127,7 @@ const useStore = create<Store>()(
           includeDistance: get().appointmentType === AppointmentType.InPerson,
           includeStaffBio: false,
           currentLocation: get().location ?? null,
+          nextAvailableAppointment: true,
         })
 
         if (result.state === 'error') {

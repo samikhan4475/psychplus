@@ -48,6 +48,7 @@ const UpdateDateAndTimeDialog = ({
         duration: selectedSlot?.duration,
         locationId: appointment.clinic.id,
         serviceId: selectedSlot?.servicesOffered[0],
+        isSelfPay: appointment.isSelfPay,
       })
 
       if (result.state === 'error') {

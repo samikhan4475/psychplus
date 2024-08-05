@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { AppointmentType } from '@psychplus-v2/constants'
 import { CareTeamMember, Consent } from '@psychplus-v2/types'
 import { getProviderTypeLabel } from '@psychplus-v2/utils'
 import { Box, Flex, Text } from '@radix-ui/themes'
@@ -166,7 +167,10 @@ const SearchAppointmentsView = ({
               ) : null}
               <AvailabilityList userConsents={userConsents} />
             </Flex>
-            <ClinicsMapView mapKey={mapKey} />
+            <ClinicsMapView
+              mapKey={mapKey}
+              hide={appointmentType === AppointmentType.Virtual}
+            />
           </Flex>
         </>
       )}

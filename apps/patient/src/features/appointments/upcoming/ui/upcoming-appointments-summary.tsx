@@ -8,7 +8,7 @@ import {
   getUserFullName,
   withSuspense,
 } from '@psychplus-v2/utils'
-import { Button, Flex, Text } from '@radix-ui/themes'
+import { Button, Flex, Text, Tooltip } from '@radix-ui/themes'
 import { CalendarDaysIcon, ChevronRightIcon, DotIcon } from 'lucide-react'
 import { getCodesets, getConsents, getProfile } from '@/api'
 import {
@@ -134,7 +134,17 @@ const UpcomingAppointmentsSummaryComponent = async () => {
                           {row.specialist.legalName.honors &&
                             `, ${row.specialist.legalName.honors}`}
                         </Text>
-                        <EditIcon />
+                        <Tooltip
+                          content="Change Provider for appointment"
+                          delayDuration={300}
+                          className="max-w-[200px]"
+                        >
+                          <Link
+                            href={`/appointments/search?appointmentId=${row.id}`}
+                          >
+                            <EditIcon />
+                          </Link>
+                        </Tooltip>
                       </Flex>
                       <Flex
                         mt="1"

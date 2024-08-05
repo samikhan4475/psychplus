@@ -3,6 +3,7 @@
 import NextLink from 'next/link'
 import { AppointmentType } from '@psychplus-v2/constants'
 import {
+  cn,
   getAppointmentTypeLabel,
   getCalendarDate,
   getClinicAddressLabel,
@@ -114,7 +115,9 @@ const ConfirmAppointment = ({
               {clinic?.contact?.email && (
                 <Text className="text-[12px] text-[#575759]">
                   Email:{' '}
-                  <Text className="text-[#194595]">{clinic.contact.email}</Text>
+                  <Text className="c text-[#194595]">
+                    {clinic.contact.email}
+                  </Text>
                 </Text>
               )}
             </Flex>
@@ -130,15 +133,24 @@ const ConfirmAppointment = ({
             </Flex>
           </Flex>
 
-          {appointmentType === AppointmentType.InPerson && (
-            <Flex className="mt-4">
-              <ClinicsMapView
-                mapKey={mapKey}
-                width="w-full"
-                height="h-[250px]"
-              />
-            </Flex>
-          )}
+          <Flex
+            className={cn(
+              appointmentType === AppointmentType.Virtual ? null : 'mt-4',
+            )}
+          >
+            <ClinicsMapView
+              hide={appointmentType === AppointmentType.Virtual}
+              mapKey={mapKey}
+              width={cn(
+                appointmentType === AppointmentType.Virtual ? 'w-0' : 'w-full',
+              )}
+              height={cn(
+                appointmentType === AppointmentType.Virtual
+                  ? 'h-0'
+                  : 'h-[250px]',
+              )}
+            />
+          </Flex>
         </Flex>
         <Text className="mt-4 text-[18px] text-[#151B4A]" weight="medium">
           Notes for your visit

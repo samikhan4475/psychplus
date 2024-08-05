@@ -28,8 +28,14 @@ const SearchAppointmentsPage = async ({
     redirect('/')
   }
 
-  const { appointmentType, providerType, slot, clinic, specialist } =
-    searchParams
+  const {
+    appointmentType,
+    providerType,
+    slot,
+    clinic,
+    specialist,
+    appointmentId,
+  } = searchParams
 
   const [
     creditCardResponse,
@@ -88,6 +94,7 @@ const SearchAppointmentsPage = async ({
           careTeam={careTeamResposne.data.careTeam}
           patientInsurances={patientInsurancesResponse.data}
           insurancePayers={insurancePayerResponse.data}
+          appointmentId={appointmentId}
         />
       </GooglePlacesContextProvider>
     </CodesetStoreProvider>

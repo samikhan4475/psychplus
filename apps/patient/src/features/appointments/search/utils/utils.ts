@@ -1,11 +1,7 @@
 import { CalendarDate } from '@internationalized/date'
 import { CareTeamMember } from '@psychplus-v2/types'
 import { getCalendarDateLabel } from '@psychplus-v2/utils'
-import {
-  AppointmentAvailability,
-  AppointmentClinic,
-  SlotsByDay,
-} from '../types'
+import { SlotsByDay } from '../types'
 
 const generateDateRange = (start: CalendarDate) => {
   const dateRange = [start]
@@ -14,6 +10,14 @@ const generateDateRange = (start: CalendarDate) => {
     dateRange.push(dateRange[i].add({ days: 1 }))
   }
   return dateRange
+}
+
+const isDateInNextRange = (
+  startingDate: CalendarDate,
+  slotDate: CalendarDate,
+) => {
+  console.log(slotDate.day, startingDate.add({ days: 6 }).compare(slotDate))
+  return startingDate.add({ days: 6 }).compare(slotDate) < 0
 }
 
 const getEarliestSlot = (slots: SlotsByDay, dateRange: CalendarDate[]) => {
@@ -32,34 +36,9 @@ const checkCareTeamExists = (
   providerType: string,
 ) => careTeam.some((member) => member.specialist === providerType)
 
-const getAllAvailabilityClinics = (
-  data: AppointmentAvailability[],
-): AppointmentClinic[] => {
-  const allClinics: AppointmentClinic[] = []
-  const seenClinics = new Set<string>()
-
-  for (const availability of data) {
-    for (const clinic of availability.clinics) {
-      const key = `${clinic.id}`
-
-      if (
-        clinic.contact.addresses?.[0].geoCoordinates &&
-        seenClinics.has(key)
-      ) {
-        continue
-      } else {
-        seenClinics.add(key)
-        allClinics.push(clinic)
-      }
-    }
-  }
-
-  return allClinics
-}
-
 export {
   generateDateRange,
   getEarliestSlot,
   checkCareTeamExists,
-  getAllAvailabilityClinics,
+  isDateInNextRange,
 }

@@ -34,6 +34,7 @@ interface AppointmentsSearchApiResponse {
 interface SearchAppointmentsActionParams {
   includeDistance: boolean
   includeStaffBio: boolean
+  nextAvailableAppointment?: boolean
   postalCode: string | null
   appointmentType: AppointmentType
   providerType: ProviderType
@@ -55,12 +56,18 @@ const searchAppointmentsAction = async ({
   includeStaffBio,
   staffIds,
   locationIds,
+  nextAvailableAppointment,
 }: SearchAppointmentsActionParams): Promise<
   ActionResult<AppointmentAvailability[]>
 > => {
   const url = new URL(`${API_URL}/api/appointments/availability/search`)
   url.searchParams.append('includeDistance', `${includeDistance}`)
   url.searchParams.append('includeStaffBio', `${includeStaffBio}`)
+  if (nextAvailableAppointment)
+    url.searchParams.append(
+      'nextAvailableAppointment',
+      `${nextAvailableAppointment}`,
+    )
 
   const payload = {
     type: appointmentType,

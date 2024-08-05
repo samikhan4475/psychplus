@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { FormContainer } from '@psychplus-v2/components'
 import { PaymentType } from '@psychplus-v2/constants'
@@ -23,6 +24,7 @@ import { bookAppointmentAction } from '@/features/appointments/book/actions'
 import { BookSlotButtonProps } from '@/features/appointments/book/types'
 import { isProviderMemberOfCareTeam } from '@/features/appointments/book/utils'
 import { checkCareTeamExists } from '@/features/appointments/search/utils'
+import { rescheduleAppointment } from '@/features/appointments/upcoming/actions'
 import { NewProviderSelectedDialog } from '../new-provider-selected-dialog'
 import { PrimaryProviderAppointedDialog } from '../primary-provider-appointed-dialog'
 
@@ -35,6 +37,7 @@ const schema = z.object({
 type SchemaType = z.infer<typeof schema>
 
 const BookAppointmentButton = ({
+  appointmentId,
   bookedSlot,
   careTeam,
   userConsents,
@@ -45,6 +48,8 @@ const BookAppointmentButton = ({
 
   const [error, setError] = useState<string | undefined>()
   const [loading, setLoading] = useState(false)
+
+  const router = useRouter()
 
   const [openNewProviderSelected, setOpenNewProviderSelected] = useState(false)
   const [openPrimaryProviderAppointed, setOpenPrimaryProviderAppointed] =
@@ -108,23 +113,43 @@ const BookAppointmentButton = ({
   const bookSlot = async () => {
     setError(undefined)
     setLoading(true)
-    const result = await bookAppointmentAction({
-      locationId: clinic.id,
-      specialistStaffId: specialist.id,
-      specialistTypeCode: providerType,
-      type: appointmentType,
-      startDate: slot.startDate,
-      duration: slot.duration,
-      serviceId: slot.servicesOffered?.[0],
-      isSelfPay: paymentMethod === PaymentType.SelfPay,
-    })
 
-    if (result.state === 'error') {
-      setError(result.error)
-      setLoading(false)
-      return
+    if (appointmentId) {
+      const result = await rescheduleAppointment({
+        appointmentId: Number(appointmentId),
+        specialistStaffId: specialist.id,
+        specialistTypeCode: providerType,
+        type: appointmentType,
+        startDate: slot.startDate,
+        duration: slot.duration,
+        serviceId: slot.servicesOffered?.[0],
+        locationId: clinic.id,
+        isSelfPay: paymentMethod === PaymentType.SelfPay,
+      })
+
+      if (result.state === 'error') {
+        setError(result.error)
+        setLoading(false)
+        return
+      }
+    } else {
+      const result = await bookAppointmentAction({
+        locationId: clinic.id,
+        specialistStaffId: specialist.id,
+        specialistTypeCode: providerType,
+        type: appointmentType,
+        startDate: slot.startDate,
+        duration: slot.duration,
+        serviceId: slot.servicesOffered?.[0],
+        isSelfPay: paymentMethod === PaymentType.SelfPay,
+      })
+
+      if (result.state === 'error') {
+        setError(result.error)
+        setLoading(false)
+        return
+      }
     }
-
     if (!policyAlreadySigned) {
       const result = await addPolicyConsent({ type: 'PolicyB' })
 
@@ -147,6 +172,7 @@ const BookAppointmentButton = ({
     handleSelectedProviderDialog()
 
     setLoading(false)
+    router.refresh()
   }
 
   const handleConsentView = (type: DocumentType) => {

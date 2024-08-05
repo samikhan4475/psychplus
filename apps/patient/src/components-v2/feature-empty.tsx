@@ -49,13 +49,13 @@ const FeatureEmpty = ({
         {title}
       </Text>
       {description ? (
-        <Text weight="light" className="text-[15px] text-gray-11">
+        <Text weight="light" mb="1" className="text-[15px] text-gray-11">
           {description}
         </Text>
       ) : null}
     </Flex>
     <Box className="w-full" mt="1">
-      {action ? action : null}
+      {action || null}
     </Box>
   </Flex>
 )

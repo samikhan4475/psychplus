@@ -4,7 +4,11 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { FormContainer } from '@psychplus-v2/components'
-import { AppointmentType, ProviderType } from '@psychplus-v2/constants'
+import {
+  AppointmentType,
+  CODESETS,
+  ProviderType,
+} from '@psychplus-v2/constants'
 import { CodesetCache } from '@psychplus-v2/types'
 import { zipCodeSchema } from '@psychplus-v2/utils'
 import { Button, Dialog, Flex, Heading, TextFieldInput } from '@radix-ui/themes'
@@ -14,6 +18,7 @@ import { getZipcodeInfo } from '@/actions'
 import {
   CancelDialogButton,
   CloseDialogIcon,
+  CodesetFormSelect,
   DialogTitle,
   FormFieldContainer,
   FormFieldError,
@@ -28,7 +33,7 @@ const schema = z.object({
   providerType: z.custom<ProviderType>(),
   appointmentType: z.custom<AppointmentType>(),
   zipCode: zipCodeSchema.optional(),
-  state: z.string().optional(),
+  state: z.string().trim().min(1, 'Required'),
 })
 
 type SchemaType = z.infer<typeof schema>
@@ -54,9 +59,7 @@ const ScheduleAppointmentButton = ({
         form.setValue('state', '')
         return
       }
-      if (zipCodeInfo.data.places?.[0].state) {
-        form.setValue('state', zipCodeInfo.data.places?.[0].state)
-      }
+      form.setValue('state', zipCodeInfo.data)
     }
   }
 
@@ -83,12 +86,17 @@ const ScheduleAppointmentButton = ({
     )
 
     router.push(`/appointments/search`)
-
     setDialogOpen(false)
   }
 
   return (
-    <Dialog.Root open={dialogOpen} onOpenChange={setDialogOpen}>
+    <Dialog.Root
+      open={dialogOpen}
+      onOpenChange={(value) => {
+        setDialogOpen(value)
+        form.reset()
+      }}
+    >
       <Dialog.Trigger>
         <Flex className={props.className}>
           <Button size="3" highContrast {...props}>
@@ -154,12 +162,11 @@ const ScheduleAppointmentButton = ({
 
                 <FormFieldContainer className="w-3/4">
                   <FormFieldLabel>State of Residence</FormFieldLabel>
-                  <TextFieldInput
+                  <CodesetFormSelect
                     size="3"
-                    radius="full"
+                    codeset={CODESETS.UsStates}
                     {...form.register('state')}
                     placeholder="State"
-                    disabled
                   />
                   <FormFieldError name="state" />
                 </FormFieldContainer>
