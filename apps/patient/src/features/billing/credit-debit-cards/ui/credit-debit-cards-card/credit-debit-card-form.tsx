@@ -117,10 +117,14 @@ const CreditCardForm = ({
       paymentMethod: { card },
     } = stripeResult
 
+    let cardBrand = card.brand
+
+    cardBrand = cardBrand === 'amex' ? 'AmericanExpress' : cardBrand
+
     return addCreditCardAction({
       name: data.fullname,
       cardKey: stripeResult.paymentMethod.id,
-      cardType: card.brand,
+      cardType: cardBrand,
       expireMonth: card.exp_month,
       expireYear: card.exp_year,
       numberLastFour: card.last4,
