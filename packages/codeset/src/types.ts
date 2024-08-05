@@ -159,6 +159,20 @@ export interface CodeSetsMetadata {
   createdByFullName: string
 }
 
+interface AssigningAuthorities {
+  assigningAuthorityId?: string
+  codeSystemName?: string
+  displayName: string
+  editPermissionCode: string
+  id?: string
+  metadata?: CodeMetadata
+  oid: string
+  recordStatus?: string
+  namespace: string
+  version?: string
+  viewPermissionCode: string
+}
+
 interface FeeScheduleCategory {
   code: string
   display: string
@@ -175,5 +189,6 @@ export type {
   ParameterCodeSet,
   Parameter,
   RelationshipCodeSet,
+  AssigningAuthorities,
   FeeScheduleCategory
 }

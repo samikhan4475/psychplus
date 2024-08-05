@@ -2,6 +2,7 @@ import { cache } from 'react'
 import { handleRequest } from '@psychplus/utils/api'
 import { createHeaders } from '@psychplus/utils/client'
 import type {
+  AssigningAuthorities,
   AuthorityCodeSet,
   Code,
   CodeSet,
@@ -78,6 +79,18 @@ const getSnomedCodes = (payload?: IcdFilters): Promise<Snomed> =>
     ),
   )
 
+const addAuthority = async (
+  body: AssigningAuthorities,
+): Promise<AssigningAuthorities> =>
+  handleRequest(
+    fetch(`/galaxy/api/codeset/authorities`, {
+      method: 'POST',
+      cache: 'no-store',
+      headers: createHeaders(),
+      body: JSON.stringify(body),
+    }),
+  )
+
 const getIcdCodesCached = cache(getIcdCodes)
 const getSnomedCodesCached = cache(getSnomedCodes)
 
@@ -89,4 +102,5 @@ export {
   getUsStates,
   getIcdCodesCached as getIcdCodes,
   getSnomedCodesCached as getSnomedCodes,
+  addAuthority,
 }
