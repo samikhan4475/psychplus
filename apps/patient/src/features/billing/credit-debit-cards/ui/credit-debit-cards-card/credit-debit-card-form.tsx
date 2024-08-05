@@ -155,7 +155,7 @@ const CreditCardForm = ({
       trigger={trigger}
       disabled={!stripe || !elements}
       toastData={{
-        title: `${creditCard ? 'Updated' : 'Added'} credit card`,
+        title: `Credit Card ${creditCard ? 'Updated' : 'Added'}`,
       }}
       triggerClassName={triggerClassName}
       onFormClose={onFormClose}

@@ -37,7 +37,7 @@ const ChangePrimaryCardDialog = ({
 
     toast({
       type: 'success',
-      title: 'Changed Primary Card',
+      title: 'Primary Card Changed',
     })
 
     router.refresh()

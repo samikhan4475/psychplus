@@ -47,7 +47,7 @@ const DeletableFieldValue = <T,>({
 
     toast({
       type: 'success',
-      title: 'Removed credit card',
+      title: 'Credit Card Removed',
     })
 
     onSuccess?.()

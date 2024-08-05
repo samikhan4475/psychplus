@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { ProviderType } from '@psychplus-v2/constants'
-import { Button, Dialog, Flex, Text } from '@radix-ui/themes'
+import { Button, Dialog, Flex } from '@radix-ui/themes'
 import { CloseDialogIcon, FormError } from '@/components-v2'
 import { changePrimaryProviderCareTeamAction } from '@/features/appointments/book/actions'
 import { NewProviderSelectedProps } from '@/features/appointments/book/types'
@@ -36,7 +36,7 @@ const NewProviderSelectedDialog = ({
 
     toast({
       type: 'success',
-      title: 'Changed Primary Provider',
+      title: 'Primary Provider Changed',
     })
 
     setOpen(false)
@@ -54,13 +54,6 @@ const NewProviderSelectedDialog = ({
         }
       }}
     >
-      <Flex align="start" className="group cursor-pointer">
-        <Dialog.Trigger>
-          <Text className="text-[#194595] underline" size="2">
-            Set as Primary
-          </Text>
-        </Dialog.Trigger>
-      </Flex>
       <Dialog.Content className="relative">
         <CloseDialogIcon />
         <Dialog.Title className="font-sans -tracking-[0.25px]">

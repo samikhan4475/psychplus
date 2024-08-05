@@ -55,8 +55,8 @@ const UpdateDateAndTimeDialog = ({
       } else {
         setIsUpdateDateAndTimeDialog(false)
         toast({
-          type: 'error',
-          title: 'Appointment rescheduled successfully',
+          type: 'success',
+          title: 'Date And Time Changed',
         })
         setStartingDate(getCalendarDateLabel(today(getLocalTimeZone())))
       }

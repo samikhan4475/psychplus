@@ -102,7 +102,7 @@ const AddCreditCardForm = () => {
       trigger={trigger}
       disabled={!stripe || !elements}
       toastData={{
-        title: 'Added credit card',
+        title: 'Credit Card Added',
       }}
     >
       <FormFieldContainer className="w-full">

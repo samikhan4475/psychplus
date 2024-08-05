@@ -199,6 +199,7 @@ const UpcomingAppointmentsSummaryComponent = async () => {
                       )}
                     </Flex>
                     <ChangePaymentMethodDialog
+                      appointment={row}
                       creditCards={sortCreditCardsByPrimary(
                         creditCardResponse.data,
                       )}

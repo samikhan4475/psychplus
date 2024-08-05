@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { FormContainer } from '@psychplus-v2/components'
+import { PaymentType } from '@psychplus-v2/constants'
 import { Consent, DocumentType } from '@psychplus-v2/types'
 import { getProviderTypeLabel } from '@psychplus-v2/utils'
 import { Button, Checkbox, Flex, Text } from '@radix-ui/themes'
@@ -38,6 +39,7 @@ const BookAppointmentButton = ({
   careTeam,
   userConsents,
   setBookingSuccessful,
+  paymentMethod,
 }: BookSlotButtonProps) => {
   const { specialist, clinic, slot, appointmentType, providerType } = bookedSlot
 
@@ -114,6 +116,7 @@ const BookAppointmentButton = ({
       startDate: slot.startDate,
       duration: slot.duration,
       serviceId: slot.servicesOffered?.[0],
+      isSelfPay: paymentMethod === PaymentType.SelfPay,
     })
 
     if (result.state === 'error') {

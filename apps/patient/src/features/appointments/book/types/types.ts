@@ -5,9 +5,9 @@ import {
 } from '@psychplus-v2/constants'
 import { CareTeamMember, Clinic, Consent } from '@psychplus-v2/types'
 import { CreditCard } from '@/features/billing/credit-debit-cards/types'
-import { AppointmentSlot, AppointmentSpecialist } from '../../search/types'
 import { Insurance } from '@/features/billing/payments/types'
 import { InsurancePayer } from '@/features/billing/payments/types/insurance'
+import { AppointmentSlot, AppointmentSpecialist } from '../../search/types'
 
 interface ConfirmationNote {
   appointmentType: string
@@ -44,6 +44,7 @@ interface BookSlotButtonProps {
   careTeam: CareTeamMember[]
   userConsents: Consent[]
   setBookingSuccessful: (value: boolean) => void
+  paymentMethod: PaymentType
 }
 
 interface ConfirmedAppointmentProps {

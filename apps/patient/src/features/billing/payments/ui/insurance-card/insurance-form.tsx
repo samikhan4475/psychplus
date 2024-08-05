@@ -5,9 +5,7 @@ import { useRouter } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { ActionErrorState, ActionSuccessState } from '@psychplus-v2/api'
 import { CODESETS } from '@psychplus-v2/constants'
-import {
-  getCalendarDate,
-} from '@psychplus-v2/utils'
+import { getCalendarDate } from '@psychplus-v2/utils'
 import { Box, Flex, Text, TextFieldInput } from '@radix-ui/themes'
 import { useForm } from 'react-hook-form'
 import z from 'zod'
@@ -239,7 +237,7 @@ const InsuranceForm = ({
     if (!data.isPatientPolicyHolder) {
       payload.policyHolderName = {
         firstName: data.policyHolderFirstName ?? '',
-        lastName: data.policyHolderLastName ?? ''
+        lastName: data.policyHolderLastName ?? '',
       }
       payload.policyHolderGender = data.policyHolderGender
       payload.policyHolderDateOfBirth = data.policyHolderDateOfBirth
@@ -329,6 +327,9 @@ const InsuranceForm = ({
       submitAction={onSubmit}
       noResetValues
       onFormClose={onFormClose}
+      toastData={{
+        title: `Insurance ${insurance ? 'Updated' : 'Added'}`,
+      }}
       deleteButtonProps={
         insurance
           ? {
@@ -337,7 +338,7 @@ const InsuranceForm = ({
               confirmDescription:
                 'Are you sure you want to remove this insurance?',
               confirmActionLabel: 'Remove',
-              toastTitle: 'Insurance removed',
+              toastTitle: 'Insurance Removed',
               onSuccess: router.refresh,
             }
           : undefined
@@ -399,7 +400,7 @@ const InsuranceForm = ({
           <PlanSelect payers={insurancePayers} />
         </Box>
         <Box className="flex-1">
-          <FormField name="memberId" label="" >
+          <FormField name="memberId" label="">
             <FormFieldLabel required>Member ID</FormFieldLabel>
             <TextFieldInput {...form.register('memberId')} />
           </FormField>
@@ -414,7 +415,7 @@ const InsuranceForm = ({
           </FormField>
         </Box>
         <Box className="flex-1">
-          <FormFieldLabel required>Effective Date</FormFieldLabel>  
+          <FormFieldLabel required>Effective Date</FormFieldLabel>
           <FormTextInput
             type="date"
             max={maxDate}
@@ -426,7 +427,7 @@ const InsuranceForm = ({
           />
         </Box>
         <Box className="flex-1">
-          <FormFieldLabel required>Termination Date</FormFieldLabel>  
+          <FormFieldLabel required>Termination Date</FormFieldLabel>
           <FormTextInput
             type="date"
             max="9999-12-31"
@@ -487,7 +488,7 @@ const InsuranceForm = ({
                 label=""
                 containerClassName="flex-1"
               >
-                <FormFieldLabel required>First Name</FormFieldLabel>  
+                <FormFieldLabel required>First Name</FormFieldLabel>
                 <TextFieldInput {...form.register('policyHolderFirstName')} />
               </FormField>
             </Box>
@@ -497,7 +498,7 @@ const InsuranceForm = ({
                 label=""
                 containerClassName="flex-1"
               >
-                <FormFieldLabel required>Last Name</FormFieldLabel>  
+                <FormFieldLabel required>Last Name</FormFieldLabel>
                 <TextFieldInput {...form.register('policyHolderLastName')} />
               </FormField>
             </Box>
@@ -507,7 +508,7 @@ const InsuranceForm = ({
                 label=""
                 containerClassName="flex-1"
               >
-                <FormFieldLabel required>Gender</FormFieldLabel>  
+                <FormFieldLabel required>Gender</FormFieldLabel>
                 <CodesetFormSelect
                   name="policyHolderGender"
                   codeset={CODESETS.Gender}
@@ -516,7 +517,7 @@ const InsuranceForm = ({
             </Box>
 
             <Box className="flex-1">
-              <FormFieldLabel required>Date of Birth</FormFieldLabel>  
+              <FormFieldLabel required>Date of Birth</FormFieldLabel>
               <FormTextInput
                 type="date"
                 max="2004-12-31"
@@ -545,7 +546,7 @@ const InsuranceForm = ({
                 label=""
                 containerClassName="flex-1"
               >
-                <FormFieldLabel required>Relationship</FormFieldLabel>  
+                <FormFieldLabel required>Relationship</FormFieldLabel>
                 <CodesetFormSelect
                   name="policyHolderRelationship"
                   codeset={CODESETS.InsuranceRelationship}

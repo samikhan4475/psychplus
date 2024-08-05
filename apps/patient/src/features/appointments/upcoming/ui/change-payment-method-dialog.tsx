@@ -1,7 +1,9 @@
 'use client'
 
 import React, { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { PaymentType } from '@psychplus-v2/constants'
+import { Appointment } from '@psychplus-v2/types'
 import { DialogClose } from '@radix-ui/react-dialog'
 import {
   Button,
@@ -14,18 +16,23 @@ import {
 import {
   CloseDialogIcon,
   EditIcon,
+  FormError,
   PaymentMethodAccordion,
   RadioGroupItem,
 } from '@/components-v2'
 import { CreditCard } from '@/features/billing/credit-debit-cards/types'
 import { Insurance, InsurancePayer } from '@/features/billing/payments/types'
+import { useToast } from '@/providers'
+import { rescheduleAppointment } from '../actions'
 
 const ChangePaymentMethodDialog = ({
+  appointment,
   creditCards,
   stripeApiKey,
   patientInsurances,
-  insurancePayers
+  insurancePayers,
 }: {
+  appointment: Appointment
   creditCards: CreditCard[]
   stripeApiKey: string
   patientInsurances: Insurance[]
@@ -35,6 +42,40 @@ const ChangePaymentMethodDialog = ({
   const [paymentMethod, setPaymentMethod] = useState<PaymentType>(
     PaymentType.Insurance,
   )
+
+  const [error, setError] = useState<string>()
+  const [loading, setLoading] = useState(false)
+  const router = useRouter()
+  const { toast } = useToast()
+
+  const onSave = async () => {
+    setLoading(true)
+
+    const result = await rescheduleAppointment({
+      appointmentId: appointment.id,
+      serviceId: appointment.serviceId,
+      specialistStaffId: appointment.specialist.id,
+      specialistTypeCode: appointment.specialistTypeCode,
+      type: appointment.type,
+      startDate: appointment.startDate,
+      duration: appointment.duration,
+      locationId: appointment.clinic.id,
+      isSelfPay: paymentMethod === PaymentType.SelfPay,
+    })
+
+    if (result.state === 'error') {
+      setError(result.error)
+    } else {
+      setIsOpen(false)
+      toast({
+        type: 'success',
+        title: 'Payment Method Changed',
+      })
+    }
+
+    router.refresh()
+    setLoading(false)
+  }
 
   return (
     <Dialog.Root open={isOpen} onOpenChange={setIsOpen}>
@@ -51,6 +92,7 @@ const ChangePaymentMethodDialog = ({
       </Tooltip>
       <Dialog.Content className="relative max-w-[1000px]">
         <CloseDialogIcon />
+        <FormError message={error} />
         <Dialog.Title
           className="font-sans -tracking-[0.25px]"
           weight="bold"
@@ -119,7 +161,14 @@ const ChangePaymentMethodDialog = ({
               </Text>
             </Button>
           </DialogClose>
-          <Button className="bg-[#151B4A]" radius="full" size="3">
+          <Button
+            highContrast
+            radius="full"
+            size="3"
+            disabled={loading}
+            className={`px-5 ${loading && 'bg-gray-3'}`}
+            onClick={onSave}
+          >
             <Text weight="medium">Update Info</Text>
           </Button>
         </Flex>
