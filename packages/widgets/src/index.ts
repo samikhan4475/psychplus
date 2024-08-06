@@ -30,6 +30,7 @@ const PROBLEMS_LIST_WIDGET = 'problems'
 const CARE_PLANS_WIDGET = 'care=plans'
 const ASSIGNING_AUTHORITIES_WIDGET = 'assigning-authorities'
 const PATIENT_HISTORY_WIDGET = 'patient-history'
+const CLINIC_WIDGET = 'clinic-widget'
 
 export {
   USER_WIDGET,
@@ -62,4 +63,5 @@ export {
   CARE_PLANS_WIDGET,
   ASSIGNING_AUTHORITIES_WIDGET,
   PATIENT_HISTORY_WIDGET,
+  CLINIC_WIDGET,
 }

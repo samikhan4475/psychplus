@@ -28,9 +28,11 @@ const FormField = ({ children, name, id, label, required, isLabelBold = true}: F
 
   return (
     <Flex direction="column" gap="1">
+      {label && 
       <Text as="label" size="2" weight={isLabelBold ? 'bold' : 'medium'} htmlFor={id}>
         {label} {required && <span className='text-[#FF0000]'>*</span>}
       </Text>
+      }
       {children}
       {state.error && (
         <Text size="2" color="red">
