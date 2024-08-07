@@ -1,7 +1,7 @@
 'use client'
 
+import { getAgeFromDate } from '@psychplus-v2/utils'
 import { z } from 'zod'
-import { getBirthyear } from '../utils'
 
 const schema = z
   .object({
@@ -11,7 +11,7 @@ const schema = z
     birthdate: z.string().trim().min(1, 'Required'),
     phoneNumber: z.string().trim().length(10, 'Invalid phone number'),
     email: z.string().email().trim(),
-    socialSecurityNumber: z.string().trim().length(9, 'Invalid SSN'),
+    socialSecurityNumber: z.string().optional(),
     medicalRecordNumber: z.string().optional(),
     cmdId: z.string().optional(),
     status: z.string().optional(),
@@ -28,11 +28,19 @@ const schema = z
     guardianLastName: z.string().optional(),
   })
   .superRefine((data, ctx) => {
-    if (getBirthyear(data.birthdate) < 5) {
+    if (getAgeFromDate(data.birthdate) < 4) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
-        message: "Age can't be less than 5 years!",
+        message: 'Must be at least 4 years of age',
         path: ['birthdate'],
+      })
+    }
+
+    if (getAgeFromDate(data.birthdate) < 18 && !data.hasGuardian) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'You must have a guardian if you are under 18',
+        path: ['hasGuardian'],
       })
     }
 

@@ -1,19 +1,25 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { CODESETS } from '@psychplus-v2/constants'
 import { PatientProfile } from '@psychplus-v2/types'
-import { getPatientPhoneNumber, getPatientSsn } from '@psychplus-v2/utils'
+import {
+  getAgeFromDate,
+  getPatientPhoneNumber,
+  getPatientSsn,
+} from '@psychplus-v2/utils'
 import { Flex, RadioGroup, Text, TextFieldInput } from '@radix-ui/themes'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
+import { cn } from '@psychplus/ui/cn'
 import {
   CodesetFormSelect,
   FormFieldContainer,
   FormFieldError,
   FormFieldLabel,
   PhoneNumberInput,
+  RadioGroupItem,
   SSNInput,
   ToggleableForm,
 } from '@/components-v2'
@@ -23,7 +29,6 @@ import { getPlaceholder } from '@/features/account/profile/utils'
 import { updateDriversLisenceImage } from './api'
 import { schema } from './schema'
 import { DriverLicenseInput } from './upload-driver-license'
-import { getBirthyear } from './utils'
 
 type SchemaType = z.infer<typeof schema>
 
@@ -63,13 +68,34 @@ const PersonalInfoForm = ({
         hasFrontImage: profile.driversLicense?.hasFrontImage ?? false,
         number: profile.driversLicense?.number ?? '',
       },
-      hasGuardian:
-        (isEdit && getBirthyear(profile.birthdate) < 18) || profile.hasGuardian,
-
+      hasGuardian: profile.hasGuardian,
       guardianFirstName: profile.guardian?.name?.firstName,
       guardianLastName: profile.guardian?.name?.lastName,
     },
   })
+
+  const dobFormValue = form.watch('birthdate')
+  const hasGuardian = form.watch('hasGuardian')
+
+  useEffect(() => {
+    if (dobFormValue && getAgeFromDate(dobFormValue) < 18) {
+      form.setValue('hasGuardian', true)
+    } else {
+      form.setValue('hasGuardian', false)
+    }
+  }, [form, dobFormValue])
+
+  useEffect(() => {
+    if (hasGuardian) {
+      form.register('guardianFirstName')
+      form.register('guardianLastName')
+    } else {
+      form.unregister('guardianFirstName')
+      form.unregister('guardianLastName')
+    }
+    if (form.formState.isSubmitted)
+      form.trigger(['guardianFirstName', 'guardianLastName', 'hasGuardian'])
+  }, [form, hasGuardian])
 
   const submitAction = (data: SchemaType) => {
     const body: PatientProfile = {
@@ -189,17 +215,9 @@ const PersonalInfoForm = ({
               size="3"
               type="date"
               max="9999-12-31"
-              data-testid="plan-date"
+              data-testid="birth-date"
               className="mr-4"
               {...form.register('birthdate')}
-              onChange={(e) => {
-                form.register('birthdate')
-                form.setValue('birthdate', e.target.value)
-                if (form.formState.isSubmitted) form.trigger('birthdate')
-                if (getBirthyear(e.target.value) < 18) {
-                  form.setValue('hasGuardian', true)
-                }
-              }}
               disabled={!isEdit}
             />
 
@@ -240,7 +258,7 @@ const PersonalInfoForm = ({
           </FormFieldContainer>
 
           <FormFieldContainer className="w-full">
-            <FormFieldLabel required>SSN</FormFieldLabel>
+            <FormFieldLabel>SSN</FormFieldLabel>
             <SSNInput
               name="socialSecurityNumber"
               editable={!isEdit}
@@ -288,7 +306,7 @@ const PersonalInfoForm = ({
         </Flex>
 
         <FormFieldContainer className="h-auto w-1/3">
-          <FormFieldLabel required>Driving License</FormFieldLabel>
+          <FormFieldLabel>Driving License</FormFieldLabel>
           <Flex className="h-auto">
             <DriverLicenseInput
               className="h-9 w-20 bg-[#194595] text-[16px] text-[white]"
@@ -310,74 +328,83 @@ const PersonalInfoForm = ({
             </Text>
           ) : null}
         </FormFieldContainer>
-        <Flex
-          align="center"
-          mt="3"
-          gap="3"
-          className="col-span-2 box-border border-y border-gray-6 py-4"
-        >
-          <FormFieldLabel className="text-[17px]">
-            Do you have a Parent/Guardian?
-          </FormFieldLabel>
 
-          <RadioGroup.Root
-            size="3"
-            color="indigo"
-            disabled={!isEdit || getBirthyear(form.watch('birthdate')) < 18}
-            highContrast
-            onValueChange={(value) => {
-              if (value === 'yes') {
-                form.setValue('hasGuardian', true)
-                form.register('guardianFirstName')
-                form.register('guardianLastName')
-              } else {
-                form.setValue('hasGuardian', false)
-                form.unregister('guardianFirstName')
-                form.unregister('guardianLastName')
-              }
-            }}
-            value={form.watch('hasGuardian') ? 'yes' : 'no'}
+        <FormFieldContainer>
+          <Flex
+            align="center"
+            mt="3"
+            gap="3"
+            className="col-span-2 box-border border-y border-gray-6 py-4"
           >
-            <Flex gap="3">
-              <Text as="label" size="3">
-                <Flex gap="1">
-                  <RadioGroup.Item className="text-[#151B4A]" value="yes" />
-                  Yes
-                </Flex>
-              </Text>
-              <Text as="label" size="3">
-                <Flex gap="1">
-                  <RadioGroup.Item className="text-[#151B4A]" value="no" />
-                  No
-                </Flex>
-              </Text>
-            </Flex>
-          </RadioGroup.Root>
-        </Flex>
+            <FormFieldLabel className="text-[17px]">
+              Do you have a Parent/Guardian?
+            </FormFieldLabel>
+
+            <RadioGroup.Root
+              name="hasGuardian"
+              value={String(form.watch('hasGuardian'))}
+              onValueChange={(value) =>
+                form.setValue('hasGuardian', value === 'true')
+              }
+              disabled={!isEdit}
+            >
+              <Flex gap="2">
+                {['true', 'false'].map((option) => (
+                  <Flex
+                    key={option}
+                    className={cn(
+                      'rounded-6 border border-gray-7',
+                      !isEdit && 'bg-gray-3',
+                      String(form.watch('hasGuardian')) === option &&
+                        isEdit &&
+                        'border-[#8DA4EF] bg-[#D9E2FC] text-[#194595]',
+                    )}
+                    gap="1"
+                    px="2"
+                    align="center"
+                  >
+                    <RadioGroupItem
+                      id={option}
+                      value={option}
+                      className={cn('pl-[3px]')}
+                      disabled={!isEdit}
+                    >
+                      <Text weight="medium">
+                        {option === 'true' ? 'Yes' : 'No'}
+                      </Text>
+                    </RadioGroupItem>
+                  </Flex>
+                ))}
+              </Flex>
+            </RadioGroup.Root>
+          </Flex>
+          <FormFieldError name="hasGuardian" />
+        </FormFieldContainer>
+
         {form.watch('hasGuardian') && (
           <Flex className="w-full" gap="3">
             <FormFieldContainer className="w-full">
               <FormFieldLabel required={form.watch('hasGuardian')}>
-                Guardian First Name
+                First Name
               </FormFieldLabel>
               <TextFieldInput
                 size="3"
                 {...form.register('guardianFirstName')}
                 disabled={!isEdit}
-                placeholder={getPlaceholder('guardianFirstName', isEdit)}
+                placeholder={getPlaceholder('firstName', isEdit)}
               />
               <FormFieldError name="guardianFirstName" />
             </FormFieldContainer>
 
             <FormFieldContainer className="w-full">
               <FormFieldLabel required={form.watch('hasGuardian')}>
-                Guardian Last Name
+                Last Name
               </FormFieldLabel>
               <TextFieldInput
                 size="3"
                 {...form.register('guardianLastName')}
                 disabled={!isEdit}
-                placeholder={getPlaceholder('guardianLastName', isEdit)}
+                placeholder={getPlaceholder('lastName', isEdit)}
               />
               <FormFieldError name="guardianLastName" />
             </FormFieldContainer>
