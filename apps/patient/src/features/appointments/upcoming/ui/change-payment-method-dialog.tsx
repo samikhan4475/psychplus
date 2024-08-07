@@ -73,7 +73,7 @@ const ChangePaymentMethodDialog = ({
   return (
     <Dialog.Root open={isOpen} onOpenChange={setIsOpen}>
       <Tooltip
-        content="Chnage Payment Method"
+        content="Change Payment Method"
         delayDuration={300}
         className="max-w-[200px]"
       >

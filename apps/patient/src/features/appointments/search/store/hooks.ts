@@ -20,7 +20,8 @@ const useSortedFilteredData = () => {
     if (!language) {
       return true
     }
-    return item.specialist.spokenLanguages?.includes(language)
+    const languageFilter = language === 'HindiUrdu' ? 'Hindi/Urdu' : language
+    return item.specialist.spokenLanguages?.includes(languageFilter)
   })
 
   if (!sortBy || sortBy === AppointmentSortBy.Nearest) {
