@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { FormContainer } from '@psychplus-v2/components'
-import { cn, getPaddedDateString } from '@psychplus-v2/utils'
+import { cn } from '@psychplus-v2/utils'
 import { Box, Dialog, Flex, Heading, Text } from '@radix-ui/themes'
 import { CheckIcon, Loader2Icon, XIcon } from 'lucide-react'
 import { useForm } from 'react-hook-form'
@@ -76,7 +76,7 @@ const VerifyOtpForm = ({
         firstName: formData.firstName,
         lastName: formData.lastName,
       },
-      dateOfBirth: getPaddedDateString(formData.dateOfBirth),
+      dateOfBirth: formData.dateOfBirth,
       contactInfo: {
         email: formData.email,
         phoneNumbers: [

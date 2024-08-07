@@ -102,10 +102,9 @@ const getPaddedDateString = (date?: DateValue) => {
   return `${date.year}-${month}-${day}`
 }
 
-const getAgeFromDate = (date: DateValue) => {
-  const dobString = getPaddedDateString(date)
+const getAgeFromDate = (dateOfBirth: string) => {
   const today = new Date()
-  const birthDate = new Date(dobString)
+  const birthDate = new Date(dateOfBirth)
   let age = today.getUTCFullYear() - birthDate.getUTCFullYear()
   const m = today.getUTCMonth() - birthDate.getUTCMonth()
 

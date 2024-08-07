@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { ActionErrorState, ActionSuccessState } from '@psychplus-v2/api'
 import { CODESETS } from '@psychplus-v2/constants'
-import { getCalendarDate } from '@psychplus-v2/utils'
+import { getAgeFromDate, getCalendarDate } from '@psychplus-v2/utils'
 import { Box, Flex, Text, TextFieldInput } from '@radix-ui/themes'
 import { useForm } from 'react-hook-form'
 import z from 'zod'
@@ -19,7 +19,6 @@ import {
   SSNInput,
   ToggleableForm,
 } from '@/components-v2'
-import { getBirthyear } from '@/features/account/profile/ui/account-profile-view/personal-info-card/utils'
 import { Insurance, InsurancePayer } from '@/features/billing/payments/types'
 import {
   deleteInsurance,
@@ -110,7 +109,7 @@ const schema = z
         fatal: true,
         path: ['policyHolderDateOfBirth'],
       })
-    } else if (getBirthyear(data.policyHolderDateOfBirth) < 18) {
+    } else if (getAgeFromDate(data.policyHolderDateOfBirth) < 18) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         message: 'Must be at least 18 years of age',

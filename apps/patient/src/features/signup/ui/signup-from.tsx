@@ -15,12 +15,10 @@ import {
   Text,
   TextFieldInput,
 } from '@radix-ui/themes'
-import { type DateValue } from 'react-aria-components'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import z from 'zod'
 import {
   ConsentView,
-  DobInput,
   FormError,
   FormField,
   FormFieldContainer,
@@ -32,6 +30,7 @@ import {
   PhoneNumberInput,
   RadioGroupItem,
 } from '@/components-v2'
+import { getPlaceholder } from '@/features/account/profile/utils'
 import { useValidateNewPassword } from '@/hooks'
 import { preverifySignupAction, sendSignupOtpAction } from '../actions'
 import { VerifyOtpForm } from './verify-otp-form'
@@ -40,15 +39,7 @@ const schema = z
   .object({
     firstName: z.string().trim().min(1, 'Required'),
     lastName: z.string().trim().min(1, 'Required'),
-    dateOfBirth: z.custom<DateValue>().superRefine((val, ctx) => {
-      if (getAgeFromDate(val) < 4) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: 'Must be at least 4 years of age',
-          fatal: true,
-        })
-      }
-    }),
+    dateOfBirth: z.string().trim().min(1, 'Required'),
     phoneNumber: z.string().trim().length(10, 'Invalid phone number'),
     email: z.string().email().trim(),
     newPassword: z
@@ -67,10 +58,10 @@ const schema = z
     guardianLastname: z.string().trim(),
   })
   .superRefine((data, ctx) => {
-    if (!data.dateOfBirth) {
+    if (getAgeFromDate(data.dateOfBirth) < 4) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
-        message: 'Required',
+        message: 'Must be at least 4 years of age',
         path: ['dateOfBirth'],
       })
     }
@@ -143,6 +134,8 @@ const SignupForm = () => {
       form.setValue('guardianFirstname', '')
       form.setValue('guardianLastname', '')
     }
+
+    if (form.formState.isSubmitted) form.trigger('hasGuardian')
   }, [form, hasGuardian])
 
   const { isValid } = useValidateNewPassword({
@@ -200,40 +193,60 @@ const SignupForm = () => {
       <FormContainer form={form} onSubmit={onSubmit}>
         <Flex direction="column" gap="3">
           <FormField name="firstName" label="First Name">
-            <TextFieldInput {...form.register('firstName')} />
+            <TextFieldInput
+              {...form.register('firstName')}
+              placeholder={getPlaceholder('firstName')}
+            />
           </FormField>
           <FormField name="lastName" label="Last Name">
-            <TextFieldInput {...form.register('lastName')} />
+            <TextFieldInput
+              {...form.register('lastName')}
+              placeholder={getPlaceholder('lastName')}
+            />
           </FormField>
-          <Flex direction="row" justify="between">
+          <Flex direction="row" justify="between" gap="2">
             <FormField
               containerClassName="flex-1"
               name="dateOfBirth"
               label="Date of Birth"
             >
-              <DobInput name="dateOfBirth" />
+              <TextFieldInput
+                type="date"
+                className="mr-4"
+                max="9999-12-31"
+                {...form.register('dateOfBirth')}
+              />
             </FormField>
             <FormField
               containerClassName="flex-1"
               name="phoneNumber"
               label="Phone Number"
             >
-              <PhoneNumberInput size="2" name="phoneNumber" />
+              <PhoneNumberInput
+                size="2"
+                name="phoneNumber"
+                placeholder={getPlaceholder('phoneNumber')}
+              />
             </FormField>
           </Flex>
           <FormField name="email" label="Email">
-            <TextFieldInput {...form.register('email')} />
+            <TextFieldInput
+              {...form.register('email')}
+              placeholder={getPlaceholder('email')}
+            />
           </FormField>
           <FormField name="newPassword" label="Password">
             <PasswordInput
               {...form.register('newPassword')}
               value={form.watch('newPassword')}
+              placeholder={getPlaceholder('password')}
             />
           </FormField>
           <FormField name="confirmPassword" label="Confirm Password">
             <PasswordInput
               {...form.register('confirmPassword')}
               value={form.watch('confirmPassword')}
+              placeholder={getPlaceholder('confirmPassword')}
             />
           </FormField>
           <PasswordRequirements
@@ -244,7 +257,7 @@ const SignupForm = () => {
           <FormFieldContainer>
             <FormFieldLabel>Do you have a Parent/Guardian?</FormFieldLabel>
             <RadioGroup.Root
-              name="example"
+              name="hasGuardian"
               value={String(form.watch('hasGuardian'))}
               onValueChange={(value) =>
                 form.setValue('hasGuardian', value === 'true')
@@ -265,11 +278,17 @@ const SignupForm = () => {
             // Show guardian form if user is under 18 and has no guardian
             form.watch('hasGuardian') === true && (
               <Flex direction="column" gap="3">
-                <FormField name="guardianFirstname" label="Guardian First Name">
-                  <TextFieldInput {...form.register('guardianFirstname')} />
+                <FormField name="guardianFirstname" label="First Name">
+                  <TextFieldInput
+                    {...form.register('guardianFirstname')}
+                    placeholder={getPlaceholder('firstName')}
+                  />
                 </FormField>
-                <FormField name="guardianLastname" label="Guardian Last Name">
-                  <TextFieldInput {...form.register('guardianLastname')} />
+                <FormField name="guardianLastname" label="Last Name">
+                  <TextFieldInput
+                    {...form.register('guardianLastname')}
+                    placeholder={getPlaceholder('lastName')}
+                  />
                 </FormField>
               </Flex>
             )
@@ -280,9 +299,10 @@ const SignupForm = () => {
               <Checkbox
                 id="terms-and-conditions-checkbox"
                 size="3"
-                onCheckedChange={(checked: boolean) =>
+                onCheckedChange={(checked: boolean) => {
                   form.setValue('userAgreed', checked)
-                }
+                  if (form.formState.isSubmitted) form.trigger('userAgreed')
+                }}
                 {...form.register('userAgreed')}
                 highContrast
               />
