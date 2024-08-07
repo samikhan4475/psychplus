@@ -1,8 +1,10 @@
 'use client'
 
-import { PaymentType } from '@psychplus-v2/constants'
-import { Box, Flex, RadioGroup, Text } from '@radix-ui/themes'
-import { PaymentMethodAccordion, RadioGroupItem } from '@/components-v2'
+import { Box, Flex, Text } from '@radix-ui/themes'
+import {
+  PaymentMethodAccordion,
+  PaymentMethodToggleButtons,
+} from '@/components-v2'
 import { PaymentMethodProps } from '@/features/appointments/book/types'
 
 const PaymentMethods = ({
@@ -20,33 +22,10 @@ const PaymentMethods = ({
           <Text size="7" weight="bold" className="text-[#151B4A]">
             Do you want to use your insurance <br /> for this visit?
           </Text>
-          <Flex gap="8">
-            <RadioGroup.Root
-              value={paymentMethod}
-              data-testid="signup-is-parent-or-guardian-input"
-              onValueChange={(value) => {
-                setPaymentMethod(value as PaymentType)
-              }}
-            >
-              <Flex gap="8">
-                {['Yes', PaymentType.SelfPay].map((option) => (
-                  <Text size="3" weight="medium" key={option}>
-                    <Flex gap="1">
-                      <RadioGroupItem
-                        key={option}
-                        id={option}
-                        value={
-                          option === 'Yes' ? PaymentType.Insurance : option
-                        }
-                      >
-                        {option}
-                      </RadioGroupItem>
-                    </Flex>
-                  </Text>
-                ))}
-              </Flex>
-            </RadioGroup.Root>
-          </Flex>
+          <PaymentMethodToggleButtons
+            value={paymentMethod}
+            onChange={setPaymentMethod}
+          />
         </Flex>
       </Flex>
 

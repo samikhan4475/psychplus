@@ -1,5 +1,5 @@
 enum PaymentType {
-  Insurance = 'Insurance',
+  Insurance = 'Yes',
   SelfPay = 'Self Pay',
 }
 

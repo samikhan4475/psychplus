@@ -5,20 +5,13 @@ import { useRouter } from 'next/navigation'
 import { PaymentType } from '@psychplus-v2/constants'
 import { Appointment } from '@psychplus-v2/types'
 import { DialogClose } from '@radix-ui/react-dialog'
-import {
-  Button,
-  Dialog,
-  Flex,
-  RadioGroup,
-  Text,
-  Tooltip,
-} from '@radix-ui/themes'
+import { Button, Dialog, Flex, Text, Tooltip } from '@radix-ui/themes'
 import {
   CloseDialogIcon,
   EditIcon,
   FormError,
   PaymentMethodAccordion,
-  RadioGroupItem,
+  PaymentMethodToggleButtons,
 } from '@/components-v2'
 import { CreditCard } from '@/features/billing/credit-debit-cards/types'
 import { Insurance, InsurancePayer } from '@/features/billing/payments/types'
@@ -40,7 +33,7 @@ const ChangePaymentMethodDialog = ({
 }) => {
   const [isOpen, setIsOpen] = useState(false)
   const [paymentMethod, setPaymentMethod] = useState<PaymentType>(
-    PaymentType.Insurance,
+    appointment.isSelfPay ? PaymentType.SelfPay : PaymentType.Insurance,
   )
 
   const [error, setError] = useState<string>()
@@ -108,35 +101,12 @@ const ChangePaymentMethodDialog = ({
         >
           <Flex direction="column" px="3" py="2" gap="3">
             <Text size="4" weight="medium">
-              Select Payment Method
+              Do you want to use your insurance for this visit?
             </Text>
-            <Flex gap="8">
-              <RadioGroup.Root
-                value={paymentMethod}
-                data-testid="signup-is-parent-or-guardian-input"
-                onValueChange={(value) => {
-                  setPaymentMethod(value as PaymentType)
-                }}
-              >
-                <Flex gap="8">
-                  {[PaymentType.Insurance, PaymentType.SelfPay].map(
-                    (option) => (
-                      <Text size="3" weight="medium" key={option}>
-                        <Flex gap="1">
-                          <RadioGroupItem
-                            key={option}
-                            id={option}
-                            value={option}
-                          >
-                            {option}
-                          </RadioGroupItem>
-                        </Flex>
-                      </Text>
-                    ),
-                  )}
-                </Flex>
-              </RadioGroup.Root>
-            </Flex>
+            <PaymentMethodToggleButtons
+              value={paymentMethod}
+              onChange={setPaymentMethod}
+            />
           </Flex>
         </Flex>
 
