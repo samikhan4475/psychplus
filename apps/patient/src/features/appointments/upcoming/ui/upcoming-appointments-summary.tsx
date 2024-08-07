@@ -239,44 +239,15 @@ const UpcomingAppointmentsSummaryComponent = async () => {
                   </Flex>
                 </Flex>
 
-                {/* Non functional previsit assesment and buttons started from here */}
                 <Flex
                   wrap="wrap"
                   gap="3"
                   align="center"
-                  justify="between"
+                  justify="end"
                   className="w-full"
                   mt="2"
                   direction={{ initial: 'column', xs: 'row' }}
                 >
-                  <Flex
-                    gap="1"
-                    width={{ initial: '100%', xs: 'auto' }}
-                    align="center"
-                  >
-                    <Flex gap="1" align="center">
-                      <FileLineIcon />
-                      <Text className="whitespace-nowrap text-[12px] xs:text-[15px]">
-                        Pre-Visit Assessment
-                      </Text>
-                    </Flex>
-                    <Badge
-                      label="Not Completed"
-                      type="warning"
-                      addIcon={true}
-                      className="h-[32px]"
-                    />
-                    <Button highContrast className="bg-[#194595]" radius="full">
-                      <Flex gap="1" align="center">
-                        <Text className="whitespace-nowrap text-[11px] xs:text-[15px]">
-                          Fill Now
-                        </Text>
-                        <ChevronRightIcon height="16" width="16" />
-                      </Flex>
-                    </Button>
-                  </Flex>
-                  {/* Non functional previsit assesment and buttons ending from */}
-
                   <Flex width={{ initial: '100%', xs: 'auto' }}>
                     {row?.virtualRoomLink &&
                       row.type === AppointmentType.Virtual && (
