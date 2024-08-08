@@ -1,5 +1,6 @@
 import { getDrugHistory } from '@psychplus-v2/scriptsure/api'
 import { withSuspense } from '@psychplus-v2/utils'
+import { getProfile } from '@/api'
 import { CardContainer, LoadingPlaceholder } from '@/components-v2'
 import { getActiveMedsFromDrugHistory } from '../../utils'
 import { ActiveMedicationsTable as Client } from './active-medications-table'
@@ -12,7 +13,12 @@ type ActiveMedicationsTableServerProps = Omit<
 const ActiveMedicationsTableServer = async (
   props: ActiveMedicationsTableServerProps,
 ) => {
-  const drugHistory = await getDrugHistory()
+  const profile = await getProfile()
+  if (profile.state === 'error') {
+    throw new Error(profile.error)
+  }
+
+  const drugHistory = await getDrugHistory(profile.data)
   const activeMedications = getActiveMedsFromDrugHistory(drugHistory)
 
   return <Client data={activeMedications} {...props} />
