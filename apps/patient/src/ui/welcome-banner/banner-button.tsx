@@ -22,7 +22,7 @@ const BannerAppointmentButton = ({
         state: {
           providerType: ProviderType.Psychiatrist,
           appointmentType: appointmentType,
-          zipCode: 77070,
+          zipCode: '77070',
         },
       }),
     )
