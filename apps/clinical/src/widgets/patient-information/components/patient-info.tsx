@@ -118,13 +118,13 @@ const PatientInfo = ({ children }: React.PropsWithChildren) => {
               ) ?? { ...initialAddress, type: 'Home' },
           }
         : null,
-      language: data?.language,
+      language: data?.language ?? '',
       languageAbility: data?.languageAbility,
       languageProficiency: data?.languageProficiency,
       religion: data?.religion,
       races: data?.races,
       ethnicities: data?.ethnicities,
-      preferredLanguage: data?.preferredLanguage,
+      preferredLanguage: data?.preferredLanguage ?? '',
       chargeUserId: data?.chargeUserId,
       isPlusMember: data?.isPlusMember,
       hasPhoto: data?.hasPhoto,
@@ -151,7 +151,7 @@ const PatientInfo = ({ children }: React.PropsWithChildren) => {
 
   const { register } = useForm()
 
-  const onSubmit: SubmitHandler<SchemaType> = (data?) => {
+  const onSubmit: SubmitHandler<SchemaType> = (data) => {
     if (data) {
       const contactPhoneNumbers = [
         data?.contactDetails.homeNumber,
@@ -169,6 +169,18 @@ const PatientInfo = ({ children }: React.PropsWithChildren) => {
       const alternateAddresses = data.alternateOrPreviousContactDetails
         ? [data?.alternateOrPreviousContactDetails?.homeAddress]
         : null
+
+      // validation for nullable fields
+
+      if (!data.genderOrientation) delete data.genderOrientation
+
+      if (!data.genderExpression) delete data.genderExpression
+
+      if (!data.genderPronoun) delete data.genderPronoun
+
+      if (!data.language) delete data.language
+
+      if (!data.preferredLanguage) delete data.preferredLanguage
 
       const body = {
         ...data,
@@ -221,10 +233,15 @@ const PatientInfo = ({ children }: React.PropsWithChildren) => {
     form.resetField('verificationStatus', { defaultValue: 'Pending' })
   }
 
+
   const lockPage = (checked: boolean) => {
     setIsPageLocked(checked)
     publish(EVENT_LOCK_PATIENT_RELATIONSHIPS, checked)
   }
+
+  const checkKeyDown = (e: React.KeyboardEvent<HTMLFormElement>) => {
+    if (e.key === 'Enter') e.preventDefault();
+  };
 
   return (
     <Box className="relative z-0 h-[100%] bg-[#EEF2F6]">
@@ -233,6 +250,7 @@ const PatientInfo = ({ children }: React.PropsWithChildren) => {
           form={form}
           onSubmit={onSubmit}
           onError={onError}
+          onKeyDown={checkKeyDown}
           className="gap-0"
         >
           <Flex

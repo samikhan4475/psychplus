@@ -1,15 +1,15 @@
 import { Box, Flex, Grid, Heading, RadioGroup, Text } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
 import { FormSelect, FormTextInput } from '@psychplus/form'
+import { useEditModeContext } from '@psychplus/patient-info'
 import { PlacesAutocomplete } from '@/components/places-autocomplete'
 import { useGooglePlacesContext } from '@/providers'
 import { FORM_FIELD_CLASSES } from '../constants'
 import { useUsStatesOptions } from '../hooks'
 import { PatientMailingAddress } from './patient-mailing-address'
-import { useEditModeContext } from '@psychplus/patient-info'
 
 const PatientAddress = () => {
-  const { register, watch, setValue, resetField, getValues } = useFormContext()
+  const { register, watch, setValue, resetField } = useFormContext()
   const { loaded } = useGooglePlacesContext()
   const { editable } = useEditModeContext()
   const usStates = useUsStatesOptions()
@@ -105,20 +105,12 @@ const PatientAddress = () => {
                       resetField('contactDetails.mailingAddress', {
                         defaultValue: {
                           type: 'Mailing',
-                          street1: getValues(
-                            'contactDetails.homeAddress.street1',
-                          ),
-                          street2: getValues(
-                            'contactDetails.homeAddress.street2',
-                          ),
-                          city: getValues('contactDetails.homeAddress.city'),
-                          state: getValues('contactDetails.homeAddress.state'),
-                          country: getValues(
-                            'contactDetails.homeAddress.country',
-                          ),
-                          postalCode: getValues(
-                            'contactDetails.homeAddress.postalCode',
-                          ),
+                          street1: '',
+                          street2: '',
+                          city: '',
+                          state: '',
+                          country: '',
+                          postalCode: '',
                         },
                       })
                   }}

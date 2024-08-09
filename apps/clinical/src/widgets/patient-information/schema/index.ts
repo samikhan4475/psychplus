@@ -25,9 +25,9 @@ const schema = z
     birthdate: validate.requiredString,
     hasGuardian: z.boolean(),
     gender: z.string(),
-    genderOrientation: validate.optionalString,
-    genderExpression: validate.optionalString,
-    genderPronoun: validate.optionalString,
+    genderOrientation: z.string().optional(),
+    genderExpression: z.string().optional(),
+    genderPronoun: z.string().optional(),
     driversLicense: z
       .object({
         type: z.string().optional().default('DriversLicense'),
@@ -110,7 +110,7 @@ const schema = z
     religion: validate.optionalString,
     races: validate.emptyOrStringArray,
     ethnicities: validate.emptyOrStringArray,
-    preferredLanguage: validate.optionalString,
+    preferredLanguage: z.string().optional(),
     chargeUserId: validate.optionalString,
     isPlusMember: z.boolean(),
     hasPhoto: z.boolean(),

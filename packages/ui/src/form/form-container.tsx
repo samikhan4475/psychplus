@@ -6,6 +6,7 @@ import {
   type UseFormReturn,
 } from 'react-hook-form'
 import { cn } from '../cn'
+import React from 'react'
 
 interface FormContainerProps<T extends FieldValues> {
   form: UseFormReturn<T>
@@ -13,6 +14,7 @@ interface FormContainerProps<T extends FieldValues> {
   formClassName?: string
   onSubmit: SubmitHandler<T>
   onError?: SubmitErrorHandler<T>
+  onKeyDown?: (e: React.KeyboardEvent<HTMLFormElement>) => void
 }
 
 const FormContainer = <T extends FieldValues>({
@@ -20,12 +22,13 @@ const FormContainer = <T extends FieldValues>({
   onSubmit,
   className,
   onError,
+  onKeyDown,
   formClassName,
   children,
 }: React.PropsWithChildren<FormContainerProps<T>>) => {
   return (
     <FormProvider {...form}>
-      <form className={cn(formClassName)} onSubmit={form.handleSubmit(onSubmit, onError)}>
+      <form className={cn(formClassName)} onSubmit={form.handleSubmit(onSubmit, onError)} onKeyDown={onKeyDown}>
         <fieldset
           disabled={form.formState.isSubmitting}
           className={cn("flex flex-col gap-3", className)}

@@ -107,11 +107,11 @@ const PatientData = ({
           <Box className="col-span-1">
             <FormSelect
               {...register('status')}
-              disabled={!editable}
+              disabled
               label="Status"
               buttonClassName={FORM_FIELD_CLASSES}
               contentClassName="max-h-[250px]"
-              placeholder="Select status"
+              placeholder="Status"
               options={statusOptions}
             />
           </Box>
