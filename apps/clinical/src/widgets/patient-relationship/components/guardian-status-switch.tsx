@@ -7,6 +7,7 @@ import {
   updatePatientRelationship,
 } from '../api.client'
 import { useStore } from '../store'
+import { useEditModeContext } from '@psychplus/patient-info'
 
 const GuardianStatusSwitch = ({
   row: { original: relationship },
@@ -15,6 +16,7 @@ const GuardianStatusSwitch = ({
   const setPatientRelationships = useStore(
     (state) => state.setPatientRelationships,
   )
+  const { editable } = useEditModeContext()
 
   useEffect(() => {
     setIsGuardian(relationship.isGuardian)
@@ -39,6 +41,7 @@ const GuardianStatusSwitch = ({
     <Text>
       <Switch
         onCheckedChange={udpateGuardianStatus}
+        disabled={!editable}
         checked={isGuardian}
         className='mr-1'
         color="grass"

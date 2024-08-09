@@ -7,6 +7,7 @@ import {
   updatePatientRelationship,
 } from '../api.client'
 import { useStore } from '../store'
+import { useEditModeContext } from '@psychplus/patient-info'
 
 const EmergencyContactSwitch = ({
   row: { original: relationship },
@@ -17,6 +18,7 @@ const EmergencyContactSwitch = ({
   const setPatientRelationships = useStore(
     (state) => state.setPatientRelationships,
   )
+  const { editable } = useEditModeContext()
 
   useEffect(() => {
     setIsEmergencyContact(relationship.isEmergencyContact)
@@ -42,6 +44,7 @@ const EmergencyContactSwitch = ({
       <Switch
         onCheckedChange={updateEmergencyContactStatus}
         checked={isEmergencyContact}
+        disabled={!editable}
         className='mr-1'
         color="grass"
       />

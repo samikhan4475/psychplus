@@ -6,8 +6,13 @@ const charRegex = /^[A-Za-z]*$/
 const passwordRegex =
   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@#!()%*?&])[A-Za-z\d$@#!()%*?&]{8,16}$/
 const zipCodeRegex = /(^\d{5}$)|(^\d{5}-\d{4}$)/
+const nameRegex = /^[^\d]*$/
+const phoneExtensionRegex = /^\d*$|^$/
 
 const requiredString = z.string().min(1, 'Required')
+const requiredName = z.string().regex(nameRegex, 'Numbers are not allowed').min(1, 'Required').max(35, {message: 'Cannot exceed 35 characters'})
+const optionalName = z.string().regex(nameRegex, 'Numbers are not allowed').max(35, {message: 'Cannot exceed 35 characters'}).optional()
+const phoneExtension = z.string().regex(phoneExtensionRegex, 'Invalid extension').max(4, 'Cannot exceed 4 digits').optional()
 const nullableString = z.string().nullable().default(null)
 const email = requiredString.email()
 const phoneNumber = requiredString.regex(phoneRegex, 'Invalid phone number')
@@ -57,6 +62,9 @@ const validate = {
   nullOrString,
   nullOrChar,
   nullOrNumber,
+  requiredName,
+  optionalName,
+  phoneExtension,
 }
 
 export { validate }

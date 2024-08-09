@@ -6,7 +6,7 @@ import { useDegreeOptions, useUsStatesOptions } from '../hooks'
 import DescriptiveSection from './descriptive-section'
 import { useGooglePlacesContext } from '@/providers'
 import { PlacesAutocomplete } from '@/components/places-autocomplete'
-import { useEditModeContext } from '../context'
+import { useEditModeContext } from '@psychplus/patient-info'
 
 const AdditionalInfo = () => {
   const { register } = useFormContext()
@@ -36,12 +36,14 @@ const AdditionalInfo = () => {
                 className={FORM_FIELD_CLASSES}
                 {...register(`contactDetails.homeNumber.extension`)}
                 disabled={!editable}
+                placeholder='Extension'
                 label="Ext"
               />
             </Box>
             <Box className="col-span-3">
               <FormTextInput
                 className={FORM_FIELD_CLASSES}
+                placeholder='Add comment'
                 {...register(`contactDetails.homeNumber.comment`)}
                 disabled={!editable}
                 label="Comment"
@@ -60,6 +62,7 @@ const AdditionalInfo = () => {
                 className={FORM_FIELD_CLASSES}
                 {...register(`contactDetails.workNumber.extension`)}
                 disabled={!editable}
+                placeholder='Extension'
                 label="Ext"
               />
             </Box>
@@ -68,6 +71,7 @@ const AdditionalInfo = () => {
                 className={FORM_FIELD_CLASSES}
                 {...register(`contactDetails.workNumber.comment`)}
                 disabled={!editable}
+                placeholder='Add comment'
                 label="Comment"
               />
             </Box>
@@ -85,6 +89,7 @@ const AdditionalInfo = () => {
               {...register('alternateOrPreviousName.firstName')}
               disabled={!editable}
               label="First Name"
+              placeholder='First name'
             />
           </Box>
           <Box className="col-span-2">
@@ -93,6 +98,7 @@ const AdditionalInfo = () => {
               {...register('alternateOrPreviousName.middleName')}
               disabled={!editable}
               label="Middle Name"
+              placeholder='Middle name'
             />
           </Box>
           <Box className="col-span-2">
@@ -101,6 +107,7 @@ const AdditionalInfo = () => {
               {...register('alternateOrPreviousName.lastName')}
               disabled={!editable}
               label="Last Name"
+              placeholder='Last name'
             />
           </Box>
           <Box className="col-span-1">
@@ -109,6 +116,7 @@ const AdditionalInfo = () => {
               disabled={!editable}
               label="Prefix"
               className={FORM_FIELD_CLASSES}
+              placeholder='Prefix'
             />
           </Box>
           <Box className="col-span-1">
@@ -117,6 +125,7 @@ const AdditionalInfo = () => {
               disabled={!editable}
               label="Suffix"
               className={FORM_FIELD_CLASSES}
+              placeholder='Suffix'
             />
           </Box>
 
@@ -125,13 +134,14 @@ const AdditionalInfo = () => {
               {...register('alternateOrPreviousName.honors')}
               disabled={!editable}
               label="Prof. Suffix"
+              placeholder='Select professional suffix'
               buttonClassName={FORM_FIELD_CLASSES}
               contentClassName='max-h-[250px]'
               options={degreeOptions}
             />
           </Box>
           <Box className="col-span-3">
-            {loaded && <PlacesAutocomplete disabled={!editable} name={'alternateOrPreviousContactDetails.homeAddress'} />}
+            {loaded && <PlacesAutocomplete label='Address Line 1' disabled={!editable} name={'alternateOrPreviousContactDetails.homeAddress'} placeholder='Address line 1' />}
           </Box>
           <Box className="col-span-3">
             <FormTextInput
@@ -140,6 +150,7 @@ const AdditionalInfo = () => {
               {...register(
                 'alternateOrPreviousContactDetails.homeAddress.street2',
               )}
+              placeholder='Address line 2'
               label="Address Line 2"
             />
           </Box>
@@ -150,6 +161,7 @@ const AdditionalInfo = () => {
               {...register(
                 'alternateOrPreviousContactDetails.homeAddress.city',
               )}
+              placeholder='City'
               label="City"
             />
           </Box>
@@ -162,6 +174,7 @@ const AdditionalInfo = () => {
                 'alternateOrPreviousContactDetails.homeAddress.state',
               )}
               label="State"
+              placeholder='Select state'
               options={usStates}
             />
           </Box>
@@ -172,6 +185,7 @@ const AdditionalInfo = () => {
               {...register(
                 'alternateOrPreviousContactDetails.homeAddress.postalCode',
               )}
+              placeholder='Zip code'
               label="Zip"
             />
           </Box>

@@ -16,7 +16,7 @@ import {
   useReligionOptions,
 } from '../hooks'
 import {MultiSelectDropdown}  from '@psychplus/ui/multi-select-search-dropdown'
-import { useEditModeContext } from '../context'
+import { useEditModeContext } from '@psychplus/patient-info'
 
 const DescriptiveSection = () => {
   const raceOptions = usePatientRaceOptions()
@@ -45,6 +45,7 @@ const DescriptiveSection = () => {
             {...register('legalName.preferredName')}
             disabled={!editable}
             label="Preferred Name"
+            placeholder='Preferred name'
           />
         </Box>
         <Box className="col-span-1">
@@ -52,6 +53,7 @@ const DescriptiveSection = () => {
             {...register('legalName.title')}
             disabled={!editable}
             label="Prefix"
+            placeholder='Prefix'
             className={FORM_FIELD_CLASSES}
           />
         </Box>
@@ -60,6 +62,7 @@ const DescriptiveSection = () => {
             {...register('legalName.suffix')}
             disabled={!editable}
             label="Suffix"
+            placeholder='Suffix'
             className={FORM_FIELD_CLASSES}
           />
         </Box>
@@ -70,6 +73,7 @@ const DescriptiveSection = () => {
             {...register('legalName.honors')}
             disabled={!editable}
             label="Prof. Suffix"
+            placeholder='Select professional suffix'
             options={degreeOptions}
           />
         </Box>
@@ -80,6 +84,7 @@ const DescriptiveSection = () => {
             {...register('gender')}
             disabled={!editable}
             label="Gender"
+            placeholder='Gender'
             required
             options={genders}
           />
@@ -90,6 +95,7 @@ const DescriptiveSection = () => {
             {...register('genderOrientation')}
             disabled={!editable}
             label="Orientation"
+            placeholder='Gender orientation'
             options={genderOrientations}
           />
         </Box>
@@ -99,6 +105,7 @@ const DescriptiveSection = () => {
             {...register('genderExpression')}
             disabled={!editable}
             label="Gender Expression"
+            placeholder='Gender expression'
             options={genderExpressions}
           />
         </Box>
@@ -108,6 +115,7 @@ const DescriptiveSection = () => {
             {...register('genderPronoun')}
             disabled={!editable}
             label="Pronoun"
+            placeholder='Select'
             options={genderPronouns}
           />
         </Box>
@@ -116,6 +124,7 @@ const DescriptiveSection = () => {
             className={FORM_FIELD_CLASSES}
             {...register('contactDetails.mobileNumber.comment')}
             disabled={!editable}
+            placeholder='Add comment'
             label="Comment"
           />
         </Box>
@@ -127,6 +136,7 @@ const DescriptiveSection = () => {
             {...register('religion')}
             disabled={!editable}
             label="Religion"
+            placeholder='Select religion'
             options={religionOptions}
           />
         </Box>
@@ -136,6 +146,7 @@ const DescriptiveSection = () => {
             {...register('motherMaidenName')}
             disabled={!editable}
             label="Mother Maiden Name"
+            placeholder='Mother maiden name'
           />
         </Box>
 
@@ -145,6 +156,7 @@ const DescriptiveSection = () => {
             {...register('language')}
             disabled={!editable}
             label="Language"
+            placeholder='Select language'
             options={languageOptions}
           />
         </Box>
@@ -154,6 +166,7 @@ const DescriptiveSection = () => {
             {...register('languageAbility')}
             disabled={!editable}
             label="Language Ability"
+            placeholder='Select language ability'
             options={languageAbilityOptions}
           />
         </Box>
@@ -163,6 +176,7 @@ const DescriptiveSection = () => {
             {...register('languageProficiency')}
             disabled={!editable}
             label="Proficiency"
+            placeholder='Select'
             options={languageProficiencyOptions}
           />
         </Box>

@@ -1,8 +1,9 @@
-import { useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import memoize from 'micro-memoize'
 import { CODE_NOT_SET, RelationshipCodeSet } from '@psychplus/codeset'
 import { usePubsub } from '@psychplus/utils/event'
 import {
+  EVENT_LOCK_PATIENT_RELATIONSHIPS,
   EVENT_RELATIONSHIP_CREATED,
   EVENT_RELATIONSHIP_DELETED,
   EVENT_RELATIONSHIP_UPDATED,
@@ -48,7 +49,21 @@ const computeRelationshipCodesIndex = memoize((codeSet: RelationshipCodeSet) =>
     ),
 )
 
+const useLockPage = () => {
+  const { subscribe } = usePubsub()
+  const [isLocked, setIsLocked] = useState<boolean>(false)
+
+
+  useEffect(() => {
+    return subscribe(EVENT_LOCK_PATIENT_RELATIONSHIPS, (data: boolean) => {
+      setIsLocked(data)
+    })
+  }, [subscribe])
+
+  return { isLocked }
+}
+
 const useRelationshipCodesIndex = () =>
   computeRelationshipCodesIndex(useStore((state) => state.relationshipsCodeset))
 
-export { useRefetchRelationships, useRelationshipCodesIndex }
+export { useRefetchRelationships, useRelationshipCodesIndex, useLockPage }

@@ -4,8 +4,9 @@ import { FormSelect, FormTextInput } from '@psychplus/form'
 import { PlacesAutocomplete } from '@/components/places-autocomplete'
 import { useGooglePlacesContext } from '@/providers'
 import { FORM_FIELD_CLASSES } from '../constants'
-import { useEditModeContext } from '../context'
 import { useUsStatesOptions } from '../hooks'
+import { PatientMailingAddress } from './patient-mailing-address'
+import { useEditModeContext } from '@psychplus/patient-info'
 
 const PatientAddress = () => {
   const { register, watch, setValue, resetField, getValues } = useFormContext()
@@ -28,6 +29,7 @@ const PatientAddress = () => {
               <PlacesAutocomplete
                 required
                 disabled={!editable}
+                placeholder="Address line 1"
                 name={'contactDetails.homeAddress'}
               />
             )}
@@ -36,6 +38,7 @@ const PatientAddress = () => {
               disabled={!editable}
               {...register(`contactDetails.homeAddress.street2`)}
               label="Address 2"
+              placeholder="Address line 2"
             />
             <Flex className="bg-gray-200 gap-3">
               <Box className="flex-1">
@@ -44,6 +47,7 @@ const PatientAddress = () => {
                   disabled={!editable}
                   required
                   label="City"
+                  placeholder="City"
                   className={FORM_FIELD_CLASSES}
                 />
               </Box>
@@ -55,6 +59,7 @@ const PatientAddress = () => {
                   buttonClassName={FORM_FIELD_CLASSES}
                   contentClassName="max-h-[250px]"
                   label="State"
+                  placeholder="Select state"
                   options={usStates}
                 />
               </Box>
@@ -64,6 +69,7 @@ const PatientAddress = () => {
                   disabled={!editable}
                   required
                   label="Zip"
+                  placeholder="Zip code"
                   className={FORM_FIELD_CLASSES}
                 />
               </Box>
@@ -93,9 +99,9 @@ const PatientAddress = () => {
                   onValueChange={(val) => {
                     setValue(
                       'contactDetails.isMailingAddressSameAsPrimary',
-                      val === 'Yes'
+                      val === 'Yes',
                     )
-                    if (val === 'Yes')
+                    if (val === 'No')
                       resetField('contactDetails.mailingAddress', {
                         defaultValue: {
                           type: 'Mailing',
@@ -133,66 +139,9 @@ const PatientAddress = () => {
                     </Text>
                   </Flex>
                 </RadioGroup.Root>
-              </Flex>{' '}
+              </Flex>
             </Flex>
-            {loaded && (
-              <PlacesAutocomplete
-                required
-                disabled={
-                  !editable ||
-                  watch('contactDetails.isMailingAddressSameAsPrimary')
-                }
-                name={'contactDetails.mailingAddress'}
-              />
-            )}
-            <FormTextInput
-              className={FORM_FIELD_CLASSES}
-              {...register(`contactDetails.mailingAddress.street2`)}
-              disabled={
-                !editable ||
-                watch('contactDetails.isMailingAddressSameAsPrimary')
-              }
-              label="Address 2"
-            />
-            <Flex className="bg-gray-200 gap-3">
-              <Box className="flex-1">
-                <FormTextInput
-                  className={FORM_FIELD_CLASSES}
-                  {...register(`contactDetails.mailingAddress.city`)}
-                  disabled={
-                    !editable ||
-                    watch('contactDetails.isMailingAddressSameAsPrimary')
-                  }
-                  required
-                  label="City"
-                />
-              </Box>
-              <Box className="flex-1">
-                <FormSelect
-                  buttonClassName={FORM_FIELD_CLASSES}
-                  {...register(`contactDetails.mailingAddress.state`)}
-                  disabled={
-                    !editable ||
-                    watch('contactDetails.isMailingAddressSameAsPrimary')
-                  }
-                  label="State"
-                  required
-                  options={usStates}
-                />
-              </Box>
-              <Box className="flex-1">
-                <FormTextInput
-                  className={FORM_FIELD_CLASSES}
-                  {...register(`contactDetails.mailingAddress.postalCode`)}
-                  disabled={
-                    !editable ||
-                    watch('contactDetails.isMailingAddressSameAsPrimary')
-                  }
-                  required
-                  label="Zip"
-                />
-              </Box>
-            </Flex>
+            <PatientMailingAddress />
           </Box>
         </Box>
       </Grid>

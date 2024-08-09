@@ -5,6 +5,7 @@ const EVENT_TEMPLATE_EDITED = 'template-edited'
 const EVENT_RELATIONSHIP_CREATED = 'relationship-created'
 const EVENT_RELATIONSHIP_UPDATED = 'relationship-updated'
 const EVENT_RELATIONSHIP_DELETED = 'relationship-deleted'
+const EVENT_LOCK_PATIENT_RELATIONSHIPS = 'lock-patient-relationships'
 
 enum EventType {
   Loaded = 'loaded',
@@ -24,4 +25,5 @@ export {
   EVENT_RELATIONSHIP_CREATED,
   EVENT_RELATIONSHIP_UPDATED,
   EVENT_RELATIONSHIP_DELETED,
+  EVENT_LOCK_PATIENT_RELATIONSHIPS,
 }

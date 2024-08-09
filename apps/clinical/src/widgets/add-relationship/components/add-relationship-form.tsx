@@ -1,6 +1,6 @@
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Box, Flex, Grid } from '@radix-ui/themes'
+import { Box, Button, Flex, Grid } from '@radix-ui/themes'
 import { useForm, type SubmitHandler } from 'react-hook-form'
 import {
   FormPhoneNumberInput,
@@ -8,7 +8,7 @@ import {
   FormTextInput,
 } from '@psychplus/form'
 import type { PatientRelationship } from '@psychplus/patient'
-import { FormContainer, FormSubmitButton } from '@psychplus/ui/form'
+import { FormContainer } from '@psychplus/ui/form'
 import { usePubsub } from '@psychplus/utils/event'
 import { ADD_RELATIONSHIP_WIDGET } from '@psychplus/widgets'
 import {
@@ -80,6 +80,7 @@ const AddRelationshipForm = ({ data }: AddRelationshipProps) => {
     [data],
   )
   const guardianRelationshipOptions = useGuardianRelationshipOptions()
+  const [isDisabled, setIsDisabled] = useState<boolean>(false)
 
   const form = useForm<SchemaType>({
     resolver: zodResolver(schema),
@@ -92,11 +93,16 @@ const AddRelationshipForm = ({ data }: AddRelationshipProps) => {
   })
 
   const onCreateNew: SubmitHandler<SchemaType> = (data) => {
-    if (patient)
+    if (patient) {
+      setIsDisabled(true)
       createPatientRelationship(data, patient.id).then(() => {
+        setIsDisabled(false)
         publish(`${ADD_RELATIONSHIP_WIDGET}:${EventType.Closed}`)
         publish(EVENT_RELATIONSHIP_CREATED)
+      }).finally(() => {
+        setIsDisabled(false)
       })
+    }
   }
 
   const onUpdate: SubmitHandler<SchemaType> = (data) => {
@@ -114,6 +120,7 @@ const AddRelationshipForm = ({ data }: AddRelationshipProps) => {
           <FormSelect
             label="Relationship"
             required
+            placeholder="Select relationship"
             {...form.register('guardianRelationshipCode')}
             options={guardianRelationshipOptions}
             buttonClassName={inputFieldClasses}
@@ -123,6 +130,7 @@ const AddRelationshipForm = ({ data }: AddRelationshipProps) => {
           <FormTextInput
             label="First Name"
             required
+            placeholder="First name"
             {...form.register('name.firstName')}
             className={inputFieldClasses}
           />
@@ -130,6 +138,7 @@ const AddRelationshipForm = ({ data }: AddRelationshipProps) => {
         <Box className="col-span-4">
           <FormTextInput
             label="Middle Name"
+            placeholder="Middle name"
             {...form.register('name.middleName')}
             className={inputFieldClasses}
           />
@@ -137,6 +146,7 @@ const AddRelationshipForm = ({ data }: AddRelationshipProps) => {
         <Box className="col-span-4">
           <FormTextInput
             label="Last Name"
+            placeholder="Last name"
             required
             {...form.register('name.lastName')}
             className={inputFieldClasses}
@@ -153,6 +163,7 @@ const AddRelationshipForm = ({ data }: AddRelationshipProps) => {
         <Box className="col-span-4">
           <FormTextInput
             label="Email"
+            placeholder="Email"
             required
             {...form.register('contactDetails.email')}
             className={inputFieldClasses}
@@ -161,6 +172,7 @@ const AddRelationshipForm = ({ data }: AddRelationshipProps) => {
         <Box className="col-span-3">
           <FormTextInput
             label="Zip Code"
+            placeholder="Zip code"
             required
             {...form.register('contactDetails.addresses.0.postalCode')}
             className={inputFieldClasses}
@@ -168,18 +180,24 @@ const AddRelationshipForm = ({ data }: AddRelationshipProps) => {
         </Box>
         <Box className="col-span-9">
           {loaded && (
-            <PlacesAutocomplete label='Address' required name={'contactDetails.addresses.0'} />
+            <PlacesAutocomplete
+              placeholder="Address"
+              label="Address"
+              required
+              name={'contactDetails.addresses.0'}
+            />
           )}
         </Box>
       </Grid>
       <MemoizedTable data={tableData} />
       <Flex justify="end" mt="3">
-        <FormSubmitButton
+        <Button
+          type='submit'
+          disabled={isDisabled}
           className="cursor-pointer bg-[#151B4A] px-3 py-1.5 text-[14px] text-[#FFF]"
-          form={form}
         >
           Save
-        </FormSubmitButton>
+        </Button>
       </Flex>
     </FormContainer>
   )

@@ -7,6 +7,7 @@ import {
   updatePatientRelationship,
 } from '../api.client'
 import { useStore } from '../store'
+import { useEditModeContext } from '@psychplus/patient-info'
 
 const RriSwitch = ({
   row: { original: relationship },
@@ -16,6 +17,7 @@ const RriSwitch = ({
   const setPatientRelationships = useStore(
     (state) => state.setPatientRelationships,
   )
+  const { editable } = useEditModeContext()
 
   useEffect(() => {
     setIsAllowedToReleaseInformation(relationship.isAllowedToReleaseInformation)
@@ -43,6 +45,7 @@ const RriSwitch = ({
       <Switch
         onCheckedChange={updateRequestToReleaseInformation}
         checked={isAllowedToReleaseInformation}
+        disabled={!editable}
         className='mr-1'
         color="grass"
       />

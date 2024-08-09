@@ -2,7 +2,7 @@ import { useFormContext } from 'react-hook-form'
 import { FormTextInput } from '@psychplus/form'
 import { FORM_FIELD_CLASSES } from '../constants'
 import { useEffect } from 'react'
-import { useEditModeContext } from '../context'
+import { useEditModeContext } from '@psychplus/patient-info'
 
 const GuardianInfo = () => {
   const { watch, register } = useFormContext()
@@ -18,6 +18,7 @@ const GuardianInfo = () => {
       <>
         <FormTextInput
           label="Guardian First Name"
+          placeholder='First name'
           required
           disabled={!editable}
           {...register('guardian.name.firstName')}
@@ -25,6 +26,7 @@ const GuardianInfo = () => {
         />
         <FormTextInput
           label="Guardian Last Name"
+          placeholder='Last name'
           disabled={!editable}
           required
           {...register('guardian.name.lastName')}

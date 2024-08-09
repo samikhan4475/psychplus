@@ -1,9 +1,9 @@
 'use client'
 
 import { PatientParams } from '@psychplus/patient'
+import { Patient, PatientConsentRequestBody } from '@psychplus/patient-info'
 import { handleRequest } from '@psychplus/utils/api'
 import { createFileHeaders, createHeaders } from '@psychplus/utils/client'
-import { Patient, PatientConsentRequestBody } from '@psychplus/patient-info'
 
 interface UpdateProfileProps extends PatientParams {
   body: Patient
@@ -15,6 +15,15 @@ interface RequestPolicyConsentProps extends PatientParams {
 
 interface ImageUploadProps extends PatientParams {
   file: File
+}
+
+interface FailureInfo {
+  message: string
+}
+
+type Failure = { [key: string]: FailureInfo }
+interface NotificationsResponse {
+  failures?: Failure
 }
 
 const updateProfile = ({
@@ -32,7 +41,7 @@ const updateProfile = ({
 const requestPatientConsent = ({
   patientId,
   body,
-}: RequestPolicyConsentProps) =>
+}: RequestPolicyConsentProps): Promise<NotificationsResponse> =>
   handleRequest(
     fetch(`/galaxy/api/patients/${patientId}/consents/actions/sendnotice`, {
       method: 'POST',

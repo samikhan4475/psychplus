@@ -3,7 +3,8 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Avatar, Box, Flex, Grid, Heading, Text } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
-import { FormSelect, FormTextInput } from '@psychplus/form'
+import { FormSelect, FormSsnInput, FormTextInput } from '@psychplus/form'
+import { useEditModeContext, useStore } from '@psychplus/patient-info'
 import {
   getPatientDriverLicenseImage,
   getPatientProfileImageByStaff,
@@ -11,16 +12,17 @@ import {
 import { PictureFallback } from '@psychplus/ui/icons'
 import { ImageControls } from '@psychplus/ui/image-controls'
 import { FORM_FIELD_CLASSES } from '../constants'
-import { useEditModeContext } from '../context'
 import { useCustomerStatusOptions, useUsStatesOptions } from '../hooks'
-import { useStore } from '@psychplus/patient-info'
 
 interface PatientDataProps {
   setDriverLicenseImage: (file: File | undefined) => void
   setProfileImage: (file: File | undefined) => void
 }
 
-const PatientData = ({setProfileImage, setDriverLicenseImage}: PatientDataProps) => {
+const PatientData = ({
+  setProfileImage,
+  setDriverLicenseImage,
+}: PatientDataProps) => {
   const data = useStore((state) => state.patientProfile)
   const statusOptions = useCustomerStatusOptions()
   const { editable } = useEditModeContext()
@@ -44,15 +46,15 @@ const PatientData = ({setProfileImage, setDriverLicenseImage}: PatientDataProps)
     }
   }, [data?.id, data.driversLicense?.hasFrontImage, data.hasPhoto])
 
-  const handleProfileImageUpload =(file: File | undefined) => {
+  const handleProfileImageUpload = (file: File | undefined) => {
     setProfileImage(file)
-    const url = file? URL.createObjectURL(file): ''
+    const url = file ? URL.createObjectURL(file) : ''
     setProfileImageUrl(url)
   }
 
   const handleDriversLicenseImageUpload = (file: File | undefined) => {
     setDriverLicenseImage(file)
-    const url = file? URL.createObjectURL(file): ''
+    const url = file ? URL.createObjectURL(file) : ''
     setDriverLicenseImageUrl(url)
   }
 
@@ -78,17 +80,18 @@ const PatientData = ({setProfileImage, setDriverLicenseImage}: PatientDataProps)
           <ImageControls
             onFileChange={handleProfileImageUpload}
             previewSrc={profileImageUrl}
+            disableControls={!editable}
             imageCaptureEvent="patient-profile-picture"
           />
         </Flex>
         <Grid columns="4" rows="2" className="grow gap-3 bg-[#FFFF] px-2 py-8">
           <FormTextInput
             {...register('medicalRecordNumber')}
-            disabled={!editable}
+            disabled
             label="MRN"
             className={`${FORM_FIELD_CLASSES} mt-auto`}
           />
-          <FormTextInput
+          <FormSsnInput
             {...register('socialSecurityNumber')}
             disabled={!editable}
             label="SSN"
@@ -98,6 +101,7 @@ const PatientData = ({setProfileImage, setDriverLicenseImage}: PatientDataProps)
             {...register('cmdId')}
             disabled={!editable}
             label="CMD"
+            placeholder='Enter cmd'
             className={FORM_FIELD_CLASSES}
           />
           <Box className="col-span-1">
@@ -115,6 +119,7 @@ const PatientData = ({setProfileImage, setDriverLicenseImage}: PatientDataProps)
             {...register('driversLicense.number')}
             disabled={!editable}
             label="Driving License"
+            placeholder='Driving license'
             required
             className={FORM_FIELD_CLASSES}
           />
@@ -158,6 +163,7 @@ const PatientData = ({setProfileImage, setDriverLicenseImage}: PatientDataProps)
           <ImageControls
             onFileChange={handleDriversLicenseImageUpload}
             previewSrc={driverLicenseImageUrl}
+            disableControls={!editable}
             imageCaptureEvent="patient-driving-license-picture"
           />
         </Flex>

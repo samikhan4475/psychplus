@@ -32,6 +32,7 @@ interface PlacesAutocompleteProps {
   required?: boolean
   disabled?: boolean
   label?: string
+  placeholder?: string
 }
 
 const PlacesAutocomplete = ({
@@ -40,6 +41,7 @@ const PlacesAutocomplete = ({
   required,
   disabled = false,
   label = 'Address 1',
+  placeholder='',
 }: PlacesAutocompleteProps) => {
   const autocompleteRef = useRef<HTMLInputElement | null>(null)
 
@@ -97,6 +99,9 @@ const PlacesAutocomplete = ({
       form.setValue(stateField, address?.state)
       form.setValue(postalCodeField, address?.postalCode)
       form.setValue(countryField, address?.country)
+      form.clearErrors(street1Field)
+      form.clearErrors(cityField)
+      form.clearErrors(postalCodeField)  
     },
     [
       form,
@@ -183,12 +188,12 @@ const PlacesAutocomplete = ({
           id={name}
           disabled={disabled}
           ref={autocompleteRef}
+          placeholder={placeholder}
           value={value}
           onChange={handleInput}
           onFocus={() => {
             setShowSuggestions(true)
           }}
-          placeholder="Enter a location"
           className="h-7 text-[12px]"
         />
         {status === 'OK' && showSuggestions ? (
@@ -196,11 +201,11 @@ const PlacesAutocomplete = ({
             {renderSuggestions()}
           </ul>
         ) : null}
-        {state.error && (
+        {state.error? (
           <Text size="2" color="red">
             {state.error.message}
           </Text>
-        )}
+        ): null}
       </Flex>
     </Flex>
   )

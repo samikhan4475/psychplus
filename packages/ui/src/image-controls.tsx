@@ -3,6 +3,7 @@ import { Flex } from '@radix-ui/themes'
 import { usePubsub } from '@psychplus/utils/event'
 import { CAPTURE_IMAGE_WIDGET, ENLARGE_IMAGE_WIDGET } from '../../widgets/src'
 import { EventType } from '../../widgets/src/events'
+import { cn } from './cn'
 import { CameraIcon, ImageEditIcon, ViewIcon } from './icons'
 
 interface ImageControlsProps {
@@ -10,9 +11,16 @@ interface ImageControlsProps {
   previewSrc: string
   imageCaptureEvent: string
   className?: string
+  disableControls?: boolean
 }
 
-const ImageControls = ({ previewSrc, onFileChange, imageCaptureEvent, className }: ImageControlsProps) => {
+const ImageControls = ({
+  previewSrc,
+  onFileChange,
+  imageCaptureEvent,
+  className,
+  disableControls = false,
+}: ImageControlsProps) => {
   const fileInputRef = useRef<HTMLInputElement>(null)
   const { publish, subscribe } = usePubsub()
 
@@ -34,8 +42,8 @@ const ImageControls = ({ previewSrc, onFileChange, imageCaptureEvent, className 
   }
 
   return (
-    <Flex align='center' className={`${className?? 'gap-[14px]'}`}>
-      <ViewIcon 
+    <Flex align="center" className={cn('gap-[14px]', className)}>
+      <ViewIcon
         className="cursor-pointer"
         width={16.67}
         height={10}
@@ -49,6 +57,12 @@ const ImageControls = ({ previewSrc, onFileChange, imageCaptureEvent, className 
       <button
         onClick={handleFileInputClick}
         onKeyDown={(e) => e.stopPropagation()}
+        type="button"
+        className={cn({
+          'cursor-pointer': !disableControls,
+          'cursor-not-allowed': disableControls,
+        })}
+        disabled={disableControls}
       >
         <ImageEditIcon width={16} height={16} />
         <input
@@ -62,11 +76,22 @@ const ImageControls = ({ previewSrc, onFileChange, imageCaptureEvent, className 
       </button>
       <button
         onClick={() => {
-          publish<string>(`${CAPTURE_IMAGE_WIDGET}:${EventType.Opened}`, imageCaptureEvent)
+          publish<string>(
+            `${CAPTURE_IMAGE_WIDGET}:${EventType.Opened}`,
+            imageCaptureEvent,
+          )
         }}
-        type='button'
+        type="button"
+        disabled={disableControls}
       >
-        <CameraIcon width={16} height={16} className='cursor-pointer' />
+        <CameraIcon
+          width={16}
+          height={16}
+          className={cn({
+            'cursor-pointer': !disableControls,
+            'cursor-not-allowed': disableControls,
+          })}
+        />
       </button>
     </Flex>
   )

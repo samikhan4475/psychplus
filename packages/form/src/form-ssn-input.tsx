@@ -5,6 +5,7 @@ import { FormField, useFormField, UseFormFieldProps } from './form-field'
 
 type SsnInputProps = UseFormFieldProps & {
   className?: string
+  disabled?: boolean
 }
 
 const FormSsnInput = React.forwardRef<HTMLInputElement, SsnInputProps>(
@@ -23,7 +24,7 @@ const FormSsnInput = React.forwardRef<HTMLInputElement, SsnInputProps>(
                 ref={field.ref}
                 name={field.name}
                 value={field.value}
-                disabled={field.disabled}
+                disabled={childProps.disabled}
                 onBlur={field.onBlur}
                 onValueChange={(value) => {
                   field.onChange(value)

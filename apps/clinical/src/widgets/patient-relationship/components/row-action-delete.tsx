@@ -1,4 +1,5 @@
 import { type PatientRelationship } from '@psychplus/patient'
+import { useEditModeContext } from '@psychplus/patient-info'
 import { type PropsWithRow } from '@psychplus/ui/data-table'
 import { DropdownMenu } from '@psychplus/ui/dropdown-menu'
 import { deleteRelationship, getPatientRelationships } from '../api.client'
@@ -10,6 +11,7 @@ const RowActionDelete = ({
   const setPatientRelationships = useStore(
     (state) => state.setPatientRelationships,
   )
+  const { editable } = useEditModeContext()
 
   const handleDelete = async () => {
     if (relationship.patientId && relationship.id) {
@@ -21,7 +23,11 @@ const RowActionDelete = ({
     }
   }
 
-  return <DropdownMenu.Item onClick={handleDelete}>Delete</DropdownMenu.Item>
+  return (
+    <DropdownMenu.Item disabled={!editable} onClick={handleDelete}>
+      Delete
+    </DropdownMenu.Item>
+  )
 }
 
 export { RowActionDelete }

@@ -2,7 +2,9 @@ import { PlusIcon } from '@radix-ui/react-icons'
 import { Box, Flex, Heading, Text } from '@radix-ui/themes'
 import { type ColumnDef } from '@tanstack/react-table'
 import { type PatientRelationship } from '@psychplus/patient'
+import { useEditModeContext } from '@psychplus/patient-info'
 import { Button } from '@psychplus/ui/button'
+import { cn } from '@psychplus/ui/cn'
 import {
   DataTable,
   DataTableRowActions,
@@ -14,11 +16,11 @@ import { ADD_RELATIONSHIP_WIDGET } from '@psychplus/widgets'
 import { EventType } from '@psychplus/widgets/events'
 import { useStore } from '../store'
 import { EmergencyContactSwitch } from './emergency-contact-switch'
+import { GuardianStatusSwitch } from './guardian-status-switch'
+import { RelationshipTextField } from './relationship-text-field'
 import { RowActionDelete } from './row-action-delete'
 import { RowActionEdit } from './row-action-edit'
 import { RriSwitch } from './rri-switch'
-import { GuardianStatusSwitch } from './guardian-status-switch'
-import { RelationshipTextField } from './relationship-text-field'
 
 const rowActions: RowAction<PatientRelationship>[] = [
   {
@@ -69,9 +71,7 @@ const columns: ColumnDef<PatientRelationship>[] = [
     id: 'relationship',
     accessorKey: 'guardianRelationship',
     header: () => <Text className="font-[400]">Relationship</Text>,
-    cell: ({ row }) => (
-      <RelationshipTextField row={row} />
-    ),
+    cell: ({ row }) => <RelationshipTextField row={row} />,
   },
   {
     id: 'address1',
@@ -143,6 +143,7 @@ const columns: ColumnDef<PatientRelationship>[] = [
 const RelationshipsTable = () => {
   const { publish } = usePubsub()
   const patientRelationships = useStore((state) => state.patientRelationships)
+  const { editable } = useEditModeContext()
 
   return (
     <Flex direction="column">
@@ -154,7 +155,14 @@ const RelationshipsTable = () => {
         <Heading className="text-[14px]">Relationship</Heading>
         <Button
           variant="outline"
-          className="h-6 cursor-pointer bg-[#FFF] px-2 text-[12px] text-[#000000] [box-shadow:inset_0_0_0_0.4px_#9E9898CC]"
+          disabled={!editable}
+          className={cn(
+            'h-6 bg-[#FFF] px-2 text-[12px] text-[#000000] [box-shadow:inset_0_0_0_0.4px_#9E9898CC]',
+            {
+              'cursor-pointer': editable,
+              'cursor-not-allowed': !editable,
+            },
+          )}
           onClick={() => {
             publish(`${ADD_RELATIONSHIP_WIDGET}:${EventType.Opened}`)
           }}

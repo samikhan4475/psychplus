@@ -3,25 +3,27 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Box, Flex, Switch, Text } from '@radix-ui/themes'
 import { useForm, type SubmitHandler } from 'react-hook-form'
 import { FormTableSelect } from '@psychplus/form'
+import { EditModeContext, useStore } from '@psychplus/patient-info'
 import { Button } from '@psychplus/ui/button'
 import { FormContainer, FormSubmitButton } from '@psychplus/ui/form'
+import { usePubsub } from '@psychplus/utils/event'
+import { PATIENT_HISTORY_WIDGET } from '@psychplus/widgets'
+import {
+  EVENT_LOCK_PATIENT_RELATIONSHIPS,
+  EventType,
+} from '@psychplus/widgets/events'
 import { HistoryIcon, SaveIcon } from '@/components/icons'
 import {
   updateDriversLicenseImage,
   updateProfile,
   updateProfileImage,
 } from '../api.client'
-import { EditModeContext } from '../context'
 import { useVerificationStatusOptions } from '../hooks'
 import { schema, type SchemaType } from '../schema'
-import { useStore } from '@psychplus/patient-info'
 import AdditionalInfo from './additional-info'
 import CreateUser from './create-user'
 import PatientAddress from './patient-address'
 import Patientdata from './patient-data'
-import { usePubsub } from '@psychplus/utils/event'
-import { PATIENT_HISTORY_WIDGET } from '@psychplus/widgets'
-import { EventType } from '@psychplus/widgets/events'
 
 const initialPhone = {
   type: 'Home',
@@ -124,7 +126,6 @@ const PatientInfo = ({ children }: React.PropsWithChildren) => {
       ethnicities: data?.ethnicities,
       preferredLanguage: data?.preferredLanguage,
       chargeUserId: data?.chargeUserId,
-      isTest: data?.isTest,
       isPlusMember: data?.isPlusMember,
       hasPhoto: data?.hasPhoto,
       chargeKey: data?.chargeKey,
@@ -157,9 +158,13 @@ const PatientInfo = ({ children }: React.PropsWithChildren) => {
         data?.contactDetails.workNumber,
         data?.contactDetails.mobileNumber,
       ].filter((contact) => contact.number)
+
+      const mailingAddress = data.contactDetails.isMailingAddressSameAsPrimary
+        ? { ...data?.contactDetails.homeAddress, type: 'Mailing' }
+        : data?.contactDetails.mailingAddress
       const contactAddresses = [
         data?.contactDetails.homeAddress,
-        data?.contactDetails.mailingAddress,
+        mailingAddress,
       ]
       const alternateAddresses = data.alternateOrPreviousContactDetails
         ? [data?.alternateOrPreviousContactDetails?.homeAddress]
@@ -179,7 +184,6 @@ const PatientInfo = ({ children }: React.PropsWithChildren) => {
               addresses: alternateAddresses,
             }
           : null,
-        isTest: true,
       }
       if (!data.hasGuardian) {
         delete body.guardian
@@ -213,17 +217,27 @@ const PatientInfo = ({ children }: React.PropsWithChildren) => {
     }
   }
 
+  const onError = () => {
+    form.resetField('verificationStatus', { defaultValue: 'Pending' })
+  }
+
+  const lockPage = (checked: boolean) => {
+    setIsPageLocked(checked)
+    publish(EVENT_LOCK_PATIENT_RELATIONSHIPS, checked)
+  }
+
   return (
-    <Box className="h-[100%] bg-[#EEF2F6] relative z-0">
+    <Box className="relative z-0 h-[100%] bg-[#EEF2F6]">
       <EditModeContext.Provider value={ctxValue}>
         <FormContainer
-          className="gap-0"
           form={form}
           onSubmit={onSubmit}
+          onError={onError}
+          className="gap-0"
         >
           <Flex
             gap="3"
-            className="sticky top-0 bg-[#FFFF] px-2 py-1 drop-shadow-md z-10" 
+            className="sticky top-0 z-10 bg-[#FFFF] px-2 py-1 drop-shadow-md"
             align="center"
           >
             <Flex className="w-[1px] grow gap-x-[17px]" align="center">
@@ -236,7 +250,7 @@ const PatientInfo = ({ children }: React.PropsWithChildren) => {
                   <Switch
                     checked={isPageLocked}
                     color="grass"
-                    onCheckedChange={setIsPageLocked}
+                    onCheckedChange={lockPage}
                   />
                   {isPageLocked ? 'Yes' : 'No'}
                 </Flex>
@@ -253,9 +267,11 @@ const PatientInfo = ({ children }: React.PropsWithChildren) => {
             </Flex>
             <Button
               variant="outline"
-              type='button'
+              type="button"
               className="h-6 cursor-pointer bg-[#FFF] px-2 text-[12px] text-[#000000CC] [box-shadow:inset_0_0_0_0.4px_#9E9898CC]"
-              onClick={() => publish(`${PATIENT_HISTORY_WIDGET}:${EventType.Opened}`)}
+              onClick={() =>
+                publish(`${PATIENT_HISTORY_WIDGET}:${EventType.Opened}`)
+              }
             >
               <HistoryIcon width={11.2} height={11.2} />
               Patient Info Hx
