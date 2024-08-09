@@ -137,10 +137,10 @@ const PayCopayButton = ({
           </>
         ) : (
           <Text>
-            You have not added any payment methods to your account. Please{' '}
+            You have not added any credit/debit card to your account. Please{' '}
             <Link asChild>
               <NextLink href="/billing/credit-debit-cards" prefetch={false}>
-                add a payment method
+                add a credit/debit card
               </NextLink>
             </Link>{' '}
             and then try again.
