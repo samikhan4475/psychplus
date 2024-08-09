@@ -3,6 +3,7 @@ import { GOOGLE_MAPS_API_KEY } from '@psychplus-v2/env'
 import { Flex } from '@radix-ui/themes'
 import { getCodesets, getProfile } from '@/api'
 import { FeatureContainer } from '@/components-v2'
+import { PreferredPartnerCard } from '@/features/account/profile/ui/account-profile-view/preferred-partner-card'
 import { CodesetStoreProvider, GooglePlacesContextProvider } from '@/providers'
 import { ProfileStoreProvider } from '../../store'
 import { AddressCard } from './address-card'
@@ -45,6 +46,7 @@ const AccountProfileView = async () => {
               <AddressCard />
               <DescriptiveCard />
               <EmergencyContactCard />
+              <PreferredPartnerCard />
             </FeatureContainer>
           </Flex>
         </GooglePlacesContextProvider>
