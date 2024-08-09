@@ -184,7 +184,7 @@ const CreditCardForm = ({
 
         <Flex className="w-full  rounded-t-1 bg-[#F0F4FF]" px="2" py="2">
           <Text size="2" weight="medium">
-            Credit & Debit Cards Details
+            Credit & Debit Card Details
           </Text>
         </Flex>
 
@@ -206,7 +206,7 @@ const CreditCardForm = ({
           </FormFieldContainer>
 
           <FormFieldContainer className="flex-1">
-            <FormFieldLabel required>Credit Card Number</FormFieldLabel>
+            <FormFieldLabel required>Card Number</FormFieldLabel>
             <Box
               py="2"
               px="3"

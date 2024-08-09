@@ -130,7 +130,7 @@ const BillingAddressAutocompleteForm = () => {
         <Flex ref={ref} className="w-full">
           <Box position="relative" className="w-full">
             <FormFieldContainer className="w-full">
-              <FormFieldLabel required>Address 1</FormFieldLabel>
+              <FormFieldLabel required>Address</FormFieldLabel>
               <TextFieldInput
                 size="3"
                 ref={autocompleteRef}
