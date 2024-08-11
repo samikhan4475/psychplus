@@ -1,14 +1,16 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import type { PatientAddress, PatientProfile } from '@psychplus-v2/types'
 import { areAddressesEqual } from '@psychplus-v2/utils'
 import { Flex, RadioGroup, Text } from '@radix-ui/themes'
 import { useForm } from 'react-hook-form'
 import {
+  FormFieldContainer,
   FormFieldLabel,
   PlacesAutocomplete,
+  RadioGroupToggle,
   ToggleableForm,
 } from '@/components-v2'
 import { updateProfileAction } from '@/features/account/profile/actions'
@@ -36,11 +38,6 @@ const AddressForm = ({
     (addr) => addr.type === 'Mailing',
   )
 
-  const addressesEqual = areAddressesEqual(homeAddress, mailingAddress)
-
-  const [mailingSameAsPrimary, setMailingSameAsPrimary] =
-    useState(addressesEqual)
-
   const form = useForm<AddressSchemaType>({
     resolver: zodResolver(addressSchema),
     reValidateMode: 'onChange',
@@ -65,9 +62,39 @@ const AddressForm = ({
         : undefined),
       primaryCountry: 'US',
       secondaryCountry: 'US',
+      isMailingAddressSameAsPrimary:
+        profile.contactDetails.isMailingAddressSameAsPrimary || false,
     },
   })
 
+  const mailingSameAsPrimary = form.watch('isMailingAddressSameAsPrimary')
+
+  useEffect(() => {
+    if (!mailingSameAsPrimary) {
+      form.register('secondaryCity')
+      form.register('secondaryState')
+      form.register('secondaryPostalCode')
+      form.register('secondaryStreet1')
+      form.register('secondaryStreet2')
+    } else {
+      form.unregister('secondaryCity')
+      form.unregister('secondaryState')
+      form.unregister('secondaryPostalCode')
+      form.unregister('secondaryStreet1')
+      form.unregister('secondaryStreet2')
+    }
+    if (form.formState.isSubmitted)
+      form.trigger([
+        'secondaryCity',
+        'secondaryState',
+        'secondaryPostalCode',
+        'secondaryStreet1',
+        'secondaryStreet2',
+      ])
+  }, [form, mailingSameAsPrimary])
+
+  console.log(form.getValues())
+  console.log(form.formState.errors)
   const submitAction = (data: AddressSchemaType) => {
     const primaryAddressData: PatientAddress = {
       type: 'Home',
@@ -79,7 +106,7 @@ const AddressForm = ({
       country: 'US',
     }
 
-    const mailingAddressData: PatientAddress = mailingSameAsPrimary
+    const mailingAddressData = mailingSameAsPrimary
       ? { ...primaryAddressData, type: 'Mailing' }
       : {
           type: 'Mailing',
@@ -95,20 +122,10 @@ const AddressForm = ({
       ...profile,
       contactDetails: {
         ...profile.contactDetails,
-        addresses: [primaryAddressData, mailingAddressData],
-        isMailingAddressSameAsPrimary: mailingSameAsPrimary,
+        addresses: [primaryAddressData, mailingAddressData as PatientAddress],
+        isMailingAddressSameAsPrimary: data.isMailingAddressSameAsPrimary,
       },
     })
-  }
-
-  const onCheckedChange = (checked: boolean) => {
-    setMailingSameAsPrimary(checked)
-
-    form.setValue('secondaryStreet1', form.getValues('primaryStreet1'))
-    form.setValue('secondaryStreet2', form.getValues('primaryStreet2'))
-    form.setValue('secondaryCity', form.getValues('primaryCity'))
-    form.setValue('secondaryState', form.getValues('primaryState'))
-    form.setValue('secondaryPostalCode', form.getValues('primaryPostalCode'))
   }
 
   const { loaded } = useGooglePlacesContext()
@@ -129,38 +146,33 @@ const AddressForm = ({
       {loaded ? (
         <PlacesAutocomplete name="primary" label="Primary" editable={!isEdit} />
       ) : null}
+      <FormFieldContainer>
+        <Flex align="center" mt="3" gap="3" className="col-span-2 py-4">
+          <FormFieldLabel className="text-[17px]">
+            Is your mailing address same as primary?
+          </FormFieldLabel>
 
-      <Flex align="center" mt="3" gap="3" className="col-span-2 py-4">
-        <FormFieldLabel className="text-[17px]">
-          Is your mailing address same as primary?
-        </FormFieldLabel>
-
-        <RadioGroup.Root
-          size="3"
-          color="indigo"
-          disabled={!isEdit}
-          highContrast
-          onValueChange={(value) => {
-            onCheckedChange(value === 'Yes')
-          }}
-          value={mailingSameAsPrimary ? 'Yes' : 'No'}
-        >
-          <Flex gap="3">
-            <Text as="label" size="3">
-              <Flex gap="1">
-                <RadioGroup.Item className="text-[#151B4A]" value="Yes" />
-                Yes
-              </Flex>
-            </Text>
-            <Text as="label" size="3">
-              <Flex gap="1">
-                <RadioGroup.Item className="text-[#151B4A]" value="No" />
-                No
-              </Flex>
-            </Text>
-          </Flex>
-        </RadioGroup.Root>
-      </Flex>
+          <RadioGroup.Root
+            name="isMailingAddressSameAsPrimary"
+            value={String(mailingSameAsPrimary)}
+            onValueChange={(value) =>
+              form.setValue('isMailingAddressSameAsPrimary', value === 'true')
+            }
+            disabled={!isEdit}
+          >
+            <Flex gap="2">
+              {['true', 'false'].map((option) => (
+                <RadioGroupToggle
+                  value={mailingSameAsPrimary}
+                  option={option}
+                  disabled={!isEdit}
+                  key={option}
+                />
+              ))}
+            </Flex>
+          </RadioGroup.Root>
+        </Flex>
+      </FormFieldContainer>
 
       {loaded && !mailingSameAsPrimary ? (
         <PlacesAutocomplete

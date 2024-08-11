@@ -2,9 +2,10 @@
 
 import { useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Text } from '@radix-ui/themes'
+import { Flex, Text } from '@radix-ui/themes'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
+import { logoutAction } from '@/actions'
 import {
   EditableFieldValue,
   FormError,
@@ -47,13 +48,13 @@ const ChangePasswordForm = () => {
   }
 
   const trigger = (
-    <EditableFieldValue>
-      {
-        <Text size="1" className="tracking-[0.5px]">
-          &#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;
-        </Text>
-      }
-    </EditableFieldValue>
+    <Flex align="end" gap="2">
+      <Text size="1" className="tracking-[0.5px]">
+        &#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;
+      </Text>
+
+      <EditableFieldValue />
+    </Flex>
   )
 
   return (
@@ -61,6 +62,7 @@ const ChangePasswordForm = () => {
       <ToggleableForm
         form={form}
         submitAction={submitAction}
+        onSuccess={logoutAction}
         onError={setError}
         trigger={trigger}
         disabled={!isValid}

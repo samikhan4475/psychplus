@@ -1,37 +1,59 @@
 import { zipCodeSchema } from '@psychplus-v2/utils'
 import z from 'zod'
 
-const street1Schema = z.string().min(1, 'Required')
-const street2Schema = z.string().optional()
-const streetSchema = z.string().optional()
-const streetNumberSchema = z.string().optional()
-const citySchema = z.string().min(1, 'Required')
-const stateSchema = z.string().min(1, 'Required')
-const countrySchema = z.string().min(1, 'Required')
+const addressSchema = z
+  .object({
+    primaryStreet1: z.string().min(1, 'Required'),
+    primaryStreet2: z.string().optional(),
+    primaryStreet: z.string().optional(),
+    primaryStreetNumber: z.string().optional(),
+    primaryCity: z.string().min(1, 'Required'),
+    primaryState: z.string().min(1, 'Required'),
+    primaryPostalCode: zipCodeSchema,
+    primaryCountry: z.string().optional(),
+    isMailingAddressSameAsPrimary: z.boolean(),
+    secondaryStreet1: z.string().optional(),
+    secondaryStreet2: z.string().optional(),
+    secondaryStreet: z.string().optional(),
+    secondaryStreetNumber: z.string().optional(),
+    secondaryCity: z.string().optional(),
+    secondaryState: z.string().optional(),
+    secondaryPostalCode: z.string().trim().optional(),
+    secondaryCountry: z.string().optional(),
+  })
+  .superRefine((data, ctx) => {
+    if (!data.isMailingAddressSameAsPrimary) {
+      if (!data.secondaryStreet1) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: 'Required',
+          path: ['secondaryStreet1'],
+        })
+      }
 
-const primaryAddressSchema = z.object({
-  primaryStreet1: street1Schema,
-  primaryStreet2: street2Schema,
-  primaryStreet: streetSchema,
-  primaryStreetNumber: streetNumberSchema,
-  primaryCity: citySchema,
-  primaryState: stateSchema,
-  primaryPostalCode: zipCodeSchema,
-  primaryCountry: countrySchema,
-})
-
-const secondaryAddressSchema = z.object({
-  secondaryStreet1: street1Schema,
-  secondaryStreet2: street2Schema,
-  secondaryStreet: streetSchema,
-  secondaryStreetNumber: streetNumberSchema,
-  secondaryCity: citySchema,
-  secondaryState: stateSchema,
-  secondaryPostalCode: zipCodeSchema,
-  secondaryCountry: countrySchema,
-})
-
-const addressSchema = primaryAddressSchema.and(secondaryAddressSchema)
+      if (!data.secondaryCity) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: 'Required',
+          path: ['secondaryCity'],
+        })
+      }
+      if (!data.secondaryState) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: 'Required',
+          path: ['secondaryState'],
+        })
+      }
+      if (!data.secondaryPostalCode) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: 'Required',
+          path: ['secondaryPostalCode'],
+        })
+      }
+    }
+  })
 
 type AddressSchemaType = z.infer<typeof addressSchema>
 

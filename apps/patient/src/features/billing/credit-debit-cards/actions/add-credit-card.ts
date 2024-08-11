@@ -45,7 +45,7 @@ const addCreditCardAction = async ({
   if (result.state === 'error') {
     return {
       state: 'error',
-      error: result.error,
+      error: extractErrorMessage(result.error),
     }
   }
 
@@ -53,6 +53,16 @@ const addCreditCardAction = async ({
     state: 'success',
     data: undefined,
   }
+}
+
+const extractErrorMessage = (error: string): string => {
+  const patterns = [/Internal server error: \(StripeException\)\s*/]
+
+  for (const pattern of patterns) {
+    error = error.replace(pattern, '')
+  }
+
+  return error.trim()
 }
 
 export { addCreditCardAction }

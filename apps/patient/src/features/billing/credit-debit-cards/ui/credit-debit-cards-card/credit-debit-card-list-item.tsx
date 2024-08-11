@@ -55,8 +55,10 @@ const CreditCardListItem = ({ creditCard }: { creditCard: CreditCard }) => {
                     <Badge label="Primary" type="basic" />
                   )}
 
-                  {creditCard.isActive && (
+                  {creditCard.isActive ? (
                     <Badge label="Active" type="success" addIcon />
+                  ) : (
+                    <Badge label="Inactive" type="danger" addIcon />
                   )}
                 </Flex>
                 <DotIcon color="gray" />
@@ -71,9 +73,12 @@ const CreditCardListItem = ({ creditCard }: { creditCard: CreditCard }) => {
 
               {!creditCard.isPrimary && (
                 <Flex align="center">
-                  <ChangePrimaryCardDialog creditCard={creditCard} />
-
-                  <Separator className="w-6 rotate-90" />
+                  {creditCard.isActive && (
+                    <>
+                      <ChangePrimaryCardDialog creditCard={creditCard} />
+                      <Separator className="w-6 rotate-90" />
+                    </>
+                  )}
 
                   <DeletableFieldValue
                     tooltip="Remove this card"

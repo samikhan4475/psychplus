@@ -12,14 +12,13 @@ import {
 import { Flex, RadioGroup, Text, TextFieldInput } from '@radix-ui/themes'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
-import { cn } from '@psychplus/ui/cn'
 import {
   CodesetFormSelect,
   FormFieldContainer,
   FormFieldError,
   FormFieldLabel,
   PhoneNumberInput,
-  RadioGroupItem,
+  RadioGroupToggle,
   SSNInput,
   ToggleableForm,
 } from '@/components-v2'
@@ -350,30 +349,12 @@ const PersonalInfoForm = ({
             >
               <Flex gap="2">
                 {['true', 'false'].map((option) => (
-                  <Flex
+                  <RadioGroupToggle
+                    value={form.watch('hasGuardian')}
+                    option={option}
                     key={option}
-                    className={cn(
-                      'rounded-6 border border-gray-7',
-                      !isEdit && 'bg-gray-3',
-                      String(form.watch('hasGuardian')) === option &&
-                        isEdit &&
-                        'border-[#8DA4EF] bg-[#D9E2FC] text-[#194595]',
-                    )}
-                    gap="1"
-                    px="2"
-                    align="center"
-                  >
-                    <RadioGroupItem
-                      id={option}
-                      value={option}
-                      className={cn('pl-[3px]')}
-                      disabled={!isEdit}
-                    >
-                      <Text weight="medium">
-                        {option === 'true' ? 'Yes' : 'No'}
-                      </Text>
-                    </RadioGroupItem>
-                  </Flex>
+                    disabled={!isEdit}
+                  />
                 ))}
               </Flex>
             </RadioGroup.Root>

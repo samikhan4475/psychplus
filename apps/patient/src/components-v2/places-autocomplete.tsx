@@ -113,8 +113,8 @@ const PlacesAutocomplete = ({
     setShowSuggestions(false)
 
     if (!value) {
-      form.reset({ address: '' })
-      form.trigger('address')
+      form.setValue(street1Field, '')
+      form.trigger(street1Field)
       return
     }
   })
