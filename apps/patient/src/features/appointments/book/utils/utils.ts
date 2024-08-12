@@ -22,17 +22,17 @@ function getAppointmentDateTimeLabel(
   startDate: string,
 ): string {
   const isTodaySlot = isToday(slotDate, getLocalTimeZone())
+  const time = getTimeLabel(startDate)
 
   if (isTodaySlot) {
-    return 'Today'
+    return `Today at ${time}`
   } else {
     const dayOfWeek = getDayOfWeekLabel(slotDate).slice(0, 3)
     const month = getMonthLabel(slotDate)
     const day = slotDate.day
     const year = slotDate.year
-    const time = getTimeLabel(startDate)
 
-    return `${dayOfWeek} ${month} ${day}, ${year} at ${time}`
+    return `on ${dayOfWeek} ${month} ${day}, ${year} at ${time}`
   }
 }
 

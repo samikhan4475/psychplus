@@ -61,7 +61,7 @@ const ConfirmAppointment = ({
           </Text>
 
           <Text className="text-[18px] text-[#194595]" weight="medium">
-            See you on {getAppointmentDateTimeLabel(slotDate, slot.startDate)}
+            See you {getAppointmentDateTimeLabel(slotDate, slot.startDate)}
           </Text>
         </Flex>
 
