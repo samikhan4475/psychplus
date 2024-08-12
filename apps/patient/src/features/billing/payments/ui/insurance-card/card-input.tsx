@@ -1,8 +1,9 @@
 import { ChangeEvent, useRef, useState } from 'react'
 import Image from 'next/image'
 import { Box, Flex, IconButton, Text } from '@radix-ui/themes'
-import { ImageIcon, XIcon } from 'lucide-react'
-import { EditCameraIcon, ViewPictureIcon } from '@/components'
+import { XIcon } from 'lucide-react'
+import { EditCameraIcon, ViewPictureIcon, ImagePlaceholderIcon } from '@/components'
+import { cn } from '@psychplus-v2/utils'
 
 interface CardInputProps {
   savedImg?: string
@@ -39,8 +40,12 @@ const CardInput = ({ savedImg, onImageChanged, label }: CardInputProps) => {
     imageSrc = savedImg
   }
 
+  const handleZoomImg = () => {
+    setImgView(true)
+  }
+
   const handleViewImage = () => {
-    setImgView(!imgView);
+    setImgView(false);
   }
 
   return (
@@ -48,7 +53,7 @@ const CardInput = ({ savedImg, onImageChanged, label }: CardInputProps) => {
       <Flex
         align="center"
         justify="center"
-        className="h-[191px] cursor-pointer items-center justify-center rounded-[5px] border border-dashed border-[#bebebe] text-accent-12 sm:flex-1"
+        className="h-[230px] cursor-pointer items-center justify-center rounded-[5px] border border-dashed border-[#bebebe] text-accent-12 sm:flex-1"
         onClick={handleImageInput}
       >
         {imageSrc ? (
@@ -58,9 +63,11 @@ const CardInput = ({ savedImg, onImageChanged, label }: CardInputProps) => {
               src={imageSrc}
               alt="insurance card preview"
               fill
-              style={{ objectFit: 'cover' }}
-              className={`bg-white rounded-[5px] transition-transform ${imgView ? 'z-[1000] scale-[2.5] shadow-3' : ''}`}
-              onMouseOut={handleViewImage} 
+              className={cn(
+                'bg-white rounded-[5px] transition-transform object-fill aspect-[4/6]',
+                imgView && 'z-[1000] scale-[1.7] shadow-3'
+              )}
+              onMouseLeave={handleViewImage} 
             />
             
             {hasPreviewImage ? (
@@ -82,8 +89,9 @@ const CardInput = ({ savedImg, onImageChanged, label }: CardInputProps) => {
           </Box>
         ) : (
           <Flex height="100%" direction="column" align="center" justify="center">
-            <ImageIcon strokeWidth={1.5} className="h-[18px] w-[18px]" />
-            <Text size="1">{label}</Text>
+            
+            <ImagePlaceholderIcon />
+            <Text className="text-sm text[#151B4A] w-[92px] leading-[20px] pt-2" align="center" size="1">{label}</Text>
           </Flex>
         )}
 
@@ -95,10 +103,10 @@ const CardInput = ({ savedImg, onImageChanged, label }: CardInputProps) => {
           accept="image/png, image/jpeg, image/jpg"
         />
       </Flex>
-      <Flex gap="3" align="center" className="pt-1.5">
+      <Flex gap="3" align="center" className="pt-2">
         {
           savedImg  || hasPreviewImage ? (
-            <Box onClick={handleViewImage}>
+            <Box onClick={handleZoomImg}>
               <ViewPictureIcon  />
             </Box>
           ) : null

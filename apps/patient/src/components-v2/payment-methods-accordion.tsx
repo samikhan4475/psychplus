@@ -116,7 +116,7 @@ const PaymentMethodAccordion = ({
             }
           />
           <PaymentMethodsAccordionItem
-            title="Credit Card Details"
+            title="Credit/Debit Card Details"
             content={
               <Box>
                 {selectedCreditCard ? (

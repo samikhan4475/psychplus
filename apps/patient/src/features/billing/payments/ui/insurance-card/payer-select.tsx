@@ -39,7 +39,11 @@ const PayerSelect = ({ payers }: PayerSelectProps) => {
               }}
               {...rest}
             >
-              <Select.Trigger placeholder={'Select Payer'} />
+              <Select.Trigger
+                placeholder="Select payer"
+                variant="soft"
+                className="bg-[white] outline outline-1 outline-gray-7"
+              />
               <Select.Content position="popper" align="center" highContrast>
                 {items}
               </Select.Content>

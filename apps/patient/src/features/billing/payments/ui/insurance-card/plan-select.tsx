@@ -58,7 +58,11 @@ const PlanSelect = ({ payers }: { payers: InsurancePayer[] }) => {
               onValueChange={field.onChange}
               {...rest}
             >
-              <Select.Trigger placeholder="Select Plan" />
+              <Select.Trigger
+                placeholder="Select plan"
+                variant="soft"
+                className="bg-[white] outline outline-1 outline-gray-7"
+              />
               <Select.Content position="popper" align="center" highContrast>
                 {items}
               </Select.Content>

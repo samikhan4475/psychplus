@@ -15,6 +15,7 @@ import {
   CodesetFormSelect,
   FormField,
   FormFieldContainer,
+  FormFieldError,
   FormFieldLabel,
   SSNInput,
   ToggleableForm,
@@ -149,7 +150,7 @@ interface InsuranceFormProps {
   insurancePayers: InsurancePayer[]
   insurancePriority?: InsurancePolicyPriority
   insurance?: Insurance
-  trigger?: any
+  trigger?: React.ReactNode
   onFormClose?: () => void
 }
 
@@ -169,9 +170,16 @@ const InsuranceForm = ({
 
   const [maxDate, setMaxDate] = useState<string>('')
   const [minDate, setMinDate] = useState<string>('')
+  const [maxDob, setMaxDob] = useState<string>('')
 
   useEffect(() => {
     const today = new Date()
+    const maxDate = new Date(
+      today.getFullYear() - 18,
+      today.getMonth(),
+      today.getDate(),
+    )
+    setMaxDob(maxDate.toISOString().split('T')[0])
 
     // Calculate max date (yesterday)
     const yesterday = new Date(today)
@@ -186,36 +194,44 @@ const InsuranceForm = ({
 
   const router = useRouter()
 
+  const getFormDefaultValues = (insurance?: Insurance) => ({
+    payerName: insurance?.payerName ?? '',
+    insurancePlanId: insurance?.insurancePlanId,
+    effectiveDate: insurance?.effectiveDate
+      ? getCalendarDate(insurance.effectiveDate).toString()
+      : '',
+    terminationDate: insurance?.terminationDate
+      ? getCalendarDate(insurance.terminationDate).toString()
+      : '',
+    memberId: insurance?.memberId ?? '',
+    groupNumber: insurance?.groupNumber ?? '',
+    isPatientPolicyHolder: insurance?.isPatientPolicyHolder ?? true,
+    policyHolderFirstName: insurance?.policyHolderName?.firstName ?? '',
+    policyHolderLastName: insurance?.policyHolderName?.lastName ?? '',
+    policyHolderGender: insurance?.policyHolderGender ?? '',
+    policyHolderDateOfBirth: insurance?.policyHolderDateOfBirth
+      ? getCalendarDate(insurance?.policyHolderDateOfBirth).toString()
+      : '',
+    policyHolderRelationship: insurance?.policyHolderRelationship ?? '',
+    insurancePolicyPriority: insurance?.insurancePolicyPriority ?? '',
+    policyHolderSocialSecurityNumber:
+      insurance?.policyHolderSocialSecurityNumber ?? '',
+    hasCardFrontImage: insurance?.hasCardFrontImage ?? false,
+    hasCardBackImage: insurance?.hasCardBackImage ?? false,
+  })
+
   const form = useForm<SchemaType>({
     resolver: zodResolver(schema),
     reValidateMode: 'onChange',
     criteriaMode: 'all',
-    defaultValues: {
-      payerName: insurance?.payerName ?? '',
-      insurancePlanId: insurance?.insurancePlanId,
-      effectiveDate: insurance?.effectiveDate
-        ? getCalendarDate(insurance.effectiveDate).toString()
-        : '',
-      terminationDate: insurance?.terminationDate
-        ? getCalendarDate(insurance.terminationDate).toString()
-        : '',
-      memberId: insurance?.memberId ?? '',
-      groupNumber: insurance?.groupNumber ?? '',
-      isPatientPolicyHolder: insurance?.isPatientPolicyHolder ?? true,
-      policyHolderFirstName: insurance?.policyHolderName?.firstName ?? '',
-      policyHolderLastName: insurance?.policyHolderName?.lastName ?? '',
-      policyHolderGender: insurance?.policyHolderGender ?? '',
-      policyHolderDateOfBirth: insurance?.policyHolderDateOfBirth
-        ? getCalendarDate(insurance?.policyHolderDateOfBirth).toString()
-        : '',
-      policyHolderRelationship: insurance?.policyHolderRelationship ?? '',
-      insurancePolicyPriority: insurance?.insurancePolicyPriority ?? '',
-      policyHolderSocialSecurityNumber:
-        insurance?.policyHolderSocialSecurityNumber ?? '',
-      hasCardFrontImage: insurance?.hasCardFrontImage ?? false,
-      hasCardBackImage: insurance?.hasCardBackImage ?? false,
-    },
+    defaultValues: getFormDefaultValues(insurance),
   })
+
+  useEffect(() => {
+    if (insurance) {
+      form.reset(getFormDefaultValues(insurance))
+    }
+  }, [form, insurance])
 
   const onSubmit = async (data: SchemaType) => {
     const payload: InsuranceParams = {
@@ -347,7 +363,7 @@ const InsuranceForm = ({
         <FormFieldLabel>Insurance Card</FormFieldLabel>
         <Flex direction={{ initial: 'column', sm: 'row' }} width="100%" gap="3">
           <CardInput
-            label="Front Side"
+            label="Upload Image Front Side"
             savedImg={
               insurance && form.watch('hasCardFrontImage')
                 ? `/api/patients/self/policies/${insurance.id}/cardimage/front`
@@ -362,7 +378,7 @@ const InsuranceForm = ({
             }}
           />
           <CardInput
-            label="Back Side"
+            label="Upload Image Back Side"
             savedImg={
               insurance && form.watch('hasCardBackImage')
                 ? `/api/patients/self/policies/${insurance.id}/cardimage/back`
@@ -379,41 +395,35 @@ const InsuranceForm = ({
         </Flex>
       </FormFieldContainer>
       <Flex gap="3" width="100%">
-        <Box className="flex-1">
+        <FormFieldContainer className="flex-1">
           <FormFieldLabel required>Priority</FormFieldLabel>
-          <FormField
+
+          <CodesetFormSelect
             name="insurancePolicyPriority"
-            label=""
-            containerClassName="flex-1"
-          >
-            <CodesetFormSelect
-              name="insurancePolicyPriority"
-              codeset={CODESETS.InsurancePolicyPriority}
-            />
-          </FormField>
-        </Box>
-        <Box className="flex-1">
+            codeset={CODESETS.InsurancePolicyPriority}
+            placeholder="Select priority"
+          />
+        </FormFieldContainer>
+        <FormFieldContainer className="flex-1">
           <PayerSelect payers={insurancePayers} />
-        </Box>
-        <Box className="flex-1">
+        </FormFieldContainer>
+        <FormFieldContainer className="flex-1">
           <PlanSelect payers={insurancePayers} />
-        </Box>
-        <Box className="flex-1">
-          <FormField name="memberId" label="">
-            <FormFieldLabel required>Member ID</FormFieldLabel>
-            <TextFieldInput {...form.register('memberId')} />
-          </FormField>
-        </Box>
+        </FormFieldContainer>
+
+        <FormFieldContainer className="flex-1">
+          <FormFieldLabel required>Member ID</FormFieldLabel>
+          <TextFieldInput {...form.register('memberId')} />
+        </FormFieldContainer>
       </Flex>
 
-      <Flex width="100%" gap="3">
-        <Box className="flex-1">
-          <FormField name="groupNumber" label="">
-            <FormFieldLabel required>Group Number</FormFieldLabel>
-            <TextFieldInput {...form.register('groupNumber')} />
-          </FormField>
-        </Box>
-        <Box className="flex-1">
+      <Flex width="100%" gap="3" mt="2">
+        <FormFieldContainer className="flex-1">
+          <FormFieldLabel required>Group Number</FormFieldLabel>
+          <TextFieldInput {...form.register('groupNumber')} />
+        </FormFieldContainer>
+
+        <FormFieldContainer className="flex-1">
           <FormFieldLabel required>Effective Date</FormFieldLabel>
           <FormTextInput
             type="date"
@@ -421,11 +431,11 @@ const InsuranceForm = ({
             label=""
             data-testid="effective-date-input"
             {...form.register('effectiveDate')}
-            style={{ marginRight: 12 }}
-            className="h-[32px] w-full rounded-2 text-4 text-[14px]"
+            className="mr-4 h-[32px] w-full rounded-2 text-[14px]"
           />
-        </Box>
-        <Box className="flex-1">
+        </FormFieldContainer>
+
+        <FormFieldContainer className="flex-1">
           <FormFieldLabel required>Termination Date</FormFieldLabel>
           <FormTextInput
             type="date"
@@ -434,124 +444,106 @@ const InsuranceForm = ({
             label=""
             data-testid="termination-date-input"
             {...form.register('terminationDate')}
-            style={{ marginRight: 12 }}
-            className="h-[32px] w-full rounded-2 text-4 text-[14px]"
+            className="mr-4 h-[32px] w-full rounded-2 text-[14px]"
           />
-        </Box>
-        <Box className="flex-1">
-          <FormFieldContainer
-            align="start"
-            justify="center"
-            direction="column"
-            className="mt-2 rounded-3 bg-[#F0F4FF] px-3 py-1.5"
-          >
-            <Box>
-              <Text className="text-[11px] font-medium">
-                Are you the primary insurance holder
-              </Text>
-            </Box>
-
-            <RadioGroup.Root
-              id="isPatientPolicyHolder"
-              value={form.watch('isPatientPolicyHolder') ? 'Yes' : 'No'}
-              data-testid="signup-is-parent-or-guardian-input"
-              onValueChange={(value) => {
-                onCheckedChange(value)
-              }}
-            >
-              <Flex gap="4">
-                {['Yes', 'No'].map((option) => (
-                  <Text as="label" key={option} size="2">
-                    <Flex gap="1">
-                      <RadioGroup.Item value={option} />
-                      {option}
-                    </Flex>
-                  </Text>
-                ))}
-              </Flex>
-            </RadioGroup.Root>
-          </FormFieldContainer>
-        </Box>
+        </FormFieldContainer>
+        <Box className="flex-1"></Box>
       </Flex>
+
+      <Box className="flex-1" mb="2">
+        <FormFieldContainer
+          align="start"
+          justify="center"
+          direction="column"
+          className="mt-2 rounded-3 bg-[#F0F4FF] px-3 py-1.5"
+        >
+          <FormFieldLabel required>
+            Are you the primary insurance holder
+          </FormFieldLabel>
+
+          <RadioGroup.Root
+            id="isPatientPolicyHolder"
+            value={form.watch('isPatientPolicyHolder') ? 'Yes' : 'No'}
+            data-testid="signup-is-parent-or-guardian-input"
+            onValueChange={(value) => {
+              onCheckedChange(value)
+            }}
+          >
+            <Flex gap="4">
+              {['Yes', 'No'].map((option) => (
+                <Text as="label" key={option} size="2">
+                  <Flex gap="1">
+                    <RadioGroup.Item value={option} />
+                    {option}
+                  </Flex>
+                </Text>
+              ))}
+            </Flex>
+          </RadioGroup.Root>
+        </FormFieldContainer>
+      </Box>
 
       {!form.watch('isPatientPolicyHolder') ? (
         <>
-          <Text size="5" className="mb-3 mt-6 font-bold text-[#151B4A]">
+          <Text size="5" className="mb-3 mt-3 font-bold text-[#151B4A]">
             Primary Insurance Holder Details
           </Text>
 
           <Flex gap="3" className="w-full">
-            <Box className="flex-1">
-              <FormField
-                name="policyHolderFirstName"
-                label=""
-                containerClassName="flex-1"
-              >
-                <FormFieldLabel required>First Name</FormFieldLabel>
-                <TextFieldInput {...form.register('policyHolderFirstName')} />
-              </FormField>
-            </Box>
-            <Box className="flex-1">
-              <FormField
-                name="policyHolderLastName"
-                label=""
-                containerClassName="flex-1"
-              >
-                <FormFieldLabel required>Last Name</FormFieldLabel>
-                <TextFieldInput {...form.register('policyHolderLastName')} />
-              </FormField>
-            </Box>
-            <Box className="flex-1">
-              <FormField
-                name="policyHolderGender"
-                label=""
-                containerClassName="flex-1"
-              >
-                <FormFieldLabel required>Gender</FormFieldLabel>
-                <CodesetFormSelect
-                  name="policyHolderGender"
-                  codeset={CODESETS.Gender}
-                />
-              </FormField>
-            </Box>
+            <FormFieldContainer className="flex-1">
+              <FormFieldLabel required>First Name</FormFieldLabel>
+              <TextFieldInput {...form.register('policyHolderFirstName')} />
+              <FormFieldError name="policyHolderFirstName" />
+            </FormFieldContainer>
 
-            <Box className="flex-1">
+            <FormFieldContainer className="flex-1">
+              <FormFieldLabel required>Last Name</FormFieldLabel>
+              <TextFieldInput {...form.register('policyHolderLastName')} />
+              <FormFieldError name="policyHolderLastName" />
+            </FormFieldContainer>
+
+            <FormFieldContainer className="flex-1">
+              <FormFieldLabel required>Gender</FormFieldLabel>
+              <CodesetFormSelect
+                size="2"
+                name="policyHolderGender"
+                placeholder="Select gender"
+                codeset={CODESETS.Gender}
+              />
+              <FormFieldError name="policyHolderGender" />
+            </FormFieldContainer>
+
+            <FormFieldContainer className="flex-1">
               <FormFieldLabel required>Date of Birth</FormFieldLabel>
               <FormTextInput
                 type="date"
-                max="2004-12-31"
+                max={maxDob}
                 label=""
                 data-testid="dob-input"
                 {...form.register('policyHolderDateOfBirth')}
-                style={{ marginRight: 12 }}
-                className="h-[32px] w-full rounded-2 text-4 text-[14px]"
+                className="mr-4 h-[32px] w-full rounded-2 text-[14px]"
               />
-            </Box>
+            </FormFieldContainer>
           </Flex>
 
           <Flex gap="3" className="w-full">
-            <Box className="flex-1">
-              <FormField
-                name="policyHolderSocialSecurityNumber"
-                label="SSN"
-                containerClassName="flex-1"
-              >
-                <SSNInput name="policyHolderSocialSecurityNumber" size="2" />
-              </FormField>
-            </Box>
-            <Box className="flex-1">
-              <FormField
+            <FormFieldContainer className="flex-1">
+              <FormFieldLabel>SSN</FormFieldLabel>
+              <SSNInput name="policyHolderSocialSecurityNumber" size="2" />
+              <FormFieldError name="policyHolderSocialSecurityNumber" />
+            </FormFieldContainer>
+
+            <FormFieldContainer className="flex-1">
+              <FormFieldLabel required>Relationship</FormFieldLabel>
+              <CodesetFormSelect
                 name="policyHolderRelationship"
-                label=""
-                containerClassName="flex-1"
-              >
-                <FormFieldLabel required>Relationship</FormFieldLabel>
-                <CodesetFormSelect
-                  name="policyHolderRelationship"
-                  codeset={CODESETS.InsuranceRelationship}
-                />
-              </FormField>
-            </Box>
+                placeholder="Select relationship"
+                codeset={CODESETS.InsuranceRelationship}
+                size="2"
+              />
+              <FormFieldError name="policyHolderRelationship" />
+            </FormFieldContainer>
+
             <Box className="flex-1"></Box>
             <Box className="flex-1"></Box>
           </Flex>
