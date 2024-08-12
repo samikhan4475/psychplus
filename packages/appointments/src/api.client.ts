@@ -17,10 +17,11 @@ import {
 
 const getAppointmentAvailabilityForUnauthenticatedUser = async (
   request: AppointmentAvailabilityPayload,
+  includeDistance = false,
 ): Promise<StaffAppointmentAvailabilities> =>
   handleRequest(
     fetch(
-      '/api/appointments/availability/search/unauthenticated?offset=0&limit=0&includeDistance=true',
+      `/api/appointments/availability/search/unauthenticated?offset=0&limit=0&includeDistance=${includeDistance}`,
 
       {
         method: 'POST',

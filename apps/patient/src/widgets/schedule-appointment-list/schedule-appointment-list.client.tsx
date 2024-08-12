@@ -77,14 +77,18 @@ const ScheduleAppointmentListClient = () => {
   useEffect(() => {
     setIsLoading(true)
 
-    getAppointmentAvailabilityForUnauthenticatedUser({
-      postalCode: filters.zipCode,
-      type: filters.appointmentType === 'In-Person' ? 'InPerson' : 'TeleVisit',
-      specialistTypeCode: filters.providerType === 'Psychiatrist' ? 1 : 2,
-      startingDate: filters.startingDate,
-      maxDaysOutToLook: 7,
-      staffIds: staffIdParam ? [staffIdParam] : [],
-    }).then((data) => {
+    getAppointmentAvailabilityForUnauthenticatedUser(
+      {
+        postalCode: filters.zipCode,
+        type:
+          filters.appointmentType === 'In-Person' ? 'InPerson' : 'TeleVisit',
+        specialistTypeCode: filters.providerType === 'Psychiatrist' ? 1 : 2,
+        startingDate: filters.startingDate,
+        maxDaysOutToLook: 7,
+        staffIds: staffIdParam ? [staffIdParam] : [],
+      },
+      filters.appointmentType === 'In-Person',
+    ).then((data) => {
       setStaffAppointmentAvailabilities(data)
       setIsLoading(false)
     })
