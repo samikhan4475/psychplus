@@ -1,4 +1,4 @@
-import { Flex } from '@radix-ui/themes'
+import { Flex, Separator } from '@radix-ui/themes'
 import { FieldPlaceholder } from '@/components-v2'
 import { InsurancePolicyPriority } from '@/features/billing/payments/constants'
 import { Insurance, InsurancePayer } from '@/features/billing/payments/types'
@@ -42,15 +42,14 @@ const InsuranceForms = ({
       {patientInsurances.length > 0 ? (
         <Flex direction="column" gap="2">
           {patientInsurances.map((insurance) => (
-            <InsuranceForm
-              key={insurance.id}
-              insurance={insurance}
-              insurancePayers={insurancePayers}
-              insurancePriority={
-                insurance.insurancePolicyPriority as InsurancePolicyPriority
-              }
-              trigger={<InsuranceFormTrigger insurance={insurance} />}
-            />
+            <Flex className="w-full" direction="column" key={insurance.id}>
+              <InsuranceFormTrigger
+                key={insurance.id}
+                insurance={insurance}
+                insurancePayers={insurancePayers}
+              />
+              <Separator className="w-full" my="4" />
+            </Flex>
           ))}
         </Flex>
       ) : null}

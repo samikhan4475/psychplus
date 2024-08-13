@@ -21,6 +21,7 @@ const CreditCardListItem = ({ creditCard }: { creditCard: CreditCard }) => {
       confirmDescription="Are you sure? This will remove the card from your account and it will
     no longer be able to be used."
       confirmActionLabel="Remove card"
+      toastTitle="Credit card Removed"
     >
       <Flex direction="column" className="gap-[2px]">
         <Flex align="center" gap="1">

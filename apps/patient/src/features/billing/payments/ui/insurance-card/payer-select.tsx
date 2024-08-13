@@ -51,7 +51,7 @@ const PayerSelect = ({ payers }: PayerSelectProps) => {
           )
         }}
       />
-      <FormFieldError name="payer" />
+      <FormFieldError name="payerName" />
     </FormFieldContainer>
   )
 }

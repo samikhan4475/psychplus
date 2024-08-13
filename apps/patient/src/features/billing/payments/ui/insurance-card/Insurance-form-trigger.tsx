@@ -1,21 +1,42 @@
+'use client'
+
+import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { getSlashedDateString } from '@psychplus-v2/utils'
 import { Box, Flex, Heading, Separator, Text } from '@radix-ui/themes'
-import { Badge, EditableFieldValue } from '@/components-v2'
+import { Badge, DeletableFieldValue, EditableFieldValue } from '@/components-v2'
+import { InsurancePolicyPriority } from '@/features/billing/payments/constants'
 import {
   Insurance,
   InsuranceChipVariantType,
+  InsurancePayer,
 } from '@/features/billing/payments/types'
+import { deleteInsurance } from '../../actions'
+import { InsuranceForm } from './insurance-form'
 
-const InsuranceFormTrigger = ({ insurance }: { insurance: Insurance }) => {
+const InsuranceFormTrigger = ({
+  insurance,
+  insurancePayers,
+}: {
+  insurance: Insurance
+  insurancePayers: InsurancePayer[]
+}) => {
   const getStatusVariant = (
     variantType: keyof typeof InsuranceChipVariantType,
   ): string => {
     return InsuranceChipVariantType[variantType] || 'basic'
   }
 
+  const router = useRouter()
+  const onDeleteAction = () => deleteInsurance({ id: insurance?.id })
+
+  const [isUpdateFormTrigger, setIsUpdateFormTrigger] = useState(false)
+
+  const toggleUpdateFormTrigger = () => setIsUpdateFormTrigger((prev) => !prev)
+
   const trigger = (
     <>
-      <Box className="pb-4">
+      <Box>
         <Flex align="center" justify="between" className="mb-3" width="100%">
           <Flex align="center" gap="2">
             <Heading weight="medium" size="4" className="font-sans text-[18px]">
@@ -28,8 +49,19 @@ const InsuranceFormTrigger = ({ insurance }: { insurance: Insurance }) => {
           </Flex>
 
           <Flex align="center" gap="3">
-            <EditableFieldValue />
+            <Box onClick={toggleUpdateFormTrigger}>
+              <EditableFieldValue />
+            </Box>
             <Separator orientation="vertical" />
+            <DeletableFieldValue
+              tooltip="Remove this insurance"
+              deleteAction={onDeleteAction}
+              onSuccess={router.refresh}
+              confirmTitle="Remove Insurance"
+              confirmDescription="Are you sure you want to remove this insurance?"
+              confirmActionLabel="Remove insurance"
+              toastTitle="Insurance Removed"
+            />
           </Flex>
         </Flex>
 
@@ -73,7 +105,19 @@ const InsuranceFormTrigger = ({ insurance }: { insurance: Insurance }) => {
         </Flex>
       </Box>
 
-      <Separator className="absolute left-0 right-6 w-full" />
+      {isUpdateFormTrigger && (
+        <Box className="mt-3">
+          <InsuranceForm
+            key={insurance.id}
+            insurance={insurance}
+            insurancePayers={insurancePayers}
+            insurancePriority={
+              insurance.insurancePolicyPriority as InsurancePolicyPriority
+            }
+            onFormClose={toggleUpdateFormTrigger}
+          />
+        </Box>
+      )}
     </>
   )
   return trigger

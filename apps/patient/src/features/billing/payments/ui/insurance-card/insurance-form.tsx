@@ -6,20 +6,20 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { ActionErrorState, ActionSuccessState } from '@psychplus-v2/api'
 import { CODESETS } from '@psychplus-v2/constants'
 import { getAgeFromDate, getCalendarDate } from '@psychplus-v2/utils'
-import { Box, Flex, Text, TextFieldInput } from '@radix-ui/themes'
+import { Box, Flex, Grid, Text, TextFieldInput } from '@radix-ui/themes'
 import { useForm } from 'react-hook-form'
 import z from 'zod'
 import { FormTextInput } from '@psychplus/form'
 import { RadioGroup } from '@psychplus/ui/radio-group'
 import {
   CodesetFormSelect,
-  FormField,
   FormFieldContainer,
   FormFieldError,
   FormFieldLabel,
   SSNInput,
   ToggleableForm,
 } from '@/components-v2'
+import { getPlaceholder } from '@/features/account/profile/utils'
 import { Insurance, InsurancePayer } from '@/features/billing/payments/types'
 import {
   deleteInsurance,
@@ -39,8 +39,8 @@ const schema = z
   .object({
     payerName: z.string().min(1, 'Required'),
     insurancePlanId: z.string().min(1, 'Required'),
-    effectiveDate: z.string(),
-    terminationDate: z.string(),
+    effectiveDate: z.string().min(1, 'Required'),
+    terminationDate: z.string().min(1, 'Required'),
     memberId: z.string().trim().min(1, 'Required').max(16, 'Invalid Member ID'),
     groupNumber: z
       .string()
@@ -52,95 +52,65 @@ const schema = z
     policyHolderLastName: z.string().trim().optional(),
     policyHolderGender: z.string().optional(),
     policyHolderRelationship: z.string().optional(),
-    insurancePolicyPriority: z.string().optional(),
+    insurancePolicyPriority: z.string().min(1, 'Required'),
     policyHolderDateOfBirth: z.string(),
     policyHolderSocialSecurityNumber: z.string().optional(),
     hasCardFrontImage: z.boolean(),
     hasCardBackImage: z.boolean(),
   })
   .superRefine((data, ctx) => {
-    if (
-      data.effectiveDate === '' ||
-      data.effectiveDate === null ||
-      data.effectiveDate === undefined
-    ) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: 'Required',
-        path: ['effectiveDate'],
-      })
-    }
+    if (!data.isPatientPolicyHolder) {
+      if (!data.policyHolderFirstName) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: 'Required',
+          path: ['policyHolderFirstName'],
+        })
+      }
 
-    if ((data.terminationDate ?? '') === '') {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: 'Required',
-        path: ['terminationDate'],
-      })
-    }
+      if (!data.policyHolderLastName) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: 'Required',
+          path: ['policyHolderLastName'],
+        })
+      }
 
-    if (data.isPatientPolicyHolder) {
-      return true
-    }
+      if (
+        data.policyHolderDateOfBirth === '' ||
+        data.policyHolderDateOfBirth === null ||
+        data.policyHolderDateOfBirth === undefined
+      ) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: 'Required',
+          fatal: true,
+          path: ['policyHolderDateOfBirth'],
+        })
+      } else if (getAgeFromDate(data.policyHolderDateOfBirth) < 18) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: 'Must be at least 18 years of age',
+          fatal: true,
+          path: ['policyHolderDateOfBirth'],
+        })
+      }
 
-    if (!data.policyHolderFirstName) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: 'Required',
-        path: ['policyHolderFirstName'],
-      })
-    }
+      if (!data.policyHolderGender) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: 'Required',
+          path: ['policyHolderGender'],
+        })
+      }
 
-    if (!data.policyHolderLastName) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: 'Required',
-        path: ['policyHolderLastName'],
-      })
-    }
-
-    if (
-      data.policyHolderDateOfBirth === '' ||
-      data.policyHolderDateOfBirth === null ||
-      data.policyHolderDateOfBirth === undefined
-    ) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: 'Required',
-        fatal: true,
-        path: ['policyHolderDateOfBirth'],
-      })
-    } else if (getAgeFromDate(data.policyHolderDateOfBirth) < 18) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: 'Must be at least 18 years of age',
-        fatal: true,
-        path: ['policyHolderDateOfBirth'],
-      })
-    }
-
-    if (!data.policyHolderGender) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: 'Required',
-        path: ['policyHolderGender'],
-      })
-    }
-
-    if (!data.policyHolderRelationship) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: 'Required',
-        path: ['policyHolderRelationship'],
-      })
-    }
-
-    if (!data.insurancePolicyPriority) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: 'Required',
-        path: ['insurancePolicyPriority'],
-      })
+      if (!data.policyHolderRelationship) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: 'Required',
+          path: ['policyHolderRelationship'],
+        })
+      }
     }
   })
 
@@ -196,7 +166,7 @@ const InsuranceForm = ({
 
   const getFormDefaultValues = (insurance?: Insurance) => ({
     payerName: insurance?.payerName ?? '',
-    insurancePlanId: insurance?.insurancePlanId,
+    insurancePlanId: insurance?.insurancePlanId ?? '',
     effectiveDate: insurance?.effectiveDate
       ? getCalendarDate(insurance.effectiveDate).toString()
       : '',
@@ -314,21 +284,20 @@ const InsuranceForm = ({
   const onCheckedChange = (value: string) => {
     form.setValue('isPatientPolicyHolder', value === 'Yes')
 
-    if (value === 'Yes') {
-      form.reset({
-        ...form.getValues(),
-        policyHolderFirstName: '',
-        policyHolderLastName: '',
-        policyHolderDateOfBirth: '',
-        policyHolderGender: '',
-        policyHolderRelationship: '',
-        policyHolderSocialSecurityNumber: '',
-      })
+    if (form.formState.isSubmitted) {
+      form.trigger([
+        'policyHolderFirstName',
+        'policyHolderLastName',
+        'policyHolderDateOfBirth',
+        'policyHolderGender',
+        'policyHolderRelationship',
+      ])
     }
   }
 
   const onSuccess = () => {
     router.refresh()
+    form.reset({})
     onFormClose?.()
   }
 
@@ -394,8 +363,9 @@ const InsuranceForm = ({
           />
         </Flex>
       </FormFieldContainer>
-      <Flex gap="3" width="100%">
-        <FormFieldContainer className="flex-1">
+
+      <Grid columns="4" gap="3" className="w-full">
+        <FormFieldContainer>
           <FormFieldLabel required>Priority</FormFieldLabel>
 
           <CodesetFormSelect
@@ -403,24 +373,37 @@ const InsuranceForm = ({
             codeset={CODESETS.InsurancePolicyPriority}
             placeholder="Select priority"
           />
+          <FormFieldError name="insurancePolicyPriority" />
         </FormFieldContainer>
-        <FormFieldContainer className="flex-1">
+
+        <FormFieldContainer>
           <PayerSelect payers={insurancePayers} />
         </FormFieldContainer>
-        <FormFieldContainer className="flex-1">
+
+        <FormFieldContainer>
           <PlanSelect payers={insurancePayers} />
         </FormFieldContainer>
 
-        <FormFieldContainer className="flex-1">
+        <FormFieldContainer>
           <FormFieldLabel required>Member ID</FormFieldLabel>
-          <TextFieldInput {...form.register('memberId')} />
+          <TextFieldInput
+            {...form.register('memberId')}
+            placeholder={getPlaceholder('memberId')}
+            maxLength={16}
+          />
+          <FormFieldError name="memberId" />
         </FormFieldContainer>
-      </Flex>
+      </Grid>
 
       <Flex width="100%" gap="3" mt="2">
         <FormFieldContainer className="flex-1">
           <FormFieldLabel required>Group Number</FormFieldLabel>
-          <TextFieldInput {...form.register('groupNumber')} />
+          <TextFieldInput
+            {...form.register('groupNumber')}
+            placeholder={getPlaceholder('groupNumber')}
+            maxLength={16}
+          />
+          <FormFieldError name="groupNumber" />
         </FormFieldContainer>
 
         <FormFieldContainer className="flex-1">
@@ -492,13 +475,19 @@ const InsuranceForm = ({
           <Flex gap="3" className="w-full">
             <FormFieldContainer className="flex-1">
               <FormFieldLabel required>First Name</FormFieldLabel>
-              <TextFieldInput {...form.register('policyHolderFirstName')} />
+              <TextFieldInput
+                {...form.register('policyHolderFirstName')}
+                placeholder={getPlaceholder('firstName')}
+              />
               <FormFieldError name="policyHolderFirstName" />
             </FormFieldContainer>
 
             <FormFieldContainer className="flex-1">
               <FormFieldLabel required>Last Name</FormFieldLabel>
-              <TextFieldInput {...form.register('policyHolderLastName')} />
+              <TextFieldInput
+                {...form.register('policyHolderLastName')}
+                placeholder={getPlaceholder('lastName')}
+              />
               <FormFieldError name="policyHolderLastName" />
             </FormFieldContainer>
 
@@ -529,7 +518,11 @@ const InsuranceForm = ({
           <Flex gap="3" className="w-full">
             <FormFieldContainer className="flex-1">
               <FormFieldLabel>SSN</FormFieldLabel>
-              <SSNInput name="policyHolderSocialSecurityNumber" size="2" />
+              <SSNInput
+                name="policyHolderSocialSecurityNumber"
+                size="2"
+                placeholder={getPlaceholder('ssn')}
+              />
               <FormFieldError name="policyHolderSocialSecurityNumber" />
             </FormFieldContainer>
 

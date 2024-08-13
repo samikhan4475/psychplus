@@ -87,19 +87,21 @@ const PaymentMethodAccordion = ({
           <PaymentMethodsAccordionItem
             title="Insurance on File"
             content={
-              <Flex width="100%" gap="2" direction="column">
-                {
-                  patientInsurances.map((insurance) => (
-                  <InsuranceForm
+              <Flex direction="column" width="100%" gap="3">
+                {patientInsurances.map((insurance) => (
+                  <Flex
                     key={insurance.id}
-                    insurance={insurance}
-                    insurancePayers={insurancePayers}
-                    insurancePriority={ insurance.insurancePolicyPriority as InsurancePolicyPriority
-                    }
-                    trigger={<InsuranceFormTrigger insurance={insurance} />}
-                  />    
-                  ))
-                }
+                    p="3"
+                    className="w-full rounded-2 border border-[#DDDDE3]"
+                  >
+                    <Box className="w-full">
+                      <InsuranceFormTrigger
+                        insurance={insurance}
+                        insurancePayers={insurancePayers}
+                      />
+                    </Box>
+                  </Flex>
+                ))}
               </Flex>
             }
           />

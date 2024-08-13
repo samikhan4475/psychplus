@@ -16,6 +16,7 @@ interface EditableFieldValueProps<T> {
   confirmTitle: string
   confirmDescription: string
   confirmActionLabel: string
+  toastTitle: string
 }
 
 const DeletableFieldValue = <T,>({
@@ -27,6 +28,7 @@ const DeletableFieldValue = <T,>({
   confirmTitle,
   confirmDescription,
   confirmActionLabel,
+  toastTitle,
 }: React.PropsWithChildren<EditableFieldValueProps<T>>) => {
   const { toast } = useToast()
   const [open, setOpen] = useState(false)
@@ -47,7 +49,7 @@ const DeletableFieldValue = <T,>({
 
     toast({
       type: 'success',
-      title: 'Credit Card Removed',
+      title: toastTitle,
     })
 
     onSuccess?.()
