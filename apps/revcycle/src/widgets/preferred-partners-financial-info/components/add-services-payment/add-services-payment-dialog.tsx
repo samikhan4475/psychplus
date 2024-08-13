@@ -24,7 +24,7 @@ const AddServicesPaymentDialog = ({
           <Dialog.Title>
             Payment{' '}
             <Button
-              className="float-right bg-transparent text-[#000]"
+              className="float-right cursor-pointer bg-transparent text-[#000]"
               onClick={() => setIsDialogOpen(false)}
             >
               X

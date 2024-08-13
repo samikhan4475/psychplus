@@ -16,4 +16,11 @@ function calculateAge(birthday: string | undefined) {
   return age
 }
 
-export { calculateAge }
+const getFormatedDate = (date: Date | undefined) => {
+  const currentDate = date ?? new Date()
+  const month = String(currentDate.getMonth() + 1).padStart(2, '0')
+  const day = String(currentDate.getDate()).padStart(2, '0')
+  return `${currentDate.getFullYear()}-${month}-${day}`
+}
+
+export { calculateAge, getFormatedDate }

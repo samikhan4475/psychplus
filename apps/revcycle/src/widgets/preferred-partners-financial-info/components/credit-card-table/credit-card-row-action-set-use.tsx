@@ -19,8 +19,8 @@ const CreditCardRowActionSetUse = ({
     const activeAction = !isActive
 
     if (creditCard.isPrimary && !activeAction) {
-      alert('Primary card cannot be deactivated!')
       setIsActive(true)
+      alert('Primary card cannot be deactivated!')
       return
     }
 
@@ -39,7 +39,11 @@ const CreditCardRowActionSetUse = ({
   }
 
   return (
-    <Switch defaultChecked={isActive} onClick={onChangeUse} />
+    <Switch
+      defaultChecked={isActive}
+      checked={isActive}
+      onClick={onChangeUse}
+    />
   )
 }
 

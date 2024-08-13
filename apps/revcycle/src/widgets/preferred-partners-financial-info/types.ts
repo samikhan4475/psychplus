@@ -155,8 +155,8 @@ interface PatientTransactions {
 
 interface ServicesHistoryPayload {
   patientIds?: number[]
-  startDate: string
-  endDate: string
+  startDate: string | null
+  endDate: string | null
   transactionTypes: string[]
   preferredPartnerIds: string[]
   preferredPartnerId: string
@@ -269,9 +269,9 @@ interface CustomChargePayload {
   transactionNumber: string
   type: string
   description: string
-  appointmentId: string
+  appointmentId: number
   visitNumber: string
-  coPayDue?: string
+  coPayDue?: number
   coPayPaid?: number
   coInsuranceDue?: number
   coInsurancePaid?: number

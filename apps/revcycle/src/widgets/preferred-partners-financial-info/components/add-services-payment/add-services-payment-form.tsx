@@ -25,6 +25,11 @@ import {
 } from '../../api.client'
 import { useStore } from '../../store'
 import {
+  AmericanExCardTypeSvg,
+  MasterCardTypeSvg,
+  PayPalCardTypeSvg,
+} from '../../svg'
+import {
   FormSelectOption,
   PatientInfo,
   PatientTransactionHistory,
@@ -95,16 +100,16 @@ const columns: ColumnDef<PatientTransactionHistory>[] = [
     ),
     cell: ({ row }) => (
       <Flex direction="row">
-          <Box className="flex-1 border-t-[0.5px] border-[#CAD8FD]">
-            <Text>${row.original.coPayDue}</Text>
-          </Box>
-          <Box className="flex-1 border-t-[0.5px] border-[#CAD8FD]">
-            <Text>$0.00</Text>
-          </Box>
-          <Box className="flex-1 border-t-[0.5px] border-[#CAD8FD]">
-            <Text>${row.original.coPayPaid}</Text>
-          </Box>
-        </Flex>
+        <Box className="flex-1 border-t-[0.5px] border-[#CAD8FD]">
+          <Text>${row.original.coPayDue}</Text>
+        </Box>
+        <Box className="flex-1 border-t-[0.5px] border-[#CAD8FD]">
+          <Text>$0.00</Text>
+        </Box>
+        <Box className="flex-1 border-t-[0.5px] border-[#CAD8FD]">
+          <Text>${row.original.coPayPaid}</Text>
+        </Box>
+      </Flex>
     ),
   },
   {
@@ -132,16 +137,16 @@ const columns: ColumnDef<PatientTransactionHistory>[] = [
     ),
     cell: ({ row }) => (
       <Flex direction="row">
-          <Box className="flex-1 border-t-[0.5px] border-[#CAD8FD]">
-            <Text>${row.original.coInsDue}</Text>
-          </Box>
-          <Box className="flex-1 border-t-[0.5px] border-[#CAD8FD]">
-            <Text>$0.00</Text>
-          </Box>
-          <Box className="flex-1 border-t-[0.5px] border-[#CAD8FD]">
-            <Text>${row.original.coInsPaid}</Text>
-          </Box>
-        </Flex>
+        <Box className="flex-1 border-t-[0.5px] border-[#CAD8FD]">
+          <Text>${row.original.coInsDue}</Text>
+        </Box>
+        <Box className="flex-1 border-t-[0.5px] border-[#CAD8FD]">
+          <Text>$0.00</Text>
+        </Box>
+        <Box className="flex-1 border-t-[0.5px] border-[#CAD8FD]">
+          <Text>${row.original.coInsPaid}</Text>
+        </Box>
+      </Flex>
     ),
   },
   {
@@ -169,16 +174,16 @@ const columns: ColumnDef<PatientTransactionHistory>[] = [
     ),
     cell: ({ row }) => (
       <Flex direction="row">
-          <Box className="flex-1 border-t-[0.5px] border-[#CAD8FD]">
-            <Text>${row.original.balanceDue}</Text>
-          </Box>
-          <Box className="flex-1 border-t-[0.5px] border-[#CAD8FD]">
-            <Text>$0.00</Text>
-          </Box>
-          <Box className="flex-1 border-t-[0.5px] border-[#CAD8FD]">
-            <Text>${row.original.balancePaid}</Text>
-          </Box>
-        </Flex>
+        <Box className="flex-1 border-t-[0.5px] border-[#CAD8FD]">
+          <Text>${row.original.balanceDue}</Text>
+        </Box>
+        <Box className="flex-1 border-t-[0.5px] border-[#CAD8FD]">
+          <Text>$0.00</Text>
+        </Box>
+        <Box className="flex-1 border-t-[0.5px] border-[#CAD8FD]">
+          <Text>${row.original.balancePaid}</Text>
+        </Box>
+      </Flex>
     ),
   },
 ]
@@ -295,8 +300,8 @@ const AddServicesPaymentForm = () => {
     }))
 
     try {
-       await createPayment(apiPayload, preferredPartnerId)
-       window.location.replace(`/widgets/preferred-partners-financial-info`)
+      await createPayment(apiPayload, preferredPartnerId)
+      window.location.replace(`/widgets/preferred-partners-financial-info`)
     } catch (error) {
       window.location.replace(`/widgets/preferred-partners-financial-info`)
     }
@@ -342,7 +347,7 @@ const AddServicesPaymentForm = () => {
         <Flex direction={'column'} className="rounded-[4px] border-[#F3F3F3]">
           <Flex direction="column" gap="4" mb="4" className="bg-[#EEF2F6] p-1">
             <Text as="label" size="2" weight="bold">
-              Personal Information
+              Patient Information
             </Text>
           </Flex>
 
@@ -366,7 +371,6 @@ const AddServicesPaymentForm = () => {
                     <Text weight="bold">Age</Text>
                     <Text> {calculateAge(patientData?.birthdate)} yrs</Text>
                   </Box>
-                  
                 </Flex>
               </Flex>
             </Box>
@@ -637,7 +641,10 @@ const AddServicesPaymentForm = () => {
               <Box style={{ flex: 7.8 }}>
                 <Checkbox size="3" onClick={onMonthlyPaymentChange} />
                 <Text className="p-[5px]">
-                  Start Monthly Payment plan: minimum payment is $25/month
+                  Start Monthly Payment plan:{' '}
+                  <span className="text-[#8C8C8C]">
+                    minimum payment is $25/month
+                  </span>
                 </Text>
               </Box>
               <Box className="flex-1">
@@ -696,7 +703,7 @@ const AddServicesPaymentForm = () => {
                 as="label"
                 size="2"
                 htmlFor="paymentMethod"
-                className='text-right float-right'
+                className="float-right cursor-pointer text-right"
                 onClick={onChangeCard}
               >
                 Add Card/Change Card
@@ -704,25 +711,27 @@ const AddServicesPaymentForm = () => {
             </Box>
           </Flex>
 
-          <Flex>
-            <Box className="justify-start">
+          <Flex direction="row" justify="between">
+            <Box className="flex-1">
               <Text>Select Payment Method</Text>
             </Box>
-            <Box>
-              <FormSelect
-                label=""
-                size="2"
-                placeholder="Credit/Debit Card"
-                onValueChange={changePaymentMethod}
-                buttonClassName="w-[200px] float-right"
-                options={[
-                  { value: 'card', label: 'Credit/Debit Card' },
-                  { value: 'cash', label: 'Cash' },
-                  { value: 'cmd', label: 'CMD' },
-                  { value: 'cheque', label: 'Cheque' },
-                ]}
-                {...form.register('paymentMethod')}
-              />
+            <Box className="flex-1">
+              <Flex className="flex justify-end">
+                <FormSelect
+                  label=""
+                  size="2"
+                  placeholder="Credit/Debit Card"
+                  onValueChange={changePaymentMethod}
+                  buttonClassName="w-[200px]"
+                  options={[
+                    { value: 'card', label: 'Credit/Debit Card' },
+                    { value: 'cash', label: 'Cash' },
+                    { value: 'cmd', label: 'CMD' },
+                    { value: 'cheque', label: 'Cheque' },
+                  ]}
+                  {...form.register('paymentMethod')}
+                />
+              </Flex>
             </Box>
           </Flex>
 
@@ -732,18 +741,7 @@ const AddServicesPaymentForm = () => {
                 {selectedCard ? (
                   <Box className="flex-1 border-[#95AAD1] bg-[#F5FAFF] p-[5px]">
                     <Flex direction="row">
-                      <Box className="flex-1">
-                        <Image
-                          src="/images/card-type-icon.png"
-                          alt="Cards"
-                          width={80}
-                          height={8}
-                          style={{
-                            display: 'block',
-                            objectFit: 'cover',
-                          }}
-                        />
-                      </Box>
+                      <Box className="flex-1"></Box>
                       <Box className="flex-1">
                         <Text weight="bold">Card Type</Text>
                       </Box>
@@ -758,7 +756,25 @@ const AddServicesPaymentForm = () => {
                       </Box>
                     </Flex>
                     <Flex direction="row">
-                      <Box className="flex-1"></Box>
+                      <Box className="flex-1 ">
+                        {selectedCard.cardType === 'Visa' && (
+                          <Image
+                            src="/revcycle/images/card-type-icon.png"
+                            width="200"
+                            height="36"
+                            alt=""
+                          />
+                        )}
+                        {selectedCard.cardType === 'AmericanExpress' && (
+                          <AmericanExCardTypeSvg />
+                        )}
+                        {selectedCard.cardType === 'MasterCard' && (
+                          <MasterCardTypeSvg />
+                        )}
+                        {selectedCard.cardType === 'PayPal' && (
+                          <PayPalCardTypeSvg />
+                        )}
+                      </Box>
                       <Box className="flex-1">{selectedCard.cardType}</Box>
                       <Box className="flex-1">{`***********${selectedCard.numberLastFour}`}</Box>
                       <Box className="flex-1">{selectedCard.name}</Box>
@@ -773,22 +789,22 @@ const AddServicesPaymentForm = () => {
 
             {paymentMethod === 'cmd' && (
               <FormTextInput
-                  size="2"
-                  type="text"
-                  label="Transaction NO."
-                  placeholder="123456789"
-                  {...form.register('cmd_transaction_no')}
-                />
+                size="2"
+                type="text"
+                label="Transaction NO."
+                placeholder="123456789"
+                {...form.register('cmd_transaction_no')}
+              />
             )}
 
             {paymentMethod === 'cheque' && (
-               <FormTextInput
-                  size="2"
-                  type="text"
-                  label="Cheque Number"
-                  placeholder="123456789"
-                  {...form.register('cheque_number')}
-                />
+              <FormTextInput
+                size="2"
+                type="text"
+                label="Cheque Number"
+                placeholder="123456789"
+                {...form.register('cheque_number')}
+              />
             )}
           </Flex>
 
@@ -814,10 +830,10 @@ const AddServicesPaymentForm = () => {
       </Flex>
 
       <Flex gap="3" justify="end">
-        <Button size="3" variant="outline">
+        <Button size="3" variant="outline" className="cursor-pointer">
           Save & Close
         </Button>
-        <FormSubmitButton size="3" className="bg-[#101D46]">
+        <FormSubmitButton size="3" className="cursor-pointer bg-[#101D46]">
           Make Payment
         </FormSubmitButton>
       </Flex>

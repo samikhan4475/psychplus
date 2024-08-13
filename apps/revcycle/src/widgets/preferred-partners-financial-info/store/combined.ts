@@ -8,6 +8,10 @@ import {
   type CreditCardState,
 } from './credit-card-store'
 import {
+  createCustomChargeStore,
+  type CustomChargeState,
+} from './custom-charge-store'
+import {
   preferredPartnerFinancialStore,
   type PreferredPartnerFinancialState,
 } from './preferred-partner-financial-store'
@@ -23,7 +27,8 @@ import {
 type Store = CreditCardState &
   SubscriptionHistoryState &
   ServicesHistoryState &
-  PreferredPartnerFinancialState
+  PreferredPartnerFinancialState &
+  CustomChargeState
 
 const useStore = createWithEqualityFn<Store>(
   combineStateCreators(
@@ -31,6 +36,7 @@ const useStore = createWithEqualityFn<Store>(
     createServicesHistoryStore,
     createSubscriptionHistoryStore,
     preferredPartnerFinancialStore,
+    createCustomChargeStore,
   ),
   shallow,
 )

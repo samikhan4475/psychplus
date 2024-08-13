@@ -1,3 +1,4 @@
+import { TrashIcon } from '@radix-ui/react-icons'
 import { type PropsWithRow } from '@psychplus/ui/data-table'
 import { DropdownMenu } from '@psychplus/ui/dropdown-menu'
 import { deleteServicesHistory } from '../../api.client'
@@ -36,7 +37,6 @@ const ServicesRowActionDelete = ({
         setRefreshServicesHistory(!refreshServicesHistory)
       } finally {
         setRefreshServicesHistory(!refreshServicesHistory)
-        window.location.replace(`/widgets/preferred-partners-financial-info`)
       }
     }
   }
@@ -49,6 +49,7 @@ const ServicesRowActionDelete = ({
           deleteRecord(tansaction)
         }}
       >
+        <TrashIcon />
         Delete
       </DropdownMenu.Item>
     </>

@@ -21,11 +21,10 @@ const SelectCardPopupForm = () => {
           </Box>
           <Box className="right-0 top-0">
             <Image
-              src="/images/payment-methods.png"
-              alt="Cards"
-              width={250}
-              height={10}
-              className="flex object-cover"
+              src="/revcycle/images/payment-methods.png"
+              width="200"
+              height="36"
+              alt=""
             />
           </Box>
         </Flex>

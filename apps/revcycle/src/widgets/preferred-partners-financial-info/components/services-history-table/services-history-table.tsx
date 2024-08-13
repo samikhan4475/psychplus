@@ -1,9 +1,5 @@
 import { useEffect, useState } from 'react'
-import {
-  IdCardIcon,
-  MagnifyingGlassIcon,
-  PlusIcon,
-} from '@radix-ui/react-icons'
+import { MagnifyingGlassIcon, PlusIcon } from '@radix-ui/react-icons'
 import { Box, Flex, Strong, Text } from '@radix-ui/themes'
 import { type ColumnDef } from '@tanstack/react-table'
 import { type SubmitHandler } from 'react-hook-form'
@@ -26,12 +22,14 @@ import { DatePicker } from '@psychplus/ui/date-picker'
 import { TableCellText } from '@psychplus/ui/table-cell'
 import { getPreferredPartnerServicesHistory } from '../../api.client'
 import { useStore } from '../../store'
+import { PaymentCardIconSvg } from '../../svg'
 import { PatientTransactions, ServicesHistory } from '../../types'
 import { AddServicesCustomChargeDialog } from '../add-services-custom-charge'
 import { AddServicesPaymentDialog } from '../add-services-payment'
 import { ServicesRowActionDelete } from './services-row-action-delete'
 import { ServicesRowActionEdit } from './services-row-action-edit'
 import '../../prefferred.css'
+import { getFormatedDate } from '../../utils'
 
 const rowActions: RowAction<PatientTransactions>[] = [
   {
@@ -45,15 +43,13 @@ const rowActions: RowAction<PatientTransactions>[] = [
 ]
 
 const DataTableHeader = () => {
-  const [customCharge, setCustomCharge] = useState(false)
   const [payment, setPayment] = useState(false)
+  const { setCustomChargePopup } = useStore((state) => ({
+    setCustomChargePopup: state.setCustomChargePopup,
+  }))
 
   return (
     <>
-      <AddServicesCustomChargeDialog
-        setIsDialogOpen={setCustomCharge}
-        isopen={customCharge}
-      />
       <AddServicesPaymentDialog
         setIsDialogOpen={setPayment}
         isDialogOpen={payment}
@@ -69,17 +65,13 @@ const DataTableHeader = () => {
             onClick={() => setPayment(true)}
             className="bg-transparent text-[#101D46]"
           >
-            <IdCardIcon />
+            <PaymentCardIconSvg />
             Payment
           </Button>
           <Button
-            onClick={() => setCustomCharge(true)}
-            style={{
-              color: '#101D46',
-              background: 'none',
-              borderColor: '#101D46',
-            }}
-            variant="outline"
+            onClick={() => setCustomChargePopup(true)}
+            className="shadow shadow-none border-[1px] border-solid border-[#9E9898CC] bg-transparent text-[#000]"
+            variant="surface"
           >
             <PlusIcon />
             Add Custom Charge
@@ -334,16 +326,9 @@ const columns: ColumnDef<any>[] = [
 
 const ServicesHistoryTable = () => {
   const preferredPartnerId = useStore((state) => state.preferredPartnerId)
+  const customChargePopup = useStore((state) => state.customChargePopup)
   const refreshServicesHistory: boolean = useStore(
     (state) => state.refreshServicesHistory,
-  )
-
-  const servicesHistoryPopup: boolean = useStore(
-    (state) => state.servicesHistoryPopup,
-  )
-
-  const setServicesHistoryPopup = useStore(
-    (state) => state.setServicesHistoryPopup,
   )
 
   const [fromDate, setFromDate] = useState<Date | undefined>()
@@ -353,14 +338,14 @@ const ServicesHistoryTable = () => {
 
   useEffect(() => {
     init()
-  }, [filters, refreshServicesHistory])
+  }, [filters, refreshServicesHistory, customChargePopup])
 
   const init = async () => {
     const request = {
       preferredPartnerId,
-      startDate: `${fromDate}`,
-      endDate: `${toDate}`,
-      transactionTypes: filters.transactionTypes || [],
+      startDate: fromDate ? getFormatedDate(fromDate) : null,
+      endDate: toDate ? getFormatedDate(toDate) : null,
+      transactionTypes: filters.transactionTypes ?? [],
       preferredPartnerIds: [preferredPartnerId],
     }
 
@@ -386,26 +371,23 @@ const ServicesHistoryTable = () => {
 
   const onSubmit: SubmitHandler<SchemaType> = async (data) => {
     setFilters({
-      startDate: fromDate,
-      endDate: toDate,
-      transactionTypes: [data.chargeType],
+      startDate: getFormatedDate(fromDate),
+      endDate: getFormatedDate(toDate),
+      transactionTypes: data.chargeType ? [data.chargeType] : [],
     })
   }
 
   const onClear = () => {
     setFilters([])
-  }
-
-  const setIsDialogOpen = () => {
-    setServicesHistoryPopup(false)
+    setFromDate(undefined)
+    setToDate(undefined)
+    form.setValue('chargeType', '')
+    form.setValue('dateRange', '')
   }
 
   return (
     <>
-      <AddServicesCustomChargeDialog
-        setIsDialogOpen={setIsDialogOpen}
-        isopen={servicesHistoryPopup}
-      />
+      <AddServicesCustomChargeDialog />
       <Flex direction="column">
         <DataTableHeader />
       </Flex>
@@ -460,7 +442,6 @@ const ServicesHistoryTable = () => {
                           size="2"
                           label=""
                           placeholder="Date Range"
-                          data-testid="add-credit-card-type"
                           options={[
                             { value: '30', label: '30' },
                             { value: '60', label: '60' },
@@ -468,6 +449,7 @@ const ServicesHistoryTable = () => {
                             { value: '180', label: '180' },
                           ]}
                           {...form.register('dateRange')}
+                          buttonClassName="w-[150px]"
                         />
                       </Box>
                       <Box className="flex-1">
@@ -477,6 +459,7 @@ const ServicesHistoryTable = () => {
                           buttonClassName="w-[150px] justify-between text-left font-regular"
                           reverse={true}
                           color="gray"
+                          placeholder="Date from"
                         />
                       </Box>
                       <Box className="flex-1">
@@ -486,6 +469,7 @@ const ServicesHistoryTable = () => {
                           buttonClassName="w-[150px] justify-between text-left font-regular"
                           reverse={true}
                           color="gray"
+                          placeholder="Date to"
                         />
                       </Box>
                       <Box className="flex-1">
@@ -493,7 +477,6 @@ const ServicesHistoryTable = () => {
                           size="2"
                           label=""
                           placeholder="Charge type"
-                          data-testid="add-credit-card-type"
                           options={[
                             { value: 'Letter', label: 'Letter' },
                             { value: 'Records', label: 'Records' },
@@ -501,14 +484,11 @@ const ServicesHistoryTable = () => {
                             { value: 'Visit', label: 'Visit' },
                           ]}
                           {...form.register('chargeType')}
+                          buttonClassName="w-[150px]"
                         />
                       </Box>
                       <Box className="flex-1">
-                        <FormSubmitButton
-                          size="2"
-                          data-testid="add-claim-status-submit-button"
-                          className="bg-[#101D46]"
-                        >
+                        <FormSubmitButton size="2" className="bg-[#101D46]">
                           <MagnifyingGlassIcon />
                         </FormSubmitButton>
                       </Box>

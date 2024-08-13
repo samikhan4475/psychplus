@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Box, Flex, Text } from '@radix-ui/themes'
+import { Box, Flex, Grid, Text } from '@radix-ui/themes'
 import { type SubmitHandler } from 'react-hook-form'
 import { z } from 'zod'
 import {
@@ -14,20 +14,19 @@ import { DatePicker } from '@psychplus/ui/date-picker'
 import { createCustomCharge } from '../../api.client'
 import { useStore } from '../../store'
 import { PatientTransactions } from '../../types'
+import { FinancialFields } from './financial-fields'
 
 const schema = z.object({
   charge: validate.requiredString,
   description: validate.requiredString,
-  visit: validate.requiredString,
-  copay_duept: validate.nullOrString,
-  coins_duepaid: validate.numberOnly,
-  copay_duepp: validate.numberOnly,
-  copay_paid: validate.numberOnly,
-  coins_duept: validate.nullOrNumber,
-  coins_duepp: validate.numberOnly,
-  balance_duept: validate.nullOrNumber,
-  balance_duepp: validate.numberOnly,
-  balance_duepaid: validate.numberOnly,
+  visit: validate.anyString,
+  time: validate.requiredString,
+  coins_duepaid: validate.requiredString,
+  copay_duepp: validate.requiredString,
+  copay_paid: validate.requiredString,
+  coins_duepp: validate.requiredString,
+  balance_duepp: validate.requiredString,
+  balance_duepaid: validate.requiredString,
 })
 
 type SchemaType = z.infer<typeof schema>
@@ -42,7 +41,7 @@ const AddServicesCustomChargeForm = ({
     (state) => state.servicesHistoryEditTransaction,
   )
   const [date, setDate] = useState<Date | undefined>()
-  const [time, setTime] = useState<string>('')
+  const [dateRequiredError, setDateRequiredError] = useState<boolean>(false)
 
   const form = useForm({
     schema,
@@ -55,27 +54,38 @@ const AddServicesCustomChargeForm = ({
   })
 
   const onSubmit: SubmitHandler<SchemaType> = async (data) => {
+    let isoString = ''
+    if (date) {
+      const [hours, minutes] = data.time.split(':').map(Number)
+      date.setHours(hours, minutes)
+      isoString = date.toISOString().toString()
+      setDateRequiredError(false)
+    } else {
+      setDateRequiredError(true)
+    }
+
     try {
       const apiPayload = {
-        chargeDate: `${date} ${time}`,
-        transactionNumber: `${data.visit}`,
+        chargeDate: isoString,
+        transactionNumber:
+          data.visit !== 'undefined' ? `${data.visit}` : 'string',
         type: data.charge,
         description: data.description,
-        appointmentId: data.visit,
-        visitNumber: data.visit,
-        coPayDue: data.copay_duept ?? '',
-        coPayPaid: data.copay_paid,
-        coInsuranceDue: data.coins_duepp,
-        coInsurancePaid: data.coins_duepaid,
-        balanceDue: data.balance_duepp,
-        balancePaid: data.balance_duepaid,
+        appointmentId: data.visit !== 'undefined' ? parseInt(data.visit) : 0,
+        visitNumber: data.visit !== 'undefined' ? data.visit : 'string',
+        coPayDue: parseFloat(data.copay_duepp),
+        coPayPaid: parseFloat(data.copay_paid),
+        coInsuranceDue: parseFloat(data.coins_duepp),
+        coInsurancePaid: parseFloat(data.coins_duepaid),
+        balanceDue: parseFloat(data.balance_duepp),
+        balancePaid: parseFloat(data.balance_duepaid),
         preferredPartnerId: preferredPartnerId,
         isPreferredPartnerTransaction: true,
         patientId: 2118, //TODO: for testing purpose
+        is_active: true,
       }
 
       await createCustomCharge(apiPayload)
-      setIsDialogOpen(false)
       alert('Custom charge has been successfully created!')
     } catch (error) {
       let message = ''
@@ -88,7 +98,7 @@ const AddServicesCustomChargeForm = ({
       }
       alert(`ERROR: ${message}`)
     } finally {
-      window.location.replace(`/widgets/preferred-partners-financial-info`)
+      setIsDialogOpen(false)
     }
   }
 
@@ -132,21 +142,22 @@ const AddServicesCustomChargeForm = ({
                   color="gray"
                 />
               </Flex>
+              {dateRequiredError && !date && (
+                <Text className="text-[13px] text-[#d03035]">Required</Text>
+              )}
             </Box>
             <Box className="flex-1">
-              <Text className="font-bold">Time</Text>
-              <Flex>
-                <input
-                  type="time"
-                  placeholder="00:00"
-                  className="border-gray rounded h-[29px] w-[100%] border-[1px] border-solid p-[5px]"
-                  onChange={(e) => setTime(e.target.value)}
-                />
-              </Flex>
+              <FormTextInput
+                type="time"
+                size="2"
+                label="Time"
+                placeholder="00:00"
+                className="w-[100%]"
+                {...form.register('time')}
+              />
             </Box>
           </Flex>
         </Flex>
-
         <Flex direction={'column'}>
           <Flex gap="4" className="p-1">
             <Box className="flex-1">
@@ -160,160 +171,103 @@ const AddServicesCustomChargeForm = ({
             </Box>
           </Flex>
         </Flex>
-
-        <Flex direction={'column'}>
-          <Flex gap="4" className="p-1">
-            <Box className="flex-1">Co-Pay</Box>
-            <Box className="flex-1">
-              <Flex>
-                <Box className="flex-1">Due PT</Box>
-                <Box className="flex-1">
-                  <FormTextInput
-                    type="text"
-                    size="1"
-                    label=""
-                    placeholder="$0.00"
-                    disabled={true}
-                    {...form.register('copay_duept')}
-                  />
-                </Box>
-              </Flex>
-            </Box>
-            <Box className="flex-1">
-              <Flex>
-                <Box className="pr-[5px]">Due PP</Box>
-                <Box>
-                  <FormTextInput
-                    type="text"
-                    size="1"
-                    label=""
-                    placeholder="$0.00"
-                    {...form.register('copay_duepp')}
-                  />
-                </Box>
-              </Flex>
-            </Box>
-            <Box className="flex-1">
-              <Flex>
-                <Box className="pr-[5px] text-[#34A432]">Paid</Box>
-                <Box>
-                  <FormTextInput
-                    type="text"
-                    label=""
-                    placeholder="$0.00"
-                    {...form.register('copay_paid')}
-                    size="1"
-                  />
-                </Box>
-              </Flex>
-            </Box>
-          </Flex>
-        </Flex>
-
-        <Flex direction={'column'}>
-          <Flex gap="4" className="p-1">
-            <Box className="flex-1">Co-Ins</Box>
-            <Box className="flex-1">
-              <Flex>
-                <Box className="flex-1">Due PT</Box>
-                <Box className="flex-1">
-                  <FormTextInput
-                    disabled={true}
-                    type="text"
-                    label=""
-                    placeholder="$0.00"
-                    {...form.register('coins_duept')}
-                    size="1"
-                    required={false}
-                  />
-                </Box>
-              </Flex>
-            </Box>
-            <Box className="flex-1">
-              <Flex>
-                <Box className="pr-[5px]">Due PP</Box>
-                <Box>
-                  <FormTextInput
-                    type="text"
-                    label=""
-                    placeholder="$0.00"
-                    {...form.register('coins_duepp')}
-                    size="1"
-                  />
-                </Box>
-              </Flex>
-            </Box>
-            <Box className="flex-1">
-              <Flex>
-                <Box className="pr-[5px] text-[#34A432]">Paid</Box>
-                <Box>
-                  <FormTextInput
-                    type="text"
-                    label=""
-                    placeholder="$0.00"
-                    {...form.register('coins_duepaid')}
-                    size="1"
-                  />
-                </Box>
-              </Flex>
-            </Box>
-          </Flex>
-        </Flex>
-
-        <Flex direction={'column'}>
-          <Flex gap="4" className="p-1">
-            <Box className="flex-1">Balance</Box>
-            <Box className="flex-1">
-              <Flex>
-                <Box className="flex-1">Due PT</Box>
-                <Box className="flex-1">
-                  <FormTextInput
-                    disabled={true}
-                    type="text"
-                    label=""
-                    placeholder="$0.00"
-                    {...form.register('balance_duept')}
-                    size="1"
-                    required={false}
-                  />
-                </Box>
-              </Flex>
-            </Box>
-            <Box className="flex-1">
-              <Flex>
-                <Box className="pr-[5px]">Due PP</Box>
-                <Box>
-                  <FormTextInput
-                    type="text"
-                    label=""
-                    placeholder="$0.00"
-                    {...form.register('balance_duepp')}
-                    size="1"
-                  />
-                </Box>
-              </Flex>
-            </Box>
-            <Box className="flex-1">
-              <Flex>
-                <Box className="pr-[5px] text-[#34A432]">Paid</Box>
-                <Box>
-                  <FormTextInput
-                    type="text"
-                    label=""
-                    placeholder="$0.00"
-                    {...form.register('balance_duepaid')}
-                    size="1"
-                  />
-                </Box>
-              </Flex>
-            </Box>
-          </Flex>
-        </Flex>
+        <Grid columns="4" className="col-span-1 flex">
+          <FinancialFields name="Co-Pay">
+            <Flex className="col-span-1 flex-1">
+              <Text className="pr-[5px] pt-[5px] text-[#194595]">Due PP</Text>
+              <Box>
+                <FormTextInput
+                  type="text"
+                  size="1"
+                  label=""
+                  placeholder="$0.00"
+                  {...form.register('copay_duepp')}
+                  className="h-[30px] w-[60px] text-[14px]"
+                />
+              </Box>
+            </Flex>
+            <Flex className="col-span-1 flex-1">
+              <Text className="pr-[5px] pt-[5px] text-[#34A432]">Paid</Text>
+              <Box className="flex">
+                <FormTextInput
+                  type="text"
+                  label=""
+                  placeholder="$0.00"
+                  {...form.register('copay_paid')}
+                  size="1"
+                  className="h-[30px] w-[60px] text-[14px]"
+                />
+              </Box>
+            </Flex>
+          </FinancialFields>
+        </Grid>
+        <Grid columns="4" className="col-span-1 flex">
+          <FinancialFields name="Co-Ins">
+            <Flex className="col-span-1 flex-1">
+              <Text className="pr-[5px] pt-[5px] text-[#194595]">Due PP</Text>
+              <Box className="justify-end">
+                <FormTextInput
+                  type="text"
+                  label=""
+                  placeholder="$0.00"
+                  {...form.register('coins_duepp')}
+                  size="1"
+                  className="h-[30px] w-[60px] text-[14px]"
+                />
+              </Box>
+            </Flex>
+            <Flex className="col-span-1 flex-1">
+              <Text className="pr-[5px] pt-[5px] text-[#34A432]">Paid</Text>
+              <Box className="flex">
+                <FormTextInput
+                  type="text"
+                  label=""
+                  placeholder="$0.00"
+                  {...form.register('coins_duepaid')}
+                  size="1"
+                  className="h-[30px] w-[60px] text-[14px]"
+                />
+              </Box>
+            </Flex>
+          </FinancialFields>
+        </Grid>
+        <Grid columns="4" className="col-span-1 flex">
+          <FinancialFields name="Balance">
+            <Flex className="col-span-1 flex-1">
+              <Text className="pr-[5px] pt-[5px] text-[#194595]">Due PP</Text>
+              <Box className="justify-end">
+                <FormTextInput
+                  type="text"
+                  label=""
+                  placeholder="$0.00"
+                  {...form.register('balance_duepp')}
+                  size="1"
+                  className="h-[30px] w-[60px] text-[14px]"
+                />
+              </Box>
+            </Flex>
+            <Flex className="col-span-1 flex-1">
+              <Text className="pr-[5px] pt-[5px] text-[#34A432]">Paid</Text>
+              <Box className="flex">
+                <FormTextInput
+                  type="text"
+                  label=""
+                  placeholder="$0.00"
+                  {...form.register('balance_duepaid')}
+                  size="1"
+                  className="h-[30px] w-[60px] text-[14px]"
+                />
+              </Box>
+            </Flex>
+          </FinancialFields>
+        </Grid>
       </Flex>
-
       <Flex gap="3">
         <Box className="flex-1">
-          <FormSubmitButton size="2" className="w-[100%] bg-[#101D46]">
+          <FormSubmitButton
+            size="3"
+            className="w-[100%] cursor-pointer bg-[#101D46]"
+          >
             Save Charges
           </FormSubmitButton>
         </Box>
@@ -322,4 +276,4 @@ const AddServicesCustomChargeForm = ({
   )
 }
 
-export { AddServicesCustomChargeForm }
+export { AddServicesCustomChargeForm, type SchemaType }

@@ -20,6 +20,7 @@ import {
 import { Checkbox } from '@psychplus/ui/checkbox'
 import { createPreferredPartnerCreditCard } from '../../api.client'
 import { useStore } from '../../store'
+import { CvvQuestionMarkSvg } from '../../svg'
 import { useAddCreditCard } from './hooks'
 
 const schema = z.object({
@@ -87,7 +88,8 @@ const AddCreditCardForm = () => {
     }
 
     const apiPayload = {
-      cardType: payload.card.brand,
+      cardType:
+        payload.card.brand === 'amex' ? 'AmericanExpress' : payload.card.brand,
       name: data.nameOnCard,
       numberLastFour: payload.card.last4,
       cvv: 123, // We don't need this because we are using stripe elements but still it's required by API
@@ -121,61 +123,74 @@ const AddCreditCardForm = () => {
           </Box>
           <Box className='top-0" right-0'>
             <Image
-              src="/images/payment-methods.png"
-              alt="Cards"
-              width={250}
-              height={10}
-              style={{
-                display: 'block',
-                objectFit: 'cover',
-              }}
+              src="/revcycle/images/payment-methods.png"
+              width="200"
+              height="36"
+              alt=""
             />
           </Box>
         </Flex>
 
         <Flex direction={'column'} className="rounded border border-[#F3F3F3]">
           <Flex direction="column" gap="4" mb="4" className="bg-[#EEF2F6] p-1">
-            <Text as="label" size="2" weight="bold" htmlFor="address1">
+            <Text as="label" size="2" weight="bold">
               Credit & Debit Cards Details
             </Text>
           </Flex>
           <Flex gap="4" className="p-1">
             <Box className="flex-1" width={'7'}>
-              <Text as="label" size="2" weight="bold" htmlFor="address1">
-                Card Number
+              <Text as="label" size="2" weight="bold">
+                Card Number*
               </Text>
-              <CardNumberElement className="mr-3 h-[36px] w-full rounded-3 border border-gray-7 py-[8px] pl-3" />
+              <CardNumberElement
+                className="mr-3 h-[36px] w-full rounded-3 border border-gray-7 py-[8px] pl-3"
+                options={{
+                  placeholder: 'xxxx-xxxx-xxxx-xxxx',
+                }}
+              />
             </Box>
             <Box className="flex-1">
               <FormTextInput
                 type="text"
                 label="Name on Card"
                 placeholder="Name"
-                data-testid="add-credit-card-name-input"
                 {...form.register('nameOnCard')}
               />
             </Box>
 
             <Box className="flex-1">
-              <Text as="label" size="2" weight="bold" htmlFor="address1">
+              <Text as="label" size="2" weight="bold">
                 Expiry Date
               </Text>
               <CardExpiryElement className="mr-3 h-[36px] w-full rounded-3 border border-gray-7 py-[8px] pl-3" />
             </Box>
 
             <Box className="flex-1">
-              <Text as="label" size="2" weight="bold" htmlFor="address1">
-                CVC
+              <Text
+                as="label"
+                size="2"
+                weight="bold"
+                className="flex inline-flex"
+              >
+                CVV{' '}
+                <span className="pl-2 pt-[2px]">
+                  <CvvQuestionMarkSvg />
+                </span>
               </Text>
 
-              <CardCvcElement className="mr-3 h-[36px] w-full rounded-3 border border-gray-7 py-[8px] pl-3" />
+              <CardCvcElement
+                className="mr-3 h-[36px] w-full rounded-3 border border-gray-7 py-[8px] pl-3"
+                options={{
+                  placeholder: 'CVV',
+                }}
+              />
             </Box>
           </Flex>
         </Flex>
 
         <Flex direction={'column'} className="rounded border border-[#F3F3F3]">
           <Flex direction="column" gap="4" mb="4" className="bg-[#EEF2F6] p-1">
-            <Text as="label" size="2" weight="bold" htmlFor="address1">
+            <Text as="label" size="2" weight="bold">
               Billing Address
             </Text>
           </Flex>
@@ -188,15 +203,11 @@ const AddCreditCardForm = () => {
                     <FormTextInput
                       type="text"
                       label="Address 1"
-                      placeholder="address1"
-                      data-testid="add-credit-card-name-input"
+                      placeholder="xxxx-xxxx-xxxx-xxxx"
                       {...form.register('address1')}
                     />
                   </Box>
                 </Flex>
-                <FormFieldError
-                  message={form.formState.errors.address1?.message}
-                />
               </Flex>
             </Box>
             <Box className="flex-1">
@@ -206,8 +217,7 @@ const AddCreditCardForm = () => {
                     <FormTextInput
                       type="text"
                       label="Address 2"
-                      placeholder="address2"
-                      data-testid="add-credit-address2-input"
+                      placeholder="Street"
                       {...form.register('address2')}
                     />
                   </Box>
@@ -221,7 +231,6 @@ const AddCreditCardForm = () => {
                 type="text"
                 label="City"
                 placeholder="City"
-                data-testid="add-credit-card-city-input"
                 {...form.register('city')}
               />
             </Box>
@@ -230,7 +239,6 @@ const AddCreditCardForm = () => {
                 type="text"
                 label="State"
                 placeholder="State"
-                data-testid="add-credit-card-state-input"
                 {...form.register('state')}
               />
             </Box>
@@ -238,8 +246,7 @@ const AddCreditCardForm = () => {
               <FormTextInput
                 type="number"
                 label="Zip Code"
-                placeholder="XXXXX"
-                data-testid="add-credit-card-zip-input"
+                placeholder="xxxxx"
                 {...form.register('zipCode')}
               />
             </Box>
@@ -251,7 +258,6 @@ const AddCreditCardForm = () => {
               <Flex align="center">
                 <Checkbox
                   id="terms-conditions-checkbox"
-                  data-testid="add-credit-card-terms-conditions-checkbox"
                   onCheckedChange={(checked) => {
                     form.setValue('termsAndConditions', checked as boolean)
                   }}
@@ -276,11 +282,7 @@ const AddCreditCardForm = () => {
       </Flex>
 
       <Flex gap="3" justify="end">
-        <FormSubmitButton
-          size="2"
-          data-testid="add-claim-status-submit-button"
-          className="bg-[#101D46]"
-        >
+        <FormSubmitButton size="2" className="bg-[#101D46]">
           Save
         </FormSubmitButton>
       </Flex>

@@ -57,7 +57,7 @@ const columns: ColumnDef<CreditCard>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader
         column={column}
-        title="Type of Card"
+        title="Types of Cards"
         className="text-[#000]"
       />
     ),

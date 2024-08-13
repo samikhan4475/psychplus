@@ -32,7 +32,7 @@ const CreditCardRowActionEdit = ({
         }
         alert(`ERROR: ${message}`)
       } finally {
-        window.location.replace(`/widgets/preferred-partners-financial-info`)
+        window.location.reload()
       }
     }
   }
