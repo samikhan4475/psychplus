@@ -77,11 +77,12 @@ const PersonalInfoForm = ({
   const hasGuardian = form.watch('hasGuardian')
 
   useEffect(() => {
-    if (dobFormValue && getAgeFromDate(dobFormValue) < 18) {
-      form.setValue('hasGuardian', true)
-    } else {
-      form.setValue('hasGuardian', false)
-    }
+    if (!profile.hasGuardian)
+      if (dobFormValue && getAgeFromDate(dobFormValue) < 18) {
+        form.setValue('hasGuardian', true)
+      } else {
+        form.setValue('hasGuardian', false)
+      }
   }, [form, dobFormValue])
 
   useEffect(() => {
