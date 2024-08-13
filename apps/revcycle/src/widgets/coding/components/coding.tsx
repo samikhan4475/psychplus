@@ -27,10 +27,13 @@ const Coding = () => {
         </Tabs.List>
         <Box px="4" pt="3" pb="2">
           <Tabs.Content value="CPT">
-            <CodingCPTClient posCodeSets={posCodeSets} cptCategoryCodeSets={cptCategoryCodeSets}/>
+            <CodingCPTClient
+              posCodeSets={posCodeSets}
+              cptCategoryCodeSets={cptCategoryCodeSets}
+            />
           </Tabs.Content>
           <Tabs.Content value="POS">
-            <CodingPOSWidgetClient />
+            <CodingPOSWidgetClient posCodeSets={posCodeSets} />
           </Tabs.Content>
         </Box>
       </Tabs.Root>

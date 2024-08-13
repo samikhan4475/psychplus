@@ -2,14 +2,13 @@
 
 import { shallow } from 'zustand/shallow'
 import { createWithEqualityFn } from 'zustand/traditional'
-import { createCodeSetStore, type CodeSetState } from '@psychplus/codeset'
 import { combineStateCreators } from '@psychplus/utils/store'
-import { codingPosStore } from './pos-code-set-store'
+import { createPOSCodeSetsStore, POSCodeSetsState } from './pos-code-set-store'
 
-type CodeSetStoreType = CodeSetState
+type CodeSetStoreType = POSCodeSetsState
 
 const useStore = createWithEqualityFn<CodeSetStoreType>(
-  combineStateCreators(codingPosStore, createCodeSetStore),
+  combineStateCreators(createPOSCodeSetsStore),
   shallow,
 )
 

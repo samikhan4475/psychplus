@@ -1,12 +1,17 @@
 'use client'
 
 import { type StateCreator } from 'zustand'
-import { createCodeSetStore } from '@psychplus/codeset'
-import { CodingSetPOSState } from './types'
+import { MetaDataCodeSet } from '../types'
 
-const codingPosStore: StateCreator<CodingSetPOSState> = (set, get, store) => ({
-  ...createCodeSetStore(set, get, store),
-  codingPosList: [],
+interface POSCodeSetsState {
+  posCodeSets: MetaDataCodeSet[]
+  setCodingPosCodeSets: (codes: MetaDataCodeSet[]) => void
+}
+
+const createPOSCodeSetsStore: StateCreator<POSCodeSetsState> = (set) => ({
+  posCodeSets: [],
+  setCodingPosCodeSets: (posCodeSets: MetaDataCodeSet[]) =>
+    set({ posCodeSets }),
 })
 
-export { codingPosStore }
+export { createPOSCodeSetsStore, type POSCodeSetsState }

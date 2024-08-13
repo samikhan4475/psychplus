@@ -35,7 +35,11 @@ const Preloader = ({
     const optionsList: MetaDataCodeSet[] = []
     for (let index = 0; index < posCodeSets.codes.length; index++) {
       const state = posCodeSets.codes[index]
-      optionsList.push({ display: state.displayName, code: state.code })
+      optionsList.push({
+        display: state.displayName,
+        code: state.code,
+        attributes: state.codeAttributes,
+      })
     }
     setCodingPosCodeSets(optionsList)
     const feeScheduleCategory = cptCategoryCodeSets.find(

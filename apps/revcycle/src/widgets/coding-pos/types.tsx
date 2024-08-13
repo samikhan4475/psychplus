@@ -1,10 +1,11 @@
 interface Attribute {
   name: string
-  value: string
+  content: string
 }
 interface MetaDataCodeSet {
   code: string
   display: string
+  attributes?: Attribute[]
 }
 
 export type { MetaDataCodeSet, Attribute }

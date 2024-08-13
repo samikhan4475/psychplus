@@ -1,15 +1,16 @@
+interface CodeAttribute {
+  name: string
+  content: string
+}
 interface MetaDataCodeSet {
   code: string
   display: string
+  attributes?: CodeAttribute[]
 }
 interface Code {
   code: string
   displayName: string
   codeAttributes?: CodeAttribute[]
-}
-interface CodeAttribute {
-  name: string
-  content: string
 }
 
 interface POSCodeSets {

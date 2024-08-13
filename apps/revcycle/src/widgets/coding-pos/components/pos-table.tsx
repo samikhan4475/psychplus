@@ -4,7 +4,6 @@ import { useState } from 'react'
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons'
 import { Box, Button, Flex, Text, TextFieldInput } from '@radix-ui/themes'
 import { type ColumnDef } from '@tanstack/react-table'
-import { MetaDataCodeSet } from '@psychplus/codeset/types'
 import {
   DataTable,
   DataTableColumnHeader,
@@ -12,6 +11,7 @@ import {
   DataTablePaginationLabel,
 } from '@psychplus/ui/data-table'
 import { useStore } from '../store'
+import { MetaDataCodeSet } from '../types'
 import { TableCellLongText } from './table-cell-long-text'
 
 const columns: ColumnDef<MetaDataCodeSet>[] = [
@@ -55,7 +55,7 @@ const DataTableFooter = (table: any) => (
 )
 
 const POSTable = () => {
-  const data = useStore((state) => state.metaDataCodeSets)
+  const data = useStore((state) => state.posCodeSets)
   const [refDataState, setRefDataState] = useState<MetaDataCodeSet[]>(data)
   const [code, setCode] = useState<string>('')
   const [display, setDisplay] = useState<string>('')
