@@ -133,4 +133,41 @@ interface Claim {
   claimDiagnosis: ClaimDiagnosis[]
 }
 
-export type { Claim }
+interface Location {
+  id: string
+  metadata: MetaData
+  isTest: boolean
+  name: string
+  group: string
+  description: string
+  distanceInMiles: number
+}
+
+interface InsurancePayer {
+  id: string
+  name: string
+}
+
+interface InsurancePayerOption {
+  value: string
+  name: string
+}
+
+interface DateTypeOption {
+  value: string
+  name: string
+}
+
+interface LocationOption {
+  value: string
+  name: string
+}
+
+export type {
+  Claim,
+  InsurancePayer,
+  InsurancePayerOption,
+  DateTypeOption,
+  LocationOption,
+  Location,
+}

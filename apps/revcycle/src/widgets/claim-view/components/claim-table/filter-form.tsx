@@ -1,15 +1,34 @@
 import { useEffect, useState } from 'react'
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons'
 import { Box, Button, Flex, Text, TextFieldInput } from '@radix-ui/themes'
+import { z } from 'zod'
+import { Form, FormSelect, useForm, validate } from '@psychplus/form'
 import { DatePicker } from '@psychplus/ui/date-picker'
-import { Select } from '@psychplus/ui/select'
 import { getClaimList } from '../../api.client'
 import { Filters, useStore } from '../../store'
 import { initialClaimListFilterState } from '../../store/claim-list-filter-store'
+import { adjustToUTC } from '../../utils'
+
+const schema = z.object({
+  locationId: validate.anyString.optional(),
+  dateType: validate.anyString.optional(),
+  claimId: validate.anyString.optional(),
+  insuranceId: validate.anyString.optional(),
+  patientId: validate.anyString.optional(),
+})
 
 const FilterForm = () => {
+  const locations = useStore((state) => state.locations)
+  const dateTypes = useStore((state) => state.dateTypes)
+  const insurancePayersList = useStore((state) => state.insurancePayersList)
+  const form = useForm({
+    schema,
+    criteriaMode: 'all',
+    defaultValues: {},
+  })
+
   const { handleFiltersChange, setClaimList } = useStore()
-  let { filters } = useStore()
+  const { filters } = useStore()
   const [filtersState, setFiltersState] = useState<Filters>(
     initialClaimListFilterState,
   )
@@ -18,167 +37,173 @@ const FilterForm = () => {
     setFiltersState(filters)
   }, [filters])
 
-  const clearFilters = () => {
-    filters = { ...initialClaimListFilterState }
-    handleFiltersChange(filters)
-    fetchFilteredData()
+  const clearFilters = async () => {
+    form.reset()
+    form.setValue('locationId', '')
+    form.setValue('dateType', '')
+    form.setValue('insuranceId', '')
+    handleFiltersChange({ ...initialClaimListFilterState })
+    try {
+      const response = await getClaimList({
+        isIncludePatientInsurancePlan: false,
+      })
+      setClaimList(response)
+    } catch (error) {
+      setClaimList([])
+    }
   }
 
-  const fetchFilteredData = async () => {
+  const onSubmit = async () => {
     try {
-      const cleanFilterState: Partial<Filters> = Object.entries(filters)
+      const formData = form.getValues()
+      const cleanFilterState: Partial<Filters> = Object.entries(formData)
         .filter(([key, value]) => !!value)
         .reduce((acc, [key, value]) => ({ ...acc, [key]: value }), {})
 
-      const response = await getClaimList({ ...cleanFilterState } as Filters)
+      const filterOptions = {
+        ...cleanFilterState,
+        dateType: cleanFilterState.dateType
+          ? cleanFilterState.dateType
+          : 'DateOfService',
+        isIncludePatientInsurancePlan: formData.insuranceId !== '',
+        fromDate: filtersState.fromDate
+          ? adjustToUTC(filtersState.fromDate)
+          : filtersState.fromDate,
+        toDate: filtersState.toDate
+          ? adjustToUTC(filtersState.toDate)
+          : filtersState.toDate,
+      } as Filters
+
+      const response = await getClaimList(filterOptions)
       setClaimList(response)
     } catch (error) {
-      alert(error)
+      setClaimList([])
     }
   }
 
   return (
-    <Box my="2">
-      <Flex>
-        <Text size="1" className="pt-2 font-bold">
-          Claim #
-        </Text>
-        <FilterField
-          label=""
-          placeholder="12345636"
-          value={filtersState?.claimId}
-          onChange={(value) => handleFiltersChange({ claimId: value })}
-        />
-        <Text size="1" className="pt-2 font-bold">
-          Patient
-        </Text>
-        <FilterField
-          label=""
-          placeholder="Robert Samntha"
-          value={filtersState?.patientId.toString()}
-          onChange={(value) =>
-            handleFiltersChange({ patientId: parseInt(value) })
-          }
-        />
+    <Form form={form} onSubmit={onSubmit}>
+      <Box my="2">
+        <Flex wrap="wrap" direction="row" mb="2" gap="4">
+          <Box className="row flex items-center">
+            <Text className="mr-2" size="1" weight="bold">
+              Claim #
+            </Text>
+            <TextFieldInput
+              className="h-30 text-sm p-0"
+              placeholder="3fasf5fde4-5dr17-4562-b3fc-2c963fa6"
+              {...form.register('claimId')}
+            />
+          </Box>
 
-        <Text size="1" className="pt-2 font-bold">
-          Insurance
-        </Text>
-        <FilterField
-          label=""
-          placeholder="Medcare"
-          value={filtersState?.insuranceId}
-          onChange={(value) => handleFiltersChange({ insuranceId: value })}
-        />
+          <Box className="row flex items-center">
+            <Text className="mr-2" size="1" weight="bold">
+              Patient Id
+            </Text>
+            <TextFieldInput
+              className="h-30 text-sm p-0"
+              placeholder="Patient Id"
+              {...form.register('patientId')}
+            />
+          </Box>
 
-        <Text size="1" className="pt-2 font-bold">
-          Location
-        </Text>
-        <Box mx="2">
-          <Select.Root
-            size="2"
-            defaultValue="Willow Brook"
-            onValueChange={(value) =>
-              handleFiltersChange({ locationId: value })
-            }
-          >
-            <Select.Trigger />
-            <Select.Content>
-              <Select.Group>
-                <Select.Label>Willow Brook</Select.Label>
-                <Select.Item value="Willow Brook">Willow Brook</Select.Item>
-                <Select.Item value="Willow Brook2">Willow Brook</Select.Item>
-              </Select.Group>
-            </Select.Content>
-          </Select.Root>
-        </Box>
+          <Box className="row flex items-center">
+            <Text className="mr-2" size="1" weight="bold">
+              Insurance
+            </Text>
+            <FormSelect
+              key={'insuranceId'}
+              label=""
+              size="2"
+              placeholder="Select"
+              required={false}
+              {...form.register('insuranceId')}
+              options={insurancePayersList}
+              buttonClassName="w-[150px]"
+            />
+          </Box>
 
-        <Text size="1" className="pt-2 font-bold">
-          Date Type
-        </Text>
-        <Box mx="2">
-          <Select.Root
-            size="2"
-            defaultValue="DOS"
-            onValueChange={(value) => handleFiltersChange({ dateType: value })}
-          >
-            <Select.Trigger />
-            <Select.Content>
-              <Select.Group>
-                <Select.Label>DOS</Select.Label>
-                <Select.Item value="DOS">DOS</Select.Item>
-                <Select.Item value="DOS2">DOS</Select.Item>
-              </Select.Group>
-            </Select.Content>
-          </Select.Root>
-        </Box>
+          <Box className="row flex items-center">
+            <Text className="mr-2" size="1" weight="bold">
+              Location
+            </Text>
+            <FormSelect
+              key={'locationId'}
+              label=""
+              size="2"
+              placeholder="Select"
+              required={false}
+              {...form.register('locationId')}
+              options={locations}
+              buttonClassName="w-[150px]"
+            />
+          </Box>
 
-        <Text size="1" className="pt-2 font-bold">
-          From
-        </Text>
-        <Box mx="2">
-          <DatePicker
-            color="gray"
-            buttonClassName="w-[150px] justify-between text-left font-regular"
-            reverse={true}
-            date={filtersState?.fromDate}
-            onSelect={(value) => handleFiltersChange({ fromDate: value })}
-          />
-        </Box>
+          <Box className="row flex items-center">
+            <Text className="mr-2" size="1" weight="bold">
+              Date Type
+            </Text>
+            <FormSelect
+              key={'dateType'}
+              label=""
+              size="2"
+              placeholder="Select"
+              required={false}
+              {...form.register('dateType')}
+              options={dateTypes}
+              buttonClassName="w-[150px]"
+            />
+          </Box>
 
-        <Text size="1" className="pt-2 font-bold">
-          To
-        </Text>
-        <Box mx="2">
-          <DatePicker
-            color="gray"
-            buttonClassName="w-[150px] justify-between text-left font-regular"
-            reverse={true}
-            date={filtersState?.toDate}
-            onSelect={(value) => handleFiltersChange({ toDate: value })}
-          />
-        </Box>
+          <Box className="row flex items-center">
+            <Text size="1" className="font-bold">
+              From
+            </Text>
+            <Box mx="2">
+              <DatePicker
+                color="gray"
+                dateFormat="MM/dd/yyyy"
+                buttonClassName="w-[150px] justify-between text-left font-regular"
+                reverse={true}
+                date={filtersState?.fromDate}
+                onSelect={(value) => handleFiltersChange({ fromDate: value })}
+              />
+            </Box>
+          </Box>
 
-        <Button
-          variant="outline"
-          highContrast
-          className="h-25 mr-n5 bg-[#EAEEF9]"
-          onClick={clearFilters}
-        >
-          Clear
-        </Button>
-        <Button className="h-25 ml-2 bg-[#151B4A]">
-          <MagnifyingGlassIcon onClick={fetchFilteredData} />
-        </Button>
-      </Flex>
-    </Box>
+          <Box className="row flex items-center">
+            <Text size="1" className="font-bold">
+              To
+            </Text>
+            <Box mx="2">
+              <DatePicker
+                color="gray"
+                dateFormat="MM/dd/yyyy"
+                buttonClassName="w-[150px] justify-between text-left font-regular"
+                reverse={true}
+                date={filtersState?.toDate}
+                onSelect={(value) => handleFiltersChange({ toDate: value })}
+              />
+            </Box>
+          </Box>
+
+          <Box className="row flex items-center">
+            <Button
+              variant="outline"
+              highContrast
+              className="h-25 mr-n5 bg-[#EAEEF9]"
+              onClick={clearFilters}
+            >
+              Clear
+            </Button>
+            <Button className="h-25 ml-2 bg-[#151B4A]" type="submit">
+              <MagnifyingGlassIcon />
+            </Button>
+          </Box>
+        </Flex>
+      </Box>
+    </Form>
   )
 }
-
-const FilterField = ({
-  label,
-  placeholder,
-  value,
-  onChange,
-}: {
-  label: string
-  placeholder: string
-  value?: string
-  onChange: (value: string) => void
-}) => (
-  <Box mx="2">
-    <Flex align="center">
-      <Text size="1" mr="1" className="font-bold">
-        {label}
-      </Text>
-      <TextFieldInput
-        className="h-30"
-        placeholder={placeholder}
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-      />
-    </Flex>
-  </Box>
-)
 
 export { FilterForm }

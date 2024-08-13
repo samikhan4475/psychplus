@@ -5,12 +5,13 @@ import { createWithEqualityFn } from 'zustand/traditional'
 import { combineStateCreators } from '@psychplus/utils/store'
 import { claimListFilterStore } from './claim-list-filter-store'
 import { claimListStore } from './claim-list-store'
-import { ClaimFiltersState, ClaimListState } from './types'
+import { codeSetsStore } from './codesets-store'
+import { ClaimFiltersState, ClaimListState, CodeSetsState } from './types'
 
-type ClaimStoreType = ClaimListState & ClaimFiltersState
+type ClaimStoreType = ClaimListState & ClaimFiltersState & CodeSetsState
 
 const useStore = createWithEqualityFn<ClaimStoreType>(
-  combineStateCreators(claimListStore, claimListFilterStore),
+  combineStateCreators(claimListStore, claimListFilterStore, codeSetsStore),
   shallow,
 )
 

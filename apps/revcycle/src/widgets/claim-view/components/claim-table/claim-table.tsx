@@ -1,8 +1,6 @@
 'use client'
 
-import { useState } from 'react'
-import { MagnifyingGlassIcon } from '@radix-ui/react-icons'
-import { Box, Button, Flex, Text, TextFieldInput } from '@radix-ui/themes'
+import { Box, Flex, Text } from '@radix-ui/themes'
 import { type ColumnDef } from '@tanstack/react-table'
 import {
   DataTable,
@@ -10,11 +8,10 @@ import {
   DataTablePageNavigation,
   DataTablePaginationLabel,
 } from '@psychplus/ui/data-table'
-import { DatePicker } from '@psychplus/ui/date-picker'
-import { Select } from '@psychplus/ui/select'
 import { useStore } from '../../store'
 import { Claim } from '../../types'
 import { RowActionDropdown } from './data-table-row.action'
+import { FilterForm } from './filter-form'
 import { TableCellLongText } from './table-cell-long-text'
 
 const columns: ColumnDef<Claim>[] = [
@@ -30,7 +27,7 @@ const columns: ColumnDef<Claim>[] = [
       />
     ),
     cell: ({ row }) => (
-      <TableCellLongText maxWidth={100} text={row.original.claimNumber} />
+      <TableCellLongText maxWidth={100} text={row.original.id} />
     ),
     enableHiding: true,
   },
@@ -57,7 +54,7 @@ const columns: ColumnDef<Claim>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader
         column={column}
-        title="Account Number"
+        title="Account #"
         className="text-[#000]"
       />
     ),
@@ -70,8 +67,8 @@ const columns: ColumnDef<Claim>[] = [
     enableHiding: true,
   },
   {
-    id: 'dos',
-    accessorKey: 'dos',
+    id: 'dateOfServiceFrom',
+    accessorKey: 'dateOfServiceFrom',
     size: 50,
     header: ({ column }) => (
       <DataTableColumnHeader
@@ -83,14 +80,14 @@ const columns: ColumnDef<Claim>[] = [
     cell: ({ row }) => (
       <TableCellLongText
         maxWidth={100}
-        text={row.original.dateOfServiceFrom.toISOString()}
+        text={`${row.original.dateOfServiceFrom}`}
       />
     ),
     enableHiding: true,
   },
   {
-    id: 'primaryInsurance',
-    accessorKey: 'primaryInsurance',
+    id: 'primaryPatientInsurancePlanId',
+    accessorKey: 'primaryPatientInsurancePlanId',
     size: 50,
     header: ({ column }) => (
       <DataTableColumnHeader
@@ -102,14 +99,14 @@ const columns: ColumnDef<Claim>[] = [
     cell: ({ row }) => (
       <TableCellLongText
         maxWidth={120}
-        text={row.original.primaryPatientInsurancePlanId.toString()}
+        text={row.original.primaryPatientInsurancePlanId?.toString()}
       />
     ),
     enableHiding: true,
   },
   {
-    id: 'secondaryInsurance',
-    accessorKey: 'secondaryInsurance',
+    id: 'secondaryPatientInsurancePlanId',
+    accessorKey: 'secondaryPatientInsurancePlanId',
     size: 50,
     header: ({ column }) => (
       <DataTableColumnHeader
@@ -121,14 +118,14 @@ const columns: ColumnDef<Claim>[] = [
     cell: ({ row }) => (
       <TableCellLongText
         maxWidth={120}
-        text={row.original.secondaryPatientInsurancePlanId.toString()}
+        text={row.original.secondaryPatientInsurancePlanId?.toString()}
       />
     ),
     enableHiding: true,
   },
   {
-    id: 'status',
-    accessorKey: 'status',
+    id: 'recordStatus',
+    accessorKey: 'recordStatus',
     size: 50,
     header: ({ column }) => (
       <DataTableColumnHeader
@@ -143,8 +140,8 @@ const columns: ColumnDef<Claim>[] = [
     enableHiding: true,
   },
   {
-    id: 'totalCharge',
-    accessorKey: 'totalCharge',
+    id: 'totalAmount',
+    accessorKey: 'totalAmount',
     size: 50,
     header: ({ column }) => (
       <DataTableColumnHeader
@@ -162,8 +159,8 @@ const columns: ColumnDef<Claim>[] = [
     enableHiding: true,
   },
   {
-    id: 'dueAmount',
-    accessorKey: 'dueAmount',
+    id: 'amountDue',
+    accessorKey: 'amountDue',
     size: 50,
     header: ({ column }) => (
       <DataTableColumnHeader
@@ -181,8 +178,8 @@ const columns: ColumnDef<Claim>[] = [
     enableHiding: true,
   },
   {
-    id: 'createdOn',
-    accessorKey: 'createdOn',
+    id: 'metadata.createdOn',
+    accessorKey: 'metadata.createdOn',
     size: 50,
     header: ({ column }) => (
       <DataTableColumnHeader
@@ -194,14 +191,14 @@ const columns: ColumnDef<Claim>[] = [
     cell: ({ row }) => (
       <TableCellLongText
         maxWidth={120}
-        text={row.original.metadata?.createdOn.toISOString()}
+        text={`${row.original.metadata?.createdOn}`}
       />
     ),
     enableHiding: true,
   },
   {
-    id: 'submittedOn',
-    accessorKey: 'submittedOn',
+    id: 'submittedDate',
+    accessorKey: 'submittedDate',
     size: 50,
     header: ({ column }) => (
       <DataTableColumnHeader
@@ -213,7 +210,7 @@ const columns: ColumnDef<Claim>[] = [
     cell: ({ row }) => (
       <TableCellLongText
         maxWidth={120}
-        text={row.original.submittedDate.toISOString()}
+        text={row.original.submittedDate?.toISOString()}
       />
     ),
     enableHiding: true,
@@ -224,7 +221,7 @@ const columns: ColumnDef<Claim>[] = [
       <DataTableColumnHeader column={column} title="Actions" />
     ),
     enableHiding: false,
-    cell: () => <RowActionDropdown />,
+    cell: ({ row }) => <RowActionDropdown row={row} />,
   },
 ]
 
@@ -239,8 +236,6 @@ const DataTableFooter = (table: any) => (
 
 const ClaimTable = () => {
   const claimList = useStore((state) => state.claimList)
-  const [claimNumber, setClaimNumber] = useState<string>('')
-  const [date, setDate] = useState<Date | undefined>(new Date())
 
   return (
     <>
@@ -253,109 +248,7 @@ const ClaimTable = () => {
           <Text>Claims</Text>
         </Flex>
       </Box>
-
-      <Box my="2">
-        <Flex>
-          <Text size="1" className="pt-2 font-bold">
-            Claim #
-          </Text>
-          <FilterField
-            label=""
-            placeholder="12345636"
-            value={claimNumber}
-            onChange={(value) => setClaimNumber(value)}
-          />
-          <Text size="1" className="pt-2 font-bold">
-            Patient
-          </Text>
-          <FilterField
-            label=""
-            placeholder="Robert Samntha"
-            value={claimNumber}
-            onChange={(value) => setClaimNumber(value)}
-          />
-
-          <Text size="1" className="pt-2 font-bold">
-            Insurance
-          </Text>
-          <FilterField
-            label=""
-            placeholder="Medcare"
-            value={claimNumber}
-            onChange={(value) => setClaimNumber(value)}
-          />
-
-          <Text size="1" className="pt-2 font-bold">
-            Location
-          </Text>
-          <Box mx="2">
-            <Select.Root size="2" defaultValue="Willow Brook">
-              <Select.Trigger />
-              <Select.Content>
-                <Select.Group>
-                  <Select.Label>Willow Brook</Select.Label>
-                  <Select.Item value="Willow Brook">Willow Brook</Select.Item>
-                  <Select.Item value="Willow Brook2">Willow Brook</Select.Item>
-                </Select.Group>
-              </Select.Content>
-            </Select.Root>
-          </Box>
-
-          <Text size="1" className="pt-2 font-bold">
-            Date Type
-          </Text>
-          <Box mx="2">
-            <Select.Root size="2" defaultValue="DOS">
-              <Select.Trigger />
-              <Select.Content>
-                <Select.Group>
-                  <Select.Label>DOS</Select.Label>
-                  <Select.Item value="DOS">DOS</Select.Item>
-                  <Select.Item value="DOS2">DOS</Select.Item>
-                </Select.Group>
-              </Select.Content>
-            </Select.Root>
-          </Box>
-
-          <Text size="1" className="pt-2 font-bold">
-            From
-          </Text>
-          <Box mx="2">
-            <DatePicker
-              color="gray"
-              buttonClassName="w-[150px] justify-between text-left font-regular"
-              reverse={true}
-              date={date}
-              onSelect={setDate}
-            />
-          </Box>
-
-          <Text size="1" className="pt-2 font-bold">
-            To
-          </Text>
-          <Box mx="2">
-            <DatePicker
-              color="gray"
-              buttonClassName="w-[150px] justify-between text-left font-regular"
-              reverse={true}
-              date={date}
-              onSelect={setDate}
-            />
-          </Box>
-
-          <Button
-            variant="outline"
-            highContrast
-            className="h-25 mr-n5 bg-[#EAEEF9]"
-          >
-            Clear
-          </Button>
-          <Button className="h-25 ml-2 bg-[#151B4A]">
-            <MagnifyingGlassIcon />
-          </Button>
-        </Flex>
-      </Box>
-
+      <FilterForm />
       <DataTable
         data={claimList}
         columns={columns}
@@ -370,31 +263,5 @@ const ClaimTable = () => {
     </>
   )
 }
-
-const FilterField = ({
-  label,
-  placeholder,
-  value,
-  onChange,
-}: {
-  label: string
-  placeholder: string
-  value?: string
-  onChange: (value: string) => void
-}) => (
-  <Box mx="2">
-    <Flex align="center">
-      <Text size="1" mr="1">
-        {label}
-      </Text>
-      <TextFieldInput
-        className="h-30"
-        placeholder={placeholder}
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-      />
-    </Flex>
-  </Box>
-)
 
 export { ClaimTable }

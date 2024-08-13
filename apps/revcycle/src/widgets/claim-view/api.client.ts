@@ -25,4 +25,13 @@ const getClaimList = (payload: ClaimFiltersPayload): Promise<Claim[]> =>
     }),
   )
 
-export { getClaimList }
+const deleteClaim = (claimId: string): Promise<Claim> =>
+  handleRequest(
+    fetch(`/revcycle/api/claims/${claimId}`, {
+      method: 'DELETE',
+      cache: 'no-store',
+      headers: createHeaders(),
+    }),
+  )
+
+export { getClaimList, deleteClaim }

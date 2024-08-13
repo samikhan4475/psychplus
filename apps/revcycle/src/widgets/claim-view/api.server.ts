@@ -2,12 +2,10 @@ import { cache } from 'react'
 import { handleRequest } from '@psychplus/utils/api'
 import { API_URL } from '@psychplus/utils/constants'
 import { createHeaders } from '@psychplus/utils/server'
-import { Claim } from './types'
+import { Claim, InsurancePayer, Location } from './types'
 
 const defaultPayLoad = {
-  dateType: 'DateOfService',
-  fromDate: new Date(),
-  toDate: new Date(),
+  isIncludePatientInsurancePlan: false,
 }
 
 const getClaimsList = (): Promise<Claim[]> => {
@@ -21,6 +19,30 @@ const getClaimsList = (): Promise<Claim[]> => {
   )
 }
 
-const getClaimsListCached = cache(getClaimsList)
+const getInsurancePayersList = (): Promise<InsurancePayer[]> => {
+  return handleRequest(
+    fetch(`${API_URL}/api/insurance/payers`, {
+      cache: 'no-store',
+      headers: createHeaders(),
+    }),
+  )
+}
 
-export { getClaimsListCached as getClaimsList }
+const getLocations = (): Promise<Location[]> => {
+  return handleRequest(
+    fetch(`${API_URL}/api/clinics`, {
+      cache: 'no-store',
+      headers: createHeaders(),
+    }),
+  )
+}
+
+const getClaimsListCached = cache(getClaimsList)
+const getInsurancePayersListCached = cache(getInsurancePayersList)
+const getLocationsCached = cache(getLocations)
+
+export {
+  getClaimsListCached as getClaimsList,
+  getInsurancePayersListCached as getInsurancePayersList,
+  getLocationsCached as getLocations,
+}
