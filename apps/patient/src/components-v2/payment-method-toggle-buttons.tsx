@@ -15,7 +15,7 @@ const PaymentMethodToggleButtons = ({
     type="single"
     value={value}
     onValueChange={(value) => {
-      onChange(value as PaymentType)
+      if (value) onChange(value as PaymentType)
     }}
   >
     <Flex className="flex-wrap" gap="4">
