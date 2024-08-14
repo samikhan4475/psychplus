@@ -1,7 +1,8 @@
+import { useEffect } from 'react'
 import { Box, Flex, Grid, Heading, RadioGroup, Text } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
 import { FormSelect, FormTextInput } from '@psychplus/form'
-import { useEditModeContext } from '@psychplus/patient-info'
+import { useEditModeContext, useStore } from '@psychplus/patient-info'
 import { PlacesAutocomplete } from '@/components/places-autocomplete'
 import { useGooglePlacesContext } from '@/providers'
 import { FORM_FIELD_CLASSES } from '../constants'
@@ -13,6 +14,25 @@ const PatientAddress = () => {
   const { loaded } = useGooglePlacesContext()
   const { editable } = useEditModeContext()
   const usStates = useUsStatesOptions()
+  const isMailingAddressSameAsPrimary = watch(
+    'contactDetails.isMailingAddressSameAsPrimary',
+  )
+
+  useEffect(() => {
+    if (isMailingAddressSameAsPrimary) {
+      resetField('contactDetails.mailingAddress', {
+        defaultValue: {
+          type: 'Mailing',
+          street1: '',
+          street2: '',
+          city: '',
+          state: '',
+          country: '',
+          postalCode: '',
+        },
+      })
+    }
+  }, [isMailingAddressSameAsPrimary, resetField])
 
   return (
     <Flex direction="column">
@@ -101,18 +121,6 @@ const PatientAddress = () => {
                       'contactDetails.isMailingAddressSameAsPrimary',
                       val === 'Yes',
                     )
-                    if (val === 'No')
-                      resetField('contactDetails.mailingAddress', {
-                        defaultValue: {
-                          type: 'Mailing',
-                          street1: '',
-                          street2: '',
-                          city: '',
-                          state: '',
-                          country: '',
-                          postalCode: '',
-                        },
-                      })
                   }}
                   size="3"
                   color="indigo"

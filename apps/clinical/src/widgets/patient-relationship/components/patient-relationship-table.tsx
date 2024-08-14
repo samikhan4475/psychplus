@@ -17,7 +17,7 @@ import { EventType } from '@psychplus/widgets/events'
 import { useStore } from '../store'
 import { EmergencyContactSwitch } from './emergency-contact-switch'
 import { GuardianStatusSwitch } from './guardian-status-switch'
-import { RelationshipTextField } from './relationship-text-field'
+import { RelationshipDropdown } from './relationship-dropdown'
 import { RowActionDelete } from './row-action-delete'
 import { RowActionEdit } from './row-action-edit'
 import { RriSwitch } from './rri-switch'
@@ -71,7 +71,7 @@ const columns: ColumnDef<PatientRelationship>[] = [
     id: 'relationship',
     accessorKey: 'guardianRelationship',
     header: () => <Text className="font-[400]">Relationship</Text>,
-    cell: ({ row }) => <RelationshipTextField row={row} />,
+    cell: ({ row }) => <RelationshipDropdown row={row} />,
   },
   {
     id: 'address1',

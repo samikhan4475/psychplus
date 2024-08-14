@@ -10,6 +10,7 @@ import { usePubsub } from '@psychplus/utils/event'
 import { PATIENT_HISTORY_WIDGET } from '@psychplus/widgets'
 import {
   EVENT_LOCK_PATIENT_RELATIONSHIPS,
+  EVENT_PATIENT_HISTORY_UPDATED,
   EventType,
 } from '@psychplus/widgets/events'
 import { HistoryIcon, SaveIcon } from '@/components/icons'
@@ -93,9 +94,11 @@ const PatientInfo = ({ children }: React.PropsWithChildren) => {
         homeAddress: data?.contactDetails.addresses?.find(
           (address) => address.type === 'Home',
         ) ?? { ...initialAddress, type: 'Home' },
-        mailingAddress: data?.contactDetails.addresses?.find(
-          (address) => address.type === 'Mailing',
-        ) ?? { ...initialAddress, type: 'Mailing' },
+        mailingAddress: data?.contactDetails.isMailingAddressSameAsPrimary
+          ? { ...initialAddress, type: 'Mailing' }
+          : data?.contactDetails.addresses?.find(
+              (address) => address.type === 'Mailing',
+            ),
         isMailingAddressSameAsPrimary:
           data?.contactDetails?.isMailingAddressSameAsPrimary ?? true,
       },
@@ -224,6 +227,7 @@ const PatientInfo = ({ children }: React.PropsWithChildren) => {
             updateProfileImage({ patientId: data.id, file: profileImage })
           }
           alert('Profile updated successfully!')
+          publish(EVENT_PATIENT_HISTORY_UPDATED)
         })
         .catch((error) => alert(error.message))
     }
@@ -233,15 +237,14 @@ const PatientInfo = ({ children }: React.PropsWithChildren) => {
     form.resetField('verificationStatus', { defaultValue: 'Pending' })
   }
 
-
   const lockPage = (checked: boolean) => {
     setIsPageLocked(checked)
     publish(EVENT_LOCK_PATIENT_RELATIONSHIPS, checked)
   }
 
   const checkKeyDown = (e: React.KeyboardEvent<HTMLFormElement>) => {
-    if (e.key === 'Enter') e.preventDefault();
-  };
+    if (e.key === 'Enter') e.preventDefault()
+  }
 
   return (
     <Box className="relative z-0 h-[100%] bg-[#EEF2F6]">

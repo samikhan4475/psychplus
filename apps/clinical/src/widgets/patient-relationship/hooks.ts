@@ -49,10 +49,26 @@ const computeRelationshipCodesIndex = memoize((codeSet: RelationshipCodeSet) =>
     ),
 )
 
+interface GuardianRelationshipCode {
+  value: string
+  label: string
+}
+
+const computeGuardianRelationship = memoize((codeSet: RelationshipCodeSet) =>
+  codeSet.codes.reduce((acc, code) => {
+    if (code.code !== CODE_NOT_SET) {
+      acc.push({ label: code.displayName, value: code.code })
+    }
+    return acc
+  }, [] as GuardianRelationshipCode[]),
+)
+
+const useGuardianRelationshipsOptions = () =>
+  computeGuardianRelationship(useStore((state) => state.relationshipsCodeset))
+
 const useLockPage = () => {
   const { subscribe } = usePubsub()
   const [isLocked, setIsLocked] = useState<boolean>(false)
-
 
   useEffect(() => {
     return subscribe(EVENT_LOCK_PATIENT_RELATIONSHIPS, (data: boolean) => {
@@ -66,4 +82,9 @@ const useLockPage = () => {
 const useRelationshipCodesIndex = () =>
   computeRelationshipCodesIndex(useStore((state) => state.relationshipsCodeset))
 
-export { useRefetchRelationships, useRelationshipCodesIndex, useLockPage }
+export {
+  useRefetchRelationships,
+  useRelationshipCodesIndex,
+  useLockPage,
+  useGuardianRelationshipsOptions,
+}

@@ -11,6 +11,7 @@ import {
   usePublishSize,
 } from '@psychplus/widgets/hooks'
 import { PatientInfoHistory } from './components'
+import { useRefetchHistory } from './hooks'
 
 const PatientHistoryWidgetClient = () => {
   const ref = useRef<HTMLDivElement>(null)
@@ -18,6 +19,7 @@ const PatientHistoryWidgetClient = () => {
   const { publish } = usePubsub()
   usePublishLoaded(PATIENT_HISTORY_WIDGET)
   usePublishSize(PATIENT_HISTORY_WIDGET, ref)
+  useRefetchHistory()
 
   return (
     <Dialog.Root

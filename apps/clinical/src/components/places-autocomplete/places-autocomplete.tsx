@@ -93,14 +93,15 @@ const PlacesAutocomplete = ({
 
   const setFormValues = useCallback(
     (address?: AddressForm) => {
-      form.setValue(street1Field, address?.street1)
-      form.setValue(street2Field, address?.street2)
-      form.setValue(cityField, address?.city)
-      form.setValue(stateField, address?.state)
-      form.setValue(postalCodeField, address?.postalCode)
-      form.setValue(countryField, address?.country)
+      form.setValue(street1Field, address?.street1?? '')
+      form.setValue(street2Field, address?.street2?? '')
+      form.setValue(cityField, address?.city?? '')
+      form.setValue(stateField, address?.state?? '')
+      form.setValue(postalCodeField, address?.postalCode?? '')
+      form.setValue(countryField, address?.country?? '')
       form.clearErrors(street1Field)
       form.clearErrors(cityField)
+      form.clearErrors(stateField)
       form.clearErrors(postalCodeField)  
     },
     [
