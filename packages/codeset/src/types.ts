@@ -97,6 +97,7 @@ export interface Snomed {
 export interface SnomedCode {
   code: string
   displayName: string
+  groupingCode?: string
 }
 export interface IcdCodes {
   id: number

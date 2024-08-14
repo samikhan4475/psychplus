@@ -91,8 +91,21 @@ const addAuthority = async (
     }),
   )
 
+const getCptCodes = (payload?: IcdFilters): Promise<Snomed> =>
+  handleRequest(
+    fetch(
+      `/galaxy/api/codeset/authorities/AMA/codesets/CPT4?${payload?.codeOrDescription}&includeExtraDetails=false&offset=0&orderBy=displayName%20asc`,
+      {
+        method: 'GET',
+        cache: 'no-store',
+        headers: createHeaders(),
+      },
+    ),
+  )
+
 const getIcdCodesCached = cache(getIcdCodes)
 const getSnomedCodesCached = cache(getSnomedCodes)
+const getCptCodesCached = cache(getCptCodes)
 
 export {
   getCodeSets,
@@ -103,4 +116,5 @@ export {
   getIcdCodesCached as getIcdCodes,
   getSnomedCodesCached as getSnomedCodes,
   addAuthority,
+  getCptCodesCached as getCptCodes,
 }

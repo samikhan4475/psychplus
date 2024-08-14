@@ -47,7 +47,16 @@
     "react-sortable-hoc": "2.0.0",
     "use-places-autocomplete": "^4.0.1",
     "zod": "^3.22.4",
-    "zustand": "^4.4.3"
+    "zustand": "^4.4.3",
+    "@radix-ui/react-toast": "^1.1.5",
+    "@radix-ui/react-toggle-group": "^1.0.4",
+    "@psychplus/immunization": "^0.1.0",
+    "react-sortable-hoc": "2.0.0",
+    "@psychplus/ccda-setting-preference": "^0.1.0",
+    "@psychplus/health-concerns": "^0.1.0",
+    "@psychplus/problems": "^0.1.0",
+    "@psychplus/care-plans": "^0.1.0",
+    "@psychplus/procedures": "^0.1.0"
   },
   "devDependencies": {
     "@psychplus/eslint-config": "^0.1.0",
