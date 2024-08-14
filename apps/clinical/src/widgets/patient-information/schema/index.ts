@@ -1,14 +1,22 @@
 import { z } from 'zod'
 import { validate } from '@psychplus/form'
 
-const phoneRegex = /^(^\+?[1-9]\d{7,14}$|^$)/
+const phoneRegex = /^(\+?[1-9]\d{9}|^$)$/
 const zipCodeRegex = /(^\d{5}$)|(^\d{5}-\d{4}$)|^$/
+const requiredPhone = validate.requiredString.regex(
+  phoneRegex,
+  'Invalid phone number',
+)
 const zipCodeValidation = z
   .string()
   .regex(zipCodeRegex, 'Invalid zip code!')
   .optional()
   .default('')
-const optionalPhoneValidation = z.string().regex(phoneRegex, 'Invalid phone number').optional().default('')  
+const optionalPhoneValidation = z
+  .string()
+  .regex(phoneRegex, 'Invalid phone number')
+  .optional()
+  .default('')
 
 const schema = z
   .object({
@@ -53,7 +61,7 @@ const schema = z
       }),
       mobileNumber: z.object({
         type: z.string().optional().default('Contact'),
-        number: validate.phoneNumber,
+        number: requiredPhone,
         extension: validate.phoneExtension.default(''),
         comment: validate.optionalString,
       }),
