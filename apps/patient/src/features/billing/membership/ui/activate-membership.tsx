@@ -28,6 +28,7 @@ import {
   FormSubmitButton,
   RadioGroupItem,
 } from '@/components-v2'
+import { getCreditCardExpiry } from '@/features/billing/credit-debit-cards/utils'
 import { useToast } from '@/providers'
 import { CreditCard } from '../../payments/types'
 import {
@@ -136,6 +137,7 @@ const ActivateMembership = ({ creditCards, user }: ActivateMembershipProps) => {
     <Dialog.Root
       open={isMembershipDialogOpen}
       onOpenChange={(open) => {
+        form.reset()
         setIsMembershipDialogOpen(open)
         setError(undefined)
         setCreditCard(creditCards?.[0])
@@ -180,6 +182,14 @@ const ActivateMembership = ({ creditCards, user }: ActivateMembershipProps) => {
                     >
                       {card.cardType} ending in{' '}
                       <Text className="font-[600]">{card.numberLastFour}</Text>
+                      <Text weight="regular" size="2">
+                        {'  (' +
+                          getCreditCardExpiry(
+                            card.expireMonth,
+                            card.expireYear,
+                          ) +
+                          ')'}
+                      </Text>
                     </RadioGroupItem>
                   ))}
                 </Flex>
@@ -190,9 +200,10 @@ const ActivateMembership = ({ creditCards, user }: ActivateMembershipProps) => {
                     <Checkbox
                       id="terms-and-conditions-checkbox"
                       size="3"
-                      onCheckedChange={(checked: boolean) =>
+                      onCheckedChange={(checked: boolean) => {
                         form.setValue('userAgreed', checked)
-                      }
+                        form.trigger('userAgreed')
+                      }}
                       {...form.register('userAgreed')}
                       highContrast
                     />
