@@ -87,24 +87,41 @@ const PaymentMethodAccordion = ({
           <PaymentMethodsAccordionItem
             title="Insurance on File"
             content={
-              <Flex direction="column" width="100%" gap="3">
-                {patientInsurances.map((insurance) => (
-                  <Flex
-                    key={insurance.id}
-                    p="3"
-                    className="w-full rounded-2 border border-[#DDDDE3]"
-                  >
-                    <Box className="w-full">
-                      <InsuranceFormTrigger
-                        insurance={insurance}
-                        insurancePayers={insurancePayers}
-                      />
-                    </Box>
-                  </Flex>
-                ))}
-              </Flex>
+              <Box>
+                {
+                  patientInsurances.length > 0 ? (
+                    <Flex width="100%" gap="2" direction="column">
+                      {
+                        patientInsurances.map((insurance) => (
+                          <Flex
+                            key={insurance.id}
+                            p="3"
+                            className="w-full rounded-2 border border-[#DDDDE3]"
+                          >
+                            <Box className="w-full">
+                              <InsuranceFormTrigger
+                                insurance={insurance}
+                                insurancePayers={insurancePayers}
+                              />
+                            </Box>
+                          </Flex>   
+                        )) 
+                      }
+                    </Flex>
+                  ) : (
+                    <>
+                      <FeatureEmpty description="No insurance added yet" Icon={EmptyFileIcon} />
+                      <Flex width="100%" justify="center" className="-mt-12 mb-8" onClick={() => setInsuranceOpenStateValue('Add/Edit Insurance')}>
+                        <FieldPlaceholder>+ Add New Insurance</FieldPlaceholder>
+                      </Flex>
+                    </>
+                  )
+                }
+              </Box>
+              
             }
           />
+
           <PaymentMethodsAccordionItem
             title="Add/Edit Insurance"
             content={
