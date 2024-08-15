@@ -1,3 +1,25 @@
+.submission .rt-TabsList{
+  box-shadow: none;
+}
+.submission .rt-TabsTrigger:where([data-state='active'])::before {
+    box-sizing: border-box;
+    content: '';
+    height: 2px;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color:#151B4A;
+}
+
+.submission .rt-TabsTrigger:where([data-state='active']) {
+  background-color: transparent;
+}
+
+.submission .rt-TabsTrigger:where(:hover) :where(.rt-TabsTriggerInner) {
+  background-color: transparent;
+}
+
 .rt-TabsTrigger:where([data-state='active'])::before {
   content: none;
 }

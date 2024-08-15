@@ -2,6 +2,7 @@ import { Box, Tabs, Text } from '@radix-ui/themes'
 import { AddClaimForm } from './claim-form/add-claim-form'
 import { ClaimTable } from './claim-table/claim-table'
 import './style.css'
+import { SubmissionView } from './submission-view'
 
 const ClaimView = () => {
   return (
@@ -50,7 +51,7 @@ const ClaimView = () => {
             <ClaimTable />
           </Tabs.Content>
           <Tabs.Content value="Submission">
-            <Text size="2"> Submission Content will come here</Text>
+            <SubmissionView />
           </Tabs.Content>
           <Tabs.Content value="Ins. Payment">
             <Text size="2">Ins. Payment Content will come here</Text>

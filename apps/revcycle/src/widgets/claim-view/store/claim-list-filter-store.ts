@@ -4,12 +4,15 @@ import { type StateCreator } from 'zustand'
 import { ClaimFiltersState } from './types'
 
 const initialClaimListFilterState = {
+  id:'',
   isIncludeMetadataResourceChangeControl: false,
   isIncludeMetadataResourceIds: false,
   isIncludeMetadataResourceStatus: false,
   patientId: 0,
+  patientName: '',
   insuranceId: '',
   claimId: '',
+  claimNumber: '',
   locationId: '',
   dateType: '',
   fromDate: undefined,

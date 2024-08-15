@@ -129,6 +129,13 @@ interface Claim {
   lastSeenDate: Date
   patientName: string
   patientAccountNumber: string
+  dos: string
+  primaryInsurance: string
+  status: string
+  totalCharge: string
+  dueAmount: string
+  createdOn: Date
+  submittedOn: Date
   claimServiceLines: ClaimServiceLine[]
   claimDiagnosis: ClaimDiagnosis[]
 }
@@ -163,6 +170,55 @@ interface LocationOption {
   name: string
 }
 
+interface Patient {
+  alternateOrPreviousContactDetails: Record<string, unknown>;
+  birthdate: string;
+  chargeKey: string;
+  chargeUserId: string;
+  cmdId: string;
+  contactDetails: {
+    email: string;
+    phoneNumbers: {
+      type: string;
+      number: string;
+    }[];
+  };
+  emergencyContact: {
+    name: {
+      firstName: string;
+      lastName: string;
+    };
+    relationship: string;
+    phoneNumber: string;
+  };
+  gender: string;
+  hasGuardian: boolean;
+  hasPhoto: boolean;
+  id: number;
+  isPlusMember: boolean;
+  isTest: boolean;
+  language: string;
+  legalName: {
+    firstName: string;
+    lastName: string;
+  };
+  medicalRecordNumber: string;
+  metadata: {
+    createdOn: string;
+    updatedOn: string;
+    updatedBy: number;
+  };
+  socialSecurityNumber: string;
+  status: string;
+  userId: number;
+  verificationStatus: string;
+}
+
+interface PatientOption {
+  id: string
+  fullName: string
+}
+
 export type {
   Claim,
   InsurancePayer,
@@ -170,4 +226,6 @@ export type {
   DateTypeOption,
   LocationOption,
   Location,
+  Patient,
+  PatientOption
 }

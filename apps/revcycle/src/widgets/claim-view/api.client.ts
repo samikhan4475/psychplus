@@ -1,6 +1,6 @@
 import { handleRequest } from '@psychplus/utils/api'
 import { createHeaders } from '@psychplus/utils/client'
-import { Claim } from './types'
+import { Claim, Patient } from './types'
 
 interface ClaimFiltersPayload {
   isIncludeMetadataResourceChangeControl?: boolean
@@ -34,4 +34,14 @@ const deleteClaim = (claimId: string): Promise<Claim> =>
     }),
   )
 
-export { getClaimList, deleteClaim }
+  const getPatients = (payload: { name: string }): Promise<Patient[]> =>
+    handleRequest(
+      fetch(`/revcycle/api/patients/search`, {
+        method: 'POST',
+        body: JSON.stringify(payload),
+        cache: 'no-store',
+        headers: createHeaders(),
+      }),
+    );
+
+export { getClaimList, deleteClaim, getPatients }
