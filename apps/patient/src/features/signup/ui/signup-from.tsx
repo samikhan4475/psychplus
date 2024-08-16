@@ -5,7 +5,11 @@ import NextLink from 'next/link'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { FormContainer } from '@psychplus-v2/components'
 import { DocumentType } from '@psychplus-v2/types'
-import { getAgeFromDate } from '@psychplus-v2/utils'
+import {
+  getAgeFromDate,
+  getCalendarDate,
+  getCalendarDateLabel,
+} from '@psychplus-v2/utils'
 import {
   Button,
   Checkbox,
@@ -65,6 +69,13 @@ const schema = z
         path: ['dateOfBirth'],
       })
     }
+    if (getAgeFromDate(data.dateOfBirth) > 120) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'Must be 120 years of age or less',
+        path: ['dateOfBirth'],
+      })
+    }
     if (getAgeFromDate(data.dateOfBirth) < 18 && !data.hasGuardian) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
@@ -99,6 +110,8 @@ const SignupForm = () => {
     visible: false,
     type: DocumentType.TERMS_AND_CONDITIONS,
   })
+
+  const today = getCalendarDate()
 
   const form = useForm<SchemaType>({
     resolver: zodResolver(schema),
@@ -213,7 +226,8 @@ const SignupForm = () => {
               <TextFieldInput
                 type="date"
                 className="mr-4"
-                max="9999-12-31"
+                min={getCalendarDateLabel(today.subtract({ years: 120 }))}
+                max={getCalendarDateLabel(today.subtract({ years: 4 }))}
                 {...form.register('dateOfBirth')}
               />
             </FormField>

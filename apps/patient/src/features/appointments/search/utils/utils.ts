@@ -16,7 +16,6 @@ const isDateInNextRange = (
   startingDate: CalendarDate,
   slotDate: CalendarDate,
 ) => {
-  console.log(slotDate.day, startingDate.add({ days: 6 }).compare(slotDate))
   return startingDate.add({ days: 6 }).compare(slotDate) < 0
 }
 

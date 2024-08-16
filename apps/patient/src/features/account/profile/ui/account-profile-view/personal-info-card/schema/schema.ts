@@ -36,6 +36,14 @@ const schema = z
       })
     }
 
+    if (getAgeFromDate(data.birthdate) > 120) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'Must be 120 years of age or less',
+        path: ['birthdate'],
+      })
+    }
+
     if (getAgeFromDate(data.birthdate) < 18 && !data.hasGuardian) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
