@@ -10,6 +10,10 @@ const NAV_LINKS = [
     label: 'Home',
   },
   {
+    href: '/account/profile',
+    label: 'My Account',
+  },
+  {
     href: '/health',
     label: 'Health',
   },

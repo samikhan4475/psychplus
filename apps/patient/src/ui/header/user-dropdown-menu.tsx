@@ -4,11 +4,7 @@ import NextLink from 'next/link'
 import { type User } from '@psychplus-v2/auth'
 import { getUserInitials } from '@psychplus-v2/utils'
 import { Avatar, DropdownMenu, Flex, Text } from '@radix-ui/themes'
-import {
-  LogOutIcon,
-  UserIcon,
-  type LucideIcon,
-} from 'lucide-react'
+import { LogOutIcon, UserIcon, type LucideIcon } from 'lucide-react'
 import { logoutAction } from '@/actions'
 
 interface UserDropdownMenuProps {
@@ -38,7 +34,7 @@ const UserDropdownMenu = ({ user }: UserDropdownMenuProps) => {
         </Flex>
         <DropdownMenu.Separator className="m-1" />
         <NextLink href={'/account/profile'}>
-          <MenuItem Icon={UserIcon}>Account</MenuItem>
+          <MenuItem Icon={UserIcon}>My Account</MenuItem>
         </NextLink>
         {/* <NextLink href="/appointments">
           <MenuItem Icon={CalendarDaysIcon}>Appointments</MenuItem>

@@ -9,6 +9,7 @@ import { Button, Dialog, Flex, Link, RadioGroup, Text } from '@radix-ui/themes'
 import { ChevronRightIcon } from 'lucide-react'
 import { CloseDialogIcon, FormError, RadioGroupItem } from '@/components-v2'
 import { CreditCard } from '@/features/billing/credit-debit-cards/types'
+import { getCreditCardExpiry } from '@/features/billing/credit-debit-cards/utils'
 import { useToast } from '@/providers'
 import { payCopay } from '../actions'
 
@@ -119,6 +120,14 @@ const PayCopayButton = ({
                     >
                       {card.cardType} ending in{' '}
                       <Text className="font-[600]">{card.numberLastFour}</Text>
+                      <Text weight="regular" size="2">
+                        {'  (' +
+                          getCreditCardExpiry(
+                            card.expireMonth,
+                            card.expireYear,
+                          ) +
+                          ')'}
+                      </Text>
                     </RadioGroupItem>
                   ))}
                 </Flex>
