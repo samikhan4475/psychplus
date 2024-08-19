@@ -77,11 +77,10 @@ const BookAppointmentButton = ({
 
   useEffect(() => {
     setPolicyAlreadySigned(checkIfPolicyBSigned(userConsents))
-  }, [userConsents])
-
-  useEffect(() => {
     form.setValue('userAgreed', policyAlreadySigned)
-  }, [])
+  }, [userConsents,policyAlreadySigned])
+
+ 
 
   useEffect(() => {
     const checkIfPolicyBSigned = (fetchedUserConsents: Consent[]) =>
@@ -113,6 +112,13 @@ const BookAppointmentButton = ({
   const bookSlot = async () => {
     setError(undefined)
     setLoading(true)
+    const formValues = form.getValues()
+
+    if (!formValues.userAgreed) { 
+      setError('You must agree to the above policies.')
+      setLoading(false)
+      return
+    }
 
     if (appointmentId) {
       const result = await rescheduleAppointment({
@@ -150,6 +156,8 @@ const BookAppointmentButton = ({
         return
       }
     }
+
+
     if (!policyAlreadySigned) {
       const result = await addPolicyConsent({ type: 'PolicyB' })
 

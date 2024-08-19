@@ -48,8 +48,8 @@ const schema = z
       .min(1, 'Required')
       .max(16, 'Invalid Gruop Number'),
     isPatientPolicyHolder: z.boolean(),
-    policyHolderFirstName: z.string().trim().optional(),
-    policyHolderLastName: z.string().trim().optional(),
+    policyHolderFirstName: z.string().max(28,'Max 28 characters are allowed'),
+    policyHolderLastName: z.string().max(28,'Max 28 characters are allowed'),
     policyHolderGender: z.string().optional(),
     policyHolderRelationship: z.string().optional(),
     insurancePolicyPriority: z.string().min(1, 'Required'),
@@ -61,6 +61,7 @@ const schema = z
   .superRefine((data, ctx) => {
     if (!data.isPatientPolicyHolder) {
       if (!data.policyHolderFirstName) {
+
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
           message: 'Required',
@@ -126,7 +127,6 @@ interface InsuranceFormProps {
 
 const InsuranceForm = ({
   insurancePayers,
-  insurancePriority,
   insurance,
   trigger,
   onFormClose,
@@ -160,6 +160,7 @@ const InsuranceForm = ({
     // Set min date to today
     const formattedMinDate = today.toISOString().split('T')[0]
     setMinDate(formattedMinDate)
+    
   }, [])
 
   const router = useRouter()
@@ -194,14 +195,39 @@ const InsuranceForm = ({
     resolver: zodResolver(schema),
     reValidateMode: 'onChange',
     criteriaMode: 'all',
-    defaultValues: getFormDefaultValues(insurance),
+    // defaultValues: { isPatientPolicyHolder: true }
+    defaultValues :getFormDefaultValues(insurance)
   })
+  const { register, watch, unregister, reset} = form
+  const watchisPatientPolicyHolder = watch("isPatientPolicyHolder");
+
+  useEffect(() => {
+    if (!watchisPatientPolicyHolder) {
+      register("policyHolderFirstName")
+      register("policyHolderLastName")
+      register("policyHolderDateOfBirth")
+      register("policyHolderGender")
+      register("policyHolderRelationship")
+
+    } else {
+      unregister("policyHolderFirstName")
+      unregister("policyHolderLastName")
+      unregister("policyHolderDateOfBirth")
+      unregister("policyHolderGender")
+      unregister("policyHolderRelationship")
+    }
+  }, [register, unregister, watchisPatientPolicyHolder])
 
   useEffect(() => {
     if (insurance) {
-      form.reset(getFormDefaultValues(insurance))
+      reset(getFormDefaultValues(insurance))
+    } else {
+      reset({
+        ...getFormDefaultValues(),
+        isPatientPolicyHolder: true,
+      })
     }
-  }, [form, insurance])
+  }, [insurance, reset])
 
   const onSubmit = async (data: SchemaType) => {
     const payload: InsuranceParams = {
@@ -212,23 +238,22 @@ const InsuranceForm = ({
       terminationDate: data.terminationDate,
       memberId: data.memberId,
       groupNumber: data.groupNumber,
-      isPatientPolicyHolder: data.isPatientPolicyHolder,
-      insurancePolicyPriority: insurancePriority ?? 'Primary',
+      isPatientPolicyHolder: data.isPatientPolicyHolder ?? "Yes",
+      insurancePolicyPriority: data.insurancePolicyPriority ?? 'Primary',
       hasCardFrontImage: data.hasCardFrontImage,
       hasCardBackImage: data.hasCardBackImage,
       isActive: true,
     }
-
     if (!data.isPatientPolicyHolder) {
       payload.policyHolderName = {
-        firstName: data.policyHolderFirstName ?? '',
-        lastName: data.policyHolderLastName ?? '',
+        firstName: data?.policyHolderFirstName ?? '',
+        lastName: data?.policyHolderLastName ?? '',
       }
-      payload.policyHolderGender = data.policyHolderGender
-      payload.policyHolderDateOfBirth = data.policyHolderDateOfBirth
-      payload.policyHolderRelationship = data.policyHolderRelationship
+      payload.policyHolderGender = data?.policyHolderGender
+      payload.policyHolderDateOfBirth = data?.policyHolderDateOfBirth
+      payload.policyHolderRelationship = data?.policyHolderRelationship
       payload.policyHolderSocialSecurityNumber =
-        data.policyHolderSocialSecurityNumber
+        data?.policyHolderSocialSecurityNumber
     }
 
     if (!insurance) delete payload.id
@@ -281,23 +306,13 @@ const InsuranceForm = ({
     } as ActionSuccessState
   }
 
-  const onCheckedChange = (value: string) => {
-    form.setValue('isPatientPolicyHolder', value === 'Yes')
+  const onCheckedChange = (isPolicyHolder: boolean) => {
 
-    if (form.formState.isSubmitted) {
-      form.trigger([
-        'policyHolderFirstName',
-        'policyHolderLastName',
-        'policyHolderDateOfBirth',
-        'policyHolderGender',
-        'policyHolderRelationship',
-      ])
-    }
+    form.setValue('isPatientPolicyHolder', isPolicyHolder, { shouldValidate: true, shouldDirty: true })
   }
 
   const onSuccess = () => {
     router.refresh()
-    form.reset({})
     onFormClose?.()
   }
 
@@ -317,14 +332,14 @@ const InsuranceForm = ({
       deleteButtonProps={
         insurance
           ? {
-              deleteAction: onDeleteAction,
-              confirmTitle: 'Remove Insurance',
-              confirmDescription:
-                'Are you sure you want to remove this insurance?',
-              confirmActionLabel: 'Remove',
-              toastTitle: 'Insurance Removed',
-              onSuccess: router.refresh,
-            }
+            deleteAction: onDeleteAction,
+            confirmTitle: 'Remove Insurance',
+            confirmDescription:
+              'Are you sure you want to remove this insurance?',
+            confirmActionLabel: 'Remove',
+            toastTitle: 'Insurance Removed',
+            onSuccess: router.refresh,
+          }
           : undefined
       }
     >
@@ -443,21 +458,22 @@ const InsuranceForm = ({
           <FormFieldLabel required>
             Are you the primary insurance holder
           </FormFieldLabel>
-
           <RadioGroup.Root
             id="isPatientPolicyHolder"
-            value={form.watch('isPatientPolicyHolder') ? 'Yes' : 'No'}
+            value={String(form.watch('isPatientPolicyHolder'))}
             data-testid="signup-is-parent-or-guardian-input"
+            defaultValue={String(true)}
             onValueChange={(value) => {
-              onCheckedChange(value)
+              const isPolicyHolder = value === "true";
+              onCheckedChange(isPolicyHolder)
             }}
           >
             <Flex gap="4">
-              {['Yes', 'No'].map((option) => (
-                <Text as="label" key={option} size="2">
+              {[{ label: 'Yes', value: true }, { label: "NO", value: false }].map((option) => (
+                <Text as="label" key={option.label} size="2">
                   <Flex gap="1">
-                    <RadioGroup.Item value={option} />
-                    {option}
+                    <RadioGroup.Item value={String(option.value)} />
+                    {option.label}
                   </Flex>
                 </Text>
               ))}
@@ -466,7 +482,7 @@ const InsuranceForm = ({
         </FormFieldContainer>
       </Box>
 
-      {!form.watch('isPatientPolicyHolder') ? (
+      {!watchisPatientPolicyHolder ? (
         <>
           <Text size="5" className="mb-3 mt-3 font-bold text-[#151B4A]">
             Primary Insurance Holder Details
