@@ -2,7 +2,10 @@
 
 import { useRouter } from 'next/navigation'
 import { CreditCardType } from '@psychplus-v2/constants'
-import { getBillingAddressLabel } from '@psychplus-v2/utils'
+import {
+  getBillingAddressLabel,
+  truncateWithEllipsis,
+} from '@psychplus-v2/utils'
 import { Flex, Separator, Text } from '@radix-ui/themes'
 import { DotIcon } from 'lucide-react'
 import {
@@ -45,19 +48,21 @@ const CreditCardListItem = ({ creditCard }: { creditCard: CreditCard }) => {
                 <Flex align="center" gap="2">
                   {creditCard.name.toLowerCase() !==
                   getDefaultCreditCardName(creditCard) ? (
-                    <Text
-                      weight="regular"
-                      size="2"
-                    >{`${creditCard.name}`}</Text>
+                    <Text weight="regular" size="2">{`${truncateWithEllipsis(
+                      creditCard.name,
+                      25,
+                    )}`}</Text>
                   ) : null}
 
                   {creditCard.isPrimary && (
                     <Badge label="Primary" type="basic" />
                   )}
 
-                  {creditCard.isActive ? (
+                  {creditCard.isActive && creditCard.isPrimary && (
                     <Badge label="Active" type="success" addIcon />
-                  ) : (
+                  )}
+
+                  {!creditCard.isActive && (
                     <Badge label="Inactive" type="danger" addIcon />
                   )}
                 </Flex>

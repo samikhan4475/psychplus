@@ -56,7 +56,7 @@ const ServerComponent = async () => {
                   </Flex>
 
                   <Text className="mb-4 text-[14px] font-medium uppercase text-[#60646C] text-accent-12">
-                    {row.specialist}
+                    Primary {row.specialist}
                   </Text>
                   <CareTeamBookButton careTeamMember={row} />
                   {/* <Text className="cursor-pointer p-2 pl-0 text-[15px] text-accent-12 underline-offset-4 hover:underline xs:text-[13px] sm:p-0">

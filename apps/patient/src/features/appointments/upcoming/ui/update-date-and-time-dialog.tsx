@@ -38,6 +38,7 @@ const UpdateDateAndTimeDialog = ({
 
   const onSave = async () => {
     setLoading(true)
+    setError('')
     if (selectedSlot) {
       const result = await rescheduleAppointment({
         appointmentId: appointment.id,
@@ -60,9 +61,9 @@ const UpdateDateAndTimeDialog = ({
           title: 'Date And Time Changed',
         })
         setStartingDate(getCalendarDateLabel(today(getLocalTimeZone())))
+        router.refresh()
       }
     }
-    router.refresh()
     setLoading(false)
   }
 
@@ -71,6 +72,7 @@ const UpdateDateAndTimeDialog = ({
       open={isUpdateDateAndTimeDialog}
       onOpenChange={(open) => {
         setIsUpdateDateAndTimeDialog(open)
+        setError('')
         setStartingDate(getCalendarDateLabel(today(getLocalTimeZone())))
       }}
     >

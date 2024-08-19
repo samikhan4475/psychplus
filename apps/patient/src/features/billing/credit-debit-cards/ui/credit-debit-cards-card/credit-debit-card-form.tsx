@@ -4,13 +4,22 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { type ActionErrorState } from '@psychplus-v2/api'
+import { DocumentType } from '@psychplus-v2/types'
 import { cn, zipCodeSchema } from '@psychplus-v2/utils'
-import { Box, Checkbox, Flex, Text, TextFieldInput } from '@radix-ui/themes'
+import {
+  Box,
+  Button,
+  Checkbox,
+  Flex,
+  Text,
+  TextFieldInput,
+} from '@radix-ui/themes'
 import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js'
 import { useForm } from 'react-hook-form'
 import z from 'zod'
 import {
   BillingAddressAutocompleteForm,
+  ConsentView,
   CreditDebitCardsIcon,
   FormFieldContainer,
   FormFieldError,
@@ -32,7 +41,10 @@ const STRIPE_INPUT_STYLE = {
 
 const schema = z.object({
   fullname: z.string().min(1, 'Required'),
-  address: z.string().min(1, 'Required'),
+  address: z
+    .string()
+    .min(1, 'Required')
+    .max(100, 'Max 100 characters are allowed.'),
   city: z.string().min(1, 'Required'),
   state: z.string().min(1, 'Required'),
   postalCode: zipCodeSchema,
@@ -62,6 +74,10 @@ const CreditCardForm = ({
   const elements = useElements()
 
   const [focus, setFocus] = useState(false)
+  const [showConsentView, setShowConsentView] = useState({
+    visible: false,
+    type: DocumentType.TERMS_AND_CONDITIONS,
+  })
 
   const form = useForm<SchemaType>({
     resolver: zodResolver(schema),
@@ -164,6 +180,14 @@ const CreditCardForm = ({
       triggerClassName={triggerClassName}
       onFormClose={onFormClose}
     >
+      <ConsentView
+        open={showConsentView.visible}
+        setOpen={(open) => {
+          setShowConsentView({ ...showConsentView, visible: open })
+        }}
+        documentType={showConsentView.type}
+      />
+
       <Flex gap="4" direction="column" className="w-full">
         <Flex
           className="w-full rounded-1 border border-gray-6"
@@ -259,8 +283,20 @@ const CreditCardForm = ({
             className="text-[14px] font-[400]"
             id="terms-and-conditions-checkbox"
           >
-            I have read the terms & conditions and card holder has agreed to
-            place the card on file
+            I have read the{' '}
+            <Button
+              className="bg-transparent px-2 pt-[5px]"
+              variant="ghost"
+              onClick={() =>
+                setShowConsentView({
+                  visible: true,
+                  type: DocumentType.TERMS_AND_CONDITIONS,
+                })
+              }
+            >
+              terms & conditions
+            </Button>{' '}
+            and card holder has agreed to place the card on file
           </FormFieldLabel>
         </Flex>
         <FormFieldError name="userAgreed" />

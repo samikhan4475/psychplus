@@ -1,4 +1,5 @@
 import type { Address, PatientAddress } from '@psychplus-v2/types'
+import { truncateWithEllipsis } from './'
 
 const areAddressesEqual = (
   addressA?: PatientAddress,
@@ -58,7 +59,9 @@ const getBillingAddressLabel = (addresses?: Address[]) => {
 
   const stateFullName = getStateFullName(address.state)
 
-  return `${address.street1} ${address.city}, ${stateFullName} ${address.postalCode}`
+  return `${truncateWithEllipsis(address.street1)} ${
+    address.city
+  }, ${stateFullName} ${address.postalCode}`
 }
 
 const STATE_ABBREVIATIONS: Record<string, string> = {
