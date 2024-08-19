@@ -2,6 +2,7 @@
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { CODESETS } from '@psychplus-v2/constants'
+import { PhoneNumberEnum } from '@psychplus-v2/types'
 import { getUserFullName } from '@psychplus-v2/utils'
 import { TextFieldInput } from '@radix-ui/themes'
 import { useForm } from 'react-hook-form'
@@ -64,7 +65,7 @@ const EmergencyContactForm = () => {
           email: data.email,
           phoneNumbers: [
             {
-              type: 'Contact',
+              type: PhoneNumberEnum.CONTACT,
               number: data.phoneNumber,
             },
           ],

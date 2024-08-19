@@ -9,7 +9,11 @@ const schema = z
     lastName: z.string().trim().min(1, 'Required'),
     middleName: z.string().optional(),
     birthdate: z.string().trim().min(1, 'Required'),
-    phoneNumber: z.string().trim().length(10, 'Invalid phone number'),
+    phoneNumber: z
+      .string()
+      .trim()
+      .min(1, 'Required')
+      .length(10, 'Invalid phone number'),
     email: z.string().email().trim(),
     socialSecurityNumber: z.string().optional(),
     medicalRecordNumber: z.string().optional(),

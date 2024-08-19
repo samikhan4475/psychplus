@@ -1,8 +1,13 @@
-type PhoneNumberType = 'Contact'
+export enum PhoneNumberEnum {
+  CONTACT = 'Contact',
+  HOME = 'Home',
+  BUSINESS = 'Business',
+}
 
 interface PhoneNumber {
-  type: PhoneNumberType
+  type: PhoneNumberEnum
   number?: string
+  extension?: string
   comment?: string
 }
 

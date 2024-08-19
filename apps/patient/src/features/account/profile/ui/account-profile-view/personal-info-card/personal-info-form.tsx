@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { CODESETS } from '@psychplus-v2/constants'
-import { PatientProfile } from '@psychplus-v2/types'
+import { PatientProfile, PhoneNumberEnum } from '@psychplus-v2/types'
 import {
   getAgeFromDate,
   getPatientPhoneNumber,
@@ -114,7 +114,7 @@ const PersonalInfoForm = ({
         phoneNumbers: [
           ...(profile.contactDetails.phoneNumbers ?? []),
           {
-            type: 'Contact',
+            type: PhoneNumberEnum.CONTACT,
             number: data.phoneNumber,
           },
         ],

@@ -8,7 +8,7 @@ import {
   ETHNICITIES_GROUPING_CODES,
   RACES_GROUPING_CODES,
 } from '@psychplus-v2/constants'
-import { PatientProfile } from '@psychplus-v2/types'
+import { PatientProfile, PhoneNumberEnum } from '@psychplus-v2/types'
 import { Flex, Grid, TextFieldInput } from '@radix-ui/themes'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
@@ -89,7 +89,7 @@ const DescriptiveForm = ({
         ...profile.contactDetails,
         phoneNumbers: [
           {
-            type: 'Contact',
+            type: PhoneNumberEnum.CONTACT,
             comment: data.comment,
             number: contactNumber?.number || '',
           },

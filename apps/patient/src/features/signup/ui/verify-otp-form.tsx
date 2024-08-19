@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { FormContainer } from '@psychplus-v2/components'
+import { PhoneNumberEnum } from '@psychplus-v2/types'
 import { cn } from '@psychplus-v2/utils'
 import { Box, Dialog, Flex, Heading, Text } from '@radix-ui/themes'
 import { CheckIcon, Loader2Icon, XIcon } from 'lucide-react'
@@ -82,7 +83,7 @@ const VerifyOtpForm = ({
         phoneNumbers: [
           {
             number: formData.phoneNumber,
-            type: 'Contact',
+            type: PhoneNumberEnum.CONTACT,
           },
         ],
       },
