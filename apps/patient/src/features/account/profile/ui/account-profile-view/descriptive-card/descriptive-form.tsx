@@ -67,6 +67,17 @@ const DescriptiveForm = ({
   })
 
   const submitAction = async (data: SchemaType) => {
+    const phoneNumbers =
+      profile.contactDetails.phoneNumbers?.filter(
+        (phone) => phone.type !== PhoneNumberEnum.CONTACT,
+      ) ?? []
+
+    phoneNumbers.push({
+      type: PhoneNumberEnum.CONTACT,
+      comment: data.comment,
+      number: contactNumber?.number || '',
+    })
+
     const body: PatientProfile = {
       ...profile,
       legalName: {
@@ -87,13 +98,7 @@ const DescriptiveForm = ({
       languageProficiency: data.languageProficiency,
       contactDetails: {
         ...profile.contactDetails,
-        phoneNumbers: [
-          {
-            type: PhoneNumberEnum.CONTACT,
-            comment: data.comment,
-            number: contactNumber?.number || '',
-          },
-        ],
+        phoneNumbers,
       },
       races: data?.races || [],
       ethnicities: data?.ethnicities || [],
