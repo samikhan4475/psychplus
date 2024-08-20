@@ -1,0 +1,172 @@
+'use client'
+
+import { zodResolver } from '@hookform/resolvers/zod'
+import { PatientProfile } from '@psychplus-v2/types'
+import { Flex, TextFieldInput } from '@radix-ui/themes'
+import { useForm } from 'react-hook-form'
+import { z } from 'zod'
+import {
+  AlternativeAddressAutocomplete,
+  FormFieldContainer,
+  FormFieldError,
+  FormFieldLabel,
+  ToggleableForm,
+} from '@/components-v2'
+import { updateProfileAction } from '@/features/account/profile/actions'
+import { useProfileStore } from '@/features/account/profile/store'
+import { getPlaceholder } from '@/features/account/profile/utils'
+import { schema } from './schema'
+
+type SchemaType = z.infer<typeof schema>
+
+const AlternateInfoForm = ({
+  isEdit,
+  handleSave,
+}: {
+  isEdit: boolean
+  handleSave: () => void
+}) => {
+  const { profile, setProfile } = useProfileStore((state) => ({
+    profile: state.profile,
+    setProfile: state.setProfile,
+  }))
+
+  const form = useForm<SchemaType>({
+    resolver: zodResolver(schema),
+    reValidateMode: 'onChange',
+    defaultValues: {
+      firstName: profile.alternateOrPreviousName?.firstName,
+      lastName: profile.alternateOrPreviousName?.lastName,
+      middleName: profile.alternateOrPreviousName?.middleName,
+      title: profile.alternateOrPreviousName?.title,
+      suffix: profile.alternateOrPreviousName?.suffix,
+      honors: profile.alternateOrPreviousName?.honors,
+      street1:
+        profile.alternateOrPreviousContactDetails?.addresses?.[0]?.street1,
+      street2:
+        profile.alternateOrPreviousContactDetails?.addresses?.[0]?.street2,
+      city: profile.alternateOrPreviousContactDetails?.addresses?.[0]?.city,
+      postalCode:
+        profile.alternateOrPreviousContactDetails?.addresses?.[0]?.postalCode,
+    },
+  })
+
+  const submitAction = (data: SchemaType) => {
+    const body: PatientProfile = {
+      ...profile,
+      alternateOrPreviousName: {
+        firstName: data.firstName ?? '',
+        lastName: data.lastName ?? '',
+        middleName: data.middleName ?? '',
+        title: data.title ?? '',
+        suffix: data.suffix ?? '',
+        honors: data.honors ?? '',
+      },
+      alternateOrPreviousContactDetails: {
+        addresses: [
+          {
+            street1: data.street1 ?? '',
+            street2: data.street2,
+            city: data.city ?? '',
+            postalCode: data.postalCode ?? '',
+          },
+        ],
+      },
+    }
+
+    return updateProfileAction(body)
+  }
+
+  const onSuccess = (data: PatientProfile) => {
+    setProfile(data)
+    handleSave()
+  }
+
+  return (
+    <ToggleableForm
+      form={form}
+      submitAction={submitAction}
+      onSuccess={onSuccess}
+      onFormClose={handleSave}
+      isEdit={isEdit}
+    >
+      <Flex direction="column" gap="3" className="w-full" mb="4">
+        <Flex className="w-full" gap="3">
+          <FormFieldContainer className="w-full">
+            <FormFieldLabel required>First Name</FormFieldLabel>
+            <TextFieldInput
+              placeholder={getPlaceholder(`first name`, isEdit)}
+              size="3"
+              {...form.register('firstName')}
+              disabled={!isEdit}
+            />
+            <FormFieldError name="firstName" />
+          </FormFieldContainer>
+
+          <FormFieldContainer className="w-full">
+            <FormFieldLabel>Middle Name</FormFieldLabel>
+            <TextFieldInput
+              placeholder={getPlaceholder(`middle name`, isEdit)}
+              size="3"
+              {...form.register('middleName')}
+              disabled={!isEdit}
+            />
+            <FormFieldError name="middleName" />
+          </FormFieldContainer>
+
+          <FormFieldContainer className="w-full">
+            <FormFieldLabel required>Last Name</FormFieldLabel>
+            <TextFieldInput
+              placeholder={getPlaceholder(`last name`, isEdit)}
+              size="3"
+              {...form.register('lastName')}
+              disabled={!isEdit}
+            />
+            <FormFieldError name="lastName" />
+          </FormFieldContainer>
+        </Flex>
+
+        <Flex className="w-full" gap="3">
+          <FormFieldContainer className="w-full">
+            <FormFieldLabel>Prefix</FormFieldLabel>
+            <TextFieldInput
+              placeholder={getPlaceholder(`prefix`, isEdit)}
+              size="3"
+              {...form.register('title')}
+              disabled={!isEdit}
+            />
+            <FormFieldError name="title" />
+          </FormFieldContainer>
+
+          <FormFieldContainer className="w-full">
+            <FormFieldLabel>Suffix</FormFieldLabel>
+            <TextFieldInput
+              placeholder={getPlaceholder(`suffix`, isEdit)}
+              size="3"
+              {...form.register('suffix')}
+              disabled={!isEdit}
+            />
+            <FormFieldError name="suffix" />
+          </FormFieldContainer>
+
+          <FormFieldContainer className="w-full">
+            <FormFieldLabel>Prof. Suffix</FormFieldLabel>
+            <TextFieldInput
+              placeholder={getPlaceholder(`prof. suffix`, isEdit)}
+              size="3"
+              {...form.register('honors')}
+              disabled={!isEdit}
+            />
+            <FormFieldError name="honors" />
+          </FormFieldContainer>
+        </Flex>
+
+        <Flex className="w-full" gap="3">
+          <AlternativeAddressAutocomplete editable={!isEdit} />
+        </Flex>
+      </Flex>
+    </ToggleableForm>
+  )
+}
+
+export { AlternateInfoForm }

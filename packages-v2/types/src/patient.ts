@@ -1,3 +1,7 @@
+import {
+  AlternateOrPreviousContactDetails,
+  AlternateOrPreviousName,
+} from './alternative-or-previous'
 import type { ContactDetails } from './contact'
 import { DriversLicense } from './drivers-lisence'
 import type { EmergencyContact, PatientGuardian } from './guardian'
@@ -26,6 +30,8 @@ interface PatientProfile {
   status?: string
   driversLicense?: DriversLicense
   hasGuardian?: boolean
+  alternateOrPreviousName?: AlternateOrPreviousName
+  alternateOrPreviousContactDetails?: AlternateOrPreviousContactDetails
   races?: string[]
   ethnicities?: string[]
   religion?: string

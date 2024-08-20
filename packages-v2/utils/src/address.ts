@@ -45,7 +45,7 @@ const getClinicAddressLabel = (addresses?: Address[]) => {
     return ''
   }
 
-  const stateAbbreviation = getStateAbbreviation(address.state)
+  const stateAbbreviation = getStateAbbreviation(address.state ?? '')
 
   return `${address.street1} ${address.city}, ${stateAbbreviation} ${address.postalCode}`
 }
@@ -57,7 +57,7 @@ const getBillingAddressLabel = (addresses?: Address[]) => {
     return ''
   }
 
-  const stateFullName = getStateFullName(address.state)
+  const stateFullName = getStateFullName(address.state ?? '')
 
   return `${truncateWithEllipsis(address.street1)} ${
     address.city

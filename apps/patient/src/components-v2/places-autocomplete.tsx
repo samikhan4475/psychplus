@@ -34,12 +34,14 @@ interface PlacesAutocompleteProps {
   name: string
   editable?: boolean
   label?: string
+  includeState?: boolean
 }
 
 const PlacesAutocomplete = ({
   name,
   editable,
   label,
+  includeState = true,
 }: PlacesAutocompleteProps) => {
   const autocompleteRef = useRef<HTMLInputElement | null>(null)
 
@@ -231,17 +233,19 @@ const PlacesAutocomplete = ({
           <FormFieldError name={cityField} />
         </FormFieldContainer>
 
-        <FormFieldContainer className="flex-1">
-          <FormFieldLabel required>State</FormFieldLabel>
-          <CodesetFormSelect
-            size="3"
-            name={stateField}
-            codeset={CODESETS.UsStates}
-            disabled={editable}
-            placeholder={editable ? '' : 'Select state'}
-          />
-          <FormFieldError name={stateField} />
-        </FormFieldContainer>
+        {includeState && (
+          <FormFieldContainer className="flex-1">
+            <FormFieldLabel required>State</FormFieldLabel>
+            <CodesetFormSelect
+              size="3"
+              name={stateField}
+              codeset={CODESETS.UsStates}
+              disabled={editable}
+              placeholder={editable ? '' : 'Select state'}
+            />
+            <FormFieldError name={stateField} />
+          </FormFieldContainer>
+        )}
 
         <FormFieldContainer className="flex-1">
           <FormFieldLabel required>Zip</FormFieldLabel>

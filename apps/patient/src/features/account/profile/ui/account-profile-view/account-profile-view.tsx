@@ -4,6 +4,7 @@ import { Flex } from '@radix-ui/themes'
 import { getCodesets, getProfile } from '@/api'
 import { FeatureContainer } from '@/components-v2'
 import { AdditionalContactCard } from '@/features/account/profile/ui/account-profile-view/additional-contact-card'
+import { AlternateInfoCard } from '@/features/account/profile/ui/account-profile-view/alternate-info-card'
 import { PreferredPartnerCard } from '@/features/account/profile/ui/account-profile-view/preferred-partner-card'
 import { CodesetStoreProvider, GooglePlacesContextProvider } from '@/providers'
 import { ProfileStoreProvider } from '../../store'
@@ -45,10 +46,10 @@ const AccountProfileView = async () => {
             <FeatureContainer>
               <PersonalInfoCard />
               <AddressCard />
-              <AdditionalContactCard />
-              <DescriptiveCard />
-              <EmergencyContactCard />
               <PreferredPartnerCard />
+              <AdditionalContactCard />
+              <AlternateInfoCard />
+              <DescriptiveCard />
             </FeatureContainer>
           </Flex>
         </GooglePlacesContextProvider>

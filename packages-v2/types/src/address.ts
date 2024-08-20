@@ -4,9 +4,10 @@ interface Address {
   street1: string
   street2?: string
   city: string
-  state: string
-  country: string
+  state?: string
+  country?: string
   postalCode: string
+  type?: string
   geoCoordinates?: {
     longitude: number
     latitude: number
