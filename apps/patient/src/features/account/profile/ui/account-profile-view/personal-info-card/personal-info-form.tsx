@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { CODESETS } from '@psychplus-v2/constants'
 import { PatientProfile, PhoneNumberEnum } from '@psychplus-v2/types'
@@ -38,6 +39,8 @@ const PersonalInfoForm = ({
   isEdit: boolean
   handleSave: () => void
 }) => {
+  const router = useRouter()
+
   const { profile, setProfile } = useProfileStore((state) => ({
     profile: state.profile,
     setProfile: state.setProfile,
@@ -162,6 +165,7 @@ const PersonalInfoForm = ({
     handleUpload()
     setProfile(data)
     handleSave()
+    router.refresh()
   }
 
   return (

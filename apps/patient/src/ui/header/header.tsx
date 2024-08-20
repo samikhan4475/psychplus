@@ -1,9 +1,8 @@
-import { getAuthCookies } from '@psychplus-v2/auth'
+import { User } from '@psychplus-v2/auth'
 import { PsychPlusNavLogo } from '@psychplus-v2/components'
 import { CODESETS } from '@psychplus-v2/constants'
 import { Container, Flex } from '@radix-ui/themes'
-import { getCodesets } from '@/api'
-import { NotificationsMenu } from '@/features/activity'
+import { getCodesets, getProfile } from '@/api'
 import { ScheduleAppointmentButton } from '@/features/appointments/search'
 import { NavigationMenu } from './navigation-menu'
 import { ResponsiveMenu } from './responsive-menu'
@@ -11,7 +10,18 @@ import { ResponsiveMenuToggle } from './responsive-menu-toggle'
 import { UserDropdownMenu } from './user-dropdown-menu'
 
 const Header = async () => {
-  const user = getAuthCookies()!.user
+  const profileResponse = await getProfile()
+  if (profileResponse.state === 'error') {
+    throw new Error(profileResponse.error)
+  }
+
+  const profile = profileResponse.data
+  const user: User = {
+    userId: String(profile.id),
+    firstName: profile.legalName.firstName,
+    lastName: profile.legalName.lastName,
+    email: profile.contactDetails.email,
+  }
 
   const codesets = await getCodesets([CODESETS.UsStates])
 
