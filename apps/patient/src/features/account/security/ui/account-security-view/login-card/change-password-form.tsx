@@ -16,6 +16,7 @@ import {
   PasswordRequirements,
   ToggleableForm,
 } from '@/components-v2'
+import { getPlaceholder } from '@/features/account/profile/utils'
 import { changePasswordAction } from '@/features/account/security/actions'
 import { useValidateNewPassword } from '@/hooks'
 
@@ -71,29 +72,32 @@ const ChangePasswordForm = () => {
         }}
       >
         <FormError message={error} />
-        <FormFieldContainer>
+        <FormFieldContainer className="w-full">
           <FormFieldLabel>Current Password</FormFieldLabel>
           <PasswordInput
             size="3"
             maxLength={32}
+            placeholder={getPlaceholder('currentPassword')}
             {...form.register('currentPassword')}
             value={form.watch('currentPassword')}
           />
         </FormFieldContainer>
-        <FormFieldContainer>
+        <FormFieldContainer className="w-full">
           <FormFieldLabel>New Password</FormFieldLabel>
           <PasswordInput
             size="3"
             maxLength={32}
+            placeholder={getPlaceholder('newPassword')}
             {...form.register('newPassword')}
             value={form.watch('newPassword')}
           />
         </FormFieldContainer>
-        <FormFieldContainer>
+        <FormFieldContainer className="w-full">
           <FormFieldLabel>Confirm New Password</FormFieldLabel>
           <PasswordInput
             size="3"
             maxLength={32}
+            placeholder={getPlaceholder('confirmPassword')}
             {...form.register('confirmPassword')}
             value={form.watch('confirmPassword')}
           />

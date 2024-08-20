@@ -68,7 +68,9 @@ const PaymentMethodAccordion = ({
     insurancePriority = InsurancePolicyPriority.Tertiary
   }
 
-  const trigger = <FieldPlaceholder>+ Add New Credit Card</FieldPlaceholder>
+  const trigger = (
+    <FieldPlaceholder>+ Add New Credit/Debit Card</FieldPlaceholder>
+  )
 
   useEffect(() => {
     setSelectedCreditCard(creditCards.length > 0 ? creditCards[0] : undefined)
@@ -88,37 +90,42 @@ const PaymentMethodAccordion = ({
             title="Insurance on File"
             content={
               <Box>
-                {
-                  patientInsurances.length > 0 ? (
-                    <Flex width="100%" gap="2" direction="column">
-                      {
-                        patientInsurances.map((insurance) => (
-                          <Flex
-                            key={insurance.id}
-                            p="3"
-                            className="w-full rounded-2 border border-[#DDDDE3]"
-                          >
-                            <Box className="w-full">
-                              <InsuranceFormTrigger
-                                insurance={insurance}
-                                insurancePayers={insurancePayers}
-                              />
-                            </Box>
-                          </Flex>   
-                        )) 
-                      }
-                    </Flex>
-                  ) : (
-                    <>
-                      <FeatureEmpty description="No insurance added yet" Icon={EmptyFileIcon} />
-                      <Flex width="100%" justify="center" className="-mt-12 mb-8" onClick={() => setInsuranceOpenStateValue('Add/Edit Insurance')}>
-                        <FieldPlaceholder>+ Add New Insurance</FieldPlaceholder>
+                {patientInsurances.length > 0 ? (
+                  <Flex width="100%" gap="2" direction="column">
+                    {patientInsurances.map((insurance) => (
+                      <Flex
+                        key={insurance.id}
+                        p="3"
+                        className="w-full rounded-2 border border-[#DDDDE3]"
+                      >
+                        <Box className="w-full">
+                          <InsuranceFormTrigger
+                            insurance={insurance}
+                            insurancePayers={insurancePayers}
+                          />
+                        </Box>
                       </Flex>
-                    </>
-                  )
-                }
+                    ))}
+                  </Flex>
+                ) : (
+                  <>
+                    <FeatureEmpty
+                      description="No insurance added yet"
+                      Icon={EmptyFileIcon}
+                    />
+                    <Flex
+                      width="100%"
+                      justify="center"
+                      className="-mt-12 mb-8"
+                      onClick={() =>
+                        setInsuranceOpenStateValue('Add/Edit Insurance')
+                      }
+                    >
+                      <FieldPlaceholder>+ Add New Insurance</FieldPlaceholder>
+                    </Flex>
+                  </>
+                )}
               </Box>
-              
             }
           />
 

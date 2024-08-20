@@ -152,12 +152,14 @@ const PasswordResetForm = ({ email }: PasswordResetFormProps) => {
           </FormField>
           <FormField name="newPassword" label="New Password">
             <PasswordInput
+              placeholder="Enter new password"
               {...form.register('newPassword')}
               value={form.watch('newPassword')}
             />
           </FormField>
           <FormField name="confirmPassword" label="Confirm Password">
             <PasswordInput
+              placeholder="Enter confirm password"
               {...form.register('confirmPassword')}
               value={form.watch('confirmPassword')}
             />

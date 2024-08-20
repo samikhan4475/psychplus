@@ -1,8 +1,11 @@
+'use client'
+
 import React from 'react'
 import { PreferredPartner } from '@psychplus-v2/types'
 import { cn, getSlashedDateString } from '@psychplus-v2/utils'
 import { Flex, Table, Text } from '@radix-ui/themes'
 import { EmptyFileIcon, FeatureEmpty } from '@/components-v2'
+import { AccountProfileAccordion } from '@/features/account/profile/ui/account-profile-view/account-profile-accordion.tsx'
 
 interface Props {
   data: PreferredPartner[]
@@ -10,6 +13,23 @@ interface Props {
 }
 
 const PreferredPartnerTable = ({ data, headerClassName }: Props) => {
+  return (
+    <AccountProfileAccordion
+      title="Preferred Partner"
+      editable={false}
+      content={() => renderPreferredPartnerTableClient(data, headerClassName)}
+    />
+  )
+}
+
+const renderPreferredPartnerTableClient = (
+  data: PreferredPartner[],
+  headerClassName: string | undefined,
+) => (
+  <PreferredPartnerTableClient data={data} headerClassName={headerClassName} />
+)
+
+const PreferredPartnerTableClient = ({ data, headerClassName }: Props) => {
   return (
     <Table.Root variant="ghost" size="2" className="w-full">
       <Table.Header className={cn('bg-[#F0F4FF]', headerClassName)}>
@@ -61,14 +81,19 @@ const PreferredPartnerTable = ({ data, headerClassName }: Props) => {
 }
 
 const ColumnHeader = ({ children }: { children: React.ReactNode }) => (
-  <Table.ColumnHeaderCell className="h-auto overflow-clip border border-[#D9E2FC] py-2 text-[12px] font-medium">
+  <Table.ColumnHeaderCell className="h-auto overflow-hidden text-ellipsis whitespace-nowrap border border-[#D9E2FC] py-2 text-[12px] font-medium">
     {children}
   </Table.ColumnHeaderCell>
 )
 
 const TableCell = ({ text }: { text: string | number | undefined }) => (
   <Table.Cell className="border border-solid border-[#D9E2FC]">
-    <Flex height="100%" align="center" justify="start">
+    <Flex
+      height="100%"
+      align="center"
+      justify="start"
+      className="overflow-hidden text-ellipsis whitespace-nowrap"
+    >
       <Text className="text-[14px]">{text}</Text>
     </Flex>
   </Table.Cell>

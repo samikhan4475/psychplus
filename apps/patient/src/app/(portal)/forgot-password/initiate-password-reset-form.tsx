@@ -59,7 +59,11 @@ const InitiatePasswordResetForm = ({
       <FormError message={error} />
       <FormContainer form={form} onSubmit={onSubmit}>
         <FormField name="email" label="Email">
-          <TextFieldInput size="3" {...form.register('email')} />
+          <TextFieldInput
+            placeholder="Enter email"
+            size="3"
+            {...form.register('email')}
+          />
         </FormField>
         <FormSubmitButton size="4" className="mt-4">
           Submit

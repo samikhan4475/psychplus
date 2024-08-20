@@ -91,6 +91,7 @@ const LoginPage = () => {
                     </FormFieldLabel>
                     <TextFieldInput
                       size="3"
+                      placeholder="Enter email"
                       id={LOGIN_FORM_EMAIL_INPUT}
                       {...form.register('username')}
                     />
@@ -102,6 +103,7 @@ const LoginPage = () => {
                     </FormFieldLabel>
                     <PasswordInput
                       size="3"
+                      placeholder="Enter password"
                       id={LOGIN_FORM_PASSWORD_INPUT}
                       {...form.register('password')}
                       value={form.watch('password')}

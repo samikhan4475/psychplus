@@ -11,7 +11,6 @@ import { ProfileStoreProvider } from '../../store'
 import { AddressCard } from './address-card'
 import { ProfileAvatar } from './avatar'
 import { DescriptiveCard } from './descriptive-card'
-import { EmergencyContactCard } from './emergency-contact-card'
 import { PersonalInfoCard } from './personal-info-card'
 
 const AccountProfileView = async () => {
