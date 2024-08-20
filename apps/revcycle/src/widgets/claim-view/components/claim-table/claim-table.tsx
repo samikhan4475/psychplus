@@ -27,7 +27,7 @@ const columns: ColumnDef<Claim>[] = [
       />
     ),
     cell: ({ row }) => (
-      <TableCellLongText maxWidth={100} text={row.original.id} />
+      <TableCellLongText maxWidth={100} text={row.original.claimNumber} />
     ),
     enableHiding: true,
   },
@@ -210,7 +210,7 @@ const columns: ColumnDef<Claim>[] = [
     cell: ({ row }) => (
       <TableCellLongText
         maxWidth={120}
-        text={row.original.submittedDate?.toISOString()}
+        text={`${row.original.submittedDate}`}
       />
     ),
     enableHiding: true,

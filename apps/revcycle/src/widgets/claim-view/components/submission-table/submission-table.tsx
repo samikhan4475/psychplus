@@ -1,52 +1,266 @@
 'use client'
 
+import { Flex } from '@radix-ui/themes'
+import { type ColumnDef } from '@tanstack/react-table'
 import {
-  createDataTableSelectColumn,
   DataTable,
   DataTableColumnHeader,
   DataTablePageNavigation,
   DataTablePaginationLabel,
 } from '@psychplus/ui/data-table'
-import { Flex } from '@radix-ui/themes'
-import { type ColumnDef } from '@tanstack/react-table'
 import { useStore } from '../../store'
 import { Claim } from '../../types'
+import { ClaimNumberCell } from './claim-number-cell'
 import { FilterForm } from './filter-form'
 import { TableCellLongText } from './table-cell-long-text'
-
-// Function to create column definitions
-const createColumn = (
-  id: string,
-  accessorKey: keyof Claim,
-  title: string,
-  maxWidth: number
-): ColumnDef<Claim> => ({
-  id,
-  accessorKey,
-  size: 50,
-  header: ({ column }) => (
-    <DataTableColumnHeader column={column} title={title} className="text-[#000]" />
-  ),
-  cell: ({ row }) => (
-    <TableCellLongText maxWidth={maxWidth} text={row.original[accessorKey]?.toString()} />
-  ),
-  enableHiding: true,
-})
+import { TableHeaderCheckbox } from './table-header-checkbox'
+import { TableRowCheckbox } from './table-row-checkbox'
 
 const columns: ColumnDef<Claim>[] = [
-  createDataTableSelectColumn(),
-  createColumn('claimNumber', 'claimNumber', 'Claim #', 100),
-  createColumn('patientName', 'patientName', 'Patient Name', 130),
-  createColumn('patientAccountNumber', 'patientAccountNumber', 'MRN #', 120),
-  createColumn('dos', 'dos', 'DOS', 100),
-  createColumn('locationId', 'locationId', 'Location', 120),
-  createColumn('primaryInsurance', 'primaryInsurance', 'Primary Ins.', 120),
-  createColumn('secondaryPatientInsurancePlanId', 'secondaryPatientInsurancePlanId', 'Secondary', 120),
-  createColumn('status', 'status', 'Claim Status', 120),
-  createColumn('totalCharge', 'totalCharge', 'Total Charge', 120),
-  createColumn('dueAmount', 'dueAmount', 'Due Amount', 120),
-  createColumn('createdOn', 'createdOn', 'Created On', 120),
-  createColumn('submittedOn', 'submittedOn', 'Submitted On', 120),
+  {
+    id: 'select',
+    header: ({ table }) => {
+      return (
+        <TableHeaderCheckbox
+          checked={table.getIsAllPageRowsSelected()}
+          onCheckedChange={table.toggleAllPageRowsSelected}
+        />
+      )
+    },
+    cell: ({ row }) => {
+      return (
+        <TableRowCheckbox
+          claimId={row.original.id}
+          checked={row.getIsSelected()}
+          onCheckedChange={row.toggleSelected}
+        />
+      )
+    },
+    enableSorting: false,
+    enableHiding: false,
+  },
+  {
+    id: 'claimNumber',
+    accessorKey: 'claimNumber',
+    size: 10,
+    header: ({ column }) => (
+      <DataTableColumnHeader
+        column={column}
+        title="Claim #"
+        className="text-[#000]"
+      />
+    ),
+    cell: ({ row }) => (
+      <ClaimNumberCell
+        claimId={row.original.id}
+        text={row.original.claimNumber}
+      />
+    ),
+    enableHiding: true,
+  },
+  {
+    id: 'patientName',
+    accessorKey: 'patientName',
+    size: 50,
+    header: ({ column }) => (
+      <DataTableColumnHeader
+        column={column}
+        title="Patient Name"
+        className="text-[#000]"
+      />
+    ),
+    cell: ({ row }) => (
+      <TableCellLongText maxWidth={130} text={row.original.patientName} />
+    ),
+    enableHiding: true,
+  },
+  {
+    id: 'patientAccountNumber',
+    accessorKey: 'patientAccountNumber',
+    size: 50,
+    header: ({ column }) => (
+      <DataTableColumnHeader
+        column={column}
+        title="MRN #"
+        className="text-[#000]"
+      />
+    ),
+    cell: ({ row }) => (
+      <TableCellLongText
+        maxWidth={120}
+        text={row.original.patientAccountNumber}
+      />
+    ),
+    enableHiding: true,
+  },
+  {
+    id: 'dos',
+    accessorKey: 'dos',
+    size: 50,
+    header: ({ column }) => (
+      <DataTableColumnHeader
+        column={column}
+        title="DOS"
+        className="text-[#000]"
+      />
+    ),
+    cell: ({ row }) => (
+      <TableCellLongText
+        maxWidth={100}
+        text={row.original.dateOfServiceFrom?.toString()}
+      />
+    ),
+    enableHiding: true,
+  },
+  {
+    id: 'primaryInsurance',
+    accessorKey: 'primaryInsurance',
+    size: 50,
+    header: ({ column }) => (
+      <DataTableColumnHeader
+        column={column}
+        title="Location"
+        className="text-[#000]"
+      />
+    ),
+    cell: ({ row }) => (
+      <TableCellLongText
+        maxWidth={120}
+        text={row.original.primaryPatientInsurancePlanId?.toString()}
+      />
+    ),
+    enableHiding: true,
+  },
+  {
+    id: 'primaryInsurance',
+    accessorKey: 'primaryInsurance',
+    size: 50,
+    header: ({ column }) => (
+      <DataTableColumnHeader
+        column={column}
+        title="Primary Ins."
+        className="text-[#000]"
+      />
+    ),
+    cell: ({ row }) => (
+      <TableCellLongText
+        maxWidth={120}
+        text={row.original.primaryPatientInsurancePlanId?.toString()}
+      />
+    ),
+    enableHiding: true,
+  },
+  {
+    id: 'secondaryPatientInsurancePlanId',
+    accessorKey: 'secondaryPatientInsurancePlanId',
+    size: 50,
+    header: ({ column }) => (
+      <DataTableColumnHeader
+        column={column}
+        title="Secondary"
+        className="text-[#000]"
+      />
+    ),
+    cell: ({ row }) => (
+      <TableCellLongText
+        maxWidth={120}
+        text={row.original.secondaryPatientInsurancePlanId?.toString()}
+      />
+    ),
+    enableHiding: true,
+  },
+  {
+    id: 'status',
+    accessorKey: 'status',
+    size: 50,
+    header: ({ column }) => (
+      <DataTableColumnHeader
+        column={column}
+        title="Claim Status"
+        className="text-[#000]"
+      />
+    ),
+    cell: ({ row }) => (
+      <TableCellLongText maxWidth={120} text={row.original.recordStatus} />
+    ),
+    enableHiding: true,
+  },
+  {
+    id: 'totalCharge',
+    accessorKey: 'totalCharge',
+    size: 50,
+    header: ({ column }) => (
+      <DataTableColumnHeader
+        column={column}
+        title="Total Charge"
+        className="text-[#000]"
+      />
+    ),
+    cell: ({ row }) => (
+      <TableCellLongText
+        maxWidth={120}
+        text={row.original.totalAmount.toString()}
+      />
+    ),
+    enableHiding: true,
+  },
+  {
+    id: 'dueAmount',
+    accessorKey: 'dueAmount',
+    size: 50,
+    header: ({ column }) => (
+      <DataTableColumnHeader
+        column={column}
+        title="Due Amount"
+        className="text-[#000]"
+      />
+    ),
+    cell: ({ row }) => (
+      <TableCellLongText
+        maxWidth={120}
+        text={row.original.amountDue.toString()}
+      />
+    ),
+    enableHiding: true,
+  },
+  {
+    id: 'createdOn',
+    accessorKey: 'createdOn',
+    size: 50,
+    header: ({ column }) => (
+      <DataTableColumnHeader
+        column={column}
+        title="Created On"
+        className="text-[#000]"
+      />
+    ),
+    cell: ({ row }) => (
+      <TableCellLongText
+        maxWidth={120}
+        text={row.original.amountDue?.toString()}
+      />
+    ),
+    enableHiding: true,
+  },
+  {
+    id: 'submittedOn',
+    accessorKey: 'submittedOn',
+    size: 50,
+    header: ({ column }) => (
+      <DataTableColumnHeader
+        column={column}
+        title="Submitted On"
+        className="text-[#000]"
+      />
+    ),
+    cell: ({ row }) => (
+      <TableCellLongText
+        maxWidth={120}
+        text={`${row.original.submittedDate}`}
+      />
+    ),
+    enableHiding: true,
+  },
 ]
 
 const DataTableFooter = (table: any) => (

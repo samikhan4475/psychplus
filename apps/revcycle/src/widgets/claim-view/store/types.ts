@@ -48,4 +48,37 @@ interface CodeSetsState {
   setDateTypes: (value: DateTypeOption[]) => void
 }
 
-export type { ClaimFiltersState, ClaimListState, Filters, Claim, CodeSetsState }
+interface ErrorMessage {
+  id: string
+  claimId: string
+  errorMessage: string
+}
+
+interface ClaimSubmission {
+  selectedClaims: string[]
+  claimsWithErrorMessages: {
+    [claimId: string]: ErrorMessage[]
+  }
+  cleanClaimIds: string[]
+  submissionType: string
+}
+
+interface ClaimSubmissionState {
+  claimSubmissionData: ClaimSubmission
+  setClaimSubmissionData: (value: ClaimSubmission) => void
+  claimSubmissionModal: boolean
+  setClaimSubmissionModal: (value: boolean) => void
+  claimSubmissionDetailModal: boolean
+  setClaimSubmissionDetailModal: (value: boolean) => void
+  selectedClaim: string
+  setSelectedClaim: (value: string) => void
+}
+
+export type {
+  ClaimFiltersState,
+  ClaimListState,
+  Filters,
+  Claim,
+  CodeSetsState,
+  ClaimSubmissionState,
+}

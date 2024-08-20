@@ -1,9 +1,9 @@
-import { Form, FormSelect, useForm, validate } from '@psychplus/form'
-import { DatePicker } from '@psychplus/ui/date-picker'
+import { useEffect, useState } from 'react'
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons'
 import { Box, Button, Flex, Text, TextFieldInput } from '@radix-ui/themes'
-import { useEffect, useState } from 'react'
 import z from 'zod'
+import { Form, FormSelect, useForm, validate } from '@psychplus/form'
+import { DatePicker } from '@psychplus/ui/date-picker'
 import { getClaimList } from '../../api.client'
 import { Filters, useStore } from '../../store'
 import { initialClaimListFilterState } from '../../store/claim-list-filter-store'
@@ -19,12 +19,12 @@ const schema = z.object({
 })
 
 const initialState = {
-  locationId: "",
-  dateType: "",
-  claimNumber: "",
-  insuranceId: "",
-  patientId: "",
-  insuranceType: "",
+  locationId: '',
+  dateType: '',
+  claimNumber: '',
+  insuranceId: '',
+  patientId: '',
+  insuranceType: 'P',
 }
 
 const FilterForm = () => {
@@ -34,7 +34,7 @@ const FilterForm = () => {
   const form = useForm({
     schema,
     criteriaMode: 'all',
-    defaultValues: initialState
+    defaultValues: initialState,
   })
 
   const { handleFiltersChange, setClaimList } = useStore()
@@ -42,7 +42,7 @@ const FilterForm = () => {
   const [filtersState, setFiltersState] = useState<Filters>(
     initialClaimListFilterState,
   )
-  const [patientReset, setPatientReset] = useState(false);
+  const [patientReset, setPatientReset] = useState(false)
 
   useEffect(() => {
     setFiltersState(filters)
@@ -50,7 +50,7 @@ const FilterForm = () => {
 
   const clearFilters = async () => {
     form.reset()
-    setPatientReset(true);
+    setPatientReset(true)
     handleFiltersChange({ ...initialClaimListFilterState })
     try {
       const response = await getClaimList({
@@ -63,7 +63,7 @@ const FilterForm = () => {
   }
 
   const onSubmit = async () => {
-    setPatientReset(false);
+    setPatientReset(false)
     try {
       const formData = form.getValues()
       const cleanFilterState: Partial<Filters> = Object.entries(formData)
@@ -87,7 +87,7 @@ const FilterForm = () => {
   const insuranceTypeOptions = [
     { value: 'Primary', label: 'Primary' },
     { value: 'Secondary', label: 'Secondary' },
-    { value: 'Tertiary', label: 'Tertiary' }
+    { value: 'Tertiary', label: 'Tertiary' },
   ]
 
   return (
@@ -101,7 +101,7 @@ const FilterForm = () => {
             <TextFieldInput
               className="h-30 text-sm p-0"
               placeholder="3fasf5fde4-5dr17-4562-b3fc-2c963fa6"
-              {...form.register('claimNumber',)}
+              {...form.register('claimNumber')}
             />
           </Box>
 
@@ -110,7 +110,9 @@ const FilterForm = () => {
               Patient
             </Text>
             <PatientSearch
-              onPatientSelect={(patientId) => form.setValue('patientId', patientId)}
+              onPatientSelect={(patientId) =>
+                form.setValue('patientId', patientId)
+              }
               reset={patientReset}
             />
           </Box>

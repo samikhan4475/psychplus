@@ -57,7 +57,7 @@ interface ClaimDiagnosis {
 }
 
 interface Claim {
-  id?: string
+  id: string
   metadata?: MetaData
   recordStatus: string
   practiceId: string
@@ -170,48 +170,59 @@ interface LocationOption {
   name: string
 }
 
+interface ErrorMessage {
+  id: string
+  claimId: string
+  errorMessage: string
+}
+interface ClaimSubmissionResponse {
+  cleanClaimIds: string[]
+  claimsWithErrorMessages: {
+    [claimId: string]: ErrorMessage[]
+  }
+}
 interface Patient {
-  alternateOrPreviousContactDetails: Record<string, unknown>;
-  birthdate: string;
-  chargeKey: string;
-  chargeUserId: string;
-  cmdId: string;
+  alternateOrPreviousContactDetails: Record<string, unknown>
+  birthdate: string
+  chargeKey: string
+  chargeUserId: string
+  cmdId: string
   contactDetails: {
-    email: string;
+    email: string
     phoneNumbers: {
-      type: string;
-      number: string;
-    }[];
-  };
+      type: string
+      number: string
+    }[]
+  }
   emergencyContact: {
     name: {
-      firstName: string;
-      lastName: string;
-    };
-    relationship: string;
-    phoneNumber: string;
-  };
-  gender: string;
-  hasGuardian: boolean;
-  hasPhoto: boolean;
-  id: number;
-  isPlusMember: boolean;
-  isTest: boolean;
-  language: string;
+      firstName: string
+      lastName: string
+    }
+    relationship: string
+    phoneNumber: string
+  }
+  gender: string
+  hasGuardian: boolean
+  hasPhoto: boolean
+  id: number
+  isPlusMember: boolean
+  isTest: boolean
+  language: string
   legalName: {
-    firstName: string;
-    lastName: string;
-  };
-  medicalRecordNumber: string;
+    firstName: string
+    lastName: string
+  }
+  medicalRecordNumber: string
   metadata: {
-    createdOn: string;
-    updatedOn: string;
-    updatedBy: number;
-  };
-  socialSecurityNumber: string;
-  status: string;
-  userId: number;
-  verificationStatus: string;
+    createdOn: string
+    updatedOn: string
+    updatedBy: number
+  }
+  socialSecurityNumber: string
+  status: string
+  userId: number
+  verificationStatus: string
 }
 
 interface PatientOption {
@@ -226,6 +237,8 @@ export type {
   DateTypeOption,
   LocationOption,
   Location,
+  ClaimSubmissionResponse,
+  ErrorMessage,
   Patient,
-  PatientOption
+  PatientOption,
 }
