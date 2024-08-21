@@ -150,7 +150,7 @@ const ScheduleAppointmentButton = ({
               />
               <Flex justify="between" gap="2">
                 <FormFieldContainer className="w-1/3">
-                  <FormFieldLabel>Enter ZIP Code</FormFieldLabel>
+                  <FormFieldLabel required>Enter ZIP Code</FormFieldLabel>
                   <TextFieldInput
                     size="3"
                     radius="full"
@@ -161,7 +161,7 @@ const ScheduleAppointmentButton = ({
                 </FormFieldContainer>
 
                 <FormFieldContainer className="w-3/4">
-                  <FormFieldLabel>State of Residence</FormFieldLabel>
+                  <FormFieldLabel required>State of Residence</FormFieldLabel>
                   <CodesetFormSelect
                     size="3"
                     codeset={CODESETS.UsStates}

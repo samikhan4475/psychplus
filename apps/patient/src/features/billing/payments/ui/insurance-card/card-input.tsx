@@ -65,7 +65,7 @@ const CardInput = ({ savedImg, onImageChanged, label }: CardInputProps) => {
               fill
               className={cn(
                 'bg-white rounded-[5px] transition-transform object-fill aspect-[4/6]',
-                imgView && 'z-[1000] scale-[1.7] shadow-3'
+                imgView && 'z-[1000] scale-[1.3] shadow-3'
               )}
               onMouseLeave={handleViewImage} 
             />

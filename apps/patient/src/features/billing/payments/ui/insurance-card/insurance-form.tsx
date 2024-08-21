@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { ActionErrorState, ActionSuccessState } from '@psychplus-v2/api'
 import { CODESETS } from '@psychplus-v2/constants'
-import { getAgeFromDate, getCalendarDate } from '@psychplus-v2/utils'
+import { getAgeFromDate, getCalendarDate, getCalendarDateLabel } from '@psychplus-v2/utils'
 import { Box, Flex, Grid, Text, TextFieldInput } from '@radix-ui/themes'
 import { useForm } from 'react-hook-form'
 import z from 'zod'
@@ -140,16 +140,11 @@ const InsuranceForm = ({
 
   const [maxDate, setMaxDate] = useState<string>('')
   const [minDate, setMinDate] = useState<string>('')
-  const [maxDob, setMaxDob] = useState<string>('')
+
+  const today = getCalendarDate()
 
   useEffect(() => {
     const today = new Date()
-    const maxDate = new Date(
-      today.getFullYear() - 18,
-      today.getMonth(),
-      today.getDate(),
-    )
-    setMaxDob(maxDate.toISOString().split('T')[0])
 
     // Calculate max date (yesterday)
     const yesterday = new Date(today)
@@ -399,11 +394,12 @@ const InsuranceForm = ({
           <PlanSelect payers={insurancePayers} />
         </FormFieldContainer>
 
-        <FormFieldContainer>
+        <FormFieldContainer className="gap-[3px]">
           <FormFieldLabel required>Member ID</FormFieldLabel>
           <TextFieldInput
+            className="h-[34px]"
             {...form.register('memberId')}
-            placeholder={getPlaceholder('memberId')}
+            placeholder="Enter member ID"
             maxLength={16}
           />
           <FormFieldError name="memberId" />
@@ -414,6 +410,7 @@ const InsuranceForm = ({
         <FormFieldContainer className="flex-1">
           <FormFieldLabel required>Group Number</FormFieldLabel>
           <TextFieldInput
+            className="h-[34px]"
             {...form.register('groupNumber')}
             placeholder={getPlaceholder('groupNumber')}
             maxLength={16}
@@ -429,7 +426,7 @@ const InsuranceForm = ({
             label=""
             data-testid="effective-date-input"
             {...form.register('effectiveDate')}
-            className="mr-4 h-[32px] w-full rounded-2 text-[14px]"
+            className="mr-4 h-[34px] w-full rounded-2 text-[14px]"
           />
         </FormFieldContainer>
 
@@ -442,7 +439,7 @@ const InsuranceForm = ({
             label=""
             data-testid="termination-date-input"
             {...form.register('terminationDate')}
-            className="mr-4 h-[32px] w-full rounded-2 text-[14px]"
+            className="mr-4 h-[34px] w-full rounded-2 text-[14px]"
           />
         </FormFieldContainer>
         <Box className="flex-1"></Box>
@@ -489,18 +486,20 @@ const InsuranceForm = ({
           </Text>
 
           <Flex gap="3" className="w-full">
-            <FormFieldContainer className="flex-1">
+            <FormFieldContainer className="flex-1 gap-[3px]">
               <FormFieldLabel required>First Name</FormFieldLabel>
               <TextFieldInput
+                className="h-[34px]"
                 {...form.register('policyHolderFirstName')}
                 placeholder={getPlaceholder('firstName')}
               />
               <FormFieldError name="policyHolderFirstName" />
             </FormFieldContainer>
 
-            <FormFieldContainer className="flex-1">
+            <FormFieldContainer className="flex-1 gap-[3px]">
               <FormFieldLabel required>Last Name</FormFieldLabel>
               <TextFieldInput
+                className="h-[34px]"
                 {...form.register('policyHolderLastName')}
                 placeholder={getPlaceholder('lastName')}
               />
@@ -522,22 +521,23 @@ const InsuranceForm = ({
               <FormFieldLabel required>Date of Birth</FormFieldLabel>
               <FormTextInput
                 type="date"
-                max={maxDob}
+                min={getCalendarDateLabel(today.subtract({ years: 120 }))}
+                max={getCalendarDateLabel(today.subtract({ years: 18 }))}
                 label=""
                 data-testid="dob-input"
                 {...form.register('policyHolderDateOfBirth')}
-                className="mr-4 h-[32px] w-full rounded-2 text-[14px]"
+                className="mr-4 h-[34px] w-full rounded-2 text-[14px]"
               />
             </FormFieldContainer>
           </Flex>
 
           <Flex gap="3" className="w-full">
-            <FormFieldContainer className="flex-1">
+            <FormFieldContainer className="flex-1 gap-[3px]">
               <FormFieldLabel>SSN</FormFieldLabel>
               <SSNInput
                 name="policyHolderSocialSecurityNumber"
                 size="2"
-                placeholder={getPlaceholder('ssn')}
+                placeholder="Enter SSN"
               />
               <FormFieldError name="policyHolderSocialSecurityNumber" />
             </FormFieldContainer>
