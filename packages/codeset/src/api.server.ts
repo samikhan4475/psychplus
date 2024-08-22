@@ -4,6 +4,7 @@ import { API_URL } from '@psychplus/utils/constants'
 import { createHeaders } from '@psychplus/utils/server'
 import {
   AssigningAuthorities,
+  AssigningAuthority,
   AuthorityCodeSet,
   RealCodeSet,
   RelationshipCodeSet,
@@ -48,6 +49,18 @@ const getRelationshipCodeSets = (): Promise<RelationshipCodeSet> =>
       },
     ),
   )
+const getActiveCodeSets = async (payload = {}): Promise<AssigningAuthority[]> =>
+  handleRequest(
+    fetch(
+      `${API_URL}/api/codeset/actions/search?offset=0&limit=0&orderBy=namespace%20asc`,
+      {
+        cache: 'no-store',
+        headers: createHeaders(),
+        body: JSON.stringify(payload),
+        method: 'POST',
+      },
+    ),
+  )
 
 const getAuthorities = async (): Promise<AssigningAuthorities[]> =>
   handleRequest(
@@ -73,6 +86,7 @@ const getCodeSetsCached = cache(getCodeSets)
 const getRealCodeSetsCached = cache(getRealCodeSets)
 const getReportCategoriesCached = cache(getReportCategories)
 const getRelationshipCodeSetsCached = cache(getRelationshipCodeSets)
+const getActiveCodeSetsCached = cache(getActiveCodeSets)
 const getAuthoritiesCached = cache(getAuthorities)
 
 export {
@@ -80,5 +94,6 @@ export {
   getRealCodeSetsCached as getRealCodeSets,
   getReportCategoriesCached as getReportCategories,
   getRelationshipCodeSetsCached as getRelationshipCodeSets,
+  getActiveCodeSetsCached as getActiveCodeSets,
   getAuthoritiesCached as getAuthorities,
 }

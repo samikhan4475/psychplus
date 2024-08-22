@@ -160,6 +160,55 @@ export interface CodeSetsMetadata {
   createdByFullName: string
 }
 
+interface ActiveCodeAttribute {
+  id?: string
+  metadata?: CodeMetadata
+  recordStatus?: string
+  codeId?: string
+  name: string
+  content: string
+}
+
+interface ActiveCode {
+  id: string
+  metadata: CodeMetadata
+  recordStatus: string
+  codesetId: string
+  code: string
+  displayName: string
+  groupingCode: string
+  codeAttributes: ActiveCodeAttribute[]
+}
+interface ActiveCodeSet {
+  id: string
+  metadata: CodeMetadata
+  recordStatus: string
+  assigningAuthorityId: string
+  codeSystemName: string
+  displayName: string
+  version: string
+  oid: string
+  validFrom: string
+  validTo: string
+  sourceName: string
+  sourceUrl: string
+  sourceFormat: string
+  sourceUpdateDays: number
+  viewPermissionCode: string
+  editPermissionCode: string
+  codes?: ActiveCode[]
+}
+type NewCode = null | Partial<{
+  code: string
+  displayName: string
+  discription: string
+  codeSystemName: string
+  codeAttributes: ActiveCodeAttribute[]
+}>
+
+type NewAttribute = null | Partial<{ name: string; content: string }>
+type EditableCode = null | Partial<ActiveCode>
+type EditableAttribute = null | Partial<ActiveCodeAttribute>
 interface AssigningAuthorities {
   assigningAuthorityId?: string
   codeSystemName?: string
@@ -179,6 +228,18 @@ interface FeeScheduleCategory {
   display: string
 }
 
+interface AssigningAuthority {
+  id: string
+  metadata: Metadata
+  recordStatus: string
+  namespace: string
+  displayName: string
+  oid: string
+  viewPermissionCode: string
+  editPermissionCode: string
+  codesets?: ActiveCodeSet[]
+}
+
 export type {
   CodeSet,
   Code,
@@ -187,9 +248,17 @@ export type {
   AuthorityCodeSet,
   AuthorityCode,
   MetaDataCodeSet,
+  AssigningAuthority,
   ParameterCodeSet,
   Parameter,
   RelationshipCodeSet,
+  ActiveCode,
+  ActiveCodeAttribute,
+  ActiveCodeSet,
+  NewCode,
+  NewAttribute,
+  EditableCode,
+  EditableAttribute,
+  FeeScheduleCategory,
   AssigningAuthorities,
-  FeeScheduleCategory
 }

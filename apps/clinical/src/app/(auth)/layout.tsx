@@ -72,10 +72,10 @@ const IndexLayout = async ({ children }: { children: React.ReactNode }) => {
             <Text weight="medium">Care Plan</Text>
           </NextLink>
           <NextLink
-            href="galaxy/widgets/assigning-authorities"
+            href="galaxy/widgets/active-codesets-list"
             className="hover:underline"
           >
-            <Text weight="medium">Assigning Authorities</Text>
+            <Text weight="medium">Active Codesets</Text>
           </NextLink>
           <NextLink
             href="galaxy/widgets/procedures-list"
