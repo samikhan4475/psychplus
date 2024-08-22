@@ -160,9 +160,14 @@ const SignupForm = () => {
     setError(undefined)
 
     const preverifyResponse = await preverifySignupAction({
+      legalName: {
+        firstName: data.firstName,
+        lastName: data.lastName,
+      },
       contactInfo: {
         email: data.email,
       },
+      dateOfBirth: data.dateOfBirth,
     })
 
     if (preverifyResponse.state === 'error') {

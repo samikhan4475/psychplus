@@ -78,9 +78,7 @@ const BookAppointmentButton = ({
   useEffect(() => {
     setPolicyAlreadySigned(checkIfPolicyBSigned(userConsents))
     form.setValue('userAgreed', policyAlreadySigned)
-  }, [userConsents,policyAlreadySigned])
-
- 
+  }, [userConsents, policyAlreadySigned])
 
   useEffect(() => {
     const checkIfPolicyBSigned = (fetchedUserConsents: Consent[]) =>
@@ -114,7 +112,7 @@ const BookAppointmentButton = ({
     setLoading(true)
     const formValues = form.getValues()
 
-    if (!formValues.userAgreed) { 
+    if (!formValues.userAgreed) {
       setError('You must agree to the above policies.')
       setLoading(false)
       return
@@ -156,7 +154,6 @@ const BookAppointmentButton = ({
         return
       }
     }
-
 
     if (!policyAlreadySigned) {
       const result = await addPolicyConsent({ type: 'PolicyB' })
@@ -254,7 +251,18 @@ const BookAppointmentButton = ({
         )}
 
         <FormError message={error} />
-        <Flex mt="2">
+        <Flex mt="2" gap="4">
+          <Button
+            type="button"
+            radius="full"
+            size="3"
+            variant="outline"
+            highContrast
+            className="px-6"
+            onClick={() => router.back()}
+          >
+            Back
+          </Button>
           <FormSubmitButton
             radius="full"
             size="3"

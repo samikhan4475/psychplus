@@ -7,6 +7,11 @@ interface PreverifySignupParams {
   contactInfo: {
     email: string
   }
+  legalName: {
+    firstName: string
+    lastName: string
+  }
+  dateOfBirth: string
 }
 
 const preverifySignupAction = async (

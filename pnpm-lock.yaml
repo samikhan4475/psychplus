@@ -306,6 +306,9 @@ importers:
       react:
         specifier: ^18.2.0
         version: 18.2.0
+      react-add-to-calendar:
+        specifier: ^0.1.5
+        version: 0.1.5(react-dom@18.2.0)(react@18.2.0)
       react-aria-components:
         specifier: ^1.1.1
         version: 1.1.1(react-dom@18.2.0)(react@18.2.0)
@@ -388,9 +391,6 @@ importers:
       postcss:
         specifier: ^8.4.31
         version: 8.4.31
-      react-add-to-calendar:
-        specifier: ^0.1.5
-        version: 0.1.5(react-dom@18.2.0)(react@18.2.0)
       tailwindcss:
         specifier: ^3.3.3
         version: 3.3.3
@@ -10099,7 +10099,7 @@ packages:
   /moment@2.30.1:
     resolution: {integrity: sha512-uEmtNhbDOrWPFS+hdjFCBfy9f2YoyzRpwcl+DqpC6taX21FzsTLQVbMV/W7PzNSX6x/bhC1zA3c2UQ5NzH6how==}
     requiresBuild: true
-    dev: true
+    dev: false
     optional: true
 
   /ms@2.1.2:
@@ -10732,7 +10732,7 @@ packages:
       react-dom: 18.2.0(react@18.2.0)
     optionalDependencies:
       moment: 2.30.1
-    dev: true
+    dev: false
 
   /react-aria-components@1.1.1(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-XdgqSbrlh9V1vJEvTwrnr+YGndQWYcVEAbN+Rx104o9g88cAAabclgetU2OUJ9Gbht6+gwnvnA0ksgXzVZog2Q==}
@@ -10856,6 +10856,7 @@ packages:
       loose-envify: 1.4.0
       react: 18.2.0
       scheduler: 0.23.0
+    dev: false
 
   /react-dom@18.3.1(react@18.2.0):
     resolution: {integrity: sha512-5m4nQKp+rZRb09LNH59GM4BxTh9251/ylbKIbpe7TpGxfJ+9kv6BLkLBXIjjspbgbnIBNqlI23tRnTWT0snUIw==}
@@ -11135,6 +11136,7 @@ packages:
     engines: {node: '>=0.10.0'}
     dependencies:
       loose-envify: 1.4.0
+    dev: false
 
   /react@18.3.1:
     resolution: {integrity: sha512-wS+hAgJShR0KhEvPJArfuPVN1+Hz1t0Y6n5jLrGQbkb4urgPE/0Rve+1kMB1v/oWgHgm4WIcV+i7F2pTVj+2iQ==}
@@ -11299,6 +11301,7 @@ packages:
     resolution: {integrity: sha512-CtuThmgHNg7zIZWAXi3AsyIzA3n4xx7aNyjwC2VJldO2LMVDhFK+63xGqq6CsJH4rTAt6/M+N4GhZiDYPx9eUw==}
     dependencies:
       loose-envify: 1.4.0
+    dev: false
 
   /scheduler@0.23.2:
     resolution: {integrity: sha512-UOShsPwz7NrMUqhR6t0hWjFduvOzbtv7toDH1/hIrfRNIDBnnBWd0CwJTGvTpngVlmwGCdP9/Zl/tVrDqcuYzQ==}

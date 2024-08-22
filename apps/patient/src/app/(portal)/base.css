@@ -44,6 +44,19 @@
     height: 100%;
     overflow-x: hidden;
   }
+
+  .react-add-to-calendar li{
+    padding-left: 10px;
+
+  }
+
+  .react-add-to-calendar li:hover{
+    background-color: #151B4A;
+    color: white;
+    border-radius: 5px;
+  }
+
+ 
 }
 
 .react-aria-DateField {
