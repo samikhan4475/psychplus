@@ -243,7 +243,7 @@ const PersonalInfoForm = ({
             <TextFieldInput
               size="3"
               {...form.register('email')}
-              disabled={!isEdit}
+              disabled
               placeholder={getPlaceholder('email', isEdit)}
             />
             <FormFieldError name="email" />
