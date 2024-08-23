@@ -8,7 +8,7 @@ const ROOT_DOMAIN = process.env.ROOT_DOMAIN ?? 'localhost'
 
 // PsychPlus service URLs
 const API_URL = process.env.API_URL ?? ''
-const AUTH_URL = process.env.AUTH_URL ?? ''
+const AUTH_URL = process.env.AUTH_API_URL ?? ''
 
 // Scriptsure
 const SCRIPTSURE_API_KEY = process.env.SCRIPTSURE_API_KEY ?? ''
