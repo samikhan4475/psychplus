@@ -39,14 +39,13 @@ const loginAction = async ({
     }
   }
 
-  const decoded = jwtDecode<{ role: string | string[] }>(loginResponse.data.accessToken)
+  const decoded = jwtDecode<{ role: string | string[] }>(
+    loginResponse.data.accessToken,
+  )
 
-  if (Array.isArray(decoded.role) && !decoded.role.includes(STAFF_ROLE)) {
-    return {
-      state: 'error',
-      error: 'Invalid credentials',
-    }
-  } else if (decoded.role !== STAFF_ROLE) {
+  const roles = Array.isArray(decoded.role) ? decoded.role : [decoded.role]
+
+  if (!roles.includes(STAFF_ROLE)) {
     return {
       state: 'error',
       error: 'Invalid credentials',
