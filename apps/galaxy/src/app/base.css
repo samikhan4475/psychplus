@@ -1,0 +1,123 @@
+@layer tw_base, radix_ui, tw_components, tw_utilities, base;
+
+@import 'tailwindcss/base' layer(tw_base);
+@import 'tailwindcss/components' layer(tw_components);
+@import 'tailwindcss/utilities' layer(tw_utilities);
+@import '@radix-ui/themes/styles.css' layer(radix_ui);
+
+@layer radix_ui {
+  .radix-themes {
+    --cursor-button: pointer;
+    --cursor-menu-item: pointer;
+    --gray-a2: #ebebef;
+    --blue-3: #ebf2fd;
+    --blue-4: #dce8ff;
+    --blue-6: #b9c4df;
+    --blue-11: #184595;
+    --blue-11-accent: #163e86;
+    --blue-12: #151a4b;
+    --table-cell-min-height: 0;
+    --table-cell-padding: 0;
+    --table-border-radius: 0;
+  }
+
+  table,
+  .rt-ScrollAreaViewport,
+  .rt-ScrollAreaRoot {
+    border-radius: 0 !important;
+  }
+
+  .rt-CheckboxRoot:not([data-disabled]) {
+    @apply cursor-pointer;
+  }
+
+  .rt-TableCell {
+    box-shadow: none;
+  }
+
+  .rt-Badge {
+    @apply rounded-full py-0 text-[11px];
+  }
+}
+
+@layer base {
+  :root {
+    --chip-height: 21px;
+  }
+
+  html,
+  body {
+    height: 100%;
+    overflow-x: hidden;
+  }
+
+  table {
+    border-collapse: separate !important;
+    border-spacing: 0 !important;
+  }
+}
+
+.react-aria-DateField {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--gray-12);
+}
+
+.react-aria-Label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--gray-12);
+  height: var(--chip-height);
+  display: flex;
+  align-items: center;
+}
+
+.react-aria-DateInput {
+  display: flex;
+  padding: 1px;
+  border: 1px solid var(--gray-7);
+  border-radius: 3px;
+  background: #ffffff;
+  width: 82px;
+  height: var(--chip-height);
+  white-space: nowrap;
+}
+
+.react-aria-DateInput[data-focus-within] {
+  outline: 2px solid var(--accent-9);
+  outline-offset: -1px;
+}
+
+.react-aria-DateInput[data-disabled] {
+  background: #ebebef;
+  cursor: not-allowed;
+}
+
+.react-aria-DateSegment {
+  padding: 0 1px;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  text-align: end;
+}
+
+.react-aria-DateSegment[data-disabled] {
+  color: var(--gray-10);
+}
+
+.react-aria-DateSegment[data-type='literal'] {
+  padding: 0;
+}
+
+.react-aria-DateSegment[data-placeholder] {
+  color: var(--gray-9);
+  font-style: italic;
+}
+
+.react-aria-DateSegment:focus {
+  color: var(--gray-12);
+  background: var(--accent-5);
+  outline: none;
+  border-radius: 2px;
+  caret-color: transparent;
+}

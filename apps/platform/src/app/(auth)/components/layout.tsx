@@ -106,7 +106,7 @@ const ComponentsLayout = ({ children }: { children: React.ReactNode }) => (
         <NavigationMenu items={navMenuItems} />
       </Flex>
     </Box>
-    <Box grow="1">
+    <Box className="grow">
       <Flex justify="center">
         <Section>{children}</Section>
       </Flex>

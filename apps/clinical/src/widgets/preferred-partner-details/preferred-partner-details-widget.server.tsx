@@ -8,11 +8,13 @@ import { Patient } from './types'
 const PreferredPartnerDetailsWidgetServer = async ({ patientId }: Patient) => {
   noStore()
 
-  const preferredPartner = await getPreferredPartners([patientId])
+  const preferredPartner = await getPreferredPartners({
+    partnerIds: [patientId],
+  })
 
   return (
     <>
-      <Preloader store={useStore} preferredPartner={preferredPartner} />
+      <Preloader store={useStore} preferredPartner={[preferredPartner]} />
       <PreferredPartnerDetailsWidgetClient patientId={patientId} />
     </>
   )

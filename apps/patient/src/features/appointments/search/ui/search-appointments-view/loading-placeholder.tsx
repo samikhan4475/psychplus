@@ -1,4 +1,5 @@
-import { Flex, Skeleton } from '@radix-ui/themes'
+import { Flex } from '@radix-ui/themes'
+import { Skeleton } from './skeleton'
 
 interface LoadingPlaceholderProps {
   showFilters?: boolean
@@ -59,9 +60,9 @@ const AppointmentPlaceholder = () => (
     <Flex gap="4">
       <Skeleton className="rounded-full h-[100px] w-[100px]" />
       <Flex direction="column">
-        <Skeleton mt="2" className="h-[25px] w-[150px]" />
-        <Skeleton mt="2" className="h-[15px] w-[100px]" />
-        <Skeleton mt="2" className="h-[40px] w-[150px]" />
+        <Skeleton className="mt-2 h-[25px] w-[150px]" />
+        <Skeleton className="mt-2 h-[15px] w-[100px]" />
+        <Skeleton className="mt-2 h-[40px] w-[150px]" />
         <Flex mt="4" gap="2">
           <Skeleton className="rounded-full h-[30px] w-[30px]" />
         </Flex>

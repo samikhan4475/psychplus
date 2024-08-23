@@ -10,6 +10,10 @@ const AppointmentSort = () => {
     setSortBy: state.setSortBy,
   }))
 
+  const triggerProps = {
+    placeholder: 'Sort By',
+  }
+
   return (
     <Flex direction="column" gap="1" className="flex-1">
       <Select.Root
@@ -17,7 +21,7 @@ const AppointmentSort = () => {
         value={sortBy}
         onValueChange={setSortBy}
       >
-        <Select.Trigger placeholder="Sort By" className="text-accent-12" />
+        <Select.Trigger {...triggerProps} className="text-accent-12" />
         <Select.Content highContrast position="popper" align="end">
           {appointmentType === AppointmentType.InPerson ? (
             <Select.Item value={AppointmentSortBy.Nearest}>Nearest</Select.Item>

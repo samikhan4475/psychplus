@@ -127,7 +127,7 @@ const WidgetsLayout = ({ children }: { children: React.ReactNode }) => {
           <NavigationMenu items={navMenuItems} />
         </Flex>
       </Box>
-      <Box grow="1">
+      <Box className="grow">
         <Flex direction="column" px="8" py="8">
           {children}
         </Flex>

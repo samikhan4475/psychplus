@@ -1,6 +1,5 @@
 import { unstable_noStore as noStore } from 'next/cache'
 import { getPatients } from '@psychplus/patient/api.server'
-// import { getPatients } from '@psychplus/patient/api.server'
 import { getPreferredPartners } from '@psychplus/preferred-partners/api.server'
 import { Preloader } from './preloader'
 import { ReconcileUserListDialogWidgetClient } from './reconcile-user-list-dialog-widget.client'
@@ -24,7 +23,9 @@ const ReconcileUserListDialogWidgetServer = async ({
       lastNameContains: searchParam.lastName,
       dateOfBirth: searchParam.birthDate,
     }),
-    getPreferredPartners([searchParam.id]),
+    getPreferredPartners({
+      partnerIds: [searchParam.id]
+    }),
   ])
 
   return (
@@ -32,7 +33,7 @@ const ReconcileUserListDialogWidgetServer = async ({
       <Preloader
         store={useStore}
         preferredPartnerId={searchParam.id}
-        preferredPartner={preferredPartner}
+        preferredPartner={[preferredPartner]}
         patients={patients}
       />
       <ReconcileUserListDialogWidgetClient />

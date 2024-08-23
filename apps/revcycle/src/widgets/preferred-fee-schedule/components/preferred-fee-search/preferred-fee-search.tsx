@@ -10,7 +10,7 @@ const PreferredFeeSearchForm = ({
   <Flex>
     <Box mb="4" mt="4" px="2">
       <TextField.Root>
-        <TextField.Input
+        <TextField.Root
           placeholder={'Search'}
           onChange={(e) => onPreferredFeeSearch?.(e.target.value)}
         />

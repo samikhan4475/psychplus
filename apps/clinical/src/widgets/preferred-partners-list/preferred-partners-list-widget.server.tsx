@@ -23,7 +23,7 @@ const PreferredPartnersListWidgetServer = async () => {
       <Preloader
         store={useStore}
         codeSets={codeSets}
-        preferredPartners={preferredPartners}
+        preferredPartners={[preferredPartners]}
         token={token ?? ''}
       />
       <PreferredPartnersListWidgetClient />

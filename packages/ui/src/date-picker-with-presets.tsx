@@ -30,6 +30,7 @@ const DatePickerWithPresets = ({
           onSelect(addDays(new Date(), parseInt(value)))
         }
       >
+        {/* @ts-ignore latest Radix UI types not up to date */}
         <Select.Trigger placeholder="Select" />
         <Select.Content position="popper">
           <Select.Item value="0">Today</Select.Item>

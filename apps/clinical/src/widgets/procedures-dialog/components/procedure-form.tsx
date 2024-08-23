@@ -199,7 +199,7 @@ const ProcedureForm = ({ data, isEdit, closeDialog }: procedureFormProps) => {
               </Box>
               <Box className="col-span-4">
                 <FormTextInput
-                  type="comments"
+                  type="text"
                   label="Comments"
                   placeholder="Comments"
                   value={form.watch('comments')}

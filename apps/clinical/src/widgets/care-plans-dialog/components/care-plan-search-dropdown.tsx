@@ -88,7 +88,7 @@ const CarePlanSearchDropdown = <T extends IcdCodes>({
       form.getValues('planCodesetUsed'),
     )
 
-    setResults(responce)
+    setResults(responce as IcdCodes[])
   }
 
   const clearFilters = () => {

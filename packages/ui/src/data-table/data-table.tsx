@@ -88,11 +88,10 @@ const DataTable = <TData, TValue>({
   })
   return (
     <Flex
-      grow="1"
       direction="column"
       height="100%"
       justify="between"
-      className="z-10"
+      className="z-10 grow"
     >
       <Box>
         {renderHeader ? renderHeader(table) : null}

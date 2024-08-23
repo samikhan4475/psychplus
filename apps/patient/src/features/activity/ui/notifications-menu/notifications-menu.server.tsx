@@ -1,7 +1,8 @@
 import { withSuspense } from '@psychplus-v2/utils'
-import { Skeleton } from '@radix-ui/themes'
+// import { Skeleton } from '@radix-ui/themes'
 import type { Activity } from '../../types'
 import { NotificationsMenu as Client } from './notifications-menu'
+import { Box } from '@radix-ui/themes'
 
 const NOW = new Date()
 
@@ -75,7 +76,7 @@ const NotificationsMenuServer = async () => {
 }
 
 const NotificationsMenu = withSuspense(NotificationsMenuServer, {
-  fallback: <Skeleton className="rounded-full h-[50px] w-[50px]" />,
+  fallback: <Box className="rounded-full h-[50px] w-[50px]" />,
 })
 
 export { NotificationsMenu }

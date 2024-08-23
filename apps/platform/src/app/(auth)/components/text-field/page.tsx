@@ -18,7 +18,7 @@ const TextFieldComponentPage = () => (
         <TextField.Slot>
           <MagnifyingGlassIcon height="16" width="16" />
         </TextField.Slot>
-        <TextField.Input placeholder="Search the docs…" />
+        <TextField.Root placeholder="Search the docs…" />
       </TextField.Root>
     </Box>
 
@@ -26,7 +26,7 @@ const TextFieldComponentPage = () => (
       <Box mb="3">
         <Heading size="5">Without Slots</Heading>
       </Box>
-      <TextField.Input placeholder="Enter your email" />
+      <TextField.Root placeholder="Enter your email" />
     </Box>
 
     <Box mb="7">
@@ -34,9 +34,9 @@ const TextFieldComponentPage = () => (
         <Heading size="5">Size</Heading>
       </Box>
       <Flex direction="column" gap="3" style={{ maxWidth: 400 }}>
-        <TextField.Input size="1" placeholder="Search the docs…" />
-        <TextField.Input size="2" placeholder="Search the docs…" />
-        <TextField.Input size="3" placeholder="Search the docs…" />
+        <TextField.Root size="1" placeholder="Search the docs…" />
+        <TextField.Root size="2" placeholder="Search the docs…" />
+        <TextField.Root size="3" placeholder="Search the docs…" />
       </Flex>
     </Box>
 
@@ -45,9 +45,9 @@ const TextFieldComponentPage = () => (
         <Heading size="5">Variant</Heading>
       </Box>
       <Flex direction="column" gap="3" style={{ maxWidth: 400 }}>
-        <TextField.Input variant="surface" placeholder="Search the docs…" />
-        <TextField.Input variant="classic" placeholder="Search the docs…" />
-        <TextField.Input variant="soft" placeholder="Search the docs…" />
+        <TextField.Root variant="surface" placeholder="Search the docs…" />
+        <TextField.Root variant="classic" placeholder="Search the docs…" />
+        <TextField.Root variant="soft" placeholder="Search the docs…" />
       </Flex>
     </Box>
 
@@ -57,17 +57,17 @@ const TextFieldComponentPage = () => (
       </Box>
       <Flex gap="3">
         <Flex direction="column" gap="3" style={{ maxWidth: 400 }}>
-          <TextField.Input
+          <TextField.Root
             color="indigo"
             variant="soft"
             placeholder="Search the docs…"
           />
-          <TextField.Input
+          <TextField.Root
             color="green"
             variant="soft"
             placeholder="Search the docs…"
           />
-          <TextField.Input
+          <TextField.Root
             color="red"
             variant="soft"
             placeholder="Search the docs…"
@@ -81,9 +81,9 @@ const TextFieldComponentPage = () => (
         <Heading size="5">Radius</Heading>
       </Box>
       <Flex direction="column" gap="3" style={{ maxWidth: 400 }}>
-        <TextField.Input radius="none" placeholder="Search the docs…" />
-        <TextField.Input radius="large" placeholder="Search the docs…" />
-        <TextField.Input radius="full" placeholder="Search the docs…" />
+        <TextField.Root radius="none" placeholder="Search the docs…" />
+        <TextField.Root radius="large" placeholder="Search the docs…" />
+        <TextField.Root radius="full" placeholder="Search the docs…" />
       </Flex>
     </Box>
 
@@ -91,7 +91,7 @@ const TextFieldComponentPage = () => (
       <Box mb="3">
         <Heading size="5">Disabled</Heading>
       </Box>
-      <TextField.Input placeholder="Enter your email" disabled />
+      <TextField.Root placeholder="Enter your email" disabled />
     </Box>
   </>
 )

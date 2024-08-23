@@ -113,6 +113,7 @@ const FilterForm = ({ filterOf }: { filterOf: 'active' | 'worklist' }) => {
             handleFilterChange('userStatusList', [value])
           }
         >
+          {/* @ts-ignore Latest Radix UI types not up to date */}
           <Select.Trigger placeholder="PP Status" className="w-[150px]" />
           <Select.Content>
             {UserStatus?.map((status) => (

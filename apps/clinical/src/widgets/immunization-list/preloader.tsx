@@ -9,8 +9,8 @@ type BoundStoreType = UseBoundStore<StoreApi<ImmunizationStoreType>>
 
 interface PreloaderProps {
   store: BoundStoreType
-  codeSets: RealCodeSet[]
-  immunizations: Immunization[]
+  codeSets?: RealCodeSet[]
+  immunizations?: Immunization[]
 }
 
 const Preloader = ({
@@ -31,8 +31,8 @@ const Preloader = ({
 
   if (!loaded.current) {
     loaded.current = true
-    setRealCodeSet(codeSets)
-    setImmunizations(immunizations)
+    setRealCodeSet(codeSets ?? [])
+    setImmunizations(immunizations ?? [])
     setAppointmentId(appointmentId)
   }
 

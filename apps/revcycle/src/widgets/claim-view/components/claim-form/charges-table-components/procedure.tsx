@@ -13,7 +13,7 @@ const TableCellProcedure = ({
 }: TableCellProps) => {
   return (
     <TextField.Root size="1">
-      <TextField.Input placeholder="Search" />
+      <TextField.Root placeholder="Search" />
       <TextField.Slot>
         <MagnifyingGlassIcon height="16" width="16" />
       </TextField.Slot>

@@ -30,10 +30,14 @@ const CodesetSelect = ({
       </Select.Item>
     ))
 
+  const triggerProps = {
+    placeholder: placeholder ?? 'Select',
+  }
+
   return (
     <Select.Root onValueChange={onChange} {...rest}>
       <Select.Trigger
-        placeholder={placeholder ?? 'Select'}
+        {...triggerProps}
         className={cn(className)}
       />
       <Select.Content position="popper" align="center" highContrast>

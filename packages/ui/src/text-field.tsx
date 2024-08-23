@@ -1,5 +1,9 @@
 import { TextField } from '@radix-ui/themes'
 
-type TextFieldInputProps = React.ComponentPropsWithRef<typeof TextField.Input>
+interface TextFieldInputProps extends React.ComponentPropsWithRef<typeof TextField.Root> {
+  name?: string
+  value?: string
+  disabled?: boolean
+}
 
 export { TextField, type TextFieldInputProps }

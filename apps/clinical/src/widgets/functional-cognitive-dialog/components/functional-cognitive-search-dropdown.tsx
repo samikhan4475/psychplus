@@ -79,7 +79,7 @@ const FunctionalCognitiveSearchDropdown = <T extends IcdCodes>({
     }
     const res = await fetchResults(input, form.getValues('symptomCodesetUsed'))
 
-    setResults(res)
+    setResults(res as IcdCodes[])
   }
 
   const clearFilters = () => {

@@ -28,7 +28,7 @@ const DialogComponentPage = () => (
               <Text as="div" size="2" mb="1" weight="bold">
                 Name
               </Text>
-              <TextField.Input
+              <TextField.Root
                 defaultValue="Doctor Strange"
                 placeholder="Enter your full name"
               />
@@ -37,7 +37,7 @@ const DialogComponentPage = () => (
               <Text as="div" size="2" mb="1" weight="bold">
                 Email
               </Text>
-              <TextField.Input
+              <TextField.Root
                 defaultValue="drstrange@psychplus.com"
                 placeholder="Enter your email"
               />

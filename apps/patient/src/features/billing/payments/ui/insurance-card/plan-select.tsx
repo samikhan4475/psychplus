@@ -52,6 +52,11 @@ const PlanSelect = ({ payers }: { payers: InsurancePayer[] }) => {
         control={form.control}
         render={({ field }) => {
           const { ref, ...rest } = field
+
+          const triggerProps = {
+            placeholder: 'Select plan',
+          }
+
           return (
             <Select.Root
               disabled={loading || !plans}
@@ -59,7 +64,7 @@ const PlanSelect = ({ payers }: { payers: InsurancePayer[] }) => {
               {...rest}
             >
               <Select.Trigger
-                placeholder="Select plan"
+                {...triggerProps}
                 variant="soft"
                 className="bg-[white] outline outline-1 outline-gray-7"
               />

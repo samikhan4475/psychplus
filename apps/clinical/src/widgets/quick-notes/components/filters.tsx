@@ -77,9 +77,9 @@ const Filters = () => (
 
       <Flex align="center" gap="2">
         <Text className="text-[12px]">Date & Time</Text>
-        <TextField.Input defaultValue="2/9/2024" placeholder="Date" disabled />
+        <TextField.Root defaultValue="2/9/2024" placeholder="Date" disabled />
 
-        <TextField.Input defaultValue="08:00pm" placeholder="Time" disabled />
+        <TextField.Root defaultValue="08:00pm" placeholder="Time" disabled />
       </Flex>
     </Flex>
   </Box>

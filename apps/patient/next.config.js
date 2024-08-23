@@ -8,6 +8,9 @@ const config = {
   env: {
     APP_ENV: process.env.APP_ENV,
   },
+  experimental: {
+    missingSuspenseWithCSRBailout: false,
+  },
   async redirects() {
     return [
       {

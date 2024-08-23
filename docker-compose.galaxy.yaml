@@ -1,0 +1,30 @@
+services:
+  galaxy:
+    container_name: galaxy
+    build:
+      context: .
+      dockerfile: ./apps/galaxy/Dockerfile
+    environment:
+      - APP_CODE=p+galaxy-app
+      - APP_VERSION=1.0.0
+      - APP_ENV=development
+      - ROOT_DOMAIN=localhost
+      - API_URL=https://api-pr-2000.ode.psychplus.dev
+      - AUTH_URL=https://auth-pr-2000.ode.psychplus.dev
+      - ACCESS_TOKEN_COOKIE=p+_staff_access_token
+      - REFRESH_TOKEN_COOKIE=p+_staff_refresh_token
+      - ACCESS_TOKEN_EXPIRY_COOKIE=p+_staff_access_token_expiry
+      - USER_COOKIE=p+_staff_user
+      - SCRIPTSURE_SESSION_COOKIE=p+_staff_scriptsure_session
+      - SCRIPTSURE_SESSION_CREATED_AT_COOKIE=p+_staff_scriptsure_session_created_at
+      - SCRIPTSURE_API_KEY=371dff62-c8c8-4347-8ac4-63a0ea00af69
+      - SCRIPTSURE_SECRET=\$2b\$10\$lEDMX9URTKzHBAdxmZiHROHYRamcFMnhw3foNGEdKOY0P3if3XfHS
+      - SCRIPTSURE_PLATFORM_URL=https://stage-platform.scriptsure.com
+      - SCRIPTSURE_APP_URL=https://stage.scriptsure.com
+    ports:
+      - 3000:3000
+    networks:
+      - psychplus
+
+networks:
+  psychplus:

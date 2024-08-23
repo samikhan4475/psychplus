@@ -19,7 +19,8 @@ const HealthConcernListWidgetServer = async ({
     getHealthConcerns({
       patientIds: [patientId],
       noteIds: [noteId],
-      recordStatus: ['Active'],
+      codingCodes: [],
+      // recordStatus: ['Active'],
     }),
   ])
 

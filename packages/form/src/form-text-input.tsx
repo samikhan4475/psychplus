@@ -10,7 +10,7 @@ const FormTextInput = React.forwardRef<HTMLInputElement, FormTextInputProps>(
 
     return (
       <FormField {...formFieldProps}>
-        <TextField.Input size="3" {...childProps} ref={ref} />
+        <TextField.Root size="3" {...childProps} ref={ref} />
       </FormField>
     )
   },

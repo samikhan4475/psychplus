@@ -38,6 +38,10 @@ const CodesetFormSelect = ({
       render={({ field }) => {
         const { ref, ...rest } = field
 
+        const triggerProps = {
+          placeholder: placeholder ?? 'Select',
+        }
+
         return (
           <Select.Root
             onValueChange={field.onChange}
@@ -45,7 +49,7 @@ const CodesetFormSelect = ({
             {...selectProps}
           >
             <Select.Trigger
-              placeholder={placeholder ?? 'Select'}
+              {...triggerProps}
               variant="soft"
               className={cn(
                 'outline outline-1 outline-gray-7',

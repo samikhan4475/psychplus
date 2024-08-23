@@ -60,7 +60,7 @@ const SsnInput = React.forwardRef<HTMLInputElement, SsnInputProps>(
             onValueChange?.(originalValue as string)
           }}
           onBlur={handleValue}
-          customInput={TextField.Input}
+          customInput={TextField.Root}
           className={cn(className, {
             ['text-gray-8']: !inputValue,
           })}

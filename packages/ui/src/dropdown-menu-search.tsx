@@ -58,7 +58,7 @@ const DropdownMenuSearch = <T extends MaybeID>({
           <TextField.Slot>
             <MagnifyingGlassIcon height="16" width="16" />
           </TextField.Slot>
-          <TextField.Input
+          <TextField.Root
             size="3"
             variant="soft"
             onChange={(e) => setInput(e.target.value)}

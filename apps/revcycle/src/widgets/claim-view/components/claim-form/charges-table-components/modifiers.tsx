@@ -16,7 +16,7 @@ const TableCellModifiers = ({
     <Flex>
       <Box className="flex-1">
         <TextField.Root size="1">
-          <TextField.Input placeholder="M1" />
+          <TextField.Root placeholder="M1" />
           <TextField.Slot>
             <MagnifyingGlassIcon height="16" width="16" />
           </TextField.Slot>
@@ -24,7 +24,7 @@ const TableCellModifiers = ({
       </Box>
       <Box className="flex-1">
         <TextField.Root size="1">
-          <TextField.Input placeholder="M2" />
+          <TextField.Root placeholder="M2" />
           <TextField.Slot>
             <MagnifyingGlassIcon height="16" width="16" />
           </TextField.Slot>
@@ -32,7 +32,7 @@ const TableCellModifiers = ({
       </Box>
       <Box className="flex-1">
         <TextField.Root size="1">
-          <TextField.Input placeholder="M3" />
+          <TextField.Root placeholder="M3" />
           <TextField.Slot>
             <MagnifyingGlassIcon height="16" width="16" />
           </TextField.Slot>
@@ -40,7 +40,7 @@ const TableCellModifiers = ({
       </Box>
       <Box className="flex-1">
         <TextField.Root size="1">
-          <TextField.Input placeholder="M4" />
+          <TextField.Root placeholder="M4" />
           <TextField.Slot>
             <MagnifyingGlassIcon height="16" width="16" />
           </TextField.Slot>

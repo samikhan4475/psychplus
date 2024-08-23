@@ -8,6 +8,8 @@ import { TextField, type TextFieldInputProps } from './text-field'
 
 interface PhoneNumberInputProps extends TextFieldInputProps {
   onValueChange?: (value: string) => void
+  size: any
+  id?: string
 }
 
 const PhoneNumberInput = React.forwardRef<
@@ -47,7 +49,7 @@ const PhoneNumberInput = React.forwardRef<
           onValueChange?.(value)
         }}
         onBlur={onBlur}
-        customInput={TextField.Input}
+        customInput={TextField.Root}
         className={cn(className, {
           ['text-gray-8']: !_value,
         })}

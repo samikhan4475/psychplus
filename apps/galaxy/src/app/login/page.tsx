@@ -1,0 +1,133 @@
+'use client'
+
+import { useState } from 'react'
+import NextLink from 'next/link'
+import { useSearchParams } from 'next/navigation'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { Flex, Heading, Text, TextField } from '@radix-ui/themes'
+import { useForm, type SubmitHandler } from 'react-hook-form'
+import { z } from 'zod'
+import { loginAction } from '@/actions'
+import {
+  FormContainer,
+  FormError,
+  FormFieldContainer,
+  FormFieldError,
+  FormFieldLabel,
+  FormSubmitButton,
+  NavLogo,
+} from '@/components'
+
+const LOGIN_FORM_EMAIL_INPUT = 'login-form-email-input'
+const LOGIN_FORM_PASSWORD_INPUT = 'login-form-password-input'
+
+const schema = z.object({
+  username: z.string().trim().min(1, 'Email is required').email(),
+  password: z.string().trim().min(1, 'Password is required'),
+})
+
+type SchemaType = z.infer<typeof schema>
+
+const LoginPage = () => {
+  const searchParams = useSearchParams()
+  const [error, setError] = useState<string>()
+
+  const form = useForm<SchemaType>({
+    resolver: zodResolver(schema),
+    reValidateMode: 'onChange',
+    defaultValues: {
+      username: '',
+      password: '',
+    },
+  })
+
+  const onSubmit: SubmitHandler<SchemaType> = async (data) => {
+    setError(undefined)
+
+    return loginAction({
+      username: data.username.trim(),
+      password: data.password.trim(),
+      next: searchParams?.get('next') ?? null,
+    }).then((result) => {
+      if (result?.state === 'error') {
+        setError(result.error)
+      }
+    })
+  }
+
+  return (
+    <Flex direction="column" height="100%">
+      <Flex
+        justify={{ initial: 'start', sm: 'center' }}
+        px="5"
+        py="1"
+        className="border-b border-b-gray-5"
+      >
+        <NavLogo />
+      </Flex>
+      <Flex
+        direction="column"
+        justify="center"
+        align="center"
+        px="5"
+        className="flex-1 bg-gray-3"
+      >
+        <Flex
+          direction="column"
+          px="5"
+          py="5"
+          className="bg-white w-full max-w-[450px] rounded-3 shadow-3"
+        >
+          <Heading weight="medium" mb="4">
+            Log in
+          </Heading>
+          <FormError message={error} />
+          <FormContainer form={form} onSubmit={onSubmit}>
+            <Flex direction="column" gap="4" mb="4">
+              <FormFieldContainer>
+                <FormFieldLabel id={LOGIN_FORM_EMAIL_INPUT}>
+                  Email
+                </FormFieldLabel>
+                <TextField.Root
+                  size="2"
+                  id={LOGIN_FORM_EMAIL_INPUT}
+                  {...form.register('username')}
+                />
+                <FormFieldError name="username" />
+              </FormFieldContainer>
+              <FormFieldContainer>
+                <FormFieldLabel id={LOGIN_FORM_PASSWORD_INPUT}>
+                  Password
+                </FormFieldLabel>
+                <TextField.Root
+                  size="2"
+                  type="password"
+                  id={LOGIN_FORM_PASSWORD_INPUT}
+                  {...form.register('password')}
+                />
+                <Flex align="start">
+                  <FormFieldError name="password" />
+                  <NextLink href="#" prefetch={false} className="ml-auto">
+                    <Text className="text-[12px] text-accent-12 underline-offset-2 hover:underline">
+                      Forgot password?
+                    </Text>
+                  </NextLink>
+                </Flex>
+              </FormFieldContainer>
+            </Flex>
+            <FormSubmitButton
+              form={form}
+              size="2"
+              className="w-full"
+              highContrast
+            >
+              Log in
+            </FormSubmitButton>
+          </FormContainer>
+        </Flex>
+      </Flex>
+    </Flex>
+  )
+}
+
+export default LoginPage

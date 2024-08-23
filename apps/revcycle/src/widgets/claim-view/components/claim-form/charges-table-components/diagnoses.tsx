@@ -14,16 +14,16 @@ const TableCellDiagnoses = ({
   return (
     <Flex>
       <Box className="flex-1">
-        <TextField.Input placeholder="DX1" size="1" />
+        <TextField.Root placeholder="DX1" size="1" />
       </Box>
       <Box className="flex-1">
-        <TextField.Input placeholder="DX2" size="1" />
+        <TextField.Root placeholder="DX2" size="1" />
       </Box>
       <Box className="flex-1">
-        <TextField.Input placeholder="DX3" size="1" />
+        <TextField.Root placeholder="DX3" size="1" />
       </Box>
       <Box className="flex-1">
-        <TextField.Input placeholder="DX4" size="1" />
+        <TextField.Root placeholder="DX4" size="1" />
       </Box>
     </Flex>
   )

@@ -31,6 +31,11 @@ const PayerSelect = ({ payers }: PayerSelectProps) => {
         control={form.control}
         render={({ field }) => {
           const { ref, ...rest } = field
+
+          const triggerProps = {
+            placeholder: 'Select payer',
+          }
+
           return (
             <Select.Root
               onValueChange={(value) => {
@@ -40,7 +45,7 @@ const PayerSelect = ({ payers }: PayerSelectProps) => {
               {...rest}
             >
               <Select.Trigger
-                placeholder="Select payer"
+                {...triggerProps}
                 variant="soft"
                 className="bg-[white] outline outline-1 outline-gray-7"
               />

@@ -1,7 +1,7 @@
 'use client'
 
 import { Box, Flex, Heading } from '@radix-ui/themes'
-import { Select } from '@psychplus/ui/select'
+import { Select } from '@radix-ui/themes'
 import { PageHeader } from '../../shared/page-header'
 
 const TITLE = 'Select'
