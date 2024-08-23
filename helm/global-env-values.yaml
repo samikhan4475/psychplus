@@ -12,15 +12,15 @@
         name: app-config
         key: aspNetCoreUrls
 
-  # CONFIG: Caching
+  # CONFIG: API
 
-  - name: APPSETTINGS_Caching__CodeSetCacheExpireMinutes
+  - name: API_URL
     valueFrom:
       configMapKeyRef:
         name: app-config
-        key: cachingCodeSetCacheExpireMinutes
+        key: apiUrl
 
-  # CONFIG: APPs
+  # CONFIG: APP
 
   - name: APP_ENV
     valueFrom:
@@ -58,17 +58,45 @@
         name: app-config
         key: reactAppPlatformUrl
 
-  - name: API_URL
-    valueFrom:
-      configMapKeyRef:
-        name: app-config
-        key: apiUrl
+  # CONFIG: AUTH
 
   - name: AUTH_API_URL
     valueFrom:
       configMapKeyRef:
         name: app-config
         key: authApiUrl
+
+  - name: AUTH_ACCESS_TOKEN_COOKIE_NAME
+    valueFrom:
+      configMapKeyRef:
+        name: app-config
+        key: authAccessTokenCookieName
+
+  - name: AUTH_ACCESS_TOKEN_EXPIRY_COOKIE_NAME
+    valueFrom:
+      configMapKeyRef:
+        name: app-config
+        key: authAccessTokenExpiryCookieName
+
+  - name: AUTH_REFRESH_TOKEN_COOKIE_NAME
+    valueFrom:
+      configMapKeyRef:
+        name: app-config
+        key: authRefreshTokenCookieName
+
+  - name: AUTH_USER_COOKIE_NAME
+    valueFrom:
+      configMapKeyRef:
+        name: app-config
+        key: authUserCookieName
+
+  # CONFIG: Caching
+
+  - name: APPSETTINGS_Caching__CodeSetCacheExpireMinutes
+    valueFrom:
+      configMapKeyRef:
+        name: app-config
+        key: cachingCodeSetCacheExpireMinutes
 
   # SECRETS: Google
 
@@ -77,6 +105,63 @@
       secretKeyRef:
         name: ehr-secrets
         key: googleMapsKey
+
+  # CONFIG: SCRIPTSURE
+
+  - name: SCRIPTSURE_BASE_APPLICATION_URL
+    valueFrom:
+      configMapKeyRef:
+        name: app-config
+        key: scriptSureBaseApplicationUrl
+
+  - name: SCRIPTSURE_BASE_PLATFORM_URL
+    valueFrom:
+      configMapKeyRef:
+        name: app-config
+        key: scriptSureBasePlatformUrl
+
+  - name: SCRIPTSURE_SESSION_COOKIE_NAME
+    valueFrom:
+      configMapKeyRef:
+        name: app-config
+        key: scriptSureSessionCookieName
+
+  - name: SCRIPTSURE_SESSION_COOKIE_CREATED_AT
+    valueFrom:
+      configMapKeyRef:
+        name: app-config
+        key: scriptSureSessionCookieCreateAt
+
+  - name: SCRIPTSURE_API_KEY
+    valueFrom:
+     secretKeyRef:
+       name: ehr-secrets
+       key: scriptSureApiKey
+
+  - name: SCRIPTSURE_API_SECRET
+    valueFrom:
+     secretKeyRef:
+       name: ehr-secrets
+       key: scriptSureApiSecret
+
+  - name: SCRIPTSURE_ENCRYPTION_KEY
+    valueFrom:
+     secretKeyRef:
+       name: ehr-secrets
+       key: scriptSureEncryptionKey
+
+  - name: SCRIPTSURE_PATIENT_PORTAL_USER_EMAIL
+    valueFrom:
+     secretKeyRef:
+       name: ehr-secrets
+       key: scriptSurePatientPortalUserEmail
+
+  - name: SCRIPTSURE_PATIENT_PORTAL_USER_EMAIL_PASSWORD
+    valueFrom:
+     secretKeyRef:
+       name: ehr-secrets
+       key: scriptSurePatientPortalUserPassword
+
 
   # SECRETS: Stripe
 
