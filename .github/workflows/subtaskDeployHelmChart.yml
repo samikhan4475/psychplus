@@ -104,6 +104,14 @@ jobs:
           $chart = $chart -replace '^appVersion: "?\d+\.\d+\.\d+"?$', "appVersion: ""$version"""
           $chart | Set-Content -Path '${{ inputs.chart_path }}/Chart.yaml'
 
+      - name: Helm chart merge values
+        shell: pwsh
+        run: |
+          $valueContent = Get-Content -Path './helm/${{ inputs.project }}/values.yaml'
+          $globalValueContent = Get-Content -Path './helm/global-env-values.yaml' -Raw
+          $valueContent = $valueContent -replace '#global-values-replace-tag', "$globalValueContent"
+          $valueContent | Set-Content -Path './helm/${{ inputs.project }}/values.yaml'
+
       - name: Helm chart output for log
         shell: pwsh
         run: |
