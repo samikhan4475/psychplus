@@ -24,13 +24,13 @@ securityContext: {}
 
 container:
   portName: http
-  containerPort: 3001
+  containerPort: 3004
   protocol: TCP
 
 service:
   enabled: true
   type: ClusterIP
-  port: 3001
+  port: 3004
 
 ingress:
   enabled: true
