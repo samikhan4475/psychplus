@@ -114,6 +114,10 @@ const navMenuItems: MenuItem[] = [
     label: 'Clinic',
     href: '/widgets/clinic',
   },
+  {
+    label: 'Management - Users',
+    href: '/widgets/management-users',
+  },
 ]
 
 const WidgetsLayout = ({ children }: { children: React.ReactNode }) => {

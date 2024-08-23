@@ -32,6 +32,7 @@ const ACTIVE_CODESET_LIST_WIDGET = 'active-codesets'
 const ASSIGNING_AUTHORITIES_WIDGET = 'assigning-authorities'
 const PATIENT_HISTORY_WIDGET = 'patient-history'
 const CLINIC_WIDGET = 'clinic-widget'
+const MANAGEMENT_USERS_WIDGET = 'management-users-widget'
 const PROCEDURES_LIST_WIDGET = 'procedures'
 
 export {
@@ -67,5 +68,6 @@ export {
   ASSIGNING_AUTHORITIES_WIDGET,
   PATIENT_HISTORY_WIDGET,
   CLINIC_WIDGET,
+  MANAGEMENT_USERS_WIDGET,
   PROCEDURES_LIST_WIDGET,
 }
