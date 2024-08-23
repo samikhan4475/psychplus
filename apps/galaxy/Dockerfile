@@ -60,7 +60,7 @@ FROM alpine AS runner
     COPY --from=builder --chown=nextjs:nodejs /app/apps/galaxy/.next/static ./apps/galaxy/.next/static
     COPY --from=builder --chown=nextjs:nodejs /app/apps/galaxy/public ./apps/galaxy/public
 
-    EXPOSE 3000
-    ENV PORT 3000
+    EXPOSE 3004
+    ENV PORT 3004
 
     CMD ["node", "apps/galaxy/server.js"]

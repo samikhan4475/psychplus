@@ -13,6 +13,7 @@ data:
   reactAppClinicalUrl: 'http://localhost:8001/galaxy'
   reactAppPatientUrl: 'http://localhost:8002'
   reactAppRevCycleUrl: 'http://localhost:8003/revcycle'
+  reactAppGalaxyUrl: 'http://localhost:8004/galaxy'
   reactAppPlatformUrl: 'http://localhost:8000/platform'
   scriptSureBaseApplicationUrl: 'https://stage.scriptsure.com'
   scriptSureBasePlatformUrl: 'https://stage-platform.scriptsure.com'
