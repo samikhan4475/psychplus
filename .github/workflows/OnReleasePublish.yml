@@ -57,6 +57,15 @@ jobs:
       image_tag: ${{ needs.build_variables.outputs.image_tag }}
     secrets: inherit
 
+  migrate_galaxy_image:
+    needs: build_variables
+    uses: ./.github/workflows/MigrateImageFromStageToProd.yml
+    with:
+      environment: production
+      image_name: galaxy
+      image_tag: ${{ needs.build_variables.outputs.image_tag }}
+    secrets: inherit
+
   migrate_revcycle_image:
     needs: build_variables
     uses: ./.github/workflows/MigrateImageFromStageToProd.yml
@@ -105,6 +114,19 @@ jobs:
       ingress_url: ui.psychplus.io
     secrets: inherit
 
+  deploy_galaxy:
+    needs: [build_variables, migrate_galaxy_image]
+    uses: ./.github/workflows/subtaskDeployHelmChart.yml
+    with:
+      environment: production
+      project: galaxy
+      helm_chart_version: ${{ needs.build_variables.outputs.build_version }}
+      helm_app_version: ${{ needs.build_variables.outputs.build_full_version }}
+      image_tag: ${{ needs.build_variables.outputs.image_tag }}
+      env_namespace: env-ehr
+      ingress_url: ui.psychplus.io
+    secrets: inherit
+
   deploy_revcycle:
     needs: [build_variables, migrate_revcycle_image]
     uses: ./.github/workflows/subtaskDeployHelmChart.yml
@@ -125,6 +147,7 @@ jobs:
       - deploy_platform
       - deploy_clinical
       - deploy_patient
+      - deploy_galaxy
       - deploy_revcycle
     steps:
       - name: Publish release
