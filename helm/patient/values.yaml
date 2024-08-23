@@ -134,6 +134,12 @@ env:
         name: app-config
         key: apiUrl
 
+  - name: GALAXY_URL
+    valueFrom:
+      configMapKeyRef:
+        name: app-config
+        key: reactAppGalaxyUrl
+
   - name: CLINICAL_URL
     valueFrom:
       configMapKeyRef:

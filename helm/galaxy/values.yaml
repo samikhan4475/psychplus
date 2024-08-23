@@ -40,7 +40,7 @@ ingress:
   hosts:
   - host: ui.integration.psychplus.dev
     paths:
-    - path: /galaxy
+    - path: /ehr
       pathType: Prefix
   tls:
   - hosts:
@@ -72,7 +72,7 @@ autoscaling:
 startupProbeEnabled: false
 startupProbe:
   httpGet:
-    path: /health/liveness_F15EC2B7-A0E7-45eb-9D34-8D36B537B358
+    path: /health/liveness_120C4006-918E-4934-B701-D6F6ACC097FB
     port: http
   periodSeconds: 30
   timeoutSeconds: 30
@@ -80,7 +80,7 @@ startupProbe:
 livenessProbeEnabled: false
 livenessProbe:
   httpGet:
-    path: /health/liveness_F15EC2B7-A0E7-45eb-9D34-8D36B537B358
+    path: /health/liveness_120C4006-918E-4934-B701-D6F6ACC097FB
     port: http
   periodSeconds: 10
   timeoutSeconds: 5
@@ -88,7 +88,7 @@ livenessProbe:
 readinessProbeEnabled: false
 readinessProbe:
   httpGet:
-    path: /health/readiness_F15EC2B7-A0E7-45eb-9D34-8D36B537B358
+    path: /health/readiness_120C4006-918E-4934-B701-D6F6ACC097FB
     port: http
   periodSeconds: 10
   timeoutSeconds: 1
@@ -110,10 +110,10 @@ affinity:
 
 env:
   - name: APP_CODE
-    value: "p+clinical-ui"
+    value: "p+galaxy-ui"
 
   - name: APP_PATH
-    value: "galaxy"
+    value: "ehr"
 
   - name: APP_VERSION
     value: "1.0.0"

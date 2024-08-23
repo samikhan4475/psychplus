@@ -131,7 +131,7 @@ env:
       configMapKeyRef:
         name: app-config
         key: aspNetCoreUrls
-  
+
   # CONFIG: Caching
 
   - name: APPSETTINGS_Caching__CodeSetCacheExpireMinutes
@@ -153,6 +153,12 @@ env:
       configMapKeyRef:
         name: app-config
         key: reactAppClinicalUrl
+
+  - name: GALAXY_URL
+    valueFrom:
+      configMapKeyRef:
+        name: app-config
+        key: reactAppGalaxyUrl
 
   - name: PATIENT_URL
     valueFrom:
