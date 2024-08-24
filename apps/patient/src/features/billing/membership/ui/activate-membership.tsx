@@ -6,15 +6,8 @@ import { useRouter } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { FormContainer } from '@psychplus-v2/components'
 import { PatientProfile } from '@psychplus-v2/types'
-import {
-  Button,
-  Checkbox,
-  Dialog,
-  Flex,
-  Link,
-  RadioGroup,
-  Text,
-} from '@radix-ui/themes'
+import * as RadioGroup from '@radix-ui/react-radio-group'
+import { Button, Checkbox, Dialog, Flex, Link, Text } from '@radix-ui/themes'
 import { useStripe } from '@stripe/react-stripe-js'
 import { useForm } from 'react-hook-form'
 import Stripe from 'stripe'

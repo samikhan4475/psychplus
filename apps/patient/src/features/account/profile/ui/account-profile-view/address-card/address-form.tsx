@@ -4,7 +4,8 @@ import { useEffect } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import type { PatientAddress, PatientProfile } from '@psychplus-v2/types'
 import { areAddressesEqual } from '@psychplus-v2/utils'
-import { Flex, RadioGroup, Text } from '@radix-ui/themes'
+import * as RadioGroup from '@radix-ui/react-radio-group'
+import { Flex, Text } from '@radix-ui/themes'
 import { useForm } from 'react-hook-form'
 import {
   FormFieldContainer,

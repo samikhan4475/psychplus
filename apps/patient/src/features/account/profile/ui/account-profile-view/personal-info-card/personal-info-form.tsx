@@ -10,7 +10,8 @@ import {
   getPatientPhoneNumber,
   getPatientSsn,
 } from '@psychplus-v2/utils'
-import { Flex, RadioGroup, Text, TextFieldInput } from '@radix-ui/themes'
+import * as RadioGroup from '@radix-ui/react-radio-group'
+import { Flex, Text, TextFieldInput } from '@radix-ui/themes'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import {
