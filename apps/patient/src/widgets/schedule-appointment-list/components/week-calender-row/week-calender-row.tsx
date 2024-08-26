@@ -12,9 +12,10 @@ import { useStore } from '../../store'
 const WeekCalendarRow = () => {
   const daysToAdd = isMobile() ? 1 : 7
 
-  const [startDate, setStartDate] = useState(new Date())
-
-  const { handleFiltersChange } = useStore()
+  const { handleFiltersChange, filters } = useStore()
+  const [startDate, setStartDate] = useState(
+    filters.startingDate ? new Date(filters.startingDate) : new Date(),
+  )
 
   const renderDays = () =>
     Array.from({ length: daysToAdd }, (_, i) => addDays(startDate, i)).map(
