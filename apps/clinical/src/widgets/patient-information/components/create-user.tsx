@@ -147,7 +147,7 @@ const CreateUser = () => {
           align="center"
           className="col-span-2 mt-auto box-border max-h-[34px] rounded-[4px] bg-[#F0F4FF] p-2"
         >
-          <Flex gap="2" grow="1" className="text-[12px] font-bold">
+          <Flex gap="2" flexGrow="1" className="text-[12px] font-bold">
             <Checkbox
               size="3"
               color="indigo"

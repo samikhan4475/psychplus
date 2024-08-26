@@ -13,17 +13,17 @@ import {
   DataTablePaginationLabel,
 } from '@psychplus/ui/data-table'
 import { TableCellText } from '@psychplus/ui/table-cell'
+import { useNewCode } from '../hooks'
 import { useStore } from '../store'
 import { ColumnProps } from '../types'
 import { ActiveCodesetsTableRowActions } from './active-codesets-row-actions'
-import { useNewCode } from '../hooks'
 
 const ActiveCodesetsTable = () => {
   const {
     codeSet,
     setCodeErrors,
     newCode,
-    codeErrors:errors,
+    codeErrors: errors,
     editableCode,
     setNewCode,
   } = useStore((state) => ({
@@ -36,8 +36,6 @@ const ActiveCodesetsTable = () => {
   }))
 
   const { handleFieldChange } = useNewCode()
-
-
 
   const columns = useMemo(() => {
     return createColumns({
@@ -96,36 +94,34 @@ const createColumns = ({
     if (row.original?.id) {
       if (editableCode?.id === row.original.id) {
         return (
-          <TextField.Root className="w-full">
-            <TextField.Input
-              defaultValue={editableCode?.code ?? row.original.code}
-              className={cn(
-                errors['code'] && 'border border-solid border-[#ef3a3a]',
-              )}
-              onBlur={(e) => {
-                const inputValue = (e.target as HTMLInputElement).value
-                handleFieldChange('editableCode', 'code', inputValue)
-              }}
-            />
-          </TextField.Root>
+          <TextField.Root
+            defaultValue={editableCode?.code ?? row.original.code}
+            className={cn(
+              errors['code'] && 'border border-solid border-[#ef3a3a]',
+              'w-full',
+            )}
+            onBlur={(e) => {
+              const inputValue = (e.target as HTMLInputElement).value
+              handleFieldChange('editableCode', 'code', inputValue)
+            }}
+          />
         )
       } else {
         return <TableCellText text={row.original.code} />
       }
     } else {
       return (
-        <TextField.Root className="w-full">
-          <TextField.Input
-            defaultValue={newCode?.code}
-            className={cn(
-              errors['code'] && 'border border-solid border-[#ef3a3a]',
-            )}
-            onBlur={(e) => {
-              const inputValue = (e.target as HTMLInputElement).value
-              handleFieldChange('newCode', 'code', inputValue)
-            }}
-          />
-        </TextField.Root>
+        <TextField.Root
+          defaultValue={newCode?.code}
+          className={cn(
+            errors['code'] && 'border border-solid border-[#ef3a3a]',
+            'w-full',
+          )}
+          onBlur={(e) => {
+            const inputValue = (e.target as HTMLInputElement).value
+            handleFieldChange('newCode', 'code', inputValue)
+          }}
+        />
       )
     }
   }
@@ -134,38 +130,34 @@ const createColumns = ({
     if (row.original?.id) {
       if (editableCode?.id === row.original.id) {
         return (
-          <TextField.Root className="w-full">
-            <TextField.Input
-              defaultValue={
-                editableCode?.displayName ?? row.original.displayName
-              }
-              className={cn(
-                errors['displayName'] && 'border border-solid border-[#ef3a3a]',
-              )}
-              onBlur={(e) => {
-                const inputValue = (e.target as HTMLInputElement).value
-                handleFieldChange('editableCode', 'displayName', inputValue)
-              }}
-            />
-          </TextField.Root>
+          <TextField.Root
+            defaultValue={editableCode?.displayName ?? row.original.displayName}
+            className={cn(
+              errors['displayName'] && 'border border-solid border-[#ef3a3a]',
+              'w-full',
+            )}
+            onBlur={(e) => {
+              const inputValue = (e.target as HTMLInputElement).value
+              handleFieldChange('editableCode', 'displayName', inputValue)
+            }}
+          />
         )
       } else {
         return <TableCellText text={row.original.displayName} />
       }
     } else {
       return (
-        <TextField.Root className="w-full">
-          <TextField.Input
-            defaultValue={newCode?.displayName}
-            className={cn(
-              errors['displayName'] && 'border border-solid border-[#ef3a3a]',
-            )}
-            onBlur={(e) => {
-              const inputValue = (e.target as HTMLInputElement).value
-              handleFieldChange('newCode', 'displayName', inputValue)
-            }}
-          />
-        </TextField.Root>
+        <TextField.Root
+          defaultValue={newCode?.displayName}
+          className={cn(
+            errors['displayName'] && 'border border-solid border-[#ef3a3a]',
+            'w-full',
+          )}
+          onBlur={(e) => {
+            const inputValue = (e.target as HTMLInputElement).value
+            handleFieldChange('newCode', 'displayName', inputValue)
+          }}
+        />
       )
     }
   }

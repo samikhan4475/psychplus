@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons'
-import { Box, Button, Flex, Text, TextFieldInput } from '@radix-ui/themes'
+import { Box, Button, Flex, Text, TextField } from '@radix-ui/themes'
 import { z } from 'zod'
 import { Form, FormSelect, useForm, validate } from '@psychplus/form'
 import { DatePicker } from '@psychplus/ui/date-picker'
@@ -89,7 +89,7 @@ const FilterForm = () => {
             <Text className="mr-2" size="1" weight="bold">
               Claim #
             </Text>
-            <TextFieldInput
+            <TextField.Root
               className="h-30 text-sm p-0"
               placeholder="3fasf5fde4-5dr17-4562-b3fc-2c963fa6"
               {...form.register('claimId')}
@@ -100,7 +100,7 @@ const FilterForm = () => {
             <Text className="mr-2" size="1" weight="bold">
               Patient Id
             </Text>
-            <TextFieldInput
+            <TextField.Root
               className="h-30 text-sm p-0"
               placeholder="Patient Id"
               {...form.register('patientId')}

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons'
-import { Box, Button, Flex, Text, TextFieldInput } from '@radix-ui/themes'
+import { Box, Button, Flex, Text, TextField } from '@radix-ui/themes'
 import { format } from 'date-fns'
 import { DatePicker } from 'node_modules/@psychplus/ui/src/date-picker'
 import { Select } from '@psychplus/ui/select'
@@ -168,7 +168,7 @@ const FilterField = ({
       <Text size="1" mr="1">
         {label}
       </Text>
-      <TextFieldInput
+      <TextField.Root
         className="h-30"
         placeholder={placeholder}
         value={value}

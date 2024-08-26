@@ -46,7 +46,7 @@ const FilterForm = () => {
   }
   return (
     <TextField.Root className="w-1/3" defaultValue={filter}>
-      <TextField.Input
+      <TextField.Root
         placeholder="Filter"
         name="Filter"
         onChange={handleFilterChange}

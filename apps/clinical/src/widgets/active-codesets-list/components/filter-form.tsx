@@ -46,14 +46,14 @@ const FilterForm = () => {
 
   return (
     <>
-      <TextField.Root className="w-80">
-        <TextField.Input
-          placeholder="Filter by description"
-          value={filter}
-          name="Filter"
-          onChange={handleFilterChange}
-          onKeyDown={handleKeyDown}
-        />
+      <TextField.Root
+        className="w-80"
+        placeholder="Filter by description"
+        value={filter}
+        name="Filter"
+        onChange={handleFilterChange}
+        onKeyDown={handleKeyDown}
+      >
         <TextField.Slot>
           <MagnifyingGlassIcon />
         </TextField.Slot>

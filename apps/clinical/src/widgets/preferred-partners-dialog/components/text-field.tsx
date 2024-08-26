@@ -1,5 +1,5 @@
 import { forwardRef } from 'react'
-import { Box, Text, TextFieldInput } from '@radix-ui/themes'
+import { Box, Text, TextField } from '@radix-ui/themes'
 
 const TextFieldLabel = forwardRef<
   HTMLInputElement,
@@ -33,7 +33,7 @@ const TextFieldLabel = forwardRef<
       <Text size="1" mr="1">
         {label}
       </Text>
-      <TextFieldInput
+      <TextField.Root
         ref={ref}
         className={`h-30 ${className}`}
         disabled={disabled}

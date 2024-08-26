@@ -1,5 +1,5 @@
 import { forwardRef } from 'react'
-import { Box, Text, TextFieldInput } from '@radix-ui/themes'
+import { Box, Text, TextField } from '@radix-ui/themes'
 
 const TextFieldLabel = forwardRef<
   HTMLInputElement,
@@ -35,7 +35,7 @@ const TextFieldLabel = forwardRef<
       <Text size="2" weight="bold">
         {label} {required && <span className="text-[#FF0000]">*</span>}
       </Text>
-      <TextFieldInput
+      <TextField.Root
         ref={ref}
         mt="1"
         className={`h-[36px] rounded-1 ${className}`}

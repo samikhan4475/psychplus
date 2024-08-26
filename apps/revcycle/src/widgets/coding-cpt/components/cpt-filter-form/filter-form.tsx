@@ -1,7 +1,7 @@
 'use client'
 
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons'
-import { Box, Button, Flex, Text, TextFieldInput } from '@radix-ui/themes'
+import { Box, Button, Flex, Text, TextField } from '@radix-ui/themes'
 import { z } from 'zod'
 import { Form, FormSelect, useForm, validate } from '@psychplus/form'
 import { useStore } from '../../store'
@@ -39,7 +39,9 @@ interface Props {
 
 const CPTFilterForm = (props: Props) => {
   const posCodes = useStore((state) => state.codingPosList || [])
-  const feeScheduleCategory = useStore((state) => state.feeScheduleCategoryList || [])
+  const feeScheduleCategory = useStore(
+    (state) => state.feeScheduleCategoryList || [],
+  )
   const form = useForm({
     schema,
     criteriaMode: 'all',
@@ -47,11 +49,14 @@ const CPTFilterForm = (props: Props) => {
   })
 
   const onSubmit = () => {
-    const formData = form.getValues();
-    if (typeof formData.resourceStatusList === 'string' && formData.resourceStatusList.trim() !== '') {
-      formData.resourceStatusList = [formData.resourceStatusList];
+    const formData = form.getValues()
+    if (
+      typeof formData.resourceStatusList === 'string' &&
+      formData.resourceStatusList.trim() !== ''
+    ) {
+      formData.resourceStatusList = [formData.resourceStatusList]
     }
-    props.search(formData as CPT);
+    props.search(formData as CPT)
   }
 
   const handleClearForm = () => {
@@ -70,7 +75,7 @@ const CPTFilterForm = (props: Props) => {
             <Text className="mr-2" size="1" weight="bold">
               CPT
             </Text>
-            <TextFieldInput
+            <TextField.Root
               className="h-30 text-sm p-0"
               placeholder="Enter CPT"
               {...form.register('cptCode')}
@@ -98,7 +103,7 @@ const CPTFilterForm = (props: Props) => {
             <Text className="mr-2" size="1" weight="bold">
               Description
             </Text>
-            <TextFieldInput
+            <TextField.Root
               className="h-30 text-sm p-0"
               placeholder="Description.."
               {...form.register('description')}
@@ -140,13 +145,13 @@ const CPTFilterForm = (props: Props) => {
             <Text className="mr-2" size="1" weight="bold">
               Age Range
             </Text>
-            <TextFieldInput
+            <TextField.Root
               className="h-30 text-sm p-0"
               placeholder="Form"
               {...form.register('minimumAge')}
             />
             <span className="ml-2 mr-2">-</span>
-            <TextFieldInput
+            <TextField.Root
               className="h-30 text-sm p-0"
               placeholder="To"
               {...form.register('maximumAge')}

@@ -99,7 +99,7 @@ const RenderCell = (
   return row.original.id ? (
     <TableCellText text={row.original[property] as string} />
   ) : (
-    <TextField.Input
+    <TextField.Root
       {...form.register(property)}
       className={fieldError ? 'border border-solid border-[#ef3a3a]' : ''}
     />

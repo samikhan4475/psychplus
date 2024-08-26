@@ -1,11 +1,11 @@
 import { Box, Flex, Text, TextField } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
 import { FormSelect, FormTextInput } from '@psychplus/form'
+import { useEditModeContext } from '@psychplus/patient-info'
 import { PlacesAutocomplete } from '@/components/places-autocomplete'
 import { useGooglePlacesContext } from '@/providers'
 import { FORM_FIELD_CLASSES } from '../constants'
 import { useUsStatesOptions } from '../hooks'
-import { useEditModeContext } from '@psychplus/patient-info'
 
 interface PlaceholderFieldProps {
   label: string
@@ -23,7 +23,7 @@ const PlaceholderField = ({
       <Text as="label" size="2" weight="medium">
         {label} {required && <span className="text-[#FF0000]">*</span>}
       </Text>
-      <TextField.Input
+      <TextField.Root
         className={className}
         placeholder="Same as primary"
         disabled

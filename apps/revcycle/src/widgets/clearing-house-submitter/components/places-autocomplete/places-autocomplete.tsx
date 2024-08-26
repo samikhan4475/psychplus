@@ -1,4 +1,3 @@
-import { Flex, Text, TextFieldInput, Button } from '@radix-ui/themes'
 import React, {
   useCallback,
   useEffect,
@@ -6,6 +5,7 @@ import React, {
   useState,
   type ChangeEvent,
 } from 'react'
+import { Button, Flex, Text, TextField } from '@radix-ui/themes'
 import { type FieldValues } from 'react-hook-form'
 import usePlacesAutocomplete, {
   getDetails,
@@ -110,7 +110,7 @@ const PlacesAutocomplete = ({
         <Text as="label" size="2" weight="bold" htmlFor={name} className="pt-1">
           {label} {required && <span className="text-[#FF0000]">*</span>}
         </Text>
-        <TextFieldInput
+        <TextField.Root
           size="3"
           id={name}
           disabled={disabled}
@@ -178,63 +178,63 @@ const getInitialAutocompleteValue = (address: FieldValues) => {
 }
 
 type AddressComponent = {
-  long_name: string;
-  short_name: string;
-  types: string[];
-};
+  long_name: string
+  short_name: string
+  types: string[]
+}
 
-const isValidResult = (result: Awaited<DetailsResult>): result is { address_components: AddressComponent[] } =>
-  !!result &&
-  !Array.isArray(result) &&
-  Array.isArray(result.address_components);
+const isValidResult = (
+  result: Awaited<DetailsResult>,
+): result is { address_components: AddressComponent[] } =>
+  !!result && !Array.isArray(result) && Array.isArray(result.address_components)
 
 const processComponent = (
   component: AddressComponent,
-  address: Partial<AddressForm>
+  address: Partial<AddressForm>,
 ): void => {
   for (const type of component.types) {
-    const value = component.long_name || component.short_name;
+    const value = component.long_name || component.short_name
     switch (type) {
       case 'postal_code':
-        address.postalCode ||= value;
-        break;
+        address.postalCode ||= value
+        break
       case 'country':
-        address.country ||= value;
-        break;
+        address.country ||= value
+        break
       case 'administrative_area_level_1':
-        address.state ||= value;
-        break;
+        address.state ||= value
+        break
       case 'locality':
-        address.city ||= value;
-        break;
+        address.city ||= value
+        break
       case 'street_number':
-        address.streetNumber ||= value;
-        break;
+        address.streetNumber ||= value
+        break
       case 'route':
-        address.street ||= value;
-        break;
+        address.street ||= value
+        break
     }
   }
-};
+}
 
 const getAddressFromPlacesResult = (
-  result: Awaited<DetailsResult>
+  result: Awaited<DetailsResult>,
 ): AddressForm | undefined => {
   if (!isValidResult(result)) {
-    return;
+    return
   }
 
-  const address: Partial<AddressForm> = {};
+  const address: Partial<AddressForm> = {}
 
   for (const component of result.address_components) {
-    processComponent(component, address);
+    processComponent(component, address)
   }
 
   if (address.street && address.streetNumber) {
-    address.street1 = `${address.streetNumber} ${address.street}`;
+    address.street1 = `${address.streetNumber} ${address.street}`
   }
 
-  return address as AddressForm;
-};
+  return address as AddressForm
+}
 
 export { PlacesAutocomplete }

@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react'
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons'
-import { Box, Button, Flex, Text, TextFieldInput } from '@radix-ui/themes'
+import { Box, Button, Flex, Text, TextField } from '@radix-ui/themes'
 
 type FilterFieldProps = {
   label: string
@@ -29,7 +29,7 @@ const FilterField: React.FC<FilterFieldProps> = ({
       </Text>
     </Flex>
     <Box className="w-full">
-      <TextFieldInput
+      <TextField.Root
         className="h-30 w-full font-light"
         size="2"
         placeholder={placeholder}

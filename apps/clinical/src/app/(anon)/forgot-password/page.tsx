@@ -8,8 +8,8 @@ import { ForgotPasswordForm } from './forgot-password-form'
 const ForgotPasswordPage = () => (
   <Flex height="100%">
     <div className="hidden bg-accent-9 md:block md:w-4/12" />
-    <Flex direction="column" justify="center" grow="1" py="4" px="6">
-      <Flex align="center" justify="center" grow="1">
+    <Flex direction="column" justify="center" flexGrow="1" py="4" px="6">
+      <Flex align="center" justify="center" flexGrow="1">
         <Flex direction="column" className="w-full xs:w-80">
           <Heading size="7" align="center" mb="6">
             Forgot Password

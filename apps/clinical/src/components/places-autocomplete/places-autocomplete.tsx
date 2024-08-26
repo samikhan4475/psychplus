@@ -7,7 +7,7 @@ import React, {
   useState,
   type ChangeEvent,
 } from 'react'
-import { Flex, Text, TextFieldInput } from '@radix-ui/themes'
+import { Flex, Text, TextField } from '@radix-ui/themes'
 import { useFormContext, type FieldValues } from 'react-hook-form'
 import usePlacesAutocomplete, {
   getDetails,
@@ -41,7 +41,7 @@ const PlacesAutocomplete = ({
   required,
   disabled = false,
   label = 'Address 1',
-  placeholder='',
+  placeholder = '',
 }: PlacesAutocompleteProps) => {
   const autocompleteRef = useRef<HTMLInputElement | null>(null)
 
@@ -93,16 +93,16 @@ const PlacesAutocomplete = ({
 
   const setFormValues = useCallback(
     (address?: AddressForm) => {
-      form.setValue(street1Field, address?.street1?? '')
-      form.setValue(street2Field, address?.street2?? '')
-      form.setValue(cityField, address?.city?? '')
-      form.setValue(stateField, address?.state?? '')
-      form.setValue(postalCodeField, address?.postalCode?? '')
-      form.setValue(countryField, address?.country?? '')
+      form.setValue(street1Field, address?.street1 ?? '')
+      form.setValue(street2Field, address?.street2 ?? '')
+      form.setValue(cityField, address?.city ?? '')
+      form.setValue(stateField, address?.state ?? '')
+      form.setValue(postalCodeField, address?.postalCode ?? '')
+      form.setValue(countryField, address?.country ?? '')
       form.clearErrors(street1Field)
       form.clearErrors(cityField)
       form.clearErrors(stateField)
-      form.clearErrors(postalCodeField)  
+      form.clearErrors(postalCodeField)
     },
     [
       form,
@@ -148,7 +148,10 @@ const PlacesAutocomplete = ({
       })
   }
 
-  const handleKeyPress = (event: React.KeyboardEvent<HTMLLIElement>, suggestions: Suggestion) => {
+  const handleKeyPress = (
+    event: React.KeyboardEvent<HTMLLIElement>,
+    suggestions: Suggestion,
+  ) => {
     if (event.key === 'Enter' || event.key === ' ') {
       handleSelect(suggestions)()
     }
@@ -184,7 +187,7 @@ const PlacesAutocomplete = ({
         <Text as="label" size="2" weight="bold" htmlFor={name}>
           {label} {required && <span className="text-[#FF0000]">*</span>}
         </Text>
-        <TextFieldInput
+        <TextField.Root
           size="3"
           id={name}
           disabled={disabled}
@@ -202,11 +205,11 @@ const PlacesAutocomplete = ({
             {renderSuggestions()}
           </ul>
         ) : null}
-        {state.error? (
+        {state.error ? (
           <Text size="2" color="red">
             {state.error.message}
           </Text>
-        ): null}
+        ) : null}
       </Flex>
     </Flex>
   )
@@ -249,7 +252,7 @@ const getAddressFromPlacesResult = (
       for (const t of component.types) {
         switch (t) {
           case 'postal_code':
-            postalCode ||= component.long_name || component.short_name;
+            postalCode ||= component.long_name || component.short_name
             break
 
           case 'country':

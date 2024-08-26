@@ -104,18 +104,16 @@ const IcdSnomedSearchDropdown = <T extends IcdCodes>({
   return (
     <Flex align="center" gap="2">
       <Box className="z-50 h-8 flex-1 border border-gray-7">
-        <TextField.Root className="[&>*]:bg-transparent [&>*]:outline-none">
-          <TextField.Input
-            size="3"
-            variant="soft"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            placeholder={placeholder}
-            onKeyDown={handleKeyPress}
-            autoFocus
-            className="border-0 outline-none"
-          />
-        </TextField.Root>
+        <TextField.Root
+          size="3"
+          variant="soft"
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          placeholder={placeholder}
+          onKeyDown={handleKeyPress}
+          autoFocus
+          className="border-0 outline-none [&>*]:bg-transparent [&>*]:outline-none"
+        />
         <Box>
           {results?.length === 0 && open && (
             <Flex py="4" justify="center">

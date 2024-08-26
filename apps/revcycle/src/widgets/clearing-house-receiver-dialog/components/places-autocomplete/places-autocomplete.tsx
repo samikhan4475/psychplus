@@ -7,7 +7,7 @@ import React, {
   useState,
   type ChangeEvent,
 } from 'react'
-import { Button, Flex, Text, TextFieldInput } from '@radix-ui/themes'
+import { Button, Flex, Text, TextField } from '@radix-ui/themes'
 import { type FieldValues } from 'react-hook-form'
 import usePlacesAutocomplete, {
   getDetails,
@@ -111,7 +111,7 @@ const PlacesAutocomplete = ({
         <Text as="label" size="1" weight="bold" htmlFor={name} className="pt-1">
           {label} {required && <span className="text-[#FF0000]">*</span>}
         </Text>
-        <TextFieldInput
+        <TextField.Root
           size="2"
           id={name}
           disabled={disabled}

@@ -47,16 +47,14 @@ const HealthConcernSearchDropdown = ({
   return (
     <Flex align="center" gap="2">
       <Box className="z-50 h-8 flex-1">
-        <TextField.Root className="h-8 rounded-b-2 rounded-tr-2 border border-gray-7 [&>*]:bg-transparent [&>*]:outline-none">
-          <TextField.Input
-            size="3"
-            variant="soft"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            placeholder={placeholder}
-            className="h-8 border-0 outline-none"
-          />
-        </TextField.Root>
+        <TextField.Root
+          className="h-8 h-8 rounded-b-2 rounded-tr-2 border border-0 border-gray-7 outline-none [&>*]:bg-transparent [&>*]:outline-none"
+          size="3"
+          variant="soft"
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          placeholder={placeholder}
+        />
         {results.length > 0 && open && (
           <Box className="rounded-2 border border-gray-7 bg-[white] p-2">
             <Flex className="border border-[#C8D6FF] bg-[#EBF3FC]">

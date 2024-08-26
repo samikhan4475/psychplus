@@ -67,7 +67,7 @@ const HistoryTable = <TData, TValue>({
 
   return (
     <Flex
-      grow="1"
+      flexGrow="1"
       direction="column"
       justify="between"
       className="h-[1px] w-full"

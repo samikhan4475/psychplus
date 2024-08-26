@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react'
-import { Box, Flex, Grid, Text, TextFieldInput } from '@radix-ui/themes'
+import { Box, Flex, Grid, Text, TextField } from '@radix-ui/themes'
 import { UseFormReturn } from 'react-hook-form'
 import { FormTextInput } from '@psychplus/form'
 import { SchemaType } from './add-services-custom-charge-form'
@@ -24,7 +24,7 @@ const FinancialFields = ({
           <Flex className="col-span-1 flex-1">
             <Text className="pr-[5px] pt-[5px] text-[#194595]">Due PT</Text>
             <Box className="justify-end">
-              <TextFieldInput
+              <TextField.Root
                 disabled={true}
                 type="text"
                 placeholder="$0.00"

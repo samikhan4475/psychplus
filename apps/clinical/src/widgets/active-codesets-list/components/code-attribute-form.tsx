@@ -97,36 +97,34 @@ const createColumns = ({
     if (row.original?.id) {
       if (editableAttribute?.id === row.original.id) {
         return (
-          <TextField.Root className="w-full">
-            <TextField.Input
-              defaultValue={editableAttribute?.name ?? row.original.name}
-              className={cn(
-                errors['name'] && 'border border-solid border-[#ef3a3a]',
-              )}
-              onChange={(e) => {
-                const inputValue = (e.target as HTMLInputElement).value
-                handleFieldChange('editableAttribute', 'name', inputValue)
-              }}
-            />
-          </TextField.Root>
+          <TextField.Root
+            defaultValue={editableAttribute?.name ?? row.original.name}
+            className={cn(
+              errors['name'] && 'border border-solid border-[#ef3a3a]',
+              'w-full',
+            )}
+            onChange={(e) => {
+              const inputValue = (e.target as HTMLInputElement).value
+              handleFieldChange('editableAttribute', 'name', inputValue)
+            }}
+          />
         )
       } else {
         return <TableCellText text={row.original.name} />
       }
     } else {
       return (
-        <TextField.Root className="w-full">
-          <TextField.Input
-            defaultValue={newAttribute?.name}
-            className={cn(
-              errors['name'] && 'border border-solid border-[#ef3a3a]',
-            )}
-            onChange={(e) => {
-              const inputValue = (e.target as HTMLInputElement).value
-              handleFieldChange('newAttribute', 'name', inputValue)
-            }}
-          />
-        </TextField.Root>
+        <TextField.Root
+          defaultValue={newAttribute?.name}
+          className={cn(
+            errors['name'] && 'border border-solid border-[#ef3a3a]',
+            'w-full',
+          )}
+          onChange={(e) => {
+            const inputValue = (e.target as HTMLInputElement).value
+            handleFieldChange('newAttribute', 'name', inputValue)
+          }}
+        />
       )
     }
   }
@@ -135,36 +133,34 @@ const createColumns = ({
     if (row.original?.id) {
       if (editableAttribute?.id === row.original.id) {
         return (
-          <TextField.Root className="w-full">
-            <TextField.Input
-              defaultValue={editableAttribute?.content ?? row.original.content}
-              className={cn(
-                errors['content'] && 'border border-solid border-[#ef3a3a]',
-              )}
-              onChange={(e) => {
-                const inputValue = (e.target as HTMLInputElement).value
-                handleFieldChange('editableAttribute', 'content', inputValue)
-              }}
-            />
-          </TextField.Root>
+          <TextField.Root
+            defaultValue={editableAttribute?.content ?? row.original.content}
+            className={cn(
+              errors['content'] && 'border border-solid border-[#ef3a3a]',
+              'w-full',
+            )}
+            onChange={(e) => {
+              const inputValue = (e.target as HTMLInputElement).value
+              handleFieldChange('editableAttribute', 'content', inputValue)
+            }}
+          />
         )
       } else {
         return <TableCellText text={row.original.content} />
       }
     } else {
       return (
-        <TextField.Root className="w-full">
-          <TextField.Input
-            defaultValue={newAttribute?.content}
-            className={cn(
-              errors['content'] && 'border border-solid border-[#ef3a3a]',
-            )}
-            onChange={(e) => {
-              const inputValue = (e.target as HTMLInputElement).value
-              handleFieldChange('newAttribute', 'content', inputValue)
-            }}
-          />
-        </TextField.Root>
+        <TextField.Root
+          defaultValue={newAttribute?.content}
+          className={cn(
+            errors['content'] && 'border border-solid border-[#ef3a3a]',
+            'w-full',
+          )}
+          onChange={(e) => {
+            const inputValue = (e.target as HTMLInputElement).value
+            handleFieldChange('newAttribute', 'content', inputValue)
+          }}
+        />
       )
     }
   }

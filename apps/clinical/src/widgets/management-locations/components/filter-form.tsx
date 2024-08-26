@@ -1,5 +1,5 @@
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons'
-import { Box, Button, Flex, Text, TextFieldInput } from '@radix-ui/themes'
+import { Box, Button, Flex, Text, TextField } from '@radix-ui/themes'
 import { Select } from '@psychplus/ui/select'
 
 const FilterForm = () => {
@@ -57,7 +57,7 @@ const FilterTextField = ({
     <Text size="2" weight={'bold'}>
       {label}
     </Text>
-    <TextFieldInput
+    <TextField.Root
       className="w-[120px]"
       size={'2'}
       placeholder={placeholder}

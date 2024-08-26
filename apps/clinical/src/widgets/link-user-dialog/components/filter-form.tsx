@@ -1,12 +1,6 @@
 import { useEffect, useState } from 'react'
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons'
-import {
-  Box,
-  Button,
-  Flex,
-  Text,
-  TextFieldInput,
-} from '@radix-ui/themes'
+import { Box, Button, Flex, Text, TextField } from '@radix-ui/themes'
 import { format } from 'date-fns'
 import { getPatients } from '@psychplus/patient/api.client'
 import { DatePicker } from '@psychplus/ui/date-picker'
@@ -39,40 +33,41 @@ const FilterForm = () => {
     setFiltersState(initialPatientFilterState)
     fetchFilteredData(initialPatientFilterState)
   }
- 
+
   interface CleanFilterState {
-    firstNameContains:string;
-    lastNameContains:string;
-    dateOfBirth:string;
+    firstNameContains: string
+    lastNameContains: string
+    dateOfBirth: string
   }
-  
+
   const fetchFilteredData = (filters: Filters) => {
     const cleanFilterState: CleanFilterState = {
       firstNameContains: '',
       lastNameContains: '',
-      dateOfBirth: ''
-    };
-  
+      dateOfBirth: '',
+    }
+
     Object.entries(filters)
       .filter(([key, value]) => !!value)
       .forEach(([key, value]) => {
         if (key === 'dateOfBirth' && value instanceof Date) {
-          cleanFilterState[key as keyof CleanFilterState] = format(value, DATE_FORMAT);
+          cleanFilterState[key as keyof CleanFilterState] = format(
+            value,
+            DATE_FORMAT,
+          )
         } else {
-          cleanFilterState[key as keyof CleanFilterState] = value;
+          cleanFilterState[key as keyof CleanFilterState] = value
         }
-      });
-  
+      })
+
     getPatients(cleanFilterState)
       .then((patients) => {
-        setPatients(patients);
+        setPatients(patients)
       })
       .catch((err: Error) => {
-        alert(err.message);
-      });
-  };
-  
-  
+        alert(err.message)
+      })
+  }
 
   return (
     <Box my="2">
@@ -154,7 +149,7 @@ const FilterField = ({
       <Text size="1" mr="1">
         {label}
       </Text>
-      <TextFieldInput
+      <TextField.Root
         className="h-7 placeholder:font-medium"
         placeholder={placeholder}
         value={value}

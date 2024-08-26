@@ -117,12 +117,12 @@ const Header = ({
         <Flex
           direction="row"
           align="center"
-          className="flex-wrap bg-[#FFF] px-2 py-2 gap-2"
+          className="flex-wrap gap-2 bg-[#FFF] px-2 py-2"
         >
           {fields?.map((field, i) => {
             if (field.resourceStatus !== 'Active') return null
             return isSelectField(field.reportParameterCode) ? (
-              <Flex key={field.id} className='gap-x-1' align="center">
+              <Flex key={field.id} className="gap-x-1" align="center">
                 <Text as="span" className="text-[12px] font-[510]">
                   {field.displayName}
                 </Text>
@@ -138,14 +138,16 @@ const Header = ({
                 />
               </Flex>
             ) : (
-              <Flex key={field.id} className='gap-x-1' align="center">
+              <Flex key={field.id} className="gap-x-1" align="center">
                 <Text as="span" className="text-[12px] font-[510]">
                   {field.displayName}
                 </Text>
-                <TextField.Input
+                <TextField.Root
                   className="h-6 py-0"
                   type={
-                    field.reportParameterCode === 'DateOfBirth' ? 'date' : ''
+                    field.reportParameterCode === 'DateOfBirth'
+                      ? 'date'
+                      : undefined
                   }
                   {...form.register(`reportTemplateParameters.${i}.value`)}
                   placeholder={field.displayName}
