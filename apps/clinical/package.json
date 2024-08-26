@@ -16,6 +16,7 @@
     "@psychplus/auth": "^0.1.0",
     "@psychplus/care-plans": "^0.1.0",
     "@psychplus/ccda-setting-preference": "^0.1.0",
+    "@psychplus/management-locations": "^0.1.0",
     "@psychplus/codeset": "^0.1.0",
     "@psychplus/form": "^0.1.0",
     "@psychplus/functional-cognitive": "^0.1.0",

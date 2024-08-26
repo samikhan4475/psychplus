@@ -55,6 +55,14 @@ const navMenuItems: MenuItem[] = [
     href: '/widgets/add-relationship',
   },
   {
+    label: 'Add Location',
+    href: '/widgets/add-management-location',
+  },
+  {
+    label: 'Management Locations',
+    href: '/widgets/management-locations',
+  },
+  {
     label: 'Patient Preferred Partners',
     href: '/widgets/patient-preferred-partners',
   },
