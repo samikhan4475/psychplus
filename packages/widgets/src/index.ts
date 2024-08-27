@@ -35,6 +35,8 @@ const CLINIC_WIDGET = 'clinic-widget'
 const MANAGEMENT_LOCATIONS_WIDGET = 'management-locations'
 const MANAGEMENT_USERS_WIDGET = 'management-users-widget'
 const PROCEDURES_LIST_WIDGET = 'procedures'
+const MANAGEMENT_SERVICES_LIST_WIDGET = 'management-services-list'
+
 const ADD_MANAGEMENT_LOCATIONS_WIDGET = 'add-management-locations'
 export {
   USER_WIDGET,
@@ -72,5 +74,6 @@ export {
   MANAGEMENT_LOCATIONS_WIDGET,
   MANAGEMENT_USERS_WIDGET,
   PROCEDURES_LIST_WIDGET,
+  MANAGEMENT_SERVICES_LIST_WIDGET,
   ADD_MANAGEMENT_LOCATIONS_WIDGET,
 }

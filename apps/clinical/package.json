@@ -57,7 +57,8 @@
     "@psychplus/health-concerns": "^0.1.0",
     "@psychplus/problems": "^0.1.0",
     "@psychplus/care-plans": "^0.1.0",
-    "@psychplus/procedures": "^0.1.0"
+    "@psychplus/procedures": "^0.1.0",
+    "@psychplus/management-services": "^0.1.0"
   },
   "devDependencies": {
     "@psychplus/eslint-config": "^0.1.0",
