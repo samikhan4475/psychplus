@@ -1,7 +1,7 @@
 import { CODESETS } from '@psychplus-v2/constants'
 import { GOOGLE_MAPS_API_KEY } from '@psychplus-v2/env'
 import { Flex } from '@radix-ui/themes'
-import { getCodesets, getProfile } from '@/api'
+import { getCodesets, getProfile, getRelationship } from '@/api'
 import { FeatureContainer } from '@/components-v2'
 import { AdditionalContactCard } from '@/features/account/profile/ui/account-profile-view/additional-contact-card'
 import { AlternateInfoCard } from '@/features/account/profile/ui/account-profile-view/alternate-info-card'
@@ -12,9 +12,10 @@ import { AddressCard } from './address-card'
 import { ProfileAvatar } from './avatar'
 import { DescriptiveCard } from './descriptive-card'
 import { PersonalInfoCard } from './personal-info-card'
+import { EmergencyContactCard } from './emergency-contact-card'
 
 const AccountProfileView = async () => {
-  const [codesets, profileResponse] = await Promise.all([
+  const [codesets, profileResponse, relationshipResponse] = await Promise.all([
     getCodesets([
       CODESETS.UsStates,
       CODESETS.Gender,
@@ -30,10 +31,15 @@ const AccountProfileView = async () => {
       CODESETS.Religion,
     ]),
     getProfile(),
+    getRelationship(),
   ])
 
   if (profileResponse.state === 'error') {
     throw new Error(profileResponse.error)
+  }
+
+  if (relationshipResponse.state === 'error') {
+    throw new Error(relationshipResponse.error)
   }
 
   return (
@@ -46,6 +52,7 @@ const AccountProfileView = async () => {
               <PersonalInfoCard />
               <AddressCard />
               <PreferredPartnerCard />
+              <EmergencyContactCard relationshipData={relationshipResponse.data}/>
               <AdditionalContactCard />
               <AlternateInfoCard />
               <DescriptiveCard />

@@ -4,20 +4,36 @@ import { useState } from 'react'
 import * as Accordion from '@radix-ui/react-accordion'
 import { Flex, Text } from '@radix-ui/themes'
 import { ChevronDown, PencilIcon } from 'lucide-react'
+import { RelationshipFormDialog } from './emergency-contact-card/relationship-form-dialog'
+import { RelationshipData } from '@psychplus-v2/types'
 
 interface AccountProfileAccordionProps {
   title: string
   editable?: boolean
-  content: (isEdit: boolean, onSave: () => void) => React.ReactNode
+  addEditable?: boolean
+  content?: (
+    isEdit: boolean,
+    onSave: () => void,
+    relationshipDataList?: RelationshipData[],
+    setDeleteItem?: React.Dispatch<React.SetStateAction<RelationshipData | undefined>>,
+    setSelectedId?: React.Dispatch<React.SetStateAction<string | undefined>>
+  ) => React.ReactNode | undefined;
+  modalContent?: (
+    open: boolean,
+    setOpen: React.Dispatch<React.SetStateAction<boolean>>,
+  ) => React.ReactNode
 }
 
 const AccountProfileAccordion = ({
   title,
   content,
   editable = true,
+  addEditable = false,
+  modalContent,
 }: AccountProfileAccordionProps) => {
   const [isEdit, setIsEdit] = useState(!editable)
   const [isOpen, setIsOpen] = useState(false)
+  const [isAddRelationshipModalOpen, setIsAddRelationshipModalOpen] = useState(false)
 
   const handleSave = () => {
     setIsEdit(false)
@@ -42,6 +58,19 @@ const AccountProfileAccordion = ({
               {title}
             </Text>
             <Flex gap="5">
+              {addEditable && (
+                <Flex align="center" gap="1">
+                  <RelationshipFormDialog
+                    modalTitle="Add Relationship"
+                    content={
+                      modalContent?.(isAddRelationshipModalOpen, setIsAddRelationshipModalOpen)
+                    }
+                    open={isAddRelationshipModalOpen}
+                    setOpen={setIsAddRelationshipModalOpen}
+                  />
+                </Flex>
+              )}
+
               {!isEdit && (
                 <Accordion.Trigger
                   onClick={() => {
@@ -85,7 +114,7 @@ const AccountProfileAccordion = ({
         </Accordion.Header>
         {isOpen && (
           <Accordion.Content className="rounded-b-2 border-x border-b border-[#DDDDE3] p-4">
-            {content(isEdit, handleSave)}
+            {content?.(isEdit, handleSave)}
           </Accordion.Content>
         )}
       </Accordion.Item>

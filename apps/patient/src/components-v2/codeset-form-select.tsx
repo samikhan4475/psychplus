@@ -51,8 +51,9 @@ const CodesetFormSelect = ({
             <Select.Trigger
               {...triggerProps}
               variant="soft"
+              radius="full"
               className={cn(
-                'outline outline-1 outline-gray-7',
+                'outline outline-1 outline-gray-7 font-[400] text-gray-12',
                 selectProps.disabled ? 'bg-gray-3 text-gray-11' : 'bg-[white]',
               )}
             />

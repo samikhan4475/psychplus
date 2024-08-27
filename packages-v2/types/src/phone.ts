@@ -2,6 +2,8 @@ export enum PhoneNumberEnum {
   CONTACT = 'Contact',
   HOME = 'Home',
   BUSINESS = 'Business',
+  WORK = 'Work',
+  MOBILE = 'Mobile',
 }
 
 interface PhoneNumber {

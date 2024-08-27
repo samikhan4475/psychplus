@@ -11,7 +11,7 @@ import {
 } from '@psychplus-v2/constants'
 import { CodesetCache } from '@psychplus-v2/types'
 import { zipCodeSchema } from '@psychplus-v2/utils'
-import { Button, Dialog, Flex, Heading, TextFieldInput } from '@radix-ui/themes'
+import { Button, Dialog, Flex, Heading } from '@radix-ui/themes'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { getZipcodeInfo } from '@/actions'
@@ -24,6 +24,7 @@ import {
   FormFieldError,
   FormFieldLabel,
   FormSubmitButton,
+  ZipcodeInput,
 } from '@/components-v2'
 import { APPOINTMENTS_SEARCH_SESSION_KEY } from '@/features/appointments/search/constants'
 import { CodesetStoreProvider } from '@/providers'
@@ -149,13 +150,13 @@ const ScheduleAppointmentButton = ({
                 }}
               />
               <Flex justify="between" gap="2">
-                <FormFieldContainer className="w-1/3">
+                <FormFieldContainer className="w-1/3 gap-[3px]">
                   <FormFieldLabel required>Enter ZIP Code</FormFieldLabel>
-                  <TextFieldInput
-                    size="3"
-                    radius="full"
+                  <ZipcodeInput
+                    className="font-[400] h-[42px]"
                     {...form.register('zipCode')}
-                    placeholder="Zip Code"
+                    placeholder="Enter ZIP"
+                    value={form.watch('zipCode')}
                   />
                   <FormFieldError name="zipCode" />
                 </FormFieldContainer>

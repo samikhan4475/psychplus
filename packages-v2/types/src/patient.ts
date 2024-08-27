@@ -7,6 +7,7 @@ import { DriversLicense } from './drivers-lisence'
 import type { EmergencyContact, PatientGuardian } from './guardian'
 import type { Metadata } from './metadata'
 import type { LegalName } from './name'
+import { PhoneNumber } from './phone'
 
 interface PatientProfile {
   id: number
@@ -40,5 +41,59 @@ interface PatientProfile {
   languageAbility?: string
   languageProficiency?: string
 }
+interface Address {
+  type: 'Home' | 'Work';
+  street1: string;
+  postalCode: string;
+}
 
-export type { PatientProfile }
+interface RelationshipContactDetails {
+  email: string;
+  phoneNumbers: PhoneNumber[];
+  addresses: Address[];
+}
+
+interface RelationshipData {
+  id?: string;
+  patientId: number;
+  name: LegalName;
+  isEmergencyContact: boolean;
+  isGuardian: boolean;
+  guardianRelationshipCode: string;
+  contactDetails: RelationshipContactDetails;
+  isAllowedToReleaseInformation: boolean
+}
+
+interface RelationshipDefaultValuesProps {
+  id: string | undefined;
+  patientId?: number;
+  firstName: string;
+  lastName: string;
+  middleName?: string;
+  relationship: string;
+  address: string;
+  postalCode: string;
+  email: string;
+  phoneNumber: string;
+  homePhone?: string;
+  isEmergencyContact: boolean;
+  isAllowedToReleaseInformation: boolean;
+  isGuardian: boolean;
+}
+
+type RelationshipTableHeader =
+  | 'First Name'
+  | 'Middle Name'
+  | 'Last Name'
+  | 'Relationship'
+  | 'Address'
+  | 'Postal Code'
+  | 'Email'
+  | 'Home Phone'
+  | 'Cell Phone'
+  | 'Emergency Phone'
+  | 'RRI'
+  | 'Guardian'
+  | 'Action';
+
+export type { PatientProfile, RelationshipData, RelationshipTableHeader, RelationshipDefaultValuesProps}

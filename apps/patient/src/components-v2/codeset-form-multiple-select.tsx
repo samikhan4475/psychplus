@@ -96,20 +96,24 @@ const CodesetFormMultipleSelect = ({
                     {items.find((code) => code.value === item)?.display}
 
                     <Cross2Icon
-                      onClick={() => {
-                        setSelectedItems(
-                          selectedItems.filter(
-                            (selectedItem) => selectedItem !== item,
-                          ),
-                        )
+                      onClick={(e) => {
+                        if (!selectProps.disabled) {
+                          setSelectedItems(
+                            selectedItems.filter(
+                              (selectedItem) => selectedItem !== item,
+                            ),
+                          )
 
-                        field.onChange(
-                          selectedItems.filter(
-                            (selectedItem) => selectedItem !== item,
-                          ),
-                        )
+                          field.onChange(
+                            selectedItems.filter(
+                              (selectedItem) => selectedItem !== item,
+                            ),
+                          )
+                        }
                       }}
-                      className="cursor-pointer"
+                      className={cn('cursor-pointer', {
+                        'cursor-not-allowed': selectProps.disabled,
+                      })}
                     />
                   </Flex>
                 ))}

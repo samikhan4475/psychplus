@@ -1,7 +1,6 @@
 'use client'
 
 import * as React from 'react'
-import { cn } from '@psychplus-v2/utils'
 import { TextField } from '@radix-ui/themes'
 import { Controller, useFormContext } from 'react-hook-form'
 import { PatternFormat } from 'react-number-format'
@@ -12,6 +11,7 @@ interface PhoneNumberInputProps {
   autoFocus?: boolean
   editable?: boolean
   placeholder?: string
+  classNames?: string
 }
 
 const PhoneNumberInput = ({
@@ -20,6 +20,7 @@ const PhoneNumberInput = ({
   size = '3',
   editable,
   placeholder = 'Phone number',
+  classNames,
 }: PhoneNumberInputProps) => {
   const form = useFormContext()
 
@@ -46,6 +47,7 @@ const PhoneNumberInput = ({
             onBlur={field.onBlur}
             customInput={TextField.Input}
             readOnly={editable}
+            className={classNames}
           />
         )
       }}

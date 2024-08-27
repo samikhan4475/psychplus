@@ -35,6 +35,7 @@ interface DataTableProps<TData, TValue> {
   isRowPan?: boolean
   isPreferredPartnerTable?: boolean
   isTreatmentPlan?: boolean
+  noResultsComponent?: React.ComponentType;
 }
 
 const DataTable = <TData, TValue>({
@@ -53,6 +54,7 @@ const DataTable = <TData, TValue>({
   isPreferredPartnerTable = false,
   isRowPan = false,
   isTreatmentPlan = false,
+  noResultsComponent: NoResultsComponent,
 }: DataTableProps<TData, TValue>) => {
   const [sorting, setSorting] = useState<SortingState>([])
   const [pagination, setPagination] = useState<PaginationState>({
@@ -184,7 +186,7 @@ const DataTable = <TData, TValue>({
               <Table.Row>
                 <Table.Cell colSpan={columns.length}>
                   <Flex align="center" justify="center">
-                    No results.
+                    {NoResultsComponent && <NoResultsComponent />} 
                   </Flex>
                 </Table.Cell>
               </Table.Row>
