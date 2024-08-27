@@ -39,6 +39,8 @@ const STRIPE_INPUT_STYLE = {
   },
 }
 
+const ALLOWED_CARDS = ['amex', 'discover', 'mastercard', 'visa']
+
 const schema = z.object({
   fullname: z.string().min(1, 'Required'),
   address: z
@@ -134,6 +136,13 @@ const CreditCardForm = ({
     } = stripeResult
 
     let cardBrand = card.brand
+
+    if (!ALLOWED_CARDS.includes(card.brand)) {
+      return {
+        state: 'error',
+        error: 'This card type is not allowed.',
+      } as ActionErrorState
+    }
 
     cardBrand = cardBrand === 'amex' ? 'AmericanExpress' : cardBrand
 
