@@ -130,6 +130,11 @@ const navMenuItems: MenuItem[] = [
     label: 'Clinic',
     href: '/widgets/clinic',
   },
+
+  {
+    label: 'Edit Managment Service',
+    href: '/widgets/edit-management-service',
+  },
   {
     label: 'Management - Users',
     href: '/widgets/management-users',
