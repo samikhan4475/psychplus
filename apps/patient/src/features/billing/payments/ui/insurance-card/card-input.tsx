@@ -2,8 +2,9 @@ import { ChangeEvent, useRef, useState } from 'react'
 import Image from 'next/image'
 import { Box, Flex, IconButton, Text } from '@radix-ui/themes'
 import { XIcon } from 'lucide-react'
-import { EditCameraIcon, ViewPictureIcon, ImagePlaceholderIcon } from '@/components'
+import { EditCameraIcon, ImagePlaceholderIcon } from '@/components'
 import { cn } from '@psychplus-v2/utils'
+import { CardImgViewDialog } from './card-img-view-dialog'
 
 interface CardInputProps {
   savedImg?: string
@@ -38,10 +39,6 @@ const CardInput = ({ savedImg, onImageChanged, label }: CardInputProps) => {
 
   if (!imageSrc) {
     imageSrc = savedImg
-  }
-
-  const handleZoomImg = () => {
-    setImgView(true)
   }
 
   const handleViewImage = () => {
@@ -104,13 +101,10 @@ const CardInput = ({ savedImg, onImageChanged, label }: CardInputProps) => {
         />
       </Flex>
       <Flex gap="3" align="center" className="pt-2">
-        {
-          savedImg  || hasPreviewImage ? (
-            <Box onClick={handleZoomImg}>
-              <ViewPictureIcon  />
-            </Box>
-          ) : null
-        }
+       
+        {(savedImg || hasPreviewImage) && (
+          <CardImgViewDialog imageSrc={imageSrc} />
+        )}
         
         <Box onClick={handleImageInput}>
           <EditCameraIcon />
