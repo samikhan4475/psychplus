@@ -4,10 +4,12 @@ import React from 'react'
 import { Box, Flex, Grid, RadioGroup, Text } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
 import { FormSelect, FormTextInput } from '@psychplus/form'
-import AddressComponent from './address-field'
+import { AddressComponent } from '@/components/address-fields'
+import { useUsStatesOptions } from '../hooks'
 
 const LocationInfo = () => {
   const form = useFormContext()
+  const usStates = useUsStatesOptions()
   const dummyOptions = [
     { value: 'active', label: 'Active' },
     { value: 'inactive', label: 'Inactive' },
@@ -142,7 +144,13 @@ const LocationInfo = () => {
             Address
           </Text>
         </Box>
-        <AddressComponent title="Primary Address" />
+        <Flex direction={'column'} gap={'3'} className="w-[600px] px-2 py-3 ">
+          <AddressComponent
+            title="Primary Address"
+            usStates={usStates}
+            columnsPerRow={'1'}
+          />
+        </Flex>
       </Flex>
     </>
   )

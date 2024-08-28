@@ -1,7 +1,7 @@
 import { forwardRef } from 'react'
 import { Box, Text, TextField } from '@radix-ui/themes'
 
-const TextFieldLabel = forwardRef<
+const AddressTextField = forwardRef<
   HTMLInputElement,
   {
     label: string
@@ -53,5 +53,5 @@ const TextFieldLabel = forwardRef<
     </Box>
   ),
 )
-TextFieldLabel.displayName = 'TextFieldLabel'
-export default TextFieldLabel
+AddressTextField.displayName = 'AddressTextField'
+export default AddressTextField

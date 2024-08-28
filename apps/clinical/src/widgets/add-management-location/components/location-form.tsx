@@ -11,7 +11,9 @@ import {
 } from '@psychplus/form'
 import { type Location } from '@psychplus/management-locations/types'
 import { FormContainer } from '@psychplus/ui/form/form-container'
-import AddressComponent from './address-fields'
+import { AddressComponent } from '@/components/address-fields'
+import { useUsStatesOptions } from '../hooks'
+
 
 interface AddManagementLocationProps {
   data?: Location
@@ -59,6 +61,7 @@ const LocationForm = ({ data }: AddManagementLocationProps) => {
     defaultValues: data ?? initialValues,
   })
 
+  const usStates = useUsStatesOptions()
   const onSubmit: SubmitHandler<SchemaType> = (data) => {
     console.log(data)
   }
@@ -186,7 +189,7 @@ const LocationForm = ({ data }: AddManagementLocationProps) => {
         Primary Address
       </Text>
 
-      <AddressComponent />
+      <AddressComponent usStates={usStates} />
 
       <Flex justify="end" mt="5">
         <FormSubmitButton className="bg-[#151B4A]" size={'2'}>

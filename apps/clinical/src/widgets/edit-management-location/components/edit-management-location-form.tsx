@@ -22,7 +22,7 @@ const schema = z.object({
   testLocation: validate.requiredString,
   id: validate.requiredString,
   address1: validate.requiredString,
-  address2: validate.requiredString,
+  address2: validate.optionalString,
   locationType: validate.requiredString,
   zip: validate.requiredString,
   city: validate.requiredString,

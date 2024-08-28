@@ -301,4 +301,8 @@ const isCompleteAddress = (address?: AddressForm) =>
   address?.postalCode &&
   address?.country
 
-export { PlacesAutocomplete }
+export {
+  PlacesAutocomplete,
+  getInitialAutocompleteValue,
+  getAddressFromPlacesResult,
+}

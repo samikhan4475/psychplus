@@ -54,6 +54,11 @@ const navMenuItems: MenuItem[] = [
     label: 'Add Relationship',
     href: '/widgets/add-relationship',
   },
+
+  {
+    label: 'Add Management Service',
+    href: '/widgets/add-management-service',
+  },
   {
     label: 'Edit Management Location',
     href: '/widgets/edit-management-location',

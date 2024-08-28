@@ -2,27 +2,46 @@ import { Grid, Text } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
 import { FormSelect } from '@psychplus/form'
 import { useGooglePlacesContext } from '@/providers'
-import { useUsStatesOptions } from '../hooks'
-import { PlacesAutocomplete } from './places-autocomplete/places-autocomplete'
-import TextFieldLabel from './text-field'
+import AddressTextField from './address-text-field'
+import { GooglePlacesAutocomplete } from './autocomplete'
 
+interface UsState {
+  label: string
+  value: string
+}
+
+interface AddressProps {
+  title?: string
+  isEdit?: boolean
+  usStates: UsState[]
+  columnsPerRow?: string
+}
 const AddressComponent = ({
   title,
   isEdit,
-}: {
-  title?: string
-  isEdit?: boolean
-}) => {
+  usStates,
+  columnsPerRow = '2',
+}: AddressProps) => {
   const { loaded } = useGooglePlacesContext()
-  const usStates = useUsStatesOptions()
+
   const form = useFormContext()
   return (
     <>
-      {title && <Text size="1">{title}</Text>}
+      {title && (
+        <Text weight={'medium'} className="text-[14px] text-[#1C2024]">
+          {title}
+        </Text>
+      )}
 
-      <Grid columns="2" gap="3">
-        {loaded && <PlacesAutocomplete required name={'address1'} />}
-        <TextFieldLabel
+      <Grid columns={columnsPerRow} gap="3">
+        {loaded && (
+          <GooglePlacesAutocomplete
+            required
+            name={'address1'}
+            placeholder={'Enter Address 1'}
+          />
+        )}
+        <AddressTextField
           label="Address 2"
           type="text"
           disabled={isEdit}
@@ -37,7 +56,7 @@ const AddressComponent = ({
         />
       </Grid>
       <Grid columns="3" gap="3">
-        <TextFieldLabel
+        <AddressTextField
           label="City"
           type="text"
           disabled={isEdit}
@@ -57,7 +76,7 @@ const AddressComponent = ({
           {...form.register('state')}
           required={true}
         />
-        <TextFieldLabel
+        <AddressTextField
           type="text"
           label="Zip"
           disabled={isEdit}
@@ -74,4 +93,4 @@ const AddressComponent = ({
   )
 }
 
-export default AddressComponent
+export { AddressComponent }
