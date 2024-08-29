@@ -27,11 +27,16 @@ import { checkCareTeamExists } from '@/features/appointments/search/utils'
 import { rescheduleAppointment } from '@/features/appointments/upcoming/actions'
 import { NewProviderSelectedDialog } from '../new-provider-selected-dialog'
 import { PrimaryProviderAppointedDialog } from '../primary-provider-appointed-dialog'
-
+const errorMessage = "You must agree to the above policies"
 const schema = z.object({
-  userAgreed: z.coerce.boolean().refine((value) => value === true, {
-    message: 'You must agree to the above policies',
-  }),
+  userAgreed: z.coerce.boolean().refine(
+    (value) => {
+      return value
+    },
+    {
+      message: errorMessage,
+    },
+  ),
 })
 
 type SchemaType = z.infer<typeof schema>
@@ -43,10 +48,11 @@ const BookAppointmentButton = ({
   userConsents,
   setBookingSuccessful,
   paymentMethod,
+  creditCards
 }: BookSlotButtonProps) => {
   const { specialist, clinic, slot, appointmentType, providerType } = bookedSlot
 
-  const [error, setError] = useState<string | undefined>()
+  const [error, setError] = useState<string>('')
   const [loading, setLoading] = useState(false)
 
   const router = useRouter()
@@ -108,16 +114,12 @@ const BookAppointmentButton = ({
   }
 
   const bookSlot = async () => {
-    setError(undefined)
-    setLoading(true)
-    const formValues = form.getValues()
-
-    if (!formValues.userAgreed) {
-      setError('You must agree to the above policies.')
-      setLoading(false)
+    if (!form.getValues().userAgreed) {
+      setError(errorMessage)
       return
     }
 
+    setLoading(true)
     if (appointmentId) {
       const result = await rescheduleAppointment({
         appointmentId: Number(appointmentId),
@@ -132,7 +134,7 @@ const BookAppointmentButton = ({
       })
 
       if (result.state === 'error') {
-        setError(result.error)
+        setError(result.error as string)
         setLoading(false)
         return
       }
@@ -149,7 +151,7 @@ const BookAppointmentButton = ({
       })
 
       if (result.state === 'error') {
-        setError(result.error)
+        setError(result.error as string)
         setLoading(false)
         return
       }
@@ -159,7 +161,7 @@ const BookAppointmentButton = ({
       const result = await addPolicyConsent({ type: 'PolicyB' })
 
       if (result.state === 'error') {
-        setError(result.error)
+        setError(result.error as string)
         setLoading(false)
         return
       }
@@ -183,6 +185,15 @@ const BookAppointmentButton = ({
   const handleConsentView = (type: DocumentType) => {
     setShowConsentView({ visible: true, type })
   }
+  const userAgreedValue = (checked: boolean) => {
+    form.setValue('userAgreed', checked)
+    if (!checked) {
+      setError('You must agree to the above policies')
+    } else {
+      setError('')
+    }
+    if (form.formState.isSubmitted) form.trigger('userAgreed')
+  }
 
   return (
     <>
@@ -201,17 +212,12 @@ const BookAppointmentButton = ({
               <Checkbox
                 id="terms-and-conditions-checkbox"
                 size="3"
-                onCheckedChange={(checked: boolean) => {
-                  form.setValue('userAgreed', checked)
-                  if (form.formState.isSubmitted) form.trigger('userAgreed')
-                }}
+                disabled={!creditCards.length}
+                onCheckedChange={(checked: boolean) => userAgreedValue(checked)}
                 {...form.register('userAgreed')}
                 highContrast
               />
-              <FormFieldLabel
-                className="text-[14px] font-[400]"
-                id="terms-and-conditions-checkbox"
-              >
+              <FormFieldLabel className="text-[14px] font-[400]">
                 I agree to electronically sign the{' '}
                 <Button
                   type="button"
@@ -263,15 +269,15 @@ const BookAppointmentButton = ({
           >
             Back
           </Button>
+
           <FormSubmitButton
             radius="full"
             size="3"
             highContrast
-            disabled={loading}
+            disabled={loading || Boolean(error) || !creditCards.length}
             className={`bg-[#151B4A] ${loading ? 'bg-gray-3' : ''}`}
-            onClick={() => {
-              console.log(form.formState.errors)
-            }}
+            style={error  || !creditCards.length ?  { opacity: 0.6, color: '#fff' }:{}}
+            
           >
             <Text weight="medium">Book Appointment</Text>
           </FormSubmitButton>

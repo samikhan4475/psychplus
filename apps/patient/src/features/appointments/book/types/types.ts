@@ -46,6 +46,7 @@ interface BookSlotButtonProps {
   userConsents: Consent[]
   setBookingSuccessful: (value: boolean) => void
   paymentMethod: PaymentType
+  creditCards: CreditCard[]
 }
 
 interface ConfirmedAppointmentProps {
