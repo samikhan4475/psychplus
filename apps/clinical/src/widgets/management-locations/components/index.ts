@@ -1,1 +1,1 @@
-export * from './location-tab'
+export * from './location-view'

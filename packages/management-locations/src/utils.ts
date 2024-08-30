@@ -24,4 +24,6 @@ const handleMockRequest = (): Promise<Location[]> => {
   })
 }
 
-export { handleMockRequest }
+const getLocations = (): Promise<Location[]> => handleMockRequest()
+
+export { getLocations }

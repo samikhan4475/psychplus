@@ -1,5 +1,5 @@
 import { unstable_noStore as noStore } from 'next/cache'
-import { getServices } from '@psychplus/management-services/api.server'
+import { getServices } from '@psychplus/management-services/utils'
 import { ManagementServicesListWidgetClient } from './management-services-list-widget.client'
 import { Preloader } from './preloader'
 import { useStore } from './store'

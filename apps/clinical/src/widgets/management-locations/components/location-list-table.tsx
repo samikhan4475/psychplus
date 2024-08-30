@@ -1,3 +1,5 @@
+'use client'
+
 import { Box, Flex } from '@radix-ui/themes'
 import { ColumnDef, type Table } from '@tanstack/react-table'
 import { type Location } from '@psychplus/management-locations/types'

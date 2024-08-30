@@ -1,10 +1,7 @@
 import { handleRequest } from '@psychplus/utils/api'
 import { API_URL } from '@psychplus/utils/constants'
 import { createHeaders } from '@psychplus/utils/server'
-import { AuthorityCodeSets, type Location } from './types'
-import { handleMockRequest } from './utils'
-
-const getLocations = (): Promise<Location[]> => handleMockRequest()
+import { AuthorityCodeSets } from './types'
 
 const getUsStatesCodeSets = (): Promise<AuthorityCodeSets> => {
   return handleRequest(
@@ -18,4 +15,4 @@ const getUsStatesCodeSets = (): Promise<AuthorityCodeSets> => {
   )
 }
 
-export { getLocations, getUsStatesCodeSets }
+export { getUsStatesCodeSets }

@@ -1,3 +1,5 @@
+'use client'
+
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons'
 import { Box, Button, Flex, Text, TextField } from '@radix-ui/themes'
 import { Select } from '@psychplus/ui/select'

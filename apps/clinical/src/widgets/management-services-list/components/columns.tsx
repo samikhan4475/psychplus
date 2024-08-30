@@ -1,3 +1,5 @@
+'use client'
+
 import { type ColumnDef } from '@tanstack/react-table'
 import type { Service } from '@psychplus/management-services'
 import { DataTableColumnHeader } from '@psychplus/ui/data-table'

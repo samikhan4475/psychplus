@@ -1,5 +1,5 @@
 import { unstable_noStore as noStore } from 'next/cache'
-import { getLocations } from '@psychplus/management-locations/api.server'
+import { getLocations } from '@psychplus/management-locations/utils'
 import { ManagementLocationsWidgetClient } from './management-locations-widget.client'
 import { Preloader } from './preloader'
 import { useStore } from './store'

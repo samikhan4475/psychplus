@@ -1,3 +1,5 @@
+'use client'
+
 import { Box, Heading } from '@radix-ui/themes'
 import { ColumnDef } from '@tanstack/react-table'
 import { DataTable } from '@psychplus/ui/data-table/data-table'

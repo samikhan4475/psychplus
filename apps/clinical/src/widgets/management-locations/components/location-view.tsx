@@ -1,3 +1,5 @@
+'use client'
+
 import React from 'react'
 import { Button, Flex, Heading } from '@radix-ui/themes'
 import { Plus } from 'lucide-react'
@@ -6,7 +8,7 @@ import { ADD_MANAGEMENT_LOCATIONS_WIDGET } from '@psychplus/widgets'
 import { EventType } from '@psychplus/widgets/events'
 import { LocationListTable } from './location-list-table'
 
-const LocationTab = () => {
+const LocationView = () => {
   const { publish } = usePubsub()
   return (
     <>
@@ -33,4 +35,4 @@ const LocationTab = () => {
   )
 }
 
-export { LocationTab }
+export { LocationView }

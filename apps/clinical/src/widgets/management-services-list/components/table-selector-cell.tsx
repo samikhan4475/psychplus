@@ -1,9 +1,11 @@
+'use client'
+
 import { useState } from 'react'
 import { Box, Flex } from '@radix-ui/themes'
 import { History } from 'lucide-react'
+import type { Service } from '@psychplus/management-services'
 import { type PropsWithRow } from '@psychplus/ui/data-table'
 import { Select } from '@psychplus/ui/select'
-import type { Service } from '@psychplus/management-services'
 
 const TableCellSelector = ({
   row: { original: data },

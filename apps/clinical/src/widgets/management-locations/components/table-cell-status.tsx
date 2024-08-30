@@ -1,3 +1,5 @@
+'use client'
+
 import React from 'react'
 import { Box, Flex, HoverCard } from '@radix-ui/themes'
 import { History } from 'lucide-react'
