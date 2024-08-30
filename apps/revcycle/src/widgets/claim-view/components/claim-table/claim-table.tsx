@@ -12,6 +12,7 @@ import { useStore } from '../../store'
 import { Claim } from '../../types'
 import { RowActionDropdown } from './data-table-row.action'
 import { FilterForm } from './filter-form'
+import { TableCellClaimIdText } from './table-cell-claim-id-text'
 import { TableCellLongText } from './table-cell-long-text'
 
 const columns: ColumnDef<Claim>[] = [
@@ -26,9 +27,7 @@ const columns: ColumnDef<Claim>[] = [
         className="text-[#000]"
       />
     ),
-    cell: ({ row }) => (
-      <TableCellLongText maxWidth={100} text={row.original.claimNumber} />
-    ),
+    cell: ({ row }) => <TableCellClaimIdText maxWidth={100} row={row} />,
     enableHiding: true,
   },
   {

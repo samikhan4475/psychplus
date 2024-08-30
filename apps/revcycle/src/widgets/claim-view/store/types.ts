@@ -1,3 +1,4 @@
+import { ClaimServiceLine } from '../components/claim-form/types'
 import { Claim } from '../types'
 
 interface Filters {
@@ -33,10 +34,34 @@ interface InsurancePayerOption {
   value: string
   label: string
 }
+interface PhoneNumber {
+  type: string
+  number: string
+}
+interface Contact {
+  phoneNumbers: PhoneNumber[]
+  addresses: Address[]
+}
 
+interface Address {
+  type: 'Home' | 'Mailing'
+  street1?: string
+  street2?: string
+  city?: string
+  state?: string
+  country?: string
+  postalCode?: string
+  geoCoordinates?: {
+    longitude?: number
+    latitude?: number
+    altitude?: number
+  }
+}
 interface LocationOption {
   value: string
   label: string
+  npi?: string
+  contact?: Contact
 }
 
 interface CodeSetsState {
@@ -48,6 +73,40 @@ interface CodeSetsState {
   setDateTypes: (value: DateTypeOption[]) => void
 }
 
+interface Tab {
+  id: string
+  label: string
+  claimId?: string
+  claimNumber?: string
+}
+
+interface TabsStore {
+  tabs: Tab[]
+  activeTabId: string
+  addTab: (tab: Tab) => void
+  setActiveTab: (tabId: string) => void
+  selectedClaimId: string
+  selectedClaimBilledAmt: number
+  deletedClaimServiceLines: ClaimServiceLine[];
+  setDeletedClaimServiceLines: (newLine: ClaimServiceLine) => void;
+  setSelectedClaim: (selectedClaimId: string) => void
+  setSelectedClaimBilledAmt: (selectedClaimBilledAmt: number) => void
+  removeTab: (tabId: string) => void
+}
+
+// Initial tabs for default setup
+export const initialTabs: Tab[] = [
+  { id: 'claimstable', label: 'Claims' },
+  { id: 'submission', label: 'Submission' },
+  { id: 'ins-payment', label: 'Ins Payment' },
+  { id: 'patient-payment', label: 'Patient Payment' },
+  { id: 'patient-statement', label: 'Patient Statement' },
+]
+
+interface MetaDataCodeSet {
+  code: string
+  display: string
+}
 interface ErrorMessage {
   id: string
   claimId: string
@@ -79,6 +138,9 @@ export type {
   ClaimListState,
   Filters,
   Claim,
+  Tab,
+  TabsStore,
+  MetaDataCodeSet,
   CodeSetsState,
   ClaimSubmissionState,
 }

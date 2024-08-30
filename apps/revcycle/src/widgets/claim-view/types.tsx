@@ -140,6 +140,16 @@ interface Claim {
   claimDiagnosis: ClaimDiagnosis[]
 }
 
+interface PhoneNumber {
+  type: string
+  number: string
+}
+
+interface Contact {
+  phoneNumbers: PhoneNumber[]
+  addresses: Address[]
+}
+
 interface Location {
   id: string
   metadata: MetaData
@@ -147,6 +157,9 @@ interface Location {
   name: string
   group: string
   description: string
+  npi: string
+  contact: Contact
+  timeZoneId: string
   distanceInMiles: number
 }
 
@@ -229,7 +242,136 @@ interface PatientOption {
   id: string
   fullName: string
 }
+interface Name {
+  firstName: string
+  lastName: string
+  middleName?: string
+  honors?: string
+  preferredName?: string
+  title?: string
+}
+interface PhoneNumber {
+  type: string
+  number: string
+}
+interface Address {
+  type: 'Home' | 'Mailing'
+  street1?: string
+  street2?: string
+  city?: string
+  state?: string
+  country?: string
+  postalCode?: string
+  geoCoordinates?: {
+    longitude?: number
+    latitude?: number
+    altitude?: number
+  }
+}
 
+interface ContactInfo {
+  email: string
+  phoneNumbers: PhoneNumber[]
+  addresses?: Address[]
+}
+interface Metadata {
+  createdOn: string
+  updatedOn: string
+  updatedBy?: number
+  updatedByFullName?: string
+}
+
+interface Staff {
+  id: number
+  isTest: boolean
+  legalName: Name
+  staffRoleCode: string
+  contactInfo: ContactInfo
+  metadata: Metadata
+  virtualRoomLink?: string
+}
+
+interface StaffDataCodeSet {
+  label: string
+  value: string
+}
+
+interface ICDCode {
+  code: string
+  displayName: string
+}
+
+interface ICDResponse {
+  codeSystemName: string
+  displayName: string
+  version: string
+  oid: string
+  codes: ICDCode[]
+}
+
+interface ICD10Code {
+  id: number
+  code: string
+  description: string
+  isFavorite: boolean
+  isActive: boolean
+}
+
+// Interface for the API response
+interface ICD10Response {
+  // Add any other fields if they exist in the response
+  codes: ICDCode[]
+}
+interface CPTCode {
+  code: string
+  displayName: string
+  groupingCode: string
+}
+
+interface CPTResponse {
+  codeSystemName: string
+  displayName: string
+  version: string
+  oid: string
+  codes: CPTCode[]
+}
+
+interface ModifierCode {
+  code: string
+  displayName: string
+}
+
+interface ModifiersResponse {
+  codes: ModifierCode[]
+}
+
+interface Code {
+  code: string
+  display: string
+}
+
+interface CodeSet {
+  code: string
+  display: string
+  isReadOnly: boolean
+  source: string
+  codes: Code[]
+}
+
+interface StatesCode {
+  code: string
+  displayName: string
+}
+interface StateCodes {
+  label: string
+  value: string
+}
+
+interface USAStates {
+  codeSystemName: string
+  displayName: string
+  codes: StatesCode[]
+}
 export type {
   Claim,
   InsurancePayer,
@@ -241,4 +383,19 @@ export type {
   ErrorMessage,
   Patient,
   PatientOption,
+  Staff,
+  StaffDataCodeSet,
+  ICDResponse,
+  ICDCode,
+  CPTCode,
+  CPTResponse,
+  ModifiersResponse,
+  ModifierCode,
+  CodeSet,
+  Code,
+  StatesCode,
+  USAStates,
+  StateCodes,
+  ICD10Code,
+  ICD10Response
 }

@@ -1,5 +1,6 @@
 import { Text } from '@radix-ui/themes'
 import { TableCellEmpty } from 'node_modules/@psychplus/ui/src/table-cell'
+import { cn } from '@psychplus/ui/cn'
 
 interface TableCellLongTextProps {
   text?: string
@@ -13,7 +14,9 @@ const TableCellLongText = ({ text, maxWidth }: TableCellLongTextProps) => {
   return (
     <Text
       size="1"
-      className={`block overflow-hidden text-ellipsis whitespace-nowrap max-w-${maxWidth}`}
+      className={cn('block overflow-hidden text-ellipsis whitespace-nowrap', {
+        maxWidth: `${maxWidth}px`,
+      })}
     >
       {text}
     </Text>

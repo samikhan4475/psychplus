@@ -1,71 +1,107 @@
 'use client'
 
-import { Cross1Icon, MagnifyingGlassIcon } from '@radix-ui/react-icons'
-import { Box, Button, Flex, Text } from '@radix-ui/themes'
+import { Cross1Icon } from '@radix-ui/react-icons'
+import { Box, Flex, Text } from '@radix-ui/themes'
 import { UseFormReturn } from 'react-hook-form'
-import { FormTextInput } from '@psychplus/form'
+import { ICD10Code } from '../../types'
 import { SchemaType } from './add-claim-form'
+import { IcdSearchDropdown } from './icd-search-dropdown'
 
 const Diagnosis = ({ form }: { form: UseFormReturn<SchemaType> }) => {
+  const { setValue, getValues, watch } = form
+  const claimDiagnoses = watch('claimDiagnosis') || []
+
+  const handleSelectedItem = (selectedItem: ICD10Code) => {
+    const currentDiagnoses = getValues('claimDiagnosis') || []
+    const claimId = getValues('id')
+    const exists = currentDiagnoses.some(
+      (diagnosis) => diagnosis.diagnosisCode === selectedItem.code,
+    )
+    if (exists) {
+      return
+    }
+    const newDiagnosis = {
+      claimId: claimId ?? '',
+      diagnosisCode: selectedItem.code,
+      diagnosisDescription: selectedItem.description,
+      deletedReason: '',
+      sequenceNo: currentDiagnoses.length + 1,
+      recordStatus: 'Active',
+    }
+    const updatedDiagnoses = [...currentDiagnoses, newDiagnosis]
+    const claimServiceLines = form.getValues('claimServiceLines')
+    claimServiceLines.map((charge) => {
+      if (newDiagnosis.sequenceNo === 1) {
+        charge.diagnosisPointer1 = newDiagnosis.sequenceNo.toString()
+      }
+      if (newDiagnosis.sequenceNo === 2) {
+        charge.diagnosisPointer2 = newDiagnosis.sequenceNo.toString()
+      }
+      if (newDiagnosis.sequenceNo === 3) {
+        charge.diagnosisPointer3 = newDiagnosis.sequenceNo.toString()
+      }
+      if (newDiagnosis.sequenceNo === 4) {
+        charge.diagnosisPointer4 = newDiagnosis.sequenceNo.toString()
+      }
+      return charge
+    })
+    form.setValue(`claimServiceLines`, claimServiceLines)
+    setValue('claimDiagnosis', updatedDiagnoses)
+  }
+
+  const handleRemoveDiagnosis = (
+    id: string | undefined,
+    diagnosisCode: string | undefined,
+  ) => {
+    const currentDiagnoses = getValues('claimDiagnosis') || []
+    let updatedDiagnoses = [...currentDiagnoses]
+
+    if (id) {
+      // updatedDiagnoses = currentDiagnoses.filter(
+      //   (diagnosis) => diagnosis.id !== id,
+      // )
+      updatedDiagnoses = updatedDiagnoses.map((diagnosis) =>
+        diagnosis.id === id
+          ? { ...diagnosis, recordStatus: 'Deleted' }
+          : diagnosis,
+      )
+    } else if (diagnosisCode) {
+      updatedDiagnoses = currentDiagnoses.filter(
+        (diagnosis) => diagnosis.diagnosisCode !== diagnosisCode,
+      )
+    } else {
+      updatedDiagnoses = currentDiagnoses
+    }
+    setValue('claimDiagnosis', updatedDiagnoses)
+  }
+
   return (
     <>
       <Flex align="center" gap="2">
-        <FormTextInput
-          type="text"
-          label=""
-          className="w-80"
-          placeholder="ICD-10 Codes"
-          data-testid="add-fee-schedule-name-input"
-          {...form.register('name')}
+        <IcdSearchDropdown
+          placeholder="Search ICD-10 Codes"
+          onSelectItem={handleSelectedItem}
         />
-        <Box>
-          <Button className="ml-2 h-[36px] bg-[#1b4594]">
-            <MagnifyingGlassIcon />
-          </Button>
-        </Box>
       </Flex>
 
       <Flex align="center" justify="start" gap="2" mt="2">
-        <Box className="rounded-[20px] border-2 border-[#acddfa] bg-[#bee4fa1a] px-2">
-          <Flex align="center" justify="center" gap="2">
-            <Text>1. F90.9 </Text>
-            <Cross1Icon />
-          </Flex>
-        </Box>
-
-        <Box className="rounded-[20px] border-2 border-[#acddfa] bg-[#bee4fa1a] px-2">
-          <Flex align="center" justify="center" gap="2">
-            <Text>2. F90.9 </Text>
-            <Cross1Icon />
-          </Flex>
-        </Box>
-        <Box className="rounded-[20px] border-2 border-[#acddfa] bg-[#bee4fa1a] px-2">
-          <Flex align="center" justify="center" gap="2">
-            <Text>3. F90.9 </Text>
-            <Cross1Icon />
-          </Flex>
-        </Box>
-
-        <Box className="rounded-[20px] border-2 border-[#acddfa] bg-[#bee4fa1a] px-2">
-          <Flex align="center" justify="center" gap="2">
-            <Text>4. F90.9 </Text>
-            <Cross1Icon />
-          </Flex>
-        </Box>
-
-        <Box className="rounded-[20px] border-2 border-[#acddfa] bg-[#bee4fa1a] px-2">
-          <Flex align="center" justify="center" gap="2">
-            <Text>5. F90.9 </Text>
-            <Cross1Icon />
-          </Flex>
-        </Box>
-
-        <Box className="rounded-[20px] border-2 border-[#acddfa] bg-[#bee4fa1a] px-2">
-          <Flex align="center" justify="center" gap="2">
-            <Text>6. F90.9 </Text>
-            <Cross1Icon />
-          </Flex>
-        </Box>
+        {claimDiagnoses.filter(item=> item.recordStatus === "Active").map((icdItem) => {
+          return (
+            <Box
+              className="rounded-[20px] border-2 border-[#acddfa] bg-[#bee4fa1a] px-2"
+              key={icdItem.diagnosisCode}
+            >
+              <Flex align="center" justify="center" gap="2">
+                <Text>{icdItem.diagnosisCode}</Text>
+                <Cross1Icon
+                  onClick={() =>
+                    handleRemoveDiagnosis(icdItem.id, icdItem.diagnosisCode)
+                  }
+                />
+              </Flex>
+            </Box>
+          )
+        })}
       </Flex>
     </>
   )

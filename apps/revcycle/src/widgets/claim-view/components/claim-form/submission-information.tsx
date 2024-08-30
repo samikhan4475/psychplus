@@ -34,7 +34,7 @@ const SubmissionInformation = ({
             error={form.formState?.errors?.referralNumber?.message}
             type="text"
             label="Submission Batch #"
-            register={form.register('submission_batch')}
+            register={form.register('submittedDate')}
             disabled={true}
           />
         </Box>
@@ -43,7 +43,7 @@ const SubmissionInformation = ({
             error={form.formState?.errors?.referralNumber?.message}
             type="text"
             label="System Validation Message"
-            register={form.register('system_validation_message')}
+            register={form.register('isSubmitted')}
             disabled={true}
           />
         </Box>

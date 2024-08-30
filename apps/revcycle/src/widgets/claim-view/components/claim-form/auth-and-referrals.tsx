@@ -11,10 +11,10 @@ const AuthAndReferrals = ({ form }: { form: UseFormReturn<SchemaType> }) => {
       <Flex gap="3">
         <Box className="flex-1">
           <TextFieldLabel
-            error={form.formState?.errors?.authNumber?.message}
+            error={form.formState?.errors?.authorizationNumber?.message}
             type="text"
             label="Authorization #"
-            register={form.register('authNumber')}
+            register={form.register('authorizationNumber')}
           />
         </Box>
         <Box className="flex-1">

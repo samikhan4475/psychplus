@@ -8,9 +8,9 @@ import {
   DataTablePageNavigation,
   DataTablePaginationLabel,
 } from '@psychplus/ui/data-table'
-import { RowActionDropdown } from './data-table-row.action'
-import { TableCellLongText } from './table-cell-long-text'
 import { SubmissionResponseType } from './types'
+import { TableCellLongText } from './table-cell-long-text'
+import { RowActionDropdown } from './data-table-row.action'
 
 const columns: ColumnDef<SubmissionResponseType>[] = [
   {

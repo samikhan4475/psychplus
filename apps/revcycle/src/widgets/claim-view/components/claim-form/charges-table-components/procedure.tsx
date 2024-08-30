@@ -1,23 +1,50 @@
-import { MagnifyingGlassIcon } from '@radix-ui/react-icons'
-import { TextField } from '@psychplus/ui/text-field'
-import { Charge } from '../types'
+import React, { useCallback } from 'react'
+import { Box } from '@radix-ui/themes'
+import { UseFormReturn, useWatch } from 'react-hook-form'
+import { CPTCode } from '@/widgets/claim-view/types'
+import { CPTSearchDropdown } from '../cpt-search-dropdown'
+import { ClaimServiceLine } from '../types'
 
 interface TableCellProps {
   row: {
-    original: Charge
+    original: ClaimServiceLine
+    index: number
   }
+  form: UseFormReturn<any> // Adjust this type to match your form's schema
 }
 
-const TableCellProcedure = ({
-  row: { original: chargeRecord },
-}: TableCellProps) => {
+const TableCellProcedure = ({ row, form }: TableCellProps) => {
+  const { setValue } = form
+
+  // Use useWatch to watch the specific field
+  const inputValue = useWatch({
+    control: form.control,
+    name: `claimServiceLines.${row.index}.cptCode`,
+  })
+
+  const handleProcedureChange = useCallback(
+    (selectedItem: CPTCode) => {
+      const { code, displayName } = selectedItem
+      setValue(`claimServiceLines.${row.index}.cptCode`, code, {
+        shouldValidate: true,
+        shouldDirty: true,
+      })
+      setValue(`claimServiceLines.${row.index}.cptDescription`, displayName, {
+        shouldValidate: true,
+        shouldDirty: true,
+      })
+    },
+    [setValue, row.index],
+  )
+
   return (
-    <TextField.Root size="1">
-      <TextField.Root placeholder="Search" />
-      <TextField.Slot>
-        <MagnifyingGlassIcon height="16" width="16" />
-      </TextField.Slot>
-    </TextField.Root>
+    <Box id="cpt-search" className="relative">
+      <CPTSearchDropdown
+      
+        onSelectItem={handleProcedureChange}
+        cptCode={inputValue}
+      />
+    </Box>
   )
 }
 

@@ -1,7 +1,10 @@
 'use client'
 
+import { useMemo } from 'react'
 import { type ColumnDef } from '@tanstack/react-table'
+import { UseFormReturn, useWatch } from 'react-hook-form'
 import { DataTable, DataTableColumnHeader } from '@psychplus/ui/data-table'
+import { SchemaType } from './add-claim-form'
 import {
   TableCellDateOfServiceFrom,
   TableCellDateOfServiceTo,
@@ -12,13 +15,18 @@ import {
   TableCellProcedure,
   TableCellStartTime,
 } from './charges-table-components'
-import { RowActionDropdown } from './data-table-row.action'
-import { TableCellLongText } from './table-cell-long-text'
-import { Charge } from './types'
+import { TableCellUnits } from './charges-table-components/units'
+import { TableCellUnitAmount } from './charges-table-components/units-amount'
+import { ClaimRowActionDropdown } from './claim-data-table-row.action'
+import { ClaimTableCellLongText } from './claim-table-cell-long-text'
+import { ClaimServiceLine } from './types'
 
-const columns: ColumnDef<Charge>[] = [
+const getColumns = (
+  form: UseFormReturn<SchemaType>,
+): ColumnDef<ClaimServiceLine>[] => [
   {
-    id: 'dosFrom',
+    id: 'dateOfServiceFrom',
+    accessorKey: 'dateOfServiceFrom',
     size: 10,
     header: ({ column }) => (
       <DataTableColumnHeader
@@ -27,11 +35,12 @@ const columns: ColumnDef<Charge>[] = [
         className="text-[#000]"
       />
     ),
-    cell: ({ row }) => <TableCellDateOfServiceFrom row={row} />,
+    cell: ({ row }) => <TableCellDateOfServiceFrom row={row} form={form} />,
     enableHiding: true,
   },
   {
-    id: 'dosTo',
+    id: 'dateOfServiceTo',
+    accessorKey: 'dateOfServiceTo',
     size: 50,
     header: ({ column }) => (
       <DataTableColumnHeader
@@ -40,12 +49,14 @@ const columns: ColumnDef<Charge>[] = [
         className="text-[#000]"
       />
     ),
-    cell: ({ row }) => <TableCellDateOfServiceTo row={row} />,
+    cell: ({ row }) => <TableCellDateOfServiceTo row={row} form={form} />,
     enableHiding: true,
   },
   {
-    id: 'procedure',
+    id: 'cptCode',
+    accessorKey: 'cptCode',
     size: 50,
+
     header: ({ column }) => (
       <DataTableColumnHeader
         column={column}
@@ -53,11 +64,12 @@ const columns: ColumnDef<Charge>[] = [
         className="text-[#000]"
       />
     ),
-    cell: ({ row }) => <TableCellProcedure row={row} />,
+    cell: ({ row }) => <TableCellProcedure row={row} form={form} />,
     enableHiding: true,
   },
   {
-    id: 'pos',
+    id: 'placeOfService',
+    accessorKey: 'placeOfService',
     size: 50,
     header: ({ column }) => (
       <DataTableColumnHeader
@@ -66,7 +78,7 @@ const columns: ColumnDef<Charge>[] = [
         className="text-[#000]"
       />
     ),
-    cell: ({ row }) => <TableCellPOS row={row} />,
+    cell: ({ row }) => <TableCellPOS row={row} form={form} />,
     enableHiding: true,
   },
   {
@@ -79,24 +91,25 @@ const columns: ColumnDef<Charge>[] = [
         className="text-[#000]"
       />
     ),
-    cell: ({ row }) => <TableCellModifiers row={row} />,
+    cell: ({ row }) => <TableCellModifiers row={row} form={form} />,
     enableHiding: true,
   },
   {
-    id: 'diagnoses',
+    id: 'diagnosis',
     size: 50,
     header: ({ column }) => (
       <DataTableColumnHeader
         column={column}
-        title="Diagnoses"
+        title="Diagnosis"
         className="text-[#000]"
       />
     ),
-    cell: ({ row }) => <TableCellDiagnoses row={row} />,
+    cell: ({ row }) => <TableCellDiagnoses row={row} form={form} />,
     enableHiding: true,
   },
   {
     id: 'units',
+    accessorKey: 'units',
     size: 50,
     header: ({ column }) => (
       <DataTableColumnHeader
@@ -105,14 +118,13 @@ const columns: ColumnDef<Charge>[] = [
         className="text-[#000]"
       />
     ),
-    cell: ({ row }) => (
-      <TableCellLongText maxWidth={120} text={row.original.units} />
-    ),
+    cell: ({ row }) => <TableCellUnits row={row} form={form} />,
     enableHiding: true,
   },
   {
-    id: 'amount',
-    size: 50,
+    id: 'unitAmount',
+    accessorKey: 'unitAmount',
+    size: 70,
     header: ({ column }) => (
       <DataTableColumnHeader
         column={column}
@@ -120,13 +132,12 @@ const columns: ColumnDef<Charge>[] = [
         className="text-[#000]"
       />
     ),
-    cell: ({ row }) => (
-      <TableCellLongText maxWidth={120} text={row.original.amount} />
-    ),
+    cell: ({ row }) => <TableCellUnitAmount row={row} form={form} />,
     enableHiding: true,
   },
   {
     id: 'totalAmount',
+    accessorKey: 'totalAmount',
     size: 50,
     header: ({ column }) => (
       <DataTableColumnHeader
@@ -135,13 +146,12 @@ const columns: ColumnDef<Charge>[] = [
         className="text-[#000]"
       />
     ),
-    cell: ({ row }) => (
-      <TableCellLongText maxWidth={120} text={row.original.total_amount} />
-    ),
+    cell: ({ row }) => <ClaimTableCellLongText maxWidth={120} row={row} />,
     enableHiding: true,
   },
   {
     id: 'startTime',
+    accessorKey: 'startTime',
     size: 50,
     header: ({ column }) => (
       <DataTableColumnHeader
@@ -155,6 +165,7 @@ const columns: ColumnDef<Charge>[] = [
   },
   {
     id: 'endTime',
+    accessorKey: 'endTime',
     size: 50,
     header: ({ column }) => (
       <DataTableColumnHeader
@@ -172,23 +183,27 @@ const columns: ColumnDef<Charge>[] = [
       <DataTableColumnHeader column={column} title="Actions" />
     ),
     enableHiding: false,
-    cell: () => <RowActionDropdown />,
+    cell: ({ row }) => (
+      <ClaimRowActionDropdown
+        rowIndex={row.index}
+        rowId={row.original.id}
+        form={form}
+      />
+    ),
   },
 ]
 
-// Static Data will be removed after integration
-const dummyData: Charge[] = [
-  {
-    units: '2',
-    amount: '50',
-    total_amount: '100',
-  },
-]
-
-const Charges = () => {
+const Charges = ({ form }: { form: UseFormReturn<SchemaType> }) => {
+  const columns = useMemo(() => getColumns(form), [form])
+  // Watch the 'claimServiceLines' field
+  const claimServiceLines =
+    useWatch({
+      control: form.control,
+      name: 'claimServiceLines',
+    }) || ([] as ClaimServiceLine[]) // Ensure type compatibility
   return (
     <DataTable
-      data={dummyData}
+      data={claimServiceLines}
       columns={columns}
       tableClass="border border-solid border-[lightgray] "
       tHeadClass="bg-[#EBF3FC]"

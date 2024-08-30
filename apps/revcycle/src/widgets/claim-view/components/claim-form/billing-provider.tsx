@@ -2,72 +2,99 @@
 
 import { Grid } from '@radix-ui/themes'
 import { UseFormReturn } from 'react-hook-form'
-import { FormTextInput } from '@psychplus/form'
+import { FormSelect, FormTextInput } from '@psychplus/form'
+import { useStore } from '../../store'
 import { SchemaType } from './add-claim-form'
-import ClaimFormSelect from './claim-form-select'
-
-const options = [
-  { label: 'Shahbaz MD', value: 'Shahbaz MD' },
-  { label: 'Willow Brook', value: 'Willow Brook2' },
-]
 
 const BillingProvider = ({ form }: { form: UseFormReturn<SchemaType> }) => {
+  const posCodes = useStore((state) => state.posCodeSets)
+  const staffCodeSets = useStore((state) => state.staffCodeSets)
+  const locations = useStore((state) => state.locations)
+
   return (
     <Grid columns="5" gap="2" rows="repeat(2)" width="auto">
-      <ClaimFormSelect
+      <FormSelect
         label="Rendering Provider"
-        options={options}
-        defaultValue="Shahbaz MD"
+        placeholder="Default Value"
+        required={true}
+        {...form.register('renderingProviderId')}
+        options={staffCodeSets}
       />
 
-      <ClaimFormSelect
+      <FormSelect
         label="Supervising Provider"
-        options={options}
-        defaultValue="Shahbaz MD"
+        placeholder="Default Value"
+        required={false}
+        {...form.register('supervisingProviderId')}
+        options={staffCodeSets}
       />
-
-      <ClaimFormSelect
+      <FormSelect
         label="Attending Provider"
-        options={options}
-        defaultValue="Shahbaz MD"
+        placeholder="Default Value"
+        required={false}
+        {...form.register('attendingProviderId')}
+        options={staffCodeSets}
       />
 
-      <ClaimFormSelect
+      <FormSelect
         label="Ordering Provider"
-        options={options}
-        defaultValue="Shahbaz MD"
+        placeholder="Default Value"
+        required={false}
+        {...form.register('orderingProviderId')}
+        options={staffCodeSets}
       />
 
-      <ClaimFormSelect
+      <FormSelect
         label="Ref. Provider"
-        options={options}
-        defaultValue="Shahbaz MD"
+        placeholder="Default Value"
+        required={false}
+        {...form.register('referringProviderId')}
+        options={staffCodeSets}
       />
-
-      <ClaimFormSelect
+      <FormSelect
+        disabled={true}
         label="Service Location"
-        options={options}
-        defaultValue="Shahbaz MD"
+        placeholder="Default Value"
+        required={true}
+        {...form.register('locationId')}
+        options={locations}
       />
 
-      <ClaimFormSelect
+      <FormSelect
         label="Billing Location"
-        options={options}
-        defaultValue="Shahbaz MD"
+        placeholder="Default Value"
+        required={true}
+        {...form.register('locationId')}
+        options={locations}
       />
 
-      <FormTextInput
+      {/* <FormTextInput
+        disabled={true}
         type="text"
         label="Billing Location Address"
         placeholder="Shahbaz MD"
         data-testid="add-fee-schedule-name-input"
-        {...form.register('name')}
-      />
+        
+        value={"test"}
+      /> */}
 
-      <ClaimFormSelect
+      <FormTextInput
+        value={'Test'}
+        name=""
+        type="text"
+        label="Billing Location Address"
+        className="pointer-events-none border-0 bg-[#ebebef] outline-none"
+        disabled={true}
+      />
+      <FormSelect
         label="POS"
-        options={options}
-        defaultValue="Shahbaz MD"
+        placeholder="Default Value"
+        required={true}
+        {...form.register('placeOfService')}
+        options={posCodes.map((r) => ({
+          label: r.display,
+          value: r.code,
+        }))}
       />
     </Grid>
   )

@@ -1,9 +1,9 @@
 import { TextField } from '@radix-ui/themes'
-import { Charge } from '../types'
+import { ClaimServiceLine } from '../types'
 
 interface TableCellProps {
   row: {
-    original: Charge
+    original: ClaimServiceLine
   }
 }
 

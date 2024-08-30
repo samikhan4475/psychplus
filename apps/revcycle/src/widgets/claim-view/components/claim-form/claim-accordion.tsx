@@ -16,7 +16,7 @@ const ClaimAccordionItem = ({
   const [isOpen, setIsOpen] = useState(false)
 
   return (
-    <Accordion.Item
+    <Accordion.Item 
       value={title}
       className="my-2 rounded-3 border border-[#e8e7e7]"
     >
@@ -41,6 +41,7 @@ const ClaimAccordionItem = ({
                 {title}
               </Text>
             </Flex>
+            {buttons}
           </Box>
         </Accordion.Trigger>
       </Accordion.Header>

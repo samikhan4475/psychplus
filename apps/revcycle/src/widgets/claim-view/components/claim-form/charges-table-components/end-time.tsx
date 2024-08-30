@@ -1,15 +1,13 @@
 import { TextField } from '@radix-ui/themes'
-import { Charge } from '../types'
+import { ClaimServiceLine } from '../types'
 
 interface TableCellProps {
   row: {
-    original: Charge
+    original: ClaimServiceLine
   }
 }
 
-const TableCellEndTime = ({
-  row: { original: chargeRecord },
-}: TableCellProps) => {
+const TableCellEndTime = ({row: { original: chargeRecord },}: TableCellProps) => {
   return (
     <TextField.Root
       type="time"

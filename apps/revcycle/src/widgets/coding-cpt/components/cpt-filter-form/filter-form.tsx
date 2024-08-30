@@ -66,7 +66,6 @@ const CPTFilterForm = (props: Props) => {
     form.setValue('gender', '')
     form.setValue('resourceStatusList', '')
   }
-
   return (
     <Form form={form} onSubmit={onSubmit}>
       <Flex className="z-10 mt-2">
