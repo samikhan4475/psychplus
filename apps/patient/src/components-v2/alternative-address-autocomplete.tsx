@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useRef, useState, type ChangeEvent } from 'react'
+import { useCallback, useState, type ChangeEvent } from 'react'
 import { Box, Flex, Text, TextFieldInput } from '@radix-ui/themes'
 import useOnclickOutside from 'react-cool-onclickoutside'
 import { useFormContext, type FieldValues } from 'react-hook-form'
@@ -33,8 +33,6 @@ interface AlternativeAddressAutocompleteProps {
 const AlternativeAddressAutocomplete = ({
   editable,
 }: AlternativeAddressAutocompleteProps) => {
-  const autocompleteRef = useRef<HTMLInputElement | null>(null)
-
   const street1Field = `street1`
   const street2Field = `street2`
   const cityField = `city`
@@ -153,7 +151,7 @@ const AlternativeAddressAutocomplete = ({
             <FormFieldLabel required>Address Line 1</FormFieldLabel>
             <TextFieldInput
               size="3"
-              ref={autocompleteRef}
+              {...addressForm.register(street1Field)}
               value={value}
               onChange={handleInput}
               onFocus={() => {

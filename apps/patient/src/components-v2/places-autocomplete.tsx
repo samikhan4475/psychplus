@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useRef, useState, type ChangeEvent } from 'react'
+import { useCallback, useState, type ChangeEvent } from 'react'
 import { CODESETS } from '@psychplus-v2/constants'
 import { Box, Flex, Text, TextFieldInput } from '@radix-ui/themes'
 import useOnclickOutside from 'react-cool-onclickoutside'
@@ -43,8 +43,6 @@ const PlacesAutocomplete = ({
   label,
   includeState = true,
 }: PlacesAutocompleteProps) => {
-  const autocompleteRef = useRef<HTMLInputElement | null>(null)
-
   const street1Field = `${name}Street1`
   const street2Field = `${name}Street2`
   const streetField = `${name}Street`
@@ -183,7 +181,7 @@ const PlacesAutocomplete = ({
             <FormFieldLabel required>{label || name} Address 1</FormFieldLabel>
             <TextFieldInput
               size="3"
-              ref={autocompleteRef}
+              {...form.register(street1Field)}
               value={value}
               onChange={handleInput}
               onFocus={() => {
