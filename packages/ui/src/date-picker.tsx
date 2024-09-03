@@ -5,12 +5,14 @@ import { format } from 'date-fns'
 import { Button } from './button'
 import { Calendar } from './calendar'
 import { Popover } from './popover'
+import { cn } from './cn'
 
 interface DatePickerProps {
   date?: Date
   reverse?: boolean
   buttonClassName?: string
   placeholder?: string
+  calendarClassName?: string
   color?:
     | 'ruby'
     | 'tomato'
@@ -49,6 +51,7 @@ const IconAndDate = (
   date: Date | undefined,
   dateFormat: string | undefined,
   placeholder?: string,
+  calendarClassName?: string,
 ) => {
   if (reverse) {
     return (
@@ -58,13 +61,13 @@ const IconAndDate = (
         ) : (
           <span className={placeholderStyles}>{placeholder || 'MM/DD/YYYY'}</span>
         )}
-        <CalendarIcon className="mr-1 h-5 w-5" />
+        <CalendarIcon className={cn("mr-1 h-5 w-5", calendarClassName)} />
       </>
     )
   }
   return (
     <>
-      <CalendarIcon className="mr-1 h-5 w-5" />
+      <CalendarIcon className={cn("mr-1 h-5 w-5", calendarClassName)} />
       {date ? format(date, 'PPP') : <span className={placeholderStyles}>{placeholder || 'Pick a date'}</span>}
     </>
   )
@@ -74,6 +77,7 @@ const DatePicker = ({
   date,
   reverse,
   buttonClassName,
+  calendarClassName,
   onSelect,
   placeholder,
   color,
@@ -88,7 +92,7 @@ const DatePicker = ({
           buttonClassName ?? 'w-[200px] justify-start text-left font-regular'
         }
       >
-        {IconAndDate(reverse, date, dateFormat, placeholder)}
+        {IconAndDate(reverse, date, dateFormat, placeholder, calendarClassName)}
       </Button>
     </Popover.Trigger>
     <Popover.Content className="w-auto p-0">

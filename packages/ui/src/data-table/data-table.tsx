@@ -11,6 +11,7 @@ import {
   getSortedRowModel,
   PaginationState,
   useReactTable,
+  type Row,
   type ColumnDef,
   type ColumnFiltersState,
   type Table as ReactTable,
@@ -18,6 +19,7 @@ import {
   type VisibilityState,
 } from '@tanstack/react-table'
 import { Table } from '../table'
+import { cn } from '../cn'
 
 interface DataTableProps<TData, TValue> {
   data: TData[]
@@ -33,6 +35,7 @@ interface DataTableProps<TData, TValue> {
   toBodyClass?: string
   thClass?: string
   isRowPan?: boolean
+  onRowSelect?: (row: Row<TData>, table: ReactTable<TData>) => void
   isPreferredPartnerTable?: boolean
   isTreatmentPlan?: boolean
   noResultsComponent?: React.ComponentType;
@@ -47,6 +50,7 @@ const DataTable = <TData, TValue>({
   disablePagination,
   headerCellClass,
   columnCellClass,
+  onRowSelect,
   tableClass,
   tHeadClass,
   toBodyClass,
@@ -147,12 +151,15 @@ const DataTable = <TData, TValue>({
                     key={row.id}
                     data-state={row.getIsSelected() && 'selected'}
                     className={
-                      isPreferredPartnerTable &&
+                      cn(isPreferredPartnerTable &&
                       (row.original as { paymentStatus: string })
                         .paymentStatus === 'Failed'
                         ? 'bg-[#ffdae4]'
-                        : ''
+                        : '', {
+                          'bg-[#D9E2FC]': row.getIsSelected()
+                        })
                     }
+                    onClick={onRowSelect? () => onRowSelect(row, table): undefined}
                   >
                     {row.getVisibleCells().map((cell) => (
                       <Table.Cell

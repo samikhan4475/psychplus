@@ -144,6 +144,10 @@ const navMenuItems: MenuItem[] = [
     label: 'Management - Users',
     href: '/widgets/management-users',
   },
+  {
+    label: 'Notes',
+    href: '/widgets/notes',
+  },
 ]
 
 const WidgetsLayout = ({ children }: { children: React.ReactNode }) => {

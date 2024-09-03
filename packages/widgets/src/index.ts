@@ -40,6 +40,7 @@ const EDIT_MANAGEMENT_SERVICE = 'edit-managemet-service'
 const EDIT_MANAGEMENT_LOCATION_WIDGET = 'edit-management-location'
 const MANAGEMENT_SERVICES_LIST_WIDGET = 'management-services-list'
 const ADD_MANAGEMENT_LOCATIONS_WIDGET = 'add-management-locations'
+const NOTES_WIDGET = 'notes-widget'
 const MANAGEMENT_LOCATION_TABS_WIDGET = 'management-location-tabs'
 
 export {
@@ -83,5 +84,6 @@ export {
   EDIT_MANAGEMENT_LOCATION_WIDGET,
   MANAGEMENT_SERVICES_LIST_WIDGET,
   ADD_MANAGEMENT_LOCATIONS_WIDGET,
+  NOTES_WIDGET,
   MANAGEMENT_LOCATION_TABS_WIDGET
 }

@@ -3,4 +3,5 @@ export interface IconProps {
   height?: string | number
   onClick?: () => void
   className?: string
+  fill?: string
 }
