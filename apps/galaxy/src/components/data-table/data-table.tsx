@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Box, Flex, Table } from '@radix-ui/themes'
 import {
   flexRender,
@@ -10,6 +10,7 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   PaginationState,
+  RowSelectionState,
   useReactTable,
   type ColumnDef,
   type ColumnFiltersState,
@@ -28,7 +29,8 @@ interface DataTableProps<TData, TValue> {
   initialPageSize?: 10 | 25 | 50 | 100 | 200
   disablePagination?: boolean
   renderEmpty?: () => React.ReactNode
-  onRowClick?: (row: Row<TData>) => void
+  onRowClick?: (row: Row<TData>, table: ReactTable<TData>) => void
+  onRowSelectionChange?: (selectedRows: RowSelectionState) => void
   sticky?: boolean
 }
 
@@ -42,6 +44,7 @@ const DataTable = <TData, TValue>({
   renderEmpty,
   onRowClick,
   sticky,
+  onRowSelectionChange,
 }: DataTableProps<TData, TValue>) => {
   const [sorting, setSorting] = useState<SortingState>([])
   const [pagination, setPagination] = useState<PaginationState>({
@@ -51,6 +54,12 @@ const DataTable = <TData, TValue>({
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = useState({})
+
+  useEffect(() => {
+    if (onRowSelectionChange) {
+      onRowSelectionChange(rowSelection)
+    }
+  }, [rowSelection])
 
   const table = useReactTable({
     data,
@@ -117,10 +126,11 @@ const DataTable = <TData, TValue>({
                 key={row.id}
                 data-state={row.getIsSelected() && 'selected'}
                 onClick={() => {
-                  onRowClick?.(row)
+                  onRowClick?.(row, table)
                 }}
                 className={cn('hover:bg-gray-2', {
                   'cursor-pointer': onRowClick !== undefined,
+                  'bg-pp-focus-bg': row.getIsSelected(),
                 })}
               >
                 {row.getVisibleCells().map((cell) => (

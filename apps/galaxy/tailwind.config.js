@@ -20,6 +20,9 @@ const config = {
         'pp-success-text': '#18794E',
         'pp-warning-bg': '#FFEDD5',
         'pp-warning-text': '#99543A',
+        'pp-gray-1': '#60646C',
+        'pp-gray-2': '#DDDDE3',
+        'pp-gray-3': '#8B8D98',
       },
       animation: {
         loader: 'bounce 500ms infinite, pulse 2s infinite',

@@ -2,6 +2,7 @@
 
 import { Flex, Select } from '@radix-ui/themes'
 import { Controller, useFormContext } from 'react-hook-form'
+import { cn } from '@/utils'
 import { BlockLabel } from './block-label'
 
 interface SelectInputProps<T> extends React.ComponentProps<typeof Select.Root> {
@@ -9,6 +10,7 @@ interface SelectInputProps<T> extends React.ComponentProps<typeof Select.Root> {
   field: string
   options?: { label: string; value: T }[]
   placeholder?: string
+  buttonClassName?: string
 }
 
 const SelectInput = <T extends string>({
@@ -16,6 +18,7 @@ const SelectInput = <T extends string>({
   field,
   placeholder = 'Select',
   options = [],
+  buttonClassName,
   ...selectProps
 }: SelectInputProps<T>) => {
   const form = useFormContext()
@@ -42,7 +45,10 @@ const SelectInput = <T extends string>({
               {...rest}
               {...selectProps}
             >
-              <Select.Trigger placeholder={placeholder} className="h-[var(--chip-height)]" />
+              <Select.Trigger
+                placeholder={placeholder}
+                className={cn('h-[var(--chip-height)]', buttonClassName)}
+              />
               <Select.Content position="popper" align="center" highContrast>
                 {items}
               </Select.Content>
