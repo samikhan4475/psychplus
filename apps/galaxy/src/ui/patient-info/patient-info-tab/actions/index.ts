@@ -1,1 +1,5 @@
 export * from './get-patient-profile'
+export * from './save-patient-profile'
+export * from './get-patient-consents'
+export * from './send-policy-email'
+export * from './send-policy-sms'

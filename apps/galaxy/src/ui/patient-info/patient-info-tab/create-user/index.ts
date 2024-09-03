@@ -1,2 +1,2 @@
 export * from './create-user-card'
-export * from './schema'
+export * from './create-user-schema'

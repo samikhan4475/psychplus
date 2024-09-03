@@ -38,7 +38,7 @@ const PatientInfoView = ({ patientId }: PatientInfoViewProps) => {
       value={activeTab}
       onValueChange={setActiveTab}
     >
-      <Flex>
+      <Flex className="z-50">
         <Tabs.List>
           <TabsTrigger value={PATIENT_INFO_TAB}>Patient Info</TabsTrigger>
           <TabsTrigger value={INSURANCE_TAB}>Insurance</TabsTrigger>
@@ -52,7 +52,7 @@ const PatientInfoView = ({ patientId }: PatientInfoViewProps) => {
               value={PATIENT_INFO_HISTORY_TAB}
               onClose={closePatientHistory}
             >
-              Patient Hx
+              Patient Info Hx
             </TabsTrigger>
           ) : null}
         </Tabs.List>
@@ -125,7 +125,7 @@ const TabsContent = ({
     <Tabs.Content
       value={value}
       forceMount={viewedTabs.has(value) ? true : undefined}
-      className="hidden flex-1 flex-col gap-2 overflow-auto data-[state=active]:flex"
+      className="hidden flex-1 flex-col gap-2 data-[state=active]:flex"
     >
       {children}
     </Tabs.Content>

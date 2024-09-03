@@ -1,4 +1,4 @@
-type PhoneNumberType = 'Contact'
+type PhoneNumberType = 'Contact' | 'Home' | 'Business'
 
 interface PhoneNumber {
   type: PhoneNumberType

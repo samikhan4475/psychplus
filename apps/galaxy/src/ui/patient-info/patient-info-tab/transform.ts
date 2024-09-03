@@ -1,7 +1,3 @@
-'use server'
-
-import * as api from '@/api'
-import { API_URL } from '@/constants'
 import type { PatientProfileRaw } from '@/types'
 import {
   getGuardianFirstName,
@@ -14,29 +10,10 @@ import {
   getPatientMRN,
   getPatientPhone,
 } from '@/utils'
-import type { PatientProfile } from '../types'
+import { PatientInfoSchema } from './patient-info-schema'
+import type { PatientProfile } from './types'
 
-const getPatientProfileAction = async (
-  id: string,
-): Promise<api.ActionResult<PatientProfile>> => {
-  const result = await api.GET<PatientProfileRaw>(
-    `${API_URL}/api/patients/${id}/profile`,
-  )
-
-  if (result.state === 'error') {
-    return {
-      state: 'error',
-      error: result.error,
-    }
-  }
-
-  return {
-    state: 'success',
-    data: transformResponseData(result.data),
-  }
-}
-
-const transformResponseData = (data: PatientProfileRaw): PatientProfile => ({
+const transformIn = (data: PatientProfileRaw): PatientProfile => ({
   id: String(data.id),
   mrn: getPatientMRN(data.id),
   firstName: getPatientFirstName(data.legalName),
@@ -50,4 +27,9 @@ const transformResponseData = (data: PatientProfileRaw): PatientProfile => ({
   guardianLastName: getGuardianLastName(data.guardian),
 })
 
-export { getPatientProfileAction }
+const transformOut = (id: string): PatientProfileRaw =>
+  ({
+    id: Number(id),
+  } as PatientProfileRaw)
+
+export { transformIn, transformOut }

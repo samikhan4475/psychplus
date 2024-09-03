@@ -7,6 +7,7 @@ import type {
   PatientGuardian,
   PhoneNumber,
 } from '@/types'
+import { sanitizePhoneNumber } from './phone'
 
 const PADDED_MRN_LENGTH = 8
 
@@ -42,10 +43,34 @@ const getPatientPhone = (phoneNumbers: PhoneNumber[]) => {
     return undefined
   }
 
-  return (
+  const phoneNumber =
     phoneNumbers.find((phone) => phone.type === 'Contact')?.number ??
     phoneNumbers[0].number
-  )
+
+  if (!phoneNumber) {
+    return undefined
+  }
+
+  return sanitizePhoneNumber(phoneNumber)
+}
+const getPatientHomeContactDetails = (phoneNumbers: PhoneNumber[]) => {
+  if (!phoneNumbers || phoneNumbers.length === 0) {
+    return undefined
+  }
+
+  const phoneNumber =
+    phoneNumbers.find((phone) => phone.type === 'Home')?.number ??
+    phoneNumbers[0].number
+
+  if (!phoneNumber) {
+    return undefined
+  }
+
+  return {
+    type: 'Home',
+    number: sanitizePhoneNumber(phoneNumber),
+    ext: phoneNumber,
+  }
 }
 
 const getPatientDOB = (dobString: string): string => {

@@ -5,7 +5,7 @@ import {
   FormFieldError,
   FormFieldLabel,
 } from '@/components/form'
-import { type CreateUserSchema } from './schema'
+import { type CreateUserSchema } from './create-user-schema'
 
 const DobInput = () => {
   const form = useFormContext<CreateUserSchema>()

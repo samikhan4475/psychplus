@@ -23,6 +23,7 @@ const config = {
         'pp-gray-1': '#60646C',
         'pp-gray-2': '#DDDDE3',
         'pp-gray-3': '#8B8D98',
+        'pp-alt-blue': '#0F6CBD',
       },
       animation: {
         loader: 'bounce 500ms infinite, pulse 2s infinite',

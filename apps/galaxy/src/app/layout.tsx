@@ -3,6 +3,9 @@ import { type Metadata } from 'next'
 import { Josefin_Sans } from 'next/font/google'
 import { Flex, Theme } from '@radix-ui/themes'
 import { Toaster } from 'react-hot-toast'
+import { getCodesets } from '@/api'
+import { CODESETS } from '@/constants'
+import { StoreProvider } from '@/store'
 import { Header } from '@/ui/header'
 import { cn } from '@/utils'
 import { getAuthCookies } from '@/utils/auth'
@@ -19,10 +22,10 @@ const josefin = Josefin_Sans({
   variable: '--font-josefin',
 })
 
-const RootLayout = ({ children }: React.PropsWithChildren) => {
+const RootLayout = async ({ children }: React.PropsWithChildren) => {
   const auth = getAuthCookies()
 
-  return (
+  const content = (
     <html lang="en" className={cn(josefin.variable)}>
       <body>
         <Toaster
@@ -44,6 +47,24 @@ const RootLayout = ({ children }: React.PropsWithChildren) => {
       </body>
     </html>
   )
+
+  if (auth) {
+    const codesets = await getCodesets([
+      CODESETS.Gender,
+      CODESETS.ProfSuffix,
+      CODESETS.GenderOrientation,
+      CODESETS.GenderExpression,
+      CODESETS.GenderPronoun,
+      CODESETS.Religion,
+      CODESETS.Language,
+      CODESETS.LanguageProficiency,
+      CODESETS.RaceAndEthnicity,
+    ])
+
+    return <StoreProvider codesets={codesets}>{content}</StoreProvider>
+  }
+
+  return content
 }
 
 export default RootLayout

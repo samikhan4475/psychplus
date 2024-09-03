@@ -13,11 +13,14 @@ const HistoryButton = () => {
       color="gray"
       variant="surface"
       highContrast
-      onClick={openPatientHistory}
+      onClick={(e) => {
+        e.preventDefault()
+        openPatientHistory()
+      }}
       className="h-auto px-1 py-1 text-[11px] font-[300]"
     >
       <HistoryIcon width={15} height={15} strokeWidth={1.75} />
-      History
+      Patient Info Hx
     </Button>
   )
 }

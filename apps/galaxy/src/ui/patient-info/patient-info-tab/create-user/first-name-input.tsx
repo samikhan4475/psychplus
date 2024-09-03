@@ -7,13 +7,13 @@ import {
   FormFieldError,
   FormFieldLabel,
 } from '@/components/form'
-import { type CreateUserSchema } from './schema'
+import { type CreateUserSchema } from './create-user-schema'
 
 const FirstNameInput = () => {
   const form = useFormContext<CreateUserSchema>()
 
   return (
-    <FormFieldContainer>
+    <FormFieldContainer className="flex-1">
       <FormFieldLabel required>First Name</FormFieldLabel>
       <TextField.Root size="1" {...form.register('firstName')} />
       <FormFieldError name="firstName" />

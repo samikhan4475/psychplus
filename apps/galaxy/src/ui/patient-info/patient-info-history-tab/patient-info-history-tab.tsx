@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { ScrollArea } from '@radix-ui/themes'
 import { TabContentHeading, ViewLoadingPlaceholder } from '../shared'
 
-const TAB_TITLE = 'Patient Info History'
+const TAB_TITLE = 'Patient Info Hx'
 
 const wait = async () => {
   await new Promise((resolve) => setTimeout(resolve, 2000))

@@ -1,4 +1,4 @@
-import { Text } from '@radix-ui/themes'
+import { Flex, Text } from '@radix-ui/themes'
 import { cn } from '@/utils'
 
 interface FormFieldLabelProps {
@@ -14,17 +14,19 @@ const FormFieldLabel = ({
   required,
 }: React.PropsWithChildren<FormFieldLabelProps>) => {
   return (
-    <Text
-      as="label"
-      weight="medium"
-      className={cn('text-[11px]', className)}
-      htmlFor={id}
-    >
-      {children}
+    <Flex align="center" className="h-[18px]">
+      <Text
+        as="label"
+        weight="medium"
+        className={cn('text-[11px]', className)}
+        htmlFor={id}
+      >
+        {children}
+      </Text>
       {required ? (
         <Text className="ml-[2px] text-[12px] text-red-9">*</Text>
       ) : null}
-    </Text>
+    </Flex>
   )
 }
 

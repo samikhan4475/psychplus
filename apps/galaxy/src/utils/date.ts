@@ -35,7 +35,7 @@ const getMonthLabel = (date: CalendarDate) => MONTH_LABELS[date.month - 1]
 const getDayOfWeekLabel = (date: CalendarDate) =>
   DAYS_OF_WEEK_LABELS[getDayOfWeek(date, 'en-US')]
 
-const getCalendarDateLabel = (date: CalendarDate) => {
+const getCalendarDateLabel = (date: DateValue) => {
   const day = date.day < 10 ? `0${date.day}` : `${date.day}`
   const month = date.month < 10 ? `0${date.month}` : `${date.month}`
   return `${date.year}-${month}-${day}`

@@ -1,6 +1,8 @@
 import { Box, Grid, Heading } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
 import { FormSelect, FormTextInput } from '@psychplus/form'
+import { useEditModeContext } from '@psychplus/patient-info'
+import { MultiSelectDropdown } from '@psychplus/ui/multi-select-search-dropdown'
 import { FORM_FIELD_CLASSES } from '../constants'
 import {
   useDegreeOptions,
@@ -15,8 +17,6 @@ import {
   usePatientRaceOptions,
   useReligionOptions,
 } from '../hooks'
-import {MultiSelectDropdown}  from '@psychplus/ui/multi-select-search-dropdown'
-import { useEditModeContext } from '@psychplus/patient-info'
 
 const DescriptiveSection = () => {
   const raceOptions = usePatientRaceOptions()
@@ -34,18 +34,18 @@ const DescriptiveSection = () => {
   const { editable } = useEditModeContext()
 
   return (
-    <Box className='bg-[#EEF2F6]'>
+    <Box className="bg-[#EEF2F6]">
       <Heading size="3" className="pb-1 pl-2 pt-2 text-[14px]">
         Descriptive
       </Heading>
-      <Grid columns='12' rows='2' className="gap-3 bg-[#FFFF] p-2">
+      <Grid columns="12" rows="2" className="gap-3 bg-[#FFFF] p-2">
         <Box className="col-span-2">
           <FormTextInput
             className={FORM_FIELD_CLASSES}
             {...register('legalName.preferredName')}
             disabled={!editable}
             label="Preferred Name"
-            placeholder='Preferred name'
+            placeholder="Preferred name"
           />
         </Box>
         <Box className="col-span-1">
@@ -53,7 +53,7 @@ const DescriptiveSection = () => {
             {...register('legalName.title')}
             disabled={!editable}
             label="Prefix"
-            placeholder='Prefix'
+            placeholder="Prefix"
             className={FORM_FIELD_CLASSES}
           />
         </Box>
@@ -62,18 +62,18 @@ const DescriptiveSection = () => {
             {...register('legalName.suffix')}
             disabled={!editable}
             label="Suffix"
-            placeholder='Suffix'
+            placeholder="Suffix"
             className={FORM_FIELD_CLASSES}
           />
         </Box>
         <Box className="col-span-2">
           <FormSelect
             buttonClassName={FORM_FIELD_CLASSES}
-            contentClassName='max-h-[250px]'
+            contentClassName="max-h-[250px]"
             {...register('legalName.honors')}
             disabled={!editable}
             label="Prof. Suffix"
-            placeholder='Select professional suffix'
+            placeholder="Select professional suffix"
             options={degreeOptions}
           />
         </Box>
@@ -84,7 +84,7 @@ const DescriptiveSection = () => {
             {...register('gender')}
             disabled={!editable}
             label="Gender"
-            placeholder='Gender'
+            placeholder="Gender"
             required
             options={genders}
           />
@@ -95,7 +95,7 @@ const DescriptiveSection = () => {
             {...register('genderOrientation')}
             disabled={!editable}
             label="Orientation"
-            placeholder='Gender orientation'
+            placeholder="Gender orientation"
             options={genderOrientations}
           />
         </Box>
@@ -105,7 +105,7 @@ const DescriptiveSection = () => {
             {...register('genderExpression')}
             disabled={!editable}
             label="Gender Expression"
-            placeholder='Gender expression'
+            placeholder="Gender expression"
             options={genderExpressions}
           />
         </Box>
@@ -115,7 +115,7 @@ const DescriptiveSection = () => {
             {...register('genderPronoun')}
             disabled={!editable}
             label="Pronoun"
-            placeholder='Select'
+            placeholder="Select"
             options={genderPronouns}
           />
         </Box>
@@ -124,7 +124,7 @@ const DescriptiveSection = () => {
             className={FORM_FIELD_CLASSES}
             {...register('contactDetails.mobileNumber.comment')}
             disabled={!editable}
-            placeholder='Add comment'
+            placeholder="Add comment"
             label="Comment"
           />
         </Box>
@@ -132,11 +132,11 @@ const DescriptiveSection = () => {
         <Box className="col-span-2">
           <FormSelect
             buttonClassName={FORM_FIELD_CLASSES}
-            contentClassName='max-h-[250px]'
+            contentClassName="max-h-[250px]"
             {...register('religion')}
             disabled={!editable}
             label="Religion"
-            placeholder='Select religion'
+            placeholder="Select religion"
             options={religionOptions}
           />
         </Box>
@@ -146,7 +146,7 @@ const DescriptiveSection = () => {
             {...register('motherMaidenName')}
             disabled={!editable}
             label="Mother Maiden Name"
-            placeholder='Mother maiden name'
+            placeholder="Mother maiden name"
           />
         </Box>
 
@@ -156,7 +156,7 @@ const DescriptiveSection = () => {
             {...register('language')}
             disabled={!editable}
             label="Language"
-            placeholder='Select language'
+            placeholder="Select language"
             options={languageOptions}
           />
         </Box>
@@ -166,7 +166,7 @@ const DescriptiveSection = () => {
             {...register('languageAbility')}
             disabled={!editable}
             label="Language Ability"
-            placeholder='Select language ability'
+            placeholder="Select language ability"
             options={languageAbilityOptions}
           />
         </Box>
@@ -176,15 +176,15 @@ const DescriptiveSection = () => {
             {...register('languageProficiency')}
             disabled={!editable}
             label="Proficiency"
-            placeholder='Select'
+            placeholder="Select"
             options={languageProficiencyOptions}
           />
         </Box>
       </Grid>
-      <Grid columns='12' className="gap-3 bg-[#FFFF] px-2">
+      <Grid columns="12" className="gap-3 bg-[#FFFF] px-2">
         <Box className="col-span-5">
           <MultiSelectDropdown
-            buttonClassName='h-7'
+            buttonClassName="h-7"
             defaultValues={getValues('races')}
             disabled={!editable}
             onValueChange={(vals) => setValue('races', vals)}
@@ -196,7 +196,7 @@ const DescriptiveSection = () => {
           <MultiSelectDropdown
             defaultValues={getValues('ethnicities')}
             disabled={!editable}
-            buttonClassName='h-7'
+            buttonClassName="h-7"
             onValueChange={(vals) => setValue('ethnicities', vals)}
             options={ethnicityOptions ?? []}
             label="Ethnicity"

@@ -1,17 +1,19 @@
 'use client'
 
+import { useEffect } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Flex } from '@radix-ui/themes'
 import { useForm, type SubmitHandler } from 'react-hook-form'
-import z from 'zod'
+import toast from 'react-hot-toast'
 import { FormContainer } from '@/components'
 import { getCalendarDate } from '@/utils'
-import { createUserSchema } from './create-user'
+import { savePatientProfileAction } from './actions'
+import {
+  patientInfoSchema,
+  type PatientInfoSchema,
+} from './patient-info-schema'
+import { transformOut } from './transform'
 import type { PatientProfile } from './types'
-
-const schema = createUserSchema
-
-type SchemaType = z.infer<typeof schema>
 
 interface PatientInfoFormProps {
   patient: PatientProfile
@@ -21,19 +23,48 @@ const PatientInfoForm = ({
   patient,
   children,
 }: React.PropsWithChildren<PatientInfoFormProps>) => {
-  const form = useForm<SchemaType>({
-    resolver: zodResolver(schema),
+  const form = useForm<PatientInfoSchema>({
+    resolver: zodResolver(patientInfoSchema),
     reValidateMode: 'onChange',
     defaultValues: {
+      id: patient.id,
       firstName: patient.firstName ?? '',
       middleName: patient.middleName ?? '',
       lastName: patient.lastName ?? '',
       dob: getCalendarDate(patient.dob),
+      phone: patient.phone ?? '',
+      email: patient.email ?? '',
+      hasGuardian: patient.hasGuardian ? 'yes' : 'no',
+      guardianFirstName: patient.guardianFirstName ?? '',
+      guardianLastName: patient.guardianLastName ?? '',
+      races: [],
+      ethnicities: [],
     },
   })
 
-  const onSubmit: SubmitHandler<SchemaType> = (data) => {
-    // do something with data
+  const resetField = form.resetField
+
+  const hasGuardian = form.watch('hasGuardian')
+
+  useEffect(() => {
+    if (hasGuardian === 'no') {
+      resetField('guardianFirstName')
+      resetField('guardianLastName')
+    }
+  }, [resetField, hasGuardian])
+
+  const onSubmit: SubmitHandler<PatientInfoSchema> = async (data) => {
+    const result = await savePatientProfileAction(
+      patient.id,
+      transformOut(patient.id),
+    )
+
+    if (result.state === 'error') {
+      toast.error(result.error)
+      return
+    }
+
+    toast.success('Patient profile saved!')
   }
 
   return (

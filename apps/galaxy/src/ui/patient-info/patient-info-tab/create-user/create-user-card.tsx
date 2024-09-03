@@ -3,13 +3,30 @@
 import { Button, Flex } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
 import { CardHeading } from '@/components'
+import { type CreateUserSchema } from './create-user-schema'
 import { DobInput } from './dob-input'
+import { EmailInput } from './email-input'
 import { FirstNameInput } from './first-name-input'
+import { GuardianNameInput } from './guardian-name-input'
+import { GuardianRadio } from './guardian-radio'
 import { LastNameInput } from './last-name-input'
 import { MiddleNameInput } from './middle-name-input'
-import { type CreateUserSchema } from './schema'
+import { PhoneNumberInput } from './phone-number-input'
+import { PolicySection } from './policy-section'
 
-const CreateUserCard = () => {
+interface CreateUserCardProps {
+  patientId: string
+  phone?: string
+  email: string
+  isPolicySigned: boolean
+}
+
+const CreateUserCard = ({
+  patientId,
+  phone,
+  email,
+  isPolicySigned,
+}: CreateUserCardProps) => {
   const form = useFormContext<CreateUserSchema>()
 
   return (
@@ -28,18 +45,35 @@ const CreateUserCard = () => {
               form.resetField('middleName')
               form.resetField('lastName')
               form.resetField('dob')
+              form.resetField('phone')
+              form.resetField('email')
+              form.resetField('hasGuardian')
+              form.resetField('guardianFirstName')
+              form.resetField('guardianLastName')
             }}
           >
             Reset
           </Button>
         </Flex>
       </CardHeading>
-      <Flex direction="column" px="2" py="2">
+      <Flex direction="column" px="2" py="2" gap="2">
         <Flex align="start" gap="2">
           <FirstNameInput />
           <MiddleNameInput />
           <LastNameInput />
           <DobInput />
+          <PhoneNumberInput />
+          <EmailInput />
+        </Flex>
+        <Flex align="start" gap="2">
+          <GuardianRadio />
+          <GuardianNameInput />
+          <PolicySection
+            patientId={patientId}
+            phone={phone}
+            email={email}
+            isPolicySigned={isPolicySigned}
+          />
         </Flex>
       </Flex>
     </Flex>
