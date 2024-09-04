@@ -26,7 +26,6 @@ const getColumns = (
 ): ColumnDef<ClaimServiceLine>[] => [
   {
     id: 'dateOfServiceFrom',
-    accessorKey: 'dateOfServiceFrom',
     size: 10,
     header: ({ column }) => (
       <DataTableColumnHeader
@@ -40,7 +39,6 @@ const getColumns = (
   },
   {
     id: 'dateOfServiceTo',
-    accessorKey: 'dateOfServiceTo',
     size: 50,
     header: ({ column }) => (
       <DataTableColumnHeader
@@ -54,7 +52,6 @@ const getColumns = (
   },
   {
     id: 'cptCode',
-    accessorKey: 'cptCode',
     size: 50,
 
     header: ({ column }) => (
@@ -69,7 +66,6 @@ const getColumns = (
   },
   {
     id: 'placeOfService',
-    accessorKey: 'placeOfService',
     size: 50,
     header: ({ column }) => (
       <DataTableColumnHeader
@@ -123,7 +119,6 @@ const getColumns = (
   },
   {
     id: 'unitAmount',
-    accessorKey: 'unitAmount',
     size: 70,
     header: ({ column }) => (
       <DataTableColumnHeader
@@ -137,8 +132,7 @@ const getColumns = (
   },
   {
     id: 'totalAmount',
-    accessorKey: 'totalAmount',
-    size: 50,
+    size: 100,
     header: ({ column }) => (
       <DataTableColumnHeader
         column={column}
@@ -146,7 +140,7 @@ const getColumns = (
         className="text-[#000]"
       />
     ),
-    cell: ({ row }) => <ClaimTableCellLongText maxWidth={120} row={row} />,
+    cell: ({ row }) => <ClaimTableCellLongText maxWidth={200} row={row} />,
     enableHiding: true,
   },
   {

@@ -83,7 +83,7 @@ const BillingProvider = ({ form }: { form: UseFormReturn<SchemaType> }) => {
         name=""
         type="text"
         label="Billing Location Address"
-        className="pointer-events-none border-0 bg-[#ebebef] outline-none"
+        className="pointer-events-none border-0 outline-none"
         disabled={true}
       />
       <FormSelect

@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import * as Accordion from '@radix-ui/react-accordion'
 import { FileIcon, PlusCircledIcon } from '@radix-ui/react-icons'
 import {
@@ -25,6 +25,7 @@ import { InsuranceTable } from './insurance-table'
 import { SubmissionInformation } from './submission-information'
 import { SubmissionResponse } from './submission-response'
 import { ClaimServiceLine } from './types'
+import useEmptyStringToNull from './useEmptyStringToNull'
 
 const schema = z.object({
   id: z.string().uuid().optional(),
@@ -75,9 +76,9 @@ const schema = z.object({
   isForceUnlock: validate.nullOrBoolean,
   forceUnlockDate: z.date().optional(),
   forceUnlockReason: validate.anyString.optional(),
-  primaryPatientInsurancePlanId: validate.nullOrNumber,
-  secondaryPatientInsurancePlanId: validate.nullOrNumber,
-  tertiaryPatientInsurancePlanId: validate.nullOrNumber,
+  primaryPatientInsurancePolicyId: validate.nullOrString,
+  secondaryPatientInsurancePolicyId: validate.nullOrString,
+  tertiaryPatientInsurancePolicyId: validate.nullOrString,
   accidentDate: z.date().optional(),
   accidentState: validate.anyString.optional(),
   accidentType: validate.anyString.optional(),
@@ -149,6 +150,7 @@ type FormBoolFieldName =
   | 'isHold'
   | 'isClaimScrubbed'
   | 'isForcePaper'
+  | 'isSelfPay'
 const AddClaimForm = ({
   selectedClaimId,
   claimNumber,
@@ -170,14 +172,17 @@ const AddClaimForm = ({
     criteriaMode: 'all',
     defaultValues: {},
   })
-  const emptyStringToNull = (
-    value: string | undefined | null,
-  ): string | null => {
-    if (typeof value === 'string') {
-      return value.trim() !== '' ? value.trim() : null
-    }
-    return null
-  }
+  const { emptyStringToNull } = useEmptyStringToNull()
+  const [openItems, setOpenItems] = useState<string[]>([
+    'Billing Provider',
+    'Accidents And Labs',
+    'Diagnosis',
+    'Charges',
+    'Authorizations and Referrals',
+    'Submission Information',
+    'Submission Response',
+    'Insurances',
+  ])
 
   const transformClaimData = (claimData: any) => {
     setSelectedClaimBilledAmt(Number(claimData.totalAmount))
@@ -189,15 +194,13 @@ const AddClaimForm = ({
       dateOfServiceTo: claimData.dateOfServiceTo
         ? new Date(claimData.dateOfServiceTo)
         : undefined,
-      primaryPatientInsurancePlanId: claimData.primaryPatientInsurancePlanId
-        ? Number(claimData.primaryPatientInsurancePlanId)
-        : null,
-      secondaryPatientInsurancePlanId: claimData.secondaryPatientInsurancePlanId
-        ? Number(claimData.secondaryPatientInsurancePlanId)
-        : null,
-      tertiaryPatientInsurancePlanId: claimData.tertiaryPatientInsurancePlanId
-        ? Number(claimData.tertiaryPatientInsurancePlanId)
-        : null,
+      primaryPatientInsurancePolicyId:
+        claimData?.primaryPatientInsurancePolicyId,
+
+      secondaryPatientInsurancePolicyId:
+        claimData?.secondaryPatientInsurancePolicyId,
+      tertiaryPatientInsurancePolicyId:
+        claimData?.tertiaryPatientInsurancePolicyId,
       renderingProviderId: claimData.renderingProviderId?.toString() ?? null,
       attendingProviderId: claimData.attendingProviderId?.toString() ?? null,
       supervisingProviderId:
@@ -259,6 +262,15 @@ const AddClaimForm = ({
       referringProviderId: emptyStringToNull(data.referringProviderId),
       accidentState: emptyStringToNull(data.accidentState),
       accidentType: emptyStringToNull(data.accidentType),
+      primaryPatientInsurancePolicyId: emptyStringToNull(
+        data.primaryPatientInsurancePolicyId,
+      ),
+      secondaryPatientInsurancePolicyId: emptyStringToNull(
+        data.secondaryPatientInsurancePolicyId,
+      ),
+      tertiaryPatientInsurancePolicyId: emptyStringToNull(
+        data.tertiaryPatientInsurancePolicyId,
+      ),
     }
     const currentClaimServiceLines = data.claimServiceLines || []
     const updatedClaimServiceLines = [
@@ -355,6 +367,12 @@ const AddClaimForm = ({
     control: form.control,
     name: 'isClaimScrubbed',
   })
+  const isSelfPay = useWatch({ control: form.control, name: 'isSelfPay' })
+
+  const handleAccordionChange = (value: string[]) => {
+    setOpenItems(value)
+  }
+
   return (
     <Box className="px-2">
       <Form form={form} onSubmit={onSubmit}>
@@ -537,16 +555,8 @@ const AddClaimForm = ({
         <Accordion.Root
           type="multiple"
           className="w-full"
-          defaultValue={[
-            'Billing Provider',
-            'Accidents And Labs',
-            'Diagnosis',
-            'Insurances',
-            'Charges',
-            'Authorizations and Referrals',
-            'Submission Information',
-            'Submission Response',
-          ]}
+          value={openItems} // Controlled value prop
+          onValueChange={handleAccordionChange} // Handler to update state
         >
           <ClaimAccordionItem title="Billing Provider">
             <BillingProvider form={form} />
@@ -567,34 +577,16 @@ const AddClaimForm = ({
                 <Text as="label" size="2" weight="bold">
                   <Flex gap="2">
                     <Switch
+                      checked={isSelfPay ?? false}
                       size="1"
                       onClick={(e) => {
                         e.stopPropagation()
+                        handleCheckboxChange('isSelfPay')
                       }}
-                    />{' '}
-                    Show Inactive Plans
-                  </Flex>
-                </Text>
-
-                <Text as="label" size="2" weight="bold">
-                  <Flex gap="2">
-                    <Switch
-                      size="1"
-                      onClick={(e) => {
-                        e.stopPropagation()
-                      }}
-                    />{' '}
+                    />
                     Self Pay
                   </Flex>
                 </Text>
-
-                <Button
-                  className="bg-[transparent] font-bold text-[#000]"
-                  size="1"
-                >
-                  <PlusCircledIcon />
-                  Add
-                </Button>
               </Flex>
             }
           >

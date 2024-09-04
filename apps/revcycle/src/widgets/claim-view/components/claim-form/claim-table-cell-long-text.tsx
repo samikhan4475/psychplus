@@ -18,7 +18,7 @@ const ClaimTableCellLongText = ({ row, maxWidth }: TableCellLongTextProps) => {
   return (
     <Text
       size="1"
-      className={`block overflow-hidden text-ellipsis whitespace-nowrap max-w-${maxWidth}`}
+      className={`block overflow-hidden text-ellipsis whitespace-nowrap max-w-${maxWidth} w-[80px]`}
     >
       {calculatedValue}
     </Text>

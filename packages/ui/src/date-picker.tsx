@@ -4,8 +4,8 @@ import { CalendarIcon } from '@radix-ui/react-icons'
 import { format } from 'date-fns'
 import { Button } from './button'
 import { Calendar } from './calendar'
-import { Popover } from './popover'
 import { cn } from './cn'
+import { Popover } from './popover'
 
 interface DatePickerProps {
   date?: Date
@@ -40,8 +40,9 @@ interface DatePickerProps {
     | 'gold'
     | 'bronze'
     | 'gray'
-    dateFormat?: string
+  dateFormat?: string
   onSelect: (date?: Date) => void
+  disabled?: boolean
 }
 
 const placeholderStyles = 'font-[400] text-xs text-[#8B8D98]'
@@ -57,18 +58,26 @@ const IconAndDate = (
     return (
       <>
         {date ? (
-          format(date, dateFormat?? 'PPP')
+          format(date, dateFormat ?? 'PPP')
         ) : (
-          <span className={placeholderStyles}>{placeholder || 'MM/DD/YYYY'}</span>
+          <span className={placeholderStyles}>
+            {placeholder || 'MM/DD/YYYY'}
+          </span>
         )}
-        <CalendarIcon className={cn("mr-1 h-5 w-5", calendarClassName)} />
+        <CalendarIcon className={cn('mr-1 h-5 w-5', calendarClassName)} />
       </>
     )
   }
   return (
     <>
-      <CalendarIcon className={cn("mr-1 h-5 w-5", calendarClassName)} />
-      {date ? format(date, 'PPP') : <span className={placeholderStyles}>{placeholder || 'Pick a date'}</span>}
+      <CalendarIcon className="mr-1 h-5 w-5" />
+      {date ? (
+        format(date, 'PPP')
+      ) : (
+        <span className={placeholderStyles}>
+          {placeholder || 'Pick a date'}
+        </span>
+      )}
     </>
   )
 }
@@ -82,10 +91,12 @@ const DatePicker = ({
   placeholder,
   color,
   dateFormat,
+  disabled,
 }: DatePickerProps) => (
   <Popover.Root>
     <Popover.Trigger>
       <Button
+        disabled={disabled}
         color={color || undefined}
         variant="outline"
         className={

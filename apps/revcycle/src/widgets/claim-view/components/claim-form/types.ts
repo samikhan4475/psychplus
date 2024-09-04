@@ -131,9 +131,9 @@ interface Claim {
   forceUnlockBy?: number
   forceUnlockDate: Date
   forceUnlockReason: string
-  primaryPatientInsurancePlanId?: number
-  secondaryPatientInsurancePlanId?: number
-  tertiaryPatientInsurancePlanId?: number
+  primaryPatientInsurancePolicyId?: string
+  secondaryPatientInsurancePolicyId?: string
+  tertiaryPatientInsurancePolicyId?: string
   accidentDate: Date
   accidentState: string
   accidentType: string
