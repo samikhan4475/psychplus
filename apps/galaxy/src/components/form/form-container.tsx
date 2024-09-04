@@ -6,25 +6,30 @@ import {
   type SubmitHandler,
   type UseFormReturn,
 } from 'react-hook-form'
+import { cn } from '@/utils'
 
 interface FormContainerProps<T extends FieldValues> {
+  className?: string
   form: UseFormReturn<T>
+  formClassName?: string
   onSubmit: SubmitHandler<T>
 }
 
 const FormContainer = <T extends FieldValues>({
   form,
+  className,
+  formClassName,
   onSubmit,
   children,
 }: React.PropsWithChildren<FormContainerProps<T>>) => (
   <FormProvider {...form}>
     <form
       onSubmit={form.handleSubmit(onSubmit)}
-      className="flex flex-1 flex-col"
+      className={cn('flex flex-1 flex-col', formClassName)}
     >
       <fieldset
         disabled={form.formState.isSubmitting}
-        className="flex flex-1 flex-col"
+        className={cn('flex flex-1 flex-col', className)}
       >
         {children}
       </fieldset>

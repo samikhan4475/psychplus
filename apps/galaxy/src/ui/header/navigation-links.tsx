@@ -7,8 +7,7 @@ import { useStore } from '@/store'
 const NavigationLinks = () => {
   return (
     <Flex>
-      <NavigationLink href="/clinic" label="Clinic" />
-      <NavigationLink href="/facility" label="Facility" />
+      <NavigationLink href="/schedule" label="Schedule" />
       <NavigationLink href="/patient-lookup" label="Patient Lookup" />
       <NavigationLink href="/revenue-cycle" label="Revenue Cycle" />
       <NavigationLink href="/experience" label="Experience" />
