@@ -9,5 +9,22 @@ interface PatientAddress {
   country: string
   postalCode: string
 }
+interface GeoCoordinates {
+  longitude: number
+  latitude: number
+  altitude: number
+}
 
-export type { PatientAddressType, PatientAddress }
+interface ClinicAddress {
+  type: string
+  street1: string
+  street2: string
+  city: string
+  state: string
+  country: string
+  postalCode: string
+  geoCoordinates: GeoCoordinates
+  timeZoneId: string
+}
+
+export type { PatientAddressType, PatientAddress, ClinicAddress }

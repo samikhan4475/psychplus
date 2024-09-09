@@ -11,6 +11,7 @@ interface CodesetFormSelectProps
   codeset: string
   exclude?: string[]
   placeholder?: string
+  className?: string
 }
 
 const CodesetSelect = ({
@@ -18,6 +19,7 @@ const CodesetSelect = ({
   codeset,
   exclude,
   placeholder,
+  className,
   ...selectProps
 }: CodesetFormSelectProps) => {
   const form = useFormContext()
@@ -52,8 +54,9 @@ const CodesetSelect = ({
               {...triggerProps}
               variant="soft"
               className={cn(
-                'font-[400] text-gray-12 outline outline-1 outline-gray-7',
+                'flex-1 font-[400] text-gray-12 outline outline-1 outline-gray-7',
                 selectProps.disabled ? 'bg-gray-3 text-gray-11' : 'bg-[white]',
+                className,
               )}
             />
             <Select.Content position="popper" align="center" highContrast>

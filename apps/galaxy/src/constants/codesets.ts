@@ -14,6 +14,9 @@ const CODESETS = {
   LanguageAbility: 'HL7v3.LanguageAbilityMode',
   LanguageProficiency: 'HL7v3.LanguageAbilityProficiency',
   Religion: 'HL7v3.ReligiousAffiliation',
+  SpecialistType: 'SpecialistType',
+  AppointmentStatus: 'AppointmentStatus',
+  EncounterType: 'EncounterType',
 }
 
 export {
