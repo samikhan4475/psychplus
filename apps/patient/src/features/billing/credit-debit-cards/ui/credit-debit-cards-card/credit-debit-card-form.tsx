@@ -8,8 +8,6 @@ import { DocumentType } from '@psychplus-v2/types'
 import { cn, zipCodeSchema } from '@psychplus-v2/utils'
 import {
   Box,
-  Button,
-  Checkbox,
   Flex,
   Text,
   TextFieldInput,
@@ -50,9 +48,6 @@ const schema = z.object({
   city: z.string().min(1, 'Required'),
   state: z.string().min(1, 'Required'),
   postalCode: zipCodeSchema,
-  userAgreed: z.coerce.boolean().refine((value) => value === true, {
-    message: 'You must agree to the terms and conditions',
-  }),
 })
 
 type SchemaType = z.infer<typeof schema>
@@ -85,7 +80,6 @@ const CreditCardForm = ({
     resolver: zodResolver(schema),
     reValidateMode: 'onChange',
     defaultValues: {
-      userAgreed: false,
       fullname: creditCard?.name || '',
       address: creditCard?.billingAddress.street1 || '',
       city: creditCard?.billingAddress.city || '',
@@ -169,7 +163,6 @@ const CreditCardForm = ({
       city: '',
       state: '',
       postalCode: '',
-      userAgreed: false,
     })
     onFormClose?.()
   }
@@ -275,41 +268,6 @@ const CreditCardForm = ({
       </Flex>
 
       {loaded ? <BillingAddressAutocompleteForm /> : null}
-
-      <FormFieldContainer mb="2">
-        <Flex direction="row" gap="2" align="center">
-          <Checkbox
-            id="terms-and-conditions-checkbox"
-            size="3"
-            onCheckedChange={(checked: boolean) => {
-              form.setValue('userAgreed', checked)
-              form.trigger('userAgreed')
-            }}
-            {...form.register('userAgreed')}
-            highContrast
-          />
-          <FormFieldLabel
-            className="text-[14px] font-[400]"
-            id="terms-and-conditions-checkbox"
-          >
-            I have read the{' '}
-            <Button
-              className="bg-transparent px-2 pt-[5px]"
-              variant="ghost"
-              onClick={() =>
-                setShowConsentView({
-                  visible: true,
-                  type: DocumentType.TERMS_AND_CONDITIONS,
-                })
-              }
-            >
-              terms & conditions
-            </Button>{' '}
-            and card holder has agreed to place the card on file
-          </FormFieldLabel>
-        </Flex>
-        <FormFieldError name="userAgreed" />
-      </FormFieldContainer>
     </ToggleableForm>
   )
 }
