@@ -4,26 +4,27 @@ import * as Tabs from '@radix-ui/react-tabs'
 import { Flex } from '@radix-ui/themes'
 import { XIcon } from 'lucide-react'
 import {
-  CREDIT_CARD_TAB,
   INSURANCE_TAB,
   PATIENT_INFO_HISTORY_TAB,
   PATIENT_INFO_TAB,
+  PAYMENT_CARDS_TAB,
   PAYMENT_HISTORY_TAB,
   POLICY_AND_CONSENTS_TAB,
 } from './constants'
-import { CreditCardTab } from './credit-card-tab'
 import { InsuranceTab } from './insurance-tab'
 import { PatientInfoHistoryTab } from './patient-info-history-tab'
 import { PatientInfoTab } from './patient-info-tab'
+import { PaymentCardsTab } from './payment-card-tab'
 import { PaymentHistoryTab } from './payment-history-tab'
 import { PolicyAndConsentsTab } from './policy-and-consents-tab'
 import { useStore } from './store'
 
 interface PatientInfoViewProps {
   patientId: string
+  stripeApiKey:string
 }
 
-const PatientInfoView = ({ patientId }: PatientInfoViewProps) => {
+const PatientInfoView = ({ patientId,stripeApiKey }: PatientInfoViewProps) => {
   const { activeTab, setActiveTab, showPatientHistory, closePatientHistory } =
     useStore((state) => ({
       activeTab: state.activeTab,
@@ -46,7 +47,7 @@ const PatientInfoView = ({ patientId }: PatientInfoViewProps) => {
             Policy and Consents
           </TabsTrigger>
           <TabsTrigger value={PAYMENT_HISTORY_TAB}>Payment Hx</TabsTrigger>
-          <TabsTrigger value={CREDIT_CARD_TAB}>Credit Card</TabsTrigger>
+          <TabsTrigger value={PAYMENT_CARDS_TAB}>Payment Cards</TabsTrigger>
           {showPatientHistory ? (
             <TabsTrigger
               value={PATIENT_INFO_HISTORY_TAB}
@@ -70,8 +71,8 @@ const PatientInfoView = ({ patientId }: PatientInfoViewProps) => {
       <TabsContent value={PAYMENT_HISTORY_TAB}>
         <PaymentHistoryTab />
       </TabsContent>
-      <TabsContent value={CREDIT_CARD_TAB}>
-        <CreditCardTab />
+      <TabsContent value={PAYMENT_CARDS_TAB}>
+        <PaymentCardsTab stripeApiKey={stripeApiKey} patientId={patientId}  />
       </TabsContent>
       <TabsContent value={PATIENT_INFO_HISTORY_TAB}>
         <PatientInfoHistoryTab />

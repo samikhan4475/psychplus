@@ -3,7 +3,7 @@ const PATIENT_INFO_HISTORY_TAB = 'patient-info-hx'
 const INSURANCE_TAB = 'insurance'
 const POLICY_AND_CONSENTS_TAB = 'policy-and-consents'
 const PAYMENT_HISTORY_TAB = 'payment-hx'
-const CREDIT_CARD_TAB = 'credit-card'
+const PAYMENT_CARDS_TAB = 'payment-cards'
 const POLICY_TYPE_A = 'PolicyA'
 
 export {
@@ -12,6 +12,6 @@ export {
   INSURANCE_TAB,
   POLICY_AND_CONSENTS_TAB,
   PAYMENT_HISTORY_TAB,
-  CREDIT_CARD_TAB,
+  PAYMENT_CARDS_TAB,
   POLICY_TYPE_A,
 }

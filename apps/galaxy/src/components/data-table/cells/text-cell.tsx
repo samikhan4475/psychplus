@@ -8,6 +8,7 @@ interface TextCellProps {
 
 const TextCell = ({
   empty,
+  className,
   children,
   className,
 }: React.PropsWithChildren<TextCellProps>) => {

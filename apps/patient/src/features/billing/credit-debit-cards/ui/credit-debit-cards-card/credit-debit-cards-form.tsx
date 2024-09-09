@@ -6,7 +6,7 @@ import { CreditCardListItem } from './credit-debit-card-list-item'
 
 const PaymentMethodsForm = ({ creditCards }: { creditCards: CreditCard[] }) => {
   const trigger = (
-    <FieldPlaceholder>+ Add New Credit/Debit Card</FieldPlaceholder>
+    <FieldPlaceholder>+ Adds New Credit/Debit Card</FieldPlaceholder>
   )
   return (
     <Box>
