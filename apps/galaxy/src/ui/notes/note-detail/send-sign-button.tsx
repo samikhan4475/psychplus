@@ -1,22 +1,22 @@
 import { Button } from '@radix-ui/themes'
 import { SignIcon } from '@/components/icons'
-import { CosignDialog } from './cosign-dialog'
-import { useCosignDialog } from './hooks'
-import { useStore } from './store'
+import { CosignDialog } from '../cosign-dialog'
+import { useCosignDialog } from '../hooks'
+import { useStore } from '../store'
 
-const NotesSendCosignerButton = () => {
+const SignButton = () => {
   const { isOpen, closeDialog, openDialog } = useCosignDialog()
-  const { selectedRows, setErrorMessage, setIsErrorAlertOpen } = useStore(
+  const { selectedRow, setErrorMessage, setIsErrorAlertOpen } = useStore(
     (state) => ({
+      selectedRow: state.selectedRow,
       setErrorMessage: state.setErrorMessage,
       setIsErrorAlertOpen: state.setIsErrorAlertOpen,
-      selectedRows: state.selectedRows,
     }),
   )
   const handleClick = () => {
-    if (!selectedRows.length) {
+    if (!selectedRow) {
       setIsErrorAlertOpen(true)
-      setErrorMessage('Please select one note to click this button')
+      setErrorMessage('Please select note to click this button')
       return
     }
     openDialog()
@@ -26,12 +26,12 @@ const NotesSendCosignerButton = () => {
     <>
       <Button size="1" highContrast onClick={handleClick}>
         <SignIcon width={16} height={16} />
-        Send to Cosigner
+        Send to Sign
       </Button>
 
-      {isOpen && <CosignDialog isOpen={isOpen} closeDialog={closeDialog} />}
+      <CosignDialog isOpen={isOpen} closeDialog={closeDialog} />
     </>
   )
 }
 
-export { NotesSendCosignerButton }
+export { SignButton }

@@ -2,23 +2,24 @@
 
 import { Button } from '@radix-ui/themes'
 import { WarningIcon } from '@/components/icons'
-import { useStore } from './store'
+import { useStore } from '../store'
 
-const NotesMarkErrorButton = () => {
-  const { selectedRows, setErrorMessage, setIsErrorAlertOpen } = useStore(
+const MarkErrorButton = () => {
+  const { selectedRow, setErrorMessage, setIsErrorAlertOpen } = useStore(
     (state) => ({
+      selectedRow: state.selectedRow,
       setErrorMessage: state.setErrorMessage,
       setIsErrorAlertOpen: state.setIsErrorAlertOpen,
-      selectedRows: state.selectedRows,
     }),
   )
 
   const handleClick = () => {
-    if (!selectedRows.length) {
+    if (!selectedRow) {
       setIsErrorAlertOpen(true)
-      setErrorMessage('Please select one note to click this button')
+      setErrorMessage('Please select note to click this button')
     }
   }
+
   return (
     <Button
       variant="outline"
@@ -33,4 +34,4 @@ const NotesMarkErrorButton = () => {
   )
 }
 
-export { NotesMarkErrorButton }
+export { MarkErrorButton }

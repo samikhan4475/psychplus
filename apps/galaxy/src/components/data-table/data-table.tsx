@@ -32,6 +32,7 @@ interface DataTableProps<TData, TValue> {
   onRowClick?: (row: Row<TData>, table: ReactTable<TData>) => void
   onRowSelectionChange?: (selectedRows: RowSelectionState) => void
   sticky?: boolean
+  theadClass?: string
 }
 
 const DataTable = <TData, TValue>({
@@ -45,6 +46,7 @@ const DataTable = <TData, TValue>({
   onRowClick,
   sticky,
   onRowSelectionChange,
+  theadClass,
 }: DataTableProps<TData, TValue>) => {
   const [sorting, setSorting] = useState<SortingState>([])
   const [pagination, setPagination] = useState<PaginationState>({
@@ -97,7 +99,11 @@ const DataTable = <TData, TValue>({
         })}
       >
         <Table.Header
-          className={cn('bg-pp-focus-bg-2', { 'sticky top-0': sticky })}
+          className={cn(
+            'bg-pp-focus-bg-2',
+            { 'sticky top-0': sticky },
+            theadClass,
+          )}
         >
           {table.getHeaderGroups().map((headerGroup) => (
             <Table.Row key={headerGroup.id}>

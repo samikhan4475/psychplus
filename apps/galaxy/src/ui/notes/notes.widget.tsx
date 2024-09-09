@@ -1,6 +1,7 @@
 'use client'
 
 import { Flex } from '@radix-ui/themes'
+import { AlertDialog } from './alert-dialog'
 import { CreateNoteView } from './create-note'
 import { NotesHeader } from './notes-header'
 import { NotesLayout } from './notes-layout'
@@ -16,7 +17,7 @@ const NotesWidget = ({ patientId }: NotesViewProps) => {
   }))
 
   return (
-    <Flex direction="column" width="100%" px={'1'}>
+    <Flex direction="column" width="100%" px="1">
       {isCreateNoteView ? (
         <CreateNoteView />
       ) : (
@@ -25,6 +26,7 @@ const NotesWidget = ({ patientId }: NotesViewProps) => {
           <NotesLayout />
         </>
       )}
+      <AlertDialog />
     </Flex>
   )
 }

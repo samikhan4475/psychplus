@@ -2,22 +2,30 @@
 
 import { PlusIcon } from '@radix-ui/react-icons'
 import { Button } from '@radix-ui/themes'
-import { useStore } from './store'
+import { useStore } from '../store'
 
-const NotesAddendumButton = () => {
-  const { selectedRows, setErrorMessage, setIsErrorAlertOpen } = useStore(
+interface AddendumButtonProps {
+  onClick: () => void
+}
+const AddendumButton = ({ onClick }: AddendumButtonProps) => {
+  const { selectedRow, setErrorMessage, setIsErrorAlertOpen } = useStore(
     (state) => ({
+      selectedRow: state.selectedRow,
       setErrorMessage: state.setErrorMessage,
       setIsErrorAlertOpen: state.setIsErrorAlertOpen,
-      selectedRows: state.selectedRows,
     }),
   )
+
   const handleClick = () => {
-    if (!selectedRows.length) {
+    if (!selectedRow) {
       setIsErrorAlertOpen(true)
-      setErrorMessage('Please select one note to click this button')
+      setErrorMessage('Please select note to click this button')
+      return
     }
+
+    onClick()
   }
+
   return (
     <Button
       variant="outline"
@@ -32,4 +40,4 @@ const NotesAddendumButton = () => {
   )
 }
 
-export { NotesAddendumButton }
+export { AddendumButton }

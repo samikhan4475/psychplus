@@ -8,6 +8,7 @@ const CreateNewNoteButton = () => {
   const { setIsCreateNoteView } = useStore((state) => ({
     setIsCreateNoteView: state.setIsCreateNoteView,
   }))
+
   return (
     <Button
       size="1"

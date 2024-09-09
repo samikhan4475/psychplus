@@ -14,6 +14,10 @@ interface Store {
   setSelectedRows: (value: string[]) => void
   isCreateNoteView: boolean
   setIsCreateNoteView: (value: boolean) => void
+  errorMessage: string
+  setErrorMessage: (value: string) => void
+  isErrorAlertOpen: boolean
+  setIsErrorAlertOpen: (value: boolean) => void
 }
 
 const useStore = create<Store>((set, get) => ({
@@ -49,6 +53,10 @@ const useStore = create<Store>((set, get) => ({
   setSelectedRows: (selectedRows) => set({ selectedRows }),
   isCreateNoteView: false,
   setIsCreateNoteView: (isCreateNoteView) => set({ isCreateNoteView }),
+  errorMessage: '',
+  setErrorMessage: (errorMessage) => set({ errorMessage }),
+  isErrorAlertOpen: false,
+  setIsErrorAlertOpen: (isErrorAlertOpen) => set({ isErrorAlertOpen }),
 }))
 
 export { useStore }

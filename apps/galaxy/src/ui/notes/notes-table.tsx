@@ -161,7 +161,6 @@ const NotesTable = () => {
 
   const onRowSelectionChange = useCallback((rows: RowSelectionState) => {
     const selectedRowIds = Object?.keys(rows)
-    if (!selectedRowIds.length) return
     setSelectedRows(selectedRowIds)
   }, [])
 
