@@ -1,6 +1,6 @@
 'use client'
 
-import { Box, Flex, Text } from '@radix-ui/themes'
+import { Box, Text } from '@radix-ui/themes'
 import {
   Calendar as CalendarIcon,
   ChevronLeftIcon,
@@ -22,13 +22,16 @@ import {
   Popover,
 } from 'react-aria-components'
 import { Controller, useFormContext } from 'react-hook-form'
-import { FormFieldError } from '@/components/form'
+import { FormFieldContainer, FormFieldError } from '@/components/form'
+import { cn } from '@/utils'
 
 interface DatePickerInputProps<T extends DateValue> extends DatePickerProps<T> {
   label?: string
   field: string
   isRequired?: boolean
   aria_lable?: string
+  className?: string
+  datePickerClass?: string
 }
 
 const DatePickerInput = <T extends DateValue>({
@@ -36,11 +39,13 @@ const DatePickerInput = <T extends DateValue>({
   isRequired,
   field,
   aria_lable,
+  className,
+  datePickerClass,
 }: DatePickerInputProps<T>) => {
   const form = useFormContext()
 
   return (
-    <Flex direction={'column'} width={'100%'} className="gap-0.5">
+    <FormFieldContainer className={cn('w-full gap-0.5', className)}>
       {label && (
         <Text as="label" size="1" weight="medium">
           {label}
@@ -63,6 +68,7 @@ const DatePickerInput = <T extends DateValue>({
             validationBehavior="aria"
             aria-label={aria_lable ?? 'date to filter input'}
             isInvalid={invalid}
+            className={datePickerClass}
           >
             <Group className={'relative w-full'}>
               <DateInput
@@ -119,7 +125,7 @@ const DatePickerInput = <T extends DateValue>({
         )}
       />
       <FormFieldError name={field} />
-    </Flex>
+    </FormFieldContainer>
   )
 }
 

@@ -23,6 +23,7 @@ const STANDARD_CODESET_ENDPOINT = (
   `${API_URL}/api/codeset/authorities/${assigningAuthority}/codesets/${codeSystemName}`
 const METADATA_CODESET_ENDPOINT = (name: string) =>
   `${API_URL}/api/metadata/codesets/${name}`
+const GET_STAFF_ENDPOINT = `${API_URL}/api/staff/search`
 const GET_CLINICS_ENDPOINT = `${API_URL}/api/clinics`
 const GET_PROVIDERS_ENDPOINT = `${API_URL}/api/staff/search`
 
@@ -40,6 +41,7 @@ export {
   SEND_POLICY_NOTICE_ENDPOINT,
   STANDARD_CODESET_ENDPOINT,
   METADATA_CODESET_ENDPOINT,
+  GET_STAFF_ENDPOINT,
   GET_CLINICS_ENDPOINT,
   GET_PROVIDERS_ENDPOINT,
 }
