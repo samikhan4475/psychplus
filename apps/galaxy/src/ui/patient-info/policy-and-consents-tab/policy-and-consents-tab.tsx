@@ -1,36 +1,19 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import { ScrollArea } from '@radix-ui/themes'
-import { TabContentHeading, ViewLoadingPlaceholder } from '../shared'
+import { Flex, ScrollArea } from '@radix-ui/themes'
+import { TabContentHeading } from '../shared'
+import { DataTable } from './data-table'
 
 const TAB_TITLE = 'Policy and Consents'
 
-const wait = async () => {
-  await new Promise((resolve) => setTimeout(resolve, 2000))
-  return 'hello'
-}
-
 const PolicyAndConsentsTab = () => {
-  const [result, setResult] = useState<string>()
-
-  useEffect(() => {
-    wait().then(setResult)
-  }, [])
-
-  if (!result) {
-    return <ViewLoadingPlaceholder title={TAB_TITLE} />
-  }
-
-  // if (result.state === 'error') {
-  //   return <div>{result.error}</div>
-  // }
-
   return (
-    <>
+    <Flex direction="column" width="100%" className="gap-0.5">
       <TabContentHeading title={TAB_TITLE} />
-      <ScrollArea></ScrollArea>
-    </>
+      <ScrollArea>
+        <DataTable />
+      </ScrollArea>
+    </Flex>
   )
 }
 

@@ -10,7 +10,6 @@ const TextCell = ({
   empty,
   className,
   children,
-  className,
 }: React.PropsWithChildren<TextCellProps>) => {
   return (
     <Flex direction="column" height="100%" justify="center" px="1">

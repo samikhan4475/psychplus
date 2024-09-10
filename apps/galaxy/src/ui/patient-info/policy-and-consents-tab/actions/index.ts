@@ -1,0 +1,1 @@
+export * from './get-patient-policy-and-consents'
