@@ -57,9 +57,6 @@ const Diagnosis = ({ form }: { form: UseFormReturn<SchemaType> }) => {
     let updatedDiagnoses = [...currentDiagnoses]
 
     if (id) {
-      // updatedDiagnoses = currentDiagnoses.filter(
-      //   (diagnosis) => diagnosis.id !== id,
-      // )
       updatedDiagnoses = updatedDiagnoses.map((diagnosis) =>
         diagnosis.id === id
           ? { ...diagnosis, recordStatus: 'Deleted' }
@@ -72,7 +69,48 @@ const Diagnosis = ({ form }: { form: UseFormReturn<SchemaType> }) => {
     } else {
       updatedDiagnoses = currentDiagnoses
     }
-    setValue('claimDiagnosis', updatedDiagnoses)
+
+    // Step 1: Calculate new sequence numbers for active diagnoses
+    const activeDiagnoses = updatedDiagnoses
+      .filter((diagnosis) => diagnosis.recordStatus !== 'Deleted')
+      .map((diagnosis, index) => ({
+        ...diagnosis,
+        sequenceNo: index + 1,
+      }))
+
+    // Step 2: Update diagnoses array with recalculated sequence numbers
+    const finalDiagnoses = updatedDiagnoses.map((diagnosis) =>
+      diagnosis.recordStatus === 'Deleted'
+        ? diagnosis
+        : activeDiagnoses.find(
+            (activeDiagnosis) => activeDiagnosis.id === diagnosis.id,
+          ) || diagnosis,
+    )
+
+
+    // Update the form value with the final diagnoses
+    setValue('claimDiagnosis', finalDiagnoses)
+    if (activeDiagnoses.length < 4) {
+      const claimServiceLines = form.getValues('claimServiceLines')
+      claimServiceLines.map((charge) => {
+        if (Number(charge.diagnosisPointer1) === activeDiagnoses.length + 1) {
+          charge.diagnosisPointer1 = ''
+        }
+        if (Number(charge.diagnosisPointer2) === activeDiagnoses.length + 1) {
+          charge.diagnosisPointer2 = ''
+        }
+        if (Number(charge.diagnosisPointer3) === activeDiagnoses.length + 1) {
+          charge.diagnosisPointer3 = ''
+        }
+        if (Number(charge.diagnosisPointer4) === activeDiagnoses.length + 1) {
+          charge.diagnosisPointer4 = ''
+        }
+        return charge
+      })
+
+      console.log('updated claim service lines ', claimServiceLines)
+      form.setValue(`claimServiceLines`, claimServiceLines)
+    }
   }
 
   return (
@@ -85,23 +123,25 @@ const Diagnosis = ({ form }: { form: UseFormReturn<SchemaType> }) => {
       </Flex>
 
       <Flex align="center" justify="start" gap="2" mt="2">
-        {claimDiagnoses.filter(item=> item.recordStatus === "Active").map((icdItem) => {
-          return (
-            <Box
-              className="rounded-[20px] border-2 border-[#acddfa] bg-[#bee4fa1a] px-2"
-              key={icdItem.diagnosisCode}
-            >
-              <Flex align="center" justify="center" gap="2">
-                <Text>{icdItem.diagnosisCode}</Text>
-                <Cross1Icon
-                  onClick={() =>
-                    handleRemoveDiagnosis(icdItem.id, icdItem.diagnosisCode)
-                  }
-                />
-              </Flex>
-            </Box>
-          )
-        })}
+        {claimDiagnoses
+          .filter((item) => item.recordStatus === 'Active')
+          .map((icdItem) => {
+            return (
+              <Box
+                className="rounded-[20px] border-2 border-[#acddfa] bg-[#bee4fa1a] px-2"
+                key={icdItem.diagnosisCode}
+              >
+                <Flex align="center" justify="center" gap="2">
+                  <Text>{icdItem.diagnosisCode}</Text>
+                  <Cross1Icon
+                    onClick={() =>
+                      handleRemoveDiagnosis(icdItem.id, icdItem.diagnosisCode)
+                    }
+                  />
+                </Flex>
+              </Box>
+            )
+          })}
       </Flex>
     </>
   )

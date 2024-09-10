@@ -105,7 +105,6 @@ const getColumns = (
   },
   {
     id: 'units',
-    accessorKey: 'units',
     size: 50,
     header: ({ column }) => (
       <DataTableColumnHeader
@@ -145,7 +144,6 @@ const getColumns = (
   },
   {
     id: 'startTime',
-    accessorKey: 'startTime',
     size: 50,
     header: ({ column }) => (
       <DataTableColumnHeader
@@ -159,7 +157,6 @@ const getColumns = (
   },
   {
     id: 'endTime',
-    accessorKey: 'endTime',
     size: 50,
     header: ({ column }) => (
       <DataTableColumnHeader

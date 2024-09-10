@@ -61,7 +61,7 @@ const IconAndDate = (
           format(date, dateFormat ?? 'PPP')
         ) : (
           <span className={placeholderStyles}>
-            {placeholder || 'MM/DD/YYYY'}
+            {placeholder ?? 'MM/DD/YYYY'}
           </span>
         )}
         <CalendarIcon className={cn('mr-1 h-5 w-5', calendarClassName)} />
@@ -75,7 +75,7 @@ const IconAndDate = (
         format(date, 'PPP')
       ) : (
         <span className={placeholderStyles}>
-          {placeholder || 'Pick a date'}
+          {placeholder ?? 'Pick a date'}
         </span>
       )}
     </>
@@ -97,7 +97,7 @@ const DatePicker = ({
     <Popover.Trigger>
       <Button
         disabled={disabled}
-        color={color || undefined}
+        color={color ?? undefined}
         variant="outline"
         className={
           buttonClassName ?? 'w-[200px] justify-start text-left font-regular'
