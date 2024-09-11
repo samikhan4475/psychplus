@@ -17,7 +17,6 @@ import {
   CreditDebitCardIcon,
   EditIcon,
   FeatureEmpty,
-  FileLineIcon,
   LoadingPlaceholder,
   ParentLineIcon,
   ProviderAvatar,
@@ -38,6 +37,7 @@ import {
   mapVerificationStatusToChipVariant,
 } from '../utils'
 import { AppointmentTimeLabel } from './appointment-time-label'
+import { JoinVirtualCallBtn } from './join-virtual-call-button'
 import { CancelAppointment } from './cancel-appointment'
 import { ChangePaymentMethodDialog } from './change-payment-method-dialog'
 import { PayCopayButton } from './pay-copay-button'
@@ -251,11 +251,10 @@ const UpcomingAppointmentsSummaryComponent = async () => {
                   <Flex width={{ initial: '100%', xs: 'auto' }}>
                     {row?.virtualRoomLink &&
                       row.type === AppointmentType.Virtual && (
-                        <Link href={row?.virtualRoomLink} target="_blank">
-                          <Button highContrast className="w-full bg-[#194595]">
-                            Join Virtual Call now
-                          </Button>
-                        </Link>
+                        <JoinVirtualCallBtn 
+                          virtualRoomLink={row?.virtualRoomLink} 
+                          appointment={row}
+                        />
                       )}
                     {row.type === AppointmentType.InPerson && (
                       <Link
