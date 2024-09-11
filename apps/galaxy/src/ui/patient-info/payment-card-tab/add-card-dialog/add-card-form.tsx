@@ -91,7 +91,7 @@ const AddCardForm = ({ onClose }: AddCardFormProps) => {
       paymentMethod: { card },
     } = stripeResult
 
-    let cardBrand = card.brand
+    const cardBrand = card.brand
 
     if (!ALLOWED_CARDS.includes(cardBrand)) {
       toast.error('Card not supported')

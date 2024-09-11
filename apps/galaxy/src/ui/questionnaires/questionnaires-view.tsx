@@ -26,14 +26,17 @@ import { HamDTab } from './ham-d-tab'
 import { MocaTab } from './moca-tab'
 import { Pcl5Tab } from './pcl-5-tab'
 import { Phq9Tab } from './phq-9-tab'
+import { QuestionnairesData } from './shared/questionnaires-form'
 import { SnapIvTab } from './snap-iv-tab'
 import { useStore } from './store'
 import { YBocsTab } from './y-bocs-tab'
 
 const QuestionnairesView = ({
   questionnairesDashboardData,
+  questionnairesGad7Data,
 }: {
   questionnairesDashboardData: QuestionnairesDashboard[]
+  questionnairesGad7Data: QuestionnairesData[]
 }) => {
   const { activeTab, setActiveTab } = useStore((state) => ({
     activeTab: state.activeTab,
@@ -71,7 +74,7 @@ const QuestionnairesView = ({
         <Phq9Tab />
       </TabsContent>
       <TabsContent value={GAD_7_TAB}>
-        <Gad7Tab />
+        <Gad7Tab questionnairesGad7Data={questionnairesGad7Data} />
       </TabsContent>
       <TabsContent value={SNAP_IV_TAB}>
         <SnapIvTab />

@@ -13,10 +13,10 @@ const transformInOption = <T>(
   valueKey?: keyof T,
   nested?: boolean,
   nestedKeys?: string[],
-  separator: string = ' ',
+  separator?: string,
 ): SelectOptionType[] => {
   if (nested && (!nestedKeys || nestedKeys.length === 0)) {
-         return []
+    return []
   }
   return arr.map((item) => {
     const label = nested
