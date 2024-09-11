@@ -15,14 +15,20 @@ import {
   CodeSetsState,
   TabsStore,
   ClaimSubmissionState,
+  ResponseHistoryListState,
+  ResponseHistoryFiltersState
 } from './types'
+import { responseHistoryListStore } from './response-history-list-store'
+import { responseHistoryListFilterStore } from './response-history-list-filter-store'
 
 type ClaimStoreType = ClaimListState &
   ClaimFiltersState &
   TabsStore &
   ClaimState &
   CodeSetsState&
-    ClaimSubmissionState
+    ClaimSubmissionState &
+    ResponseHistoryListState &
+    ResponseHistoryFiltersState
 
 const useStore = createWithEqualityFn<ClaimStoreType>(
   combineStateCreators(
@@ -32,6 +38,8 @@ const useStore = createWithEqualityFn<ClaimStoreType>(
     createClaimStore,
     codeSetsStore,
     ClaimSubmissionStore,
+    responseHistoryListStore,
+    responseHistoryListFilterStore
   ),
   shallow,
 )

@@ -1,5 +1,5 @@
 import { ClaimServiceLine } from '../components/claim-form/types'
-import { Claim } from '../types'
+import { Claim, ResponseHistoryRecord } from '../types'
 
 interface Filters {
   isIncludeMetadataResourceChangeControl?: boolean
@@ -98,6 +98,7 @@ interface TabsStore {
 export const initialTabs: Tab[] = [
   { id: 'claimstable', label: 'Claims' },
   { id: 'submission', label: 'Submission' },
+  { id: 'response-history', label: 'Response History' },
   { id: 'ins-payment', label: 'Ins Payment' },
   { id: 'patient-payment', label: 'Patient Payment' },
   { id: 'patient-statement', label: 'Patient Statement' },
@@ -133,6 +134,23 @@ interface ClaimSubmissionState {
   setSelectedClaim: (value: string) => void
 }
 
+interface ResponseHistoryFiltersState {
+  responseHistoryFilters: ResponseHistoryFilters
+  handleResponseHistoryFiltersChange: (newFilters: Partial<ResponseHistoryFilters>) => void
+}
+interface ResponseHistoryListState {
+  responseHistoryList: ResponseHistoryRecord[]
+  setResponseHistoryList: (value: ResponseHistoryRecord[]) => void
+  responseHistoryModalOpen: boolean
+  setResponseHistoryModalOpen: (value: boolean) => void
+  responseHistoryBatchId: string
+  setResponseHistoryBatchId: (value: string) => void
+}
+
+interface ResponseHistoryFilters {
+  receiverName?: string
+  createdOn?: Date
+}
 export type {
   ClaimFiltersState,
   ClaimListState,
@@ -143,4 +161,7 @@ export type {
   MetaDataCodeSet,
   CodeSetsState,
   ClaimSubmissionState,
+  ResponseHistoryListState,
+  ResponseHistoryFilters,
+  ResponseHistoryFiltersState
 }

@@ -8,6 +8,7 @@ import {
   getPOSCodeSets,
   getStaff,
   getUSAStates,
+  getResponseHistory,
 } from './api.server'
 import { ClaimWidgetClient } from './claim-widget.client'
 import { Preloader } from './preloader'
@@ -24,6 +25,7 @@ const ClaimWidgetServer = async () => {
     posCodeSets,
     staffCodeSets,
     usaStates,
+    responseHistory
   ] = await Promise.all([
     getClaimsList(),
     getInsurancePayersList(),
@@ -32,7 +34,9 @@ const ClaimWidgetServer = async () => {
     getPOSCodeSets(),
     getStaff(),
     getUSAStates(),
+    getResponseHistory()
   ])
+  
   return (
     <ToastProvider>
       <Preloader
@@ -44,6 +48,7 @@ const ClaimWidgetServer = async () => {
         codeSets={codeSets}
         locations={locations}
         usaStates={usaStates}
+        responseHistoryList={responseHistory}
       />
       <ClaimWidgetClient />
     </ToastProvider>

@@ -13,6 +13,7 @@ import {
   StaffDataCodeSet,
   StatesCode,
   USAStates,
+  ResponseHistoryRecord
 } from './types'
 
 type BoundStoreType = UseBoundStore<StoreApi<ClaimStoreType>>
@@ -20,6 +21,7 @@ type BoundStoreType = UseBoundStore<StoreApi<ClaimStoreType>>
 interface PreloaderProps {
   store: BoundStoreType
   claimsList: Claim[]
+  responseHistoryList: ResponseHistoryRecord[]
   insurancePayersList: InsurancePayer[]
   codeSets: CodeSet[]
   locations: Location[]
@@ -31,6 +33,7 @@ interface PreloaderProps {
 const Preloader = ({
   store,
   claimsList,
+  responseHistoryList,
   insurancePayersList,
   codeSets,
   locations,
@@ -48,6 +51,7 @@ const Preloader = ({
     setStaffCodeSets,
     setAccidentTypeCodesets,
     setUSAStatesCodeSets,
+    setResponseHistoryList
   } = store((state) => ({
     setClaimList: state.setClaimList,
     setDateTypes: state.setDateTypes,
@@ -57,11 +61,13 @@ const Preloader = ({
     setCodingPosCodeSets: state.setCodingPosCodeSets,
     setAccidentTypeCodesets: state.setAccidentTypeCodesets,
     setUSAStatesCodeSets: state.setUSAStatesCodeSets,
+    setResponseHistoryList: state.setResponseHistoryList,
   }))
 
   if (!loaded.current) {
     loaded.current = true
     setClaimList(claimsList)
+    setResponseHistoryList(responseHistoryList)
 
     const accidentType = codeSets.find(
       (element) => element.code === 'AccidentType',

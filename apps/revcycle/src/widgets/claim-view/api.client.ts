@@ -7,7 +7,10 @@ import {
   ICD10Code,
   ModifiersResponse,
   Patient,
+  ResponseHistoryDetail,
+  ResponseHistoryRecord
 } from './types'
+import { ClearingHouseReceiver } from '../clearing-house-receiver-list/types'
 
 interface ClaimFiltersPayload {
   isIncludeMetadataResourceChangeControl?: boolean
@@ -35,6 +38,10 @@ interface ClaimSubmissionPayload {
   claimIds: string[]
   insurancePolicyPriority: string
   isScrubOnly: boolean
+}
+interface ResponseHistoryPayload {
+  receiverName?: string
+  createdOn?: Date
 }
 
 const getClaimList = (payload: ClaimFiltersPayload): Promise<Claim[]> =>
@@ -127,14 +134,47 @@ const submitClaim = (
       body: JSON.stringify(payload),
     }),
   )
+
+const getReceivers = (payload: { receiverName: string }): Promise<ClearingHouseReceiver[]> =>
+  handleRequest(
+    fetch(`/revcycle/api/clearinghousereceivers/actions/search`, {
+      method: 'POST',
+      body: JSON.stringify(payload),
+      cache: 'no-store',
+      headers: createHeaders(),
+    }),
+  )
+
+const getResponseHistoryList = (payload: ResponseHistoryPayload): Promise<ResponseHistoryRecord[]> =>
+  handleRequest(
+    fetch(`/revcycle/api/claimssubmissions/responses/actions/search`, {
+      method: 'POST',
+      body: JSON.stringify(payload),
+      cache: 'no-store',
+      headers: createHeaders(),
+    }),
+  )
+
+const getResponseHistoryDetail = (
+  batchId: string,
+): Promise<ResponseHistoryDetail[]> =>
+  handleRequest(
+    fetch(
+      `/revcycle/api/claimssubmissions/responses/${batchId}/details/actions/search`,
+      {
+        method: 'POST',
+        cache: 'no-store',
+        headers: createHeaders(),
+      },
+    ),
+  )
+
 export {
-  getClaimList,
+  deleteClaim, getClaimList, getPatients, getReceivers, getResponseHistoryDetail, getResponseHistoryList, submitClaim,
   getIcdCodes,
-  deleteClaim,
   getCPTCodes,
   getClaimById,
   getModifiersCodes,
-  getPatients,
   updateClaim,
-  submitClaim,
 }
+

@@ -5,6 +5,7 @@ import './style.css'
 import { Cross1Icon } from '@radix-ui/react-icons'
 import { initialTabs, useStore } from '../store'
 import { SubmissionView } from './submission-view'
+import { ResponseHistoryTable } from './response-history-table/response-history-table'
 
 const ClaimView = () => {
   const { tabs, activeTabId, setActiveTab, selectedClaimId, removeTab } =
@@ -55,8 +56,11 @@ const ClaimView = () => {
           >
             <ClaimTable />
           </Box>
-          <Tabs.Content value="Submission">
+          <Tabs.Content value="submission">
             <SubmissionView />
+          </Tabs.Content>
+          <Tabs.Content value="response-history">
+            <ResponseHistoryTable />
           </Tabs.Content>
           <Tabs.Content value="Ins. Payment">
             <Text size="2">Ins. Payment Content will come here</Text>

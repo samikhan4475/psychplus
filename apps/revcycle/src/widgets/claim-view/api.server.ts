@@ -10,10 +10,17 @@ import {
   Location,
   Staff,
   USAStates,
+  ResponseHistoryRecord
 } from './types'
 
 const defaultPayLoad = {
   isIncludePatientInsurancePlan: false,
+}
+
+const defaultResponsePayLoad = {
+  isIncludeMetadataResourceChangeControl: true,
+  isIncludeMetadataResourceIds: true,
+  isIncludeMetadataResourceStatus: true,
 }
 
 const getClaimsList = (): Promise<Claim[]> => {
@@ -87,6 +94,16 @@ const getUSAStates = async (): Promise<USAStates> => {
     ),
   )
 }
+const getResponseHistory = (): Promise<ResponseHistoryRecord[]> => {
+  return handleRequest(
+    fetch(`${API_URL}/api/claimssubmissions/responses/actions/search`, {
+      cache: 'no-store',
+      method: 'POST',
+      body: JSON.stringify(defaultResponsePayLoad),
+      headers: createHeaders(),
+    }),
+  )
+}
 
 const getClaimsListCached = cache(getClaimsList)
 const getPOSCodeSetsCached = cache(getPOSCodeSets)
@@ -95,6 +112,7 @@ const getInsurancePayersListCached = cache(getInsurancePayersList)
 const getLocationsCached = cache(getLocations)
 const getAccidentCodeSetsCached = cache(getAccidentCodeSets)
 const getUSAStatesCached = cache(getUSAStates)
+const getResponseHistoryCached = cache(getResponseHistory)
 
 export {
   getClaimsListCached as getClaimsList,
@@ -104,4 +122,5 @@ export {
   getLocationsCached as getLocations,
   getAccidentCodeSetsCached as getAccidentCodeSets,
   getUSAStatesCached as getUSAStates,
+  getResponseHistoryCached as getResponseHistory,
 }

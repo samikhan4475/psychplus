@@ -372,6 +372,56 @@ interface USAStates {
   displayName: string
   codes: StatesCode[]
 }
+interface Insurance {
+  paymentType: string
+  checkNumber: string
+  claimNumber: string
+  payerName: string
+  checkDate: string
+  receivedDate: string
+  totalClaim: string
+  status: string
+  postedAmount: string
+  unpostedAmount: string
+  insuranceName: string
+  selectDate: string
+  dateType: string
+  dateFrom: Date
+  dateTo: Date
+}
+
+interface ResponseHistoryRecord {
+  id: string;
+  recordStatus: string;
+  receiverId: string;
+  receiverName: string;
+  submitterId: string;
+  submitterName: string;
+  practiceId: string;
+  practiceName: string;
+  zipFilePath: string;
+  processingStatus: string;
+  isProcessed: string;
+  isManualImport: boolean;
+  fileCount: number;
+}
+
+interface ReceiverOption {
+  id: string
+  name: string
+}
+interface ResponseHistoryDetail {
+  id: string
+  metadata: MetaData
+  recordStatus: string;
+  responseId: string;
+  filePath: string;
+  fileType: string;
+  isProcessed: boolean;
+  isCheckAlreadyExists: boolean;
+  transcationReferenceNumber: string;
+}
+
 export type {
   Claim,
   InsurancePayer,
@@ -397,5 +447,9 @@ export type {
   USAStates,
   StateCodes,
   ICD10Code,
-  ICD10Response
+  ICD10Response,
+  Insurance,
+  ResponseHistoryRecord,
+  ReceiverOption,
+  ResponseHistoryDetail
 }
