@@ -1,10 +1,21 @@
 import { Flex, Text, Tooltip } from '@radix-ui/themes'
+import { cn } from '@/utils'
 
-const LongTextCell = ({ children }: React.PropsWithChildren) => {
+interface LongTextCellProps {
+  children: React.ReactNode
+  className?: string
+}
+
+const LongTextCell = ({ children, className }: LongTextCellProps) => {
   return (
-    <Flex direction="column" height="100%" justify="center" px="1">
-      <Tooltip content={children}>
-        <Text className="line-clamp-1 overflow-ellipsis text-[11px]">
+    <Flex className={cn('flex h-full flex-col justify-center px-1', className)}>
+      <Tooltip content={<Text className="select-text">{children}</Text>}>
+        <Text
+          className={cn(
+            'line-clamp-1 select-text overflow-ellipsis text-[11px]',
+            className,
+          )}
+        >
           {children}
         </Text>
       </Tooltip>

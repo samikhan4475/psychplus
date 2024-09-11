@@ -14,13 +14,8 @@ const FormFieldLabel = ({
   required,
 }: React.PropsWithChildren<FormFieldLabelProps>) => {
   return (
-    <Flex align="center" className="h-[18px]">
-      <Text
-        as="label"
-        weight="medium"
-        className={cn('text-[11px]', className)}
-        htmlFor={id}
-      >
+    <Flex align="center" className={cn('text-[11px]', className)}>
+      <Text as="label" weight="medium" htmlFor={id}>
         {children}
       </Text>
       {required ? (

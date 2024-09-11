@@ -116,6 +116,36 @@ const getAgeFromDate = (date: DateValue) => {
   return age
 }
 
+const formatDateTime = (dateString: string | undefined) => {
+  if (!dateString) return ''
+
+  const date = new Date(dateString)
+  return new Intl.DateTimeFormat('en-US', {
+    year: '2-digit',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+  }).format(date)
+}
+
+function formatDateToISOString(
+  date: DateValue | null | undefined,
+  endOfDay: boolean = false,
+): string | null {
+  if (!date) return null
+
+  const { year, month, day } = date
+
+  // If `endOfDay` is true, set the time to 23:59:59.999, otherwise set it to 00:00:00
+  const formattedDate = endOfDay
+    ? new Date(Date.UTC(year, month - 1, day, 23, 59, 59, 999)) // End of day
+    : new Date(Date.UTC(year, month - 1, day, 0, 0, 0)) // Start of day
+
+  return formattedDate.toISOString()
+}
+
 export {
   getCalendarDate,
   getLocalCalendarDate,
@@ -127,4 +157,6 @@ export {
   getDayOfWeekLabel,
   getTimeLabel,
   getSlashedDateString,
+  formatDateTime,
+  formatDateToISOString,
 }

@@ -61,14 +61,14 @@ const DatePickerInput = <T extends DateValue>({
         }) => (
           <DatePicker
             name={name}
-            value={value}
+            value={value ?? null} // Ensure it handles null or undefined
             onChange={onChange}
             onBlur={onBlur}
             isRequired
             validationBehavior="aria"
             aria-label={aria_lable ?? 'date to filter input'}
             isInvalid={invalid}
-            className={datePickerClass}
+            className="w-[100px]"
           >
             <Group className={'relative w-full'}>
               <DateInput

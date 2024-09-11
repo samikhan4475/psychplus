@@ -17,6 +17,8 @@ const CODESETS = {
   SpecialistType: 'SpecialistType',
   AppointmentStatus: 'AppointmentStatus',
   EncounterType: 'EncounterType',
+  NotificationStatus: 'NotificationStatusType',
+  NotificationChannel: 'NotificationChannel',
 }
 
 export {
