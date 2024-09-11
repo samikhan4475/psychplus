@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { AppointmentType, CODESETS, PaymentType } from '@psychplus-v2/constants'
+import { AppointmentType, CODESETS, PaymentType, ProviderType } from '@psychplus-v2/constants'
 import { GOOGLE_MAPS_API_KEY, STRIPE_PUBLISHABLE_KEY } from '@psychplus-v2/env'
 import {
   formatCurrency,
@@ -8,14 +8,13 @@ import {
   getUserFullName,
   withSuspense,
 } from '@psychplus-v2/utils'
-import { Button, Flex, Text, Tooltip } from '@radix-ui/themes'
-import { CalendarDaysIcon, ChevronRightIcon, DotIcon } from 'lucide-react'
+import { Button, Flex, Text } from '@radix-ui/themes'
+import { CalendarDaysIcon, DotIcon } from 'lucide-react'
 import { getCodesets, getConsents, getProfile } from '@/api'
 import {
   Badge,
   CardContainer,
   CreditDebitCardIcon,
-  EditIcon,
   FeatureEmpty,
   LoadingPlaceholder,
   ParentLineIcon,
@@ -42,6 +41,7 @@ import { CancelAppointment } from './cancel-appointment'
 import { ChangePaymentMethodDialog } from './change-payment-method-dialog'
 import { PayCopayButton } from './pay-copay-button'
 import { UpdateDateAndTimeDialog } from './update-date-and-time-dialog'
+import { AppointmentEditButton } from './appointment-edit-button'
 
 const UpcomingAppointmentsSummaryComponent = async () => {
   const [
@@ -134,17 +134,10 @@ const UpcomingAppointmentsSummaryComponent = async () => {
                           {row.specialist.legalName.honors &&
                             `, ${row.specialist.legalName.honors}`}
                         </Text>
-                        <Tooltip
-                          content="Change Provider for appointment"
-                          delayDuration={300}
-                          className="max-w-[200px]"
-                        >
-                          <Link
-                            href={`/appointments/search?appointmentId=${row.id}`}
-                          >
-                            <EditIcon />
-                          </Link>
-                        </Tooltip>
+                        <AppointmentEditButton 
+                          appointmentType={row.type === 'InPerson' ? AppointmentType.InPerson : AppointmentType.Virtual} 
+                          providerType={row.specialistTypeCode === 1 ? ProviderType.Psychiatrist : ProviderType.Therapist} 
+                        />
                       </Flex>
                       <Flex
                         mt="1"
