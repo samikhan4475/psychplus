@@ -20,11 +20,15 @@ const renderCPTItem = (provider: CPTCode) => {
 interface DropdownMenuSearchProps<T> {
   onSelectItem: (selectedItem: CPTCode) => void
   cptCode?: string
+  isError?: boolean
+  error?: any
 }
 
 const CPTSearchDropdown = <T extends CPTCode>({
   onSelectItem,
   cptCode,
+  isError,
+  error,
 }: DropdownMenuSearchProps<T>) => {
   return (
     <SearchDropdown<CPTCode>
@@ -33,6 +37,8 @@ const CPTSearchDropdown = <T extends CPTCode>({
       fetchResults={fetchCPTCodes}
       renderItem={renderCPTItem}
       searchQuery={cptCode}
+      isError={isError}
+      error={error}
     />
   )
 }

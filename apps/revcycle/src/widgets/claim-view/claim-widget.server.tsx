@@ -1,5 +1,6 @@
 import { unstable_noStore as noStore } from 'next/cache'
 import { getCodeSets } from '@psychplus/codeset/api.server'
+import { ToastProvider } from '@psychplus/ui/toast-provider'
 import {
   getClaimsList,
   getInsurancePayersList,
@@ -33,7 +34,7 @@ const ClaimWidgetServer = async () => {
     getUSAStates(),
   ])
   return (
-    <>
+    <ToastProvider>
       <Preloader
         store={useStore}
         claimsList={claimsList}
@@ -45,7 +46,7 @@ const ClaimWidgetServer = async () => {
         usaStates={usaStates}
       />
       <ClaimWidgetClient />
-    </>
+    </ToastProvider>
   )
 }
 

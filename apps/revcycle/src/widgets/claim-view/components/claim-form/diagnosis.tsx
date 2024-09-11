@@ -8,7 +8,12 @@ import { SchemaType } from './add-claim-form'
 import { IcdSearchDropdown } from './icd-search-dropdown'
 
 const Diagnosis = ({ form }: { form: UseFormReturn<SchemaType> }) => {
-  const { setValue, getValues, watch } = form
+  const {
+    setValue,
+    getValues,
+    watch,
+    formState: { errors },
+  } = form
   const claimDiagnoses = watch('claimDiagnosis') || []
 
   const handleSelectedItem = (selectedItem: ICD10Code) => {
@@ -29,8 +34,8 @@ const Diagnosis = ({ form }: { form: UseFormReturn<SchemaType> }) => {
       recordStatus: 'Active',
     }
     const updatedDiagnoses = [...currentDiagnoses, newDiagnosis]
-    const claimServiceLines = form.getValues('claimServiceLines')
-    claimServiceLines.map((charge) => {
+    const claimServiceLines = form.getValues('claimServiceLines') ?? []
+        claimServiceLines.map((charge) => {
       if (newDiagnosis.sequenceNo === 1) {
         charge.diagnosisPointer1 = newDiagnosis.sequenceNo.toString()
       }
@@ -87,7 +92,6 @@ const Diagnosis = ({ form }: { form: UseFormReturn<SchemaType> }) => {
           ) || diagnosis,
     )
 
-
     // Update the form value with the final diagnoses
     setValue('claimDiagnosis', finalDiagnoses)
     if (activeDiagnoses.length < 4) {
@@ -121,7 +125,11 @@ const Diagnosis = ({ form }: { form: UseFormReturn<SchemaType> }) => {
           onSelectItem={handleSelectedItem}
         />
       </Flex>
-
+      {errors.claimDiagnosis && (
+        <Text color="red" mt="2">
+          {errors.claimDiagnosis.message}
+        </Text>
+      )}
       <Flex align="center" justify="start" gap="2" mt="2">
         {claimDiagnoses
           .filter((item) => item.recordStatus === 'Active')

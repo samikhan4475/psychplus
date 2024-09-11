@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react'
-import { Box, Flex } from '@radix-ui/themes'
+import { Box, Flex, Text } from '@radix-ui/themes'
 import { CellContext } from '@tanstack/react-table'
 import { UseFormReturn, useWatch } from 'react-hook-form'
 import { TextField } from '@psychplus/ui/text-field'
@@ -17,10 +17,11 @@ interface TableCellProps {
   row: CellContext<ClaimServiceLine, string>['row']
   form: UseFormReturn<SchemaType>
 }
-
 const TableCellDiagnoses = ({ row, form }: TableCellProps) => {
-  const { setValue } = form
-
+  const {
+    setValue,
+    formState: { errors },
+  } = form
   const diagnosisPointer1 = useWatch({
     control: form.control,
     name: `claimServiceLines.${row.index}.${DiagnosisPointerEnum.DX1}`,
@@ -50,50 +51,57 @@ const TableCellDiagnoses = ({ row, form }: TableCellProps) => {
     },
     [setValue, row.index],
   )
-
+  const getErrorObject = (pointer: DiagnosisPointerEnum) =>
+    errors.claimServiceLines?.[row.index]?.[pointer]
+  const errorObject = getErrorObject(DiagnosisPointerEnum.DX1)
   return (
-    <Flex>
-      <Box className="flex-1">
-        <TextField.Root
-          size="1"
-          placeholder="DX1"
-          value={diagnosisPointer1 ?? ''}
-          onChange={(e) =>
-            handleChange(DiagnosisPointerEnum.DX1, e.target.value)
-          }
-        />
-      </Box>
-      <Box className="flex-1">
-        <TextField.Root
-          size="1"
-          placeholder="DX2"
-          value={diagnosisPointer2 ?? ''}
-          onChange={(e) =>
-            handleChange(DiagnosisPointerEnum.DX2, e.target.value)
-          }
-        />
-      </Box>
-      <Box className="flex-1">
-        <TextField.Root
-          size="1"
-          placeholder="DX3"
-          value={diagnosisPointer3 ?? ''}
-          onChange={(e) =>
-            handleChange(DiagnosisPointerEnum.DX3, e.target.value)
-          }
-        />
-      </Box>
-      <Box className="flex-1">
-        <TextField.Root
-          size="1"
-          placeholder="DX4"
-          value={diagnosisPointer4 ?? ''}
-          onChange={(e) =>
-            handleChange(DiagnosisPointerEnum.DX4, e.target.value)
-          }
-        />
-      </Box>
-    </Flex>
+    <Box>
+      <Flex>
+        <Box className="flex-1">
+          <TextField.Root
+            size="1"
+            placeholder="DX1"
+            value={diagnosisPointer1 ?? ''}
+            onChange={(e) =>
+              handleChange(DiagnosisPointerEnum.DX1, e.target.value)
+            }
+          />
+        </Box>
+        <Box className="flex-1">
+          <TextField.Root
+            size="1"
+            placeholder="DX2"
+            value={diagnosisPointer2 ?? ''}
+            onChange={(e) =>
+              handleChange(DiagnosisPointerEnum.DX2, e.target.value)
+            }
+          />
+        </Box>
+        <Box className="flex-1">
+          <TextField.Root
+            size="1"
+            placeholder="DX3"
+            value={diagnosisPointer3 ?? ''}
+            onChange={(e) =>
+              handleChange(DiagnosisPointerEnum.DX3, e.target.value)
+            }
+          />
+        </Box>
+        <Box className="flex-1">
+          <TextField.Root
+            size="1"
+            placeholder="DX4"
+            value={diagnosisPointer4 ?? ''}
+            onChange={(e) =>
+              handleChange(DiagnosisPointerEnum.DX4, e.target.value)
+            }
+          />
+        </Box>
+      </Flex>
+      <Text size="2" color="red">
+        {errorObject?.message}
+      </Text>
+    </Box>
   )
 }
 

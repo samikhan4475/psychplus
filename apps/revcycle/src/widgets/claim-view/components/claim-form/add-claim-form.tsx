@@ -13,6 +13,7 @@ import {
 import { useWatch, type SubmitHandler } from 'react-hook-form'
 import { z } from 'zod'
 import { Form, useForm, validate } from '@psychplus/form'
+import { useToast } from '@psychplus/ui/toast-provider'
 import { getClaimById, updateClaim } from '../../api.client'
 import { useStore } from '../../store'
 import { AccidentAndLab } from './accident-and-lab'
@@ -25,6 +26,7 @@ import { InsuranceTable } from './insurance-table'
 import { SubmissionInformation } from './submission-information'
 import { SubmissionResponse } from './submission-response'
 import { ClaimServiceLine } from './types'
+import useClaimServiceLineValidation from './useClaimServiceLineValidation'
 import useEmptyStringToNull from './useEmptyStringToNull'
 
 const schema = z.object({
@@ -151,6 +153,7 @@ type FormBoolFieldName =
   | 'isClaimScrubbed'
   | 'isForcePaper'
   | 'isSelfPay'
+
 const AddClaimForm = ({
   selectedClaimId,
   claimNumber,
@@ -172,7 +175,12 @@ const AddClaimForm = ({
     criteriaMode: 'all',
     defaultValues: {},
   })
+
+  const { toast } = useToast()
+
   const { emptyStringToNull } = useEmptyStringToNull()
+  const validateClaimServiceLines = useClaimServiceLineValidation(form)
+
   const [openItems, setOpenItems] = useState<string[]>([
     'Billing Provider',
     'Accidents And Labs',
@@ -219,7 +227,7 @@ const AddClaimForm = ({
       lastSeenDate: claimData.lastSeenDate
         ? new Date(claimData.lastSeenDate)
         : undefined,
-      claimServiceLines: claimData.claimServiceLines.map(
+      claimServiceLines: (claimData.claimServiceLines ?? []).map(
         (line: ClaimServiceLine) => ({
           ...line,
           dateOfServiceFrom: line.dateOfServiceFrom
@@ -252,7 +260,15 @@ const AddClaimForm = ({
   }, [selectedClaimId, form])
 
   const onSubmit: SubmitHandler<SchemaType> = async (data) => {
-    // Parse fields to ensure correct types
+    const { hasErrors, message } = validateClaimServiceLines()
+    if (hasErrors) {
+      if (message) {
+        toast({ type: 'error', title: message })
+      } else {
+        toast({ type: 'error', title: 'Please fill all required Fields' })
+      }
+      return
+    }
     const parsedData = {
       ...data,
       id: data.id ?? '',
@@ -282,7 +298,6 @@ const AddClaimForm = ({
       claimServiceLines: updatedClaimServiceLines,
     })
   }
-
   const handleAddCharge = () => {
     const { setValue, getValues } = form
     const currentCharges = getValues('claimServiceLines') || []

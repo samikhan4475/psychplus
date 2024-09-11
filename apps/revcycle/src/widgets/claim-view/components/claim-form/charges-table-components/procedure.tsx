@@ -1,6 +1,10 @@
 import React, { useCallback } from 'react'
 import { Box } from '@radix-ui/themes'
-import { UseFormReturn, useWatch } from 'react-hook-form'
+import {
+  FieldError,
+  UseFormReturn,
+  useWatch,
+} from 'react-hook-form'
 import { CPTCode } from '@/widgets/claim-view/types'
 import { CPTSearchDropdown } from '../cpt-search-dropdown'
 import { ClaimServiceLine } from '../types'
@@ -14,7 +18,19 @@ interface TableCellProps {
 }
 
 const TableCellProcedure = ({ row, form }: TableCellProps) => {
-  const { setValue } = form
+  const {
+    setValue,
+    formState: { errors },
+  } = form
+  // Type guard to ensure correct structure
+  const getClaimServiceLineError = (index: number): FieldError | undefined => {
+    if (errors.claimServiceLines && Array.isArray(errors.claimServiceLines)) {
+      return errors.claimServiceLines[index]?.cptCode
+    }
+    return undefined
+  }
+
+  const error = getClaimServiceLineError(row.index)
 
   // Use useWatch to watch the specific field
   const inputValue = useWatch({
@@ -40,9 +56,10 @@ const TableCellProcedure = ({ row, form }: TableCellProps) => {
   return (
     <Box id="cpt-search" className="relative">
       <CPTSearchDropdown
-      
         onSelectItem={handleProcedureChange}
         cptCode={inputValue}
+        isError={error?.message ? true : false}
+        error={error}
       />
     </Box>
   )

@@ -11,6 +11,8 @@ interface DropdownMenuSearchProps<T> {
   searchQuery?: string
   fetchResults: (query: string) => Promise<T[]>
   renderItem: (item: T) => React.ReactNode
+  isError?: boolean
+  error?: any
 }
 
 const SearchDropdown = <T,>({
@@ -19,6 +21,8 @@ const SearchDropdown = <T,>({
   searchQuery,
   fetchResults,
   renderItem,
+  isError,
+  error,
 }: DropdownMenuSearchProps<T>) => {
   const [open, setOpen] = useState(false)
   const [input, setInput] = useState(searchQuery ?? '')
@@ -141,6 +145,7 @@ const SearchDropdown = <T,>({
           <MagnifyingGlassIcon height="16" width="16" />
         </TextField.Slot>
         <TextField.Root
+          className={isError ? 'border border-solid border-[#ef3a3a]' : ''}
           size="1"
           placeholder={placeholder}
           value={input}
