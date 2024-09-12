@@ -1,6 +1,7 @@
 'use server'
 
 import * as api from '@/api'
+import { Sort } from '@/types'
 import {
   getPatientAge,
   getPatientDOB,
@@ -17,18 +18,25 @@ import type { Patient, PatientRaw, SearchPatientsData } from '../types'
 
 interface SearchPatientsParams extends Partial<SchemaType> {
   page?: number
+  sort?: Sort
 }
 
 const searchPatientsAction = async ({
   page = 1,
+  sort,
   ...rest
 }: SearchPatientsParams): Promise<api.ActionResult<SearchPatientsData>> => {
   const offset = (page - 1) * PATIENT_LOOKUP_TABLE_PAGE_SIZE
 
-  const response = await api.POST<PatientRaw[]>(
-    `${api.SEARCH_PATIENTS_ENDPOINT}?limit=${PATIENT_LOOKUP_TABLE_PAGE_SIZE}&offset=${offset}`,
-    rest,
-  )
+  const url = new URL(api.SEARCH_PATIENTS_ENDPOINT)
+  url.searchParams.append('limit', String(PATIENT_LOOKUP_TABLE_PAGE_SIZE))
+  url.searchParams.append('offset', String(offset))
+
+  if (sort) {
+    url.searchParams.append('orderBy', `${sort.column} ${sort.direction}`)
+  }
+
+  const response = await api.POST<PatientRaw[]>(url.toString(), rest)
 
   if (response.state === 'error') {
     return {

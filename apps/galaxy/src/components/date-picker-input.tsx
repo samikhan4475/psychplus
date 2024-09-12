@@ -68,7 +68,8 @@ const DatePickerInput = <T extends DateValue>({
             validationBehavior="aria"
             aria-label={aria_lable ?? 'date to filter input'}
             isInvalid={invalid}
-            className="w-[100px]"
+            className={datePickerClass}
+            granularity="second"
           >
             <Group className={'relative w-full'}>
               <DateInput

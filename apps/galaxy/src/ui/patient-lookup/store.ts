@@ -1,4 +1,6 @@
 import { create } from 'zustand'
+import { Sort } from '@/types'
+import { getNewSortDir } from '@/utils'
 import { searchPatientsAction } from './actions'
 import { SchemaType } from './patient-lookup-form'
 import type { SearchPatientsData } from './types'
@@ -6,6 +8,7 @@ import type { SearchPatientsData } from './types'
 interface Store {
   data?: SearchPatientsData
   error?: string
+  sort?: Sort
   loading?: boolean
   page: number
   formValues?: Partial<SchemaType>
@@ -15,6 +18,7 @@ interface Store {
     page?: number,
     reset?: boolean,
   ) => void
+  sortData: (column: string) => void
   next: () => void
   prev: () => void
 }
@@ -23,6 +27,7 @@ const useStore = create<Store>((set, get) => ({
   data: undefined,
   error: undefined,
   loading: undefined,
+  sort: undefined,
   page: 1,
   formValues: undefined,
   pageCache: {},
@@ -40,6 +45,7 @@ const useStore = create<Store>((set, get) => ({
     const result = await searchPatientsAction({
       ...formValues,
       page,
+      sort: get().sort,
     })
 
     if (result.state === 'error') {
@@ -77,6 +83,16 @@ const useStore = create<Store>((set, get) => ({
       data: get().pageCache[page],
       page,
     })
+  },
+  sortData: (column) => {
+    set({
+      sort: {
+        column,
+        direction: getNewSortDir(column, get().sort),
+      },
+    })
+
+    get().search(get().formValues, 1, true)
   },
 }))
 

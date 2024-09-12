@@ -27,6 +27,7 @@ const METADATA_CODESET_ENDPOINT = (name: string) =>
 const GET_STAFF_ENDPOINT = `${API_URL}/api/staff/search`
 const GET_CLINICS_ENDPOINT = `${API_URL}/api/clinics`
 const GET_PROVIDERS_ENDPOINT = `${API_URL}/api/staff/search`
+const GET_VISIT_TYPE_ENDPOINT = `${API_URL}/api/encounters/actions/search`
 
 export {
   USER_ENDPOINT,
@@ -46,4 +47,5 @@ export {
   GET_STAFF_ENDPOINT,
   GET_CLINICS_ENDPOINT,
   GET_PROVIDERS_ENDPOINT,
+  GET_VISIT_TYPE_ENDPOINT,
 }

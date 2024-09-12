@@ -12,62 +12,77 @@ import {
   TextCell,
 } from '@/components'
 import { useStore as useRootStore } from '@/store'
+import { Sort } from '@/types'
+import { getSortDir } from '@/utils'
 import { useStore } from './store'
 import type { Patient } from './types'
 
-const columns: ColumnDef<Patient>[] = [
-  {
-    id: 'patient-last-name',
-    header: () => <ColumnHeader label="Last" />,
-    cell: ({ row }) => {
-      return <LongTextCell>{row.original.lastName}</LongTextCell>
+const columns = (
+  sort?: Sort,
+  onSort?: (column: string) => void,
+): ColumnDef<Patient>[] => {
+  return [
+    {
+      id: 'legalName',
+      header: ({ column }) => (
+        <ColumnHeader
+          sortable
+          sortDir={getSortDir(column.id, sort)}
+          onClick={() => {
+            onSort?.(column.id)
+          }}
+          className="!text-black justify-center !font-medium"
+          column={column}
+          label="Name"
+        />
+      ),
+      cell: ({ row }) => {
+        return (
+          <LongTextCell>{`${row.original.firstName} ${row.original.lastName}`}</LongTextCell>
+        )
+      },
     },
-  },
-  {
-    id: 'patient-first-name',
-    header: () => <ColumnHeader label="First" />,
-    cell: ({ row }) => {
-      return <LongTextCell>{row.original.firstName}</LongTextCell>
+    {
+      id: 'patient-age',
+      header: ({ column }) => <ColumnHeader label="Age" column={column} />,
+      cell: ({ row }) => {
+        return <TextCell>{row.original.age}</TextCell>
+      },
     },
-  },
-  {
-    id: 'patient-age',
-    header: () => <ColumnHeader label="Age" />,
-    cell: ({ row }) => {
-      return <TextCell>{row.original.age}</TextCell>
+    {
+      id: 'patient-gender',
+      header: ({ column }) => <ColumnHeader label="Gender" />,
+      cell: ({ row }) => {
+        return <TextCell>{row.original.gender}</TextCell>
+      },
     },
-  },
-  {
-    id: 'patient-gender',
-    header: () => <ColumnHeader label="Gender" />,
-    cell: ({ row }) => {
-      return <TextCell>{row.original.gender}</TextCell>
+    {
+      id: 'patient-mrn',
+      header: ({ column }) => <ColumnHeader label="MRN" />,
+      cell: ({ row }) => {
+        return <TextCell>{row.original.mrn}</TextCell>
+      },
     },
-  },
-  {
-    id: 'patient-mrn',
-    header: () => <ColumnHeader label="MRN" />,
-    cell: ({ row }) => {
-      return <TextCell>{row.original.mrn}</TextCell>
+    {
+      id: 'patient-dob',
+      header: ({ column }) => <ColumnHeader label="DOB" />,
+      cell: ({ row }) => {
+        return <TextCell>{row.original.dob}</TextCell>
+      },
     },
-  },
-  {
-    id: 'patient-dob',
-    header: () => <ColumnHeader label="DOB" />,
-    cell: ({ row }) => {
-      return <TextCell>{row.original.dob}</TextCell>
-    },
-  },
-]
+  ]
+}
 
 const PatientLookupTable = () => {
   const router = useRouter()
 
   const addTab = useRootStore((state) => state.addTab)
 
-  const { data, loading } = useStore((state) => ({
+  const { data, loading, sort, sortData } = useStore((state) => ({
     data: state.data,
     loading: state.loading,
+    sort: state.sort,
+    sortData: state.sortData,
   }))
 
   if (loading) {
@@ -96,7 +111,7 @@ const PatientLookupTable = () => {
     <ScrollArea>
       <DataTable
         data={data.patients}
-        columns={columns}
+        columns={columns(sort, sortData)}
         onRowClick={(row) => {
           const href = `/chart/${row.original.id}`
 

@@ -37,6 +37,9 @@ const ChartNavigation = () => {
           <NavigationLink href="/pcp">PCP</NavigationLink>
           <NavigationLink href="/pharmacy">Pharmacy</NavigationLink>
           <NavigationLink href="/staff-comments">Staff Comments</NavigationLink>
+          <NavigationLink href="/scheduling-history">
+            Scheduling History
+          </NavigationLink>
           <NavigationLink href="/add-on">Add On</NavigationLink>
           <NavigationLink href="/rating">Rating</NavigationLink>
           <NavigationLink href="/notifications">Notifications</NavigationLink>

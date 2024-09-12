@@ -32,6 +32,7 @@ interface DataTableProps<TData, TValue> {
   onRowClick?: (row: Row<TData>, table: ReactTable<TData>) => void
   onRowSelectionChange?: (selectedRows: RowSelectionState) => void
   sticky?: boolean
+  isRowSpan?: boolean // Use rowspan to prevent table layout issues. Nested columns apply only when the optional `isRowSpan` prop is true, as data tables don't support them directly.
   theadClass?: string
 }
 
@@ -46,6 +47,7 @@ const DataTable = <TData, TValue>({
   onRowClick,
   sticky,
   onRowSelectionChange,
+  isRowSpan,
   theadClass,
 }: DataTableProps<TData, TValue>) => {
   const [sorting, setSorting] = useState<SortingState>([])
@@ -108,12 +110,30 @@ const DataTable = <TData, TValue>({
           {table.getHeaderGroups().map((headerGroup) => (
             <Table.Row key={headerGroup.id}>
               {headerGroup.headers.map((header) => {
+                const columnRelativeDepth = header.depth - header.column.depth
+
+                if (
+                  !header.isPlaceholder &&
+                  columnRelativeDepth > 1 &&
+                  header.id === header.column.id
+                ) {
+                  return null
+                }
+
+                let rowSpan = 1
+                if (header.isPlaceholder) {
+                  const leafs = header.getLeafHeaders()
+                  rowSpan = leafs[leafs.length - 1].depth - header.depth
+                }
+
                 return (
                   <Table.ColumnHeaderCell
                     key={header.id}
+                    rowSpan={isRowSpan ? rowSpan : undefined}
+                    colSpan={header.colSpan}
                     className="border-pp-table-border h-5 border border-r-0 px-[2px] py-0 last:border-r"
                   >
-                    {header.isPlaceholder
+                    {!isRowSpan && header.isPlaceholder
                       ? null
                       : flexRender(
                           header.column.columnDef.header,

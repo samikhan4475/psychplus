@@ -1,0 +1,24 @@
+import { Metadata } from './metadata'
+
+interface EncounterToService {
+  id: string
+  encounterId: number
+  locationType: string
+  serviceOffered: string
+}
+
+interface Encounter {
+  id: number
+  metadata: Metadata
+  encounterName: string
+  description: string
+  duration: number
+  isForNewPatient: boolean
+  typeOfVisit: string
+  visitSequence: string
+  visitMedium: string
+  resourceStatus: string
+  encounterToServices: EncounterToService[]
+}
+
+export type { Metadata, EncounterToService, Encounter }
