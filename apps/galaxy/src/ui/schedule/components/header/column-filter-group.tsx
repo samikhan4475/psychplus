@@ -5,7 +5,7 @@ const buttonClasses =
 
 const ColumnFilterGroup = () => {
   return (
-    <Flex align="center" className="gap-x-1.5 pr-[9px]">
+    <Flex align="center" className="gap-x-1.5 pr-[9px] flex-1" justify='end'>
       <Button variant="outline" className={buttonClasses}>
         <Text weight={'regular'} size={'2'}>
           All

@@ -5,7 +5,7 @@ const buttonClasses =
 
 const SchedulerFilterGroup = () => {
   return (
-    <Flex align="center" className="gap-x-3 pr-[12px] lg:flex-1" justify="end">
+    <Flex align="center" className="gap-x-3 pr-[12px] flex-1" justify="end">
       <Button variant="outline" className={buttonClasses}>
         All
       </Button>

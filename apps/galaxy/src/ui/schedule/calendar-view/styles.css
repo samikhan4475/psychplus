@@ -1,0 +1,56 @@
+.rbc-allday-cell {
+  display: none !important;
+}
+
+.rbc-row {
+  flex-grow: 1 !important;
+}
+
+.rbc-time-header {
+  height: 38px !important;
+}
+
+.rbc-header {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.rbc-time-slot {
+  color: #60646c;
+  font-size: 12px;
+}
+
+.rbc-timeslot-group {
+  min-height: 60px !important;
+}
+
+.rbc-timeslot-group > :nth-child(2) {
+  display: none;
+}
+
+.rbc-event-label {
+  display: none !important;
+}
+
+.rbc-event {
+  background-color: #e9f9ee !important;
+  border: none !important;
+  border-radius: 0px !important;
+  padding: 0px !important;
+  pointer-events: auto !important;
+}
+
+.rbc-today {
+  background-color: white !important;
+}
+
+.rbc-event-content {
+  display: flex;
+  align-items: center;
+}
+
+.rbc-events-container {
+  margin-right: 20px !important;
+  pointer-events: none !important;
+}

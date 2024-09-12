@@ -4,6 +4,7 @@ import { Taxonomy } from './taxonomy'
 
 interface Clinic {
   id: string
+  metada?: Metadata
   isTest: boolean
   name: string
   group: string

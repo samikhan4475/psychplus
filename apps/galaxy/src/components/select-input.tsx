@@ -11,6 +11,7 @@ interface SelectInputProps<T> extends React.ComponentProps<typeof Select.Root> {
   options?: { label: string; value: T }[]
   placeholder?: string
   buttonClassName?: string
+  className?: string
 }
 
 const SelectInput = <T extends string>({
@@ -18,6 +19,7 @@ const SelectInput = <T extends string>({
   field,
   placeholder = 'Select',
   options = [],
+  className,
   buttonClassName,
   ...selectProps
 }: SelectInputProps<T>) => {
@@ -30,7 +32,7 @@ const SelectInput = <T extends string>({
   ))
 
   return (
-    <Flex align="center" gap="2">
+    <Flex align="center" gap="2" className={className}>
       {label && <BlockLabel name={field}>{label}</BlockLabel>}
       <Controller
         name={field}

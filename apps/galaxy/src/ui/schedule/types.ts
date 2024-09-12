@@ -37,7 +37,9 @@ interface Balance {
 enum TabValue {
   Scheduler = 'scheduler',
   List = 'list',
-  Calender = 'calendar',
+  Calendar = 'calendar',
+  ProviderCoding = 'ProviderCoding',
+  Rounding = 'Rounding',
 }
 
 interface PatientRecord {
@@ -65,6 +67,64 @@ interface PatientRecord {
   nodeSigned: boolean
 }
 
-export type { PatientRecord, Provider, SlotsTable }
+interface AvailableSlots {
+  type: 'in-person' | 'video' | 'unavailable'
+  isPlusSlot: boolean
+  startDate: string
+  endDate: string
+  duration: number
+  servicesOffered: string[]
+  teleState: string[]
+  timeZoneId: string
+}
+
+interface AvailableSlotsInDateFormat
+  extends Omit<AvailableSlots, 'startDate' | 'endDate'> {
+  startDate: Date
+  endDate: Date
+  specialist: Specialist
+}
+
+interface AvailableSlotsEvent<T> {
+  start: Date
+  end: Date
+  title: string
+  data: T
+}
+
+interface Specialist {
+  id: number
+  isTest: boolean
+  legalName: {
+    firstName: string
+    lastName: string
+  }
+  staffRoleCode: string
+  virtualRoomLink?: string
+  bio?: string
+  hasPhoto?: boolean
+  rating?: number
+}
+
+interface AvailableSlotsMock extends AvailableSlots {
+  specialist: Specialist
+}
+
+interface GetAppointmentSlotsResponse<T> {
+  appointments: AvailableSlotsEvent<T>[]
+  total: number
+}
+
+export type {
+  PatientRecord,
+  Provider,
+  SlotsTable,
+  AvailableSlots,
+  GetAppointmentSlotsResponse,
+  AvailableSlotsInDateFormat,
+  Specialist,
+  AvailableSlotsEvent,
+  AvailableSlotsMock,
+}
 
 export { TabValue }
