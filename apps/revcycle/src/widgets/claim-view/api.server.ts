@@ -5,6 +5,7 @@ import { createHeaders } from '@psychplus/utils/server'
 import { POSCodeSets } from '../coding-cpt/types'
 import {
   Claim,
+  ClaimSubmissionHistory,
   CodeSet,
   InsurancePayer,
   Location,
@@ -15,6 +16,7 @@ import {
 
 const defaultPayLoad = {
   isIncludePatientInsurancePlan: false,
+  isIncludePatientInsurancePolicy: true,
 }
 
 const defaultResponsePayLoad = {
@@ -52,6 +54,16 @@ const getLocations = (): Promise<Location[]> => {
   )
 }
 
+const getClaimSubmissionHistoryList = (): Promise<ClaimSubmissionHistory[]> => {
+  return handleRequest(
+    fetch(`${API_URL}/api/claimssubmissions/batches/actions/search`, {
+      cache: 'no-store',
+      method: 'POST',
+      body: JSON.stringify(defaultPayLoad),
+      headers: createHeaders(),
+    }),
+  )
+}
 const getPOSCodeSets = (): Promise<POSCodeSets> => {
   return handleRequest(
     fetch(
@@ -110,6 +122,7 @@ const getPOSCodeSetsCached = cache(getPOSCodeSets)
 const getStaffSetsCached = cache(getStaff)
 const getInsurancePayersListCached = cache(getInsurancePayersList)
 const getLocationsCached = cache(getLocations)
+const getClaimSubmissionHistoryListCached = cache(getClaimSubmissionHistoryList)
 const getAccidentCodeSetsCached = cache(getAccidentCodeSets)
 const getUSAStatesCached = cache(getUSAStates)
 const getResponseHistoryCached = cache(getResponseHistory)
@@ -120,6 +133,7 @@ export {
   getStaffSetsCached as getStaff,
   getInsurancePayersListCached as getInsurancePayersList,
   getLocationsCached as getLocations,
+  getClaimSubmissionHistoryListCached as getClaimSubmissionHistoryList,
   getAccidentCodeSetsCached as getAccidentCodeSets,
   getUSAStatesCached as getUSAStates,
   getResponseHistoryCached as getResponseHistory,

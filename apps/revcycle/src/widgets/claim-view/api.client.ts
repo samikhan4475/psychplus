@@ -1,16 +1,19 @@
 import { handleRequest } from '@psychplus/utils/api'
 import { createHeaders } from '@psychplus/utils/client'
+import { ClearingHouseReceiver } from '../clearing-house-receiver-list/types'
 import {
   Claim,
+  ClaimSubmissionHistory,
+  ClaimSubmissionHistoryDetail,
+  ClaimSubmissionHistoryFilters,
   ClaimSubmissionResponse,
   CPTResponse,
   ICD10Code,
   ModifiersResponse,
   Patient,
   ResponseHistoryDetail,
-  ResponseHistoryRecord
+  ResponseHistoryRecord,
 } from './types'
-import { ClearingHouseReceiver } from '../clearing-house-receiver-list/types'
 
 interface ClaimFiltersPayload {
   isIncludeMetadataResourceChangeControl?: boolean
@@ -135,7 +138,20 @@ const submitClaim = (
     }),
   )
 
-const getReceivers = (payload: { receiverName: string }): Promise<ClearingHouseReceiver[]> =>
+const getClaimSubmissionHistoryList = (
+  payload: ClaimSubmissionHistoryFilters,
+): Promise<ClaimSubmissionHistory[]> =>
+  handleRequest(
+    fetch(`/revcycle/api/claimssubmissions/batches/actions/search`, {
+      method: 'POST',
+      body: JSON.stringify(payload),
+      cache: 'no-store',
+      headers: createHeaders(),
+    }),
+  )
+const getReceivers = (payload: {
+  receiverName: string
+}): Promise<ClearingHouseReceiver[]> =>
   handleRequest(
     fetch(`/revcycle/api/clearinghousereceivers/actions/search`, {
       method: 'POST',
@@ -145,7 +161,22 @@ const getReceivers = (payload: { receiverName: string }): Promise<ClearingHouseR
     }),
   )
 
-const getResponseHistoryList = (payload: ResponseHistoryPayload): Promise<ResponseHistoryRecord[]> =>
+const getClaimSubmissionHistoryDetail = (
+  batchId: string,
+): Promise<ClaimSubmissionHistoryDetail[]> =>
+  handleRequest(
+    fetch(
+      `/revcycle/api/claimssubmissions/batches/${batchId}/details/actions/search?isIncludeMetadataResourceChangeControl=true`,
+      {
+        method: 'POST',
+        cache: 'no-store',
+        headers: createHeaders(),
+      },
+    ),
+  )
+const getResponseHistoryList = (
+  payload: ResponseHistoryPayload,
+): Promise<ResponseHistoryRecord[]> =>
   handleRequest(
     fetch(`/revcycle/api/claimssubmissions/responses/actions/search`, {
       method: 'POST',
@@ -170,11 +201,18 @@ const getResponseHistoryDetail = (
   )
 
 export {
-  deleteClaim, getClaimList, getPatients, getReceivers, getResponseHistoryDetail, getResponseHistoryList, submitClaim,
+  deleteClaim,
+  getClaimList,
+  getPatients,
+  getReceivers,
+  getResponseHistoryDetail,
+  getResponseHistoryList,
   getIcdCodes,
   getCPTCodes,
   getClaimById,
   getModifiersCodes,
   updateClaim,
+  submitClaim,
+  getClaimSubmissionHistoryList,
+  getClaimSubmissionHistoryDetail,
 }
-

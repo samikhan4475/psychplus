@@ -7,13 +7,14 @@ import { POSCodeSets } from '../coding-cpt/types'
 import { ClaimStoreType } from './store'
 import {
   Claim,
+  ClaimSubmissionHistory,
   InsurancePayer,
   Location,
+  ResponseHistoryRecord,
   Staff,
   StaffDataCodeSet,
   StatesCode,
   USAStates,
-  ResponseHistoryRecord
 } from './types'
 
 type BoundStoreType = UseBoundStore<StoreApi<ClaimStoreType>>
@@ -25,6 +26,7 @@ interface PreloaderProps {
   insurancePayersList: InsurancePayer[]
   codeSets: CodeSet[]
   locations: Location[]
+  claimSubmissionHistoryList: ClaimSubmissionHistory[]
   posCodeSets: POSCodeSets
   staffCodeSets: Staff[]
   usaStates: USAStates
@@ -37,6 +39,7 @@ const Preloader = ({
   insurancePayersList,
   codeSets,
   locations,
+  claimSubmissionHistoryList,
   posCodeSets,
   staffCodeSets,
   usaStates,
@@ -47,16 +50,18 @@ const Preloader = ({
     setDateTypes,
     setLocations,
     setInsurancePayersList,
+    setClaimSubmissionHistoryList,
     setCodingPosCodeSets,
     setStaffCodeSets,
     setAccidentTypeCodesets,
     setUSAStatesCodeSets,
-    setResponseHistoryList
+    setResponseHistoryList,
   } = store((state) => ({
     setClaimList: state.setClaimList,
     setDateTypes: state.setDateTypes,
     setLocations: state.setLocations,
     setInsurancePayersList: state.setInsurancePayersList,
+    setClaimSubmissionHistoryList: state.setClaimSubmissionHistoryList,
     setStaffCodeSets: state.setStaffCodeSets,
     setCodingPosCodeSets: state.setCodingPosCodeSets,
     setAccidentTypeCodesets: state.setAccidentTypeCodesets,
@@ -67,6 +72,7 @@ const Preloader = ({
   if (!loaded.current) {
     loaded.current = true
     setClaimList(claimsList)
+    setClaimSubmissionHistoryList(claimSubmissionHistoryList)
     setResponseHistoryList(responseHistoryList)
 
     const accidentType = codeSets.find(
@@ -114,12 +120,12 @@ const Preloader = ({
       let submissionCode = ''
       for (const attribute of codeAttributes) {
         if (attribute.name === 'SubmissionCode') {
-          submissionCode = attribute.content 
-          break 
+          submissionCode = attribute.content
+          break
         }
       }
 
-      const formattedCode = submissionCode.padStart(2, '0');
+      const formattedCode = submissionCode.padStart(2, '0')
       if (submissionCode) {
         optionsList.push({
           display: `${formattedCode}-${state.displayName}`,
@@ -127,7 +133,7 @@ const Preloader = ({
         })
       } else {
         optionsList.push({
-          display: state.displayName, 
+          display: state.displayName,
           code: state.code,
         })
       }

@@ -3,6 +3,7 @@ import { getCodeSets } from '@psychplus/codeset/api.server'
 import { ToastProvider } from '@psychplus/ui/toast-provider'
 import {
   getClaimsList,
+  getClaimSubmissionHistoryList,
   getInsurancePayersList,
   getLocations,
   getPOSCodeSets,
@@ -22,6 +23,7 @@ const ClaimWidgetServer = async () => {
     insurancePayersList,
     codeSets,
     locations,
+    claimSubmissionHistoryList,
     posCodeSets,
     staffCodeSets,
     usaStates,
@@ -31,6 +33,7 @@ const ClaimWidgetServer = async () => {
     getInsurancePayersList(),
     getCodeSets(),
     getLocations(),
+    getClaimSubmissionHistoryList(),
     getPOSCodeSets(),
     getStaff(),
     getUSAStates(),
@@ -47,6 +50,7 @@ const ClaimWidgetServer = async () => {
         insurancePayersList={insurancePayersList}
         codeSets={codeSets}
         locations={locations}
+        claimSubmissionHistoryList={claimSubmissionHistoryList}
         usaStates={usaStates}
         responseHistoryList={responseHistory}
       />

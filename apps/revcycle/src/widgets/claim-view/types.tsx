@@ -269,6 +269,66 @@ interface Address {
   }
 }
 
+interface ClaimSubmissionDetail {
+  id: string
+  metadata: MetaData
+  recordStatus: string
+  batchId: string
+  claimId: string
+  status: string
+  coverage: string
+  amount: number
+}
+
+interface ClaimSubmissionHistory {
+  id: string
+  metadata: MetaData
+  recordStatus: string
+  practiceId: string
+  submitterId: string
+  receiverId: string
+  batchName: string
+  batchType: string
+  batchStatus: string
+  batchStatusDetail: string
+  submittedDate: Date
+  processedDate: Date
+  isProcessed: boolean
+  isPaper: boolean
+  claimCount: number
+  totalAmount: number
+  ak9Error: string
+  ak9Status: string
+  ik5Error: string
+  ik5Status: string
+  isaControlNumber: string
+  notes: string
+  transaction837Path: string
+  claimSubmissionDetail: ClaimSubmissionDetail[]
+}
+
+interface ClaimSubmissionHistoryFilters {
+  batchName?: string
+  batchId?: string
+  submittedDate?: Date
+  insurancePolicyPriority?: string
+  recordStatuses?: string[]
+}
+
+interface ClaimSubmissionHistoryDetail {
+  id: string
+  metadata: MetaData
+  recordStatus: string
+  batchId: string
+  claimId: string
+  status: string
+  coverage: string
+  amount: number
+  patientName: string
+  claimNumber: string
+  dateOfServiceFrom: Date
+}
+
 interface ContactInfo {
   email: string
   phoneNumbers: PhoneNumber[]
@@ -391,19 +451,19 @@ interface Insurance {
 }
 
 interface ResponseHistoryRecord {
-  id: string;
-  recordStatus: string;
-  receiverId: string;
-  receiverName: string;
-  submitterId: string;
-  submitterName: string;
-  practiceId: string;
-  practiceName: string;
-  zipFilePath: string;
-  processingStatus: string;
-  isProcessed: string;
-  isManualImport: boolean;
-  fileCount: number;
+  id: string
+  recordStatus: string
+  receiverId: string
+  receiverName: string
+  submitterId: string
+  submitterName: string
+  practiceId: string
+  practiceName: string
+  zipFilePath: string
+  processingStatus: string
+  isProcessed: string
+  isManualImport: boolean
+  fileCount: number
 }
 
 interface ReceiverOption {
@@ -413,13 +473,13 @@ interface ReceiverOption {
 interface ResponseHistoryDetail {
   id: string
   metadata: MetaData
-  recordStatus: string;
-  responseId: string;
-  filePath: string;
-  fileType: string;
-  isProcessed: boolean;
-  isCheckAlreadyExists: boolean;
-  transcationReferenceNumber: string;
+  recordStatus: string
+  responseId: string
+  filePath: string
+  fileType: string
+  isProcessed: boolean
+  isCheckAlreadyExists: boolean
+  transcationReferenceNumber: string
 }
 
 export type {
@@ -433,6 +493,9 @@ export type {
   ErrorMessage,
   Patient,
   PatientOption,
+  ClaimSubmissionHistory,
+  ClaimSubmissionHistoryDetail,
+  ClaimSubmissionHistoryFilters,
   Staff,
   StaffDataCodeSet,
   ICDResponse,
@@ -451,5 +514,5 @@ export type {
   Insurance,
   ResponseHistoryRecord,
   ReceiverOption,
-  ResponseHistoryDetail
+  ResponseHistoryDetail,
 }

@@ -13,6 +13,20 @@ const ClaimSubmissionStore: StateCreator<ClaimSubmissionState> = (set) => ({
   setClaimSubmissionData(data) {
     set({ claimSubmissionData: data })
   },
+  claimSubmissionHistoryList: [],
+  setClaimSubmissionHistoryList(data) {
+    set({ claimSubmissionHistoryList: data })
+  },
+
+  claimSubmissionHistoryModalOpen: false,
+  setClaimSubmissionHistoryModalOpen(open) {
+    set({ claimSubmissionHistoryModalOpen: open })
+  },
+  claimSubmissionHistoryBatchId: '',
+  setClaimSubmissionHistoryBatchId(batchId) {
+    set({ claimSubmissionHistoryBatchId: batchId })
+  },
+
   claimSubmissionModal: false,
   setClaimSubmissionModal(open) {
     set({ claimSubmissionModal: open })

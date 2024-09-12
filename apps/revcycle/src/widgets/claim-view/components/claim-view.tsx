@@ -4,8 +4,8 @@ import { ClaimTable } from './claim-table/claim-table'
 import './style.css'
 import { Cross1Icon } from '@radix-ui/react-icons'
 import { initialTabs, useStore } from '../store'
-import { SubmissionView } from './submission-view'
 import { ResponseHistoryTable } from './response-history-table/response-history-table'
+import { SubmissionView } from './submission-view'
 
 const ClaimView = () => {
   const { tabs, activeTabId, setActiveTab, selectedClaimId, removeTab } =
@@ -51,14 +51,17 @@ const ClaimView = () => {
         <Box px="4" pt="3" pb="2">
           <Box
             className={activeTabId === 'claimstable' ? 'block' : 'hidden'}
-            // id="claimstable"
-            key={'claimstable'}
+            key="claimstable"
           >
             <ClaimTable />
           </Box>
-          <Tabs.Content value="submission">
+          <Box
+            className={activeTabId === 'submission' ? 'block' : 'hidden'}
+            key="submission"
+          >
             <SubmissionView />
-          </Tabs.Content>
+          </Box>
+
           <Tabs.Content value="response-history">
             <ResponseHistoryTable />
           </Tabs.Content>

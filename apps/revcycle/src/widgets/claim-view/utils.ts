@@ -27,4 +27,16 @@ function adjustToUTC(date: string | Date) {
   return utcDate
 }
 
-export { adjustToUTC, getClaimErrorById, getClaimById }
+function formattedDate(date: string | Date) {
+  if (date) {
+    const dateObj = new Date(date)
+
+    return `${(dateObj.getMonth() + 1).toString().padStart(2, '0')}/${dateObj
+      .getDate()
+      .toString()
+      .padStart(2, '0')}/${dateObj.getFullYear()}`
+  }
+  return date
+}
+
+export { adjustToUTC, getClaimErrorById, getClaimById, formattedDate }

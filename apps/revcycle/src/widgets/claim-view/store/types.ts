@@ -1,5 +1,10 @@
 import { ClaimServiceLine } from '../components/claim-form/types'
-import { Claim, ResponseHistoryRecord } from '../types'
+import {
+  Claim,
+  ClaimSubmissionHistory,
+  ClaimSubmissionHistoryFilters,
+  ResponseHistoryRecord,
+} from '../types'
 
 interface Filters {
   isIncludeMetadataResourceChangeControl?: boolean
@@ -87,8 +92,8 @@ interface TabsStore {
   setActiveTab: (tabId: string) => void
   selectedClaimId: string
   selectedClaimBilledAmt: number
-  deletedClaimServiceLines: ClaimServiceLine[];
-  setDeletedClaimServiceLines: (newLine: ClaimServiceLine) => void;
+  deletedClaimServiceLines: ClaimServiceLine[]
+  setDeletedClaimServiceLines: (newLine: ClaimServiceLine) => void
   setSelectedClaim: (selectedClaimId: string) => void
   setSelectedClaimBilledAmt: (selectedClaimBilledAmt: number) => void
   removeTab: (tabId: string) => void
@@ -132,11 +137,21 @@ interface ClaimSubmissionState {
   setClaimSubmissionDetailModal: (value: boolean) => void
   selectedClaim: string
   setSelectedClaim: (value: string) => void
+
+  claimSubmissionHistoryModalOpen: boolean
+  setClaimSubmissionHistoryModalOpen: (value: boolean) => void
+  claimSubmissionHistoryBatchId: string
+  setClaimSubmissionHistoryBatchId: (value: string) => void
+
+  claimSubmissionHistoryList: ClaimSubmissionHistory[]
+  setClaimSubmissionHistoryList: (value: ClaimSubmissionHistory[]) => void
 }
 
 interface ResponseHistoryFiltersState {
   responseHistoryFilters: ResponseHistoryFilters
-  handleResponseHistoryFiltersChange: (newFilters: Partial<ResponseHistoryFilters>) => void
+  handleResponseHistoryFiltersChange: (
+    newFilters: Partial<ResponseHistoryFilters>,
+  ) => void
 }
 interface ResponseHistoryListState {
   responseHistoryList: ResponseHistoryRecord[]
@@ -161,7 +176,9 @@ export type {
   MetaDataCodeSet,
   CodeSetsState,
   ClaimSubmissionState,
+  ClaimSubmissionHistory,
+  ClaimSubmissionHistoryFilters,
   ResponseHistoryListState,
   ResponseHistoryFilters,
-  ResponseHistoryFiltersState
+  ResponseHistoryFiltersState,
 }

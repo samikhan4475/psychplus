@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Box, Button, Flex, Tabs, Text } from '@radix-ui/themes'
 import { Select } from '@psychplus/ui/select'
+import { SubmissionHistoryTableTab } from './submission-history-table'
 import { SubmissionTable } from './submission-table/submission-table'
 import './style.css'
 import { submitClaim } from '../api.client'
@@ -129,7 +130,7 @@ const SubmissionView = () => {
               <SubmissionTable type="paper" />
             </Tabs.Content>
             <Tabs.Content value="Submission History">
-              <Text size="2">Submission History Content will come here</Text>
+              <SubmissionHistoryTableTab />
             </Tabs.Content>
           </Box>
         </Tabs.Root>
