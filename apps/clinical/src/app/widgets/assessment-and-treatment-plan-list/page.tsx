@@ -1,4 +1,4 @@
-import { Box } from '@radix-ui/themes'
+import { Text } from '@radix-ui/themes'
 import { type SearchParams } from '@psychplus/utils/url'
 import { AssessmentAndTreatmnetPlansListWidgetServer } from '@/widgets/assessment-and-treatment-plan-list'
 
@@ -8,11 +8,11 @@ const ProblemsListWidgetPage = ({
   searchParams: SearchParams
 }) => {
   if (!searchParams.patientId) {
-    return <Box>Patient ID is required</Box>
+    return <Text>Patient ID is required</Text>
   }
 
   if (!searchParams.noteId) {
-    return <Box>Note ID is required</Box>
+    return <Text>Note ID is required</Text>
   }
 
   return (

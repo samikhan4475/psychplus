@@ -31,7 +31,6 @@ const FilterField: React.FC<FilterFieldProps> = ({
     <Box className="w-full">
       <TextField.Root
         className="h-30 w-full font-light"
-        size="2"
         placeholder={placeholder}
         value={value}
         onChange={(e) => onChange(e.target.value)}

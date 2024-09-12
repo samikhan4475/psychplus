@@ -1,6 +1,5 @@
-import { Box, Button, Flex, Heading, Text } from '@radix-ui/themes'
+import { Box, Flex, Text, TextField } from '@radix-ui/themes'
 import { Select } from '@psychplus/ui/select'
-import { TextField } from '@psychplus/ui/text-field'
 
 const Filters = () => (
   <Box className="mb-[1px] rounded-[2px] bg-[#ffffff] px-2 py-1.5">

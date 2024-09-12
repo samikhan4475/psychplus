@@ -61,7 +61,6 @@ const FilterTextField = ({
     </Text>
     <TextField.Root
       className="w-[120px]"
-      size={'2'}
       placeholder={placeholder}
       value={value}
       onChange={({ target: { value } }) => onChange?.(value)}

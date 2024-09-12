@@ -18,7 +18,7 @@ import type {
 
 const getCodeSets = async (): Promise<CodeSet[]> =>
   handleRequest(
-    fetch(`/revcycle/api/metadata/codesets`, {
+    fetch(`/galaxy/api/metadata/codesets`, {
       headers: createHeaders(),
     }),
   )

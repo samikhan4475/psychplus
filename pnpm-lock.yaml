@@ -59,6 +59,9 @@ importers:
       '@psychplus/immunization':
         specifier: ^0.1.0
         version: link:../../packages/immunization
+      '@psychplus/lab-orders':
+        specifier: ^0.1.0
+        version: link:../../packages/lab-orders
       '@psychplus/management-locations':
         specifier: ^0.1.0
         version: link:../../packages/management-locations
@@ -140,9 +143,15 @@ importers:
       react-sortable-hoc:
         specifier: 2.0.0
         version: 2.0.0(prop-types@15.8.1)(react-dom@18.3.1)(react@18.3.1)
+      react-to-print:
+        specifier: ^2.15.1
+        version: 2.15.1(react-dom@18.3.1)(react@18.3.1)
       use-places-autocomplete:
         specifier: ^4.0.1
         version: 4.0.1(react@18.3.1)
+      uuid:
+        specifier: ^9.0.1
+        version: 9.0.1
       zod:
         specifier: ^3.22.4
         version: 3.23.8
@@ -165,6 +174,9 @@ importers:
       '@types/react-dom':
         specifier: ^18.2.10
         version: 18.3.0
+      '@types/uuid':
+        specifier: ^9.0.8
+        version: 9.0.8
       autoprefixer:
         specifier: ^10.4.16
         version: 10.4.19(postcss@8.4.39)
@@ -1319,6 +1331,37 @@ importers:
         version: 5.5.3
 
   packages/immunization:
+    dependencies:
+      '@psychplus/utils':
+        specifier: ^0.1.0
+        version: link:../utils
+      next:
+        specifier: ^14.0.1
+        version: 14.2.4(@babel/core@7.24.7)(react-dom@18.3.1)(react@18.3.1)
+      react:
+        specifier: ^18.2.0
+        version: 18.3.1
+      zustand:
+        specifier: ^4.4.3
+        version: 4.5.4(@types/react@18.3.3)(react@18.3.1)
+    devDependencies:
+      '@psychplus/eslint-config':
+        specifier: ^0.1.0
+        version: link:../../tooling/eslint-config
+      '@psychplus/tsconfig':
+        specifier: ^0.1.0
+        version: link:../../tooling/tsconfig
+      '@types/react':
+        specifier: ^18.2.47
+        version: 18.3.3
+      eslint:
+        specifier: ^8.50.0
+        version: 8.50.0
+      typescript:
+        specifier: ^5.2.2
+        version: 5.5.3
+
+  packages/lab-orders:
     dependencies:
       '@psychplus/utils':
         specifier: ^0.1.0
@@ -10307,6 +10350,16 @@ packages:
       react: ^16.0.0 || ^17.0.0 || ^18.0.0
     dependencies:
       react: 18.3.1
+    dev: false
+
+  /react-to-print@2.15.1(react-dom@18.3.1)(react@18.3.1):
+    resolution: {integrity: sha512-1foogIFbCpzAVxydkhBiDfMiFYhIMphiagDOfcG4X/EcQ+fBPqJ0rby9Wv/emzY1YLkIQy/rEgOrWQT+rBKhjw==}
+    peerDependencies:
+      react: ^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0
+      react-dom: ^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0
+    dependencies:
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
     dev: false
 
   /react-webcam@7.2.0(react-dom@18.3.1)(react@18.3.1):

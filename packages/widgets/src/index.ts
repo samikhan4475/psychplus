@@ -1,6 +1,8 @@
 const USER_WIDGET = 'user'
 const PATIENT_WIDGET = 'patient'
 const PATIENT_REFERRALS_LIST_WIDGET = 'patient-referrals'
+const LAB_ORDER = 'laborder'
+const ADD_LAB_ORDER_RESULT = 'add-laborder-result'
 const ALL_REFERRALS_LIST_WIDGET = 'all-referrals'
 const CREATE_REFERRAL_WIDGET = 'create-referral'
 const EDIT_REFERRAL_WIDGET = 'edit-referral'
@@ -46,6 +48,8 @@ const MANAGEMENT_LOCATION_TABS_WIDGET = 'management-location-tabs'
 export {
   USER_WIDGET,
   PATIENT_WIDGET,
+  LAB_ORDER,
+  ADD_LAB_ORDER_RESULT,
   PATIENT_REFERRALS_LIST_WIDGET,
   ALL_REFERRALS_LIST_WIDGET,
   CREATE_REFERRAL_WIDGET,

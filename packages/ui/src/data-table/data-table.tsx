@@ -3,27 +3,26 @@
 import { useState } from 'react'
 import { Box, Flex } from '@radix-ui/themes'
 import {
+  ExpandedState,
   flexRender,
   getCoreRowModel,
+  getExpandedRowModel,
   getFacetedUniqueValues,
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
   PaginationState,
   useReactTable,
-  type Row,
-  type ColumnDef,
   type ColumnFiltersState,
   type Table as ReactTable,
+  type Row,
   type SortingState,
   type VisibilityState,
 } from '@tanstack/react-table'
-import { Table } from '../table'
 import { cn } from '../cn'
+import { Table } from '../table'
 
 interface DataTableProps<TData, TValue> {
-  data: TData[]
-  columns: ColumnDef<TData, TValue>[]
   renderHeader?: (table: ReactTable<TData>) => React.ReactNode
   renderFooter?: (table: ReactTable<TData>) => React.ReactNode
   initialPageSize?: 10 | 25 | 50 | 100 | 200
@@ -34,14 +33,16 @@ interface DataTableProps<TData, TValue> {
   tHeadClass?: string
   toBodyClass?: string
   thClass?: string
+  meta?: any
   isRowPan?: boolean
   onRowSelect?: (row: Row<TData>, table: ReactTable<TData>) => void
   isPreferredPartnerTable?: boolean
+  enableRowSelection?: boolean
   isTreatmentPlan?: boolean
-  noResultsComponent?: React.ComponentType;
+  noResultsComponent?: React.ComponentType
 }
 
-const DataTable = <TData, TValue>({
+const DataTable = ({
   data,
   columns,
   renderHeader,
@@ -55,11 +56,13 @@ const DataTable = <TData, TValue>({
   tHeadClass,
   toBodyClass,
   thClass,
+  meta,
   isPreferredPartnerTable = false,
   isRowPan = false,
+  enableRowSelection = false,
   isTreatmentPlan = false,
   noResultsComponent: NoResultsComponent,
-}: DataTableProps<TData, TValue>) => {
+}: any) => {
   const [sorting, setSorting] = useState<SortingState>([])
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
@@ -69,11 +72,13 @@ const DataTable = <TData, TValue>({
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = useState({})
 
+  const [expanded, setExpanded] = useState<ExpandedState>({})
   const table = useReactTable({
     data,
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
+    onExpandedChange: setExpanded,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: disablePagination
       ? undefined
@@ -84,7 +89,12 @@ const DataTable = <TData, TValue>({
     onColumnVisibilityChange: setColumnVisibility,
     onRowSelectionChange: setRowSelection,
     onPaginationChange: setPagination,
+    getExpandedRowModel: getExpandedRowModel(),
+    enableRowSelection: enableRowSelection,
+    meta: meta,
+    debugTable: true,
     state: {
+      expanded,
       sorting,
       columnFilters,
       columnVisibility,
@@ -111,7 +121,6 @@ const DataTable = <TData, TValue>({
               <tr key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
                   const columnRelativeDepth = header.depth - header.column.depth
-
                   if (
                     !header.isPlaceholder &&
                     columnRelativeDepth > 1 &&
@@ -125,11 +134,20 @@ const DataTable = <TData, TValue>({
                     const leafs = header.getLeafHeaders()
                     rowSpan = leafs[leafs.length - 1].depth - header.depth
                   }
-
+                  const { size, minSize, maxSize } = header.column.columnDef
+                  const widthClass = `w-${size || 'auto'}`
+                  const minWidthClass = `min-w-${minSize || 'auto'}`
+                  const maxWidthClass = `max-w-${maxSize || 'auto'}`
+                  const className = cn(
+                    widthClass,
+                    minWidthClass,
+                    maxWidthClass,
+                    thClass,
+                  )
                   return (
                     <th
                       key={header.id}
-                      className={`${thClass}`}
+                      className={className}
                       colSpan={header.colSpan}
                       rowSpan={isRowPan ? rowSpan : undefined}
                     >
@@ -150,42 +168,48 @@ const DataTable = <TData, TValue>({
                   <Table.Row
                     key={row.id}
                     data-state={row.getIsSelected() && 'selected'}
-                    className={
-                      cn(isPreferredPartnerTable &&
-                      (row.original as { paymentStatus: string })
-                        .paymentStatus === 'Failed'
+                    className={cn(
+                      isPreferredPartnerTable &&
+                        (row.original as { paymentStatus: string })
+                          .paymentStatus === 'Failed'
                         ? 'bg-[#ffdae4]'
-                        : '', {
-                          'bg-[#D9E2FC]': row.getIsSelected()
-                        })
+                        : 'w-20',
+                      {
+                        'bg-[#D9E2FC]': row.getIsSelected(),
+                      },
+                    )}
+                    onClick={
+                      onRowSelect ? () => onRowSelect(row, table) : undefined
                     }
-                    onClick={onRowSelect? () => onRowSelect(row, table): undefined}
                   >
-                    {row.getVisibleCells().map((cell) => (
-                      <Table.Cell
-                        key={cell.id}
-                        py="1"
-                        px="1"
-                        className={`h-auto cursor-pointer align-middle ${columnCellClass}`}
-                        onClick={() => {
-                          if (isTreatmentPlan && cell.column.id !== 'actions') {
-                            const {
-                              patientId,
-                              noteId,
-                              id: rowId,
-                            } = row.original as any
-                            window.location.replace(
-                              `/galaxy/widgets/assessment-and-treatment-plan-detail?patientId=${patientId}&noteId=${noteId}&rowId=${rowId}`,
-                            )
-                          }
-                        }}
-                      >
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext(),
-                        )}
-                      </Table.Cell>
-                    ))}
+                    {row.getVisibleCells().map((cell) => {
+                      const { size, minSize, maxSize } = cell.column.columnDef
+                      const widthClass = `w-${size || 'auto'}`
+                      const minWidthClass = `min-w-${minSize || 'auto'}`
+                      const maxWidthClass = `max-w-${maxSize || 'auto'}`
+                      const className = cn(
+                        widthClass,
+                        minWidthClass,
+                        maxWidthClass,
+                        'h-auto',
+                        'cursor-pointer',
+                        'align-middle',
+                        columnCellClass,
+                      )
+                      return (
+                        <Table.Cell
+                          key={cell.id}
+                          py="1"
+                          px="1"
+                          className={className}
+                        >
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext(),
+                          )}
+                        </Table.Cell>
+                      )
+                    })}
                   </Table.Row>
                 )
               })
@@ -193,7 +217,7 @@ const DataTable = <TData, TValue>({
               <Table.Row>
                 <Table.Cell colSpan={columns.length}>
                   <Flex align="center" justify="center">
-                    {NoResultsComponent && <NoResultsComponent />} 
+                    {NoResultsComponent && <NoResultsComponent />}
                   </Flex>
                 </Table.Cell>
               </Table.Row>

@@ -5,6 +5,7 @@ import { format } from 'date-fns'
 import { HealthProblem } from '@psychplus/health-concerns/types'
 import { DataTable, DataTableColumnHeader } from '@psychplus/ui/data-table'
 import { TableCellLongText, TableCellText } from '@psychplus/ui/table-cell'
+import { Button } from '@radix-ui/themes'
 
 const DATE_FORMAT = 'yyyy-MM-dd'
 
@@ -77,16 +78,8 @@ const columns = (
   {
     id: 'actions',
     header: ({ column }) => <DataTableHeader title="Actions" column={column} />,
-    cell: ({ row }) => <button onClick={() => handleRemoveRow(row)}>X</button>,
+    cell: ({ row }) => <Button onClick={() => handleRemoveRow(row)}>X</Button>,
   },
-
-  // {
-  //   id: 'remove',
-  //   header: () => <DataTableHeader title="" column={null} />,
-  //   cell: ({ row, index }) => (
-  //     <button onClick={() => handleRemoveRow(index)}>X</button>
-  //   ),
-  // },
 ]
 
 export { AddConcernsTable }

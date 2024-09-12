@@ -3,7 +3,7 @@ import {
   CaretSortIcon,
   CaretUpIcon,
 } from '@radix-ui/react-icons'
-import { Box, Text } from '@radix-ui/themes'
+import { Text } from '@radix-ui/themes'
 import { type Column, type SortDirection } from '@tanstack/react-table'
 import { Button } from '../button'
 
@@ -30,7 +30,7 @@ const DataTableColumnHeader = <TData, TValue>({
 }: DataTableColumnHeaderProps<TData, TValue>) => {
   if (!column.getCanSort()) {
     return (
-      <Text size="1" className={className}>
+      <Text size="1" weight="medium" className={className}>
         {title}
       </Text>
     )
@@ -45,9 +45,9 @@ const DataTableColumnHeader = <TData, TValue>({
       onClick={() => {
         column.toggleSorting(sortDir === 'asc')
       }}
-      className={`whitespace-nowrap ${className}`}
+      className={`flex  w-full justify-between whitespace-nowrap ${className}`}
     >
-      <Text size="1" className={className}>
+      <Text size="1" weight="medium" className={className}>
         {title}
       </Text>
       {renderSortIcon(sortDir)}

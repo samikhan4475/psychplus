@@ -5,9 +5,8 @@ import { Dialog } from '@radix-ui/themes'
 import { ProblemFormDialogProps } from '.'
 import { AssessmentAndTreatmentPlanForm } from './components'
 
-const AssessmentAndTreatmentPlanDialogWidgetClient: React.FC<
-  ProblemFormDialogProps
-> = ({ isOpen, closeDialog }) => {
+const AssessmentAndTreatmentPlanDialogWidgetClient = ({ isOpen, closeDialog }: ProblemFormDialogProps) => {
+  
   return (
     <Dialog.Root
       open={isOpen}

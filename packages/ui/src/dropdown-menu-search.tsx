@@ -15,6 +15,7 @@ interface DropdownMenuSearchProps<T> {
   initialValue?: T
   placeholder?: string
   disabled?: boolean
+  defaultData?: any
   fetchResults: (input: string) => Promise<T[]>
   renderItem: (value: T) => React.ReactNode
   renderTrigger: (value?: T, disabled?: boolean) => React.ReactNode
@@ -29,11 +30,12 @@ const DropdownMenuSearch = <T extends MaybeID>({
   renderItem,
   renderTrigger,
   onChange,
+  defaultData,
 }: DropdownMenuSearchProps<T>) => {
   const [open, setOpen] = useState(false)
   const [input, setInput] = useState('')
   const [debouncedInput] = useDebounce(input, 500)
-  const [results, setResults] = useState<T[] | undefined>()
+  const [results, setResults] = useState<T[] | undefined>(defaultData || [])
   const [value, setValue] = useState<T | undefined>(initialValue)
 
   useEffect(() => {

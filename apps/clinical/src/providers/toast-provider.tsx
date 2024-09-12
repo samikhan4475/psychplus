@@ -9,12 +9,13 @@ import {
   useRef,
   useState,
 } from 'react'
-import Toast from '@psychplus/ui/react-toast'
 import { Flex, Text } from '@radix-ui/themes'
 import { CheckIcon, XIcon } from 'lucide-react'
+import Toast from '@psychplus/ui/react-toast'
 
 interface ToastData {
   type?: 'info' | 'success' | 'error'
+  bgColor?: 'red' | 'green' | 'white'
   title?: string
   description?: string
   action?: React.ReactNode
@@ -56,7 +57,7 @@ const ToastProvider = ({ children }: React.PropsWithChildren) => {
       <ToastContext.Provider value={contextValue}>
         {children}
         <Toast.Root
-          className="data-[state=open]:animate-slideIn data-[state=closed]:animate-hide data-[swipe=end]:animate-swipeOut rounded-md bg-white relative grid grid-cols-[auto_max-content] items-center gap-x-[15px] rounded-2 p-4 shadow-3 [grid-template-areas:_'title_action'_'description_action'] data-[swipe=cancel]:translate-x-0 data-[swipe=move]:translate-x-[var(--radix-toast-swipe-move-x)] data-[swipe=cancel]:transition-[transform_200ms_ease-out]"
+          className="data-[state=open]:animate-slideIn data-[state=closed]:animate-hide data-[swipe=end]:animate-swipeOut rounded-md relative grid grid-cols-[auto_max-content] items-center gap-x-[15px] rounded-2 bg-[#ffff] p-4 shadow-3 [grid-template-areas:_'title_action'_'description_action'] data-[swipe=cancel]:translate-x-0 data-[swipe=move]:translate-x-[var(--radix-toast-swipe-move-x)] data-[swipe=cancel]:transition-[transform_200ms_ease-out]"
           open={open}
           onOpenChange={setOpen}
         >

@@ -1,8 +1,8 @@
+import React from 'react'
 import { Text } from '@radix-ui/themes'
 import { formatDate, formatTime, isEmptyDate } from '@psychplus/utils/time'
 import { cn } from './cn'
 import { Tooltip } from './tooltip'
-import React from 'react'
 
 interface TableCellEmptyProps {
   label?: string
@@ -18,25 +18,60 @@ interface TableCellTextProps {
   text?: string
   emptyLabel?: string
   className?: string
+  isToolTip?: boolean
+  isLight?: boolean
 }
 
-const TableCellText = ({ text, emptyLabel, className }: TableCellTextProps) =>
-  text ? (
-    <Text size="1" className={cn('whitespace-nowrap', className)}>
-      {text}
-    </Text>
-  ) : (
-    <TableCellEmpty label={emptyLabel} />
-  )
+const TableCellText = ({
+  text,
+  emptyLabel,
+  className,
+  isToolTip = false,
+  isLight = false,
+}: TableCellTextProps) => {
+  let content
+
+  if (text) {
+    if (isToolTip) {
+      content = (
+        <Tooltip content={text} delayDuration={250} className="max-w-[100px]">
+          <Text
+            size="1"
+            weight="light"
+            className={cn('whitespace-nowrap', className)}
+          >
+            {text}
+          </Text>
+        </Tooltip>
+      )
+    } else {
+      content = (
+        <Text
+          size="1"
+          weight={isLight ? 'light' : 'medium'}
+          className={cn('whitespace-nowrap', className)}
+        >
+          {text}
+        </Text>
+      )
+    }
+  } else {
+    content = <TableCellEmpty label={emptyLabel} />
+  }
+
+  return content
+}
 
 interface TableCellLongTextProps {
   text?: string
   maxWidth?: number
+  isLight?: boolean
 }
 
 const TableCellLongText = ({
   text,
   maxWidth = 300,
+  isLight = false,
 }: TableCellLongTextProps) => {
   if (!text) {
     return <TableCellEmpty />
@@ -49,6 +84,7 @@ const TableCellLongText = ({
         style={{
           maxWidth: `${maxWidth}px`,
         }}
+        weight={`${isLight ? 'light' : 'medium'}`}
         className="block overflow-hidden text-ellipsis whitespace-nowrap"
       >
         {text}
@@ -96,17 +132,18 @@ interface TableCellInputProps {
 
 const TableCellInput = React.forwardRef<HTMLInputElement, TableCellInputProps>(
   (props, ref) => {
-  const { className, placeholder, ...formFieldProps } = props
+    const { className, placeholder, ...formFieldProps } = props
 
-  return (
-    <input
-      className={`${className?? ''} outline-none`}
-      placeholder={placeholder?? ''}
-      {...formFieldProps}
-      ref={ref}
-   />
-  )
-})
+    return (
+      <input
+        className={`${className ?? ''} outline-none`}
+        placeholder={placeholder ?? ''}
+        {...formFieldProps}
+        ref={ref}
+      />
+    )
+  },
+)
 
 TableCellInput.displayName = 'TableCellInput'
 

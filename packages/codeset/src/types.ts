@@ -160,6 +160,11 @@ export interface CodeSetsMetadata {
   createdByFullName: string
 }
 
+interface CodeSetType {
+  label: string
+  value: string
+}
+
 interface ActiveCodeAttribute {
   id?: string
   metadata?: CodeMetadata
@@ -241,6 +246,7 @@ interface AssigningAuthority {
 }
 
 export type {
+  CodeSetType,
   CodeSet,
   Code,
   CodeAttribute,
