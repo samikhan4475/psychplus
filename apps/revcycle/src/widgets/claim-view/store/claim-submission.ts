@@ -37,6 +37,11 @@ const ClaimSubmissionStore: StateCreator<ClaimSubmissionState> = (set) => ({
     set({ claimSubmissionDetailModal: open })
   },
 
+  claimSubmissionRejectionDetailModal: false,
+  setClaimSubmissionRejectionDetailModal(open) {
+    set({ claimSubmissionRejectionDetailModal: open })
+  },
+
   selectedClaim: '',
   setSelectedClaim(value) {
     set({ selectedClaim: value })

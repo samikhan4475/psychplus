@@ -9,14 +9,15 @@ import {
   CodeSet,
   InsurancePayer,
   Location,
+  ResponseHistoryRecord,
   Staff,
   USAStates,
-  ResponseHistoryRecord
 } from './types'
 
 const defaultPayLoad = {
   isIncludePatientInsurancePlan: false,
   isIncludePatientInsurancePolicy: true,
+  isIncludeClaimValidation: true,
 }
 
 const defaultResponsePayLoad = {

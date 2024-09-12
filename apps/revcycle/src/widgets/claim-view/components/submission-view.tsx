@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Box, Button, Flex, Tabs, Text } from '@radix-ui/themes'
+import { Checkbox } from '@psychplus/ui/checkbox'
 import { Select } from '@psychplus/ui/select'
 import { SubmissionHistoryTableTab } from './submission-history-table'
 import { SubmissionTable } from './submission-table/submission-table'
@@ -12,6 +13,7 @@ import { ClaimSubmissionPopupDialog } from './claim-submission-popup-dialog'
 const SubmissionView = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [submissionType, setSubmissionType] = useState('electronic')
+  const [scrubOnlyChecked, setScrubOnlyChecked] = useState(false)
 
   const claimSubmissionData = useStore((state) => state.claimSubmissionData)
   const { setClaimSubmissionData, setClaimSubmissionModal } = useStore(
@@ -41,7 +43,7 @@ const SubmissionView = () => {
         claimType: 'Professional',
         claimIds: claimSubmissionData.selectedClaims,
         insurancePolicyPriority: 'Primary',
-        isScrubOnly: true,
+        isScrubOnly: scrubOnlyChecked,
       }
       const response = await submitClaim(payload)
       const newObj = claimSubmissionData
@@ -91,6 +93,12 @@ const SubmissionView = () => {
               </Select.Group>
             </Select.Content>
           </Select.Root>
+          <Text>Scrub Only</Text>
+          <Checkbox
+            checked={scrubOnlyChecked}
+            onCheckedChange={(value) => setScrubOnlyChecked(!!value)}
+            aria-label="Scrub only"
+          />
           <Button
             className="h-25 ml-2 bg-[#151B4A] text-[#fff]"
             onClick={onSubmitClaims}

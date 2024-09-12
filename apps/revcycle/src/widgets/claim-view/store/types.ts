@@ -135,6 +135,8 @@ interface ClaimSubmissionState {
   setClaimSubmissionModal: (value: boolean) => void
   claimSubmissionDetailModal: boolean
   setClaimSubmissionDetailModal: (value: boolean) => void
+  claimSubmissionRejectionDetailModal: boolean
+  setClaimSubmissionRejectionDetailModal: (value: boolean) => void
   selectedClaim: string
   setSelectedClaim: (value: string) => void
 

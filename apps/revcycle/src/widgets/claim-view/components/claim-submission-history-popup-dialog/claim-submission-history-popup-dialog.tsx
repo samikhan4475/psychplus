@@ -1,4 +1,4 @@
-import { Box, Flex } from '@radix-ui/themes'
+import { Box, Flex, Text } from '@radix-ui/themes'
 import { Button } from '@psychplus/ui/button'
 import { Dialog } from '@psychplus/ui/dialog'
 import { useStore } from '../../store'
@@ -24,7 +24,9 @@ const ClaimSubmissionHistoryPopupDialog = () => {
       <Dialog.Content className="max-w-[600px] rounded-[0px]">
         <Dialog.Title>
           <Flex className="flex w-full items-center justify-between space-x-2">
-            <Box className="flex items-center space-x-2">Submission Detail</Box>
+            <Box className="flex items-center space-x-2">
+              <Text>Submission Detail</Text>
+            </Box>
             <Box>
               <Button
                 className="cursor-pointer bg-transparent text-[#000]"

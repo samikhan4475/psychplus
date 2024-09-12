@@ -10,6 +10,7 @@ import {
 } from '@psychplus/ui/data-table'
 import { useStore } from '../../store'
 import { Claim } from '../../types'
+import { ClaimSubmissionRejectionDetailPopupDialog } from '../claim-submission-rejection-detail-popup-dialog'
 import { RowActionDropdown } from './data-table-row.action'
 import { FilterForm } from './filter-form'
 import { TableCellClaimIdText } from './table-cell-claim-id-text'
@@ -238,6 +239,7 @@ const ClaimTable = () => {
 
   return (
     <>
+      <ClaimSubmissionRejectionDetailPopupDialog />
       <Box className="shadow-lg">
         <Flex
           py="1"

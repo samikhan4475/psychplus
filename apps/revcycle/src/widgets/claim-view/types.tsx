@@ -138,6 +138,7 @@ interface Claim {
   submittedOn: Date
   claimServiceLines: ClaimServiceLine[]
   claimDiagnosis: ClaimDiagnosis[]
+  isSystemRejected: boolean
 }
 
 interface PhoneNumber {

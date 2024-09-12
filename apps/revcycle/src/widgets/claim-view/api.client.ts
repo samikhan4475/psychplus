@@ -8,6 +8,7 @@ import {
   ClaimSubmissionHistoryFilters,
   ClaimSubmissionResponse,
   CPTResponse,
+  ErrorMessage,
   ICD10Code,
   ModifiersResponse,
   Patient,
@@ -174,6 +175,17 @@ const getClaimSubmissionHistoryDetail = (
       },
     ),
   )
+
+const getClaimSubmissionRejectionDetail = (
+  claimsId: string,
+): Promise<ErrorMessage[]> =>
+  handleRequest(
+    fetch(`/revcycle/api/claims/${claimsId}/claimvalidations/actions/search`, {
+      method: 'POST',
+      cache: 'no-store',
+      headers: createHeaders(),
+    }),
+  )
 const getResponseHistoryList = (
   payload: ResponseHistoryPayload,
 ): Promise<ResponseHistoryRecord[]> =>
@@ -215,4 +227,5 @@ export {
   submitClaim,
   getClaimSubmissionHistoryList,
   getClaimSubmissionHistoryDetail,
+  getClaimSubmissionRejectionDetail,
 }
