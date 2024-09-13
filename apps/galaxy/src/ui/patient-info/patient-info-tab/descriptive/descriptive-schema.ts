@@ -15,8 +15,8 @@ const descriptiveSchema = z.object({
   language: z.string().optional(),
   languageAbility: z.string().optional(),
   languageProficiency: z.string().optional(),
-  races: z.array(z.string()).optional(),
-  ethnicities: z.array(z.string()).optional(),
+  race: z.string().optional(),
+  ethnicity: z.string().optional(),
 })
 
 type DescriptiveSchema = z.infer<typeof descriptiveSchema>

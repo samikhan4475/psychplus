@@ -4,7 +4,7 @@ import { CODESETS } from '@/constants'
 const GenderExpressionSelect = () => {
   return (
     <FormFieldContainer className="flex-1">
-      <FormFieldLabel required>Gender Expression</FormFieldLabel>
+      <FormFieldLabel className="!text-1">Gender Expression</FormFieldLabel>
       <CodesetSelect
         name="genderExpression"
         codeset={CODESETS.GenderExpression}

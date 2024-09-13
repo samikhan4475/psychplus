@@ -4,7 +4,9 @@ const RACES_GROUPING_CODES = ['R', 'R1', 'R2', 'R3', 'R4', 'R5']
 const ETHNICITIES_GROUPING_CODES = ['E', 'E1', 'E2']
 
 const CODESETS = {
+  UsStates: 'PsychPlusPublic.UsStates',
   Gender: 'Gender',
+  CustomerStatus: 'CustomerStatus',
   GenderOrientation: 'GenderOrientation',
   GenderExpression: 'GenderExpression',
   GenderPronoun: 'GenderPronoun',
@@ -14,7 +16,6 @@ const CODESETS = {
   LanguageAbility: 'HL7v3.LanguageAbilityMode',
   LanguageProficiency: 'HL7v3.LanguageAbilityProficiency',
   Religion: 'HL7v3.ReligiousAffiliation',
-  UsStates: 'psychpluspublic.UsStates',
   CommonLanguages: 'FHIR.CommonLanguages',
   FirstResponder: 'psychpluspublic.FirstResponderOccupation',
   VisitMedium: 'AppointmentType',
@@ -25,6 +26,7 @@ const CODESETS = {
   EncounterType: 'EncounterType',
   NotificationStatus: 'NotificationStatusType',
   NotificationChannel: 'NotificationChannel',
+  Relationship: 'HL7v3.RoleCode',
 }
 
 export {

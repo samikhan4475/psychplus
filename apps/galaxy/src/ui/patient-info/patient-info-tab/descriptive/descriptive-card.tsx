@@ -24,7 +24,7 @@ interface DescriptiveCardProps {
 
 const DescriptiveCard = ({ patientId }: DescriptiveCardProps) => {
   return (
-    <Flex direction="column" className="bg-white shadow-2">
+    <Flex direction="column" className="bg-white overflow-hidden rounded-1">
       <CardHeading title="Descriptive" />
       <Flex direction="column" px="2" py="2" gap="2">
         <Flex align="start" gap="2">

@@ -41,6 +41,7 @@ const DatePickerInput = <T extends DateValue>({
   aria_lable,
   className,
   datePickerClass,
+  ...props
 }: DatePickerInputProps<T>) => {
   const form = useFormContext()
 
@@ -69,19 +70,23 @@ const DatePickerInput = <T extends DateValue>({
             aria-label={aria_lable ?? 'date to filter input'}
             isInvalid={invalid}
             className={datePickerClass}
-            granularity="second"
+            isDisabled={form.formState.disabled}
+            {...props}
           >
             <Group className={'relative w-full'}>
               <DateInput
-                className={
-                  'border-pp-gray-2 flex h-6 w-full items-center overflow-hidden whitespace-nowrap rounded-1 border px-1 py-[2.5px] data-[focus-within]:outline-1 data-[focus-within]:outline-iris-12'
-                }
+                className={cn(
+                  'border-pp-gray-2 flex h-6 w-full items-center overflow-hidden whitespace-nowrap rounded-1 border px-1 py-[2.5px] data-[focus-within]:outline-1 data-[focus-within]:outline-iris-12',
+                  {
+                    'bg-gray-3': form.formState.disabled || props.isDisabled,
+                  },
+                )}
               >
                 {(segment) => <DateSegment segment={segment} />}
               </DateInput>
               <Button
                 className={
-                  'bg-white absolute bottom-[1px] right-[1px] top-[1px] flex items-center rounded-1 pr-[3px] outline-none'
+                  'bg-white absolute bottom-[1px] right-[1px] top-[1px] flex items-center rounded-1 pr-[3px] outline-none disabled:bg-gray-3 disabled:text-gray-11'
                 }
               >
                 <CalendarIcon size={16} />

@@ -1,18 +1,15 @@
-import {
-  CodesetGroupMultiSelect,
-  FormFieldContainer,
-  FormFieldLabel,
-} from '@/components'
-import { CODE_RACE, CODESETS, RACES_GROUPING_CODES } from '@/constants'
+import { CodesetSelect, FormFieldContainer, FormFieldLabel } from '@/components'
+import { CODE_RACE, CODESETS, ETHNICITIES_GROUPING_CODES } from '@/constants'
 
 const RaceSelect = () => {
   return (
     <FormFieldContainer className="min-w-96 w-auto">
-      <FormFieldLabel required>Race</FormFieldLabel>
-      <CodesetGroupMultiSelect
-        name="races"
+      <FormFieldLabel className="!text-1">Race</FormFieldLabel>
+      <CodesetSelect
+        name="race"
         codeset={CODESETS.RaceAndEthnicity}
-        groupingCodes={RACES_GROUPING_CODES}
+        groupingCodes={ETHNICITIES_GROUPING_CODES}
+        size="1"
         exclude={[CODE_RACE]}
       />
     </FormFieldContainer>

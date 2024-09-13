@@ -1,4 +1,4 @@
-import { Flex, TextField } from '@radix-ui/themes'
+import { TextField } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
 import {
   FormFieldContainer,
@@ -17,19 +17,34 @@ const GuardianNameInput = () => {
   }
 
   return (
-    <Flex gap="2">
-      <FormFieldContainer className="w-64">
-        <FormFieldLabel required>Guardian First Name</FormFieldLabel>
-        <TextField.Root size="1" {...form.register('guardianFirstName')} />
+    <>
+      <FormFieldContainer>
+        <FormFieldLabel className="!text-1" required>
+          Guardian First Name
+        </FormFieldLabel>
+        <TextField.Root
+          size="1"
+          className={textFieldClassName}
+          placeholder="First Name"
+          {...form.register('guardianFirstName')}
+        />
         <FormFieldError name="guardianFirstName" />
       </FormFieldContainer>
-      <FormFieldContainer className="w-64">
-        <FormFieldLabel required>Guardian Last Name</FormFieldLabel>
-        <TextField.Root size="1" {...form.register('guardianLastName')} />
+      <FormFieldContainer>
+        <FormFieldLabel className="!text-1" required>
+          Guardian Last Name
+        </FormFieldLabel>
+        <TextField.Root
+          size="1"
+          className={textFieldClassName}
+          placeholder="Last Name"
+          {...form.register('guardianLastName')}
+        />
         <FormFieldError name="guardianLastName" />
       </FormFieldContainer>
-    </Flex>
+    </>
   )
 }
-
+const textFieldClassName =
+  'border-pp-gray-2 w-full h-6 border border-solid !outline-none [box-shadow:none]'
 export { GuardianNameInput }

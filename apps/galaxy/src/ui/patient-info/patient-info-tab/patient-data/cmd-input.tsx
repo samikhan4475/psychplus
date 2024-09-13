@@ -1,0 +1,30 @@
+'use client'
+
+import { TextField } from '@radix-ui/themes'
+import { useFormContext } from 'react-hook-form'
+import {
+  FormFieldContainer,
+  FormFieldError,
+  FormFieldLabel,
+} from '@/components/form'
+import { PatientDataSchema } from './patient-data-schema'
+
+const CmdInput = () => {
+  const form = useFormContext<PatientDataSchema>()
+
+  return (
+    <FormFieldContainer className="flex-1">
+      <FormFieldLabel className="!text-1">CMD</FormFieldLabel>
+      <TextField.Root
+        size="1"
+        {...form.register('cmdId')}
+        placeholder="CMD"
+        className={textFieldClassName}
+      />
+      <FormFieldError name="cmdId" />
+    </FormFieldContainer>
+  )
+}
+const textFieldClassName =
+  'border-pp-gray-2 w-full h-6 border border-solid !outline-none [box-shadow:none]'
+export { CmdInput }

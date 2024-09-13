@@ -70,6 +70,13 @@ const RootLayout = async ({ children }: React.PropsWithChildren) => {
       CODESETS.EncounterType,
       CODESETS.NotificationStatus,
       CODESETS.NotificationChannel,
+      CODESETS.UsStates,
+      CODESETS.SpecialistType,
+      CODESETS.AppointmentStatus,
+      CODESETS.EncounterType,
+      CODESETS.UsStates,
+      CODESETS.CustomerStatus,
+      CODESETS.Relationship,
     ])
 
     return <StoreProvider codesets={codesets}>{content}</StoreProvider>

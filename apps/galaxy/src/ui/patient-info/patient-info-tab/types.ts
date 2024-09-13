@@ -1,3 +1,5 @@
+import { ContactDetails, LegalName } from '@/types'
+
 interface PatientProfile {
   id: string
   mrn: string
@@ -12,4 +14,28 @@ interface PatientProfile {
   guardianLastName?: string
 }
 
-export type { PatientProfile }
+interface PatientRelationship {
+  id?: string
+  name: LegalName
+  patientId?: number
+  isEmergencyContact: boolean
+  isGuardian?: boolean
+  guardianRelationshipCode?: string
+  contactDetails?: ContactDetails
+  isAllowedToReleaseInformation: boolean
+}
+interface PatientPreferredPartner {
+  id: string
+  name: string
+  premiumStatus?: string
+  payerStatus: string
+  userID: string
+  userType: string
+  isPrimaryPartner: boolean
+  usersInID: string
+  userStatus: string
+  startDate: string
+  endDate: string
+  priority: string
+}
+export type { PatientProfile, PatientPreferredPartner, PatientRelationship }

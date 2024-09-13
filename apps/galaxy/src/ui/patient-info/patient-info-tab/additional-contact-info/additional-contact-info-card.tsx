@@ -17,7 +17,7 @@ const AdditionalContactInfoCard = ({
   patientId,
 }: AdditionalContactInfoCardProps) => {
   return (
-    <Flex direction="column" className="bg-white shadow-2">
+    <Flex direction="column" className="bg-white overflow-hidden rounded-1">
       <CardHeading title="Additional Contact Info" />
       <Flex direction="column" px="2" py="2" gap="2">
         <Flex align="start" gap="2">

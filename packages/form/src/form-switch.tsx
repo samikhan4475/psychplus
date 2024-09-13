@@ -28,4 +28,7 @@ const FormSwitch = React.forwardRef<HTMLButtonElement, Props>((props, ref) => {
     />
   )
 })
+
+FormSwitch.displayName = 'FormSwitch'
+
 export { FormSwitch }

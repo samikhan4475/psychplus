@@ -28,6 +28,10 @@ const GET_STAFF_ENDPOINT = `${API_URL}/api/staff/search`
 const GET_CLINICS_ENDPOINT = `${API_URL}/api/clinics`
 const GET_PROVIDERS_ENDPOINT = `${API_URL}/api/staff/search`
 const GET_VISIT_TYPE_ENDPOINT = `${API_URL}/api/encounters/actions/search`
+const GET_PATIENT_RELATIONSHIPS = (patientId: string) =>
+  `${API_URL}/api/patients/${patientId}/relationships`
+const GET_PATIENT_PREFERRED_PARTNERS = (patientId: string) =>
+  `${API_URL}/api/patients/${patientId}/preferredpartners`
 
 export {
   USER_ENDPOINT,
@@ -48,4 +52,6 @@ export {
   GET_CLINICS_ENDPOINT,
   GET_PROVIDERS_ENDPOINT,
   GET_VISIT_TYPE_ENDPOINT,
+  GET_PATIENT_RELATIONSHIPS,
+  GET_PATIENT_PREFERRED_PARTNERS,
 }

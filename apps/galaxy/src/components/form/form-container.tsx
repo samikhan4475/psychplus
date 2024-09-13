@@ -13,6 +13,7 @@ interface FormContainerProps<T extends FieldValues> {
   form: UseFormReturn<T>
   formClassName?: string
   onSubmit: SubmitHandler<T>
+  disabled?: boolean
 }
 
 const FormContainer = <T extends FieldValues>({
@@ -21,6 +22,7 @@ const FormContainer = <T extends FieldValues>({
   formClassName,
   onSubmit,
   children,
+  disabled,
 }: React.PropsWithChildren<FormContainerProps<T>>) => (
   <FormProvider {...form}>
     <form
@@ -28,7 +30,9 @@ const FormContainer = <T extends FieldValues>({
       className={cn('flex flex-1 flex-col', formClassName)}
     >
       <fieldset
-        disabled={form.formState.isSubmitting}
+        disabled={
+          form.formState.isSubmitting || disabled || form.formState.disabled
+        }
         className={cn('flex flex-1 flex-col', className)}
       >
         {children}

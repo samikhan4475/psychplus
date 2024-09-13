@@ -16,9 +16,13 @@ const SCRIPTSURE_SECRET = process.env.SCRIPTSURE_SECRET ?? ''
 const SCRIPTSURE_PLATFORM_URL = process.env.SCRIPTSURE_PLATFORM_URL ?? ''
 const SCRIPTSURE_APP_URL = process.env.SCRIPTSURE_APP_URL ?? ''
 
+// Google Maps
+const GOOGLE_MAPS_API_KEY = process.env.GOOGLE_MAPS_API_KEY ?? ''
+
 // Cookies
 const USER_COOKIE = process.env.USER_COOKIE ?? 'p+_staff_user'
-const ACCESS_TOKEN_COOKIE = process.env.ACCESS_TOKEN_COOKIE ?? 'p+_staff_access_token'
+const ACCESS_TOKEN_COOKIE =
+  process.env.ACCESS_TOKEN_COOKIE ?? 'p+_staff_access_token'
 const ACCESS_TOKEN_EXPIRY_COOKIE =
   process.env.ACCESS_TOKEN_EXPIRY_COOKIE ?? 'p+_staff_access_token_expiry'
 const REFRESH_TOKEN_COOKIE =
@@ -31,7 +35,7 @@ const SCRIPTSURE_SESSION_CREATED_AT_COOKIE =
 
 //Stripe
 const STRIPE_API_KEY = process.env.STRIPE_API_KEY ?? ''
-const STRIPE_PUBLISHABLE_KEY = process.env.STRIPE_PUBLISHABLE_KEY ?? ''  
+const STRIPE_PUBLISHABLE_KEY = process.env.STRIPE_PUBLISHABLE_KEY ?? ''
 
 export {
   APP_CODE,
@@ -51,5 +55,6 @@ export {
   SCRIPTSURE_SESSION_COOKIE,
   SCRIPTSURE_SESSION_CREATED_AT_COOKIE,
   STRIPE_API_KEY,
-  STRIPE_PUBLISHABLE_KEY
+  STRIPE_PUBLISHABLE_KEY,
+  GOOGLE_MAPS_API_KEY,
 }

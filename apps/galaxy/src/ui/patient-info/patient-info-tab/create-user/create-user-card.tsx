@@ -1,6 +1,6 @@
 'use client'
 
-import { Button, Flex } from '@radix-ui/themes'
+import { Button, Flex, Grid } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
 import { CardHeading } from '@/components'
 import { type CreateUserSchema } from './create-user-schema'
@@ -30,7 +30,7 @@ const CreateUserCard = ({
   const form = useFormContext<CreateUserSchema>()
 
   return (
-    <Flex direction="column" className="bg-white shadow-2">
+    <Flex direction="column" className="bg-white overflow-hidden rounded-1">
       <CardHeading title="Create User">
         <Flex justify="end" className="flex-1">
           <Button
@@ -56,26 +56,22 @@ const CreateUserCard = ({
           </Button>
         </Flex>
       </CardHeading>
-      <Flex direction="column" px="2" py="2" gap="2">
-        <Flex align="start" gap="2">
-          <FirstNameInput />
-          <MiddleNameInput />
-          <LastNameInput />
-          <DobInput />
-          <PhoneNumberInput />
-          <EmailInput />
-        </Flex>
-        <Flex align="start" gap="2">
-          <GuardianRadio />
-          <GuardianNameInput />
-          <PolicySection
-            patientId={patientId}
-            phone={phone}
-            email={email}
-            isPolicySigned={isPolicySigned}
-          />
-        </Flex>
-      </Flex>
+      <Grid columns="6" px="2" py="2" gap="2">
+        <FirstNameInput />
+        <MiddleNameInput />
+        <LastNameInput />
+        <DobInput />
+        <PhoneNumberInput />
+        <EmailInput />
+        <GuardianRadio />
+        <GuardianNameInput />
+        <PolicySection
+          patientId={patientId}
+          phone={phone}
+          email={email}
+          isPolicySigned={isPolicySigned}
+        />
+      </Grid>
     </Flex>
   )
 }

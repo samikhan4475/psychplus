@@ -1,6 +1,8 @@
 import { NextResponse, type NextRequest } from 'next/server'
 import { clearAuthCookiesResponse, setAuthCookiesResponse } from '@/utils/auth'
+import { createHeaders } from './api'
 import { apiGetSession } from './api/session'
+import { API_URL } from './constants'
 
 const LOGIN_PATH = '/login'
 
@@ -15,6 +17,26 @@ export const middleware = async (request: NextRequest) => {
   if (request.headers.get('next-action') !== null) {
     // Skip middleware if request is part of a Next server action.
     return NextResponse.next()
+  }
+
+  if (request.nextUrl.pathname.startsWith('/api')) {
+    const headers = createHeaders(request.headers)
+
+    return fetch(new URL(`${request.nextUrl.pathname}`, API_URL), {
+      body: request.body,
+      method: request.method,
+      headers: {
+        Authorization: headers.get('Authorization') ?? '',
+        'Content-Type': headers.get('Content-Type') ?? 'application/json',
+        'Psychplus-Application':
+          headers.get('Psychplus-Application') ?? 'react-ui',
+        'Psychplus-AppVersion': headers.get('Psychplus-AppVersion') ?? '1.0.0',
+        'Psychplus-RunEnvironment':
+          headers.get('Psychplus-RunEnvironment') ?? 'development',
+      },
+    }).catch((e) => {
+      console.log(e)
+    })
   }
 
   const [ok, refresh] = await apiGetSession()

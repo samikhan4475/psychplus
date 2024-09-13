@@ -2,9 +2,10 @@
 
 import { useState } from 'react'
 import { Button, Checkbox, Flex, Text } from '@radix-ui/themes'
-import { MailIcon, MessageSquareTextIcon } from 'lucide-react'
+import { MailIcon, MessageSquareTextIcon, PhoneCall } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { sendPolicyEmailAction, sendPolicySmsAction } from '../actions'
+import { useStore } from '../store'
 
 interface PolicySectionProps {
   patientId: string
@@ -19,6 +20,9 @@ const PolicySection = ({
   email,
   isPolicySigned,
 }: PolicySectionProps) => {
+  const { isUserLocked } = useStore((state) => ({
+    isUserLocked: state.isUserLocked,
+  }))
   const [isSending, setIsSending] = useState(false)
 
   const disabled = isSending
@@ -60,47 +64,64 @@ const PolicySection = ({
 
   return (
     <Flex
-      justify="center"
+      justify="between"
       gap="2"
-      className="bg-pp-bg-accent self-end rounded-2 p-2"
+      className="bg-pp-bg-accent col-span-2 w-full self-end rounded-2 px-2 py-1.5"
     >
-      <Flex gap="2" align="center">
-        <Checkbox highContrast checked={true} />
-        <Text className="text-[12px]" weight="medium">
+      <Flex gap="2" align="center" width="100%">
+        <Checkbox
+          color="green"
+          defaultChecked
+          disabled={isUserLocked}
+          className="rounded-full bg-white overflow-hidden before:[box-shadow:none]"
+        />
+        <Text className="text-1" weight="medium">
           Patient Policy A
         </Text>
       </Flex>
-
-      <Button
-        size="1"
-        variant="surface"
-        color="gray"
-        highContrast
-        className="bg-pp-alt-blue text-white h-auto px-1 py-[2px] text-[10px]"
-        disabled={disabled}
-        onClick={(e) => {
-          e.preventDefault()
-          sendSms()
-        }}
-      >
-        <MessageSquareTextIcon strokeWidth={1.5} className="h-4 w-4" />
-        Send SMS
-      </Button>
-      <Button
-        size="1"
-        variant="surface"
-        color="gray"
-        highContrast
-        className="bg-pp-alt-blue text-white h-auto px-1 py-[2px] text-[10px]"
-        disabled={disabled}
-        onClick={(e) => {
-          e.preventDefault()
-          sendEmail()
-        }}
-      >
-        <MailIcon strokeWidth={1.5} className="h-4 w-4" />
-        Send Email
-      </Button>
+      <Flex justify="end" gap="2" width="100%">
+        <Button
+          size="1"
+          variant="solid"
+          color="blue"
+          className="bg-pp-alt-blue text-[10px] disabled:bg-gray-5"
+          disabled={disabled || isUserLocked}
+          type="button"
+          onClick={(e) => {
+            e.preventDefault()
+            sendSms()
+          }}
+        >
+          <MessageSquareTextIcon strokeWidth={1.5} size={14} />
+          Send SMS
+        </Button>
+        <Button
+          size="1"
+          variant="solid"
+          color="blue"
+          className="bg-pp-alt-blue text-[10px] disabled:bg-gray-5"
+          disabled={disabled || isUserLocked}
+          type="button"
+          onClick={(e) => {
+            e.preventDefault()
+            sendEmail()
+          }}
+        >
+          <MailIcon strokeWidth={1.5} size={14} />
+          Send Email
+        </Button>
+        <Button
+          size="1"
+          variant="solid"
+          color="blue"
+          className="bg-pp-alt-blue text-[10px] disabled:bg-gray-5"
+          disabled={disabled || isUserLocked}
+          type="button"
+        >
+          <PhoneCall strokeWidth={1.5} size={14} />
+          Call Patient
+        </Button>
+      </Flex>
     </Flex>
   )
 }

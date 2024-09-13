@@ -11,7 +11,7 @@ const TabContentHeading = ({
   return (
     <Flex
       p="2"
-      className="bg-white sticky top-0 -mt-[1px] border border-gray-5"
+      className="bg-white sticky -top-[1px] z-10 -mt-[1px] border border-gray-5"
     >
       <Text className="text-[16px] font-[600] text-accent-12">{title}</Text>
       {children}

@@ -77,8 +77,7 @@ const AddCardForm = ({ onClose }: AddCardFormProps) => {
     if (
       stripeResult.error ||
       stripeResult.paymentMethod.type !== 'card' ||
-      !stripeResult.paymentMethod ||
-      !stripeResult.paymentMethod.card
+      !stripeResult.paymentMethod?.card
     ) {
       toast.error(
         stripeResult.error?.message ?? 'Could not collect credit card info',
@@ -91,9 +90,7 @@ const AddCardForm = ({ onClose }: AddCardFormProps) => {
       paymentMethod: { card },
     } = stripeResult
 
-    const cardBrand = card.brand
-
-    if (!ALLOWED_CARDS.includes(cardBrand)) {
+    if (!ALLOWED_CARDS.includes(card.brand)) {
       toast.error('Card not supported')
     }
 

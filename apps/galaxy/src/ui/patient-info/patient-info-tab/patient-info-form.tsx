@@ -12,6 +12,7 @@ import {
   patientInfoSchema,
   type PatientInfoSchema,
 } from './patient-info-schema'
+import { useStore } from './store'
 import { transformOut } from './transform'
 import type { PatientProfile } from './types'
 
@@ -23,7 +24,10 @@ const PatientInfoForm = ({
   patient,
   children,
 }: React.PropsWithChildren<PatientInfoFormProps>) => {
+  const disabled = useStore((state) => state.isUserLocked)
+
   const form = useForm<PatientInfoSchema>({
+    disabled: disabled,
     resolver: zodResolver(patientInfoSchema),
     reValidateMode: 'onChange',
     defaultValues: {
@@ -37,8 +41,8 @@ const PatientInfoForm = ({
       hasGuardian: patient.hasGuardian ? 'yes' : 'no',
       guardianFirstName: patient.guardianFirstName ?? '',
       guardianLastName: patient.guardianLastName ?? '',
-      races: [],
-      ethnicities: [],
+      race: '',
+      ethnicity: '',
     },
   })
 

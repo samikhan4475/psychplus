@@ -44,13 +44,15 @@ const config = {
         'pp-text-sub': '#60646C',
         'pp-text-primary-base': '#194595',
         'pp-bg-table-cell': '#F9F9FB',
+        'pp-img-border': '#9BABF0',
       },
       animation: {
         loader: 'bounce 500ms infinite, pulse 2s infinite',
       },
       boxShadow: {
-        'light-08': '0px 0px 2px 0px rgba(0, 0, 0, 0.12), 0px 4px 8px 0px rgba(0, 0, 0, 0.14)'
-      }
+        'light-08':
+          '0px 0px 2px 0px rgba(0, 0, 0, 0.12), 0px 4px 8px 0px rgba(0, 0, 0, 0.14)',
+      },
     },
   },
   plugins: [],

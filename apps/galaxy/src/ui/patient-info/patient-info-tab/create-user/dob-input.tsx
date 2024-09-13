@@ -1,46 +1,23 @@
-import { DateField, DateInput, DateSegment } from 'react-aria-components'
-import { Controller, useFormContext } from 'react-hook-form'
+'use client'
+
+import { DatePickerInput } from '@/components'
 import {
   FormFieldContainer,
   FormFieldError,
   FormFieldLabel,
 } from '@/components/form'
-import { type CreateUserSchema } from './create-user-schema'
 
 const DobInput = () => {
-  const form = useFormContext<CreateUserSchema>()
-
   return (
     <FormFieldContainer>
-      <FormFieldLabel required>Date of Birth</FormFieldLabel>
-      <Controller
-        control={form.control}
-        name="dob"
-        rules={{ required: 'Required' }}
-        render={({
-          field: { name, value, onChange, onBlur, ref },
-          fieldState: { invalid, error },
-        }) => (
-          <DateField
-            name={name}
-            value={value}
-            onChange={onChange}
-            onBlur={onBlur}
-            isRequired
-            // Let React Hook Form handle validation instead of the browser.
-            validationBehavior="aria"
-            aria-label="patient date of birth input"
-            isInvalid={invalid}
-          >
-            <DateInput>
-              {(segment) => <DateSegment segment={segment} />}
-            </DateInput>
-          </DateField>
-        )}
-      />
+      <FormFieldLabel className="!text-1" required>
+        Date of Birth
+      </FormFieldLabel>
+      <DatePickerInput field="dob" datePickerClass={textFieldClassName} />
       <FormFieldError name="dob" />
     </FormFieldContainer>
   )
 }
-
+const textFieldClassName =
+  'border-pp-gray-2 w-full h-6 border border-solid !outline-none [box-shadow:none]'
 export { DobInput }

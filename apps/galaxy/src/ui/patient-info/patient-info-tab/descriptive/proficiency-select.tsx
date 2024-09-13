@@ -4,7 +4,7 @@ import { CODESETS } from '@/constants'
 const ProficiencySelect = () => {
   return (
     <FormFieldContainer className="flex-1">
-      <FormFieldLabel required>Proficiency</FormFieldLabel>
+      <FormFieldLabel className="!text-1">Proficiency</FormFieldLabel>
       <CodesetSelect
         name="language"
         codeset={CODESETS.LanguageProficiency}

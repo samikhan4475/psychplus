@@ -21,10 +21,15 @@ import { useStore } from './store'
 
 interface PatientInfoViewProps {
   patientId: string
-  stripeApiKey:string
+  stripeApiKey: string
+  googleApiKey: string
 }
 
-const PatientInfoView = ({ patientId,stripeApiKey }: PatientInfoViewProps) => {
+const PatientInfoView = ({
+  patientId,
+  stripeApiKey,
+  googleApiKey,
+}: PatientInfoViewProps) => {
   const { activeTab, setActiveTab, showPatientHistory, closePatientHistory } =
     useStore((state) => ({
       activeTab: state.activeTab,
@@ -60,7 +65,7 @@ const PatientInfoView = ({ patientId,stripeApiKey }: PatientInfoViewProps) => {
         <Flex className="flex-1 border-b border-gray-5" />
       </Flex>
       <TabsContent value={PATIENT_INFO_TAB}>
-        <PatientInfoTab patientId={patientId} />
+        <PatientInfoTab googleApiKey={googleApiKey} patientId={patientId} />
       </TabsContent>
       <TabsContent value={INSURANCE_TAB}>
         <InsuranceTab />
@@ -72,7 +77,7 @@ const PatientInfoView = ({ patientId,stripeApiKey }: PatientInfoViewProps) => {
         <PaymentHistoryTab />
       </TabsContent>
       <TabsContent value={PAYMENT_CARDS_TAB}>
-        <PaymentCardsTab stripeApiKey={stripeApiKey} patientId={patientId}  />
+        <PaymentCardsTab stripeApiKey={stripeApiKey} patientId={patientId} />
       </TabsContent>
       <TabsContent value={PATIENT_INFO_HISTORY_TAB}>
         <PatientInfoHistoryTab />

@@ -2,20 +2,26 @@
 
 import { Flex } from '@radix-ui/themes'
 import { CardHeading } from '@/components'
+import { GooglePlacesContextProvider } from '@/providers/google-places-provider'
+import { MailAddressGroup } from './mail-address-group'
+import { PrimaryAddressGroup } from './primary-address-group'
 
-interface DescriptiveCardProps {
-  patientId: string
+interface AddressCardProps {
+  googleApiKey: string
 }
 
-const UserAddressCard = ({ patientId }: DescriptiveCardProps) => {
+const AddressCard = ({ googleApiKey }: AddressCardProps) => {
   return (
-    <Flex direction="column" className="bg-white shadow-2">
-      <CardHeading title="Addresss" />
-      <Flex direction="column" px="2" py="2" gap="2">
-        <Flex align="start" gap="2"></Flex>
+    <Flex direction="column" className="bg-white overflow-hidden rounded-1">
+      <CardHeading title="Address" />
+      <Flex px="2" py="2" gap="2">
+        <GooglePlacesContextProvider apiKey={googleApiKey}>
+          <PrimaryAddressGroup />
+          <MailAddressGroup />
+        </GooglePlacesContextProvider>
       </Flex>
     </Flex>
   )
 }
 
-export { UserAddressCard }
+export { AddressCard }

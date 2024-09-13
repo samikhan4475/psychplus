@@ -132,7 +132,7 @@ const formatDateTime = (dateString: string | undefined) => {
 
 function formatDateToISOString(
   date: DateValue | null | undefined,
-  endOfDay: boolean = false,
+  endOfDay = false,
 ): string | null {
   if (!date) return null
 

@@ -3,8 +3,13 @@ import { RadioGroup } from '@/components'
 
 const GuardianRadio = () => {
   return (
-    <Flex className="bg-pp-bg-accent self-end rounded-2 p-2" gap="2">
-      <Text className="text-[12px]" weight="medium">
+    <Flex
+      className="bg-pp-bg-accent col-span-2 self-end rounded-1 p-2"
+      gap="2"
+      justify="between"
+      align="center"
+    >
+      <Text className="text-1" weight="medium">
         Guardian (Do you have a Parent/Guardian?)
       </Text>
       <RadioGroup

@@ -14,11 +14,19 @@ const EmailInput = () => {
 
   return (
     <FormFieldContainer className="flex-1">
-      <FormFieldLabel required>Email</FormFieldLabel>
-      <TextField.Root size="1" {...form.register('email')} />
+      <FormFieldLabel className="!text-1" required>
+        Email
+      </FormFieldLabel>
+      <TextField.Root
+        size="1"
+        placeholder="Email"
+        className={textFieldClassName}
+        {...form.register('email')}
+      />
       <FormFieldError name="email" />
     </FormFieldContainer>
   )
 }
-
+const textFieldClassName =
+  'border-pp-gray-2 w-full h-6 border border-solid !outline-none [box-shadow:none]'
 export { EmailInput }

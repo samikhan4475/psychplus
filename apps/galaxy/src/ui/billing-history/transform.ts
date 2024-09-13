@@ -13,7 +13,7 @@ const transformInOption = <T>(
   valueKey?: keyof T,
   nested?: boolean,
   nestedKeys?: string[],
-  separator?: string,
+  separator = ' ',
 ): SelectOptionType[] => {
   if (nested && (!nestedKeys || nestedKeys.length === 0)) {
     return []
