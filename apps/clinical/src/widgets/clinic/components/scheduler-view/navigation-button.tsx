@@ -13,6 +13,7 @@ const NavigationButton = ({
   onClick,
   className,
 }: NavigationButtonProps) => {
+
   return (
     <IconButton
       variant="outline"

@@ -16,8 +16,6 @@ import { FilterVisibilityContext } from './context'
 const tabButtonClasses =
   'text-[12px] data-[state=active]:font-[510] data-[state=active]:before:bg-transparent data-[state=active]:bg-[#D9E2FC] data-[state=active]:text-[#194595] text-[#000000] h-6 rounded-[2px] data-[state=active]:rounded-[2px] data-[state=active]:text-[12px] px-[0.4px] box-border [box-shadow:inset_0_0_0_0.4px_#B9BBC6]'
 
-const startDate = '2024-12-17T03:24:00'
-
 enum TabValue {
   Scheduler = 'scheduler',
   List = 'list',
@@ -32,18 +30,18 @@ const ClinicWidgetClient = () => {
   usePublishSize(CLINIC_WIDGET, ref)
 
   return (
-    <Box className="min-h-[650px]" ref={ref}>
+    <Box className="h-screen min-h-[650px]" ref={ref}>
       <FilterVisibilityContext.Provider value={setAreFiltersHidden}>
-        <Tabs.Root defaultValue="scheduler" onValueChange={setSelectedTab}>
+        <Tabs.Root defaultValue="scheduler" onValueChange={setSelectedTab} className='relative z-0'>
           <Flex
             align="center"
-            className="py-0.5 pl-[22px] pr-5 [box-shadow:0_4px_4px_0_#00000014]"
+            className="sticky top-0 bg-[#FFF] z-20 py-0.5 pl-[22px] pr-5 [box-shadow:0_4px_4px_0_#00000014]"
             justify="center"
           >
             <Heading className="text-xl font-semibold">Clinic</Heading>
             <Tabs.List
               className={cn(
-                'lg:flex-1 items-center gap-x-2 pl-[17px] [box-shadow:none]',
+                'items-center gap-x-2 pl-[17px] [box-shadow:none] lg:flex-1',
               )}
             >
               <Tabs.Trigger className={tabButtonClasses} value={TabValue.List}>
@@ -77,9 +75,7 @@ const ClinicWidgetClient = () => {
                 {areFiltersHidden ? 'More Filters' : 'Hide Filters'}
               </Button>
             </Tabs.List>
-            {selectedTab === TabValue.Scheduler && (
-              <DateStepper startDate={startDate} step={10} />
-            )}
+            {selectedTab === TabValue.Scheduler && <DateStepper />}
             {selectedTab === TabValue.List && <ColumnFilterGroup />}
             {selectedTab === TabValue.Scheduler && <SchedulerFilterGroup />}
             <ActionButtonGroup />

@@ -1,55 +1,84 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import * as Accordion from '@radix-ui/react-accordion'
 import { ChevronDownIcon, ChevronUpIcon } from '@radix-ui/react-icons'
 import { Box, Flex, Grid, Text } from '@radix-ui/themes'
 import { cn } from '@psychplus/ui/cn'
-import { Provider, SlotsTable } from '../../types'
-import { currentWeekTotalSlots, nextWeekTotalSlots } from './date-utils'
-import { days } from './pseudo-data'
+import { useSpecialistTypeOptions } from '../../hooks'
+import { useStore } from '../../store'
+import { AppointmentAvailability, SlotsByDay } from '../../types'
+import {
+  currentWeekTotalSlots,
+  extractTime,
+  nextWeekTotalSlots,
+} from '../../utils'
 
 interface Props {
-  provider: Provider
+  provider: AppointmentAvailability
   value: string
 }
 
-const ThisWeekSlots = ({ slots }: { slots: SlotsTable }) => {
-  const thisWeekDays = days.slice(0, days.length / 2)
+const ThisWeekSlots = ({ slots }: { slots: SlotsByDay }) => {
+  const dates = useStore((state) => state.appointmentDays)
+  const thisWeekDays = dates.slice(0, dates.length / 2)
+
   return (
     <Flex
       align="center"
       className="col-span-5 justify-end gap-x-1 py-2.5 pr-2 text-[12px]"
     >
       {thisWeekDays.map((day, i) => (
-        <span className={cn("font-[510]", {
-          "after:content-[',']": i < (days.length/2 - 1)
-        })} key={day.date}>
-          {day.day} {'(' + slots[`${day.day}${day.monthDay}`].length + ')'}
+        <span
+          className={cn('font-[510]', {
+            "after:content-[',']": i < dates.length / 2 - 1,
+          })}
+          key={day.monthAndDay}
+        >
+          {day.day} {'(' + (slots[`${day.monthAndDay}`]?.length || 0) + ')'}
         </span>
       ))}
     </Flex>
   )
 }
 
-const NextWeekSlots = ({ slots }: { slots: SlotsTable }) => {
-  const nextWeekDays = days.slice(days.length / 2, days.length)
+const NextWeekSlots = ({ slots }: { slots: SlotsByDay }) => {
+  const dates = useStore((state) => state.appointmentDays)
+  const nextWeekDays = dates.slice(dates.length / 2, dates.length)
   return (
     <Flex
       align="center"
-      className="col-span-5 justify-end gap-x-1 py-2.5 text-[12px] pr-2"
+      className="col-span-5 justify-end gap-x-1 py-2.5 pr-2 text-[12px]"
     >
       {nextWeekDays.map((day, i) => (
-        <span className={cn("font-[510]", {
-          "after:content-[',']": i < (days.length/2 - 1)
-        })} key={day.date}>
-          {day.day} {'(' + slots[`${day.day}${day.monthDay}`].length + ')'}
+        <span
+          className={cn('font-[510]', {
+            "after:content-[',']": i < dates.length / 2 - 1,
+          })}
+          key={day.monthAndDay}
+        >
+          {day.day} {'(' + (slots[`${day.monthAndDay}`]?.length || 0) + ')'}
         </span>
       ))}
     </Flex>
   )
 }
 
+type SpecialistTypeIndex = { [key: string]: string }
+
 const AccordionItem = ({ provider, value }: Props) => {
   const [isOpen, setIsOpen] = useState<boolean>(false)
+  const dates = useStore((state) => state.appointmentDays)
+  const specialistTypeOptions = useSpecialistTypeOptions()
+  const specialistTypeIndex = useMemo(
+    () =>
+      specialistTypeOptions?.reduce(
+        (acc, specialistType) => ({
+          ...acc,
+          [specialistType.value]: specialistType.label,
+        }),
+        {} as SpecialistTypeIndex,
+      ),
+    [specialistTypeOptions],
+  )
 
   return (
     <Accordion.Item value={value}>
@@ -64,7 +93,7 @@ const AccordionItem = ({ provider, value }: Props) => {
             onClick={() => setIsOpen(!isOpen)}
             className={cn('cursor-pointer py-2.5 pl-2')}
           >
-            <Flex justify="between" className="w-full">
+            <Flex className="w-full gap-x-4">
               {isOpen ? (
                 <ChevronUpIcon width={18} height={18} />
               ) : (
@@ -73,18 +102,20 @@ const AccordionItem = ({ provider, value }: Props) => {
 
               <Flex direction="column">
                 <Text className="text-[12px] font-[510] text-[#656565]">
-                  Dr. Morgan Roish, MD
+                  {`${provider.specialist.legalName.firstName} 
+                  ${provider.specialist.legalName.lastName}, `}
+                  {provider.specialist.legalName.honors}
                 </Text>
 
                 <Text className="text-[12px] font-[510] text-[#151B4A]">
-                  {provider.speciality}
+                  {specialistTypeIndex?.[provider.specialistTypeCode] ?? ''}
                 </Text>
               </Flex>
             </Flex>
           </Accordion.Trigger>
         </Accordion.Header>
         {!isOpen && (
-          <Box className="col-[3_/_span_14] border-b-2 border-t border-r border-[#D9E2FC]">
+          <Box className="col-[3_/_span_14] border-b-2 border-r border-t border-[#D9E2FC]">
             <Grid columns="14" className="h-full">
               <Flex
                 align="center"
@@ -93,11 +124,13 @@ const AccordionItem = ({ provider, value }: Props) => {
                 <Flex direction="column">
                   <span>This Week Available</span>
                   <span>{`Slots ${
-                    '(' + currentWeekTotalSlots(days, provider.slots) + ')'
+                    '(' +
+                    currentWeekTotalSlots(dates, provider.allSlotsByDay) +
+                    ')'
                   }`}</span>
                 </Flex>
               </Flex>
-              <ThisWeekSlots slots={provider.slots} />
+              <ThisWeekSlots slots={provider.allSlotsByDay} />
               <Flex
                 align="center"
                 className="relative col-span-2 py-2.5 pl-2 pl-2 text-[12px] before:absolute before:bottom-0 before:left-0 before:top-0 before:w-[1px] before:-translate-x-1/2 before:bg-[#D9E2FC] before:content-['']"
@@ -105,22 +138,24 @@ const AccordionItem = ({ provider, value }: Props) => {
                 <Flex direction="column">
                   <span>Next Week Available</span>
                   <span>{`Slots ${
-                    '(' + nextWeekTotalSlots(days, provider.slots) + ')'
+                    '(' +
+                    nextWeekTotalSlots(dates, provider.allSlotsByDay) +
+                    ')'
                   }`}</span>
                 </Flex>{' '}
               </Flex>
-              <NextWeekSlots slots={provider.slots} />
+              <NextWeekSlots slots={provider.allSlotsByDay} />
             </Grid>
           </Box>
         )}
         <Accordion.Content className="col-[3_/_span_14]">
           <Grid
             columns="14"
-            className="border-b-[2px] border-r border-t border-[#D9E2FC]"
+            className="h-full border-b-[2px] border-r border-t border-[#D9E2FC]"
           >
-            {days.map((day, i) => (
+            {dates.map((day, i) => (
               <Box
-                key={day.date}
+                key={day.monthAndDay}
                 className={cn('relative col-span-1 px-2 py-3', {
                   "after:absolute after:bottom-0 after:right-0 after:top-0 after:w-[1px] after:bg-[#D9E2FC] after:content-['']":
                     i === 6,
@@ -130,16 +165,16 @@ const AccordionItem = ({ provider, value }: Props) => {
                 })}
               >
                 <Flex direction="column" className="gap-y-2 px-[1.5px]">
-                  {provider.slots[`${day.day}${day.monthDay}`]
-                    ? provider.slots[`${day.day}${day.monthDay}`].map(
+                  {provider.allSlotsByDay[`${day.monthAndDay}`]
+                    ? provider.allSlotsByDay[`${day.monthAndDay}`]?.map(
                         (slot) => (
                           <Flex
                             justify="center"
                             align="center"
                             className="h-6 rounded-[4px] border border-[#DDDDE3] px-[15px] py-1 text-[12px] font-[510]"
-                            key={slot.id}
+                            key={slot.startDate}
                           >
-                            {slot.duration}
+                            {extractTime(slot.startDate, slot.timeZoneId)}
                           </Flex>
                         ),
                       )
@@ -147,34 +182,6 @@ const AccordionItem = ({ provider, value }: Props) => {
                 </Flex>
               </Box>
             ))}
-            {/* <Box className="col-span-1 py-3">
-              <Flex direction="column" justify="between" className="h-full">
-                <Text className="mx-2 rounded-[4px] rounded-[4px] border border-[#DDDDE3] px-2 text-center text-[12px] font-[510]">
-                  Next Available Slots
-                </Text>
-                {provider.nextAvailability.map((availability) => (
-                  <Flex
-                    key={availability.date}
-                    direction="column"
-                    className="mx-2 rounded-[4px] border border-[#DDDDE3] px-2 py-1"
-                    align="center"
-                    justify="center"
-                  >
-                    <Flex className="gap-x-[3px]">
-                      <span className="text-[12px] font-[510] text-[#60646C]">
-                        {availability.day}
-                      </span>
-                      <span className="text-[12px] font-[510]">
-                        {availability.monthDay}
-                      </span>
-                    </Flex>
-                    <Text className="text-[12px] font-[510]">
-                      {availability.time}
-                    </Text>
-                  </Flex>
-                ))}
-              </Flex>
-            </Box> */}
           </Grid>
         </Accordion.Content>
       </Grid>

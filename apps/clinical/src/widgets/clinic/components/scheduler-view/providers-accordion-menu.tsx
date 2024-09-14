@@ -1,15 +1,20 @@
 import * as Accordion from '@radix-ui/react-accordion'
-import { Provider } from '../../types'
+import { useStore } from '../../store'
 import { AccordionItem } from './accordian-item'
 
-interface Props {
-  providers: Provider[]
-}
-const ProvidersAccordionMenu = ({ providers }: Props) => {
+const ProvidersAccordionMenu = () => {
+  const appointmentAvailabilities = useStore(
+    (state) => state.appointmentAvailabilities
+  )
+
   return (
     <Accordion.Root type="multiple">
-      {providers.map((provider) => (
-        <AccordionItem key={provider.id} provider={provider} value={`${provider.id}`} />
+      {appointmentAvailabilities.map((providerAvailability) => (
+        <AccordionItem
+          key={providerAvailability.specialist.id}
+          provider={providerAvailability}
+          value={`${providerAvailability.specialist.id}`}
+        />
       ))}
     </Accordion.Root>
   )

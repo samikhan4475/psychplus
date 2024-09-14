@@ -1,30 +1,35 @@
 import { Box, Flex, Grid, Text } from '@radix-ui/themes'
+import { addDays } from 'date-fns'
 import { cn } from '@psychplus/ui/cn'
+import { useStore } from '../../store'
 import { NavigationButton } from './navigation-button'
-import { days, PROVIDERS } from './pseudo-data'
 
 const DayHeader = () => {
+  const appointmentDates = useStore((state) => state.appointmentDays)
+  const setAppointmentDates = useStore((state) => state.setAppointmentDates)
+  const serverProviderAvailabilities = useStore(state => state.appointmentAvailabilities)
+
   const handleForwardNavigation = () => {
-    // TODO: Remove log on API integration
-    console.log('handle Navigation')
+    const nextDay = addDays(appointmentDates[0].date, 1)
+    setAppointmentDates(nextDay)
   }
 
   const handleBackwardNavigation = () => {
-    // TODO: Remove log on API integration
-    console.log('handle Navigation')
+    const prevDay = addDays(appointmentDates[0].date, -1)
+    setAppointmentDates(prevDay)
   }
 
   return (
     <Grid columns="17" className="mt-[7px]">
-      <Text className="col-span-2 px-[17px] text-[14px] font-[590] text-[#1C2024]">{`${PROVIDERS.length} Providers`}</Text>
-      <Box className="relative col-[3_/_span_14]">
+      <Text className="col-span-2 px-[17px] text-[14px] font-[590] text-[#1C2024]">{`${serverProviderAvailabilities.length} Providers`}</Text>
+      <Box className="relative z-10 col-[3_/_span_14]">
         <NavigationButton
-          className="absolute left-0 top-[50%] -translate-x-1/2 -translate-y-1/2"
+          className="absolute left-0 top-[50%] z-20 -translate-x-1/2 -translate-y-1/2"
           onClick={handleBackwardNavigation}
           direction="left"
         />
         <NavigationButton
-          className="absolute right-0 top-[50%] -translate-y-1/2 translate-x-1/2"
+          className="absolute right-0 top-[50%] z-20 -translate-y-1/2 translate-x-1/2"
           onClick={handleForwardNavigation}
           direction="right"
         />
@@ -32,11 +37,11 @@ const DayHeader = () => {
           columns="14"
           className="h-7 w-full border border-b-[2px] border-[#D9E2FC]"
         >
-          {days.map((day, i) => (
+          {appointmentDates.map((day, i) => (
             <Flex
               align="center"
               justify="center"
-              key={day.date}
+              key={day.monthAndDay}
               className={cn('relative px-2', {
                 "after:absolute after:bottom-0 after:right-0 after:top-0 after:w-[2px] after:translate-x-1/2 after:bg-[#D9E2FC] after:content-['']":
                   i === 6,
@@ -50,7 +55,9 @@ const DayHeader = () => {
                 <span className="text-[12px] font-[510] text-[#60646C]">
                   {day.day}
                 </span>
-                <span className="text-[12px] font-[510]">{day.monthDay}</span>
+                <span className="text-[12px] font-[510]">
+                  {day.monthAndDay}
+                </span>
               </Flex>
             </Flex>
           ))}
