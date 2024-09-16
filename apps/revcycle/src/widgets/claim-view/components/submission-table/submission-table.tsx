@@ -287,6 +287,7 @@ const SubmissionTable = ({ type }: { type: 'electronic' | 'paper' }) => {
         toBodyClass="border-[lightgray]; border-b border-solid"
         columnCellClass="border border-solid border-[#F2F2F2] w-50"
         renderFooter={DataTableFooter}
+        enableRowSelection={true}
       />
     </>
   )
