@@ -1,37 +1,37 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { ScrollArea } from '@radix-ui/themes'
-import { TabContentHeading, ViewLoadingPlaceholder } from '../shared'
+import { ViewLoadingPlaceholder } from '@/components'
+import { getInsurancePayersAction } from './actions/get-insurance-payers'
+import { InsuranceView } from './insurance-view'
+import { useStore } from './store'
+import { InsurancePayer } from './types'
 
-const TAB_TITLE = 'Insurance'
-
-const wait = async () => {
-  await new Promise((resolve) => setTimeout(resolve, 2000))
-  return 'hello'
-}
+const TAB_TITLE = 'Patient Insurance Information'
 
 const InsuranceTab = () => {
-  const [result, setResult] = useState<string>()
+  const { fetchInsurances, loading } = useStore((state) => ({
+    fetchInsurances: state.fetchInsurances,
+    loading: state.loading,
+  }))
+
+  const [insurancePayers, setInsurancePayers] = useState<InsurancePayer[]>([])
 
   useEffect(() => {
-    wait().then(setResult)
+    Promise.all([fetchInsurances(), getInsurancePayersAction()]).then(
+      ([_, insurancePayerResponse]) => {
+        if (insurancePayerResponse.state == 'success') {
+          setInsurancePayers(insurancePayerResponse.data ?? [])
+        }
+      },
+    )
   }, [])
 
-  if (!result) {
+  if (loading) {
     return <ViewLoadingPlaceholder title={TAB_TITLE} />
   }
 
-  // if (result.state === 'error') {
-  //   return <div>{result.error}</div>
-  // }
-
-  return (
-    <>
-      <TabContentHeading title={TAB_TITLE} />
-      <ScrollArea></ScrollArea>
-    </>
-  )
+  return <InsuranceView insurancePayers={insurancePayers ?? []} />
 }
 
 export { InsuranceTab }

@@ -32,6 +32,7 @@ interface DatePickerInputProps<T extends DateValue> extends DatePickerProps<T> {
   aria_lable?: string
   className?: string
   datePickerClass?: string
+  dateInputClass?: string
 }
 
 const DatePickerInput = <T extends DateValue>({
@@ -41,6 +42,7 @@ const DatePickerInput = <T extends DateValue>({
   aria_lable,
   className,
   datePickerClass,
+  dateInputClass,
   ...props
 }: DatePickerInputProps<T>) => {
   const form = useFormContext()
@@ -76,10 +78,11 @@ const DatePickerInput = <T extends DateValue>({
             <Group className={'relative w-full'}>
               <DateInput
                 className={cn(
-                  'border-pp-gray-2 flex h-6 w-full items-center overflow-hidden whitespace-nowrap rounded-1 border px-1 py-[2.5px] data-[focus-within]:outline-1 data-[focus-within]:outline-iris-12',
+                  'border-pp-gray-2 flex h-7 w-full items-center overflow-hidden whitespace-nowrap rounded-1 border px-1 py-[2.5px] data-[focus-within]:outline-1 data-[focus-within]:outline-iris-12',
                   {
                     'bg-gray-3': form.formState.disabled || props.isDisabled,
                   },
+                  dateInputClass,
                 )}
               >
                 {(segment) => <DateSegment segment={segment} />}
@@ -92,7 +95,7 @@ const DatePickerInput = <T extends DateValue>({
                 <CalendarIcon size={16} />
               </Button>
             </Group>
-            <Popover className="bg-white rounded-1 p-3 shadow-[0px_7px_29px_rgba(100,100,111,0.2)]">
+            <Popover className="bg-white pointer-events-auto rounded-1 p-3 shadow-[0px_7px_29px_rgba(100,100,111,0.2)]">
               <Dialog>
                 <Calendar>
                   <Box className="mx-[0.5rem] mb-1 flex justify-between">

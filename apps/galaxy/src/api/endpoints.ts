@@ -32,6 +32,9 @@ const GET_PATIENT_RELATIONSHIPS = (patientId: string) =>
   `${API_URL}/api/patients/${patientId}/relationships`
 const GET_PATIENT_PREFERRED_PARTNERS = (patientId: string) =>
   `${API_URL}/api/patients/${patientId}/preferredpartners`
+const GET_INSURANCE_PAYERS_ENDPOINT = `${API_URL}/api/insurance/payers?includePlans=false&includeInactive=false&includeTest=false&publicViewable=true&offset=0&limit=0`
+const GET_INSURANCE_PAYER_PLANS = (payerId: string) =>
+  `${API_URL}/api/insurance/payers/${payerId}?includePlans=true&includeInactive=false&includeTest=false&publicViewable=true`
 
 export {
   USER_ENDPOINT,
@@ -54,4 +57,6 @@ export {
   GET_VISIT_TYPE_ENDPOINT,
   GET_PATIENT_RELATIONSHIPS,
   GET_PATIENT_PREFERRED_PARTNERS,
+  GET_INSURANCE_PAYERS_ENDPOINT,
+  GET_INSURANCE_PAYER_PLANS,
 }

@@ -27,6 +27,8 @@ const CODESETS = {
   NotificationStatus: 'NotificationStatusType',
   NotificationChannel: 'NotificationChannel',
   Relationship: 'HL7v3.RoleCode',
+  InsurancePolicyPriority: 'InsurancePolicyPriority',
+  InsuranceRelationship: 'InsuranceRelationship',
 }
 
 export {
