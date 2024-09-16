@@ -34,9 +34,13 @@ import { YBocsTab } from './y-bocs-tab'
 const QuestionnairesView = ({
   questionnairesDashboardData,
   questionnairesGad7Data,
+  questionnairesPcl5Data,
+  questionnairesPhq9Data,
 }: {
   questionnairesDashboardData: QuestionnairesDashboard[]
   questionnairesGad7Data: QuestionnairesData[]
+  questionnairesPcl5Data: QuestionnairesData[]
+  questionnairesPhq9Data: QuestionnairesData[]
 }) => {
   const { activeTab, setActiveTab } = useStore((state) => ({
     activeTab: state.activeTab,
@@ -71,7 +75,7 @@ const QuestionnairesView = ({
         />
       </TabsContent>
       <TabsContent value={PHQ_9_TAB}>
-        <Phq9Tab />
+        <Phq9Tab questionnairesPhq9Data={questionnairesPhq9Data} />
       </TabsContent>
       <TabsContent value={GAD_7_TAB}>
         <Gad7Tab questionnairesGad7Data={questionnairesGad7Data} />
@@ -80,7 +84,7 @@ const QuestionnairesView = ({
         <SnapIvTab />
       </TabsContent>
       <TabsContent value={PCL_5_TAB}>
-        <Pcl5Tab />
+        <Pcl5Tab questionnairesPcl5Data={questionnairesPcl5Data} />
       </TabsContent>
       <TabsContent value={Y_BOCS_TAB}>
         <YBocsTab />

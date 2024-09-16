@@ -1,33 +1,59 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import { ScrollArea } from '@radix-ui/themes'
+import { Flex } from '@radix-ui/themes'
+import { FormProvider } from 'react-hook-form'
 import { TabContentHeading, ViewLoadingPlaceholder } from '@/components'
 import { PCL_5_TAB } from '../constants'
+import {
+  AddToNoteCell,
+  AddToPreVisitAssessmentCell,
+  HistoryButton,
+  SaveButton,
+  SendToPatientButton,
+} from '../shared'
+import {
+  QuestionnairesData,
+  QuestionnairesForm,
+} from '../shared/questionnaires-form'
+import { useQuestionnaireForm } from '../shared/use-questionnaire-form'
+import { LABELS, SCORE_INTERPRETATION_RANGES } from './constants'
 
-const TAB_TITLE = PCL_5_TAB
+const Pcl5Tab = ({
+  questionnairesPcl5Data,
+}: {
+  questionnairesPcl5Data: QuestionnairesData[]
+}) => {
+  const { totalScore, ...formMethods } = useQuestionnaireForm(
+    questionnairesPcl5Data,
+  )
 
-const wait = async () => {
-  await new Promise((resolve) => setTimeout(resolve, 2000))
-  return 'hello'
-}
-
-const Pcl5Tab = () => {
-  const [result, setResult] = useState<string>()
-
-  useEffect(() => {
-    wait().then(setResult)
-  }, [])
-
-  if (!result) {
-    return <ViewLoadingPlaceholder title={TAB_TITLE} />
+  if (!questionnairesPcl5Data) {
+    return <ViewLoadingPlaceholder title={PCL_5_TAB} />
   }
 
   return (
-    <>
-      <TabContentHeading title={TAB_TITLE} />
-      <ScrollArea></ScrollArea>
-    </>
+    <FormProvider {...formMethods}>
+      <TabContentHeading title={PCL_5_TAB}>
+        <Flex ml="2">
+          <AddToPreVisitAssessmentCell />
+          <AddToNoteCell />
+        </Flex>
+        <Flex align="center" justify="end" gap="2" className="flex-1">
+          <SendToPatientButton />
+          <HistoryButton />
+          <SaveButton />
+        </Flex>
+      </TabContentHeading>
+
+      <Flex className="bg-white" p="4">
+        <QuestionnairesForm
+          data={questionnairesPcl5Data}
+          labels={LABELS}
+          totalScore={totalScore}
+          scoreInterpretationRanges={SCORE_INTERPRETATION_RANGES}
+        />
+      </Flex>
+    </FormProvider>
   )
 }
 

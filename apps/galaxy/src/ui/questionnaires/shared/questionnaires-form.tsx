@@ -65,7 +65,7 @@ const QuestionnairesForm = ({
               <Table.Cell
                 className={cn(index % 2 === 1 ? 'bg-pp-bg-table-cell' : '')}
               >
-                <Flex gap="2" align="start">
+                <Flex gap="2">
                   <Text>{index + 1}.</Text>
                   <Text weight="medium" size="1">
                     {item.question}
@@ -77,13 +77,13 @@ const QuestionnairesForm = ({
                   key={option.value}
                   className={cn(
                     index % 2 === 1 ? 'bg-pp-bg-table-cell' : '',
-                    'pl-6',
+                    'pl-6 align-middle',
                   )}
                 >
                   <RadixRadioGroup.Root
                     onValueChange={() => handleChange(index, option.value)}
                     value={`responses.${index}.selectedValue`}
-                    className="flex items-center gap-2"
+                    className="flex items-center gap-1"
                   >
                     <RadixRadioGroup.Item
                       className="rounded-full flex h-[12px] w-[12px] items-center justify-center border border-gray-9 data-[state=checked]:border-blue-11 data-[state=checked]:bg-blue-11"
@@ -103,7 +103,8 @@ const QuestionnairesForm = ({
                       )}
                     >
                       {!isNaN(Number(option.label)) &&
-                        option.label.trim() !== '' && <Text size="1">+</Text>}
+                        option.label.trim() !== '' &&
+                        option.label.trim() !== '0' && <Text size="1">+</Text>}
                       <Text size="2">{option.label}</Text>
                     </Flex>
                   </RadixRadioGroup.Root>
