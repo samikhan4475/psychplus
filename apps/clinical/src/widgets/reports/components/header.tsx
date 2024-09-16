@@ -31,6 +31,7 @@ const schema = z.object({
       reportParameterCode: z.string(),
       displayName: z.string().optional().default(''),
       value: z.string().optional().default(''),
+      displayOrder: z.number().optional().default(0),
     }),
   ),
 })
@@ -58,6 +59,7 @@ const Header = ({
     name: 'reportTemplateParameters',
   })
   const { toast } = useToast()
+  const sortedFields = fields.sort((a,b) => a.displayOrder - b.displayOrder)
 
   useEffect(() => {
     form.reset({ reportTemplateParameters: parameters })
@@ -119,7 +121,7 @@ const Header = ({
           align="center"
           className="flex-wrap gap-2 bg-[#FFF] px-2 py-2"
         >
-          {fields?.map((field, i) => {
+          {sortedFields?.map((field, i) => {
             if (field.resourceStatus !== 'Active') return null
             return isSelectField(field.reportParameterCode) ? (
               <Flex key={field.id} className="gap-x-1" align="center">

@@ -41,28 +41,32 @@ const ReportsWidgetClient = () => {
         >
           <Box className="grid h-full grid-cols-6 gap-x-1">
             <Tabs.List className="col-span-1 flex h-full flex-col overflow-y-scroll bg-[#FFF] pl-3.5 pr-5 pt-2">
-              {reportCategories.codes.map((tab) => (
-                <Tabs.Trigger
-                  key={tab.code}
-                  value={tab.code}
-                  className={tabButtonClasses}
-                >
-                  {tab.displayName}
-                </Tabs.Trigger>
-              ))}
+              {(reportCategories.codes ? reportCategories.codes : []).map(
+                (tab) => (
+                  <Tabs.Trigger
+                    key={tab.code}
+                    value={tab.code}
+                    className={tabButtonClasses}
+                  >
+                    {tab.displayName}
+                  </Tabs.Trigger>
+                ),
+              )}
             </Tabs.List>
-            {reportCategories.codes.map((category) => (
-              <Tabs.Content
-                key={`content-${category.code}`}
-                value={category.code}
-                className={tabContentStyles}
-              >
-                <ReportsContent
-                  category={category.code}
-                  title={category.displayName}
-                />
-              </Tabs.Content>
-            ))}
+            {(reportCategories.codes ? reportCategories.codes : []).map(
+              (category) => (
+                <Tabs.Content
+                  key={`content-${category.code}`}
+                  value={category.code}
+                  className={tabContentStyles}
+                >
+                  <ReportsContent
+                    category={category.code}
+                    title={category.displayName}
+                  />
+                </Tabs.Content>
+              ),
+            )}
           </Box>
         </Tabs.Root>
       </Flex>

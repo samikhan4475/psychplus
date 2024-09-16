@@ -28,7 +28,7 @@ const schema = z.object({
       reportParameterCode: z.string(),
       resourceStatus: z.string(),
       reportTemplateId: z.string().optional(),
-      displayOrder: z.number().optional(),
+      displayOrder: z.number().optional().default(0),
     }),
   ).nonempty({ message: 'Add at least one parameter' }),
   isAdhocAllowed: z.boolean(),
@@ -71,6 +71,8 @@ const EditTemplateForm = ({ template }: EditTemplateFormProps) => {
         uniqueParameters.push(param)
       }
     })
+    uniqueParameters.forEach((parameter, i) => parameter.displayOrder= i)
+
     const payload = {...data, reportTemplateParameters: uniqueParameters, resourceStatus: 'Active'}
     updateTemplate(payload, payload.id)
     .then((res) => {

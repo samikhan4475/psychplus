@@ -52,10 +52,15 @@ const AddTemplateForm = () => {
   })
 
   const onSubmit: SubmitHandler<SchemaType> = async (data) => {
+    const orderedParameters = data.reportTemplateParameters.map((parameter, i) => ({
+      ...parameter,
+      displayOrder: i,
+    }))
+
     const response = {
       resourceStatus: 'Active',
       shortName: data.shortName,
-      reportTemplateParameters: data.reportTemplateParameters,
+      reportTemplateParameters: orderedParameters,
       displayName: data.displayName,
       reportCategoryCode: data.reportCategoryCode,
       isAdhocAllowed: data.isAdhocAllowed,

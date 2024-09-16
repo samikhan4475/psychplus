@@ -39,6 +39,7 @@ const ParametersTable = () => {
       displayName: '',
       reportTemplateId: getValues('id'),
       resourceStatus: 'Active',
+      displayOrder: fields.length,
     }
     append(newParameter)
   }
