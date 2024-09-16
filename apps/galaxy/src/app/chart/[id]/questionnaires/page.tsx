@@ -3,6 +3,7 @@ import { getQuestionnairesDashboard } from '@/ui/questionnaires/dashboard-tab/da
 import { getQuestionnairesGad7 } from '@/ui/questionnaires/gad-7-tab/api/get-questionnaires-gad7'
 import { getQuestionnairesPcl5 } from '@/ui/questionnaires/pcl-5-tab/api'
 import { getQuestionnairesPhq9 } from '@/ui/questionnaires/phq-9-tab/api'
+import { getQuestionnairesSnapIv } from '@/ui/questionnaires/snap-iv-tab/api'
 
 interface QuestionnairesPageProps {
   params: {
@@ -16,11 +17,13 @@ const QuestionnairesInfoPage = async ({ params }: QuestionnairesPageProps) => {
     questionnairesGad7Response,
     questionnairesPcl5Response,
     questionnairesPhq9DataResponse,
+    questionnairesSnapIvResponse,
   ] = await Promise.all([
     getQuestionnairesDashboard({ patientId: params.id }),
     getQuestionnairesGad7({ patientId: params.id }),
     getQuestionnairesPcl5({ patientId: params.id }),
     getQuestionnairesPhq9({ patientId: params.id }),
+    getQuestionnairesSnapIv({ patientId: params.id }),
   ])
 
   if (questionnairesDashboardResponse.state === 'error') {
@@ -31,6 +34,9 @@ const QuestionnairesInfoPage = async ({ params }: QuestionnairesPageProps) => {
     throw new Error(questionnairesGad7Response.error)
   }
 
+  if (questionnairesSnapIvResponse.state === 'error') {
+    throw new Error(questionnairesSnapIvResponse.error)
+  }
   if (questionnairesPcl5Response.state === 'error') {
     throw new Error(questionnairesPcl5Response.error)
   }
@@ -47,6 +53,10 @@ const QuestionnairesInfoPage = async ({ params }: QuestionnairesPageProps) => {
       questionnairesGad7Data={
         questionnairesGad7Response.data.questionnairesGad7Data
       }
+      questionnairesSnapIvResponse={
+        questionnairesSnapIvResponse.data.questionnairesSnapIvData
+      }
+      patientId={params.id}
       questionnairesPcl5Data={
         questionnairesPcl5Response.data.questionnairesPcl5Data
       }

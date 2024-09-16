@@ -26,7 +26,7 @@ const WidgetContainer = ({
 }: WidgetContainerProps) => {
   return (
     <Flex direction="column" py="3" className="bg-white px-2.5 shadow-2">
-      <Flex align="center" justify="between" gap="2" wrap="wrap" mb="3">
+      <Flex align="center" justify="between" gap="2" wrap="wrap">
         <Flex align="center" gap="2">
           {toggleable && (
             <Checkbox

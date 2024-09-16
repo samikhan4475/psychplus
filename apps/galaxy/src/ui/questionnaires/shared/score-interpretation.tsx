@@ -3,6 +3,7 @@ import { Badge, Box, Flex, Text } from '@radix-ui/themes'
 import { cn } from '@/utils'
 
 interface ScoreInterpretationRange {
+  rangeTitle?: string
   label: string
   color: string
   min: number
@@ -49,7 +50,10 @@ const ScoreInterpretation = ({
               )}
             ></Box>
             <Text className="text-black" size="1">
-              {range.min}-{range.max} - {range.label}
+              {range.rangeTitle
+                ? range.rangeTitle
+                : `${range.min}-${range.max}`}{' '}
+              - {range.label}
             </Text>
           </Flex>
         ))}
@@ -61,6 +65,7 @@ const ScoreInterpretation = ({
           variant="soft"
           mx="1"
           color={getBadgeColor(currentRangeLabel)}
+          className={`border 1px solid ${getBadgeColor(currentRangeLabel)}`}
         >
           Score {totalScore}
         </Badge>

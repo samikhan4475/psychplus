@@ -3,6 +3,7 @@
 import * as Tabs from '@radix-ui/react-tabs'
 import { Flex } from '@radix-ui/themes'
 import { XIcon } from 'lucide-react'
+import { QuickNoteSectionItem } from '@/types'
 import { AimsTab } from './aims-tab'
 import { AuditTab } from './audit-tab'
 import {
@@ -33,14 +34,18 @@ import { YBocsTab } from './y-bocs-tab'
 
 const QuestionnairesView = ({
   questionnairesDashboardData,
+  questionnairesSnapIvResponse,
   questionnairesGad7Data,
   questionnairesPcl5Data,
   questionnairesPhq9Data,
+  patientId,
 }: {
   questionnairesDashboardData: QuestionnairesDashboard[]
   questionnairesGad7Data: QuestionnairesData[]
   questionnairesPcl5Data: QuestionnairesData[]
   questionnairesPhq9Data: QuestionnairesData[]
+  questionnairesSnapIvResponse: QuickNoteSectionItem[]
+  patientId: string
 }) => {
   const { activeTab, setActiveTab } = useStore((state) => ({
     activeTab: state.activeTab,
@@ -81,7 +86,7 @@ const QuestionnairesView = ({
         <Gad7Tab questionnairesGad7Data={questionnairesGad7Data} />
       </TabsContent>
       <TabsContent value={SNAP_IV_TAB}>
-        <SnapIvTab />
+        <SnapIvTab patientId={patientId} data={questionnairesSnapIvResponse} />
       </TabsContent>
       <TabsContent value={PCL_5_TAB}>
         <Pcl5Tab questionnairesPcl5Data={questionnairesPcl5Data} />

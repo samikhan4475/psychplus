@@ -11,6 +11,9 @@ const SendToPatientButton = () => {
       variant="surface"
       highContrast
       className="h-auto px-1 py-1 text-[11px] font-[300]"
+      onClick={(e) => {
+        e.preventDefault()
+      }}
     >
       <SendHorizonalIcon width={15} height={15} strokeWidth={1.75} />
       Send to Patient

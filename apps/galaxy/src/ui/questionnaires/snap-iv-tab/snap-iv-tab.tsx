@@ -1,33 +1,63 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import { ScrollArea } from '@radix-ui/themes'
-import { TabContentHeading, ViewLoadingPlaceholder } from '@/components'
+import { Flex } from '@radix-ui/themes'
+import { FormProvider } from 'react-hook-form'
+import { WidgetFormContainer } from '@/components'
+import { QuickNoteSectionItem } from '@/types'
 import { SNAP_IV_TAB } from '../constants'
+import {
+  AddToNoteCell,
+  AddToPreVisitAssessmentCell,
+  HistoryButton,
+  SaveButton,
+  SendToPatientButton,
+} from '../shared'
+import { SNAP_IV_LABELS } from './constants'
+import { transformIn, transformOut } from './form-snap-iv/data'
+import { QuestionnairesFormSnapIv } from './form-snap-iv/snap-iv-form'
+import { useQuestionnaireFormSnapIv } from './form-snap-iv/use-snap-iv-form'
 
-const TAB_TITLE = SNAP_IV_TAB
-
-const wait = async () => {
-  await new Promise((resolve) => setTimeout(resolve, 2000))
-  return 'hello'
-}
-
-const SnapIvTab = () => {
-  const [result, setResult] = useState<string>()
-
-  useEffect(() => {
-    wait().then(setResult)
-  }, [])
-
-  if (!result) {
-    return <ViewLoadingPlaceholder title={TAB_TITLE} />
-  }
+const SnapIvTab = ({
+  patientId,
+  data,
+}: {
+  patientId: string
+  data: QuickNoteSectionItem[]
+}) => {
+  const initialValue = transformIn(data)
+  const { totalScore, ...form } = useQuestionnaireFormSnapIv(initialValue)
 
   return (
-    <>
-      <TabContentHeading title={TAB_TITLE} />
-      <ScrollArea></ScrollArea>
-    </>
+    <FormProvider {...form}>
+      <Flex direction="column" gap=".5rem">
+        <WidgetFormContainer
+          enableEvents={false}
+          patientId={patientId}
+          widgetId="snap-iv"
+          getData={transformOut(patientId)}
+          title={SNAP_IV_TAB}
+          headerRight={
+            <Flex gap="2">
+              <SendToPatientButton />
+              <HistoryButton />
+              <SaveButton />
+            </Flex>
+          }
+          headerLeft={
+            <Flex>
+              <AddToPreVisitAssessmentCell />
+              <AddToNoteCell />
+            </Flex>
+          }
+        />
+        <Flex maxWidth="100%" className="bg-white" px="3" py='1'>
+          <QuestionnairesFormSnapIv
+            labels={SNAP_IV_LABELS}
+            totalScore={totalScore}
+          />
+        </Flex>
+      </Flex>
+    </FormProvider>
   )
 }
 

@@ -12,12 +12,14 @@ interface WidgetFormContainerProps extends WidgetContainerProps {
   patientId: string
   widgetId: string
   getData: (schema: any) => QuickNoteSectionItem[]
+  enableEvents?: boolean // TODO: Remove this prop if event are necessary, panding aryan's feedback
 }
 
 const WidgetFormContainer = ({
   patientId,
   widgetId,
   getData,
+  enableEvents = true,
   ...props
 }: WidgetFormContainerProps) => {
   const form = useFormContext()
@@ -26,20 +28,20 @@ const WidgetFormContainer = ({
 
   const onSubmit = (shouldToast = true) =>
     form.handleSubmit(async (data) => {
-      const result = await saveWidgetAction({
-        patientId,
-        data: getData(data),
-      })
+      const payload = { patientId, data: getData(data) }
+      const result = await saveWidgetAction(payload)
 
       if (result.state === 'error') {
-        window.postMessage(
-          {
-            type: 'widget:save',
-            widgetId: widgetId,
-            success: false,
-          },
-          '*',
-        )
+        if (enableEvents) {
+          window.postMessage(
+            {
+              type: 'widget:save',
+              widgetId: widgetId,
+              success: false,
+            },
+            '*',
+          )
+        }
 
         if (shouldToast) {
           toast.error('Failed to save!')
@@ -49,14 +51,16 @@ const WidgetFormContainer = ({
 
       form.reset(data)
 
-      window.postMessage(
-        {
-          type: 'widget:save',
-          widgetId: widgetId,
-          success: true,
-        },
-        '*',
-      )
+      if (enableEvents) {
+        window.postMessage(
+          {
+            type: 'widget:save',
+            widgetId: widgetId,
+            success: true,
+          },
+          '*',
+        )
+      }
 
       if (shouldToast) {
         toast.success('Saved!')
