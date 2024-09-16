@@ -35,6 +35,7 @@ const GET_PATIENT_PREFERRED_PARTNERS = (patientId: string) =>
 const GET_INSURANCE_PAYERS_ENDPOINT = `${API_URL}/api/insurance/payers?includePlans=false&includeInactive=false&includeTest=false&publicViewable=true&offset=0&limit=0`
 const GET_INSURANCE_PAYER_PLANS = (payerId: string) =>
   `${API_URL}/api/insurance/payers/${payerId}?includePlans=true&includeInactive=false&includeTest=false&publicViewable=true`
+const GET_USER_PERMISSIONS_ENDPOINT = `${API_URL}/api/users/self/permissions` 
 
 export {
   USER_ENDPOINT,
@@ -59,4 +60,5 @@ export {
   GET_PATIENT_PREFERRED_PARTNERS,
   GET_INSURANCE_PAYERS_ENDPOINT,
   GET_INSURANCE_PAYER_PLANS,
+  GET_USER_PERMISSIONS_ENDPOINT
 }

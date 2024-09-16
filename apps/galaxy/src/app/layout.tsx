@@ -3,7 +3,7 @@ import { type Metadata } from 'next'
 import { Josefin_Sans } from 'next/font/google'
 import { Flex, Theme } from '@radix-ui/themes'
 import { Toaster } from 'react-hot-toast'
-import { getCodesets } from '@/api'
+import { getCodesets, getUserPermissions } from '@/api'
 import { CODESETS } from '@/constants'
 import { StoreProvider } from '@/store'
 import { Header } from '@/ui/header'
@@ -49,39 +49,46 @@ const RootLayout = async ({ children }: React.PropsWithChildren) => {
   )
 
   if (auth) {
-    const codesets = await getCodesets([
-      CODESETS.Gender,
-      CODESETS.ProfSuffix,
-      CODESETS.GenderOrientation,
-      CODESETS.GenderExpression,
-      CODESETS.GenderPronoun,
-      CODESETS.Religion,
-      CODESETS.Language,
-      CODESETS.LanguageProficiency,
-      CODESETS.RaceAndEthnicity,
-      CODESETS.UsStates,
-      CODESETS.CommonLanguages,
-      CODESETS.VisitMedium,
-      CODESETS.FirstResponder,
-      CODESETS.ServicesOffered,
-      CODESETS.ProviderType,
-      CODESETS.SpecialistType,
-      CODESETS.AppointmentStatus,
-      CODESETS.EncounterType,
-      CODESETS.NotificationStatus,
-      CODESETS.NotificationChannel,
-      CODESETS.UsStates,
-      CODESETS.SpecialistType,
-      CODESETS.AppointmentStatus,
-      CODESETS.EncounterType,
-      CODESETS.UsStates,
-      CODESETS.CustomerStatus,
-      CODESETS.Relationship,
-      CODESETS.InsurancePolicyPriority,
-      CODESETS.InsuranceRelationship,
+    const [codesets, permissions] = await Promise.all([
+      getCodesets([
+        CODESETS.Gender,
+        CODESETS.ProfSuffix,
+        CODESETS.GenderOrientation,
+        CODESETS.GenderExpression,
+        CODESETS.GenderPronoun,
+        CODESETS.Religion,
+        CODESETS.Language,
+        CODESETS.LanguageProficiency,
+        CODESETS.RaceAndEthnicity,
+        CODESETS.UsStates,
+        CODESETS.CommonLanguages,
+        CODESETS.VisitMedium,
+        CODESETS.FirstResponder,
+        CODESETS.ServicesOffered,
+        CODESETS.ProviderType,
+        CODESETS.SpecialistType,
+        CODESETS.AppointmentStatus,
+        CODESETS.EncounterType,
+        CODESETS.NotificationStatus,
+        CODESETS.NotificationChannel,
+        CODESETS.UsStates,
+        CODESETS.SpecialistType,
+        CODESETS.AppointmentStatus,
+        CODESETS.EncounterType,
+        CODESETS.UsStates,
+        CODESETS.CustomerStatus,
+        CODESETS.Relationship,
+        CODESETS.InsurancePolicyPriority,
+        CODESETS.InsuranceRelationship,
+      ]),
+      getUserPermissions(),
     ])
 
-    return <StoreProvider codesets={codesets}>{content}</StoreProvider>
+    return (
+      <StoreProvider permissions={permissions} codesets={codesets}>
+        {content}
+      </StoreProvider>
+    )
   }
 
   return content

@@ -14,6 +14,7 @@ interface NavigationTab {
 
 interface Store {
   codesets: CodesetCache
+  permissions: Record<string, boolean>
   tabs: NavigationTab[]
   addTab: (tab: NavigationTab) => void
   removeTab: (name: string) => void
@@ -21,6 +22,7 @@ interface Store {
 
 interface StoreInitialState {
   codesets: CodesetCache
+  permissions: Record<string, boolean>
 }
 
 const createStore = (initialState: StoreInitialState) =>
@@ -28,6 +30,7 @@ const createStore = (initialState: StoreInitialState) =>
     persist(
       (set, get) => ({
         codesets: initialState.codesets,
+        permissions: initialState.permissions,
         tabs: [],
         addTab: (tab) => set(addTabReducer(tab)),
         removeTab: (name) => set(removeTabReducer(name)),
