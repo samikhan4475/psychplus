@@ -34,7 +34,9 @@ const loginAction = async ({
 
   const decoded = jwtDecode<{ role: string }>(loginResponse.data.accessToken)
 
-  if (decoded.role !== PATIENT_ROLE) {
+  const roles = Array.isArray(decoded.role) ? decoded.role : [decoded.role]
+
+  if (!roles.includes(PATIENT_ROLE)) {
     return {
       state: 'error',
       error: 'Invalid credentials',
