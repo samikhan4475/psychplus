@@ -43,6 +43,7 @@ const SearchAppointmentsView = ({
     zipCode,
     location,
     startingDate,
+    state,
     setCareTeam,
   } = useStore((state) => ({
     loading: state.loading,
@@ -57,6 +58,7 @@ const SearchAppointmentsView = ({
     next: state.next,
     startingDate: state.startingDate,
     setCareTeam: state.setCareTeam,
+    state: state.state,
   }))
 
   useEffect(() => {
@@ -83,6 +85,7 @@ const SearchAppointmentsView = ({
     providerType,
     appointmentType,
     zipCode,
+    state,
     startingDate,
     location,
     setCareTeam,

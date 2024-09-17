@@ -3,6 +3,14 @@
 import * as api from '@psychplus-v2/api'
 import type { ActionResult } from '@psychplus-v2/api'
 import { GOOGLE_MAPS_API_KEY } from '@psychplus-v2/env'
+import multiStateZipcodes from './multi_state_zip_codes.json'
+
+
+interface MultiStateZipCodes {
+  [key: string]: AddressComponent[]
+}
+
+const MULTI_STATE_ZIP_CODES_TYPED: MultiStateZipCodes = multiStateZipcodes
 
 interface GeocodingAPIResponse {
   results: Result[]
@@ -44,41 +52,48 @@ interface PlusCode {
   compound_code: string
   global_code: string
 }
-
+const getMultiStateZipCode = (zipCode: string): AddressComponent[] | null => {
+  return MULTI_STATE_ZIP_CODES_TYPED[zipCode] || null
+}
 const getZipcodeInfo = async (
   zipCode: string,
-): Promise<ActionResult<string>> => {
+): Promise<ActionResult<AddressComponent[]>> => {
+  const multiStateData = getMultiStateZipCode(zipCode)
+  if (multiStateData) {
+    return {
+      state: 'success',
+      data: multiStateData,
+    }
+  }
   const url = new URL('https://maps.googleapis.com/maps/api/geocode/json')
-  url.searchParams.append('address', `${zipCode}`)
-  url.searchParams.append('key', `${GOOGLE_MAPS_API_KEY}`)
+  url.searchParams.append('address', zipCode)
+  url.searchParams.append('key', GOOGLE_MAPS_API_KEY)
 
-  const result = await api.GET<GeocodingAPIResponse>(url.toString())
+  try {
+    const result = await api.GET<GeocodingAPIResponse>(url.toString())
 
-  if (result.state === 'error') {
+    if (result.state === 'error') {
+      return { state: 'error', error: result.error }
+    }
+
+    if (!result.data.results.length) {
+      return { state: 'error', error: 'No results found' }
+    }
+
+    const stateComponents = result.data.results[0].address_components.filter(
+      (component) => component.types.includes('administrative_area_level_1'),
+    )
+
+    if (stateComponents.length === 0) {
+      return { state: 'error', error: 'No state information found' }
+    }
+
     return {
-      state: 'error',
-      error: result.error,
+      state: 'success',
+      data: stateComponents,
     }
-  }
-
-  if (result.data.results.length === 0) {
-    return {
-      state: 'error',
-      error: 'No results found',
-    }
-  }
-
-  let state = ''
-  for (const component of result.data.results[0].address_components) {
-    if (component.types.includes('administrative_area_level_1')) {
-      state = component.long_name
-      break
-    }
-  }
-
-  return {
-    state: 'success',
-    data: state,
+  } catch (error) {
+    return { state: 'error', error: 'Failed to fetch ZIP code info' }
   }
 }
 

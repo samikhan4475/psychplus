@@ -1,0 +1,159 @@
+{
+    "02861": [
+      {
+        "long_name": "Rhode Island",
+        "short_name": "RI",
+        "types": ["administrative_area_level_1", "political"]
+      },
+      {
+        "long_name": "Massachusetts",
+        "short_name": "MA",
+        "types": ["administrative_area_level_1", "political"]
+      }
+    ],
+    "42223": [
+      {
+        "long_name": "Kentucky",
+        "short_name": "KY",
+        "types": ["administrative_area_level_1", "political"]
+      },
+      {
+        "long_name": "Tennessee",
+        "short_name": "TN",
+        "types": ["administrative_area_level_1", "political"]
+      }
+    ],
+    "59221": [
+      {
+        "long_name": "Montana",
+        "short_name": "MT",
+        "types": ["administrative_area_level_1", "political"]
+      },
+      {
+        "long_name": "North Dakota",
+        "short_name": "ND",
+        "types": ["administrative_area_level_1", "political"]
+      }
+    ],
+    "63673": [
+      {
+        "long_name": "Missouri",
+        "short_name": "MO",
+        "types": ["administrative_area_level_1", "political"]
+      },
+      {
+        "long_name": "Illinois",
+        "short_name": "IL",
+        "types": ["administrative_area_level_1", "political"]
+      }
+    ],
+    "71749": [
+      {
+        "long_name": "Arkansas",
+        "short_name": "AR",
+        "types": ["administrative_area_level_1", "political"]
+      },
+      {
+        "long_name": "Louisiana",
+        "short_name": "LA",
+        "types": ["administrative_area_level_1", "political"]
+      }
+    ],
+    "73949": [
+      {
+        "long_name": "Oklahoma",
+        "short_name": "OK",
+        "types": ["administrative_area_level_1", "political"]
+      },
+      {
+        "long_name": "Texas",
+        "short_name": "TX",
+        "types": ["administrative_area_level_1", "political"]
+      }
+    ],
+    "81137": [
+      {
+        "long_name": "Colorado",
+        "short_name": "CO",
+        "types": ["administrative_area_level_1", "political"]
+      },
+      {
+        "long_name": "New Mexico",
+        "short_name": "NM",
+        "types": ["administrative_area_level_1", "political"]
+      }
+    ],
+    "84536": [
+      {
+        "long_name": "Arizona",
+        "short_name": "AZ",
+        "types": ["administrative_area_level_1", "political"]
+      },
+      {
+        "long_name": "Utah",
+        "short_name": "UT",
+        "types": ["administrative_area_level_1", "political"]
+      }
+    ],
+    "86044": [
+      {
+        "long_name": "Arizona",
+        "short_name": "AZ",
+        "types": ["administrative_area_level_1", "political"]
+      },
+      {
+        "long_name": "Utah",
+        "short_name": "UT",
+        "types": ["administrative_area_level_1", "political"]
+      }
+    ],
+    "86515": [
+      {
+        "long_name": "Arizona",
+        "short_name": "AZ",
+        "types": ["administrative_area_level_1", "political"]
+      },
+      {
+        "long_name": "New Mexico",
+        "short_name": "NM",
+        "types": ["administrative_area_level_1", "political"]
+      }
+    ],
+    "88063": [
+      {
+        "long_name": "New Mexico",
+        "short_name": "NM",
+        "types": ["administrative_area_level_1", "political"]
+      },
+      {
+        "long_name": "Texas",
+        "short_name": "TX",
+        "types": ["administrative_area_level_1", "political"]
+      }
+    ],
+    "89439": [
+      {
+        "long_name": "California",
+        "short_name": "CA",
+        "types": ["administrative_area_level_1", "political"]
+      },
+      {
+        "long_name": "Nevada",
+        "short_name": "NV",
+        "types": ["administrative_area_level_1", "political"]
+      }
+    ],
+    "97635": [
+      {
+        "long_name": "California",
+        "short_name": "CA",
+        "types": ["administrative_area_level_1", "political"]
+      },
+      {
+        "long_name": "Oregon",
+        "short_name": "OR",
+        "types": ["administrative_area_level_1", "political"]
+      }
+    ]
+  }
+  

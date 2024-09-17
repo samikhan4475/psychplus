@@ -43,6 +43,7 @@ interface SearchAppointmentsActionParams {
   currentLocation: CurrentLocation | null
   staffIds?: number[]
   locationIds?: string[]
+  state?: string | null
 }
 
 const searchAppointmentsAction = async ({
@@ -57,6 +58,7 @@ const searchAppointmentsAction = async ({
   staffIds,
   locationIds,
   nextAvailableAppointment,
+  state,
 }: SearchAppointmentsActionParams): Promise<
   ActionResult<AppointmentAvailability[]>
 > => {
@@ -75,6 +77,7 @@ const searchAppointmentsAction = async ({
     startingDate,
     maxDaysOutToLook,
     postalCode,
+    state,
     currentLocation: currentLocation ?? null,
     staffIds: staffIds,
     locationIds: locationIds,

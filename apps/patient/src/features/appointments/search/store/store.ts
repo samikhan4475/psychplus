@@ -30,11 +30,13 @@ interface Store {
   startingDate: string
   location?: CurrentLocation
   careTeam: CareTeamMember[]
+  state?: string
   setStartingDate: (value: string) => void
   setProviderType: (value: ProviderType) => void
   setAppointmentType: (value: AppointmentType) => void
   setZipCode: (value: string) => void
   setLanguage: (value: string) => void
+  setState: (value: string) => void
   setSortBy: (value: AppointmentSortBy) => void
   setLocation: (value: CurrentLocation) => void
   setLoading: (value: boolean) => void
@@ -57,6 +59,7 @@ const useStore = create<Store>()(
       zipCode: undefined,
       language: undefined,
       sortBy: undefined,
+      state: undefined,
       startingDate: getCalendarDateLabel(today(getLocalTimeZone())),
       careTeam: [],
       setStartingDate: (startingDate) => set({ startingDate }),
@@ -89,6 +92,7 @@ const useStore = create<Store>()(
           zipCode: undefined,
         })
       },
+      setState: (state) => set({ state }),
       careTeamMember: () =>
         get().careTeam.find(
           (member) =>
@@ -101,6 +105,7 @@ const useStore = create<Store>()(
           startingDate: get().startingDate,
           zipCode: get().zipCode,
           location: get().location,
+          state: get().state,
         })
 
         if (get().cache[cacheKey]) {
@@ -124,6 +129,7 @@ const useStore = create<Store>()(
           startingDate: get().startingDate,
           maxDaysOutToLook: 7,
           postalCode: get().zipCode ?? null,
+          state: get().state ?? null,
           includeDistance: get().appointmentType === AppointmentType.InPerson,
           includeStaffBio: false,
           currentLocation: get().location ?? null,
@@ -183,15 +189,17 @@ const getCacheKey = ({
   startingDate,
   zipCode = 'none',
   location,
+  state,
 }: {
   appointmentType: AppointmentType
   providerType: ProviderType
   startingDate: string
   zipCode?: string
   location?: CurrentLocation
+  state?: string
 }) => {
   const locationKey = location ? 'location' : 'none'
-  return `${appointmentType}:${providerType}:${startingDate}:${zipCode}:${locationKey}`
+  return `${appointmentType}:${providerType}:${startingDate}:${zipCode}:${locationKey}:${state}`
 }
 
 export { useStore }

@@ -4,11 +4,7 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { FormContainer } from '@psychplus-v2/components'
-import {
-  AppointmentType,
-  CODESETS,
-  ProviderType,
-} from '@psychplus-v2/constants'
+import { AppointmentType, ProviderType } from '@psychplus-v2/constants'
 import { CodesetCache } from '@psychplus-v2/types'
 import { zipCodeSchema } from '@psychplus-v2/utils'
 import { Button, Dialog, Flex, Heading } from '@radix-ui/themes'
@@ -18,7 +14,6 @@ import { getZipcodeInfo } from '@/actions'
 import {
   CancelDialogButton,
   CloseDialogIcon,
-  CodesetFormSelect,
   DialogTitle,
   FormFieldContainer,
   FormFieldError,
@@ -28,6 +23,7 @@ import {
 } from '@/components-v2'
 import { APPOINTMENTS_SEARCH_SESSION_KEY } from '@/features/appointments/search/constants'
 import { CodesetStoreProvider } from '@/providers'
+import { ZipCodeStateDropdown } from '../search-appointments-view/zipcode-state-dropdown'
 import { RadioGroupInput } from './radio-group-input'
 
 const schema = z.object({
@@ -44,23 +40,28 @@ interface ScheduleAppointmentButtonProps
   codesets: CodesetCache
 }
 
+interface StateListType {
+  long_name: string
+  short_name: string
+  types: string[]
+}
+
 const ScheduleAppointmentButton = ({
   codesets,
   ...props
 }: ScheduleAppointmentButtonProps) => {
   const [dialogOpen, setDialogOpen] = useState(false)
+  const [zipStates, setZipStates] = useState<StateListType[]>([])
 
   const router = useRouter()
-
   const getZipCodeInfoApi = async (zipCode: string | undefined) => {
-    form.setValue('state', '')
-    if (zipCode && zipCode?.length > 4 && zipCode?.length < 6) {
+    setZipStates([])
+    if (zipCode?.length === 5) {
       const zipCodeInfo = await getZipcodeInfo(zipCode)
       if (zipCodeInfo.state === 'error') {
-        form.setValue('state', '')
         return
       }
-      form.setValue('state', zipCodeInfo.data)
+      setZipStates(zipCodeInfo.data)
     }
   }
 
@@ -78,6 +79,7 @@ const ScheduleAppointmentButton = ({
 
   useEffect(() => {
     getZipCodeInfoApi(form.watch('zipCode'))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [form, form.watch('zipCode')])
 
   const onSubmit = (data: SchemaType) => {
@@ -89,6 +91,12 @@ const ScheduleAppointmentButton = ({
     router.push(`/appointments/search`)
     setDialogOpen(false)
   }
+
+  useEffect(() => {
+    if (zipStates.length > 0) {
+      form.setValue('state', zipStates[0].long_name)
+    }
+  }, [zipStates])
 
   return (
     <Dialog.Root
@@ -153,7 +161,7 @@ const ScheduleAppointmentButton = ({
                 <FormFieldContainer className="w-1/3 gap-[3px]">
                   <FormFieldLabel required>Enter ZIP Code</FormFieldLabel>
                   <ZipcodeInput
-                    className="font-[400] h-[42px]"
+                    className="h-[42px] font-[400]"
                     {...form.register('zipCode')}
                     placeholder="Enter ZIP"
                     value={form.watch('zipCode')}
@@ -162,12 +170,16 @@ const ScheduleAppointmentButton = ({
                 </FormFieldContainer>
 
                 <FormFieldContainer className="w-3/4">
-                  <FormFieldLabel required>State of Residence</FormFieldLabel>
-                  <CodesetFormSelect
+                  <FormFieldLabel required>State</FormFieldLabel>
+                  <ZipCodeStateDropdown
                     size="3"
-                    codeset={CODESETS.UsStates}
-                    {...form.register('state')}
-                    placeholder="State"
+                    name="state"
+                    value={form.watch('state') ?? ''}
+                    onValueChange={(value) => {
+                      form.setValue('state', value)
+                      form.trigger('state')
+                    }}
+                    options={zipStates}
                   />
                   <FormFieldError name="state" />
                 </FormFieldContainer>
