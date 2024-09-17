@@ -12,7 +12,7 @@ interface AddressCardProps {
 
 const AddressCard = ({ googleApiKey }: AddressCardProps) => {
   return (
-    <Flex direction="column" className="bg-white overflow-hidden rounded-1">
+    <Flex direction="column" className="bg-white rounded-1">
       <CardHeading title="Address" />
       <Flex px="2" py="2" gap="2">
         <GooglePlacesContextProvider apiKey={googleApiKey}>

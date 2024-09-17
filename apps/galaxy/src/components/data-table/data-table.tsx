@@ -3,8 +3,10 @@
 import { useEffect, useState } from 'react'
 import { Box, Flex, Table } from '@radix-ui/themes'
 import {
+  ExpandedState,
   flexRender,
   getCoreRowModel,
+  getExpandedRowModel,
   getFacetedUniqueValues,
   getFilteredRowModel,
   getPaginationRowModel,
@@ -58,6 +60,7 @@ const DataTable = <TData, TValue>({
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = useState({})
+  const [expanded, setExpanded] = useState<ExpandedState>({})
 
   useEffect(() => {
     if (onRowSelectionChange) {
@@ -68,8 +71,10 @@ const DataTable = <TData, TValue>({
   const table = useReactTable({
     data,
     columns,
+    onExpandedChange: setExpanded,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
+    getSubRows: (row: TData) => (row as { subRows?: TData[] }).subRows,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: disablePagination
       ? undefined
@@ -80,7 +85,9 @@ const DataTable = <TData, TValue>({
     onColumnVisibilityChange: setColumnVisibility,
     onRowSelectionChange: setRowSelection,
     onPaginationChange: setPagination,
+    getExpandedRowModel: getExpandedRowModel(),
     state: {
+      expanded,
       sorting,
       columnFilters,
       columnVisibility,
@@ -157,6 +164,8 @@ const DataTable = <TData, TValue>({
                 className={cn('hover:bg-gray-2', {
                   'cursor-pointer': onRowClick !== undefined,
                   'bg-pp-focus-bg': row.getIsSelected(),
+                  'bg-pp-table-subRows hover:bg-pp-table-subRows':
+                    row.depth > 0,
                 })}
               >
                 {row.getVisibleCells().map((cell) => (

@@ -29,6 +29,7 @@ const CODESETS = {
   Relationship: 'HL7v3.RoleCode',
   InsurancePolicyPriority: 'InsurancePolicyPriority',
   InsuranceRelationship: 'InsuranceRelationship',
+  TransactionType: 'TransactionType',
 }
 
 export {

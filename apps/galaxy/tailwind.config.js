@@ -19,6 +19,7 @@ const config = {
         'pp-focus-bg': '#D9E2FC',
         'pp-focus-bg-2': '#F0F4FF',
         'pp-table-border': '#CAD8FD',
+        'pp-table-subRows': '#EEF2F6',
         'pp-success-bg': '#E9F9EE',
         'pp-success-text': '#18794E',
         'pp-warning-bg': '#FFEDD5',

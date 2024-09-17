@@ -80,6 +80,7 @@ const RootLayout = async ({ children }: React.PropsWithChildren) => {
         CODESETS.Relationship,
         CODESETS.InsurancePolicyPriority,
         CODESETS.InsuranceRelationship,
+        CODESETS.TransactionType,
       ]),
       getUserPermissions(),
     ])

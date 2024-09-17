@@ -1,36 +1,43 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import { ScrollArea } from '@radix-ui/themes'
+import { useEffect } from 'react'
+import { Flex, ScrollArea } from '@radix-ui/themes'
 import { TabContentHeading, ViewLoadingPlaceholder } from '../shared'
+import { AddCustomChargeDialog } from './add-custom-charge-dialog'
+import { PaymentButton } from './payment-button'
+import { PaymentHeader } from './payment-header'
+import { PaymentHistoryTable } from './payment-history-table'
+import { useStore } from './store'
 
 const TAB_TITLE = 'Payment History'
 
-const wait = async () => {
-  await new Promise((resolve) => setTimeout(resolve, 2000))
-  return 'hello'
-}
-
 const PaymentHistoryTab = () => {
-  const [result, setResult] = useState<string>()
+  const { fetchPatientPaymentHistories, loading } = useStore((state) => ({
+    loading: state.loading,
+    fetchPatientPaymentHistories: state.fetchPatientPaymentHistories,
+  }))
 
   useEffect(() => {
-    wait().then(setResult)
+    fetchPatientPaymentHistories()
   }, [])
 
-  if (!result) {
+  if (loading) {
     return <ViewLoadingPlaceholder title={TAB_TITLE} />
   }
 
-  // if (result.state === 'error') {
-  //   return <div>{result.error}</div>
-  // }
-
   return (
-    <>
-      <TabContentHeading title={TAB_TITLE} />
-      <ScrollArea></ScrollArea>
-    </>
+    <Flex direction="column" className="gap-0.5">
+      <TabContentHeading title={TAB_TITLE}>
+        <Flex gap="2" align="center" className="flex-1" justify="end">
+          <AddCustomChargeDialog />
+          <PaymentButton />
+        </Flex>
+      </TabContentHeading>
+      <ScrollArea>
+        <PaymentHeader />
+        <PaymentHistoryTable />
+      </ScrollArea>
+    </Flex>
   )
 }
 
