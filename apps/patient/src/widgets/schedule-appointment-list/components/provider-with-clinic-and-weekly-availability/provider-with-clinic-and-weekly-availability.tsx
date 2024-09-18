@@ -34,8 +34,8 @@ const ProviderWithClinicAndWeeklyAvailability = ({
   }, [])
 
   return (
-    <Flex className="w-full flex-col gap-5 sm:flex-row sm:gap-0">
-      <Flex gap="2" style={{ flex: 0.87 }}>
+    <Flex className="w-full flex-col gap-5 sm:flex-row sm:gap-0 hhera">
+      <Flex gap="2" className="w-[343px]">
         {renderProfileImage(
           profileImage,
           staffWithClinicsAndSlots.staff.legalName.firstName[0],

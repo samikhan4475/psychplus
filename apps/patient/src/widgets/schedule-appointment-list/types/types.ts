@@ -6,6 +6,7 @@ interface Filters {
   appointmentType: string
   providerType: string
   zipCode: string
+  state?: string
   sortBy: string
   language: string
   startingDate: string
@@ -19,11 +20,13 @@ interface FilterOptionButtonProps {
 }
 
 interface FilterOptionsDropDownProps {
-  prefix: string
+  prefix?: string
   filterType: keyof Filters
   options: string[] | undefined
   onFilterChange: (newFilters: Partial<Filters>) => void
   placeholder: string
+  selectedOption?: string
+  disabled?: boolean
 }
 
 interface Location {

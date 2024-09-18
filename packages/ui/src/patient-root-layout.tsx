@@ -10,7 +10,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
           accentColor="indigo"
           radius="medium"
           scaling="90%"
-          className="h-full w-full"
+          className="h-full w-full !bg-transparent"
         >
           <PubsubProvider>{children}</PubsubProvider>
         </Theme>

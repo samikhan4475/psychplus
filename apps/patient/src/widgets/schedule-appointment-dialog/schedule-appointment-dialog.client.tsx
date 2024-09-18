@@ -10,7 +10,13 @@ import { EventType } from '@psychplus/widgets/events'
 import { useDialog, usePublishLoaded } from '@psychplus/widgets/hooks'
 import { ScheduleTabs } from './tabs'
 
-const ScheduleAppointmentDialogClient = () => {
+interface ScheduleAppointmentDialogClientProps {
+  mapKey: string
+}
+
+const ScheduleAppointmentDialogClient = ({
+  mapKey,
+}: ScheduleAppointmentDialogClientProps) => {
   const { publish } = usePubsub()
   const { open } = useDialog(SCHEDULE_APPOINTMENT_DIALOG)
   usePublishLoaded(SCHEDULE_APPOINTMENT_DIALOG)
@@ -44,7 +50,7 @@ const ScheduleAppointmentDialogClient = () => {
         <Dialog.Title className="text-center text-7 sm:text-left sm:text-8">
           Schedule an appointment
         </Dialog.Title>
-        {open && <ScheduleTabs onClose={onClose} />}
+        {open && <ScheduleTabs onClose={onClose} mapKey={mapKey} />}
       </Dialog.Content>
     </Dialog.Root>
   )

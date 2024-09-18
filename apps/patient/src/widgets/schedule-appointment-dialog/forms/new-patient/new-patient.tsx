@@ -7,18 +7,21 @@ import { type SubmitHandler } from 'react-hook-form'
 import { z } from 'zod'
 import {
   Form,
+  FormSelect,
   FormSubmitButton,
   FormTextInput,
   useForm,
   validate,
 } from '@psychplus/form'
 import { usePubsub } from '@psychplus/utils/event'
+import { getZipcodeInfo } from '@psychplus/utils/map'
 import { clickTrack } from '@psychplus/utils/tracking'
 import { SCHEDULE_APPOINTMENT_DIALOG } from '@psychplus/widgets'
 import { useStore } from '@/widgets/schedule-appointment-list/store'
 
 interface NewPatientProps {
   onclose?: () => void
+  mapKey: string
 }
 
 const toggleGroupItemClasses =
@@ -31,10 +34,16 @@ interface ScheduledAppointment {
   zipCode: string
 }
 
+interface StateOptions {
+  label: string
+  value: string
+}
+
 const schema = z
   .object({
     dateOfBirth: validate.requiredString,
     zipCode: validate.requiredString,
+    state: validate.requiredString,
   })
   .superRefine(({ dateOfBirth, zipCode }, ctx) => {
     const currentDate = new Date()
@@ -64,7 +73,7 @@ const schema = z
 
 type SchemaType = z.infer<typeof schema>
 
-const NewPatient = ({ onclose }: NewPatientProps) => {
+const NewPatient = ({ onclose, mapKey }: NewPatientProps) => {
   const { publish } = usePubsub()
 
   const form = useForm({
@@ -79,23 +88,48 @@ const NewPatient = ({ onclose }: NewPatientProps) => {
     zipCode: '',
   })
 
+  const [stateOptions, setStateOptions] = useState<StateOptions[]>([])
+
   const { setPatient } = useStore()
 
   const onScheduleChange = (key: keyof ScheduledAppointment, value: string) => {
     setSchedule((prev) => ({ ...prev, [key]: value }))
   }
 
-  const handleZipCodeChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleZipCodeChange = async (event: ChangeEvent<HTMLInputElement>) => {
     const zipCode = event.target.value.slice(0, 5)
     form.setValue('zipCode', zipCode)
 
-    if (form.formState.isSubmitted) form.trigger('zipCode')
+    if (zipCode) {
+      const response = await getZipcodeInfo(zipCode, mapKey)
+      const states = response.data
+      const options = states.map((state) => {
+        return {
+          label: state.long_name,
+          value: state.long_name,
+        }
+      })
+
+      setStateOptions(options)
+
+      if (options.length && options.length < 2) {
+        const newState = options[0].value
+        setTimeout(() => {
+          form.setValue('state', newState)
+        }, 100)
+      }
+    }
+
+    if (form.formState.isSubmitted) {
+      form.trigger('zipCode')
+    }
   }
 
   const onSubmit: SubmitHandler<SchemaType> = () => {
     const queryString = Object.entries({
       ...schedule,
       zipCode: form.getValues().zipCode,
+      state: form.getValues().state,
     })
       .filter((key) => key[0] !== 'dateOfBirth')
       .map((key) => `${key[0]}=${key[1]}`)
@@ -183,7 +217,7 @@ const NewPatient = ({ onclose }: NewPatientProps) => {
       </Flex>
       <Form form={form} onSubmit={onSubmit}>
         <Flex className="gap-6 max-md:w-full" direction="column" py="2">
-          <Flex className="flex-col sm:flex-row" gap="6">
+          <Flex className="flex-col sm:flex-row" gap="3">
             <Flex direction="column" className="font-regular">
               <Text size="4" mb="3">
                 Date of Birth
@@ -194,13 +228,12 @@ const NewPatient = ({ onclose }: NewPatientProps) => {
                 label=""
                 data-testid="date-of-birth-input"
                 {...form.register('dateOfBirth')}
-                style={{ marginRight: 12 }}
-                className="h-[56px] w-full rounded-2 text-4 sm:w-[300px]"
+                className="h-[56px] w-full rounded-2 text-4 sm:w-[190px]"
               />
             </Flex>
             <Flex direction="column" className="font-regular">
               <Text size="4" mb="3">
-                Enter ZIP Code
+                ZIP Code
               </Text>
               <FormTextInput
                 type="number"
@@ -208,8 +241,22 @@ const NewPatient = ({ onclose }: NewPatientProps) => {
                 placeholder="ZIP Code"
                 data-testid="zip-code-input"
                 {...form.register('zipCode')}
-                className="h-[56px] w-[300px] text-4"
+                className="h-[56px] w-[200px] text-4"
                 onChange={handleZipCodeChange}
+              />
+            </Flex>
+            <Flex direction="column" className="font-regular">
+              <Text size="4" mb="3">
+                State
+              </Text>
+              <FormSelect
+                label={''}
+                required
+                {...form.register('state')}
+                disabled={stateOptions.length < 2}
+                placeholder="Select state"
+                buttonClassName="h-[56px] w-[210px] text-4"
+                options={stateOptions}
               />
             </Flex>
           </Flex>
