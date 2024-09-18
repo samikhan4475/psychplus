@@ -1,63 +1,56 @@
 import { useEffect, useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm, UseFormReturn } from 'react-hook-form'
-import z from 'zod'
+import z, { ZodSchema } from 'zod'
+import {
+  createQuestionnaireSchema,
+  QuestionnaireSchemaType,
+} from './questionnaires-schema/questionnaires-schema'
 
-interface Option {
-  label: string
-  value: number
-}
+const calculateTotalScore = (data: any): number => {
+  let totalScore = 0
 
-interface QuestionData {
-  question: string
-  selectedValue: number
-  options: Option[]
-}
+  Object.keys(data).forEach((key) => {
+    const value = Number(data[key]) || 0
 
-const schema = z.object({
-  responses: z
-    .array(
-      z.object({
-        question: z.string(),
-        selectedValue: z.number(),
-      }),
-    )
-    .optional(),
-})
-
-export type FormValues = z.infer<typeof schema>
-
-const useQuestionnaireForm = (
-  data: QuestionData[],
-): UseFormReturn<FormValues> & { totalScore: number } => {
-  const formMethods = useForm<FormValues>({
-    resolver: zodResolver(schema),
-    defaultValues: {
-      responses: data.map((item) => ({
-        question: item.question,
-        selectedValue: item.selectedValue,
-      })),
-    },
+    totalScore += value
   })
 
-  const [totalScore, setTotalScore] = useState<number>(() =>
-    data.reduce((acc, item) => acc + item.selectedValue, 0),
-  )
+  return totalScore
+}
+
+const useQuestionnaireForm = (
+  initialValues: QuestionnaireSchemaType,
+  totalQuestions: number,
+): UseFormReturn<QuestionnaireSchemaType> & { totalScore: number } => {
+  const schema = createQuestionnaireSchema(totalQuestions)
+
+  const form = useForm<QuestionnaireSchemaType>({
+    resolver: zodResolver(schema),
+
+    defaultValues: initialValues,
+  })
+
+  const [totalScore, setTotalScore] = useState<number>(0)
 
   useEffect(() => {
-    const subscription = formMethods.watch((values) => {
-      const score = (values.responses || []).reduce(
-        (acc, response) => acc + (response?.selectedValue || 0),
-        0,
-      )
-      setTotalScore(score)
+    const scores = calculateTotalScore(initialValues)
+
+    setTotalScore(scores)
+  }, [])
+
+  useEffect(() => {
+    const subscription = form.watch((values) => {
+      const scores = calculateTotalScore(values)
+      setTotalScore(scores)
     })
 
     return () => subscription.unsubscribe()
-  }, [formMethods.watch])
+  }, [form])
 
   return {
-    ...formMethods,
+    ...form,
+
     totalScore,
   }
 }

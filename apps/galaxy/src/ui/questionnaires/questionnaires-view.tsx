@@ -27,7 +27,6 @@ import { HamDTab } from './ham-d-tab'
 import { MocaTab } from './moca-tab'
 import { Pcl5Tab } from './pcl-5-tab'
 import { Phq9Tab } from './phq-9-tab'
-import { QuestionnairesData } from './shared/questionnaires-form'
 import { SnapIvTab } from './snap-iv-tab'
 import { useStore } from './store'
 import { YBocsTab } from './y-bocs-tab'
@@ -35,16 +34,18 @@ import { YBocsTab } from './y-bocs-tab'
 const QuestionnairesView = ({
   questionnairesDashboardData,
   questionnairesSnapIvResponse,
-  questionnairesGad7Data,
-  questionnairesPcl5Data,
-  questionnairesPhq9Data,
+  questionnairesGad7Response,
+  questionnairesPcl5Response,
+  questionnairesPhq9Response,
+  questionnairesDast10Response,
   patientId,
 }: {
   questionnairesDashboardData: QuestionnairesDashboard[]
-  questionnairesGad7Data: QuestionnairesData[]
-  questionnairesPcl5Data: QuestionnairesData[]
-  questionnairesPhq9Data: QuestionnairesData[]
+  questionnairesGad7Response: QuickNoteSectionItem[]
+  questionnairesPcl5Response: QuickNoteSectionItem[]
+  questionnairesPhq9Response: QuickNoteSectionItem[]
   questionnairesSnapIvResponse: QuickNoteSectionItem[]
+  questionnairesDast10Response: QuickNoteSectionItem[]
   patientId: string
 }) => {
   const { activeTab, setActiveTab } = useStore((state) => ({
@@ -80,16 +81,16 @@ const QuestionnairesView = ({
         />
       </TabsContent>
       <TabsContent value={PHQ_9_TAB}>
-        <Phq9Tab questionnairesPhq9Data={questionnairesPhq9Data} />
+        <Phq9Tab patientId={patientId} data={questionnairesPhq9Response} />
       </TabsContent>
       <TabsContent value={GAD_7_TAB}>
-        <Gad7Tab questionnairesGad7Data={questionnairesGad7Data} />
+        <Gad7Tab patientId={patientId} data={questionnairesGad7Response} />
       </TabsContent>
       <TabsContent value={SNAP_IV_TAB}>
         <SnapIvTab patientId={patientId} data={questionnairesSnapIvResponse} />
       </TabsContent>
       <TabsContent value={PCL_5_TAB}>
-        <Pcl5Tab questionnairesPcl5Data={questionnairesPcl5Data} />
+        <Pcl5Tab patientId={patientId} data={questionnairesPcl5Response} />
       </TabsContent>
       <TabsContent value={Y_BOCS_TAB}>
         <YBocsTab />
@@ -101,7 +102,7 @@ const QuestionnairesView = ({
         <AuditTab />
       </TabsContent>
       <TabsContent value={DAST_10_TAB}>
-        <Dast10Tab />
+        <Dast10Tab patientId={patientId} data={questionnairesDast10Response} />
       </TabsContent>
       <TabsContent value={MOCA_TAB}>
         <MocaTab />

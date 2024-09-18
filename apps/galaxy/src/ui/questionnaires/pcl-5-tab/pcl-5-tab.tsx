@@ -2,7 +2,9 @@
 
 import { Flex } from '@radix-ui/themes'
 import { FormProvider } from 'react-hook-form'
-import { TabContentHeading, ViewLoadingPlaceholder } from '@/components'
+import { ViewLoadingPlaceholder, WidgetFormContainer } from '@/components'
+import { QuickNoteSectionItem } from '@/types'
+import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { PCL_5_TAB } from '../constants'
 import {
   AddToNoteCell,
@@ -11,47 +13,63 @@ import {
   SaveButton,
   SendToPatientButton,
 } from '../shared'
-import {
-  QuestionnairesData,
-  QuestionnairesForm,
-} from '../shared/questionnaires-form'
+import { transformIn, transformOut } from '../shared/data'
+import { QuestionnairesForm } from '../shared/questionnaires-form'
 import { useQuestionnaireForm } from '../shared/use-questionnaire-form'
-import { LABELS, SCORE_INTERPRETATION_RANGES } from './constants'
+import { LABELS, QUESTIONS, SCORE_INTERPRETATION_RANGES } from './constants'
 
 const Pcl5Tab = ({
-  questionnairesPcl5Data,
+  patientId,
+  data,
 }: {
-  questionnairesPcl5Data: QuestionnairesData[]
+  patientId: string
+  data: QuickNoteSectionItem[]
 }) => {
-  const { totalScore, ...formMethods } = useQuestionnaireForm(
-    questionnairesPcl5Data,
+  const totalQuestions = QUESTIONS.length
+  const initialValue = transformIn(data, totalQuestions)
+  const { totalScore, ...form } = useQuestionnaireForm(
+    initialValue,
+    totalQuestions,
   )
 
-  if (!questionnairesPcl5Data) {
+  if (!data) {
     return <ViewLoadingPlaceholder title={PCL_5_TAB} />
   }
 
   return (
-    <FormProvider {...formMethods}>
-      <TabContentHeading title={PCL_5_TAB}>
-        <Flex ml="2">
-          <AddToPreVisitAssessmentCell />
-          <AddToNoteCell />
-        </Flex>
-        <Flex align="center" justify="end" gap="2" className="flex-1">
-          <SendToPatientButton />
-          <HistoryButton />
-          <SaveButton />
-        </Flex>
-      </TabContentHeading>
-
-      <Flex className="bg-white" p="4">
-        <QuestionnairesForm
-          data={questionnairesPcl5Data}
-          labels={LABELS}
-          totalScore={totalScore}
-          scoreInterpretationRanges={SCORE_INTERPRETATION_RANGES}
+    <FormProvider {...form}>
+      <Flex direction="column" gap=".5rem">
+        <WidgetFormContainer
+          enableEvents={false}
+          patientId={patientId}
+          widgetId="pcl-5"
+          getData={transformOut(
+            patientId,
+            QuickNoteSectionName.QuickNoteSectionPcl5,
+          )}
+          title={PCL_5_TAB}
+          headerRight={
+            <Flex gap="2">
+              <SendToPatientButton />
+              <HistoryButton />
+              <SaveButton />
+            </Flex>
+          }
+          headerLeft={
+            <Flex>
+              <AddToPreVisitAssessmentCell />
+              <AddToNoteCell />
+            </Flex>
+          }
         />
+        <Flex maxWidth="100%" className="bg-white" px="3" py="1">
+          <QuestionnairesForm
+            data={QUESTIONS}
+            labels={LABELS}
+            totalScore={totalScore}
+            scoreInterpretationRanges={SCORE_INTERPRETATION_RANGES}
+          />
+        </Flex>
       </Flex>
     </FormProvider>
   )

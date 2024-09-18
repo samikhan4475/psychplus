@@ -1,22 +1,21 @@
 import React from 'react'
-import * as RadixRadioGroup from '@radix-ui/react-radio-group'
 import { Box, Flex, Table, Text } from '@radix-ui/themes'
-import { useFormContext } from 'react-hook-form'
 import { cn } from '@/utils'
+import { RadioButton } from './radio-button'
 import {
   ScoreInterpretation,
   ScoreInterpretationRange,
 } from './score-interpretation'
-import { FormValues } from './use-questionnaire-form'
 
 interface Option {
-  value: number
+  value: string
   label: string
 }
 
 interface QuestionnairesData {
+  id: string
   question: string
-  selectedValue: number
+  value: number
   options: Option[]
 }
 
@@ -33,25 +32,19 @@ const QuestionnairesForm = ({
   totalScore,
   scoreInterpretationRanges,
 }: QuestionnairesFormProps) => {
-  const { getValues, setValue } = useFormContext<FormValues>()
-
-  const handleChange = (index: number, value: number) => {
-    setValue(`responses.${index}.selectedValue`, value)
-  }
-
   return (
-    <Flex direction="column">
+    <Box className="w-full">
       <Table.Root variant="ghost" size="1">
         <Table.Header>
           <Table.Row>
-            <Table.ColumnHeaderCell className="w-1/3" pl="0">
-              <Text weight="bold" size="2">
+            <Table.ColumnHeaderCell className="w-[50%]" pl="0">
+              <Text weight="medium" size="2">
                 {labels[0]}
               </Text>
             </Table.ColumnHeaderCell>
             {labels.slice(1).map((label) => (
-              <Table.ColumnHeaderCell key={label} className="pl-6" pr="0">
-                <Text weight="bold" size="2">
+              <Table.ColumnHeaderCell key={label}>
+                <Text weight="medium" size="2">
                   {label}
                 </Text>
               </Table.ColumnHeaderCell>
@@ -61,55 +54,35 @@ const QuestionnairesForm = ({
 
         <Table.Body>
           {data.map((item, index) => (
-            <Table.Row key={item.question}>
-              <Table.Cell
-                className={cn(index % 2 === 1 ? 'bg-pp-bg-table-cell' : '')}
-              >
-                <Flex gap="2">
-                  <Text>{index + 1}.</Text>
+            <Table.Row
+              key={item.id}
+              className={cn(index % 2 === 1 ? 'bg-pp-bg-table-cell' : '')}
+            >
+              <Table.Cell>
+                <Flex gap="1">
+                  <Text weight="medium" size="1">
+                    {index + 1}.
+                  </Text>
                   <Text weight="medium" size="1">
                     {item.question}
                   </Text>
                 </Flex>
               </Table.Cell>
-              {item.options.map((option) => (
-                <Table.Cell
-                  key={option.value}
-                  className={cn(
-                    index % 2 === 1 ? 'bg-pp-bg-table-cell' : '',
-                    'pl-6 align-middle',
-                  )}
-                >
-                  <RadixRadioGroup.Root
-                    onValueChange={() => handleChange(index, option.value)}
-                    value={`responses.${index}.selectedValue`}
-                    className="flex items-center gap-1"
-                  >
-                    <RadixRadioGroup.Item
-                      className="rounded-full flex h-[12px] w-[12px] items-center justify-center border border-gray-9 data-[state=checked]:border-blue-11 data-[state=checked]:bg-blue-11"
-                      value={String(option.value)}
-                      checked={
-                        getValues(`responses.${index}.selectedValue`) ===
-                        option.value
-                      }
-                    >
-                      <RadixRadioGroup.Indicator className="after:bg-white after:rounded-full flex h-full w-full items-center justify-center after:block after:h-[4px] after:w-[4px] after:content-['']" />
-                    </RadixRadioGroup.Item>
-                    <Flex
-                      className={cn(
-                        'cursor-pointer items-center',
-                        getValues(`responses.${index}.selectedValue`) ===
-                          option.value && 'font-bold',
-                      )}
-                    >
-                      {!isNaN(Number(option.label)) &&
-                        option.label.trim() !== '' &&
-                        option.label.trim() !== '0' && <Text size="1">+</Text>}
-                      <Text size="2">{option.label}</Text>
-                    </Flex>
-                  </RadixRadioGroup.Root>
-                </Table.Cell>
-              ))}
+              {item.options.map((option, colIndex) => {
+                return (
+                  <Table.Cell key={`${item.id}-${colIndex}`}>
+                    {option ? (
+                      <RadioButton
+                        className="bg-0 rounded-0 border-0"
+                        field={`${item.id}`}
+                        options={[option]}
+                      />
+                    ) : (
+                      <Box className="h-6" />
+                    )}
+                  </Table.Cell>
+                )
+              })}
             </Table.Row>
           ))}
         </Table.Body>
@@ -123,7 +96,7 @@ const QuestionnairesForm = ({
           />
         </Box>
       )}
-    </Flex>
+    </Box>
   )
 }
 

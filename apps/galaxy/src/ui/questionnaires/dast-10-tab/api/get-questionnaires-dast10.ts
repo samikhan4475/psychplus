@@ -2,24 +2,24 @@ import * as api from '@/api'
 import { QuickNoteSectionItem } from '@/types'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 
-interface GetQuestionnairesPhq9Params {
+interface GetQuestionnairesDast10Params {
   patientId: string
 }
 
-interface GetQuestionnairesPhq9PResponse {
-  questionnairesPhq9Data: QuickNoteSectionItem[]
+interface GetQuestionnairesDast10PResponse {
+  questionnairesDast10Data: QuickNoteSectionItem[]
 }
 
-const getQuestionnairesPhq9 = async ({
+const getQuestionnairesDast10 = async ({
   patientId,
-}: GetQuestionnairesPhq9Params): Promise<
-  api.ActionResult<GetQuestionnairesPhq9PResponse>
+}: GetQuestionnairesDast10Params): Promise<
+  api.ActionResult<GetQuestionnairesDast10PResponse>
 > => {
   const response = await api.POST<QuickNoteSectionItem[]>(
     api.NOTE_DETAILS_SEARCH_ENDPOINT,
     {
       patientId: Number(patientId),
-      sectionName: [QuickNoteSectionName.QuickNoteSectionPhq9],
+      sectionName: [QuickNoteSectionName.QuickNoteSectionDast10],
       isLatest: true,
     },
   )
@@ -34,9 +34,9 @@ const getQuestionnairesPhq9 = async ({
   return {
     state: 'success',
     data: {
-      questionnairesPhq9Data: response.data,
+      questionnairesDast10Data: response.data,
     },
   }
 }
 
-export { getQuestionnairesPhq9 }
+export { getQuestionnairesDast10 }

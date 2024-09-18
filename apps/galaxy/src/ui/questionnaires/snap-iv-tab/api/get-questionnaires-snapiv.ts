@@ -2,7 +2,7 @@
 
 import * as api from '@/api'
 import { QuickNoteSectionItem } from '@/types'
-import { QUICKNOTE_SECTION_NAME } from '../constants'
+import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 
 interface GetQuestionnairesSnapIvParams {
   patientId: string
@@ -21,7 +21,7 @@ const getQuestionnairesSnapIv = async ({
     api.NOTE_DETAILS_SEARCH_ENDPOINT,
     {
       patientId: Number(patientId),
-      sectionName: [QUICKNOTE_SECTION_NAME],
+      sectionName: [QuickNoteSectionName.QuickNoteSectionSnapIV],
       isLatest: true,
     },
   )

@@ -1,4 +1,3 @@
-const QUICKNOTE_SECTION_NAME = 'QuicknoteSectionQuestionnaireSnapIV'
 const SNAP_IV_LABELS = [
   'Over the last two weeks, how often have you been bothered by any of the following problems?',
   'Not at all',
@@ -226,7 +225,6 @@ const SNAP_IV_TABLES = [
 export {
   SNAP_IV_OPTIONS,
   SNAP_IV_LABELS,
-  QUICKNOTE_SECTION_NAME,
   SCORE_INTERPRETATION_RANGES_INATTENTION,
   SCORE_INTERPRETATION_RANGES_HYPERACTIVITY,
   SCORE_INTERPRETATION_RANGES_OPPOSITION,

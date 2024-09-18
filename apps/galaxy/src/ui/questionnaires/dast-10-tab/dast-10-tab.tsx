@@ -1,33 +1,86 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import { ScrollArea } from '@radix-ui/themes'
-import { TabContentHeading, ViewLoadingPlaceholder } from '@/components'
+import { Flex } from '@radix-ui/themes'
+import { FormProvider } from 'react-hook-form'
+import { ViewLoadingPlaceholder, WidgetFormContainer } from '@/components'
+import { QuickNoteSectionItem } from '@/types'
+import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { DAST_10_TAB } from '../constants'
+import {
+  AddToNoteCell,
+  AddToPreVisitAssessmentCell,
+  HistoryButton,
+  QuestionnairesForm,
+  SaveButton,
+  SendToPatientButton,
+  useQuestionnaireForm,
+} from '../shared'
+import { transformIn, transformOut } from '../shared/data'
+import { LABELS, QUESTIONS, SCORE_INTERPRETATION_RANGES } from './constants'
+import { ScoreCalculation } from './score-calculation'
 
-const TAB_TITLE = DAST_10_TAB
+const Dast10Tab = ({
+  patientId,
+  data,
+}: {
+  patientId: string
+  data: QuickNoteSectionItem[]
+}) => {
+  const totalQuestions = QUESTIONS.length
+  const initialValue = transformIn(data, totalQuestions)
+  const { totalScore, ...form } = useQuestionnaireForm(
+    initialValue,
+    totalQuestions,
+  )
 
-const wait = async () => {
-  await new Promise((resolve) => setTimeout(resolve, 2000))
-  return 'hello'
-}
-
-const Dast10Tab = () => {
-  const [result, setResult] = useState<string>()
-
-  useEffect(() => {
-    wait().then(setResult)
-  }, [])
-
-  if (!result) {
-    return <ViewLoadingPlaceholder title={TAB_TITLE} />
+  if (!data) {
+    return <ViewLoadingPlaceholder title={DAST_10_TAB} />
   }
 
   return (
-    <>
-      <TabContentHeading title={TAB_TITLE} />
-      <ScrollArea></ScrollArea>
-    </>
+    <FormProvider {...form}>
+      <Flex direction="column" gap=".5rem">
+        <WidgetFormContainer
+          enableEvents={false}
+          patientId={patientId}
+          widgetId="gad-7"
+          getData={transformOut(
+            patientId,
+            QuickNoteSectionName.QuickNoteSectionDast10,
+          )}
+          title={DAST_10_TAB}
+          headerRight={
+            <Flex gap="2">
+              <SendToPatientButton />
+              <HistoryButton />
+              <SaveButton />
+            </Flex>
+          }
+          headerLeft={
+            <Flex>
+              <AddToPreVisitAssessmentCell />
+              <AddToNoteCell />
+            </Flex>
+          }
+        />
+        <Flex
+          maxWidth="100%"
+          className="bg-white"
+          px="3"
+          py="1"
+          direction="column"
+          gap="2"
+        >
+          <QuestionnairesForm
+            data={QUESTIONS}
+            labels={LABELS}
+            totalScore={totalScore}
+            scoreInterpretationRanges={SCORE_INTERPRETATION_RANGES}
+          />
+          <ScoreCalculation />
+        </Flex>
+      </Flex>
+    </FormProvider>
   )
 }
 

@@ -1,5 +1,5 @@
 import { QuickNoteSectionItem } from '@/types'
-import { QUICKNOTE_SECTION_NAME } from '../constants'
+import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { SnapIvSchemaType } from '../snap-iv-schema'
 
 const transformIn = (value: QuickNoteSectionItem[]): SnapIvSchemaType => {
@@ -45,7 +45,7 @@ const transformOut =
       if (value !== '') {
         result.push({
           pid: Number(patientId),
-          sectionName: QUICKNOTE_SECTION_NAME,
+          sectionName: QuickNoteSectionName.QuickNoteSectionSnapIV,
           sectionItem: key,
           sectionItemValue: value?.toString() || '',
         })

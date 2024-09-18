@@ -19,44 +19,47 @@ const ScoreInterpretation = ({
   ranges,
   totalScore,
 }: ScoreInterpretationProps) => {
-  const getRangeLabel = (score: number) => {
-    for (const range of ranges) {
-      if (score >= range.min && score <= range.max) {
-        return range.label
-      }
-    }
+  const getRange = (score: number) => {
+    return ranges.find((range) => score >= range.min && score <= range.max)
   }
 
-  const currentRangeLabel = getRangeLabel(totalScore)
+  const currentRange = getRange(totalScore)
 
   return (
     <Flex
       align="center"
       justify="between"
       className="h-9 border-y border-gray-3"
+      px="2"
     >
       <Flex className="" gap="4">
         <Text weight="bold" size="2">
           Score Interpretation
         </Text>
-        {ranges.map((range) => (
-          <Flex gap="2" align="center" key={range.label}>
-            <Box
-              key={range.label}
-              className={cn(
-                'h-[14.24px] w-[22px] rounded-1',
-                range.color === 'white' && 'border border-gray-6',
-                getBadgeBackgroundClass(range.color),
-              )}
-            ></Box>
-            <Text className="text-black" size="1">
-              {range.rangeTitle
-                ? range.rangeTitle
-                : `${range.min}-${range.max}`}{' '}
-              - {range.label}
-            </Text>
-          </Flex>
-        ))}
+        {ranges.map((range) => {
+          const badgeBackgroundClass = getBadgeBackgroundClass(range.color)
+
+          let title = range.rangeTitle
+
+          if (!title) {
+            const maxPart = range.max > 0 ? ` - ${range.max}` : ''
+            title = `${range.min}${maxPart}`
+          }
+          return (
+            <Flex gap="2" align="center" key={range.label}>
+              <Box
+                className={cn(
+                  'h-[14.24px] w-[22px] rounded-1',
+                  range.color === 'white' && 'border border-gray-6',
+                  badgeBackgroundClass,
+                )}
+              />
+              <Text className="text-black" size="1">
+                {title} - {range.label}
+              </Text>
+            </Flex>
+          )
+        })}
       </Flex>
 
       <Flex align="center" gap="1">
@@ -64,26 +67,29 @@ const ScoreInterpretation = ({
           size="1"
           variant="soft"
           mx="1"
-          color={getBadgeColor(currentRangeLabel)}
-          className={`border 1px solid ${getBadgeColor(currentRangeLabel)}`}
+          color={getBadgeColor(getRange(totalScore))}
+          className={cn(
+            getBadgeColor(getRange(totalScore)),
+            '1px solid border',
+          )}
         >
           Score {totalScore}
         </Badge>
-        <Text size="1">{currentRangeLabel}</Text>
+        <Text size="1">{currentRange?.label}</Text>
       </Flex>
     </Flex>
   )
 }
 
-const getBadgeColor = (anxiety?: string) => {
-  switch (anxiety?.split(' ')[0]) {
-    case 'Mild':
-      return 'green'
-    case 'Moderate':
-      return 'yellow'
-    case 'Severe':
+const getBadgeColor = (currentRange?: ScoreInterpretationRange) => {
+  switch (currentRange?.color) {
+    case 'dark red':
       return 'red'
-    case 'Very':
+    case 'green':
+      return 'green'
+    case 'yellow':
+      return 'yellow'
+    case 'red':
       return 'red'
     default:
       return 'gray'
