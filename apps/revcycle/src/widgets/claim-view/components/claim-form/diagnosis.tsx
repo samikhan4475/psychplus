@@ -1,11 +1,14 @@
 'use client'
 
+import { useState } from 'react'
 import { Cross1Icon } from '@radix-ui/react-icons'
 import { Box, Flex, Text } from '@radix-ui/themes'
 import { UseFormReturn } from 'react-hook-form'
 import { ICD10Code } from '../../types'
 import { SchemaType } from './add-claim-form'
 import { IcdSearchDropdown } from './icd-search-dropdown'
+
+const MAX_DIAGNOSES = 12
 
 const Diagnosis = ({ form }: { form: UseFormReturn<SchemaType> }) => {
   const {
@@ -16,26 +19,41 @@ const Diagnosis = ({ form }: { form: UseFormReturn<SchemaType> }) => {
   } = form
   const claimDiagnoses = watch('claimDiagnosis') || []
 
+  // State to track if the error should be displayed
+  const [validationError, setValidationError] = useState<string | null>(null)
+
   const handleSelectedItem = (selectedItem: ICD10Code) => {
     const currentDiagnoses = getValues('claimDiagnosis') || []
+
     const claimId = getValues('id')
     const exists = currentDiagnoses.some(
       (diagnosis) => diagnosis.diagnosisCode === selectedItem.code,
     )
+    const activeClaimDiagnosis = currentDiagnoses.filter(
+      (diagnosis) => diagnosis.recordStatus !== 'Deleted',
+    )
     if (exists) {
       return
     }
+
+    // Check if adding a new diagnosis exceeds the limit
+    if (activeClaimDiagnosis.length >= MAX_DIAGNOSES) {
+      setValidationError('Cannot add more than 12 diagnoses')
+      return
+    }
+
+    setValidationError(null) // Clear the error if within the limit
     const newDiagnosis = {
       claimId: claimId ?? '',
       diagnosisCode: selectedItem.code,
       diagnosisDescription: selectedItem.description,
       deletedReason: '',
-      sequenceNo: currentDiagnoses.length + 1,
+      sequenceNo: activeClaimDiagnosis.length + 1,
       recordStatus: 'Active',
     }
     const updatedDiagnoses = [...currentDiagnoses, newDiagnosis]
     const claimServiceLines = form.getValues('claimServiceLines') ?? []
-        claimServiceLines.map((charge) => {
+    claimServiceLines.map((charge) => {
       if (newDiagnosis.sequenceNo === 1) {
         charge.diagnosisPointer1 = newDiagnosis.sequenceNo.toString()
       }
@@ -125,6 +143,11 @@ const Diagnosis = ({ form }: { form: UseFormReturn<SchemaType> }) => {
           onSelectItem={handleSelectedItem}
         />
       </Flex>
+      {validationError && (
+        <Text color="red" mt="2">
+          {validationError}
+        </Text>
+      )}
       {errors.claimDiagnosis && (
         <Text color="red" mt="2">
           {errors.claimDiagnosis.message}

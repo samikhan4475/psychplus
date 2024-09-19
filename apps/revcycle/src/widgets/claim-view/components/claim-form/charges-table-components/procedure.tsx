@@ -1,11 +1,10 @@
 import React, { useCallback } from 'react'
 import { Box } from '@radix-ui/themes'
-import {
-  FieldError,
-  UseFormReturn,
-  useWatch,
-} from 'react-hook-form'
+import { FieldError, UseFormReturn, useWatch } from 'react-hook-form'
 import { CPTCode } from '@/widgets/claim-view/types'
+import { getCPTSearchedRecords } from '@/widgets/coding-cpt/api.client'
+import { CPTRecord } from '@/widgets/coding-cpt/components'
+import { SchemaType } from '../add-claim-form'
 import { CPTSearchDropdown } from '../cpt-search-dropdown'
 import { ClaimServiceLine } from '../types'
 
@@ -14,7 +13,7 @@ interface TableCellProps {
     original: ClaimServiceLine
     index: number
   }
-  form: UseFormReturn<any> // Adjust this type to match your form's schema
+  form: UseFormReturn<SchemaType> // Adjust this type to match your form's schema
 }
 
 const TableCellProcedure = ({ row, form }: TableCellProps) => {
@@ -39,8 +38,22 @@ const TableCellProcedure = ({ row, form }: TableCellProps) => {
   })
 
   const handleProcedureChange = useCallback(
-    (selectedItem: CPTCode) => {
+    async (selectedItem: CPTCode) => {
       const { code, displayName } = selectedItem
+      const result = await fetchAndProcessCPTData(code)
+
+      if (result) {
+        const { medicareAmount } = result
+
+        setValue(`claimServiceLines.${row.index}.totalAmount`, medicareAmount, {
+          shouldValidate: true,
+          shouldDirty: true,
+        })
+        setValue(`claimServiceLines.${row.index}.unitAmount`, medicareAmount, {
+          shouldValidate: true,
+          shouldDirty: true,
+        })
+      }
       setValue(`claimServiceLines.${row.index}.cptCode`, code, {
         shouldValidate: true,
         shouldDirty: true,
@@ -52,6 +65,29 @@ const TableCellProcedure = ({ row, form }: TableCellProps) => {
     },
     [setValue, row.index],
   )
+
+  const fetchAndProcessCPTData = async (
+    code: string,
+  ): Promise<{ medicareAmount: number } | null> => {
+    try {
+      const data = await getCPTSearchedRecords(0, 0, { cptCode: code })
+      const response = data as CPTRecord[]
+
+      if (response.length > 0) {
+        const apiResponse = response[0]
+        const medicareAmount =
+          apiResponse.medicareAmount !== undefined &&
+          apiResponse.medicareAmount !== null
+            ? parseFloat(apiResponse.medicareAmount)
+            : 0
+        return { medicareAmount }
+      } else {
+        return null
+      }
+    } catch (error) {
+      return null
+    }
+  }
 
   return (
     <Box id="cpt-search" className="relative">

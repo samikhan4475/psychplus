@@ -331,3 +331,5 @@ const WidgetTable = () => {
 }
 
 export { WidgetTable }
+
+export type { CPTRecord }

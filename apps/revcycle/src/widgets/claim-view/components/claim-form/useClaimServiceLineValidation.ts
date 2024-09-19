@@ -27,6 +27,11 @@ const useClaimServiceLineValidation = (form: UseFormReturn<SchemaType>) => {
       (diagnosis) => diagnosis.recordStatus !== 'Deleted',
     )
 
+     // Create a set of valid diagnosis sequence numbers
+     const validDiagnosisSequenceNumbers = new Set(
+      activeClaimDiagnosis.map(diagnosis => diagnosis.sequenceNo)
+    )
+
     // Validate claimDiagnosis
     if (activeClaimDiagnosis.length === 0) {
       form.setError('claimDiagnosis', {
@@ -37,7 +42,7 @@ const useClaimServiceLineValidation = (form: UseFormReturn<SchemaType>) => {
       message = ''
     }
 
-    // Validate claimDiagnosis
+    // active claimServiceLines
     if (activeClaimServiceLines.length === 0) {
       form.setError('claimServiceLines', {
         type: 'manual',
@@ -107,6 +112,7 @@ const useClaimServiceLineValidation = (form: UseFormReturn<SchemaType>) => {
           type: 'manual',
           message: 'Enter Valid Pointer(s) 12',
         })
+         message = ''
         hasErrors = true
       } else if (
         (isEmpty(diagnosisPointer1) === false &&
@@ -140,6 +146,17 @@ const useClaimServiceLineValidation = (form: UseFormReturn<SchemaType>) => {
         hasErrors = true
         message = ''
       }
+       // Validate diagnosis pointers against diagnosis sequence numbers
+       pointers.forEach((pointer) => {
+        if (pointer && !validDiagnosisSequenceNumbers.has(Number(pointer))) {
+          form.setError(`claimServiceLines.${index}.diagnosisPointer1`, {
+            type: 'manual',
+            message: 'Enter correct pointer',
+          })
+          hasErrors = true
+          message = 'Enter correct pointer'
+        }
+      })
     })
 
     return {
