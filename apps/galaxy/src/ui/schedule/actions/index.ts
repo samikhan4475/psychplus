@@ -1,2 +1,4 @@
 export * from './get-clinics'
 export * from './get-providers'
+export * from './get-location-services'
+export * from './get-booked-appointments'

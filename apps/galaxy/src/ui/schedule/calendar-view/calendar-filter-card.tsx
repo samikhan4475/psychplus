@@ -17,7 +17,6 @@ import { ServiceDropdown } from './service-dropdown'
 import { ShowFiltersButton } from './show-filters-button'
 import { StartDateInput } from './start-date-input'
 import { StateSelect } from './state-select'
-import { TimeOfTheDayDropdown } from './time-of-the-day-dropdown'
 import { VisitMediumDropdown } from './visit-medium-dropdown'
 
 const schema = z.object({
@@ -91,7 +90,6 @@ const CalendarFilterCard = () => {
             <Flex align="center" gap="2">
               <ProviderTypeDropdown />
               <GenderSelect />
-              <TimeOfTheDayDropdown />
               <LanguageSelect />
               <FirstResponderSelect />
               <HideFiltersButton onClick={() => setIsPartialFilterView(true)} />

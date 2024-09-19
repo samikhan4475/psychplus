@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { Flex, Heading, Tabs } from '@radix-ui/themes'
+import { cn } from '@/utils'
 import { getClinicsOptionsAction, getProvidersOptionsAction } from './actions'
 import { CalendarView } from './calendar-view'
 import { DateStepper } from './calendar-view/date-stepper'
@@ -10,6 +11,7 @@ import {
   SchedulerActionButtonGroup,
 } from './components/header'
 import { SchedulerFilterGroup } from './components/header/scheduler-filter-group'
+import { RoundingView, RoundingViewFilterGroup } from './rounding-view'
 import { TabsList } from './schedule-view-tabs-list'
 import { useStore } from './store'
 import { TabValue } from './types'
@@ -54,12 +56,16 @@ const ScheduleView = () => {
         {selectedTab === TabValue.Calendar && <DateStepper />}
         {selectedTab === TabValue.List && <ColumnFilterGroup />}
         {selectedTab === TabValue.Scheduler && <SchedulerFilterGroup />}
+        {selectedTab === TabValue.Rounding && <RoundingViewFilterGroup />}
         <SchedulerActionButtonGroup />
       </Flex>
       <Tabs.Content value={TabValue.List}>List View</Tabs.Content>
       <Tabs.Content
         value={TabValue.Calendar}
-        className="flex flex-1 flex-col overflow-y-auto"
+        className={cn({
+          'flex flex-1 flex-col overflow-y-auto':
+            selectedTab === TabValue.Calendar,
+        })}
       >
         <CalendarView />
       </Tabs.Content>
@@ -67,7 +73,15 @@ const ScheduleView = () => {
       <Tabs.Content value={TabValue.ProviderCoding}>
         Provider Coding View
       </Tabs.Content>
-      <Tabs.Content value={TabValue.Rounding}>Rounding View</Tabs.Content>
+      <Tabs.Content
+        className={cn({
+          'flex flex-1 flex-col overflow-y-auto':
+            selectedTab === TabValue.Rounding,
+        })}
+        value={TabValue.Rounding}
+      >
+        <RoundingView />
+      </Tabs.Content>
     </Tabs.Root>
   )
 }

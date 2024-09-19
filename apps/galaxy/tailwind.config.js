@@ -46,6 +46,8 @@ const config = {
         'pp-text-primary-base': '#194595',
         'pp-bg-table-cell': '#F9F9FB',
         'pp-img-border': '#9BABF0',
+        'pp-icon-soft': '#8B8D98',
+        'pp-states-success': '#30A46C',
       },
       animation: {
         loader: 'bounce 500ms infinite, pulse 2s infinite',

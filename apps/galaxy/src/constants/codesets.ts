@@ -29,6 +29,10 @@ const CODESETS = {
   Relationship: 'HL7v3.RoleCode',
   InsurancePolicyPriority: 'InsurancePolicyPriority',
   InsuranceRelationship: 'InsuranceRelationship',
+  VisitStatus: 'FacilityAppointmentStatus',
+  VerificationStatus: 'VerificationStatus',
+  VisitSequence: 'VisitSequenceType',
+  LegalStatus: 'AdmissionLegalStatus',
   TransactionType: 'TransactionType',
 }
 
