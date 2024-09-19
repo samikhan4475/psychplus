@@ -10,11 +10,16 @@ import { Flex, IconButton, Text } from '@radix-ui/themes'
 import { type PropsWithRow } from '@psychplus/ui/data-table'
 import { DropdownMenu } from '@psychplus/ui/dropdown-menu'
 import { deleteClaim } from '../../api.client'
+import { useStore } from '../../store'
 import { Claim } from '../../types'
 
 const RowActionDropdown = ({
   row: { original: claim },
 }: PropsWithRow<Claim>) => {
+  const { addTab } = useStore((state) => ({
+    addTab: state.addTab,
+  }))
+
   const deleteRecord = async () => {
     const checkConfirm = window.confirm(
       'Are you sure you want to delete this claim?',
@@ -40,6 +45,16 @@ const RowActionDropdown = ({
     }
   }
 
+  const handleClaimIdClick = () => {
+    const tab = {
+      id: `claimsid#${claim.id}`,
+      label: `Claim#${claim.claimNumber}`,
+      claimId: claim.id,
+      claimNumber: claim.claimNumber,
+    }
+    addTab(tab)
+  }
+
   return (
     <DropdownMenu.Root>
       <DropdownMenu.Trigger>
@@ -48,7 +63,10 @@ const RowActionDropdown = ({
         </IconButton>
       </DropdownMenu.Trigger>
       <DropdownMenu.Content>
-        <DropdownMenu.Item className="w-full py-4 hover:bg-[#151B4A]">
+        <DropdownMenu.Item
+          className="w-full py-4 hover:bg-[#151B4A]"
+          onClick={handleClaimIdClick}
+        >
           <Flex className=" hover:text-[white]" align="center" gap="1">
             <Pencil1Icon />
             <Text size="3">Edit</Text>

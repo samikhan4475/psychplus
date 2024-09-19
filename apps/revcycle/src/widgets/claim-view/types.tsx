@@ -56,6 +56,30 @@ interface ClaimDiagnosis {
   sequenceNo: number
 }
 
+interface ClaimInsurance {
+  id: string
+  insurancePlanId: string
+  verificationStatus: string
+  isActive: boolean
+  isDeleted: boolean
+  memberId: string
+  groupNumber: string
+  effectiveDate: string
+  terminationDate: string
+  insurancePolicyPriority: string
+  hasCardFrontImage: boolean
+  hasCardBackImage: boolean
+  isPatientPolicyHolder: boolean
+  policyHolderRelationship: string
+  policyHolderDateOfBirth: string
+  policyHolderSocialSecurityNumber: string
+  policyHolderGender: string
+  policyName: string
+  policyHolderStreetAddress: string
+  payerAddress: string
+  payerName: string
+}
+
 interface Claim {
   id: string
   metadata?: MetaData
@@ -130,7 +154,6 @@ interface Claim {
   patientName: string
   patientAccountNumber: string
   dos: string
-  primaryInsurance: string
   status: string
   totalCharge: string
   dueAmount: string
@@ -139,6 +162,8 @@ interface Claim {
   claimServiceLines: ClaimServiceLine[]
   claimDiagnosis: ClaimDiagnosis[]
   isSystemRejected: boolean
+  primaryInsurance?: ClaimInsurance
+  secondaryInsurance?: ClaimInsurance
 }
 
 interface PhoneNumber {

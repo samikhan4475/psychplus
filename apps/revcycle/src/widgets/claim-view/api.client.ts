@@ -48,11 +48,17 @@ interface ResponseHistoryPayload {
   createdOn?: Date
 }
 
+const defaultPayLoad = {
+  isIncludePatientInsurancePlan: false,
+  isIncludePatientInsurancePolicy: true,
+  isIncludeClaimValidation: true,
+}
+
 const getClaimList = (payload: ClaimFiltersPayload): Promise<Claim[]> =>
   handleRequest(
     fetch(`/revcycle/api/claims/actions/search`, {
       method: 'POST',
-      body: JSON.stringify(payload),
+      body: JSON.stringify({ ...payload, ...defaultPayLoad }),
       cache: 'no-store',
       headers: createHeaders(),
     }),

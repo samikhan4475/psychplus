@@ -100,7 +100,7 @@ const FilterForm = () => {
             </Text>
             <TextField.Root
               className="h-30 text-sm p-0"
-              placeholder="3fasf5fde4-5dr17-4562-b3fc-2c963fa6"
+              placeholder="123455"
               {...form.register('claimNumber')}
             />
           </Box>

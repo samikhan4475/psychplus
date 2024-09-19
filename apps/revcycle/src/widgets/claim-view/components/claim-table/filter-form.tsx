@@ -8,11 +8,12 @@ import { getClaimList } from '../../api.client'
 import { Filters, useStore } from '../../store'
 import { initialClaimListFilterState } from '../../store/claim-list-filter-store'
 import { adjustToUTC } from '../../utils'
+import PatientSearch from '../submission-table/patient-search'
 
 const schema = z.object({
   locationId: validate.anyString.optional(),
   dateType: validate.anyString.optional(),
-  claimId: validate.anyString.optional(),
+  claimNumber: validate.anyString.optional(),
   insuranceId: validate.anyString.optional(),
   patientId: validate.anyString.optional(),
 })
@@ -21,6 +22,7 @@ const FilterForm = () => {
   const locations = useStore((state) => state.locations)
   const dateTypes = useStore((state) => state.dateTypes)
   const insurancePayersList = useStore((state) => state.insurancePayersList)
+  const [patientReset, setPatientReset] = useState(false)
   const form = useForm({
     schema,
     criteriaMode: 'all',
@@ -42,6 +44,7 @@ const FilterForm = () => {
     form.setValue('locationId', '')
     form.setValue('dateType', '')
     form.setValue('insuranceId', '')
+    setPatientReset(true)
     handleFiltersChange({ ...initialClaimListFilterState })
     try {
       const response = await getClaimList({
@@ -54,6 +57,7 @@ const FilterForm = () => {
   }
 
   const onSubmit = async () => {
+    setPatientReset(false)
     try {
       const formData = form.getValues()
       const cleanFilterState: Partial<Filters> = Object.entries(formData)
@@ -91,19 +95,20 @@ const FilterForm = () => {
             </Text>
             <TextField.Root
               className="h-30 text-sm p-0"
-              placeholder="3fasf5fde4-5dr17-4562-b3fc-2c963fa6"
-              {...form.register('claimId')}
+              placeholder="123455"
+              {...form.register('claimNumber')}
             />
           </Box>
 
           <Box className="row flex items-center">
             <Text className="mr-2" size="1" weight="bold">
-              Patient Id
+              Patient
             </Text>
-            <TextField.Root
-              className="h-30 text-sm p-0"
-              placeholder="Patient Id"
-              {...form.register('patientId')}
+            <PatientSearch
+              onPatientSelect={(patientId) =>
+                form.setValue('patientId', patientId)
+              }
+              reset={patientReset}
             />
           </Box>
 

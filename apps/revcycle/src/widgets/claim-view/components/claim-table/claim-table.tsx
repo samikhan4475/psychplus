@@ -99,7 +99,7 @@ const columns: ColumnDef<Claim>[] = [
     cell: ({ row }) => (
       <TableCellLongText
         maxWidth={120}
-        text={row.original.primaryPatientInsurancePlanId?.toString()}
+        text={row.original.primaryInsurance?.payerName}
       />
     ),
     enableHiding: true,
@@ -118,7 +118,7 @@ const columns: ColumnDef<Claim>[] = [
     cell: ({ row }) => (
       <TableCellLongText
         maxWidth={120}
-        text={row.original.secondaryPatientInsurancePlanId?.toString()}
+        text={row.original.secondaryInsurance?.payerName}
       />
     ),
     enableHiding: true,
@@ -210,7 +210,7 @@ const columns: ColumnDef<Claim>[] = [
     cell: ({ row }) => (
       <TableCellLongText
         maxWidth={120}
-        text={`${row.original.submittedDate}`}
+        text={row.original.submittedDate && `${row.original.submittedDate}`}
       />
     ),
     enableHiding: true,
