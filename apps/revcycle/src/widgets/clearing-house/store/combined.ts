@@ -7,11 +7,18 @@ import {
   createUsStatesCodeSetsStore,
   UsStatesCodeSetsState,
 } from './codesets-states-store'
+import {
+  clearingHouseSubmitterStore,
+  SubmitterSetState,
+} from './submitter-set-store'
 
-type ClearingHouseStoreType = UsStatesCodeSetsState
+type ClearingHouseStoreType = UsStatesCodeSetsState & SubmitterSetState
 
 const useStore = createWithEqualityFn<ClearingHouseStoreType>(
-  combineStateCreators(createUsStatesCodeSetsStore),
+  combineStateCreators(
+    createUsStatesCodeSetsStore,
+    clearingHouseSubmitterStore,
+  ),
   shallow,
 )
 
