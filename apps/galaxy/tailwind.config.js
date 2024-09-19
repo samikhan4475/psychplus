@@ -24,6 +24,8 @@ const config = {
         'pp-success-text': '#18794E',
         'pp-warning-bg': '#FFEDD5',
         'pp-warning-text': '#99543A',
+        'pp-warning-bg-1': '#FEF7EC',
+        'pp-warning-border': '#F2AE40',
         'pp-link-text': '#194595',
         'pp-send-icon': '#60646C',
         'pp-grey': '#DDDDE3',

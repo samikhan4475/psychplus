@@ -54,4 +54,4 @@ interface MetadataCodeAttribute {
 
 type CodesetCache = Record<string, SharedCodeset>
 
-export type { Codeset, SharedCodeset, MetadataCodeset, CodesetCache }
+export type { Codeset, Code, SharedCodeset, SharedCode, MetadataCodeset, CodesetCache }

@@ -21,6 +21,7 @@ const SelectInput = <T extends string>({
   options = [],
   className,
   buttonClassName,
+  onValueChange,
   ...selectProps
 }: SelectInputProps<T>) => {
   const form = useFormContext()
@@ -43,7 +44,7 @@ const SelectInput = <T extends string>({
           return (
             <Select.Root
               size="1"
-              onValueChange={field.onChange}
+              onValueChange={onValueChange ?? field.onChange}
               {...rest}
               {...selectProps}
             >

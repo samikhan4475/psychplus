@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { Flex, Heading, Tabs } from '@radix-ui/themes'
 import { cn } from '@/utils'
+import { StateCodeSet } from '../visit/add-visit/types'
 import { getClinicsOptionsAction, getProvidersOptionsAction } from './actions'
 import { CalendarView } from './calendar-view'
 import { DateStepper } from './calendar-view/date-stepper'
@@ -16,7 +17,7 @@ import { TabsList } from './schedule-view-tabs-list'
 import { useStore } from './store'
 import { TabValue } from './types'
 
-const ScheduleView = () => {
+const ScheduleView = ({ states }: { states: StateCodeSet[] }) => {
   const [selectedTab, setSelectedTab] = useState<string>(TabValue.Calendar)
   const { setProvidersOptions, setClinicsOptions } = useStore((state) => ({
     setProvidersOptions: state.setProvidersOptions,
@@ -57,7 +58,7 @@ const ScheduleView = () => {
         {selectedTab === TabValue.List && <ColumnFilterGroup />}
         {selectedTab === TabValue.Scheduler && <SchedulerFilterGroup />}
         {selectedTab === TabValue.Rounding && <RoundingViewFilterGroup />}
-        <SchedulerActionButtonGroup />
+        <SchedulerActionButtonGroup states={states} />
       </Flex>
       <Tabs.Content value={TabValue.List}>List View</Tabs.Content>
       <Tabs.Content

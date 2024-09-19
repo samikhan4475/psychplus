@@ -40,6 +40,7 @@ interface Service {
   maxBookingFrequencyInSlot: number
   isRequiresMedicalVisit: boolean
   primaryProviderType: string
+  isServiceTimeDependent: boolean
   city: string
   state: string
   cosigner: Cosigner

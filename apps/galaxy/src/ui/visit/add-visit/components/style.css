@@ -1,0 +1,7 @@
+.appointment-date-time > :nth-child(1) {
+  grid-column: span 3;
+}
+
+.appointment-date-time > :nth-child(2) {
+  grid-column: span 2;
+}

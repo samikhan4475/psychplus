@@ -30,6 +30,7 @@ interface DatePickerInputProps<T extends DateValue> extends DatePickerProps<T> {
   field: string
   isRequired?: boolean
   aria_lable?: string
+  isDisabled?: boolean
   className?: string
   datePickerClass?: string
   dateInputClass?: string
@@ -40,6 +41,7 @@ const DatePickerInput = <T extends DateValue>({
   isRequired,
   field,
   aria_lable,
+  isDisabled,
   className,
   datePickerClass,
   dateInputClass,
@@ -72,15 +74,20 @@ const DatePickerInput = <T extends DateValue>({
             aria-label={aria_lable ?? 'date to filter input'}
             isInvalid={invalid}
             className={datePickerClass}
-            isDisabled={form.formState.disabled}
+            isDisabled={form.formState.disabled || isDisabled}
             {...props}
           >
-            <Group className={'relative w-full'}>
+            <Group
+              className={cn(
+                'relative w-full',
+                isDisabled ? 'bg-gray-3 text-gray-11' : 'bg-[white]',
+              )}
+            >
               <DateInput
                 className={cn(
                   'border-pp-gray-2 flex h-7 w-full items-center overflow-hidden whitespace-nowrap rounded-1 border px-1 py-[2.5px] data-[focus-within]:outline-1 data-[focus-within]:outline-iris-12',
                   {
-                    'bg-gray-3': form.formState.disabled || props.isDisabled,
+                    'bg-gray-3': form.formState.disabled || isDisabled,
                   },
                   dateInputClass,
                 )}
@@ -92,7 +99,7 @@ const DatePickerInput = <T extends DateValue>({
                   'bg-white absolute bottom-[1px] right-[1px] top-[1px] flex items-center rounded-1 pr-[3px] outline-none disabled:bg-gray-3 disabled:text-gray-11'
                 }
               >
-                <CalendarIcon size={16} />
+                <CalendarIcon size={16} className="stroke-pp-gray-3" />
               </Button>
             </Group>
             <Popover className="bg-white pointer-events-auto rounded-1 p-3 shadow-[0px_7px_29px_rgba(100,100,111,0.2)]">

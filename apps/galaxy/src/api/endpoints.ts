@@ -6,6 +6,13 @@ const SESSION_ENDPOINT = `${AUTH_URL}/session`
 const LOGIN_ENDPOINT = `${AUTH_URL}/login`
 const GET_PATIENT_NOTIFICATIONS_ENDPOINT = `${API_URL}/api/patientnotifications/actions/search`
 const SEARCH_PATIENTS_ENDPOINT = `${API_URL}/api/patients/search`
+const CLINIC_LOCATIONS_ENDPOINT = `${API_URL}/api/clinics`
+const FACILITY_ADMISSION_ID_ENDPOINT = `${API_URL}/api/facilityadmissionids`
+const LOCATION_SERVICES_ENDPOINT = `${API_URL}/api/locationservices/actions/search`
+const VISIT_TYPES_ENDPOINT = `${API_URL}/api/visittypes/actions/search`
+const ENCOUNTER_TYPES_ENDPOINT = `${API_URL}/api/encounters/actions/search`
+const STATES_BY_COUNTRY_ENDPOINT = (countryCode: string) =>
+  `${API_URL}/api/countries/${countryCode}/states`
 const PATIENT_PROFILE_ENDPOINT = (id: string) =>
   `${API_URL}/api/patients/${id}/profile`
 const NOTE_DETAILS_SEARCH_ENDPOINT = `${API_URL}/api/notedetails/actions/search`
@@ -45,6 +52,12 @@ export {
   SESSION_ENDPOINT,
   LOGIN_ENDPOINT,
   SEARCH_PATIENTS_ENDPOINT,
+  CLINIC_LOCATIONS_ENDPOINT,
+  FACILITY_ADMISSION_ID_ENDPOINT,
+  LOCATION_SERVICES_ENDPOINT,
+  VISIT_TYPES_ENDPOINT,
+  ENCOUNTER_TYPES_ENDPOINT,
+  STATES_BY_COUNTRY_ENDPOINT,
   GET_PATIENT_NOTIFICATIONS_ENDPOINT,
   PATIENT_PROFILE_ENDPOINT,
   NOTE_DETAILS_SEARCH_ENDPOINT,
