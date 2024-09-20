@@ -40,6 +40,7 @@ const CODESETS = {
   VisitSequence: 'VisitSequenceType',
   LegalStatus: 'AdmissionLegalStatus',
   TransactionType: 'TransactionType',
+  PractitionerHonor: 'PsychPlusPublic.PractitionerHonor',
 }
 
 export {

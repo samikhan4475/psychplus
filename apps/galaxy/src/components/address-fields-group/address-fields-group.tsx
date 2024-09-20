@@ -1,6 +1,6 @@
 'use client'
 
-import { Box, Flex, Grid, Text } from '@radix-ui/themes'
+import { Box, Flex, FlexProps, Grid, Text } from '@radix-ui/themes'
 import { useGooglePlacesContext } from '@/providers/google-places-provider'
 import { GooglePlacesAutocomplete } from './address-autocomplete'
 import { AddressTextField } from './address-text-field'
@@ -11,17 +11,19 @@ interface AddressProps {
   columnsPerRow?: string
   required?: boolean
   className?: string
+  direction?: FlexProps['direction']
 }
 const AddressFieldsGroup = ({
   title,
   columnsPerRow = '2',
   required = true,
   className,
+  direction = 'column',
 }: AddressProps) => {
   const { loaded } = useGooglePlacesContext()
 
   return (
-    <Flex gap="2" className={className} direction="column">
+    <Flex gap="2" className={className} direction={direction}>
       {title && (
         <Text weight="medium" className="text-pp-black-3 text-[14px]">
           {title}
