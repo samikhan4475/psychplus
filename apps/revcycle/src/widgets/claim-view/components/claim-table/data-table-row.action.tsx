@@ -16,8 +16,10 @@ import { Claim } from '../../types'
 const RowActionDropdown = ({
   row: { original: claim },
 }: PropsWithRow<Claim>) => {
-  const { addTab } = useStore((state) => ({
+  const { addTab, claimList, setClaimList } = useStore((state) => ({
     addTab: state.addTab,
+    claimList: state.claimList,
+    setClaimList: state.setClaimList,
   }))
 
   const deleteRecord = async () => {
@@ -27,6 +29,14 @@ const RowActionDropdown = ({
     if (checkConfirm && claim.id) {
       try {
         await deleteClaim(claim.id)
+        const newClaimList = [...claimList]
+        const index = newClaimList.findIndex(
+          (element) => element.id === claim.id,
+        )
+        if (index !== -1) {
+          newClaimList.splice(index, 1)
+          setClaimList(newClaimList)
+        }
         alert('Claim deleted successfully!')
       } catch (error) {
         console.log('error', error)
@@ -39,8 +49,6 @@ const RowActionDropdown = ({
           message = JSON.stringify(error)
         }
         alert(`ERROR: ${message}`)
-      } finally {
-        window.location.replace(`/revcycle/widgets/claim-view`)
       }
     }
   }
