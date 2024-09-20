@@ -36,6 +36,7 @@ interface DataTableProps<TData, TValue> {
   sticky?: boolean
   isRowSpan?: boolean // Use rowspan to prevent table layout issues. Nested columns apply only when the optional `isRowSpan` prop is true, as data tables don't support them directly.
   theadClass?: string
+  tableClass?: string
 }
 
 const DataTable = <TData, TValue>({
@@ -51,6 +52,7 @@ const DataTable = <TData, TValue>({
   onRowSelectionChange,
   isRowSpan,
   theadClass,
+  tableClass,
 }: DataTableProps<TData, TValue>) => {
   const [sorting, setSorting] = useState<SortingState>([])
   const [pagination, setPagination] = useState<PaginationState>({
@@ -60,6 +62,7 @@ const DataTable = <TData, TValue>({
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = useState({})
+  const [rowHover, setRowHover] = useState('')
   const [expanded, setExpanded] = useState<ExpandedState>({})
 
   useEffect(() => {
@@ -85,6 +88,9 @@ const DataTable = <TData, TValue>({
     onColumnVisibilityChange: setColumnVisibility,
     onRowSelectionChange: setRowSelection,
     onPaginationChange: setPagination,
+    meta: {
+      rowHover,
+    },
     getExpandedRowModel: getExpandedRowModel(),
     state: {
       expanded,
@@ -102,7 +108,7 @@ const DataTable = <TData, TValue>({
       <Table.Root
         variant="ghost"
         size="1"
-        className={cn('rounded-[0px]', {
+        className={cn(tableClass, 'rounded-[0px]', {
           'border-collapse [&_.rt-ScrollAreaRoot]:!overflow-visible [&_.rt-ScrollAreaViewport]:!overflow-visible':
             sticky,
         })}
@@ -138,7 +144,10 @@ const DataTable = <TData, TValue>({
                     key={header.id}
                     rowSpan={isRowSpan ? rowSpan : undefined}
                     colSpan={header.colSpan}
-                    className="border-pp-table-border h-5 border border-r-0 px-[2px] py-0 last:border-r"
+                    className={cn(
+                      'border-pp-table-border h-5 border border-r-0  px-[2px] py-0 last:border-r',
+                      `w-[${header.getSize()}px]`,
+                    )}
                   >
                     {!isRowSpan && header.isPlaceholder
                       ? null
@@ -161,6 +170,8 @@ const DataTable = <TData, TValue>({
                 onClick={() => {
                   onRowClick?.(row, table)
                 }}
+                onMouseEnter={() => setRowHover(row.id)}
+                onMouseLeave={() => setRowHover('')}
                 className={cn('hover:bg-gray-2', {
                   'cursor-pointer': onRowClick !== undefined,
                   'bg-pp-focus-bg': row.getIsSelected(),
