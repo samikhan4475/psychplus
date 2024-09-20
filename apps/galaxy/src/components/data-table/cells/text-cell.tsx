@@ -12,15 +12,17 @@ const TextCell = ({
   className,
 }: React.PropsWithChildren<TextCellProps>) => {
   return (
-    <Flex direction="column" height="100%" justify="center" px="1">
+    <Flex height="100%" align="center">
       <Text
         className={cn(
-          'text-[11px]',
+          'text-pp-black-3',
           {
             'text-gray-9': empty,
           },
           className,
         )}
+        weight="regular"
+        size="1"
       >
         {children}
       </Text>

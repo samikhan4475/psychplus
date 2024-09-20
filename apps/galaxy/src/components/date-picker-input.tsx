@@ -85,7 +85,7 @@ const DatePickerInput = <T extends DateValue>({
             >
               <DateInput
                 className={cn(
-                  'border-pp-gray-2 flex h-7 w-full items-center overflow-hidden whitespace-nowrap rounded-1 border px-1 py-[2.5px] data-[focus-within]:outline-1 data-[focus-within]:outline-iris-12',
+                  'border-pp-gray-2 flex h-6 w-full items-center overflow-hidden whitespace-nowrap rounded-1 border px-1 py-[2.5px] data-[focus-within]:outline-1 data-[focus-within]:outline-iris-12',
                   {
                     'bg-gray-3': form.formState.disabled || isDisabled,
                   },

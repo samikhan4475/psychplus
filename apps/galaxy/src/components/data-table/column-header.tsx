@@ -11,11 +11,11 @@ import { cn } from '@/utils'
 
 const renderSortIcon = (sortDir?: SortDirection) => {
   if (!sortDir) {
-    return <CaretSortIcon className="ml-1 h-4 w-4" />
+    return <CaretSortIcon className="text-pp-text-sub h-4 w-4" />
   }
   return {
-    asc: <CaretUpIcon className="ml-1 h-4 w-4" />,
-    desc: <CaretDownIcon className="ml-1 h-4 w-4" />,
+    asc: <CaretUpIcon className="text-pp-text-sub h-4 w-4" />,
+    desc: <CaretDownIcon className="text-pp-text-sub h-4 w-4" />,
   }[sortDir]
 }
 
@@ -38,8 +38,18 @@ const ColumnHeader = <TData, TValue>({
 }: ColumnHeaderProps<TData, TValue>) => {
   if (!sortable) {
     return (
-      <Flex height="100%" align="center">
-        <Text className={cn('text-[11.5px] font-regular', className)}>
+      <Flex
+        height="100%"
+        align="center"
+        justify={column?.columns?.length ? 'center' : 'start'}
+        px="1"
+        className="py-0.5"
+      >
+        <Text
+          className={cn('text-pp-black-3 whitespace-nowrap', className)}
+          weight="medium"
+          size="1"
+        >
           {label}
         </Text>
       </Flex>
@@ -58,13 +68,14 @@ const ColumnHeader = <TData, TValue>({
         size="1"
         variant="ghost"
         color="gray"
+        type="button"
         onClick={() => onClick?.(column?.id ?? 'unknown')}
         className={cn(
-          'text-black !m-0 grow justify-between whitespace-nowrap text-[11.5px] font-regular !outline-none',
-          className,
+          'text-pp-black-3 !m-0 h-full grow justify-between whitespace-nowrap px-1 py-0.5 font-medium !outline-none',
           {
             'cursor-pointer': onClick,
           },
+          className,
         )}
       >
         {label}

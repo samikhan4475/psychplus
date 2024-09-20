@@ -15,6 +15,7 @@ import usePlacesAutocomplete, {
 } from 'use-places-autocomplete'
 import { FormFieldLabel } from '../form'
 import {
+  fieldName,
   getAddressFromPlacesResult,
   getInitialAutocompleteValue,
 } from './utils'
@@ -39,23 +40,29 @@ interface PlacesAutocompleteProps {
   callbackAddress?: (address: AddressForm | undefined) => void
   isFilter?: boolean
   placeholder?: string
+  prefix?: string
 }
+
 const GooglePlacesAutocomplete = ({
-  name,
-  autoFocus,
-  required,
+  name = '',
+  autoFocus = false,
+  required = false,
   callbackAddress,
   disabled = false,
   label = 'Address 1',
-  isFilter,
-  placeholder,
+  isFilter = false,
+  placeholder = '',
+  prefix = '',
 }: PlacesAutocompleteProps) => {
   const form = useFormContext()
-
   const autocompleteFieldRef = useRef<HTMLInputElement | null>(null)
-  const state = form?.getFieldState('address1', form.formState)
-  const values = form?.getValues()
   const [showSuggestions, setShowSuggestions] = useState(false)
+
+  const state = form?.getFieldState(
+    fieldName('address1', prefix),
+    form?.formState,
+  )
+  const values = form?.getValues()
 
   const {
     ready,
@@ -65,116 +72,104 @@ const GooglePlacesAutocomplete = ({
     clearSuggestions,
   } = usePlacesAutocomplete({
     defaultValue: getInitialAutocompleteValue({
-      street1: values?.address1,
-      city: values?.city,
-      state: values?.state,
-      postalCode: values?.zip,
+      street1: values?.[fieldName('address1', prefix)],
+      city: values?.[fieldName('city', prefix)],
+      state: values?.[fieldName('state', prefix)],
+      postalCode: values?.[fieldName('zip', prefix)],
     }),
     requestOptions: {
       types: ['address'],
-      componentRestrictions: {
-        country: ['us'],
-      },
+      componentRestrictions: { country: ['us'] },
     },
     debounce: 300,
   })
 
   useEffect(() => {
-    if (ready && autocompleteFieldRef.current && autoFocus) {
-      setTimeout(() => {
-        autocompleteFieldRef.current?.focus()
-      }, 0)
+    if (ready && autoFocus && autocompleteFieldRef.current) {
+      setTimeout(() => autocompleteFieldRef.current?.focus(), 0)
     }
   }, [ready, autoFocus])
 
   const setFormValues = useCallback(
     (address?: AddressForm) => {
-      form?.setValue('address1', address?.street ?? '')
-      form?.setValue('address2', address?.street1 ?? '')
-      form?.setValue('city', address?.city ?? '')
-      form?.setValue('state', address?.state ?? '')
-      form?.setValue('zip', address?.postalCode ?? '')
+      if (form) {
+        form.setValue(fieldName('address1', prefix), address?.street ?? '')
+        form.setValue(fieldName('address2', prefix), address?.street1 ?? '')
+        form.setValue(fieldName('city', prefix), address?.city ?? '')
+        form.setValue(fieldName('state', prefix), address?.state ?? '')
+        form.setValue(fieldName('zip', prefix), address?.postalCode ?? '')
+      }
     },
-    [form],
+    [form, name],
   )
 
   const handleInput = (e: ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value)
-    // set form value to an empty string if the text is removed
     if (!e.target.value) {
-      form?.setValue('address1', '')
+      form?.setValue(fieldName('address1', prefix), '')
     }
   }
 
-  const handleSelect = (suggestion: Suggestion) => async () => {
-    clearSuggestions()
-    try {
-      const response = await getDetails({ placeId: suggestion.place_id })
-      const address = getAddressFromPlacesResult(response)
-      setFormValues(address)
-      setValue(address?.street ?? '')
-      setShowSuggestions(false)
-      if (callbackAddress && address) {
-        callbackAddress(address)
+  const handleSelect = useCallback(
+    (suggestion: Suggestion) => async () => {
+      clearSuggestions()
+      try {
+        const response = await getDetails({ placeId: suggestion.place_id })
+        const address = getAddressFromPlacesResult(response)
+        setFormValues(address)
+        setValue(address?.street ?? '')
+        setShowSuggestions(false)
+        callbackAddress?.(address)
+      } catch (error) {
+        alert(error)
       }
-    } catch (error) {
-      alert(error)
-    }
-  }
+    },
+    [clearSuggestions, setFormValues, setValue, callbackAddress],
+  )
 
   return (
     <Flex direction="column" width="100%" gap="3">
       <Flex
-        position="relative"
         direction={isFilter ? 'row' : 'column'}
         className="gap-[2px]"
+        position="relative"
       >
-        <FormFieldLabel required={required} className="!text-1">
-          {label}
-        </FormFieldLabel>
+        <FormFieldLabel required={required}>{label}</FormFieldLabel>
         <TextField.Root
           size="1"
-          id={name}
+          id={fieldName('address1', prefix)}
           disabled={disabled}
           ref={autocompleteFieldRef}
           value={value}
           onChange={handleInput}
           placeholder={placeholder}
-          onFocus={() => {
-            setShowSuggestions(true)
-          }}
+          onFocus={() => setShowSuggestions(true)}
           className={textFieldClassName}
         />
-        {status === 'OK' && showSuggestions ? (
-          <ul className="bg-white absolute top-full z-50 w-full overflow-x-clip rounded-2  shadow-3">
-            {data.map((item) => {
-              const {
+        {status === 'OK' && showSuggestions && (
+          <ul className="bg-white absolute top-full z-50 w-full overflow-x-clip rounded-2 shadow-3">
+            {data.map(
+              ({
                 place_id,
                 structured_formatting: { main_text, secondary_text },
-              } = item
-
-              return (
+              }) => (
                 <Button
                   key={place_id}
-                  onClick={handleSelect(item)}
+                  onClick={handleSelect({ place_id })}
                   variant="ghost"
                   color="gray"
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter' || e.key === ' ') handleSelect(item)
-                  }}
                   tabIndex={0}
-                  className="hover:!text-white w-full cursor-pointer  justify-start border-b border-b-gray-5 px-4 py-2 last:border-b-0 hover:bg-indigo-12"
+                  className="hover:!text-white w-full cursor-pointer justify-start border-b border-b-gray-5 px-4 py-2 last:border-b-0 hover:bg-indigo-12"
                 >
                   <Text weight="medium" size="1">
                     {main_text}
                   </Text>
-
                   <Text size="1">{secondary_text}</Text>
                 </Button>
-              )
-            })}
+              ),
+            )}
           </ul>
-        ) : null}
+        )}
         {state?.error && (
           <Text size="2" color="red">
             {state.error.message}
@@ -184,6 +179,8 @@ const GooglePlacesAutocomplete = ({
     </Flex>
   )
 }
+
 const textFieldClassName =
   'border-pp-gray-2 w-full h-6 border border-solid !outline-none [box-shadow:none]'
+
 export { GooglePlacesAutocomplete }

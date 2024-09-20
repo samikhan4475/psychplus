@@ -53,38 +53,40 @@ interface Props {
   onChange?: (selectedValues: string[]) => void
   menuClassName?: string
   label?: string
+  disabled?: boolean
 }
 
-const MultiSelectField: React.FC<Props> = ({
+const MultiSelectField = ({
   options,
   placeholder = 'Select',
   onChange,
   menuClassName,
   defaultValues,
   label,
-}) => {
+  disabled,
+}: Props) => {
   const [selectedValues, setSelectedValues] = useState<string[]>(
     defaultValues ?? [],
   )
 
   const handleChange = (value: string) => {
     const isSelected = selectedValues.includes(value)
-    setSelectedValues((prevValues) =>
-      isSelected
-        ? prevValues.filter((v) => v !== value)
-        : [...prevValues, value],
-    )
+    const tempSelectedValues = isSelected
+      ? selectedValues.filter((v) => v !== value)
+      : [...selectedValues, value]
+
+    setSelectedValues(tempSelectedValues)
+
+    onChange?.(tempSelectedValues)
   }
+
+  useEffect(() => {
+    setSelectedValues(defaultValues ?? [])
+  }, [defaultValues])
 
   const onClose = () => {
     setSelectedValues([])
   }
-
-  useEffect(() => {
-    if (onChange) {
-      onChange(selectedValues)
-    }
-  }, [onChange, selectedValues])
 
   return (
     <FormFieldContainer>
@@ -103,7 +105,7 @@ const MultiSelectField: React.FC<Props> = ({
             })}
             onClick={onClose}
           />
-          <DropdownMenu.Trigger>
+          <DropdownMenu.Trigger disabled={disabled}>
             <Button
               color="gray"
               variant="outline"
@@ -128,24 +130,29 @@ const MultiSelectField: React.FC<Props> = ({
           </DropdownMenu.Trigger>
         </Box>
         <DropdownMenu.Content
-          className={cn(`w-full min-w-[100px]`, menuClassName)}
+          className={cn(
+            `w-full min-w-[100px] rounded-1 shadow-3 [&__.rt-BaseMenuViewport]:p-2`,
+            menuClassName,
+          )}
           align="start"
         >
           {options.map((item) => (
             <DropdownMenu.Item
-              className={'bg-white p-0'}
+              className={cn('bg-white h-6 p-0', {
+                'bg-red-1': selectedValues.includes(item.value),
+              })}
               key={item.value}
               onSelect={(e) => e.preventDefault()}
             >
               <Text
                 as="label"
                 size={'1'}
-                className="text-black hover:bg-pp-focus-bg h-full w-full cursor-pointer gap-x-2 rounded-1 py-0.5 pl-1.5 pr-1"
+                className="text-black w-full cursor-pointer gap-x-2 p-0 text-[14px]"
               >
-                <Flex gap={'1'} align={'center'} height={'100%'}>
+                <Flex gap={'2'} align={'center'} height={'100%'}>
                   <Checkbox
                     color="indigo"
-                    size={'1'}
+                    size={'2'}
                     highContrast
                     checked={selectedValues.includes(item.value)}
                     onCheckedChange={() => handleChange(item.value)}

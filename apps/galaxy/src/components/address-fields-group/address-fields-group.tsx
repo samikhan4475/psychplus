@@ -1,16 +1,18 @@
 'use client'
 
-import { Box, Flex, FlexProps, Grid, Text } from '@radix-ui/themes'
+import { Flex, FlexProps, Grid, Text } from '@radix-ui/themes'
 import { useGooglePlacesContext } from '@/providers/google-places-provider'
 import { GooglePlacesAutocomplete } from './address-autocomplete'
 import { AddressTextField } from './address-text-field'
 import { UsStateSelect } from './usstate-select'
+import { fieldName } from './utils'
 
 interface AddressProps {
   title?: string
   columnsPerRow?: string
   required?: boolean
   className?: string
+  prefix?: string
   direction?: FlexProps['direction']
 }
 const AddressFieldsGroup = ({
@@ -18,6 +20,7 @@ const AddressFieldsGroup = ({
   columnsPerRow = '2',
   required = true,
   className,
+  prefix,
   direction = 'column',
 }: AddressProps) => {
   const { loaded } = useGooglePlacesContext()
@@ -38,14 +41,26 @@ const AddressFieldsGroup = ({
             required={required}
             name={'address1'}
             placeholder={'Enter Address 1'}
+            prefix={prefix}
           />
         )}
-        <AddressTextField label="Address 2" field="address2" />
+        <AddressTextField
+          label="Address 2"
+          field={fieldName('address2', prefix)}
+        />
       </Grid>
       <Grid columns="3" gap="3" className="flex-1">
-        <AddressTextField label="City" field="city" required={required} />
-        <UsStateSelect required={required} />
-        <AddressTextField label="Zip" field="zip" required={required} />
+        <AddressTextField
+          label="City"
+          field={fieldName('city', prefix)}
+          required={required}
+        />
+        <UsStateSelect required={required} prefix={prefix} />
+        <AddressTextField
+          label="Zip"
+          field={fieldName('zip', prefix)}
+          required={required}
+        />
       </Grid>
     </Flex>
   )

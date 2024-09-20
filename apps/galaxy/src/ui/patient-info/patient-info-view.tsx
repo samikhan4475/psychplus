@@ -74,7 +74,7 @@ const PatientInfoView = ({
         <PolicyAndConsentsTab />
       </TabsContent>
       <TabsContent value={PAYMENT_HISTORY_TAB}>
-        <PaymentHistoryTab />
+        <PaymentHistoryTab stripeApiKey={stripeApiKey} patientId={patientId} />
       </TabsContent>
       <TabsContent value={PAYMENT_CARDS_TAB}>
         <PaymentCardsTab stripeApiKey={stripeApiKey} patientId={patientId} />

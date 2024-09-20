@@ -21,7 +21,9 @@ const AddressTextField = ({
   className,
   required,
 }: AddressTextFieldProps) => {
-  const form = useFormContext()
+  const { register, setValue, watch } = useFormContext()
+
+  const { onChange, ...rest } = register(field)
 
   return (
     <FormFieldContainer className={cn('flex-1', className)}>
@@ -30,8 +32,10 @@ const AddressTextField = ({
       </FormFieldLabel>
       <TextField.Root
         size="1"
+        value={watch(field)}
         className={textFieldClassName}
-        {...form.register(field)}
+        onChange={(e) => setValue(field, e.target.value)}
+        {...rest}
       />
       <FormFieldError name={field} />
     </FormFieldContainer>

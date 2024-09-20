@@ -1,6 +1,7 @@
 'use client'
 
 import { Flex, Text } from '@radix-ui/themes'
+import { PatientPaymentsDialog } from './patient-payments-dialog'
 
 const PaymentHeader = () => {
   return (
@@ -24,6 +25,7 @@ const PaymentHeader = () => {
         </Text>
       </Flex>
       <Flex gap="1" align="center">
+        <PatientPaymentsDialog />
         <Text size="1">Total Payment</Text>
         <Text size="2" weight="bold">
           $237.00

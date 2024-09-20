@@ -4,8 +4,6 @@ import { Box, Flex, ScrollArea } from '@radix-ui/themes'
 import { ColumnDef } from '@tanstack/react-table'
 import { ColumnHeader, DataTable, TextCell } from '@/components'
 import { ActionsCell, CollapseCell } from './cells'
-import { FilterForm } from './filter-form'
-import { useStore } from './store'
 import { PaymentHistory } from './types'
 
 const columns: ColumnDef<PaymentHistory>[] = [
@@ -258,23 +256,17 @@ const columns: ColumnDef<PaymentHistory>[] = [
   },
 ]
 
-const PaymentHistoryTable = () => {
-  const { data } = useStore((state) => ({
-    data: state.data,
-  }))
+interface PaymentHistoryTableProps {
+  data: PaymentHistory[]
+}
+
+const PaymentHistoryTable = ({ data }: PaymentHistoryTableProps) => {
   return (
-    <Flex direction="column" gap="1" className="bg-white w-full px-2 py-1">
-      <FilterForm />
-      <ScrollArea className="max-w-[calc(100vw_-_210px)]">
-        <Box className="min-w-max">
-          <DataTable
-            columns={columns}
-            data={data?.paymentHistories ?? []}
-            isRowSpan
-          />
-        </Box>
-      </ScrollArea>
-    </Flex>
+    <ScrollArea className="bg-white max-w-[calc(100vw_-_210px)]">
+      <Box className="min-w-max">
+        <DataTable columns={columns} data={data ?? []} isRowSpan />
+      </Box>
+    </ScrollArea>
   )
 }
 export { PaymentHistoryTable }

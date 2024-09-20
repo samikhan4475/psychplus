@@ -7,7 +7,7 @@ import { CreditCard } from '../types'
 
 const CardTypeCell = ({ row: { original } }: PropsWithRow<CreditCard>) => {
   return (
-    <Flex className="gap-x-2" align={'center'}>
+    <Flex className="gap-x-2 pr-1" align={'center'}>
       <TextCell className="!text-1">{original?.cardType}</TextCell>
       {original?.isPrimary && (
         <Badge

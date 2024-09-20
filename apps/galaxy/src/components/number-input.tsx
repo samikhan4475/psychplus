@@ -14,6 +14,7 @@ interface NumberInputProps {
   placeholder?: string
   autoFocus?: boolean
   className?: string
+  disabled?: boolean
 }
 
 const NumberInput = ({
@@ -23,6 +24,7 @@ const NumberInput = ({
   format = '###',
   className,
   autoFocus,
+  disabled,
 }: NumberInputProps) => {
   const form = useFormContext()
 
@@ -46,7 +48,7 @@ const NumberInput = ({
               placeholder={placeholder}
               name={fieldName}
               value={field.value}
-              disabled={field.disabled}
+              disabled={field.disabled || disabled}
               onValueChange={({ value }) => field.onChange(value)}
               onBlur={field.onBlur}
               customInput={TextField.Root}

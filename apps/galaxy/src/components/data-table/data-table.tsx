@@ -120,7 +120,7 @@ const DataTable = <TData, TValue>({
             theadClass,
           )}
         >
-          {table.getHeaderGroups().map((headerGroup) => (
+          {table.getHeaderGroups().map((headerGroup, index) => (
             <Table.Row key={headerGroup.id}>
               {headerGroup.headers.map((header) => {
                 const columnRelativeDepth = header.depth - header.column.depth
@@ -145,6 +145,11 @@ const DataTable = <TData, TValue>({
                     rowSpan={isRowSpan ? rowSpan : undefined}
                     colSpan={header.colSpan}
                     className={cn(
+                      'border-pp-table-border h-5 border border-r-0 p-0',
+                      {
+                        'border-b-0 ': header.colSpan > 1,
+                        'last:border-r': header.depth <= 1,
+                      },
                       'border-pp-table-border h-5 border border-r-0  px-[2px] py-0 last:border-r',
                       `w-[${header.getSize()}px]`,
                     )}
@@ -182,9 +187,9 @@ const DataTable = <TData, TValue>({
                 {row.getVisibleCells().map((cell) => (
                   <Table.Cell
                     key={cell.id}
-                    className="border-pp-table-border h-5 border-b border-l border-r-0 p-0 last:border-r"
+                    className="border-pp-table-border h-5 border-b border-l border-r-0 px-1 py-0.5 last:border-r"
                   >
-                    <Flex height="100%" align="center">
+                    <Flex height="100%" align="center" width="100%">
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext(),

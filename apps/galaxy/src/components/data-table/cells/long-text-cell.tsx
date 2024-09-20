@@ -8,13 +8,15 @@ interface LongTextCellProps {
 
 const LongTextCell = ({ children, className }: LongTextCellProps) => {
   return (
-    <Flex className={cn('flex h-full flex-col justify-center px-1', className)}>
+    <Flex className={cn('flex h-full flex-col justify-center', className)}>
       <Tooltip content={<Text className="select-text">{children}</Text>}>
         <Text
           className={cn(
-            'line-clamp-1 select-text overflow-ellipsis text-[11px]',
+            'text-pp-black-3 line-clamp-1 select-text overflow-ellipsis',
             className,
           )}
+          size="1"
+          weight="regular"
         >
           {children}
         </Text>

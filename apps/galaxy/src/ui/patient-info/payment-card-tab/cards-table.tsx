@@ -3,7 +3,12 @@
 import { Box } from '@radix-ui/themes'
 import { ColumnDef } from '@tanstack/react-table'
 import { ColumnHeader, DataTable, TextCell } from '@/components'
-import { ActionsCell, CardTypeCell, CardUseCell, StatusCell } from './cells'
+import {
+  ActionsCell,
+  CardTypeCell,
+  PrimaryRadioCell,
+  StatusCell,
+} from './cells'
 import { CreditCard } from './types'
 
 interface CardsTableProps {
@@ -12,17 +17,23 @@ interface CardsTableProps {
 
 const columns: ColumnDef<CreditCard>[] = [
   {
+    id: 'isPrimary',
+    header: () => <ColumnHeader label="Primary" />,
+    cell: ({ row }) => <PrimaryRadioCell row={row} />,
+  },
+  {
     id: 'type',
     accessorKey: 'type',
-    header: () => <ColumnHeader label="Type of Card" className="text-1" />,
+    header: ({ column }) => (
+      <ColumnHeader column={column} sortable label="Type of Card" />
+    ),
     cell: ({ row }) => <CardTypeCell row={row} />,
   },
-
   {
     id: 'numberLastFour',
     accessorKey: 'numberLastFour',
-    header: () => (
-      <ColumnHeader label="Credit/Debit Card #" className="text-1" />
+    header: ({ column }) => (
+      <ColumnHeader column={column} sortable label="Credit/Debit Card #" />
     ),
     cell: ({ row }) => (
       <TextCell className="!text-1">
@@ -33,7 +44,9 @@ const columns: ColumnDef<CreditCard>[] = [
   {
     id: 'name',
     accessorKey: 'name',
-    header: () => <ColumnHeader label="Name on Card" className="text-1" />,
+    header: ({ column }) => (
+      <ColumnHeader column={column} sortable label="Name on Card" />
+    ),
     cell: ({ row }) => (
       <TextCell className="!text-1">{row.original.name}</TextCell>
     ),
@@ -41,7 +54,9 @@ const columns: ColumnDef<CreditCard>[] = [
   {
     id: 'expiryDate',
     accessorKey: 'expiryDate',
-    header: () => <ColumnHeader label="Expiration Date" className="text-1" />,
+    header: ({ column }) => (
+      <ColumnHeader column={column} sortable label="Expiration Date" />
+    ),
     cell: ({ row }) => (
       <TextCell className="!text-1">{`${row.original.expireMonth}-${row.original.expireYear}`}</TextCell>
     ),
@@ -49,7 +64,9 @@ const columns: ColumnDef<CreditCard>[] = [
   {
     id: 'zip',
     accessorKey: 'zip',
-    header: () => <ColumnHeader label="Billing Zip code" className="text-1" />,
+    header: ({ column }) => (
+      <ColumnHeader column={column} sortable label="Billing Zip code" />
+    ),
     cell: ({ row }) => (
       <TextCell className="!text-1">
         {row.original.billingAddress.postalCode}
@@ -59,31 +76,29 @@ const columns: ColumnDef<CreditCard>[] = [
   {
     id: 'status',
     accessorKey: 'status',
-    header: () => <ColumnHeader label="Card Status" className="text-1" />,
+    header: ({ column }) => (
+      <ColumnHeader column={column} sortable label="Card Status" />
+    ),
     cell: ({ row }) => <StatusCell row={row} />,
   },
   {
-    id: 'UseCard',
-    header: () => <ColumnHeader label="Use Card" className="text-1" />,
-    cell: ({ row }) => <CardUseCell row={row} />,
-  },
-  {
     id: 'action',
-    header: () => <ColumnHeader label="Action" className="text-1" />,
-    cell: ActionsCell,
+    header: () => <ColumnHeader label="Action" />,
+    cell: ({ row }) => <ActionsCell row={row} />,
   },
 ]
 
-const CardsTable = ({ patientCards }: CardsTableProps) => {
+const CreditCardsTable = ({ patientCards }: CardsTableProps) => {
   return (
-    <Box className="bg-white min-h-full min-w-[100%] px-2 py-2">
+    <Box className="bg-white min-h-full min-w-[100%]">
       <DataTable
         columns={columns}
         data={patientCards ?? []}
-        theadClass="bg-indigo-3"
+        theadClass="bg-indigo-3 z-10"
+        sticky
       />
     </Box>
   )
 }
 
-export { CardsTable }
+export { CreditCardsTable }

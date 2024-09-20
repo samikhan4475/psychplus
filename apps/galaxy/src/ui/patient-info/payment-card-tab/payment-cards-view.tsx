@@ -6,8 +6,8 @@ import { Plus } from 'lucide-react'
 import { ActionResult } from '@/api'
 import { TabContentHeading, ViewLoadingPlaceholder } from '../shared'
 import { getPatientCards } from './actions'
-import { AddCardDialog } from './add-card-dialog'
-import { CardsTable } from './cards-table'
+import { AddCreditCardDialog } from './add-credit-card'
+import { CreditCardsTable } from './cards-table'
 import { CreditCard } from './types'
 
 interface PaymentCardsWidgetProps {
@@ -40,9 +40,9 @@ const PaymentCardView = ({
   }
 
   return (
-    <Flex direction={'column'}>
+    <Flex direction="column">
       <TabContentHeading title={TAB_TITLE}>
-        <Flex justify={'end'} className="flex-1">
+        <Flex justify="end" className="flex-1">
           <Button
             color="gray"
             size="1"
@@ -55,13 +55,14 @@ const PaymentCardView = ({
           </Button>
         </Flex>
       </TabContentHeading>
-      <ScrollArea>
-        <CardsTable patientCards={patientCardsResult?.data ?? []} />
+      <ScrollArea className="p-2">
+        <CreditCardsTable patientCards={patientCardsResult?.data ?? []} />
       </ScrollArea>
-      <AddCardDialog
+      <AddCreditCardDialog
         open={open}
         onClose={toggleOpen}
         stripeApiKey={stripeApiKey}
+        patientId={patientId}
       />
     </Flex>
   )

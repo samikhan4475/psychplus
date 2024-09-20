@@ -31,7 +31,6 @@ const columns = (
           onClick={() => {
             onSort?.(column.id)
           }}
-          className="!text-black justify-center !font-medium"
           column={column}
           label="Name"
         />

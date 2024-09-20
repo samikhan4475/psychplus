@@ -26,7 +26,11 @@ const FormContainer = <T extends FieldValues>({
 }: React.PropsWithChildren<FormContainerProps<T>>) => (
   <FormProvider {...form}>
     <form
-      onSubmit={form.handleSubmit(onSubmit)}
+      onSubmit={(e) => {
+        e.preventDefault()
+        e.stopPropagation()
+        form.handleSubmit(onSubmit)(e)
+      }}
       className={cn('flex flex-1 flex-col', formClassName)}
     >
       <fieldset

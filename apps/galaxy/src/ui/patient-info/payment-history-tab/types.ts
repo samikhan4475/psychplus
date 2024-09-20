@@ -23,6 +23,33 @@ interface PaymentHistory {
   subRows?: PaymentHistory[]
 }
 
+interface PaymentHistoryData {
+  time: string
+  date: string
+  charge: string
+  visit: string
+  method: string
+  paymentDescription: string
+  description: string
+  transaction: string
+  stripe: string
+  coPay: {
+    duePT: string
+    duePP: string
+    paid: string
+  }
+  coIns: {
+    duePT: string
+    duePP: string
+    paid: string
+  }
+  balance: {
+    duePT: string
+    duePP: string
+    paid: string
+  }
+}
+
 type PaymentHistoryRow = Row<PaymentHistory>
 
 interface GetPaymentHistoryData {
@@ -47,11 +74,20 @@ interface StaffCommentsBilling {
   comments: string
 }
 
-export type {
-  GetPaymentHistoryData,
-  PaymentHistory,
-  PaymentHistoryRow,
-  GetPaymentTableResponse,
-  StaffCommentsTreatment,
-  StaffCommentsBilling,
+enum PaymentMethod {
+  CreditCard = 'Credit Card',
+  Cheque = 'Cheque',
+  Cash = 'Cash',
+  CMD = 'CMD',
+}
+
+export {
+  PaymentMethod,
+  type GetPaymentHistoryData,
+  type PaymentHistoryData,
+  type PaymentHistory,
+  type PaymentHistoryRow,
+  type GetPaymentTableResponse,
+  type StaffCommentsTreatment,
+  type StaffCommentsBilling,
 }
