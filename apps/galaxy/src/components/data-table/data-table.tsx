@@ -62,7 +62,6 @@ const DataTable = <TData, TValue>({
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = useState({})
-  const [rowHover, setRowHover] = useState('')
   const [expanded, setExpanded] = useState<ExpandedState>({})
 
   useEffect(() => {
@@ -88,9 +87,6 @@ const DataTable = <TData, TValue>({
     onColumnVisibilityChange: setColumnVisibility,
     onRowSelectionChange: setRowSelection,
     onPaginationChange: setPagination,
-    meta: {
-      rowHover,
-    },
     getExpandedRowModel: getExpandedRowModel(),
     state: {
       expanded,
@@ -150,7 +146,6 @@ const DataTable = <TData, TValue>({
                         'border-b-0 ': header.colSpan > 1,
                         'last:border-r': header.depth <= 1,
                       },
-                      'border-pp-table-border h-5 border border-r-0  px-[2px] py-0 last:border-r',
                       `w-[${header.getSize()}px]`,
                     )}
                   >
@@ -175,9 +170,7 @@ const DataTable = <TData, TValue>({
                 onClick={() => {
                   onRowClick?.(row, table)
                 }}
-                onMouseEnter={() => setRowHover(row.id)}
-                onMouseLeave={() => setRowHover('')}
-                className={cn('hover:bg-gray-2', {
+                className={cn('group/row-hover hover:bg-gray-2', {
                   'cursor-pointer': onRowClick !== undefined,
                   'bg-pp-focus-bg': row.getIsSelected(),
                   'bg-pp-table-subRows hover:bg-pp-table-subRows':

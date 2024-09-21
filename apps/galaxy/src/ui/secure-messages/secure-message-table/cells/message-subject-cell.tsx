@@ -12,26 +12,22 @@ const MessageSubjectCell = ({
   row: Row<SecureMessage>
   table: CustomTable<SecureMessage>
 }) => {
-  const rowId = table.options.meta?.rowHover
-  const hovered = row.id === rowId
   return (
     <Flex justify="between" width="100%" className="relative">
       <TextCell>{row.original.subject}</TextCell>
-      {hovered && (
-        <Flex
-          gap="2"
-          justify="end"
-          pr="2"
-          className="bg-white absolute right-0 top-0  px-2"
-        >
-          <Tooltip content="Archieve">
-            <ArchieveIcon />
-          </Tooltip>
-          <Tooltip content="Mark as Read">
-            <MailIcon />
-          </Tooltip>
-        </Flex>
-      )}
+      <Flex
+        gap="2"
+        justify="end"
+        pr="2"
+        className="bg-white invisible absolute right-0 top-0 px-2 group-hover/row-hover:visible"
+      >
+        <Tooltip content="Archieve">
+          <ArchieveIcon />
+        </Tooltip>
+        <Tooltip content="Mark as Read">
+          <MailIcon />
+        </Tooltip>
+      </Flex>
     </Flex>
   )
 }

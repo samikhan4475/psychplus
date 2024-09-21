@@ -7,16 +7,13 @@ const SpecialtySelect = () => {
   return (
     <FormFieldContainer className="flex-row items-center gap-1">
       <FormFieldLabel className="!text-1">Specialty</FormFieldLabel>
-
       <CodesetSelect
         name="specialty"
         codeset={CODESETS.SpecialistType}
-        className={buttonClassName}
+        className={'w-[122px]'}
         size="1"
       />
     </FormFieldContainer>
   )
 }
-const buttonClassName =
-  'border-pp-gray-2 w-full min-w-[122px] h-6 border border-solid !outline-none [box-shadow:none]'
 export { SpecialtySelect }

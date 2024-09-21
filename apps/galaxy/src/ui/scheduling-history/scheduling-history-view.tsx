@@ -1,6 +1,9 @@
 'use client'
 
+import { useState } from 'react'
 import { Box, Flex, Heading } from '@radix-ui/themes'
+import { TreatmentBillingAlert } from '@/components'
+import { StaffComment } from '@/types'
 import { SchedulingHistoryTable } from './scheduling-history-table'
 
 interface SchedulingHistoryViewProps {
@@ -8,6 +11,12 @@ interface SchedulingHistoryViewProps {
 }
 
 const SchedulingHistoryView = ({ patientId }: SchedulingHistoryViewProps) => {
+  const [isOpen, setIsOpen] = useState(true)
+
+  const closeDialog = () => {
+    setIsOpen(false)
+  }
+
   return (
     <Flex className="w-full p-[1px]" direction="column" gap="1">
       <Box
@@ -20,8 +29,21 @@ const SchedulingHistoryView = ({ patientId }: SchedulingHistoryViewProps) => {
         <Heading size="4">Scheduling History</Heading>
       </Box>
       <SchedulingHistoryTable />
+      <TreatmentBillingAlert
+        title="Billing"
+        isOpen={isOpen}
+        closeDialog={closeDialog}
+        data={comment ?? []}
+      />
     </Flex>
   )
 }
+
+const comment: StaffComment[] = [...Array(1)].map(() => ({
+  date_time: '03/12/24',
+  staff: 'John Smith, MD',
+  comments:
+    "The EHR's scheduling module has made appointment management much easier and more organized. It’s great to have automated reminders for both patients and staff",
+}))
 
 export { SchedulingHistoryView }
