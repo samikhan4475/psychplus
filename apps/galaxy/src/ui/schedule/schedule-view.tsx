@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { Flex, Heading, Tabs } from '@radix-ui/themes'
+import toast from 'react-hot-toast'
 import { cn } from '@/utils'
 import { StateCodeSet } from '../visit/add-visit/types'
 import { getClinicsOptionsAction, getProvidersOptionsAction } from './actions'
@@ -24,19 +25,30 @@ const ScheduleView = ({ states }: { states: StateCodeSet[] }) => {
     setClinicsOptions: state.setClinicsOptions,
   }))
 
+  const getProvidersAndClinicsOptions = async () => {
+    const [providersResponse, clinicsResponse] = await Promise.all([
+      getProvidersOptionsAction(),
+      getClinicsOptionsAction(),
+    ])
+
+    if (providersResponse.state === 'error') {
+      toast.error(providersResponse.error)
+    }
+
+    if (clinicsResponse.state === 'error') {
+      toast.error(clinicsResponse.error)
+    }
+
+    setProvidersOptions(
+      providersResponse.state === 'error' ? [] : providersResponse.data,
+    )
+    setClinicsOptions(
+      clinicsResponse.state === 'error' ? [] : clinicsResponse.data,
+    )
+  }
+
   useEffect(() => {
-    getProvidersOptionsAction().then((response) => {
-      if (response.state === 'error') {
-        throw new Error(response.error)
-      }
-      setProvidersOptions(response.data)
-    })
-    getClinicsOptionsAction().then((response) => {
-      if (response.state === 'error') {
-        throw new Error(response.error)
-      }
-      setClinicsOptions(response.data)
-    })
+    getProvidersAndClinicsOptions()
   }, [])
 
   return (
@@ -68,7 +80,7 @@ const ScheduleView = ({ states }: { states: StateCodeSet[] }) => {
             selectedTab === TabValue.Calendar,
         })}
       >
-        <CalendarView />
+        <CalendarView states={states} />
       </Tabs.Content>
       <Tabs.Content value={TabValue.Scheduler}>Scheduler View</Tabs.Content>
       <Tabs.Content value={TabValue.ProviderCoding}>

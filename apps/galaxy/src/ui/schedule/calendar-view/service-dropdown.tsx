@@ -1,14 +1,13 @@
-import { CodesetSelect, FormFieldLabel } from '@/components'
+import { CodesetSelect, FormFieldContainer, FormFieldLabel } from '@/components'
 import { CODESETS } from '@/constants'
-import { FormFieldContainer } from './form-field-container'
 
 const ServiceDropdown = () => {
   return (
-    <FormFieldContainer className="flex-1">
+    <FormFieldContainer>
       <FormFieldLabel className="text-[12px]">Service</FormFieldLabel>
       <CodesetSelect
         codeset={CODESETS.ServicesOffered}
-        name="service"
+        name="serviceId"
         size="1"
       />
     </FormFieldContainer>

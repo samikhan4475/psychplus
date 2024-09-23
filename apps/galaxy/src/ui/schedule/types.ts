@@ -108,10 +108,6 @@ interface Specialist {
   rating?: number
 }
 
-interface AvailableSlotsMock extends AvailableSlots {
-  specialist: Specialist
-}
-
 interface GetAppointmentSlotsResponse<T> {
   appointments: AvailableSlotsEvent<T>[]
   total: number
@@ -190,7 +186,6 @@ export type {
   AvailableSlotsInDateFormat,
   Specialist,
   AvailableSlotsEvent,
-  AvailableSlotsMock,
   Option,
   Appointment,
 }

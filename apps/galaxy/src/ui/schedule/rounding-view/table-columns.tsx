@@ -2,7 +2,7 @@ import { ColumnDef } from '@tanstack/react-table'
 import { ColumnHeader, TextCell } from '@/components'
 import { Sort } from '@/types'
 import { getSortDir } from '@/utils'
-import { Appointment } from '../types'
+import { BookedAppointment } from '../types/schedule'
 import {
   ActionsCell,
   GroupSelectCell,
@@ -14,7 +14,7 @@ import {
   VisitStatusSelectCell,
 } from './table-cells'
 
-const columns = (sort?: Sort): ColumnDef<Appointment>[] => {
+const columns = (sort?: Sort): ColumnDef<BookedAppointment>[] => {
   return [
     {
       id: 'date-header',

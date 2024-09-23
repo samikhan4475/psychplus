@@ -20,7 +20,7 @@ const getProvidersOptionsAction = async (): Promise<
 
   const transformedData = response.data.map((data) => ({
     label: `${data.legalName.firstName} ${data.legalName.lastName}`,
-    value: data.id,
+    value: String(data.id),
   }))
 
   return {

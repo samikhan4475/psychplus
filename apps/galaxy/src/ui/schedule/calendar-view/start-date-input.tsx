@@ -1,11 +1,27 @@
-import { DatePickerInput, FormFieldLabel } from '@/components'
-import { FormFieldContainer } from './form-field-container'
+import { CalendarDate } from '@internationalized/date'
+import { useFormContext } from 'react-hook-form'
+import {
+  DatePickerInput,
+  FormFieldContainer,
+  FormFieldLabel,
+} from '@/components'
 
 const StartDateInput = () => {
+  const form = useFormContext()
+
+  const handleChange = (dateValue: CalendarDate) => {
+    if (dateValue) {
+      const { year, month, day } = dateValue
+      const convertedDate = new Date(year, month - 1, day)
+      form.setValue('startDate', convertedDate)
+    } else {
+      form.setValue('startDate', undefined)
+    }
+  }
   return (
-    <FormFieldContainer className="flex-1">
+    <FormFieldContainer>
       <FormFieldLabel className="text-[12px]">From</FormFieldLabel>
-      <DatePickerInput field="startDate" />
+      <DatePickerInput handleChange={handleChange} field="date" />
     </FormFieldContainer>
   )
 }

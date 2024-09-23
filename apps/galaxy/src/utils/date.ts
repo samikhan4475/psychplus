@@ -4,6 +4,7 @@ import {
   getDayOfWeek,
   type DateValue,
 } from '@internationalized/date'
+import { format } from 'date-fns'
 
 const MONTH_LABELS = [
   'January',
@@ -146,6 +147,15 @@ function formatDateToISOString(
   return formattedDate.toISOString()
 }
 
+const formatDate = (
+  date: Date | null | undefined | string,
+  dateFormat = 'yyyy-MM-dd',
+): string => {
+  if (!date) return ''
+  if (typeof date === 'string') date = new Date(date)
+  return format(date, dateFormat)
+}
+
 export {
   getCalendarDate,
   getLocalCalendarDate,
@@ -159,4 +169,5 @@ export {
   getSlashedDateString,
   formatDateTime,
   formatDateToISOString,
+  formatDate,
 }

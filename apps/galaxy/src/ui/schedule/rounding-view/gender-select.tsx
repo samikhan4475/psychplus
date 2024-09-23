@@ -2,7 +2,7 @@
 
 import { CodesetSelect, FormFieldLabel } from '@/components'
 import { CODESETS } from '@/constants'
-import { FormFieldContainer } from '../shared'
+import { FormFieldContainer } from '@/components'
 
 const GenderSelect = () => {
   return (

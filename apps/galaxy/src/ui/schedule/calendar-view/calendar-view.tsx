@@ -6,17 +6,21 @@ import getDay from 'date-fns/getDay'
 import enUS from 'date-fns/locale/en-US'
 import parse from 'date-fns/parse'
 import startOfWeek from 'date-fns/startOfWeek'
-import { Calendar, dateFnsLocalizer } from 'react-big-calendar'
+import { Calendar, dateFnsLocalizer, EventProps } from 'react-big-calendar'
 import 'react-big-calendar/lib/css/react-big-calendar.css'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { getLocalTimeZone } from '@internationalized/date'
 import { PlusIcon } from '@/components/icons'
-import { getAppointmentsAction } from '../actions/get-appointments'
 import { useStore } from '../store'
-import { AvailableSlotsEvent, AvailableSlotsMock } from '../types'
 import { CalendarFilterCard } from './calendar-filter-card'
 import { CustomEvent } from './custom-event'
 import './styles.css'
+import { AddVisit } from '@/ui/visit/add-visit'
+import { StateCodeSet } from '@/ui/visit/add-visit/types'
+import {
+  AppointmentEventData,
+  AvailableSlotsEvent,
+} from '../types/calender'
 
 const locales = {
   'en-US': enUS,
@@ -37,11 +41,8 @@ interface DateLocalizerInterface {
   localizer: DateLocalizerType
 }
 
-// @ts-ignore
-const CustomTimeSlot = (props) => {
-  const [showButton, setShowButton] = useState<boolean>()
-
-  if (props.resource === undefined) return props.children
+const CustomTimeSlot = ({ states }: { states: StateCodeSet[] }) => {
+  const [showButton, setShowButton] = useState<boolean>(false)
 
   return (
     <Flex
@@ -52,20 +53,26 @@ const CustomTimeSlot = (props) => {
       onMouseLeave={() => setShowButton(false)}
     >
       {showButton && (
-        <IconButton
-          variant="ghost"
-          className="bg-pp-primary-light absolute right-0 top-0 z-[200] h-5 w-5 translate-x-[-25%] translate-y-[25%] rounded-[0px] p-0.5"
-        >
-          <PlusIcon />
-        </IconButton>
+        <AddVisit states={states}>
+          <IconButton
+            variant="ghost"
+            className="bg-pp-primary-light absolute right-0 top-0 z-[200] h-5 w-5 translate-x-[-25%] translate-y-[25%] rounded-[0px] p-0.5"
+          >
+            <PlusIcon />
+          </IconButton>
+        </AddVisit>
       )}
     </Flex>
   )
 }
 
-const components = {
-  timeSlotWrapper: CustomTimeSlot,
-  event: CustomEvent,
+const CalendarComponent = (states: StateCodeSet[]) => ({
+  timeSlotWrapper: () => <CustomTimeSlot states={states} />,
+  event: (
+    props: React.JSX.IntrinsicAttributes &
+      EventProps<AvailableSlotsEvent<AppointmentEventData>>,
+  ) => <CustomEvent {...props} />,
+
   week: {
     header: ({ date, localizer }: DateLocalizerInterface) => {
       const dayName = localizer.format(date, 'EEE')
@@ -89,32 +96,28 @@ const components = {
       )
     },
   },
-}
+})
 
 const formats = {
   timeGutterFormat: 'hh a',
 }
 
-const CalendarView = () => {
-  const [slots, setSlots] = useState<AvailableSlotsEvent<AvailableSlotsMock>[]>(
-    [],
-  )
+interface CalendarViewProps {
+  states: StateCodeSet[]
+}
+
+const CalendarView = ({ states }: CalendarViewProps) => {
+  const [slots, setSlots] = useState<
+    AvailableSlotsEvent<AppointmentEventData>[]
+  >([])
+
   const { weekStartDate } = useStore((state) => ({
     weekStartDate: state.weekStartDate,
   }))
 
-  useEffect(() => {
-    getAppointmentsAction().then((response) => {
-      if (response.state === 'error') {
-        throw new Error(response.error)
-      }
-      setSlots(response.data.appointments)
-    })
-  }, [])
-
   return (
     <>
-      <CalendarFilterCard />
+      <CalendarFilterCard setSlots={setSlots} states={states} />
       <Flex direction="column" className="mt-1.5 flex-1 overflow-y-auto" px="5">
         <Flex direction="column" className="h-full">
           <Calendar
@@ -122,7 +125,7 @@ const CalendarView = () => {
             view="week"
             toolbar={false}
             events={slots}
-            components={components}
+            components={CalendarComponent(states)}
             startAccessor="start"
             endAccessor="end"
             formats={formats}

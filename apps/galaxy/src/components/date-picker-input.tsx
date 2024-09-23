@@ -1,5 +1,6 @@
 'use client'
 
+import { CalendarDate } from '@internationalized/date'
 import { Box, Text } from '@radix-ui/themes'
 import {
   Calendar as CalendarIcon,
@@ -34,6 +35,7 @@ interface DatePickerInputProps<T extends DateValue> extends DatePickerProps<T> {
   className?: string
   datePickerClass?: string
   dateInputClass?: string
+  handleChange?: (date: CalendarDate) => void
 }
 
 const DatePickerInput = <T extends DateValue>({
@@ -45,6 +47,7 @@ const DatePickerInput = <T extends DateValue>({
   className,
   datePickerClass,
   dateInputClass,
+  handleChange,
   ...props
 }: DatePickerInputProps<T>) => {
   const form = useFormContext()
@@ -67,7 +70,10 @@ const DatePickerInput = <T extends DateValue>({
           <DatePicker
             name={name}
             value={value ?? null} // Ensure it handles null or undefined
-            onChange={onChange}
+            onChange={(date) => {
+              onChange(date)
+              handleChange?.(date as CalendarDate)
+            }}
             onBlur={onBlur}
             isRequired
             validationBehavior="aria"

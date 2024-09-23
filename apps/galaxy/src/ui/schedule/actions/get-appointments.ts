@@ -1,192 +1,188 @@
-import { parseAbsolute } from '@internationalized/date'
-import * as api from '@/api'
-import {
-  AvailableSlots,
-  GetAppointmentSlotsResponse,
-  Specialist,
-} from '../types'
+'use server'
 
-interface AvailableSlotsMock extends AvailableSlots {
-  specialist: Specialist
+import { parseAbsolute } from '@internationalized/date'
+import { addDays } from 'date-fns'
+import toast from 'react-hot-toast'
+import * as api from '@/api'
+import { formatDate } from '@/utils'
+import {
+  StaffAppointmentAvailability,
+  StaffAppointmentAvailabilityResponse,
+} from '../types/appointments'
+import {
+  AppointmentEventData,
+  AvailableSlotsEvent,
+  CalenderViewSchemaType,
+} from '../types/calender'
+import { BookedAppointment } from '../types/schedule'
+
+const parseZonedDate = (dateString: string, timeZoneId: string): Date => {
+  const zonedDate = parseAbsolute(dateString, timeZoneId)
+  return new Date(
+    zonedDate.year,
+    zonedDate.month - 1,
+    zonedDate.day,
+    zonedDate.hour,
+    zonedDate.minute,
+    zonedDate.second,
+    zonedDate.millisecond,
+  )
 }
 
-const getAppointmentsAction = async (): Promise<
-  api.ActionResult<GetAppointmentSlotsResponse<AvailableSlotsMock>>
-> => {
-  const response = await mockFetchAllAppointments()
+const transformOutAvailableAppointment = (filters: CalenderViewSchemaType) => {
+  const payload = {
+    maxDaysOutToLook: 7,
+    staffIds: filters.provider ? [filters.provider] : null,
+    locationIds: filters.location ? [filters.location] : null,
+    specialistTypeCode: filters.providerType ?? '',
+    startingDate: filters.startDate ? formatDate(filters.startDate) : '',
+    stateId: filters.stateId ?? '',
+    serviceId: filters.serviceId ?? '',
+    gender: filters.gender || '',
+    language: filters.language || '',
+    isFirstResponder: filters.isFirstResponder || '',
+  }
 
-  if (response.state === 'error') {
+  return Object.fromEntries(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    Object.entries(payload).filter(([_, value]) => value),
+  )
+}
+
+const transformOutBookedAppointment = (filters: CalenderViewSchemaType) => {
+  const payload = {
+    isIncludeMetadataResourceChangeControl: true,
+    isIncludeMetadataResourceIds: true,
+    isIncludeMetadataResourceStatus: true,
+    includePatientData: true,
+    includeFinancialData: true,
+    includeLocation: true,
+    includeStaff: true,
+    includeSpecialist: true,
+    includeEncounterTypes: true,
+    includeServiceUnit: true,
+    includeServiceGroup: true,
+    includeCptCodes: true,
+    includePatientTransactions: true,
+    includePatientNotes: true,
+
+    // TODO: Backend is working on these required filters.
+    // staffIds: filters.provider ? [filters.provider] : null,
+    // language: filters.language || '',
+    // isFirstResponder: filters.isFirstResponder || '',
+    // stateId: filters.stateId ?? '',
+
+    provideType: filters.providerType ?? '',
+    visitMedium: filters.visitMedium ?? '',
+    serviceId: filters.serviceId ? [filters.serviceId] : null,
+    locationId: filters.location ?? '',
+    startingDate: filters.startDate ? formatDate(filters.startDate) : '',
+    endingDate: filters.startDate
+      ? formatDate(addDays(new Date(filters.startDate), 7))
+      : '',
+    gender: filters.gender || '',
+  }
+
+  return Object.fromEntries(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    Object.entries(payload).filter(([_, value]) => value),
+  )
+}
+
+const transformInAvailableAppointments = (
+  data: StaffAppointmentAvailabilityResponse,
+) => {
+  return data.staffAppointmentAvailabilities.flatMap((provider) =>
+    provider.availableSlots.map((slot) => {
+      const start = parseZonedDate(slot.startDate, provider.clinic.timeZoneId)
+      const end = parseZonedDate(slot.endDate, provider.clinic.timeZoneId)
+      const title = `${provider.specialist.legalName.firstName} ${provider.specialist.legalName.lastName}`
+
+      return {
+        start,
+        end,
+        title,
+        data: {
+          appointmentType: 'available',
+          ...provider,
+          ...slot,
+          timeZoneId: provider.clinic.timeZoneId,
+        },
+      }
+    }),
+  )
+}
+
+const transformInBookedAppointments = (data: BookedAppointment[]) => {
+  return data.map((appointment) => {
+    const start = new Date(appointment.appointmentDate)
+    const end = new Date(start.getTime() + 20 * 60000) // Assuming 20 mins duration; adjust if needed
+    const title = `${appointment.name} (${appointment.visitType})`
+
+    return {
+      start,
+      end,
+      title,
+      data: {
+        appointmentType: 'booked',
+        ...appointment,
+      },
+    }
+  })
+}
+
+const getAppointments = async (
+  filters: CalenderViewSchemaType,
+): Promise<api.ActionResult<AvailableSlotsEvent<AppointmentEventData>[]>> => {
+  try {
+    const payload = transformOutAvailableAppointment(filters)
+    const [availableResponse, bookedResponse] = await Promise.all([
+      api.POST(api.GET_AVAILABLE_APPOINTMENT_ENDPOINT, payload),
+      api.POST<BookedAppointment[]>(
+        api.SEARCH_BOOKED_APPOINTMENTS_ENDPOINT,
+        transformOutBookedAppointment(filters),
+      ),
+    ])
+
+    if (availableResponse.state === 'error') {
+      throw new Error(availableResponse.error)
+    }
+
+    if (bookedResponse.state === 'error') {
+      throw new Error(bookedResponse.error)
+    }
+
+    const availableAppointments = transformInAvailableAppointments(
+      availableResponse.data as StaffAppointmentAvailabilityResponse,
+    ).flat()
+
+    const bookedAppointments = transformInBookedAppointments(
+      bookedResponse.data,
+    ).flat()
+
+    const data = [...availableAppointments, ...bookedAppointments].sort(
+      (a, b) => a.start.getTime() - b.start.getTime(),
+    )
+
+    if (availableAppointments.length === 0) {
+      toast.error('No slots available!')
+    }
+
+    return {
+      state: 'success',
+      data: data as AvailableSlotsEvent<
+        StaffAppointmentAvailability | BookedAppointment
+      >[],
+    }
+  } catch (error) {
+    const errorMessage =
+      (error as Error).message || 'Failed to fetch appointments!'
+    toast.error(errorMessage)
     return {
       state: 'error',
-      error: response.error,
+      error: errorMessage,
     }
-  }
-
-  const total = Number(response.headers.get('psychplus-totalresourcecount'))
-  const appointmentsData = response.data.map((slot) => {
-    const zonedStartDate = parseAbsolute(slot.startDate, slot.timeZoneId)
-    const zonedEndDate = parseAbsolute(slot.endDate, slot.timeZoneId)
-
-    return {
-      start: new Date(
-        zonedStartDate.year,
-        zonedStartDate.month - 1,
-        zonedStartDate.day,
-        zonedStartDate.hour,
-        zonedStartDate.minute,
-        zonedStartDate.second,
-        zonedStartDate.millisecond,
-      ),
-      end: new Date(
-        zonedEndDate.year,
-        zonedEndDate.month - 1,
-        zonedEndDate.day,
-        zonedEndDate.hour,
-        zonedEndDate.minute,
-        zonedEndDate.second,
-        zonedEndDate.millisecond,
-      ),
-      title: `${slot.specialist.legalName.firstName} ${slot.specialist.legalName.lastName}`,
-      data: slot,
-    }
-  })
-
-  return {
-    state: 'success',
-    data: {
-      appointments: appointmentsData,
-      total,
-    },
   }
 }
 
-const mockFetchAllAppointments = async (): Promise<
-  api.NetworkResult<AvailableSlotsMock[]>
-> => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve({
-        headers: new Headers({}),
-        state: 'success',
-        data: [
-          {
-            type: 'in-person',
-            isPlusSlot: false,
-            startDate: '2024-09-10T06:00:00Z',
-            endDate: '2024-09-10T06:20:00Z',
-            duration: 20,
-            servicesOffered: ['53f6b5cc-6d12-4e09-bca9-713a0ca0c5e1'],
-            timeZoneId: 'America/New_York',
-            teleState: [],
-            specialist: {
-              id: 347,
-              isTest: false,
-              legalName: {
-                firstName: 'Annie',
-                lastName: 'Shipley',
-              },
-              staffRoleCode: '1',
-            },
-          },
-          {
-            type: 'in-person',
-            isPlusSlot: false,
-            startDate: '2024-09-10T08:00:00Z',
-            endDate: '2024-09-10T08:20:00Z',
-            duration: 20,
-            servicesOffered: ['53f6b5cc-6d12-4e09-bca9-713a0ca0c5e1'],
-            timeZoneId: 'America/New_York',
-            teleState: [],
-            specialist: {
-              id: 347,
-              isTest: false,
-              legalName: {
-                firstName: 'Annie',
-                lastName: 'Shipley',
-              },
-              staffRoleCode: '1',
-            },
-          },
-          {
-            type: 'in-person',
-            isPlusSlot: false,
-            startDate: '2024-09-10T08:20:00Z',
-            endDate: '2024-09-10T08:40:00Z',
-            duration: 20,
-            servicesOffered: ['53f6b5cc-6d12-4e09-bca9-713a0ca0c5e1'],
-            timeZoneId: 'America/New_York',
-            teleState: [],
-            specialist: {
-              id: 347,
-              isTest: false,
-              legalName: {
-                firstName: 'Annie',
-                lastName: 'Shipley',
-              },
-              staffRoleCode: '1',
-            },
-          },
-          {
-            type: 'in-person',
-            isPlusSlot: false,
-            startDate: '2024-09-10T10:00:00Z',
-            endDate: '2024-09-10T10:20:00Z',
-            duration: 20,
-            servicesOffered: ['53f6b5cc-6d12-4e09-bca9-713a0ca0c5e1'],
-            timeZoneId: 'America/New_York',
-            teleState: [],
-            specialist: {
-              id: 347,
-              isTest: false,
-              legalName: {
-                firstName: 'Annie',
-                lastName: 'Shipley',
-              },
-              staffRoleCode: '1',
-            },
-          },
-          {
-            type: 'in-person',
-            isPlusSlot: false,
-            startDate: '2024-09-10T10:20:00Z',
-            endDate: '2024-09-10T10:40:00Z',
-            duration: 20,
-            servicesOffered: ['53f6b5cc-6d12-4e09-bca9-713a0ca0c5e1'],
-            timeZoneId: 'America/New_York',
-            teleState: [],
-            specialist: {
-              id: 347,
-              isTest: false,
-              legalName: {
-                firstName: 'Annie',
-                lastName: 'Shipley',
-              },
-              staffRoleCode: '1',
-            },
-          },
-          {
-            type: 'video',
-            isPlusSlot: false,
-            startDate: '2024-09-14T08:20:00Z',
-            endDate: '2024-09-14T08:40:00Z',
-            duration: 20,
-            servicesOffered: ['53f6b5cc-6d12-4e09-bca9-713a0ca0c5e1'],
-            timeZoneId: 'America/New_York',
-            teleState: [],
-            specialist: {
-              id: 347,
-              isTest: false,
-              legalName: {
-                firstName: 'Annie',
-                lastName: 'Shipley',
-              },
-              staffRoleCode: '1',
-            },
-          },
-        ],
-      })
-    }, 2000)
-  })
-}
-
-export { getAppointmentsAction }
+export { getAppointments }

@@ -1,11 +1,14 @@
 'use client'
 
-import { DatePickerInput, FormFieldLabel } from '@/components'
-import { FormFieldContainer } from '../shared'
+import {
+  DatePickerInput,
+  FormFieldContainer,
+  FormFieldLabel,
+} from '@/components'
 
 const StartDateInput = () => {
   return (
-    <FormFieldContainer className='flex-1'>
+    <FormFieldContainer className="flex-1">
       <FormFieldLabel>From</FormFieldLabel>
       <DatePickerInput field="startDate" />
     </FormFieldContainer>

@@ -1,12 +1,20 @@
-import { CodesetSelect, FormFieldLabel } from '@/components'
-import { CODESETS } from '@/constants'
-import { FormFieldContainer } from './form-field-container'
+import { FormFieldContainer, FormFieldLabel, SelectInput } from '@/components'
+import { StateCodeSet } from '@/ui/visit/add-visit/types'
 
-const StateSelect = () => {
+interface StateSelectProps {
+  states: StateCodeSet[]
+}
+
+const StateSelect = ({ states }: StateSelectProps) => {
+  const options = states.map((v) => ({
+    label: v.stateName,
+    value: v.id,
+  }))
+
   return (
-    <FormFieldContainer className="flex-1">
+    <FormFieldContainer>
       <FormFieldLabel className="text-[12px]">State</FormFieldLabel>
-      <CodesetSelect placeholder='Select State' name="usState" codeset={CODESETS.UsStates} size="1" />
+      <SelectInput field="stateId" options={options} buttonClassName="flex-1" />
     </FormFieldContainer>
   )
 }

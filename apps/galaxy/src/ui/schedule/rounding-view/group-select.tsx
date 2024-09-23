@@ -1,7 +1,7 @@
 'use client'
 
 import { FormFieldLabel, SelectInput } from '@/components'
-import { FormFieldContainer } from '../shared'
+import { FormFieldContainer } from '@/components'
 import { useRoundingFiltersContext } from './context'
 
 const options = [

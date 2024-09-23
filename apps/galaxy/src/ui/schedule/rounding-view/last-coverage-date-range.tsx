@@ -1,7 +1,7 @@
 'use client'
 
 import { DatePickerInput, FormFieldLabel } from '@/components'
-import { FormFieldContainer } from '../shared'
+import { FormFieldContainer } from '@/components'
 import { useRoundingFiltersContext } from './context'
 
 const LastCoverageDateRange = () => {

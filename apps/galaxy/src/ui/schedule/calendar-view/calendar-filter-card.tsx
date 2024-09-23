@@ -2,8 +2,16 @@ import { useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Flex } from '@radix-ui/themes'
 import { SubmitHandler, useForm } from 'react-hook-form'
-import z from 'zod'
+import toast from 'react-hot-toast'
 import { FormContainer } from '@/components'
+import { StateCodeSet } from '@/ui/visit/add-visit/types'
+import { getAppointments } from '../actions'
+import {
+  AppointmentEventData,
+  AvailableSlotsEvent,
+  CalenderViewSchemaType,
+} from '../types/calender'
+import { calenderViewSchema } from './calender-view-schema'
 import { ClearFilterButton } from './clear-filter-button'
 import { FirstResponderSelect } from './first-responder-select'
 import { GenderSelect } from './gender-select'
@@ -19,84 +27,65 @@ import { StartDateInput } from './start-date-input'
 import { StateSelect } from './state-select'
 import { VisitMediumDropdown } from './visit-medium-dropdown'
 
-const schema = z.object({
-  startDate: z.date().optional(),
-  endDate: z.date().optional(),
-  usState: z.string().optional(),
-  location: z.string().optional(),
-  service: z.string().optional(),
-  provider: z.string().optional(),
-  visitMedium: z.string().optional(),
-  providerType: z.string().optional(),
-  gender: z.string().optional(),
-  timeOfTheDay: z.string().optional(),
-  language: z.string().optional(),
-  isFirstResponder: z.boolean().optional(),
-})
+interface CalendarFilterCardProps {
+  setSlots: (slots: AvailableSlotsEvent<AppointmentEventData>[]) => void
+  states: StateCodeSet[]
+}
 
-type SchemaType = z.infer<typeof schema>
-
-const CalendarFilterCard = () => {
+const CalendarFilterCard = ({ setSlots, states }: CalendarFilterCardProps) => {
   const [isPartialFilterView, setIsPartialFilterView] = useState<boolean>(true)
-  const form = useForm<SchemaType>({
-    resolver: zodResolver(schema),
+  const form = useForm<CalenderViewSchemaType>({
+    resolver: zodResolver(calenderViewSchema),
     criteriaMode: 'all',
     defaultValues: {
       startDate: undefined,
       endDate: undefined,
-      usState: '',
+      stateId: '',
     },
   })
 
-  const onSubmit: SubmitHandler<SchemaType> = () => {
-    //TODO: implement when integrating APIs
+  const onSubmit: SubmitHandler<CalenderViewSchemaType> = async (values) => {
+    const result = await getAppointments(values)
+    if (result.state === 'error') {
+      toast.error(result.error)
+      return
+    }
+    setSlots(result.data)
   }
 
+  const FilterButton = isPartialFilterView
+    ? ShowFiltersButton
+    : HideFiltersButton
   return (
-    <Flex
-      className="bg-white z-10 rounded-[4px] px-1.5 shadow-3"
-      direction="column"
-      position="sticky"
-      top="0"
-      mx="5"
-      mt="1"
-    >
+    <Flex className="bg-white z-10 rounded-[4px] px-1.5 shadow-3" mx="5" mt="1">
       <FormContainer form={form} onSubmit={onSubmit}>
         <Flex
-          direction="column"
-          gap="1"
-          wrap="wrap"
-          py="1"
           className="sticky top-0"
+          wrap="wrap"
+          gap="2"
+          align="center"
+          justify="start"
+          py="1"
         >
-          <Flex align="center" gap="2">
-            <StartDateInput />
-            <StateSelect />
-            <LocationDropdown />
-            <ServiceDropdown />
-            <ProviderDropdown />
-            <VisitMediumDropdown />
-            {isPartialFilterView && (
-              <>
-                <ClearFilterButton />
-                <SearchButton />
-                <ShowFiltersButton
-                  onClick={() => setIsPartialFilterView(false)}
-                />
-              </>
-            )}
-          </Flex>
+          <StartDateInput />
+          <StateSelect states={states} />
+          <LocationDropdown />
+          <ServiceDropdown />
+          <ProviderDropdown />
+          <VisitMediumDropdown />
           {!isPartialFilterView && (
-            <Flex align="center" gap="2">
+            <>
               <ProviderTypeDropdown />
               <GenderSelect />
               <LanguageSelect />
               <FirstResponderSelect />
-              <HideFiltersButton onClick={() => setIsPartialFilterView(true)} />
-              <ClearFilterButton />
-              <SearchButton />
-            </Flex>
+            </>
           )}
+          <FilterButton
+            onClick={() => setIsPartialFilterView(!isPartialFilterView)}
+          />
+          <ClearFilterButton />
+          <SearchButton />
         </Flex>
       </FormContainer>
     </Flex>

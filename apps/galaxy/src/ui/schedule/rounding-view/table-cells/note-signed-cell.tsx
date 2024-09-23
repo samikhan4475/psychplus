@@ -1,11 +1,11 @@
 import { CheckCircledIcon, CrossCircledIcon } from '@radix-ui/react-icons'
 import { Box } from '@radix-ui/themes'
 import { PropsWithRow } from '@/components'
-import { Appointment } from '../../types'
+import { BookedAppointment } from '../../types/schedule'
 
 const NoteSignedCell = ({
   row: { original: appointment },
-}: PropsWithRow<Appointment>) => {
+}: PropsWithRow<BookedAppointment>) => {
   return (
     <Box pl="1" width="100%">
       {appointment.isNoteSigned ? (
