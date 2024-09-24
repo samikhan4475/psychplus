@@ -1,4 +1,5 @@
 import { QuestionnairesView } from '@/ui/questionnaires'
+import { getQuestionnairesAims } from '@/ui/questionnaires/aims-tab/api'
 import { getQuestionnairesAudit } from '@/ui/questionnaires/audit-tab/api'
 import { getQuestionnairesDashboard } from '@/ui/questionnaires/dashboard-tab/dashboard-widget/api'
 import { getQuestionnairesDast10 } from '@/ui/questionnaires/dast-10-tab/api'
@@ -22,6 +23,7 @@ const QuestionnairesInfoPage = async ({ params }: QuestionnairesPageProps) => {
     questionnairesSnapIvResponse,
     questionnairesDast10Response,
     questionnairesAuditResponse,
+    questionnairesAimsResponse,
   ] = await Promise.all([
     getQuestionnairesDashboard({ patientId: params.id }),
     getQuestionnairesGad7({ patientId: params.id }),
@@ -30,6 +32,7 @@ const QuestionnairesInfoPage = async ({ params }: QuestionnairesPageProps) => {
     getQuestionnairesSnapIv({ patientId: params.id }),
     getQuestionnairesDast10({ patientId: params.id }),
     getQuestionnairesAudit({ patientId: params.id }),
+    getQuestionnairesAims({ patientId: params.id }),
   ])
 
   if (questionnairesDashboardResponse.state === 'error') {
@@ -58,6 +61,9 @@ const QuestionnairesInfoPage = async ({ params }: QuestionnairesPageProps) => {
   if (questionnairesAuditResponse.state === 'error') {
     throw new Error(questionnairesAuditResponse.error)
   }
+  if (questionnairesAimsResponse.state === 'error') {
+    throw new Error(questionnairesAimsResponse.error)
+  }
 
   return (
     <QuestionnairesView
@@ -82,6 +88,9 @@ const QuestionnairesInfoPage = async ({ params }: QuestionnairesPageProps) => {
       }
       questionnairesAuditResponse={
         questionnairesAuditResponse.data.questionnairesAuditData
+      }
+      questionnairesAimsResponse={
+        questionnairesAimsResponse.data.questionnairesAimsData
       }
     />
   )

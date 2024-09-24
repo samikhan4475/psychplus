@@ -39,6 +39,7 @@ const QuestionnairesView = ({
   questionnairesPhq9Response,
   questionnairesDast10Response,
   questionnairesAuditResponse,
+  questionnairesAimsResponse,
   patientId,
 }: {
   questionnairesDashboardData: QuestionnairesDashboard[]
@@ -48,6 +49,7 @@ const QuestionnairesView = ({
   questionnairesSnapIvResponse: QuickNoteSectionItem[]
   questionnairesDast10Response: QuickNoteSectionItem[]
   questionnairesAuditResponse: QuickNoteSectionItem[]
+  questionnairesAimsResponse: QuickNoteSectionItem[]
   patientId: string
 }) => {
   const { activeTab, setActiveTab } = useStore((state) => ({
@@ -98,7 +100,7 @@ const QuestionnairesView = ({
         <YBocsTab />
       </TabsContent>
       <TabsContent value={AIMS_TAB}>
-        <AimsTab />
+        <AimsTab patientId={patientId} data={questionnairesAimsResponse} />
       </TabsContent>
       <TabsContent value={AUDIT_TAB}>
         <AuditTab patientId={patientId} data={questionnairesAuditResponse} />

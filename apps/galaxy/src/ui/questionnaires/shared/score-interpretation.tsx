@@ -4,7 +4,7 @@ import { cn } from '@/utils'
 
 interface ScoreInterpretationRange {
   rangeTitle?: string
-  label: string
+  label?: string
   color: string
   min: number
   max?: number
@@ -13,11 +13,13 @@ interface ScoreInterpretationRange {
 interface ScoreInterpretationProps {
   ranges: ScoreInterpretationRange[]
   totalScore: number
+  isRanges?: boolean
 }
 
 const ScoreInterpretation = ({
   ranges,
   totalScore,
+  isRanges = true,
 }: ScoreInterpretationProps) => {
   const getRange = (score: number) => {
     return ranges.find((range) => {
@@ -42,30 +44,31 @@ const ScoreInterpretation = ({
         <Text weight="bold" size="2">
           Score Interpretation
         </Text>
-        {ranges.map((range) => {
-          const badgeBackgroundClass = getBadgeBackgroundClass(range.color)
+        {isRanges &&
+          ranges.map((range) => {
+            const badgeBackgroundClass = getBadgeBackgroundClass(range.color)
 
-          let title = range.rangeTitle
+            let title = range.rangeTitle
 
-          if (!title) {
-            const maxPart = range.max !== undefined ? `-${range.max}` : ''
-            title = `${range.min}${maxPart}`
-          }
-          return (
-            <Flex gap="2" align="center" key={range.label}>
-              <Box
-                className={cn(
-                  'h-[14.24px] w-[22px] rounded-1',
-                  range.color === 'white' && 'border border-gray-6',
-                  badgeBackgroundClass,
-                )}
-              />
-              <Text className="text-black" size="1">
-                {title} - {range.label}
-              </Text>
-            </Flex>
-          )
-        })}
+            if (!title) {
+              const maxPart = range.max !== undefined ? `-${range.max}` : ''
+              title = `${range.min}${maxPart}`
+            }
+            return (
+              <Flex gap="2" align="center" key={range.label}>
+                <Box
+                  className={cn(
+                    'h-[14.24px] w-[22px] rounded-1',
+                    range.color === 'white' && 'border border-gray-6',
+                    badgeBackgroundClass,
+                  )}
+                />
+                <Text className="text-black" size="1">
+                  {title} - {range.label}
+                </Text>
+              </Flex>
+            )
+          })}
       </Flex>
 
       <Flex align="center" gap="1">
