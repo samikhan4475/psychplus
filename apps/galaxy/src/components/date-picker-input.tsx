@@ -115,7 +115,7 @@ const DatePickerInput = <T extends DateValue>({
                     <Button
                       slot="previous"
                       className={
-                        'text-base hover:text-black m-0 flex h-[1.5em] w-[1.5em] items-center justify-center rounded-1 border border-solid border-slate-6 text-slate-10 hover:border-slate-12 '
+                        'text-base hover:text-black m-0 flex h-[1.5em] w-[1.5em] items-center justify-center rounded-1 border border-solid border-slate-6 text-slate-10 hover:border-slate-12 data-[disabled]:cursor-not-allowed data-[disabled]:border-gray-3 data-[disabled]:text-gray-6'
                       }
                     >
                       <ChevronLeftIcon className="h-4 w-4" />
@@ -124,7 +124,7 @@ const DatePickerInput = <T extends DateValue>({
                     <Button
                       slot="next"
                       className={
-                        'text-base hover:text-black m-0 flex h-[1.5em] w-[1.5em] items-center justify-center rounded-1 border border-solid border-slate-6 text-slate-10 hover:border-slate-12 '
+                        'text-base hover:text-black m-0 flex h-[1.5em] w-[1.5em] items-center justify-center rounded-1 border border-solid border-slate-6 text-slate-10 hover:border-slate-12 data-[disabled]:cursor-not-allowed data-[disabled]:border-gray-3 data-[disabled]:text-gray-6'
                       }
                     >
                       <ChevronRightIcon className="h-4 w-4" />
@@ -135,7 +135,7 @@ const DatePickerInput = <T extends DateValue>({
                       <CalendarCell
                         date={date}
                         className={
-                          'data-[selected]:text-white data-[outside-month]:opacity-35 m-px w-[2em] cursor-pointer rounded-[6px] text-center text-[13px] leading-[2em] outline-none hover:bg-iris-6 data-[outside-month]:!cursor-default data-[outside-month]:!bg-transparent data-[selected]:!bg-iris-12'
+                          'data-[selected]:text-white data-[outside-month]:opacity-35 m-px w-[2em] cursor-pointer rounded-[6px] text-center text-[13px] leading-[2em] outline-none hover:bg-iris-6 data-[disabled]:cursor-not-allowed data-[outside-month]:!cursor-default data-[disabled]:!bg-transparent data-[outside-month]:!bg-transparent data-[selected]:!bg-iris-12 data-[disabled]:text-gray-6'
                         }
                       />
                     )}

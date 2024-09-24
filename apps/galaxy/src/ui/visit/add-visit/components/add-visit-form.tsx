@@ -2,6 +2,8 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Box, Button, Flex, Grid, Text } from '@radix-ui/themes'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { FormContainer, FormSubmitButton } from '@/components'
+import { AddVacation } from '@/ui/vacation/add-vacation'
+import { cn } from '@/utils'
 import { schema, SchemaType } from '../schema'
 import { StateCodeSet } from '../types'
 import { LocationDropdown } from './location-select'
@@ -44,6 +46,8 @@ const AddVisitForm = ({ states }: { states: StateCodeSet[] }) => {
     alert('Add User Popup')
   }
 
+  const provider = form.watch('provider')
+
   return (
     <FormContainer form={form} onSubmit={onCreateNew}>
       <Grid columns="12" className="min-w-[648px] gap-3">
@@ -58,7 +62,7 @@ const AddVisitForm = ({ states }: { states: StateCodeSet[] }) => {
         >
           <Button
             size="1"
-            className="bg-pp-black-1 text-white flex-1 cursor-pointer px-3 py-1.5 h-[21px]"
+            className="bg-pp-black-1 text-white h-[21px] flex-1 cursor-pointer px-3 py-1.5"
             onClick={onAddUser}
           >
             <Text size="1">Add User</Text>
@@ -78,16 +82,23 @@ const AddVisitForm = ({ states }: { states: StateCodeSet[] }) => {
         {isServiceTimeDependent ? <TimedVisitForm /> : <UntimedVisitForm />}
       </Grid>
       <Flex justify="between" mt="3">
-        <Button
-          className="text-xs bg-white text-pp-black-3
-          active:bg-pp-focus-bg active:text-pp-blue border-pp-black-3 cursor-pointer border px-3 py-1.5"
-          color="gray"
-          variant="outline"
-        >
-          <Text size="1">Add Vacation</Text>
-        </Button>
+        {isServiceTimeDependent && (
+          <AddVacation staffId={provider}>
+            <Button
+              className={cn(
+                'text-xs bg-white text-pp-black-3 active:bg-pp-focus-bg active:text-pp-blue border-pp-black-3 cursor-pointer border px-3 py-1.5',
+                !provider ? 'bg-gray-3 text-gray-11' : 'bg-[white]',
+              )}
+              color="gray"
+              variant="outline"
+              disabled={!provider}
+            >
+              <Text size="1">Add Vacation</Text>
+            </Button>
+          </AddVacation>
+        )}
         <FormSubmitButton
-          className="bg-pp-black-1 text-white cursor-pointer px-3 py-1.5"
+          className="bg-pp-black-1 text-white ml-auto cursor-pointer px-3 py-1.5"
           form={form}
         >
           <Text size="1">Save</Text>

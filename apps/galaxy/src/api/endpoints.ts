@@ -13,6 +13,8 @@ const VISIT_TYPES_ENDPOINT = `${API_URL}/api/visittypes/actions/search`
 const ENCOUNTER_TYPES_ENDPOINT = `${API_URL}/api/encounters/actions/search`
 const STATES_BY_COUNTRY_ENDPOINT = (countryCode: string) =>
   `${API_URL}/api/countries/${countryCode}/states`
+const ADD_VACATION = (staffId: string) =>
+  `${API_URL}/api/staff/${staffId}/vacations`
 const PATIENT_PROFILE_ENDPOINT = (id: string) =>
   `${API_URL}/api/patients/${id}/profile`
 const NOTE_DETAILS_SEARCH_ENDPOINT = `${API_URL}/api/notedetails/actions/search`
@@ -59,6 +61,7 @@ export {
   VISIT_TYPES_ENDPOINT,
   ENCOUNTER_TYPES_ENDPOINT,
   STATES_BY_COUNTRY_ENDPOINT,
+  ADD_VACATION,
   GET_PATIENT_NOTIFICATIONS_ENDPOINT,
   PATIENT_PROFILE_ENDPOINT,
   NOTE_DETAILS_SEARCH_ENDPOINT,

@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 import { useFormContext } from 'react-hook-form'
 import {
   FormFieldContainer,
@@ -8,6 +8,8 @@ import {
   FormFieldLabel,
   SelectInput,
 } from '@/components'
+import { CODESETS } from '@/constants'
+import { useCodesetCodes } from '@/hooks'
 import { getLocationServices } from '../actions'
 import { SchemaType } from '../schema'
 import { useAddVisitStore } from '../store'
@@ -15,9 +17,17 @@ import { useAddVisitStore } from '../store'
 const ServiceDropdown = () => {
   const form = useFormContext<SchemaType>()
   const { services, setServices } = useAddVisitStore()
+  const serviceCodes = useCodesetCodes(CODESETS.ServicesOffered)
   const prevLocationId = useRef<string | undefined>(undefined)
 
   const locationId = form.watch('location')
+
+  const mappedServices: { [key: string]: string } = useMemo(() => {
+    return serviceCodes.reduce<{ [key: string]: string }>((acc, curr) => {
+      acc[curr.value] = curr.display
+      return acc
+    }, {})
+  }, [serviceCodes])
 
   useEffect(() => {
     if (prevLocationId.current !== locationId) {
@@ -38,7 +48,7 @@ const ServiceDropdown = () => {
       <SelectInput
         field="service"
         options={services.map((v) => ({
-          label: v.serviceOffered,
+          label: mappedServices[v.serviceOffered],
           value: v.id,
         }))}
         buttonClassName="flex-1"
