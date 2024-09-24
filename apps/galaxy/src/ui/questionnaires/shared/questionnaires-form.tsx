@@ -37,13 +37,18 @@ const QuestionnairesForm = ({
       <Table.Root variant="ghost" size="1">
         <Table.Header>
           <Table.Row>
-            <Table.ColumnHeaderCell className="w-[50%]" pl="0">
+            <Table.ColumnHeaderCell width="50%" pl="0">
               <Text weight="medium" size="2">
-                {labels[0]}
+                {labels?.[0]}
               </Text>
             </Table.ColumnHeaderCell>
-            {labels.slice(1).map((label) => (
-              <Table.ColumnHeaderCell key={label}>
+
+            {labels?.slice(1).map((label) => (
+              <Table.ColumnHeaderCell
+                key={label}
+                width={`${50 / (labels.length - 1)}%`}
+                pl="5"
+              >
                 <Text weight="medium" size="2">
                   {label}
                 </Text>
@@ -56,9 +61,10 @@ const QuestionnairesForm = ({
           {data.map((item, index) => (
             <Table.Row
               key={item.id}
-              className={cn(index % 2 === 1 ? 'bg-pp-bg-table-cell' : '')}
+              className={cn(index % 2 === 1 && 'bg-pp-bg-table-cell')}
+              align="center"
             >
-              <Table.Cell>
+              <Table.Cell width="50%" pl="0">
                 <Flex gap="1">
                   <Text weight="medium" size="1">
                     {index + 1}.
@@ -70,15 +76,17 @@ const QuestionnairesForm = ({
               </Table.Cell>
               {item.options.map((option, colIndex) => {
                 return (
-                  <Table.Cell key={`${item.id}-${colIndex}`}>
-                    {option ? (
+                  <Table.Cell
+                    key={`${item.id}-${colIndex}`}
+                    width={`${50 / (labels.length - 1)}%`}
+                    pl="5"
+                  >
+                    {option.label && option.value && (
                       <RadioButton
                         className="bg-0 rounded-0 border-0"
                         field={`${item.id}`}
                         options={[option]}
                       />
-                    ) : (
-                      <Box className="h-6" />
                     )}
                   </Table.Cell>
                 )

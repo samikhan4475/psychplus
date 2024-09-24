@@ -41,7 +41,7 @@ const RadioButton = ({ field, options, className }: RadioGroupProps) => {
               >
                 <RadixRadioGroup.Indicator className="after:bg-white after:rounded-full flex h-full w-full items-center justify-center after:block after:h-[4px] after:w-[4px] after:content-['']" />
               </RadixRadioGroup.Item>
-              <Text size="2" className={isSelected ? 'font-bold' : undefined}>
+              <Text size="1" className={cn(isSelected && 'font-bold', 'flex-1')}>
                 {label}
               </Text>
             </label>

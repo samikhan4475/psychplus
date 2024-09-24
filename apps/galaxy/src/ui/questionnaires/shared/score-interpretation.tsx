@@ -7,7 +7,7 @@ interface ScoreInterpretationRange {
   label: string
   color: string
   min: number
-  max: number
+  max?: number
 }
 
 interface ScoreInterpretationProps {
@@ -20,7 +20,13 @@ const ScoreInterpretation = ({
   totalScore,
 }: ScoreInterpretationProps) => {
   const getRange = (score: number) => {
-    return ranges.find((range) => score >= range.min && score <= range.max)
+    return ranges.find((range) => {
+      if (range.max !== undefined) {
+        return score >= range.min && score <= range.max
+      }
+
+      return score >= range.min
+    })
   }
 
   const currentRange = getRange(totalScore)
@@ -42,7 +48,7 @@ const ScoreInterpretation = ({
           let title = range.rangeTitle
 
           if (!title) {
-            const maxPart = range.max > 0 ? ` - ${range.max}` : ''
+            const maxPart = range.max !== undefined ? `-${range.max}` : ''
             title = `${range.min}${maxPart}`
           }
           return (
