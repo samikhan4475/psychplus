@@ -1,10 +1,7 @@
 import { CalendarDate } from '@internationalized/date'
 import { useFormContext } from 'react-hook-form'
-import {
-  DatePickerInput,
-  FormFieldContainer,
-  FormFieldLabel,
-} from '@/components'
+import { DatePickerInput, FormFieldLabel } from '@/components'
+import { FormFieldContainer } from '../shared'
 
 const StartDateInput = () => {
   const form = useFormContext()
@@ -21,7 +18,11 @@ const StartDateInput = () => {
   return (
     <FormFieldContainer>
       <FormFieldLabel className="text-[12px]">From</FormFieldLabel>
-      <DatePickerInput handleChange={handleChange} field="date" />
+      <DatePickerInput
+        handleChange={handleChange}
+        field="date"
+        dateInputClass="h-6"
+      />
     </FormFieldContainer>
   )
 }

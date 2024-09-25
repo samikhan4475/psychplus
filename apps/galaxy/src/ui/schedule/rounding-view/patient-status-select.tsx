@@ -2,7 +2,7 @@
 
 import { CodesetSelect, FormFieldLabel } from '@/components'
 import { CODESETS } from '@/constants'
-import { FormFieldContainer } from '@/components'
+import { FormFieldContainer } from '../shared'
 
 const PatientStatusSelect = () => {
   return (

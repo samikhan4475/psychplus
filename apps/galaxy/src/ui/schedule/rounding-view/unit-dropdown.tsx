@@ -1,8 +1,9 @@
 'use client'
 
 import { FormFieldLabel, SelectInput } from '@/components'
-import { FormFieldContainer } from '@/components'
-import { useRoundingFiltersContext } from './context'
+import { FormFieldContainer } from '../shared'
+import { useFiltersContext } from '../context'
+import { SchedulerFilters } from '../constants'
 
 const options = [
   {
@@ -20,8 +21,8 @@ const options = [
 ]
 
 const UnitDropdown = () => {
-  const { filters } = useRoundingFiltersContext()
-  if (!filters.includes('Unit')) return null
+  const { filters } = useFiltersContext()
+  if (!filters.includes(SchedulerFilters.Unit)) return null
 
   return (
     <FormFieldContainer className="h-full">

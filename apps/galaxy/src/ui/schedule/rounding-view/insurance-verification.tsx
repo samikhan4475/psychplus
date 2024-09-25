@@ -2,12 +2,13 @@
 
 import { CodesetSelect, FormFieldLabel } from '@/components'
 import { CODESETS } from '@/constants'
-import { FormFieldContainer } from '@/components'
-import { useRoundingFiltersContext } from './context'
+import { FormFieldContainer } from '../shared'
+import { useFiltersContext } from '../context'
+import { SchedulerFilters } from '../constants'
 
 const InsuranceVerificationSelect = () => {
-  const { filters } = useRoundingFiltersContext()
-  if (!filters.includes('Ins Verification')) return null
+  const { filters } = useFiltersContext()
+  if (!filters.includes(SchedulerFilters.InsVerification)) return null
 
   return (
     <FormFieldContainer>

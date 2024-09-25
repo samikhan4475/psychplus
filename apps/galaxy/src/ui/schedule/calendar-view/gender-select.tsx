@@ -1,11 +1,17 @@
-import { CodesetSelect, FormFieldContainer, FormFieldLabel } from '@/components'
+import { CodesetSelect, FormFieldLabel } from '@/components'
 import { CODESETS } from '@/constants'
+import { FormFieldContainer } from '../shared'
 
 const GenderSelect = () => {
   return (
     <FormFieldContainer>
       <FormFieldLabel className="text-[12px]">Gender</FormFieldLabel>
-      <CodesetSelect name="gender" codeset={CODESETS.Gender} size="1" />
+      <CodesetSelect
+        name="gender"
+        codeset={CODESETS.Gender}
+        size="1"
+        className="flex-1"
+      />
     </FormFieldContainer>
   )
 }

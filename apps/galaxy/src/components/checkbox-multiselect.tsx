@@ -53,6 +53,7 @@ interface Props {
   onChange?: (selectedValues: string[]) => void
   menuClassName?: string
   label?: string
+  className?: string
   disabled?: boolean
 }
 
@@ -63,7 +64,8 @@ const MultiSelectField = ({
   menuClassName,
   defaultValues,
   label,
-  disabled,
+  className,
+  disabled = false,
 }: Props) => {
   const [selectedValues, setSelectedValues] = useState<string[]>(
     defaultValues ?? [],
@@ -89,7 +91,7 @@ const MultiSelectField = ({
   }
 
   return (
-    <FormFieldContainer>
+    <FormFieldContainer className={className}>
       {label && (
         <Text as="label" size="1" weight="medium">
           {label}

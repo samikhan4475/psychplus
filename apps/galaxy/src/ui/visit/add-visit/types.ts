@@ -20,8 +20,8 @@ interface Contact {
 
 interface Metadata {
   createdOn: string
-  createdBy: number
-  updatedOn: string
+  createdBy?: number
+  updatedOn?: string
 }
 
 interface Clinic {

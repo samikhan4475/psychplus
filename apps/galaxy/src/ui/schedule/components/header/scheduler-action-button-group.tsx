@@ -2,12 +2,13 @@ import { Button, Flex, IconButton } from '@radix-ui/themes'
 import { DownloadIcon, Plus } from 'lucide-react'
 import { PrinterIcon } from '@/components/icons'
 import { AddVisit } from '@/ui/visit/add-visit'
-import { StateCodeSet } from '@/ui/visit/add-visit/types'
+import { useDropdownContext } from '../../context'
 
-const SchedulerActionButtonGroup = ({ states }: { states: StateCodeSet[] }) => {
+const SchedulerActionButtonGroup = () => {
+  const { usStates } = useDropdownContext()
   return (
     <Flex align="center" className="gap-x-2">
-      <AddVisit states={states}>
+      <AddVisit states={usStates}>
         <Button
           variant="outline"
           className="bg-pp-black-2 text-white h-6 rounded-[2px] px-1.5 font-[500] [box-shadow:none]"

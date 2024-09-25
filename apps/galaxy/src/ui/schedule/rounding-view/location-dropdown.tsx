@@ -1,8 +1,8 @@
 'use client'
 
 import { FormFieldLabel, SelectInput } from '@/components'
-import { FormFieldContainer } from '@/components'
 import { useStore } from '../store'
+import { FormFieldContainer } from '../shared'
 
 const LocationDropdown = () => {
   const clinicOptions = useStore((state) => state.clinics)

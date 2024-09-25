@@ -9,13 +9,16 @@ import {
   Text,
 } from '@radix-ui/themes'
 import { PlusIcon } from 'lucide-react'
-import { OTHER_ROUNDING_FILTERS } from '../constants'
-import { useStore } from '../store'
-import { useRoundingFiltersContext } from './context'
+import { useFiltersContext } from '../context'
 
-const AddFiltersPopover = () => {
-  const saveFilters = useStore((state) => state.saveFilters)
-  const { filters, setFilters } = useRoundingFiltersContext()
+interface AddFiltersPopoverProps {
+  view: string
+  onSave: (list: string[]) => void
+  viewFilters: string[]
+}
+
+const AddFiltersPopover = ({ view, onSave, viewFilters }: AddFiltersPopoverProps) => {
+  const { filters, setFilters } = useFiltersContext()
 
   const isFilterVisible = (name: string): boolean => {
     return filters.includes(name)
@@ -43,11 +46,11 @@ const AddFiltersPopover = () => {
       </Popover.Trigger>
       <Popover.Content className="h-80 w-[170px] p-3">
         <ScrollArea className="relative flex flex-col">
-          <Flex direction="column" className='sticky top-0 bg-white z-10'>
+          <Flex direction="column" className="bg-white sticky top-0 z-10">
             <Text className="text-[14px] font-[590]">Filters For</Text>
-            <Text className="text-[14px] font-[590]">Rounding View</Text>
+            <Text className="text-[14px] font-[590]">{view}</Text>
           </Flex>
-          {OTHER_ROUNDING_FILTERS.map((item) => (
+          {viewFilters.map((item) => (
             <Text as="label" key={item}>
               <Flex
                 gap="2"
@@ -71,7 +74,7 @@ const AddFiltersPopover = () => {
           <Popover.Close>
             <Button
               className="bg-pp-bg-primary sticky bottom-0 h-6 w-full"
-              onClick={() => saveFilters(filters)}
+              onClick={() => onSave(filters)}
             >
               Save Filters
             </Button>

@@ -3,13 +3,14 @@
 import { TextField } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
 import { FormFieldLabel } from '@/components'
-import { FormFieldContainer } from '@/components'
-import { useRoundingFiltersContext } from './context'
+import { FormFieldContainer } from '../shared'
+import { useFiltersContext } from '../context'
+import { SchedulerFilters } from '../constants'
 
 const CoPayRange = () => {
   const form = useFormContext()
-  const { filters } = useRoundingFiltersContext()
-  if (!filters.includes('Co-Pay')) return null
+  const { filters } = useFiltersContext()
+  if (!filters.includes(SchedulerFilters.CoPayment)) return null
 
   return (
     <FormFieldContainer>

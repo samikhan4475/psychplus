@@ -1,14 +1,13 @@
+import * as api from '@/api'
 import { ScheduleView } from '@/ui/schedule'
-import { getStatesByCountry } from '@/ui/visit/add-visit/api'
 
 const SchedulePage = async () => {
-  const statesResponse = await getStatesByCountry('United States')
+  const [insurancePlans, usStates] = await Promise.all([
+    api.getInsurancePlansAction(),
+    api.getUsStatesAction(),
+  ])
 
-  if (statesResponse.state === 'error') {
-    throw new Error(statesResponse.error)
-  }
-
-  return <ScheduleView states={statesResponse.data} />
+  return <ScheduleView insurancePlans={insurancePlans} usStates={usStates} />
 }
 
 export default SchedulePage

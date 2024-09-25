@@ -64,7 +64,6 @@ const CalendarFilterCard = ({ setSlots, states }: CalendarFilterCardProps) => {
           wrap="wrap"
           gap="2"
           align="center"
-          justify="start"
           py="1"
         >
           <StartDateInput />
@@ -73,20 +72,29 @@ const CalendarFilterCard = ({ setSlots, states }: CalendarFilterCardProps) => {
           <ServiceDropdown />
           <ProviderDropdown />
           <VisitMediumDropdown />
-          {!isPartialFilterView && (
-            <>
-              <ProviderTypeDropdown />
-              <GenderSelect />
-              <LanguageSelect />
-              <FirstResponderSelect />
-            </>
+          {isPartialFilterView && (
+            <Flex gap="2">
+              <FilterButton
+                onClick={() => setIsPartialFilterView(!isPartialFilterView)}
+              />
+              <ClearFilterButton />
+              <SearchButton />
+            </Flex>
           )}
-          <FilterButton
-            onClick={() => setIsPartialFilterView(!isPartialFilterView)}
-          />
-          <ClearFilterButton />
-          <SearchButton />
         </Flex>
+        {!isPartialFilterView && (
+          <Flex width="full" gap="2" py="1" align="center">
+            <ProviderTypeDropdown />
+            <GenderSelect />
+            <LanguageSelect />
+            <FirstResponderSelect />
+            <FilterButton
+              onClick={() => setIsPartialFilterView(!isPartialFilterView)}
+            />
+            <ClearFilterButton />
+            <SearchButton />
+          </Flex>
+        )}
       </FormContainer>
     </Flex>
   )

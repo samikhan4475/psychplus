@@ -1,8 +1,9 @@
 'use client'
 
 import { FormFieldLabel, SelectInput } from '@/components'
-import { FormFieldContainer } from '@/components'
-import { useRoundingFiltersContext } from './context'
+import { FormFieldContainer } from '../shared'
+import { useFiltersContext } from '../context'
+import { SchedulerFilters } from '../constants'
 
 const options = [
   {
@@ -20,8 +21,8 @@ const options = [
 ]
 
 const PrimaryInsuranceDropdown = () => {
-  const { filters } = useRoundingFiltersContext()
-  if (!filters.includes('Primary Insurance')) return null
+  const { filters } = useFiltersContext()
+  if (!filters.includes(SchedulerFilters.PrimaryInsurance)) return null
 
   return (
     <FormFieldContainer className="h-full">

@@ -18,12 +18,14 @@ interface Store {
   clinics: Option[]
   weekStartDate: CalendarDate
   cachedFilters: string[]
+  cachedFiltersList: string[]
   tableFilters: string[]
   setProvidersOptions: (options: Option[]) => void
   setClinicsOptions: (options: Option[]) => void
   addWeek: () => void
   subtractWeek: () => void
   saveFilters: (filter: string[]) => void
+  saveListFilters: (filters: string[]) => void
   updateTableFilters: (filter: string[]) => void
 }
 
@@ -34,6 +36,7 @@ const useStore = create<Store>()(
       clinics: [],
       weekStartDate: getCurrentWeekStartDate(),
       cachedFilters: [],
+      cachedFiltersList: [],
       tableFilters: [],
       setProvidersOptions: (options) => {
         set({
@@ -62,6 +65,11 @@ const useStore = create<Store>()(
           cachedFilters: filters,
         })
       },
+      saveListFilters: (filters: string[]) => {
+        set({
+          cachedFiltersList: filters,
+        })
+      },
       updateTableFilters: (filters: string[]) => {
         set({
           tableFilters: filters,
@@ -73,6 +81,7 @@ const useStore = create<Store>()(
       storage: createJSONStorage(() => sessionStorage),
       partialize: (state) => ({
         cachedFilters: state.cachedFilters,
+        cachedFiltersList: state.cachedFiltersList,
       }),
     },
   ),

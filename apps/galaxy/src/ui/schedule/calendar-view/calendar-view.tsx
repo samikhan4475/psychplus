@@ -21,6 +21,7 @@ import {
   AppointmentEventData,
   AvailableSlotsEvent,
 } from '../types/calender'
+import { useDropdownContext } from '../context'
 
 const locales = {
   'en-US': enUS,
@@ -41,8 +42,12 @@ interface DateLocalizerInterface {
   localizer: DateLocalizerType
 }
 
-const CustomTimeSlot = ({ states }: { states: StateCodeSet[] }) => {
+// @ts-ignore
+const   CustomTimeSlot = (props) => {
   const [showButton, setShowButton] = useState<boolean>(false)
+  const { usStates } = useDropdownContext()
+
+  if (props.resource === undefined) return props.children
 
   return (
     <Flex
@@ -53,7 +58,7 @@ const CustomTimeSlot = ({ states }: { states: StateCodeSet[] }) => {
       onMouseLeave={() => setShowButton(false)}
     >
       {showButton && (
-        <AddVisit states={states}>
+        <AddVisit states={usStates}>
           <IconButton
             variant="ghost"
             className="bg-pp-primary-light absolute right-0 top-0 z-[200] h-5 w-5 translate-x-[-25%] translate-y-[25%] rounded-[0px] p-0.5"
@@ -66,8 +71,8 @@ const CustomTimeSlot = ({ states }: { states: StateCodeSet[] }) => {
   )
 }
 
-const CalendarComponent = (states: StateCodeSet[]) => ({
-  timeSlotWrapper: () => <CustomTimeSlot states={states} />,
+const CalendarComponent = {
+  timeSlotWrapper: CustomTimeSlot,
   event: (
     props: React.JSX.IntrinsicAttributes &
       EventProps<AvailableSlotsEvent<AppointmentEventData>>,
@@ -96,7 +101,7 @@ const CalendarComponent = (states: StateCodeSet[]) => ({
       )
     },
   },
-})
+}
 
 const formats = {
   timeGutterFormat: 'hh a',
@@ -125,7 +130,7 @@ const CalendarView = ({ states }: CalendarViewProps) => {
             view="week"
             toolbar={false}
             events={slots}
-            components={CalendarComponent(states)}
+            components={CalendarComponent}
             startAccessor="start"
             endAccessor="end"
             formats={formats}

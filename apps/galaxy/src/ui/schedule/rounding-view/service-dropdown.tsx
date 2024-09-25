@@ -4,8 +4,8 @@ import { useEffect, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 import { FormFieldLabel, SelectInput } from '@/components'
 import { getLocationServicesAction } from '../actions'
-import { FormFieldContainer } from '@/components'
 import { Option } from '../types/calender'
+import { FormFieldContainer } from '../shared'
 
 const ServiceDropdown = () => {
   const form = useFormContext()

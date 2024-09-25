@@ -174,6 +174,7 @@ interface Appointment {
   legalStatus: string
   authorizationNumber: string
   dateOfAddmission: string
+  lastCoverageDate: string
   lengthOfStay: number
 }
 

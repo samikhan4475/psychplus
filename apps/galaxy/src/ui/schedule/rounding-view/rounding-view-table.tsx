@@ -7,10 +7,10 @@ import toast from 'react-hot-toast'
 import { DataTable } from '@/components'
 import { getBookedAppointmentsAction } from '../actions'
 import { useStore } from '../store'
-import { BookedAppointment } from '../types/schedule'
 import { columns } from './table-columns'
+import { Appointment } from '../types'
 
-const DataTableHeader = (table: Table<BookedAppointment>) => {
+const DataTableHeader = (table: Table<Appointment>) => {
   const roundingFilters = useStore((state) => state.tableFilters)
 
   useEffect(() => {
@@ -35,7 +35,7 @@ const DataTableHeader = (table: Table<BookedAppointment>) => {
 }
 
 const RoundingViewTable = () => {
-  const [tableData, setTableData] = useState<BookedAppointment[]>([])
+  const [tableData, setTableData] = useState<Appointment[]>([])
 
   useEffect(() => {
     getBookedAppointmentsAction().then((response) => {

@@ -1,0 +1,37 @@
+'use client'
+
+import { TextField } from '@radix-ui/themes'
+import { useFormContext } from 'react-hook-form'
+import { FormFieldLabel } from '@/components'
+import { FormFieldContainer } from '../../shared'
+import { useFiltersContext } from '../../context'
+import { type ListViewSchema } from '../list-view-schema'
+import { SchedulerFilters } from '../../constants'
+
+const LengthOfStayRange = () => {
+  const form = useFormContext<ListViewSchema>()
+  const { filters } = useFiltersContext()
+  if (!filters.includes(SchedulerFilters.LOS)) return null
+
+  return (
+    <FormFieldContainer>
+      <FormFieldLabel>LOS</FormFieldLabel>
+      <TextField.Root
+        className="h-6"
+        placeholder='From'
+        size="1"
+        type="number"
+        {...form.register('losFrom')}
+      />
+      <TextField.Root
+        className="h-6"
+        placeholder='To'
+        size="1"
+        type="number"
+        {...form.register('losTo')}
+      />
+    </FormFieldContainer>
+  )
+}
+
+export { LengthOfStayRange }

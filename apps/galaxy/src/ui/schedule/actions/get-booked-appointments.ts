@@ -1,10 +1,10 @@
 'use server'
 
 import * as api from '@/api'
-import { BookedAppointment } from '../types/schedule'
+import { Appointment } from '../types'
 
 const getBookedAppointmentsAction = async (): Promise<
-  api.ActionResult<BookedAppointment[]>
+  api.ActionResult<Appointment[]>
 > => {
   const body = {
     isIncludeMetadataResourceChangeControl: true,
@@ -22,7 +22,7 @@ const getBookedAppointmentsAction = async (): Promise<
     includePatientTransactions: true,
     includePatientNotes: true,
   }
-  const response = await api.POST<BookedAppointment[]>(
+  const response = await api.POST<Appointment[]>(
     api.SEARCH_BOOKED_APPOINTMENTS_ENDPOINT,
     body,
   )

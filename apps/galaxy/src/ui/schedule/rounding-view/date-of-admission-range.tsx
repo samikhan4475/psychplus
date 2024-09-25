@@ -1,12 +1,13 @@
 'use client'
 
 import { DatePickerInput, FormFieldLabel } from '@/components'
-import { FormFieldContainer } from '@/components'
-import { useRoundingFiltersContext } from './context'
+import { FormFieldContainer } from '../shared'
+import { useFiltersContext } from '../context'
+import { SchedulerFilters } from '../constants'
 
 const DateOfAdmissionRange = () => {
-  const { filters } = useRoundingFiltersContext()
-  if (!filters.includes('DOA')) return null
+  const { filters } = useFiltersContext()
+  if (!filters.includes(SchedulerFilters.DOA)) return null
 
   return (
     <FormFieldContainer>

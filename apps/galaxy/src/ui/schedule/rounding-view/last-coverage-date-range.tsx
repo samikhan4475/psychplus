@@ -1,12 +1,13 @@
 'use client'
 
 import { DatePickerInput, FormFieldLabel } from '@/components'
-import { FormFieldContainer } from '@/components'
-import { useRoundingFiltersContext } from './context'
+import { FormFieldContainer } from '../shared'
+import { useFiltersContext } from '../context'
+import { SchedulerFilters } from '../constants'
 
 const LastCoverageDateRange = () => {
-  const { filters } = useRoundingFiltersContext()
-  if (!filters.includes('LCD')) return null
+  const { filters } = useFiltersContext()
+  if (!filters.includes(SchedulerFilters.LCD)) return null
 
   return (
     <FormFieldContainer>

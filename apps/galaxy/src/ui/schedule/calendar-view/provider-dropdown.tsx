@@ -1,5 +1,6 @@
-import { FormFieldContainer, FormFieldLabel, SelectInput } from '@/components'
+import { FormFieldLabel, SelectInput } from '@/components'
 import { useStore } from '../store'
+import { FormFieldContainer } from '../shared'
 
 const ProviderDropdown = () => {
   const providerOptions = useStore((state) => state.providers)
@@ -12,6 +13,7 @@ const ProviderDropdown = () => {
         placeholder="Select"
         options={providerOptions}
         className="h-full flex-1"
+        buttonClassName='flex-1 h-6'
       />
     </FormFieldContainer>
   )

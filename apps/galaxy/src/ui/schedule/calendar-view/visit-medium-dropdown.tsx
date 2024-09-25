@@ -1,5 +1,6 @@
-import { CodesetSelect, FormFieldContainer, FormFieldLabel } from '@/components'
+import { CodesetSelect, FormFieldLabel } from '@/components'
 import { CODESETS } from '@/constants'
+import { FormFieldContainer } from '../shared'
 
 const VisitMediumDropdown = () => {
   return (
@@ -9,6 +10,7 @@ const VisitMediumDropdown = () => {
         name="visitMedium"
         codeset={CODESETS.VisitMedium}
         size="1"
+        className='flex-1'
       />
     </FormFieldContainer>
   )

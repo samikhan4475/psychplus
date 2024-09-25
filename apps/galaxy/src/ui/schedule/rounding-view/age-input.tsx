@@ -3,7 +3,7 @@
 import { TextField } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
 import { FormFieldLabel } from '@/components'
-import { FormFieldContainer } from '@/components'
+import { FormFieldContainer } from '../shared'
 
 const AgeInput = () => {
   const form = useFormContext()

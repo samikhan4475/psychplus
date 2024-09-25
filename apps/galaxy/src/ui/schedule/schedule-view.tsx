@@ -1,30 +1,37 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Flex, Heading, Tabs } from '@radix-ui/themes'
+import { State } from '@/types'
 import toast from 'react-hot-toast'
 import { cn } from '@/utils'
-import { StateCodeSet } from '../visit/add-visit/types'
 import { getClinicsOptionsAction, getProvidersOptionsAction } from './actions'
 import { CalendarView } from './calendar-view'
-import { DateStepper } from './calendar-view/date-stepper'
-import {
-  ColumnFilterGroup,
-  SchedulerActionButtonGroup,
-} from './components/header'
-import { SchedulerFilterGroup } from './components/header/scheduler-filter-group'
-import { RoundingView, RoundingViewFilterGroup } from './rounding-view'
+import { SchedulerActionButtonGroup } from './components/header'
+import { DropdownContext } from './context'
+import { ListView } from './list-view'
+import { RoundingView } from './rounding-view'
+import { ViewHeader } from './schedule-view-header'
 import { TabsList } from './schedule-view-tabs-list'
 import { useStore } from './store'
-import { TabValue } from './types'
+import { Option, TabValue } from './types'
 
-const ScheduleView = ({ states }: { states: StateCodeSet[] }) => {
-  const [selectedTab, setSelectedTab] = useState<string>(TabValue.Calendar)
+interface ScheduleViewProps {
+  insurancePlans: Option[]
+  usStates: State[]
+}
+
+const ScheduleView = ({ insurancePlans, usStates }: ScheduleViewProps) => {
+  const [selectedTab, setSelectedTab] = useState<string>(TabValue.List)
   const { setProvidersOptions, setClinicsOptions } = useStore((state) => ({
     setProvidersOptions: state.setProvidersOptions,
     setClinicsOptions: state.setClinicsOptions,
   }))
 
+  const ctxValue = useMemo(
+    () => ({ insurancePlans, usStates }),
+    [insurancePlans, usStates],
+  )
   const getProvidersAndClinicsOptions = async () => {
     const [providersResponse, clinicsResponse] = await Promise.all([
       getProvidersOptionsAction(),
@@ -52,50 +59,57 @@ const ScheduleView = ({ states }: { states: StateCodeSet[] }) => {
   }, [])
 
   return (
-    <Tabs.Root
-      defaultValue={TabValue.Calendar}
-      onValueChange={setSelectedTab}
-      className="flex w-full flex-1 flex-col overflow-y-auto"
-    >
-      <Flex
-        align="center"
-        className="py-0.5 pl-[22px] pr-5 shadow-1"
-        justify="between"
+    <DropdownContext.Provider value={ctxValue}>
+      <Tabs.Root
+        defaultValue={TabValue.List}
+        onValueChange={setSelectedTab}
+        className="flex w-full flex-1 flex-col overflow-y-auto"
       >
-        <Flex>
-          <Heading className="text-xl font-semibold">Schedule</Heading>
-          <TabsList />
+        <Flex
+          align="center"
+          className="py-0.5 pl-[22px] pr-5 shadow-1"
+          justify="between"
+        >
+          <Flex>
+            <Heading className="text-xl font-semibold">Schedule</Heading>
+            <TabsList />
+          </Flex>
+          <ViewHeader selectedTab={selectedTab} />
+          <SchedulerActionButtonGroup />
         </Flex>
-        {selectedTab === TabValue.Calendar && <DateStepper />}
-        {selectedTab === TabValue.List && <ColumnFilterGroup />}
-        {selectedTab === TabValue.Scheduler && <SchedulerFilterGroup />}
-        {selectedTab === TabValue.Rounding && <RoundingViewFilterGroup />}
-        <SchedulerActionButtonGroup states={states} />
-      </Flex>
-      <Tabs.Content value={TabValue.List}>List View</Tabs.Content>
-      <Tabs.Content
-        value={TabValue.Calendar}
-        className={cn({
-          'flex flex-1 flex-col overflow-y-auto':
-            selectedTab === TabValue.Calendar,
-        })}
-      >
-        <CalendarView states={states} />
-      </Tabs.Content>
-      <Tabs.Content value={TabValue.Scheduler}>Scheduler View</Tabs.Content>
-      <Tabs.Content value={TabValue.ProviderCoding}>
-        Provider Coding View
-      </Tabs.Content>
-      <Tabs.Content
-        className={cn({
-          'flex flex-1 flex-col overflow-y-auto':
-            selectedTab === TabValue.Rounding,
-        })}
-        value={TabValue.Rounding}
-      >
-        <RoundingView />
-      </Tabs.Content>
-    </Tabs.Root>
+        <Tabs.Content
+          value={TabValue.List}
+          className={cn({
+            'flex flex-1 flex-col overflow-y-auto':
+              selectedTab === TabValue.List,
+          })}
+        >
+          <ListView />
+        </Tabs.Content>
+        <Tabs.Content
+          value={TabValue.Calendar}
+          className={cn({
+            'flex flex-1 flex-col overflow-y-auto':
+              selectedTab === TabValue.Calendar,
+          })}
+        >
+          <CalendarView states={usStates} />
+        </Tabs.Content>
+        <Tabs.Content value={TabValue.Scheduler}>Scheduler View</Tabs.Content>
+        <Tabs.Content value={TabValue.ProviderCoding}>
+          Provider Coding View
+        </Tabs.Content>
+        <Tabs.Content
+          className={cn({
+            'flex flex-1 flex-col overflow-y-auto':
+              selectedTab === TabValue.Rounding,
+          })}
+          value={TabValue.Rounding}
+        >
+          <RoundingView />
+        </Tabs.Content>
+      </Tabs.Root>
+    </DropdownContext.Provider>
   )
 }
 

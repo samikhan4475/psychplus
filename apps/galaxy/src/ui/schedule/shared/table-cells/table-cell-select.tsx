@@ -1,25 +1,11 @@
 import { Flex, Select } from '@radix-ui/themes'
+import { Option } from '../../types'
 
-const options = [
-  {
-    label: 'Unit 1',
-    value: 'Unit 1',
-  },
-  {
-    label: 'Unit 2',
-    value: 'Unit 2',
-  },
-  {
-    label: 'Unit 3',
-    value: 'Unit 3',
-  },
-  {
-    label: 'Unit 4',
-    value: 'Unit 4',
-  },
-]
+interface TableCellSelectProps {
+    options: Option[]
+}
 
-const UnitSelectCell = () => {
+const TableCellSelect = ({options}: TableCellSelectProps) => {
   return (
     <Flex p="1" width="100%">
       <Select.Root size="1">
@@ -36,4 +22,4 @@ const UnitSelectCell = () => {
   )
 }
 
-export { UnitSelectCell }
+export { TableCellSelect }

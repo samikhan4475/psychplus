@@ -2,12 +2,13 @@
 
 import { CodesetSelect, FormFieldLabel } from '@/components'
 import { CODESETS } from '@/constants'
-import { FormFieldContainer } from '@/components'
-import { useRoundingFiltersContext } from './context'
+import { FormFieldContainer } from '../shared'
+import { useFiltersContext } from '../context'
+import { SchedulerFilters } from '../constants'
 
 const ProviderTypeDropdown = () => {
-  const { filters } = useRoundingFiltersContext()
-  if (!filters.includes('Provider Type')) return null
+  const { filters } = useFiltersContext()
+  if (!filters.includes(SchedulerFilters.ProviderType)) return null
 
   return (
     <FormFieldContainer>

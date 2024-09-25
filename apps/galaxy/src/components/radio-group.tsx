@@ -1,7 +1,7 @@
 import * as RadixRadioGroup from '@radix-ui/react-radio-group'
 import { Text } from '@radix-ui/themes'
-import { useFormContext } from 'react-hook-form'
 import { cn } from '@/utils'
+import { useFormContext } from 'react-hook-form'
 
 interface RadioGroupProps {
   field: string

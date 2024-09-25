@@ -1,16 +1,4 @@
-const STATIC_ROUNDING_FILTERS = [
-  'startDate',
-  'endDate',
-  'name',
-  'age',
-  'gender',
-  'dob',
-  'patientStatus',
-  'clinicLocation',
-  'service',
-]
-
-const OTHER_ROUNDING_FILTERS = [
+const ROUNDING_FILTERS = [
   'Provider Type',
   'Unit',
   'Room',
@@ -34,6 +22,64 @@ const OTHER_ROUNDING_FILTERS = [
   'Note Signed',
 ]
 
+const LIIST_VIEW_FILTERS = [
+  'Location',
+  'Service',
+  'Unit',
+  'Room',
+  'Group',
+  'Provider Type',
+  'Provider',
+  'Visit Type',
+  'Visit Sequence',
+  'Visit Medium',
+  'Visit Status',
+  'Ins Verification',
+  'Primary Insurance',
+  'Secondary Insurance',
+  'Co-Pay',
+  'Co-Ins',
+  'Balance',
+  'DOA',
+  'LOS',
+  'LCD',
+  'Authorization Number',
+  'Legal',
+  'Note Signed',
+]
+
 const ROUNDING_FILTERS_KEY = 'rounding-filters'
 
-export { STATIC_ROUNDING_FILTERS, OTHER_ROUNDING_FILTERS, ROUNDING_FILTERS_KEY }
+enum SchedulerFilters {
+  AuthorizationNumber = 'Authorization Number',
+  Balance = 'Balance',
+  CoInsurance = 'Co-Ins',
+  CoPayment = 'Co-Pay',
+  DOA = 'DOA',
+  Group = 'Group',
+  InsVerification = 'Ins Verification',
+  LCD = 'LCD',
+  Legal = 'Legal',
+  LOS = 'LOS',
+  Location = 'Location',
+  NoteSigned = 'Note Signed',
+  PrimaryInsurance = 'Primary Insurance',
+  Provider = 'Provider',
+  ProviderType = 'Provider Type',
+  Room = 'Room',
+  SecondaryInsurance = 'Secondary Insurance',
+  Unit = 'Unit',
+  VisitMedium = 'Visit Medium',
+  VisitSequence = 'Visit Sequence',
+  VisitStatus = 'Visit Status',
+  VisitType = 'Visit Type',
+  CptCode = 'CPT Code',
+  Diagnosis = 'Diagnosis',
+}
+
+export {
+  ROUNDING_FILTERS,
+  ROUNDING_FILTERS_KEY,
+  LIIST_VIEW_FILTERS,
+  SchedulerFilters,
+}

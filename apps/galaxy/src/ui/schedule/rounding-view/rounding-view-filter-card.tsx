@@ -10,14 +10,12 @@ import { useStore } from '../store'
 import { AgeInput } from './age-input'
 import { BalanceRange } from './balance-range'
 import { CoInsuranceRange } from './co-insurance-range'
-import { RoundingFiltersContext } from './context'
 import { CoPayRange } from './copay-range'
 import { CptCodeInput } from './cpt-code-input'
 import { DateOfAdmissionRange } from './date-of-admission-range'
 import { DiagnosisInput } from './diagnosis-input'
 import { DateOfBirthInput } from './dob-input'
 import { EndDateInput } from './end-date-input'
-import { FiltersActionGroup } from './filter-actions-group'
 import { GenderSelect } from './gender-select'
 import { GroupDropdown } from './group-select'
 import { InsuranceVerificationSelect } from './insurance-verification'
@@ -39,6 +37,9 @@ import { VisitMediumSelect } from './visit-medium-select'
 import { VisitSequenceSelect } from './visit-sequence-select'
 import { VisitStatus } from './visit-status'
 import { VisitTypeSelect } from './visit-type-select'
+import { AddFiltersPopover, FiltersButtonsGroup } from '../shared'
+import { ROUNDING_FILTERS } from '../constants'
+import { FiltersContext } from '../context'
 
 const schema = z.object({
   startDate: z.date().optional(),
@@ -82,8 +83,8 @@ const schema = z.object({
 type SchemaType = z.infer<typeof schema>
 
 const RoundingViewFilterCard = () => {
-  const [filters, setFilters] = useState<string[]>([])
-  const cachedFilters = useStore((state) => state.cachedFilters)
+  const [filters, setFilters] = useState<string[]>(ROUNDING_FILTERS)
+  const {cachedFilters, saveFilters} = useStore((state) => ({cachedFilters: state.cachedFilters, saveFilters: state.saveFilters}))
   const ctxValue = useMemo(
     () => ({
       filters,
@@ -152,7 +153,7 @@ const RoundingViewFilterCard = () => {
       position="sticky"
       top="0"
     >
-      <RoundingFiltersContext.Provider value={ctxValue}>
+      <FiltersContext.Provider value={ctxValue}>
         <FormContainer form={form} onSubmit={onSubmit}>
           <Flex align="start" direction="column" wrap="wrap" gap="2">
             <Flex align="start" width="100%" gap="2">
@@ -188,11 +189,17 @@ const RoundingViewFilterCard = () => {
               <CoInsuranceRange />
               <BalanceRange />
               <NoteSignedSelect />
-              <FiltersActionGroup />
+              <FiltersButtonsGroup>
+                <AddFiltersPopover 
+                  view="Rounding View"
+                  onSave={saveFilters}
+                  viewFilters={ROUNDING_FILTERS}
+                />
+              </FiltersButtonsGroup>
             </Grid>
           </Flex>
         </FormContainer>
-      </RoundingFiltersContext.Provider>
+      </FiltersContext.Provider>
     </Flex>
   )
 }

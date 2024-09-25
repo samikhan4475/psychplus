@@ -2,11 +2,11 @@ import { Flex, Select } from '@radix-ui/themes'
 import { PropsWithRow } from '@/components'
 import { CODESETS } from '@/constants'
 import { useCodesetCodes } from '@/hooks'
-import { BookedAppointment } from '../../types/schedule'
+import { Appointment } from '../../types'
 
 const VisitSequenceSelectCell = ({
   row: { original: appointment },
-}: PropsWithRow<BookedAppointment>) => {
+}: PropsWithRow<Appointment>) => {
   const codes = useCodesetCodes(CODESETS.VisitSequence)
   const items = codes.map((code) => (
     <Select.Item key={code.value} value={code.value}>
