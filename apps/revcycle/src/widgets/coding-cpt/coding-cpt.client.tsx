@@ -23,7 +23,7 @@ const CodingCPTClient = ({
 
   useEffect(() => {
     initializeData()
-  }, [])
+  }, [posCodeSets, cptCategoryCodeSets])
 
   const initializeData = async () => {
     try {
