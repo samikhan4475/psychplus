@@ -24,6 +24,19 @@ interface PatientRelationship {
   contactDetails?: ContactDetails
   isAllowedToReleaseInformation: boolean
 }
+
+interface Relationship {
+  firstName: string
+  lastName: string
+  middleName: string
+  relationship: string
+  address: string
+  email: string
+  homePhone: string
+  isEmergencyContact: boolean
+  isRri: boolean
+  isGuardian: boolean
+}
 interface PatientPreferredPartner {
   id: string
   name: string
@@ -38,4 +51,16 @@ interface PatientPreferredPartner {
   endDate: string
   priority: string
 }
-export type { PatientProfile, PatientPreferredPartner, PatientRelationship }
+
+interface PatientHistory {
+  dateTime: string
+  username: string
+}
+
+export type {
+  PatientProfile,
+  PatientPreferredPartner,
+  PatientRelationship,
+  PatientHistory,
+  Relationship,
+}

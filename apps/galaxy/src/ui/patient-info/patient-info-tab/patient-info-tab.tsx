@@ -16,9 +16,9 @@ import { AdditionalContactInfoCard } from './additional-contact-info'
 import { AlternativeInfoCard } from './alternate-info'
 import { CreateUserCard } from './create-user'
 import { DescriptiveCard } from './descriptive'
-import { HistoryButton } from './history-button'
 import { LockPageSwitch } from './lock-page-switch'
 import { PatientDataCard } from './patient-data'
+import { PatientHistoryDialog } from './patient-history-dialog'
 import { PatientInfoForm } from './patient-info-form'
 import { PreferredPartnerCard } from './preferred-partner'
 import { RelationshipCard } from './relationship'
@@ -107,7 +107,7 @@ const PatientInfoTab = ({ patientId, googleApiKey }: PatientInfoTabProps) => {
           <LockPageSwitch />
           <Flex align="center" justify="end" gap="2" className="flex-1">
             <StatusSelector />
-            <HistoryButton />
+            <PatientHistoryDialog />
             <ResetPasswordButton />
             <SaveButton />
           </Flex>
