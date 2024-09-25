@@ -14,29 +14,6 @@ interface PatientProfile {
   guardianLastName?: string
 }
 
-interface PatientRelationship {
-  id?: string
-  name: LegalName
-  patientId?: number
-  isEmergencyContact: boolean
-  isGuardian?: boolean
-  guardianRelationshipCode?: string
-  contactDetails?: ContactDetails
-  isAllowedToReleaseInformation: boolean
-}
-
-interface Relationship {
-  firstName: string
-  lastName: string
-  middleName: string
-  relationship: string
-  address: string
-  email: string
-  homePhone: string
-  isEmergencyContact: boolean
-  isRri: boolean
-  isGuardian: boolean
-}
 interface PatientPreferredPartner {
   id: string
   name: string
@@ -57,10 +34,4 @@ interface PatientHistory {
   username: string
 }
 
-export type {
-  PatientProfile,
-  PatientPreferredPartner,
-  PatientRelationship,
-  PatientHistory,
-  Relationship,
-}
+export type { PatientProfile, PatientPreferredPartner, PatientHistory }

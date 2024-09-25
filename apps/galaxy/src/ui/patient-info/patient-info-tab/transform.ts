@@ -10,7 +10,8 @@ import {
   getPatientMRN,
   getPatientPhone,
 } from '@/utils'
-import { PatientInfoSchema } from './patient-info-schema'
+import { AddRelationshipRequestBody } from './actions'
+import { AddRelationshipSchemaType } from './add-relationship-dialog/schema'
 import type { PatientProfile } from './types'
 
 const transformIn = (data: PatientProfileRaw): PatientProfile => ({
@@ -32,4 +33,38 @@ const transformOut = (id: string): PatientProfileRaw =>
     id: Number(id),
   } as PatientProfileRaw)
 
-export { transformIn, transformOut }
+const addRelationshipTransformOut = (
+  patientId: string,
+  data: AddRelationshipSchemaType,
+): AddRelationshipRequestBody => ({
+  guardianRelationshipCode: data.relationship,
+  patientId: parseInt(patientId),
+  name: {
+    firstName: data.firstName,
+    middleName: data.middleName,
+    lastName: data.lastName,
+  },
+  isEmergencyContact: data.isEmergencyContact,
+  isAllowedToReleaseInformation: data.isAllowedToReleaseInformation,
+  isGuardian: data.isGuardian,
+  contactDetails: {
+    email: data.email,
+    phoneNumbers: [
+      {
+        number: data.phone,
+        type: 'Home',
+      },
+    ],
+    addresses: data.address
+      ? [
+          {
+            type: 'Home',
+            street1: data.address,
+            postalCode: String(data.postalCode),
+          },
+        ]
+      : [],
+  },
+})
+
+export { transformIn, transformOut, addRelationshipTransformOut }

@@ -20,7 +20,7 @@ const InsuranceTab = () => {
   useEffect(() => {
     Promise.all([fetchInsurances(), getInsurancePayersAction()]).then(
       ([_, insurancePayerResponse]) => {
-        if (insurancePayerResponse.state == 'success') {
+        if (insurancePayerResponse.state === 'success') {
           setInsurancePayers(insurancePayerResponse.data ?? [])
         }
       },

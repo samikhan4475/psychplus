@@ -3,7 +3,6 @@
 import { ScrollArea } from '@radix-ui/themes'
 import { ColumnDef } from '@tanstack/react-table'
 import { ColumnHeader, DataTable, LongTextCell, TextCell } from '@/components'
-import { Relationship } from '../../../types'
 import {
   EmergencyContactCell,
   GuardianCell,
@@ -11,7 +10,20 @@ import {
   RRICell,
 } from './cells'
 
-const columns: ColumnDef<Relationship>[] = [
+interface DummyRelationship {
+  address: string
+  email: string
+  firstName: string
+  lastName: string
+  middleName: string
+  homePhone: string
+  isEmergencyContact: boolean
+  isGuardian: boolean
+  isRri: boolean
+  relationship: string
+}
+
+const columns: ColumnDef<DummyRelationship>[] = [
   {
     id: 'firstName',
     header: () => <ColumnHeader label="First Name" />,
@@ -80,7 +92,7 @@ const PreferredPartnerTable = () => {
   )
 }
 
-const data: Relationship[] = [...Array(14)].map((_, ind) => ({
+const data: DummyRelationship[] = [...Array(14)].map((_, ind) => ({
   address: 'St 6, New York city',
   email: 'uxdesigner@gmail.com',
   firstName: 'Mat Leo',
@@ -92,4 +104,4 @@ const data: Relationship[] = [...Array(14)].map((_, ind) => ({
   isRri: ind % 2 === 0,
   relationship: 'father',
 }))
-export { PreferredPartnerTable }
+export { PreferredPartnerTable, type DummyRelationship }

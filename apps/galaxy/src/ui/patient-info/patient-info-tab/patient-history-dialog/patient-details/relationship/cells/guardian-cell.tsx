@@ -2,13 +2,13 @@
 
 import { Switch } from '@radix-ui/themes'
 import { PropsWithRow } from '@/components'
-import { Relationship } from '@/ui/patient-info/patient-info-tab/types'
+import { DummyRelationship } from '../relationship-table'
 
 const GuardianCell = ({
   row: {
     original: { isGuardian },
   },
-}: PropsWithRow<Relationship>) => {
+}: PropsWithRow<DummyRelationship>) => {
   return <Switch defaultChecked={isGuardian} size="1" color="green" />
 }
 

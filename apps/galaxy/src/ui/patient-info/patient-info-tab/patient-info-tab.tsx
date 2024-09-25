@@ -1,17 +1,9 @@
 'use client'
 
-import { useEffect, useState } from 'react'
 import { Flex } from '@radix-ui/themes'
-import { type ActionResult } from '@/api'
 import { PatientConsent, Relationship } from '@/types'
 import { POLICY_TYPE_A } from '../constants'
-import { TabContentHeading, ViewLoadingPlaceholder } from '../shared'
-import {
-  getPatientConsentsAction,
-  getPatientPreferredPartnersAction,
-  getPatientProfileAction,
-  getPatientRelationshipsAction,
-} from './actions'
+import { TabContentHeading } from '../shared'
 import { AdditionalContactInfoCard } from './additional-contact-info'
 import { AlternativeInfoCard } from './alternate-info'
 import { CreateUserCard } from './create-user'
@@ -33,64 +25,21 @@ const TAB_TITLE = 'Patient Info'
 interface PatientInfoTabProps {
   patientId: string
   googleApiKey: string
+  patientProfile: PatientProfile
+  patientPreferredPartners: PatientPreferredPartner[]
+  patientRelationships: Relationship[]
+  patientConsents: PatientConsent[]
 }
 
-const PatientInfoTab = ({ patientId, googleApiKey }: PatientInfoTabProps) => {
-  const [profileResult, setProfileResult] =
-    useState<ActionResult<PatientProfile>>()
-  const [consentsResult, setConsentsResult] =
-    useState<ActionResult<PatientConsent[]>>()
-  const [patientRelationships, setPatientRelationships] =
-    useState<ActionResult<Relationship[]>>()
-  const [preferredPartnerResult, setPreferredPartnerResult] =
-    useState<ActionResult<PatientPreferredPartner[]>>()
-
-  useEffect(() => {
-    const actions = [
-      getPatientProfileAction(patientId),
-      getPatientConsentsAction(patientId),
-      getPatientRelationshipsAction(patientId),
-      getPatientPreferredPartnersAction(patientId),
-    ]
-
-    Promise.all(actions).then(
-      ([
-        profileResult,
-        consentsResult,
-        patientRelationshipsResult,
-        preferredPartnerResult,
-      ]) => {
-        setProfileResult(profileResult as ActionResult<PatientProfile>)
-        setConsentsResult(consentsResult as ActionResult<PatientConsent[]>)
-        setPatientRelationships(
-          patientRelationshipsResult as ActionResult<Relationship[]>,
-        )
-        setPreferredPartnerResult(
-          preferredPartnerResult as ActionResult<PatientPreferredPartner[]>,
-        )
-      },
-    )
-  }, [patientId])
-
-  if (!profileResult || !consentsResult || !patientRelationships) {
-    return <ViewLoadingPlaceholder title={TAB_TITLE} />
-  }
-
-  if (profileResult.state === 'error') {
-    return <div>{profileResult.error}</div>
-  }
-
-  if (consentsResult.state === 'error') {
-    return <div>{consentsResult.error}</div>
-  }
-
-  if (patientRelationships.state === 'error') {
-    return <div>{patientRelationships.error}</div>
-  }
-  if (preferredPartnerResult?.state === 'error') {
-    return <div>{preferredPartnerResult.error}</div>
-  }
-  const isPolicySigned = consentsResult.data.some(
+const PatientInfoTab = ({
+  patientId,
+  googleApiKey,
+  patientProfile,
+  patientPreferredPartners,
+  patientRelationships,
+  patientConsents,
+}: PatientInfoTabProps) => {
+  const isPolicySigned = patientConsents.some(
     (consent) => consent.signingDate && consent.type === POLICY_TYPE_A,
   )
 
@@ -113,20 +62,23 @@ const PatientInfoTab = ({ patientId, googleApiKey }: PatientInfoTabProps) => {
           </Flex>
         </Flex>
       </TabContentHeading>
-      <PatientInfoForm patient={profileResult.data}>
+      <PatientInfoForm patient={patientProfile}>
         <Flex direction="column" gap="2">
           <CreateUserCard
             patientId={patientId}
-            phone={profileResult.data.phone}
-            email={profileResult.data.email}
+            phone={patientProfile.phone}
+            email={patientProfile.email}
             isPolicySigned={isPolicySigned}
           />
           <PatientDataCard patientId={patientId} />
           <AddressCard googleApiKey={googleApiKey} />
           <PreferredPartnerCard
-            preferredPartners={preferredPartnerResult?.data ?? []}
+            preferredPartners={patientPreferredPartners ?? []}
           />
-          <RelationshipCard patientRelationships={patientRelationships.data} />
+          <RelationshipCard
+            patientId={patientId}
+            patientRelationships={patientRelationships ?? []}
+          />
           <AdditionalContactInfoCard patientId={patientId} />
           <AlternativeInfoCard googleApiKey={googleApiKey} />
           <DescriptiveCard patientId={patientId} />

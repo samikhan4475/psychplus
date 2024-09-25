@@ -37,4 +37,6 @@ const AuthAndEligibilityTab = memo(() => {
   )
 })
 
+AuthAndEligibilityTab.displayName = 'AuthAndEligibilityTab'
+
 export { AuthAndEligibilityTab }

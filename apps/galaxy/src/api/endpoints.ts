@@ -48,6 +48,12 @@ const GET_USER_PERMISSIONS_ENDPOINT = `${API_URL}/api/users/self/permissions`
 const SEARCH_LOCATION_SERVICES_ENDPOINT = `${API_URL}/api/locationservices/actions/search`
 const SEARCH_BOOKED_APPOINTMENTS_ENDPOINT = `${API_URL}/api/appointments/actions/search`
 const GET_AVAILABLE_APPOINTMENT_ENDPOINT = `${API_URL}/api/schedules/availability/search`
+const ADD_PATIENT_RELATIONSHIP_ENDPOINT = (patientId: string) =>
+  `${API_URL}/api/patients/${patientId}/relationships`
+const DELETE_PATIENT_RELATIONSHIP_ENDPOINT = (
+  patientId: string,
+  relationshipId: string,
+) => `${API_URL}/api/patients/${patientId}/relationships/${relationshipId}`
 
 export {
   USER_ENDPOINT,
@@ -83,4 +89,6 @@ export {
   SEARCH_LOCATION_SERVICES_ENDPOINT,
   SEARCH_BOOKED_APPOINTMENTS_ENDPOINT,
   GET_AVAILABLE_APPOINTMENT_ENDPOINT,
+  ADD_PATIENT_RELATIONSHIP_ENDPOINT,
+  DELETE_PATIENT_RELATIONSHIP_ENDPOINT,
 }

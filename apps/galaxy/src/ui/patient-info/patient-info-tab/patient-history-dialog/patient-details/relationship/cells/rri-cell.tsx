@@ -2,13 +2,13 @@
 
 import { Switch } from '@radix-ui/themes'
 import { PropsWithRow } from '@/components'
-import { Relationship } from '@/ui/patient-info/patient-info-tab/types'
+import { DummyRelationship } from '../relationship-table'
 
 const RRICell = ({
   row: {
     original: { isRri },
   },
-}: PropsWithRow<Relationship>) => {
+}: PropsWithRow<DummyRelationship>) => {
   return <Switch defaultChecked={isRri} size="1" color="green" />
 }
 

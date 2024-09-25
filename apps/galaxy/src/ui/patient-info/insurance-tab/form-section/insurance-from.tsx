@@ -143,4 +143,6 @@ const InsuranceForm = memo(
   },
 )
 
+InsuranceForm.displayName = 'InsuranceForm'
+
 export { InsuranceForm }

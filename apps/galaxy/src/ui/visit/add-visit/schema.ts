@@ -62,7 +62,6 @@ const schema = z
     group: z.string().min(1, 'Required'),
   })
   .superRefine((data, ctx) => {
-    debugger
     const validateTimedService = (
       _data: Partial<SchemaType>,
       _ctx: RefinementCtx,

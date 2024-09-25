@@ -23,8 +23,8 @@ const DateInput = ({ label, field: fieldName, autoFocus }: DateInputProps) => {
       name={fieldName}
       rules={{ required: 'Required' }}
       render={({
-        field: { name, value, onChange, onBlur, ref },
-        fieldState: { invalid, error },
+        field: { name, value, onChange, onBlur },
+        fieldState: { invalid },
       }) => (
         <DateField
           autoFocus={autoFocus}

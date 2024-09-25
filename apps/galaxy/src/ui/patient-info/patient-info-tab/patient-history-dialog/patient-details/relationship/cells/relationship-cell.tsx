@@ -2,13 +2,13 @@
 
 import { Select } from '@radix-ui/themes'
 import { PropsWithRow } from '@/components'
-import { Relationship } from '@/ui/patient-info/patient-info-tab/types'
+import { DummyRelationship } from '../relationship-table'
 
 const RelationshipCell = ({
   row: {
     original: { relationship },
   },
-}: PropsWithRow<Relationship>) => {
+}: PropsWithRow<DummyRelationship>) => {
   return (
     <Select.Root defaultValue={relationship} size="1">
       <Select.Trigger className="h-4 w-full px-0 !outline-none [box-shadow:none] data-[disabled]:!bg-gray-3 data-[disabled]:!text-gray-11" />

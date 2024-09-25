@@ -3,16 +3,25 @@
 import { Flex } from '@radix-ui/themes'
 import { CardHeading } from '@/components'
 import { Relationship } from '@/types'
+import { AddRelationshipDialog } from '../add-relationship-dialog'
 import { RelationshipTable } from './relationship-table'
 
 interface RelationshipCardProps {
   patientRelationships: Relationship[]
+  patientId: string
 }
 
-const RelationshipCard = ({ patientRelationships }: RelationshipCardProps) => {
+const RelationshipCard = ({
+  patientRelationships,
+  patientId,
+}: RelationshipCardProps) => {
   return (
     <Flex direction="column" className="bg-white overflow-hidden rounded-1">
-      <CardHeading title="Relationship" />
+      <CardHeading title="Relationship">
+        <Flex justify="end" flexGrow="1">
+          <AddRelationshipDialog patientId={patientId} />
+        </Flex>
+      </CardHeading>
       <Flex direction="column" p="2" gap="2">
         <RelationshipTable patientRelationships={patientRelationships} />
       </Flex>
