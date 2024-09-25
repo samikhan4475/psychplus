@@ -17,7 +17,6 @@ const getPatientBillingHistoryAction = async ({
     }
   }
 
-  
   return {
     state: 'success',
     data: {

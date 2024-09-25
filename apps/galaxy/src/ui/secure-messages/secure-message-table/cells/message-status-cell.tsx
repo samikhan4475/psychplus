@@ -13,7 +13,13 @@ const MessageStatusCell = ({ row }: { row: Row<SecureMessage> }) => {
   else if (isReplied) status = SecureMessageStatus.REPLIED
   return (
     <Badge color={getStatusColor(status)}>
-      <TextCell className={cn('font-bold', `text-${getStatusColor(status)}`)}>
+      <TextCell
+        className={cn(
+          'font-bold',
+          `text-${getStatusColor(status)}`,
+          'text-[11px]',
+        )}
+      >
         {status}
       </TextCell>
     </Badge>

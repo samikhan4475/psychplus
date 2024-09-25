@@ -1,16 +1,8 @@
+import { ClinicAddress, LegalName, Metadata, } from "@/types"
 import { Table, TableOptions, TableState, Updater } from "@tanstack/react-table"
+import { Dispatch, SetStateAction } from "react"
+import { SchemaType } from "./secure-messages-view"
 
-interface Metadata {
-    createdOn: string
-    createdBy: number
-    createdByFullName: string
-    updatedOn: string
-    updatedBy: number
-    updatedByFullName: string
-    deletedOn: string
-    deletedBy: number
-    deletedByFullName: string
-}
 enum SecureMessagesTab {
     ALL = 'Inbox',
     DRAFT = 'Draft',
@@ -42,11 +34,17 @@ enum SecureMessageType {
     FORWARD = 'Forward',
     REPLY = 'Reply',
 }
+
+interface MetadataMapping extends Metadata {
+    deletedOn: string
+    deletedByFullName: string
+    deletedBy: number
+}
 interface SecureMessage {
     id?: string
     senderUserId?: number
     conversationId?: string
-    metadata?: Metadata
+    metadata?: MetadataMapping
     attachments?: Attachment[] | []
     channels?: Channel[] | []
     recordStatus: string
@@ -79,7 +77,7 @@ interface Channel {
 
 interface EmailPreview {
     id: string
-    metadata: Metadata
+    metadata: MetadataMapping
     recordStatus: string
     receiverUserId: number
     messageId: string
@@ -96,7 +94,7 @@ interface EmailPreview {
 
 interface ChannelMessageStatus {
     id: string
-    metadata: Metadata
+    metadata: MetadataMapping
     recordStatus: string
     receiverUserId: number
     messageId: string
@@ -163,12 +161,57 @@ interface DataTableFooterProps {
 interface SecureMessageStore {
     secureMessages: SecureMessage[],
     setSecureMessages: (secureMessages: SecureMessage[]) => void,
+    loading?: boolean
+    error?: string
+    fetch: (page?: number, reset?: boolean) => void
+    formValues?: Partial<SchemaType>
 }
 
 
 
 type SecureMessageStoreType = SecureMessageStore
+
+interface PhoneNumber {
+    type: string
+    number: string
+    extension: string
+    comment: string
+}
+interface ContactInfo {
+    email: string
+    emailVerificationStatus: string
+    phoneNumbers?: PhoneNumber[]
+    addresses: ClinicAddress[]
+    isMailingAddressSameAsPrimary: boolean
+}
+interface LegalNameMapping extends LegalName {
+    suffix: string
+}
+interface EmailRecipients {
+    id: number
+    metadata: MetadataMapping
+    legalName: LegalNameMapping
+    userRoleCode: string
+    contactInfo: ContactInfo
+    staffId: number
+    patientId: number
+}
+interface ActiveComponentProps {
+    setActiveComponent: Dispatch<SetStateAction<ActiveComponent>>
+}
+interface AttachmentsProps {
+    attachments: File[];
+    handleDeleteFile: (index: number) => void;
+}
+interface FileTileProps {
+    attachment: Attachment | File
+    handleDeleteFile: () => void
+}
 export {
+    type FileTileProps,
+    type AttachmentsProps,
+    type ActiveComponentProps,
+    type EmailRecipients,
     type SecureMessageStoreType,
     type DataTableFooterProps,
     type CustomTable,

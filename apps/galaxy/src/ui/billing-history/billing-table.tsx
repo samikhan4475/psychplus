@@ -152,7 +152,7 @@ const columns: ColumnDef<BillingHistory>[] = [
     header: () => (
       <ColumnHeader
         className="!text-1 !font-medium"
-        label="Scheduling Status "
+        label="Scheduling Status "
       />
     ),
     cell: ({ row }) => (
@@ -165,7 +165,7 @@ const columns: ColumnDef<BillingHistory>[] = [
     id: 'verification',
     accessorKey: 'verification',
     header: () => (
-      <ColumnHeader className="!text-1 !font-medium" label="Verification " />
+      <ColumnHeader className="!text-1 !font-medium" label="Verification " />
     ),
     cell: ({ row }) => (
       <Box>
@@ -174,10 +174,10 @@ const columns: ColumnDef<BillingHistory>[] = [
     ),
   },
   {
-    id: 'billingStatus ',
-    accessorKey: 'billingStatus ',
+    id: 'billingStatus ',
+    accessorKey: 'billingStatus ',
     header: () => (
-      <ColumnHeader className="!text-1 !font-medium" label="Billing Status  " />
+      <ColumnHeader className="!text-1 !font-medium" label="Billing Status  " />
     ),
     cell: ({ row }) => (
       <Box>
@@ -189,7 +189,7 @@ const columns: ColumnDef<BillingHistory>[] = [
     id: 'cmd',
     accessorKey: 'cmd',
     header: () => (
-      <ColumnHeader className="!text-1 !font-medium" label="CMD  " />
+      <ColumnHeader className="!text-1 !font-medium" label="CMD  " />
     ),
     cell: ({ row }) => (
       <Box>
@@ -201,7 +201,7 @@ const columns: ColumnDef<BillingHistory>[] = [
     id: 'sign',
     accessorKey: 'sign',
     header: () => (
-      <ColumnHeader className="!text-1 !font-medium" label="Sign  " />
+      <ColumnHeader className="!text-1 !font-medium" label="Sign  " />
     ),
     cell: ({ row }) => (
       <Box>

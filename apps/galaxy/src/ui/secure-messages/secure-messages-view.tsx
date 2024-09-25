@@ -1,38 +1,32 @@
 'use client'
 
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Flex } from '@radix-ui/themes'
+import { DateValue } from 'react-aria-components'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import z from 'zod'
-import { FormContainer } from '@/components'
-import { getAllSecureMessagesAction } from './actions'
+import { FormContainer, LoadingPlaceholder } from '@/components'
 import { MessageSection } from './message-section'
 import { useStore } from './store'
 
 const schema = z.object({
-  startDate: z.date().optional(),
-  endDate: z.date().optional(),
+  startDate: z.custom<DateValue>().optional(),
+  endDate: z.custom<DateValue>().optional(),
   from: z.string().optional(),
   status: z.string().optional(),
   name: z.string().optional(),
+  subject: z.string().optional(),
+  searchMessage: z.string().optional(),
 })
 
-type SchemaType = z.infer<typeof schema>
+export type SchemaType = z.infer<typeof schema>
 
 const SecureMessagesView = () => {
-  const ref = useRef<HTMLDivElement>(null)
-  const { setSecureMessages } = useStore((state) => state)
+  const { fetch, loading } = useStore((state) => state)
 
   useEffect(() => {
-    const fetchMessages = async () => {
-      const secureMessages = await getAllSecureMessagesAction()
-      if (secureMessages.state === 'error') {
-        return secureMessages.error
-      }
-      setSecureMessages(secureMessages.data)
-    }
-    fetchMessages()
+    fetch()
   }, [])
 
   const form = useForm<SchemaType>({
@@ -47,14 +41,24 @@ const SecureMessagesView = () => {
     },
   })
 
-  const onSubmit: SubmitHandler<SchemaType> = () => {
-    //TODO: implement when integrating APIs
+  const onSubmit: SubmitHandler<SchemaType> = (data) => {
+    // Will remove console once integrate API
+    console.log('Submitted Data:', data)
+  }
+  if (loading) {
+    return (
+      <Flex height="100%" align="center" justify="center">
+        <LoadingPlaceholder />
+      </Flex>
+    )
   }
   return (
-    <FormContainer form={form} onSubmit={onSubmit}>
-      <Flex className="h-fit min-w-fit" ref={ref}>
-        <MessageSection />
-      </Flex>
+    <FormContainer
+      form={form}
+      onSubmit={onSubmit}
+      className="h-fit min-w-fit  pt-2"
+    >
+      <MessageSection />
     </FormContainer>
   )
 }

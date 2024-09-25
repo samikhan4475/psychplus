@@ -1,9 +1,9 @@
 import * as api from '@/api'
 import { SecureMessage } from '../types'
 
-const getAllSecureMessagesAction = async (): Promise<
-  api.ActionResult<SecureMessage[]>
-> => {
+const getAllSecureMessagesAction = async ({
+  ...rest
+}): Promise<api.ActionResult<SecureMessage[]>> => {
   const response = await mockFetchAllSecureMessages()
   if (response.state === 'error') {
     return {
@@ -61,7 +61,7 @@ const mockFetchAllSecureMessages = async (): Promise<
                   messageId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
                   receiverType: 'MAIN',
                   receiverStatus: 'Dispatch',
-                  sendMode: 'EXt Staff',
+                  sendMode: 'EXT Staff',
                   receiverStatusDetail: 'string',
                   externalMessageId: 'string',
                   externalEmail: 'string',
@@ -92,4 +92,4 @@ const mockFetchAllSecureMessages = async (): Promise<
   })
 }
 
-export { mockFetchAllSecureMessages, getAllSecureMessagesAction }
+export { getAllSecureMessagesAction }

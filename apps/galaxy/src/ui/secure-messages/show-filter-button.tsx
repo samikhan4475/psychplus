@@ -14,14 +14,14 @@ const ShowFiltersButton = ({
       size="1"
       variant="outline"
       className={cn(
-        '  w-[66px] border-none text-[12px] outline-none [box-shadow:none] ',
+        '  w-[68px] border-none text-[12px] outline-none [box-shadow:none] ',
         showFilter
-          ? 'bg-pp-focus-bg text-pp-link-text [border:1px_solid_#8DA4EF] '
-          : ' text-black   bg-transparent [border:1px_solid_#DDDDE3]',
+          ? 'bg-pp-focus-bg text-pp-link-text border-pp-focus-outline border border-solid'
+          : 'text-black   border-pp-grey border border-solid  bg-transparent',
       )}
       onClick={onClick}
     >
-      <ListFilterIcon width={10} height={10} />
+      <ListFilterIcon className="h-[12px] w-[12px]" />
       Filters
     </Button>
   )

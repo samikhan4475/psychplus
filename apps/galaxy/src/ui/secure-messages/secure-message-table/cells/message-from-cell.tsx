@@ -8,7 +8,13 @@ import { SecureMessage } from '../../types'
 
 const MessageFromCell = ({ row }: { row: Row<SecureMessage> }) => (
   <Badge color={'gray'}>
-    <TextCell className={cn('flex items-center gap-1 font-bold', 'text-gray')}>
+    <TextCell
+      className={cn(
+        'flex items-center gap-1 font-bold',
+        'text-gray',
+        'text-[11px]',
+      )}
+    >
       <UserSharedLineIcon />
       {row?.original?.channels?.[0]?.sendMode}
     </TextCell>

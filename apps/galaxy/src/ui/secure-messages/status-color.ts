@@ -3,8 +3,8 @@ import { SecureMessageStatus } from "./types"
 const getStatusColor = (status: SecureMessageStatus) => {
     switch (status) {
         case SecureMessageStatus.READ:
-            return "gray"
         case SecureMessageStatus.REPLIED:
+            return "gray"
         case SecureMessageStatus.UNREAD:
             return "blue"
         default:
@@ -14,5 +14,4 @@ const getStatusColor = (status: SecureMessageStatus) => {
 
 export {
     getStatusColor
-
 }

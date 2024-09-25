@@ -1,0 +1,30 @@
+.ql-container.ql-snow {
+  border-radius: 10px !important;
+  border-bottom: 0px !important;
+  border-left: 0px !important;
+  border-right: 0px !important;
+  background-color: white !important;
+  height: 10rem !important;
+}
+.ql-active {
+  background-color: #d9e2fc !important;
+  width: auto !important;
+  border-radius: 2px !important;
+}
+.react-tags__tag {
+  background-color: white !important;
+  border: 1px solid #dddde3 !important;
+  height: 24px !important;
+  padding: 2px 4px !important;
+  font-size: 14px !important;
+  margin: 0 !important;
+}
+.react-tags__tag:hover {
+  color: black !important;
+}
+.react-tags__tag::after {
+  background-color: #8b8d98 !important;
+}
+.react-tags__combobox {
+  margin: 0 !important;
+}

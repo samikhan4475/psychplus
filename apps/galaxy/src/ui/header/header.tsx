@@ -50,7 +50,7 @@ const Header = () => {
         <NavigationLinks />
         <Flex align="center" gap="3">
           <PatientSearchInput />
-          <InboxLink />
+          <InboxLink href="/secure-messages" label="Inbox" />
         </Flex>
       </Flex>
       <NavigationTabs />

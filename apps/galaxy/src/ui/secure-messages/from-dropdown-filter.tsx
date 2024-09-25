@@ -5,14 +5,14 @@ import { SelectInput } from '@/components'
 const FromDropdownFilter = () => {
   return (
     <Flex width="100%" gap="1" align="center">
-      <Text size="1" weight="medium">
+      <Text size="1" weight="medium" className="text-[12px]">
         From
       </Text>
       <SelectInput
         field="Select"
         label=""
         name=""
-        className="w-full"
+        className=" w-[238px]"
         buttonClassName="w-full"
         options={[{ label: 'Yes', value: 'yes' }]}
         key=""

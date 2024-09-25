@@ -1,11 +1,12 @@
 import React, { useState } from 'react'
 import { Flex } from '@radix-ui/themes'
+import { NewEmailButton } from './compose-email/new-email-button'
 import { MessageSearch } from './message-search'
-import { NewEmailButton } from './new-email-button'
 import { ShowFilter } from './show-filter'
 import { ShowFiltersButton } from './show-filter-button'
+import { ActiveComponent, ActiveComponentProps } from './types'
 
-const MessageHeader = () => {
+const MessageHeader = ({ setActiveComponent }: ActiveComponentProps) => {
   const [showFilter, setShowFilter] = useState(false)
 
   return (
@@ -22,7 +23,9 @@ const MessageHeader = () => {
             showFilter={showFilter}
             onClick={() => setShowFilter(!showFilter)}
           />
-          <NewEmailButton />
+          <NewEmailButton
+            onClick={() => setActiveComponent(ActiveComponent.COMPOSE_MAIL)}
+          />
         </Flex>
       </Flex>
       <ShowFilter showFilter={showFilter} />

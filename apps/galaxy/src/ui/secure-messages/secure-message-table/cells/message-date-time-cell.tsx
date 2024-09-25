@@ -7,14 +7,15 @@ import { SecureMessage } from '../../types'
 
 const MessageDateTimeCell = ({ row }: { row: Row<SecureMessage> }) => {
   const dateTime =
-    row?.original?.metadata?.createdBy.toString() || new Date().toISOString()
+    row?.original?.metadata?.createdBy?.toString() || new Date().toISOString()
 
   const date = getSlashedDateString(dateTime)
   const time = getTimeLabel(dateTime)
 
   return (
-    <TextCell>
-      {date} <Text className="text-pp-gray-1">{time}</Text>
+    <TextCell className="text-[12px] font-[400]">
+      {date}{' '}
+      <Text className="text-pp-text-sub text-[12px] font-[400]">{time}</Text>
     </TextCell>
   )
 }

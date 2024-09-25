@@ -44,7 +44,7 @@ const SecureMessagesTable = () => {
       },
       {
         id: 'name',
-        size: 100,
+        size: 120,
         header: ({ column }) =>
           ColumnHeader({
             column,
@@ -55,7 +55,7 @@ const SecureMessagesTable = () => {
       },
       {
         id: 'datatime',
-        size: 100,
+        size: 140,
         header: ({ column }) =>
           ColumnHeader({
             column,
@@ -83,7 +83,7 @@ const SecureMessagesTable = () => {
     <DataTable
       data={secureMessages}
       columns={columns}
-      tableClass="bg-white mt-4 w-[552px]"
+      tableClass="bg-white mt-4 "
     />
   )
 }

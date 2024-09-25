@@ -1,31 +1,31 @@
 import React from 'react'
-import { Flex, Tooltip } from '@radix-ui/themes'
+import { Box, Flex, Tooltip } from '@radix-ui/themes'
 import { Row } from '@tanstack/react-table'
 import { TextCell } from '@/components'
-import { ArchieveIcon, MailIcon } from '@/components/icons'
-import { CustomTable, SecureMessage } from '../../types'
+import { ArchiveIcon, MailIcon } from '@/components/icons'
+import { SecureMessage } from '../../types'
 
-const MessageSubjectCell = ({
-  row,
-  table,
-}: {
-  row: Row<SecureMessage>
-  table: CustomTable<SecureMessage>
-}) => {
+const MessageSubjectCell = ({ row }: { row: Row<SecureMessage> }) => {
   return (
-    <Flex justify="between" width="100%" className="relative">
-      <TextCell>{row.original.subject}</TextCell>
+    <Flex justify="between" width="100%" className="relative  p-0">
+      <TextCell className="line-clamp-1 overflow-hidden text-ellipsis text-[12px] font-[400]">
+        {row.original.subject}
+      </TextCell>
       <Flex
         gap="2"
         justify="end"
         pr="2"
-        className="bg-white invisible absolute right-0 top-0 px-2 group-hover/row-hover:visible"
+        className="bg-pp-bg-table-cell invisible absolute -top-0 right-0 p-0 px-2 group-hover/row-hover:visible"
       >
-        <Tooltip content="Archieve">
-          <ArchieveIcon />
+        <Tooltip content="Archive">
+          <Box className="hover:bg-pp-table-subRows rounded-2 p-[2px]">
+            <ArchiveIcon fill="#60646C" />
+          </Box>
         </Tooltip>
         <Tooltip content="Mark as Read">
-          <MailIcon />
+          <Box className="hover:bg-pp-table-subRows rounded-2 p-[2px]">
+            <MailIcon fill="#60646C" />
+          </Box>
         </Tooltip>
       </Flex>
     </Flex>
