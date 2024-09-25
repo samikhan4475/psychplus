@@ -129,6 +129,7 @@ const schema = z.object({
       placeOfService: validate.anyString.optional(),
       isDoNotBill: validate.nullOrBoolean,
       statusCode: validate.anyString.optional(),
+      isAnesthesia: validate.nullOrBoolean,
     }),
   ),
   claimDiagnosis: z
@@ -236,6 +237,10 @@ const AddClaimForm = ({
           dateOfServiceTo: line.dateOfServiceTo
             ? new Date(line.dateOfServiceTo)
             : undefined,
+          isAnesthsia: line?.isAnesthesia ?? false,
+          startTime: line?.startTime?.toString() ?? '',
+          minutes: line?.minutes?.toString() ?? '',
+          endTime: line?.endTime?.toString() ?? '',
         }),
       ),
     }
@@ -348,6 +353,7 @@ const AddClaimForm = ({
       placeOfService: '',
       isDoNotBill: false,
       statusCode: 'NewCharge',
+      isAnesthesia: false,
     }
 
     setValue('claimServiceLines', [...currentCharges, newCharge])
@@ -387,6 +393,7 @@ const AddClaimForm = ({
   const handleAccordionChange = (value: string[]) => {
     setOpenItems(value)
   }
+
 
   return (
     <Box className="px-2">

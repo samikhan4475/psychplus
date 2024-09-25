@@ -43,8 +43,10 @@ const TableCellProcedure = ({ row, form }: TableCellProps) => {
       const result = await fetchAndProcessCPTData(code)
 
       if (result) {
-        const { medicareAmount } = result
-
+        const { medicareAmount, category } = result
+        if (category === 'Anesthesia') {
+          form.setValue(`claimServiceLines.${row.index}.isAnesthesia`, true)
+        }
         setValue(`claimServiceLines.${row.index}.totalAmount`, medicareAmount, {
           shouldValidate: true,
           shouldDirty: true,
@@ -68,7 +70,7 @@ const TableCellProcedure = ({ row, form }: TableCellProps) => {
 
   const fetchAndProcessCPTData = async (
     code: string,
-  ): Promise<{ medicareAmount: number } | null> => {
+  ): Promise<{ medicareAmount: number; category: string } | null> => {
     try {
       const data = await getCPTSearchedRecords(0, 0, { cptCode: code })
       const response = data as CPTRecord[]
@@ -80,7 +82,8 @@ const TableCellProcedure = ({ row, form }: TableCellProps) => {
           apiResponse.medicareAmount !== null
             ? parseFloat(apiResponse.medicareAmount)
             : 0
-        return { medicareAmount }
+        const category = apiResponse.category ?? ''
+        return { medicareAmount, category }
       } else {
         return null
       }

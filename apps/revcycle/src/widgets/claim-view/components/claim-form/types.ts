@@ -29,37 +29,38 @@ interface Metadata {
 }
 
 interface ClaimServiceLine {
-  id?: string | null ; 
-  recordStatus?: string; 
-  claimId: string;
-  cptCode: string;
-  cptDescription?: string; 
-  nationalDrugCode?: string; 
-  modifierCode1?: string; 
-  modifierCode2?: string; 
-  modifierCode3?: string; 
-  modifierCode4?: string; 
-  diagnosisPointer1?: string; 
-  diagnosisPointer2?: string; 
-  diagnosisPointer3?: string; 
-  diagnosisPointer4?: string; 
-  serviceLineNotes?: string; 
-  authorizationNumber?: string; 
-  deletedReason?: string; 
-  minutes?: string; 
-  startTime?: string; 
-  endTime?: string; 
-  sequenceNo: number | null;
-  dateOfServiceFrom: Date; 
-  dateOfServiceTo: Date; 
-  units?: number | null; 
-  // nationalDrugCodeQuantity?: number | null; 
-  nationalDrugCodeMeasureUnit?: string; 
-  unitAmount?: number | null; 
-  totalAmount: number | null;
-  placeOfService?: string; 
-  isDoNotBill?: boolean | null; 
-  statusCode?: string; 
+  id?: string | null
+  recordStatus?: string
+  claimId: string
+  cptCode: string
+  cptDescription?: string
+  nationalDrugCode?: string
+  modifierCode1?: string
+  modifierCode2?: string
+  modifierCode3?: string
+  modifierCode4?: string
+  diagnosisPointer1?: string
+  diagnosisPointer2?: string
+  diagnosisPointer3?: string
+  diagnosisPointer4?: string
+  serviceLineNotes?: string
+  authorizationNumber?: string
+  deletedReason?: string
+  minutes?: string
+  startTime?: string
+  endTime?: string
+  sequenceNo: number | null
+  dateOfServiceFrom: Date
+  dateOfServiceTo: Date
+  units?: number | null
+  // nationalDrugCodeQuantity?: number | null;
+  nationalDrugCodeMeasureUnit?: string
+  unitAmount?: number | null
+  totalAmount: number | null
+  placeOfService?: string
+  isDoNotBill?: boolean | null
+  statusCode?: string
+  isAnesthesia?: boolean | null
 }
 
 interface ClaimDiagnosis {

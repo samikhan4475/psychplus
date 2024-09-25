@@ -9,17 +9,16 @@ import {
   TableCellDateOfServiceFrom,
   TableCellDateOfServiceTo,
   TableCellDiagnoses,
-  TableCellEndTime,
   TableCellModifiers,
   TableCellPOS,
   TableCellProcedure,
-  TableCellStartTime,
 } from './charges-table-components'
 import { TableCellUnits } from './charges-table-components/units'
 import { TableCellUnitAmount } from './charges-table-components/units-amount'
 import { ClaimRowActionDropdown } from './claim-data-table-row.action'
 import { ClaimTableCellLongText } from './claim-table-cell-long-text'
 import { ClaimServiceLine } from './types'
+import { TableCellTime } from './charges-table-components/charge-time'
 
 const getColumns = (
   form: UseFormReturn<SchemaType>,
@@ -152,7 +151,7 @@ const getColumns = (
         className="text-[#000]"
       />
     ),
-    cell: ({ row }) => <TableCellStartTime row={row} />,
+    cell: ({ row }) => <TableCellTime  row={row} form={form}  isStartTime={true}/>,
     enableHiding: true,
   },
   {
@@ -165,7 +164,7 @@ const getColumns = (
         className="text-[#000]"
       />
     ),
-    cell: ({ row }) => <TableCellEndTime row={row} />,
+    cell: ({ row }) => <TableCellTime row={row} form={form}  isStartTime={false}/>,
     enableHiding: true,
   },
   {
