@@ -1,41 +1,38 @@
 'use client'
 
 import { useEffect } from 'react'
-import { Flex, ScrollArea } from '@radix-ui/themes'
-import { TabContentHeading, ViewLoadingPlaceholder } from '../shared'
+import { SelectOptionType } from '@/types'
+import { AddCommentForm, TabContentHeading } from '../shared'
 import { useStore } from '../store'
 import { BillingDataTable } from './billing-data-table'
-import { AddNewCommentForm } from './new-comment-form'
 
 const TAB_TITLE = 'Billing'
 
 interface BillingTabProps {
   patientId: string
+  staffOptions: SelectOptionType[]
 }
-const BillingTab = ({ patientId }: BillingTabProps) => {
-  const { data, fetch, loading } = useStore((state) => ({
-    data: state.data,
+const BillingTab = ({ patientId, staffOptions }: BillingTabProps) => {
+  const { billingComments, fetchComments, loading } = useStore((state) => ({
+    billingComments: state.billingComments,
     loading: state.loading,
-    fetch: state.fetch,
+    fetchComments: state.fetchComments,
   }))
 
   useEffect(() => {
-    fetch()
+    fetchComments({ PatientId: patientId, IsTreatment: false, IsBilling: true })
   }, [])
-
-  if (loading) {
-    return <ViewLoadingPlaceholder title={TAB_TITLE} />
-  }
 
   return (
     <>
       <TabContentHeading title={TAB_TITLE} />
-      <ScrollArea type="always">
-        <Flex direction={'column'} className="gap-0.5 p-[1px]" width={'100%'}>
-          <AddNewCommentForm />
-          <BillingDataTable comments={data?.comments ?? []} />
-        </Flex>
-      </ScrollArea>
+      <AddCommentForm patientId={patientId} />
+      <BillingDataTable
+        comments={billingComments ?? []}
+        staffOptions={staffOptions}
+        patientId={patientId}
+        loading={loading ?? false}
+      />
     </>
   )
 }

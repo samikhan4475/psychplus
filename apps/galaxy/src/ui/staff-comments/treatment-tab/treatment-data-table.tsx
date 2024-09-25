@@ -1,15 +1,28 @@
-import { DataTable } from '../shared'
-import { StaffComment } from '../types'
-import { TreatmentFilterForm } from './filter-form'
+'use client'
+
+import { SelectOptionType, StaffComment } from '@/types'
+import { DataTable, FilterForm, ViewLoadingPlaceholder } from '../shared'
 
 interface TreatmentDataTableProps {
   comments: StaffComment[]
+  patientId: string
+  staffOptions: SelectOptionType[]
+  loading?: boolean
 }
-const TreatmentDataTable = ({ comments }: TreatmentDataTableProps) => {
+const TreatmentDataTable = ({
+  comments,
+  patientId,
+  staffOptions,
+  loading,
+}: TreatmentDataTableProps) => {
   return (
     <>
-      <TreatmentFilterForm />
-      <DataTable data={comments ?? []} />
+      <FilterForm patientId={patientId} staffOptions={staffOptions} />
+      {loading ? (
+        <ViewLoadingPlaceholder />
+      ) : (
+        <DataTable data={comments ?? []} />
+      )}
     </>
   )
 }

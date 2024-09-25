@@ -1,2 +1,5 @@
 export * from './get-staff-comments'
 export * from './get-staff'
+export * from './create-staff-comment'
+export * from './delete-staff-comment'
+export * from './update-staff-comment'

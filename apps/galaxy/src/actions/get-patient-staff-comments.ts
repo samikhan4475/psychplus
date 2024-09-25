@@ -1,10 +1,9 @@
 'use server'
 
 import * as api from '@/api'
-import type { StaffComment, StaffCommentParams } from '@/types'
-import type { GetCommentsData } from '../types'
+import type { GetCommentsData, StaffComment, StaffCommentParams } from '@/types'
 
-const getStaffCommentsAction = async ({
+const getPatientStaffCommentsAction = async ({
   ...rest
 }: Partial<StaffCommentParams>): Promise<api.ActionResult<GetCommentsData>> => {
   const response = await api.POST<StaffComment[]>(
@@ -25,4 +24,4 @@ const getStaffCommentsAction = async ({
   }
 }
 
-export { getStaffCommentsAction }
+export { getPatientStaffCommentsAction }

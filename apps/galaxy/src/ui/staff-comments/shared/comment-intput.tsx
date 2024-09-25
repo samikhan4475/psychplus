@@ -12,12 +12,11 @@ const CommentInput = () => {
       <TextField.Root
         placeholder="Add text here..."
         size="1"
-        className={textFieldClassName}
-        {...form.register('text')}
+        className="border-pp-gray-2 h-6 w-full max-w-[315px] border border-solid !outline-none [box-shadow:none]"
+        {...form.register('partialComment')}
       />
     </FormFieldContainer>
   )
 }
-const textFieldClassName =
-  'border-pp-gray-2 w-full h-6 border border-solid !outline-none [box-shadow:none] max-w-[315px]'
+
 export { CommentInput }

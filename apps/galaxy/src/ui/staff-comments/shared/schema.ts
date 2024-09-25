@@ -1,25 +1,23 @@
+'use client'
+
 import { DateValue } from 'react-aria-components'
 import z from 'zod'
 
-const filterFormDefaultValues = {
-  dateFrom: null,
-  dateTo: null,
-  staff: '',
-  text: '',
-}
-
 const commentSchema = z.object({
-  from: z.number(),
-  to: z.string(),
-  staff: z.string(),
-  comment: z.string(),
+  staffComment: z
+    .string()
+    .min(1, 'Required')
+    .max(128, 'Max 128 characters are allowed.'), // Max 128 characters
 })
 
 const filterFormschema = z.object({
-  dateFrom: z.custom<DateValue | null>(),
-  dateTo: z.custom<DateValue | null>(),
-  staff: z.string(),
-  text: z.string(),
+  startDate: z.custom<DateValue | null>().optional(),
+  endDate: z.custom<DateValue | null>().optional(),
+  partialComment: z.string().optional(),
+  isBilling: z.boolean(),
+  isTreatment: z.boolean(),
+  patientId: z.string(),
+  staffId: z.string().optional(),
 })
 
 type FilterFormSchemaType = z.infer<typeof filterFormschema>
@@ -29,7 +27,6 @@ type CommentSchemaType = z.infer<typeof commentSchema>
 export {
   commentSchema,
   filterFormschema,
-  filterFormDefaultValues,
   type CommentSchemaType,
   type FilterFormSchemaType,
 }

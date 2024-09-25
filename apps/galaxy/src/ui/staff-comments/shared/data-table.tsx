@@ -1,6 +1,6 @@
 'use client'
 
-import { Flex } from '@radix-ui/themes'
+import { Box, ScrollArea } from '@radix-ui/themes'
 import { ColumnDef } from '@tanstack/react-table'
 import {
   ColumnHeader,
@@ -8,7 +8,9 @@ import {
   DataTable as Table,
   TextCell,
 } from '@/components'
-import { StaffComment } from '../types'
+import { StaffComment } from '@/types'
+import { formatDateTime } from '@/utils'
+import { ActionCell, CommentCell, UrgentCell } from './cells'
 
 interface DataTableProps {
   data: StaffComment[]
@@ -16,43 +18,62 @@ interface DataTableProps {
 
 const columns: ColumnDef<StaffComment>[] = [
   {
-    accessorKey: 'data_time',
-    header: () => (
-      <ColumnHeader label="Date/Time" className="!text-1 !font-medium" />
+    id: 'commentedOn',
+    accessorKey: 'commentedOn',
+    header: ({ column }) => (
+      <ColumnHeader clientSideSort column={column} label="Date/Time" />
     ),
-    cell: ({ row }) => <DateCell>{row?.original?.data_time}</DateCell>,
+    cell: ({ row }) => (
+      <DateCell>{formatDateTime(row?.original?.commentedOn)}</DateCell>
+    ),
   },
   {
-    accessorKey: 'staff',
-    header: () => (
-      <ColumnHeader label="Staff" className="!text-1 !font-medium" />
+    id: 'staffName',
+    accessorKey: 'staffName.firstName',
+    header: ({ column }) => (
+      <ColumnHeader clientSideSort column={column} label="Staff" />
     ),
-    cell: ({ row }) => <TextCell>{row?.original?.staff}</TextCell>,
+    cell: ({ row }) => (
+      <TextCell>
+        {row?.original?.staffName?.firstName}{' '}
+        {row?.original?.staffName?.lastName}
+      </TextCell>
+    ),
   },
   {
+    id: 'organization',
     accessorKey: 'organization',
-    header: () => (
-      <ColumnHeader label="Organization" className="!text-1 !font-medium" />
+    header: ({ column }) => (
+      <ColumnHeader column={column} clientSideSort label="Organization" />
     ),
     cell: ({ row }) => <TextCell>{row?.original?.organization}</TextCell>,
   },
   {
     id: 'comments',
-    header: () => (
-      <ColumnHeader label="Comments" className="!text-1 !font-medium" />
-    ),
-    cell: ({ row }) => <TextCell>{row?.original?.comments}</TextCell>,
+    size: 400,
+    header: () => <ColumnHeader label="Comments" />,
+    cell: CommentCell,
+  },
+  {
+    id: 'urgent',
+    size: 50,
+    header: () => <ColumnHeader label="Urgent" />,
+    cell: UrgentCell,
+  },
+  {
+    id: 'Action',
+    size: 50,
+    cell: ActionCell,
   },
 ]
 
 const DataTable = ({ data }: DataTableProps) => {
   return (
-    <Flex
-      direction="column"
-      className="bg-white overflow-hidden rounded-1 shadow-4"
-    >
-      <Table columns={columns} data={data ?? []} />
-    </Flex>
+    <Box className="bg-white rounded-1 p-2 shadow-2">
+      <ScrollArea className="max-h-[31dvh]" scrollbars="vertical">
+        <Table columns={columns} data={data ?? []} sticky theadClass="z-[1]" />
+      </ScrollArea>
+    </Box>
   )
 }
 

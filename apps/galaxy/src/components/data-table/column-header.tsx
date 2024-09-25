@@ -9,7 +9,7 @@ import { Button, Flex, Text } from '@radix-ui/themes'
 import { type Column, type SortDirection } from '@tanstack/react-table'
 import { cn } from '@/utils'
 
-const renderSortIcon = (sortDir?: SortDirection) => {
+const renderSortIcon = (sortDir?: SortDirection | false) => {
   if (!sortDir) {
     return <CaretSortIcon className="text-pp-text-sub h-4 w-4" />
   }
@@ -26,6 +26,7 @@ interface ColumnHeaderProps<TData, TValue> {
   sortable?: boolean
   sortDir?: SortDirection
   onClick?: (column: string) => void
+  clientSideSort?: boolean
 }
 
 const ColumnHeader = <TData, TValue>({
@@ -35,8 +36,9 @@ const ColumnHeader = <TData, TValue>({
   sortable,
   sortDir,
   onClick,
+  clientSideSort,
 }: ColumnHeaderProps<TData, TValue>) => {
-  if (!sortable) {
+  if (!sortable && !clientSideSort) {
     return (
       <Flex
         height="100%"
@@ -55,6 +57,7 @@ const ColumnHeader = <TData, TValue>({
       </Flex>
     )
   }
+  const clientSideSortDir = column?.getIsSorted()
 
   return (
     <Flex
@@ -69,7 +72,11 @@ const ColumnHeader = <TData, TValue>({
         variant="ghost"
         color="gray"
         type="button"
-        onClick={() => onClick?.(column?.id ?? 'unknown')}
+        onClick={() => {
+          clientSideSort
+            ? column?.toggleSorting(clientSideSortDir === 'asc')
+            : onClick?.(column?.id ?? 'unknown')
+        }}
         className={cn(
           'text-pp-black-3 !m-0 h-full grow justify-between whitespace-nowrap px-1 py-0.5 font-medium !outline-none',
           {
@@ -79,7 +86,7 @@ const ColumnHeader = <TData, TValue>({
         )}
       >
         {label}
-        {renderSortIcon(sortDir)}
+        {renderSortIcon(sortDir || (clientSideSort && clientSideSortDir))}
       </Button>
     </Flex>
   )

@@ -1,9 +1,11 @@
+'use client'
+
+import toast from 'react-hot-toast'
 import { create } from 'zustand'
-import { getStaffCommentsAction } from './actions'
-import { getStaffOptionsAction } from './actions/get-staff'
+import { getPatientStaffCommentsAction } from '@/actions'
+import { StaffComment, StaffCommentParams } from '@/types'
 import { TREATMENT_TAB } from './constants'
-import { CommentSchemaType} from './shared'
-import { GetCommentsData, SelectOptionType, StaffComment } from './types'
+import { GetCommentsData } from './types'
 
 interface Store {
   activeTab: string
@@ -12,18 +14,15 @@ interface Store {
   data?: GetCommentsData
   error?: string
   loading?: boolean
-  billComments: StaffComment[]
+  billingComments: StaffComment[]
   treatmentComments: StaffComment[]
-  formValues?: Partial<CommentSchemaType>
-  fetch: (formValues?: Partial<CommentSchemaType>) => void
-  fetchStaffOptions: () => void
-  staffOptions: SelectOptionType[]
+  formValues?: Partial<StaffCommentParams>
+  fetchComments: (formValues: StaffCommentParams) => void
 }
 
 const useStore = create<Store>((set, get) => ({
-  billComments: [],
+  billingComments: [],
   treatmentComments: [],
-  staffOptions: [],
   activeTab: TREATMENT_TAB,
   viewedTabs: new Set([TREATMENT_TAB]),
   setActiveTab: (activeTab) => {
@@ -35,45 +34,37 @@ const useStore = create<Store>((set, get) => ({
       viewedTabs,
     })
   },
-  fetch: async (formValues: Partial<CommentSchemaType> = {}) => {
+  fetchComments: async (formValues: StaffCommentParams) => {
     set({
       error: undefined,
       loading: true,
       formValues,
     })
 
-    const result = await getStaffCommentsAction({
+    const result = await getPatientStaffCommentsAction({
       ...formValues,
+      RecordStatuses: null,
     })
 
     if (result.state === 'error') {
+      toast.error(result.error ?? 'Error while fetching Staff Comments')
       return set({
         error: result.error,
         loading: false,
       })
     }
 
-    set({
-      data: result.data,
-      loading: false,
-      billComments: result?.data?.comments,
-      treatmentComments: result?.data?.comments,
-    })
-  },
-  fetchStaffOptions: async () => {
-    const result = await getStaffOptionsAction()
-
-    if (result.state === 'error') {
-      return set({
-        error: result.error,
+    if (formValues.IsTreatment) {
+      set({
         loading: false,
+        treatmentComments: result?.data?.comments,
+      })
+    } else {
+      set({
+        loading: false,
+        billingComments: result?.data?.comments,
       })
     }
-
-    set({
-      staffOptions: result.data,
-      loading: false,
-    })
   },
 }))
 

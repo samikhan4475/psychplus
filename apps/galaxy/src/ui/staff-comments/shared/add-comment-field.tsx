@@ -3,20 +3,20 @@
 import { TextField } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
 import { FormFieldContainer, FormFieldError } from '@/components'
+import { CommentSchemaType } from './schema'
 
 const AddCommentField = () => {
-  const form = useFormContext()
+  const form = useFormContext<CommentSchemaType>()
   return (
     <FormFieldContainer className="w-full">
       <TextField.Root
         size="1"
-        {...form.register('comment')}
-        className={textFieldClassName}
+        {...form.register('staffComment')}
+        className="border-pp-gray-2 h-6 w-full border border-solid !outline-none [box-shadow:none]"
       />
-      <FormFieldError name="comment" />
+      <FormFieldError name="staffComment" />
     </FormFieldContainer>
   )
 }
-const textFieldClassName =
-  'border-pp-gray-2 w-full h-6 border border-solid !outline-none [box-shadow:none]'
+
 export { AddCommentField }

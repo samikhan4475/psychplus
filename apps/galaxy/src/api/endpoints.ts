@@ -47,6 +47,13 @@ const GET_INSURANCE_PAYER_PLANS = (payerId: string) =>
 const GET_USER_PERMISSIONS_ENDPOINT = `${API_URL}/api/users/self/permissions`
 const SEARCH_LOCATION_SERVICES_ENDPOINT = `${API_URL}/api/locationservices/actions/search`
 const SEARCH_BOOKED_APPOINTMENTS_ENDPOINT = `${API_URL}/api/appointments/actions/search`
+const GET_PATIENT_STAFF_COMMENTS_ENDPOINT = `${API_URL}/api/staffcomments/actions/search`
+const DELETE_STAFF_COMMENT_ENDPOINT = (commentId: number) =>
+  `${API_URL}/api/staffcomments/${commentId}`
+const CREATE_STAFF_COMMENT_ENDPOINT = (appointmentId: number) =>
+  `${API_URL}/api/appointments/${appointmentId}/staffcomments`
+const Update_STAFF_COMMENT_ENDPOINT = (commentId: number) =>
+  `${API_URL}/api/staffcomments/${commentId}`
 const GET_AVAILABLE_APPOINTMENT_ENDPOINT = `${API_URL}/api/schedules/availability/search`
 const ADD_PATIENT_RELATIONSHIP_ENDPOINT = (patientId: string) =>
   `${API_URL}/api/patients/${patientId}/relationships`
@@ -88,6 +95,10 @@ export {
   GET_USER_PERMISSIONS_ENDPOINT,
   SEARCH_LOCATION_SERVICES_ENDPOINT,
   SEARCH_BOOKED_APPOINTMENTS_ENDPOINT,
+  GET_PATIENT_STAFF_COMMENTS_ENDPOINT,
+  DELETE_STAFF_COMMENT_ENDPOINT,
+  CREATE_STAFF_COMMENT_ENDPOINT,
+  Update_STAFF_COMMENT_ENDPOINT,
   GET_AVAILABLE_APPOINTMENT_ENDPOINT,
   ADD_PATIENT_RELATIONSHIP_ENDPOINT,
   DELETE_PATIENT_RELATIONSHIP_ENDPOINT,

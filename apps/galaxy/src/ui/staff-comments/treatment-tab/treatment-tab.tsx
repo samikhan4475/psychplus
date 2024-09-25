@@ -1,37 +1,38 @@
 'use client'
 
 import { useEffect } from 'react'
-import { Flex, ScrollArea } from '@radix-ui/themes'
-import { TabContentHeading } from '../shared'
+import { SelectOptionType } from '@/types'
+import { AddCommentForm, TabContentHeading } from '../shared'
 import { useStore } from '../store'
-import { AddCommentForm } from './add-comment-form'
 import { TreatmentDataTable } from './treatment-data-table'
 
 const TAB_TITLE = 'Treatment'
 
 interface TreatmentTabProps {
   patientId: string
+  staffOptions: SelectOptionType[]
 }
-const TreatmentTab = ({ patientId }: TreatmentTabProps) => {
-  const { data, fetch } = useStore((state) => ({
-    data: state.data,
+const TreatmentTab = ({ patientId, staffOptions }: TreatmentTabProps) => {
+  const { treatmentComments, fetchComments, loading } = useStore((state) => ({
+    treatmentComments: state.treatmentComments,
     loading: state.loading,
-    fetch: state.fetch,
+    fetchComments: state.fetchComments,
   }))
 
   useEffect(() => {
-    fetch()
+    fetchComments({ PatientId: patientId, IsTreatment: true, IsBilling: false })
   }, [])
 
   return (
     <>
       <TabContentHeading title={TAB_TITLE} />
-      <ScrollArea type="always">
-        <Flex direction={'column'} className="gap-0.5 p-[1px]" width="100%">
-          <AddCommentForm />
-          <TreatmentDataTable comments={data?.comments ?? []} />
-        </Flex>
-      </ScrollArea>
+      <AddCommentForm patientId={patientId} />
+      <TreatmentDataTable
+        comments={treatmentComments ?? []}
+        staffOptions={staffOptions}
+        patientId={patientId}
+        loading={loading}
+      />
     </>
   )
 }

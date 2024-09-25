@@ -121,14 +121,19 @@ const formatDateTime = (dateString: string | undefined) => {
   if (!dateString) return ''
 
   const date = new Date(dateString)
-  return new Intl.DateTimeFormat('en-US', {
-    year: '2-digit',
+  const formattedDate = new Intl.DateTimeFormat('en-US', {
     month: '2-digit',
     day: '2-digit',
+    year: '2-digit',
+  }).format(date)
+
+  const formattedTime = new Intl.DateTimeFormat('en-US', {
     hour: '2-digit',
     minute: '2-digit',
-    hour12: false,
+    hour12: true,
   }).format(date)
+
+  return `${formattedDate} ${formattedTime}`
 }
 
 function formatDateToISOString(

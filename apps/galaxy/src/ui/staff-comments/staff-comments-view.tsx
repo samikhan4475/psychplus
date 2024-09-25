@@ -1,9 +1,11 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import * as Tabs from '@radix-ui/react-tabs'
 import { Flex } from '@radix-ui/themes'
 import { XIcon } from 'lucide-react'
+import { SelectOptionType } from '@/types'
+import { getStaffOptionsAction } from './actions'
 import { BillingTab } from './billing-tab'
 import { BILLING_TAB, TREATMENT_TAB } from './constants'
 import { useStore } from './store'
@@ -14,35 +16,35 @@ interface StaffCommentsViewProps {
 }
 
 const StaffCommentsView = ({ patientId }: StaffCommentsViewProps) => {
-  const { activeTab, setActiveTab, fetchStaffOptions } = useStore((state) => ({
+  const [staffOptions, setStaffOptions] = useState<SelectOptionType[]>([])
+  const { activeTab, setActiveTab } = useStore((state) => ({
     activeTab: state.activeTab,
     setActiveTab: state.setActiveTab,
-    fetchStaffOptions: state.fetchStaffOptions,
   }))
 
-  
   useEffect(() => {
-    fetchStaffOptions()
+    getStaffOptionsAction().then((staffResult) => {
+      if (staffResult.state == 'success') {
+        setStaffOptions(staffResult.data ?? [])
+      }
+    })
   }, [])
 
   return (
     <Tabs.Root
-      className="flex w-full flex-col"
+      className="flex h-full w-full flex-col"
       value={activeTab}
       onValueChange={setActiveTab}
     >
-      <Flex className="z-50">
-        <Tabs.List>
-          <TabsTrigger value={TREATMENT_TAB}>Treatment</TabsTrigger>
-          <TabsTrigger value={BILLING_TAB}>Billing</TabsTrigger>
-        </Tabs.List>
-        <Flex className="flex-1 border-b border-gray-5" />
-      </Flex>
+      <Tabs.List>
+        <TabsTrigger value={TREATMENT_TAB}>Treatment</TabsTrigger>
+        <TabsTrigger value={BILLING_TAB}>Billing</TabsTrigger>
+      </Tabs.List>
       <TabsContent value={TREATMENT_TAB}>
-        <TreatmentTab patientId={patientId} />
+        <TreatmentTab patientId={patientId} staffOptions={staffOptions ?? []} />
       </TabsContent>
       <TabsContent value={BILLING_TAB}>
-        <BillingTab patientId={patientId} />
+        <BillingTab patientId={patientId} staffOptions={staffOptions ?? []} />
       </TabsContent>
     </Tabs.Root>
   )
@@ -93,7 +95,7 @@ const TabsContent = ({
     <Tabs.Content
       value={value}
       forceMount={viewedTabs.has(value) ? true : undefined}
-      className="hidden h-full flex-1 flex-col gap-0.5 data-[state=active]:flex"
+      className="hidden h-full flex-1 flex-col gap-0.5 px-[1px] pt-0.5 data-[state=active]:flex"
     >
       {children}
     </Tabs.Content>

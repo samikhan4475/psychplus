@@ -1,4 +1,4 @@
-import { SelectOptionType, StaffResource } from './types'
+import { SelectOptionType, StaffResource } from '@/types'
 
 const transformInStaffOptions = (data: StaffResource[]): SelectOptionType[] => {
   return data.map((item) => {

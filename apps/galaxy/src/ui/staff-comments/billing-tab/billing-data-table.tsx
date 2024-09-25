@@ -1,16 +1,29 @@
-import { DataTable } from '../shared'
-import { StaffComment } from '../types'
-import { BillingFilterForm } from './billing-filter-form'
+'use client'
+
+import { SelectOptionType, StaffComment } from '@/types'
+import { DataTable, FilterForm, ViewLoadingPlaceholder } from '../shared'
 
 interface BillingDataTableProps {
   comments: StaffComment[]
+  staffOptions: SelectOptionType[]
+  patientId: string
+  loading: boolean
 }
 
-const BillingDataTable = ({ comments }: BillingDataTableProps) => {
+const BillingDataTable = ({
+  comments,
+  patientId,
+  staffOptions,
+  loading,
+}: BillingDataTableProps) => {
   return (
     <>
-      <BillingFilterForm />
-      <DataTable data={comments ?? []} />
+      <FilterForm patientId={patientId} staffOptions={staffOptions} />
+      {loading ? (
+        <ViewLoadingPlaceholder />
+      ) : (
+        <DataTable data={comments ?? []} />
+      )}
     </>
   )
 }
