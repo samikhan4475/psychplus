@@ -22,8 +22,10 @@ interface AppointmentState {
   bookedSlot: BookedSlot | undefined
   filteredStaffAppointmentAvailabilities: StaffAppointmentAvailabilities | []
   staffWithClinicsAndSlots: StaffWithClinicsAndSlots[] | []
+  currentWeekReel: number
 
   setBookedSlot: (staff?: BookedSlot) => void
+  setCurrentWeekReel: (currentWeekReel: number) => void
   setFilteredStaffAppointmentAvailabilities: (
     filteredStaffAppointmentAvailabilities: StaffAppointmentAvailabilities | [],
   ) => void

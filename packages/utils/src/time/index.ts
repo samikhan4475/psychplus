@@ -23,9 +23,7 @@ const formatDate = (date: Date) => {
 }
 
 const formatDateYmd = (inputDate: Date) => {
-  const cstDateString = inputDate.toLocaleString('en-US', {
-    timeZone: TIMEZONE_FORMAT,
-  })
+  const cstDateString = inputDate.toLocaleString('en-US')
 
   const date = new Date(cstDateString)
   const year = date.getFullYear()
@@ -121,6 +119,19 @@ const formatCurrency = (amount: number): string => {
   })
 }
 
+const getFirstDayOfWeek = (today?: Date): Date => {
+  if (!today) {
+    today = new Date()
+  }
+  const dayOfWeek = today.getDay()
+  const firstDayOfWeek = new Date(today)
+  if (dayOfWeek !== 0) {
+    firstDayOfWeek.setDate(today.getDate() - dayOfWeek)
+  }
+
+  return firstDayOfWeek
+}
+
 export {
   isEmptyDate,
   daysAgo,
@@ -134,4 +145,5 @@ export {
   formatDateToCst,
   calculateAge,
   formatCurrency,
+  getFirstDayOfWeek,
 }

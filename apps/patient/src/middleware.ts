@@ -33,7 +33,12 @@ export const middleware = async (request: NextRequest) => {
   if (request.nextUrl.pathname.startsWith('/api')) {
     const headers = createHeaders(request.headers)
 
-    return fetch(new URL(`${request.nextUrl.pathname}`, API_URL), {
+    const url = new URL(
+      `${request.nextUrl.pathname}${request.nextUrl.search}`,
+      API_URL,
+    )
+
+    return fetch(url.toString(), {
       body: request.body,
       method: request.method,
       headers: {

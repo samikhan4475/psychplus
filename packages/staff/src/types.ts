@@ -9,6 +9,7 @@ interface Staff {
   contactInfo?: Contact
   spokenLanguages?: string[]
   virtualRoomLink?: string
+  rating?: number
 }
 
 type StaffPayload = {

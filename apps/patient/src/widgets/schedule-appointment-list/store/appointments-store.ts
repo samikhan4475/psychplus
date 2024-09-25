@@ -7,8 +7,10 @@ const createAppointmentsStore: StateCreator<AppointmentState> = (set) => ({
   bookedSlot: undefined,
   filteredStaffAppointmentAvailabilities: [],
   staffWithClinicsAndSlots: [],
+  currentWeekReel: 0,
 
   setBookedSlot: (bookedSlot) => set({ bookedSlot }),
+  setCurrentWeekReel: (currentWeekReel) => set({ currentWeekReel }),
   setFilteredStaffAppointmentAvailabilities: (
     filteredStaffAppointmentAvailabilities,
   ) => set({ filteredStaffAppointmentAvailabilities }),

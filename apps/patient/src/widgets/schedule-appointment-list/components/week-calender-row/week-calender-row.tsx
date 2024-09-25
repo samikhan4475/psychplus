@@ -4,17 +4,18 @@ import React, { useState } from 'react'
 import { Flex, Text } from '@radix-ui/themes'
 import { addDays, format } from 'date-fns'
 import { isMobile } from '@psychplus/utils/client'
-import { TIMEZONE_FORMAT } from '@psychplus/utils/constants'
-import { formatDateYmd } from '@psychplus/utils/time'
+import { formatDateYmd, getFirstDayOfWeek } from '@psychplus/utils/time'
 import { LeftArrowIcon, RightArrowIcon } from '@/components'
 import { useStore } from '../../store'
 
 const WeekCalendarRow = () => {
   const daysToAdd = isMobile() ? 1 : 7
 
-  const { handleFiltersChange, filters } = useStore()
+  const { handleFiltersChange, filters, currentWeekReel, setCurrentWeekReel } =
+    useStore()
+
   const [startDate, setStartDate] = useState(
-    filters.startingDate ? new Date(filters.startingDate) : new Date(),
+    filters.startingDate ? new Date(filters.startingDate) : getFirstDayOfWeek(),
   )
 
   const renderDays = () =>
@@ -23,6 +24,9 @@ const WeekCalendarRow = () => {
     )
 
   const handleWeekChange = (daysToAdd: number) => {
+    const newWeekReel =
+      daysToAdd < 0 ? currentWeekReel - 1 : currentWeekReel + 1
+    setCurrentWeekReel(newWeekReel)
     handleFiltersChange({
       startingDate: formatDateYmd(addDays(startDate, daysToAdd)),
     })
@@ -32,8 +36,16 @@ const WeekCalendarRow = () => {
   return (
     <Flex align="center" className="w-full">
       <Flex
-        onClick={() => handleWeekChange(-daysToAdd)}
-        className="cursor-pointer"
+        onClick={() => {
+          if (currentWeekReel > 0) {
+            handleWeekChange(-daysToAdd)
+          }
+        }}
+        className={
+          currentWeekReel > 0
+            ? 'cursor-pointer'
+            : 'cursor-not-allowed opacity-50'
+        }
       >
         <LeftArrowIcon />
       </Flex>
@@ -51,13 +63,8 @@ const WeekCalendarRow = () => {
 }
 
 const renderDay = (currentDate: Date) => {
-  const date = currentDate.toLocaleString('en-US', {
-    timeZone: TIMEZONE_FORMAT,
-  })
-
-  const today = new Date().toLocaleString('en-US', {
-    timeZone: TIMEZONE_FORMAT,
-  })
+  const date = currentDate.toLocaleString('en-US')
+  const today = new Date().toLocaleString('en-US')
 
   return (
     <Flex
@@ -68,7 +75,17 @@ const renderDay = (currentDate: Date) => {
     >
       {format(new Date(date), 'yyyy-MM-dd') ===
       format(new Date(today), 'yyyy-MM-dd') ? (
-        <Text className="text-[#151B4A]">Today</Text>
+        <Flex gap="1" align="baseline">
+          <Text className="absolute -mt-[16px] text-[12px] font-medium text-[#194595]">
+            Today
+          </Text>
+          <Text className="text-[#575759]" size="2">
+            {format(new Date(date), 'EEE')}
+          </Text>
+          <Text className="text-[#151B4A]">
+            {format(new Date(date), 'MMM d')}
+          </Text>
+        </Flex>
       ) : (
         <Flex gap="1" align="baseline">
           <Text className="text-[#575759]" size="2">

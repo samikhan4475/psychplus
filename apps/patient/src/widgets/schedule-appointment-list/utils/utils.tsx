@@ -7,7 +7,7 @@ import {
 import { type Clinic } from '@psychplus/clinics'
 import { type Staff } from '@psychplus/staff'
 import { isMobile } from '@psychplus/utils/client'
-import { APP_ENV, TIMEZONE_FORMAT } from '@psychplus/utils/constants'
+import { APP_ENV } from '@psychplus/utils/constants'
 import { type Location, type StaffWithClinicsAndSlots } from '../types'
 
 function groupStaffWithClinicsAndSlots(
@@ -200,18 +200,14 @@ function organizeSlotsByDate(slots: Slot[] | undefined, startingDate: string) {
   currentDay += 1
   for (let i = 0; i < daysToAdd; i++) {
     const currentDate = new Date(year, month - 1, currentDay + i)
-    const cstDateString = currentDate.toLocaleString('en-US', {
-      timeZone: TIMEZONE_FORMAT,
-    })
+    const cstDateString = currentDate.toLocaleString('en-US')
     const formattedDate = cstDateString.split(' ')[0]
     slotsByDate[formattedDate] = []
   }
 
   slots?.forEach((slot) => {
     const cstDateString = new Date(slot.startDate)
-      .toLocaleString('en-US', {
-        timeZone: TIMEZONE_FORMAT,
-      })
+      .toLocaleString('en-US')
       .split(' ')[0]
 
     if (cstDateString in slotsByDate) slotsByDate[cstDateString].push(slot)
@@ -232,7 +228,7 @@ const renderProfileImage = (
     src={profileImage ?? ''}
     color="gray"
     fallback={fallback ?? 'A'}
-    size="7"
+    className="h-[56px] w-[56px]"
     radius="full"
   />
 )

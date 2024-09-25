@@ -3,13 +3,14 @@
 import { useEffect, useRef, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { Flex, Text } from '@radix-ui/themes'
+import { isBefore } from 'date-fns'
 import { useDebounce } from 'use-debounce'
 import { StaffAppointmentAvailabilities } from '@psychplus/appointments'
 import { getAppointmentAvailabilityForUnauthenticatedUser } from '@psychplus/appointments/api.client'
 import { getCodeSets } from '@psychplus/codeset/api.client'
 import { isMobile } from '@psychplus/utils/client'
 import { getZipcodeInfo } from '@psychplus/utils/map'
-import { formatDateYmd } from '@psychplus/utils/time'
+import { formatDateYmd, getFirstDayOfWeek } from '@psychplus/utils/time'
 import { SCHEDULE_APPOINTMENT_LIST } from '@psychplus/widgets'
 import {
   usePublishLoaded,
@@ -49,6 +50,7 @@ const ScheduleAppointmentListClient = ({
     setStaffWithAvailableSlots,
     setFilteredStaffAppointmentAvailabilities,
     handleFiltersChange,
+    setCurrentWeekReel,
   } = useStore()
 
   const [staffWithClinicsAndSlotsState, setStaffWithClinicsAndSlotsState] =
@@ -68,6 +70,10 @@ const ScheduleAppointmentListClient = ({
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
   useEffect(() => {
+    setCurrentWeekReel(0)
+  }, [setCurrentWeekReel])
+
+  useEffect(() => {
     setZipCodeState(filters.zipCode)
   }, [filters.zipCode])
 
@@ -80,20 +86,27 @@ const ScheduleAppointmentListClient = ({
       state: searchParams.get('state') || '',
       sortBy: '',
       language: '',
-      startingDate: formatDateYmd(new Date()),
+      startingDate: formatDateYmd(getFirstDayOfWeek()),
     })
   }, [handleFiltersChange, searchParams, setCodeSets])
 
   useEffect(() => {
+    if (filters.zipCode.length < 5 || !filters.state) {
+      return
+    }
+
     setIsLoading(true)
+    const today = new Date()
 
     getAppointmentAvailabilityForUnauthenticatedUser(
       {
         postalCode: filters.zipCode,
         type:
           filters.appointmentType === 'In-Person' ? 'InPerson' : 'TeleVisit',
-        specialistTypeCode: filters.providerType === 'Psychiatrist' ? 1 : 2,
-        startingDate: filters.startingDate,
+        specialistTypeCode: filters.providerType === 'Psychiatry' ? 1 : 2,
+        startingDate: isBefore(new Date(filters.startingDate), today)
+          ? formatDateYmd(today)
+          : filters.startingDate,
         maxDaysOutToLook: 7,
         staffIds: staffIdParam ? [staffIdParam] : [],
         state: filters.state,
@@ -104,7 +117,6 @@ const ScheduleAppointmentListClient = ({
       setIsLoading(false)
     })
   }, [
-    debouncedZipCode,
     filters.state,
     filters.providerType,
     filters.appointmentType,
@@ -138,6 +150,7 @@ const ScheduleAppointmentListClient = ({
 
   useEffect(() => {
     const fetchZipcodeInfo = async (zipCode: string) => {
+      filters.state = ''
       const response = await getZipcodeInfo(zipCode, mapKey)
       const states = response.data
       const options: string[] = states.reduce((acc: string[], state) => {
@@ -148,7 +161,7 @@ const ScheduleAppointmentListClient = ({
 
       setStateOptions(options)
 
-      if (options.length && options.length < 2) {
+      if (options.length) {
         filters.state = options[0]
       }
     }
@@ -183,7 +196,7 @@ const ScheduleAppointmentListClient = ({
         align="center"
       >
         <Flex style={{ flex: 1 }} align="center">
-          <Flex className="w-[300px] text-[#151B4A]">
+          <Flex className="w-[300px] text-[#151B4A] lg:w-[380px]">
             <Text size="5">
               {staffWithClinicsAndSlotsState?.length} Providers
             </Text>

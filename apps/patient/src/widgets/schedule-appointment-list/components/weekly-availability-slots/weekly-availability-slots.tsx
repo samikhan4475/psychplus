@@ -39,6 +39,7 @@ const WeeklyAvailabilitySlots = ({
             staffTypeCode={staffTypeCode}
           />
         </Flex>
+
       ))}
     </Flex>
   )
@@ -82,32 +83,32 @@ const SlotComponent = ({
   }
 
   return (
-    <Flex
-      className="flex-row overflow-x-auto whitespace-nowrap pb-4 sm:flex-col"
-      gap="2"
-    >
-      {slots
-        .slice(0, showAll || isMobile() ? slots.length : 3)
-        .map((slot, i) => (
-          <SlotItem
-            key={`${slot.startDate}-${i}`}
-            slot={slot}
-            onBookedSlot={setBookedSlotDetails}
-          />
-        ))}
-
-      {!isMobile() && slots.length > 3 && (
-        <Button
-          className="h-[38px] rounded-3 bg-[white] text-[#151B4A] hover:bg-[#151B4A] hover:text-[white]"
-          style={{ border: '1px solid #151B4A' }}
-          onClick={handleShowMore}
-        >
-          <Text>{showAll ? 'Less' : 'More'}</Text>
-        </Button>
-      )}
-    </Flex>
+      <Flex
+        className="flex-row overflow-x-auto whitespace-nowrap pb-4 sm:flex-col"
+        gap="4"
+      >
+        {slots
+          .slice(0, showAll || isMobile() ? slots.length : 3)
+          .map((slot, i) => (
+            <SlotItem
+              key={`${slot.startDate}-${i}`}
+              slot={slot}
+              onBookedSlot={setBookedSlotDetails}
+            />
+          ))}
+           {!isMobile() && slots.length > 3 && (
+          <Button
+            className="h-[36px] w-full p-2 rounded-[40px] bg-[#f0f4ff] text-[#24366b] font-medium text-[14px] leading-5 hover:bg-[#151B4A] hover:text-[white]"
+            onClick={handleShowMore}
+          >
+            <Text>{showAll ? 'Less' : 'More'}</Text>
+          </Button>
+        )}
+      </Flex>
   )
 }
+
+
 
 const SlotItem = ({
   slot,
@@ -117,13 +118,13 @@ const SlotItem = ({
   onBookedSlot: (slot: Slot) => void
 }) => (
   <Flex
-    className="h-[38px] w-20 cursor-pointer rounded-[20px] border border-[#151B4A] text-[#151B4A] hover:bg-[#151B4A] hover:text-[white] sm:rounded-3"
+    className="h-[36px] px-3 cursor-pointer rounded-[4px] border border-[#b9bbc6] text-[14px] font-medium leading-[20px] text-[#24366b] hover:text-[white] hover:bg-[#151B4A] sm:rounded-3"
     align="center"
     justify="center"
     p="2"
     onClick={() => onBookedSlot(slot)}
   >
-    <Text size="2">{formatTimeWithAmPm(slot.startDate)}</Text>
+    <Text>{formatTimeWithAmPm(slot.startDate)}</Text>
   </Flex>
 )
 

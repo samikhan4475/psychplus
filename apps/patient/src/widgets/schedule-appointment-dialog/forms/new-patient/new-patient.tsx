@@ -29,7 +29,7 @@ const toggleGroupItemClasses =
   'bg-[#E8E8E8] text-3 data-[state=on]:bg-[#24366B] data-[state=on]:text-accent-1 rounded-4'
 
 interface ScheduledAppointment {
-  providerType: 'Psychiatrist' | 'Therapist' | 'unknown'
+  providerType: 'Psychiatry' | 'Therapy' | 'unknown'
   appointmentType: 'In-Person' | 'Virtual' | 'unknown'
   dateOfBirth: string
   zipCode: string
@@ -84,7 +84,7 @@ const NewPatient = ({ onclose, mapKey }: NewPatientProps) => {
   })
 
   const [schedule, setSchedule] = useState<ScheduledAppointment>({
-    providerType: 'Psychiatrist',
+    providerType: 'Psychiatry',
     appointmentType: 'In-Person',
     dateOfBirth: new Date().toISOString(),
     zipCode: '',
@@ -179,7 +179,7 @@ const NewPatient = ({ onclose, mapKey }: NewPatientProps) => {
 
         <ToggleGroup.Root
           type="single"
-          defaultValue="Psychiatrist"
+          defaultValue="Psychiatry"
           value={schedule.providerType}
           onValueChange={(value) => {
             if (value) {
@@ -188,7 +188,7 @@ const NewPatient = ({ onclose, mapKey }: NewPatientProps) => {
           }}
         >
           <ToggleGroup.Item
-            value="Psychiatrist"
+            value="Psychiatry"
             className={
               toggleGroupItemClasses + ' h-[50px] w-[268px] sm:w-[292px]'
             }
@@ -196,7 +196,7 @@ const NewPatient = ({ onclose, mapKey }: NewPatientProps) => {
             Psychiatry <Text size="1">(Diagnosis / Medications)</Text>
           </ToggleGroup.Item>
           <ToggleGroup.Item
-            value="Therapist"
+            value="Therapy"
             className={
               toggleGroupItemClasses +
               ' mt-2 h-[50px] w-[207px] sm:ml-3 sm:mt-0'
@@ -299,14 +299,14 @@ const NewPatient = ({ onclose, mapKey }: NewPatientProps) => {
           <Flex gap="3" direction="row">
             <Button
               radius="full"
-              className="h-[40px] w-[80px] cursor-pointer items-center justify-center border-[#151B4A] bg-[white] px-4 text-[#151B4A] outline"
+              className="h-[40px] w-[100px] cursor-pointer items-center justify-center border-[#151B4A] bg-[white] px-4 text-[#151B4A] outline"
               onClick={onclose}
             >
               <Text size="3">Cancel</Text>
             </Button>
             <FormSubmitButton
               radius="full"
-              className="h-[40px] w-[100px] cursor-pointer items-center justify-center bg-[#151B4A] px-4 font-bold"
+              className="h-[40px] w-[112px] cursor-pointer items-center justify-center bg-[#151B4A] px-4 font-bold"
             >
               <Text size="3">Search</Text>
             </FormSubmitButton>

@@ -1,10 +1,11 @@
 'use client'
 
 import React, { useEffect, useRef, useState } from 'react'
+import { ChevronDownIcon } from '@radix-ui/react-icons'
 import { Button, Flex, Text } from '@radix-ui/themes'
 import { cn } from '@psychplus/ui/cn'
 import { Select } from '@psychplus/ui/select'
-import { isVirtualAppointmentType, psychPlusBlueColor } from '@/components'
+import { psychPlusBlueColor } from '@/components'
 import { useStore } from '../../store'
 import type {
   FilterOptionButtonProps,
@@ -35,11 +36,11 @@ const FilterPanel = ({ stateOptions = [] }: FilterPanelProps) => {
   return (
     <Flex pt="1" pb="6" className="w-full flex-wrap px-4 sm:px-7" gap="4">
       <Flex className="flex-1 flex-col gap-6 sm:flex-row sm:gap-7">
-        <Flex align="center" className="gap-2">
-          <Text className="text-[14px] font-medium text-[#1c2024]">
+        <Flex align="center" gap="4">
+          <Text className="text-[16px] font-medium text-[#000000]">
             Appointment
           </Text>
-          {['Psychiatrist', 'Therapist'].map((option) => (
+          {['Psychiatry', 'Therapy'].map((option) => (
             <FilterOptionButton
               key={option}
               filterType="providerType"
@@ -51,7 +52,7 @@ const FilterPanel = ({ stateOptions = [] }: FilterPanelProps) => {
         </Flex>
 
         <Flex gap="4" align="center">
-          <Text className="text-[14px] font-medium text-[#1c2024]">Type</Text>
+          <Text className="text-[16px] font-medium text-[#000000]">Type</Text>
           {['Virtual', 'In-Person'].map((option) => (
             <FilterOptionButton
               key={option}
@@ -65,46 +66,42 @@ const FilterPanel = ({ stateOptions = [] }: FilterPanelProps) => {
       </Flex>
 
       <Flex className="gap-1 sm:gap-4">
-        <Flex gap="4" align="center">
-          <Text className="text-[14px] font-medium text-[#1c2024]">
-            Sort by
-          </Text>
+        <Flex gap="4" align="center" className="text-[#1c2024]">
+          <Text className="text-[16px] font-medium ">Sort by</Text>
           <FilterOptionsDropDown
             prefix="A-Z"
             filterType="sortBy"
             options={['Nearest', 'First Available']}
             onFilterChange={handleFiltersChange}
-            placeholder="Sort by"
+            placeholder="A-Z"
+            selectedOption={filters.sortBy}
           />
         </Flex>
-        <Flex gap="4" align="center">
-          <Text className="text-[14px] font-medium text-[#1c2024]">
-            Language
-          </Text>
+        <Flex gap="4" align="center" className="text-[#1c2024]">
+          <Text className="text-[16px] font-medium">Language</Text>
           <FilterOptionsDropDown
             prefix="Language"
             filterType="language"
             options={languageCodeSet?.map((item) => item.display)}
             onFilterChange={handleFiltersChange}
             placeholder="Language"
+            selectedOption={filters.language}
           />
         </Flex>
         <>
-          <Flex gap="4" align="center">
-            <Text className="text-[14px] font-medium text-[#1c2024]">
-              ZIP Code
-            </Text>
+          <Flex gap="4" align="center" className="text-[#1c2024]">
+            <Text className="text-[16px] font-medium">ZIP Code</Text>
             <input
-              type="text"
+              type="number"
               placeholder="ZIP Code"
               value={filtersState?.zipCode}
-              className=" flex-1 rounded-[4px] border border-[#b9bbc6] px-[10px] py-2 text-[#1c2024] focus:border-blue-12 focus:outline-none "
+              className=" w-[102px] flex-1 rounded-[4px] border border-[#b9bbc6] px-[10px] py-2 font-regular text-[#1c2024] focus:border-blue-12 focus:outline-none "
               style={{ color: psychPlusBlueColor }}
               onChange={(e) => handleZipCodeChange(e.target.value)}
             />
           </Flex>
           <Flex gap="4" align="center">
-            <Text className="text-[14px] font-medium text-[#1c2024]">
+            <Text className="text-[16px] font-medium text-[#1c2024]">
               State
             </Text>
             <FilterOptionsDropDown
@@ -135,7 +132,7 @@ const FilterOptionButton = ({
       variant="outline"
       color="gray"
       className={cn(
-        'h-10 cursor-pointer rounded-[6px] bg-[#FFFFFF] text-[14px] text-[#1c2024]',
+        'h-10 cursor-pointer rounded-[6px] bg-[#FFFFFF] px-[10px] text-[16px] font-medium text-[#1c2024]',
         {
           'border-[#151B4A] bg-[#151B4A] text-[#FFFFFF]': active,
           '': !active,
@@ -165,17 +162,17 @@ const FilterOptionsDropDown = ({
       disabled={disabled}
       onValueChange={(value) => {
         onFilterChange({ [filterType]: value })
-
-        if (triggerRef.current) {
-          triggerRef.current.innerText = `${value}`
-        }
       }}
     >
       <Select.Trigger
         ref={triggerRef}
         placeholder={placeholder}
-        className="h-10 min-w-[115px] whitespace-nowrap rounded-[4px] border border-[#b9bbc6] px-[10px] py-2 text-[14px] font-regular text-[#1c2024] "
-      ></Select.Trigger>
+        className="h-10 min-w-[115px] whitespace-nowrap rounded-[4px] border border-[#b9bbc6] px-[10px] py-2 text-[16px] font-regular text-[#1c2024] placeholder-[#1C2024]"
+      >
+        {selectedOption || placeholder}
+
+        <ChevronDownIcon className="absolute right-3 top-1/2 -translate-y-1/2 transform" />
+      </Select.Trigger>
       <Select.Content align="end" position="popper" highContrast>
         {options?.map((option) => (
           <Select.Item key={option} value={option}>
