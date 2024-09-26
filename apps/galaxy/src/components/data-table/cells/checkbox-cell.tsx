@@ -3,16 +3,18 @@ import { Checkbox, Flex, Text } from '@radix-ui/themes'
 interface CheckboxCellProps {
   label?: string
   checked: boolean
+  className?: string
   onCheckedChange: (checked: boolean) => void
 }
 
 const CheckboxCell = ({
   label,
   checked,
+  className,
   onCheckedChange,
 }: CheckboxCellProps) => {
   return (
-    <Flex height="100%" align="center" px="1">
+    <Flex height="100%" align="center" px="1" className={className}>
       <Checkbox
         size="1"
         checked={checked}

@@ -5,7 +5,7 @@ import z, { ZodSchema } from 'zod'
 import {
   createQuestionnaireSchema,
   QuestionnaireSchemaType,
-} from './questionnaires-schema/questionnaires-schema'
+} from './questionnaires-schema'
 
 const calculateTotalScore = (data: any): number => {
   let totalScore = 0

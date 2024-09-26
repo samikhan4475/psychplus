@@ -1,6 +1,6 @@
 import { QuickNoteSectionItem } from '@/types'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
-import { QuestionnaireSchemaType } from './questionnaires-schema/questionnaires-schema'
+import { QuestionnaireSchemaType } from './questionnaires-schema'
 
 const transformIn = (
   value: QuickNoteSectionItem[],

@@ -1,12 +1,7 @@
 import { Flex, Text } from '@radix-ui/themes'
 import { SendHorizontalIcon } from 'lucide-react'
-import type { QuestionnairesDashboardRow } from '../types'
 
-interface ActionsCellProps {
-  row: QuestionnairesDashboardRow
-}
-
-const ActionsCell = ({ row }: ActionsCellProps) => {
+const ActionsCell = () => {
   return (
     <Flex
       direction="row"

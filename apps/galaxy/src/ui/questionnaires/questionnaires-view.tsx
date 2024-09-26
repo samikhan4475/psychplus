@@ -20,7 +20,6 @@ import {
   Y_BOCS_TAB,
 } from './constants'
 import { DashboardTab } from './dashboard-tab'
-import { QuestionnairesDashboard } from './dashboard-tab/dashboard-widget/types'
 import { Dast10Tab } from './dast-10-tab'
 import { Gad7Tab } from './gad-7-tab'
 import { HamDTab } from './ham-d-tab'
@@ -42,7 +41,7 @@ const QuestionnairesView = ({
   questionnairesAimsResponse,
   patientId,
 }: {
-  questionnairesDashboardData: QuestionnairesDashboard[]
+  questionnairesDashboardData: QuickNoteSectionItem[]
   questionnairesGad7Response: QuickNoteSectionItem[]
   questionnairesPcl5Response: QuickNoteSectionItem[]
   questionnairesPhq9Response: QuickNoteSectionItem[]
@@ -81,6 +80,7 @@ const QuestionnairesView = ({
       </Flex>
       <TabsContent value={DASHBOARD_TAB}>
         <DashboardTab
+          patientId={patientId}
           questionnairesDashboardData={questionnairesDashboardData}
         />
       </TabsContent>

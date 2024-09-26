@@ -1,7 +1,7 @@
 import { QuestionnairesView } from '@/ui/questionnaires'
+import { getQuestionnairesDashboard } from '@/ui/questionnaires/dashboard-tab/api'
 import { getQuestionnairesAims } from '@/ui/questionnaires/aims-tab/api'
 import { getQuestionnairesAudit } from '@/ui/questionnaires/audit-tab/api'
-import { getQuestionnairesDashboard } from '@/ui/questionnaires/dashboard-tab/dashboard-widget/api'
 import { getQuestionnairesDast10 } from '@/ui/questionnaires/dast-10-tab/api'
 import { getQuestionnairesGad7 } from '@/ui/questionnaires/gad-7-tab/api/get-questionnaires-gad7'
 import { getQuestionnairesPcl5 } from '@/ui/questionnaires/pcl-5-tab/api'
