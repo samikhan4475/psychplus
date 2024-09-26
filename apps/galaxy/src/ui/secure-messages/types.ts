@@ -12,7 +12,7 @@ enum SecureMessagesTab {
 
 enum ActiveComponent {
     NEW_EMAIL = 'new-email',
-    PREVIE_EMAIL = 'preview-email',
+    PREVIEW_EMAIL = 'preview-email',
     COMPOSE_MAIL = 'compose-email',
 }
 
@@ -29,10 +29,10 @@ enum EmailRecipientTypes {
     PATIENT = 'Patient',
 }
 
-enum SecureMessageType {
-    NEW = 'New',
-    FORWARD = 'Forward',
-    REPLY = 'Reply',
+interface MetadataMapping extends Metadata {
+    deletedOn: string
+    deletedByFullName: string
+    deletedBy: number
 }
 
 interface MetadataMapping extends Metadata {
@@ -125,6 +125,7 @@ interface Attachment {
     fileDescription: string
     createdOn: string
     createdBy: number
+    size: number
     updatedOn: string
     updatedBy: number
     recordStatus: string
@@ -161,6 +162,8 @@ interface DataTableFooterProps {
 interface SecureMessageStore {
     secureMessages: SecureMessage[],
     setSecureMessages: (secureMessages: SecureMessage[]) => void,
+    previewSecureMessage: SecureMessage | null
+    setPreviewSecureMessage: (value: SecureMessage | null) => void
     loading?: boolean
     error?: string
     fetch: (page?: number, reset?: boolean) => void
@@ -198,16 +201,25 @@ interface EmailRecipients {
 }
 interface ActiveComponentProps {
     setActiveComponent: Dispatch<SetStateAction<ActiveComponent>>
+    activeComponent?: ActiveComponent
 }
 interface AttachmentsProps {
     attachments: File[];
     handleDeleteFile: (index: number) => void;
+    activeComponent?: ActiveComponent
 }
 interface FileTileProps {
     attachment: Attachment | File
     handleDeleteFile: () => void
+    activeComponent?: ActiveComponent
+}
+interface ViewMessageAttachmentProps {
+    previewSecureMessage?: SecureMessage | null
+    handleDeleteFile: (index: number) => void
+    activeComponent?: ActiveComponent
 }
 export {
+    type ViewMessageAttachmentProps,
     type FileTileProps,
     type AttachmentsProps,
     type ActiveComponentProps,
@@ -227,5 +239,4 @@ export {
     SecureMessagesTab,
     ActiveComponent,
     EmailRecipientTypes,
-    SecureMessageType,
 }

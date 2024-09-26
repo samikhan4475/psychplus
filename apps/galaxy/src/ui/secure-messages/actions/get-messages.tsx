@@ -28,8 +28,8 @@ const mockFetchAllSecureMessages = async (): Promise<
         data: [
           ...Array(7)
             .fill(null)
-            .map((item) => ({
-              id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+            .map((item, index) => ({
+              id: '3fa85f64-5717-4562-b3fc-2c963f66afa6' + index,
               metadata: {
                 createdOn: '2024-09-16T11:30:10.310Z',
                 createdBy: 0,
@@ -44,9 +44,14 @@ const mockFetchAllSecureMessages = async (): Promise<
               recordStatus: 'Active',
               senderUserId: 0,
               conversationId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-              externalEmailAddress: 'string',
-              subject: 'Treatment Options and Plans',
-              text: 'Ronald Richards',
+              externalEmailAddress: 'john@psychplus.com',
+              subject: 'Treatment Options and Plans ' + (index + 1),
+              text: `Dear Dr. John Smith,
+
+I hope this email finds you well. I am reaching out to discuss a patient case that I believe could benefit from your expertise.
+I recently saw a patient, [Patient's Name], who presents with [brief description of patient's condition or symptoms]. After conducting a thorough examination and reviewing their medical history, I have identified [diagnosis or preliminary assessment].
+
+Given the complexity of the case and considering your specialization in [mention recipient's area of expertise], I believe that involving you in the patient's care would greatly contribute to their treatment plan and overall well-being.`,
               messageStatus: 'Success',
               isMessageSent: true,
               channels: [
@@ -64,7 +69,7 @@ const mockFetchAllSecureMessages = async (): Promise<
                   sendMode: 'EXT Staff',
                   receiverStatusDetail: 'string',
                   externalMessageId: 'string',
-                  externalEmail: 'string',
+                  externalEmail: 'john@psychplus.com',
                   readTimeStamp: '2024-09-16T11:30:10.310Z',
                   isRead: true,
                   isReplied: true,
@@ -79,8 +84,9 @@ const mockFetchAllSecureMessages = async (): Promise<
                   recordStatus: 'Active',
                   id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
                   messageId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-                  name: 'sdfsdfsdfdf',
+                  name: 'Result Report',
                   uri: 'string',
+                  size: 2000,
                   mimeType: 'string',
                   fileDescription: 'string',
                 },

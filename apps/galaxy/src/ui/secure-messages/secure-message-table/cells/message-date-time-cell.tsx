@@ -14,7 +14,7 @@ const MessageDateTimeCell = ({ row }: { row: Row<SecureMessage> }) => {
 
   return (
     <TextCell className="text-[12px] font-[400]">
-      {date}{' '}
+      {date}
       <Text className="text-pp-text-sub text-[12px] font-[400]">{time}</Text>
     </TextCell>
   )

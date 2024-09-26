@@ -3,9 +3,9 @@
 import { useState } from 'react'
 import { Flex, Tabs } from '@radix-ui/themes'
 import { SecureMessagesTable } from './secure-message-table'
-import { SecureMessagesTab } from './types'
+import { ActiveComponentProps, SecureMessagesTab } from './types'
 
-const SecureMessagesTabs = () => {
+const SecureMessagesTabs = ({ setActiveComponent }: ActiveComponentProps) => {
   const [activeTab, setActiveTab] = useState(SecureMessagesTab.ALL)
   return (
     <Flex direction="column" className=" p-2">
@@ -41,7 +41,7 @@ const SecureMessagesTabs = () => {
           </Tabs.Trigger>
         </Tabs.List>
       </Tabs.Root>
-      <SecureMessagesTable />
+      <SecureMessagesTable setActiveComponent={setActiveComponent} />
     </Flex>
   )
 }

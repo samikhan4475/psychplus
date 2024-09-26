@@ -9,6 +9,10 @@ const useStore = create<SecureMessageStoreType>((set, get) => ({
   secureMessages: [],
   setSecureMessages: (secureMessages: SecureMessage[]) =>
     set({ secureMessages }),
+  previewSecureMessage: null,
+  setPreviewSecureMessage: (secureMessage: SecureMessage | null) => {
+    set({ previewSecureMessage: secureMessage })
+  },
   error: undefined,
   loading: true,
   formValues: undefined,

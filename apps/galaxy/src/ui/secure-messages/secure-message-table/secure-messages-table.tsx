@@ -1,10 +1,10 @@
 'use client'
 
-import { useMemo } from 'react'
-import { type ColumnDef } from '@tanstack/react-table'
+import { useCallback, useMemo } from 'react'
+import { Row, type ColumnDef } from '@tanstack/react-table'
 import { ColumnHeader, DataTable } from '@/components'
 import { useStore } from '../store'
-import { SecureMessage } from '../types'
+import { ActiveComponent, ActiveComponentProps, SecureMessage } from '../types'
 import {
   MessageDateTimeCell,
   MessageFromCell,
@@ -13,8 +13,8 @@ import {
   MessageUserNameCell,
 } from './cells'
 
-const SecureMessagesTable = () => {
-  const { secureMessages } = useStore((state) => state)
+const SecureMessagesTable = ({ setActiveComponent }: ActiveComponentProps) => {
+  const { secureMessages, setPreviewSecureMessage } = useStore((state) => state)
 
   const columns: ColumnDef<SecureMessage>[] = useMemo(
     () => [
@@ -78,12 +78,21 @@ const SecureMessagesTable = () => {
     ],
     [],
   )
-
+  const handleSecureMessage = useCallback(
+    (secureMessage: SecureMessage) => {
+      setPreviewSecureMessage(secureMessage)
+      setActiveComponent(ActiveComponent.PREVIEW_EMAIL)
+    },
+    [setActiveComponent, setPreviewSecureMessage],
+  )
   return (
     <DataTable
       data={secureMessages}
       columns={columns}
-      tableClass="bg-white mt-4 "
+      tableClass="bg-white mt-4"
+      onRowClick={(row: Row<SecureMessage>) =>
+        handleSecureMessage(row.original)
+      }
     />
   )
 }

@@ -1,7 +1,8 @@
 import React, { useMemo, useState } from 'react'
 import { Box, Flex } from '@radix-ui/themes'
-import { ComposeNewEmail } from './compose-email/compose-new-email-template'
-import { EmailPlaceHolder } from './compose-email/email-placeholder'
+import { ComposeNewEmail } from './email/compose-new-email-template'
+import { EmailPlaceHolder } from './email/email-placeholder'
+import { ReviewEmail } from './email/view-message'
 import { MessageHeader } from './message-header'
 import { SecureMessagesTabs } from './secure-messages-tabs'
 import { ActiveComponent } from './types'
@@ -10,10 +11,16 @@ const MessageSection = () => {
   const [activeComponent, setActiveComponent] = useState(
     ActiveComponent.NEW_EMAIL,
   )
-
   const renderEmailBody = useMemo(() => {
     if (activeComponent === ActiveComponent.NEW_EMAIL)
       return <EmailPlaceHolder setActiveComponent={setActiveComponent} />
+    else if (activeComponent === ActiveComponent.PREVIEW_EMAIL)
+      return (
+        <ReviewEmail
+          activeComponent={activeComponent}
+          setActiveComponent={setActiveComponent}
+        />
+      )
     else return <ComposeNewEmail setActiveComponent={setActiveComponent} />
   }, [activeComponent])
 
@@ -24,7 +31,7 @@ const MessageSection = () => {
         direction="column"
       >
         <MessageHeader setActiveComponent={setActiveComponent} />
-        <SecureMessagesTabs />
+        <SecureMessagesTabs setActiveComponent={setActiveComponent} />
       </Flex>
       <Box className="w-[60%] ">{renderEmailBody}</Box>
     </Flex>
