@@ -59,6 +59,8 @@ const CREATE_STAFF_COMMENT_ENDPOINT = (appointmentId: number) =>
 const Update_STAFF_COMMENT_ENDPOINT = (commentId: number) =>
   `${API_URL}/api/staffcomments/${commentId}`
 const GET_AVAILABLE_APPOINTMENT_ENDPOINT = `${API_URL}/api/schedules/availability/search`
+const GET_PATIENT_BILLING_HISTORY = (patientId: string) =>
+  `${API_URL}/api/patients/${patientId}/billinghistory/actions/search`
 const ADD_PATIENT_RELATIONSHIP_ENDPOINT = (patientId: string) =>
   `${API_URL}/api/patients/${patientId}/relationships`
 const DELETE_PATIENT_RELATIONSHIP_ENDPOINT = (
@@ -107,6 +109,7 @@ export {
   CREATE_STAFF_COMMENT_ENDPOINT,
   Update_STAFF_COMMENT_ENDPOINT,
   GET_AVAILABLE_APPOINTMENT_ENDPOINT,
+  GET_PATIENT_BILLING_HISTORY,
   ADD_PATIENT_RELATIONSHIP_ENDPOINT,
   DELETE_PATIENT_RELATIONSHIP_ENDPOINT,
 }

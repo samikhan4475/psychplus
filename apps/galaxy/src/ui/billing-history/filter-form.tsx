@@ -1,6 +1,5 @@
 'use client'
 
-import { useEffect } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons'
 import { Button, Flex } from '@radix-ui/themes'
@@ -8,66 +7,60 @@ import { DateValue } from 'react-aria-components'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import z from 'zod'
 import { FormContainer } from '@/components'
-import { BillingStatusSelect } from './billing-status-select'
-import { CosignerSelect } from './cosigner-select'
-import { DateInputFrom } from './date-input-from'
-import { DateInputTo } from './date-input-to'
+import { getCalendarDateLabel } from '@/utils'
+import { ClaimNoInput } from './claim-no-input'
+import { EndDateInput } from './end-date-input'
+import { InsuranceSelect } from './insurance-select'
 import { LocationsSelect } from './locations-select'
-import { ProvidersSelect } from './providers-select'
-import { SchedulingStatusSelect } from './scheduling-status-select'
-import { SignedSelect } from './signed-select'
-import { SpecialtySelect } from './specialty-select'
+import { StartDateInput } from './start-date-input'
 import { useStore } from './store'
-import { VerifiedSelect } from './verified-select'
-import { VisitTypeSelect } from './visit-type-select'
+import { sanitizeObject } from './utils'
 
 const schema = z.object({
-  dateFrom: z.custom<DateValue | null>(),
-  dateTo: z.custom<DateValue | null>(),
-  specialty: z.string().optional(),
-  location: z.string().optional(),
-  provider: z.string().optional(),
-  coSigner: z.string().optional(),
-  visitType: z.string().optional(),
-  billingStatus: z.string().optional(),
-  schedulingStatus: z.string().optional(),
-  verified: z.string().optional(),
-  signed: z.string().optional(),
+  claimNo: z.string().optional(),
+  fromDate: z.custom<DateValue | null>().optional(),
+  endDate: z.custom<DateValue | null>().optional(),
+  locationId: z.string().optional(),
+  insurance: z.string().optional(),
 })
 type BillingFilterSchemaType = z.infer<typeof schema>
 
-const BillingFilterForm = () => {
-  const { toggleFilters, fetchProviders, providers } = useStore((state) => ({
+interface BillingFilterFormProps {
+  patientId: string
+}
+const BillingFilterForm = ({ patientId }: BillingFilterFormProps) => {
+  const { toggleFilters, fetchBillingHistory } = useStore((state) => ({
     toggleFilters: state.toggleFilters,
-    fetchProviders: state.fetchProviders,
-    providers: state.providers,
+    fetchBillingHistory: state.fetchBillingHistory,
   }))
-
-  useEffect(() => {
-    fetchProviders()
-  }, [])
 
   const form = useForm<BillingFilterSchemaType>({
     resolver: zodResolver(schema),
     defaultValues: {
-      dateFrom: null,
-      dateTo: null,
-      specialty: '',
-      location: '',
-      provider: '',
-      coSigner: '',
-      visitType: '',
-      billingStatus: '',
-      schedulingStatus: '',
-      verified: '',
-      signed: '',
+      claimNo: '',
+      fromDate: null,
+      endDate: null,
+      insurance: '',
+      locationId: '',
     },
   })
-
+  const { isDirty, isSubmitting } = form.formState
   const onSubmit: SubmitHandler<BillingFilterSchemaType> = (data) => {
-    console.log('Todo Api Request', data)
+    if (!isDirty) return
+    const sanitizedData = sanitizeObject({
+      FromDate: data.fromDate ? getCalendarDateLabel(data.fromDate) : '',
+      EndDate: data.endDate ? getCalendarDateLabel(data.endDate) : '',
+      ClaimNo: data.claimNo,
+      LocationId: data.locationId ? [data.locationId] : undefined,
+      Insurance: data.insurance,
+    })
+    return fetchBillingHistory(patientId, sanitizedData)
   }
-
+  const handleReset = () => {
+    if (!isDirty) return
+    form.reset()
+    fetchBillingHistory(patientId)
+  }
   return (
     <FormContainer
       form={form}
@@ -75,25 +68,19 @@ const BillingFilterForm = () => {
       className="bg-white z-[1] rounded-bl-1 rounded-br-1 p-2"
     >
       <Flex align="center" gap="2" wrap="wrap" width="100%">
-        <DateInputFrom />
-        <DateInputTo />
-        <SpecialtySelect />
+        <ClaimNoInput />
+        <StartDateInput disabled={isSubmitting} />
+        <EndDateInput disabled={isSubmitting} />
         <LocationsSelect />
-        <ProvidersSelect providerOptions={providers ?? []} />
-        <CosignerSelect providerOptions={providers ?? []} />
-        <VisitTypeSelect />
-        <BillingStatusSelect />
-        <SchedulingStatusSelect />
-        <VerifiedSelect />
-        <SignedSelect />
-
+        <InsuranceSelect />
         <Flex align="center" className="px-2">
           <Button
             size="1"
             variant="ghost"
             className="text-1 font-regular text-indigo-12"
             color="indigo"
-            onClick={() => toggleFilters()}
+            type="button"
+            onClick={toggleFilters}
           >
             Hide Filters
           </Button>
@@ -103,7 +90,7 @@ const BillingFilterForm = () => {
           color="gray"
           className="text-black"
           variant="outline"
-          onClick={() => form.reset()}
+          onClick={handleReset}
         >
           Clear
         </Button>

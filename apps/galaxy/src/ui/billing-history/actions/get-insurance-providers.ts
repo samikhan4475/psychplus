@@ -1,12 +1,14 @@
 'use server'
 
 import * as api from '@/api'
-import { ClinicRaw, SelectOptionType } from '@/types'
+import { InsurancePayer, SelectOptionType } from '@/types'
 
-const getClinicsAction = async (): Promise<
+const getInsuranceProvidersAction = async (): Promise<
   api.ActionResult<SelectOptionType[]>
 > => {
-  const result = await api.GET<ClinicRaw[]>(api.GET_CLINICS_ENDPOINT)
+  const result = await api.GET<InsurancePayer[]>(
+    api.GET_INSURANCE_PAYERS_ENDPOINT,
+  )
 
   if (result.state === 'error') {
     return {
@@ -14,7 +16,6 @@ const getClinicsAction = async (): Promise<
       error: result.error,
     }
   }
-
   const transformedOptions: SelectOptionType[] = result.data?.map((item) => ({
     label: item.name,
     value: item.id,
@@ -25,4 +26,4 @@ const getClinicsAction = async (): Promise<
   }
 }
 
-export { getClinicsAction }
+export { getInsuranceProvidersAction }

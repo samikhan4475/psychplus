@@ -58,7 +58,6 @@ const ColumnHeader = <TData, TValue>({
     )
   }
   const clientSideSortDir = column?.getIsSorted()
-
   return (
     <Flex
       height="100%"

@@ -3,31 +3,33 @@
 import { useEffect, useState } from 'react'
 import { FormFieldContainer, FormFieldLabel, SelectInput } from '@/components'
 import { SelectOptionType } from '@/types'
-import { getClinicsAction } from './actions'
+import { getInsuranceProvidersAction } from './actions'
 
-const LocationsSelect = () => {
-  const [locationsResult, setLocationsResult] = useState<SelectOptionType[]>([])
+const InsuranceSelect = () => {
+  const [insuranceProviders, setInsuranceProviders] = useState<
+    SelectOptionType[]
+  >([])
 
   useEffect(() => {
-    getClinicsAction().then((res) => {
+    getInsuranceProvidersAction().then((res) => {
       if (res.state === 'success') {
-        setLocationsResult(res.data)
+        setInsuranceProviders(res.data)
       }
     })
   }, [])
 
   return (
     <FormFieldContainer className="flex-row items-center gap-1">
-      <FormFieldLabel className="!text-1">Locations</FormFieldLabel>
+      <FormFieldLabel className="!text-1">Insurance</FormFieldLabel>
       <SelectInput
         placeholder="Select"
-        field="locationId"
+        field="insurance"
         buttonClassName="border-pp-gray-2 w-[122px] h-6 border border-solid !outline-none [box-shadow:none]"
-        options={locationsResult}
+        options={insuranceProviders}
         tooltip
       />
     </FormFieldContainer>
   )
 }
 
-export { LocationsSelect }
+export { InsuranceSelect }

@@ -1,18 +1,19 @@
+import toast from 'react-hot-toast'
 import { create } from 'zustand'
-import { getPatientBillingHistoryAction, getProvidersAction } from './actions'
-import { BillingFilterSchemaType } from './filter-form'
-import type { GetBillingHistoryData, SelectOptionType } from './types'
+import { getPatientBillingHistoryAction } from './actions'
+import type { BillingHistoryParams, GetBillingHistoryData } from './types'
 
 interface Store {
   data?: GetBillingHistoryData
   error?: string
   loading?: boolean
   showFilters: boolean
-  formValues?: Partial<BillingFilterSchemaType>
-  fetch: (formValues?: Partial<BillingFilterSchemaType>) => void
-  fetchProviders: () => void
+  formValues?: Partial<BillingHistoryParams>
+  fetchBillingHistory: (
+    patientId: string,
+    formValues?: Partial<BillingHistoryParams>,
+  ) => void
   toggleFilters: () => void
-  providers: SelectOptionType[]
 }
 
 const useStore = create<Store>((set, get) => ({
@@ -21,21 +22,25 @@ const useStore = create<Store>((set, get) => ({
   loading: undefined,
   formValues: undefined,
   showFilters: true,
-  providers: [],
+  insuranceProviders: [],
   toggleFilters: () => set({ showFilters: !get().showFilters }),
 
-  fetch: async (formValues: Partial<BillingFilterSchemaType> = {}) => {
+  fetchBillingHistory: async (
+    patientId: string,
+    formValues: Partial<BillingHistoryParams> = {},
+  ) => {
     set({
       error: undefined,
       loading: true,
       formValues,
     })
 
-    const result = await getPatientBillingHistoryAction({
+    const result = await getPatientBillingHistoryAction(patientId, {
       ...formValues,
     })
 
     if (result.state === 'error') {
+      toast.error(result.error ?? 'Error while fetching Billing History')
       return set({
         error: result.error,
         loading: false,
@@ -44,22 +49,6 @@ const useStore = create<Store>((set, get) => ({
 
     set({
       data: result.data,
-      loading: false,
-    })
-  },
-
-  fetchProviders: async () => {
-    const result = await getProvidersAction()
-
-    if (result.state === 'error') {
-      return set({
-        error: result.error,
-        loading: false,
-      })
-    }
-
-    set({
-      providers: result.data,
       loading: false,
     })
   },
