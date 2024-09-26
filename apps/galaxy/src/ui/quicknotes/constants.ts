@@ -5,6 +5,7 @@ enum QuickNoteSectionName {
   QuickNoteSectionPcl5 = 'QuicknoteSectionQuestionnairePcl5',
   QuickNoteSectionPhq9 = 'QuicknoteSectionQuestionnairePhq9',
   QuickNoteSectionSnapIV = 'QuicknoteSectionQuestionnaireSnapIV',
+  QuickNoteSectionYbcos = 'QuicknoteSectionQuestionnaireYbocs',
   QuickNoteSectionAudit = 'QuicknoteSectionQuestionnaireAudit',
   QuickNoteSectionAims = 'QuicknoteSectionQuestionnaireAims',
 }

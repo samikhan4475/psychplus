@@ -7,6 +7,7 @@ import { getQuestionnairesGad7 } from '@/ui/questionnaires/gad-7-tab/api/get-que
 import { getQuestionnairesPcl5 } from '@/ui/questionnaires/pcl-5-tab/api'
 import { getQuestionnairesPhq9 } from '@/ui/questionnaires/phq-9-tab/api'
 import { getQuestionnairesSnapIv } from '@/ui/questionnaires/snap-iv-tab/api'
+import { getQuestionnairesYBocs } from '@/ui/questionnaires/y-bocs-tab/api'
 
 interface QuestionnairesPageProps {
   params: {
@@ -21,6 +22,7 @@ const QuestionnairesInfoPage = async ({ params }: QuestionnairesPageProps) => {
     questionnairesPcl5Response,
     questionnairesPhq9Response,
     questionnairesSnapIvResponse,
+    questionnairesYBocsResponse,
     questionnairesDast10Response,
     questionnairesAuditResponse,
     questionnairesAimsResponse,
@@ -30,6 +32,7 @@ const QuestionnairesInfoPage = async ({ params }: QuestionnairesPageProps) => {
     getQuestionnairesPcl5({ patientId: params.id }),
     getQuestionnairesPhq9({ patientId: params.id }),
     getQuestionnairesSnapIv({ patientId: params.id }),
+    getQuestionnairesYBocs({ patientId: params.id }),
     getQuestionnairesDast10({ patientId: params.id }),
     getQuestionnairesAudit({ patientId: params.id }),
     getQuestionnairesAims({ patientId: params.id }),
@@ -57,6 +60,9 @@ const QuestionnairesInfoPage = async ({ params }: QuestionnairesPageProps) => {
   if (questionnairesDast10Response.state === 'error') {
     throw new Error(questionnairesDast10Response.error)
   }
+  if (questionnairesYBocsResponse.state === 'error') {
+    throw new Error(questionnairesYBocsResponse.error)
+  }
 
   if (questionnairesAuditResponse.state === 'error') {
     throw new Error(questionnairesAuditResponse.error)
@@ -67,6 +73,7 @@ const QuestionnairesInfoPage = async ({ params }: QuestionnairesPageProps) => {
 
   return (
     <QuestionnairesView
+      patientId={params.id}
       questionnairesDashboardData={
         questionnairesDashboardResponse.data.questionnairesDashboardData
       }
@@ -76,7 +83,6 @@ const QuestionnairesInfoPage = async ({ params }: QuestionnairesPageProps) => {
       questionnairesSnapIvResponse={
         questionnairesSnapIvResponse.data.questionnairesSnapIvData
       }
-      patientId={params.id}
       questionnairesPcl5Response={
         questionnairesPcl5Response.data.questionnairesPcl5Data
       }
@@ -85,6 +91,9 @@ const QuestionnairesInfoPage = async ({ params }: QuestionnairesPageProps) => {
       }
       questionnairesDast10Response={
         questionnairesDast10Response.data.questionnairesDast10Data
+      }
+      questionnairesYBocsResponse={
+        questionnairesYBocsResponse.data.questionnairesYBocsData
       }
       questionnairesAuditResponse={
         questionnairesAuditResponse.data.questionnairesAuditData

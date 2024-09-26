@@ -33,6 +33,7 @@ import { YBocsTab } from './y-bocs-tab'
 const QuestionnairesView = ({
   questionnairesDashboardData,
   questionnairesSnapIvResponse,
+  questionnairesYBocsResponse,
   questionnairesGad7Response,
   questionnairesPcl5Response,
   questionnairesPhq9Response,
@@ -49,6 +50,7 @@ const QuestionnairesView = ({
   questionnairesDast10Response: QuickNoteSectionItem[]
   questionnairesAuditResponse: QuickNoteSectionItem[]
   questionnairesAimsResponse: QuickNoteSectionItem[]
+  questionnairesYBocsResponse: QuickNoteSectionItem[]
   patientId: string
 }) => {
   const { activeTab, setActiveTab } = useStore((state) => ({
@@ -97,7 +99,7 @@ const QuestionnairesView = ({
         <Pcl5Tab patientId={patientId} data={questionnairesPcl5Response} />
       </TabsContent>
       <TabsContent value={Y_BOCS_TAB}>
-        <YBocsTab />
+        <YBocsTab patientId={patientId} data={questionnairesYBocsResponse} />
       </TabsContent>
       <TabsContent value={AIMS_TAB}>
         <AimsTab patientId={patientId} data={questionnairesAimsResponse} />

@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm, UseFormReturn } from 'react-hook-form'
-import z, { ZodSchema } from 'zod'
 import {
   createQuestionnaireSchema,
   QuestionnaireSchemaType,
@@ -9,13 +8,10 @@ import {
 
 const calculateTotalScore = (data: any): number => {
   let totalScore = 0
-
   Object.keys(data).forEach((key) => {
     const value = Number(data[key]) || 0
-
     totalScore += value
   })
-
   return totalScore
 }
 
