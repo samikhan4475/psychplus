@@ -24,6 +24,8 @@ interface QuestionnairesFormProps {
   labels: string[]
   totalScore: number
   scoreInterpretationRanges: ScoreInterpretationRange[]
+  classNameHeaderCell?: string
+  classNameCell?: string
 }
 
 const QuestionnairesForm = ({
@@ -31,6 +33,8 @@ const QuestionnairesForm = ({
   labels,
   totalScore,
   scoreInterpretationRanges,
+  classNameHeaderCell,
+  classNameCell,
 }: QuestionnairesFormProps) => {
   return (
     <Box className="w-full">
@@ -47,7 +51,7 @@ const QuestionnairesForm = ({
               <Table.ColumnHeaderCell
                 key={label}
                 width={`${50 / (labels.length - 1)}%`}
-                pl="5"
+                className={classNameHeaderCell}
               >
                 <Text weight="medium" size="2">
                   {label}
@@ -74,12 +78,12 @@ const QuestionnairesForm = ({
                   </Text>
                 </Flex>
               </Table.Cell>
-              {item.options.map((option, colIndex) => {
+              {item.options?.map((option, colIndex) => {
                 return (
                   <Table.Cell
                     key={`${item.id}-${colIndex}`}
                     width={`${50 / (labels.length - 1)}%`}
-                    pl="5"
+                    className={classNameCell}
                   >
                     {option.label && option.value && (
                       <RadioButton

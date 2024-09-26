@@ -1,0 +1,137 @@
+[
+  [
+    { "label": "Absent", "value": "0" },
+    { "label": "Sadness", "value": "1" },
+    { "label": "Occasional weeping", "value": "2" },
+    { "label": "Frequent weeping", "value": "3" },
+    { "label": "Extreme symptoms", "value": "4" }
+  ],
+  [
+    { "label": "Absent", "value": "0" },
+    { "label": "Occasional", "value": "1" },
+    { "label": "Ideas of guilt", "value": "2" },
+    {
+      "label": "Present illness is a punishment, Delusions of Guilt",
+      "value": "3"
+    },
+    { "label": "Hallucinations of guilt", "value": "4" }
+  ],
+  [
+    { "label": "Absent", "value": "0" },
+    { "label": "Feels life is not worth living", "value": "1" },
+    { "label": "Wishes he/she were dead", "value": "2" },
+    { "label": "Suicide ideas or ", "value": "3" },
+    { "label": "Attempts at suicide", "value": "4" }
+  ],
+  [
+    { "label": "Absent", "value": "0" },
+    { "label": "Occasional", "value": "1" },
+    { "label": "Frequent", "value": "2" },
+    { "label": "", "value": "" },
+    { "label": "", "value": "" }
+  ],
+  [
+    { "label": "Absent", "value": "0" },
+    { "label": "Occasional", "value": "1" },
+    { "label": "Frequent(except for purpose of voiding)", "value": "2" },
+    { "label": "", "value": "" },
+    { "label": "", "value": "" }
+  ],
+  [
+    { "label": "Absent", "value": "0" },
+    { "label": "Occasional", "value": "1" },
+    { "label": "Frequent", "value": "2" },
+    { "label": "", "value": "" },
+    { "label": "", "value": "" }
+  ],
+  [
+    { "label": "No difficulty", "value": "0" },
+    {
+      "label": "Feelings of incapacity,fatigue or weakness related to activities, work or hobbies",
+      "value": "1"
+    },
+    {
+      "label": "Loss of interest in activity, hobbies or work, or decreased social activities",
+      "value": "2"
+    },
+    { "label": "Prpductivity decreased", "value": "3" },
+    { "label": "Stopped working because of present illness", "value": "4" }
+  ],
+  [
+    { "label": "Absent", "value": "0" },
+    { "label": "Slight retardation during the interview", "value": "1" },
+    { "label": "Obvious retardation during the interview", "value": "2" },
+    { "label": "Interview difficult", "value": "3" },
+    { "label": "Complete stupor", "value": "4" }
+  ],
+  [
+    { "label": "Absent", "value": "0" },
+    { "label": "Mild", "value": "1" },
+    { "label": "Severe", "value": "2" },
+    { "label": "", "value": "" },
+    { "label": "", "value": "" }
+  ],
+  [
+    { "label": "Absent", "value": "0" },
+    { "label": "Tension and irritability", "value": "1" },
+    { "label": "Worrying about minor matters", "value": "2" },
+    { "label": "Apprehensive attitude", "value": "3" },
+    { "label": "Fear", "value": "4" }
+  ],
+  [
+    { "label": "Absent", "value": "0" },
+    { "label": "Mild", "value": "1" },
+    { "label": "Moderate", "value": "2" },
+    { "label": "Severe", "value": "3" },
+    { "label": "Incapacitating", "value": "4" }
+  ],
+  [
+    { "label": "Absent", "value": "0" },
+    { "label": "Mild", "value": "1" },
+    { "label": "Severe", "value": "2" },
+    { "label": "", "value": "" },
+    { "label": "", "value": "" }
+  ],
+  [
+    { "label": "Absent", "value": "0" },
+    { "label": "Mild", "value": "1" },
+    { "label": "Severe", "value": "2" },
+    { "label": "", "value": "" },
+    { "label": "", "value": "" }
+  ],
+  [
+    { "label": "Absent", "value": "0" },
+    { "label": "Mild", "value": "1" },
+    { "label": "Severe", "value": "2" },
+    { "label": "", "value": "" },
+    { "label": "", "value": "" }
+  ],
+  [
+    { "label": "No Present", "value": "0" },
+    { "label": "Self-absorption(bodily)", "value": "1" },
+    { "label": "Preoccupation with health", "value": "2" },
+    { "label": "Querulous attitude", "value": "3" },
+    { "label": "Hypochondriacal delusions", "value": "4" }
+  ],
+  [
+    { "label": "None", "value": "0" },
+    { "label": "Slight", "value": "1" },
+    { "label": "Obvious severe", "value": "2" },
+    { "label": "", "value": "" },
+    { "label": "", "value": "" }
+  ],
+  [
+    { "label": "No loss", "value": "0" },
+    { "label": "Partial or doubtful loss", "value": "1" },
+    { "label": "Loss on insight", "value": "2" },
+    { "label": "", "value": "" },
+    { "label": "", "value": "" }
+  ],
+  [
+    { "label": "Absent", "value": "0" },
+    { "label": "Mild", "value": "1" },
+    { "label": "Severe", "value": "2" },
+    { "label": "", "value": "" },
+    { "label": "", "value": "" }
+  ]
+]

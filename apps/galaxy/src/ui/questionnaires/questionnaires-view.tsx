@@ -40,6 +40,7 @@ const QuestionnairesView = ({
   questionnairesDast10Response,
   questionnairesAuditResponse,
   questionnairesAimsResponse,
+  questionnairesHamDResponse,
   patientId,
 }: {
   questionnairesDashboardData: QuickNoteSectionItem[]
@@ -50,6 +51,7 @@ const QuestionnairesView = ({
   questionnairesDast10Response: QuickNoteSectionItem[]
   questionnairesAuditResponse: QuickNoteSectionItem[]
   questionnairesAimsResponse: QuickNoteSectionItem[]
+  questionnairesHamDResponse: QuickNoteSectionItem[]
   questionnairesYBocsResponse: QuickNoteSectionItem[]
   patientId: string
 }) => {
@@ -114,7 +116,7 @@ const QuestionnairesView = ({
         <MocaTab />
       </TabsContent>
       <TabsContent value={HAM_D_TAB}>
-        <HamDTab />
+        <HamDTab patientId={patientId} data={questionnairesHamDResponse} />
       </TabsContent>
     </Tabs.Root>
   )
