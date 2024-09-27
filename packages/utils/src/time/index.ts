@@ -119,6 +119,11 @@ const formatCurrency = (amount: number): string => {
   })
 }
 
+function parseDateString(dateString: string) {
+  const [year, month, day] = dateString.split('-').map(Number)
+  return new Date(year, month - 1, day)
+}
+
 const getFirstDayOfWeek = (today?: Date): Date => {
   if (!today) {
     today = new Date()
@@ -130,6 +135,18 @@ const getFirstDayOfWeek = (today?: Date): Date => {
   }
 
   return firstDayOfWeek
+}
+
+function getLastDayOfWeek(date?: Date) {
+  if (!date) {
+    date = new Date()
+  }
+  const lastDay = new Date(date)
+  const dayOfWeek = lastDay.getDay()
+  const diffToLastDay = 6 - dayOfWeek
+
+  lastDay.setDate(lastDay.getDate() + diffToLastDay)
+  return lastDay
 }
 
 export {
@@ -146,4 +163,6 @@ export {
   calculateAge,
   formatCurrency,
   getFirstDayOfWeek,
+  parseDateString,
+  getLastDayOfWeek,
 }

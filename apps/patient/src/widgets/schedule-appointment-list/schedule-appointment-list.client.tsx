@@ -10,7 +10,12 @@ import { getAppointmentAvailabilityForUnauthenticatedUser } from '@psychplus/app
 import { getCodeSets } from '@psychplus/codeset/api.client'
 import { isMobile } from '@psychplus/utils/client'
 import { getZipcodeInfo } from '@psychplus/utils/map'
-import { formatDateYmd, getFirstDayOfWeek } from '@psychplus/utils/time'
+import {
+  formatDateYmd,
+  getFirstDayOfWeek,
+  getLastDayOfWeek,
+  parseDateString,
+} from '@psychplus/utils/time'
 import { SCHEDULE_APPOINTMENT_LIST } from '@psychplus/widgets'
 import {
   usePublishLoaded,
@@ -97,6 +102,12 @@ const ScheduleAppointmentListClient = ({
 
     setIsLoading(true)
     const today = new Date()
+    const maxDaysOutToLook =
+      getLastDayOfWeek(parseDateString(filters.startingDate)).getDay() +
+      1 -
+      (isBefore(new Date(filters.startingDate), today)
+        ? parseDateString(formatDateYmd(today)).getDay()
+        : parseDateString(filters.startingDate).getDay())
 
     getAppointmentAvailabilityForUnauthenticatedUser(
       {
@@ -107,7 +118,7 @@ const ScheduleAppointmentListClient = ({
         startingDate: isBefore(new Date(filters.startingDate), today)
           ? formatDateYmd(today)
           : filters.startingDate,
-        maxDaysOutToLook: 7,
+        maxDaysOutToLook,
         staffIds: staffIdParam ? [staffIdParam] : [],
         state: filters.state,
       },

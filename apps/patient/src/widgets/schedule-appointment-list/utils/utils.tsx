@@ -8,6 +8,7 @@ import { type Clinic } from '@psychplus/clinics'
 import { type Staff } from '@psychplus/staff'
 import { isMobile } from '@psychplus/utils/client'
 import { APP_ENV } from '@psychplus/utils/constants'
+import { formatDateYmd, parseDateString } from '@psychplus/utils/time'
 import { type Location, type StaffWithClinicsAndSlots } from '../types'
 
 function groupStaffWithClinicsAndSlots(
@@ -19,7 +20,7 @@ function groupStaffWithClinicsAndSlots(
     return resultArray
   }
 
-  appointmentAvailabilities.staffAppointmentAvailabilities.forEach(
+  appointmentAvailabilities?.staffAppointmentAvailabilities.forEach(
     (appointment) => {
       const staff: Staff = appointment.specialist
       const staffTypeCode: number = appointment.specialistTypeCode
@@ -193,24 +194,24 @@ const extractLocations = (
 
 function organizeSlotsByDate(slots: Slot[] | undefined, startingDate: string) {
   const slotsByDate: Record<string, Slot[]> = {}
-  const [year, month, day] = startingDate.split('-').map(Number)
+  const parsedDate = parseDateString(startingDate)
 
   const daysToAdd = isMobile() ? 1 : 7
-  let currentDay = day
-  currentDay += 1
+  const currentDate = parsedDate
+
   for (let i = 0; i < daysToAdd; i++) {
-    const currentDate = new Date(year, month - 1, currentDay + i)
-    const cstDateString = currentDate.toLocaleString('en-US')
-    const formattedDate = cstDateString.split(' ')[0]
+    const formattedDate = formatDateYmd(currentDate)
     slotsByDate[formattedDate] = []
+    currentDate.setDate(currentDate.getDate() + 1)
   }
 
   slots?.forEach((slot) => {
-    const cstDateString = new Date(slot.startDate)
-      .toLocaleString('en-US')
-      .split(' ')[0]
+    const slotDate = parseDateString(slot.startDate.split('T')[0])
 
-    if (cstDateString in slotsByDate) slotsByDate[cstDateString].push(slot)
+    const formattedSlotDate = formatDateYmd(slotDate)
+
+    if (formattedSlotDate in slotsByDate)
+      slotsByDate[formattedSlotDate].push(slot)
   })
   return slotsByDate
 }

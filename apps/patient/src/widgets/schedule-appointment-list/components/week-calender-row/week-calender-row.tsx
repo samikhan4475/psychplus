@@ -1,10 +1,14 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Flex, Text } from '@radix-ui/themes'
 import { addDays, format } from 'date-fns'
 import { isMobile } from '@psychplus/utils/client'
-import { formatDateYmd, getFirstDayOfWeek } from '@psychplus/utils/time'
+import {
+  formatDateYmd,
+  getFirstDayOfWeek,
+  parseDateString,
+} from '@psychplus/utils/time'
 import { LeftArrowIcon, RightArrowIcon } from '@/components'
 import { useStore } from '../../store'
 
@@ -15,7 +19,9 @@ const WeekCalendarRow = () => {
     useStore()
 
   const [startDate, setStartDate] = useState(
-    filters.startingDate ? new Date(filters.startingDate) : getFirstDayOfWeek(),
+    filters.startingDate
+      ? parseDateString(filters.startingDate)
+      : getFirstDayOfWeek(),
   )
 
   const renderDays = () =>
