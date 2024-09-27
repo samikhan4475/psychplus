@@ -8,16 +8,22 @@ import { RichTextEditor } from './quill-editor'
 import { SubjectInput } from './subject-input'
 import { UserRecipientsEmails } from './user-recipients-emails'
 
-const ComposeNewEmail = ({ setActiveComponent }: ActiveComponentProps) => {
+const ComposeNewEmail = ({
+  setActiveComponent,
+  activeComponent,
+}: ActiveComponentProps) => {
   return (
     <Flex direction="column" className="w-full">
-      <NewMessageHeader setActiveComponent={setActiveComponent} />
+      <NewMessageHeader
+        activeComponent={activeComponent}
+        setActiveComponent={setActiveComponent}
+      />
       <Flex direction="column" className="w-full space-y-2 p-4">
         <InternalRecipientsEmails />
         <ExternalRecipientsEmails />
         <UserRecipientsEmails />
-        <SubjectInput />
-        <RichTextEditor />
+        <SubjectInput activeComponent={activeComponent} />
+        <RichTextEditor activeComponent={activeComponent} />
         <Flex gap="3" pt="3">
           <SendButton />
           <SaveDraftButton />

@@ -12,7 +12,7 @@ const SecureMessagesTabs = ({ setActiveComponent }: ActiveComponentProps) => {
       <Tabs.Root className="mt-2 h-[32px] w-[416px]" value={activeTab}>
         <Tabs.List className="bg-pp-light-white flex rounded-2 p-1  [box-shadow:none]">
           <Tabs.Trigger
-            className="text-sm text-gray-600 data-[state=active]:bg-white data-[state=active]:shadow-md text-pp-gray-3 data-[state=active]:text-black h-[24px] w-[99px] rounded-2 px-4  py-1 font-medium focus:outline-none data-[state=active]:before:w-0"
+            className="text-sm text-gray-600  data-[state=active]:bg-white data-[state=active]:shadow-md text-pp-gray-3 data-[state=active]:text-black h-[24px] w-[99px] rounded-2 px-4  py-1 font-medium focus:outline-none data-[state=active]:before:w-0"
             value={SecureMessagesTab.ALL}
             onClick={() => setActiveTab(SecureMessagesTab.ALL)}
           >

@@ -41,7 +41,7 @@ const ReviewEmail = ({
           handleDeleteFile={handleDeleteFile}
           previewSecureMessage={previewSecureMessage}
         />
-        <ViewMessageReplyForward />
+        <ViewMessageReplyForward setActiveComponent={setActiveComponent} />
       </Box>
     </Flex>
   )

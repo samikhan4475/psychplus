@@ -21,7 +21,13 @@ const MessageSection = () => {
           setActiveComponent={setActiveComponent}
         />
       )
-    else return <ComposeNewEmail setActiveComponent={setActiveComponent} />
+    else
+      return (
+        <ComposeNewEmail
+          activeComponent={activeComponent}
+          setActiveComponent={setActiveComponent}
+        />
+      )
   }, [activeComponent])
 
   return (

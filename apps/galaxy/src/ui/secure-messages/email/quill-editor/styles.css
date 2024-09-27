@@ -28,3 +28,9 @@
 .react-tags__combobox {
   margin: 0 !important;
 }
+.rt-TabsTriggerInner:hover {
+  background-color: transparent !important;
+}
+.rt-BaseTabListTrigger:hover .rt-TabsTriggerInner {
+  background-color: transparent !important;
+}

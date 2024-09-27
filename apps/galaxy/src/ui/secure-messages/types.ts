@@ -1,6 +1,6 @@
 import { ClinicAddress, LegalName, Metadata, } from "@/types"
 import { Table, TableOptions, TableState, Updater } from "@tanstack/react-table"
-import { Dispatch, SetStateAction } from "react"
+import { Dispatch, ReactNode, SetStateAction } from "react"
 import { SchemaType } from "./secure-messages-view"
 
 enum SecureMessagesTab {
@@ -12,8 +12,9 @@ enum SecureMessagesTab {
 
 enum ActiveComponent {
     NEW_EMAIL = 'new-email',
+    COMPOSE_MAIL = "New Message",
     PREVIEW_EMAIL = 'preview-email',
-    COMPOSE_MAIL = 'compose-email',
+    FORWARD = 'Forward'
 }
 
 enum SecureMessageStatus {
@@ -117,18 +118,19 @@ interface EmailRecipient {
 
 
 interface Attachment {
-    id: string
-    messageId: string
-    name: string
-    uri: string
-    mimeType: string
-    fileDescription: string
-    createdOn: string
-    createdBy: number
-    size: number
-    updatedOn: string
-    updatedBy: number
-    recordStatus: string
+    id?: string
+    file?: File
+    messageId?: string
+    name?: string
+    uri?: string
+    mimeType?: string
+    fileDescription?: string
+    createdOn?: string
+    createdBy?: number
+    size?: number
+    updatedOn?: string
+    updatedBy?: number
+    recordStatus?: string
 }
 interface SecureMessageData {
     secureMessages: SecureMessage[]
@@ -204,7 +206,7 @@ interface ActiveComponentProps {
     activeComponent?: ActiveComponent
 }
 interface AttachmentsProps {
-    attachments: File[];
+    attachments: Attachment[];
     handleDeleteFile: (index: number) => void;
     activeComponent?: ActiveComponent
 }
@@ -218,7 +220,12 @@ interface ViewMessageAttachmentProps {
     handleDeleteFile: (index: number) => void
     activeComponent?: ActiveComponent
 }
+interface RichTextEditorWrapperProps {
+    children: ReactNode
+    activeComponent?: ActiveComponent
+}
 export {
+    type RichTextEditorWrapperProps,
     type ViewMessageAttachmentProps,
     type FileTileProps,
     type AttachmentsProps,

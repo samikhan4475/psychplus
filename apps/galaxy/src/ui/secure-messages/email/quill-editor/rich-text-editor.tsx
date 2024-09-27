@@ -1,10 +1,15 @@
 import React from 'react'
 import './styles.css'
+import { ActiveComponent } from '../../types'
 import { RichTextEditorToolbar } from './rich-text-editor-toolbar'
 import { RichTextEditorWrapper } from './rich-text-editor-wrapper'
 
-const RichTextEditor = () => (
-  <RichTextEditorWrapper>
+const RichTextEditor = ({
+  activeComponent,
+}: {
+  activeComponent?: ActiveComponent
+}) => (
+  <RichTextEditorWrapper activeComponent={activeComponent}>
     <RichTextEditorToolbar />
   </RichTextEditorWrapper>
 )

@@ -35,7 +35,7 @@ const FileUplaodCard = ({
         </Text>
         <Flex className="items-center" gap="1">
           <Text className="text-[12px]" color="gray">
-            {`${bytesToMegaBytes(attachment.size)} MB`}
+            {`${attachment?.size && bytesToMegaBytes(attachment?.size)} MB`}
           </Text>
           <Text className="text-[12px]" color="gray">
             .

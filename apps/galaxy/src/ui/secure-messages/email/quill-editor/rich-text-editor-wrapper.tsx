@@ -1,9 +1,15 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import dynamic from 'next/dynamic'
 import './styles.css'
 import { Box } from '@radix-ui/themes'
 import { initializeQuillIcons, RichTextEditor } from '.'
 import { MAX_FILE_UPLOAD_UNIT } from '../../contants'
+import { useStore } from '../../store'
+import {
+  ActiveComponent,
+  Attachment,
+  RichTextEditorWrapperProps,
+} from '../../types'
 import { Attachments } from './attachments'
 
 const ReactQuill = dynamic(() => import('react-quill'), {
@@ -15,10 +21,22 @@ if (typeof window !== 'undefined') {
   Quill = require('react-quill').Quill
   initializeQuillIcons(Quill)
 }
+
 export const RichTextEditorWrapper = ({
   children,
-}: React.PropsWithChildren) => {
-  const [attachments, setAttachments] = useState<File[]>([])
+  activeComponent,
+}: RichTextEditorWrapperProps) => {
+  const [attachments, setAttachments] = useState<Attachment[]>([])
+  const [value, setValue] = useState<string>('')
+  const { previewSecureMessage } = useStore((state) => state)
+
+  useEffect(() => {
+    if (activeComponent === ActiveComponent.FORWARD && previewSecureMessage) {
+      // Initialize attachments with existing ones
+      setAttachments(previewSecureMessage.attachments || [])
+      setValue(previewSecureMessage.text || '')
+    }
+  }, [activeComponent, previewSecureMessage])
 
   const handleFileChange = async (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -37,8 +55,15 @@ export const RichTextEditorWrapper = ({
         },
       )
 
-      if (filteredFiles.length > 0) {
-        setAttachments([...attachments, ...filteredFiles])
+      // Map files to Attachment format if needed
+      const newAttachments = filteredFiles.map((file) => ({
+        id: file.name, // or a generated ID
+        name: file.name,
+        file, // Store the actual File object
+      }))
+
+      if (newAttachments.length > 0) {
+        setAttachments([...attachments, ...newAttachments])
       }
     }
   }
@@ -52,9 +77,9 @@ export const RichTextEditorWrapper = ({
     <Box className="bg-pp-bg-table-cell border-pp-gray-2 !mt-6 rounded-4 border">
       {children}
       <ReactQuill
-        value={''}
+        value={value}
         className="rounded-t-4"
-        onChange={(value) => {}}
+        onChange={(value) => setValue(value)}
         modules={RichTextEditor.modules}
         placeholder="Write your message here..."
       />
