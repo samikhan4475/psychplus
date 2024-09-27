@@ -5,7 +5,7 @@ import { CreditDebitCardsIcon } from '@/components/icons'
 
 const InfoBox = () => {
   return (
-    <Box width="100%">
+    <Box width="100%" maxWidth={'776px'}>
       <Flex
         gap="2"
         justify="between"

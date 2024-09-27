@@ -1,7 +1,10 @@
 'use client'
 
 import { Flex, FlexProps, Grid, Text } from '@radix-ui/themes'
+import { useFormContext } from 'react-hook-form'
 import { useGooglePlacesContext } from '@/providers/google-places-provider'
+import { FormFieldContainer, FormFieldError, FormFieldLabel } from '../form'
+import { ZipcodeInput } from '../zipcode-input'
 import { GooglePlacesAutocomplete } from './address-autocomplete'
 import { AddressTextField } from './address-text-field'
 import { UsStateSelect } from './usstate-select'
@@ -25,6 +28,10 @@ const AddressFieldsGroup = ({
 }: AddressProps) => {
   const { loaded } = useGooglePlacesContext()
 
+  const form = useFormContext()
+
+  const zipFieldName = fieldName('zip', prefix)
+
   return (
     <Flex gap="2" className={className} direction={direction}>
       {title && (
@@ -39,28 +46,37 @@ const AddressFieldsGroup = ({
         {loaded && (
           <GooglePlacesAutocomplete
             required={required}
-            name={'address1'}
-            placeholder={'Enter Address 1'}
+            name="address1"
+            placeholder="Enter Address 1"
             prefix={prefix}
           />
         )}
         <AddressTextField
           label="Address 2"
           field={fieldName('address2', prefix)}
+          placeholder="Enter Address 2"
         />
       </Grid>
       <Grid columns="3" gap="3" className="flex-1">
         <AddressTextField
           label="City"
           field={fieldName('city', prefix)}
+          placeholder="Enter City"
           required={required}
         />
         <UsStateSelect required={required} prefix={prefix} />
-        <AddressTextField
-          label="Zip"
-          field={fieldName('zip', prefix)}
-          required={required}
-        />
+
+        <FormFieldContainer className="flex-1">
+          <FormFieldLabel required>Zip Code</FormFieldLabel>
+          <ZipcodeInput
+            size="1"
+            placeholder="Enter Zip"
+            className="border-pp-gray-2 h-6 w-full border border-solid !outline-none [box-shadow:none] disabled:bg-gray-3 disabled:text-gray-11"
+            {...form.register(zipFieldName)}
+            value={form.watch(zipFieldName)}
+          />
+          <FormFieldError name="zip" />
+        </FormFieldContainer>
       </Grid>
     </Flex>
   )

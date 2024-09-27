@@ -14,10 +14,12 @@ const TAB_TITLE = 'Payment Hx'
 interface PaymentHistoryTabProps {
   stripeApiKey: string
   patientId: string
+  googleApiKey: string
 }
 const PaymentHistoryTab = ({
   stripeApiKey,
   patientId,
+  googleApiKey,
 }: PaymentHistoryTabProps) => {
   const { data, fetchPatientPaymentHistories, loading } = useStore((state) => ({
     loading: state.loading,
@@ -38,7 +40,11 @@ const PaymentHistoryTab = ({
       <TabContentHeading title={TAB_TITLE}>
         <Flex gap="2" align="center" className="flex-1" justify="end">
           <AddCustomChargeDialog />
-          <PaymentButton stripeApiKey={stripeApiKey} patientId={patientId} />
+          <PaymentButton
+            stripeApiKey={stripeApiKey}
+            patientId={patientId}
+            googleApiKey={googleApiKey}
+          />
         </Flex>
       </TabContentHeading>
       <ScrollArea>

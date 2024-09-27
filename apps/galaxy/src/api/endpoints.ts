@@ -67,6 +67,17 @@ const DELETE_PATIENT_RELATIONSHIP_ENDPOINT = (
   patientId: string,
   relationshipId: string,
 ) => `${API_URL}/api/patients/${patientId}/relationships/${relationshipId}`
+const GET_PATIENT_CREDIT_CARDS = (patientId: string) =>
+  `${API_URL}/api/patients/${patientId}/creditcards?includeInactive=true`
+const SET_PRIMARY_PATIENT_CREDIT_CARD = (
+  patientId: number,
+  creditCardId: number,
+) =>
+  `${API_URL}/api/patients/${patientId}/creditcards/${creditCardId}/actions/setdefault`
+const DELETE_PATIENT_CREDIT_CARD = (patientId: number, creditCardId: number) =>
+  `${API_URL}/api/patients/${patientId}/creditcards/${creditCardId}`
+const ADD_PATIENT_CREDIT_CARD = (patientId: string) =>
+  `${API_URL}/api/patients/${patientId}/creditcards`
 
 export {
   USER_ENDPOINT,
@@ -112,4 +123,8 @@ export {
   GET_PATIENT_BILLING_HISTORY,
   ADD_PATIENT_RELATIONSHIP_ENDPOINT,
   DELETE_PATIENT_RELATIONSHIP_ENDPOINT,
+  GET_PATIENT_CREDIT_CARDS,
+  SET_PRIMARY_PATIENT_CREDIT_CARD,
+  DELETE_PATIENT_CREDIT_CARD,
+  ADD_PATIENT_CREDIT_CARD,
 }

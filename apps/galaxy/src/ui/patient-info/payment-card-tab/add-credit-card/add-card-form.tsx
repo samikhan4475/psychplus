@@ -8,11 +8,19 @@ import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import z from 'zod'
-import { FormContainer, FormFieldContainer, FormFieldLabel } from '@/components'
-import { cn } from '@/utils'
+import {
+  FormContainer,
+  FormError,
+  FormFieldContainer,
+  FormFieldLabel,
+} from '@/components'
+import { CreditCardType } from '@/constants'
+import { AllowedCards, CreditCard } from '@/types'
+import { cn, zipCodeSchema } from '@/utils'
+import { addPatientCardAction } from '../actions'
 import { BillingAddress } from './billing-address'
 import { CardDetails } from './card-details'
-import UserAgreeCheckbox from './user-agree-checkbox'
+import { InfoBox } from './info-box'
 
 const STRIPE_INPUT_STYLE = {
   base: {
@@ -22,96 +30,135 @@ const STRIPE_INPUT_STYLE = {
     fontSmoothing: 'antialiased',
   },
 }
-const ALLOWED_CARDS = ['amex', 'discover', 'mastercard', 'visa']
 
 interface AddCardFormProps {
   onClose?: () => void
   patientId: string
+  patientCards?: CreditCard[]
 }
 
 const schema = z.object({
-  fullname: z.string().min(1, 'Required'),
+  name: z
+    .string()
+    .min(1, 'Required')
+    .max(128, 'Max 100 characters are allowed.'),
   address1: z
     .string()
     .min(1, 'Required')
     .max(100, 'Max 100 characters are allowed.'),
-  address2: z.string().max(100, 'Max 100 characters are allowed.'),
+  address2: z.string().max(128, 'Max 100 characters are allowed.').optional(),
   city: z.string().min(1, 'Required'),
   state: z.string().min(1, 'Required'),
-  postalCode: z.string().trim().min(1, 'Required').length(5, 'Invalid ZIP'),
-  userAgreed: z.coerce.boolean().refine((value) => value === true, {
-    message: 'You must agree to the terms and conditions',
-  }),
+  zip: zipCodeSchema,
 })
-export type SchemaType = z.infer<typeof schema>
+export type AddCardFormSchemaType = z.infer<typeof schema>
 
-const AddCardForm = ({ onClose, patientId }: AddCardFormProps) => {
+const AddCardForm = ({
+  onClose,
+  patientId,
+  patientCards,
+}: AddCardFormProps) => {
   const stripe = useStripe()
   const router = useRouter()
 
+  const [error, setError] = useState<string>()
   const elements = useElements()
   const [focus, setFocus] = useState(false)
 
-  const form = useForm<SchemaType>({
+  const form = useForm<AddCardFormSchemaType>({
     resolver: zodResolver(schema),
-    mode: 'onChange',
+    reValidateMode: 'onChange',
     defaultValues: {
-      address1: 'xxx-xxxx-xxx-xxx',
-      address2: 'jhon',
-      city: 'month',
-      fullname: '',
-      postalCode: 'CVV',
-      state: 'year',
-      userAgreed: false,
+      address1: '',
+      address2: '',
+      city: '',
+      name: '',
+      zip: '',
+      state: '',
     },
   })
 
-  const onSubmit: SubmitHandler<SchemaType> = async (data) => {
+  const { isSubmitting } = form.formState
+
+  const onSubmit: SubmitHandler<AddCardFormSchemaType> = async (data) => {
     if (!stripe || !elements) {
       return
     }
 
-    const stripeResult = await stripe.createPaymentMethod({
+    const { error, paymentMethod } = await stripe.createPaymentMethod({
       elements,
     })
 
-    if (
-      stripeResult.error ||
-      stripeResult.paymentMethod.type !== 'card' ||
-      !stripeResult.paymentMethod?.card
-    ) {
-      toast.error(
-        stripeResult.error?.message ?? 'Could not collect credit card info',
-      )
-
+    if (error || paymentMethod?.type !== 'card' || !paymentMethod?.card) {
+      setError(error?.message ?? 'Could not collect credit card info')
       return
     }
 
-    const {
-      paymentMethod: { card },
-    } = stripeResult
+    const { card } = paymentMethod
+    const { last4, exp_month, exp_year, brand } = card
 
-    if (!ALLOWED_CARDS.includes(card.brand)) {
-      toast.error('Card not supported')
+    const isDuplicate = patientCards?.some(
+      (patientCard) =>
+        patientCard.numberLastFour === last4 &&
+        patientCard.expireMonth === exp_month &&
+        patientCard.expireYear === exp_year,
+    )
+
+    if (isDuplicate) {
+      setError('This card already exists in your account.')
+      return
     }
 
+    if (!Object.values(AllowedCards).includes(brand as AllowedCards)) {
+      setError('Card not supported')
+      return
+    }
+
+    const cardBrand =
+      brand === AllowedCards.Amex ? AllowedCards.AmericanExpress : brand
+
+    const result = await addPatientCardAction(patientId, {
+      name: data.name,
+      cardKey: paymentMethod.id,
+      cardType: cardBrand as CreditCardType,
+      expireMonth: exp_month,
+      expireYear: exp_year,
+      numberLastFour: last4,
+      billingAddress: {
+        type: 'Billing',
+        street1: data.address1,
+        street2: data.address2,
+        city: data.city,
+        state: data.state,
+        postalCode: data.zip,
+      },
+    })
+
+    if (result.state === 'error') {
+      setError(result.error ?? 'Could not add credit card')
+      return
+    }
+
+    toast.success('Credit Card Added')
     onSuccess()
   }
 
   const onSuccess = () => {
     router.refresh()
     form.reset({
-      fullname: '',
+      name: '',
       address1: '',
+      address2: '',
       city: '',
       state: '',
-      postalCode: '',
-      userAgreed: false,
+      zip: '',
     })
     onClose?.()
   }
   return (
     <FormContainer form={form} onSubmit={onSubmit}>
+      <FormError message={error} />
+      <InfoBox />
       <Flex gap="2" width="100%" direction="column">
         <CardDetails>
           <FormFieldContainer className="w-full">
@@ -126,12 +173,13 @@ const AddCardForm = ({ onClose, patientId }: AddCardFormProps) => {
               options={{
                 style: STRIPE_INPUT_STYLE,
                 hidePostalCode: true,
-
+                disabled: isSubmitting,
                 classes: {
                   base: cn(
                     'border-pp-gray-2 h-6 w-full border border-solid !outline-none [box-shadow:none] py-[3px] px-1 rounded-1',
                     {
                       'border-blue-8': focus,
+                      '!bg-gray-3 !text-gray-11': isSubmitting,
                     },
                   ),
                 },
@@ -140,9 +188,8 @@ const AddCardForm = ({ onClose, patientId }: AddCardFormProps) => {
           </FormFieldContainer>
         </CardDetails>
         <BillingAddress />
-        <UserAgreeCheckbox />
-        <Flex justify="end">
-          <Button highContrast type="submit">
+        <Flex justify="end" pt="4">
+          <Button disabled={isSubmitting} highContrast type="submit">
             Save
           </Button>
         </Flex>

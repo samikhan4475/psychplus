@@ -3,7 +3,7 @@
 import * as Tabs from '@radix-ui/react-tabs'
 import { Flex } from '@radix-ui/themes'
 import { XIcon } from 'lucide-react'
-import { PatientConsent, Relationship } from '@/types'
+import { CreditCard, PatientConsent, Relationship } from '@/types'
 import {
   INSURANCE_TAB,
   PATIENT_INFO_HISTORY_TAB,
@@ -32,6 +32,7 @@ interface PatientInfoViewProps {
   patientPreferredPartners: PatientPreferredPartner[]
   patientRelationships: Relationship[]
   patientConsents: PatientConsent[]
+  patientCards : CreditCard[]
 }
 
 const PatientInfoView = ({
@@ -42,6 +43,7 @@ const PatientInfoView = ({
   patientPreferredPartners,
   patientRelationships,
   patientConsents,
+  patientCards
 }: PatientInfoViewProps) => {
   const { activeTab, setActiveTab, showPatientHistory, closePatientHistory } =
     useStore((state) => ({
@@ -94,10 +96,19 @@ const PatientInfoView = ({
         <PolicyAndConsentsTab />
       </TabsContent>
       <TabsContent value={PAYMENT_HISTORY_TAB}>
-        <PaymentHistoryTab stripeApiKey={stripeApiKey} patientId={patientId} />
+        <PaymentHistoryTab
+          stripeApiKey={stripeApiKey}
+          patientId={patientId}
+          googleApiKey={googleApiKey}
+        />
       </TabsContent>
       <TabsContent value={PAYMENT_CARDS_TAB}>
-        <PaymentCardsTab stripeApiKey={stripeApiKey} patientId={patientId} />
+        <PaymentCardsTab
+          stripeApiKey={stripeApiKey}
+          patientId={patientId}
+          googleApiKey={googleApiKey}
+          patientCards={patientCards}
+        />
       </TabsContent>
       <TabsContent value={PATIENT_INFO_HISTORY_TAB}>
         <PatientInfoHistoryTab />

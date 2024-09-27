@@ -161,6 +161,13 @@ const formatDate = (
   return format(date, dateFormat)
 }
 
+function formatExpirationDate(expireMonth: number, expireYear: number) {
+  const formattedMonth = String(expireMonth).padStart(2, '0')
+
+  const formattedYear = String(expireYear).slice(-2)
+  return `${formattedMonth}/${formattedYear}`
+}
+
 export {
   getCalendarDate,
   getLocalCalendarDate,
@@ -175,4 +182,5 @@ export {
   formatDateTime,
   formatDateToISOString,
   formatDate,
+  formatExpirationDate,
 }

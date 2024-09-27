@@ -1,3 +1,4 @@
+import { getPatientCreditCards } from '@/actions'
 import { GOOGLE_MAPS_API_KEY, STRIPE_PUBLISHABLE_KEY } from '@/constants'
 import { PatientInfoView } from '@/ui/patient-info'
 import {
@@ -19,11 +20,13 @@ const PatientInfoPage = async ({ params }: PatientInfoPageProps) => {
     consentsResult,
     patientRelationshipsResult,
     preferredPartnerResult,
+    patientCardsResult,
   ] = await Promise.all([
     getPatientProfileAction(params.id),
     getPatientConsentsAction(params.id),
     getPatientRelationshipsAction(params.id),
     getPatientPreferredPartnersAction(params.id),
+    getPatientCreditCards(params.id),
   ])
 
   if (profileResult.state === 'error') {
@@ -40,6 +43,11 @@ const PatientInfoPage = async ({ params }: PatientInfoPageProps) => {
   if (preferredPartnerResult?.state === 'error') {
     return <div>{preferredPartnerResult.error}</div>
   }
+
+  if (patientCardsResult?.state === 'error') {
+    return <div>{patientCardsResult.error}</div>
+  }
+
   return (
     <PatientInfoView
       googleApiKey={GOOGLE_MAPS_API_KEY}
@@ -49,6 +57,7 @@ const PatientInfoPage = async ({ params }: PatientInfoPageProps) => {
       patientPreferredPartners={preferredPartnerResult.data}
       patientRelationships={patientRelationshipsResult.data}
       patientConsents={consentsResult.data}
+      patientCards={patientCardsResult.data}
     />
   )
 }

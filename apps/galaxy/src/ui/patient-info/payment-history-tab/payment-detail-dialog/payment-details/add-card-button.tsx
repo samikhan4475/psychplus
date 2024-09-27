@@ -7,8 +7,13 @@ import { AddCardDialog } from '../add-credit-card-dialog'
 interface AddCardButtonProps {
   stripeApiKey: string
   patientId: string
+  googleApiKey: string
 }
-const AddCardButton = ({ stripeApiKey, patientId }: AddCardButtonProps) => {
+const AddCardButton = ({
+  stripeApiKey,
+  patientId,
+  googleApiKey,
+}: AddCardButtonProps) => {
   const [open, setOpen] = useState(false)
   const onOpen = () => setOpen(true)
   const onClose = () => setOpen(false)
@@ -29,6 +34,7 @@ const AddCardButton = ({ stripeApiKey, patientId }: AddCardButtonProps) => {
         onClose={onClose}
         patientId={patientId}
         stripeApiKey={stripeApiKey}
+        googleApiKey={googleApiKey}
       />
     </>
   )

@@ -8,8 +8,13 @@ import { PaymentDetailDialog } from './payment-detail-dialog'
 interface PaymentButtonProps {
   stripeApiKey: string
   patientId: string
+  googleApiKey: string
 }
-const PaymentButton = ({ stripeApiKey, patientId }: PaymentButtonProps) => {
+const PaymentButton = ({
+  stripeApiKey,
+  patientId,
+  googleApiKey,
+}: PaymentButtonProps) => {
   const [open, setOpen] = useState(false)
   const onOpen = () => setOpen(true)
   const onClose = () => setOpen(false)
@@ -24,6 +29,7 @@ const PaymentButton = ({ stripeApiKey, patientId }: PaymentButtonProps) => {
         open={open}
         onClose={onClose}
         stripeApiKey={stripeApiKey}
+        googleApiKey={googleApiKey}
       />
     </>
   )

@@ -18,9 +18,14 @@ import { TransactionInput } from './transaction-input'
 interface PaymentDetailsProps {
   stripeApiKey: string
   patientId: string
+  googleApiKey: string
 }
 
-const PaymentDetails = ({ stripeApiKey, patientId }: PaymentDetailsProps) => {
+const PaymentDetails = ({
+  stripeApiKey,
+  patientId,
+  googleApiKey,
+}: PaymentDetailsProps) => {
   const { register, unregister, watch } = useFormContext<PaymentDetailSchema>()
 
   const paymentMethod = watch('paymentMethod')
@@ -40,7 +45,11 @@ const PaymentDetails = ({ stripeApiKey, patientId }: PaymentDetailsProps) => {
         <Text size="2" weight="medium">
           Payment Details
         </Text>
-        <AddCardButton stripeApiKey={stripeApiKey} patientId={patientId} />
+        <AddCardButton
+          stripeApiKey={stripeApiKey}
+          patientId={patientId}
+          googleApiKey={googleApiKey}
+        />
       </Flex>
       <Flex align="start" gap="3" className="px-2 py-2">
         <SelectMethod />

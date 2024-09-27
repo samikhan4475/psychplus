@@ -57,11 +57,13 @@ const GooglePlacesAutocomplete = ({
   const form = useFormContext()
   const autocompleteFieldRef = useRef<HTMLInputElement | null>(null)
   const [showSuggestions, setShowSuggestions] = useState(false)
+  const address1Field = fieldName('address1', prefix)
+  const address2Field = fieldName('address2', prefix)
+  const cityField = fieldName('city', prefix)
+  const stateField = fieldName('state', prefix)
+  const zipField = fieldName('zip', prefix)
 
-  const state = form?.getFieldState(
-    fieldName('address1', prefix),
-    form?.formState,
-  )
+  const state = form?.getFieldState(address1Field, form?.formState)
   const values = form?.getValues()
 
   const {
@@ -72,10 +74,10 @@ const GooglePlacesAutocomplete = ({
     clearSuggestions,
   } = usePlacesAutocomplete({
     defaultValue: getInitialAutocompleteValue({
-      street1: values?.[fieldName('address1', prefix)],
-      city: values?.[fieldName('city', prefix)],
-      state: values?.[fieldName('state', prefix)],
-      postalCode: values?.[fieldName('zip', prefix)],
+      street1: values?.[address2Field],
+      city: values?.[cityField],
+      state: values?.[stateField],
+      postalCode: values?.[zipField],
     }),
     requestOptions: {
       types: ['address'],
@@ -93,11 +95,18 @@ const GooglePlacesAutocomplete = ({
   const setFormValues = useCallback(
     (address?: AddressForm) => {
       if (form) {
-        form.setValue(fieldName('address1', prefix), address?.street ?? '')
-        form.setValue(fieldName('address2', prefix), address?.street1 ?? '')
-        form.setValue(fieldName('city', prefix), address?.city ?? '')
-        form.setValue(fieldName('state', prefix), address?.state ?? '')
-        form.setValue(fieldName('zip', prefix), address?.postalCode ?? '')
+        form.setValue(address1Field, address?.street ?? '')
+        form.setValue(address2Field, address?.street1 ?? '')
+        form.setValue(cityField, address?.city ?? '')
+        form.setValue(stateField, address?.state ?? '')
+        form.setValue(zipField, address?.postalCode ?? '')
+        form.trigger([
+          address1Field,
+          address2Field,
+          cityField,
+          stateField,
+          zipField,
+        ])
       }
     },
     [form, name],
@@ -137,7 +146,7 @@ const GooglePlacesAutocomplete = ({
         <FormFieldLabel required={required}>{label}</FormFieldLabel>
         <TextField.Root
           size="1"
-          id={fieldName('address1', prefix)}
+          id={address1Field}
           disabled={disabled}
           ref={autocompleteFieldRef}
           value={value}
@@ -147,7 +156,7 @@ const GooglePlacesAutocomplete = ({
           className={textFieldClassName}
         />
         {status === 'OK' && showSuggestions && (
-          <ul className="bg-white absolute top-full z-50 w-full overflow-x-clip rounded-2 shadow-3">
+          <ul className="bg-white absolute top-full z-50 flex w-full flex-col overflow-x-hidden rounded-2 shadow-3">
             {data.map(
               ({
                 place_id,
@@ -158,20 +167,23 @@ const GooglePlacesAutocomplete = ({
                   onClick={handleSelect({ place_id })}
                   variant="ghost"
                   color="gray"
+                  radius="none"
                   tabIndex={0}
-                  className="hover:!text-white w-full cursor-pointer justify-start border-b border-b-gray-5 px-4 py-2 last:border-b-0 hover:bg-indigo-12"
+                  className="hover:!text-white !m-0 cursor-pointer flex-wrap justify-start gap-y-0 border-b border-b-gray-5 px-4 py-2 last:border-b-0 hover:bg-indigo-12"
                 >
-                  <Text weight="medium" size="1">
+                  <Text weight="medium" size="1" align="left">
                     {main_text}
                   </Text>
-                  <Text size="1">{secondary_text}</Text>
+                  <Text size="1" align="left">
+                    {secondary_text}
+                  </Text>
                 </Button>
               ),
             )}
           </ul>
         )}
         {state?.error && (
-          <Text size="2" color="red">
+          <Text size="1" color="red">
             {state.error.message}
           </Text>
         )}

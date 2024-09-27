@@ -15,6 +15,7 @@ interface PaymentdetailDialogProps {
   onClose?(): void
   stripeApiKey: string
   patientId: string
+  googleApiKey: string
 }
 
 const PaymentDetailDialog = ({
@@ -22,6 +23,7 @@ const PaymentDetailDialog = ({
   open,
   stripeApiKey,
   patientId,
+  googleApiKey,
 }: PaymentdetailDialogProps) => {
   return (
     <Dialog.Root open={open} onOpenChange={onClose}>
@@ -37,7 +39,11 @@ const PaymentDetailDialog = ({
             <PatientInformation />
             <PaymentInfoSection />
             <PaymentOptions />
-            <PaymentDetails stripeApiKey={stripeApiKey} patientId={patientId} />
+            <PaymentDetails
+              stripeApiKey={stripeApiKey}
+              patientId={patientId}
+              googleApiKey={googleApiKey}
+            />
           </PaymentDetailForm>
           <StaffCommentsTab />
         </Flex>

@@ -4,6 +4,7 @@ import React from 'react'
 import { Dialog, Flex, ScrollArea } from '@radix-ui/themes'
 import { X } from 'lucide-react'
 import { CreditCardType } from '@/constants'
+import { GooglePlacesContextProvider } from '@/providers/google-places-provider'
 import { CreditCard } from '@/types'
 import {
   CreditCardsTable,
@@ -15,16 +16,18 @@ interface AddCardDialogProps {
   onClose?(): void
   stripeApiKey: string
   patientId: string
+  googleApiKey: string
 }
 const AddCardDialog = ({
   onClose,
   open,
   stripeApiKey,
   patientId,
+  googleApiKey,
 }: AddCardDialogProps) => {
   return (
     <Dialog.Root onOpenChange={onClose} open={open}>
-      <Dialog.Content className="relative max-w-[800px] rounded-1 p-5">
+      <Dialog.Content className="relative max-w-[991px] rounded-1 p-5">
         <Dialog.Close className="absolute right-5 cursor-pointer">
           <X size={22} strokeWidth={1.5} />
         </Dialog.Close>
@@ -35,10 +38,12 @@ const AddCardDialog = ({
           <ScrollArea className="max-h-[130px] pb-3">
             <CreditCardsTable patientCards={patientCards ?? []} />
           </ScrollArea>
-          <PaymentMethodSection
-            stripeApiKey={stripeApiKey}
-            patientId={patientId}
-          />
+          <GooglePlacesContextProvider apiKey={googleApiKey}>
+            <PaymentMethodSection
+              stripeApiKey={stripeApiKey}
+              patientId={patientId}
+            />
+          </GooglePlacesContextProvider>
         </Flex>
       </Dialog.Content>
     </Dialog.Root>

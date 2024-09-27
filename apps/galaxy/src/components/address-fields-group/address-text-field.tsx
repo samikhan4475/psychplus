@@ -14,12 +14,14 @@ interface AddressTextFieldProps
   label: string
   field: string
   className?: string
+  placeholder?: string
 }
 const AddressTextField = ({
   label,
   field,
   className,
   required,
+  placeholder,
 }: AddressTextFieldProps) => {
   const { register, setValue, watch } = useFormContext()
 
@@ -33,8 +35,11 @@ const AddressTextField = ({
       <TextField.Root
         size="1"
         value={watch(field)}
+        placeholder={placeholder}
         className={textFieldClassName}
-        onChange={(e) => setValue(field, e.target.value)}
+        onChange={(e) =>
+          setValue(field, e.target.value, { shouldValidate: true })
+        }
         {...rest}
       />
       <FormFieldError name={field} />

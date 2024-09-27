@@ -15,4 +15,12 @@ interface CreditCard {
   isPrimary: boolean
 }
 
-export type { CreditCard }
+enum AllowedCards {
+  Amex = 'amex',
+  Discover = 'discover',
+  AmericanExpress = 'AmericanExpress',
+  Mastercard = 'mastercard',
+  Visa = 'visa',
+}
+
+export { AllowedCards, type CreditCard }

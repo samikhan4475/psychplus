@@ -1,24 +1,22 @@
 import { type Row } from '@tanstack/react-table'
 import { CreditCardType } from '@/constants'
-import { PatientAddress } from '@/types'
+import { CreditCard, PatientAddress } from '@/types'
 
-interface CreditCard {
-  id: number
-  patientId: number
-  cardType: CreditCardType
+interface AddCardRequestBody {
   name: string
-  numberLastFour: string
-  isActive: boolean
+  cardKey: string
+  cardType: CreditCardType
   expireMonth: number
   expireYear: number
+  numberLastFour: string
   billingAddress: PatientAddress
-  cardKey: string
-  isPrimary: boolean
 }
 
-interface GetPatientCardsResponse {
-  data: CreditCard[]
+interface AddPatientCardParams {
+  patientId: string
+  payload: CreditCard
 }
 
 type CardRow = Row<CreditCard>
-export type { CreditCard, CardRow, GetPatientCardsResponse }
+
+export type { CardRow, AddPatientCardParams, AddCardRequestBody }

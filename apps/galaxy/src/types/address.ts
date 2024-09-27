@@ -1,4 +1,4 @@
-type PatientAddressType = 'Home' | 'Mailing'
+type PatientAddressType = 'Home' | 'Mailing' | 'Billing'
 
 interface PatientAddress {
   type: PatientAddressType
@@ -6,7 +6,7 @@ interface PatientAddress {
   street2?: string
   city: string
   state: string
-  country: string
+  country?: string
   postalCode: string
   geoCoordinates?: {
     longitude: number
