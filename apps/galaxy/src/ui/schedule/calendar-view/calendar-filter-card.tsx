@@ -4,7 +4,7 @@ import { Flex } from '@radix-ui/themes'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { FormContainer } from '@/components'
-import { StateCodeSet } from '@/ui/visit/add-visit/types'
+import { StateCodeSet } from '@/ui/visit/types'
 import { getAppointments } from '../actions'
 import {
   AppointmentEventData,

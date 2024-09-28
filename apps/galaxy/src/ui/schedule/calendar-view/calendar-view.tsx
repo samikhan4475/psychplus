@@ -16,7 +16,7 @@ import { CalendarFilterCard } from './calendar-filter-card'
 import { CustomEvent } from './custom-event'
 import './styles.css'
 import { AddVisit } from '@/ui/visit/add-visit'
-import { StateCodeSet } from '@/ui/visit/add-visit/types'
+import { StateCodeSet } from '@/ui/visit/types'
 import {
   AppointmentEventData,
   AvailableSlotsEvent,

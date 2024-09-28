@@ -4,9 +4,9 @@ import {
   FormFieldError,
   FormFieldLabel,
 } from '@/components'
-import { searchPatientsAction } from '../actions'
+import { searchPatientsAction } from '../../actions'
 import { SchemaType } from '../schema'
-import { Patient } from '../types'
+import { Patient } from '../../types'
 import { calculateAge } from '../util'
 import { ServerSearchSelect } from './server-search-select'
 

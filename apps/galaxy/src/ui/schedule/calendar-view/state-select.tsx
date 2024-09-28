@@ -1,5 +1,5 @@
 import { FormFieldLabel, SelectInput } from '@/components'
-import { StateCodeSet } from '@/ui/visit/add-visit/types'
+import { StateCodeSet } from '@/ui/visit/types'
 import { FormFieldContainer } from '../shared'
 
 interface StateSelectProps {

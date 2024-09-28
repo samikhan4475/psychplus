@@ -8,15 +8,14 @@ import {
 } from '@/components'
 import { CODESETS } from '@/constants'
 import { useCodesetCodes } from '@/hooks'
-import { SchemaType } from '../../schema'
-import { useAddVisitStore } from '../../store'
 import { ServiceType, SpecialistType } from '../../../types'
+import { SchemaType } from '../../schema'
+import { useEditVisitStore } from '../../store'
 
-const ProviderTypeDropdown = () => {
+const ProviderTypeSelect = () => {
   const form = useFormContext<SchemaType>()
+  const { services } = useEditVisitStore()
   const codes = useCodesetCodes(CODESETS.SpecialistType)
-  const { services } = useAddVisitStore()
-
   const serviceId = form.watch('service')
 
   const options = useMemo(() => {
@@ -30,9 +29,9 @@ const ProviderTypeDropdown = () => {
           (provider) => provider.value === SpecialistType.Bcba,
         )
         break
+      case ServiceType.GroupType:
       case ServiceType.Therapy:
       case ServiceType.CouplesFamilyTherapy:
-      case ServiceType.GroupType:
         filteredOptions = codes.filter((provider) =>
           [SpecialistType.Psychiatrist, SpecialistType.Therapist].includes(
             provider.value as SpecialistType,
@@ -44,23 +43,22 @@ const ProviderTypeDropdown = () => {
         break
     }
     return filteredOptions.map((code) => ({
-      label: code.display,
       value: code.value,
+      label: code.display,
     }))
-  }, [codes, serviceId])
+  }, [serviceId, codes])
 
   return (
     <FormFieldContainer className="flex-1">
       <FormFieldLabel required>Provider Type</FormFieldLabel>
       <SelectInput
-        field="providerType"
         options={options}
-        buttonClassName="flex-1"
-        disabled={!serviceId}
+        buttonClassName="flex-1 w-full"
+        field="providerType"
       />
       <FormFieldError name={'providerType'} />
     </FormFieldContainer>
   )
 }
 
-export { ProviderTypeDropdown }
+export { ProviderTypeSelect }

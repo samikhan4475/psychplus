@@ -2,17 +2,18 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
+import toast from 'react-hot-toast'
 import {
   FormFieldContainer,
   FormFieldError,
   FormFieldLabel,
   SelectInput,
 } from '@/components'
-import { getProviders } from '../../actions'
-import { SchemaType } from '../schema'
-import { Provider } from '../../types'
+import { getProviders } from '@/ui/visit/actions'
+import { Provider } from '../../../types'
+import { SchemaType } from '../../schema'
 
-const ProviderDropdown = () => {
+const ProviderSelect = () => {
   const form = useFormContext<SchemaType>()
   const [options, setOptions] = useState<{ label: string; value: string }[]>([])
   const prevProviderType = useRef<string | undefined>(undefined)
@@ -23,41 +24,43 @@ const ProviderDropdown = () => {
 
   useEffect(() => {
     if (
-      prevProviderType.current !== providerType ||
-      prevLocation.current !== location
+      prevLocation.current !== location ||
+      prevProviderType.current !== providerType
     ) {
-      prevProviderType.current = providerType
       prevLocation.current = location
+      prevProviderType.current = providerType
       form.resetField('provider')
 
-      if (providerType && location) {
+      if (location && providerType) {
         getProviders({
           locationIds: [location],
         }).then((res) => {
-          if (res.state === 'error') return setOptions([])
+          if (res.state === 'error') {
+            toast.error('Failed to fetch providers')
+            return setOptions([])
+          }
           setOptions(
             res.data.map((provider: Provider) => ({
-              label: `${provider.firstName} ${provider.lastName}`,
               value: `${provider.id}`,
+              label: `${provider.firstName} ${provider.lastName}`,
             })),
           )
         })
       }
     }
-  }, [location, providerType])
+  }, [providerType, location])
 
   return (
     <FormFieldContainer className="flex-1">
       <FormFieldLabel required>Provider</FormFieldLabel>
       <SelectInput
-        field="provider"
         options={options}
-        buttonClassName="flex-1"
-        disabled={!providerType}
+        buttonClassName="flex-1 w-full"
+        field="provider"
       />
       <FormFieldError name="provider" />
     </FormFieldContainer>
   )
 }
 
-export { ProviderDropdown }
+export { ProviderSelect }

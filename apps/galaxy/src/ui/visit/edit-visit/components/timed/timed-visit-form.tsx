@@ -1,28 +1,24 @@
 import { useEffect, useState } from 'react'
-import { Box, Flex } from '@radix-ui/themes'
+import { Box } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
 import { TCM } from '@/ui/visit/constants'
 import { TCMVisitTypes } from '../../../types'
 import { SchemaType } from '../../schema'
-import { useAddVisitStore } from '../../store'
-import { ProviderDropdown } from '../provider-select'
+import { useEditVisitStore } from '../../store'
 import { VisitDate } from '../visit-date'
-import { VisitMediumInput } from '../visit-medium-text'
-import { VisitSequenceInput } from '../visit-sequence-text'
-import { VisitTypeDropdown } from '../visit-type-select'
-import { DCDate } from './dc-date'
-import { DCLocationInput } from './dc-location-text'
 import { DurationDropdown } from './duration-select'
-import { EDDischargeDropdown } from './ed-discharge-select'
 import { FrequencyDropdown } from './frequency-select'
-import { GroupTypeDropdown } from './group-select'
-import { ProviderTypeDropdown } from './provider-type-select'
-import { VisitTimeDropdown } from './visit-time-select'
+import { ProviderSelect } from './provider-select'
+import { ProviderTypeSelect } from './provider-type-select'
+import { VisitMediumText } from './visit-medium-text'
+import { VisitSequenceText } from './visit-sequence-text'
+import { VisitTimeSelect } from './visit-time-select'
+import { VisitTypeSelect } from './visit-type-select'
 
 const TimedVisitForm = () => {
   const form = useFormContext<SchemaType>()
   const [showDCFields, setShowDCFields] = useState<boolean>(false)
-  const { visitTypes } = useAddVisitStore()
+  const { visitTypes } = useEditVisitStore()
 
   const selectedVisitType = form.watch('visitType')
 
@@ -35,51 +31,34 @@ const TimedVisitForm = () => {
       if (visitType) {
         setShowDCFields(TCM.includes(visitType.encouterType as TCMVisitTypes))
       }
-    } else if (!selectedVisitType && showDCFields) {
+    } else if (showDCFields && !selectedVisitType) {
       setShowDCFields(false)
     }
-  }, [visitTypes, selectedVisitType])
+  }, [selectedVisitType, visitTypes])
 
   return (
     <>
       <Box className="col-span-4">
-        <ProviderTypeDropdown />
+        <ProviderTypeSelect />
       </Box>
       <Box className="col-span-4">
-        <ProviderDropdown />
+        <ProviderSelect />
       </Box>
       <Box className="col-span-4">
-        <VisitTypeDropdown />
+        <VisitTypeSelect />
       </Box>
       <Box className="col-span-3">
-        <VisitSequenceInput />
+        <VisitSequenceText />
       </Box>
       <Box className="col-span-3">
-        <VisitMediumInput />
+        <VisitMediumText />
       </Box>
       <Box className="col-span-3">
-        <VisitDate dependentOn="visitType" />
+        <VisitDate />
       </Box>
       <Box className="col-span-3">
-        <VisitTimeDropdown />
+        <VisitTimeSelect />
       </Box>
-      {showDCFields && (
-        <>
-          <Box className="col-span-4">
-            <DCDate />
-          </Box>
-          <Box className="col-span-4">
-            <DCLocationInput />
-          </Box>
-          <Box className="col-span-4">
-            <Flex align="center" gap="2" className="flex-1">
-              <EDDischargeDropdown />
-            </Flex>
-          </Box>
-        </>
-      )}
-
-      <GroupTypeDropdown />
       <Box className="col-span-3">
         <DurationDropdown />
       </Box>

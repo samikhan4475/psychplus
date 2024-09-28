@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
+import toast from 'react-hot-toast'
 import {
   FormFieldContainer,
   FormFieldError,
@@ -9,16 +10,16 @@ import {
   SelectInput,
 } from '@/components'
 import { getClinicLocations } from '../../actions'
-import { SchemaType } from '../schema'
 import { StateCodeSet } from '../../types'
+import { SchemaType } from '../schema'
 
-const LocationDropdown = ({ states }: { states: StateCodeSet[] }) => {
+const LocationSelect = ({ states }: { states: StateCodeSet[] }) => {
   const form = useFormContext<SchemaType>()
+  const prevStateCode = useRef<string | undefined>(undefined)
   const [locations, setLocations] = useState<
-    { label: string; value: string }[]
+    { value: string; label: string }[]
   >([])
   const stateCode = form.watch('state')
-  const prevStateCode = useRef<string | undefined>(undefined)
 
   useEffect(() => {
     if (prevStateCode.current !== stateCode) {
@@ -28,30 +29,32 @@ const LocationDropdown = ({ states }: { states: StateCodeSet[] }) => {
       if (state.id) {
         form.resetField('location')
         getClinicLocations(state.id).then((res) => {
-          if (res.state === 'error') return setLocations([])
+          if (res.state === 'error') {
+            toast.error('Failed to fetch locations')
+            return setLocations([])
+          }
           setLocations(
             res.data.map((location) => ({
-              label: location.name,
               value: location.id,
+              label: location.name,
             })),
           )
         })
       }
     }
-  }, [stateCode, states, form])
+  }, [states, stateCode, form])
 
   return (
     <FormFieldContainer className="flex-1">
       <FormFieldLabel required>Location</FormFieldLabel>
       <SelectInput
-        field="location"
         options={locations}
         buttonClassName="flex-1 w-full"
-        disabled={!stateCode}
+        field="location"
       />
       <FormFieldError name={'location'} />
     </FormFieldContainer>
   )
 }
 
-export { LocationDropdown }
+export { LocationSelect }

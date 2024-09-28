@@ -1,5 +1,5 @@
 import { Box, Flex, ScrollArea } from '@radix-ui/themes'
-import { ServerSearchSelectID } from '../../types'
+import { ServerSearchSelectID } from '../../../types'
 
 interface SearchResultsProps<T extends ServerSearchSelectID> {
   results: T[] | undefined

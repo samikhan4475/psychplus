@@ -1,6 +1,5 @@
 'use client'
 
-import { useFormContext } from 'react-hook-form'
 import {
   FormFieldContainer,
   FormFieldError,
@@ -8,12 +7,8 @@ import {
   SelectInput,
 } from '@/components'
 import { StateCodeSet } from '../../types'
-import { SchemaType } from '../schema'
 
-const StateDropdown = ({ states }: { states: StateCodeSet[] }) => {
-  const form = useFormContext<SchemaType>()
-  const patient = form.watch('patient')
-
+const StateSelect = ({ states }: { states: StateCodeSet[] }) => {
   const options = states.map((v) => ({
     label: v.stateName,
     value: v.stateCode,
@@ -24,13 +19,12 @@ const StateDropdown = ({ states }: { states: StateCodeSet[] }) => {
       <FormFieldLabel required>State</FormFieldLabel>
       <SelectInput
         field="state"
-        options={options}
         buttonClassName="flex-1 w-full"
-        disabled={!patient}
+        options={options}
       />
       <FormFieldError name={'state'} />
     </FormFieldContainer>
   )
 }
 
-export { StateDropdown }
+export { StateSelect }

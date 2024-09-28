@@ -1,10 +1,11 @@
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
-import { Flex, Heading, Tabs } from '@radix-ui/themes'
-import { State } from '@/types'
+import { Button, Flex, Heading, Tabs } from '@radix-ui/themes'
 import toast from 'react-hot-toast'
+import { State } from '@/types'
 import { cn } from '@/utils'
+import { EditVisit } from '../visit/edit-visit'
 import { getClinicsOptionsAction, getProvidersOptionsAction } from './actions'
 import { CalendarView } from './calendar-view'
 import { SchedulerActionButtonGroup } from './components/header'
@@ -97,7 +98,9 @@ const ScheduleView = ({ insurancePlans, usStates }: ScheduleViewProps) => {
         </Tabs.Content>
         <Tabs.Content value={TabValue.Scheduler}>Scheduler View</Tabs.Content>
         <Tabs.Content value={TabValue.ProviderCoding}>
-          Provider Coding View
+          <EditVisit states={usStates}>
+            <Button variant="ghost">Provider Coding View</Button>
+          </EditVisit>
         </Tabs.Content>
         <Tabs.Content
           className={cn({

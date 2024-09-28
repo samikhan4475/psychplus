@@ -6,7 +6,7 @@ import { Controller, useFormContext } from 'react-hook-form'
 import { useDebounce } from 'use-debounce'
 import { ActionResult } from '@/api'
 import { cn } from '@/utils'
-import { ServerSearchSelectID } from '../../types'
+import { ServerSearchSelectID } from '../../../types'
 import SearchInput from './search-input'
 import { SearchResults } from './search-results'
 

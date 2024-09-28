@@ -6,9 +6,9 @@ import {
   FormFieldLabel,
   SelectInput,
 } from '@/components'
-import { getProviders } from '../../actions'
+import { getProviders } from '../../../actions'
 import { SchemaType } from '../../schema'
-import { Provider } from '../../types'
+import { Provider } from '../../../types'
 
 const AdmittingProviderSelector = () => {
   const form = useFormContext<SchemaType>()

@@ -118,17 +118,35 @@ enum SpecialistType {
   Bcba = '3',
 }
 
-export type {
-  Clinic,
-  DropdownOptions,
-  Patient,
-  PatientRaw,
-  Provider,
-  Service,
-  ServiceWithOptions,
-  StateCodeSet,
-  StatesCodeSetState,
-  VisitTypesPayload,
-  ServerSearchSelectID,
+interface StaffCommentsTreatment {
+  date: string
+  time: string
+  staff: string
+  comments: string
 }
-export { ServiceType, SpecialistType, TCMVisitTypes }
+
+interface StaffCommentsBilling {
+  date: string
+  time: string
+  staff: string
+  comments: string
+}
+
+export {
+  type Clinic,
+  type DropdownOptions,
+  type Patient,
+  type PatientRaw,
+  type Provider,
+  type Service,
+  type ServiceWithOptions,
+  type StateCodeSet,
+  type StatesCodeSetState,
+  type VisitTypesPayload,
+  type ServerSearchSelectID,
+  type StaffCommentsTreatment,
+  type StaffCommentsBilling,
+  ServiceType,
+  SpecialistType,
+  TCMVisitTypes,
+}

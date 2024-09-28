@@ -4,7 +4,7 @@ import { ReactElement, useState } from 'react'
 import { Cross1Icon } from '@radix-ui/react-icons'
 import { Dialog, Flex } from '@radix-ui/themes'
 import { AddVisitForm } from './components'
-import { StateCodeSet } from './types'
+import { StateCodeSet } from '../types'
 
 const CloseDialogIcon = () => (
   <Dialog.Close className="absolute right-3 top-3 cursor-pointer">

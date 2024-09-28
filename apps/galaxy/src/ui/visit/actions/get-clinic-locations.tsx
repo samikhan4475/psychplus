@@ -1,7 +1,7 @@
 'use server'
 
 import * as api from '@/api'
-import type { Clinic } from '../types'
+import { Clinic } from '../types'
 
 const getClinicLocations = async (
   stateId: string,

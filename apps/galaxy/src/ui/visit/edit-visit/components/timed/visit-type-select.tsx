@@ -2,35 +2,35 @@
 
 import { useEffect } from 'react'
 import { useFormContext } from 'react-hook-form'
+import toast from 'react-hot-toast'
 import {
   FormFieldContainer,
   FormFieldError,
   FormFieldLabel,
   SelectInput,
 } from '@/components'
-import { getVisitTypes } from '../../actions'
-import { SchemaType } from '../schema'
-import { useAddVisitStore } from '../store'
+import { getVisitTypes } from '@/ui/visit/actions'
+import { SchemaType } from '../../schema'
+import { useEditVisitStore } from '../../store'
 
-const VisitTypeDropdown = () => {
+const VisitTypeSelect = () => {
   const form = useFormContext<SchemaType>()
-  const { visitTypes, setVisitTypes } = useAddVisitStore()
+  const { visitTypes, setVisitTypes } = useEditVisitStore()
 
   const locationId = form.watch('location')
   const serviceId = form.watch('service')
-  const providerType = form.watch('providerType')
-  const provider = form.watch('provider')
-
-  const isDisabled = !locationId && !serviceId && !providerType && !provider
 
   useEffect(() => {
-    if (locationId && serviceId) {
-      getVisitTypes({ locationId, serviceId }).then((res) => {
-        if (res.state === 'error') return setVisitTypes([])
+    if (serviceId && locationId) {
+      getVisitTypes({ serviceId, locationId }).then((res) => {
+        if (res.state === 'error') {
+          toast.error('Failed to fetch visit types')
+          return setVisitTypes([])
+        }
         setVisitTypes(res.data)
       })
     }
-  }, [locationId, serviceId])
+  }, [serviceId, locationId])
 
   return (
     <FormFieldContainer className="flex-1">
@@ -38,18 +38,17 @@ const VisitTypeDropdown = () => {
       <SelectInput
         field="visitType"
         options={visitTypes.map((visitType) => ({
-          label: `${visitType.encouterType} | ${visitType.visitSequence} | ${visitType.visitMedium}`,
           value: visitType.encouterType,
+          label: `${visitType.encouterType} | ${visitType.visitSequence} | ${visitType.visitMedium}`,
         }))}
         buttonClassName="flex-1 w-full"
-        disabled={isDisabled}
         onValueChange={(newValue) => {
           const visitType = visitTypes.find(
             (vt) => vt.encouterType === newValue,
           )
           form.setValue('visitType', newValue)
-          form.setValue('visitMedium', visitType?.visitMedium ?? '')
           form.setValue('visitSequence', visitType?.visitSequence ?? '')
+          form.setValue('visitMedium', visitType?.visitMedium ?? '')
         }}
       />
       <FormFieldError name="visitType" />
@@ -57,4 +56,4 @@ const VisitTypeDropdown = () => {
   )
 }
 
-export { VisitTypeDropdown }
+export { VisitTypeSelect }
