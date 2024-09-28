@@ -18,6 +18,8 @@ const config = {
         'pp-focus-outline': '#8DA4EF',
         'pp-blue': '#194595',
         'pp-blue-1': '#24366B',
+        'pp-blue-2': '#0134DB72',
+        'pp-blue-3': '#00259ECB',
         'pp-focus-bg': '#D9E2FC',
         'pp-focus-bg-2': '#F0F4FF',
         'pp-table-border': '#CAD8FD',

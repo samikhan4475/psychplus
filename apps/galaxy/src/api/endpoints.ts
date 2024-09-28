@@ -47,6 +47,7 @@ const GET_INSURANCE_PAYER_PLANS = (payerId: string) =>
 const GET_USER_PERMISSIONS_ENDPOINT = `${API_URL}/api/users/self/permissions`
 const SEARCH_LOCATION_SERVICES_ENDPOINT = `${API_URL}/api/locationservices/actions/search`
 const SEARCH_BOOKED_APPOINTMENTS_ENDPOINT = `${API_URL}/api/appointments/actions/search`
+const ADD_PATIENT_ENDPOINT = `${API_URL}/api/users/actions/patientsignup`
 const GET_US_STATES_ENDPOINT = `${API_URL}/api/countries/united states/states`
 const GET_STATES_LOCATIONS_ENDPOINT = (stateId: string) =>
   `${API_URL}/api/clinics?stateId=${stateId}`
@@ -112,6 +113,7 @@ export {
   GET_USER_PERMISSIONS_ENDPOINT,
   SEARCH_LOCATION_SERVICES_ENDPOINT,
   SEARCH_BOOKED_APPOINTMENTS_ENDPOINT,
+  ADD_PATIENT_ENDPOINT,
   GET_US_STATES_ENDPOINT,
   GET_STATES_LOCATIONS_ENDPOINT,
   SEARCH_INSURANCE_PLANS_ENDPOINT,

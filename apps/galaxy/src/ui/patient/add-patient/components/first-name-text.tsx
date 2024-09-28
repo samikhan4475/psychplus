@@ -1,0 +1,28 @@
+'use client'
+
+import { TextField } from '@radix-ui/themes'
+import { useFormContext } from 'react-hook-form'
+import {
+  FormFieldContainer,
+  FormFieldError,
+  FormFieldLabel,
+} from '@/components/form'
+import { SchemaType } from '../schema'
+
+const FirstNameInput = () => {
+  const form = useFormContext<SchemaType>()
+
+  return (
+    <FormFieldContainer className="flex-1 gap-0">
+      <FormFieldLabel required>First Name</FormFieldLabel>
+      <TextField.Root
+        size="1"
+        {...form.register('firstName')}
+        placeholder="Enter First Name"
+      />
+      <FormFieldError name="firstName" />
+    </FormFieldContainer>
+  )
+}
+
+export { FirstNameInput }

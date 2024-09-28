@@ -1,0 +1,57 @@
+import { DateValue } from 'react-aria-components'
+import z from 'zod'
+
+const phoneRegex = /^\+?[1-9]\d{7,14}$/
+
+const schema = z
+  .object({
+    firstName: z.string().min(1, 'Required'),
+    middleName: z.coerce.string().optional(),
+    lastName: z.string().min(1, 'Required'),
+    gender: z.string().min(1, 'Required'),
+    dateOfBirth: z
+      .custom<DateValue>()
+      .refine((val) => val !== null && val !== undefined, {
+        message: 'Required',
+      }),
+    phoneNumber: z
+      .string()
+      .min(1, 'Required')
+      .regex(phoneRegex, 'Invalid phone number'),
+    email: z.string().min(1, 'Required').email('Invalid email address'),
+    hasGuardian: z.string(),
+    guardianFirstName: z.string().optional(),
+    guardianLastName: z.string().optional(),
+    relationship: z.string().optional(),
+    patientPolicyA: z.boolean().optional(),
+    patientPolicyB: z.boolean().optional(),
+  })
+  .superRefine((data, ctx) => {
+    if (data.hasGuardian === 'yes') {
+      if (!data.guardianFirstName) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "Required",
+          path: ['guardianFirstName'],
+        })
+      }
+      if (!data.guardianLastName) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "Required",
+          path: ['guardianLastName'],
+        })
+      }
+      if (!data.relationship) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: 'Required',
+          path: ['relationship'],
+        })
+      }
+    }
+  })
+
+type SchemaType = z.infer<typeof schema>
+
+export { schema, type SchemaType }

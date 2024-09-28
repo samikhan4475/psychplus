@@ -10,4 +10,9 @@ interface PatientConsent {
   isNeedsNewSignature: boolean
 }
 
-export { type PatientConsent }
+enum Policy {
+  PolicyA = 'PolicyA',
+  PolicyB = 'PolicyB',
+}
+
+export { type PatientConsent, Policy }

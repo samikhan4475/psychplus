@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { Button, Checkbox, Flex, Text } from '@radix-ui/themes'
 import { MailIcon, MessageSquareTextIcon, PhoneCall } from 'lucide-react'
 import toast from 'react-hot-toast'
+import { Policy } from '@/types'
 import { sendPolicyEmailAction, sendPolicySmsAction } from '../actions'
 import { useStore } from '../store'
 
@@ -35,7 +36,7 @@ const PolicySection = ({
 
     setIsSending(true)
 
-    const result = await sendPolicySmsAction(patientId, phone)
+    const result = await sendPolicySmsAction(patientId, phone, Policy.PolicyA)
 
     if (result.state === 'error') {
       toast.error('Failed to send text')
@@ -50,7 +51,7 @@ const PolicySection = ({
   const sendEmail = async () => {
     setIsSending(true)
 
-    const result = await sendPolicyEmailAction(patientId, email)
+    const result = await sendPolicyEmailAction(patientId, email, Policy.PolicyA)
 
     if (result.state === 'error') {
       toast.error('Failed to send email')

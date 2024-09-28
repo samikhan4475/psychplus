@@ -11,6 +11,7 @@ import { PatientSelect } from './patient-select'
 import { ServiceDropdown } from './service-select'
 import { StateDropdown } from './state-select'
 import './style.css'
+import { AddPatient } from '@/ui/patient/add-patient'
 import TimedVisitForm from './timed/timed-visit-form'
 import UntimedVisitForm from './untimed/untimed-visit-form'
 
@@ -42,8 +43,8 @@ const AddVisitForm = ({ states }: { states: StateCodeSet[] }) => {
     // })
   }
 
-  const onAddUser = () => {
-    alert('Add User Popup')
+  const onPatientAdd = (newPatient: any) => {
+    // onPatientAdd
   }
 
   const provider = form.watch('provider')
@@ -60,13 +61,14 @@ const AddVisitForm = ({ states }: { states: StateCodeSet[] }) => {
             form.formState?.errors?.patient ? 'items-center' : 'items-end'
           }`}
         >
-          <Button
-            size="1"
-            className="bg-pp-black-1 text-white h-[21px] flex-1 cursor-pointer px-3 py-1.5"
-            onClick={onAddUser}
-          >
-            <Text size="1">Add User</Text>
-          </Button>
+          <AddPatient onPatientAdd={onPatientAdd}>
+            <Button
+              size="1"
+              className="bg-pp-black-1 text-white h-[21px] flex-1 cursor-pointer px-3 py-1.5"
+            >
+              <Text size="1">Add User</Text>
+            </Button>
+          </AddPatient>
         </Box>
 
         <Box className="col-span-4">

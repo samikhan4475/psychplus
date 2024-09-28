@@ -1,13 +1,17 @@
 'use server'
 
 import * as api from '@/api'
-import { POLICY_TYPE_A } from '../../constants'
+import { Policy } from '@/types'
 
-const sendPolicyEmailAction = async (patientId: string, email: string) => {
+const sendPolicyEmailAction = async (
+  patientId: string,
+  email: string,
+  policy: Policy,
+) => {
   const result = await api.POST<api.ActionResult<void>>(
     api.SEND_POLICY_NOTICE_ENDPOINT(patientId),
     {
-      policyType: POLICY_TYPE_A,
+      policyType: policy,
       channels: ['Email'],
       toEmail: email,
     },
