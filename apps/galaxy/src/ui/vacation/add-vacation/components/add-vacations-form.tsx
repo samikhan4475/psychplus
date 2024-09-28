@@ -4,6 +4,7 @@ import { Box, Button, Flex, Grid, Text } from '@radix-ui/themes'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { FormContainer } from '@/components'
+import { ActiveVisits } from '../../active-visits'
 import { addVacation } from '../actions/add-vacation'
 import { schema, SchemaType } from '../schema'
 import { ActiveVisitsAlert } from './active-visits-alert'
@@ -25,6 +26,7 @@ const AddVacationForm = ({
     useState<boolean>(false)
   const [isActiveVisitsAlertOpen, setIsActiveVisitsAlertOpen] =
     useState<boolean>(false)
+  const [isActiveVisitsOpen, setIsActiveVisitsOpen] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const form = useForm<SchemaType>({
     resolver: zodResolver(schema),
@@ -37,6 +39,10 @@ const AddVacationForm = ({
       vacationStatus: undefined,
     },
   })
+  const startDate = `${form.getValues('fromDate')}T${form.getValues(
+    'fromTime',
+  )}:00`
+  const endDate = `${form.getValues('toDate')}T${form.getValues('toTime')}:00`
 
   const createVacation = async (data: SchemaType) => {
     setIsLongVacationAlertOpen(false)
@@ -59,6 +65,7 @@ const AddVacationForm = ({
       if (result.error.includes('active vacation time')) {
         return setIsActiveVisitsAlertOpen(true)
       }
+      setIsActiveVisitsAlertOpen(true)
       return toast.error(result.error)
     }
 
@@ -84,7 +91,17 @@ const AddVacationForm = ({
       <ActiveVisitsAlert
         isOpen={isActiveVisitsAlertOpen}
         closeDialog={() => setIsActiveVisitsAlertOpen(false)}
-        onConfirm={() => setIsActiveVisitsAlertOpen(false)}
+        onConfirm={() => {
+          setIsActiveVisitsAlertOpen(false)
+          setIsActiveVisitsOpen(true)
+        }}
+      />
+      <ActiveVisits
+        staffId={staffId}
+        startDate={startDate}
+        endDate={endDate}
+        isOpen={isActiveVisitsOpen}
+        closeDialog={() => setIsActiveVisitsOpen(false)}
       />
       <Grid
         columns="12"
