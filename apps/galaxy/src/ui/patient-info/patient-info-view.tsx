@@ -93,7 +93,10 @@ const PatientInfoView = ({
         <InsuranceTab />
       </TabsContent>
       <TabsContent value={POLICY_AND_CONSENTS_TAB}>
-        <PolicyAndConsentsTab />
+        <PolicyAndConsentsTab
+          patientId={patientId}
+          patientConsents={patientConsents}
+        />
       </TabsContent>
       <TabsContent value={PAYMENT_HISTORY_TAB}>
         <PaymentHistoryTab

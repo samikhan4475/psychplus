@@ -79,7 +79,6 @@ const getSlashedDateString = (
   if (!date) {
     date = getCalendarDate()
   }
-
   const { month, day, year } = date
   return `${month}/${day}/${truncateYear ? year.toString().slice(2) : year}`
 }
@@ -161,6 +160,19 @@ const formatDate = (
   return format(date, dateFormat)
 }
 
+const getSlashedPaddedDateString = (date: CalendarDate | string) => {
+  if (typeof date === 'string') {
+    date = getCalendarDate(date)
+  }
+  if (!date) {
+    date = getCalendarDate()
+  }
+  const month = String(date.month).padStart(2, '0')
+  const day = String(date.day).padStart(2, '0')
+  const year = date.year % 100
+  return `${month}/${day}/${year}`
+
+}
 function formatExpirationDate(expireMonth: number, expireYear: number) {
   const formattedMonth = String(expireMonth).padStart(2, '0')
 
@@ -182,5 +194,6 @@ export {
   formatDateTime,
   formatDateToISOString,
   formatDate,
+  getSlashedPaddedDateString,
   formatExpirationDate,
 }

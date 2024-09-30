@@ -10,7 +10,7 @@ import { setPrimaryPatientCard } from '../actions'
 
 const PrimaryRadioCell = ({
   row: {
-    original: { isPrimary, patientId, id },
+    original: { isPrimary, patientId, id, isActive },
   },
 }: PropsWithRow<CreditCard>) => {
   const router = useRouter()
@@ -44,7 +44,7 @@ const PrimaryRadioCell = ({
     <Radio
       value="true"
       checked={isPrimary}
-      disabled={isLoading}
+      disabled={isLoading || !isActive}
       onValueChange={handleChange}
       highContrast
       size="1"

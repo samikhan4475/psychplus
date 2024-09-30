@@ -1,4 +1,9 @@
-import type { PatientProfileRaw } from '@/types'
+import {
+  ConsentStatus,
+  VerificationStatus,
+  type PatientConsent,
+  type PatientProfileRaw,
+} from '@/types'
 import {
   getGuardianFirstName,
   getGuardianLastName,
@@ -9,6 +14,7 @@ import {
   getPatientMiddleName,
   getPatientMRN,
   getPatientPhone,
+  getSlashedPaddedDateString,
 } from '@/utils'
 import { AddRelationshipRequestBody } from './actions'
 import { AddRelationshipSchemaType } from './add-relationship-dialog/schema'
@@ -67,4 +73,71 @@ const addRelationshipTransformOut = (
   },
 })
 
-export { transformIn, transformOut, addRelationshipTransformOut }
+const patientConsentTransformIn = (
+  data: PatientConsent[],
+): PatientConsent[] => {
+  const formatDate = (date: string | undefined) =>
+    date ? getSlashedPaddedDateString(date) : ''
+
+  const consentMap: Record<
+    string,
+    PatientConsent & { consents?: PatientConsent[]; status?: string }
+  > = {}
+
+  data.forEach((consent) => {
+    const { id, latestIssuanceDate, issuanceDate, signingDate, type, ...rest } =
+      consent
+
+    const formattedConsent: PatientConsent = {
+      id: String(id),
+      latestIssuanceDate: formatDate(latestIssuanceDate),
+      issuanceDate: formatDate(issuanceDate),
+      signingDate: formatDate(signingDate),
+      type,
+      ...rest,
+    }
+
+    if (!consentMap[type]) {
+      consentMap[type] = { ...formattedConsent, consents: [] }
+    } else {
+      switch (formattedConsent.verificationStatus) {
+        case VerificationStatus.Pending:
+          formattedConsent.status = ConsentStatus.Pending
+          break
+        case VerificationStatus.Verified:
+          formattedConsent.status = ConsentStatus.Yes
+          break
+        case VerificationStatus.Unverifiable:
+        default:
+          formattedConsent.status = ConsentStatus.No
+          break
+      }
+      consentMap[type].consents!.push(formattedConsent)
+    }
+  })
+
+  Object.values(consentMap).forEach((consent) => {
+    const isLatestSigned = !!consent.signingDate && !consent.isNeedsNewSignature
+    const hasSignedConsent = consent.consents?.some(
+      (item) => !!item.signingDate,
+    )
+    const isLatestNotSigned = !consent.signingDate
+
+    if (!hasSignedConsent && isLatestNotSigned) {
+      consent.status = ConsentStatus.No
+    } else if (isLatestSigned) {
+      consent.status = ConsentStatus.Yes
+    } else {
+      consent.status = ConsentStatus.Pending
+    }
+  })
+
+  return Object.values(consentMap)
+}
+
+export {
+  transformIn,
+  transformOut,
+  addRelationshipTransformOut,
+  patientConsentTransformIn,
+}

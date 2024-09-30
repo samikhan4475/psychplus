@@ -3,30 +3,30 @@
 import { Box, Flex, Text } from '@radix-ui/themes'
 import { PropsWithRow } from '@/components'
 import { CloseIcon, QuestionIcon, TickIcon } from '@/components/icons'
-import { PolicyConsents, StatusType } from '../types'
+import { type PatientConsent } from '@/types'
 
 const StatusCell = ({
   row: {
     original: { status },
   },
-}: PropsWithRow<PolicyConsents>) => {
+}: PropsWithRow<PatientConsent>) => {
   const iconProps = { width: 16, height: 16 }
 
   const iconTextMap: Record<
-    StatusType,
+    string,
     { Icon: JSX.Element; text: string; className: string }
   > = {
-    yes: {
+    Yes: {
       Icon: <TickIcon {...iconProps} />,
       text: 'Yes',
       className: '',
     },
-    no: {
+    No: {
       Icon: <CloseIcon {...iconProps} />,
       text: 'No',
       className: 'text-red-9',
     },
-    pending: {
+    Pending: {
       Icon: <QuestionIcon width={14} height={14} />,
       text: 'Pending',
       className: 'ml-0.5',
@@ -34,7 +34,7 @@ const StatusCell = ({
   }
 
   const { Icon, text, className } =
-    iconTextMap[status as StatusType] || iconTextMap['pending']
+    iconTextMap[status as string] || iconTextMap['Pending']
 
   return (
     <Box className="px-1 py-0.5">

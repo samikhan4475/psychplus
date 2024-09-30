@@ -11,7 +11,7 @@ const StatusCell = ({ row: { original } }: PropsWithRow<CreditCard>) => {
       size="1"
       className="rounded-1 font-regular"
     >
-      {original?.isActive ? 'Active' : 'Expire'}
+      {original?.isActive ? 'Active' : 'Inactive'}
     </Badge>
   )
 }

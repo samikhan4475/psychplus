@@ -1,47 +1,34 @@
 import { create } from 'zustand'
-import { getPatientPolicyAndConsetntAction } from './actions'
-import { PolicyConsentFilterSchemaType } from './filter-form'
-import type { GetPolicyConsentsData } from './types'
+import type { PatientConsent } from '@/types'
 
 interface Store {
-  data?: GetPolicyConsentsData
+  consents: PatientConsent[]
   error?: string
   loading?: boolean
-  formValues?: Partial<PolicyConsentFilterSchemaType>
-  fetchPolicies: (formValues?: Partial<PolicyConsentFilterSchemaType>) => void
+  filteredConsents: PatientConsent[]
+  setFilteredConsents: (consents: PatientConsent[]) => void
+  setConsents: (patientConsents: PatientConsent[]) => void
 }
 
 const useStore = create<Store>((set, get) => ({
-  data: undefined,
+  consents: [],
+  filteredConsents: [],
   error: undefined,
   loading: undefined,
-  page: 1,
-  formValues: undefined,
-  pageCache: {},
-  fetchPolicies: async (
-    formValues: Partial<PolicyConsentFilterSchemaType> = {},
-  ) => {
+  setConsents: (patientConsents: PatientConsent[]) => {
     set({
       error: undefined,
       loading: true,
-      formValues,
     })
-
-    const result = await getPatientPolicyAndConsetntAction({
-      ...formValues,
-    })
-
-    if (result.state === 'error') {
-      return set({
-        error: result.error,
-        loading: false,
-      })
-    }
 
     set({
-      data: result.data,
+      consents: patientConsents,
+      filteredConsents: patientConsents,
       loading: false,
     })
+  },
+  setFilteredConsents: (consents: PatientConsent[]) => {
+    set({ filteredConsents: consents })
   },
 }))
 

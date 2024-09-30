@@ -9,7 +9,13 @@ interface PropsWithRow<TData> {
 
 interface RowAction<TData> {
   id: string
-  render: (props: { row: Row<TData> }) => React.ReactNode
+  render: (props: {
+    row: Row<TData>
+    showTitle?: boolean
+    id?: string
+    toggleRowClick?: () => void
+    disabled?: boolean
+  }) => React.ReactNode
 }
 
 interface DataTableRowActionsProps<TData> {

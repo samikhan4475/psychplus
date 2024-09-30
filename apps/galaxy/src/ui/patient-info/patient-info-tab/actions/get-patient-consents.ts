@@ -2,6 +2,7 @@
 
 import * as api from '@/api'
 import type { PatientConsent } from '@/types'
+import { patientConsentTransformIn } from '../transform'
 
 const getPatientConsentsAction = async (
   id: string,
@@ -19,7 +20,7 @@ const getPatientConsentsAction = async (
 
   return {
     state: 'success',
-    data: result.data,
+    data: patientConsentTransformIn(result.data),
   }
 }
 

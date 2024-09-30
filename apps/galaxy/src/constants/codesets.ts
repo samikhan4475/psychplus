@@ -43,6 +43,7 @@ const CODESETS = {
   LegalStatus: 'AdmissionLegalStatus',
   TransactionType: 'TransactionType',
   PractitionerHonor: 'PsychPlusPublic.PractitionerHonor',
+  PatientConsentPolicyType: 'PatientConsentPolicyType',
 }
 
 export {

@@ -1,28 +1,10 @@
-import type { Metadata } from '@/types'
+import { PropsWithRow } from '@/components'
+import { PatientConsent } from '@/types'
 
-interface PolicyConsentRaw {
-  id: number
-  metadata: Metadata
+interface RowActionProps extends PropsWithRow<PatientConsent> {
+  id?: string
+  toggleRowClick?: () => void
+  disabled?: boolean
 }
 
-type StatusType = 'yes' | 'no' | 'pending'
-
-interface PolicyConsents {
-  policyDescription: string
-  policyType: string
-  organizationPractice: string
-  issuanceDate: string
-  signingDate: string
-  status: StatusType
-}
-
-interface GetPolicyConsentsData {
-  consents: PolicyConsents[]
-}
-
-export type {
-  PolicyConsents,
-  PolicyConsentRaw,
-  GetPolicyConsentsData,
-  StatusType,
-}
+export { type RowActionProps }

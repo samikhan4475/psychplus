@@ -23,7 +23,7 @@ const NOTE_DETAILS_SAVE_ENDPOINT = (id: string) =>
 const GET_PATIENT_PROFILE_ENDPOINT = (id: string) =>
   `${API_URL}/api/patients/${id}/profile`
 const GET_PATIENT_CONSENTS_ENDPOINT = (id: string) =>
-  `${API_URL}/api/patients/${id}/consents`
+  `${API_URL}/api/patients/${id}/consents?includeHistory=true`
 const SEND_POLICY_NOTICE_ENDPOINT = (id: string) =>
   `${API_URL}/api/patients/${id}/consents/actions/sendnotice`
 const STANDARD_CODESET_ENDPOINT = (
@@ -47,6 +47,10 @@ const GET_INSURANCE_PAYER_PLANS = (payerId: string) =>
 const GET_USER_PERMISSIONS_ENDPOINT = `${API_URL}/api/users/self/permissions`
 const SEARCH_LOCATION_SERVICES_ENDPOINT = `${API_URL}/api/locationservices/actions/search`
 const SEARCH_BOOKED_APPOINTMENTS_ENDPOINT = `${API_URL}/api/appointments/actions/search`
+const GET_PATIENT_CONSENT_SIGNED_PDF_ENDPOINT = (
+  patientId: string,
+  consentId: string,
+) => `${API_URL}/api/patients/${patientId}/consents/${consentId}/signedpdf`
 const ADD_PATIENT_ENDPOINT = `${API_URL}/api/users/actions/patientsignup`
 const GET_US_STATES_ENDPOINT = `${API_URL}/api/countries/united states/states`
 const GET_STATES_LOCATIONS_ENDPOINT = (stateId: string) =>
@@ -125,6 +129,7 @@ export {
   GET_PATIENT_BILLING_HISTORY,
   ADD_PATIENT_RELATIONSHIP_ENDPOINT,
   DELETE_PATIENT_RELATIONSHIP_ENDPOINT,
+  GET_PATIENT_CONSENT_SIGNED_PDF_ENDPOINT,
   GET_PATIENT_CREDIT_CARDS,
   SET_PRIMARY_PATIENT_CREDIT_CARD,
   DELETE_PATIENT_CREDIT_CARD,

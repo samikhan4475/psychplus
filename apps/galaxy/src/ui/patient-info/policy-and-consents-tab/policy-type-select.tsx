@@ -1,27 +1,27 @@
 'use client'
 
 import {
+  CodesetSelect,
   FormFieldContainer,
   FormFieldError,
   FormFieldLabel,
-  SelectInput,
 } from '@/components'
+import { CODESETS } from '@/constants'
 
 const PolicyTypeSelect = () => {
   return (
     <FormFieldContainer className="w-auto flex-row items-center gap-1">
       <FormFieldLabel className="!text-1">Policy Type</FormFieldLabel>
-      <SelectInput
-        field="policyType"
+      <CodesetSelect
+        name="type"
         placeholder="Select"
-        buttonClassName={buttonClassName}
+        codeset={CODESETS.PatientConsentPolicyType}
+        className="w-[144px]"
+        size="1"
       />
-      <FormFieldError name="policyType" />
+      <FormFieldError name="type" />
     </FormFieldContainer>
   )
 }
-
-const buttonClassName =
-  'border-pp-gray-2 w-[144px] h-6 border border-solid !outline-none [box-shadow:none]'
 
 export { PolicyTypeSelect }

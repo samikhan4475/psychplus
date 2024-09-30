@@ -46,8 +46,8 @@ const SelectInput = <T extends string>({
         name={field}
         control={form.control}
         render={({ field }) => {
-          const { ref, value, ...rest } = field
-          const selectedLabel = findLabel(value)
+          const { ref, ...rest } = field
+          const selectedLabel = findLabel(rest?.value)
 
           return (
             <Select.Root

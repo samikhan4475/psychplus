@@ -1,4 +1,5 @@
 export * from './login'
 export * from './logout'
 export * from './get-patient-staff-comments'
+export * from './send-policy-notice'
 export * from './get-patient-credit-cards'

@@ -116,7 +116,7 @@ const DataTable = <TData, TValue>({
             theadClass,
           )}
         >
-          {table.getHeaderGroups().map((headerGroup, index) => (
+          {table.getHeaderGroups().map((headerGroup) => (
             <Table.Row key={headerGroup.id}>
               {headerGroup.headers.map((header) => {
                 const columnRelativeDepth = header.depth - header.column.depth

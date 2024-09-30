@@ -1,38 +1,65 @@
 'use client'
 
-import React from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button, Flex } from '@radix-ui/themes'
 import { Search } from 'lucide-react'
-import { DateValue } from 'react-aria-components'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { FormContainer } from '@/components'
+import { ConsentStatus } from '@/types'
+import { applyClientSideFilters } from '../patient-info-tab/utils'
 import { IssuanceSelect } from './issuance-select'
 import { PolicyTypeSelect } from './policy-type-select'
 import { StatusSelect } from './status-select'
+import { useStore } from './store'
 
 const schema = z.object({
   status: z.string().optional(),
-  policyType: z.string().optional(),
-  issuanceDate: z.custom<DateValue>(),
+  type: z.string().optional(),
+  issuanceDate: z.string().optional(),
 })
 
-type PolicyConsentFilterSchemaType = z.infer<typeof schema>
+type PatientConsentSchemaType = z.infer<typeof schema>
 
 const FilterForm = () => {
-  const form = useForm<PolicyConsentFilterSchemaType>({
+  const { consents, setFilteredConsents } = useStore((state) => ({
+    consents: state.consents,
+    setFilteredConsents: state.setFilteredConsents,
+  }))
+
+  const form = useForm<PatientConsentSchemaType>({
     resolver: zodResolver(schema),
+    reValidateMode: 'onChange',
     defaultValues: {
       status: '',
-      policyType: '',
-      issuanceDate: undefined,
+      type: '',
+      issuanceDate: '',
     },
   })
 
-  const onSubmit: SubmitHandler<PolicyConsentFilterSchemaType> = (data) => {
-    console.log('Form submitted with data:', data)
+  const { isDirty } = form.formState
+
+  const onSubmit: SubmitHandler<PatientConsentSchemaType> = (data) => {
+    if (!isDirty) return
+    const filteredConsents = applyClientSideFilters(consents ?? [], {
+      status: data.status as ConsentStatus,
+      issuanceDate: data.issuanceDate,
+      type: data.type,
+    })
+
+    setFilteredConsents(filteredConsents ?? [])
   }
+
+  const handleReset = () => {
+    if (!isDirty) return
+    form.reset({
+      status: '',
+      issuanceDate: '',
+      type: '',
+    })
+    setFilteredConsents(consents ?? [])
+  }
+
   return (
     <FormContainer
       form={form}
@@ -48,6 +75,7 @@ const FilterForm = () => {
           color="gray"
           size="1"
           className="text-black  font-regular"
+          onClick={handleReset}
         >
           Clear
         </Button>
@@ -59,4 +87,4 @@ const FilterForm = () => {
   )
 }
 
-export { FilterForm, type PolicyConsentFilterSchemaType }
+export { FilterForm, type PatientConsentSchemaType }

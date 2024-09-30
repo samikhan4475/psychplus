@@ -46,7 +46,6 @@ const GET = async <T>(
     cache: next?.revalidate ? undefined : 'no-store',
     ...rest,
   })
-
   const data = getResponseData(await response.text())
 
   if (!response.ok) {

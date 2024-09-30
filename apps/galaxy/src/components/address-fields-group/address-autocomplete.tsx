@@ -169,7 +169,7 @@ const GooglePlacesAutocomplete = ({
                   color="gray"
                   radius="none"
                   tabIndex={0}
-                  className="hover:!text-white !m-0 cursor-pointer flex-wrap justify-start gap-y-0 border-b border-b-gray-5 px-4 py-2 last:border-b-0 hover:bg-indigo-12"
+                  className="hover:!text-white !m-0 cursor-pointer flex-wrap justify-start gap-y-0 border-b border-b-gray-5 p-2 last:border-b-0 hover:bg-indigo-12"
                 >
                   <Text weight="medium" size="1" align="left">
                     {main_text}

@@ -1,6 +1,5 @@
 'use client'
 
-import { useEffect } from 'react'
 import { Box, Flex } from '@radix-ui/themes'
 import { ColumnDef } from '@tanstack/react-table'
 import {
@@ -9,137 +8,72 @@ import {
   DataTable as Table,
   TextCell,
 } from '@/components'
-import { ActionsCell, StatusCell } from './cells'
-import { FilterForm } from './filter-form'
-import { useStore } from './store'
-import { type PolicyConsents } from './types'
+import { type PatientConsent } from '@/types'
+import { PolicyDescriptionCell, StatusCell } from './cells'
+import { ActionCell } from './cells/action-cell'
 
-const columns: ColumnDef<PolicyConsents>[] = [
+const columns: ColumnDef<PatientConsent>[] = [
   {
     id: 'policy-description',
     accessorKey: 'policyDescription',
-    header: () => (
-      <ColumnHeader
-        label="Policy Description"
-        className="px-1 py-0.5 !text-1 !font-medium"
-      />
-    ),
-    cell: ({ row }) => (
-      <TextCell className="px-1 py-0.5 !text-1">
-        {row.original.policyDescription}
-      </TextCell>
-    ),
+    header: () => <ColumnHeader label="Policy Description" />,
+    cell: ({ row }) => <PolicyDescriptionCell row={row} />,
   },
   {
     id: 'policy-type',
-    accessorKey: 'policyType',
-    header: () => (
-      <ColumnHeader
-        label="Policy Type"
-        className="px-1 py-0.5 !text-1 !font-medium"
-      />
-    ),
-    cell: ({ row }) => (
-      <TextCell className="px-1 py-0.5 !text-1">
-        {row.original.policyType}
-      </TextCell>
-    ),
+    accessorKey: 'type',
+    header: () => <ColumnHeader label="Policy Type" />,
+    cell: ({ row }) => <TextCell>{row.original.type}</TextCell>,
   },
   {
     id: 'organization-practice',
     accessorKey: 'organizationPractice',
-    header: () => (
-      <ColumnHeader
-        label="Organization/Practice"
-        className="px-1 py-0.5 !text-1 !font-medium"
-      />
-    ),
-    cell: ({ row }) => (
-      <TextCell className="px-1 py-0.5  !text-1">
-        {row.original.organizationPractice}
-      </TextCell>
-    ),
+    header: () => <ColumnHeader label="Organization/Practice" />,
+    cell: ({ row }) => <TextCell>{row.original.organizationPractice}</TextCell>,
   },
   {
     id: 'issuance-date',
     accessorKey: 'issuanceDate',
-    header: () => (
-      <ColumnHeader
-        label="Issuance Date"
-        className="px-1 py-0.5 !text-1 !font-medium"
-      />
-    ),
-    cell: ({ row }) => (
-      <TextCell className="px-1 py-0.5 !text-1">
-        {row.original.issuanceDate}
-      </TextCell>
-    ),
+    header: () => <ColumnHeader label="Issuance Date" />,
+    cell: ({ row }) => <TextCell>{row.original.issuanceDate}</TextCell>,
   },
   {
     id: 'signing-date',
     accessorKey: 'signingDate',
-    header: () => (
-      <ColumnHeader
-        label="Signing Date"
-        className="px-1 py-0.5 !text-1 !font-medium"
-      />
-    ),
-    cell: ({ row }) => (
-      <TextCell className="px-1 py-0.5 !text-1">
-        {row.original.signingDate}
-      </TextCell>
-    ),
+    header: () => <ColumnHeader label="Signing Date" />,
+    cell: ({ row }) => <TextCell>{row.original.signingDate}</TextCell>,
   },
   {
     id: 'status',
     accessorKey: 'status',
-    header: () => (
-      <ColumnHeader
-        label="Status"
-        className="px-1 py-0.5 !text-1 !font-medium"
-      />
-    ),
+    header: () => <ColumnHeader label="Status" />,
     cell: ({ row }) => <StatusCell row={row} />,
   },
   {
     id: 'actions',
     accessorKey: 'actions',
-    header: () => (
-      <ColumnHeader
-        label="Actions"
-        className="px-1 py-0.5 !text-1 !font-medium"
-      />
-    ),
-    cell: ({ row }) => <ActionsCell row={row} />,
+    header: () => <ColumnHeader label="Actions" />,
+    cell: ({ row }) => <ActionCell row={row} />,
   },
 ]
 
-const DataTable = () => {
-  const { data, fetchPolicies, loading } = useStore((state) => ({
-    data: state.data,
-    loading: state.loading,
-    fetchPolicies: state.fetchPolicies,
-  }))
-
-  useEffect(() => {
-    fetchPolicies()
-  }, [])
-
+interface DataTableProps {
+  consents: PatientConsent[]
+  loading?: boolean
+}
+const DataTable = ({ consents, loading }: DataTableProps) => {
   if (loading) {
     return (
-      <Flex height="100%" align="center" justify="center">
+      <Flex height="45dvh" className="bg-white" align="center" justify="center">
         <LoadingPlaceholder />
       </Flex>
     )
   }
 
   return (
-    <Flex direction="column" className="gap-0.5">
-      <FilterForm />
-      <Box className="bg-white rounded-1 p-2">
-        <Table columns={columns} data={data?.consents ?? []} />
-      </Box>
-    </Flex>
+    <Box className="bg-white rounded-1 p-2">
+      <Table columns={columns} data={consents} />
+    </Box>
   )
 }
 export { DataTable }
