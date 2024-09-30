@@ -458,6 +458,167 @@ interface USAStates {
   displayName: string
   codes: StatesCode[]
 }
+interface ClaimSubmissionDetail {
+  id: string
+  metadata: MetaData
+  recordStatus: string
+  batchId: string
+  claimId: string
+  status: string
+  coverage: string
+  amount: number
+}
+
+interface ClaimSubmissionHistory {
+  id: string
+  metadata: MetaData
+  recordStatus: string
+  practiceId: string
+  submitterId: string
+  receiverId: string
+  batchName: string
+  batchType: string
+  batchStatus: string
+  batchStatusDetail: string
+  submittedDate: Date
+  processedDate: Date
+  isProcessed: boolean
+  isPaper: boolean
+  claimCount: number
+  totalAmount: number
+  ak9Error: string
+  ak9Status: string
+  ik5Error: string
+  ik5Status: string
+  isaControlNumber: string
+  notes: string
+  transaction837Path: string
+  claimSubmissionDetail: ClaimSubmissionDetail[]
+}
+
+interface ClaimSubmissionHistoryFilters {
+  batchName?: string
+  batchId?: string
+  submittedDate?: Date
+  insurancePolicyPriority?: string
+  recordStatuses?: string[]
+}
+
+interface ClaimSubmissionHistoryDetail {
+  id: string
+  metadata: MetaData
+  recordStatus: string
+  batchId: string
+  claimId: string
+  status: string
+  coverage: string
+  amount: number
+  patientName: string
+  claimNumber: string
+  dateOfServiceFrom: Date
+}
+
+interface PaymentAttachments {
+  id: string
+  metadata?: MetaData
+  recordStatus?: string
+  paymentId?: string
+  attachmentType?: string
+  fileUrl?: string
+  fileName: string
+  file?: File
+  isNewUpload?: boolean
+}
+
+interface ServiceLinePaymentAdjustment {
+  id: string
+  metadata: MetaData
+  recordStatus: string
+  claimServiceLinePaymentId: string
+  adjustmentAmount: 0
+  adjustmentReasonCode: string
+  remarkCode: string
+  adjustmentGroupCode: string
+}
+interface ClaimServiceLinePayment {
+  id: string
+  metadata: MetaData
+  recordStatus: string
+  claimPaymentId: string
+  claimServiceLineId: string
+  dateOfServiceFrom: Date
+  dateOfServiceTo: Date
+  cptCode: string
+  units: number
+  billedAmount: number
+  allowedAmount: number
+  paidAmount: number
+  copayAmount: number
+  coinsuranceAmount: number
+  deductibleAmount: number
+  otherPR: number
+  writeOffAmount: number
+  modifierCode1: string
+  modifierCode2: string
+  modifierCode3: string
+  modifierCode4: string
+  serviceLinePaymentAdjustments: ServiceLinePaymentAdjustment[]
+}
+
+interface ClaimPayment {
+  id: string
+  metadata: MetaData
+  recordStatus: string
+  paymentId: string
+  claimId: string
+  paymentSource: string
+  insurancePolicyId: string
+  processedAsCode: string
+  insuranceInternalControlNumber: string
+  claimServiceLinePayments: ClaimServiceLinePayment[]
+}
+
+interface InsurancePayment {
+  id: string
+  metadata: MetaData
+  recordStatus: string
+  paymentMethod: string
+  paymentType: string
+  amount: number
+  practiceId: string
+  status: string
+  isDuplicate: boolean
+  insuranceName: string
+  checkNumber: string
+  checkDate: Date
+  receivedDate: Date
+  depositDate: Date
+  patientId: number
+  payerId: string
+  receiverId: string
+  creditCardId: string
+  creditCardTransactionId: string
+  creditCardTransactionDate: Date
+  postedBy: number
+  postedDate: Date
+  comments: string
+  paymentAttachments: PaymentAttachments[]
+  claimPayments: ClaimPayment[]
+}
+
+interface InsurancePaymentRecordPayload {
+  id?: string
+  insuranceName?: string
+  paymentMethod: string
+  checkNumber?: string
+  amount: number
+  comments?: string
+  checkDate: string
+  receivedDate: string
+  depositDate: string
+  paymentAttachments?: PaymentAttachments[]
+}
+
 interface Insurance {
   paymentType: string
   checkNumber: string
@@ -508,6 +669,27 @@ interface ResponseHistoryDetail {
   transcationReferenceNumber: string
 }
 
+interface SelectOption {
+  value: string
+  label: string
+}
+
+interface InsurancePaymentsPayload {
+  dateType?: string
+  fromDate?: Date
+  toDate?: Date
+  checkNumber?: string
+  insuranceName?: string
+  paymentType?: string
+}
+
+interface FileNamesList {
+  id: string | number
+  name: string
+  isNewUpload: boolean
+  file: File
+}
+
 export type {
   Claim,
   InsurancePayer,
@@ -519,9 +701,6 @@ export type {
   ErrorMessage,
   Patient,
   PatientOption,
-  ClaimSubmissionHistory,
-  ClaimSubmissionHistoryDetail,
-  ClaimSubmissionHistoryFilters,
   Staff,
   StaffDataCodeSet,
   ICDResponse,
@@ -537,8 +716,17 @@ export type {
   StateCodes,
   ICD10Code,
   ICD10Response,
+  ClaimSubmissionHistory,
+  ClaimSubmissionHistoryDetail,
+  ClaimSubmissionHistoryFilters,
+  InsurancePayment,
   Insurance,
   ResponseHistoryRecord,
   ReceiverOption,
   ResponseHistoryDetail,
+  SelectOption,
+  PaymentAttachments,
+  InsurancePaymentsPayload,
+  FileNamesList,
+  InsurancePaymentRecordPayload,
 }

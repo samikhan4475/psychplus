@@ -3,11 +3,13 @@ import { handleRequest } from '@psychplus/utils/api'
 import { API_URL } from '@psychplus/utils/constants'
 import { createHeaders } from '@psychplus/utils/server'
 import { POSCodeSets } from '../coding-cpt/types'
+import { insurancePaymentRecordStatuses } from './enums'
 import {
   Claim,
   ClaimSubmissionHistory,
   CodeSet,
   InsurancePayer,
+  InsurancePayment,
   Location,
   ResponseHistoryRecord,
   Staff,
@@ -18,6 +20,10 @@ const defaultPayLoad = {
   isIncludePatientInsurancePlan: false,
   isIncludePatientInsurancePolicy: true,
   isIncludeClaimValidation: true,
+}
+
+const defaultInsurancePaymentPayload = {
+  recordStatuses: [insurancePaymentRecordStatuses.ACTIVE],
 }
 
 const defaultResponsePayLoad = {
@@ -55,16 +61,6 @@ const getLocations = (): Promise<Location[]> => {
   )
 }
 
-const getClaimSubmissionHistoryList = (): Promise<ClaimSubmissionHistory[]> => {
-  return handleRequest(
-    fetch(`${API_URL}/api/claimssubmissions/batches/actions/search`, {
-      cache: 'no-store',
-      method: 'POST',
-      body: JSON.stringify(defaultPayLoad),
-      headers: createHeaders(),
-    }),
-  )
-}
 const getPOSCodeSets = (): Promise<POSCodeSets> => {
   return handleRequest(
     fetch(
@@ -96,6 +92,30 @@ const getAccidentCodeSets = async (): Promise<CodeSet[]> =>
     }),
   )
 
+const getPaymentMethodCodeSets = async (): Promise<CodeSet> =>
+  handleRequest(
+    fetch(`${API_URL}/api/metadata/codesets/PaymentMethod`, {
+      cache: 'no-store',
+      headers: createHeaders(),
+    }),
+  )
+
+const getPaymentSourceTypeCodeSets = async (): Promise<CodeSet> =>
+  handleRequest(
+    fetch(`${API_URL}/api/metadata/codesets/PaymentSourceType`, {
+      cache: 'no-store',
+      headers: createHeaders(),
+    }),
+  )
+
+const getClaimPaymentFiltrationDateTypeCodeSets = async (): Promise<CodeSet> =>
+  handleRequest(
+    fetch(`${API_URL}/api/metadata/codesets/ClaimPaymentFiltrationDateType`, {
+      cache: 'no-store',
+      headers: createHeaders(),
+    }),
+  )
+
 const getUSAStates = async (): Promise<USAStates> => {
   return handleRequest(
     fetch(
@@ -105,6 +125,27 @@ const getUSAStates = async (): Promise<USAStates> => {
         headers: createHeaders(),
       },
     ),
+  )
+}
+const getClaimSubmissionHistoryList = (): Promise<ClaimSubmissionHistory[]> => {
+  return handleRequest(
+    fetch(`${API_URL}/api/claimssubmissions/batches/actions/search`, {
+      cache: 'no-store',
+      method: 'POST',
+      body: JSON.stringify(defaultPayLoad),
+      headers: createHeaders(),
+    }),
+  )
+}
+
+const getInsurancePaymentsList = (): Promise<InsurancePayment[]> => {
+  return handleRequest(
+    fetch(`${API_URL}/api/payments/actions/search?orderBy=receivedDate desc`, {
+      cache: 'no-store',
+      method: 'POST',
+      body: JSON.stringify(defaultInsurancePaymentPayload),
+      headers: createHeaders(),
+    }),
   )
 }
 const getResponseHistory = (): Promise<ResponseHistoryRecord[]> => {
@@ -126,7 +167,13 @@ const getLocationsCached = cache(getLocations)
 const getClaimSubmissionHistoryListCached = cache(getClaimSubmissionHistoryList)
 const getAccidentCodeSetsCached = cache(getAccidentCodeSets)
 const getUSAStatesCached = cache(getUSAStates)
+const getInsurancePaymentsListCached = cache(getInsurancePaymentsList)
+const getPaymentMethodCodeSetsCached = cache(getPaymentMethodCodeSets)
 const getResponseHistoryCached = cache(getResponseHistory)
+const getPaymentSourceTypeCodeSetsCached = cache(getPaymentSourceTypeCodeSets)
+const getClaimPaymentFiltrationDateTypeCodeSetsCached = cache(
+  getClaimPaymentFiltrationDateTypeCodeSets,
+)
 
 export {
   getClaimsListCached as getClaimsList,
@@ -137,5 +184,9 @@ export {
   getClaimSubmissionHistoryListCached as getClaimSubmissionHistoryList,
   getAccidentCodeSetsCached as getAccidentCodeSets,
   getUSAStatesCached as getUSAStates,
+  getInsurancePaymentsListCached as getInsurancePaymentsList,
+  getPaymentMethodCodeSetsCached as getPaymentMethodCodeSets,
   getResponseHistoryCached as getResponseHistory,
+  getPaymentSourceTypeCodeSetsCached as getPaymentSourceTypeCodeSets,
+  getClaimPaymentFiltrationDateTypeCodeSetsCached as getClaimPaymentFiltrationDateTypeCodeSets,
 }

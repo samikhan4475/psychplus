@@ -11,6 +11,7 @@ import { adjustToUTC } from '../../utils'
 const schema = z.object({
   batchName: validate.anyString.optional(),
   batchId: validate.anyString.optional(),
+  claimId: validate.anyString.optional(),
   insurancePolicyPriority: validate.anyString.optional(),
   submittedDate: z.date().optional(),
 })

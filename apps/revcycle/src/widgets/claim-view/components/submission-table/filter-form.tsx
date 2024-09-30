@@ -4,7 +4,7 @@ import { Box, Button, Flex, Text, TextField } from '@radix-ui/themes'
 import z from 'zod'
 import { Form, FormSelect, useForm, validate } from '@psychplus/form'
 import { DatePicker } from '@psychplus/ui/date-picker'
-import { getClaimList } from '../../api.client'
+import { getClaimList, getPatients } from '../../api.client'
 import { Filters, useStore } from '../../store'
 import { initialClaimListFilterState } from '../../store/claim-list-filter-store'
 import PatientSearch from './patient-search'
@@ -90,6 +90,21 @@ const FilterForm = () => {
     { value: 'Tertiary', label: 'Tertiary' },
   ]
 
+  const getRecords = async (searchSearch: string) => {
+    try {
+      const response = await getPatients({ name: searchSearch })
+
+      const mappedResults = response.map((record) => ({
+        id: String(record.id),
+        fullName: `${record.legalName.firstName} ${record.legalName.lastName}`,
+      }))
+
+      return mappedResults
+    } catch (error) {
+      return []
+    }
+  }
+
   return (
     <Form form={form} onSubmit={onSubmit}>
       <Box my="2">
@@ -114,6 +129,8 @@ const FilterForm = () => {
                 form.setValue('patientId', patientId)
               }
               reset={patientReset}
+              getRecords={getRecords}
+              placeholder="John Doe Smith"
             />
           </Box>
 

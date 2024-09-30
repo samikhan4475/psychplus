@@ -4,6 +4,7 @@ import { ClaimTable } from './claim-table/claim-table'
 import './style.css'
 import { Cross1Icon } from '@radix-ui/react-icons'
 import { initialTabs, useStore } from '../store'
+import { InsurancePaymentTableTab } from './insurance-payment-table'
 import { ResponseHistoryTable } from './response-history-table/response-history-table'
 import { SubmissionView } from './submission-view'
 
@@ -65,14 +66,13 @@ const ClaimView = () => {
           <Tabs.Content value="response-history">
             <ResponseHistoryTable />
           </Tabs.Content>
-          <Tabs.Content value="Ins. Payment">
-            <Text size="2">Ins. Payment Content will come here</Text>
-            <Text as="label" size="2" weight="bold">
-              <Flex gap="2">
-                <Checkbox /> Ready to Send
-              </Flex>
-            </Text>
-          </Tabs.Content>
+
+          <Box
+            className={activeTabId === 'ins-payment' ? 'block' : 'hidden'}
+            key={'ins-payment'}
+          >
+            <InsurancePaymentTableTab />
+          </Box>
           <Box
             className={activeTabId === 'patient-payment' ? 'block' : 'hidden'}
             // id="ins-payment"
@@ -88,7 +88,7 @@ const ClaimView = () => {
           <Box
             className={activeTabId === 'patient-statement' ? 'block' : 'hidden'}
             // id="ins-payment"
-            key={'ins-payment'}
+            key={'patient-statement'}
           >
             Patient Statement Content will come here
           </Box>

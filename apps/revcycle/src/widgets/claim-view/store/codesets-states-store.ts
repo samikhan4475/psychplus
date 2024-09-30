@@ -1,7 +1,7 @@
 'use client'
 
 import { type StateCreator } from 'zustand'
-import { Claim, StaffDataCodeSet, StateCodes } from '../types'
+import { Claim, SelectOption, StaffDataCodeSet, StateCodes } from '../types'
 import { MetaDataCodeSet } from './types'
 
 interface ClaimState {
@@ -15,6 +15,12 @@ interface ClaimState {
   setAccidentTypeCodesets: (codes: MetaDataCodeSet[]) => void
   usaStatesCodeSets: StateCodes[]
   setUSAStatesCodeSets: (codes: StateCodes[]) => void
+  paymentMethodCodeSets: SelectOption[]
+  setPaymentMethodCodeSets: (codes: SelectOption[]) => void
+  paymentSourceTypeCodeSets: SelectOption[]
+  setPaymentSourceTypeCodeSets: (codes: SelectOption[]) => void
+  claimPaymentFiltrationDateType: SelectOption[]
+  setClaimPaymentFiltrationDateType: (codes: SelectOption[]) => void
 }
 
 const createClaimStore: StateCreator<ClaimState> = (set) => ({
@@ -30,7 +36,18 @@ const createClaimStore: StateCreator<ClaimState> = (set) => ({
   setAccidentTypeCodesets: (accidentTypeCodesets: MetaDataCodeSet[]) =>
     set({ accidentTypeCodesets }),
   usaStatesCodeSets: [],
-  setUSAStatesCodeSets: (usaStatesCodeSets: StateCodes[]) =>set({ usaStatesCodeSets }),
+  setUSAStatesCodeSets: (usaStatesCodeSets: StateCodes[]) =>
+    set({ usaStatesCodeSets }),
+  paymentMethodCodeSets: [],
+  setPaymentMethodCodeSets: (paymentMethodCodeSets: StateCodes[]) =>
+    set({ paymentMethodCodeSets }),
+  paymentSourceTypeCodeSets: [],
+  setPaymentSourceTypeCodeSets: (paymentSourceTypeCodeSets: StateCodes[]) =>
+    set({ paymentSourceTypeCodeSets }),
+  claimPaymentFiltrationDateType: [],
+  setClaimPaymentFiltrationDateType: (
+    claimPaymentFiltrationDateType: StateCodes[],
+  ) => set({ claimPaymentFiltrationDateType }),
 })
 
 export { createClaimStore, type ClaimState }

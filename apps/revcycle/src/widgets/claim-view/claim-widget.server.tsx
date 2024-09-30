@@ -2,14 +2,18 @@ import { unstable_noStore as noStore } from 'next/cache'
 import { getCodeSets } from '@psychplus/codeset/api.server'
 import { ToastProvider } from '@psychplus/ui/toast-provider'
 import {
+  getClaimPaymentFiltrationDateTypeCodeSets,
   getClaimsList,
   getClaimSubmissionHistoryList,
   getInsurancePayersList,
+  getInsurancePaymentsList,
   getLocations,
+  getPaymentMethodCodeSets,
+  getPaymentSourceTypeCodeSets,
   getPOSCodeSets,
+  getResponseHistory,
   getStaff,
   getUSAStates,
-  getResponseHistory,
 } from './api.server'
 import { ClaimWidgetClient } from './claim-widget.client'
 import { Preloader } from './preloader'
@@ -23,23 +27,31 @@ const ClaimWidgetServer = async () => {
     insurancePayersList,
     codeSets,
     locations,
-    claimSubmissionHistoryList,
     posCodeSets,
     staffCodeSets,
     usaStates,
-    responseHistory
+    claimSubmissionHistoryList,
+    insurancePaymentsList,
+    paymentMethodCodeSets,
+    responseHistory,
+    paymentSourceTypeCodeSets,
+    claimPaymentFiltrationDateTypeCodeSets,
   ] = await Promise.all([
     getClaimsList(),
     getInsurancePayersList(),
     getCodeSets(),
     getLocations(),
-    getClaimSubmissionHistoryList(),
     getPOSCodeSets(),
     getStaff(),
     getUSAStates(),
-    getResponseHistory()
+    getClaimSubmissionHistoryList(),
+    getInsurancePaymentsList(),
+    getPaymentMethodCodeSets(),
+    getResponseHistory(),
+    getPaymentSourceTypeCodeSets(),
+    getClaimPaymentFiltrationDateTypeCodeSets(),
   ])
-  
+
   return (
     <ToastProvider>
       <Preloader
@@ -52,7 +64,13 @@ const ClaimWidgetServer = async () => {
         locations={locations}
         claimSubmissionHistoryList={claimSubmissionHistoryList}
         usaStates={usaStates}
+        insurancePaymentsList={insurancePaymentsList}
+        paymentMethodCodeSets={paymentMethodCodeSets}
         responseHistoryList={responseHistory}
+        paymentSourceTypeCodeSets={paymentSourceTypeCodeSets}
+        claimPaymentFiltrationDateTypeCodeSets={
+          claimPaymentFiltrationDateTypeCodeSets
+        }
       />
       <ClaimWidgetClient />
     </ToastProvider>

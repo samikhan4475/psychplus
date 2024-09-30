@@ -3,6 +3,7 @@ import {
   Claim,
   ClaimSubmissionHistory,
   ClaimSubmissionHistoryFilters,
+  InsurancePayment,
   ResponseHistoryRecord,
 } from '../types'
 
@@ -149,6 +150,17 @@ interface ClaimSubmissionState {
   setClaimSubmissionHistoryList: (value: ClaimSubmissionHistory[]) => void
 }
 
+interface InsurancePaymentsState {
+  insurancePaymentsList: InsurancePayment[]
+  setInsurancePaymentsList: (value: InsurancePayment[]) => void
+  insurancePaymentModalOpen: boolean
+  setInsurancePaymentModalOpen: (value: boolean) => void
+  insurancePaymentEditData: InsurancePayment | null
+  setInsurancePaymentEditData: (value: InsurancePayment | null) => void
+  insurancePaymentRefetchData: boolean
+  setInsurancePaymentRefetchData: (value: boolean) => void
+}
+
 interface ResponseHistoryFiltersState {
   responseHistoryFilters: ResponseHistoryFilters
   handleResponseHistoryFiltersChange: (
@@ -180,6 +192,7 @@ export type {
   ClaimSubmissionState,
   ClaimSubmissionHistory,
   ClaimSubmissionHistoryFilters,
+  InsurancePaymentsState,
   ResponseHistoryListState,
   ResponseHistoryFilters,
   ResponseHistoryFiltersState,

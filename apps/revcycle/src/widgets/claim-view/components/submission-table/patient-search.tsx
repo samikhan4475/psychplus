@@ -1,16 +1,24 @@
 import { useEffect, useRef, useState } from 'react'
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons'
 import { Box, Button, Flex, Text, TextField } from '@radix-ui/themes'
-import { getPatients } from '../../api.client'
 import { PatientOption } from '../../types'
 
 interface PatientSearchProps {
-  onPatientSelect: (patientId: string, patientName: string) => void
+  onPatientSelect: (optionId: string, optionName: string) => void
   reset: boolean
+  getRecords: (searchSearch: string) => Promise<PatientOption[]>
+  placeholder?: string
+  editValue?: string
 }
 
-const PatientSearch = ({ onPatientSelect, reset }: PatientSearchProps) => {
-  const [searchTerm, setSearchTerm] = useState('')
+const PatientSearch = ({
+  onPatientSelect,
+  reset,
+  getRecords,
+  placeholder,
+  editValue,
+}: PatientSearchProps) => {
+  const [searchTerm, setSearchTerm] = useState(editValue)
   const [results, setResults] = useState<PatientOption[]>([])
   const [highlightedIndex, setHighlightedIndex] = useState(-1)
   const [showSuggestions, setShowSuggestions] = useState(false)
@@ -20,12 +28,8 @@ const PatientSearch = ({ onPatientSelect, reset }: PatientSearchProps) => {
     const fetchPatients = async () => {
       if (searchTerm && showSuggestions) {
         try {
-          const data = await getPatients({ name: searchTerm })
-          const mappedResults = data.map((patient) => ({
-            id: String(patient.id),
-            fullName: `${patient.legalName.firstName} ${patient.legalName.lastName}`,
-          }))
-          setResults(mappedResults)
+          const data = await getRecords(searchTerm)
+          setResults(data)
         } catch (error) {
           setResults([])
         }
@@ -122,7 +126,7 @@ const PatientSearch = ({ onPatientSelect, reset }: PatientSearchProps) => {
         <Box position="relative">
           <TextField.Root
             className="h-30 text-sm p-0"
-            placeholder="John Doe Smith"
+            placeholder={placeholder ?? ''}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             onFocus={handleInputFocus}

@@ -5,30 +5,33 @@ import { createWithEqualityFn } from 'zustand/traditional'
 import { combineStateCreators } from '@psychplus/utils/store'
 import { claimListFilterStore } from './claim-list-filter-store'
 import { claimListStore } from './claim-list-store'
+import { ClaimSubmissionStore } from './claim-submission'
 import { useTabsStore } from './claim-tab-store'
 import { ClaimState, createClaimStore } from './codesets-states-store'
-import { ClaimSubmissionStore } from './claim-submission'
 import { codeSetsStore } from './codesets-store'
+import { InsurancePaymentStore } from './insurance-payments'
+import { responseHistoryListFilterStore } from './response-history-list-filter-store'
+import { responseHistoryListStore } from './response-history-list-store'
 import {
   ClaimFiltersState,
   ClaimListState,
-  CodeSetsState,
-  TabsStore,
   ClaimSubmissionState,
+  CodeSetsState,
+  InsurancePaymentsState,
+  ResponseHistoryFiltersState,
   ResponseHistoryListState,
-  ResponseHistoryFiltersState
+  TabsStore,
 } from './types'
-import { responseHistoryListStore } from './response-history-list-store'
-import { responseHistoryListFilterStore } from './response-history-list-filter-store'
 
 type ClaimStoreType = ClaimListState &
   ClaimFiltersState &
   TabsStore &
   ClaimState &
-  CodeSetsState&
-    ClaimSubmissionState &
-    ResponseHistoryListState &
-    ResponseHistoryFiltersState
+  CodeSetsState &
+  ClaimSubmissionState &
+  InsurancePaymentsState &
+  ResponseHistoryListState &
+  ResponseHistoryFiltersState
 
 const useStore = createWithEqualityFn<ClaimStoreType>(
   combineStateCreators(
@@ -38,8 +41,9 @@ const useStore = createWithEqualityFn<ClaimStoreType>(
     createClaimStore,
     codeSetsStore,
     ClaimSubmissionStore,
+    InsurancePaymentStore,
     responseHistoryListStore,
-    responseHistoryListFilterStore
+    responseHistoryListFilterStore,
   ),
   shallow,
 )

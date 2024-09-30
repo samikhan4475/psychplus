@@ -10,8 +10,13 @@ import {
   CPTResponse,
   ErrorMessage,
   ICD10Code,
+  InsurancePayer,
+  InsurancePayment,
+  InsurancePaymentRecordPayload,
+  InsurancePaymentsPayload,
   ModifiersResponse,
   Patient,
+  PaymentAttachments,
   ResponseHistoryDetail,
   ResponseHistoryRecord,
 } from './types'
@@ -48,10 +53,21 @@ interface ResponseHistoryPayload {
   createdOn?: Date
 }
 
+const defaultInsurancePaymentPayload = {
+  recordStatuses: ['Active'],
+}
 const defaultPayLoad = {
   isIncludePatientInsurancePlan: false,
   isIncludePatientInsurancePolicy: true,
   isIncludeClaimValidation: true,
+}
+
+const defaultInsurancePaymentRecordPayload = {
+  isDuplicate: false,
+  status: 'Posted',
+  practiceId: 'd3f4e8a1-7c4e-4b98-8d5e-3a8dbe2c5d39',
+  recordStatus: 'Active',
+  paymentType: 'Eob',
 }
 
 const getClaimList = (payload: ClaimFiltersPayload): Promise<Claim[]> =>
@@ -182,6 +198,17 @@ const getClaimSubmissionHistoryDetail = (
     ),
   )
 
+const getInsurancePaymentsList = (
+  payload: InsurancePaymentsPayload = {},
+): Promise<InsurancePayment[]> =>
+  handleRequest(
+    fetch(`/revcycle/api/payments/actions/search?orderBy=receivedDate desc`, {
+      method: 'POST',
+      cache: 'no-store',
+      body: JSON.stringify({ ...defaultInsurancePaymentPayload, ...payload }),
+      headers: createHeaders(),
+    }),
+  )
 const getClaimSubmissionRejectionDetail = (
   claimsId: string,
 ): Promise<ErrorMessage[]> =>
@@ -218,7 +245,81 @@ const getResponseHistoryDetail = (
     ),
   )
 
+const deleteInsurancePaymentRecord = (
+  recordId: string,
+): Promise<InsurancePayment> =>
+  handleRequest(
+    fetch(`/revcycle/api/payments/${recordId}`, {
+      method: 'DELETE',
+      cache: 'no-store',
+      headers: createHeaders(),
+    }),
+  )
+
+const getInsurancePayers = (name: string): Promise<InsurancePayer[]> =>
+  handleRequest(
+    fetch(`/revcycle/api/insurance/plans/actions/search`, {
+      method: 'POST',
+      body: JSON.stringify({
+        name: name,
+        recordStatuses: ['Active'],
+      }),
+      cache: 'no-store',
+      headers: createHeaders(),
+    }),
+  )
+
+const createInsurancePayment = (
+  payload: InsurancePaymentRecordPayload,
+): Promise<InsurancePayment> =>
+  handleRequest(
+    fetch(`/revcycle/api/payments`, {
+      method: 'POST',
+      body: JSON.stringify({
+        ...payload,
+        ...defaultInsurancePaymentRecordPayload,
+      }),
+      cache: 'no-store',
+      headers: createHeaders(),
+    }),
+  )
+
+const createInsurancePaymentAttachments = (
+  payload: FormData,
+  paymentId: string,
+): Promise<PaymentAttachments[]> =>
+  handleRequest(
+    fetch(`/revcycle/api/payments/${paymentId}/attachments`, {
+      method: 'POST',
+      body: payload,
+      cache: 'no-store',
+      headers: {
+        ...createHeaders(),
+        accept: 'application/json',
+      },
+    }),
+  )
+
+const updateInsurancePayment = (
+  payload: InsurancePaymentRecordPayload,
+  id: string,
+): Promise<InsurancePayment> =>
+  handleRequest(
+    fetch(`/revcycle/api/payments/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify({
+        ...payload,
+        ...defaultInsurancePaymentRecordPayload,
+      }),
+      cache: 'no-store',
+      headers: createHeaders(),
+    }),
+  )
+
 export {
+  getInsurancePaymentsList,
+  createInsurancePayment,
+  updateInsurancePayment,
   deleteClaim,
   getClaimList,
   getPatients,
@@ -234,4 +335,7 @@ export {
   getClaimSubmissionHistoryList,
   getClaimSubmissionHistoryDetail,
   getClaimSubmissionRejectionDetail,
+  deleteInsurancePaymentRecord,
+  getInsurancePayers,
+  createInsurancePaymentAttachments,
 }

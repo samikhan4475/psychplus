@@ -9,6 +9,7 @@ import {
   Claim,
   ClaimSubmissionHistory,
   InsurancePayer,
+  InsurancePayment,
   Location,
   ResponseHistoryRecord,
   Staff,
@@ -30,6 +31,10 @@ interface PreloaderProps {
   posCodeSets: POSCodeSets
   staffCodeSets: Staff[]
   usaStates: USAStates
+  insurancePaymentsList: InsurancePayment[]
+  paymentMethodCodeSets: CodeSet
+  paymentSourceTypeCodeSets: CodeSet
+  claimPaymentFiltrationDateTypeCodeSets: CodeSet
 }
 
 const Preloader = ({
@@ -39,10 +44,14 @@ const Preloader = ({
   insurancePayersList,
   codeSets,
   locations,
-  claimSubmissionHistoryList,
   posCodeSets,
   staffCodeSets,
   usaStates,
+  claimSubmissionHistoryList,
+  insurancePaymentsList,
+  paymentMethodCodeSets,
+  paymentSourceTypeCodeSets,
+  claimPaymentFiltrationDateTypeCodeSets,
 }: PreloaderProps) => {
   const loaded = useRef(false)
   const {
@@ -55,7 +64,11 @@ const Preloader = ({
     setStaffCodeSets,
     setAccidentTypeCodesets,
     setUSAStatesCodeSets,
+    setInsurancePaymentsList,
+    setPaymentMethodCodeSets,
     setResponseHistoryList,
+    setPaymentSourceTypeCodeSets,
+    setClaimPaymentFiltrationDateType,
   } = store((state) => ({
     setClaimList: state.setClaimList,
     setDateTypes: state.setDateTypes,
@@ -66,13 +79,18 @@ const Preloader = ({
     setCodingPosCodeSets: state.setCodingPosCodeSets,
     setAccidentTypeCodesets: state.setAccidentTypeCodesets,
     setUSAStatesCodeSets: state.setUSAStatesCodeSets,
+    setInsurancePaymentsList: state.setInsurancePaymentsList,
+    setPaymentMethodCodeSets: state.setPaymentMethodCodeSets,
     setResponseHistoryList: state.setResponseHistoryList,
+    setPaymentSourceTypeCodeSets: state.setPaymentSourceTypeCodeSets,
+    setClaimPaymentFiltrationDateType: state.setClaimPaymentFiltrationDateType,
   }))
 
   if (!loaded.current) {
     loaded.current = true
     setClaimList(claimsList)
     setClaimSubmissionHistoryList(claimSubmissionHistoryList)
+    setInsurancePaymentsList(insurancePaymentsList)
     setResponseHistoryList(responseHistoryList)
 
     const accidentType = codeSets.find(
@@ -157,6 +175,26 @@ const Preloader = ({
       }))
       setUSAStatesCodeSets(statesoptionlist)
     }
+
+    const paymentMethods = paymentMethodCodeSets.codes.map((element) => ({
+      value: element.code,
+      label: element.display,
+    }))
+    setPaymentMethodCodeSets(paymentMethods)
+    const paymentSourceTypes = paymentSourceTypeCodeSets.codes.map(
+      (element) => ({
+        value: element.code,
+        label: element.display,
+      }),
+    )
+    setPaymentSourceTypeCodeSets(paymentSourceTypes)
+
+    const filterationDateTypes =
+      claimPaymentFiltrationDateTypeCodeSets.codes.map((element) => ({
+        value: element.code,
+        label: element.display,
+      }))
+    setClaimPaymentFiltrationDateType(filterationDateTypes)
   }
 
   return null
