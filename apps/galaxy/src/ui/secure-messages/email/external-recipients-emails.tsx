@@ -1,13 +1,15 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { Box, Flex } from '@radix-ui/themes'
 import { ReactTags, Tag } from 'react-tag-autocomplete'
 import 'react-tag-autocomplete/example/src/styles.css'
 import { SendExternalTitle } from '.'
 import { EMAIL_REGEX } from '../contants'
-import { useStore } from '../store'
+import { ExternalRecipientsEmailsProps } from '../types'
 
-const ExternalRecipientsEmails = () => {
-  const [externalRecipientsTag, setExternalRecipientsTag] = useState<Tag[]>([])
+const ExternalRecipientsEmails = ({
+  externalRecipientsTag,
+  setExternalRecipientsTag,
+}: ExternalRecipientsEmailsProps) => {
   const [externalEmailSuggestions, setExternalEmailSuggestions] = useState<
     Tag[]
   >([])

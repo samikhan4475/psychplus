@@ -2,11 +2,11 @@ import React from 'react'
 import { Box, Flex } from '@radix-ui/themes'
 import { useStore } from '../store'
 import { ActiveComponentProps, SecureMessage } from '../types'
+import { ViewMessageActions } from './view-message-actions'
 import { ViewMessageAttachment } from './view-message-attachment'
 import { ViewMessageHeader } from './view-message-header'
 import { ViewMessageHeaderTitle } from './view-message-header-title'
 import { ViewMessageProfileDetails } from './view-message-profile-details'
-import { ViewMessageReplyForward } from './view-message-reply'
 import { ViewMessageText } from './view-message-text'
 
 const ReviewEmail = ({
@@ -41,7 +41,7 @@ const ReviewEmail = ({
           handleDeleteFile={handleDeleteFile}
           previewSecureMessage={previewSecureMessage}
         />
-        <ViewMessageReplyForward setActiveComponent={setActiveComponent} />
+        <ViewMessageActions setActiveComponent={setActiveComponent} />
       </Box>
     </Flex>
   )

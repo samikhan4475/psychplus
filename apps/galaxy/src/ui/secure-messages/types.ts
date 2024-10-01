@@ -2,6 +2,7 @@ import { ClinicAddress, LegalName, Metadata, } from "@/types"
 import { Table, TableOptions, TableState, Updater } from "@tanstack/react-table"
 import { Dispatch, ReactNode, SetStateAction } from "react"
 import { SchemaType } from "./secure-messages-view"
+import { Tag } from "react-tag-autocomplete"
 
 enum SecureMessagesTab {
     ALL = 'Inbox',
@@ -14,7 +15,9 @@ enum ActiveComponent {
     NEW_EMAIL = 'new-email',
     COMPOSE_MAIL = "New Message",
     PREVIEW_EMAIL = 'preview-email',
-    FORWARD = 'Forward'
+    FORWARD = 'Forward',
+    REPLY = 'Reply',
+    REPLY_TO_ALL = 'Reply to all',
 }
 
 enum SecureMessageStatus {
@@ -29,13 +32,6 @@ enum EmailRecipientTypes {
     EXTERNAL = 'External',
     PATIENT = 'Patient',
 }
-
-interface MetadataMapping extends Metadata {
-    deletedOn: string
-    deletedByFullName: string
-    deletedBy: number
-}
-
 interface MetadataMapping extends Metadata {
     deletedOn: string
     deletedByFullName: string
@@ -48,6 +44,7 @@ interface SecureMessage {
     metadata?: MetadataMapping
     attachments?: Attachment[] | []
     channels?: Channel[] | []
+    channel?: Channel
     recordStatus: string
     subject: string
     text: string
@@ -59,6 +56,7 @@ interface SecureMessage {
 interface Channel {
     receiverStatus?: string
     sendMode?: string
+    metadata?: MetadataMapping
     receiverStatusDetail?: string
     externalMessageId?: string
     externalEmail?: string
@@ -72,8 +70,8 @@ interface Channel {
     receiverType: string
     isRead: boolean
     isReplied: boolean
-    createdOn: string
-    createdBy: number
+    createdOn?: string
+    createdBy?: number
 }
 
 interface EmailPreview {
@@ -224,7 +222,17 @@ interface RichTextEditorWrapperProps {
     children: ReactNode
     activeComponent?: ActiveComponent
 }
+interface InternalRecipientsEmailsProps {
+    setInternalRecipientsTag: Dispatch<SetStateAction<Tag[]>>
+    internalRecipientsTag: Tag[]
+}
+interface ExternalRecipientsEmailsProps {
+    setExternalRecipientsTag: Dispatch<SetStateAction<Tag[]>>
+    externalRecipientsTag: Tag[]
+}
 export {
+    type ExternalRecipientsEmailsProps,
+    type InternalRecipientsEmailsProps,
     type RichTextEditorWrapperProps,
     type ViewMessageAttachmentProps,
     type FileTileProps,

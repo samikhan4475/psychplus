@@ -4,7 +4,12 @@ import { useCallback, useMemo } from 'react'
 import { Row, type ColumnDef } from '@tanstack/react-table'
 import { ColumnHeader, DataTable } from '@/components'
 import { useStore } from '../store'
-import { ActiveComponent, ActiveComponentProps, SecureMessage } from '../types'
+import {
+  ActiveComponent,
+  ActiveComponentProps,
+  Channel,
+  SecureMessage,
+} from '../types'
 import {
   MessageDateTimeCell,
   MessageFromCell,
@@ -79,15 +84,17 @@ const SecureMessagesTable = ({ setActiveComponent }: ActiveComponentProps) => {
     [],
   )
   const handleSecureMessage = useCallback(
-    (secureMessage: SecureMessage) => {
+    async (secureMessage: SecureMessage) => {
       setPreviewSecureMessage(secureMessage)
       setActiveComponent(ActiveComponent.PREVIEW_EMAIL)
     },
     [setActiveComponent, setPreviewSecureMessage],
   )
+  const flattenedMessages = flattenMessages(secureMessages)
+  // console.log(flattenedMessages, 'flattenedMessages', secureMessages)
   return (
     <DataTable
-      data={secureMessages}
+      data={flattenedMessages}
       columns={columns}
       tableClass="bg-white mt-4"
       onRowClick={(row: Row<SecureMessage>) =>
@@ -98,3 +105,18 @@ const SecureMessagesTable = ({ setActiveComponent }: ActiveComponentProps) => {
 }
 
 export { SecureMessagesTable }
+
+const flattenMessages = (
+  messages: SecureMessage[],
+): (SecureMessage & { channel: Channel })[] => {
+  return messages.reduce((acc, message) => {
+    const { channels = [] } = message
+    return [
+      ...acc,
+      ...channels.map((channel) => ({
+        ...message,
+        channel,
+      })),
+    ]
+  }, [] as (SecureMessage & { channel: Channel })[])
+}

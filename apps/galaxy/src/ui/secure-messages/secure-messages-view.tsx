@@ -43,7 +43,7 @@ const SecureMessagesView = () => {
 
   const onSubmit: SubmitHandler<SchemaType> = (data) => {
     // Will remove console once integrate API
-    console.log('Submitted Data:', data)
+    console.log('Submitted Data: ', data)
   }
   if (loading) {
     return (

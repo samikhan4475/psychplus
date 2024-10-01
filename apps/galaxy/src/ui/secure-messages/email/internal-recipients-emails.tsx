@@ -5,11 +5,13 @@ import 'react-tag-autocomplete/example/src/styles.css'
 import { useDebouncedCallback } from 'use-debounce'
 import { SendInternalTitle } from '.'
 import { getAllRecipientSuggestionsAction } from '../actions'
-import { EmailRecipients } from '../types'
+import { EmailRecipients, InternalRecipientsEmailsProps } from '../types'
 
-const InternalRecipientsEmails = () => {
-  const [internalRecipientsTag, setInternalRecipientsTag] = useState<Tag[]>([])
-  const [recipientSuggention, setRecipientSuggention] = useState<
+const InternalRecipientsEmails = ({
+  internalRecipientsTag,
+  setInternalRecipientsTag,
+}: InternalRecipientsEmailsProps) => {
+  const [recipientSuggestion, setRecipientSuggestion] = useState<
     EmailRecipients[]
   >([])
   useEffect(() => {
@@ -19,7 +21,7 @@ const InternalRecipientsEmails = () => {
       if (fetchRecipientSuggestion.state === 'error') {
         return fetchRecipientSuggestion.error
       }
-      setRecipientSuggention(fetchRecipientSuggestion.data)
+      setRecipientSuggestion(fetchRecipientSuggestion.data)
     }
     fetchSuggestions()
   }, [])
@@ -30,7 +32,7 @@ const InternalRecipientsEmails = () => {
   const handleChange = (keyword: string) => {
     const lowerKeyword = keyword.trim().toLowerCase()
 
-    const internalRecipientsResponse = recipientSuggention.filter((item) => {
+    const internalRecipientsResponse = recipientSuggestion.filter((item) => {
       const name = item?.legalName.firstName?.trim().toLowerCase()
 
       return name && name.includes(lowerKeyword)
