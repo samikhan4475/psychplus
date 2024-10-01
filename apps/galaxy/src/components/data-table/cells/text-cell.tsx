@@ -3,11 +3,13 @@ import { cn } from '@/utils'
 
 interface TextCellProps {
   empty?: boolean
+  hasPayment?: boolean
   className?: string
 }
 
 const TextCell = ({
   empty,
+  hasPayment,
   children,
   className,
 }: React.PropsWithChildren<TextCellProps>) => {
@@ -24,6 +26,7 @@ const TextCell = ({
         weight="regular"
         size="1"
       >
+        {!empty && hasPayment ? '$' : ''}
         {children}
       </Text>
     </Flex>

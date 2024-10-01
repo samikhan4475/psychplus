@@ -2,9 +2,6 @@
 
 import { useEffect, useMemo, useState } from 'react'
 import { Button, Flex, Heading, Tabs } from '@radix-ui/themes'
-import toast from 'react-hot-toast'
-import { State } from '@/types'
-import { cn } from '@/utils'
 import { EditVisit } from '../visit/edit-visit'
 import { getClinicsOptionsAction, getProvidersOptionsAction } from './actions'
 import { CalendarView } from './calendar-view'
@@ -14,12 +11,19 @@ import { ListView } from './list-view'
 import { RoundingView } from './rounding-view'
 import { ViewHeader } from './schedule-view-header'
 import { TabsList } from './schedule-view-tabs-list'
+import { SchedulerView } from './scheduler-view'
 import { useStore } from './store'
 import { Option, TabValue } from './types'
+import { State } from '@/types'
 
 interface ScheduleViewProps {
   insurancePlans: Option[]
   usStates: State[]
+}
+
+const tabContentClass = (tab: string, currentSelection: string) => {
+  if (tab !== currentSelection) return
+  return 'flex flex-1 flex-col overflow-y-auto'
 }
 
 const ScheduleView = ({ insurancePlans, usStates }: ScheduleViewProps) => {
@@ -33,30 +37,20 @@ const ScheduleView = ({ insurancePlans, usStates }: ScheduleViewProps) => {
     () => ({ insurancePlans, usStates }),
     [insurancePlans, usStates],
   )
-  const getProvidersAndClinicsOptions = async () => {
-    const [providersResponse, clinicsResponse] = await Promise.all([
-      getProvidersOptionsAction(),
-      getClinicsOptionsAction(),
-    ])
-
-    if (providersResponse.state === 'error') {
-      toast.error(providersResponse.error)
-    }
-
-    if (clinicsResponse.state === 'error') {
-      toast.error(clinicsResponse.error)
-    }
-
-    setProvidersOptions(
-      providersResponse.state === 'error' ? [] : providersResponse.data,
-    )
-    setClinicsOptions(
-      clinicsResponse.state === 'error' ? [] : clinicsResponse.data,
-    )
-  }
 
   useEffect(() => {
-    getProvidersAndClinicsOptions()
+    getProvidersOptionsAction().then((response) => {
+      if (response.state === 'error') {
+        throw new Error(response.error)
+      }
+      setProvidersOptions(response.data)
+    })
+    getClinicsOptionsAction().then((response) => {
+      if (response.state === 'error') {
+        throw new Error(response.error)
+      }
+      setClinicsOptions(response.data)
+    })
   }, [])
 
   return (
@@ -80,33 +74,29 @@ const ScheduleView = ({ insurancePlans, usStates }: ScheduleViewProps) => {
         </Flex>
         <Tabs.Content
           value={TabValue.List}
-          className={cn({
-            'flex flex-1 flex-col overflow-y-auto':
-              selectedTab === TabValue.List,
-          })}
+          className={tabContentClass(TabValue.List, selectedTab)}
         >
           <ListView />
         </Tabs.Content>
         <Tabs.Content
           value={TabValue.Calendar}
-          className={cn({
-            'flex flex-1 flex-col overflow-y-auto':
-              selectedTab === TabValue.Calendar,
-          })}
+          className={tabContentClass(TabValue.Calendar, selectedTab)}
         >
           <CalendarView states={usStates} />
         </Tabs.Content>
-        <Tabs.Content value={TabValue.Scheduler}>Scheduler View</Tabs.Content>
+        <Tabs.Content
+          value={TabValue.Scheduler}
+          className={tabContentClass(TabValue.Scheduler, selectedTab)}
+        >
+          <SchedulerView />
+        </Tabs.Content>
         <Tabs.Content value={TabValue.ProviderCoding}>
           <EditVisit states={usStates}>
             <Button variant="ghost">Provider Coding View</Button>
           </EditVisit>
         </Tabs.Content>
         <Tabs.Content
-          className={cn({
-            'flex flex-1 flex-col overflow-y-auto':
-              selectedTab === TabValue.Rounding,
-          })}
+          className={tabContentClass(TabValue.Rounding, selectedTab)}
           value={TabValue.Rounding}
         >
           <RoundingView />

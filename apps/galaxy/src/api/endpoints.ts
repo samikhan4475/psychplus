@@ -72,6 +72,7 @@ const DELETE_PATIENT_RELATIONSHIP_ENDPOINT = (
   patientId: string,
   relationshipId: string,
 ) => `${API_URL}/api/patients/${patientId}/relationships/${relationshipId}`
+const SEARCH_AVAILABLE_APPOINTMENT_SLOTS_ENDPOINT = `${API_URL}/api/schedules/availability/search`
 const GET_PATIENT_CREDIT_CARDS = (patientId: string) =>
   `${API_URL}/api/patients/${patientId}/creditcards?includeInactive=true`
 const SET_PRIMARY_PATIENT_CREDIT_CARD = (
@@ -129,6 +130,7 @@ export {
   GET_PATIENT_BILLING_HISTORY,
   ADD_PATIENT_RELATIONSHIP_ENDPOINT,
   DELETE_PATIENT_RELATIONSHIP_ENDPOINT,
+  SEARCH_AVAILABLE_APPOINTMENT_SLOTS_ENDPOINT,
   GET_PATIENT_CONSENT_SIGNED_PDF_ENDPOINT,
   GET_PATIENT_CREDIT_CARDS,
   SET_PRIMARY_PATIENT_CREDIT_CARD,

@@ -44,6 +44,12 @@ enum TabValue {
   Rounding = 'Rounding',
 }
 
+enum VerificationStatus {
+  Verified = "Verified",
+  Pending = "Pending",
+  UnVerifiable = "Unverifiable"
+}
+
 interface PatientRecord {
   id: number
   date: string
@@ -76,7 +82,7 @@ interface AvailableSlots {
   endDate: string
   duration: number
   servicesOffered: string[]
-  teleState: string[]
+  teleState?: string[]
   timeZoneId: string
 }
 
@@ -173,7 +179,7 @@ interface Appointment {
   cptCodes: string[]
   legalStatus: string
   authorizationNumber: string
-  dateOfAddmission: string
+  dateOfAdmission: string
   lastCoverageDate: string
   lengthOfStay: number
 }
@@ -191,4 +197,4 @@ export type {
   Appointment,
 }
 
-export { TabValue }
+export { TabValue, VerificationStatus }

@@ -55,7 +55,7 @@ interface Appointment {
   cptCodes: string[]
   legalStatus: string
   authorizationNumber: string
-  dateOfAddmission: string
+  dateOfAdmission: string
   lastCoverageDate: string
   lengthOfStay: number
 }

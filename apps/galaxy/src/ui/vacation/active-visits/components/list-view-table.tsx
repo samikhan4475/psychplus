@@ -23,7 +23,7 @@ const ListViewTable = ({ staffId, startDate, endDate }: ListViewTableProps) => {
   return (
     <Flex direction="column" className="flex-1">
       <ScrollArea className="mt-[13px] w-full" scrollbars="horizontal">
-        <DataTable columns={columns()} data={tableData} isRowSpan />
+        <DataTable columns={columns} data={tableData} isRowSpan />
       </ScrollArea>
     </Flex>
   )

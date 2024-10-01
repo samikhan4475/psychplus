@@ -80,7 +80,6 @@ const RootLayout = async ({ children }: React.PropsWithChildren) => {
         CODESETS.NotificationStatus,
         CODESETS.NotificationChannel,
         CODESETS.UsStates,
-        CODESETS.SpecialistType,
         CODESETS.AppointmentStatus,
         CODESETS.EncounterType,
         CODESETS.UsStates,

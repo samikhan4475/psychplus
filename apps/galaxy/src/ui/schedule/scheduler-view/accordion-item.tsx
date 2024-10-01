@@ -1,16 +1,15 @@
+'use client'
+
 import { useMemo, useState } from 'react'
 import * as Accordion from '@radix-ui/react-accordion'
 import { ChevronDownIcon, ChevronUpIcon } from '@radix-ui/react-icons'
 import { Box, Flex, Grid, Text } from '@radix-ui/themes'
-import { cn } from '@psychplus/ui/cn'
-import { useSpecialistTypeOptions } from '../../hooks'
-import { useStore } from '../../store'
-import { AppointmentAvailability, SlotsByDay } from '../../types'
-import {
-  currentWeekTotalSlots,
-  extractTime,
-  nextWeekTotalSlots,
-} from '../../utils'
+import { CODESETS } from '@/constants'
+import { useCodesetCodes } from '@/hooks'
+import { cn } from '@/utils'
+import { useStore } from './store'
+import { AppointmentAvailability, SlotsByDay } from './types'
+import { currentWeekTotalSlots, extractTime, nextWeekTotalSlots } from './utils'
 
 interface Props {
   provider: AppointmentAvailability
@@ -18,7 +17,7 @@ interface Props {
 }
 
 const ThisWeekSlots = ({ slots }: { slots: SlotsByDay }) => {
-  const dates = useStore((state) => state.appointmentDays)
+  const dates = useStore((state) => state.dates)
   const thisWeekDays = dates.slice(0, dates.length / 2)
 
   return (
@@ -27,21 +26,21 @@ const ThisWeekSlots = ({ slots }: { slots: SlotsByDay }) => {
       className="col-span-5 justify-end gap-x-1 py-2.5 pr-2 text-[12px]"
     >
       {thisWeekDays.map((day, i) => (
-        <span
+        <Text
           className={cn('font-[510]', {
             "after:content-[',']": i < dates.length / 2 - 1,
           })}
           key={day.monthAndDay}
         >
-          {day.day} {'(' + (slots[`${day.monthAndDay}`]?.length || 0) + ')'}
-        </span>
+          {day.day} {'(' + (slots[`${day.monthAndDay}`]?.length ?? 0) + ')'}
+        </Text>
       ))}
     </Flex>
   )
 }
 
 const NextWeekSlots = ({ slots }: { slots: SlotsByDay }) => {
-  const dates = useStore((state) => state.appointmentDays)
+  const dates = useStore((state) => state.dates)
   const nextWeekDays = dates.slice(dates.length / 2, dates.length)
   return (
     <Flex
@@ -49,43 +48,42 @@ const NextWeekSlots = ({ slots }: { slots: SlotsByDay }) => {
       className="col-span-5 justify-end gap-x-1 py-2.5 pr-2 text-[12px]"
     >
       {nextWeekDays.map((day, i) => (
-        <span
-          className={cn('font-[510]', {
+        <Text
+          className={cn('font-[510] ', {
             "after:content-[',']": i < dates.length / 2 - 1,
           })}
           key={day.monthAndDay}
         >
-          {day.day} {'(' + (slots[`${day.monthAndDay}`]?.length || 0) + ')'}
-        </span>
+          {day.day} {'(' + (slots[`${day.monthAndDay}`]?.length ?? 0) + ')'}
+        </Text>
       ))}
     </Flex>
   )
 }
 
-type SpecialistTypeIndex = { [key: string]: string }
-
 const AccordionItem = ({ provider, value }: Props) => {
   const [isOpen, setIsOpen] = useState<boolean>(false)
-  const dates = useStore((state) => state.appointmentDays)
-  const specialistTypeOptions = useSpecialistTypeOptions()
-  const specialistTypeIndex = useMemo(
+  const dates = useStore((state) => state.dates)
+  const codes = useCodesetCodes(CODESETS.SpecialistType)
+
+  const specialistTypeIndex: Record<string, string> = useMemo(
     () =>
-      specialistTypeOptions?.reduce(
+      codes?.reduce(
         (acc, specialistType) => ({
           ...acc,
-          [specialistType.value]: specialistType.label,
+          [specialistType.value]: specialistType.display,
         }),
-        {} as SpecialistTypeIndex,
+        {},
       ),
-    [specialistTypeOptions],
+    [codes],
   )
 
   return (
     <Accordion.Item value={value}>
-      <Grid columns="17">
+      <Grid columns="16" className="mx-[26px]">
         <Accordion.Header
           className={cn(
-            'col-span-2 ml-[17px] border-b-2 border-l border-t border-[#D9E2FC]',
+            'border-pp-focus-bg col-span-2 border-b-2 border-l border-t',
           )}
         >
           <Accordion.Trigger
@@ -101,13 +99,13 @@ const AccordionItem = ({ provider, value }: Props) => {
               )}
 
               <Flex direction="column">
-                <Text className="text-[12px] font-[510] text-[#656565]">
+                <Text className="text-pp-dark-grey text-[12px] font-[510]">
                   {`${provider.specialist.legalName.firstName} 
                   ${provider.specialist.legalName.lastName}, `}
                   {provider.specialist.legalName.honors}
                 </Text>
 
-                <Text className="text-[12px] font-[510] text-[#151B4A]">
+                <Text className="text-pp-black-1 text-[12px] font-[510]">
                   {specialistTypeIndex?.[provider.specialistTypeCode] ?? ''}
                 </Text>
               </Flex>
@@ -115,34 +113,34 @@ const AccordionItem = ({ provider, value }: Props) => {
           </Accordion.Trigger>
         </Accordion.Header>
         {!isOpen && (
-          <Box className="col-[3_/_span_14] border-b-2 border-r border-t border-[#D9E2FC]">
+          <Box className="border-pp-focus-bg col-[3_/_span_14] border-b-2 border-r border-t">
             <Grid columns="14" className="h-full">
               <Flex
                 align="center"
                 className="col-span-2 py-2.5 pl-2 text-[12px]"
               >
                 <Flex direction="column">
-                  <span>This Week Available</span>
-                  <span>{`Slots ${
+                  <Text>This Week Available</Text>
+                  <Text>{`Slots ${
                     '(' +
                     currentWeekTotalSlots(dates, provider.allSlotsByDay) +
                     ')'
-                  }`}</span>
+                  }`}</Text>
                 </Flex>
               </Flex>
               <ThisWeekSlots slots={provider.allSlotsByDay} />
               <Flex
                 align="center"
-                className="relative col-span-2 py-2.5 pl-2 pl-2 text-[12px] before:absolute before:bottom-0 before:left-0 before:top-0 before:w-[1px] before:-translate-x-1/2 before:bg-[#D9E2FC] before:content-['']"
+                className="before:bg-pp-focus-bg relative col-span-2 py-2.5 pl-2 pl-2 text-[12px] before:absolute before:bottom-0 before:left-0 before:top-0 before:w-[1px] before:-translate-x-1/2 before:content-['']"
               >
                 <Flex direction="column">
-                  <span>Next Week Available</span>
-                  {/* <span>{`Slots ${
+                  <Text>Next Week Available</Text>
+                  <Text>{`Slots ${
                     '(' +
                     nextWeekTotalSlots(dates, provider.allSlotsByDay) +
                     ')'
-                  }`}</span> */}
-                </Flex>{' '}
+                  }`}</Text>
+                </Flex>
               </Flex>
               <NextWeekSlots slots={provider.allSlotsByDay} />
             </Grid>
@@ -151,16 +149,16 @@ const AccordionItem = ({ provider, value }: Props) => {
         <Accordion.Content className="col-[3_/_span_14]">
           <Grid
             columns="14"
-            className="h-full border-b-[2px] border-r border-t border-[#D9E2FC]"
+            className="border-pp-focus-bg h-full border-b-[2px] border-r border-t"
           >
             {dates.map((day, i) => (
               <Box
                 key={day.monthAndDay}
                 className={cn('relative col-span-1 px-2 py-3', {
-                  "after:absolute after:bottom-0 after:right-0 after:top-0 after:w-[1px] after:bg-[#D9E2FC] after:content-['']":
+                  "after:bg-pp-focus-bg after:absolute after:bottom-0 after:right-0 after:top-0 after:w-[1px] after:content-['']":
                     i === 6,
                   'col-span-full': !isOpen,
-                  "before:absolute before:bottom-0 before:left-0 before:top-0 before:w-[1px] before:bg-[#D9E2FC] before:content-['']":
+                  "before:bg-pp-focus-bg before:absolute before:bottom-0 before:left-0 before:top-0 before:w-[1px] before:content-['']":
                     i === 7,
                 })}
               >
@@ -171,7 +169,7 @@ const AccordionItem = ({ provider, value }: Props) => {
                           <Flex
                             justify="center"
                             align="center"
-                            className="h-6 rounded-[4px] border border-[#DDDDE3] px-[15px] py-1 text-[12px] font-[510]"
+                            className="border-pp-grey h-6 rounded-[4px] border px-[15px] py-1 text-[12px] font-[510]"
                             key={slot.startDate}
                           >
                             {extractTime(slot.startDate, slot.timeZoneId)}

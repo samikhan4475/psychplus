@@ -7,7 +7,7 @@ import { Appointment } from '../../types'
 const VisitStatusSelectCell = ({
   row: { original: appointment },
 }: PropsWithRow<Appointment>) => {
-  const codes = useCodesetCodes(CODESETS.VisitStatus)
+  const codes = useCodesetCodes(CODESETS.AppointmentStatus)
   const items = codes.map((code) => (
     <Select.Item key={code.value} value={code.value}>
       {code.display}

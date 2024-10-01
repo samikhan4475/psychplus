@@ -1,7 +1,5 @@
 import { ColumnDef } from '@tanstack/react-table'
-import { ColumnHeader, TextCell } from '@/components'
-import { Sort } from '@/types'
-import { getSortDir } from '@/utils'
+import { ColumnHeader, LongTextCell, TextCell } from '@/components'
 import {
   ActionsCell,
   GroupSelectCell,
@@ -13,22 +11,21 @@ import {
   VisitStatusSelectCell,
 } from '../shared/table-cells'
 import { Appointment } from '../types'
+import { formatDateCell } from '../utils'
 
-const columns = (sort?: Sort): ColumnDef<Appointment>[] => {
-  return [
+const columns: ColumnDef<Appointment>[] = [
     {
       id: 'date-header',
       accessorKey: 'appointmentDate',
       header: ({ column }) => (
         <ColumnHeader
-          sortable
-          sortDir={getSortDir(column.id, sort)}
+          clientSideSort
           className="!text-black justfy-center !font-medium"
           column={column}
           label="Date"
         />
       ),
-      cell: ({ row }) => <TextCell>{row.original.appointmentDate}</TextCell>,
+      cell: ({ row }) => <TextCell className='whitespace-nowrap'>{formatDateCell(row.original.appointmentDate)}</TextCell>,
       enableHiding: false,
     },
     {
@@ -36,14 +33,13 @@ const columns = (sort?: Sort): ColumnDef<Appointment>[] => {
       accessorKey: 'name',
       header: ({ column }) => (
         <ColumnHeader
-          sortable
-          sortDir={getSortDir(column.id, sort)}
+          clientSideSort
           className="!text-black justfy-center !font-medium"
           column={column}
           label="Name"
         />
       ),
-      cell: ({ row }) => <TextCell>{row.original.name}</TextCell>,
+      cell: ({ row }) => <TextCell className='whitespace-nowrap'>{row.original.name}</TextCell>,
       enableHiding: false,
     },
     {
@@ -51,8 +47,7 @@ const columns = (sort?: Sort): ColumnDef<Appointment>[] => {
       accessorKey: 'age',
       header: ({ column }) => (
         <ColumnHeader
-          sortable
-          sortDir={getSortDir(column.id, sort)}
+          clientSideSort
           className="!text-black justfy-center !font-medium"
           column={column}
           label="Age"
@@ -66,8 +61,7 @@ const columns = (sort?: Sort): ColumnDef<Appointment>[] => {
       accessorKey: 'gender',
       header: ({ column }) => (
         <ColumnHeader
-          sortable
-          sortDir={getSortDir(column.id, sort)}
+          clientSideSort
           className="!text-black justfy-center !font-medium"
           column={column}
           label="Gender"
@@ -80,22 +74,20 @@ const columns = (sort?: Sort): ColumnDef<Appointment>[] => {
       accessorKey: 'dob',
       header: ({ column }) => (
         <ColumnHeader
-          sortable
-          sortDir={getSortDir(column.id, sort)}
+          clientSideSort
           className="!text-black justfy-center !font-medium"
           column={column}
           label="DOB"
         />
       ),
-      cell: ({ row }) => <TextCell>{row.original.dob}</TextCell>,
+      cell: ({ row }) => <TextCell className='whitespace-nowrap'>{row.original.dob}</TextCell>,
     },
     {
       id: 'patient-status',
       accessorKey: 'patientStatus',
       header: ({ column }) => (
         <ColumnHeader
-          sortable
-          sortDir={getSortDir(column.id, sort)}
+          clientSideSort
           className="!text-black justfy-center !font-medium"
           column={column}
           label="Pt. Status"
@@ -109,14 +101,13 @@ const columns = (sort?: Sort): ColumnDef<Appointment>[] => {
       accessorKey: 'clinicLocation',
       header: ({ column }) => (
         <ColumnHeader
-          sortable
-          sortDir={getSortDir(column.id, sort)}
+          clientSideSort
           className="!text-black justfy-center !font-medium"
           column={column}
           label="Location"
         />
       ),
-      cell: ({ row }) => <TextCell>{row.original.clinicLocation}</TextCell>,
+      cell: ({ row }) => <TextCell className='whitespace-nowrap'>{row.original.locationName}</TextCell>,
     },
 
     {
@@ -124,22 +115,20 @@ const columns = (sort?: Sort): ColumnDef<Appointment>[] => {
       accessorKey: 'service',
       header: ({ column }) => (
         <ColumnHeader
-          sortable
-          sortDir={getSortDir(column.id, sort)}
+          clientSideSort
           className="!text-black justfy-center !font-medium"
           column={column}
           label="Service"
         />
       ),
-      cell: ({ row }) => <TextCell>{row.original.service}</TextCell>,
+      cell: ({ row }) => <TextCell className='whitespace-nowrap'>{row.original.service}</TextCell>,
     },
     {
       id: 'provider-type',
       accessorKey: 'providerType',
       header: ({ column }) => (
         <ColumnHeader
-          sortable
-          sortDir={getSortDir(column.id, sort)}
+          clientSideSort
           className="!text-black justfy-center !font-medium"
           column={column}
           label="Provider Type"
@@ -153,8 +142,7 @@ const columns = (sort?: Sort): ColumnDef<Appointment>[] => {
       accessorKey: 'unitResource.unit',
       header: ({ column }) => (
         <ColumnHeader
-          sortable
-          sortDir={getSortDir(column.id, sort)}
+          clientSideSort
           className="!text-black justfy-center !font-medium"
           column={column}
           label="Unit"
@@ -167,8 +155,7 @@ const columns = (sort?: Sort): ColumnDef<Appointment>[] => {
       accessorKey: 'room',
       header: ({ column }) => (
         <ColumnHeader
-          sortable
-          sortDir={getSortDir(column.id, sort)}
+          clientSideSort
           className="!text-black justfy-center !font-medium"
           column={column}
           label="Room"
@@ -181,8 +168,7 @@ const columns = (sort?: Sort): ColumnDef<Appointment>[] => {
       accessorKey: 'groupResource.group',
       header: ({ column }) => (
         <ColumnHeader
-          sortable
-          sortDir={getSortDir(column.id, sort)}
+          clientSideSort
           className="!text-black justfy-center !font-medium"
           column={column}
           label="Group"
@@ -195,8 +181,7 @@ const columns = (sort?: Sort): ColumnDef<Appointment>[] => {
       accessorKey: 'primaryInsuranceName',
       header: ({ column }) => (
         <ColumnHeader
-          sortable
-          sortDir={getSortDir(column.id, sort)}
+          clientSideSort
           className="!text-black justfy-center !font-medium"
           column={column}
           label="Primary Insurance"
@@ -212,8 +197,7 @@ const columns = (sort?: Sort): ColumnDef<Appointment>[] => {
       accessorKey: 'secondaryInsuranceName',
       header: ({ column }) => (
         <ColumnHeader
-          sortable
-          sortDir={getSortDir(column.id, sort)}
+          clientSideSort
           className="!text-black justfy-center !font-medium"
           column={column}
           label="Secondary Insurance"
@@ -238,22 +222,20 @@ const columns = (sort?: Sort): ColumnDef<Appointment>[] => {
           accessorKey: 'visitType',
           header: ({ column }) => (
             <ColumnHeader
-              sortable
-              sortDir={getSortDir(column.id, sort)}
+              clientSideSort
               className="!text-black justfy-center !font-medium"
               column={column}
               label="Type"
             />
           ),
-          cell: ({ row }) => <TextCell>{row.original.visitType}</TextCell>,
+          cell: ({ row }) => <LongTextCell>{row.original.visitType}</LongTextCell>,
           enableHiding: false,
         },
         {
           accessorKey: 'visitSequence',
           header: ({ column }) => (
             <ColumnHeader
-              sortable
-              sortDir={getSortDir(column.id, sort)}
+              clientSideSort
               className="!text-black justfy-center !font-medium"
               column={column}
               label="Sequence"
@@ -266,8 +248,7 @@ const columns = (sort?: Sort): ColumnDef<Appointment>[] => {
           accessorKey: 'visitMedium',
           header: ({ column }) => (
             <ColumnHeader
-              sortable
-              sortDir={getSortDir(column.id, sort)}
+              clientSideSort
               className="!text-black justfy-center !font-medium"
               column={column}
               label="Medium"
@@ -280,8 +261,7 @@ const columns = (sort?: Sort): ColumnDef<Appointment>[] => {
           accessorKey: 'visitStatus',
           header: ({ column }) => (
             <ColumnHeader
-              sortable
-              sortDir={getSortDir(column.id, sort)}
+              clientSideSort
               className="!text-black justfy-center !font-medium"
               column={column}
               label="Status"
@@ -294,11 +274,10 @@ const columns = (sort?: Sort): ColumnDef<Appointment>[] => {
           accessorKey: 'insuranceVerification',
           header: ({ column }) => (
             <ColumnHeader
-              sortable
-              sortDir={getSortDir(column.id, sort)}
+              clientSideSort
               className="!text-black justfy-center !font-medium"
               column={column}
-              label="Ins Verification"
+              label="Ins. Verification"
             />
           ),
           cell: ({ row }) => (
@@ -313,14 +292,13 @@ const columns = (sort?: Sort): ColumnDef<Appointment>[] => {
       accessorKey: 'diagnosis',
       header: ({ column }) => (
         <ColumnHeader
-          sortable
-          sortDir={getSortDir(column.id, sort)}
+          clientSideSort
           className="!text-black justfy-center !font-medium"
           column={column}
           label="Diagnosis"
         />
       ),
-      cell: ({ row }) => <TextCell>{row.original.diagnosis}</TextCell>,
+      cell: ({ row }) => <TextCell>{row.original.visitMedium}</TextCell>,
       enableHiding: false,
     },
     {
@@ -328,14 +306,13 @@ const columns = (sort?: Sort): ColumnDef<Appointment>[] => {
       accessorKey: 'cptCodes',
       header: ({ column }) => (
         <ColumnHeader
-          sortable
-          sortDir={getSortDir(column.id, sort)}
+          clientSideSort
           className="!text-black justfy-center !font-medium"
           column={column}
           label="CPT Codes"
         />
       ),
-      cell: ({ row }) => <TextCell>{row.original.cptCodes.join(',')}</TextCell>,
+      cell: ({ row }) => <TextCell>{row.original.visitMedium}</TextCell>,
       enableHiding: false,
     },
     {
@@ -343,14 +320,13 @@ const columns = (sort?: Sort): ColumnDef<Appointment>[] => {
       accessorKey: 'doa',
       header: ({ column }) => (
         <ColumnHeader
-          sortable
-          sortDir={getSortDir(column.id, sort)}
+          clientSideSort
           className="!text-black justfy-center !font-medium"
           column={column}
           label="DOA"
         />
       ),
-      cell: ({ row }) => <TextCell>{row.original.dateOfAddmission}</TextCell>,
+      cell: ({ row }) => <TextCell>{row.original.dateOfAdmission}</TextCell>,
       enableHiding: false,
     },
     {
@@ -358,8 +334,7 @@ const columns = (sort?: Sort): ColumnDef<Appointment>[] => {
       accessorKey: 'lengthOfStay',
       header: ({ column }) => (
         <ColumnHeader
-          sortable
-          sortDir={getSortDir(column.id, sort)}
+          clientSideSort
           className="!text-black justfy-center !font-medium"
           column={column}
           label="LOS"
@@ -373,8 +348,7 @@ const columns = (sort?: Sort): ColumnDef<Appointment>[] => {
       accessorKey: 'lastCoverageDate',
       header: ({ column }) => (
         <ColumnHeader
-          sortable
-          sortDir={getSortDir(column.id, sort)}
+          clientSideSort
           className="!text-black justfy-center !font-medium"
           column={column}
           label="LCD"
@@ -388,8 +362,7 @@ const columns = (sort?: Sort): ColumnDef<Appointment>[] => {
       accessorKey: 'authorizationNumber',
       header: ({ column }) => (
         <ColumnHeader
-          sortable
-          sortDir={getSortDir(column.id, sort)}
+          clientSideSort
           className="!text-black justfy-center !font-medium"
           column={column}
           label="Auth #"
@@ -405,8 +378,7 @@ const columns = (sort?: Sort): ColumnDef<Appointment>[] => {
       accessorKey: 'legalStatus',
       header: ({ column }) => (
         <ColumnHeader
-          sortable
-          sortDir={getSortDir(column.id, sort)}
+          clientSideSort
           className="!text-black justfy-center !font-medium"
           column={column}
           label="Legal"
@@ -431,8 +403,7 @@ const columns = (sort?: Sort): ColumnDef<Appointment>[] => {
           accessorKey: 'copayDue',
           header: ({ column }) => (
             <ColumnHeader
-              sortable
-              sortDir={getSortDir(column.id, sort)}
+              clientSideSort
               className="!text-black justfy-center !font-medium"
               column={column}
               label="Due"
@@ -446,8 +417,7 @@ const columns = (sort?: Sort): ColumnDef<Appointment>[] => {
           accessorKey: 'copayPaid',
           header: ({ column }) => (
             <ColumnHeader
-              sortable
-              sortDir={getSortDir(column.id, sort)}
+              clientSideSort
               className="!text-black justfy-center !font-medium"
               column={column}
               label="Paid"
@@ -475,8 +445,7 @@ const columns = (sort?: Sort): ColumnDef<Appointment>[] => {
           accessorKey: 'copayDue',
           header: ({ column }) => (
             <ColumnHeader
-              sortable
-              sortDir={getSortDir(column.id, sort)}
+              clientSideSort
               className="!text-black justfy-center !font-medium"
               column={column}
               label="Due"
@@ -489,8 +458,7 @@ const columns = (sort?: Sort): ColumnDef<Appointment>[] => {
           accessorKey: 'copayPaid',
           header: ({ column }) => (
             <ColumnHeader
-              sortable
-              sortDir={getSortDir(column.id, sort)}
+              clientSideSort
               className="!text-black justfy-center !font-medium"
               column={column}
               label="Paid"
@@ -519,8 +487,7 @@ const columns = (sort?: Sort): ColumnDef<Appointment>[] => {
           accessorKey: 'balanceDue',
           header: ({ column }) => (
             <ColumnHeader
-              sortable
-              sortDir={getSortDir(column.id, sort)}
+              clientSideSort
               className="!text-black justfy-center !font-medium"
               column={column}
               label="Due"
@@ -533,8 +500,7 @@ const columns = (sort?: Sort): ColumnDef<Appointment>[] => {
           accessorKey: 'balancePaid',
           header: ({ column }) => (
             <ColumnHeader
-              sortable
-              sortDir={getSortDir(column.id, sort)}
+              clientSideSort
               className="!text-black justfy-center !font-medium"
               column={column}
               label="Paid"
@@ -549,8 +515,7 @@ const columns = (sort?: Sort): ColumnDef<Appointment>[] => {
       accessorKey: 'isNoteSigned',
       header: ({ column }) => (
         <ColumnHeader
-          sortable
-          sortDir={getSortDir(column.id, sort)}
+          clientSideSort
           className="!text-black justfy-center !font-medium"
           column={column}
           label="Note Signed"
@@ -564,6 +529,5 @@ const columns = (sort?: Sort): ColumnDef<Appointment>[] => {
       cell: ({ row }) => <ActionsCell />,
     },
   ]
-}
 
 export { columns }
