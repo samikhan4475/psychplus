@@ -55,6 +55,7 @@ const config = {
         'pp-img-border': '#9BABF0',
         'pp-icon-soft': '#8B8D98',
         'pp-states-success': '#30A46C',
+        'pp-bg-table-label': '#EEF2F6',
       },
       animation: {
         loader: 'bounce 500ms infinite, pulse 2s infinite',

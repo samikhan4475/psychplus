@@ -9,7 +9,10 @@ const HxButton = ({ toggleOpen }: { toggleOpen(): void }) => (
     variant="outline"
     color="gray"
     className="text-black"
-    onClick={toggleOpen}
+    onClick={(e) => {
+      e.preventDefault()
+      toggleOpen()
+    }}
   >
     Hx
   </Button>

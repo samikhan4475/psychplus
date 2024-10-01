@@ -20,7 +20,7 @@ const QuestionnairesFormSnapIvDataTable = ({
   return (
     <Flex direction="column">
       <Table.Root className="w-full">
-        <Table.Header className="bg-[#EEF2F6]">
+        <Table.Header className="bg-pp-bg-table-label">
           <Table.Row>
             <Table.Cell colSpan={5} className="h-fit py-1">
               <Text weight="medium" size="1">

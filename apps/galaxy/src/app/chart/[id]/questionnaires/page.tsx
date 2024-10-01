@@ -5,6 +5,7 @@ import { getQuestionnairesAudit } from '@/ui/questionnaires/audit-tab/api'
 import { getQuestionnairesDast10 } from '@/ui/questionnaires/dast-10-tab/api'
 import { getQuestionnairesGad7 } from '@/ui/questionnaires/gad-7-tab/api/get-questionnaires-gad7'
 import { getQuestionnairesHamD } from '@/ui/questionnaires/ham-d-tab/api'
+import { getQuestionnairesMoca } from '@/ui/questionnaires/moca-tab/action'
 import { getQuestionnairesPcl5 } from '@/ui/questionnaires/pcl-5-tab/api'
 import { getQuestionnairesPhq9 } from '@/ui/questionnaires/phq-9-tab/api'
 import { getQuestionnairesSnapIv } from '@/ui/questionnaires/snap-iv-tab/api'
@@ -28,6 +29,7 @@ const QuestionnairesInfoPage = async ({ params }: QuestionnairesPageProps) => {
     questionnairesAuditResponse,
     questionnairesAimsResponse,
     questionnairesHamDResponse,
+    questionnairesMocaResponse,
   ] = await Promise.all([
     getQuestionnairesDashboard({ patientId: params.id }),
     getQuestionnairesGad7({ patientId: params.id }),
@@ -39,6 +41,7 @@ const QuestionnairesInfoPage = async ({ params }: QuestionnairesPageProps) => {
     getQuestionnairesAudit({ patientId: params.id }),
     getQuestionnairesAims({ patientId: params.id }),
     getQuestionnairesHamD({ patientId: params.id }),
+    getQuestionnairesMoca({ patientId: params.id }),
   ])
 
   if (questionnairesDashboardResponse.state === 'error') {
@@ -76,6 +79,9 @@ const QuestionnairesInfoPage = async ({ params }: QuestionnairesPageProps) => {
   if (questionnairesHamDResponse.state === 'error') {
     throw new Error(questionnairesHamDResponse.error)
   }
+  if (questionnairesMocaResponse.state === 'error') {
+    throw new Error(questionnairesMocaResponse.error)
+  }
 
   return (
     <QuestionnairesView
@@ -109,6 +115,9 @@ const QuestionnairesInfoPage = async ({ params }: QuestionnairesPageProps) => {
       }
       questionnairesHamDResponse={
         questionnairesHamDResponse.data.questionnairesHamDData
+      }
+      questionnairesMocaResponse={
+        questionnairesMocaResponse.data.questionnairesMocaData
       }
     />
   )

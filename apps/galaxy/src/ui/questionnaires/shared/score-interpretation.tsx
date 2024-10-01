@@ -21,7 +21,7 @@ const ScoreInterpretation = ({
   totalScore,
   isRanges = true,
 }: ScoreInterpretationProps) => {
-  const getRange = (score: number) => {
+    const getRange = (score: number) => {
     return ranges.find((range) => {
       if (range.max !== undefined) {
         return score >= range.min && score <= range.max

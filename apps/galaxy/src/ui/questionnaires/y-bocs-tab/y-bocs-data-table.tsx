@@ -16,7 +16,7 @@ const QuestionnairesFormYBocsDataTable = ({
 }: QuestionnairesFormYBocsDataTableProps) => {
   return (
     <Table.Root variant="ghost" size="1" className="w-full">
-      <Table.Header className="bg-[#EEF2F6]">
+      <Table.Header className="bg-pp-bg-table-label">
         <Table.Row className="align-middle">
           <Table.Cell className="w-[30%]">
             <Text weight="medium" size="1">
