@@ -5,7 +5,7 @@ import { FormProvider } from 'react-hook-form'
 import { ViewLoadingPlaceholder, WidgetFormContainer } from '@/components'
 import { QuickNoteSectionItem } from '@/types'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
-import { GAD_7_TAB } from '../constants'
+import { QuestionnaireTabs } from '../constants'
 import {
   AddToNoteCell,
   AddToPreVisitAssessmentCell,
@@ -34,7 +34,7 @@ const Gad7Tab = ({
   )
 
   if (!data) {
-    return <ViewLoadingPlaceholder title={GAD_7_TAB} />
+    return <ViewLoadingPlaceholder title={QuestionnaireTabs.GAD_7_TAB} />
   }
 
   return (
@@ -43,12 +43,12 @@ const Gad7Tab = ({
         <WidgetFormContainer
           enableEvents={false}
           patientId={patientId}
-          widgetId="gad-7"
+          widgetId={QuestionnaireTabs.GAD_7_TAB}
           getData={transformOut(
             patientId,
             QuickNoteSectionName.QuickNoteSectionGad7,
           )}
-          title={GAD_7_TAB}
+          title={QuestionnaireTabs.GAD_7_TAB}
           headerRight={
             <Flex gap="2">
               <SendToPatientButton />

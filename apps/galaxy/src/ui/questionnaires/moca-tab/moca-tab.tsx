@@ -4,7 +4,7 @@ import { Flex } from '@radix-ui/themes'
 import { FormProvider } from 'react-hook-form'
 import { WidgetFormContainer } from '@/components'
 import { QuickNoteSectionItem } from '@/types'
-import { MOCA_TAB } from '../constants'
+import { QuestionnaireTabs } from '../constants'
 import { AddToNoteCell, HistoryButton, SaveButton } from '../shared'
 import { MOCA_LABELS } from './constants'
 import { QuestionnairesFormMoca } from './form-moca/aims-form'
@@ -27,9 +27,9 @@ const MocaTab = ({
         <WidgetFormContainer
           enableEvents={false}
           patientId={patientId}
-          widgetId="moca"
+          widgetId={QuestionnaireTabs.MOCA_TAB}
           getData={transformOut(patientId)}
-          title={MOCA_TAB}
+          title={QuestionnaireTabs.MOCA_TAB}
           headerRight={
             <Flex gap="2">
               <HistoryButton />

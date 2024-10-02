@@ -6,19 +6,7 @@ import { XIcon } from 'lucide-react'
 import { QuickNoteSectionItem } from '@/types'
 import { AimsTab } from './aims-tab'
 import { AuditTab } from './audit-tab'
-import {
-  AIMS_TAB,
-  AUDIT_TAB,
-  DASHBOARD_TAB,
-  DAST_10_TAB,
-  GAD_7_TAB,
-  HAM_D_TAB,
-  MOCA_TAB,
-  PCL_5_TAB,
-  PHQ_9_TAB,
-  SNAP_IV_TAB,
-  Y_BOCS_TAB,
-} from './constants'
+import { QuestionnaireTabs } from './constants'
 import { DashboardTab } from './dashboard-tab'
 import { Dast10Tab } from './dast-10-tab'
 import { Gad7Tab } from './gad-7-tab'
@@ -70,54 +58,76 @@ const QuestionnairesView = ({
     >
       <Flex>
         <Tabs.List>
-          <TabsTrigger value={DASHBOARD_TAB}>Dashboard</TabsTrigger>
-          <TabsTrigger value={PHQ_9_TAB}>PHQ-9</TabsTrigger>
-          <TabsTrigger value={GAD_7_TAB}>GAD-7</TabsTrigger>
-          <TabsTrigger value={SNAP_IV_TAB}>SNAP-IV</TabsTrigger>
-          <TabsTrigger value={PCL_5_TAB}>PCL-5</TabsTrigger>
-          <TabsTrigger value={Y_BOCS_TAB}>Y-BOCS</TabsTrigger>
-          <TabsTrigger value={AIMS_TAB}>AIMS</TabsTrigger>
-          <TabsTrigger value={AUDIT_TAB}>AUDIT</TabsTrigger>
-          <TabsTrigger value={DAST_10_TAB}>DAST-10</TabsTrigger>
-          <TabsTrigger value={MOCA_TAB}>MOCA</TabsTrigger>
-          <TabsTrigger value={HAM_D_TAB}>HAM-D</TabsTrigger>
+          <TabsTrigger value={QuestionnaireTabs.DASHBOARD_TAB}>
+            {QuestionnaireTabs.DASHBOARD_TAB}
+          </TabsTrigger>
+          <TabsTrigger value={QuestionnaireTabs.PHQ_9_TAB}>
+            {QuestionnaireTabs.PHQ_9_TAB}
+          </TabsTrigger>
+          <TabsTrigger value={QuestionnaireTabs.GAD_7_TAB}>
+            {QuestionnaireTabs.GAD_7_TAB}
+          </TabsTrigger>
+          <TabsTrigger value={QuestionnaireTabs.SNAP_IV_TAB}>
+            {QuestionnaireTabs.SNAP_IV_TAB}
+          </TabsTrigger>
+          <TabsTrigger value={QuestionnaireTabs.PCL_5_TAB}>
+            {QuestionnaireTabs.PCL_5_TAB}
+          </TabsTrigger>
+          <TabsTrigger value={QuestionnaireTabs.Y_BOCS_TAB}>
+            {QuestionnaireTabs.Y_BOCS_TAB}
+          </TabsTrigger>
+          <TabsTrigger value={QuestionnaireTabs.AIMS_TAB}>
+            {QuestionnaireTabs.AIMS_TAB}
+          </TabsTrigger>
+          <TabsTrigger value={QuestionnaireTabs.AUDIT_TAB}>
+            {QuestionnaireTabs.AUDIT_TAB}
+          </TabsTrigger>
+          <TabsTrigger value={QuestionnaireTabs.DAST_10_TAB}>
+            {QuestionnaireTabs.DAST_10_TAB}
+          </TabsTrigger>
+          <TabsTrigger value={QuestionnaireTabs.MOCA_TAB}>
+            {QuestionnaireTabs.MOCA_TAB}
+          </TabsTrigger>
+          <TabsTrigger value={QuestionnaireTabs.HAM_D_TAB}>
+            {QuestionnaireTabs.HAM_D_TAB}
+          </TabsTrigger>
         </Tabs.List>
         <Flex className="flex-1 border-b border-gray-5" />
       </Flex>
-      <TabsContent value={DASHBOARD_TAB}>
+      <TabsContent value={QuestionnaireTabs.DASHBOARD_TAB}>
         <DashboardTab
           patientId={patientId}
           questionnairesDashboardData={questionnairesDashboardData}
         />
       </TabsContent>
-      <TabsContent value={PHQ_9_TAB}>
+      <TabsContent value={QuestionnaireTabs.PHQ_9_TAB}>
         <Phq9Tab patientId={patientId} data={questionnairesPhq9Response} />
       </TabsContent>
-      <TabsContent value={GAD_7_TAB}>
+      <TabsContent value={QuestionnaireTabs.GAD_7_TAB}>
         <Gad7Tab patientId={patientId} data={questionnairesGad7Response} />
       </TabsContent>
-      <TabsContent value={SNAP_IV_TAB}>
+      <TabsContent value={QuestionnaireTabs.SNAP_IV_TAB}>
         <SnapIvTab patientId={patientId} data={questionnairesSnapIvResponse} />
       </TabsContent>
-      <TabsContent value={PCL_5_TAB}>
+      <TabsContent value={QuestionnaireTabs.PCL_5_TAB}>
         <Pcl5Tab patientId={patientId} data={questionnairesPcl5Response} />
       </TabsContent>
-      <TabsContent value={Y_BOCS_TAB}>
+      <TabsContent value={QuestionnaireTabs.Y_BOCS_TAB}>
         <YBocsTab patientId={patientId} data={questionnairesYBocsResponse} />
       </TabsContent>
-      <TabsContent value={AIMS_TAB}>
+      <TabsContent value={QuestionnaireTabs.AIMS_TAB}>
         <AimsTab patientId={patientId} data={questionnairesAimsResponse} />
       </TabsContent>
-      <TabsContent value={AUDIT_TAB}>
+      <TabsContent value={QuestionnaireTabs.AUDIT_TAB}>
         <AuditTab patientId={patientId} data={questionnairesAuditResponse} />
       </TabsContent>
-      <TabsContent value={DAST_10_TAB}>
+      <TabsContent value={QuestionnaireTabs.DAST_10_TAB}>
         <Dast10Tab patientId={patientId} data={questionnairesDast10Response} />
       </TabsContent>
-      <TabsContent value={MOCA_TAB}>
+      <TabsContent value={QuestionnaireTabs.MOCA_TAB}>
         <MocaTab patientId={patientId} data={questionnairesMocaResponse} />
       </TabsContent>
-      <TabsContent value={HAM_D_TAB}>
+      <TabsContent value={QuestionnaireTabs.HAM_D_TAB}>
         <HamDTab patientId={patientId} data={questionnairesHamDResponse} />
       </TabsContent>
     </Tabs.Root>

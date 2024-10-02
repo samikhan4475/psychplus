@@ -4,7 +4,7 @@ import { Flex } from '@radix-ui/themes'
 import { FormProvider } from 'react-hook-form'
 import { WidgetFormContainer } from '@/components'
 import { QuickNoteSectionItem } from '@/types'
-import { AIMS_TAB } from '../constants'
+import { QuestionnaireTabs } from '../constants'
 import {
   AddToNoteCell,
   AddToPreVisitAssessmentCell,
@@ -33,9 +33,9 @@ const AimsTab = ({
         <WidgetFormContainer
           enableEvents={false}
           patientId={patientId}
-          widgetId="aims"
+          widgetId={QuestionnaireTabs.AIMS_TAB}
           getData={transformOut(patientId)}
-          title={AIMS_TAB}
+          title={QuestionnaireTabs.AIMS_TAB}
           headerRight={
             <Flex gap="2">
               <SendToPatientButton />

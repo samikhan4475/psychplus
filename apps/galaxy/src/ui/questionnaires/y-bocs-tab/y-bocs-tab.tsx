@@ -5,7 +5,7 @@ import { FormProvider } from 'react-hook-form'
 import { WidgetFormContainer } from '@/components'
 import { QuickNoteSectionItem } from '@/types'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
-import { Y_BOCS_TAB } from '../constants'
+import { QuestionnaireTabs } from '../constants'
 import {
   AddToNoteCell,
   AddToPreVisitAssessmentCell,
@@ -38,12 +38,12 @@ const YBocsTab = ({ patientId, data }: QuestionnairesFormYBocsProps) => {
         <WidgetFormContainer
           enableEvents={false}
           patientId={patientId}
-          widgetId="y-bocs"
+          widgetId={QuestionnaireTabs.Y_BOCS_TAB}
           getData={transformOut(
             patientId,
             QuickNoteSectionName.QuickNoteSectionYbcos,
           )}
-          title={Y_BOCS_TAB}
+          title={QuestionnaireTabs.Y_BOCS_TAB}
           headerRight={
             <Flex gap="2">
               <SendToPatientButton />

@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { DASHBOARD_TAB } from './constants'
+import { QuestionnaireTabs } from './constants'
 
 interface Store {
   activeTab: string
@@ -8,8 +8,8 @@ interface Store {
 }
 
 const useStore = create<Store>((set, get) => ({
-  activeTab: DASHBOARD_TAB,
-  viewedTabs: new Set([DASHBOARD_TAB]),
+  activeTab: QuestionnaireTabs.DASHBOARD_TAB,
+  viewedTabs: new Set([QuestionnaireTabs.DASHBOARD_TAB]),
   setActiveTab: (activeTab) => {
     const viewedTabs = get().viewedTabs
     viewedTabs.add(activeTab)

@@ -4,7 +4,7 @@ import { Flex } from '@radix-ui/themes'
 import { FormProvider } from 'react-hook-form'
 import { WidgetFormContainer } from '@/components'
 import { QuickNoteSectionItem } from '@/types'
-import { SNAP_IV_TAB } from '../constants'
+import { QuestionnaireTabs } from '../constants'
 import {
   AddToNoteCell,
   AddToPreVisitAssessmentCell,
@@ -33,9 +33,9 @@ const SnapIvTab = ({
         <WidgetFormContainer
           enableEvents={false}
           patientId={patientId}
-          widgetId="snap-iv"
+          widgetId={QuestionnaireTabs.SNAP_IV_TAB}
           getData={transformOut(patientId)}
-          title={SNAP_IV_TAB}
+          title={QuestionnaireTabs.SNAP_IV_TAB}
           headerRight={
             <Flex gap="2">
               <SendToPatientButton />
@@ -50,7 +50,7 @@ const SnapIvTab = ({
             </Flex>
           }
         />
-        <Flex maxWidth="100%" className="bg-white" px="3" py='1'>
+        <Flex maxWidth="100%" className="bg-white" px="3" py="1">
           <QuestionnairesFormSnapIv
             labels={SNAP_IV_LABELS}
             totalScore={totalScore}

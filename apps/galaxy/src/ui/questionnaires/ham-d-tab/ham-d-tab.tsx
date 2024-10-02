@@ -5,7 +5,7 @@ import { FormProvider } from 'react-hook-form'
 import { ViewLoadingPlaceholder, WidgetFormContainer } from '@/components'
 import { QuickNoteSectionItem } from '@/types'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
-import { HAM_D_TAB } from '../constants'
+import { QuestionnaireTabs } from '../constants'
 import {
   AddToNoteCell,
   AddToPreVisitAssessmentCell,
@@ -33,7 +33,7 @@ const HamDTab = ({
   )
 
   if (!data) {
-    return <ViewLoadingPlaceholder title={HAM_D_TAB} />
+    return <ViewLoadingPlaceholder title={QuestionnaireTabs.HAM_D_TAB} />
   }
 
   return (
@@ -42,12 +42,12 @@ const HamDTab = ({
         <WidgetFormContainer
           enableEvents={false}
           patientId={patientId}
-          widgetId="ham-d"
+          widgetId={QuestionnaireTabs.HAM_D_TAB}
           getData={transformOut(
             patientId,
             QuickNoteSectionName.QuickNoteSectionHamD,
           )}
-          title={HAM_D_TAB}
+          title={QuestionnaireTabs.HAM_D_TAB}
           headerRight={
             <Flex gap="2">
               <SendToPatientButton />
@@ -68,8 +68,8 @@ const HamDTab = ({
             labels={LABELS}
             totalScore={totalScore}
             scoreInterpretationRanges={SCORE_INTERPRETATION_RANGES}
-            classNameHeaderCell= 'bg-[#D9E2FC] align-middle border-pp-table-border h-5 border px-[50px] py-0'
-            classNameCell= 'align-middle border-pp-table-border h-5 border pl-[10px] py-0.5'
+            classNameHeaderCell="bg-[#D9E2FC] align-middle border-pp-table-border h-5 border px-[50px] py-0"
+            classNameCell="align-middle border-pp-table-border h-5 border pl-[10px] py-0.5"
           />
         </Flex>
       </Flex>
