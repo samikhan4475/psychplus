@@ -40,7 +40,7 @@ const UrgentCell = ({
       defaultChecked={isUrgentComment}
       checked={isChecked}
       size="1"
-      disabled={isLoading || recordStatus == 'Deleted'}
+      disabled={isLoading || recordStatus === 'Deleted'}
       onCheckedChange={handleChange}
       className="data-[state=checked]:before:bg-pp-text-primary-base data-[disabled]:before:!bg-pp-gray-2"
       highContrast

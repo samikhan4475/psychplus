@@ -12,7 +12,7 @@ const CommentCell = ({
   return (
     <TextCell
       className={cn({
-        'text-pp-send-icon line-through': recordStatus == 'Deleted',
+        'text-pp-send-icon line-through': recordStatus === 'Deleted',
       })}
     >
       {staffCommment}

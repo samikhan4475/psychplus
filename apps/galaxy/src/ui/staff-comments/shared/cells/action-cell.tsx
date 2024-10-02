@@ -45,7 +45,7 @@ const ActionCell = ({
       variant="ghost"
       color="gray"
       size="1"
-      disabled={recordStatus == 'Deleted' || loading}
+      disabled={recordStatus === 'Deleted' || loading}
       onClick={handleDelete}
     >
       <Trash2 size={16} />

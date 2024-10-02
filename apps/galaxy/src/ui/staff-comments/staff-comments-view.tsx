@@ -24,7 +24,7 @@ const StaffCommentsView = ({ patientId }: StaffCommentsViewProps) => {
 
   useEffect(() => {
     getStaffOptionsAction().then((staffResult) => {
-      if (staffResult.state == 'success') {
+      if (staffResult.state === 'success') {
         setStaffOptions(staffResult.data ?? [])
       }
     })

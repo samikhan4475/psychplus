@@ -25,7 +25,7 @@ const RowActionEmail = ({
         policyType: type,
       })
 
-      if (result.state == 'error') {
+      if (result.state === 'error') {
         throw new Error('Failed to send Email')
       }
 
