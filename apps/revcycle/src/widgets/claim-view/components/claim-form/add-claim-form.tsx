@@ -319,7 +319,26 @@ const AddClaimForm = ({
         return
       }
     }
+    const activeDiagnoses = (getValues('claimDiagnosis') || []).filter(
+      (diagnosis) => diagnosis.recordStatus !== 'Deleted',
+    )
 
+    // Get the first four active diagnoses
+    const firstFourDiagnoses = activeDiagnoses.slice(0, 4)
+
+    // Initialize diagnosis pointers
+    const diagnosisPointers: { [key: string]: string } = {
+      diagnosisPointer1: '',
+      diagnosisPointer2: '',
+      diagnosisPointer3: '',
+      diagnosisPointer4: '',
+    }
+
+    // Assign pointers based on available diagnoses
+    firstFourDiagnoses.forEach((diagnosis, index) => {
+      diagnosisPointers[`diagnosisPointer${index + 1}`] =
+        diagnosis.sequenceNo.toString()
+    })
     const newCharge = {
       id: null,
       recordStatus: 'Active',
@@ -332,10 +351,7 @@ const AddClaimForm = ({
       modifierCode2: '',
       modifierCode3: '',
       modifierCode4: '',
-      diagnosisPointer1: '',
-      diagnosisPointer2: '',
-      diagnosisPointer3: '',
-      diagnosisPointer4: '',
+      ...diagnosisPointers, // Spread the diagnosis pointers here
       serviceLineNotes: '',
       authorizationNumber: '',
       deletedReason: '',
@@ -393,7 +409,6 @@ const AddClaimForm = ({
   const handleAccordionChange = (value: string[]) => {
     setOpenItems(value)
   }
-
 
   return (
     <Box className="px-2">

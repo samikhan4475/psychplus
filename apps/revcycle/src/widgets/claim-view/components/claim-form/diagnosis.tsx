@@ -93,7 +93,6 @@ const Diagnosis = ({ form }: { form: UseFormReturn<SchemaType> }) => {
       updatedDiagnoses = currentDiagnoses
     }
 
-    // Step 1: Calculate new sequence numbers for active diagnoses
     const activeDiagnoses = updatedDiagnoses
       .filter((diagnosis) => diagnosis.recordStatus !== 'Deleted')
       .map((diagnosis, index) => ({
@@ -101,16 +100,23 @@ const Diagnosis = ({ form }: { form: UseFormReturn<SchemaType> }) => {
         sequenceNo: index + 1,
       }))
 
-    // Step 2: Update diagnoses array with recalculated sequence numbers
-    const finalDiagnoses = updatedDiagnoses.map((diagnosis) =>
-      diagnosis.recordStatus === 'Deleted'
-        ? diagnosis
-        : activeDiagnoses.find(
-            (activeDiagnosis) => activeDiagnosis.id === diagnosis.id,
-          ) || diagnosis,
-    )
+    const finalDiagnoses = updatedDiagnoses.map((diagnosis) => {
+      if (diagnosis.recordStatus === 'Deleted') {
+        return diagnosis
+      }
+      let activeDiagnosis
+      if (diagnosis.id) {
+        activeDiagnosis = activeDiagnoses.find(
+          (active) => active.id === diagnosis.id,
+        )
+      } else {
+        activeDiagnosis = activeDiagnoses.find(
+          (active) => active.diagnosisCode === diagnosis.diagnosisCode,
+        )
+      }
 
-    // Update the form value with the final diagnoses
+      return activeDiagnosis ?? diagnosis
+    })
     setValue('claimDiagnosis', finalDiagnoses)
     if (activeDiagnoses.length < 4) {
       const claimServiceLines = form.getValues('claimServiceLines')
@@ -130,7 +136,6 @@ const Diagnosis = ({ form }: { form: UseFormReturn<SchemaType> }) => {
         return charge
       })
 
-      console.log('updated claim service lines ', claimServiceLines)
       form.setValue(`claimServiceLines`, claimServiceLines)
     }
   }
