@@ -27,7 +27,8 @@ import { checkCareTeamExists } from '@/features/appointments/search/utils'
 import { rescheduleAppointment } from '@/features/appointments/upcoming/actions'
 import { NewProviderSelectedDialog } from '../new-provider-selected-dialog'
 import { PrimaryProviderAppointedDialog } from '../primary-provider-appointed-dialog'
-const errorMessage = "You must agree to the above policies"
+
+const errorMessage = 'You must agree to the above policies'
 const schema = z.object({
   userAgreed: z.coerce.boolean().refine(
     (value) => {
@@ -48,7 +49,8 @@ const BookAppointmentButton = ({
   userConsents,
   setBookingSuccessful,
   paymentMethod,
-  creditCards
+  creditCards,
+  patientInsurances,
 }: BookSlotButtonProps) => {
   const { specialist, clinic, slot, appointmentType, providerType } = bookedSlot
 
@@ -80,6 +82,10 @@ const BookAppointmentButton = ({
   const [policyAlreadySigned, setPolicyAlreadySigned] = useState(
     checkIfPolicyBSigned(userConsents),
   )
+
+  useEffect(() => {
+    setError('')
+  }, [paymentMethod, patientInsurances])
 
   useEffect(() => {
     setPolicyAlreadySigned(checkIfPolicyBSigned(userConsents))
@@ -116,6 +122,11 @@ const BookAppointmentButton = ({
   const bookSlot = async () => {
     if (!form.getValues().userAgreed) {
       setError(errorMessage)
+      return
+    }
+
+    if (paymentMethod === PaymentType.Insurance && !patientInsurances?.length) {
+      setError('Please add insurance or choose self-pay to book an appointment')
       return
     }
 
@@ -276,8 +287,11 @@ const BookAppointmentButton = ({
             highContrast
             disabled={loading || Boolean(error) || !creditCards.length}
             className={`bg-[#151B4A] ${loading ? 'bg-gray-3' : ''}`}
-            style={error  || !creditCards.length ?  { opacity: 0.6, color: '#fff' }:{}}
-            
+            style={
+              error || !creditCards.length
+                ? { opacity: 0.6, color: '#fff' }
+                : {}
+            }
           >
             <Text weight="medium">Book Appointment</Text>
           </FormSubmitButton>

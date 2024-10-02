@@ -83,6 +83,7 @@ const BookAppointmentView = ({
               setBookingSuccessful={setBookingSuccessful}
               paymentMethod={paymentMethod}
               creditCards={creditCards}
+              patientInsurances={patientInsurances}
             />
           </Box>
         </>
