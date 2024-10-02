@@ -3,7 +3,7 @@ import { handleRequest } from '@psychplus/utils/api'
 import { API_URL } from '@psychplus/utils/constants'
 import { createHeaders } from '@psychplus/utils/server'
 import { POSCodeSets } from '../coding-cpt/types'
-import { insurancePaymentRecordStatuses } from './enums'
+import { insurancePaymentRecordStatuses, practiceListStatuses } from './enums'
 import {
   Claim,
   ClaimSubmissionHistory,
@@ -11,6 +11,7 @@ import {
   InsurancePayer,
   InsurancePayment,
   Location,
+  PracticeList,
   ResponseHistoryRecord,
   Staff,
   USAStates,
@@ -22,14 +23,21 @@ const defaultPayLoad = {
   isIncludeClaimValidation: true,
 }
 
+const defaultResourcePayLoad = {
+  isIncludeMetadataResourceChangeControl: true,
+  isIncludeMetadataResourceIds: true,
+  isIncludeMetadataResourceStatus: true,
+}
+
 const defaultInsurancePaymentPayload = {
   recordStatuses: [insurancePaymentRecordStatuses.ACTIVE],
 }
 
-const defaultResponsePayLoad = {
-  isIncludeMetadataResourceChangeControl: true,
-  isIncludeMetadataResourceIds: true,
-  isIncludeMetadataResourceStatus: true,
+const defaultResponsePayLoad = defaultResourcePayLoad
+
+const defaultPayloadPracticeList = {
+  ...defaultResourcePayLoad,
+  recordStatuses: [practiceListStatuses.ACTIVE],
 }
 
 const getClaimsList = (): Promise<Claim[]> => {
@@ -159,6 +167,15 @@ const getResponseHistory = (): Promise<ResponseHistoryRecord[]> => {
   )
 }
 
+const getPracticeList = (): Promise<PracticeList[]> =>
+  handleRequest(
+    fetch(`${API_URL}/api/practices/actions/search`, {
+      headers: createHeaders(),
+      method: 'POST',
+      body: JSON.stringify(defaultPayloadPracticeList),
+    }),
+  )
+
 const getClaimsListCached = cache(getClaimsList)
 const getPOSCodeSetsCached = cache(getPOSCodeSets)
 const getStaffSetsCached = cache(getStaff)
@@ -174,6 +191,7 @@ const getPaymentSourceTypeCodeSetsCached = cache(getPaymentSourceTypeCodeSets)
 const getClaimPaymentFiltrationDateTypeCodeSetsCached = cache(
   getClaimPaymentFiltrationDateTypeCodeSets,
 )
+const getPracticeListCached = cache(getPracticeList)
 
 export {
   getClaimsListCached as getClaimsList,
@@ -189,4 +207,5 @@ export {
   getResponseHistoryCached as getResponseHistory,
   getPaymentSourceTypeCodeSetsCached as getPaymentSourceTypeCodeSets,
   getClaimPaymentFiltrationDateTypeCodeSetsCached as getClaimPaymentFiltrationDateTypeCodeSets,
+  getPracticeListCached as getPracticeList,
 }

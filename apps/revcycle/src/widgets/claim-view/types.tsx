@@ -617,6 +617,7 @@ interface InsurancePaymentRecordPayload {
   receivedDate: string
   depositDate: string
   paymentAttachments?: PaymentAttachments[]
+  practiceId: string
 }
 
 interface Insurance {
@@ -690,6 +691,11 @@ interface FileNamesList {
   file: File
 }
 
+interface PracticeList {
+  id: string
+  displayName: string
+}
+
 export type {
   Claim,
   InsurancePayer,
@@ -729,4 +735,5 @@ export type {
   InsurancePaymentsPayload,
   FileNamesList,
   InsurancePaymentRecordPayload,
+  PracticeList,
 }

@@ -48,11 +48,13 @@ const InsurancePaymentForm = ({
     setInsurancePaymentRefetchData,
     setInsurancePaymentModalOpen,
     paymentMethodCodeSets,
+    practiceList,
   } = useStore((state) => ({
     setInsurancePaymentEditData: state.setInsurancePaymentEditData,
     setInsurancePaymentRefetchData: state.setInsurancePaymentRefetchData,
     setInsurancePaymentModalOpen: state.setInsurancePaymentModalOpen,
     paymentMethodCodeSets: state.paymentMethodCodeSets,
+    practiceList: state.practiceList,
   }))
   const [fileNamesList, setFileNamesList] = useState<PaymentAttachments[]>(
     data?.paymentAttachments || [],
@@ -122,6 +124,7 @@ const InsurancePaymentForm = ({
       receivedDate: formData.receivedDate,
       depositDate: formData.depositDate,
       paymentAttachments: attachmentFiles,
+      practiceId: practiceList[0]?.id ?? '', // We are using first practice as default
     }
 
     if (data?.id) {

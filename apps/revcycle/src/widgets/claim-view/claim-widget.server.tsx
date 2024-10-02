@@ -11,6 +11,7 @@ import {
   getPaymentMethodCodeSets,
   getPaymentSourceTypeCodeSets,
   getPOSCodeSets,
+  getPracticeList,
   getResponseHistory,
   getStaff,
   getUSAStates,
@@ -36,6 +37,7 @@ const ClaimWidgetServer = async () => {
     responseHistory,
     paymentSourceTypeCodeSets,
     claimPaymentFiltrationDateTypeCodeSets,
+    practiceList,
   ] = await Promise.all([
     getClaimsList(),
     getInsurancePayersList(),
@@ -50,6 +52,7 @@ const ClaimWidgetServer = async () => {
     getResponseHistory(),
     getPaymentSourceTypeCodeSets(),
     getClaimPaymentFiltrationDateTypeCodeSets(),
+    getPracticeList(),
   ])
 
   return (
@@ -71,6 +74,7 @@ const ClaimWidgetServer = async () => {
         claimPaymentFiltrationDateTypeCodeSets={
           claimPaymentFiltrationDateTypeCodeSets
         }
+        practiceList={practiceList}
       />
       <ClaimWidgetClient />
     </ToastProvider>

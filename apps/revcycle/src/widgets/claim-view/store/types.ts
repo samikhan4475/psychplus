@@ -4,6 +4,7 @@ import {
   ClaimSubmissionHistory,
   ClaimSubmissionHistoryFilters,
   InsurancePayment,
+  PracticeList,
   ResponseHistoryRecord,
 } from '../types'
 
@@ -196,4 +197,5 @@ export type {
   ResponseHistoryListState,
   ResponseHistoryFilters,
   ResponseHistoryFiltersState,
+  PracticeList,
 }

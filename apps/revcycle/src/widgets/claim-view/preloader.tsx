@@ -11,6 +11,7 @@ import {
   InsurancePayer,
   InsurancePayment,
   Location,
+  PracticeList,
   ResponseHistoryRecord,
   Staff,
   StaffDataCodeSet,
@@ -35,6 +36,7 @@ interface PreloaderProps {
   paymentMethodCodeSets: CodeSet
   paymentSourceTypeCodeSets: CodeSet
   claimPaymentFiltrationDateTypeCodeSets: CodeSet
+  practiceList: PracticeList[]
 }
 
 const Preloader = ({
@@ -52,6 +54,7 @@ const Preloader = ({
   paymentMethodCodeSets,
   paymentSourceTypeCodeSets,
   claimPaymentFiltrationDateTypeCodeSets,
+  practiceList,
 }: PreloaderProps) => {
   const loaded = useRef(false)
   const {
@@ -69,6 +72,7 @@ const Preloader = ({
     setResponseHistoryList,
     setPaymentSourceTypeCodeSets,
     setClaimPaymentFiltrationDateType,
+    setPracticeList,
   } = store((state) => ({
     setClaimList: state.setClaimList,
     setDateTypes: state.setDateTypes,
@@ -84,6 +88,7 @@ const Preloader = ({
     setResponseHistoryList: state.setResponseHistoryList,
     setPaymentSourceTypeCodeSets: state.setPaymentSourceTypeCodeSets,
     setClaimPaymentFiltrationDateType: state.setClaimPaymentFiltrationDateType,
+    setPracticeList: state.setPracticeList,
   }))
 
   if (!loaded.current) {
@@ -92,6 +97,7 @@ const Preloader = ({
     setClaimSubmissionHistoryList(claimSubmissionHistoryList)
     setInsurancePaymentsList(insurancePaymentsList)
     setResponseHistoryList(responseHistoryList)
+    setPracticeList(practiceList)
 
     const accidentType = codeSets.find(
       (element) => element.code === 'AccidentType',

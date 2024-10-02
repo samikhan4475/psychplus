@@ -65,7 +65,6 @@ const defaultPayLoad = {
 const defaultInsurancePaymentRecordPayload = {
   isDuplicate: false,
   status: 'Posted',
-  practiceId: 'd3f4e8a1-7c4e-4b98-8d5e-3a8dbe2c5d39',
   recordStatus: 'Active',
   paymentType: 'Eob',
 }

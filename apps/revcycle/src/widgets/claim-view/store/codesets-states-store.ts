@@ -2,11 +2,13 @@
 
 import { type StateCreator } from 'zustand'
 import { Claim, SelectOption, StaffDataCodeSet, StateCodes } from '../types'
-import { MetaDataCodeSet } from './types'
+import { MetaDataCodeSet, PracticeList } from './types'
 
 interface ClaimState {
   claimList: Claim[]
   setClaimList: (codes: Claim[]) => void
+  practiceList: PracticeList[]
+  setPracticeList: (list: PracticeList[]) => void
   posCodeSets: MetaDataCodeSet[]
   setCodingPosCodeSets: (codes: MetaDataCodeSet[]) => void
   staffCodeSets: StaffDataCodeSet[]
@@ -26,6 +28,8 @@ interface ClaimState {
 const createClaimStore: StateCreator<ClaimState> = (set) => ({
   claimList: [],
   setClaimList: (claimList: Claim[]) => set({ claimList }),
+  practiceList: [],
+  setPracticeList: (list: PracticeList[]) => set({ practiceList: list }),
   posCodeSets: [],
   setCodingPosCodeSets: (posCodeSets: MetaDataCodeSet[]) =>
     set({ posCodeSets }),

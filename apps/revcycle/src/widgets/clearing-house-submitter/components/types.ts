@@ -1,5 +1,5 @@
-import { UseFormReturn } from "react-hook-form";
-import { SubmitterFormSchema } from "../schema/submitterForm.schema";
+import { UseFormReturn } from 'react-hook-form'
+import { SubmitterFormSchema } from '../schema/submitterForm.schema'
 
 interface SubmitterDropdownItem {
   value: string
@@ -7,48 +7,48 @@ interface SubmitterDropdownItem {
 }
 
 interface SubmitterListColumn {
-  id: string;
-  title: string;
-  rowName: string;
+  id: string
+  title: string
+  rowName: string
   editable: boolean
-  type: string;
-  enableHiding: boolean,
-  dropdownValues?: SubmitterDropdownItem[];
-  text: (text: string) => string;
+  type: string
+  enableHiding: boolean
+  dropdownValues?: SubmitterDropdownItem[]
+  text: (text: string) => string
 }
 
 interface SubmitterList {
-  tablePageSize: number;
-  manualPagination: boolean;
-  columns: SubmitterListColumn[];
+  tablePageSize: number
+  manualPagination: boolean
+  columns: SubmitterListColumn[]
 }
 
 interface SubmitterItem {
-  name?: string;
-  username?: string;
-  email?: string;
-  password?: string;
-  submitterId?: string;
-  contactPerson?: string;
-  phone?: string;
-  fax?: string;
-  addressLine1?: string;
-  addressLine2?: string;
-  city?: string;
-  state?: string;
-  zip?: string;
-  id?: string;
+  name?: string
+  username?: string
+  email?: string
+  password?: string
+  submitterId?: string
+  contactPerson?: string
+  phone?: string
+  fax?: string
+  addressLine1?: string
+  addressLine2?: string
+  city?: string
+  state?: string
+  zip?: string
+  id?: string
 }
 
 interface PracticeList {
-  id: string,
-  name: string
+  id: string
+  displayName: string
 }
 
 interface ReceiverItem {
-  id: string,
-  receiverName: string,
-  city: string,
+  id: string
+  receiverName: string
+  city: string
   state: string
 }
 interface CodeAttribute {
@@ -72,8 +72,8 @@ interface MetaDataCodeSet {
 }
 
 export enum SubmitterIconAction {
-  edit = "Edit",
-  delete = "Delete"
+  edit = 'Edit',
+  delete = 'Delete',
 }
 interface AddressForm {
   street1?: string
@@ -108,5 +108,5 @@ export type {
   Code,
   MetaDataCodeSet,
   AddressForm,
-  PlacesAutocompleteProps
+  PlacesAutocompleteProps,
 }

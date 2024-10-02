@@ -2,4 +2,8 @@ enum insurancePaymentRecordStatuses {
   ACTIVE = 'Active',
 }
 
-export { insurancePaymentRecordStatuses }
+enum practiceListStatuses {
+  ACTIVE = 'Active',
+}
+
+export { insurancePaymentRecordStatuses, practiceListStatuses }
