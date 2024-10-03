@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { useFormContext } from 'react-hook-form'
+import { useFormContext, useWatch } from 'react-hook-form'
 import {
   FormFieldContainer,
   FormFieldError,
@@ -16,7 +16,10 @@ const ProviderTypeSelect = () => {
   const form = useFormContext<SchemaType>()
   const { services } = useEditVisitStore()
   const codes = useCodesetCodes(CODESETS.SpecialistType)
-  const serviceId = form.watch('service')
+  const serviceId = useWatch({
+    control: form.control,
+    name: 'service',
+  })
 
   const options = useMemo(() => {
     const service = services.find((s) => s.id === serviceId)

@@ -31,8 +31,8 @@ const columns: ColumnDef<StaffCommentsBilling>[] = [
       <ColumnHeader
         column={column}
         sortable
+        label="Staff Name"
         className="!text-1 !font-medium"
-        label="Staff"
       />
     ),
   },
@@ -41,7 +41,7 @@ const columns: ColumnDef<StaffCommentsBilling>[] = [
     cell: ({ row }) => <TextCell>{row?.original?.comments}</TextCell>,
     header: () => (
       <ColumnHeader
-        label="Comments"
+        label="Comment"
         className="min-w-80 !text-1 !font-medium"
       />
     ),

@@ -1,14 +1,15 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Box, Flex, Grid, Text } from '@radix-ui/themes'
-import { SubmitHandler, useForm } from 'react-hook-form'
+import { SubmitHandler, useForm, useWatch } from 'react-hook-form'
 import { FormContainer, FormSubmitButton } from '@/components'
-import { schema, SchemaType } from '../schema'
 import { StateCodeSet } from '../../types'
+import { schema, SchemaType } from '../schema'
 import { LocationSelect } from './location-select'
 import { PatientText } from './patient-text'
 import { ServiceSelect } from './service-select'
 import { StateSelect } from './state-select'
-import TimedVisitForm from './timed/timed-visit-form'
+import { TimedVisitForm } from './timed/timed-visit-form'
+import { UntimedVisitForm } from './untimed/untimed-visit-form'
 
 const EditVisitForm = ({ states }: { states: StateCodeSet[] }) => {
   const form = useForm<SchemaType>({
@@ -26,6 +27,11 @@ const EditVisitForm = ({ states }: { states: StateCodeSet[] }) => {
       duration: '',
       frequency: '',
     },
+  })
+
+  const isServiceTimeDependent = useWatch({
+    control: form.control,
+    name: 'isServiceTimeDependent',
   })
 
   const onSubmit: SubmitHandler<SchemaType> = () => {
@@ -47,8 +53,7 @@ const EditVisitForm = ({ states }: { states: StateCodeSet[] }) => {
         <Box className="col-span-4">
           <ServiceSelect />
         </Box>
-
-        <TimedVisitForm />
+        {isServiceTimeDependent ? <TimedVisitForm /> : <UntimedVisitForm />}
       </Grid>
       <Flex justify="between" mt="3">
         <FormSubmitButton

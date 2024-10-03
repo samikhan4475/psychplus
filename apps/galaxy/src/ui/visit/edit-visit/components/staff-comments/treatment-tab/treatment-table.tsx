@@ -32,7 +32,7 @@ const columns: ColumnDef<StaffCommentsTreatment>[] = [
         sortable
         column={column}
         className="!text-1 !font-medium"
-        label="Staff"
+        label="Staff Name"
       />
     ),
   },
@@ -42,7 +42,7 @@ const columns: ColumnDef<StaffCommentsTreatment>[] = [
     header: () => (
       <ColumnHeader
         className="min-w-80 !text-1 !font-medium"
-        label="Comments"
+        label="Comment"
       />
     ),
   },

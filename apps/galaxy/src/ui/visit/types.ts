@@ -132,6 +132,16 @@ interface StaffCommentsBilling {
   comments: string
 }
 
+enum ServicesOffered {
+  EmergencyRoom = 'EmergencyRoom',
+  InpatientPsych = 'InpatientPsych',
+  PartialHospital = 'PartialHospital',
+  InpatientBehaviorHealthResidential = 'InpatientBehaviorHealthResidential',
+  InpatientMedical = 'InpatientMedical',
+  InpatientRehab = 'InpatientRehab',
+  InpatientSubstanceUseResidential = 'InpatientSubstanceUseResidential',
+}
+
 export {
   type Clinic,
   type DropdownOptions,
@@ -149,4 +159,5 @@ export {
   ServiceType,
   SpecialistType,
   TCMVisitTypes,
+  ServicesOffered,
 }

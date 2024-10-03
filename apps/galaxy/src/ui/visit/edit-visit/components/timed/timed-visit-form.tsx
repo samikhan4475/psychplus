@@ -1,26 +1,29 @@
 import { useEffect, useState } from 'react'
 import { Box } from '@radix-ui/themes'
-import { useFormContext } from 'react-hook-form'
+import { useFormContext, useWatch } from 'react-hook-form'
 import { TCM } from '@/ui/visit/constants'
 import { TCMVisitTypes } from '../../../types'
 import { SchemaType } from '../../schema'
 import { useEditVisitStore } from '../../store'
 import { VisitDate } from '../visit-date'
-import { DurationDropdown } from './duration-select'
-import { FrequencyDropdown } from './frequency-select'
+import { VisitTypeSelect } from '../visit-type-select'
+import { DurationSelect } from './duration-select'
+import { FrequencySelect } from './frequency-select'
 import { ProviderSelect } from './provider-select'
 import { ProviderTypeSelect } from './provider-type-select'
 import { VisitMediumText } from './visit-medium-text'
 import { VisitSequenceText } from './visit-sequence-text'
 import { VisitTimeSelect } from './visit-time-select'
-import { VisitTypeSelect } from './visit-type-select'
 
 const TimedVisitForm = () => {
   const form = useFormContext<SchemaType>()
   const [showDCFields, setShowDCFields] = useState<boolean>(false)
   const { visitTypes } = useEditVisitStore()
 
-  const selectedVisitType = form.watch('visitType')
+  const selectedVisitType = useWatch({
+    control: form.control,
+    name: 'visitType',
+  })
 
   useEffect(() => {
     if (selectedVisitType) {
@@ -54,18 +57,18 @@ const TimedVisitForm = () => {
         <VisitMediumText />
       </Box>
       <Box className="col-span-3">
-        <VisitDate />
+        <VisitDate dependentOn="visitType" />
       </Box>
       <Box className="col-span-3">
         <VisitTimeSelect />
       </Box>
       <Box className="col-span-3">
-        <DurationDropdown />
+        <DurationSelect />
       </Box>
       <Box className="col-span-3">
-        <FrequencyDropdown />
+        <FrequencySelect />
       </Box>
     </>
   )
 }
-export default TimedVisitForm
+export { TimedVisitForm }

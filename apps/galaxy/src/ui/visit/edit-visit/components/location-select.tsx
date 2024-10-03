@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { useFormContext } from 'react-hook-form'
+import { useFormContext, useWatch } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import {
   FormFieldContainer,
@@ -19,7 +19,10 @@ const LocationSelect = ({ states }: { states: StateCodeSet[] }) => {
   const [locations, setLocations] = useState<
     { value: string; label: string }[]
   >([])
-  const stateCode = form.watch('state')
+  const [stateCode, isServiceTimeDependent] = useWatch({
+    control: form.control,
+    name: ['state', 'isServiceTimeDependent'],
+  })
 
   useEffect(() => {
     if (prevStateCode.current !== stateCode) {
@@ -51,6 +54,7 @@ const LocationSelect = ({ states }: { states: StateCodeSet[] }) => {
         options={locations}
         buttonClassName="flex-1 w-full"
         field="location"
+        disabled={!isServiceTimeDependent}
       />
       <FormFieldError name={'location'} />
     </FormFieldContainer>

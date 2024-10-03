@@ -16,9 +16,11 @@ interface GetProviderResponse {
 const getProviders = async ({
   name,
   locationIds,
+  specialistType,
 }: {
   name?: string
   locationIds: string[]
+  specialistType?: string
 }): Promise<api.ActionResult<Provider[]>> => {
   const url = new URL(api.GET_STAFF_ENDPOINT)
 
@@ -26,6 +28,7 @@ const getProviders = async ({
     name,
     locationIds,
     roleCodes: ['1'],
+    specialistType,
   })
   if (response.state === 'error') {
     return {

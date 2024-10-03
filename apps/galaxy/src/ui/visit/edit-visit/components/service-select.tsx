@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useMemo, useRef } from 'react'
-import { useFormContext } from 'react-hook-form'
+import { useFormContext, useWatch } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import {
   FormFieldContainer,
@@ -21,7 +21,10 @@ const ServiceSelect = () => {
   const serviceCodes = useCodesetCodes(CODESETS.ServicesOffered)
   const prevLocationId = useRef<string | undefined>(undefined)
 
-  const locationId = form.watch('location')
+  const [locationId, isServiceTimeDependent] = useWatch({
+    control: form.control,
+    name: ['location', 'isServiceTimeDependent'],
+  })
 
   const mappedServices: Record<string, string> = useMemo(() => {
     return Object.fromEntries(
@@ -68,6 +71,7 @@ const ServiceSelect = () => {
           form.resetField('visitSequence')
           form.resetField('visitMedium')
         }}
+        disabled={!isServiceTimeDependent}
       />
       <FormFieldError name={'service'} />
     </FormFieldContainer>

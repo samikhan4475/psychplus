@@ -9,7 +9,7 @@ import {
 import { CODESETS } from '@/constants'
 import { useCodesetCodes } from '@/hooks'
 
-const FrequencyDropdown = () => {
+const FrequencySelect = () => {
   const codes = useCodesetCodes(CODESETS.VisitRepeatFrequency)
 
   const items = codes.map((option) => {
@@ -31,4 +31,4 @@ const FrequencyDropdown = () => {
   )
 }
 
-export { FrequencyDropdown }
+export { FrequencySelect }

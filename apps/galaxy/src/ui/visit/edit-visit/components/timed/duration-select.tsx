@@ -7,7 +7,7 @@ import {
   SelectInput,
 } from '@/components'
 
-const DurationDropdown = () => {
+const DurationSelect = () => {
   const duration = [
     { label: '20', value: '20' },
     { label: '40', value: '40' },
@@ -27,4 +27,4 @@ const DurationDropdown = () => {
   )
 }
 
-export { DurationDropdown }
+export { DurationSelect }

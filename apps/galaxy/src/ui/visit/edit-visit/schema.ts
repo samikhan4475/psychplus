@@ -19,6 +19,8 @@ const schema = z
     isServiceTimeDependent: z.boolean().default(true),
     service: z.string().min(1, 'Required'),
     visitType: z.string().min(1, 'Required'),
+    visitSequence: z.string().min(1, 'Required'),
+    visitMedium: z.string().min(1, 'Required'),
 
     // Timed Service
     providerType: z.string().min(1, 'Required'),
@@ -29,10 +31,29 @@ const schema = z
         message: 'Required',
       }),
     visitTime: z.string().min(1, 'Required'),
-    visitSequence: z.string().min(1, 'Required'),
-    visitMedium: z.string().min(1, 'Required'),
     duration: z.string().min(1, 'Required'),
     frequency: z.string().min(1, 'Required'),
+
+    // Untimed Service
+    nonTimeProviderType: z.string().min(1, 'Required'),
+    facilityAdmissionId: z.string().min(1, 'Required'),
+    dateOfAdmission: z
+      .custom<DateValue>()
+      .refine((val) => val !== null && val !== undefined, {
+        message: 'Required',
+      }),
+    admittingProvider: z.string().min(1, 'Required'),
+    timeOfAdmission: z.string().min(1, 'Required'),
+    visitFrequency: z.string().min(1, 'Required'),
+    visitStatus: z.string().min(1, 'Required'),
+    insuranceVerificationStatus: z.string(),
+    legal: z.string(),
+    authNumber: z.string(),
+    authDate: z.custom<DateValue>(),
+    lcd: z.custom<DateValue>(),
+    unit: z.string(),
+    room: z.string(),
+    group: z.string(),
   })
   .superRefine((data, ctx) => {
     const validateTimedService = (
@@ -43,11 +64,11 @@ const schema = z
         { field: 'providerType', message: 'Required' },
         { field: 'provider', message: 'Required' },
         { field: 'visitType', message: 'Required' },
-        { field: 'visitSequence', message: 'Required' },
         { field: 'visitMedium', message: 'Required' },
+        { field: 'visitSequence', message: 'Required' },
         { field: 'groupType', message: 'Required' },
-        { field: 'visitDate', message: 'Required' },
         { field: 'visitTime', message: 'Required' },
+        { field: 'visitDate', message: 'Required' },
         { field: 'duration', message: 'Required' },
         { field: 'frequency', message: 'Required' },
       ]

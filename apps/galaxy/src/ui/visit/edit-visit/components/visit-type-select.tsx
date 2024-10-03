@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect } from 'react'
-import { useFormContext } from 'react-hook-form'
+import { useFormContext, useWatch } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import {
   FormFieldContainer,
@@ -10,15 +10,17 @@ import {
   SelectInput,
 } from '@/components'
 import { getVisitTypes } from '@/ui/visit/actions'
-import { SchemaType } from '../../schema'
-import { useEditVisitStore } from '../../store'
+import { SchemaType } from '../schema'
+import { useEditVisitStore } from '../store'
 
 const VisitTypeSelect = () => {
   const form = useFormContext<SchemaType>()
   const { visitTypes, setVisitTypes } = useEditVisitStore()
 
-  const locationId = form.watch('location')
-  const serviceId = form.watch('service')
+  const [locationId, serviceId, isServiceTimeDependent] = useWatch({
+    control: form.control,
+    name: ['location', 'service', 'isServiceTimeDependent'],
+  })
 
   useEffect(() => {
     if (serviceId && locationId) {
@@ -50,6 +52,7 @@ const VisitTypeSelect = () => {
           form.setValue('visitSequence', visitType?.visitSequence ?? '')
           form.setValue('visitMedium', visitType?.visitMedium ?? '')
         }}
+        disabled={!isServiceTimeDependent}
       />
       <FormFieldError name="visitType" />
     </FormFieldContainer>

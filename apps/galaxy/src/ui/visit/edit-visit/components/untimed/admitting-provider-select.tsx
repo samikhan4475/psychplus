@@ -1,5 +1,3 @@
-'use client'
-
 import { useEffect, useRef, useState } from 'react'
 import { useFormContext, useWatch } from 'react-hook-form'
 import toast from 'react-hot-toast'
@@ -9,33 +7,32 @@ import {
   FormFieldLabel,
   SelectInput,
 } from '@/components'
-import { getProviders } from '@/ui/visit/actions'
+import { getProviders } from '../../../actions'
 import { Provider } from '../../../types'
 import { SchemaType } from '../../schema'
 
-const ProviderSelect = () => {
+const AdmittingProviderSelect = () => {
   const form = useFormContext<SchemaType>()
   const [options, setOptions] = useState<{ label: string; value: string }[]>([])
   const prevProviderType = useRef<string | undefined>(undefined)
   const prevLocation = useRef<string | undefined>(undefined)
-
-  const [providerType, location] = useWatch({
+  const [location, nonTimeProviderType] = useWatch({
     control: form.control,
-    name: ['providerType', 'location'],
+    name: ['location', 'nonTimeProviderType'],
   })
 
   useEffect(() => {
     if (
       prevLocation.current !== location ||
-      prevProviderType.current !== providerType
+      prevProviderType.current !== nonTimeProviderType
     ) {
       prevLocation.current = location
-      prevProviderType.current = providerType
-      form.resetField('provider')
-
-      if (location && providerType) {
+      prevProviderType.current = nonTimeProviderType
+      form.resetField('admittingProvider')
+      if (location && nonTimeProviderType) {
         getProviders({
           locationIds: [location],
+          specialistType: nonTimeProviderType,
         }).then((res) => {
           if (res.state === 'error') {
             toast.error('Failed to fetch providers')
@@ -50,19 +47,19 @@ const ProviderSelect = () => {
         })
       }
     }
-  }, [providerType, location])
+  }, [form, location, nonTimeProviderType])
 
   return (
-    <FormFieldContainer className="flex-1">
-      <FormFieldLabel required>Provider</FormFieldLabel>
+    <FormFieldContainer>
+      <FormFieldLabel required>Admitting Provider</FormFieldLabel>
       <SelectInput
+        field="admittingProvider"
         options={options}
-        buttonClassName="flex-1 w-full"
-        field="provider"
+        buttonClassName="flex-1"
       />
-      <FormFieldError name="provider" />
+      <FormFieldError name={'admittingProvider'} />
     </FormFieldContainer>
   )
 }
 
-export { ProviderSelect }
+export { AdmittingProviderSelect }
