@@ -2,11 +2,11 @@
 
 import { getLocalTimeZone, today } from '@internationalized/date'
 import * as api from '@/api'
-import { Appointment } from '../types'
+import { Appointment, AppointmentParams } from '../types'
 
-const getBookedAppointmentsAction = async (): Promise<
-  api.ActionResult<Appointment[]>
-> => {
+const getBookedAppointmentsAction = async (
+  params?: AppointmentParams,
+): Promise<api.ActionResult<Appointment[]>> => {
   const startDate = today(getLocalTimeZone())
   const year = startDate.year
   const month = `${startDate.month}`.padStart(2, '0')
@@ -26,6 +26,7 @@ const getBookedAppointmentsAction = async (): Promise<
     includeServiceUnit: true,
     includeServiceGroup: true,
     includePatientNotes: true,
+    ...params,
   }
 
   const response = await api.POST<Appointment[]>(
@@ -38,11 +39,9 @@ const getBookedAppointmentsAction = async (): Promise<
       error: response.error,
     }
   }
-
   return {
     state: 'success',
     data: response.data,
   }
 }
-
 export { getBookedAppointmentsAction }

@@ -36,7 +36,7 @@ const AddVacationForm = ({
       toDate: undefined,
       toTime: undefined,
       duration: 0,
-      vacationStatus: undefined,
+      vacationStatus: 'Pending',
     },
   })
   const startDate = `${form.getValues('fromDate')}T${form.getValues(

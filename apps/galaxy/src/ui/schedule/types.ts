@@ -1,4 +1,4 @@
-import { Metadata } from "@/types"
+import { Metadata } from '@/types'
 
 interface Visit {
   type: string
@@ -165,7 +165,7 @@ interface Appointment {
     serviceId: string
     unit: string
     coSignerId: number
-  },
+  }
   groupResource: {
     id: string
     metadata: Metadata
@@ -184,6 +184,46 @@ interface Appointment {
   lengthOfStay: number
 }
 
+interface AppointmentParams {
+  startingDate?: string
+  endingDate?: string
+  name?: string
+  age?: number
+  gender?: string
+  dateOfBirth?: string
+  patientStatuses?: string[]
+  locationId?: string
+  serviceIds?: string[]
+  providerIds?: number[]
+  providerType?: string
+  unitId?: string
+  room?: string
+  groupId?: string
+  primaryInsuranceName?: string
+  secondaryInsuranceName?: string
+  visitType?: string
+  visitSequence?: string
+  visitMedium?: string
+  visitStatus?: string
+  patientInsuranceVerificationStatus?: string
+  diagnosisCode?: string
+  cptCode?: string
+  dateOfAdmissionStart?: string
+  dateOfAdmissionEnd?: string
+  lengthOfStayMin?: number
+  lengthOfStayMax?: number
+  lastCoverageDateStart?: string
+  lastCoverageDateEnd?: string
+  legalStatus?: string
+  copayDueMin?: number
+  copayDueMax?: number
+  coInsuranceDueMin?: number
+  coInsuranceDueMax?: number
+  balanceDueMin?: number
+  balanceDueMax?: number
+  noteSigned?: string
+}
+
 export type {
   PatientRecord,
   Provider,
@@ -195,6 +235,7 @@ export type {
   AvailableSlotsEvent,
   Option,
   Appointment,
+  AppointmentParams,
 }
 
 export { TabValue, VerificationStatus }
