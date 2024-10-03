@@ -19,6 +19,7 @@ const transformIn = (value: QuickNoteSectionItem[]): SnapIvSchemaType => {
     'Opposition/DefianceQ22': '',
     'Opposition/DefianceQ23': '',
     'Opposition/DefianceQ24': '',
+    'Opposition/DefianceQ25': '',
     'Opposition/DefianceQ26': '',
     'Hyperactivity/ImpulsivityQ10': '',
     'Hyperactivity/ImpulsivityQ11': '',

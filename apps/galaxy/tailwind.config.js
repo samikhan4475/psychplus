@@ -56,6 +56,9 @@ const config = {
         'pp-icon-soft': '#8B8D98',
         'pp-states-success': '#30A46C',
         'pp-bg-table-label': '#EEF2F6',
+        'pp-sky-blue-5': '#7BC8E0',
+        'pp-cyan-1': '#F1FCFF',
+        'pp-cyan-10': '#236E93',
       },
       animation: {
         loader: 'bounce 500ms infinite, pulse 2s infinite',

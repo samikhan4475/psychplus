@@ -11,7 +11,7 @@ const transformIn = (
     result[`Q${i}`] = ''
   }
 
-  value.forEach((item: QuickNoteSectionItem) => {
+  value?.forEach((item: QuickNoteSectionItem) => {
     if (item.sectionItem in result) {
       result[item.sectionItem] = item.sectionItemValue
     }

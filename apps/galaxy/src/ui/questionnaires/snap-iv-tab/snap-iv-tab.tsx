@@ -13,9 +13,12 @@ import {
   SendToPatientButton,
 } from '../shared'
 import { SNAP_IV_LABELS } from './constants'
+import { FillOutButtonSnapIv } from './fill-out-button'
+import {
+  QuestionnairesFormSnapIv,
+  useQuestionnaireFormSnapIv,
+} from './form-snap-iv'
 import { transformIn, transformOut } from './form-snap-iv/data'
-import { QuestionnairesFormSnapIv } from './form-snap-iv/snap-iv-form'
-import { useQuestionnaireFormSnapIv } from './form-snap-iv/use-snap-iv-form'
 
 const SnapIvTab = ({
   patientId,
@@ -38,6 +41,7 @@ const SnapIvTab = ({
           title={QuestionnaireTabs.SNAP_IV_TAB}
           headerRight={
             <Flex gap="2">
+              <FillOutButtonSnapIv patientId={patientId} data={data} />
               <SendToPatientButton />
               <HistoryButton />
               <SaveButton />

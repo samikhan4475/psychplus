@@ -17,6 +17,7 @@ import {
 } from '../shared'
 import { transformIn, transformOut } from '../shared/data'
 import { LABELS, QUESTIONS, SCORE_INTERPRETATION_RANGES } from './constants'
+import { FillOutButtonHamD } from './fill-out-button'
 
 const HamDTab = ({
   patientId,
@@ -50,6 +51,7 @@ const HamDTab = ({
           title={QuestionnaireTabs.HAM_D_TAB}
           headerRight={
             <Flex gap="2">
+              <FillOutButtonHamD patientId={patientId} data={data} />
               <SendToPatientButton />
               <HistoryButton />
               <SaveButton />
@@ -68,7 +70,7 @@ const HamDTab = ({
             labels={LABELS}
             totalScore={totalScore}
             scoreInterpretationRanges={SCORE_INTERPRETATION_RANGES}
-            classNameHeaderCell="bg-[#D9E2FC] align-middle border-pp-table-border h-5 border px-[50px] py-0"
+            classNameHeaderCell="bg-pp-focus-bg align-middle border-pp-table-border h-5 border px-[50px] py-0"
             classNameCell="align-middle border-pp-table-border h-5 border pl-[10px] py-0.5"
           />
         </Flex>
