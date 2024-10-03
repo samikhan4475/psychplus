@@ -1,49 +1,7 @@
 'use client'
 
 import { Row } from '@tanstack/react-table'
-
-interface InsurancePayer {
-  id: string
-  name: string
-  plans?: InsurancePlan[]
-}
-
-interface InsurancePlan {
-  id: string
-  name: string
-  isActive: boolean
-  isTest: boolean
-  isPublicViewable: boolean
-  payerType: string
-}
-
-interface Insurance {
-  id: string
-  insurancePlanId: string
-  verificationStatus: string
-  isActive: boolean
-  memberId: string
-  groupNumber: string
-  effectiveDate: string
-  terminationDate: string
-  insurancePolicyPriority: string
-  hasCardFrontImage: boolean
-  hasCardBackImage: boolean
-  isPatientPolicyHolder: boolean
-  policyHolderRelationship?: string
-  policyHolderName?: {
-    firstName: string
-    lastName: string
-    middleName?: string
-  }
-  policyHolderDateOfBirth?: string
-  policyHolderSocialSecurityNumber?: string
-  policyHolderGender?: string
-  policyHolderPriority?: string
-  policyName: string
-  payerName: string
-  isDeleted: boolean
-}
+import { PatientAddress } from '@/types'
 
 interface InsuranceParams {
   payerName: string
@@ -68,6 +26,15 @@ interface InsuranceParams {
   isActive: boolean
   id?: string
   isDeleted?: boolean
+  policyHolderStreetAddress?: string
+  policyHolderStreetAddress2?: string
+  policyHolderCity?: string
+  policyHolderState?: string
+  policyHolderPostalCode?: string
+  verificationStatus?: string
+  contactInfo?: {
+    addresses: PatientAddress[]
+  }
 }
 
 interface InsuranceTag {
@@ -122,9 +89,6 @@ interface EligibilityResponseTable {
 }
 
 export type {
-  InsurancePayer,
-  InsurancePlan,
-  Insurance,
   AuthTable,
   InsuranceTag,
   EligibilityTable,

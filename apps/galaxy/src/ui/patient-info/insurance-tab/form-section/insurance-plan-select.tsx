@@ -8,8 +8,8 @@ import {
   FormFieldError,
   FormFieldLabel,
 } from '@/components'
+import type { InsurancePayer, InsurancePlan } from '@/types'
 import { getInsurancePayerPlans } from '../actions'
-import type { InsurancePayer, InsurancePlan } from '../types'
 import { type InsuranceSchemaType } from './schema'
 
 const InsurancePlanSelect = ({ payers }: { payers: InsurancePayer[] }) => {
@@ -61,6 +61,7 @@ const InsurancePlanSelect = ({ payers }: { payers: InsurancePayer[] }) => {
             <Select.Root
               disabled={loading || !plans}
               onValueChange={field.onChange}
+              size="1"
               {...rest}
             >
               <Select.Trigger

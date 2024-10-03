@@ -15,7 +15,7 @@ const GenderSelect = () => {
         Gender
       </FormFieldLabel>
       <CodesetSelect
-        size="2"
+        size="1"
         name="policyHolderGender"
         placeholder="Select gender"
         codeset={CODESETS.Gender}

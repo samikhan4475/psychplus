@@ -1,3 +1,5 @@
-export * from './get-patient-insurances'
 export * from './get-insurance-payer-plans'
-export * from './get-patient-insurances'
+export * from './upload-policy-image'
+export * from './add-policy'
+export * from './delete-policy'
+export * from './update-policy'

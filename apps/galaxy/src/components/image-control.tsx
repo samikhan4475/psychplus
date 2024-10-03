@@ -9,7 +9,7 @@ import { ImageViewDialog } from './image-view-dialog'
 
 interface ImageControlsProps {
   onFileChange: (file: File | undefined) => void
-  previewSrc: string
+  previewSrc?: string
   className?: string
   disableControls?: boolean
 }

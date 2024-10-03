@@ -1,16 +1,25 @@
 'use client'
 
+import { useEffect, useState } from 'react'
 import { Checkbox, Flex, Text } from '@radix-ui/themes'
 import { useStore } from './store'
 
 const ShowCheckbox = () => {
-  const { activeStatus, setActiveStatus } = useStore((state) => ({
-    activeStatus: state.activeStatus,
-    setActiveStatus: state.setActiveStatus,
+  const { setFilteredInsurances } = useStore((state) => ({
+    setFilteredInsurances: state.setFilteredInsurances,
   }))
 
-  const handleChange = (status: boolean) => {
-    setActiveStatus(status)
+  const [status, setStatus] = useState({ active: true, inactive: false })
+
+  useEffect(() => {
+    setFilteredInsurances(status.active, status.inactive)
+  }, [status, setFilteredInsurances])
+
+  const handleStatusChange = (
+    type: 'active' | 'inactive',
+    checked: boolean | 'indeterminate',
+  ) => {
+    setStatus((prev) => ({ ...prev, [type]: checked }))
   }
 
   return (
@@ -18,24 +27,28 @@ const ShowCheckbox = () => {
       <Text size="1" weight="medium">
         Show
       </Text>
+
       <Text as="label" size="1">
         <Flex gap="1">
           <Checkbox
             size="1"
             highContrast
-            checked={activeStatus === true}
-            onCheckedChange={() => handleChange(true)}
+            checked={status.active}
+            onCheckedChange={(checked) => handleStatusChange('active', checked)}
           />
           Active
         </Flex>
       </Text>
+
       <Text as="label" size="1">
         <Flex gap="1">
           <Checkbox
             size="1"
             highContrast
-            checked={activeStatus === false}
-            onCheckedChange={() => handleChange(false)}
+            checked={status.inactive}
+            onCheckedChange={(checked) =>
+              handleStatusChange('inactive', checked)
+            }
           />
           Inactive
         </Flex>

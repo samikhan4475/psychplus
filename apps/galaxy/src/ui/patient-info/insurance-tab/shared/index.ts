@@ -1,3 +1,3 @@
 export * from './detail-box'
-export * from './photo-card'
+export * from './image-card'
 export * from './feature-empty'

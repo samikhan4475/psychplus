@@ -6,7 +6,11 @@ import { HistoryIcon } from 'lucide-react'
 import { cn } from '@/utils'
 import { HistoryDetailsDialog } from '../dialogs'
 
-const HistoryButton = () => {
+interface HistoryButtonProps {
+  disabled?: boolean
+}
+
+const HistoryButton = ({ disabled }: HistoryButtonProps) => {
   const [open, setOpen] = useState(false)
   const onOpen = () => setOpen(true)
   const onClose = () => setOpen(false)
@@ -19,6 +23,7 @@ const HistoryButton = () => {
         className={cn('text-black', { 'text-white bg-pp-blue': open })}
         type="button"
         onClick={onOpen}
+        disabled={disabled}
       >
         <HistoryIcon size={14} /> History
       </Button>

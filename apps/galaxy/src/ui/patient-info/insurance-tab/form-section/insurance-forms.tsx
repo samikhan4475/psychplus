@@ -1,46 +1,37 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
-import { Flex } from '@radix-ui/themes'
-import { Insurance, InsurancePayer } from '../types'
+import { Insurance, InsurancePayer } from '@/types'
 import { InsuranceForm } from './insurance-from'
 
 interface InsuranceFormsProps {
-  insurances: Insurance[]
+  insurances?: Insurance[]
   isAddFormOpen: boolean
   insurancePayers: InsurancePayer[]
+  patientId: string
 }
 
 const InsuranceForms = ({
   insurances,
   isAddFormOpen,
   insurancePayers,
+  patientId,
 }: InsuranceFormsProps) => {
-  const scrollRef = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    if (!isAddFormOpen || !scrollRef?.current || !insurances?.length) return
-    scrollRef.current.scrollIntoView({
-      behavior: 'smooth',
-      block: 'start',
-      inline: 'nearest',
-    })
-  }, [isAddFormOpen])
-
   return (
     <>
-      {insurances.map((insurance) => (
+      {isAddFormOpen && (
+        <InsuranceForm
+          patientId={patientId}
+          insurancePayers={insurancePayers}
+        />
+      )}
+      {insurances?.map((insurance) => (
         <InsuranceForm
           key={insurance.id}
           insurancePayers={insurancePayers}
           insurance={insurance}
+          patientId={patientId}
         />
       ))}
-      {isAddFormOpen && (
-        <Flex ref={scrollRef}>
-          <InsuranceForm insurancePayers={insurancePayers} />
-        </Flex>
-      )}
     </>
   )
 }

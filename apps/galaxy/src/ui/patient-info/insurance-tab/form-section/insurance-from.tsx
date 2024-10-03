@@ -1,18 +1,28 @@
 'use client'
 
-import { memo, useEffect } from 'react'
+import { memo, useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Flex, Grid } from '@radix-ui/themes'
 import { useForm } from 'react-hook-form'
-import { FormContainer } from '@/components'
+import toast from 'react-hot-toast'
+import { AddressFieldsGroup, FormContainer } from '@/components'
+import { Insurance, InsurancePayer } from '@/types'
+import {
+  addPolicyAction,
+  updatePolicyAction,
+  uploadPolicyImage,
+} from '../actions'
 import { AuthAndEligibilityTab } from '../auth-and-eligibility-tab'
-import { InsurancePolicyPriority } from '../constants'
-import { PhotoCards } from '../photo-cards'
-import { Insurance, InsuranceParams, InsurancePayer } from '../types'
-import { getInsuranceFormDefaultValues, getMinMaxDates } from '../utils'
-import { Address1Input } from './address1-input'
-import { Address2Input } from './address2-input'
-import { CitySelect } from './city-select'
+import { ImageCard } from '../shared'
+import { useStore } from '../store'
+import { transformOut } from '../transform'
+import {
+  getInsuranceFormDefaultValues,
+  getMinMaxDates,
+  registerPolicyHolderFields,
+  unregisterPolicyHolderFields,
+} from '../utils'
 import { DOBDatePicker } from './dob-date-picker'
 import { EffectiveDatePicker } from './effective-date-picker'
 import { FirstNameInput } from './first-name-input'
@@ -25,23 +35,50 @@ import InsuranceSwitch from './insurance-switch'
 import { LastNameInput } from './last-name-input'
 import { MemberIDInput } from './member-id-input'
 import { PayerSelect } from './payer-select'
-import { PolicyNumberInput } from './policy-number-input'
 import { PrioritySelect } from './priority-select'
 import { RelationshipSelect } from './relationship-select'
 import { insuranceSchema, InsuranceSchemaType } from './schema'
 import { SSNInput } from './ssn-input'
-import { StateSelect } from './state-select'
 import { TerminationDatePicker } from './termination-date-picker'
-import { ZipInput } from './zip-input'
 
 interface InsuranceFormProps {
   insurancePayers: InsurancePayer[]
-  insurancePriority?: InsurancePolicyPriority
   insurance?: Insurance
+  patientId: string
+  onFormClose?: () => void
 }
 
 const InsuranceForm = memo(
-  ({ insurancePayers, insurance, insurancePriority }: InsuranceFormProps) => {
+  ({
+    insurancePayers,
+    insurance,
+    patientId,
+    onFormClose,
+  }: InsuranceFormProps) => {
+    const router = useRouter()
+    const { isAddFormOpen, setAddFormOpen } = useStore((state) => ({
+      isAddFormOpen: state.isAddFormOpen,
+      setAddFormOpen: state.setAddFormOpen,
+    }))
+
+    const [policyFrontImage, setPolicyFrontImage] = useState<File | undefined>(
+      undefined,
+    )
+    const [policyBackImage, setPolicyBackImage] = useState<File | undefined>(
+      undefined,
+    )
+
+    const [maxDate, setMaxDate] = useState<string>('')
+    const [minDate, setMinDate] = useState<string>('')
+
+    useEffect(() => {
+      const { maxDate, minDate } = getMinMaxDates()
+
+      setMaxDate(maxDate)
+
+      setMinDate(minDate)
+    }, [])
+
     const form = useForm<InsuranceSchemaType>({
       reValidateMode: 'onChange',
       criteriaMode: 'all',
@@ -49,9 +86,22 @@ const InsuranceForm = memo(
       defaultValues: getInsuranceFormDefaultValues(insurance),
     })
 
-    const { reset } = form
+    const {
+      register,
+      watch,
+      unregister,
+      reset,
+      formState: { isSubmitting },
+    } = form
+    const watchisPatientPolicyHolder = watch('isPatientPolicyHolder')
 
-    const { minDate, maxDate } = getMinMaxDates()
+    useEffect(() => {
+      if (!watchisPatientPolicyHolder) {
+        registerPolicyHolderFields(register)
+      } else {
+        unregisterPolicyHolderFields(unregister)
+      }
+    }, [register, unregister, watchisPatientPolicyHolder])
 
     useEffect(() => {
       if (insurance) {
@@ -65,53 +115,121 @@ const InsuranceForm = memo(
     }, [insurance, reset])
 
     const onSubmit = async (data: InsuranceSchemaType) => {
-      const payload: InsuranceParams = {
-        id: insurance?.id,
-        payerName: data.payerName,
-        insurancePlanId: data.insurancePlanId,
-        effectiveDate: data.effectiveDate,
-        terminationDate: data.terminationDate,
-        memberId: data.memberId,
-        groupNumber: data.groupNumber,
-        isPatientPolicyHolder: data.isPatientPolicyHolder ?? 'Yes',
-        insurancePolicyPriority: data.insurancePolicyPriority ?? 'Primary',
-        hasCardFrontImage: data.hasCardFrontImage,
-        hasCardBackImage: data.hasCardBackImage,
-        isActive: true,
-      }
-      if (!data.isPatientPolicyHolder) {
-        payload.policyHolderName = {
-          firstName: data?.policyHolderFirstName ?? '',
-          lastName: data?.policyHolderLastName ?? '',
-        }
-        payload.policyHolderGender = data?.policyHolderGender
-        payload.policyHolderDateOfBirth = data?.policyHolderDateOfBirth
-        payload.policyHolderRelationship = data?.policyHolderRelationship
-        payload.policyHolderSocialSecurityNumber =
-          data?.policyHolderSocialSecurityNumber
+      const payload = transformOut({ insurance, data })
+      if (!insurance) delete payload.id
+
+      const insuranceResponse = insurance
+        ? await updatePolicyAction(patientId, insurance.id, payload)
+        : await addPolicyAction(patientId, payload)
+
+      if (insuranceResponse.state === 'error') {
+        toast.error(
+          insuranceResponse.error ??
+            'There was a problem saving your changes. Please try again.',
+        )
+        return
       }
 
-      console.log(payload)
-      if (!insurance) delete payload.id
+      const imageUploadPromises = []
+
+      if (policyFrontImage) {
+        imageUploadPromises.push(
+          uploadPolicyImage({
+            file: policyFrontImage,
+            patientId: patientId,
+            side: 'Front',
+            policyId: insuranceResponse.data.id,
+          }),
+        )
+      }
+
+      if (policyBackImage) {
+        imageUploadPromises.push(
+          uploadPolicyImage({
+            file: policyBackImage,
+            patientId: patientId,
+            side: 'Back',
+            policyId: insuranceResponse.data.id,
+          }),
+        )
+      }
+      const imageUploadResponse = await Promise.all(imageUploadPromises)
+
+      if (imageUploadResponse.some((r) => !r.ok)) {
+        toast.error(
+          'Could not upload insurance card images Please try again later.',
+        )
+        return
+      }
+      toast.success(
+        insurance ? 'Policy updated successfully' : 'Policy added successfully',
+      )
+
+      return onSuccess()
+    }
+
+    const onSuccess = () => {
+      router.refresh()
+
+      if (!insurance && isAddFormOpen) {
+        setAddFormOpen(false)
+      }
+      onFormClose?.()
     }
 
     return (
-      <FormContainer form={form} onSubmit={onSubmit}>
+      <FormContainer form={form} onSubmit={onSubmit} className="px-[1px]">
         <Grid
           columns="12"
           gap="3"
           p="3"
           className="bg-white relative h-full rounded-1 shadow-2"
         >
-          <PhotoCards />
+          <Flex gap="3" className="col-span-4">
+            <ImageCard
+              title="Insurance Photo Front"
+              savedImg={
+                insurance && form.watch('hasCardFrontImage')
+                  ? `/ehr/api/patients/${patientId}/policies/${insurance.id}/cardimage/front`
+                  : undefined
+              }
+              onImageChanged={(image) => {
+                form.setValue(
+                  'hasCardFrontImage',
+                  !form.getValues('hasCardFrontImage'),
+                )
+                setPolicyFrontImage(image)
+              }}
+            />
+
+            <ImageCard
+              title="Insurance Photo Back"
+              savedImg={
+                insurance && form.watch('hasCardBackImage')
+                  ? `/ehr/api/patients/${patientId}/policies/${insurance.id}/cardimage/back`
+                  : undefined
+              }
+              onImageChanged={(image) => {
+                form.setValue(
+                  'hasCardBackImage',
+                  !form.getValues('hasCardBackImage'),
+                )
+                setPolicyBackImage(image)
+              }}
+            />
+          </Flex>
           <Flex className="col-span-8" gap="3" direction="column">
-            <FormHeader insurance={insurance} />
+            <FormHeader
+              insurance={insurance}
+              patientId={patientId}
+              disabled={isSubmitting}
+            />
             <Grid columns="4" gap="3">
               <InsuranceSwitch />
               <PrioritySelect />
               <PayerSelect insurancePayers={insurancePayers} />
               <InsurancePlanSelect payers={insurancePayers} />
-              <PolicyNumberInput />
+
               <MemberIDInput />
               <GroupNumberInput />
               <EffectiveDatePicker maxDate={maxDate} />
@@ -119,24 +237,33 @@ const InsuranceForm = memo(
               <Flex className="col-span-full">
                 <InsuranceHolderSwitch />
               </Flex>
-              <Grid columns="6" className="col-span-full" gap="3">
-                <FirstNameInput />
-                <LastNameInput />
-                <GenderSelect />
-                <DOBDatePicker />
-                <SSNInput />
-                <RelationshipSelect />
-              </Grid>
-              <Grid columns="5" className="col-span-full" gap="3">
-                <Address1Input />
-                <Address2Input />
-                <CitySelect />
-                <StateSelect />
-                <ZipInput />
-              </Grid>
+
+              {!watchisPatientPolicyHolder ? (
+                <>
+                  <Grid columns="6" className="col-span-full" gap="3">
+                    <FirstNameInput />
+                    <LastNameInput />
+                    <GenderSelect />
+                    <DOBDatePicker />
+                    <SSNInput
+                      name="policyHolderSocialSecurityNumber"
+                      size="2"
+                      placeholder="Enter SSN"
+                    />
+                    <RelationshipSelect />
+                  </Grid>
+
+                  <AddressFieldsGroup
+                    className="col-span-full flex-row"
+                    columnsPerRow="2"
+                    fieldClassName="!h-7"
+                    fieldLabelClassName="!text-1"
+                  />
+                </>
+              ) : null}
             </Grid>
           </Flex>
-          <AuthAndEligibilityTab />
+          {/* <AuthAndEligibilityTab /> */}
         </Grid>
       </FormContainer>
     )

@@ -7,9 +7,10 @@ import {
   FormFieldError,
   FormFieldLabel,
 } from '@/components'
+import { InsuranceSchemaType } from './schema'
 
 const MemberIDInput = () => {
-  const form = useFormContext()
+  const form = useFormContext<InsuranceSchemaType>()
 
   return (
     <FormFieldContainer className="w-full">
@@ -22,6 +23,7 @@ const MemberIDInput = () => {
         placeholder="Enter Member ID"
         size="1"
         {...form.register('memberId')}
+        maxLength={16}
       />
       <FormFieldError name="memberId" />
     </FormFieldContainer>

@@ -4,15 +4,23 @@ import { Button, DropdownMenu, Flex } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
 import { CloseIcon, QuestionIcon, TickIcon } from '@/components/icons'
 import { cn } from '@/utils'
+import { InsuranceSchemaType } from './schema'
 
 const icons: Record<string, JSX.Element> = {
-  pending: <QuestionIcon />,
-  yes: <TickIcon />,
-  no: <CloseIcon />,
+  Pending: <QuestionIcon />,
+  Verified: <TickIcon />,
+  Unverifiable: <CloseIcon />,
 }
 const StatusDropdown = () => {
-  const form = useFormContext()
+  const form = useFormContext<InsuranceSchemaType>()
   const status = form.watch('verificationStatus')
+
+  const { isSubmitting } = form.formState
+
+  const getLabelFromValue = (value: string) => {
+    const option = options.find((option) => option.value === value)
+    return option ? option.label : 'Select'
+  }
 
   return (
     <DropdownMenu.Root>
@@ -23,10 +31,11 @@ const StatusDropdown = () => {
           size="1"
           type="button"
           className="text-black min-w-[97px] justify-between capitalize"
+          disabled={isSubmitting}
         >
           <Flex justify="start" gap="1">
-            {icons[status?.toLowerCase()]}
-            {status || 'Select'}
+            {icons[status]}
+            {getLabelFromValue(status)}
           </Flex>
           <DropdownMenu.TriggerIcon />
         </Button>
@@ -56,15 +65,15 @@ const StatusDropdown = () => {
 const options = [
   {
     label: 'Yes',
-    value: 'yes',
+    value: 'Verified',
   },
   {
     label: 'No',
-    value: 'no',
+    value: 'Unverifiable',
   },
   {
     label: 'Pending',
-    value: 'pending',
+    value: 'Pending',
   },
 ]
 export default StatusDropdown

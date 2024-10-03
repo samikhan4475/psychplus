@@ -15,23 +15,28 @@ const insuranceSchema = z
       .min(1, 'Required')
       .max(16, 'Invalid Gruop Number'),
     isPatientPolicyHolder: z.boolean(),
-    policyHolderFirstName: z.string().max(28, 'Max 28 characters are allowed'),
-    policyHolderLastName: z.string().max(28, 'Max 28 characters are allowed'),
+    policyHolderFirstName: z
+      .string()
+      .max(28, 'Max 28 characters are allowed')
+      .optional(),
+    policyHolderLastName: z
+      .string()
+      .max(28, 'Max 28 characters are allowed')
+      .optional(),
     policyHolderGender: z.string().optional(),
     policyHolderRelationship: z.string().optional(),
-    insurancePolicyPriority: z.string().min(1, 'Required'),
-    policyHolderDateOfBirth: z.string(),
+    insurancePolicyPriority: z.string().min(1, 'Required').optional(),
+    policyHolderDateOfBirth: z.string().optional(),
     policyHolderSocialSecurityNumber: z.string().optional(),
     hasCardFrontImage: z.boolean(),
     hasCardBackImage: z.boolean(),
-    insuranceActive: z.boolean(),
-    policyNumber: z.string().min(1, 'Required'),
-    policyHolderAddress1: z.string().min(1, 'Required'),
-    policyHolderAddress2: z.string().optional(),
-    policyHolderCity: z.string().min(1, 'Required'),
-    policyHolderState: z.string().min(1, 'Required'),
-    policyHolderPostalCode: z.string().min(1, 'Required'),
-    verificationStatus: z.string().optional(),
+    isActive: z.boolean(),
+    address1: z.string().max(128, 'Max 128 characters are allowed').optional(),
+    address2: z.string().optional(),
+    city: z.string().max(28, 'Max 28 characters are allowed').optional(),
+    state: z.string().max(28, 'Max 28 characters are allowed').optional(),
+    zip: z.string().max(5, 'Invalid ZIP').optional(),
+    verificationStatus: z.string().min(1, 'Required'),
   })
   .superRefine((data, ctx) => {
     if (!data.isPatientPolicyHolder) {
@@ -43,11 +48,42 @@ const insuranceSchema = z
         })
       }
 
+      if (!data.city) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: 'Required',
+          path: ['city'],
+        })
+      }
+      if (!data.state) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: 'Required',
+          path: ['state'],
+        })
+      }
+
+      if (!data.zip) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: 'Required',
+          path: ['zip'],
+        })
+      }
+
       if (!data.policyHolderLastName) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
           message: 'Required',
           path: ['policyHolderLastName'],
+        })
+      }
+
+      if (!data.address1) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: 'Required',
+          path: ['address1'],
         })
       }
 

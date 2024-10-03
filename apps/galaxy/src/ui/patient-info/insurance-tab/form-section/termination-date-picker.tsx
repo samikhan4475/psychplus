@@ -2,7 +2,11 @@
 
 import { TextField } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
-import { FormFieldContainer, FormFieldLabel } from '@/components'
+import {
+  FormFieldContainer,
+  FormFieldError,
+  FormFieldLabel,
+} from '@/components'
 import { InsuranceSchemaType } from './schema'
 
 interface TerminationDatePickerProps {
@@ -17,11 +21,15 @@ const TerminationDatePicker = ({ minDate }: TerminationDatePickerProps) => {
       </FormFieldLabel>
       <TextField.Root
         type="date"
-        max={minDate}
-        data-testid="effective-date-input"
-        {...form.register('effectiveDate')}
-        className="h-7 w-full text-1"
+        size="1"
+        min={minDate}
+        pattern="\d{4}-\d{2}-\d{2}"
+        data-testid="terminationDate-date-input"
+        {...form.register('terminationDate')}
+        max="3000-01-01"
+        className="border-pp-gray-2 h-7 w-full border border-solid !outline-none [box-shadow:none] [&__.rt-TextFieldInput]:!inline-block"
       />
+      <FormFieldError name="terminationDate" />
     </FormFieldContainer>
   )
 }

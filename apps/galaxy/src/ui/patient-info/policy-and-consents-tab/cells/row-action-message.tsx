@@ -17,26 +17,18 @@ const RowActionMessage = ({
 }: RowActionProps) => {
   const handleSendMessageNotice = async () => {
     toggleRowClick?.()
+    const result = await sendPolicyNoticeAction({
+      patientId,
+      channels: [NotificationType.Sms],
+      policyType: type,
+    })
 
-    try {
-      const result = await sendPolicyNoticeAction({
-        patientId,
-        channels: [NotificationType.Sms],
-        policyType: type,
-      })
-
-      if (result.error) {
-        throw new Error('Failed to send text')
-      }
-
+    if (result.state === 'error') {
+      toast.error(result.error ?? '')
+    } else if (result.state === 'success') {
       toast.success('Message sent!')
-    } catch (error) {
-      const message =
-        error instanceof Error ? error.message : 'Failed to send text'
-      toast.error(message)
-    } finally {
-      toggleRowClick?.()
     }
+    toggleRowClick?.()
   }
   return (
     <ActionItem

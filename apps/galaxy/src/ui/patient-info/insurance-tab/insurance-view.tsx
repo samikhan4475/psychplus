@@ -1,28 +1,54 @@
 'use client'
 
+import { useEffect, useRef } from 'react'
+import { Flex } from '@radix-ui/themes'
 import { EmptyFileIcon } from '@/components/icons'
+import { Insurance, InsurancePayer } from '@/types'
 import { InsuranceForms } from './form-section'
 import { InsuranceHeader } from './insurance-header'
 import { FeatureEmpty } from './shared'
 import { useStore } from './store'
-import { InsurancePayer } from './types'
 
 interface InsuranceViewProps {
   insurancePayers: InsurancePayer[]
+  patientId: string
+  patientPolicies: Insurance[]
 }
 
-const InsuranceView = ({ insurancePayers }: InsuranceViewProps) => {
-  const { insurances, isAddFormOpen } = useStore((state) => ({
+const InsuranceView = ({
+  insurancePayers,
+  patientPolicies,
+  patientId,
+}: InsuranceViewProps) => {
+  const scrollRef = useRef<HTMLDivElement>(null)
+  const { isAddFormOpen, setInsurances,filteredInsurances, } = useStore((state) => ({
     isAddFormOpen: state.isAddFormOpen,
-    insurances: state.insurances,
+    setInsurances: state.setInsurances,
+    filteredInsurances:state.filteredInsurances
   }))
 
+  useEffect(() => {
+    if (patientPolicies?.length > 0) {
+      setInsurances(patientPolicies)
+    }
+  }, [patientPolicies,patientId])
+
+  useEffect(() => {
+    if (!scrollRef?.current) return
+    scrollRef.current.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start',
+      inline: 'nearest',
+    })
+  }, [isAddFormOpen])
+
   return (
-    <>
+    <Flex direction="column" ref={scrollRef} gap="1">
       <InsuranceHeader />
-      {(insurances && insurances?.length > 0) || isAddFormOpen ? (
+      {(filteredInsurances && filteredInsurances?.length > 0) || isAddFormOpen ? (
         <InsuranceForms
-          insurances={insurances ?? []}
+          patientId={patientId}
+          insurances={filteredInsurances}
           isAddFormOpen={isAddFormOpen}
           insurancePayers={insurancePayers}
         />
@@ -34,7 +60,7 @@ const InsuranceView = ({ insurancePayers }: InsuranceViewProps) => {
           />
         )
       )}
-    </>
+    </Flex>
   )
 }
 

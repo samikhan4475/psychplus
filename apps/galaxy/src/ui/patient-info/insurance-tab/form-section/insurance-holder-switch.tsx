@@ -7,6 +7,13 @@ import { InsuranceSchemaType } from './schema'
 
 const InsuranceHolderSwitch = () => {
   const form = useFormContext<InsuranceSchemaType>()
+
+  const onCheckedChange = (isPolicyHolder: boolean) => {
+    form.setValue('isPatientPolicyHolder', isPolicyHolder, {
+      shouldValidate: true,
+      shouldDirty: true,
+    })
+  }
   return (
     <FormFieldContainer className="flex-row gap-1.5">
       <Text size="1" weight="medium">
@@ -18,10 +25,7 @@ const InsuranceHolderSwitch = () => {
             size="1"
             color="green"
             checked={form.getValues('isPatientPolicyHolder')}
-            onCheckedChange={(check) => {
-              form.setValue('isPatientPolicyHolder', check)
-              form.trigger('isPatientPolicyHolder')
-            }}
+            onCheckedChange={onCheckedChange}
           />
           Yes
         </Flex>

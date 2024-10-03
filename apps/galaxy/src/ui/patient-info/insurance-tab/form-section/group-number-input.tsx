@@ -7,9 +7,10 @@ import {
   FormFieldError,
   FormFieldLabel,
 } from '@/components'
+import { InsuranceSchemaType } from './schema'
 
 const GroupNumberInput = () => {
-  const form = useFormContext()
+  const form = useFormContext<InsuranceSchemaType>()
 
   return (
     <FormFieldContainer className="w-full">
@@ -21,6 +22,7 @@ const GroupNumberInput = () => {
         placeholder="Enter group number"
         size="1"
         {...form.register('groupNumber')}
+        maxLength={16}
       />
       <FormFieldError name="groupNumber" />
     </FormFieldContainer>

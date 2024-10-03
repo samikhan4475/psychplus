@@ -2,23 +2,12 @@
 
 import { Button } from '@radix-ui/themes'
 import { Save } from 'lucide-react'
-import { useFormContext } from 'react-hook-form'
 
-const SaveButton = () => {
-  const form = useFormContext()
+interface SaveButtonProps {
+  disabled?: boolean
+}
 
-  const onSubmit = async (event?: React.BaseSyntheticEvent) => {
-    await form.handleSubmit(
-      async (data) => {
-        console.log('Form data:', data)
-      },
-      (errors) => {
-        console.log('Validation errors:', errors)
-
-        form.trigger()
-      },
-    )(event)
-  }
+const SaveButton = ({ disabled }: SaveButtonProps) => {
   return (
     <Button
       variant="outline"
@@ -26,7 +15,7 @@ const SaveButton = () => {
       className="text-black"
       type="submit"
       size="1"
-      onClick={onSubmit}
+      disabled={disabled}
     >
       <Save size={14} /> Save
     </Button>

@@ -1,7 +1,7 @@
 'use server'
 
 import * as api from '@/api'
-import { InsurancePayer } from '../types'
+import { InsurancePayer } from '@/types'
 
 const getInsurancePayerPlans = async (
   payerId: string,

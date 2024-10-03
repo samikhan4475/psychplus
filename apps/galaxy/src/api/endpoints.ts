@@ -84,6 +84,14 @@ const DELETE_PATIENT_CREDIT_CARD = (patientId: number, creditCardId: number) =>
   `${API_URL}/api/patients/${patientId}/creditcards/${creditCardId}`
 const ADD_PATIENT_CREDIT_CARD = (patientId: string) =>
   `${API_URL}/api/patients/${patientId}/creditcards`
+const GET_PATIENT_POLICIES = (patientId: string) =>
+  `${API_URL}/api/patients/${patientId}/policies?includeInactive=true`
+const ADD_PATIENT_POLICY_ENDPOINT = (patientId: string) =>
+  `${API_URL}/api/patients/${patientId}/policies`
+const UPDATE_PATIENT_POLICY_ENDPOINT = (patientId: string, policyId: string) =>
+  `${API_URL}/api/patients/${patientId}/policies/${policyId}`
+const DELETE_PATIENT_POLICY_ENDPOINT = (patientId: string, policyId: string) =>
+  `${API_URL}/api/patients/${patientId}/policies/${policyId}`
 
 export {
   USER_ENDPOINT,
@@ -136,4 +144,8 @@ export {
   SET_PRIMARY_PATIENT_CREDIT_CARD,
   DELETE_PATIENT_CREDIT_CARD,
   ADD_PATIENT_CREDIT_CARD,
+  GET_PATIENT_POLICIES,
+  ADD_PATIENT_POLICY_ENDPOINT,
+  UPDATE_PATIENT_POLICY_ENDPOINT,
+  DELETE_PATIENT_POLICY_ENDPOINT,
 }

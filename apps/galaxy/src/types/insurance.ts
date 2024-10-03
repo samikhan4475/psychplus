@@ -1,3 +1,5 @@
+import { PatientAddress } from './address'
+
 interface InsurancePayer {
   id: string
   name: string
@@ -13,4 +15,40 @@ interface InsurancePlan {
   payerType: string
 }
 
-export type { InsurancePayer }
+interface Insurance {
+  id: string
+  insurancePlanId: string
+  verificationStatus: string
+  isActive: boolean
+  memberId: string
+  groupNumber: string
+  effectiveDate: string
+  terminationDate: string
+  insurancePolicyPriority: string
+  hasCardFrontImage: boolean
+  hasCardBackImage: boolean
+  isPatientPolicyHolder: boolean
+  policyHolderRelationship?: string
+  policyHolderName?: {
+    firstName: string
+    lastName: string
+    middleName?: string
+  }
+  policyHolderDateOfBirth?: string
+  policyHolderSocialSecurityNumber?: string
+  policyHolderGender?: string
+  policyHolderPriority?: string
+  policyName: string
+  payerName: string
+  isDeleted?: boolean
+  policyHolderStreetAddress?: string
+  policyHolderStreetAddress2?: string
+  policyHolderCity?: string
+  policyHolderState?: string
+  policyHolderPostalCode?: string
+  contactInfo?: {
+    addresses: PatientAddress[]
+  }
+}
+
+export type { InsurancePayer, Insurance }

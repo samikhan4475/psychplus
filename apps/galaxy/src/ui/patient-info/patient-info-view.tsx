@@ -3,7 +3,7 @@
 import * as Tabs from '@radix-ui/react-tabs'
 import { Flex } from '@radix-ui/themes'
 import { TabsTrigger } from '@/components'
-import { CreditCard, PatientConsent, Relationship } from '@/types'
+import { CreditCard, Insurance, InsurancePayer, PatientConsent, Relationship } from '@/types'
 import {
   INSURANCE_TAB,
   PATIENT_INFO_HISTORY_TAB,
@@ -33,6 +33,8 @@ interface PatientInfoViewProps {
   patientRelationships: Relationship[]
   patientConsents: PatientConsent[]
   patientCards: CreditCard[]
+  insurancePayers: InsurancePayer[]
+  patientPolicies: Insurance[]
 }
 
 const PatientInfoView = ({
@@ -44,6 +46,8 @@ const PatientInfoView = ({
   patientRelationships,
   patientConsents,
   patientCards,
+  insurancePayers,
+  patientPolicies,
 }: PatientInfoViewProps) => {
   const { activeTab, setActiveTab, showPatientHistory, closePatientHistory } =
     useStore((state) => ({
@@ -90,7 +94,12 @@ const PatientInfoView = ({
         />
       </TabsContent>
       <TabsContent value={INSURANCE_TAB}>
-        <InsuranceTab />
+        <InsuranceTab
+          insurancePayers={insurancePayers}
+          patientPolicies={patientPolicies}
+          patientId={patientId}
+          googleApiKey={googleApiKey}
+        />
       </TabsContent>
       <TabsContent value={POLICY_AND_CONSENTS_TAB}>
         <PolicyAndConsentsTab

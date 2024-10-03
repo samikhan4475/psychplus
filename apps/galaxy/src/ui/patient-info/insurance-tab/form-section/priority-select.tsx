@@ -19,7 +19,7 @@ const PrioritySelect = () => {
         name="insurancePolicyPriority"
         codeset={CODESETS.InsurancePolicyPriority}
         className="border-pp-gray-2 h-7 w-full border border-solid text-1 !outline-none [box-shadow:none]"
-        size="2"
+        size="1"
         placeholder="Select priority"
       />
 

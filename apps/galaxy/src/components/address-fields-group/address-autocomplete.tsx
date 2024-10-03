@@ -13,6 +13,7 @@ import usePlacesAutocomplete, {
   getDetails,
   type Suggestion,
 } from 'use-places-autocomplete'
+import { cn } from '@/utils'
 import { FormFieldLabel } from '../form'
 import {
   fieldName,
@@ -41,6 +42,8 @@ interface PlacesAutocompleteProps {
   isFilter?: boolean
   placeholder?: string
   prefix?: string
+  className?: string
+  labelClassName?: string
 }
 
 const GooglePlacesAutocomplete = ({
@@ -53,6 +56,8 @@ const GooglePlacesAutocomplete = ({
   isFilter = false,
   placeholder = '',
   prefix = '',
+  className,
+  labelClassName,
 }: PlacesAutocompleteProps) => {
   const form = useFormContext()
   const autocompleteFieldRef = useRef<HTMLInputElement | null>(null)
@@ -74,7 +79,7 @@ const GooglePlacesAutocomplete = ({
     clearSuggestions,
   } = usePlacesAutocomplete({
     defaultValue: getInitialAutocompleteValue({
-      street1: values?.[address2Field],
+      street1: values?.[address1Field],
       city: values?.[cityField],
       state: values?.[stateField],
       postalCode: values?.[zipField],
@@ -143,7 +148,9 @@ const GooglePlacesAutocomplete = ({
         className="gap-[2px]"
         position="relative"
       >
-        <FormFieldLabel required={required}>{label}</FormFieldLabel>
+        <FormFieldLabel required={required} className={labelClassName}>
+          {label}
+        </FormFieldLabel>
         <TextField.Root
           size="1"
           id={address1Field}
@@ -153,7 +160,10 @@ const GooglePlacesAutocomplete = ({
           onChange={handleInput}
           placeholder={placeholder}
           onFocus={() => setShowSuggestions(true)}
-          className={textFieldClassName}
+          className={cn(
+            'border-pp-gray-2 h-6 w-full border border-solid !outline-none [box-shadow:none]',
+            className,
+          )}
         />
         {status === 'OK' && showSuggestions && (
           <ul className="bg-white absolute top-full z-50 flex w-full flex-col overflow-x-hidden rounded-2 shadow-3">
@@ -191,8 +201,5 @@ const GooglePlacesAutocomplete = ({
     </Flex>
   )
 }
-
-const textFieldClassName =
-  'border-pp-gray-2 w-full h-6 border border-solid !outline-none [box-shadow:none]'
 
 export { GooglePlacesAutocomplete }

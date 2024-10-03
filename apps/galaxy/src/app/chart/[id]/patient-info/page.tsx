@@ -3,10 +3,13 @@ import { GOOGLE_MAPS_API_KEY, STRIPE_PUBLISHABLE_KEY } from '@/constants'
 import { PatientInfoView } from '@/ui/patient-info'
 import {
   getPatientConsentsAction,
+  getPatientPoliciesAction,
   getPatientPreferredPartnersAction,
   getPatientProfileAction,
   getPatientRelationshipsAction,
+  getInsurancePayersAction
 } from '@/ui/patient-info/patient-info-tab/actions'
+
 
 interface PatientInfoPageProps {
   params: {
@@ -21,12 +24,16 @@ const PatientInfoPage = async ({ params }: PatientInfoPageProps) => {
     patientRelationshipsResult,
     preferredPartnerResult,
     patientCardsResult,
+    insurancePayersResult,
+    patientPoliciesResult,
   ] = await Promise.all([
     getPatientProfileAction(params.id),
     getPatientConsentsAction(params.id),
     getPatientRelationshipsAction(params.id),
     getPatientPreferredPartnersAction(params.id),
     getPatientCreditCards(params.id),
+    getInsurancePayersAction(),
+    getPatientPoliciesAction(params.id),
   ])
 
   if (profileResult.state === 'error') {
@@ -48,6 +55,15 @@ const PatientInfoPage = async ({ params }: PatientInfoPageProps) => {
     return <div>{patientCardsResult.error}</div>
   }
 
+  if (patientPoliciesResult?.state === 'error') {
+    return <div>{patientPoliciesResult.error}</div>
+  }
+
+  if (insurancePayersResult?.state === 'error') {
+    return <div>{insurancePayersResult.error}</div>
+  }
+
+
   return (
     <PatientInfoView
       googleApiKey={GOOGLE_MAPS_API_KEY}
@@ -58,6 +74,8 @@ const PatientInfoPage = async ({ params }: PatientInfoPageProps) => {
       patientRelationships={patientRelationshipsResult.data}
       patientConsents={consentsResult.data}
       patientCards={patientCardsResult.data}
+      insurancePayers={insurancePayersResult.data}
+      patientPolicies={patientPoliciesResult.data}
     />
   )
 }

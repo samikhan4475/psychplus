@@ -18,10 +18,10 @@ const InsuranceSwitch = () => {
           <Switch
             size="1"
             color="green"
-            checked={form.getValues('insuranceActive')}
+            checked={form.getValues('isActive')}
             onCheckedChange={(check) => {
-              form.setValue('insuranceActive', check)
-              form.trigger('insuranceActive')
+              form.setValue('isActive', check)
+              form.trigger('isActive')
             }}
           />
           Yes

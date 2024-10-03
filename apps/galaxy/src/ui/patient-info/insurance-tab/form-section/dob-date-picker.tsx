@@ -24,8 +24,9 @@ const DOBDatePicker = () => {
         min={getCalendarDateLabel(today.subtract({ years: 120 }))}
         max={getCalendarDateLabel(today.subtract({ years: 18 }))}
         data-testid="dob-input"
+        size="1"
         {...form.register('policyHolderDateOfBirth')}
-        className="h-7 w-full rounded-2 text-1"
+        className="border-pp-gray-2 h-7 w-full border border-solid !outline-none [box-shadow:none] [&__.rt-TextFieldInput]:!inline-block"
       />
       <FormFieldError name="policyHolderDateOfBirth" />
     </FormFieldContainer>

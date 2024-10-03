@@ -15,6 +15,7 @@ interface AddressTextFieldProps
   field: string
   className?: string
   placeholder?: string
+  labelClassName?: string
 }
 const AddressTextField = ({
   label,
@@ -22,21 +23,28 @@ const AddressTextField = ({
   className,
   required,
   placeholder,
+  labelClassName,
 }: AddressTextFieldProps) => {
   const { register, setValue, watch } = useFormContext()
 
   const { onChange, ...rest } = register(field)
 
   return (
-    <FormFieldContainer className={cn('flex-1', className)}>
-      <FormFieldLabel required={required} className="!text-1">
+    <FormFieldContainer className="flex-1">
+      <FormFieldLabel
+        required={required}
+        className={cn('!text-1', labelClassName)}
+      >
         {label}
       </FormFieldLabel>
       <TextField.Root
         size="1"
         value={watch(field)}
         placeholder={placeholder}
-        className={textFieldClassName}
+        className={cn(
+          'border-pp-gray-2 h-6 w-full border border-solid !outline-none [box-shadow:none]',
+          className,
+        )}
         onChange={(e) =>
           setValue(field, e.target.value, { shouldValidate: true })
         }
@@ -46,6 +54,5 @@ const AddressTextField = ({
     </FormFieldContainer>
   )
 }
-const textFieldClassName =
-  'border-pp-gray-2 w-full h-6 border border-solid !outline-none [box-shadow:none]'
+
 export { AddressTextField }

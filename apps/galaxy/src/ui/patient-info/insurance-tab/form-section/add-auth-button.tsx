@@ -5,7 +5,11 @@ import { PlusIcon } from '@radix-ui/react-icons'
 import { Button } from '@radix-ui/themes'
 import { AddReferralDialog } from '../dialogs'
 
-const AddAuthButton = () => {
+interface AddAuthButtonProps {
+  disabled?: boolean
+}
+
+const AddAuthButton = ({ disabled }: AddAuthButtonProps) => {
   const [open, setOpen] = useState(false)
   const onOpen = () => setOpen(true)
   const onClose = () => setOpen(false)
@@ -18,6 +22,7 @@ const AddAuthButton = () => {
         className="text-black"
         type="button"
         onClick={onOpen}
+        disabled={disabled}
       >
         <PlusIcon /> Auth/Ref
       </Button>

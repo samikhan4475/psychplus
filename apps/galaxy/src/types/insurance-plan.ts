@@ -2,13 +2,13 @@ import { Metadata } from './metadata'
 
 interface InsurancePlan {
   id: string
-  metadata: Metadata
+  metadata?: Metadata
   name: string
   isActive: boolean
   isTest: boolean
   isPublicViewable: boolean
   payerType: string
-  effectiveDate: string
+  effectiveDate?: string
 }
 
 export type { InsurancePlan }

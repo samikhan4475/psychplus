@@ -21,10 +21,11 @@ const EffectiveDatePicker = ({ maxDate }: EffectiveDatePickerProps) => {
       </FormFieldLabel>
       <TextField.Root
         type="date"
+        size="1"
         max={maxDate}
         data-testid="effective-date-input"
         {...form.register('effectiveDate')}
-        className="h-7 w-full text-1"
+        className="border-pp-gray-2 h-7 w-full border border-solid !outline-none [box-shadow:none] [&__.rt-TextFieldInput]:!inline-block"
       />
       <FormFieldError name="effectiveDate" />
     </FormFieldContainer>

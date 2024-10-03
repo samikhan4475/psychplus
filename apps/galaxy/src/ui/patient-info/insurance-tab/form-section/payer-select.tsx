@@ -6,7 +6,7 @@ import {
   FormFieldLabel,
   SelectInput,
 } from '@/components'
-import { InsurancePayer } from '../types'
+import { InsurancePayer } from '@/types'
 
 interface PayerSelectProps {
   insurancePayers: InsurancePayer[]
@@ -34,14 +34,4 @@ const PayerSelect = ({ insurancePayers }: PayerSelectProps) => {
   )
 }
 
-const options = [
-  {
-    label: 'Test',
-    value: 'test',
-  },
-  {
-    label: 'Ambetter',
-    value: 'ambetter',
-  },
-]
 export { PayerSelect }

@@ -5,7 +5,11 @@ import { Button } from '@radix-ui/themes'
 import { RepeatIcon } from 'lucide-react'
 import { EligibilityCheckDialog } from '../dialogs'
 
-const EligibilityCheckButton = () => {
+interface EligibilityCheckButtonProps {
+  disabled?: boolean
+}
+
+const EligibilityCheckButton = ({ disabled }: EligibilityCheckButtonProps) => {
   const [open, setOpen] = useState(false)
   const onOpen = () => setOpen(true)
   const onClose = () => setOpen(false)
@@ -18,6 +22,7 @@ const EligibilityCheckButton = () => {
         variant="outline"
         type="button"
         onClick={onOpen}
+        disabled={disabled}
       >
         <RepeatIcon size={14} /> Eligibility Check
       </Button>
