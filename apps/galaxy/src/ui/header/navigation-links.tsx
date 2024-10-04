@@ -18,6 +18,7 @@ const NavigationLinks = () => {
         label="Pre-visit Assessment"
       />
       <NavigationLink href="/rx" label="Rx" />
+      <NavigationLink href="/reports" label="Reports" />
     </Flex>
   )
 }

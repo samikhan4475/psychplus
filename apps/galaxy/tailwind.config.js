@@ -59,6 +59,9 @@ const config = {
         'pp-sky-blue-5': '#7BC8E0',
         'pp-cyan-1': '#F1FCFF',
         'pp-cyan-10': '#236E93',
+        'pp-blue-200': '#0134DB72',
+        'pp-blue-300': '#0044ff',
+        'pp-blue-400': '#194595',
       },
       animation: {
         loader: 'bounce 500ms infinite, pulse 2s infinite',
