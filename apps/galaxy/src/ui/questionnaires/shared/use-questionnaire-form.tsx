@@ -15,10 +15,19 @@ const calculateTotalScore = (data: any): number => {
   return totalScore
 }
 
+const calculateTotalFilledQuestions = (data: any): number => {
+  return Object.values(data).filter(
+    (value) => value !== '' && value !== null && value !== undefined,
+  ).length
+}
+
 const useQuestionnaireForm = (
   initialValues: QuestionnaireSchemaType,
   totalQuestions: number,
-): UseFormReturn<QuestionnaireSchemaType> & { totalScore: number } => {
+): UseFormReturn<QuestionnaireSchemaType> & {
+  totalScore: number
+  totalFilledQuestions: number
+} => {
   const schema = createQuestionnaireSchema(totalQuestions)
 
   const form = useForm<QuestionnaireSchemaType>({
@@ -28,17 +37,23 @@ const useQuestionnaireForm = (
   })
 
   const [totalScore, setTotalScore] = useState<number>(0)
+  const [totalFilledQuestions, setTotalFilledQuestions] = useState<number>(0)
 
   useEffect(() => {
     const scores = calculateTotalScore(initialValues)
+    const filledQuestions = calculateTotalFilledQuestions(initialValues)
 
     setTotalScore(scores)
+    setTotalFilledQuestions(filledQuestions)
   }, [])
 
   useEffect(() => {
     const subscription = form.watch((values) => {
       const scores = calculateTotalScore(values)
+      const filledQuestions = calculateTotalFilledQuestions(values)
+
       setTotalScore(scores)
+      setTotalFilledQuestions(filledQuestions)
     })
 
     return () => subscription.unsubscribe()
@@ -48,6 +63,7 @@ const useQuestionnaireForm = (
     ...form,
 
     totalScore,
+    totalFilledQuestions,
   }
 }
 

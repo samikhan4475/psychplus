@@ -12,7 +12,7 @@ const HistoryButton = () => {
           e.preventDefault()
         }}
       >
-        <HistoryIcon color="black" height="16" width="16" />
+        <HistoryIcon color="black" height="14" width="14" />
       </Button>
     </Tooltip>
   )

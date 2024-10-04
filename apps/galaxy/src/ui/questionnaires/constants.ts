@@ -12,4 +12,14 @@ enum QuestionnaireTabs {
   HAM_D_TAB = 'HAM-D',
 }
 
-export { QuestionnaireTabs }
+enum QuestionnairesStatus {
+  Completed = 'Completed',
+  Requested = 'Requested',
+}
+
+enum QuestionnairesFilledBy {
+  Patient = 'Patient',
+  Provider = 'Provider',
+}
+
+export { QuestionnaireTabs, QuestionnairesStatus, QuestionnairesFilledBy }

@@ -28,8 +28,7 @@ const QuestionnairesSelectableChip = ({
         )}
       >
         <Text
-          size="2"
-          className={cn('select-none', {
+          className={cn('select-none text-[11px]', {
             'font-bold': selected,
           })}
         >

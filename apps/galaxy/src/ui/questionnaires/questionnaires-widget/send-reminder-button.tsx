@@ -2,9 +2,9 @@
 
 import { Button, Tooltip } from '@radix-ui/themes'
 
-const SendToPatientButton = () => {
+const SendReminderButton = () => {
   return (
-    <Tooltip content="Send a Request to the Patient to Complete Questionnaire">
+    <Tooltip content="Patient will receive reminder Message">
       <Button
         size="1"
         color="gray"
@@ -14,10 +14,10 @@ const SendToPatientButton = () => {
           e.preventDefault()
         }}
       >
-        Request patient to Fill
+        Send Reminder
       </Button>
     </Tooltip>
   )
 }
 
-export { SendToPatientButton }
+export { SendReminderButton }

@@ -18,9 +18,12 @@ interface QuestionnairesSelectSectionProps {
 }
 
 interface QuestionnaireRow {
-  totalScore: string
+  totalScore: number
   status: string
   date: string
+  filledBy?: string
+  reminderToCompleteQuestionnaireAlreadySent?: boolean
+  sectionName?: string
 }
 
 const QuestionnairesSelectSection = ({

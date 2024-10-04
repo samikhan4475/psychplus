@@ -200,23 +200,29 @@ const SNAP_IV_OPTIONS = [
   { label: '+3', value: '3' },
 ]
 
+enum SNAP_IV_SECTIONS {
+  Inattention = 'Inattention',
+  Hyperactivity = 'Hyperactivity/Impulsivity',
+  Opposition = 'Opposition/Defiance',
+}
+
 const SNAP_IV_TABLES = [
   {
     id: 'Inattention',
-    label: 'Inattention',
+    label: SNAP_IV_SECTIONS.Inattention,
     data: SNAP_IV_QUESTIONS_INATTENTION,
     ScoreInterpretation: SCORE_INTERPRETATION_RANGES_INATTENTION,
   },
 
   {
     id: 'Hyperactivity',
-    label: 'Hyperactivity/Impulsivity',
+    label: SNAP_IV_SECTIONS.Hyperactivity,
     data: SNAP_IV_QUESTIONS_HYPERACTIVITY,
     ScoreInterpretation: SCORE_INTERPRETATION_RANGES_HYPERACTIVITY,
   },
   {
     id: 'Opposition',
-    label: 'Opposition/Defiance',
+    label: SNAP_IV_SECTIONS.Opposition,
     data: SNAP_IV_QUESTIONS_OPPOSITION,
     ScoreInterpretation: SCORE_INTERPRETATION_RANGES_OPPOSITION,
   },
@@ -232,4 +238,5 @@ export {
   SNAP_IV_QUESTIONS_HYPERACTIVITY,
   SNAP_IV_QUESTIONS_OPPOSITION,
   SNAP_IV_TABLES,
+  SNAP_IV_SECTIONS,
 }

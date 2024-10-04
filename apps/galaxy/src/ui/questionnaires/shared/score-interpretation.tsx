@@ -21,17 +21,7 @@ const ScoreInterpretation = ({
   totalScore,
   isRanges = true,
 }: ScoreInterpretationProps) => {
-    const getRange = (score: number) => {
-    return ranges.find((range) => {
-      if (range.max !== undefined) {
-        return score >= range.min && score <= range.max
-      }
-
-      return score >= range.min
-    })
-  }
-
-  const currentRange = getRange(totalScore)
+  const currentRange = getRange(ranges, totalScore)
 
   return (
     <Flex
@@ -76,9 +66,9 @@ const ScoreInterpretation = ({
           size="1"
           variant="soft"
           mx="1"
-          color={getBadgeColor(getRange(totalScore))}
+          color={getBadgeColor(getRange(ranges, totalScore))}
           className={cn(
-            getBadgeColor(getRange(totalScore)),
+            getBadgeColor(getRange(ranges, totalScore)),
             '1px solid border',
           )}
         >
@@ -88,6 +78,16 @@ const ScoreInterpretation = ({
       </Flex>
     </Flex>
   )
+}
+
+const getRange = (ranges: ScoreInterpretationRange[], score: number) => {
+  return ranges.find((range) => {
+    if (range.max !== undefined) {
+      return score >= range.min && score <= range.max
+    }
+
+    return score >= range.min
+  })
 }
 
 const getBadgeColor = (currentRange?: ScoreInterpretationRange) => {
@@ -122,4 +122,9 @@ const getBadgeBackgroundClass = (color: string) => {
   }
 }
 
-export { ScoreInterpretation, type ScoreInterpretationRange }
+export {
+  ScoreInterpretation,
+  getBadgeColor,
+  getRange,
+  type ScoreInterpretationRange,
+}

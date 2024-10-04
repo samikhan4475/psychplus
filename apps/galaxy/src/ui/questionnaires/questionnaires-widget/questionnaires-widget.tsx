@@ -4,7 +4,12 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { FormProvider, useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { WidgetFormContainer } from '@/components'
-import { QuestionnaireTabs } from '../constants'
+import {
+  QuestionnairesFilledBy,
+  QuestionnairesStatus,
+  QuestionnaireTabs,
+} from '../constants'
+import { SNAP_IV_SECTIONS } from '../snap-iv-tab/constants'
 import { QuestionnairesTabsBlock } from './blocks'
 
 interface QuestionnairesWidgetProps {
@@ -30,19 +35,84 @@ const QuestionnairesWidget = ({ patientId }: QuestionnairesWidgetProps) => {
       questionnairesTabs: [
         {
           key: QuestionnaireTabs.PHQ_9_TAB,
-          value: [{}, {}, {}],
+          value: [
+            {
+              totalScore: 9,
+              status: QuestionnairesStatus.Completed,
+              filledBy: QuestionnairesFilledBy.Provider,
+            },
+            {
+              totalScore: 21,
+              status: QuestionnairesStatus.Completed,
+              filledBy: QuestionnairesFilledBy.Patient,
+            },
+            {
+              totalScore: 21,
+              status: QuestionnairesStatus.Completed,
+              filledBy: QuestionnairesFilledBy.Patient,
+            },
+            {
+              totalScore: 21,
+              status: QuestionnairesStatus.Completed,
+              filledBy: QuestionnairesFilledBy.Patient,
+            },
+            {
+              totalScore: 2,
+              status: QuestionnairesStatus.Completed,
+              filledBy: QuestionnairesFilledBy.Provider,
+            },
+            {
+              totalScore: 9,
+              status: QuestionnairesStatus.Completed,
+              filledBy: QuestionnairesFilledBy.Patient,
+            },
+            {
+              totalScore: 9,
+              status: QuestionnairesStatus.Completed,
+              filledBy: QuestionnairesFilledBy.Provider,
+            },
+            {
+              totalScore: 14,
+              status: QuestionnairesStatus.Completed,
+              filledBy: QuestionnairesFilledBy.Patient,
+            },
+            {
+              totalScore: 9,
+              status: QuestionnairesStatus.Completed,
+              filledBy: QuestionnairesFilledBy.Provider,
+            },
+          ],
         },
         {
           key: QuestionnaireTabs.GAD_7_TAB,
-          value: [{}],
-        },
-        {
-          key: QuestionnaireTabs.PCL_5_TAB,
-          value: [{}],
+          value: [
+            {
+              totalScore: 13,
+              status: QuestionnairesStatus.Completed,
+              filledBy: QuestionnairesFilledBy.Provider,
+            },
+          ],
         },
         {
           key: QuestionnaireTabs.SNAP_IV_TAB,
-          value: [{}],
+          value: [
+            {
+              totalScore: 9,
+              status: QuestionnairesStatus.Completed,
+              filledBy: QuestionnairesFilledBy.Patient,
+              sectionName: SNAP_IV_SECTIONS.Inattention,
+            },
+          ],
+        },
+        {
+          key: QuestionnaireTabs.PCL_5_TAB,
+          value: [
+            {
+              totalScore: 45,
+              status: QuestionnairesStatus.Requested,
+              reminderToCompleteQuestionnaireAlreadySent: true,
+            },
+          ],
         },
       ],
     },

@@ -1,5 +1,5 @@
-import { QuestionnairesSelectSection } from '@/components/questionnaires-select-section'
 import { QuestionnaireTabs } from '../../constants'
+import { QuestionnairesSelectSection } from '../components'
 
 const QuestionnairesTabsBlock = () => {
   return (
