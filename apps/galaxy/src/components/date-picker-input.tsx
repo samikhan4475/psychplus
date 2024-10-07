@@ -80,21 +80,21 @@ const DatePickerInput = <T extends DateValue>({
             aria-label={aria_lable ?? 'date to filter input'}
             isInvalid={invalid}
             className={datePickerClass}
-            isDisabled={form.formState.disabled || isDisabled}
+            isDisabled={
+              form.formState.disabled ||
+              form.formState.isSubmitting ||
+              isDisabled
+            }
             {...props}
           >
             <Group
-              className={cn(
-                'relative w-full',
-                isDisabled ? 'bg-gray-3 text-gray-11' : 'bg-[white]',
-              )}
+              className={
+                'relative w-full data-[disabled]:pointer-events-none data-[disabled]:bg-gray-3 data-[disabled]:text-gray-11'
+              }
             >
               <DateInput
                 className={cn(
-                  'border-pp-gray-2 flex h-6 w-full items-center overflow-hidden whitespace-nowrap rounded-1 border px-1 py-[2.5px] data-[focus-within]:outline-1 data-[focus-within]:outline-iris-12',
-                  {
-                    'bg-gray-3': form.formState.disabled || isDisabled,
-                  },
+                  'border-pp-gray-2 flex h-6 w-full items-center overflow-hidden whitespace-nowrap rounded-1 border px-1 py-[2.5px]   data-[focus-within]:outline-1 data-[focus-within]:outline-iris-12',
                   dateInputClass,
                 )}
               >

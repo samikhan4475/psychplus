@@ -21,17 +21,19 @@ const InsuranceView = ({
   patientId,
 }: InsuranceViewProps) => {
   const scrollRef = useRef<HTMLDivElement>(null)
-  const { isAddFormOpen, setInsurances,filteredInsurances, } = useStore((state) => ({
-    isAddFormOpen: state.isAddFormOpen,
-    setInsurances: state.setInsurances,
-    filteredInsurances:state.filteredInsurances
-  }))
+  const { isAddFormOpen, setInsurances, filteredInsurances } = useStore(
+    (state) => ({
+      isAddFormOpen: state.isAddFormOpen,
+      setInsurances: state.setInsurances,
+      filteredInsurances: state.filteredInsurances,
+    }),
+  )
 
   useEffect(() => {
     if (patientPolicies?.length > 0) {
       setInsurances(patientPolicies)
     }
-  }, [patientPolicies,patientId])
+  }, [patientPolicies, patientId, setInsurances])
 
   useEffect(() => {
     if (!scrollRef?.current) return
@@ -45,7 +47,8 @@ const InsuranceView = ({
   return (
     <Flex direction="column" ref={scrollRef} gap="1">
       <InsuranceHeader />
-      {(filteredInsurances && filteredInsurances?.length > 0) || isAddFormOpen ? (
+      {(filteredInsurances && filteredInsurances?.length > 0) ||
+      isAddFormOpen ? (
         <InsuranceForms
           patientId={patientId}
           insurances={filteredInsurances}

@@ -9,13 +9,15 @@ interface PhotoCardProps {
   title?: string
   className?: string
   savedImg?: string
-  onImageChanged: (file: File | undefined) => void
+  onImageChanged?: (file: File | undefined) => void
+  noControls?: boolean
 }
 const ImageCard = ({
   title,
   className,
   savedImg,
   onImageChanged,
+  noControls = false,
 }: PhotoCardProps) => {
   const [previewImage, setPreviewImage] = useState<string | null>(null)
 
@@ -24,7 +26,7 @@ const ImageCard = ({
     const objectUrl = file ? URL.createObjectURL(file) : null
 
     setPreviewImage(objectUrl)
-    onImageChanged(file)
+    onImageChanged?.(file)
   }
 
   let imageSrc: string | undefined | null = previewImage
@@ -48,7 +50,9 @@ const ImageCard = ({
           fallback={<PictureFallback width={140} height={150} />}
         />
       </Box>
-      <ImageControls previewSrc={imageSrc} onFileChange={onImageChange} />
+      {!noControls && (
+        <ImageControls previewSrc={imageSrc} onFileChange={onImageChange} />
+      )}
     </Flex>
   )
 }

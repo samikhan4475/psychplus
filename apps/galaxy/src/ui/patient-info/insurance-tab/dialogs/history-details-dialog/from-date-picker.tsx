@@ -8,9 +8,9 @@ import {
 
 const FromDataPicker = () => {
   return (
-    <FormFieldContainer className="w-[154px] flex-row gap-1">
-      <FormFieldLabel className="!text-1">From</FormFieldLabel>
-      <DatePickerInput field="fromDate" />
+    <FormFieldContainer className="w-[154px] flex-row items-start gap-1">
+      <FormFieldLabel className="pt-0.5 !text-1">From</FormFieldLabel>
+      <DatePickerInput field="historyCreatedFrom" className="" />
     </FormFieldContainer>
   )
 }

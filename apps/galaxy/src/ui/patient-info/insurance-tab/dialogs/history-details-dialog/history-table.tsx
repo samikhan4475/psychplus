@@ -1,54 +1,62 @@
 'use client'
 
 import { ScrollArea } from '@radix-ui/themes'
-import { ColumnDef } from '@tanstack/react-table'
+import { ColumnDef, Row, Table } from '@tanstack/react-table'
 import { ColumnHeader, DataTable, TextCell } from '@/components'
-import { InsuranceHistoryData } from '../../types'
+import { RawInsurance } from '@/types'
+import { formatDateTime } from '@/utils'
+import { useStore } from './store'
 
-const columns: ColumnDef<InsuranceHistoryData>[] = [
+const columns: ColumnDef<RawInsurance>[] = [
   {
-    accessorKey: 'dateTime',
+    accessorKey: 'metadata.createdOn',
     header: ({ column }) => (
-      <ColumnHeader
-        label="Date/time"
-        sortable
-        column={column}
-        className="px-1 py-0.5 !text-1 !font-medium"
-      />
+      <ColumnHeader label="Date/time" sortable clientSideSort column={column} />
     ),
     cell: ({ row }) => (
-      <TextCell className="px-1 py-0.5 !text-1 !font-medium">
-        {row.original.dateTime}
+      <TextCell>
+        {formatDateTime(row?.original?.metadata?.createdOn, false)}
       </TextCell>
     ),
   },
   {
-    accessorKey: 'user.name',
+    accessorKey: 'metadata.createdByFullName',
     header: ({ column }) => (
-      <ColumnHeader
-        sortable
-        column={column}
-        label="Username"
-        className="px-1 py-0.5 !text-1 !font-medium"
-      />
+      <ColumnHeader sortable clientSideSort column={column} label="Username" />
     ),
     cell: ({ row }) => (
-      <TextCell className="px-1 py-0.5 !text-1 !font-medium">
-        {row?.original?.username}
+      <TextCell className="truncate">
+        {row?.original?.metadata?.createdByFullName ?? 'N/A'}
       </TextCell>
     ),
   },
 ]
+
 const HistoryTable = () => {
+  const { setSelectedRow, insuranceHistory } = useStore((state) => ({
+    setSelectedRow: state.setSelectedRow,
+    insuranceHistory: state.insuranceHistory,
+  }))
+
+  const onRowSelect = (row: Row<RawInsurance>, table: Table<RawInsurance>) => {
+    table.setRowSelection({ [row.id]: true })
+    setSelectedRow(row.original)
+  }
+
   return (
-    <ScrollArea className="max-h-[570px] w-full">
-      <DataTable columns={columns} data={data} sticky />
+    <ScrollArea
+      className="outline-pp outline-pp-table-border h-full w-full max-w-[220px] outline outline-1 -outline-offset-1"
+      scrollbars="vertical"
+    >
+      <DataTable
+        columns={columns}
+        data={insuranceHistory ?? []}
+        onRowClick={onRowSelect}
+        selectFirstRow={true}
+        sticky
+      />
     </ScrollArea>
   )
 }
 
-const data: InsuranceHistoryData[] = [...Array(20)].map(() => ({
-  dateTime: '12/12/2024',
-  username: 'John Robert Smith',
-}))
 export { HistoryTable }

@@ -92,6 +92,11 @@ const UPDATE_PATIENT_POLICY_ENDPOINT = (patientId: string, policyId: string) =>
   `${API_URL}/api/patients/${patientId}/policies/${policyId}`
 const DELETE_PATIENT_POLICY_ENDPOINT = (patientId: string, policyId: string) =>
   `${API_URL}/api/patients/${patientId}/policies/${policyId}`
+const GET_PATIENT_POLICY_HISTORY_ENDPOINT = (
+  patientId: string,
+  policyId: string,
+) =>
+  `${API_URL}/api/patients/${patientId}/policies/${policyId}/history/actions/search`
 const GET_REPORTS_CATEGORY_ENDPOINT = `${API_URL}/api/codeset/authorities/PsychPlusPublic/codesets/ReportCategory`
 const GET_REPORTS_TEMPLATES_ENDPOINT =`${API_URL}/api/reporting/templates/actions/search?offset=0&limit=0&orderBy=displayname%20asc`
 const GET_REPORTS_PARAMETER_ENDPOINT = `${API_URL}/api/codeset/authorities/PsychPlusPublic/codesets/ReportParameterType`
@@ -153,6 +158,7 @@ export {
   ADD_PATIENT_POLICY_ENDPOINT,
   UPDATE_PATIENT_POLICY_ENDPOINT,
   DELETE_PATIENT_POLICY_ENDPOINT,
+  GET_PATIENT_POLICY_HISTORY_ENDPOINT,
   GET_REPORTS_CATEGORY_ENDPOINT,
   GET_REPORTS_TEMPLATES_ENDPOINT,
   GET_REPORTS_PARAMETER_ENDPOINT,

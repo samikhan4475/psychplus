@@ -37,6 +37,11 @@ interface InsuranceParams {
   }
 }
 
+interface InsuranceHistoryParams {
+  historyCreatedFrom?: string
+  historyCreatedTo?: string
+  username?: string
+}
 interface InsuranceTag {
   id: string
   name: string
@@ -97,4 +102,5 @@ export type {
   InsuranceHistoryData,
   EligibilityResponseTable,
   InsuranceParams,
+  InsuranceHistoryParams,
 }

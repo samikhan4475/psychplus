@@ -37,6 +37,7 @@ interface DataTableProps<TData, TValue> {
   isRowSpan?: boolean // Use rowspan to prevent table layout issues. Nested columns apply only when the optional `isRowSpan` prop is true, as data tables don't support them directly.
   theadClass?: string
   tableClass?: string
+  selectFirstRow?: boolean
 }
 
 const DataTable = <TData, TValue>({
@@ -53,15 +54,19 @@ const DataTable = <TData, TValue>({
   isRowSpan,
   theadClass,
   tableClass,
+  selectFirstRow,
 }: DataTableProps<TData, TValue>) => {
   const [sorting, setSorting] = useState<SortingState>([])
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
     pageSize: initialPageSize,
   })
+  const initialRowSelection: RowSelectionState = selectFirstRow
+    ? { 0: true }
+    : {}
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
-  const [rowSelection, setRowSelection] = useState({})
+  const [rowSelection, setRowSelection] = useState(initialRowSelection)
   const [expanded, setExpanded] = useState<ExpandedState>({})
 
   useEffect(() => {
@@ -172,7 +177,7 @@ const DataTable = <TData, TValue>({
                 }}
                 className={cn('group/row-hover hover:bg-gray-2', {
                   'cursor-pointer': onRowClick !== undefined,
-                  'bg-pp-focus-bg': row.getIsSelected(),
+                  '!bg-pp-table-subRows': row.getIsSelected(),
                   'bg-pp-table-subRows hover:bg-pp-table-subRows':
                     row.depth > 0,
                 })}

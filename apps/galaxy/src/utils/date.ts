@@ -116,7 +116,10 @@ const getAgeFromDate = (date: DateValue) => {
   return age
 }
 
-const formatDateTime = (dateString: string | undefined) => {
+const formatDateTime = (
+  dateString: string | undefined,
+  hour12: boolean | undefined = true,
+) => {
   if (!dateString) return ''
 
   const date = new Date(dateString)
@@ -129,7 +132,7 @@ const formatDateTime = (dateString: string | undefined) => {
   const formattedTime = new Intl.DateTimeFormat('en-US', {
     hour: '2-digit',
     minute: '2-digit',
-    hour12: true,
+    hour12: hour12,
   }).format(date)
 
   return `${formattedDate} ${formattedTime}`
@@ -160,7 +163,12 @@ const formatDate = (
   return format(date, dateFormat)
 }
 
-const getSlashedPaddedDateString = (date: CalendarDate | string) => {
+const getSlashedPaddedDateString = (
+  date: CalendarDate | string | undefined,
+) => {
+  if (!date) {
+    return ''
+  }
   if (typeof date === 'string') {
     date = getCalendarDate(date)
   }
@@ -171,7 +179,6 @@ const getSlashedPaddedDateString = (date: CalendarDate | string) => {
   const day = String(date.day).padStart(2, '0')
   const year = date.year % 100
   return `${month}/${day}/${year}`
-
 }
 function formatExpirationDate(expireMonth: number, expireYear: number) {
   const formattedMonth = String(expireMonth).padStart(2, '0')

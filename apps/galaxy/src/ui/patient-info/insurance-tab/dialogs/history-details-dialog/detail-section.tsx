@@ -1,31 +1,59 @@
 'use client'
 
-import { Grid } from '@radix-ui/themes'
-import { DetailBox } from '../../shared'
+import { getSlashedPaddedDateString } from '@/utils'
+import { LabeledContent } from '../../shared'
+import { InsuranceImages } from './insurance-images'
+import { PatientDetails } from './patient-details'
+import { useStore } from './store'
 
-const DetailSection = () => {
+interface DetailSectionProps {
+  patientId: string
+  policyId: string
+}
+const DetailSection = ({ patientId, policyId }: DetailSectionProps) => {
+  const { selectedRow } = useStore((state) => ({
+    selectedRow: state.selectedRow,
+  }))
   return (
     <>
-      <DetailBox title="First NAme" content="John" required />
-      <DetailBox title="Last Name" content="Corner" required />
-      <DetailBox title="Gender" content="Male" required />
-      <DetailBox title="DOB" content="12/12/2024" required />
-      <DetailBox title="Relationship" content="Father" required />
-      <DetailBox title="SSN" content="122334444" required />
-      <DetailBox title="Member ID" content="123uj3333" required />
-      <DetailBox title="Group ID" content="123738UD" required />
-      <Grid columns="3" className="col-span-full" gap="2">
-        <DetailBox title="Effective Date" content="12/13/2022" required />
-        <DetailBox title="Termination Date" content="12/13/2022" required />
-        <DetailBox title="Patient is insurance holder" content="No" />
-        <DetailBox title="Priority" content="Primary" required />
-        <DetailBox title="Payer" content="Ambetter" required />
-        <DetailBox
-          title="Insurance Plan"
-          content="Superior health plan"
-          required
-        />
-      </Grid>
+      <LabeledContent
+        title="Priority"
+        content={selectedRow?.insurancePolicyPriority}
+        required
+      />
+      <LabeledContent title="Payer" content={selectedRow?.payerName} required />
+      <LabeledContent
+        title="Insurance Plan"
+        content={selectedRow?.policyName}
+        required
+      />
+      <LabeledContent
+        title="Member ID"
+        content={selectedRow?.memberId}
+        required
+      />
+      <LabeledContent
+        title="Group Number"
+        content={selectedRow?.groupNumber}
+        required
+      />
+      <LabeledContent
+        title="Effective Date"
+        content={getSlashedPaddedDateString(selectedRow?.effectiveDate)}
+        required
+      />
+      <LabeledContent
+        title="Termination Date"
+        content={getSlashedPaddedDateString(selectedRow?.terminationDate)}
+        required
+      />
+      <LabeledContent
+        title="Patient is insurance holder"
+        className="col-span-2"
+        content={selectedRow?.isPatientPolicyHolder ? 'Yes' : 'No'}
+      />
+      {!selectedRow?.isPatientPolicyHolder && <PatientDetails />}
+      <InsuranceImages patientId={patientId} policyId={policyId} />
     </>
   )
 }

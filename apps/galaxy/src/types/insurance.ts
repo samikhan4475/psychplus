@@ -1,4 +1,5 @@
 import { PatientAddress } from './address'
+import { Metadata } from './metadata'
 
 interface InsurancePayer {
   id: string
@@ -51,4 +52,7 @@ interface Insurance {
   }
 }
 
-export type { InsurancePayer, Insurance }
+interface RawInsurance extends Insurance {
+  metadata: Metadata & { createdByFullName: string }
+}
+export type { InsurancePayer, Insurance, RawInsurance }

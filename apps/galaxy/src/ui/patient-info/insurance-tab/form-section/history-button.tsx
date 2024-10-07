@@ -5,12 +5,16 @@ import { Button } from '@radix-ui/themes'
 import { HistoryIcon } from 'lucide-react'
 import { cn } from '@/utils'
 import { HistoryDetailsDialog } from '../dialogs'
+import { Insurance } from '@/types'
 
 interface HistoryButtonProps {
   disabled?: boolean
+  patientId: string
+  policyId:string
+  insurance?:Insurance
 }
 
-const HistoryButton = ({ disabled }: HistoryButtonProps) => {
+const HistoryButton = ({ disabled, patientId,policyId,insurance }: HistoryButtonProps) => {
   const [open, setOpen] = useState(false)
   const onOpen = () => setOpen(true)
   const onClose = () => setOpen(false)
@@ -27,7 +31,13 @@ const HistoryButton = ({ disabled }: HistoryButtonProps) => {
       >
         <HistoryIcon size={14} /> History
       </Button>
-      <HistoryDetailsDialog open={open} onClose={onClose} />
+      <HistoryDetailsDialog
+        open={open}
+        onClose={onClose}
+        patientId={patientId}
+        policyId={policyId}
+        title={insurance?.policyName ?? ''}
+      />
     </>
   )
 }
