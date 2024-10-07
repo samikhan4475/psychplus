@@ -36,9 +36,9 @@ const RemoveButton = ({
 
     const result = await deletePolicy(patientId, insurance.id)
 
-    if (result.state == 'error') {
+    if (result.state === 'error') {
       toast.error(result.error ?? 'Failed to delete policy')
-    } else if (result.state == 'success') {
+    } else if (result.state === 'success') {
       router.refresh()
       toast.success('Policy deleted successfully')
     }
