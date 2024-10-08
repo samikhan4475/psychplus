@@ -4,7 +4,7 @@ import { CodesetSelect, FormFieldLabel } from '@/components'
 import { CODESETS } from '@/constants'
 import { FormFieldContainer } from '../shared'
 import { useFiltersContext } from '../context'
-import { SchedulerFilters } from '../constants'
+import { SchedulerFilters } from '../types'
 
 const ProviderTypeDropdown = () => {
   const { filters } = useFiltersContext()

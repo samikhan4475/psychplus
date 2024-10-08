@@ -2,6 +2,7 @@ import {
   CalendarDate,
   DateFormatter,
   getDayOfWeek,
+  parseDate,
   type DateValue,
 } from '@internationalized/date'
 import { format } from 'date-fns'
@@ -187,6 +188,14 @@ function formatExpirationDate(expireMonth: number, expireYear: number) {
   return `${formattedMonth}/${formattedYear}`
 }
 
+const formatDateOfBirth = (dob: string) => {
+  const date = parseDate(dob)
+  const month = String(date.month).padStart(2, '0')
+  const day = String(date.day).padStart(2, '0')
+  const year = String(date.year).padStart(2, '0')
+  return `${month}-${day}-${year}`
+}
+
 export {
   getCalendarDate,
   getLocalCalendarDate,
@@ -203,4 +212,5 @@ export {
   formatDate,
   getSlashedPaddedDateString,
   formatExpirationDate,
+  formatDateOfBirth,
 }

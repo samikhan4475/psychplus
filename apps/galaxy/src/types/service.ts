@@ -16,6 +16,26 @@ interface Cosigner {
   rating: number
 }
 
+interface ServiceUnit {
+  id: string
+  metadata: Metadata
+  locationId: string
+  serviceId: string
+  unit: string
+  coSignerId: number
+  resourceStatus: string
+}
+
+interface ServiceGroup {
+  id: string
+  metadata: Metadata
+  locationId: string
+  serviceId: string
+  group: string
+  coSignerId: number
+  resourceStatus: string
+}
+
 interface Service {
   id: string
   metadata: Metadata
@@ -44,6 +64,8 @@ interface Service {
   city: string
   state: string
   cosigner: Cosigner
+  serviceUnits?: ServiceUnit[]
+  serviceGroups?: ServiceGroup[]
 }
 
-export type { Service, Cosigner }
+export type { Service, Cosigner, ServiceGroup, ServiceUnit }

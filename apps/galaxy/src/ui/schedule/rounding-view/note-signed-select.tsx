@@ -3,7 +3,7 @@
 import { FormFieldLabel, SelectInput } from '@/components'
 import { FormFieldContainer } from '../shared'
 import { useFiltersContext } from '../context'
-import { SchedulerFilters } from '../constants'
+import { SchedulerFilters } from '../types'
 
 const options = [
   {
@@ -16,7 +16,7 @@ const options = [
   },
 ]
 
-const NoteSignedSelect = () => {
+const   NoteSignedSelect = () => {
   const { filters } = useFiltersContext()
   if (!filters.includes(SchedulerFilters.NoteSigned)) return null
 
@@ -24,7 +24,7 @@ const NoteSignedSelect = () => {
     <FormFieldContainer>
       <FormFieldLabel>Note Signed</FormFieldLabel>
       <SelectInput
-        field="noteSigned"
+        field="isNoteSigned"
         placeholder="Select"
         options={options}
         buttonClassName="h-6 w-full"

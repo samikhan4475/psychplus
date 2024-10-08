@@ -5,10 +5,11 @@ import { useFormContext } from 'react-hook-form'
 import { FormFieldLabel } from '@/components'
 import { FormFieldContainer } from '../shared'
 import { useFiltersContext } from '../context'
-import { SchedulerFilters } from '../constants'
+import { BookedAppointmentsSchemaType } from '../schema'
+import { SchedulerFilters } from '../types'
 
 const CptCodeInput = () => {
-  const form = useFormContext()
+  const form = useFormContext<BookedAppointmentsSchemaType>()
   const { filters } = useFiltersContext()
   if (!filters.includes(SchedulerFilters.CptCode)) return null
 

@@ -5,7 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Flex, Grid } from '@radix-ui/themes'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { FormContainer } from '@/components'
-import { LIIST_VIEW_FILTERS } from '../constants'
+import { LIST_VIEW_FILTERS } from '../constants'
 import { AddFiltersPopover, FiltersButtonsGroup } from '../shared'
 import { useStore } from '../store'
 import {
@@ -46,7 +46,7 @@ import { FiltersContext } from '../context'
 import {listViewSchema, type ListViewSchema } from './list-view-schema'
 
 const ListViewFilterCard = () => {
-  const [filters, setFilters] = useState<string[]>(LIIST_VIEW_FILTERS)
+  const [filters, setFilters] = useState<string[]>(LIST_VIEW_FILTERS)
   const { cachedFilters, saveFilters } = useStore((state) => ({
     cachedFilters: state.cachedFiltersList,
     saveFilters: state.saveListFilters,
@@ -163,7 +163,7 @@ const ListViewFilterCard = () => {
                 <AddFiltersPopover
                   view="List View"
                   onSave={saveFilters}
-                  viewFilters={LIIST_VIEW_FILTERS}
+                  viewFilters={LIST_VIEW_FILTERS}
                 />
               </FiltersButtonsGroup>
             </Grid>

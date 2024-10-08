@@ -6,7 +6,7 @@ import { Button } from '@radix-ui/themes'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { FormContainer } from '@/components'
 import { SelectOptionType } from '@/types'
-import { getCalendarDateLabel } from '@/utils'
+import { getCalendarDateLabel, sanitizeFormData } from '@/utils'
 import {
   CommentInput,
   DateFromInput,
@@ -16,7 +16,6 @@ import {
   StaffSelect,
 } from '../shared'
 import { useStore } from '../store'
-import { sanitizeObject } from '../utils'
 
 interface BillingFilterFormProps {
   staffOptions: SelectOptionType[]
@@ -47,7 +46,7 @@ const FilterForm = ({ patientId, staffOptions }: BillingFilterFormProps) => {
   const onSubmit: SubmitHandler<FilterFormSchemaType> = (data) => {
     if (!isDirty) return
 
-    const sanitizedData = sanitizeObject({
+    const sanitizedData = sanitizeFormData({
       PatientId: data.patientId,
       StartDate: data.startDate ? getCalendarDateLabel(data.startDate) : '',
       EndDate: data.endDate ? getCalendarDateLabel(data.endDate) : '',

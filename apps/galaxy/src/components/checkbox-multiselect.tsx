@@ -88,6 +88,7 @@ const MultiSelectField = ({
 
   const onClose = () => {
     setSelectedValues([])
+    onChange?.([])
   }
 
   return (
@@ -107,11 +108,17 @@ const MultiSelectField = ({
             })}
             onClick={onClose}
           />
-          <DropdownMenu.Trigger disabled={disabled}>
+          <DropdownMenu.Trigger
+            disabled={disabled}
+            className={cn(disabled && 'cursor-not-allowed')}
+          >
             <Button
               color="gray"
               variant="outline"
-              className="text-black !bg-white border-pp-gray-2 relative flex h-6 w-full cursor-default items-center !justify-between border border-solid px-1.5 pr-5 [box-shadow:none]"
+              className={cn(
+                'text-black !bg-white border-pp-gray-2 relative flex h-6 w-full cursor-default items-center !justify-between border border-solid px-1.5 pr-5 [box-shadow:none]',
+                { '!bg-pp-states-disabled': disabled },
+              )}
             >
               {selectedValues.length < 1 ? (
                 <Text

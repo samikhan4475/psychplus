@@ -1,20 +1,18 @@
 'use client'
 
 import { FormFieldLabel, SelectInput } from '@/components'
-import { FormFieldContainer } from '../../shared'
 import { useDropdownContext, useFiltersContext } from '../../context'
-import { SchedulerFilters } from '../../constants'
+import { FormFieldContainer } from '../../shared'
+import { SchedulerFilters } from '../../types'
 
 const SecondaryInsuranceDropdown = () => {
   const { filters } = useFiltersContext()
-  const {insurancePlans} = useDropdownContext()
+  const { insurancePlans } = useDropdownContext()
   if (!filters.includes(SchedulerFilters.SecondaryInsurance)) return null
 
   return (
     <FormFieldContainer className="h-full">
-      <FormFieldLabel>
-        Secondary Insurance
-      </FormFieldLabel>
+      <FormFieldLabel>Secondary Insurance</FormFieldLabel>
       <SelectInput
         field="secondaryInsurance"
         placeholder="Select"

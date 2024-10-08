@@ -14,8 +14,9 @@ const RoundingViewFilterGroup = () => {
   }
 
   const applyToggleBackground = (value: string) => {
-    if (value === activeFilter)
+    if (value === activeFilter) {
       return 'bg-pp-focus-bg text-pp-text-primary-base'
+    }
     return 'text-black'
   }
 

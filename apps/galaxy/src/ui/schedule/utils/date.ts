@@ -36,15 +36,13 @@ const formatDate = (date: CalendarDate): string => {
   }).format(date.toDate(getLocalTimeZone()))
 }
 
-const formatDateCell = (date: string) => {
-  const zonedDate = parseAbsolute(date, 'America/Chicago')
-  // TODO: Pass timezone dynamically when API response is updated
-  return `${zonedDate.day}/${zonedDate.month}/${zonedDate.year}`
+const formatDateCell = (date: string, timezoneId: string) => {
+  const zonedDate = parseAbsolute(date, timezoneId)
+  return `${zonedDate.month}/${zonedDate.day}/${zonedDate.year}`
 }
 
-const formatTimeCell = (date: string) => {
-  const zonedDate = parseAbsolute(date, 'America/Chicago')
-  // TODO: Pass timezone dynamically when API response is updated
+const formatTimeCell = (date: string, timezoneId: string) => {
+  const zonedDate = parseAbsolute(date, timezoneId)
   const hours = `${zonedDate.hour}`.padStart(2, "0")
   const minutes = `${zonedDate.minute}`.padStart(2, "0")
   return `${hours}:${minutes}`

@@ -1,4 +1,4 @@
-import { Metadata } from '@/types'
+import { Metadata, ServiceGroup, ServiceUnit } from '@/types'
 
 interface Visit {
   type: string
@@ -45,9 +45,9 @@ enum TabValue {
 }
 
 enum VerificationStatus {
-  Verified = "Verified",
-  Pending = "Pending",
-  UnVerifiable = "Unverifiable"
+  Verified = 'Verified',
+  Pending = 'Pending',
+  UnVerifiable = 'Unverifiable',
 }
 
 interface PatientRecord {
@@ -124,66 +124,6 @@ interface Option {
   label: string
 }
 
-interface Appointment {
-  appointmentId: number
-  metadata: Metadata
-  appointmentDate: string
-  name: string
-  age: number
-  clinicLocation: string
-  state: string
-  gender: string
-  dob: string
-  patientStatus: string
-  service: string
-  patientInfoVerificationStatus: string
-  patientInsuranceVerificationStatus: string
-  patientConsentStatus: string
-  patientCardVerificationStatus: boolean
-  providerId: number
-  providerName: string
-  providerType: string
-  visitType: string
-  visitSequence: string
-  visitMedium: string
-  visitStatus: string
-  insuranceVerification: string
-  primaryInsuranceName: string
-  secondaryInsuranceName: string
-  copayDue: number
-  copayPaid: number
-  coInsuranceDue: number
-  coInsurancePaid: number
-  balanceDue: number
-  balancePaid: number
-  isNoteSigned: boolean
-  locationName: string
-  unitResource: {
-    id: string
-    metadata: Metadata
-    locationId: string
-    serviceId: string
-    unit: string
-    coSignerId: number
-  }
-  groupResource: {
-    id: string
-    metadata: Metadata
-    locationId: string
-    serviceId: string
-    group: string
-    coSignerId: number
-  }
-  room: string
-  diagnosis: string
-  cptCodes: string[]
-  legalStatus: string
-  authorizationNumber: string
-  dateOfAdmission: string
-  lastCoverageDate: string
-  lengthOfStay: number
-}
-
 interface AppointmentParams {
   startingDate?: string
   endingDate?: string
@@ -224,6 +164,44 @@ interface AppointmentParams {
   noteSigned?: string
 }
 
+interface GetUnitsGroupsResponse {
+  serviceGroups: ServiceGroup[]
+  serviceUnits: ServiceUnit[]
+}
+
+enum View {
+  Rounding = 'rounding-view',
+  List = 'list-view',
+  All = 'all',
+}
+
+enum SchedulerFilters {
+  AuthorizationNumber = 'Authorization Number',
+  Balance = 'Balance',
+  CoInsurance = 'Co-Ins',
+  CoPayment = 'Co-Pay',
+  DOA = 'DOA',
+  Group = 'Group',
+  InsVerification = 'Ins Verification',
+  LCD = 'LCD',
+  Legal = 'Legal',
+  LOS = 'LOS',
+  Location = 'Location',
+  NoteSigned = 'Note Signed',
+  PrimaryInsurance = 'Primary Insurance',
+  Provider = 'Provider',
+  ProviderType = 'Provider Type',
+  Room = 'Room',
+  SecondaryInsurance = 'Secondary Insurance',
+  Unit = 'Unit',
+  VisitMedium = 'Visit Medium',
+  VisitSequence = 'Visit Sequence',
+  VisitStatus = 'Visit Status',
+  VisitType = 'Visit Type',
+  CptCode = 'CPT Code',
+  Diagnosis = 'Diagnosis',
+}
+
 export type {
   PatientRecord,
   Provider,
@@ -234,8 +212,8 @@ export type {
   Specialist,
   AvailableSlotsEvent,
   Option,
-  Appointment,
   AppointmentParams,
+  GetUnitsGroupsResponse,
 }
 
-export { TabValue, VerificationStatus }
+export { TabValue, VerificationStatus, View, SchedulerFilters }

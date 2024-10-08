@@ -2,26 +2,12 @@
 
 import { FormFieldLabel, SelectInput } from '@/components'
 import { FormFieldContainer } from '../shared'
-import { useFiltersContext } from '../context'
-import { SchedulerFilters } from '../constants'
-
-const options = [
-  {
-    label: 'Secondary Insurance 1',
-    value: 'Secondary Insurance 1',
-  },
-  {
-    label: 'Secondary Insurance 2',
-    value: 'Secondary Insurance 2',
-  },
-  {
-    label: 'Secondary Insurance 3',
-    value: 'Secondary Insurance 3',
-  },
-]
+import { useDropdownContext, useFiltersContext } from '../context'
+import { SchedulerFilters } from '../types'
 
 const SecondaryInsuranceDropdown = () => {
   const { filters } = useFiltersContext()
+  const { insurancePlans } = useDropdownContext()
   if (!filters.includes(SchedulerFilters.SecondaryInsurance)) return null
 
   return (
@@ -30,9 +16,9 @@ const SecondaryInsuranceDropdown = () => {
         Secondary Insurance
       </FormFieldLabel>
       <SelectInput
-        field="secondaryInsurance"
+        field="secondaryInsuranceName"
         placeholder="Select"
-        options={options}
+        options={insurancePlans}
         buttonClassName="w-full h-6"
         className="h-full flex-1"
       />

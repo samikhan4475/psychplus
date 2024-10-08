@@ -12,8 +12,9 @@ import {
   VisitSequenceSelectCell,
   VisitStatusSelectCell,
 } from '../shared/table-cells'
-import { Appointment, VerificationStatus } from '../types'
+import { VerificationStatus } from '../types'
 import { formatDateCell, formatTimeCell } from '../utils'
+import { Appointment } from '@/types'
 
 const verificationStatus = (status: string): JSX.Element => {
   switch (status) {
@@ -39,7 +40,12 @@ const columns: ColumnDef<Appointment>[] = [
       />
     ),
     cell: ({ row }) => (
-      <TextCell>{formatDateCell(row.original.appointmentDate)}</TextCell>
+      <TextCell>
+        {formatDateCell(
+          row.original.appointmentDate,
+          row.original.locationTimezoneId,
+        )}
+      </TextCell>
     ),
     enableHiding: false,
   },
@@ -55,7 +61,12 @@ const columns: ColumnDef<Appointment>[] = [
       />
     ),
     cell: ({ row }) => (
-      <TextCell>{formatTimeCell(row.original.appointmentDate)}</TextCell>
+      <TextCell>
+        {formatTimeCell(
+          row.original.appointmentDate,
+          row.original.locationTimezoneId,
+        )}
+      </TextCell>
     ),
     enableHiding: true,
   },
@@ -85,7 +96,9 @@ const columns: ColumnDef<Appointment>[] = [
         label="Name"
       />
     ),
-    cell: ({ row }) => <TextCell className='whitespace-nowrap'>{row.original.name}</TextCell>,
+    cell: ({ row }) => (
+      <TextCell className="whitespace-nowrap">{row.original.name}</TextCell>
+    ),
     enableHiding: false,
   },
   {
@@ -343,7 +356,11 @@ const columns: ColumnDef<Appointment>[] = [
             label="Type"
           />
         ),
-        cell: ({ row }) => <TextCell className='whitespace-nowrap'>{row.original.visitType}</TextCell>,
+        cell: ({ row }) => (
+          <TextCell className="whitespace-nowrap">
+            {row.original.visitType}
+          </TextCell>
+        ),
         enableHiding: false,
       },
       {
@@ -644,7 +661,7 @@ const columns: ColumnDef<Appointment>[] = [
         label="Legal"
       />
     ),
-    cell: ({ row }) => <LegalSelectCell />,
+    cell: ({ row }) => <LegalSelectCell row={row} />,
     enableHiding: true,
   },
 

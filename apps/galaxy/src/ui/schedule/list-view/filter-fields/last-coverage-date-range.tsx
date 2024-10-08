@@ -3,7 +3,7 @@
 import { DatePickerInput, FormFieldLabel } from '@/components'
 import { FormFieldContainer } from '../../shared'
 import { useFiltersContext } from '../../context'
-import { SchedulerFilters } from '../../constants'
+import { SchedulerFilters } from '../../types'
 
 const LastCoverageDateRange = () => {
   const { filters } = useFiltersContext()

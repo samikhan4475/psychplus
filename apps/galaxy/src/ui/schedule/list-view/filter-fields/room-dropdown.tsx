@@ -5,7 +5,7 @@ import { FormFieldContainer } from '../../shared'
 import { useFormContext } from 'react-hook-form'
 import { useFiltersContext } from '../../context'
 import { type ListViewSchema } from '../list-view-schema'
-import { SchedulerFilters } from '../../constants'
+import { SchedulerFilters } from '../../types'
 
 const options = [
   {

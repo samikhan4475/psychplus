@@ -1,108 +1,81 @@
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
-import { Button, Flex, Heading, Tabs } from '@radix-ui/themes'
-import { EditVisit } from '../visit/edit-visit'
-import { getClinicsOptionsAction, getProvidersOptionsAction } from './actions'
+import { PropsWithChildren, useEffect } from 'react'
+import { getLocalTimeZone, today } from '@internationalized/date'
+import { Flex, Heading, Tabs } from '@radix-ui/themes'
 import { CalendarView } from './calendar-view'
 import { SchedulerActionButtonGroup } from './components/header'
-import { DropdownContext } from './context'
 import { ListView } from './list-view'
 import { RoundingView } from './rounding-view'
 import { ViewHeader } from './schedule-view-header'
 import { TabsList } from './schedule-view-tabs-list'
 import { SchedulerView } from './scheduler-view'
-import { useStore } from './store'
-import { Option, TabValue } from './types'
-import { State } from '@/types'
+import { useBookedAppointmentsStore, useStore } from './store'
+import { TabValue } from './types'
 
-interface ScheduleViewProps {
-  insurancePlans: Option[]
-  usStates: State[]
-}
-
-const tabContentClass = (tab: string, currentSelection: string) => {
-  if (tab !== currentSelection) return
-  return 'flex flex-1 flex-col overflow-y-auto'
-}
-
-const ScheduleView = ({ insurancePlans, usStates }: ScheduleViewProps) => {
-  const [selectedTab, setSelectedTab] = useState<string>(TabValue.List)
-  const { setProvidersOptions, setClinicsOptions } = useStore((state) => ({
-    setProvidersOptions: state.setProvidersOptions,
-    setClinicsOptions: state.setClinicsOptions,
+const ScheduleView = () => {
+  const { activeTab, setActiveTab } = useStore((state) => ({
+    activeTab: state.activeTab,
+    setActiveTab: state.setActiveTab,
   }))
-
-  const ctxValue = useMemo(
-    () => ({ insurancePlans, usStates }),
-    [insurancePlans, usStates],
+  const fetchBookedAppointments = useBookedAppointmentsStore(
+    (state) => state.fetchData,
   )
 
   useEffect(() => {
-    getProvidersOptionsAction().then((response) => {
-      if (response.state === 'error') {
-        throw new Error(response.error)
-      }
-      setProvidersOptions(response.data)
-    })
-    getClinicsOptionsAction().then((response) => {
-      if (response.state === 'error') {
-        throw new Error(response.error)
-      }
-      setClinicsOptions(response.data)
-    })
+    fetchBookedAppointments()
   }, [])
 
   return (
-    <DropdownContext.Provider value={ctxValue}>
-      <Tabs.Root
-        defaultValue={TabValue.List}
-        onValueChange={setSelectedTab}
-        className="flex w-full flex-1 flex-col overflow-y-auto"
+    <Tabs.Root
+      defaultValue={TabValue.List}
+      onValueChange={setActiveTab}
+      className="flex w-full flex-1 flex-col overflow-y-auto"
+    >
+      <Flex
+        align="center"
+        className="py-0.5 pl-[22px] pr-5 shadow-1"
+        justify="between"
       >
-        <Flex
-          align="center"
-          className="py-0.5 pl-[22px] pr-5 shadow-1"
-          justify="between"
-        >
-          <Flex>
-            <Heading className="text-xl font-semibold">Schedule</Heading>
-            <TabsList />
-          </Flex>
-          <ViewHeader selectedTab={selectedTab} />
-          <SchedulerActionButtonGroup />
+        <Flex>
+          <Heading className="text-xl font-semibold">Schedule</Heading>
+          <TabsList />
         </Flex>
-        <Tabs.Content
-          value={TabValue.List}
-          className={tabContentClass(TabValue.List, selectedTab)}
-        >
-          <ListView />
-        </Tabs.Content>
-        <Tabs.Content
-          value={TabValue.Calendar}
-          className={tabContentClass(TabValue.Calendar, selectedTab)}
-        >
-          <CalendarView states={usStates} />
-        </Tabs.Content>
-        <Tabs.Content
-          value={TabValue.Scheduler}
-          className={tabContentClass(TabValue.Scheduler, selectedTab)}
-        >
-          <SchedulerView />
-        </Tabs.Content>
-        <Tabs.Content value={TabValue.ProviderCoding}>
-          <EditVisit states={usStates}>
-            <Button variant="ghost">Provider Coding View</Button>
-          </EditVisit>
-        </Tabs.Content>
-        <Tabs.Content
-          className={tabContentClass(TabValue.Rounding, selectedTab)}
-          value={TabValue.Rounding}
-        >
-          <RoundingView />
-        </Tabs.Content>
-      </Tabs.Root>
-    </DropdownContext.Provider>
+        <ViewHeader selectedTab={activeTab} />
+        <SchedulerActionButtonGroup />
+      </Flex>
+      <TabsContent value={TabValue.List}>
+        <ListView />
+      </TabsContent>
+      <TabsContent value={TabValue.Calendar}>
+        <CalendarView />
+      </TabsContent>
+      <TabsContent value={TabValue.Scheduler}>
+        <SchedulerView />
+      </TabsContent>
+      <TabsContent value={TabValue.ProviderCoding}>
+        Provider Coding View
+      </TabsContent>
+      <TabsContent value={TabValue.Rounding}>
+        <RoundingView />
+      </TabsContent>
+    </Tabs.Root>
+  )
+}
+
+const TabsContent = ({
+  value,
+  children,
+}: PropsWithChildren<{ value: string }>) => {
+  const visitedTabs = useStore((state) => state.visitedTabs)
+  return (
+    <Tabs.Content
+      value={value}
+      className="hidden flex-1 flex-col overflow-y-auto data-[state=active]:flex"
+      forceMount={visitedTabs.has(value) ? true : undefined}
+    >
+      {children}
+    </Tabs.Content>
   )
 }
 

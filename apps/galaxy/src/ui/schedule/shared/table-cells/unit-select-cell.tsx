@@ -1,4 +1,4 @@
-import { TableCellSelect } from './table-cell-select'
+import { SelectCell } from '@/components'
 
 const options = [
   {
@@ -20,7 +20,7 @@ const options = [
 ]
 
 const UnitSelectCell = () => {
-  return <TableCellSelect options={options} />
+  return <SelectCell options={options} />
 }
 
 export { UnitSelectCell }

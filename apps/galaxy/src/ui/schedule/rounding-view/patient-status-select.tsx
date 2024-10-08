@@ -9,7 +9,7 @@ const PatientStatusSelect = () => {
     <FormFieldContainer className="flex-1">
       <FormFieldLabel>Pt. Status</FormFieldLabel>
       <CodesetSelect
-        name="visitMedium"
+        name="patientStatuses"
         codeset={CODESETS.CustomerStatus}
         size="1"
         className="flex-1"

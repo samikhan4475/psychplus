@@ -5,10 +5,11 @@ import { useFormContext } from 'react-hook-form'
 import { FormFieldLabel } from '@/components'
 import { FormFieldContainer } from '../shared'
 import { useFiltersContext } from '../context'
-import { SchedulerFilters } from '../constants'
+import { BookedAppointmentsSchemaType } from '../schema'
+import { SchedulerFilters } from '../types'
 
 const DiagnosisInput = () => {
-  const form = useFormContext()
+  const form = useFormContext<BookedAppointmentsSchemaType>()
   const { filters } = useFiltersContext()
   if (!filters.includes(SchedulerFilters.Diagnosis)) return null
 
@@ -19,7 +20,7 @@ const DiagnosisInput = () => {
         className="flex-1"
         placeholder='Diagnosis'
         size="1"
-        {...form.register('diagnosis')}
+        {...form.register('diagnosisCode')}
       />
     </FormFieldContainer>
   )

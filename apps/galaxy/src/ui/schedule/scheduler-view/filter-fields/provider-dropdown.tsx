@@ -1,11 +1,11 @@
 'use client'
 
 import { FormFieldLabel, SelectInput } from '@/components'
-import { useStore } from '../../store'
 import { FormFieldContainer } from '../../shared'
+import { useDropdownContext } from '../../context'
 
 const ProviderDropdown = () => {
-  const providerOptions = useStore((state) => state.providers)
+  const { providers } = useDropdownContext()
 
   return (
     <FormFieldContainer className="flex-1">
@@ -13,7 +13,7 @@ const ProviderDropdown = () => {
       <SelectInput
         field="provider"
         placeholder="Select"
-        options={providerOptions}
+        options={providers}
         buttonClassName="w-full h-6"
         className="h-full flex-1"
       />

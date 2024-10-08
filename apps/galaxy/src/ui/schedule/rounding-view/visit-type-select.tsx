@@ -4,7 +4,7 @@ import { CodesetSelect, FormFieldLabel } from '@/components'
 import { CODESETS } from '@/constants'
 import { FormFieldContainer } from '../shared'
 import { useFiltersContext } from '../context'
-import { SchedulerFilters } from '../constants'
+import { SchedulerFilters } from '../types'
 
 const VisitTypeSelect = () => {
   const { filters } = useFiltersContext()
@@ -15,7 +15,7 @@ const VisitTypeSelect = () => {
       <FormFieldLabel>Visit Type</FormFieldLabel>
       <CodesetSelect
         name="visitType"
-        codeset={CODESETS.AppointmentStatus}
+        codeset={CODESETS.VisitType}
         size="1"
         className="flex-1"
       />

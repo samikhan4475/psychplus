@@ -1,5 +1,18 @@
 import { Metadata } from '@/types'
 
+interface Diagnosis {
+  id: string
+  metadata: Metadata
+  icd10Code: string
+  description: string
+  patientId: number
+  isChecked: boolean
+  priorityFavourite: number
+  priorityCheck: number
+  recordStatus: string
+}
+
+
 interface Appointment {
   appointmentId: number
   metadata: Metadata
@@ -11,29 +24,32 @@ interface Appointment {
   gender: string
   dob: string
   patientStatus: string
+  service: string
+  serviceId: string
+  isServiceTimeDependent: boolean
   patientInfoVerificationStatus: string
   patientInsuranceVerificationStatus: string
   patientConsentStatus: string
   patientCardVerificationStatus: boolean
-  service: string
   providerId: number
   providerName: string
   providerType: string
   visitType: string
-  visitStatus: string
   visitSequence: string
   visitMedium: string
+  visitStatus: string
   insuranceVerification: string
   primaryInsuranceName: string
   secondaryInsuranceName: string
-  copayPaid: number
   copayDue: number
-  coInsurancePaid: number
+  copayPaid: number
   coInsuranceDue: number
-  balancePaid: number
+  coInsurancePaid: number
   balanceDue: number
+  balancePaid: number
   isNoteSigned: boolean
   locationName: string
+  locationTimezoneId: string
   unitResource: {
     id: string
     metadata: Metadata
@@ -51,7 +67,7 @@ interface Appointment {
     coSignerId: number
   }
   room: string
-  diagnosis: string
+  diagnosis: Diagnosis[]
   cptCodes: string[]
   legalStatus: string
   authorizationNumber: string

@@ -11,17 +11,16 @@ import 'react-big-calendar/lib/css/react-big-calendar.css'
 import React, { useState } from 'react'
 import { getLocalTimeZone } from '@internationalized/date'
 import { PlusIcon } from '@/components/icons'
-import { useStore } from '../store'
 import { CalendarFilterCard } from './calendar-filter-card'
 import { CustomEvent } from './custom-event'
 import './styles.css'
 import { AddVisit } from '@/ui/visit/add-visit'
-import { StateCodeSet } from '@/ui/visit/types'
 import {
   AppointmentEventData,
   AvailableSlotsEvent,
 } from '../types/calender'
 import { useDropdownContext } from '../context'
+import { useStore } from '../store'
 
 const locales = {
   'en-US': enUS,
@@ -107,11 +106,7 @@ const formats = {
   timeGutterFormat: 'hh a',
 }
 
-interface CalendarViewProps {
-  states: StateCodeSet[]
-}
-
-const CalendarView = ({ states }: CalendarViewProps) => {
+const CalendarView = () => {
   const [slots, setSlots] = useState<
     AvailableSlotsEvent<AppointmentEventData>[]
   >([])
@@ -122,7 +117,7 @@ const CalendarView = ({ states }: CalendarViewProps) => {
 
   return (
     <>
-      <CalendarFilterCard setSlots={setSlots} states={states} />
+      <CalendarFilterCard setSlots={setSlots} />
       <Flex direction="column" className="mt-1.5 flex-1 overflow-y-auto" px="5">
         <Flex direction="column" className="h-full">
           <Calendar

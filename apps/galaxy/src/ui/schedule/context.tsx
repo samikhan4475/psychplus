@@ -1,5 +1,14 @@
+'use client'
+
+import {
+  createContext,
+  Dispatch,
+  PropsWithChildren,
+  SetStateAction,
+  useContext,
+  useMemo,
+} from 'react'
 import { State } from '@/types'
-import { createContext, Dispatch, SetStateAction, useContext } from 'react'
 
 interface Option {
   label: string
@@ -14,6 +23,8 @@ interface FiltersContexType {
 interface DropdownContextType {
   insurancePlans: Option[]
   usStates: State[]
+  providers: Option[]
+  clinics: Option[]
 }
 
 type ContextType = Dispatch<SetStateAction<boolean>>
@@ -24,6 +35,24 @@ const FilterVisibilityContext = createContext<ContextType | undefined>(
 const DropdownContext = createContext<DropdownContextType | undefined>(
   undefined,
 )
+
+const DropdownContextProvider = ({
+  children,
+  insurancePlans,
+  usStates,
+  providers,
+  clinics,
+}: PropsWithChildren<DropdownContextType>) => {
+  const ctxValue = useMemo(
+    () => ({ insurancePlans, usStates, providers, clinics }),
+    [insurancePlans, usStates, providers, clinics],
+  )
+  return (
+    <DropdownContext.Provider value={ctxValue}>
+      {children}
+    </DropdownContext.Provider>
+  )
+}
 
 const useFilterVisibilityContext = (): ContextType => {
   const context = useContext(FilterVisibilityContext)
@@ -62,4 +91,5 @@ export {
   useFiltersContext,
   useFilterVisibilityContext,
   useDropdownContext,
+  DropdownContextProvider,
 }

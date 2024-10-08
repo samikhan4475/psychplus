@@ -1,13 +1,12 @@
 'use client'
 
 import { FormFieldLabel, SelectInput } from '@/components'
-import { useStore } from '../../store'
 import { FormFieldContainer } from '../../shared'
-import { useFiltersContext } from '../../context'
-import { SchedulerFilters } from '../../constants'
+import { useDropdownContext, useFiltersContext } from '../../context'
+import { SchedulerFilters } from '../../types'
 
 const ProviderDropdown = () => {
-  const providerOptions = useStore((state) => state.providers)
+  const { providers } = useDropdownContext()
   const { filters } = useFiltersContext()
   if (!filters.includes(SchedulerFilters.Provider)) return null
 
@@ -17,7 +16,7 @@ const ProviderDropdown = () => {
       <SelectInput
         field="provider"
         placeholder="Select"
-        options={providerOptions}
+        options={providers}
         buttonClassName="w-full h-6"
         className="h-full flex-1"
       />

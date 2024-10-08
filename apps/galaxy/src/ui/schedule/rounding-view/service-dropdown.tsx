@@ -2,14 +2,15 @@
 
 import { useEffect, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
-import { FormFieldLabel, SelectInput } from '@/components'
+import { FormFieldLabel, MultiSelectField } from '@/components'
 import { getLocationServicesAction } from '../actions'
-import { Option } from '../types/calender'
 import { FormFieldContainer } from '../shared'
+import { Option } from '../types/calender'
 
 const ServiceDropdown = () => {
   const form = useFormContext()
-  const selectedLocation = form.watch('location')
+  const selectedLocation = form.watch('locationId')
+  const services = form.getValues('serviceIds')
   const [servicesOptions, setServicesOptions] = useState<Option[]>([])
 
   useEffect(() => {
@@ -24,13 +25,13 @@ const ServiceDropdown = () => {
   return (
     <FormFieldContainer className="flex-1">
       <FormFieldLabel>Service</FormFieldLabel>
-      <SelectInput
-        field="service"
+      <MultiSelectField
         disabled={!selectedLocation}
-        placeholder="Select"
+        defaultValues={services}
         options={servicesOptions}
-        buttonClassName="h-6 w-full"
-        className="h-full flex-1"
+        className="flex-1"
+        onChange={(values) => form.setValue('serviceIds', values)}
+        menuClassName="w-[155px]"
       />
     </FormFieldContainer>
   )

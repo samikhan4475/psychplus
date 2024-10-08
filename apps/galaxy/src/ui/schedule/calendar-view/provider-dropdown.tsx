@@ -1,9 +1,9 @@
 import { FormFieldLabel, SelectInput } from '@/components'
-import { useStore } from '../store'
 import { FormFieldContainer } from '../shared'
+import { useDropdownContext } from '../context'
 
 const ProviderDropdown = () => {
-  const providerOptions = useStore((state) => state.providers)
+  const { providers } = useDropdownContext()
 
   return (
     <FormFieldContainer>
@@ -11,7 +11,7 @@ const ProviderDropdown = () => {
       <SelectInput
         field="provider"
         placeholder="Select"
-        options={providerOptions}
+        options={providers}
         className="h-full flex-1"
         buttonClassName='flex-1 h-6'
       />

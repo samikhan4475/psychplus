@@ -1,30 +1,25 @@
 import { CalendarDate } from '@internationalized/date'
 import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
+import { ROUNDING_FILTERS_KEY } from '../constants'
+import { TabValue } from '../types'
 import {
   getCurrentWeekStartDate,
   getNextWeekStart,
   getPreviousWeekStart,
-} from './utils'
-import { ROUNDING_FILTERS_KEY } from './constants'
-
-interface Option {
-  value: string
-  label: string
-}
+} from '../utils'
 
 interface Store {
-  providers: Option[]
-  clinics: Option[]
+  visitedTabs: Set<string>
+  activeTab: string
   weekStartDate: CalendarDate
-  cachedFilters: string[]
+  cachedFiltersRounding: string[]
   cachedFiltersList: string[]
   tableFilters: string[]
-  setProvidersOptions: (options: Option[]) => void
-  setClinicsOptions: (options: Option[]) => void
+  setActiveTab?: (tab: string) => void
   addWeek: () => void
   subtractWeek: () => void
-  saveFilters: (filter: string[]) => void
+  saveRoundingFilters: (filter: string[]) => void
   saveListFilters: (filters: string[]) => void
   updateTableFilters: (filter: string[]) => void
 }
@@ -32,20 +27,18 @@ interface Store {
 const useStore = create<Store>()(
   persist(
     (set, get) => ({
-      providers: [],
-      clinics: [],
+      activeTab: TabValue.List,
+      visitedTabs: new Set([TabValue.List]),
       weekStartDate: getCurrentWeekStartDate(),
-      cachedFilters: [],
+      cachedFiltersRounding: [],
       cachedFiltersList: [],
       tableFilters: [],
-      setProvidersOptions: (options) => {
+      setActiveTab: (activeTab) => {
+        const visitedTabs = get().visitedTabs
+        visitedTabs.add(activeTab)
         set({
-          providers: options,
-        })
-      },
-      setClinicsOptions: (options) => {
-        set({
-          clinics: options,
+          activeTab,
+          visitedTabs,
         })
       },
       addWeek: () => {
@@ -60,9 +53,9 @@ const useStore = create<Store>()(
           weekStartDate: getPreviousWeekStart(currentStartDate),
         })
       },
-      saveFilters: (filters: string[]) => {
+      saveRoundingFilters: (filters: string[]) => {
         set({
-          cachedFilters: filters,
+          cachedFiltersRounding: filters,
         })
       },
       saveListFilters: (filters: string[]) => {
@@ -80,7 +73,7 @@ const useStore = create<Store>()(
       name: ROUNDING_FILTERS_KEY,
       storage: createJSONStorage(() => sessionStorage),
       partialize: (state) => ({
-        cachedFilters: state.cachedFilters,
+        cachedFilters: state.cachedFiltersRounding,
         cachedFiltersList: state.cachedFiltersList,
       }),
     },

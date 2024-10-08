@@ -7,14 +7,13 @@ import { DateValue } from 'react-aria-components'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import z from 'zod'
 import { FormContainer } from '@/components'
-import { getCalendarDateLabel } from '@/utils'
+import { getCalendarDateLabel, sanitizeFormData } from '@/utils'
 import { ClaimNoInput } from './claim-no-input'
 import { EndDateInput } from './end-date-input'
 import { InsuranceSelect } from './insurance-select'
 import { LocationsSelect } from './locations-select'
 import { StartDateInput } from './start-date-input'
 import { useStore } from './store'
-import { sanitizeObject } from './utils'
 
 const schema = z.object({
   claimNo: z.string().optional(),
@@ -47,7 +46,7 @@ const BillingFilterForm = ({ patientId }: BillingFilterFormProps) => {
   const { isDirty, isSubmitting } = form.formState
   const onSubmit: SubmitHandler<BillingFilterSchemaType> = (data) => {
     if (!isDirty) return
-    const sanitizedData = sanitizeObject({
+    const sanitizedData = sanitizeFormData({
       FromDate: data.fromDate ? getCalendarDateLabel(data.fromDate) : '',
       EndDate: data.endDate ? getCalendarDateLabel(data.endDate) : '',
       ClaimNo: data.claimNo,

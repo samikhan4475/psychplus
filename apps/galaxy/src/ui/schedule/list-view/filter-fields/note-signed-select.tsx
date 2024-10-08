@@ -3,7 +3,7 @@
 import { FormFieldLabel, SelectInput } from '@/components'
 import { useFiltersContext } from '../../context'
 import { FormFieldContainer } from '../../shared'
-import { SchedulerFilters } from '../../constants'
+import { SchedulerFilters } from '../../types'
 
 const options = [
   {

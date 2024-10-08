@@ -3,12 +3,13 @@
 import { TextField } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
 import { FormFieldLabel } from '@/components'
-import { FormFieldContainer } from '../shared'
 import { useFiltersContext } from '../context'
-import { SchedulerFilters } from '../constants'
+import { BookedAppointmentsSchemaType } from '../schema'
+import { FormFieldContainer } from '../shared'
+import { SchedulerFilters } from '../types'
 
 const BalanceRange = () => {
-  const form = useFormContext()
+  const form = useFormContext<BookedAppointmentsSchemaType>()
   const { filters } = useFiltersContext()
   if (!filters.includes(SchedulerFilters.Balance)) return null
 
@@ -18,12 +19,18 @@ const BalanceRange = () => {
       <TextField.Root
         size="1"
         placeholder="$ From"
-        {...form.register('balanceFrom')}
+        type="number"
+        {...form.register('balanceDueMin', {
+          setValueAs: (val) => val || undefined,
+        })}
       />
       <TextField.Root
         size="1"
         placeholder="$ To"
-        {...form.register('balanceTo')}
+        type="number"
+        {...form.register('balanceDueMax', {
+          setValueAs: (val) => val || undefined,
+        })}
       />
     </FormFieldContainer>
   )

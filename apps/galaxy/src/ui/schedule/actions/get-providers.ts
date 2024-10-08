@@ -4,7 +4,7 @@ import * as api from '@/api'
 import { StaffResource } from '@/types'
 
 const getProvidersOptionsAction = async (): Promise<
-  api.ActionResult<{ label: string; value: string }[]>
+  { label: string; value: string }[]
 > => {
   const body = {
     roleCodes: ['1'],
@@ -12,10 +12,7 @@ const getProvidersOptionsAction = async (): Promise<
   const response = await api.POST<StaffResource[]>(api.GET_STAFF_ENDPOINT, body)
 
   if (response.state === 'error') {
-    return {
-      state: 'error',
-      error: response.error,
-    }
+    throw new Error(response.error)
   }
 
   const transformedData = response.data.map((data) => ({
@@ -23,10 +20,7 @@ const getProvidersOptionsAction = async (): Promise<
     value: String(data.id),
   }))
 
-  return {
-    state: 'success',
-    data: transformedData,
-  }
+  return transformedData
 }
 
 export { getProvidersOptionsAction }

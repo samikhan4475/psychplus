@@ -6,7 +6,7 @@ import { FormFieldLabel } from '@/components'
 import { FormFieldContainer } from '../../shared'
 import { useFiltersContext } from '../../context'
 import { type ListViewSchema } from '../list-view-schema'
-import { SchedulerFilters } from '../../constants'
+import { SchedulerFilters } from '../../types'
 
 const CoInsuranceInputRange = () => {
   const form = useFormContext<ListViewSchema>()

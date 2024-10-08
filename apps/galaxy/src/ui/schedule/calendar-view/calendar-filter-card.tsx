@@ -4,7 +4,6 @@ import { Flex } from '@radix-ui/themes'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { FormContainer } from '@/components'
-import { StateCodeSet } from '@/ui/visit/types'
 import { getAppointments } from '../actions'
 import {
   AppointmentEventData,
@@ -29,10 +28,9 @@ import { VisitMediumDropdown } from './visit-medium-dropdown'
 
 interface CalendarFilterCardProps {
   setSlots: (slots: AvailableSlotsEvent<AppointmentEventData>[]) => void
-  states: StateCodeSet[]
 }
 
-const CalendarFilterCard = ({ setSlots, states }: CalendarFilterCardProps) => {
+const CalendarFilterCard = ({ setSlots }: CalendarFilterCardProps) => {
   const [isPartialFilterView, setIsPartialFilterView] = useState<boolean>(true)
   const form = useForm<CalenderViewSchemaType>({
     resolver: zodResolver(calenderViewSchema),
@@ -67,7 +65,7 @@ const CalendarFilterCard = ({ setSlots, states }: CalendarFilterCardProps) => {
           py="1"
         >
           <StartDateInput />
-          <StateSelect states={states} />
+          <StateSelect />
           <LocationDropdown />
           <ServiceDropdown />
           <ProviderDropdown />

@@ -8,7 +8,7 @@ import { getStateClinicsOptionsAction } from '../../actions'
 import { useFiltersContext } from '../../context'
 import { FormFieldContainer } from '../../shared'
 import { type ListViewSchema } from '../list-view-schema'
-import { SchedulerFilters } from '../../constants'
+import { SchedulerFilters } from '../../types'
 
 const LocationDropdown = () => {
   const [clinicLocations, setClinicLocations] = useState<

@@ -1,14 +1,12 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { Flex, ScrollArea } from '@radix-ui/themes'
 import { Table } from '@tanstack/react-table'
-import toast from 'react-hot-toast'
 import { DataTable, LoadingPlaceholder } from '@/components'
-import { getBookedAppointmentsAction } from '../actions'
-import { useStore } from '../store'
-import { Appointment } from '../types'
+import { useBookedAppointmentsStore, useStore } from '../store'
 import { columns } from './table-columns'
+import { Appointment } from '@/types'
 
 const DataTableHeader = (table: Table<Appointment>) => {
   const listViewFilters = useStore((state) => state.tableFilters)
@@ -35,30 +33,20 @@ const DataTableHeader = (table: Table<Appointment>) => {
 }
 
 const ListViewTable = () => {
-  const [tableData, setTableData] = useState<Appointment[]>([])
-  const [isLoading, setIsLoading] = useState<boolean>(true)
-
-  useEffect(() => {
-    getBookedAppointmentsAction().then((response) => {
-      if (response.state === 'error') {
-        setTableData([])
-        toast.error('Failed to retrieve appointments data')
-      } else {
-        setTableData(response.data)
-      }
-      setIsLoading(false)
-    })
-  }, [])
+  const {data, loading} = useBookedAppointmentsStore(state => ({
+    data: state.listViewData,
+    loading: state.loading,
+  }))
 
   return (
     <Flex direction="column" className="w-[100vw] flex-1 px-[26px]">
       <ScrollArea className="mt-[13px] w-full px-2" scrollbars="horizontal">
-        {isLoading ? (
+        {loading ? (
           <LoadingPlaceholder />
         ) : (
           <DataTable
             columns={columns}
-            data={tableData}
+            data={data}
             renderHeader={DataTableHeader}
             isRowSpan
           />

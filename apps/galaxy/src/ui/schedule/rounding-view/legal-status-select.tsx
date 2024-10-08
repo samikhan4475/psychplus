@@ -4,7 +4,7 @@ import { CodesetSelect, FormFieldLabel } from '@/components'
 import { CODESETS } from '@/constants'
 import { FormFieldContainer } from '../shared'
 import { useFiltersContext } from '../context'
-import { SchedulerFilters } from '../constants'
+import { SchedulerFilters } from '../types'
 
 const LegalStatusSelect = () => {
   const { filters } = useFiltersContext()
@@ -14,7 +14,7 @@ const LegalStatusSelect = () => {
     <FormFieldContainer>
       <FormFieldLabel>Legal</FormFieldLabel>
       <CodesetSelect
-        name="VerificationStatus"
+        name="legalStatus"
         codeset={CODESETS.LegalStatus}
         size="1"
         className="flex-1"

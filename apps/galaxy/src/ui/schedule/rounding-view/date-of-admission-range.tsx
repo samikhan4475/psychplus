@@ -3,7 +3,7 @@
 import { DatePickerInput, FormFieldLabel } from '@/components'
 import { FormFieldContainer } from '../shared'
 import { useFiltersContext } from '../context'
-import { SchedulerFilters } from '../constants'
+import { SchedulerFilters } from '../types'
 
 const DateOfAdmissionRange = () => {
   const { filters } = useFiltersContext()
@@ -12,8 +12,8 @@ const DateOfAdmissionRange = () => {
   return (
     <FormFieldContainer>
       <FormFieldLabel>DOA</FormFieldLabel>
-      <DatePickerInput field="doaFrom" />
-      <DatePickerInput field="doaTo" />
+      <DatePickerInput field="dateOfAdmissionStart" />
+      <DatePickerInput field="dateOfAdmissionEnd" />
     </FormFieldContainer>
   )
 }

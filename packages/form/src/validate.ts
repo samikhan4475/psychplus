@@ -28,7 +28,7 @@ const passwordStrong = requiredString.regex(
 const zipCode = requiredString.regex(zipCodeRegex, 'Invalid zip code format!')
 const optionalString = z.string().optional().default('')
 const anyString = z.coerce.string()
-const numberOnly = z.coerce.number()
+const numberOnly = z.coerce.number() 
 const charOnly = anyString.regex(charRegex, 'only charactors are allowed')
 
 // can be empity but if had a value then validate

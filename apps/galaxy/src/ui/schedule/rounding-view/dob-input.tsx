@@ -7,7 +7,7 @@ const DateOfBirthInput = () => {
   return (
     <FormFieldContainer className='flex-1'>
       <FormFieldLabel>DOB</FormFieldLabel>
-      <DatePickerInput field="dob" />
+      <DatePickerInput field="dateOfBirth" />
     </FormFieldContainer>
   )
 }

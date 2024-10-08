@@ -22,7 +22,7 @@ const ROUNDING_FILTERS = [
   'Note Signed',
 ]
 
-const LIIST_VIEW_FILTERS = [
+const LIST_VIEW_FILTERS = [
   'Location',
   'Service',
   'Unit',
@@ -50,36 +50,14 @@ const LIIST_VIEW_FILTERS = [
 
 const ROUNDING_FILTERS_KEY = 'rounding-filters'
 
-enum SchedulerFilters {
-  AuthorizationNumber = 'Authorization Number',
-  Balance = 'Balance',
-  CoInsurance = 'Co-Ins',
-  CoPayment = 'Co-Pay',
-  DOA = 'DOA',
-  Group = 'Group',
-  InsVerification = 'Ins Verification',
-  LCD = 'LCD',
-  Legal = 'Legal',
-  LOS = 'LOS',
-  Location = 'Location',
-  NoteSigned = 'Note Signed',
-  PrimaryInsurance = 'Primary Insurance',
-  Provider = 'Provider',
-  ProviderType = 'Provider Type',
-  Room = 'Room',
-  SecondaryInsurance = 'Secondary Insurance',
-  Unit = 'Unit',
-  VisitMedium = 'Visit Medium',
-  VisitSequence = 'Visit Sequence',
-  VisitStatus = 'Visit Status',
-  VisitType = 'Visit Type',
-  CptCode = 'CPT Code',
-  Diagnosis = 'Diagnosis',
+const NOTE_SIGNED: Record<string, boolean> = {
+  'yes': true,
+  'no': false,
 }
 
 export {
   ROUNDING_FILTERS,
   ROUNDING_FILTERS_KEY,
-  LIIST_VIEW_FILTERS,
-  SchedulerFilters,
+  LIST_VIEW_FILTERS,
+  NOTE_SIGNED,
 }

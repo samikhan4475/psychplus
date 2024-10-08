@@ -16,7 +16,7 @@ const getInsurancePlansAction = async (): Promise<
 
   const transformedData = response.data.map((data) => ({
     label: data.name,
-    value: data.id,
+    value: data.name,
   }))
 
   return transformedData

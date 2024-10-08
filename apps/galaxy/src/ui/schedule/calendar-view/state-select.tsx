@@ -1,13 +1,10 @@
 import { FormFieldLabel, SelectInput } from '@/components'
-import { StateCodeSet } from '@/ui/visit/types'
 import { FormFieldContainer } from '../shared'
+import { useDropdownContext } from '../context'
 
-interface StateSelectProps {
-  states: StateCodeSet[]
-}
-
-const StateSelect = ({ states }: StateSelectProps) => {
-  const options = states.map((v) => ({
+const StateSelect = () => {
+  const { usStates } = useDropdownContext()
+  const options = usStates.map((v) => ({
     label: v.stateName,
     value: v.id,
   }))

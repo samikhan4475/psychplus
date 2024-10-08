@@ -14,7 +14,7 @@ interface Store {
   setDates: (value: Date) => void
 }
 
-const useStore = create<Store>((set, get) => ({
+const useStore = create<Store>((set) => ({
   loading: undefined,
   error: undefined,
   data: [],

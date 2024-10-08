@@ -4,7 +4,7 @@ import { CodesetSelect, FormFieldLabel } from '@/components'
 import { CODESETS } from '@/constants'
 import { useFiltersContext } from '../../context'
 import { FormFieldContainer } from '../../shared/form-field-container'
-import { SchedulerFilters } from '../../constants'
+import { SchedulerFilters } from '../../types'
 
 const LegalStatusSelect = () => {
   const { filters } = useFiltersContext()

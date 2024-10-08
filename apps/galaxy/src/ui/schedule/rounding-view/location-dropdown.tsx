@@ -1,19 +1,19 @@
 'use client'
 
 import { FormFieldLabel, SelectInput } from '@/components'
-import { useStore } from '../store'
 import { FormFieldContainer } from '../shared'
+import { useDropdownContext } from '../context'
 
 const LocationDropdown = () => {
-  const clinicOptions = useStore((state) => state.clinics)
+  const { clinics } = useDropdownContext()
 
   return (
     <FormFieldContainer className="h-full flex-1">
       <FormFieldLabel>Location</FormFieldLabel>
       <SelectInput
-        field="location"
+        field="locationId"
         placeholder="Select"
-        options={clinicOptions}
+        options={clinics}
         buttonClassName="h-6 w-full"
         className="h-full flex-1"
       />
