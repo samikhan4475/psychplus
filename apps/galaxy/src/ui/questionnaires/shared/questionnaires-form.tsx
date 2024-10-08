@@ -39,7 +39,7 @@ const QuestionnairesForm = ({
   return (
     <Box className="w-full">
       <Table.Root variant="ghost" size="1">
-        <Table.Header>
+        <Table.Header className={classNameHeaderCell && 'bg-pp-bg-table-label'}>
           <Table.Row>
             <Table.ColumnHeaderCell width="50%" pl="0">
               <Text weight="medium" size="2">

@@ -20,7 +20,7 @@ type FilloutCurrentView = React.PropsWithChildren<{
 const CurrentView = ({ patientId, data }: FilloutCurrentView) => {
   const totalQuestions = YBOCS_TABLES.length
   const initialValue = transformIn(data, totalQuestions)
-  const { totalScore, ...form } = useQuestionnaireForm(
+  const { totalScore, totalFilledQuestions, ...form } = useQuestionnaireForm(
     initialValue,
     totalQuestions,
   )
@@ -38,7 +38,10 @@ const CurrentView = ({ patientId, data }: FilloutCurrentView) => {
             QuickNoteSectionName.QuickNoteSectionYbcos,
           )}
         >
-          <FilloutCurrentTab max={Object.keys(initialValue).length} value={8}>
+          <FilloutCurrentTab
+            max={Object.keys(initialValue).length}
+            value={totalFilledQuestions}
+          >
             <Flex maxWidth="100%" className="bg-white" p="3">
               <Flex className="flex-col">
                 <Text weight="medium" size="2" className="pb-4">

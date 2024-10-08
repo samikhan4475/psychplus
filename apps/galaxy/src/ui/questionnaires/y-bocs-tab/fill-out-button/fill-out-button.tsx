@@ -10,7 +10,7 @@ type FillOutButtonYBocsProps = PropsWithChildren<{
 
 const FillOutButtonYBocs = ({ patientId, data }: FillOutButtonYBocsProps) => {
   return (
-    <FillOutButton title="Y-BOCS">
+    <FillOutButton title="Yale-Brown Obsessive Compulsive (Y-BOCS)">
       <FillOutTabsView>
         <CurrentView patientId={patientId} data={data} />
       </FillOutTabsView>

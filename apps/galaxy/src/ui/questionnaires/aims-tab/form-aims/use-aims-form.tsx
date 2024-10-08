@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm, UseFormReturn } from 'react-hook-form'
 import z from 'zod'
+import { calculateTotalFilledQuestions } from '../../shared'
 import { aimsSchema, AimsSchemaType } from '../aims-schema'
 
 export type FormValues = z.infer<typeof aimsSchema>
@@ -23,6 +24,7 @@ const calculateTotalScore = (data: AimsSchemaType): scoreType => {
 
   Object.keys(data).forEach((key) => {
     const value = Number(data[key as keyof AimsSchemaType]) || 0
+
     if (key.includes(ScoreCategories.FacialAndOralMovements)) {
       FacialAndOralMovements += value
     }
@@ -49,11 +51,16 @@ const useQuestionnaireFormAims = (
   initialValues: AimsSchemaType,
 ): UseFormReturn<FormValues> & {
   totalScore: scoreType
+  totalFilledQuestions: number
 } => {
   const form = useForm<FormValues>({
     resolver: zodResolver(aimsSchema),
     defaultValues: initialValues,
   })
+
+  const [totalFilledQuestions, setTotalFilledQuestions] = useState<number>(
+    calculateTotalFilledQuestions(initialValues as AimsSchemaType),
+  )
 
   const [totalScore, setTotalScore] = useState<scoreType>(
     calculateTotalScore(initialValues as AimsSchemaType),
@@ -62,7 +69,12 @@ const useQuestionnaireFormAims = (
   useEffect(() => {
     const subscription = form.watch((values) => {
       const scores = calculateTotalScore(values as AimsSchemaType)
+      const filledQuestions = calculateTotalFilledQuestions(
+        values as AimsSchemaType,
+      )
+
       setTotalScore(scores)
+      setTotalFilledQuestions(filledQuestions)
     })
 
     return () => subscription.unsubscribe()
@@ -71,6 +83,7 @@ const useQuestionnaireFormAims = (
   return {
     ...form,
     totalScore,
+    totalFilledQuestions,
   }
 }
 

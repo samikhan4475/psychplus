@@ -7,6 +7,7 @@ import { QuickNoteSectionItem } from '@/types'
 import { QuestionnaireTabs } from '../constants'
 import { AddToNoteCell, HistoryButton, SaveButton } from '../shared'
 import { MOCA_LABELS } from './constants'
+import { FillOutButtonMoca } from './fill-out-button'
 import { QuestionnairesFormMoca } from './form-moca/aims-form'
 import { transformIn, transformOut } from './form-moca/data'
 import { useQuestionnaireFormMoca } from './form-moca/use-moca-form'
@@ -32,6 +33,7 @@ const MocaTab = ({
           title={QuestionnaireTabs.MOCA_TAB}
           headerRight={
             <Flex gap="2">
+              <FillOutButtonMoca patientId={patientId} data={[]} />
               <HistoryButton />
               <SaveButton />
             </Flex>

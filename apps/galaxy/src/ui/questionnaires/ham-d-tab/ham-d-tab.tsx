@@ -15,6 +15,7 @@ import {
   SendToPatientButton,
   useQuestionnaireForm,
 } from '../shared'
+import { CLASSNAME_CELL, CLASSNAME_HEADER_CELL } from '../shared/constants'
 import { transformIn, transformOut } from '../shared/data'
 import { LABELS, QUESTIONS, SCORE_INTERPRETATION_RANGES } from './constants'
 import { FillOutButtonHamD } from './fill-out-button'
@@ -70,8 +71,8 @@ const HamDTab = ({
             labels={LABELS}
             totalScore={totalScore}
             scoreInterpretationRanges={SCORE_INTERPRETATION_RANGES}
-            classNameHeaderCell="bg-pp-focus-bg align-middle border-pp-table-border h-5 border px-[50px] py-0"
-            classNameCell="align-middle border-pp-table-border h-5 border pl-[10px] py-0.5"
+            classNameHeaderCell={CLASSNAME_HEADER_CELL}
+            classNameCell={CLASSNAME_CELL}
           />
         </Flex>
       </Flex>

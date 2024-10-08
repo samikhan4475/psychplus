@@ -1,9 +1,5 @@
 import { PropsWithChildren } from 'react'
 import { QuickNoteSectionItem } from '@/types'
-import {
-  LABELS,
-  SCORE_INTERPRETATION_RANGES,
-} from '@/ui/questionnaires/shared/constants'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { QuestionnaireTabs } from '../../constants'
 import {
@@ -11,16 +7,17 @@ import {
   FillOutTabsView,
   QuestionnairePopupCurrentView,
 } from '../../shared'
-import { QUESTIONS } from '../constants'
+import { CLASSNAME_CELL, CLASSNAME_HEADER_CELL } from '../../shared/constants'
+import { LABELS, QUESTIONS, SCORE_INTERPRETATION_RANGES } from '../constants'
 
-type FillOutButtonPhq9Props = PropsWithChildren<{
+type FillOutButtonAuditProps = PropsWithChildren<{
   patientId: string
   data: QuickNoteSectionItem[]
 }>
 
-const FillOutButtonPhq9 = ({ patientId, data }: FillOutButtonPhq9Props) => {
+const FillOutButtonAudit = ({ patientId, data }: FillOutButtonAuditProps) => {
   return (
-    <FillOutButton title="Patient Health Questionnaire (PHQ-9)">
+    <FillOutButton title="Alcohol Use Disorders Identification Test (AUDIT)">
       <FillOutTabsView>
         <QuestionnairePopupCurrentView
           data={data}
@@ -28,12 +25,14 @@ const FillOutButtonPhq9 = ({ patientId, data }: FillOutButtonPhq9Props) => {
           questions={QUESTIONS}
           labels={LABELS}
           scoreInterpretationRanges={SCORE_INTERPRETATION_RANGES}
-          quickNoteSectionName={QuickNoteSectionName.QuickNoteSectionPhq9}
-          questionnaireTab={QuestionnaireTabs.PHQ_9_TAB}
+          quickNoteSectionName={QuickNoteSectionName.QuickNoteSectionAudit}
+          questionnaireTab={QuestionnaireTabs.AUDIT_TAB}
+          classNameHeaderCell={CLASSNAME_HEADER_CELL}
+          classNameCell={CLASSNAME_CELL}
         />
       </FillOutTabsView>
     </FillOutButton>
   )
 }
 
-export { FillOutButtonPhq9 }
+export { FillOutButtonAudit }

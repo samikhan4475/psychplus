@@ -17,6 +17,7 @@ import { transformIn, transformOut } from '../shared/data'
 import { QuestionnairesForm } from '../shared/questionnaires-form'
 import { useQuestionnaireForm } from '../shared/use-questionnaire-form'
 import { LABELS, QUESTIONS, SCORE_INTERPRETATION_RANGES } from './constants'
+import { FillOutButtonPcl5 } from './fill-out-button'
 
 const Pcl5Tab = ({
   patientId,
@@ -50,6 +51,7 @@ const Pcl5Tab = ({
           title={QuestionnaireTabs.PCL_5_TAB}
           headerRight={
             <Flex gap="2">
+              <FillOutButtonPcl5 patientId={patientId} data={[]} />
               <SendToPatientButton />
               <HistoryButton />
               <SaveButton />

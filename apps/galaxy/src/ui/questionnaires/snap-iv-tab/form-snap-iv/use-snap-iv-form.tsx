@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm, UseFormReturn } from 'react-hook-form'
 import z from 'zod'
+import { calculateTotalFilledQuestions } from '../../shared'
 import { snapIvSchema, SnapIvSchemaType } from '../snap-iv-schema'
 
 export type FormValues = z.infer<typeof snapIvSchema>
@@ -33,6 +34,7 @@ const useQuestionnaireFormSnapIv = (
   initialValues: SnapIvSchemaType,
 ): UseFormReturn<FormValues> & {
   totalScore: scoreType
+  totalFilledQuestions: number
 } => {
   const form = useForm<FormValues>({
     resolver: zodResolver(snapIvSchema),
@@ -51,10 +53,20 @@ const useQuestionnaireFormSnapIv = (
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
+  const [totalFilledQuestions, setTotalFilledQuestions] = useState<number>(
+    calculateTotalFilledQuestions(initialValues as SnapIvSchemaType),
+  )
+
   useEffect(() => {
     const subscription = form.watch((values) => {
       const scores = calculateTotalScore(values as SnapIvSchemaType)
+
+      const filledQuestions = calculateTotalFilledQuestions(
+        values as SnapIvSchemaType,
+      )
+
       setTotalScore(scores)
+      setTotalFilledQuestions(filledQuestions)
     })
 
     return () => subscription.unsubscribe()
@@ -63,6 +75,7 @@ const useQuestionnaireFormSnapIv = (
   return {
     ...form,
     totalScore,
+    totalFilledQuestions,
   }
 }
 

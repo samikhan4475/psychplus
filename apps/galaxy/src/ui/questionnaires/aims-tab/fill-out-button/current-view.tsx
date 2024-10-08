@@ -4,12 +4,10 @@ import { FormProvider } from 'react-hook-form'
 import { WidgetFormContainer } from '@/components'
 import { QuickNoteSectionItem } from '@/types'
 import { FilloutCurrentTab } from '../../shared'
-import { SNAP_IV_LABELS } from '../constants'
-import {
-  QuestionnairesFormSnapIv,
-  useQuestionnaireFormSnapIv,
-} from '../form-snap-iv'
-import { transformIn, transformOut } from '../form-snap-iv/data'
+import { AIMS_LABELS } from '../constants'
+import { QuestionnairesFormAims } from '../form-aims/aims-form'
+import { transformIn, transformOut } from '../form-aims/data'
+import { useQuestionnaireFormAims } from '../form-aims/use-aims-form'
 
 type FilloutCurrentView = React.PropsWithChildren<{
   patientId: string
@@ -19,7 +17,7 @@ type FilloutCurrentView = React.PropsWithChildren<{
 const CurrentView = ({ patientId, data }: FilloutCurrentView) => {
   const initialValue = transformIn(data)
   const { totalScore, totalFilledQuestions, ...form } =
-    useQuestionnaireFormSnapIv(initialValue)
+    useQuestionnaireFormAims(initialValue)
 
   return (
     <FormProvider {...form}>
@@ -35,8 +33,8 @@ const CurrentView = ({ patientId, data }: FilloutCurrentView) => {
             max={Object.keys(initialValue).length}
             value={totalFilledQuestions}
           >
-            <QuestionnairesFormSnapIv
-              labels={SNAP_IV_LABELS}
+            <QuestionnairesFormAims
+              labels={AIMS_LABELS}
               totalScore={totalScore}
             />
           </FilloutCurrentTab>

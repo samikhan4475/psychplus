@@ -67,4 +67,4 @@ const useQuestionnaireForm = (
   }
 }
 
-export { useQuestionnaireForm }
+export { useQuestionnaireForm, calculateTotalFilledQuestions }

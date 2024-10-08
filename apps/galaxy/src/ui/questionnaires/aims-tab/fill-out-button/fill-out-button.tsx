@@ -3,14 +3,14 @@ import { QuickNoteSectionItem } from '@/types'
 import { FillOutButton, FillOutTabsView } from '../../shared'
 import { CurrentView } from './current-view'
 
-type FillOutButtonSnapIvProps = PropsWithChildren<{
+type FillOutButtonAimsProps = PropsWithChildren<{
   patientId: string
   data: QuickNoteSectionItem[]
 }>
 
-const FillOutButtonSnapIv = ({ patientId, data }: FillOutButtonSnapIvProps) => {
+const FillOutButtonAims = ({ patientId, data }: FillOutButtonAimsProps) => {
   return (
-    <FillOutButton title="Swanson, Nolan and Pelham (SNAP-IV)">
+    <FillOutButton title="Abnormal Involuntary Movement Scale (AIMS)">
       <FillOutTabsView>
         <CurrentView patientId={patientId} data={data} />
       </FillOutTabsView>
@@ -18,4 +18,4 @@ const FillOutButtonSnapIv = ({ patientId, data }: FillOutButtonSnapIvProps) => {
   )
 }
 
-export { FillOutButtonSnapIv }
+export { FillOutButtonAims }

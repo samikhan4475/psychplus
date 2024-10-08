@@ -1,7 +1,13 @@
 const LABELS = ['Questions', 'No', 'Yes']
 
 const SCORE_INTERPRETATION_RANGES = [
-  { label: 'No problems reported', color: 'white', min: 0, max: 0 },
+  {
+    label: 'No problems reported',
+    color: 'white',
+    min: 0,
+    max: 0,
+    rangeTitle: '0',
+  },
   { label: 'Low Level', color: 'green', min: 1, max: 2 },
   { label: 'Moderate level', color: 'yellow', min: 3, max: 5 },
   { label: 'Subclinical level', color: 'red', min: 6, max: 8 },

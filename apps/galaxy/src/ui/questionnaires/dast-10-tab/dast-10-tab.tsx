@@ -15,8 +15,10 @@ import {
   SendToPatientButton,
   useQuestionnaireForm,
 } from '../shared'
+import { CLASSNAME_CELL, CLASSNAME_HEADER_CELL } from '../shared/constants'
 import { transformIn, transformOut } from '../shared/data'
 import { LABELS, QUESTIONS, SCORE_INTERPRETATION_RANGES } from './constants'
+import { FillOutButtonDast10 } from './fill-out-button'
 import { ScoreCalculation } from './score-calculation'
 
 const Dast10Tab = ({
@@ -51,6 +53,7 @@ const Dast10Tab = ({
           title={QuestionnaireTabs.DAST_10_TAB}
           headerRight={
             <Flex gap="2">
+              <FillOutButtonDast10 patientId={patientId} data={[]} />
               <SendToPatientButton />
               <HistoryButton />
               <SaveButton />
@@ -76,6 +79,8 @@ const Dast10Tab = ({
             labels={LABELS}
             totalScore={totalScore}
             scoreInterpretationRanges={SCORE_INTERPRETATION_RANGES}
+            classNameHeaderCell={CLASSNAME_HEADER_CELL}
+            classNameCell={CLASSNAME_CELL}
           />
           <ScoreCalculation />
         </Flex>

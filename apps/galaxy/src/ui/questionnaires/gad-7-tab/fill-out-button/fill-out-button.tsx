@@ -13,14 +13,14 @@ import {
 } from '../../shared'
 import { QUESTIONS } from '../constants'
 
-type FillOutButtonPhq9Props = PropsWithChildren<{
+type FillOutButtonGad7Props = PropsWithChildren<{
   patientId: string
   data: QuickNoteSectionItem[]
 }>
 
-const FillOutButtonPhq9 = ({ patientId, data }: FillOutButtonPhq9Props) => {
+const FillOutButtonGad7 = ({ patientId, data }: FillOutButtonGad7Props) => {
   return (
-    <FillOutButton title="Patient Health Questionnaire (PHQ-9)">
+    <FillOutButton title="Generalized Anxiety Disorder (GAD-7)">
       <FillOutTabsView>
         <QuestionnairePopupCurrentView
           data={data}
@@ -28,12 +28,12 @@ const FillOutButtonPhq9 = ({ patientId, data }: FillOutButtonPhq9Props) => {
           questions={QUESTIONS}
           labels={LABELS}
           scoreInterpretationRanges={SCORE_INTERPRETATION_RANGES}
-          quickNoteSectionName={QuickNoteSectionName.QuickNoteSectionPhq9}
-          questionnaireTab={QuestionnaireTabs.PHQ_9_TAB}
+          quickNoteSectionName={QuickNoteSectionName.QuickNoteSectionGad7}
+          questionnaireTab={QuestionnaireTabs.GAD_7_TAB}
         />
       </FillOutTabsView>
     </FillOutButton>
   )
 }
 
-export { FillOutButtonPhq9 }
+export { FillOutButtonGad7 }

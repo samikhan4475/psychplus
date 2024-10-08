@@ -15,8 +15,10 @@ import {
   SendToPatientButton,
   useQuestionnaireForm,
 } from '../shared'
+import { CLASSNAME_CELL, CLASSNAME_HEADER_CELL } from '../shared/constants'
 import { transformIn, transformOut } from '../shared/data'
 import { LABELS, QUESTIONS, SCORE_INTERPRETATION_RANGES } from './constants'
+import { FillOutButtonAudit } from './fill-out-button'
 
 const AuditTab = ({
   patientId,
@@ -50,6 +52,7 @@ const AuditTab = ({
           title={QuestionnaireTabs.AUDIT_TAB}
           headerRight={
             <Flex gap="2">
+              <FillOutButtonAudit patientId={patientId} data={[]} />
               <SendToPatientButton />
               <HistoryButton />
               <SaveButton />
@@ -68,6 +71,8 @@ const AuditTab = ({
             labels={LABELS}
             totalScore={totalScore}
             scoreInterpretationRanges={SCORE_INTERPRETATION_RANGES}
+            classNameHeaderCell={CLASSNAME_HEADER_CELL}
+            classNameCell={CLASSNAME_CELL}
           />
         </Flex>
       </Flex>

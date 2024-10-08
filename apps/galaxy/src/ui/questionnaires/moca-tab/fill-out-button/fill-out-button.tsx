@@ -3,14 +3,14 @@ import { QuickNoteSectionItem } from '@/types'
 import { FillOutButton, FillOutTabsView } from '../../shared'
 import { CurrentView } from './current-view'
 
-type FillOutButtonSnapIvProps = PropsWithChildren<{
+type FillOutButtonMocaProps = PropsWithChildren<{
   patientId: string
   data: QuickNoteSectionItem[]
 }>
 
-const FillOutButtonSnapIv = ({ patientId, data }: FillOutButtonSnapIvProps) => {
+const FillOutButtonMoca = ({ patientId, data }: FillOutButtonMocaProps) => {
   return (
-    <FillOutButton title="Swanson, Nolan and Pelham (SNAP-IV)">
+    <FillOutButton title="Montreal Cognitive Assessment (MoCA)">
       <FillOutTabsView>
         <CurrentView patientId={patientId} data={data} />
       </FillOutTabsView>
@@ -18,4 +18,4 @@ const FillOutButtonSnapIv = ({ patientId, data }: FillOutButtonSnapIvProps) => {
   )
 }
 
-export { FillOutButtonSnapIv }
+export { FillOutButtonMoca }

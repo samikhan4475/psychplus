@@ -21,11 +21,20 @@ const calculateTotalScore = (data: MocaSchemaType): scoreType => {
   let orientation = 0
 
   Object.keys(data).forEach((key) => {
-    const value = Number(data[key as keyof MocaSchemaType]) || 0
+    let value = 0
+    const keyValue = data[key as keyof MocaSchemaType]
+    const specialCases = ['1-contour', '1-hands', '1-numbers']
+
+    if (specialCases.includes(keyValue)) {
+      value = Number(keyValue.split('-')[0]) || 0
+    } else {
+      value = Number(keyValue) || 0
+    }
 
     switch (true) {
       case key.includes(ScoreCategories.VisuospatialExecutive):
         visuospatialExecutive += value
+
         break
       case key.includes(ScoreCategories.Naming):
         naming += value
