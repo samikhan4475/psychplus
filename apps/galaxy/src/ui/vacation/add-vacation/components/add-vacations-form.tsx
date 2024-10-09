@@ -1,7 +1,8 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Box, Button, Flex, Grid, Text } from '@radix-ui/themes'
-import { useForm } from 'react-hook-form'
+import { differenceInMinutes, parseISO } from 'date-fns'
+import { useForm, useWatch } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { FormContainer } from '@/components'
 import { ActiveVisits } from '../../active-visits'
@@ -11,8 +12,9 @@ import { ActiveVisitsAlert } from './active-visits-alert'
 import { DurationText } from './duration-text'
 import { FromDateInput } from './from-date-input'
 import { LongVacationAlert } from './long-vacation-alert'
+import { NegativeVacationAlert } from './negative-vacation-alert'
 import { StatusSelect } from './status-select'
-import { TimeInput } from './time-input'
+import { TimeSelect } from './time-select'
 import { ToDateInput } from './to-date-input'
 
 const AddVacationForm = ({
@@ -24,6 +26,7 @@ const AddVacationForm = ({
 }) => {
   const [isLongVacationAlertOpen, setIsLongVacationAlertOpen] =
     useState<boolean>(false)
+  const [isNegativeAlertOpen, setIsNegativeAlertOpen] = useState<boolean>(false)
   const [isActiveVisitsAlertOpen, setIsActiveVisitsAlertOpen] =
     useState<boolean>(false)
   const [isActiveVisitsOpen, setIsActiveVisitsOpen] = useState<boolean>(false)
@@ -46,7 +49,13 @@ const AddVacationForm = ({
 
   const createVacation = async (data: SchemaType) => {
     setIsLongVacationAlertOpen(false)
+    const fromDateTime = parseISO(`${data.fromDate}T${data.fromTime}`)
+    const toDateTime = parseISO(`${data.toDate}T${data.toTime}`)
+    if (fromDateTime > toDateTime) {
+      return setIsNegativeAlertOpen(true)
+    }
     setIsLoading(true)
+
     const body = {
       recordStatus: 'Active',
       staffId: Number(staffId),
@@ -65,7 +74,6 @@ const AddVacationForm = ({
       if (result.error.includes('active vacation time')) {
         return setIsActiveVisitsAlertOpen(true)
       }
-      setIsActiveVisitsAlertOpen(true)
       return toast.error(result.error)
     }
 
@@ -73,6 +81,30 @@ const AddVacationForm = ({
     setIsOpenDialog(false)
     form.reset()
   }
+
+  const [fromDate, fromTime, toDate, toTime] = useWatch({
+    control: form.control,
+    name: ['fromDate', 'fromTime', 'toDate', 'toTime'],
+  })
+
+  useEffect(() => {
+    if (fromDate && fromTime && toDate && toTime) {
+      const fromDateTime = parseISO(`${fromDate}T${fromTime}`)
+      const toDateTime = parseISO(`${toDate}T${toTime}`)
+
+      if (fromDateTime > toDateTime) setIsNegativeAlertOpen(true)
+
+      const totalMinutes = differenceInMinutes(toDateTime, fromDateTime)
+      const totalHours = totalMinutes / 60
+      console.log({ totalMinutes, totalHours })
+
+      const days = Math.floor(totalHours / 24)
+      const hours = totalHours % 24
+      if (!isNaN(days)) {
+        form.setValue('duration', parseFloat(`${days}.${hours}`))
+      }
+    }
+  }, [fromDate, fromTime, toDate, toTime, form])
 
   const onSubmit = (data: SchemaType) => {
     if (data.duration > 14) {
@@ -87,6 +119,10 @@ const AddVacationForm = ({
         isOpen={isLongVacationAlertOpen}
         closeDialog={() => setIsLongVacationAlertOpen(false)}
         onConfirm={createVacation}
+      />
+      <NegativeVacationAlert
+        isOpen={isNegativeAlertOpen}
+        closeDialog={() => setIsNegativeAlertOpen(false)}
       />
       <ActiveVisitsAlert
         isOpen={isActiveVisitsAlertOpen}
@@ -113,13 +149,13 @@ const AddVacationForm = ({
           <FromDateInput label="From Date & Time" field="fromDate" />
         </Box>
         <Box className="transparent-label col-span-3">
-          <TimeInput field="fromTime" label="From Time" />
+          <TimeSelect field="fromTime" label="From Time" />
         </Box>
         <Box className="col-span-3">
           <ToDateInput label="To Date & Time" field="toDate" />
         </Box>
         <Box className="transparent-label col-span-3">
-          <TimeInput field="toTime" label="To Time" />
+          <TimeSelect field="toTime" label="To Time" />
         </Box>
         <Box className="col-span-3">
           <DurationText />
