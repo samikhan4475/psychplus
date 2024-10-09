@@ -46,6 +46,7 @@ const CODESETS = {
   PatientConsentPolicyType: 'PatientConsentPolicyType',
   ClaimFiltrationDateType: 'ClaimFiltrationDateType',
   RecordStatus: 'RecordStatus',
+  PaymentSourceType: 'PaymentSourceType',
   VisitType: 'PsychPlusPublic.VisitType',
 }
 

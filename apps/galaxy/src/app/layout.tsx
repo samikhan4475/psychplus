@@ -97,6 +97,7 @@ const RootLayout = async ({ children }: React.PropsWithChildren) => {
         CODESETS.PractitionerHonor,
         CODESETS.PatientConsentPolicyType,
         CODESETS.ClaimFiltrationDateType,
+        CODESETS.PaymentSourceType,
         CODESETS.VisitType,
         CODESETS.RecordStatus,
       ]),
