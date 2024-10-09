@@ -1,15 +1,15 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { getClinicsOptionsAction } from '@/actions'
 import { FormFieldContainer, FormFieldLabel, SelectInput } from '@/components'
 import { SelectOptionType } from '@/types'
-import { getClinicsAction } from './actions'
 
 const LocationsSelect = () => {
   const [locationsResult, setLocationsResult] = useState<SelectOptionType[]>([])
 
   useEffect(() => {
-    getClinicsAction().then((res) => {
+    getClinicsOptionsAction().then((res) => {
       if (res.state === 'success') {
         setLocationsResult(res.data)
       }

@@ -1,27 +1,22 @@
 'use client'
 
-import { Button, Flex } from '@radix-ui/themes'
-import { useStore } from '../store'
+import { Flex, ScrollArea } from '@radix-ui/themes'
+import { TabContentHeading } from '@/components'
+import { ClaimListFilterForm } from './claims-list-filter-form'
+import { ClaimListTable } from './claims-list-table'
+import { ClaimsListTablePagination } from './claims-list-table-pagination'
 
 const ClaimTabView = () => {
-  const setActiveTab = useStore((state) => state.setActiveTab)
-  const onOpenClaim = () => {
-    const randomNumber = Math.floor(Math.random() * 1000)
-    setActiveTab('Claim# ' + randomNumber)
-  }
-
-  const onOpenCheck = () => {
-    const randomNumber = Math.floor(Math.random() * 1000)
-    setActiveTab('Check# ' + randomNumber)
-  }
   return (
-    <Flex className="py-2" gap="2">
-      <Button highContrast onClick={onOpenClaim}>
-        Claim
-      </Button>
-      <Button highContrast onClick={onOpenCheck}>
-        Check
-      </Button>
+    <Flex direction="column" className="gap-0.5">
+      <TabContentHeading title="Claims" />
+      <ScrollArea>
+        <Flex direction="column" gap="1" className="bg-white w-full py-1">
+          <ClaimListFilterForm />
+          <ClaimListTable />
+          <ClaimsListTablePagination />
+        </Flex>
+      </ScrollArea>
     </Flex>
   )
 }

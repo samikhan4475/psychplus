@@ -1,28 +1,28 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { ActionResult } from '@/api'
+import { getClinicsOptionsAction } from '@/actions'
 import { FormFieldContainer, FormFieldLabel, SelectInput } from '@/components'
-import { getClinicsAction } from './actions'
 import { SelectOptionType } from './types'
 
 const LocationSelect = () => {
-  const [locationsResult, setLocationsResult] =
-    useState<ActionResult<SelectOptionType[]>>()
+  const [locationsResult, setLocationsResult] = useState<SelectOptionType[]>([])
 
   useEffect(() => {
-    getClinicsAction().then(setLocationsResult)
+    getClinicsOptionsAction().then((res) => {
+      if (res.state === 'success') {
+        setLocationsResult(res.data)
+      }
+    })
   }, [])
 
-  const isSuccess = locationsResult?.state === 'success'
-  const options = isSuccess ? locationsResult?.data : []
   return (
     <FormFieldContainer className="flex-row items-center gap-1">
       <FormFieldLabel>Location</FormFieldLabel>
       <SelectInput
         field="location"
         buttonClassName={buttonClassName}
-        options={options}
+        options={locationsResult}
       />
     </FormFieldContainer>
   )

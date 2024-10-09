@@ -1,3 +1,5 @@
+import { Claim } from '@/types'
+
 enum RevenueCycleTab {
   Claim = 'Claim',
   Submission = 'Submission',
@@ -8,4 +10,26 @@ enum RevenueCycleTab {
   CheckDetails = 'Check#',
 }
 
-export { RevenueCycleTab }
+interface GetClaimsListResponse {
+  claims: Claim[]
+  total: number
+}
+
+interface ClaimListSearchParams {
+  isIncludeMetadataResourceChangeControl?: boolean
+  isIncludeMetadataResourceIds?: boolean
+  isIncludeMetadataResourceStatus?: boolean
+  patientId?: number
+  insuranceId?: string
+  claimId?: string
+  locationId?: string
+  dateType?: string
+  isIncludePatientInsurancePlan?: boolean
+  receiverName?: string
+}
+
+export {
+  RevenueCycleTab,
+  type ClaimListSearchParams,
+  type GetClaimsListResponse,
+}

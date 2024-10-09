@@ -92,13 +92,15 @@ const UPDATE_PATIENT_POLICY_ENDPOINT = (patientId: string, policyId: string) =>
   `${API_URL}/api/patients/${patientId}/policies/${policyId}`
 const DELETE_PATIENT_POLICY_ENDPOINT = (patientId: string, policyId: string) =>
   `${API_URL}/api/patients/${patientId}/policies/${policyId}`
+const GET_CLAIMS_LIST_ENDPOINT = `${API_URL}/api/claims/actions/search`
+const DELETE_CLAIM_ENDPOINT = (id: string) => `${API_URL}/api/claims/${id}`
 const GET_PATIENT_POLICY_HISTORY_ENDPOINT = (
   patientId: string,
   policyId: string,
 ) =>
   `${API_URL}/api/patients/${patientId}/policies/${policyId}/history/actions/search`
 const GET_REPORTS_CATEGORY_ENDPOINT = `${API_URL}/api/codeset/authorities/PsychPlusPublic/codesets/ReportCategory`
-const GET_REPORTS_TEMPLATES_ENDPOINT =`${API_URL}/api/reporting/templates/actions/search?offset=0&limit=0&orderBy=displayname%20asc`
+const GET_REPORTS_TEMPLATES_ENDPOINT = `${API_URL}/api/reporting/templates/actions/search?offset=0&limit=0&orderBy=displayname%20asc`
 const GET_REPORTS_PARAMETER_ENDPOINT = `${API_URL}/api/codeset/authorities/PsychPlusPublic/codesets/ReportParameterType`
 const GET_TEMPLATE_REPORT = (templateId: string, reportType: string) =>
   `${API_URL}/api/reporting/templates/${templateId}/actions/run?exportType=${reportType}`
@@ -154,6 +156,8 @@ export {
   SET_PRIMARY_PATIENT_CREDIT_CARD,
   DELETE_PATIENT_CREDIT_CARD,
   ADD_PATIENT_CREDIT_CARD,
+  GET_CLAIMS_LIST_ENDPOINT,
+  DELETE_CLAIM_ENDPOINT,
   GET_PATIENT_POLICIES,
   ADD_PATIENT_POLICY_ENDPOINT,
   UPDATE_PATIENT_POLICY_ENDPOINT,
@@ -162,5 +166,5 @@ export {
   GET_REPORTS_CATEGORY_ENDPOINT,
   GET_REPORTS_TEMPLATES_ENDPOINT,
   GET_REPORTS_PARAMETER_ENDPOINT,
-  GET_TEMPLATE_REPORT
+  GET_TEMPLATE_REPORT,
 }

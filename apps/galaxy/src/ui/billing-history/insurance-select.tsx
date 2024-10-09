@@ -1,9 +1,9 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { getInsurancePayersOptionsAction } from '@/actions'
 import { FormFieldContainer, FormFieldLabel, SelectInput } from '@/components'
 import { SelectOptionType } from '@/types'
-import { getInsuranceProvidersAction } from './actions'
 
 const InsuranceSelect = () => {
   const [insuranceProviders, setInsuranceProviders] = useState<
@@ -11,7 +11,7 @@ const InsuranceSelect = () => {
   >([])
 
   useEffect(() => {
-    getInsuranceProvidersAction().then((res) => {
+    getInsurancePayersOptionsAction().then((res) => {
       if (res.state === 'success') {
         setInsuranceProviders(res.data)
       }

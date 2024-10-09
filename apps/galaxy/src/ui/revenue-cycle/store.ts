@@ -22,6 +22,9 @@ const useStore = create<Store>((set, get) => ({
   activeTab: RevenueCycleTab.Claim,
   viewedTabs: new Set([RevenueCycleTab.Claim]),
   closeableTabs: new Set(),
+  insurancePayers: [],
+  clinics: [],
+  claimsListData: undefined,
   setActiveTab: (activeTab) => {
     const viewedTabs = get().viewedTabs
     viewedTabs.add(activeTab)
