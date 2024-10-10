@@ -1,28 +1,66 @@
-import { type Row } from '@tanstack/react-table'
+import { Metadata } from '@/types'
 
-interface PaymentHistory {
-  time: string
-  date: string
-  charge: string
-  visit: string
-  method: string
-  paymentDescription: string
+interface PatientName {
+  firstName: string
+  middleName: string
+  lastName: string
+  preferredName: string
+  title: string
+  suffix: string
+  honors: string
+}
+interface PatientTransaction {
+  id: number
+  metadata: Metadata
+  patientId: number
+  chargeDate: string
+  transactionNumber: string
+  type: string
   description: string
-  transaction: string
-  stripe: string
-  updatedBy: string
-  updatedDate: string
-  coPay: {
-    due: string
-    paid: string
-  }
-  coIns: {
-    due: string
-    paid: string
-  }
-  subRows?: PaymentHistory[]
+  appointmentId: number
+  visitNumber: string
+  coPayDue: number
+  coPayPaid: number
+  coInsuranceDue: number
+  coInsurancePaid: number
+  balanceDue: number
+  balancePaid: number
+  unappliedPayment: number
+  method: string
+  stripeNumber: string
+  paymentDescription: string
+  patientName: PatientName
+  preferredPartnerId: string
+  isPreferredPartnerTransaction: boolean
+  is_active: boolean
+  paymentResponsibility: string
+  subRows?: PatientTransaction[]
 }
 
+interface PaymentHistory {
+  totalDue: number
+  remainingDue: number
+  unappliedPayment: number
+  totalPayment: number
+  startDate: string
+  endDate: string
+  bundledAmount?: number
+  patientTransactions: PatientTransaction[]
+}
+
+interface GetPaymentHistorysData {
+  paymentHistory: PaymentHistory
+  total: number
+}
+
+interface GetPatientPaymentHistoryParams {
+  patientIds?: string[]
+  startDate?: string
+  endDate?: string
+  transactionTypes?: string[]
+  preferredPartnerIds?: string[]
+  dataRange?: string
+}
 interface PaymentHistoryData {
   time: string
   date: string
@@ -50,14 +88,8 @@ interface PaymentHistoryData {
   }
 }
 
-type PaymentHistoryRow = Row<PaymentHistory>
-
 interface GetPaymentHistoryData {
-  paymentHistories: PaymentHistory[]
-}
-
-interface GetPaymentTableResponse {
-  notes: PaymentHistory[]
+  paymentHistory: PaymentHistory
 }
 
 interface StaffCommentsTreatment {
@@ -82,12 +114,13 @@ enum PaymentMethod {
 }
 
 export {
+  type PatientTransaction,
   PaymentMethod,
   type GetPaymentHistoryData,
   type PaymentHistoryData,
   type PaymentHistory,
-  type PaymentHistoryRow,
-  type GetPaymentTableResponse,
   type StaffCommentsTreatment,
   type StaffCommentsBilling,
+  type GetPatientPaymentHistoryParams,
+  type GetPaymentHistorysData,
 }

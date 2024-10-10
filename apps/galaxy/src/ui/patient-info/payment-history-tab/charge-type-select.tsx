@@ -8,7 +8,7 @@ const ChargeTypeSelect = () => {
     <FormFieldContainer className="flex flex-row items-center gap-1">
       <FormFieldLabel className="!text-1">Charge Type</FormFieldLabel>
       <CodesetSelect
-        name="TransactionType"
+        name="chargeType"
         placeholder="Select Type"
         codeset={CODESETS.TransactionType}
         size="1"

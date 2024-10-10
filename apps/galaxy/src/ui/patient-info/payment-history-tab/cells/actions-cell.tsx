@@ -1,27 +1,20 @@
 'use client'
 
-import { RowAction, RowActionsCell } from '@/components'
-import { PaymentHistory, PaymentHistoryRow } from '../types'
+import { Flex } from '@radix-ui/themes'
+import { PropsWithRow } from '@/components'
+import { PatientTransaction } from '../types'
 import { RowActionDelete } from './row-action-delete'
 import { RowActionEdit } from './row-action-edit'
 
-const rowActions: RowAction<PaymentHistory>[] = [
-  {
-    id: 'payment-history-row-action-edit',
-    render: RowActionEdit,
-  },
-  {
-    id: 'payment-history-row-action-delete',
-    render: RowActionDelete,
-  },
-]
-
-interface ActionsCellProps {
-  row: PaymentHistoryRow
-}
-
-const ActionsCell = ({ row }: ActionsCellProps) => {
-  return <RowActionsCell row={row} actions={rowActions} />
+const ActionsCell = ({ row }: PropsWithRow<PatientTransaction>) => {
+  return (
+    row?.depth === 0 && (
+      <Flex gap="1" justify="center" align="center">
+        <RowActionEdit row={row} />
+        <RowActionDelete row={row} />
+      </Flex>
+    )
+  )
 }
 
 export { ActionsCell }

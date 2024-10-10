@@ -6,6 +6,7 @@ import {
   type DateValue,
 } from '@internationalized/date'
 import { format } from 'date-fns'
+import { Period } from '@/types'
 
 const MONTH_LABELS = [
   'January',
@@ -188,6 +189,33 @@ function formatExpirationDate(expireMonth: number, expireYear: number) {
   return `${formattedMonth}/${formattedYear}`
 }
 
+const getNextDaysValue = (input: string): number | null => {
+  if (!isNaN(Number(input)) && Number(input) > 0) {
+    return Number(input)
+  }
+
+  return null
+}
+
+const getDatesForDateRange = (filter: string, period?: Period) => {
+  const periodValue = period ?? 'Past'
+
+  const days = getNextDaysValue(filter)
+
+  if (days !== null) {
+    const endDate = getCalendarDate()
+
+    const startDate =
+      periodValue === 'Future'
+        ? endDate.add({ days })
+        : endDate.subtract({ days })
+
+    return { startDate, endDate }
+  }
+
+  return { startDate: undefined, endDate: undefined }
+}
+
 const formatDateOfBirth = (dob: string) => {
   const date = parseDate(dob)
   const month = String(date.month).padStart(2, '0')
@@ -213,4 +241,5 @@ export {
   getSlashedPaddedDateString,
   formatExpirationDate,
   formatDateOfBirth,
+  getDatesForDateRange,
 }

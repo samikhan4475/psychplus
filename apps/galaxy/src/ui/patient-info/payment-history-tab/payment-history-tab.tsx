@@ -2,12 +2,13 @@
 
 import { useEffect } from 'react'
 import { Flex, ScrollArea } from '@radix-ui/themes'
-import { TabContentHeading, ViewLoadingPlaceholder } from '../shared'
+import { TabContentHeading } from '../shared'
 import { AddCustomChargeDialog } from './add-custom-charge-dialog'
 import { FilterForm } from './filter-form'
 import { PaymentButton } from './payment-button'
 import { PaymentHeader } from './payment-header'
 import { PaymentHistoryTable } from './payment-history-table'
+import { PaymentHistoryTablePagination } from './payment-history-table-pagination'
 import { useStore } from './store'
 
 const TAB_TITLE = 'Payment Hx'
@@ -21,19 +22,15 @@ const PaymentHistoryTab = ({
   patientId,
   googleApiKey,
 }: PaymentHistoryTabProps) => {
-  const { data, fetchPatientPaymentHistories, loading } = useStore((state) => ({
+  const { data, fetchPatientPaymentHistory } = useStore((state) => ({
     loading: state.loading,
-    fetchPatientPaymentHistories: state.fetchPatientPaymentHistories,
-    data: state.data,
+    fetchPatientPaymentHistory: state.fetchPatientPaymentHistory,
+    data: state.data?.paymentHistory,
   }))
 
   useEffect(() => {
-    fetchPatientPaymentHistories()
-  }, [])
-
-  if (loading) {
-    return <ViewLoadingPlaceholder title={TAB_TITLE} />
-  }
+    fetchPatientPaymentHistory({ patientIds: [patientId] })
+  }, [fetchPatientPaymentHistory, patientId])
 
   return (
     <Flex direction="column" className="gap-0.5">
@@ -48,10 +45,13 @@ const PaymentHistoryTab = ({
         </Flex>
       </TabContentHeading>
       <ScrollArea>
-        <PaymentHeader />
-        <Flex direction="column" gap="1" className="bg-white w-full px-2 py-1">
-          <FilterForm />
-          <PaymentHistoryTable data={data?.paymentHistories ?? []} />
+        <PaymentHeader data={data} />
+        <Flex direction="column" gap="1" className="bg-white w-full py-1">
+          <FilterForm patientId={patientId} />
+          <Flex direction="column" pl="2">
+            <PaymentHistoryTable />
+            <PaymentHistoryTablePagination />
+          </Flex>
         </Flex>
       </ScrollArea>
     </Flex>

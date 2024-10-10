@@ -92,6 +92,12 @@ const UPDATE_PATIENT_POLICY_ENDPOINT = (patientId: string, policyId: string) =>
   `${API_URL}/api/patients/${patientId}/policies/${policyId}`
 const DELETE_PATIENT_POLICY_ENDPOINT = (patientId: string, policyId: string) =>
   `${API_URL}/api/patients/${patientId}/policies/${policyId}`
+const GET_PATIENT_PAYMENT_HISTORY = `${API_URL}/api/patients/all/transactions/search`
+const GET_PATIENT_TRANSACTIONS_HISTORY = (
+  patientId: number,
+  transactionId: number,
+) =>
+  `${API_URL}/api/patients/${patientId}/transactions/${transactionId}/actions/history`
 const GET_INSURANCE_PAYMENT_LIST_ENDPOINT = `${API_URL}/api/payments/actions/search`
 const DELETE_INSURANCE_PAYMENT_ENDPOINT = (id: string) =>
   `${API_URL}/api/payments/${id}`
@@ -165,6 +171,8 @@ export {
   ADD_PATIENT_POLICY_ENDPOINT,
   UPDATE_PATIENT_POLICY_ENDPOINT,
   DELETE_PATIENT_POLICY_ENDPOINT,
+  GET_PATIENT_PAYMENT_HISTORY,
+  GET_PATIENT_TRANSACTIONS_HISTORY,
   GET_PATIENT_POLICY_HISTORY_ENDPOINT,
   GET_REPORTS_CATEGORY_ENDPOINT,
   GET_REPORTS_TEMPLATES_ENDPOINT,

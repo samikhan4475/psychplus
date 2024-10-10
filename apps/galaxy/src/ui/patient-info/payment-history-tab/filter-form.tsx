@@ -11,36 +11,65 @@ import { ChargeTypeSelect } from './charge-type-select'
 import { DateRangeSelect } from './date-range-select'
 import { EndDatePicker } from './end-date-picker'
 import { StartDatePicker } from './start-date-picker'
+import { useStore } from './store'
 
 const schema = z.object({
   dateRange: z.string().optional(),
-  startDate: z.custom<DateValue>(),
-  endDate: z.custom<DateValue>(),
+  patientIds: z.array(z.string()),
+  startDate: z.custom<DateValue>().optional(),
+  endDate: z.custom<DateValue>().optional(),
   chargeType: z.string().optional(),
+  preferredPartnerIds: z.array(z.string()).optional(),
 })
 
-type PaymentFilterSchemaType = z.infer<typeof schema>
-
-const FilterForm = () => {
-  const form = useForm<PaymentFilterSchemaType>({
+type SchemaType = z.infer<typeof schema>
+interface FilterFormProps {
+  patientId: string
+}
+const FilterForm = ({ patientId }: FilterFormProps) => {
+  const { fetchPatientPaymentHistory } = useStore((state) => ({
+    fetchPatientPaymentHistory: state.fetchPatientPaymentHistory,
+  }))
+  const form = useForm<SchemaType>({
     resolver: zodResolver(schema),
     defaultValues: {
-      dateRange: '',
+      dateRange: 'All',
       startDate: undefined,
       endDate: undefined,
       chargeType: '',
+      patientIds: [patientId],
+      preferredPartnerIds: [],
     },
+    mode: 'onChange',
   })
-
-  const onSubmit: SubmitHandler<PaymentFilterSchemaType> = (data) => {
-    console.log('Form submitted with data:', data)
+  const { isSubmitting } = form.formState
+  const onSubmit: SubmitHandler<SchemaType> = (data) => {
+    return fetchPatientPaymentHistory(data, 1, true)
   }
+  const handleReset = async () => {
+    fetchPatientPaymentHistory(
+      {
+        patientIds: [patientId],
+      },
+      1,
+      true,
+    )
+    form.reset({
+      dateRange: 'All',
+      startDate: undefined,
+      endDate: undefined,
+      chargeType: '',
+      patientIds: [patientId],
+      preferredPartnerIds: [],
+    })
+  }
+
   return (
-    <FormContainer form={form} onSubmit={onSubmit}>
+    <FormContainer form={form} onSubmit={onSubmit} className="px-2">
       <Flex gap="2" align="center">
         <DateRangeSelect />
-        <StartDatePicker />
-        <EndDatePicker />
+        <StartDatePicker disabled={isSubmitting} />
+        <EndDatePicker disabled={isSubmitting} />
         <ChargeTypeSelect />
         <Flex gap="2" align="center">
           <Button type="submit" size="1" highContrast>
@@ -49,8 +78,10 @@ const FilterForm = () => {
           <Button
             variant="outline"
             color="gray"
+            type="button"
             size="1"
-            className="text-black  font-regular"
+            className="text-black"
+            onClick={handleReset}
           >
             Clear
           </Button>
@@ -60,4 +91,4 @@ const FilterForm = () => {
   )
 }
 
-export { FilterForm,type PaymentFilterSchemaType }
+export { FilterForm, type SchemaType }

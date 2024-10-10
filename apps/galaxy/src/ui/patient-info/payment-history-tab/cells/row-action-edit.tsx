@@ -1,20 +1,25 @@
-import { DropdownMenu } from '@radix-ui/themes'
+'use client'
+
+import { IconButton } from '@radix-ui/themes'
 import { Pencil } from 'lucide-react'
 import { type PropsWithRow } from '@/components'
-import type { PaymentHistory } from '../types'
+import type { PatientTransaction } from '../types'
 
 const RowActionEdit = ({
   row: { original: PaymentHistory },
-}: PropsWithRow<PaymentHistory>) => {
+}: PropsWithRow<PatientTransaction>) => {
   return (
-    <DropdownMenu.Item
+    <IconButton
       onClick={() => {
         console.log('edit:', PaymentHistory)
       }}
+      size="1"
+      variant="ghost"
+      color="gray"
+      className="text-black disabled:text-pp-gray-3"
     >
       <Pencil height={12} width={12} />
-      Edit
-    </DropdownMenu.Item>
+    </IconButton>
   )
 }
 

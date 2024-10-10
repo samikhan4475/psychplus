@@ -1,6 +1,6 @@
 'use client'
 
-import { DataTablePagination } from '@/components'
+import { DataTablePaginationLegacy } from '@/components'
 import { CLAIM_LIST_TABLE_PAGE_SIZE } from '../constants'
 import { useStore } from './store'
 
@@ -20,7 +20,7 @@ const ClaimsListTablePagination = () => {
   }
 
   return (
-    <DataTablePagination
+    <DataTablePaginationLegacy
       total={claimsListData.total}
       loading={claimsListLoading ?? false}
       page={page}

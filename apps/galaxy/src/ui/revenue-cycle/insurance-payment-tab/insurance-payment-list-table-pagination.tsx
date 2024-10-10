@@ -1,6 +1,6 @@
 'use client'
 
-import { DataTablePagination } from '@/components'
+import { DataTablePaginationLegacy } from '@/components'
 import { INSURANCE_PAYMENT_LIST_TABLE_PAGE_SIZE } from '../constants'
 import { useStore } from './store'
 
@@ -18,7 +18,7 @@ const InsurancePaymentListTablePagination = () => {
   }
 
   return (
-    <DataTablePagination
+    <DataTablePaginationLegacy
       total={data.total}
       loading={loading ?? false}
       page={page}

@@ -1,5 +1,10 @@
 import { Fragment } from 'react'
-import { DropdownMenu, Flex, IconButton } from '@radix-ui/themes'
+import {
+  DropdownMenu,
+  Flex,
+  IconButton,
+  IconButtonProps,
+} from '@radix-ui/themes'
 import { type Row } from '@tanstack/react-table'
 import { EllipsisIcon } from 'lucide-react'
 
@@ -21,18 +26,25 @@ interface RowAction<TData> {
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>
   actions: RowAction<TData>[]
+  buttonColor?: IconButtonProps['color']
 }
 
 const RowActionsCell = <TData,>({
   row,
   actions,
+  buttonColor,
 }: DataTableRowActionsProps<TData>) => {
   return (
     <Flex width="100%" justify="center">
       <DropdownMenu.Root>
         <DropdownMenu.Trigger>
           <Flex height="100%" width="100%" align="center" justify="center">
-            <IconButton size="1" variant="soft" className="h-3.5 px-4">
+            <IconButton
+              size="1"
+              variant="soft"
+              className="h-3.5 px-4"
+              color={buttonColor}
+            >
               <EllipsisIcon
                 width="18"
                 height="12"
