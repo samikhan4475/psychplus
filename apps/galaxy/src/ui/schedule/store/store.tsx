@@ -16,11 +16,13 @@ interface Store {
   cachedFiltersRounding: string[]
   cachedFiltersList: string[]
   tableFilters: string[]
+  providerCodingFilters: string[],
   setActiveTab?: (tab: string) => void
   addWeek: () => void
   subtractWeek: () => void
   saveRoundingFilters: (filter: string[]) => void
   saveListFilters: (filters: string[]) => void
+  saveProviderCodingFilters: (filters: string[]) => void
   updateTableFilters: (filter: string[]) => void
 }
 
@@ -32,6 +34,7 @@ const useStore = create<Store>()(
       weekStartDate: getCurrentWeekStartDate(),
       cachedFiltersRounding: [],
       cachedFiltersList: [],
+      providerCodingFilters: [],
       tableFilters: [],
       setActiveTab: (activeTab) => {
         const visitedTabs = get().visitedTabs
@@ -61,6 +64,11 @@ const useStore = create<Store>()(
       saveListFilters: (filters: string[]) => {
         set({
           cachedFiltersList: filters,
+        })
+      },
+      saveProviderCodingFilters: (filters: string[]) => {
+        set({
+          providerCodingFilters: filters,
         })
       },
       updateTableFilters: (filters: string[]) => {

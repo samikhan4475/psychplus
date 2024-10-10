@@ -5,6 +5,7 @@ import { Flex, Heading, Tabs } from '@radix-ui/themes'
 import { CalendarView } from './calendar-view'
 import { SchedulerActionButtonGroup } from './components/header'
 import { ListView } from './list-view'
+import { ProviderCoding } from './provider-coding'
 import { RoundingView } from './rounding-view'
 import { ViewHeader } from './schedule-view-header'
 import { TabsList } from './schedule-view-tabs-list'
@@ -53,7 +54,7 @@ const ScheduleView = () => {
         <SchedulerView />
       </TabsContent>
       <TabsContent value={TabValue.ProviderCoding}>
-        Provider Coding View
+      <ProviderCoding />
       </TabsContent>
       <TabsContent value={TabValue.Rounding}>
         <RoundingView />

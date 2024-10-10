@@ -55,9 +55,34 @@ const NOTE_SIGNED: Record<string, boolean> = {
   'no': false,
 }
 
+const PROVIDER_CODING_FILTERS = [
+  'Provider Type',
+  'Unit',
+  'Room',
+  'Group',
+  'Primary Insurance',
+  'Secondary Insurance',
+  'Visit Type',
+  'Visit Sequence',
+  'Visit Medium',
+  'Visit Status',
+  'Ins Verification',
+  'Diagnosis',
+  'CPT Code',
+  'DOA',
+  'LOS',
+  'LCD',
+  'Legal',
+  'Co-Pay',
+  'Co-Ins',
+  'Balance',
+  'Note Signed',
+]
+
 export {
   ROUNDING_FILTERS,
   ROUNDING_FILTERS_KEY,
+  PROVIDER_CODING_FILTERS,
   LIST_VIEW_FILTERS,
   NOTE_SIGNED,
 }

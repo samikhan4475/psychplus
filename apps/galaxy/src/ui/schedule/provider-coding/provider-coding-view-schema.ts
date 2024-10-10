@@ -1,0 +1,43 @@
+import z from "zod";
+
+const providerCodingViewSchema = z.object({
+    startDate: z.date().optional(),
+    endDate: z.date().optional(),
+    name: z.string().optional(),
+    age: z.number().optional(),
+    gender: z.string().optional(),
+    dob: z.date().optional(),
+    location: z.string().optional(),
+    service: z.string().optional(),
+    providerType: z.string().optional(),
+    unit: z.string().optional(),
+    room: z.string().optional(),
+    group: z.string().optional(),
+    primaryInsurance: z.string().optional(),
+    secondaryInsurance: z.string().optional(),
+    visitType: z.string().optional(),
+    visitSequence: z.string().optional(),
+    visitMedium: z.string().optional(),
+    visitStatus: z.string().optional(),
+    insVerification: z.string().optional(),
+    diagnosis: z.string().optional(),
+    cptCode: z.string().optional(),
+    doaFrom: z.date().optional(),
+    doaTo: z.date().optional(),
+    losFrom: z.date().optional(),
+    losTo: z.date().optional(),
+    lcdFrom: z.date().optional(),
+    lcdTo: z.date().optional(),
+    legal: z.string().optional(),
+    copayFrom: z.string().optional(),
+    copayTo: z.string().optional(),
+    coInsFrom: z.string().optional(),
+    coInsTo: z.string().optional(),
+    balanceFrom: z.string().optional(),
+    balanceTo: z.string().optional(),
+    noteSigned: z.string().optional(),
+})
+
+type ProviderCodingSchema = z.infer<typeof providerCodingViewSchema>
+
+export {providerCodingViewSchema, type ProviderCodingSchema}
