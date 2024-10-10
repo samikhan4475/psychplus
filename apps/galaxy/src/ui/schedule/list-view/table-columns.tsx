@@ -2,19 +2,18 @@ import { CheckCircledIcon, CrossCircledIcon } from '@radix-ui/react-icons'
 import { Text } from '@radix-ui/themes'
 import { ColumnDef } from '@tanstack/react-table'
 import { ColumnHeader, TextCell } from '@/components'
+import { Appointment } from '@/types'
+import { formatDateOfBirth } from '@/utils'
 import {
   ActionsCell,
-  GroupSelectCell,
   LegalSelectCell,
   NoteSignedCell,
-  RoomSelectCell,
-  UnitSelectCell,
   VisitSequenceSelectCell,
   VisitStatusSelectCell,
 } from '../shared/table-cells'
 import { VerificationStatus } from '../types'
 import { formatDateCell, formatTimeCell } from '../utils'
-import { Appointment } from '@/types'
+import { GroupSelectCell, UnitSelectCell } from './table-cells'
 
 const verificationStatus = (status: string): JSX.Element => {
   switch (status) {
@@ -61,7 +60,7 @@ const columns: ColumnDef<Appointment>[] = [
       />
     ),
     cell: ({ row }) => (
-      <TextCell>
+      <TextCell empty={!row.original.isServiceTimeDependent}>
         {formatTimeCell(
           row.original.appointmentDate,
           row.original.locationTimezoneId,
@@ -140,7 +139,9 @@ const columns: ColumnDef<Appointment>[] = [
       />
     ),
     cell: ({ row }) => (
-      <TextCell className="whitespace-nowrap">{row.original.dob}</TextCell>
+      <TextCell className="whitespace-nowrap">
+        {formatDateOfBirth(row.original.dob)}
+      </TextCell>
     ),
   },
   {
@@ -332,7 +333,7 @@ const columns: ColumnDef<Appointment>[] = [
       />
     ),
     cell: ({ row }) => (
-      <TextCell>{row.original.secondaryInsuranceName}</TextCell>
+      <TextCell>{row.original.secondaryInsuranceName ?? 'N/A'}</TextCell>
     ),
     enableHiding: true,
   },
@@ -564,21 +565,8 @@ const columns: ColumnDef<Appointment>[] = [
         label="Unit"
       />
     ),
-    cell: ({ row }) => <UnitSelectCell />,
+    cell: ({ row }) => <UnitSelectCell row={row} />,
     enableHiding: true,
-  },
-  {
-    id: 'room',
-    accessorKey: 'room',
-    header: ({ column }) => (
-      <ColumnHeader
-        clientSideSort
-        className="!text-black justfy-center !font-medium"
-        column={column}
-        label="Room"
-      />
-    ),
-    cell: ({ row }) => <RoomSelectCell />,
   },
   {
     id: 'appointment-group',
@@ -591,7 +579,7 @@ const columns: ColumnDef<Appointment>[] = [
         label="Group"
       />
     ),
-    cell: ({ row }) => <GroupSelectCell />,
+    cell: ({ row }) => <GroupSelectCell row={row} />,
     enableHiding: true,
   },
   {
@@ -605,7 +593,11 @@ const columns: ColumnDef<Appointment>[] = [
         label="DOA"
       />
     ),
-    cell: ({ row }) => <TextCell>{row.original.dateOfAdmission}</TextCell>,
+    cell: ({ row }) => (
+      <TextCell empty={row.original.isServiceTimeDependent}>
+        {row.original.dateOfAdmission}
+      </TextCell>
+    ),
     enableHiding: true,
   },
   {
@@ -619,7 +611,11 @@ const columns: ColumnDef<Appointment>[] = [
         label="LOS"
       />
     ),
-    cell: ({ row }) => <TextCell>{row.original.lengthOfStay}</TextCell>,
+    cell: ({ row }) => (
+      <TextCell empty={row.original.isServiceTimeDependent}>
+        {row.original.lengthOfStay}
+      </TextCell>
+    ),
     enableHiding: true,
   },
   {
@@ -633,7 +629,11 @@ const columns: ColumnDef<Appointment>[] = [
         label="LCD"
       />
     ),
-    cell: ({ row }) => <TextCell>{row.original.lastCoverageDate}</TextCell>,
+    cell: ({ row }) => (
+      <TextCell empty={row.original.isServiceTimeDependent}>
+        {row.original.lastCoverageDate}
+      </TextCell>
+    ),
     enableHiding: true,
   },
   {

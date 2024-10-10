@@ -1,12 +1,21 @@
 'use server'
 
 import * as api from '@/api'
-import { Clinic } from '@/types'
+import type { InsurancePlan } from '@/types'
 
-const getClinicsOptionsAction = async (): Promise<
+const getInsurancePlanOptionsAction = async (): Promise<
   api.ActionResult<{ label: string; value: string }[]>
 > => {
-  const response = await api.GET<Clinic[]>(api.GET_CLINICS_ENDPOINT)
+  const body = {}
+  const response = await api.POST<InsurancePlan[]>(
+    api.SEARCH_INSURANCE_PLANS_ENDPOINT,
+    body,
+    {
+      next: {
+        revalidate: 3600,
+      },
+    },
+  )
 
   if (response.state === 'error') {
     return {
@@ -16,7 +25,7 @@ const getClinicsOptionsAction = async (): Promise<
   }
 
   const transformedData = response.data.map((data) => ({
-    value: data.id,
+    value: data.name,
     label: data.name,
   }))
 
@@ -26,4 +35,4 @@ const getClinicsOptionsAction = async (): Promise<
   }
 }
 
-export { getClinicsOptionsAction }
+export { getInsurancePlanOptionsAction }

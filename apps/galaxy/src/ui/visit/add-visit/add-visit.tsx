@@ -20,10 +20,8 @@ const CloseDialogIcon = () => (
 
 const AddVisit = ({
   children,
-  states,
 }: {
   children: ReactElement
-  states: StateCodeSet[]
 }) => {
   const [isOpen, setIsOpen] = useState(false)
 
@@ -43,7 +41,7 @@ const AddVisit = ({
           Add Visit
         </Dialog.Title>
 
-        <AddVisitForm states={states} />
+        <AddVisitForm />
       </Dialog.Content>
     </Dialog.Root>
   )

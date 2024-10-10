@@ -5,11 +5,20 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Flex, Grid } from '@radix-ui/themes'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { FormContainer } from '@/components'
-import { LIST_VIEW_FILTERS } from '../constants'
-import { AddFiltersPopover, FiltersButtonsGroup } from '../shared'
-import { useStore } from '../store'
+import { sanitizeFormData } from '@/utils'
+import { LIST_VIEW_FILTERS, NOTE_SIGNED } from '../constants'
+import { FiltersContext } from '../context'
+import {
+  bookedAppointmentsSchema,
+  BookedAppointmentsSchemaType,
+} from '../schema'
+import { AddFiltersPopover, FacilityFields, FiltersButtonsGroup } from '../shared'
+import { useBookedAppointmentsStore, useStore } from '../store'
+import { View } from '../types'
+import { getDateString, isDirty } from '../utils'
 import {
   AgeInput,
+  AuthorizationNumberInput,
   BalanceInputRange,
   CoInsuranceInputRange,
   CoPayInputRange,
@@ -17,36 +26,31 @@ import {
   DateOfBirthInput,
   EndDateInput,
   GenderSelect,
-  GroupDropdown,
   InsuranceVerificationSelect,
   LastCoverageDateRange,
   LegalStatusSelect,
   LengthOfStayRange,
+  LocationDropdown,
   NameInput,
   NoteSignedSelect,
   PatientStatusSelect,
   PrimaryInsuranceDropdown,
+  ProviderDropdown,
   ProviderTypeDropdown,
-  RoomDropdown,
   SecondaryInsuranceDropdown,
+  ServiceMultiSelect,
   StartDateInput,
-  UnitDropdown,
+  StateSelect,
+  TimeInputField,
   VisitMediumSelect,
   VisitSequenceSelect,
   VisitStatusSelect,
   VisitTypeSelect,
 } from './filter-fields'
-import { AuthorizationNumberInput } from './filter-fields/authorization-number-input'
-import { LocationDropdown } from './filter-fields/location-dropdown'
-import { ProviderDropdown } from './filter-fields/provider-dropdown'
-import { ServiceMultiSelect } from './filter-fields/service-multiselect'
-import { StateSelect } from './filter-fields/state-select'
-import { TimeInputField } from './filter-fields/time-input-field'
-import { FiltersContext } from '../context'
-import {listViewSchema, type ListViewSchema } from './list-view-schema'
 
 const ListViewFilterCard = () => {
   const [filters, setFilters] = useState<string[]>(LIST_VIEW_FILTERS)
+  const fetchData = useBookedAppointmentsStore((state) => state.fetchData)
   const { cachedFilters, saveFilters } = useStore((state) => ({
     cachedFilters: state.cachedFiltersList,
     saveFilters: state.saveListFilters,
@@ -59,50 +63,54 @@ const ListViewFilterCard = () => {
     [filters],
   )
 
-  const form = useForm<ListViewSchema>({
-    resolver: zodResolver(listViewSchema),
+  const form = useForm<BookedAppointmentsSchemaType>({
+    resolver: zodResolver(bookedAppointmentsSchema),
     criteriaMode: 'all',
     defaultValues: {
-      startDate: undefined,
-      endDate: undefined,
+      startingDate: undefined,
+      endingDate: undefined,
+      time: undefined,
       name: '',
       age: undefined,
       gender: '',
-      dob: undefined,
-      ptStatus: '',
-      state: '',
-      location: '',
-      service: '',
+      dateOfBirth: undefined,
+      patientStatuses: '',
+      stateId: '',
+      locationId: '',
+      serviceIds: [],
       providerType: '',
-      unit: '',
+      providerIds: '',
+      unitId: '',
       room: '',
-      group: '',
-      primaryInsurance: '',
-      secondaryInsurance: '',
+      groupId: '',
+      primaryInsuranceName: '',
+      secondaryInsuranceName: '',
       visitType: '',
       visitSequence: '',
       visitMedium: '',
       visitStatus: '',
-      insVerification: '',
-      diagnosis: '',
+      patientInsuranceVerificationStatus: '',
+      diagnosisCode: '',
       authorizationNumber: '',
       cptCode: '',
-      doaFrom: undefined,
-      doaTo: undefined,
-      losFrom: undefined,
-      losTo: undefined,
-      lcdFrom: undefined,
-      lcdTo: undefined,
-      legal: '',
-      copayFrom: '',
-      copayTo: '',
-      coInsFrom: '',
-      coInsTo: '',
-      balanceFrom: '',
-      balanceTo: '',
-      noteSigned: '',
+      dateOfAdmissionStart: undefined,
+      dateOfAdmissionEnd: undefined,
+      lengthOfStayMin: undefined,
+      lengthOfStayMax: undefined,
+      lastCoverageDateStart: undefined,
+      lastCoverageDateEnd: undefined,
+      legalStatus: '',
+      copayDueMin: undefined,
+      copayDueMax: undefined,
+      coInsuranceDueMin: undefined,
+      coInsuranceDueMax: undefined,
+      balanceDueMin: undefined,
+      balanceDueMax: undefined,
+      isNoteSigned: '',
     },
   })
+
+  const { dirtyFields } = form.formState
 
   useEffect(() => {
     if (cachedFilters.length > 0) {
@@ -110,8 +118,30 @@ const ListViewFilterCard = () => {
     }
   }, [])
 
-  const onSubmit: SubmitHandler<ListViewSchema> = () => {
-    //TODO: implement when integrating APIs
+  const onSubmit: SubmitHandler<BookedAppointmentsSchemaType> = (data) => {
+    if (!isDirty(dirtyFields)) return
+    const transformedData = {
+      ...data,
+      startingDate: getDateString(data.startingDate),
+      endingDate: getDateString(data.endingDate),
+      dateOfBirth: getDateString(data.dateOfBirth),
+      dateOfAdmissionStart: getDateString(data.dateOfAdmissionStart),
+      dateOfAdmissionEnd: getDateString(data.dateOfAdmissionEnd),
+      lastCoverageDateStart: getDateString(data.lastCoverageDateStart),
+      lastCoverageDateEnd: getDateString(data.lastCoverageDateEnd),
+      isNoteSigned: data.isNoteSigned ? NOTE_SIGNED[data.isNoteSigned] : undefined,
+      patientStatuses: data.patientStatuses ? [data.patientStatuses] : [],
+      time: data.time? data.time.toString(): undefined,
+      providerIds: data.providerIds? [Number(data.providerIds)]: [],
+    }
+    const sanitizedData = sanitizeFormData(transformedData)
+    fetchData({ params: sanitizedData, view: View.List })
+  }
+
+  const resetFilters = () => {
+    if (!isDirty(dirtyFields)) return
+    form.reset()
+    fetchData({ view: View.List })
   }
 
   return (
@@ -138,9 +168,7 @@ const ListViewFilterCard = () => {
             <Grid columns="6" gap="2">
               <LocationDropdown />
               <ServiceMultiSelect />
-              <UnitDropdown />
-              <RoomDropdown />
-              <GroupDropdown />
+              <FacilityFields />
               <ProviderTypeDropdown />
               <ProviderDropdown />
               <VisitTypeSelect />
@@ -159,7 +187,7 @@ const ListViewFilterCard = () => {
               <AuthorizationNumberInput />
               <LegalStatusSelect />
               <NoteSignedSelect />
-              <FiltersButtonsGroup>
+              <FiltersButtonsGroup resetFilters={resetFilters}>
                 <AddFiltersPopover
                   view="List View"
                   onSave={saveFilters}

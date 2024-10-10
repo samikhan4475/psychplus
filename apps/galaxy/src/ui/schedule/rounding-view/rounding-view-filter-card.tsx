@@ -3,20 +3,19 @@
 import { useEffect, useMemo, useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Flex, Grid } from '@radix-ui/themes'
-import { DateValue } from 'react-aria-components'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { FormContainer } from '@/components'
-import { getCalendarDateLabel, sanitizeFormData } from '@/utils'
+import { sanitizeFormData } from '@/utils'
 import { NOTE_SIGNED, ROUNDING_FILTERS } from '../constants'
 import { FiltersContext } from '../context'
 import {
   bookedAppointmentsSchema,
   BookedAppointmentsSchemaType,
 } from '../schema'
-import { AddFiltersPopover, FiltersButtonsGroup } from '../shared'
+import { AddFiltersPopover, FacilityFields, FiltersButtonsGroup } from '../shared'
 import { useBookedAppointmentsStore, useStore } from '../store'
 import { View } from '../types'
-import { isDirty } from '../utils'
+import { getDateString, isDirty } from '../utils'
 import { AgeInput } from './age-input'
 import { BalanceRange } from './balance-range'
 import { CoInsuranceRange } from './co-insurance-range'
@@ -39,15 +38,11 @@ import { PrimaryInsuranceDropdown } from './primary-insurance-select'
 import { ProviderTypeDropdown } from './provider-type-dropdown'
 import { SecondaryInsuranceDropdown } from './seondary-insurance-select'
 import { ServiceDropdown } from './service-dropdown'
-import { ServiceFieldGroup } from './service-field-group'
 import { StartDateInput } from './start-date-input'
 import { VisitMediumSelect } from './visit-medium-select'
 import { VisitSequenceSelect } from './visit-sequence-select'
 import { VisitStatus } from './visit-status'
 import { VisitTypeSelect } from './visit-type-select'
-
-const getDateString = (date?: DateValue): string | undefined =>
-  date ? getCalendarDateLabel(date) : undefined
 
 const defaultValues = {
   startingDate: undefined,
@@ -141,6 +136,7 @@ const RoundingViewFilterCard = () => {
       lastCoverageDateEnd: getDateString(lastCoverageDateEnd),
       isNoteSigned: isNoteSigned? NOTE_SIGNED[isNoteSigned]: undefined,
       patientStatuses: patientStatuses ? [patientStatuses] : [],
+      providerIds: [],
     }
 
     const sanitizedParams = sanitizeFormData(transformedData)
@@ -176,7 +172,7 @@ const RoundingViewFilterCard = () => {
             </Flex>
             <Grid columns="6" gap="2">
               <ProviderTypeDropdown />
-              <ServiceFieldGroup />
+              <FacilityFields />
               <PrimaryInsuranceDropdown />
               <SecondaryInsuranceDropdown />
               <VisitTypeSelect />

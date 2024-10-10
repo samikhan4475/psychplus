@@ -1,3 +1,4 @@
+import { getCalendarDateLabel } from '@/utils'
 import {
   CalendarDate,
   DateFormatter,
@@ -6,6 +7,7 @@ import {
   today,
   parseAbsolute,
 } from '@internationalized/date'
+import { DateValue } from 'react-aria-components'
 
 const getCurrentLocalDate = (): CalendarDate => {
   const currentDate = today(getLocalTimeZone())
@@ -48,6 +50,9 @@ const formatTimeCell = (date: string, timezoneId: string) => {
   return `${hours}:${minutes}`
 }
 
+const getDateString = (date?: DateValue): string | undefined =>
+  date ? getCalendarDateLabel(date) : undefined
+
 export {
   getCurrentLocalDate,
   getCurrentWeekStartDate,
@@ -56,4 +61,5 @@ export {
   formatDate,
   formatDateCell,
   formatTimeCell,
+  getDateString,
 }

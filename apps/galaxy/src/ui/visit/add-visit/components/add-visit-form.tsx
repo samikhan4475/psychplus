@@ -5,7 +5,6 @@ import { FormContainer, FormSubmitButton } from '@/components'
 import { AddVacation } from '@/ui/vacation/add-vacation'
 import { cn } from '@/utils'
 import { schema, SchemaType } from '../schema'
-import { StateCodeSet } from '../../types'
 import { LocationDropdown } from './location-select'
 import { PatientSelect } from './patient-select'
 import { ServiceDropdown } from './service-select'
@@ -14,8 +13,13 @@ import './style.css'
 import { AddPatient } from '@/ui/patient/add-patient'
 import TimedVisitForm from './timed/timed-visit-form'
 import UntimedVisitForm from './untimed/untimed-visit-form'
+import { useEffect, useState } from 'react'
+import { getUsStatesAction } from '../../actions'
+import { State } from '@/types'
+import toast from 'react-hot-toast'
 
-const AddVisitForm = ({ states }: { states: StateCodeSet[] }) => {
+const AddVisitForm = () => {
+  const [states, setStates] = useState<State[]>([])
   const form = useForm<SchemaType>({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -49,6 +53,17 @@ const AddVisitForm = ({ states }: { states: StateCodeSet[] }) => {
 
   const provider = form.watch('provider')
 
+  useEffect(() => {
+    getUsStatesAction().then(response => {
+      if (response.state === 'error') {
+        toast.error('Failed to fetch US States')
+        setStates([])
+      } else {
+        setStates(response.data)
+      }
+    })
+  }, [])
+
   return (
     <FormContainer form={form} onSubmit={onCreateNew}>
       <Grid columns="12" className="min-w-[648px] gap-3">
@@ -74,7 +89,7 @@ const AddVisitForm = ({ states }: { states: StateCodeSet[] }) => {
         <Box className="col-span-4">
           <StateDropdown states={states} />
         </Box>
-        <Box className="col-span-4">
+        <Box className="col-span-4"> 
           <LocationDropdown states={states} />
         </Box>
         <Box className="col-span-4">

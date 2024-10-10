@@ -1,19 +1,17 @@
-import { FormFieldLabel, SelectInput } from '@/components'
+import { AsyncSelect, FormFieldLabel } from '@/components'
+import { getProvidersOptionsAction } from '../actions'
 import { FormFieldContainer } from '../shared'
-import { useDropdownContext } from '../context'
 
 const ProviderDropdown = () => {
-  const { providers } = useDropdownContext()
-
   return (
     <FormFieldContainer>
       <FormFieldLabel className="text-[12px]">Provider</FormFieldLabel>
-      <SelectInput
+      <AsyncSelect
         field="provider"
         placeholder="Select"
-        options={providers}
+        fetchOptions={getProvidersOptionsAction}
         className="h-full flex-1"
-        buttonClassName='flex-1 h-6'
+        buttonClassName="flex-1 h-6"
       />
     </FormFieldContainer>
   )

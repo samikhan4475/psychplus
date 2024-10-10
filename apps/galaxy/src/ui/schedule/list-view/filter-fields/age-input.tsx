@@ -3,11 +3,11 @@
 import { TextField } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
 import { FormFieldLabel } from '@/components'
+import { BookedAppointmentsSchemaType } from '../../schema'
 import { FormFieldContainer } from '../../shared'
-import { type ListViewSchema } from '../list-view-schema'
 
 const AgeInput = () => {
-  const form = useFormContext<ListViewSchema>()
+  const form = useFormContext<BookedAppointmentsSchemaType>()
 
   return (
     <FormFieldContainer className="flex-1">
@@ -15,7 +15,10 @@ const AgeInput = () => {
       <TextField.Root
         placeholder="Add Age"
         size="1"
-        {...form.register('age')}
+        type="number"
+        {...form.register('age', {
+          setValueAs: (val) => val || undefined,
+        })}
       />
     </FormFieldContainer>
   )

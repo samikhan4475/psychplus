@@ -7,16 +7,16 @@ import { FormFieldLabel, SelectInput } from '@/components'
 import { getStateClinicsOptionsAction } from '../../actions'
 import { useFiltersContext } from '../../context'
 import { FormFieldContainer } from '../../shared'
-import { type ListViewSchema } from '../list-view-schema'
 import { SchedulerFilters } from '../../types'
+import { BookedAppointmentsSchemaType } from '../../schema'
 
 const LocationDropdown = () => {
   const [clinicLocations, setClinicLocations] = useState<
     { label: string; value: string }[]
   >([])
-  const form = useFormContext<ListViewSchema>()
+  const form = useFormContext<BookedAppointmentsSchemaType>()
   const { filters } = useFiltersContext()
-  const stateId = form.watch('state')
+  const stateId = form.watch('stateId')
 
   useEffect(() => {
     if (stateId) {
@@ -35,7 +35,7 @@ const LocationDropdown = () => {
     <FormFieldContainer className="h-full flex-1">
       <FormFieldLabel className="text-[12px]">Location</FormFieldLabel>
       <SelectInput
-        field="location"
+        field="locationId"
         placeholder="Select"
         options={clinicLocations}
         disabled={!stateId}

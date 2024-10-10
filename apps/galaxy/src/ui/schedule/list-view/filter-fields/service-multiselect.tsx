@@ -4,13 +4,13 @@ import { useEffect, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 import { FormFieldLabel, MultiSelectField } from '@/components'
 import { getLocationServicesAction } from '../../actions'
-import { FormFieldContainer } from '../../shared'
+import { BookedAppointmentsSchemaType } from '../../schema'
 import { Option } from '../../types'
-import { type ListViewSchema } from '../list-view-schema'
+import { FormFieldContainer } from '../../shared'
 
 const ServiceMultiSelect = () => {
-  const form = useFormContext<ListViewSchema>()
-  const selectedLocation = form.watch('location')
+  const form = useFormContext<BookedAppointmentsSchemaType>()
+  const selectedLocation = form.watch('locationId')
   const [servicesOptions, setServicesOptions] = useState<Option[]>([])
 
   useEffect(() => {
@@ -29,6 +29,7 @@ const ServiceMultiSelect = () => {
         disabled={!selectedLocation}
         options={servicesOptions}
         className="flex-1"
+        onChange={(values) => form.setValue('serviceIds', values)}
         menuClassName="w-[155px]"
       />
     </FormFieldContainer>

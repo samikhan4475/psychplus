@@ -5,11 +5,11 @@ import { useFormContext } from 'react-hook-form'
 import { FormFieldLabel } from '@/components'
 import { FormFieldContainer } from '../../shared'
 import { useFiltersContext } from '../../context'
-import { type ListViewSchema } from '../list-view-schema'
 import { SchedulerFilters } from '../../types'
+import { BookedAppointmentsSchemaType } from '../../schema'
 
 const AuthorizationNumberInput = () => {
-  const form = useFormContext<ListViewSchema>()
+  const form = useFormContext<BookedAppointmentsSchemaType>()
   const { filters } = useFiltersContext()
   if (!filters.includes(SchedulerFilters.AuthorizationNumber)) return null
 

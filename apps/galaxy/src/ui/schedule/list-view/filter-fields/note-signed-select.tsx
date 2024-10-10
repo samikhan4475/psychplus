@@ -24,7 +24,7 @@ const NoteSignedSelect = () => {
     <FormFieldContainer>
       <FormFieldLabel>Note Signed</FormFieldLabel>
       <SelectInput
-        field="noteSigned"
+        field="isNoteSigned"
         placeholder="Select"
         options={options}
         buttonClassName="h-6 w-full"

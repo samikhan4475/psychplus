@@ -14,7 +14,7 @@ const LegalStatusSelect = () => {
     <FormFieldContainer>
       <FormFieldLabel>Legal</FormFieldLabel>
       <CodesetSelect
-        name="VerificationStatus"
+        name="legalStatus"
         codeset={CODESETS.LegalStatus}
         className="flex-1"
         size="1"

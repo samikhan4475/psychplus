@@ -1,3 +1,8 @@
+import { Role } from './authorization'
+import { ContactDetails } from './contact'
+import { Metadata } from './metadata'
+import { LegalName } from './name'
+
 interface User {
   userId: string
   firstName: string
@@ -6,13 +11,15 @@ interface User {
 }
 
 interface UserResponse {
-  legalName: {
-    firstName: string
-    lastName: string
-  }
-  contactInfo: {
-    email: string
-  }
+  id: number,
+  metadata: Metadata,
+  username: string,
+  legalName:LegalName,
+  userRoleCode: string,
+  contactInfo: ContactDetails,
+  staffId: number,
+  patientId: number,
+  userRoles: Role[]
 }
 
 interface AuthRequest {

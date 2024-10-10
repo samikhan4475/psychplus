@@ -15,7 +15,7 @@ const FormFieldLabel = ({
 }: React.PropsWithChildren<FormFieldLabelProps>) => {
   return (
     <Flex align="center" className={cn('text-[11px]', className)}>
-      <Text as="label" weight="medium" htmlFor={id}>
+      <Text as="label" wrap='nowrap' weight="medium" htmlFor={id}>
         {children}
       </Text>
       {required ? (

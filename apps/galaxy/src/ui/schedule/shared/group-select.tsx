@@ -1,24 +1,28 @@
 'use client'
 
-import { FormFieldLabel, SelectInput } from '@/components'
-import { FormFieldContainer } from '../shared'
-import { useFiltersContext } from '../context'
-import { ServiceGroup } from '@/types'
 import { useMemo } from 'react'
-import { BookedAppointmentsSchemaType } from '../schema'
 import { useFormContext } from 'react-hook-form'
+import { FormFieldLabel, SelectInput } from '@/components'
+import { ServiceGroup } from '@/types'
 import { SchedulerFilters } from '../types'
+import { FormFieldContainer } from './form-field-container'
+import { BookedAppointmentsSchemaType } from '../schema'
+import { useFiltersContext } from '../context'
 
-const GroupDropdown = ({ groups }: {groups: ServiceGroup[]}) => {
+const GroupDropdown = ({ groups }: { groups: ServiceGroup[] }) => {
   const { filters } = useFiltersContext()
   const { watch } = useFormContext<BookedAppointmentsSchemaType>()
   const services = watch('serviceIds')
-  const groupOptions = useMemo(() =>groups.map(group => ({
-    label: group.group,
-    value: group.id
-  })), [groups])
+  const groupOptions = useMemo(
+    () =>
+      groups.map((group) => ({
+        label: group.group,
+        value: group.id,
+      })),
+    [groups],
+  )
   if (!filters.includes(SchedulerFilters.Group)) return null
-  
+
   return (
     <FormFieldContainer className="h-full">
       <FormFieldLabel>Group</FormFieldLabel>

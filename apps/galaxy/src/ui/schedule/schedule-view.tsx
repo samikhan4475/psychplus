@@ -1,7 +1,6 @@
 'use client'
 
 import { PropsWithChildren, useEffect } from 'react'
-import { getLocalTimeZone, today } from '@internationalized/date'
 import { Flex, Heading, Tabs } from '@radix-ui/themes'
 import { CalendarView } from './calendar-view'
 import { SchedulerActionButtonGroup } from './components/header'

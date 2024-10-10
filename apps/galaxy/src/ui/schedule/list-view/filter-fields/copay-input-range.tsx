@@ -3,13 +3,13 @@
 import { TextField } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
 import { FormFieldLabel } from '@/components'
-import { FormFieldContainer } from '../../shared'
 import { useFiltersContext } from '../../context'
-import { type ListViewSchema } from '../list-view-schema'
+import { BookedAppointmentsSchemaType } from '../../schema'
+import { FormFieldContainer } from '../../shared'
 import { SchedulerFilters } from '../../types'
 
 const CoPayInputRange = () => {
-  const form = useFormContext<ListViewSchema>()
+  const form = useFormContext<BookedAppointmentsSchemaType>()
   const { filters } = useFiltersContext()
   if (!filters.includes(SchedulerFilters.CoPayment)) return null
 
@@ -19,12 +19,18 @@ const CoPayInputRange = () => {
       <TextField.Root
         size="1"
         placeholder="$ From"
-        {...form.register('copayFrom')}
+        type="number"
+        {...form.register('copayDueMin', {
+          setValueAs: (val) => val || undefined,
+        })}
       />
       <TextField.Root
         size="1"
         placeholder="$ To"
-        {...form.register('copayTo')}
+        type="number"
+        {...form.register('copayDueMax', {
+          setValueAs: (val) => val || undefined,
+        })}
       />
     </FormFieldContainer>
   )

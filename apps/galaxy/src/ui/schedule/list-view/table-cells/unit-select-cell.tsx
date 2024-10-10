@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import { PropsWithRow, SelectCell } from '@/components'
-import { useStore } from '../store'
 import { Appointment } from '@/types'
+import { useStore } from '../store'
 
 const UnitSelectCell = ({
   row: { original: appointment },
@@ -18,7 +18,13 @@ const UnitSelectCell = ({
     }))
   }, [data])
 
-  return <SelectCell value={appointment.unitResource?.id} options={unitOptions} />
+  return (
+    <SelectCell
+      value={appointment.unitResource?.id}
+      options={unitOptions}
+      disabled={appointment.isServiceTimeDependent}
+    />
+  )
 }
 
 export { UnitSelectCell }

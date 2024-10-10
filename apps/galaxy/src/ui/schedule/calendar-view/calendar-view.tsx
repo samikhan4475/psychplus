@@ -19,7 +19,6 @@ import {
   AppointmentEventData,
   AvailableSlotsEvent,
 } from '../types/calender'
-import { useDropdownContext } from '../context'
 import { useStore } from '../store'
 
 const locales = {
@@ -44,7 +43,6 @@ interface DateLocalizerInterface {
 // @ts-ignore
 const   CustomTimeSlot = (props) => {
   const [showButton, setShowButton] = useState<boolean>(false)
-  const { usStates } = useDropdownContext()
 
   if (props.resource === undefined) return props.children
 
@@ -57,7 +55,7 @@ const   CustomTimeSlot = (props) => {
       onMouseLeave={() => setShowButton(false)}
     >
       {showButton && (
-        <AddVisit states={usStates}>
+        <AddVisit>
           <IconButton
             variant="ghost"
             className="bg-pp-primary-light absolute right-0 top-0 z-[200] h-5 w-5 translate-x-[-25%] translate-y-[25%] rounded-[0px] p-0.5"

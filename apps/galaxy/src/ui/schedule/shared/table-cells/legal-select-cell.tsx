@@ -9,6 +9,7 @@ const LegalSelectCell = ({
     <CodesetSelectCell
       codeset={CODESETS.LegalStatus}
       value={appointment.legalStatus}
+      disabled={appointment.isServiceTimeDependent}
     />
   )
 }

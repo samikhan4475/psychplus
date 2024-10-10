@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 import toast from 'react-hot-toast'
+import { ServiceGroup, ServiceUnit } from '@/types'
+import { UnitDropdown } from './unit-dropdown'
+import { GroupDropdown } from './group-select'
 import { getUnitsGroupsAction } from '../actions'
 import { BookedAppointmentsSchemaType } from '../schema'
-import { GroupDropdown } from './group-select'
-import { UnitDropdown } from './unit-dropdown'
-import { ServiceGroup, ServiceUnit } from '@/types'
 
-const ServiceFieldGroup = () => {
+const FacilityFields = () => {
   const form = useFormContext<BookedAppointmentsSchemaType>()
   const [units, setUnits] = useState<ServiceUnit[]>([])
   const [groups, setGroups] = useState<ServiceGroup[]>([])
@@ -35,4 +35,4 @@ const ServiceFieldGroup = () => {
   )
 }
 
-export { ServiceFieldGroup }
+export { FacilityFields }

@@ -14,8 +14,8 @@ const VisitStatusSelect = () => {
     <FormFieldContainer>
       <FormFieldLabel>Visit Status</FormFieldLabel>
       <CodesetSelect
-        name="visitMedium"
-        codeset={CODESETS.VisitStatus}
+        name="visitStatus"
+        codeset={CODESETS.AppointmentStatus}
         size="1"
         className="flex-1"
       />

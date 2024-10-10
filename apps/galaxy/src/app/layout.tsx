@@ -3,7 +3,7 @@ import { type Metadata } from 'next'
 import { Josefin_Sans } from 'next/font/google'
 import { Flex, Theme } from '@radix-ui/themes'
 import { Toaster } from 'react-hot-toast'
-import { getCodesets, getUserPermissions } from '@/api'
+import { getCodesets, getLoggedInUser, getUserPermissions } from '@/api'
 import { CODESETS } from '@/constants'
 import { StoreProvider } from '@/store'
 import { Header } from '@/ui/header'
@@ -49,7 +49,7 @@ const RootLayout = async ({ children }: React.PropsWithChildren) => {
   )
 
   if (auth) {
-    const [codesets, permissions] = await Promise.all([
+    const [codesets, permissions, user] = await Promise.all([
       getCodesets([
         CODESETS.Gender,
         CODESETS.ProfSuffix,
@@ -103,10 +103,11 @@ const RootLayout = async ({ children }: React.PropsWithChildren) => {
         CODESETS.RecordStatus,
       ]),
       getUserPermissions(),
+      getLoggedInUser(),
     ])
 
     return (
-      <StoreProvider permissions={permissions} codesets={codesets}>
+      <StoreProvider user={user} permissions={permissions} codesets={codesets}>
         {content}
       </StoreProvider>
     )

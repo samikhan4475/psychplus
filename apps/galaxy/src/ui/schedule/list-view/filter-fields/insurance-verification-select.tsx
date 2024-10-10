@@ -14,7 +14,7 @@ const InsuranceVerificationSelect = () => {
     <FormFieldContainer>
       <FormFieldLabel>Ins Verification</FormFieldLabel>
       <CodesetSelect
-        name="VerificationStatus"
+        name="patientInsuranceVerificationStatus"
         className="flex-1"
         codeset={CODESETS.VerificationStatus}
         size="1"

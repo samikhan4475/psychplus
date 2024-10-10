@@ -16,7 +16,7 @@ const VisitTypeSelect = () => {
       <CodesetSelect
         name="visitType"
         className="flex-1"
-        codeset={CODESETS.AppointmentStatus}
+        codeset={CODESETS.VisitType}
         size="1"
       />
     </FormFieldContainer>

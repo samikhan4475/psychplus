@@ -4,8 +4,8 @@ import { FormFieldLabel, SelectInput } from '@/components'
 import { FormFieldContainer } from '../../shared'
 import { useFormContext } from 'react-hook-form'
 import { useFiltersContext } from '../../context'
-import { type ListViewSchema } from '../list-view-schema'
 import { SchedulerFilters } from '../../types'
+import { BookedAppointmentsSchemaType } from '../../schema'
 
 const options = [
   {
@@ -23,8 +23,8 @@ const options = [
 ]
 
 const RoomDropdown = () => {
-  const form = useFormContext<ListViewSchema>()
-  const serviceId = form.watch('service')
+  const form = useFormContext<BookedAppointmentsSchemaType>()
+  const services = form.watch('serviceIds')
   const { filters } = useFiltersContext()
   if (!filters.includes(SchedulerFilters.Room)) return null
 
@@ -35,7 +35,7 @@ const RoomDropdown = () => {
         field="room"
         placeholder="Select"
         options={options}
-        disabled={!serviceId}
+        disabled={services.length === 0}
         buttonClassName="w-full h-6"
         className="h-full flex-1"
       />

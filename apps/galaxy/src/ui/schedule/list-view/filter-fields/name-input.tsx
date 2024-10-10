@@ -4,10 +4,10 @@ import { TextField } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
 import { FormFieldLabel } from '@/components'
 import { FormFieldContainer } from '../../shared'
-import { type ListViewSchema } from '../list-view-schema'
+import { BookedAppointmentsSchemaType } from '../../schema'
 
 const NameInput = () => {
-  const form = useFormContext<ListViewSchema>()
+  const form = useFormContext<BookedAppointmentsSchemaType>()
 
   return (
     <FormFieldContainer className="flex-1">
