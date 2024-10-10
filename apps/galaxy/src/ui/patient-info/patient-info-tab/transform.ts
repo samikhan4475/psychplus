@@ -30,8 +30,8 @@ const transformIn = (data: PatientProfileRaw): PatientProfile => ({
   phone: getPatientPhone(data.contactDetails.phoneNumbers),
   email: getPatientEmail(data.contactDetails),
   hasGuardian: data.guardian !== undefined,
-  guardianFirstName: getGuardianFirstName(data.guardian),
-  guardianLastName: getGuardianLastName(data.guardian),
+  guardianFirstName: data.guardian?.name?.firstName || "", 
+  guardianLastName: data.guardian?.name?.lastName || "",
 })
 
 const transformOut = (id: string): PatientProfileRaw =>

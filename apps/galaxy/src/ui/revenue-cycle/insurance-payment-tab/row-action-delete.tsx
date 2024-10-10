@@ -16,9 +16,9 @@ const RowActionDelete = ({
   const deleteRecord = async () => {
     if (record.id) {
       const result = await deleteInsurancePaymentRecord(record.id)
-      if (result.state == 'error') {
+      if (result.state === 'error') {
         toast.error(result.error ?? 'Failed to delete insurance payment record')
-      } else if (result.state == 'success') {
+      } else if (result.state === 'success') {
         toast.success('Insurance payment record deleted successfully')
         search({})
       }

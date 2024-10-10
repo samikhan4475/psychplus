@@ -113,6 +113,8 @@ const GET_REPORTS_TEMPLATES_ENDPOINT = `${API_URL}/api/reporting/templates/actio
 const GET_REPORTS_PARAMETER_ENDPOINT = `${API_URL}/api/codeset/authorities/PsychPlusPublic/codesets/ReportParameterType`
 const GET_TEMPLATE_REPORT = (templateId: string, reportType: string) =>
   `${API_URL}/api/reporting/templates/${templateId}/actions/run?exportType=${reportType}`
+const GET_PATIENT_PROFILE_IMAGE_ENDPOINT = (patientId: string) =>
+  `${API_URL}/ehr/api/patients/${patientId}/profileimage`
 
 export {
   USER_ENDPOINT,
@@ -180,4 +182,5 @@ export {
   GET_TEMPLATE_REPORT,
   GET_INSURANCE_PAYMENT_LIST_ENDPOINT,
   DELETE_INSURANCE_PAYMENT_ENDPOINT,
+  GET_PATIENT_PROFILE_IMAGE_ENDPOINT
 }

@@ -14,9 +14,9 @@ const RowActionDelete = ({ row: { original: claim } }: PropsWithRow<Claim>) => {
   const deleteRecord = async () => {
     if (claim.id) {
       const result = await deleteClaim(claim.id)
-      if (result.state == 'error') {
+      if (result.state === 'error') {
         toast.error(result.error ?? 'Failed to delete claim')
-      } else if (result.state == 'success') {
+      } else if (result.state === 'success') {
         toast.success('Claim deleted successfully')
         claimsListSearch({})
       }

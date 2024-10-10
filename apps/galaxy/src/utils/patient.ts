@@ -4,6 +4,7 @@ import type {
   GenderAbbreviation,
   LegalName,
   PatientAddress,
+  PatientAddressType,
   PatientGuardian,
   PhoneNumber,
 } from '@/types'
@@ -36,9 +37,9 @@ const getPatientMRN = (id: number) => {
   return new Array(diff).fill('0').join('') + String(id)
 }
 
-const getPatientEmail = (contact: ContactDetails) => contact.email
+const getPatientEmail = (contact?: ContactDetails) => contact?.email || ""
 
-const getPatientPhone = (phoneNumbers: PhoneNumber[]) => {
+const getPatientPhone = (phoneNumbers?: PhoneNumber[]) => {
   if (!phoneNumbers || phoneNumbers.length === 0) {
     return undefined
   }
@@ -52,25 +53,6 @@ const getPatientPhone = (phoneNumbers: PhoneNumber[]) => {
   }
 
   return sanitizePhoneNumber(phoneNumber)
-}
-const getPatientHomeContactDetails = (phoneNumbers: PhoneNumber[]) => {
-  if (!phoneNumbers || phoneNumbers.length === 0) {
-    return undefined
-  }
-
-  const phoneNumber =
-    phoneNumbers.find((phone) => phone.type === 'Home')?.number ??
-    phoneNumbers[0].number
-
-  if (!phoneNumber) {
-    return undefined
-  }
-
-  return {
-    type: 'Home',
-    number: sanitizePhoneNumber(phoneNumber),
-    ext: phoneNumber,
-  }
 }
 
 const getPatientDOB = (dobString: string): string => {
@@ -94,7 +76,50 @@ const getPatientAge = (dobString: string) => {
   return age
 }
 
-const getPatientMainAddress = (addresses: PatientAddress[]) => {
+const getPatientPostalCode = (addresses?: PatientAddress[], type :PatientAddressType = 'Home') => {
+  if (!addresses || addresses.length === 0) {
+    return undefined
+  }
+
+  const address = addresses.find((addr) => addr.type === type)
+
+  if (!address) {
+    return addresses[0].postalCode
+  }
+
+  return address.postalCode
+}
+
+const getPatientCity = (addresses?: PatientAddress[], type :PatientAddressType = 'Home') => {
+  if (!addresses || addresses.length === 0) {
+    return undefined
+  }
+
+  const address = addresses.find((addr) => addr.type === type)
+
+  if (!address) {
+    return addresses[0].city
+  }
+
+  return address.city
+}
+
+
+const getPatientState = (addresses?: PatientAddress[], type :PatientAddressType = 'Home') => {
+  if (!addresses || addresses.length === 0) {
+    return undefined
+  }
+
+  const address = addresses.find((addr) => addr.type === type)
+
+  if (!address) {
+    return addresses[0].state
+  }
+
+  return address.state
+}
+
+const getPatientMainAddress = (addresses?: PatientAddress[]) => {
   if (!addresses || addresses.length === 0) {
     return undefined
   }
@@ -130,4 +155,7 @@ export {
   getPatientAge,
   getPatientGender,
   getPatientMainAddress,
+  getPatientPostalCode,
+  getPatientCity,
+  getPatientState,
 }

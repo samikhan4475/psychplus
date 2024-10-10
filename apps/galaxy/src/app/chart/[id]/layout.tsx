@@ -1,10 +1,16 @@
-import { Suspense } from 'react'
+import React, { Suspense } from 'react'
 import { Flex, ScrollArea } from '@radix-ui/themes'
 import { LoadingPlaceholder } from '@/components'
 import { ChartNavigation } from '@/ui/chart-navigation'
 import { PatientBanner } from '@/ui/patient-banner'
 
-const ChartLayout = ({ children }: React.PropsWithChildren) => {
+interface ChartLayoutProps extends React.PropsWithChildren {
+  params: {
+    id: string
+  }
+}
+
+const ChartLayout = ({ children, params }: ChartLayoutProps) => {
   return (
     <Flex height="100%" direction="column" gap="1" className="bg-pp-bg-accent">
       <Suspense
@@ -14,7 +20,7 @@ const ChartLayout = ({ children }: React.PropsWithChildren) => {
           </Flex>
         }
       >
-        <PatientBanner />
+        <PatientBanner patientId={params.id} />
       </Suspense>
       <Flex gap="3" px="2" className="flex-1 overflow-auto">
         <ChartNavigation />
