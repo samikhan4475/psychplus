@@ -2,10 +2,14 @@
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { SubmitHandler, useForm } from 'react-hook-form'
+import toast from 'react-hot-toast'
 import z from 'zod'
 import { FormContainer } from '@/components'
-import { AddCommentButton } from './add-comment-button'
-import { CommentInput } from './comment-input'
+import { STAFF_COMMENT_STATUS } from '@/types'
+import { createStaffCommentAction } from '@/ui/visit/actions/create-staff-comment'
+import { StaffCommentParams } from '@/ui/visit/types'
+import { AddButton } from './add-button'
+import { BillingCommentInput } from './billing-comment-input'
 
 const schema = z.object({
   comment: z.string().min(1, 'Required'),
@@ -13,7 +17,13 @@ const schema = z.object({
 
 export type BillingCommentFormSchemaType = z.infer<typeof schema>
 
-const BillingCommentForm = () => {
+const BillingCommentForm = ({
+  appointmentId,
+  fetchComments,
+}: {
+  appointmentId: number
+  fetchComments: (payload: StaffCommentParams) => void
+}) => {
   const form = useForm<BillingCommentFormSchemaType>({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -21,12 +31,37 @@ const BillingCommentForm = () => {
     },
   })
 
-  const onSubmit: SubmitHandler<BillingCommentFormSchemaType> = () => {}
+  const onSubmit: SubmitHandler<BillingCommentFormSchemaType> = async (
+    data,
+  ) => {
+    const requestData = {
+      recordStatus: STAFF_COMMENT_STATUS.Active,
+      staffCommment: data.comment,
+      appointmentId: appointmentId,
+      isTreatmentComment: false,
+      isBillingComment: true,
+    }
+
+    const result = await createStaffCommentAction(requestData)
+
+    if (result.state === 'error') {
+      return toast.error(result.error)
+    }
+
+    toast.success('Comment created successfully')
+    form.reset()
+    fetchComments({
+      isTreatment: false,
+      isBilling: true,
+      appointmentId: appointmentId.toString(),
+      recordStatuses: [STAFF_COMMENT_STATUS.Active],
+    })
+  }
 
   return (
     <FormContainer className="flex-row gap-2" form={form} onSubmit={onSubmit}>
-      <CommentInput />
-      <AddCommentButton />
+      <BillingCommentInput />
+      <AddButton />
     </FormContainer>
   )
 }

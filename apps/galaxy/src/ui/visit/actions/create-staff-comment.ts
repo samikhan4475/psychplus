@@ -5,12 +5,12 @@ import type { StaffComment } from '@/types'
 import { getAuthCookies } from '@/utils/auth'
 
 interface CreateCommentParams {
-  PatientId?: string
-  AppointmentId: number
-  IsBillingComment: boolean
-  IsTreatmentComment: boolean
-  IsUrgentComment?: boolean
-  StaffCommment: string
+  patientId?: string
+  appointmentId: number
+  isBillingComment: boolean
+  isTreatmentComment: boolean
+  isUrgentComment?: boolean
+  staffCommment: string
 }
 
 const createStaffCommentAction = async ({
@@ -19,12 +19,11 @@ const createStaffCommentAction = async ({
   const auth = getAuthCookies()
 
   const payload = {
-    StaffId: auth?.user.userId,
-    CommentedOn: new Date(),
+    staffId: auth?.user.userId,
     ...rest,
   }
   const response = await api.POST<StaffComment>(
-    api.CREATE_STAFF_COMMENT_ENDPOINT(rest.AppointmentId),
+    api.CREATE_STAFF_COMMENT_ENDPOINT(rest.appointmentId),
     payload,
   )
   if (response.state === 'error') {

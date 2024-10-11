@@ -38,7 +38,7 @@ const VisitTypeDropdown = () => {
       <SelectInput
         field="visitType"
         options={visitTypes.map((visitType) => ({
-          label: `${visitType.encouterType} | ${visitType.visitSequence} | ${visitType.visitMedium}`,
+          label: `${visitType.typeOfVisit} | ${visitType.visitSequence} | ${visitType.visitMedium}`,
           value: visitType.encouterType,
         }))}
         buttonClassName="flex-1 w-full"

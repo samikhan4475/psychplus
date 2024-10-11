@@ -6,10 +6,12 @@ import type { GetCommentsData, StaffComment, StaffCommentParams } from '@/types'
 const getPatientStaffCommentsAction = async ({
   ...rest
 }: Partial<StaffCommentParams>): Promise<api.ActionResult<GetCommentsData>> => {
-  const response = await api.POST<StaffComment[]>(
-    api.GET_PATIENT_STAFF_COMMENTS_ENDPOINT,
-    rest,
-  )
+  const url = new URL(api.GET_PATIENT_STAFF_COMMENTS_ENDPOINT)
+  url.searchParams.append('limit', String(0))
+  url.searchParams.append('offset', String(0))
+  url.searchParams.append('orderBy', 'commentDate desc')
+
+  const response = await api.POST<StaffComment[]>(url.toString(), rest)
   if (response.state === 'error') {
     return {
       state: 'error',

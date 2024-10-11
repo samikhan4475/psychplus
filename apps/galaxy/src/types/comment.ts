@@ -10,6 +10,7 @@ interface StaffComment {
   isBillingComment?: boolean
   isTreatmentComment?: boolean
   isUrgentComment?: boolean
+  appointmentId?: number
   patientId?: number
   recordStatus?: string
   staffName?: LegalName
@@ -22,9 +23,10 @@ interface StaffCommentParams {
   PartialComment?: string
   IsBilling: boolean
   IsTreatment: boolean
-  PatientId: string
+  PatientId?: string
+  AppointmentId?: string
   staff?: string
-  RecordStatuses?: string | null
+  RecordStatuses?: string[] | null
 }
 interface GetCommentsData {
   comments: StaffComment[]

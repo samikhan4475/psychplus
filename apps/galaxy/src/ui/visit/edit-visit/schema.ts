@@ -50,7 +50,7 @@ const schema = z
     legal: z.string(),
     authNumber: z.string(),
     authDate: z.custom<DateValue>(),
-    lcd: z.custom<DateValue>(),
+    lastCoverageDate: z.custom<DateValue>(),
     unit: z.string(),
     room: z.string(),
     group: z.string(),

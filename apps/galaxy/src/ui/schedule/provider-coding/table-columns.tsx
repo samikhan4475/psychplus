@@ -87,7 +87,9 @@ const columns = (sort?: Sort): ColumnDef<ProviderCoding>[] => {
           label="Facility Admission ID"
         />
       ),
-      cell: ({ row }) => <TextCell>{row.original.facilityAdmissionId}</TextCell>,
+      cell: ({ row }) => (
+        <TextCell>{row.original.facilityAdmissionId}</TextCell>
+      ),
       enableHiding: true,
     },
     {
@@ -273,9 +275,7 @@ const columns = (sort?: Sort): ColumnDef<ProviderCoding>[] => {
           label="Legal"
         />
       ),
-      cell: ({ row }) => (
-        <TextCell>{row.original.legalStatus}</TextCell>
-      ), //<LegalSelectCell />,
+      cell: ({ row }) => <TextCell>{row.original.legalStatus}</TextCell>, //<LegalSelectCell />,
       enableHiding: true,
     },
     {
@@ -391,7 +391,7 @@ const columns = (sort?: Sort): ColumnDef<ProviderCoding>[] => {
     {
       id: 'actions-column',
       header: () => <ColumnHeader label="Actions" className="!font-medium" />,
-      cell: ({ row }) => <ActionsCell />,
+      cell: ({ row }) => <ActionsCell appointmentId={row.original.age} />,
       enableHiding: false,
     },
   ]

@@ -1,17 +1,39 @@
 'use client'
 
-import { PropsWithChildren, useState } from 'react'
-import { Box, Dialog } from '@radix-ui/themes'
+import { PropsWithChildren, useEffect, useState } from 'react'
+import { Dialog } from '@radix-ui/themes'
+import toast from 'react-hot-toast'
+import { LoadingPlaceholder } from '@/components'
 import { CloseDialogTrigger } from '@/components/close-dialog-trigger'
-import { State } from '@/types'
+import { Appointment } from '@/types'
+import { getBookedAppointmentsAction } from '@/ui/schedule/actions'
 import { EditVisitForm } from './components'
-import { StaffComments } from './components/staff-comments'
 
 const EditVisit = ({
+  appointmentId,
   children,
-  states,
-}: PropsWithChildren<{ states: State[] }>) => {
+}: PropsWithChildren<{ appointmentId: number }>) => {
+  const [visitDetails, setVisitDetails] = useState<Appointment>()
   const [isOpen, setIsOpen] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+    if (isOpen) fetchVisitDetails()
+  }, [isOpen])
+
+  const fetchVisitDetails = async () => {
+    getBookedAppointmentsAction({
+      appointmentIds: [appointmentId],
+    }).then((response) => {
+      if (response.state === 'error') {
+        toast.error('Failed to retrieve appointments data')
+      } else {
+        const visit = response.data[0]
+        setVisitDetails(visit)
+      }
+      setIsLoading(false)
+    })
+  }
 
   return (
     <Dialog.Root
@@ -29,11 +51,15 @@ const EditVisit = ({
           Edit Visit - Visit Details
         </Dialog.Title>
 
-        <EditVisitForm states={states} />
-
-        <Box className="my-2 h-px bg-gray-6" />
-
-        <StaffComments />
+        {isLoading ? (
+          <LoadingPlaceholder className="bg-white min-h-[46vh]" />
+        ) : (
+          <EditVisitForm
+            appointmentId={appointmentId}
+            isLoading={isLoading}
+            visitDetails={visitDetails as Appointment}
+          />
+        )}
       </Dialog.Content>
     </Dialog.Root>
   )

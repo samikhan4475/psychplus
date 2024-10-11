@@ -12,17 +12,20 @@ interface Diagnosis {
   recordStatus: string
 }
 
-
 interface Appointment {
   appointmentId: number
   metadata: Metadata
   appointmentDate: string
+  appointmentDuration: number
+  appointmentInterval: number
   name: string
   age: number
   clinicLocation: string
   state: string
+  stateCode: string
   gender: string
   dob: string
+  patientMrn: string
   patientStatus: string
   service: string
   serviceId: string
@@ -48,6 +51,7 @@ interface Appointment {
   balanceDue: number
   balancePaid: number
   isNoteSigned: boolean
+  locationId: string
   locationName: string
   locationTimezoneId: string
   unitResource: {
@@ -71,8 +75,10 @@ interface Appointment {
   cptCodes: string[]
   legalStatus: string
   authorizationNumber: string
+  authorizationDate: string
   dateOfAdmission: string
   lastCoverageDate: string
+  facilityAdmissionId: string
   lengthOfStay: number
 }
 

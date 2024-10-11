@@ -8,7 +8,7 @@ import { DateTimeOfAdmission } from './date-time-of-admission'
 import { FacilityAdmissionSelect } from './facility-admission-id-select'
 import { GroupSelect } from './group-select'
 import { InsuranceVerificationSelect } from './insurance-verification-select'
-import { LastCoverDate } from './last-cover-date'
+import { LastCoverageDate } from './last-coverage-date'
 import { LegalSelect } from './legal-select'
 import { ProviderTypeSelect } from './provider-type-select'
 import { UnitSelect } from './unit-select'
@@ -61,7 +61,7 @@ const UntimedVisitForm = () => {
         <AuthDate />
       </Box>
       <Box className="col-span-3">
-        <LastCoverDate />
+        <LastCoverageDate />
       </Box>
       <Box className="col-span-4">
         <UnitSelect />

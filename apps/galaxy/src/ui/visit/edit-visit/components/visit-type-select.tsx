@@ -41,7 +41,7 @@ const VisitTypeSelect = () => {
         field="visitType"
         options={visitTypes.map((visitType) => ({
           value: visitType.encouterType,
-          label: `${visitType.encouterType} | ${visitType.visitSequence} | ${visitType.visitMedium}`,
+          label: `${visitType.typeOfVisit} | ${visitType.visitSequence} | ${visitType.visitMedium}`,
         }))}
         buttonClassName="flex-1 w-full"
         onValueChange={(newValue) => {

@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useMemo, useRef } from 'react'
+import { useEffect, useMemo } from 'react'
 import { useFormContext, useWatch } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import {
@@ -19,7 +19,6 @@ const ServiceSelect = () => {
   const form = useFormContext<SchemaType>()
   const { services, setServices } = useEditVisitStore()
   const serviceCodes = useCodesetCodes(CODESETS.ServicesOffered)
-  const prevLocationId = useRef<string | undefined>(undefined)
 
   const [locationId, isServiceTimeDependent] = useWatch({
     control: form.control,
@@ -33,19 +32,15 @@ const ServiceSelect = () => {
   }, [serviceCodes])
 
   useEffect(() => {
-    if (prevLocationId.current !== locationId) {
-      prevLocationId.current = locationId
-      if (locationId) {
-        form.resetField('service')
-        getLocationServices(locationId).then((res) => {
-          if (res.state === 'error') {
-            toast.error('Failed to fetch services')
-            return setServices([])
-          }
-          setServices(res.data)
-        })
+    if (!locationId) return
+    form.resetField('service')
+    getLocationServices(locationId).then((res) => {
+      if (res.state === 'error') {
+        toast.error('Failed to fetch services')
+        return setServices([])
       }
-    }
+      setServices(res.data)
+    })
   }, [locationId])
 
   return (

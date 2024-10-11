@@ -49,7 +49,7 @@ const ProviderTypeSelect = () => {
       value: code.value,
       label: code.display,
     }))
-  }, [serviceId, codes])
+  }, [services, serviceId, codes])
 
   return (
     <FormFieldContainer className="flex-1">

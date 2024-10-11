@@ -1,11 +1,16 @@
-import { Flex } from '@radix-ui/themes'
+import { Flex, IconButton } from '@radix-ui/themes'
 import { DollarIcon, TableEditIcon } from '@/components/icons'
+import { EditVisit } from '@/ui/visit/edit-visit'
 
-const ActionsCell = () => {
+const ActionsCell = ({ appointmentId }: { appointmentId: number }) => {
   return (
     <Flex gap="1" align="center" justify="center" className="flex-1">
       <DollarIcon />
-      <TableEditIcon height={18} />
+      <EditVisit appointmentId={appointmentId}>
+        <IconButton variant="ghost">
+          <TableEditIcon height={18} />
+        </IconButton>
+      </EditVisit>
     </Flex>
   )
 }

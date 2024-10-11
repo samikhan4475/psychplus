@@ -119,6 +119,11 @@ interface GetAppointmentSlotsResponse<T> {
   total: number
 }
 
+interface GetUnitsGroupsResponse {
+  serviceGroups: ServiceGroup[]
+  serviceUnits: ServiceUnit[]
+}
+
 interface Option {
   value: string
   label: string
@@ -185,6 +190,7 @@ interface Appointment {
 }
 
 interface ProviderCoding {
+  appointmentId: number
   name: string
   age: number
   gender: string
@@ -213,6 +219,7 @@ interface ProviderCoding {
   facilityAdmissionId?: string
 }
 interface AppointmentParams {
+  appointmentIds?: number[]
   startingDate?: string
   endingDate?: string
   name?: string

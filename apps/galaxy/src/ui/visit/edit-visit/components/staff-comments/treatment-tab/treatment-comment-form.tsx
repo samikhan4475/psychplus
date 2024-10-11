@@ -2,10 +2,14 @@
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { SubmitHandler, useForm } from 'react-hook-form'
+import toast from 'react-hot-toast'
 import z from 'zod'
 import { FormContainer } from '@/components'
-import { AddCommentButton } from './add-comment-button'
-import { CommentInput } from './comment-input'
+import { STAFF_COMMENT_STATUS } from '@/types'
+import { createStaffCommentAction } from '@/ui/visit/actions/create-staff-comment'
+import { StaffCommentParams } from '@/ui/visit/types'
+import { AddButton } from './add-button'
+import { TreatmentCommentInput } from './treatment-comment-input'
 
 const schema = z.object({
   comment: z.string().min(1, 'Required'),
@@ -13,7 +17,13 @@ const schema = z.object({
 
 export type TreatmentCommentFormSchemaType = z.infer<typeof schema>
 
-const TreatmentCommentForm = () => {
+const TreatmentCommentForm = ({
+  appointmentId,
+  fetchComments,
+}: {
+  appointmentId: number
+  fetchComments: (formValues: StaffCommentParams) => void
+}) => {
   const form = useForm<TreatmentCommentFormSchemaType>({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -21,12 +31,37 @@ const TreatmentCommentForm = () => {
     },
   })
 
-  const onSubmit: SubmitHandler<TreatmentCommentFormSchemaType> = () => {}
+  const onSubmit: SubmitHandler<TreatmentCommentFormSchemaType> = async (
+    data,
+  ) => {
+    const requestData = {
+      recordStatus: STAFF_COMMENT_STATUS.Active,
+      staffCommment: data.comment,
+      appointmentId: appointmentId,
+      isTreatmentComment: true,
+      isBillingComment: false,
+    }
+
+    const result = await createStaffCommentAction(requestData)
+
+    if (result.state === 'error') {
+      return toast.error(result.error)
+    }
+
+    toast.success('Comment created successfully')
+    form.reset()
+    fetchComments({
+      isTreatment: true,
+      isBilling: false,
+      appointmentId: appointmentId.toString(),
+      recordStatuses: [STAFF_COMMENT_STATUS.Active],
+    })
+  }
 
   return (
     <FormContainer className="flex-row gap-2" form={form} onSubmit={onSubmit}>
-      <CommentInput />
-      <AddCommentButton />
+      <TreatmentCommentInput />
+      <AddButton />
     </FormContainer>
   )
 }

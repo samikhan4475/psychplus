@@ -16,4 +16,10 @@ interface StaffResource {
   rating: number
 }
 
+enum STAFF_COMMENT_STATUS {
+  Active = 'Active',
+  Deleted = 'Deleted',
+}
+
 export type { StaffResource }
+export { STAFF_COMMENT_STATUS }

@@ -1,20 +1,19 @@
 'use client'
 
-import { Flex, ScrollArea } from '@radix-ui/themes'
+import { ScrollArea } from '@radix-ui/themes'
 import { ColumnDef } from '@tanstack/react-table'
-import { ColumnHeader, DataTable, DateCell, TextCell } from '@/components'
-import { StaffCommentsTreatment } from '../../../../types'
-import { ActionCell } from './cells'
+import { ColumnHeader, DataTable, TextCell } from '@/components'
+import { StaffComment } from '@/types'
+import { StaffCommentParams } from '@/ui/visit/types'
+import { ActionCell } from './action-cell'
+import { DateTimeCell } from './date-time-cell'
 
-const columns: ColumnDef<StaffCommentsTreatment>[] = [
+const columns = (
+  fetchComments: (payload: StaffCommentParams) => void,
+): ColumnDef<StaffComment>[] => [
   {
     accessorKey: 'data_time',
-    cell: ({ row }) => (
-      <Flex width="100%" justify="between" align="center" pl="2">
-        <DateCell>{row?.original?.date}</DateCell>
-        <DateCell>{row?.original?.time}</DateCell>
-      </Flex>
-    ),
+    cell: DateTimeCell,
     header: ({ column }) => (
       <ColumnHeader
         column={column}
@@ -26,7 +25,12 @@ const columns: ColumnDef<StaffCommentsTreatment>[] = [
   },
   {
     accessorKey: 'staff',
-    cell: ({ row }) => <TextCell>{row?.original?.staff}</TextCell>,
+    cell: ({ row }) => (
+      <TextCell>
+        {row?.original?.staffName?.firstName}{' '}
+        {row?.original?.staffName?.lastName}
+      </TextCell>
+    ),
     header: ({ column }) => (
       <ColumnHeader
         sortable
@@ -38,33 +42,34 @@ const columns: ColumnDef<StaffCommentsTreatment>[] = [
   },
   {
     id: 'comments',
-    cell: ({ row }) => <TextCell>{row?.original?.comments}</TextCell>,
+    cell: ({ row }) => <TextCell>{row?.original?.staffCommment}</TextCell>,
     header: () => (
-      <ColumnHeader
-        className="min-w-80 !text-1 !font-medium"
-        label="Comment"
-      />
+      <ColumnHeader className="min-w-80 !text-1 !font-medium" label="Comment" />
     ),
   },
   {
     id: 'action',
-    cell: ActionCell,
+    cell: ({ row }) => <ActionCell row={row} fetchComments={fetchComments} />,
   },
 ]
 
-const TreatmentTable = () => {
+const TreatmentTable = ({
+  data,
+  fetchComments,
+}: {
+  data: StaffComment[]
+  fetchComments: (payload: StaffCommentParams) => void
+}) => {
   return (
     <ScrollArea className="max-h-[150px]">
-      <DataTable data={data} columns={columns} sticky disablePagination />
+      <DataTable
+        data={data}
+        columns={columns(fetchComments)}
+        disablePagination
+        sticky
+      />
     </ScrollArea>
   )
 }
-
-const data: StaffCommentsTreatment[] = [...Array(10)].map(() => ({
-  date: '04/17/23',
-  comments: 'test',
-  staff: 'Ronald John, MD ',
-  time: '20:59',
-}))
 
 export { TreatmentTable }

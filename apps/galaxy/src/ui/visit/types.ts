@@ -118,20 +118,6 @@ enum SpecialistType {
   Bcba = '3',
 }
 
-interface StaffCommentsTreatment {
-  date: string
-  time: string
-  staff: string
-  comments: string
-}
-
-interface StaffCommentsBilling {
-  date: string
-  time: string
-  staff: string
-  comments: string
-}
-
 enum ServicesOffered {
   EmergencyRoom = 'EmergencyRoom',
   InpatientPsych = 'InpatientPsych',
@@ -140,6 +126,23 @@ enum ServicesOffered {
   InpatientMedical = 'InpatientMedical',
   InpatientRehab = 'InpatientRehab',
   InpatientSubstanceUseResidential = 'InpatientSubstanceUseResidential',
+}
+
+enum STAFF_COMMENTS_TAB {
+  TreatmentTab = 'Treatment',
+  BillingTab = 'Billing',
+}
+
+interface StaffCommentParams {
+  startDate?: string
+  endDate?: string
+  partialComment?: string
+  isBilling: boolean
+  isTreatment: boolean
+  patientId?: string
+  appointmentId?: string
+  staff?: string
+  recordStatuses?: string[] | null
 }
 
 export {
@@ -154,10 +157,10 @@ export {
   type StatesCodeSetState,
   type VisitTypesPayload,
   type ServerSearchSelectID,
-  type StaffCommentsTreatment,
-  type StaffCommentsBilling,
+  type StaffCommentParams,
   ServiceType,
   SpecialistType,
   TCMVisitTypes,
   ServicesOffered,
+  STAFF_COMMENTS_TAB,
 }

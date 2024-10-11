@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useFormContext, useWatch } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import {
@@ -15,7 +15,6 @@ import { SchemaType } from '../schema'
 
 const LocationSelect = ({ states }: { states: StateCodeSet[] }) => {
   const form = useFormContext<SchemaType>()
-  const prevStateCode = useRef<string | undefined>(undefined)
   const [locations, setLocations] = useState<
     { value: string; label: string }[]
   >([])
@@ -25,27 +24,23 @@ const LocationSelect = ({ states }: { states: StateCodeSet[] }) => {
   })
 
   useEffect(() => {
-    if (prevStateCode.current !== stateCode) {
-      prevStateCode.current = stateCode
-      const state =
-        states.filter((state) => state.stateCode === stateCode)?.[0] || {}
-      if (state.id) {
-        form.resetField('location')
-        getClinicLocations(state.id).then((res) => {
-          if (res.state === 'error') {
-            toast.error('Failed to fetch locations')
-            return setLocations([])
-          }
-          setLocations(
-            res.data.map((location) => ({
-              value: location.id,
-              label: location.name,
-            })),
-          )
-        })
+    const state =
+      states.filter((state) => state.stateCode === stateCode)?.[0] || {}
+    if (!state.id) return
+    form.resetField('location')
+    getClinicLocations(state.id).then((res) => {
+      if (res.state === 'error') {
+        toast.error('Failed to fetch locations')
+        return setLocations([])
       }
-    }
-  }, [states, stateCode, form])
+      setLocations(
+        res.data.map((location) => ({
+          value: location.id,
+          label: location.name,
+        })),
+      )
+    })
+  }, [stateCode])
 
   return (
     <FormFieldContainer className="flex-1">

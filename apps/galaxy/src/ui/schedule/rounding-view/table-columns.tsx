@@ -567,7 +567,7 @@ const columns: ColumnDef<Appointment>[] = [
   {
     id: 'actions-column',
     header: () => <ColumnHeader label="Actions" className="!font-medium" />,
-    cell: ({ row }) => <ActionsCell />,
+    cell: ({ row }) => <ActionsCell appointmentId={row.original.appointmentId} />,
   },
 ]
 

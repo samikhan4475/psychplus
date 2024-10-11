@@ -1,9 +1,4 @@
-import {
-  CodesetSelect,
-  FormFieldContainer,
-  FormFieldError,
-  FormFieldLabel,
-} from '@/components'
+import { CodesetSelect, FormFieldContainer, FormFieldLabel } from '@/components'
 import { CODESETS } from '@/constants'
 
 const InsuranceVerificationSelect = () => {
@@ -14,9 +9,8 @@ const InsuranceVerificationSelect = () => {
         name="insuranceVerificationStatus"
         codeset={CODESETS.VerificationStatus}
         size="1"
-        className="flex-1"
+        className="flex-1 h-[21px]"
       />
-      <FormFieldError name={'insuranceVerificationStatus'} />
     </FormFieldContainer>
   )
 }
