@@ -19,6 +19,7 @@ import {
   useQuestionnaireFormSnapIv,
 } from './form-snap-iv'
 import { transformIn, transformOut } from './form-snap-iv/data'
+import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 
 const SnapIvTab = ({
   patientId,
@@ -43,7 +44,11 @@ const SnapIvTab = ({
             <Flex gap="2">
               <FillOutButtonSnapIv patientId={patientId} data={data} />
               <SendToPatientButton />
-              <HistoryButton />
+              <HistoryButton
+                sectionName={QuickNoteSectionName.QuickNoteSectionSnapIV}
+                questionnaire={QuestionnaireTabs.SNAP_IV_TAB}
+                patientId={patientId}
+              />
               <SaveButton />
             </Flex>
           }

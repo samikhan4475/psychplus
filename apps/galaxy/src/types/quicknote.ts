@@ -4,6 +4,20 @@ interface QuickNoteSectionItem {
   sectionName: string
   sectionItem: string
   sectionItemValue: string
+  encounterType?: string
 }
 
-export type { QuickNoteSectionItem }
+interface QuickNoteHistory {
+  patientId: number
+  sectionName: string
+  createdOn: string
+  createdBy: number
+  createdByFullName: string
+  createdByType?: string
+  addToNote: boolean
+  totalScore?: string
+  encounterType?: string
+  data: QuickNoteSectionItem[]
+}
+
+export type { QuickNoteSectionItem, QuickNoteHistory }

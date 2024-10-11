@@ -52,9 +52,13 @@ const Phq9Tab = ({
           title={QuestionnaireTabs.PHQ_9_TAB}
           headerRight={
             <Flex gap="2">
-              <FillOutButtonPhq9 patientId={patientId} data={[]} />
+              <FillOutButtonPhq9 patientId={patientId} />
               <SendToPatientButton />
-              <HistoryButton />
+              <HistoryButton
+                sectionName={QuickNoteSectionName.QuickNoteSectionPhq9}
+                questionnaire={QuestionnaireTabs.PHQ_9_TAB}
+                patientId={patientId}
+              />
               <SaveButton />
             </Flex>
           }

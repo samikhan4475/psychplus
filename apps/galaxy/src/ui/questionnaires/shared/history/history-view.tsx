@@ -1,28 +1,74 @@
+import { useEffect, useState } from 'react'
 import * as Tabs from '@radix-ui/react-tabs'
 import { Flex } from '@radix-ui/themes'
-import { XIcon } from 'lucide-react'
+import { ListIcon, SignalIcon, XIcon } from 'lucide-react'
+import { LoadingPlaceholder } from '@/components'
+import { QuickNoteHistory } from '@/types'
+import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
+import { getQuestionnairesHistory } from '../api'
 import { ChartView } from './chart-view'
 import { SheetView } from './sheet-view'
 
-const HistoryView = () => {
+interface HistoryViewProps {
+  sectionName?: QuickNoteSectionName
+  questionnaire?: string
+  patientId: string
+}
+
+const HistoryView = ({
+  sectionName,
+  questionnaire,
+  patientId,
+}: HistoryViewProps) => {
+  const [data, setData] = useState<QuickNoteHistory[] | undefined>(undefined)
+  const [loader, setLoader] = useState<boolean>(true)
+
+  useEffect(() => {
+    ;(async () => {
+      const response = await getQuestionnairesHistory({
+        patientId,
+        sectionName: sectionName as QuickNoteSectionName,
+      })
+      setLoader(false)
+      if (response.state === 'success') {
+        setData(response.data.historyData)
+      }
+    })()
+  }, [patientId, sectionName])
+
   return (
     <Tabs.Root defaultValue="SheetView" className="flex w-full flex-col">
       <Flex mt="2">
         <Tabs.List>
           <Flex gap="2">
-            <TabsTrigger value="SheetView">Sheet View</TabsTrigger>
-            <TabsTrigger value="DataView">Data View</TabsTrigger>
+            <TabsTrigger value="SheetView">
+              <Flex align="center" gap="2">
+                <ListIcon size={16} />
+                Sheet View
+              </Flex>
+            </TabsTrigger>
+            <TabsTrigger value="DataView">
+              <Flex align="center" gap="2">
+                <SignalIcon size={14} />
+                Data View
+              </Flex>
+            </TabsTrigger>
           </Flex>
         </Tabs.List>
       </Flex>
 
-      <TabsContent value="SheetView">
-        <SheetView />
-      </TabsContent>
+      {loader && <LoadingPlaceholder />}
+      {data && (
+        <>
+          <TabsContent value="SheetView">
+            <SheetView data={data} />
+          </TabsContent>
 
-      <TabsContent value="DataView">
-        <ChartView />
-      </TabsContent>
+          <TabsContent value="DataView">
+            <ChartView data={data} questionnaire={questionnaire} />
+          </TabsContent>
+        </>
+      )}
     </Tabs.Root>
   )
 }

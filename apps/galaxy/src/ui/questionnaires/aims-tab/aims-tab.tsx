@@ -4,6 +4,7 @@ import { Flex } from '@radix-ui/themes'
 import { FormProvider } from 'react-hook-form'
 import { WidgetFormContainer } from '@/components'
 import { QuickNoteSectionItem } from '@/types'
+import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { QuestionnaireTabs } from '../constants'
 import {
   AddToNoteCell,
@@ -41,7 +42,11 @@ const AimsTab = ({
             <Flex gap="2">
               <FillOutButtonAims patientId={patientId} data={[]} />
               <SendToPatientButton />
-              <HistoryButton />
+              <HistoryButton
+                sectionName={QuickNoteSectionName.QuickNoteSectionAims}
+                questionnaire={QuestionnaireTabs.AIMS_TAB}
+                patientId={patientId}
+              />
               <SaveButton />
             </Flex>
           }

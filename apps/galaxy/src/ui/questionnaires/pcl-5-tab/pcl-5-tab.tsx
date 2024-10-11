@@ -53,7 +53,11 @@ const Pcl5Tab = ({
             <Flex gap="2">
               <FillOutButtonPcl5 patientId={patientId} data={[]} />
               <SendToPatientButton />
-              <HistoryButton />
+              <HistoryButton
+                sectionName={QuickNoteSectionName.QuickNoteSectionPcl5}
+                questionnaire={QuestionnaireTabs.PCL_5_TAB}
+                patientId={patientId}
+              />
               <SaveButton />
             </Flex>
           }

@@ -3,8 +3,20 @@ import * as Tabs from '@radix-ui/react-tabs'
 import { Flex } from '@radix-ui/themes'
 import { XIcon } from 'lucide-react'
 import { HistoryView } from '../history'
+import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 
-const FillOutTabsView = ({ children }: PropsWithChildren) => {
+interface FillOutTabsViewProps extends PropsWithChildren {
+  patientId: string
+  questionnaire: string
+  sectionName: QuickNoteSectionName
+}
+
+const FillOutTabsView = ({
+  children,
+  patientId,
+  questionnaire,
+  sectionName,
+}: FillOutTabsViewProps) => {
   return (
     <Tabs.Root className="flex w-full flex-col">
       <Flex>
@@ -18,7 +30,11 @@ const FillOutTabsView = ({ children }: PropsWithChildren) => {
       </Flex>
       <TabsContent value="Current">{children}</TabsContent>
       <TabsContent value="History">
-        <HistoryView />
+        <HistoryView
+          patientId={patientId}
+          questionnaire={questionnaire}
+          sectionName={sectionName}
+        />
       </TabsContent>
     </Tabs.Root>
   )

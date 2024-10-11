@@ -17,8 +17,8 @@ import {
 } from '../shared'
 import { transformIn, transformOut } from '../shared/data'
 import { SCORE_INTERPRETATION_RANGES, YBOCS_TABLES } from './constants'
-import { QuestionnairesFormYBocsDataTable } from './y-bocs-data-table'
 import { FillOutButtonYBocs } from './fill-out-button'
+import { QuestionnairesFormYBocsDataTable } from './y-bocs-data-table'
 
 interface QuestionnairesFormYBocsProps {
   patientId: string
@@ -49,7 +49,11 @@ const YBocsTab = ({ patientId, data }: QuestionnairesFormYBocsProps) => {
             <Flex gap="2">
               <FillOutButtonYBocs patientId={patientId} data={data} />
               <SendToPatientButton />
-              <HistoryButton />
+              <HistoryButton
+                sectionName={QuickNoteSectionName.QuickNoteSectionYbcos}
+                questionnaire={QuestionnaireTabs.Y_BOCS_TAB}
+                patientId={patientId}
+              />
               <SaveButton />
             </Flex>
           }

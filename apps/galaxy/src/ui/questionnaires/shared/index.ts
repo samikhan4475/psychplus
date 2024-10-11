@@ -1,4 +1,3 @@
-export * from './history-button'
 export * from './save-button'
 export * from './send-to-patient-button'
 export * from './questionnaires-form'

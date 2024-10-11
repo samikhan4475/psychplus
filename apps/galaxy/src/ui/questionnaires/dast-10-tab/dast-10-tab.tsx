@@ -55,7 +55,11 @@ const Dast10Tab = ({
             <Flex gap="2">
               <FillOutButtonDast10 patientId={patientId} data={[]} />
               <SendToPatientButton />
-              <HistoryButton />
+              <HistoryButton
+                sectionName={QuickNoteSectionName.QuickNoteSectionDast10}
+                questionnaire={QuestionnaireTabs.DAST_10_TAB}
+                patientId={patientId}
+              />
               <SaveButton />
             </Flex>
           }

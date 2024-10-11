@@ -5,35 +5,39 @@ import {
   SCORE_INTERPRETATION_RANGES,
 } from '@/ui/questionnaires/shared/constants'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
-import { QuestionnaireTabs } from '../../constants'
+import { QuestionnaireTabs } from '../constants'
 import {
   FillOutButton,
   FillOutTabsView,
   QuestionnairePopupCurrentView,
-} from '../../shared'
-import { QUESTIONS } from '../constants'
+} from '../shared'
+import { QUESTIONS } from './constants'
 
-type FillOutButtonPhq9Props = PropsWithChildren<{
+type FillOutButtonGad7Props = PropsWithChildren<{
   patientId: string
   data: QuickNoteSectionItem[]
 }>
 
-const FillOutButtonPhq9 = ({ patientId, data }: FillOutButtonPhq9Props) => {
+const FillOutButtonGad7 = ({ patientId, data }: FillOutButtonGad7Props) => {
   return (
-    <FillOutButton title="Patient Health Questionnaire (PHQ-9)">
-      <FillOutTabsView>
+    <FillOutButton title="Generalized Anxiety Disorder (GAD-7)">
+      <FillOutTabsView
+        patientId={patientId}
+        sectionName={QuickNoteSectionName.QuickNoteSectionGad7}
+        questionnaire={QuestionnaireTabs.GAD_7_TAB}
+      >
         <QuestionnairePopupCurrentView
           data={data}
           patientId={patientId}
           questions={QUESTIONS}
           labels={LABELS}
           scoreInterpretationRanges={SCORE_INTERPRETATION_RANGES}
-          quickNoteSectionName={QuickNoteSectionName.QuickNoteSectionPhq9}
-          questionnaireTab={QuestionnaireTabs.PHQ_9_TAB}
+          quickNoteSectionName={QuickNoteSectionName.QuickNoteSectionGad7}
+          questionnaireTab={QuestionnaireTabs.GAD_7_TAB}
         />
       </FillOutTabsView>
     </FillOutButton>
   )
 }
 
-export { FillOutButtonPhq9 }
+export { FillOutButtonGad7 }

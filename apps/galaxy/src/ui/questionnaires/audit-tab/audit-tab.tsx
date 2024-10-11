@@ -54,7 +54,11 @@ const AuditTab = ({
             <Flex gap="2">
               <FillOutButtonAudit patientId={patientId} data={[]} />
               <SendToPatientButton />
-              <HistoryButton />
+              <HistoryButton
+                sectionName={QuickNoteSectionName.QuickNoteSectionAudit}
+                questionnaire={QuestionnaireTabs.AUDIT_TAB}
+                patientId={patientId}
+              />
               <SaveButton />
             </Flex>
           }

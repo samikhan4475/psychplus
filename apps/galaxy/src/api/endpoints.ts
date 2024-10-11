@@ -18,6 +18,7 @@ const ADD_VACATION = (staffId: string) =>
 const PATIENT_PROFILE_ENDPOINT = (id: string) =>
   `${API_URL}/api/patients/${id}/profile`
 const NOTE_DETAILS_SEARCH_ENDPOINT = `${API_URL}/api/notedetails/actions/search`
+const NOTE_DETAILS_HISTORY_ENDPOINT = `${API_URL}/api/notedetails/history/search`
 const NOTE_DETAILS_SAVE_ENDPOINT = (id: string) =>
   `${API_URL}/api/patients/${id}/notedetails`
 const GET_PATIENT_PROFILE_ENDPOINT = (id: string) =>
@@ -132,6 +133,7 @@ export {
   GET_PATIENT_NOTIFICATIONS_ENDPOINT,
   PATIENT_PROFILE_ENDPOINT,
   NOTE_DETAILS_SEARCH_ENDPOINT,
+  NOTE_DETAILS_HISTORY_ENDPOINT,
   NOTE_DETAILS_SAVE_ENDPOINT,
   GET_PATIENT_PROFILE_ENDPOINT,
   GET_PATIENT_CONSENTS_ENDPOINT,

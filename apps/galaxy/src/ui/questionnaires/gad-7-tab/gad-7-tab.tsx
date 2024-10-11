@@ -54,7 +54,11 @@ const Gad7Tab = ({
             <Flex gap="2">
               <FillOutButtonGad7 patientId={patientId} data={[]} />
               <SendToPatientButton />
-              <HistoryButton />
+              <HistoryButton
+                sectionName={QuickNoteSectionName.QuickNoteSectionGad7}
+                questionnaire={QuestionnaireTabs.GAD_7_TAB}
+                patientId={patientId}
+              />
               <SaveButton />
             </Flex>
           }

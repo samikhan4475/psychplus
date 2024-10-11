@@ -1,23 +1,21 @@
 import { useState } from 'react'
 import { Flex, ScrollArea } from '@radix-ui/themes'
 import { type ColumnDef } from '@tanstack/react-table'
+import { format } from 'date-fns'
 import { ChevronsUpDown } from 'lucide-react'
 import { CheckboxCell, ColumnHeader, DataTable, TextCell } from '@/components'
+import { QuickNoteHistory } from '@/types'
 import { AddToNoteCell } from './cells'
 import { ScoreCell } from './cells/score-cell'
 
-interface HistorySheetData {
-  'Date/Time': string
-  Note: string
-  FilledBy: string
-  TotalScore: string
-  AddToNote: boolean
+interface SheetViewDataProps {
+  data: QuickNoteHistory[]
 }
 
 const createColumns = (
-  handleCheckNote: (id: number, checked: boolean) => void,
-  checkedNotes: Record<number, boolean>,
-): ColumnDef<HistorySheetData>[] => [
+  onCheckAddToNote: (checked: boolean, index?: number) => void,
+  allChecked: boolean,
+): ColumnDef<QuickNoteHistory>[] => [
   {
     id: 'dateTime',
     header: () => (
@@ -26,7 +24,11 @@ const createColumns = (
         <ChevronsUpDown size="16" stroke="#8B8D98" />
       </Flex>
     ),
-    cell: ({ row }) => <TextCell> {row.original['Date/Time']}</TextCell>,
+    cell: ({ row }) => (
+      <TextCell>
+        {format(new Date(row.original.createdOn), 'MM/dd/yyyy HH:mm')}
+      </TextCell>
+    ),
   },
   {
     id: 'note',
@@ -36,17 +38,25 @@ const createColumns = (
         <ChevronsUpDown size="16" stroke="#8B8D98" />
       </Flex>
     ),
-    cell: ({ row }) => <TextCell>{row.original.Note}</TextCell>,
+    cell: ({ row }) => (
+      <TextCell>
+        {row.original.data?.[0].encounterType || row.original.encounterType}
+      </TextCell>
+    ),
   },
   {
     id: 'filledBy',
     header: () => (
       <Flex justify="between" align="center" pr="2">
-        <ColumnHeader label="Filled/By" />
+        <ColumnHeader label="Filled By" />
         <ChevronsUpDown size="16" stroke="#8B8D98" />
       </Flex>
     ),
-    cell: ({ row }) => <TextCell>{row.original.FilledBy} </TextCell>,
+    cell: ({ row }) => (
+      <TextCell>
+        {row.original.createdByType || row.original.createdByFullName}
+      </TextCell>
+    ),
   },
   {
     id: 'totalScore',
@@ -56,7 +66,11 @@ const createColumns = (
         <ChevronsUpDown size="16" stroke="#8B8D98" />
       </Flex>
     ),
-    cell: ({ row }) => <ScoreCell value={row.original.TotalScore} />,
+    cell: ({ row }) => {
+      const { totalScore } = row.original
+
+      return <ScoreCell value={totalScore || ''} />
+    },
   },
   {
     id: 'addToNote',
@@ -64,52 +78,45 @@ const createColumns = (
       <CheckboxCell
         label="Add to Note"
         className="px-[9px] font-[500]"
-        checked={Object.values(checkedNotes).every((checked) => checked)}
-        onCheckedChange={(checked) => handleCheckNote(-1, checked)}
+        checked={allChecked}
+        onCheckedChange={(checked) => onCheckAddToNote(checked)}
       />
     ),
-    cell: ({ row: { index } }) => (
+    cell: ({ row }) => (
       <AddToNoteCell
-        checked={checkedNotes[index]}
+        checked={row.original.addToNote}
         className="px-[5px]"
-        onCheckedChange={(checked) => handleCheckNote(index, checked)}
+        onCheckedChange={(checked) => onCheckAddToNote(checked, row.index)}
       />
     ),
   },
 ]
 
-const HistorySheetTable = () => {
-  const [checkedNotes, setCheckedNotes] = useState<Record<number, boolean>>(
-    Array(25)
-      .fill(0)
-      .reduce((acc, _, index) => ({ ...acc, [index]: false }), {}),
-  )
+const HistorySheetTable = ({ data }: SheetViewDataProps) => {
+  const [modifiedData, setModifiedData] = useState(data)
 
-  const handleCheckNote = (id: number, checked: boolean) => {
-    if (id === -1) {
-      const updated = Object.keys(checkedNotes).reduce(
-        (acc, key) => ({ ...acc, [key]: checked }),
-        {},
-      )
-      setCheckedNotes(updated)
-    } else {
-      setCheckedNotes((prev) => ({ ...prev, [id]: checked }))
-    }
+  const handleCheckAddToNote = (checked: boolean, index?: number) => {
+    setModifiedData((prevData) =>
+      index === undefined
+        ? prevData.map((item) => ({ ...item, addToNote: checked }))
+        : prevData.map((item, i) =>
+            i === index ? { ...item, addToNote: checked } : item,
+          ),
+    )
   }
 
-  const columns = createColumns(handleCheckNote, checkedNotes)
+  const allChecked = modifiedData.every((item) => item.addToNote)
 
-  const data: HistorySheetData[] = Array(25).fill({
-    'Date/Time': '2024-09-30 10:00 AM',
-    Note: 'Out Pt, New Pt, In-Person',
-    FilledBy: 'Provider',
-    TotalScore: '25',
-    AddToNote: false,
-  })
+  const columns = createColumns(handleCheckAddToNote, allChecked)
 
   return (
     <ScrollArea>
-      <DataTable data={data} columns={columns} disablePagination sticky />
+      <DataTable
+        data={modifiedData}
+        columns={columns}
+        disablePagination
+        sticky
+      />
     </ScrollArea>
   )
 }
