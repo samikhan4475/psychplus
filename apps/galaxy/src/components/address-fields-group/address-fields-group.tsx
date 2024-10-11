@@ -1,11 +1,7 @@
 'use client'
 
 import { Flex, FlexProps, Grid, Text } from '@radix-ui/themes'
-import { useFormContext } from 'react-hook-form'
 import { useGooglePlacesContext } from '@/providers/google-places-provider'
-import { cn } from '@/utils'
-import { FormFieldContainer, FormFieldError, FormFieldLabel } from '../form'
-import { ZipcodeInput } from '../zipcode-input'
 import { GooglePlacesAutocomplete } from './address-autocomplete'
 import { AddressTextField } from './address-text-field'
 import { UsStateSelect } from './usstate-select'
@@ -20,6 +16,8 @@ interface AddressProps {
   direction?: FlexProps['direction']
   fieldClassName?: string
   fieldLabelClassName?: string
+  addressFieldName?: string
+  disabled?: boolean
 }
 const AddressFieldsGroup = ({
   title,
@@ -30,12 +28,19 @@ const AddressFieldsGroup = ({
   direction = 'column',
   fieldClassName,
   fieldLabelClassName,
+  addressFieldName,
+  disabled,
 }: AddressProps) => {
   const { loaded } = useGooglePlacesContext()
 
-  const form = useFormContext()
-
-  const zipFieldName = fieldName('zip', prefix)
+  const zipFieldName = fieldName(
+    addressFieldName ? 'postalCode' : 'zip',
+    prefix,
+  )
+  const address2FieldName = fieldName(
+    addressFieldName ? 'street2' : 'address2',
+    prefix,
+  )
 
   return (
     <Flex gap="2" className={className} direction={direction}>
@@ -50,8 +55,11 @@ const AddressFieldsGroup = ({
       <Grid columns={columnsPerRow} gap="2" className="flex-1">
         {loaded && (
           <GooglePlacesAutocomplete
+            disabled={disabled}
             required={required}
-            name="address1"
+            name={addressFieldName ?? 'address1'}
+            zipFieldName={zipFieldName}
+            address2FieldName={address2FieldName}
             placeholder="Enter Address 1"
             prefix={prefix}
             className={fieldClassName}
@@ -60,9 +68,10 @@ const AddressFieldsGroup = ({
         )}
         <AddressTextField
           label="Address 2"
-          field={fieldName('address2', prefix)}
+          field={address2FieldName}
           placeholder="Enter Address 2"
           className={fieldClassName}
+          disabled={disabled}
           labelClassName={fieldLabelClassName}
         />
       </Grid>
@@ -72,6 +81,7 @@ const AddressFieldsGroup = ({
           field={fieldName('city', prefix)}
           placeholder="Enter City"
           required={required}
+          disabled={disabled}
           className={fieldClassName}
           labelClassName={fieldLabelClassName}
         />
@@ -79,27 +89,21 @@ const AddressFieldsGroup = ({
           required={required}
           prefix={prefix}
           className={fieldClassName}
+          disabled={disabled}
           labelClassName={fieldLabelClassName}
         />
 
-        <FormFieldContainer className="flex-1">
-          <FormFieldLabel required className={fieldLabelClassName}>
-            Zip Code
-          </FormFieldLabel>
-          <ZipcodeInput
-            size="1"
-            placeholder="Enter Zip"
-            className={cn(
-              'border-pp-gray-2 h-6 w-full border border-solid !outline-none [box-shadow:none] data-[disabled]:bg-gray-3 data-[disabled]:text-gray-11',
-              fieldClassName,
-            )}
-            {...form.register(zipFieldName, {
-              onChange: () => form.trigger(zipFieldName),
-            })}
-            value={form.watch(zipFieldName)}
-          />
-          <FormFieldError name="zip" />
-        </FormFieldContainer>
+        <AddressTextField
+          label="Zip"
+          field={zipFieldName}
+          placeholder="Zip"
+          type="number"
+          maxLength={5}
+          required={required}
+          disabled={disabled}
+          className={fieldClassName}
+          labelClassName={fieldLabelClassName}
+        />
       </Grid>
     </Flex>
   )

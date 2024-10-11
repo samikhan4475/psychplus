@@ -14,14 +14,13 @@ const PhoneNumberInput = () => {
         Phone Number
       </FormFieldLabel>
       <PhoneNumberInputBase
-        field="phone"
-        className={textFieldClassName}
+        field="contactDetails.mobileNumber.number"
+        className="border-pp-gray-2 h-6 w-full border border-solid !outline-none [box-shadow:none]"
         placeholder="Phone Number"
       />
-      <FormFieldError name="phone" />
+      <FormFieldError name="contactDetails.mobileNumber.number" />
     </FormFieldContainer>
   )
 }
-const textFieldClassName =
-  'border-pp-gray-2 w-full h-6 border border-solid !outline-none [box-shadow:none]'
+
 export { PhoneNumberInput }

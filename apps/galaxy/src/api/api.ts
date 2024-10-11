@@ -109,14 +109,18 @@ const PATCH = async <T>(
 ): Promise<NetworkResult<T>> => {
   const { headers, ...rest } = options
 
+  const isBodyFormData = body instanceof FormData
   const reqHeaders = rest.ignoreHeaders
     ? createJsonHeader()
-    : createHeaders({ ...createJsonHeader(), ...headers })
+    : createHeaders({
+        ...(isBodyFormData ? {} : createJsonHeader()),
+        ...headers,
+      })
 
   const response = await fetch(url, {
     method: 'PATCH',
     headers: reqHeaders,
-    body: body instanceof FormData ? body : JSON.stringify(body),
+    body: isBodyFormData ? body : JSON.stringify(body),
     ...rest,
   })
 

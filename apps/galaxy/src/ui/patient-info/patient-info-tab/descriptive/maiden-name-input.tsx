@@ -7,10 +7,10 @@ import {
   FormFieldError,
   FormFieldLabel,
 } from '@/components/form'
-import { DescriptiveSchema } from './descriptive-schema'
+import { PatientInfoSchemaType } from '../patient-info-schema'
 
 const MotherMaidenNameInput = () => {
-  const form = useFormContext<DescriptiveSchema>()
+  const form = useFormContext<PatientInfoSchemaType>()
 
   return (
     <FormFieldContainer className="flex-1">

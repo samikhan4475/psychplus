@@ -1,42 +1,56 @@
 'use client'
 
 import { useState } from 'react'
-import { Button, Checkbox, Flex, Text } from '@radix-ui/themes'
+import { Button, Flex, Text } from '@radix-ui/themes'
 import { MailIcon, MessageSquareTextIcon, PhoneCall } from 'lucide-react'
 import toast from 'react-hot-toast'
-import { Policy } from '@/types'
-import { sendPolicyEmailAction, sendPolicySmsAction } from '../actions'
+import { sendPolicyNoticeAction } from '@/actions'
+import {
+  CloseIcon,
+  NotRequestedIcon,
+  QuestionIcon,
+  TickIcon,
+} from '@/components/icons'
+import { NotificationType, Policy } from '@/types'
 import { useStore } from '../store'
 
 interface PolicySectionProps {
   patientId: string
-  phone?: string
-  email: string
-  isPolicySigned: boolean
+  patientPolicyAStatus?: string
 }
 
 const PolicySection = ({
   patientId,
-  phone,
-  email,
-  isPolicySigned,
+  patientPolicyAStatus,
 }: PolicySectionProps) => {
   const { isUserLocked } = useStore((state) => ({
     isUserLocked: state.isUserLocked,
   }))
   const [isSending, setIsSending] = useState(false)
 
+  const renderStatusIcon = (status: string | undefined) => {
+    switch (status) {
+      case 'Unverifiable':
+        return <CloseIcon width={20} height={20} />
+      case 'Pending':
+        return <QuestionIcon width={20} height={20} />
+      case 'Verified':
+        return <TickIcon width={23} height={23} rectRx="6" />
+      default:
+        return <NotRequestedIcon width={20} height={20} />
+    }
+  }
+
   const disabled = isSending
 
   const sendSms = async () => {
-    if (!phone) {
-      toast.error('Add a phone number first!')
-      return
-    }
-
     setIsSending(true)
 
-    const result = await sendPolicySmsAction(patientId, phone, Policy.PolicyA)
+    const result = await sendPolicyNoticeAction({
+      patientId,
+      channels: [NotificationType.Sms],
+      policyType: Policy.PolicyA,
+    })
 
     if (result.state === 'error') {
       toast.error('Failed to send text')
@@ -51,7 +65,11 @@ const PolicySection = ({
   const sendEmail = async () => {
     setIsSending(true)
 
-    const result = await sendPolicyEmailAction(patientId, email, Policy.PolicyA)
+    const result = await sendPolicyNoticeAction({
+      patientId,
+      channels: [NotificationType.Email],
+      policyType: Policy.PolicyA,
+    })
 
     if (result.state === 'error') {
       toast.error('Failed to send email')
@@ -69,13 +87,8 @@ const PolicySection = ({
       gap="2"
       className="bg-pp-bg-accent col-span-2 w-full self-end rounded-2 px-2 py-1.5"
     >
-      <Flex gap="2" align="center" width="100%">
-        <Checkbox
-          color="green"
-          defaultChecked
-          disabled={isUserLocked}
-          className="rounded-full bg-white overflow-hidden before:[box-shadow:none]"
-        />
+      <Flex gap="1" align="center" width="100%">
+        {renderStatusIcon(patientPolicyAStatus)}
         <Text className="text-1" weight="medium">
           Patient Policy A
         </Text>

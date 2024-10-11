@@ -1,79 +1,90 @@
 'use client'
 
-import { useState } from 'react'
 import { Button, DropdownMenu, Flex } from '@radix-ui/themes'
-import { FormFieldContainer, FormFieldLabel } from '@/components'
-import { CloseIcon, QuestionIcon, TickIcon } from '@/components/icons'
+import { useFormContext } from 'react-hook-form'
+import {
+  CloseIcon,
+  NotRequestedIcon,
+  QuestionIcon,
+  TickIcon,
+} from '@/components/icons'
 import { cn } from '@/utils'
+import { PatientInfoSchemaType } from './patient-info-schema'
 
 const icons: Record<string, JSX.Element> = {
-  pending: <QuestionIcon />,
-  yes: <TickIcon />,
-  no: <CloseIcon />,
+  Pending: <QuestionIcon />,
+  Verified: <TickIcon />,
+  Unverifiable: <CloseIcon />,
+  NotRequested: <NotRequestedIcon />,
 }
-const StatusSelector = () => {
-  const [selectedOption, setSelectedOption] = useState(options[2]) // 'Pending' as default
+const StatusSelect = () => {
+  const form = useFormContext<PatientInfoSchemaType>()
+  const status = form.watch('verificationStatus')
 
-  const handleChange = (value: string) => {
-    const option = options.find((opt) => opt.value === value)
-    if (option) {
-      setSelectedOption(option)
-    }
+  const { isSubmitting } = form.formState
+
+  const getLabelFromValue = (value: string) => {
+    const option = options.find((option) => option.value === value)
+    return option ? option.label : 'Select'
   }
 
   return (
-    <FormFieldContainer className="flex-row gap-1">
-      <FormFieldLabel className="text-pp-black-3 !text-2">
-        Verification Status
-      </FormFieldLabel>
-      <DropdownMenu.Root>
-        <DropdownMenu.Trigger>
-          <Button
-            variant="outline"
-            color="gray"
-            size="1"
-            type="button"
-            className="text-black min-w-[97px] justify-between capitalize !outline-none"
+    <DropdownMenu.Root>
+      <DropdownMenu.Trigger disabled={isSubmitting}>
+        <Button
+          variant="outline"
+          color="gray"
+          size="1"
+          type="button"
+          className="text-black min-w-[97px] justify-between capitalize disabled:pointer-events-none"
+          disabled={isSubmitting}
+        >
+          <Flex justify="start" gap="1">
+            {icons[status]}
+            {getLabelFromValue(status)}
+          </Flex>
+          <DropdownMenu.TriggerIcon />
+        </Button>
+      </DropdownMenu.Trigger>
+      <DropdownMenu.Content className="p-0 shadow-3" color="gray">
+        {options?.map(({ label, value }) => (
+          <DropdownMenu.Item
+            onSelect={() => {
+              form.setValue('verificationStatus', value)
+              form.trigger('verificationStatus')
+            }}
+            className={cn(
+              'hover:bg-pp-gray-2 text-black h-6 px-2 !text-1 font-medium',
+              {
+                'text-red-9': value === 'no',
+              },
+            )}
+            key={label}
           >
-            <Flex justify="start" gap="1">
-              {icons[selectedOption?.value || 'pending']}
-              {selectedOption?.label}
-            </Flex>
-            <DropdownMenu.TriggerIcon />
-          </Button>
-        </DropdownMenu.Trigger>
-        <DropdownMenu.Content className="p-0 shadow-3" color="gray">
-          {options.map(({ label, value }) => (
-            <DropdownMenu.Item
-              onSelect={() => handleChange(value)}
-              className={cn(
-                'hover:bg-pp-gray-2 text-black h-6 px-2 !text-1 font-medium',
-                {
-                  'text-red-9': value === 'no',
-                },
-              )}
-              key={value}
-            >
-              {icons[value]} {label}
-            </DropdownMenu.Item>
-          ))}
-        </DropdownMenu.Content>
-      </DropdownMenu.Root>
-    </FormFieldContainer>
+            {icons[value]} {label}
+          </DropdownMenu.Item>
+        ))}
+      </DropdownMenu.Content>
+    </DropdownMenu.Root>
   )
 }
 const options = [
   {
     label: 'Yes',
-    value: 'yes',
+    value: 'Verified',
   },
   {
     label: 'No',
-    value: 'no',
+    value: 'Unverifiable',
   },
   {
     label: 'Pending',
-    value: 'pending',
+    value: 'Pending',
+  },
+
+  {
+    label: 'Not Requested',
+    value: 'NotRequested',
   },
 ]
-export { StatusSelector }
+export { StatusSelect }

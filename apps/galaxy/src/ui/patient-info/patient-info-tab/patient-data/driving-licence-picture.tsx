@@ -10,18 +10,20 @@ import {
 } from '@/components/form'
 import { PictureFallback } from '@/components/icons'
 
-const DrivingLicensePicture = () => {
+interface DrivingLicensePictureProps {
+  setDriverLicenseImage: (file: File | undefined) => void
+  savedDriverLicenseUrl: string
+}
+const DrivingLicensePicture = ({
+  setDriverLicenseImage,
+  savedDriverLicenseUrl,
+}: DrivingLicensePictureProps) => {
   const [drivingLicenseImageUrl, setDrivingLicenseImageUrl] = useState<string>(
-    'https://picsum.photos/500/500',
+    savedDriverLicenseUrl ?? '',
   )
-  const [drivingLicenseImage, setDrivingLicenseImage] = useState<
-    File | undefined
-  >(undefined)
-
-  console.log(drivingLicenseImage)
 
   const handleinsuranceImageUpload = (file: File | undefined) => {
-    setDrivingLicenseImage(file)
+    setDriverLicenseImage(file)
     const url = file ? URL.createObjectURL(file) : ''
     setDrivingLicenseImageUrl(url)
   }

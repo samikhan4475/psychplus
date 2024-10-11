@@ -1,5 +1,3 @@
-import { ContactDetails, LegalName } from '@/types'
-
 interface PatientProfile {
   id: string
   mrn: string

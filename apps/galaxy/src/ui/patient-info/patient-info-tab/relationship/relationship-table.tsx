@@ -22,11 +22,13 @@ const columns: ColumnDef<Relationship>[] = [
     id: 'relation-first-name',
     header: () => <ColumnHeader label="First Name" />,
     cell: ({ row }) => <TextCell>{row.original.name.firstName}</TextCell>,
+    size: 50,
   },
   {
     id: 'relation-middle-name',
     header: () => <ColumnHeader label="Middle Name" />,
     cell: ({ row }) => <TextCell>{row.original.name.middleName}</TextCell>,
+    size: 100,
   },
   {
     id: 'relation-last-name',
@@ -47,7 +49,7 @@ const columns: ColumnDef<Relationship>[] = [
     id: 'address',
     header: () => <ColumnHeader label="Address" />,
     cell: ({ row }) => (
-      <TextCell>
+      <TextCell className="truncate">
         {getAddressLabel('Home', row.original.contactDetails.addresses)}
       </TextCell>
     ),

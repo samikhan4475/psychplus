@@ -4,7 +4,7 @@ import { CODESETS } from '@/constants'
 const LanguageAbilitySelect = () => {
   return (
     <CodesetSelect
-      name="language"
+      name="languageAbility"
       placeholder="Select Language"
       codeset={CODESETS.LanguageAbility}
       size="1"

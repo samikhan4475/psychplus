@@ -1,14 +1,12 @@
 'use server'
 
 import * as api from '@/api'
-import type { PatientProfileRaw } from '@/types'
-import { transformIn } from '../transform'
-import type { PatientProfile } from '../types'
+import type { PatientProfile } from '@/types'
 
 const getPatientProfileAction = async (
   id: string,
 ): Promise<api.ActionResult<PatientProfile>> => {
-  const result = await api.GET<PatientProfileRaw>(
+  const result = await api.GET<PatientProfile>(
     api.GET_PATIENT_PROFILE_ENDPOINT(id),
   )
 
@@ -21,7 +19,7 @@ const getPatientProfileAction = async (
 
   return {
     state: 'success',
-    data: transformIn(result.data),
+    data: result.data,
   }
 }
 

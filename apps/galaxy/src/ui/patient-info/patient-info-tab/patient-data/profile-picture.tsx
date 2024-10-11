@@ -10,14 +10,18 @@ import {
 } from '@/components/form'
 import { PictureFallback } from '@/components/icons'
 
-const ProfilePicture = () => {
+interface ProfilePictureProps {
+  setProfileImage: (file: File | undefined) => void
+  savedProfileImageUrl: string
+}
+
+const ProfilePicture = ({
+  setProfileImage,
+  savedProfileImageUrl,
+}: ProfilePictureProps) => {
   const [profileImageUrl, setProfileImageUrl] = useState<string>(
-    'https://picsum.photos/500/500',
+    savedProfileImageUrl ?? '',
   )
-
-  const [profileImage, setProfileImage] = useState<File | undefined>(undefined)
-  console.log(profileImage)
-
   const handleProfileImageUpload = (file: File | undefined) => {
     setProfileImage(file)
     const url = file ? URL.createObjectURL(file) : ''

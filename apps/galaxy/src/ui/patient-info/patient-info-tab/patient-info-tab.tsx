@@ -1,7 +1,9 @@
 'use client'
 
-import { Flex } from '@radix-ui/themes'
-import { PatientConsent, Relationship } from '@/types'
+import { useState } from 'react'
+import { Box, Flex } from '@radix-ui/themes'
+import { GooglePlacesContextProvider } from '@/providers/google-places-provider'
+import { PatientConsent, PatientProfile, Relationship } from '@/types'
 import { POLICY_TYPE_A } from '../constants'
 import { TabContentHeading } from '../shared'
 import { AdditionalContactInfoCard } from './additional-contact-info'
@@ -14,10 +16,10 @@ import { PatientHistoryDialog } from './patient-history-dialog'
 import { PatientInfoForm } from './patient-info-form'
 import { PreferredPartnerCard } from './preferred-partner'
 import { RelationshipCard } from './relationship'
-import { ResetPasswordButton } from './reset-password-button'
+// import { ResetPasswordButton } from './reset-password-button'
 import { SaveButton } from './save-button'
-import { StatusSelector } from './status-selector'
-import { PatientPreferredPartner, type PatientProfile } from './types'
+import { StatusSelect } from './status-selector'
+import { PatientPreferredPartner } from './types'
 import { AddressCard } from './user-address'
 
 const TAB_TITLE = 'Patient Info'
@@ -39,52 +41,58 @@ const PatientInfoTab = ({
   patientRelationships,
   patientConsents,
 }: PatientInfoTabProps) => {
-  const isPolicySigned = patientConsents.some(
-    (consent) => consent.signingDate && consent.type === POLICY_TYPE_A,
+  const [profileImage, setProfileImage] = useState<File | undefined>(undefined)
+  const [driverLicenseImage, setDriverLicenseImage] = useState<
+    File | undefined
+  >(undefined)
+
+  const patientPolicyA = patientConsents?.find(
+    (consent) => consent?.type === POLICY_TYPE_A,
   )
 
   return (
-    <>
-      <TabContentHeading title={TAB_TITLE}>
-        <Flex
-          align="center"
-          justify="between"
-          gap="2"
-          className="flex-1"
-          pl="4"
+    <Box position="relative">
+      <LockPageSwitch />
+      <GooglePlacesContextProvider apiKey={googleApiKey}>
+        <PatientInfoForm
+          patient={patientProfile}
+          profileImage={profileImage}
+          driverLicenseImage={driverLicenseImage}
         >
-          <LockPageSwitch />
-          <Flex align="center" justify="end" gap="2" className="flex-1">
-            <StatusSelector />
-            <PatientHistoryDialog />
-            <ResetPasswordButton />
-            <SaveButton />
+          <TabContentHeading title={TAB_TITLE}>
+            <Flex align="center" justify="end" gap="2" className="flex-1">
+              <StatusSelect />
+              <PatientHistoryDialog />
+              {/* <ResetPasswordButton /> */}
+              <SaveButton />
+            </Flex>
+          </TabContentHeading>
+
+          <Flex direction="column" gap="2">
+            <CreateUserCard
+              patientId={patientId}
+              patientPolicyAStatus={patientPolicyA?.verificationStatus}
+            />
+            <PatientDataCard
+              patientId={patientId}
+              setProfileImage={setProfileImage}
+              setDriverLicenseImage={setDriverLicenseImage}
+            />
+            <AddressCard />
+            <PreferredPartnerCard
+              preferredPartners={patientPreferredPartners ?? []}
+            />
+            <RelationshipCard
+              patientId={patientId}
+              patientRelationships={patientRelationships ?? []}
+            />
+            <AdditionalContactInfoCard />
+            <AlternativeInfoCard />
+            <DescriptiveCard />
           </Flex>
-        </Flex>
-      </TabContentHeading>
-      <PatientInfoForm patient={patientProfile}>
-        <Flex direction="column" gap="2">
-          <CreateUserCard
-            patientId={patientId}
-            phone={patientProfile.phone}
-            email={patientProfile.email}
-            isPolicySigned={isPolicySigned}
-          />
-          <PatientDataCard patientId={patientId} />
-          <AddressCard googleApiKey={googleApiKey} />
-          <PreferredPartnerCard
-            preferredPartners={patientPreferredPartners ?? []}
-          />
-          <RelationshipCard
-            patientId={patientId}
-            patientRelationships={patientRelationships ?? []}
-          />
-          <AdditionalContactInfoCard patientId={patientId} />
-          <AlternativeInfoCard googleApiKey={googleApiKey} />
-          <DescriptiveCard patientId={patientId} />
-        </Flex>
-      </PatientInfoForm>
-    </>
+        </PatientInfoForm>
+      </GooglePlacesContextProvider>
+    </Box>
   )
 }
 

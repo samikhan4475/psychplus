@@ -9,13 +9,15 @@ import { CODESETS } from '@/constants'
 const LicenseStateSelect = () => {
   return (
     <FormFieldContainer className="flex-1">
-      <FormFieldLabel className="!text-1">Driving License State</FormFieldLabel>
+      <FormFieldLabel className="!text-1" required>
+        Driving License State
+      </FormFieldLabel>
       <CodesetSelect
-        name="driversLicense.state"
+        name="driversLicense.validIn"
         codeset={CODESETS.UsStates}
         size="1"
       />
-      <FormFieldError name="driversLicense.state" />
+      <FormFieldError name="driversLicense.validIn" />
     </FormFieldContainer>
   )
 }

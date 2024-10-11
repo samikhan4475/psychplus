@@ -1,4 +1,4 @@
-type PatientAddressType = 'Home' | 'Mailing' | 'Billing'
+type PatientAddressType = 'Home' | 'Business' | 'Mailing' | 'Billing'
 
 interface PatientAddress {
   type: PatientAddressType

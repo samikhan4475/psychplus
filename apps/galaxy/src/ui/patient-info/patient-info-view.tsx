@@ -3,7 +3,14 @@
 import * as Tabs from '@radix-ui/react-tabs'
 import { Flex } from '@radix-ui/themes'
 import { TabsTrigger } from '@/components'
-import { CreditCard, Insurance, InsurancePayer, PatientConsent, Relationship } from '@/types'
+import {
+  CreditCard,
+  Insurance,
+  InsurancePayer,
+  PatientConsent,
+  PatientProfile,
+  Relationship,
+} from '@/types'
 import {
   INSURANCE_TAB,
   PATIENT_INFO_HISTORY_TAB,
@@ -15,10 +22,7 @@ import {
 import { InsuranceTab } from './insurance-tab'
 import { PatientInfoHistoryTab } from './patient-info-history-tab'
 import { PatientInfoTab } from './patient-info-tab'
-import {
-  PatientPreferredPartner,
-  PatientProfile,
-} from './patient-info-tab/types'
+import { PatientPreferredPartner } from './patient-info-tab/types'
 import { PaymentCardsTab } from './payment-card-tab'
 import { PaymentHistoryTab } from './payment-history-tab'
 import { PolicyAndConsentsTab } from './policy-and-consents-tab'

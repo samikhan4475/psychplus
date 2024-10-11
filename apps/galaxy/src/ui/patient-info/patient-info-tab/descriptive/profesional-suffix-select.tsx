@@ -6,7 +6,7 @@ const ProfessionalSuffixSelect = () => {
     <FormFieldContainer className="flex-1">
       <FormFieldLabel className="!text-1">Prof. Suffix</FormFieldLabel>
       <CodesetSelect
-        name="professionalSuffix"
+        name="legalName.honors"
         codeset={CODESETS.ProfSuffix}
         size="1"
       />

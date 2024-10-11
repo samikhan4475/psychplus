@@ -20,13 +20,11 @@ const LicenseInput = () => {
       <TextField.Root
         size="1"
         placeholder="Driving License"
-        className={textFieldClassName}
+        className="border-pp-gray-2 h-6 w-full border border-solid !outline-none [box-shadow:none]"
         {...form.register('driversLicense.number')}
       />
       <FormFieldError name="driversLicense.number" />
     </FormFieldContainer>
   )
 }
-const textFieldClassName =
-  'border-pp-gray-2 w-full h-6 border border-solid !outline-none [box-shadow:none]'
 export { LicenseInput }

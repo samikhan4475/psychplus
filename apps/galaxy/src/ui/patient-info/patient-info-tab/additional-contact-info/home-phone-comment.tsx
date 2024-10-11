@@ -7,24 +7,23 @@ import {
   FormFieldError,
   FormFieldLabel,
 } from '@/components/form'
-import { AdditionalContactInfoSchema } from './additional-contact-info-schema'
+import { PatientInfoSchemaType } from '../patient-info-schema'
 
 const HomePhoneCommentInput = () => {
-  const form = useFormContext<AdditionalContactInfoSchema>()
+  const form = useFormContext<PatientInfoSchemaType>()
 
   return (
     <FormFieldContainer className="flex-1">
       <FormFieldLabel className="!text-1">Comment</FormFieldLabel>
       <TextField.Root
         size="1"
-        className={textFieldClassName}
+        className="border-pp-gray-2 h-6 w-full border border-solid !outline-none [box-shadow:none]"
         placeholder="Comment"
-        {...form.register('homePhoneComment')}
+        {...form.register('contactDetails.homeNumber.comment')}
       />
-      <FormFieldError name="homePhoneComment" />
+      <FormFieldError name="contactDetails.homeNumber.comment" />
     </FormFieldContainer>
   )
 }
-const textFieldClassName =
-  'border-pp-gray-2 w-full h-6 border border-solid !outline-none [box-shadow:none]'
+
 export { HomePhoneCommentInput }

@@ -7,10 +7,10 @@ import {
   FormFieldError,
   FormFieldLabel,
 } from '@/components/form'
-import { type CreateUserSchema } from './create-user-schema'
+import { PatientInfoSchemaType } from '../patient-info-schema'
 
 const FirstNameInput = () => {
-  const form = useFormContext<CreateUserSchema>()
+  const form = useFormContext<PatientInfoSchemaType>()
 
   return (
     <FormFieldContainer className="flex-1">
@@ -19,14 +19,13 @@ const FirstNameInput = () => {
       </FormFieldLabel>
       <TextField.Root
         size="1"
-        className={textFieldClassName}
+        className="textFieldClassName"
         placeholder="First Name"
-        {...form.register('firstName')}
+        {...form.register('legalName.firstName')}
       />
-      <FormFieldError name="firstName" />
+      <FormFieldError name="legalName.firstName'" />
     </FormFieldContainer>
   )
 }
-const textFieldClassName =
-  'border-pp-gray-2 w-full h-6 border border-solid !outline-none [box-shadow:none]'
+
 export { FirstNameInput }

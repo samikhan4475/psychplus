@@ -9,13 +9,7 @@ import { WorkPhoneCommentInput } from './work-phone-comment'
 import { WorkPhoneExtInput } from './work-phone-ext-input'
 import { WorkPhoneInput } from './work-phone-input'
 
-interface AdditionalContactInfoCardProps {
-  patientId: string
-}
-
-const AdditionalContactInfoCard = ({
-  patientId,
-}: AdditionalContactInfoCardProps) => {
+const AdditionalContactInfoCard = () => {
   return (
     <Flex direction="column" className="bg-white overflow-hidden rounded-1">
       <CardHeading title="Additional Contact Info" />

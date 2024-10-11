@@ -7,26 +7,23 @@ import {
   FormFieldError,
   FormFieldLabel,
 } from '@/components/form'
-import { type AlternativeInfoSchema } from './alternative-info-schema'
+import { PatientInfoSchemaType } from '../patient-info-schema'
 
 const FirstNameInput = () => {
-  const form = useFormContext<AlternativeInfoSchema>()
+  const form = useFormContext<PatientInfoSchemaType>()
 
   return (
     <FormFieldContainer className="flex-1">
-      <FormFieldLabel className="!text-1" required>
-        First Name
-      </FormFieldLabel>
+      <FormFieldLabel className="!text-1">First Name</FormFieldLabel>
       <TextField.Root
         size="1"
-        className={textFieldClassName}
+        className="border-pp-gray-2 h-6 w-full border border-solid !outline-none [box-shadow:none]"
         placeholder="First Name"
-        {...form.register('firstName')}
+        {...form.register('alternateOrPreviousName.firstName')}
       />
-      <FormFieldError name="firstName" />
+      <FormFieldError name="alternateOrPreviousName.firstName" />
     </FormFieldContainer>
   )
 }
-const textFieldClassName =
-  'border-pp-gray-2 w-full h-6 border border-solid !outline-none [box-shadow:none]'
+
 export { FirstNameInput }

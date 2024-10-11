@@ -7,24 +7,23 @@ import {
   FormFieldError,
   FormFieldLabel,
 } from '@/components/form'
-import { type CreateUserSchema } from './create-user-schema'
+import { PatientInfoSchemaType } from '../patient-info-schema'
 
 const MiddleNameInput = () => {
-  const form = useFormContext<CreateUserSchema>()
+  const form = useFormContext<PatientInfoSchemaType>()
 
   return (
     <FormFieldContainer className="flex-1">
       <FormFieldLabel className="!text-1">Middle Name</FormFieldLabel>
       <TextField.Root
         size="1"
-        className={textFieldClassName}
+        className="border-pp-gray-2 h-6 w-full border border-solid !outline-none [box-shadow:none]"
         placeholder="Middle Name"
-        {...form.register('middleName')}
+        {...form.register('legalName.middleName')}
       />
-      <FormFieldError name="middleName" />
+      <FormFieldError name="legalName.middleName" />
     </FormFieldContainer>
   )
 }
-const textFieldClassName =
-  'border-pp-gray-2 w-full h-6 border border-solid !outline-none [box-shadow:none]'
+
 export { MiddleNameInput }

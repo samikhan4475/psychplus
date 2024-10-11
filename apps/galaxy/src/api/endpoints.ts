@@ -116,6 +116,18 @@ const GET_TEMPLATE_REPORT = (templateId: string, reportType: string) =>
   `${API_URL}/api/reporting/templates/${templateId}/actions/run?exportType=${reportType}`
 const GET_PATIENT_PROFILE_IMAGE_ENDPOINT = (patientId: string) =>
   `${API_URL}/ehr/api/patients/${patientId}/profileimage`
+const GET_PATIENT_DRIVER_LICENSE_IMAGE_ENDPOINT = (
+  patientId: string,
+  side: string,
+) => `${API_URL}/ehr/api/patients/${patientId}/driverslicenseimage/${side}`
+const UPDATE_PATIENT_PROFILE_ENDPOINT = (patientId: number) =>
+  `${API_URL}/api/patients/${patientId}/profile`
+const UPDATE_PATIENT_PROFILE_IMAGE_ENDPOINT = (patientId: number) =>
+  `${API_URL}/api/patients/${patientId}/profileimage`
+const UPDATE_PATIENT_DRIVING_LICENSE_IMAGE_ENDPOINT = (
+  patientId: number,
+  side: string,
+) => `${API_URL}/api/patients/${patientId}/driverslicenseimage/${side}`
 
 export {
   USER_ENDPOINT,
@@ -182,7 +194,11 @@ export {
   GET_REPORTS_TEMPLATES_ENDPOINT,
   GET_REPORTS_PARAMETER_ENDPOINT,
   GET_TEMPLATE_REPORT,
+  GET_PATIENT_PROFILE_IMAGE_ENDPOINT,
+  GET_PATIENT_DRIVER_LICENSE_IMAGE_ENDPOINT,
+  UPDATE_PATIENT_PROFILE_ENDPOINT,
+  UPDATE_PATIENT_PROFILE_IMAGE_ENDPOINT,
+  UPDATE_PATIENT_DRIVING_LICENSE_IMAGE_ENDPOINT,
   GET_INSURANCE_PAYMENT_LIST_ENDPOINT,
   DELETE_INSURANCE_PAYMENT_ENDPOINT,
-  GET_PATIENT_PROFILE_IMAGE_ENDPOINT
 }

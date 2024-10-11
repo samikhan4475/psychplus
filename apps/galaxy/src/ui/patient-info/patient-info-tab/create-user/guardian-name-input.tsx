@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { TextField } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
 import {
@@ -5,44 +6,47 @@ import {
   FormFieldError,
   FormFieldLabel,
 } from '@/components'
-import { CreateUserSchema } from './create-user-schema'
+import { PatientInfoSchemaType } from '../patient-info-schema'
 
 const GuardianNameInput = () => {
-  const form = useFormContext<CreateUserSchema>()
+  const { watch, register } = useFormContext<PatientInfoSchemaType>()
 
-  const hasGuardian = form.watch('hasGuardian')
+  const hasGuardian = watch('hasGuardian')
 
-  if (hasGuardian === 'no') {
-    return null
-  }
+  useEffect(() => {
+    register('guardian.name.firstName')
+    register('guardian.name.lastName')
+  }, [register])
 
   return (
-    <>
-      <FormFieldContainer>
-        <FormFieldLabel className="!text-1" required>
-          Guardian First Name
-        </FormFieldLabel>
-        <TextField.Root
-          size="1"
-          className={textFieldClassName}
-          placeholder="First Name"
-          {...form.register('guardianFirstName')}
-        />
-        <FormFieldError name="guardianFirstName" />
-      </FormFieldContainer>
-      <FormFieldContainer>
-        <FormFieldLabel className="!text-1" required>
-          Guardian Last Name
-        </FormFieldLabel>
-        <TextField.Root
-          size="1"
-          className={textFieldClassName}
-          placeholder="Last Name"
-          {...form.register('guardianLastName')}
-        />
-        <FormFieldError name="guardianLastName" />
-      </FormFieldContainer>
-    </>
+    hasGuardian && (
+      <>
+        <FormFieldContainer>
+          <FormFieldLabel className="!text-1" required>
+            Guardian First Name
+          </FormFieldLabel>
+          <TextField.Root
+            size="1"
+            className={textFieldClassName}
+            placeholder="First Name"
+            {...register('guardian.name.firstName')}
+          />
+          <FormFieldError name="guardian.name.firstName" />
+        </FormFieldContainer>
+        <FormFieldContainer>
+          <FormFieldLabel className="!text-1" required>
+            Guardian Last Name
+          </FormFieldLabel>
+          <TextField.Root
+            size="1"
+            className={textFieldClassName}
+            placeholder="Last Name"
+            {...register('guardian.name.lastName')}
+          />
+          <FormFieldError name="guardian.name.lastName" />
+        </FormFieldContainer>
+      </>
+    )
   )
 }
 const textFieldClassName =

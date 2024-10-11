@@ -1,20 +1,24 @@
 import { IconProps } from '@/types'
 
-const TickIcon = (props: IconProps) => {
+interface TickIconProps extends IconProps {
+  rectRx?: string
+}
+const TickIcon = ({ width, height, rectRx = '3', ...rest }: TickIconProps) => {
   return (
     <svg
-      width={props.width ?? 16}
-      height={props.height ?? 16}
+      width={width ?? 16}
+      height={height ?? 16}
       viewBox="0 0 16 17"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      {...rest}
     >
       <rect
         x="1.59961"
         y="1.59998"
         width="12.8"
         height="12.8"
-        rx="3"
+        rx={rectRx}
         className="fill-green-9"
       />
       <g filter="url(#filter0_d_13110_14085)">

@@ -43,7 +43,7 @@ const CodesetGroupMultiSelect = ({
   const groupedCodes = useMemo(
     () =>
       groupingCodes
-        ? codes.filter((item) =>
+        ? codes?.filter((item) =>
             groupingCodes.some((code) => item.groupingCode?.startsWith(code)),
           )
         : codes,
@@ -96,7 +96,7 @@ const CodesetGroupMultiSelect = ({
       gap="1"
       pl="1"
     >
-      {selected.map((item: string) => (
+      {selected?.map((item: string) => (
         <Flex
           key={item}
           className="bg-pp-table-border mt-1 whitespace-nowrap rounded-6"
@@ -155,11 +155,11 @@ const CodesetGroupMultiSelect = ({
             >
               <Flex
                 gap="2"
-                className={cn(selected.includes(code.value) && 'bg-red-1')}
+                className={cn(selected?.includes(code.value) && 'bg-red-1')}
               >
                 <Checkbox
                   highContrast
-                  checked={selected.includes(code.value)}
+                  checked={selected?.includes(code.value)}
                   onCheckedChange={(checked) => {
                     checked ? addValue(code.value) : removeValue(code.value)
                   }}

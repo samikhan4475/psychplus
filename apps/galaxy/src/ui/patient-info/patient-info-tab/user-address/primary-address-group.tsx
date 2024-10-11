@@ -9,7 +9,11 @@ const PrimaryAddressGroup = () => {
       <Text weight="medium" className="text-[14px]">
         Primary<Text className="ml-[2px] text-1 text-red-9">*</Text>
       </Text>
-      <AddressFieldsGroup columnsPerRow="1" />
+      <AddressFieldsGroup
+        columnsPerRow="1"
+        prefix="contactDetails.homeAddress"
+        addressFieldName="street1"
+      />
     </Flex>
   )
 }

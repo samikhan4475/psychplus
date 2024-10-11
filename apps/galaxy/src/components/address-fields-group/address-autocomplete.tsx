@@ -44,6 +44,8 @@ interface PlacesAutocompleteProps {
   prefix?: string
   className?: string
   labelClassName?: string
+  zipFieldName: string
+  address2FieldName: string
 }
 
 const GooglePlacesAutocomplete = ({
@@ -58,19 +60,20 @@ const GooglePlacesAutocomplete = ({
   prefix = '',
   className,
   labelClassName,
+  zipFieldName,
+  address2FieldName,
 }: PlacesAutocompleteProps) => {
   const form = useFormContext()
   const autocompleteFieldRef = useRef<HTMLInputElement | null>(null)
   const [showSuggestions, setShowSuggestions] = useState(false)
-  const address1Field = fieldName('address1', prefix)
-  const address2Field = fieldName('address2', prefix)
+  const address1Field = fieldName(name, prefix)
+  const address2Field = address2FieldName
   const cityField = fieldName('city', prefix)
   const stateField = fieldName('state', prefix)
-  const zipField = fieldName('zip', prefix)
+  const zipField = zipFieldName
+  const countryField = fieldName('country', prefix)
 
   const state = form?.getFieldState(address1Field, form?.formState)
-  const values = form?.getValues()
-
   const {
     ready,
     value,
@@ -79,10 +82,10 @@ const GooglePlacesAutocomplete = ({
     clearSuggestions,
   } = usePlacesAutocomplete({
     defaultValue: getInitialAutocompleteValue({
-      street1: values?.[address1Field],
-      city: values?.[cityField],
-      state: values?.[stateField],
-      postalCode: values?.[zipField],
+      street1: form.watch(address1Field),
+      city: form.watch(cityField),
+      state: form.watch(stateField),
+      postalCode: form.watch(zipField),
     }),
     requestOptions: {
       types: ['address'],
@@ -90,6 +93,10 @@ const GooglePlacesAutocomplete = ({
     },
     debounce: 300,
   })
+
+  useEffect(() => {
+    setValue(form.watch(address1Field))
+  }, [address1Field, form, setValue])
 
   useEffect(() => {
     if (ready && autoFocus && autocompleteFieldRef.current) {
@@ -100,17 +107,20 @@ const GooglePlacesAutocomplete = ({
   const setFormValues = useCallback(
     (address?: AddressForm) => {
       if (form) {
-        form.setValue(address1Field, address?.street ?? '')
-        form.setValue(address2Field, address?.street1 ?? '')
+        const { street1 = '', street = '' } = address || {}
+        form.setValue(address1Field, street1 || street)
+        form.setValue(address2Field, address?.street2 ?? '')
         form.setValue(cityField, address?.city ?? '')
         form.setValue(stateField, address?.state ?? '')
         form.setValue(zipField, address?.postalCode ?? '')
+        form.setValue(countryField, address?.country ?? '')
         form.trigger([
           address1Field,
           address2Field,
           cityField,
           stateField,
           zipField,
+          countryField,
         ])
       }
     },
@@ -120,7 +130,7 @@ const GooglePlacesAutocomplete = ({
   const handleInput = (e: ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value)
     if (!e.target.value) {
-      form?.setValue(fieldName('address1', prefix), '')
+      form?.setValue(address1Field, '')
     }
   }
 

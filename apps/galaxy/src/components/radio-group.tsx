@@ -1,12 +1,14 @@
 import * as RadixRadioGroup from '@radix-ui/react-radio-group'
 import { Text } from '@radix-ui/themes'
-import { cn } from '@/utils'
 import { useFormContext } from 'react-hook-form'
+import { cn } from '@/utils'
 
 interface RadioGroupProps {
   field: string
   options: RadioGroupOption[]
   className?: string
+  defaultValue?: string
+  onValueChange?: (value: string) => void
 }
 
 interface RadioGroupOption {
@@ -14,17 +16,24 @@ interface RadioGroupOption {
   value: string
 }
 
-const RadioGroup = ({ field, options, className }: RadioGroupProps) => {
+const RadioGroup = ({
+  field,
+  options,
+  className,
+  defaultValue,
+  onValueChange,
+}: RadioGroupProps) => {
   const form = useFormContext()
 
   const value = form.watch(field)
 
   return (
     <RadixRadioGroup.Root
-      onValueChange={(value) => {
-        form.setValue(field, value)
-      }}
-      value={value}
+      onValueChange={
+        (value) =>
+          onValueChange ? onValueChange(value) : form.setValue(field, value) // Inline handling
+      }
+      value={defaultValue ?? value}
       className="flex gap-1.5"
     >
       {options.map((option) => {

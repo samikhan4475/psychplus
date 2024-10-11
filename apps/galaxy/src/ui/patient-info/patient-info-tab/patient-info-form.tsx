@@ -1,79 +1,106 @@
 'use client'
 
-import { useEffect } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Flex } from '@radix-ui/themes'
 import { useForm, type SubmitHandler } from 'react-hook-form'
 import toast from 'react-hot-toast'
+import { ActionResult } from '@/api/api'
 import { FormContainer } from '@/components'
-import { getCalendarDate } from '@/utils'
-import { savePatientProfileAction } from './actions'
+import type { PatientProfile } from '@/types'
+import { sanitizeFormData } from '@/utils'
+import {
+  updatePatientDrivingLicenseImageAction,
+  updatePatientProfileAction,
+  updatePatientProfileImageAction,
+} from './actions'
 import {
   patientInfoSchema,
-  type PatientInfoSchema,
+  type PatientInfoSchemaType,
 } from './patient-info-schema'
 import { useStore } from './store'
 import { transformOut } from './transform'
-import type { PatientProfile } from './types'
+import { getInitialValues } from './utils'
 
 interface PatientInfoFormProps {
   patient: PatientProfile
+  profileImage: File | undefined
+  driverLicenseImage: File | undefined
 }
 
 const PatientInfoForm = ({
   patient,
+  profileImage,
+  driverLicenseImage,
   children,
 }: React.PropsWithChildren<PatientInfoFormProps>) => {
   const disabled = useStore((state) => state.isUserLocked)
 
-  const form = useForm<PatientInfoSchema>({
+  const form = useForm<PatientInfoSchemaType>({
     disabled: disabled,
     resolver: zodResolver(patientInfoSchema),
     reValidateMode: 'onChange',
-    defaultValues: {
-      id: patient.id,
-      firstName: patient.firstName ?? '',
-      middleName: patient.middleName ?? '',
-      lastName: patient.lastName ?? '',
-      dob: getCalendarDate(patient.dob),
-      phone: patient.phone ?? '',
-      email: patient.email ?? '',
-      hasGuardian: patient.hasGuardian ? 'yes' : 'no',
-      guardianFirstName: patient.guardianFirstName ?? '',
-      guardianLastName: patient.guardianLastName ?? '',
-      race: '',
-      ethnicity: '',
-    },
+    defaultValues: getInitialValues(patient),
   })
 
-  const resetField = form.resetField
+  const onSubmit: SubmitHandler<PatientInfoSchemaType> = async (data) => {
+    const sanitizedData = sanitizeFormData(data)
 
-  const hasGuardian = form.watch('hasGuardian')
-
-  useEffect(() => {
-    if (hasGuardian === 'no') {
-      resetField('guardianFirstName')
-      resetField('guardianLastName')
-    }
-  }, [resetField, hasGuardian])
-
-  const onSubmit: SubmitHandler<PatientInfoSchema> = async (data) => {
-    const result = await savePatientProfileAction(
-      patient.id,
-      transformOut(patient.id),
+    const payload = transformOut(
+      sanitizedData,
+      profileImage,
+      driverLicenseImage,
     )
 
-    if (result.state === 'error') {
-      toast.error(result.error)
-      return
-    }
+    const result = await updatePatientProfileAction(patient?.id, payload)
 
-    toast.success('Patient profile saved!')
+    if (result.state === 'error') {
+      toast.error(result.error ?? 'Failed to update patient profile')
+    } else if (result.state === 'success') {
+      const imageUploadPromises: Promise<ActionResult<void>>[] = []
+
+      if (driverLicenseImage) {
+        const licenseImageFormData = new FormData()
+        licenseImageFormData.append('file', driverLicenseImage)
+        imageUploadPromises.push(
+          updatePatientDrivingLicenseImageAction({
+            patientId: patient?.id,
+            data: licenseImageFormData,
+            side: 'front',
+          }),
+        )
+      }
+
+      if (profileImage) {
+        const profileImageformData = new FormData()
+        profileImageformData.append('file', profileImage)
+        imageUploadPromises.push(
+          updatePatientProfileImageAction({
+            data: profileImageformData,
+            patientId: patient?.id,
+          }),
+        )
+      }
+
+      const imagesUploadResponse = await Promise.all(imageUploadPromises)
+
+      const imageUploadError = imagesUploadResponse?.find(
+        (r) => r.state === 'error',
+      )
+      if (imageUploadError) {
+        toast.error(
+          imageUploadError?.error ??
+            'Could not upload images Please try again later.',
+        )
+        return
+      }
+
+      toast.success('Patient profile saved!')
+    }
   }
 
   return (
     <FormContainer form={form} onSubmit={onSubmit}>
-      <Flex direction="column" gap="2" className="flex-1 overflow-auto">
+      <Flex direction="column" gap="2" className="flex-1">
         {children}
       </Flex>
     </FormContainer>

@@ -13,12 +13,14 @@ interface UsStateSelectProps {
   prefix?: string
   className?: string
   labelClassName?: string
+  disabled?: boolean
 }
 const UsStateSelect = ({
   prefix,
   required = true,
   className,
   labelClassName,
+  disabled,
 }: UsStateSelectProps) => {
   const name = fieldName('state', prefix)
 
@@ -31,6 +33,7 @@ const UsStateSelect = ({
         State
       </FormFieldLabel>
       <CodesetSelect
+        disabled={disabled}
         name={name}
         codeset={CODESETS.UsStates}
         size="1"

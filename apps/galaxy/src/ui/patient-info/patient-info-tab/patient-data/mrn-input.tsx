@@ -17,14 +17,13 @@ const MrnInput = () => {
       <FormFieldLabel className="!text-1">MRN</FormFieldLabel>
       <TextField.Root
         size="1"
-        className={textFieldClassName}
+        className="border-pp-gray-2 h-6 w-full border border-solid !outline-none [box-shadow:none]"
         placeholder="MRN"
-        {...form.register('medicalRecordNumber')}
+        {...form.register('medicalRecordNumber', { disabled: true })}
       />
       <FormFieldError name="medicalRecordNumber" />
     </FormFieldContainer>
   )
 }
-const textFieldClassName =
-  'border-pp-gray-2 w-full h-6 border border-solid !outline-none [box-shadow:none]'
+
 export { MrnInput }

@@ -7,24 +7,23 @@ import {
   FormFieldError,
   FormFieldLabel,
 } from '@/components/form'
-import { AdditionalContactInfoSchema } from './additional-contact-info-schema'
+import { PatientInfoSchemaType } from '../patient-info-schema'
 
 const WorkPhoneExtInput = () => {
-  const form = useFormContext<AdditionalContactInfoSchema>()
+  const form = useFormContext<PatientInfoSchemaType>()
 
   return (
     <FormFieldContainer className="w-16">
       <FormFieldLabel className="!text-1">Ext</FormFieldLabel>
       <TextField.Root
         size="1"
-        className={textFieldClassName}
+        className="border-pp-gray-2 h-6 w-full border border-solid !outline-none [box-shadow:none]"
         placeholder="Ext"
-        {...form.register('workPhoneExtension')}
+        {...form.register('contactDetails.workNumber.extension')}
       />
-      <FormFieldError name="workPhoneExtension" />
+      <FormFieldError name="contactDetails.workNumber.extension" />
     </FormFieldContainer>
   )
 }
-const textFieldClassName =
-  'border-pp-gray-2 w-full h-6 border border-solid !outline-none [box-shadow:none]'
+
 export { WorkPhoneExtInput }

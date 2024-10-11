@@ -16,6 +16,7 @@ interface AddressTextFieldProps
   className?: string
   placeholder?: string
   labelClassName?: string
+  disabled?: boolean
 }
 const AddressTextField = ({
   label,
@@ -24,10 +25,12 @@ const AddressTextField = ({
   required,
   placeholder,
   labelClassName,
+  disabled,
+  ...props
 }: AddressTextFieldProps) => {
   const { register, setValue, watch } = useFormContext()
 
-  const { onChange, ...rest } = register(field)
+  const { onChange, ...rest } = register(field, { disabled: disabled })
 
   return (
     <FormFieldContainer className="flex-1">
@@ -48,6 +51,7 @@ const AddressTextField = ({
         onChange={(e) =>
           setValue(field, e.target.value, { shouldValidate: true })
         }
+        {...props}
         {...rest}
       />
       <FormFieldError name={field} />

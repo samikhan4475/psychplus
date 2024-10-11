@@ -18,11 +18,7 @@ import { RaceSelect } from './race-select'
 import { ReligionSelect } from './religion-select'
 import { SuffixInput } from './suffix-input'
 
-interface DescriptiveCardProps {
-  patientId: string
-}
-
-const DescriptiveCard = ({ patientId }: DescriptiveCardProps) => {
+const DescriptiveCard = () => {
   return (
     <Flex direction="column" className="bg-white overflow-hidden rounded-1">
       <CardHeading title="Descriptive" />

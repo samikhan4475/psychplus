@@ -1,43 +1,71 @@
 import {
   ConsentStatus,
+  PatientAddressType,
+  PatientProfile,
   VerificationStatus,
   type PatientConsent,
-  type PatientProfileRaw,
 } from '@/types'
-import {
-  getGuardianFirstName,
-  getGuardianLastName,
-  getPatientDOB,
-  getPatientEmail,
-  getPatientFirstName,
-  getPatientLastName,
-  getPatientMiddleName,
-  getPatientMRN,
-  getPatientPhone,
-  getSlashedPaddedDateString,
-} from '@/utils'
+import { getSlashedPaddedDateString } from '@/utils'
 import { AddRelationshipRequestBody } from './actions'
 import { AddRelationshipSchemaType } from './add-relationship-dialog/schema'
-import type { PatientProfile } from './types'
+import { PatientInfoSchemaType } from './patient-info-schema'
 
-const transformIn = (data: PatientProfileRaw): PatientProfile => ({
-  id: String(data.id),
-  mrn: getPatientMRN(data.id),
-  firstName: getPatientFirstName(data.legalName),
-  middleName: getPatientMiddleName(data.legalName),
-  lastName: getPatientLastName(data.legalName),
-  dob: getPatientDOB(data.birthdate),
-  phone: getPatientPhone(data.contactDetails.phoneNumbers),
-  email: getPatientEmail(data.contactDetails),
-  hasGuardian: data.guardian !== undefined,
-  guardianFirstName: data.guardian?.name?.firstName || "", 
-  guardianLastName: data.guardian?.name?.lastName || "",
-})
+const transformOut = (
+  data: PatientInfoSchemaType,
+  profileImage?: File,
+  driverLicenseImage?: File,
+): PatientProfile => {
+  const contactPhoneNumbers = [
+    data?.contactDetails.homeNumber,
+    data?.contactDetails.workNumber,
+    data?.contactDetails.mobileNumber,
+  ].filter((contact) => contact.number)
+  const mailingAddress = data.contactDetails.isMailingAddressSameAsPrimary
+    ? {
+        ...data?.contactDetails.homeAddress,
+        type: 'Mailing' as PatientAddressType,
+      }
+    : data?.contactDetails.mailingAddress
+  const contactAddresses = [data?.contactDetails.homeAddress, mailingAddress]
+  const alternateAddresses = data.alternateOrPreviousContactDetails
+    ? [data?.alternateOrPreviousContactDetails?.homeAddress]
+    : null
 
-const transformOut = (id: string): PatientProfileRaw =>
-  ({
-    id: Number(id),
-  } as PatientProfileRaw)
+  const body = {
+    ...data,
+    contactDetails: {
+      email: data?.contactDetails.email,
+      phoneNumbers: contactPhoneNumbers ?? [],
+      addresses: contactAddresses ?? [],
+      isMailingAddressSameAsPrimary:
+        data?.contactDetails?.isMailingAddressSameAsPrimary,
+    },
+    alternateOrPreviousContactDetails: alternateAddresses
+      ? {
+          addresses: alternateAddresses,
+        }
+      : null,
+  }
+  if (driverLicenseImage && data.driversLicense)
+    data.driversLicense.hasFrontImage = true
+  if (profileImage) data.hasPhoto = true
+
+  if (
+    !data?.alternateOrPreviousName?.firstName &&
+    !data?.alternateOrPreviousName?.lastName
+  ) {
+    body.alternateOrPreviousName = null
+  }
+  if (!data.alternateOrPreviousContactDetails?.homeAddress?.postalCode) {
+    body.alternateOrPreviousContactDetails = null
+  }
+
+  if (!data.hasGuardian) {
+    delete body.guardian
+  }
+
+  return body
+}
 
 const addRelationshipTransformOut = (
   patientId: string,
@@ -135,9 +163,4 @@ const patientConsentTransformIn = (
   return Object.values(consentMap)
 }
 
-export {
-  transformIn,
-  transformOut,
-  addRelationshipTransformOut,
-  patientConsentTransformIn,
-}
+export { transformOut, addRelationshipTransformOut, patientConsentTransformIn }

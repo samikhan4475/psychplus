@@ -7,24 +7,22 @@ import {
   FormFieldError,
   FormFieldLabel,
 } from '@/components/form'
-import { AlternativeInfoSchema } from './alternative-info-schema'
+import { PatientInfoSchemaType } from '../patient-info-schema'
 
 const SuffixInput = () => {
-  const form = useFormContext<AlternativeInfoSchema>()
+  const form = useFormContext<PatientInfoSchemaType>()
 
   return (
     <FormFieldContainer className="flex-1">
       <FormFieldLabel className="!text-1">Suffix</FormFieldLabel>
       <TextField.Root
         size="1"
-        className={textFieldClassName}
-        {...form.register('suffix')}
+        className="border-pp-gray-2 h-6 w-full border border-solid !outline-none [box-shadow:none]"
+        {...form.register('alternateOrPreviousName.suffix')}
       />
-      <FormFieldError name="suffix" />
+      <FormFieldError name="alternateOrPreviousName.suffix" />
     </FormFieldContainer>
   )
 }
 
-const textFieldClassName =
-  'border-pp-gray-2 w-full h-6 border border-solid !outline-none [box-shadow:none]'
 export { SuffixInput }
