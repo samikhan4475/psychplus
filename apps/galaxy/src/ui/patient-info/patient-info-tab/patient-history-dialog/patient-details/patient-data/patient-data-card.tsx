@@ -5,7 +5,7 @@ import { Details } from './details'
 import { DrivingLicense } from './driving-license'
 import { ProfilePicture } from './profile-picture'
 
-const PatientDataCard = () => {
+const PatientDataCard = ({ patientId }: { patientId: string }) => {
   return (
     <Flex direction="column">
       <Box className="bg-pp-table-subRows rounded-t-1" px="2">
@@ -14,9 +14,9 @@ const PatientDataCard = () => {
         </Text>
       </Box>
       <Flex p="2" gap="5" align="center">
-        <ProfilePicture />
+        <ProfilePicture patientId={patientId} />
         <Details />
-        <DrivingLicense />
+        <DrivingLicense patientId={patientId} />
       </Flex>
     </Flex>
   )

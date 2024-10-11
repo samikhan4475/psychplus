@@ -5,35 +5,66 @@ import { DateValue } from 'react-aria-components'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import z from 'zod'
 import { FormContainer } from '@/components'
-import { FromDataInput } from './from-date-input'
+import { useStore } from '../store'
+import { ClearButton } from './clear-button'
+import { FromDatePicker } from './from-date-picker'
 import { NameInput } from './name-input'
-import { ToDataInput } from './to-date-input'
+import { SaveButton } from './save-button'
+import { ToDatePicker } from './to-date-picker'
 
-const schema = z.object({
-  toDate: z.custom<DateValue>(),
-  fromDate: z.custom<DateValue>(),
-  name: z.string().optional(),
-})
+const schema = z
+  .object({
+    historyCreatedFrom: z.custom<DateValue | undefined>().optional(),
+    historyCreatedTo: z.custom<DateValue | undefined>().optional(),
+    username: z.string().optional().default(''),
+  })
+  .superRefine((data, ctx) => {
+    if (data.historyCreatedTo && !data.historyCreatedFrom) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'From date is required',
+        path: ['historyCreatedFrom'],
+      })
+    }
+  })
 
-export type FilterFormSchemaType = z.infer<typeof schema>
+type SchemaType = z.infer<typeof schema>
 
-const FilterForm = () => {
-  const form = useForm<FilterFormSchemaType>({
+interface FilterFormProps {
+  patientId: string
+}
+
+const FilterForm = ({ patientId }: FilterFormProps) => {
+  const { fetchPatientInfoHistories } = useStore((state) => ({
+    fetchPatientInfoHistories: state.fetchPatientInfoHistories,
+  }))
+
+  const form = useForm<SchemaType>({
     resolver: zodResolver(schema),
     defaultValues: {
-      fromDate: undefined,
-      name: '',
-      toDate: undefined,
+      historyCreatedFrom: undefined,
+      historyCreatedTo: undefined,
+      username: '',
     },
   })
-  const onSubmit: SubmitHandler<FilterFormSchemaType> = () => {}
+
+  const onSubmit: SubmitHandler<SchemaType> = async (data) => {
+    return fetchPatientInfoHistories(patientId, data)
+  }
+
   return (
-    <FormContainer form={form} onSubmit={onSubmit} className="flex-row gap-2">
-      <FromDataInput />
-      <ToDataInput />
+    <FormContainer
+      form={form}
+      onSubmit={onSubmit}
+      className="flex-row items-start gap-2"
+    >
+      <FromDatePicker />
+      <ToDatePicker />
       <NameInput />
+      <SaveButton />
+      <ClearButton patientId={patientId} />
     </FormContainer>
   )
 }
 
-export { FilterForm }
+export { FilterForm, type SchemaType }

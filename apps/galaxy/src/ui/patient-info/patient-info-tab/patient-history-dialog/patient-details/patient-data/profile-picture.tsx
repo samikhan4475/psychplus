@@ -1,19 +1,26 @@
 'use client'
 
 import { Avatar } from '@radix-ui/themes'
-import { Box } from 'lucide-react'
-import { PictureFallback } from '@/components/icons'
+import { Image as Fallback } from 'lucide-react'
+import { GET_PATIENT_HISOTRY_PROFILE_IMAGE_ENDPOINT } from '@/api/endpoints'
+import { useStore } from '../../store'
 
-const ProfilePicture = () => {
+const ProfilePicture = ({ patientId }: { patientId: string }) => {
+  const { selectedRow } = useStore((store) => ({
+    selectedRow: store.selectedRow,
+  }))
+
+  const profileImage = selectedRow?.hasPhoto
+    ? GET_PATIENT_HISOTRY_PROFILE_IMAGE_ENDPOINT(patientId, selectedRow?.id)
+    : undefined
+
   return (
     <Avatar
       size="9"
       color="gray"
-      src="https://picsum.photos/500/500"
+      src={profileImage}
       fallback={
-        <Box>
-          <PictureFallback width={150} height={150} />
-        </Box>
+        <Fallback size={120} className="text-pp-blue" strokeWidth={1} />
       }
       className="h-[150px] w-[150px]"
     />

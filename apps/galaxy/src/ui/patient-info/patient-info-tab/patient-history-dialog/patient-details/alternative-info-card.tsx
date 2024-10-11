@@ -1,9 +1,17 @@
 'use client'
 
 import { Box, Flex, Text } from '@radix-ui/themes'
-import { DetailBox } from '../shared'
+import { LabelledText } from '../shared'
+import { useStore } from '../store'
 
 const AlternativeInfoCard = () => {
+  const { selectedRow } = useStore((state) => ({
+    selectedRow: state?.selectedRow,
+  }))
+  const AlternateInfoAddress =
+    selectedRow?.alternateOrPreviousContactDetails?.addresses?.find(
+      (address) => address?.type === 'Home',
+    )
   return (
     <Flex direction="column">
       <Box className="bg-pp-table-subRows rounded-t-1" px="2">
@@ -12,20 +20,41 @@ const AlternativeInfoCard = () => {
         </Text>
       </Box>
       <Flex gapX="4" gapY="3" wrap="wrap" p="2">
-        <DetailBox title="First Name" content="John" />
-        <DetailBox title="Middle Name" content="John" />
-        <DetailBox title="Last Name" content="John" />
-        <DetailBox title="Prefix" content="Mr." />
-        <DetailBox title="Suffix" content="---" />
-        <DetailBox title="Prof. Suffix" content="MBA" />
-        <DetailBox
+        <LabelledText
+          title="First Name"
+          content={selectedRow?.alternateOrPreviousName?.firstName}
+        />
+        <LabelledText
+          title="Middle Name"
+          content={selectedRow?.alternateOrPreviousName?.middleName}
+        />
+        <LabelledText
+          title="Last Name"
+          content={selectedRow?.alternateOrPreviousName?.lastName}
+        />
+        <LabelledText
+          title="Prefix"
+          content={selectedRow?.alternateOrPreviousName?.title}
+        />
+        <LabelledText
+          title="Suffix"
+          content={selectedRow?.alternateOrPreviousName?.suffix}
+        />
+        <LabelledText
+          title="Prof. Suffix"
+          content={selectedRow?.alternateOrPreviousName?.honors}
+        />
+        <LabelledText
           title="Address Line 1"
-          content="13th Street. 47 W 13th St, New York, NY 10011, USA"
+          content={AlternateInfoAddress?.street1}
         />
-        <DetailBox
+        <LabelledText
           title="Address Line 2"
-          content="13th Street. 47 W 13th St, New York, NY 10011, USA"
+          content={AlternateInfoAddress?.street2}
         />
+        <LabelledText title="City" content={AlternateInfoAddress?.city} />
+        <LabelledText title="State" content={AlternateInfoAddress?.state} />
+        <LabelledText title="Zip" content={AlternateInfoAddress?.postalCode} />
       </Flex>
     </Flex>
   )

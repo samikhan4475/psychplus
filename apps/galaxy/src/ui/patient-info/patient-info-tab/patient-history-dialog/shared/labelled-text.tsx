@@ -3,18 +3,18 @@
 import { Flex, Heading, Text } from '@radix-ui/themes'
 import { cn } from '@/utils'
 
-interface LabeledContentProps {
+interface LabelledTextProps {
   required?: boolean
   className?: string
   title: string
   content?: string
 }
-const LabeledContent = ({
+const LabelledText = ({
   title,
   content,
   className,
   required,
-}: LabeledContentProps) => {
+}: LabelledTextProps) => {
   return (
     <Flex className={cn(className)} gap="1" direction="column">
       <Flex align="center" className="h-[18px]" gap="2" width="100%">
@@ -34,4 +34,4 @@ const LabeledContent = ({
   )
 }
 
-export { LabeledContent }
+export { LabelledText }

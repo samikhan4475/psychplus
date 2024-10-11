@@ -1,9 +1,19 @@
 'use client'
 
 import { Box, Flex, Text } from '@radix-ui/themes'
-import { DetailBox } from '../shared'
+import { LabelledText } from '../shared'
+import { useStore } from '../store'
 
 const AdditionalInfoCard = () => {
+  const { selectedRow } = useStore((state) => ({
+    selectedRow: state.selectedRow,
+  }))
+  const homeNumber = selectedRow?.contactDetails?.phoneNumbers?.find(
+    (number) => number.type === 'Home',
+  )
+  const workNumber = selectedRow?.contactDetails?.phoneNumbers?.find(
+    (number) => number.type === 'Business',
+  )
   return (
     <Flex direction="column">
       <Box className="bg-pp-table-subRows rounded-t-1" px="2">
@@ -12,18 +22,12 @@ const AdditionalInfoCard = () => {
         </Text>
       </Box>
       <Flex gapX="4" gapY="3" wrap="wrap" p="2">
-        <DetailBox title="Home Phone" content="12345678" />
-        <DetailBox title="Ext" content="321" />
-        <DetailBox
-          title="Comment"
-          content="Please only morning Saturday from 08:00am to 08:00pm"
-        />
-        <DetailBox title="Home Phone" content="12345678" />
-        <DetailBox title="Ext" content="321" />
-        <DetailBox
-          title="Comment"
-          content="Please only morning Saturday from 08:00am to 08:00pm"
-        />
+        <LabelledText title="Home Phone" content={homeNumber?.number} />
+        <LabelledText title="Ext" content={homeNumber?.extension} />
+        <LabelledText title="Comment" content={homeNumber?.comment} />
+        <LabelledText title="Home Phone" content={workNumber?.number} />
+        <LabelledText title="Ext" content={workNumber?.extension} />
+        <LabelledText title="Comment" content={workNumber?.comment} />
       </Flex>
     </Flex>
   )

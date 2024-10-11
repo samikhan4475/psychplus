@@ -1,1 +1,1 @@
-export * from './detail-box'
+export * from './labelled-text'

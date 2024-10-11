@@ -62,7 +62,10 @@ const PatientInfoTab = ({
           <TabContentHeading title={TAB_TITLE}>
             <Flex align="center" justify="end" gap="2" className="flex-1">
               <StatusSelect />
-              <PatientHistoryDialog />
+              <PatientHistoryDialog
+                patientId={patientId}
+                patientPolicyAStatus={patientPolicyA?.verificationStatus}
+              />
               {/* <ResetPasswordButton /> */}
               <SaveButton />
             </Flex>

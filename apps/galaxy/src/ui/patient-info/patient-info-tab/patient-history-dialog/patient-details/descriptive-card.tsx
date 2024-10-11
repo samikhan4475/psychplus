@@ -1,9 +1,19 @@
 'use client'
 
 import { Box, Flex, Text } from '@radix-ui/themes'
-import { DetailBox } from '../shared'
+import { LabelledText } from '../shared'
+import { useStore } from '../store'
 
 const DescriptiveCard = () => {
+  const { selectedRow } = useStore((state) => ({
+    selectedRow: state?.selectedRow,
+  }))
+  const ethnicities = selectedRow?.ethnicities?.join(', ')
+  const races = selectedRow?.races?.join(', ')
+  const cellNumber = selectedRow?.contactDetails?.phoneNumbers?.find(
+    (number) => number?.type === 'Contact',
+  )
+
   return (
     <Flex direction="column">
       <Box className="bg-pp-table-subRows rounded-t-1" px="2">
@@ -12,25 +22,43 @@ const DescriptiveCard = () => {
         </Text>
       </Box>
       <Flex gapX="6" gapY="3" wrap="wrap" p="2">
-        <DetailBox title="Preferred Name" content="John" />
-        <DetailBox title="Prefix" content="Mr" />
-        <DetailBox title="Suffix" content="" />
-        <DetailBox title="Prof. Suffix" content="MBA" />
-        <DetailBox title="Gender" content="Male" required />
-        <DetailBox title="Orientation" content="....." />
-        <DetailBox title="Gender Expression" content="Male" />
-        <DetailBox title="Pronoun" content="He" />
-        <DetailBox title="Comment" content="Call me after 8:00am" required />
-        <DetailBox title="Religion" content="Islam" />
-        <DetailBox title="Mother Maiden Name" content="English" />
-        <DetailBox title="Language" content="English" />
-        <DetailBox title="Language Ability" content="English" />
-        <DetailBox title="Proficiency" content="English" />
-        <DetailBox
-          title="Race"
-          content="Native Hawaiian or Other Pacific Islander, White"
+        <LabelledText
+          title="Preferred Name"
+          content={selectedRow?.legalName?.preferredName}
         />
-        <DetailBox title="Ethnicity" content="Not Hispanic or Latino" />
+        <LabelledText title="Prefix" content={selectedRow?.legalName?.title} />
+        <LabelledText title="Suffix" content={selectedRow?.legalName?.suffix} />
+        <LabelledText
+          title="Prof. Suffix"
+          content={selectedRow?.legalName?.honors}
+        />
+        <LabelledText title="Gender" content={selectedRow?.gender} required />
+        <LabelledText
+          title="Orientation"
+          content={selectedRow?.genderOrientation}
+        />
+        <LabelledText
+          title="Gender Expression"
+          content={selectedRow?.genderExpression}
+        />
+        <LabelledText title="Pronoun" content={selectedRow?.genderPronoun} />
+        <LabelledText title="Comment" content={cellNumber?.comment} />
+        <LabelledText title="Religion" content={selectedRow?.religion} />
+        <LabelledText
+          title="Mother Maiden Name"
+          content={selectedRow?.motherMaidenName}
+        />
+        <LabelledText title="Language" content={selectedRow?.language} />
+        <LabelledText
+          title="Language Ability"
+          content={selectedRow?.languageAbility}
+        />
+        <LabelledText
+          title="Proficiency"
+          content={selectedRow?.languageProficiency}
+        />
+        <LabelledText title="Race" content={races} />
+        <LabelledText title="Ethnicity" content={ethnicities} />
       </Flex>
     </Flex>
   )

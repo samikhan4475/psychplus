@@ -1,18 +1,35 @@
 'use client'
 
 import { Grid } from '@radix-ui/themes'
-import { DetailBox } from '../../shared'
+import { LabelledText } from '../../shared'
+import { useStore } from '../../store'
 
 const Details = () => {
+  const { selectedRow } = useStore((state) => ({
+    selectedRow: state.selectedRow,
+  }))
+  const patientDetailsAddress = selectedRow?.contactDetails?.addresses?.find(
+    (address) => address.type === 'Home',
+  )
   return (
     <Grid columns="4" gap="3" className="h-fit w-full">
-      <DetailBox title="MRN" content="12345555" />
-      <DetailBox title="SSN" content="12245345" />
-      <DetailBox title="CMD" content="14482939" />
-      <DetailBox title="Status" content="P Active" />
-      <DetailBox title="Driving License" content="283993293" />
-      <DetailBox title="Driving License State" content="12345555" />
-      <DetailBox title="State of Residence" content="29292000" required />
+      <LabelledText title="MRN" content={selectedRow?.medicalRecordNumber} />
+      <LabelledText title="SSN" content={selectedRow?.socialSecurityNumber} />
+      <LabelledText title="CMD" content={selectedRow?.chargeKey} />
+      <LabelledText title="Status" content={selectedRow?.status} />
+      <LabelledText
+        title="Driving License"
+        content={selectedRow?.driversLicense?.number}
+      />
+      <LabelledText
+        title="Driving License State"
+        content={selectedRow?.driversLicense?.validIn}
+      />
+      <LabelledText
+        title="State of Residence"
+        content={patientDetailsAddress?.state}
+        required
+      />
     </Grid>
   )
 }

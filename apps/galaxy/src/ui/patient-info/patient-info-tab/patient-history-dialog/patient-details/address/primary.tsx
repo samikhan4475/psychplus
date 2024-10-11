@@ -1,28 +1,32 @@
 'use client'
 
 import { Grid, Heading } from '@radix-ui/themes'
-import { DetailBox } from '../../shared'
+import { PatientAddress } from '@/types'
+import { LabelledText } from '../../shared'
 
-const Primary = () => {
+interface PrimaryAddressProps {
+  address?: PatientAddress
+}
+const Primary = ({ address }: PrimaryAddressProps) => {
   return (
     <Grid columns="3" gap="2">
       <Heading className="col-span-full" size="2" weight="medium">
         Primary
       </Heading>
-      <DetailBox
+      <LabelledText
         title="Address 1"
-        content="13th Street. 47 W 13th St, New York, NY 10011, USA."
+        content={address?.street1}
         className="col-span-full"
         required
       />
-      <DetailBox
+      <LabelledText
         title="Address 2"
-        content="13th Street. 47 W 13th St, New York, NY 10011, USA."
+        content={address?.street2}
         className="col-span-full"
       />
-      <DetailBox title="City" content="New York" required />
-      <DetailBox title="State" content="New York" required />
-      <DetailBox title="Zip" content="1234332" required />
+      <LabelledText title="City" content={address?.city} required />
+      <LabelledText title="State" content={address?.state} required />
+      <LabelledText title="Zip" content={address?.postalCode} required />
     </Grid>
   )
 }

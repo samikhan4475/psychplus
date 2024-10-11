@@ -1,10 +1,20 @@
 'use client'
 
 import { Box, Flex, Text } from '@radix-ui/themes'
-import { DetailBox } from '../../shared'
-import { PatientPolicyCheckbox } from './patient-policy-checkbox'
+import { LabelledText } from '../../shared'
+import { useStore } from '../../store'
+import { PatientPolicyStatus } from './patient-policy-status'
 
-const CreateUserCard = () => {
+interface CreateUserCardProps {
+  patientPolicyAStatus?: string
+}
+const CreateUserCard = ({ patientPolicyAStatus }: CreateUserCardProps) => {
+  const { selectedRow } = useStore((state) => ({
+    selectedRow: state.selectedRow,
+  }))
+  const contactNumber = selectedRow?.contactDetails?.phoneNumbers?.find(
+    (number) => number.type === 'Contact',
+  )?.number
   return (
     <Flex direction="column">
       <Box className="bg-pp-table-subRows rounded-t-1" px="2">
@@ -13,20 +23,51 @@ const CreateUserCard = () => {
         </Text>
       </Box>
       <Flex gapX="4" gapY="3" wrap="wrap" p="2" align="start">
-        <DetailBox title="First Name" content="John" required />
-        <DetailBox title="Middle Name" content="John" required />
-        <DetailBox title="Last Name" content="John" required />
-        <DetailBox title="Date of Birth" content="12/11/1994" required />
-        <DetailBox title="Phone Number" content="362728282828" required />
-        <DetailBox title="Email" content="john@corner.com" required />
-        <DetailBox
-          title="Guardian (Do you have a Parent/Guardian?)"
-          content="Yes"
+        <LabelledText
+          required
+          content={selectedRow?.legalName?.firstName}
+          title="First Name"
+        />
+        <LabelledText
+          content={selectedRow?.legalName?.middleName}
+          title="Middle Name"
+        />
+        <LabelledText
+          content={selectedRow?.legalName?.lastName}
+          title="Last Name"
           required
         />
-        <DetailBox title="Guardian First Name" content="John" required />
-        <DetailBox title="Guardian Last Name" content="John" required />
-        <PatientPolicyCheckbox />
+        <LabelledText
+          content={selectedRow?.birthdate}
+          title="Date of Birth"
+          required
+        />
+        <LabelledText content={contactNumber} title="Phone Number" required />
+        <LabelledText
+          content={selectedRow?.contactDetails?.email}
+          title="Email"
+          required
+        />
+        <LabelledText
+          content={selectedRow?.hasGuardian ? 'Yes' : 'No'}
+          title="Guardian (Do you have a Parent/Guardian?)"
+          required
+        />
+        {selectedRow?.hasGuardian && (
+          <>
+            <LabelledText
+              content={selectedRow?.guardian?.name?.firstName}
+              title="Guardian First Name"
+              required
+            />
+            <LabelledText
+              content={selectedRow?.guardian?.name?.lastName}
+              title="Guardian Last Name"
+              required
+            />
+          </>
+        )}
+        <PatientPolicyStatus patientPolicyAStatus={patientPolicyAStatus} />
       </Flex>
     </Flex>
   )

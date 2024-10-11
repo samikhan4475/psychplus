@@ -1,19 +1,34 @@
 'use client'
 
 import { Avatar } from '@radix-ui/themes'
-import { Box } from 'lucide-react'
-import { PictureFallback } from '@/components/icons'
+import { Image as Fallback } from 'lucide-react'
+import { GET_PATIENT_HISOTRY_DRIVING_LICENSE_IMAGE_ENDPOINT } from '@/api/endpoints'
+import { useStore } from '../../store'
 
-const DrivingLicense = () => {
+const DrivingLicense = ({ patientId }: { patientId: string }) => {
+  const { selectedRow } = useStore((store) => ({
+    selectedRow: store.selectedRow,
+  }))
+  const licenseImage = selectedRow?.driversLicense?.hasFrontImage
+    ? GET_PATIENT_HISOTRY_DRIVING_LICENSE_IMAGE_ENDPOINT(
+        patientId,
+        selectedRow?.id,
+        'front',
+      )
+    : undefined
+
   return (
     <Avatar
       size="9"
       color="gray"
-      src="https://picsum.photos/500/500"
+      src={licenseImage}
       fallback={
-        <Box>
-          <PictureFallback width={250} height={150} />
-        </Box>
+        <Fallback
+          width={250}
+          height={140}
+          className="text-pp-blue"
+          strokeWidth={1}
+        />
       }
       className="h-[150px] w-[250px]"
     />

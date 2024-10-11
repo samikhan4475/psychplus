@@ -114,6 +114,18 @@ const GET_REPORTS_TEMPLATES_ENDPOINT = `${API_URL}/api/reporting/templates/actio
 const GET_REPORTS_PARAMETER_ENDPOINT = `${API_URL}/api/codeset/authorities/PsychPlusPublic/codesets/ReportParameterType`
 const GET_TEMPLATE_REPORT = (templateId: string, reportType: string) =>
   `${API_URL}/api/reporting/templates/${templateId}/actions/run?exportType=${reportType}`
+const GET_PATIENTS_INFO_HISTORY = (patientId: string) =>
+  `${API_URL}/api/patients/${patientId}/history/search`
+const GET_PATIENT_HISOTRY_PROFILE_IMAGE_ENDPOINT = (
+  patientId: string,
+  historyId: number,
+) => `/ehr/api/patients/${patientId}/history/${historyId}/profileimage`
+const GET_PATIENT_HISOTRY_DRIVING_LICENSE_IMAGE_ENDPOINT = (
+  patientId: string,
+  historyId: number,
+  side: string,
+) =>
+  `/ehr/api/patients/${patientId}/history/${historyId}/driverslicenseimage/${side}`
 const GET_PATIENT_PROFILE_IMAGE_ENDPOINT = (patientId: string) =>
   `${API_URL}/ehr/api/patients/${patientId}/profileimage`
 const GET_PATIENT_DRIVER_LICENSE_IMAGE_ENDPOINT = (
@@ -194,6 +206,9 @@ export {
   GET_REPORTS_TEMPLATES_ENDPOINT,
   GET_REPORTS_PARAMETER_ENDPOINT,
   GET_TEMPLATE_REPORT,
+  GET_PATIENTS_INFO_HISTORY,
+  GET_PATIENT_HISOTRY_PROFILE_IMAGE_ENDPOINT,
+  GET_PATIENT_HISOTRY_DRIVING_LICENSE_IMAGE_ENDPOINT,
   GET_PATIENT_PROFILE_IMAGE_ENDPOINT,
   GET_PATIENT_DRIVER_LICENSE_IMAGE_ENDPOINT,
   UPDATE_PATIENT_PROFILE_ENDPOINT,

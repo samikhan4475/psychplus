@@ -1,31 +1,39 @@
 'use client'
 
 import { Flex, Grid, Heading, Text } from '@radix-ui/themes'
-import { DetailBox } from '../../shared'
+import { PatientAddress } from '@/types'
+import { LabelledText } from '../../shared'
 
-const Mail = () => {
+interface MailAddressProps {
+  address?: PatientAddress
+  isSameAsPrimary?: boolean
+}
+const Mail = ({ address, isSameAsPrimary }: MailAddressProps) => {
   return (
     <Grid columns="3" gap="2">
       <Flex gap="4" className="col-span-full">
         <Heading size="2" weight="medium">
           Mail
         </Heading>
-        <Text size="1">Is your mailing address same as above? No</Text>
+        <Text size="1">
+          Is your mailing address same as above?
+          {isSameAsPrimary ? ' Yes' : ' No'}
+        </Text>
       </Flex>
-      <DetailBox
+      <LabelledText
         title="Address 1"
-        content="13th Street. 47 W 13th St, New York, NY 10011, USA."
+        content={address?.street1}
         className="col-span-full"
         required
       />
-      <DetailBox
+      <LabelledText
         title="Address 2"
-        content="13th Street. 47 W 13th St, New York, NY 10011, USA."
+        content={address?.street2}
         className="col-span-full"
       />
-      <DetailBox title="City" content="New York" required />
-      <DetailBox title="State" content="New York" required />
-      <DetailBox title="Zip" content="1234332" required />
+      <LabelledText title="City" content={address?.city} required />
+      <LabelledText title="State" content={address?.state} required />
+      <LabelledText title="Zip" content={address?.postalCode} required />
     </Grid>
   )
 }
