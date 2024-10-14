@@ -48,5 +48,9 @@ export enum REPORT_TYPE {
   PDF = 'PDF',
   EXCEL = 'EXCEL'
 }
+export enum STATUS {
+  ACTIVE = 'Active',
+  INACTIVE = 'Inactive',
+}
 
-export type { Template, Parameter, CodeSetIndex, ReportFilterParameters }
+export type { Template, Parameter, CodeSetIndex, ReportFilterParameters,ParameterCodeSet }

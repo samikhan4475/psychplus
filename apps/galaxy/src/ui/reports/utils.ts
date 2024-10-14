@@ -1,3 +1,5 @@
+import { ParameterCodeSet } from "./types";
+
 export const parseGeneratedReport = (report: string) => {
   const lines = report.trim().split('\n');
   const parseLine = (line: string) => {
@@ -39,3 +41,15 @@ export const parseGeneratedReport = (report: string) => {
 export const formatHeader = (header: string) => {
   return header.replace(/([a-z])([A-Z])/g, '$1 $2').replace(/_/g, ' ');
 };
+
+const truncateFileName = (fileName: string, maxLength: number = 15) => {
+  if (fileName.length <= maxLength) return fileName;
+  return `${fileName.substring(0, maxLength)}...`;
+};
+
+const getFieldType = (parameters: ParameterCodeSet[], code: string): string => {
+  const fieldType = parameters.find((parameter) => parameter.code === code)?.displayName;
+  return fieldType ?? '';
+};
+
+export { truncateFileName, getFieldType };

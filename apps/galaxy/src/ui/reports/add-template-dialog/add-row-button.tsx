@@ -1,0 +1,23 @@
+import { Button, Flex, Text } from '@radix-ui/themes';
+import { PlusIcon } from '@radix-ui/react-icons';
+
+interface AddRowButtonProps {
+  onAddRow: () => void;
+}
+
+const AddRowButton = ({ onAddRow }: AddRowButtonProps) => (
+  <Flex gap="2" align="center" className="text-[12px] py-2">
+    <Text className="!text-1" weight="medium">Run Parameters<span className="text-pp-red ml-1">*</span></Text>
+    <Button
+      variant="outline"
+      color="gray"
+      className="h-6 cursor-pointer bg-white px-2 text-[12px] text-black"
+      onClick={onAddRow}
+    >
+      <PlusIcon width={12} height={12} />
+      Add
+    </Button>
+  </Flex>
+);
+
+export { AddRowButton };

@@ -140,6 +140,7 @@ const UPDATE_PATIENT_DRIVING_LICENSE_IMAGE_ENDPOINT = (
   patientId: number,
   side: string,
 ) => `${API_URL}/api/patients/${patientId}/driverslicenseimage/${side}`
+const GET_ORGANIZATION_ROLES = `${API_URL}/api/organizations/actions/search`
 
 export {
   USER_ENDPOINT,
@@ -216,4 +217,6 @@ export {
   UPDATE_PATIENT_DRIVING_LICENSE_IMAGE_ENDPOINT,
   GET_INSURANCE_PAYMENT_LIST_ENDPOINT,
   DELETE_INSURANCE_PAYMENT_ENDPOINT,
+  GET_ORGANIZATION_ROLES,
+
 }
