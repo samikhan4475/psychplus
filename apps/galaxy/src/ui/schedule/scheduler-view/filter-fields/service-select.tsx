@@ -6,10 +6,12 @@ import { FormFieldLabel, MultiSelectField } from '@/components'
 import { getLocationServicesAction } from '../../actions'
 import { FormFieldContainer } from '../../shared'
 import { Option } from '../../types'
+import { SchemaType } from '../filter-actions-group'
 
 const ServiceMultiSelect = () => {
-  const form = useFormContext()
-  const selectedLocation = form.watch('location')
+  const form = useFormContext<SchemaType>()
+  const selectedLocation = form.watch('locationIds')
+  const services = form.getValues('serviceIds')
   const [servicesOptions, setServicesOptions] = useState<Option[]>([])
 
   useEffect(() => {
@@ -26,8 +28,10 @@ const ServiceMultiSelect = () => {
       <FormFieldLabel>Service</FormFieldLabel>
       <MultiSelectField
         disabled={!selectedLocation}
+        defaultValues={services}
         options={servicesOptions}
         className="flex-1"
+        onChange={(values) => form.setValue('serviceIds', values)}
         menuClassName="w-[155px]"
       />
     </FormFieldContainer>

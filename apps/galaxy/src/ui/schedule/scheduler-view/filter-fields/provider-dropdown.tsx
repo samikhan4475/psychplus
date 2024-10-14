@@ -9,7 +9,7 @@ const ProviderDropdown = () => {
     <FormFieldContainer className="flex-1">
       <FormFieldLabel>Provider</FormFieldLabel>
       <AsyncSelect
-        field="provider"
+        field="staffIds"
         placeholder="Select"
         fetchOptions={getProvidersOptionsAction}
         buttonClassName="w-full h-6"

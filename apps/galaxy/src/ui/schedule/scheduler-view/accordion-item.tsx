@@ -27,7 +27,7 @@ const ThisWeekSlots = ({ slots }: { slots: SlotsByDay }) => {
     >
       {thisWeekDays.map((day, i) => (
         <Text
-          className={cn('font-[510]', {
+          className={cn('font-[500]', {
             "after:content-[',']": i < dates.length / 2 - 1,
           })}
           key={day.monthAndDay}
@@ -49,7 +49,7 @@ const NextWeekSlots = ({ slots }: { slots: SlotsByDay }) => {
     >
       {nextWeekDays.map((day, i) => (
         <Text
-          className={cn('font-[510] ', {
+          className={cn('font-[500]', {
             "after:content-[',']": i < dates.length / 2 - 1,
           })}
           key={day.monthAndDay}
@@ -169,7 +169,7 @@ const AccordionItem = ({ provider, value }: Props) => {
                           <Flex
                             justify="center"
                             align="center"
-                            className="border-pp-grey h-6 rounded-[4px] border px-[15px] py-1 text-[12px] font-[510]"
+                            className="border-pp-grey h-6 rounded-[4px] border px-[15px] py-1 text-[12px] font-[500]"
                             key={slot.startDate}
                           >
                             {extractTime(slot.startDate, slot.timeZoneId)}

@@ -1,6 +1,5 @@
 import { Flex } from '@radix-ui/themes'
 import { DateStepper } from './calendar-view/date-stepper'
-import { SchedulerFilterGroup } from './components/header/scheduler-filter-group'
 import { Header } from './list-view/header'
 import { RoundingViewFilterGroup } from './rounding-view'
 import { DateStepper as SchedulerDateStepper } from './scheduler-view/date-stepper'
@@ -14,7 +13,6 @@ const ViewHeader = ({ selectedTab }: { selectedTab: string }) => {
       return (
         <Flex align="center" flexGrow="1">
           <SchedulerDateStepper />
-          <SchedulerFilterGroup />
         </Flex>
       )
     case TabValue.Rounding:

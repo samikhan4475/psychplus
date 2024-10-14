@@ -1,9 +1,13 @@
 import { useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { startOfWeek } from '@internationalized/date'
 import { Flex } from '@radix-ui/themes'
-import { useForm } from 'react-hook-form'
+import { DateValue } from 'react-aria-components'
+import { SubmitHandler, useForm } from 'react-hook-form'
 import z from 'zod'
 import { FormContainer } from '@/components'
+import { sanitizeFormData } from '@/utils'
+import { getDateString, isDirty } from '../utils'
 import { ClearFilterButton } from './clear-filter-button'
 import {
   EndDateInput,
@@ -16,47 +20,93 @@ import {
   ServiceMultiSelect,
   StartDateInput,
   StateSelect,
+  VisitMediumSelect,
 } from './filter-fields'
 import { HideFiltersButton } from './hide-filters-button'
 import { SearchButton } from './search-button'
 import { ShowFiltersButton } from './show-filters-button'
+import { useStore } from './store'
+
+const IS_FIRST_RESPONDER: Record<string, boolean> = {
+  yes: true,
+  no: false,
+}
+
+const dateValidation = z.custom<DateValue>()
 
 const schema = z.object({
-  startDate: z.date().optional(),
-  endDate: z.date().optional(),
-  usState: z.string().optional(),
-  location: z.string().optional(),
-  service: z.string().optional(),
-  provider: z.string().optional(),
-  providerType: z.string().optional(),
+  startingDate: dateValidation.optional(),
+  endingDate: dateValidation.optional(),
+  stateId: z.string().optional(),
+  locationIds: z.string().optional(),
+  serviceIds: z
+    .array(z.string())
+    .refine((value) => value.every((item) => typeof item === 'string'), {
+      message: 'Array must be empty or contain only strings',
+    }),
+  staffIds: z.string().optional(),
+  specialistTypeCode: z.string().optional(),
   gender: z.string().optional(),
   language: z.string().optional(),
-  firstResponder: z.string().optional(),
+  isFirstResponder: z.string().optional(),
+  slotType: z.string().optional(),
 })
 
 type SchemaType = z.infer<typeof schema>
 
 const SchedulerFilterGroup = () => {
   const [isPartialFilterView, setIsPartialFilterView] = useState<boolean>(true)
+  const { fetchData, setDates } = useStore((state) => ({
+    setDates: state.setDates,
+    fetchData: state.fetchAppointments,
+  }))
   const form = useForm<SchemaType>({
     resolver: zodResolver(schema),
     criteriaMode: 'all',
     defaultValues: {
-      startDate: undefined,
-      endDate: undefined,
-      usState: '',
-      location: '',
-      service: '',
-      provider: '',
-      providerType: '',
+      startingDate: undefined,
+      endingDate: undefined,
+      stateId: '',
+      locationIds: '',
+      serviceIds: [],
+      staffIds: '',
+      specialistTypeCode: '',
       gender: '',
       language: '',
-      firstResponder: '',
+      isFirstResponder: '',
+      slotType: '',
     },
   })
 
-  const onSubmit = () => {
-    // TODO: Implement with API integrations
+  const { dirtyFields } = form.formState
+
+  const onSubmit: SubmitHandler<SchemaType> = (data) => {
+    if (!isDirty(dirtyFields)) return
+    const transformedData = {
+      ...data,
+      startingDate: getDateString(data.startingDate),
+      endingDate: getDateString(data.endingDate),
+      locationIds: data.locationIds ? [data.locationIds] : [],
+      staffIds: data.staffIds ? [data.staffIds] : [],
+      isFirstResponder: data.isFirstResponder
+        ? IS_FIRST_RESPONDER[data.isFirstResponder]
+        : undefined,
+    }
+    if (data.startingDate) {
+      const weekStartDateValue = startOfWeek(data.startingDate, 'en-US').add({
+        days: 1,
+      })
+      setDates(new Date(weekStartDateValue.toString()))
+    }
+    const sanitizedData = sanitizeFormData(transformedData)
+    fetchData(sanitizedData)
+  }
+
+  const resetFilters = () => {
+    if (!isDirty(dirtyFields)) return
+    form.reset()
+    setDates()
+    fetchData()
   }
 
   return (
@@ -82,7 +132,7 @@ const SchedulerFilterGroup = () => {
             <ProviderDropdown />
             {isPartialFilterView && (
               <>
-                <ClearFilterButton />
+                <ClearFilterButton onClick={resetFilters} />
                 <SearchButton />
                 <ShowFiltersButton
                   onClick={() => setIsPartialFilterView(false)}
@@ -92,6 +142,7 @@ const SchedulerFilterGroup = () => {
           </Flex>
           {!isPartialFilterView && (
             <Flex gap="2" align="center">
+              <VisitMediumSelect />
               <ProviderTypeDropdown />
               <GenderSelect />
               <LanguageSelect />
@@ -100,7 +151,7 @@ const SchedulerFilterGroup = () => {
                 <HideFiltersButton
                   onClick={() => setIsPartialFilterView(true)}
                 />
-                <ClearFilterButton />
+                <ClearFilterButton onClick={resetFilters} />
                 <SearchButton />
               </Flex>
             </Flex>
@@ -111,4 +162,4 @@ const SchedulerFilterGroup = () => {
   )
 }
 
-export { SchedulerFilterGroup }
+export { SchedulerFilterGroup, type SchemaType }

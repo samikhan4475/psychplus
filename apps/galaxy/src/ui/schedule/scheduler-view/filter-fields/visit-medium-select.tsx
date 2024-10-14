@@ -1,21 +1,19 @@
-'use client'
-
 import { CodesetSelect, FormFieldLabel } from '@/components'
 import { CODESETS } from '@/constants'
 import { FormFieldContainer } from '../../shared'
 
-const ProviderTypeDropdown = () => {
+const VisitMediumSelect = () => {
   return (
     <FormFieldContainer>
-      <FormFieldLabel>Provider Type</FormFieldLabel>
+      <FormFieldLabel>Visit Medium</FormFieldLabel>
       <CodesetSelect
-        codeset={CODESETS.ProviderType}
-        size="1"
-        name="specialistTypeCode"
+        name="slotType"
         className="flex-1"
+        codeset={CODESETS.VisitMedium}
+        size="1"
       />
     </FormFieldContainer>
   )
 }
 
-export { ProviderTypeDropdown }
+export { VisitMediumSelect }

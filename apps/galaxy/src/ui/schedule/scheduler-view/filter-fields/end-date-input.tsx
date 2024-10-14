@@ -4,8 +4,8 @@ import { FormFieldContainer } from '../../shared'
 const EndDateInput = () => {
   return (
     <FormFieldContainer>
-      <FormFieldLabel>From</FormFieldLabel>
-      <DatePickerInput field="startDate" dateInputClass="h-6" />
+      <FormFieldLabel>To</FormFieldLabel>
+      <DatePickerInput field="endingDate" dateInputClass="h-6" />
     </FormFieldContainer>
   )
 }

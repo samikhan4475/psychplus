@@ -29,7 +29,9 @@ const DayHeader = () => {
 
   return (
     <Grid columns="16" className="mx-[26px] mt-[7px]" position="sticky" top="0">
+      <Flex align='center'>
       <Text className="text-pp-black-3 col-span-2 text-[14px] font-[590]">{`${serverProviderAvailabilities.length} Providers`}</Text>
+      </Flex>
       <Box className="relative z-10 col-[3_/_span_14]">
         <NavigationButton
           className="absolute left-0 top-[50%] z-20 -translate-x-1/2 -translate-y-1/2"

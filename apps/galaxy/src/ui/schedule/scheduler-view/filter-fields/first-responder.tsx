@@ -1,16 +1,27 @@
-import { CodesetSelect, FormFieldLabel } from '@/components'
-import { CODESETS } from '@/constants'
+import { FormFieldLabel, SelectInput } from '@/components'
 import { FormFieldContainer } from '../../shared'
+
+const options = [
+  {
+    label: 'Yes',
+    value: 'yes',
+  },
+  {
+    label: 'No',
+    value: 'no',
+  },
+]
 
 const FirstResponderSelect = () => {
   return (
     <FormFieldContainer>
-      <FormFieldLabel className="text-[12px]">First Responder</FormFieldLabel>
-      <CodesetSelect
-        name="firstResponder"
-        codeset={CODESETS.FirstResponder}
-        className='flex-1'
-        size="1"
+      <FormFieldLabel>First Responder</FormFieldLabel>
+      <SelectInput
+        field="isFirstResponder"
+        placeholder="Select"
+        options={options}
+        buttonClassName="h-6 w-full"
+        className="h-full flex-1"
       />
     </FormFieldContainer>
   )

@@ -6,19 +6,20 @@ import toast from 'react-hot-toast'
 import { FormFieldLabel, SelectInput } from '@/components'
 import { getStateClinicsOptionsAction } from '../../actions'
 import { FormFieldContainer } from '../../shared'
+import { SchemaType } from '../filter-actions-group'
 
 const LocationDropdown = () => {
   const [clinicLocations, setClinicLocations] = useState<
     { label: string; value: string }[]
   >([])
-  const form = useFormContext()
-  const stateId = form.watch('state')
+  const form = useFormContext<SchemaType>()
+  const stateId = form.watch('stateId')
 
   useEffect(() => {
     if (stateId) {
       getStateClinicsOptionsAction(stateId).then((response) => {
         if (response.state === 'error') {
-          toast.error('Failed ot fetch clinic locations')
+          toast.error('Failed to fetch clinic locations')
         }
         setClinicLocations(response.state === 'error' ? [] : response.data)
       })
@@ -27,9 +28,9 @@ const LocationDropdown = () => {
 
   return (
     <FormFieldContainer className="h-full flex-1">
-      <FormFieldLabel className="text-[12px]">Location</FormFieldLabel>
+      <FormFieldLabel>Location</FormFieldLabel>
       <SelectInput
-        field="location"
+        field="locationIds"
         placeholder="Select"
         options={clinicLocations}
         disabled={!stateId}

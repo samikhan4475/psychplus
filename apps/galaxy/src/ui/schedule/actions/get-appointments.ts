@@ -67,7 +67,7 @@ const transformOutBookedAppointment = (filters: CalenderViewSchemaType) => {
     includePatientNotes: true,
 
     // TODO: Backend is working on these required filters.
-    // staffIds: filters.provider ? [filters.provider] : null,
+    // staffIds: filters.provider ? [filters.provider] : null, 
     // language: filters.language || '',
     // isFirstResponder: filters.isFirstResponder || '',
     // stateId: filters.stateId ?? '',

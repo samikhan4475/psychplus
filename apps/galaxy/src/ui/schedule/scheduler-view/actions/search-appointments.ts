@@ -10,13 +10,14 @@ import {
   SlotsByDay,
 } from '../types'
 import { extractDate } from '../utils'
+import { AvailableSlotsParams } from '../../types'
 
-const searchAppointmentsAction = async (): Promise<
+const searchAppointmentsAction = async (params: AvailableSlotsParams): Promise<
   api.ActionResult<AppointmentAvailability[]>
 > => {
   const result = await api.POST<AppointmentsSearchApiResponse>(
     api.SEARCH_AVAILABLE_APPOINTMENT_SLOTS_ENDPOINT,
-    { maxDaysOutToLook: 90 },
+    { maxDaysOutToLook: 90, ...params },
   )
 
   if (result.state === 'error') {

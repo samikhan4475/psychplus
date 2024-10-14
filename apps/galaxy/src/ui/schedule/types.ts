@@ -259,6 +259,19 @@ interface AppointmentParams {
   noteSigned?: string
 }
 
+interface AvailableSlotsParams {
+  startingDate?: string
+  endingDate?: string
+  serviceIds?: string[]
+  stateId?: string 
+  locationIds?: string[] 
+  staffIds?: string[]
+  specialistTypeCode?: string
+  gender?: string
+  language?: string
+  isFirstResponder?: boolean
+}
+
 interface GetUnitsGroupsResponse {
   serviceGroups: ServiceGroup[]
   serviceUnits: ServiceUnit[]
@@ -311,6 +324,7 @@ export type {
   ProviderCoding,
   AppointmentParams,
   GetUnitsGroupsResponse,
+  AvailableSlotsParams,
 }
 
 export { TabValue, VerificationStatus, View, SchedulerFilters }
