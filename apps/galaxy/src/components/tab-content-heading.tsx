@@ -9,7 +9,7 @@ const TabContentHeading = ({
   children,
 }: React.PropsWithChildren<TabContentHeadingProps>) => {
   return (
-    <Flex p="2" className="bg-white -mt-[1px] border border-gray-5">
+    <Flex align='center' p="2" className="bg-white -mt-[1px] border border-gray-5">
       <Text className="text-[16px] font-[600] text-accent-12">{title}</Text>
       {children}
     </Flex>

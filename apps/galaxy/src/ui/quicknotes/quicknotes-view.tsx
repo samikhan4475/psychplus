@@ -15,6 +15,7 @@ import { RosWidget } from '@/ui/ros'
 import { SocialHxWidget } from '@/ui/social-hx'
 import { SubstanceUseHxWidget } from '@/ui/substance-use-hx'
 import { VitalsWidget } from '@/ui/vitals'
+import { QuicknotesDiagnosisWidget } from '../diagnosis/quicknotes-diagnosis-widget'
 import { QuickNotesHeader } from './quicknotes-header'
 import { QuickNotesSaver } from './quicknotes-saver'
 
@@ -39,6 +40,7 @@ const QuickNotesView = ({ patientId }: QuickNotesViewProps) => {
         <RosWidget patientId={patientId} />
         <VitalsWidget patientId={patientId} />
         <MseWidget patientId={patientId} />
+        <QuicknotesDiagnosisWidget patientId={patientId} />
         <AssessmentPlanWidget patientId={patientId} />
         <InteractiveComplexityWidget patientId={patientId} />
         <PatientMedicationsWidget patientId={patientId} />

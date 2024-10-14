@@ -63,6 +63,7 @@ const config = {
         'pp-blue-200': '#0134DB72',
         'pp-blue-300': '#0044ff',
         'pp-blue-400': '#194595',
+        'pp-lavender-blue': '#CDD5EE'
       },
       animation: {
         loader: 'bounce 500ms infinite, pulse 2s infinite',
