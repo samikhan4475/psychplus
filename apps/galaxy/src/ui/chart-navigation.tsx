@@ -47,6 +47,7 @@ const ChartNavigation = () => {
           <NavigationLink href="/patient-tracking">
             Patient Tracking
           </NavigationLink>
+          <NavigationLink href="/procedures">Procedures</NavigationLink>
           <NavigationLink href="/billing-history">
             Billing History
           </NavigationLink>
