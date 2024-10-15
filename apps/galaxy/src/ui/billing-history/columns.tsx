@@ -1,33 +1,32 @@
 import { ColumnDef } from '@tanstack/react-table'
-import { ColumnHeader, TextCell } from '@/components'
-import { formatCurrency, getSlashedDateString } from '@/utils'
+import { ColumnHeader, LongTextCell, TextCell } from '@/components'
+import { formatCurrency, formatDateTime, getSlashedDateString } from '@/utils'
 import { ActionsCell, SignCell } from './cells'
 import { BillingHistory } from './types'
 
 const columns: ColumnDef<BillingHistory>[] = [
   {
-    accessorKey: 'claimNo',
+    accessorKey: 'claimNumber',
     size: 50,
     header: ({ column }) => (
-      <ColumnHeader column={column} clientSideSort sortable label="Claim #" />
+      <ColumnHeader column={column} clientSideSort label="Claim #" />
     ),
-    cell: ({ row }) => <TextCell>{row.original?.claimNo} </TextCell>,
+    cell: ({ row }) => <TextCell>{row.original?.claimNumber} </TextCell>,
   },
   {
-    accessorKey: 'dateOfService',
+    accessorKey: 'dateOfServiceFrom',
     size: 100,
     header: ({ column }) => (
       <ColumnHeader
         column={column}
         clientSideSort
-        sortable
         label="Date of Service (DOS)"
       />
     ),
     cell: ({ row }) => (
       <TextCell>
-        {row.original?.dateOfService &&
-          getSlashedDateString(row.original?.dateOfService)}
+        {row.original?.dateOfServiceFrom &&
+          getSlashedDateString(row.original?.dateOfServiceFrom)}
       </TextCell>
     ),
   },
@@ -35,12 +34,7 @@ const columns: ColumnDef<BillingHistory>[] = [
     accessorKey: 'patientStatusCode',
     size: 100,
     header: ({ column }) => (
-      <ColumnHeader
-        column={column}
-        clientSideSort
-        sortable
-        label="Patient Status"
-      />
+      <ColumnHeader column={column} clientSideSort label="Patient Status" />
     ),
     cell: ({ row }) => <TextCell>{row.original.patientStatusCode} </TextCell>,
   },
@@ -49,33 +43,29 @@ const columns: ColumnDef<BillingHistory>[] = [
     size: 200,
 
     header: ({ column }) => (
-      <ColumnHeader column={column} clientSideSort sortable label="Location" />
+      <ColumnHeader column={column} clientSideSort label="Location" />
     ),
-    cell: ({ row }) => <TextCell>{row.original.locationName} </TextCell>,
+    cell: ({ row }) => (
+      <LongTextCell className="min-w-24 max-w-32">
+        {row.original.locationName}
+      </LongTextCell>
+    ),
   },
   {
     accessorKey: 'visitType',
     size: 200,
     header: ({ column }) => (
-      <ColumnHeader
-        column={column}
-        clientSideSort
-        sortable
-        label="Visit Type"
-      />
+      <ColumnHeader column={column} clientSideSort label="Visit Type" />
     ),
-    cell: ({ row }) => <TextCell>{row.original.visitType}</TextCell>,
+    cell: ({ row }) => (
+      <TextCell className="truncate">{row.original.visitType}</TextCell>
+    ),
   },
   {
     accessorKey: 'visitSequence',
     size: 100,
     header: ({ column }) => (
-      <ColumnHeader
-        column={column}
-        clientSideSort
-        sortable
-        label="Visit Sequence"
-      />
+      <ColumnHeader column={column} clientSideSort label="Visit Sequence" />
     ),
     cell: ({ row }) => <TextCell>{row.original.visitSequence}</TextCell>,
   },
@@ -83,12 +73,7 @@ const columns: ColumnDef<BillingHistory>[] = [
     accessorKey: 'visitMedium',
     size: 100,
     header: ({ column }) => (
-      <ColumnHeader
-        column={column}
-        clientSideSort
-        sortable
-        label="Visit Medium"
-      />
+      <ColumnHeader column={column} clientSideSort label="Visit Medium" />
     ),
     cell: ({ row }) => (
       <TextCell>{row.original?.visitMedium ?? 'N/A'}</TextCell>
@@ -98,12 +83,7 @@ const columns: ColumnDef<BillingHistory>[] = [
     accessorKey: 'primaryInsuranceDescription',
     size: 120,
     header: ({ column }) => (
-      <ColumnHeader
-        column={column}
-        clientSideSort
-        sortable
-        label="Primary Ins."
-      />
+      <ColumnHeader column={column} clientSideSort label="Primary Ins." />
     ),
     cell: ({ row }) => (
       <TextCell className="truncate">
@@ -115,12 +95,7 @@ const columns: ColumnDef<BillingHistory>[] = [
     accessorKey: 'secondaryInsuranceDescription',
     size: 120,
     header: ({ column }) => (
-      <ColumnHeader
-        column={column}
-        clientSideSort
-        sortable
-        label="Secondary Ins."
-      />
+      <ColumnHeader column={column} clientSideSort label="Secondary Ins." />
     ),
     cell: ({ row }) => (
       <TextCell>{row.original.secondaryInsuranceDescription}</TextCell>
@@ -129,7 +104,7 @@ const columns: ColumnDef<BillingHistory>[] = [
   {
     accessorKey: 'provider',
     header: ({ column }) => (
-      <ColumnHeader column={column} clientSideSort sortable label="Provider" />
+      <ColumnHeader column={column} clientSideSort label="Provider" />
     ),
     cell: ({ row }) => (
       <TextCell className="truncate">{row.original?.doctorName}</TextCell>
@@ -139,7 +114,7 @@ const columns: ColumnDef<BillingHistory>[] = [
     accessorKey: 'cosignerName',
     size: 50,
     header: ({ column }) => (
-      <ColumnHeader column={column} clientSideSort sortable label="Cosigner" />
+      <ColumnHeader column={column} clientSideSort label="Cosigner" />
     ),
     cell: ({ row }) => <TextCell>{row.original.cosignerName}</TextCell>,
   },
@@ -147,23 +122,27 @@ const columns: ColumnDef<BillingHistory>[] = [
     accessorKey: 'diagnosisDisplayName',
     size: 50,
     header: ({ column }) => (
-      <ColumnHeader column={column} clientSideSort sortable label="Diagnosis" />
+      <ColumnHeader column={column} clientSideSort label="Diagnosis" />
     ),
-    cell: ({ row }) => <TextCell>{row.original.diagnosisDisplayName}</TextCell>,
+    cell: ({ row }) => (
+      <TextCell className="truncate">
+        {row.original.diagnosisDisplayName}
+      </TextCell>
+    ),
   },
   {
-    accessorKey: 'patientCpt',
+    accessorKey: 'cptCode',
     size: 50,
     header: ({ column }) => (
-      <ColumnHeader column={column} clientSideSort sortable label="CPT" />
+      <ColumnHeader column={column} clientSideSort label="CPT" />
     ),
-    cell: ({ row }) => <TextCell>{row.original?.patientCpt}</TextCell>,
+    cell: ({ row }) => <TextCell>{row.original?.cptCode}</TextCell>,
   },
   {
     accessorKey: 'patientCmd',
     size: 50,
     header: ({ column }) => (
-      <ColumnHeader column={column} clientSideSort sortable label="CMD" />
+      <ColumnHeader column={column} clientSideSort label="CMD" />
     ),
     cell: ({ row }) => <TextCell>{row.original.patientCmd}</TextCell>,
   },
@@ -171,33 +150,23 @@ const columns: ColumnDef<BillingHistory>[] = [
     accessorKey: 'appointmentStatus',
     size: 50,
     header: ({ column }) => (
-      <ColumnHeader
-        column={column}
-        clientSideSort
-        sortable
-        label="Visit Status"
-      />
+      <ColumnHeader column={column} clientSideSort label="Visit Status" />
     ),
     cell: ({ row }) => <TextCell>{row.original?.appointmentStatus}</TextCell>,
   },
   {
-    accessorKey: 'vis',
+    accessorKey: 'verification',
     size: 50,
     header: ({ column }) => (
-      <ColumnHeader column={column} clientSideSort sortable label="VIS" />
+      <ColumnHeader column={column} clientSideSort label="VIS" />
     ),
-    cell: ({ row }) => <TextCell>{row.original?.vis}</TextCell>,
+    cell: ({ row }) => <TextCell>{row.original?.verification}</TextCell>,
   },
   {
     accessorKey: 'cptStatus',
     size: 100,
     header: ({ column }) => (
-      <ColumnHeader
-        column={column}
-        clientSideSort
-        sortable
-        label="Billing Status"
-      />
+      <ColumnHeader column={column} clientSideSort label="Billing Status" />
     ),
     cell: ({ row }) => <TextCell>{row.original?.cptStatus}</TextCell>,
   },
@@ -209,7 +178,7 @@ const columns: ColumnDef<BillingHistory>[] = [
         accessorKey: 'coPayDue',
         size: 50,
         header: ({ column }) => (
-          <ColumnHeader column={column} clientSideSort sortable label="Due" />
+          <ColumnHeader column={column} clientSideSort label="Due" />
         ),
         cell: ({ row }) => (
           <TextCell>{formatCurrency(Number(row.original?.coPayDue))}</TextCell>
@@ -219,7 +188,7 @@ const columns: ColumnDef<BillingHistory>[] = [
         accessorKey: 'coPayPaid',
         size: 50,
         header: ({ column }) => (
-          <ColumnHeader column={column} clientSideSort sortable label="Paid" />
+          <ColumnHeader column={column} clientSideSort label="Paid" />
         ),
         cell: ({ row }) => (
           <TextCell>{formatCurrency(Number(row.original.coPayPaid))}</TextCell>
@@ -235,7 +204,7 @@ const columns: ColumnDef<BillingHistory>[] = [
         accessorKey: 'coInsDue',
         size: 50,
         header: ({ column }) => (
-          <ColumnHeader column={column} clientSideSort sortable label="Due" />
+          <ColumnHeader column={column} clientSideSort label="Due" />
         ),
         cell: ({ row }) => (
           <TextCell>{formatCurrency(Number(row.original.coInsDue))}</TextCell>
@@ -245,7 +214,7 @@ const columns: ColumnDef<BillingHistory>[] = [
         accessorKey: 'coInsPaid',
         size: 50,
         header: ({ column }) => (
-          <ColumnHeader column={column} clientSideSort sortable label="Paid" />
+          <ColumnHeader column={column} clientSideSort label="Paid" />
         ),
         cell: ({ row }) => (
           <TextCell>{formatCurrency(Number(row.original.coInsPaid))}</TextCell>
@@ -261,7 +230,7 @@ const columns: ColumnDef<BillingHistory>[] = [
         accessorKey: 'balanceDue',
         size: 50,
         header: ({ column }) => (
-          <ColumnHeader column={column} clientSideSort sortable label="Due" />
+          <ColumnHeader column={column} clientSideSort label="Due" />
         ),
         cell: ({ row }) => (
           <TextCell>{formatCurrency(Number(row.original.balanceDue))}</TextCell>
@@ -271,7 +240,7 @@ const columns: ColumnDef<BillingHistory>[] = [
         accessorKey: 'balancePaid',
         size: 50,
         header: ({ column }) => (
-          <ColumnHeader column={column} clientSideSort sortable label="Paid" />
+          <ColumnHeader column={column} clientSideSort label="Paid" />
         ),
         cell: ({ row }) => (
           <TextCell>
@@ -285,17 +254,12 @@ const columns: ColumnDef<BillingHistory>[] = [
     accessorKey: 'createdOn',
     size: 100,
     header: ({ column }) => (
-      <ColumnHeader
-        column={column}
-        clientSideSort
-        sortable
-        label="Created On"
-      />
+      <ColumnHeader column={column} clientSideSort label="Created On" />
     ),
     cell: ({ row }) => (
-      <TextCell>
-        {row.original?.createdOn &&
-          getSlashedDateString(row.original?.createdOn)}
+      <TextCell className="truncate">
+        {row?.original?.appointmentDateTime &&
+          formatDateTime(row?.original?.appointmentDateTime)}
       </TextCell>
     ),
   },
@@ -303,17 +267,12 @@ const columns: ColumnDef<BillingHistory>[] = [
     accessorKey: 'submittedOn',
     size: 100,
     header: ({ column }) => (
-      <ColumnHeader
-        column={column}
-        clientSideSort
-        sortable
-        label="Submitted On"
-      />
+      <ColumnHeader column={column} clientSideSort label="Submitted On" />
     ),
     cell: ({ row }) => (
-      <TextCell>
-        {row.original?.submittedOn &&
-          getSlashedDateString(row.original?.submittedOn)}
+      <TextCell className="truncate">
+        {row.original?.claimSubmittedDate &&
+          getSlashedDateString(row.original?.claimSubmittedDate)}
       </TextCell>
     ),
   },

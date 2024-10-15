@@ -1,6 +1,6 @@
 'use client'
 
-import { Box, ScrollArea } from '@radix-ui/themes'
+import { ScrollArea } from '@radix-ui/themes'
 import { DataTable, LoadingPlaceholder } from '@/components'
 import { columns } from './columns'
 import { BillingHistory } from './types'
@@ -13,17 +13,15 @@ const BillingTable = ({ data = [], loading }: BillingTableProps) => {
   return loading ? (
     <LoadingPlaceholder className="bg-white min-h-[46vh]" />
   ) : (
-    <ScrollArea className="bg-white max-h-[46vh] max-w-[calc(100vw_-_190px)] rounded-1 p-2">
-      <Box className="min-w-max">
-        <DataTable
-          columns={columns}
-          data={data}
-          theadClass="z-[1]"
-          isRowSpan
-          sticky
-          disablePagination
-        />
-      </Box>
+    <ScrollArea className="bg-white h-[calc(100dvh_-_360px)] max-w-[calc(100vw_-_198px)] p-2">
+      <DataTable
+        columns={columns}
+        data={data}
+        theadClass="z-[1]"
+        isRowSpan
+        sticky
+        disablePagination
+      />
     </ScrollArea>
   )
 }

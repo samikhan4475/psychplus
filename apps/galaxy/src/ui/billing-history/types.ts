@@ -1,6 +1,9 @@
 import { Row } from '@tanstack/react-table'
+import { Metadata } from '@/types'
+import { BillingFilterSchemaType } from './filter-form'
 
 interface BillingHistory {
+  metadata?: Metadata
   visitNumber: string
   appointmentId: number
   patientMrn: string
@@ -8,6 +11,7 @@ interface BillingHistory {
   locationName: string
   visitType: string
   doctorName: string
+  dateOfServiceFrom: string
   primaryInsuranceDescription: string
   secondaryInsuranceDescription: string
   diagnosisDisplayName: string
@@ -24,14 +28,14 @@ interface BillingHistory {
   locationServiceDescription: string
   visitSequence: string
   visitMedium: string
-  claimNo: number
-  patientCpt: string
+  claimNumber: string
+  cptCode: string
   dateOfService: string
   appointmentStatus: string
-  vis: string
+  verification: string
   cptStatus: string
   createdOn: string
-  submittedOn: string
+  claimSubmittedDate: string
 }
 
 type BillingHistoryRow = Row<BillingHistory>
@@ -39,12 +43,11 @@ type BillingHistoryRow = Row<BillingHistory>
 interface GetBillingHistoryData {
   billingHistories: BillingHistory[]
 }
-interface BillingHistoryParams {
-  FromDate?: string
-  EndDate?: string
-  PartialComment?: string
-  LocationId?: string[]
-  Insurance?: string
+interface BillingHistoryParams
+  extends Omit<BillingFilterSchemaType, 'fromDate' | 'endDate' | 'locationId'> {
+  fromDate?: string
+  endDate?: string
+  locationId?: string[]
 }
 
 export type {

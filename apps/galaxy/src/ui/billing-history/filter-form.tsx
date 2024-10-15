@@ -7,7 +7,7 @@ import { DateValue } from 'react-aria-components'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import z from 'zod'
 import { FormContainer } from '@/components'
-import { getCalendarDateLabel, sanitizeFormData } from '@/utils'
+import { sanitizeFormData } from '@/utils'
 import { ClaimNoInput } from './claim-no-input'
 import { EndDateInput } from './end-date-input'
 import { InsuranceSelect } from './insurance-select'
@@ -16,11 +16,11 @@ import { StartDateInput } from './start-date-input'
 import { useStore } from './store'
 
 const schema = z.object({
-  claimNo: z.string().optional(),
+  claimNumber: z.string().optional(),
   fromDate: z.custom<DateValue | null>().optional(),
   endDate: z.custom<DateValue | null>().optional(),
   locationId: z.string().optional(),
-  insurance: z.string().optional(),
+  patientInsurancePayerId: z.string().optional(),
 })
 type BillingFilterSchemaType = z.infer<typeof schema>
 
@@ -28,36 +28,33 @@ interface BillingFilterFormProps {
   patientId: string
 }
 const BillingFilterForm = ({ patientId }: BillingFilterFormProps) => {
-  const { toggleFilters, fetchBillingHistory } = useStore((state) => ({
-    toggleFilters: state.toggleFilters,
-    fetchBillingHistory: state.fetchBillingHistory,
-  }))
-
+  const { toggleFilters, fetchBillingHistory, formValues } = useStore(
+    (state) => ({
+      toggleFilters: state.toggleFilters,
+      fetchBillingHistory: state.fetchBillingHistory,
+      formValues: state.formValues,
+    }),
+  )
   const form = useForm<BillingFilterSchemaType>({
     resolver: zodResolver(schema),
-    defaultValues: {
-      claimNo: '',
-      fromDate: null,
-      endDate: null,
-      insurance: '',
-      locationId: '',
-    },
+    defaultValues: formValues,
+    mode: 'onBlur',
   })
-  const { isDirty, isSubmitting } = form.formState
+  const { isSubmitting } = form.formState
   const onSubmit: SubmitHandler<BillingFilterSchemaType> = (data) => {
-    if (!isDirty) return
     const sanitizedData = sanitizeFormData({
-      FromDate: data.fromDate ? getCalendarDateLabel(data.fromDate) : '',
-      EndDate: data.endDate ? getCalendarDateLabel(data.endDate) : '',
-      ClaimNo: data.claimNo,
-      LocationId: data.locationId ? [data.locationId] : undefined,
-      Insurance: data.insurance,
+      ...data,
     })
     return fetchBillingHistory(patientId, sanitizedData)
   }
   const handleReset = () => {
-    if (!isDirty) return
-    form.reset()
+    form.reset({
+      claimNumber: '',
+      fromDate: null,
+      endDate: null,
+      patientInsurancePayerId: '',
+      locationId: '',
+    })
     fetchBillingHistory(patientId)
   }
   return (
@@ -89,6 +86,7 @@ const BillingFilterForm = ({ patientId }: BillingFilterFormProps) => {
           color="gray"
           className="text-black"
           variant="outline"
+          type="button"
           onClick={handleReset}
         >
           Clear

@@ -14,7 +14,7 @@ const ClaimNoInput = () => {
         size="1"
         placeholder="Claim no"
         className="border-pp-gray-2 h-6 w-[122px] border border-solid !outline-none [box-shadow:none]"
-        {...form.register('claimNo')}
+        {...form.register('claimNumber')}
       />
     </FormFieldContainer>
   )
