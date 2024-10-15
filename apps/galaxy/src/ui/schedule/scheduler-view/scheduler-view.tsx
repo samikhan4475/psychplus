@@ -8,7 +8,13 @@ import { SchedulerFilterGroup } from './filter-actions-group'
 import { ProvidersAccordionMenu } from './providers-accordion-menu'
 import { useStore } from './store'
 
-const SchedulerView = () => {
+const SchedulerView = ({
+  showFollowUpFilter = false,
+  noOfDays = 13,
+}: {
+  showFollowUpFilter?: boolean
+  noOfDays?: number
+}) => {
   const { fetchAvailableSlots, loading } = useStore((state) => ({
     fetchAvailableSlots: state.fetchAppointments,
     loading: state.loading,
@@ -27,8 +33,9 @@ const SchedulerView = () => {
           top="0"
           className="bg-white z-10"
         >
-          <SchedulerFilterGroup />
-          <DayHeader />
+          <SchedulerFilterGroup showFollowUpFilter={showFollowUpFilter} />
+
+          <DayHeader noOfDays={noOfDays} />
         </Flex>
         {loading ? (
           <Flex height="100%" align="center">

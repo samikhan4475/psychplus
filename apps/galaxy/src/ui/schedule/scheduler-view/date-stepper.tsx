@@ -5,7 +5,7 @@ import { addDays } from 'date-fns'
 import { NavigationButton } from './navigation-button'
 import { useStore } from './store'
 
-const DateStepper = () => {
+const DateStepper = ({ noOfDays = 13 }: { noOfDays?: number }) => {
   const appointmentDates = useStore((state) => state.dates)
   const setAppointmentDates = useStore((state) => state.setDates)
   const endDateIndex = appointmentDates.length - 1
@@ -15,7 +15,7 @@ const DateStepper = () => {
       appointmentDates[0].date,
       appointmentDates.length,
     )
-    setAppointmentDates(nextWeekDay)
+    setAppointmentDates(nextWeekDay, noOfDays)
   }
 
   const stepBackward = () => {
@@ -23,7 +23,7 @@ const DateStepper = () => {
       appointmentDates[0].date,
       -appointmentDates.length,
     )
-    setAppointmentDates(previousWeekDay)
+    setAppointmentDates(previousWeekDay, noOfDays)
   }
 
   return (

@@ -10,15 +10,15 @@ import { PatientSelect } from './patient-select'
 import { ServiceDropdown } from './service-select'
 import { StateDropdown } from './state-select'
 import './style.css'
+import { useEffect, useState } from 'react'
+import toast from 'react-hot-toast'
+import { State } from '@/types'
 import { AddPatient } from '@/ui/patient/add-patient'
+import { getUsStatesAction } from '../../actions'
 import TimedVisitForm from './timed/timed-visit-form'
 import UntimedVisitForm from './untimed/untimed-visit-form'
-import { useEffect, useState } from 'react'
-import { getUsStatesAction } from '../../actions'
-import { State } from '@/types'
-import toast from 'react-hot-toast'
 
-const AddVisitForm = () => {
+const AddVisitForm = ({ showAddUser = true }: { showAddUser?: Boolean }) => {
   const [states, setStates] = useState<State[]>([])
   const form = useForm<SchemaType>({
     resolver: zodResolver(schema),
@@ -54,7 +54,7 @@ const AddVisitForm = () => {
   const provider = form.watch('provider')
 
   useEffect(() => {
-    getUsStatesAction().then(response => {
+    getUsStatesAction().then((response) => {
       if (response.state === 'error') {
         toast.error('Failed to fetch US States')
         setStates([])
@@ -71,25 +71,27 @@ const AddVisitForm = () => {
           <PatientSelect />
         </Box>
 
-        <Box
-          className={`col-span-2 flex ${
-            form.formState?.errors?.patient ? 'items-center' : 'items-end'
-          }`}
-        >
-          <AddPatient onPatientAdd={onPatientAdd}>
-            <Button
-              size="1"
-              className="bg-pp-black-1 text-white h-[21px] flex-1 cursor-pointer px-3 py-1.5"
-            >
-              <Text size="1">Add User</Text>
-            </Button>
-          </AddPatient>
-        </Box>
+        {showAddUser && (
+          <Box
+            className={`col-span-2 flex ${
+              form.formState?.errors?.patient ? 'items-center' : 'items-end'
+            }`}
+          >
+            <AddPatient onPatientAdd={onPatientAdd}>
+              <Button
+                size="1"
+                className="bg-pp-black-1 text-white h-[21px] flex-1 cursor-pointer px-3 py-1.5"
+              >
+                <Text size="1">Add User</Text>
+              </Button>
+            </AddPatient>
+          </Box>
+        )}
 
         <Box className="col-span-4">
           <StateDropdown states={states} />
         </Box>
-        <Box className="col-span-4"> 
+        <Box className="col-span-4">
           <LocationDropdown states={states} />
         </Box>
         <Box className="col-span-4">

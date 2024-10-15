@@ -54,12 +54,18 @@ const schema = z.object({
 
 type SchemaType = z.infer<typeof schema>
 
-const SchedulerFilterGroup = () => {
-  const [isPartialFilterView, setIsPartialFilterView] = useState<boolean>(true)
+const SchedulerFilterGroup = ({
+  showFollowUpFilter = false,
+}: {
+  showFollowUpFilter: boolean
+}) => {
+  const [isPartialFilterView, setIsPartialFilterView] =
+    useState<boolean>(showFollowUpFilter)
   const { fetchData, setDates } = useStore((state) => ({
     setDates: state.setDates,
     fetchData: state.fetchAppointments,
   }))
+
   const form = useForm<SchemaType>({
     resolver: zodResolver(schema),
     criteriaMode: 'all',
@@ -105,7 +111,7 @@ const SchedulerFilterGroup = () => {
   const resetFilters = () => {
     if (!isDirty(dirtyFields)) return
     form.reset()
-    setDates()
+
     fetchData()
   }
 
@@ -123,23 +129,38 @@ const SchedulerFilterGroup = () => {
           py="1"
           className="bg-white sticky top-0"
         >
-          <Flex gap="2">
-            <StartDateInput />
-            <EndDateInput />
-            <StateSelect />
-            <LocationDropdown />
-            <ServiceMultiSelect />
-            <ProviderDropdown />
-            {isPartialFilterView && (
-              <>
+          {showFollowUpFilter ? (
+            <Flex gap="2" align="center">
+              <StateSelect />
+              <LocationDropdown />
+              <ServiceMultiSelect />
+              <ProviderTypeDropdown />
+              <ProviderDropdown />
+              <VisitMediumSelect />
+              <Flex className="flex-1" justify="end" gap="2" align="center">
                 <ClearFilterButton onClick={resetFilters} />
                 <SearchButton />
-                <ShowFiltersButton
-                  onClick={() => setIsPartialFilterView(false)}
-                />
-              </>
-            )}
-          </Flex>
+              </Flex>
+            </Flex>
+          ) : (
+            <Flex gap="2">
+              <StartDateInput />
+              <EndDateInput />
+              <StateSelect />
+              <LocationDropdown />
+              <ServiceMultiSelect />
+              <ProviderDropdown />
+              {isPartialFilterView && (
+                <>
+                  <ClearFilterButton onClick={resetFilters} />
+                  <SearchButton />
+                  <ShowFiltersButton
+                    onClick={() => setIsPartialFilterView(false)}
+                  />
+                </>
+              )}
+            </Flex>
+          )}
           {!isPartialFilterView && (
             <Flex gap="2" align="center">
               <VisitMediumSelect />

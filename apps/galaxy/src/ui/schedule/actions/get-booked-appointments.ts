@@ -1,12 +1,12 @@
 'use server'
 
 import * as api from '@/api'
-import { AppointmentParams } from '../types'
 import { Appointment } from '@/types'
+import { AppointmentParams } from '../types'
 
-const getBookedAppointmentsAction = async (params?: AppointmentParams): Promise<
-  api.ActionResult<Appointment[]>
-> => {
+const getBookedAppointmentsAction = async (
+  params?: AppointmentParams,
+): Promise<api.ActionResult<Appointment[]>> => {
   const body = {
     isIncludeMetadataResourceChangeControl: true,
     isIncludeMetadataResourceIds: true,

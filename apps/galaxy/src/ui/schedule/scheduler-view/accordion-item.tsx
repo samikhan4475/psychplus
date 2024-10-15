@@ -16,50 +16,35 @@ interface Props {
   value: string
 }
 
-const ThisWeekSlots = ({ slots }: { slots: SlotsByDay }) => {
-  const dates = useStore((state) => state.dates)
-  const thisWeekDays = dates.slice(0, dates.length / 2)
-
-  return (
-    <Flex
-      align="center"
-      className="col-span-5 justify-end gap-x-1 py-2.5 pr-2 text-[12px]"
-    >
-      {thisWeekDays.map((day, i) => (
-        <Text
-          className={cn('font-[500]', {
-            "after:content-[',']": i < dates.length / 2 - 1,
-          })}
-          key={day.monthAndDay}
-        >
-          {day.day} {'(' + (slots[`${day.monthAndDay}`]?.length ?? 0) + ')'}
-        </Text>
-      ))}
-    </Flex>
-  )
-}
-
-const NextWeekSlots = ({ slots }: { slots: SlotsByDay }) => {
-  const dates = useStore((state) => state.dates)
-  const nextWeekDays = dates.slice(dates.length / 2, dates.length)
-  return (
-    <Flex
-      align="center"
-      className="col-span-5 justify-end gap-x-1 py-2.5 pr-2 text-[12px]"
-    >
-      {nextWeekDays.map((day, i) => (
-        <Text
-          className={cn('font-[500]', {
-            "after:content-[',']": i < dates.length / 2 - 1,
-          })}
-          key={day.monthAndDay}
-        >
-          {day.day} {'(' + (slots[`${day.monthAndDay}`]?.length ?? 0) + ')'}
-        </Text>
-      ))}
-    </Flex>
-  )
-}
+const Slots = ({
+  slots,
+  days,
+  noOfDays,
+}: {
+  slots: SlotsByDay
+  days: Array<any>
+  noOfDays: number
+}) => (
+  <Flex
+    align="center"
+    className={cn(
+      `${
+        noOfDays === 7 ? 'col-span-10' : 'col-span-5'
+      } justify-end gap-x-1 py-2.5 pr-2 text-[12px]`,
+    )}
+  >
+    {days.map((day, i) => (
+      <Text
+        className={cn('font-medium', {
+          "after:content-[',']": i < days.length - 1,
+        })}
+        key={day.monthAndDay}
+      >
+        {day.day} {'(' + (slots[`${day.monthAndDay}`]?.length ?? 0) + ')'}
+      </Text>
+    ))}
+  </Flex>
+)
 
 const AccordionItem = ({ provider, value }: Props) => {
   const [isOpen, setIsOpen] = useState<boolean>(false)
@@ -77,6 +62,11 @@ const AccordionItem = ({ provider, value }: Props) => {
       ),
     [codes],
   )
+
+  // Check if days are 7 or if accordion is open
+  const displayInSingleSection = dates.length === 7 || isOpen
+  const thisWeekDays = dates.slice(0, dates.length / 2)
+  const nextWeekDays = dates.slice(dates.length / 2)
 
   return (
     <Accordion.Item value={value}>
@@ -99,13 +89,13 @@ const AccordionItem = ({ provider, value }: Props) => {
               )}
 
               <Flex direction="column">
-                <Text className="text-pp-dark-grey text-[12px] font-[510]">
+                <Text className="text-pp-dark-grey text-[12px] font-medium">
                   {`${provider.specialist.legalName.firstName} 
                   ${provider.specialist.legalName.lastName}, `}
                   {provider.specialist.legalName.honors}
                 </Text>
 
-                <Text className="text-pp-black-1 text-[12px] font-[510]">
+                <Text className="text-pp-black-1 text-[12px] font-bold">
                   {specialistTypeIndex?.[provider.specialistTypeCode] ?? ''}
                 </Text>
               </Flex>
@@ -128,27 +118,39 @@ const AccordionItem = ({ provider, value }: Props) => {
                   }`}</Text>
                 </Flex>
               </Flex>
-              <ThisWeekSlots slots={provider.allSlotsByDay} />
-              <Flex
-                align="center"
-                className="before:bg-pp-focus-bg relative col-span-2 py-2.5 pl-2 pl-2 text-[12px] before:absolute before:bottom-0 before:left-0 before:top-0 before:w-[1px] before:-translate-x-1/2 before:content-['']"
-              >
-                <Flex direction="column">
-                  <Text>Next Week Available</Text>
-                  <Text>{`Slots ${
-                    '(' +
-                    nextWeekTotalSlots(dates, provider.allSlotsByDay) +
-                    ')'
-                  }`}</Text>
+              <Slots
+                slots={provider.allSlotsByDay}
+                days={displayInSingleSection ? dates : thisWeekDays}
+                noOfDays={dates.length}
+              />
+              {!displayInSingleSection && (
+                <Flex
+                  align="center"
+                  className="before:bg-pp-focus-bg relative col-span-2 py-2.5 pl-2 text-[12px] before:absolute before:bottom-0 before:left-0 before:top-0 before:w-[1px] before:-translate-x-1/2 before:content-['']"
+                >
+                  <Flex direction="column">
+                    <Text>Next Week Available</Text>
+                    <Text>{`Slots ${
+                      '(' +
+                      nextWeekTotalSlots(dates, provider.allSlotsByDay) +
+                      ')'
+                    }`}</Text>
+                  </Flex>
                 </Flex>
-              </Flex>
-              <NextWeekSlots slots={provider.allSlotsByDay} />
+              )}
+              {!displayInSingleSection && (
+                <Slots
+                  slots={provider.allSlotsByDay}
+                  days={nextWeekDays}
+                  noOfDays={dates.length}
+                />
+              )}
             </Grid>
           </Box>
         )}
         <Accordion.Content className="col-[3_/_span_14]">
           <Grid
-            columns="14"
+            columns={String(dates.length)}
             className="border-pp-focus-bg h-full border-b-[2px] border-r border-t"
           >
             {dates.map((day, i) => (
@@ -169,7 +171,7 @@ const AccordionItem = ({ provider, value }: Props) => {
                           <Flex
                             justify="center"
                             align="center"
-                            className="border-pp-grey h-6 rounded-[4px] border px-[15px] py-1 text-[12px] font-[500]"
+                            className="border-pp-grey h-6 rounded-[4px] border px-[15px] py-1 text-[12px] font-medium"
                             key={slot.startDate}
                           >
                             {extractTime(slot.startDate, slot.timeZoneId)}

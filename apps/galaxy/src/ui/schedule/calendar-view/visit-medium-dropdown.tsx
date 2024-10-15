@@ -10,7 +10,7 @@ const VisitMediumDropdown = () => {
         name="visitMedium"
         codeset={CODESETS.VisitMedium}
         size="1"
-        className='flex-1'
+        className="flex-1"
       />
     </FormFieldContainer>
   )

@@ -7,30 +7,30 @@ import { cn } from '@/utils'
 import { NavigationButton } from './navigation-button'
 import { useStore } from './store'
 
-const DayHeader = () => {
+const DayHeader = ({ noOfDays = 13 }: { noOfDays?: number }) => {
   const appointmentDates = useStore((state) => state.dates)
   const setAppointmentDates = useStore((state) => state.setDates)
   const serverProviderAvailabilities = useStore((state) => state.data)
 
   useEffect(() => {
     const currentDate = new Date()
-    setAppointmentDates(currentDate)
-  }, [])
+    setAppointmentDates(currentDate, noOfDays)
+  }, [setAppointmentDates, noOfDays])
 
   const handleForwardNavigation = () => {
     const nextDay = addDays(appointmentDates[0].date, 1)
-    setAppointmentDates(nextDay)
+    setAppointmentDates(nextDay, noOfDays)
   }
 
   const handleBackwardNavigation = () => {
     const prevDay = addDays(appointmentDates[0].date, -1)
-    setAppointmentDates(prevDay)
+    setAppointmentDates(prevDay, noOfDays)
   }
 
   return (
     <Grid columns="16" className="mx-[26px] mt-[7px]" position="sticky" top="0">
-      <Flex align='center'>
-      <Text className="text-pp-black-3 col-span-2 text-[14px] font-[590]">{`${serverProviderAvailabilities.length} Providers`}</Text>
+      <Flex align="center">
+        <Text className="text-pp-black-3 col-span-2 text-[14px] font-bold">{`${serverProviderAvailabilities.length} Providers`}</Text>
       </Flex>
       <Box className="relative z-10 col-[3_/_span_14]">
         <NavigationButton
@@ -43,18 +43,18 @@ const DayHeader = () => {
           onClick={handleForwardNavigation}
           direction="right"
         />
-        <Grid
-          columns="14"
+        <Flex
           className="border-pp-focus-bg h-7 w-full border border-b-[2px]"
+          style={{ display: 'flex', justifyContent: 'space-between' }}
         >
           {appointmentDates.map((day, i) => (
             <Flex
               align="center"
               justify="center"
               key={day.monthAndDay}
-              className={cn('relative px-2', {
+              className={cn('relative flex-1', {
                 "after:bg-pp-focus-bg after:absolute after:bottom-0 after:right-0 after:top-0 after:w-[2px] after:translate-x-1/2 after:content-['']":
-                  i === 6,
+                  noOfDays !== 6 && i === 6,
               })}
             >
               <Flex
@@ -62,16 +62,14 @@ const DayHeader = () => {
                 justify="center"
                 className={cn('gap-x-[3px] text-[12px]')}
               >
-                <Text className="text-pp-text-sub text-[12px] font-[510]">
+                <Text className="text-pp-text-sub text-[12px] font-medium">
                   {day.day}
                 </Text>
-                <Text className="text-[12px] font-[510]">
-                  {day.monthAndDay}
-                </Text>
+                <Text className="text-[12px] font-bold">{day.monthAndDay}</Text>
               </Flex>
             </Flex>
           ))}
-        </Grid>
+        </Flex>
       </Box>
     </Grid>
   )
