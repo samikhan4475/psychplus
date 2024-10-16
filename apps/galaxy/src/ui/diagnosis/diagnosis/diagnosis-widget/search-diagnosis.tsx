@@ -1,20 +1,36 @@
 'use client'
 
-import { Flex, Select, Text } from '@radix-ui/themes'
+import { useMemo, useState } from 'react'
+import { Box, Flex, ScrollArea, Text, TextField } from '@radix-ui/themes'
 import { PlusCircleIcon } from 'lucide-react'
+import useOnclickOutside from 'react-cool-onclickoutside'
+import { useDebouncedCallback } from 'use-debounce'
+import { LoadingPlaceholder } from '@/components'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { SearchButton } from '@/ui/schedule/shared'
 import { cn } from '@/utils'
 import { useStore } from '../../store'
-import { OPTIONS } from '../constants'
 
+interface options {
+  label: string
+  value: string
+}
 interface SearchDiagnosisProps {
   patientId: string
-  px?: string
 }
 
-const SearchDiagnosis = ({ px = '', patientId }: SearchDiagnosisProps) => {
-  const { workingDiagnosisData, updateWorkingDiagnosisData } = useStore()
+const ServiceDiagnosisList = ({ patientId }: SearchDiagnosisProps) => {
+  const {
+    loadingServicesDiagnosis,
+    workingDiagnosisData,
+    serviceDiagnosisData,
+    updateWorkingDiagnosisData,
+  } = useStore()
+
+  const selectedOptions = useMemo(() => {
+    return workingDiagnosisData.map((item) => item.sectionItemValue)
+  }, [workingDiagnosisData])
+
   const handleValueChange = async (value: string) => {
     const data = [
       ...workingDiagnosisData,
@@ -28,55 +44,84 @@ const SearchDiagnosis = ({ px = '', patientId }: SearchDiagnosisProps) => {
     updateWorkingDiagnosisData(patientId, data)
   }
 
+  if (loadingServicesDiagnosis) {
+    return <LoadingPlaceholder className="mt-5" />
+  }
+  if (serviceDiagnosisData.length === 0) {
+    return <Text>No data found</Text>
+  }
+
+  return serviceDiagnosisData.map((option: options, index: number) => {
+    const isDisabled = selectedOptions.includes(option.value)
+    return (
+      <Flex
+        key={option.value + index}
+        justify="between"
+        align="center"
+        p="1"
+        onClick={() => (isDisabled ? null : handleValueChange(option.value))}
+        className={cn(
+          `hover:bg-pp-bg-accent rounded-2 ${
+            isDisabled
+              ? 'cursor-not-allowed opacity-30'
+              : 'cursor-pointer opacity-100'
+          }`,
+        )}
+      >
+        <Text className="w-[85%]">{option.label}</Text>
+        <PlusCircleIcon stroke="#194595" strokeWidth="2" />
+      </Flex>
+    )
+  })
+}
+
+const SearchDiagnosis = ({ patientId }: SearchDiagnosisProps) => {
+  const { loadingServicesDiagnosis, fetchServiceDiagnosis } = useStore()
+  const [showOptions, setShowOptions] = useState(false)
+
+  const handleSearchService = useDebouncedCallback((value: string) => {
+    fetchServiceDiagnosis(value)
+  }, 500)
+
+  const ref = useOnclickOutside(() => setShowOptions(false))
+
   return (
-    <Flex px={px} gap="2" justify="between" align="center" width="40%">
-      <Select.Root value="" onValueChange={handleValueChange}>
-        <Select.Trigger
-          placeholder="Search Practice"
-          className={`border-pp-gray-2 h-6 w-full border border-solid p-4 !outline-none [box-shadow:none]`}
-        />
-        <Select.Content
-          position="popper"
+    <Flex align="center" gap="2">
+      <Box ref={ref} className="relative">
+        <Flex
+          className={cn(
+            'w-full flex-wrap overflow-y-auto rounded-2 border border-gray-7',
+          )}
           align="center"
-          variant="soft"
-          className="w-full"
+          gap="1"
+          pl="1"
         >
-          {OPTIONS.map((option) => {
-            const isDisabled = workingDiagnosisData?.some(
-              (item) => item.sectionItemValue === option.value,
-            )
+          <TextField.Root
+            style={
+              {
+                '--text-field-border-width': '0px',
+              } as React.CSSProperties
+            }
+            size="1"
+            className="min-w-14 !outline-white w-[500px] flex-1 [box-shadow:none]"
+            placeholder="Select Practice"
+            onChange={(e) => handleSearchService(e.target.value)}
+            onFocus={() => setShowOptions(true)}
+          />
+        </Flex>
 
-            return (
-              <Flex
-                key={option.value}
-                className="hover:bg-pp-bg-accent rounded-2"
-                justify="between"
-                align="center"
-              >
-                <Text
-                  className={cn(
-                    `pl-1 ${isDisabled ? 'opacity-30' : 'opacity-100'}`,
-                  )}
-                >
-                  {option.label}
-                </Text>
-                <Select.Item
-                  value={option.value}
-                  disabled={isDisabled}
-                  className="hover:bg-pp-bg-accent bg-transparent"
-                >
-                  <PlusCircleIcon
-                    stroke="#194595"
-                    strokeWidth="2"
-                    className={isDisabled ? 'opacity-30' : 'opacity-100'}
-                  />
-                </Select.Item>
-              </Flex>
-            )
-          })}
-        </Select.Content>
-      </Select.Root>
-
+        {showOptions && (
+          <ScrollArea
+            className={cn(
+              `bg-white !absolute z-50 mx-auto h-auto max-h-40 w-full rounded-[25px] p-2 shadow-3  ${
+                loadingServicesDiagnosis ?? 'min-h-28'
+              }`,
+            )}
+          >
+            <ServiceDiagnosisList patientId={patientId} />
+          </ScrollArea>
+        )}
+      </Box>
       <SearchButton />
     </Flex>
   )
