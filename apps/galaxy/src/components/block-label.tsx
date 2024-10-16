@@ -1,10 +1,11 @@
-import { Text } from '@radix-ui/themes'
+import { Text, Tooltip } from '@radix-ui/themes'
 import { cn } from '@/utils'
 
 interface BlockLabelProps {
   name?: string
   orientation?: 'horizontal' | 'vertical'
   className?: string
+  isTooltip?: boolean
 }
 
 const BlockLabel = ({
@@ -12,8 +13,9 @@ const BlockLabel = ({
   orientation = 'horizontal',
   className,
   children,
+  isTooltip = false,
 }: React.PropsWithChildren<BlockLabelProps>) => {
-  return (
+  const labelContent = (
     <Text
       size="1"
       weight="medium"
@@ -26,6 +28,12 @@ const BlockLabel = ({
     >
       {children}
     </Text>
+  )
+
+  return isTooltip ? (
+    <Tooltip content="Head, Eyes, Ears, Nose, Throat">{labelContent}</Tooltip>
+  ) : (
+    labelContent
   )
 }
 

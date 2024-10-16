@@ -17,6 +17,7 @@ import { SubstanceUseHxWidget } from '@/ui/substance-use-hx'
 import { VitalsWidget } from '@/ui/vitals'
 import { QuicknotesDiagnosisWidget } from '../diagnosis/quicknotes-diagnosis-widget'
 import { FollowUpWidget } from '../follow-up'
+import { PhysicalExamWidget } from '../physical-exam'
 import { QuickNotesHeader } from './quicknotes-header'
 import { QuickNotesSaver } from './quicknotes-saver'
 
@@ -42,6 +43,7 @@ const QuickNotesView = ({ patientId }: QuickNotesViewProps) => {
         <VitalsWidget patientId={patientId} />
         <MseWidget patientId={patientId} />
         <QuicknotesDiagnosisWidget patientId={patientId} />
+        <PhysicalExamWidget patientId={patientId} />
         <AssessmentPlanWidget patientId={patientId} />
         <InteractiveComplexityWidget patientId={patientId} />
         <PatientMedicationsWidget patientId={patientId} />

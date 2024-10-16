@@ -1,12 +1,13 @@
 'use client'
 
-import { Flex, Text } from '@radix-ui/themes'
+import { Flex, Text, Tooltip } from '@radix-ui/themes'
 import { cn } from '@/utils'
 
 interface SelectableChipProps {
   label: string
   selected: boolean
   onClick: () => void
+  isTooltip?: boolean
 }
 
 const SelectableChip = ({
@@ -14,7 +15,18 @@ const SelectableChip = ({
   selected,
   children,
   onClick,
+  isTooltip = false,
 }: React.PropsWithChildren<SelectableChipProps>) => {
+  const chipContent = (
+    <Text
+      className={cn('select-none text-[11px]', {
+        'font-medium': selected,
+      })}
+    >
+      {label}
+    </Text>
+  )
+
   return (
     <Flex align="center" className="h-[var(--chip-height)]">
       <Flex
@@ -27,13 +39,13 @@ const SelectableChip = ({
           },
         )}
       >
-        <Text
-          className={cn('select-none text-[11px]', {
-            'font-medium': selected,
-          })}
-        >
-          {label}
-        </Text>
+        {isTooltip ? (
+          <Tooltip content="Pupils Equal, Round, Reactive to Light and Accommodation">
+            {chipContent}
+          </Tooltip>
+        ) : (
+          chipContent
+        )}
       </Flex>
       {children}
     </Flex>

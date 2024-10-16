@@ -19,6 +19,7 @@ const ChartNavigation = () => {
           <NavigationLink href="/questionnaires">Questionnaires</NavigationLink>
           <NavigationLink href="/vitals">Vitals</NavigationLink>
           <NavigationLink href="/ros">Review of System</NavigationLink>
+          <NavigationLink href="/physical-exam">Physical Exam</NavigationLink>
           <NavigationLink href="/mse">Mental Status Exam</NavigationLink>
           <NavigationLink href="/diagnosis">Diagnosis</NavigationLink>
           <NavigationLink href="/assessment">Assessment & Plan</NavigationLink>
