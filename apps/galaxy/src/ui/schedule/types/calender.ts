@@ -7,13 +7,6 @@ type CalenderViewSchemaType = z.infer<typeof calenderViewSchema>
 
 type AppointmentEventData = BookedAppointment | StaffAppointmentAvailability
 
-interface AvailableSlotsEvent<T> {
-  start: Date
-  end: Date
-  title: string
-  data: T
-}
-
 interface Option {
   value: string
   label: string
@@ -22,7 +15,6 @@ interface Option {
 export type {
   Option,
   AppointmentEventData,
-  AvailableSlotsEvent,
   CalenderViewSchemaType,
 }
 

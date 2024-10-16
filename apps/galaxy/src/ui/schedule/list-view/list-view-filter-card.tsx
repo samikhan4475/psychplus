@@ -156,7 +156,7 @@ const ListViewFilterCard = () => {
           <Flex align="start" direction="column" wrap="wrap" gap="2">
             <Flex align="start" width="100%" gap="2">
               <StartDateInput />
-              <EndDateInput />
+              <EndDateInput />  
               <TimeInputField />
               <NameInput />
               <AgeInput />

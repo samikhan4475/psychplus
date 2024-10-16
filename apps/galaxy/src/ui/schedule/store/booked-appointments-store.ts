@@ -1,9 +1,9 @@
 import toast from 'react-hot-toast'
 import { create } from 'zustand'
-import { getBookedAppointmentsAction } from '../actions'
-import { AppointmentParams, View } from '../types'
 import { Appointment } from '@/types'
-import { getLocalTimeZone, today } from '@internationalized/date'
+import { getBookedAppointmentsAction } from '../actions'
+import { AppointmentParams, AvailableSlotsEvent, View } from '../types'
+import { convertToZonedDate, getWeekStartDateFormatted } from '../utils'
 
 interface ActionParams {
   params?: AppointmentParams
@@ -13,6 +13,7 @@ interface ActionParams {
 interface Store {
   roundingViewData: Appointment[]
   listViewData: Appointment[]
+  calendarViewData: AvailableSlotsEvent<Appointment>[]
   error?: string
   loading?: boolean
   fetchData: (arg?: ActionParams) => void
@@ -21,6 +22,7 @@ interface Store {
 const useBookedAppointmentsStore = create<Store>((set) => ({
   roundingViewData: [],
   listViewData: [],
+  calendarViewData: [],
   error: undefined,
   loading: undefined,
   fetchData: async (options) => {
@@ -28,12 +30,8 @@ const useBookedAppointmentsStore = create<Store>((set) => ({
       error: undefined,
       loading: true,
     })
-    const startDate = today(getLocalTimeZone())
-    const year = startDate.year
-    const month = `${startDate.month}`.padStart(2, '0')
-    const day = `${startDate.day}`.padStart(2, '0')
-    const startingDate = `${year}-${month}-${day}`
-    const params = {startingDate, ...(options?.params?? {})}
+    const startingDate = getWeekStartDateFormatted()
+    const params = { startingDate, ...(options?.params ?? {}) }
     const result = await getBookedAppointmentsAction(params)
     if (result.state === 'error') {
       toast.error('Failed to retrieve appointments data')
@@ -53,14 +51,39 @@ const useBookedAppointmentsStore = create<Store>((set) => ({
           listViewData: result.data,
           loading: false,
         })
+      case View.Calendar:
+        return set({
+          calendarViewData: transformInBookedAppointments(result.data),
+          loading: false,
+        })
       default:
         return set({
           roundingViewData: result.data,
           listViewData: result.data,
+          calendarViewData: transformInBookedAppointments(result.data),
           loading: false,
         })
     }
   },
 }))
+
+const transformInBookedAppointments = (data: Appointment[]) =>
+  data.map((appointment) => {
+    const start = convertToZonedDate(
+      appointment.appointmentDate,
+      appointment.locationTimezoneId,
+    )
+    const end = new Date(start.getTime() + 20 * 60000) // Assuming 20 mins duration; adjust if needed
+    const title = `${appointment.name} (${appointment.visitType})`
+
+    return {
+      start,
+      end,
+      title,
+      data: {
+        ...appointment,
+      },
+    }
+  })
 
 export { useBookedAppointmentsStore }

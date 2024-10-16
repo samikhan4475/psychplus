@@ -26,6 +26,7 @@ import { HideFiltersButton } from './hide-filters-button'
 import { SearchButton } from './search-button'
 import { ShowFiltersButton } from './show-filters-button'
 import { useStore } from './store'
+import { START_OF_WEEK_LOCALE } from '../constants'
 
 const IS_FIRST_RESPONDER: Record<string, boolean> = {
   yes: true,
@@ -99,9 +100,7 @@ const SchedulerFilterGroup = ({
         : undefined,
     }
     if (data.startingDate) {
-      const weekStartDateValue = startOfWeek(data.startingDate, 'en-US').add({
-        days: 1,
-      })
+      const weekStartDateValue = startOfWeek(data.startingDate, START_OF_WEEK_LOCALE)
       setDates(new Date(weekStartDateValue.toString()))
     }
     const sanitizedData = sanitizeFormData(transformedData)

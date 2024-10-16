@@ -28,7 +28,7 @@ const ScheduleView = () => {
 
   return (
     <Tabs.Root
-      defaultValue={TabValue.List}
+      value={activeTab}
       onValueChange={setActiveTab}
       className="flex w-full flex-1 flex-col overflow-y-auto"
     >

@@ -1,11 +1,11 @@
 import { getUsStatesOptionsAction } from '@/actions'
 import { AsyncSelect, FormFieldLabel } from '@/components'
-import { FormFieldContainer } from '../shared'
+import { FormFieldContainer } from '../../shared'
 
 const StateSelect = () => {
   return (
     <FormFieldContainer>
-      <FormFieldLabel className="text-[12px]">State</FormFieldLabel>
+      <FormFieldLabel>State</FormFieldLabel>
       <AsyncSelect
         field="stateId"
         fetchOptions={getUsStatesOptionsAction}

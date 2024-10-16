@@ -9,6 +9,7 @@ const ShowFiltersButton = ({
       size="1"
       variant="outline"
       color="gray"
+      type='button'
       className="text-black text-[12px]"
       onClick={onClick}
     >

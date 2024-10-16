@@ -7,6 +7,7 @@ const HideFiltersButton = ({
     <Button
       size="1"
       variant="ghost"
+      type='button'
       className="text-pp-text-primary-base text-[12px]"
       onClick={onClick}
     >

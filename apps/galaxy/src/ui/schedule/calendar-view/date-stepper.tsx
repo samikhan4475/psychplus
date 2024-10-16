@@ -1,7 +1,7 @@
 import { Box, Flex, IconButton, Text } from '@radix-ui/themes'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
-import { useStore } from '../store'
 import { formatDate } from '../utils'
+import { useStore } from './store'
 
 const DateStepper = () => {
   const { weekStartDate, addWeek, subtractWeek } = useStore(

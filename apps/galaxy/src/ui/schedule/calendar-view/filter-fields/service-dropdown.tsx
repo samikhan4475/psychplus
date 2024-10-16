@@ -1,15 +1,15 @@
-'use client'
-
 import { useEffect, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 import { FormFieldLabel, MultiSelectField } from '@/components'
 import { getLocationServicesAction } from '../../actions'
 import { FormFieldContainer } from '../../shared'
+import type { CalenderViewSchemaType } from '../../types'
 import { Option } from '../../types'
 
-const ServiceMultiSelect = () => {
-  const form = useFormContext()
-  const selectedLocation = form.watch('location')
+const ServiceDropdown = () => {
+  const form = useFormContext<CalenderViewSchemaType>()
+  const selectedLocation = form.watch('locationId')
+  const services = form.getValues('serviceIds')
   const [servicesOptions, setServicesOptions] = useState<Option[]>([])
 
   useEffect(() => {
@@ -22,16 +22,18 @@ const ServiceMultiSelect = () => {
   }, [selectedLocation])
 
   return (
-    <FormFieldContainer className="flex-1">
+    <FormFieldContainer>
       <FormFieldLabel>Service</FormFieldLabel>
       <MultiSelectField
         disabled={!selectedLocation}
+        defaultValues={services}
         options={servicesOptions}
         className="flex-1"
+        onChange={(values) => form.setValue('serviceIds', values)}
         menuClassName="w-[155px]"
       />
     </FormFieldContainer>
   )
 }
 
-export { ServiceMultiSelect }
+export { ServiceDropdown }

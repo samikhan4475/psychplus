@@ -1,4 +1,3 @@
-import { getLocalTimeZone, startOfWeek, today } from '@internationalized/date'
 import { addDays, eachDayOfInterval, format } from 'date-fns'
 import { create } from 'zustand'
 import { AvailableSlotsParams } from '../types'
@@ -45,13 +44,9 @@ const useStore = create<Store>((set) => ({
   },
 }))
 
-const createDays = (
-  startDate: Date = new Date(),
-  noOfDays = 13,
-): AppointmentDate[] => {
-  const startOfWeek = startDate ? startDate : getCurrentWeekStart()
+const createDays = (startDate: Date, noOfDays = 13): AppointmentDate[] => {
   const dates = eachDayOfInterval({
-    start: startOfWeek,
+    start: startDate,
     end: addDays(startDate, noOfDays),
   })
 
@@ -60,12 +55,6 @@ const createDays = (
     day: format(date, 'EEE'),
     monthAndDay: format(date, 'MM/dd'),
   }))
-}
-
-const getCurrentWeekStart = (): Date => {
-  const currentDate = today(getLocalTimeZone())
-  const weekStartDate = startOfWeek(currentDate, 'en-US').add({ days: 1 })
-  return new Date(weekStartDate.toString())
 }
 
 export { useStore }

@@ -6,6 +6,7 @@ import { addDays } from 'date-fns'
 import { cn } from '@/utils'
 import { NavigationButton } from './navigation-button'
 import { useStore } from './store'
+import { getCurrentWeekStart } from './utils'
 
 const DayHeader = ({ noOfDays = 13 }: { noOfDays?: number }) => {
   const appointmentDates = useStore((state) => state.dates)
@@ -13,7 +14,7 @@ const DayHeader = ({ noOfDays = 13 }: { noOfDays?: number }) => {
   const serverProviderAvailabilities = useStore((state) => state.data)
 
   useEffect(() => {
-    const currentDate = new Date()
+    const currentDate = getCurrentWeekStart()
     setAppointmentDates(currentDate, noOfDays)
   }, [setAppointmentDates, noOfDays])
 

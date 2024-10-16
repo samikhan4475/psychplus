@@ -1,18 +1,24 @@
+import { DateValue } from 'react-aria-components'
 import { z } from 'zod'
 
+const dateValidation = z.custom<DateValue>()
+
 const calenderViewSchema = z.object({
-  startDate: z.date().optional(),
-  endDate: z.date().optional(),
+  startingDate: dateValidation.optional(),
+  endingDate: dateValidation.optional(),
   stateId: z.string().optional(),
-  location: z.string().optional(),
-  serviceId: z.string().optional(),
-  provider: z.string().optional(),
+  locationId: z.string().optional(),
+  serviceIds: z
+  .array(z.string())
+  .refine((value) => value.every((item) => typeof item === 'string'), {
+    message: 'Array must be empty or contain only strings',
+  }),
+  providerIds: z.string().optional(),
   visitMedium: z.string().optional(),
   providerType: z.string().optional(),
   gender: z.string().optional(),
-  timeOfTheDay: z.string().optional(),
-  language: z.string().optional(),
-  isFirstResponder: z.boolean().optional(),
+  providerLanguage: z.string().optional(),
+  isFirstResponder: z.string().optional(),
 })
 
 export { calenderViewSchema }

@@ -79,10 +79,14 @@ const PROVIDER_CODING_FILTERS = [
   'Note Signed',
 ]
 
+// setting locale where start of the week is monday
+const START_OF_WEEK_LOCALE = 'fr-FR'
+
 export {
   ROUNDING_FILTERS,
   ROUNDING_FILTERS_KEY,
   PROVIDER_CODING_FILTERS,
   LIST_VIEW_FILTERS,
   NOTE_SIGNED,
+  START_OF_WEEK_LOCALE,
 }

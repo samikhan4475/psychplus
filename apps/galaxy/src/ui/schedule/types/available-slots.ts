@@ -124,11 +124,6 @@ interface GetUnitsGroupsResponse {
   serviceUnits: ServiceUnit[]
 }
 
-interface Option {
-  value: string
-  label: string
-}
-
 interface Appointment {
   appointmentId: number
   metadata: Metadata
@@ -280,6 +275,7 @@ interface GetUnitsGroupsResponse {
 enum View {
   Rounding = 'rounding-view',
   List = 'list-view',
+  Calendar = 'calendar',
   All = 'all',
 }
 
@@ -319,7 +315,6 @@ export type {
   AvailableSlotsInDateFormat,
   Specialist,
   AvailableSlotsEvent,
-  Option,
   Appointment,
   ProviderCoding,
   AppointmentParams,

@@ -1,5 +1,6 @@
-import { parseAbsolute } from '@internationalized/date'
+import { getLocalTimeZone, parseAbsolute, startOfWeek, today } from '@internationalized/date'
 import { AppointmentDate, SlotsByDay } from './types'
+import { START_OF_WEEK_LOCALE } from '../constants'
 
 const extractDate = (dateString: string, timezone: string) => {
   const zonedDate = parseAbsolute(dateString, timezone)
@@ -35,9 +36,16 @@ const nextWeekTotalSlots = (days: AppointmentDate[], slots: SlotsByDay) => {
   return total
 }
 
+const getCurrentWeekStart = (): Date => {
+  const currentDate = today(getLocalTimeZone())
+  const weekStartDate = startOfWeek(currentDate, START_OF_WEEK_LOCALE)
+  return new Date(weekStartDate.toString())
+}
+
 export {
   extractDate,
   currentWeekTotalSlots,
   extractTime,
   nextWeekTotalSlots,
+  getCurrentWeekStart,
 }
