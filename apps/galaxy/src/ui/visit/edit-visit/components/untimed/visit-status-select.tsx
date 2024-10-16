@@ -14,7 +14,7 @@ const VisitStatusSelect = () => {
         name="visitStatus"
         codeset={CODESETS.AppointmentStatus}
         size="1"
-        className="flex-1"
+        className="h-6 w-full"
       />
       <FormFieldError name={'visitStatus'} />
     </FormFieldContainer>

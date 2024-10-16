@@ -13,14 +13,14 @@ const AuthNumberText = () => {
   const form = useFormContext<SchemaType>()
   return (
     <FormFieldContainer className="flex-1 gap-[3px]">
-      <FormFieldLabel>Auth #</FormFieldLabel>
+      <FormFieldLabel>Ins. Authorization #</FormFieldLabel>
       <TextField.Root
-        {...form.register('authNumber')}
+        {...form.register('insuranceAuthorizationNumber')}
         placeholder="Enter Auth Number"
-        className="h-[21px]"
+        className="h-6 w-full"
         size="1"
       />
-      <FormFieldError name="authNumber" />
+      <FormFieldError name="insuranceAuthorizationNumber" />
     </FormFieldContainer>
   )
 }

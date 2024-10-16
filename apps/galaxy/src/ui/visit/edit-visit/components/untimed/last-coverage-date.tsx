@@ -9,7 +9,7 @@ const LastCoverageDate = () => {
     <Flex className="flex-1 gap-[3px]" direction={'column'}>
       <FormFieldLabel>LCD</FormFieldLabel>
       <DatePickerInput
-        dateInputClass="h-[21px]"
+        dateInputClass="h-6 w-full"
         field="lastCoverageDate"
         isRequired={false}
       />

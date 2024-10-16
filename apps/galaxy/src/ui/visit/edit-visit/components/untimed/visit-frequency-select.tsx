@@ -11,9 +11,6 @@ import { useCodesetCodes } from '@/hooks'
 
 const VisitFrequencySelect = () => {
   const codes = useCodesetCodes(CODESETS.VisitRepeatFrequency)
-
-  // @TODO: Set default value based on the service when visit info is fetched
-
   const options = codes
     .filter((attr) =>
       attr.attributes?.find(
@@ -23,7 +20,6 @@ const VisitFrequencySelect = () => {
     .map((option) => {
       return { value: option.value, label: option.display }
     })
-
   return (
     <FormFieldContainer className="flex-1">
       <FormFieldLabel required>Visit Frequency</FormFieldLabel>
@@ -31,7 +27,7 @@ const VisitFrequencySelect = () => {
         options={options}
         field="visitFrequency"
         disabled
-        buttonClassName="flex-1"
+        buttonClassName="h-6 w-full"
       />
       <FormFieldError name="visitFrequency" />
     </FormFieldContainer>

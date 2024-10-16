@@ -20,7 +20,7 @@ const DurationSelect = () => {
       <SelectInput
         field="duration"
         options={duration}
-        buttonClassName="flex-1 w-full"
+        buttonClassName="h-6 w-full"
       />
       <FormFieldError name="duration" />
     </FormFieldContainer>

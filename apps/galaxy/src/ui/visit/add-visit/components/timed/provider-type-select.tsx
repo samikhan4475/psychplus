@@ -32,7 +32,7 @@ const ProviderTypeDropdown = () => {
         break
       case ServiceType.Therapy:
       case ServiceType.CouplesFamilyTherapy:
-      case ServiceType.GroupType:
+      case ServiceType.GroupTherapy:
         filteredOptions = codes.filter((provider) =>
           [SpecialistType.Psychiatrist, SpecialistType.Therapist].includes(
             provider.value as SpecialistType,

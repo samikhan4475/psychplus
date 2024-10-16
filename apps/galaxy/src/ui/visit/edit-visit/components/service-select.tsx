@@ -34,7 +34,7 @@ const ServiceSelect = () => {
   useEffect(() => {
     if (!locationId) return
     form.resetField('service')
-    getLocationServices(locationId).then((res) => {
+    getLocationServices({ locationId }).then((res) => {
       if (res.state === 'error') {
         toast.error('Failed to fetch services')
         return setServices([])
@@ -52,7 +52,7 @@ const ServiceSelect = () => {
           label: mappedServices[v.serviceOffered],
           value: v.id,
         }))}
-        buttonClassName="flex-1 w-full"
+        buttonClassName="h-6 w-full"
         onValueChange={(value) => {
           const selectedService = services.find((option) => option.id === value)
           form.setValue(

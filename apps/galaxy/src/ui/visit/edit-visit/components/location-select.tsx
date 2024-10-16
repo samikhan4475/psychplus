@@ -9,15 +9,14 @@ import {
   FormFieldLabel,
   SelectInput,
 } from '@/components'
+import { SelectOptionType } from '@/types'
 import { getClinicLocations } from '../../actions'
 import { StateCodeSet } from '../../types'
 import { SchemaType } from '../schema'
 
 const LocationSelect = ({ states }: { states: StateCodeSet[] }) => {
   const form = useFormContext<SchemaType>()
-  const [locations, setLocations] = useState<
-    { value: string; label: string }[]
-  >([])
+  const [locations, setLocations] = useState<SelectOptionType[]>([])
   const [stateCode, isServiceTimeDependent] = useWatch({
     control: form.control,
     name: ['state', 'isServiceTimeDependent'],
@@ -40,14 +39,14 @@ const LocationSelect = ({ states }: { states: StateCodeSet[] }) => {
         })),
       )
     })
-  }, [stateCode])
+  }, [stateCode, states])
 
   return (
     <FormFieldContainer className="flex-1">
       <FormFieldLabel required>Location</FormFieldLabel>
       <SelectInput
         options={locations}
-        buttonClassName="flex-1 w-full"
+        buttonClassName="h-6 w-full"
         field="location"
         disabled={!isServiceTimeDependent}
       />

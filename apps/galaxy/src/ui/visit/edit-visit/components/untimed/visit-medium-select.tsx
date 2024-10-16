@@ -29,7 +29,7 @@ const VisitMediumSelect = () => {
       <SelectInput
         options={options}
         field="visitMedium"
-        buttonClassName="flex-1"
+        buttonClassName="h-6 w-full"
       />
       <FormFieldError name={'visitMedium'} />
     </FormFieldContainer>

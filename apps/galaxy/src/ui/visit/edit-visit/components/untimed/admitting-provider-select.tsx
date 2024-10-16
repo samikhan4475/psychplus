@@ -45,7 +45,7 @@ const AdmittingProviderSelect = () => {
       <SelectInput
         field="admittingProvider"
         options={options}
-        buttonClassName="flex-1"
+        buttonClassName="h-6 w-full"
       />
       <FormFieldError name={'admittingProvider'} />
     </FormFieldContainer>

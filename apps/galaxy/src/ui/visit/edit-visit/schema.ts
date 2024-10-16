@@ -46,14 +46,14 @@ const schema = z
     timeOfAdmission: z.string().min(1, 'Required'),
     visitFrequency: z.string().min(1, 'Required'),
     visitStatus: z.string().min(1, 'Required'),
-    insuranceVerificationStatus: z.string(),
-    legal: z.string(),
-    authNumber: z.string(),
-    authDate: z.custom<DateValue>(),
+    insuranceVerificationStatus: z.string().optional(),
+    legal: z.string().optional(),
+    insuranceAuthorizationNumber: z.string().optional(),
+    authDate: z.custom<DateValue>().optional(),
     lastCoverageDate: z.custom<DateValue>(),
-    unit: z.string(),
-    room: z.string(),
-    group: z.string(),
+    unit: z.string().optional(),
+    room: z.string().optional(),
+    group: z.string().optional(),
   })
   .superRefine((data, ctx) => {
     const validateTimedService = (

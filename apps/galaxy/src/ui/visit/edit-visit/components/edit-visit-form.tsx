@@ -74,7 +74,7 @@ const EditVisitForm = ({
       insuranceVerificationStatus:
         visitDetails.patientInsuranceVerificationStatus,
       legal: visitDetails.legalStatus,
-      authNumber: visitDetails.authorizationNumber,
+      insuranceAuthorizationNumber: visitDetails.authorizationNumber,
       authDate: visitDetails.authorizationDate
         ? parseAbsolute(
             visitDetails.authorizationDate,
@@ -86,7 +86,7 @@ const EditVisitForm = ({
 
       admittingProvider: '',
       timeOfAdmission: '',
-      visitFrequency: visitDetails.appointmentInterval.toString(),
+      visitFrequency: 'Daily',
       lastCoverageDate: visitDetails.lastCoverageDate
         ? parseAbsolute(
             visitDetails.lastCoverageDate,

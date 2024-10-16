@@ -9,7 +9,7 @@ const InsuranceVerificationSelect = () => {
         name="insuranceVerificationStatus"
         codeset={CODESETS.VerificationStatus}
         size="1"
-        className="flex-1 h-[21px]"
+        className="h-6 w-full"
       />
     </FormFieldContainer>
   )

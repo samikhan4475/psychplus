@@ -23,7 +23,7 @@ const FrequencySelect = () => {
       <FormFieldLabel required>Frequency</FormFieldLabel>
       <SelectInput
         field="frequency"
-        buttonClassName="flex-1 w-full"
+        buttonClassName="h-6 w-full"
         options={items}
       />
       <FormFieldError name="frequency" />

@@ -1,7 +1,7 @@
 'use client'
 
 import { useMemo } from 'react'
-import { Box, Flex } from '@radix-ui/themes'
+import { Box, Flex, Grid } from '@radix-ui/themes'
 import { DatePickerInput, SelectInput } from '@/components'
 import { FormFieldError, FormFieldLabel } from '@/components/form'
 import { generateTimeIntervals } from '@/ui/visit/add-visit/util'
@@ -18,16 +18,24 @@ const DateTimeOfAdmission = () => {
     <Box className="flex-1">
       <Flex className="flex-1 gap-[2px]" direction={'column'}>
         <FormFieldLabel required>Date/Time of Admission</FormFieldLabel>
-        <Box className="appointment-date-time grid grid-cols-5 gap-3">
-          <DatePickerInput field="dateOfAdmission" dateInputClass="h-[21px]" />
-          <Box className="flex-1">
-            <SelectInput
-              field="timeOfAdmission"
-              options={options}
-              buttonClassName="flex-1"
-            />
-            <FormFieldError name="timeOfAdmission" />
-          </Box>
+        <Box className="appointment-date-time">
+          <Grid columns="12" className="gap-3">
+            <Box className="col-span-6">
+              <DatePickerInput
+                field="dateOfAdmission"
+                dateInputClass="h-6 w-full"
+              />
+              <FormFieldError name="dateOfAdmission" />
+            </Box>
+            <Box className="col-span-6">
+              <SelectInput
+                field="timeOfAdmission"
+                options={options}
+                buttonClassName="h-6 w-full"
+              />
+              <FormFieldError name="timeOfAdmission" />
+            </Box>
+          </Grid>
         </Box>
       </Flex>
     </Box>

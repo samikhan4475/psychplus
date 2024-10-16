@@ -9,7 +9,7 @@ import {
   FormFieldLabel,
   SelectInput,
 } from '@/components'
-import { getVisitTypes } from '@/ui/visit/actions'
+import { getLocationServices } from '@/ui/visit/actions'
 import { SchemaType } from '../schema'
 import { useEditVisitStore } from '../store'
 
@@ -23,13 +23,17 @@ const VisitTypeSelect = () => {
   })
 
   useEffect(() => {
-    if (serviceId && locationId) {
-      getVisitTypes({ serviceId, locationId }).then((res) => {
+    if (locationId && serviceId) {
+      getLocationServices({
+        locationId,
+        serviceIds: [serviceId],
+        includeServiceVisitType: true,
+      }).then((res) => {
         if (res.state === 'error') {
-          toast.error('Failed to fetch visit types')
+          toast.error(res.error)
           return setVisitTypes([])
         }
-        setVisitTypes(res.data)
+        setVisitTypes(res.data[0].serviceVisitTypes ?? [])
       })
     }
   }, [serviceId, locationId])
@@ -40,19 +44,19 @@ const VisitTypeSelect = () => {
       <SelectInput
         field="visitType"
         options={visitTypes.map((visitType) => ({
-          value: visitType.encouterType,
-          label: `${visitType.typeOfVisit} | ${visitType.visitSequence} | ${visitType.visitMedium}`,
+          value: visitType.typeOfVisit,
+          label: `${visitType.visitTypeCode} | ${visitType.visitSequence} | ${visitType.visitMedium}`,
         }))}
-        buttonClassName="flex-1 w-full"
+        buttonClassName="h-6 w-full"
+        disabled={!isServiceTimeDependent}
         onValueChange={(newValue) => {
           const visitType = visitTypes.find(
-            (vt) => vt.encouterType === newValue,
+            (vt) => vt.typeOfVisit === newValue,
           )
           form.setValue('visitType', newValue)
           form.setValue('visitSequence', visitType?.visitSequence ?? '')
           form.setValue('visitMedium', visitType?.visitMedium ?? '')
         }}
-        disabled={!isServiceTimeDependent}
       />
       <FormFieldError name="visitType" />
     </FormFieldContainer>

@@ -3,12 +3,16 @@
 import * as api from '@/api'
 import { Service } from '@/types'
 
-const getLocationServices = async (
-  locationId: string,
-): Promise<api.ActionResult<Service[]>> => {
+const getLocationServices = async (payload: {
+  locationId?: string
+  serviceIds?: string[]
+  includeServiceVisitType?: boolean
+  includeServiceUnit?: boolean
+  includeServiceGroup?: boolean
+}): Promise<api.ActionResult<Service[]>> => {
   const response = await api.POST<Service[]>(
     `${api.LOCATION_SERVICES_ENDPOINT}`,
-    { locationId },
+    payload,
   )
 
   if (response.state === 'error') {

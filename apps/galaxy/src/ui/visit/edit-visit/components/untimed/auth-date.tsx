@@ -11,7 +11,7 @@ const AuthDate = () => {
   return (
     <FormFieldContainer className="flex-1 gap-[3px]">
       <FormFieldLabel>Auth Date</FormFieldLabel>
-      <DatePickerInput dateInputClass="h-[21px]" field="authDate" />
+      <DatePickerInput dateInputClass="h-6 w-full" field="authDate" />
       <FormFieldError name="authDate" />
     </FormFieldContainer>
   )

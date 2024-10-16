@@ -14,7 +14,7 @@ const ProviderTypeSelect = () => {
         name="nonTimeProviderType"
         codeset={CODESETS.ProviderType}
         size="1"
-        className="flex-1"
+        className="h-6 w-full"
         disabled
       />
       <FormFieldError name={'nonTimeProviderType'} />

@@ -25,7 +25,7 @@ const StateSelect = ({ states }: { states: StateCodeSet[] }) => {
       <FormFieldLabel required>State</FormFieldLabel>
       <SelectInput
         field="state"
-        buttonClassName="flex-1 w-full"
+        buttonClassName="h-6 w-full"
         options={options}
         disabled={!isServiceTimeDependent}
       />

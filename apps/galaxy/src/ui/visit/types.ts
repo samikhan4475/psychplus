@@ -109,13 +109,19 @@ enum ServiceType {
   Aba = 'Aba',
   Therapy = 'Therapy',
   CouplesFamilyTherapy = 'CouplesFamilyTherapy',
-  GroupType = 'GroupType',
+  GroupTherapy = 'GroupTherapy',
 }
 
 enum SpecialistType {
   Psychiatrist = '1',
   Therapist = '2',
   Bcba = '3',
+}
+
+enum ProviderType {
+  Psychiatrist = 'Psychiatrist',
+  Therapist = 'Therapy',
+  Bcba = 'Bcba',
 }
 
 enum ServicesOffered {
@@ -159,6 +165,7 @@ export {
   type ServerSearchSelectID,
   type StaffCommentParams,
   ServiceType,
+  ProviderType,
   SpecialistType,
   TCMVisitTypes,
   ServicesOffered,

@@ -1,6 +1,7 @@
 import { ContactDetails } from './contact'
 import { Metadata } from './metadata'
 import { LegalName } from './name'
+import { VisitType } from './visitType'
 
 interface Cosigner {
   id: number
@@ -22,6 +23,16 @@ interface ServiceUnit {
   locationId: string
   serviceId: string
   unit: string
+  coSignerId: number
+  resourceStatus: string
+}
+
+interface ServiceRoom {
+  id: string
+  metadata: Metadata
+  locationId: string
+  serviceId: string
+  room: string
   coSignerId: number
   resourceStatus: string
 }
@@ -65,7 +76,9 @@ interface Service {
   state: string
   cosigner: Cosigner
   serviceUnits?: ServiceUnit[]
+  serviceRooms?: ServiceRoom[]
   serviceGroups?: ServiceGroup[]
+  serviceVisitTypes?: VisitType[]
 }
 
-export type { Service, Cosigner, ServiceGroup, ServiceUnit }
+export type { Service, Cosigner, ServiceGroup, ServiceUnit, ServiceRoom }

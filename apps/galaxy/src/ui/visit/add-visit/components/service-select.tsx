@@ -34,7 +34,7 @@ const ServiceDropdown = () => {
       prevLocationId.current = locationId
       if (locationId) {
         form.resetField('service')
-        getLocationServices(locationId).then((res) => {
+        getLocationServices({ locationId }).then((res) => {
           if (res.state === 'error') return setServices([])
           setServices(res.data)
         })

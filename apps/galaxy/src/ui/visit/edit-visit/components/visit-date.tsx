@@ -17,7 +17,7 @@ const VisitDate = ({ dependentOn }: { dependentOn: keyof SchemaType }) => {
     <Flex className="flex-1 gap-[2px]" direction={'column'}>
       <FormFieldLabel required>Visit Date</FormFieldLabel>
       <DatePickerInput
-        dateInputClass="h-[21px]"
+        dateInputClass="h-6 w-full"
         field="visitDate"
         isDisabled={isDisabled}
       />

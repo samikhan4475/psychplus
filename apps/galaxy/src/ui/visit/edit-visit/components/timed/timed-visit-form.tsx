@@ -1,10 +1,5 @@
-import { useEffect, useState } from 'react'
 import { Box } from '@radix-ui/themes'
-import { useFormContext, useWatch } from 'react-hook-form'
-import { TCM } from '@/ui/visit/constants'
-import { TCMVisitTypes } from '../../../types'
-import { SchemaType } from '../../schema'
-import { useEditVisitStore } from '../../store'
+import { PaymentResponsibilitySelect } from '../payment-responsibility-select'
 import { VisitDate } from '../visit-date'
 import { VisitTypeSelect } from '../visit-type-select'
 import { DurationSelect } from './duration-select'
@@ -16,29 +11,6 @@ import { VisitSequenceText } from './visit-sequence-text'
 import { VisitTimeSelect } from './visit-time-select'
 
 const TimedVisitForm = () => {
-  const form = useFormContext<SchemaType>()
-  const [showDCFields, setShowDCFields] = useState<boolean>(false)
-  const { visitTypes } = useEditVisitStore()
-
-  const selectedVisitType = useWatch({
-    control: form.control,
-    name: 'visitType',
-  })
-
-  useEffect(() => {
-    if (selectedVisitType) {
-      const visitType = visitTypes.find(
-        (type) => type.encouterType === selectedVisitType,
-      )
-
-      if (visitType) {
-        setShowDCFields(TCM.includes(visitType.encouterType as TCMVisitTypes))
-      }
-    } else if (showDCFields && !selectedVisitType) {
-      setShowDCFields(false)
-    }
-  }, [selectedVisitType, visitTypes])
-
   return (
     <>
       <Box className="col-span-4">
@@ -62,11 +34,14 @@ const TimedVisitForm = () => {
       <Box className="col-span-3">
         <VisitTimeSelect />
       </Box>
-      <Box className="col-span-3">
+      <Box className="col-span-4">
         <DurationSelect />
       </Box>
-      <Box className="col-span-3">
+      <Box className="col-span-4">
         <FrequencySelect />
+      </Box>
+      <Box className="col-span-4">
+        <PaymentResponsibilitySelect />
       </Box>
     </>
   )

@@ -14,12 +14,12 @@ const VisitMediumText = () => {
   const isDisabled = true
   return (
     <FormFieldContainer className="flex-1 gap-[3px]">
-      <FormFieldLabel>Visit Medium</FormFieldLabel>
+      <FormFieldLabel required>Visit Medium</FormFieldLabel>
       <TextField.Root
         size="1"
         {...form.register('visitMedium')}
         disabled={isDisabled}
-        className="h-[21px]"
+        className="h-6 w-full"
       />
       <FormFieldError name="visitMedium" />
     </FormFieldContainer>

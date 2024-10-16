@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect } from 'react'
-import { useFormContext, useWatch } from 'react-hook-form'
+import { useFormContext } from 'react-hook-form'
 import {
   CodesetSelect,
   FormFieldContainer,
@@ -25,7 +25,7 @@ const LegalSelect = () => {
         name="legal"
         codeset={CODESETS.AdmissionLegalStatus}
         size="1"
-        className="flex-1"
+        className="h-6 w-full"
       />
       <FormFieldError name="legal" />
     </FormFieldContainer>

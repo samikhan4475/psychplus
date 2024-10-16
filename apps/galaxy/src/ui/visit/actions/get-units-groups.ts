@@ -5,14 +5,19 @@ import { Service } from '@/types'
 
 const getUnitsGroupsAction = async ({
   serviceId,
-  isUnit,
+  isUnit = false,
+  isRoom = false,
+  isGroup = false,
 }: {
   serviceId: string
-  isUnit: boolean
+  isUnit?: boolean
+  isRoom?: boolean
+  isGroup?: boolean
 }): Promise<api.ActionResult<{ label: string; value: string }[]>> => {
   const body = {
     includeServiceUnit: isUnit,
-    includeServiceGroup: !isUnit,
+    includeServiceRoom: isRoom,
+    includeServiceGroup: isGroup,
     serviceIds: [serviceId],
   }
 
@@ -34,6 +39,15 @@ const getUnitsGroupsAction = async ({
       data:
         response.data[0].serviceUnits?.map((v) => ({
           label: v.unit,
+          value: v.id,
+        })) ?? [],
+    }
+  } else if (isRoom) {
+    return {
+      state: 'success',
+      data:
+        response.data[0].serviceRooms?.map((v) => ({
+          label: v.room,
           value: v.id,
         })) ?? [],
     }

@@ -12,7 +12,7 @@ const PatientText = ({ visitDetails }: { visitDetails: Appointment }) => {
         size="1"
         value={`${visitDetails.name} ${visitDetails.age} yo ${visitDetails.gender[0]} | ${dob} | ${visitDetails.patientMrn} | ${visitDetails.patientStatus}`}
         disabled
-        className="h-[21px]"
+        className="h-6"
       />
     </FormFieldContainer>
   )

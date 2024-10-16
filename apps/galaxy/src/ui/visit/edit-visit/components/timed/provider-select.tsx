@@ -46,7 +46,7 @@ const ProviderSelect = () => {
       <FormFieldLabel required>Provider</FormFieldLabel>
       <SelectInput
         options={options}
-        buttonClassName="flex-1 w-full"
+        buttonClassName="h-6 w-full"
         field="provider"
       />
       <FormFieldError name="provider" />

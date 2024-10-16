@@ -5,7 +5,7 @@ import { AsyncSelect, FormFieldContainer, FormFieldLabel } from '@/components'
 import { getUnitsGroupsAction } from '@/ui/visit/actions/get-units-groups'
 import { SchemaType } from '../../schema'
 
-const UnitSelect = () => {
+const RoomSelect = () => {
   const form = useFormContext<SchemaType>()
   const serviceId = useWatch({
     control: form.control,
@@ -13,14 +13,14 @@ const UnitSelect = () => {
   })
   return (
     <FormFieldContainer className="flex-1">
-      <FormFieldLabel>Unit</FormFieldLabel>
+      <FormFieldLabel>Room</FormFieldLabel>
       <AsyncSelect
-        field="unit"
-        fetchOptions={() => getUnitsGroupsAction({ serviceId, isUnit: true })}
-        buttonClassName="h-6 w-full"
+        field="room"
+        fetchOptions={() => getUnitsGroupsAction({ serviceId, isRoom: true })}
+        buttonClassName="flex-1 h-6"
       />
     </FormFieldContainer>
   )
 }
 
-export { UnitSelect }
+export { RoomSelect }
