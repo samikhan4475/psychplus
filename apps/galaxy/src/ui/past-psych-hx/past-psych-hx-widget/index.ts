@@ -1,1 +1,1 @@
-export * from './past-psych-hx-widget'
+export { PastPsychHxLoader as PastPsychHxWidget } from './past-psych-hx-loader'

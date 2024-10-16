@@ -1,0 +1,3 @@
+const QUICKNOTE_SECTION_NAME = 'QuicknoteSectionPASTPSYCHHX'
+
+export { QUICKNOTE_SECTION_NAME }

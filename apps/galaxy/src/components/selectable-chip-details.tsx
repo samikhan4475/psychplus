@@ -1,4 +1,5 @@
 import { Box, Flex, Text } from '@radix-ui/themes'
+import { useFormContext } from 'react-hook-form'
 import { DateInput } from './date-input'
 import { NumberInput } from './number-input'
 import { SelectInput } from './select-input'
@@ -11,6 +12,7 @@ interface SelectableChipDetailsProps {
   label: string
   field: string
   options?: { label: string; value: string }[]
+  format?: string
 }
 
 const SelectableChipDetails = ({
@@ -18,7 +20,11 @@ const SelectableChipDetails = ({
   label,
   field,
   options,
+  format = '##',
 }: SelectableChipDetailsProps) => {
+  const form = useFormContext()
+  const error = form.getFieldState(field, form.formState).error
+
   return (
     <Flex position="relative" align="center">
       <SelectedIndicator />
@@ -28,11 +34,19 @@ const SelectableChipDetails = ({
         </Text>
         {type === 'text' && <TextInput field={field} autoFocus />}
         {type === 'number' && (
-          <NumberInput field={field} className="w-[35px]" autoFocus />
+          <NumberInput
+            format={format}
+            field={field}
+            className="w-[35px]"
+            autoFocus
+          />
         )}
         {type === 'select' && <SelectInput field={field} options={options} />}
         {type === 'date' && <DateInput field={field} autoFocus />}
       </Flex>
+      {error ? (
+        <Text className="pl-1 text-[12px] text-tomato-11">{error.message}</Text>
+      ) : null}
     </Flex>
   )
 }

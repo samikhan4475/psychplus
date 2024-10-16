@@ -2,7 +2,7 @@ import { z } from 'zod'
 
 type PastPsychHxWidgetSchemaType = z.infer<typeof pastPsychHxWidgetSchema>
 
-const conditionalPositiveInt = z.coerce.number().positive().int().optional()
+const conditionalPositiveInt = z.coerce.number().optional()
 
 const pastPsychHxWidgetSchema = z
   .object({
@@ -44,37 +44,36 @@ const pastPsychHxWidgetSchema = z
     otherDetails: z.ostring(),
   })
   .superRefine((data, ctx) => {
-    if (data.depression && !data.depressionAge) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        path: ['depressionAge'],
-        message: 'Required',
-      })
-    }
+    const issues = [
+      { condition: 'depression', ageField: 'depressionAge' },
+      { condition: 'anxiety', ageField: 'anxietyAge' },
+      { condition: 'schizophrenia', ageField: 'schizophreniaAge' },
+      { condition: 'bipolar', ageField: 'bipolarAge' },
+      { condition: 'disorder', ageField: 'disorderAge' },
+      { condition: 'obsessiveThinking', ageField: 'obsessiveThinkingAge' },
+      { condition: 'compulsiveBehavior', ageField: 'compulsiveBehaviorAge' },
+      { condition: 'adhd', ageField: 'adhdAge' },
+      { condition: 'autism', ageField: 'autismAge' },
+      { condition: 'eatingDisorder', ageField: 'eatingDisorderAge' },
+      { condition: 'exposureToTrauma', ageField: 'exposureToTraumaAge' },
+      { condition: 'cuttingSelfHarmBehavior', ageField: 'cuttingSelfHarmBehaviorAge' },
+      { condition: 'problemsWithSleep', ageField: 'problemsWithSleepAge' },
+      { condition: 'dementia', ageField: 'dementiaAge' },
+      { condition: 'personalityDisorder', ageField: 'personalityDisorderAge' },
+      { condition: 'intellectualDisability', ageField: 'intellectualDisabilityAge' },
+    ];
 
-    if (data.anxiety && !data.anxietyAge) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        path: ['anxietyAge'],
-        message: 'Required',
-      })
-    }
+    //We are just checking if the condition is true and the age is not provided
+    issues.forEach(({ condition, ageField }) => {
+      if (data[condition as keyof typeof data]  && !data[ageField as keyof typeof data]) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: [ageField],
+          message: 'Required',
+        });
+      }
+    });
 
-    if (data.schizophrenia && !data.schizophreniaAge) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        path: ['schizophreniaAge'],
-        message: 'Required',
-      })
-    }
-
-    if (data.bipolar && !data.bipolarAge) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        path: ['bipolarAge'],
-        message: 'Required',
-      })
-    }
   })
 
 export { pastPsychHxWidgetSchema, type PastPsychHxWidgetSchemaType }

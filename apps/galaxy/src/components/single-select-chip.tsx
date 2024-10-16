@@ -20,6 +20,7 @@ const SingleSelectChip = ({ field, details, ...props }: SingleSelectChip) => {
   const isSelected = form.watch(field) === true
 
   const toggleSelected = () => {
+    form.clearErrors(details?.field)
     form.setValue(field, !form.getValues(field))
   }
 

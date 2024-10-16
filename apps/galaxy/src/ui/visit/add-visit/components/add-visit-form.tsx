@@ -18,7 +18,7 @@ import { getUsStatesAction } from '../../actions'
 import TimedVisitForm from './timed/timed-visit-form'
 import UntimedVisitForm from './untimed/untimed-visit-form'
 
-const AddVisitForm = ({ showAddUser = true }: { showAddUser?: Boolean }) => {
+const AddVisitForm = ({ showAddUser = true }: { showAddUser?: boolean }) => {
   const [states, setStates] = useState<State[]>([])
   const form = useForm<SchemaType>({
     resolver: zodResolver(schema),

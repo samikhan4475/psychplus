@@ -73,6 +73,11 @@ const BLOCK_OPTIONS = [
     detailsField: 'dementiaAge',
   },
   {
+    label: 'Panic Attacks',
+    field: 'panicAttacks',
+    detailsField: 'panicAttacksAge',
+  },
+  {
     label: 'Personality Disorder',
     field: 'personalityDisorder',
     detailsField: 'personalityDisorderAge',

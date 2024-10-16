@@ -42,7 +42,7 @@ export const formatHeader = (header: string) => {
   return header.replace(/([a-z])([A-Z])/g, '$1 $2').replace(/_/g, ' ');
 };
 
-const truncateFileName = (fileName: string, maxLength: number = 15) => {
+const truncateFileName = (fileName: string, maxLength = 15) => {
   if (fileName.length <= maxLength) return fileName;
   return `${fileName.substring(0, maxLength)}...`;
 };

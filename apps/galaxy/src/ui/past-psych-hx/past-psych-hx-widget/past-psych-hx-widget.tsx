@@ -14,14 +14,20 @@ import {
   PsychHospitalizationsBlock,
   SuicideAttemptsBlock,
 } from './blocks'
+import { transformOut } from './data'
 import { usePastPsychHxWidgetForm } from './past-psych-hx-widget-form'
+import { PastPsychHxWidgetSchemaType } from './past-psych-hx-widget-schema'
 
 interface PastPsychHxWidgetProps {
   patientId: string
+  initialValue: PastPsychHxWidgetSchemaType
 }
 
-const PastPsychHxWidget = ({ patientId }: PastPsychHxWidgetProps) => {
-  const form = usePastPsychHxWidgetForm()
+const PastPsychHxWidget = ({
+  patientId,
+  initialValue,
+}: PastPsychHxWidgetProps) => {
+  const form = usePastPsychHxWidgetForm(initialValue)
 
   return (
     <FormProvider {...form}>
@@ -29,7 +35,7 @@ const PastPsychHxWidget = ({ patientId }: PastPsychHxWidgetProps) => {
         patientId={patientId}
         widgetId="past-psych-hx"
         title="Past Psych Hx"
-        getData={() => []}
+        getData={transformOut(patientId)}
         toggleable
         headerRight={
           <>

@@ -21,7 +21,7 @@ const NumberInput = ({
   label,
   field: fieldName,
   placeholder = '00',
-  format = '###',
+  format = '##',
   className,
   autoFocus,
   disabled,
