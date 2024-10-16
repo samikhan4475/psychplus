@@ -60,7 +60,7 @@ const InsuranceForm = memo(
       isAddFormOpen: state.isAddFormOpen,
       setAddFormOpen: state.setAddFormOpen,
     }))
-
+    const selectedInsuranceId = insurance?.id
     const [policyFrontImage, setPolicyFrontImage] = useState<File | undefined>(
       undefined,
     )
@@ -227,8 +227,8 @@ const InsuranceForm = memo(
             <Grid columns="4" gap="3">
               <InsuranceSwitch />
               <PrioritySelect />
-              <PayerSelect insurancePayers={insurancePayers} />
-              <InsurancePlanSelect payers={insurancePayers} />
+              <PayerSelect insurancePayers={insurancePayers} selectedInsuranceId={selectedInsuranceId}/>
+              <InsurancePlanSelect payers={insurancePayers} selectedInsuranceId={selectedInsuranceId}/>
 
               <MemberIDInput />
               <GroupNumberInput />

@@ -10,9 +10,10 @@ import { InsurancePayer } from '@/types'
 
 interface PayerSelectProps {
   insurancePayers: InsurancePayer[]
+  selectedInsuranceId?: string
 }
 
-const PayerSelect = ({ insurancePayers }: PayerSelectProps) => {
+const PayerSelect = ({ insurancePayers, selectedInsuranceId }: PayerSelectProps) => {
   return (
     <FormFieldContainer className="w-full">
       <FormFieldLabel className="!text-1" required>
@@ -28,6 +29,7 @@ const PayerSelect = ({ insurancePayers }: PayerSelectProps) => {
           })) ?? []
         }
         placeholder="Select payer"
+        disabled={!!selectedInsuranceId}
       />
       <FormFieldError name="payerName" />
     </FormFieldContainer>

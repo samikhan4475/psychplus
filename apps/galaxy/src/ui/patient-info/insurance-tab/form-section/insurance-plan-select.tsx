@@ -12,7 +12,13 @@ import {
 import type { InsurancePayer, InsurancePlan } from '@/types'
 import { getInsurancePayerPlans } from '../actions'
 
-const InsurancePlanSelect = ({ payers }: { payers: InsurancePayer[] }) => {
+const InsurancePlanSelect = ({
+  payers,
+  selectedInsuranceId,
+}: {
+  payers: InsurancePayer[]
+  selectedInsuranceId?: string
+}) => {
   const [loading, setLoading] = useState(false)
   const [plans, setPlans] = useState<InsurancePlan[]>()
   const payerName = useWatch({ name: 'payerName' })
@@ -49,7 +55,7 @@ const InsurancePlanSelect = ({ payers }: { payers: InsurancePayer[] }) => {
       <SelectInput
         field="insurancePlanId"
         placeholder="Select Plan"
-        disabled={loading || !plans}
+        disabled={loading || !plans || !!selectedInsuranceId}
         options={options}
         buttonClassName="border-pp-gray-2 w-full h-7 border border-solid !outline-none [box-shadow:none]"
       />
