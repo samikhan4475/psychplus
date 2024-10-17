@@ -4,6 +4,7 @@ import { getNewSortDir } from '@/utils'
 import { getInsurancePaymentListAction } from '../actions'
 import {
   GetInsurancePaymentListResponse,
+  InsurancePayment,
   InsurancePaymentSearchParams,
 } from '../types'
 
@@ -15,6 +16,7 @@ interface Store {
   page: number
   sort?: Sort
   pageCache: Record<number, GetInsurancePaymentListResponse>
+  jumpToPage: (page: number) => void
   search: (
     payload?: InsurancePaymentSearchParams,
     page?: number,
@@ -30,6 +32,7 @@ const useStore = create<Store>((set, get) => ({
   page: 1,
   pageCache: {},
   sort: undefined,
+
   search: async (
     payload?: InsurancePaymentSearchParams,
     page = 1,
@@ -87,6 +90,19 @@ const useStore = create<Store>((set, get) => ({
       },
     })
     get().search(get().payload, 1, true)
+  },
+  jumpToPage: (page: number) => {
+    if (page < 1) {
+      return
+    }
+
+    if (get().pageCache[page]) {
+      return set({
+        data: get().pageCache[page],
+        page,
+      })
+    }
+    get().search(get().payload, page)
   },
 }))
 

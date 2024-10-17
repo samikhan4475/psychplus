@@ -99,6 +99,7 @@ const RootLayout = async ({ children }: React.PropsWithChildren) => {
         CODESETS.QueryByNextDays,
         CODESETS.ClaimFiltrationDateType,
         CODESETS.PaymentSourceType,
+        CODESETS.PaymentMethod,
         CODESETS.PaymentResponsibility,
         CODESETS.VisitType,
         CODESETS.RecordStatus,

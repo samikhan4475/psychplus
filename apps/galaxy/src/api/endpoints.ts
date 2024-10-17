@@ -94,6 +94,11 @@ const UPDATE_PATIENT_POLICY_ENDPOINT = (patientId: string, policyId: string) =>
   `${API_URL}/api/patients/${patientId}/policies/${policyId}`
 const DELETE_PATIENT_POLICY_ENDPOINT = (patientId: string, policyId: string) =>
   `${API_URL}/api/patients/${patientId}/policies/${policyId}`
+const UPDATE_INSURANCE_PAYMENT_ENDPOINT = (id: string) =>
+  `${API_URL}/api/payments/${id}`
+const INSURANCE_PAYMENT_ATTACHMENTS_ENDPOINT = (paymentId: string) =>
+  `${API_URL}/api/payments/${paymentId}/attachments`
+const ADD_INSURANCE_PAYMENT_ENDPOINT = `${API_URL}/api/payments`
 const GET_PATIENT_PAYMENT_HISTORY = `${API_URL}/api/patients/all/transactions/search`
 const GET_PATIENT_TRANSACTIONS_HISTORY = (
   patientId: number,
@@ -101,6 +106,7 @@ const GET_PATIENT_TRANSACTIONS_HISTORY = (
 ) =>
   `${API_URL}/api/patients/${patientId}/transactions/${transactionId}/actions/history`
 const GET_INSURANCE_PAYMENT_LIST_ENDPOINT = `${API_URL}/api/payments/actions/search`
+const GET_PRACTICE_IDS_LIST_ENDPOINT = `${API_URL}/api/practices/actions/search`
 const DELETE_INSURANCE_PAYMENT_ENDPOINT = (id: string) =>
   `${API_URL}/api/payments/${id}`
 const GET_CLAIMS_LIST_ENDPOINT = `${API_URL}/api/claims/actions/search`
@@ -224,6 +230,9 @@ export {
   GET_INSURANCE_PAYMENT_LIST_ENDPOINT,
   GET_CLAIM_SUBMISSION_HISTORY_DETAIL,
   DELETE_INSURANCE_PAYMENT_ENDPOINT,
+  ADD_INSURANCE_PAYMENT_ENDPOINT,
+  UPDATE_INSURANCE_PAYMENT_ENDPOINT,
+  INSURANCE_PAYMENT_ATTACHMENTS_ENDPOINT,
+  GET_PRACTICE_IDS_LIST_ENDPOINT,
   GET_ORGANIZATION_ROLES,
-
 }

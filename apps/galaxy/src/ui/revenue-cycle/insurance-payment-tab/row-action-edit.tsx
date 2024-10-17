@@ -1,22 +1,13 @@
 'use client'
 
-import { Pencil1Icon } from '@radix-ui/react-icons'
-import { IconButton } from '@radix-ui/themes'
 import { type PropsWithRow } from '@/components'
+import { InsurancePaymentDialog } from '../dialogs'
 import { InsurancePayment } from '../types'
 
 const RowActionEdit = ({
   row: { original: record },
 }: PropsWithRow<InsurancePayment>) => {
-  const onEdit = () => {
-    // modal open code
-  }
-
-  return (
-    <IconButton size="1" color="gray" variant="ghost" onClick={onEdit}>
-      <Pencil1Icon width={16} height={16} className="text-pp-gray-1" />
-    </IconButton>
-  )
+  return <InsurancePaymentDialog data={record} />
 }
 
 export { RowActionEdit }

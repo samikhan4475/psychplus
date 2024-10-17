@@ -82,9 +82,9 @@ interface InsurancePayment {
   isDuplicate: boolean
   insuranceName: string
   checkNumber: string
-  checkDate: Date
-  receivedDate: Date
-  depositDate: Date
+  checkDate: string
+  receivedDate: string
+  depositDate: string
   patientId: number
   payerId: string
   receiverId: string
@@ -128,6 +128,11 @@ interface InsurancePaymentSearchParams {
   paymentType?: string
 }
 
+interface PracticeList {
+  id: string
+  displayName: string
+}
+
 export {
   RevenueCycleTab,
   type ClaimListSearchParams,
@@ -135,4 +140,6 @@ export {
   type InsurancePayment,
   type GetInsurancePaymentListResponse,
   type InsurancePaymentSearchParams,
+  type PaymentAttachments,
+  type PracticeList,
 }
