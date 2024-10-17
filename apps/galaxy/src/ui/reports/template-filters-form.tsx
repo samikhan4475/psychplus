@@ -39,7 +39,7 @@ const DynamicTemplateFilters = () => {
   const { selectedTemplate, templateFilters, setGeneratedReport } = useStore();
   const codesetIndex = useGlobalStore((state) => state.codesets);
 
-  const reportTemplateFilters: TemplateParameter[] = selectedTemplate?.reportTemplateParameters || [];
+  const reportTemplateFilters: TemplateParameter[] = selectedTemplate?.parameters  || [];
   const codeParametersType = templateFilters?.codes || [];
 
   const form = useForm<SchemaType>({

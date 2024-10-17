@@ -1,10 +1,15 @@
 'use client'
 
 import { Button, ChevronDownIcon, DropdownMenu, Flex } from '@radix-ui/themes'
+import { useState } from 'react'
+import { ScheduleReportDialog } from './schedule-report-dialog'
 
 const RunReportButton = () => {
-
+  const [open, setOpen] = useState(false)
+  const onOpen = () => setOpen(true)
+  const onClose = () => setOpen(false)
   return (
+    <>
     <Flex align="center" className="md:gap-x-[1px] lg:gap-x-[0.5px]">
       <Button
         type="submit"
@@ -20,10 +25,12 @@ const RunReportButton = () => {
         </DropdownMenu.Trigger>
         <DropdownMenu.Content>
           <DropdownMenu.Item>Run in the background</DropdownMenu.Item>
-          <DropdownMenu.Item>Schedule Report</DropdownMenu.Item>
+          <DropdownMenu.Item onClick={onOpen}>Schedule Report</DropdownMenu.Item>
         </DropdownMenu.Content>
       </DropdownMenu.Root>
     </Flex>
+    <ScheduleReportDialog open={open} onClose={onClose} />
+    </>
   )
 }
 

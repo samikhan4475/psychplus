@@ -7,7 +7,7 @@ interface Template {
   reportCategoryCode: string
   isAdhocAllowed: boolean
   resourceStatus: string
-  reportTemplateParameters: []
+  parameters: []
 }
 
 interface CodeAttributes {
@@ -53,4 +53,16 @@ export enum STATUS {
   INACTIVE = 'Inactive',
 }
 
+export enum INTERVAL {
+  DAY = 'day',
+  WEEK = 'week',
+  MONTH = 'month',
+  YEAR = 'year'
+}
+export enum REPEAT_INTERVAL {
+  NOREPEAT = 'notrepeat',
+  ONE = '1',
+  TWO = '2',
+  THREE = '3'
+}
 export type { Template, Parameter, CodeSetIndex, ReportFilterParameters,ParameterCodeSet }
