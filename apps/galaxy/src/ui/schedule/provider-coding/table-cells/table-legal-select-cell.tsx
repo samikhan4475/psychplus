@@ -1,10 +1,10 @@
 import { CodesetSelectCell, PropsWithRow } from '@/components'
 import { CODESETS } from '@/constants'
-import { Appointment } from '@/types'
+import { MergedRecord } from '../types'
 
 const LegalSelectCell = ({
   row: { original: appointment },
-}: PropsWithRow<Appointment>) => {
+}: PropsWithRow<MergedRecord>) => {
   return (
     <CodesetSelectCell
       codeset={CODESETS.LegalStatus}

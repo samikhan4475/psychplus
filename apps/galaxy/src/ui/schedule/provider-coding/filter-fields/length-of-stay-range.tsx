@@ -21,14 +21,14 @@ const LengthOfStayRange = () => {
         placeholder="From"
         size="1"
         type="number"
-        {...form.register('losFrom')}
+        {...form.register('lengthOfStayMin')}
       />
       <TextField.Root
         className="h-6"
         placeholder="To"
         size="1"
         type="number"
-        {...form.register('losTo')}
+        {...form.register('lengthOfStayMax')}
       />
     </FormFieldContainer>
   )

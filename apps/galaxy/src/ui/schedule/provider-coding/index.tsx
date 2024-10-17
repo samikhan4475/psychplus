@@ -1,1 +1,1 @@
-export * from "./filter-fields/provider-coding"
+export * from "./provider-coding"

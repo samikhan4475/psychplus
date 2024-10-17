@@ -54,7 +54,7 @@ const ScheduleView = () => {
         <SchedulerView />
       </TabsContent>
       <TabsContent value={TabValue.ProviderCoding}>
-      <ProviderCoding />
+        <ProviderCoding />
       </TabsContent>
       <TabsContent value={TabValue.Rounding}>
         <RoundingView />

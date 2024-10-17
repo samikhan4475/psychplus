@@ -15,7 +15,7 @@ const VisitTypeDropdown = () => {
       <FormFieldLabel>Visit Type</FormFieldLabel>
       <CodesetSelect
         name="visitType"
-        codeset={CODESETS.AppointmentStatus}
+        codeset={CODESETS.VisitType}
         size="1"
         className="flex-1"
       />

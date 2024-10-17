@@ -14,7 +14,7 @@ const LegalStatusDropdown = () => {
     <FormFieldContainer>
       <FormFieldLabel>Legal</FormFieldLabel>
       <CodesetSelect
-        name="VerificationStatus"
+        name="legalStatus"
         codeset={CODESETS.LegalStatus}
         size="1"
         className="flex-1"

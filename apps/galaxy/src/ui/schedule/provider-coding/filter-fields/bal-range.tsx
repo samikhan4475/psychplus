@@ -18,12 +18,14 @@ const BalanceRange = () => {
       <TextField.Root
         size="1"
         placeholder="$ From"
-        {...form.register('balanceFrom')}
+        type="number"
+        {...form.register('balanceDueMin')}
       />
       <TextField.Root
         size="1"
         placeholder="$ To"
-        {...form.register('balanceTo')}
+        type="number"
+        {...form.register('balanceDueMax')}
       />
     </FormFieldContainer>
   )

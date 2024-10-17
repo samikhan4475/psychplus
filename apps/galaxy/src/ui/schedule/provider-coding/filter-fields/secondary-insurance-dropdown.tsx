@@ -1,24 +1,10 @@
 'use client'
 
-import { FormFieldLabel, SelectInput } from '@/components'
-import { FormFieldContainer } from '../../shared'
+import { AsyncSelect, FormFieldLabel } from '@/components'
 import { useFiltersContext } from '../../context'
+import { FormFieldContainer } from '../../shared'
 import { SchedulerFilters } from '../../types'
-
-const options = [
-  {
-    label: 'Secondary Insurance 1',
-    value: 'Secondary Insurance 1',
-  },
-  {
-    label: 'Secondary Insurance 2',
-    value: 'Secondary Insurance 2',
-  },
-  {
-    label: 'Secondary Insurance 3',
-    value: 'Secondary Insurance 3',
-  },
-]
+import { getInsurancePlanOptionsAction } from '../../actions'
 
 const SecondaryInsuranceDropdown = () => {
   const { filters } = useFiltersContext()
@@ -26,11 +12,11 @@ const SecondaryInsuranceDropdown = () => {
 
   return (
     <FormFieldContainer className="h-full">
-      <FormFieldLabel>Secondary Insurance</FormFieldLabel>
-      <SelectInput
-        field="secondaryInsurance"
+      <FormFieldLabel className='w-2/4'>Secondary Insurance</FormFieldLabel>
+      <AsyncSelect
+        field="secondaryInsuranceName"
         placeholder="Select"
-        options={options}
+        fetchOptions={getInsurancePlanOptionsAction}
         buttonClassName="w-full h-6"
         className="h-full flex-1"
       />

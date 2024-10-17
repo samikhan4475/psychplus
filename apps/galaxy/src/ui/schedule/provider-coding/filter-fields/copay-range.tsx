@@ -19,12 +19,14 @@ const CoPayRange = () => {
       <TextField.Root
         size="1"
         placeholder="$ From"
-        {...form.register('copayFrom')}
+        type="number"
+        {...form.register('copayDueMin')}
       />
       <TextField.Root
         size="1"
         placeholder="$ To"
-        {...form.register('copayTo')}
+        type="number"
+        {...form.register('copayDueMax')}
       />
     </FormFieldContainer>
   )

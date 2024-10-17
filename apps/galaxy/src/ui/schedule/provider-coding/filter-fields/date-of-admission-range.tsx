@@ -12,8 +12,8 @@ const DateOfAdmissionRange = () => {
   return (
     <FormFieldContainer>
       <FormFieldLabel>DOA</FormFieldLabel>
-      <DatePickerInput field="doaFrom" />
-      <DatePickerInput field="doaTo" />
+      <DatePickerInput field="dateOfAdmissionStart" />
+      <DatePickerInput field="dateOfAdmissionEnd" />
     </FormFieldContainer>
   )
 }

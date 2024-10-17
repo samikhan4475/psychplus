@@ -7,8 +7,8 @@ const LastCoverageDateRange = () => {
   return (
     <FormFieldContainer>
       <FormFieldLabel>LCD</FormFieldLabel>
-      <DatePickerInput field="lcdFrom" />
-      <DatePickerInput field="lcdTo" />
+      <DatePickerInput field="lastCoverageDateStart" />
+      <DatePickerInput field="lastCoverageDateEnd" />
     </FormFieldContainer>
   )
 }

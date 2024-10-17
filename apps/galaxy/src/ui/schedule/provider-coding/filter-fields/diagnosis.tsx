@@ -20,7 +20,7 @@ const Diagnosis = () => {
         className="flex-1"
         placeholder="Diagnosis"
         size="1"
-        {...form.register('diagnosis')}
+        {...form.register('diagnosisCode')}
       />
     </FormFieldContainer>
   )

@@ -4,15 +4,126 @@ import { Sort } from '@/types'
 import { getSortDir } from '@/utils'
 import {
   ActionsCell,
-  GroupSelectCell,
-  LegalSelectCell,
   RoomSelectCell,
-  UnitSelectCell,
 } from '../shared/table-cells'
-import { ProviderCoding } from '../types'
+import { GroupSelectCell, UnitSelectCell } from './table-cells'
+import { CptCodeCell } from './table-cells/table-cpt-code-cell'
+import { DiagnosisCodesCell } from './table-cells/table-diagnosis-cell'
+import { LegalSelectCell } from './table-cells/table-legal-select-cell'
+import { NoteSignedCell } from './table-cells/table-note-signed-cell'
+import { TableTextCell } from './table-cells/table-text-field-cell'
+import { VisitMediumSelectCell } from './table-cells/table-visit-medium-cell'
+import { VisitSequenceSelectCell } from './table-cells/table-visit-select-cell'
+import { VisitStatusSelectCell } from './table-cells/table-visit-status-cell'
 import { ToggleVisibilityColumnHeader } from './toggle-visibility-column-header'
+import { MergedRecord, WeekDay } from './types'
 
-const columns = (sort?: Sort): ColumnDef<ProviderCoding>[] => {
+const generateColumns = (weekDays: WeekDay[]): ColumnDef<MergedRecord>[] => {
+  return weekDays.map((day) => ({
+    id: day.id,
+    accessorKey: day.id,
+    header: ({ column }) => (
+      <ToggleVisibilityColumnHeader
+        className="!text-black mx-auto justify-center !font-medium"
+        column={column}
+        label={day.label}
+      />
+    ),
+    enableHiding: false,
+    columns: [
+      {
+        accessorKey: `${day.id}.cptCodes`,
+        header: ({ column }) => (
+          <ColumnHeader
+            className="!text-black justify-center !font-medium"
+            column={column}
+            label="CPT Codes"
+          />
+        ),
+        cell: ({ row }) => <CptCodeCell row={row} day={day} />,
+        enableHiding: false,
+      },
+
+      {
+        accessorKey: `${day.id}.visitType`,
+        header: ({ column }) => (
+          <ColumnHeader
+            className="!text-black justfy-center !font-medium"
+            column={column}
+            label="Visit Type"
+          />
+        ),
+        cell: ({ row }) => <TableTextCell row={row} day={day} />,
+        enableHiding: true,
+      },
+      {
+        accessorKey: `${day.id}.visitSequence`,
+        header: ({ column }) => (
+          <ColumnHeader
+            className="!text-black justfy-center !font-medium"
+            column={column}
+            label="Sequence"
+          />
+        ),
+        cell: ({ row }) => <VisitSequenceSelectCell row={row} day={day} />,
+        enableHiding: true,
+      },
+      {
+        accessorKey: `${day.id}.visitMedium`,
+        header: ({ column }) => (
+          <ColumnHeader
+            className="!text-black justfy-center !font-medium"
+            column={column}
+            label="Medium"
+          />
+        ),
+
+        cell: ({ row }) => <VisitMediumSelectCell row={row} day={day} />,
+        enableHiding: true,
+      },
+      {
+        accessorKey: `${day.id}.visitStatus`,
+        header: ({ column }) => (
+          <ColumnHeader
+            className="!text-black justfy-center !font-medium"
+            column={column}
+            label="Status"
+          />
+        ),
+        cell: ({ row }) => <VisitStatusSelectCell row={row} day={day} />,
+        enableHiding: true,
+      },
+      {
+        accessorKey: `${day.id}.diagnosis`,
+        header: ({ column }) => (
+          <ColumnHeader
+            className="!text-black justfy-center !font-medium"
+            column={column}
+            label="Diagnosis"
+          />
+        ),
+        cell: ({ row }) => <DiagnosisCodesCell row={row} day={day} />,
+        enableHiding: true,
+      },
+      {
+        accessorKey: `${day.id}.isNoteSigned`,
+        header: ({ column }) => (
+          <ColumnHeader
+            className="!text-black justfy-center !font-medium"
+            column={column}
+            label="Note Signed"
+          />
+        ),
+        cell: ({ row }) => <NoteSignedCell row={row} day={day} />,
+        enableHiding: true,
+      },
+    ],
+  }))
+}
+const columns = (
+  currentWeekDays: WeekDay[],
+  sort?: Sort,
+): ColumnDef<MergedRecord>[] => {
   return [
     {
       id: 'patient-name',
@@ -150,7 +261,7 @@ const columns = (sort?: Sort): ColumnDef<ProviderCoding>[] => {
           label="Unit"
         />
       ),
-      cell: ({ row }) => <UnitSelectCell />,
+      cell: ({ row }) => <UnitSelectCell row={row} />,
       enableHiding: true,
     },
     {
@@ -180,7 +291,7 @@ const columns = (sort?: Sort): ColumnDef<ProviderCoding>[] => {
           label="Group"
         />
       ),
-      cell: ({ row }) => <GroupSelectCell />,
+      cell: ({ row }) => <GroupSelectCell row={row} />,
       enableHiding: true,
     },
     {
@@ -213,7 +324,7 @@ const columns = (sort?: Sort): ColumnDef<ProviderCoding>[] => {
           label="DOA"
         />
       ),
-      cell: ({ row }) => <TextCell>{row.original.dateOfAddmission}</TextCell>,
+      cell: ({ row }) => <TextCell>{row.original.dateOfAdmission}</TextCell>,
       enableHiding: true,
     },
     {
@@ -275,123 +386,16 @@ const columns = (sort?: Sort): ColumnDef<ProviderCoding>[] => {
           label="Legal"
         />
       ),
-      cell: ({ row }) => <TextCell>{row.original.legalStatus}</TextCell>, //<LegalSelectCell />,
+      cell: ({ row }) => <LegalSelectCell row={row} />,
       enableHiding: true,
     },
-    {
-      id: 'date-range',
-      accessorKey: 'date-range',
-      header: ({ column }) => (
-        <ToggleVisibilityColumnHeader
-          className="!text-black justfy-center mx-auto !font-medium"
-          column={column}
-          label="Wed 04/16"
-        />
-      ),
-      enableHiding: false,
-      columns: [
-        {
-          accessorKey: 'cptCodes',
-          header: ({ column }) => (
-            <ColumnHeader
-              className="!text-black justfy-center !font-medium"
-              column={column}
-              label="CPT Codes"
-            />
-          ),
-          cell: ({ row }) => <TextCell>{row.original.cptCodes}</TextCell>,
-          enableHiding: false,
-        },
-        {
-          accessorKey: 'visitType',
-          header: ({ column }) => (
-            <ColumnHeader
-              className="!text-black justfy-center !font-medium"
-              column={column}
-              label="Visit Type"
-            />
-          ),
-          cell: ({ row }) => <TextCell>{row.original.visitType}</TextCell>,
-          enableHiding: true,
-        },
-        {
-          accessorKey: 'visitSequence',
-          header: ({ column }) => (
-            <ColumnHeader
-              sortable
-              sortDir={getSortDir(column.id, sort)}
-              className="!text-black justfy-center !font-medium"
-              column={column}
-              label="Sequence"
-            />
-          ),
-          cell: ({ row }) => <TextCell>{row.original.visitSequence}</TextCell>,
-          enableHiding: true,
-        },
-        {
-          accessorKey: 'visitMedium',
-          header: ({ column }) => (
-            <ColumnHeader
-              sortable
-              sortDir={getSortDir(column.id, sort)}
-              className="!text-black justfy-center !font-medium"
-              column={column}
-              label="Medium"
-            />
-          ),
-          cell: ({ row }) => <TextCell>{row.original.visitMedium}</TextCell>,
-          enableHiding: true,
-        },
-        {
-          accessorKey: 'visitStatus',
-          header: ({ column }) => (
-            <ColumnHeader
-              sortable
-              sortDir={getSortDir(column.id, sort)}
-              className="!text-black justfy-center !font-medium"
-              column={column}
-              label="Status"
-            />
-          ),
-          cell: ({ row }) => <TextCell>{row.original.visitStatus}</TextCell>,
-          enableHiding: true,
-        },
-        {
-          id: 'diagnosis',
-          accessorKey: 'diagnosis',
-          header: ({ column }) => (
-            <ColumnHeader
-              sortable
-              sortDir={getSortDir(column.id, sort)}
-              className="!text-black justfy-center !font-medium"
-              column={column}
-              label="Diagnosis"
-            />
-          ),
-          cell: ({ row }) => <TextCell>{row.original.diagnosis}</TextCell>,
-          enableHiding: true,
-        },
-        {
-          id: 'note-signed',
-          accessorKey: 'isNoteSigned',
-          header: ({ column }) => (
-            <ColumnHeader
-              sortable
-              sortDir={getSortDir(column.id, sort)}
-              className="!text-black justfy-center !font-medium"
-              column={column}
-              label="Note Signed"
-            />
-          ),
-          cell: ({ row }) => <TextCell>{row.original.isNoteSigned}</TextCell>,
-          enableHiding: true,
-        },
-      ],
-    },
+    ...generateColumns(currentWeekDays),
     {
       id: 'actions-column',
       header: () => <ColumnHeader label="Actions" className="!font-medium" />,
-      cell: ({ row }) => <ActionsCell appointmentId={row.original.age} />,
+      cell: ({ row }) => (
+        <ActionsCell appointmentId={row.original.appointmentId || 0} />
+      ),
       enableHiding: false,
     },
   ]

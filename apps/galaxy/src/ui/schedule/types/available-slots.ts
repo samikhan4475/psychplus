@@ -254,6 +254,34 @@ interface AppointmentParams {
   noteSigned?: string
 }
 
+interface ProviderCoding {
+  name: string
+  age: number
+  gender: string
+  dob: string
+  patientStatus: string
+  service: string
+  providerType: string
+  clinicLocation: string
+  providerId: number
+  providerName: string
+  primaryInsuranceName: string
+  locationName: string
+  room: string
+  legalStatus: string
+  authorizationNumber: string
+  dateOfAddmission: string
+  lastCoverageDate: string
+  lengthOfStay: number
+  cptCodes: string[]
+  visitType: string
+  visitSequence: string
+  visitMedium: string
+  visitStatus: string
+  diagnosis: string
+  isNoteSigned: boolean
+}
+
 interface AvailableSlotsParams {
   startingDate?: string
   endingDate?: string

@@ -14,7 +14,7 @@ const InsuranceVerificationDropdown = () => {
     <FormFieldContainer>
       <FormFieldLabel>Ins Verification</FormFieldLabel>
       <CodesetSelect
-        name="VerificationStatus"
+        name="patientInsuranceVerificationStatus"
         codeset={CODESETS.VerificationStatus}
         size="1"
         className="flex-1"

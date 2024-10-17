@@ -20,13 +20,17 @@ const CoInsuranceRange = () => {
         className="h-6"
         size="1"
         placeholder="$ From"
-        {...form.register('coInsFrom')}
+        type="number"
+
+        {...form.register('coInsuranceDueMin')}
       />
       <TextField.Root
         className="h-6"
         size="1"
         placeholder="$ To"
-        {...form.register('coInsTo')}
+        type="number"
+
+        {...form.register('coInsuranceDueMax')}
       />
     </FormFieldContainer>
   )

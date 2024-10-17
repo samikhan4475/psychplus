@@ -10,7 +10,7 @@ import { Box, Button, Flex, Text } from '@radix-ui/themes'
 import { Table, type Column, type SortDirection } from '@tanstack/react-table'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { cn } from '@/utils'
-import { ProviderCoding } from '../types'
+import { MergedRecord } from './types'
 
 const renderSortIcon = (sortDir?: SortDirection | false) => {
   if (!sortDir) {
@@ -25,10 +25,9 @@ const renderSortIcon = (sortDir?: SortDirection | false) => {
 interface ArrowButtonProps {
   direction: 'left' | 'right'
   onClick?: () => void
-  sortable?: boolean
 }
 
-const ArrowButton = ({ direction, onClick, sortable }: ArrowButtonProps) => {
+const ArrowButton = ({ direction, onClick }: ArrowButtonProps) => {
   const icon =
     direction === 'left' ? (
       <ChevronLeft className="h-4 w-4" />
@@ -50,7 +49,7 @@ interface ColumnHeaderProps<TData, TValue> {
   column?: Column<TData, TValue>
   label: string
   className?: string
-  table?: Table<ProviderCoding>
+  table?: Table<MergedRecord>
   sortable?: boolean
   sortDir?: SortDirection
   onClick?: (column: string) => void
@@ -67,7 +66,9 @@ const ToggleVisibilityColumnHeader = <TData, TValue>({
   onClick,
   clientSideSort,
 }: ColumnHeaderProps<TData, TValue>) => {
-  const [arrowDirection, setArrowDirection] = useState<'right' | 'left'>('left')
+  const [arrowDirection, setArrowDirection] = useState<'right' | 'left'>(
+    'right',
+  )
 
   const toggleColumnsVisibility = (isVisible: boolean) => {
     if (column?.columns?.length) {
@@ -84,12 +85,12 @@ const ToggleVisibilityColumnHeader = <TData, TValue>({
   }, [column, table])
 
   const handleColumns = (action: 'show' | 'remove') => {
-    if (action === 'show') {
-      toggleColumnsVisibility(true)
-      setArrowDirection('left')
-    } else {
+    if (action === 'remove') {
       toggleColumnsVisibility(false)
       setArrowDirection('right')
+    } else {
+      toggleColumnsVisibility(true)
+      setArrowDirection('left')
     }
   }
 
@@ -112,13 +113,12 @@ const ToggleVisibilityColumnHeader = <TData, TValue>({
         >
           {label}
         </Text>
-        <Box >
+        <Box>
           <ArrowButton
             direction={arrowDirection}
             onClick={() =>
-              handleColumns(arrowDirection === 'right' ? 'show' : 'remove')
+              handleColumns(arrowDirection === 'left' ? 'remove' : 'show')
             }
-            sortable={false}
           />
         </Box>
       </Flex>
@@ -159,9 +159,8 @@ const ToggleVisibilityColumnHeader = <TData, TValue>({
         <ArrowButton
           direction={arrowDirection}
           onClick={() =>
-            handleColumns(arrowDirection === 'right' ? 'show' : 'remove')
+            handleColumns(arrowDirection === 'left' ? 'remove' : 'show')
           }
-          sortable={true}
         />
       </Box>
     </Flex>

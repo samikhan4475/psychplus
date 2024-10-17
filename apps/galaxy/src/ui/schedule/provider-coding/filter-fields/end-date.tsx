@@ -7,7 +7,7 @@ const EndDate = () => {
   return (
     <FormFieldContainer className="flex-1">
       <FormFieldLabel>To</FormFieldLabel>
-      <DatePickerInput field="endDate" />
+      <DatePickerInput field="endingDate" />
     </FormFieldContainer>
   )
 }

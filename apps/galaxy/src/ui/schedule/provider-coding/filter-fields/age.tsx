@@ -15,7 +15,10 @@ const Age = () => {
       <TextField.Root
         placeholder="Add Age"
         size="1"
-        {...form.register('age')}
+        type="number"
+        {...form.register('age', {
+          setValueAs: (val) => val || undefined,
+        })}
       />
     </FormFieldContainer>
   )
