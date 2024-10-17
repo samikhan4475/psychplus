@@ -12,6 +12,8 @@ enum QuickNoteSectionName {
   QuickNoteSectionMoca = 'QuicknoteSectionQuestionnaireMoca',
   QuickNoteSectionDiagnosis = 'QuicknoteSectionDiagnosis',
   QuickNoteSectionHospital = 'QuicknoteSectionHospital',
+  QuickNoteSectionPastPsychHx = 'QuicknoteSectionPastPsychHx',
+  QuickNoteSectionSocialHx= 'QuicknoteSectionSocialHx',
 }
 
 export { QuickNoteSectionName }

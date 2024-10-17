@@ -1,7 +1,7 @@
 import { QuickNoteSectionItem } from '@/types'
-import { QUICKNOTE_SECTION_NAME } from './constants'
-import { PastPsychHxWidgetSchemaType } from './past-psych-hx-widget-schema'
+import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { sanitizeFormData } from '@/utils'
+import { PastPsychHxWidgetSchemaType } from './past-psych-hx-widget-schema'
 
 
 const transformIn = (
@@ -72,7 +72,7 @@ const transformOut =
 
     const QuickNotesPayload = {
       pid: Number(patientId),
-      sectionName: QUICKNOTE_SECTION_NAME,
+      sectionName: QuickNoteSectionName.QuickNoteSectionPastPsychHx,
     }
 
     const formData = sanitizeFormData(schema)

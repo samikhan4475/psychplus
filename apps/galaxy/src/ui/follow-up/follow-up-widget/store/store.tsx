@@ -37,7 +37,6 @@ const useStore = create<StoreState>()(
             loading: false,
           })
         }
-        console.log('result', result.data)
         set({
           data: result.data,
           loading: false,

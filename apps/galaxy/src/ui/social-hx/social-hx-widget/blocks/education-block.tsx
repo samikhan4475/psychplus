@@ -2,7 +2,7 @@ import { RadioSelectSection } from '@/components'
 
 const BLOCK_ID = 'professionalEducation'
 
-const BLOCK_TITLE = 'Education'
+const BLOCK_TITLE = 'Professional Education'
 
 const BLOCK_OPTIONS = [
   {

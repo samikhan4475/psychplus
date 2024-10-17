@@ -5,18 +5,11 @@ import {
   type SocialHxWidgetSchemaType,
 } from './social-hx-widget-schema'
 
-const useSocialHxWidgetForm = () => {
+const useSocialHxWidgetForm = (initialValue:SocialHxWidgetSchemaType) => {
   const form = useForm<SocialHxWidgetSchemaType>({
     resolver: zodResolver(socialHxWidgetSchema),
     reValidateMode: 'onChange',
-    defaultValues: {
-      relationshipStatus: undefined,
-      professionalEducation: undefined,
-      employed: undefined,
-      legalHistory: undefined,
-      living: undefined,
-      traumaHx: undefined,
-    },
+    defaultValues: initialValue,
   })
 
   return form

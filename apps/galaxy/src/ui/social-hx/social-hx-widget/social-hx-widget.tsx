@@ -16,14 +16,18 @@ import {
   RelationshipStatusBlock,
   TraumaHxBlock,
 } from './blocks'
+import { OtherBlock } from './blocks/other-block'
+import { transformOut } from './data'
 import { useSocialHxWidgetForm } from './social-hx-widget-form'
+import { SocialHxWidgetSchemaType } from './social-hx-widget-schema'
 
 interface SocialHxWidgetProps {
   patientId: string
+  initialValue: SocialHxWidgetSchemaType
 }
 
-const SocialHxWidget = ({ patientId }: SocialHxWidgetProps) => {
-  const form = useSocialHxWidgetForm()
+const SocialHxWidget = ({ patientId, initialValue }: SocialHxWidgetProps) => {
+  const form = useSocialHxWidgetForm(initialValue)
 
   return (
     <FormProvider {...form}>
@@ -31,7 +35,7 @@ const SocialHxWidget = ({ patientId }: SocialHxWidgetProps) => {
         patientId={patientId}
         widgetId="social-hx"
         title="Social Hx"
-        getData={() => []}
+        getData={transformOut(patientId)}
         toggleable
         headerRight={
           <>
@@ -48,6 +52,7 @@ const SocialHxWidget = ({ patientId }: SocialHxWidgetProps) => {
         <LegalHistoryBlock />
         <LivingBlock />
         <TraumaHxBlock />
+        <OtherBlock />
       </WidgetFormContainer>
     </FormProvider>
   )

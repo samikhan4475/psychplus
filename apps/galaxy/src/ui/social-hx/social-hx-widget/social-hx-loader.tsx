@@ -2,20 +2,18 @@ import * as api from '@/api'
 import { QuickNoteSectionItem } from '@/types'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { transformIn } from './data'
-import { PastPsychHxWidget } from './past-psych-hx-widget'
+import { SocialHxWidget } from './social-hx-widget'
 
-interface PastPsychHxWidgetLoaderProps {
+interface SocialHxWidgetLoaderProps {
   patientId: string
 }
 
-const PastPsychHxLoader = async ({
-  patientId,
-}: PastPsychHxWidgetLoaderProps) => {
+const SocialHxLoader = async ({ patientId }: SocialHxWidgetLoaderProps) => {
   const response = await api.POST<QuickNoteSectionItem[]>(
     api.NOTE_DETAILS_SEARCH_ENDPOINT,
     {
       patientId: Number(patientId),
-      sectionName: [QuickNoteSectionName.QuickNoteSectionPastPsychHx],
+      sectionName: [QuickNoteSectionName.QuickNoteSectionSocialHx],
       isLatest: true,
     },
   )
@@ -26,7 +24,7 @@ const PastPsychHxLoader = async ({
 
   const initialValue = transformIn(response.data)
 
-  return <PastPsychHxWidget patientId={patientId} initialValue={initialValue} />
+  return <SocialHxWidget patientId={patientId} initialValue={initialValue} />
 }
 
-export { PastPsychHxLoader }
+export { SocialHxLoader }
