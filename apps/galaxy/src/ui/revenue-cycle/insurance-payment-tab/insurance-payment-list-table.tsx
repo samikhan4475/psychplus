@@ -16,6 +16,7 @@ import { getSortDir } from '@/utils'
 import { formatDateTime } from '@/utils/date'
 import { InsurancePayment } from '../types'
 import { ActionsCell } from './actions-cell'
+import { CheckNumberCell } from './check-number-cell'
 import { useStore } from './store'
 
 const columns = (
@@ -36,7 +37,11 @@ const columns = (
         />
       ),
       cell: ({ row }) => {
-        return <TextCell>{row.original.checkNumber}</TextCell>
+        return (
+          <CheckNumberCell row={row}>
+            {row.original.checkNumber}
+          </CheckNumberCell>
+        )
       },
     },
     {

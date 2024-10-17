@@ -57,19 +57,6 @@ interface ClaimServiceLinePayment {
   serviceLinePaymentAdjustments: ServiceLinePaymentAdjustment[]
 }
 
-interface ClaimPayment {
-  id: string
-  metadata: Metadata
-  recordStatus: string
-  paymentId: string
-  claimId: string
-  paymentSource: string
-  insurancePolicyId: string
-  processedAsCode: string
-  insuranceInternalControlNumber: string
-  claimServiceLinePayments: ClaimServiceLinePayment[]
-}
-
 interface InsurancePayment {
   id: string
   metadata: Metadata
@@ -97,7 +84,18 @@ interface InsurancePayment {
   paymentAttachments: PaymentAttachments[]
   claimPayments: ClaimPayment[]
 }
-
+interface ClaimPayment {
+  id: string
+  metadata: Metadata
+  recordStatus: string
+  paymentId: string
+  claimId: string
+  paymentSource: string
+  insurancePolicyId: string
+  processedAsCode: string
+  insuranceInternalControlNumber: string
+  claimServiceLinePayments: ClaimServiceLinePayment[]
+}
 interface GetClaimsListResponse {
   claims: Claim[]
   total: number

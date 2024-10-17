@@ -1,0 +1,1 @@
+export * from './insurance-payment-detail-view'

@@ -3,13 +3,13 @@
 import * as Tabs from '@radix-ui/react-tabs'
 import { Box, Flex } from '@radix-ui/themes'
 import { TabsTrigger } from '@/components'
-import { CheckDetailView } from './check-detail-tab'
 import { ClaimDetailView } from './claim-detail-tab'
 import { ClaimTabView } from './claim-tab'
 import { InsurancePaymentTabView } from './insurance-payment-tab'
 import { useStore } from './store'
 import { SubmissionTabView } from './submission-tab'
 import { RevenueCycleTab } from './types'
+import { InsurancePaymentDetailView } from './insurance-payment-detail-tab'
 
 const RevenueCycleTabs = () => {
   const { activeTab, closeableTabs, closeTab, setActiveTab } = useStore(
@@ -30,7 +30,7 @@ const RevenueCycleTabs = () => {
         defaultValue={RevenueCycleTab.Claim}
         value={activeTab}
         onValueChange={setActiveTab}
-        className="flex w-full flex-col"
+        className="flex flex-col w-full"
       >
         <Flex className="z-50">
           <Tabs.List>
@@ -75,7 +75,7 @@ const RevenueCycleTabs = () => {
           <ClaimDetailView claimId={tabId} />
         </TabsContent>
         <TabsContent value={`${RevenueCycleTab.CheckDetails} ${tabId}`}>
-          <CheckDetailView checkId={tabId} />
+          <InsurancePaymentDetailView checkId={tabId} />
         </TabsContent>
       </Tabs.Root>
     </Box>
