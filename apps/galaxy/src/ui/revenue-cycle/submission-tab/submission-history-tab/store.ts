@@ -1,20 +1,18 @@
 import { create } from 'zustand'
 import { Sort } from '@/types'
 import { getNewSortDir } from '@/utils'
-import { GetClaimsListResponse } from '../types'
-import { SchemaType } from './submission-filter-form'
-import { TabValue } from './types'
-import { getClaimsListAction } from '../actions'
-
+import { SchemaType } from './submission-history-filter-form'
+import { SearchSubmissionHistoryData } from './types'
+import { getSubmissionHistory } from '../../actions/get-submission-history'
 
 interface Store {
-  data?: GetClaimsListResponse
+  data?: SearchSubmissionHistoryData
   error?: string
   sort?: Sort
   loading?: boolean
   page: number
   formValues?: Partial<SchemaType>
-  pageCache: Record<number, GetClaimsListResponse>
+  pageCache: Record<number, SearchSubmissionHistoryData>
   search: (
     formValues?: Partial<SchemaType>,
     page?: number,
@@ -24,12 +22,8 @@ interface Store {
   jumpToPage: (page: number) => void
   next: () => void
   prev: () => void
-  selectedRows: string[]
-  setSelectedRows: (value: string[]) => void
-  selectedTab: TabValue | string
-  setSelectedTab: (value: string) => void
-  reset: () => void
 }
+
 const useStore = create<Store>((set, get) => ({
   data: undefined,
   error: undefined,
@@ -48,23 +42,46 @@ const useStore = create<Store>((set, get) => ({
       loading: true,
       formValues,
     })
-    const result = await getClaimsListAction({
+
+    const result = await getSubmissionHistory({
       ...formValues,
       page,
       sort: get().sort,
     })
+
     if (result.state === 'error') {
       return set({
         error: result.error,
         loading: false,
       })
     }
+
     set({
       data: result.data,
       loading: false,
       pageCache: reset
         ? { [page]: result.data }
         : { ...get().pageCache, [page]: result.data },
+      page,
+    })
+  },
+  next: () => {
+    const page = get().page + 1
+
+    if (get().pageCache[page]) {
+      return set({
+        data: get().pageCache[page],
+        page,
+      })
+    }
+
+    get().search(get().formValues, page)
+  },
+  prev: () => {
+    const page = get().page - 1
+
+    set({
+      data: get().pageCache[page],
       page,
     })
   },
@@ -81,23 +98,6 @@ const useStore = create<Store>((set, get) => ({
     }
     get().search(get().formValues, page)
   },
-  next: () => {
-    const page = get().page + 1
-    if (get().pageCache[page]) {
-      return set({
-        data: get().pageCache[page],
-        page,
-      })
-    }
-    get().search(get().formValues, page)
-  },
-  prev: () => {
-    const page = get().page - 1
-    set({
-      data: get().pageCache[page],
-      page,
-    })
-  },
   sortData: (column) => {
     set({
       sort: {
@@ -105,21 +105,8 @@ const useStore = create<Store>((set, get) => ({
         direction: getNewSortDir(column, get().sort),
       },
     })
+
     get().search(get().formValues, 1, true)
   },
-  reset: () =>
-    set({
-      data: undefined,
-      error: undefined,
-      loading: undefined,
-      sort: undefined,
-      page: 1,
-      formValues: undefined,
-      pageCache: {},
-    }),
-  selectedTab: TabValue.PaperSubmission,
-  setSelectedTab: (currentTab) => set({ selectedTab: currentTab }),
-  selectedRows: [],
-  setSelectedRows: (selectedRows) => set({ selectedRows }),
 }))
 export { useStore }

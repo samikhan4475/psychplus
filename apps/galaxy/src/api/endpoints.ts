@@ -104,6 +104,9 @@ const GET_INSURANCE_PAYMENT_LIST_ENDPOINT = `${API_URL}/api/payments/actions/sea
 const DELETE_INSURANCE_PAYMENT_ENDPOINT = (id: string) =>
   `${API_URL}/api/payments/${id}`
 const GET_CLAIMS_LIST_ENDPOINT = `${API_URL}/api/claims/actions/search`
+const GET_CLAIM_SUBMISSION_HISTORY = `${API_URL}/api/claimssubmissions/batches/actions/search`
+const GET_CLAIM_SUBMISSION_HISTORY_DETAIL = (batchId: string) =>
+  `${API_URL}/api/claimssubmissions/batches/${batchId}/details/actions/search?isIncludeMetadataResourceChangeControl=true`
 const DELETE_CLAIM_ENDPOINT = (id: string) => `${API_URL}/api/claims/${id}`
 const GET_PATIENT_POLICY_HISTORY_ENDPOINT = (
   patientId: string,
@@ -197,6 +200,7 @@ export {
   DELETE_PATIENT_CREDIT_CARD,
   ADD_PATIENT_CREDIT_CARD,
   GET_CLAIMS_LIST_ENDPOINT,
+  GET_CLAIM_SUBMISSION_HISTORY,
   DELETE_CLAIM_ENDPOINT,
   GET_PATIENT_POLICIES,
   ADD_PATIENT_POLICY_ENDPOINT,
@@ -218,6 +222,7 @@ export {
   UPDATE_PATIENT_PROFILE_IMAGE_ENDPOINT,
   UPDATE_PATIENT_DRIVING_LICENSE_IMAGE_ENDPOINT,
   GET_INSURANCE_PAYMENT_LIST_ENDPOINT,
+  GET_CLAIM_SUBMISSION_HISTORY_DETAIL,
   DELETE_INSURANCE_PAYMENT_ENDPOINT,
   GET_ORGANIZATION_ROLES,
 
