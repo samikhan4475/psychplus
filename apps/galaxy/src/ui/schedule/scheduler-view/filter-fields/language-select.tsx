@@ -10,7 +10,7 @@ const LanguageSelect = () => {
       <FormFieldLabel>Language</FormFieldLabel>
       <CodesetSelect
         name="language"
-        codeset={CODESETS.CommonLanguages}
+        codeset={CODESETS.Language}
         size="1"
         className="flex-1"
       />
