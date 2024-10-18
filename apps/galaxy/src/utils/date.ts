@@ -44,10 +44,11 @@ const getCalendarDateLabel = (date: DateValue) => {
   return `${date.year}-${month}-${day}`
 }
 
-const getTimeLabel = (dateString: string) => {
+const getTimeLabel = (dateString: string, hour12 = true) => {
   return new DateFormatter('en-US', {
     hour: 'numeric',
     minute: 'numeric',
+    hour12,
   }).format(new Date(dateString))
 }
 

@@ -46,6 +46,10 @@ interface PatientResponse {
     staffId: number
     patientId: number
   }
+  dob: string
+  gender: string
+  patientMrn: string
+  patientStatus: string
 }
 
 export type { PatientBody, PatientResponse }

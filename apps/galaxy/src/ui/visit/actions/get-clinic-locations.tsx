@@ -1,11 +1,12 @@
 'use server'
 
 import * as api from '@/api'
+import { SelectOptionType } from '@/types'
 import { Clinic } from '../types'
 
 const getClinicLocations = async (
   stateId: string,
-): Promise<api.ActionResult<Clinic[]>> => {
+): Promise<api.ActionResult<SelectOptionType[]>> => {
   const url = new URL(api.CLINIC_LOCATIONS_ENDPOINT)
   url.searchParams.append('stateId', String(stateId))
 
@@ -18,7 +19,12 @@ const getClinicLocations = async (
     }
   }
 
-  return { state: 'success', data: response.data }
+  const transformedData = response?.data?.map((item) => ({
+    label: item.name,
+    value: item.id,
+  }))
+
+  return { state: 'success', data: transformedData }
 }
 
 export { getClinicLocations }

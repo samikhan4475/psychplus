@@ -1,7 +1,7 @@
 'use client'
 
 import { TextField } from '@radix-ui/themes'
-import { useFormContext } from 'react-hook-form'
+import { useFormContext, useWatch } from 'react-hook-form'
 import {
   FormFieldContainer,
   FormFieldError,
@@ -11,19 +11,22 @@ import { SchemaType } from '../../schema'
 
 const AuthNumberInput = () => {
   const form = useFormContext<SchemaType>()
-  const legal = form.watch('legal')
+  const legal = useWatch({
+    control: form.control,
+    name: 'legal',
+  })
 
   return (
     <FormFieldContainer className="flex-1 gap-[3px]">
-      <FormFieldLabel required>Auth #</FormFieldLabel>
+      <FormFieldLabel>Ins. Authorization #</FormFieldLabel>
       <TextField.Root
         size="1"
-        {...form.register('authNumber')}
+        {...form.register('insuranceAuthorizationNumber')}
         placeholder="Enter Auth Number"
         disabled={!legal}
-        className="h-[21px]"
+        className="h-6 w-full"
       />
-      <FormFieldError name="authNumber" />
+      <FormFieldError name="insuranceAuthorizationNumber" />
     </FormFieldContainer>
   )
 }

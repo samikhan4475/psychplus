@@ -10,7 +10,6 @@ const CLINIC_LOCATIONS_ENDPOINT = `${API_URL}/api/clinics`
 const FACILITY_ADMISSION_ID_ENDPOINT = `${API_URL}/api/facilityadmissionids`
 const LOCATION_SERVICES_ENDPOINT = `${API_URL}/api/locationservices/actions/search`
 const VISIT_TYPES_ENDPOINT = `${API_URL}/api/visittypes/actions/search`
-const ENCOUNTER_TYPES_ENDPOINT = `${API_URL}/api/encounters/actions/search`
 const STATES_BY_COUNTRY_ENDPOINT = (countryCode: string) =>
   `${API_URL}/api/countries/${countryCode}/states`
 const ADD_VACATION = (staffId: string) =>
@@ -39,6 +38,8 @@ const GET_STAFF_ENDPOINT = `${API_URL}/api/staff/search`
 const GET_CLINICS_ENDPOINT = `${API_URL}/api/clinics`
 const GET_PROVIDERS_ENDPOINT = `${API_URL}/api/staff/search`
 const GET_VISIT_TYPE_ENDPOINT = `${API_URL}/api/encounters/actions/search`
+const GET_FACILITY_ADMISSION_IDS_ENDPOINT = (patientId: number) =>
+  `${API_URL}/api/patients/${patientId}/appointments/actions/facilityadmitids`
 const GET_INSURANCE_PAYMENT_DETAIL_ENDPOINT = (paymentId: string) =>
   `${API_URL}/api/payments/${paymentId}`
 const GET_PATIENT_RELATIONSHIPS = (patientId: string) =>
@@ -164,7 +165,6 @@ export {
   FACILITY_ADMISSION_ID_ENDPOINT,
   LOCATION_SERVICES_ENDPOINT,
   VISIT_TYPES_ENDPOINT,
-  ENCOUNTER_TYPES_ENDPOINT,
   STATES_BY_COUNTRY_ENDPOINT,
   ADD_VACATION,
   GET_PATIENT_NOTIFICATIONS_ENDPOINT,
@@ -182,6 +182,7 @@ export {
   GET_CLINICS_ENDPOINT,
   GET_PROVIDERS_ENDPOINT,
   GET_VISIT_TYPE_ENDPOINT,
+  GET_FACILITY_ADMISSION_IDS_ENDPOINT,
   GET_PATIENT_RELATIONSHIPS,
   GET_PATIENT_PREFERRED_PARTNERS,
   GET_INSURANCE_PAYERS_ENDPOINT,

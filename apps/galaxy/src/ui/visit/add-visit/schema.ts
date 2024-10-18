@@ -18,48 +18,44 @@ const schema = z
     location: z.string().min(1, 'Required'),
     service: z.string().min(1, 'Required'),
     isServiceTimeDependent: z.boolean().default(true),
-    visitType: z.string().min(1, 'Required'),
-
-    // Timed Service
     providerType: z.string().min(1, 'Required'),
-    provider: z.string().min(1, 'Required'),
-    groupType: z.string().min(1, 'Required'),
-    dcDate: z
-      .custom<DateValue>()
-      .refine((val) => val !== null && val !== undefined, {
-        message: 'Required',
-      }),
-    dcHospitalName: z.string().min(1, 'Required'),
-    edDischarge: z.string().min(1, 'Required'),
+    visitType: z.string().min(1, 'Required'),
+    visitSequence: z.string().min(1, 'Required'),
+    visitMedium: z.string().min(1, 'Required'),
+    paymentResponsibility: z.string().optional(),
     visitDate: z
       .custom<DateValue>()
       .refine((val) => val !== null && val !== undefined, {
         message: 'Required',
       }),
-    visitTime: z.string().min(1, 'Required'),
-    duration: z.string().min(1, 'Required'),
-    frequency: z.string().min(1, 'Required'),
+
+    // Timed Service
+    provider: z.string().optional(),
+    groupType: z.string().optional(),
+    dcDate: z.custom<DateValue>().optional(),
+    dcLocation: z.string().optional(),
+    edDischarge: z.string().optional(),
+    visitTime: z.string().optional(),
+    duration: z.string().optional(),
+    frequency: z.string().optional(),
+    upto: z.string().optional(),
+    showDCFields: z.boolean().optional(),
+    showGroupTypeField: z.boolean().optional(),
 
     // Untimed Service
-    nonTimeProviderType: z.string().min(1, 'Required'),
-    visitSequence: z.string().min(1, 'Required'),
-    visitStatus: z.string().min(1, 'Required'),
-    visitMedium: z.string().min(1, 'Required'),
-    facilityAdmissionId: z.string().min(1, 'Required'),
-    dateOfAdmission: z
-      .custom<DateValue>()
-      .refine((val) => val !== null && val !== undefined, {
-        message: 'Required',
-      }),
-    timeOfAdmission: z.string().min(1, 'Required'),
-    admittingProvider: z.string().min(1, 'Required'),
-    visitFrequency: z.string().min(1, 'Required'),
-    authNumber: z.string().min(1, 'Required'),
-    authDate: z.string().min(1, 'Required'),
-    legal: z.string().min(1, 'Required'),
-    unit: z.string().min(1, 'Required'),
-    room: z.string().min(1, 'Required'),
-    group: z.string().min(1, 'Required'),
+    visitStatus: z.string().optional(),
+    facilityAdmissionId: z.string().optional(),
+    dateOfAdmission: z.custom<DateValue>().optional(),
+    timeOfAdmission: z.string().optional(),
+    admittingProvider: z.string().optional(),
+    dischargeDate: z.custom<DateValue>().optional(),
+    visitFrequency: z.string().optional(),
+    insuranceAuthorizationNumber: z.string().optional(),
+    authDate: z.custom<DateValue>().optional(),
+    legal: z.string().optional(),
+    unit: z.string().optional(),
+    room: z.string().optional(),
+    group: z.string().optional(),
   })
   .superRefine((data, ctx) => {
     const validateTimedService = (
@@ -69,16 +65,19 @@ const schema = z
       const requiredFields = [
         { field: 'providerType', message: 'Required' },
         { field: 'provider', message: 'Required' },
-        { field: 'visitType', message: 'Required' },
-        { field: 'groupType', message: 'Required' },
-        { field: 'dcDate', message: 'Required' },
-        { field: 'dcHospitalName', message: 'Required' },
-        { field: 'edDischarge', message: 'Required' },
-        { field: 'visitDate', message: 'Required' },
         { field: 'visitTime', message: 'Required' },
         { field: 'duration', message: 'Required' },
         { field: 'frequency', message: 'Required' },
+        { field: 'upto', message: 'Required' },
       ]
+      if (data.showGroupTypeField) {
+        requiredFields.push({ field: 'groupType', message: 'Required' })
+      }
+      if (data.showDCFields) {
+        requiredFields.push({ field: 'dcDate', message: 'Required' })
+        requiredFields.push({ field: 'dcLocation', message: 'Required' })
+        requiredFields.push({ field: 'edDischarge', message: 'Required' })
+      }
 
       requiredFields.forEach(({ field, message }) => {
         if (!_data[field as keyof SchemaType]) {
@@ -96,20 +95,13 @@ const schema = z
       _ctx: RefinementCtx,
     ) => {
       const requiredFields = [
-        { field: 'visitSequence', message: 'Required' },
-        { field: 'visitStatus', message: 'Required' },
-        { field: 'visitMedium', message: 'Required' },
         { field: 'facilityAdmissionId', message: 'Required' },
         { field: 'dateOfAdmission', message: 'Required' },
         { field: 'timeOfAdmission', message: 'Required' },
         { field: 'admittingProvider', message: 'Required' },
+        { field: 'dischargeDate', message: 'Required' },
         { field: 'visitFrequency', message: 'Required' },
-        { field: 'authNumber', message: 'Required' },
-        { field: 'authDate', message: 'Required' },
         { field: 'legal', message: 'Required' },
-        { field: 'unit', message: 'Required' },
-        { field: 'room', message: 'Required' },
-        { field: 'group', message: 'Required' },
       ]
 
       requiredFields.forEach(({ field, message }) => {
@@ -123,9 +115,9 @@ const schema = z
       })
     }
 
-    if (data.service === 'timed') {
+    if (data.isServiceTimeDependent) {
       validateTimedService(data, ctx)
-    } else if (data.service === 'untimed') {
+    } else {
       validateUntimedService(data, ctx)
     }
   })

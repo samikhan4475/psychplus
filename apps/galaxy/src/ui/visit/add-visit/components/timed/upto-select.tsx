@@ -9,31 +9,28 @@ import {
 } from '@/components'
 import { SchemaType } from '../../schema'
 
-const DurationDropdown = () => {
+const UptoSelect = () => {
   const form = useFormContext<SchemaType>()
-  const visitTime = useWatch({
+  const frequency = useWatch({
     control: form.control,
-    name: 'visitTime',
+    name: 'frequency',
   })
-
-  const duration = [
-    { label: '20', value: '20' },
-    { label: '40', value: '40' },
-    { label: '60', value: '60' },
-  ]
-
+  const options = Array.from({ length: 6 }, (_, i) => ({
+    label: `${i + 1} Week${i + 1 > 1 ? 's' : ''}`,
+    value: `${i + 1}`,
+  }))
   return (
     <FormFieldContainer className="flex-1">
-      <FormFieldLabel required>Duration</FormFieldLabel>
+      <FormFieldLabel required>Upto</FormFieldLabel>
       <SelectInput
-        field="duration"
-        options={duration}
+        field="upto"
+        options={options}
         buttonClassName="h-6 w-full"
-        disabled={!visitTime}
+        disabled={!frequency}
       />
-      <FormFieldError name="duration" />
+      <FormFieldError name="upto" />
     </FormFieldContainer>
   )
 }
 
-export { DurationDropdown }
+export { UptoSelect }

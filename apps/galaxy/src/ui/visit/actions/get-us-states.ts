@@ -3,9 +3,7 @@
 import * as api from '@/api'
 import type { State } from '@/types'
 
-const getUsStatesAction = async (): Promise<
-  api.ActionResult<State[]>
-> => {
+const getUsStatesAction = async (): Promise<api.ActionResult<State[]>> => {
   const response = await api.GET<State[]>(api.GET_US_STATES_ENDPOINT, {
     next: {
       revalidate: 3600,
@@ -21,7 +19,7 @@ const getUsStatesAction = async (): Promise<
 
   return {
     state: 'success',
-    data: response.data,
+    data: response.data.filter((state) => state.stateCode),
   }
 }
 

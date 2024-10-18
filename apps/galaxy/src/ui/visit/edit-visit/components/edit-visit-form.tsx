@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { parseAbsolute } from '@internationalized/date'
 import { Box, Flex, Grid, Separator, Text } from '@radix-ui/themes'
 import { SubmitHandler, useForm, useWatch } from 'react-hook-form'
 import toast from 'react-hot-toast'
@@ -10,6 +9,7 @@ import {
   LoadingPlaceholder,
 } from '@/components'
 import { Appointment, State } from '@/types'
+import { getCalendarDate, getTimeLabel } from '@/utils'
 import { getUsStatesAction } from '../../actions'
 import { StaffComments } from '../components/staff-comments'
 import { schema, SchemaType } from '../schema'
@@ -45,10 +45,7 @@ const EditVisitForm = ({
         birthdate: visitDetails.dob,
       },
       visitDate: visitDetails.appointmentDate
-        ? parseAbsolute(
-            visitDetails.appointmentDate,
-            visitDetails.locationTimezoneId,
-          )
+        ? getCalendarDate(visitDetails.appointmentDate)
         : undefined,
       duration: visitDetails.appointmentDuration?.toString(),
       frequency: visitDetails.appointmentInterval?.toString(),
@@ -59,16 +56,13 @@ const EditVisitForm = ({
       visitType: visitDetails.visitType,
       providerType: visitDetails.providerType,
       provider: visitDetails.providerId?.toString(),
-      visitTime: visitDetails.appointmentDate,
+      visitTime: getTimeLabel(visitDetails.appointmentDate, false),
       visitSequence: visitDetails.visitSequence,
       visitMedium: visitDetails.visitMedium,
       nonTimeProviderType: visitDetails.providerType,
       facilityAdmissionId: visitDetails.facilityAdmissionId,
       dateOfAdmission: visitDetails.dateOfAdmission
-        ? parseAbsolute(
-            visitDetails.dateOfAdmission,
-            visitDetails.locationTimezoneId,
-          )
+        ? getCalendarDate(visitDetails.dateOfAdmission)
         : undefined,
       visitStatus: visitDetails.visitStatus,
       insuranceVerificationStatus:
@@ -76,10 +70,7 @@ const EditVisitForm = ({
       legal: visitDetails.legalStatus,
       insuranceAuthorizationNumber: visitDetails.authorizationNumber,
       authDate: visitDetails.authorizationDate
-        ? parseAbsolute(
-            visitDetails.authorizationDate,
-            visitDetails.locationTimezoneId,
-          )
+        ? getCalendarDate(visitDetails.authorizationDate)
         : undefined,
       unit: visitDetails?.unitResource?.unit,
       group: visitDetails?.groupResource?.group,
@@ -88,10 +79,7 @@ const EditVisitForm = ({
       timeOfAdmission: '',
       visitFrequency: 'Daily',
       lastCoverageDate: visitDetails.lastCoverageDate
-        ? parseAbsolute(
-            visitDetails.lastCoverageDate,
-            visitDetails.locationTimezoneId,
-          )
+        ? getCalendarDate(visitDetails.lastCoverageDate)
         : undefined,
     },
   })

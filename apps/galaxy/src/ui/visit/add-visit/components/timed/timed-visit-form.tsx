@@ -1,30 +1,32 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { Box, Flex } from '@radix-ui/themes'
-import { useFormContext } from 'react-hook-form'
+import { useFormContext, useWatch } from 'react-hook-form'
 import { TCM } from '@/ui/visit/constants'
-import { TCMVisitTypes } from '../../../types'
+import { StateCodeSet, TCMVisitTypes } from '../../../types'
 import { SchemaType } from '../../schema'
 import { useAddVisitStore } from '../../store'
-import { ProviderDropdown } from '../provider-select'
 import { VisitDate } from '../visit-date'
-import { VisitMediumInput } from '../visit-medium-text'
-import { VisitSequenceInput } from '../visit-sequence-text'
 import { VisitTypeDropdown } from '../visit-type-select'
 import { DCDate } from './dc-date'
-import { DCLocationInput } from './dc-location-text'
+import { DCLocationSelect } from './dc-location-select'
 import { DurationDropdown } from './duration-select'
 import { EDDischargeDropdown } from './ed-discharge-select'
 import { FrequencyDropdown } from './frequency-select'
 import { GroupTypeDropdown } from './group-select'
-import { ProviderTypeDropdown } from './provider-type-select'
+import { PaymentResponsibilitySelect } from './payment-responsibility-select'
+import { ProviderDropdown } from './provider-select'
+import { VisitMediumText } from './visit-medium-text'
+import { VisitSequenceText } from './visit-sequence-text'
 import { VisitTimeDropdown } from './visit-time-select'
 
-const TimedVisitForm = () => {
+const TimedVisitForm = ({ states }: { states: StateCodeSet[] }) => {
   const form = useFormContext<SchemaType>()
-  const [showDCFields, setShowDCFields] = useState<boolean>(false)
   const { visitTypes } = useAddVisitStore()
 
-  const selectedVisitType = form.watch('visitType')
+  const [selectedVisitType, showDCFields] = useWatch({
+    control: form.control,
+    name: ['visitType', 'showDCFields'],
+  })
 
   useEffect(() => {
     if (selectedVisitType) {
@@ -33,43 +35,31 @@ const TimedVisitForm = () => {
       )
 
       if (visitType) {
-        setShowDCFields(TCM.includes(visitType.encouterType as TCMVisitTypes))
+        const isTCM = TCM.includes(visitType.encouterType as TCMVisitTypes)
+        form.setValue('showDCFields', isTCM)
       }
     } else if (!selectedVisitType && showDCFields) {
-      setShowDCFields(false)
+      form.setValue('showDCFields', false)
     }
+    return () => form.setValue('showDCFields', false)
   }, [visitTypes, selectedVisitType])
 
   return (
     <>
-      <Box className="col-span-4">
-        <ProviderTypeDropdown />
-      </Box>
       <Box className="col-span-4">
         <ProviderDropdown />
       </Box>
       <Box className="col-span-4">
         <VisitTypeDropdown />
       </Box>
-      <Box className="col-span-3">
-        <VisitSequenceInput />
-      </Box>
-      <Box className="col-span-3">
-        <VisitMediumInput />
-      </Box>
-      <Box className="col-span-3">
-        <VisitDate dependentOn="visitType" />
-      </Box>
-      <Box className="col-span-3">
-        <VisitTimeDropdown />
-      </Box>
+
       {showDCFields && (
         <>
           <Box className="col-span-4">
             <DCDate />
           </Box>
           <Box className="col-span-4">
-            <DCLocationInput />
+            <DCLocationSelect states={states} />
           </Box>
           <Box className="col-span-4">
             <Flex align="center" gap="2" className="flex-1">
@@ -79,12 +69,24 @@ const TimedVisitForm = () => {
         </>
       )}
 
-      <GroupTypeDropdown />
-      <Box className="col-span-3">
+      <Box className="col-span-12">
+        <Flex direction={'row'} gap={'3'} className="flex-1">
+          <GroupTypeDropdown />
+          <VisitSequenceText />
+          <VisitMediumText />
+          <VisitDate dependentOn="visitType" />
+          <VisitTimeDropdown />
+        </Flex>
+      </Box>
+
+      <Box className="col-span-4">
         <DurationDropdown />
       </Box>
-      <Box className="col-span-3">
+      <Box className="col-span-4">
         <FrequencyDropdown />
+      </Box>
+      <Box className="col-span-4">
+        <PaymentResponsibilitySelect />
       </Box>
     </>
   )

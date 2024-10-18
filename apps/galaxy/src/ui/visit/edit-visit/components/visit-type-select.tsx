@@ -44,18 +44,16 @@ const VisitTypeSelect = () => {
       <SelectInput
         field="visitType"
         options={visitTypes.map((visitType) => ({
-          value: visitType.typeOfVisit,
-          label: `${visitType.visitTypeCode} | ${visitType.visitSequence} | ${visitType.visitMedium}`,
+          value: visitType.visitTypeCode,
+          label: `${visitType.typeOfVisit} | ${visitType.visitSequence} | ${visitType.visitMedium}`,
         }))}
         buttonClassName="h-6 w-full"
         disabled={!isServiceTimeDependent}
         onValueChange={(newValue) => {
-          const visitType = visitTypes.find(
-            (vt) => vt.typeOfVisit === newValue,
-          )
+          const visitType = visitTypes.find((vt) => vt.visitTypeCode === newValue)
           form.setValue('visitType', newValue)
-          form.setValue('visitSequence', visitType?.visitSequence ?? '')
           form.setValue('visitMedium', visitType?.visitMedium ?? '')
+          form.setValue('visitSequence', visitType?.visitSequence ?? '')
         }}
       />
       <FormFieldError name="visitType" />

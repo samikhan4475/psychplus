@@ -27,6 +27,7 @@ const ProviderSelect = () => {
     form.resetField('provider')
     getProviders({
       locationIds: [location],
+      providerType,
     }).then((res) => {
       if (res.state === 'error') {
         toast.error('Failed to fetch providers')

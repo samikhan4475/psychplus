@@ -1,7 +1,5 @@
 'use client'
 
-import { useEffect } from 'react'
-import { useFormContext } from 'react-hook-form'
 import {
   FormFieldContainer,
   FormFieldError,
@@ -10,11 +8,12 @@ import {
 } from '@/components'
 import { CODESETS } from '@/constants'
 import { useCodesetCodes } from '@/hooks'
+import { useEffect } from 'react'
+import { useFormContext } from 'react-hook-form'
 import { SchemaType } from '../../schema'
 
 const VisitFrequencyDropdown = () => {
   const form = useFormContext<SchemaType>()
-  const visitDate = form.watch('visitDate')
   const codes = useCodesetCodes(CODESETS.VisitRepeatFrequency)
 
   useEffect(() => {
@@ -37,8 +36,8 @@ const VisitFrequencyDropdown = () => {
       <SelectInput
         field="visitFrequency"
         options={options}
-        buttonClassName="flex-1"
-        disabled={!visitDate}
+        buttonClassName="h-6 w-full"
+        disabled
       />
       <FormFieldError name="visitFrequency" />
     </FormFieldContainer>

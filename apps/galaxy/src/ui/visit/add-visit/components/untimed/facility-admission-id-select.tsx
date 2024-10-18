@@ -1,35 +1,32 @@
-import { useFormContext } from 'react-hook-form'
+import { useFormContext, useWatch } from 'react-hook-form'
 import {
+  AsyncSelect,
   FormFieldContainer,
   FormFieldError,
   FormFieldLabel,
-  SelectInput,
 } from '@/components'
+import { getFacilityAdmissionIdsOptionsAction } from '@/ui/visit/actions/get-facility-admission-ids'
 import { SchemaType } from '../../schema'
 
 const FacilityAdmissionDropdown = () => {
   const form = useFormContext<SchemaType>()
-  const visitSequence = form.watch('visitSequence')
-
-  const facilityAdmissionIdOptions = [
-    {
-      label: 'Create New',
-      value: 'createNew',
-    },
-    {
-      label: 'Facility Admission ID',
-      value: 'facilityAdmissionId',
-    },
-  ]
-
+  const [visitType, patient] = useWatch({
+    control: form.control,
+    name: ['visitType', 'patient'],
+  })
   return (
     <FormFieldContainer className="flex-1">
       <FormFieldLabel required>Facility Admission ID</FormFieldLabel>
-      <SelectInput
+      <AsyncSelect
+        fetchOptions={() => {
+          if (!patient?.id) {
+            return Promise.resolve({ state: 'success', data: [] })
+          }
+          return getFacilityAdmissionIdsOptionsAction(patient?.id)
+        }}
+        buttonClassName="h-6 w-full"
         field="facilityAdmissionId"
-        options={facilityAdmissionIdOptions}
-        buttonClassName="flex-1"
-        disabled={!visitSequence}
+        disabled={!visitType}
       />
       <FormFieldError name={'facilityAdmissionId'} />
     </FormFieldContainer>

@@ -2,7 +2,7 @@
 
 import { useMemo } from 'react'
 import { Box, Flex } from '@radix-ui/themes'
-import { useFormContext } from 'react-hook-form'
+import { useFormContext, useWatch } from 'react-hook-form'
 import { DatePickerInput, SelectInput } from '@/components'
 import { FormFieldError, FormFieldLabel } from '@/components/form'
 import { SchemaType } from '../../schema'
@@ -11,12 +11,14 @@ import { generateTimeIntervals } from '../../util'
 const DateTimeOfAdmission = () => {
   const form = useFormContext<SchemaType>()
 
-  const facilityAdmissionId = form.watch('facilityAdmissionId')
-  const nonTimeProviderType = form.watch('nonTimeProviderType')
+  const [facilityAdmissionId, providerType] = useWatch({
+    control: form.control,
+    name: ['facilityAdmissionId', 'providerType'],
+  })
 
   const timeSlots = useMemo(() => generateTimeIntervals(), [])
 
-  const isDisabled = !facilityAdmissionId && !nonTimeProviderType
+  const isDisabled = !facilityAdmissionId && !providerType
 
   const options = timeSlots.map((v) => ({
     label: v.label,
@@ -31,13 +33,13 @@ const DateTimeOfAdmission = () => {
           <DatePickerInput
             field="dateOfAdmission"
             isDisabled={isDisabled}
-            dateInputClass="h-[21px]"
+            dateInputClass="h-6 w-full"
           />
           <Box className="flex-1">
             <SelectInput
               field="timeOfAdmission"
               options={options}
-              buttonClassName="flex-1"
+              buttonClassName="h-6 w-full"
               disabled={isDisabled}
             />
             <FormFieldError name="timeOfAdmission" />

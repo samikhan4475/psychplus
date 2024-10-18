@@ -1,7 +1,6 @@
 'use client'
 
-import { useEffect } from 'react'
-import { useFormContext } from 'react-hook-form'
+import { useFormContext, useWatch } from 'react-hook-form'
 import {
   FormFieldContainer,
   FormFieldError,
@@ -14,12 +13,11 @@ import { SchemaType } from '../../schema'
 
 const LegalDropdown = () => {
   const form = useFormContext<SchemaType>()
-  const visitFrequency = form.watch('visitFrequency')
+  const visitFrequency = useWatch({
+    control: form.control,
+    name: 'visitFrequency',
+  })
   const codes = useCodesetCodes(CODESETS.AdmissionLegalStatus)
-
-  useEffect(() => {
-    form.setValue('legal', 'voluntary')
-  }, [])
 
   const options = codes.map((option) => {
     return { label: option.display, value: option.value }
@@ -31,7 +29,7 @@ const LegalDropdown = () => {
       <SelectInput
         field="legal"
         options={options}
-        buttonClassName="flex-1"
+        buttonClassName="h-6 w-full"
         disabled={!visitFrequency}
       />
       <FormFieldError name="legal" />

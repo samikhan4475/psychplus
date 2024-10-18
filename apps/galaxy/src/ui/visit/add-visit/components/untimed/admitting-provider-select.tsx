@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useFormContext } from 'react-hook-form'
+import { useFormContext, useWatch } from 'react-hook-form'
 import {
   FormFieldContainer,
   FormFieldError,
@@ -7,22 +7,23 @@ import {
   SelectInput,
 } from '@/components'
 import { getProviders } from '../../../actions'
-import { SchemaType } from '../../schema'
 import { Provider } from '../../../types'
+import { SchemaType } from '../../schema'
 
 const AdmittingProviderSelector = () => {
   const form = useFormContext<SchemaType>()
   const [options, setOptions] = useState<{ label: string; value: string }[]>([])
-  const facilityAdmissionId = form.watch('facilityAdmissionId')
-
-  const nonTimeProviderType = form.watch('nonTimeProviderType')
-  const location = form.watch('location')
+  const [facilityAdmissionId, providerType, location] = useWatch({
+    control: form.control,
+    name: ['facilityAdmissionId', 'providerType', 'location'],
+  })
 
   useEffect(() => {
-    if (location && nonTimeProviderType) {
+    if (location && providerType) {
       form.resetField('provider')
       getProviders({
         locationIds: [location],
+        providerType: providerType,
       }).then((res) => {
         if (res.state === 'error') return setOptions([])
         setOptions(
@@ -33,7 +34,7 @@ const AdmittingProviderSelector = () => {
         )
       })
     }
-  }, [location, nonTimeProviderType])
+  }, [location, providerType])
 
   return (
     <FormFieldContainer>
@@ -42,7 +43,7 @@ const AdmittingProviderSelector = () => {
       <SelectInput
         field="admittingProvider"
         options={options}
-        buttonClassName="flex-1"
+        buttonClassName="h-6 w-full"
         disabled={!facilityAdmissionId}
       />
       <FormFieldError name={'admittingProvider'} />

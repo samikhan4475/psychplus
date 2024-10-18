@@ -13,22 +13,16 @@ interface GetProviderResponse {
   }
 }
 
-const getProviders = async ({
-  name,
-  locationIds,
-  specialistType,
-}: {
+const getProviders = async (payload: {
   name?: string
   locationIds: string[]
-  specialistType?: string
+  providerType?: string
 }): Promise<api.ActionResult<Provider[]>> => {
   const url = new URL(api.GET_STAFF_ENDPOINT)
 
   const response = await api.POST<GetProviderResponse[]>(url.toString(), {
-    name,
-    locationIds,
+    ...payload,
     roleCodes: ['1'],
-    specialistType,
   })
   if (response.state === 'error') {
     return {

@@ -16,7 +16,7 @@ const SearchInput = ({ setInput, placeholder, required }: SearchInputProps) => {
         onChange={(e) => setInput(e.target.value)}
         placeholder={placeholder}
         autoFocus
-        className="bg-white flex-1 border-0 outline-none [&>*]:bg-transparent [&>*]:outline-none"
+        className="bg-white flex-1 border-0 outline-none [&>*]:bg-transparent [&>*]:outline-none h-6"
         required={required}
       >
         <TextField.Slot>

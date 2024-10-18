@@ -1,30 +1,25 @@
 'use client'
 
-import { useFormContext } from 'react-hook-form'
-import {
-  FormFieldContainer,
-  FormFieldError,
-  FormFieldLabel,
-  SelectInput,
-} from '@/components'
+import { useFormContext, useWatch } from 'react-hook-form'
+import { AsyncSelect, FormFieldContainer, FormFieldLabel } from '@/components'
+import { getUnitsGroupsAction } from '@/ui/visit/actions/get-units-groups'
 import { SchemaType } from '../../schema'
 
 const RoomDropdown = () => {
   const form = useFormContext<SchemaType>()
-  const legal = form.watch('legal')
-
-  const roomOptions = [{ label: 'Room 1', value: '1' }]
-
+  const [serviceId, legal] = useWatch({
+    control: form.control,
+    name: ['service', 'legal'],
+  })
   return (
     <FormFieldContainer className="flex-1">
-      <FormFieldLabel required>Room</FormFieldLabel>
-      <SelectInput
-        field="state"
-        options={roomOptions}
-        buttonClassName="flex-1"
+      <FormFieldLabel>Room</FormFieldLabel>
+      <AsyncSelect
+        buttonClassName="flex-1 h-6"
+        fetchOptions={() => getUnitsGroupsAction({ serviceId, isRoom: true })}
+        field="room"
         disabled={!legal}
       />
-      <FormFieldError name="room" />
     </FormFieldContainer>
   )
 }

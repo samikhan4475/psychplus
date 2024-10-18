@@ -6,23 +6,24 @@ import { DatePickerInput } from '@/components'
 import { FormFieldLabel } from '@/components/form'
 import { SchemaType } from '../../schema'
 
-const DCDate = () => {
+const DischargeDate = () => {
   const form = useFormContext<SchemaType>()
-  const visitType = useWatch({
+
+  const admittingProvider = useWatch({
     control: form.control,
-    name: 'visitType',
+    name: 'admittingProvider',
   })
 
   return (
     <Flex direction={'column'} className="flex-1 gap-[2px]">
-      <FormFieldLabel required>DC Date</FormFieldLabel>
+      <FormFieldLabel required>Discharge Date</FormFieldLabel>
       <DatePickerInput
-        field="dcDate"
-        isDisabled={!visitType}
+        field="dischargeDate"
+        isDisabled={!admittingProvider}
         dateInputClass="h-6 w-full"
       />
     </Flex>
   )
 }
 
-export { DCDate }
+export { DischargeDate }

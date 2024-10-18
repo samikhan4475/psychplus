@@ -32,12 +32,7 @@ const LocationSelect = ({ states }: { states: StateCodeSet[] }) => {
         toast.error('Failed to fetch locations')
         return setLocations([])
       }
-      setLocations(
-        res.data.map((location) => ({
-          value: location.id,
-          label: location.name,
-        })),
-      )
+      setLocations(res.data)
     })
   }, [stateCode, states])
 

@@ -1,4 +1,4 @@
-import { useFormContext } from 'react-hook-form'
+import { useFormContext, useWatch } from 'react-hook-form'
 import {
   FormFieldContainer,
   FormFieldError,
@@ -7,11 +7,14 @@ import {
 } from '@/components'
 import { CODESETS } from '@/constants'
 import { useCodesetCodes } from '@/hooks'
-import { SchemaType } from '../schema'
+import { SchemaType } from '../../schema'
 
 const VisitMediumSelect = () => {
   const form = useFormContext<SchemaType>()
-  const visitSequence = form.watch('visitSequence')
+  const visitSequence = useWatch({
+    control: form.control,
+    name: 'visitSequence',
+  })
   const codes = useCodesetCodes(CODESETS.AppointmentType)
 
   const isDisabled = !visitSequence
@@ -35,7 +38,7 @@ const VisitMediumSelect = () => {
       <SelectInput
         field="visitMedium"
         options={options}
-        buttonClassName="flex-1"
+        buttonClassName="h-6 w-full"
         disabled={isDisabled}
       />
       <FormFieldError name={'visitMedium'} />

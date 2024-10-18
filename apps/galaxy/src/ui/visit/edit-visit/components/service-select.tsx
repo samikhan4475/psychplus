@@ -36,7 +36,7 @@ const ServiceSelect = () => {
     form.resetField('service')
     getLocationServices({ locationId }).then((res) => {
       if (res.state === 'error') {
-        toast.error('Failed to fetch services')
+        toast.error(res.error)
         return setServices([])
       }
       setServices(res.data)

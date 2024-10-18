@@ -49,8 +49,8 @@ const CODESETS = {
   PaymentSourceType: 'PaymentSourceType',
   PaymentMethod: 'PaymentMethod',
   VisitType: 'PsychPlusPublic.VisitType',
-  QueryByNextDays: 'QueryByNextDays',
   PaymentResponsibility: 'PaymentResponsibility',
+  QueryByNextDays: 'QueryByNextDays',
 }
 
 export {

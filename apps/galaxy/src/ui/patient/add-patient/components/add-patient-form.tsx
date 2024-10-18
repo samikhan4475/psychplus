@@ -142,7 +142,7 @@ const AddPatientForm = ({
       }
     }
     setIsLoading(false)
-    onPatientAdd(resData)
+    onPatientAddSuccess(resData)
     newPatientRef.current = undefined
     toast.success('Text sent!')
     form.reset()
@@ -188,10 +188,20 @@ const AddPatientForm = ({
       }
     }
     setIsLoading(false)
-    onPatientAdd(resData)
+    onPatientAddSuccess(resData)
     newPatientRef.current = undefined
     toast.success('Email sent!')
     form.reset()
+  }
+
+  const onPatientAddSuccess = (resData: PatientResponse) => {
+    const data = form.getValues()
+    onPatientAdd({
+      ...resData,
+      // @Todo: these will be removed once the API is updated
+      dob: data.dateOfBirth.toString(),
+      gender: data.gender,
+    })
   }
 
   const onSave = async (data: SchemaType) => {
@@ -200,7 +210,7 @@ const AddPatientForm = ({
     setIsLoading(false)
     if (!resData?.accessToken) return
     form.reset()
-    onPatientAdd(resData)
+    onPatientAddSuccess(resData)
   }
 
   return (

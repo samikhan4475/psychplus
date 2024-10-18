@@ -1,46 +1,40 @@
-import { Box, Flex } from '@radix-ui/themes'
-import { useFormContext } from 'react-hook-form'
+import { Box } from '@radix-ui/themes'
+import { useFormContext, useWatch } from 'react-hook-form'
 import { SchemaType } from '../../schema'
-import { VisitDate } from '../visit-date'
-import { VisitMediumSelect } from '../visit-medium-select'
-import { VisitSequenceSelect } from '../visit-sequence-select'
 import { VisitTypeDropdown } from '../visit-type-select'
 import { AdmittingProviderSelector } from './admitting-provider-select'
-import { AuthDateInput } from './auth-date-text'
+import { AuthDate } from './auth-date'
 import { AuthNumberInput } from './auth-number-text'
 import { DateTimeOfAdmission } from './date-time-of-admission'
+import { DischargeDate } from './discharge-date'
 import { FacilityAdmissionDropdown } from './facility-admission-id-select'
-import { VisitFrequencyDropdown } from './visit-frequency-select'
 import { GroupDropdown } from './group-select'
 import { LegalDropdown } from './legal-select'
-import { ProviderTypeDropdown } from './provider-type-select'
+import { PaymentResponsibilitySelect } from './payment-responsibility-select'
+import { RoomDropdown } from './room-select'
 import { UnitDropdown } from './unit-select'
+import { VisitFrequencyDropdown } from './visit-frequency-select'
+import { VisitMediumSelect } from './visit-medium-select'
+import { VisitSequenceSelect } from './visit-sequence-select'
+import { VisitStatusSelect } from './visit-status-select'
 
 const UntimedVisitForm = () => {
   const form = useFormContext<SchemaType>()
+  const facilityAdmissionId = useWatch({
+    control: form.control,
+    name: 'facilityAdmissionId',
+  })
 
-  const isNewFacilityAdmissionId =
-    form.watch('facilityAdmissionId') === 'createNew'
+  const isNewFacilityAdmissionId = facilityAdmissionId === 'createNew'
 
   return (
     <>
       <Box className="col-span-4">
-        <ProviderTypeDropdown />
-      </Box>
-
-      <Box className="col-span-4">
         <VisitTypeDropdown />
       </Box>
       <Box className="col-span-4">
-        <VisitSequenceSelect />
-      </Box>
-      <Box className="col-span-4">
-        <VisitMediumSelect />
-      </Box>
-      <Box className="col-span-8">
         <FacilityAdmissionDropdown />
       </Box>
-
       {isNewFacilityAdmissionId && (
         <>
           <Box className="col-span-4">
@@ -50,24 +44,39 @@ const UntimedVisitForm = () => {
             <AdmittingProviderSelector />
           </Box>
           <Box className="col-span-4">
-            <VisitDate dependentOn="facilityAdmissionId" />
+            <DischargeDate />
           </Box>
         </>
       )}
-      <Box className="col-span-12">
-        <Flex direction={'row'} gap={'3'} className="flex-1">
-          {!isNewFacilityAdmissionId && (
-            <VisitDate dependentOn="facilityAdmissionId" />
-          )}
-          <VisitFrequencyDropdown />
-          <LegalDropdown />
-          <AuthNumberInput />
-          <AuthDateInput />
-        </Flex>
+      <Box className="col-span-3">
+        <VisitSequenceSelect />
       </Box>
-
+      <Box className="col-span-3">
+        <VisitMediumSelect />
+      </Box>
+      <Box className="col-span-3">
+        <VisitFrequencyDropdown />
+      </Box>
+      <Box className="col-span-3">
+        <VisitStatusSelect />
+      </Box>
+      <Box className="col-span-3">
+        <LegalDropdown />
+      </Box>
+      <Box className="col-span-3">
+        <AuthNumberInput />
+      </Box>
+      <Box className="col-span-3">
+        <AuthDate />
+      </Box>
+      <Box className="col-span-3">
+        <PaymentResponsibilitySelect />
+      </Box>
       <Box className="col-span-4">
         <UnitDropdown />
+      </Box>
+      <Box className="col-span-4">
+        <RoomDropdown />
       </Box>
       <Box className="col-span-4">
         <GroupDropdown />

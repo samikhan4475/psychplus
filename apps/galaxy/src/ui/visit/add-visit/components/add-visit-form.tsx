@@ -1,24 +1,28 @@
+import { useEffect, useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Box, Button, Flex, Grid, Text } from '@radix-ui/themes'
-import { SubmitHandler, useForm } from 'react-hook-form'
+import { SubmitHandler, useForm, useWatch } from 'react-hook-form'
+import toast from 'react-hot-toast'
 import { FormContainer, FormSubmitButton } from '@/components'
+import { State } from '@/types'
+import { AddPatient } from '@/ui/patient/add-patient'
 import { AddVacation } from '@/ui/vacation/add-vacation'
 import { cn } from '@/utils'
+import { getUsStatesAction } from '../../actions'
+import { NewPatient } from '../../types'
 import { schema, SchemaType } from '../schema'
 import { LocationDropdown } from './location-select'
 import { PatientSelect } from './patient-select'
+import { PatientText } from './patient-text'
 import { ServiceDropdown } from './service-select'
 import { StateDropdown } from './state-select'
 import './style.css'
-import { useEffect, useState } from 'react'
-import toast from 'react-hot-toast'
-import { State } from '@/types'
-import { AddPatient } from '@/ui/patient/add-patient'
-import { getUsStatesAction } from '../../actions'
+import { ProviderTypeDropdown } from './timed/provider-type-select'
 import TimedVisitForm from './timed/timed-visit-form'
 import UntimedVisitForm from './untimed/untimed-visit-form'
 
 const AddVisitForm = ({ showAddUser = true }: { showAddUser?: boolean }) => {
+  const [newPatient, setNewPatient] = useState<NewPatient>()
   const [states, setStates] = useState<State[]>([])
   const form = useForm<SchemaType>({
     resolver: zodResolver(schema),
@@ -31,27 +35,38 @@ const AddVisitForm = ({ showAddUser = true }: { showAddUser?: boolean }) => {
       provider: '',
       visitType: '',
       dcDate: undefined,
-      dcHospitalName: undefined,
+      dcLocation: undefined,
       visitDate: undefined,
       visitTime: '',
       duration: '',
       frequency: '',
+      visitStatus: 'Unseen',
+      visitFrequency: 'Daily',
+      legal: 'Voluntary',
     },
   })
 
-  const isServiceTimeDependent = form.watch('isServiceTimeDependent')
+  const [isServiceTimeDependent, provider] = useWatch({
+    control: form.control,
+    name: ['isServiceTimeDependent', 'provider'],
+  })
 
-  const onCreateNew: SubmitHandler<SchemaType> = (data) => {
-    // addVisit(data).catch((error) => {
-    //   console.log('Error adding visit', error)
-    // })
+  const onCreateNew: SubmitHandler<SchemaType> = (data) => {}
+
+  const onPatientAdd = (newPatient: NewPatient) => {
+    form.setValue('patient', {
+      id: Number(newPatient.accessToken),
+      birthdate: newPatient.dob,
+      firstName: newPatient.user.legalName.firstName,
+      middleName: newPatient.user.legalName.middleName,
+      lastName: newPatient.user.legalName.lastName,
+      gender: newPatient.gender ?? '',
+      medicalRecordNumber: newPatient.patientMrn ?? '',
+      status: newPatient.patientStatus ?? '',
+      state: '',
+    })
+    setNewPatient(newPatient)
   }
-
-  const onPatientAdd = (newPatient: any) => {
-    // onPatientAdd
-  }
-
-  const provider = form.watch('provider')
 
   useEffect(() => {
     getUsStatesAction().then((response) => {
@@ -68,7 +83,11 @@ const AddVisitForm = ({ showAddUser = true }: { showAddUser?: boolean }) => {
     <FormContainer form={form} onSubmit={onCreateNew}>
       <Grid columns="12" className="min-w-[648px] gap-3">
         <Box className="col-span-10">
-          <PatientSelect />
+          {newPatient ? (
+            <PatientText patient={newPatient} />
+          ) : (
+            <PatientSelect />
+          )}
         </Box>
 
         {showAddUser && (
@@ -80,7 +99,7 @@ const AddVisitForm = ({ showAddUser = true }: { showAddUser?: boolean }) => {
             <AddPatient onPatientAdd={onPatientAdd}>
               <Button
                 size="1"
-                className="bg-pp-black-1 text-white h-[21px] flex-1 cursor-pointer px-3 py-1.5"
+                className="bg-pp-black-1 text-white h-6 flex-1 cursor-pointer px-3 py-1.5"
               >
                 <Text size="1">Add User</Text>
               </Button>
@@ -98,10 +117,18 @@ const AddVisitForm = ({ showAddUser = true }: { showAddUser?: boolean }) => {
           <ServiceDropdown />
         </Box>
 
-        {isServiceTimeDependent ? <TimedVisitForm /> : <UntimedVisitForm />}
+        <Box className="col-span-4">
+          <ProviderTypeDropdown />
+        </Box>
+
+        {isServiceTimeDependent ? (
+          <TimedVisitForm states={states} />
+        ) : (
+          <UntimedVisitForm />
+        )}
       </Grid>
       <Flex justify="between" mt="3">
-        {isServiceTimeDependent && (
+        {isServiceTimeDependent && provider && (
           <AddVacation staffId={provider}>
             <Button
               className={cn(

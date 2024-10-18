@@ -6,7 +6,7 @@ interface VisitType {
   locationId: string
   serviceId: string
   visitTypeId: number
-  visitTypeCode: number
+  visitTypeCode: string
   encouterType: string
   description: string
   typeOfVisit: string

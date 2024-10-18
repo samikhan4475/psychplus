@@ -1,6 +1,6 @@
 'use client'
 
-import { useFormContext } from 'react-hook-form'
+import { useFormContext, useWatch } from 'react-hook-form'
 import {
   FormFieldContainer,
   FormFieldError,
@@ -11,7 +11,10 @@ import { SchemaType } from '../../schema'
 
 const EDDischargeDropdown = () => {
   const form = useFormContext<SchemaType>()
-  const visitType = form.watch('visitType')
+  const visitType = useWatch({
+    control: form.control,
+    name: 'visitType',
+  })
 
   const isDisabled = !visitType
 
@@ -26,7 +29,7 @@ const EDDischargeDropdown = () => {
       <SelectInput
         field="edDischarge"
         options={options}
-        buttonClassName="flex-1"
+        buttonClassName="h-6 w-full"
         disabled={isDisabled}
       />
       <FormFieldError name="edDischarge" />

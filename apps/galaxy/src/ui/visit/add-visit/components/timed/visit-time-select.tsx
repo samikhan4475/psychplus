@@ -1,7 +1,7 @@
 'use client'
 
 import { useMemo } from 'react'
-import { useFormContext } from 'react-hook-form'
+import { useFormContext, useWatch } from 'react-hook-form'
 import {
   FormFieldContainer,
   FormFieldError,
@@ -13,7 +13,10 @@ import { generateTimeIntervals } from '../../util'
 
 const VisitTimeDropdown = () => {
   const form = useFormContext<SchemaType>()
-  const visitDate = form.watch('visitDate')
+  const visitDate = useWatch({
+    control: form.control,
+    name: 'visitDate',
+  })
 
   const timeSlots = useMemo(() => generateTimeIntervals(), [])
 
@@ -23,7 +26,7 @@ const VisitTimeDropdown = () => {
       <SelectInput
         field="visitTime"
         options={timeSlots}
-        buttonClassName="flex-1"
+        buttonClassName="h-6 w-full"
         disabled={!visitDate}
       />
       <FormFieldError name="visitTime" />

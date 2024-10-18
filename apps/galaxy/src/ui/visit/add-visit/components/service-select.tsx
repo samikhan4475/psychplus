@@ -1,7 +1,8 @@
 'use client'
 
-import { useEffect, useMemo, useRef } from 'react'
-import { useFormContext } from 'react-hook-form'
+import { useEffect, useMemo } from 'react'
+import { useFormContext, useWatch } from 'react-hook-form'
+import toast from 'react-hot-toast'
 import {
   FormFieldContainer,
   FormFieldError,
@@ -18,9 +19,11 @@ const ServiceDropdown = () => {
   const form = useFormContext<SchemaType>()
   const { services, setServices } = useAddVisitStore()
   const serviceCodes = useCodesetCodes(CODESETS.ServicesOffered)
-  const prevLocationId = useRef<string | undefined>(undefined)
 
-  const locationId = form.watch('location')
+  const locationId = useWatch({
+    control: form.control,
+    name: 'location',
+  })
 
   const mappedServices: { [key: string]: string } = useMemo(() => {
     return serviceCodes.reduce<{ [key: string]: string }>((acc, curr) => {
@@ -30,16 +33,15 @@ const ServiceDropdown = () => {
   }, [serviceCodes])
 
   useEffect(() => {
-    if (prevLocationId.current !== locationId) {
-      prevLocationId.current = locationId
-      if (locationId) {
-        form.resetField('service')
-        getLocationServices({ locationId }).then((res) => {
-          if (res.state === 'error') return setServices([])
-          setServices(res.data)
-        })
+    if (!locationId) return
+    form.resetField('service')
+    getLocationServices({ locationId }).then((res) => {
+      if (res.state === 'error') {
+        setServices([])
+        return toast.error(res.error)
       }
-    }
+      setServices(res.data)
+    })
   }, [locationId])
 
   return (
@@ -51,7 +53,7 @@ const ServiceDropdown = () => {
           label: mappedServices[v.serviceOffered],
           value: v.id,
         }))}
-        buttonClassName="flex-1 w-full"
+        buttonClassName="h-6 w-full"
         disabled={!locationId}
         onValueChange={(value) => {
           const selectedService = services.find((option) => option.id === value)
@@ -61,7 +63,6 @@ const ServiceDropdown = () => {
           )
           form.setValue('service', value)
           form.resetField('providerType')
-          form.resetField('nonTimeProviderType')
           form.resetField('provider')
           form.resetField('visitType')
           form.resetField('visitSequence')

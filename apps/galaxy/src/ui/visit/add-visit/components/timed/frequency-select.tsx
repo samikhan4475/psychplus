@@ -1,6 +1,6 @@
 'use client'
 
-import { useFormContext } from 'react-hook-form'
+import { useFormContext, useWatch } from 'react-hook-form'
 import {
   FormFieldContainer,
   FormFieldError,
@@ -14,7 +14,10 @@ import { SchemaType } from '../../schema'
 const FrequencyDropdown = () => {
   const form = useFormContext<SchemaType>()
   const codes = useCodesetCodes(CODESETS.VisitRepeatFrequency)
-  const duration = form.watch('duration')
+  const duration = useWatch({
+    control: form.control,
+    name: 'duration',
+  })
 
   const items = codes.map((option) => {
     const value = option?.attributes?.find((attr) => attr.name === 'ResourceId')
@@ -28,7 +31,7 @@ const FrequencyDropdown = () => {
       <SelectInput
         field="frequency"
         options={items}
-        buttonClassName="flex-1"
+        buttonClassName="h-6 w-full"
         disabled={!duration}
       />
       <FormFieldError name="frequency" />
