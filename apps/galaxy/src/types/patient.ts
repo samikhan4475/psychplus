@@ -35,7 +35,6 @@ interface PatientEmergencyContact extends Partial<ContactDetails> {
   name?: Partial<LegalName>
 }
 
-
 interface PatientProfile {
   id: number
   userId?: number

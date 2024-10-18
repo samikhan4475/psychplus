@@ -16,6 +16,7 @@ interface GroupSelectSectionProps<T extends string> {
   options: GroupSelectOption<T>[]
   normalChipsSelected?: string[]
   setNormalChipsSelected?: (selected: string[]) => void
+  dependentNormalValues?: string[]
   isTooltip?: boolean
 }
 
@@ -38,6 +39,7 @@ const PhysicalExamGroupSelectSection = <T extends string>({
   options,
   normalChipsSelected = [],
   setNormalChipsSelected,
+  dependentNormalValues = [],
   isTooltip = false,
 }: GroupSelectSectionProps<T>) => {
   const form = useFormContext()
@@ -57,7 +59,10 @@ const PhysicalExamGroupSelectSection = <T extends string>({
     ]
 
     const normalValues: string[] = array
-      .filter((v) => v.label.includes('Normal'))
+      .filter(
+        (v) =>
+          v.label.includes('Normal') || dependentNormalValues.includes(v.value),
+      )
       .map((v) => v.value)
 
     if (setNormalChipsSelected) {
@@ -95,7 +100,10 @@ const PhysicalExamGroupSelectSection = <T extends string>({
       }
     } else {
       form.setValue(field, [...values, value], { shouldDirty: true })
-      if (setNormalChipsSelected && value.includes('Normal')) {
+      if (
+        setNormalChipsSelected &&
+        (value.includes('Normal') || dependentNormalValues.includes(value))
+      ) {
         setNormalChipsSelected([...normalChipsSelected, value])
       }
     }

@@ -1,11 +1,13 @@
-import { GroupSelectSection } from '@/components'
+import { physicalExamWidgetSchema } from '../history/physical-exam-details/data'
+import { PhysicalExamGroupDetailSection } from '../history/physical-exam-details/physical-exam-group-detail-section'
 import { PhysicalExamGroupSelectSection } from '../physical-exam-group-select-section'
+import { GroupSelectOption } from '../types'
 
 const BLOCK_ID = 'lungs'
 
 const BLOCK_TITLE = 'Lungs'
 
-const LNG_OPTIONS = [
+const LNG_OPTIONS: GroupSelectOption<string>[] = [
   {
     label: 'Normal',
     value: 'lngNormal',
@@ -14,34 +16,47 @@ const LNG_OPTIONS = [
     label: 'Clear to auscultation bilaterally',
     value: 'lngClearToAuscultationBilaterally',
   },
+  {
+    label: 'Other',
+    value: 'lngOther',
+    details: {
+      type: 'text',
+      label: 'Details',
+      field: 'lngOtherDetails',
+    },
+  },
 ]
 
 const LungsBlock = ({
   normalChipsSelected,
   setNormalChipsSelected,
+  isDetails,
+  result,
 }: {
-  normalChipsSelected: string[]
-  setNormalChipsSelected: (selected: string[]) => void
+  normalChipsSelected?: string[]
+  setNormalChipsSelected?: (selected: string[]) => void
+  isDetails?: boolean
+  result?: physicalExamWidgetSchema
 }) => {
   return (
-    <PhysicalExamGroupSelectSection
-      label={BLOCK_TITLE}
-      field={BLOCK_ID}
-      options={[
-        ...LNG_OPTIONS,
-        {
-          label: 'Other',
-          value: 'lngOther',
-          details: {
-            type: 'text',
-            label: 'Details',
-            field: 'lngOtherDetails',
-          },
-        },
-      ]}
-      normalChipsSelected={normalChipsSelected}
-      setNormalChipsSelected={setNormalChipsSelected}
-    />
+    <>
+      {isDetails ? (
+        <PhysicalExamGroupDetailSection
+          label={BLOCK_TITLE}
+          field={BLOCK_ID}
+          options={LNG_OPTIONS}
+          result={result}
+        />
+      ) : (
+        <PhysicalExamGroupSelectSection
+          label={BLOCK_TITLE}
+          field={BLOCK_ID}
+          options={LNG_OPTIONS}
+          normalChipsSelected={normalChipsSelected}
+          setNormalChipsSelected={setNormalChipsSelected}
+        />
+      )}
+    </>
   )
 }
 

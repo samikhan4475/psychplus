@@ -1,11 +1,13 @@
-import { GroupSelectSection } from '@/components'
+import { physicalExamWidgetSchema } from '../history/physical-exam-details/data'
+import { PhysicalExamGroupDetailSection } from '../history/physical-exam-details/physical-exam-group-detail-section'
 import { PhysicalExamGroupSelectSection } from '../physical-exam-group-select-section'
+import { GroupSelectOption } from '../types'
 
 const BLOCK_ID = 'heent'
 
 const BLOCK_TITLE = 'HEENT'
 
-const HNT_OPTIONS = [
+const HNT_OPTIONS: GroupSelectOption<string>[] = [
   {
     label: 'Headache',
     value: 'hntHeadache',
@@ -52,30 +54,35 @@ const HNT_OPTIONS = [
 const HeentBlock = ({
   normalChipsSelected,
   setNormalChipsSelected,
+  isDetails = false,
+  result,
 }: {
-  normalChipsSelected: string[]
-  setNormalChipsSelected: (selected: string[]) => void
+  normalChipsSelected?: string[]
+  setNormalChipsSelected?: (selected: string[]) => void
+  isDetails?: boolean
+  result?: physicalExamWidgetSchema
 }) => {
   return (
-    <PhysicalExamGroupSelectSection
-      label={BLOCK_TITLE}
-      field={BLOCK_ID}
-      options={[
-        ...HNT_OPTIONS,
-        {
-          label: 'Other',
-          value: 'hntOther',
-          details: {
-            type: 'text',
-            label: 'Details',
-            field: 'hntOtherDetails',
-          },
-        },
-      ]}
-      normalChipsSelected={normalChipsSelected}
-      setNormalChipsSelected={setNormalChipsSelected}
-      isTooltip={true}
-    />
+    <>
+      {isDetails ? (
+        <PhysicalExamGroupDetailSection
+          label={BLOCK_TITLE}
+          field={BLOCK_ID}
+          options={HNT_OPTIONS}
+          isTooltip={true}
+          result={result}
+        />
+      ) : (
+        <PhysicalExamGroupSelectSection
+          label={BLOCK_TITLE}
+          field={BLOCK_ID}
+          options={HNT_OPTIONS}
+          isTooltip={true}
+          normalChipsSelected={normalChipsSelected}
+          setNormalChipsSelected={setNormalChipsSelected}
+        />
+      )}
+    </>
   )
 }
 

@@ -1,11 +1,13 @@
-import { GroupSelectSection } from '@/components'
+import { physicalExamWidgetSchema } from '../history/physical-exam-details/data'
+import { PhysicalExamGroupDetailSection } from '../history/physical-exam-details/physical-exam-group-detail-section'
 import { PhysicalExamGroupSelectSection } from '../physical-exam-group-select-section'
+import { GroupSelectOption } from '../types'
 
 const BLOCK_ID = 'gastrointestinalGi'
 
 const BLOCK_TITLE = 'Gastrointestinal (GI)'
 
-const GI_OPTIONS = [
+const GI_OPTIONS: GroupSelectOption<string>[] = [
   {
     label: 'Normal',
     value: 'giNormal',
@@ -30,34 +32,47 @@ const GI_OPTIONS = [
     label: 'Food intolerance',
     value: 'giFoodIntolerance',
   },
+  {
+    label: 'Other',
+    value: 'giOther',
+    details: {
+      type: 'text',
+      label: 'Details',
+      field: 'giOtherDetails',
+    },
+  },
 ]
 
 const GastrointestinalGiBlock = ({
   normalChipsSelected,
   setNormalChipsSelected,
+  isDetails,
+  result,
 }: {
-  normalChipsSelected: string[]
-  setNormalChipsSelected: (selected: string[]) => void
+  normalChipsSelected?: string[]
+  setNormalChipsSelected?: (selected: string[]) => void
+  isDetails?: boolean
+  result?: physicalExamWidgetSchema
 }) => {
   return (
-    <PhysicalExamGroupSelectSection
-      label={BLOCK_TITLE}
-      field={BLOCK_ID}
-      options={[
-        ...GI_OPTIONS,
-        {
-          label: 'Other',
-          value: 'giOther',
-          details: {
-            type: 'text',
-            label: 'Details',
-            field: 'giOtherDetails',
-          },
-        },
-      ]}
-      normalChipsSelected={normalChipsSelected}
-      setNormalChipsSelected={setNormalChipsSelected}
-    />
+    <>
+      {isDetails ? (
+        <PhysicalExamGroupDetailSection
+          label={BLOCK_TITLE}
+          field={BLOCK_ID}
+          options={GI_OPTIONS}
+          result={result}
+        />
+      ) : (
+        <PhysicalExamGroupSelectSection
+          label={BLOCK_TITLE}
+          field={BLOCK_ID}
+          options={GI_OPTIONS}
+          normalChipsSelected={normalChipsSelected}
+          setNormalChipsSelected={setNormalChipsSelected}
+        />
+      )}
+    </>
   )
 }
 

@@ -10,6 +10,7 @@ import {
   WidgetSaveButton,
   WidgetTagButton,
 } from '@/components'
+import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import {
   CardiovascularCvsBlock,
   CentralNervousSystemCnsBlock,
@@ -29,7 +30,9 @@ import {
   SkinBlock,
 } from './blocks'
 import { CheckAllNormalCell } from './check-all-normal-cell'
+import { QUICKNOTE_SECTION_NAME } from './constants'
 import { transformOut } from './data'
+import { HistoryButton } from './history'
 import { usePhysicalExamWidgetForm } from './physical-exam-widget-form'
 import { type PhysicalExamWidgetSchemaType } from './physical-exam-widget-schema'
 
@@ -120,7 +123,10 @@ const PhysicalExamWidget = ({
         headerRight={
           <>
             <WidgetTagButton />
-            <WidgetHxButton />
+            <HistoryButton
+              patientId={patientId}
+              sectionName={QuickNoteSectionName.QuicknoteSectionPhysicalExam}
+            />
             <WidgetClearButton />
             <WidgetSaveButton />
           </>
@@ -197,6 +203,7 @@ const PhysicalExamWidget = ({
         <CranialNervesExamBlock
           normalChipsSelected={normalChipsSelected}
           setNormalChipsSelected={setNormalChipsSelected}
+          dependentNormalValues={dependentNormalValues}
         />
       </WidgetFormContainer>
     </FormProvider>

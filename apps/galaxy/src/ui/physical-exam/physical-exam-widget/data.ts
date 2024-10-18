@@ -21,7 +21,7 @@ enum ExamPrefixes {
   SKIN = 'SKN',
 }
 
-const valueToSchema: { [key: string]: string } = {
+const valueToSchemaPe: { [key: string]: string } = {
   // Cardiovascular block
   CVS_Normal: 'cvsNormal',
   CVS_Fatigue: 'cvsMurmurs',
@@ -185,7 +185,7 @@ const valueToSchema: { [key: string]: string } = {
 }
 
 const schemaToValue: { [key: string]: string } = Object.entries(
-  valueToSchema,
+  valueToSchemaPe,
 ).reduce((acc, [key, value]) => {
   acc[value] = key
   return acc
@@ -290,52 +290,52 @@ const transformIn = (
 
     switch (prefix) {
       case ExamPrefixes.CARDIOVASCULAR:
-        result.cardiovascularCvs.push(valueToSchema[item.sectionItem])
+        result.cardiovascularCvs.push(valueToSchemaPe[item.sectionItem])
         break
       case ExamPrefixes.CENTRAL_NERVOUS_SYSTEM:
-        result.centralNervousSystemCns.push(valueToSchema[item.sectionItem])
+        result.centralNervousSystemCns.push(valueToSchemaPe[item.sectionItem])
         break
       case ExamPrefixes.CHEST:
-        result.chest.push(valueToSchema[item.sectionItem])
+        result.chest.push(valueToSchemaPe[item.sectionItem])
         break
       case ExamPrefixes.GASTROINTESTINAL:
-        result.gastrointestinalGi.push(valueToSchema[item.sectionItem])
+        result.gastrointestinalGi.push(valueToSchemaPe[item.sectionItem])
         break
       case ExamPrefixes.GENERAL:
-        result.general.push(valueToSchema[item.sectionItem])
+        result.general.push(valueToSchemaPe[item.sectionItem])
         break
       case ExamPrefixes.GENITOURINARY:
-        result.genitourinaryGu.push(valueToSchema[item.sectionItem])
+        result.genitourinaryGu.push(valueToSchemaPe[item.sectionItem])
         break
       case ExamPrefixes.GYNECOLOGICAL:
-        result.gynecologicalGyn.push(valueToSchema[item.sectionItem])
+        result.gynecologicalGyn.push(valueToSchemaPe[item.sectionItem])
         break
       case ExamPrefixes.HEENT:
-        result.heent.push(valueToSchema[item.sectionItem])
+        result.heent.push(valueToSchemaPe[item.sectionItem])
         break
       case ExamPrefixes.LUNGS:
-        result.lungs.push(valueToSchema[item.sectionItem])
+        result.lungs.push(valueToSchemaPe[item.sectionItem])
         break
       case ExamPrefixes.LYMPH:
-        result.lymphNodes.push(valueToSchema[item.sectionItem])
+        result.lymphNodes.push(valueToSchemaPe[item.sectionItem])
         break
       case ExamPrefixes.MUSCULOSKELETAL:
-        result.musculoskeletal.push(valueToSchema[item.sectionItem])
+        result.musculoskeletal.push(valueToSchemaPe[item.sectionItem])
         break
       case ExamPrefixes.NECK:
-        result.neck.push(valueToSchema[item.sectionItem])
+        result.neck.push(valueToSchemaPe[item.sectionItem])
         break
       case ExamPrefixes.NUTRITION:
-        result.nutrition.push(valueToSchema[item.sectionItem])
+        result.nutrition.push(valueToSchemaPe[item.sectionItem])
         break
       case ExamPrefixes.PSYCHIATRIC:
-        result.psychiatric.push(valueToSchema[item.sectionItem])
+        result.psychiatric.push(valueToSchemaPe[item.sectionItem])
         break
       case ExamPrefixes.SKIN:
-        result.skin.push(valueToSchema[item.sectionItem])
+        result.skin.push(valueToSchemaPe[item.sectionItem])
         break
       case ExamPrefixes.CRANIAL_NERVES_EXAM:
-        result.cranialNervesExam.push(valueToSchema[item.sectionItem])
+        result.cranialNervesExam.push(valueToSchemaPe[item.sectionItem])
         break
       default:
         break
@@ -373,4 +373,4 @@ const transformOut =
     return result
   }
 
-export { transformIn, transformOut, valueToSchema }
+export { transformIn, transformOut, valueToSchemaPe }

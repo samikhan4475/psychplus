@@ -13,6 +13,7 @@ interface SelectableChipDetailsProps {
   field: string
   options?: { label: string; value: string }[]
   format?: string
+  isDisabled?: boolean
 }
 
 const SelectableChipDetails = ({
@@ -21,6 +22,7 @@ const SelectableChipDetails = ({
   field,
   options,
   format = '##',
+  isDisabled = false,
 }: SelectableChipDetailsProps) => {
   const form = useFormContext()
   const error = form.getFieldState(field, form.formState).error
@@ -32,7 +34,9 @@ const SelectableChipDetails = ({
         <Text weight="medium" mr="1" className="text-[11px]">
           {label}
         </Text>
-        {type === 'text' && <TextInput field={field} autoFocus />}
+        {type === 'text' && (
+          <TextInput field={field} disabled={isDisabled} autoFocus />
+        )}
         {type === 'number' && (
           <NumberInput
             format={format}

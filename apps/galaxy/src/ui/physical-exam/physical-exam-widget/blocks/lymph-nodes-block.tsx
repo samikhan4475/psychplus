@@ -1,11 +1,13 @@
-import { GroupSelectSection } from '@/components'
+import { physicalExamWidgetSchema } from '../history/physical-exam-details/data'
+import { PhysicalExamGroupDetailSection } from '../history/physical-exam-details/physical-exam-group-detail-section'
 import { PhysicalExamGroupSelectSection } from '../physical-exam-group-select-section'
+import { GroupSelectOption } from '../types'
 
 const BLOCK_ID = 'lymphNodes'
 
 const BLOCK_TITLE = 'Lymph Nodes'
 
-const LN_OPTIONS = [
+const LN_OPTIONS: GroupSelectOption<string>[] = [
   {
     label: 'Normal',
     value: 'lnNormal',
@@ -14,34 +16,47 @@ const LN_OPTIONS = [
     label: 'None palpated',
     value: 'lnNonePalpated',
   },
+  {
+    label: 'Other',
+    value: 'lnOther',
+    details: {
+      type: 'text',
+      label: 'Details',
+      field: 'lnOtherDetails',
+    },
+  },
 ]
 
 const LymphNodesBlock = ({
   normalChipsSelected,
   setNormalChipsSelected,
+  isDetails = false,
+  result,
 }: {
-  normalChipsSelected: string[]
-  setNormalChipsSelected: (selected: string[]) => void
+  normalChipsSelected?: string[]
+  setNormalChipsSelected?: (selected: string[]) => void
+  isDetails?: boolean
+  result?: physicalExamWidgetSchema
 }) => {
   return (
-    <PhysicalExamGroupSelectSection
-      label={BLOCK_TITLE}
-      field={BLOCK_ID}
-      options={[
-        ...LN_OPTIONS,
-        {
-          label: 'Other',
-          value: 'lnOther',
-          details: {
-            type: 'text',
-            label: 'Details',
-            field: 'lnOtherDetails',
-          },
-        },
-      ]}
-      normalChipsSelected={normalChipsSelected}
-      setNormalChipsSelected={setNormalChipsSelected}
-    />
+    <>
+      {isDetails ? (
+        <PhysicalExamGroupDetailSection
+          label={BLOCK_TITLE}
+          field={BLOCK_ID}
+          options={LN_OPTIONS}
+          result={result}
+        />
+      ) : (
+        <PhysicalExamGroupSelectSection
+          label={BLOCK_TITLE}
+          field={BLOCK_ID}
+          options={LN_OPTIONS}
+          normalChipsSelected={normalChipsSelected}
+          setNormalChipsSelected={setNormalChipsSelected}
+        />
+      )}
+    </>
   )
 }
 

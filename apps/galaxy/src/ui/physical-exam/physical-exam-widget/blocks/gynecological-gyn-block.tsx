@@ -1,11 +1,13 @@
-import { GroupSelectSection } from '@/components'
+import { physicalExamWidgetSchema } from '../history/physical-exam-details/data'
+import { PhysicalExamGroupDetailSection } from '../history/physical-exam-details/physical-exam-group-detail-section'
 import { PhysicalExamGroupSelectSection } from '../physical-exam-group-select-section'
+import { GroupSelectOption } from '../types'
 
 const BLOCK_ID = 'gynecologicalGyn'
 
 const BLOCK_TITLE = 'Gynecological (GYN)'
 
-const GYN_OPTIONS = [
+const GYN_OPTIONS: GroupSelectOption<string>[] = [
   {
     label: 'Normal',
     value: 'gynNormal',
@@ -30,34 +32,47 @@ const GYN_OPTIONS = [
     label: 'Dyspareunia',
     value: 'gynDyspareunia',
   },
+  {
+    label: 'Other',
+    value: 'gynOther',
+    details: {
+      type: 'text',
+      label: 'Details',
+      field: 'gynOtherDetails',
+    },
+  },
 ]
 
 const GynecologicalGynBlock = ({
   normalChipsSelected,
   setNormalChipsSelected,
+  isDetails,
+  result,
 }: {
-  normalChipsSelected: string[]
-  setNormalChipsSelected: (selected: string[]) => void
+  normalChipsSelected?: string[]
+  setNormalChipsSelected?: (selected: string[]) => void
+  isDetails?: boolean
+  result?: physicalExamWidgetSchema
 }) => {
   return (
-    <PhysicalExamGroupSelectSection
-      label={BLOCK_TITLE}
-      field={BLOCK_ID}
-      options={[
-        ...GYN_OPTIONS,
-        {
-          label: 'Other',
-          value: 'gynOther',
-          details: {
-            type: 'text',
-            label: 'Details',
-            field: 'gynOtherDetails',
-          },
-        },
-      ]}
-      normalChipsSelected={normalChipsSelected}
-      setNormalChipsSelected={setNormalChipsSelected}
-    />
+    <>
+      {isDetails ? (
+        <PhysicalExamGroupDetailSection
+          label={BLOCK_TITLE}
+          field={BLOCK_ID}
+          options={GYN_OPTIONS}
+          result={result}
+        />
+      ) : (
+        <PhysicalExamGroupSelectSection
+          label={BLOCK_TITLE}
+          field={BLOCK_ID}
+          options={GYN_OPTIONS}
+          normalChipsSelected={normalChipsSelected}
+          setNormalChipsSelected={setNormalChipsSelected}
+        />
+      )}
+    </>
   )
 }
 

@@ -10,9 +10,16 @@ interface TextInputProps {
   field: string
   autoFocus?: boolean
   className?: string
+  disabled?: boolean
 }
 
-const TextInput = ({ label, field, autoFocus, className }: TextInputProps) => {
+const TextInput = ({
+  label,
+  field,
+  autoFocus,
+  className,
+  disabled = false,
+}: TextInputProps) => {
   const form = useFormContext()
 
   return (
@@ -21,6 +28,7 @@ const TextInput = ({ label, field, autoFocus, className }: TextInputProps) => {
       <TextField.Root
         size="1"
         autoFocus={autoFocus}
+        disabled={disabled}
         className={cn('h-[var(--chip-height)]', className)}
         {...form.register(field)}
       />
