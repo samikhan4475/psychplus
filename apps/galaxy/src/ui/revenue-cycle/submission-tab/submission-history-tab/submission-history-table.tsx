@@ -22,158 +22,158 @@ const columns = (
   sort?: Sort,
   onSort?: (column: string) => void,
 ): ColumnDef<ClaimSubmissionHistory>[] => [
-  {
-    id: 'id',
-    header: ({ column }) => (
-      <ColumnHeader
-        sortable
-        sortDir={getSortDir(column.id, sort)}
-        onClick={() => {
-          onSort?.(column.id)
-        }}
-        column={column}
-        label="Batch #"
-      />
-    ),
-    cell: ({ row }) => <LongTextCell>{`${row.original.id}`}</LongTextCell>,
-  },
-  {
-    id: 'batchName',
-    header: ({ column }) => (
-      <ColumnHeader
-        sortable
-        sortDir={getSortDir(column.id, sort)}
-        onClick={() => {
-          onSort?.(column.id)
-        }}
-        label="Batch Name"
-        column={column}
-      />
-    ),
-    cell: ({ row }) => <TextCell>{row.original.batchName}</TextCell>,
-  },
-  {
-    id: 'isaControlNumber',
-    header: ({ column }) => (
-      <ColumnHeader
-        sortable
-        sortDir={getSortDir(column.id, sort)}
-        onClick={() => {
-          onSort?.(column.id)
-        }}
-        column={column}
-        label="ICN #"
-      />
-    ),
-    cell: ({ row }) => (
-      <TextCell>{row.original.isaControlNumber || '-'}</TextCell>
-    ),
-  },
-  {
-    id: 'claimCount',
-    header: ({ column }) => (
-      <ColumnHeader
-        column={column}
-        sortable
-        sortDir={getSortDir(column.id, sort)}
-        onClick={() => {
-          onSort?.(column.id)
-        }}
-        label="Total # of Claims"
-      />
-    ),
-    cell: ({ row }) => <TextCell>{row.original.claimCount}</TextCell>,
-  },
-  {
-    id: 'metaData.createdOn',
-    header: ({ column }) => (
-      <ColumnHeader
-        column={column}
-        sortable
-        sortDir={getSortDir(column.id, sort)}
-        onClick={() => {
-          onSort?.(column.id)
-        }}
-        label="Batch Date"
-      />
-    ),
-    cell: ({ row }) => (
-      <DateCell>
-        {formatDate(row.original.metadata.createdOn, 'MM-dd-yyyy')}
-      </DateCell>
-    ),
-  },
-  {
-    id: 'processedDate',
-    header: ({ column }) => (
-      <ColumnHeader
-        sortable
-        sortDir={getSortDir(column.id, sort)}
-        onClick={() => {
-          onSort?.(column.id)
-        }}
-        column={column}
-        label="Processed Date"
-      />
-    ),
-    cell: ({ row }) => (
-      <TextCell>{formatDate(row.original.processedDate) || '-'}</TextCell>
-    ),
-  },
-  {
-    id: 'batchType',
-    header: ({ column }) => (
-      <ColumnHeader
-        sortable
-        sortDir={getSortDir(column.id, sort)}
-        onClick={() => {
-          onSort?.(column.id)
-        }}
-        column={column}
-        label="Batch Type"
-      />
-    ),
-    cell: ({ row }) => <TextCell>{row.original.batchType}</TextCell>,
-  },
-  {
-    id: 'metadata.createdByFullName',
-    header: ({ column }) => (
-      <ColumnHeader
-        sortable
-        sortDir={getSortDir(column.id, sort)}
-        onClick={() => {
-          onSort?.(column.id)
-        }}
-        column={column}
-        label="Created By"
-      />
-    ),
-    cell: ({ row }) => (
-      <TextCell>{row.original.metadata?.createdByFullName}</TextCell>
-    ),
-  },
-  {
-    id: 'isProcessed',
-    header: ({ column }) => (
-      <ColumnHeader
-        sortable
-        sortDir={getSortDir(column.id, sort)}
-        onClick={() => {
-          onSort?.(column.id)
-        }}
-        column={column}
-        label="Processed"
-      />
-    ),
-    cell: ({ row }) => <TextCell>{row.original.isProcessed || '-'}</TextCell>,
-  },
-  {
-    id: 'actions',
-    header: ({ column }) => <ColumnHeader column={column} label="Actions" />,
-    enableHiding: false,
-    cell: ({ row }) => <ActionsCell row={row} />,
-  },
-]
+    {
+      id: 'batchId',
+      header: ({ column }) => (
+        <ColumnHeader
+          sortable
+          sortDir={getSortDir(column.id, sort)}
+          onClick={() => {
+            onSort?.(column.id)
+          }}
+          column={column}
+          label="Batch #"
+        />
+      ),
+      cell: ({ row }) => <LongTextCell>{`${row.original.id}`}</LongTextCell>,
+    },
+    {
+      id: 'batchName',
+      header: ({ column }) => (
+        <ColumnHeader
+          sortable
+          sortDir={getSortDir(column.id, sort)}
+          onClick={() => {
+            onSort?.(column.id)
+          }}
+          label="Batch Name"
+          column={column}
+        />
+      ),
+      cell: ({ row }) => <TextCell>{row.original.batchName}</TextCell>,
+    },
+    {
+      id: 'isaControlNumber',
+      header: ({ column }) => (
+        <ColumnHeader
+          sortable
+          sortDir={getSortDir(column.id, sort)}
+          onClick={() => {
+            onSort?.(column.id)
+          }}
+          column={column}
+          label="ICN #"
+        />
+      ),
+      cell: ({ row }) => (
+        <TextCell>{row.original.isaControlNumber || '-'}</TextCell>
+      ),
+    },
+    {
+      id: 'claimCount',
+      header: ({ column }) => (
+        <ColumnHeader
+          column={column}
+          sortable
+          sortDir={getSortDir(column.id, sort)}
+          onClick={() => {
+            onSort?.(column.id)
+          }}
+          label="Total # of Claims"
+        />
+      ),
+      cell: ({ row }) => <TextCell>{row.original.claimCount}</TextCell>,
+    },
+    {
+      id: 'createdOn',
+      header: ({ column }) => (
+        <ColumnHeader
+          column={column}
+          sortable
+          sortDir={getSortDir(column.id, sort)}
+          onClick={() => {
+            onSort?.(column.id)
+          }}
+          label="Batch Date"
+        />
+      ),
+      cell: ({ row }) => (
+        <DateCell>
+          {formatDate(row.original.metadata.createdOn, 'MM-dd-yyyy')}
+        </DateCell>
+      ),
+    },
+    {
+      id: 'processedDate',
+      header: ({ column }) => (
+        <ColumnHeader
+          sortable
+          sortDir={getSortDir(column.id, sort)}
+          onClick={() => {
+            onSort?.(column.id)
+          }}
+          column={column}
+          label="Processed Date"
+        />
+      ),
+      cell: ({ row }) => (
+        <TextCell>{formatDate(row.original.processedDate) || '-'}</TextCell>
+      ),
+    },
+    {
+      id: 'batchType',
+      header: ({ column }) => (
+        <ColumnHeader
+          sortable
+          sortDir={getSortDir(column.id, sort)}
+          onClick={() => {
+            onSort?.(column.id)
+          }}
+          column={column}
+          label="Batch Type"
+        />
+      ),
+      cell: ({ row }) => <TextCell>{row.original.batchType}</TextCell>,
+    },
+    {
+      id: 'createdByFullName',
+      header: ({ column }) => (
+        <ColumnHeader
+          sortable
+          sortDir={getSortDir(column.id, sort)}
+          onClick={() => {
+            onSort?.(column.id)
+          }}
+          column={column}
+          label="Created By"
+        />
+      ),
+      cell: ({ row }) => (
+        <TextCell>{row.original.metadata?.createdByFullName}</TextCell>
+      ),
+    },
+    {
+      id: 'isProcessed',
+      header: ({ column }) => (
+        <ColumnHeader
+          sortable
+          sortDir={getSortDir(column.id, sort)}
+          onClick={() => {
+            onSort?.(column.id)
+          }}
+          column={column}
+          label="Processed"
+        />
+      ),
+      cell: ({ row }) => <TextCell>{row.original.isProcessed || '-'}</TextCell>,
+    },
+    {
+      id: 'actions',
+      header: ({ column }) => <ColumnHeader column={column} label="Actions" />,
+      enableHiding: false,
+      cell: ({ row }) => <ActionsCell row={row} />,
+    },
+  ]
 
 const SubmissionHistoryTable = () => {
   const { data, loading, sort, sortData, search } = useStore((state) => ({

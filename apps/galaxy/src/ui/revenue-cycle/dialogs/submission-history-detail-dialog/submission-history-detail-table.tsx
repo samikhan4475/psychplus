@@ -74,7 +74,7 @@ const columns = (
       ),
     },
     {
-      id: 'metadata.createdOn',
+      id: 'createdOn',
       accessorKey: 'metadata.createdOn',
       header: ({ column }) => (
         <ColumnHeader

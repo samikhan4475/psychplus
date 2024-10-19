@@ -203,7 +203,7 @@ const columns = (
       },
     },
     {
-      id: 'metadata.createdOn',
+      id: 'createdOn',
       header: ({ column }) => (
         <ColumnHeader
           sortable
