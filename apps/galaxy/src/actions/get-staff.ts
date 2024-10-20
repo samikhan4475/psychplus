@@ -1,14 +1,12 @@
 'use server'
 
 import * as api from '@/api'
-import { Clinic, SelectOptionType } from '@/types'
+import { SelectOptionType, StaffResource } from '@/types'
 
-const getClinicsOptionsAction = async (): Promise<
+const getStaffOptionsAction = async (): Promise<
   api.ActionResult<SelectOptionType[]>
 > => {
-  const response = await api.GET<Clinic[]>(api.GET_CLINICS_ENDPOINT, {
-    next: { revalidate: 3600 },
-  })
+  const response = await api.GET<StaffResource[]>(api.GET_STAFF)
 
   if (response.state === 'error') {
     return {
@@ -19,7 +17,7 @@ const getClinicsOptionsAction = async (): Promise<
 
   const transformedData = response.data.map((data) => ({
     value: data.id,
-    label: data.name,
+    label: data.legalName.firstName,
   }))
 
   return {
@@ -28,4 +26,4 @@ const getClinicsOptionsAction = async (): Promise<
   }
 }
 
-export { getClinicsOptionsAction }
+export { getStaffOptionsAction }

@@ -52,6 +52,12 @@ interface MetadataCodeAttribute {
   value: string
 }
 
+interface POSCodeSets {
+  codeSystemName: string
+  displayName: string
+  codes: Code[]
+}
+
 type CodesetCache = Record<string, SharedCodeset>
 
-export type { Codeset, Code, SharedCodeset, SharedCode, MetadataCodeset, CodesetCache }
+export type { Codeset, Code, SharedCodeset, SharedCode, MetadataCodeset, CodesetCache ,POSCodeSets}

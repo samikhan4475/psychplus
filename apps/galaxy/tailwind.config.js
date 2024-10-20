@@ -65,7 +65,11 @@ const config = {
         'pp-blue-400': '#194595',
         'pp-lavender-blue': '#CDD5EE',
         'pp-red':"#EE1D52",
-        'pp-focus-border': '#B9BBC6'
+        'pp-gray-5':"#EEEEEE",
+        'pp-header-bg':"#EBF3FC",
+        'pp-border':"#A4A4A4",
+        'pp-focus-border': '#B9BBC6',
+        'pp-ac-border': '#E8E7E7'
       },
       animation: {
         loader: 'bounce 500ms infinite, pulse 2s infinite',
