@@ -52,6 +52,7 @@ const GET_INSURANCE_PAYER_PLANS = (payerId: string) =>
 const GET_USER_PERMISSIONS_ENDPOINT = `${API_URL}/api/users/self/permissions`
 const SEARCH_LOCATION_SERVICES_ENDPOINT = `${API_URL}/api/locationservices/actions/search`
 const SEARCH_BOOKED_APPOINTMENTS_ENDPOINT = `${API_URL}/api/appointments/actions/search`
+const GET_CLEARNING_HOUSE_RECEIVERS = `${API_URL}/api/clearinghousereceivers/actions/search`
 const GET_PATIENT_CONSENT_SIGNED_PDF_ENDPOINT = (
   patientId: string,
   consentId: string,
@@ -113,6 +114,9 @@ const GET_PRACTICE_IDS_LIST_ENDPOINT = `${API_URL}/api/practices/actions/search`
 const DELETE_INSURANCE_PAYMENT_ENDPOINT = (id: string) =>
   `${API_URL}/api/payments/${id}`
 const GET_CLAIMS_LIST_ENDPOINT = `${API_URL}/api/claims/actions/search`
+const CLAIM_SUBMIT_ENDPOINT = `${API_URL}/api/claimssubmissions/actions/srcubandsubmit`
+const CLAIM_SUBMISSION_REJECTION_DETAIL_ENDPOINT = (claimId: string) =>
+  `${API_URL}/api/claims/${claimId}/claimvalidations/actions/search`
 const GET_CLAIM_SUBMISSION_HISTORY = `${API_URL}/api/claimssubmissions/batches/actions/search`
 const GET_CLAIM_SUBMISSION_HISTORY_DETAIL = (batchId: string) =>
   `${API_URL}/api/claimssubmissions/batches/${batchId}/details/actions/search?isIncludeMetadataResourceChangeControl=true`
@@ -160,6 +164,7 @@ const GET_POS_CODES = `${API_URL}/api/codeset/authorities/PsychPlusPublic/codese
 export {
   USER_ENDPOINT,
   REFRESH_ENDPOINT,
+  GET_CLEARNING_HOUSE_RECEIVERS,
   SESSION_ENDPOINT,
   LOGIN_ENDPOINT,
   SEARCH_PATIENTS_ENDPOINT,
@@ -225,6 +230,8 @@ export {
   GET_REPORTS_CATEGORY_ENDPOINT,
   GET_REPORTS_TEMPLATES_ENDPOINT,
   GET_REPORTS_PARAMETER_ENDPOINT,
+  CLAIM_SUBMIT_ENDPOINT,
+  CLAIM_SUBMISSION_REJECTION_DETAIL_ENDPOINT,
   GET_TEMPLATE_REPORT,
   GET_PATIENTS_INFO_HISTORY,
   GET_PATIENT_HISOTRY_PROFILE_IMAGE_ENDPOINT,

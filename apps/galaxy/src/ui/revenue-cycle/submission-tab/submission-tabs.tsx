@@ -14,15 +14,15 @@ const SubmissionTabs = () => {
     >
       <Tabs.Trigger
         className={tabButtonClasses}
-        value={TabValue.PaperSubmission}
-      >
-        Paper Submission
-      </Tabs.Trigger>
-      <Tabs.Trigger
-        className={tabButtonClasses}
         value={TabValue.ElectronicSubmission}
       >
         Electronic Submission
+      </Tabs.Trigger>
+      <Tabs.Trigger
+        className={tabButtonClasses}
+        value={TabValue.PaperSubmission}
+      >
+        Paper Submission
       </Tabs.Trigger>
       <Tabs.Trigger
         className={tabButtonClasses}

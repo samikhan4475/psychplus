@@ -125,6 +125,65 @@ interface InsurancePaymentSearchParams {
   insuranceName?: string
   paymentType?: string
 }
+interface ClaimSubmissionPayload {
+  batchId: number
+  batchName: string
+  errorMessage: string
+  hcfatype: string
+  insuranceType: string
+  receiverId: string
+  submissionType: string
+  subscriptionTypeViewOnly: string
+  claimType: string
+  claimIds: string[]
+  insurancePolicyPriority: string
+}
+interface ClaimSubmissionResponse {
+  cleanClaimIds: string[]
+  claimsWithErrorMessages: Record<string, ErrorMessage[]>
+}
+
+interface ErrorMessage {
+  id: string
+  claimId: string
+  errorMessage: string
+}
+interface ClaimResponseType {
+  claimId: string
+  message: string[]
+}
+interface ClearingHouseReceiver {
+  id: string
+  clearingHouseName: string
+  receiverId: string
+  receiverName: string
+  phone: string
+  fax: string
+  email: string
+  website: string
+  submissionMethod: string
+  submissionUrl: string
+  submissionPort: number
+  submissionDirectory: string
+  batchResponseDirectory: string
+  chResponseDirectory: string
+  claimResponseDirectory: string
+  eraResponseDirectory: string
+  isa01: string
+  isa03: string
+  isa05: string
+  isa07: string
+  isa08: string
+  gs03: string
+  nm140ReceiverName: string
+  nm140ReceiverId: string
+  address1: string
+  address2?: string
+  city: string
+  state: string
+  zip: string
+  recordStatus: string
+}
 
 interface PracticeList {
   id: string
@@ -133,6 +192,11 @@ interface PracticeList {
 
 export {
   RevenueCycleTab,
+  type ClearingHouseReceiver,
+  type ErrorMessage,
+  type ClaimResponseType,
+  type ClaimSubmissionPayload,
+  type ClaimSubmissionResponse,
   type ClaimListSearchParams,
   type GetClaimsListResponse,
   type InsurancePayment,

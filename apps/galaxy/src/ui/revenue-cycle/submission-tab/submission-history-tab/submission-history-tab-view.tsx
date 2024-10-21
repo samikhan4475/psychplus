@@ -6,7 +6,7 @@ import { SubmissionHistoryTablePagination } from './submission-history-table-pag
 
 const SubmissionHistoryView = () => {
   return (
-    <Flex direction={'column'}>
+    <Flex direction="column">
       <SubmissionHistoryFilterForm />
       <Flex direction="column" mt="2" className="bg-white flex-1 ">
         <Box className="flex-1 overflow-auto">

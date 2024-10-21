@@ -10,7 +10,7 @@ const BatchNumberInput = () => {
     <FormFieldContainer className="w-auto flex-row items-center gap-1">
       <FormFieldLabel> Batch #</FormFieldLabel>
       <TextField.Root
-        size={'1'}
+        size="1"
         placeholder='1232123'
         className="border-pp-gray-2 h-[var(--chip-height)] w-[102px] border border-solid !outline-none [box-shadow:none]"
         {...form.register('batchNumber')}

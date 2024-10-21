@@ -6,7 +6,7 @@ const DateToInput = () => {
       <FormFieldLabel>
         To
       </FormFieldLabel>
-      <DatePickerInput className='w-[102px]' field={'toDate'} />
+      <DatePickerInput className='w-[102px]' field="toDate" />
     </FormFieldContainer>
   )
 }

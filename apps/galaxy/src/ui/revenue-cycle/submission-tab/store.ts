@@ -1,11 +1,10 @@
 import { create } from 'zustand'
 import { Sort } from '@/types'
 import { getNewSortDir } from '@/utils'
+import { getClaimsListAction } from '../actions'
 import { GetClaimsListResponse } from '../types'
 import { SchemaType } from './submission-filter-form'
 import { TabValue } from './types'
-import { getClaimsListAction } from '../actions'
-
 
 interface Store {
   data?: GetClaimsListResponse
@@ -49,7 +48,10 @@ const useStore = create<Store>((set, get) => ({
       formValues,
     })
     const result = await getClaimsListAction({
-      ...formValues,
+      ...{
+        ...formValues,
+        isForcePaper: get().selectedTab === TabValue.PaperSubmission,
+      },
       page,
       sort: get().sort,
     })
@@ -83,6 +85,19 @@ const useStore = create<Store>((set, get) => ({
   },
   next: () => {
     const page = get().page + 1
+
+    if (get().pageCache[page]) {
+      return set({
+        data: get().pageCache[page],
+        page,
+      })
+    }
+
+    get().search(get().formValues, page)
+  },
+  prev: () => {
+    const page = get().page - 1
+
     if (get().pageCache[page]) {
       return set({
         data: get().pageCache[page],
@@ -90,13 +105,6 @@ const useStore = create<Store>((set, get) => ({
       })
     }
     get().search(get().formValues, page)
-  },
-  prev: () => {
-    const page = get().page - 1
-    set({
-      data: get().pageCache[page],
-      page,
-    })
   },
   sortData: (column) => {
     set({
@@ -117,7 +125,7 @@ const useStore = create<Store>((set, get) => ({
       formValues: undefined,
       pageCache: {},
     }),
-  selectedTab: TabValue.PaperSubmission,
+  selectedTab: TabValue.ElectronicSubmission,
   setSelectedTab: (currentTab) => set({ selectedTab: currentTab }),
   selectedRows: [],
   setSelectedRows: (selectedRows) => set({ selectedRows }),

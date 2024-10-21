@@ -1,5 +1,6 @@
 import { Box, Checkbox } from '@radix-ui/themes'
 import { useStore } from '../store'
+
 interface HeaderCheckboxProps {
   checked: boolean
   onCheckedChange: (value: boolean) => void
@@ -8,9 +9,9 @@ const TableHeaderCheckboxCell = ({
   checked,
   onCheckedChange,
 }: HeaderCheckboxProps) => {
-  const { selectedRows, setSelectedRows } = useStore((state) => ({
-    selectedRows: state.selectedRows,
+  const { setSelectedRows, claims } = useStore((state) => ({
     setSelectedRows: state.setSelectedRows,
+    claims: state.data?.claims,
   }))
   return (
     <Box onClick={(e) => e.stopPropagation()}>
@@ -20,10 +21,8 @@ const TableHeaderCheckboxCell = ({
         color="indigo"
         highContrast
         onCheckedChange={(value) => {
-          if (selectedRows.length > 0 && !value) {
-            setSelectedRows([])
-          }
           onCheckedChange(!!value)
+          setSelectedRows(value ? claims?.map((claim) => claim.id) || [] : [])
         }}
         aria-label="Select all"
       />

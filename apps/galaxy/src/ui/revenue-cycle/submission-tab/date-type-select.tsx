@@ -11,7 +11,7 @@ const DateTypeSelect = () => {
       </FormFieldLabel>
       <CodesetSelect
         className='w-[102px]'
-        name={'dateType'}
+        name="dateType"
         codeset={CODESETS.ClaimFiltrationDateType}
         size="1"
       />

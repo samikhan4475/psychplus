@@ -11,7 +11,7 @@ const LocationSelect = () => {
       </FormFieldLabel>
       <AsyncSelect
         fetchOptions={getClinicsOptionsAction}
-        field={'locationId'}
+        field="locationId"
         buttonClassName="w-[102px]"
       />
     </FormFieldContainer>

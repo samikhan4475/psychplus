@@ -20,7 +20,7 @@ const SubmissionTabView = () => {
     reset()
   }
   return (
-    <Flex direction={'column'} className="gap-0.5">
+    <Flex direction="column" className="gap-0.5">
       <TabContentHeading title="Submission">
         {selectedTab !== TabValue.SubmissionHistory && <SubmissionSubmitField />}
       </TabContentHeading>

@@ -11,7 +11,7 @@ const InsuranceNameSelect = () => {
       </FormFieldLabel>
       <AsyncSelect
         className='w-fit'
-        field={'insuranceId'}
+        field="insuranceId"
         fetchOptions={getInsurancePayersOptionsAction}
         buttonClassName="w-[102px]"
 

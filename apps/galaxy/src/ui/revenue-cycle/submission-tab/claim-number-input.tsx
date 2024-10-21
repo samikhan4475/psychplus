@@ -11,7 +11,7 @@ const ClaimNumberInput = () => {
         Claim #
       </FormFieldLabel>
       <TextField.Root
-        size={'1'}
+        size="1"
         placeholder='123456'
         className='h-[var(--chip-height)] border-pp-gray-2 border border-solid !outline-none w-[102px] [box-shadow:none]'
         {...form.register("claimNumber")} />

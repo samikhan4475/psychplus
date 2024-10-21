@@ -1,5 +1,6 @@
 import { Box, Checkbox } from '@radix-ui/themes'
 import { useStore } from '../store'
+
 interface RowCheckboxProps {
   checked: boolean
   onCheckedChange: (val: boolean) => void
@@ -8,7 +9,7 @@ interface RowCheckboxProps {
 const TableRowCheckboxCell = ({
   checked,
   onCheckedChange,
-  claimId
+  claimId,
 }: RowCheckboxProps) => {
   const { selectedRows, setSelectedRows } = useStore((state) => ({
     selectedRows: state.selectedRows,

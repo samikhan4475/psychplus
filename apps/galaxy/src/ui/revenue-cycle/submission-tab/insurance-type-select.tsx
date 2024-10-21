@@ -12,7 +12,7 @@ const InsuranceTypeSelect = () => {
         Insurance Type
       </FormFieldLabel>
       <SelectInput
-        field={'insuranceType'}
+        field="insuranceType"
         options={insuranceTypeOptions}
         buttonClassName="w-[102px]"
       />

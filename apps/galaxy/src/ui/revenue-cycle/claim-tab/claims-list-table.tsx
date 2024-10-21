@@ -16,6 +16,7 @@ import { getSortDir } from '@/utils'
 import { formatDateTime } from '@/utils/date'
 import { ActionsCell } from './actions-cell'
 import { useStore } from './store'
+import { ClaimNumberCell } from './table-row-claim-number-cell'
 
 const columns = (
   sort?: Sort,
@@ -34,9 +35,7 @@ const columns = (
           }}
         />
       ),
-      cell: ({ row }) => {
-        return <TextCell>{row.original.claimNumber}</TextCell>
-      },
+      cell: ClaimNumberCell,
     },
     {
       id: 'patientName',

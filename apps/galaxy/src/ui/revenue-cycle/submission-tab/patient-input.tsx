@@ -11,8 +11,8 @@ const PatientInput = () => {
         Patient
       </FormFieldLabel>
       <TextField.Root
-        size={'1'}
-        placeholder='Patient ID'
+        size="1"
+        placeholder="Patient ID"
         className='h-[var(--chip-height)] border-pp-gray-2 border border-solid w-[102px] !outline-none [box-shadow:none]'
         {...form.register("patientId")} />
     </FormFieldContainer>

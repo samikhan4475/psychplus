@@ -8,17 +8,12 @@ import {
   ColumnHeader,
   DataTable,
   DateCell,
-  DateTimeCell,
   LoadingPlaceholder,
   TextCell,
 } from '@/components'
 import { Claim, Sort } from '@/types'
-import { formatDateTime, getSortDir } from '@/utils'
-import {
-  ClaimNumberCell,
-  TableHeaderCheckboxCell,
-  TableRowCheckboxCell,
-} from './cells'
+import { formatDate, getSortDir } from '@/utils'
+import { TableHeaderCheckboxCell, TableRowCheckboxCell } from './cells'
 import { useStore } from './store'
 
 const columns = (
@@ -38,7 +33,7 @@ const columns = (
       cell: ({ row }) => (
         <Box className="pl-[2px]">
           <TableRowCheckboxCell
-            claimId={row.id}
+            claimId={row.original.id}
             checked={row.getIsSelected()}
             onCheckedChange={row.toggleSelected}
           />
@@ -58,9 +53,7 @@ const columns = (
           label="Claim #"
         />
       ),
-      cell: ({ row }) => {
-        return <ClaimNumberCell text={row.original.claimNumber} />
-      },
+      cell: ({ row }) => <TextCell>{row.original.claimNumber}</TextCell>,
     },
     {
       id: 'patientName',
@@ -75,9 +68,7 @@ const columns = (
           column={column}
         />
       ),
-      cell: ({ row }) => {
-        return <TextCell>{row.original.patientName}</TextCell>
-      },
+      cell: ({ row }) => <TextCell>{row.original.patientName}</TextCell>,
     },
     {
       id: 'patientAccountNumber',
@@ -92,9 +83,9 @@ const columns = (
           label="MRN #"
         />
       ),
-      cell: ({ row }) => {
-        return <TextCell>{row.original.patientAccountNumber}</TextCell>
-      },
+      cell: ({ row }) => (
+        <TextCell>{row.original.patientAccountNumber}</TextCell>
+      ),
     },
     {
       id: 'dateOfServiceFrom',
@@ -109,13 +100,11 @@ const columns = (
           label="DOS"
         />
       ),
-      cell: ({ row }) => {
-        return (
-          <DateTimeCell>
-            {formatDateTime(`${row.original.dateOfServiceFrom}`)}
-          </DateTimeCell>
-        )
-      },
+      cell: ({ row }) => (
+        <DateCell>
+          {formatDate(`${row.original.dateOfServiceFrom}`, 'MM-dd-yyyy')}
+        </DateCell>
+      ),
     },
     {
       id: 'primaryInsurance.payerName',
@@ -130,9 +119,9 @@ const columns = (
           label="Primary Ins."
         />
       ),
-      cell: ({ row }) => {
-        return <TextCell>{row.original.primaryInsurance?.payerName}</TextCell>
-      },
+      cell: ({ row }) => (
+        <TextCell>{row.original.primaryInsurance?.payerName}</TextCell>
+      ),
     },
     {
       id: 'secondaryInsurance.payerName',
@@ -147,9 +136,9 @@ const columns = (
           label="Secondary"
         />
       ),
-      cell: ({ row }) => {
-        return <TextCell>{row.original.secondaryInsurance?.payerName}</TextCell>
-      },
+      cell: ({ row }) => (
+        <TextCell>{row.original.secondaryInsurance?.payerName}</TextCell>
+      ),
     },
     {
       id: 'recordStatus',
@@ -182,7 +171,7 @@ const columns = (
         />
       ),
       cell: ({ row }) => {
-        return <TextCell>${row.original.totalAmount}</TextCell>
+        return <TextCell hasPayment>{row.original.totalAmount}</TextCell>
       },
     },
     {
@@ -199,7 +188,7 @@ const columns = (
         />
       ),
       cell: ({ row }) => {
-        return <TextCell>${row.original.amountDue}</TextCell>
+        return <TextCell hasPayment>{row.original.amountDue}</TextCell>
       },
     },
     {
@@ -215,13 +204,11 @@ const columns = (
           label="Created On"
         />
       ),
-      cell: ({ row }) => {
-        return (
-          <DateTimeCell>
-            {formatDateTime(row.original.metadata?.createdOn)}
-          </DateTimeCell>
-        )
-      },
+      cell: ({ row }) => (
+        <DateCell>
+          {formatDate(`${row.original.metadata?.createdOn}`, 'MM-dd-yyyy')}
+        </DateCell>
+      ),
     },
     {
       id: 'submittedDate',
@@ -236,16 +223,20 @@ const columns = (
           label="Submitted On"
         />
       ),
-      cell: ({ row }) => {
-        return (
-          <DateTimeCell>
-            {row.original.submittedDate &&
-              formatDateTime(`${row.original.submittedDate}`)}
-          </DateTimeCell>
-        )
-      },
+      cell: ({ row }) => (
+        <DateCell>
+          {row.original.submittedDate
+            ? formatDate(`${row.original.submittedDate}`, 'MM-dd-yyyy')
+            : '--'}
+        </DateCell>
+      ),
     },
   ]
+}
+const defaultPayload = {
+  isIncludeClaimValidation: true,
+  isIncludePatientInsurancePlan: false,
+  isIncludePatientInsurancePolicy: true,
 }
 const SubmissionTable = () => {
   const { data, loading, sort, sortData, search } = useStore((state) => ({
@@ -256,7 +247,7 @@ const SubmissionTable = () => {
     search: state.search,
   }))
   useEffect(() => {
-    search()
+    search(defaultPayload)
   }, [])
   if (loading) {
     return (

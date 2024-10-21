@@ -11,7 +11,7 @@ const InsurancePolicyTypeSelect = () => {
     <FormFieldContainer className="w-auto flex-row items-center gap-1">
       <FormFieldLabel>Insurance Type</FormFieldLabel>
       <SelectInput
-        field={'insurancePolicyPriority'}
+        field="insurancePolicyPriority"
         options={insuranceTypeOptions}
         buttonClassName="w-[102px]"
       />
