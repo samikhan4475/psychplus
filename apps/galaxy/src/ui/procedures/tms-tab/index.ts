@@ -1,1 +1,1 @@
-export * from './tms-tab'
+export * from './tms-widget'
