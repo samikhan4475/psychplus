@@ -13,6 +13,7 @@ interface RadioSelectSectionProps {
   description?: React.ReactNode
   field: string
   options: RadioSelectOption[]
+  required?:boolean
 }
 
 interface RadioSelectOption {
@@ -25,6 +26,7 @@ const RadioSelectSection = ({
   description,
   field,
   options,
+  required
 }: RadioSelectSectionProps) => {
   const form = useFormContext()
 
@@ -32,7 +34,7 @@ const RadioSelectSection = ({
 
   return (
     <Flex align="start" justify="start" gap="2">
-      {label && <BlockLabel>{label}</BlockLabel>}
+      {label && <BlockLabel required={required}>{label}</BlockLabel>}
       {description && <BlockDescription>{description}</BlockDescription>}
       <RadioGroup.Root
         onValueChange={(value) => {

@@ -10,6 +10,7 @@ interface TextAreaInputProps {
   field: string
   autoFocus?: boolean
   className?: string
+  placeHolder?:string
 }
 
 const TextAreaInput = ({
@@ -17,6 +18,7 @@ const TextAreaInput = ({
   field,
   autoFocus,
   className,
+  placeHolder
 }: TextAreaInputProps) => {
   const form = useFormContext()
 
@@ -27,6 +29,7 @@ const TextAreaInput = ({
         size="1"
         autoFocus={autoFocus}
         className={cn('h-[var(--chip-height)]', className)}
+        placeholder={placeHolder}
         {...form.register(field)}
       />
     </Flex>

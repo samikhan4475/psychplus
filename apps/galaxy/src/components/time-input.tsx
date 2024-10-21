@@ -32,7 +32,7 @@ const TimeInput = <T extends TimeValue>({
   const form = useFormContext()
   return (
     <FormFieldContainer className={cn('w-full', className)}>
-      {label && <FormFieldLabel>Time</FormFieldLabel>}
+      {label && <FormFieldLabel>{label}</FormFieldLabel>}
       <Controller
         control={form.control}
         name={field}

@@ -12,6 +12,8 @@ interface SelectableChipDetailsProps {
   label: string
   field: string
   options?: { label: string; value: string }[]
+  showIndicator?:boolean
+  placeHolder?:string
   format?: string
   isDisabled?: boolean
 }
@@ -21,6 +23,8 @@ const SelectableChipDetails = ({
   label,
   field,
   options,
+  showIndicator = true,
+  placeHolder = "",
   format = '##',
   isDisabled = false,
 }: SelectableChipDetailsProps) => {
@@ -29,14 +33,12 @@ const SelectableChipDetails = ({
 
   return (
     <Flex position="relative" align="center">
-      <SelectedIndicator />
+      { showIndicator &&  <SelectedIndicator /> }
       <Flex align="center" pl="1" className="bg-pp-focus-bg-2 rounded-1">
         <Text weight="medium" mr="1" className="text-[11px]">
           {label}
         </Text>
-        {type === 'text' && (
-          <TextInput field={field} disabled={isDisabled} autoFocus />
-        )}
+        {type === 'text' && <TextInput field={field} disabled={isDisabled} autoFocus placeHolder={placeHolder} />}
         {type === 'number' && (
           <NumberInput
             format={format}
