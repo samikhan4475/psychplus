@@ -1,7 +1,7 @@
 'use client'
 
 import { Button, Dialog } from '@radix-ui/themes'
-import { HistoryIcon, X } from 'lucide-react'
+import { X } from 'lucide-react'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { HistoryView } from './history-view'
 

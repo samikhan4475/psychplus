@@ -5,10 +5,12 @@ import { PhysicalExamWidget } from './physical-exam-widget'
 
 interface HpiWidgetLoaderProps {
   patientId: string
+  isPhysicalExamTab?: boolean
 }
 
 const PhysicalExamWidgetLoader = async ({
   patientId,
+  isPhysicalExamTab = false,
 }: HpiWidgetLoaderProps) => {
   const response = await api.POST<QuickNoteSectionItem[]>(
     api.NOTE_DETAILS_SEARCH_ENDPOINT,
@@ -26,7 +28,11 @@ const PhysicalExamWidgetLoader = async ({
   const initialValue = transformIn(response.data)
 
   return (
-    <PhysicalExamWidget patientId={patientId} initialValue={initialValue} />
+    <PhysicalExamWidget
+      patientId={patientId}
+      initialValue={initialValue}
+      isPhysicalExamTab={isPhysicalExamTab}
+    />
   )
 }
 

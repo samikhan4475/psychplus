@@ -6,11 +6,11 @@ import { FormProvider } from 'react-hook-form'
 import {
   WidgetClearButton,
   WidgetFormContainer,
-  WidgetHxButton,
   WidgetSaveButton,
   WidgetTagButton,
 } from '@/components'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
+import { cn } from '@/utils'
 import {
   CardiovascularCvsBlock,
   CentralNervousSystemCnsBlock,
@@ -30,20 +30,22 @@ import {
   SkinBlock,
 } from './blocks'
 import { CheckAllNormalCell } from './check-all-normal-cell'
-import { QUICKNOTE_SECTION_NAME } from './constants'
 import { transformOut } from './data'
 import { HistoryButton } from './history'
+import { PhysicalExamHeader } from './physical-exam-header'
 import { usePhysicalExamWidgetForm } from './physical-exam-widget-form'
 import { type PhysicalExamWidgetSchemaType } from './physical-exam-widget-schema'
 
 interface PhysicalExamWidgetProps {
   patientId: string
   initialValue: PhysicalExamWidgetSchemaType
+  isPhysicalExamTab: boolean
 }
 
 const PhysicalExamWidget = ({
   patientId,
   initialValue,
+  isPhysicalExamTab,
 }: PhysicalExamWidgetProps) => {
   const form = usePhysicalExamWidgetForm(initialValue)
   const dependentNormalValues = [
@@ -115,24 +117,33 @@ const PhysicalExamWidget = ({
 
   return (
     <FormProvider {...form}>
+      {isPhysicalExamTab && (
+        <PhysicalExamHeader
+          patientId={patientId}
+          getData={transformOut(patientId)}
+          sectionName={QuickNoteSectionName.QuicknoteSectionPhysicalExam}
+        />
+      )}
       <WidgetFormContainer
         patientId={patientId}
         widgetId="physical-exam"
         getData={transformOut(patientId)}
-        title="Physical Exam"
+        title={!isPhysicalExamTab ? 'Physical Exam' : undefined}
         headerRight={
           <>
             <WidgetTagButton />
-            <HistoryButton
-              patientId={patientId}
-              sectionName={QuickNoteSectionName.QuicknoteSectionPhysicalExam}
-            />
+            {!isPhysicalExamTab && (
+              <HistoryButton
+                patientId={patientId}
+                sectionName={QuickNoteSectionName.QuicknoteSectionPhysicalExam}
+              />
+            )}
             <WidgetClearButton />
-            <WidgetSaveButton />
+            {!isPhysicalExamTab && <WidgetSaveButton />}
           </>
         }
         headerLeft={
-          <Flex>
+          <Flex className={cn(isPhysicalExamTab && 'ml-[-11px]')}>
             <CheckAllNormalCell
               onSelectAllNormal={handleSelectAllNormal}
               checked={normalChipsSelected.length === normal.length}

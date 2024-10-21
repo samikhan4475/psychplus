@@ -5,7 +5,7 @@ import { LoadingPlaceholder } from './loading-placeholder'
 import { WidgetBlocksContainer } from './widget-blocks-container'
 
 type WidgetContainerProps = React.PropsWithChildren<{
-  title: string
+  title?: string
   loading?: boolean
   error?: string
   contentHeight?: number

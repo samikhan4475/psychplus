@@ -8,7 +8,7 @@ interface PhysicalExamViewProps {
 const PhysicalExamView = ({ patientId }: PhysicalExamViewProps) => {
   return (
     <Flex direction="column" gap="2" width="100%">
-      <PhysicalExamWidget patientId={patientId} />
+      <PhysicalExamWidget patientId={patientId} isPhysicalExamTab={true} />
     </Flex>
   )
 }
