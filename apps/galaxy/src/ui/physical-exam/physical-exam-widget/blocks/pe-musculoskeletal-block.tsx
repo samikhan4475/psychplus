@@ -5,7 +5,7 @@ import { GroupSelectOption } from '../types'
 
 const BLOCK_ID = 'musculoskeletal'
 
-const BLOCK_TITLE = 'Nutrition'
+const BLOCK_TITLE = 'Musculoskeletal'
 
 const MSU_OPTIONS: GroupSelectOption<string>[] = [
   {

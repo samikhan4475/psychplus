@@ -24,27 +24,27 @@ enum ExamPrefixes {
 const valueToSchemaPe: { [key: string]: string } = {
   // Cardiovascular block
   CVS_Normal: 'cvsNormal',
-  CVS_Fatigue: 'cvsMurmurs',
-  CVS_FeelingAnxious: 'cvsHypertensionHtn',
-  CVS_Irritable: 'cvsOther',
+  CVS_Murmurs: 'cvsMurmurs',
+  CVS_HypertensionHtn: 'cvsHypertensionHtn',
+  CVS_Other: 'cvsOther',
 
   // Central Nervous System block
   CNS_Normal: 'cnsNormal',
   CNS_Fainting: 'cnsFainting',
   CNS_LossOfConsciousnessLoc: 'cnsLossOfConsciousnessLoc',
-  CNS_MoodSwings: 'cnsWeakness',
-  CNS_SelfHarm: 'cnsTremor',
-  CNS_UnstableRelationships: 'cnsSeizures',
-  CNS_UnstableSelfImage: 'cnsOther',
+  CNS_Weakness: 'cnsWeakness',
+  CNS_Tremor: 'cnsTremor',
+  CNS_Seizures: 'cnsSeizures',
+  CNS_Other: 'cnsOther',
 
   // chest block
-  CHS_ADHD: 'chsNormal',
-  CHS_Anxiety: 'chsChroniCHSough',
-  CHS_Bipolar: 'chsWheezing',
-  CHS_Dementia: 'chsDoeDyspneaOnExertion',
-  CHS_Depression: 'chsChestPain',
-  CHS_Ocd: 'chsBreastLumpsDischarge',
-  CHS_Ptsd: 'chsOther',
+  CHS_Normal: 'chsNormal',
+  CHS_ChronicCough: 'chsChronicCough',
+  CHS_Wheezing: 'chsWheezing',
+  CHS_DoeDyspneaOnExertion: 'chsDoeDyspneaOnExertion',
+  CHS_ChestPain: 'chsChestPain',
+  CHS_BreastLumpsDischarge: 'chsBreastLumpsDischarge',
+  CHS_Other: 'chsOther',
 
   // Cranial Nerves Exam block
   CNE_Olfactory: 'cneOlfactory',
@@ -89,6 +89,7 @@ const valueToSchemaPe: { [key: string]: string } = {
   GI_DiarrheaConstipation: 'giDiarrheaConstipation',
   GI_Jaundice: 'giJaundice',
   GI_FoodIntolerance: 'giFoodIntolerance',
+  GI_SoftNonTenderNoReboundOrRigidity: 'giSoftNonTenderNoReboundOrRigidity',
   GI_Other: 'giOther',
 
   // General block
@@ -101,7 +102,7 @@ const valueToSchemaPe: { [key: string]: string } = {
 
   // Genitourinary block
   GU_Normal: 'guNormal',
-  GU_guOther: 'guDysuria',
+  GU_Dysuria: 'guDysuria',
   GU_Discharge: 'guDischarge',
   GU_ScrotalMasses: 'guScrotalMasses',
   GU_UrinaryFrequency: 'guUrinaryFrequency',
@@ -138,7 +139,7 @@ const valueToSchemaPe: { [key: string]: string } = {
 
   // Lymph Nodes
   LN_Normal: 'lnNormal',
-  LN_ClearToAuscultationBilaterally: 'lnNonePalpated',
+  LN_NonePalpated: 'lnNonePalpated',
   LN_Other: 'lnOther',
 
   // Musculoskeletal block

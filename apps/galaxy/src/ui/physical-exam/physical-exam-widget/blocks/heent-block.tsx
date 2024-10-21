@@ -49,6 +49,15 @@ const HNT_OPTIONS: GroupSelectOption<string>[] = [
     label: 'Nares are patent without drainage',
     value: 'hntNaresArePatentWithoutDrainage',
   },
+  {
+    label: 'Other',
+    value: 'hntOther',
+    details: {
+      type: 'text',
+      label: 'Details',
+      field: 'hntOtherDetails',
+    },
+  },
 ]
 
 const HeentBlock = ({
