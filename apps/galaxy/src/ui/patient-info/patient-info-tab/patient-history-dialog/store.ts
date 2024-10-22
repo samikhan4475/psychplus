@@ -1,8 +1,8 @@
 import toast from 'react-hot-toast'
 import { create } from 'zustand'
+import { getPatientHistoryAction } from '@/actions'
 import { PatientProfile } from '@/types'
 import { getCalendarDateLabel } from '@/utils'
-import { getPatientInfoHistoryAction } from '../actions'
 import { SchemaType } from './filter-form'
 import { PatientHistoryParams } from './types'
 
@@ -47,7 +47,7 @@ const useStore = create<Store>((set) => ({
       }),
     }
 
-    const result = await getPatientInfoHistoryAction(patientId, payload)
+    const result = await getPatientHistoryAction(patientId, payload)
 
     if (result.state === 'error') {
       toast.error(result.error)

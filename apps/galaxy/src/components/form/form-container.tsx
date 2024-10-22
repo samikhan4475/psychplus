@@ -2,6 +2,7 @@
 
 import {
   FormProvider,
+  SubmitErrorHandler,
   type FieldValues,
   type SubmitHandler,
   type UseFormReturn,
@@ -13,6 +14,7 @@ interface FormContainerProps<T extends FieldValues> {
   form: UseFormReturn<T>
   formClassName?: string
   onSubmit: SubmitHandler<T>
+  onError?: SubmitErrorHandler<T>
   disabled?: boolean
 }
 
@@ -21,6 +23,7 @@ const FormContainer = <T extends FieldValues>({
   className,
   formClassName,
   onSubmit,
+  onError,
   children,
   disabled,
 }: React.PropsWithChildren<FormContainerProps<T>>) => (
@@ -29,7 +32,7 @@ const FormContainer = <T extends FieldValues>({
       onSubmit={(e) => {
         e.preventDefault()
         e.stopPropagation()
-        form.handleSubmit(onSubmit)(e)
+        form.handleSubmit(onSubmit, onError)(e)
       }}
       className={cn('flex flex-1 flex-col', formClassName)}
     >

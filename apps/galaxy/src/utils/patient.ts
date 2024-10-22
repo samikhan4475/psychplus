@@ -2,6 +2,7 @@ import type {
   ContactDetails,
   Gender,
   GenderAbbreviation,
+  Insurance,
   LegalName,
   PatientAddress,
   PatientAddressType,
@@ -37,7 +38,7 @@ const getPatientMRN = (id: number) => {
   return new Array(diff).fill('0').join('') + String(id)
 }
 
-const getPatientEmail = (contact?: ContactDetails) => contact?.email || ""
+const getPatientEmail = (contact?: ContactDetails) => contact?.email ?? ''
 
 const getPatientPhone = (phoneNumbers?: PhoneNumber[]) => {
   if (!phoneNumbers || phoneNumbers.length === 0) {
@@ -76,7 +77,10 @@ const getPatientAge = (dobString: string) => {
   return age
 }
 
-const getPatientPostalCode = (addresses?: PatientAddress[], type :PatientAddressType = 'Home') => {
+const getPatientPostalCode = (
+  addresses?: PatientAddress[],
+  type: PatientAddressType = 'Home',
+) => {
   if (!addresses || addresses.length === 0) {
     return undefined
   }
@@ -90,7 +94,10 @@ const getPatientPostalCode = (addresses?: PatientAddress[], type :PatientAddress
   return address.postalCode
 }
 
-const getPatientCity = (addresses?: PatientAddress[], type :PatientAddressType = 'Home') => {
+const getPatientCity = (
+  addresses?: PatientAddress[],
+  type: PatientAddressType = 'Home',
+) => {
   if (!addresses || addresses.length === 0) {
     return undefined
   }
@@ -104,8 +111,10 @@ const getPatientCity = (addresses?: PatientAddress[], type :PatientAddressType =
   return address.city
 }
 
-
-const getPatientState = (addresses?: PatientAddress[], type :PatientAddressType = 'Home') => {
+const getPatientState = (
+  addresses?: PatientAddress[],
+  type: PatientAddressType = 'Home',
+) => {
   if (!addresses || addresses.length === 0) {
     return undefined
   }
@@ -141,6 +150,12 @@ const getGuardianFirstName = (guardian?: PatientGuardian) =>
 const getGuardianLastName = (guardian?: PatientGuardian) =>
   guardian?.name?.lastName
 
+const getPatientInsuranceName = (insurances: Insurance[] | undefined) => {
+  if (!insurances || insurances?.length === 0) {
+    return undefined
+  }
+  return insurances?.[0]?.policyName
+}
 export {
   getPatientFirstName,
   getPatientLastName,
@@ -158,4 +173,5 @@ export {
   getPatientPostalCode,
   getPatientCity,
   getPatientState,
+  getPatientInsuranceName,
 }

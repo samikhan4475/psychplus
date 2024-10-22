@@ -47,7 +47,7 @@ const DataTablePagination = ({
       gap="2"
       align="center"
       justify="end"
-      className={cn('border-pp-table-border h-12 border', className)}
+      className={cn('border-pp-gray-2 h-12 border', className)}
     >
       <PaginationButton onClick={prev} disabled={!hasPrev || loading}>
         Previous

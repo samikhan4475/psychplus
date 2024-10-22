@@ -146,10 +146,12 @@ const DataTable = <TData, TValue>({
                     rowSpan={isRowSpan ? rowSpan : undefined}
                     colSpan={header.colSpan}
                     className={cn(
-                      'border-pp-table-border h-5 border border-r-0 p-0',
+                      'border-pp-table-border border-t-pp-gray-2 h-5 border border-r-0 p-0',
                       {
-                        'border-b-0 ': header.colSpan > 1,
-                        'last:border-r': header.depth <= 1,
+                        'border-b-0': header.colSpan > 1,
+                        'last:border-r-pp-gray-2 first:border-l-pp-gray-2 first:rounded-tl-1 last:rounded-tr-1 last:border-r':
+                          header.depth <= 1,
+                        'border-t-pp-table-border': header.depth > 1,
                       },
                       `w-[${header.getSize()}px]`,
                     )}
@@ -185,7 +187,7 @@ const DataTable = <TData, TValue>({
                 {row.getVisibleCells().map((cell) => (
                   <Table.Cell
                     key={cell.id}
-                    className="border-pp-table-border h-5 border-b border-l border-r-0 px-1 py-0.5 last:border-r"
+                    className="border-pp-table-border last:border-r-pp-gray-2 first:border-l-pp-gray-2 group-last/row-hover:!border-b-pp-gray-2 h-5 border-b border-l border-r-0 px-1 py-0.5 last:border-r group-last/row-hover:first:rounded-bl-1 group-last/row-hover:last:rounded-br-1"
                   >
                     <Flex height="100%" align="center" width="100%">
                       {flexRender(

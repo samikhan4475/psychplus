@@ -225,6 +225,25 @@ const formatDateOfBirth = (dob: string) => {
   return `${month}-${day}-${year}`
 }
 
+const convertToCalendarDate = (storedDate: DateValue | string) => {
+  if (typeof storedDate === 'string') {
+    return parseDate(storedDate)
+  }
+  if (storedDate instanceof CalendarDate) {
+    return storedDate
+  }
+
+  const { year, month, day } = storedDate as {
+    year: number
+    month: number
+    day: number
+  }
+  return new CalendarDate(year, month, day)
+}
+
+const getOptionalDateString = (date?: DateValue | null): string | undefined =>
+  date ? getCalendarDateLabel(date) : undefined
+
 export {
   getCalendarDate,
   getLocalCalendarDate,
@@ -243,4 +262,6 @@ export {
   formatExpirationDate,
   formatDateOfBirth,
   getDatesForDateRange,
+  convertToCalendarDate,
+  getOptionalDateString,
 }

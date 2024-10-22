@@ -1,6 +1,6 @@
 'use client'
 
-import { PropsWithChildren, useEffect, useState } from 'react'
+import { PropsWithChildren, useEffect, useRef, useState } from 'react'
 import { ChevronDownIcon, Cross2Icon } from '@radix-ui/react-icons'
 import {
   Box,
@@ -10,6 +10,7 @@ import {
   Flex,
   Text,
 } from '@radix-ui/themes'
+import { useFormContext } from 'react-hook-form'
 import { cn } from '@/utils'
 import { FormFieldContainer } from './form'
 
@@ -21,7 +22,7 @@ interface MultiSelectOption {
 const Tag = ({ children }: PropsWithChildren) => {
   return (
     <Flex
-      className="bg-pp-table-border z-[1] h-4 w-full gap-1 rounded-3 px-1 text-[10px]"
+      className="bg-pp-table-border z-[1] h-4 w-full gap-1 rounded-3 px-1 pr-3 text-[10px]"
       justify="between"
       align="center"
     >
@@ -71,6 +72,15 @@ const MultiSelectField = ({
     defaultValues ?? [],
   )
 
+  const form = useFormContext()
+  const {
+    formState: { disabled: formDisable, isSubmitting },
+  } = form
+
+  const disable = formDisable || isSubmitting || disabled
+
+  const ref = useRef<HTMLButtonElement>(null)
+
   const handleChange = (value: string) => {
     const isSelected = selectedValues.includes(value)
     const tempSelectedValues = isSelected
@@ -92,7 +102,7 @@ const MultiSelectField = ({
   }
 
   return (
-    <FormFieldContainer className={className}>
+    <FormFieldContainer className={cn('overflow-hidden', className)}>
       {label && (
         <Text as="label" size="1" weight="medium">
           {label}
@@ -109,15 +119,20 @@ const MultiSelectField = ({
             onClick={onClose}
           />
           <DropdownMenu.Trigger
-            disabled={disabled}
-            className={cn(disabled && 'cursor-not-allowed')}
+            disabled={disable}
+            className={cn({
+              'cursor-not-allowed': disable,
+            })}
+            ref={ref}
           >
             <Button
               color="gray"
               variant="outline"
               className={cn(
                 'text-black !bg-white border-pp-gray-2 relative flex h-6 w-full cursor-default items-center !justify-between border border-solid px-1.5 pr-5 [box-shadow:none]',
-                { '!bg-pp-states-disabled': disabled },
+                {
+                  '!bg-pp-states-disabled': disable,
+                },
               )}
             >
               {selectedValues.length < 1 ? (
@@ -133,7 +148,9 @@ const MultiSelectField = ({
               <ChevronDownIcon
                 width={14}
                 height={14}
-                className="absolute right-[3px] top-0 h-full"
+                className={cn('absolute right-[3px] top-0 h-full', {
+                  'pointer-events-none': disable,
+                })}
               />
             </Button>
           </DropdownMenu.Trigger>
@@ -143,35 +160,48 @@ const MultiSelectField = ({
             `w-full min-w-[100px] rounded-1 shadow-3 [&__.rt-BaseMenuViewport]:p-2`,
             menuClassName,
           )}
+          style={{
+            minWidth: ref?.current?.clientWidth,
+          }}
           align="start"
         >
-          {options.map((item) => (
+          {!options?.length ? (
             <DropdownMenu.Item
-              className={cn('bg-white h-6 p-0', {
-                'bg-red-1': selectedValues.includes(item.value),
-              })}
-              key={item.value}
+              className="bg-white h-6 justify-center p-0 text-center text-1"
               onSelect={(e) => e.preventDefault()}
+              disabled
             >
-              <Text
-                as="label"
-                size={'1'}
-                className="text-black w-full cursor-pointer gap-x-2 p-0 text-[14px]"
-              >
-                <Flex gap={'2'} align={'center'} height={'100%'}>
-                  <Checkbox
-                    color="indigo"
-                    size={'2'}
-                    highContrast
-                    checked={selectedValues.includes(item.value)}
-                    onCheckedChange={() => handleChange(item.value)}
-                    key={item.value}
-                  />
-                  {item.label}
-                </Flex>
-              </Text>
+              No data
             </DropdownMenu.Item>
-          ))}
+          ) : (
+            options?.map((item) => (
+              <DropdownMenu.Item
+                className={cn('bg-white h-6 p-0', {
+                  'bg-red-1': selectedValues.includes(item.value),
+                })}
+                key={item.value}
+                onSelect={(e) => e.preventDefault()}
+              >
+                <Text
+                  as="label"
+                  size="1"
+                  className="text-black w-full cursor-pointer gap-x-2 p-0 text-[14px]"
+                >
+                  <Flex gap="2" align="center" height="100%">
+                    <Checkbox
+                      color="indigo"
+                      size="2"
+                      highContrast
+                      checked={selectedValues.includes(item.value)}
+                      onCheckedChange={() => handleChange(item.value)}
+                      key={item.value}
+                    />
+                    {item.label}
+                  </Flex>
+                </Text>
+              </DropdownMenu.Item>
+            ))
+          )}
         </DropdownMenu.Content>
       </DropdownMenu.Root>
     </FormFieldContainer>

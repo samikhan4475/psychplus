@@ -1,6 +1,13 @@
 import { PatientAddress } from './address'
 import { Metadata } from './metadata'
 
+
+enum InsurancePolicyPriority {
+  Primary = 'Primary',
+  Secondary = 'Secondary',
+  Tertiary = 'Tertiary',
+  Other = 'Other',
+}
 interface InsurancePayer {
   id: string
   name: string
@@ -55,4 +62,4 @@ interface Insurance {
 interface RawInsurance extends Insurance {
   metadata: Metadata & { createdByFullName: string }
 }
-export type { InsurancePayer, Insurance, RawInsurance }
+export  {InsurancePolicyPriority,type InsurancePayer,type Insurance,type RawInsurance }

@@ -56,7 +56,7 @@ const formatTimeCell = (date: string, timezoneId: string) => {
   return `${hours}:${minutes}`
 }
 
-const getDateString = (date?: DateValue): string | undefined =>
+const getDateString = (date?: DateValue | null): string | undefined =>
   date ? getCalendarDateLabel(date) : undefined
 
 const convertToZonedDate = (date: string, timezone: string): Date => {

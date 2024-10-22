@@ -1,10 +1,17 @@
 import type {
   ContactDetails,
   Gender,
-  GenderAbbreviation,
   LegalName,
   Metadata,
+  PatientProfile,
 } from '@/types'
+import { InsurancePolicyPriority } from '../patient-info/insurance-tab/constants'
+import { PatientLookUpSchemaType } from './patient-filter-form'
+
+enum QueryByNextDays {
+  NoVisits = 'NoVisits',
+  Disregard = 'Disregard',
+}
 
 interface PatientRaw {
   id: number
@@ -15,16 +22,17 @@ interface PatientRaw {
   gender: Gender
 }
 
-interface Patient {
-  id: string
-  mrn: string
-  firstName: string
-  lastName: string
-  dob: string
+interface Patient extends PatientProfile {
+  name: string
   age: number
-  email: string
-  address?: string
-  gender: GenderAbbreviation
+  mrn: string
+  dob: string
+  phoneNumber?: string
+  residence?: string
+  city?: string
+  zip?: string
+  userCreated?: string
+  insurance?: string
 }
 
 interface SearchPatientsData {
@@ -32,4 +40,24 @@ interface SearchPatientsData {
   total: number
 }
 
-export type { Patient, PatientRaw, SearchPatientsData }
+interface SearchPatientsParams
+  extends Omit<
+    PatientLookUpSchemaType,
+    'patientCreatedFrom' | 'patientCreatedTo' | 'dateOfBirth' | 'hasGuardian'
+  > {
+  patientCreatedFrom?: string
+  patientCreatedTo?: string
+  dateOfBirth?: string
+  hasGuardian?: boolean
+  consentVerificationStatuses?: string[]
+  creditCardVerificationStatuses?: string[]
+  insurancePriority?: InsurancePolicyPriority
+}
+
+export {
+  QueryByNextDays,
+  type Patient,
+  type PatientRaw,
+  type SearchPatientsData,
+  type SearchPatientsParams,
+}

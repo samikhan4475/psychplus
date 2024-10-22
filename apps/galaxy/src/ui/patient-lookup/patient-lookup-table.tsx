@@ -3,81 +3,22 @@
 import { useRouter } from 'next/navigation'
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons'
 import { Flex, ScrollArea, Text } from '@radix-ui/themes'
-import { type ColumnDef } from '@tanstack/react-table'
-import {
-  ColumnHeader,
-  DataTable,
-  LoadingPlaceholder,
-  LongTextCell,
-  TextCell,
-} from '@/components'
+import { DataTable, LoadingPlaceholder } from '@/components'
 import { useStore as useRootStore } from '@/store'
-import { Sort } from '@/types'
-import { getSortDir } from '@/utils'
+import { SelectOptionType } from '@/types'
+import { columns } from './columns'
 import { useStore } from './store'
-import type { Patient } from './types'
 
-const columns = (
-  sort?: Sort,
-  onSort?: (column: string) => void,
-): ColumnDef<Patient>[] => {
-  return [
-    {
-      id: 'legalName',
-      header: ({ column }) => (
-        <ColumnHeader
-          sortable
-          sortDir={getSortDir(column.id, sort)}
-          onClick={() => {
-            onSort?.(column.id)
-          }}
-          column={column}
-          label="Name"
-        />
-      ),
-      cell: ({ row }) => {
-        return (
-          <LongTextCell>{`${row.original.firstName} ${row.original.lastName}`}</LongTextCell>
-        )
-      },
-    },
-    {
-      id: 'patient-age',
-      header: ({ column }) => <ColumnHeader label="Age" column={column} />,
-      cell: ({ row }) => {
-        return <TextCell>{row.original.age}</TextCell>
-      },
-    },
-    {
-      id: 'patient-gender',
-      header: ({ column }) => <ColumnHeader label="Gender" />,
-      cell: ({ row }) => {
-        return <TextCell>{row.original.gender}</TextCell>
-      },
-    },
-    {
-      id: 'patient-mrn',
-      header: ({ column }) => <ColumnHeader label="MRN" />,
-      cell: ({ row }) => {
-        return <TextCell>{row.original.mrn}</TextCell>
-      },
-    },
-    {
-      id: 'patient-dob',
-      header: ({ column }) => <ColumnHeader label="DOB" />,
-      cell: ({ row }) => {
-        return <TextCell>{row.original.dob}</TextCell>
-      },
-    },
-  ]
+interface PatientLookupTableProps {
+  practicesOptions: SelectOptionType[]
 }
 
-const PatientLookupTable = () => {
+const PatientLookupTable = ({ practicesOptions }: PatientLookupTableProps) => {
   const router = useRouter()
 
   const addTab = useRootStore((state) => state.addTab)
 
-  const { data, loading, sort, sortData } = useStore((state) => ({
+  const { data, loading } = useStore((state) => ({
     data: state.data,
     loading: state.loading,
     sort: state.sort,
@@ -105,23 +46,23 @@ const PatientLookupTable = () => {
       </Flex>
     )
   }
-
   return (
-    <ScrollArea>
+    <ScrollArea scrollbars="both" className="bg-white h-full flex-1 px-4 py-2">
       <DataTable
         data={data.patients}
-        columns={columns(sort, sortData)}
+        columns={columns(practicesOptions)}
         onRowClick={(row) => {
           const href = `/chart/${row.original.id}`
-
           addTab({
             href,
-            label: `${row.original.firstName} ${row.original.lastName}`,
+            label: `${row.original?.legalName?.firstName} ${row.original.legalName?.lastName}`,
           })
-
           router.push(href)
         }}
+        tableClass="[&_.rt-ScrollAreaScrollbar]:!hidden"
+        theadClass="z-[1]"
         disablePagination
+        isRowSpan
         sticky
       />
     </ScrollArea>

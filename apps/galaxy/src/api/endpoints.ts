@@ -158,6 +158,8 @@ const UPDATE_PATIENT_DRIVING_LICENSE_IMAGE_ENDPOINT = (
   side: string,
 ) => `${API_URL}/api/patients/${patientId}/driverslicenseimage/${side}`
 const GET_ORGANIZATION_ROLES = `${API_URL}/api/organizations/actions/search`
+const GET_ORGANIZATIONS_ENDPOINT = `${API_URL}/api/organizations/actions/search`
+const GET_PRACTICES_ENDPOINT = `${API_URL}/api/practices/actions/search`
 const GET_PATIENT_VITALS_ENDPOINT = `${API_URL}/api/patientvitalsigns/actions/search`
 const GET_STAFF = `${API_URL}/api/staff?includeInactive=false&offset=0&limit=0&orderBy=legalName asc`
 const GET_POS_CODES = `${API_URL}/api/codeset/authorities/PsychPlusPublic/codesets/PlaceOfService?includeExtraDetails=false&offset=0&limit=100&orderBy=displayName asc`
@@ -250,6 +252,8 @@ export {
   INSURANCE_PAYMENT_ATTACHMENTS_ENDPOINT,
   GET_PRACTICE_IDS_LIST_ENDPOINT,
   GET_ORGANIZATION_ROLES,
+  GET_ORGANIZATIONS_ENDPOINT,
+  GET_PRACTICES_ENDPOINT,
+  GET_POS_CODES,
   GET_PATIENT_VITALS_ENDPOINT,
-  GET_POS_CODES
 }

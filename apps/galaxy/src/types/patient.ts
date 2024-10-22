@@ -1,6 +1,7 @@
 import type { ContactDetails } from './contact'
 import { GenderExpression, GenderOrientation, GenderPronoun } from './gender'
 import { PatientGuardian } from './guardian'
+import { Insurance } from './insurance'
 import type { Metadata } from './metadata'
 import type { LegalName } from './name'
 
@@ -70,6 +71,22 @@ interface PatientProfile {
   guardian?: PatientGuardian
   verificationStatus?: string
   status?: string
+  patientVerificationTimeElapsed?: string
+  insuranceVerificationTimeElapsed?: string
+  insurancePolicies?: Insurance[]
+  mostRecentAppointmentDate?: string
+  contactMadeStatus?: string
+  ccVerification?: string
+  insuranceVerification?: string
+  patientConsent?: string
+  upcomingAppointmentDate?: string
+  practice?: string
 }
 
-export type { PatientProfile, PatientProfileRaw }
+interface PatientHistoryParams {
+  historyCreatedFrom?: string
+  historyCreatedTo?: string
+  username?: string
+}
+
+export type { PatientProfile, PatientProfileRaw, PatientHistoryParams }

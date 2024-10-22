@@ -1,10 +1,9 @@
 'use server'
 
 import * as api from '@/api'
-import { PatientProfile } from '@/types'
-import { PatientHistoryParams } from '../patient-history-dialog/types'
+import { PatientHistoryParams, PatientProfile } from '@/types'
 
-const getPatientInfoHistoryAction = async (
+const getPatientHistoryAction = async (
   patientId: string,
   payload: PatientHistoryParams,
 ): Promise<api.ActionResult<PatientProfile[]>> => {
@@ -24,4 +23,4 @@ const getPatientInfoHistoryAction = async (
   }
 }
 
-export { getPatientInfoHistoryAction }
+export { getPatientHistoryAction }

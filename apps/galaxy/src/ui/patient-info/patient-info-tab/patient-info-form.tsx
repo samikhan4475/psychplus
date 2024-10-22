@@ -4,13 +4,13 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Flex } from '@radix-ui/themes'
 import { useForm, type SubmitHandler } from 'react-hook-form'
 import toast from 'react-hot-toast'
+import { updatePatientProfileAction } from '@/actions'
 import { ActionResult } from '@/api/api'
 import { FormContainer } from '@/components'
 import type { PatientProfile } from '@/types'
 import { sanitizeFormData } from '@/utils'
 import {
   updatePatientDrivingLicenseImageAction,
-  updatePatientProfileAction,
   updatePatientProfileImageAction,
 } from './actions'
 import {
