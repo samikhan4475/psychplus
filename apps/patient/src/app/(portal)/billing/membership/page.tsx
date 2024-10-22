@@ -1,7 +1,12 @@
-import { MembershipView } from '@/features/billing/membership'
+import { redirect } from 'next/navigation'
+
+// import { MembershipView } from '@/features/billing/membership'
 
 const MembershipPage = () => {
-  return <MembershipView />
+  // Temporary redirect to /billing to disable membership page
+  redirect('/billing')
+  return null
+  // return <MembershipView />
 }
 
 export default MembershipPage

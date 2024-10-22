@@ -1,7 +1,12 @@
 'use client'
 
 import { Flex } from '@radix-ui/themes'
-import { CreditCardIcon, CrossIcon, WalletIcon, ShieldCheck } from 'lucide-react'
+import {
+  CreditCardIcon,
+  CrossIcon,
+  ShieldCheck,
+  WalletIcon,
+} from 'lucide-react'
 import {
   CreditDebitCardIcon,
   NavigationSideMenu,
@@ -19,11 +24,11 @@ const LINKS = [
     label: 'Insurance',
     Icon: ShieldCheck,
   },
-  {
-    href: '/billing/membership',
-    label: 'Membership',
-    Icon: CrossIcon,
-  },
+  // {
+  //   href: '/billing/membership',
+  //   label: 'Membership',
+  //   Icon: CrossIcon,
+  // },
 ]
 
 const BillingLayout = ({ children }: { children: React.ReactNode }) => (
