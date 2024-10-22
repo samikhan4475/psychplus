@@ -9,7 +9,7 @@ interface AddToNoteCellProps {
 }
 
 const AddToNoteCell = ({ row }: AddToNoteCellProps) => {
-  const [addToNote, setAddToNote] = useState(row.original.addToNote)
+  const [addToNote, setAddToNote] = useState(false)
 
   return (
     <CheckboxCell
