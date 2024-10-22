@@ -13,10 +13,10 @@ interface QuickNoteHistory {
   createdOn: string
   createdBy: number
   createdByFullName: string
-  createdByType?: string
+  createdByRole?: string
   addToNote: boolean
   totalScore?: string
-  encounterType?: string
+  note?: string
   data: QuickNoteSectionItem[]
 }
 

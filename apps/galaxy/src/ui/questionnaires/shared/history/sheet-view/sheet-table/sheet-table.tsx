@@ -38,11 +38,7 @@ const createColumns = (
         <ChevronsUpDown size="16" stroke="#8B8D98" />
       </Flex>
     ),
-    cell: ({ row }) => (
-      <TextCell>
-        {row.original.data?.[0].encounterType || row.original.encounterType}
-      </TextCell>
-    ),
+    cell: ({ row }) => <TextCell>{row.original.note}</TextCell>,
   },
   {
     id: 'filledBy',
@@ -54,7 +50,7 @@ const createColumns = (
     ),
     cell: ({ row }) => (
       <TextCell>
-        {row.original.createdByType || row.original.createdByFullName}
+        {row.original.createdByRole || row.original.createdByFullName}
       </TextCell>
     ),
   },
