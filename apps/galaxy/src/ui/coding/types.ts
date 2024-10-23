@@ -4,5 +4,8 @@ enum CodingTab {
   Modifier = 'Modifier',
   POS = 'POS',
 }
-
-export { CodingTab }
+interface PosList {
+  code: string
+  description: string
+}
+export { CodingTab, type PosList }

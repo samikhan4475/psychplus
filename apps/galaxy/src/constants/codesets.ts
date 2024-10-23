@@ -50,6 +50,7 @@ const CODESETS = {
   PaymentMethod: 'PaymentMethod',
   VisitType: 'PsychPlusPublic.VisitType',
   PaymentResponsibility: 'PaymentResponsibility',
+  PlaceOfSerivce: 'PsychPlusPublic.PlaceOfService',
   QueryByNextDays: 'QueryByNextDays',
   LocationType: 'LocationType',
   ContactMadeStatus: 'ContactMadeStatus',

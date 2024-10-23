@@ -5,6 +5,7 @@ import { Box, Flex } from '@radix-ui/themes'
 import { TabsTrigger } from '@/components'
 import { useStore } from './store'
 import { CodingTab } from './types'
+import { PosTabView } from './pos-tab'
 
 const CodingTabs = () => {
   const { activeTab, setActiveTab } = useStore((state) => ({
@@ -40,7 +41,7 @@ const CodingTabs = () => {
           <div>Modifier </div>
         </TabsContent>
         <TabsContent value={CodingTab.POS}>
-          <div>POS </div>
+          <PosTabView />
         </TabsContent>
       </Tabs.Root>
     </Box>
