@@ -14,10 +14,10 @@ const getRunReportAction = async ({
   reportType,
   data,
 }: GeneratedReportParams): Promise<
-  api.ActionResult<GeneratedReportParams[]>
+  api.ActionResult<string>
 > => {
-  const result = await api.POST<GeneratedReportParams[]>(api.GET_TEMPLATE_REPORT(templateId,reportType), data)
-
+  const result = await api.POST<string>(api.GET_TEMPLATE_REPORT(templateId,reportType), data)
+  
   if (result.state === 'error') {
     return {
       state: 'error',

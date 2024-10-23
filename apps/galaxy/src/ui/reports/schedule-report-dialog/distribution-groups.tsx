@@ -18,6 +18,7 @@ const DistributionGroupsSelect = () => {
         name="distributionGroups"
         codeset="testCodeset"
         placeholder="Select codes"
+        disabled
       />
       <FormFieldError name="code" />
     </FormFieldContainer>

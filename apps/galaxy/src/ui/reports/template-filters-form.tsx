@@ -15,6 +15,8 @@ import { TemplateFilterDatePicker } from './template-filter-datepicker';
 import { TemplateFilterInput } from './template-filter-input';
 import { TemplateSelect } from './template-select';
 import { CODE_PARAM_ATTRIBUTES, REPORT_TYPE } from './types';
+import { ReportExportButtons } from './report-export-buttons';
+import toast from 'react-hot-toast';
 
 const schema = z.object({
   reportTemplateParameters: z.array(
@@ -36,7 +38,7 @@ interface TemplateParameter {
 }
 
 const DynamicTemplateFilters = () => {
-  const { selectedTemplate, templateFilters, setGeneratedReport } = useStore();
+  const { selectedTemplate, templateFilters, setGeneratedReport, generatedReport, setFiltersData } = useStore();
   const codesetIndex = useGlobalStore((state) => state.codesets);
 
   const reportTemplateFilters: TemplateParameter[] = selectedTemplate?.parameters  || [];
@@ -98,7 +100,7 @@ const DynamicTemplateFilters = () => {
       runValue: param.runValue ?? '',
     }));
     if (!selectedTemplate?.id) return;
-
+    setFiltersData(formattedData);
     const payload = { templateId: selectedTemplate.id, data: formattedData, reportType: REPORT_TYPE.CSV };
 
     const result = await getRunReportAction(payload);
@@ -106,7 +108,7 @@ const DynamicTemplateFilters = () => {
     if (result.state === 'success') {
       setGeneratedReport(result.data);
     } else {
-      console.error('Failed to generate report:', result.error);
+      toast.error(result.error ?? 'Failed to generate report:')
     }
   };
 
@@ -115,57 +117,62 @@ const DynamicTemplateFilters = () => {
   );
 
   return (
-    <FormContainer form={form} onSubmit={onSubmit}>
-      <Flex direction="row" align="center" className="flex-wrap gap-2 bg-white px-2 py-2 mt-1">
-        {sortedParameters.map((item, i) => {
-          const { isString, isDate, isSelect } = getFieldTypes(item.reportParameterCode);
-          return (
-            <Flex key={item.id} direction="row" className="gap-x-1">
-              {isString && (
-                <TemplateFilterInput
-                  title={item.displayName}
-                  {...register(`reportTemplateParameters.${i}.runValue`, {
-                    required: 'This field is required',
-                  })}
-                />
-              )}
+    <>
+      <FormContainer form={form} onSubmit={onSubmit}>
+        <Flex direction="row" align="center" className="flex-wrap gap-2 bg-white px-2 py-2 mt-1">
+          {sortedParameters.map((item, i) => {
+            const { isString, isDate, isSelect } = getFieldTypes(item.reportParameterCode);
+            return (
+              <Flex key={item.id} direction="row" className="gap-x-1">
+                {isString && (
+                  <TemplateFilterInput
+                    title={item.displayName}
+                    {...register(`reportTemplateParameters.${i}.runValue`, {
+                      required: 'This field is required',
+                    })}
+                  />
+                )}
 
-              {isDate && (
-                <TemplateFilterDatePicker
-                  title={item.displayName}
-                  {...register(`reportTemplateParameters.${i}.runValue`, {
-                    required: 'This field is required',
-                  })}
-                />
-              )}
+                {isDate && (
+                  <TemplateFilterDatePicker
+                    title={item.displayName}
+                    {...register(`reportTemplateParameters.${i}.runValue`, {
+                      required: 'This field is required',
+                    })}
+                  />
+                )}
 
-              {isSelect && (
-                <TemplateSelect
-                  title={item.displayName}
-                  options={computeOptions(codesetIndex, item.reportParameterCode)}
-                  {...register(`reportTemplateParameters.${i}.runValue`, {
-                    required: 'This field is required',
-                  })}
-                />
-              )}
+                {isSelect && (
+                  <TemplateSelect
+                    title={item.displayName}
+                    options={computeOptions(codesetIndex, item.reportParameterCode)}
+                    {...register(`reportTemplateParameters.${i}.runValue`, {
+                      required: 'This field is required',
+                    })}
+                  />
+                )}
 
-              {!isString && !isDate && !isSelect && (
-                <TemplateFilterInput
-                  title={item.displayName}
-                  {...register(`reportTemplateParameters.${i}.runValue`, {
-                    required: 'This field is required',
-                  })}
-                />
-              )}
-            </Flex>
-          );
-        })}
-        <ClearButton onClear={() => reset()} />
-        <RunReportButton />
-      </Flex>
-    </FormContainer>
+                {!isString && !isDate && !isSelect && (
+                  <TemplateFilterInput
+                    title={item.displayName}
+                    {...register(`reportTemplateParameters.${i}.runValue`, {
+                      required: 'This field is required',
+                    })}
+                  />
+                )}
+              </Flex>
+            );
+          })}
+          <ClearButton onClear={() => reset()} />
+          <RunReportButton />
+        </Flex>
+      </FormContainer>
+
+      {generatedReport && (
+        <ReportExportButtons />
+      )}
+    </>
   );
 };
 
 export { DynamicTemplateFilters };
-

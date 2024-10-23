@@ -2,7 +2,6 @@ import { Code } from '@/types';
 import { create } from 'zustand';
 import { getReportParametersTypeAction, getReportsAction, getTemplatesAction } from './actions';
 import { Parameter, Template } from './types';
-import { getOrganizationRolesAction } from './actions/get-organization-roles';
 
 interface Store {
   reports: Code[];
@@ -14,11 +13,11 @@ interface Store {
   selectedTemplate: Template | null;
   generatedReport: any;
   filtersData: any;
-  organizationData: any;
   fetchReportsAndTemplates: () => void;
   setSelectedReport: (code: Code) => void;
   setSelectedTemplate: (template: Template) => void;
   setGeneratedReport: (report: any) => void;
+  setFiltersData: (data: any) => void;
 }
 
 const useStore = create<Store>((set) => ({
@@ -31,24 +30,22 @@ const useStore = create<Store>((set) => ({
   selectedTemplate: null,
   generatedReport: null,
   filtersData: null,
-  organizationData: null,
 
   fetchReportsAndTemplates: async () => {
     set({ loading: true, error: null });
 
-    const [reportsResult, templatesResult, codeParametersResult, organizationResult] = await Promise.all([
+    const [reportsResult, templatesResult, codeParametersResult] = await Promise.all([
       getReportsAction(),
       getTemplatesAction(),
       getReportParametersTypeAction(),
-      getOrganizationRolesAction()
     ]);
 
-    if (reportsResult.state === 'success' && templatesResult.state === 'success' && codeParametersResult.state === 'success' && organizationResult.state === 'success') {
+    if (reportsResult.state === 'success' && templatesResult.state === 'success' && codeParametersResult.state === 'success') {
       set({
         reports: reportsResult.data?.codes || [],
         templates: templatesResult.data || [],
         templateFilters: codeParametersResult.data || null,
-        organizationData: organizationResult.data || null,
+        // organizationData: organizationResult.data || null,
         loading: false,
       });
     } else {
@@ -69,6 +66,10 @@ const useStore = create<Store>((set) => ({
 
   setGeneratedReport: (report: any) => {
     set({ generatedReport: report });
+  },
+
+  setFiltersData: (data: any) => {
+    set({ filtersData: data });
   },
 }));
 

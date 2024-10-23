@@ -11,6 +11,7 @@ const ClearButton = ({ onClear }: ClearButtonProps) => {
     <Button
       variant="outline"
       color="gray"
+      type="button"
       className="text-black 'w-fit h-[24px] py-1 px-2 flex items-center justify-center"
       onClick={onClear}
     >

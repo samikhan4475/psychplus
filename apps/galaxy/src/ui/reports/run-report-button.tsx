@@ -24,8 +24,8 @@ const RunReportButton = () => {
           </Button>
         </DropdownMenu.Trigger>
         <DropdownMenu.Content>
-          <DropdownMenu.Item>Run in the background</DropdownMenu.Item>
-          <DropdownMenu.Item onClick={onOpen}>Schedule Report</DropdownMenu.Item>
+          {/* <DropdownMenu.Item >Run in the background</DropdownMenu.Item> */}
+          <DropdownMenu.Item className='text-[12px] hover:bg-pp-blue-300/30 transition duration-300 ease-in-out hover:text-white' onClick={onOpen}>Schedule Report</DropdownMenu.Item>
         </DropdownMenu.Content>
       </DropdownMenu.Root>
     </Flex>

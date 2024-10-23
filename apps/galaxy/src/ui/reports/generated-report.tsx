@@ -32,7 +32,7 @@ const GeneratedReport = () => {
   return (
     <Box className="mt-1 w-full h-[87%] overflow-hidden">
       <Box className="bg-white rounded-1 p-2">
-        <ScrollArea>
+        <ScrollArea className="max-h-[480px]">
           <Box className="bg-white min-w-max">
             <DataTable columns={columns} data={data} sticky />
           </Box>

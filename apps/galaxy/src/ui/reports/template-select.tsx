@@ -14,10 +14,11 @@ const TemplateSelect = ({ title, options, name }: TemplateSelectProps) => {
 
   return (
     <FormFieldContainer className="flex-row items-center gap-1">
-      <FormFieldLabel>{title}</FormFieldLabel>
+      <FormFieldLabel className="!text-1">{title}</FormFieldLabel>
       <SelectInput
         field={title}
-        buttonClassName="border-pp-gray-2 h-6 border border-solid !outline-none [box-shadow:none] w-full"
+        buttonClassName="border-pp-gray-2 h-6  w-full min-w-[120px] text-left"
+        className="text-left"
         options={options}
         {...register(name)}
       />
