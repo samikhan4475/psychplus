@@ -8,7 +8,7 @@ const PatientClaimDetails = () => {
         columns="2"
         gap="3"
         rows="repeat(2)"
-        className=" mr-2 w-2/5 border-r border-solid border-pp-border"
+        className=" border-pp-border mr-2 w-2/5 border-r border-solid"
       >
         <LabelAndValue label="Patient Name" value="Test User" />
         <LabelAndValue label="Gender" value="Male" />

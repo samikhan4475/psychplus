@@ -52,6 +52,7 @@ const CODESETS = {
   PaymentResponsibility: 'PaymentResponsibility',
   PlaceOfSerivce: 'PsychPlusPublic.PlaceOfService',
   QueryByNextDays: 'QueryByNextDays',
+  AccidentType: 'AccidentType',
   LocationType: 'LocationType',
   ContactMadeStatus: 'ContactMadeStatus',
 }

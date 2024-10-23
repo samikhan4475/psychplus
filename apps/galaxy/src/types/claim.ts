@@ -180,4 +180,122 @@ interface Claim {
   secondaryInsurance?: ClaimInsurance
 }
 
-export type { Claim }
+interface ClaimUpdate {
+  id: string
+  metadata: Metadata
+  recordStatus: string
+  practiceId: string
+  appointmentId: number
+  claimNumber: string
+  locationId: string
+  renderingProviderId: number
+  attendingProviderId: number
+  supervisingProviderId: number
+  orderingProviderId: number
+  referringProviderId: number
+  patientId: number
+  placeOfService: string
+  dateOfServiceFrom: Date
+  dateOfServiceTo: Date
+  claimType: string
+  isAnesthesiaClaim?: boolean
+  authorizationNumber: string
+  referralNumber: string
+  clinicalLaboratoryImprovementAmendmentsNumber: string
+  claimNotes: string
+  payerClaimControlNumber: string
+  primaryStatusCode: string
+  secondaryStatusCode: string
+  tertiaryStatusCode: string
+  patientStatusCode: string
+  createFrom: string
+  deletedReason: string
+  totalAmount: number
+  amountDue: number
+  primaryPaid: number
+  secondaryPaid: number
+  tertiaryPaid: number
+  patientPaid?: number | null
+  primaryWriteOff?: number
+  secondaryWriteOff?: number
+  tertiaryWriteOff?: number
+  patientWriteOff?: number
+  totalWriteOff?: number
+  claimStatusCode: string
+  isMarkAsSubmitted: boolean
+  isSubmitted: boolean
+  submittedDate: Date
+  isHoldStatement: boolean
+  isResubmitted: boolean
+  isForcePaper: boolean
+  rejectionReason: string
+  isSelfPay: boolean
+  isDraft: boolean
+  isHold: boolean
+  externalFileId?: number
+  isClaimScrubbed: boolean
+  isForceUnlock: boolean
+  forceUnlockBy?: number
+  forceUnlockDate: Date
+  forceUnlockReason: string
+  primaryPatientInsurancePolicyId?: string
+  secondaryPatientInsurancePolicyId?: string
+  tertiaryPatientInsurancePolicyId?: string
+  accidentDate: Date
+  accidentState: string
+  accidentType: string
+  isOutsideLab: boolean
+  labCharges: number
+  isEmployment: boolean
+  isAutoAccident: boolean
+  isOtherAccident: boolean
+  claimFrequencyCode: string
+  lastSeenDate: Date
+  patientName: string
+  patientAccountNumber: string
+  claimServiceLines: ClaimServiceLine[]
+  claimDiagnosis: ClaimDiagnosis[]
+}
+
+interface DiagnosisCode {
+  diagnosisCode: string
+}
+
+interface ICD10Code {
+  id: number | string
+  code: string
+  description: string
+  isFavorite: boolean
+  isActive: boolean
+}
+
+interface CPTRecord {
+  id: string
+  gender: string
+  category: string
+  minimumAge: string
+  maximumAge: string
+  effectiveFrom: string
+  effectiveTill: string
+  placeOfService: string
+  recordStatus: string
+  cptCode: string
+  description: string
+  requirement: string
+  medicareAmount: string
+}
+
+interface CodeItem {
+  code: string
+  displayName: string
+  groupingCode: string
+}
+export type {
+  Claim,
+  ClaimUpdate,
+  CodeItem,
+  CPTRecord,
+  ICD10Code,
+  DiagnosisCode,
+  ClaimServiceLine
+}

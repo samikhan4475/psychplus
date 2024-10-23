@@ -65,6 +65,8 @@ const config = {
         'pp-blue-300': '#0044ff',
         'pp-blue-400': '#194595',
         'pp-lavender-blue': '#CDD5EE',
+        'pp-icd-bg':"#E7F9FB",
+        'pp-icd-border':"#3DB9CF",
         'pp-red': '#EE1D52',
         'pp-header-bg': '#EBF3FC',
         'pp-border': '#A4A4A4',

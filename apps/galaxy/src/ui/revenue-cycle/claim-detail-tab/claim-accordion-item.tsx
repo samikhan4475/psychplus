@@ -2,22 +2,28 @@ import { PropsWithChildren, ReactNode, useState } from 'react'
 import * as Accordion from '@radix-ui/react-accordion'
 import { ChevronDownIcon, ChevronUpIcon } from '@radix-ui/react-icons'
 import { Flex, Text } from '@radix-ui/themes'
+import { cn } from '@/utils'
 
 interface ClaimAccordionItemProps extends PropsWithChildren {
   title: string
   buttons?: ReactNode
+  className?: string
 }
 
 const ClaimAccordionItem = ({
   title,
   children,
   buttons,
+  className,
 }: ClaimAccordionItemProps) => {
   const [isOpen, setIsOpen] = useState(false)
   return (
     <Accordion.Item
       value={title}
-      className="my-1 rounded-3 border border-pp-ac-border"
+      className={cn(
+        'border-pp-ac-border my-1 flex-1 rounded-3 border',
+        className,
+      )}
     >
       <Accordion.Header>
         <Accordion.Trigger asChild onClick={() => setIsOpen(!isOpen)}>
