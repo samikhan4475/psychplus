@@ -9,6 +9,7 @@ const SEARCH_PATIENTS_ENDPOINT = `${API_URL}/api/patients/search`
 const CLINIC_LOCATIONS_ENDPOINT = `${API_URL}/api/clinics`
 const FACILITY_ADMISSION_ID_ENDPOINT = `${API_URL}/api/facilityadmissionids`
 const LOCATION_SERVICES_ENDPOINT = `${API_URL}/api/locationservices/actions/search`
+const LOCATION_ENDPOINT = `${API_URL}/api/locations/actions/search`
 const VISIT_TYPES_ENDPOINT = `${API_URL}/api/visittypes/actions/search`
 const STATES_BY_COUNTRY_ENDPOINT = (countryCode: string) =>
   `${API_URL}/api/countries/${countryCode}/states`
@@ -174,6 +175,7 @@ export {
   CLINIC_LOCATIONS_ENDPOINT,
   FACILITY_ADMISSION_ID_ENDPOINT,
   LOCATION_SERVICES_ENDPOINT,
+  LOCATION_ENDPOINT,
   VISIT_TYPES_ENDPOINT,
   STATES_BY_COUNTRY_ENDPOINT,
   ADD_VACATION,

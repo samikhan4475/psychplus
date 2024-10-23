@@ -77,6 +77,8 @@ const config = {
       boxShadow: {
         'light-08':
           '0px 0px 2px 0px rgba(0, 0, 0, 0.12), 0px 4px 8px 0px rgba(0, 0, 0, 0.14)',
+        'light-gray-08':
+          '0px 4px 4px 0px #00000014'
       },
     },
   },

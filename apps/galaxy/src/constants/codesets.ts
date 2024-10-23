@@ -51,6 +51,7 @@ const CODESETS = {
   VisitType: 'PsychPlusPublic.VisitType',
   PaymentResponsibility: 'PaymentResponsibility',
   QueryByNextDays: 'QueryByNextDays',
+  LocationType: 'LocationType',
   ContactMadeStatus: 'ContactMadeStatus',
 }
 
