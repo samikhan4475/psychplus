@@ -5,28 +5,13 @@ import {
   type FamilyPsychHxWidgetSchemaType,
 } from './family-psych-hx-widget-schema'
 
-const useFamilyPsychHxWidgetForm = () => {
+const useFamilyPsychHxWidgetForm = (
+  initialValue: FamilyPsychHxWidgetSchemaType,
+) => {
   const form = useForm<FamilyPsychHxWidgetSchemaType>({
     resolver: zodResolver(familyPsychHxWidgetSchema),
     reValidateMode: 'onChange',
-    defaultValues: {
-      completedSuicide: false,
-      completedSuicideRelation: '',
-      anxiety: false,
-      anxietyRelation: '',
-      depression: false,
-      depressionRelation: '',
-      ocd: false,
-      ocdRelation: '',
-      bipolarDisorder: false,
-      bipolarDisorderRelation: '',
-      schizophrenia: false,
-      schizophreniaRelation: '',
-      alcoholUseDisorder: false,
-      alcoholUseDisorderRelation: '',
-      dementia: false,
-      dementiaRelation: '',
-    },
+    defaultValues: initialValue,
   })
 
   return form

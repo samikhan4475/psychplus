@@ -1,19 +1,20 @@
 import { Box, Flex, Text } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
+import { MultiSelectField } from './checkbox-multiselect'
 import { DateInput } from './date-input'
 import { NumberInput } from './number-input'
 import { SelectInput } from './select-input'
 import { TextInput } from './text-input'
 
-type DetailsType = 'text' | 'number' | 'select' | 'date'
+type DetailsType = 'text' | 'number' | 'select' | 'date' | 'multi-select'
 
 interface SelectableChipDetailsProps {
   type: DetailsType
   label: string
   field: string
   options?: { label: string; value: string }[]
-  showIndicator?:boolean
-  placeHolder?:string
+  showIndicator?: boolean
+  placeHolder?: string
   format?: string
   isDisabled?: boolean
 }
@@ -24,7 +25,7 @@ const SelectableChipDetails = ({
   field,
   options,
   showIndicator = true,
-  placeHolder = "",
+  placeHolder = '',
   format = '##',
   isDisabled = false,
 }: SelectableChipDetailsProps) => {
@@ -33,12 +34,19 @@ const SelectableChipDetails = ({
 
   return (
     <Flex position="relative" align="center">
-      { showIndicator &&  <SelectedIndicator /> }
+      {showIndicator && <SelectedIndicator />}
       <Flex align="center" pl="1" className="bg-pp-focus-bg-2 rounded-1">
         <Text weight="medium" mr="1" className="text-[11px]">
           {label}
         </Text>
-        {type === 'text' && <TextInput field={field} disabled={isDisabled} autoFocus placeHolder={placeHolder} />}
+        {type === 'text' && (
+          <TextInput
+            field={field}
+            disabled={isDisabled}
+            autoFocus
+            placeHolder={placeHolder}
+          />
+        )}
         {type === 'number' && (
           <NumberInput
             format={format}
@@ -49,6 +57,13 @@ const SelectableChipDetails = ({
         )}
         {type === 'select' && <SelectInput field={field} options={options} />}
         {type === 'date' && <DateInput field={field} autoFocus />}
+        {type === 'multi-select' && (
+          <MultiSelectField
+            onChange={(vals) => form.setValue(field, vals)}
+            options={options || []}
+            defaultValues={form.watch(field)}
+          />
+        )}
       </Flex>
       {error ? (
         <Text className="pl-1 text-[12px] text-tomato-11">{error.message}</Text>

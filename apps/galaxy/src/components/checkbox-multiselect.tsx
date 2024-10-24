@@ -48,7 +48,7 @@ const getDisplayLabel = (
 }
 
 interface Props {
-  options: MultiSelectOption[]
+  options: MultiSelectOption[] | []
   placeholder?: string
   defaultValues?: string[]
   onChange?: (selectedValues: string[]) => void

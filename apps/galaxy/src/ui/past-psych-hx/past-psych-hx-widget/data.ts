@@ -3,11 +3,10 @@ import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { sanitizeFormData } from '@/utils'
 import { PastPsychHxWidgetSchemaType } from './past-psych-hx-widget-schema'
 
-
 const transformIn = (
   value: QuickNoteSectionItem[],
 ): PastPsychHxWidgetSchemaType => {
-  const result: Record<string,number | string|undefined | boolean> = {
+  const result: Record<string, number | string | undefined | boolean> = {
     psychHospitalizations: undefined,
     suicideAttempts: undefined,
     depression: undefined,
@@ -48,17 +47,15 @@ const transformIn = (
 
   value.forEach((item) => {
     const key = item.sectionItem
-    const ageKey = `${item.sectionItem}Age`
     const itemValue = item.sectionItemValue
-
     if (['psychHospitalizations', 'suicideAttempts'].includes(key)) {
       result[key] = Number(itemValue)
     } else if (key === 'other') {
-      result.other = itemValue === 'undefined' ? false : true
-      result.otherDetails = itemValue === 'undefined' ? undefined : itemValue
+      result.other = true
+      result.otherDetails = itemValue
     } else if (key in result) {
-      result[ageKey] = itemValue === 'undefined' ? undefined : Number(itemValue)
-      result[key] = itemValue === 'false' ? false : true
+      result[`${key}Age`] = Number(itemValue)
+      result[key] = true
     }
   })
 
@@ -101,6 +98,14 @@ const transformOut =
           })
       }
     })
+
+    if (result.length === 0) {
+      result.push({
+        ...QuickNotesPayload,
+        sectionItem: 'empity',
+        sectionItemValue: 'true',
+      })
+    }
     return result
   }
 

@@ -1,1 +1,1 @@
-export * from './family-psych-hx-widget'
+export { FamilyPsychHxLoader as FamilyPsychHxWidget } from './family-psych-hx-loader'

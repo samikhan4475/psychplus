@@ -8,15 +8,21 @@ import {
   WidgetSaveButton,
   WidgetTagButton,
 } from '@/components'
-import { ConditionsBlock } from './blocks'
+import { ConditionsBlock, OtherBlock } from './blocks'
+import { transformOut } from './data'
 import { useFamilyPsychHxWidgetForm } from './family-psych-hx-widget-form'
+import { FamilyPsychHxWidgetSchemaType } from './family-psych-hx-widget-schema'
 
 interface FamilyPsychHxWidgetProps {
   patientId: string
+  initialValue: FamilyPsychHxWidgetSchemaType
 }
 
-const FamilyPsychHxWidget = ({ patientId }: FamilyPsychHxWidgetProps) => {
-  const form = useFamilyPsychHxWidgetForm()
+const FamilyPsychHxWidget = ({
+  patientId,
+  initialValue,
+}: FamilyPsychHxWidgetProps) => {
+  const form = useFamilyPsychHxWidgetForm(initialValue)
 
   return (
     <FormProvider {...form}>
@@ -24,7 +30,7 @@ const FamilyPsychHxWidget = ({ patientId }: FamilyPsychHxWidgetProps) => {
         patientId={patientId}
         widgetId="family-psych-hx"
         title="Family Psych Hx"
-        getData={() => []}
+        getData={transformOut(patientId)}
         toggleable
         headerRight={
           <>
@@ -36,6 +42,7 @@ const FamilyPsychHxWidget = ({ patientId }: FamilyPsychHxWidgetProps) => {
         }
       >
         <ConditionsBlock />
+        <OtherBlock />
       </WidgetFormContainer>
     </FormProvider>
   )

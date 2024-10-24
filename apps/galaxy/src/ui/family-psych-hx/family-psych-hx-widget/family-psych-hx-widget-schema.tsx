@@ -2,33 +2,29 @@ import { z } from 'zod'
 
 type FamilyPsychHxWidgetSchemaType = z.infer<typeof familyPsychHxWidgetSchema>
 
-const familyPsychHxWidgetSchema = z
-  .object({
-    completedSuicide: z.oboolean(),
-    completedSuicideRelation: z.ostring(),
-    anxiety: z.oboolean(),
-    anxietyRelation: z.ostring(),
-    depression: z.oboolean(),
-    depressionRelation: z.ostring(),
-    ocd: z.oboolean(),
-    ocdRelation: z.ostring(),
-    bipolarDisorder: z.oboolean(),
-    bipolarDisorderRelation: z.ostring(),
-    schizophrenia: z.oboolean(),
-    schizophreniaRelation: z.ostring(),
-    alcoholUseDisorder: z.oboolean(),
-    alcoholUseDisorderRelation: z.ostring(),
-    dementia: z.oboolean(),
-    dementiaRelation: z.ostring(),
-  })
-  .superRefine((data, ctx) => {
-    if (data.completedSuicide && !data.completedSuicideRelation) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        path: ['completedSuicide'],
-        message: 'Required',
-      })
-    }
-  })
+const booleanOptional = z.boolean().optional()
+const stringOptional = z.string().optional()
+const stringArrayOptional = z.array(z.string()).optional()
+const familyPsychHxWidgetSchema = z.object({
+  depression: booleanOptional,
+  depressionRelation: stringArrayOptional,
+  anxiety: booleanOptional,
+  anxietyRelation: stringArrayOptional,
+  completedSuicide: booleanOptional,
+  completedSuicideRelation: stringArrayOptional,
+
+  schizophrenia: booleanOptional,
+  schizophreniaRelation: stringArrayOptional,
+
+  ocd: booleanOptional,
+  ocdRelation: stringArrayOptional,
+  bipolarDisorder: booleanOptional,
+  bipolarDisorderRelation: stringArrayOptional,
+  alcoholUseDisorder: booleanOptional,
+  alcoholUseDisorderRelation: stringArrayOptional,
+  dementia: booleanOptional,
+  dementiaRelation: stringArrayOptional,
+  other: stringOptional,
+})
 
 export { familyPsychHxWidgetSchema, type FamilyPsychHxWidgetSchemaType }

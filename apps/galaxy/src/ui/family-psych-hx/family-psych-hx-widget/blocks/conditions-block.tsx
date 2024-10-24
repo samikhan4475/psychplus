@@ -1,13 +1,12 @@
 import { Flex } from '@radix-ui/themes'
-import { SingleSelectChip } from '@/components'
+import { MultiSelectChip } from '@/components'
 
 const RELATIONSHIP_OPTIONS = [
-  { label: 'Mother', value: 'mother' },
-  { label: 'Father', value: 'father' },
+  { label: 'Parent', value: 'parent' },
   { label: 'Sibling', value: 'sibling' },
   { label: 'Child', value: 'child' },
-  { label: 'Grandparent', value: 'grandparent' },
-  { label: 'Other', value: 'other' },
+  { label: 'Grand parent', value: 'grandparent' },
+  { label: 'Parents sibling', value: 'parentSibling' },
 ]
 
 const BLOCK_OPTIONS = [
@@ -36,6 +35,12 @@ const BLOCK_OPTIONS = [
     field: 'schizophrenia',
     detailsField: 'schizophreniaRelation',
   },
+
+  {
+    label: 'Bipolor disorder',
+    field: 'bipolorDisorder',
+    detailsField: 'bipolorDisorderRelation',
+  },
   {
     label: 'Alcohol use disorder',
     field: 'alcoholUseDisorder',
@@ -52,12 +57,12 @@ const ConditionsBlock = () => {
   return (
     <Flex gap="2" wrap="wrap">
       {BLOCK_OPTIONS.map((option) => (
-        <SingleSelectChip
+        <MultiSelectChip
           key={option.field}
           label={option.label}
           field={option.field}
           details={{
-            type: 'select',
+            type: 'multi-select',
             label: 'Relationship',
             field: option.detailsField,
             options: RELATIONSHIP_OPTIONS,
