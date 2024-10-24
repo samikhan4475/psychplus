@@ -1,14 +1,15 @@
 import { ClinicAddress, LegalName, Metadata, } from "@/types"
 import { Table, TableOptions, TableState, Updater } from "@tanstack/react-table"
 import { Dispatch, ReactNode, SetStateAction } from "react"
-import { SchemaType } from "./secure-messages-view"
+import { SchemaType } from "./schema"
 import { Tag } from "react-tag-autocomplete"
 
 enum SecureMessagesTab {
-    ALL = 'Inbox',
+    INBOX = 'Inbox',
     DRAFT = 'Draft',
     SENT = 'Sent',
     ARCHIVED = 'Archived',
+
 }
 
 enum ActiveComponent {
@@ -18,60 +19,127 @@ enum ActiveComponent {
     FORWARD = 'Forward',
     REPLY = 'Reply',
     REPLY_TO_ALL = 'Reply to all',
+    DRAFT = 'Draft',
+}
+
+enum SendMode {
+    EXTERNAL = 'EmrDirect',
+    INTERNAL = 'Internal',
+    SUCCESS = "Success",
+    DRAFT = 'Draft',
+}
+
+enum SendType {
+    SEND = 'Send',
+}
+
+enum ReceiverUserRole {
+    STAFF = 'Staff',
+    PATIENT = "Patient"
 }
 
 enum SecureMessageStatus {
     READ = 'READ',
     UNREAD = 'UNREAD',
     REPLIED = 'REPLIED',
-    ARCHIVED = 'ARCHIVED',
+    ARCHIVED = 'Archived',
 }
 
 enum EmailRecipientTypes {
-    STAFF = 'Staff',
-    EXTERNAL = 'External',
+    INTERNAL = 'Internal',
+    EXTERNAL = 'EmrDirect',
     PATIENT = 'Patient',
+    STAFF = 'Staff',
+}
+enum Staff {
+    INTERNAL_EXTERNAL = 'INT/EXT Staff',
+    INTERNAL = 'INT Staff',
+    EXTERNAL = 'EXT Staff',
+}
+enum messageStatus {
+    READ = 'read',
+    UNREAD = 'unread',
+    REPLIED = 'replied',
 }
 interface MetadataMapping extends Metadata {
     deletedOn: string
     deletedByFullName: string
     deletedBy: number
-}
-interface SecureMessage {
-    id?: string
-    senderUserId?: number
-    conversationId?: string
-    metadata?: MetadataMapping
-    attachments?: Attachment[] | []
-    channels?: Channel[] | []
-    channel?: Channel
-    recordStatus: string
-    subject: string
-    text: string
-    externalEmailAddress: string
-    messageStatus: string
-    isMessageSent: boolean
+    createdOn: string
 }
 
+interface Name {
+    firstName: string;
+    middleName: string;
+    lastName: string;
+    preferredName: string;
+    title: string;
+    suffix: string;
+    honors: string;
+}
+
+
 interface Channel {
-    receiverStatus?: string
-    sendMode?: string
-    metadata?: MetadataMapping
-    receiverStatusDetail?: string
-    externalMessageId?: string
-    externalEmail?: string
-    updatedOn?: string
-    updatedBy?: number
-    recordStatus: string
-    readTimeStamp?: string
-    id: string
-    receiverUserId: number
-    messageId: string
-    receiverType: string
-    isRead: boolean
-    isReplied: boolean
-    createdOn?: string
-    createdBy?: number
+    id: string;
+    metadata: Metadata;
+    recordStatus: string;
+    receiverUserRole: string;
+    receiverUserId: number | null;
+    receiverEmail: string;
+    receiverName: {
+        firstName: string;
+        middleName: string;
+        lastName: string;
+    };
+    receiverUserType: string;
+    messageId: string;
+    receiverType: string;
+    receiverStatus: string;
+    sendMode: string;
+    receiverStatusDetail: string;
+    externalMessageId: string;
+    externalEmail: string;
+    readTimeStamp: string;
+    isRead: boolean;
+    isReplied: boolean;
+};
+
+
+interface Attachment {
+    createdOn: string;
+    createdBy: number;
+    updatedOn: string;
+    updatedBy: number;
+    recordStatus: string;
+    id: string;
+    messageId: string;
+    name: string;
+    uri: string;
+    size: number;
+    mimeType: string;
+    fileName: string;
+    fileUrl: string;
+    file: File;
+    fileDescription: string;
+}
+
+
+interface SecureMessage {
+    id: string;
+    metadata: MetadataMapping;
+    recordStatus: string;
+    senderUserId: number;
+    senderEmail: string;
+    senderName: Name;
+    senderUserRole: string;
+    conversationId: string;
+    externalEmailAddress: string;
+    subject: string;
+    text: string;
+    messageStatus: string;
+    isMessageSent: boolean;
+    channels: Channel[];
+    attachments: Attachment[];
 }
 
 interface EmailPreview {
@@ -109,27 +177,12 @@ interface ChannelMessageStatus {
 }
 
 interface EmailRecipient {
-    name: string
-    email: string
+    name?: string
+    email?: string
     userType: string
 }
 
 
-interface Attachment {
-    id?: string
-    file?: File
-    messageId?: string
-    name?: string
-    uri?: string
-    mimeType?: string
-    fileDescription?: string
-    createdOn?: string
-    createdBy?: number
-    size?: number
-    updatedOn?: string
-    updatedBy?: number
-    recordStatus?: string
-}
 interface SecureMessageData {
     secureMessages: SecureMessage[]
     total: number
@@ -139,17 +192,17 @@ interface EmailPreviewTypes {
     total: number
 }
 interface TableMeta {
-    rowHover?: string // Adjust type as needed based on your row ID type
+    rowHover: string
 }
 
 type CustomTableOptions<T> = Omit<TableOptions<T>, 'meta'> & {
-    meta?: TableMeta
+    meta: TableMeta
 }
 
 type CustomTable<T> = Table<T> & {
     options: CustomTableOptions<T> & {
         onStateChange: (updater: Updater<TableState>) => void
-        renderFallbackValue?: any // Ensure this is optional if it's not required
+        renderFallbackValue: any
     }
 }
 interface DataTableFooterProps {
@@ -160,14 +213,30 @@ interface DataTableFooterProps {
     nextPage: () => void;
 }
 interface SecureMessageStore {
-    secureMessages: SecureMessage[],
-    setSecureMessages: (secureMessages: SecureMessage[]) => void,
-    previewSecureMessage: SecureMessage | null
-    setPreviewSecureMessage: (value: SecureMessage | null) => void
-    loading?: boolean
+    activeTab: SecureMessagesTab,
+    setActiveTab: (activeTab: SecureMessagesTab) => void,
+    activeComponent: ActiveComponent,
+    setActiveComponent: (activeComponent: ActiveComponent) => void,
+    secureMessages: Partial<SecureMessage>[],
+    setSecureMessages: (secureMessages: Partial<SecureMessage>[]) => void;
+    previewSecureMessage: {
+        secureMessage: Partial<SecureMessage> | null;
+        activeTab: SecureMessagesTab;
+    };
+    setPreviewSecureMessage: (preview: { secureMessage: Partial<SecureMessage> | null; activeTab: SecureMessagesTab }) => void;
+    loading: boolean
     error?: string
-    fetch: (page?: number, reset?: boolean) => void
     formValues?: Partial<SchemaType>
+    page: number
+    pageCache: Record<number, SecureMessage[]>
+    search: (
+        formValues: Partial<SchemaType>,
+        page?: number,
+        reset?: boolean,
+    ) => void
+    next: () => void
+    prev: () => void
+    jumpToPage: (page: number) => void
 }
 
 
@@ -183,61 +252,83 @@ interface PhoneNumber {
 interface ContactInfo {
     email: string
     emailVerificationStatus: string
-    phoneNumbers?: PhoneNumber[]
+    phoneNumbers: PhoneNumber[]
     addresses: ClinicAddress[]
     isMailingAddressSameAsPrimary: boolean
-}
-interface LegalNameMapping extends LegalName {
-    suffix: string
 }
 interface EmailRecipients {
     id: number
     metadata: MetadataMapping
-    legalName: LegalNameMapping
+    legalName: LegalName
     userRoleCode: string
     contactInfo: ContactInfo
     staffId: number
     patientId: number
 }
-interface ActiveComponentProps {
-    setActiveComponent: Dispatch<SetStateAction<ActiveComponent>>
-    activeComponent?: ActiveComponent
-}
 interface AttachmentsProps {
-    attachments: Attachment[];
-    handleDeleteFile: (index: number) => void;
-    activeComponent?: ActiveComponent
+    attachments: Partial<Attachment>[];
+    handleDeleteFile: (index?: number, messageId?: string, attachmentId?: string) => void;
 }
 interface FileTileProps {
-    attachment: Attachment | File
+    attachment: Partial<Attachment>
+    viewMessage?: boolean
     handleDeleteFile: () => void
-    activeComponent?: ActiveComponent
-}
-interface ViewMessageAttachmentProps {
-    previewSecureMessage?: SecureMessage | null
-    handleDeleteFile: (index: number) => void
-    activeComponent?: ActiveComponent
 }
 interface RichTextEditorWrapperProps {
     children: ReactNode
-    activeComponent?: ActiveComponent
+    attachments: Partial<Attachment>[]
+    setAttachments: Dispatch<SetStateAction<Partial<Attachment>[]>>
 }
-interface InternalRecipientsEmailsProps {
-    setInternalRecipientsTag: Dispatch<SetStateAction<Tag[]>>
+interface AttachmentProps {
+    attachments: Partial<Attachment>[]
+    setAttachments: Dispatch<SetStateAction<Partial<Attachment>[]>>
+}
+interface InternalRecipientProps {
     internalRecipientsTag: Tag[]
+    setInternalRecipientsTag: Dispatch<SetStateAction<Tag[]>>
+    internalEmailSuggestions: EmailRecipients[] | Channel[]
+    setInternalEmailSuggestions: Dispatch<SetStateAction<EmailRecipients[] | Channel[]>>
 }
-interface ExternalRecipientsEmailsProps {
-    setExternalRecipientsTag: Dispatch<SetStateAction<Tag[]>>
+interface UserRecipientProps {
+    userRecipientsTag: Tag[]
+    setUserRecipientsTag: Dispatch<SetStateAction<Tag[]>>
+    userEmailSuggestions: EmailRecipients[] | Channel[]
+    setUserEmailSuggestions: Dispatch<SetStateAction<EmailRecipients[] | Channel[]>>
+}
+interface ExternalRecipientProps {
     externalRecipientsTag: Tag[]
+    setExternalRecipientsTag: Dispatch<SetStateAction<Tag[]>>
+    externalEmailSuggestions: Tag[]
+    setExternalEmailSuggestions: Dispatch<SetStateAction<Tag[]>>
 }
+interface ActiveTabPops {
+    setActiveTab: Dispatch<SetStateAction<SecureMessagesTab>>
+    activeTab: SecureMessagesTab
+}
+
+interface SecureMessagesAttachmentsParams {
+    data: FormData
+    messageId: string
+    attachmentId: string
+}
+interface AttachmentsParams {
+    messageId: string
+    fileName: string
+    fileDescription: string
+    fileUrl: string
+    mimeType: string
+}
+
 export {
-    type ExternalRecipientsEmailsProps,
-    type InternalRecipientsEmailsProps,
+    type UserRecipientProps,
+    type ExternalRecipientProps,
+    type InternalRecipientProps,
+    type AttachmentProps,
+    type SecureMessagesAttachmentsParams,
     type RichTextEditorWrapperProps,
-    type ViewMessageAttachmentProps,
     type FileTileProps,
+    type ActiveTabPops,
     type AttachmentsProps,
-    type ActiveComponentProps,
     type EmailRecipients,
     type SecureMessageStoreType,
     type DataTableFooterProps,
@@ -250,8 +341,14 @@ export {
     type EmailRecipient,
     type Attachment,
     type Channel,
+    type AttachmentsParams,
     SecureMessageStatus,
     SecureMessagesTab,
     ActiveComponent,
     EmailRecipientTypes,
+    SendMode,
+    ReceiverUserRole,
+    messageStatus,
+    SendType,
+    Staff,
 }

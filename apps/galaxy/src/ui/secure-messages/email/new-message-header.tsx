@@ -3,14 +3,14 @@ import { Cross1Icon } from '@radix-ui/react-icons'
 import { Flex } from '@radix-ui/themes'
 import { LeftIcon } from '@/components/icons'
 import { cn } from '@/utils'
-import { ActiveComponent, ActiveComponentProps } from '../types'
+import { useStore } from '../store'
+import { ActiveComponent } from '../types'
 import { MessageHeading } from './message-heading'
 
-const NewMessageHeader = ({
-  setActiveComponent,
-  activeComponent,
-}: ActiveComponentProps) => {
+const NewMessageHeader = () => {
+  const { setActiveComponent, activeComponent } = useStore((state) => state)
   const noComposeEmail = activeComponent !== ActiveComponent.COMPOSE_MAIL
+
   return (
     <Flex
       className="bg-pp-table-subRows h-[40px] w-full"
@@ -26,7 +26,7 @@ const NewMessageHeader = ({
             onClick={() => setActiveComponent(ActiveComponent.NEW_EMAIL)}
           />
         )}
-        <MessageHeading activeComponent={activeComponent} />
+        <MessageHeading />
       </Flex>
 
       <Cross1Icon

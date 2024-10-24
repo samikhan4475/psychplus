@@ -18,6 +18,8 @@
   padding: 2px 4px !important;
   font-size: 14px !important;
   margin: 0 !important;
+  display: flex !important;
+  align-items: center !important;
 }
 .react-tags__tag:hover {
   color: black !important;
@@ -33,4 +35,8 @@
 }
 .rt-BaseTabListTrigger:hover .rt-TabsTriggerInner {
   background-color: transparent !important;
+}
+.react-tags__list {
+  display: flex !important;
+  gap: 2px !important;
 }

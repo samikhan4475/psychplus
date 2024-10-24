@@ -1,14 +1,11 @@
-import { Dispatch, SetStateAction } from 'react'
 import { PlusIcon } from '@radix-ui/react-icons'
 import { Button, Flex, Text } from '@radix-ui/themes'
 import { Mail1Icon } from '@/components/icons'
+import { useStore } from '../store'
 import { ActiveComponent } from '../types'
 
-const EmailPlaceHolder = ({
-  setActiveComponent,
-}: {
-  setActiveComponent: Dispatch<SetStateAction<ActiveComponent>>
-}) => {
+const EmailPlaceHolder = () => {
+  const { setActiveComponent } = useStore((state) => state)
   return (
     <Flex
       className="h-full w-full"

@@ -1,15 +1,19 @@
 'use client'
 
 import { useCallback, useMemo } from 'react'
-import { Row, type ColumnDef } from '@tanstack/react-table'
-import { ColumnHeader, DataTable } from '@/components'
-import { useStore } from '../store'
+import { Flex } from '@radix-ui/themes'
+import { Column, Row, type ColumnDef } from '@tanstack/react-table'
+import toast from 'react-hot-toast'
 import {
-  ActiveComponent,
-  ActiveComponentProps,
-  Channel,
-  SecureMessage,
-} from '../types'
+  ColumnHeader,
+  DataTable,
+  DataTablePagination,
+  LoadingPlaceholder,
+} from '@/components'
+import { updateChannelAction } from '../actions'
+import { PAGE_SIZE } from '../contants'
+import { useStore } from '../store'
+import { ActiveComponent, SecureMessage, SecureMessagesTab } from '../types'
 import {
   MessageDateTimeCell,
   MessageFromCell,
@@ -18,23 +22,56 @@ import {
   MessageUserNameCell,
 } from './cells'
 
-const SecureMessagesTable = ({ setActiveComponent }: ActiveComponentProps) => {
-  const { secureMessages, setPreviewSecureMessage } = useStore((state) => state)
+const SecureMessagesTable = () => {
+  const {
+    secureMessages,
+    setSecureMessages,
+    setPreviewSecureMessage,
+    loading,
+    next,
+    prev,
+    page,
+    activeTab,
+    setActiveComponent,
+    jumpToPage,
+  } = useStore((state) => state)
+
+  const DataTableFooter = useMemo(() => {
+    return (
+      <Flex py="2" align="center" width="100%" justify="end">
+        <DataTablePagination
+          jumpToPage={jumpToPage}
+          page={page}
+          loading={loading || false}
+          className=""
+          pageSize={PAGE_SIZE}
+          key="pagination"
+          total={secureMessages.length}
+          prev={prev}
+          next={next}
+        />
+      </Flex>
+    )
+  }, [secureMessages])
 
   const columns: ColumnDef<SecureMessage>[] = useMemo(
     () => [
-      {
-        id: 'status',
-        size: 50,
-
-        header: ({ column }) =>
-          ColumnHeader({
-            column,
-            label: 'Status',
-            className: 'text-3 font-regular text-black',
-          }),
-        cell: MessageStatusCell,
-      },
+      ...(activeTab !== SecureMessagesTab.SENT &&
+      activeTab !== SecureMessagesTab.DRAFT
+        ? [
+            {
+              id: 'status',
+              size: 50,
+              header: ({ column }: { column: Column<SecureMessage> }) =>
+                ColumnHeader({
+                  column,
+                  label: 'Status',
+                  className: 'text-3 font-regular text-black',
+                }),
+              cell: MessageStatusCell,
+            },
+          ]
+        : []),
       {
         id: 'from',
         size: 50,
@@ -71,7 +108,7 @@ const SecureMessagesTable = ({ setActiveComponent }: ActiveComponentProps) => {
       },
       {
         id: 'subject',
-        size: 200,
+        size: 100,
         header: ({ column }) =>
           ColumnHeader({
             column,
@@ -81,42 +118,66 @@ const SecureMessagesTable = ({ setActiveComponent }: ActiveComponentProps) => {
         cell: MessageSubjectCell,
       },
     ],
-    [],
+    [activeTab],
   )
-  const handleSecureMessage = useCallback(
+
+  const onClickSecureMessage = useCallback(
     async (secureMessage: SecureMessage) => {
-      setPreviewSecureMessage(secureMessage)
-      setActiveComponent(ActiveComponent.PREVIEW_EMAIL)
+      setPreviewSecureMessage({ secureMessage, activeTab })
+
+      if (activeTab === SecureMessagesTab.DRAFT) {
+        setActiveComponent(ActiveComponent.DRAFT)
+      } else {
+        setActiveComponent(ActiveComponent.PREVIEW_EMAIL)
+
+        // Update the 'isRead' status for non-SENT messages
+        if (activeTab !== SecureMessagesTab.SENT) {
+          const channel = secureMessage?.channels?.[0]
+          if (!channel?.id || !secureMessage.id) return
+
+          const payload = { ...channel, isRead: true }
+          const result = await updateChannelAction(
+            secureMessage.id,
+            channel.id,
+            payload,
+          )
+
+          if (result.state === 'error') {
+            toast.error('Failed to update channel')
+          } else {
+            secureMessage.channels[0].isRead = true
+            const updatedMessages = secureMessages.map((msg) =>
+              msg.id === secureMessage.id ? secureMessage : msg,
+            )
+            setSecureMessages(updatedMessages)
+          }
+        }
+      }
     },
-    [setActiveComponent, setPreviewSecureMessage],
+    [setActiveComponent, setPreviewSecureMessage, activeTab, secureMessages],
   )
-  const flattenedMessages = flattenMessages(secureMessages)
-  // console.log(flattenedMessages, 'flattenedMessages', secureMessages)
+
+  if (loading) {
+    return (
+      <Flex height="100vh" align="center" justify="center">
+        <LoadingPlaceholder />
+      </Flex>
+    )
+  }
+  const validSecureMessages = secureMessages.filter(
+    (message): message is SecureMessage => message.id !== undefined,
+  )
   return (
     <DataTable
-      data={flattenedMessages}
+      data={validSecureMessages}
       columns={columns}
       tableClass="bg-white mt-4"
+      renderFooter={() => DataTableFooter}
       onRowClick={(row: Row<SecureMessage>) =>
-        handleSecureMessage(row.original)
+        onClickSecureMessage(row.original)
       }
     />
   )
 }
 
 export { SecureMessagesTable }
-
-const flattenMessages = (
-  messages: SecureMessage[],
-): (SecureMessage & { channel: Channel })[] => {
-  return messages.reduce((acc, message) => {
-    const { channels = [] } = message
-    return [
-      ...acc,
-      ...channels.map((channel) => ({
-        ...message,
-        channel,
-      })),
-    ]
-  }, [] as (SecureMessage & { channel: Channel })[])
-}

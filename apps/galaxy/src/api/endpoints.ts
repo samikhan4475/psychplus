@@ -71,6 +71,17 @@ const CREATE_STAFF_COMMENT_ENDPOINT = (appointmentId: number) =>
 const Update_STAFF_COMMENT_ENDPOINT = (commentId: number) =>
   `${API_URL}/api/staffcomments/${commentId}`
 const GET_AVAILABLE_APPOINTMENT_ENDPOINT = `${API_URL}/api/schedules/availability/search`
+const GET_SECURE_MESSAGES = `${API_URL}/api/users/self/securemessaging/messages/actions/search`
+const UPDATE_MESSAGE = (messageId: string) => `${API_URL}/api/users/self/securemessaging/messages/${messageId}`
+const UPDATE_CHANNEL_MESSAGES_STATUS = (messageId: string, channelId: string) => `${API_URL}/api/users/self/securemessaging/messages/${messageId}/channels/${channelId}`
+const CREATE_CHANNEL_SECURE_MESSAGE = (messageId: string) => `${API_URL}/api/users/self/securemessaging/messages/${messageId}/channels`
+const GET_CHANNEL_SECURE_MESSAGE = (messageId: string) => `${API_URL}/api/users/self/securemessaging/messages/${messageId}/channels`
+const ATTACHMENTS_SECURE_MESSAGE = (messageId: string, attachmentId: string) => `${API_URL}/api/users/self/securemessaging/messages/${messageId}/attachments/${attachmentId}/actions/upload?fileDescription=${messageId}`
+const ADD_ATTACHMENTS_SECURE_MESSAGE = (messageId: string) => `${API_URL}/api/users/self/securemessaging/messages/${messageId}/attachments`
+const DOWNLOAD_ATTACHMENTS_FILE_SECURE_MESSAGE = (messageId: string, attachmentId: string) => `${API_URL}/api/securemessaging/messages/${messageId}/attachments/${attachmentId}/actions/download`
+const DELETE_ATTACHMENTS_SECURE_MESSAGE = (messageId: string, attachmentId: string) => `${API_URL}/api/users/self/securemessaging/messages/${messageId}/attachements/${attachmentId}`
+const SEND_SECURE_MESSAGE = `${API_URL}/api/users/self/securemessaging/messages`
+const GET_RECIPIENT_SECURE_MESSAGE = (messageId: string) => `${API_URL}/api/users/self/securemessages/${messageId}/recipients/actions/search`
 const GET_PATIENT_BILLING_HISTORY = (patientId: string) =>
   `${API_URL}/api/patients/${patientId}/billinghistory/actions/search`
 const ADD_PATIENT_RELATIONSHIP_ENDPOINT = (patientId: string) =>
@@ -218,9 +229,16 @@ export {
   CREATE_STAFF_COMMENT_ENDPOINT,
   Update_STAFF_COMMENT_ENDPOINT,
   GET_AVAILABLE_APPOINTMENT_ENDPOINT,
+  GET_SECURE_MESSAGES,
+  SEND_SECURE_MESSAGE,
+  GET_RECIPIENT_SECURE_MESSAGE,
+  CREATE_CHANNEL_SECURE_MESSAGE,
+  ATTACHMENTS_SECURE_MESSAGE,
   GET_PATIENT_BILLING_HISTORY,
   ADD_PATIENT_RELATIONSHIP_ENDPOINT,
   DELETE_PATIENT_RELATIONSHIP_ENDPOINT,
+  GET_CHANNEL_SECURE_MESSAGE,
+  UPDATE_CHANNEL_MESSAGES_STATUS,
   SEARCH_AVAILABLE_APPOINTMENT_SLOTS_ENDPOINT,
   GET_PATIENT_CONSENT_SIGNED_PDF_ENDPOINT,
   GET_PATIENT_CREDIT_CARDS,
@@ -243,6 +261,8 @@ export {
   CLAIM_SUBMIT_ENDPOINT,
   CLAIM_SUBMISSION_REJECTION_DETAIL_ENDPOINT,
   GET_TEMPLATE_REPORT,
+  DELETE_ATTACHMENTS_SECURE_MESSAGE,
+  DOWNLOAD_ATTACHMENTS_FILE_SECURE_MESSAGE,
   GET_PATIENTS_INFO_HISTORY,
   GET_PATIENT_HISOTRY_PROFILE_IMAGE_ENDPOINT,
   GET_PATIENT_HISOTRY_DRIVING_LICENSE_IMAGE_ENDPOINT,
@@ -259,11 +279,13 @@ export {
   INSURANCE_PAYMENT_ATTACHMENTS_ENDPOINT,
   GET_PRACTICE_IDS_LIST_ENDPOINT,
   GET_ORGANIZATION_ROLES,
+  GET_POS_CODES,
+  ADD_ATTACHMENTS_SECURE_MESSAGE,
   GET_MASTER_FEE_SCHEDULES,
   GET_PROCEDURES_CODES,
   GET_MODIFIERS_CODES,
   GET_ORGANIZATIONS_ENDPOINT,
   GET_PRACTICES_ENDPOINT,
-  GET_POS_CODES,
   GET_PATIENT_VITALS_ENDPOINT,
+  UPDATE_MESSAGE
 }

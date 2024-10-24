@@ -2,7 +2,7 @@ import { Button } from '@radix-ui/themes'
 import { ListFilterIcon } from 'lucide-react'
 import { cn } from '@/utils'
 
-const ShowFiltersButton = ({
+const FiltersButton = ({
   onClick,
   showFilter,
 }: {
@@ -13,6 +13,7 @@ const ShowFiltersButton = ({
     <Button
       size="1"
       variant="outline"
+      type="button"
       className={cn(
         '  w-[68px] border-none text-[12px] outline-none [box-shadow:none] ',
         showFilter
@@ -26,4 +27,4 @@ const ShowFiltersButton = ({
     </Button>
   )
 }
-export { ShowFiltersButton }
+export { FiltersButton }

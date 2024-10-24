@@ -1,17 +1,20 @@
 import React from 'react'
 import './styles.css'
-import { ActiveComponent } from '../../types'
+import { FormFieldError } from '@/components'
+import { AttachmentProps } from '../../types'
 import { RichTextEditorToolbar } from './rich-text-editor-toolbar'
 import { RichTextEditorWrapper } from './rich-text-editor-wrapper'
 
-const RichTextEditor = ({
-  activeComponent,
-}: {
-  activeComponent?: ActiveComponent
-}) => (
-  <RichTextEditorWrapper activeComponent={activeComponent}>
-    <RichTextEditorToolbar />
-  </RichTextEditorWrapper>
+const RichTextEditor = ({ attachments, setAttachments }: AttachmentProps) => (
+  <>
+    <RichTextEditorWrapper
+      attachments={attachments}
+      setAttachments={setAttachments}
+    >
+      <RichTextEditorToolbar />
+    </RichTextEditorWrapper>
+    <FormFieldError name="text" />
+  </>
 )
 
 export { RichTextEditor }

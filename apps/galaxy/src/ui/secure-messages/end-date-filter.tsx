@@ -10,7 +10,7 @@ const EndDate = () => {
       </Text>
       <DatePickerInput
         className="w-[248px] "
-        field="endDate"
+        field="to"
         aria-label="date-to-filter-input"
       />
     </Flex>

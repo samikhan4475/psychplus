@@ -2,7 +2,7 @@ import React from 'react'
 import { Flex, TextField } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
 import { FormFieldError, FormFieldLabel } from '@/components'
-import { SchemaType } from './secure-messages-view'
+import { SchemaType } from './schema'
 
 const NameInputField = () => {
   const form = useFormContext<SchemaType>()

@@ -1,7 +1,7 @@
 import React from 'react'
 import { Box } from '@radix-ui/themes'
-import { FileUplaodCard } from '.'
 import { AttachmentsProps } from '../../types'
+import { FileUploadCard } from './file-upload-card'
 
 const Attachments = ({ attachments, handleDeleteFile }: AttachmentsProps) => {
   return (
@@ -9,10 +9,12 @@ const Attachments = ({ attachments, handleDeleteFile }: AttachmentsProps) => {
       {attachments.length > 0 && (
         <Box className="bg-white flex flex-wrap gap-2 rounded-4 p-4 pt-4">
           {attachments.map((attachment, index) => (
-            <FileUplaodCard
+            <FileUploadCard
               key={`${attachment.name}-${index}`}
               attachment={attachment}
-              handleDeleteFile={() => handleDeleteFile(index)}
+              handleDeleteFile={() => {
+                handleDeleteFile(index, attachment?.messageId, attachment?.id)
+              }}
             />
           ))}
         </Box>

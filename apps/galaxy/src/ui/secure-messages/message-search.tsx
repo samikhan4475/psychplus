@@ -3,7 +3,7 @@ import { MagnifyingGlassIcon } from '@radix-ui/react-icons'
 import { TextField } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
 import { FormFieldContainer } from '@/components'
-import { SchemaType } from './secure-messages-view'
+import { SchemaType } from './schema'
 
 const MessageSearch = () => {
   const form = useFormContext<SchemaType>()
@@ -13,7 +13,7 @@ const MessageSearch = () => {
       <TextField.Root
         size="1"
         placeholder="Search message"
-        {...form.register('searchMessage')}
+        {...form.register('subject')}
         className="h-[24px] w-[370px] border-0 outline-none [box-shadow:none]"
       />
       <MagnifyingGlassIcon

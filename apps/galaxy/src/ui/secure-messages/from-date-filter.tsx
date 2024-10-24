@@ -10,7 +10,7 @@ const FromDateFilter = () => {
       </Text>
       <DatePickerInput
         className="w-[248px]"
-        field="startDate"
+        field="from"
         aria-label="date-to-filter-input"
       />
     </Flex>

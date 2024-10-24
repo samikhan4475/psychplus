@@ -1,12 +1,9 @@
 import React from 'react'
 import { Text } from '@radix-ui/themes'
-import { ActiveComponent } from '../types'
+import { useStore } from '../store'
 
-const MessageHeading = ({
-  activeComponent,
-}: {
-  activeComponent?: ActiveComponent
-}) => {
+const MessageHeading = () => {
+  const { activeComponent } = useStore((state) => state)
   return (
     <Text size="2" weight="medium" className="pl-4 text-[16px]">
       {activeComponent}

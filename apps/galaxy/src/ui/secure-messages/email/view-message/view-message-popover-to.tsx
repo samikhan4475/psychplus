@@ -1,11 +1,11 @@
 import React from 'react'
 import { Text } from '@radix-ui/themes'
-import { SecureMessage } from '../types'
+import { SecureMessage } from '../../types'
 
 const ViewMessagePopoverTo = ({
   previewSecureMessage,
 }: {
-  previewSecureMessage?: SecureMessage | null
+  previewSecureMessage?: Partial<SecureMessage> | null
 }) => {
   return (
     <>

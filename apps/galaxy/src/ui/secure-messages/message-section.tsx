@@ -1,33 +1,20 @@
-import React, { useMemo, useState } from 'react'
+import React, { useMemo } from 'react'
 import { Box, Flex } from '@radix-ui/themes'
-import { ComposeNewEmail } from './email/compose-new-email-template'
-import { EmailPlaceHolder } from './email/email-placeholder'
+import { ComposeNewEmail, EmailPlaceHolder } from './email'
 import { ReviewEmail } from './email/view-message'
 import { MessageHeader } from './message-header'
 import { SecureMessagesTabs } from './secure-messages-tabs'
+import { useStore } from './store'
 import { ActiveComponent } from './types'
 
 const MessageSection = () => {
-  const [activeComponent, setActiveComponent] = useState(
-    ActiveComponent.NEW_EMAIL,
-  )
+  const { activeComponent } = useStore((state) => state)
   const renderEmailBody = useMemo(() => {
     if (activeComponent === ActiveComponent.NEW_EMAIL)
-      return <EmailPlaceHolder setActiveComponent={setActiveComponent} />
+      return <EmailPlaceHolder />
     else if (activeComponent === ActiveComponent.PREVIEW_EMAIL)
-      return (
-        <ReviewEmail
-          activeComponent={activeComponent}
-          setActiveComponent={setActiveComponent}
-        />
-      )
-    else
-      return (
-        <ComposeNewEmail
-          activeComponent={activeComponent}
-          setActiveComponent={setActiveComponent}
-        />
-      )
+      return <ReviewEmail />
+    else return <ComposeNewEmail />
   }, [activeComponent])
 
   return (
@@ -36,8 +23,8 @@ const MessageSection = () => {
         className="border-pp-gray-2 h-[100vh] w-[42%]  border-r pr-1 pt-1"
         direction="column"
       >
-        <MessageHeader setActiveComponent={setActiveComponent} />
-        <SecureMessagesTabs setActiveComponent={setActiveComponent} />
+        <MessageHeader />
+        <SecureMessagesTabs />
       </Flex>
       <Box className="w-[60%] ">{renderEmailBody}</Box>
     </Flex>

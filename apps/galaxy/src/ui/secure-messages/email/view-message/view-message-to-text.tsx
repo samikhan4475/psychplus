@@ -1,16 +1,14 @@
 import React from 'react'
 import { Text } from '@radix-ui/themes'
-import { SecureMessage } from '../types'
+import { useStore } from '../../store'
 
-const ViewMessageToText = ({
-  previewSecureMessage,
-}: {
-  previewSecureMessage: SecureMessage | null
-}) => {
+const ViewMessageToText = () => {
+  const { previewSecureMessage } = useStore((state) => state)
+
   return (
     <Text className="text-pp-gray-1 text-[12px]">
       to:
-      {previewSecureMessage?.channels
+      {previewSecureMessage.secureMessage?.channels
         ?.map((channel) => channel?.externalEmail)
         .join(', ')}
     </Text>

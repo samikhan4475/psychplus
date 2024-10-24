@@ -20,7 +20,7 @@ const MessageStatusCell = ({ row }: { row: Row<SecureMessage> }) => {
           'text-[11px]',
         )}
       >
-        {status}
+        {status || '-'}
       </TextCell>
     </Badge>
   )

@@ -2,7 +2,8 @@ import React, { useEffect } from 'react'
 import { Flex, Text } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
 import { SelectInput } from '@/components'
-import { SchemaType } from './secure-messages-view'
+import { SchemaType } from './schema'
+import { messageStatus } from './types'
 
 const StatusDropdownFilter = () => {
   const form = useFormContext<SchemaType>()
@@ -18,15 +19,15 @@ const StatusDropdownFilter = () => {
       </Text>
       <SelectInput
         field="Select"
-        label=""
         className="w-full"
         name="status"
         value={form.watch('status')}
         onValueChange={(vals) => form.setValue('status', vals)}
         buttonClassName="w-full"
         options={[
-          { label: 'Yes', value: 'yes' },
-          { label: 'No', value: 'no' },
+          { label: 'Read', value: messageStatus.READ },
+          { label: 'UnRead', value: messageStatus.UNREAD },
+          { label: 'Replied', value: messageStatus.REPLIED },
         ]}
         placeholder="Select"
       />
