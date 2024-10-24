@@ -43,7 +43,9 @@ const useBookedAppointmentsStore = create<Store>((set) => ({
     switch (options?.view) {
       case View.Rounding:
         return set({
-          roundingViewData: result.data,
+          roundingViewData: result.data.filter(
+            (appointment) => !appointment.isServiceTimeDependent,
+          ),
           loading: false,
         })
       case View.List:
@@ -58,7 +60,9 @@ const useBookedAppointmentsStore = create<Store>((set) => ({
         })
       default:
         return set({
-          roundingViewData: result.data,
+          roundingViewData: result.data.filter(
+            (appointment) => !appointment.isServiceTimeDependent,
+          ),
           listViewData: result.data,
           calendarViewData: transformInBookedAppointments(result.data),
           loading: false,
@@ -68,22 +72,24 @@ const useBookedAppointmentsStore = create<Store>((set) => ({
 }))
 
 const transformInBookedAppointments = (data: Appointment[]) =>
-  data.map((appointment) => {
-    const start = convertToZonedDate(
-      appointment.appointmentDate,
-      appointment.locationTimezoneId,
-    )
-    const end = new Date(start.getTime() + 20 * 60000) // Assuming 20 mins duration; adjust if needed
-    const title = `${appointment.name} (${appointment.visitType})`
+  data
+    .map((appointment) => {
+      const start = convertToZonedDate(
+        appointment.appointmentDate,
+        appointment.locationTimezoneId,
+      )
+      const end = new Date(start.getTime() + 20 * 60000) // Assuming 20 mins duration; adjust if needed
+      const title = `${appointment.name} (${appointment.visitType})`
 
-    return {
-      start,
-      end,
-      title,
-      data: {
-        ...appointment,
-      },
-    }
-  })
+      return {
+        start,
+        end,
+        title,
+        data: {
+          ...appointment,
+        },
+      }
+    })
+    .filter((appointment) => appointment.data.isServiceTimeDependent)
 
 export { useBookedAppointmentsStore }
