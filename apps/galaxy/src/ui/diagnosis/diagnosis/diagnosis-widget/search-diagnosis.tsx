@@ -48,7 +48,11 @@ const ServiceDiagnosisList = ({ patientId }: SearchDiagnosisProps) => {
     return <LoadingPlaceholder className="mt-5" />
   }
   if (serviceDiagnosisData.length === 0) {
-    return <Text>No data found</Text>
+    return (
+      <Text weight="medium" className="text-[12px]">
+        No data found
+      </Text>
+    )
   }
 
   return serviceDiagnosisData.map((option: options, index: number) => {
@@ -68,8 +72,13 @@ const ServiceDiagnosisList = ({ patientId }: SearchDiagnosisProps) => {
           }`,
         )}
       >
-        <Text className="w-[85%]">{option.label}</Text>
-        <PlusCircleIcon stroke="#194595" strokeWidth="2" />
+        <Text className="w-[85%] text-[11px]">{option.label}</Text>
+        <PlusCircleIcon
+          stroke="#194595"
+          strokeWidth="2"
+          height="15"
+          width="15"
+        />
       </Flex>
     )
   })

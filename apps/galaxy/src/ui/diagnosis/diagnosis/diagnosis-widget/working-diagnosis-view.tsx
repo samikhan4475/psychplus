@@ -59,28 +59,38 @@ const WorkingDiagnosisView = ({
                     {...provided.dragHandleProps}
                     ref={provided.innerRef}
                   >
-                    <Text>{index + 1}.</Text>
+                    <Text weight="medium" className="text-[11px]">
+                      {index + 1}.
+                    </Text>
                     <Flex
                       align="center"
                       justify="between"
                       width="100%"
-                      className="drag rounded-2 border border-pp-focus-bg"
+                      className="drag border-pp-focus-bg rounded-2 border"
                       px="2"
                       py="1"
                     >
-                      <Flex>
-                        <MoveVertical strokeWidth="1" />
-                        <Text>{item.sectionItemValue}</Text>
+                      <Flex align="center" gap="2">
+                        <MoveVertical strokeWidth="1" height="18" width="18" />
+                        <Text className="text-[11px]">
+                          {item.sectionItemValue}
+                        </Text>
                       </Flex>
-                      <Flex gap="2">
+                      <Flex align="center" gap="2">
                         <Trash2
+                          height="14"
+                          width="14"
                           cursor="pointer"
-                          strokeWidth="1"
                           onClick={() =>
                             deleteWorkingDiagnosis(patientId, index)
                           }
                         />
-                        <StarIcon stroke="#0F6CBD" strokeWidth="1" />
+                        <StarIcon
+                          stroke="#0F6CBD"
+                          strokeWidth="1"
+                          height="15"
+                          width="15"
+                        />
                       </Flex>
                     </Flex>
                   </Flex>

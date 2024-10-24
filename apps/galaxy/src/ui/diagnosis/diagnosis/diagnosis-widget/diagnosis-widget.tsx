@@ -10,7 +10,7 @@ interface DiagnosisWidgetProps {
 
 const DiagnosisWidget = ({ patientId, recommended }: DiagnosisWidgetProps) => {
   return (
-    <Flex className="bg-whiteA-12" gap="2" height='100vh'>
+    <Flex className="bg-whiteA-12" gap="2">
       <Flex width="70%" direction="column">
         <Text className="bg-pp-bg-table-label px-2 py-1 font-bold">
           Working Diagnosis

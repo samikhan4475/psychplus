@@ -14,7 +14,7 @@ const WidgetClearButton = () => {
       className="text-black"
       onClick={(e) => {
         e.preventDefault()
-        form.reset()
+        form?.reset()
       }}
     >
       Clear

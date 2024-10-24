@@ -15,11 +15,16 @@ const FavoriteView = () => {
           {Favorites_Data.map((item, index) => (
             <Table.Row key={item.id + index}>
               <Table.Cell className="border-pp-table-border h-5 border-b px-1 py-0.5">
-                <Text>{item.text}</Text>
+                <Text className="text-[11px]">{item.text}</Text>
               </Table.Cell>
 
-              <Table.Cell className="border-pp-table-border h-5 border-b px-1 py-0.5">
-                <StarIcon stroke="#A0B6DC" fill="#A0B6DC" />
+              <Table.Cell className="border-pp-table-border h-5 border-b px-0 py-0.5">
+                <StarIcon
+                  stroke="#A0B6DC"
+                  fill="#A0B6DC"
+                  height="15"
+                  width="15"
+                />
               </Table.Cell>
             </Table.Row>
           ))}
