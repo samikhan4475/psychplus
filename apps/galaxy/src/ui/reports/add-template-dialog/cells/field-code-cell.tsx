@@ -2,7 +2,7 @@ import { SelectCell } from '@/components';
 import { useFormContext } from 'react-hook-form';
 import { useStore } from '../../store';
 import { getFieldType } from '../../utils';
-import { AddTemplateSchemaType } from '../add-template-form';
+import { AddTemplateSchemaType } from '../schema';
 
 const FieldCodeCell = ({ rowIndex }: { rowIndex: number }) => {
   const { watch, setValue } = useFormContext<AddTemplateSchemaType>();
@@ -16,11 +16,11 @@ const FieldCodeCell = ({ rowIndex }: { rowIndex: number }) => {
 
   return (
     <SelectCell
-      value={watch(`reportTemplateParameters.${rowIndex}.reportParameterCode`)}
+      value={watch(`parameters.${rowIndex}.reportParameterCode`)}
       options={reportParametersOptions || []}
       onValueChange={(value) => {
-        setValue(`reportTemplateParameters.${rowIndex}.reportParameterCode`, value);
-        setValue(`reportTemplateParameters.${rowIndex}.displayName`, getFieldType( parameters || [] , value ));
+        setValue(`parameters.${rowIndex}.reportParameterCode`, value);
+        setValue(`parameters.${rowIndex}.displayName`, getFieldType( parameters || [] , value ));
       }}
     />
   );

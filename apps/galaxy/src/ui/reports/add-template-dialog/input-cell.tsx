@@ -1,17 +1,14 @@
 import { TextField } from '@radix-ui/themes';
 import { useFormContext } from 'react-hook-form';
 import { cn } from '@/utils';
+import { ComponentProps } from 'react';
 
-interface InputCellProps {
-  name: string;
-  className?: string;
-  placeholder?: string;
-  disabled?: boolean;
-  defaultValue?: string;
+interface InputCellProps extends ComponentProps<typeof TextField.Root> {
+  field: string;
 }
 
 const InputCell = ({
-  name,
+  field,
   className,
   placeholder = '',
   disabled,
@@ -21,7 +18,7 @@ const InputCell = ({
 
   return (
     <TextField.Root
-      {...register(name)}
+      {...register(field)}
       defaultValue={defaultValue}
       size="1"
       placeholder={placeholder}

@@ -9,14 +9,17 @@ import { ReportsTemplateTabs } from './reports-template-tabs';
 import { useStore } from './store';
 
 const ReportsTabs = () => {
-  const { reports, loading, fetchReportsAndTemplates, selectedReport, setSelectedReport } = useStore();
+  const { reports, loading, fetchReportsAndTemplates, selectedReport, setSelectedReport, setGeneratedReport, setSelectedTemplate, fetchStaffData } = useStore();
 
   useEffect(() => {
     fetchReportsAndTemplates();
-  }, [fetchReportsAndTemplates]);
+    fetchStaffData();
+  }, [fetchReportsAndTemplates, fetchStaffData]);
 
   const handleTabClick = (reportItem: Code) => {
     setSelectedReport(reportItem);
+    setSelectedTemplate(null);
+    setGeneratedReport(null);
   };
 
   if (loading) {

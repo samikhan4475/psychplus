@@ -16,11 +16,11 @@ const TitleInputField = () => {
         Add Title
       </FormFieldLabel>
       <TextField.Root
-        {...form.register('title')}
+        {...form.register('displayName')}
         placeholder='Add Description'
         size="1"
       />
-      <FormFieldError name="title" />
+      <FormFieldError name="displayName" />
     </FormFieldContainer>
   )
 }

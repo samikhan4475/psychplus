@@ -1,13 +1,24 @@
 import { Code, MetadataCodeset } from "@/types"
 
+
+export interface TemplateParameter {
+  id?: string;
+    reportParameterCode: string;
+    displayName: string;
+    resourceStatus: string;
+    reportTemplateId?: string;
+    displayOrder: number;
+    runValue?: string;
+}
+
 interface Template {
   id?: string
   shortName: string
   displayName: string
   reportCategoryCode: string
-  isAdhocAllowed: boolean
-  resourceStatus: string
-  parameters: []
+  isAdhocAllowed?: boolean
+  parameters?:TemplateParameter[];
+  permittedRoles?: string[]
 }
 
 interface CodeAttributes {
@@ -33,6 +44,10 @@ interface Parameter {
 interface ReportFilterParameters {
   id: string;
   runValue: string;
+}
+interface StaffDataOptions {
+  value: string;
+  label: string;
 }
 
 export enum CODE_PARAM_ATTRIBUTES {
@@ -65,4 +80,8 @@ export enum REPEAT_INTERVAL {
   TWO = '2',
   THREE = '3'
 }
-export type { Template, Parameter, CodeSetIndex, ReportFilterParameters,ParameterCodeSet }
+export enum STAFF_SELECTION {
+  STAFF_SELECTION_SPECIALIST_TYPE = 'StaffSelectionSpecialistType',
+  SPECIALIST_TYPE = 'SpecialistType',
+}
+export type { Template, Parameter, CodeSetIndex, ReportFilterParameters,ParameterCodeSet, StaffDataOptions }

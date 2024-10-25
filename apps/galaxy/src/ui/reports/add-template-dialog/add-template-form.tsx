@@ -1,73 +1,63 @@
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Box, Flex } from '@radix-ui/themes';
-import { SubmitHandler, useForm } from 'react-hook-form';
-import z from 'zod';
 import { FormContainer } from '@/components';
-import { TitleInputField } from './add-title-field';
-import { CodeInput } from './code-input';
-import { CategorySelect } from './category-select';
-import { ParametersTable } from './parameter-table';
-import { RolesMultiSelect } from './roles-multi-select';
-import { ReportUploader } from './report-uploader';
-import ScheduleReportSwitch from './schedule-report-switch';
-import { AddTemplateButton } from './add-template-button';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import toast from 'react-hot-toast';
+import { addTemplateAction } from '../actions';
+import { useStore } from '../store';
+import { handleUploadReport } from '../utils';
+import { addTemplateSchema, AddTemplateSchemaType } from './schema';
+import { TemplateFormFields } from './template-form';
 
-const schema = z.object({
-  type: z.string().optional(),
-  title: z.string().optional(),
-  code: z.string().optional(),
-  isSchedule: z.boolean().optional(),
-  reportTemplateParameters: z.array(
-    z.object({
-      reportParameterCode: z.string().optional(),
-      displayName: z.string().optional(),
-      resourceStatus: z.string().optional(),
-      id: z.string().optional(),
-    })
-  ).optional(),
-});
+interface AddTemplateFormProps {
+  onClose?: () => void;
+}
 
-type AddTemplateSchemaType = z.infer<typeof schema>;
-
-const AddTemplateForm = () => {
+const AddTemplateForm = ({ onClose }: AddTemplateFormProps) => {
   const form = useForm<AddTemplateSchemaType>({
-    resolver: zodResolver(schema),
+    resolver: zodResolver(addTemplateSchema),
     defaultValues: {
-      type: '',
-      title: '',
-      code: '',
-      reportTemplateParameters: [],
-      isSchedule: false
+      displayName: '',
+      shortName: '',
+      reportCategoryCode: '',
+      parameters: [],
+      isAdhocAllowed: false,
+      permittedRoles: [],
     },
     mode: 'onChange',
   });
 
-  const onSubmit: SubmitHandler<AddTemplateSchemaType> = (data) => {
-    console.log('Form Submitted:', data);
+  const fetchReportsAndTemplates = useStore((state) => state.fetchReportsAndTemplates);
+  const setSelectedTemplate = useStore((state) => state.setSelectedTemplate);
+
+  const onSubmit: SubmitHandler<AddTemplateSchemaType> = async (data) => {
+    const { definitionPayloadUrl, ...payload } = data;
+
+    const addTemplateResponse = await addTemplateAction(payload);
+    if (addTemplateResponse?.state === 'success') {
+      const templateId = addTemplateResponse.data?.id;
+
+      if (definitionPayloadUrl && templateId) {
+        const uploadSuccess = await handleUploadReport(definitionPayloadUrl, templateId);
+        if (!uploadSuccess) return;
+      }
+
+      toast.success('Template and report uploaded successfully!');
+      fetchReportsAndTemplates();
+      setSelectedTemplate(null);
+      if (onClose) onClose();
+    } else {
+      toast.error(
+        addTemplateResponse.error ?? 'There was a problem saving your changes. Please try again.'
+      );
+    }
   };
 
   return (
     <FormContainer form={form} onSubmit={onSubmit}>
-      <Flex className="gap-x-3.5">
-        <Box className="w-[50%]">
-          <TitleInputField />
-        </Box>
-        <Box className="w-[25%]">
-          <CodeInput />
-        </Box>
-        <Box className="w-[25%]">
-          <CategorySelect />
-        </Box>
-      </Flex>
-      <ParametersTable />
-      <RolesMultiSelect />
-      <Flex className="w-full gap-x-3 text-[12px] mt-3">
-        <ReportUploader />
-        <ScheduleReportSwitch />
-      </Flex>
-      <AddTemplateButton  />
+      <TemplateFormFields  />
     </FormContainer>
   );
 };
 
-export { AddTemplateForm, type AddTemplateSchemaType };
+export { AddTemplateForm };
+

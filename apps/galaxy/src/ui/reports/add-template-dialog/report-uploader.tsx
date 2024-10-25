@@ -1,6 +1,6 @@
 'use client';
 
-import { FormFieldContainer } from '@/components';
+import { FormFieldContainer, FormFieldError } from '@/components';
 import { Cross2Icon, UploadIcon } from '@radix-ui/react-icons';
 import { Button, Flex, Text } from '@radix-ui/themes';
 import { useRef, useState } from 'react';
@@ -15,7 +15,7 @@ const ReportUploader = () => {
   const handleReportChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      form.setValue('uploadedFile', file);
+      form.setValue('definitionPayloadUrl', file);
       setSelectedReportName(file.name);
     }
   };
@@ -27,7 +27,7 @@ const ReportUploader = () => {
   };
 
   const handleRemoveReport = () => {
-    form.setValue('uploadedFile', null);
+    form.setValue('definitionPayloadUrl', null);
     setSelectedReportName(null);
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
@@ -43,11 +43,12 @@ const ReportUploader = () => {
       <FormFieldContainer className="w-full">
         <Flex align="center" justify="between">
           <Text className="text-pp-black-3" size="1" weight="medium">
-            Upload File
+            Upload File<Text className="text-pp-red ml-1">*</Text>
           </Text>
           <Button
             onClick={selectedReportName ? handleRemoveReport : handleButtonClick}
             variant="outline"
+            type='button'
             color="gray"
             className="w-fit text-black h-[24px] py-2 px-3 flex items-center justify-center bg-white cursor-pointer"
           >
@@ -72,6 +73,7 @@ const ReportUploader = () => {
           />
         </Flex>
       </FormFieldContainer>
+      <FormFieldError name="definitionPayloadUrl" />
     </Flex>
   );
 };

@@ -1,7 +1,7 @@
 import { TextCell } from '@/components';
 import { useFormContext } from 'react-hook-form';
 import { useStore } from '../../store';
-import { AddTemplateSchemaType } from '../add-template-form';
+import { AddTemplateSchemaType } from '../schema';
 
 interface FieldTypeCellProps {
   rowIndex: number;
@@ -18,7 +18,7 @@ const FieldTypeCell = ({ rowIndex }: FieldTypeCellProps) => {
     return dataTypeAttribute?.content || '';
   };
 
-  const reportParameterCode = watch(`reportTemplateParameters.${rowIndex}.reportParameterCode`) || '';
+  const reportParameterCode = watch(`parameters.${rowIndex}.reportParameterCode`) || '';
 
   return <TextCell>{getDataTypeFromAttributes(reportParameterCode)}</TextCell>;
 };

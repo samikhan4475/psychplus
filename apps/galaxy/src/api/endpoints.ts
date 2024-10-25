@@ -180,6 +180,10 @@ const GET_PROCEDURES_CODES = (codeStartsWith: string) =>
   `${API_URL}/api/codeset/authorities/AMA/codesets/CPT4?codeStartsWith=${codeStartsWith}&includeExtraDetails=false&offset=0&limit=0&orderBy=displayName%20asc`
 const GET_MODIFIERS_CODES = (codeStartsWith: string) =>
   `${API_URL}/api/codeset/authorities/AMA/codesets/CPT4Modifiers?codeStartsWith=${codeStartsWith}&includeExtraDetails=false&offset=0&limit=0&orderBy=displayName%20asc`
+const ADD_REPORT_TEMPLATE_ENDPOINT = `${API_URL}/api/reporting/templates`
+const UPLOAD_TEMPLATE_REPORT_ENDPOINT = (templateId: string) => `${API_URL}/api/reporting/templates/${templateId}/actions/importdefinition`
+const EDIT_TEMPLATE_ENDPOINT = (templateId: string) => `${API_URL}/api/reporting/templates/${templateId}/`
+const GET_ALL_STAFF_ENDPOINT = `${API_URL}/api/staff`
 
 export {
   USER_ENDPOINT,
@@ -287,5 +291,9 @@ export {
   GET_ORGANIZATIONS_ENDPOINT,
   GET_PRACTICES_ENDPOINT,
   GET_PATIENT_VITALS_ENDPOINT,
-  UPDATE_MESSAGE
+  UPDATE_MESSAGE,
+  ADD_REPORT_TEMPLATE_ENDPOINT,
+  UPLOAD_TEMPLATE_REPORT_ENDPOINT,
+  EDIT_TEMPLATE_ENDPOINT,
+  GET_ALL_STAFF_ENDPOINT
 }

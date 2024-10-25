@@ -16,11 +16,11 @@ const CodeInput = () => {
         Code
       </FormFieldLabel>
       <TextField.Root
-        {...form.register('code')}
+        {...form.register('shortName')}
         placeholder='Code'
         size="1"
       />
-      <FormFieldError name="code" />
+      <FormFieldError name="shortName" />
     </FormFieldContainer>
   )
 }

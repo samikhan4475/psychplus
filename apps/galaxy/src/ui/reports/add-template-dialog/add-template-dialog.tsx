@@ -1,14 +1,18 @@
-'use client'
+'use client';
 
-import { Dialog } from '@radix-ui/themes'
-import { X } from 'lucide-react'
-import { AddTemplateForm } from './add-template-form'
+import { Dialog } from '@radix-ui/themes';
+import { X } from 'lucide-react';
+import { AddTemplateForm } from './add-template-form';
+import { EditTemplateForm } from './edit-template-form';
+import { Template } from '../types';
 
 interface AddTemplateDialogProps {
-  open?: boolean
-  onClose?: () => void
+  open?: boolean;
+  onClose?: () => void;
+  template?: Template | null;
 }
-const AddTemplateDialog = ({ open, onClose }: AddTemplateDialogProps) => {
+
+const AddTemplateDialog = ({ open, onClose, template }: AddTemplateDialogProps) => {
   return (
     <Dialog.Root open={open} onOpenChange={onClose}>
       <Dialog.Content className="relative max-w-[800px] rounded-3 p-6">
@@ -16,12 +20,16 @@ const AddTemplateDialog = ({ open, onClose }: AddTemplateDialogProps) => {
           <X size={20} strokeWidth={1.5} />
         </Dialog.Close>
         <Dialog.Title size="5" className="font-medium">
-          Add New Template
+          {template ? 'Edit Template' : 'Add New Template'}
         </Dialog.Title>
-        <AddTemplateForm />
+        {template ? (
+          <EditTemplateForm defaultValues={template} onClose={onClose} />
+        ) : (
+          <AddTemplateForm onClose={onClose} />
+        )}
       </Dialog.Content>
     </Dialog.Root>
-  )
-}
+  );
+};
 
-export { AddTemplateDialog }
+export { AddTemplateDialog };

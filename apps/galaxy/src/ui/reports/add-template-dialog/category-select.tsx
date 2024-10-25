@@ -19,12 +19,12 @@ const CategorySelect = () => {
         Category
       </FormFieldLabel>
       <SelectInput
-        field="category"
+        field="reportCategoryCode"
         className='w-full'
         buttonClassName=" w-full h-6 border-pp-gray-2 rounded-2 !outline-none"
         options={categoryOptions}
       />
-      <FormFieldError name="category" />
+      <FormFieldError name="reportCategoryCode" />
     </FormFieldContainer>
   )
 }

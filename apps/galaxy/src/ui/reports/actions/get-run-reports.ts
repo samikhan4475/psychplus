@@ -6,7 +6,7 @@ import { ReportFilterParameters } from '../types'
 interface GeneratedReportParams {
   templateId: string
   reportType: string
-  data: ReportFilterParameters[]
+  data: ReportFilterParameters[] 
 }
 
 const getRunReportAction = async ({
@@ -17,7 +17,7 @@ const getRunReportAction = async ({
   api.ActionResult<string>
 > => {
   const result = await api.POST<string>(api.GET_TEMPLATE_REPORT(templateId,reportType), data)
-  
+
   if (result.state === 'error') {
     return {
       state: 'error',

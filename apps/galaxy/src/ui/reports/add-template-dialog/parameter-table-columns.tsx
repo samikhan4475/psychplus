@@ -1,14 +1,14 @@
 import { ColumnHeader, TextCell } from '@/components';
 import { ColumnDef } from '@tanstack/react-table';
 import { FieldArrayWithId, UseFieldArrayMove, UseFieldArrayRemove } from 'react-hook-form';
-import { AddTemplateSchemaType } from './add-template-form';
 import { DeleteActionCell, FieldCodeCell, FieldLabelCell, FieldTypeCell, MoveActionCell, SerialNumberCell } from './cells';
+import { TemplateSchemaType } from './schema';
 
 const createColumns = (
   move: UseFieldArrayMove,
   remove: UseFieldArrayRemove,
   totalFields: number
-): ColumnDef<FieldArrayWithId<AddTemplateSchemaType, 'reportTemplateParameters', 'id'>, unknown>[] => {
+): ColumnDef<FieldArrayWithId<TemplateSchemaType, 'parameters', 'id'>, unknown>[] => {
   return [
     {
       id: 'serial-number',

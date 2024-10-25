@@ -1,7 +1,8 @@
-import { Code } from '@/types';
+import { Code, StaffResource } from '@/types';
 import { create } from 'zustand';
-import { getReportParametersTypeAction, getReportsAction, getTemplatesAction } from './actions';
-import { Parameter, Template } from './types';
+import { getReportParametersTypeAction, getReportsAction, getStaffAction, getTemplatesAction } from './actions';
+import { Parameter, ReportFilterParameters, StaffDataOptions, Template } from './types';
+import { getOrganizationRolesAction } from './actions/get-organization-roles';
 
 interface Store {
   reports: Code[];
@@ -11,13 +12,16 @@ interface Store {
   templateFilters: Parameter | null;
   selectedReport: Code | null;
   selectedTemplate: Template | null;
-  generatedReport: any;
-  filtersData: any;
+  generatedReport: string | null;
+  filtersData: ReportFilterParameters[] | null;
+  staffData: StaffDataOptions[] | null;
+  // organizationData: any;
   fetchReportsAndTemplates: () => void;
   setSelectedReport: (code: Code) => void;
-  setSelectedTemplate: (template: Template) => void;
-  setGeneratedReport: (report: any) => void;
-  setFiltersData: (data: any) => void;
+  setSelectedTemplate: (template: Template | null) => void;
+  setGeneratedReport: (report: string | null) => void;
+  fetchStaffData: () => void;
+  setFiltersData : (data: ReportFilterParameters[] | null) => void;
 }
 
 const useStore = create<Store>((set) => ({
@@ -30,22 +34,24 @@ const useStore = create<Store>((set) => ({
   selectedTemplate: null,
   generatedReport: null,
   filtersData: null,
+  // organizationData: null,
+  staffData: null,
 
   fetchReportsAndTemplates: async () => {
     set({ loading: true, error: null });
 
     const [reportsResult, templatesResult, codeParametersResult] = await Promise.all([
+
       getReportsAction(),
       getTemplatesAction(),
       getReportParametersTypeAction(),
     ]);
-
     if (reportsResult.state === 'success' && templatesResult.state === 'success' && codeParametersResult.state === 'success') {
       set({
         reports: reportsResult.data?.codes || [],
         templates: templatesResult.data || [],
         templateFilters: codeParametersResult.data || null,
-        // organizationData: organizationResult.data || null,
+        // organizationData: organizationResult?.data || null, //TODO: implement once the BE populates the data
         loading: false,
       });
     } else {
@@ -56,11 +62,32 @@ const useStore = create<Store>((set) => ({
     }
   },
 
+  fetchStaffData: async () => {
+    set({ error: null });
+
+    const staffResult = await getStaffAction();
+
+    if (staffResult.state === 'success') {
+      const transformedStaffData = staffResult?.data.map((staff: StaffResource) => ({
+        value: `${staff.legalName.firstName} ${staff.legalName.lastName}`,
+        label: `${staff.legalName.firstName} ${staff.legalName.lastName}`,
+      }));
+
+      set({
+        staffData: transformedStaffData || null,
+      });
+    } else {
+      set({
+        error: 'Failed to fetch staff data',
+      });
+    }
+  },
+
   setSelectedReport: (code: Code) => {
     set({ selectedReport: code });
   },
 
-  setSelectedTemplate: (template: Template) => {
+  setSelectedTemplate: (template: Template | null) => {
     set({ selectedTemplate: template });
   },
 

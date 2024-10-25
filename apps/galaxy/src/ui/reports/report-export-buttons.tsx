@@ -18,7 +18,7 @@ const ReportExportButtons = () => {
     const payload = {
       templateId: selectedTemplate.id,
       reportType,
-      data: filtersData,
+      data: filtersData ? filtersData : [],
     };
 
     if (reportType === REPORT_TYPE.PDF) {

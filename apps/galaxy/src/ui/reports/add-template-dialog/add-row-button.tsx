@@ -7,10 +7,11 @@ interface AddRowButtonProps {
 
 const AddRowButton = ({ onAddRow }: AddRowButtonProps) => (
   <Flex gap="2" align="center" className="text-[12px] py-2">
-    <Text className="!text-1" weight="medium">Run Parameters<span className="text-pp-red ml-1">*</span></Text>
+    <Text className="!text-1" weight="medium">Run Parameters</Text>
     <Button
       variant="outline"
       color="gray"
+      type='button'
       className="h-6 cursor-pointer bg-white px-2 text-[12px] text-black"
       onClick={onAddRow}
     >

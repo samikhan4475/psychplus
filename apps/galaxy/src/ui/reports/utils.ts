@@ -1,4 +1,6 @@
-import { ParameterCodeSet } from "./types";
+import toast from "react-hot-toast";
+import { addTemplateReportAction } from "./actions";
+import { ParameterCodeSet, ReportFilterParameters } from "./types";
 
 export const parseGeneratedReport = (report: string) => {
   const lines = report.trim().split('\n');
@@ -82,7 +84,7 @@ const convertToCSV = (data: any[]): string => {
   return [headers, ...rows].join('\n');
 };
  
-const downloadPDFFile = async (endpoint: string, filename: string, data?: string) => {
+const downloadPDFFile = async (endpoint: string, filename: string, data: ReportFilterParameters[] | null) => {
   try {
     const fetchOptions: RequestInit = {
       method: data ? 'POST' : 'GET',
@@ -115,5 +117,22 @@ const downloadPDFFile = async (endpoint: string, filename: string, data?: string
     throw error
   }
 }
+const handleUploadReport = async (definitionPayloadUrl: File, templateId: string) => {
+  const formData = new FormData();
+  formData.append('file', definitionPayloadUrl);
+  const reportResponse = await addTemplateReportAction({
+    templateId,
+    data: formData,
+  });
 
-export { truncateFileName, getFieldType, downloadCSVReport, downloadPDFFile };
+  if (reportResponse.state === 'error') {
+    toast.error(
+      reportResponse.error ?? 'There was a problem uploading the report. Please try again.'
+    );
+    return false;
+  }
+
+  return true;
+};
+
+export { truncateFileName, getFieldType, downloadCSVReport, downloadPDFFile,handleUploadReport };

@@ -12,7 +12,7 @@ type ExpandedSidebarProps = {
 };
 
 const ExpandedSidebar = ({ toggleSidebar }: ExpandedSidebarProps) => {
-  const { setSelectedTemplate, templates, selectedReport, selectedTemplate } = useStore();
+  const { setSelectedTemplate, templates, selectedReport, selectedTemplate,setGeneratedReport } = useStore();
 
   const filteredTemplates = templates.filter(
     (template) => template.reportCategoryCode === selectedReport?.code
@@ -20,6 +20,7 @@ const ExpandedSidebar = ({ toggleSidebar }: ExpandedSidebarProps) => {
 
   const handleTemplateClick = (template: any) => {
     setSelectedTemplate(template);
+    setGeneratedReport(null);
   };
 
   return (

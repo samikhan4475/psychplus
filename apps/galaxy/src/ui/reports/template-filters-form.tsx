@@ -14,8 +14,8 @@ import { useStore } from './store';
 import { TemplateFilterDatePicker } from './template-filter-datepicker';
 import { TemplateFilterInput } from './template-filter-input';
 import { TemplateSelect } from './template-select';
-import { CODE_PARAM_ATTRIBUTES, REPORT_TYPE } from './types';
 import { ReportExportButtons } from './report-export-buttons';
+import { CODE_PARAM_ATTRIBUTES, REPORT_TYPE, STAFF_SELECTION, TemplateParameter } from './types';
 import toast from 'react-hot-toast';
 
 const schema = z.object({
@@ -29,34 +29,32 @@ const schema = z.object({
 
 type SchemaType = z.infer<typeof schema>;
 
-interface TemplateParameter {
-  id: string;
-  reportParameterCode: string;
-  displayName: string;
-  runValue: string;
-  displayOrder: number;
-}
 
 const DynamicTemplateFilters = () => {
-  const { selectedTemplate, templateFilters, setGeneratedReport, generatedReport, setFiltersData } = useStore();
+  const { selectedTemplate, templateFilters, setGeneratedReport, staffData,generatedReport, setFiltersData } = useStore();
   const codesetIndex = useGlobalStore((state) => state.codesets);
-
-  const reportTemplateFilters: TemplateParameter[] = selectedTemplate?.parameters  || [];
+  const reportTemplateFilters: TemplateParameter[] = selectedTemplate?.parameters || [];
   const codeParametersType = templateFilters?.codes || [];
+  const sortedParameters: TemplateParameter[] = [...reportTemplateFilters].sort(
+    (a, b) => a.displayOrder - b.displayOrder
+  );
 
   const form = useForm<SchemaType>({
     resolver: zodResolver(schema),
     defaultValues: {
-      reportTemplateParameters: reportTemplateFilters,
+      reportTemplateParameters: sortedParameters,
     },
   });
 
   const { reset, register } = form;
 
   useEffect(() => {
-    reset({
-      reportTemplateParameters: reportTemplateFilters,
-    });
+    if (reportTemplateFilters.length > 0) {
+      reset();
+      reset({
+        reportTemplateParameters: sortedParameters,
+      });
+    }
   }, [reportTemplateFilters, reset]);
 
   const getFieldTypes = (code: string) => {
@@ -82,12 +80,21 @@ const DynamicTemplateFilters = () => {
   };
 
   const computeOptions = (codesetIndex: any, reportParameterCode: string) => {
-    const matchingCodeset = codesetIndex[reportParameterCode];
-
-    if (!matchingCodeset?.codes) {
+    let matchingCodeset;
+  
+    if (reportParameterCode === STAFF_SELECTION.STAFF_SELECTION_SPECIALIST_TYPE) {
+      matchingCodeset = codesetIndex[STAFF_SELECTION.SPECIALIST_TYPE];
+    } else {
+      matchingCodeset = codesetIndex[reportParameterCode];
+    }
+  
+    if (!matchingCodeset?.codes && reportParameterCode !== 'StaffSelectionList') {
       return [];
     }
-
+  
+    if (reportParameterCode === 'StaffSelectionList') {
+      return staffData;
+    }
     return matchingCodeset.codes.map((code: { value: string; display: string }) => ({
       value: code.value,
       label: code.display,
@@ -108,13 +115,12 @@ const DynamicTemplateFilters = () => {
     if (result.state === 'success') {
       setGeneratedReport(result.data);
     } else {
-      toast.error(result.error ?? 'Failed to generate report:')
+      toast.error(
+        result.error ?? 'Failed to generate report:'
+      );
     }
   };
 
-  const sortedParameters: TemplateParameter[] = [...reportTemplateFilters].sort(
-    (a, b) => a.displayOrder - b.displayOrder
-  );
 
   return (
     <>
@@ -152,26 +158,25 @@ const DynamicTemplateFilters = () => {
                   />
                 )}
 
-                {!isString && !isDate && !isSelect && (
-                  <TemplateFilterInput
-                    title={item.displayName}
-                    {...register(`reportTemplateParameters.${i}.runValue`, {
-                      required: 'This field is required',
-                    })}
-                  />
-                )}
-              </Flex>
-            );
-          })}
-          <ClearButton onClear={() => reset()} />
-          <RunReportButton />
-        </Flex>
-      </FormContainer>
-
-      {generatedReport && (
+              {!isString && !isDate && !isSelect && (
+                <TemplateFilterInput
+                  title={item.displayName}
+                  {...register(`reportTemplateParameters.${i}.runValue`, {
+                    required: 'This field is required',
+                  })}
+                />
+              )}
+            </Flex>
+          );
+        })}
+        {sortedParameters.length > 0 && <ClearButton onClear={() => reset()} />}
+        <RunReportButton />
+      </Flex>
+    </FormContainer>
+    {generatedReport && (
         <ReportExportButtons />
       )}
-    </>
+      </>
   );
 };
 
