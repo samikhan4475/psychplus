@@ -1,11 +1,21 @@
 'use client'
 
-import { ReactElement, useState } from 'react'
+import { PropsWithChildren, useState } from 'react'
 import { Dialog } from '@radix-ui/themes'
 import { CloseDialogTrigger } from '@/components/close-dialog-trigger'
+import { NewPatient } from '@/types'
 import { AddVisitForm } from './components'
 
-const AddVisit = ({ children }: { children: ReactElement }) => {
+interface AddVisitProps {
+  patient?: NewPatient
+  showAddUser?: boolean
+}
+
+const AddVisit = ({
+  children,
+  patient,
+  showAddUser,
+}: PropsWithChildren<AddVisitProps>) => {
   const [isOpen, setIsOpen] = useState(false)
 
   return (
@@ -24,7 +34,7 @@ const AddVisit = ({ children }: { children: ReactElement }) => {
           Add Visit
         </Dialog.Title>
 
-        <AddVisitForm />
+        <AddVisitForm patient={patient} showAddUser={showAddUser} />
       </Dialog.Content>
     </Dialog.Root>
   )

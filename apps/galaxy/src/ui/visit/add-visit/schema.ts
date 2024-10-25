@@ -6,7 +6,7 @@ const schema = z
     patient: z.object({
       id: z.number(),
       firstName: z.string(),
-      middleName: z.string(),
+      middleName: z.string().optional(),
       lastName: z.string(),
       birthdate: z.string(),
       gender: z.string(),

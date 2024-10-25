@@ -4,12 +4,11 @@ import { Box, Button, Flex, Grid, Text } from '@radix-ui/themes'
 import { SubmitHandler, useForm, useWatch } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { FormContainer, FormSubmitButton } from '@/components'
-import { State } from '@/types'
+import { NewPatient, State } from '@/types'
 import { AddPatient } from '@/ui/patient/add-patient'
 import { AddVacation } from '@/ui/vacation/add-vacation'
 import { cn } from '@/utils'
 import { getUsStatesAction } from '../../actions'
-import { NewPatient } from '../../types'
 import { schema, SchemaType } from '../schema'
 import { LocationDropdown } from './location-select'
 import { PatientSelect } from './patient-select'
@@ -21,14 +20,19 @@ import { ProviderTypeDropdown } from './timed/provider-type-select'
 import TimedVisitForm from './timed/timed-visit-form'
 import UntimedVisitForm from './untimed/untimed-visit-form'
 
-const AddVisitForm = ({ showAddUser = true }: { showAddUser?: boolean }) => {
+interface AddVisitFormProps {
+  showAddUser?: boolean
+  patient?: NewPatient
+}
+
+const AddVisitForm = ({ showAddUser = true, patient }: AddVisitFormProps) => {
   const [newPatient, setNewPatient] = useState<NewPatient>()
   const [states, setStates] = useState<State[]>([])
   const form = useForm<SchemaType>({
     resolver: zodResolver(schema),
     defaultValues: {
-      patient: undefined,
-      state: '',
+      patient: patient ?? undefined,
+      state: patient?.state ?? '',
       location: '',
       service: '',
       providerType: '',
@@ -51,6 +55,11 @@ const AddVisitForm = ({ showAddUser = true }: { showAddUser?: boolean }) => {
     name: ['isServiceTimeDependent', 'provider'],
   })
 
+  useEffect(() => {
+    if (!patient) return
+    onPatientAdd(patient)
+  }, [patient])
+
   const onCreateNew: SubmitHandler<SchemaType> = (data) => {}
 
   const onPatientAdd = (newPatient: NewPatient) => {
@@ -58,12 +67,12 @@ const AddVisitForm = ({ showAddUser = true }: { showAddUser?: boolean }) => {
       id: Number(newPatient.accessToken),
       birthdate: newPatient.dob,
       firstName: newPatient.user.legalName.firstName,
-      middleName: newPatient.user.legalName.middleName,
+      middleName: newPatient.user.legalName.middleName ?? '',
       lastName: newPatient.user.legalName.lastName,
       gender: newPatient.gender ?? '',
       medicalRecordNumber: newPatient.patientMrn ?? '',
       status: newPatient.patientStatus ?? '',
-      state: '',
+      state: newPatient.state ?? '',
     })
     setNewPatient(newPatient)
   }

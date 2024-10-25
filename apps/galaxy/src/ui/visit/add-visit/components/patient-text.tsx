@@ -1,10 +1,10 @@
 import { parseDate } from '@internationalized/date'
 import { TextField } from '@radix-ui/themes'
 import { FormFieldContainer, FormFieldLabel } from '@/components'
-import { PatientResponse } from '@/ui/patient/add-patient/types'
+import { NewPatient } from '@/types'
 import { getAgeFromDate, getSlashedDateString } from '@/utils'
 
-const PatientText = ({ patient }: { patient: PatientResponse }) => {
+const PatientText = ({ patient }: { patient: NewPatient }) => {
   const {
     user: { legalName },
     dob = '',
@@ -19,7 +19,7 @@ const PatientText = ({ patient }: { patient: PatientResponse }) => {
       <FormFieldLabel required>Patient Name</FormFieldLabel>
       <TextField.Root
         size="1"
-        value={`${name} ${age} yo ${gender[0]} | ${getSlashedDateString(
+        value={`${name} ${age} yo ${gender[0] ?? ''} | ${getSlashedDateString(
           dob,
         )} | ${patientMrn} | ${patientStatus}`}
         disabled

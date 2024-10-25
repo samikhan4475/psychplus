@@ -4,14 +4,14 @@ import { Box, Button, Grid, Text } from '@radix-ui/themes'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { FormContainer } from '@/components'
-import { Policy } from '@/types'
+import { NewPatient, Policy } from '@/types'
 import {
   sendPolicyEmailAction,
   sendPolicySmsAction,
 } from '@/ui/patient-info/patient-info-tab/actions'
 import { addPatient } from '../actions/add-patient'
 import { schema, SchemaType } from '../schema'
-import { PatientBody, PatientResponse } from '../types'
+import { PatientBody } from '../types'
 import { DobInput } from './dob-input'
 import { EmailInput } from './email-input'
 import { FirstNameInput } from './first-name-text'
@@ -28,10 +28,10 @@ import { RelationshipSelect } from './relationship-select'
 const AddPatientForm = ({
   onPatientAdd,
 }: {
-  onPatientAdd: (data: PatientResponse) => void
+  onPatientAdd: (data: NewPatient) => void
 }) => {
   const [isLoading, setIsLoading] = useState<boolean>(false)
-  const newPatientRef = useRef<PatientResponse | undefined>(undefined)
+  const newPatientRef = useRef<NewPatient | undefined>(undefined)
   const form = useForm<SchemaType>({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -54,7 +54,7 @@ const AddPatientForm = ({
 
   const createPatient = async (
     data: SchemaType,
-  ): Promise<PatientResponse | undefined> => {
+  ): Promise<NewPatient | undefined> => {
     try {
       const body: PatientBody = {
         legalName: {
@@ -194,7 +194,7 @@ const AddPatientForm = ({
     form.reset()
   }
 
-  const onPatientAddSuccess = (resData: PatientResponse) => {
+  const onPatientAddSuccess = (resData: NewPatient) => {
     const data = form.getValues()
     onPatientAdd({
       ...resData,

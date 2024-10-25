@@ -1,12 +1,13 @@
 'use server'
 
 import * as api from '@/api'
-import { PatientBody, PatientResponse } from '../types'
+import { NewPatient } from '@/types'
+import { PatientBody } from '../types'
 
 const addPatient = async (
   body: PatientBody,
-): Promise<api.ActionResult<PatientResponse>> => {
-  const response = await api.POST<PatientResponse>(
+): Promise<api.ActionResult<NewPatient>> => {
+  const response = await api.POST<NewPatient>(
     `${api.ADD_PATIENT_ENDPOINT}?`,
     body,
   )

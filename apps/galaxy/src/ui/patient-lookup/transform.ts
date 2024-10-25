@@ -1,5 +1,6 @@
-import { Gender, PatientProfile } from '@/types'
+import { Gender, NewPatient, PatientProfile } from '@/types'
 import {
+  formatDate,
   getMaskedPhoneNumber,
   getOptionalDateString,
   getPatientAge,
@@ -61,6 +62,7 @@ const transformResponseData = (data: PatientProfile[]): Patient[] =>
       ),
       residence: getPatientState(item?.contactDetails?.addresses),
       city: getPatientCity(item?.contactDetails?.addresses),
+      state: getPatientState(item?.contactDetails?.addresses),
       zip: getPatientPostalCode(item?.contactDetails?.addresses),
       userCreated: getSlashedPaddedDateString(item?.metadata?.createdOn),
       gender: getPatientGender(gender as Gender),
@@ -75,4 +77,29 @@ const transformResponseData = (data: PatientProfile[]): Patient[] =>
     }),
   )
 
-export { transformResponseData, transformOut }
+const transformOutPatientRow = ({
+  id,
+  legalName: { firstName = '', lastName = '', middleName = '' },
+  birthdate,
+  mrn = '',
+  status = '',
+  gender = '',
+  state = '',
+}: Patient): NewPatient => ({
+  user: {
+    id,
+    legalName: {
+      firstName,
+      lastName,
+      middleName,
+    },
+  },
+  accessToken: String(id),
+  patientMrn: mrn,
+  gender,
+  dob: birthdate ? formatDate(birthdate) : '',
+  patientStatus: status,
+  state,
+})
+
+export { transformResponseData, transformOut, transformOutPatientRow }

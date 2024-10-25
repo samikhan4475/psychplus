@@ -128,35 +128,6 @@ enum ServicesOffered {
   InpatientSubstanceUseResidential = 'InpatientSubstanceUseResidential',
 }
 
-interface NewPatient {
-  accessToken: string
-  user: {
-    id: number
-    username: string
-    legalName: {
-      firstName: string
-      middleName: string
-      lastName: string
-    }
-    userRoleCode: string
-    contactInfo: {
-      email: string
-      phoneNumbers: [
-        {
-          type: string
-          number: string
-        },
-      ]
-    }
-    staffId: number
-    patientId: number
-  }
-  dob: string
-  gender: string
-  patientMrn: string
-  patientStatus: string
-}
-
 enum STAFF_COMMENTS_TAB {
   TreatmentTab = 'Treatment',
   BillingTab = 'Billing',
@@ -186,7 +157,6 @@ export {
   type StatesCodeSetState,
   type VisitTypesPayload,
   type ServerSearchSelectID,
-  type NewPatient,
   type StaffCommentParams,
   ServiceType,
   ProviderType,

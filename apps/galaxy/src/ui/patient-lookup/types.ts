@@ -31,6 +31,7 @@ interface Patient extends PatientProfile {
   residence?: string
   city?: string
   zip?: string
+  state?: string
   userCreated?: string
   insurance?: string
 }

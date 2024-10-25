@@ -23,33 +23,5 @@ interface PatientBody {
   }
 }
 
-interface PatientResponse {
-  accessToken: string
-  user: {
-    id: number
-    username: string
-    legalName: {
-      firstName: string
-      middleName: string
-      lastName: string
-    }
-    userRoleCode: string
-    contactInfo: {
-      email: string
-      phoneNumbers: [
-        {
-          type: string
-          number: string
-        },
-      ]
-    }
-    staffId: number
-    patientId: number
-  }
-  dob: string
-  gender: string
-  patientMrn: string
-  patientStatus: string
-}
 
-export type { PatientBody, PatientResponse }
+export type { PatientBody }
