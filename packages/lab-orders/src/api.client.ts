@@ -1,6 +1,6 @@
 import { handleRequest } from '@psychplus/utils/api'
 import { createHeaders } from '@psychplus/utils/client'
-import { LabTest, Problem, LabResultPayload, LabSearchPayload, ResultData, StaffType, StaffTypeSearchPayload, RecordTypes, Diagnoses, SearchLabDignosisCod10Diagnoses, LabTestResult, Observation, getSpecimenTypes, SpecimenTypes, NewAppointment, LabOrder, DocumetTypeAgainstLaborderPayload, DocumentTypeAgainstLaborder } from './types'
+import { LabTest, Problem, LabResultPayload, LabSearchPayload, ResultData, StaffType, StaffTypeSearchPayload, RecordTypes, Diagnoses, SearchLabDignosisCod10Diagnoses, LabTestResult, Observation, getSpecimenTypes, SpecimenTypes, NewAppointment, LabOrder, DocumetTypeAgainstLaborderPayload, DocumentTypeAgainstLaborder, PatientTypes, PatientPayload, questResultPayload } from './types'
 
 const getSearchProviders = (
 ): Promise<StaffType[]> =>
@@ -10,6 +10,34 @@ const getSearchProviders = (
       {
         method: 'GET',
         cache: 'no-store',
+        headers: createHeaders(),
+      },
+    ),
+  )
+const getSearchPatient = (
+  payload: PatientPayload
+): Promise<PatientTypes[]> =>
+  handleRequest(
+    fetch(
+      `/galaxy/api/patients/search?includeInactive=false&includeTest=true&offset=0&orderBy=legalName desc`,
+      {
+        method: 'POST',
+        cache: 'no-store',
+        body: JSON.stringify(payload || {}),
+        headers: createHeaders(),
+      },
+    ),
+  )
+const getQuestResult = (
+  payload: questResultPayload
+): Promise<LabOrder[]> =>
+  handleRequest(
+    fetch(
+      `/galaxy/api/labhl7logs/actions/questresults`,
+      {
+        method: 'POST',
+        cache: 'no-store',
+        body: JSON.stringify(payload || {}),
         headers: createHeaders(),
       },
     ),
@@ -337,6 +365,7 @@ const getProviderAgainstLabOrder = (
   )
 
 export {
+  getSearchPatient,
   getDiagnosis,
   getSearchTests,
   deleteLabOrder,
@@ -364,5 +393,6 @@ export {
   deleteResultAgainstLabOrderTest,
   updateResultAgainstLabOrderTest,
   getDocumentDetailAgainstLaborder,
-  getDocumnetAgainstLaborder
+  getDocumnetAgainstLaborder,
+  getQuestResult
 }

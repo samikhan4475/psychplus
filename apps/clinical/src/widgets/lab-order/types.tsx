@@ -1,6 +1,7 @@
 import { Dispatch, HTMLProps, ReactNode, SetStateAction } from 'react'
 import { Row } from '@tanstack/react-table'
 import { CodeSetType } from '@psychplus/codeset'
+import { PatientTypes } from '@psychplus/lab-orders/types'
 import { ToastData } from '@/providers'
 
 interface UseDiagnosticDataParams {
@@ -607,8 +608,16 @@ interface Appointment {
   coPay?: number
   isCopayPaid?: boolean
 }
-
+interface MergePatientsProps {
+  data: PatientTypes[]
+  searchTerm: string
+  onSearchChange: (term: string) => void
+  onRowSelect: (patient: PatientTypes) => void
+  showCreatePatientButton?: boolean
+  selectedRow: any
+}
 export type {
+  MergePatientsProps,
   SearchDropdownTypes,
   PayloadTypes,
   DataItem,

@@ -19,7 +19,7 @@ const Pill = ({ text, onToggle, checked }: TestCompProps) => {
       m="1"
       align="center"
       className={cn(
-        'ml-1 h-[20px] max-w-[95px] min-w-[95px] cursor-pointer gap-2 overflow-hidden rounded-6 p-[2px_8px_2px_8px]',
+        'ml-1 h-[20px] min-w-[95px] max-w-[95px] cursor-pointer gap-2 overflow-hidden rounded-6 p-[2px_8px_2px_8px]',
         {
           'bg-[#D9E2FC]': checked,
           'border border-[#B9BBC6]': !checked,

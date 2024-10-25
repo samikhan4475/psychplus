@@ -8,6 +8,7 @@ interface Address {
   country?: string;
   postalCode?: string;
   geoCoordinates?: GeoCoordinates;
+  timeZoneId?: string;
 }
 
 interface GeoCoordinates {
@@ -379,6 +380,7 @@ interface Contact {
       longitude: number;
       latitude: number;
       altitude: number;
+      timeZoneId?: string
     };
   }[];
   isMailingAddressSameAsPrimary: boolean;
@@ -737,8 +739,132 @@ interface SpecimenTypes {
   containerCondition?: string;
   labTests?: LabTest[];
 }
+
+interface Name {
+  firstName: string;
+  middleName: string;
+  lastName: string;
+  preferredName: string;
+  title: string;
+  suffix: string;
+  honors: string;
+};
+
+interface PatientContact {
+  email: string;
+  emailVerificationStatus: 'Verified' | 'Unverified';
+  phoneNumbers: PhoneNumber[];
+  addresses: Address[];
+  isMailingAddressSameAsPrimary: boolean;
+};
+
+interface DriversLicense {
+  type: string;
+  number: string;
+  issuedDate: string;
+  expirationDate: string;
+  issuedBy: string;
+  validIn: string;
+  hasFrontImage: boolean;
+  hasBackImage: boolean;
+};
+
+interface Guardian {
+  name: Name;
+  isEmergencyContact: boolean;
+  relationship: string;
+  contact: Contact;
+};
+
+interface EmergencyContact {
+  name: Name;
+  relationship: string;
+  contact: Contact;
+};
+
+interface AlternateOrPreviousContactDetails {
+  email: string;
+  emailVerificationStatus: 'Verified' | 'Unverified';
+  phoneNumbers: PhoneNumber[];
+  addresses: Address[];
+  isMailingAddressSameAsPrimary: boolean;
+};
+
+interface PatientTypes {
+  id: number;
+  metadata: Metadata;
+  verificationStatus: 'Verified' | 'Unverified';
+  userId: number;
+  legalName: Name;
+  birthdate: string;
+  gender: 'Male' | 'Female' | 'NotSpecified';
+  genderOrientation: string;
+  genderExpression: string;
+  genderPronoun: string;
+  driversLicense: DriversLicense;
+  socialSecurityNumber: string;
+  medicalRecordNumber: string;
+  language: string;
+  preferredLanguage: string;
+  chargeKey: string;
+  chargeUserId: string;
+  isPlusMember: boolean;
+  isTest: boolean;
+  hasPhoto: boolean;
+  guardian: Guardian;
+  contactDetails: PatientContact;
+  emergencyContact: EmergencyContact;
+  cmdId: string;
+  motherMaidenName: string;
+  alternateOrPreviousName: Name;
+  alternateOrPreviousContactDetails: AlternateOrPreviousContactDetails;
+  languageAbility: string;
+  languageProficiency: string;
+  religion: string;
+  status: string;
+  hasGuardian: boolean;
+  races: string[];
+  ethnicities: string[];
+};
+type questResultPayload = {
+  EntryType?: string,
+  LogDescription?: string
+}
+type PatientPayload = {
+  idList?: number[];
+  name?: string;
+  gender?: 'Male' | 'Female' | 'NotSpecified';
+  dateOfBirth?: string; // e.g., '2024-09-12'
+  age?: number;
+  email?: string;
+  telephone?: string;
+  ssn?: string;
+  city?: string;
+  postalCode?: string;
+  hasGuardian?: boolean;
+  mrn?: string; // Medical Record Number
+  patientCreatedFrom?: string; // e.g., '2024-09-12'
+  patientCreatedTo?: string; // e.g., '2024-09-12'
+  patientStatuses?: PatientStatus[];
+  contactMadeStatuses?: ContactMadeStatus[];
+  verificationStatus?: 'Verified' | 'Unverified';
+  insuranceVerificationStatus?: 'Verified' | 'Unverified';
+  consentVerificationStatus?: 'Verified' | 'Unverified';
+  creditCardVerificationStatus?: 'Verified' | 'Unverified';
+  hasNextAppointment?: boolean;
+  visitHistoryPastDays?: number;
+  futureVisitsByDays?: 'Disregard' | 'Consider';
+};
+
+type PatientStatus = 'CustomerActive' | 'CustomerInactive' | 'Prospective';
+type ContactMadeStatus = 'Set' | 'NotSet';
+
 export type {
+  PatientPayload,
+  PatientContact,
+  Address,
   RecordTypes,
+  PatientTypes,
   SpecimenData,
   ResultData,
   LabOrders,
@@ -760,5 +886,6 @@ export type {
   NewAppointment,
   Code,
   DocumentTypeAgainstLaborder,
-  DocumetTypeAgainstLaborderPayload
+  DocumetTypeAgainstLaborderPayload,
+  questResultPayload
 }

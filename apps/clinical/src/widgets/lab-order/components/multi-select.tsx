@@ -41,7 +41,7 @@ const CustomMultiSelect = ({
           'border-[#DDDDE3]',
           'flex',
           'items-center',
-          'rounded-3',
+          ' rounded-3',
           'overflow-x-auto',
           'overflow-y-hidden',
           'w-[610px] gap-[4px] p-[0px_4px_0px_4px]',

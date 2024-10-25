@@ -1,8 +1,8 @@
 import { useEffect, useLayoutEffect, useState } from 'react';
-import { findProvider, fetchSpecimenAgainstLabOrder, getProblems, getSpecimen, getLabLocation, getProviderAgainstLabOrder } from '@psychplus/lab-orders/api.client';
+import { findProvider, fetchSpecimenAgainstLabOrder, getProblems, getSpecimen, getLabLocation, getProviderAgainstLabOrder, getSearchPatient } from '@psychplus/lab-orders/api.client';
 import { Diagnostic, LabTest, Person, SearchDropdownTypes, UseDiagnosticDataParams } from '../types';
-import { fetchCreatedDiagnosticData, parseDateTime, removeDuplicates, searchDiagnoses, searchTest } from '../utils';
-import { NewAppointment, RecordTypes, SpecimenData } from '@psychplus/lab-orders/types';
+import { debounce, fetchCreatedDiagnosticData, parseDateTime, removeDuplicates, searchDiagnoses, searchTest } from '../utils';
+import { NewAppointment, PatientTypes, RecordTypes, SpecimenData } from '@psychplus/lab-orders/types';
 
 // Fetch Data
 export const useDiagnosticData = ({

@@ -28,7 +28,7 @@ const LabOrderWidgetServer = async ({
       getSpecimen('HL7v2', 'AbnormalFlags'),
       getSpecimen('HL7v2', 'ObservationResultStatusCodes'),
     ])
-  const testsData = tests.map((item) => {
+  const testsData = tests?.map((item) => {
     const labTestCode = item?.testCode
     const labTestCodeType = item?.testCode
     delete item?.testCode

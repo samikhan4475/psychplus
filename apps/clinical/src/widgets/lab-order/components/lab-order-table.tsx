@@ -24,6 +24,7 @@ import { useDropdowns } from '../utils'
 import { RowActionDropdown } from './data-table-row.action'
 import { DocumentResultPreviewCell } from './document-result-preview-cell'
 import { LabOrderFormModal } from './lab-order-form-modal'
+import { MergePatientsModal } from './merge-patients-modal'
 import { PdfModal } from './pdf-modal'
 import { RowDeleteConfirmDialog } from './row-delete-confirm-dialog'
 import { SpecimenLabelPrintingModal } from './specimen-label-printing-modal'
@@ -44,6 +45,7 @@ const LabOrderTable = ({
     useState<LabTestDetails>({ labTestId: '', type: '', labTest: null })
   const [submitted, setSubmitted] = useState(false)
   const [pdfModalOpened, setPdfModalOpened] = useState(false)
+  const [unmappedOrderModal, setUnmappedOrderModal] = useState(false)
   const [pdfTypeUrl, setPdfTypeUrl] = useState<PdfTypeUrl>({
     type: '',
     url: '',
@@ -52,7 +54,8 @@ const LabOrderTable = ({
     type: '',
     data: null,
   })
-
+  const unmappedOrderModalClose = () => setUnmappedOrderModal(false)
+  const unmappedOrderModalOpened = () => setUnmappedOrderModal(true)
   const openPdfModal = (url: string, type: string) => {
     setPdfTypeUrl({ type, url: url })
     setPdfModalOpened(true)
@@ -175,8 +178,13 @@ const LabOrderTable = ({
   ]
   const resultFlags = useStore((state) => state.resultFlags)
   const resultStatus = useStore((state) => state.resultStatus)
+
   return (
     <Box className="h-fit min-w-fit">
+      <MergePatientsModal
+        isOpen={unmappedOrderModal}
+        onClose={unmappedOrderModalClose}
+      />
       <OrderResult
         resultFlags={resultFlags}
         resultStatus={resultStatus}
@@ -213,15 +221,25 @@ const LabOrderTable = ({
           <Text size="4" weight="bold" className="text-[#151B4A]">
             Lab Order Summary
           </Text>
-          <Button
-            variant="outline"
-            highContrast
-            onClick={handleSubmit}
-            className="h-25 border-1 mr-2 flex items-center gap-1 border-[#9E9898CC]  text-[#1C2024] shadow-[0_0_0_1px_#9E9898CC]"
-          >
-            <Pencil1Icon />
-            Add Lab Order
-          </Button>
+          <Flex gap="2">
+            <Button
+              variant="outline"
+              highContrast
+              onClick={unmappedOrderModalOpened}
+              className="h-25 border-1 mr-2 flex items-center gap-1 border-[#9E9898CC]  text-[#1C2024] shadow-[0_0_0_1px_#9E9898CC]"
+            >
+              Unmapped Order
+            </Button>
+            <Button
+              variant="outline"
+              highContrast
+              onClick={handleSubmit}
+              className="h-25 border-1 mr-2 flex items-center gap-1 border-[#9E9898CC]  text-[#1C2024] shadow-[0_0_0_1px_#9E9898CC]"
+            >
+              <Pencil1Icon />
+              Add Lab Order
+            </Button>
+          </Flex>
         </Flex>
       </Box>
       <Box px="1">
@@ -231,7 +249,7 @@ const LabOrderTable = ({
           tableClass="border border-solid border-[#CAD8FD]"
           tHeadClass="bg-[#EBF3FC] text-start"
           thClass="border-b border-r border-solid border-[#CAD8FD] text-start font-light"
-          toBodyClass="border-[#CAD8FD] border-b border-solid"
+          toBodyClass="border-[#CAD8FD] border-b border-solid "
           columnCellClass="border border-solid border-[#CAD8FD] font-light cursor-default"
           renderFooter={DataTableFooter}
         />
