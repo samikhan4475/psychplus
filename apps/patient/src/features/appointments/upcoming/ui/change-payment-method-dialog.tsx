@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { PaymentType } from '@psychplus-v2/constants'
 import { Appointment } from '@psychplus-v2/types'
@@ -41,8 +41,18 @@ const ChangePaymentMethodDialog = ({
   const router = useRouter()
   const { toast } = useToast()
 
+  useEffect(() => {
+    setError('')
+  }, [paymentMethod, patientInsurances])
+
   const onSave = async () => {
     setLoading(true)
+
+    if (paymentMethod === PaymentType.Insurance && !patientInsurances?.length) {
+      setError('Please add insurance or choose self-pay to book an appointment')
+      setLoading(false)
+      return
+    }
 
     const result = await rescheduleAppointment({
       appointmentId: appointment.id,
