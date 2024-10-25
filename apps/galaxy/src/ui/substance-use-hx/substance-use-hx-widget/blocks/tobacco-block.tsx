@@ -1,18 +1,17 @@
 import { Flex } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
-import { DateInput, RadioSelectSection, YesNoSelect } from '@/components'
+import { RadioSelectSection, TextInput, YesNoSelect } from '@/components'
 import { type SubstanceUseHxWidgetSchemaType } from '../substance-use-hx-schema'
+import {
+  SMOKE_PACKS_ID,
+  SMOKE_PACKS_LABEL,
+  SMOKE_PACKS_OPTIONS,
+  TOBACCO_CHEW_SMOKE_ID,
+  TOBACCO_CHEW_SMOKE_OPTIONS,
+  TOBACCO_ID,
+  TOBACCO_LABEL,
+} from './constants'
 import { SmokingCessationBlock } from './smoking-cessation-block'
-
-const TOBACCO_ID = 'tobacco'
-const TOBACCO_LABEL = 'Tobacco'
-const TOBACCO_CHEW_SMOKE_ID = 'tobaccoChewSmoke'
-const TOBACCO_CHEW_SMOKE_LABEL = 'Chew/Smoke'
-
-const TOBACCO_CHEW_SMOKE_OPTIONS = [
-  { label: 'Chew', value: 'chew' },
-  { label: 'Smoke', value: 'smoke' },
-]
 
 const TobaccoBlock = () => {
   const form = useFormContext<SubstanceUseHxWidgetSchemaType>()
@@ -22,19 +21,25 @@ const TobaccoBlock = () => {
       gap="2"
       p="2"
       className="rounded-3 border border-gray-7"
+      mt="2"
     >
       <Flex gap="3" align="center" wrap="wrap">
-        <YesNoSelect label={TOBACCO_LABEL} field={TOBACCO_ID} />
+        <YesNoSelect label={TOBACCO_LABEL} field={TOBACCO_ID} isNoFirst />
         {form.watch('tobacco') === 'yes' && (
           <>
             <RadioSelectSection
-              label={TOBACCO_CHEW_SMOKE_LABEL}
               field={TOBACCO_CHEW_SMOKE_ID}
               options={TOBACCO_CHEW_SMOKE_OPTIONS}
             />
-            <DateInput label="Start Date" field="tobaccoStartDate" />
-            <DateInput label="End Date" field="tobaccoEndDate" />
+            {form.watch('tobaccoChewSmoke') === 'smoke' && (
+              <RadioSelectSection
+                label={SMOKE_PACKS_LABEL}
+                field={SMOKE_PACKS_ID}
+                options={SMOKE_PACKS_OPTIONS}
+              />
+            )}
             <SmokingCessationBlock />
+            <TextInput label="Other" field="otherTobacco" />
           </>
         )}
       </Flex>

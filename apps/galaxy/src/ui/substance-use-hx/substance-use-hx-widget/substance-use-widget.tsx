@@ -10,13 +10,16 @@ import {
 } from '@/components'
 import { AlcoholDrugsBlock, TobaccoBlock } from './blocks'
 import { useSubstanceHxWidgetForm } from './substance-use-hx-form'
+import { transformOut } from './data'
+import { SubstanceUseHxWidgetSchemaType } from './substance-use-hx-schema'
 
 interface SocialHxWidgetProps {
   patientId: string
+  initialValue: SubstanceUseHxWidgetSchemaType
 }
 
-const SubstanceUseHxWidget = ({ patientId }: SocialHxWidgetProps) => {
-  const form = useSubstanceHxWidgetForm()
+const SubstanceUseHxWidget = ({ patientId, initialValue }: SocialHxWidgetProps) => {
+  const form = useSubstanceHxWidgetForm(initialValue)
 
   return (
     <FormProvider {...form}>
@@ -24,7 +27,7 @@ const SubstanceUseHxWidget = ({ patientId }: SocialHxWidgetProps) => {
         patientId={patientId}
         widgetId="substance-use-hx"
         title="Substance Use Hx"
-        getData={() => []}
+        getData={transformOut(patientId)}
         toggleable
         headerRight={
           <>

@@ -1,19 +1,17 @@
-import { amp } from 'next.config'
 import { z } from 'zod'
 
 type SubstanceUseHxWidgetSchemaType = z.infer<typeof substanceUseHxWidgetSchema>
 
 const substanceUseHxWidgetSchema = z.object({
-  tobacco: z.enum(['yes', 'no']),
+  tobacco: z.enum(['yes', 'no']).optional(),
   tobaccoChewSmoke: z.enum(['chew', 'smoke']).optional(),
-  tobaccoStartDate: z.string().optional(),
-  tobaccoEndDate: z.string().optional(),
-  tobaccoStatus: z.string().optional(),
+  smokePacks: z.enum(['0.5', '1', '2']).optional(),
   smokingCessationOption: z.string().optional(),
   counselingOption: z.string().optional(),
   smokingCessationDiscussionDuration: z.enum(['>=3m', '>=11m']).optional(),
-  alcohol: z.enum(['yes', 'no']),
-  drugs: z.enum(['yes', 'no']),
+  otherTobacco: z.string().optional(),
+  alcohol: z.enum(['yes', 'no']).optional(),
+  drugs: z.enum(['yes', 'no']).optional(),
   opioids: z.oboolean(),
   opioidsDetails: z.ostring(),
   sedative: z.oboolean(),
@@ -26,7 +24,13 @@ const substanceUseHxWidgetSchema = z.object({
   pcpDetails: z.ostring(),
   inhalants: z.oboolean(),
   inhalantsDetails: z.ostring(),
-  questionnaire: z.ostring(),
+  questionnaire: z.enum(['yes', 'no']).optional(),
+  briefIntervention: z.oboolean(),
+  referralTreatment: z.array(z.string()).optional(),
+  alcoholSubstanceCessationDiscussionDuration: z
+    .enum(['>=15m', '>=31m'])
+    .optional(),
+  otherAlcoholDrugs: z.string().optional(),
 })
 
 export { substanceUseHxWidgetSchema, type SubstanceUseHxWidgetSchemaType }

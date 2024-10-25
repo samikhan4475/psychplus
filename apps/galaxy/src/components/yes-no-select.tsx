@@ -1,19 +1,35 @@
 import { RadioSelectSection } from './radio-select-section'
 
 interface YesNoSelectProps {
-  label?: string;
-  description?: React.ReactNode;
-  field: string;
-  options?: { label: string; value: string }[]; 
-  required?:boolean
+  label?: string
+  description?: React.ReactNode
+  field: string
+  options?: { label: string; value: string }[]
+  required?: boolean
+  isNoFirst?: boolean
 }
 
 const defaultOptions = [
   { label: 'Yes', value: 'yes' },
   { label: 'No', value: 'no' },
-];
+]
 
-const YesNoSelect = ({ label, description, field,options = defaultOptions, required }: YesNoSelectProps) => {
+const reversDefault = [
+  { label: 'No', value: 'no' },
+  { label: 'Yes', value: 'yes' },
+]
+
+const YesNoSelect = ({
+  label,
+  description,
+  field,
+  options = defaultOptions,
+  required,
+  isNoFirst,
+}: YesNoSelectProps) => {
+  if (isNoFirst) {
+    options = reversDefault
+  }
   return (
     <RadioSelectSection
       label={label}

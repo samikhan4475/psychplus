@@ -1,5 +1,6 @@
 import { Box, Flex, Text } from '@radix-ui/themes'
 import { RadioSelectSection, SelectInput } from '@/components'
+import { COUNSELING_OPTIONS, SMOKING_CESSATION_OPTIONS } from './constants'
 
 const SmokingCessationBlock = () => {
   return (
@@ -12,13 +13,7 @@ const SmokingCessationBlock = () => {
         <SelectInput
           label="Smoking Cessation Options"
           field="smokingCessationOption"
-          options={[
-            { label: 'Nicotine replacement therapy', value: 'nicotine' },
-            { label: 'Varenicline (Chantix)', value: 'varenicline' },
-            { label: 'Bupropion (Zyban)', value: 'bupropion' },
-            { label: 'Combination therapy', value: 'combination' },
-            { label: 'Other', value: 'other' },
-          ]}
+          options={SMOKING_CESSATION_OPTIONS}
         />
       </Box>
       <Text size="1" className="flex h-[var(--chip-height)] items-center">
@@ -28,11 +23,7 @@ const SmokingCessationBlock = () => {
         <SelectInput
           label="Counseling Options"
           field="counselingOption"
-          options={[
-            { label: 'Brief counseling', value: 'brief' },
-            { label: 'Intensive counseling', value: 'intensive' },
-            { label: 'Other', value: 'other' },
-          ]}
+          options={COUNSELING_OPTIONS}
         />
       </Box>
       <RadioSelectSection

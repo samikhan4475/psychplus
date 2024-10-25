@@ -1,1 +1,1 @@
-export * from './substance-use-widget'
+export { SubstanceUseHxLoader as SubstanceUseHxWidget } from './substance-use-hx-loader'
