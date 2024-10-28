@@ -6,6 +6,7 @@ import { TabsTrigger } from '@/components'
 import { ClaimDetailView } from './claim-detail-tab'
 import { ClaimTabView } from './claim-tab'
 import { InsurancePaymentTabView } from './insurance-payment-tab'
+import { PatientStatementsTabView } from './patient-statements-tab'
 import { useStore } from './store'
 import { SubmissionTabView } from './submission-tab'
 import { RevenueCycleTab } from './types'
@@ -69,7 +70,7 @@ const RevenueCycleTabs = () => {
           <InsurancePaymentTabView />
         </TabsContent>
         <TabsContent value={RevenueCycleTab.PatientStatement}>
-          <div>Patient Statement</div>
+          <PatientStatementsTabView />
         </TabsContent>
         <TabsContent value={`${RevenueCycleTab.ClaimDetails} ${tabId}`}>
           <ClaimDetailView claimId={tabId} />

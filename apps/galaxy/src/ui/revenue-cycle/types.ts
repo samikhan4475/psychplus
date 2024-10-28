@@ -106,6 +106,32 @@ interface GetInsurancePaymentListResponse {
   total: number
 }
 
+interface PatientStatement {
+  id: string
+  patientId: number
+  patientFirstName: string
+  patientLastName: string
+  accountNumber: string
+  totalAmount: number
+  paidAmount: number
+  patientBalanceDue: number
+  insurancePaid: number
+  claimNumber?: string
+}
+
+interface PatientStatementPayload {
+  patientId?: number[]
+  patientFirstName?: string
+  patientLastName?: string
+  accountNumber?: string
+  isGroupByPatient?: boolean
+}
+
+interface PatientStatementsListResponse {
+  patientStatements: PatientStatement[]
+  total: number
+}
+
 interface ClaimListSearchParams {
   isIncludeMetadataResourceChangeControl?: boolean
   isIncludeMetadataResourceIds?: boolean
@@ -202,6 +228,9 @@ export {
   type InsurancePayment,
   type GetInsurancePaymentListResponse,
   type InsurancePaymentSearchParams,
+  type PatientStatementsListResponse,
+  type PatientStatement,
   type PaymentAttachments,
   type PracticeList,
+  type PatientStatementPayload,
 }

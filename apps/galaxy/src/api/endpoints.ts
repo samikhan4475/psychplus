@@ -72,16 +72,31 @@ const Update_STAFF_COMMENT_ENDPOINT = (commentId: number) =>
   `${API_URL}/api/staffcomments/${commentId}`
 const GET_AVAILABLE_APPOINTMENT_ENDPOINT = `${API_URL}/api/schedules/availability/search`
 const GET_SECURE_MESSAGES = `${API_URL}/api/users/self/securemessaging/messages/actions/search`
-const UPDATE_MESSAGE = (messageId: string) => `${API_URL}/api/users/self/securemessaging/messages/${messageId}`
-const UPDATE_CHANNEL_MESSAGES_STATUS = (messageId: string, channelId: string) => `${API_URL}/api/users/self/securemessaging/messages/${messageId}/channels/${channelId}`
-const CREATE_CHANNEL_SECURE_MESSAGE = (messageId: string) => `${API_URL}/api/users/self/securemessaging/messages/${messageId}/channels`
-const GET_CHANNEL_SECURE_MESSAGE = (messageId: string) => `${API_URL}/api/users/self/securemessaging/messages/${messageId}/channels`
-const ATTACHMENTS_SECURE_MESSAGE = (messageId: string, attachmentId: string) => `${API_URL}/api/users/self/securemessaging/messages/${messageId}/attachments/${attachmentId}/actions/upload?fileDescription=${messageId}`
-const ADD_ATTACHMENTS_SECURE_MESSAGE = (messageId: string) => `${API_URL}/api/users/self/securemessaging/messages/${messageId}/attachments`
-const DOWNLOAD_ATTACHMENTS_FILE_SECURE_MESSAGE = (messageId: string, attachmentId: string) => `${API_URL}/api/securemessaging/messages/${messageId}/attachments/${attachmentId}/actions/download`
-const DELETE_ATTACHMENTS_SECURE_MESSAGE = (messageId: string, attachmentId: string) => `${API_URL}/api/users/self/securemessaging/messages/${messageId}/attachements/${attachmentId}`
+const UPDATE_MESSAGE = (messageId: string) =>
+  `${API_URL}/api/users/self/securemessaging/messages/${messageId}`
+const UPDATE_CHANNEL_MESSAGES_STATUS = (messageId: string, channelId: string) =>
+  `${API_URL}/api/users/self/securemessaging/messages/${messageId}/channels/${channelId}`
+const CREATE_CHANNEL_SECURE_MESSAGE = (messageId: string) =>
+  `${API_URL}/api/users/self/securemessaging/messages/${messageId}/channels`
+const GET_CHANNEL_SECURE_MESSAGE = (messageId: string) =>
+  `${API_URL}/api/users/self/securemessaging/messages/${messageId}/channels`
+const ATTACHMENTS_SECURE_MESSAGE = (messageId: string, attachmentId: string) =>
+  `${API_URL}/api/users/self/securemessaging/messages/${messageId}/attachments/${attachmentId}/actions/upload?fileDescription=${messageId}`
+const ADD_ATTACHMENTS_SECURE_MESSAGE = (messageId: string) =>
+  `${API_URL}/api/users/self/securemessaging/messages/${messageId}/attachments`
+const DOWNLOAD_ATTACHMENTS_FILE_SECURE_MESSAGE = (
+  messageId: string,
+  attachmentId: string,
+) =>
+  `${API_URL}/api/securemessaging/messages/${messageId}/attachments/${attachmentId}/actions/download`
+const DELETE_ATTACHMENTS_SECURE_MESSAGE = (
+  messageId: string,
+  attachmentId: string,
+) =>
+  `${API_URL}/api/users/self/securemessaging/messages/${messageId}/attachements/${attachmentId}`
 const SEND_SECURE_MESSAGE = `${API_URL}/api/users/self/securemessaging/messages`
-const GET_RECIPIENT_SECURE_MESSAGE = (messageId: string) => `${API_URL}/api/users/self/securemessages/${messageId}/recipients/actions/search`
+const GET_RECIPIENT_SECURE_MESSAGE = (messageId: string) =>
+  `${API_URL}/api/users/self/securemessages/${messageId}/recipients/actions/search`
 const GET_PATIENT_BILLING_HISTORY = (patientId: string) =>
   `${API_URL}/api/patients/${patientId}/billinghistory/actions/search`
 const ADD_PATIENT_RELATIONSHIP_ENDPOINT = (patientId: string) =>
@@ -125,6 +140,9 @@ const GET_INSURANCE_PAYMENT_LIST_ENDPOINT = `${API_URL}/api/payments/actions/sea
 const GET_PRACTICE_IDS_LIST_ENDPOINT = `${API_URL}/api/practices/actions/search`
 const DELETE_INSURANCE_PAYMENT_ENDPOINT = (id: string) =>
   `${API_URL}/api/payments/${id}`
+const GET_PATIENT_STATEMENT_DETAIL_LIST_ENDPOINT = (id: number) =>
+  `${API_URL}/api/patients/${id}/billingstatements/actions/search`
+const GET_PATIENT_STATEMENTS_LIST_ENDPOINT = `${API_URL}/api/billingstatements/actions/search`
 const GET_CLAIMS_LIST_ENDPOINT = `${API_URL}/api/claims/actions/search`
 const CLAIM_SUBMIT_ENDPOINT = `${API_URL}/api/claimssubmissions/actions/srcubandsubmit`
 const CLAIM_SUBMISSION_REJECTION_DETAIL_ENDPOINT = (claimId: string) =>
@@ -181,8 +199,10 @@ const GET_PROCEDURES_CODES = (codeStartsWith: string) =>
 const GET_MODIFIERS_CODES = (codeStartsWith: string) =>
   `${API_URL}/api/codeset/authorities/AMA/codesets/CPT4Modifiers?codeStartsWith=${codeStartsWith}&includeExtraDetails=false&offset=0&limit=0&orderBy=displayName%20asc`
 const ADD_REPORT_TEMPLATE_ENDPOINT = `${API_URL}/api/reporting/templates`
-const UPLOAD_TEMPLATE_REPORT_ENDPOINT = (templateId: string) => `${API_URL}/api/reporting/templates/${templateId}/actions/importdefinition`
-const EDIT_TEMPLATE_ENDPOINT = (templateId: string) => `${API_URL}/api/reporting/templates/${templateId}/`
+const UPLOAD_TEMPLATE_REPORT_ENDPOINT = (templateId: string) =>
+  `${API_URL}/api/reporting/templates/${templateId}/actions/importdefinition`
+const EDIT_TEMPLATE_ENDPOINT = (templateId: string) =>
+  `${API_URL}/api/reporting/templates/${templateId}/`
 const GET_ALL_STAFF_ENDPOINT = `${API_URL}/api/staff`
 
 export {
@@ -283,6 +303,7 @@ export {
   INSURANCE_PAYMENT_ATTACHMENTS_ENDPOINT,
   GET_PRACTICE_IDS_LIST_ENDPOINT,
   GET_ORGANIZATION_ROLES,
+  GET_PATIENT_STATEMENTS_LIST_ENDPOINT,
   GET_POS_CODES,
   ADD_ATTACHMENTS_SECURE_MESSAGE,
   GET_MASTER_FEE_SCHEDULES,
@@ -291,9 +312,10 @@ export {
   GET_ORGANIZATIONS_ENDPOINT,
   GET_PRACTICES_ENDPOINT,
   GET_PATIENT_VITALS_ENDPOINT,
+  GET_PATIENT_STATEMENT_DETAIL_LIST_ENDPOINT,
   UPDATE_MESSAGE,
   ADD_REPORT_TEMPLATE_ENDPOINT,
   UPLOAD_TEMPLATE_REPORT_ENDPOINT,
   EDIT_TEMPLATE_ENDPOINT,
-  GET_ALL_STAFF_ENDPOINT
+  GET_ALL_STAFF_ENDPOINT,
 }
