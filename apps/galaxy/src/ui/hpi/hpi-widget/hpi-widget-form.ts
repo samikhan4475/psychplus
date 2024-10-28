@@ -8,7 +8,6 @@ const useHpiWidgetForm = (initialValue: HpiWidgetSchemaType) => {
     reValidateMode: 'onChange',
     defaultValues: initialValue,
   })
-
   return form
 }
 

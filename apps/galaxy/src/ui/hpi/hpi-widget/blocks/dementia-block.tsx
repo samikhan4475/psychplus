@@ -1,42 +1,18 @@
 import { GroupSelectSection } from '@/components'
 
-const BLOCK_ID = 'mania'
+const BLOCK_ID = 'dementia'
 
-const BLOCK_TITLE = 'Mania'
+const BLOCK_TITLE = 'Dementia'
 
 const BLOCK_OPTIONS = [
-  {
-    label: 'Memory Loss',
-    value: 'memoryLoss',
-  },
-  {
-    label: 'Confusion',
-    value: 'confusion',
-  },
-  {
-    label: 'Difficulty with ADLs',
-    value: 'difficultyWithAdls',
-  },
-  {
-    label: 'Wandering',
-    value: 'wandering',
-  },
-  {
-    label: 'Agitation',
-    value: 'agitation',
-  },
-  {
-    label: 'AH',
-    value: 'ah',
-  },
-  {
-    label: 'VH',
-    value: 'vh',
-  },
-  {
-    label: 'Parkinson Symptoms',
-    value: 'parkinsonSymptoms',
-  },
+  { label: 'Memory Loss', value: 'demMemoryLoss' },
+  { label: 'Confusion', value: 'demConfusion' },
+  { label: 'Difficulty with ADLs', value: 'demDifficultyWithAdls' },
+  { label: 'Wandering', value: 'demWandering' },
+  { label: 'Agitation', value: 'demAgitation' },
+  { label: 'AH', value: 'demAh' },
+  { label: 'VH', value: 'demVh' },
+  { label: 'Parkinson Symptoms', value: 'demParkinsonSymptoms' },
 ]
 
 const DementiaBlock = () => {
@@ -45,6 +21,8 @@ const DementiaBlock = () => {
       label={BLOCK_TITLE}
       field={BLOCK_ID}
       options={BLOCK_OPTIONS}
+      parentField="chiefComplaint"
+      valueInParent="ccDementia"
     />
   )
 }

@@ -5,58 +5,19 @@ const BLOCK_ID = 'depression'
 const BLOCK_TITLE = 'Depression'
 
 const BLOCK_OPTIONS = [
-  {
-    label: 'Low Mood',
-    value: 'lowMood',
-  },
-  {
-    label: 'Sleep Concerns',
-    value: 'sleepConcerns',
-  },
-  {
-    label: 'Low Interest',
-    value: 'lowInterest',
-  },
-  {
-    label: 'Guilt',
-    value: 'guilt',
-  },
-  {
-    label: 'Poor Energy',
-    value: 'poorEnergy',
-  },
-  {
-    label: 'Poor Concentration',
-    value: 'poorConcentration',
-  },
-  {
-    label: 'Poor Motivation',
-    value: 'poorMotivation',
-  },
-  {
-    label: 'Appetite Concerns',
-    value: 'appetiteConcerns',
-  },
-  {
-    label: 'Hopeless',
-    value: 'hopeless',
-  },
-  {
-    label: 'Slowing',
-    value: 'slowing',
-  },
-  {
-    label: 'Agitation',
-    value: 'agitation',
-  },
-  {
-    label: 'Suicidal Thoughts',
-    value: 'suicidalThoughts',
-  },
-  {
-    label: 'Anger',
-    value: 'anger',
-  },
+  { label: 'Low Mood', value: 'depLowMood' },
+  { label: 'Sleep Concerns', value: 'depSleepConcerns' },
+  { label: 'Low Interest', value: 'depLowInterest' },
+  { label: 'Guilt', value: 'depGuilt' },
+  { label: 'Poor Energy', value: 'depPoorEnergy' },
+  { label: 'Poor Concentration', value: 'depPoorConcentration' },
+  { label: 'Poor Motivation', value: 'depPoorMotivation' },
+  { label: 'Appetite Concerns', value: 'depAppetiteConcerns' },
+  { label: 'Hopeless', value: 'depHopeless' },
+  { label: 'Slowing', value: 'depSlowing' },
+  { label: 'Agitation', value: 'depAgitation' },
+  { label: 'Suicidal Thoughts', value: 'depSuicidalThoughts' },
+  { label: 'Anger', value: 'depAnger' },
 ]
 
 const DepressionBlock = () => {
@@ -65,6 +26,8 @@ const DepressionBlock = () => {
       label={BLOCK_TITLE}
       field={BLOCK_ID}
       options={BLOCK_OPTIONS}
+      parentField="chiefComplaint"
+      valueInParent="ccDepression"
     />
   )
 }

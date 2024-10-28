@@ -17,6 +17,7 @@ enum QuickNoteSectionName {
   QuickNoteSectionSocialHx = 'QuicknoteSectionSocialHx',
   QuickNoteSectionSubstanceUseHx = 'QuicknoteSectionSubstanceUseHx',
   QuicknoteSectionPhysicalExam = 'QuicknoteSectionPhysicalExam',
+  QuicknoteSectionHPI = 'QuicknoteSectionHPI',
 }
 
 export { QuickNoteSectionName }

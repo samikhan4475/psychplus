@@ -53,6 +53,8 @@ const AnxietyBlock = () => {
       label={BLOCK_TITLE}
       field={BLOCK_ID}
       options={BLOCK_OPTIONS}
+      parentField="chiefComplaint"
+      valueInParent="ccAnxiety"
     />
   )
 }

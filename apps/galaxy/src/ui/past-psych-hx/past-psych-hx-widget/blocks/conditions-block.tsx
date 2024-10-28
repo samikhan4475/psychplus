@@ -1,7 +1,7 @@
 import { Flex } from '@radix-ui/themes'
 import { SingleSelectChip } from '@/components'
 
-const BLOCK_OPTIONS = [
+const PAST_PSYCH_CONDITIONS_BLOCK_OPTIONS = [
   {
     label: 'Depression',
     field: 'depression',
@@ -97,7 +97,7 @@ const BLOCK_OPTIONS = [
 const ConditionsBlock = () => {
   return (
     <Flex gap="2" wrap="wrap">
-      {BLOCK_OPTIONS.map((option) => (
+      {PAST_PSYCH_CONDITIONS_BLOCK_OPTIONS.map((option) => (
         <SingleSelectChip
           key={option.field}
           field={option.field}
@@ -113,4 +113,4 @@ const ConditionsBlock = () => {
   )
 }
 
-export { ConditionsBlock }
+export { ConditionsBlock, PAST_PSYCH_CONDITIONS_BLOCK_OPTIONS }

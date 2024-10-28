@@ -22,7 +22,7 @@ interface MultiSelectOption {
 const Tag = ({ children }: PropsWithChildren) => {
   return (
     <Flex
-      className="bg-pp-table-border z-[1] h-4 w-full gap-1 rounded-3 px-1 pr-3 text-[10px]"
+      className="bg-pp-table-border z-[1] h-4 w-full gap-1 rounded-3 px-1 pr-4 text-[10px]"
       justify="between"
       align="center"
     >

@@ -7,39 +7,39 @@ const BLOCK_TITLE = 'ADHD Inattentive'
 const BLOCK_OPTIONS = [
   {
     label: 'Careless Mistakes',
-    value: 'carelessMistakes',
+    value: 'adiCarelessMistakes',
   },
   {
     label: 'Decreased Attention',
-    value: 'decreasedAttention',
+    value: 'adiDecreasedAttention',
   },
   {
     label: "Doesn't Listen",
-    value: 'doesntListen',
+    value: 'adiDoesntListen',
   },
   {
     label: 'Hard to Follow Instruction',
-    value: 'hardToFollowInstruction',
+    value: 'adiHardToFollowInstruction',
   },
   {
     label: 'Difficulty Organizing',
-    value: 'difficultyOrganizing',
+    value: 'adiDifficultyOrganizing',
   },
   {
     label: 'Difficulty to do Detail-Oriented Tasks',
-    value: 'difficultyToDoDetailOrientedTasks',
+    value: 'adiDifficultyToDoDetailOrientedTasks',
   },
   {
     label: 'Loses Things',
-    value: 'losesThings',
+    value: 'adiLosesThings',
   },
   {
     label: 'Easily Distracted',
-    value: 'easilyDistracted',
+    value: 'adiEasilyDistracted',
   },
   {
     label: 'Forgetful',
-    value: 'forgetful',
+    value: 'adiForgetful',
   },
 ]
 
@@ -49,6 +49,8 @@ const AdhdInattentiveBlock = () => {
       label={BLOCK_TITLE}
       field={BLOCK_ID}
       options={BLOCK_OPTIONS}
+      parentField="chiefComplaint"
+      valueInParent="ccAdhdi"
     />
   )
 }

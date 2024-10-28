@@ -12,7 +12,7 @@ const OtherBlock = () => {
       <TextField.Root
         size="1"
         className="w-full max-w-lg"
-        {...form.register('other')}
+        {...form.register('hpiOther')}
       ></TextField.Root>
     </Flex>
   )

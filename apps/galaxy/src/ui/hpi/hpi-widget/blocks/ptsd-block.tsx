@@ -5,46 +5,16 @@ const BLOCK_ID = 'ptsd'
 const BLOCK_TITLE = 'PTSD'
 
 const BLOCK_OPTIONS = [
-  {
-    label: 'Traumatic Event',
-    value: 'traumaticEvent',
-  },
-  {
-    label: 'Intrusive Memories',
-    value: 'intrusiveMemories',
-  },
-  {
-    label: 'Nightmares',
-    value: 'nightmares',
-  },
-  {
-    label: 'Night Terrors',
-    value: 'nightTerrors',
-  },
-  {
-    label: 'Flashbacks',
-    value: 'flashbacks',
-  },
-  {
-    label: 'Dissociative Episodes',
-    value: 'dissociativeEpisodes',
-  },
-  {
-    label: 'Hypervigilance',
-    value: 'hypervigilance',
-  },
-  {
-    label: 'Avoidance',
-    value: 'avoidance',
-  },
-  {
-    label: 'Startled',
-    value: 'startled',
-  },
-  {
-    label: 'Detachment',
-    value: 'detachment',
-  },
+  { label: 'Traumatic Event', value: 'ptsTraumaticEvent' },
+  { label: 'Intrusive Memories', value: 'ptsIntrusiveMemories' },
+  { label: 'Nightmares', value: 'ptsNightmares' },
+  { label: 'Night Terrors', value: 'ptsNightTerrors' },
+  { label: 'Flashbacks', value: 'ptsFlashbacks' },
+  { label: 'Dissociative Episodes', value: 'ptsDissociativeEpisodes' },
+  { label: 'Hypervigilance', value: 'ptsHypervigilance' },
+  { label: 'Avoidance', value: 'ptsAvoidance' },
+  { label: 'Startled', value: 'ptsStartled' },
+  { label: 'Detachment', value: 'ptsDetachment' },
 ]
 
 const PtsdBlock = () => {
@@ -53,6 +23,8 @@ const PtsdBlock = () => {
       label={BLOCK_TITLE}
       field={BLOCK_ID}
       options={BLOCK_OPTIONS}
+      parentField="chiefComplaint"
+      valueInParent="ccPtsd"
     />
   )
 }

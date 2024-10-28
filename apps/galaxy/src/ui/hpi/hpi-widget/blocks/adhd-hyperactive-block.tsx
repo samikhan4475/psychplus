@@ -7,43 +7,43 @@ const BLOCK_TITLE = 'ADHD Hyperactive'
 const BLOCK_OPTIONS = [
   {
     label: 'Fidgeting',
-    value: 'fidgeting',
+    value: 'adhFidgeting',
   },
   {
     label: 'Leaves Assigned Space',
-    value: 'leavesAssignedSpace',
+    value: 'adhLeavesAssignedSpace',
   },
   {
     label: 'Restless',
-    value: 'restless',
+    value: 'adhRestless',
   },
   {
     label: 'Hard to Enjoy Relaxing',
-    value: 'hardToEnjoyRelaxing',
+    value: 'adhHardToEnjoyRelaxing',
   },
   {
     label: 'On the Go',
-    value: 'onTheGo',
+    value: 'adhOnTheGo',
   },
   {
     label: 'Excessive Talking',
-    value: 'excessiveTalking',
+    value: 'adhExcessiveTalking',
   },
   {
     label: 'Blurts Out Answers',
-    value: 'blurtsOutAnswers',
+    value: 'adhBlurtsOutAnswers',
   },
   {
     label: 'Impatient',
-    value: 'impatient',
+    value: 'adhImpatient',
   },
   {
     label: 'Interrupts',
-    value: 'interrupts',
+    value: 'adhInterrupts',
   },
   {
     label: 'Behavior Outbursts',
-    value: 'behaviorOutbursts',
+    value: 'adhBehaviorOutbursts',
   },
 ]
 
@@ -53,6 +53,8 @@ const AdhdHyperactiveBlock = () => {
       label={BLOCK_TITLE}
       field={BLOCK_ID}
       options={BLOCK_OPTIONS}
+      parentField="chiefComplaint"
+      valueInParent="ccAdhdh"
     />
   )
 }

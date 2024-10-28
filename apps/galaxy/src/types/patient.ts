@@ -43,6 +43,8 @@ interface PatientProfile {
   birthdate: string
   hasGuardian: boolean
   gender: string
+  name?: string
+  age?: number
   genderOrientation?: string
   genderExpression?: string
   genderPronoun?: string

@@ -1,11 +1,34 @@
-import { Button } from '@radix-ui/themes'
-import { EyeIcon } from 'lucide-react'
+'use client'
+
+import { Button, Text } from '@radix-ui/themes'
+import { EyeIcon, EyeOffIcon } from 'lucide-react'
+import { useStore } from './quicknotes-store'
 
 const QuickNotesViewNoteButton = () => {
+  const { toggleActualNoteView, showActualNoteView } = useStore((state) => ({
+    toggleActualNoteView: state.toggleActualNoteView,
+    showActualNoteView: state.showActualNoteView,
+  }))
+
   return (
-    <Button variant="outline" color="gray" size="1" className="text-black">
-      <EyeIcon height={14} width={14} strokeWidth={1.5} />
-      View Note
+    <Button
+      onClick={toggleActualNoteView}
+      variant="outline"
+      color="gray"
+      size="1"
+      className="text-black"
+    >
+      {showActualNoteView ? (
+        <>
+          <EyeOffIcon height={14} width={14} strokeWidth={1.5} />
+          <Text>Hide Note</Text>
+        </>
+      ) : (
+        <>
+          <EyeIcon height={14} width={14} strokeWidth={1.5} />
+          <Text>View Note</Text>
+        </>
+      )}
     </Button>
   )
 }

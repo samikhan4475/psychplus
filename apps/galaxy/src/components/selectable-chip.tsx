@@ -28,12 +28,13 @@ const SelectableChip = ({
   )
 
   return (
-    <Flex align="center" className="h-[var(--chip-height)]">
+    <>
       <Flex
         px="1"
         onClick={onClick}
+        align="center"
         className={cn(
-          'cursor-pointer rounded-1 border border-gray-9 py-[1px]',
+          'h-[var(--chip-height)] cursor-pointer rounded-1 border border-gray-9 py-[1px]',
           {
             'bg-pp-focus-bg border-pp-focus-outline': selected,
           },
@@ -48,7 +49,7 @@ const SelectableChip = ({
         )}
       </Flex>
       {children}
-    </Flex>
+    </>
   )
 }
 

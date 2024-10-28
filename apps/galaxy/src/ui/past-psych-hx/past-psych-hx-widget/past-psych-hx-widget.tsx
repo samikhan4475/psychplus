@@ -9,6 +9,7 @@ import {
   WidgetSaveButton,
   WidgetTagButton,
 } from '@/components'
+import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import {
   ConditionsBlock,
   PsychHospitalizationsBlock,
@@ -33,7 +34,7 @@ const PastPsychHxWidget = ({
     <FormProvider {...form}>
       <WidgetFormContainer
         patientId={patientId}
-        widgetId="past-psych-hx"
+        widgetId={QuickNoteSectionName.QuickNoteSectionPastPsychHx}
         title="Past Psych Hx"
         getData={transformOut(patientId)}
         toggleable

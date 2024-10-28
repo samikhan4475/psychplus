@@ -6,10 +6,15 @@ interface Store {
   save: () => void
   unsavedChanges: Record<string, boolean>
   setUnsavedChanges: (widgetName: string, unsavedChanges: boolean) => void
+  toggleActualNoteView: () => void
+  showActualNoteView: boolean
 }
 
 const useStore = create<Store>()((set, get) => ({
   loading: false,
+  showActualNoteView: true,
+  toggleActualNoteView: () =>
+    set({ showActualNoteView: !get().showActualNoteView }),
   save: async () => {
     set({ loading: true })
 

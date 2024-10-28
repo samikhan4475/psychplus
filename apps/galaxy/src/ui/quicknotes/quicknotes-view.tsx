@@ -1,4 +1,4 @@
-import { Flex } from '@radix-ui/themes'
+import { Flex, ScrollArea } from '@radix-ui/themes'
 import { PatientAllergiesWidget } from '@/ui/allergy'
 import { AssessmentPlanWidget } from '@/ui/assessment'
 import { CodesWidget } from '@/ui/codes'
@@ -18,6 +18,7 @@ import { QuicknotesDiagnosisWidget } from '../diagnosis/quicknotes-diagnosis-wid
 import { FollowUpWidget } from '../follow-up'
 import { PhysicalExamWidget } from '../physical-exam'
 import { QuicknotesVitalsWidget } from '../vitals'
+import { ActualNoteView } from './actual-note-view'
 import { QuickNotesHeader } from './quicknotes-header'
 import { QuickNotesSaver } from './quicknotes-saver'
 
@@ -27,29 +28,34 @@ interface QuickNotesViewProps {
 
 const QuickNotesView = ({ patientId }: QuickNotesViewProps) => {
   return (
-    <Flex direction="column" width="100%">
+    <Flex width="100%" direction="column">
       <QuickNotesSaver />
       <QuickNotesHeader />
-      <Flex direction="column" gap="2">
-        <HpiWidget patientId={patientId} />
-        <PastPsychHxWidget patientId={patientId} />
-        <FamilyPsychHxWidget patientId={patientId} />
-        <SocialHxWidget patientId={patientId} />
-        <SubstanceUseHxWidget patientId={patientId} />
-        <PastMedicalHxWidget patientId={patientId} />
-        <PatientAllergiesWidget patientId={patientId} />
-        <QuestionnairesWidget patientId={patientId} />
-        <RosWidget patientId={patientId} />
-        <QuicknotesVitalsWidget patientId={patientId} />
-        <MseWidget patientId={patientId} />
-        <QuicknotesDiagnosisWidget patientId={patientId} />
-        <PhysicalExamWidget patientId={patientId} />
-        <AssessmentPlanWidget patientId={patientId} />
-        <InteractiveComplexityWidget patientId={patientId} />
-        <PatientMedicationsWidget patientId={patientId} />
-        <PatientReferralsWidget patientId={patientId} />
-        <FollowUpWidget patientId={patientId} />
-        <CodesWidget patientId={patientId} />
+      <Flex className="h-full max-h-[calc(100dvh_-_385px)] w-full">
+        <ScrollArea className="h-full pr-3" type="always" scrollbars="vertical">
+          <Flex direction="column" height="100%" gap="2">
+            <HpiWidget patientId={patientId} />
+            <PastPsychHxWidget patientId={patientId} />
+            <FamilyPsychHxWidget patientId={patientId} />
+            <SocialHxWidget patientId={patientId} />
+            <SubstanceUseHxWidget patientId={patientId} />
+            <PastMedicalHxWidget patientId={patientId} />
+            <PatientAllergiesWidget patientId={patientId} />
+            <QuestionnairesWidget patientId={patientId} />
+            <RosWidget patientId={patientId} />
+            <QuicknotesVitalsWidget patientId={patientId} />
+            <MseWidget patientId={patientId} />
+            <QuicknotesDiagnosisWidget patientId={patientId} />
+            <PhysicalExamWidget patientId={patientId} />
+            <AssessmentPlanWidget patientId={patientId} />
+            <InteractiveComplexityWidget patientId={patientId} />
+            <PatientMedicationsWidget patientId={patientId} />
+            <PatientReferralsWidget patientId={patientId} />
+            <FollowUpWidget patientId={patientId} />
+            <CodesWidget patientId={patientId} />
+          </Flex>
+        </ScrollArea>
+        <ActualNoteView patientId={patientId} />
       </Flex>
     </Flex>
   )

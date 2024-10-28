@@ -2,28 +2,32 @@
 
 import { FormProvider } from 'react-hook-form'
 import {
-  WidgetClearButton,
   WidgetFormContainer,
   WidgetHxButton,
   WidgetSaveButton,
   WidgetTagButton,
 } from '@/components'
+import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import {
   AdhdHyperactiveBlock,
   AdhdInattentiveBlock,
   AnxietyBlock,
+  AutismBlock,
+  BipolarManiaBlock,
   BpdBlock,
   ChiefComplaintBlock,
+  ConductDisorderBlock,
   DementiaBlock,
   DepressionBlock,
-  ManiaBlock,
   MedicationSeBlock,
   ObsessionBlock,
+  OcdBlock,
   OtherBlock,
   PtsdBlock,
   SchizophreniaBlock,
   SubstanceBlock,
 } from './blocks'
+import { ClearButton } from './clear-button'
 import { transformOut } from './data'
 import { useHpiWidgetForm } from './hpi-widget-form'
 import { type HpiWidgetSchemaType } from './hpi-widget-schema'
@@ -40,14 +44,14 @@ const HpiWidget = ({ patientId, initialValue }: HpiWidgetProps) => {
     <FormProvider {...form}>
       <WidgetFormContainer
         patientId={patientId}
-        widgetId="hpi"
+        widgetId={QuickNoteSectionName.QuicknoteSectionHPI}
         getData={transformOut(patientId)}
         title="HPI/Presenting Symptoms"
+        sticky
+        className="p-2 pt-0"
         headerRight={
           <>
-            <WidgetTagButton />
-            <WidgetHxButton />
-            <WidgetClearButton />
+            <ClearButton />
             <WidgetSaveButton />
           </>
         }
@@ -55,13 +59,16 @@ const HpiWidget = ({ patientId, initialValue }: HpiWidgetProps) => {
         <ChiefComplaintBlock />
         <DepressionBlock />
         <AnxietyBlock />
-        <ManiaBlock />
+        <BipolarManiaBlock />
         <PtsdBlock />
         <ObsessionBlock />
+        <OcdBlock />
         <BpdBlock />
         <SubstanceBlock />
         <AdhdInattentiveBlock />
         <AdhdHyperactiveBlock />
+        <AutismBlock />
+        <ConductDisorderBlock />
         <DementiaBlock />
         <SchizophreniaBlock />
         <MedicationSeBlock />

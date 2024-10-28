@@ -5,50 +5,11 @@ const BLOCK_ID = 'obsession'
 const BLOCK_TITLE = 'Obsession'
 
 const BLOCK_OPTIONS = [
-  {
-    label: 'Contamination',
-    value: 'contamination',
-  },
-  {
-    label: 'Doubt',
-    value: 'doubt',
-  },
-  {
-    label: 'Somatic',
-    value: 'somatic',
-  },
-  {
-    label: 'Aggression',
-    value: 'aggression',
-  },
-  {
-    label: 'Sexual',
-    value: 'sexual',
-  },
-  {
-    label: 'Compulsion',
-    value: 'compulsion',
-  },
-  {
-    label: 'Checking',
-    value: 'checking',
-  },
-  {
-    label: 'Washing',
-    value: 'washing',
-  },
-  {
-    label: 'Counting',
-    value: 'counting',
-  },
-  {
-    label: 'Hoarding',
-    value: 'hoarding',
-  },
-  {
-    label: 'Picking',
-    value: 'picking',
-  },
+  { label: 'Contamination', value: 'obsContamination' },
+  { label: 'Doubt', value: 'obsDoubt' },
+  { label: 'Somatic', value: 'obsSomatic' },
+  { label: 'Aggression', value: 'obsAggression' },
+  { label: 'Sexual', value: 'obsSexual' },
 ]
 
 const ObsessionBlock = () => {
@@ -57,6 +18,8 @@ const ObsessionBlock = () => {
       label={BLOCK_TITLE}
       field={BLOCK_ID}
       options={BLOCK_OPTIONS}
+      parentField="chiefComplaint"
+      valueInParent="ccObsession"
     />
   )
 }

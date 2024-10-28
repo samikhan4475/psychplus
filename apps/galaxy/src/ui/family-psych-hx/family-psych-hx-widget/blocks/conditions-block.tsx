@@ -9,7 +9,7 @@ const RELATIONSHIP_OPTIONS = [
   { label: 'Parents sibling', value: 'parentSibling' },
 ]
 
-const BLOCK_OPTIONS = [
+const FAMILY_PSYCH_BLOCK_OPTIONS = [
   {
     label: 'Completed Suicide',
     field: 'completedSuicide',
@@ -56,7 +56,7 @@ const BLOCK_OPTIONS = [
 const ConditionsBlock = () => {
   return (
     <Flex gap="2" wrap="wrap">
-      {BLOCK_OPTIONS.map((option) => (
+      {FAMILY_PSYCH_BLOCK_OPTIONS.map((option) => (
         <MultiSelectChip
           key={option.field}
           label={option.label}
@@ -73,4 +73,4 @@ const ConditionsBlock = () => {
   )
 }
 
-export { ConditionsBlock }
+export { ConditionsBlock, FAMILY_PSYCH_BLOCK_OPTIONS }

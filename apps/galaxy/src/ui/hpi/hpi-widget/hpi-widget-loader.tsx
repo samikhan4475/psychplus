@@ -1,5 +1,6 @@
 import * as api from '@/api'
 import { QuickNoteSectionItem } from '@/types'
+import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { transformIn } from './data'
 import { HpiWidget } from './hpi-widget'
 
@@ -12,7 +13,7 @@ const HpiWidgetLoader = async ({ patientId }: HpiWidgetLoaderProps) => {
     api.NOTE_DETAILS_SEARCH_ENDPOINT,
     {
       patientId: Number(patientId),
-      sectionName: ['QuicknoteSectionHPI'],
+      sectionName: [QuickNoteSectionName.QuicknoteSectionHPI],
       isLatest: true,
     },
   )
