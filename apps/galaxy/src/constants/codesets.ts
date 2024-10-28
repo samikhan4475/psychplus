@@ -53,6 +53,9 @@ const CODESETS = {
   AccidentType: 'AccidentType',
   LocationType: 'LocationType',
   ContactMadeStatus: 'ContactMadeStatus',
+  ParameterAdjustmentStatus: 'ParameterAdjustmentStatus',
+  TMSCoilType: 'PsychPlusPublic.TMSCoilType',
+  TMSStimulationSite: 'PsychPlusPublic.TMSStimulationSite',
 }
 
 export {

@@ -1,6 +1,9 @@
-import { Text } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
-import { FormFieldContainer, GroupSelectSection } from '@/components'
+import {
+  BlockLabel,
+  FormFieldContainer,
+  GroupSelectSection,
+} from '@/components'
 import { TmsWidgetSchemaType } from '../../tms-widget-schema'
 import DiscontinueBlock from './discontinue-block'
 import FollowUpBlock from './follow-up-block'
@@ -37,7 +40,9 @@ const DischargePlanBlock = () => {
   const dischargeBlock = form.watch('dischargePlan')
   return (
     <FormFieldContainer className="gap-2">
-      <Text weight="medium">Discharge Plan</Text>
+      <BlockLabel required className="text-3 font-[600]">
+        Discharge Plan
+      </BlockLabel>
       <GroupSelectSection label="" field={BLOCK_ID} options={BLOCK_OPTIONS} />
       {dischargeBlock.map((dischargeBlockItem, index) => (
         <FormFieldContainer key={dischargeBlockItem + index} className="mt-2">

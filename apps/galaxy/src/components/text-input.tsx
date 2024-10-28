@@ -10,8 +10,9 @@ interface TextInputProps {
   field: string
   autoFocus?: boolean
   className?: string
-  placeHolder?:string
+  placeHolder?: string
   disabled?: boolean
+  required?: boolean
 }
 
 const TextInput = ({
@@ -21,13 +22,17 @@ const TextInput = ({
   className,
   placeHolder,
   disabled = false,
+  required = false,
 }: TextInputProps) => {
-
   const form = useFormContext()
 
   return (
     <Flex align="center" gap="2">
-      {label && <BlockLabel name={field}>{label}</BlockLabel>}
+      {label && (
+        <BlockLabel required={required} name={field}>
+          {label}
+        </BlockLabel>
+      )}
       <TextField.Root
         size="1"
         autoFocus={autoFocus}

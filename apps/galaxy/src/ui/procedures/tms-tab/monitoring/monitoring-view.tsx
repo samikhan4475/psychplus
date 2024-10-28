@@ -1,6 +1,7 @@
 'use client'
 
 import { Flex, Text } from '@radix-ui/themes'
+import { BlockLabel } from '@/components'
 import DizzinessBlock from './blocks/dizziness-block'
 import FatigueBlock from './blocks/fatigue-block'
 import HeadacheBlock from './blocks/headache-block'
@@ -12,11 +13,10 @@ import SuicideBlock from './blocks/suicide-block'
 
 const MonitoringView = () => {
   return (
-    <Flex
-      direction={'column'}
-      className="mt-2"
-    >
-      <Text weight="medium">Monitoring</Text>
+    <Flex direction="column" className="mt-2">
+      <BlockLabel required className="text-3 font-[600]">
+        Monitoring
+      </BlockLabel>
       <Flex
         direction={'column'}
         className="mt-2 gap-2 rounded-3 border border-gray-7 p-2"

@@ -8,8 +8,9 @@ import {
 } from '@/components'
 import { ProcedureTabs, ProcedureTabsId } from '../constants'
 import { DischargePlanView } from './discharge-plan'
-import { useTmsWidgetForm } from './tms-widget-form'
 import MonitoringView from './monitoring/monitoring-view'
+import { useTmsWidgetForm } from './tms-widget-form'
+import { TreatmentSessionView } from './treatment-session'
 
 interface TmsTabProps {
   patientId: string
@@ -17,6 +18,7 @@ interface TmsTabProps {
 
 const TmsTab = ({ patientId }: TmsTabProps) => {
   const form = useTmsWidgetForm()
+
   return (
     <FormProvider {...form}>
       <WidgetFormContainer
@@ -31,6 +33,7 @@ const TmsTab = ({ patientId }: TmsTabProps) => {
           </>
         }
       >
+        <TreatmentSessionView />
         <MonitoringView />
         <DischargePlanView />
       </WidgetFormContainer>

@@ -72,6 +72,9 @@ const config = {
         'pp-border': '#A4A4A4',
         'pp-focus-border': '#B9BBC6',
         'pp-ac-border': '#E8E7E7',
+        'pp-red-1': '#C62A2F',
+        'pp-green-1': '#006B3BE7',
+        'pp-green-2': '#92CEAC',
       },
       animation: {
         loader: 'bounce 500ms infinite, pulse 2s infinite',
@@ -79,8 +82,7 @@ const config = {
       boxShadow: {
         'light-08':
           '0px 0px 2px 0px rgba(0, 0, 0, 0.12), 0px 4px 8px 0px rgba(0, 0, 0, 0.14)',
-        'light-gray-08':
-          '0px 4px 4px 0px #00000014'
+        'light-gray-08': '0px 4px 4px 0px #00000014',
       },
     },
   },

@@ -32,25 +32,51 @@ const tmsWidgetSchema = z.object({
     other: z.enum(['yes', 'no']),
     details: z.string().optional().nullable(),
   }),
-  dischargePlan: z.array(z.enum([
-    'continueWithCurrentProtocol',
-    'modifyTreatmentPlan',
-    'discontinueTreatment',
-    'referral',
-    'followupAssessmentScreening'
-  ])
-  ),
-  tmsDischargePlanBlock: z.array(z.object({
-    discharge: z.enum([
+  dischargePlan: z.array(
+    z.enum([
       'continueWithCurrentProtocol',
       'modifyTreatmentPlan',
       'discontinueTreatment',
       'referral',
-      'followupAssessmentScreening'
+      'followupAssessmentScreening',
     ]),
-    value: z.string(),
-  })),
-  followUpBlock: z.array(z.string().optional())
+  ),
+  tmsDischargePlanBlock: z.array(
+    z.object({
+      discharge: z.enum([
+        'continueWithCurrentProtocol',
+        'modifyTreatmentPlan',
+        'discontinueTreatment',
+        'referral',
+        'followupAssessmentScreening',
+      ]),
+      value: z.string(),
+    }),
+  ),
+  followUpBlock: z.array(z.string().optional()),
+  typeOfThetaBurst: z.string(),
+  frequency: z.string(),
+  frequencyOfSession: z.number(),
+  durationFrom: z.number(),
+  durationTo: z.number(),
+  optimalStimulationLevel: z.number(),
+  motorThershold: z.array(
+    z.object({
+      dateTime: z.string(),
+      user: z.string(),
+      motorThersholdPercent: z.string(),
+    }),
+  ),
+  stimulationLevel: z.number(),
+  precautionsAndWarnings: z.array(z.number().optional()),
+  tmdSessionNo: z.string(),
+  stimulationSite: z.string(),
+  coilTypeUsed: z.string(),
+  treatmentParameter: z.string(),
+  burstPattern: z.string(),
+  treatmentAndObservation: z.string(),
+  protocol: z.string(),
+  motorThersholdValue: z.string(),
 })
 
 export { tmsWidgetSchema, type TmsWidgetSchemaType }

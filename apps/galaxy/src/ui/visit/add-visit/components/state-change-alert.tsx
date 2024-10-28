@@ -27,9 +27,9 @@ const StateChangeAlert = ({
           <Flex direction="column" gap="3" pt="1" className="pr-4">
             <Dialog.Title size="4" className="m-0 font-medium">
               <Text size="4">
-                This patient's primary address is not in the service state,
-                please confirm that the patient is residing in the state of
-                service to proceed
+                This patient&lsquo;s primary address is not in the service
+                state, please confirm that the patient is residing in the state
+                of service to proceed
               </Text>
             </Dialog.Title>
             <Flex justify="start" width="100%" gap="2">
