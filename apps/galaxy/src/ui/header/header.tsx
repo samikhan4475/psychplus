@@ -48,7 +48,7 @@ const Header = () => {
         className="text-white bg-accent-11"
       >
         <NavigationLinks />
-        <Flex align="center" gap="3">
+        <Flex align="center" gap="1">
           <PatientSearchInput />
           <InboxLink href="/secure-messages" label="Inbox" />
         </Flex>

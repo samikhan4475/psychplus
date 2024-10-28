@@ -50,7 +50,7 @@ const GET_PATIENT_PREFERRED_PARTNERS = (patientId: string) =>
 const GET_INSURANCE_PAYERS_ENDPOINT = `${API_URL}/api/insurance/payers?includePlans=false&includeInactive=false&includeTest=false&publicViewable=true&offset=0&limit=0`
 const GET_INSURANCE_PAYER_PLANS = (payerId: string) =>
   `${API_URL}/api/insurance/payers/${payerId}?includePlans=true&includeInactive=false&includeTest=false&publicViewable=true`
-const GET_USER_PERMISSIONS_ENDPOINT = `${API_URL}/api/users/self/permissions`
+const GET_USER_PERMISSIONS_ENDPOINT = `${API_URL}/api/users/self/organizations?includePermissions=true`
 const SEARCH_LOCATION_SERVICES_ENDPOINT = `${API_URL}/api/locationservices/actions/search`
 const SEARCH_BOOKED_APPOINTMENTS_ENDPOINT = `${API_URL}/api/appointments/actions/search`
 const GET_CLEARNING_HOUSE_RECEIVERS = `${API_URL}/api/clearinghousereceivers/actions/search`

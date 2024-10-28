@@ -5,7 +5,7 @@ import { useStore as zustandUseStore, type StoreApi } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
 import { createStore as zustandCreateStore } from 'zustand/vanilla'
 import { GALAXY_APP_LOCAL_STORAGE_KEY } from '@/constants'
-import type { CodesetCache, UserResponse as User } from '@/types'
+import type { CodesetCache, RolePermission, UserResponse as User } from '@/types'
 
 interface NavigationTab {
   href: string
@@ -15,7 +15,7 @@ interface NavigationTab {
 interface Store {
   user: User
   codesets: CodesetCache
-  permissions: Record<string, boolean>
+  permissions: Record<string, RolePermission>
   tabs: NavigationTab[]
   addTab: (tab: NavigationTab) => void
   removeTab: (name: string) => void
@@ -24,7 +24,7 @@ interface Store {
 interface StoreInitialState {
   user: User
   codesets: CodesetCache
-  permissions: Record<string, boolean>
+  permissions: Record<string, RolePermission>
 }
 
 const createStore = (initialState: StoreInitialState) =>

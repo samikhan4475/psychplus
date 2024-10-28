@@ -1,5 +1,7 @@
+import { ScheduleView } from "@/ui/schedule"
+
 const HomePage = () => {
-  return <>Provider Portal Home Page</>
+  return <ScheduleView />
 }
 
 export default HomePage

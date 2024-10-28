@@ -10,7 +10,7 @@ const PsychPlusLogo = () => (
     <style type="text/css">
       {`
           .st0{fill:#151B4A;}
-          .st1{fill:#8BD5C9;}
+          .st1{fill:#194595;}
         `}
     </style>
     <path

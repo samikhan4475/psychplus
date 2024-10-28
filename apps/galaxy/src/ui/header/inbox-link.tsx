@@ -20,7 +20,7 @@ const InboxLink = ({ href, label }: InboxLinkProps) => {
           label,
         })
       }}
-      className="bg-pp-black-1 flex items-center gap-1 rounded-2 px-1 text-[16px]"
+      className="flex items-center gap-1 rounded-2 px-1 text-[16px]"
     >
       <MailIcon width={20} height={20} strokeWidth={1.25} />
       Inbox

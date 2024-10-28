@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import NextLink from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
-import { Cross2Icon, HomeIcon } from '@radix-ui/react-icons'
+import { Cross2Icon } from '@radix-ui/react-icons'
 import { Box, Flex, Text } from '@radix-ui/themes'
 import { useStore } from '@/store'
 import { cn } from '@/utils'
@@ -27,7 +27,7 @@ const NavigationTabs = () => {
       gap="2"
       className="text-white h-[38px] bg-accent-12"
     >
-      <NavigationTab href="/" label="Home" />
+      <NavigationTab href="/" label="Schedule" />
       {tabs.map((tab) => (
         <NavigationTab key={tab.href} href={tab.href} label={tab.label} />
       ))}
@@ -62,7 +62,6 @@ const NavigationTab = ({ href, label }: NavigationTabProps) => {
         },
       )}
     >
-      {href === '/' ? <HomeIcon /> : null}
       <Text className="text-[11px] font-[600]">{label}</Text>
       {href !== '/' ? (
         <Flex

@@ -1,13 +1,15 @@
 'use client'
 
 import NextLink from 'next/link'
+import { usePathname } from 'next/navigation'
 import { Flex } from '@radix-ui/themes'
 import { useStore } from '@/store'
+import { cn } from '@/utils'
 
 const NavigationLinks = () => {
   return (
     <Flex>
-      <NavigationLink href="/schedule" label="Schedule" />
+      <NavigationLink href="/" label="Schedule" />
       <NavigationLink href="/patient-lookup" label="Patient Lookup" />
       <NavigationLink href="/revenue-cycle" label="Revenue Cycle" />
       <NavigationLink href="/experience" label="Experience" />
@@ -30,11 +32,24 @@ interface NavigationLinkProps {
 
 const NavigationLink = ({ href, label }: NavigationLinkProps) => {
   const addTab = useStore((state) => state.addTab)
+  const pathname = usePathname()
+  const isActive = href === '/' ? pathname === href : pathname.startsWith(href)
+  const navLinkClass = cn('whitespace-nowrap px-2 py-1 text-[13px]', {
+    'bg-pp-black-1 rounded-[4px]': isActive,
+  })
+
+  if (label === 'Schedule') {
+    return (
+      <NextLink href="/" className={navLinkClass}>
+        Schedule
+      </NextLink>
+    )
+  }
 
   return (
     <NextLink
       href={href}
-      className="whitespace-nowrap px-2 py-1 text-[13px]"
+      className={navLinkClass}
       onClick={() => {
         addTab({
           href,
