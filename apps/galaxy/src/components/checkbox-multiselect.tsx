@@ -56,6 +56,7 @@ interface Props {
   label?: string
   className?: string
   disabled?: boolean
+  hideSelectedCount?: boolean
 }
 
 const MultiSelectField = ({
@@ -67,6 +68,7 @@ const MultiSelectField = ({
   label,
   className,
   disabled = false,
+  hideSelectedCount = false,
 }: Props) => {
   const [selectedValues, setSelectedValues] = useState<string[]>(
     defaultValues ?? [],
@@ -114,7 +116,7 @@ const MultiSelectField = ({
             width={12}
             height={12}
             className={cn('absolute right-6 top-1.5 z-[2] cursor-pointer', {
-              hidden: selectedValues.length < 1,
+              hidden: hideSelectedCount || selectedValues.length < 1,
             })}
             onClick={onClose}
           />
@@ -135,7 +137,7 @@ const MultiSelectField = ({
                 },
               )}
             >
-              {selectedValues.length < 1 ? (
+              {hideSelectedCount || selectedValues.length < 1 ? (
                 <Text
                   as="span"
                   className="text-[12px] font-regular text-grayA-10"

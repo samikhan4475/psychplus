@@ -6,6 +6,7 @@ import { getPatientAge, getPatientFullName } from '@/utils'
 import { QuickNoteSectionName } from '../../constants'
 import { ActualNoteDetailsWrapper } from '../shared'
 import { HpiNarration } from './hpi-narration'
+import { getGenderValue } from './utils'
 
 interface HpiProps {
   patientId: string
@@ -36,7 +37,7 @@ const HpiDetailView = async ({ patientId }: HpiProps) => {
         patient={{
           name: getPatientFullName(legalName),
           age: getPatientAge(birthdate),
-          gender: gender?.toLowerCase() ?? 'N/A',
+          gender: getGenderValue(gender),
         }}
         symptoms={transformIn(hpiResult.data, true)}
       />

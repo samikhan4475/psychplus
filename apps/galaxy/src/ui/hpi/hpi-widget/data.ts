@@ -95,6 +95,11 @@ const valueToSchema: { [key: string]: string } = {
   OBS_Somatic: 'obsSomatic',
   OBS_Aggression: 'obsAggression',
   OBS_Sexual: 'obsSexual',
+  OBS_Checking: 'obsChecking',
+  OBS_Washing: 'obsWashing',
+  OBS_Counting: 'obsCounting',
+  OBS_Hoarding: 'obsHoarding',
+  OBS_Picking: 'obsPicking',
 
   // OCD  block
   OCD_Checking: 'ocdChecking',

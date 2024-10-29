@@ -7,7 +7,7 @@ const updatePatientProfileAction = async (
   patientId: number,
   payload: PatientProfile,
 ): Promise<api.ActionResult<PatientProfile>> => {
-  const result = await api.PATCH<PatientProfile>(
+  const result = await api.PUT<PatientProfile>(
     api.UPDATE_PATIENT_PROFILE_ENDPOINT(patientId),
     payload,
   )

@@ -180,7 +180,7 @@ const GET_PATIENT_DRIVER_LICENSE_IMAGE_ENDPOINT = (
   side: string,
 ) => `${API_URL}/ehr/api/patients/${patientId}/driverslicenseimage/${side}`
 const UPDATE_PATIENT_PROFILE_ENDPOINT = (patientId: number) =>
-  `${API_URL}/api/patients/${patientId}/profile`
+  `${API_URL}/api/patients/${patientId}`
 const UPDATE_PATIENT_PROFILE_IMAGE_ENDPOINT = (patientId: number) =>
   `${API_URL}/api/patients/${patientId}/profileimage`
 const UPDATE_PATIENT_DRIVING_LICENSE_IMAGE_ENDPOINT = (

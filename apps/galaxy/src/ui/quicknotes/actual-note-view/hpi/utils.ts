@@ -72,10 +72,22 @@ const appendMuliSelectOptions = (
   return complaints
 }
 
+function getGenderValue(genderValue?: string): string {
+  if (!genderValue) {
+    return 'N/A'
+  }
+  const specialValues = ['undetermined', 'notspecified']
+  if (specialValues.includes(genderValue.toLowerCase())) {
+    return `gender:${genderValue.toLowerCase()}`
+  }
+  return genderValue.toLowerCase()
+}
+
 export {
   formatSymptoms,
   formatOthersDetail,
   otherDetailsMap,
   appendMuliSelectOptions,
   schizophreniaMap,
+  getGenderValue,
 }

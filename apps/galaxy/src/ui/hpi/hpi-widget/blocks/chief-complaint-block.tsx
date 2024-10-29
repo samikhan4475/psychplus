@@ -26,14 +26,9 @@ const BLOCK_OPTIONS = [
     fieldName: 'ptsd',
   },
   {
-    label: 'Obsession',
+    label: 'Obsession/Ocd',
     value: 'ccObsession',
     fieldName: 'obsession',
-  },
-  {
-    label: 'OCD',
-    value: 'ccOcd',
-    fieldName: 'ocd',
   },
   {
     label: 'BPD',

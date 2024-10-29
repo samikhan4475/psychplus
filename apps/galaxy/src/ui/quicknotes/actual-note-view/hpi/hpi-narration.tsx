@@ -2,6 +2,7 @@ import React from 'react'
 import { Flex, Text } from '@radix-ui/themes'
 import { PatientProfile } from '@/types'
 import { HpiWidgetSchemaType } from '@/ui/hpi/hpi-widget/hpi-widget-schema'
+import { optionsValueToLabel } from '@/ui/hpi/hpi-widget/utils'
 import { BlockContainer, LabelAndValue } from '../shared'
 import {
   appendMuliSelectOptions,
@@ -24,7 +25,7 @@ const HpiNarration = ({ patient, symptoms }: Props) => {
 
     if (!chiefComplaints.length && !symptoms?.hpiOther) return ''
 
-    let narration = ` ${patient.name} is a ${patient.age}-year-old ${patient.gender}`
+    let narration = ` ${patient.name} is a ${patient.age}-year-old, ${patient.gender}`
 
     if (!chiefComplaints.length && symptoms.hpiOther) {
       return narration
@@ -55,7 +56,9 @@ const HpiNarration = ({ patient, symptoms }: Props) => {
       let complaintSymptoms = symptoms[complaint as HpiWidgetSchemaKey]
 
       if (Array.isArray(complaintSymptoms) && complaintSymptoms.length > 0) {
-        narration += ` The patient reports that ${complaint} symptoms are consistent with `
+        narration += ` The patient reports that ${
+          optionsValueToLabel[complaint] ?? complaint
+        } symptoms are consistent with `
 
         const details = otherDetailsMap[complaint]
         if (details) {
@@ -94,7 +97,7 @@ const HpiNarration = ({ patient, symptoms }: Props) => {
           {generateNarration()}
         </Text>
         {symptoms?.hpiOther && (
-          <LabelAndValue label="Other :" value={symptoms?.hpiOther} />
+          <LabelAndValue label="" value={symptoms?.hpiOther} />
         )}
       </Flex>
     </BlockContainer>

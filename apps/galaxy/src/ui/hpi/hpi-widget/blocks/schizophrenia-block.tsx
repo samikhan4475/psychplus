@@ -40,6 +40,7 @@ const SCHIZOPHRENIA_BLOCK_OPTIONS = [
     value: 'schDelusion',
     details: {
       type: 'multi-select' as DetailsType,
+      hideSelectedCount: true,
       label: 'Types',
       options: DELUSION_OPTIONS,
       isOptionsChip: true,
@@ -52,6 +53,7 @@ const SCHIZOPHRENIA_BLOCK_OPTIONS = [
     value: 'schHallucination',
     details: {
       type: 'multi-select' as DetailsType,
+      hideSelectedCount: true,
       label: 'Types',
       options: HALLUCINATIONS_OPTIONS,
       isOptionsChip: true,

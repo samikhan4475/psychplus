@@ -1,12 +1,7 @@
 'use client'
 
 import { FormProvider } from 'react-hook-form'
-import {
-  WidgetFormContainer,
-  WidgetHxButton,
-  WidgetSaveButton,
-  WidgetTagButton,
-} from '@/components'
+import { WidgetFormContainer, WidgetSaveButton } from '@/components'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import {
   AdhdHyperactiveBlock,
@@ -21,7 +16,6 @@ import {
   DepressionBlock,
   MedicationSeBlock,
   ObsessionBlock,
-  OcdBlock,
   OtherBlock,
   PtsdBlock,
   SchizophreniaBlock,
@@ -62,7 +56,7 @@ const HpiWidget = ({ patientId, initialValue }: HpiWidgetProps) => {
         <BipolarManiaBlock />
         <PtsdBlock />
         <ObsessionBlock />
-        <OcdBlock />
+        {/* <OcdBlock /> */}
         <BpdBlock />
         <SubstanceBlock />
         <AdhdInattentiveBlock />

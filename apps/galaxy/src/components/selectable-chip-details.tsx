@@ -14,6 +14,7 @@ interface SelectableChipDetailsProps {
   type: DetailsType
   label: string
   field: string
+  hideSelectedCount?: boolean
   options?: { label: string; value: string }[]
   showIndicator?: boolean
   placeHolder?: string
@@ -34,6 +35,7 @@ const SelectableChipDetails = ({
   isDisabled = false,
   className,
   isOptionsChip,
+  hideSelectedCount = false,
 }: SelectableChipDetailsProps) => {
   const form = useFormContext()
   const error = form.getFieldState(field, form.formState).error
@@ -74,6 +76,7 @@ const SelectableChipDetails = ({
               }
               options={options || []}
               defaultValues={form.watch(field)}
+              hideSelectedCount={hideSelectedCount}
             />
           )}
         </Flex>
