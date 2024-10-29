@@ -204,6 +204,8 @@ const UPLOAD_TEMPLATE_REPORT_ENDPOINT = (templateId: string) =>
 const EDIT_TEMPLATE_ENDPOINT = (templateId: string) =>
   `${API_URL}/api/reporting/templates/${templateId}/`
 const GET_ALL_STAFF_ENDPOINT = `${API_URL}/api/staff`
+const GET_APPOINTMENT = (appointmentId: string) =>
+  `${API_URL}/api/appointments/${appointmentId}`
 
 export {
   USER_ENDPOINT,
@@ -318,4 +320,5 @@ export {
   UPLOAD_TEMPLATE_REPORT_ENDPOINT,
   EDIT_TEMPLATE_ENDPOINT,
   GET_ALL_STAFF_ENDPOINT,
+  GET_APPOINTMENT,
 }

@@ -1,22 +1,30 @@
+import { useRouter } from 'next/navigation'
 import { Button } from '@radix-ui/themes'
 import { NotepadIcon } from '@/components/icons'
 import { useStore as useRootStore } from '@/store'
-import { useRouter } from 'next/navigation'
+import { Appointment } from '@/types'
+import { getPatientMRN } from '@/utils'
 
-const OpenPatientChartButton = ({ name }: { name: string }) => {
+interface OpenPatientChartButtonProps {
+  appointment: Appointment
+}
+
+const OpenPatientChartButton = ({
+  appointment,
+}: OpenPatientChartButtonProps) => {
+  const { patientId, name, appointmentId } = appointment
   const addTab = useRootStore((state) => state.addTab)
   const router = useRouter()
 
   return (
     <Button
       variant="ghost"
-      className="text-pp-bg-primary gap-x-1 text-[12px] font-[510] cursor-pointer"
+      className="text-pp-bg-primary cursor-pointer gap-x-1 text-[12px] font-[510]"
       onClick={() => {
-        // TODO: pass dynamic patientId in href when backend returns it in the response
-        const href = `/chart/1560`
+        const href = `/chart/${patientId}/quicknotes?id=${appointmentId}`
         addTab({
           href,
-          label: name
+          label: `${name}-${getPatientMRN(patientId)}-${appointmentId}`,
         })
         router.push(href)
       }}

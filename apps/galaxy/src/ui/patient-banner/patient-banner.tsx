@@ -28,8 +28,6 @@ const PatientBanner = async ({ patientId }: PatientBannerProps) => {
 
   const user = response.data
 
-  console.log(GET_PATIENT_PROFILE_IMAGE_ENDPOINT(String(user.id)))
-
   return (
     <Flex
       gap="3"

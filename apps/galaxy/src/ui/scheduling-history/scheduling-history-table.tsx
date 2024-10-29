@@ -28,7 +28,7 @@ const SchedulingHistoryTable = () => {
           </Flex>
         ) : (
           <Box className="min-w-max">
-            <DataTable
+            <DataTable //Add addTab logic like list view table
               columns={columns}
               data={data?.schedulingHistories ?? []}
               isRowSpan

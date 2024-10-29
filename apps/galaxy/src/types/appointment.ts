@@ -80,6 +80,7 @@ interface Appointment {
   lastCoverageDate: string
   facilityAdmissionId: string
   lengthOfStay: number
+  patientId: number
 }
 
 export { type Appointment }

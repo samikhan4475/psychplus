@@ -24,13 +24,14 @@ import { QuickNotesSaver } from './quicknotes-saver'
 
 interface QuickNotesViewProps {
   patientId: string
+  appointmentId: string
 }
 
-const QuickNotesView = ({ patientId }: QuickNotesViewProps) => {
+const QuickNotesView = ({ patientId, appointmentId }: QuickNotesViewProps) => {
   return (
     <Flex width="100%" direction="column">
       <QuickNotesSaver />
-      <QuickNotesHeader />
+      <QuickNotesHeader appointmentId={appointmentId} />
       <Flex className="h-full max-h-[calc(100dvh_-_385px)] w-full">
         <ScrollArea className="h-full pr-3" type="always" scrollbars="vertical">
           <Flex direction="column" height="100%" gap="2">

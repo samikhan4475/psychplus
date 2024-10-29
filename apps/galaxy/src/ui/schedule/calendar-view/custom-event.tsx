@@ -103,7 +103,9 @@ const CustomEvent = ({
                 <VisitStatusDropdown value={visitStatus} />
               </Flex>
               <Flex align="center" className="gap-x-3">
-                <OpenPatientChartButton name={name} />
+                <OpenPatientChartButton
+                  appointment={event.data as Appointment}
+                />
                 <EditVisitDetailsButton />
               </Flex>
             </Flex>

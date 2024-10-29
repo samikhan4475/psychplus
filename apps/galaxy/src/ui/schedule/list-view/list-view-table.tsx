@@ -1,12 +1,14 @@
 'use client'
 
 import { useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import { Flex, ScrollArea } from '@radix-ui/themes'
 import { Table } from '@tanstack/react-table'
 import { DataTable, LoadingPlaceholder } from '@/components'
+import { useStore as useRootStore } from '@/store'
+import { Appointment } from '@/types'
 import { useBookedAppointmentsStore, useStore } from '../store'
 import { columns } from './table-columns'
-import { Appointment } from '@/types'
 
 const DataTableHeader = (table: Table<Appointment>) => {
   const listViewFilters = useStore((state) => state.tableFilters)
@@ -33,10 +35,12 @@ const DataTableHeader = (table: Table<Appointment>) => {
 }
 
 const ListViewTable = () => {
-  const {data, loading} = useBookedAppointmentsStore(state => ({
+  const { data, loading } = useBookedAppointmentsStore((state) => ({
     data: state.listViewData,
     loading: state.loading,
   }))
+  const router = useRouter()
+  const addTab = useRootStore((state) => state.addTab)
 
   return (
     <Flex direction="column" className="w-[100vw] flex-1 px-[26px]">
@@ -45,6 +49,14 @@ const ListViewTable = () => {
           <LoadingPlaceholder />
         ) : (
           <DataTable
+            onRowClick={(row) => {
+              const href = `/chart/${row.original.patientId}/quicknotes?id=${row.original.appointmentId}`
+              addTab({
+                href,
+                label: `${row.original?.name}-${row.original.patientMrn}-${row.original.appointmentId}`,
+              })
+              router.push(href)
+            }}
             columns={columns}
             data={data}
             renderHeader={DataTableHeader}

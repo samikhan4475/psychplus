@@ -52,10 +52,10 @@ const PatientLookupTable = ({ practicesOptions }: PatientLookupTableProps) => {
         data={data.patients}
         columns={columns(practicesOptions)}
         onRowClick={(row) => {
-          const href = `/chart/${row.original.id}`
+          const href = `/chart/${row.original.id}/scheduling-history`
           addTab({
             href,
-            label: `${row.original?.legalName?.firstName} ${row.original.legalName?.lastName}`,
+            label: `${row.original?.legalName?.firstName} ${row.original.legalName?.lastName}-${row.original.medicalRecordNumber}`,
           })
           router.push(href)
         }}
