@@ -45,21 +45,7 @@ const SearchAppointmentsView = ({
     startingDate,
     state,
     setCareTeam,
-  } = useStore((state) => ({
-    loading: state.loading,
-    search: state.search,
-    providerType: state.providerType,
-    appointmentType: state.appointmentType,
-    zipCode: state.zipCode,
-    location: state.location,
-    language: state.language,
-    sortBy: state.sortBy,
-    setZipCode: state.setZipCode,
-    next: state.next,
-    startingDate: state.startingDate,
-    setCareTeam: state.setCareTeam,
-    state: state.state,
-  }))
+  } = useStore()
 
   useEffect(() => {
     useStore.persist.rehydrate()

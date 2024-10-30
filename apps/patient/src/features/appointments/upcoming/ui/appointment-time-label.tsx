@@ -6,6 +6,7 @@ import { Appointment } from '@psychplus-v2/types'
 import {
   getCalendarDate,
   getDayOfWeekLabel,
+  getLocalCalendarDate,
   getMonthLabel,
   getTimeLabel,
 } from '@psychplus-v2/utils'
@@ -29,7 +30,7 @@ const AppointmentTimeLabel = ({
     return null
   }
 
-  const appointmentDate = getCalendarDate(row.startDate)
+  const appointmentDate = getLocalCalendarDate(row.startDate)
 
   return (
     <Flex mt="1" align="center">

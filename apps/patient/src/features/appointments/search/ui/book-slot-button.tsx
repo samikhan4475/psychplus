@@ -219,7 +219,7 @@ const BookSlotButton = ({
 
                   {appointmentType === AppointmentType.InPerson ? (
                     <Text className="text-[12px]">
-                      {getClinicAddressLabel(clinic.contact.addresses)}
+                      {getClinicAddressLabel(clinic.contact?.addresses)}
                     </Text>
                   ) : (
                     <Text highContrast className="text-[12px]">

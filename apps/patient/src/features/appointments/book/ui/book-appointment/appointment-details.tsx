@@ -4,9 +4,9 @@ import { getLocalTimeZone, isToday } from '@internationalized/date'
 import { AppointmentType } from '@psychplus-v2/constants'
 import {
   getAppointmentTypeLabel,
-  getCalendarDate,
   getClinicAddressLabel,
   getDayOfWeekLabel,
+  getLocalCalendarDate,
   getMonthLabel,
   getProviderTypeLabel,
   getTimeLabel,
@@ -19,7 +19,7 @@ import { BookedAppointmentProps } from '@/features/appointments/book/types'
 const AppointmentDetails = ({ bookedSlot }: BookedAppointmentProps) => {
   const { specialist, clinic, slot, appointmentType, providerType } = bookedSlot
 
-  const slotDate = getCalendarDate(slot.startDate)
+  const slotDate = getLocalCalendarDate(slot.startDate)
   const isSlotToday = isToday(slotDate, getLocalTimeZone())
 
   return (
@@ -62,7 +62,7 @@ const AppointmentDetails = ({ bookedSlot }: BookedAppointmentProps) => {
 
         {appointmentType === AppointmentType.InPerson && (
           <Text className="text-[14px] text-[#60646C]" weight="bold">
-            {getClinicAddressLabel(clinic.contact.addresses)}
+            {getClinicAddressLabel(clinic.contact?.addresses)}
           </Text>
         )}
       </Flex>

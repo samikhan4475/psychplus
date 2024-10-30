@@ -12,12 +12,11 @@ import { Box, Button, Flex, Text } from '@radix-ui/themes'
 import { LoadingPlaceholder } from '@/components-v2'
 import type {
   AppointmentAvailability,
-  AppointmentClinic,
   AppointmentSlot,
-  AppointmentSpecialist,
 } from '@/features/appointments/search/types'
 import { useToast } from '@/providers'
 import { searchAppointmentsAction } from '../../search/actions'
+import { transformResponseData } from '../../search/actions/data'
 import { useStore } from '../../search/store/store'
 import { generateDateRange } from '../../search/utils'
 
@@ -70,7 +69,7 @@ const AvailabilityList = ({
           title: result.error,
         })
       } else {
-        setAppointmentAvailability(result.data)
+        setAppointmentAvailability(transformResponseData(result.data))
       }
       setLoading(false)
     }

@@ -2,6 +2,7 @@ import {
   CalendarDate,
   DateFormatter,
   getDayOfWeek,
+  getLocalTimeZone,
   type DateValue,
 } from '@internationalized/date'
 
@@ -115,6 +116,27 @@ const getAgeFromDate = (dateOfBirth: string) => {
   return age
 }
 
+const convertUtcISOToLocalISOString = (
+  utcString: string,
+  timeZone?: string,
+) => {
+  const date = new Date(utcString)
+  const localDate = new Intl.DateTimeFormat('en-US', {
+    timeZone,
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false,
+  }).format(date)
+  const match = localDate.match(/\d+/g) || []
+  const [month, day, year, hour, minute, second] = match
+  const iosDate = `${year}-${month}-${day}T${hour}:${minute}:${second}`
+  return iosDate
+}
+
 export {
   getCalendarDate,
   getLocalCalendarDate,
@@ -126,4 +148,5 @@ export {
   getDayOfWeekLabel,
   getTimeLabel,
   getSlashedDateString,
+  convertUtcISOToLocalISOString,
 }

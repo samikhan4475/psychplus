@@ -1,5 +1,10 @@
 import { AppointmentType, ProviderType } from '@psychplus-v2/constants'
-import type { ClinicContactDetails, LegalName } from '@psychplus-v2/types'
+import type {
+  Clinic,
+  ClinicContactDetails,
+  LegalName,
+  Specialist,
+} from '@psychplus-v2/types'
 
 interface CurrentLocation {
   latitude: number
@@ -15,6 +20,7 @@ interface AppointmentSlot {
   startDate: string
   endDate: string
   servicesOffered: string[]
+  startDateUtc?: string
 }
 
 interface AppointmentSpecialist {
@@ -41,6 +47,25 @@ interface AppointmentAvailability {
   specialistTypeCode: ProviderType
 }
 
+interface AvailabilityApiResponse {
+  availableSlots: {
+    type: AppointmentType
+    isPlusSlot: boolean
+    duration: number
+    startDate: string
+    startDateUtc?: string
+    endDate: string
+    servicesOffered: string[]
+  }[]
+  specialist: Specialist
+  clinic: Clinic
+  specialistTypeCode: ProviderType
+}
+
+interface AppointmentsSearchApiResponse {
+  staffAppointmentAvailabilities: AvailabilityApiResponse[]
+}
+
 export type {
   AppointmentSpecialist,
   CurrentLocation,
@@ -48,4 +73,5 @@ export type {
   SlotsByDay,
   AppointmentSlot,
   AppointmentClinic,
+  AppointmentsSearchApiResponse
 }

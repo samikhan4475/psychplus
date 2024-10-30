@@ -17,6 +17,7 @@ import type {
   AppointmentAvailability,
   CurrentLocation,
 } from '@/features/appointments/search/types'
+import { transformResponseData } from '../actions/data'
 
 interface Store {
   loading: boolean
@@ -133,7 +134,7 @@ const useStore = create<Store>()(
           includeDistance: get().appointmentType === AppointmentType.InPerson,
           includeStaffBio: false,
           currentLocation: get().location ?? null,
-          nextAvailableAppointment: true,
+          nextAvailableAppointment: true
         })
 
         if (result.state === 'error') {
@@ -142,10 +143,12 @@ const useStore = create<Store>()(
             error: result.error,
           })
         } else {
+          const data = transformResponseData(result.data, getLocalTimeZone())
+
           set({
             loading: false,
-            data: result.data,
-            cache: { ...get().cache, [cacheKey]: result.data },
+            data: data,
+            cache: { ...get().cache, [cacheKey]: data },
           })
         }
       },

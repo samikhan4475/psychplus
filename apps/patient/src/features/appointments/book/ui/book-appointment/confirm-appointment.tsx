@@ -5,8 +5,8 @@ import { AppointmentType } from '@psychplus-v2/constants'
 import {
   cn,
   getAppointmentTypeLabel,
-  getCalendarDate,
   getClinicAddressLabel,
+  getLocalCalendarDate,
   getProviderTypeLabel,
   getUserFullName,
 } from '@psychplus-v2/utils'
@@ -31,7 +31,7 @@ const ConfirmAppointment = ({
     CONFIRMATION_NOTES.find((c) => c.appointmentType === appointmentType)
       ?.notes ?? []
 
-  const slotDate = getCalendarDate(slot.startDate)
+  const slotDate = getLocalCalendarDate(slot.startDate)
 
   const specialistName = `${getUserFullName(specialist.legalName)}${
     specialist.legalName.honors ? `, ${specialist.legalName.honors}` : ''
@@ -44,7 +44,7 @@ const ConfirmAppointment = ({
     description: '',
     location:
       appointmentType === AppointmentType.InPerson
-        ? getClinicAddressLabel(clinic.contact.addresses)
+        ? getClinicAddressLabel(clinic.contact?.addresses)
         : '',
   }
 
@@ -99,7 +99,7 @@ const ConfirmAppointment = ({
               </Text>
               {appointmentType === AppointmentType.InPerson && (
                 <Text className="text-[12px] leading-3 text-[#575759]">
-                  {getClinicAddressLabel(clinic.contact.addresses)}
+                  {getClinicAddressLabel(clinic.contact?.addresses)}
                 </Text>
               )}
 

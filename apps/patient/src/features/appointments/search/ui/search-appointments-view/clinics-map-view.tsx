@@ -36,7 +36,7 @@ const getAllAvailabilityClinics = (
     for (const clinic of availability.clinics) {
       const key = `${clinic.id}`
 
-      const coords = clinic.contact.addresses?.[0].geoCoordinates
+      const coords = clinic.contact?.addresses?.[0].geoCoordinates
 
       if (!coords) {
         continue

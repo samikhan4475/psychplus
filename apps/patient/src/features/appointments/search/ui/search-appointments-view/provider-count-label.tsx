@@ -1,4 +1,4 @@
-import { Text } from '@radix-ui/themes'
+import { Flex, Text } from '@radix-ui/themes'
 import { useSortedFilteredData } from '../../store/hooks'
 
 const ProviderCountLabel = () => {
@@ -19,12 +19,14 @@ const ProviderCountLabel = () => {
   }
 
   return (
-    <Text
-      weight="medium"
-      className="mr-[48px] w-[240px] text-[20px] text-accent-12"
-    >
-      {label}
-    </Text>
+    <Flex direction="column" align="center" justify="center">
+      <Text
+        weight="medium"
+        className="mr-[48px] w-[240px] text-[20px] text-accent-12"
+      >
+        {label}
+      </Text>
+    </Flex>
   )
 }
 

@@ -90,6 +90,7 @@ const BookAppointmentButton = ({
   useEffect(() => {
     setPolicyAlreadySigned(checkIfPolicyBSigned(userConsents))
     form.setValue('userAgreed', policyAlreadySigned)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userConsents, policyAlreadySigned])
 
   useEffect(() => {
@@ -98,6 +99,7 @@ const BookAppointmentButton = ({
 
     setPolicyAlreadySigned(checkIfPolicyBSigned(userConsents))
     form.setValue('userAgreed', policyAlreadySigned)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userConsents])
 
   const careTeamExists = checkCareTeamExists(
@@ -137,7 +139,7 @@ const BookAppointmentButton = ({
         specialistStaffId: specialist.id,
         specialistTypeCode: providerType,
         type: appointmentType,
-        startDate: slot.startDate,
+        startDate: slot.startDateUtc ?? slot.startDate,
         duration: slot.duration,
         serviceId: slot.servicesOffered?.[0],
         locationId: clinic.id,
@@ -163,7 +165,6 @@ const BookAppointmentButton = ({
         })
       } catch (error) {
         setError(error as string)
-        console.log(error)
         setLoading(false)
         return
       }

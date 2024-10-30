@@ -36,7 +36,7 @@ const ClinicSelector = ({
           >
             <Text className="text-[12px] font-[600]">
               {clinics[selectedClinic].name}{' '}
-              {getClinicAddressLabel(clinics[selectedClinic].contact.addresses)}
+              {getClinicAddressLabel(clinics[selectedClinic]?.contact?.addresses)}
             </Text>
             {hasMultipleClinics ? (
               <ChevronDownIcon
@@ -72,7 +72,7 @@ const ClinicSelector = ({
                   {clinic.name}
                 </Text>
                 <Text className="text-[12px]">
-                  {getClinicAddressLabel(clinic.contact.addresses)}
+                  {getClinicAddressLabel(clinic.contact?.addresses)}
                 </Text>
               </Flex>
             </DropdownMenu.Item>

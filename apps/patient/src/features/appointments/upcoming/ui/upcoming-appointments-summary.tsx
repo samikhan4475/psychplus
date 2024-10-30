@@ -254,7 +254,7 @@ const UpcomingAppointmentsSummaryComponent = async () => {
                     {row.type === AppointmentType.InPerson && (
                       <Link
                         href={getClinicAddressDirectionMapUrl(
-                          row.clinic.contact.addresses,
+                          row.clinic.contact?.addresses,
                         )}
                         target="_blank"
                       >

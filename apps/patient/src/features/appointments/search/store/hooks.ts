@@ -5,12 +5,7 @@ import { generateDateRange, getEarliestSlot } from '../utils'
 import { useStore } from './store'
 
 const useSortedFilteredData = () => {
-  const { data, sortBy, language, startingDate } = useStore((state) => ({
-    data: state.data,
-    sortBy: state.sortBy,
-    language: state.language,
-    startingDate: state.startingDate,
-  }))
+  const { data, sortBy, language, startingDate } = useStore()
 
   if (!data) {
     return []
