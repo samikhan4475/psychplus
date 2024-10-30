@@ -158,7 +158,7 @@ const BookAppointmentButton = ({
           specialistStaffId: specialist.id,
           specialistTypeCode: providerType,
           type: appointmentType,
-          startDate: slot.startDate,
+          startDate: slot.startDateUtc ?? slot.startDate,
           duration: slot.duration,
           serviceId: slot.servicesOffered?.[0],
           isSelfPay: paymentMethod === PaymentType.SelfPay,
