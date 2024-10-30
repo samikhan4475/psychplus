@@ -35,6 +35,7 @@ const SearchAppointmentsPage = async ({
     clinic,
     specialist,
     appointmentId,
+    specialistId,
   } = searchParams
 
   const [
@@ -95,6 +96,7 @@ const SearchAppointmentsPage = async ({
           patientInsurances={patientInsurancesResponse.data}
           insurancePayers={insurancePayerResponse.data}
           appointmentId={appointmentId}
+          specialistId={specialistId}
         />
       </GooglePlacesContextProvider>
     </CodesetStoreProvider>

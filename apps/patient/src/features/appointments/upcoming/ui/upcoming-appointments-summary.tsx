@@ -137,6 +137,8 @@ const UpcomingAppointmentsSummaryComponent = async () => {
                         <AppointmentEditButton 
                           appointmentType={row.type === 'InPerson' ? AppointmentType.InPerson : AppointmentType.Virtual} 
                           providerType={row.specialistTypeCode === 1 ? ProviderType.Psychiatrist : ProviderType.Therapist} 
+                          appointmentId={row.id}
+                          specialistId={row.specialist.id}
                         />
                       </Flex>
                       <Flex

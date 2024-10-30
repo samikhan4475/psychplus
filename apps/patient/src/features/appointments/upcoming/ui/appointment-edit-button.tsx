@@ -7,13 +7,17 @@ import { EditIcon } from '@/components-v2'
 import { APPOINTMENTS_SEARCH_SESSION_KEY } from '@/features/appointments/search/constants'
 
 interface AppointmentEditButtonProps {
-  appointmentType: AppointmentType,
+  appointmentType: AppointmentType
   providerType: ProviderType
+  appointmentId: number
+  specialistId: number
 }
 
 const AppointmentEditButton = ({
   appointmentType,
   providerType,
+  appointmentId,
+  specialistId,
 }: AppointmentEditButtonProps) => {
   const router = useRouter()
 
@@ -29,11 +33,13 @@ const AppointmentEditButton = ({
       }),
     )
 
-    router.push(`/appointments/search`)
+    router.push(
+      `/appointments/search?appointmentId=${appointmentId}&specialistId=${specialistId}`,
+    )
   }
 
   return (
-    <Tooltip 
+    <Tooltip
       content="Change Provider for appointment"
       delayDuration={300}
       className="max-w-[200px]"
@@ -42,7 +48,7 @@ const AppointmentEditButton = ({
         variant="soft"
         onClick={onSchedule}
         radius="small"
-        className="bg-white p-0 height-[16px] cursor-pointer"
+        className="bg-white height-[16px] cursor-pointer p-0"
       >
         <EditIcon />
       </Button>

@@ -150,19 +150,20 @@ const BookAppointmentButton = ({
         return
       }
     } else {
-      const result = await bookAppointmentAction({
-        locationId: clinic.id,
-        specialistStaffId: specialist.id,
-        specialistTypeCode: providerType,
-        type: appointmentType,
-        startDate: slot.startDate,
-        duration: slot.duration,
-        serviceId: slot.servicesOffered?.[0],
-        isSelfPay: paymentMethod === PaymentType.SelfPay,
-      })
-
-      if (result.state === 'error') {
-        setError(result.error as string)
+      try {
+        await bookAppointmentAction({
+          locationId: clinic.id,
+          specialistStaffId: specialist.id,
+          specialistTypeCode: providerType,
+          type: appointmentType,
+          startDate: slot.startDate,
+          duration: slot.duration,
+          serviceId: slot.servicesOffered?.[0],
+          isSelfPay: paymentMethod === PaymentType.SelfPay,
+        })
+      } catch (error) {
+        setError(error as string)
+        console.log(error)
         setLoading(false)
         return
       }
