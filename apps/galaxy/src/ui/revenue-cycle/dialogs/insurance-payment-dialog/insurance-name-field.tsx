@@ -1,26 +1,19 @@
 'use client'
 
-import { TextField } from '@radix-ui/themes'
-import { useFormContext } from 'react-hook-form'
-import {
-  FormFieldContainer,
-  FormFieldError,
-  FormFieldLabel,
-} from '@/components/form'
-import { SchemaType } from './insurance-payment-form'
+import { FormFieldContainer, FormFieldLabel } from '@/components/form'
+import { getInsurancePayerOptionsAction } from '../../actions'
+import { AsyncAutoCompleteTextField } from '../../shared'
 
 const InsuranceNameField = () => {
-  const form = useFormContext<SchemaType>()
-
   return (
     <FormFieldContainer className="flex-1 gap-0">
       <FormFieldLabel>Insurance Name</FormFieldLabel>
-      <TextField.Root
-        size="1"
-        {...form.register('insuranceName')}
-        placeholder="John Doe"
+      <AsyncAutoCompleteTextField
+        fetchDataAction={getInsurancePayerOptionsAction}
+        field="insuranceName"
+        placeholder="Search"
+        valueKey="label"
       />
-      <FormFieldError name="insuranceName" />
     </FormFieldContainer>
   )
 }

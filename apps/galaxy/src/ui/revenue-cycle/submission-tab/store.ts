@@ -48,7 +48,7 @@ const useStore = create<Store>((set, get) => ({
       formValues,
     })
     const result = await getClaimsListAction({
-      ...{
+      payload: {
         ...formValues,
         isForcePaper: get().selectedTab === TabValue.PaperSubmission,
       },

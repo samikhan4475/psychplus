@@ -146,13 +146,14 @@ interface ClaimListSearchParams {
   isIncludeMetadataResourceChangeControl?: boolean
   isIncludeMetadataResourceIds?: boolean
   isIncludeMetadataResourceStatus?: boolean
-  patientId?: number
+  patientId?: string
   insuranceId?: string
   claimId?: string
   locationId?: string
   dateType?: string
   isIncludePatientInsurancePlan?: boolean
   receiverName?: string
+  isForcePaper?: boolean
 }
 
 interface InsurancePaymentSearchParams {

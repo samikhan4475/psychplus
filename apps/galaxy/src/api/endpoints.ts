@@ -195,6 +195,7 @@ const UPDATE_PATIENT_DRIVING_LICENSE_IMAGE_ENDPOINT = (
 ) => `${API_URL}/api/patients/${patientId}/driverslicenseimage/${side}`
 const GET_ORGANIZATION_ROLES = `${API_URL}/api/organizations/actions/search`
 const GET_ORGANIZATIONS_ENDPOINT = `${API_URL}/api/organizations/actions/search`
+const GET_INSURANCE_PAYERS_LIST_ENDPOINT = `${API_URL}/api/insurance/plans/actions/search`
 const GET_PRACTICES_ENDPOINT = `${API_URL}/api/practices/actions/search`
 const GET_PATIENT_VITALS_ENDPOINT = `${API_URL}/api/patientvitalsigns/actions/search`
 const ADD_PATIENT_VITAL_ENDPOINT = (patientId: string) =>
@@ -342,8 +343,9 @@ export {
   UPLOAD_TEMPLATE_REPORT_ENDPOINT,
   EDIT_TEMPLATE_ENDPOINT,
   GET_ALL_STAFF_ENDPOINT,
+  GET_INSURANCE_PAYERS_LIST_ENDPOINT,
   SEARCH_FAVOURITE_DIAGNOSIS_ENDPOINT,
   FAVOURITE_DIAGNOSIS_ENDPOINT,
   GET_APPOINTMENT,
-  DOWNLOAD_TEMPLATE_REPORT
+  DOWNLOAD_TEMPLATE_REPORT,
 }
