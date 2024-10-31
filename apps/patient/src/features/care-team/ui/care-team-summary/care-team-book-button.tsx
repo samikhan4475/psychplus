@@ -26,7 +26,7 @@ const CareTeamBookButton = ({
         state: {
           providerType:
             careTeamMember.specialist ===
-            getProviderTypeLabel(ProviderType.Psychiatrist)
+            ProviderType[ProviderType.Psychiatrist]
               ? ProviderType.Psychiatrist
               : ProviderType.Therapist,
           appointmentType: AppointmentType.Virtual,
