@@ -1,7 +1,8 @@
 import React from 'react'
 import * as Accordion from '@radix-ui/react-accordion'
-import { CaretUpIcon, PlusIcon } from '@radix-ui/react-icons'
-import { Button, Flex, Text } from '@radix-ui/themes'
+import { CaretUpIcon } from '@radix-ui/react-icons'
+import { Flex, Text } from '@radix-ui/themes'
+import { ClaimSelectionDialog } from '../dialogs/claim-selection-dialog'
 
 const PaymentDetailHeader = () => {
   return (
@@ -25,17 +26,7 @@ const PaymentDetailHeader = () => {
         align="center"
         className="ml-3 cursor-pointer hover:underline"
       >
-        <Button
-          size="1"
-          highContrast
-          variant="solid"
-          onClick={() => {
-            // TODO: Implemention of Claim Modal Opening
-          }}
-        >
-          <PlusIcon />
-          Add New Claim
-        </Button>
+        <ClaimSelectionDialog/>
       </Flex>
     </Flex>
   )

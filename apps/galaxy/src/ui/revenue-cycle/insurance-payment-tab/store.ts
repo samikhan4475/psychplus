@@ -1,10 +1,9 @@
 import { create } from 'zustand'
-import { Sort } from '@/types'
+import { Claim, Sort } from '@/types'
 import { getNewSortDir } from '@/utils'
 import { getInsurancePaymentListAction } from '../actions'
 import {
   GetInsurancePaymentListResponse,
-  InsurancePayment,
   InsurancePaymentSearchParams,
 } from '../types'
 
@@ -16,6 +15,8 @@ interface Store {
   page: number
   sort?: Sort
   pageCache: Record<number, GetInsurancePaymentListResponse>
+  paymentPostingClaim: Record<string, Claim | undefined>
+  setPaymentPostingClaim: (paymentId: string, postingClaim?: Claim) => void
   jumpToPage: (page: number) => void
   search: (
     payload?: InsurancePaymentSearchParams,
@@ -32,7 +33,20 @@ const useStore = create<Store>((set, get) => ({
   page: 1,
   pageCache: {},
   sort: undefined,
+  paymentPostingClaim: {},
+  setPaymentPostingClaim: (paymentId: string, postingClaim?: Claim) => {
+    const matchingPostingClaim = get().paymentPostingClaim[paymentId]
 
+    const newPaymentPostingClaims = { ...get().paymentPostingClaim }
+
+    if (matchingPostingClaim) {
+      delete newPaymentPostingClaims[paymentId]
+    } else {
+      newPaymentPostingClaims[paymentId] = postingClaim
+    }
+
+    set({ paymentPostingClaim: newPaymentPostingClaims })
+  },
   search: async (
     payload?: InsurancePaymentSearchParams,
     page = 1,

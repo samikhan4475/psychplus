@@ -1,0 +1,17 @@
+import React from 'react'
+import { PropsWithRow } from '@/components'
+import { ClaimServiceLinePayment } from '@/ui/revenue-cycle/types'
+import { DollarInput } from './dollar-input'
+import { amountCheck } from './utils'
+
+const WriteoffAmountCell = ({ row }: PropsWithRow<ClaimServiceLinePayment>) => {
+  return (
+    <DollarInput
+      disabled={true}
+      name={`claimServiceLinePayments.${row.index}.adjustmentAmount`}
+      onKeyDown={amountCheck}
+    />
+  )
+}
+
+export { WriteoffAmountCell }

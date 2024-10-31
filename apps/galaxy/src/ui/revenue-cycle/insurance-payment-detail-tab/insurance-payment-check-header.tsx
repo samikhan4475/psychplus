@@ -50,7 +50,7 @@ const PaymentCheckHeader = ({ paymentDetail }: PaymentCheckHeaderProps) => {
           Check Date:
         </Text>
         <Text size="1">
-          {formatDate(String(paymentDetail.checkDate), 'MM-dd-yyyy')}
+          {formatDate(String(paymentDetail.checkDate), 'MM/dd/yyyy')}
         </Text>
       </Flex>
       <Flex gap="2">
@@ -58,7 +58,7 @@ const PaymentCheckHeader = ({ paymentDetail }: PaymentCheckHeaderProps) => {
           Received Date:
         </Text>
         <Text size="1">
-          {formatDate(String(paymentDetail.receivedDate), 'MM-dd-yyyy')}
+          {formatDate(String(paymentDetail.receivedDate), 'MM/dd/yyyy')}
         </Text>
       </Flex>
       <Flex gap="2">
@@ -66,7 +66,7 @@ const PaymentCheckHeader = ({ paymentDetail }: PaymentCheckHeaderProps) => {
           Deposit Date:
         </Text>
         <Text size="1">
-          {formatDate(String(paymentDetail.depositDate), 'MM-dd-yyyy')}
+          {formatDate(String(paymentDetail.depositDate), 'MM/dd/yyyy')}
         </Text>
       </Flex>
     </Grid>

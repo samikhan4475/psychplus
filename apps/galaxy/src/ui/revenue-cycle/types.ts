@@ -24,17 +24,16 @@ interface PaymentAttachments {
 
 interface ServiceLinePaymentAdjustment {
   id: string
-  metadata: Metadata
   recordStatus: string
   claimServiceLinePaymentId: string
-  adjustmentAmount: 0
+  adjustmentAmount: number
   adjustmentReasonCode: string
   remarkCode: string
   adjustmentGroupCode: string
 }
 interface ClaimServiceLinePayment {
   id: string
-  metadata: Metadata
+  chargeId: string
   recordStatus: string
   claimPaymentId: string
   claimServiceLineId: string
@@ -43,6 +42,7 @@ interface ClaimServiceLinePayment {
   cptCode: string
   units: number
   billedAmount: number
+  totalAmount: number
   allowedAmount: number
   paidAmount: number
   copayAmount: number
@@ -51,10 +51,10 @@ interface ClaimServiceLinePayment {
   otherPR: number
   writeOffAmount: number
   modifierCode1: string
-  modifierCode2: string
-  modifierCode3: string
-  modifierCode4: string
-  serviceLinePaymentAdjustments: ServiceLinePaymentAdjustment[]
+  modifierCode2?: string
+  modifierCode3?: string
+  modifierCode4?: string
+  serviceLinePaymentAdjustments?: ServiceLinePaymentAdjustment[]
 }
 
 interface InsurancePayment {
@@ -94,8 +94,18 @@ interface ClaimPayment {
   insurancePolicyId: string
   processedAsCode: string
   insuranceInternalControlNumber: string
+  status: string
+  billedAmount: number
+  allowedAmount: number
+  paidAmount: number
+  copayAmount: number
+  coinsuranceAmount: number
+  deductibleAmount: number
+  otherPr: number
+  writeOffAmount: number
   claimServiceLinePayments: ClaimServiceLinePayment[]
 }
+
 interface GetClaimsListResponse {
   claims: Claim[]
   total: number
@@ -218,6 +228,9 @@ interface PracticeList {
 
 export {
   RevenueCycleTab,
+  type ClaimServiceLinePayment,
+  type ServiceLinePaymentAdjustment,
+  type ClaimPayment,
   type ClearingHouseReceiver,
   type ErrorMessage,
   type ClaimResponseType,

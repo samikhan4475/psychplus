@@ -1,133 +1,129 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import * as Accordion from '@radix-ui/react-accordion'
 import { ScrollArea } from '@radix-ui/themes'
 import { ColumnDef } from '@tanstack/react-table'
-import { ColumnHeader, DataTable, DateCell, TextCell } from '@/components'
-import { Claim } from '@/types'
-import { formatDate } from '@/utils'
-import { InsurancePayment } from '../types'
+import { ColumnHeader, DataTable, TextCell } from '@/components'
+import { ClaimPayment, InsurancePayment } from '../types'
+import { ActionsCell } from './actions-cell'
 import { InsurancePaymentTableTabs } from './insurance-payment-table-tabs'
 import { PaymentDetailHeader } from './payment-detail-header'
+import { PaymentListTypes } from './types'
 
-const columns: ColumnDef<Claim>[] = [
+const columns: ColumnDef<ClaimPayment>[] = [
   {
-    id: 'claimNumber',
-    header: ({ column }) => <ColumnHeader label="Claim #" sortable />,
-    cell: ({ row }) => {
-      return <TextCell>{row.original.claimNumber}</TextCell>
-    },
+    id: 'claimId',
+    header: ({ column }) => <ColumnHeader column={column} label="Claim #" />,
+    cell: ({ row }) => <TextCell>{row.original.claimId}</TextCell>,
   },
   {
     id: 'dosFrom',
-    header: ({ column }) => <ColumnHeader label="Dos From" sortable />,
-    cell: ({ row }) => {
-      return <DateCell>{formatDate(row.original.dateOfServiceFrom)}</DateCell>
-    },
+    header: ({ column }) => <ColumnHeader column={column} label="DOS From" />,
+    cell: ({ row }) => <TextCell>--</TextCell>,
   },
   {
     id: 'dosTo',
-    header: ({ column }) => <ColumnHeader label="Dos To" sortable />,
-    cell: ({ row }) => {
-      return <DateCell>{formatDate(row.original.dateOfServiceTo)}</DateCell>
-    },
+    header: ({ column }) => <ColumnHeader column={column} label="DOS To" />,
+    cell: ({ row }) => <TextCell>--</TextCell>,
   },
   {
-    id: 'claimStatus',
-    header: ({ column }) => <ColumnHeader label="Claim Status" sortable />,
-    cell: ({ row }) => {
-      return <TextCell>{row.original.claimStatusCode}</TextCell>
-    },
+    id: 'status',
+    header: ({ column }) => (
+      <ColumnHeader column={column} label="Claim Status" />
+    ),
+    cell: ({ row }) => <TextCell>{row.original.status}</TextCell>,
   },
   {
     id: 'patientName',
-    header: ({ column }) => <ColumnHeader label="Patient Name" sortable />,
-    cell: ({ row }) => {
-      return <TextCell>{row.original.patientName}</TextCell>
-    },
+    header: ({ column }) => (
+      <ColumnHeader column={column} label="Patient Name" />
+    ),
+    cell: ({ row }) => <TextCell>--</TextCell>,
+  },
+  {
+    id: 'processedAsCode',
+    header: ({ column }) => <ColumnHeader column={column} label="Process As" />,
+    cell: ({ row }) => <TextCell>{row.original.processedAsCode}</TextCell>,
+  },
+  {
+    id: 'billedAmount',
+    header: ({ column }) => (
+      <ColumnHeader column={column} label="Billed Amount" />
+    ),
+    cell: ({ row }) => (
+      <TextCell hasPayment>{row.original.billedAmount}</TextCell>
+    ),
+  },
+  {
+    id: 'allowedAmount',
+    header: ({ column }) => (
+      <ColumnHeader column={column} label="Allowed Amount" />
+    ),
+    cell: ({ row }) => (
+      <TextCell hasPayment>{row.original.allowedAmount}</TextCell>
+    ),
+  },
+  {
+    id: 'paidAmount',
+    header: ({ column }) => (
+      <ColumnHeader column={column} label="Paid Amount" />
+    ),
+    cell: ({ row }) => (
+      <TextCell hasPayment>{row.original.paidAmount}</TextCell>
+    ),
   },
   {
     id: 'noindex',
-    header: ({ column }) => <ColumnHeader label="Process As" sortable />,
-    cell: ({ row }) => {
-      return <TextCell>-</TextCell>
-    },
+    header: ({ column }) => (
+      <ColumnHeader column={column} label="Patient Paid" />
+    ),
+    cell: ({ row }) => <TextCell>--</TextCell>,
+  },
+  {
+    id: 'copayAmount',
+    header: ({ column }) => <ColumnHeader column={column} label="Copay" />,
+    cell: ({ row }) => (
+      <TextCell hasPayment>{row.original.copayAmount}</TextCell>
+    ),
+  },
+  {
+    id: 'coinsuranceAmount',
+    header: ({ column }) => (
+      <ColumnHeader column={column} label="Co-Insurance" />
+    ),
+    cell: ({ row }) => (
+      <TextCell hasPayment>{row.original.coinsuranceAmount}</TextCell>
+    ),
+  },
+  {
+    id: 'deductibleAmount',
+    header: ({ column }) => <ColumnHeader column={column} label="Deductible" />,
+    cell: ({ row }) => (
+      <TextCell hasPayment>{row.original.deductibleAmount}</TextCell>
+    ),
+  },
+  {
+    id: 'otherPr',
+    header: ({ column }) => <ColumnHeader column={column} label="Other PR" />,
+    cell: ({ row }) => <TextCell hasPayment>{row.original.otherPr}</TextCell>,
+  },
+  {
+    id: 'writeOffAmount',
+    header: ({ column }) => (
+      <ColumnHeader column={column} label="Adjustment Amount" />
+    ),
+    cell: ({ row }) => (
+      <TextCell hasPayment>{row.original.writeOffAmount}</TextCell>
+    ),
+  },
+  {
+    id: 'recordStatus',
+    header: ({ column }) => <ColumnHeader column={column} label="Status" />,
+    cell: ({ row }) => <TextCell>{row.original.recordStatus}</TextCell>,
   },
   {
     id: 'noindex',
-    header: ({ column }) => <ColumnHeader label="Billed Amount" sortable />,
-    cell: ({ row }) => {
-      return <TextCell>-</TextCell>
-    },
-  },
-  {
-    id: 'noindex',
-    header: ({ column }) => <ColumnHeader label="Allowed Amount" sortable />,
-    cell: ({ row }) => {
-      return <TextCell>-</TextCell>
-    },
-  },
-  {
-    id: 'noindex',
-    header: ({ column }) => <ColumnHeader label="Paid Amount" sortable />,
-    cell: ({ row }) => {
-      return <TextCell>-</TextCell>
-    },
-  },
-  {
-    id: 'noindex',
-    header: ({ column }) => <ColumnHeader label="Patient Paid" sortable />,
-    cell: ({ row }) => {
-      return <TextCell>-</TextCell>
-    },
-  },
-  {
-    id: 'noindex',
-    header: ({ column }) => <ColumnHeader label="Copay" sortable />,
-    cell: ({ row }) => {
-      return <TextCell>-</TextCell>
-    },
-  },
-  {
-    id: 'noindex',
-    header: ({ column }) => <ColumnHeader label="Co-Insurance" sortable />,
-    cell: ({ row }) => {
-      return <TextCell>-</TextCell>
-    },
-  },
-  {
-    id: 'noindex',
-    header: ({ column }) => <ColumnHeader label="Deductible" sortable />,
-    cell: ({ row }) => {
-      return <TextCell>-</TextCell>
-    },
-  },
-  {
-    id: 'noindex',
-    header: ({ column }) => <ColumnHeader label="Other PR" sortable />,
-    cell: ({ row }) => {
-      return <TextCell>-</TextCell>
-    },
-  },
-  {
-    id: 'noindex',
-    header: ({ column }) => <ColumnHeader label="Adjustment Amount" sortable />,
-    cell: ({ row }) => {
-      return <TextCell>-</TextCell>
-    },
-  },
-  {
-    id: 'noindex',
-    header: ({ column }) => <ColumnHeader label="Status" sortable />,
-    cell: ({ row }) => {
-      return <TextCell>-</TextCell>
-    },
-  },
-  {
-    id: 'noindex',
-    header: ({ column }) => <ColumnHeader label="Actions" sortable />,
-    cell: ({ row }) => {
-      return <TextCell>-</TextCell>
-    },
+    header: ({ column }) => <ColumnHeader column={column} label="Actions" />,
+    cell: ({ row }) => <ActionsCell row={row} />,
   },
 ]
 
@@ -136,6 +132,18 @@ interface PaymentCheckHeaderProps {
 }
 
 const PaymentCheckTable = ({ paymentDetail }: PaymentCheckHeaderProps) => {
+  const [claimPayments, setClaimPayments] = useState(
+    paymentDetail.claimPayments,
+  )
+  const [paymentListType, setPaymentListType] = useState<PaymentListTypes>(
+    PaymentListTypes.All,
+  )
+
+  useEffect(() => {
+    // TODO: Will be used as filter at client side based on list type selected (setClaimPayments)
+    setClaimPayments(paymentDetail.claimPayments) //will be applied filter based on API
+  }, [paymentListType])
+
   return (
     <Accordion.Root
       className="rounded-3 border-[2px] border-gray-3 "
@@ -146,9 +154,17 @@ const PaymentCheckTable = ({ paymentDetail }: PaymentCheckHeaderProps) => {
       <Accordion.Item className="shadow-sm " value="item-1">
         <PaymentDetailHeader />
         <Accordion.AccordionContent className="px-3 py-2">
-          <InsurancePaymentTableTabs />
+          <InsurancePaymentTableTabs
+            paymentListType={paymentListType}
+            setPaymentListType={setPaymentListType}
+          />
           <ScrollArea>
-            <DataTable data={[]} columns={columns} disablePagination sticky />
+            <DataTable
+              data={claimPayments ?? []}
+              columns={columns}
+              disablePagination
+              sticky
+            />
           </ScrollArea>
         </Accordion.AccordionContent>
       </Accordion.Item>

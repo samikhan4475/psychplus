@@ -1,9 +1,9 @@
 'use server'
 
 import * as api from '@/api'
-import { InsurancePayment } from '../../types'
+import { InsurancePayment } from '../types'
 
-const getPaymentDetail = async (
+const getPaymentDetailAction = async (
   paymentId: string,
 ): Promise<api.ActionResult<InsurancePayment>> => {
   const result = await api.GET<InsurancePayment>(
@@ -20,4 +20,4 @@ const getPaymentDetail = async (
     data: result.data,
   }
 }
-export { getPaymentDetail }
+export { getPaymentDetailAction }

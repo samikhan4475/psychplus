@@ -166,6 +166,7 @@ interface Claim {
   claimFrequencyCode: string
   lastSeenDate: Date
   patientName: string
+  patientDateOfBirth: string
   patientAccountNumber: string
   dos: string
   status: string

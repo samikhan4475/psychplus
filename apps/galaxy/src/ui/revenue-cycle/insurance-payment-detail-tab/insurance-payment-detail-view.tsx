@@ -1,13 +1,16 @@
 'use client'
 
-import { useEffect } from 'react'
-import { Flex } from '@radix-ui/themes'
+import { useEffect, useState } from 'react'
+import { Flex, Text } from '@radix-ui/themes'
+import toast from 'react-hot-toast'
 import { LoadingPlaceholder } from '@/components'
+import { getPaymentDetailAction } from '../actions'
+import { useStore } from '../insurance-payment-tab/store'
 import { useStore as useTabStore } from '../store'
-import { RevenueCycleTab } from '../types'
+import { InsurancePayment, RevenueCycleTab } from '../types'
 import { PaymentCheckHeader } from './insurance-payment-check-header'
 import { PaymentCheckTable } from './insurance-payment-check-table'
-import { useStore } from './store'
+import { InsurancePaymentPostingView } from './insurance-payment-posting-tab'
 
 interface InsurancePaymentDetailViewProps {
   checkId: string
@@ -15,26 +18,48 @@ interface InsurancePaymentDetailViewProps {
 const InsurancePaymentDetailView = ({
   checkId,
 }: InsurancePaymentDetailViewProps) => {
-  const { fetchPaymentDetail, loading, data } = useStore((state) => ({
-    fetchPaymentDetail: state.fetchPaymentDetail,
-    loading: state.loading,
-    data: state.data,
-  }))
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [paymentDetail, setPaymentDetail] = useState<InsurancePayment>()
   const activeTab = useTabStore((state) => state.activeTab)
+  const paymentPostingClaim = useStore(
+    (state) => state.paymentPostingClaim[activeTab],
+  )
+  const fetchPaymentDetail = (checkId: string) => {
+    setIsLoading(true)
+    getPaymentDetailAction(checkId).then((result) => {
+      if (result.state === 'success') {
+        setPaymentDetail(result.data)
+      } else if (result.state === 'error') {
+        toast.error(result.error)
+      }
+      setIsLoading(false)
+    })
+  }
+
   useEffect(() => {
-    if (activeTab.includes(RevenueCycleTab.CheckDetails))
-      fetchPaymentDetail(checkId)
+    if (!activeTab.includes(RevenueCycleTab.CheckDetails)) return
+    fetchPaymentDetail(checkId)
   }, [checkId, activeTab])
 
-  if (loading) return <LoadingPlaceholder className="bg-white min-h-[46vh]" />
+  if (isLoading) return <LoadingPlaceholder className="bg-white min-h-[46vh]" />
 
-  if (data)
+  if (!paymentDetail)
     return (
-      <Flex gapY="2" direction="column">
-        <PaymentCheckHeader paymentDetail={data} />
-        <PaymentCheckTable paymentDetail={data} />
-      </Flex>
+      <Text size="2" weight="bold">
+        No Payment Found
+      </Text>
     )
+
+  return (
+    <Flex gapY="2" direction="column">
+      <PaymentCheckHeader paymentDetail={paymentDetail} />
+      {paymentPostingClaim ? (
+        <InsurancePaymentPostingView />
+      ) : (
+        <PaymentCheckTable paymentDetail={paymentDetail} />
+      )}
+    </Flex>
+  )
 }
 
 export { InsurancePaymentDetailView }
