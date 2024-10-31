@@ -204,6 +204,9 @@ const UPLOAD_TEMPLATE_REPORT_ENDPOINT = (templateId: string) =>
 const EDIT_TEMPLATE_ENDPOINT = (templateId: string) =>
   `${API_URL}/api/reporting/templates/${templateId}/`
 const GET_ALL_STAFF_ENDPOINT = `${API_URL}/api/staff`
+const SEARCH_FAVOURITE_DIAGNOSIS_ENDPOINT = `${API_URL}/api/staff/self/diagnoses/actions/favorites/search`
+const FAVOURITE_DIAGNOSIS_ENDPOINT = (icd10Code: string) =>
+  `${API_URL}/api/staff/self/icd10codes/${icd10Code}/actions/favorites`
 const GET_APPOINTMENT = (appointmentId: string) =>
   `${API_URL}/api/appointments/${appointmentId}`
 const DOWNLOAD_TEMPLATE_REPORT = (templateId: string) =>
@@ -321,6 +324,8 @@ export {
   UPLOAD_TEMPLATE_REPORT_ENDPOINT,
   EDIT_TEMPLATE_ENDPOINT,
   GET_ALL_STAFF_ENDPOINT,
+  SEARCH_FAVOURITE_DIAGNOSIS_ENDPOINT,
+  FAVOURITE_DIAGNOSIS_ENDPOINT,
   GET_APPOINTMENT,
   DOWNLOAD_TEMPLATE_REPORT
 }

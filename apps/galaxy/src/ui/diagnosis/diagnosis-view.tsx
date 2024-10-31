@@ -13,10 +13,11 @@ interface DiagnosisViewProps {
 }
 
 const DiagnosisView = ({ patientId }: DiagnosisViewProps) => {
-  const { fetchWorkingDiagnosis } = useStore()
+  const { fetchWorkingDiagnosis, fetchFavouriteDiagnosis } = useStore()
 
   useEffect(() => {
     fetchWorkingDiagnosis(patientId)
+    fetchFavouriteDiagnosis()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [patientId])
 

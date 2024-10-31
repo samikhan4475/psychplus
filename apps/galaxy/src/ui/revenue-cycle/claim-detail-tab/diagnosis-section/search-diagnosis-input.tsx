@@ -4,7 +4,7 @@ import useOnclickOutside from 'react-cool-onclickoutside'
 import toast from 'react-hot-toast'
 import { useDebouncedCallback } from 'use-debounce'
 import { ICD10Code } from '@/types'
-import { getServiceDiagnosis } from '@/ui/diagnosis/diagnosis/api/get-service-diagnosis'
+import { getServiceDiagnosis } from '@/ui/diagnosis/diagnosis/actions/get-service-diagnosis'
 import { SearchButton } from '@/ui/schedule/shared'
 import { cn } from '@/utils'
 

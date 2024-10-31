@@ -1,6 +1,6 @@
 import toast from 'react-hot-toast'
 import { DiagnosisView } from '@/ui/diagnosis'
-import { getQuickNotesWorkingDiagnosis } from '@/ui/diagnosis/diagnosis/api/get-working-diagnosis'
+import { getQuickNotesWorkingDiagnosis } from '@/ui/diagnosis/diagnosis/actions/get-working-diagnosis'
 
 interface DiagnosisPageProps {
   params: {

@@ -69,7 +69,7 @@ interface PostOptions extends RequestInit {
 
 const POST = async <T>(
   url: string,
-  body: FormData | object,
+  body?: FormData | object,
   options: PostOptions = {},
 ): Promise<NetworkResult<T>> => {
   const { headers, ...rest } = options;

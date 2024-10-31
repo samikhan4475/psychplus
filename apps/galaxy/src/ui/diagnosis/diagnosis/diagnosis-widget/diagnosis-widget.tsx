@@ -19,7 +19,7 @@ const DiagnosisWidget = ({ patientId, recommended }: DiagnosisWidgetProps) => {
         {recommended && <RecommendedDiagnosisView />}
       </Flex>
       <Flex width="30%" direction="column">
-        <FavoriteView />
+        <FavoriteView patientId={patientId}/>
       </Flex>
     </Flex>
   )

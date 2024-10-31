@@ -31,7 +31,6 @@ const getQuickNotesWorkingDiagnosis = async ({
       error: response.error,
     }
   }
-
   return {
     state: 'success',
     data: {
@@ -41,3 +40,4 @@ const getQuickNotesWorkingDiagnosis = async ({
 }
 
 export { getQuickNotesWorkingDiagnosis }
+
