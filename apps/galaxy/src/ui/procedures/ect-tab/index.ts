@@ -1,1 +1,1 @@
-export * from './ect-tab'
+export { EctWidget } from './ect-widget'

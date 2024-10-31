@@ -1,9 +1,12 @@
-import { FormFieldContainer, FormFieldLabel, RadioSelectSection } from '@/components'
 import { Heading } from '@radix-ui/themes'
+import {
+  FormFieldContainer,
+  FormFieldError,
+  RadioSelectSection,
+} from '@/components'
 
 const BLOCK_ID = 'ectContinuePBlock'
 const BLOCK_LABEL = 'Continue ECT'
-
 
 const BLOCK_OPTIONS = [
   {
@@ -26,8 +29,8 @@ const ContinueEctBlock = () => {
         label={BLOCK_LABEL}
         required={true}
       />
+      <FormFieldError name={BLOCK_ID} />
     </FormFieldContainer>
-
   )
 }
 

@@ -1,4 +1,4 @@
-import { RadioSelectSection } from '@/components'
+import { RadioSelectSection, YesNoSelect } from '@/components'
 
 const BLOCK_ID = 'biteblock'
 const BLOCK_LABEL = 'Bite Block'
@@ -18,12 +18,11 @@ const BLOCK_OPTIONS = [
 
 const BiteBlock = () => {
   return (
-    <RadioSelectSection
+    <YesNoSelect
       field={BLOCK_ID}
       options={BLOCK_OPTIONS}
       label={BLOCK_LABEL}
       required={true}
-      
     />
   )
 }

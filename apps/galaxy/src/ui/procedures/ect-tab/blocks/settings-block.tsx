@@ -1,31 +1,66 @@
-import { FormFieldContainer, FormFieldLabel, SelectableChipDetails, SelectableChipDetailsProps } from '@/components'
-import { Flex, Text } from '@radix-ui/themes'
+import {
+  FormFieldContainer,
+  FormFieldLabel,
+  SelectableChipDetails,
+  SelectableChipDetailsProps,
+} from '@/components'
 
 const settingsFieldsBlock: SelectableChipDetailsProps[] = [
-  { label: 'Pw', type: 'text', field: 'ectSettingBlock.pw', showIndicator: false, placeHolder: '00.00' },
-  { label: 'Frequency', type: 'text', field: 'ectSettingBlock.frequency', showIndicator: false },
-  { label: 'Duration', type: 'text', field: 'ectSettingBlock.duration', showIndicator: false },
-  { label: 'Current', type: 'text', field: 'ectSettingBlock.current', showIndicator: false },
-];
+  {
+    label: 'Pw',
+    type: 'number',
+    field: 'ectSettingBlockPw',
+    showIndicator: false,
+    placeHolder: '00.00',
+    format: '##.##',
+  },
+  {
+    label: 'Frequency',
+    type: 'number',
+    field: 'ectSettingBlockFrequency',
+    showIndicator: false,
+    placeHolder: '000',
+    format: '###',
+  },
+  {
+    label: 'Duration',
+    type: 'number',
+    field: 'ectSettingBlockDuration',
+    showIndicator: false,
+    placeHolder: '0',
+    format: '#',
+  },
+  {
+    label: 'Current',
+    type: 'number',
+    field: 'ectSettingBlockCurrent',
+    showIndicator: false,
+    placeHolder: '000',
+    format: '###',
+  },
+]
 
 const SettingsBlock = () => {
   return (
-    <FormFieldContainer className="w-auto flex flex-row gap-2">
-      <FormFieldLabel className='text-[12px]' required>
+    <FormFieldContainer className="flex w-auto flex-row gap-2">
+      <FormFieldLabel className="text-[12px]" required>
         Settings
       </FormFieldLabel>
-      {settingsFieldsBlock.map(({ label, type, field, placeHolder }) => (
-        <SelectableChipDetails
-          key={field}
-          label={label}
-          type={type}
-          field={field}
-          showIndicator={false}
-          placeHolder={placeHolder}
-        />
-      ))}
+      {settingsFieldsBlock.map(
+        ({ label, type, field, placeHolder, format }) => (
+          <SelectableChipDetails
+            key={field}
+            label={label}
+            type={type}
+            field={field}
+            showIndicator={false}
+            placeHolder={placeHolder}
+            format={format}
+          />
+        ),
+      )}
     </FormFieldContainer>
-  );
+  )
 }
 
 export { SettingsBlock }

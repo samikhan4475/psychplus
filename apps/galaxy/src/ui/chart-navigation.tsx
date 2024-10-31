@@ -87,6 +87,7 @@ const ChartNavigation = () => {
               Staff Comments
             </NavigationLink>
             <NavigationLink href="/notifications">Notifications</NavigationLink>
+            <NavigationLink href="/procedures">Procedures</NavigationLink>
             <NavigationLink href="/billing-history">
               Billing History
             </NavigationLink>

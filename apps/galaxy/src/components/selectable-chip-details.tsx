@@ -63,8 +63,9 @@ const SelectableChipDetails = ({
             <NumberInput
               format={format}
               field={field}
-              className="w-[35px]"
+              className="w-[45px]"
               autoFocus
+              placeholder={placeHolder}
             />
           )}
           {type === 'select' && <SelectInput field={field} options={options} />}

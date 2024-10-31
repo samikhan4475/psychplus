@@ -1,11 +1,22 @@
-import { Flex, TextField } from '@radix-ui/themes'
-import { FormFieldContainer, FormFieldLabel, TextAreaInput } from '@/components'
+import {
+  FormFieldContainer,
+  FormFieldError,
+  FormFieldLabel,
+  TextAreaInput,
+} from '@/components'
 
 const ECTAssesment = () => {
   return (
-    <FormFieldContainer className="w-auto flex flex-col gap-2">
-      <FormFieldLabel className='text-[12px]' required>ECT Assesment</FormFieldLabel>
-      <TextAreaInput field="ectAssessment" className="w-full h-full"  placeHolder='Describe Ect Assesment' />
+    <FormFieldContainer className="flex w-auto flex-col gap-2">
+      <FormFieldLabel className="text-[12px]" required>
+        ECT Assesment
+      </FormFieldLabel>
+      <TextAreaInput
+        field="ectAssessment"
+        className="h-full w-full"
+        placeHolder="Describe Ect Assesment"
+      />
+      <FormFieldError name={'ectAssessment'} />
     </FormFieldContainer>
   )
 }

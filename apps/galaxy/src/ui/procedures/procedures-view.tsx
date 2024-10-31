@@ -3,17 +3,22 @@
 import * as Tabs from '@radix-ui/react-tabs'
 import { Flex } from '@radix-ui/themes'
 import { TabsTrigger } from '@/components'
+import { QuickNoteSectionItem } from '@/types'
 import { ProcedureTabs } from './constants'
-import { EctTab } from './ect-tab'
+import { EctWidget } from './ect-tab'
 import { SpravatoTab } from './spravato-tab'
 import { useStore } from './store'
 import { TmsTab } from './tms-tab'
 
 interface ProceduresViewProps {
   patientId: string
+  procedureEctData: QuickNoteSectionItem[]
 }
 
-const ProceduresView = ({ patientId }: ProceduresViewProps) => {
+const ProceduresView = ({
+  patientId,
+  procedureEctData,
+}: ProceduresViewProps) => {
   const { activeTab, setActiveTab } = useStore((state) => ({
     activeTab: state.activeTab,
     setActiveTab: state.setActiveTab,
@@ -40,7 +45,7 @@ const ProceduresView = ({ patientId }: ProceduresViewProps) => {
         <Flex className="flex-1 border-b border-gray-5" />
       </Flex>
       <TabsContent value={ProcedureTabs.ECT}>
-        <EctTab patientId={patientId} />
+        <EctWidget patientId={patientId} procedureEctData={procedureEctData} />
       </TabsContent>
       <TabsContent value={ProcedureTabs.TMS}>
         <TmsTab patientId={patientId} />
