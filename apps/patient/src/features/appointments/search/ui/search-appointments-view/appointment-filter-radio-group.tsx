@@ -1,5 +1,6 @@
 import * as RadioGroup from '@radix-ui/react-radio-group'
 import { Flex } from '@radix-ui/themes'
+import { cn } from '@psychplus/ui/cn'
 import { FilterFieldLabel } from './filter-field-label'
 
 interface AppointmentFilterRadioGroupProps<T> {
@@ -10,6 +11,7 @@ interface AppointmentFilterRadioGroupProps<T> {
     value: T
     label: string
   }[]
+  disabled?: boolean
 }
 
 const AppointmentFilterRadioGroup = <T extends string>({
@@ -17,11 +19,17 @@ const AppointmentFilterRadioGroup = <T extends string>({
   value,
   onChange,
   options,
+  disabled,
 }: AppointmentFilterRadioGroupProps<T>) => {
   return (
     <Flex gap="1" align="center" className="flex-1">
       <FilterFieldLabel>{title}</FilterFieldLabel>
-      <RadioGroup.Root value={value} onValueChange={onChange}>
+      <RadioGroup.Root
+        value={value}
+        onValueChange={onChange}
+        disabled={disabled}
+        className={cn(disabled && 'pointer-events-none opacity-50')}
+      >
         <Flex gap={{ initial: '2', sm: '3' }} height="100%">
           {options.map((option) => (
             <RadioGroup.Item

@@ -4,13 +4,17 @@ import { useStore } from '@/features/appointments/search/store'
 import { AppointmentFilterRadioGroup } from './appointment-filter-radio-group'
 
 const VisitTypeFilter = () => {
-  const { appointmentType, setAppointmentType } = useStore((state) => ({
-    appointmentType: state.appointmentType,
-    setAppointmentType: state.setAppointmentType,
-  }))
+  const { appointmentType, setAppointmentType, loading } = useStore(
+    (state) => ({
+      appointmentType: state.appointmentType,
+      setAppointmentType: state.setAppointmentType,
+      loading: state.loading,
+    }),
+  )
 
   return (
     <AppointmentFilterRadioGroup
+      disabled={loading}
       title="Type"
       value={appointmentType}
       onChange={setAppointmentType}
