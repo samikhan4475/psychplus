@@ -90,7 +90,7 @@ const SignupForm = () => {
         ],
         email: form.getValues().email,
       },
-      language: 'English',
+      language: ['English'],
       preferredLanguage: 'English',
       dateOfBirth: form.getValues().dateOfBirth,
       password: form.getValues().password,

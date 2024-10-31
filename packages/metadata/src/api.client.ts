@@ -17,7 +17,7 @@ const getPlusMembershipBenefitsCached = cache(getPlusMembershipBenefits)
 
 const getConfigurationProtected = async (): Promise<ConfigurationProtected> =>
   handleRequest(
-    fetch('/revcycle/api/metadata/configuration/protected', {
+    fetch('/api/metadata/configuration/protected', {
       headers: createHeaders(),
     }),
   )

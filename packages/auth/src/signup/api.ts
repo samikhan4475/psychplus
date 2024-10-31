@@ -15,7 +15,7 @@ interface SignupRequest {
   socialSecurityNumber?: string
   userRoleId?: number
   contactInfo: ContactInfo
-  language?: string
+  language?: [string]
   preferredLanguage?: string
   emergencyContact?: ContactInfo
   guardian?: Guardian
