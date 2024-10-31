@@ -3,6 +3,7 @@
 import * as Tabs from '@radix-ui/react-tabs'
 import { Box, Flex } from '@radix-ui/themes'
 import { TabsTrigger } from '@/components'
+import { ReceiverTabView } from './receiver-tab'
 import { useStore } from './store'
 import { ClearingHouseTab } from './types'
 
@@ -31,7 +32,7 @@ const ClearingHouseTabs = () => {
           </Tabs.List>
         </Flex>
         <TabsContent value={ClearingHouseTab.Receiver}>
-          <div>receiver</div>
+          <ReceiverTabView />
         </TabsContent>
         <TabsContent value={ClearingHouseTab.Submitter}>
           <div>submitter </div>

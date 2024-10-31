@@ -13,7 +13,8 @@ interface RadioSelectSectionProps {
   description?: React.ReactNode
   field: string
   options: RadioSelectOption[]
-  required?:boolean
+  required?: boolean
+  className?: string
 }
 
 interface RadioSelectOption {
@@ -26,7 +27,8 @@ const RadioSelectSection = ({
   description,
   field,
   options,
-  required
+  required,
+  className = 'rounded-1 border border-gray-7', // in some cases we don't need border
 }: RadioSelectSectionProps) => {
   const form = useFormContext()
 
@@ -44,7 +46,7 @@ const RadioSelectSection = ({
         className="flex gap-1.5"
       >
         {options.map((option) => {
-          const isSelected = value === option.value
+          const isSelected = value === option.value && className
           const id = `${label}-radio-${option.value}`
 
           return (
@@ -53,7 +55,8 @@ const RadioSelectSection = ({
               as="label"
               htmlFor={id}
               className={cn(
-                'flex cursor-pointer items-center rounded-1 border border-gray-7 px-1 h-[var(--chip-height)]',
+                'flex h-[var(--chip-height)] cursor-pointer items-center px-1',
+                className,
                 {
                   'border-pp-focus-outline bg-pp-focus-bg': isSelected,
                 },

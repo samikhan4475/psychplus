@@ -11,6 +11,7 @@ const Attachments = () => {
   const { fields, append, remove, update } = useFieldArray({
     control,
     name: 'attachments',
+    keyName: 'fieldId',
   })
 
   const fileInputRef = useRef<HTMLInputElement | null>(null)

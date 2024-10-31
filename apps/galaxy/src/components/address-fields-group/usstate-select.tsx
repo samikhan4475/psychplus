@@ -14,6 +14,8 @@ interface UsStateSelectProps {
   className?: string
   labelClassName?: string
   disabled?: boolean
+  fieldContainerClassName?: string
+  stateFieldContainerClassName?: string
 }
 const UsStateSelect = ({
   prefix,
@@ -21,11 +23,14 @@ const UsStateSelect = ({
   className,
   labelClassName,
   disabled,
+  fieldContainerClassName = 'flex-1',
+  stateFieldContainerClassName,
 }: UsStateSelectProps) => {
   const name = fieldName('state', prefix)
-
   return (
-    <FormFieldContainer className="flex-1">
+    <FormFieldContainer
+      className={cn(fieldContainerClassName, stateFieldContainerClassName)}
+    >
       <FormFieldLabel
         className={cn('!text-1', labelClassName)}
         required={required}

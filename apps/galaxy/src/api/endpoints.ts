@@ -136,6 +136,12 @@ const GET_PATIENT_TRANSACTIONS_HISTORY = (
   transactionId: number,
 ) =>
   `${API_URL}/api/patients/${patientId}/transactions/${transactionId}/actions/history`
+const GET_CLEARING_HOUSE_RECEIVER_LIST_ENDPOINT = `${API_URL}/api/clearinghousereceivers/actions/search`
+const DELETE_CLEARING_HOUSE_RECEIVER_ENDPOINT = (id: string) =>
+  `${API_URL}/api/clearinghousereceivers/${id}`
+const ADD_CLEARING_HOUSE_RECEIVER_ENDPOINT = `${API_URL}/api/clearinghousereceivers`
+const UPDATE_CLEARING_HOUSE_RECEIVER_ENDPOINT = (id: string) =>
+  `${API_URL}/api/clearinghousereceivers/${id}`
 const GET_INSURANCE_PAYMENT_LIST_ENDPOINT = `${API_URL}/api/payments/actions/search`
 const GET_PRACTICE_IDS_LIST_ENDPOINT = `${API_URL}/api/practices/actions/search`
 const DELETE_INSURANCE_PAYMENT_ENDPOINT = (id: string) =>
@@ -315,6 +321,10 @@ export {
   INSURANCE_PAYMENT_ATTACHMENTS_ENDPOINT,
   GET_PRACTICE_IDS_LIST_ENDPOINT,
   GET_ORGANIZATION_ROLES,
+  GET_CLEARING_HOUSE_RECEIVER_LIST_ENDPOINT,
+  DELETE_CLEARING_HOUSE_RECEIVER_ENDPOINT,
+  ADD_CLEARING_HOUSE_RECEIVER_ENDPOINT,
+  UPDATE_CLEARING_HOUSE_RECEIVER_ENDPOINT,
   GET_PATIENT_STATEMENTS_LIST_ENDPOINT,
   GET_POS_CODES,
   ADD_ATTACHMENTS_SECURE_MESSAGE,

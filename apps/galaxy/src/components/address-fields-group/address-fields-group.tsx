@@ -18,6 +18,9 @@ interface AddressProps {
   fieldLabelClassName?: string
   addressFieldName?: string
   disabled?: boolean
+  isFilter?: boolean
+  fieldContainerClassName?: string
+  stateFieldContainerClassName?: string
 }
 const AddressFieldsGroup = ({
   title,
@@ -30,6 +33,9 @@ const AddressFieldsGroup = ({
   fieldLabelClassName,
   addressFieldName,
   disabled,
+  isFilter = false,
+  fieldContainerClassName,
+  stateFieldContainerClassName,
 }: AddressProps) => {
   const { loaded } = useGooglePlacesContext()
 
@@ -64,6 +70,7 @@ const AddressFieldsGroup = ({
             prefix={prefix}
             className={fieldClassName}
             labelClassName={fieldLabelClassName}
+            isFilter={isFilter}
           />
         )}
         <AddressTextField
@@ -73,6 +80,7 @@ const AddressFieldsGroup = ({
           className={fieldClassName}
           disabled={disabled}
           labelClassName={fieldLabelClassName}
+          fieldContainerClassName={fieldContainerClassName}
         />
       </Grid>
       <Grid columns="3" gap="3" className="flex-1">
@@ -84,6 +92,7 @@ const AddressFieldsGroup = ({
           disabled={disabled}
           className={fieldClassName}
           labelClassName={fieldLabelClassName}
+          fieldContainerClassName={fieldContainerClassName}
         />
         <UsStateSelect
           required={required}
@@ -91,6 +100,8 @@ const AddressFieldsGroup = ({
           className={fieldClassName}
           disabled={disabled}
           labelClassName={fieldLabelClassName}
+          fieldContainerClassName={fieldContainerClassName}
+          stateFieldContainerClassName={stateFieldContainerClassName}
         />
 
         <AddressTextField
@@ -103,6 +114,7 @@ const AddressFieldsGroup = ({
           disabled={disabled}
           className={fieldClassName}
           labelClassName={fieldLabelClassName}
+          fieldContainerClassName={fieldContainerClassName}
         />
       </Grid>
     </Flex>

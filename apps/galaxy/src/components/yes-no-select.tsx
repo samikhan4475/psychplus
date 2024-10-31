@@ -6,6 +6,7 @@ interface YesNoSelectProps {
   field: string
   options?: { label: string; value: string }[]
   required?: boolean
+  className?: string
   isNoFirst?: boolean
 }
 
@@ -25,6 +26,7 @@ const YesNoSelect = ({
   field,
   options = defaultOptions,
   required,
+  className,
   isNoFirst,
 }: YesNoSelectProps) => {
   if (isNoFirst) {
@@ -37,6 +39,7 @@ const YesNoSelect = ({
       field={field}
       options={options}
       required={required}
+      className={className}
     />
   )
 }

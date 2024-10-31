@@ -17,6 +17,7 @@ interface AddressTextFieldProps
   placeholder?: string
   labelClassName?: string
   disabled?: boolean
+  fieldContainerClassName?: string
 }
 const AddressTextField = ({
   label,
@@ -26,6 +27,7 @@ const AddressTextField = ({
   placeholder,
   labelClassName,
   disabled,
+  fieldContainerClassName = 'flex-1',
   ...props
 }: AddressTextFieldProps) => {
   const { register, setValue, watch } = useFormContext()
@@ -33,7 +35,7 @@ const AddressTextField = ({
   const { onChange, ...rest } = register(field, { disabled: disabled })
 
   return (
-    <FormFieldContainer className="flex-1">
+    <FormFieldContainer className={fieldContainerClassName}>
       <FormFieldLabel
         required={required}
         className={cn('!text-1', labelClassName)}
