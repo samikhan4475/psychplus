@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import { getLocalTimeZone, today } from '@internationalized/date'
 import { Appointment } from '@psychplus-v2/types'
 import { getCalendarDateLabel } from '@psychplus-v2/utils'
-import { Box, Button, Dialog, Flex, Tooltip } from '@radix-ui/themes'
+import { Box, Button, Flex, Tooltip } from '@radix-ui/themes'
 import { Popover } from '@psychplus/ui/popover'
 import { EditIcon, FormError } from '@/components-v2'
 import { useToast } from '@/providers'
@@ -45,7 +45,7 @@ const UpdateDateAndTimeDialog = ({
         specialistStaffId: appointment.specialist.id,
         specialistTypeCode: appointment.specialistTypeCode,
         type: appointment.type,
-        startDate: selectedSlot?.startDate,
+        startDate: selectedSlot?.startDateUtc ?? selectedSlot?.startDate,
         duration: selectedSlot?.duration,
         locationId: appointment.clinic.id,
         serviceId: selectedSlot?.servicesOffered[0],
