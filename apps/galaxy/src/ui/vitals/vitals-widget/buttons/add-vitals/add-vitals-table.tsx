@@ -1,56 +1,38 @@
 'use client'
 
-import React, { useEffect } from 'react'
 import { Box, Table } from '@radix-ui/themes'
-import { DateTimeCell, LoadingPlaceholder, TextCell } from '@/components'
-import { formatDateTime } from '@/utils'
-import {
-  RECORD_STATUSES,
-  UnitSystem,
-  VITAL_TABLE_LABELS,
-} from '../../constants'
-import { useStore } from '../../store'
-import { getVitalValue } from '../../utils'
+import { useFormContext } from 'react-hook-form'
+import { DateTimeCell, LongTextCell, TextCell } from '@/components'
+import { cn, formatDateTime } from '@/utils'
+import { UnitSystem, VITAL_TABLE_LABELS } from '../../constants'
+import { PatientVital } from '../../types'
+import { getVitalRowHeightClass, getVitalValue } from '../../utils'
 
 interface AddVitalsTableProps {
-  patientId: string
-  appointmentId: string
   unitSystem: UnitSystem
+  data: PatientVital[]
 }
 
-const AddVitalsTable = ({
-  patientId,
-  appointmentId,
-  unitSystem,
-}: AddVitalsTableProps) => {
-  const { data, loading, fetch } = useStore((state) => ({
-    data: state.data,
-    loading: state.loading,
-    fetch: state.fetch,
-  }))
-
-  useEffect(() => {
-    fetch({ appointmentId, patientId, recordStatuses: RECORD_STATUSES })
-  }, [])
-
-  if (loading) return <LoadingPlaceholder />
-
+const AddVitalsTable = ({ unitSystem, data }: AddVitalsTableProps) => {
   return (
     <Box className="w-full">
       <Table.Root variant="ghost" size="1">
         <Table.Header className="bg-pp-focus-bg-2">
           <Table.Row>
-            <Table.ColumnHeaderCell className="border-pp-table-border bg-pp-focus-bg-2 sticky left-0 z-10 h-6 border px-1 py-0">
+            <Table.ColumnHeaderCell className="border-pp-table-border bg-pp-focus-bg-2 min-w-36 sticky left-0 z-10 h-6 border px-1 py-0">
               <TextCell>Vitals</TextCell>
             </Table.ColumnHeaderCell>
 
-            {data?.map((vital) => (
+            {data?.map((vital, index) => (
               <Table.ColumnHeaderCell
-                key={vital.metadata.createdOn}
+                key={`${vital.metadata.createdOn} + ${index}`}
                 className="border-pp-table-border h-6 whitespace-nowrap border border-l-0 px-1 py-0"
               >
-                <DateTimeCell>
-                  {formatDateTime(vital.metadata.createdOn)}
+                <DateTimeCell className="w-24">
+                  {formatDateTime(
+                    vital.metadata.updatedOn || vital.metadata.createdOn,
+                    false,
+                  )}
                 </DateTimeCell>
               </Table.ColumnHeaderCell>
             ))}
@@ -69,9 +51,14 @@ const AddVitalsTable = ({
               {data?.map((vital) => (
                 <Table.Cell
                   key={`${vital.id}-${label}`}
-                  className="border-pp-table-border h-7 whitespace-nowrap border border-l-0 border-t-0 px-1 py-0"
+                  className={cn(
+                    'border-pp-table-border h-7 border border-l-0 border-t-0 px-1 py-0',
+                    getVitalRowHeightClass(index, data),
+                  )}
                 >
-                  <TextCell>{getVitalValue(vital, label, unitSystem)}</TextCell>
+                  <LongTextCell className="w-24">
+                    {getVitalValue(vital, label, unitSystem)}
+                  </LongTextCell>
                 </Table.Cell>
               ))}
             </Table.Row>

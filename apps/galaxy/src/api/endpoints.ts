@@ -191,6 +191,12 @@ const GET_ORGANIZATION_ROLES = `${API_URL}/api/organizations/actions/search`
 const GET_ORGANIZATIONS_ENDPOINT = `${API_URL}/api/organizations/actions/search`
 const GET_PRACTICES_ENDPOINT = `${API_URL}/api/practices/actions/search`
 const GET_PATIENT_VITALS_ENDPOINT = `${API_URL}/api/patientvitalsigns/actions/search`
+const ADD_PATIENT_VITAL_ENDPOINT = (patientId: string) =>
+  `${API_URL}/api/patients/${patientId}/vitalsigns`
+const UPDATE_PATIENT_VITAL_ENDPOINT = (
+  patientId: string,
+  vitalSignId: string,
+) => `${API_URL}/api/patients/${patientId}/vitalsigns/${vitalSignId}`
 const GET_STAFF = `${API_URL}/api/staff?includeInactive=false&offset=0&limit=0&orderBy=legalName asc`
 const GET_POS_CODES = `${API_URL}/api/codeset/authorities/PsychPlusPublic/codesets/PlaceOfService?includeExtraDetails=false&offset=0&limit=100&orderBy=displayName asc`
 const GET_MASTER_FEE_SCHEDULES = `${API_URL}/api/masterfeeschedules/actions/search`
@@ -318,6 +324,8 @@ export {
   GET_ORGANIZATIONS_ENDPOINT,
   GET_PRACTICES_ENDPOINT,
   GET_PATIENT_VITALS_ENDPOINT,
+  ADD_PATIENT_VITAL_ENDPOINT,
+  UPDATE_PATIENT_VITAL_ENDPOINT,
   GET_PATIENT_STATEMENT_DETAIL_LIST_ENDPOINT,
   UPDATE_MESSAGE,
   ADD_REPORT_TEMPLATE_ENDPOINT,

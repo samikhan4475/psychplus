@@ -3,12 +3,21 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Box, Flex, Table } from '@radix-ui/themes'
 import { useForm, type SubmitHandler } from 'react-hook-form'
+import toast from 'react-hot-toast'
 import { z } from 'zod'
-import { DateTimeCell, FormContainer, LoadingPlaceholder } from '@/components'
-import { cn, formatDateTime } from '@/utils'
+import { DateTimeCell, FormContainer } from '@/components'
+import { cn, formatDateTime, sanitizeFormData } from '@/utils'
+import { addPatientVitalAction } from '../../actions'
 import { UnitSystem, VITAL_TABLE_LABELS } from '../../constants'
 import { useStore } from '../../store'
-import { getFormField, getUnitValue } from '../../utils'
+import { PatientVital } from '../../types'
+import {
+  createVitalsObject,
+  getFormField,
+  getUnitValue,
+  getVitalRowHeightClass,
+  removeNaNValues,
+} from '../../utils'
 import { CancelButton } from '../cancel'
 import { SaveButton } from '../save'
 import { BloodPressureField } from './blood-pressure-field'
@@ -38,6 +47,8 @@ interface AddVitalsFormProps {
   appointmentId: string
   unitSystem: UnitSystem
   setAddNewRecord: (value: boolean) => void
+  addNewVital(data: PatientVital[]): void
+  vitalsData: PatientVital[]
 }
 
 const AddVitalsForm = ({
@@ -45,10 +56,14 @@ const AddVitalsForm = ({
   appointmentId,
   unitSystem,
   setAddNewRecord,
+  addNewVital,
+  vitalsData,
 }: AddVitalsFormProps) => {
-  const { data, loading } = useStore((state) => ({
+  const { data, setData, setError, isFilterEnabled } = useStore((state) => ({
     data: state.data,
-    loading: state.loading,
+    setData: state.setData,
+    setError: state.setError,
+    isFilterEnabled: state.isFilterEnabled,
   }))
 
   const form = useForm<SchemaType>({
@@ -56,11 +71,35 @@ const AddVitalsForm = ({
     reValidateMode: 'onChange',
   })
 
-  const onSubmit: SubmitHandler<SchemaType> = (data) => {
-    form.reset()
-  }
+  const onSubmit: SubmitHandler<SchemaType> = async (formData) => {
+    const mappedVital = createVitalsObject(
+      sanitizeFormData(formData),
+      unitSystem,
+    )
 
-  if (loading) return
+    const cleanedData = removeNaNValues({
+      ...mappedVital,
+      patientId,
+      appointmentId: Number(appointmentId),
+    })
+
+    const response = await addPatientVitalAction({
+      ...cleanedData,
+      recordStatus: 'Active',
+    } as PatientVital)
+
+    if (response.state === 'error') {
+      setError(response.error)
+      if (!response.error) toast.error('Failed to save!')
+    } else {
+      toast.success('Saved!')
+      setError('')
+      if (!isFilterEnabled)
+        setData([response.data, ...(data as PatientVital[])])
+      addNewVital([response.data, ...vitalsData])
+      form.reset()
+    }
+  }
 
   return (
     <FormContainer form={form} onSubmit={onSubmit}>
@@ -70,7 +109,7 @@ const AddVitalsForm = ({
             <Table.Row>
               <Table.ColumnHeaderCell className="border-pp-table-border bg-pp-focus-bg-2 h-6 border px-1 py-0">
                 <DateTimeCell>
-                  {formatDateTime(new Date().toISOString())}
+                  {formatDateTime(new Date().toISOString(), false)}
                 </DateTimeCell>
               </Table.ColumnHeaderCell>
             </Table.Row>
@@ -81,12 +120,8 @@ const AddVitalsForm = ({
               <Table.Row key={label}>
                 <Table.Cell
                   className={cn(
-                    'border-pp-table-border border px-1 py-0 align-middle',
-                    index >= Object.values(VITAL_TABLE_LABELS).length - 2 &&
-                      data &&
-                      data.length > 5
-                      ? 'h-[33px]'
-                      : 'h-7',
+                    'border-pp-table-border border border-t-0 px-1 py-0 align-middle',
+                    getVitalRowHeightClass(index, vitalsData),
                   )}
                 >
                   {label === VITAL_TABLE_LABELS.bloodPressure ? (

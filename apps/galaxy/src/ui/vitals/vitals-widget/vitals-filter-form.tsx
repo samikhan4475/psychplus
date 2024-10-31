@@ -1,14 +1,15 @@
 'use client'
 
+import { useEffect } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons'
 import { Button } from '@radix-ui/themes'
 import { DateValue } from 'react-aria-components'
 import { useForm, type SubmitHandler } from 'react-hook-form'
+import toast from 'react-hot-toast'
 import { z } from 'zod'
 import { FormContainer } from '@/components'
-import { removeEmptyValues } from '@/ui/notifications/patient-notifications-view/utils'
-import { formatDateToISOString } from '@/utils'
+import { formatDateToISOString, sanitizeFormData } from '@/utils'
 import { ClearButton } from './buttons'
 import { FromField, StatusSelect, ToField } from './filter-fields'
 import { useStore, VitalsParams } from './store'
@@ -23,8 +24,9 @@ const schema = z.object({
 type SchemaType = z.infer<typeof schema>
 
 const VitalsFilterForm = ({ patientId, appointmentId }: VitalsProps) => {
-  const { fetch } = useStore((state) => ({
+  const { fetch, setIsFilterEnabled } = useStore((state) => ({
     fetch: state.fetch,
+    setIsFilterEnabled: state.setIsFilterEnabled,
   }))
 
   const form = useForm<SchemaType>({
@@ -37,16 +39,34 @@ const VitalsFilterForm = ({ patientId, appointmentId }: VitalsProps) => {
     },
   })
 
+  useEffect(() => {
+    const values = form.getValues()
+    const hasFilters = Boolean(values.from || values.to || values.status)
+
+    setIsFilterEnabled(hasFilters)
+  }, [
+    form.watch('from'),
+    form.watch('to'),
+    form.watch('status'),
+    appointmentId,
+    patientId,
+  ])
+
   const onSubmit: SubmitHandler<SchemaType> = (data) => {
-    const formattedData = {
-      from: formatDateToISOString(data.from),
-      to: formatDateToISOString(data.to, true),
-      appointmentId,
-      patientId,
-      recordStatuses: [data.status],
+    if (data.from && data.to && data.to < data.from) {
+      toast.error('To date must be greater than From date')
+      return
     }
 
-    const cleanedData = removeEmptyValues(formattedData)
+    const formattedData = {
+      fromDateTime: formatDateToISOString(data.from),
+      toDateTime: formatDateToISOString(data.to, true),
+      appointmentId,
+      patientId,
+      recordStatuses: data.status ? [data.status] : [],
+    }
+
+    const cleanedData = sanitizeFormData(formattedData)
     return fetch(cleanedData as VitalsParams)
   }
 

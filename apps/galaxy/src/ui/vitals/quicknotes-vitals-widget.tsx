@@ -1,31 +1,43 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import * as Tabs from '@radix-ui/react-tabs'
 import { LoadingPlaceholder, WidgetContainer } from '@/components'
 import {
   AddVitalsButton,
   getLatest10Vitals,
-  RECORD_STATUSES,
-  useStore,
+  PatientVital,
 } from './vitals-widget'
+import { getPatientVitalsAction } from './vitals-widget/actions'
+import { VitalsHistoryButton } from './vitals-widget/buttons/history/history'
 import { VitalsTable } from './vitals-widget/vitals-table'
 
 const QuicknotesVitalsWidget = ({ patientId }: { patientId: string }) => {
   const searchParams = useSearchParams()
+  const [data, setData] = useState<PatientVital[]>([])
+  const [loading, setLoading] = useState<boolean>(false)
 
   const appointmentId = searchParams.get('appointmentId') || '0'
 
-  const { data, fetch, loading } = useStore((state) => ({
-    data: state.data,
-    loading: state.loading,
-    fetch: state.fetch,
-  }))
-
   useEffect(() => {
-    fetch({ appointmentId, patientId, recordStatuses: RECORD_STATUSES })
-  }, [])
+    const fetchPatientVitals = async () => {
+      setLoading(true)
+      const result = await getPatientVitalsAction({
+        payload: {
+          appointmentId: Number(appointmentId),
+          patientId: patientId,
+        },
+      })
+
+      if (result.state === 'success') {
+        setData(result.data)
+        setLoading(false)
+      }
+    }
+
+    fetchPatientVitals()
+  }, [appointmentId, patientId])
 
   // TODO:: Integrate the API to fetch vitals from the QuickNotes API.
   // TODO:: If vitals are available in QuickNotes, display them; otherwise, render the latest 10 created vitals.
@@ -37,18 +49,24 @@ const QuicknotesVitalsWidget = ({ patientId }: { patientId: string }) => {
       <WidgetContainer
         title="Vitals"
         headerRight={
-          <AddVitalsButton
-            title="Add"
-            patientId={patientId}
-            appointmentId={appointmentId}
-            showSign
-          />
+          <>
+            <AddVitalsButton
+              title="Add"
+              patientId={patientId}
+              appointmentId={appointmentId}
+              showSign
+            />
+            <VitalsHistoryButton
+              patientId={patientId}
+              appointmentId={appointmentId}
+            />
+          </>
         }
       >
         {loading ? (
           <LoadingPlaceholder />
         ) : (
-          <VitalsTable data={quicknotesVitals ?? []} />
+          <VitalsTable data={quicknotesVitals ?? []} editStatusCell={false} />
         )}
       </WidgetContainer>
     </Tabs.Root>

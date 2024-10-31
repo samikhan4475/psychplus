@@ -19,7 +19,7 @@ const NumberField = ({
       <TextField.Root
         size="1"
         type="number"
-        min="0"
+        step="0.01"
         {...form.register(field as string)}
         className={cn('h-full', className)}
       />

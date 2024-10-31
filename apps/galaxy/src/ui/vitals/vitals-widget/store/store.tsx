@@ -5,25 +5,30 @@ import type { PatientVital } from '../types'
 interface VitalsParams {
   patientId: string
   appointmentId: string
-  recordStatuses: string[]
+  recordStatuses?: string[]
+  fromDateTime?: string
+  toDateTime?: string
 }
 
 interface StoreState {
-  patientId: string
-  appointmentId: number
   data?: PatientVital[]
   loading?: boolean
   error?: string
-  payload?: any
+  isFilterEnabled: boolean
+  setIsFilterEnabled: (value: boolean) => void
+  setData: (data: PatientVital[]) => void
+  setError: (error: string) => void
   fetch: (payload: VitalsParams) => void
 }
 
 const useStore = create<StoreState>((set, get) => ({
-  patientId: '',
-  appointmentId: 0,
   data: undefined,
   loading: true,
   error: undefined,
+  isFilterEnabled: false,
+  setIsFilterEnabled: (isFilterEnabled: boolean) => set({ isFilterEnabled }),
+  setError: (error: string) => set({ error }),
+  setData: (data: PatientVital[]) => set({ data }),
   fetch: async (payload, page = 1, reset = false) => {
     set({
       error: undefined,

@@ -7,7 +7,9 @@ interface GetPatientVitalsParams {
   payload: {
     patientId: string
     appointmentId: number
-    recordStatuses: string[]
+    recordStatuses?: string[]
+    fromDateTime?: string
+    toDateTime?: string
   }
 }
 

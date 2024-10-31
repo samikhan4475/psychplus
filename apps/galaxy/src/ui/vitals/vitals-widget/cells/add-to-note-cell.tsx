@@ -1,23 +1,27 @@
 'use client'
 
-import { useState } from 'react'
 import { CheckboxCell } from '@/components'
-import type { PatientVitalRow } from '../types'
 
 interface AddToNoteCellProps {
-  row: PatientVitalRow
+  checked?: boolean
+  className?: string
+  onCheckedChange: (checked: boolean) => void
+  disabled: boolean
 }
 
-const AddToNoteCell = ({ row }: AddToNoteCellProps) => {
-  const [addToNote, setAddToNote] = useState(false)
-
+const AddToNoteCell = ({
+  checked,
+  className,
+  onCheckedChange,
+  disabled,
+}: AddToNoteCellProps) => {
   return (
     <CheckboxCell
-      label={addToNote ? 'Yes' : 'No'}
-      checked={addToNote}
-      onCheckedChange={(checked) => {
-        setAddToNote(checked)
-      }}
+      label={checked ? 'Yes' : 'No'}
+      checked={checked || false}
+      className={className}
+      onCheckedChange={onCheckedChange}
+      disabled={disabled}
     />
   )
 }

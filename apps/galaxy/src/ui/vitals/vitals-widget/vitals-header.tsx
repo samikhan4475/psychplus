@@ -9,8 +9,7 @@ const VitalsHeader = ({ patientId, appointmentId }: VitalsProps) => {
   return (
     <Flex
       align="center"
-      p="2"
-      className="drop-shadow [box-shadow:0_4px_4px_0_#00000014]"
+      className="p-2.5 drop-shadow [box-shadow:0_4px_4px_0_#00000014]"
       justify="between"
     >
       <Flex gap="2" align="center">

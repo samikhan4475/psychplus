@@ -1,4 +1,15 @@
-const RECORD_STATUSES = ['Active']
+const RECORD_STATUSES = ['Active', 'Inactive', 'Deleted']
+
+const STATUS_CODESET = [
+  {
+    label: 'Active',
+    value: 'Active',
+  },
+  {
+    label: 'Inactive',
+    value: 'Inactive',
+  },
+]
 
 enum UnitSystem {
   Metric = 'Metric',
@@ -11,7 +22,7 @@ enum VITAL_TABLE_LABELS {
   bmi = 'BMI',
   temperature = 'Temperature',
   bloodPressure = 'Blood Pressure',
-  headcircumference = 'Head circumference',
+  headCircumference = 'Head Circumference',
   heartRate = 'Heart Rate',
   respiratoryRate = 'Respiratory Rate',
   pulseOximetry = 'Pulse Oximetry',
@@ -21,4 +32,17 @@ enum VITAL_TABLE_LABELS {
   weightLengthPercentile = 'Weight Length Percentile',
 }
 
-export { UnitSystem, RECORD_STATUSES, VITAL_TABLE_LABELS }
+const VitalField = {
+  BreathingRate: 'Respiratory Rate',
+  PulseRate: 'Heart Rate',
+  BodyTemperatureF: 'Temperature',
+  BodyTemperatureC: 'Temperature',
+}
+
+export {
+  UnitSystem,
+  RECORD_STATUSES,
+  VITAL_TABLE_LABELS,
+  STATUS_CODESET,
+  VitalField,
+}
