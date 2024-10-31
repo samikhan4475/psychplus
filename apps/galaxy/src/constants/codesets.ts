@@ -48,6 +48,8 @@ const CODESETS = {
   PaymentMethod: 'PaymentMethod',
   VisitType: 'PsychPlusPublic.VisitType',
   PaymentResponsibility: 'PaymentResponsibility',
+  TherapyModality: 'PsychPlusPublic.TherapyModality',
+  TherapyIntervention: 'PsychPlusPublic.TherapyIntervention',
   PlaceOfSerivce: 'PsychPlusPublic.PlaceOfService',
   QueryByNextDays: 'QueryByNextDays',
   AccidentType: 'AccidentType',

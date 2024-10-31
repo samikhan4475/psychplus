@@ -4,15 +4,16 @@ import React from 'react'
 import * as RadioGroup from '@radix-ui/react-radio-group'
 import { Flex, Text } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
-import { cn } from '@/utils'
-import { BlockLabel, NumberInput, TextInput } from '@/components'
+import { BlockLabel, NumberInput } from '@/components'
 import { BlockDescription } from '@/components/block-description'
+import { cn } from '@/utils'
 
 interface RadioSelectInputProps {
   label?: string
   description?: React.ReactNode
   field: string
   options: RadioSelectInputOption[]
+  required?: boolean
 }
 
 interface RadioSelectInputOption {
@@ -25,13 +26,14 @@ const RadioSelectInput = ({
   description,
   field,
   options,
+  required,
 }: RadioSelectInputProps) => {
   const form = useFormContext()
   const selectedValue = form.watch(field)
 
   return (
     <Flex align="start" justify="start" gap="2">
-      {label && <BlockLabel>{label}</BlockLabel>}
+      {label && <BlockLabel required={required}>{label}</BlockLabel>}
       {description && <BlockDescription>{description}</BlockDescription>}
       <RadioGroup.Root
         onValueChange={(value) => {
@@ -50,7 +52,7 @@ const RadioSelectInput = ({
                 as="label"
                 htmlFor={id}
                 className={cn(
-                  'flex cursor-pointer items-center rounded-1 border border-gray-7 px-1 h-[var(--chip-height)]',
+                  'flex h-[var(--chip-height)] cursor-pointer items-center rounded-1 border border-gray-7 px-1',
                   {
                     'border-pp-focus-outline bg-pp-focus-bg': isSelected,
                   },
@@ -74,7 +76,12 @@ const RadioSelectInput = ({
               </Text>
 
               {isSelected && (
-                <NumberInput field={option.value} className="w-[35px]" autoFocus format='##' />
+                <NumberInput
+                  field={option.value}
+                  className="w-[35px]"
+                  autoFocus
+                  format="##"
+                />
               )}
             </Flex>
           )

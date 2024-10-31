@@ -23,7 +23,7 @@ const TextAreaInput = ({
   const form = useFormContext()
 
   return (
-    <Flex align="center" gap="2">
+    <Flex align="center" gap="2" className="w-full">
       {label && <BlockLabel name={field}>{label}</BlockLabel>}
       <TextArea
         size="1"
