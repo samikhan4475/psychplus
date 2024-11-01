@@ -90,7 +90,7 @@ const BookAppointmentButton = ({
   useEffect(() => {
     setPolicyAlreadySigned(checkIfPolicyBSigned(userConsents))
     form.setValue('userAgreed', policyAlreadySigned)
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userConsents, policyAlreadySigned])
 
   useEffect(() => {
@@ -99,7 +99,7 @@ const BookAppointmentButton = ({
 
     setPolicyAlreadySigned(checkIfPolicyBSigned(userConsents))
     form.setValue('userAgreed', policyAlreadySigned)
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userConsents])
 
   const careTeamExists = checkCareTeamExists(
@@ -152,19 +152,19 @@ const BookAppointmentButton = ({
         return
       }
     } else {
-      try {
-        await bookAppointmentAction({
-          locationId: clinic.id,
-          specialistStaffId: specialist.id,
-          specialistTypeCode: providerType,
-          type: appointmentType,
-          startDate: slot.startDateUtc ?? slot.startDate,
-          duration: slot.duration,
-          serviceId: slot.servicesOffered?.[0],
-          isSelfPay: paymentMethod === PaymentType.SelfPay,
-        })
-      } catch (error) {
-        setError(error as string)
+      const result = await bookAppointmentAction({
+        locationId: clinic.id,
+        specialistStaffId: specialist.id,
+        specialistTypeCode: providerType,
+        type: appointmentType,
+        startDate: slot.startDateUtc ?? slot.startDate,
+        duration: slot.duration,
+        serviceId: slot.servicesOffered?.[0],
+        isSelfPay: paymentMethod === PaymentType.SelfPay,
+      })
+
+      if (result.state === 'error') {
+        setError(result.error as string)
         setLoading(false)
         return
       }

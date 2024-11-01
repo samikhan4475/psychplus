@@ -90,6 +90,7 @@ const PrimaryProviderAvailabilityCard = ({
 
 const AvailabilityList = ({ userConsents }: AvailabilityListProps) => {
   const data = useSortedFilteredData()
+  
 
   const careTeamMember = useStore((state) => state.careTeamMember())
 
