@@ -1,13 +1,11 @@
 import { DateValue } from 'react-aria-components'
 import z from 'zod'
 
-const dateValidation = z.custom<DateValue>()
-
 // Define Claim ServiceLines schema
 const claimServiceLinesSchema = z.object({
   id: z.string().optional(),
   recordStatus: z.string().optional(),
-  claimId: z.string().optional(),
+  claimId: z.string(),
   chargeId: z.string().optional(),
   cptCode: z.string().optional(),
   cptDescription: z.string().optional(),
@@ -27,8 +25,8 @@ const claimServiceLinesSchema = z.object({
   startTime: z.string().optional(),
   endTime: z.string().optional(),
   sequenceNo: z.coerce.number().optional(),
-  dateOfServiceFrom: z.date(),
-  dateOfServiceTo: z.date(),
+  dateOfServiceFrom:  z.custom<DateValue>().optional(),
+  dateOfServiceTo:  z.custom<DateValue>().optional(),
   units: z.coerce.number().optional(),
   nationalDrugCodeMeasureUnit: z.string().optional(),
   unitAmount: z.coerce.number().optional(),
@@ -50,12 +48,12 @@ const claimDiagnosisSchema = z.object({
   sequenceNo: z.coerce.number().optional(),
 })
 
-// Define Claim update Schema 
+// Define Claim update Schema
 const claimUpdateSchema = z.object({
   id: z.string().uuid().optional(),
   recordStatus: z.string().optional(),
   practiceId: z.string().optional(),
-  appointmentId: z.string().optional(),
+  appointmentId: z.number().optional(),
   claimNumber: z.string(),
   locationId: z.string().optional(),
   renderingProviderId: z.string().optional(),
@@ -65,8 +63,8 @@ const claimUpdateSchema = z.object({
   referringProviderId: z.string().optional(),
   patientId: z.coerce.number().optional(),
   placeOfService: z.string().optional(),
-  dateOfServiceFrom: dateValidation.optional(),
-  dateOfServiceTo: dateValidation.optional(),
+  dateOfServiceFrom:  z.custom<DateValue>().optional(),
+  dateOfServiceTo:  z.custom<DateValue>().optional(),
   claimType: z.string().optional(),
   authorizationNumber: z.string().optional(),
   referralNumber: z.string().optional(),
@@ -87,7 +85,7 @@ const claimUpdateSchema = z.object({
   claimStatusCode: z.string().optional(),
   isMarkAsSubmitted: z.boolean(),
   isSubmitted: z.boolean(),
-  submittedDate: dateValidation.optional(),
+  submittedDate: z.custom<DateValue>().optional(),
   isHoldStatement: z.boolean(),
   isResubmitted: z.boolean(),
   isForcePaper: z.boolean(),
@@ -97,12 +95,12 @@ const claimUpdateSchema = z.object({
   isHold: z.boolean(),
   isClaimScrubbed: z.boolean(),
   isForceUnlock: z.boolean(),
-  forceUnlockDate: dateValidation.optional(),
+  forceUnlockDate: z.custom<DateValue>().optional(),
   forceUnlockReason: z.string().optional(),
   primaryPatientInsurancePolicyId: z.string().optional(),
   secondaryPatientInsurancePolicyId: z.string().optional(),
   tertiaryPatientInsurancePolicyId: z.string().optional(),
-  accidentDate: dateValidation.optional(),
+  accidentDate: z.custom<DateValue>().optional(),
   accidentState: z.string().optional(),
   accidentType: z.string().optional(),
   isOutsideLab: z.boolean(),
@@ -111,11 +109,11 @@ const claimUpdateSchema = z.object({
   isAutoAccident: z.boolean(),
   isOtherAccident: z.boolean(),
   claimFrequencyCode: z.string().optional(),
-  lastSeenDate: dateValidation.optional(),
-  patientName: z.string().optional(),
-  patientAccountNumber: z.string().optional(),
-  patientDateOfBirth: z.string().optional(),
-  patientGender: z.string().optional(),
+  lastSeenDate: z.custom<DateValue>().optional(),
+  patientName: z.string(),
+  patientAccountNumber: z.string(),
+  patientDateOfBirth: z.string(),
+  patientGender: z.string(),
   claimServiceLines: z.array(claimServiceLinesSchema),
   claimDiagnosis: z.array(claimDiagnosisSchema),
 })

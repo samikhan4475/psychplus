@@ -2,9 +2,10 @@
 
 import { useFormContext } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import { getServiceMasterFeeSchedule } from '../actions'
-import { SearchProcedureCodes } from './procedure-code-search'
 import { CodeItem } from '@/types'
+import { getServiceMasterFeeSchedule } from '../actions'
+import { ClaimUpdateSchemaType } from '../schema'
+import { SearchProcedureCodes } from './procedure-code-search'
 
 interface TableCellProcedureProps {
   rowIndex: number
@@ -13,22 +14,39 @@ interface TableCellProcedureProps {
 const TableCellProcedure: React.FC<TableCellProcedureProps> = ({
   rowIndex,
 }) => {
-  const { setValue } = useFormContext()
+  const form = useFormContext<ClaimUpdateSchemaType>()
 
   const handleProcedureCodeSelected = async (selectedItem: CodeItem) => {
     const { code } = selectedItem
     const result = await fetchAndProcessCPTData(code)
+    form.setValue(`claimServiceLines.${rowIndex}.cptCode`, code, {
+      shouldDirty: true,
+    })
     if (result) {
       const { medicareAmount, category } = result
-      if (category === 'Anesthesia') {
-        setValue(`claimServiceLines.${rowIndex}.isAnesthesia`, true)
-      }
-      setValue(`claimServiceLines.${rowIndex}.totalAmount`, medicareAmount)
-      setValue(`claimServiceLines.${rowIndex}.unitAmount`, medicareAmount)
+      form.setValue(
+        `claimServiceLines.${rowIndex}.totalAmount`,
+        medicareAmount,
+        {
+          shouldDirty: true,
+        },
+      )
+      form.setValue(
+        `claimServiceLines.${rowIndex}.unitAmount`,
+        medicareAmount,
+        {
+          shouldDirty: true,
+        },
+      )
+      form.setValue(
+        `claimServiceLines.${rowIndex}.isAnesthesia`,
+        category === 'Anesthesia',
+        {
+          shouldDirty: true,
+        },
+      )
     }
-    setValue(`claimServiceLines.${rowIndex}.cptCode`, code)
   }
-
   const fetchAndProcessCPTData = async (
     code: string,
   ): Promise<{ medicareAmount: number; category: string } | null> => {

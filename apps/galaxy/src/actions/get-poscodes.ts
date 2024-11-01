@@ -16,10 +16,22 @@ const getPOSCodesOptions = async (): Promise<
     }
   }
 
-  const transformedData = response.data.codes.map((data) => ({
-    value: data.code,
-    label: data.displayName,
-  }))
+  const transformedData =
+    response.data?.codes.map((state) => {
+      const submissionCode =
+        state.codeAttributes?.find((attr) => attr.name === 'SubmissionCode')
+          ?.content ?? ''
+      const formattedCode = submissionCode
+        ? submissionCode.padStart(2, '0')
+        : ''
+
+      return {
+        label: formattedCode
+          ? `${formattedCode}-${state.displayName}`
+          : state.displayName,
+        value: state.code,
+      }
+    }) || []
 
   return {
     state: 'success',

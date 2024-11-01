@@ -54,7 +54,7 @@ const columns: ColumnDef<ClaimServiceLinePayment>[] = [
     ),
     cell: ({ row }) => (
       <DateCell className="w-[108px]">
-        {formatDate(row.original.dateOfServiceFrom, 'MM/dd/yyyy')}
+        {formatDate(row.original.dateOfServiceFrom.toString(), 'MM/dd/yyyy')}
       </DateCell>
     ),
   },
@@ -65,7 +65,7 @@ const columns: ColumnDef<ClaimServiceLinePayment>[] = [
     ),
     cell: ({ row }) => (
       <DateCell className="w-[108px]">
-        {formatDate(row.original.dateOfServiceTo, 'MM/dd/yyyy')}
+        {formatDate(row.original.dateOfServiceTo.toString(), 'MM/dd/yyyy')}
       </DateCell>
     ),
   },

@@ -3,34 +3,44 @@
 import React from 'react'
 import { DotsHorizontalIcon } from '@radix-ui/react-icons'
 import { DropdownMenu, Flex, IconButton, Text } from '@radix-ui/themes'
+import { useFormContext, useWatch } from 'react-hook-form'
+import { DeleteIcon } from '@/components/icons'
+import { ClaimUpdateSchemaType } from '../schema'
 
 interface RowActionDropdownProps {
   rowIndex: number
+  rowId?: string
 }
 const ClaimRowActionDropdown: React.FC<RowActionDropdownProps> = ({
   rowIndex,
+  rowId,
 }) => {
+  const form = useFormContext<ClaimUpdateSchemaType>()
+  const { setValue } = form
+  const claimServiceLines = useWatch({
+    control: form.control,
+    name: 'claimServiceLines',
+  })
+
+  const handleDeleteCharge = () => {
+    if (rowId) {
+      let updateCharges = claimServiceLines.map((charge) =>
+        charge.id === rowId ? { ...charge, recordStatus: 'Deleted' } : charge,
+      )
+      setValue('claimServiceLines', updateCharges)
+    } else {
+      const deletedCharges = claimServiceLines.filter(
+        (charge, index) => index !== rowIndex,
+      )
+      setValue('claimServiceLines', deletedCharges)
+    }
+  }
   return (
-    <DropdownMenu.Root>
-      <DropdownMenu.Trigger>
-        <IconButton size="1" variant="ghost" mr="1">
-          <DotsHorizontalIcon height={16} width={16} />
-        </IconButton>
-      </DropdownMenu.Trigger>
-      <DropdownMenu.Content>
-        <DropdownMenu.Item className="hover:bg-pp-black-1 w-full py-4">
-          <Flex className=" hover:text-[white]">
-            <Text size="1">Edit</Text>
-          </Flex>
-        </DropdownMenu.Item>
-        <DropdownMenu.Separator className="m-0 p-0" />
-        <DropdownMenu.Item className="hover:bg-pp-black-1 w-full py-4">
-          <Flex className=" hover:text-[white]">
-            <Text size="1">Delete</Text>
-          </Flex>
-        </DropdownMenu.Item>
-      </DropdownMenu.Content>
-    </DropdownMenu.Root>
+    <Flex gap="1" align="center" justify="center" className="flex-1">
+      <IconButton variant="ghost" onClick={handleDeleteCharge}>
+        <DeleteIcon height={18} />
+      </IconButton>
+    </Flex>
   )
 }
 

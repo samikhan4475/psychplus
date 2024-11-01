@@ -1,20 +1,10 @@
 import { ColumnDef } from '@tanstack/react-table'
 import { ColumnHeader, TextCell } from '@/components'
-import { Sort } from '@/types'
+import { InsuranceClaimPolicy, Sort } from '@/types'
 import { getSortDir } from '@/utils'
 import { ActionsCell } from './table-action-cell'
 
-interface InsuranceData {
-  coverage: string
-  insuranceName: string
-  policyNumber: string
-  relationship: string
-  address: string
-  payerAddress: string
-  status: string
-}
-
-const columns = (sort?: Sort): ColumnDef<InsuranceData>[] => {
+const columns = (sort?: Sort): ColumnDef<InsuranceClaimPolicy>[] => {
   return [
     {
       id: 'coverage',
@@ -28,7 +18,9 @@ const columns = (sort?: Sort): ColumnDef<InsuranceData>[] => {
           label="Coverage"
         />
       ),
-      cell: ({ row }) => <TextCell>{row.original.coverage}</TextCell>,
+      cell: ({ row }) => (
+        <TextCell>{row.original.insurancePolicyPriority}</TextCell>
+      ),
       enableHiding: true,
     },
     {
@@ -43,7 +35,7 @@ const columns = (sort?: Sort): ColumnDef<InsuranceData>[] => {
           label="Insurance Name"
         />
       ),
-      cell: ({ row }) => <TextCell>{row.original.insuranceName}</TextCell>,
+      cell: ({ row }) => <TextCell>{row.original.policyName}</TextCell>,
       enableHiding: true,
     },
     {
@@ -58,7 +50,7 @@ const columns = (sort?: Sort): ColumnDef<InsuranceData>[] => {
           label="Policy Number"
         />
       ),
-      cell: ({ row }) => <TextCell>{row.original.policyNumber}</TextCell>,
+      cell: ({ row }) => <TextCell>{row.original.groupNumber}</TextCell>,
 
       enableHiding: true,
     },
@@ -74,7 +66,7 @@ const columns = (sort?: Sort): ColumnDef<InsuranceData>[] => {
           label="Relationship"
         />
       ),
-      cell: ({ row }) => <TextCell>{row.original.relationship}</TextCell>,
+      cell: ({ row }) => <TextCell>{}</TextCell>,
 
       enableHiding: true,
     },
@@ -90,7 +82,7 @@ const columns = (sort?: Sort): ColumnDef<InsuranceData>[] => {
           label="Address"
         />
       ),
-      cell: ({ row }) => <TextCell>{row.original.address}</TextCell>,
+      cell: ({ row }) => <TextCell>{''}</TextCell>,
 
       enableHiding: true,
     },
@@ -106,7 +98,7 @@ const columns = (sort?: Sort): ColumnDef<InsuranceData>[] => {
           label="Payer Address"
         />
       ),
-      cell: ({ row }) => <TextCell>{row.original.payerAddress}</TextCell>,
+      cell: ({ row }) => <TextCell>{''}</TextCell>,
 
       enableHiding: true,
     },
@@ -122,7 +114,7 @@ const columns = (sort?: Sort): ColumnDef<InsuranceData>[] => {
           label="Status"
         />
       ),
-      cell: ({ row }) => <TextCell>{row.original.status}</TextCell>,
+      cell: ({ row }) => <TextCell>{row.original.verificationStatus}</TextCell>,
 
       enableHiding: true,
     },
@@ -135,24 +127,4 @@ const columns = (sort?: Sort): ColumnDef<InsuranceData>[] => {
   ]
 }
 
-const dummyData: InsuranceData[] = [
-  {
-    coverage: 'Primary',
-    insuranceName: 'BCBS- Insurance 1',
-    policyNumber: '78910',
-    relationship: '18 Self',
-    address: '217 Mackenzie Drive',
-    payerAddress: '-',
-    status: 'New Charge',
-  },
-  {
-    coverage: 'Secondary',
-    insuranceName: '1199 National Insurance',
-    policyNumber: '10987',
-    relationship: '18 Self',
-    address: '217 Mackenzie Drive',
-    payerAddress: '-',
-    status: 'N/A',
-  },
-]
-export { columns, dummyData }
+export { columns }

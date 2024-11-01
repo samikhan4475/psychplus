@@ -1,49 +1,51 @@
+import { DateValue } from 'react-aria-components'
 import { Metadata } from './metadata'
 
 interface ClaimServiceLine {
   id?: string
   metadata?: Metadata
-  recordStatus: string
+  recordStatus?: string
   claimId: string
-  cptCode: string
-  cptDescription: string
-  nationalDrugCode: string
-  modifierCode1: string
-  modifierCode2: string
-  modifierCode3: string
-  modifierCode4: string
-  diagnosisPointer1: string
-  diagnosisPointer2: string
-  diagnosisPointer3: string
-  diagnosisPointer4: string
-  serviceLineNotes: string
-  authorizationNumber: string
-  deletedReason: string
-  minutes: string
-  startTime: string
-  endTime: string
-  sequenceNo: number
-  dateOfServiceFrom: Date
-  dateOfServiceTo: Date
-  units: number
-  nationalDrugCodeQuantity: number
-  nationalDrugCodeMeasureUnit: string
-  unitAmount: number
-  totalAmount: number
-  placeOfService: string
-  isDoNotBill: true
-  statusCode: string
+  cptCode?: string
+  cptDescription?: string
+  nationalDrugCode?: string
+  modifierCode1?: string
+  modifierCode2?: string
+  modifierCode3?: string
+  modifierCode4?: string
+  diagnosisPointer1?: string
+  diagnosisPointer2?: string
+  diagnosisPointer3?: string
+  diagnosisPointer4?: string
+  serviceLineNotes?: string
+  authorizationNumber?: string
+  deletedReason?: string
+  minutes?: string
+  startTime?: string
+  endTime?: string
+  sequenceNo?: number
+  dateOfServiceFrom?: DateValue 
+  dateOfServiceTo?: DateValue
+  units?: number
+  nationalDrugCodeQuantity?: number
+  nationalDrugCodeMeasureUnit?: string
+  unitAmount?: number
+  totalAmount?: number
+  placeOfService?: string
+  isDoNotBill: boolean
+  statusCode?: string
+  isAnesthesia: boolean
 }
 
 interface ClaimDiagnosis {
   id?: string
   metadata?: Metadata
-  recordStatus: string
-  claimId: string
-  diagnosisCode: string
-  diagnosisDescription: string
-  deletedReason: string
-  sequenceNo: number
+  recordStatus?: string
+  claimId?: string
+  diagnosisCode?: string
+  diagnosisDescription?: string
+  deletedReason?: string
+  sequenceNo?: number
 }
 
 interface ClaimInsurance {
@@ -138,7 +140,7 @@ interface Claim {
   claimStatusCode: string
   isMarkAsSubmitted: boolean
   isSubmitted: boolean
-  submittedDate: Date
+  submittedDate?: string
   isHoldStatement: boolean
   isResubmitted: boolean
   isForcePaper: boolean
@@ -182,78 +184,80 @@ interface Claim {
 }
 
 interface ClaimUpdate {
-  id: string
-  metadata: Metadata
-  recordStatus: string
-  practiceId: string
-  appointmentId: number
-  claimNumber: string
-  locationId: string
-  renderingProviderId: number
-  attendingProviderId: number
-  supervisingProviderId: number
-  orderingProviderId: number
-  referringProviderId: number
-  patientId: number
-  placeOfService: string
-  dateOfServiceFrom: Date
-  dateOfServiceTo: Date
-  claimType: string
+  id?: string
+  metadata?: Metadata
+  recordStatus?: string
+  practiceId?: string
+  appointmentId?: number
+  claimNumber?: string
+  locationId?: string
+  renderingProviderId?: string
+  attendingProviderId?: string
+  supervisingProviderId?: string
+  orderingProviderId?: string
+  referringProviderId?: string
+  patientId?: number
+  placeOfService?: string
+  dateOfServiceFrom?: DateValue | string
+  dateOfServiceTo?: DateValue | string
+  claimType?: string
   isAnesthesiaClaim?: boolean
-  authorizationNumber: string
-  referralNumber: string
-  clinicalLaboratoryImprovementAmendmentsNumber: string
-  claimNotes: string
-  payerClaimControlNumber: string
-  primaryStatusCode: string
-  secondaryStatusCode: string
-  tertiaryStatusCode: string
-  patientStatusCode: string
-  createFrom: string
-  deletedReason: string
-  totalAmount: number
-  amountDue: number
-  primaryPaid: number
-  secondaryPaid: number
-  tertiaryPaid: number
+  authorizationNumber?: string
+  referralNumber?: string
+  clinicalLaboratoryImprovementAmendmentsNumber?: string
+  claimNotes?: string
+  payerClaimControlNumber?: string
+  primaryStatusCode?: string
+  secondaryStatusCode?: string
+  tertiaryStatusCode?: string
+  patientStatusCode?: string
+  createFrom?: string
+  deletedReason?: string
+  totalAmount?: number
+  amountDue?: number
+  primaryPaid?: number
+  secondaryPaid?: number
+  tertiaryPaid?: number
   patientPaid?: number | null
   primaryWriteOff?: number
   secondaryWriteOff?: number
   tertiaryWriteOff?: number
   patientWriteOff?: number
   totalWriteOff?: number
-  claimStatusCode: string
+  claimStatusCode?: string
   isMarkAsSubmitted: boolean
   isSubmitted: boolean
-  submittedDate: Date
+  submittedDate?: string
   isHoldStatement: boolean
   isResubmitted: boolean
   isForcePaper: boolean
-  rejectionReason: string
+  rejectionReason?: string
   isSelfPay: boolean
   isDraft: boolean
   isHold: boolean
   externalFileId?: number
-  isClaimScrubbed: boolean
+  isClaimScrubbed?: boolean
   isForceUnlock: boolean
   forceUnlockBy?: number
-  forceUnlockDate: Date
-  forceUnlockReason: string
+  forceUnlockDate?: DateValue | string
+  forceUnlockReason?: string
   primaryPatientInsurancePolicyId?: string
   secondaryPatientInsurancePolicyId?: string
   tertiaryPatientInsurancePolicyId?: string
-  accidentDate: Date
-  accidentState: string
-  accidentType: string
-  isOutsideLab: boolean
-  labCharges: number
+  accidentDate?: DateValue | string
+  accidentState?: string
+  accidentType?: string
+  isOutsideLab?: boolean
+  labCharges?: number
   isEmployment: boolean
   isAutoAccident: boolean
   isOtherAccident: boolean
-  claimFrequencyCode: string
-  lastSeenDate: Date
+  claimFrequencyCode?: string
+  lastSeenDate?: DateValue | string
   patientName: string
   patientAccountNumber: string
+  patientGender: string
+  patientDateOfBirth: string
   claimServiceLines: ClaimServiceLine[]
   claimDiagnosis: ClaimDiagnosis[]
 }
@@ -291,6 +295,151 @@ interface CodeItem {
   displayName: string
   groupingCode: string
 }
+
+interface InsuranceClaimPolicy {
+  effectiveDate?: string
+  groupNumber?: string
+  hasCardBackImage?: boolean
+  hasCardFrontImage?: boolean
+  id?: string
+  insurancePlanId?: string
+  insurancePolicyPriority?: string
+  isActive?: boolean
+  isDeleted?: boolean
+  isPatientPolicyHolder?: boolean
+  memberId?: string
+  metadata?: Metadata
+  policyName?: string
+  terminationDate?: string
+  verificationStatus?: string
+}
+
+interface ClaimUpdateApiResponse {
+  id?: string
+  metadata?: Metadata
+  recordStatus?: string
+  practiceId?: string
+  appointmentId?: number
+  claimNumber?: string
+  locationId?: string
+  renderingProviderId?: number
+  attendingProviderId?: number
+  supervisingProviderId?: number
+  orderingProviderId?: number
+  referringProviderId?: number
+  patientId?: number
+  placeOfService?: string
+  dateOfServiceFrom?: string
+  dateOfServiceTo?: string
+  claimType?: string
+  isAnesthesiaClaim?: boolean
+  authorizationNumber?: string
+  referralNumber?: string
+  clinicalLaboratoryImprovementAmendmentsNumber?: string
+  claimNotes?: string
+  payerClaimControlNumber?: string
+  primaryStatusCode?: string
+  secondaryStatusCode?: string
+  tertiaryStatusCode?: string
+  patientStatusCode?: string
+  createFrom?: string
+  deletedReason?: string
+  totalAmount?: number
+  amountDue?: number
+  primaryPaid?: number
+  secondaryPaid?: number
+  tertiaryPaid?: number
+  patientPaid?: number | null
+  primaryWriteOff?: number
+  secondaryWriteOff?: number
+  tertiaryWriteOff?: number
+  patientWriteOff?: number
+  totalWriteOff?: number
+  claimStatusCode?: string
+  isMarkAsSubmitted: boolean
+  isSubmitted: boolean
+  submittedDate?: string
+  isHoldStatement: boolean
+  isResubmitted: boolean
+  isForcePaper: boolean
+  rejectionReason?: string
+  isSelfPay: boolean
+  isDraft: boolean
+  isHold: boolean
+  externalFileId?: number
+  isClaimScrubbed?: boolean
+  isForceUnlock: boolean
+  forceUnlockBy?: number
+  forceUnlockDate?: string
+  forceUnlockReason?: string
+  primaryPatientInsurancePolicyId?: string
+  secondaryPatientInsurancePolicyId?: string
+  tertiaryPatientInsurancePolicyId?: string
+  accidentDate?: string
+  accidentState?: string
+  accidentType?: string
+  isOutsideLab?: boolean
+  labCharges?: number
+  isEmployment: boolean
+  isAutoAccident: boolean
+  isOtherAccident: boolean
+  claimFrequencyCode?: string
+  lastSeenDate?: string
+  patientName: string
+  patientAccountNumber: string
+  patientGender: string
+  patientDateOfBirth: string
+  claimServiceLines: ClaimServiceLineApiResponse[]
+  claimDiagnosis: ClaimDiagnosisApiResponse[]
+}
+
+interface ClaimServiceLineApiResponse {
+  id?: string
+  metadata?: Metadata
+  recordStatus?: string
+  claimId: string
+  cptCode?: string
+  cptDescription?: string
+  nationalDrugCode?: string
+  modifierCode1?: string
+  modifierCode2?: string
+  modifierCode3?: string
+  modifierCode4?: string
+  diagnosisPointer1?: string
+  diagnosisPointer2?: string
+  diagnosisPointer3?: string
+  diagnosisPointer4?: string
+  serviceLineNotes?: string
+  authorizationNumber?: string
+  deletedReason?: string
+  minutes?: string
+  startTime?: string
+  endTime?: string
+  sequenceNo?: number
+  dateOfServiceFrom?: string
+  dateOfServiceTo?: string
+  units?: number
+  nationalDrugCodeQuantity?: number
+  nationalDrugCodeMeasureUnit?: string
+  unitAmount?: number
+  totalAmount?: number
+  placeOfService?: string
+  isDoNotBill: boolean
+  statusCode?: string
+  isAnesthesia: boolean
+}
+
+interface ClaimDiagnosisApiResponse {
+  id?: string
+  metadata?: Metadata
+  recordStatus?: string
+  claimId?: string
+  diagnosisCode?: string
+  diagnosisDescription?: string
+  deletedReason?: string
+  sequenceNo?: number
+}
+
 export type {
   Claim,
   ClaimUpdate,
@@ -298,5 +447,10 @@ export type {
   CPTRecord,
   ICD10Code,
   DiagnosisCode,
-  ClaimServiceLine
+  ClaimServiceLine,
+  ClaimDiagnosis,
+  InsuranceClaimPolicy,
+  ClaimUpdateApiResponse,
+  ClaimServiceLineApiResponse,
+  ClaimDiagnosisApiResponse,
 }

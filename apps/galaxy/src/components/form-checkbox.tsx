@@ -12,7 +12,7 @@ const FormCheckbox = ({ label, fieldName }: FormCheckboxProps) => {
   const { control } = useFormContext<ClaimUpdateSchemaType>()
 
   return (
-    <FormFieldContainer className="flex-1">
+    <FormFieldContainer>
       <Text className="text-[11.5px] font-[600]">
         <Flex gap="2">
           <Controller

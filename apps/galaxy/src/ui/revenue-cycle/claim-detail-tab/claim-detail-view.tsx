@@ -1,10 +1,26 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { CalendarDate, getLocalTimeZone, today } from '@internationalized/date'
 import * as Accordion from '@radix-ui/react-accordion'
 import { Flex } from '@radix-ui/themes'
+import { DateValue } from 'react-aria-components'
 import { SubmitHandler, useFieldArray, useForm } from 'react-hook-form'
+import toast from 'react-hot-toast'
 import { FormContainer } from '@/components'
+import {
+  ClaimServiceLine,
+  ClaimServiceLineApiResponse,
+  ClaimUpdate,
+  ClaimUpdateApiResponse,
+} from '@/types'
+import {
+  getCalendarDateLabel,
+  getLocalCalendarDate,
+  sanitizeFormData,
+} from '@/utils'
 import { AccidentAndLabView } from './accident-lab-section'
+import { getClaimById } from './actions/get-service-claim'
+import { updateClaimAction } from './actions/update-claim'
 import { AuthAndReferralsView } from './auth-and-referrals-section'
 import { BillingProviderView } from './billing-provider-section'
 import { ChargesHeaderAction, ChargesTableView } from './charges-section'
@@ -52,15 +68,106 @@ const ClaimDetailView = ({ claimId }: ClaimDetailViewProps) => {
     control,
     name: 'claimServiceLines',
   })
-  const onSubmit: SubmitHandler<ClaimUpdateSchemaType> = async () => {}
+
+  const getDateString = (date?: DateValue): string | undefined =>
+    date ? getCalendarDateLabel(date) : undefined
+
+  const onSubmit: SubmitHandler<ClaimUpdateSchemaType> = async (data) => {
+    const formattedClaimData = {
+      ...data,
+      accidentDate: getDateString(data.accidentDate),
+      lastSeenDate: getDateString(data.lastSeenDate),
+      forceUnlockDate: getDateString(data.forceUnlockDate),
+      dateOfServiceFrom: getDateString(data.dateOfServiceFrom),
+      dateOfServiceTo: getDateString(data.dateOfServiceTo),
+      submittedDate: getDateString(data.submittedDate),
+      renderingProviderId: Number(data.renderingProviderId),
+      attendingProviderId: Number(data.attendingProviderId),
+      supervisingProviderId: Number(data.supervisingProviderId),
+      orderingProviderId: Number(data.orderingProviderId),
+      referringProviderId: Number(data.referringProviderId),
+      claimServiceLines: (data.claimServiceLines ?? []).map(
+        (line: ClaimServiceLine) => ({
+          ...line,
+          dateOfServiceFrom: getDateString(line.dateOfServiceFrom),
+          dateOfServiceTo: getDateString(line.dateOfServiceTo),
+        }),
+      ),
+    }
+    const sanitizeClaimData = sanitizeFormData(formattedClaimData)
+    await updateClaimAction(data.id ?? '', sanitizeClaimData)
+  }
 
   const handleAccordionChange = (value: string[]) => {
     setOpenItems(value)
   }
 
+  useEffect(() => {
+    const fetchClaimData = async (claimId: string) => {
+      const claimResponse = await getClaimById(claimId)
+      if (claimResponse.state === 'success') {
+        const transformedClaimData = transformClaimData(claimResponse.data)
+        form.reset(transformedClaimData)
+      } else {
+        toast('Failed to fetch claim data')
+      }
+    }
+    if (claimId) {
+      fetchClaimData(claimId)
+    }
+  }, [])
+
+  const transformClaimData = (
+    claimData: ClaimUpdateApiResponse,
+  ): ClaimUpdate => {
+    return {
+      ...claimData,
+      accidentDate: claimData.accidentDate
+        ? getLocalCalendarDate(claimData.accidentDate)
+        : undefined,
+      lastSeenDate: claimData.lastSeenDate
+        ? getLocalCalendarDate(claimData.lastSeenDate)
+        : undefined,
+      forceUnlockDate: claimData.forceUnlockDate
+        ? getLocalCalendarDate(claimData.forceUnlockDate)
+        : undefined,
+      dateOfServiceFrom: claimData.dateOfServiceFrom
+        ? getLocalCalendarDate(claimData.dateOfServiceFrom)
+        : undefined,
+      dateOfServiceTo: claimData.dateOfServiceTo
+        ? getLocalCalendarDate(claimData.dateOfServiceTo)
+        : undefined,
+      renderingProviderId:
+        claimData.renderingProviderId?.toString() ?? undefined,
+      attendingProviderId:
+        claimData.attendingProviderId?.toString() ?? undefined,
+      supervisingProviderId:
+        claimData.supervisingProviderId?.toString() ?? undefined,
+      orderingProviderId: claimData.orderingProviderId?.toString() ?? undefined,
+      referringProviderId:
+        claimData.referringProviderId?.toString() ?? undefined,
+      claimServiceLines: (claimData.claimServiceLines ?? []).map(
+        (line: ClaimServiceLineApiResponse) => ({
+          ...line,
+          dateOfServiceFrom: line.dateOfServiceFrom
+            ? getLocalCalendarDate(line.dateOfServiceFrom)
+            : undefined,
+          dateOfServiceTo: line.dateOfServiceTo
+            ? getLocalCalendarDate(line.dateOfServiceTo)
+            : undefined,
+          isAnesthsia: line?.isAnesthesia ?? false,
+          startTime: line?.startTime?.toString() ?? '',
+          minutes: line?.minutes?.toString() ?? '',
+          endTime: line?.endTime?.toString() ?? '',
+        }),
+      ),
+    }
+  }
   const onAddNewServiceLine = () => {
+    const timeZone = getLocalTimeZone()
+
+    const dateToday: CalendarDate = today(timeZone)
     const newServiceLine = {
-      id: crypto.randomUUID(),
       recordStatus: 'Active',
       claimId,
       chargeId: '',
@@ -69,8 +176,8 @@ const ClaimDetailView = ({ claimId }: ClaimDetailViewProps) => {
       modifierCode2: '',
       diagnosisPointer1: '',
       sequenceNo: form.watch('claimServiceLines').length + 1,
-      dateOfServiceFrom: new Date(),
-      dateOfServiceTo: new Date(),
+      dateOfServiceFrom: dateToday,
+      dateOfServiceTo: dateToday,
       units: 0,
       unitAmount: 0.0,
       totalAmount: 0.0,
@@ -82,10 +189,9 @@ const ClaimDetailView = ({ claimId }: ClaimDetailViewProps) => {
 
     append(newServiceLine)
   }
-
   return (
     <FormContainer form={form} onSubmit={onSubmit} className="bg-pp-bg-accent ">
-      <ClaimDetailHeader claimId={claimId} />
+      <ClaimDetailHeader />
       <ClaimActions />
       <PatientClaimDetails />
       <Flex direction="column" className="bg-white overflow-hidden rounded-1">
@@ -98,9 +204,7 @@ const ClaimDetailView = ({ claimId }: ClaimDetailViewProps) => {
           <ClaimAccordionItem title="Billing Provider">
             <BillingProviderView />
           </ClaimAccordionItem>
-          <ClaimAccordionItem title="Accidents And Labs">
-            <AccidentAndLabView />
-          </ClaimAccordionItem>
+
           <ClaimAccordionItem
             title="Insurances"
             buttons={ClaimInsuranceHeaders()}
@@ -115,6 +219,10 @@ const ClaimDetailView = ({ claimId }: ClaimDetailViewProps) => {
             buttons={<ChargesHeaderAction onAddNew={onAddNewServiceLine} />}
           >
             <ChargesTableView />
+          </ClaimAccordionItem>
+
+          <ClaimAccordionItem title="Accidents And Labs">
+            <AccidentAndLabView />
           </ClaimAccordionItem>
 
           <Flex gap="3" className="flex-1">

@@ -12,7 +12,7 @@ const RejectionReason = () => {
       <TextArea
         className="w-[100%]"
         maxLength={2048}
-        {...form.register('claimNotes')}
+        {...form.register('rejectionReason')}
         disabled={true}
       />
     </FormFieldContainer>

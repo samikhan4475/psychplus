@@ -7,6 +7,8 @@ interface Store {
   activeTab: Tab
   viewedTabs: Set<Tab>
   closeableTabs: Set<Tab>
+  selectedClaimId: string
+  setSelectedClaim: (selectedClaimId: string) => void
   setActiveTab: (tab: Tab) => void
   closeTab: (tab: Tab) => void
 }
@@ -47,8 +49,12 @@ const useStore = create<Store>((set, get) => ({
       activeTab: RevenueCycleTab.Claim,
       closeableTabs: updatedCloseableTabs,
       viewedTabs: updatedViewedTabs,
+      selectedClaimId: '',
     })
   },
+  selectedClaimId: '',
+  setSelectedClaim: (selectedClaimId: string) =>
+    set(() => ({ selectedClaimId: selectedClaimId })),
 }))
 
 export { useStore }

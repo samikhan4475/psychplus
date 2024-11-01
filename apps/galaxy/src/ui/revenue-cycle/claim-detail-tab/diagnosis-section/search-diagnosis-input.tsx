@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from 'react'
+import { MagnifyingGlassIcon } from '@radix-ui/react-icons'
 import { Box, Flex, ScrollArea, Text, TextField } from '@radix-ui/themes'
 import useOnclickOutside from 'react-cool-onclickoutside'
 import toast from 'react-hot-toast'
@@ -79,39 +80,40 @@ const SearchDiagnosisInput = <T extends ICD10Code>({
   }, [diagnosisDataList, loadingDiagnosis])
 
   return (
-    <>
-      <Box ref={ref}>
-        <Flex
-          className={cn(
-            'w-full flex-wrap overflow-y-auto rounded-2 border border-gray-7',
-          )}
-          align="center"
-          gap="1"
-          pl="1"
-        >
-          <TextField.Root
-            size="1"
-            className="min-w-14 !outline-white w-[500px] flex-1 [box-shadow:none]"
-            placeholder={placeholder}
-            onChange={(e) => handleSearchService(e.target.value)}
-            onFocus={() => setOpen(true)}
-          />
-        </Flex>
-
-        {open && (
-          <Box position="relative">
-            <ScrollArea
-              className={
-                'bg-white !absolute z-50 mx-auto h-auto max-h-40 w-[500px] rounded-[25px] p-2 shadow-3'
-              }
-            >
-              {memoizedDiagnosisList}
-            </ScrollArea>
-          </Box>
+    <Box ref={ref}>
+      <Flex
+        className={cn(
+          'w-full flex-wrap overflow-y-auto rounded-2 border border-gray-7 ',
         )}
-      </Box>
-      <SearchButton />
-    </>
+        align="center"
+        gap="1"
+        pl="1"
+      >
+        <TextField.Root
+          size="1"
+          className="min-w-14 !outline-white w-[500px] flex-1 [box-shadow:none] flex-row-reverse"
+          placeholder={placeholder}
+          onChange={(e) => handleSearchService(e.target.value)}
+          onFocus={() => setOpen(true)}
+        >
+          <TextField.Slot>
+            <MagnifyingGlassIcon height="16" width="16" />
+          </TextField.Slot>
+        </TextField.Root>
+      </Flex>
+
+      {open && (
+        <Box position="relative">
+          <ScrollArea
+            className={
+              'bg-white !absolute z-50 mx-auto h-auto max-h-40 w-[500px] rounded-[25px] p-2 shadow-3'
+            }
+          >
+            {memoizedDiagnosisList}
+          </ScrollArea>
+        </Box>
+      )}
+    </Box>
   )
 }
 

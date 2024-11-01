@@ -211,6 +211,8 @@ const GET_PROCEDURES_CODES = (codeStartsWith: string) =>
   `${API_URL}/api/codeset/authorities/AMA/codesets/CPT4?codeStartsWith=${codeStartsWith}&includeExtraDetails=false&offset=0&limit=0&orderBy=displayName%20asc`
 const GET_MODIFIERS_CODES = (codeStartsWith: string) =>
   `${API_URL}/api/codeset/authorities/AMA/codesets/CPT4Modifiers?codeStartsWith=${codeStartsWith}&includeExtraDetails=false&offset=0&limit=0&orderBy=displayName%20asc`
+const GET_CLAIM_BY_ID = (claimId: string) => `${API_URL}/api/claims/${claimId}`
+const UPDATE_CLAIM = (claimId: string) => `${API_URL}/api/claims/${claimId}`
 const ADD_REPORT_TEMPLATE_ENDPOINT = `${API_URL}/api/reporting/templates`
 const UPLOAD_TEMPLATE_REPORT_ENDPOINT = (templateId: string) =>
   `${API_URL}/api/reporting/templates/${templateId}/actions/importdefinition`
@@ -332,9 +334,11 @@ export {
   GET_MASTER_FEE_SCHEDULES,
   GET_PROCEDURES_CODES,
   GET_MODIFIERS_CODES,
+  GET_CLAIM_BY_ID,
   GET_ORGANIZATIONS_ENDPOINT,
   GET_PRACTICES_ENDPOINT,
   GET_PATIENT_VITALS_ENDPOINT,
+  UPDATE_CLAIM,
   ADD_PATIENT_VITAL_ENDPOINT,
   UPDATE_PATIENT_VITAL_ENDPOINT,
   GET_PATIENT_STATEMENT_DETAIL_LIST_ENDPOINT,

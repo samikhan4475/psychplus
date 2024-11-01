@@ -1,3 +1,4 @@
+import { DateValue } from 'react-aria-components'
 import z from 'zod'
 
 const ServiceLinePaymentAdjustmentSchema = z.object({
@@ -16,8 +17,8 @@ const ClaimServiceLinePaymentSchema = z.object({
   recordStatus: z.string(),
   claimPaymentId: z.string(),
   claimServiceLineId: z.string(),
-  dateOfServiceFrom: z.date(),
-  dateOfServiceTo: z.date(),
+  dateOfServiceFrom: z.custom<DateValue>(),
+  dateOfServiceTo: z.custom<DateValue>(),
   cptCode: z.string(),
   units: z.number(),
   billedAmount: z.number(),

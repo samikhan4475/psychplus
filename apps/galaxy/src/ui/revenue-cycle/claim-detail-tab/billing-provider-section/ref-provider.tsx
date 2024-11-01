@@ -1,7 +1,7 @@
 'use client'
 
-import { getStaffOptionsAction } from '@/actions/get-staff'
 import { AsyncSelect, FormFieldContainer, FormFieldLabel } from '@/components'
+import { getProviderOptionsAction } from '../actions'
 
 const RefProvider = () => {
   return (
@@ -10,7 +10,7 @@ const RefProvider = () => {
       <AsyncSelect
         field="referringProviderId"
         placeholder="Select"
-        fetchOptions={getStaffOptionsAction}
+        fetchOptions={getProviderOptionsAction}
         buttonClassName="w-full h-6"
         className="h-full flex-1"
       />

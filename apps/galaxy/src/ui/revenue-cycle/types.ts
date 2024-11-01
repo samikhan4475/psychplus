@@ -1,4 +1,5 @@
 import { Claim, Metadata } from '@/types'
+import { DateValue } from 'react-aria-components'
 
 enum RevenueCycleTab {
   Claim = 'Claim',
@@ -37,8 +38,8 @@ interface ClaimServiceLinePayment {
   recordStatus: string
   claimPaymentId: string
   claimServiceLineId: string
-  dateOfServiceFrom: Date
-  dateOfServiceTo: Date
+  dateOfServiceFrom: DateValue
+  dateOfServiceTo: DateValue
   cptCode: string
   units: number
   billedAmount: number

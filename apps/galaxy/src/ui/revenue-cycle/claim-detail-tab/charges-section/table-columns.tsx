@@ -136,7 +136,7 @@ const columns = (): ColumnDef<ClaimServiceLine>[] => {
           label="Total Amount"
         />
       ),
-      cell: ({ row }) => <TableCellTotalAmount />,
+      cell: ({ row }) => <TableCellTotalAmount row={row}/>,
 
       enableHiding: true,
     },
@@ -172,7 +172,7 @@ const columns = (): ColumnDef<ClaimServiceLine>[] => {
       id: 'actions-column',
       accessorKey: 'actions-column',
       header: () => <ColumnHeader label="Actions" className="!font-medium" />,
-      cell: ({ row }) => <ClaimRowActionDropdown rowIndex={row.index} />,
+      cell: ({ row }) => <ClaimRowActionDropdown rowIndex={row.index} rowId={row.original.id}/>,
       enableHiding: false,
     },
   ]

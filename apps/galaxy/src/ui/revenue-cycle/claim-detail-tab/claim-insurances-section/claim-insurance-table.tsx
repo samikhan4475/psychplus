@@ -1,8 +1,12 @@
+import { useFormContext } from 'react-hook-form'
 import { DataTable } from '@/components'
-import { dummyData, columns as getColumns } from './table-columns'
+import { columns as getColumns } from './table-columns'
 
 const ClaimInsuranceTable = () => {
-  return <DataTable columns={getColumns()} data={dummyData} />
+  const { watch } = useFormContext()
+  const claimInsurancePolicies = watch('claimInsurancePolicies') || []
+
+  return <DataTable columns={getColumns()} data={claimInsurancePolicies} />
 }
 
 export { ClaimInsuranceTable }

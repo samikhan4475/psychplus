@@ -5,22 +5,22 @@ import { Box, Flex } from '@radix-ui/themes'
 import { TabsTrigger } from '@/components'
 import { ClaimDetailView } from './claim-detail-tab'
 import { ClaimTabView } from './claim-tab'
+import { InsurancePaymentDetailView } from './insurance-payment-detail-tab'
 import { InsurancePaymentTabView } from './insurance-payment-tab'
 import { PatientStatementsTabView } from './patient-statements-tab'
 import { useStore } from './store'
 import { SubmissionTabView } from './submission-tab'
 import { RevenueCycleTab } from './types'
-import { InsurancePaymentDetailView } from './insurance-payment-detail-tab'
 
 const RevenueCycleTabs = () => {
-  const { activeTab, closeableTabs, closeTab, setActiveTab } = useStore(
-    (state) => ({
+  const { activeTab, closeableTabs, closeTab, setActiveTab, selectedClaimId } =
+    useStore((state) => ({
       closeableTabs: Array.from(state.closeableTabs),
       activeTab: state.activeTab,
       setActiveTab: state.setActiveTab,
       closeTab: state.closeTab,
-    }),
-  )
+      selectedClaimId: state.selectedClaimId,
+    }))
 
   // Claim# 1234, Check# 1234, tabId is 1234
   const tabId = activeTab?.split(' ')[1]
@@ -31,7 +31,7 @@ const RevenueCycleTabs = () => {
         defaultValue={RevenueCycleTab.Claim}
         value={activeTab}
         onValueChange={setActiveTab}
-        className="flex flex-col w-full"
+        className="flex w-full flex-col"
       >
         <Flex className="z-50">
           <Tabs.List>
@@ -73,7 +73,7 @@ const RevenueCycleTabs = () => {
           <PatientStatementsTabView />
         </TabsContent>
         <TabsContent value={`${RevenueCycleTab.ClaimDetails} ${tabId}`}>
-          <ClaimDetailView claimId={tabId} />
+          <ClaimDetailView claimId={selectedClaimId} />
         </TabsContent>
         <TabsContent value={`${RevenueCycleTab.CheckDetails} ${tabId}`}>
           <InsurancePaymentDetailView checkId={tabId} />
