@@ -1,6 +1,7 @@
 import { QuickNoteSectionItem } from '@/types'
 import { QUICKNOTE_SECTION_NAME } from './constants'
 import { PhysicalExamWidgetSchemaType } from './physical-exam-widget-schema'
+import { createEmptyFormValues } from './physicalExamDefaults'
 
 enum ExamPrefixes {
   CARDIOVASCULAR = 'CVS',
@@ -195,41 +196,7 @@ const schemaToValue: { [key: string]: string } = Object.entries(
 const transformIn = (
   value: QuickNoteSectionItem[],
 ): PhysicalExamWidgetSchemaType => {
-  const result: PhysicalExamWidgetSchemaType = {
-    general: [],
-    skin: [],
-    heent: [],
-    neck: [],
-    lymphNodes: [],
-    chest: [],
-    cardiovascularCvs: [],
-    lungs: [],
-    gastrointestinalGi: [],
-    adhdHyperactive: [],
-    gynecologicalGyn: [],
-    genitourinaryGu: [],
-    centralNervousSystemCns: [],
-    musculoskeletal: [],
-    nutrition: [],
-    psychiatric: [],
-    cranialNervesExam: [],
-    cneOtherDetails: '',
-    gnOtherDetails: '',
-    sknOtherDetails: '',
-    hntOtherDetails: '',
-    nkOtherDetails: '',
-    lnOtherDetails: '',
-    chsOtherDetails: '',
-    cvsOtherDetails: '',
-    lngOtherDetails: '',
-    giOtherDetails: '',
-    gynOtherDetails: '',
-    guOtherDetails: '',
-    cnsOtherDetails: '',
-    msuOtherDetails: '',
-    mutOtherDetails: '',
-    psyOtherDetails: '',
-  }
+  const result = createEmptyFormValues()
 
   value.forEach((item) => {
     if (item.sectionItem.includes('Other')) {
@@ -281,6 +248,9 @@ const transformIn = (
           break
         case 'psyOtherDetails':
           result.psyOtherDetails = item.sectionItemValue
+          break
+        case 'nutOtherDetails':
+          result.nutOtherDetails = item.sectionItemValue
           break
         default:
           break

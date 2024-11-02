@@ -37,7 +37,6 @@ const CHS_OPTIONS: GroupSelectOption<string>[] = [
     value: 'chsOther',
     details: {
       type: 'text',
-      label: 'Details',
       field: 'chsOtherDetails',
     },
   },

@@ -37,7 +37,6 @@ const CNS_OPTIONS: GroupSelectOption<string>[] = [
     value: 'cnsOther',
     details: {
       type: 'text',
-      label: 'Details',
       field: 'cnsOtherDetails',
     },
   },

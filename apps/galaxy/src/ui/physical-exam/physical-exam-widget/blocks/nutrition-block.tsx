@@ -37,7 +37,6 @@ const NUT_OPTIONS: GroupSelectOption<string>[] = [
     value: 'nutOther',
     details: {
       type: 'text',
-      label: 'Details',
       field: 'nutOtherDetails',
     },
   },

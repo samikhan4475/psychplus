@@ -12,7 +12,7 @@ type DetailsType = 'text' | 'number' | 'select' | 'date' | 'multi-select'
 
 interface SelectableChipDetailsProps {
   type: DetailsType
-  label: string
+  label?: string
   field: string
   hideSelectedCount?: boolean
   options?: { label: string; value: string }[]
@@ -48,9 +48,11 @@ const SelectableChipDetails = ({
           align="center"
           className={cn('bg-pp-focus-bg-2 rounded-1 pl-1', className)}
         >
-          <Text weight="medium" mr="1" className="text-[11px]">
-            {label}
-          </Text>
+          {label && (
+            <Text weight="medium" mr="1" className="text-[11px]">
+              {label}
+            </Text>
+          )}
           {type === 'text' && (
             <TextInput
               field={field}

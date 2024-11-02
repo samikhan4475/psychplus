@@ -8,6 +8,7 @@ interface SelectableChipProps {
   selected: boolean
   onClick: () => void
   isTooltip?: boolean
+  tooltipContent?: string
 }
 
 const SelectableChip = ({
@@ -16,6 +17,7 @@ const SelectableChip = ({
   children,
   onClick,
   isTooltip = false,
+  tooltipContent,
 }: React.PropsWithChildren<SelectableChipProps>) => {
   const chipContent = (
     <Text
@@ -41,9 +43,7 @@ const SelectableChip = ({
         )}
       >
         {isTooltip ? (
-          <Tooltip content="Pupils Equal, Round, Reactive to Light and Accommodation">
-            {chipContent}
-          </Tooltip>
+          <Tooltip content={tooltipContent}>{chipContent}</Tooltip>
         ) : (
           chipContent
         )}

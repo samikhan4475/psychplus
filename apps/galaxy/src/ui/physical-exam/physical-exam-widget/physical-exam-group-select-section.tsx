@@ -18,6 +18,7 @@ interface GroupSelectSectionProps<T extends string> {
   setNormalChipsSelected?: (selected: string[]) => void
   dependentNormalValues?: string[]
   isTooltip?: boolean
+  tooltipContent?: string
 }
 
 interface RadioOption {
@@ -31,6 +32,7 @@ interface GroupSelectOption<T extends string> {
   details?: SelectableChipDetailsProps
   radioOption?: RadioOption[]
   isTooltip?: boolean
+  tooltipContent?: string
 }
 
 const PhysicalExamGroupSelectSection = <T extends string>({
@@ -41,6 +43,7 @@ const PhysicalExamGroupSelectSection = <T extends string>({
   setNormalChipsSelected,
   dependentNormalValues = [],
   isTooltip = false,
+  tooltipContent,
 }: GroupSelectSectionProps<T>) => {
   const form = useFormContext()
   const values = form.watch(field) as string[]
@@ -111,7 +114,9 @@ const PhysicalExamGroupSelectSection = <T extends string>({
 
   return (
     <Flex align="start" gap="2">
-      <BlockLabel isTooltip={isTooltip}>{label}</BlockLabel>
+      <BlockLabel isTooltip={isTooltip} tooltipContent={tooltipContent}>
+        {label}
+      </BlockLabel>
       <Flex gap="1" wrap="wrap">
         {options.map((option) => (
           <Flex key={option.value} align="center" gap="1">
@@ -120,6 +125,7 @@ const PhysicalExamGroupSelectSection = <T extends string>({
               selected={isSelected(option.value)}
               onClick={toggleSelected(option.value)}
               isTooltip={option.isTooltip}
+              tooltipContent={option.tooltipContent}
             >
               {isSelected(option.value) && option.details && (
                 <SelectableChipDetails {...option.details} />

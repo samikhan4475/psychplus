@@ -4,7 +4,6 @@ import { useState } from 'react'
 import { Flex } from '@radix-ui/themes'
 import { FormProvider } from 'react-hook-form'
 import {
-  WidgetClearButton,
   WidgetFormContainer,
   WidgetSaveButton,
   WidgetTagButton,
@@ -35,6 +34,7 @@ import { HistoryButton } from './history'
 import { PhysicalExamHeader } from './physical-exam-header'
 import { usePhysicalExamWidgetForm } from './physical-exam-widget-form'
 import { type PhysicalExamWidgetSchemaType } from './physical-exam-widget-schema'
+import { WidgetClearButton } from './widget-clear-button'
 
 interface PhysicalExamWidgetProps {
   patientId: string
@@ -115,6 +115,10 @@ const PhysicalExamWidget = ({
     setNormalChipsSelected(checked ? normal : [])
   }
 
+  const handleOnClear = () => {
+    setNormalChipsSelected([])
+  }
+
   return (
     <FormProvider {...form}>
       {isPhysicalExamTab && (
@@ -138,7 +142,7 @@ const PhysicalExamWidget = ({
                 sectionName={QuickNoteSectionName.QuicknoteSectionPhysicalExam}
               />
             )}
-            <WidgetClearButton />
+            <WidgetClearButton handleOnClear={handleOnClear} />
             {!isPhysicalExamTab && <WidgetSaveButton />}
           </>
         }

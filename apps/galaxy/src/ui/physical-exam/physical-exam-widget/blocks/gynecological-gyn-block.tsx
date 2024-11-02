@@ -37,7 +37,6 @@ const GYN_OPTIONS: GroupSelectOption<string>[] = [
     value: 'gynOther',
     details: {
       type: 'text',
-      label: 'Details',
       field: 'gynOtherDetails',
     },
   },

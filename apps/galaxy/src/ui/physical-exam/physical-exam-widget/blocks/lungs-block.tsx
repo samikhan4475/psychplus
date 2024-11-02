@@ -21,7 +21,6 @@ const LNG_OPTIONS: GroupSelectOption<string>[] = [
     value: 'lngOther',
     details: {
       type: 'text',
-      label: 'Details',
       field: 'lngOtherDetails',
     },
   },

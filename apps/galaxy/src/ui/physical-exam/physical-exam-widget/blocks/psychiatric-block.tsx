@@ -33,7 +33,6 @@ const PSY_OPTIONS: GroupSelectOption<string>[] = [
     value: 'psyOther',
     details: {
       type: 'text',
-      label: 'Details',
       field: 'psyOtherDetails',
     },
   },

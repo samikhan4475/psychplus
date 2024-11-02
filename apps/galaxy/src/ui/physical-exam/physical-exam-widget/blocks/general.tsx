@@ -33,7 +33,6 @@ const GN_OPTIONS: GroupSelectOption<string>[] = [
     value: 'gnOther',
     details: {
       type: 'text',
-      label: 'Details',
       field: 'gnOtherDetails',
     },
   },

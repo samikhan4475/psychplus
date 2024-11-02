@@ -1,5 +1,6 @@
 import { QuickNoteSectionItem } from '@/types'
 import { valueToSchemaPe } from '../../data'
+import { createEmptyFormValues } from '../../physicalExamDefaults'
 
 export interface physicalExamWidgetSchema {
   general: string[]
@@ -60,42 +61,7 @@ enum ExamPrefixes {
 export const transformIn = (
   value?: QuickNoteSectionItem[],
 ): physicalExamWidgetSchema => {
-  const result: physicalExamWidgetSchema = {
-    general: [],
-    skin: [],
-    heent: [],
-    neck: [],
-    lymphNodes: [],
-    chest: [],
-    cardiovascularCvs: [],
-    lungs: [],
-    gastrointestinalGi: [],
-    adhdHyperactive: [],
-    gynecologicalGyn: [],
-    genitourinaryGu: [],
-    centralNervousSystemCns: [],
-    musculoskeletal: [],
-    nutrition: [],
-    psychiatric: [],
-    cranialNervesExam: [],
-    cneOtherDetails: '',
-    gnOtherDetails: '',
-    sknOtherDetails: '',
-    hntOtherDetails: '',
-    nkOtherDetails: '',
-    lnOtherDetails: '',
-    chsOtherDetails: '',
-    cvsOtherDetails: '',
-    lngOtherDetails: '',
-    giOtherDetails: '',
-    gynOtherDetails: '',
-    guOtherDetails: '',
-    cnsOtherDetails: '',
-    msuOtherDetails: '',
-    mutOtherDetails: '',
-    psyOtherDetails: '',
-    nutOtherDetails: '',
-  }
+  const result = createEmptyFormValues()
 
   value?.forEach((item) => {
     if (item.sectionItem.includes('Other')) {
@@ -147,6 +113,9 @@ export const transformIn = (
           break
         case 'psyOtherDetails':
           result.psyOtherDetails = item.sectionItemValue
+          break
+        case 'nutOtherDetails':
+          result.nutOtherDetails = item.sectionItemValue
           break
         default:
           break

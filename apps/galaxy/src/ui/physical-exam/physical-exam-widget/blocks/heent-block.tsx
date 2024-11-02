@@ -9,6 +9,10 @@ const BLOCK_TITLE = 'HEENT'
 
 const HNT_OPTIONS: GroupSelectOption<string>[] = [
   {
+    label: 'Normal',
+    value: 'hntNormal',
+  },
+  {
     label: 'Headache',
     value: 'hntHeadache',
   },
@@ -33,17 +37,10 @@ const HNT_OPTIONS: GroupSelectOption<string>[] = [
     value: 'hntFrequentNoseBleeds',
   },
   {
-    label: 'No external abnormality',
-    value: 'hntNoExternalAbnormality',
-  },
-  {
     label: 'PERRLA',
     value: 'hntPerrla',
     isTooltip: true,
-  },
-  {
-    label: 'Normal',
-    value: 'hntNormal',
+    tooltipContent: 'Pupils Equal, Round, Reactive to Light and Accommodation',
   },
   {
     label: 'Nares are patent without drainage',
@@ -54,7 +51,6 @@ const HNT_OPTIONS: GroupSelectOption<string>[] = [
     value: 'hntOther',
     details: {
       type: 'text',
-      label: 'Details',
       field: 'hntOtherDetails',
     },
   },
@@ -87,6 +83,7 @@ const HeentBlock = ({
           field={BLOCK_ID}
           options={HNT_OPTIONS}
           isTooltip={true}
+          tooltipContent={'Head, Eyes, Ears, Nose, Throat'}
           normalChipsSelected={normalChipsSelected}
           setNormalChipsSelected={setNormalChipsSelected}
         />

@@ -3,7 +3,7 @@ import { physicalExamWidgetSchema } from './data'
 import { ReadOnlyTextInput } from './read-only-text-input'
 
 interface SelectableChipDetailsProps {
-  label: string
+  label?: string
   field: keyof physicalExamWidgetSchema
   result?: physicalExamWidgetSchema
 }
@@ -21,9 +21,11 @@ const SelectableChipDetails = ({
     <Flex position="relative" align="center">
       <SelectedIndicator />
       <Flex align="center" pl="1" className="bg-pp-focus-bg-2 rounded-1">
-        <Text weight="medium" mr="1" className="text-[11px]">
-          {label}
-        </Text>
+        {label && (
+          <Text weight="medium" mr="1" className="text-[11px]">
+            {label}
+          </Text>
+        )}
         <Flex align="center" gap="2">
           <ReadOnlyTextInput
             value={displayValue}

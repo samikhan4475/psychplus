@@ -36,6 +36,7 @@ const physicalExamWidgetSchema = z.object({
   msuOtherDetails: z.string().trim(),
   mutOtherDetails: z.string().trim(),
   psyOtherDetails: z.string().trim(),
+  nutOtherDetails: z.string().trim(),
 })
 
 export { physicalExamWidgetSchema, type PhysicalExamWidgetSchemaType }

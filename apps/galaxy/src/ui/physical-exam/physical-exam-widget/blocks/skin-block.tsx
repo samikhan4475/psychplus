@@ -29,7 +29,6 @@ const SKN_OPTIONS: GroupSelectOption<string>[] = [
     value: 'sknOther',
     details: {
       type: 'text',
-      label: 'Details',
       field: 'sknOtherDetails',
     },
   },

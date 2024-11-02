@@ -30,7 +30,6 @@ const cneOptions: GroupSelectOption<string>[] = [
     value: 'cneOther',
     details: {
       type: 'text',
-      label: 'Details',
       field: 'cneOtherDetails',
     },
   },

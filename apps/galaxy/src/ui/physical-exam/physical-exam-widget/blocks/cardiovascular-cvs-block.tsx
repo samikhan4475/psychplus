@@ -25,7 +25,6 @@ const CVS_OPTIONS: GroupSelectOption<string>[] = [
     value: 'cvsOther',
     details: {
       type: 'text',
-      label: 'Details',
       field: 'cvsOtherDetails',
     },
   },

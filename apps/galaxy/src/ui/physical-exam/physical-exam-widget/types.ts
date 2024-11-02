@@ -8,11 +8,12 @@ interface GroupSelectOption<T extends string> {
   details?: SelectableChipDetailsProps
   radioOption?: SelectOptionType[]
   isTooltip?: boolean
+  tooltipContent?: string
 }
 
 interface SelectableChipDetailsProps {
   type: DetailsType
-  label: string
+  label?: string
   field: keyof physicalExamWidgetSchema
   options?: { label: string; value: string }[]
   format?: string

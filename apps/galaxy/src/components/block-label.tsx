@@ -6,7 +6,8 @@ interface BlockLabelProps {
   orientation?: 'horizontal' | 'vertical'
   className?: string
   isTooltip?: boolean
-  required?:boolean
+  required?: boolean
+  tooltipContent?: string
 }
 
 const BlockLabel = ({
@@ -16,6 +17,7 @@ const BlockLabel = ({
   children,
   isTooltip = false,
   required = false,
+  tooltipContent,
 }: React.PropsWithChildren<BlockLabelProps>) => {
   const labelContent = (
     <Text
@@ -36,7 +38,7 @@ const BlockLabel = ({
   )
 
   return isTooltip ? (
-    <Tooltip content="Head, Eyes, Ears, Nose, Throat">{labelContent}</Tooltip>
+    <Tooltip content={tooltipContent}>{labelContent}</Tooltip>
   ) : (
     labelContent
   )

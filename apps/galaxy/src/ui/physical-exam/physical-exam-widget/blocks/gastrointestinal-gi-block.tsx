@@ -33,15 +33,10 @@ const GI_OPTIONS: GroupSelectOption<string>[] = [
     value: 'giFoodIntolerance',
   },
   {
-    label: 'Soft, non-tender, no rebound or rigidity',
-    value: 'giSoftNonTenderNoReboundOrRigidity',
-  },
-  {
     label: 'Other',
     value: 'giOther',
     details: {
       type: 'text',
-      label: 'Details',
       field: 'giOtherDetails',
     },
   },

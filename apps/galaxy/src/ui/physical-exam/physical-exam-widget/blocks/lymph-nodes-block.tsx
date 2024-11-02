@@ -21,7 +21,6 @@ const LN_OPTIONS: GroupSelectOption<string>[] = [
     value: 'lnOther',
     details: {
       type: 'text',
-      label: 'Details',
       field: 'lnOtherDetails',
     },
   },

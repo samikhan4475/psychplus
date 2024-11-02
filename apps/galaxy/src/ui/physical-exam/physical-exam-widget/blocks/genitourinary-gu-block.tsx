@@ -19,7 +19,6 @@ const GU_OPTIONS: GroupSelectOption<string>[] = [
     value: 'guOther',
     details: {
       type: 'text',
-      label: 'Details',
       field: 'guOtherDetails',
     },
   },

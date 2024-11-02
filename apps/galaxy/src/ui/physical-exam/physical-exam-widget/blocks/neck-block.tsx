@@ -21,7 +21,6 @@ const NK_OPTIONS: GroupSelectOption<string>[] = [
     value: 'nkOther',
     details: {
       type: 'text',
-      label: 'Details',
       field: 'nkOtherDetails',
     },
   },
