@@ -1,5 +1,10 @@
 import Link from 'next/link'
-import { AppointmentType, CODESETS, PaymentType, ProviderType } from '@psychplus-v2/constants'
+import {
+  AppointmentType,
+  CODESETS,
+  PaymentType,
+  ProviderType,
+} from '@psychplus-v2/constants'
 import { GOOGLE_MAPS_API_KEY, STRIPE_PUBLISHABLE_KEY } from '@psychplus-v2/env'
 import {
   formatCurrency,
@@ -35,13 +40,13 @@ import {
   getClinicAddressDirectionMapUrl,
   mapVerificationStatusToChipVariant,
 } from '../utils'
+import { AppointmentEditButton } from './appointment-edit-button'
 import { AppointmentTimeLabel } from './appointment-time-label'
-import { JoinVirtualCallBtn } from './join-virtual-call-button'
 import { CancelAppointment } from './cancel-appointment'
 import { ChangePaymentMethodDialog } from './change-payment-method-dialog'
+import { JoinVirtualCallBtn } from './join-virtual-call-button'
 import { PayCopayButton } from './pay-copay-button'
 import { UpdateDateAndTimeDialog } from './update-date-and-time-dialog'
-import { AppointmentEditButton } from './appointment-edit-button'
 
 const UpcomingAppointmentsSummaryComponent = async () => {
   const [
@@ -134,9 +139,17 @@ const UpcomingAppointmentsSummaryComponent = async () => {
                           {row.specialist.legalName.honors &&
                             `, ${row.specialist.legalName.honors}`}
                         </Text>
-                        <AppointmentEditButton 
-                          appointmentType={row.type === 'InPerson' ? AppointmentType.InPerson : AppointmentType.Virtual} 
-                          providerType={row.specialistTypeCode === 1 ? ProviderType.Psychiatrist : ProviderType.Therapist} 
+                        <AppointmentEditButton
+                          appointmentType={
+                            row.type === 'InPerson'
+                              ? AppointmentType.InPerson
+                              : AppointmentType.Virtual
+                          }
+                          providerType={
+                            row.specialistTypeCode === 1
+                              ? ProviderType.Psychiatrist
+                              : ProviderType.Therapist
+                          }
                           appointmentId={row.id}
                           specialistId={row.specialist.id}
                         />
@@ -175,33 +188,37 @@ const UpcomingAppointmentsSummaryComponent = async () => {
 
                 <Flex
                   wrap="wrap"
-                  direction={{ initial: 'column', xs: 'row' }}
+                  direction="column"
                   className="lg:ml-20"
-                  gap={{ initial: '2', xs: '6' }}
+                  gap={{ initial: '2', xs: '3' }}
                 >
                   <Flex align="center" gap="2" ml={{ initial: '0', xs: '3' }}>
                     <Flex align="center" gap="1">
-                      {row.isSelfPay ? (
-                        <CreditDebitCardIcon />
-                      ) : (
+                      {row.isSelfPay && <CreditDebitCardIcon />}
+                      {!row.isSelfPay && patientVerification.hasInsurance && (
                         <ShieldFlashLineIcon />
                       )}
+                      {!row.isSelfPay &&
+                        !patientVerification.hasInsurance &&
+                        'Select Insurance'}
+
                       <Text className="text-[12px] xs:text-[15px]">
                         {row.isSelfPay
                           ? PaymentType.SelfPay
                           : patientVerification.primaryInsuranceName}
                       </Text>
-                      {!row.isSelfPay && patientVerification.hasInsurance && (
-                        <Badge
-                          label={
-                            patientVerification.patientInsuranceVerification
-                          }
-                          type={mapVerificationStatusToChipVariant(
-                            patientVerification?.patientInsuranceVerification,
-                          )}
-                          addIcon
-                        />
-                      )}
+                      {!row.isSelfPay &&
+                        patientVerification.primaryInsuranceName && (
+                          <Badge
+                            label={
+                              patientVerification.patientInsuranceVerification
+                            }
+                            type={mapVerificationStatusToChipVariant(
+                              patientVerification?.patientInsuranceVerification,
+                            )}
+                            addIcon
+                          />
+                        )}
                     </Flex>
                     <ChangePaymentMethodDialog
                       appointment={row}
@@ -214,7 +231,7 @@ const UpcomingAppointmentsSummaryComponent = async () => {
                     />
                   </Flex>
 
-                  <Flex align="center" gap="1">
+                  <Flex align="center" gap="1" ml={{ initial: '0', xs: '3' }}>
                     <ParentLineIcon />
                     <Text className="text-[12px] xs:text-[15px]">{`Copay: ${formatCurrency(
                       row.coPay,
@@ -246,8 +263,8 @@ const UpcomingAppointmentsSummaryComponent = async () => {
                   <Flex width={{ initial: '100%', xs: 'auto' }}>
                     {row?.virtualRoomLink &&
                       row.type === AppointmentType.Virtual && (
-                        <JoinVirtualCallBtn 
-                          virtualRoomLink={row?.virtualRoomLink} 
+                        <JoinVirtualCallBtn
+                          virtualRoomLink={row?.virtualRoomLink}
                           appointment={row}
                         />
                       )}
