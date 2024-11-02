@@ -111,6 +111,8 @@ const RootLayout = async ({ children }: React.PropsWithChildren) => {
         CODESETS.ParameterAdjustmentStatus,
         CODESETS.TMSCoilType,
         CODESETS.TMSStimulationSite,
+        CODESETS.ResourceStatus,
+        CODESETS.ServicesStatus,
       ]),
       getUserPermissions(),
       getLoggedInUser(),

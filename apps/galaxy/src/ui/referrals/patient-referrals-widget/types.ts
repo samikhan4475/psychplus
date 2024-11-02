@@ -1,15 +1,9 @@
 import { type Row } from '@tanstack/react-table'
+import { type PatientReferral } from '@/types'
 
-interface PatientReferral {
-  dateTime: string
-  serviceName: string
-  serviceStatus: string
-  initiatedBy: string
-  referringProvider: string
-  contactStatus: string
-  visitDate?: string
-  referralStatus: string
-  comments: string
+enum QueryByNextDays {
+  NoVisits = 'NoVisits',
+  Disregard = 'Disregard',
 }
 
 type PatientReferralRow = Row<PatientReferral>
@@ -19,4 +13,23 @@ interface GetPatientReferralsResponse {
   total: number
 }
 
-export type { PatientReferral, PatientReferralRow, GetPatientReferralsResponse }
+interface PatientReferralsPayload {
+  servicesOfferedList: string[]
+  contactStatusList: string[]
+  resourceStatusList: string[]
+  fromReferralDate: string
+  toReferralDate: string
+}
+interface GetPatientReferralsParams {
+  patientIds: string[]
+  payload: Partial<PatientReferralsPayload>
+  page?: number
+}
+export {
+  QueryByNextDays,
+  type PatientReferral,
+  type PatientReferralRow,
+  type GetPatientReferralsResponse,
+  type GetPatientReferralsParams,
+  type PatientReferralsPayload,
+}

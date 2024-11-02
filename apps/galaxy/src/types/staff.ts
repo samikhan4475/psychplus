@@ -14,6 +14,7 @@ interface StaffResource {
   bio: string
   hasPhoto: boolean
   rating: number
+  avatar?: string
 }
 
 enum STAFF_COMMENT_STATUS {
@@ -21,5 +22,12 @@ enum STAFF_COMMENT_STATUS {
   Deleted = 'Deleted',
 }
 
-export type { StaffResource }
+interface Provider {
+  id?: string
+  avatar?: string
+  firstName: string
+  lastName: string
+  honors?: string
+}
+export type { StaffResource, Provider }
 export { STAFF_COMMENT_STATUS }

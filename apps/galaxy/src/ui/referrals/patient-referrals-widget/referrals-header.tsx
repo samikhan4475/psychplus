@@ -1,0 +1,36 @@
+'use client'
+
+import { Flex, Heading } from '@radix-ui/themes'
+import { useStore as zustandUseStore } from 'zustand'
+import { CreateReferralDialog } from '../create-referral-dialog'
+import { useStore } from './store'
+
+interface ReferralsHeaderProps {
+  patientId: string
+}
+const ReferralsHeader = ({ patientId }: ReferralsHeaderProps) => {
+  const store = useStore()
+  const { refetch } = zustandUseStore(store, (state) => ({
+    refetch: state.refetch,
+  }))
+
+  const onClose = () => {
+    refetch()
+  }
+  return (
+    <Flex
+      className="bg-white rounded-1"
+      justify="between"
+      align="center"
+      p="2"
+      width="100%"
+    >
+      <Heading size="4" weight="medium">
+        Referrals
+      </Heading>
+      <CreateReferralDialog patientId={patientId} onClose={onClose} />
+    </Flex>
+  )
+}
+
+export { ReferralsHeader }

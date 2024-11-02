@@ -8,7 +8,7 @@ import { BlockLabel } from './block-label'
 interface SelectInputProps<T> extends React.ComponentProps<typeof Select.Root> {
   label?: string
   field: string
-  options?: { label: string; value: T }[]
+  options?: { label: string; value: T; disabled?: boolean }[]
   placeholder?: string
   buttonClassName?: string
   className?: string
@@ -29,7 +29,11 @@ const SelectInput = <T extends string>({
   const form = useFormContext()
 
   const items = options.map((option) => (
-    <Select.Item key={option.value} value={option.value}>
+    <Select.Item
+      key={option.value}
+      value={option.value}
+      disabled={option.disabled}
+    >
       {option.label}
     </Select.Item>
   ))

@@ -2,7 +2,7 @@ import { GroupSelectSection } from '@/components'
 
 const BLOCK_ID = 'obsession'
 
-const BLOCK_TITLE = 'Obsession/Ocd'
+const BLOCK_TITLE = 'Obsession/OCD'
 
 const BLOCK_OPTIONS = [
   { label: 'Contamination', value: 'obsContamination' },

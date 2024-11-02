@@ -219,11 +219,23 @@ const UPLOAD_TEMPLATE_REPORT_ENDPOINT = (templateId: string) =>
 const EDIT_TEMPLATE_ENDPOINT = (templateId: string) =>
   `${API_URL}/api/reporting/templates/${templateId}/`
 const GET_ALL_STAFF_ENDPOINT = `${API_URL}/api/staff`
+const SEARCH_STAFF_ENDPOINT = `${API_URL}/api/staff/search?limit=10`
+const GET_SELF_STAFF_DETAILS_ENDPOINT = `${API_URL}/api/staff/self`
+const GET_PATIENT_REFERRALS_ENDPOINT = `${API_URL}/api/referrals/search`
+const GET_PATIENT_REFERRALS_HISTORY_ENDPOINT = (liveReferralId: string) =>
+  `${API_URL}/api/referrals/${liveReferralId}/history/search`
+const UPDATE_PATIENT_REFERRAL_ENDPOINT = (
+  patientId: number,
+  referralId: number,
+) => `${API_URL}/api/patients/${patientId}/referrals/${referralId}`
+const GET_APPOINTMENT = (appointmentId: string) =>
+  `${API_URL}/api/appointments/${appointmentId}`
+const CREATE_PATIENT_REFERRAL_ENDPOINT = (patientId: string) =>
+  `${API_URL}/api/patients/${patientId}/referrals`
+
 const SEARCH_FAVOURITE_DIAGNOSIS_ENDPOINT = `${API_URL}/api/staff/self/diagnoses/actions/favorites/search`
 const FAVOURITE_DIAGNOSIS_ENDPOINT = (icd10Code: string) =>
   `${API_URL}/api/staff/self/icd10codes/${icd10Code}/actions/favorites`
-const GET_APPOINTMENT = (appointmentId: string) =>
-  `${API_URL}/api/appointments/${appointmentId}`
 const DOWNLOAD_TEMPLATE_REPORT = (templateId: string) =>
   `${API_URL}/api/reporting/templates/${templateId}/actions/download`
 export {
@@ -347,9 +359,15 @@ export {
   UPLOAD_TEMPLATE_REPORT_ENDPOINT,
   EDIT_TEMPLATE_ENDPOINT,
   GET_ALL_STAFF_ENDPOINT,
+  SEARCH_STAFF_ENDPOINT,
+  GET_PATIENT_REFERRALS_ENDPOINT,
+  GET_PATIENT_REFERRALS_HISTORY_ENDPOINT,
+  GET_SELF_STAFF_DETAILS_ENDPOINT,
+  UPDATE_PATIENT_REFERRAL_ENDPOINT,
+  GET_APPOINTMENT,
+  CREATE_PATIENT_REFERRAL_ENDPOINT,
   GET_INSURANCE_PAYERS_LIST_ENDPOINT,
   SEARCH_FAVOURITE_DIAGNOSIS_ENDPOINT,
   FAVOURITE_DIAGNOSIS_ENDPOINT,
-  GET_APPOINTMENT,
   DOWNLOAD_TEMPLATE_REPORT,
 }

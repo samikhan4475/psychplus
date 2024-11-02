@@ -1,8 +1,10 @@
 'use client'
 
-import { WidgetContainer } from '@/components'
-import { AddReferralButton } from './add-referral-button'
-import { PatientReferralsTable } from './patient-referrals-table'
+import { Flex } from '@radix-ui/themes'
+import { ReferralsFilterForm } from './referrals-filter-form'
+import { ReferralsHeader } from './referrals-header'
+import { ReferralsTable } from './referrals-table'
+import { ReferralsTablePagination } from './referrals-table-pagination'
 import { StoreProvider } from './store'
 
 interface PatientReferralsWidgetProps {
@@ -12,16 +14,18 @@ interface PatientReferralsWidgetProps {
 const PatientReferralsWidget = ({ patientId }: PatientReferralsWidgetProps) => {
   return (
     <StoreProvider patientId={patientId}>
-      <WidgetContainer
-        title="Referral"
-        headerRight={
-          <>
-            <AddReferralButton />
-          </>
-        }
+      <Flex
+        direction="column"
+        width="100%"
+        className="bg-white h-[calc(100dvh_-_278px)] rounded-1 shadow-2"
       >
-        <PatientReferralsTable />
-      </WidgetContainer>
+        <Flex gap="1" direction="column" mb="1">
+          <ReferralsHeader patientId={patientId} />
+          <ReferralsFilterForm />
+        </Flex>
+        <ReferralsTable />
+        <ReferralsTablePagination />
+      </Flex>
     </StoreProvider>
   )
 }

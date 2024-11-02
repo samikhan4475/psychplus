@@ -37,6 +37,7 @@ interface DataTableProps<TData, TValue> {
   isRowSpan?: boolean // Use rowspan to prevent table layout issues. Nested columns apply only when the optional `isRowSpan` prop is true, as data tables don't support them directly.
   theadClass?: string
   tableClass?: string
+  tableRowClass?: string
   selectFirstRow?: boolean
 }
 
@@ -55,6 +56,7 @@ const DataTable = <TData, TValue>({
   theadClass,
   tableClass,
   selectFirstRow,
+  tableRowClass,
 }: DataTableProps<TData, TValue>) => {
   const [sorting, setSorting] = useState<SortingState>([])
   const [pagination, setPagination] = useState<PaginationState>({
@@ -177,12 +179,16 @@ const DataTable = <TData, TValue>({
                 onClick={() => {
                   onRowClick?.(row, table)
                 }}
-                className={cn('group/row-hover hover:bg-gray-2', {
-                  'cursor-pointer': onRowClick !== undefined,
-                  '!bg-pp-table-subRows': row.getIsSelected(),
-                  'bg-pp-table-subRows hover:bg-pp-table-subRows':
-                    row.depth > 0,
-                })}
+                className={cn(
+                  tableRowClass,
+                  'group/row-hover hover:bg-gray-2',
+                  {
+                    'cursor-pointer': onRowClick !== undefined,
+                    '!bg-pp-table-subRows': row.getIsSelected(),
+                    'bg-pp-table-subRows hover:bg-pp-table-subRows':
+                      row.depth > 0,
+                  },
+                )}
               >
                 {row.getVisibleCells().map((cell) => (
                   <Table.Cell

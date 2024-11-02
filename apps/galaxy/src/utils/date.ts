@@ -244,6 +244,9 @@ const convertToCalendarDate = (storedDate: DateValue | string) => {
 const getOptionalDateString = (date?: DateValue | null): string | undefined =>
   date ? getCalendarDateLabel(date) : undefined
 
+const daysAgo = (days: number) =>
+  new Date(new Date().setDate(new Date().getDate() - days))
+
 const calculateMinutes = (startTime: string, endTime: string) => {
   if (startTime && endTime) {
     const start = new Date(`1970-01-01T${startTime}:00`)
@@ -275,5 +278,6 @@ export {
   getDatesForDateRange,
   convertToCalendarDate,
   getOptionalDateString,
-  calculateMinutes
+  daysAgo,
+  calculateMinutes,
 }

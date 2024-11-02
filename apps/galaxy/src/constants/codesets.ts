@@ -2,6 +2,7 @@ const CODE_RACE = '1000-9'
 const CODE_ETHNICITY = '2133-7'
 const RACES_GROUPING_CODES = ['R', 'R1', 'R2', 'R3', 'R4', 'R5']
 const ETHNICITIES_GROUPING_CODES = ['E', 'E1', 'E2']
+const CODE_NOT_SET = 'NotSet'
 
 const CODESETS = {
   UsStates: 'PsychPlusPublic.UsStates',
@@ -27,6 +28,7 @@ const CODESETS = {
   FirstResponder: 'psychpluspublic.FirstResponderOccupation',
   VisitMedium: 'AppointmentType',
   ServicesOffered: 'ServicesOffered',
+  ResourceStatus: 'ResourceStatus',
   AppointmentStatus: 'AppointmentStatus',
   EncounterType: 'EncounterType',
   NotificationStatus: 'NotificationStatusType',
@@ -58,6 +60,7 @@ const CODESETS = {
   ParameterAdjustmentStatus: 'ParameterAdjustmentStatus',
   TMSCoilType: 'PsychPlusPublic.TMSCoilType',
   TMSStimulationSite: 'PsychPlusPublic.TMSStimulationSite',
+  ServicesStatus: 'ServicesStatus',
 }
 
 export {
@@ -66,4 +69,5 @@ export {
   CODE_RACE,
   ETHNICITIES_GROUPING_CODES,
   RACES_GROUPING_CODES,
+  CODE_NOT_SET,
 }

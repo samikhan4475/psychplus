@@ -1,44 +1,44 @@
 'use client'
 
 import { useState } from 'react'
-import { SelectCell } from '@/components'
-import type { PatientReferralRow } from '../types'
+import toast from 'react-hot-toast'
+import { PropsWithRow } from '@/components'
+import { CODESETS } from '@/constants'
+import { useCodesetOptions } from '@/hooks'
+import { PatientReferral } from '@/types'
+import { updatePatientReferralAction } from '../../actions'
+import { StatusSelect } from '../status-select'
 
-interface ReferralStatusCellProps {
-  row: PatientReferralRow
+interface Props extends PropsWithRow<PatientReferral> {
+  disabled?: boolean
 }
-const ReferralStatusCell = ({ row }: ReferralStatusCellProps) => {
-  const [loading, setLoading] = useState(false)
-  const [referralStatus, setReferralStatus] = useState(
-    row.original.referralStatus,
+const ReferralStatusCell = ({
+  row: { original: referral },
+  disabled,
+}: Props) => {
+  const options = useCodesetOptions(CODESETS.ResourceStatus)
+  const [selectedValue, setSelectedValue] = useState(
+    referral?.resourceStatus ?? '',
   )
-
+  const updateContactMadeStatus = async (value: string) => {
+    setSelectedValue(value)
+    const result = await updatePatientReferralAction({
+      ...referral,
+      resourceStatus: value,
+  })
+    if (result.state === 'success') {
+      toast.success('Successfully updated!')
+    } else if (result.state === 'error') {
+      setSelectedValue(referral?.resourceStatus ?? '')
+      toast.error(result.error ?? 'Failed to update!')
+    }
+  }
   return (
-    <SelectCell
-      value={referralStatus}
-      onValueChange={(value) => {
-        const currentStatus = referralStatus
-
-        setLoading(true)
-        setReferralStatus(value)
-
-        // TODO: call update referral action with new data
-        // If success, show toast message and set loading to false
-        // If error, show error toast message and set loading to false and set referralStatus back to currentStatus
-      }}
-      options={[
-        { label: 'Completed', value: 'Completed' },
-        { label: 'Incomplete', value: 'Incomplete' },
-        { label: 'Deleted', value: 'Deleted' },
-      ]}
-      className={
-        {
-          Completed: 'bg-pp-success-bg text-pp-success-text',
-          Incomplete: 'bg-pp-warning-bg text-pp-warning-text',
-          Deleted: 'bg-gray-3 text-gray-10',
-        }[referralStatus]
-      }
-      disabled={loading}
+    <StatusSelect
+      value={selectedValue}
+      onValueChange={updateContactMadeStatus}
+      options={options}
+      disabled={disabled}
     />
   )
 }
