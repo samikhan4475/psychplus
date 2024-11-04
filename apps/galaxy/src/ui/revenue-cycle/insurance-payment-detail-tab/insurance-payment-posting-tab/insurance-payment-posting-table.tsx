@@ -1,19 +1,10 @@
+'use client'
+
 import React from 'react'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { Flex, ScrollArea, Text } from '@radix-ui/themes'
+import { Box, Flex, ScrollArea, Text } from '@radix-ui/themes'
 import { ColumnDef } from '@tanstack/react-table'
-import { useForm } from 'react-hook-form'
-import {
-  ColumnHeader,
-  DataTable,
-  DateCell,
-  FormContainer,
-  TextCell,
-} from '@/components'
-import { DollarIcon } from '@/components/icons'
+import { ColumnHeader, DataTable, DateCell, TextCell } from '@/components'
 import { formatDate } from '@/utils'
-import { useStore } from '../../insurance-payment-tab/store'
-import { useStore as TabStore } from '../../store'
 import { ClaimServiceLinePayment } from '../../types'
 import CancelButton from './cancel-button'
 import {
@@ -29,7 +20,6 @@ import {
 } from './cells'
 import { SaveAndPostButton } from './save-and-post-button'
 import { SaveButton } from './save-button'
-import { schema, SchemaType } from './schema'
 
 const columns: ColumnDef<ClaimServiceLinePayment>[] = [
   {
@@ -42,7 +32,7 @@ const columns: ColumnDef<ClaimServiceLinePayment>[] = [
       />
     ),
     cell: ({ row }) => (
-      <TextCell className="flex w-[108px] items-center">
+      <TextCell className="flex w-[280px] items-center">
         {row.original.chargeId}
       </TextCell>
     ),
@@ -89,8 +79,8 @@ const columns: ColumnDef<ClaimServiceLinePayment>[] = [
     ),
     cell: ({ row }) => (
       <TextCell className="flex w-[108px] items-center">
-        <DollarIcon />
-        {row.original.totalAmount}
+        <Text className="mr-1 text-[12px]">$</Text>
+        {row.original.billedAmount}
       </TextCell>
     ),
   },
@@ -171,66 +161,33 @@ const columns: ColumnDef<ClaimServiceLinePayment>[] = [
   },
 ]
 
-const InsurancePaymentPostingTable = () => {
-  const activeTab = TabStore((state) => state.activeTab)
-  const { setPaymentPostingClaim, paymentPostingClaim } = useStore((state) => ({
-    setPaymentPostingClaim: state.setPaymentPostingClaim,
-    paymentPostingClaim: state.paymentPostingClaim[activeTab],
-  }))
+interface InsurancePaymentPostingTableProps {
+  claimServiceLinePayments: ClaimServiceLinePayment[]
+  onCancel: () => void
+}
 
-  const form = useForm<SchemaType>({
-    resolver: zodResolver(schema),
-    reValidateMode: 'onBlur',
-    defaultValues: {
-      id: '',
-      recordStatus: '',
-      paymentId: '',
-      claimId: '',
-      paymentSource: '',
-      insurancePolicyId: '',
-      processedAsCode: '',
-      insuranceInternalControlNumber: '',
-      status: '',
-      billedAmount: 0,
-      allowedAmount: 0,
-      paidAmount: 0,
-      copayAmount: 0,
-      coinsuranceAmount: 0,
-      deductibleAmount: 0,
-      otherPr: 0,
-      writeOffAmount: 0,
-      claimServiceLinePayments: paymentPostingClaim?.claimServiceLines, // Initial data
-    },
-  })
-
-  const onSubmit = (data: SchemaType) => {
-    // TODO : NEED API IMPLEMENTATION HERE (data, claimPostingId -> ID FOR GET DATA HERE)
-  }
-
-  const onCancel = () => {
-    setPaymentPostingClaim(activeTab, paymentPostingClaim)
-  }
-
+const InsurancePaymentPostingTable = ({
+  claimServiceLinePayments,
+  onCancel,
+}: InsurancePaymentPostingTableProps) => {
   return (
     <Flex direction="column">
       <Text mb="1" size="3" weight="bold">
         Service Lines
       </Text>
-      <FormContainer form={form} onSubmit={onSubmit}>
-        <ScrollArea className="max-w-[calc(100vw-16px)]">
-          <DataTable
-            data={form.getValues('claimServiceLinePayments') ?? []}
-            columns={columns}
-            disablePagination
-            sticky
-          />
-        </ScrollArea>
-        <Flex justify="end" gapX="3" mt="3">
-          <CancelButton onClick={onCancel} />
-          <SaveButton />
-          <SaveAndPostButton />
-        </Flex>
-      </FormContainer>
+
+      <DataTable
+        tableClass="[&_.rt-ScrollAreaRoot]:pb-2 max-w-[calc(100vw-23px)]"
+        data={claimServiceLinePayments ?? []}
+        columns={columns}
+        disablePagination
+      />
+
+      <Flex justify="end" gapX="3" mt="3">
+        <CancelButton onClick={onCancel} />
+        <SaveButton />
+        <SaveAndPostButton />
+      </Flex>
     </Flex>
   )
 }

@@ -1,7 +1,7 @@
 enum PaymentListTypes {
   All = 'All',
   Posted = 'Posted',
-  Unposted = 'Unposted',
+  Unposted = 'NotPosted',
   Unlinked = 'Unlinked',
 }
 export { PaymentListTypes }

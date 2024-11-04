@@ -7,7 +7,7 @@ interface AdjustmentAddProps {
 }
 const AdjustmentAddButton = ({ onClick }: AdjustmentAddProps) => {
   return (
-    <IconButton onClick={onClick} className="h-4 bg-transparent" type="submit">
+    <IconButton onClick={onClick} className="h-4 bg-transparent" type="button">
       <CirclePlusIcon className="mx-1 cursor-pointer" />
     </IconButton>
   )

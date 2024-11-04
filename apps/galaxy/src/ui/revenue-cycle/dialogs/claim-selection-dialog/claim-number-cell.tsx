@@ -13,7 +13,7 @@ const ClaimNumberCell = ({
     <Flex height="100%" align="center">
       <Text
         onClick={() => handlePaymentPostingClaim(claim)}
-        className="text-blue-10"
+        className="cursor-pointer text-blue-11"
         weight="regular"
         size="1"
       >

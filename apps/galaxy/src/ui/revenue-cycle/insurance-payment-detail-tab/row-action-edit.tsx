@@ -3,13 +3,20 @@
 import { Pencil1Icon } from '@radix-ui/react-icons'
 import { IconButton } from '@radix-ui/themes'
 import { type PropsWithRow } from '@/components'
+import { useStore } from '../insurance-payment-tab/store'
+import { useStore as useTabStore } from '../store'
 import { ClaimPayment } from '../types'
 
 const RowActionEdit = ({
   row: { original: payment },
 }: PropsWithRow<ClaimPayment>) => {
+  const setPaymentPostingClaim = useStore(
+    (state) => state.setPaymentPostingClaim,
+  )
+
+  const activeTab = useTabStore((state) => state.activeTab)
   const onEdit = () => {
-    //  TODO: NEED TO IMPLEMENT EDIT
+    setPaymentPostingClaim(activeTab, payment)
   }
 
   return (

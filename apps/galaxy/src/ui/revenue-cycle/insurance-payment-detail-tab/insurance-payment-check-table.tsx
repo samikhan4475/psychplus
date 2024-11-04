@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react'
 import * as Accordion from '@radix-ui/react-accordion'
 import { ScrollArea } from '@radix-ui/themes'
 import { ColumnDef } from '@tanstack/react-table'
-import { ColumnHeader, DataTable, TextCell } from '@/components'
+import { ColumnHeader, DataTable, DateCell, TextCell } from '@/components'
+import { formatDate } from '@/utils'
 import { ClaimPayment, InsurancePayment } from '../types'
 import { ActionsCell } from './actions-cell'
 import { InsurancePaymentTableTabs } from './insurance-payment-table-tabs'
@@ -13,17 +14,27 @@ const columns: ColumnDef<ClaimPayment>[] = [
   {
     id: 'claimId',
     header: ({ column }) => <ColumnHeader column={column} label="Claim #" />,
-    cell: ({ row }) => <TextCell>{row.original.claimId}</TextCell>,
+    cell: ({ row }) => (
+      <TextCell className="min-w-[235px]">{row.original.claimId}</TextCell>
+    ),
   },
   {
-    id: 'dosFrom',
+    id: 'dateOfServiceFrom',
     header: ({ column }) => <ColumnHeader column={column} label="DOS From" />,
-    cell: ({ row }) => <TextCell>--</TextCell>,
+    cell: ({ row }) => (
+      <DateCell>
+        {formatDate(row.original.dateOfServiceFrom, 'MM/dd/yyyy')}
+      </DateCell>
+    ),
   },
   {
-    id: 'dosTo',
+    id: 'dateOfServiceTo',
     header: ({ column }) => <ColumnHeader column={column} label="DOS To" />,
-    cell: ({ row }) => <TextCell>--</TextCell>,
+    cell: ({ row }) => (
+      <DateCell>
+        {formatDate(row.original.dateOfServiceTo, 'MM/dd/yyyy')}
+      </DateCell>
+    ),
   },
   {
     id: 'status',
@@ -42,7 +53,7 @@ const columns: ColumnDef<ClaimPayment>[] = [
   {
     id: 'processedAsCode',
     header: ({ column }) => <ColumnHeader column={column} label="Process As" />,
-    cell: ({ row }) => <TextCell>{row.original.processedAsCode}</TextCell>,
+    cell: ({ row }) => <TextCell className='min-w-fit'>{row.original.processedAsCode}</TextCell>,
   },
   {
     id: 'billedAmount',
@@ -140,8 +151,13 @@ const PaymentCheckTable = ({ paymentDetail }: PaymentCheckHeaderProps) => {
   )
 
   useEffect(() => {
-    // TODO: Will be used as filter at client side based on list type selected (setClaimPayments)
-    setClaimPayments(paymentDetail.claimPayments) //will be applied filter based on API
+    setClaimPayments(
+      paymentListType === PaymentListTypes.All
+        ? paymentDetail.claimPayments
+        : paymentDetail.claimPayments?.filter(
+            (payment) => payment.status === paymentListType,
+          ) ?? [],
+    )
   }, [paymentListType])
 
   return (

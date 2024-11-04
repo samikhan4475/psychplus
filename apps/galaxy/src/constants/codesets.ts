@@ -60,6 +60,9 @@ const CODESETS = {
   ParameterAdjustmentStatus: 'ParameterAdjustmentStatus',
   TMSCoilType: 'PsychPlusPublic.TMSCoilType',
   TMSStimulationSite: 'PsychPlusPublic.TMSStimulationSite',
+  ProcessedAsCode: 'ProcessedAsCode',
+  AdjustmentGroupCode: 'AdjustmentGroupCode',
+  PaymentPostingStatus:'PaymentPostingStatus',
   ServicesStatus: 'ServicesStatus',
 }
 

@@ -54,7 +54,7 @@ const InsurancePaymentDetailView = ({
     <Flex gapY="2" direction="column">
       <PaymentCheckHeader paymentDetail={paymentDetail} />
       {paymentPostingClaim ? (
-        <InsurancePaymentPostingView />
+        <InsurancePaymentPostingView fetchPaymentDetail={fetchPaymentDetail} />
       ) : (
         <PaymentCheckTable paymentDetail={paymentDetail} />
       )}

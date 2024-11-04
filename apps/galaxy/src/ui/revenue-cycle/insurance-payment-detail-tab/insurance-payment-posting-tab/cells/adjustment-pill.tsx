@@ -13,7 +13,6 @@ interface AdjustmentPillProps {
 }
 const AdjustmentPill = ({
   paymentAdjustment: {
-    id,
     adjustmentGroupCode,
     remarkCode,
     adjustmentReasonCode,
@@ -25,12 +24,19 @@ const AdjustmentPill = ({
   const form = useFormContext<SchemaType>()
 
   const removeAdjustment = () => {
-    if (id === '0') {
-      form.setValue(
-        `claimServiceLinePayments.${serviceLineIndex}.serviceLinePaymentAdjustments`,
-        adjustments.filter((adj, index) => index !== adjustmentIndex),
-      )
-    }
+    const updatedAdjustments = adjustments
+      .map((adj, index) => {
+        if (!adj.id && adjustmentIndex === index) return null
+        if (adj.id && index === adjustmentIndex)
+          return { ...adj, recordStatus: 'Inactive' }
+        return adj
+      })
+      .filter((v) => v !== null)
+
+    form.setValue(
+      `claimServiceLinePayments.${serviceLineIndex}.serviceLinePaymentAdjustments`,
+      updatedAdjustments,
+    )
   }
 
   return (

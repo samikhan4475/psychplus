@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
-import { TextField } from '@radix-ui/themes'
+import { Text, TextField } from '@radix-ui/themes'
 import { PropsWithRow } from '@/components'
-import { DollarIcon } from '@/components/icons'
 import { ClaimServiceLinePayment } from '../../../types'
 
 const BalanceAmountCell = ({ row }: PropsWithRow<ClaimServiceLinePayment>) => {
@@ -16,7 +15,7 @@ const BalanceAmountCell = ({ row }: PropsWithRow<ClaimServiceLinePayment>) => {
       size="1"
     >
       <TextField.Slot>
-        <DollarIcon />
+        <Text className="text-[12px]">$</Text>
       </TextField.Slot>
     </TextField.Root>
   )

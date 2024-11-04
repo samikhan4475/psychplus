@@ -31,17 +31,18 @@ const AdjustmentReasonRemarkCell = ({
     setAdjustment((prev) => ({ ...prev, adjustmentCode: value }))
 
   const ServiceLineAdjustments = useMemo(() => {
-    return form.watch(
-      `claimServiceLinePayments.${row.index}.serviceLinePaymentAdjustments`,
-    )
+    return form
+      .watch(
+        `claimServiceLinePayments.${row.index}.serviceLinePaymentAdjustments`,
+      )
+      ?.filter((adj) => adj.recordStatus === 'Active')
   }, [form, row.index])
 
   const addAdjustment = () => {
     const { adjustmentCode, reasonCode, remarkCode } = adjustment
     if (!adjustmentCode || !reasonCode || !remarkCode) return
     const newAdjustment: ServiceLinePaymentAdjustment = {
-      id: '0',
-      claimServiceLinePaymentId: '',
+      claimServiceLinePaymentId: row.original.claimServiceLineId,
       adjustmentAmount: 0,
       adjustmentGroupCode: adjustmentCode,
       adjustmentReasonCode: reasonCode,
@@ -55,7 +56,7 @@ const AdjustmentReasonRemarkCell = ({
   }
 
   return (
-    <Flex gapX="2">
+    <Flex gapX="2" align='center' className='min-w-max'>
       <AdjustmentCodeField
         value={adjustment.adjustmentCode}
         onChange={onChangeSelect}

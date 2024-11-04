@@ -13,7 +13,7 @@ const InsurancePaymentTableTabs = ({ ...props }: InsurancePaymentTableTabsProps)
     <Flex className="mb-2 w-fit rounded-l-3 rounded-r-3 bg-gray-2 p-1">
       <InsPaymentTabButton {...props} value={PaymentListTypes.All} />
       <InsPaymentTabButton {...props} value={PaymentListTypes.Posted} />
-      <InsPaymentTabButton {...props} value={PaymentListTypes.Unposted} />
+      <InsPaymentTabButton {...props} value={PaymentListTypes.Unposted} label='Unposted' />
       <InsPaymentTabButton {...props} value={PaymentListTypes.Unlinked} />
     </Flex>
   )

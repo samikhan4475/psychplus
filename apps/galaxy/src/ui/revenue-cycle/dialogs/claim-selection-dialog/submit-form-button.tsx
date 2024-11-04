@@ -4,7 +4,7 @@ import { Button } from '@radix-ui/themes'
 
 const SubmitFormButton = () => (
   <Button highContrast size="1" type="submit">
-    <MagnifyingGlassIcon strokeWidth={2} />
+    <MagnifyingGlassIcon />
   </Button>
 )
 

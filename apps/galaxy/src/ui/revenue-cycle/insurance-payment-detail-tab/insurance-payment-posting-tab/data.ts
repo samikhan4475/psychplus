@@ -1,0 +1,94 @@
+import { ClaimPayment, UpdateClaimPaymentPayload } from '../../types'
+
+const transformInDefault = (
+  paymentPostingId: string,
+  paymentPostingClaim?: Partial<ClaimPayment>,
+) => {
+  if (!paymentPostingClaim) return {}
+  const serviceLines =
+    paymentPostingClaim?.claimServiceLinePayments ??
+    paymentPostingClaim?.claimServiceLines ??
+    []
+  const claimServiceLinePayments = serviceLines?.map((serviceLine) => ({
+    ...serviceLine,
+    chargeId: serviceLine.claimServiceLineId ?? serviceLine.id ?? '',
+    claimPaymentId: paymentPostingClaim.claimId ? paymentPostingClaim.id : '',
+    dateOfServiceFrom: serviceLine.dateOfServiceFrom ?? '',
+    dateOfServiceTo: serviceLine.dateOfServiceTo ?? '',
+    claimServiceLineId: serviceLine.id,
+    billedAmount:
+      String(serviceLine.totalAmount ?? '') ||
+      String(serviceLine.billedAmount ?? ''),
+    allowedAmount: String(serviceLine.allowedAmount ?? ''),
+    modifierCode1: serviceLine.modifierCode1 ?? '',
+    modifierCode2: serviceLine.modifierCode2 ?? '',
+    modifierCode3: serviceLine.modifierCode3 ?? '',
+    modifierCode4: serviceLine.modifierCode4 ?? '',
+    paidAmount: String(serviceLine.paidAmount ?? ''),
+    copayAmount: String(serviceLine.copayAmount ?? ''),
+    coinsuranceAmount: String(serviceLine.coinsuranceAmount ?? ''),
+    deductibleAmount: String(serviceLine.deductibleAmount ?? ''),
+    otherPr: String(serviceLine.otherPr ?? ''),
+    writeOffAmount: String(serviceLine.writeOffAmount ?? ''),
+  }))
+
+  return {
+    ...paymentPostingClaim,
+    claimServiceLinePayments,
+    id: paymentPostingClaim.claimId ? paymentPostingClaim.id : '',
+    recordStatus: 'Active',
+    paymentId: paymentPostingId,
+    dateOfServiceFrom: new Date(paymentPostingClaim?.dateOfServiceFrom ?? ''),
+    dateOfServiceTo: new Date(paymentPostingClaim?.dateOfServiceTo ?? ''),
+    claimId: paymentPostingClaim?.claimId ?? paymentPostingClaim.id ?? '',
+    paymentSource: paymentPostingClaim.paymentSource ?? 'Primary',
+    processedAsCode: paymentPostingClaim.processedAsCode ?? '',
+    insuranceInternalControlNumber:
+      paymentPostingClaim.insuranceInternalControlNumber ?? '',
+    status: paymentPostingClaim.status ?? 'NotPosted',
+    billedAmount: String(paymentPostingClaim.billedAmount ?? '0'),
+    allowedAmount: String(paymentPostingClaim.allowedAmount ?? '0'),
+    paidAmount: String(paymentPostingClaim.paidAmount ?? '0'),
+    copayAmount: String(paymentPostingClaim.copayAmount ?? '0'),
+    coinsuranceAmount: String(paymentPostingClaim.coinsuranceAmount ?? '0'),
+    deductibleAmount: String(paymentPostingClaim.deductibleAmount ?? '0'),
+    otherPr: String(paymentPostingClaim.otherPr ?? '0'),
+    writeOffAmount: String(paymentPostingClaim.writeOffAmount ?? '0'),
+  }
+}
+
+const transformOut = (
+  claimPayment: Partial<ClaimPayment>,
+  paymentClaim?: Partial<ClaimPayment>,
+): UpdateClaimPaymentPayload => {
+
+  const insurancePolicies: Record<string, string> = {
+    ProcessedAsPrimary: paymentClaim?.primaryPatientInsurancePolicyId ?? '',
+    ProcessedAsSecondary: paymentClaim?.secondaryPatientInsurancePolicyId ?? '',
+    ProcessedAsTertiary: paymentClaim?.tertiaryPatientInsurancePolicyId ?? '',
+  }
+
+  const insurancePolicyId =
+    insurancePolicies[claimPayment.processedAsCode ?? ''] ||
+    (paymentClaim?.insurancePolicyId ?? '')
+
+  const updatedModel: UpdateClaimPaymentPayload = {
+    ...claimPayment,
+    id: claimPayment.id || null,
+    insurancePolicyId,
+    claimServiceLinePayments: claimPayment.claimServiceLinePayments ?? [],
+    dateOfServiceFrom:
+      new Date(claimPayment.dateOfServiceFrom ?? '').toISOString() ?? '',
+    dateOfServiceTo:
+      new Date(claimPayment.dateOfServiceTo ?? '').toISOString() ?? '',
+  }
+
+  if (!updatedModel.id)
+    updatedModel.claimServiceLinePayments?.forEach((serviceLine) => {
+      delete serviceLine['claimPaymentId']
+      delete serviceLine['id']
+    })
+  return updatedModel
+}
+
+export { transformInDefault, transformOut }

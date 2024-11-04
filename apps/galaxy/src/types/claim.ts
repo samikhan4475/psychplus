@@ -3,6 +3,7 @@ import { Metadata } from './metadata'
 
 interface ClaimServiceLine {
   id?: string
+  claimServiceLineId?: string
   metadata?: Metadata
   recordStatus?: string
   claimId: string
@@ -19,12 +20,20 @@ interface ClaimServiceLine {
   diagnosisPointer4?: string
   serviceLineNotes?: string
   authorizationNumber?: string
+  billedAmount?: string
+  allowedAmount?: string
+  paidAmount?: string
+  copayAmount?: string
+  coinsuranceAmount?: string
+  deductibleAmount?: string
+  otherPr?: string
+  writeOffAmount?: string
   deletedReason?: string
   minutes?: string
   startTime?: string
   endTime?: string
   sequenceNo?: number
-  dateOfServiceFrom?: DateValue 
+  dateOfServiceFrom?: DateValue
   dateOfServiceTo?: DateValue
   units?: number
   nationalDrugCodeQuantity?: number
@@ -117,6 +126,9 @@ interface Claim {
   isAnesthesiaClaim: boolean
   authorizationNumber: string
   referralNumber: string
+  primaryPatientInsurancePolicyId: string
+  secondaryPatientInsurancePolicyId: string
+  tertiaryPatientInsurancePolicyId: string
   clinicalLaboratoryImprovementAmendmentsNumber: string
   claimNotes: string
   payerClaimControlNumber: string
@@ -154,9 +166,9 @@ interface Claim {
   forceUnlockBy: number
   forceUnlockDate: Date
   forceUnlockReason: string
-  primaryPatientInsurancePlanId: Date
-  secondaryPatientInsurancePlanId: Date
-  tertiaryPatientInsurancePlanId: Date
+  primaryPatientInsurancePlanId: string
+  secondaryPatientInsurancePlanId: string
+  tertiaryPatientInsurancePlanId: string
   accidentDate: Date
   accidentState: string
   accidentType: string

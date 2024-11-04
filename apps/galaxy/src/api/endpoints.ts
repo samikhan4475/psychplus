@@ -173,6 +173,10 @@ const GET_PATIENT_HISOTRY_PROFILE_IMAGE_ENDPOINT = (
   patientId: string,
   historyId: number,
 ) => `/ehr/api/patients/${patientId}/history/${historyId}/profileimage`
+const ADD_CLAIM_PAYMENT = (paymentId: string) =>
+  `${API_URL}/api/payments/${paymentId}/claimpayments`
+const UPDATE_CLAIM_PAYMENT = (paymentId: string, claimPaymentId: string) =>
+  `${API_URL}/api/payments/${paymentId}/claimpayments/${claimPaymentId}`
 const GET_PATIENT_HISOTRY_DRIVING_LICENSE_IMAGE_ENDPOINT = (
   patientId: string,
   historyId: number,
@@ -241,6 +245,8 @@ const DOWNLOAD_TEMPLATE_REPORT = (templateId: string) =>
 export {
   USER_ENDPOINT,
   REFRESH_ENDPOINT,
+  ADD_CLAIM_PAYMENT,
+  UPDATE_CLAIM_PAYMENT,
   GET_CLEARNING_HOUSE_RECEIVERS,
   SESSION_ENDPOINT,
   LOGIN_ENDPOINT,

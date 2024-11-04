@@ -7,8 +7,7 @@ import { amountCheck } from './utils'
 const WriteoffAmountCell = ({ row }: PropsWithRow<ClaimServiceLinePayment>) => {
   return (
     <DollarInput
-      disabled={true}
-      name={`claimServiceLinePayments.${row.index}.adjustmentAmount`}
+      name={`claimServiceLinePayments.${row.index}.writeOffAmount`}
       onKeyDown={amountCheck}
     />
   )

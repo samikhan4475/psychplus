@@ -1,13 +1,71 @@
+'use client'
+
 import React from 'react'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { Flex } from '@radix-ui/themes'
+import { useForm } from 'react-hook-form'
+import toast from 'react-hot-toast'
+import { FormContainer } from '@/components'
+import { addClaimPaymentAction } from '../../actions/add-claim-payment'
+import { updateClaimPaymentAction } from '../../actions/update-claim-payment'
+import { useStore } from '../../insurance-payment-tab/store'
+import { useStore as TabStore } from '../../store'
+import { transformInDefault, transformOut } from './data'
 import { InsurancePaymentClaimSummary } from './insurance-payment-claim-summary'
 import { InsurancePaymentPostingTable } from './insurance-payment-posting-table'
+import { schema, SchemaType } from './schema'
 
-const InsurancePaymentPostingView = () => {
+interface InsurancePaymentPostingViewProps {
+  fetchPaymentDetail: (checkId: string) => void
+}
+const InsurancePaymentPostingView = ({
+  fetchPaymentDetail,
+}: InsurancePaymentPostingViewProps) => {
+  const activeTab = TabStore((state) => state.activeTab)
+  const { paymentPostingClaim, setPaymentPostingClaim } = useStore((state) => ({
+    setPaymentPostingClaim: state.setPaymentPostingClaim,
+    paymentPostingClaim: state.paymentPostingClaim[activeTab],
+  }))
+  const paymentPostingId = activeTab.split(' ')[1]
+  const form = useForm<SchemaType>({
+    resolver: zodResolver(schema),
+    reValidateMode: 'onChange',
+    defaultValues: transformInDefault(paymentPostingId, paymentPostingClaim),
+  })
+  const onSubmit = (data: SchemaType, event: any) => {
+    const { name } = event.nativeEvent.submitter
+
+    const isPosted = name === 'Save_Post' ? 'Posted' : 'NotPosted'
+
+    const updatedPayload = transformOut(
+      { ...data, status: isPosted },
+      paymentPostingClaim,
+    )
+
+    const claimPaymentAction = !updatedPayload?.id
+      ? addClaimPaymentAction(updatedPayload)
+      : updateClaimPaymentAction(updatedPayload)
+
+    claimPaymentAction.then((result) => {
+      if (result.state === 'success') {
+        fetchPaymentDetail(paymentPostingId)
+        onCancel()
+      } else if (result.state === 'error') {
+        toast.error(result.error)
+      }
+    })
+  }
+  const onCancel = () => setPaymentPostingClaim(activeTab)
+
   return (
     <Flex gapY="4" direction="column">
-      <InsurancePaymentClaimSummary />
-      <InsurancePaymentPostingTable />
+      <FormContainer form={form} onSubmit={onSubmit}>
+        <InsurancePaymentClaimSummary claim={paymentPostingClaim} />
+        <InsurancePaymentPostingTable
+          onCancel={onCancel}
+          claimServiceLinePayments={form.getValues('claimServiceLinePayments')}
+        />
+      </FormContainer>
     </Flex>
   )
 }

@@ -1,7 +1,6 @@
 import React from 'react'
-import { TextField } from '@radix-ui/themes'
+import { Text, TextField } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
-import { DollarIcon } from '@/components/icons'
 import { SchemaType } from '../schema'
 
 interface DollarInputProps {
@@ -14,7 +13,7 @@ interface DollarInputProps {
 
 const DollarInput = ({
   name,
-  placeholder = '00.00',
+  placeholder = '0.00',
   onKeyDown,
   className,
   disabled = false,
@@ -32,7 +31,7 @@ const DollarInput = ({
       size="1"
     >
       <TextField.Slot>
-        <DollarIcon />
+        <Text className="text-[12px]">$</Text>
       </TextField.Slot>
     </TextField.Root>
   )

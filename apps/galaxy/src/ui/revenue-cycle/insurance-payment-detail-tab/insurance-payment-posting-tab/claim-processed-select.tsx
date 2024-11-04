@@ -7,10 +7,10 @@ const ClaimProcessedSelect = () => {
     <FormFieldContainer>
       <FormFieldLabel>Claim Processed as</FormFieldLabel>
       <CodesetSelect
-        name="processedAs"
-        codeset={CODESETS.Gender}
+        name="processedAsCode"
+        codeset={CODESETS.ProcessedAsCode}
         size="1"
-        className="w-[230px] bg-transparent"
+        className="min-w-fit w-[280px] bg-transparent"
       />
     </FormFieldContainer>
   )

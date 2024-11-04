@@ -1,5 +1,5 @@
-import { Claim, Metadata } from '@/types'
 import { DateValue } from 'react-aria-components'
+import { Claim, ClaimServiceLine, Metadata } from '@/types'
 
 enum RevenueCycleTab {
   Claim = 'Claim',
@@ -24,37 +24,41 @@ interface PaymentAttachments {
 }
 
 interface ServiceLinePaymentAdjustment {
-  id: string
+  id?: string
   recordStatus: string
-  claimServiceLinePaymentId: string
+  claimServiceLinePaymentId?: string
   adjustmentAmount: number
   adjustmentReasonCode: string
   remarkCode: string
   adjustmentGroupCode: string
 }
-interface ClaimServiceLinePayment {
-  id: string
+
+interface ClaimServiceLinePayment
+  extends Partial<
+    Omit<ClaimServiceLine, 'dateOfServiceFrom' | 'dateOfServiceTo'>
+  > {
+  id?: string
+  claimPaymentId?: string
+  billedAmount: string
+  allowedAmount: string
+  paidAmount: string
+  copayAmount: string
+  coinsuranceAmount: string
+  deductibleAmount: string
+  otherPr: string
+  writeOffAmount: string
   chargeId: string
   recordStatus: string
-  claimPaymentId: string
   claimServiceLineId: string
   dateOfServiceFrom: DateValue
   dateOfServiceTo: DateValue
   cptCode: string
   units: number
-  billedAmount: number
-  totalAmount: number
-  allowedAmount: number
-  paidAmount: number
-  copayAmount: number
-  coinsuranceAmount: number
-  deductibleAmount: number
-  otherPR: number
-  writeOffAmount: number
   modifierCode1: string
   modifierCode2?: string
   modifierCode3?: string
   modifierCode4?: string
+
   serviceLinePaymentAdjustments?: ServiceLinePaymentAdjustment[]
 }
 
@@ -85,26 +89,45 @@ interface InsurancePayment {
   paymentAttachments: PaymentAttachments[]
   claimPayments: ClaimPayment[]
 }
-interface ClaimPayment {
-  id: string
+interface ClaimPayment extends Claim {
   metadata: Metadata
   recordStatus: string
   paymentId: string
   claimId: string
+  claimPaymentId: string
   paymentSource: string
   insurancePolicyId: string
   processedAsCode: string
   insuranceInternalControlNumber: string
+  dateOfServiceFrom: Date
+  dateOfServiceTo: Date
   status: string
-  billedAmount: number
-  allowedAmount: number
-  paidAmount: number
-  copayAmount: number
-  coinsuranceAmount: number
-  deductibleAmount: number
-  otherPr: number
-  writeOffAmount: number
+  billedAmount: string
+  allowedAmount: string
+  paidAmount: string
+  copayAmount: string
+  coinsuranceAmount: string
+  deductibleAmount: string
+  otherPr: string
+  writeOffAmount: string
   claimServiceLinePayments: ClaimServiceLinePayment[]
+}
+
+interface UpdateClaimPaymentPayload
+  extends Partial<
+    Omit<ClaimPayment, 'dateOfServiceFrom' | 'dateOfServiceTo' | 'id'>
+  > {
+  id: string | null
+  dateOfServiceFrom?: string | Date
+  dateOfServiceTo?: string | Date
+  authorizationNumber?: string
+  claimPaymentId?: string
+  cptDescription?: string
+  deletedReason?: string
+  nationalDrugCode?: string
+  nationalDrugCodeMeasureUnit?: string
+  nationalDrugCodeQuantity?: string
+  serviceLineNotes?: string
 }
 
 interface GetClaimsListResponse {
@@ -230,6 +253,7 @@ interface PracticeList {
 
 export {
   RevenueCycleTab,
+  type UpdateClaimPaymentPayload,
   type ClaimServiceLinePayment,
   type ServiceLinePaymentAdjustment,
   type ClaimPayment,

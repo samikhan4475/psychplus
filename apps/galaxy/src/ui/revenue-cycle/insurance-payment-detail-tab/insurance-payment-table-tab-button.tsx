@@ -5,11 +5,13 @@ import { PaymentListTypes } from './types'
 
 interface InsPaymentTabButtonProps extends InsurancePaymentTableTabsProps {
   value: PaymentListTypes
+  label?: string
 }
 const InsPaymentTabButton = ({
   value,
   setPaymentListType,
   paymentListType,
+  label,
 }: InsPaymentTabButtonProps) => {
   return (
     <Text
@@ -20,7 +22,7 @@ const InsPaymentTabButton = ({
           : 'cursor-pointer'
         } `}
     >
-      {value}
+      {label ?? value}
     </Text>
   )
 }
