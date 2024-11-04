@@ -7,7 +7,7 @@ import { BlockLabel } from './block-label'
 
 interface SelectInputProps<T> extends React.ComponentProps<typeof Select.Root> {
   label?: string
-  field: string
+  field?: string
   options?: { label: string; value: T; disabled?: boolean }[]
   placeholder?: string
   buttonClassName?: string
@@ -47,7 +47,7 @@ const SelectInput = <T extends string>({
     <Flex align="center" gap="2" className={className}>
       {label && <BlockLabel name={field}>{label}</BlockLabel>}
       <Controller
-        name={field}
+        name={field ?? ''}
         control={form.control}
         render={({ field }) => {
           const { ref, ...rest } = field

@@ -1,56 +1,64 @@
 'use client'
 
+import { useState } from 'react'
+import { Box } from '@radix-ui/themes'
 import { FormProvider } from 'react-hook-form'
 import {
   WidgetClearButton,
   WidgetFormContainer,
   WidgetSaveButton,
 } from '@/components'
-import {
-  AfterHoursBlock,
-  AlcoholSubstanceBlock,
-  InjectionBlock,
-  InteractiveComplexityBlock,
-  ModifierBlock,
-  PrimaryCodeBlock,
-  PsychoanalysisBlock,
-  QuestionnaireBlock,
-  TherapyBlock,
-  TobaccoCessationBlock,
-} from './blocks'
+import { AddonsTable, ModifierTable, PrimaryCodeTable } from './blocks'
+import { CodeHistory } from './code-history'
+import { CodesHeader } from './codes-header'
 import { useCodesWidgetForm } from './codes-widget-form'
+import { transformOut } from './data'
 
 interface CodesWidgetProps {
   patientId: string
+  isCodesHeader?: boolean
 }
 
-const CodesWidget = ({ patientId }: CodesWidgetProps) => {
+const CodesWidget = ({ patientId, isCodesHeader }: CodesWidgetProps) => {
   const form = useCodesWidgetForm()
+  const [dropdownValue, setDropdownValue] = useState('Outpatient Office Visit')
+
+  const handleDropdownChange = (value: string) => {
+    setDropdownValue(value)
+  }
 
   return (
     <FormProvider {...form}>
+      {isCodesHeader && (
+        <CodesHeader
+          patientId={patientId}
+          getData={transformOut(patientId)}
+          onDropdownChange={handleDropdownChange}
+        />
+      )}
+
       <WidgetFormContainer
         patientId={patientId}
         widgetId="codes"
-        title="Codes"
-        getData={() => []}
+        title={isCodesHeader ? `${dropdownValue}` : 'Codes'}
+        getData={transformOut(patientId)}
         headerRight={
           <>
-            <WidgetClearButton />
-            <WidgetSaveButton />
+            {!isCodesHeader && (
+              <>
+                <WidgetClearButton />
+                <WidgetSaveButton />
+              </>
+            )}
           </>
         }
       >
-        <PrimaryCodeBlock />
-        <ModifierBlock />
-        <TherapyBlock />
-        <QuestionnaireBlock />
-        <InjectionBlock />
-        <InteractiveComplexityBlock />
-        <PsychoanalysisBlock />
-        <TobaccoCessationBlock />
-        <AlcoholSubstanceBlock />
-        <AfterHoursBlock />
+        <Box className="border-pp-focus-bg relative w-full max-w-[580px] border p-1">
+          <CodeHistory form={form} />
+          <PrimaryCodeTable />
+          <ModifierTable />
+          <AddonsTable />
+        </Box>
       </WidgetFormContainer>
     </FormProvider>
   )

@@ -1,0 +1,44 @@
+import { Flex, Text } from '@radix-ui/themes'
+import { QuickNoteSectionItem } from '@/types'
+import { CodesSaveButton } from './codes-save-button'
+import { TypeDropdown } from './filter-fields/type-dropdown'
+import { HistoryButton } from './history/history-button'
+
+interface CodesHeaderProps {
+  patientId: string
+  getData: (schema: any) => QuickNoteSectionItem[]
+  onDropdownChange: (value: string) => void
+}
+
+const CodesHeader = ({
+  patientId,
+  getData,
+  onDropdownChange,
+}: CodesHeaderProps) => {
+  return (
+    <Flex
+      justify="between"
+      align="center"
+      className="bg-white rounded-b-[4px] rounded-t-[4px] px-2 py-1 pr-3 shadow-2"
+    >
+      <Flex className="gap-x-8 text-[20px]" align="center">
+        <Text className="text-pp-black-1 flex items-center gap-x-[11px] text-[20px] font-bold">
+          Codes
+        </Text>
+        <Flex align="center" className="gap-x-1">
+          <Text className="text-[11px]" as="label" wrap="nowrap" weight="medium">
+            Type
+          </Text>
+          <TypeDropdown onChange={onDropdownChange} />
+        </Flex>
+      </Flex>
+
+      <Flex className="gap-x-2 text-[20px]" align="center">
+        <HistoryButton />
+        <CodesSaveButton patientId={patientId} getData={getData} />
+      </Flex>
+    </Flex >
+  )
+}
+
+export { CodesHeader }

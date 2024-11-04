@@ -7,7 +7,7 @@ interface CodesPageProps {
 }
 
 const CodesPage = ({ params }: CodesPageProps) => {
-  return <CodesView patientId={params.id} />
+  return <CodesView patientId={params.id} isCodesHeader={true} />
 }
 
 export default CodesPage

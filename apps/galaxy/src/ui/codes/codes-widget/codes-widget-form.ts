@@ -7,16 +7,9 @@ const useCodesWidgetForm = () => {
     resolver: zodResolver(codesWidgetSchema),
     reValidateMode: 'onChange',
     defaultValues: {
-      primaryCode: '',
-      modifier: [],
-      therapy: [],
-      questionnaire: [],
-      injection: [],
-      interactiveComplexity: [],
-      psychoanalysis: [],
-      tobaccoCessation: [],
-      alcoholSubstanceUse: [],
-      afterHours: [],
+      primaryCode: [],
+      modifierCode: ['25', '59', '95'],
+      addOns: ['96127', '96127', '96372', '90836', '99406', '99408', '99050'],
     },
   })
 
