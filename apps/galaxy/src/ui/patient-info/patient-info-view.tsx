@@ -8,6 +8,7 @@ import {
   Insurance,
   InsurancePayer,
   PatientConsent,
+  PatientPreferredPartner,
   PatientProfile,
   Relationship,
 } from '@/types'
@@ -22,7 +23,6 @@ import {
 import { InsuranceTab } from './insurance-tab'
 import { PatientInfoHistoryTab } from './patient-info-history-tab'
 import { PatientInfoTab } from './patient-info-tab'
-import { PatientPreferredPartner } from './patient-info-tab/types'
 import { PaymentCardsTab } from './payment-card-tab'
 import { PaymentHistoryTab } from './payment-history-tab'
 import { PolicyAndConsentsTab } from './policy-and-consents-tab'

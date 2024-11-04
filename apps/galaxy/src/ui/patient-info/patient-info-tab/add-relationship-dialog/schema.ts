@@ -1,46 +1,47 @@
 import z from 'zod'
+import { zipCodeSchema } from '@/utils'
 
 const MOTHER_CODESET_CODE = 'MTH'
 
 const schema = z
   .object({
     relationship: z.string().min(1, 'Required'),
-    firstName: z.string().min(1, 'Required'),
-    lastName: z.string().min(1, 'Required'),
-    middleName: z.string().optional(),
-    maidenName: z.string().optional(),
+    firstName: z
+      .string()
+      .min(1, 'Required')
+      .max(35, 'Max 35 characters are allowed'),
+    lastName: z
+      .string()
+      .min(1, 'Required')
+      .max(35, 'Max 35 characters are  allowed'),
+    middleName: z.string().max(35, 'Max 35 characters are allowed').optional(),
+    maidenName: z.string().max(35, 'Max 35 characters are allowed').optional(),
     phone: z.string().min(1, 'Required'),
     email: z.string().min(1, 'Required'),
     isEmergencyContact: z.boolean().default(false),
     isAllowedToReleaseInformation: z.boolean().default(false),
     isGuardian: z.boolean().default(false),
     address: z.string().optional(),
-    postalCode: z.string().optional(),
+    contactDetails: z.object({
+      addresses: z.array(
+        z.object({
+          type: z.enum(['Home']).default('Home'),
+          street1: z.string().min(1, 'Required'),
+          street2: z.string().optional().default(''),
+          city: z.string().optional().default(''),
+          state: z.string().optional().default(''),
+          country: z.string().optional().default(''),
+          postalCode: zipCodeSchema,
+        }),
+      ),
+    }),
   })
   .superRefine((data, ctx) => {
-    console.log('Test')
     if (data.relationship === MOTHER_CODESET_CODE) {
-      if (data.maidenName && data.maidenName.length > 0) {
+      if (!data?.maidenName) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
           path: ['maidenName'],
-          message: 'Required',
-        })
-      }
-    }
-
-    if (data.postalCode || data.address) {
-      if (!data.address) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          path: ['address'],
-          message: 'Required',
-        })
-      }
-      if (!data.postalCode) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          path: ['postalCode'],
           message: 'Required',
         })
       }

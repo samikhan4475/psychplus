@@ -2,7 +2,7 @@
 
 import { Flex, Select } from '@radix-ui/themes'
 import { Row } from '@tanstack/react-table'
-import { PatientPreferredPartner } from '../../types'
+import { PatientPreferredPartner } from '@/types'
 
 interface PrioritySelectCellProps {
   row: Row<PatientPreferredPartner>

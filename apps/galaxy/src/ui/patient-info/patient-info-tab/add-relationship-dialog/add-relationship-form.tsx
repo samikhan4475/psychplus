@@ -7,6 +7,7 @@ import { Flex, Grid } from '@radix-ui/themes'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { FormContainer, FormError } from '@/components'
+import { useGooglePlacesContext } from '@/providers/google-places-provider'
 import { addPatientRelationshipAction } from '../actions'
 import { addRelationshipTransformOut } from '../transform'
 import { AddressInput } from './address-input'
@@ -31,6 +32,7 @@ const AddRelationshipForm = ({
   patientId,
   setDialogOpen,
 }: AddRelationshipFormProps) => {
+  const { loaded } = useGooglePlacesContext()
   const form = useForm<AddRelationshipSchemaType>({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -44,6 +46,19 @@ const AddRelationshipForm = ({
       isEmergencyContact: false,
       isAllowedToReleaseInformation: false,
       isGuardian: false,
+      contactDetails: {
+        addresses: [
+          {
+            type: 'Home',
+            street1: '',
+            street2: '',
+            city: '',
+            state: '',
+            country: '',
+            postalCode: '',
+          },
+        ],
+      },
     },
   })
 
@@ -82,7 +97,7 @@ const AddRelationshipForm = ({
           <EmailInput />
         </Flex>
         <ZipInput />
-        <AddressInput />
+        {loaded && <AddressInput />}
       </Grid>
       <RelationshipTable />
       <SaveButton />

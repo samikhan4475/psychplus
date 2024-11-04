@@ -3,7 +3,12 @@
 import { useState } from 'react'
 import { Box, Flex } from '@radix-ui/themes'
 import { GooglePlacesContextProvider } from '@/providers/google-places-provider'
-import { PatientConsent, PatientProfile, Relationship } from '@/types'
+import {
+  PatientConsent,
+  PatientPreferredPartner,
+  PatientProfile,
+  Relationship,
+} from '@/types'
 import { POLICY_TYPE_A } from '../constants'
 import { TabContentHeading } from '../shared'
 import { AdditionalContactInfoCard } from './additional-contact-info'
@@ -19,7 +24,6 @@ import { RelationshipCard } from './relationship'
 // import { ResetPasswordButton } from './reset-password-button'
 import { SaveButton } from './save-button'
 import { StatusSelect } from './status-selector'
-import { PatientPreferredPartner } from './types'
 import { AddressCard } from './user-address'
 
 const TAB_TITLE = 'Patient Info'

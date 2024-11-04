@@ -11,7 +11,9 @@ const getAddressLabel = (addressType: AddressType, addresses?: Address[]) => {
 
   const stateAbbreviation = getStateAbbreviation(address.state ?? '')
 
-  return `${address.street1} ${address.city}, ${stateAbbreviation} ${address.postalCode}`
+  return `${address.street1} ${address.city ?? ''}, ${stateAbbreviation} ${
+    address.postalCode
+  }`
 }
 
 const getStateAbbreviation = (name: string) => {

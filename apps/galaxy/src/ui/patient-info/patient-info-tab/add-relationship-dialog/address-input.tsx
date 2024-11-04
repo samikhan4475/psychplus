@@ -1,25 +1,20 @@
 'use client'
 
-import { TextField } from '@radix-ui/themes'
-import { useFormContext } from 'react-hook-form'
-import {
-  FormFieldContainer,
-  FormFieldError,
-  FormFieldLabel,
-} from '@/components'
-import { AddRelationshipSchemaType } from './add-relationship-form'
+import { FormFieldContainer, GooglePlacesAutocomplete } from '@/components'
 
 const AddressInput = () => {
-  const form = useFormContext<AddRelationshipSchemaType>()
   return (
     <FormFieldContainer className="col-span-2 w-full">
-      <FormFieldLabel className="!text-1">Address</FormFieldLabel>
-      <TextField.Root
-        size="1"
-        className="border-pp-gray-2 h-6 w-full border border-solid !outline-none [box-shadow:none]"
-        {...form.register('address')}
+      <GooglePlacesAutocomplete
+        required={true}
+        name="street1"
+        label="Address"
+        zipFieldName="contactDetails.addresses.0.postalCode"
+        address2FieldName="street2"
+        placeholder="Enter Address"
+        prefix="contactDetails.addresses.0"
+        labelClassName="!text-1"
       />
-      <FormFieldError name="address" />
     </FormFieldContainer>
   )
 }

@@ -1,7 +1,7 @@
 'use server'
 
 import * as api from '@/api'
-import { PatientPreferredPartner } from '../types'
+import { PatientPreferredPartner } from '@/types'
 
 const getPatientPreferredPartnersAction = async (
   id: string,

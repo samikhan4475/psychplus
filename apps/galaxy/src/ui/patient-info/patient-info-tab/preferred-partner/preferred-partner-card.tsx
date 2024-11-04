@@ -2,7 +2,7 @@
 
 import { Flex } from '@radix-ui/themes'
 import { CardHeading } from '@/components'
-import { PatientPreferredPartner } from '../types'
+import { PatientPreferredPartner } from '@/types'
 import { PreferredPartnerTable } from './preferred-partner-table'
 
 interface PreferredPartnerCardProps {

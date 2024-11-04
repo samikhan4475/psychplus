@@ -7,7 +7,7 @@ import { Trash2 } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { PropsWithRow } from '@/components'
 import { Relationship } from '@/types'
-import { deletePatientRelationshipAction } from '../actions'
+import { deletePatientRelationshipAction } from '../../actions'
 
 const ActionsCell = ({
   row: {

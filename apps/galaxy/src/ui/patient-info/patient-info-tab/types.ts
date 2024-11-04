@@ -12,24 +12,14 @@ interface PatientProfile {
   guardianLastName?: string
 }
 
-interface PatientPreferredPartner {
-  id: string
-  name: string
-  premiumStatus?: string
-  payerStatus: string
-  userID: string
-  userType: string
-  isPrimaryPartner: boolean
-  usersInID: string
-  userStatus: string
-  startDate: string
-  endDate: string
-  priority: string
-}
-
 interface PatientHistory {
   dateTime: string
   username: string
 }
 
-export type { PatientProfile, PatientPreferredPartner, PatientHistory }
+interface RRI {
+  user: string
+  dataTime: string
+  status: string
+}
+export type { PatientProfile, PatientHistory, RRI }

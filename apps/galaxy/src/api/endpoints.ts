@@ -242,6 +242,10 @@ const FAVOURITE_DIAGNOSIS_ENDPOINT = (icd10Code: string) =>
   `${API_URL}/api/staff/self/icd10codes/${icd10Code}/actions/favorites`
 const DOWNLOAD_TEMPLATE_REPORT = (templateId: string) =>
   `${API_URL}/api/reporting/templates/${templateId}/actions/download`
+const UPDATE_PATIENT_RELATIONSHIP_ENDPOINT = (
+  patientId: number,
+  relationshipId: string,
+) => `${API_URL}/api/patients/${patientId}/relationships/${relationshipId}`
 export {
   USER_ENDPOINT,
   REFRESH_ENDPOINT,
@@ -376,4 +380,5 @@ export {
   SEARCH_FAVOURITE_DIAGNOSIS_ENDPOINT,
   FAVOURITE_DIAGNOSIS_ENDPOINT,
   DOWNLOAD_TEMPLATE_REPORT,
+  UPDATE_PATIENT_RELATIONSHIP_ENDPOINT,
 }

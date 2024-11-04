@@ -89,15 +89,7 @@ const addRelationshipTransformOut = (
         type: 'Home',
       },
     ],
-    addresses: data.address
-      ? [
-          {
-            type: 'Home',
-            street1: data.address,
-            postalCode: String(data.postalCode),
-          },
-        ]
-      : [],
+    ...data.contactDetails,
   },
 })
 
