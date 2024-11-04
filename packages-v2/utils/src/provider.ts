@@ -1,7 +1,7 @@
 import { ProviderType } from '@psychplus-v2/constants'
 
 const PROVIDER_TYPE_LABELS: Record<ProviderType, string> = {
-  [ProviderType.Psychiatrist]: 'Psychiatry',
+  [ProviderType.Psychiatrist]: 'Psychiatrist',
   [ProviderType.Therapist]: 'Therapy',
 }
 
