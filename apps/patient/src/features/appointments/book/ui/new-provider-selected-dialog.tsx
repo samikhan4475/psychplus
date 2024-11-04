@@ -25,7 +25,8 @@ const NewProviderSelectedDialog = ({
 
     const result = await changePrimaryProviderCareTeamAction({
       specialistStaffId,
-      specialistType: ProviderType[providerType],
+      specialistType:
+        ProviderType[providerType] === 'Therapist' ? 'Therapy' : 'Psychiatrist',
     })
 
     if (result.state === 'error') {
