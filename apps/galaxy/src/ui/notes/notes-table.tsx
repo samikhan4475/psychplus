@@ -1,13 +1,8 @@
 'use client'
 
-import { useCallback, useEffect } from 'react'
+import { useEffect } from 'react'
 import { Box, Flex } from '@radix-ui/themes'
-import {
-  ColumnDef,
-  Row,
-  Table,
-  type RowSelectionState,
-} from '@tanstack/react-table'
+import { ColumnDef, Row, Table } from '@tanstack/react-table'
 import {
   ColumnHeader,
   DataTable,
@@ -140,15 +135,12 @@ const columns: ColumnDef<PatientNotes>[] = [
 ]
 
 const NotesTable = () => {
-  const { data, fetch, loading, setSelectedRow, setSelectedRows } = useStore(
-    (state) => ({
-      data: state.data,
-      loading: state.loading,
-      fetch: state.fetch,
-      setSelectedRow: state.setSelectedRow,
-      setSelectedRows: state.setSelectedRows,
-    }),
-  )
+  const { data, fetch, loading, setSelectedRow } = useStore((state) => ({
+    data: state.data,
+    loading: state.loading,
+    fetch: state.fetch,
+    setSelectedRow: state.setSelectedRow,
+  }))
 
   useEffect(() => {
     fetch()
@@ -158,11 +150,6 @@ const NotesTable = () => {
     table.setRowSelection({ [row.id]: true })
     setSelectedRow(row.id)
   }
-
-  const onRowSelectionChange = useCallback((rows: RowSelectionState) => {
-    const selectedRowIds = Object?.keys(rows)
-    setSelectedRows(selectedRowIds)
-  }, [])
 
   if (loading) {
     return (
@@ -178,7 +165,6 @@ const NotesTable = () => {
         columns={columns}
         data={data?.notes || []}
         onRowClick={onRowSelect}
-        onRowSelectionChange={onRowSelectionChange}
       />
     </Box>
   )

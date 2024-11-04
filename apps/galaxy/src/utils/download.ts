@@ -1,40 +1,29 @@
 'use client'
 
-import toast from "react-hot-toast";
-
-const downloadFile = async (
-  endpoint: string,
+const downloadFile = async <TBody>(
+  endpoint: string | URL,
   filename: string,
   method: 'GET' | 'POST' = 'GET',
-  bodyData?: any
+  bodyData?: TBody,
 ) => {
   const options: RequestInit = {
     method,
-  };
-
-  if (method === 'POST' && bodyData) {
-    options.body = JSON.stringify(bodyData);
-    options.headers = {
-      'Content-Type': 'application/json',
-    };
+    body: JSON.stringify(bodyData),
+    headers: { 'Content-Type': 'application/json' },
   }
-
-  const result = await fetch('/ehr' + endpoint, options);
-
+  const result = await fetch('/ehr' + endpoint, options)
   if (!result.ok) {
-    toast.error(result.statusText ?? 'Failed to download file')
-    return;
+    throw new Error(result.statusText)
   }
+  const blob = await result.blob()
+  const url = window.URL.createObjectURL(blob)
+  const a = document.createElement('a')
+  a.href = url
+  a.download = filename
+  document.body.appendChild(a)
+  a.click()
+  a.remove()
+  window.URL.revokeObjectURL(url)
+}
 
-  const blob = await result.blob();
-  const url = window.URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  window.URL.revokeObjectURL(url);
-};
-
-export { downloadFile };
+export { downloadFile }

@@ -10,26 +10,36 @@ import { DateInputFrom } from './date-input-from'
 import { DateInputTo } from './date-input-to'
 import { PaymentMethodSelect } from './payment-method-select'
 import { SearchButton } from './search-button'
+import { useStore } from './store'
 
 const schema = z.object({
-  dateFrom: z.custom<DateValue | null>(),
-  dateTo: z.custom<DateValue | null>(),
+  fromDate: z.custom<DateValue>().nullable(),
+  toDate: z.custom<DateValue>().nullable(),
   paymentMethod: z.string().optional(),
 })
 
-export type FilterFormSchemaType = z.infer<typeof schema>
+type SchemaType = z.infer<typeof schema>
 
-const FilterForm = () => {
-  const form = useForm<FilterFormSchemaType>({
+interface FilterFormProps {
+  patientId: string
+}
+const FilterForm = ({ patientId }: FilterFormProps) => {
+  const { fetchPatientPayments } = useStore((state) => ({
+    fetchPatientPayments: state.fetchPatientPayments,
+  }))
+
+  const form = useForm<SchemaType>({
     resolver: zodResolver(schema),
     defaultValues: {
-      dateFrom: null,
-      dateTo: null,
+      fromDate: null,
+      toDate: null,
       paymentMethod: '',
     },
   })
 
-  const onSubmit: SubmitHandler<FilterFormSchemaType> = () => {}
+  const onSubmit: SubmitHandler<SchemaType> = (data) => {
+    return fetchPatientPayments(patientId, data)
+  }
   return (
     <FormContainer
       form={form}
@@ -39,10 +49,10 @@ const FilterForm = () => {
       <DateInputFrom />
       <DateInputTo />
       <PaymentMethodSelect />
-      <ClearButton />
+      <ClearButton patientId={patientId} />
       <SearchButton />
     </FormContainer>
   )
 }
 
-export { FilterForm }
+export { FilterForm, type SchemaType }

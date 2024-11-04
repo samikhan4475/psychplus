@@ -7,9 +7,11 @@ import { PaymentHistory } from './types'
 
 interface PaymentHeaderProps {
   data?: PaymentHistory
+  patientId: string
 }
 
-const PaymentHeader = ({ data }: PaymentHeaderProps) => {
+const PaymentHeader = ({ data, patientId }: PaymentHeaderProps) => {
+  const totalPayment = formatCurrency(data?.totalPayment ?? 0)
   return (
     <Flex gap="9" className="bg-pp-table-subRows px-2 py-1">
       <Flex gap="1" align="center">
@@ -31,10 +33,10 @@ const PaymentHeader = ({ data }: PaymentHeaderProps) => {
         </Text>
       </Flex>
       <Flex gap="1" align="center">
-        <PatientPaymentsDialog />
+        <PatientPaymentsDialog patientId={patientId} totalPayment={totalPayment} />
         <Text size="1">Total Payment</Text>
         <Text size="2" weight="bold">
-          {formatCurrency(data?.totalPayment ?? 0)}
+          {totalPayment}
         </Text>
       </Flex>
       <Flex gap="1" align="center">

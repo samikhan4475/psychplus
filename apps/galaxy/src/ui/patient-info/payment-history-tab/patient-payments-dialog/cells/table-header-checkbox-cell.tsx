@@ -14,13 +14,12 @@ const TableHeaderCheckboxCell = ({
   return (
     <Flex
       onClick={(e) => e.stopPropagation()}
-      className="h-full w-full px-0.5"
+      className="h-full w-full"
       justify="center"
       align="center"
     >
       <Checkbox
         checked={checked}
-        className="mt-0.5"
         color="indigo"
         size="1"
         highContrast

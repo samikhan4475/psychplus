@@ -1,6 +1,7 @@
 'use client'
 
-import { FormFieldContainer, FormFieldLabel, SelectInput } from '@/components'
+import { CodesetSelect, FormFieldContainer, FormFieldLabel } from '@/components'
+import { CODESETS } from '@/constants'
 
 const PaymentMethodSelect = () => {
   return (
@@ -8,23 +9,14 @@ const PaymentMethodSelect = () => {
       <FormFieldLabel className="whitespace-nowrap !text-1">
         Payment Method
       </FormFieldLabel>
-      <SelectInput
-        field="paymentMethod"
-        buttonClassName="border-pp-gray-2 h-6 w-[125px] border border-solid !outline-none [box-shadow:none]"
-        options={options}
+      <CodesetSelect
+        codeset={CODESETS.PaymentMethod}
+        name="paymentMethod"
+        size="1"
+        className="border-pp-gray-2 h-6 w-[125px] border border-solid !outline-none [box-shadow:none]"
       />
     </FormFieldContainer>
   )
 }
 
-const options = [
-  {
-    label: 'Test',
-    value: 'test',
-  },
-  {
-    label: 'Test 2',
-    value: 'test 2',
-  },
-]
 export { PaymentMethodSelect }

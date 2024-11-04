@@ -32,7 +32,7 @@ interface DataTableProps<TData, TValue> {
   disablePagination?: boolean
   renderEmpty?: () => React.ReactNode
   onRowClick?: (row: Row<TData>, table: ReactTable<TData>) => void
-  onRowSelectionChange?: (selectedRows: RowSelectionState) => void
+  onRowSelectionChange?: (rows: Row<TData>[]) => void
   sticky?: boolean
   isRowSpan?: boolean // Use rowspan to prevent table layout issues. Nested columns apply only when the optional `isRowSpan` prop is true, as data tables don't support them directly.
   theadClass?: string
@@ -73,7 +73,7 @@ const DataTable = <TData, TValue>({
 
   useEffect(() => {
     if (onRowSelectionChange) {
-      onRowSelectionChange(rowSelection)
+      onRowSelectionChange(table.getSelectedRowModel().flatRows)
     }
   }, [rowSelection])
 

@@ -7,7 +7,14 @@ import { PaymentsTable } from './payments-table'
 import { PrintButton } from './print-button'
 import { TotalPayment } from './total-payment'
 
-const PatientPaymentsDialog = () => {
+interface PatientPaymentsDialogProps {
+  patientId: string
+  totalPayment: string
+}
+const PatientPaymentsDialog = ({
+  patientId,
+  totalPayment,
+}: PatientPaymentsDialogProps) => {
   return (
     <Dialog.Root>
       <Dialog.Trigger>
@@ -20,20 +27,23 @@ const PatientPaymentsDialog = () => {
           <History size={14} />
         </IconButton>
       </Dialog.Trigger>
-      <Dialog.Content className="relative max-w-[723px] rounded-1 p-3">
+      <Dialog.Content
+        className="relative max-w-[723px] rounded-1 p-3"
+        onOpenAutoFocus={(e) => e.preventDefault()}
+      >
         <Flex justify="between" align="center">
           <Dialog.Title size="6" className="!mb-0 font-[600]">
             Patient Payments
           </Dialog.Title>
           <Flex gap="2" align="start">
-            <PrintButton />
+            <PrintButton patientId={patientId} />
             <Dialog.Close className="cursor-pointer">
               <X size={20} strokeWidth={1.5} />
             </Dialog.Close>
           </Flex>
         </Flex>
-        <TotalPayment />
-        <PaymentsTable />
+        <TotalPayment totalPayment={totalPayment} />
+        <PaymentsTable patientId={patientId} />
       </Dialog.Content>
     </Dialog.Root>
   )

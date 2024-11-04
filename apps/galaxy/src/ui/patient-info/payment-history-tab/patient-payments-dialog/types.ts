@@ -1,8 +1,13 @@
-interface PatientPayment {
-  method: string
-  date: string
-  description: string
-  ammount: string
+import { PatientPayment } from '@/types'
+import { SchemaType } from './filter-form'
+
+interface GetPatientPaymentsData {
+  payments: PatientPayment[]
 }
 
-export type { PatientPayment }
+interface GetPaymentPayload extends Omit<SchemaType, 'toDate' | 'fromDate'> {
+  fromDate?: string
+  toDate?: string
+}
+
+export type { PatientPayment, GetPatientPaymentsData, GetPaymentPayload }

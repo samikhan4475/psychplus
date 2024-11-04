@@ -45,7 +45,7 @@ const PaymentHistoryTab = ({
         </Flex>
       </TabContentHeading>
       <ScrollArea>
-        <PaymentHeader data={data} />
+        <PaymentHeader data={data} patientId={patientId} />
         <Flex direction="column" gap="1" className="bg-white w-full py-1">
           <FilterForm patientId={patientId} />
           <Flex direction="column" pl="2">

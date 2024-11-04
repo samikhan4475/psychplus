@@ -14,13 +14,12 @@ const TableRowCheckboxCell = ({
   return (
     <Flex
       onClick={(e) => e.stopPropagation()}
-      className="w-full px-0.5"
+      className="w-full"
       justify="center"
       align="center"
     >
       <Checkbox
         checked={checked}
-        className="mt-0.5"
         size="1"
         onCheckedChange={onCheckedChange}
         color="indigo"
