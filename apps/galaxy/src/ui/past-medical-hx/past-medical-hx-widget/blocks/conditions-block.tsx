@@ -51,7 +51,7 @@ const BLOCK_OPTIONS: {
     field: 'seizures',
   },
   {
-    label: 'Parkinson\'s',
+    label: "Parkinson's",
     field: 'parkinsons',
   },
   {
@@ -112,13 +112,17 @@ const BLOCK_OPTIONS: {
     field: 'breastFeeding',
     details: {
       type: 'number',
-      label: 'Days Post Partum',
+      label: 'The number of postpartum weeks',
       field: 'breastFeedingDaysPostPartum',
     },
   },
   {
-    label: 'Communicable',
-    field: 'communicable',
+    label: 'Gonorrhea',
+    field: 'gonorrhea',
+  },
+  {
+    label: 'Chlamydia',
+    field: 'chlamydias',
   },
   {
     label: 'Measles',
@@ -157,7 +161,7 @@ const BLOCK_OPTIONS: {
     field: 'other',
     details: {
       type: 'text',
-      label: 'Details',
+      label: '',
       field: 'otherDetails',
     },
   },
@@ -178,4 +182,4 @@ const ConditionsBlock = () => {
   )
 }
 
-export { ConditionsBlock }
+export { ConditionsBlock, BLOCK_OPTIONS }

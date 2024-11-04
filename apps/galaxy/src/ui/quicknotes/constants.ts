@@ -14,6 +14,7 @@ enum QuickNoteSectionName {
   QuickNoteSectionHospital = 'QuicknoteSectionHospital',
   QuickNoteSectionFamilyPsychHx = 'QuicknoteSectionFamilyPsychHx',
   QuickNoteSectionPastPsychHx = 'QuicknoteSectionPastPsychHx',
+  QuickNoteSectionPastMedicalHx = 'QuicknoteSectionPastMedicalHx',
   QuickNoteSectionSocialHx = 'QuicknoteSectionSocialHx',
   QuickNoteSectionSubstanceUseHx = 'QuicknoteSectionSubstanceUseHx',
   QuicknoteSectionPhysicalExam = 'QuicknoteSectionPhysicalExam',

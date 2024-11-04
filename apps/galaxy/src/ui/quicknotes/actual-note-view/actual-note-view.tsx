@@ -39,7 +39,7 @@ const ActualNoteView = ({ patientId }: ActualNoteViewProps) => {
           <FamilyPsychDetailView patientId={patientId} />
           <SocialHx />
           <SubstanceUseHx />
-          <PastMedicalHx />
+          <PastMedicalHx patientId={patientId} />
           <Allergies />
           <Question />
           <ReviewOfSystem />

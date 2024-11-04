@@ -1,1 +1,1 @@
-export * from './past-medical-hx-widget'
+export { PastMedicalHxLoader as PastMedicalHxWidget } from './past-medical-hx-loader'

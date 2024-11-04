@@ -29,6 +29,7 @@ const WidgetFormContainer = ({
   const onSubmit = (shouldToast = true) =>
     form.handleSubmit(async (data) => {
       const payload = { patientId, data: getData(data) }
+
       const result = await saveWidgetAction(payload)
 
       if (result.state === 'error') {

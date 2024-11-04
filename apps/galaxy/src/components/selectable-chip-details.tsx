@@ -3,7 +3,7 @@ import { useFormContext } from 'react-hook-form'
 import { cn } from '@/utils'
 import { MultiSelectField } from './checkbox-multiselect'
 import { ChipList } from './chip-list'
-import { DateInput } from './date-input'
+import { DatePickerInput } from './date-picker-input'
 import { NumberInput } from './number-input'
 import { SelectInput } from './select-input'
 import { TextInput } from './text-input'
@@ -49,7 +49,11 @@ const SelectableChipDetails = ({
           className={cn('bg-pp-focus-bg-2 rounded-1 pl-1', className)}
         >
           {label && (
-            <Text weight="medium" mr="1" className="text-[11px]">
+            <Text
+              weight="medium"
+              mr="1"
+              className="whitespace-nowrap text-[11px]"
+            >
               {label}
             </Text>
           )}
@@ -71,7 +75,15 @@ const SelectableChipDetails = ({
             />
           )}
           {type === 'select' && <SelectInput field={field} options={options} />}
-          {type === 'date' && <DateInput field={field} autoFocus />}
+          {type === 'date' && (
+            <Box className="w-[100px]">
+              <DatePickerInput
+                field={field}
+                isDisabled={isDisabled}
+                isRequired={true}
+              />
+            </Box>
+          )}
           {type === 'multi-select' && (
             <MultiSelectField
               onChange={(vals) =>
