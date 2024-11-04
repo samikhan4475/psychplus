@@ -1,7 +1,7 @@
 import { ColumnDef } from '@tanstack/react-table'
 import { ColumnHeader, LongTextCell, TextCell } from '@/components'
 import { formatCurrency, formatDateTime, getSlashedDateString } from '@/utils'
-import { ActionsCell, SignCell } from './cells'
+import { SignCell } from './cells'
 import { BillingHistory } from './types'
 
 const columns: ColumnDef<BillingHistory>[] = [
@@ -102,7 +102,7 @@ const columns: ColumnDef<BillingHistory>[] = [
     ),
   },
   {
-    accessorKey: 'provider',
+    accessorKey: 'doctorName',
     header: ({ column }) => (
       <ColumnHeader column={column} clientSideSort label="Provider" />
     ),
@@ -125,9 +125,9 @@ const columns: ColumnDef<BillingHistory>[] = [
       <ColumnHeader column={column} clientSideSort label="Diagnosis" />
     ),
     cell: ({ row }) => (
-      <TextCell className="truncate">
+      <LongTextCell className="min-w-32">
         {row.original.diagnosisDisplayName}
-      </TextCell>
+      </LongTextCell>
     ),
   },
   {
@@ -251,7 +251,7 @@ const columns: ColumnDef<BillingHistory>[] = [
     ],
   },
   {
-    accessorKey: 'createdOn',
+    accessorKey: 'claimCreatedDate',
     size: 100,
     header: ({ column }) => (
       <ColumnHeader column={column} clientSideSort label="Created On" />
@@ -259,12 +259,12 @@ const columns: ColumnDef<BillingHistory>[] = [
     cell: ({ row }) => (
       <TextCell className="truncate">
         {row?.original?.appointmentDateTime &&
-          formatDateTime(row?.original?.appointmentDateTime)}
+          formatDateTime(row?.original?.claimCreatedDate)}
       </TextCell>
     ),
   },
   {
-    accessorKey: 'submittedOn',
+    accessorKey: 'claimSubmittedDate',
     size: 100,
     header: ({ column }) => (
       <ColumnHeader column={column} clientSideSort label="Submitted On" />
@@ -282,12 +282,14 @@ const columns: ColumnDef<BillingHistory>[] = [
     header: () => <ColumnHeader label="Sign Note" />,
     cell: SignCell,
   },
-  {
-    accessorKey: 'Action',
-    size: 50,
-    header: () => <ColumnHeader label="Action" />,
-    cell: ActionsCell,
-  },
+
+  //Todo in phase 2
+  // {
+  //   accessorKey: 'Action',
+  //   size: 50,
+  //   header: () => <ColumnHeader label="Action" />,
+  //   cell: ActionsCell,
+  // },
 ]
 
 export { columns }

@@ -1,21 +1,24 @@
 'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { MagnifyingGlassIcon } from '@radix-ui/react-icons'
-import { Button, Flex } from '@radix-ui/themes'
+import { Flex } from '@radix-ui/themes'
 import { DateValue } from 'react-aria-components'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import z from 'zod'
 import { FormContainer } from '@/components'
-import { sanitizeFormData } from '@/utils'
+import { cn, sanitizeFormData } from '@/utils'
 import { ClaimNoInput } from './claim-no-input'
 import { EndDateInput } from './end-date-input'
+import { FiltersToggleButton } from './filters-toggle-button'
 import { InsuranceSelect } from './insurance-select'
 import { LocationsSelect } from './locations-select'
+import { ResetButton } from './reset-button'
 import { StartDateInput } from './start-date-input'
 import { useStore } from './store'
+import { SubmitButton } from './submit-button'
 
 const schema = z.object({
+  patientId: z.string().optional(),
   claimNumber: z.string().optional(),
   fromDate: z.custom<DateValue | null>().optional(),
   endDate: z.custom<DateValue | null>().optional(),
@@ -28,16 +31,16 @@ interface BillingFilterFormProps {
   patientId: string
 }
 const BillingFilterForm = ({ patientId }: BillingFilterFormProps) => {
-  const { toggleFilters, fetchBillingHistory, formValues } = useStore(
+  const { showFilters, fetchBillingHistory, formValues } = useStore(
     (state) => ({
-      toggleFilters: state.toggleFilters,
+      showFilters: state.showFilters,
       fetchBillingHistory: state.fetchBillingHistory,
       formValues: state.formValues,
     }),
   )
   const form = useForm<BillingFilterSchemaType>({
     resolver: zodResolver(schema),
-    defaultValues: formValues,
+    defaultValues: { ...formValues, patientId },
     mode: 'onBlur',
   })
   const { isSubmitting } = form.formState
@@ -45,55 +48,33 @@ const BillingFilterForm = ({ patientId }: BillingFilterFormProps) => {
     const sanitizedData = sanitizeFormData({
       ...data,
     })
-    return fetchBillingHistory(patientId, sanitizedData)
+    return fetchBillingHistory(sanitizedData)
   }
-  const handleReset = () => {
-    form.reset({
-      claimNumber: '',
-      fromDate: null,
-      endDate: null,
-      patientInsurancePayerId: '',
-      locationId: '',
-    })
-    fetchBillingHistory(patientId)
-  }
+
   return (
     <FormContainer
       form={form}
       onSubmit={onSubmit}
-      className="bg-white z-[1] rounded-bl-1 rounded-br-1 p-2"
+      className={cn(
+        'bg-white z-[1] w-full flex-row justify-between rounded-bl-1 rounded-br-1 p-2',
+        {
+          'justify-end': !showFilters,
+        },
+      )}
     >
-      <Flex align="center" gap="2" wrap="wrap" width="100%">
-        <ClaimNoInput />
-        <StartDateInput disabled={isSubmitting} />
-        <EndDateInput disabled={isSubmitting} />
-        <LocationsSelect />
-        <InsuranceSelect />
-        <Flex align="center" className="px-2">
-          <Button
-            size="1"
-            variant="ghost"
-            className="text-1 font-regular text-indigo-12"
-            color="indigo"
-            type="button"
-            onClick={toggleFilters}
-          >
-            Hide Filters
-          </Button>
+      {showFilters && (
+        <Flex align="center" gap="2" wrap="wrap">
+          <ClaimNoInput />
+          <StartDateInput disabled={isSubmitting} />
+          <EndDateInput disabled={isSubmitting} />
+          <LocationsSelect />
+          <InsuranceSelect />
         </Flex>
-        <Button
-          size="1"
-          color="gray"
-          className="text-black"
-          variant="outline"
-          type="button"
-          onClick={handleReset}
-        >
-          Clear
-        </Button>
-        <Button type="submit" size="1" highContrast>
-          <MagnifyingGlassIcon width="14px" height="14px" />
-        </Button>
+      )}
+      <Flex gap="2" align="center">
+        <FiltersToggleButton />
+        <ResetButton patientId={patientId} />
+        <SubmitButton />
       </Flex>
     </FormContainer>
   )

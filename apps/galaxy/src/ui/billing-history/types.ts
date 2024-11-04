@@ -36,18 +36,21 @@ interface BillingHistory {
   cptStatus: string
   createdOn: string
   claimSubmittedDate: string
+  claimCreatedDate: string
 }
 
 type BillingHistoryRow = Row<BillingHistory>
 
 interface GetBillingHistoryData {
   billingHistories: BillingHistory[]
+  total: number
 }
 interface BillingHistoryParams
   extends Omit<BillingFilterSchemaType, 'fromDate' | 'endDate' | 'locationId'> {
   fromDate?: string
   endDate?: string
   locationId?: string[]
+  patientId: string
 }
 
 export type {

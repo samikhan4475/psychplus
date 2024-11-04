@@ -11,9 +11,9 @@ interface BillingTableProps {
 }
 const BillingTable = ({ data = [], loading }: BillingTableProps) => {
   return loading ? (
-    <LoadingPlaceholder className="bg-white min-h-[46vh]" />
+    <LoadingPlaceholder className="h-full" />
   ) : (
-    <ScrollArea className="bg-white h-[calc(100dvh_-_360px)] max-w-[calc(100vw_-_198px)] p-2">
+    <ScrollArea className="h-full max-w-[calc(100vw_-_188px)] p-2">
       <DataTable
         columns={columns}
         data={data}

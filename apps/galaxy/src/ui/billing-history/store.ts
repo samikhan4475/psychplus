@@ -11,9 +11,15 @@ interface Store {
   loading?: boolean
   showFilters: boolean
   formValues?: Partial<BillingFilterSchemaType>
+  pageCache: Record<number, GetBillingHistoryData>
+  page: number
+  next: () => void
+  prev: () => void
+  jumpToPage: (page: number) => void
   fetchBillingHistory: (
-    patientId: string,
     formValues?: Partial<BillingFilterSchemaType>,
+    page?: number,
+    reset?: boolean,
   ) => void
   toggleFilters: () => void
 }
@@ -24,12 +30,13 @@ const useStore = create<Store>((set, get) => ({
   loading: undefined,
   formValues: undefined,
   showFilters: true,
-  insuranceProviders: [],
+  page: 1,
+  pageCache: {},
   toggleFilters: () => set({ showFilters: !get().showFilters }),
-
   fetchBillingHistory: async (
-    patientId: string,
     formValues: Partial<BillingFilterSchemaType> = {},
+    page = 1,
+    reset = false,
   ) => {
     set({
       error: undefined,
@@ -38,8 +45,8 @@ const useStore = create<Store>((set, get) => ({
     })
 
     const result = await getPatientBillingHistoryAction(
-      patientId,
       transformOut(formValues),
+      page,
     )
 
     if (result.state === 'error') {
@@ -53,7 +60,47 @@ const useStore = create<Store>((set, get) => ({
     set({
       data: result.data,
       loading: false,
+      pageCache: reset
+        ? { [page]: result.data }
+        : { ...get().pageCache, [page]: result.data },
+      page,
     })
+  },
+  next: () => {
+    const page = get().page + 1
+
+    if (get().pageCache[page]) {
+      return set({
+        data: get().pageCache[page],
+        page,
+      })
+    }
+
+    get().fetchBillingHistory(get().formValues, page)
+  },
+  prev: () => {
+    const page = get().page - 1
+
+    if (get().pageCache[page]) {
+      return set({
+        data: get().pageCache[page],
+        page,
+      })
+    }
+    get().fetchBillingHistory(get().formValues, page)
+  },
+  jumpToPage: (page: number) => {
+    if (page < 1) {
+      return
+    }
+
+    if (get().pageCache[page]) {
+      return set({
+        data: get().pageCache[page],
+        page,
+      })
+    }
+    get().fetchBillingHistory(get().formValues, page)
   },
 }))
 
