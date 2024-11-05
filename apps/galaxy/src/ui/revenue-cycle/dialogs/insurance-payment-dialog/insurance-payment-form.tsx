@@ -3,6 +3,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Box, Grid, Text } from '@radix-ui/themes'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
+import { getPracticeIdsAction } from '@/actions'
 import { FormContainer } from '@/components'
 import {
   formatDateToISOString,
@@ -12,7 +13,6 @@ import {
 import {
   addInsurancePaymentAction,
   createInsurancePaymentAttachmentsAction,
-  getPracticeIdsAction,
   updateInsurancePaymentAction,
 } from '../../actions'
 import { useStore } from '../../insurance-payment-tab/store'
@@ -62,7 +62,7 @@ const InsurancePaymentForm = ({
   useEffect(() => {
     getPracticeIdsAction().then((result) => {
       if (result.state === 'success') {
-        setPracticeId(result.data[0].id) // first practice id
+        setPracticeId(result.data[0].value) // first practice id
       }
     })
   }, [])

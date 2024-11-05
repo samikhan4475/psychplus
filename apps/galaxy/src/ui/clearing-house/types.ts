@@ -3,6 +3,10 @@ enum ClearingHouseTab {
   Submitter = 'Submitter',
 }
 
+enum RecordStatuses {
+  ACTIVE = 'Active',
+}
+
 interface ClearingHouseReceiver {
   id: string
   clearingHouseName: string
@@ -42,8 +46,35 @@ interface GetReceiverListResponse {
   total: number
 }
 
+interface ClearingHouseSubmitter {
+  name?: string
+  username?: string
+  email?: string
+  password?: string
+  submitterId?: string
+  contactPerson?: string
+  phone?: string
+  fax?: string
+  addressLine1?: string
+  addressLine2?: string
+  city?: string
+  state?: string
+  zip?: string
+  id?: string
+  practiceId?: string
+  receiverId?: string
+}
+
+interface GetSubmitterListResponse {
+  submitters: ClearingHouseSubmitter[]
+  total: number
+}
+
 export {
   ClearingHouseTab,
-  type ClearingHouseReceiver,
+  RecordStatuses,
+  type ClearingHouseSubmitter,
+  type GetSubmitterListResponse,
   type GetReceiverListResponse,
+  type ClearingHouseReceiver,
 }

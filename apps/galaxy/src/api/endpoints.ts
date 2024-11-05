@@ -210,6 +210,12 @@ const UPDATE_PATIENT_VITAL_ENDPOINT = (
 ) => `${API_URL}/api/patients/${patientId}/vitalsigns/${vitalSignId}`
 const GET_STAFF = `${API_URL}/api/staff?includeInactive=false&offset=0&limit=0&orderBy=legalName asc`
 const GET_POS_CODES = `${API_URL}/api/codeset/authorities/PsychPlusPublic/codesets/PlaceOfService?includeExtraDetails=false&offset=0&limit=100&orderBy=displayName asc`
+const GET_CLEARNING_HOUSE_SUBMITTER_ENDPOINT = `${API_URL}/api/clearinghousesubmitters/actions/search`
+const DELETE_CLEARNING_HOUSE_SUBMITTER_ENDPOINT = (id: string) =>
+  `${API_URL}/api/clearinghousesubmitters/${id}`
+const ADD_CLEARNING_HOUSE_SUBMITTER_ENDPOINT = `${API_URL}/api/clearinghousesubmitters`
+const UPDATE_CLEARNING_HOUSE_SUBMITTER_ENDPOINT = (id: string) =>
+  `${API_URL}/api/clearinghousesubmitters/${id}`
 const GET_MASTER_FEE_SCHEDULES = `${API_URL}/api/masterfeeschedules/actions/search`
 const GET_PROCEDURES_CODES = (codeStartsWith: string) =>
   `${API_URL}/api/codeset/authorities/AMA/codesets/CPT4?codeStartsWith=${codeStartsWith}&includeExtraDetails=false&offset=0&limit=0&orderBy=displayName%20asc`
@@ -365,6 +371,10 @@ export {
   GET_ORGANIZATIONS_ENDPOINT,
   GET_PRACTICES_ENDPOINT,
   GET_PATIENT_VITALS_ENDPOINT,
+  GET_CLEARNING_HOUSE_SUBMITTER_ENDPOINT,
+  DELETE_CLEARNING_HOUSE_SUBMITTER_ENDPOINT,
+  ADD_CLEARNING_HOUSE_SUBMITTER_ENDPOINT,
+  UPDATE_CLEARNING_HOUSE_SUBMITTER_ENDPOINT,
   UPDATE_CLAIM,
   ADD_PATIENT_VITAL_ENDPOINT,
   UPDATE_PATIENT_VITAL_ENDPOINT,

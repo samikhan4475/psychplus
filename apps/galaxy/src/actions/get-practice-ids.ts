@@ -1,18 +1,26 @@
 'use server'
 
 import * as api from '@/api'
-import { insurancePaymentRecordStatuses } from '../enums'
-import { PracticeList } from '../types'
+import { SelectOptionType } from '@/types'
+
+enum recordStatuses {
+  ACTIVE = 'Active',
+}
 
 const defaultPayloadPracticeList = {
   isIncludeMetadataResourceChangeControl: true,
   isIncludeMetadataResourceIds: true,
   isIncludeMetadataResourceStatus: true,
-  recordStatuses: [insurancePaymentRecordStatuses.ACTIVE],
+  recordStatuses: [recordStatuses.ACTIVE],
+}
+
+interface PracticeList {
+  id: string
+  displayName: string
 }
 
 const getPracticeIdsAction = async (): Promise<
-  api.ActionResult<PracticeList[]>
+  api.ActionResult<SelectOptionType[]>
 > => {
   const response = await api.POST<PracticeList[]>(
     api.GET_PRACTICE_IDS_LIST_ENDPOINT,
@@ -26,9 +34,14 @@ const getPracticeIdsAction = async (): Promise<
     }
   }
 
+  const transformedData = response.data.map((data) => ({
+    value: data.id,
+    label: data.displayName,
+  }))
+
   return {
     state: 'success',
-    data: response.data,
+    data: transformedData,
   }
 }
 
