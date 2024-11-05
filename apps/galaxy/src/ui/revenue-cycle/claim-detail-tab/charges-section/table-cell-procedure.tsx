@@ -1,7 +1,9 @@
 'use client'
 
+import { Flex } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
 import toast from 'react-hot-toast'
+import { FormFieldError } from '@/components'
 import { CodeItem } from '@/types'
 import { getServiceMasterFeeSchedule } from '../actions'
 import { ClaimUpdateSchemaType } from '../schema'
@@ -72,10 +74,13 @@ const TableCellProcedure: React.FC<TableCellProcedureProps> = ({
   }
 
   return (
-    <SearchProcedureCodes
-      fieldName={`claimServiceLines.${rowIndex}.cptCode`}
-      onChange={handleProcedureCodeSelected}
-    />
+    <Flex direction={'column'}>
+      <SearchProcedureCodes
+        fieldName={`claimServiceLines.${rowIndex}.cptCode`}
+        onChange={handleProcedureCodeSelected}
+      />
+      <FormFieldError name={`claimServiceLines.${rowIndex}.cptCode`} />
+    </Flex>
   )
 }
 

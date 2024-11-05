@@ -1,4 +1,5 @@
 import { ColumnDef } from '@tanstack/react-table'
+import { useFormContext } from 'react-hook-form'
 import { ColumnHeader } from '@/components'
 import { ClaimServiceLine } from '@/types'
 import { ClaimRowActionDropdown } from './table-action-cell'
@@ -14,7 +15,18 @@ import { TableCellTotalAmount } from './table-cell-total-amount'
 import { TableCellUnitAmount } from './table-cell-unit-amount'
 import { TableCellUnits } from './table-cell-units'
 
-const columns = (): ColumnDef<ClaimServiceLine>[] => {
+const createRowIndexMap = (claimServiceLines: ClaimServiceLine[]) => {
+  const rowIndexMap: Record<string, number> = {}
+  claimServiceLines.forEach((charge, index) => {
+    if (charge.id) rowIndexMap[charge.id] = index
+  })
+  return rowIndexMap
+}
+const columns = (
+  claimServiceLines: ClaimServiceLine[],
+): ColumnDef<ClaimServiceLine>[] => {
+  const rowIndexMap = createRowIndexMap(claimServiceLines)
+
   return [
     {
       id: 'dateOfServiceFrom',
@@ -26,7 +38,9 @@ const columns = (): ColumnDef<ClaimServiceLine>[] => {
           label="DOS From"
         />
       ),
-      cell: ({ row }) => <TableCellDosFrom rowIndex={row.index} />,
+      cell: ({ row }) => (
+        <TableCellDosFrom rowIndex={rowIndexMap[row.original.id ?? '']} />
+      ),
       enableHiding: true,
     },
     {
@@ -39,7 +53,9 @@ const columns = (): ColumnDef<ClaimServiceLine>[] => {
           label="DOS To"
         />
       ),
-      cell: ({ row }) => <TableCellDosTo rowIndex={row.index} />,
+      cell: ({ row }) => (
+        <TableCellDosTo rowIndex={rowIndexMap[row.original.id ?? '']} />
+      ),
       enableHiding: true,
     },
     {
@@ -52,7 +68,9 @@ const columns = (): ColumnDef<ClaimServiceLine>[] => {
           label="Procedure"
         />
       ),
-      cell: ({ row }) => <TableCellProcedure rowIndex={row.index} />,
+      cell: ({ row }) => (
+        <TableCellProcedure rowIndex={rowIndexMap[row.original.id ?? '']} />
+      ),
 
       enableHiding: true,
     },
@@ -66,7 +84,9 @@ const columns = (): ColumnDef<ClaimServiceLine>[] => {
           label="POS"
         />
       ),
-      cell: ({ row }) => <TableCellPOS rowIndex={row.index} />,
+      cell: ({ row }) => (
+        <TableCellPOS rowIndex={rowIndexMap[row.original.id ?? '']} />
+      ),
 
       enableHiding: true,
     },
@@ -80,7 +100,9 @@ const columns = (): ColumnDef<ClaimServiceLine>[] => {
           label="Modifiers"
         />
       ),
-      cell: ({ row }) => <TableCellModifier rowIndex={row.index} />,
+      cell: ({ row }) => (
+        <TableCellModifier rowIndex={rowIndexMap[row.original.id ?? '']} />
+      ),
 
       enableHiding: true,
     },
@@ -94,7 +116,9 @@ const columns = (): ColumnDef<ClaimServiceLine>[] => {
           label="Diagnosis"
         />
       ),
-      cell: ({ row }) => <TableCellDiagnosis rowIndex={row.index} />,
+      cell: ({ row }) => (
+        <TableCellDiagnosis rowIndex={rowIndexMap[row.original.id ?? '']} />
+      ),
 
       enableHiding: true,
     },
@@ -108,7 +132,9 @@ const columns = (): ColumnDef<ClaimServiceLine>[] => {
           label="Units"
         />
       ),
-      cell: ({ row }) => <TableCellUnits rowIndex={row.index} />,
+      cell: ({ row }) => (
+        <TableCellUnits rowIndex={rowIndexMap[row.original.id ?? '']} />
+      ),
 
       enableHiding: true,
     },
@@ -122,7 +148,9 @@ const columns = (): ColumnDef<ClaimServiceLine>[] => {
           label="Amount"
         />
       ),
-      cell: ({ row }) => <TableCellUnitAmount rowIndex={row.index} />,
+      cell: ({ row }) => (
+        <TableCellUnitAmount rowIndex={rowIndexMap[row.original.id ?? '']} />
+      ),
 
       enableHiding: true,
     },
@@ -136,7 +164,7 @@ const columns = (): ColumnDef<ClaimServiceLine>[] => {
           label="Total Amount"
         />
       ),
-      cell: ({ row }) => <TableCellTotalAmount row={row}/>,
+      cell: ({ row }) => <TableCellTotalAmount row={row} />,
 
       enableHiding: true,
     },
@@ -150,7 +178,11 @@ const columns = (): ColumnDef<ClaimServiceLine>[] => {
           label="Start Time"
         />
       ),
-      cell: ({ row }) => <TableCellStartChargesTime rowIndex={row.index} />,
+      cell: ({ row }) => (
+        <TableCellStartChargesTime
+          rowIndex={rowIndexMap[row.original.id ?? '']}
+        />
+      ),
 
       enableHiding: true,
     },
@@ -164,7 +196,11 @@ const columns = (): ColumnDef<ClaimServiceLine>[] => {
           label="End Time"
         />
       ),
-      cell: ({ row }) => <TableCellEndChargesTime rowIndex={row.index} />,
+      cell: ({ row }) => (
+        <TableCellEndChargesTime
+          rowIndex={rowIndexMap[row.original.id ?? '']}
+        />
+      ),
 
       enableHiding: true,
     },
@@ -172,7 +208,12 @@ const columns = (): ColumnDef<ClaimServiceLine>[] => {
       id: 'actions-column',
       accessorKey: 'actions-column',
       header: () => <ColumnHeader label="Actions" className="!font-medium" />,
-      cell: ({ row }) => <ClaimRowActionDropdown rowIndex={row.index} rowId={row.original.id}/>,
+      cell: ({ row }) => (
+        <ClaimRowActionDropdown
+          rowIndex={rowIndexMap[row.original.id ?? '']}
+          rowId={row.original.id}
+        />
+      ),
       enableHiding: false,
     },
   ]

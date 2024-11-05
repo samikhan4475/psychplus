@@ -1,26 +1,22 @@
 import { ColumnDef } from '@tanstack/react-table'
 import { ColumnHeader, TextCell } from '@/components'
 import { InsuranceClaimPolicy, Sort } from '@/types'
-import { getSortDir } from '@/utils'
 import { ActionsCell } from './table-action-cell'
+import { TableCellCoverage } from './table-cell-coverage'
 
-const columns = (sort?: Sort): ColumnDef<InsuranceClaimPolicy>[] => {
+const columns = ( editRowId: number | null,setEditRowId: (id: number | null) => void): ColumnDef<InsuranceClaimPolicy>[] => {
   return [
     {
       id: 'coverage',
       accessorKey: 'coverage',
       header: ({ column }) => (
         <ColumnHeader
-          sortable
-          sortDir={getSortDir(column.id, sort)}
           className="!text-black justfy-center !font-medium"
           column={column}
           label="Coverage"
         />
       ),
-      cell: ({ row }) => (
-        <TextCell>{row.original.insurancePolicyPriority}</TextCell>
-      ),
+      cell: ({ row }) => <TableCellCoverage editRowId={editRowId} row={row} />,
       enableHiding: true,
     },
     {
@@ -28,8 +24,6 @@ const columns = (sort?: Sort): ColumnDef<InsuranceClaimPolicy>[] => {
       accessorKey: 'insuranceName',
       header: ({ column }) => (
         <ColumnHeader
-          sortable
-          sortDir={getSortDir(column.id, sort)}
           className="!text-black justfy-center !font-medium"
           column={column}
           label="Insurance Name"
@@ -43,8 +37,6 @@ const columns = (sort?: Sort): ColumnDef<InsuranceClaimPolicy>[] => {
       accessorKey: 'insuranceName',
       header: ({ column }) => (
         <ColumnHeader
-          sortable
-          sortDir={getSortDir(column.id, sort)}
           className="!text-black justfy-center !font-medium"
           column={column}
           label="Policy Number"
@@ -59,8 +51,6 @@ const columns = (sort?: Sort): ColumnDef<InsuranceClaimPolicy>[] => {
       accessorKey: 'relationship',
       header: ({ column }) => (
         <ColumnHeader
-          sortable
-          sortDir={getSortDir(column.id, sort)}
           className="!text-black justfy-center !font-medium"
           column={column}
           label="Relationship"
@@ -75,8 +65,6 @@ const columns = (sort?: Sort): ColumnDef<InsuranceClaimPolicy>[] => {
       accessorKey: 'address',
       header: ({ column }) => (
         <ColumnHeader
-          sortable
-          sortDir={getSortDir(column.id, sort)}
           className="!text-black justfy-center !font-medium"
           column={column}
           label="Address"
@@ -91,8 +79,6 @@ const columns = (sort?: Sort): ColumnDef<InsuranceClaimPolicy>[] => {
       accessorKey: 'payerAddress',
       header: ({ column }) => (
         <ColumnHeader
-          sortable
-          sortDir={getSortDir(column.id, sort)}
           className="!text-black justfy-center !font-medium"
           column={column}
           label="Payer Address"
@@ -107,8 +93,6 @@ const columns = (sort?: Sort): ColumnDef<InsuranceClaimPolicy>[] => {
       accessorKey: 'status',
       header: ({ column }) => (
         <ColumnHeader
-          sortable
-          sortDir={getSortDir(column.id, sort)}
           className="!text-black justfy-center !font-medium"
           column={column}
           label="Status"
@@ -121,7 +105,12 @@ const columns = (sort?: Sort): ColumnDef<InsuranceClaimPolicy>[] => {
     {
       id: 'actions-column',
       header: () => <ColumnHeader label="Actions" className="!font-medium" />,
-      cell: ({ row }) => <ActionsCell />,
+      cell: ({ row }) => (
+        <ActionsCell
+          item={row.original}
+          onEdit={() => setEditRowId(row.index)}
+        />
+      ),
       enableHiding: false,
     },
   ]

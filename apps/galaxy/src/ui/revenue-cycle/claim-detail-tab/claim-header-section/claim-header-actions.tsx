@@ -12,16 +12,6 @@ const ClaimActions = () => {
           <FormCheckbox label="Hold Claim" fieldName="isHold" />
           <FormCheckbox label="Mark as Submit" fieldName="isMarkAsSubmitted" />
         </Flex>
-        <Box>
-          <Button
-            variant="outline"
-            size="1"
-            color="gray"
-            className="text-black"
-          >
-            Hx
-          </Button>
-        </Box>
       </Flex>
     </Flex>
   )

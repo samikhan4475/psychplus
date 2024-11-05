@@ -17,25 +17,28 @@ const getPOSCodesOptions = async (): Promise<
   }
 
   const transformedData =
-    response.data?.codes.map((state) => {
-      const submissionCode =
-        state.codeAttributes?.find((attr) => attr.name === 'SubmissionCode')
-          ?.content ?? ''
-      const formattedCode = submissionCode
-        ? submissionCode.padStart(2, '0')
-        : ''
+    response.data?.codes
+      .map((state) => {
+        const submissionCode =
+          state.codeAttributes?.find((attr) => attr.name === 'SubmissionCode')
+            ?.content ?? ''
+        const formattedCode = submissionCode.padStart(2, '0')
 
-      return {
-        label: formattedCode
-          ? `${formattedCode}-${state.displayName}`
-          : state.displayName,
-        value: state.code,
-      }
-    }) || []
+        return {
+          label: formattedCode
+            ? `${formattedCode}-${state.displayName}`
+            : state.displayName,
+          value: state.code,
+          submissionCode: formattedCode,
+        }
+      })
+      .sort((a, b) => a.submissionCode.localeCompare(b.submissionCode)) || []
+
+  const finalData = transformedData.map(({ submissionCode, ...rest }) => rest)
 
   return {
     state: 'success',
-    data: transformedData,
+    data: finalData,
   }
 }
 

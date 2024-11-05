@@ -207,7 +207,7 @@ const ClaimDetailView = ({ claimId }: ClaimDetailViewProps) => {
 
           <ClaimAccordionItem
             title="Insurances"
-            buttons={ClaimInsuranceHeaders()}
+            buttons={<ClaimInsuranceHeaders />}
           >
             <ClaimInsuranceTable />
           </ClaimAccordionItem>

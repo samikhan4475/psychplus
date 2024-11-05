@@ -3,6 +3,7 @@
 import { Cross1Icon } from '@radix-ui/react-icons'
 import { Box, Flex, Text } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
+import { FormFieldError } from '@/components'
 import { ICD10Code } from '@/types'
 import { ClaimUpdateSchemaType } from '../schema'
 import { SearchDiagnosisInput } from './search-diagnosis-input'
@@ -36,6 +37,23 @@ const DiagnosisView = () => {
     }
     const updatedDiagnoses = [...currentDiagnosisList, newDiagnosis]
     form.setValue('claimDiagnosis', updatedDiagnoses)
+
+    const claimServiceLines = form.getValues('claimServiceLines') ?? []
+    claimServiceLines.forEach((charge) => {
+      if (newDiagnosis.sequenceNo === 1) {
+        charge.diagnosisPointer1 = newDiagnosis.sequenceNo.toString()
+      }
+      if (newDiagnosis.sequenceNo === 2) {
+        charge.diagnosisPointer2 = newDiagnosis.sequenceNo.toString()
+      }
+      if (newDiagnosis.sequenceNo === 3) {
+        charge.diagnosisPointer3 = newDiagnosis.sequenceNo.toString()
+      }
+      if (newDiagnosis.sequenceNo === 4) {
+        charge.diagnosisPointer4 = newDiagnosis.sequenceNo.toString()
+      }
+    })
+    form.setValue(`claimServiceLines`, claimServiceLines)
   }
 
   const removeDiagnosis = (id?: string, diagnosisCode?: string) => {
@@ -53,18 +71,32 @@ const DiagnosisView = () => {
         (diagnosis) => diagnosis.diagnosisCode !== diagnosisCode,
       )
     }
+    const activeDiagnosis = updatedDiagnosis
+      .filter((diagnosis) => diagnosis.recordStatus !== 'Deleted')
+      .map((diagnosis, index) => ({
+        ...diagnosis,
+        sequenceNo: index + 1,
+      }))
 
-    // update seq num against active items
-    const finalDiagnosisList = updatedDiagnosis.map((diagnosis, index) => {
-      if (diagnosis.recordStatus !== 'Deleted') {
-        return {
-          ...diagnosis,
-          sequenceNo: index + 1,
-        }
+    const finalDiagnoses = updatedDiagnosis.map((diagnosis) => {
+      if (diagnosis.recordStatus === 'Deleted') {
+        return diagnosis
       }
-      return { ...diagnosis }
+      let activeDiagnose
+      if (diagnosis.id) {
+        activeDiagnose = activeDiagnosis.find(
+          (active) => active.id === diagnosis.id,
+        )
+      } else {
+        activeDiagnose = activeDiagnosis.find(
+          (active) => active.diagnosisCode === diagnosis.diagnosisCode,
+        )
+      }
+
+      return activeDiagnose ?? diagnosis
     })
-    form.setValue('claimDiagnosis', finalDiagnosisList)
+
+    form.setValue('claimDiagnosis', finalDiagnoses)
   }
 
   return (
@@ -96,6 +128,7 @@ const DiagnosisView = () => {
             )
           })}
       </Flex>
+      <FormFieldError name={`claimDiagnosis.claimDiagnosis`} />
     </>
   )
 }

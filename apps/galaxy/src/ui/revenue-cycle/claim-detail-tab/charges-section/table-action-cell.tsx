@@ -1,8 +1,7 @@
 'use client'
 
 import React from 'react'
-import { DotsHorizontalIcon } from '@radix-ui/react-icons'
-import { DropdownMenu, Flex, IconButton, Text } from '@radix-ui/themes'
+import { Flex, IconButton } from '@radix-ui/themes'
 import { useFormContext, useWatch } from 'react-hook-form'
 import { DeleteIcon } from '@/components/icons'
 import { ClaimUpdateSchemaType } from '../schema'
