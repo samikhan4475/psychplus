@@ -7,11 +7,13 @@ import { BlockLabel } from './block-label'
 
 interface CheckboxInputProps extends React.ComponentProps<typeof Checkbox> {
   label?: string
+  labelClassName?: string
   field: string
 }
 
 const CheckboxInput = ({
   label,
+  labelClassName,
   field: fieldName,
   className,
   ...checkboxProps
@@ -42,7 +44,7 @@ const CheckboxInput = ({
       {label && (
         <BlockLabel
           name={fieldName}
-          className="text-wrap max-w-xl font-regular"
+          className={cn('text-wrap max-w-xl font-regular', labelClassName)}
         >
           {label}
         </BlockLabel>

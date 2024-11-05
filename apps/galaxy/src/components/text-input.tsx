@@ -1,6 +1,6 @@
 'use client'
 
-import { Flex, TextField } from '@radix-ui/themes'
+import { Flex, Text, TextField } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
 import { cn } from '@/utils'
 import { BlockLabel } from './block-label'
@@ -34,6 +34,7 @@ const TextInput = ({
         </BlockLabel>
       )}
       <TextField.Root
+        required={required}
         size="1"
         autoFocus={autoFocus}
         placeholder={placeHolder}
