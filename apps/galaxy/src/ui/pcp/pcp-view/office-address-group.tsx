@@ -9,7 +9,12 @@ const OfficeAddressGroup = () => {
       <Text weight="medium" className="text-[14px]">
         Office Address
       </Text>
-      <AddressFieldsGroup columnsPerRow="2" direction="row" />
+      <AddressFieldsGroup
+        columnsPerRow="2"
+        direction="row"
+        prefix="officeAddress"
+        addressFieldName="street1"
+      />
     </Flex>
   )
 }

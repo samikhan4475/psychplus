@@ -19,6 +19,7 @@ const PATIENT_PROFILE_ENDPOINT = (id: string) =>
   `${API_URL}/api/patients/${id}/profile`
 const NOTE_DETAILS_SEARCH_ENDPOINT = `${API_URL}/api/notedetails/actions/search`
 const NOTE_DETAILS_HISTORY_ENDPOINT = `${API_URL}/api/notedetails/history/search`
+const PCP_HISTORY_ENDPOINT = `${API_URL}/api/externalproviders/actions/relationships/history/search`
 const SERVICE_DIAGNOSIS_SEARCH_ENDPOINT = `${API_URL}/api/metadata/icd10codes/actions/search`
 const NOTE_DETAILS_SAVE_ENDPOINT = (id: string) =>
   `${API_URL}/api/patients/${id}/notedetails`
@@ -101,6 +102,13 @@ const GET_PATIENT_BILLING_HISTORY = (patientId: string) =>
   `${API_URL}/api/patients/${patientId}/billinghistory/actions/search`
 const ADD_PATIENT_RELATIONSHIP_ENDPOINT = (patientId: string) =>
   `${API_URL}/api/patients/${patientId}/relationships`
+const ADD_PCP_ENDPOINT = () => `${API_URL}/api/externalproviders`
+const FETCH_EXTERNAL_PROVIDER_WITH_PATIENT_ENDPOINT = () =>
+  `${API_URL}/api/externalproviders/actions/relationships/search`
+const FETCH_EXTERNAL_PROVIDERS_ENDPOINT = () =>
+  `${API_URL}/api/externalproviders/actions/search`
+const ATTACH_PCP_TO_PATIENT_ENDPOINT = (patientId: string, pcpId: string) =>
+  `${API_URL}/api/externalproviders/${pcpId}/patients/${patientId}/actions/associate`
 const DELETE_PATIENT_RELATIONSHIP_ENDPOINT = (
   patientId: string,
   relationshipId: string,
@@ -406,4 +414,9 @@ export {
   DOWNLOAD_PATIENT_PAYMENTS_PDF_ENDPOINT,
   GET_PATIENT_PAYMENTS_ENDPOINT,
   UPDATE_PATIENT_RELATIONSHIP_ENDPOINT,
+  ADD_PCP_ENDPOINT,
+  ATTACH_PCP_TO_PATIENT_ENDPOINT,
+  FETCH_EXTERNAL_PROVIDER_WITH_PATIENT_ENDPOINT,
+  FETCH_EXTERNAL_PROVIDERS_ENDPOINT,
+  PCP_HISTORY_ENDPOINT,
 }

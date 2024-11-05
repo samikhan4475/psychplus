@@ -4,14 +4,14 @@ import { Flex } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
 import { GooglePlacesContextProvider } from '@/providers/google-places-provider'
 import type { PcpViewProps } from '../types'
-import { AddressSchemaType } from './address-schema'
 import { MailAddressGroup } from './mail-address-group'
 import { MailAddressRadio } from './mail-address-radio'
 import { OfficeAddressGroup } from './office-address-group'
 import { PcpBasicDetailFields } from './pcp-basic-detail-fields'
+import { PcpSchemaType } from './pcp-schema'
 
 const PcpFormView = ({ patientId, googleApiKey }: PcpViewProps) => {
-  const form = useFormContext<AddressSchemaType>()
+  const form = useFormContext<PcpSchemaType>()
 
   const mailingSameAsPrimary = form.watch('isMailingAddressSameAsHome')
 

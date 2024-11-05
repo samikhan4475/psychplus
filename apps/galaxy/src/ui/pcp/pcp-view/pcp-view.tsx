@@ -1,18 +1,19 @@
 'use client'
 
-import React, { useState } from 'react'
-import { CreatePcpHeader, HxDialog, PcpFormView } from '.'
-import { PcpViewProps } from '../types'
+import React from 'react'
+import { CreatePcpHeader, PcpFormView } from '.'
+import { PcpViewWithInitialValueProps } from '../types'
 import { CreatePcpForm } from './create-pcp-form'
 
-const PcpView = ({ patientId, googleApiKey }: PcpViewProps) => {
-  const [open, setOpen] = useState(false)
-  const toggleOpen = () => setOpen(!open)
+const PcpView = ({
+  patientId,
+  googleApiKey,
+  initialValue,
+}: PcpViewWithInitialValueProps) => {
   return (
-    <CreatePcpForm>
-      <CreatePcpHeader onClick={toggleOpen} />
+    <CreatePcpForm patientId={patientId} initialValue={initialValue}>
+      <CreatePcpHeader patientId={patientId} />
       <PcpFormView patientId={patientId} googleApiKey={googleApiKey} />
-      <HxDialog open={open} onClose={toggleOpen} patientId={patientId} />
     </CreatePcpForm>
   )
 }

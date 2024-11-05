@@ -7,10 +7,10 @@ import {
   FormFieldError,
   FormFieldLabel,
 } from '@/components'
-import { AddressSchemaType } from './address-schema'
+import { PcpSchemaType } from './pcp-schema'
 
 const EmailInput = () => {
-  const form = useFormContext<AddressSchemaType>()
+  const form = useFormContext<PcpSchemaType>()
   return (
     <Flex className="col-span-2">
       <FormFieldContainer className="w-full">
@@ -18,9 +18,9 @@ const EmailInput = () => {
         <TextField.Root
           placeholder="Email"
           size="1"
-          {...form.register('physicianEmail')}
+          {...form.register('email')}
         />
-        <FormFieldError name="physicianEmail" />
+        <FormFieldError name="email" />
       </FormFieldContainer>
     </Flex>
   )

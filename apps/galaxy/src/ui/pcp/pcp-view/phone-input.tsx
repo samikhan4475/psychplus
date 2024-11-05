@@ -1,6 +1,7 @@
 'use client'
 
 import { Flex } from '@radix-ui/themes'
+import { useFormContext } from 'react-hook-form'
 import {
   FormFieldContainer,
   FormFieldError,
@@ -13,11 +14,8 @@ const PhoneInput = () => {
     <Flex className="col-span-2">
       <FormFieldContainer className="w-full">
         <FormFieldLabel>Phone</FormFieldLabel>
-        <PhoneNumberInputBase
-          field="physicianPhone"
-          placeholder="Phone Number"
-        />
-        <FormFieldError name="physicianPhone" />
+        <PhoneNumberInputBase field="phone" placeholder="Phone Number" />
+        <FormFieldError name="phone" />
       </FormFieldContainer>
     </Flex>
   )

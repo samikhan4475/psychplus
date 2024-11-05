@@ -10,7 +10,7 @@ const CredentialSelect = () => {
       <FormFieldContainer className="w-full">
         <FormFieldLabel>Credentials</FormFieldLabel>
         <CodesetSelect
-          name="physicianCredentials"
+          name="credentials"
           codeset={CODESETS.PractitionerHonor}
           size="1"
         />

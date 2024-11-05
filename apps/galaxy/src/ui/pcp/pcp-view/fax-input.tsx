@@ -10,11 +10,11 @@ import {
 
 const FaxInput = () => {
   return (
-    <Flex className="col-span-1">
+    <Flex className="col-span-2">
       <FormFieldContainer className="w-full">
         <FormFieldLabel>Fax</FormFieldLabel>
-        <PhoneNumberInputBase field="physicianFax" placeholder="Fax Number" />
-        <FormFieldError name="physicianFax" />
+        <PhoneNumberInputBase field="fax" placeholder="Fax Number" />
+        <FormFieldError name="fax" />
       </FormFieldContainer>
     </Flex>
   )

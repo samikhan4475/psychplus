@@ -7,18 +7,18 @@ import {
   FormFieldError,
   FormFieldLabel,
 } from '@/components'
-import { AddressSchemaType } from './address-schema'
+import { PcpSchemaType } from './pcp-schema'
 
-const PhysicianNameInput = () => {
-  const form = useFormContext<AddressSchemaType>()
+const LastNameInput = () => {
+  const form = useFormContext<PcpSchemaType>()
   return (
-    <Flex className="col-span-2">
+    <Flex className="col-span-1">
       <FormFieldContainer className="w-full">
-        <FormFieldLabel>Physician Name</FormFieldLabel>
+        <FormFieldLabel>Last Name</FormFieldLabel>
         <TextField.Root
-          placeholder="Physician Name"
+          placeholder="Last Name"
           size="1"
-          {...form.register('physicianName')}
+          {...form.register('lastName')}
         />
         <FormFieldError name="physicianName" />
       </FormFieldContainer>
@@ -26,4 +26,4 @@ const PhysicianNameInput = () => {
   )
 }
 
-export { PhysicianNameInput }
+export { LastNameInput }

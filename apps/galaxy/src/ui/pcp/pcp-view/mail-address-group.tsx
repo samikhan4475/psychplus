@@ -12,7 +12,12 @@ const MailAddressGroup = () => {
           Mailing Address
         </Text>
       </Flex>
-      <AddressFieldsGroup columnsPerRow="2" direction="row" />
+      <AddressFieldsGroup
+        columnsPerRow="2"
+        direction="row"
+        addressFieldName="street1"
+        prefix="mailingAddress"
+      />
     </Flex>
   )
 }

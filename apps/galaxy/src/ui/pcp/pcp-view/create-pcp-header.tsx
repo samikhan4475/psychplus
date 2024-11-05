@@ -1,11 +1,11 @@
 import { Flex, Text } from '@radix-ui/themes'
-import { HxButton } from './hx-button'
+import { HistoryButton } from './history'
 import { SaveButton } from './save-button'
 
 interface PcpHeaderProps {
-  onClick(): void
+  patientId: string
 }
-const CreatePcpHeader = ({ onClick }: PcpHeaderProps) => {
+const CreatePcpHeader = ({ patientId }: PcpHeaderProps) => {
   return (
     <Flex
       justify="between"
@@ -18,7 +18,7 @@ const CreatePcpHeader = ({ onClick }: PcpHeaderProps) => {
         </Text>
       </Flex>
       <Flex className="gap-x-2 text-[20px]" align="center">
-        <HxButton toggleOpen={onClick} />
+        <HistoryButton patientId={patientId} />
         <SaveButton />
       </Flex>
     </Flex>

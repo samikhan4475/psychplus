@@ -1,66 +1,53 @@
+import { PatientAddress } from '@/types/address'
+import { Metadata } from '@/types/metadata'
+import { LegalName } from '@/types/name'
+import { PhoneNumber } from '@/types/phone'
+
 interface PcpViewProps {
   patientId: string
   googleApiKey: string
 }
 
-type PcpAddressType = 'Home' | 'Mailing'
-
-interface Address {
-  street1: string
-  street2?: string
-  city: string
-  state?: string
-  country?: string
-  postalCode: string
-  type?: string
-  geoCoordinates?: {
-    longitude: number
-    latitude: number
-  }
+export interface PcpViewWithInitialValueProps {
+  patientId: string
+  googleApiKey: string
+  initialValue?: ExternalProvider
 }
 
-interface PcpAddress extends Address {
-  type: PcpAddressType
+export type PhoneNumberType = 'Contact' | 'Home' | 'Business'
+
+export interface ContactDetails {
+  phoneNumbers: PhoneNumber[]
+  email: string
+  isMailingAddressSameAsPrimary?: boolean
+  addresses: PatientAddress[]
 }
 
-export interface Pcp {
-  Id?: string
-  PatientId: number
-  Metadata?: Metadata
-  PhysicianName: PhysicianName
-  PhysicianCredentials: string
-  PhysicianPhone: string
-  PhysicianNpi: string
-  PhysicianEmail: string
-  PhysicianFax: string
-  PhysicianContactDetails: PhysicianContactDetails
-  IsMailingAddressSameAsHome: boolean
-  RecordStatus: string
+export interface ExternalProvider {
+  id?: string
+  legalName: LegalName
+  contactDetails: ContactDetails
+  isMailingAddressSameAsHome?: boolean
+  metadata?: Metadata
+  recordStatus?: string
+}
+export interface ServerSearchSelectID {
+  id?: string | number
 }
 
-export interface Metadata {
-  CreatedBy: number
-  CreatedOn: string
-  UpdatedBy: number
-  UpdatedOn: string
+export interface PcpHistoryParams {
+  createdFrom?: string | null
+  createdTo?: string | null
+  createdBy?: string
 }
 
-export interface PhysicianName {
-  FirstName: string
-  LastName: string
+export type ExternalProviderDetail = {
+  externalProviderId: string
+  metadata: Metadata
+  recordStatus: string
+  patientId: string
+  relationship: string
+  externalProvider: ExternalProvider
 }
 
-export interface PhysicianContactDetails {
-  Addresses: Address2[]
-}
-
-export interface Address2 {
-  Type: string
-  Street1: string
-  Street2: string
-  City: string
-  State: string
-  PostalCode: string
-}
-
-export type { Address, PcpAddressType, PcpAddress, PcpViewProps }
+export type { PcpViewProps }
