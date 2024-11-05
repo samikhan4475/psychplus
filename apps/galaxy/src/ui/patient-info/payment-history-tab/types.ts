@@ -34,6 +34,7 @@ interface PatientTransaction {
   isPreferredPartnerTransaction: boolean
   is_active: boolean
   paymentResponsibility: string
+  chargeTime?: string
   subRows?: PatientTransaction[]
 }
 

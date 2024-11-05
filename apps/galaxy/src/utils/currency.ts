@@ -3,6 +3,14 @@ const USDollar = new Intl.NumberFormat('en-US', {
   currency: 'USD',
 })
 
-const formatCurrency = (value: number) => USDollar.format(value)
+const formatCurrency = (value?: number) => {
+  if (!value) return '00.00'
+  return USDollar.format(value)
+}
 
-export { formatCurrency }
+const formatValueWithDecimals = (value?: string | number) => {
+  const parsedValue =
+    typeof value === 'number' ? value : parseFloat(value ?? '0')
+  return parsedValue.toFixed(2)
+}
+export { formatCurrency, formatValueWithDecimals }

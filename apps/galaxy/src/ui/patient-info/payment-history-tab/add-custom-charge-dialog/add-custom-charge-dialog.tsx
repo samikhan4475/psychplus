@@ -1,27 +1,49 @@
 'use client'
 
-import React from 'react'
-import { Button, Dialog } from '@radix-ui/themes'
-import { Plus, X } from 'lucide-react'
+import React, { PropsWithChildren, useState } from 'react'
+import { Dialog, IconButton } from '@radix-ui/themes'
+import { X } from 'lucide-react'
 import { CustomChargeForm } from './custom-charge-form'
+import { PatientTransaction } from '../types'
 
-const AddCustomChargeDialog = () => {
+interface Props {
+  patientId: string
+  onClose?: () => void
+  unappliedAmount?: string
+  transaction?:PatientTransaction
+}
+
+const AddCustomChargeDialog = ({
+  patientId,
+  children,
+  onClose,
+  unappliedAmount,
+  transaction
+}: PropsWithChildren<Props>) => {
+  const [isOpen, setIsOpen] = useState(false)
+  const handleClose = () => {
+    onClose?.()
+    setIsOpen(false)
+  }
+
   return (
-    <Dialog.Root>
-      <Dialog.Trigger>
-        <Button size="1" variant="outline" color="gray" className="text-black">
-          <Plus width={12} height={12} />
-          Add Custom Charge
-        </Button>
-      </Dialog.Trigger>
-      <Dialog.Content className="relative max-w-[662px] rounded-1 p-3">
-        <Dialog.Close className="absolute right-2.5 cursor-pointer">
-          <X size={18} strokeWidth={1.5} />
+    <Dialog.Root open={isOpen} onOpenChange={(isOpen) => setIsOpen(isOpen)}>
+      <Dialog.Trigger>{children}</Dialog.Trigger>
+      <Dialog.Content className="relative max-w-[662px] rounded-2 p-4">
+        <Dialog.Close className="absolute right-4 top-3">
+          <IconButton color="gray" size="1" variant="ghost" className="!m-0">
+            <X size={18} strokeWidth={1.5} />
+          </IconButton>
         </Dialog.Close>
-        <Dialog.Title size="5" className="!mb-0 font-[600]">
+        <Dialog.Title size="5" weight="medium">
           Charge/Modified Entry
         </Dialog.Title>
-        <CustomChargeForm />
+        <CustomChargeForm
+          patientId={patientId}
+          onClose={handleClose}
+          unappliedAmount={unappliedAmount}
+          transaction={transaction}
+        />
       </Dialog.Content>
     </Dialog.Root>
   )

@@ -1,64 +1,103 @@
 'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Flex, Grid } from '@radix-ui/themes'
-import { DateValue } from 'react-aria-components'
+import { Grid } from '@radix-ui/themes'
 import { SubmitHandler, useForm } from 'react-hook-form'
-import { z } from 'zod'
+import toast from 'react-hot-toast'
 import { FormContainer } from '@/components'
+import {
+  getCalendarDate,
+  getCalendarDateLabel,
+  sanitizeFormData,
+} from '@/utils'
+import { PatientTransaction } from '../types'
+import { createPatientCustomChargeAction } from './actions'
 import { AmountInput } from './amount-input'
-import { ChargeInput } from './charge-input'
+import { BalanceBlock } from './balance-block'
+import { ChargeSelect } from './charge-select'
+import { CoInsBlock } from './co-ins-block'
+import { CoPayBlock } from './co-pay-block'
 import { DatePickerField } from './date-picker-input'
 import { DescriptionInput } from './description-input'
 import { SaveChargesButton } from './save-charges-button'
+import { chargeSchema, CustomChargeSchemaType } from './schema'
 import { TimeSelect } from './time-select'
 import { UnAppliedBalanceInput } from './un-applied-balance-input'
 
-const schema = z.object({
-  charge: z.string().optional(),
-  description: z.string().optional(),
-  unappliedBalance: z.string().optional(),
-  date: z.custom<DateValue>(),
-  time: z.string().optional(),
-  amount: z.string().optional(),
-})
+interface CustomChargeFormProps {
+  patientId: string
+  onClose: () => void
+  unappliedAmount?: string
+  transaction?: PatientTransaction
+}
 
-type CustomChargeFilterSchemaType = z.infer<typeof schema>
-
-const CustomChargeForm = () => {
-  const form = useForm<CustomChargeFilterSchemaType>({
-    resolver: zodResolver(schema),
+const CustomChargeForm = ({
+  patientId,
+  onClose,
+  unappliedAmount,
+  transaction,
+}: CustomChargeFormProps) => {
+  const form = useForm<CustomChargeSchemaType>({
+    resolver: zodResolver(chargeSchema),
+    reValidateMode: 'onChange',
+    shouldUnregister: true,
     defaultValues: {
-      charge: '',
-      description: '',
-      unappliedBalance: '',
-      date: undefined,
-      time: '',
-      amount: '',
+      type: transaction?.type ?? '',
+      description: transaction?.description ?? '',
+      unappliedBalance: unappliedAmount,
+      chargeDate: transaction?.chargeDate
+        ? getCalendarDate(transaction?.chargeDate)
+        : undefined,
+      chargeTime: transaction?.chargeTime ?? '',
+      balanceDue: transaction?.balanceDue
+        ? String(transaction?.balanceDue)
+        : '',
     },
   })
 
-  const onSubmit: SubmitHandler<CustomChargeFilterSchemaType> = (data) => {
-    console.log('Form submitted with data:', data)
+  const onSubmit: SubmitHandler<CustomChargeSchemaType> = async (data) => {
+    const sanitizedData = sanitizeFormData({
+      ...data,
+      chargeDate: getCalendarDateLabel(data.chargeDate),
+    })
+
+    const response = await createPatientCustomChargeAction(
+      patientId,
+      sanitizedData,
+    )
+    if (response.state === 'error') {
+      toast.error(response.error ?? 'Error while saving')
+      return
+    }
+
+    toast.success('Charge created successfully!')
+    onClose()
   }
   return (
-    <FormContainer form={form} onSubmit={onSubmit} className="mt-2">
-      <Flex
-        direction="column"
-        className="rounded-2 border border-gray-3 px-2 py-2"
-      >
-        <Grid columns="2" gap="3">
-          <ChargeInput />
-          <DescriptionInput />
+    <FormContainer
+      form={form}
+      onSubmit={onSubmit}
+      className="gap-3 rounded-2 border border-gray-3 px-2 py-2"
+    >
+      <Grid columns="2" gap="3">
+        <ChargeSelect />
+        <DescriptionInput />
+      </Grid>
+      <Grid columns="4" gap="3">
+        <UnAppliedBalanceInput />
+        <DatePickerField />
+        <TimeSelect />
+        <AmountInput />
+      </Grid>
+      {transaction && transaction.type === 'Visit' && (
+        <Grid columns="3" className="overflow-hidden rounded-2 shadow-2">
+          <CoPayBlock />
+          <CoInsBlock />
+          <BalanceBlock />
         </Grid>
-        <Grid columns="4" gap="3" mt="3">
-          <UnAppliedBalanceInput />
-          <DatePickerField />
-          <TimeSelect />
-          <AmountInput />
-        </Grid>
-        <SaveChargesButton />
-      </Flex>
+      )}
+
+      <SaveChargesButton />
     </FormContainer>
   )
 }

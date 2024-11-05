@@ -248,6 +248,12 @@ const FAVOURITE_DIAGNOSIS_ENDPOINT = (icd10Code: string) =>
   `${API_URL}/api/staff/self/icd10codes/${icd10Code}/actions/favorites`
 const DOWNLOAD_TEMPLATE_REPORT = (templateId: string) =>
   `${API_URL}/api/reporting/templates/${templateId}/actions/download`
+const CREATE_PATIENT_CUSTOM_CHARGE_ENDPOINT = (patientId: string) =>
+  `${API_URL}/api/patients/${patientId}/transactions`
+const PATIENT_CUSTOM_CHARGE_ENDPOINT = (
+  patientId: number,
+  transactionId: number,
+) => `${API_URL}/api/patients/${patientId}/transactions/${transactionId}`
 const GET_PATIENT_PAYMENTS_ENDPOINT = (patientId: string) =>
   `${API_URL}/api/patients/${patientId}/payments`
 const DOWNLOAD_PATIENT_PAYMENTS_PDF_ENDPOINT = (patientId: string) =>
@@ -395,6 +401,8 @@ export {
   SEARCH_FAVOURITE_DIAGNOSIS_ENDPOINT,
   FAVOURITE_DIAGNOSIS_ENDPOINT,
   DOWNLOAD_TEMPLATE_REPORT,
+  CREATE_PATIENT_CUSTOM_CHARGE_ENDPOINT,
+  PATIENT_CUSTOM_CHARGE_ENDPOINT,
   DOWNLOAD_PATIENT_PAYMENTS_PDF_ENDPOINT,
   GET_PATIENT_PAYMENTS_ENDPOINT,
   UPDATE_PATIENT_RELATIONSHIP_ENDPOINT,

@@ -6,7 +6,7 @@ import {
   type DateValue,
 } from '@internationalized/date'
 import { format } from 'date-fns'
-import { Period } from '@/types'
+import { Period, SelectOptionType } from '@/types'
 
 const MONTH_LABELS = [
   'January',
@@ -258,6 +258,22 @@ const calculateMinutes = (startTime: string, endTime: string) => {
   }
   return 0
 }
+
+const generateTimeOptions = (interval: number = 20): SelectOptionType[] => {
+  const options = []
+  const totalMinutesInDay = 24 * 60
+  for (let minutes = 0; minutes < totalMinutesInDay; minutes += interval) {
+    const hours = Math.floor(minutes / 60)
+    const mins = minutes % 60
+    const timeString = `${String(hours).padStart(2, '0')}:${String(
+      mins,
+    ).padStart(2, '0')}`
+    options.push({ label: timeString, value: timeString })
+  }
+
+  return options
+}
+
 export {
   getCalendarDate,
   getLocalCalendarDate,
@@ -280,4 +296,5 @@ export {
   getOptionalDateString,
   daysAgo,
   calculateMinutes,
+  generateTimeOptions
 }

@@ -24,6 +24,7 @@ interface Store {
   prev: () => void
   jumpToPage: (page: number) => void
   setData: (data: GetPaymentHistorysData) => void
+  refetch: () => void
 }
 
 const useStore = create<Store>((set, get) => ({
@@ -117,6 +118,9 @@ const useStore = create<Store>((set, get) => ({
     })
 
     get().fetchPatientPaymentHistory(get().formValues, 1, true)
+  },
+  refetch: () => {
+    get().fetchPatientPaymentHistory(get().formValues, get().page, true)
   },
 }))
 

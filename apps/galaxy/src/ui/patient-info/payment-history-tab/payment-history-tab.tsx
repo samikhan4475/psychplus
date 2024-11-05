@@ -2,7 +2,9 @@
 
 import { useEffect } from 'react'
 import { Flex, ScrollArea } from '@radix-ui/themes'
+import { formatValueWithDecimals } from '@/utils'
 import { TabContentHeading } from '../shared'
+import { AddCustomChargeButton } from './add-custom-charge-button'
 import { AddCustomChargeDialog } from './add-custom-charge-dialog'
 import { FilterForm } from './filter-form'
 import { PaymentButton } from './payment-button'
@@ -22,21 +24,32 @@ const PaymentHistoryTab = ({
   patientId,
   googleApiKey,
 }: PaymentHistoryTabProps) => {
-  const { data, fetchPatientPaymentHistory } = useStore((state) => ({
+  const { data, refetch, fetchPatientPaymentHistory } = useStore((state) => ({
     loading: state.loading,
     fetchPatientPaymentHistory: state.fetchPatientPaymentHistory,
     data: state.data?.paymentHistory,
+    refetch: state.refetch,
   }))
 
   useEffect(() => {
     fetchPatientPaymentHistory({ patientIds: [patientId] })
   }, [fetchPatientPaymentHistory, patientId])
 
+  const handleCloseCustomChargeDialog = () => {
+    refetch()
+  }
+
   return (
     <Flex direction="column" className="gap-0.5">
       <TabContentHeading title={TAB_TITLE}>
         <Flex gap="2" align="center" className="flex-1" justify="end">
-          <AddCustomChargeDialog />
+          <AddCustomChargeDialog
+            patientId={patientId}
+            onClose={handleCloseCustomChargeDialog}
+            unappliedAmount={formatValueWithDecimals(data?.unappliedPayment)}
+          >
+            <AddCustomChargeButton />
+          </AddCustomChargeDialog>
           <PaymentButton
             stripeApiKey={stripeApiKey}
             patientId={patientId}
