@@ -96,22 +96,24 @@ const ClaimDetailView = ({ claimId }: ClaimDetailViewProps) => {
     }
     const sanitizeClaimData = sanitizeFormData(formattedClaimData)
     await updateClaimAction(data.id ?? '', sanitizeClaimData)
+    toast.success('Record has been saved successfully')
+    fetchClaimData(claimId)
   }
 
   const handleAccordionChange = (value: string[]) => {
     setOpenItems(value)
   }
 
-  useEffect(() => {
-    const fetchClaimData = async (claimId: string) => {
-      const claimResponse = await getClaimById(claimId)
-      if (claimResponse.state === 'success') {
-        const transformedClaimData = transformClaimData(claimResponse.data)
-        form.reset(transformedClaimData)
-      } else {
-        toast('Failed to fetch claim data')
-      }
+  const fetchClaimData = async (claimId: string) => {
+    const claimResponse = await getClaimById(claimId)
+    if (claimResponse.state === 'success') {
+      const transformedClaimData = transformClaimData(claimResponse.data)
+      form.reset(transformedClaimData)
+    } else {
+      toast('Failed to fetch claim data')
     }
+  }
+  useEffect(() => {
     if (claimId) {
       fetchClaimData(claimId)
     }

@@ -8,7 +8,7 @@ const ClaimActions = () => {
         <Flex gap="2">
           <FormCheckbox label="HCFA" fieldName="isForcePaper" />
           <FormCheckbox label="Ready to Send" fieldName="isClaimScrubbed" />
-          <FormCheckbox label="Hold Statement" fieldName="isForcePaper" />
+          <FormCheckbox label="Hold Statement" fieldName="isHoldStatement" />
           <FormCheckbox label="Hold Claim" fieldName="isHold" />
           <FormCheckbox label="Mark as Submit" fieldName="isMarkAsSubmitted" />
         </Flex>
