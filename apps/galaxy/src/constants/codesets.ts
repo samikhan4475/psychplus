@@ -42,6 +42,7 @@ const CODESETS = {
   VisitSequence: 'VisitSequenceType',
   LegalStatus: 'AdmissionLegalStatus',
   TransactionType: 'TransactionType',
+  FeeScheduleCategoryType: 'FeeScheduleCategory',
   PractitionerHonor: 'PsychPlusPublic.PractitionerHonor',
   PatientConsentPolicyType: 'PatientConsentPolicyType',
   ClaimFiltrationDateType: 'ClaimFiltrationDateType',

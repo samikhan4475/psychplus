@@ -1,11 +1,12 @@
 'use client'
 
 import * as Tabs from '@radix-ui/react-tabs'
-import { Box, Flex } from '@radix-ui/themes'
+import { Box, Flex, Text } from '@radix-ui/themes'
 import { TabsTrigger } from '@/components'
+import { MasterFeeScheduleTabView } from './master-fee-schedule-tab'
+import { PosTabView } from './pos-tab'
 import { useStore } from './store'
 import { CodingTab } from './types'
-import { PosTabView } from './pos-tab'
 
 const CodingTabs = () => {
   const { activeTab, setActiveTab } = useStore((state) => ({
@@ -32,13 +33,13 @@ const CodingTabs = () => {
           </Tabs.List>
         </Flex>
         <TabsContent value={CodingTab.ICD}>
-          <div>ICD</div>
+          <Text>ICD </Text>
         </TabsContent>
         <TabsContent value={CodingTab.CPT}>
-          <div>CPT </div>
+          <MasterFeeScheduleTabView />
         </TabsContent>
         <TabsContent value={CodingTab.Modifier}>
-          <div>Modifier </div>
+          <Text>Modifier </Text>
         </TabsContent>
         <TabsContent value={CodingTab.POS}>
           <PosTabView />
