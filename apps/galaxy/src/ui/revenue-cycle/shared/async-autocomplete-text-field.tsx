@@ -89,7 +89,7 @@ const AsyncAutoCompleteTextField = ({
   )
 
   const handleSelect = (item: SelectOptionType) => {
-    const value = valueKey == 'value' ? item.value : item.label
+    const value = valueKey === 'value' ? item.value : item.label
     form.setValue(field, value)
     setSelectedLabel(item.label)
     setOpen(false)

@@ -22,7 +22,7 @@ const HeadingCellMenu = ({ data, title }: HeadingCellMenuProps) => {
       title === 'Therapy Modality'
         ? 'therapyDetailsModality'
         : 'therapyDetailsInterventions';
-    let currentValues = getValues(fieldName) || [];
+    const currentValues = getValues(fieldName) || [];
     const isDuplicate = currentValues.some(
       (existingItem: ThearpyDataOption) => existingItem.value === item.value
     );

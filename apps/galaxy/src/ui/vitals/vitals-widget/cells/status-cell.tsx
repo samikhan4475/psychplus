@@ -13,7 +13,7 @@ const VitalStatusCell = ({
   editable,
 }: {
   row: PatientVital
-  editable: Boolean
+  editable: boolean
 }) => {
   const [loading, setLoading] = useState(false)
   const [vital, setVital] = useState<PatientVital>(row)

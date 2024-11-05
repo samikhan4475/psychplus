@@ -35,7 +35,7 @@ const FavoriteView = ({ patientId }: FavoriteViewProps) => {
           sectionItemValue: value,
         },
       ];
-      updateWorkingDiagnosisData(patientId, data);
+      updateWorkingDiagnosisData( data);
     }
   };
 

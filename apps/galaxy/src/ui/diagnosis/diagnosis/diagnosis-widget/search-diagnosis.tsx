@@ -41,9 +41,8 @@ const ServiceDiagnosisList = ({ patientId }: SearchDiagnosisProps) => {
         sectionItemValue: value,
       },
     ]
-    updateWorkingDiagnosisData(patientId, data)
+    updateWorkingDiagnosisData(data)
   }
-
   if (loadingServicesDiagnosis) {
     return <LoadingPlaceholder className="mt-5" />
   }

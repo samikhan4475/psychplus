@@ -24,10 +24,7 @@ interface Store {
   setWorkingDiagnosisData: (
     workingDiagnosisData: QuickNoteSectionItem[],
   ) => void
-  updateWorkingDiagnosisData: (
-    patientId: string,
-    data: QuickNoteSectionItem[],
-  ) => void
+  updateWorkingDiagnosisData: (data: QuickNoteSectionItem[]) => void
   deleteWorkingDiagnosis: (patientId: string, value: number) => void
   serviceDiagnosisData: { label: string; value: string }[]
   fetchServiceDiagnosis: (patientId: string) => void
@@ -38,6 +35,7 @@ interface Store {
   ) => void
   unmarkDiagnosisFavorites: (icd10Code: string, id: number | string) => void
   encodeId: (id: string) => string
+  saveWorkingDiagnosis: (patientId: string) => Promise<void>
 }
 
 const useStore = create<Store>((set, get) => ({
@@ -61,16 +59,18 @@ const useStore = create<Store>((set, get) => ({
   setWorkingDiagnosisData: (workingDiagnosisData) => {
     set({ workingDiagnosisData })
   },
-  updateWorkingDiagnosisData: async (
-    patientId: string,
-    data: QuickNoteSectionItem[],
-  ) => {
+  updateWorkingDiagnosisData: async (data: QuickNoteSectionItem[]) => {
+    set({ workingDiagnosisData: data })
+  },
+
+  saveWorkingDiagnosis: async (patientId: string) => {
+    const { workingDiagnosisData } = get()
     const dataCopy = get().workingDiagnosisData
-    const payload = data.map((item, index) => ({
+    const payload = workingDiagnosisData.map((item, index) => ({
       ...item,
       sectionItem: `${index + 1}`,
     }))
-    set({ workingDiagnosisData: data })
+
     const response = await saveWidgetAction({ patientId, data: payload })
     if (response.state === 'error') {
       toast.error('Failed to save!')
@@ -79,10 +79,12 @@ const useStore = create<Store>((set, get) => ({
       toast.success('Saved!')
     }
   },
-  deleteWorkingDiagnosis: (patientId: string, value: number) => {
+
+  deleteWorkingDiagnosis: async (patientId: string, value: number) => {
     const { workingDiagnosisData, updateWorkingDiagnosisData } = get()
     const updatedData = workingDiagnosisData.filter((_, i) => i !== value)
-    updateWorkingDiagnosisData(patientId, updatedData)
+    await saveWidgetAction({ patientId, data: updatedData })
+    updateWorkingDiagnosisData(updatedData)
   },
 
   serviceDiagnosisData: [],

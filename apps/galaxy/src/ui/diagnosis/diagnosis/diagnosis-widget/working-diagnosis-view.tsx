@@ -33,7 +33,7 @@ const WorkingDiagnosisView = ({
     const updatedData = [...workingDiagnosisData]
     const [movedItem] = updatedData.splice(source.index, 1)
     updatedData.splice(destination.index, 0, movedItem)
-    updateWorkingDiagnosisData(patientId, updatedData)
+    updateWorkingDiagnosisData(updatedData)
   }
 
   const isItemFavorite = (sectionItemValue: string) => {

@@ -24,7 +24,7 @@ const ClaimRowActionDropdown: React.FC<RowActionDropdownProps> = ({
 
   const handleDeleteCharge = () => {
     if (rowId) {
-      let updateCharges = claimServiceLines.map((charge) =>
+      const updateCharges = claimServiceLines.map((charge) =>
         charge.id === rowId ? { ...charge, recordStatus: 'Deleted' } : charge,
       )
       setValue('claimServiceLines', updateCharges)

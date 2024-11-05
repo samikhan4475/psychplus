@@ -7,7 +7,7 @@ import { PATIENT_LIST_OPTION_SIZE } from '../constants'
 const getPatientsOptionsAction = async (
   search: string,
 ): Promise<api.ActionResult<SelectOptionType[]>> => {
-  let url = new URL(api.SEARCH_PATIENTS_ENDPOINT)
+  const url = new URL(api.SEARCH_PATIENTS_ENDPOINT)
   url.searchParams.append('limit', String(PATIENT_LIST_OPTION_SIZE))
   const response = await api.POST<PatientProfile[]>(`${url}`, {
     name: search,

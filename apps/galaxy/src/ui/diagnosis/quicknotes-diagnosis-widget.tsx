@@ -7,11 +7,11 @@ import {
   WidgetAddButton,
   WidgetClearButton,
   WidgetHxButton,
-  WidgetSaveButton,
 } from '@/components'
 import { WorkingDiagnosisView } from '@/ui/diagnosis/diagnosis/diagnosis-widget'
 import { SearchDiagnosis } from '@/ui/diagnosis/diagnosis/diagnosis-widget/search-diagnosis'
 import { Diagnosis } from './diagnosis'
+import { DiagnosisSaveButton } from './diagnosis/diagnosis-widget/diagnosis-save-button'
 import { useStore } from './store'
 
 interface DiagnosisWidgetProps {
@@ -19,9 +19,10 @@ interface DiagnosisWidgetProps {
 }
 
 const QuicknotesDiagnosisWidget = ({ patientId }: DiagnosisWidgetProps) => {
-  const { fetchWorkingDiagnosis } = useStore()
+  const { fetchWorkingDiagnosis, fetchFavouriteDiagnosis } = useStore()
   useEffect(() => {
     fetchWorkingDiagnosis(patientId)
+    fetchFavouriteDiagnosis()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [patientId])
   return (
@@ -37,7 +38,7 @@ const QuicknotesDiagnosisWidget = ({ patientId }: DiagnosisWidgetProps) => {
             </WidgetAddButton>
             <WidgetHxButton />
             <WidgetClearButton />
-            <WidgetSaveButton />
+            <DiagnosisSaveButton patientId={patientId} />
           </Flex>
         </Flex>
       </TabContentHeading>
@@ -49,3 +50,4 @@ const QuicknotesDiagnosisWidget = ({ patientId }: DiagnosisWidgetProps) => {
 }
 
 export { QuicknotesDiagnosisWidget }
+

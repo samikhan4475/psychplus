@@ -7,7 +7,7 @@ import { INSURANCE_PAYER_LIST_OPTION_SIZE } from '../constants'
 const getInsurancePayerOptionsAction = async (
   search: string,
 ): Promise<api.ActionResult<SelectOptionType[]>> => {
-  let url = new URL(api.GET_INSURANCE_PAYERS_LIST_ENDPOINT)
+  const url = new URL(api.GET_INSURANCE_PAYERS_LIST_ENDPOINT)
   url.searchParams.append('limit', String(INSURANCE_PAYER_LIST_OPTION_SIZE))
   const response = await api.POST<InsurancePlan[]>(`${url}`, {
     name: search,
