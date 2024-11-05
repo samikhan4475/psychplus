@@ -36,7 +36,7 @@ interface Address {
 
 interface ContactInfo {
   email: string
-  phoneNumbers: PhoneNumber[]
+  phoneNumbers?: PhoneNumber[]
   addresses?: Address[]
 }
 
@@ -47,11 +47,18 @@ interface Guardian {
   contact?: ContactInfo
 }
 
+interface ContactDetails {
+  email: string
+  addresses?: Address[]
+  isMailingAddressSameAsPrimary?: boolean
+}
+
 interface User {
   id?: number
   legalName?: Name
   userRoleCode?: string
   contactInfo?: ContactInfo
+  contactDetails?: ContactDetails
   avatar?: string
   dateOfBirth?: string
 }

@@ -3,15 +3,18 @@
 import { useRouter } from 'next/navigation'
 import { AppointmentType, ProviderType } from '@psychplus-v2/constants'
 import { Button, Flex, Text } from '@radix-ui/themes'
+import { User } from '@psychplus/user'
 import { HospitalIcon, MobileIcon } from '@/components-v2'
 import { APPOINTMENTS_SEARCH_SESSION_KEY } from '@/features/appointments/search/constants'
 
 interface BannerAppointmentButtonProps {
   appointmentType: AppointmentType
+  profile: User
 }
 
 const BannerAppointmentButton = ({
   appointmentType,
+  profile,
 }: BannerAppointmentButtonProps) => {
   const router = useRouter()
 
@@ -26,8 +29,11 @@ const BannerAppointmentButton = ({
         },
       }),
     )
-
-    router.push(`/appointments/search`)
+    if (profile.contactDetails?.addresses) {
+      router.push(`/appointments/search`)
+    } else {
+      router.push(`/appointments/schedule-visit`)
+    }
   }
 
   return (

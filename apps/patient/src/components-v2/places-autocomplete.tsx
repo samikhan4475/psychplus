@@ -225,7 +225,7 @@ const PlacesAutocomplete = ({
             size="3"
             radius="full"
             {...form.register(cityField)}
-            disabled={editable}
+            disabled={true}
             placeholder={getPlaceholder('city', !editable)}
           />
           <FormFieldError name={cityField} />
@@ -238,7 +238,7 @@ const PlacesAutocomplete = ({
               size="3"
               name={stateField}
               codeset={CODESETS.UsStates}
-              disabled={editable}
+              disabled={true}
               placeholder={editable ? '' : 'Select state'}
             />
             <FormFieldError name={stateField} />
@@ -251,7 +251,7 @@ const PlacesAutocomplete = ({
             size="3"
             {...form.register(postalCodeField)}
             value={form.getValues(postalCodeField)}
-            disabled={editable}
+            disabled={true}
             placeholder={getPlaceholder('zip', !editable)}
           />
           <FormFieldError name={postalCodeField} />

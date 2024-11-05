@@ -39,7 +39,6 @@ const Header = async () => {
             <Flex align="center" gap="3">
               <NavigationMenu />
               <ScheduleAppointmentButton
-                codesets={codesets}
                 size={{ initial: '2', md: '3' }}
                 className="hidden sm:block"
               />

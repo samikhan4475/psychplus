@@ -42,8 +42,14 @@ const WelcomeBanner = async () => {
           </NextLink> */}
         </Flex>
         <Flex gap="4" direction={{ initial: 'column', xs: 'row' }} width="100%">
-          <BannerAppointmentButton appointmentType={AppointmentType.InPerson} />
-          <BannerAppointmentButton appointmentType={AppointmentType.Virtual} />
+          <BannerAppointmentButton
+            appointmentType={AppointmentType.InPerson}
+            profile={profile}
+          />
+          <BannerAppointmentButton
+            appointmentType={AppointmentType.Virtual}
+            profile={profile}
+          />
         </Flex>
       </ViewContainer>
     </Flex>

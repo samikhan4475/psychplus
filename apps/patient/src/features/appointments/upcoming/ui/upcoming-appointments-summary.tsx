@@ -108,7 +108,6 @@ const UpcomingAppointmentsSummaryComponent = async () => {
           action={
             <ScheduleAppointmentButton
               className="justify-center"
-              codesets={codesets}
             />
           }
           Icon={CalendarDaysIcon}
