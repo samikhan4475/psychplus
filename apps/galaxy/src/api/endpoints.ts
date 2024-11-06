@@ -157,6 +157,9 @@ const DELETE_INSURANCE_PAYMENT_ENDPOINT = (id: string) =>
 const GET_PATIENT_STATEMENT_DETAIL_LIST_ENDPOINT = (id: number) =>
   `${API_URL}/api/patients/${id}/billingstatements/actions/search`
 const GET_PATIENT_STATEMENTS_LIST_ENDPOINT = `${API_URL}/api/billingstatements/actions/search`
+const GET_RESPONSE_HISTORY_LIST_ENDPOINT = `${API_URL}/api/claimssubmissions/responses/actions/search`
+const GET_RESPONSE_HISTORY_DETAIL_LIST_ENDPOINT = (id: string) =>
+  `${API_URL}/api/claimssubmissions/responses/${id}/details/actions/search`
 const GET_CLAIMS_LIST_ENDPOINT = `${API_URL}/api/claims/actions/search`
 const CLAIM_SUBMIT_ENDPOINT = `${API_URL}/api/claimssubmissions/actions/srcubandsubmit`
 const CLAIM_SUBMISSION_REJECTION_DETAIL_ENDPOINT = (claimId: string) =>
@@ -408,6 +411,8 @@ export {
   GET_INSURANCE_PAYERS_LIST_ENDPOINT,
   SEARCH_FAVOURITE_DIAGNOSIS_ENDPOINT,
   FAVOURITE_DIAGNOSIS_ENDPOINT,
+  GET_RESPONSE_HISTORY_LIST_ENDPOINT,
+  GET_RESPONSE_HISTORY_DETAIL_LIST_ENDPOINT,
   DOWNLOAD_TEMPLATE_REPORT,
   CREATE_PATIENT_CUSTOM_CHARGE_ENDPOINT,
   PATIENT_CUSTOM_CHARGE_ENDPOINT,

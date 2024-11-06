@@ -1,9 +1,5 @@
-import { Claim, SelectOptionType } from '@/types'
-import {
-  ClaimResponseType,
-  ClaimSubmissionResponse,
-  ClearingHouseReceiver,
-} from '../types'
+import { Claim } from '@/types'
+import { ClaimResponseType, ClaimSubmissionResponse } from '../types'
 
 const transformIn = (data: ClaimSubmissionResponse, claims?: Claim[]) => {
   const claimLookup: Record<string, string> =
@@ -28,12 +24,4 @@ const transformIn = (data: ClaimSubmissionResponse, claims?: Claim[]) => {
   return { claimErrorResponses, claimCleanResponses }
 }
 
-const transformInSubmissionOptions = (
-  data: ClearingHouseReceiver[],
-): SelectOptionType[] =>
-  data.map((submissionType) => ({
-    label: submissionType.clearingHouseName,
-    value: submissionType.id,
-  }))
-
-export { transformIn, transformInSubmissionOptions }
+export { transformIn }

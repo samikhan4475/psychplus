@@ -8,6 +8,7 @@ import { ClaimTabView } from './claim-tab'
 import { InsurancePaymentDetailView } from './insurance-payment-detail-tab'
 import { InsurancePaymentTabView } from './insurance-payment-tab'
 import { PatientStatementsTabView } from './patient-statements-tab'
+import { ResponseHistoryTabView } from './response-history-tab'
 import { useStore } from './store'
 import { SubmissionTabView } from './submission-tab'
 import { RevenueCycleTab } from './types'
@@ -64,7 +65,7 @@ const RevenueCycleTabs = () => {
           <SubmissionTabView />
         </TabsContent>
         <TabsContent value={RevenueCycleTab.ResponseHistory}>
-          <div>Response History</div>
+          <ResponseHistoryTabView />
         </TabsContent>
         <TabsContent value={RevenueCycleTab.InsurancePayment}>
           <InsurancePaymentTabView />

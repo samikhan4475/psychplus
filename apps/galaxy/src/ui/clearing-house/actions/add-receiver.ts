@@ -1,7 +1,7 @@
 'use server'
 
 import * as api from '@/api'
-import type { ClearingHouseReceiver } from '../types'
+import type { ClearingHouseReceiver } from '@/types'
 
 const addReceiverAction = async (
   payload: Partial<ClearingHouseReceiver>,

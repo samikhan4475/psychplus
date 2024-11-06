@@ -9,9 +9,8 @@ import {
   LoadingPlaceholder,
   TextCell,
 } from '@/components'
-import { Sort } from '@/types'
+import { ClearingHouseReceiver, Sort } from '@/types'
 import { getSortDir } from '@/utils'
-import { ClearingHouseReceiver } from '../types'
 import { ActionsCell } from './actions-cell'
 import { StateNameCell } from './state-name-cell'
 import { useStore } from './store'

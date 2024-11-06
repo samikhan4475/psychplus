@@ -1,7 +1,7 @@
 'use client'
 
+import { getReceiverListOptionsAction } from '@/actions'
 import { AsyncSelect, FormFieldContainer, FormFieldLabel } from '@/components'
-import { getReceiverListOptionsAction } from '../../actions'
 
 const ReceiverSelect = () => {
   return (

@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { Dialog } from '@radix-ui/themes'
 import { CloseDialogTrigger } from '@/components/close-dialog-trigger'
-import { ClearingHouseReceiver } from '../../types'
+import { ClearingHouseReceiver } from '@/types'
 import { AddReceiverButton } from './add-receiver-button'
 import { EditReceiverButton } from './edit-receiver-button'
 import { ReceiverForm } from './receiver-form'

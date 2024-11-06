@@ -1,26 +1,26 @@
 import { create } from 'zustand'
-import { ClearingHouseReceiver, Sort } from '@/types'
+import { Sort } from '@/types'
 import { getNewSortDir } from '@/utils'
-import { getReceiverListAction } from '../actions'
-import { GetReceiverListResponse } from '../types'
+import { getResponseHistoryListAction } from '../actions'
+import { ResponseHistoryListResponse, ResponseHistoryPayload } from '../types'
 
 interface Store {
-  data?: GetReceiverListResponse
+  data?: ResponseHistoryListResponse
   loading?: boolean
   error?: string
-  payload?: Partial<ClearingHouseReceiver>
+  payload?: ResponseHistoryPayload
   page: number
   sort?: Sort
-  pageCache: Record<number, GetReceiverListResponse>
-  jumpToPage: (page: number) => void
+  pageCache: Record<number, ResponseHistoryListResponse>
   search: (
-    payload?: Partial<ClearingHouseReceiver>,
+    payload?: ResponseHistoryPayload,
     page?: number,
     reset?: boolean,
   ) => void
   sortData: (column: string) => void
   next: () => void
   prev: () => void
+  jumpToPage: (page: number) => void
 }
 
 const useStore = create<Store>((set, get) => ({
@@ -28,18 +28,13 @@ const useStore = create<Store>((set, get) => ({
   page: 1,
   pageCache: {},
   sort: undefined,
-
-  search: async (
-    payload?: Partial<ClearingHouseReceiver>,
-    page = 1,
-    reset = false,
-  ) => {
+  search: async (payload?: ResponseHistoryPayload, page = 1, reset = false) => {
     set({
       error: undefined,
       loading: true,
       payload: payload,
     })
-    const result = await getReceiverListAction({
+    const result = await getResponseHistoryListAction({
       payload,
       sort: get().sort,
       page,

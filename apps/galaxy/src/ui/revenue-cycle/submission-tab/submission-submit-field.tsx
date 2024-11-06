@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { Button, Flex, Select, Text } from '@radix-ui/themes'
 import toast from 'react-hot-toast'
+import { getReceiverListOptionsAction } from '@/actions'
 import { SelectOptionType } from '@/types'
 import { cn } from '@/utils'
-import { clearningHouseReceiversAction } from '../actions/get-clearing-house-receivers'
 import { ClaimSubmissionDialog } from '../dialogs'
-import { transformInSubmissionOptions } from './data'
 import { useStore } from './store'
 
 const SubmissionSubmitField = () => {
@@ -14,9 +13,9 @@ const SubmissionSubmitField = () => {
   const [clearingHouse, setClearingHouse] = useState('')
 
   useEffect(() => {
-    clearningHouseReceiversAction().then((result) => {
+    getReceiverListOptionsAction().then((result) => {
       if (result.state === 'success') {
-        setSubmissionTypes(transformInSubmissionOptions(result.data))
+        setSubmissionTypes(result.data)
       } else if (result.state === 'error') {
         toast.error(result.error)
       }

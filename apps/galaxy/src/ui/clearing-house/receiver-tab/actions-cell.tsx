@@ -1,6 +1,6 @@
 import { type Row } from '@tanstack/react-table'
 import { AdaptiveRowActionsCell, type RowAction } from '@/components'
-import { ClearingHouseReceiver } from '../types'
+import { ClearingHouseReceiver } from '@/types'
 import { RowActionDelete } from './row-action-delete'
 import { RowActionEdit } from './row-action-edit'
 

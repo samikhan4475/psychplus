@@ -1,9 +1,9 @@
 'use server'
 
 import * as api from '@/api'
-import { Sort } from '@/types'
+import { ClearingHouseReceiver, Sort } from '@/types'
 import { RECEIVER_LIST_TABLE_PAGE_SIZE } from '../constants'
-import type { ClearingHouseReceiver, GetReceiverListResponse } from '../types'
+import type { GetReceiverListResponse } from '../types'
 
 interface GetClaimsListParams {
   payload?: Partial<ClearingHouseReceiver>

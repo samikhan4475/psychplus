@@ -4,7 +4,7 @@ import { Text } from '@radix-ui/themes'
 import { type PropsWithRow } from '@/components'
 import { CODESETS } from '@/constants'
 import { useCodesetCodes } from '@/hooks'
-import { ClearingHouseReceiver } from '../types'
+import { ClearingHouseReceiver } from '@/types'
 import { getStateDisplayName } from '../utils'
 
 const StateNameCell = ({

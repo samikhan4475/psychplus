@@ -1,8 +1,8 @@
 'use client'
 
 import { type PropsWithRow } from '@/components'
+import { ClearingHouseReceiver } from '@/types'
 import { ReceiverDialog } from '../dialogs'
-import { ClearingHouseReceiver } from '../types'
 
 const RowActionEdit = ({
   row: { original: record },

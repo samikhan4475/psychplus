@@ -1,15 +1,19 @@
 'use server'
 
 import * as api from '@/api'
-import { SelectOptionType } from '@/types'
-import type { ClearingHouseReceiver } from '../types'
+import { ClearingHouseReceiver, SelectOptionType } from '@/types'
 
-const getReceiverListOptionsAction = async (): Promise<
-  api.ActionResult<SelectOptionType[]>
-> => {
+const getReceiverListOptionsAction = async (
+  search?: string,
+): Promise<api.ActionResult<SelectOptionType[]>> => {
+  const payload = search
+    ? {
+        receiverName: search,
+      }
+    : {}
   const response = await api.POST<ClearingHouseReceiver[]>(
     api.GET_CLEARING_HOUSE_RECEIVER_LIST_ENDPOINT,
-    {},
+    payload,
   )
 
   if (response.state === 'error') {
@@ -21,7 +25,7 @@ const getReceiverListOptionsAction = async (): Promise<
 
   const transformedData = response.data.map((data) => ({
     value: data.id,
-    label: data.clearingHouseName,
+    label: search ? data.receiverName : data.clearingHouseName,
   }))
 
   return {

@@ -4,8 +4,8 @@ import { TrashIcon } from '@radix-ui/react-icons'
 import { IconButton } from '@radix-ui/themes'
 import toast from 'react-hot-toast'
 import { type PropsWithRow } from '@/components'
+import { ClearingHouseReceiver } from '@/types'
 import { deleteReceiverRecord } from '../actions'
-import { ClearingHouseReceiver } from '../types'
 import { useStore } from './store'
 
 const RowActionDelete = ({

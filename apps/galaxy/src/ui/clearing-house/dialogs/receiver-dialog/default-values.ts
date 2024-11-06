@@ -1,4 +1,4 @@
-import { ClearingHouseReceiver } from '../../types'
+import { ClearingHouseReceiver } from '@/types'
 
 const defaultValues = (data?: ClearingHouseReceiver | null) => {
   return {

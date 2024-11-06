@@ -58,7 +58,6 @@ interface ClaimServiceLinePayment
   modifierCode2?: string
   modifierCode3?: string
   modifierCode4?: string
-
   serviceLinePaymentAdjustments?: ServiceLinePaymentAdjustment[]
 }
 
@@ -213,42 +212,53 @@ interface ClaimResponseType {
   claimId: string
   message: string[]
 }
-interface ClearingHouseReceiver {
-  id: string
-  clearingHouseName: string
-  receiverId: string
-  receiverName: string
-  phone: string
-  fax: string
-  email: string
-  website: string
-  submissionMethod: string
-  submissionUrl: string
-  submissionPort: number
-  submissionDirectory: string
-  batchResponseDirectory: string
-  chResponseDirectory: string
-  claimResponseDirectory: string
-  eraResponseDirectory: string
-  isa01: string
-  isa03: string
-  isa05: string
-  isa07: string
-  isa08: string
-  gs03: string
-  nm140ReceiverName: string
-  nm140ReceiverId: string
-  address1: string
-  address2?: string
-  city: string
-  state: string
-  zip: string
-  recordStatus: string
-}
 
 interface PracticeList {
   id: string
   displayName: string
+}
+
+interface ResponseHistoryRecord {
+  id: string
+  recordStatus: string
+  receiverId: string
+  receiverName: string
+  submitterId: string
+  submitterName: string
+  practiceId: string
+  practiceName: string
+  zipFilePath: string
+  processingStatus: string
+  isProcessed: string
+  isManualImport: boolean
+  fileCount: number
+}
+
+interface ResponseHistoryListResponse {
+  responseHistory: ResponseHistoryRecord[]
+  total: number
+}
+
+interface ResponseHistoryPayload {
+  receiverId?: string
+  createdOn?: string
+}
+
+interface ResponseHistoryDetail {
+  id: string
+  metadata: Metadata
+  recordStatus: string
+  responseId: string
+  filePath: string
+  fileType: string
+  isProcessed: boolean
+  isCheckAlreadyExists: boolean
+  transcationReferenceNumber: string
+}
+
+interface ResponseHistoryDetailListResponse {
+  responseHistoryDetail: ResponseHistoryDetail[]
+  total: number
 }
 
 export {
@@ -257,7 +267,6 @@ export {
   type ClaimServiceLinePayment,
   type ServiceLinePaymentAdjustment,
   type ClaimPayment,
-  type ClearingHouseReceiver,
   type ErrorMessage,
   type ClaimResponseType,
   type ClaimSubmissionPayload,
@@ -272,4 +281,9 @@ export {
   type PaymentAttachments,
   type PracticeList,
   type PatientStatementPayload,
+  type ResponseHistoryRecord,
+  type ResponseHistoryListResponse,
+  type ResponseHistoryPayload,
+  type ResponseHistoryDetail,
+  type ResponseHistoryDetailListResponse,
 }
