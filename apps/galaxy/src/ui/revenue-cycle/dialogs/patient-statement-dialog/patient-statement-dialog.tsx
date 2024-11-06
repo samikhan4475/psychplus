@@ -39,7 +39,7 @@ const PatientStatementDialog = ({ data }: DialogProps) => {
 
         <PatientStatementFilterForm patientId={data.patientId} />
         <PatientStatementTable patientId={data.patientId} />
-        <FooterDialog />
+        <FooterDialog patientId={data.patientId} />
       </Dialog.Content>
     </Dialog.Root>
   )

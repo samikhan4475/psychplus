@@ -25,6 +25,7 @@ const defaultPayLoad = {
   claimStatusCodes: [patientStatementSlaimStatusCodes.BILLED_TO_PATIENT],
   recordStatuses: [patientStatementRecordStatuses.ACTIVE],
   includeServiceLinePayment: true,
+  isGroupedByPatient: false,
 }
 
 const getPatientStatementDetailListAction = async ({
@@ -34,7 +35,7 @@ const getPatientStatementDetailListAction = async ({
 }: PatientStatementsListParams): Promise<
   api.ActionResult<PatientStatementsListResponse>
 > => {
-  const url = new URL(api.GET_PATIENT_STATEMENT_DETAIL_LIST_ENDPOINT(patientId))
+  let url = new URL(api.GET_PATIENT_STATEMENTS_LIST_ENDPOINT)
   if (sort) {
     url.searchParams.append('orderBy', `${sort.column} ${sort.direction}`)
   }

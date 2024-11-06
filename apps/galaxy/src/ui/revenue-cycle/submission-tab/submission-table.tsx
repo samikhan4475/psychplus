@@ -13,6 +13,7 @@ import {
 } from '@/components'
 import { Claim, Sort } from '@/types'
 import { formatDate, getSortDir } from '@/utils'
+import { getInsurancePayerName } from '../utils'
 import { TableHeaderCheckboxCell, TableRowCheckboxCell } from './cells'
 import { useStore } from './store'
 
@@ -120,7 +121,12 @@ const columns = (
         />
       ),
       cell: ({ row }) => (
-        <TextCell>{row.original.primaryInsurance?.payerName}</TextCell>
+        <TextCell>
+          {getInsurancePayerName(
+            'Primary',
+            row.original.claimInsurancePolicies ?? [],
+          )}
+        </TextCell>
       ),
     },
     {
@@ -137,7 +143,12 @@ const columns = (
         />
       ),
       cell: ({ row }) => (
-        <TextCell>{row.original.secondaryInsurance?.payerName}</TextCell>
+        <TextCell>
+          {getInsurancePayerName(
+            'Secondary',
+            row.original.claimInsurancePolicies ?? [],
+          )}
+        </TextCell>
       ),
     },
     {

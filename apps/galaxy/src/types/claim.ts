@@ -1,4 +1,5 @@
 import { DateValue } from 'react-aria-components'
+import { ContactDetails, User } from './'
 import { Metadata } from './metadata'
 
 interface ClaimServiceLine {
@@ -105,6 +106,32 @@ interface ClaimInsurance {
   payerName: string
 }
 
+interface ClaimInsurancePolicy {
+  id: string
+  metadata: Metadata
+  insurancePlanId: string
+  verificationStatus: string
+  isActive: boolean
+  isDeleted: boolean
+  memberId: string
+  groupNumber: string
+  effectiveDate: string
+  terminationDate: string
+  insurancePolicyPriority: string
+  hasCardFrontImage: boolean
+  hasCardBackImage: boolean
+  isPatientPolicyHolder: boolean
+  policyHolderRelationship: string
+  policyHolderName: User
+  policyHolderDateOfBirth: string
+  policyHolderSocialSecurityNumber: string
+  policyHolderGender: string
+  policyName: string
+  contactInfo: ContactDetails
+  payerAddress: string
+  payerName: string
+}
+
 interface Claim {
   id: string
   metadata?: Metadata
@@ -193,6 +220,7 @@ interface Claim {
   isSystemRejected: boolean
   primaryInsurance?: ClaimInsurance
   secondaryInsurance?: ClaimInsurance
+  claimInsurancePolicies?: ClaimInsurancePolicy[]
 }
 
 interface ClaimUpdate {
@@ -460,6 +488,7 @@ export type {
   ICD10Code,
   DiagnosisCode,
   ClaimServiceLine,
+  ClaimInsurancePolicy,
   ClaimDiagnosis,
   InsuranceClaimPolicy,
   ClaimUpdateApiResponse,

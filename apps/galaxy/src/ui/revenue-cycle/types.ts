@@ -11,6 +11,22 @@ enum RevenueCycleTab {
   CheckDetails = 'Check#',
 }
 
+enum FileFormats {
+  PDF = 'pdf',
+}
+
+enum insurancePaymentRecordStatuses {
+  ACTIVE = 'Active',
+}
+
+enum patientStatementSlaimStatusCodes {
+  BILLED_TO_PATIENT = 'BilledToPatient',
+}
+
+enum patientStatementRecordStatuses {
+  ACTIVE = 'Active',
+}
+
 interface PaymentAttachments {
   id: string
   metadata?: Metadata
@@ -150,10 +166,13 @@ interface PatientStatement {
   patientBalanceDue: number
   insurancePaid: number
   claimNumber?: string
+  claimId: string
 }
 
 interface PatientStatementPayload {
   patientId?: number[]
+  patientIds?: number[]
+  claimIds?: string[]
   patientFirstName?: string
   patientLastName?: string
   accountNumber?: string
@@ -263,6 +282,10 @@ interface ResponseHistoryDetailListResponse {
 
 export {
   RevenueCycleTab,
+  FileFormats,
+  insurancePaymentRecordStatuses,
+  patientStatementSlaimStatusCodes,
+  patientStatementRecordStatuses,
   type UpdateClaimPaymentPayload,
   type ClaimServiceLinePayment,
   type ServiceLinePaymentAdjustment,

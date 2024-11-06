@@ -41,7 +41,7 @@ const PatientStatementFilterForm = ({
     const cleanedData = sanitizeFormData(data) as PatientStatementPayload
     return search(patientId, {
       ...cleanedData,
-      patientId: [patientId],
+      patientIds: [patientId],
     })
   }
 

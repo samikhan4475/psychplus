@@ -154,8 +154,10 @@ const GET_INSURANCE_PAYMENT_LIST_ENDPOINT = `${API_URL}/api/payments/actions/sea
 const GET_PRACTICE_IDS_LIST_ENDPOINT = `${API_URL}/api/practices/actions/search`
 const DELETE_INSURANCE_PAYMENT_ENDPOINT = (id: string) =>
   `${API_URL}/api/payments/${id}`
-const GET_PATIENT_STATEMENT_DETAIL_LIST_ENDPOINT = (id: number) =>
-  `${API_URL}/api/patients/${id}/billingstatements/actions/search`
+const GENERATE_PATIENT_STATEMENTS_ENDPOINT = (fileFormat: string) =>
+  `${API_URL}/api/billingstatements/actions/generate/${fileFormat}`
+const DOWNLOAD_PATIENT_STATEMENTS_ENDPOINT = (fileFormat: string) =>
+  `${API_URL}/api/billingstatements/actions/preview/${fileFormat}`
 const GET_PATIENT_STATEMENTS_LIST_ENDPOINT = `${API_URL}/api/billingstatements/actions/search`
 const GET_RESPONSE_HISTORY_LIST_ENDPOINT = `${API_URL}/api/claimssubmissions/responses/actions/search`
 const GET_RESPONSE_HISTORY_DETAIL_LIST_ENDPOINT = (id: string) =>
@@ -399,7 +401,8 @@ export {
   UPDATE_CLAIM,
   ADD_PATIENT_VITAL_ENDPOINT,
   UPDATE_PATIENT_VITAL_ENDPOINT,
-  GET_PATIENT_STATEMENT_DETAIL_LIST_ENDPOINT,
+  GENERATE_PATIENT_STATEMENTS_ENDPOINT,
+  DOWNLOAD_PATIENT_STATEMENTS_ENDPOINT,
   UPDATE_MESSAGE,
   ADD_REPORT_TEMPLATE_ENDPOINT,
   UPLOAD_TEMPLATE_REPORT_ENDPOINT,

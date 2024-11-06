@@ -15,8 +15,8 @@ const TableRowCheckboxCell = ({ row }: TableRowCheckboxCellProps) => {
   const toggleSelected = async (value: boolean) => {
     row.toggleSelected(value)
     const selectedIds = value
-      ? [...selectedStatements, row.original.id]
-      : selectedStatements.filter((id) => id !== row.original.id)
+      ? [...selectedStatements, row.original.claimId]
+      : selectedStatements.filter((id) => id !== row.original.claimId)
     setSelectedStatements(selectedIds)
   }
   return (

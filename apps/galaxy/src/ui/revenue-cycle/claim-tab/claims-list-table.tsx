@@ -14,6 +14,7 @@ import {
 import { Sort, type Claim } from '@/types'
 import { getSortDir } from '@/utils'
 import { formatDateTime } from '@/utils/date'
+import { getInsurancePayerName } from '../utils'
 import { ActionsCell } from './actions-cell'
 import { useStore } from './store'
 import { ClaimNumberCell } from './table-row-claim-number-cell'
@@ -102,7 +103,14 @@ const columns = (
         />
       ),
       cell: ({ row }) => {
-        return <TextCell>{row.original.primaryInsurance?.payerName}</TextCell>
+        return (
+          <TextCell>
+            {getInsurancePayerName(
+              'Primary',
+              row.original.claimInsurancePolicies ?? [],
+            )}
+          </TextCell>
+        )
       },
     },
     {
@@ -120,7 +128,10 @@ const columns = (
       cell: ({ row }) => {
         return (
           <LongTextCell>
-            {row.original.secondaryInsurance?.payerName}
+            {getInsurancePayerName(
+              'Secondary',
+              row.original.claimInsurancePolicies ?? [],
+            )}
           </LongTextCell>
         )
       },
