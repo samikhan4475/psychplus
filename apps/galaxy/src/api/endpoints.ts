@@ -98,6 +98,8 @@ const DELETE_ATTACHMENTS_SECURE_MESSAGE = (
 const SEND_SECURE_MESSAGE = `${API_URL}/api/users/self/securemessaging/messages`
 const GET_RECIPIENT_SECURE_MESSAGE = (messageId: string) =>
   `${API_URL}/api/users/self/securemessages/${messageId}/recipients/actions/search`
+const SEARCH_PHARMACIES = (patientId: string) =>
+  `${API_URL}/api/patients/${patientId}/pharmacies/actions/search`
 const GET_PATIENT_BILLING_HISTORY = (patientId: string) =>
   `${API_URL}/api/patients/${patientId}/billinghistory/actions/search`
 const ADD_PATIENT_RELATIONSHIP_ENDPOINT = (patientId: string) =>
@@ -334,6 +336,7 @@ export {
   GET_RECIPIENT_SECURE_MESSAGE,
   CREATE_CHANNEL_SECURE_MESSAGE,
   ATTACHMENTS_SECURE_MESSAGE,
+  SEARCH_PHARMACIES,
   GET_PATIENT_BILLING_HISTORY,
   ADD_PATIENT_RELATIONSHIP_ENDPOINT,
   DELETE_PATIENT_RELATIONSHIP_ENDPOINT,

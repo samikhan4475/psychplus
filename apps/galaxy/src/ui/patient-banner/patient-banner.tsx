@@ -1,5 +1,5 @@
 import { Avatar, Flex, Text } from '@radix-ui/themes'
-import { GET_PATIENT_PROFILE_IMAGE_ENDPOINT, getPatientProfile } from '@/api'
+import { getPatientProfile } from '@/api'
 import { PatientAddress, PhoneNumber } from '@/types'
 import {
   cn,
@@ -14,6 +14,7 @@ import {
   getSlashedPaddedDateString,
   getUserFullName,
 } from '@/utils'
+import { searchPharmaciesAction } from '../pharmacy/actions'
 
 interface PatientBannerProps {
   patientId: string
@@ -21,12 +22,18 @@ interface PatientBannerProps {
 
 const PatientBanner = async ({ patientId }: PatientBannerProps) => {
   const response = await getPatientProfile(patientId)
-
   if (response.state === 'error') {
     return <Text>{response.error}</Text>
   }
-
   const user = response.data
+
+  const result = await searchPharmaciesAction(patientId, {
+    isOnlyDefaults: true,
+  })
+  if (result.state === 'error') return <Text>{result?.error}</Text>
+
+  const pharmacy = result.data[0] ?? {}
+  const pharmacyAddress = pharmacy.pharmacyContactDetails?.addresses?.[0] ?? {}
 
   return (
     <Flex
@@ -117,9 +124,19 @@ const PatientBanner = async ({ patientId }: PatientBannerProps) => {
         <LabelAndValue label="Psychiatrist" />
         <LabelAndValue label="Therapist" />
         <LabelAndValue label="PCP" />
-        <LabelAndValue label="Pharmacy Name" />
-        <LabelAndValue label="Pharmacy Address" />
-        <LabelAndValue label="Pharm City/State/Zip" />
+        <LabelAndValue label="Pharmacy Name" value={pharmacy.pharmacyName} />
+        <LabelAndValue
+          label="Pharmacy Address"
+          value={pharmacyAddress.street1}
+        />
+        <LabelAndValue
+          label="Pharm City/State/Zip"
+          value={
+            pharmacyAddress.city
+              ? `${pharmacyAddress.city}/${pharmacyAddress.state}/${pharmacyAddress.postalCode}`
+              : undefined
+          }
+        />
       </Flex>
     </Flex>
   )
