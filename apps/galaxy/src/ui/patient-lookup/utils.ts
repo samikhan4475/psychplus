@@ -30,8 +30,8 @@ const getInitialValues = (): PatientLookUpSchemaType => {
     insurancePolicyIds: [],
     visitHistoryPastDays: '',
     futureVisitsByDays: '',
-    futureVisitsStatus: '',
-    visitHistoryPastStatus: '',
+    pastVisitStatus: '',
+    nextVisitStatus: '',
     organizations: [],
   }
 }
@@ -40,7 +40,7 @@ const convertDateField = (field: DateValue | null | undefined) => {
   return field ? convertToCalendarDate(field) : null
 }
 
-const hasFieldErrors = (fields: string[], errors: FieldErrors): boolean =>
-  fields.some((field) => field in errors)
+const hasFieldErrors = (errors: FieldErrors): boolean =>
+  Object.keys(errors)?.length > 0
 
 export { getInitialValues, convertDateField, hasFieldErrors }

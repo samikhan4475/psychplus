@@ -3,9 +3,9 @@
 import { useState } from 'react'
 import { Flex } from '@radix-ui/themes'
 import toast from 'react-hot-toast'
-import { updatePatientProfileAction } from '@/actions'
 import { CodesetSelectCell, PropsWithRow } from '@/components'
 import { CODESETS } from '@/constants'
+import { updatePatientAction } from '../actions'
 import { Patient } from '../types'
 
 const ContactMadeSelectCell = ({
@@ -15,8 +15,7 @@ const ContactMadeSelectCell = ({
 
   const updateContactMadeStatus = async (value: string) => {
     setSelectedValue(value)
-    const result = await updatePatientProfileAction(patient.id, {
-      ...patient,
+    const result = await updatePatientAction(patient.id, {
       contactMadeStatus: value,
     })
     if (result.state === 'success') {

@@ -9,27 +9,15 @@ import {
 } from 'react-hook-form'
 import { FormContainer } from '@/components'
 import { FormError } from '@/components/form'
-import { SelectOptionType } from '@/types'
-import { ERROR_FIELDS } from '../constants'
 import { useStore } from '../store'
 import { convertDateField, getInitialValues, hasFieldErrors } from '../utils'
-import { AgeInput } from './age-input'
 import { ClearButton } from './clear-button'
-import { CollapseButton } from './collapse-button'
-import { DOBDatePicker } from './dob-date-picker'
-import { FirstNameInput } from './first-name-input'
-import { GenderSelect } from './gender-select'
-import { LastNameInput } from './last-name-input'
-import { MoreFilters } from './more-filters'
-import { MRNInput } from './mrn-input'
+import { FilterButton } from './filter-button'
+import { Filters } from './filters'
 import { patientLookupSchema, PatientLookUpSchemaType } from './schema'
 import { SubmitButton } from './submit-button'
 
-interface PatientFilterFormProps {
-  practicesOptions: SelectOptionType[]
-}
-
-const PatientFilterForm = ({ practicesOptions }: PatientFilterFormProps) => {
+const PatientFilterForm = () => {
   const { error, search, formValues, loading, showFilters, toggleFilters } =
     useStore((state) => ({
       error: state.error,
@@ -59,7 +47,7 @@ const PatientFilterForm = ({ practicesOptions }: PatientFilterFormProps) => {
   }
 
   const onError: SubmitErrorHandler<PatientLookUpSchemaType> = (errors) => {
-    if (!showFilters && hasFieldErrors(ERROR_FIELDS, errors)) {
+    if (!showFilters && hasFieldErrors(errors)) {
       toggleFilters()
     }
   }
@@ -70,27 +58,20 @@ const PatientFilterForm = ({ practicesOptions }: PatientFilterFormProps) => {
       <Flex gap="4">
         <FormContainer form={form} onSubmit={onSubmit} onError={onError}>
           <Grid columns="4" gap="2" align="baseline">
-            <FirstNameInput />
-            <LastNameInput />
-            <Grid columns="2" gap="2" align="baseline">
-              <AgeInput />
-              <GenderSelect />
-            </Grid>
-            <Grid columns="2" gap="2" align="baseline">
-              <MRNInput />
-              <DOBDatePicker />
-            </Grid>
-            {showFilters ? (
-              <MoreFilters practicesOptions={practicesOptions} />
-            ) : (
-              <Flex className="col-span-full" justify="end" gap="2">
-                <ClearButton />
-                <SubmitButton />
-              </Flex>
-            )}
+            {showFilters && <Filters />}
+
+            <Flex
+              className="col-span-full"
+              justify="end"
+              gap="2"
+              align="center"
+            >
+              <FilterButton />
+              <ClearButton />
+              <SubmitButton />
+            </Flex>
           </Grid>
         </FormContainer>
-        <CollapseButton isOpen={showFilters} onOpenToggle={toggleFilters} />
       </Flex>
     </Flex>
   )

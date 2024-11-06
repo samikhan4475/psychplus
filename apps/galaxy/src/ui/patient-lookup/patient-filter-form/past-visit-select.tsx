@@ -1,18 +1,22 @@
 'use client'
 
-import { CodesetSelect, FormFieldContainer, FormFieldLabel } from '@/components'
+import {
+  DropdownSelect,
+  FormFieldContainer,
+  FormFieldLabel,
+} from '@/components'
 import { CODESETS } from '@/constants'
+import { useCodesetOptions } from '@/hooks'
 
 const PastVisitSelect = () => {
+  const options = useCodesetOptions(CODESETS.QueryByLastDays)
   return (
     <FormFieldContainer className="flex-row gap-1">
       <FormFieldLabel className="!text-1">Past Visit</FormFieldLabel>
-      <CodesetSelect
-        size="1"
-        name="visitHistoryPastDays"
-        codeset={CODESETS.QueryByNextDays}
-        className="flex-1"
-        placeholder="days"
+      <DropdownSelect
+        field="visitHistoryPastDays"
+        options={options}
+        placeholder="Days"
       />
     </FormFieldContainer>
   )

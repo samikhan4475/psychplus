@@ -44,7 +44,11 @@ interface SearchPatientsData {
 interface SearchPatientsParams
   extends Omit<
     PatientLookUpSchemaType,
-    'patientCreatedFrom' | 'patientCreatedTo' | 'dateOfBirth' | 'hasGuardian'
+    | 'patientCreatedFrom'
+    | 'patientCreatedTo'
+    | 'dateOfBirth'
+    | 'hasGuardian'
+    | 'contactMadeStatuses'
   > {
   patientCreatedFrom?: string
   patientCreatedTo?: string
@@ -53,6 +57,7 @@ interface SearchPatientsParams
   consentVerificationStatuses?: string[]
   creditCardVerificationStatuses?: string[]
   insurancePriority?: InsurancePolicyPriority
+  contactMadeStatuses?: string[]
 }
 
 export {

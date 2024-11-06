@@ -1,39 +1,44 @@
 'use client'
 
-import { Flex, Grid } from '@radix-ui/themes'
-import { SelectOptionType } from '@/types'
+import { Grid } from '@radix-ui/themes'
+import { AgeInput } from './age-input'
 import { CityInput } from './city-input'
-import { ClearButton } from './clear-button'
 import { ConsentVerifySelect } from './consent-verify-select'
 import { ContactMadeSelect } from './contact-made-select'
 import { CreatedDatePicker } from './created-date-picker'
 import { CreditCardVerifySelect } from './credit-card-verify-select'
+import { DOBDatePicker } from './dob-date-picker'
 import { EmailInput } from './email-input'
+import { FirstNameInput } from './first-name-input'
+import { GenderSelect } from './gender-select'
 import { GuardianSelect } from './guardian-select'
 import { InsuranceSelect } from './insurance-select'
 import { InsuranceVerifySelect } from './insurance-verify-select'
+import { LastNameInput } from './last-name-input'
+import { MRNInput } from './mrn-input'
 import { NextVisitSelect } from './next-visit-select'
 import { NextVisitStatusSelect } from './next-visit-status-select'
-import { OrganizationSelect } from './organization-select'
 import { PastVisitSelect } from './past-visit-select'
 import { PastVisitStatusSelect } from './past-visit-status-select'
 import { PatientVerifySelect } from './patient-verify-select'
 import { PhoneNumberInput } from './phone-number-input'
-import { PracticeSelect } from './practice-select'
 import { SocialSecurityInput } from './social-security-input'
 import { PatientStatusSelect } from './status-select'
-import { SubmitButton } from './submit-button'
 import { ZipInput } from './zip-input'
 
-interface MoreFiltersProps {
-  practicesOptions: SelectOptionType[]
-}
-
-const MoreFilters = ({
-  practicesOptions,
-}: MoreFiltersProps) => {
+const Filters = () => {
   return (
     <Grid className="col-span-full" columns="4" gap="2" align="baseline">
+      <FirstNameInput />
+      <LastNameInput />
+      <Grid columns="2" gap="2" align="baseline">
+        <AgeInput />
+        <GenderSelect />
+      </Grid>
+      <Grid columns="2" gap="2" align="baseline">
+        <MRNInput />
+        <DOBDatePicker />
+      </Grid>
       <Grid columns="2" gap="2" align="baseline">
         <CityInput />
         <ZipInput />
@@ -46,7 +51,10 @@ const MoreFilters = ({
         <EmailInput />
         <SocialSecurityInput />
       </Grid>
-      <PracticeSelect practicesOptions={practicesOptions} />
+
+      {/* 
+        Todo in Phase 2 
+      <PracticeSelect /> */}
       <Grid columns="2" gap="2" align="baseline">
         <PatientStatusSelect />
         <PatientVerifySelect />
@@ -59,19 +67,16 @@ const MoreFilters = ({
         <NextVisitSelect />
         <NextVisitStatusSelect />
       </Grid>
-      <ContactMadeSelect />
-      <InsuranceSelect />
       <Grid columns="2" gap="2" align="baseline">
         <PastVisitSelect />
         <PastVisitStatusSelect />
       </Grid>
-      <OrganizationSelect />
-      <Flex className="col-span-2" justify="end" gap="2">
-        <ClearButton />
-        <SubmitButton />
-      </Flex>
+      <ContactMadeSelect />
+      <InsuranceSelect />
+
+      {/* <OrganizationSelect /> */}
     </Grid>
   )
 }
 
-export { MoreFilters }
+export { Filters }

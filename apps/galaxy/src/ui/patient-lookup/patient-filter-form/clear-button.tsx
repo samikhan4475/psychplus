@@ -13,7 +13,7 @@ const ClearButton = () => {
   }))
 
   const handleResetForm = () => {
-    search({}, 1, true)
+    search(getInitialValues(), 1, true)
     form.reset({ ...getInitialValues() })
   }
   return (

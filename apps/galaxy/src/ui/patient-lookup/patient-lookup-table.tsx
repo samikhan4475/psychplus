@@ -1,29 +1,30 @@
 'use client'
 
+import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons'
 import { Flex, ScrollArea, Text } from '@radix-ui/themes'
 import { DataTable, LoadingPlaceholder } from '@/components'
 import { useStore as useRootStore } from '@/store'
-import { SelectOptionType } from '@/types'
 import { columns } from './columns'
 import { useStore } from './store'
 
-interface PatientLookupTableProps {
-  practicesOptions: SelectOptionType[]
-}
-
-const PatientLookupTable = ({ practicesOptions }: PatientLookupTableProps) => {
+const PatientLookupTable = () => {
   const router = useRouter()
 
   const addTab = useRootStore((state) => state.addTab)
 
-  const { data, loading } = useStore((state) => ({
+  const { data, loading, refetch } = useStore((state) => ({
     data: state.data,
     loading: state.loading,
     sort: state.sort,
     sortData: state.sortData,
+    refetch: state.refetch,
   }))
+
+  useEffect(() => {
+    refetch()
+  }, [refetch])
 
   if (loading) {
     return (
@@ -50,7 +51,7 @@ const PatientLookupTable = ({ practicesOptions }: PatientLookupTableProps) => {
     <ScrollArea scrollbars="both" className="bg-white h-full flex-1 px-4 py-2">
       <DataTable
         data={data.patients}
-        columns={columns(practicesOptions)}
+        columns={columns}
         onRowClick={(row) => {
           const href = `/chart/${row.original.id}/scheduling-history`
           addTab({

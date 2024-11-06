@@ -83,6 +83,7 @@ interface PatientProfile {
   patientConsent?: string
   upcomingAppointmentDate?: string
   practice?: string
+  dateOfBirth?: string
 }
 
 interface PatientHistoryParams {

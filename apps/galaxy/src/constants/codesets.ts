@@ -58,13 +58,15 @@ const CODESETS = {
   AccidentType: 'AccidentType',
   LocationType: 'LocationType',
   ContactMadeStatus: 'ContactMadeStatus',
+  ReferralSource: 'ReferralSource',
   ParameterAdjustmentStatus: 'ParameterAdjustmentStatus',
   TMSCoilType: 'PsychPlusPublic.TMSCoilType',
   TMSStimulationSite: 'PsychPlusPublic.TMSStimulationSite',
   ProcessedAsCode: 'ProcessedAsCode',
   AdjustmentGroupCode: 'AdjustmentGroupCode',
-  PaymentPostingStatus:'PaymentPostingStatus',
+  PaymentPostingStatus: 'PaymentPostingStatus',
   ServicesStatus: 'ServicesStatus',
+  QueryByLastDays: 'QueryByLastDays',
 }
 
 export {

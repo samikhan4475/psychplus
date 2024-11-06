@@ -1,18 +1,19 @@
 'use client'
 
-import { CodesetSelect, FormFieldContainer, FormFieldLabel } from '@/components'
+import {
+  DropdownSelect,
+  FormFieldContainer,
+  FormFieldLabel,
+} from '@/components'
 import { CODESETS } from '@/constants'
+import { useCodesetOptions } from '@/hooks'
 
 const ContactMadeSelect = () => {
+  const options = useCodesetOptions(CODESETS.ContactMadeStatus)
   return (
     <FormFieldContainer className="flex-row gap-1">
       <FormFieldLabel className="!text-1">Contact Made</FormFieldLabel>
-      <CodesetSelect
-        size="1"
-        name="contactMadeStatuses"
-        codeset={CODESETS.ContactMadeStatus}
-        className="flex-1"
-      />
+      <DropdownSelect field="contactMadeStatuses" options={options} />
     </FormFieldContainer>
   )
 }

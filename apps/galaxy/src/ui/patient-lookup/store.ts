@@ -27,6 +27,7 @@ interface Store {
   prev: () => void
   jumpToPage: (page: number) => void
   toggleFilters: () => void
+  refetch: () => void
 }
 
 const useStore = create<Store>()(
@@ -37,7 +38,7 @@ const useStore = create<Store>()(
       loading: undefined,
       sort: undefined,
       page: 1,
-      showFilters: false,
+      showFilters: true,
       formValues: undefined,
       pageCache: {},
       toggleFilters: () => set({ showFilters: !get().showFilters }),
@@ -90,10 +91,13 @@ const useStore = create<Store>()(
       prev: () => {
         const page = get().page - 1
 
-        set({
-          data: get().pageCache[page],
-          page,
-        })
+        if (get().pageCache[page]) {
+          return set({
+            data: get().pageCache[page],
+            page,
+          })
+        }
+        get().search(get().formValues, page)
       },
       jumpToPage: (page: number) => {
         if (page < 1) {
@@ -118,7 +122,11 @@ const useStore = create<Store>()(
 
         get().search(get().formValues, 1, true)
       },
+      refetch: () => {
+        get().search(get().formValues, get().page, true)
+      },
     }),
+
     {
       name: PATIENT_LOOKUP_FILTERS_KEY,
       storage: createJSONStorage(() => sessionStorage),

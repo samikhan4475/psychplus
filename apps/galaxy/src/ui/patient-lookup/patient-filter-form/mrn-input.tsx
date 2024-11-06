@@ -1,6 +1,6 @@
 'use client'
 
-import { TextField } from '@radix-ui/themes'
+import { Flex, TextField } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
 import {
   FormFieldContainer,
@@ -12,14 +12,16 @@ import { PatientLookUpSchemaType } from './schema'
 const MRNInput = () => {
   const form = useFormContext<PatientLookUpSchemaType>()
   return (
-    <FormFieldContainer className="flex-row gap-1">
-      <FormFieldLabel className="!text-1">MRN</FormFieldLabel>
-      <TextField.Root
-        size="1"
-        placeholder="MRN"
-        className="border-pp-gray-2 h-6 w-full border border-solid !outline-none [box-shadow:none]"
-        {...form.register('mrn')}
-      />
+    <FormFieldContainer className="gap-1">
+      <Flex gap="1">
+        <FormFieldLabel className="!text-1">MRN</FormFieldLabel>
+        <TextField.Root
+          size="1"
+          placeholder="MRN"
+          className="border-pp-gray-2 h-6 w-full border border-solid !outline-none [box-shadow:none]"
+          {...form.register('mrn')}
+        />
+      </Flex>
       <FormFieldError name="mrn" />
     </FormFieldContainer>
   )

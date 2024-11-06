@@ -1,18 +1,19 @@
 'use client'
 
-import { CodesetSelect, FormFieldContainer, FormFieldLabel } from '@/components'
+import {
+  DropdownSelect,
+  FormFieldContainer,
+  FormFieldLabel,
+} from '@/components'
 import { CODESETS } from '@/constants'
+import { useCodesetOptions } from '@/hooks'
 
 const ConsentVerifySelect = () => {
+  const options = useCodesetOptions(CODESETS.VerificationStatus)
   return (
     <FormFieldContainer className="flex-row gap-1">
       <FormFieldLabel className="!text-1">Consent Verify</FormFieldLabel>
-      <CodesetSelect
-        size="1"
-        name="consentVerificationStatus"
-        codeset={CODESETS.VerificationStatus}
-        className="flex-1"
-      />
+      <DropdownSelect field="consentVerificationStatus" options={options} />
     </FormFieldContainer>
   )
 }

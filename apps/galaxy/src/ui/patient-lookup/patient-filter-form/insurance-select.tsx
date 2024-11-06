@@ -12,6 +12,8 @@ import { getInsurancePlansOptionsAction } from '../actions'
 import { PatientLookUpSchemaType } from './schema'
 
 const InsuranceSelect = () => {
+
+  const form = useFormContext<PatientLookUpSchemaType>()
   const [insurancePlansOptions, setInsurancePlansOptions] = useState<
     SelectOptionType[]
   >([])
@@ -24,7 +26,6 @@ const InsuranceSelect = () => {
     })
   }, [])
 
-  const form = useFormContext<PatientLookUpSchemaType>()
   const insurancePolicies = form.watch('insurancePolicyIds')
 
   return (

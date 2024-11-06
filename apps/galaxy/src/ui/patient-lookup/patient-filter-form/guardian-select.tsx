@@ -1,17 +1,16 @@
 'use client'
 
-import { FormFieldContainer, FormFieldLabel, SelectInput } from '@/components'
+import {
+  DropdownSelect,
+  FormFieldContainer,
+  FormFieldLabel,
+} from '@/components'
 
 const GuardianSelect = () => {
   return (
     <FormFieldContainer className="flex-row gap-1">
       <FormFieldLabel className="!text-1">Guardian</FormFieldLabel>
-      <SelectInput
-        field="hasGuardian"
-        options={options}
-        className="flex-1"
-        buttonClassName="border-pp-gray-2 h-6 w-full border border-solid !outline-none [box-shadow:none]"
-      />
+      <DropdownSelect field="hasGuardian" options={options} />
     </FormFieldContainer>
   )
 }

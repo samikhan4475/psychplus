@@ -1,14 +1,15 @@
 'use client'
 
 import { useFormContext } from 'react-hook-form'
-import { CodesetSelect, FormFieldContainer } from '@/components'
+import { DropdownSelect, FormFieldContainer } from '@/components'
 import { CODESETS } from '@/constants'
+import { useCodesetOptions } from '@/hooks'
 import { QueryByNextDays } from '../types'
 import { PatientLookUpSchemaType } from './schema'
 
 const NextVisitStatusSelect = () => {
   const { watch } = useFormContext<PatientLookUpSchemaType>()
-
+  const options = useCodesetOptions(CODESETS.AppointmentStatus)
   const futureVisitsByDays = watch('futureVisitsByDays')
 
   const isDisabled =
@@ -18,12 +19,9 @@ const NextVisitStatusSelect = () => {
 
   return (
     <FormFieldContainer className="flex-row gap-1">
-      <CodesetSelect
-        codeset={CODESETS.AppointmentStatus}
-        size="1"
-        name="futureVisitsStatus"
-        placeholder="Status"
-        className="flex-1"
+      <DropdownSelect
+        field="nextVisitStatus"
+        options={options}
         disabled={isDisabled}
       />
     </FormFieldContainer>

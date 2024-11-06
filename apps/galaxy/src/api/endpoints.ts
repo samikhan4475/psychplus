@@ -221,6 +221,7 @@ const UPDATE_PATIENT_VITAL_ENDPOINT = (
 ) => `${API_URL}/api/patients/${patientId}/vitalsigns/${vitalSignId}`
 const GET_STAFF = `${API_URL}/api/staff?includeInactive=false&offset=0&limit=0&orderBy=legalName asc`
 const GET_POS_CODES = `${API_URL}/api/codeset/authorities/PsychPlusPublic/codesets/PlaceOfService?includeExtraDetails=false&offset=0&limit=100&orderBy=displayName asc`
+const ADD_NO_EMAIL_PATIENT_ENDPOINT = `${API_URL}/api/users/actions/patientsignup`
 const GET_CLEARNING_HOUSE_SUBMITTER_ENDPOINT = `${API_URL}/api/clearinghousesubmitters/actions/search`
 const DELETE_CLEARNING_HOUSE_SUBMITTER_ENDPOINT = (id: string) =>
   `${API_URL}/api/clearinghousesubmitters/${id}`
@@ -240,6 +241,8 @@ const UPLOAD_TEMPLATE_REPORT_ENDPOINT = (templateId: string) =>
 const EDIT_TEMPLATE_ENDPOINT = (templateId: string) =>
   `${API_URL}/api/reporting/templates/${templateId}/`
 const GET_ALL_STAFF_ENDPOINT = `${API_URL}/api/staff`
+const UPDATE_PATIENT_ENDPOINT = (patientId: number) =>
+  `${API_URL}/api/patients/${patientId}`
 const SEARCH_STAFF_ENDPOINT = `${API_URL}/api/staff/search?limit=10`
 const GET_SELF_STAFF_DETAILS_ENDPOINT = `${API_URL}/api/staff/self`
 const GET_PATIENT_REFERRALS_ENDPOINT = `${API_URL}/api/referrals/search`
@@ -388,6 +391,7 @@ export {
   GET_ORGANIZATIONS_ENDPOINT,
   GET_PRACTICES_ENDPOINT,
   GET_PATIENT_VITALS_ENDPOINT,
+  ADD_NO_EMAIL_PATIENT_ENDPOINT,
   GET_CLEARNING_HOUSE_SUBMITTER_ENDPOINT,
   DELETE_CLEARNING_HOUSE_SUBMITTER_ENDPOINT,
   ADD_CLEARNING_HOUSE_SUBMITTER_ENDPOINT,
@@ -401,6 +405,7 @@ export {
   UPLOAD_TEMPLATE_REPORT_ENDPOINT,
   EDIT_TEMPLATE_ENDPOINT,
   GET_ALL_STAFF_ENDPOINT,
+  UPDATE_PATIENT_ENDPOINT,
   SEARCH_STAFF_ENDPOINT,
   GET_PATIENT_REFERRALS_ENDPOINT,
   GET_PATIENT_REFERRALS_HISTORY_ENDPOINT,

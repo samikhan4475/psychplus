@@ -27,6 +27,7 @@ const transformOut = (data: PatientLookUpSchemaType): SearchPatientsParams => {
     hasGuardian,
     consentVerificationStatus,
     creditCardVerificationStatus,
+    contactMadeStatuses,
     ...rest
   } = data
 
@@ -41,6 +42,9 @@ const transformOut = (data: PatientLookUpSchemaType): SearchPatientsParams => {
     creditCardVerificationStatuses: creditCardVerificationStatus
       ? [creditCardVerificationStatus]
       : undefined,
+      contactMadeStatuses: contactMadeStatuses
+      ? [contactMadeStatuses]
+      : undefined, 
     ...(hasGuardian ? { hasGuardian: hasGuardian === 'yes' } : {}),
   })
 }

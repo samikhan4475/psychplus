@@ -1,18 +1,19 @@
 'use client'
 
-import { CodesetSelect, FormFieldContainer, FormFieldLabel } from '@/components'
+import {
+  DropdownSelect,
+  FormFieldContainer,
+  FormFieldLabel,
+} from '@/components'
 import { CODESETS } from '@/constants'
+import { useCodesetOptions } from '@/hooks'
 
 const CreditCardVerifySelect = () => {
+  const options = useCodesetOptions(CODESETS.VerificationStatus)
   return (
     <FormFieldContainer className="flex-row gap-1">
       <FormFieldLabel className="!text-1">Credit Card Verify</FormFieldLabel>
-      <CodesetSelect
-        size="1"
-        codeset={CODESETS.VerificationStatus}
-        name="creditCardVerificationStatus"
-        className="flex-1"
-      />
+      <DropdownSelect field="creditCardVerificationStatus" options={options} />
     </FormFieldContainer>
   )
 }
