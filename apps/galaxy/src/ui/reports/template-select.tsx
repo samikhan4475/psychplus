@@ -10,8 +10,7 @@ type TemplateSelectProps = {
 };
 
 const TemplateSelect = ({ title, options, name }: TemplateSelectProps) => {
-  const { register } = useFormContext();
-
+  const { register, setValue, watch } = useFormContext();
   return (
     <FormFieldContainer className="flex-row items-center gap-1">
       <FormFieldLabel className="!text-1">{title}</FormFieldLabel>
@@ -21,6 +20,10 @@ const TemplateSelect = ({ title, options, name }: TemplateSelectProps) => {
         className="text-left"
         options={options}
         {...register(name)}
+        value={watch(name)}
+        onValueChange={(value) => {
+          setValue(name, value);
+        }}
       />
     </FormFieldContainer>
   )

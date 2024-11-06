@@ -18,9 +18,9 @@ const FieldTypeCell = ({ rowIndex }: FieldTypeCellProps) => {
     return dataTypeAttribute?.content || '';
   };
 
-  const reportParameterCode = watch(`parameters.${rowIndex}.reportParameterCode`) || '';
+  const parameterCode = watch(`parameters.${rowIndex}.parameterCode`) || '';
 
-  return <TextCell>{getDataTypeFromAttributes(reportParameterCode)}</TextCell>;
+  return <TextCell>{getDataTypeFromAttributes(parameterCode)}</TextCell>;
 };
 
 export { FieldTypeCell };

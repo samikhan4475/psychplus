@@ -9,7 +9,7 @@ const templateSchema = z.object({
   parameters: z.array(
     z.object({
       id: z.string().optional(),
-      reportParameterCode: z.string(),
+      parameterCode: z.string().min(1,"Please fill out all the parameters"),
       displayName: z.string(),
       resourceStatus: z.string(),
       reportTemplateId: z.string().optional(),

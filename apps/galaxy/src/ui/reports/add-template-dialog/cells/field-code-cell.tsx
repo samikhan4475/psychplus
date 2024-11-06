@@ -16,10 +16,10 @@ const FieldCodeCell = ({ rowIndex }: { rowIndex: number }) => {
 
   return (
     <SelectCell
-      value={watch(`parameters.${rowIndex}.reportParameterCode`)}
+      value={watch(`parameters.${rowIndex}.parameterCode`)}
       options={reportParametersOptions || []}
       onValueChange={(value) => {
-        setValue(`parameters.${rowIndex}.reportParameterCode`, value);
+        setValue(`parameters.${rowIndex}.parameterCode`, value);
         setValue(`parameters.${rowIndex}.displayName`, getFieldType( parameters || [] , value ));
       }}
     />

@@ -15,6 +15,7 @@ const ManagementNavigation = () => {
             Clearing House Setup
           </NavigationLink>
           <NavigationLink href="/location">Location</NavigationLink>
+          <NavigationLink href="/reports">Reporting</NavigationLink>
         </Flex>
       </ScrollArea>
     </Box>

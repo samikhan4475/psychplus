@@ -1,6 +1,6 @@
 'use client';
 
-import { DocumentIcon } from '@/components/icons';
+import { MedicalReportIcon } from '@/components/icons';
 import { ChevronLeftIcon } from '@radix-ui/react-icons';
 import { Box, Flex, ScrollArea, Text } from '@radix-ui/themes';
 import { AddTemplateButton } from './add-template-button';
@@ -29,16 +29,16 @@ const ExpandedSidebar = ({ toggleSidebar }: ExpandedSidebarProps) => {
         justify="center"
         align="center"
         onClick={toggleSidebar}
-        className="absolute right-[-4px] top-[16px] z-50 h-[20px] w-[20px] cursor-pointer justify-center rounded-full border border-pp-blue-200 bg-white shadow-light-08"
+        className="absolute right-[-4px] top-[16px] z-50 h-[20px] w-[20px] cursor-pointer justify-center rounded-full border border-pp-black-3/30 bg-white shadow-light-08"
       >
         <ChevronLeftIcon />
       </Flex>
 
-      <ScrollArea>
+      <ScrollArea className='h-[600px] bg-white'>
         <Flex direction="column" className="p-2 gap-1">
           <Flex align="center" className="my-2">
-            <DocumentIcon />
-            <Text className="text-pp-black-1 font-medium ml-1">{selectedReport?.displayName}</Text>
+            <MedicalReportIcon />
+            <Text className="text-pp-black-3 font-medium ml-1">{selectedReport?.displayName}</Text>
           </Flex>
           <AddTemplateButton isCollapsed={false} />
           {filteredTemplates.map((item) => (

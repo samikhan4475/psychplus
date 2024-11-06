@@ -7,11 +7,15 @@ import { ExportCsvButton } from './export-csv-report-button';
 import { ExportPdfButton } from './export-pdf-report-button';
 import { useStore } from './store';
 import { REPORT_TYPE } from './types';
-import { downloadCSVReport, downloadPDFFile } from './utils';
+import { downloadCSVReport } from './utils';
 import { GET_TEMPLATE_REPORT } from '@/api/endpoints';
+import { downloadFile } from '@/utils/download';
+import { useState } from 'react';
 
 const ReportExportButtons = () => {
   const { selectedTemplate, filtersData } = useStore();
+  const [loadingPDF, setLoadingPDF] = useState(false);
+  const [loadingCSV, setLoadingCSV] = useState(false);
 
   const handleExport = async (reportType: REPORT_TYPE) => {
     if (!selectedTemplate?.id) return;
@@ -22,24 +26,32 @@ const ReportExportButtons = () => {
     };
 
     if (reportType === REPORT_TYPE.PDF) {
-      const endpoint = GET_TEMPLATE_REPORT(selectedTemplate.id, reportType)
-      const fileName = "report.pdf"
-      await downloadPDFFile(endpoint, fileName, filtersData)
-    } else if (reportType === REPORT_TYPE.CSV) {
-      const result = await getRunReportAction(payload);
-
-      if (result.state === 'success') {
-        downloadCSVReport(result.data, reportType === REPORT_TYPE.CSV ? 'csv' : 'pdf');
-      } else {
-        toast.error(result.error ?? 'Failed to export report');
+      setLoadingPDF(true);
+      try {
+        const endpoint = GET_TEMPLATE_REPORT(selectedTemplate.id, reportType);
+        const fileName = "report.pdf";
+        await downloadFile(endpoint, fileName, 'POST', filtersData);
+      } catch (error) {
+        toast.error('Failed to download PDF');
+      } finally {
+        setLoadingPDF(false);
       }
+    } else if (reportType === REPORT_TYPE.CSV) {
+      setLoadingCSV(true);
+      const result = await getRunReportAction(payload);
+      if (result.state === 'success') {
+        downloadCSVReport(result.data, 'csv');
+      } else {
+        toast.error(result.error ?? 'Failed to export CSV');
+      }
+      setLoadingCSV(false);
     }
   };
 
   return (
     <Flex justify="end" gap="2" mt="2" px="2">
-      <ExportPdfButton onClick={() => handleExport(REPORT_TYPE.PDF)} />
-      <ExportCsvButton onClick={() => handleExport(REPORT_TYPE.CSV)} />
+      <ExportPdfButton onClick={() => handleExport(REPORT_TYPE.PDF)} loading={loadingPDF}/>
+      <ExportCsvButton onClick={() => handleExport(REPORT_TYPE.CSV)} loading={loadingCSV} />
     </Flex>
   );
 };

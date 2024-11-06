@@ -12,12 +12,12 @@ const FieldLabelCell = ({ rowIndex }: FieldLabelCellProps) => {
   const { watch } = useFormContext<AddTemplateSchemaType>();
   const { templateFilters } = useStore();
   const parameters = templateFilters?.codes;
-  const reportParameterCode = watch(`parameters.${rowIndex}.reportParameterCode`) || '';
+  const parameterCode = watch(`parameters.${rowIndex}.parameterCode`) || '';
 
   return (
     <InputCell
       field={`parameters.${rowIndex}.displayName`}
-      defaultValue={getFieldType( parameters || [], reportParameterCode)}
+      defaultValue={getFieldType( parameters || [], parameterCode)}
     />
   );
 };

@@ -67,9 +67,9 @@ const DynamicTemplateFilters = () => {
     let isSelect = false;
 
     codeParam.codeAttributes.forEach((attribute) => {
-      if (attribute.name === CODE_PARAM_ATTRIBUTES.DATA_TYPE && attribute.content === CODE_PARAM_ATTRIBUTES.STRING) {
+      if (attribute.name === CODE_PARAM_ATTRIBUTES.DATA_TYPE && attribute.content === CODE_PARAM_ATTRIBUTES.TEXTBOX) {
         isString = true;
-      } else if (attribute.name === CODE_PARAM_ATTRIBUTES.DATA_TYPE && attribute.content === CODE_PARAM_ATTRIBUTES.DATEONLY) {
+      } else if (attribute.name === CODE_PARAM_ATTRIBUTES.DATA_TYPE && attribute.content === CODE_PARAM_ATTRIBUTES.DATE) {
         isDate = true;
       } else if (attribute.name === CODE_PARAM_ATTRIBUTES.SELECTION) {
         isSelect = true;
@@ -121,13 +121,12 @@ const DynamicTemplateFilters = () => {
     }
   };
 
-
   return (
     <>
       <FormContainer form={form} onSubmit={onSubmit}>
         <Flex direction="row" align="center" className="flex-wrap gap-2 bg-white px-2 py-2 mt-1">
           {sortedParameters.map((item, i) => {
-            const { isString, isDate, isSelect } = getFieldTypes(item.reportParameterCode);
+            const { isString, isDate, isSelect } = getFieldTypes(item.parameterCode);
             return (
               <Flex key={item.id} direction="row" className="gap-x-1">
                 {isString && (
@@ -151,7 +150,7 @@ const DynamicTemplateFilters = () => {
                 {isSelect && (
                   <TemplateSelect
                     title={item.displayName}
-                    options={computeOptions(codesetIndex, item.reportParameterCode)}
+                    options={computeOptions(codesetIndex, item.parameterCode)}
                     {...register(`reportTemplateParameters.${i}.runValue`, {
                       required: 'This field is required',
                     })}

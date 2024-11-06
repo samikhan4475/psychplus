@@ -24,7 +24,7 @@ const createColumns = (
     },
     {
       id: 'field-code',
-      accessorKey: 'reportParameterCode',
+      accessorKey: 'parameterCode',
       header: () => <ColumnHeader label="Field Code" />,
       cell: ({ row }) => (
         <FieldCodeCell rowIndex={row.index} />

@@ -96,9 +96,6 @@ const downloadPDFFile = async (endpoint: string, filename: string, data: ReportF
  
     const result = await fetch('/ehr' + endpoint, fetchOptions)
     
-    if (!result.ok) {
-      throw new Error(`Failed to fetch ${filename}: ${result.statusText}`)
-    }
     const htmlContent = await result.text();
     const iframe = document.createElement('iframe');
     iframe.style.display = 'none';

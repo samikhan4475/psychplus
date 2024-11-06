@@ -66,10 +66,10 @@ const useStore = create<Store>((set) => ({
     set({ error: null });
 
     const staffResult = await getStaffAction();
-
+    
     if (staffResult.state === 'success') {
       const transformedStaffData = staffResult?.data.map((staff: StaffResource) => ({
-        value: `${staff.legalName.firstName} ${staff.legalName.lastName}`,
+        value: String(staff.id),
         label: `${staff.legalName.firstName} ${staff.legalName.lastName}`,
       }));
 

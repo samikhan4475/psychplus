@@ -15,6 +15,10 @@ const ReportsTabs = () => {
     fetchReportsAndTemplates();
     fetchStaffData();
   }, [fetchReportsAndTemplates, fetchStaffData]);
+  
+  const filteredReports = reports.filter(report => 
+    report.code === 'Provider' || report.codeAttributes?.every(attr => attr.content !== '99')
+  );
 
   const handleTabClick = (reportItem: Code) => {
     setSelectedReport(reportItem);
@@ -24,18 +28,17 @@ const ReportsTabs = () => {
 
   if (loading) {
     return (
-      <Flex height="100%" align="center" justify="center">
+      <Flex height="100%" align="center" justify="center" width="100%" className='h-[600px]'>
         <LoadingPlaceholder />
       </Flex>
     );
   }
-
   return (
-    <Flex className="w-full rounded-1 shadow-2 h-full bg-pp-bg-accent">
+    <Flex className="w-full rounded-1 shadow-2 h-full min-h-[600px]">
       <Box className="w-56 m-1 bg-white">
-        <ScrollArea>
+        <ScrollArea className='max-h-[600px]'>
           <Flex direction="column" className="p-2 gap-1">
-            {reports.map((item) => (
+            {filteredReports.map((item) => (
               <TabItem
                 key={item.code}
                 displayName={item.displayName}

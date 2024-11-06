@@ -3,7 +3,7 @@ import { Code, MetadataCodeset } from "@/types"
 
 export interface TemplateParameter {
   id?: string;
-    reportParameterCode: string;
+    parameterCode: string;
     displayName: string;
     resourceStatus: string;
     reportTemplateId?: string;
@@ -52,8 +52,8 @@ interface StaffDataOptions {
 
 export enum CODE_PARAM_ATTRIBUTES {
   DATA_TYPE = 'DataType',
-  STRING = 'String',
-  DATEONLY = 'DateOnly',
+  TEXTBOX = 'TextBox',
+  DATE = 'Date',
   SELECTION = 'Selection'
 }
 

@@ -3,11 +3,12 @@
 import { DOWNLOAD_TEMPLATE_REPORT } from '@/api/endpoints';
 import { FormFieldContainer, FormFieldError } from '@/components';
 import { downloadFile } from '@/utils/download';
-import { Cross2Icon, DownloadIcon, TrashIcon, UploadIcon } from '@radix-ui/react-icons';
+import { Cross2Icon, DownloadIcon, TrashIcon } from '@radix-ui/react-icons';
 import { Button, Flex, Text } from '@radix-ui/themes';
 import { useEffect, useRef, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { truncateFileName } from '../utils';
+import { UploadIcon } from '@/components/icons';
 
 const ReportUploader = () => {
   const form = useFormContext();

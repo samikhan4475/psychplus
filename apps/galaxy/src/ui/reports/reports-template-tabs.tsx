@@ -16,7 +16,7 @@ const ReportsTemplateTabs = () => {
   };
 
   return (
-    <Flex className="mb-4 w-full h-full">
+    <Flex className="w-full">
       {isCollapsed ? (
         <CollapsedSidebar toggleSidebar={toggleSidebar} />
       ) : (

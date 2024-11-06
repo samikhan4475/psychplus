@@ -14,7 +14,7 @@ const ParametersTable = () => {
   const templateID = watch('id');
   const addRow = () => {
     append({
-      reportParameterCode: '',
+      parameterCode: '',
       displayName: '',
       resourceStatus: STATUS.ACTIVE,
       displayOrder: fields.length,
@@ -36,7 +36,7 @@ const ParametersTable = () => {
     <>
       <AddRowButton onAddRow={addRow} />
       <DataTable columns={createColumns(move, remove, fields.length)} data={fields} />
-      <FormFieldError name="parameters" />
+      <FormFieldError name={`parameters[0].parameterCode`} />
     </>
   );
 };
