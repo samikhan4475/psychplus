@@ -103,12 +103,12 @@ const columns = (
       ),
       cell: ({ row }) => (
         <DateCell>
-          {formatDate(`${row.original.dateOfServiceFrom}`, 'MM-dd-yyyy')}
+          {formatDate(`${row.original.dateOfServiceFrom}`, 'MM/dd/yyyy')}
         </DateCell>
       ),
     },
     {
-      id: 'primaryInsurance.payerName',
+      id: 'primaryPatientInsurancePlan',
       header: ({ column }) => (
         <ColumnHeader
           sortable
@@ -130,7 +130,7 @@ const columns = (
       ),
     },
     {
-      id: 'secondaryInsurance.payerName',
+      id: 'secondaryPatientInsurancePlan',
       header: ({ column }) => (
         <ColumnHeader
           sortable
@@ -152,7 +152,7 @@ const columns = (
       ),
     },
     {
-      id: 'recordStatus',
+      id: 'claimStatusCode',
       header: ({ column }) => (
         <ColumnHeader
           sortable
@@ -164,9 +164,7 @@ const columns = (
           label="Claim Status"
         />
       ),
-      cell: ({ row }) => {
-        return <TextCell>{row.original.recordStatus}</TextCell>
-      },
+      cell: ({ row }) => <TextCell>{row.original.claimStatusCode}</TextCell>,
     },
     {
       id: 'totalAmount',
@@ -181,9 +179,9 @@ const columns = (
           label="Total Charge"
         />
       ),
-      cell: ({ row }) => {
-        return <TextCell hasPayment>{row.original.totalAmount}</TextCell>
-      },
+      cell: ({ row }) => (
+        <TextCell hasPayment>{row.original.totalAmount}</TextCell>
+      ),
     },
     {
       id: 'amountDue',
@@ -198,9 +196,9 @@ const columns = (
           label="Due Amount"
         />
       ),
-      cell: ({ row }) => {
-        return <TextCell hasPayment>{row.original.amountDue}</TextCell>
-      },
+      cell: ({ row }) => (
+        <TextCell hasPayment>{row.original.amountDue}</TextCell>
+      ),
     },
     {
       id: 'createdOn',
@@ -217,7 +215,7 @@ const columns = (
       ),
       cell: ({ row }) => (
         <DateCell>
-          {formatDate(`${row.original.metadata?.createdOn}`, 'MM-dd-yyyy')}
+          {formatDate(`${row.original.metadata?.createdOn}`, 'MM/dd/yyyy')}
         </DateCell>
       ),
     },
@@ -237,7 +235,7 @@ const columns = (
       cell: ({ row }) => (
         <DateCell>
           {row.original.submittedDate
-            ? formatDate(`${row.original.submittedDate}`, 'MM-dd-yyyy')
+            ? formatDate(`${row.original.submittedDate}`, 'MM/dd/yyyy')
             : '--'}
         </DateCell>
       ),
@@ -283,7 +281,7 @@ const SubmissionTable = () => {
   return (
     <ScrollArea>
       <DataTable
-        data={data.claims}
+        data={data.submissions}
         columns={columns(sort, sortData)}
         onRowClick={(row) => {
           // TODO: Row click can be implemented here

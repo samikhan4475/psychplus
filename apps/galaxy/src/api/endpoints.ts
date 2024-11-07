@@ -166,6 +166,7 @@ const GET_RESPONSE_HISTORY_DETAIL_LIST_ENDPOINT = (id: string) =>
   `${API_URL}/api/claimssubmissions/responses/${id}/details/actions/search`
 const GET_CLAIMS_LIST_ENDPOINT = `${API_URL}/api/claims/actions/search`
 const CLAIM_SUBMIT_ENDPOINT = `${API_URL}/api/claimssubmissions/actions/srcubandsubmit`
+const GET_CLAIM_SUBMISSION_LIST = `${API_URL}/api/claimssubmissions/actions/search`
 const CLAIM_SUBMISSION_REJECTION_DETAIL_ENDPOINT = (claimId: string) =>
   `${API_URL}/api/claims/${claimId}/claimvalidations/actions/search`
 const GET_CLAIM_SUBMISSION_HISTORY = `${API_URL}/api/claimssubmissions/batches/actions/search`
@@ -284,6 +285,7 @@ const UPDATE_PATIENT_RELATIONSHIP_ENDPOINT = (
 export {
   USER_ENDPOINT,
   REFRESH_ENDPOINT,
+  GET_CLAIM_SUBMISSION_LIST,
   ADD_CLAIM_PAYMENT,
   UPDATE_CLAIM_PAYMENT,
   GET_CLEARNING_HOUSE_RECEIVERS,

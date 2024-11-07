@@ -11,7 +11,7 @@ const TableHeaderCheckboxCell = ({
 }: HeaderCheckboxProps) => {
   const { setSelectedRows, claims } = useStore((state) => ({
     setSelectedRows: state.setSelectedRows,
-    claims: state.data?.claims,
+    claims: state.data?.submissions,
   }))
   return (
     <Box onClick={(e) => e.stopPropagation()}>

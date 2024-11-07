@@ -144,7 +144,10 @@ interface UpdateClaimPaymentPayload
   nationalDrugCodeQuantity?: string
   serviceLineNotes?: string
 }
-
+interface GetSubmissionResponse {
+  submissions: Claim[]
+  total: number
+}
 interface GetClaimsListResponse {
   claims: Claim[]
   total: number
@@ -286,6 +289,7 @@ export {
   insurancePaymentRecordStatuses,
   patientStatementSlaimStatusCodes,
   patientStatementRecordStatuses,
+  type GetSubmissionResponse,
   type UpdateClaimPaymentPayload,
   type ClaimServiceLinePayment,
   type ServiceLinePaymentAdjustment,

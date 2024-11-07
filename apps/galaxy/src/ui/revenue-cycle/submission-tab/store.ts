@@ -1,19 +1,19 @@
 import { create } from 'zustand'
 import { Sort } from '@/types'
 import { getNewSortDir } from '@/utils'
-import { getClaimsListAction } from '../actions'
-import { GetClaimsListResponse } from '../types'
+import { GetSubmissionResponse } from '../types'
 import { SchemaType } from './submission-filter-form'
 import { TabValue } from './types'
+import { getSubmissionListAction } from '../actions/get-submissions-list'
 
 interface Store {
-  data?: GetClaimsListResponse
+  data?: GetSubmissionResponse
   error?: string
   sort?: Sort
   loading?: boolean
   page: number
   formValues?: Partial<SchemaType>
-  pageCache: Record<number, GetClaimsListResponse>
+  pageCache: Record<number, GetSubmissionResponse>
   search: (
     formValues?: Partial<SchemaType>,
     page?: number,
@@ -47,7 +47,7 @@ const useStore = create<Store>((set, get) => ({
       loading: true,
       formValues,
     })
-    const result = await getClaimsListAction({
+    const result = await getSubmissionListAction({
       payload: {
         ...formValues,
         isForcePaper: get().selectedTab === TabValue.PaperSubmission,

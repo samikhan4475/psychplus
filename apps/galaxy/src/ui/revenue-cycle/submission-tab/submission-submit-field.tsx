@@ -8,7 +8,7 @@ import { ClaimSubmissionDialog } from '../dialogs'
 import { useStore } from './store'
 
 const SubmissionSubmitField = () => {
-  const claims = useStore((state) => state.data?.claims)
+  const claims = useStore((state) => state.data?.submissions)
   const [submissionTypes, setSubmissionTypes] = useState<SelectOptionType[]>([])
   const [clearingHouse, setClearingHouse] = useState('')
 

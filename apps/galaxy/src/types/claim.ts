@@ -156,6 +156,9 @@ interface Claim {
   primaryPatientInsurancePolicyId: string
   secondaryPatientInsurancePolicyId: string
   tertiaryPatientInsurancePolicyId: string
+  primaryPatientInsurancePolicyName?: string
+  secondaryPatientInsurancePolicyName?: string
+  tertiaryPatientInsurancePolicyName?: string
   clinicalLaboratoryImprovementAmendmentsNumber: string
   claimNotes: string
   payerClaimControlNumber: string
