@@ -8,7 +8,7 @@ const updatePatientCustomChargeAction = async (
   transactionId: number,
   payload: CustomChargePayload,
 ): Promise<api.ActionResult<void>> => {
-  const response = await api.POST<CustomChargePayload>(
+  const response = await api.PUT<CustomChargePayload>(
     api.PATIENT_CUSTOM_CHARGE_ENDPOINT(patientId, transactionId),
     payload,
   )

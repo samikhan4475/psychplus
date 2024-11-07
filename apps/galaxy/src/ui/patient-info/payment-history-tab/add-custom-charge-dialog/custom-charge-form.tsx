@@ -5,13 +5,12 @@ import { Grid } from '@radix-ui/themes'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { FormContainer } from '@/components'
-import {
-  getCalendarDate,
-  getCalendarDateLabel,
-  sanitizeFormData,
-} from '@/utils'
+import { getCalendarDateLabel, sanitizeFormData } from '@/utils'
 import { PatientTransaction } from '../types'
-import { createPatientCustomChargeAction } from './actions'
+import {
+  createPatientCustomChargeAction,
+  updatePatientCustomChargeAction,
+} from './actions'
 import { AmountInput } from './amount-input'
 import { BalanceBlock } from './balance-block'
 import { ChargeSelect } from './charge-select'
@@ -23,6 +22,7 @@ import { SaveChargesButton } from './save-charges-button'
 import { chargeSchema, CustomChargeSchemaType } from './schema'
 import { TimeSelect } from './time-select'
 import { UnAppliedBalanceInput } from './un-applied-balance-input'
+import { getInitialValues } from './utils'
 
 interface CustomChargeFormProps {
   patientId: string
@@ -42,16 +42,8 @@ const CustomChargeForm = ({
     reValidateMode: 'onChange',
     shouldUnregister: true,
     defaultValues: {
-      type: transaction?.type ?? '',
-      description: transaction?.description ?? '',
       unappliedBalance: unappliedAmount,
-      chargeDate: transaction?.chargeDate
-        ? getCalendarDate(transaction?.chargeDate)
-        : undefined,
-      chargeTime: transaction?.chargeTime ?? '',
-      balanceDue: transaction?.balanceDue
-        ? String(transaction?.balanceDue)
-        : '',
+      ...getInitialValues(transaction),
     },
   })
 
@@ -61,10 +53,13 @@ const CustomChargeForm = ({
       chargeDate: getCalendarDateLabel(data.chargeDate),
     })
 
-    const response = await createPatientCustomChargeAction(
-      patientId,
-      sanitizedData,
-    )
+    const response = transaction
+      ? await updatePatientCustomChargeAction(
+          transaction.patientId,
+          transaction.id,
+          sanitizedData,
+        )
+      : await createPatientCustomChargeAction(patientId, sanitizedData)
     if (response.state === 'error') {
       toast.error(response.error ?? 'Error while saving')
       return
@@ -73,6 +68,7 @@ const CustomChargeForm = ({
     toast.success('Charge created successfully!')
     onClose()
   }
+
   return (
     <FormContainer
       form={form}

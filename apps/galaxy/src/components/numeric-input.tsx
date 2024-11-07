@@ -7,6 +7,7 @@ import { NumericFormat } from 'react-number-format'
 import { cn, formatValueWithDecimals } from '@/utils'
 import { BlockLabel } from './block-label'
 
+const MAX_LIMIT = 1000
 interface NumericInputProps {
   label?: string
   field: string
@@ -41,6 +42,7 @@ const NumericInput = ({
             <NumericFormat
               autoFocus={autoFocus}
               size="1"
+              
               id={fieldName}
               type="text"
               prefix={prefix}
@@ -50,6 +52,10 @@ const NumericInput = ({
               value={field.value}
               disabled={field.disabled || disabled}
               onValueChange={({ value }) => field.onChange(value)}
+              isAllowed={(values) => {
+                const { floatValue = 0 } = values
+                return floatValue < MAX_LIMIT
+              }}
               onBlur={() => {
                 const formattedValue = formatValueWithDecimals(field.value)
                 field.onChange(formattedValue)

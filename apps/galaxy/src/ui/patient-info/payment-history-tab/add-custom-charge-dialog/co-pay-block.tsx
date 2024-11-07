@@ -1,6 +1,7 @@
 'use client'
 
 import { Flex, Text } from '@radix-ui/themes'
+import { FormFieldError } from '@/components'
 import { PaymentInput } from './shared'
 
 const CoPayBlock = () => {
@@ -10,10 +11,11 @@ const CoPayBlock = () => {
         Co-Pay
       </Text>
       <Flex gap="2" className="border-r-2 border-indigo-3 p-1">
-        <PaymentInput label="Due PT" field="coPaysDue" />
-        <PaymentInput label="Due PP" field="coPayPp" />
-        <PaymentInput label="Paid" field="coPayPaid" />
+        <PaymentInput label="Due PT" field="coPayDue" />
+        <PaymentInput label="Due PP" field="coPayPaid" disabled />
+        <PaymentInput label="Paid" field="coPayPaid" disabled />
       </Flex>
+      <FormFieldError name="coPayDue" />
     </Flex>
   )
 }

@@ -17,7 +17,7 @@ interface SearchPaymentHistoryParams extends GetPatientPaymentHistoryParams {
 const getPatientPaymentHistoryAction = async ({
   page = 1,
   sort,
-  ...rest
+  ...payload
 }: Partial<SearchPaymentHistoryParams>): Promise<
   api.ActionResult<GetPaymentHistorysData>
 > => {
@@ -29,7 +29,10 @@ const getPatientPaymentHistoryAction = async ({
   if (sort) {
     url.searchParams.append('orderBy', `${sort.column} ${sort.direction}`)
   }
-  const response = await api.POST<PaymentHistory>(url.toString(), rest)
+  const response = await api.POST<PaymentHistory>(url.toString(), {
+    ...payload,
+    includeCustomCharge: true,
+  })
   if (response.state === 'error') {
     return {
       state: 'error',

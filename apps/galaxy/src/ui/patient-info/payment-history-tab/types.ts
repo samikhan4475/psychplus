@@ -36,6 +36,9 @@ interface PatientTransaction {
   paymentResponsibility: string
   chargeTime?: string
   subRows?: PatientTransaction[]
+  coPayPreferredPartner?: number
+  coInsurancePreferredPartner?: number
+  balancePreferredPartner?: number
 }
 
 interface PaymentHistory {

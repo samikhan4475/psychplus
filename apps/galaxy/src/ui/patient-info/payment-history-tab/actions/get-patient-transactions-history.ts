@@ -14,7 +14,7 @@ const getPatientTransactionsHistoryAction = async ({
 }: GetPatientTransactionsHistoryParams): Promise<
   api.ActionResult<PatientTransaction[]>
 > => {
-  const response = await api.GET<PatientTransaction[]>(
+  const response = await api.POST<PatientTransaction[]>(
     api.GET_PATIENT_TRANSACTIONS_HISTORY(patientId, transactionId),
   )
   if (response.state === 'error') {
