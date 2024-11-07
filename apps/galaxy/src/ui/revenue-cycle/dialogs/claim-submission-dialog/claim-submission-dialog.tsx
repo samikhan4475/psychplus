@@ -12,17 +12,19 @@ import { useStore } from '../../submission-tab/store'
 import { ClaimResponseType } from '../../types'
 import { ClaimSubmissionResponseView } from './claim-submission-response'
 
-interface ClaimSubmissionDialogInterface {
+interface ClaimSubmissionDialogProps {
   claimId?: string
   clearingHouse?: string
   claims?: Claim[]
+  isScrubOnly?: boolean
 }
 const ClaimSubmissionDialog = ({
   children,
   claimId,
   clearingHouse,
   claims,
-}: PropsWithChildren<ClaimSubmissionDialogInterface>) => {
+  isScrubOnly,
+}: PropsWithChildren<ClaimSubmissionDialogProps>) => {
   const [selectedTab, selectedRows] = useStore((state) => [
     state.selectedTab,
     state.selectedRows,
@@ -48,6 +50,7 @@ const ClaimSubmissionDialog = ({
       subscriptionTypeViewOnly: '',
       claimType: 'Professional',
       claimIds: selectedRows,
+      isScrubOnly: isScrubOnly ?? false,
       insurancePolicyPriority: InsurancePolicyPriority.Primary,
       clearingHouseReceiverId: clearingHouse ?? '',
     }

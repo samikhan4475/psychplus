@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import { Button, Flex, Select, Text } from '@radix-ui/themes'
+import { Button, Checkbox, Flex, Select } from '@radix-ui/themes'
 import toast from 'react-hot-toast'
 import { getReceiverListOptionsAction } from '@/actions'
+import { FormFieldContainer, FormFieldLabel } from '@/components'
 import { SelectOptionType } from '@/types'
 import { cn } from '@/utils'
 import { ClaimSubmissionDialog } from '../dialogs'
@@ -11,7 +12,7 @@ const SubmissionSubmitField = () => {
   const claims = useStore((state) => state.data?.submissions)
   const [submissionTypes, setSubmissionTypes] = useState<SelectOptionType[]>([])
   const [clearingHouse, setClearingHouse] = useState('')
-
+  const [isScrubOnly, setIsScrubOnly] = useState(false)
   useEffect(() => {
     getReceiverListOptionsAction().then((result) => {
       if (result.state === 'success') {
@@ -22,30 +23,42 @@ const SubmissionSubmitField = () => {
     })
   }, [])
   return (
-    <Flex align="center" className="ml-auto">
-      <Text size="1" weight="bold" mr="1">
-        Clearinghouse
-      </Text>
-      <Select.Root
-        value={clearingHouse}
-        size="1"
-        onValueChange={(value) => setClearingHouse(value)}
-      >
-        <Select.Trigger
-          disabled={submissionTypes.length === 0}
-          placeholder="Submission Type"
-          className={cn('h-[var(--chip-height)] w-[122px]')}
+    <Flex align="center" gapX="2" className="ml-auto">
+      <FormFieldContainer className="flex-row items-center gap-x-2">
+        <FormFieldLabel>Clearinghouse</FormFieldLabel>
+        <Select.Root
+          value={clearingHouse}
+          size="1"
+          onValueChange={(value) => setClearingHouse(value)}
+        >
+          <Select.Trigger
+            disabled={submissionTypes.length === 0}
+            placeholder="Submission Type"
+            className={cn('h-[var(--chip-height)] w-[122px]')}
+          />
+          <Select.Content position="popper" align="center" highContrast>
+            {submissionTypes.map((option) => (
+              <Select.Item key={option.value} value={option.value}>
+                {option.label}
+              </Select.Item>
+            ))}
+          </Select.Content>
+        </Select.Root>
+      </FormFieldContainer>
+      <FormFieldContainer className="flex-row items-center gap-x-2">
+        <FormFieldLabel>Scrub Only</FormFieldLabel>
+        <Checkbox
+          checked={isScrubOnly}
+          onCheckedChange={(checked) => setIsScrubOnly(!!checked)}
+          highContrast
+          className="cursor-pointer"
         />
-        <Select.Content position="popper" align="center" highContrast>
-          {submissionTypes.map((option) => (
-            <Select.Item key={option.value} value={option.value}>
-              {option.label}
-            </Select.Item>
-          ))}
-        </Select.Content>
-      </Select.Root>
-
-      <ClaimSubmissionDialog claims={claims} clearingHouse={clearingHouse}>
+      </FormFieldContainer>
+      <ClaimSubmissionDialog
+        claims={claims}
+        isScrubOnly={isScrubOnly}
+        clearingHouse={clearingHouse}
+      >
         <Button
           variant="solid"
           size="1"

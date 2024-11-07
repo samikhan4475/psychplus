@@ -1,4 +1,4 @@
-import { CrossCircledIcon } from '@radix-ui/react-icons'
+import { CheckCircledIcon, CrossCircledIcon } from '@radix-ui/react-icons'
 import { Box, Text } from '@radix-ui/themes'
 import { PropsWithRow } from '@/components'
 import { Claim } from '@/types'
@@ -16,8 +16,11 @@ const ClaimNumberCell = ({ row: { original: claim } }: PropsWithRow<Claim>) => {
         {claim.claimNumber}
         {claim.isSystemRejected && (
           <ClaimSubmissionDialog claims={claims} claimId={claim.id}>
-            <CrossCircledIcon className="ml-1 cursor-pointer text-[#e5484d]" />
+            <CrossCircledIcon className="ml-1 cursor-pointer text-red-10" />
           </ClaimSubmissionDialog>
+        )}
+        {claim.isSubmitted && (
+          <CheckCircledIcon className="ml-1 cursor-pointer text-green-10" />
         )}
       </Text>
     </Box>
