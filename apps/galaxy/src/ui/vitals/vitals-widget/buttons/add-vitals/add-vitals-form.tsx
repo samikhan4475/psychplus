@@ -5,7 +5,9 @@ import { Box, Flex, Table } from '@radix-ui/themes'
 import { useForm, type SubmitHandler } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { z } from 'zod'
+import { saveWidgetAction } from '@/actions/save-widget'
 import { DateTimeCell, FormContainer } from '@/components'
+import { transformOut } from '@/ui/vitals/data'
 import { cn, formatDateTime, sanitizeFormData } from '@/utils'
 import { addPatientVitalAction } from '../../actions'
 import { UnitSystem, VITAL_TABLE_LABELS } from '../../constants'
@@ -59,9 +61,18 @@ const AddVitalsForm = ({
   addNewVital,
   vitalsData,
 }: AddVitalsFormProps) => {
-  const { data, setData, setError, isFilterEnabled } = useStore((state) => ({
+  const {
+    data,
+    quicknotesData,
+    setData,
+    setQuicknotesData,
+    setError,
+    isFilterEnabled,
+  } = useStore((state) => ({
     data: state.data,
+    quicknotesData: state.quicknotesData,
     setData: state.setData,
+    setQuicknotesData: state.setQuicknotesData,
     setError: state.setError,
     isFilterEnabled: state.isFilterEnabled,
   }))
@@ -72,33 +83,50 @@ const AddVitalsForm = ({
   })
 
   const onSubmit: SubmitHandler<SchemaType> = async (formData) => {
-    const mappedVital = createVitalsObject(
-      sanitizeFormData(formData),
-      unitSystem,
-    )
-
-    const cleanedData = removeNaNValues({
-      ...mappedVital,
-      patientId,
-      appointmentId: Number(appointmentId),
-    })
-
-    const response = await addPatientVitalAction({
-      ...cleanedData,
+    const vitalData = {
+      ...removeNaNValues({
+        ...createVitalsObject(sanitizeFormData(formData), unitSystem),
+        patientId,
+        appointmentId: Number(appointmentId),
+      }),
       recordStatus: 'Active',
-    } as PatientVital)
+    }
+
+    const response = await addPatientVitalAction(vitalData as PatientVital)
 
     if (response.state === 'error') {
-      setError(response.error)
-      if (!response.error) toast.error('Failed to save!')
-    } else {
-      toast.success('Saved!')
-      setError('')
-      if (!isFilterEnabled)
-        setData([response.data, ...(data as PatientVital[])])
-      addNewVital([response.data, ...vitalsData])
-      form.reset()
+      setError(response.error || 'Failed to save!')
+      toast.error('Failed to save!')
+
+      return
     }
+    setError('')
+    toast.success('Saved!')
+    addNewVital([response.data, ...vitalsData])
+    if (!isFilterEnabled) setData([response.data, ...(data as PatientVital[])])
+    form.reset()
+
+    const selectedVitalIds =
+      quicknotesData?.map((item) => String(item.id)) ?? []
+
+    selectedVitalIds.push(String(response.data.id))
+
+    const payload = transformOut(
+      patientId,
+      appointmentId,
+    )({ vitalsId: selectedVitalIds as string[] })
+
+    const result = await saveWidgetAction({ patientId, data: payload })
+
+    if (result.state === 'error') {
+      toast.error('Failed to save!')
+      return
+    }
+
+    setQuicknotesData([
+      response.data,
+      ...((quicknotesData || []) as PatientVital[]),
+    ])
   }
 
   return (

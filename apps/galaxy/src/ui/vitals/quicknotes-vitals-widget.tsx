@@ -1,48 +1,29 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useSearchParams } from 'next/navigation'
 import * as Tabs from '@radix-ui/react-tabs'
+import { ScrollArea } from '@radix-ui/themes'
 import { LoadingPlaceholder, WidgetContainer } from '@/components'
-import {
-  AddVitalsButton,
-  getLatest10Vitals,
-  PatientVital,
-} from './vitals-widget'
-import { getPatientVitalsAction } from './vitals-widget/actions'
+import { cn } from '@/utils'
+import { AddVitalsButton, useStore } from './vitals-widget'
 import { VitalsHistoryButton } from './vitals-widget/buttons/history/history'
 import { VitalsTable } from './vitals-widget/vitals-table'
 
 const QuicknotesVitalsWidget = ({ patientId }: { patientId: string }) => {
   const searchParams = useSearchParams()
-  const [data, setData] = useState<PatientVital[]>([])
-  const [loading, setLoading] = useState<boolean>(false)
 
-  const appointmentId = searchParams.get('appointmentId') || '0'
+  const { quicknotesData, fetch, loading } = useStore((state) => ({
+    quicknotesData: state.quicknotesData,
+    loading: state.quicknotesLoading,
+    fetch: state.fetch,
+  }))
 
   useEffect(() => {
-    const fetchPatientVitals = async () => {
-      setLoading(true)
-      const result = await getPatientVitalsAction({
-        payload: {
-          appointmentId: Number(appointmentId),
-          patientId: patientId,
-        },
-      })
+    fetch({ appointmentId, patientId }, true, true)
+  }, [])
 
-      if (result.state === 'success') {
-        setData(result.data)
-        setLoading(false)
-      }
-    }
-
-    fetchPatientVitals()
-  }, [appointmentId, patientId])
-
-  // TODO:: Integrate the API to fetch vitals from the QuickNotes API.
-  // TODO:: If vitals are available in QuickNotes, display them; otherwise, render the latest 10 created vitals.
-
-  const quicknotesVitals = getLatest10Vitals(data ?? [])
+  const appointmentId = searchParams.get('id') || '0'
 
   return (
     <Tabs.Root defaultValue="SheetView" className="flex w-full flex-col">
@@ -54,7 +35,6 @@ const QuicknotesVitalsWidget = ({ patientId }: { patientId: string }) => {
               title="Add"
               patientId={patientId}
               appointmentId={appointmentId}
-              showSign
             />
             <VitalsHistoryButton
               patientId={patientId}
@@ -66,7 +46,14 @@ const QuicknotesVitalsWidget = ({ patientId }: { patientId: string }) => {
         {loading ? (
           <LoadingPlaceholder />
         ) : (
-          <VitalsTable data={quicknotesVitals ?? []} editStatusCell={false} />
+          <ScrollArea
+            className={cn(
+              'max-h-[200px] flex-1 overflow-y-auto',
+              quicknotesData && quicknotesData.length > 7 && 'pr-2.5',
+            )}
+          >
+            <VitalsTable data={quicknotesData ?? []} editStatusCell={false} />
+          </ScrollArea>
         )}
       </WidgetContainer>
     </Tabs.Root>

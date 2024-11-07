@@ -5,7 +5,11 @@ import { useFormContext } from 'react-hook-form'
 import { useStore } from '../../store'
 import { VitalsProps } from '../../types'
 
-const ClearButton = ({ patientId, appointmentId }: VitalsProps) => {
+const ClearButton = ({
+  patientId,
+  appointmentId,
+  quickNoteView,
+}: VitalsProps & { quickNoteView?: boolean }) => {
   const form = useFormContext()
 
   const { fetch } = useStore((state) => ({
@@ -20,10 +24,13 @@ const ClearButton = ({ patientId, appointmentId }: VitalsProps) => {
       status: '',
     })
 
-    return fetch({
-      patientId,
-      appointmentId,
-    })
+    return fetch(
+      {
+        patientId,
+        appointmentId,
+      },
+      quickNoteView,
+    )
   }
 
   return (

@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 import { SelectCell } from '@/components'
+import { cn } from '@/utils'
 import { updatePatientVitalAction } from '../actions'
 import { STATUS_CODESET } from '../constants'
 import { useStore } from '../store'
@@ -22,10 +23,14 @@ const VitalStatusCell = ({
     setVital(row)
   }, [row])
 
-  const { data, setData } = useStore((state) => ({
-    data: state.data,
-    setData: state.setData,
-  }))
+  const { data, setData, quicknotesData, setQuicknotesData } = useStore(
+    (state) => ({
+      data: state.data,
+      setData: state.setData,
+      quicknotesData: state.quicknotesData,
+      setQuicknotesData: state.setQuicknotesData,
+    }),
+  )
 
   const onSubmit = async (status: string) => {
     setLoading(true)
@@ -49,6 +54,16 @@ const VitalStatusCell = ({
             )
           : [],
       )
+
+      setQuicknotesData(
+        quicknotesData
+          ? quicknotesData.map((item) =>
+              item.id === response.data.id
+                ? { ...item, ...response.data }
+                : item,
+            )
+          : [],
+      )
     }
     setLoading(false)
   }
@@ -58,11 +73,11 @@ const VitalStatusCell = ({
       value={vital.recordStatus}
       onValueChange={onSubmit}
       options={STATUS_CODESET}
-      className={
-        {
-          Inactive: 'bg-gray-3 text-gray-10',
-        }[vital.recordStatus as string]
-      }
+      className={cn(
+        editable &&
+          vital.recordStatus === 'Inactive' &&
+          'bg-gray-3 text-gray-10',
+      )}
       disabled={!editable || loading}
     />
   )

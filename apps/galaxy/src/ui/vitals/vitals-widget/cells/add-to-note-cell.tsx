@@ -1,27 +1,25 @@
 'use client'
 
-import { CheckboxCell } from '@/components'
+import { saveWidgetAction } from '@/actions/save-widget'
+import { CheckboxCell, PropsWithRow } from '@/components'
+import { transformOut } from '../../data'
+import { useStore } from '../store'
+import { PatientVital } from '../types'
 
-interface AddToNoteCellProps {
-  checked?: boolean
-  className?: string
-  onCheckedChange: (checked: boolean) => void
-  disabled: boolean
-}
+type AddToNoteCellProps = PropsWithRow<PatientVital>
 
-const AddToNoteCell = ({
-  checked,
-  className,
-  onCheckedChange,
-  disabled,
-}: AddToNoteCellProps) => {
+const AddToNoteCell = ({ row }: AddToNoteCellProps) => {
+  const checked = row.original.addToNote || false
+
+  const handleAddToNote = useStore((state) => state.handleAddToNoteCheck)
+
   return (
     <CheckboxCell
       label={checked ? 'Yes' : 'No'}
-      checked={checked || false}
-      className={className}
-      onCheckedChange={onCheckedChange}
-      disabled={disabled}
+      checked={checked}
+      className="ml-[-3px]"
+      onCheckedChange={(checked) => handleAddToNote(row.original.id, checked)}
+      disabled={row.original.recordStatus !== 'Active'}
     />
   )
 }

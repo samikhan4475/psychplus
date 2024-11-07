@@ -1,14 +1,7 @@
-import { useEffect, useState } from 'react'
 import { type ColumnDef } from '@tanstack/react-table'
-import {
-  CheckboxCell,
-  ColumnHeader,
-  DataTable,
-  DateTimeCell,
-  TextCell,
-} from '@/components'
+import { ColumnHeader, DataTable, DateTimeCell, TextCell } from '@/components'
 import { formatDateTime } from '@/utils'
-import { AddToNoteCell, VitalStatusCell } from './cells'
+import { AddAllToNoteCellHeader, AddToNoteCell, VitalStatusCell } from './cells'
 import { UnitSystem, VITAL_TABLE_LABELS } from './constants'
 import { PatientVital } from './types'
 import { getVitalValue } from './utils'
@@ -21,10 +14,7 @@ interface VitalsTableProps {
 
 const createColumns = (
   showAddToNote: boolean,
-  onCheckAddToNote: (checked: boolean, index?: number) => void,
-  allChecked: boolean,
   editStatusCell: boolean,
-  disabledAllChecked: boolean,
 ): ColumnDef<PatientVital>[] => {
   const vitalsColumns: ColumnDef<PatientVital>[] = [
     {
@@ -195,23 +185,8 @@ const createColumns = (
   if (showAddToNote)
     vitalsColumns.push({
       id: 'vitals-add-to-note',
-      header: () => (
-        <CheckboxCell
-          label="Add to Note"
-          className="whitespace-nowrap font-[500]"
-          checked={allChecked}
-          disabled={disabledAllChecked}
-          onCheckedChange={(checked) => onCheckAddToNote(checked)}
-        />
-      ),
-      cell: ({ row }) => (
-        <AddToNoteCell
-          checked={row.original.addToNote}
-          className="ml-[-3px]"
-          onCheckedChange={(checked) => onCheckAddToNote(checked, row.index)}
-          disabled={row.original.recordStatus !== 'Active'}
-        />
-      ),
+      header: () => <AddAllToNoteCellHeader />,
+      cell: ({ row }) => <AddToNoteCell row={row} />,
     })
 
   return vitalsColumns
@@ -222,45 +197,8 @@ const VitalsTable = ({
   showAddToNote = false,
   editStatusCell = true,
 }: VitalsTableProps) => {
-  const [modifiedData, setModifiedData] = useState(data)
-
-  useEffect(() => {
-    setModifiedData(data)
-  }, [data])
-
-  const handleCheckAddToNote = (checked: boolean, index?: number) => {
-    setModifiedData((prevData) =>
-      index === undefined
-        ? prevData.map((item) =>
-            item.recordStatus === 'Active'
-              ? { ...item, addToNote: checked }
-              : item,
-          )
-        : prevData.map((item, i) =>
-            i === index && item.recordStatus === 'Active'
-              ? { ...item, addToNote: checked }
-              : item,
-          ),
-    )
-  }
-
-  const activeVitals = modifiedData.filter(
-    (item) => item.recordStatus === 'Active',
-  )
-  const allChecked =
-    activeVitals.length > 0 && activeVitals.every((item) => item.addToNote)
-
-  const columns = createColumns(
-    showAddToNote,
-    handleCheckAddToNote,
-    allChecked,
-    editStatusCell,
-    activeVitals.length === 0,
-  )
-
-  return (
-    <DataTable data={modifiedData} columns={columns} disablePagination sticky />
-  )
+  const columns = createColumns(showAddToNote, editStatusCell)
+  return <DataTable data={data} columns={columns} disablePagination sticky />
 }
 
 export { VitalsTable }

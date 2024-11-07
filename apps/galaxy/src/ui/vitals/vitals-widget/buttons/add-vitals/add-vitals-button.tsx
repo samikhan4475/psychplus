@@ -19,12 +19,10 @@ const AddVitalsButton = ({
   title,
   patientId,
   appointmentId,
-  showSign = false,
 }: {
   title: string
   patientId: string
   appointmentId: string
-  showSign?: boolean
 }) => {
   const [unitSystem, setUnitSystem] = useState(UnitSystem.Metric)
   const [addNewRecord, setAddNewRecord] = useState(true)
@@ -101,13 +99,6 @@ const AddVitalsButton = ({
                   vitalsData={data}
                 />
               )}
-            </Flex>
-          )}
-          {showSign && (
-            <Flex justify="end" className="mt-4">
-              <Button highContrast size="2" onClick={(e) => e.preventDefault()}>
-                Sign
-              </Button>
             </Flex>
           )}
         </Flex>

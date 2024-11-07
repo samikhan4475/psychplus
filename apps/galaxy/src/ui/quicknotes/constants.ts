@@ -21,6 +21,7 @@ enum QuickNoteSectionName {
   QuickNoteSectionPrimaryCode = 'QuicknoteSectionPrimaryCode',
   QuicknoteSectionProcedureEtcTab = 'QuicknoteSectionProcedureEtcTab',
   QuicknoteSectionHPI = 'QuicknoteSectionHPI',
+  Vitals = 'QuicknoteSectionVital',
 }
 
 export { QuickNoteSectionName }

@@ -4,6 +4,7 @@ import { Cross2Icon } from '@radix-ui/react-icons'
 import { Button, Dialog, Flex, ScrollArea } from '@radix-ui/themes'
 import { VitalsTabsContent, VitalsTabsList } from '../../tabs'
 import { VitalsFilterForm } from '../../vitals-filter-form'
+import { SaveToNoteButton } from './save-to-note'
 
 const VitalsHistoryButton = ({
   patientId,
@@ -38,6 +39,11 @@ const VitalsHistoryButton = ({
             <VitalsFilterForm
               patientId={patientId}
               appointmentId={appointmentId}
+              quickNoteView={true}
+            />
+            <SaveToNoteButton
+              patientId={patientId}
+              appointmentId={appointmentId}
             />
           </Flex>
 
@@ -46,6 +52,7 @@ const VitalsHistoryButton = ({
               patientId={patientId}
               appointmentId={appointmentId}
               showAddToNote={true}
+              editStatusCell={false}
             />
           </ScrollArea>
         </Flex>

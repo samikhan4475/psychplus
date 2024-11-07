@@ -23,7 +23,11 @@ const schema = z.object({
 
 type SchemaType = z.infer<typeof schema>
 
-const VitalsFilterForm = ({ patientId, appointmentId }: VitalsProps) => {
+const VitalsFilterForm = ({
+  patientId,
+  appointmentId,
+  quickNoteView = false,
+}: VitalsProps & { quickNoteView?: boolean }) => {
   const { fetch, setIsFilterEnabled } = useStore((state) => ({
     fetch: state.fetch,
     setIsFilterEnabled: state.setIsFilterEnabled,
@@ -67,7 +71,7 @@ const VitalsFilterForm = ({ patientId, appointmentId }: VitalsProps) => {
     }
 
     const cleanedData = sanitizeFormData(formattedData)
-    return fetch(cleanedData as VitalsParams)
+    return fetch(cleanedData as VitalsParams, quickNoteView)
   }
 
   return (
@@ -80,7 +84,11 @@ const VitalsFilterForm = ({ patientId, appointmentId }: VitalsProps) => {
       <ToField />
       <StatusSelect />
 
-      <ClearButton patientId={patientId} appointmentId={appointmentId} />
+      <ClearButton
+        patientId={patientId}
+        appointmentId={appointmentId}
+        quickNoteView={quickNoteView}
+      />
 
       <Button highContrast size="1" type="submit">
         <MagnifyingGlassIcon strokeWidth={2} />

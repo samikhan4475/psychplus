@@ -14,7 +14,7 @@ interface VitalsWidgetProps {
 const VitalsWidget = ({ patientId }: VitalsWidgetProps) => {
   const searchParams = useSearchParams()
 
-  const appointmentId = searchParams.get('appointmentId') || '0'
+  const appointmentId = searchParams.get('id') || '0'
 
   return (
     <Tabs.Root defaultValue="SheetView">
@@ -26,6 +26,7 @@ const VitalsWidget = ({ patientId }: VitalsWidgetProps) => {
         <VitalsTabsContent
           patientId={patientId}
           appointmentId={appointmentId}
+          handleQuicknotesLoading={true}
         />
       </WidgetContainer>
     </Tabs.Root>

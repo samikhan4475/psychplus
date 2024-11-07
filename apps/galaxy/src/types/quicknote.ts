@@ -1,6 +1,7 @@
 interface QuickNoteSectionItem {
   id?: string
   pid: number
+  appId?: number
   sectionName: string
   sectionItem: string
   sectionItemValue: string
@@ -20,4 +21,11 @@ interface QuickNoteHistory {
   data: QuickNoteSectionItem[]
 }
 
-export type { QuickNoteSectionItem, QuickNoteHistory }
+interface QuickNoteDetailsPayload {
+  patientId: number
+  sectionName: string[]
+  appointmentId?: number
+  isLatest: boolean
+}
+
+export type { QuickNoteSectionItem, QuickNoteHistory, QuickNoteDetailsPayload }

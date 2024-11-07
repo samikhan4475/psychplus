@@ -9,10 +9,14 @@ const VitalsTabsContent = ({
   patientId,
   appointmentId,
   showAddToNote = false,
+  editStatusCell = true,
+  handleQuicknotesLoading = false,
 }: {
   patientId: string
   appointmentId: string
   showAddToNote?: boolean
+  editStatusCell?: boolean
+  handleQuicknotesLoading?: boolean
 }) => {
   const { data, fetch, loading } = useStore((state) => ({
     data: state.data,
@@ -21,7 +25,7 @@ const VitalsTabsContent = ({
   }))
 
   useEffect(() => {
-    fetch({ appointmentId, patientId })
+    fetch({ appointmentId, patientId }, true, handleQuicknotesLoading)
   }, [])
 
   if (loading) return <LoadingPlaceholder />
@@ -29,7 +33,11 @@ const VitalsTabsContent = ({
   return (
     <Flex>
       <TabsContent value="SheetView">
-        <VitalsTable data={data ?? []} showAddToNote={showAddToNote} />
+        <VitalsTable
+          data={data ?? []}
+          showAddToNote={showAddToNote}
+          editStatusCell={editStatusCell}
+        />
       </TabsContent>
       {/* <TabsContent value="DataView" /> */}
     </Flex>
