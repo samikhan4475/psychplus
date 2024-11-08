@@ -40,6 +40,7 @@ const transformResponseData = (
       ...slot,
       startDateUtc: slot.startDate,
       startDate: convertUtcISOToLocalISOString(slot.startDate, timeZone),
+      clinicId: availability.clinic.id,
     })),
   }))
 

@@ -90,7 +90,6 @@ const PrimaryProviderAvailabilityCard = ({
 
 const AvailabilityList = ({ userConsents }: AvailabilityListProps) => {
   const data = useSortedFilteredData()
-  
 
   const careTeamMember = useStore((state) => state.careTeamMember())
 
@@ -353,7 +352,10 @@ const AppointmentTimeSlots = ({
       slot: JSON.stringify(slot).toString(),
       specialist: JSON.stringify(rest.specialist).toString(),
       clinic: JSON.stringify({
-        id: rest.clinic.id,
+        id:
+          appointmentType === AppointmentType.InPerson
+            ? rest.clinic.id
+            : slot.clinicId,
         name: rest.clinic.name,
         isTest: rest.clinic.isTest,
         contact: rest.clinic.contact,

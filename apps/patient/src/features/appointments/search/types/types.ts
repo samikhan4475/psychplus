@@ -21,6 +21,7 @@ interface AppointmentSlot {
   endDate: string
   servicesOffered: string[]
   startDateUtc?: string
+  clinicId?: string
 }
 
 interface AppointmentSpecialist {
@@ -73,5 +74,5 @@ export type {
   SlotsByDay,
   AppointmentSlot,
   AppointmentClinic,
-  AppointmentsSearchApiResponse
+  AppointmentsSearchApiResponse,
 }
