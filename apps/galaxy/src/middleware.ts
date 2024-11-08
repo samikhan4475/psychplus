@@ -22,20 +22,24 @@ export const middleware = async (request: NextRequest) => {
   if (request.nextUrl.pathname.startsWith('/api')) {
     const headers = createHeaders(request.headers)
 
-    return fetch(new URL(`${request.nextUrl.pathname}${request.nextUrl.search}`, API_URL), {
-      body: request.body,
-      method: request.method,
-      headers: {
-        Authorization: headers.get('Authorization') ?? '',
-        'Content-Type': headers.get('Content-Type') ?? 'application/json',
-        'Psychplus-Application':
-          headers.get('Psychplus-Application') ?? 'react-ui',
-        'Psychplus-AppVersion': headers.get('Psychplus-AppVersion') ?? '1.0.0',
-        'Psychplus-RunEnvironment':
-          headers.get('Psychplus-RunEnvironment') ?? 'development',
+    return fetch(
+      new URL(`${request.nextUrl.pathname}${request.nextUrl.search}`, API_URL),
+      {
+        body: request.body,
+        method: request.method,
+        headers: {
+          Authorization: headers.get('Authorization') ?? '',
+          'Content-Type': headers.get('Content-Type') ?? 'application/json',
+          'Psychplus-Application':
+            headers.get('Psychplus-Application') ?? 'react-ui',
+          'Psychplus-AppVersion':
+            headers.get('Psychplus-AppVersion') ?? '1.0.0',
+          'Psychplus-RunEnvironment':
+            headers.get('Psychplus-RunEnvironment') ?? 'development',
+        },
       },
-    }).catch((e) => {
-      console.log(e)
+    ).catch((e) => {
+      console.log(`${request.nextUrl.pathname} ==> ${JSON.stringify(e)}`)
     })
   }
 
