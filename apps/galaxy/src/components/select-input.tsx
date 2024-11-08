@@ -13,6 +13,7 @@ interface SelectInputProps<T> extends React.ComponentProps<typeof Select.Root> {
   buttonClassName?: string
   className?: string
   tooltip?: boolean
+  required?: boolean
 }
 
 const SelectInput = <T extends string>({
@@ -24,6 +25,7 @@ const SelectInput = <T extends string>({
   buttonClassName,
   onValueChange,
   tooltip,
+  required,
   ...selectProps
 }: SelectInputProps<T>) => {
   const form = useFormContext()
@@ -45,7 +47,11 @@ const SelectInput = <T extends string>({
 
   return (
     <Flex align="center" gap="2" className={className}>
-      {label && <BlockLabel name={field}>{label}</BlockLabel>}
+      {label && (
+        <BlockLabel name={field} required={required}>
+          {label}
+        </BlockLabel>
+      )}
       <Controller
         name={field ?? ''}
         control={form.control}
@@ -63,7 +69,7 @@ const SelectInput = <T extends string>({
               <Select.Trigger
                 placeholder={placeholder}
                 title={tooltip && selectedLabel ? selectedLabel : ''}
-                className={cn('h-[var(--chip-height)]', buttonClassName)}
+                className={cn('h-[var(--chip-height)] overflow-y-auto', buttonClassName)}
               />
               <Select.Content position="popper" align="center" highContrast>
                 {items}

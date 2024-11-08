@@ -21,6 +21,7 @@ const NOTE_DETAILS_SEARCH_ENDPOINT = `${API_URL}/api/notedetails/actions/search`
 const NOTE_DETAILS_HISTORY_ENDPOINT = `${API_URL}/api/notedetails/history/search`
 const PCP_HISTORY_ENDPOINT = `${API_URL}/api/externalproviders/actions/relationships/history/search`
 const SERVICE_DIAGNOSIS_SEARCH_ENDPOINT = `${API_URL}/api/metadata/icd10codes/actions/search`
+const ADD_ON_DRUGS_SEARCH_ENDPOINT = `${API_URL}/api/drugs/core/actions/search`
 const NOTE_DETAILS_SAVE_ENDPOINT = (id: string) =>
   `${API_URL}/api/patients/${id}/notedetails`
 const GET_PATIENT_PROFILE_ENDPOINT = (id: string) =>
@@ -304,6 +305,7 @@ export {
   NOTE_DETAILS_SEARCH_ENDPOINT,
   NOTE_DETAILS_HISTORY_ENDPOINT,
   SERVICE_DIAGNOSIS_SEARCH_ENDPOINT,
+  ADD_ON_DRUGS_SEARCH_ENDPOINT,
   NOTE_DETAILS_SAVE_ENDPOINT,
   GET_PATIENT_PROFILE_ENDPOINT,
   GET_PATIENT_CONSENTS_ENDPOINT,

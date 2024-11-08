@@ -1,15 +1,13 @@
 import React from 'react'
 import { Flex, Text } from '@radix-ui/themes'
 import { cn } from '@/utils'
-import TableActionCell from './table-action-cell'
-import { Label } from 'react-aria-components'
-import { FormFieldLabel } from '@/components'
+import { TableActionCell } from './table-action-cell'
 
 interface TableCellEmptyProps {
   label?: string
 }
 
-const TableCellEmpty = ({ label = 'N/A' }: TableCellEmptyProps) => (
+const TableCellEmpty = ({ label = 'Empty' }: TableCellEmptyProps) => (
   <Text size="1" className="text-gray-9">
     {label}
   </Text>
@@ -21,11 +19,7 @@ interface TableCellTextProps {
   className?: string
 }
 
-const TableCellText = ({
-  text,
-  emptyLabel,
-  className,
-}: TableCellTextProps) => {
+const TableCellText = ({ text, emptyLabel, className }: TableCellTextProps) => {
   let content
 
   if (text) {
@@ -48,32 +42,35 @@ const TableCellText = ({
 interface TableCellLongTextProps {
   text?: string
   maxWidth: string
-  onDelete: () => void;
+  onDelete: () => void
 }
 
 const TableCellLongText = ({
   text,
   maxWidth,
-  onDelete
+  onDelete,
 }: TableCellLongTextProps) => {
   if (!text) {
     return <TableCellEmpty />
   }
 
   return (
-    <Flex justify="between" align="center" style={{ position: 'relative', width: maxWidth }}>
+    <Flex
+      justify="between"
+      align="center"
+      style={{ position: 'relative', width: maxWidth }}
+    >
       <Text
-          className={cn(
-            'text-pp-black-3 line-clamp-1 select-text overflow-ellipsis text-[#000000CC]',
-          )}
-          size="1"
-          weight="regular"
-        >
-       {text}
-
-        </Text>
-    <TableActionCell onDelete={onDelete}/>
-  </Flex>
+        className={cn(
+          'text-pp-black-3 line-clamp-1 select-text overflow-ellipsis text-[#000000CC]',
+        )}
+        size="1"
+        weight="regular"
+      >
+        {text}
+      </Text>
+      <TableActionCell onDelete={onDelete} />
+    </Flex>
   )
 }
 

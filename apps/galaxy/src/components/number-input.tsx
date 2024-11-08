@@ -15,6 +15,8 @@ interface NumberInputProps {
   autoFocus?: boolean
   className?: string
   disabled?: boolean
+  min?: number
+  max?: number
 }
 
 const NumberInput = ({
@@ -25,8 +27,40 @@ const NumberInput = ({
   className,
   autoFocus,
   disabled,
+  min,
+  max,
 }: NumberInputProps) => {
   const form = useFormContext()
+
+  const handleOnValueChange = (
+    value: string,
+    onChange: (value: string) => void,
+  ) => {
+    const numericValue = parseInt(value, 10)
+
+    if (
+      numericValue.toString().length === 2 &&
+      min !== undefined &&
+      max !== undefined
+    ) {
+      if (numericValue < min) {
+        onChange(min.toString())
+      } else if (numericValue > max) {
+        onChange(max.toString())
+      } else {
+        onChange(value)
+      }
+    } else {
+      onChange(value)
+    }
+  }
+
+  const handleOnBlur = (value: string, onChange: (value: string) => void) => {
+    const numericValue = parseInt(value, 10);
+    if (min !== undefined && numericValue < min) {
+      onChange(min?.toString() || '');
+    }
+  };
 
   return (
     <Flex align="center" gap="2">
@@ -49,8 +83,10 @@ const NumberInput = ({
               name={fieldName}
               value={field.value}
               disabled={field.disabled || disabled}
-              onValueChange={({ value }) => field.onChange(value)}
-              onBlur={field.onBlur}
+              onValueChange={({ value }) =>
+                handleOnValueChange(value, field.onChange)
+              }
+              onBlur={() => handleOnBlur(field.value, field.onChange)}
               customInput={TextField.Root}
               getInputRef={field.ref}
               className={cn('h-[var(--chip-height)]', className)}

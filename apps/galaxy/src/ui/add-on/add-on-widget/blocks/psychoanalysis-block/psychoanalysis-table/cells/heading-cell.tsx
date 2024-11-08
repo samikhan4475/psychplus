@@ -2,24 +2,23 @@
 
 import { Flex } from '@radix-ui/themes'
 import { FormFieldLabel } from '@/components'
-import { HeadingCellMenu } from './table-cell-menu'
+import { HeadingCellMenu } from './heading-cell-menu'
 
-interface ThearpyDataOption {
+interface DataOption {
   value: string
   display: string
 }
 interface TableHeadingCellProps {
   title: string
   count: number
-  data: ThearpyDataOption[]
+  data: DataOption[]
   width: string
 }
-
-const TableHeadingCell = (props: TableHeadingCellProps) => {
+const HeadingCell = (props: TableHeadingCellProps) => {
   const { count, title, data, width } = props
   return (
     <Flex style={{ position: 'relative', width: width }}>
-      <FormFieldLabel className="ml-1 text-[12px] text-[#1C2024]" required>
+      <FormFieldLabel className="ml-1 text-[12px]" required>
         {title}
       </FormFieldLabel>
       <FormFieldLabel className="ml-1 text-[12px]">({count})</FormFieldLabel>
@@ -28,4 +27,4 @@ const TableHeadingCell = (props: TableHeadingCellProps) => {
   )
 }
 
-export { TableHeadingCell }
+export { HeadingCell }

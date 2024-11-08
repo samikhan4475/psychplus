@@ -4,27 +4,27 @@ import React from 'react'
 import { DropdownMenu, Flex, Text } from '@radix-ui/themes'
 import { CirclePlus, PlusIcon } from 'lucide-react'
 import { useFormContext } from 'react-hook-form'
-import { TherapySchemaType } from '../therapy-schema'
+import { AddOnWidgetSchemaType } from '@/ui/add-on/add-on-widget/add-on-widget-schema'
 
-interface ThearpyDataOption {
+interface DataOption {
   value: string
   display: string
 }
 interface HeadingCellMenuProps {
-  data: ThearpyDataOption[]
+  data: DataOption[]
   title: string
 }
 const HeadingCellMenu = ({ data, title }: HeadingCellMenuProps) => {
-  const { getValues, setValue } = useFormContext<TherapySchemaType>()
+  const { getValues, setValue } = useFormContext<AddOnWidgetSchemaType>()
 
-  const addTherapyDetailItem = (item: ThearpyDataOption) => {
+  const addPsychoanalysisItem = (item: DataOption) => {
     const fieldName =
-      title === 'Therapy Modality'
-        ? 'therapyDetailsModality'
-        : 'therapyDetailsInterventions'
+      title === 'Description of Transference'
+        ? 'transferenceDescription'
+        : 'psychoanalyticTechnique'
     const currentValues = getValues(fieldName) || []
     const isDuplicate = currentValues.some(
-      (existingItem: ThearpyDataOption) => existingItem.value === item.value,
+      (existingItem) => existingItem?.value === item.value,
     )
     if (!isDuplicate) {
       currentValues.push(item)
@@ -42,9 +42,14 @@ const HeadingCellMenu = ({ data, title }: HeadingCellMenuProps) => {
           <DropdownMenu.Item
             className="hover:bg-pp-bg-accent group w-full px-3 py-2"
             key={item.value}
-            onClick={() => addTherapyDetailItem(item)}
           >
-            <Flex justify="between" gap="2" align="center" width="100%">
+            <Flex
+              justify="between"
+              gap="2"
+              align="center"
+              width="100%"
+              onClick={() => addPsychoanalysisItem(item)}
+            >
               <Text size="2" className="text-black">
                 {item.display}
               </Text>

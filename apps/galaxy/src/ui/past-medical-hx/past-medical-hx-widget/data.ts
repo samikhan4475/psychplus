@@ -94,7 +94,6 @@ const transformOut =
     }
 
     const formData = sanitizeFormData(schema)
-    console.log('formData', formData)
     const addQuickNote = (sectionItem: string, sectionItemValue: string) => {
       result.push({ ...QuickNotesPayload, sectionItem, sectionItemValue })
     }

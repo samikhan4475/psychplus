@@ -4,7 +4,7 @@ import { AssessmentPlanWidget } from '@/ui/assessment'
 import { CodesWidget } from '@/ui/codes'
 import { FamilyPsychHxWidget } from '@/ui/family-psych-hx'
 import { HpiWidget } from '@/ui/hpi'
-import { InteractiveComplexityWidget } from '@/ui/interactive-complexity'
+import { AddOnWidget } from '@/ui/add-on'
 import { PatientMedicationsWidget } from '@/ui/medications'
 import { MseWidget } from '@/ui/mse'
 import { PastMedicalHxWidget } from '@/ui/past-medical-hx'
@@ -49,7 +49,7 @@ const QuickNotesView = ({ patientId, appointmentId }: QuickNotesViewProps) => {
             <QuicknotesDiagnosisWidget patientId={patientId} />
             <PhysicalExamWidget patientId={patientId} />
             <AssessmentPlanWidget patientId={patientId} />
-            <InteractiveComplexityWidget patientId={patientId} />
+            <AddOnWidget patientId={patientId} />
             <PatientMedicationsWidget patientId={patientId} />
             <PatientReferralsWidget patientId={patientId} />
             <FollowUpWidget patientId={patientId} />

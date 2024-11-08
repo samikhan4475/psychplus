@@ -19,6 +19,8 @@ interface RadioSelectInputProps {
 interface RadioSelectInputOption {
   label: string
   value: string
+  min?: number
+  max?: number
 }
 
 const RadioSelectInput = ({
@@ -81,6 +83,8 @@ const RadioSelectInput = ({
                   className="w-[35px]"
                   autoFocus
                   format="##"
+                  min={option.min}
+                  max={option.max}
                 />
               )}
             </Flex>
