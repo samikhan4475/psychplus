@@ -1,4 +1,5 @@
 import { PropsWithChildren } from 'react'
+import { useParams } from 'next/navigation'
 import { QuickNoteSectionItem } from '@/types'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { QuestionnaireTabs } from '../constants'
@@ -11,17 +12,16 @@ import { CLASSNAME_CELL, CLASSNAME_HEADER_CELL } from '../shared/constants'
 import { LABELS, QUESTIONS, SCORE_INTERPRETATION_RANGES } from './constants'
 
 type FillOutButtonHamDProps = PropsWithChildren<{
-  patientId: string
   data: QuickNoteSectionItem[]
 }>
 
-const FillOutButtonHamD = ({ patientId, data }: FillOutButtonHamDProps) => {
+const FillOutButtonHamD = ({ data }: FillOutButtonHamDProps) => {
+  const patientId = useParams().id as string
+
   return (
     <FillOutButton title="Hamilton Depression Rating Scale (HAM-D)">
       <FillOutTabsView
-        patientId={patientId}
-        sectionName={QuickNoteSectionName.QuickNoteSectionHamD}
-        questionnaire={QuestionnaireTabs.HAM_D_TAB}
+        questionnaire={QuickNoteSectionName.QuickNoteSectionHamD}
       >
         <QuestionnairePopupCurrentView
           data={data}

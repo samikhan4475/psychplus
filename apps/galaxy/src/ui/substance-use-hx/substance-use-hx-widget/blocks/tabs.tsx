@@ -1,9 +1,8 @@
 import { Flex, Text } from '@radix-ui/themes'
 import {
   DeleteButton,
-  FilloutButton,
   SendToPatientButton,
-} from '@/ui/questionnaires/questionnaires-widget'
+} from '@/ui/questionnaires/questionnaires-widget/blocks'
 
 type AlcoholDrugsTabProps = {
   label: string
@@ -23,7 +22,7 @@ const AlcoholDrugsTab = ({ label }: AlcoholDrugsTabProps) => {
         {label}
       </Text>
       <Flex align="center" gap="2">
-        <SendToPatientButton /> <FilloutButton /> <DeleteButton />
+        <SendToPatientButton /> <DeleteButton />
       </Flex>
     </Flex>
   )

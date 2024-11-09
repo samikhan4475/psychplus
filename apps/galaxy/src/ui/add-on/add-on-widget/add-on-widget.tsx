@@ -42,9 +42,7 @@ const AddOnWidget = ({ patientId, initialValue }: AddOnWidgetProps) => {
         <Flex direction="column" gap="2">
           <InjectionBlock />
           <TherapyPsychoAnalysisBlock />
-          {form.watch('therapyPsychoanalysis') !== 'neither' && (
-            <InteractiveComplexityBlock />
-          )}
+          <InteractiveComplexityBlock />
         </Flex>
       </WidgetFormContainer>
     </FormProvider>

@@ -15,20 +15,21 @@ interface Option {
   value: string
 }
 
+const SITE_LOCATIONS = [
+  { label: 'Right Upper Arm', value: 'right_upper_arm' },
+  { label: 'Left Upper Arm', value: 'left_upper_arm' },
+  { label: 'Right Thigh', value: 'right_thigh' },
+  { label: 'Left Thigh', value: 'left_thigh' },
+  { label: 'Right Buttocks', value: 'right_buttocks' },
+  { label: 'Left Buttocks', value: 'left_buttocks' },
+  { label: 'Right Hip', value: 'right_hip' },
+  { label: 'Left Hip', value: 'left_hip' },
+]
+
 const InjectionBlock = () => {
   const { selectedDrug } = useStore()
   const form = useFormContext()
   const { watch } = form
-  const SITE_LOCATIONS = [
-    { label: 'Right Upper Arm', value: 'right_upper_arm' },
-    { label: 'Left Upper Arm', value: 'left_upper_arm' },
-    { label: 'Right Thigh', value: 'right_thigh' },
-    { label: 'Left Thigh', value: 'left_thigh' },
-    { label: 'Right Buttocks', value: 'right_buttocks' },
-    { label: 'Left Buttocks', value: 'left_buttocks' },
-    { label: 'Right Hip', value: 'right_hip' },
-    { label: 'Left Hip', value: 'left_hip' },
-  ]
 
   const manufacturersList = selectedDrug
     ? selectedDrug?.manufacturer.map((item) => ({ label: item, value: item }))

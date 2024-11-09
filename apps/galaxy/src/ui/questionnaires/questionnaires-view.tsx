@@ -1,5 +1,6 @@
 'use client'
 
+import { useEffect } from 'react'
 import * as Tabs from '@radix-ui/react-tabs'
 import { Flex } from '@radix-ui/themes'
 import { XIcon } from 'lucide-react'
@@ -18,6 +19,21 @@ import { SnapIvTab } from './snap-iv-tab'
 import { useStore } from './store'
 import { YBocsTab } from './y-bocs-tab'
 
+interface QuestionnairesViewProps {
+  questionnairesDashboardData: QuickNoteSectionItem[]
+  questionnairesGad7Response: QuickNoteSectionItem[]
+  questionnairesPcl5Response: QuickNoteSectionItem[]
+  questionnairesPhq9Response: QuickNoteSectionItem[]
+  questionnairesSnapIvResponse: QuickNoteSectionItem[]
+  questionnairesDast10Response: QuickNoteSectionItem[]
+  questionnairesAuditResponse: QuickNoteSectionItem[]
+  questionnairesAimsResponse: QuickNoteSectionItem[]
+  questionnairesHamDResponse: QuickNoteSectionItem[]
+  questionnairesYBocsResponse: QuickNoteSectionItem[]
+  questionnairesMocaResponse: QuickNoteSectionItem[]
+  patientId: string
+}
+
 const QuestionnairesView = ({
   questionnairesDashboardData,
   questionnairesSnapIvResponse,
@@ -31,30 +47,27 @@ const QuestionnairesView = ({
   questionnairesHamDResponse,
   questionnairesMocaResponse,
   patientId,
-}: {
-  questionnairesDashboardData: QuickNoteSectionItem[]
-  questionnairesGad7Response: QuickNoteSectionItem[]
-  questionnairesPcl5Response: QuickNoteSectionItem[]
-  questionnairesPhq9Response: QuickNoteSectionItem[]
-  questionnairesSnapIvResponse: QuickNoteSectionItem[]
-  questionnairesDast10Response: QuickNoteSectionItem[]
-  questionnairesAuditResponse: QuickNoteSectionItem[]
-  questionnairesAimsResponse: QuickNoteSectionItem[]
-  questionnairesHamDResponse: QuickNoteSectionItem[]
-  questionnairesYBocsResponse: QuickNoteSectionItem[]
-  questionnairesMocaResponse: QuickNoteSectionItem[]
-  patientId: string
-}) => {
-  const { activeTab, setActiveTab } = useStore((state) => ({
-    activeTab: state.activeTab,
-    setActiveTab: state.setActiveTab,
+}: QuestionnairesViewProps) => {
+  const {
+    activeQuestionnaireTab,
+    setQuestionnaireActiveTab,
+    initializeQuestionnaires,
+  } = useStore((state) => ({
+    activeQuestionnaireTab: state.activeQuestionnaireTab,
+    setQuestionnaireActiveTab: state.setQuestionnaireActiveTab,
+    initializeQuestionnaires: state.initializeQuestionnaires,
   }))
+
+  useEffect(() => {
+    initializeQuestionnaires(patientId)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
     <Tabs.Root
       className="flex w-full flex-col"
-      value={activeTab}
-      onValueChange={setActiveTab}
+      value={activeQuestionnaireTab}
+      onValueChange={setQuestionnaireActiveTab}
     >
       <Flex>
         <Tabs.List>
@@ -173,7 +186,7 @@ const TabsContent = ({
   value: string
   children: React.ReactNode
 }) => {
-  const viewedTabs = useStore((state) => state.viewedTabs)
+  const viewedTabs = useStore((state) => state.viewedQuestionnaireTabs)
 
   return (
     <Tabs.Content

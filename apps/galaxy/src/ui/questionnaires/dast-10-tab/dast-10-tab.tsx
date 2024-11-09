@@ -18,7 +18,6 @@ import {
 import { CLASSNAME_CELL, CLASSNAME_HEADER_CELL } from '../shared/constants'
 import { transformIn, transformOut } from '../shared/data'
 import { LABELS, QUESTIONS, SCORE_INTERPRETATION_RANGES } from './constants'
-import { FillOutButtonDast10 } from './fill-out-button'
 import { ScoreCalculation } from './score-calculation'
 
 const Dast10Tab = ({
@@ -53,13 +52,8 @@ const Dast10Tab = ({
           title={QuestionnaireTabs.DAST_10_TAB}
           headerRight={
             <Flex gap="2">
-              <FillOutButtonDast10 patientId={patientId} data={[]} />
               <SendToPatientButton />
-              <HistoryButton
-                sectionName={QuickNoteSectionName.QuickNoteSectionDast10}
-                questionnaire={QuestionnaireTabs.DAST_10_TAB}
-                patientId={patientId}
-              />
+              <HistoryButton questionnaire={QuickNoteSectionName.QuickNoteSectionDast10} />
               <SaveButton />
             </Flex>
           }

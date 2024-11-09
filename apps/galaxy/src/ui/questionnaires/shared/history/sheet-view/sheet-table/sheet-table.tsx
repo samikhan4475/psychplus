@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { Flex, ScrollArea } from '@radix-ui/themes'
 import { type ColumnDef } from '@tanstack/react-table'
 import { format } from 'date-fns'
@@ -10,11 +9,13 @@ import { ScoreCell } from './cells/score-cell'
 
 interface SheetViewDataProps {
   data: QuickNoteHistory[]
+  setData: (data: QuickNoteHistory[]) => void
 }
 
 const createColumns = (
   onCheckAddToNote: (checked: boolean, index?: number) => void,
   allChecked: boolean,
+  data: QuickNoteHistory[],
 ): ColumnDef<QuickNoteHistory>[] => [
   {
     id: 'dateTime',
@@ -75,6 +76,7 @@ const createColumns = (
         label="Add to Note"
         className="px-[9px] font-[500]"
         checked={allChecked}
+        disabled={data.length === 0}
         onCheckedChange={(checked) => onCheckAddToNote(checked)}
       />
     ),
@@ -88,31 +90,24 @@ const createColumns = (
   },
 ]
 
-const HistorySheetTable = ({ data }: SheetViewDataProps) => {
-  const [modifiedData, setModifiedData] = useState(data)
-
+const HistorySheetTable = ({ data, setData }: SheetViewDataProps) => {
   const handleCheckAddToNote = (checked: boolean, index?: number) => {
-    setModifiedData((prevData) =>
+    const newList =
       index === undefined
-        ? prevData.map((item) => ({ ...item, addToNote: checked }))
-        : prevData.map((item, i) =>
+        ? data.map((item) => ({ ...item, addToNote: checked }))
+        : data.map((item, i) =>
             i === index ? { ...item, addToNote: checked } : item,
-          ),
-    )
+          )
+    setData(newList)
   }
 
-  const allChecked = modifiedData.every((item) => item.addToNote)
+  const allChecked = data.every((item) => item.addToNote)
 
-  const columns = createColumns(handleCheckAddToNote, allChecked)
+  const columns = createColumns(handleCheckAddToNote, allChecked, data)
 
   return (
     <ScrollArea>
-      <DataTable
-        data={modifiedData}
-        columns={columns}
-        disablePagination
-        sticky
-      />
+      <DataTable data={data} columns={columns} disablePagination sticky />
     </ScrollArea>
   )
 }

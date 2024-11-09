@@ -1,18 +1,12 @@
 import * as Tabs from '@radix-ui/react-tabs'
 import { Badge, Flex, Text } from '@radix-ui/themes'
+import { format } from 'date-fns'
 import { ListIcon, SignalIcon } from 'lucide-react'
 import { BlockLabel } from '@/components'
-import {
-  DeleteButton,
-  FilloutButton,
-  HistoryButton,
-  SendReminderButton,
-  SendToPatientButton,
-  ViewButton,
-} from '@/ui/questionnaires/questionnaires-widget'
-import { cn } from '@/utils'
+import { QuickNoteHistory } from '@/types'
+import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { SCORE_INTERPRETATION_RANGES as AUDIT_SCORE_INTERPRETATION_RANGES } from '../../audit-tab/constants'
-import { QuestionnairesStatus, QuestionnaireTabs } from '../../constants'
+import { QuestionnaireTabs } from '../../constants'
 import { SCORE_INTERPRETATION_RANGES as DAST10_SCORE_INTERPRETATION_RANGES } from '../../dast-10-tab/constants'
 import { SCORE_INTERPRETATION_RANGES as HAMD_SCORE_INTERPRETATION_RANGES } from '../../ham-d-tab/constants'
 import { SCORE_INTERPRETATION_RANGES_ORIENTATION } from '../../moca-tab/constants'
@@ -26,22 +20,36 @@ import {
   SNAP_IV_SECTIONS,
 } from '../../snap-iv-tab/constants'
 import { SCORE_INTERPRETATION_RANGES as YBOCS_SCORE_INTERPRETATION_RANGES } from '../../y-bocs-tab/constants'
-import { QuestionnaireRow } from './questionnaires-select-section'
-import { ChartView, ListView, TabsContent, TabsTrigger, useStore } from './tabs'
+import { ChartView, ListView, TabsContent, TabsTrigger } from '../tabs'
+import { RowRightButtons } from './row-right-button'
+import { useStore } from '../../store'
 
-interface SelectableQuestionnairesChipDetailsProps {
-  label: string
-  options: QuestionnaireRow[]
+interface QuestionnairesDetailsProps {
+  questionnaire: string
+  option: { label: QuestionnaireTabs; value: QuickNoteSectionName }
 }
 
-const SelectableQuestionnairesChipDetails = ({
-  label,
-  options,
-}: SelectableQuestionnairesChipDetailsProps) => {
-  const { activeTab, setActiveTab } = useStore((state) => ({
-    activeTab: state.activeTab,
-    setActiveTab: state.setActiveTab,
-  }))
+const QuestionnairesDetails = ({
+  questionnaire,
+  option,
+}: QuestionnairesDetailsProps) => {
+  const { activeTab, setActiveTab, addedToNotes, histories } = useStore(
+    (state) => ({
+      activeTab: state.activeTab,
+      setActiveTab: state.setActiveTab,
+      histories: state.histories,
+      addedToNotes: state.addedToNotes,
+    }),
+  )
+  const badgeLabel = option.label
+
+  // get the added to notes dates for the current questionnaire
+  const addedTonNotesDates = addedToNotes[questionnaire] || []
+  const historiesData = histories[questionnaire] || []  
+  
+  const filteredHistories = historiesData.filter((history) =>
+    addedTonNotesDates.includes(history.createdOn),
+  )
 
   return (
     <Flex className="w-full" direction="column">
@@ -54,10 +62,11 @@ const SelectableQuestionnairesChipDetails = ({
       >
         <Flex align="center" gap="2">
           <BlockLabel>
-            {label} {options?.length > 1 && ` (${options.length})`}
+            {option?.label}
+            {filteredHistories?.length > 1 && ` (${filteredHistories.length})`}
           </BlockLabel>
 
-          {options.length > 1 ? (
+          {filteredHistories.length > 1 ? (
             <Tabs.Root value={activeTab} onValueChange={setActiveTab}>
               <Tabs.List className="flex gap-2">
                 <TabsTrigger value="ListView">
@@ -76,12 +85,12 @@ const SelectableQuestionnairesChipDetails = ({
             </Tabs.Root>
           ) : (
             <Flex>
-              {options.map((option) => {
+              {filteredHistories.map((option) => {
                 return (
                   <QuestionnaireRowDetail
                     option={option}
-                    label={label}
-                    key={option.date}
+                    label={badgeLabel}
+                    key={option.createdOn}
                   />
                 )
               })}
@@ -89,13 +98,16 @@ const SelectableQuestionnairesChipDetails = ({
           )}
         </Flex>
 
-        <ButtonSection option={options[0]} />
+        <RowRightButtons
+          questionnaire={questionnaire}
+          historiesData={historiesData.length}
+        />
       </Flex>
 
-      {options.length > 1 && (
+      {filteredHistories.length > 1 && (
         <Tabs.Root value={activeTab} onValueChange={setActiveTab}>
           <TabsContent value="ListView">
-            <ListView options={options} label={label} />
+            <ListView options={filteredHistories} label={questionnaire} />
           </TabsContent>
           <TabsContent value="DataView">
             <ChartView />
@@ -106,87 +118,53 @@ const SelectableQuestionnairesChipDetails = ({
   )
 }
 
-const ButtonSection = ({
-  option,
-  showHistory = true,
-}: {
-  option: QuestionnaireRow
-  showHistory?: boolean
-}) => {
-  const status = option?.status || undefined
-  const reminderToCompleteQuestionnaireAlreadySent =
-    option?.reminderToCompleteQuestionnaireAlreadySent || undefined
-
-  return (
-    <Flex gap="3" align="center">
-      {status === QuestionnairesStatus.Requested ? (
-        <>
-          {reminderToCompleteQuestionnaireAlreadySent ? (
-            <SendReminderButton />
-          ) : (
-            <SendToPatientButton />
-          )}
-
-          <FilloutButton />
-        </>
-      ) : null}
-      {status !== QuestionnairesStatus.Requested && showHistory && (
-        <HistoryButton />
-      )}
-      {status !== QuestionnairesStatus.Requested && <ViewButton />}
-      <DeleteButton />
-    </Flex>
-  )
-}
-
 const QuestionnaireRowDetail = ({
   option,
   label,
 }: {
-  option: QuestionnaireRow
+  option: QuickNoteHistory
   label: string
-}) => (
-  <Flex key={option.date} gap="2" align="center">
-    {option.status !== QuestionnairesStatus.Requested && (
+}) => {
+  const totalScore = option.data.reduce(
+    (acc, item) => acc + Number(item.sectionItemValue),
+    0,
+  )
+  return (
+    <Flex key={option.createdOn} gap="2" align="center">
       <Badge
         size="1"
         variant="surface"
         color={getBadgeColor(
           getRange(
             scoreInterpretationRanges(label, option.sectionName),
-            option.totalScore,
+            totalScore,
           ),
         )}
       >
-        Score {option.totalScore}
+        Score {totalScore}
       </Badge>
-    )}
-    <Badge
-      variant="surface"
-      size="1"
-      color={
-        option.status === QuestionnairesStatus.Completed ? 'green' : 'yellow'
-      }
-    >
-      {option.status}
-    </Badge>
 
-    <Text className="text-[11px]" color="gray" weight="medium">
-      ON {option.date || '03/25/2024 09:27:30'}
-    </Text>
+      <Badge variant="surface" size="1" color={'green'}>
+        Completed
+      </Badge>
 
-    {option.filledBy && (
       <Text className="text-[11px]" color="gray" weight="medium">
-        BY
+        ON {format(new Date(option.createdOn), 'MM/dd/yyyy HH:mm')}
       </Text>
-    )}
-    {option.filledBy && (
-      <Badge variant="surface" size="1" color="gray">
-        {option.filledBy}
-      </Badge>
-    )}
-  </Flex>
-)
+
+      {option.createdByRole && (
+        <>
+          <Text className="text-[11px]" color="gray" weight="medium">
+            BY
+          </Text>
+          <Badge variant="surface" size="1" color="gray">
+            {option.createdByRole}
+          </Badge>
+        </>
+      )}
+    </Flex>
+  )
+}
 
 const scoreInterpretationRanges = (
   label: string,
@@ -221,8 +199,7 @@ const scoreInterpretationRanges = (
 }
 
 export {
-  SelectableQuestionnairesChipDetails,
-  type SelectableQuestionnairesChipDetailsProps,
+  QuestionnairesDetails,
+  type QuestionnairesDetailsProps,
   QuestionnaireRowDetail,
-  ButtonSection,
 }

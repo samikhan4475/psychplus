@@ -1,67 +1,84 @@
 import { useEffect, useState } from 'react'
+import { useParams } from 'next/navigation'
 import * as Tabs from '@radix-ui/react-tabs'
 import { Flex } from '@radix-ui/themes'
 import { ListIcon, SignalIcon, XIcon } from 'lucide-react'
-import { LoadingPlaceholder } from '@/components'
-import { QuickNoteHistory } from '@/types'
+import { QuickNoteHistory, QuickNoteSectionItem } from '@/types'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
-import { getQuestionnairesHistory } from '../api'
+import { useStore } from '../../store'
+import { AddToNotesSaveButton } from './add-to-notes-save-button'
 import { ChartView } from './chart-view'
 import { SheetView } from './sheet-view'
 
 interface HistoryViewProps {
-  sectionName?: QuickNoteSectionName
-  questionnaire?: string
-  patientId: string
+  questionnaire: QuickNoteSectionName
 }
 
-const HistoryView = ({
-  sectionName,
-  questionnaire,
-  patientId,
-}: HistoryViewProps) => {
-  const [data, setData] = useState<QuickNoteHistory[] | undefined>(undefined)
-  const [loader, setLoader] = useState<boolean>(true)
+const HistoryView = ({ questionnaire }: HistoryViewProps) => {
+  const [data, setData] = useState<QuickNoteHistory[]>([])
+  // const [loader, setLoader] = useState<boolean>(true)
+  const patientId = useParams().id as string
+
+  const { addedToNotes, histories, handleAddToNotes } = useStore((state) => ({
+    histories: state.histories,
+    addedToNotes: state.addedToNotes,
+    handleAddToNotes: state.handleAddToNotes,
+  }))
 
   useEffect(() => {
-    ;(async () => {
-      const response = await getQuestionnairesHistory({
-        patientId,
-        sectionName: sectionName as QuickNoteSectionName,
-      })
-      setLoader(false)
-      if (response.state === 'success') {
-        setData(response.data.historyData)
+    // get the added to notes dates for the current questionnaire
+    const selectedDates = addedToNotes[questionnaire] || []
+    const historiesData = histories[questionnaire] || []
+
+    const modifiedData = historiesData.map((history) => {
+      const totalScore = history.data
+        .reduce(
+          (acc: number, curr: QuickNoteSectionItem) =>
+            acc + Number(curr.sectionItemValue),
+          0,
+        )
+        .toString()
+      if (selectedDates?.includes(history.createdOn)) {
+        return { ...history, addToNote: true, totalScore }
+      } else {
+        return { ...history, addToNote: false, totalScore }
       }
-    })()
-  }, [patientId, sectionName])
+    })
+    setData(modifiedData)
+  }, [addedToNotes, histories, patientId, questionnaire])
+
+  const handleOnSave = () => {
+    handleAddToNotes(data, questionnaire, patientId)
+  }
 
   return (
     <Tabs.Root defaultValue="SheetView" className="flex w-full flex-col">
-      <Flex mt="2">
+      <Flex mt="2" justify="between">
         <Tabs.List>
-          <Flex gap="2">
-            <TabsTrigger value="SheetView">
-              <Flex align="center" gap="2">
-                <ListIcon size={16} />
-                Sheet View
-              </Flex>
-            </TabsTrigger>
-            <TabsTrigger value="DataView">
-              <Flex align="center" gap="2">
-                <SignalIcon size={14} />
-                Data View
-              </Flex>
-            </TabsTrigger>
+          <Flex direction="row" justify="between">
+            <Flex gap="2">
+              <TabsTrigger value="SheetView">
+                <Flex align="center" gap="2">
+                  <ListIcon size={16} />
+                  Sheet View
+                </Flex>
+              </TabsTrigger>
+              <TabsTrigger value="DataView">
+                <Flex align="center" gap="2">
+                  <SignalIcon size={14} />
+                  Data View
+                </Flex>
+              </TabsTrigger>
+            </Flex>
           </Flex>
         </Tabs.List>
+        <AddToNotesSaveButton onClick={handleOnSave} />
       </Flex>
 
-      {loader && <LoadingPlaceholder />}
       {data && (
         <>
           <TabsContent value="SheetView">
-            <SheetView data={data} />
+            <SheetView data={data} setData={setData} />
           </TabsContent>
 
           <TabsContent value="DataView">

@@ -1,22 +1,21 @@
 import { PropsWithChildren } from 'react'
+import { useParams } from 'next/navigation'
 import { QuickNoteSectionItem } from '@/types'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
-import { QuestionnaireTabs } from '../../constants'
 import { FillOutButton, FillOutTabsView } from '../../shared'
 import { CurrentView } from './current-view'
 
 type FillOutButtonYBocsProps = PropsWithChildren<{
-  patientId: string
   data: QuickNoteSectionItem[]
 }>
 
-const FillOutButtonYBocs = ({ patientId, data }: FillOutButtonYBocsProps) => {
+const FillOutButtonYBocs = ({ data }: FillOutButtonYBocsProps) => {
+  const patientId = useParams().id as string
+
   return (
     <FillOutButton title="Yale-Brown Obsessive Compulsive (Y-BOCS)">
       <FillOutTabsView
-        patientId={patientId}
-        sectionName={QuickNoteSectionName.QuickNoteSectionYbcos}
-        questionnaire={QuestionnaireTabs.Y_BOCS_TAB}
+        questionnaire={QuickNoteSectionName.QuickNoteSectionYbcos}
       >
         <CurrentView patientId={patientId} data={data} />
       </FillOutTabsView>

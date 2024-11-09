@@ -5,12 +5,13 @@ import { HistorySheetTable } from './sheet-table'
 
 interface SheetViewDataProps {
   data: QuickNoteHistory[]
+  setData: (data: QuickNoteHistory[]) => void
 }
 
-const SheetView = ({ data }: SheetViewDataProps) => {
+const SheetView = ({ data, setData }: SheetViewDataProps) => {
   return (
     <Flex mt="2">
-      <HistorySheetTable data={data} />
+      <HistorySheetTable data={data} setData={setData} />
     </Flex>
   )
 }

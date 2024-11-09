@@ -3,18 +3,18 @@
 import { Flex, Text } from '@radix-ui/themes'
 import { cn } from '@/utils'
 
-interface QuestionnairesSelectableChipProps {
+interface SelectableChipProps {
   label: string
   selected: boolean
   onClick: () => void
 }
 
-const QuestionnairesSelectableChip = ({
+const SelectableChip = ({
   label,
   selected,
   children,
   onClick,
-}: React.PropsWithChildren<QuestionnairesSelectableChipProps>) => {
+}: React.PropsWithChildren<SelectableChipProps>) => {
   return (
     <Flex align="center" className="h-[var(--chip-height)]">
       <Flex
@@ -40,4 +40,4 @@ const QuestionnairesSelectableChip = ({
   )
 }
 
-export { QuestionnairesSelectableChip }
+export { SelectableChip }

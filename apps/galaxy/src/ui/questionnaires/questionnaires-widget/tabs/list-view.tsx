@@ -1,18 +1,13 @@
 import React from 'react'
 import { Flex } from '@radix-ui/themes'
-import { DeleteButton } from '../../delete-button'
-import { ViewButton } from '../../view-button'
-import { QuestionnaireRow } from '../questionnaires-select-section'
-import {
-  ButtonSection,
-  QuestionnaireRowDetail,
-} from '../selectable-questionnaire-chip-details'
+import { QuickNoteHistory } from '@/types'
+import { QuestionnaireRowDetail, RowRightButtons } from '../blocks'
 
 const ListView = ({
   options,
   label,
 }: {
-  options: QuestionnaireRow[]
+  options: QuickNoteHistory[]
   label: string
 }) => {
   return (
@@ -25,10 +20,10 @@ const ListView = ({
             px="2"
             py="2"
             justify="between"
-            key={`${index}+${option.date}`}
+            key={`${index}+${option.createdOn}`}
           >
             <QuestionnaireRowDetail option={option} label={label} />
-            <ButtonSection option={option} showHistory={false} />
+            {/* <RowRightButtons options={options} /> */}
           </Flex>
         ))}
     </Flex>

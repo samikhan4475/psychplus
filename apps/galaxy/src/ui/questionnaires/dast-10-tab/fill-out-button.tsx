@@ -1,4 +1,5 @@
 import { PropsWithChildren } from 'react'
+import { useParams } from 'next/navigation'
 import { QuickNoteSectionItem } from '@/types'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { QuestionnaireTabs } from '../constants'
@@ -11,17 +12,16 @@ import { CLASSNAME_CELL, CLASSNAME_HEADER_CELL } from '../shared/constants'
 import { LABELS, QUESTIONS, SCORE_INTERPRETATION_RANGES } from './constants'
 
 type FillOutButtonDast10Props = PropsWithChildren<{
-  patientId: string
   data: QuickNoteSectionItem[]
 }>
 
-const FillOutButtonDast10 = ({ patientId, data }: FillOutButtonDast10Props) => {
+const FillOutButtonDast10 = ({ data }: FillOutButtonDast10Props) => {
+  const patientId = useParams().id as string
+
   return (
     <FillOutButton title="Drug Abuse Screening Test (DAST-10)">
       <FillOutTabsView
-        patientId={patientId}
-        sectionName={QuickNoteSectionName.QuickNoteSectionDast10}
-        questionnaire={QuestionnaireTabs.DAST_10_TAB}
+        questionnaire={QuickNoteSectionName.QuickNoteSectionDast10}
       >
         <QuestionnairePopupCurrentView
           data={data}

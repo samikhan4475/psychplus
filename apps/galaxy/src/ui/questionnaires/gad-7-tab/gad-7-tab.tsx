@@ -18,7 +18,6 @@ import {
 import { LABELS, SCORE_INTERPRETATION_RANGES } from '../shared/constants'
 import { transformIn, transformOut } from '../shared/data'
 import { QUESTIONS } from './constants'
-import { FillOutButtonGad7 } from './fill-out-button'
 
 const Gad7Tab = ({
   patientId,
@@ -52,13 +51,8 @@ const Gad7Tab = ({
           title={QuestionnaireTabs.GAD_7_TAB}
           headerRight={
             <Flex gap="2">
-              <FillOutButtonGad7 patientId={patientId} data={[]} />
               <SendToPatientButton />
-              <HistoryButton
-                sectionName={QuickNoteSectionName.QuickNoteSectionGad7}
-                questionnaire={QuestionnaireTabs.GAD_7_TAB}
-                patientId={patientId}
-              />
+              <HistoryButton questionnaire={QuickNoteSectionName.QuickNoteSectionGad7} />
               <SaveButton />
             </Flex>
           }

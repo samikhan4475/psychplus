@@ -1,135 +1,80 @@
 'use client'
 
-import { zodResolver } from '@hookform/resolvers/zod'
-import { FormProvider, useForm } from 'react-hook-form'
-import { z } from 'zod'
-import { WidgetFormContainer } from '@/components'
-import {
-  QuestionnairesFilledBy,
-  QuestionnairesStatus,
-  QuestionnaireTabs,
-} from '../constants'
-import { SNAP_IV_SECTIONS } from '../snap-iv-tab/constants'
-import { QuestionnairesTabsBlock } from './blocks'
+import React, { useEffect } from 'react'
+import { useParams } from 'next/navigation'
+import { Flex, Text } from '@radix-ui/themes'
+import { useStore } from '../store'
+import { QuestionnairesDetails, SelectableChip } from './blocks'
+import { BLOCK_OPTIONS, BLOCK_TITLE } from './constants'
 
-interface QuestionnairesWidgetProps {
-  patientId: string
+interface QuestionnaireRow {
+  totalScore: number
+  status: string
+  date: string
+  filledBy?: string
+  reminderToCompleteQuestionnaireAlreadySent?: boolean
+  sectionName?: string
 }
 
-type QuestionnairesWidgetSchemaType = z.infer<typeof questionnairesWidgetSchema>
-
-const questionnairesWidgetSchema = z.object({
-  questionnairesTabs: z.array(
-    z.object({
-      key: z.string(),
-      value: z.array(z.object({})),
+const QuestionnairesWidget = () => {
+  const patientId = useParams().id as string
+  const { selectedTabs, setSelectedTabs, initializeQuestionnaires } = useStore(
+    (state) => ({
+      selectedTabs: state.selectedTabs,
+      setSelectedTabs: state.setSelectedTabs,
+      initializeQuestionnaires: state.initializeQuestionnaires,
     }),
-  ),
-})
+  )
 
-const QuestionnairesWidget = ({ patientId }: QuestionnairesWidgetProps) => {
-  const form = useForm<QuestionnairesWidgetSchemaType>({
-    resolver: zodResolver(questionnairesWidgetSchema),
-    reValidateMode: 'onChange',
-    defaultValues: {
-      questionnairesTabs: [
-        {
-          key: QuestionnaireTabs.PHQ_9_TAB,
-          value: [
-            {
-              totalScore: 9,
-              status: QuestionnairesStatus.Completed,
-              filledBy: QuestionnairesFilledBy.Provider,
-            },
-            {
-              totalScore: 21,
-              status: QuestionnairesStatus.Completed,
-              filledBy: QuestionnairesFilledBy.Patient,
-            },
-            {
-              totalScore: 21,
-              status: QuestionnairesStatus.Completed,
-              filledBy: QuestionnairesFilledBy.Patient,
-            },
-            {
-              totalScore: 21,
-              status: QuestionnairesStatus.Completed,
-              filledBy: QuestionnairesFilledBy.Patient,
-            },
-            {
-              totalScore: 2,
-              status: QuestionnairesStatus.Completed,
-              filledBy: QuestionnairesFilledBy.Provider,
-            },
-            {
-              totalScore: 9,
-              status: QuestionnairesStatus.Completed,
-              filledBy: QuestionnairesFilledBy.Patient,
-            },
-            {
-              totalScore: 9,
-              status: QuestionnairesStatus.Completed,
-              filledBy: QuestionnairesFilledBy.Provider,
-            },
-            {
-              totalScore: 14,
-              status: QuestionnairesStatus.Completed,
-              filledBy: QuestionnairesFilledBy.Patient,
-            },
-            {
-              totalScore: 9,
-              status: QuestionnairesStatus.Completed,
-              filledBy: QuestionnairesFilledBy.Provider,
-            },
-          ],
-        },
-        {
-          key: QuestionnaireTabs.GAD_7_TAB,
-          value: [
-            {
-              totalScore: 13,
-              status: QuestionnairesStatus.Completed,
-              filledBy: QuestionnairesFilledBy.Provider,
-            },
-          ],
-        },
-        {
-          key: QuestionnaireTabs.SNAP_IV_TAB,
-          value: [
-            {
-              totalScore: 9,
-              status: QuestionnairesStatus.Completed,
-              filledBy: QuestionnairesFilledBy.Patient,
-              sectionName: SNAP_IV_SECTIONS.Inattention,
-            },
-          ],
-        },
-        {
-          key: QuestionnaireTabs.PCL_5_TAB,
-          value: [
-            {
-              totalScore: 45,
-              status: QuestionnairesStatus.Requested,
-              reminderToCompleteQuestionnaireAlreadySent: true,
-            },
-          ],
-        },
-      ],
-    },
-  })
+  useEffect(() => {
+    initializeQuestionnaires(patientId)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
-    <FormProvider {...form}>
-      <WidgetFormContainer
-        patientId={patientId}
-        widgetId="questionnaires"
-        title=""
-        getData={() => []}
-      >
-        <QuestionnairesTabsBlock />
-      </WidgetFormContainer>
-    </FormProvider>
+    <Flex
+      direction="column"
+      py="3"
+      gap="2"
+      className="bg-white px-2.5 shadow-2"
+    >
+      <Flex align="center" gap="2">
+        <Text size="3" weight="medium">
+          {BLOCK_TITLE}
+        </Text>
+
+        <Flex gap="1" wrap="wrap">
+          {BLOCK_OPTIONS.map((questionnaire) => {
+            const isSelected = selectedTabs.includes(questionnaire.value)
+            return (
+              <SelectableChip
+                key={questionnaire.value}
+                label={questionnaire.label}
+                selected={isSelected}
+                onClick={() => setSelectedTabs(questionnaire.value)}
+              />
+            )
+          })}
+        </Flex>
+      </Flex>
+      {selectedTabs.length > 0 && (
+        <Flex direction="column" align="start" gap="2" width="100%">
+          {selectedTabs.map((tab) => {
+            const option = BLOCK_OPTIONS.find((opt) => opt.value === tab)
+            return (
+              option && (
+                <QuestionnairesDetails
+                  key={tab}
+                  questionnaire={tab}
+                  option={option}
+                />
+              )
+            )
+          })}
+        </Flex>
+      )}
+    </Flex>
   )
 }
 
-export { QuestionnairesWidget }
+export { QuestionnairesWidget, type QuestionnaireRow }

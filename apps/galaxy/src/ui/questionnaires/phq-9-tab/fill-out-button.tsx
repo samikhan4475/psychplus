@@ -1,3 +1,4 @@
+import { useParams } from 'next/navigation'
 import {
   LABELS,
   SCORE_INTERPRETATION_RANGES,
@@ -11,17 +12,12 @@ import {
 } from '../shared'
 import { QUESTIONS } from './constants'
 
-type FillOutButtonPhq9Props = {
-  patientId: string
-}
-
-const FillOutButtonPhq9 = ({ patientId }: FillOutButtonPhq9Props) => {
+const FillOutButtonPhq9 = () => {
+  const patientId = useParams().id as string
   return (
     <FillOutButton title="Patient Health Questionnaire (PHQ-9)">
       <FillOutTabsView
-        patientId={patientId}
-        sectionName={QuickNoteSectionName.QuickNoteSectionPhq9}
-        questionnaire={QuestionnaireTabs.PHQ_9_TAB}
+        questionnaire={QuickNoteSectionName.QuickNoteSectionPhq9}
       >
         <QuestionnairePopupCurrentView
           data={[]}

@@ -18,7 +18,6 @@ import {
 import { CLASSNAME_CELL, CLASSNAME_HEADER_CELL } from '../shared/constants'
 import { transformIn, transformOut } from '../shared/data'
 import { LABELS, QUESTIONS, SCORE_INTERPRETATION_RANGES } from './constants'
-import { FillOutButtonAudit } from './fill-out-button'
 
 const AuditTab = ({
   patientId,
@@ -52,13 +51,8 @@ const AuditTab = ({
           title={QuestionnaireTabs.AUDIT_TAB}
           headerRight={
             <Flex gap="2">
-              <FillOutButtonAudit patientId={patientId} data={[]} />
               <SendToPatientButton />
-              <HistoryButton
-                sectionName={QuickNoteSectionName.QuickNoteSectionAudit}
-                questionnaire={QuestionnaireTabs.AUDIT_TAB}
-                patientId={patientId}
-              />
+              <HistoryButton questionnaire={QuickNoteSectionName.QuickNoteSectionAudit} />
               <SaveButton />
             </Flex>
           }

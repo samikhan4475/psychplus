@@ -4,14 +4,13 @@ import { Flex } from '@radix-ui/themes'
 import { FormProvider } from 'react-hook-form'
 import { WidgetFormContainer } from '@/components'
 import { QuickNoteSectionItem } from '@/types'
-import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { QuestionnaireTabs } from '../constants'
 import { AddToNoteCell, HistoryButton, SaveButton } from '../shared'
 import { MOCA_LABELS } from './constants'
-import { FillOutButtonMoca } from './fill-out-button'
 import { QuestionnairesFormMoca } from './form-moca/aims-form'
 import { transformIn, transformOut } from './form-moca/data'
 import { useQuestionnaireFormMoca } from './form-moca/use-moca-form'
+import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 
 const MocaTab = ({
   patientId,
@@ -34,12 +33,7 @@ const MocaTab = ({
           title={QuestionnaireTabs.MOCA_TAB}
           headerRight={
             <Flex gap="2">
-              <FillOutButtonMoca patientId={patientId} data={[]} />
-              <HistoryButton
-                sectionName={QuickNoteSectionName.QuickNoteSectionMoca}
-                questionnaire={QuestionnaireTabs.MOCA_TAB}
-                patientId={patientId}
-              />
+              <HistoryButton questionnaire={QuickNoteSectionName.QuickNoteSectionMoca} />
               <SaveButton />
             </Flex>
           }

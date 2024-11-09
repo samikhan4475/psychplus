@@ -1,4 +1,5 @@
 import { PropsWithChildren } from 'react'
+import { useParams } from 'next/navigation'
 import { QuickNoteSectionItem } from '@/types'
 import {
   LABELS,
@@ -14,17 +15,16 @@ import {
 import { QUESTIONS } from './constants'
 
 type FillOutButtonGad7Props = PropsWithChildren<{
-  patientId: string
   data: QuickNoteSectionItem[]
 }>
 
-const FillOutButtonGad7 = ({ patientId, data }: FillOutButtonGad7Props) => {
+const FillOutButtonGad7 = ({ data }: FillOutButtonGad7Props) => {
+  const patientId = useParams().id as string
+
   return (
     <FillOutButton title="Generalized Anxiety Disorder (GAD-7)">
       <FillOutTabsView
-        patientId={patientId}
-        sectionName={QuickNoteSectionName.QuickNoteSectionGad7}
-        questionnaire={QuestionnaireTabs.GAD_7_TAB}
+        questionnaire={QuickNoteSectionName.QuickNoteSectionGad7}
       >
         <QuestionnairePopupCurrentView
           data={data}

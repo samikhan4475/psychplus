@@ -18,7 +18,6 @@ import {
 import { CLASSNAME_CELL, CLASSNAME_HEADER_CELL } from '../shared/constants'
 import { transformIn, transformOut } from '../shared/data'
 import { LABELS, QUESTIONS, SCORE_INTERPRETATION_RANGES } from './constants'
-import { FillOutButtonHamD } from './fill-out-button'
 
 const HamDTab = ({
   patientId,
@@ -52,13 +51,8 @@ const HamDTab = ({
           title={QuestionnaireTabs.HAM_D_TAB}
           headerRight={
             <Flex gap="2">
-              <FillOutButtonHamD patientId={patientId} data={data} />
               <SendToPatientButton />
-              <HistoryButton
-                sectionName={QuickNoteSectionName.QuickNoteSectionHamD}
-                questionnaire={QuestionnaireTabs.HAM_D_TAB}
-                patientId={patientId}
-              />
+              <HistoryButton questionnaire={QuickNoteSectionName.QuickNoteSectionHamD} />
               <SaveButton />
             </Flex>
           }
