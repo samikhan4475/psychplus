@@ -186,7 +186,7 @@ const columns = (
       ),
     },
     {
-      id: 'stripeNumber',
+      accessorKey: 'stripeNumber',
       header: ({ column }) => (
         <ColumnHeader column={column} clientSideSort label="Stripe #" />
       ),

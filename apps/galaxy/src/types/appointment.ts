@@ -1,5 +1,16 @@
 import { Metadata } from '@/types'
 
+type PaymentType =
+  | 'CoPay'
+  | 'CoInsurance'
+  | 'CoPayAndCoInsurance'
+  | 'OutstandingBalance'
+  | 'CustomPayment'
+  | 'PaymentPlan'
+  | 'PlusMembership'
+  | 'Insurance'
+  | 'SelfPay'
+
 interface Diagnosis {
   id: string
   metadata: Metadata
@@ -14,10 +25,14 @@ interface Diagnosis {
 
 interface Appointment {
   appointmentId: number
+  app_id?: string
   metadata: Metadata
   appointmentDate: string
   appointmentDuration: number
+  coPayAmount?: string
+  coInsuranceAmount?: string
   appointmentInterval: number
+  appointmentDateTime?: string
   name: string
   age: number
   clinicLocation: string
@@ -83,4 +98,4 @@ interface Appointment {
   patientId: number
 }
 
-export { type Appointment }
+export { type Appointment, type PaymentType }

@@ -3,14 +3,14 @@
 import React, { PropsWithChildren, useState } from 'react'
 import { Dialog, IconButton } from '@radix-ui/themes'
 import { X } from 'lucide-react'
-import { CustomChargeForm } from './custom-charge-form'
 import { PatientTransaction } from '../types'
+import { CustomChargeForm } from './custom-charge-form'
 
 interface Props {
   patientId: string
   onClose?: () => void
   unappliedAmount?: string
-  transaction?:PatientTransaction
+  transaction?: PatientTransaction
 }
 
 const AddCustomChargeDialog = ({
@@ -18,11 +18,10 @@ const AddCustomChargeDialog = ({
   children,
   onClose,
   unappliedAmount,
-  transaction
+  transaction,
 }: PropsWithChildren<Props>) => {
   const [isOpen, setIsOpen] = useState(false)
   const handleClose = () => {
-    onClose?.()
     setIsOpen(false)
   }
 
@@ -40,7 +39,8 @@ const AddCustomChargeDialog = ({
         </Dialog.Title>
         <CustomChargeForm
           patientId={patientId}
-          onClose={handleClose}
+          closeDialog={handleClose}
+          onClose={onClose}
           unappliedAmount={unappliedAmount}
           transaction={transaction}
         />

@@ -26,16 +26,18 @@ import { getInitialValues } from './utils'
 
 interface CustomChargeFormProps {
   patientId: string
-  onClose: () => void
+  closeDialog: () => void
   unappliedAmount?: string
   transaction?: PatientTransaction
+  onClose?: () => void
 }
 
 const CustomChargeForm = ({
   patientId,
-  onClose,
+  closeDialog,
   unappliedAmount,
   transaction,
+  onClose,
 }: CustomChargeFormProps) => {
   const form = useForm<CustomChargeSchemaType>({
     resolver: zodResolver(chargeSchema),
@@ -66,7 +68,8 @@ const CustomChargeForm = ({
     }
 
     toast.success('Charge created successfully!')
-    onClose()
+    closeDialog()
+    onClose?.()
   }
 
   return (

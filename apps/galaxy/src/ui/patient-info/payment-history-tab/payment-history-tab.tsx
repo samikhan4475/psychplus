@@ -8,6 +8,7 @@ import { AddCustomChargeButton } from './add-custom-charge-button'
 import { AddCustomChargeDialog } from './add-custom-charge-dialog'
 import { FilterForm } from './filter-form'
 import { PaymentButton } from './payment-button'
+import { PaymentDialog } from './payment-dialog'
 import { PaymentHeader } from './payment-header'
 import { PaymentHistoryTable } from './payment-history-table'
 import { PaymentHistoryTablePagination } from './payment-history-table-pagination'
@@ -24,7 +25,7 @@ const PaymentHistoryTab = ({
   patientId,
   googleApiKey,
 }: PaymentHistoryTabProps) => {
-  const { data, refetch, fetchPatientPaymentHistory } = useStore((state) => ({
+  const { data, fetchPatientPaymentHistory, refetch } = useStore((state) => ({
     loading: state.loading,
     fetchPatientPaymentHistory: state.fetchPatientPaymentHistory,
     data: state.data?.paymentHistory,
@@ -35,7 +36,7 @@ const PaymentHistoryTab = ({
     fetchPatientPaymentHistory({ patientIds: [patientId] })
   }, [fetchPatientPaymentHistory, patientId])
 
-  const handleCloseCustomChargeDialog = () => {
+  const handleCloseDialog = () => {
     refetch()
   }
 
@@ -45,23 +46,26 @@ const PaymentHistoryTab = ({
         <Flex gap="2" align="center" className="flex-1" justify="end">
           <AddCustomChargeDialog
             patientId={patientId}
-            onClose={handleCloseCustomChargeDialog}
+            onClose={handleCloseDialog}
             unappliedAmount={formatValueWithDecimals(data?.unappliedPayment)}
           >
             <AddCustomChargeButton />
           </AddCustomChargeDialog>
-          <PaymentButton
+          <PaymentDialog
             stripeApiKey={stripeApiKey}
             patientId={patientId}
             googleApiKey={googleApiKey}
-          />
+            onClose={handleCloseDialog}
+          >
+            <PaymentButton />
+          </PaymentDialog>
         </Flex>
       </TabContentHeading>
       <ScrollArea>
         <PaymentHeader data={data} patientId={patientId} />
         <Flex direction="column" gap="1" className="bg-white w-full py-1">
           <FilterForm patientId={patientId} />
-          <Flex direction="column" pl="2">
+          <Flex direction="column" pl="2" className="h-[calc(100dvh_-_420px)]">
             <PaymentHistoryTable />
             <PaymentHistoryTablePagination />
           </Flex>

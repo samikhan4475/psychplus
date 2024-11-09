@@ -14,10 +14,10 @@ const PaymentHistoryTable = () => {
   }))
 
   if (loading) {
-    return <LoadingPlaceholder className="min-h-[calc(100dvh_-_465px)]" />
+    return <LoadingPlaceholder className="h-full" />
   }
   return (
-    <ScrollArea className="bg-white h-[calc(100dvh_-_465px)] max-w-[calc(100vw_-_198px)] pb-2 pr-2">
+    <ScrollArea className="bg-white h-full max-w-[calc(100vw_-_198px)] pb-2 pr-2">
       <DataTable
         columns={columns(sort, sortData)}
         data={data?.patientTransactions ?? []}

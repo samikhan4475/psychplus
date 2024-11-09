@@ -1,37 +1,16 @@
 'use client'
 
-import { useState } from 'react'
-import { Button } from '@radix-ui/themes'
-import { CreditCard } from 'lucide-react'
-import { PaymentDetailDialog } from './payment-detail-dialog'
+import { Button, Dialog } from '@radix-ui/themes'
+import { CreditCardIcon } from 'lucide-react'
 
-interface PaymentButtonProps {
-  stripeApiKey: string
-  patientId: string
-  googleApiKey: string
-}
-const PaymentButton = ({
-  stripeApiKey,
-  patientId,
-  googleApiKey,
-}: PaymentButtonProps) => {
-  const [open, setOpen] = useState(false)
-  const onOpen = () => setOpen(true)
-  const onClose = () => setOpen(false)
+const PaymentButton = () => {
   return (
-    <>
-      <Button size="1" highContrast onClick={onOpen}>
-        <CreditCard width={12} height={12} />
+    <Dialog.Trigger>
+      <Button size="1" highContrast>
+        <CreditCardIcon width={12} height={12} />
         Payment
       </Button>
-      <PaymentDetailDialog
-        patientId={patientId}
-        open={open}
-        onClose={onClose}
-        stripeApiKey={stripeApiKey}
-        googleApiKey={googleApiKey}
-      />
-    </>
+    </Dialog.Trigger>
   )
 }
 

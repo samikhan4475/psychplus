@@ -3,6 +3,9 @@ enum CreditCardType {
   Discover = 'Discover',
   MasterCard = 'MasterCard',
   AmericanExpress = 'AmericanExpress',
+  DinersClub = 'DinersClub',
+  Jcb = 'Jcb',
+  UnionPay = 'UnionPay',
 }
 
 export { CreditCardType }

@@ -1,0 +1,50 @@
+'use client'
+
+import { Flex, Text } from '@radix-ui/themes'
+import { FormFieldError } from '@/components'
+import { CoInsuranceRow } from './coinsurance-row'
+import { CopayRow } from './copay-row'
+import { CustomAmountRow } from './custom-amount-row'
+import { PaymentPlanRow } from './payment-plan-row'
+import { PaymentTotal } from './payment-total'
+import { RemainingBalance } from './remaining-balance'
+import { RemainingDueRow } from './remaining-due-row'
+
+interface PaymentOptionsProps {
+  patientId: string
+}
+const PaymentOptions = ({ patientId }: PaymentOptionsProps) => {
+  return (
+    <Flex direction="column" className="rounded-2 shadow-2">
+      <Flex className="w-full bg-blue-3 px-2 py-0.5">
+        <Text size="2" weight="medium" className="flex-1">
+          Payment Options
+        </Text>
+        <FormFieldError className="flex-1 text-center" name="paymentType" />
+        <RemainingBalance />
+      </Flex>
+
+      <Flex direction="column" gap="2" className="px-2 py-2">
+        <Flex direction="column" pt="2" className="gap-1.5">
+          <CopayRow patientId={patientId} />
+          <CoInsuranceRow patientId={patientId} />
+          <RemainingDueRow />
+          <CustomAmountRow />
+          <PaymentPlanRow />
+        </Flex>
+
+        {/*  Todo in phase 2 
+        <Flex gap="3" pl="2">
+          <ChargeDatePicker />
+          <ChargeFrequencySelect />
+          <ChargeAmountInput />
+          <ChargeTimesSelect />
+          <TotalAmountInput />
+        </Flex> */}
+        <PaymentTotal />
+      </Flex>
+    </Flex>
+  )
+}
+
+export { PaymentOptions }

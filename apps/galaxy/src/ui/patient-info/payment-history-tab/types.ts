@@ -1,14 +1,20 @@
-import { Metadata } from '@/types'
+import { LegalName, Metadata } from '@/types'
+import { SchemaType } from './filter-form'
 
-interface PatientName {
-  firstName: string
-  middleName: string
-  lastName: string
-  preferredName: string
-  title: string
-  suffix: string
-  honors: string
+enum TransactionType {
+  Visit = 'Visit',
+  NoShow = 'NoShow',
+  Records = 'Records',
+  Letter = 'Letter',
+  PlusMembership = 'PlusMembership',
+  Custom = 'Custom',
+  CancelPLt24 = 'CancelPLt24',
 }
+
+export interface PaymentMap {
+  [key: string]: number
+}
+
 interface PatientTransaction {
   id: number
   metadata: Metadata
@@ -29,7 +35,7 @@ interface PatientTransaction {
   method: string
   stripeNumber: string
   paymentDescription: string
-  patientName: PatientName
+  patientName: LegalName
   preferredPartnerId: string
   isPreferredPartnerTransaction: boolean
   is_active: boolean
@@ -65,6 +71,7 @@ interface GetPatientPaymentHistoryParams {
   preferredPartnerIds?: string[]
   dataRange?: string
 }
+
 interface PaymentHistoryData {
   time: string
   date: string
@@ -110,16 +117,9 @@ interface StaffCommentsBilling {
   comments: string
 }
 
-enum PaymentMethod {
-  CreditCard = 'Credit Card',
-  Cheque = 'Cheque',
-  Cash = 'Cash',
-  CMD = 'CMD',
-}
-
 export {
+  TransactionType,
   type PatientTransaction,
-  PaymentMethod,
   type GetPaymentHistoryData,
   type PaymentHistoryData,
   type PaymentHistory,
@@ -127,4 +127,5 @@ export {
   type StaffCommentsBilling,
   type GetPatientPaymentHistoryParams,
   type GetPaymentHistorysData,
+  type SchemaType,
 }

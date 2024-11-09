@@ -159,13 +159,13 @@ const MultiSelectField = ({
         </Box>
         <DropdownMenu.Content
           className={cn(
-            `w-full min-w-[100px] rounded-1 shadow-3 [&__.rt-BaseMenuViewport]:p-2`,
+            `w-full min-w-max max-w-[100vw] rounded-1 shadow-3 [&__.rt-BaseMenuViewport]:p-2`,
             menuClassName,
           )}
           style={{
-            minWidth: ref?.current?.clientWidth,
+            width: ref?.current?.clientWidth,
           }}
-          align="start"
+          align="center"
         >
           {!options?.length ? (
             <DropdownMenu.Item

@@ -215,6 +215,11 @@ const UPDATE_PATIENT_DRIVING_LICENSE_IMAGE_ENDPOINT = (
   side: string,
 ) => `${API_URL}/api/patients/${patientId}/driverslicenseimage/${side}`
 const GET_ORGANIZATION_ROLES = `${API_URL}/api/organizations/actions/search`
+const GET_PATIENT_UNPAID_APPOINTMENTS_ENDPOINT = (
+  patientId: string,
+  paymentType: string,
+) =>
+  `${API_URL}/api/patients/${patientId}/appointments/actions/unpaid/${paymentType}`
 const GET_ORGANIZATIONS_ENDPOINT = `${API_URL}/api/organizations/actions/search`
 const GET_INSURANCE_PAYERS_LIST_ENDPOINT = `${API_URL}/api/insurance/plans/actions/search`
 const GET_PRACTICES_ENDPOINT = `${API_URL}/api/practices/actions/search`
@@ -278,6 +283,7 @@ const GET_PATIENT_PAYMENTS_ENDPOINT = (patientId: string) =>
   `${API_URL}/api/patients/${patientId}/payments`
 const DOWNLOAD_PATIENT_PAYMENTS_PDF_ENDPOINT = (patientId: string) =>
   `/api/patients/${patientId}/payments/actions/receipts/pdf`
+const PATIENT_CHARGE_PAYMENT_ENDPOINT = `${API_URL}/api/payments/actions/charge`
 
 const UPDATE_PATIENT_RELATIONSHIP_ENDPOINT = (
   patientId: number,
@@ -386,12 +392,13 @@ export {
   INSURANCE_PAYMENT_ATTACHMENTS_ENDPOINT,
   GET_PRACTICE_IDS_LIST_ENDPOINT,
   GET_ORGANIZATION_ROLES,
+  GET_PATIENT_UNPAID_APPOINTMENTS_ENDPOINT,
+  GET_POS_CODES,
   GET_CLEARING_HOUSE_RECEIVER_LIST_ENDPOINT,
   DELETE_CLEARING_HOUSE_RECEIVER_ENDPOINT,
   ADD_CLEARING_HOUSE_RECEIVER_ENDPOINT,
   UPDATE_CLEARING_HOUSE_RECEIVER_ENDPOINT,
   GET_PATIENT_STATEMENTS_LIST_ENDPOINT,
-  GET_POS_CODES,
   ADD_ATTACHMENTS_SECURE_MESSAGE,
   GET_MASTER_FEE_SCHEDULES,
   GET_PROCEDURES_CODES,
@@ -439,4 +446,5 @@ export {
   FETCH_EXTERNAL_PROVIDER_WITH_PATIENT_ENDPOINT,
   FETCH_EXTERNAL_PROVIDERS_ENDPOINT,
   PCP_HISTORY_ENDPOINT,
+  PATIENT_CHARGE_PAYMENT_ENDPOINT,
 }
