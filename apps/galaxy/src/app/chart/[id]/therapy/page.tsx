@@ -1,4 +1,4 @@
-import { TherapyView } from '@/ui/therapy'
+import { TherapyWidget } from '@/ui/therapy'
 
 interface TherapyPageProps {
   params: {
@@ -7,7 +7,7 @@ interface TherapyPageProps {
 }
 
 const TherapyPage = ({ params }: TherapyPageProps) => {
-  return <TherapyView patientId={params.id} />
+  return <TherapyWidget patientId={params.id} />
 }
 
 export default TherapyPage

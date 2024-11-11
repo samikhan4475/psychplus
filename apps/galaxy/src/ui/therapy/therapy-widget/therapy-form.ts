@@ -2,19 +2,12 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { TherapySchema, TherapySchemaType } from './therapy-schema'
 
-const useTherapyForm = () => {
+const useTherapyForm = (initialValue: TherapySchemaType) => {
   const form = useForm<TherapySchemaType>({
     resolver: zodResolver(TherapySchema),
     reValidateMode: 'onChange',
-    defaultValues: {
-      therapyTimeSpent:undefined,
-      therapySessionParticipants:undefined,
-      therapyDetailsInterventions:[],
-      therapyDetailsModality:[],
-      additionalTherapyDetail:undefined
-    },
+    defaultValues: initialValue,
   })
-
   return form
 }
 

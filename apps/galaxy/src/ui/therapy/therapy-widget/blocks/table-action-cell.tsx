@@ -12,8 +12,8 @@ const TableActionCell = ({ onDelete }: TableActionCellProps) => {
       size="2"
       type="button"
       variant="ghost"
-      className="absolute right-0"
-      onClick={onDelete}
+      className="absolute right-1"
+      onClick={onDelete} 
     >
       <Trash2 size={14} color="#60646C" />
     </IconButton>

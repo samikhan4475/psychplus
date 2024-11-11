@@ -1,1 +1,1 @@
-export * from './therapy-view'
+export * from './therapy-widget'

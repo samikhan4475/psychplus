@@ -4,7 +4,7 @@ import React from 'react'
 import * as RadioGroup from '@radix-ui/react-radio-group'
 import { Flex, Text } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
-import { BlockLabel, NumberInput } from '@/components'
+import { BlockLabel, FormFieldError, NumberInput } from '@/components'
 import { BlockDescription } from '@/components/block-description'
 import { cn } from '@/utils'
 
@@ -78,14 +78,15 @@ const RadioSelectInput = ({
               </Text>
 
               {isSelected && (
-                <NumberInput
-                  field={option.value}
-                  className="w-[35px]"
-                  autoFocus
-                  format="##"
-                  min={option.min}
-                  max={option.max}
-                />
+                <>
+                  <NumberInput
+                    field={option.value}
+                    className="w-[35px]"
+                    autoFocus
+                    format="##"
+                  />
+                  <FormFieldError name={option.value} />
+                </>
               )}
             </Flex>
           )

@@ -32,12 +32,12 @@ const TherapyTableColumns = ({
           title="Therapy Modality"
           count={therapyDetailsModality.length}
           data={modalityCodes}
-          width="355px"
+          width="365px"
         />
       ),
       cell: ({ row }) => (
         <TableCellLongText
-          maxWidth={'350px'}
+          maxWidth={'360px'}
           text={row.original?.modality}
           onDelete={() => {
             const updatedModality = [...therapyDetailsModality]
@@ -54,12 +54,12 @@ const TherapyTableColumns = ({
           title="Interventions"
           count={therapyDetailsInterventions.length}
           data={interventionCodes}
-          width="550px"
+          width="545px"
         />
       ),
       cell: ({ row }) => (
         <TableCellLongText
-          maxWidth={'545px'}
+          maxWidth={'540px'}
           text={row.original?.intervention}
           onDelete={() => {
             const updatedIntervention = [...therapyDetailsInterventions]

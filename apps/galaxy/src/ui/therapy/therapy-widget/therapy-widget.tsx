@@ -1,31 +1,34 @@
 'use client'
 
 import { FormProvider } from 'react-hook-form'
-import { WidgetFormContainer, WidgetHxButton } from '@/components'
+import { WidgetFormContainer } from '@/components'
 import { AdditionalTherapyDetailBlock } from './blocks/additional-therapy-detail'
+import { ClearButton } from './blocks/clear-button'
 import { SaveButton } from './blocks/save-button'
 import { TherapySessionParticipantsBlock } from './blocks/session-participants'
 import { TherapyTableBlock } from './blocks/therapy-table-block'
 import { TherapyTimeSpentBlock } from './blocks/time-spent'
+import { transformOut } from './data'
 import { useTherapyForm } from './therapy-form'
+import { TherapySchemaType } from './therapy-schema'
 
 interface TherapyWidgetProps {
   patientId: string
+  initialValue: TherapySchemaType
 }
 
-const TherapyWidget = ({ patientId }: TherapyWidgetProps) => {
-  const form = useTherapyForm()
+const TherapyWidget = ({ patientId, initialValue }: TherapyWidgetProps) => {
+  const form = useTherapyForm(initialValue)
   return (
     <FormProvider {...form}>
       <WidgetFormContainer
         patientId={patientId}
         widgetId="therapy-details"
         title="Therapy"
-        getData={() => []}
-        className='h-[400px]'
+        getData={transformOut(patientId)}
         headerRight={
           <>
-            <WidgetHxButton />
+            <ClearButton />
             <SaveButton />
           </>
         }

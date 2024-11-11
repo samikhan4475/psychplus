@@ -5,7 +5,7 @@ import { SaveIcon } from 'lucide-react'
 
 const SaveButton = () => {
   return (
-    <Button size="1" onClick={() => {}} disabled={false} highContrast>
+    <Button size="1" type="submit"  highContrast>
       <SaveIcon height={14} width={14} strokeWidth={2} />
       Save
     </Button>
@@ -13,3 +13,4 @@ const SaveButton = () => {
 }
 
 export { SaveButton }
+

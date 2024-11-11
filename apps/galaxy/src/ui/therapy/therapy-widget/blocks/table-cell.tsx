@@ -7,7 +7,7 @@ interface TableCellEmptyProps {
   label?: string
 }
 
-const TableCellEmpty = ({ label = 'Empty' }: TableCellEmptyProps) => (
+const TableCellEmpty = ({ label = '' }: TableCellEmptyProps) => (
   <Text size="1" className="text-gray-9">
     {label}
   </Text>

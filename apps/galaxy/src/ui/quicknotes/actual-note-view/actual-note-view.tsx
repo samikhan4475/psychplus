@@ -21,6 +21,7 @@ import { ReviewOfSystem } from './ros'
 import { SocialHx } from './social-hx'
 import { SubstanceUseHx } from './substance-use-hx'
 import { TherapistPlan } from './therapist-plan'
+import { TherapyHx } from './therapy-hx '
 import { VitalsTable } from './vitals-table'
 import { WorkingDiagnosis } from './working-diagnosis'
 
@@ -55,6 +56,7 @@ const ActualNoteView = ({ patientId }: ActualNoteViewProps) => {
           <Referral />
           <FollowUp />
           <Codes />
+          <TherapyHx patientId={patientId} />
         </Flex>
       </ScrollArea>
     </ActualNoteViewClient>

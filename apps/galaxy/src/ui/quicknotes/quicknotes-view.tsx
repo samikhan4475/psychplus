@@ -14,6 +14,7 @@ import { PatientReferralsWidget } from '@/ui/referrals'
 import { RosWidget } from '@/ui/ros'
 import { SocialHxWidget } from '@/ui/social-hx'
 import { SubstanceUseHxWidget } from '@/ui/substance-use-hx'
+import { TherapyWidget } from '@/ui/therapy'
 import { QuicknotesDiagnosisWidget } from '../diagnosis/quicknotes-diagnosis-widget'
 import { FollowUpWidget } from '../follow-up'
 import { PhysicalExamWidget } from '../physical-exam'
@@ -22,6 +23,7 @@ import { QuicknotesVitalsWidget } from '../vitals'
 import { ActualNoteView } from './actual-note-view'
 import { QuickNotesHeader } from './quicknotes-header'
 import { QuickNotesSaver } from './quicknotes-saver'
+
 
 interface QuickNotesViewProps {
   patientId: string
@@ -55,6 +57,7 @@ const QuickNotesView = ({ patientId, appointmentId }: QuickNotesViewProps) => {
             <PatientReferralsWidget patientId={patientId} />
             <FollowUpWidget patientId={patientId} />
             <CodesWidget patientId={patientId} />
+            <TherapyWidget patientId={patientId} />
             <EctWidget patientId={patientId} />
           </Flex>
         </ScrollArea>
