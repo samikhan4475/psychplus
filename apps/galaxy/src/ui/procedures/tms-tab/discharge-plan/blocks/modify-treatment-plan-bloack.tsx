@@ -24,10 +24,10 @@ const TREATMENT_PLAN_OPTIONS = [
 const ModifyTreatmentPlanBlock = () => {
   return (
     <Flex align={'center'} gap={'1'}>
-      <Text>Treatment plan will be modified to the</Text>
+      <Text>Treatment plan will be modified to begin the</Text>
       <SelectInput
         placeholder="Select"
-        field=""
+        field="modifyTreatmentPlanDetail"
         buttonClassName="border-pp-gray-2 w-[122px] h-6 border border-solid !outline-none [box-shadow:none]"
         options={TREATMENT_PLAN_OPTIONS}
         tooltip

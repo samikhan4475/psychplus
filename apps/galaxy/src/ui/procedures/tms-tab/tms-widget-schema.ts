@@ -3,78 +3,59 @@ import { z } from 'zod'
 type TmsWidgetSchemaType = z.infer<typeof tmsWidgetSchema>
 
 const tmsWidgetSchema = z.object({
-  tmsSeizureBlock: z.object({
-    seizure: z.enum(['yes', 'no']),
-    details: z.string().optional().nullable(),
-  }),
-  tmsDizzinessBlock: z.object({
-    dizziness: z.enum(['yes', 'no']),
-    details: z.string().optional().nullable(),
-  }),
-  tmsHeadacheBlock: z.object({
-    headache: z.enum(['yes', 'no']),
-    details: z.string().optional().nullable(),
-  }),
-  tmsFatigueBlock: z.object({
-    fatigue: z.enum(['yes', 'no']),
-    details: z.string().optional().nullable(),
-  }),
-  tmsMuscleTwitchingBlock: z.object({
-    muscleTwitching: z.enum(['yes', 'no']),
-    details: z.string().optional().nullable(),
-  }),
-  suicide: z.enum(['yes', 'no']), // Kept as is
-  tmsScalpDiscomfortBlock: z.object({
-    scalpDiscomfort: z.enum(['yes', 'no']),
-    details: z.string().optional().nullable(),
-  }),
-  tmsOtherBlock: z.object({
-    other: z.enum(['yes', 'no']),
-    details: z.string().optional().nullable(),
-  }),
-  dischargePlan: z.array(
-    z.enum([
-      'continueWithCurrentProtocol',
-      'modifyTreatmentPlan',
-      'discontinueTreatment',
-      'referral',
-      'followupAssessmentScreening',
-    ]),
-  ),
-  tmsDischargePlanBlock: z.array(
-    z.object({
-      discharge: z.enum([
-        'continueWithCurrentProtocol',
-        'modifyTreatmentPlan',
-        'discontinueTreatment',
-        'referral',
-        'followupAssessmentScreening',
-      ]),
-      value: z.string(),
-    }),
-  ),
-  followUpBlock: z.array(z.string().optional()),
+  tmsSeizureBlock: z.string(),
+  tmsSeizureBlockDetail: z.string(),
+
+  tmsDizzinessBlock: z.string(),
+  tmsDizzinessBlockDetail: z.string(),
+
+  tmsHeadacheBlock: z.string(),
+  tmsHeadacheBlockDetail: z.string(),
+
+  tmsFatigueBlock: z.string(),
+  tmsFatigueBlockDetail: z.string(),
+
+  tmsMuscleTwitchingBlock: z.string(),
+  tmsMuscleTwitchingBlockDetail: z.string(),
+
+  suicide: z.string(),
+
+  tmsScalpDiscomfortBlock: z.string(),
+  tmsScalpDiscomfortBlockDetail: z.string(),
+
+  tmsOtherBlock: z.string(),
+  tmsOtherBlockDetail: z.string(),
+
+  dischargePlan: z.array(z.string()).min(1, 'required'),
+  modifyTreatmentPlanDetail: z.string(),
+  discontinueTreatmentDetail: z.string(),
+  referralDetail: z.string(),
+  followUpBlock: z.array(z.string()),
   typeOfThetaBurst: z.string(),
   frequency: z.string(),
-  frequencyOfSession: z.number(),
-  durationFrom: z.number(),
-  durationTo: z.number(),
-  optimalStimulationLevel: z.number(),
+  frequencyOfSession: z.string().min(1,'required'),
+  frequencyUnit: z.string(),
+  plannedSession: z.string().min(1,'required'),
+  durationFrom: z.string().min(1,'required'),
+  intermittentDurationFrom: z.string().min(1,'required'),
+  durationTo: z.string().min(1,'required'),
+  optimalStimulationLevel: z.string(),
   motorThershold: z.array(
     z.object({
       dateTime: z.string(),
       user: z.string(),
       motorThersholdPercent: z.string(),
     }),
-  ),
-  stimulationLevel: z.number(),
-  precautionsAndWarnings: z.array(z.number().optional()),
+  ).min(1, 'required'),
+  stimulationLevel: z.string(),
+  precautionsAndWarnings: z.array(z.string()),
   tmdSessionNo: z.string(),
   stimulationSite: z.string(),
   coilTypeUsed: z.string(),
   treatmentParameter: z.string(),
+  treatmentAdjustmentDetail: z.string(),
   burstPattern: z.string(),
-  treatmentAndObservation: z.string(),
+  treatmentAndObservation: z.string().min(1, 'required'),
   protocol: z.string(),
   motorThersholdValue: z.string(),
 })

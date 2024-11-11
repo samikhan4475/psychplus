@@ -13,11 +13,13 @@ import { TmsTab } from './tms-tab'
 interface ProceduresViewProps {
   patientId: string
   procedureEctData: QuickNoteSectionItem[]
+  procedureTmsData: QuickNoteSectionItem[]
 }
 
 const ProceduresView = ({
   patientId,
   procedureEctData,
+  procedureTmsData,
 }: ProceduresViewProps) => {
   const { activeTab, setActiveTab } = useStore((state) => ({
     activeTab: state.activeTab,
@@ -48,7 +50,7 @@ const ProceduresView = ({
         <EctWidget patientId={patientId} procedureEctData={procedureEctData} />
       </TabsContent>
       <TabsContent value={ProcedureTabs.TMS}>
-        <TmsTab patientId={patientId} />
+        <TmsTab patientId={patientId} procedureTmsData={procedureTmsData} />
       </TabsContent>
       <TabsContent value={ProcedureTabs.SPRAVATO}>
         <SpravatoTab patientId={patientId} />

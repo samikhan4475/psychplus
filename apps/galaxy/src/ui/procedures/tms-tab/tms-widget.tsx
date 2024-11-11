@@ -6,7 +6,9 @@ import {
   WidgetHxButton,
   WidgetSaveButton,
 } from '@/components'
+import { QuickNoteSectionItem } from '@/types'
 import { ProcedureTabs, ProcedureTabsId } from '../constants'
+import { transformIn, transformOut } from './data'
 import { DischargePlanView } from './discharge-plan'
 import MonitoringView from './monitoring/monitoring-view'
 import { useTmsWidgetForm } from './tms-widget-form'
@@ -14,10 +16,12 @@ import { TreatmentSessionView } from './treatment-session'
 
 interface TmsTabProps {
   patientId: string
+  procedureTmsData: QuickNoteSectionItem[]
 }
 
-const TmsTab = ({ patientId }: TmsTabProps) => {
-  const form = useTmsWidgetForm()
+const TmsTab = ({ patientId, procedureTmsData }: TmsTabProps) => {
+  const initialValue = transformIn(procedureTmsData)
+  const form = useTmsWidgetForm(initialValue)
 
   return (
     <FormProvider {...form}>
@@ -25,7 +29,7 @@ const TmsTab = ({ patientId }: TmsTabProps) => {
         patientId={patientId}
         widgetId={ProcedureTabsId.TMS_ID}
         title={ProcedureTabs.TMS}
-        getData={() => []}
+        getData={transformOut(patientId)}
         headerRight={
           <>
             <WidgetHxButton />

@@ -1,7 +1,7 @@
 'use client'
 
 import { Flex } from '@radix-ui/themes'
-import { BlockLabel } from '@/components'
+import { BlockLabel, FormFieldError } from '@/components'
 import { MotorThresholdDialog, ThresholdTable } from './blocks'
 
 const MotorThreshold = () => {
@@ -12,6 +12,7 @@ const MotorThreshold = () => {
           Motor Threshold Determination (MT)
         </BlockLabel>
         <MotorThresholdDialog />
+        <FormFieldError name="motorThershold" />
       </Flex>
       <ThresholdTable className="w-[35%]" renderFirstRowOnly />
     </Flex>

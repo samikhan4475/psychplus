@@ -5,7 +5,7 @@ const ReferralBlock = () => {
   return (
     <FormFieldContainer>
       <FormFieldLabel>Referral</FormFieldLabel>
-      <TextAreaInput field="dizziness.details" className="h-full w-full" />
+      <TextAreaInput field="referralDetail" className="h-full w-full" />
     </FormFieldContainer>
   )
 }

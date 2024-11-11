@@ -6,6 +6,7 @@ import { Controller, useFormContext } from 'react-hook-form'
 import { PatternFormat } from 'react-number-format'
 import { cn } from '@/utils'
 import { BlockLabel } from './block-label'
+import { FormFieldError } from './form'
 
 interface NumberInputProps {
   label?: string
@@ -15,6 +16,8 @@ interface NumberInputProps {
   autoFocus?: boolean
   className?: string
   disabled?: boolean
+  required?: boolean
+  showError?: boolean
   min?: number
   max?: number
 }
@@ -27,6 +30,8 @@ const NumberInput = ({
   className,
   autoFocus,
   disabled,
+  required = false,
+  showError = true,
   min,
   max,
 }: NumberInputProps) => {
@@ -64,7 +69,11 @@ const NumberInput = ({
 
   return (
     <Flex align="center" gap="2">
-      {label && <BlockLabel name={fieldName}>{label}</BlockLabel>}
+      {label && (
+        <BlockLabel name={fieldName} required={required}>
+          {label}
+        </BlockLabel>
+      )}
       <Controller
         control={form.control}
         name={fieldName}
@@ -94,6 +103,7 @@ const NumberInput = ({
           )
         }}
       />
+      {showError && <FormFieldError name={fieldName} />}
     </Flex>
   )
 }

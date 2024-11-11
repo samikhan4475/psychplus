@@ -39,7 +39,7 @@ const StimulationIntensity = () => {
   useEffect(() => {
     form.setValue(
       'stimulationLevel',
-      optimalStimulationLevel * motorThersholdValue,
+      (optimalStimulationLevel * motorThersholdValue).toString(),
     )
   }, [optimalStimulationLevel, motorThersholdValue])
 

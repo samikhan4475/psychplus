@@ -2,18 +2,18 @@ import { useFormContext } from 'react-hook-form'
 import { TextAreaInput, YesNoSelect } from '@/components'
 import { TmsWidgetSchemaType } from '../../tms-widget-schema'
 
-const BLOCK_ID = 'tmsFatigueBlock.fatigue'
+const BLOCK_ID = 'tmsFatigueBlock'
 const BLOCK_TITLE = 'Fatigue'
 
 const FatigueBlock = () => {
   const form = useFormContext<TmsWidgetSchemaType>()
-  const fatigue = form.watch('tmsFatigueBlock.fatigue')
+  const fatigue = form.watch(BLOCK_ID)
   return (
     <>
       <YesNoSelect label={BLOCK_TITLE} field={BLOCK_ID} />
       {fatigue === 'yes' && (
         <TextAreaInput
-          field="tmsFatigueBlock.details"
+          field="tmsFatigueBlockDetail"
           className="h-full w-full"
         />
       )}
@@ -21,4 +21,4 @@ const FatigueBlock = () => {
   )
 }
 
-export default FatigueBlock;
+export default FatigueBlock

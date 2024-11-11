@@ -49,7 +49,12 @@ const ThetaBurstSimulation = () => {
 
       <Flex direction="row" gap="1" className="align-middle">
         <BlockLabel required>Duration</BlockLabel>
-        <UnitInput field="durationFrom" symbol="sec" />
+        {typeOfThetaBurst === TypeOfThetaBurst.ContinuesThetaBurst && (
+          <UnitInput field={'durationFrom'} symbol="sec" />
+        )}
+        {typeOfThetaBurst === TypeOfThetaBurst.IntermittentThetaBurst && (
+          <UnitInput field={'intermittentDurationFrom'} symbol="sec" />
+        )}
         {typeOfThetaBurst === TypeOfThetaBurst.ContinuesThetaBurst && (
           <>
             <Text className="text-4 font-regular">-</Text>

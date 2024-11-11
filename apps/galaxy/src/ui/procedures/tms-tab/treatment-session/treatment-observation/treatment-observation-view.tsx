@@ -1,5 +1,5 @@
 import { Button, Flex, Text } from '@radix-ui/themes'
-import { BlockLabel, TextAreaInput } from '@/components'
+import { BlockLabel, FormFieldError, TextAreaInput } from '@/components'
 
 const Badge = ({ text }: { text: string }) => {
   return (
@@ -17,9 +17,12 @@ const Badge = ({ text }: { text: string }) => {
 const TreatmentObservation = () => {
   return (
     <Flex direction="column" gap="1">
-      <BlockLabel required className="text-2 font-[600]">
-        Treatment Observation & Patient Response
-      </BlockLabel>
+      <Flex align={'center'} gap={'2'}>
+        <BlockLabel required className="text-2 font-[600]">
+          Treatment Observation & Patient Response
+        </BlockLabel>
+        <FormFieldError name="treatmentAndObservation" />
+      </Flex>
 
       <TextAreaInput
         field="treatmentAndObservation"

@@ -5,7 +5,10 @@ const DiscontinueBlock = () => {
   return (
     <FormFieldContainer>
       <FormFieldLabel>Discontinue Treatment</FormFieldLabel>
-      <TextAreaInput field="dizziness.details" className="h-full w-full" />
+      <TextAreaInput
+        field="discontinueTreatmentDetail"
+        className="h-full w-full"
+      />
     </FormFieldContainer>
   )
 }

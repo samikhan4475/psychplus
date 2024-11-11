@@ -1,7 +1,9 @@
+import { Flex } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
 import {
   BlockLabel,
   FormFieldContainer,
+  FormFieldError,
   GroupSelectSection,
 } from '@/components'
 import { TmsWidgetSchemaType } from '../../tms-widget-schema'
@@ -37,12 +39,16 @@ const BLOCK_OPTIONS = [
 
 const DischargePlanBlock = () => {
   const form = useFormContext<TmsWidgetSchemaType>()
-  const dischargeBlock = form.watch('dischargePlan')
+  const dischargeBlock = form.watch(BLOCK_ID)
+
   return (
     <FormFieldContainer className="gap-2">
-      <BlockLabel required className="text-3 font-[600]">
-        Discharge Plan
-      </BlockLabel>
+      <Flex align={'center'} gap={'2'}>
+        <BlockLabel required className="text-3 font-[600]">
+          Discharge Plan
+        </BlockLabel>
+        <FormFieldError name={BLOCK_ID} />
+      </Flex>
       <GroupSelectSection label="" field={BLOCK_ID} options={BLOCK_OPTIONS} />
       {dischargeBlock.map((dischargeBlockItem, index) => (
         <FormFieldContainer key={dischargeBlockItem + index} className="mt-2">

@@ -27,6 +27,7 @@ const TreatmentRegime = () => {
           label="Frequency of Sessions"
           field="frequencyOfSession"
           className="h-6 w-9"
+          required
         />
         <Text className="text-4">/</Text>
         <SelectInput
@@ -39,6 +40,7 @@ const TreatmentRegime = () => {
           label="No. of Planned Sessions"
           field="plannedSession"
           className="h-6 w-24"
+          required
         />
       </Flex>
     </Flex>

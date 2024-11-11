@@ -40,7 +40,7 @@ const MotorThresholdDialog = () => {
         user: `${user?.legalName.firstName ?? ''} ${
           user?.legalName.lastName ?? ''
         }`,
-        motorThersholdPercent: motorThreshold,
+        motorThersholdPercent: motorThreshold.toString(),
       },
       ...motorThersholdData,
     ]
