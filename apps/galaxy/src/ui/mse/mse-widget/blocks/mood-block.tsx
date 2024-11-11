@@ -1,51 +1,69 @@
 import { GroupSelectSection } from '@/components'
+import { MseGroupDetailSection } from '../history/mse-details/mse-group-detail-section'
+import { MseWidgetSchemaType } from '../mse-widget-schema'
+import { GroupSelectOption } from '../types'
 
 const BLOCK_ID = 'mood'
 
 const BLOCK_TITLE = 'Mood'
 
-const BLOCK_OPTIONS = [
+const BLOCK_OPTIONS: GroupSelectOption<string>[] = [
   {
     label: 'Depressed',
-    value: 'depressed',
+    value: 'modDepressed',
   },
   {
     label: 'Dysphoric',
-    value: 'dysphoric',
+    value: 'modDysphoric',
   },
   {
     label: 'Anxious',
-    value: 'anxious',
+    value: 'modAnxious',
   },
   {
     label: 'Elevated',
-    value: 'elevated',
+    value: 'modElevated',
   },
   {
     label: 'Irritable',
-    value: 'irritable',
+    value: 'modIrritable',
   },
   {
     label: 'Angry',
-    value: 'angry',
+    value: 'modAngry',
   },
   {
     label: 'Euthymic',
-    value: 'euthymic',
+    value: 'modEuthymic',
   },
   {
     label: 'Other',
-    value: 'other',
+    value: 'modOther',
+    details: {
+      type: 'text',
+      field: 'modOtherDetails',
+    },
   },
 ]
 
-const MoodBlock = () => {
+const MoodBlock = ({ result }: { result?: MseWidgetSchemaType }) => {
   return (
-    <GroupSelectSection
-      label={BLOCK_TITLE}
-      field={BLOCK_ID}
-      options={BLOCK_OPTIONS}
-    />
+    <>
+      {result ? (
+        <MseGroupDetailSection
+          label={BLOCK_TITLE}
+          field={BLOCK_ID}
+          options={BLOCK_OPTIONS}
+          result={result}
+        />
+      ) : (
+        <GroupSelectSection
+          label={BLOCK_TITLE}
+          field={BLOCK_ID}
+          options={BLOCK_OPTIONS}
+        />
+      )}
+    </>
   )
 }
 

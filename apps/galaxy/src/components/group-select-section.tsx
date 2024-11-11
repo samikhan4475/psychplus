@@ -10,7 +10,7 @@ import {
 } from './selectable-chip-details'
 
 interface GroupSelectSectionProps<T extends string> {
-  label: string
+  label?: string
   field: string
   options: GroupSelectOption<T>[]
   parentField?: string

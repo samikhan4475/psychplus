@@ -1,55 +1,73 @@
 import { GroupSelectSection } from '@/components'
+import { MseGroupDetailSection } from '../history/mse-details/mse-group-detail-section'
+import { MseWidgetSchemaType } from '../mse-widget-schema'
+import { GroupSelectOption } from '../types'
 
 const BLOCK_ID = 'thoughtProcess'
 
 const BLOCK_TITLE = 'Thought Process'
 
-const BLOCK_OPTIONS = [
+const BLOCK_OPTIONS: GroupSelectOption<string>[] = [
   {
     label: 'Linear',
-    value: 'linear',
+    value: 'thpLinear',
   },
   {
     label: 'Loose',
-    value: 'loose',
+    value: 'thpLoose',
   },
   {
     label: 'Circumstantial',
-    value: 'circumstantial',
+    value: 'thpCircumstantial',
   },
   {
     label: 'Tangential',
-    value: 'tangential',
+    value: 'thpTangential',
   },
   {
     label: 'Flight of ideas',
-    value: 'flightOfIdeas',
+    value: 'thpFlightOfIdeas',
   },
   {
     label: 'Disorganized',
-    value: 'disorganized',
+    value: 'thpDisorganized',
   },
   {
     label: 'Concrete',
-    value: 'concrete',
+    value: 'thpConcrete',
   },
   {
     label: 'Blocking',
-    value: 'blocking',
+    value: 'thpBlocking',
   },
   {
     label: 'Other',
-    value: 'other',
+    value: 'thpOther',
+    details: {
+      type: 'text',
+      field: 'thpOtherDetails',
+    },
   },
 ]
 
-const ThoughtProcessBlock = () => {
+const ThoughtProcessBlock = ({ result }: { result?: MseWidgetSchemaType }) => {
   return (
-    <GroupSelectSection
-      label={BLOCK_TITLE}
-      field={BLOCK_ID}
-      options={BLOCK_OPTIONS}
-    />
+    <>
+      {result ? (
+        <MseGroupDetailSection
+          label={BLOCK_TITLE}
+          field={BLOCK_ID}
+          options={BLOCK_OPTIONS}
+          result={result}
+        />
+      ) : (
+        <GroupSelectSection
+          label={BLOCK_TITLE}
+          field={BLOCK_ID}
+          options={BLOCK_OPTIONS}
+        />
+      )}
+    </>
   )
 }
 

@@ -8,7 +8,7 @@ import { HpiDetailView } from './hpi'
 import { Injection } from './injection'
 import { InteractiveComplexity } from './interactive-complexity'
 import { Medications } from './medications'
-import { MentalStatusExam } from './mental-status-exam'
+import { MentalStatusExamHx } from './mental-status-exam-hx'
 import { NoteViewHeader } from './note-view-header'
 import { PastMedicalHx } from './past-medical-hx'
 import { PastPsychlDetailView } from './past-psych-hx'
@@ -45,7 +45,7 @@ const ActualNoteView = ({ patientId }: ActualNoteViewProps) => {
           <Question />
           <ReviewOfSystem />
           <VitalsTable />
-          <MentalStatusExam />
+          <MentalStatusExamHx patientId={patientId} />
           <WorkingDiagnosis />
           <PsychiatristPlan />
           <TherapistPlan />

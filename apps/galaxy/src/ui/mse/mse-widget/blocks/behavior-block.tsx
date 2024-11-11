@@ -1,35 +1,53 @@
 import { GroupSelectSection } from '@/components'
+import { MseGroupDetailSection } from '../history/mse-details/mse-group-detail-section'
+import { MseWidgetSchemaType } from '../mse-widget-schema'
+import { GroupSelectOption } from '../types'
 
 const BLOCK_ID = 'behavior'
 
 const BLOCK_TITLE = 'Behavior'
 
-const BLOCK_OPTIONS = [
+const BLOCK_OPTIONS: GroupSelectOption<string>[] = [
   {
     label: 'Redirectable',
-    value: 'redirectable',
+    value: 'behRedirectable',
   },
   {
     label: 'Uncooperative',
-    value: 'uncooperative',
+    value: 'behUncooperative',
   },
   {
     label: 'Poor eye contact',
-    value: 'poorEyeContact',
+    value: 'behPoorEyeContact',
   },
   {
     label: 'Other',
-    value: 'other',
+    value: 'behOther',
+    details: {
+      type: 'text',
+      field: 'behOtherDetails',
+    },
   },
 ]
 
-const BehaviorBlock = () => {
+const BehaviorBlock = ({ result }: { result?: MseWidgetSchemaType }) => {
   return (
-    <GroupSelectSection
-      label={BLOCK_TITLE}
-      field={BLOCK_ID}
-      options={BLOCK_OPTIONS}
-    />
+    <>
+      {result ? (
+        <MseGroupDetailSection
+          label={BLOCK_TITLE}
+          field={BLOCK_ID}
+          options={BLOCK_OPTIONS}
+          result={result}
+        />
+      ) : (
+        <GroupSelectSection
+          label={BLOCK_TITLE}
+          field={BLOCK_ID}
+          options={BLOCK_OPTIONS}
+        />
+      )}
+    </>
   )
 }
 

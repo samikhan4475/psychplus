@@ -15,6 +15,8 @@ interface RadioSelectSectionProps {
   options: RadioSelectOption[]
   required?: boolean
   className?: string
+  disabled?: boolean
+  defaultValue?: string
 }
 
 interface RadioSelectOption {
@@ -29,10 +31,12 @@ const RadioSelectSection = ({
   options,
   required,
   className = 'rounded-1 border border-gray-7', // in some cases we don't need border
+  disabled = false,
+  defaultValue,
 }: RadioSelectSectionProps) => {
   const form = useFormContext()
 
-  const value = form.watch(field)
+  const value = disabled ? defaultValue : form.watch(field)
 
   return (
     <Flex align="start" justify="start" gap="2">
@@ -40,7 +44,9 @@ const RadioSelectSection = ({
       {description && <BlockDescription>{description}</BlockDescription>}
       <RadioGroup.Root
         onValueChange={(value) => {
-          form.setValue(field, value)
+          if (!disabled) {
+            form.setValue(field, value)
+          }
         }}
         value={value}
         className="flex gap-1.5"
@@ -55,25 +61,31 @@ const RadioSelectSection = ({
               as="label"
               htmlFor={id}
               className={cn(
-                'flex h-[var(--chip-height)] cursor-pointer items-center px-1',
+                'flex h-[var(--chip-height)] items-center px-1',
                 className,
                 {
                   'border-pp-focus-outline bg-pp-focus-bg': isSelected,
                 },
+                { 'cursor-pointer': !disabled },
               )}
             >
               <RadioGroup.Item
                 className="rounded-full flex h-[12px] w-[12px] items-center justify-center border border-gray-9 data-[state=checked]:bg-blue-11"
                 value={option.value}
                 id={id}
+                disabled={disabled}
               >
                 <RadioGroup.Indicator className="after:bg-white after:rounded-full flex h-full w-full items-center justify-center after:block after:h-[4px] after:w-[4px] after:content-['']" />
               </RadioGroup.Item>
               <Text
                 ml="1"
-                className={cn('cursor-pointer text-[11px]', {
-                  'font-medium': isSelected,
-                })}
+                className={cn(
+                  'text-[11px]',
+                  {
+                    'font-medium': isSelected,
+                  },
+                  { 'cursor-pointer': !disabled },
+                )}
               >
                 {option.label}
               </Text>

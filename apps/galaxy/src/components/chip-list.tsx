@@ -10,15 +10,24 @@ interface ChipListProps {
   chipClassName?: string
   className?: string
   field: string
+  isDisable?: boolean
 }
-const ChipList = ({ data, options, chipClassName, field }: ChipListProps) => {
+const ChipList = ({
+  data,
+  options,
+  chipClassName,
+  field,
+  isDisable,
+}: ChipListProps) => {
   const { setValue, getValues } = useFormContext()
 
   const handleDelete = (index: number) => {
-    const updatedArray = getValues(field).filter(
-      (_: string, idx: number) => idx !== index,
-    )
-    setValue(field, updatedArray)
+    if (!isDisable) {
+      const updatedArray = getValues(field).filter(
+        (_: string, idx: number) => idx !== index,
+      )
+      setValue(field, updatedArray)
+    }
   }
   if (!data?.length) return
   return data.map((item, idx) => {

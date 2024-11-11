@@ -9,7 +9,7 @@ const MseView = ({ patientId }: MseViewProps) => {
   return (
     <Flex direction="column" width="100%">
       <Flex direction="column" gap="2">
-        <MseWidget patientId={patientId} />
+        <MseWidget patientId={patientId} isMseTab={true} />
       </Flex>
     </Flex>
   )

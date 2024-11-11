@@ -26,6 +26,7 @@ enum QuickNoteSectionName {
   QuicknoteSectionHPI = 'QuicknoteSectionHPI',
   Addon = 'QuicknoteSectionAddOn',
   Vitals = 'QuicknoteSectionVital',
+  QuicknoteSectionMse = 'QuicknoteSectionMse',
 }
 
 export { QuickNoteSectionName }

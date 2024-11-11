@@ -1,51 +1,69 @@
 import { GroupSelectSection } from '@/components'
+import { MseGroupDetailSection } from '../history/mse-details/mse-group-detail-section'
+import { MseWidgetSchemaType } from '../mse-widget-schema'
+import { GroupSelectOption } from '../types'
 
 const BLOCK_ID = 'psychomotor'
 
 const BLOCK_TITLE = 'Psychomotor'
 
-const BLOCK_OPTIONS = [
+const BLOCK_OPTIONS: GroupSelectOption<string>[] = [
   {
-    label: 'No slowing/agitation',
-    value: 'noSlowingAgitation',
+    label: 'No slow/agitations',
+    value: 'psyNoSlowAgitations',
   },
   {
     label: 'Slowing',
-    value: 'slowing',
+    value: 'psySlowing',
   },
   {
     label: 'Agitation',
-    value: 'agitation',
+    value: 'psyAgitation',
   },
   {
     label: 'Catatonic',
-    value: 'catatonic',
+    value: 'psyCatatonic',
   },
   {
     label: 'Tremors',
-    value: 'tremors',
+    value: 'psyTremors',
   },
   {
     label: 'TD',
-    value: 'td',
+    value: 'psyTd',
   },
   {
-    label: 'Ticks',
-    value: 'ticks',
+    label: 'Tics',
+    value: 'psyTics',
   },
   {
     label: 'Other',
-    value: 'other',
+    value: 'psyOther',
+    details: {
+      type: 'text',
+      field: 'psyOtherDetails',
+    },
   },
 ]
 
-const PsychomotorBlock = () => {
+const PsychomotorBlock = ({ result }: { result?: MseWidgetSchemaType }) => {
   return (
-    <GroupSelectSection
-      label={BLOCK_TITLE}
-      field={BLOCK_ID}
-      options={BLOCK_OPTIONS}
-    />
+    <>
+      {result ? (
+        <MseGroupDetailSection
+          label={BLOCK_TITLE}
+          field={BLOCK_ID}
+          options={BLOCK_OPTIONS}
+          result={result}
+        />
+      ) : (
+        <GroupSelectSection
+          label={BLOCK_TITLE}
+          field={BLOCK_ID}
+          options={BLOCK_OPTIONS}
+        />
+      )}
+    </>
   )
 }
 

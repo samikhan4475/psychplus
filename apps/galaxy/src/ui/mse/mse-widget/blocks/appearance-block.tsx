@@ -1,35 +1,57 @@
 import { GroupSelectSection } from '@/components'
+import { MseGroupDetailSection } from '../history/mse-details/mse-group-detail-section'
+import { MseWidgetSchemaType } from '../mse-widget-schema'
+import { GroupSelectOption } from '../types'
 
-const BLOCK_ID = 'orientation'
+const BLOCK_ID = 'appearance'
 
-const BLOCK_TITLE = 'Orientation'
+const BLOCK_TITLE = 'Appearance'
 
-const BLOCK_OPTIONS = [
+const BLOCK_OPTIONS: GroupSelectOption<string>[] = [
   {
     label: 'Casual dress',
-    value: 'casualDress',
+    value: 'appCasualDress',
   },
   {
     label: 'Disheveled',
-    value: 'disheveled',
+    value: 'appDisheveled',
   },
   {
     label: 'Bad odor',
-    value: 'badOdor',
+    value: 'appBadOrder',
+  },
+  {
+    label: 'Obese',
+    value: 'appObese',
   },
   {
     label: 'Other',
-    value: 'other',
+    value: 'appOther',
+    details: {
+      type: 'text',
+      field: 'appOtherDetails',
+    },
   },
 ]
 
-const AppearanceBlock = () => {
+const AppearanceBlock = ({ result }: { result?: MseWidgetSchemaType }) => {
   return (
-    <GroupSelectSection
-      label={BLOCK_TITLE}
-      field={BLOCK_ID}
-      options={BLOCK_OPTIONS}
-    />
+    <>
+      {result ? (
+        <MseGroupDetailSection
+          label={BLOCK_TITLE}
+          field={BLOCK_ID}
+          options={BLOCK_OPTIONS}
+          result={result}
+        />
+      ) : (
+        <GroupSelectSection
+          label={BLOCK_TITLE}
+          field={BLOCK_ID}
+          options={BLOCK_OPTIONS}
+        />
+      )}
+    </>
   )
 }
 
