@@ -22,6 +22,7 @@ interface SelectableChipDetailsProps {
   isDisabled?: boolean
   isOptionsChip?: boolean
   className?: string
+  rightLabel?: string
 }
 
 const SelectableChipDetails = ({
@@ -36,6 +37,7 @@ const SelectableChipDetails = ({
   className,
   isOptionsChip,
   hideSelectedCount = false,
+  rightLabel,
 }: SelectableChipDetailsProps) => {
   const form = useFormContext()
   const error = form.getFieldState(field, form.formState).error
@@ -95,6 +97,7 @@ const SelectableChipDetails = ({
             />
           )}
         </Flex>
+        {rightLabel && <Text className="ml-1 text-[11px]">{rightLabel}</Text>}
         {error ? (
           <Text className="pl-1 text-[12px] text-tomato-11">
             {error.message}

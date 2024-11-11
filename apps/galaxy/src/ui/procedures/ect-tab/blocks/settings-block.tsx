@@ -29,6 +29,7 @@ const settingsFieldsBlock: SelectableChipDetailsProps[] = [
     showIndicator: false,
     placeHolder: '0',
     format: '#',
+    rightLabel: 'seconds',
   },
   {
     label: 'Current',
@@ -47,7 +48,7 @@ const SettingsBlock = () => {
         Settings
       </FormFieldLabel>
       {settingsFieldsBlock.map(
-        ({ label, type, field, placeHolder, format }) => (
+        ({ label, type, field, placeHolder, format, rightLabel }) => (
           <SelectableChipDetails
             key={field}
             label={label}
@@ -56,6 +57,7 @@ const SettingsBlock = () => {
             showIndicator={false}
             placeHolder={placeHolder}
             format={format}
+            rightLabel={rightLabel}
           />
         ),
       )}

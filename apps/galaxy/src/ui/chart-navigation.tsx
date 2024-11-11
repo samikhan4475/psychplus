@@ -71,6 +71,7 @@ const ChartNavigation = () => {
             <NavigationLink href="/scheduling-history">
               Scheduling History
             </NavigationLink>
+            <NavigationLink href="/quicknotes">Quick Notes</NavigationLink>
             <NavigationLink href="/notes">Notes</NavigationLink>
             <NavigationLink href="/diagnosis">Diagnosis</NavigationLink>
             <NavigationLink href="/medications">Medications</NavigationLink>

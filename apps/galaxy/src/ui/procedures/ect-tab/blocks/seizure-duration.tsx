@@ -10,14 +10,15 @@ const SeizureDuration = () => {
       <FormFieldLabel className="text-[12px]" required>
         Seizure Duration
       </FormFieldLabel>
-      <SelectableChipDetails
-        label="Duration"
-        type="number"
-        field="ectSeizureDuration"
-        showIndicator={false}
-        format="###"
-        placeHolder="000"
-      />
+        <SelectableChipDetails
+          label="Duration"
+          type="number"
+          field="ectSeizureDuration"
+          showIndicator={false}
+          format="###"
+          placeHolder="000"
+          rightLabel="seconds"
+        />
     </FormFieldContainer>
   )
 }

@@ -17,6 +17,7 @@ import { SubstanceUseHxWidget } from '@/ui/substance-use-hx'
 import { QuicknotesDiagnosisWidget } from '../diagnosis/quicknotes-diagnosis-widget'
 import { FollowUpWidget } from '../follow-up'
 import { PhysicalExamWidget } from '../physical-exam'
+import { EctWidgetLoader as EctWidget } from '../procedures/ect-tab/ect-widget-loader'
 import { QuicknotesVitalsWidget } from '../vitals'
 import { ActualNoteView } from './actual-note-view'
 import { QuickNotesHeader } from './quicknotes-header'
@@ -54,6 +55,7 @@ const QuickNotesView = ({ patientId, appointmentId }: QuickNotesViewProps) => {
             <PatientReferralsWidget patientId={patientId} />
             <FollowUpWidget patientId={patientId} />
             <CodesWidget patientId={patientId} />
+            <EctWidget patientId={patientId} />
           </Flex>
         </ScrollArea>
         <ActualNoteView patientId={patientId} />
