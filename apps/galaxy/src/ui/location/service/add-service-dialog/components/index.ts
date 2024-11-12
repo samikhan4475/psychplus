@@ -1,0 +1,12 @@
+export * from './location-info-input'
+export * from './service-input'
+export * from './pos-input'
+export * from './texonomy-input'
+export * from './ppr-input'
+export * from './time-dependent'
+export * from './select-provider-input'
+export * from './similar-visit-checkbox'
+export * from './max-booking-frequency-input'
+export * from './cosigner-type-input'
+export * from './cosigner-input'
+

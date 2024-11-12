@@ -4,7 +4,11 @@ import { Box, Flex, Text } from '@radix-ui/themes'
 import { TabsTrigger } from '@/components'
 import { LocationView } from './location-view'
 
-const LocationTabs = () => {
+interface LocationTabsProps {
+  googleApiKey: string
+}
+
+const LocationTabs = ({googleApiKey}: LocationTabsProps) => {
   return (
     <Box className="px-3 pt-4">
       <Tabs.Root
@@ -22,7 +26,7 @@ const LocationTabs = () => {
           </Tabs.List>
         </Flex>
         <Tabs.Content value="location">
-          <LocationView />
+          <LocationView googleApiKey={googleApiKey} />
         </Tabs.Content>
         <Tabs.Content value="service">
           <Text>Service</Text>

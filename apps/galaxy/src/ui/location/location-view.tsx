@@ -2,7 +2,6 @@
 
 import { DataTable, LoadingPlaceholder } from "@/components"
 import {Flex, ScrollArea } from "@radix-ui/themes"
-import { ColumnDef } from "@tanstack/react-table"
 import {LocationType} from "./actions/types"
 import { columns } from "./columns"
 import { LocationHeader } from "./location-header"
@@ -10,7 +9,11 @@ import { Filters } from "./filters/filters"
 import { useEffect, useState } from "react"
 import { getLocationList } from "./actions/get-location-list"
 
-const LocationView = () => {
+interface LocationViewProps {
+  googleApiKey: string
+}
+
+const LocationView = ({googleApiKey}: LocationViewProps) => {
   const [data, setData] = useState<LocationType[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   useEffect(() => {
@@ -46,9 +49,9 @@ const LocationView = () => {
       ):(
       <Flex className="py-1 px-2">
         <ScrollArea>
-          <DataTable<LocationType, ColumnDef<LocationType>>
+          <DataTable
             data={data}
-            columns={columns()}
+            columns={columns(googleApiKey)}
             disablePagination
             sticky
           />

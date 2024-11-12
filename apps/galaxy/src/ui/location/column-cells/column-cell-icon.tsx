@@ -1,12 +1,18 @@
-import { EditUnderlinedIcon, LinkIcon } from '@/components/icons'
+import { EditUnderlinedIcon } from '@/components/icons'
 import { Flex } from '@radix-ui/themes'
 import React from 'react'
+import { AddLocationServiceDialog } from '../service/add-service-dialog/add-service-dialog'
 
-const ColumnCellIcon = () => {
+interface ColumnCellIconProps {
+  googleApiKey: string
+}
+
+const ColumnCellIcon = ({googleApiKey}: ColumnCellIconProps) => {
+  
   return (
     <Flex gap="1">
       <EditUnderlinedIcon />
-      <LinkIcon />
+      <AddLocationServiceDialog googleApiKey={googleApiKey} />
     </Flex>
   )
 }

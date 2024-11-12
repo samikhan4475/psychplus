@@ -7,9 +7,11 @@ import { ColumnCellDropDown } from "./column-cells/column-cell-dropdown"
 import { ColumnCellIcon } from "./column-cells/column-cell-icon"
 
 const columns = (
+  googleApiKey: string,
   sort?: Sort,
-  onSort?: (column: keyof LocationType) => void, 
+  onSort?: (column: string) => void,
 ): ColumnDef<LocationType>[] => {
+  
   return [
     {
       id: 'id',
@@ -170,7 +172,7 @@ const columns = (
     {
       id: 'actions',
       header: () => <ColumnHeader label="Actions" />,
-      cell: ({ row }) => <ColumnCellIcon />
+      cell: ({ row }) => <ColumnCellIcon googleApiKey={googleApiKey} />
     },
   ];
 };
