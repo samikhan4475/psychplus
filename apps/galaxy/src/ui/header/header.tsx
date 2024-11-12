@@ -13,27 +13,42 @@ const Header = () => {
 
   return (
     <>
-      <header className="bg-white">
+      <header className="bg-white p-2">
         <Flex align="center" justify="between" px="5">
           <NavLogo />
           <Flex height="100%" align="center" gap="2">
-            <Button variant="outline" size="1" highContrast>
+            <Button
+              variant="outline"
+              size="2"
+              color="gray"
+              highContrast
+              className="pb-[14px] pt-[14px]"
+            >
               <PlusCircledIcon />
               Patient
             </Button>
-            <Button variant="outline" size="1" highContrast>
+            <Button
+              variant="outline"
+              size="2"
+              color="gray"
+              highContrast
+              className="pb-[14px] pt-[14px]"
+            >
               <PlusCircledIcon />
               Visit
             </Button>
-            <Button variant="outline" size="1" highContrast>
+            <Button
+              variant="outline"
+              size="2"
+              color="gray"
+              highContrast
+              className="pb-[14px] pt-[14px]"
+            >
               Help
             </Button>
             <Flex height="100%" align="center" gap="3" ml="2">
               <Text weight="medium" size="1">
                 Mercy Hospital
-              </Text>
-              <Text weight="medium" size="1">
-                John Doe
               </Text>
               <UserDropdownMenu user={auth.user} />
             </Flex>

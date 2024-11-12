@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation'
 import { Flex } from '@radix-ui/themes'
 import { useStore } from '@/store'
 import { cn } from '@/utils'
+import { PatientLookupDropdown } from './patient-lookup-dropdown'
 
 const NavigationLinks = () => {
   return (
@@ -44,7 +45,9 @@ const NavigationLink = ({ href, label }: NavigationLinkProps) => {
       </NextLink>
     )
   }
-
+  if (label === 'Patient Lookup') {
+    return <PatientLookupDropdown isActive={isActive} />
+  }
   return (
     <NextLink
       href={href}

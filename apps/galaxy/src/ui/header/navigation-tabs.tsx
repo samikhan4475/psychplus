@@ -56,19 +56,19 @@ const NavigationTab = ({ href, label }: NavigationTabProps) => {
       href={href}
       prefetch={false}
       className={cn(
-        'text-white flex cursor-pointer items-center gap-2 overflow-hidden rounded-t-2 bg-blue-11 px-2 py-1 no-underline hover:bg-[var(--blue-11-accent)]',
+        'text-white hover:bg-white bg-pp-focus-bg flex cursor-pointer items-center gap-2 overflow-hidden rounded-t-2 px-2 py-1 no-underline',
         {
-          'bg-white hover:bg-white cursor-default text-accent-12': isActive,
+          'hover:bg-white cursor-default bg-[#FCFDFF] text-accent-12': isActive,
         },
       )}
     >
-      <Text className="text-[11px] font-[600]">{label}</Text>
+      <Text className="text-pp-black-1 text-[11px] font-[600]">{label}</Text>
       {href !== '/' ? (
         <Flex
           align="center"
           justify="center"
           className={cn(
-            'rounded-full text-white h-[20px] w-[20px] cursor-pointer transition-colors hover:bg-accent-12',
+            'rounded-full text-white h-[20px] w-[20px] cursor-pointer transition-colors hover:bg-gray-3',
             {
               'text-gray-9 hover:bg-gray-3 hover:text-gray-11': isActive,
             },
@@ -98,7 +98,7 @@ const NavigationTab = ({ href, label }: NavigationTabProps) => {
             }
           }}
         >
-          <Cross2Icon width={12} height={12} />
+          <Cross2Icon className="text-pp-black-1" width={12} height={12} />
         </Flex>
       ) : (
         <Box className="h-[20px]" />

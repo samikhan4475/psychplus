@@ -1,6 +1,7 @@
 'use client'
 
 import NextLink from 'next/link'
+import { TriangleDownIcon } from '@radix-ui/react-icons'
 import { Avatar, DropdownMenu, Flex, Text } from '@radix-ui/themes'
 import {
   LogOutIcon,
@@ -20,17 +21,23 @@ const UserDropdownMenu = ({ user }: UserDropdownMenuProps) => {
   return (
     <DropdownMenu.Root modal={false}>
       <DropdownMenu.Trigger className="hidden sm:block">
-        <button className="rounded-full focus:outline-accent-9">
-          <Avatar
-            src={undefined}
-            fallback={getUserInitials(user)}
-            radius="full"
-            size="2"
-            alt=""
-            className="hover:bg-pp-bg-accent transition-colors duration-200"
-            highContrast
-          />
-        </button>
+        <Flex className="!flex cursor-pointer items-center gap-1 rounded-4 border border-[#DDDDE3] px-2 py-1">
+          <button className="rounded-full focus:outline-accent-9">
+            <Avatar
+              src={undefined}
+              fallback={getUserInitials(user)}
+              radius="full"
+              size="2"
+              alt=""
+              className="hover:bg-pp-bg-accent transition-colors duration-200"
+              highContrast
+            />
+          </button>
+          <Text weight="medium" size="1">
+            Michael
+          </Text>
+          <TriangleDownIcon />
+        </Flex>
       </DropdownMenu.Trigger>
       <DropdownMenu.Content
         size="1"
