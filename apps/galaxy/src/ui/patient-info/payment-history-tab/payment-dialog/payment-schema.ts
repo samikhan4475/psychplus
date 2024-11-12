@@ -25,7 +25,10 @@ const paymentSchema = z
     }),
     card_Key: z.string().optional(),
     card_id: z.string().optional(),
-    paymentDescription: z.string().optional(),
+    paymentDescription: z
+      .string()
+      .max(128, 'Max 128 character are allowed ')
+      .optional(),
     paymentType: z
       .array(z.nativeEnum(PaymentType))
       .nonempty({ message: 'Select at least one payment type' }),

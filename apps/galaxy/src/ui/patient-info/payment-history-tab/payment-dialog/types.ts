@@ -15,8 +15,8 @@ enum PaymentType {
 
 interface ChargePaymentParams {
   appointmentId: string | number
-  cardKey: string
-  cardId: string
+  cardKey?: string
+  cardId?: string
   paymentDescription: string
   patientId: string
   amount: string | number

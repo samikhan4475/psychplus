@@ -15,9 +15,9 @@ import { getInitialValues } from './utils'
 
 interface PaymentDetailFormProps {
   patientId: string
-  onClose?: () => void
+  onClose: () => void
   remainingBalance?: string
-  closeDialog: () => void
+  loading: boolean
 }
 
 const PaymentDetailForm = ({
@@ -25,7 +25,7 @@ const PaymentDetailForm = ({
   children,
   remainingBalance,
   onClose,
-  closeDialog,
+  loading,
 }: React.PropsWithChildren<PaymentDetailFormProps>) => {
   const { coPayMap, coInsuranceMap } = useStore((state) => ({
     coPayMap: state.coPayMap,
@@ -33,6 +33,7 @@ const PaymentDetailForm = ({
   }))
 
   const form = useForm<PaymentDetailSchemaType>({
+    disabled: loading,
     criteriaMode: 'all',
     resolver: zodResolver(paymentSchema),
     reValidateMode: 'onChange',
@@ -41,7 +42,7 @@ const PaymentDetailForm = ({
 
   useEffect(() => {
     form.reset({
-      ...getInitialValues(),
+      ...form.getValues(),
       outstandingBalanceAmount: remainingBalance,
       remainingBalance: remainingBalance,
     })
@@ -65,8 +66,7 @@ const PaymentDetailForm = ({
     }
 
     toast.success('Charge created successfully!')
-    onClose?.()
-    closeDialog()
+    onClose()
   }
 
   return (

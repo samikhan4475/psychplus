@@ -16,25 +16,25 @@ interface PaymentdetailDialogProps {
   stripeApiKey: string
   patientId: string
   googleApiKey: string
-  toggleOpen: () => void
   appointment?: Appointment
-  onClose?: () => void
+  onClose: () => void
 }
 
 const PaymentSection = ({
   stripeApiKey,
   patientId,
   googleApiKey,
-  toggleOpen,
-  appointment,
   onClose,
+  appointment,
 }: PaymentdetailDialogProps) => {
   const { fetchPatientCreditCards } = useStore((state) => ({
     fetchPatientCreditCards: state.fetchPatientCreditCards,
   }))
   const [remainingBalance, setRemainingBalance] = useState('')
+  const [loading, setLoading] = useState(false)
   useEffect(() => {
     if (!patientId) return
+    setLoading(true)
     Promise.all([
       getPatientPaymentHistoryAction({ patientIds: [patientId] }),
       fetchPatientCreditCards(patientId),
@@ -44,6 +44,7 @@ const PaymentSection = ({
           transactionsResult?.data?.paymentHistory?.remainingDue ?? 0
         setRemainingBalance(twoDecimal(remainingDue))
       }
+      setLoading(false)
     })
   }, [patientId, fetchPatientCreditCards])
 
@@ -51,9 +52,9 @@ const PaymentSection = ({
     <Flex direction="column" gap="2" mt="2">
       <PaymentDetailForm
         patientId={patientId}
-        closeDialog={toggleOpen}
         onClose={onClose}
         remainingBalance={remainingBalance}
+        loading={loading}
       >
         <PaymentOptions patientId={patientId} />
         <PaymentDetails

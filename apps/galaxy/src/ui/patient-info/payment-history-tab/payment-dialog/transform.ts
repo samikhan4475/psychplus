@@ -21,8 +21,9 @@ const transformOut = (
   } = data
 
   const commonPaymentData = {
-    cardKey: card_Key,
-    cardId: card_id,
+    ...(card_Key ? { cardKey: card_Key } : {}),
+    ...(card_id ? { cardId: card_id } : {}),
+
     paymentDescription,
     patientId,
     paymentMethod,

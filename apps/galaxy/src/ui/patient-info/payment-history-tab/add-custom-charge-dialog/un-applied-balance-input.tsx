@@ -8,7 +8,7 @@ const UnAppliedBalanceInput = () => {
       <FormFieldLabel className="!text-1">Unapplied Balance</FormFieldLabel>
       <NumericInput
         placeholder="$0.00"
-        field="unappliedBalance"
+        field="unappliedPayment"
         disabled
         className="border-pp-gray-2 h-7 w-full border border-solid !outline-none [box-shadow:none]"
       />

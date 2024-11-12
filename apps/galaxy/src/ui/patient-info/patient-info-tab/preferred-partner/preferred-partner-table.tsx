@@ -2,16 +2,15 @@
 
 import { ScrollArea } from '@radix-ui/themes'
 import { ColumnDef } from '@tanstack/react-table'
-import { ColumnHeader, DataTable, TextCell } from '@/components'
-import { getSlashedPaddedDateString } from '@/utils'
+import { ColumnHeader, DataTable, LongTextCell, TextCell } from '@/components'
 import { PatientPreferredPartner } from '@/types'
-import { PrioritySelectCell } from './cells'
+import { getSlashedPaddedDateString } from '@/utils'
 
 const columns: ColumnDef<PatientPreferredPartner>[] = [
   {
     id: 'id',
     header: () => <ColumnHeader label="PP ID" />,
-    cell: ({ row }) => <TextCell>{row?.original?.id}</TextCell>,
+    cell: ({ row }) => <LongTextCell>{row?.original?.id}</LongTextCell>,
   },
   {
     id: 'name',
@@ -61,11 +60,6 @@ const columns: ColumnDef<PatientPreferredPartner>[] = [
     cell: ({ row }) => (
       <TextCell>{getSlashedPaddedDateString(row?.original?.termDate)}</TextCell>
     ),
-  },
-  {
-    id: 'priority',
-    header: () => <ColumnHeader label="Priority" />,
-    cell: PrioritySelectCell,
   },
 ]
 

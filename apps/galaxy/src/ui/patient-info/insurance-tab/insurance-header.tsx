@@ -3,7 +3,6 @@
 import { Button, Flex } from '@radix-ui/themes'
 import { Plus } from 'lucide-react'
 import { TabContentHeading } from '../shared'
-import { PatientBillingRadio } from './patient-billing-radio'
 import { ShowCheckbox } from './show-checkbox'
 import { useStore } from './store'
 
@@ -24,7 +23,6 @@ const InsuranceHeader = () => {
         <Flex justify="between" flexGrow="1" align="center" ml="4" gap="2">
           <Flex align="center" flexGrow="1" gap="4">
             <ShowCheckbox />
-            <PatientBillingRadio />
           </Flex>
           <Flex align="center" gap="4">
             <Button

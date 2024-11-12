@@ -1,8 +1,8 @@
-import { create } from 'zustand'
 import { Sort } from '@/types'
 import { getNewSortDir } from '@/utils'
 import { getPatientPaymentHistoryAction } from '../../actions'
 import type { GetPaymentHistorysData, SchemaType } from '../../types'
+import { create } from '../create-resetable-store'
 
 interface Store {
   data?: GetPaymentHistorysData
@@ -23,7 +23,7 @@ interface Store {
   jumpToPage: (page: number) => void
 }
 
-const useStore = create<Store>((set, get) => ({
+const useStore = create<Store>()((set, get) => ({
   data: undefined,
   error: undefined,
   loading: undefined,

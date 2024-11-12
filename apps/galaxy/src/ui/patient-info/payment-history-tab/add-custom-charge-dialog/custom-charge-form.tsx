@@ -26,15 +26,13 @@ import { getInitialValues } from './utils'
 
 interface CustomChargeFormProps {
   patientId: string
-  closeDialog: () => void
   unappliedAmount?: string
   transaction?: PatientTransaction
-  onClose?: () => void
+  onClose: () => void
 }
 
 const CustomChargeForm = ({
   patientId,
-  closeDialog,
   unappliedAmount,
   transaction,
   onClose,
@@ -44,7 +42,7 @@ const CustomChargeForm = ({
     reValidateMode: 'onChange',
     shouldUnregister: true,
     defaultValues: {
-      unappliedBalance: unappliedAmount,
+      unappliedPayment: unappliedAmount,
       ...getInitialValues(transaction),
     },
   })
@@ -68,8 +66,7 @@ const CustomChargeForm = ({
     }
 
     toast.success('Charge created successfully!')
-    closeDialog()
-    onClose?.()
+    onClose()
   }
 
   return (

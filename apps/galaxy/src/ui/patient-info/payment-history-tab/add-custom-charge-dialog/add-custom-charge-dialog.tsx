@@ -23,6 +23,7 @@ const AddCustomChargeDialog = ({
   const [isOpen, setIsOpen] = useState(false)
   const handleClose = () => {
     setIsOpen(false)
+    onClose?.()
   }
 
   return (
@@ -39,8 +40,7 @@ const AddCustomChargeDialog = ({
         </Dialog.Title>
         <CustomChargeForm
           patientId={patientId}
-          closeDialog={handleClose}
-          onClose={onClose}
+          onClose={handleClose}
           unappliedAmount={unappliedAmount}
           transaction={transaction}
         />

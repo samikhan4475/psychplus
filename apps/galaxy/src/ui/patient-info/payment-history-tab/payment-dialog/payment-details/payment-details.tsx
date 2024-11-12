@@ -11,6 +11,7 @@ import { PaymentDetailSchemaType } from '../payment-schema'
 import { PaymentDescriptionInput } from '../shared'
 import { PaymentMethod } from '../types'
 import { CardDetails } from './card-details'
+import { CheckInput } from './check-input'
 import { MakePaymentButton } from './make-payment-button'
 import { SelectMethod } from './select-method'
 
@@ -75,7 +76,7 @@ const renderPaymentDetailInput = (
     case PaymentMethod.CMD:
       return <PaymentDescriptionInput label="Transaction Number" />
     case PaymentMethod.Cheque:
-      return <PaymentDescriptionInput label="Check Number" />
+      return <CheckInput label="Check Number" />
     case PaymentMethod.CreditCard:
       return <CardDetails primaryCard={primaryCard} />
     default:

@@ -1,7 +1,7 @@
-import { create } from 'zustand'
 import { getPatientCreditCards } from '@/actions'
 import { CreditCard } from '@/types'
 import { PaymentMap } from '../types'
+import { create } from './create-resetable-store'
 
 interface Store {
   patientCards?: CreditCard[]
@@ -16,7 +16,7 @@ interface Store {
   openAddCardDialog: boolean
 }
 
-const useStore = create<Store>((set, get) => ({
+const useStore = create<Store>()((set) => ({
   patientCards: undefined,
   error: undefined,
   loading: undefined,

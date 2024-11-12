@@ -39,6 +39,9 @@ const getInitialValues = () => ({
   remainingBalance: '',
   customAmount: '',
   outstandingBalanceAmount: '',
+  card_Key: '',
+  card_id: '',
+  paymentDescription: '',
 })
 
 export {

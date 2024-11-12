@@ -7,7 +7,7 @@ const chargeSchema = z
   .object({
     type: z.string().min(1, 'Required'),
     description: z.string().max(50, 'Max 50 characters allowed').optional(),
-    unappliedBalance: z.string().optional(),
+    unappliedPayment: z.string().optional(),
     chargeDate: z
       .custom<DateValue>()
       .refine((value) => value !== undefined && value !== null, {
@@ -30,7 +30,6 @@ const chargeSchema = z
     balancePreferredPartner: optionalString,
     appointmentId: z.number().optional(),
     transactionNumber: optionalString,
-    unappliedPayment: optionalString,
   })
   .superRefine((data, ctx) => {
     if (data.appointmentId) return

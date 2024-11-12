@@ -259,7 +259,7 @@ const calculateMinutes = (startTime: string, endTime: string) => {
   return 0
 }
 
-const generateTimeOptions = (interval: number = 20): SelectOptionType[] => {
+const generateTimeOptions = (interval = 20): SelectOptionType[] => {
   const options = []
   const totalMinutesInDay = 24 * 60
   for (let minutes = 0; minutes < totalMinutesInDay; minutes += interval) {
@@ -296,5 +296,5 @@ export {
   getOptionalDateString,
   daysAgo,
   calculateMinutes,
-  generateTimeOptions
+  generateTimeOptions,
 }

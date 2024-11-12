@@ -17,14 +17,14 @@ interface SelectMethodProps {
 }
 
 const SelectMethod = ({ primaryCardDetails }: SelectMethodProps) => {
-  const { setValue } = useFormContext<PaymentDetailSchemaType>()
+  const { setValue, clearErrors } = useFormContext<PaymentDetailSchemaType>()
   const handleChange = (value: PaymentMethod) => {
     const paymentDescription =
       value === PaymentMethod.CreditCard && primaryCardDetails
         ? maskCardNumber(primaryCardDetails.numberLastFour)
         : ''
-
-    setValue('paymentDescription', paymentDescription, { shouldValidate: true })
+    clearErrors(['paymentDescription', 'card_Key'])
+    setValue('paymentDescription', paymentDescription)
     setValue('paymentMethod', value)
   }
 

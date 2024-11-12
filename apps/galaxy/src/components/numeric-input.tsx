@@ -17,6 +17,7 @@ interface NumericInputProps {
   decimalScale?: number
   prefix?: string
   maxLimit?: number
+  allowNegative?: boolean
 }
 
 const NumericInput = ({
@@ -29,6 +30,7 @@ const NumericInput = ({
   decimalScale = 2,
   prefix = '$',
   maxLimit = 1000,
+  allowNegative = true,
 }: NumericInputProps) => {
   const form = useFormContext()
 
@@ -49,6 +51,7 @@ const NumericInput = ({
               decimalScale={decimalScale}
               placeholder={placeholder}
               name={fieldName}
+              allowNegative={allowNegative}
               value={field.value}
               disabled={field.disabled || disabled}
               onValueChange={({ value }) => field.onChange(value)}
@@ -57,6 +60,7 @@ const NumericInput = ({
                 return floatValue < maxLimit
               }}
               onBlur={() => {
+                if (!field.value || !allowNegative) return
                 const formattedValue = formatValueWithDecimals(field.value)
                 field.onChange(formattedValue)
                 field.onBlur()

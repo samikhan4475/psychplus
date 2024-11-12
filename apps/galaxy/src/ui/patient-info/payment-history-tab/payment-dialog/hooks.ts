@@ -25,7 +25,7 @@ function usePaymentTypeField<T extends object>(fieldName: Path<T>) {
 
   const shouldDisable = (value: string) => !isChecked(value)
 
-  return { isChecked, shouldDisable,form, paymentTypeValues: values }
+  return { isChecked, shouldDisable, form, paymentTypeValues: values }
 }
 
 const useAppointmentOptions = ({
@@ -68,9 +68,9 @@ const useAppointmentOptions = ({
 
       return {
         value: appointmentId,
-        label: `${formatDateTime(data.appointmentDateTime)} ${
-          data.providerName
-        }`,
+        label: `${formatDateTime(data.appointmentDateTime)} | ${
+          data.visitType
+        } | ${data.providerName} | ${data.app_id}`,
       }
     })
 
