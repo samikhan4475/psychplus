@@ -24,7 +24,7 @@ const ExpandedSidebar = ({ toggleSidebar }: ExpandedSidebarProps) => {
   };
 
   return (
-    <Box className="w-[224px] my-1 transition-all duration-300 bg-white relative">
+    <Box className="w-[224px] transition-all duration-300 bg-white relative">
       <Flex
         justify="center"
         align="center"

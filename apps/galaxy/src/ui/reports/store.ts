@@ -1,8 +1,10 @@
-import { Code, StaffResource } from '@/types';
+import { Code, SelectOptionType, StaffResource } from '@/types';
 import { create } from 'zustand';
-import { getReportParametersTypeAction, getReportsAction, getStaffAction, getTemplatesAction } from './actions';
+import { getPatientsOptionsAction, getReportParametersTypeAction, getReportsAction, getStaffAction, getTemplatesAction } from './actions';
 import { Parameter, ReportFilterParameters, StaffDataOptions, Template } from './types';
 import { getOrganizationRolesAction } from './actions/get-organization-roles';
+import { getInsurancePayersOptionsAction } from '@/actions';
+import { getProvidersOptionsAction } from '../schedule/actions';
 
 interface Store {
   reports: Code[];
@@ -15,13 +17,15 @@ interface Store {
   generatedReport: string | null;
   filtersData: ReportFilterParameters[] | null;
   staffData: StaffDataOptions[] | null;
-  // organizationData: any;
+  insuranceData: SelectOptionType[] | null;
+  patientData: SelectOptionType[] | null;
+  cosignerData: SelectOptionType[] | null;
   fetchReportsAndTemplates: () => void;
   setSelectedReport: (code: Code) => void;
   setSelectedTemplate: (template: Template | null) => void;
   setGeneratedReport: (report: string | null) => void;
   fetchStaffData: () => void;
-  setFiltersData : (data: ReportFilterParameters[] | null) => void;
+  setFiltersData: (data: ReportFilterParameters[] | null) => void;
 }
 
 const useStore = create<Store>((set) => ({
@@ -34,8 +38,10 @@ const useStore = create<Store>((set) => ({
   selectedTemplate: null,
   generatedReport: null,
   filtersData: null,
-  // organizationData: null,
   staffData: null,
+  insuranceData: null,
+  patientData: null,
+  cosignerData: null,
 
   fetchReportsAndTemplates: async () => {
     set({ loading: true, error: null });
@@ -51,7 +57,6 @@ const useStore = create<Store>((set) => ({
         reports: reportsResult.data?.codes || [],
         templates: templatesResult.data || [],
         templateFilters: codeParametersResult.data || null,
-        // organizationData: organizationResult?.data || null, //TODO: implement once the BE populates the data
         loading: false,
       });
     } else {
@@ -65,9 +70,14 @@ const useStore = create<Store>((set) => ({
   fetchStaffData: async () => {
     set({ error: null });
 
-    const staffResult = await getStaffAction();
-    
-    if (staffResult.state === 'success') {
+    const [staffResult, insuranceResult, patientResult, cosignerResult] = await Promise.all([
+      getStaffAction(),
+      getInsurancePayersOptionsAction(),
+      getPatientsOptionsAction(),
+      getProvidersOptionsAction(),
+    ]);
+
+    if (staffResult.state === 'success' && insuranceResult.state === 'success' && patientResult.state === 'success' && cosignerResult.state === 'success') {
       const transformedStaffData = staffResult?.data.map((staff: StaffResource) => ({
         value: String(staff.id),
         label: `${staff.legalName.firstName} ${staff.legalName.lastName}`,
@@ -75,10 +85,13 @@ const useStore = create<Store>((set) => ({
 
       set({
         staffData: transformedStaffData || null,
+        insuranceData: insuranceResult.data || null,
+        patientData: patientResult.data || null,
+        cosignerData: cosignerResult.data || null,
       });
     } else {
       set({
-        error: 'Failed to fetch staff data',
+        error: 'Failed to fetch parameters options data',
       });
     }
   },

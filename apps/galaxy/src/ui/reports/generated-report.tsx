@@ -28,13 +28,12 @@ const GeneratedReport = () => {
   if (!generatedReport) return;
   const { headers, data } = parseGeneratedReport(generatedReport);
   const columns = generateColumns(headers);
-
   return (
-    <Box className="mt-1 w-full h-[87%] overflow-hidden">
-      <Box className="bg-white rounded-1 p-2">
-        <ScrollArea className="max-h-[480px]">
-          <Box className="bg-white min-w-max">
-            <DataTable columns={columns} data={data} sticky />
+    <Box className="mt-1 w-full h-[82%] overflow-hidden bg-white">
+      <Box className="rounded-1 p-1">
+        <ScrollArea className="max-h-[470px]">
+          <Box className="bg-white max-w-full">
+            <DataTable columns={columns} data={data} sticky disablePagination />
           </Box>
         </ScrollArea>
       </Box>
