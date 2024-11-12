@@ -289,6 +289,10 @@ const UPDATE_PATIENT_RELATIONSHIP_ENDPOINT = (
   patientId: number,
   relationshipId: string,
 ) => `${API_URL}/api/patients/${patientId}/relationships/${relationshipId}`
+const GET_ALLERGIES_ENDPOINT = `${API_URL}/api/allergies/actions/search`
+const PATIENT_CARE_TEAM_ENDPOINT = (patientId: string) =>
+  `${API_URL}/api/patients/${patientId}/careteam`
+
 export {
   USER_ENDPOINT,
   REFRESH_ENDPOINT,
@@ -446,5 +450,7 @@ export {
   FETCH_EXTERNAL_PROVIDER_WITH_PATIENT_ENDPOINT,
   FETCH_EXTERNAL_PROVIDERS_ENDPOINT,
   PCP_HISTORY_ENDPOINT,
+  GET_ALLERGIES_ENDPOINT,
+  PATIENT_CARE_TEAM_ENDPOINT,
   PATIENT_CHARGE_PAYMENT_ENDPOINT,
 }

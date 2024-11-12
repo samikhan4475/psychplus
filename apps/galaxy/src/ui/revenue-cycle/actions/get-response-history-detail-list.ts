@@ -20,7 +20,7 @@ const getResponseHistoryDetailListAction = async ({
 }: ResponseHistoryDetailListParams): Promise<
   api.ActionResult<ResponseHistoryDetailListResponse>
 > => {
-  let url = new URL(api.GET_RESPONSE_HISTORY_DETAIL_LIST_ENDPOINT(batchId))
+  const url = new URL(api.GET_RESPONSE_HISTORY_DETAIL_LIST_ENDPOINT(batchId))
   if (sort) {
     url.searchParams.append('orderBy', `${sort.column} ${sort.direction}`)
   }

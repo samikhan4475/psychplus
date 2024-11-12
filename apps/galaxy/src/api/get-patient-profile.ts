@@ -2,23 +2,23 @@ import * as api from '@/api'
 import { PatientProfile } from '@/types'
 
 const getPatientProfile = async (
-    id: string,
-  ): Promise<api.ActionResult<PatientProfile>> => {
-    const response = await api.GET<PatientProfile>(
-      api.PATIENT_PROFILE_ENDPOINT(id),
-    )
-  
-    if (response.state === 'error') {
-      return {
-        state: 'error',
-        error: response.error,
-      }
-    }
-  
+  id: string,
+): Promise<api.ActionResult<PatientProfile>> => {
+  const response = await api.GET<PatientProfile>(
+    api.PATIENT_PROFILE_ENDPOINT(id),
+  )
+
+  if (response.state === 'error') {
     return {
-      state: 'success',
-      data: response.data,
+      state: 'error',
+      error: response.error,
     }
   }
 
-  export { getPatientProfile }
+  return {
+    state: 'success',
+    data: response.data,
+  }
+}
+
+export { getPatientProfile }

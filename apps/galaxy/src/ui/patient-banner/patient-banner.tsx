@@ -1,20 +1,14 @@
-import { Avatar, Flex, Text } from '@radix-ui/themes'
+import { Flex, Text } from '@radix-ui/themes'
 import { getPatientProfile } from '@/api'
-import { PatientAddress, PhoneNumber } from '@/types'
-import {
-  cn,
-  getAgeFromDate,
-  getCalendarDate,
-  getMaskedPhoneNumber,
-  getPatientCity,
-  getPatientMainAddress,
-  getPatientPhone,
-  getPatientPostalCode,
-  getPatientState,
-  getSlashedPaddedDateString,
-  getUserFullName,
-} from '@/utils'
-import { searchPharmaciesAction } from '../pharmacy/actions'
+import { CareTeamInfoSection } from './care-team-info-section'
+import { InsuranceInfoSection } from './insurance-info-section'
+import { LabelAndValue } from './label-and-value'
+import { PcpInfoSection } from './pcp-info-section'
+import { PharmacyInfoSection } from './pharmacy-info-section'
+import { UserAvatar } from './user-avatar'
+import { UserContactDetailsSection } from './user-contact-details-section'
+import { UserInfoSection } from './user-info-section'
+import { VitalsInfoSection } from './vitals-info-section'
 
 interface PatientBannerProps {
   patientId: string
@@ -25,15 +19,8 @@ const PatientBanner = async ({ patientId }: PatientBannerProps) => {
   if (response.state === 'error') {
     return <Text>{response.error}</Text>
   }
+
   const user = response.data
-
-  const result = await searchPharmaciesAction(patientId, {
-    isOnlyDefaults: true,
-  })
-  if (result.state === 'error') return <Text>{result?.error}</Text>
-
-  const pharmacy = result.data[0] ?? {}
-  const pharmacyAddress = pharmacy.pharmacyContactDetails?.addresses?.[0] ?? {}
 
   return (
     <Flex
@@ -48,116 +35,25 @@ const PatientBanner = async ({ patientId }: PatientBannerProps) => {
       className="bg-white border-b border-b-gray-5"
     >
       <Flex mr="6">
-        <Avatar
-          src={
-            user.hasPhoto
-              ? `/ehr/api/patients/${user.id}/profileimage`
-              : undefined
-          }
-          fallback="NA"
-          size="7"
-          highContrast
-        />
+        <UserAvatar user={user} />
       </Flex>
+      <UserInfoSection user={user} />
       <Flex direction="column" className="gap-[2px] md:flex-1">
-        <LabelAndValue label="Name" value={getUserFullName(user.legalName)} />
-        <LabelAndValue
-          label="Age/Gender"
-          value={`${getAgeFromDate(getCalendarDate(user.birthdate))} yo/${
-            user.gender
-          }`}
-        />
-        <LabelAndValue label="Orientation" value={user.genderOrientation} />
-        <LabelAndValue label="Pronouns" value={user.genderPronoun} />
-        <LabelAndValue label="Language" value={user.language} />
-        <LabelAndValue label="Status" value={user.status} />
-      </Flex>
-      <Flex direction="column" className="gap-[2px] md:flex-1">
-        <LabelAndValue label="MRN" value={user.medicalRecordNumber} />
-        <LabelAndValue
-          label="DOB"
-          value={getSlashedPaddedDateString(user.birthdate)}
-        />
-        <LabelAndValue
-          label="Cell"
-          value={getMaskedPhoneNumber(
-            getPatientPhone(
-              user.contactDetails?.phoneNumbers as PhoneNumber[],
-            ) as string,
-          )}
-        />
-        <LabelAndValue label="Email" value={user.contactDetails?.email} />
-        <LabelAndValue label="SSN" value={user.socialSecurityNumber} />
-        <LabelAndValue label="Allergies" />
-      </Flex>
-      <Flex direction="column" className="gap-[2px] md:flex-1">
-        <LabelAndValue label="BP" />
-        <LabelAndValue label="HR" />
-        <LabelAndValue label="Temp (F)" />
-        <LabelAndValue label="Height (in)" />
-        <LabelAndValue label="Weight (lbs)" />
-        <LabelAndValue label="BMI" />
+        <VitalsInfoSection patientId={patientId} />
       </Flex>
       <Flex direction="column" className="gap-[2px] md:flex-1">
         <LabelAndValue label="CC on file" />
         <LabelAndValue label="Verify" />
-        <LabelAndValue label="Primary Ins" />
-        <LabelAndValue label="Secondary Ins" />
-        <LabelAndValue
-          label="Address"
-          value={getPatientMainAddress(
-            user.contactDetails.addresses as PatientAddress[],
-          )}
-        />
-        <LabelAndValue
-          label="City/State/Zip"
-          value={`${getPatientCity(
-            user.contactDetails.addresses as PatientAddress[],
-          )}, ${getPatientState(
-            user.contactDetails.addresses as PatientAddress[],
-          )} ${getPatientPostalCode(
-            user.contactDetails.addresses as PatientAddress[],
-          )}`}
-        />
+        <InsuranceInfoSection patientId={patientId} />
+        <UserContactDetailsSection user={user} />
       </Flex>
       <Flex direction="column" className="gap-[2px] md:flex-1">
-        <LabelAndValue label="Psychiatrist" />
-        <LabelAndValue label="Therapist" />
-        <LabelAndValue label="PCP" />
-        <LabelAndValue label="Pharmacy Name" value={pharmacy.pharmacyName} />
-        <LabelAndValue
-          label="Pharmacy Address"
-          value={pharmacyAddress.street1}
-        />
-        <LabelAndValue
-          label="Pharm City/State/Zip"
-          value={
-            pharmacyAddress.city
-              ? `${pharmacyAddress.city}/${pharmacyAddress.state}/${pharmacyAddress.postalCode}`
-              : undefined
-          }
-        />
+        <CareTeamInfoSection patientId={patientId} />
+        <PcpInfoSection patientId={patientId} />
+        <PharmacyInfoSection patientId={patientId} />
       </Flex>
     </Flex>
   )
 }
-
-interface LabelAndValueProps {
-  label: string
-  value?: string
-}
-
-const LabelAndValue = ({ label, value }: LabelAndValueProps) => (
-  <Flex gap="1" className="whitespace-nowrap">
-    <Text className="text-[11.5px] font-[600]">{label}</Text>
-    <Text
-      className={cn('text-[11.5px]', {
-        'italic text-gray-9': !value,
-      })}
-    >
-      {value ?? 'N/A'}
-    </Text>
-  </Flex>
-)
 
 export { PatientBanner }

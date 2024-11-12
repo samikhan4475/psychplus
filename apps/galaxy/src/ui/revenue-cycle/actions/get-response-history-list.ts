@@ -30,7 +30,7 @@ const getResponseHistoryListAction = async ({
 > => {
   const offset = (page - 1) * RESPONSE_HISTORY_TABLE_PAGE_SIZE
 
-  let url = new URL(api.GET_RESPONSE_HISTORY_LIST_ENDPOINT)
+  const url = new URL(api.GET_RESPONSE_HISTORY_LIST_ENDPOINT)
   url.searchParams.append('limit', String(RESPONSE_HISTORY_TABLE_PAGE_SIZE))
   url.searchParams.append('offset', String(offset))
 

@@ -35,7 +35,7 @@ const getPatientStatementDetailListAction = async ({
 }: PatientStatementsListParams): Promise<
   api.ActionResult<PatientStatementsListResponse>
 > => {
-  let url = new URL(api.GET_PATIENT_STATEMENTS_LIST_ENDPOINT)
+  const url = new URL(api.GET_PATIENT_STATEMENTS_LIST_ENDPOINT)
   if (sort) {
     url.searchParams.append('orderBy', `${sort.column} ${sort.direction}`)
   }
