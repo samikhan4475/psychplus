@@ -3,6 +3,7 @@
 import * as Tabs from '@radix-ui/react-tabs'
 import { Box, Flex } from '@radix-ui/themes'
 import { TabsTrigger } from '@/components'
+import { EdiTabView } from './edi-tab'
 import { ReceiverTabView } from './receiver-tab'
 import { useStore } from './store'
 import { SubmitterTabView } from './submitter-tab'
@@ -30,6 +31,9 @@ const ClearingHouseTabs = () => {
             <TabsTrigger value={ClearingHouseTab.Submitter}>
               {ClearingHouseTab.Submitter}
             </TabsTrigger>
+            <TabsTrigger value={ClearingHouseTab.EDI}>
+              {ClearingHouseTab.EDI}
+            </TabsTrigger>
           </Tabs.List>
         </Flex>
         <TabsContent value={ClearingHouseTab.Receiver}>
@@ -37,6 +41,9 @@ const ClearingHouseTabs = () => {
         </TabsContent>
         <TabsContent value={ClearingHouseTab.Submitter}>
           <SubmitterTabView />
+        </TabsContent>
+        <TabsContent value={ClearingHouseTab.EDI}>
+          <EdiTabView />
         </TabsContent>
       </Tabs.Root>
     </Box>

@@ -49,13 +49,20 @@ const GET_PATIENT_RELATIONSHIPS = (patientId: string) =>
   `${API_URL}/api/patients/${patientId}/relationships`
 const GET_PATIENT_PREFERRED_PARTNERS = (patientId: string) =>
   `${API_URL}/api/patients/${patientId}/preferredpartners`
-const GET_INSURANCE_PAYERS_ENDPOINT = `${API_URL}/api/insurance/payers?includePlans=false&includeInactive=false&includeTest=false&publicViewable=true&offset=0&limit=0`
+const GET_INSURANCE_PAYERS_ENDPOINT = (includePlans: boolean) =>
+  `${API_URL}/api/insurance/payers?includePlans=${includePlans}&includeInactive=false&includeTest=false&publicViewable=true&offset=0&limit=0`
 const GET_INSURANCE_PAYER_PLANS = (payerId: string) =>
   `${API_URL}/api/insurance/payers/${payerId}?includePlans=true&includeInactive=false&includeTest=false&publicViewable=true`
 const GET_USER_PERMISSIONS_ENDPOINT = `${API_URL}/api/users/self/organizations?includePermissions=true`
 const SEARCH_LOCATION_SERVICES_ENDPOINT = `${API_URL}/api/locationservices/actions/search`
 const SEARCH_BOOKED_APPOINTMENTS_ENDPOINT = `${API_URL}/api/appointments/actions/search`
 const GET_CLEARNING_HOUSE_RECEIVERS = `${API_URL}/api/clearinghousereceivers/actions/search`
+const GET_CLEARNING_HOUSE_EDI_ENDPOINT = `${API_URL}/api/integrationconfiguration/insuranceplans/actions/search`
+const ADD_CLEARNING_HOUSE_EDI_ENDPOINT = `${API_URL}/api/integrationconfiguration/insuranceplans`
+const UPDATE_CLEARNING_HOUSE_EDI_ENDPOINT = (id: string) =>
+  `${API_URL}/api/integrationconfiguration/insuranceplans/${id}`
+const DELETE_CLEARNING_HOUSE_EDI_ENDPOINT = (id: string) =>
+  `${API_URL}/api/integrationconfiguration/insuranceplans/${id}`
 const GET_PATIENT_CONSENT_SIGNED_PDF_ENDPOINT = (
   patientId: string,
   consentId: string,
@@ -434,11 +441,15 @@ export {
   GET_PATIENT_REFERRALS_HISTORY_ENDPOINT,
   GET_SELF_STAFF_DETAILS_ENDPOINT,
   UPDATE_PATIENT_REFERRAL_ENDPOINT,
-  GET_APPOINTMENT,
   CREATE_PATIENT_REFERRAL_ENDPOINT,
   GET_INSURANCE_PAYERS_LIST_ENDPOINT,
   SEARCH_FAVOURITE_DIAGNOSIS_ENDPOINT,
   FAVOURITE_DIAGNOSIS_ENDPOINT,
+  GET_APPOINTMENT,
+  GET_CLEARNING_HOUSE_EDI_ENDPOINT,
+  ADD_CLEARNING_HOUSE_EDI_ENDPOINT,
+  UPDATE_CLEARNING_HOUSE_EDI_ENDPOINT,
+  DELETE_CLEARNING_HOUSE_EDI_ENDPOINT,
   GET_RESPONSE_HISTORY_LIST_ENDPOINT,
   GET_RESPONSE_HISTORY_DETAIL_LIST_ENDPOINT,
   DOWNLOAD_TEMPLATE_REPORT,

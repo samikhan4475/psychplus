@@ -3,11 +3,11 @@
 import * as api from '@/api'
 import { InsurancePayer, SelectOptionType } from '@/types'
 
-const getInsurancePayersOptionsAction = async (): Promise<
+const getInsurancePlanPayersOptionsAction = async (): Promise<
   api.ActionResult<SelectOptionType[]>
 > => {
   const response = await api.GET<InsurancePayer[]>(
-    api.GET_INSURANCE_PAYERS_ENDPOINT(false),
+    api.GET_INSURANCE_PAYERS_ENDPOINT(true),
   )
 
   if (response.state === 'error') {
@@ -16,11 +16,14 @@ const getInsurancePayersOptionsAction = async (): Promise<
       error: response.error,
     }
   }
-
-  const transformedData = response.data.map((data) => ({
-    value: data.id,
-    label: data.name,
-  }))
+  const transformedData = response.data?.flatMap((item: InsurancePayer) =>
+    item?.plans
+      ? item?.plans?.map((plan) => ({
+          value: plan.id,
+          label: plan.name,
+        }))
+      : [],
+  )
 
   return {
     state: 'success',
@@ -28,4 +31,4 @@ const getInsurancePayersOptionsAction = async (): Promise<
   }
 }
 
-export { getInsurancePayersOptionsAction }
+export { getInsurancePlanPayersOptionsAction }

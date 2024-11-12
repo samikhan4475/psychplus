@@ -7,7 +7,7 @@ const getInsurancePayersAction = async (): Promise<
   api.ActionResult<InsurancePayer[]>
 > => {
   const result = await api.GET<InsurancePayer[]>(
-    api.GET_INSURANCE_PAYERS_ENDPOINT,
+    api.GET_INSURANCE_PAYERS_ENDPOINT(false),
   )
 
   if (result.state === 'error') {
