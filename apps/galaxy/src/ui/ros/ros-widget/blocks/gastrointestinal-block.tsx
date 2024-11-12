@@ -1,40 +1,51 @@
-import { GroupSelectSection } from '@/components'
+import { GroupSelectOption, GroupSelectSection } from '@/components'
+import { useGroupSelection } from '@/hooks/use-group-selection'
 
 const BLOCK_ID = 'gastrointestinal'
 
 const BLOCK_TITLE = 'Gastrointestinal'
 
-const BLOCK_OPTIONS = [
+const GASTROINTESTINAL_BLOCK_OPTIONS: GroupSelectOption<string>[] = [
   {
     label: 'No concerns',
-    value: 'noConcerns',
+    value: 'giNoConcerns',
   },
   {
     label: 'Nausea/Vomiting',
-    value: 'nauseaVomiting',
+    value: 'giNauseaVomiting',
   },
   {
     label: 'Diarrhea',
-    value: 'diarrhea',
+    value: 'giDiarrhea',
   },
   {
     label: 'Constipation',
-    value: 'constipation',
+    value: 'giConstipation',
   },
   {
     label: 'Other',
-    value: 'other',
+    value: 'giOther',
+    details: {
+      type: 'text',
+      label: '',
+      field: 'giOtherDetails',
+    },
   },
 ]
 
 const GastrointestinalBlock = () => {
+  const { handleOptionSelect } = useGroupSelection({
+    key: BLOCK_ID,
+    value: 'giNoConcerns',
+  })
   return (
     <GroupSelectSection
       label={BLOCK_TITLE}
       field={BLOCK_ID}
-      options={BLOCK_OPTIONS}
+      options={GASTROINTESTINAL_BLOCK_OPTIONS}
+      onToggle={handleOptionSelect}
     />
   )
 }
 
-export { GastrointestinalBlock }
+export { GastrointestinalBlock, GASTROINTESTINAL_BLOCK_OPTIONS }

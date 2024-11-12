@@ -8,6 +8,7 @@ import {
   WidgetSaveButton,
   WidgetTagButton,
 } from '@/components'
+import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import {
   CardiovascularBlock,
   ConstitutionalBlock,
@@ -20,22 +21,25 @@ import {
   RespiratoryBlock,
   SkinBlock,
 } from './blocks'
+import { CheckAllNoConcernCell } from './check-all-no-concern-cell'
+import { transformOut } from './data'
 import { useRosWidgetForm } from './ros-widget-form'
+import { RosWidgetSchemaType } from './ros-widget-schema'
 
 interface HpiWidgetProps {
   patientId: string
+  initialValue: RosWidgetSchemaType
 }
 
-const RosWidget = ({ patientId }: HpiWidgetProps) => {
-  const form = useRosWidgetForm()
-
+const RosWidget = ({ patientId, initialValue }: HpiWidgetProps) => {
+  const form = useRosWidgetForm(initialValue)
   return (
     <FormProvider {...form}>
       <WidgetFormContainer
         patientId={patientId}
-        widgetId="ros"
+        widgetId={QuickNoteSectionName.QuicknoteSectionReviewOfSystem}
         title="ROS (Review of System)"
-        getData={() => []}
+        getData={transformOut(patientId)}
         headerRight={
           <>
             <WidgetTagButton />
@@ -44,6 +48,7 @@ const RosWidget = ({ patientId }: HpiWidgetProps) => {
             <WidgetSaveButton />
           </>
         }
+        headerLeft={<CheckAllNoConcernCell form={form} />}
       >
         <ConstitutionalBlock />
         <EntMouthBlock />
@@ -52,8 +57,8 @@ const RosWidget = ({ patientId }: HpiWidgetProps) => {
         <RespiratoryBlock />
         <GastrointestinalBlock />
         <GenitourinaryBlock />
-        <MusculoskeletalBlock />
         <SkinBlock />
+        <MusculoskeletalBlock />
         <NeuroBlock />
       </WidgetFormContainer>
     </FormProvider>

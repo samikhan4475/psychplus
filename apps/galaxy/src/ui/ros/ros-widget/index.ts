@@ -1,1 +1,1 @@
-export * from './ros-widget'
+export { RosWidgetLoader as RosWidget } from './ros-widget-loader'

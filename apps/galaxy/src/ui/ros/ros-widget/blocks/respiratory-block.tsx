@@ -1,40 +1,51 @@
-import { GroupSelectSection } from '@/components'
+import { GroupSelectOption, GroupSelectSection } from '@/components'
+import { useGroupSelection } from '@/hooks/use-group-selection'
 
 const BLOCK_ID = 'respiratory'
 
 const BLOCK_TITLE = 'Respiratory'
 
-const BLOCK_OPTIONS = [
+const RESPIRATORY_BLOCK_OPTIONS: GroupSelectOption<string>[] = [
   {
     label: 'No concerns',
-    value: 'noConcerns',
+    value: 'resNoConcerns',
   },
   {
     label: 'Cough',
-    value: 'cough',
+    value: 'resCough',
   },
   {
     label: 'Wheezing',
-    value: 'wheezing',
+    value: 'resWheezing',
   },
   {
     label: 'Dyspnea',
-    value: 'dyspnea',
+    value: 'resDyspnea',
   },
   {
     label: 'Other',
-    value: 'other',
+    value: 'resOther',
+    details: {
+      type: 'text',
+      label: '',
+      field: 'resOtherDetails',
+    },
   },
 ]
 
 const RespiratoryBlock = () => {
+  const { handleOptionSelect } = useGroupSelection({
+    key: BLOCK_ID,
+    value: 'resNoConcerns',
+  })
   return (
     <GroupSelectSection
       label={BLOCK_TITLE}
       field={BLOCK_ID}
-      options={BLOCK_OPTIONS}
+      options={RESPIRATORY_BLOCK_OPTIONS}
+      onToggle={handleOptionSelect}
     />
   )
 }
 
-export { RespiratoryBlock }
+export { RespiratoryBlock, RESPIRATORY_BLOCK_OPTIONS }

@@ -1,44 +1,55 @@
-import { GroupSelectSection } from '@/components'
+import { GroupSelectOption, GroupSelectSection } from '@/components'
+import { useGroupSelection } from '@/hooks/use-group-selection'
 
 const BLOCK_ID = 'eyes'
 
 const BLOCK_TITLE = 'Eyes'
 
-const BLOCK_OPTIONS = [
+const EYE_BLOCK_OPTIONS: GroupSelectOption<string>[] = [
   {
     label: 'No concerns',
-    value: 'noConcerns',
+    value: 'eyesNoConcerns',
   },
   {
     label: 'Eye pain',
-    value: 'eyePain',
+    value: 'eyesEyePain',
   },
   {
     label: 'Redness',
-    value: 'redness',
+    value: 'eyesRedness',
   },
   {
     label: 'Discharge',
-    value: 'discharge',
+    value: 'eyesDischarge',
   },
   {
     label: 'Vision changes',
-    value: 'visionChanges',
+    value: 'eyesVisionChanges',
   },
   {
     label: 'Other',
-    value: 'other',
+    value: 'eyesOther',
+    details: {
+      type: 'text',
+      label: '',
+      field: 'eyesOtherDetails',
+    },
   },
 ]
 
 const EyesBlock = () => {
+  const { handleOptionSelect } = useGroupSelection({
+    key: BLOCK_ID,
+    value: 'eyesNoConcerns',
+  })
   return (
     <GroupSelectSection
       label={BLOCK_TITLE}
       field={BLOCK_ID}
-      options={BLOCK_OPTIONS}
+      options={EYE_BLOCK_OPTIONS}
+      onToggle={handleOptionSelect}
     />
   )
 }
 
-export { EyesBlock }
+export { EyesBlock, EYE_BLOCK_OPTIONS }

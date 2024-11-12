@@ -1,40 +1,51 @@
-import { GroupSelectSection } from '@/components'
+import { GroupSelectOption, GroupSelectSection } from '@/components'
+import { useGroupSelection } from '@/hooks/use-group-selection'
 
 const BLOCK_ID = 'cardiovascular'
 
 const BLOCK_TITLE = 'Cardiovascular'
 
-const BLOCK_OPTIONS = [
+const CARDIOVASCULAR_BLOCK_OPTIONS: GroupSelectOption<string>[] = [
   {
     label: 'No concerns',
-    value: 'noConcerns',
+    value: 'cvsNoConcerns',
   },
   {
     label: 'Chest pain',
-    value: 'chestPain',
+    value: 'cvsChestPain',
   },
   {
     label: 'Shortness of breath',
-    value: 'shortnessOfBreath',
+    value: 'cvsShortnessOfBreath',
   },
   {
     label: 'Palpitations',
-    value: 'palpitations',
+    value: 'cvsPalpitations',
   },
   {
     label: 'Other',
-    value: 'other',
+    value: 'cvsOther',
+    details: {
+      type: 'text',
+      label: '',
+      field: 'cvsOtherDetails',
+    },
   },
 ]
 
 const CardiovascularBlock = () => {
+  const { handleOptionSelect } = useGroupSelection({
+    key: BLOCK_ID,
+    value: 'cvsNoConcerns',
+  })
   return (
     <GroupSelectSection
       label={BLOCK_TITLE}
       field={BLOCK_ID}
-      options={BLOCK_OPTIONS}
+      options={CARDIOVASCULAR_BLOCK_OPTIONS}
+      onToggle={handleOptionSelect}
     />
   )
 }
 
-export { CardiovascularBlock }
+export { CardiovascularBlock, CARDIOVASCULAR_BLOCK_OPTIONS }

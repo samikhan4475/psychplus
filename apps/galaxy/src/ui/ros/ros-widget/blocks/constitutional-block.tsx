@@ -1,44 +1,36 @@
-import { GroupSelectSection } from '@/components'
+import { GroupSelectOption, GroupSelectSection } from '@/components'
+import { useGroupSelection } from '@/hooks/use-group-selection'
 
 const BLOCK_ID = 'constitutional'
-
 const BLOCK_TITLE = 'Constitutional'
 
-const BLOCK_OPTIONS = [
-  {
-    label: 'No concerns',
-    value: 'noConcerns',
-  },
-  {
-    label: 'Weight change',
-    value: 'weightChange',
-  },
-  {
-    label: 'Fever',
-    value: 'fever',
-  },
-  {
-    label: 'Chills',
-    value: 'chills',
-  },
-  {
-    label: 'Fatigue',
-    value: 'fatigue',
-  },
+const CONSTITUTIONAL_BLOCK_OPTIONS: GroupSelectOption<string>[] = [
+  { label: 'No concerns', value: 'ctNoConcerns' },
+  { label: 'Weight change', value: 'ctWeightChange' },
+  { label: 'Fever', value: 'ctFever' },
+  { label: 'Chills', value: 'ctChills' },
+  { label: 'Fatigue', value: 'ctFatigue' },
   {
     label: 'Other',
-    value: 'other',
+    value: 'ctOther',
+    details: { type: 'text', label: '', field: 'ctOtherDetails' },
   },
 ]
 
 const ConstitutionalBlock = () => {
+  const { handleOptionSelect } = useGroupSelection({
+    key: BLOCK_ID,
+    value: 'ctNoConcerns',
+  })
+
   return (
     <GroupSelectSection
       label={BLOCK_TITLE}
       field={BLOCK_ID}
-      options={BLOCK_OPTIONS}
+      options={CONSTITUTIONAL_BLOCK_OPTIONS}
+      onToggle={handleOptionSelect}
     />
   )
 }
 
-export { ConstitutionalBlock }
+export { ConstitutionalBlock, CONSTITUTIONAL_BLOCK_OPTIONS }

@@ -1,48 +1,59 @@
-import { GroupSelectSection } from '@/components'
+import { GroupSelectOption, GroupSelectSection } from '@/components'
+import { useGroupSelection } from '@/hooks/use-group-selection'
 
 const BLOCK_ID = 'neuro'
 
 const BLOCK_TITLE = 'Neuro'
 
-const BLOCK_OPTIONS = [
+const NEURO_BLOCK_OPTIONS: GroupSelectOption<string>[] = [
   {
     label: 'No concerns',
-    value: 'noConcerns',
+    value: 'neuNoConcerns',
   },
   {
     label: 'Weakness',
-    value: 'weakness',
+    value: 'neuWeakness',
   },
   {
     label: 'Paresthesia',
-    value: 'paresthesia',
+    value: 'neuParesthesia',
   },
   {
     label: 'Dizziness',
-    value: 'dizziness',
+    value: 'neuDizziness',
   },
   {
     label: 'Headache',
-    value: 'headache',
+    value: 'neuHeadache',
   },
   {
     label: 'Recent falls',
-    value: 'recentFalls',
+    value: 'neuRecentFalls',
   },
   {
     label: 'Other',
-    value: 'other',
+    value: 'neuOther',
+    details: {
+      type: 'text',
+      label: '',
+      field: 'neuOtherDetails',
+    },
   },
 ]
 
 const NeuroBlock = () => {
+  const { handleOptionSelect } = useGroupSelection({
+    key: BLOCK_ID,
+    value: 'neuNoConcerns',
+  })
   return (
     <GroupSelectSection
       label={BLOCK_TITLE}
       field={BLOCK_ID}
-      options={BLOCK_OPTIONS}
+      options={NEURO_BLOCK_OPTIONS}
+      onToggle={handleOptionSelect}
     />
   )
 }
 
-export { NeuroBlock }
+export { NeuroBlock, NEURO_BLOCK_OPTIONS }

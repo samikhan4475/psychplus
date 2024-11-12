@@ -43,7 +43,7 @@ const ActualNoteView = ({ patientId }: ActualNoteViewProps) => {
           <PastMedicalHx patientId={patientId} />
           <Allergies />
           <Question />
-          <ReviewOfSystem />
+          <ReviewOfSystem patientId={patientId} />
           <VitalsTable />
           <MentalStatusExamHx patientId={patientId} />
           <WorkingDiagnosis />

@@ -1,40 +1,51 @@
-import { GroupSelectSection } from '@/components'
+import { GroupSelectOption, GroupSelectSection } from '@/components'
+import { useGroupSelection } from '@/hooks/use-group-selection'
 
 const BLOCK_ID = 'genitourinary'
 
 const BLOCK_TITLE = 'Genitourinary'
 
-const BLOCK_OPTIONS = [
+const GENITOURINARY_BLOCK_OPTIONS: GroupSelectOption<string>[] = [
   {
     label: 'No concerns',
-    value: 'noConcerns',
+    value: 'guNoConcerns',
   },
   {
     label: 'Dysmenorrhea',
-    value: 'dysmenorrhea',
+    value: 'guDysmenorrhea',
   },
   {
     label: 'Urinary frequency',
-    value: 'urinaryFrequency',
+    value: 'guUrinaryFrequency',
   },
   {
     label: 'Urinary incontinence',
-    value: 'urinaryIncontinence',
+    value: 'guUrinaryIncontinence',
   },
   {
     label: 'Other',
-    value: 'other',
+    value: 'guOther',
+    details: {
+      type: 'text',
+      label: '',
+      field: 'guOtherDetails',
+    },
   },
 ]
 
 const GenitourinaryBlock = () => {
+  const { handleOptionSelect } = useGroupSelection({
+    key: BLOCK_ID,
+    value: 'guNoConcerns',
+  })
   return (
     <GroupSelectSection
       label={BLOCK_TITLE}
       field={BLOCK_ID}
-      options={BLOCK_OPTIONS}
+      options={GENITOURINARY_BLOCK_OPTIONS}
+      onToggle={handleOptionSelect}
     />
   )
 }
 
-export { GenitourinaryBlock }
+export { GenitourinaryBlock, GENITOURINARY_BLOCK_OPTIONS }

@@ -16,6 +16,7 @@ interface GroupSelectSectionProps<T extends string> {
   parentField?: string
   valueInParent?: string
   hasChild?: boolean
+  onToggle?: (value: string) => void
 }
 
 interface GroupSelectOption<T extends string> {
@@ -32,6 +33,7 @@ const GroupSelectSection = <T extends string>({
   parentField,
   valueInParent,
   hasChild,
+  onToggle,
 }: GroupSelectSectionProps<T>) => {
   const form = useFormContext()
 
@@ -44,6 +46,11 @@ const GroupSelectSection = <T extends string>({
   const toggleSelected =
     (value: string, option: GroupSelectOption<T>) => () => {
       const isSelect = isSelected(value)
+      if (onToggle) {
+        onToggle(value)
+        return
+      }
+
       if (option) {
         const { details, fieldName } = option
 
@@ -84,6 +91,7 @@ const GroupSelectSection = <T extends string>({
         form.setValue(parentField, updatedParentValues, { shouldDirty: true })
       }
     }
+
   return (
     <Flex align="center" gap="1" wrap="wrap">
       {label && <BlockLabel>{label}</BlockLabel>}
@@ -104,3 +112,4 @@ const GroupSelectSection = <T extends string>({
 }
 
 export { GroupSelectSection }
+export type { GroupSelectSectionProps, GroupSelectOption }

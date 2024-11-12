@@ -20,6 +20,7 @@ enum QuickNoteSectionName {
   QuickNoteSectionSocialHx = 'QuicknoteSectionSocialHx',
   QuickNoteSectionSubstanceUseHx = 'QuicknoteSectionSubstanceUseHx',
   QuicknoteSectionPhysicalExam = 'QuicknoteSectionPhysicalExam',
+  QuicknoteSectionReviewOfSystem = 'QuicknoteSectionReviewOfSystem',
   QuickNoteSectionPrimaryCode = 'QuicknoteSectionPrimaryCode',
   QuicknoteSectionProcedureEtcTab = 'QuicknoteSectionProcedureEtcTab',
   ProcedureTMS = 'ProcedureTMS',

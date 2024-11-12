@@ -1,40 +1,35 @@
-import { GroupSelectSection } from '@/components'
+import { GroupSelectOption, GroupSelectSection } from '@/components'
+import { useGroupSelection } from '@/hooks/use-group-selection'
 
 const BLOCK_ID = 'entMouth'
-
 const BLOCK_TITLE = 'ENT/Mouth'
 
-const BLOCK_OPTIONS = [
-  {
-    label: 'No concerns',
-    value: 'noConcerns',
-  },
-  {
-    label: 'Hearing changes/Ear pain',
-    value: 'hearingChangesEarPain',
-  },
-  {
-    label: 'Sinus congestion',
-    value: 'sinusCongestion',
-  },
-  {
-    label: 'Sore throat',
-    value: 'soreThroat',
-  },
+const EYE_MOUTH_BLOCK_OPTIONS: GroupSelectOption<string>[] = [
+  { label: 'No concerns', value: 'entNoConcerns' },
+  { label: 'Hearing changes/Ear pain', value: 'entHearingChangesEarPain' },
+  { label: 'Sinus congestion', value: 'entSinusCongestion' },
+  { label: 'Sore throat', value: 'entSoreThroat' },
   {
     label: 'Other',
-    value: 'other',
+    value: 'entOther',
+    details: { type: 'text', label: '', field: 'entOtherDetails' },
   },
 ]
 
 const EntMouthBlock = () => {
+  const { handleOptionSelect } = useGroupSelection({
+    key: BLOCK_ID,
+    value: 'entNoConcerns',
+  })
+
   return (
     <GroupSelectSection
       label={BLOCK_TITLE}
       field={BLOCK_ID}
-      options={BLOCK_OPTIONS}
+      options={EYE_MOUTH_BLOCK_OPTIONS}
+      onToggle={handleOptionSelect}
     />
   )
 }
 
-export { EntMouthBlock }
+export { EntMouthBlock, EYE_MOUTH_BLOCK_OPTIONS }

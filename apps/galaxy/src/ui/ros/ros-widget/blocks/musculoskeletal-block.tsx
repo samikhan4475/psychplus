@@ -1,40 +1,51 @@
-import { GroupSelectSection } from '@/components'
+import { GroupSelectOption, GroupSelectSection } from '@/components'
+import { useGroupSelection } from '@/hooks/use-group-selection'
 
 const BLOCK_ID = 'musculoskeletal'
 
 const BLOCK_TITLE = 'Musculoskeletal'
 
-const BLOCK_OPTIONS = [
+const MUSCULORSKELETAL_BLOCK_OPTIONS: GroupSelectOption<string>[] = [
   {
     label: 'No concerns',
-    value: 'noConcerns',
+    value: 'msuNoConcerns',
   },
   {
     label: 'Myalgias',
-    value: 'myalgias',
+    value: 'msuMyalgias',
   },
   {
     label: 'Joint/musicle stiffness',
-    value: 'jointMuscleStiffness',
+    value: 'msuJointMuscleStiffness',
   },
   {
     label: 'Breast changes',
-    value: 'breastChanges',
+    value: 'msuBreastChanges',
   },
   {
     label: 'Other',
-    value: 'other',
+    value: 'msuOther',
+    details: {
+      type: 'text',
+      label: '',
+      field: 'msuOtherDetails',
+    },
   },
 ]
 
 const MusculoskeletalBlock = () => {
+  const { handleOptionSelect } = useGroupSelection({
+    key: BLOCK_ID,
+    value: 'msuNoConcerns',
+  })
   return (
     <GroupSelectSection
       label={BLOCK_TITLE}
       field={BLOCK_ID}
-      options={BLOCK_OPTIONS}
+      options={MUSCULORSKELETAL_BLOCK_OPTIONS}
+      onToggle={handleOptionSelect}
     />
   )
 }
 
-export { MusculoskeletalBlock }
+export { MusculoskeletalBlock, MUSCULORSKELETAL_BLOCK_OPTIONS }
