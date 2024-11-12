@@ -14,12 +14,14 @@ interface ProceduresViewProps {
   patientId: string
   procedureEctData: QuickNoteSectionItem[]
   procedureTmsData: QuickNoteSectionItem[]
+  procedureSpravatoData: QuickNoteSectionItem[]
 }
 
 const ProceduresView = ({
   patientId,
   procedureEctData,
   procedureTmsData,
+  procedureSpravatoData,
 }: ProceduresViewProps) => {
   const { activeTab, setActiveTab } = useStore((state) => ({
     activeTab: state.activeTab,
@@ -53,7 +55,7 @@ const ProceduresView = ({
         <TmsTab patientId={patientId} procedureTmsData={procedureTmsData} />
       </TabsContent>
       <TabsContent value={ProcedureTabs.SPRAVATO}>
-        <SpravatoTab patientId={patientId} />
+        <SpravatoTab procedureSpravatoData={procedureSpravatoData} />
       </TabsContent>
     </Tabs.Root>
   )

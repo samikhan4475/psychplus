@@ -1,10 +1,11 @@
 'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod'
+import { MagnifyingGlassIcon } from '@radix-ui/react-icons'
 import { Flex } from '@radix-ui/themes'
-import { useForm, type SubmitHandler } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import { useStore as zustandUseStore } from 'zustand'
-import { FormContainer } from '@/components'
+import { FormContainer, FormSubmitButton } from '@/components'
 import { cn, formatDateToISOString, sanitizeFormData } from '@/utils'
 import { useStore } from '../store'
 import { ClearButton } from './clear-button'
@@ -14,7 +15,6 @@ import { FromDatePicker } from './from-date-picker'
 import { patientReferralsSchema, PatientReferralsSchemaType } from './schema'
 import { ServiceSelect } from './service-select'
 import { ServiceStatusSelect } from './service-status-select'
-import { SubmitButton } from './submit-button'
 import { ToDatePicker } from './to-date-picker'
 
 const ReferralsFilterForm = () => {
@@ -43,7 +43,7 @@ const ReferralsFilterForm = () => {
     },
   })
 
-  const onSubmit: SubmitHandler<PatientReferralsSchemaType> = (data) => {
+  const handleFormSubmit = form.handleSubmit((data) => {
     const payload = sanitizeFormData({
       contactStatusList: data?.contactStatusList,
       resourceStatusList: data?.resourceStatusList,
@@ -51,13 +51,13 @@ const ReferralsFilterForm = () => {
       fromReferralDate: formatDateToISOString(data?.fromReferralDate) ?? '',
       toReferralDate: formatDateToISOString(data?.toReferralDate) ?? '',
     })
-    return fetchPatientReferrals(payload, 1, true)
-  }
+    fetchPatientReferrals(payload, 1, true)
+  })
 
   return (
     <FormContainer
       form={form}
-      onSubmit={onSubmit}
+      onSubmit={() => {}}
       className={cn('flex flex-row justify-end gap-1 p-2', {
         'justify-between': showFilters,
       })}
@@ -74,7 +74,15 @@ const ReferralsFilterForm = () => {
       <Flex justify="end" gap="2" align="center">
         <FilterToggleButton />
         <ClearButton />
-        <SubmitButton />
+        <FormSubmitButton
+          form={form}
+          size="1"
+          variant="solid"
+          onClick={handleFormSubmit}
+          highContrast
+        >
+          <MagnifyingGlassIcon />
+        </FormSubmitButton>
       </Flex>
     </FormContainer>
   )

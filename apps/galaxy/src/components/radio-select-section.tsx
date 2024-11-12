@@ -53,7 +53,7 @@ const RadioSelectSection = ({
       >
         {options.map((option) => {
           const isSelected = value === option.value && className
-          const id = `${label}-radio-${option.value}`
+          const id = `${field}-radio-${option.value}`
 
           return (
             <Text

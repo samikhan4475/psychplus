@@ -293,6 +293,8 @@ const GET_ALLERGIES_ENDPOINT = `${API_URL}/api/allergies/actions/search`
 const PATIENT_CARE_TEAM_ENDPOINT = (patientId: string) =>
   `${API_URL}/api/patients/${patientId}/careteam`
 
+const GET_STAFF_LICENSE = `${API_URL}/api/stafflicenses/actions/search`
+
 export {
   USER_ENDPOINT,
   REFRESH_ENDPOINT,
@@ -453,4 +455,5 @@ export {
   GET_ALLERGIES_ENDPOINT,
   PATIENT_CARE_TEAM_ENDPOINT,
   PATIENT_CHARGE_PAYMENT_ENDPOINT,
+  GET_STAFF_LICENSE,
 }

@@ -1,53 +1,57 @@
 'use client'
 
-import { Flex } from '@radix-ui/themes'
+import { useParams } from 'next/navigation'
 import { FormProvider } from 'react-hook-form'
-import { WidgetFormContainer } from '@/components'
-import { HistoryButton, SaveButton } from '@/ui/procedures/shared'
-import { useSpravatoForm } from '@/ui/procedures/spravato-tab/form/use-spravato-form'
-import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
-import { ProcedureTabs } from '../constants'
+import {
+  WidgetFormContainer,
+  WidgetHxButton,
+  WidgetSaveButton,
+} from '@/components'
+import { QuickNoteSectionItem } from '@/types'
+import { ProcedureTabs, ProcedureTabsId } from '../constants'
+import { AdverseEventQuestionView } from './adverse-event-question'
+import { AdverseReactionView } from './adverse-reaction'
+import { transformIn, transformOut } from './data'
+import { DischargePlan } from './discharge-plan'
+import { MonitoringView } from './monitoring'
+import { PostTreatmentTransportation } from './post-treatment'
 import { DosingSection, PrecautionsAndWarningSection } from './sections'
+import { useSpravatoWidgetForm } from './spravato-widget-form'
+import { VitalSignsView } from './vital-signs'
 
 interface SpravatoTabProps {
-  patientId: string
+  procedureSpravatoData: QuickNoteSectionItem[]
 }
 
-const SpravatoTab = ({ patientId }: SpravatoTabProps) => {
-  const form = useSpravatoForm({
-    patientId,
-    treatmentNumber: '01',
-    medicationAssessment: true,
-    benzodiazepines: 'no',
-    nonBenzodiazepineSedativeHypnotic: 'no',
-    psychostimulants: 'no',
-    monoamineOxidaseInhibitors: 'no',
-    aneurysmalVascularDisease: true,
-    pregnancyStatus: true,
-    adverseReactionsEducation: true,
-    postTreatmentSafety: true,
-  })
+const SpravatoTab = ({ procedureSpravatoData }: SpravatoTabProps) => {
+  const { id } = useParams<{ id: string }>()
+  const initialValues = transformIn(procedureSpravatoData)
+  const form = useSpravatoWidgetForm(initialValues)
 
   return (
     <FormProvider {...form}>
-      <Flex direction="column" gap=".5rem">
-        <WidgetFormContainer
-          enableEvents={false}
-          patientId={patientId}
-          widgetId={ProcedureTabs.SPRAVATO}
-          getData={() => []}
-          title={ProcedureTabs.SPRAVATO}
-          headerRight={
-            <Flex gap="2">
-              <HistoryButton />
-              <SaveButton />
-            </Flex>
-          }
-        />
-
-        <DosingSection loading={false} />
+      <WidgetFormContainer
+        patientId={id}
+        widgetId={ProcedureTabsId.SPRAVATO_ID}
+        title={ProcedureTabs.SPRAVATO}
+        getData={transformOut(id)}
+        headerRight={
+          <>
+            <WidgetHxButton />
+            <WidgetSaveButton />
+          </>
+        }
+      >
+        <DosingSection />
         <PrecautionsAndWarningSection />
-      </Flex>
+
+        <MonitoringView />
+        <VitalSignsView />
+        <AdverseReactionView />
+        <AdverseEventQuestionView />
+        <DischargePlan />
+        <PostTreatmentTransportation />
+      </WidgetFormContainer>
     </FormProvider>
   )
 }

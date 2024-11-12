@@ -92,6 +92,8 @@ const config = {
         'pp-blue-5': '#0079be',
         'pp-red-2': '#ED0006',
         'pp-red-3': '#d10429',
+        'pp-red-border': '#F3AEAF',
+        'pp-blue-border': '#96C7F2',
       },
       animation: {
         loader: 'bounce 500ms infinite, pulse 2s infinite',

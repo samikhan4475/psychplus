@@ -1,6 +1,7 @@
 import toast from 'react-hot-toast'
 import { ProceduresView } from 'src/ui/procedures'
 import { getProcedureEct } from '@/ui/procedures/ect-tab/api'
+import { getProcedureSpravato } from '@/ui/procedures/spravato-tab/api'
 import { getProcedureTms } from '@/ui/procedures/tms-tab/api'
 
 interface ProcedurePageProps {
@@ -10,9 +11,14 @@ interface ProcedurePageProps {
 }
 
 const ProcedurePage = async ({ params }: ProcedurePageProps) => {
-  const [procedureEctResponse, procedureTmsResponse] = await Promise.all([
+  const [
+    procedureEctResponse,
+    procedureTmsResponse,
+    procedureSpravatoResponse,
+  ] = await Promise.all([
     getProcedureEct({ patientId: params.id }),
     getProcedureTms({ patientId: params.id }),
+    getProcedureSpravato({ patientId: params.id }),
     //add more APis for other tabs
   ])
 
@@ -22,6 +28,10 @@ const ProcedurePage = async ({ params }: ProcedurePageProps) => {
 
   if (procedureTmsResponse.state === 'error') {
     toast.error('Failed to fetch TMS data')
+  }
+
+  if (procedureSpravatoResponse.state === 'error') {
+    toast.error('Failed to fetch Spravato data')
   }
 
   return (
@@ -35,6 +45,11 @@ const ProcedurePage = async ({ params }: ProcedurePageProps) => {
       procedureTmsData={
         procedureTmsResponse.state === 'success'
           ? procedureTmsResponse.data
+          : []
+      }
+      procedureSpravatoData={
+        procedureSpravatoResponse.state === 'success'
+          ? procedureSpravatoResponse.data
           : []
       }
     />

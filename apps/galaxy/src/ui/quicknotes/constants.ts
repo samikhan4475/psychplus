@@ -23,6 +23,7 @@ enum QuickNoteSectionName {
   QuickNoteSectionPrimaryCode = 'QuicknoteSectionPrimaryCode',
   QuicknoteSectionProcedureEtcTab = 'QuicknoteSectionProcedureEtcTab',
   ProcedureTMS = 'ProcedureTMS',
+  QuicknoteSectionProcedureSpravatoTab = 'QuicknoteSectionProcedureSpravatoTab',
   QuicknoteSectionHPI = 'QuicknoteSectionHPI',
   Addon = 'QuicknoteSectionAddOn',
   Vitals = 'QuicknoteSectionVital',

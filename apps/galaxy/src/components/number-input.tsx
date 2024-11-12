@@ -31,7 +31,7 @@ const NumberInput = ({
   autoFocus,
   disabled,
   required = false,
-  showError = true,
+  showError = false,
   min,
   max,
 }: NumberInputProps) => {

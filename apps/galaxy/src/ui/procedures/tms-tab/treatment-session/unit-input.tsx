@@ -30,9 +30,8 @@ const UnitInput = ({
           field={field}
           disabled={disabled}
           placeholder="000"
-          showError={false}
         />
-        <Text className="text-pp-gray-3] w-[100%] text-center text-2 font-regular">
+        <Text className="text-pp-gray-3 w-[100%] text-center text-2 font-regular">
           {symbol}
         </Text>
       </Flex>

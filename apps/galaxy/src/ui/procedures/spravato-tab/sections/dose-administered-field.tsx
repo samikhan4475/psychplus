@@ -1,5 +1,8 @@
-import { Flex } from '@radix-ui/themes'
-import { RadioSelectSection } from '@/components'
+import {
+  FormFieldContainer,
+  FormFieldError,
+  RadioSelectSection,
+} from '@/components'
 
 const BLOCK_ID = 'doseAdminstered'
 
@@ -17,14 +20,15 @@ const BLOCK_OPTIONS = [
 ]
 const DoseAdministeredField = () => {
   return (
-    <Flex gap="2">
+    <FormFieldContainer className="flex-row items-center gap-2">
       <RadioSelectSection
         label={BLOCK_TITLE}
         field={BLOCK_ID}
         options={BLOCK_OPTIONS}
         required
       />
-    </Flex>
+      <FormFieldError name={BLOCK_ID} />
+    </FormFieldContainer>
   )
 }
 
