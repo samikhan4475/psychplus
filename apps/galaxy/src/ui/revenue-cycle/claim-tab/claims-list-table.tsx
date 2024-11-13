@@ -6,6 +6,7 @@ import { type ColumnDef } from '@tanstack/react-table'
 import {
   ColumnHeader,
   DataTable,
+  DateCell,
   DateTimeCell,
   LoadingPlaceholder,
   LongTextCell,
@@ -13,7 +14,7 @@ import {
 } from '@/components'
 import { Sort, type Claim } from '@/types'
 import { getSortDir } from '@/utils'
-import { formatDateTime } from '@/utils/date'
+import { formatDate, formatDateTime } from '@/utils/date'
 import { getInsurancePayerName } from '../utils'
 import { ActionsCell } from './actions-cell'
 import { useStore } from './store'
@@ -82,13 +83,11 @@ const columns = (
           }}
         />
       ),
-      cell: ({ row }) => {
-        return (
-          <DateTimeCell>
-            {formatDateTime(`${row.original.dateOfServiceFrom}`)}
-          </DateTimeCell>
-        )
-      },
+      cell: ({ row }) => (
+        <DateCell>
+          {formatDate(`${row.original.dateOfServiceFrom}`, 'MM/dd/yyyy')}
+        </DateCell>
+      ),
     },
     {
       id: 'primaryInsurance.payerName',
@@ -165,7 +164,7 @@ const columns = (
         />
       ),
       cell: ({ row }) => {
-        return <LongTextCell>{row.original.totalAmount}</LongTextCell>
+        return <TextCell hasPayment>{row.original.totalAmount}</TextCell>
       },
     },
     {
@@ -181,7 +180,7 @@ const columns = (
         />
       ),
       cell: ({ row }) => {
-        return <LongTextCell>{row.original.amountDue}</LongTextCell>
+        return <TextCell hasPayment>{row.original.amountDue}</TextCell>
       },
     },
 

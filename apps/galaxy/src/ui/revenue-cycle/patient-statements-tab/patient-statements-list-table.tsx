@@ -62,7 +62,9 @@ const columns = (
           }}
         />
       ),
-      cell: ({ row }) => <TextCell>${row.original.totalAmount}</TextCell>,
+      cell: ({ row }) => (
+        <TextCell hasPayment>{row.original.totalAmount}</TextCell>
+      ),
     },
 
     {
@@ -77,7 +79,9 @@ const columns = (
           }}
         />
       ),
-      cell: ({ row }) => <TextCell>${row.original.paidAmount}</TextCell>,
+      cell: ({ row }) => (
+        <TextCell hasPayment>{row.original.paidAmount}</TextCell>
+      ),
     },
 
     {
@@ -92,7 +96,9 @@ const columns = (
           }}
         />
       ),
-      cell: ({ row }) => <TextCell>${row.original.patientBalanceDue}</TextCell>,
+      cell: ({ row }) => (
+        <TextCell hasPayment>{row.original.patientBalanceDue}</TextCell>
+      ),
     },
 
     {
@@ -107,7 +113,9 @@ const columns = (
           }}
         />
       ),
-      cell: ({ row }) => <TextCell>${row.original.insurancePaid}</TextCell>,
+      cell: ({ row }) => (
+        <TextCell hasPayment>{row.original.insurancePaid}</TextCell>
+      ),
     },
 
     {
@@ -122,7 +130,9 @@ const columns = (
           }}
         />
       ),
-      cell: ({ row }) => <TextCell>${row.original.totalAmount}</TextCell>,
+      cell: ({ row }) => (
+        <TextCell hasPayment>{row.original.totalAmount}</TextCell>
+      ),
     },
 
     {

@@ -1,6 +1,6 @@
 import React from 'react'
 import { Flex, Grid, Text } from '@radix-ui/themes'
-import { formatDate } from '@/utils'
+import { formatCurrency, formatDate } from '@/utils'
 import { InsurancePayment } from '../types'
 
 interface PaymentCheckHeaderProps {
@@ -25,7 +25,7 @@ const PaymentCheckHeader = ({ paymentDetail }: PaymentCheckHeaderProps) => {
         <Text weight="bold" size="1">
           Check Amount:
         </Text>
-        <Text size="1">${paymentDetail.amount}</Text>
+        <Text size="1">{formatCurrency(paymentDetail.amount)}</Text>
       </Flex>
       <Flex gap="2">
         <Text weight="bold" size="1">

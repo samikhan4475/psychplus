@@ -6,6 +6,7 @@ import { type ColumnDef } from '@tanstack/react-table'
 import {
   ColumnHeader,
   DataTable,
+  DateCell,
   DateTimeCell,
   LoadingPlaceholder,
   LongTextCell,
@@ -13,7 +14,7 @@ import {
 } from '@/components'
 import { Sort } from '@/types'
 import { getSortDir } from '@/utils'
-import { formatDateTime } from '@/utils/date'
+import { formatDate, formatDateTime } from '@/utils/date'
 import { InsurancePayment } from '../types'
 import { ActionsCell } from './actions-cell'
 import { CheckNumberCell } from './check-number-cell'
@@ -36,13 +37,9 @@ const columns = (
           }}
         />
       ),
-      cell: ({ row }) => {
-        return (
-          <CheckNumberCell row={row}>
-            {row.original.checkNumber}
-          </CheckNumberCell>
-        )
-      },
+      cell: ({ row }) => (
+        <CheckNumberCell row={row}>{row.original.checkNumber}</CheckNumberCell>
+      ),
     },
     {
       id: 'paymentType',
@@ -56,9 +53,7 @@ const columns = (
           }}
         />
       ),
-      cell: ({ row }) => {
-        return <TextCell>{row.original.paymentType}</TextCell>
-      },
+      cell: ({ row }) => <TextCell>{row.original.paymentType}</TextCell>,
     },
     {
       id: 'insuranceName',
@@ -72,9 +67,7 @@ const columns = (
           }}
         />
       ),
-      cell: ({ row }) => {
-        return <TextCell>{row.original.insuranceName}</TextCell>
-      },
+      cell: ({ row }) => <TextCell>{row.original.insuranceName}</TextCell>,
     },
     {
       id: 'amount',
@@ -88,9 +81,7 @@ const columns = (
           }}
         />
       ),
-      cell: ({ row }) => {
-        return <TextCell>{`$${row.original.amount}`}</TextCell>
-      },
+      cell: ({ row }) => <TextCell hasPayment>{row.original.amount}</TextCell>,
     },
     {
       id: 'checkDate',
@@ -104,13 +95,11 @@ const columns = (
           }}
         />
       ),
-      cell: ({ row }) => {
-        return (
-          <DateTimeCell>
-            {formatDateTime(`${row.original.checkDate}`)}
-          </DateTimeCell>
-        )
-      },
+      cell: ({ row }) => (
+        <DateCell>
+          {formatDate(`${row.original.checkDate}`, 'MM/dd/yyyy')}
+        </DateCell>
+      ),
     },
     {
       id: 'receivedDate',
@@ -124,13 +113,11 @@ const columns = (
           }}
         />
       ),
-      cell: ({ row }) => {
-        return (
-          <DateTimeCell>
-            {formatDateTime(`${row.original.receivedDate}`)}
-          </DateTimeCell>
-        )
-      },
+      cell: ({ row }) => (
+        <DateCell>
+          {formatDate(`${row.original.receivedDate}`, 'MM/dd/yyyy')}
+        </DateCell>
+      ),
     },
     {
       id: 'noindex', // noindex is here because right now we are not mapping any value against this column
@@ -160,9 +147,7 @@ const columns = (
           }}
         />
       ),
-      cell: ({ row }) => {
-        return <LongTextCell>{row.original.status}</LongTextCell>
-      },
+      cell: ({ row }) => <LongTextCell>{row.original.status}</LongTextCell>,
     },
     {
       id: 'noindex', // noindex is here because right now we are not mapping any value against this column
@@ -193,14 +178,12 @@ const columns = (
           }}
         />
       ),
-      cell: ({ row }) => {
-        return <TextCell>{`$${row.original.amount}`}</TextCell>
-      },
+      cell: ({ row }) => <TextCell hasPayment>{row.original.amount}</TextCell>,
     },
     {
       id: 'actions',
       header: () => <ColumnHeader label="Actions" />,
-      cell: ({ row }) => <ActionsCell row={row} />,
+      cell: ActionsCell,
     },
   ]
 }

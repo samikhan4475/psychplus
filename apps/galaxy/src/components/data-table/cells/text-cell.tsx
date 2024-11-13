@@ -1,5 +1,5 @@
 import { Flex, Text } from '@radix-ui/themes'
-import { cn } from '@/utils'
+import { cn, formatCurrency } from '@/utils'
 
 interface TextCellProps {
   empty?: boolean
@@ -26,8 +26,7 @@ const TextCell = ({
         weight="regular"
         size="1"
       >
-        {!empty && hasPayment ? '$' : ''}
-        {children}
+        {!empty && hasPayment ? formatCurrency(Number(children)) : children}
       </Text>
     </Flex>
   )
