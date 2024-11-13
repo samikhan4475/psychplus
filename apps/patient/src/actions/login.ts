@@ -6,8 +6,6 @@ import { type ActionResult } from '@psychplus-v2/api'
 import { login, setAuthCookies, type AuthRequest } from '@psychplus-v2/auth'
 import { API_URL } from '@psychplus-v2/env'
 import { createAuthzHeader } from '@psychplus-v2/headers'
-import { scriptSurePatientLogin, setCookie } from '@psychplus-v2/scriptsure'
-import { getUserFullName } from '@psychplus-v2/utils'
 import { jwtDecode } from 'jwt-decode'
 
 const SELF_PROFILE_URL = `${API_URL}/api/patients/self/profile`
@@ -59,14 +57,14 @@ const loginAction = async ({
 
   setAuthCookies(loginResponse.data)
 
-  const scriptSureSession = await scriptSurePatientLogin(
-    String(profileResponse.data.id),
-    getUserFullName(profileResponse.data.legalName),
-  )
+  // const scriptSureSession = await scriptSurePatientLogin(
+  //   String(profileResponse.data.id),
+  //   getUserFullName(profileResponse.data.legalName),
+  // )
 
-  if (scriptSureSession) {
-    setCookie(scriptSureSession)
-  }
+  // if (scriptSureSession) {
+  //   setCookie(scriptSureSession)
+  // }
 
   if (!shouldRedirect) {
     return {
