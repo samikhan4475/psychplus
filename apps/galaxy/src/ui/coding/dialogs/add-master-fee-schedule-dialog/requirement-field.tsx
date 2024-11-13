@@ -16,6 +16,7 @@ const RequirementField = () => {
     <FormFieldContainer>
       <FormFieldLabel required>Requirement</FormFieldLabel>
       <TextField.Root
+        maxLength={256}
         size="1"
         {...form.register('requirement')}
         placeholder="Requirements..."

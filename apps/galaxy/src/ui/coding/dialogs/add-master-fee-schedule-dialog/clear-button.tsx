@@ -6,7 +6,22 @@ import { SchemaType } from './schema'
 const ClearButton = () => {
   const form = useFormContext<SchemaType>()
   const onClear = () => {
-    form.reset()
+    form.reset({
+      gender: '',
+      category: '',
+      maximumAge: '',
+      minimumAge: '',
+      placeOfService: '',
+      recordStatus: '',
+      cptCode: '',
+      description: '',
+      requirement: '',
+      mdDoAmount: '',
+      npAmount: '',
+      paAmount: '',
+      psyDAmount: '',
+      mastersAmount: '',
+    })
   }
   return (
     <Button

@@ -16,6 +16,7 @@ const DescriptionField = () => {
     <FormFieldContainer>
       <FormFieldLabel required>Description</FormFieldLabel>
       <TextField.Root
+        maxLength={128}
         size="1"
         {...form.register('description')}
         placeholder="Description"

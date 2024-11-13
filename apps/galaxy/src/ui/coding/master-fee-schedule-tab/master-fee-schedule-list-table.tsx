@@ -11,13 +11,17 @@ import {
   LoadingPlaceholder,
   TextCell,
 } from '@/components'
-import { Sort } from '@/types'
+import { CODESETS } from '@/constants'
+import { useCodesetCodes } from '@/hooks'
+import { SharedCode, Sort } from '@/types'
 import { getSortDir } from '@/utils'
 import { CPT } from '../types'
 import { ActionsCell } from './cells/actions-cell'
 import { useStore } from './store'
+import { getCPTDisplay } from './utils'
 
 const columns = (
+  CPTCodeSet: SharedCode[],
   sort?: Sort,
   onSort?: (column: string) => void,
 ): ColumnDef<CPT>[] => {
@@ -53,21 +57,6 @@ const columns = (
       cell: ({ row }) => <TextCell>{row.original.placeOfService}</TextCell>,
     },
     {
-      id: 'mastersAmount',
-      header: ({ column }) => (
-        <ColumnHeader
-          sortable
-          sortDir={getSortDir(column.id, sort)}
-          onClick={() => {
-            onSort?.(column.id)
-          }}
-          label="Masters"
-          column={column}
-        />
-      ),
-      cell: ({ row }) => <TextCell>{row.original.mastersAmount}</TextCell>,
-    },
-    {
       id: 'mdDoAmount',
       header: ({ column }) => (
         <ColumnHeader
@@ -80,10 +69,12 @@ const columns = (
           column={column}
         />
       ),
-      cell: ({ row }) => <TextCell>{row.original.mdDoAmount}</TextCell>,
+      cell: ({ row }) => (
+        <TextCell hasPayment>{row.original.mdDoAmount}</TextCell>
+      ),
     },
     {
-      id: 'npPaAmount',
+      id: 'npAmount',
       header: ({ column }) => (
         <ColumnHeader
           sortable
@@ -91,14 +82,33 @@ const columns = (
           onClick={() => {
             onSort?.(column.id)
           }}
-          label="NP/PA"
+          label="NP"
           column={column}
         />
       ),
-      cell: ({ row }) => <TextCell>{row.original.npPaAmount}</TextCell>,
+      cell: ({ row }) => (
+        <TextCell hasPayment>{row.original.npAmount}</TextCell>
+      ),
     },
     {
-      id: 'noindex',
+      id: 'paAmount',
+      header: ({ column }) => (
+        <ColumnHeader
+          sortable
+          sortDir={getSortDir(column.id, sort)}
+          onClick={() => {
+            onSort?.(column.id)
+          }}
+          label="PA"
+          column={column}
+        />
+      ),
+      cell: ({ row }) => (
+        <TextCell hasPayment>{row.original.paAmount}</TextCell>
+      ),
+    },
+    {
+      id: 'psyDAmount',
       header: ({ column }) => (
         <ColumnHeader
           sortable
@@ -110,10 +120,12 @@ const columns = (
           column={column}
         />
       ),
-      cell: ({ row }) => <TextCell>--</TextCell>,
+      cell: ({ row }) => (
+        <TextCell hasPayment>{row.original.psyDAmount}</TextCell>
+      ),
     },
     {
-      id: 'medicareAmount',
+      id: 'mastersAmount',
       header: ({ column }) => (
         <ColumnHeader
           sortable
@@ -121,17 +133,16 @@ const columns = (
           onClick={() => {
             onSort?.(column.id)
           }}
-          label="Medicare Amount"
+          label="Masters"
           column={column}
         />
       ),
       cell: ({ row }) => (
-        <TextCell hasPayment>{row.original.medicareAmount}</TextCell>
+        <TextCell hasPayment>{row.original.mastersAmount}</TextCell>
       ),
     },
     {
       id: 'description',
-
       header: ({ column }) => (
         <ColumnHeader
           className="min-w-[400px]"
@@ -159,7 +170,9 @@ const columns = (
           column={column}
         />
       ),
-      cell: ({ row }) => <TextCell>{row.original.category}</TextCell>,
+      cell: ({ row }) => (
+        <TextCell> {getCPTDisplay(row.original.category, CPTCodeSet)}</TextCell>
+      ),
     },
     {
       id: 'gender',
@@ -232,6 +245,7 @@ const columns = (
   ]
 }
 const MasterFeeScheduleTable = () => {
+  const CPTCodeSet = useCodesetCodes(CODESETS.FeeScheduleCategoryType)
   const { data, loading, sort, sortData, search } = useStore((state) => ({
     data: state.data,
     loading: state.loading,
@@ -266,7 +280,7 @@ const MasterFeeScheduleTable = () => {
     <ScrollArea className="max-w-[calc(100vw-200px)]">
       <DataTable
         data={data.cptList}
-        columns={columns(sort, sortData)}
+        columns={columns(CPTCodeSet, sort, sortData)}
         onRowClick={(row) => {
           // TODO: Row click can be implemented here
         }}

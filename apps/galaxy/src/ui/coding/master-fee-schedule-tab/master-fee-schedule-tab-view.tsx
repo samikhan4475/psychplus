@@ -1,5 +1,6 @@
 import React from 'react'
-import { Flex } from '@radix-ui/themes'
+import { PlusIcon } from '@radix-ui/react-icons'
+import { Button, Flex } from '@radix-ui/themes'
 import { AddMasterFeeScheduleDialog } from '../dialogs'
 import { MasterFeeScheduleFilterForm } from './master-fee-schedule-filter-form'
 import { MasterFeeScheduleTable } from './master-fee-schedule-list-table'
@@ -13,7 +14,11 @@ const MasterFeeScheduleTabView = () => {
       <TabContentHeading title="Master Fee Schedule">
         <Flex gapX="2">
           <UploadExcelButton />
-          <AddMasterFeeScheduleDialog />
+          <AddMasterFeeScheduleDialog>
+            <Button size="1" highContrast>
+              <PlusIcon /> Add CPT
+            </Button>
+          </AddMasterFeeScheduleDialog>
         </Flex>
       </TabContentHeading>
       <Flex direction="column" className="bg-white w-full py-1">

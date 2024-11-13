@@ -10,7 +10,6 @@ import { ClearFilterFormButton } from './clear-filter-form-button'
 import { CptField } from './cpt-field'
 import { DescriptionField } from './description-field'
 import { GenderSelectField } from './gender-select-field'
-import { MedicareAmountField } from './medicare-amount-field'
 import { PosSelectField } from './pos-select-field'
 import { StatusSelectField } from './status-field'
 import { useStore } from './store'
@@ -24,7 +23,6 @@ const schema = z.object({
   category: z.string().optional(),
   gender: z.string().optional(),
   recordStatus: z.string().optional(),
-  medicareAmount: z.string().optional(),
   minimumAge: z.string().optional(),
   maximumAge: z.string().optional(),
 })
@@ -40,7 +38,6 @@ const MasterFeeScheduleFilterForm = () => {
     defaultValues: {
       recordStatus: '',
       cptCode: '',
-      medicareAmount: '',
       placeOfService: '',
       description: '',
       requirement: '',
@@ -66,7 +63,6 @@ const MasterFeeScheduleFilterForm = () => {
       >
         <CptField />
         <PosSelectField />
-        <MedicareAmountField />
         <DescriptionField />
         <CategorySelectField />
         <GenderSelectField />

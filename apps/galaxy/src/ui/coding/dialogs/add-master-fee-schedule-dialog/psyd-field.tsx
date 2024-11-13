@@ -17,10 +17,10 @@ const PsyDField = () => {
       <FormFieldLabel required>PsyD</FormFieldLabel>
       <TextField.Root
         size="1"
-        {...form.register('paDAmount')}
-        placeholder="MCD $"
+        {...form.register('psyDAmount')}
+        placeholder="PsyD $"
       />
-      <FormFieldError name="paDAmount" />
+      <FormFieldError name="psyDAmount" />
     </FormFieldContainer>
   )
 }

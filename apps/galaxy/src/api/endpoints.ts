@@ -21,6 +21,9 @@ const NOTE_DETAILS_SEARCH_ENDPOINT = `${API_URL}/api/notedetails/actions/search`
 const NOTE_DETAILS_HISTORY_ENDPOINT = `${API_URL}/api/notedetails/history/search`
 const PCP_HISTORY_ENDPOINT = `${API_URL}/api/externalproviders/actions/relationships/history/search`
 const SERVICE_DIAGNOSIS_SEARCH_ENDPOINT = `${API_URL}/api/metadata/icd10codes/actions/search`
+const ADD_MASTER_FEE_SCHEDULE_ENDPOINT = `${API_URL}/api/masterfeeschedules`
+const MASTER_FEE_SCHEDULE_ENDPOINT = (scheduleId: string) =>
+  `${API_URL}/api/masterfeeschedules/${scheduleId}`
 const ADD_ON_DRUGS_SEARCH_ENDPOINT = `${API_URL}/api/drugs/core/actions/search`
 const NOTE_DETAILS_SAVE_ENDPOINT = (id: string) =>
   `${API_URL}/api/patients/${id}/notedetails`
@@ -313,6 +316,8 @@ export {
   GET_CLAIM_SUBMISSION_LIST,
   ADD_CLAIM_PAYMENT,
   UPDATE_CLAIM_PAYMENT,
+  ADD_MASTER_FEE_SCHEDULE_ENDPOINT,
+  MASTER_FEE_SCHEDULE_ENDPOINT,
   GET_CLEARNING_HOUSE_RECEIVERS,
   SESSION_ENDPOINT,
   LOGIN_ENDPOINT,

@@ -18,7 +18,7 @@ const MastersField = () => {
       <TextField.Root
         size="1"
         {...form.register('mastersAmount')}
-        placeholder="MCD $"
+        placeholder="Masters $"
       />
       <FormFieldError name="mastersAmount" />
     </FormFieldContainer>

@@ -22,10 +22,12 @@ interface CPT {
   description: string
   requirement: string
   medicareAmount: string
-  mdDoAmount: number
-  npPaAmount: number
-  paDAmount: number
-  mastersAmount: number
+  mdDoAmount: string
+  npAmount: string
+  paAmount: string
+  psyDAmount:string
+  paDAmount: string
+  mastersAmount: string
 }
 
 interface PosList {

@@ -10,7 +10,7 @@ import {
 const PosSelectField = () => {
   return (
     <FormFieldContainer className="w-auto">
-      <FormFieldLabel>POS</FormFieldLabel>
+      <FormFieldLabel required>POS</FormFieldLabel>
       <AsyncSelect
         field="placeOfService"
         placeholder="Select"
