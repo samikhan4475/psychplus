@@ -29,6 +29,7 @@ enum QuickNoteSectionName {
   Addon = 'QuicknoteSectionAddOn',
   Vitals = 'QuicknoteSectionVital',
   QuicknoteSectionMse = 'QuicknoteSectionMse',
+  FollowUps = 'FollowUps',
   QuicknoteSectionPsychiatryAssessmentPlan = 'QuicknoteSectionPsychiatryAssessmentPlan',
   QuicknoteSectionTherapyAssessmentPlan = 'QuicknoteSectionTherapyAssessmentPlan',
   QuicknoteSectionFamilyInternalMedicineAssessmentPlan = 'QuicknoteSectionFamilyInternalMedicineAssessmentPlan',

@@ -96,6 +96,8 @@ interface Appointment {
   facilityAdmissionId: string
   lengthOfStay: number
   patientId: number
+  type?: string
+  specialistTypeCode?: number
 }
 
 export { type Appointment, type PaymentType }

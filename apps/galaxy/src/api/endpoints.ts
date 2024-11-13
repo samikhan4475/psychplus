@@ -261,6 +261,7 @@ const EDIT_TEMPLATE_ENDPOINT = (templateId: string) =>
 const GET_ALL_STAFF_ENDPOINT = `${API_URL}/api/staff`
 const UPDATE_PATIENT_ENDPOINT = (patientId: number) =>
   `${API_URL}/api/patients/${patientId}`
+
 const SEARCH_STAFF_ENDPOINT = `${API_URL}/api/staff/search?limit=10`
 const GET_SELF_STAFF_DETAILS_ENDPOINT = `${API_URL}/api/staff/self`
 const GET_PATIENT_REFERRALS_ENDPOINT = `${API_URL}/api/referrals/search`
@@ -274,6 +275,10 @@ const GET_APPOINTMENT = (appointmentId: string) =>
   `${API_URL}/api/appointments/${appointmentId}`
 const CREATE_PATIENT_REFERRAL_ENDPOINT = (patientId: string) =>
   `${API_URL}/api/patients/${patientId}/referrals`
+const DELETE_PATIENT_APPOINTMENT_ENDPOINT = (
+  patientId: number,
+  appointmentId: number,
+) => `${API_URL}/api/patients/${patientId}/appointments/${appointmentId}`
 
 const SEARCH_FAVOURITE_DIAGNOSIS_ENDPOINT = `${API_URL}/api/staff/self/diagnoses/actions/favorites/search`
 const FAVOURITE_DIAGNOSIS_ENDPOINT = (icd10Code: string) =>
@@ -463,6 +468,7 @@ export {
   FETCH_EXTERNAL_PROVIDER_WITH_PATIENT_ENDPOINT,
   FETCH_EXTERNAL_PROVIDERS_ENDPOINT,
   PCP_HISTORY_ENDPOINT,
+  DELETE_PATIENT_APPOINTMENT_ENDPOINT,
   GET_ALLERGIES_ENDPOINT,
   PATIENT_CARE_TEAM_ENDPOINT,
   PATIENT_CHARGE_PAYMENT_ENDPOINT,

@@ -1,2 +1,2 @@
-export * from './follow-up-filter-form'
+export * from './follow-up-form'
 export * from './follow-up-widget'

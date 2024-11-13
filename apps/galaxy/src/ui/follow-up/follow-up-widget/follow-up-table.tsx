@@ -1,7 +1,6 @@
 'use client'
 
-import { useEffect } from 'react'
-import { Flex, ScrollArea } from '@radix-ui/themes'
+import { Flex } from '@radix-ui/themes'
 import { type ColumnDef } from '@tanstack/react-table'
 import {
   ColumnHeader,
@@ -12,26 +11,26 @@ import {
   TextCell,
 } from '@/components'
 import { Appointment } from '@/types'
-import { VisitStatusSelectCell } from '@/ui/schedule/shared/table-cells'
 import { formatDateTime } from '@/utils/date'
 import { ActionsCell } from './cells'
 import { useStore } from './store'
-import { getEndDate } from './utils'
 
 const columns: ColumnDef<Appointment>[] = [
   {
     id: 'follow-up-date-time',
+    accessorKey: 'follow-up-date-time',
     header: () => <ColumnHeader label="Date/Time" />,
     cell: ({ row }) => {
       return (
         <DateTimeCell>
-          {formatDateTime(row.original.appointmentDate)}
+          {formatDateTime(row.original.appointmentDate, false)}
         </DateTimeCell>
       )
     },
   },
   {
     id: 'provider',
+    accessorKey: 'provider',
     header: ({ column }) => (
       <ColumnHeader clientSideSort column={column} label="Provider" />
     ),
@@ -40,10 +39,10 @@ const columns: ColumnDef<Appointment>[] = [
         {row.original.providerName}
       </TextCell>
     ),
-    enableHiding: true,
   },
   {
     id: 'location',
+    accessorKey: 'location',
     header: ({ column }) => (
       <ColumnHeader clientSideSort column={column} label="Location" />
     ),
@@ -55,40 +54,28 @@ const columns: ColumnDef<Appointment>[] = [
   },
   {
     id: 'visit-type',
+    accessorKey: 'visit-type',
     header: ({ column }) => (
-      <ColumnHeader clientSideSort column={column} label="Type" />
+      <ColumnHeader clientSideSort column={column} label="Visit Type" />
     ),
     cell: ({ row }) => <LongTextCell>{row.original.visitType}</LongTextCell>,
-    enableHiding: false,
-  },
-  {
-    id: 'visit-status',
-    header: ({ column }) => (
-      <ColumnHeader clientSideSort column={column} label="Status" />
-    ),
-    cell: ({ row }) => <VisitStatusSelectCell row={row} />,
-    enableHiding: false,
   },
   {
     id: 'follow-up-actions',
     header: () => <ColumnHeader label="Actions" />,
-    cell: ActionsCell,
+    cell: ({ row }) => (
+      <Flex className="overflow-hidden">
+        <ActionsCell row={row} />
+      </Flex>
+    ),
   },
 ]
 
-const FollowUpTable = ({ patientId }: { patientId: string }) => {
-  const { data, search, loading } = useStore((state) => ({
+const FollowUpTable = () => {
+  const { data, loading } = useStore((state) => ({
     data: state.data,
     loading: state.loading,
-    search: state.search,
   }))
-
-  useEffect(() => {
-    search({
-      startingDate: new Date().toDateString(),
-      endingDate: getEndDate('4week').toDateString(),
-    })
-  }, [])
 
   if (loading) {
     return (
@@ -99,9 +86,7 @@ const FollowUpTable = ({ patientId }: { patientId: string }) => {
   }
 
   return (
-    <ScrollArea>
-      <DataTable data={data ?? []} columns={columns} disablePagination sticky />
-    </ScrollArea>
+    <DataTable data={data ?? []} columns={columns} disablePagination sticky />
   )
 }
 

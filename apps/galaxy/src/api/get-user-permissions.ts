@@ -11,13 +11,14 @@ const getUserPermissions = async () => {
     throw new Error(response.error)
   }
 
-  const result = response.data[0]?.users[0]?.userRoles[0]?.rolePermissions?.reduce(
-    (acc, rolePermission) => {
-      acc[rolePermission.permission.shortName] = rolePermission
-      return acc
-    },
-    {} as Record<string, RolePermission>,
-  )?? {}
+  const result =
+    response.data[0]?.users[0]?.userRoles[0]?.rolePermissions?.reduce(
+      (acc, rolePermission) => {
+        acc[rolePermission.permission.shortName] = rolePermission
+        return acc
+      },
+      {} as Record<string, RolePermission>,
+    ) ?? {}
 
   return result
 }

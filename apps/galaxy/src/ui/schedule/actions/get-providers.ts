@@ -2,14 +2,20 @@
 
 import * as api from '@/api'
 import { StaffResource } from '@/types'
+import { sanitizeFormData } from '@/utils'
 
-const getProvidersOptionsAction = async (): Promise<
-  api.ActionResult<{ label: string; value: string }[]>
-> => {
+const getProvidersOptionsAction = async (
+  providerType?: string,
+): Promise<api.ActionResult<{ label: string; value: string }[]>> => {
   const body = {
     roleCodes: ['1'],
+    providerType,
   }
-  const response = await api.POST<StaffResource[]>(api.GET_STAFF_ENDPOINT, body)
+
+  const response = await api.POST<StaffResource[]>(
+    api.GET_STAFF_ENDPOINT,
+    sanitizeFormData(body),
+  )
 
   if (response.state === 'error') {
     return {
@@ -25,7 +31,7 @@ const getProvidersOptionsAction = async (): Promise<
 
   return {
     state: 'success',
-    data: transformedData
+    data: transformedData,
   }
 }
 

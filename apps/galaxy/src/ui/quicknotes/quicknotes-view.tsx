@@ -20,7 +20,7 @@ import { FamilyInternalMedicineAssessmentPlanWidget } from '../assessment-plan/f
 import { PsychiatryAssessmentPlanWidget } from '../assessment-plan/psychiatry-assessment-plan-tab/psychiatry-assessment-plan-widget'
 import { TherapyAssessmentPlanWidget } from '../assessment-plan/therapy-assessment-plan-tab/therapy-assessment-plan-widget'
 import { QuicknotesDiagnosisWidget } from '../diagnosis/quicknotes-diagnosis-widget'
-import { FollowUpWidget } from '../follow-up'
+import { QuicknotesFollowUpWidget } from '../follow-up'
 import { PhysicalExamWidget } from '../physical-exam'
 import { EctWidgetLoader as EctWidget } from '../procedures/ect-tab/ect-widget-loader'
 import { QuicknotesVitalsWidget } from '../vitals'
@@ -60,7 +60,7 @@ const QuickNotesView = ({ patientId, appointmentId }: QuickNotesViewProps) => {
             <AddOnWidget patientId={patientId} />
             <PatientMedicationsWidget patientId={patientId} />
             <PatientReferralsWidget patientId={patientId} />
-            <FollowUpWidget patientId={patientId} />
+            <QuicknotesFollowUpWidget patientId={patientId} />
             <CodesWidget patientId={patientId} />
             <TherapyWidget patientId={patientId} />
             <EctWidget patientId={patientId} />

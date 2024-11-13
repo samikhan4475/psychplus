@@ -3,7 +3,7 @@
 import { AsyncSelect, FormFieldContainer, FormFieldLabel } from '@/components'
 import { getClinicsOptionsAction } from '@/ui/schedule/actions'
 
-const LocationDropdown = () => {
+const LocationDropdown = ({ disabled }: { disabled: boolean }) => {
   return (
     <FormFieldContainer className="flex-row gap-1">
       <FormFieldLabel className="text-[12px]">Location</FormFieldLabel>
@@ -13,6 +13,7 @@ const LocationDropdown = () => {
         fetchOptions={getClinicsOptionsAction}
         buttonClassName="w-full h-6"
         className="w-[150px]"
+        disabled={disabled}
       />
     </FormFieldContainer>
   )

@@ -215,6 +215,7 @@ interface ProviderCoding {
 }
 interface AppointmentParams {
   appointmentIds?: number[]
+  patientIds?: number[]
   startingDate?: string
   endingDate?: string
   name?: string
@@ -252,6 +253,7 @@ interface AppointmentParams {
   balanceDueMin?: number
   balanceDueMax?: number
   noteSigned?: string
+  isFollowUp?: boolean
 }
 
 interface ProviderCoding {
@@ -286,8 +288,8 @@ interface AvailableSlotsParams {
   startingDate?: string
   endingDate?: string
   serviceIds?: string[]
-  stateId?: string 
-  locationIds?: string[] 
+  stateId?: string
+  locationIds?: string[]
   staffIds?: string[]
   specialistTypeCode?: string
   gender?: string
