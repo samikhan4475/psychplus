@@ -29,6 +29,9 @@ enum QuickNoteSectionName {
   Addon = 'QuicknoteSectionAddOn',
   Vitals = 'QuicknoteSectionVital',
   QuicknoteSectionMse = 'QuicknoteSectionMse',
+  QuicknoteSectionPsychiatryAssessmentPlan = 'QuicknoteSectionPsychiatryAssessmentPlan',
+  QuicknoteSectionTherapyAssessmentPlan = 'QuicknoteSectionTherapyAssessmentPlan',
+  QuicknoteSectionFamilyInternalMedicineAssessmentPlan = 'QuicknoteSectionFamilyInternalMedicineAssessmentPlan',
 }
 
 export { QuickNoteSectionName }

@@ -1,10 +1,10 @@
 import { Flex, ScrollArea } from '@radix-ui/themes'
+import { AddOnWidget } from '@/ui/add-on'
 import { PatientAllergiesWidget } from '@/ui/allergy'
 import { AssessmentPlanWidget } from '@/ui/assessment'
 import { CodesWidget } from '@/ui/codes'
 import { FamilyPsychHxWidget } from '@/ui/family-psych-hx'
 import { HpiWidget } from '@/ui/hpi'
-import { AddOnWidget } from '@/ui/add-on'
 import { PatientMedicationsWidget } from '@/ui/medications'
 import { MseWidget } from '@/ui/mse'
 import { PastMedicalHxWidget } from '@/ui/past-medical-hx'
@@ -15,6 +15,10 @@ import { RosWidget } from '@/ui/ros'
 import { SocialHxWidget } from '@/ui/social-hx'
 import { SubstanceUseHxWidget } from '@/ui/substance-use-hx'
 import { TherapyWidget } from '@/ui/therapy'
+import { AlertDialog } from '../assessment-plan/alert-dialog'
+import { FamilyInternalMedicineAssessmentPlanWidget } from '../assessment-plan/family-internal-medicine-assessment-plan-tab/family-internal-medicine-assessment-plan-widget'
+import { PsychiatryAssessmentPlanWidget } from '../assessment-plan/psychiatry-assessment-plan-tab/psychiatry-assessment-plan-widget'
+import { TherapyAssessmentPlanWidget } from '../assessment-plan/therapy-assessment-plan-tab/therapy-assessment-plan-widget'
 import { QuicknotesDiagnosisWidget } from '../diagnosis/quicknotes-diagnosis-widget'
 import { FollowUpWidget } from '../follow-up'
 import { PhysicalExamWidget } from '../physical-exam'
@@ -23,7 +27,6 @@ import { QuicknotesVitalsWidget } from '../vitals'
 import { ActualNoteView } from './actual-note-view'
 import { QuickNotesHeader } from './quicknotes-header'
 import { QuickNotesSaver } from './quicknotes-saver'
-
 
 interface QuickNotesViewProps {
   patientId: string
@@ -51,7 +54,9 @@ const QuickNotesView = ({ patientId, appointmentId }: QuickNotesViewProps) => {
             <QuicknotesDiagnosisWidget patientId={patientId} />
             <QuestionnairesWidget />
             <PhysicalExamWidget patientId={patientId} />
-            <AssessmentPlanWidget patientId={patientId} />
+            <PsychiatryAssessmentPlanWidget patientId={patientId} />
+            <TherapyAssessmentPlanWidget patientId={patientId} />
+            <FamilyInternalMedicineAssessmentPlanWidget patientId={patientId} />
             <AddOnWidget patientId={patientId} />
             <PatientMedicationsWidget patientId={patientId} />
             <PatientReferralsWidget patientId={patientId} />

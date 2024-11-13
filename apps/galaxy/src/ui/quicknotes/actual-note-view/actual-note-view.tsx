@@ -2,6 +2,7 @@ import { Flex, ScrollArea } from '@radix-ui/themes'
 import { ActualNoteViewClient } from './actual-note-client'
 import { Allergies } from './allergies'
 import { Codes } from './codes'
+import { FamilyInternalMedicineAssessmentPlanView } from './family-internal-medicine-assessment-plan'
 import { FamilyPsychDetailView } from './family-psych-hx'
 import { FollowUp } from './follow-up'
 import { HpiDetailView } from './hpi'
@@ -12,16 +13,17 @@ import { MentalStatusExamHx } from './mental-status-exam-hx'
 import { NoteViewHeader } from './note-view-header'
 import { PastMedicalHx } from './past-medical-hx'
 import { PastPsychlDetailView } from './past-psych-hx'
+import { PhysicalExamView } from './physical-exam'
 import { PsychiatricEvaluation } from './psychiatric-evaluation'
-import { PsychiatristPlan } from './psychiatrist-plan'
+import { PsychiatryAssessmentPlanView } from './psychiatry-assessment-plan'
 import { Psychoanalysis } from './psychoanalysis'
 import { Question } from './question'
 import { Referral } from './referral'
 import { ReviewOfSystem } from './ros'
 import { SocialHx } from './social-hx'
 import { SubstanceUseHx } from './substance-use-hx'
-import { TherapistPlan } from './therapist-plan'
 import { Therapy } from './therapy'
+import { TherapyAssessmentPlanView } from './therapy-assessment-plan'
 import { VitalsTable } from './vitals-table'
 import { WorkingDiagnosis } from './working-diagnosis'
 
@@ -47,8 +49,6 @@ const ActualNoteView = ({ patientId }: ActualNoteViewProps) => {
           <VitalsTable />
           <MentalStatusExamHx patientId={patientId} />
           <WorkingDiagnosis />
-          <PsychiatristPlan />
-          <TherapistPlan />
           <Psychoanalysis />
           <Injection />
           <InteractiveComplexity />
@@ -57,6 +57,10 @@ const ActualNoteView = ({ patientId }: ActualNoteViewProps) => {
           <FollowUp />
           <Codes />
           <Therapy patientId={patientId} />
+          <PsychiatryAssessmentPlanView patientId={patientId} />
+          <TherapyAssessmentPlanView patientId={patientId} />
+          <FamilyInternalMedicineAssessmentPlanView patientId={patientId} />
+          <PhysicalExamView patientId={patientId} />
         </Flex>
       </ScrollArea>
     </ActualNoteViewClient>

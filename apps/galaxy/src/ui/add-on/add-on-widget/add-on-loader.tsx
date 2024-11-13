@@ -1,5 +1,5 @@
-import * as api from '@/api'
 import { Text } from '@radix-ui/themes'
+import * as api from '@/api'
 import { QuickNoteSectionItem } from '@/types'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { AddOnWidget } from './add-on-widget'

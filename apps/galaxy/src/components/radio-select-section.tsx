@@ -17,6 +17,7 @@ interface RadioSelectSectionProps {
   className?: string
   disabled?: boolean
   defaultValue?: string
+  onChange?: (value: string) => void
 }
 
 interface RadioSelectOption {
@@ -33,21 +34,23 @@ const RadioSelectSection = ({
   className = 'rounded-1 border border-gray-7', // in some cases we don't need border
   disabled = false,
   defaultValue,
+  onChange,
 }: RadioSelectSectionProps) => {
   const form = useFormContext()
 
   const value = disabled ? defaultValue : form.watch(field)
+
+  const handleValueChange = (newValue: string) => {
+    if (!disabled) form.setValue(field, newValue)
+    if (onChange) onChange(newValue)
+  }
 
   return (
     <Flex align="start" justify="start" gap="2">
       {label && <BlockLabel required={required}>{label}</BlockLabel>}
       {description && <BlockDescription>{description}</BlockDescription>}
       <RadioGroup.Root
-        onValueChange={(value) => {
-          if (!disabled) {
-            form.setValue(field, value)
-          }
-        }}
+        onValueChange={handleValueChange}
         value={value}
         className="flex gap-1.5"
       >
