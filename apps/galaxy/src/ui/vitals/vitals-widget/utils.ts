@@ -153,6 +153,16 @@ const getVitalRowHeightClass = (index: number, data?: PatientVital[]) => {
   return 'h-7'
 }
 
+const filterVitalsWithin48Hours = (vitals: PatientVital[]) => {
+  const now = new Date()
+  const cutoffDate = new Date(now.getTime() - 48 * 60 * 60 * 1000)
+
+  return vitals.filter((vital) => {
+    const createdAtDate = new Date(vital.metadata.createdOn)
+    return createdAtDate >= cutoffDate
+  })
+}
+
 export {
   getVitalValue,
   roundToTwoDecimals,
@@ -163,4 +173,5 @@ export {
   removeNaNValues,
   mapErrorMessage,
   getVitalRowHeightClass,
+  filterVitalsWithin48Hours,
 }
