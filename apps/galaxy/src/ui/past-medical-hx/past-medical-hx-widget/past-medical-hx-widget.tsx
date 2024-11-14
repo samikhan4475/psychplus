@@ -12,35 +12,44 @@ import {
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { ConditionsBlock } from './blocks'
 import { transformOut } from './data'
+import { PastMedicalHeader } from './past-medical-header'
 import { usePastMedicalHxWidgetForm } from './past-medical-hx-widget-form'
 import { PastMedicalHxWidgetSchemaType } from './past-medical-hx-widget-schema'
 
 interface PastMedicalHxWidgetProps {
   patientId: string
   initialValue: PastMedicalHxWidgetSchemaType
+  isHistoryHeader?: boolean
 }
 
 const PastMedicalHxWidget = ({
   patientId,
   initialValue,
+  isHistoryHeader = false,
 }: PastMedicalHxWidgetProps) => {
   const form = usePastMedicalHxWidgetForm(initialValue)
 
   return (
-    <Flex direction="column" width="100%">
+    <Flex direction="column" width="100%" gap="2">
       <FormProvider {...form}>
+        {isHistoryHeader && (
+          <PastMedicalHeader
+            patientId={patientId}
+            getData={transformOut(patientId)}
+          />
+        )}
         <WidgetFormContainer
           patientId={patientId}
           widgetId={QuickNoteSectionName.QuickNoteSectionPastMedicalHx}
-          title="Past Medical Hx"
+          title={!isHistoryHeader ? 'Past Medical Hx' : undefined}
           getData={transformOut(patientId)}
-          toggleable
+          toggleable={!isHistoryHeader}
           headerRight={
             <>
               <WidgetTagButton />
-              <WidgetHxButton />
+              {!isHistoryHeader && <WidgetHxButton />}
               <WidgetClearButton />
-              <WidgetSaveButton />
+              {!isHistoryHeader && <WidgetSaveButton />}
             </>
           }
         >

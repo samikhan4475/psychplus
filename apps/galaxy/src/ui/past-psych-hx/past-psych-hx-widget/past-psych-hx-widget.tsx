@@ -16,34 +16,43 @@ import {
   SuicideAttemptsBlock,
 } from './blocks'
 import { transformOut } from './data'
+import { PastPsychHeader } from './past-psych-header'
 import { usePastPsychHxWidgetForm } from './past-psych-hx-widget-form'
 import { PastPsychHxWidgetSchemaType } from './past-psych-hx-widget-schema'
 
 interface PastPsychHxWidgetProps {
   patientId: string
   initialValue: PastPsychHxWidgetSchemaType
+  isHistoryHeader?: boolean
 }
 
 const PastPsychHxWidget = ({
   patientId,
   initialValue,
+  isHistoryHeader = false,
 }: PastPsychHxWidgetProps) => {
   const form = usePastPsychHxWidgetForm(initialValue)
 
   return (
     <FormProvider {...form}>
+      {isHistoryHeader && (
+        <PastPsychHeader
+          patientId={patientId}
+          getData={transformOut(patientId)}
+        />
+      )}
       <WidgetFormContainer
         patientId={patientId}
         widgetId={QuickNoteSectionName.QuickNoteSectionPastPsychHx}
-        title="Past Psych Hx"
+        title={!isHistoryHeader ? 'Past Psych Hx' : undefined}
         getData={transformOut(patientId)}
-        toggleable
+        toggleable={!isHistoryHeader}
         headerRight={
           <>
             <WidgetTagButton />
-            <WidgetHxButton />
+            {!isHistoryHeader && <WidgetHxButton />}
             <WidgetClearButton />
-            <WidgetSaveButton />
+            {!isHistoryHeader && <WidgetSaveButton />}
           </>
         }
       >

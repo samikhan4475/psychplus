@@ -19,7 +19,7 @@ const ChartNavigation = () => {
             <NavigationLink href="/hpi">
               History of Present Illness
             </NavigationLink>
-            <NavigationLink href="/history">History</NavigationLink>
+            <NavigationLink href="/histories">Histories</NavigationLink>
             <NavigationLink href="/questionnaires">
               Questionnaires
             </NavigationLink>

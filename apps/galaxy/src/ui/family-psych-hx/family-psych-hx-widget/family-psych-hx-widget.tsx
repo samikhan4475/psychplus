@@ -11,34 +11,43 @@ import {
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { ConditionsBlock, OtherBlock } from './blocks'
 import { transformOut } from './data'
+import { PastFamilyHeader } from './family-psych-header'
 import { useFamilyPsychHxWidgetForm } from './family-psych-hx-widget-form'
 import { FamilyPsychHxWidgetSchemaType } from './family-psych-hx-widget-schema'
 
 interface FamilyPsychHxWidgetProps {
   patientId: string
   initialValue: FamilyPsychHxWidgetSchemaType
+  isHistoryHeader?: boolean
 }
 
 const FamilyPsychHxWidget = ({
   patientId,
   initialValue,
+  isHistoryHeader = false,
 }: FamilyPsychHxWidgetProps) => {
   const form = useFamilyPsychHxWidgetForm(initialValue)
 
   return (
     <FormProvider {...form}>
+      {isHistoryHeader && (
+        <PastFamilyHeader
+          patientId={patientId}
+          getData={transformOut(patientId)}
+        />
+      )}
       <WidgetFormContainer
         patientId={patientId}
         widgetId={QuickNoteSectionName.QuickNoteSectionFamilyPsychHx}
-        title="Family Psych Hx"
+        title={!isHistoryHeader ? 'Family Psych Hx' : undefined}
         getData={transformOut(patientId)}
-        toggleable
+        toggleable={!isHistoryHeader}
         headerRight={
           <>
             <WidgetTagButton />
-            <WidgetHxButton />
+            {!isHistoryHeader && <WidgetHxButton />}
             <WidgetClearButton />
-            <WidgetSaveButton />
+            {!isHistoryHeader && <WidgetSaveButton />}
           </>
         }
       >

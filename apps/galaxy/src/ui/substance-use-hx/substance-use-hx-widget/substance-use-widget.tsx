@@ -9,32 +9,44 @@ import {
   WidgetTagButton,
 } from '@/components'
 import { AlcoholDrugsBlock, TobaccoBlock } from './blocks'
-import { useSubstanceHxWidgetForm } from './substance-use-hx-form'
 import { transformOut } from './data'
+import { useSubstanceHxWidgetForm } from './substance-use-hx-form'
+import { SubstanceUseHxHxHeader } from './substance-use-hx-header'
 import { SubstanceUseHxWidgetSchemaType } from './substance-use-hx-schema'
 
 interface SocialHxWidgetProps {
   patientId: string
   initialValue: SubstanceUseHxWidgetSchemaType
+  isHistoryHeader?: boolean
 }
 
-const SubstanceUseHxWidget = ({ patientId, initialValue }: SocialHxWidgetProps) => {
+const SubstanceUseHxWidget = ({
+  patientId,
+  initialValue,
+  isHistoryHeader = false,
+}: SocialHxWidgetProps) => {
   const form = useSubstanceHxWidgetForm(initialValue)
 
   return (
     <FormProvider {...form}>
+      {isHistoryHeader && (
+        <SubstanceUseHxHxHeader
+          patientId={patientId}
+          getData={transformOut(patientId)}
+        />
+      )}
       <WidgetFormContainer
         patientId={patientId}
         widgetId="substance-use-hx"
-        title="Substance Use Hx"
+        title={!isHistoryHeader ? 'Substance Use Hx' : undefined}
         getData={transformOut(patientId)}
-        toggleable
+        toggleable={!isHistoryHeader}
         headerRight={
           <>
             <WidgetTagButton />
-            <WidgetHxButton />
+            {!isHistoryHeader && <WidgetHxButton />}
             <WidgetClearButton />
-            <WidgetSaveButton />
+            {!isHistoryHeader && <WidgetSaveButton />}
           </>
         }
       >

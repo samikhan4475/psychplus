@@ -18,31 +18,43 @@ import {
 } from './blocks'
 import { OtherBlock } from './blocks/other-block'
 import { transformOut } from './data'
+import { SocialHxHeader } from './social-hx-header'
 import { useSocialHxWidgetForm } from './social-hx-widget-form'
 import { SocialHxWidgetSchemaType } from './social-hx-widget-schema'
 
 interface SocialHxWidgetProps {
   patientId: string
   initialValue: SocialHxWidgetSchemaType
+  isHistoryHeader?: boolean
 }
 
-const SocialHxWidget = ({ patientId, initialValue }: SocialHxWidgetProps) => {
+const SocialHxWidget = ({
+  patientId,
+  initialValue,
+  isHistoryHeader = false,
+}: SocialHxWidgetProps) => {
   const form = useSocialHxWidgetForm(initialValue)
 
   return (
     <FormProvider {...form}>
+      {isHistoryHeader && (
+        <SocialHxHeader
+          patientId={patientId}
+          getData={transformOut(patientId)}
+        />
+      )}
       <WidgetFormContainer
         patientId={patientId}
         widgetId="social-hx"
         title="Social Hx"
         getData={transformOut(patientId)}
-        toggleable
+        toggleable={!isHistoryHeader}
         headerRight={
           <>
             <WidgetTagButton />
-            <WidgetHxButton />
+            {!isHistoryHeader && <WidgetHxButton />}
             <WidgetClearButton />
-            <WidgetSaveButton />
+            {!isHistoryHeader && <WidgetSaveButton />}
           </>
         }
       >
