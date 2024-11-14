@@ -20,6 +20,7 @@ interface Store {
   sortData: (column: string) => void
   next: () => void
   prev: () => void
+  jumpToPage: (page: number) => void
 }
 
 const useStore = create<Store>((set, get) => ({
@@ -84,6 +85,19 @@ const useStore = create<Store>((set, get) => ({
       },
     })
     get().claimsListSearch(get().claimsListPayload, 1, true)
+  },
+  jumpToPage: (page: number) => {
+    if (page < 1) {
+      return
+    }
+
+    if (get().pageCache[page]) {
+      return set({
+        claimsListData: get().pageCache[page],
+        page,
+      })
+    }
+    get().claimsListSearch(get().claimsListPayload, page)
   },
 }))
 

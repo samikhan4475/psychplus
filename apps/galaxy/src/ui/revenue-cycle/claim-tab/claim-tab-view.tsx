@@ -1,6 +1,6 @@
 'use client'
 
-import { Flex, ScrollArea } from '@radix-ui/themes'
+import { Flex } from '@radix-ui/themes'
 import { TabContentHeading } from '@/components'
 import { ClaimListFilterForm } from './claims-list-filter-form'
 import { ClaimListTable } from './claims-list-table'
@@ -8,15 +8,13 @@ import { ClaimsListTablePagination } from './claims-list-table-pagination'
 
 const ClaimTabView = () => {
   return (
-    <Flex direction="column" className="gap-0.5">
+    <Flex direction="column" className="gap-0.5" width="100%">
       <TabContentHeading title="Claims" />
-      <ScrollArea>
-        <Flex direction="column" gap="1" className="bg-white w-full py-1">
-          <ClaimListFilterForm />
-          <ClaimListTable />
-          <ClaimsListTablePagination />
-        </Flex>
-      </ScrollArea>
+      <ClaimListFilterForm />
+      <Flex direction="column" className="bg-white w-full">
+        <ClaimListTable />
+        <ClaimsListTablePagination />
+      </Flex>
     </Flex>
   )
 }

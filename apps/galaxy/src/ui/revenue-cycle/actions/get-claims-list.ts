@@ -15,6 +15,7 @@ const defaultPayLoad = {
   isIncludePatientInsurancePlan: false,
   isIncludePatientInsurancePolicy: true,
   isIncludeClaimValidation: true,
+  isIncludePatientAppointments: true,
 }
 
 const getClaimsListAction = async ({

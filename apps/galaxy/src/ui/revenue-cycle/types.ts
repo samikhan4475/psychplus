@@ -27,6 +27,14 @@ enum patientStatementRecordStatuses {
   ACTIVE = 'Active',
 }
 
+enum claimNoteSignedStatuses {
+  SIGNED = 'signed',
+  NONE = 'none',
+  PENDING = 'pending',
+  SIGNED_PENDING = 'signedPending',
+  COSIGNED = 'cosigned',
+}
+
 interface PaymentAttachments {
   id: string
   metadata?: Metadata
@@ -289,6 +297,7 @@ export {
   insurancePaymentRecordStatuses,
   patientStatementSlaimStatusCodes,
   patientStatementRecordStatuses,
+  claimNoteSignedStatuses,
   type GetSubmissionResponse,
   type UpdateClaimPaymentPayload,
   type ClaimServiceLinePayment,

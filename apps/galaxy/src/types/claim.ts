@@ -223,7 +223,29 @@ interface Claim {
   isSystemRejected: boolean
   primaryInsurance?: ClaimInsurance
   secondaryInsurance?: ClaimInsurance
+  patientGender: string
+  serviceType?: string
+  visitTypeCode?: string
+  visitStatus?: string
+  copayDue?: string
+  copayPaid?: string
+  coinsDue?: string
+  coinsPaid?: string
+  balanceDue?: string
+  balancePaid?: string
+  patientAge?: number
+  visitMediumTypeCode?: string
+  providerType?: string
+  cosignerName?: string
+  diagnosisCode?: string
+  diagnosisCodes?: string
+  providerName?: string
+  cptCodes?: string
+  cmdId?: string
+  verificationIdentificationStatus?: string
+  billingStatusCode?: string
   claimInsurancePolicies?: ClaimInsurancePolicy[]
+  noteSignedStatus?: string
 }
 
 interface ClaimUpdate {
