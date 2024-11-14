@@ -46,7 +46,7 @@ const AddVitalsTable = ({ unitSystem, data }: AddVitalsTableProps) => {
               className={index % 2 === 1 ? 'bg-pp-bg-table-cell' : ''}
             >
               <Table.Cell className="border-pp-table-border bg-white min-w-36 sticky left-0 z-10 h-7 max-w-[50px] border border-t-0 px-1 py-0">
-                <TextCell className="font-[590]">{label}</TextCell>
+                <TextCell className="font-[500]">{label}</TextCell>
               </Table.Cell>
               {data?.map((vital) => (
                 <Table.Cell

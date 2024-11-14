@@ -66,7 +66,7 @@ const QuickNotesView = ({ patientId, appointmentId }: QuickNotesViewProps) => {
             <EctWidget patientId={patientId} />
           </Flex>
         </ScrollArea>
-        <ActualNoteView patientId={patientId} />
+        <ActualNoteView patientId={patientId} appointmentId={appointmentId} />
       </Flex>
     </Flex>
   )

@@ -29,8 +29,9 @@ import { WorkingDiagnosis } from './working-diagnosis'
 
 interface ActualNoteViewProps {
   patientId: string
+  appointmentId: string
 }
-const ActualNoteView = ({ patientId }: ActualNoteViewProps) => {
+const ActualNoteView = ({ patientId, appointmentId }: ActualNoteViewProps) => {
   return (
     <ActualNoteViewClient>
       <ScrollArea className="h-full w-96">
@@ -54,7 +55,7 @@ const ActualNoteView = ({ patientId }: ActualNoteViewProps) => {
           <InteractiveComplexity />
           <Medications />
           <Referral />
-          <FollowUp />
+          <FollowUp patientId={patientId} appointmentId={appointmentId} />
           <Codes />
           <Therapy patientId={patientId} />
           <PsychiatryAssessmentPlanView patientId={patientId} />

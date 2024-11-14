@@ -7,7 +7,7 @@ interface Props<T> {
 
 const Details = ({ data }: Props<PhysicalExamWidgetSchemaType>) => {
   const formatValue = (value: string) => {
-    return value.replace(/^[a-z]+/, '')
+    return value?.replace(/^[a-z]+/, '')
   }
 
   const renderDataWithOther = (key: string, values: string[]) => {
@@ -19,7 +19,7 @@ const Details = ({ data }: Props<PhysicalExamWidgetSchemaType>) => {
     values.forEach((value) => {
       const cleanedValue = formatValue(value)
 
-      const [, prefix] = value.match(/^([a-z]+)([A-Z].*)$/) || []
+      const [, prefix] = value?.match(/^([a-z]+)([A-Z].*)$/) || []
 
       if (prefix) {
         const otherDetailKey = `${prefix}OtherDetails` as keyof typeof data
