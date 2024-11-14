@@ -19,6 +19,7 @@ const CODESETS = {
   AdmissionLegalStatus: 'AdmissionLegalStatus',
   RaceAndEthnicity: 'cdc.PH_RaceAndEthnicity_CDC',
   ProfSuffix: 'HL7v2.Degree',
+  StaffRole: 'StaffRole',
   LanguageAbility: 'HL7v3.LanguageAbilityMode',
   LanguageProficiency: 'HL7v3.LanguageAbilityProficiency',
   Religion: 'HL7v3.ReligiousAffiliation',

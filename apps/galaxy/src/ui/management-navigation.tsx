@@ -11,6 +11,9 @@ const ManagementNavigation = () => {
       <ScrollArea>
         <Flex direction="column">
           <NavigationLink href="/coding">Coding</NavigationLink>
+          <NavigationLink href="/staff">
+            Staff
+          </NavigationLink>
           <NavigationLink href="/clearinghouse">
             Clearing House Setup
           </NavigationLink>
