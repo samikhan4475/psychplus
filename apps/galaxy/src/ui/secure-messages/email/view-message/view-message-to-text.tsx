@@ -9,7 +9,7 @@ const ViewMessageToText = () => {
     <Text className="text-pp-gray-1 text-[12px]">
       to:
       {previewSecureMessage.secureMessage?.channels
-        ?.map((channel) => channel?.externalEmail)
+        ?.map((channel) => channel?.externalEmail || channel?.receiverEmail)
         .join(', ')}
     </Text>
   )

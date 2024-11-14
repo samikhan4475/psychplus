@@ -1,10 +1,8 @@
-import React from 'react'
-import { TrashIcon } from '@radix-ui/react-icons'
-import { Flex, IconButton, Text, Tooltip } from '@radix-ui/themes'
-import toast from 'react-hot-toast'
-import { PdfIcon } from '@/components/icons'
+import { FileIcon, TrashIcon } from '@radix-ui/react-icons'
+import { Flex, IconButton, Spinner, Text, Tooltip } from '@radix-ui/themes'
+import { DOWNLOAD_ATTACHMENTS_FILE_SECURE_MESSAGE } from '@/api/endpoints'
 import { cn } from '@/utils'
-import { getAttachmentsAction } from '../../actions'
+import { downloadFile } from '@/utils/download'
 import { useStore } from '../../store'
 import { ActiveComponent, Attachment, FileTileProps } from '../../types'
 import { bytesToMegaBytes } from '../../utils'
@@ -14,11 +12,12 @@ const FileUploadCard = ({
   attachment,
   handleDeleteFile,
   viewMessage,
+  uploading = false,
+  deleting = false,
 }: FileTileProps) => {
   const { activeComponent } = useStore((state) => state)
   const hasError = false
-  const isPreviewEmail = activeComponent !== ActiveComponent.PREVIEW_EMAIL
-
+  const isPreviewEmail = activeComponent === ActiveComponent.PREVIEW_EMAIL
   const isFile = (
     attachment: Partial<Attachment> | File,
   ): attachment is File => {
@@ -26,16 +25,17 @@ const FileUploadCard = ({
   }
   const downloadAttachment = async () => {
     if (attachment.messageId && attachment.id && viewMessage) {
-      const results = await getAttachmentsAction({
-        messageId: attachment.messageId,
-        attachmentId: attachment.id,
-      })
-      if (results.state === 'error') {
-        toast.error('Attachment download failed')
-      }
+      await downloadFile(
+        DOWNLOAD_ATTACHMENTS_FILE_SECURE_MESSAGE(
+          attachment.messageId,
+          attachment.id,
+        ),
+        attachment.name ?? 'file',
+        'POST',
+        {},
+      )
     }
   }
-
   return (
     <Flex
       onClick={downloadAttachment}
@@ -47,7 +47,11 @@ const FileUploadCard = ({
           : 'border-pp-gray-4 bg-pp-bg-table-cell',
       )}
     >
-      <PdfIcon className="mr-2" />
+      {uploading || deleting ? (
+        <Spinner className="mr-2" />
+      ) : (
+        <FileIcon className="text-pp-bg-primary mr-2" width="40" height="40" />
+      )}
       <Flex direction="column" className="">
         <Text
           weight="bold"
@@ -67,13 +71,14 @@ const FileUploadCard = ({
           {hasError && <ErrorBadge />}
         </Flex>
       </Flex>
-      {isPreviewEmail && (
+      {!isPreviewEmail && (
         <Tooltip content="Delete" side="top">
           <IconButton
             variant="ghost"
             color="red"
             type="button"
             className="trash-icon opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+            disabled={uploading || deleting}
             onClick={(e) => {
               e.stopPropagation()
               handleDeleteFile()

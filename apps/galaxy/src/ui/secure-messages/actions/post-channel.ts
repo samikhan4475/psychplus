@@ -5,7 +5,7 @@ import { Channel } from '../types'
 
 const postChannelAction = async (
   messageId: string,
-  data: Partial<Channel>,
+  data: Partial<Channel>[],
 ): Promise<api.ActionResult<Channel>> => {
   const response = await api.POST(
     api.CREATE_CHANNEL_SECURE_MESSAGE(messageId),

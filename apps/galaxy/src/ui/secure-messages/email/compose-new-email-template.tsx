@@ -1,11 +1,12 @@
-import { Flex } from '@radix-ui/themes'
-import 'react-quill/dist/quill.snow.css'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { Flex } from '@radix-ui/themes'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import { Tag } from 'react-tag-autocomplete'
 import { FormContainer } from '@/components'
+import { useStore as globalStore } from '@/store'
+import 'react-quill/dist/quill.snow.css'
+import { Tag } from 'react-tag-autocomplete'
 import {
   ExternalRecipientsEmails,
   SaveDraftButton,
@@ -13,20 +14,21 @@ import {
   SubjectInput,
 } from '.'
 import {
-  addAttachmentsAction,
   getAllChannelsAgainstMessageIdAction,
-  postAttachmentsAction,
+  initializeAttachmentsAction,
   postChannelAction,
   postSecureMessagesAction,
   updateChannelAction,
 } from '../actions'
 import { updateMessageAction } from '../actions/update-message'
+import { uploadAttachmentAction } from '../actions/upload-attachments'
 import { useStore } from '../store'
 import {
   ActiveComponent,
   Attachment,
   Channel,
   EmailRecipients,
+  SecureMessage,
   SecureMessagesTab,
   SendMode,
   SendType,
@@ -47,7 +49,9 @@ const ComposeNewEmail = () => {
     activeTab,
     page,
   } = useStore((state) => state)
-  const [attachments, setAttachments] = useState<Partial<Attachment>[]>([])
+  const [attachments, setAttachments] = useState<Partial<Attachment>[]>(
+    previewSecureMessage?.secureMessage?.attachments || [],
+  )
   const [internalRecipientsTag, setInternalRecipientsTag] = useState<Tag[]>([])
   const [internalEmailSuggestions, setInternalEmailSuggestions] = useState<
     EmailRecipients[] | Channel[]
@@ -61,18 +65,25 @@ const ComposeNewEmail = () => {
     EmailRecipients[] | Channel[]
   >([])
   const [sendType, setSendType] = useState('Send')
-
+  const [uploadingAttachmentIds, setUploadingAttachmentIds] = useState<
+    string[]
+  >([])
+  const [deletingAttachmentIds, setDeletingAttachmentIds] = useState<string[]>(
+    [],
+  )
   const form = useForm<SendMessageSchemaType>({
     resolver: zodResolver(sendMessageSchema),
     criteriaMode: 'all',
     defaultValues: {
-      subject: '',
-      text: '',
+      messageId: previewSecureMessage?.secureMessage?.id ?? undefined,
+      subject: previewSecureMessage?.secureMessage?.subject ?? '',
+      text: previewSecureMessage?.secureMessage?.text ?? '',
       externalEmails: [],
       internalEmails: [],
       userRecipients: [],
     },
   })
+  const user = globalStore((state) => state.user)
 
   const onSubmit: SubmitHandler<SendMessageSchemaType> = async ({
     subject,
@@ -81,15 +92,8 @@ const ComposeNewEmail = () => {
     externalEmails,
     userRecipients,
   }) => {
-    const channelId = previewSecureMessage?.secureMessage?.channels?.[0]?.id
-    let messageId = previewSecureMessage?.secureMessage?.id
-    await handleReplyAction(
-      previewSecureMessage.activeTab,
-      activeComponent,
-      channelId,
-      messageId,
-    )
-    messageId = await messageHandler(sendType, subject, text)
+    const messageId =
+      previewSecureMessage?.secureMessage?.id || form.getValues('messageId')
 
     const updatedExternalEmails: Tag[] =
       externalEmails?.map((email) => ({
@@ -97,32 +101,25 @@ const ComposeNewEmail = () => {
         value: email.value ?? '',
       })) || []
 
-    if (internalEmails) {
-      await createChannels(
-        sendType,
-        internalEmails as (Partial<EmailRecipients> | undefined)[],
-        updatedExternalEmails,
-        userRecipients as (EmailRecipients | undefined)[],
-        channelId,
-        messageId,
-      )
-    }
-    await sendAttachment(attachments, messageId)
-    toast.success(
-      `Message sent successfully to ${
-        sendType === SendType.SEND ? SendMode.SUCCESS : SendMode.DRAFT
-      }`,
+    await createChannels(
+      internalEmails as (Partial<EmailRecipients> | undefined)[],
+      updatedExternalEmails,
+      userRecipients as (EmailRecipients | undefined)[],
+      messageId,
     )
 
+    await messageHandler(sendType, subject, text)
+    await handleReplyAction()
+    toast.success(`Message sent successfully`)
     setActiveComponent(ActiveComponent.NEW_EMAIL)
-    search(
-      {
-        messageStatus: activeTab,
-      },
-      page,
-      true,
-    )
+    search({ messageStatus: activeTab }, page, true)
   }
+
+  useEffect(() => {
+    if (activeComponent === ActiveComponent.COMPOSE_MAIL) {
+      createNewMessageId()
+    }
+  }, [])
 
   useEffect(() => {
     if (activeComponent === ActiveComponent.COMPOSE_MAIL) {
@@ -137,64 +134,29 @@ const ComposeNewEmail = () => {
     }
   }, [activeComponent])
 
-  console.log('okcompose')
   useEffect(() => {
-    if (
-      previewSecureMessage &&
-      (activeComponent === ActiveComponent.FORWARD ||
-        activeComponent === ActiveComponent.DRAFT)
-    ) {
-      const text = previewSecureMessage?.secureMessage?.text || ''
-      const attachments = previewSecureMessage?.secureMessage?.attachments || []
-      form.setValue('text', text)
-      setAttachments(attachments)
+    if (previewSecureMessage?.secureMessage?.id) {
+      if (activeComponent === ActiveComponent.DRAFT) {
+        const text = previewSecureMessage?.secureMessage?.text || ''
+        const attachments =
+          previewSecureMessage?.secureMessage?.attachments || []
+        form.setValue('text', text)
+        setAttachments(attachments)
+      } else if (activeComponent === ActiveComponent.FORWARD) {
+        const text = previewSecureMessage?.secureMessage?.text || ''
+        const attachments =
+          previewSecureMessage?.secureMessage?.attachments || []
+        form.setValue('text', text)
+        setAttachments(attachments)
+        createNewMessageId()
+      }
     }
-  }, [activeComponent, previewSecureMessage])
+  }, [activeComponent, previewSecureMessage.secureMessage?.id])
 
-  const createChannel = async ({
-    messageId,
-    emailRecords,
-  }: {
-    messageId?: string
-    emailRecords?: Partial<Channel>[]
-  }) => {
-    if (emailRecords && emailRecords.length > 0 && messageId) {
-      const results = await Promise.all(
-        emailRecords.map((item) => postChannelAction(messageId, item)),
-      )
-      const isError = results.some((item) => item.state === 'error')
-      if (isError) {
-        toast.error('Failed to create some channels')
-      }
-    }
-  }
-  const updateChannelRecords = async ({
-    messageId,
-    channelId,
-    emailRecords,
-  }: {
-    messageId?: string
-    channelId?: string
-    emailRecords?: Partial<Channel>[]
-  }) => {
-    if (emailRecords && emailRecords.length > 0 && channelId && messageId) {
-      const results = await Promise.all(
-        emailRecords.map((item) =>
-          updateChannelAction(messageId, channelId, item),
-        ),
-      )
-      const isError = results.some((item) => item.state === 'error')
-      if (isError) {
-        toast.error('Failed to update some channels')
-      }
-    }
-  }
   const createChannels = async (
-    sendType: string,
     internalEmails: (Partial<EmailRecipients> | undefined)[],
     externalEmails: Tag[],
     userRecipients: (EmailRecipients | undefined)[],
-    channelId?: string,
     messageId?: string,
   ) => {
     const internalEmailsUpdatedData = mapEmailData({
@@ -224,15 +186,29 @@ const ComposeNewEmail = () => {
       ...externalEmailsUpdatedData,
       ...userRecipientsUpdatedData,
     ]
+    if (messageId && emailRecords.length) {
+      const results = await postChannelAction(messageId, emailRecords)
+      if (results.state === 'error') {
+        toast.error('Failed to create some channels')
+      }
+    }
+  }
 
-    if (sendType === SendMode.DRAFT && channelId && messageId) {
-      await updateChannelRecords({
-        messageId,
-        channelId,
-        emailRecords,
-      })
+  const createNewMessageId = async () => {
+    const secureMessageData: Partial<SecureMessage> = {
+      subject: '',
+      text: '',
+      externalEmailAddress: '',
+      isMessageSent: false,
+      messageStatus: SendMode.DRAFT,
+      recordStatus: 'Active',
+      senderUserId: user.id,
+    }
+    const result = await postSecureMessagesAction(secureMessageData)
+    if (result.state === 'error') {
+      return toast.error('Failed to create message')
     } else {
-      await createChannel({ messageId, emailRecords })
+      form.setValue('messageId', result.data.id)
     }
   }
 
@@ -244,8 +220,10 @@ const ComposeNewEmail = () => {
     const sanitizedSubject = subject.startsWith('Fw: ')
       ? subject.slice(4)
       : subject
+    const messageId = form.getValues('messageId')
 
     const secureMessageData: {
+      id?: string
       subject: string
       text: string
       externalEmailAddress: string
@@ -253,14 +231,17 @@ const ComposeNewEmail = () => {
       messageStatus: SendMode
       recordStatus: string
       conversationId?: string
+      senderUserId: number
     } = {
+      id: messageId,
       subject: sanitizedSubject,
       text,
-      externalEmailAddress: 'string',
+      externalEmailAddress: '',
       isMessageSent: true,
       messageStatus:
         sendType === SendType.SEND ? SendMode.SUCCESS : SendMode.DRAFT,
       recordStatus: 'Active',
+      senderUserId: user.id,
     }
     if (activeComponent === ActiveComponent.REPLY) {
       secureMessageData.conversationId = previewSecureMessage?.secureMessage?.id
@@ -269,80 +250,84 @@ const ComposeNewEmail = () => {
       delete secureMessageData.isMessageSent
     }
     if (
-      activeComponent === ActiveComponent.DRAFT &&
-      previewSecureMessage.activeTab === SecureMessagesTab.DRAFT &&
-      previewSecureMessage.secureMessage?.id
+      (activeComponent === ActiveComponent.DRAFT &&
+        previewSecureMessage.activeTab === SecureMessagesTab.DRAFT &&
+        previewSecureMessage.secureMessage?.id) ||
+      (activeComponent === ActiveComponent.COMPOSE_MAIL && messageId)
     ) {
+      secureMessageData.id = messageId
       const result = await updateMessageAction(
-        previewSecureMessage.secureMessage?.id,
+        previewSecureMessage.secureMessage?.id || messageId,
         secureMessageData,
       )
       if (result.state === 'error') {
-        toast.error('Failed to update message')
-        return
-      } else {
-        return result.data.id
-      }
-    } else {
-      const result = await postSecureMessagesAction(secureMessageData)
-      if (result.state === 'error') {
-        toast.error('Failed to create message')
+        toast.error(result.error || 'Failed to update message')
         return
       } else {
         return result.data.id
       }
     }
   }
-  const sendAttachment = async (
-    attachments: Partial<Attachment>[] = [],
-    messageId?: string,
-  ) => {
-    if (!messageId) {
+
+  const sendAttachments = async (newAttachments: Partial<Attachment>[]) => {
+    const messageId = form.getValues('messageId')
+    if (!messageId || newAttachments.length === 0) {
       return
     }
 
-    const attachmentPromises = attachments.map((item) => {
-      if (item.uri && item.name && item.mimeType && item.fileDescription) {
-        return addAttachmentsAction({
+    const newAttachmentIds = newAttachments.map((attachment) => attachment.id)
+    setUploadingAttachmentIds((prev) => [
+      ...prev,
+      ...(newAttachmentIds as string[]),
+    ])
+
+    const uploadPromises = newAttachments.map(async (attachment) => {
+      if (!attachment.file || !attachment.name) {
+        return
+      }
+
+      // Step 1: Initialize the attachment to get attachmentId
+      const res = await initializeAttachmentsAction({
+        messageId,
+        fileName: attachment.name,
+        fileDescription: attachment.name,
+        mimeType: attachment.file.type,
+      })
+      if (res.state === 'error') {
+        setUploadingAttachmentIds((prev) =>
+          prev.filter((id) => id !== attachment.id),
+        )
+        return toast.error(res.error)
+      }
+      const { id } = res.data
+      if (id) {
+        const formData = new FormData()
+        formData.append('file', attachment.file as Blob, attachment.name) // Appending file and naming it
+        formData.append('fileDescription', attachment.name ?? '')
+        formData.append('mimeType', (attachment.file as Blob).type)
+        const uploadRes = await uploadAttachmentAction({
           messageId,
-          fileName: item.name,
-          fileUrl: item.uri,
-          fileDescription: item.fileDescription,
-          mimeType: item.mimeType,
+          attachmentId: id,
+          formData,
         })
+        if (uploadRes.state === 'error') {
+          setUploadingAttachmentIds((prev) =>
+            prev.filter((id) => id !== attachment.id),
+          )
+          return toast.error(uploadRes.error)
+        }
+        setUploadingAttachmentIds((prev) =>
+          prev.filter((id) => id !== attachment.id),
+        )
+        setAttachments((prevAttachments) =>
+          prevAttachments.map((att) =>
+            att.id === attachment.id ? uploadRes.data : att,
+          ),
+        )
       }
     })
-    await Promise.all(attachmentPromises)
 
-    const filesToUpload = attachments
-      .map((item) => item.file)
-      .filter((file): file is File => file !== undefined)
-
-    if (filesToUpload.length > 0) {
-      await uploadAttachments({ messageId, attachments: filesToUpload })
-    }
-  }
-
-  const uploadAttachments = async ({
-    messageId,
-    attachments = [],
-  }: {
-    messageId: string
-    attachments?: File[]
-  }) => {
-    if (attachments.length > 0) {
-      const formData = new FormData()
-      attachments.forEach((file) => formData.append('files', file, file.name))
-
-      const result = await postAttachmentsAction({
-        attachmentId: messageId,
-        messageId,
-        data: formData,
-      })
-      if (result.state === 'error') {
-        toast.error(`Error uploading attachments: ${result.error}`)
-      }
-    }
+    await Promise.all(uploadPromises)
   }
 
   const replyEmail = async (messageId: string, channelId: string) => {
@@ -381,17 +366,17 @@ const ComposeNewEmail = () => {
         })
         if (result.state === 'error') {
           toast.error('Failed to reply email')
-          return
         }
       }),
     )
   }
-  const handleReplyAction = async (
-    activeTab: SecureMessagesTab,
-    activeComponent: ActiveComponent,
-    channelId?: string,
-    messageId?: string,
-  ) => {
+
+  const handleReplyAction = async () => {
+    const { activeTab } = previewSecureMessage
+    const messageId = form.getValues('messageId')
+    const channelId = previewSecureMessage.secureMessage?.channels?.find(
+      (a) => a.receiverUserId === user.id,
+    )?.id
     if (
       activeComponent === ActiveComponent.REPLY &&
       channelId &&
@@ -409,6 +394,7 @@ const ComposeNewEmail = () => {
       await replyAll(messageId)
     }
   }
+
   return (
     <FormContainer
       form={form}
@@ -439,7 +425,23 @@ const ComposeNewEmail = () => {
           <SubjectInput />
           <RichTextEditor
             attachments={attachments}
-            setAttachments={setAttachments}
+            setAttachments={(a: Partial<Attachment>[]) => {
+              setAttachments(a)
+              sendAttachments(
+                a.filter(
+                  (att) =>
+                    !attachments.some((existing) => existing.id === att.id),
+                ),
+              )
+            }}
+            removeAttachment={(index) => {
+              const _attachment = [...attachments]
+              _attachment.splice(index, 1)
+              setAttachments(_attachment)
+            }}
+            uploadingAttachmentIds={uploadingAttachmentIds}
+            deletingAttachmentIds={deletingAttachmentIds}
+            setDeletingAttachmentIds={setDeletingAttachmentIds}
           />
           <Flex gap="3" pt="3">
             <SendButton onClick={() => setSendType('Send')} />

@@ -3,7 +3,15 @@ import { Box } from '@radix-ui/themes'
 import { AttachmentsProps } from '../../types'
 import { FileUploadCard } from './file-upload-card'
 
-const Attachments = ({ attachments, handleDeleteFile }: AttachmentsProps) => {
+const Attachments = ({
+  attachments,
+  handleDeleteFile,
+  uploadingAttachmentIds,
+  deletingAttachmentIds,
+}: AttachmentsProps & {
+  uploadingAttachmentIds: string[]
+  deletingAttachmentIds: string[]
+}) => {
   return (
     <>
       {attachments.length > 0 && (
@@ -15,6 +23,8 @@ const Attachments = ({ attachments, handleDeleteFile }: AttachmentsProps) => {
               handleDeleteFile={() => {
                 handleDeleteFile(index, attachment?.messageId, attachment?.id)
               }}
+              uploading={uploadingAttachmentIds.includes(attachment.id ?? '')}
+              deleting={deletingAttachmentIds.includes(attachment.id ?? '')}
             />
           ))}
         </Box>

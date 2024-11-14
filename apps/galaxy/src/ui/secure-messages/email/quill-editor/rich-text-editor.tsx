@@ -5,11 +5,22 @@ import { AttachmentProps } from '../../types'
 import { RichTextEditorToolbar } from './rich-text-editor-toolbar'
 import { RichTextEditorWrapper } from './rich-text-editor-wrapper'
 
-const RichTextEditor = ({ attachments, setAttachments }: AttachmentProps) => (
+const RichTextEditor = ({
+  attachments,
+  setAttachments,
+  removeAttachment,
+  uploadingAttachmentIds,
+  deletingAttachmentIds,
+  setDeletingAttachmentIds,
+}: AttachmentProps) => (
   <>
     <RichTextEditorWrapper
       attachments={attachments}
       setAttachments={setAttachments}
+      removeAttachment={removeAttachment}
+      uploadingAttachmentIds={uploadingAttachmentIds}
+      deletingAttachmentIds={deletingAttachmentIds}
+      setDeletingAttachmentIds={setDeletingAttachmentIds}
     >
       <RichTextEditorToolbar />
     </RichTextEditorWrapper>

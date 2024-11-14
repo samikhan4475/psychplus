@@ -28,6 +28,7 @@ const SecureMessagesTable = () => {
     setSecureMessages,
     setPreviewSecureMessage,
     loading,
+    total,
     next,
     prev,
     page,
@@ -46,7 +47,7 @@ const SecureMessagesTable = () => {
           className=""
           pageSize={PAGE_SIZE}
           key="pagination"
-          total={secureMessages.length}
+          total={total}
           prev={prev}
           next={next}
         />

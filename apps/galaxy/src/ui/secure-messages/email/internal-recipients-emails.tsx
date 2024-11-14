@@ -1,11 +1,13 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import { Box, Flex } from '@radix-ui/themes'
+import { Box, Button, Flex, IconButton, Text } from '@radix-ui/themes'
 import { ReactTags, Tag } from 'react-tag-autocomplete'
 import 'react-tag-autocomplete/example/src/styles.css'
+import { XIcon } from 'lucide-react'
 import { useFormContext } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { useDebouncedCallback } from 'use-debounce'
 import { FormFieldError } from '@/components'
+import { cn } from '@/utils'
 import { SendInternalTitle } from '.'
 import {
   getAllChannelsAgainstMessageIdAction,
@@ -55,6 +57,7 @@ const InternalRecipientsEmails = ({
           payload,
         )
         if (response.state === 'error') {
+          toast.error(response.error)
           return []
         }
         return response.data
@@ -208,10 +211,15 @@ const InternalRecipientsEmails = ({
     setInternalEmailSuggestions([])
     const channels = previewSecureMessage?.secureMessage?.channels || []
     const internalTags = channels
-      .filter((item) => item.sendMode === EmailRecipientTypes.INTERNAL)
+      .filter(
+        (item) =>
+          item.sendMode === EmailRecipientTypes.INTERNAL &&
+          item.receiverUserRole === EmailRecipientTypes.STAFF,
+      )
       .map((item) => ({
-        label: item.externalEmail || '',
-        value: item.externalEmail || '',
+        label:
+          item.receiverName.firstName + ' ' + item.receiverName.lastName || '',
+        value: item.receiverEmail || '',
       }))
 
     const allUpdatedRecipients = []
@@ -242,9 +250,9 @@ const InternalRecipientsEmails = ({
     setInternalEmailSuggestions(channels)
     setInternalRecipientsTag(internalTags)
   }
-  console.log('okinternal')
 
   useEffect(() => {
+    if (!previewSecureMessage.secureMessage?.id) return
     switch (activeComponent) {
       case ActiveComponent.REPLY:
         handleReply()
@@ -261,7 +269,7 @@ const InternalRecipientsEmails = ({
       default:
         break
     }
-  }, [activeComponent, handleReply, handleDraft, handleReplyAll])
+  }, [activeComponent, previewSecureMessage.secureMessage?.id])
 
   const handleChange = useCallback(
     async (keyword: string) => {
@@ -269,7 +277,8 @@ const InternalRecipientsEmails = ({
         const internalRecipientsResponse = await fetchRecipientSuggestions(
           keyword,
           EmailRecipientTypes.STAFF,
-          '2d05b578-3651-49eb-a2a9-08dced4c4fc7',
+          previewSecureMessage?.secureMessage?.id ||
+            form.getValues('messageId'),
         )
         if (internalRecipientsResponse?.length) {
           const tags = internalRecipientsResponse.map((recipient) => ({
@@ -293,7 +302,6 @@ const InternalRecipientsEmails = ({
         'contactInfo' in suggestion &&
         suggestion.contactInfo?.email === tag.value,
     )
-
     if (internalEmailSuggestion) {
       const existingRecipients = form.getValues('internalEmails') || []
       const updatedRecipients = [
@@ -314,7 +322,8 @@ const InternalRecipientsEmails = ({
         const channels = previewSecureMessage?.secureMessage?.channels || []
         const channel = channels.find(
           (item, index) =>
-            item.sendMode === EmailRecipientTypes.EXTERNAL &&
+            item.sendMode === EmailRecipientTypes.INTERNAL &&
+            item.receiverUserRole === EmailRecipientTypes.STAFF &&
             internalRecipientsTag[index].value === item?.externalEmail,
         )
         if (previewSecureMessage?.secureMessage?.id && channel?.id) {
@@ -364,6 +373,23 @@ const InternalRecipientsEmails = ({
             renderInput={(inputProps) => (
               <input {...inputProps} className="flex-grow outline-none" />
             )}
+            renderTag={({ classNames, tag, onClick, color, ...tagProps }) => {
+              return (
+                <Button type="button" className={classNames.tag} {...tagProps}>
+                  <Text className={cn('text-pp-black-3', classNames.tagName)}>
+                    {tag.label}
+                  </Text>
+                  <IconButton
+                    type="button"
+                    onClick={onClick}
+                    size="1"
+                    variant="ghost"
+                  >
+                    <XIcon size="16" color="gray" />
+                  </IconButton>
+                </Button>
+              )
+            }}
             renderRoot={({ children, ...rootProps }) => (
               <Flex
                 align="center"

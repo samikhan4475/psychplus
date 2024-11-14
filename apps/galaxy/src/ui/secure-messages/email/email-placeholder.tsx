@@ -5,7 +5,11 @@ import { useStore } from '../store'
 import { ActiveComponent } from '../types'
 
 const EmailPlaceHolder = () => {
-  const { setActiveComponent } = useStore((state) => state)
+  const {
+    previewSecureMessage: { activeTab },
+    setActiveComponent,
+    setPreviewSecureMessage,
+  } = useStore((state) => state)
   return (
     <Flex
       className="h-full w-full"
@@ -26,6 +30,7 @@ const EmailPlaceHolder = () => {
         color="gray"
         className="text-black hover:bg-black hover:text-white  mt-4 bg-transparent transition-colors"
         onClick={() => {
+          setPreviewSecureMessage({ activeTab, secureMessage: null })
           setActiveComponent(ActiveComponent.COMPOSE_MAIL)
         }}
       >

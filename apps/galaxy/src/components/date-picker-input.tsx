@@ -135,7 +135,7 @@ const DatePickerInput = <T extends DateValue>({
                       <CalendarCell
                         date={date}
                         className={
-                          'data-[selected]:text-white data-[outside-month]:opacity-35 m-px w-[2em] cursor-pointer rounded-[6px] text-center text-[13px] leading-[2em] outline-none hover:bg-iris-6 data-[disabled]:cursor-not-allowed data-[outside-month]:!cursor-default data-[disabled]:!bg-transparent data-[outside-month]:!bg-transparent data-[selected]:!bg-iris-12 data-[disabled]:text-gray-6'
+                          'data-[selected]:text-white [&[aria-label*="Today"]]:bg-pp-focus-bg data-[outside-month]:opacity-35 m-px w-[2em] cursor-pointer rounded-[6px] text-center text-[13px] leading-[2em] outline-none hover:!bg-iris-6 data-[disabled]:cursor-not-allowed data-[outside-month]:!cursor-default data-[disabled]:!bg-transparent data-[outside-month]:!bg-transparent data-[selected]:!bg-iris-12 data-[disabled]:text-gray-6'
                         }
                       />
                     )}

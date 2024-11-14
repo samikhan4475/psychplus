@@ -25,7 +25,7 @@
   color: black !important;
 }
 .react-tags__tag::after {
-  background-color: #8b8d98 !important;
+  display: none !important;
 }
 .react-tags__combobox {
   margin: 0 !important;

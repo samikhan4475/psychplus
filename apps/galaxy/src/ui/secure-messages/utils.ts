@@ -1,5 +1,5 @@
 import { Tag } from "react-tag-autocomplete"
-import { Channel, EmailRecipients, EmailRecipientTypes, Staff } from "./types"
+import { Channel, EmailRecipients, EmailRecipientTypes, SendMode, Staff } from "./types"
 
 const bytesToMegaBytes = (bytes: number) => {
     const MB = bytes / (1024 * 1024)
@@ -52,7 +52,7 @@ const mapEmailData = ({
                     receiverStatus: 'Dispatch',
                     sendMode,
                     receiverUserId,
-                    externalEmail,
+                    externalEmail: sendMode === SendMode.EXTERNAL ? externalEmail : null,
                     readTimeStamp: new Date().toISOString(),
                     isRead: false,
                     isReplied: false,
@@ -72,7 +72,7 @@ function splitName(fullName: string) {
 const getFullName = (
     firstName?: string,
     lastName?: string,
-    externalEmail?: string,
+    externalEmail?: string | null,
 ) =>
     firstName && lastName ? `${firstName} ${lastName}` : externalEmail || '-'
 function isEmail(keyword: string) {

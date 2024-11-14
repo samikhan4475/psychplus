@@ -17,18 +17,16 @@ import { splitName } from './utils'
 const MessageHeader = () => {
   const [showFilter, setShowFilter] = useState(false)
 
-  const { search, setActiveComponent, activeTab, page } = useStore(
-    (state) => state,
-  )
+  const {
+    search,
+    setActiveComponent,
+    activeTab,
+    page,
+    setPreviewSecureMessage,
+  } = useStore((state) => state)
 
   useEffect(() => {
-    search(
-      {
-        messageStatus: activeTab,
-      },
-      page,
-      true,
-    )
+    search({ messageStatus: activeTab }, page, true)
   }, [activeTab, search])
 
   const form = useForm<SchemaType>({
@@ -44,14 +42,14 @@ const MessageHeader = () => {
   const onSubmit: SubmitHandler<SchemaType> = (data) => {
     const { firstName, lastName } = splitName(data?.name || '')
     const cleanedPayload = {
+      ...data,
       messageStatus: activeTab,
       firstName,
       lastName,
       to: data.to ? formatDateToISOString(data.to as DateValue) : undefined,
       from: data.from
-        ? formatDateToISOString(data.from as DateValue)
+        ? formatDateToISOString(data.from as DateValue, true)
         : undefined,
-      ...data,
     }
     if (
       activeTab === SecureMessagesTab.SENT ||
@@ -82,7 +80,10 @@ const MessageHeader = () => {
             onClick={() => setShowFilter(!showFilter)}
           />
           <NewEmailButton
-            onClick={() => setActiveComponent(ActiveComponent.COMPOSE_MAIL)}
+            onClick={() => {
+              setPreviewSecureMessage({ activeTab, secureMessage: null })
+              setActiveComponent(ActiveComponent.COMPOSE_MAIL)
+            }}
           />
         </Flex>
       </Flex>

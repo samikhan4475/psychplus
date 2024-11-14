@@ -94,8 +94,13 @@ const GET_CHANNEL_SECURE_MESSAGE = (messageId: string) =>
   `${API_URL}/api/users/self/securemessaging/messages/${messageId}/channels`
 const ATTACHMENTS_SECURE_MESSAGE = (messageId: string, attachmentId: string) =>
   `${API_URL}/api/users/self/securemessaging/messages/${messageId}/attachments/${attachmentId}/actions/upload?fileDescription=${messageId}`
-const ADD_ATTACHMENTS_SECURE_MESSAGE = (messageId: string) =>
-  `${API_URL}/api/users/self/securemessaging/messages/${messageId}/attachments`
+const INITIALIZE_ATTACHMENT_SECURE_MESSAGE = (messageId: string) =>
+  `${API_URL}/api/users/self/securemessaging/messages/${messageId}/attachments/actions/initialize`
+const UPLOAD_ATTACHMENT_SECURE_MESSAGE = (
+  messageId: string,
+  attachmentId: string,
+) =>
+  `${API_URL}/api/users/self/securemessaging/messages/${messageId}/attachments/${attachmentId}/actions/upload`
 const DOWNLOAD_ATTACHMENTS_FILE_SECURE_MESSAGE = (
   messageId: string,
   attachmentId: string,
@@ -105,7 +110,7 @@ const DELETE_ATTACHMENTS_SECURE_MESSAGE = (
   messageId: string,
   attachmentId: string,
 ) =>
-  `${API_URL}/api/users/self/securemessaging/messages/${messageId}/attachements/${attachmentId}`
+  `${API_URL}/api/securemessaging/messages/${messageId}/attachements/${attachmentId}`
 const SEND_SECURE_MESSAGE = `${API_URL}/api/users/self/securemessaging/messages`
 const GET_RECIPIENT_SECURE_MESSAGE = (messageId: string) =>
   `${API_URL}/api/users/self/securemessages/${messageId}/recipients/actions/search`
@@ -422,7 +427,8 @@ export {
   ADD_CLEARING_HOUSE_RECEIVER_ENDPOINT,
   UPDATE_CLEARING_HOUSE_RECEIVER_ENDPOINT,
   GET_PATIENT_STATEMENTS_LIST_ENDPOINT,
-  ADD_ATTACHMENTS_SECURE_MESSAGE,
+  INITIALIZE_ATTACHMENT_SECURE_MESSAGE,
+  UPLOAD_ATTACHMENT_SECURE_MESSAGE,
   GET_MASTER_FEE_SCHEDULES,
   GET_PROCEDURES_CODES,
   GET_MODIFIERS_CODES,

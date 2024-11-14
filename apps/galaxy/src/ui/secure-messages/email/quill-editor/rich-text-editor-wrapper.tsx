@@ -1,13 +1,7 @@
-import React, {
-  forwardRef,
-  useEffect,
-  useImperativeHandle,
-  useState,
-} from 'react'
+import React from 'react'
 import dynamic from 'next/dynamic'
-import './styles.css'
 import { Box } from '@radix-ui/themes'
-import { useFormContext } from 'react-hook-form'
+import { useFormContext, useWatch } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { initializeQuillIcons, RichTextEditor } from '.'
 import { deleteAttachmentsAction } from '../../actions'
@@ -15,6 +9,7 @@ import { MAX_FILE_UPLOAD_UNIT } from '../../contants'
 import { RichTextEditorWrapperProps } from '../../types'
 import { SendMessageSchemaType } from '../send-message-schema'
 import { Attachments } from './attachments'
+import './styles.css'
 
 const ReactQuill = dynamic(() => import('react-quill'), {
   ssr: false,
@@ -30,8 +25,13 @@ export const RichTextEditorWrapper = ({
   children,
   attachments,
   setAttachments,
+  removeAttachment,
+  uploadingAttachmentIds,
+  deletingAttachmentIds,
+  setDeletingAttachmentIds,
 }: RichTextEditorWrapperProps) => {
   const form = useFormContext<SendMessageSchemaType>()
+  const text = useWatch({ control: form.control, name: 'text' })
 
   const handleFileChange = async (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -65,28 +65,31 @@ export const RichTextEditorWrapper = ({
   }
 
   const handleDeleteFile = async (
-    index?: number,
+    index: number,
     messageId?: string,
     attachmentId?: string,
   ) => {
     if (attachmentId && messageId) {
+      setDeletingAttachmentIds((prev) => [...prev, attachmentId])
       const results = await deleteAttachmentsAction({
         messageId: messageId,
         attachmentId: attachmentId,
       })
+      setDeletingAttachmentIds((prev) =>
+        prev.filter((id) => id !== attachmentId),
+      )
       if (results.state === 'error') {
-        toast.error('Attachment delete failed')
+        return toast.error('Attachment delete failed')
       }
+      removeAttachment(index)
     }
-    const newFiles = attachments.filter((_, i) => i !== index)
-    setAttachments(newFiles)
   }
 
   return (
     <Box className="bg-pp-bg-table-cell border-pp-gray-2 !mt-6 w-[750px] rounded-4 border">
       {children}
       <ReactQuill
-        value={form.watch('text') || ''}
+        value={text || ''}
         className="rounded-t-4"
         onChange={(newValue) => {
           form.setValue('text', newValue)
@@ -104,6 +107,8 @@ export const RichTextEditorWrapper = ({
       <Attachments
         attachments={attachments}
         handleDeleteFile={handleDeleteFile}
+        uploadingAttachmentIds={uploadingAttachmentIds}
+        deletingAttachmentIds={deletingAttachmentIds}
       />
     </Box>
   )

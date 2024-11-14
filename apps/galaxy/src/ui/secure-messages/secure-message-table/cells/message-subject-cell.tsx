@@ -1,9 +1,8 @@
-import React from 'react'
-import { Button, Flex, Tooltip } from '@radix-ui/themes'
+import { Flex } from '@radix-ui/themes'
 import { Row } from '@tanstack/react-table'
 import toast from 'react-hot-toast'
 import { TextCell } from '@/components'
-import { ArchiveIcon, MailIcon } from '@/components/icons'
+import { useStore as globalStore } from '@/store'
 import { updateChannelAction } from '../../actions'
 import { ArchiveButton } from '../../archive-button'
 import { MarkAsReadButton } from '../../mark-as-read-button'
@@ -15,10 +14,14 @@ import {
 } from '../../types'
 
 const MessageSubjectCell = ({ row }: { row: Row<SecureMessage> }) => {
-  const { activeTab } = useStore((state) => state)
+  const { activeTab, search, page } = useStore((state) => state)
+  const user = globalStore((state) => state.user)
 
   const onSubmit = async (type: string) => {
-    const channel = row.original.channels?.[0]
+    const channel = row.original.channels?.find(
+      (channel) => channel.receiverUserId === user.id,
+    )
+
     if (!channel?.id || !row.original.id) return
     const payload = {
       ...channel,
@@ -37,8 +40,9 @@ const MessageSubjectCell = ({ row }: { row: Row<SecureMessage> }) => {
     )
 
     if (result.state === 'error') {
-      toast.error('Failed to update channel')
+      return toast.error(result.error || 'Failed to update channel')
     }
+    search({ messageStatus: activeTab }, page, true)
   }
   return (
     <Flex justify="between" width="100%" className="relative  p-0">

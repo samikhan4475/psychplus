@@ -8,9 +8,17 @@ import { ActiveComponent } from '../types'
 import { MessageHeading } from './message-heading'
 
 const NewMessageHeader = () => {
-  const { setActiveComponent, activeComponent } = useStore((state) => state)
+  const {
+    activeComponent,
+    activeTab,
+    setActiveComponent,
+    setPreviewSecureMessage,
+  } = useStore((state) => state)
   const noComposeEmail = activeComponent !== ActiveComponent.COMPOSE_MAIL
-
+  const closeMessageEditor = () => {
+    setPreviewSecureMessage({ activeTab, secureMessage: null })
+    setActiveComponent(ActiveComponent.NEW_EMAIL)
+  }
   return (
     <Flex
       className="bg-pp-table-subRows h-[40px] w-full"
@@ -23,7 +31,7 @@ const NewMessageHeader = () => {
             width={12}
             className="cursor-pointer"
             height={12}
-            onClick={() => setActiveComponent(ActiveComponent.NEW_EMAIL)}
+            onClick={closeMessageEditor}
           />
         )}
         <MessageHeading />
@@ -31,9 +39,9 @@ const NewMessageHeader = () => {
 
       <Cross1Icon
         className="text-pp-text-sub pr-6"
-        onClick={() => {
-          setActiveComponent(ActiveComponent.NEW_EMAIL)
-        }}
+        width="40"
+        height="40"
+        onClick={closeMessageEditor}
       />
     </Flex>
   )

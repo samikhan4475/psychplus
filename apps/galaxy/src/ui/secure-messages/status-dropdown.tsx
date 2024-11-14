@@ -26,7 +26,7 @@ const StatusDropdownFilter = () => {
         buttonClassName="w-full"
         options={[
           { label: 'Read', value: messageStatus.READ },
-          { label: 'UnRead', value: messageStatus.UNREAD },
+          { label: 'UNRead', value: messageStatus.UNREAD },
           { label: 'Replied', value: messageStatus.REPLIED },
         ]}
         placeholder="Select"

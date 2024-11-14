@@ -50,6 +50,7 @@ const externalEmailSchema = z.object({
 })
 const sendMessageSchema = z
   .object({
+    messageId: z.string().min(1, { message: 'MessageId is required' }),
     subject: z.string().min(1, { message: 'Subject is required' }),
     text: z.string().min(1, { message: 'Text is required' }),
     internalEmails: z.array(emailSchema).optional(),

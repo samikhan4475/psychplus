@@ -98,7 +98,7 @@ interface Channel {
     sendMode: string;
     receiverStatusDetail: string;
     externalMessageId: string;
-    externalEmail: string;
+    externalEmail: string | null;
     readTimeStamp: string;
     isRead: boolean;
     isReplied: boolean;
@@ -225,6 +225,7 @@ interface SecureMessageStore {
     };
     setPreviewSecureMessage: (preview: { secureMessage: Partial<SecureMessage> | null; activeTab: SecureMessagesTab }) => void;
     loading: boolean
+    total: number
     error?: string
     formValues?: Partial<SchemaType>
     page: number
@@ -267,21 +268,31 @@ interface EmailRecipients {
 }
 interface AttachmentsProps {
     attachments: Partial<Attachment>[];
-    handleDeleteFile: (index?: number, messageId?: string, attachmentId?: string) => void;
+    handleDeleteFile: (index: number, messageId?: string, attachmentId?: string) => void;
 }
 interface FileTileProps {
     attachment: Partial<Attachment>
     viewMessage?: boolean
     handleDeleteFile: () => void
+    uploading?: boolean
+    deleting?: boolean
 }
 interface RichTextEditorWrapperProps {
     children: ReactNode
     attachments: Partial<Attachment>[]
-    setAttachments: Dispatch<SetStateAction<Partial<Attachment>[]>>
+    setAttachments: (attachments: Partial<Attachment>[]) => void
+    removeAttachment: (index: number) => void
+    uploadingAttachmentIds: string[]
+    deletingAttachmentIds: string[]
+    setDeletingAttachmentIds: Dispatch<SetStateAction<string[]>>
 }
 interface AttachmentProps {
     attachments: Partial<Attachment>[]
-    setAttachments: Dispatch<SetStateAction<Partial<Attachment>[]>>
+    setAttachments: (attachments: Partial<Attachment>[]) => void
+    removeAttachment: (index: number) => void
+    uploadingAttachmentIds: string[]
+    deletingAttachmentIds: string[]
+    setDeletingAttachmentIds: Dispatch<SetStateAction<string[]>>
 }
 interface InternalRecipientProps {
     internalRecipientsTag: Tag[]
@@ -311,12 +322,17 @@ interface SecureMessagesAttachmentsParams {
     messageId: string
     attachmentId: string
 }
-interface AttachmentsParams {
+interface InitializeAttachmentsParams {
     messageId: string
     fileName: string
-    fileDescription: string
-    fileUrl: string
     mimeType: string
+    fileDescription: string
+}
+
+interface UploadAttachmentsParams {
+    messageId: string
+    attachmentId: string
+    formData: FormData
 }
 
 export {
@@ -341,7 +357,8 @@ export {
     type EmailRecipient,
     type Attachment,
     type Channel,
-    type AttachmentsParams,
+    type InitializeAttachmentsParams,
+    type UploadAttachmentsParams,
     SecureMessageStatus,
     SecureMessagesTab,
     ActiveComponent,

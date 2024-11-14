@@ -12,7 +12,7 @@ const SubjectInput = () => {
   const { previewSecureMessage, activeComponent } = useStore((state) => state)
 
   useEffect(() => {
-    if (!previewSecureMessage) return
+    if (!previewSecureMessage.secureMessage?.id) return
 
     const subject = previewSecureMessage?.secureMessage?.subject || ''
     switch (activeComponent) {
@@ -25,7 +25,7 @@ const SubjectInput = () => {
       default:
         break
     }
-  }, [activeComponent, previewSecureMessage, form])
+  }, [activeComponent, previewSecureMessage.secureMessage?.id])
 
   return (
     <Box className="!mt-4">

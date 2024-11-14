@@ -1,17 +1,12 @@
-import React, {
-  forwardRef,
-  memo,
-  useCallback,
-  useEffect,
-  useImperativeHandle,
-  useState,
-} from 'react'
-import { Box, Flex } from '@radix-ui/themes'
-import { ReactTags, Tag } from 'react-tag-autocomplete'
-import 'react-tag-autocomplete/example/src/styles.css'
+import { useCallback, useEffect } from 'react'
+import { Box, Button, Flex, IconButton, Text } from '@radix-ui/themes'
+import { XIcon } from 'lucide-react'
 import { useFormContext } from 'react-hook-form'
 import toast from 'react-hot-toast'
+import { ReactTags, Tag } from 'react-tag-autocomplete'
 import { FormFieldError } from '@/components'
+import { cn } from '@/utils'
+import 'react-tag-autocomplete/example/src/styles.css'
 import { SendExternalTitle } from '.'
 import {
   getAllChannelsAgainstMessageIdAction,
@@ -123,13 +118,13 @@ const ExternalRecipientsEmails = ({
       })
 
     if (externalTags.length <= 0) return
-
+    form.setValue('externalEmails', externalTags)
     setExternalEmailSuggestions(externalTags)
     setExternalRecipientsTag(externalTags)
   }
 
   useEffect(() => {
-    if (!previewSecureMessage) return
+    if (!previewSecureMessage.secureMessage?.id) return
 
     switch (activeComponent) {
       case ActiveComponent.REPLY:
@@ -147,7 +142,7 @@ const ExternalRecipientsEmails = ({
       default:
         break
     }
-  }, [activeComponent, previewSecureMessage])
+  }, [activeComponent, previewSecureMessage.secureMessage?.id])
 
   const fetchChannels = async (messageId: string) => {
     const channels = await getAllChannelsAgainstMessageIdAction(messageId)
@@ -233,6 +228,23 @@ const ExternalRecipientsEmails = ({
             renderInput={(inputProps) => (
               <input {...inputProps} className="flex-grow outline-none" />
             )}
+            renderTag={({ classNames, tag, onClick, color, ...tagProps }) => {
+              return (
+                <Button type="button" className={classNames.tag} {...tagProps}>
+                  <Text className={cn('text-pp-black-3', classNames.tagName)}>
+                    {tag.label}
+                  </Text>
+                  <IconButton
+                    type="button"
+                    onClick={onClick}
+                    size="1"
+                    variant="ghost"
+                  >
+                    <XIcon size="16" color="gray" />
+                  </IconButton>
+                </Button>
+              )
+            }}
             renderRoot={({ children, ...rootProps }) => (
               <Flex
                 align="center"
