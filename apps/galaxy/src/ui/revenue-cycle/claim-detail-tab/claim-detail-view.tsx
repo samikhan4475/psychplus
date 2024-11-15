@@ -167,7 +167,24 @@ const ClaimDetailView = ({ claimId }: ClaimDetailViewProps) => {
   }
   const onAddNewServiceLine = () => {
     const timeZone = getLocalTimeZone()
+    const activeDiagnoses = form
+      .getValues('claimDiagnosis')
+      .filter((diagnosis) => diagnosis.recordStatus !== 'Deleted')
 
+    const firstFourDiagnoses = activeDiagnoses.slice(0, 4)
+
+    const diagnosisPointers: Record<string, string> = {
+      diagnosisPointer1: '',
+      diagnosisPointer2: '',
+      diagnosisPointer3: '',
+      diagnosisPointer4: '',
+    }
+
+    firstFourDiagnoses.forEach((diagnosis, index) => {
+      diagnosisPointers[`diagnosisPointer${index + 1}`] = diagnosis.sequenceNo
+        ? diagnosis.sequenceNo.toString()
+        : ''
+    })
     const dateToday: CalendarDate = today(timeZone)
     const newServiceLine = {
       recordStatus: 'Active',
@@ -176,7 +193,7 @@ const ClaimDetailView = ({ claimId }: ClaimDetailViewProps) => {
       cptCode: '',
       modifierCode1: '',
       modifierCode2: '',
-      diagnosisPointer1: '',
+      ...diagnosisPointers,
       sequenceNo: form.watch('claimServiceLines').length + 1,
       dateOfServiceFrom: dateToday,
       dateOfServiceTo: dateToday,

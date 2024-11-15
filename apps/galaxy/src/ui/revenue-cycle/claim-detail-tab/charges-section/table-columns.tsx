@@ -1,5 +1,4 @@
 import { ColumnDef } from '@tanstack/react-table'
-import { useFormContext } from 'react-hook-form'
 import { ColumnHeader } from '@/components'
 import { ClaimServiceLine } from '@/types'
 import { ClaimRowActionDropdown } from './table-action-cell'
@@ -19,9 +18,18 @@ const createRowIndexMap = (claimServiceLines: ClaimServiceLine[]) => {
   const rowIndexMap: Record<string, number> = {}
   claimServiceLines.forEach((charge, index) => {
     if (charge.id) rowIndexMap[charge.id] = index
+    else rowIndexMap[index] = index
   })
   return rowIndexMap
 }
+
+const getRowIndex = (
+  rowIndexMap: Record<string, number>,
+  row: { original: ClaimServiceLine; index: number },
+) => {
+  return row.original.id ? rowIndexMap[row.original.id] : row.index
+}
+
 const columns = (
   claimServiceLines: ClaimServiceLine[],
 ): ColumnDef<ClaimServiceLine>[] => {
@@ -39,7 +47,7 @@ const columns = (
         />
       ),
       cell: ({ row }) => (
-        <TableCellDosFrom rowIndex={rowIndexMap[row.original.id ?? '']} />
+        <TableCellDosFrom rowIndex={getRowIndex(rowIndexMap, row)} />
       ),
       enableHiding: true,
     },
@@ -54,7 +62,7 @@ const columns = (
         />
       ),
       cell: ({ row }) => (
-        <TableCellDosTo rowIndex={rowIndexMap[row.original.id ?? '']} />
+        <TableCellDosTo rowIndex={getRowIndex(rowIndexMap, row)} />
       ),
       enableHiding: true,
     },
@@ -69,7 +77,7 @@ const columns = (
         />
       ),
       cell: ({ row }) => (
-        <TableCellProcedure rowIndex={rowIndexMap[row.original.id ?? '']} />
+        <TableCellProcedure rowIndex={getRowIndex(rowIndexMap, row)} />
       ),
 
       enableHiding: true,
@@ -85,7 +93,7 @@ const columns = (
         />
       ),
       cell: ({ row }) => (
-        <TableCellPOS rowIndex={rowIndexMap[row.original.id ?? '']} />
+        <TableCellPOS rowIndex={getRowIndex(rowIndexMap, row)} />
       ),
 
       enableHiding: true,
@@ -101,7 +109,7 @@ const columns = (
         />
       ),
       cell: ({ row }) => (
-        <TableCellModifier rowIndex={rowIndexMap[row.original.id ?? '']} />
+        <TableCellModifier rowIndex={getRowIndex(rowIndexMap, row)} />
       ),
 
       enableHiding: true,
@@ -117,7 +125,7 @@ const columns = (
         />
       ),
       cell: ({ row }) => (
-        <TableCellDiagnosis rowIndex={rowIndexMap[row.original.id ?? '']} />
+        <TableCellDiagnosis rowIndex={getRowIndex(rowIndexMap, row)} />
       ),
 
       enableHiding: true,
@@ -133,7 +141,7 @@ const columns = (
         />
       ),
       cell: ({ row }) => (
-        <TableCellUnits rowIndex={rowIndexMap[row.original.id ?? '']} />
+        <TableCellUnits rowIndex={getRowIndex(rowIndexMap, row)} />
       ),
 
       enableHiding: true,
@@ -149,7 +157,7 @@ const columns = (
         />
       ),
       cell: ({ row }) => (
-        <TableCellUnitAmount rowIndex={rowIndexMap[row.original.id ?? '']} />
+        <TableCellUnitAmount rowIndex={getRowIndex(rowIndexMap, row)} />
       ),
 
       enableHiding: true,
@@ -179,9 +187,7 @@ const columns = (
         />
       ),
       cell: ({ row }) => (
-        <TableCellStartChargesTime
-          rowIndex={rowIndexMap[row.original.id ?? '']}
-        />
+        <TableCellStartChargesTime rowIndex={getRowIndex(rowIndexMap, row)} />
       ),
 
       enableHiding: true,
@@ -197,9 +203,7 @@ const columns = (
         />
       ),
       cell: ({ row }) => (
-        <TableCellEndChargesTime
-          rowIndex={rowIndexMap[row.original.id ?? '']}
-        />
+        <TableCellEndChargesTime rowIndex={getRowIndex(rowIndexMap, row)} />
       ),
 
       enableHiding: true,
@@ -210,7 +214,7 @@ const columns = (
       header: () => <ColumnHeader label="Actions" className="!font-medium" />,
       cell: ({ row }) => (
         <ClaimRowActionDropdown
-          rowIndex={rowIndexMap[row.original.id ?? '']}
+          rowIndex={getRowIndex(rowIndexMap, row)}
           rowId={row.original.id}
         />
       ),
