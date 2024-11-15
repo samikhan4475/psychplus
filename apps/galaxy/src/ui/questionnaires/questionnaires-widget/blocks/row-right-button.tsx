@@ -23,7 +23,10 @@ const RowRightButtons = ({
       ) : (
         <>
           <ViewButton />
-          <HistoryButton questionnaire={questionnaire} justIcon />
+          <HistoryButton
+            questionnaire={questionnaire}
+            justIcon
+          />
         </>
       )}
       <DeleteButton />

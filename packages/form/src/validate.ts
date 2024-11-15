@@ -31,6 +31,7 @@ const anyString = z.coerce.string()
 const numberOnly = z.coerce.number() 
 const charOnly = anyString.regex(charRegex, 'only charactors are allowed')
 
+// can be empity but if had a value then validate
 const emptyOrStringArray = z
   .array(z.string())
   .refine((value) => value.every((item) => typeof item === 'string'), {

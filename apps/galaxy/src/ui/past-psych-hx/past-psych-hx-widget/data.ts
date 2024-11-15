@@ -102,7 +102,7 @@ const transformOut =
     if (result.length === 0) {
       result.push({
         ...QuickNotesPayload,
-        sectionItem: 'empty',
+        sectionItem: 'empity',
         sectionItemValue: 'true',
       })
     }

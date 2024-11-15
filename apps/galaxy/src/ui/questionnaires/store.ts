@@ -93,7 +93,7 @@ const useStore = create<Store>((set, get) => ({
         pid: Number(patientId),
         sectionName: `${QuickNoteSectionName.AddToNoteQuestionnaire}-${questionnaire}`,
         sectionItem: questionnaire,
-        sectionItemValue: addToNoteData?.toString() || 'empty',
+        sectionItemValue: addToNoteData?.toString() || 'empity',
       },
     ]
 
@@ -120,24 +120,17 @@ const useStore = create<Store>((set, get) => ({
       getQuestionnairesAddToNotes({ patientId }),
       getQuestionnairesHistories({ patientId }),
     ])
-    const histories = transformHistories(
-      historiesResponse.state === 'success' ? historiesResponse.data : [],
-    )
 
-    const { addedToNotes, autoUpdateAddToNotes } = transformAddToNotesData(
-      addToNotesResponse.state === 'success' ? addToNotesResponse.data : [],
-      histories,
-      patientId,
-    )
-
-    if (autoUpdateAddToNotes.length > 0) {
-      await saveWidgetAction({
-        patientId: patientId.toString(),
-        data: autoUpdateAddToNotes,
-      })
+    if (addToNotesResponse.state === 'success') {
+      const addedToNotes = transformAddToNotesData(addToNotesResponse.data)
+      const addedToNotesKeys = Object.keys(addedToNotes)
+      set({ addedToNotes, selectedTabs: addedToNotesKeys })
     }
 
-    set({ histories, addedToNotes, selectedTabs: Object.keys(addedToNotes) })
+    if (historiesResponse.state === 'success') {
+      const histories = transformHistories(historiesResponse.data)
+      set({ histories })
+    }
   },
 }))
 
