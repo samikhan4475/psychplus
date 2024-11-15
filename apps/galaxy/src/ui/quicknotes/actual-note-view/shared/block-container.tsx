@@ -6,11 +6,13 @@ import { Flex, Heading, Separator } from '@radix-ui/themes'
 interface BlockContainerProps extends PropsWithChildren {
   heading: string
   subHeading?: string
+  separator?: boolean
 }
 const BlockContainer = ({
   heading,
   subHeading,
   children,
+  separator=true
 }: BlockContainerProps) => {
   return (
     <>
@@ -23,7 +25,7 @@ const BlockContainer = ({
         )}
         {children}
       </Flex>
-      <Separator orientation="horizontal" className="my-2 w-full" />
+      {separator && <Separator orientation="horizontal" className="my-2 w-full" />}
     </>
   )
 }
