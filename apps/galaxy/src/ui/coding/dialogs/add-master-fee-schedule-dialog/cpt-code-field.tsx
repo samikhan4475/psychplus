@@ -1,25 +1,24 @@
 'use client'
 
-import { TextField } from '@radix-ui/themes'
-import { useFormContext } from 'react-hook-form'
+import { AsyncAutoCompleteTextField } from '@/components'
 import {
   FormFieldContainer,
   FormFieldError,
   FormFieldLabel,
 } from '@/components/form'
-import { SchemaType } from './schema'
+import { getCptCodesListOptions } from '../../actions'
 
-const CptCodeField = () => {
-  const form = useFormContext<SchemaType>()
-
+const CptCodeField = ({ disabled }: { disabled?: boolean }) => {
   return (
     <FormFieldContainer>
       <FormFieldLabel required>CPT Code</FormFieldLabel>
-      <TextField.Root
-        size="1"
-        maxLength={6}
-        {...form.register('cptCode')}
-        placeholder="Enter CPT"
+      <AsyncAutoCompleteTextField
+        fetchDataAction={getCptCodesListOptions}
+        field="cptCode"
+        placeholder="Search CPT"
+        className="h-6 w-full"
+        truncateText={12}
+        disabled={disabled}
       />
       <FormFieldError name="cptCode" />
     </FormFieldContainer>

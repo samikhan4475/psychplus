@@ -21,13 +21,13 @@ interface CPT {
   cptCode: string
   description: string
   requirement: string
+  mastersAmount: string
+  paAmount: string
+  npAmount: string
+  psyDAmount: string
   medicareAmount: string
   mdDoAmount: string
-  npAmount: string
-  paAmount: string
-  psyDAmount:string
   paDAmount: string
-  mastersAmount: string
 }
 
 interface PosList {

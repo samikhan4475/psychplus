@@ -1,8 +1,8 @@
 'use client'
 
 import { getReceiverListOptionsAction } from '@/actions'
+import { AsyncAutoCompleteTextField } from '@/components'
 import { FormFieldContainer, FormFieldLabel } from '@/components/form'
-import { AsyncAutoCompleteTextField } from '../shared'
 
 const ReceiverNameField = () => {
   return (

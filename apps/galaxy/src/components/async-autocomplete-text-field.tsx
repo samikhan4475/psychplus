@@ -16,8 +16,7 @@ import toast from 'react-hot-toast'
 import { useDebouncedCallback } from 'use-debounce'
 import { type ActionResult } from '@/api'
 import { SelectOptionType } from '@/types'
-import { cn } from '@/utils'
-import { truncateString } from '../utils'
+import { cn, truncateString } from '@/utils'
 
 interface AsyncAutoCompleteTextFieldProps {
   placeholder?: string
@@ -57,12 +56,18 @@ const AsyncAutoCompleteTextField = ({
     setLoading(false)
   }, 300)
 
+  const onOpenChange = (open: boolean) => {
+    if (!disabled) {
+      setOpen(open)
+    }
+  }
+
   const renderTrigger = () => (
     <Box
-      onClick={() => setOpen(true)}
+      onClick={() => onOpenChange(true)}
       className={cn(
         'flex h-7 w-full cursor-pointer items-center justify-between rounded-1 border border-gray-7',
-        { 'cursor-not-allowed': disabled },
+        { 'bg-pp-states-disabled cursor-not-allowed': disabled },
         className,
       )}
     >
@@ -100,7 +105,7 @@ const AsyncAutoCompleteTextField = ({
       name={field}
       control={form.control}
       render={() => (
-        <Popover.Root open={open} onOpenChange={setOpen}>
+        <Popover.Root open={open} onOpenChange={onOpenChange}>
           <Popover.Trigger disabled={disabled}>
             {renderTrigger()}
           </Popover.Trigger>

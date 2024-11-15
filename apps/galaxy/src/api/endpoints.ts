@@ -259,6 +259,8 @@ const GET_PROCEDURES_CODES = (codeStartsWith: string) =>
   `${API_URL}/api/codeset/authorities/AMA/codesets/CPT4?codeStartsWith=${codeStartsWith}&includeExtraDetails=false&offset=0&limit=0&orderBy=displayName%20asc`
 const GET_MODIFIERS_CODES = (codeStartsWith: string) =>
   `${API_URL}/api/codeset/authorities/AMA/codesets/CPT4Modifiers?codeStartsWith=${codeStartsWith}&includeExtraDetails=false&offset=0&limit=0&orderBy=displayName%20asc`
+const GET_CPT_CODES = (codeStartsWith: string) =>
+  `${API_URL}/api/codeset/authorities/AMA/codesets/CPT4?codeStartsWith=${codeStartsWith}&includeExtraDetails=false&offset=0&limit=0&orderBy=displayName%20asc`
 const GET_CLAIM_BY_ID = (claimId: string) => `${API_URL}/api/claims/${claimId}`
 const UPDATE_CLAIM = (claimId: string) => `${API_URL}/api/claims/${claimId}`
 const ADD_REPORT_TEMPLATE_ENDPOINT = `${API_URL}/api/reporting/templates`
@@ -484,4 +486,5 @@ export {
   PATIENT_CARE_TEAM_ENDPOINT,
   PATIENT_CHARGE_PAYMENT_ENDPOINT,
   GET_STAFF_LICENSE,
+  GET_CPT_CODES,
 }

@@ -16,7 +16,7 @@ const PosSelectField = () => {
         placeholder="Select"
         fetchOptions={getPOSCodesOptions}
         size="1"
-        buttonClassName="w-full"
+        buttonClassName="w-full h-6"
       />
       <FormFieldError name="placeOfService" />
     </FormFieldContainer>

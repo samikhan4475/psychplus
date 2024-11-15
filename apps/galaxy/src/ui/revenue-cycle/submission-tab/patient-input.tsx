@@ -1,7 +1,10 @@
 import React from 'react'
-import { FormFieldContainer, FormFieldLabel } from '@/components'
+import {
+  AsyncAutoCompleteTextField,
+  FormFieldContainer,
+  FormFieldLabel,
+} from '@/components'
 import { getPatientsOptionsAction } from '../actions'
-import { AsyncAutoCompleteTextField } from '../shared'
 
 const PatientInput = () => {
   return (

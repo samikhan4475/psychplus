@@ -87,7 +87,7 @@ const AddMasterFeeScheduleForm = ({
   return (
     <FormContainer className="gap-2" form={form} onSubmit={onSubmit}>
       <Grid columns="3" gapX="2">
-        <CptCodeField />
+        <CptCodeField disabled={!!cpt?.id} />
         <PosSelectField />
         <MdDoField />
       </Grid>

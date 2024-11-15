@@ -1,8 +1,8 @@
 'use client'
 
+import { AsyncAutoCompleteTextField } from '@/components'
 import { FormFieldContainer, FormFieldLabel } from '@/components/form'
 import { getPatientsOptionsAction } from '../../actions'
-import { AsyncAutoCompleteTextField } from '../../shared'
 
 const PatientIdField = () => {
   return (
