@@ -9,7 +9,10 @@ const PatientAllergiesView = ({ patientId }: PatientAllergiesViewProps) => {
   return (
     <Flex direction="column" width="100%">
       <Flex direction="column" gap="2">
-        <PatientAllergiesWidget patientId={patientId} />
+        <PatientAllergiesWidget
+          patientId={patientId}
+          isPatientAllergiesTab={true}
+        />
       </Flex>
     </Flex>
   )

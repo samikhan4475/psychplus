@@ -1,7 +1,6 @@
 import { Flex, ScrollArea } from '@radix-ui/themes'
 import { ActualNoteViewClient } from './actual-note-client'
-import { Allergies } from './allergies'
-import { Codes } from './codes'
+import { CodesDetailsView } from './codes'
 import { FamilyInternalMedicineAssessmentPlanView } from './family-internal-medicine-assessment-plan'
 import { FamilyPsychDetailView } from './family-psych-hx'
 import { FollowUp } from './follow-up'
@@ -13,6 +12,7 @@ import { MentalStatusExamHx } from './mental-status-exam-hx'
 import { NoteViewHeader } from './note-view-header'
 import { PastMedicalHx } from './past-medical-hx'
 import { PastPsychlDetailView } from './past-psych-hx'
+import { AllergiesDetailsView } from './patient-allergies'
 import { PhysicalExamView } from './physical-exam'
 import { PsychiatricEvaluation } from './psychiatric-evaluation'
 import { PsychiatryAssessmentPlanView } from './psychiatry-assessment-plan'
@@ -25,7 +25,7 @@ import { SubstanceUseHx } from './substance-use-hx'
 import { Therapy } from './therapy'
 import { TherapyAssessmentPlanView } from './therapy-assessment-plan'
 import { VitalsTable } from './vitals-table'
-import { WorkingDiagnosis } from './working-diagnosis'
+import { WorkingDiagnosisDetailView } from './working-diagnosis'
 
 interface ActualNoteViewProps {
   patientId: string
@@ -44,19 +44,19 @@ const ActualNoteView = ({ patientId, appointmentId }: ActualNoteViewProps) => {
           <SocialHx />
           <SubstanceUseHx />
           <PastMedicalHx patientId={patientId} />
-          <Allergies />
+          <AllergiesDetailsView patientId={patientId} />
           <Question />
           <ReviewOfSystem patientId={patientId} />
           <VitalsTable />
+          <WorkingDiagnosisDetailView patientId={patientId} />
           <MentalStatusExamHx patientId={patientId} />
-          <WorkingDiagnosis />
           <Psychoanalysis />
           <Injection />
           <InteractiveComplexity />
           <Medications />
           <Referral />
+          <CodesDetailsView patientId={patientId} />
           <FollowUp patientId={patientId} appointmentId={appointmentId} />
-          <Codes />
           <Therapy patientId={patientId} />
           <PsychiatryAssessmentPlanView patientId={patientId} />
           <TherapyAssessmentPlanView patientId={patientId} />

@@ -1,25 +1,28 @@
-import { RowActionsCell, type RowAction } from '@/components'
-import type { PatientAllergy, PatientAllergyRow } from '../types'
+import { type Row } from '@tanstack/react-table'
+import { AdaptiveRowActionsCell, type RowAction } from '@/components'
+import type { AllergyDataResponse } from '../types'
+import { RowActionDelete } from './row-action-delete'
 import { RowActionDetails } from './row-action-details'
 import { RowActionEdit } from './row-action-edit'
 
-const rowActions: RowAction<PatientAllergy>[] = [
+const actions = [
+  { id: 'Details', render: RowActionDetails },
   {
-    id: 'patient-allergies-row-action-details',
-    render: RowActionDetails,
-  },
-  {
-    id: 'patient-allergies-row-action-edit',
+    id: 'Edit',
     render: RowActionEdit,
   },
-]
+  {
+    id: 'Delete',
+    render: RowActionDelete,
+  },
+] as RowAction<AllergyDataResponse>[]
 
 interface ActionsCellProps {
-  row: PatientAllergyRow
+  row: Row<AllergyDataResponse>
 }
 
 const ActionsCell = ({ row }: ActionsCellProps) => {
-  return <RowActionsCell row={row} actions={rowActions} />
+  return <AdaptiveRowActionsCell row={row} actions={actions} />
 }
 
 export { ActionsCell }

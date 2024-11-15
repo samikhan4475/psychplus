@@ -1,21 +1,23 @@
+'use server'
+
 import * as api from '@/api'
-import { PATIENT_ALLERGIES_TABLE_PAGE_SIZE } from '../constants'
-import type { GetPatientAllergiesResponse, PatientAllergy } from '../types'
+import { Sort } from '@/types'
+import type { AllergiesSearchParams, AllergyDataResponse } from '../types'
 
 interface GetPatientAllergiesParams {
-  patientId: string
-  page?: number
+  payload?: AllergiesSearchParams
+  sort?: Sort
 }
 
 const getPatientAllergiesAction = async ({
-  patientId,
-  page = 1,
+  payload,
 }: GetPatientAllergiesParams): Promise<
-  api.ActionResult<GetPatientAllergiesResponse>
+  api.ActionResult<AllergyDataResponse[]>
 > => {
-  const offset = (page - 1) * PATIENT_ALLERGIES_TABLE_PAGE_SIZE
-
-  const response = await mockFetchPatientAllergies()
+  const response = await api.POST<AllergyDataResponse[]>(
+    api.GET_ALLERGIES_ENDPOINT,
+    payload,
+  )
 
   if (response.state === 'error') {
     return {
@@ -24,74 +26,10 @@ const getPatientAllergiesAction = async ({
     }
   }
 
-  const total = Number(response.headers.get('psychplus-totalresourcecount'))
-
   return {
     state: 'success',
-    data: {
-      allergies: response.data,
-      total,
-    },
+    data: response.data,
   }
-}
-
-const mockFetchPatientAllergies = async (): Promise<
-  api.NetworkResult<PatientAllergy[]>
-> => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve({
-        headers: new Headers({}),
-        state: 'success',
-        data: [
-          {
-            type: 'Ingredient',
-            name: 'Shellfish',
-            reaction: 'Cough',
-            severity: 'Mild',
-            status: 'active',
-            observationDate: '03/21/24',
-            endDate: '03/21/24',
-            notes: '',
-            addToNote: false,
-          },
-          {
-            type: 'Ingredient',
-            name: 'Peanuts',
-            reaction: 'Hives',
-            severity: 'Moderate',
-            status: 'active',
-            observationDate: '03/21/24',
-            endDate: '03/21/24',
-            notes: 'these are some notes about the peanut allergy',
-            addToNote: false,
-          },
-          {
-            type: 'Drug Class',
-            name: 'penicillin',
-            reaction: 'Anaphylaxis',
-            severity: 'Severe',
-            status: 'active',
-            observationDate: '03/21/24',
-            endDate: '03/21/24',
-            notes: '',
-            addToNote: false,
-          },
-          {
-            type: 'Substance',
-            name: 'Alcohol',
-            reaction: 'Cough',
-            severity: 'Mild',
-            status: 'active',
-            observationDate: '03/21/24',
-            endDate: '03/21/24',
-            notes: '',
-            addToNote: false,
-          },
-        ],
-      })
-    }, 2000)
-  })
 }
 
 export { getPatientAllergiesAction }

@@ -10,84 +10,83 @@ import {
   DateCell,
   LoadingPlaceholder,
   LongTextCell,
-  SelectCell,
   TextCell,
 } from '@/components'
-import { ActionsCell, AddToNoteCell, SeverityCell } from './cells'
+import { getSlashedPaddedDateString } from '@/utils'
+import { ActionsCell, SeverityCell } from './cells'
 import { useStore } from './store'
-import type { PatientAllergy, PatientAllergyRow } from './types'
+import type { AllergyDataResponse } from './types'
 
-const columns: ColumnDef<PatientAllergy>[] = [
+const columns: ColumnDef<AllergyDataResponse>[] = [
   {
     id: 'allergy-type',
-    header: () => <ColumnHeader label="Type" />,
-    cell: ({ row }) => {
-      return <TextCell>{row.original.type}</TextCell>
-    },
+    header: ({ column }) => (
+      <ColumnHeader column={column} clientSideSort label="Type" />
+    ),
+    cell: ({ row }) => <TextCell>{row.original.allergyType}</TextCell>,
   },
   {
     id: 'allergy-name',
-    header: () => <ColumnHeader label="Allergy" />,
-    cell: ({ row }) => {
-      return <TextCell>{row.original.name}</TextCell>
-    },
+    header: ({ column }) => (
+      <ColumnHeader clientSideSort column={column} label="Allergy" />
+    ),
+    cell: ({ row }) => <TextCell>{row.original.allergyName}</TextCell>,
   },
   {
     id: 'allergy-reaction',
-    header: () => <ColumnHeader label="Reaction" />,
-    cell: ({ row }) => {
-      return <TextCell>{row.original.reaction}</TextCell>
-    },
+    header: ({ column }) => (
+      <ColumnHeader clientSideSort column={column} label="Reaction" />
+    ),
+    cell: ({ row }) => <TextCell>{row.original.reaction}</TextCell>,
   },
   {
     id: 'allergy-severity',
-    header: () => <ColumnHeader label="Severity" />,
+    header: ({ column }) => (
+      <ColumnHeader clientSideSort column={column} label="Severity" />
+    ),
     cell: SeverityCell,
   },
   {
     id: 'allergy-status',
-    header: () => <ColumnHeader label="Status" />,
-    cell: ({ row }) => {
-      return (
-        <SelectCell
-          value={row.original.status}
-          options={[
-            { value: 'active', label: 'Active' },
-            { value: 'inactive', label: 'Inactive' },
-          ]}
-        />
-      )
-    },
+    header: ({ column }) => (
+      <ColumnHeader clientSideSort column={column} label="Status" />
+    ),
+    cell: ({ row }) => (
+      <TextCell>{row.original.archive === 0 ? 'Active' : 'Inactive'}</TextCell>
+    ),
   },
   {
     id: 'allergy-observation-date',
-    header: () => <ColumnHeader label="Observation Date" />,
-    cell: ({ row }) => {
-      return <DateCell>{row.original.observationDate}</DateCell>
-    },
+    header: ({ column }) => (
+      <ColumnHeader clientSideSort column={column} label="Observation Date" />
+    ),
+    cell: ({ row }) => (
+      <DateCell>
+        {getSlashedPaddedDateString(`${row.original.onsetBegan}`)}
+      </DateCell>
+    ),
   },
   {
     id: 'allergy-end-date',
-    header: () => <ColumnHeader label="End Date" />,
-    cell: ({ row }) => {
-      return <DateCell>{row.original.endDate}</DateCell>
-    },
+    header: ({ column }) => (
+      <ColumnHeader clientSideSort column={column} label="End Date" />
+    ),
+    cell: ({ row }) => (
+      <DateCell>
+        {getSlashedPaddedDateString(`${row.original.onsetEnded}`)}
+      </DateCell>
+    ),
   },
   {
     id: 'allergy-notes',
-    header: () => <ColumnHeader label="Notes" />,
-    cell: ({ row }) => {
-      return <LongTextCell>{row.original.notes}</LongTextCell>
-    },
-  },
-  {
-    id: 'allergy-add-to-note',
-    header: () => <ColumnHeader label="Add to Note" />,
-    cell: AddToNoteCell,
+    header: ({ column }) => (
+      <ColumnHeader column={column} clientSideSort label="Notes" />
+    ),
+    cell: ({ row }) => <LongTextCell>{row.original.comment}</LongTextCell>,
   },
   {
     id: 'allergy-actions',
-    header: () => <ColumnHeader label="Actions" />,
+    header: ({ column }) => <ColumnHeader column={column} label="Actions" />,
     cell: ActionsCell,
   },
 ]
@@ -95,17 +94,20 @@ const columns: ColumnDef<PatientAllergy>[] = [
 const PatientAllergiesTable = () => {
   const store = useStore()
 
-  const { data, fetch, loading } = zustandUseStore(store, (state) => ({
-    data: state.data,
-    loading: state.loading,
-    fetch: state.fetch,
-  }))
+  const { data, allergiesListSearch, allergiesListLoading } = zustandUseStore(
+    store,
+    (state) => ({
+      data: state.allergiesListData,
+      allergiesListLoading: state.allergiesListLoading,
+      allergiesListSearch: state.allergiesListSearch,
+    }),
+  )
 
   useEffect(() => {
-    fetch()
+    allergiesListSearch()
   }, [])
 
-  if (loading) {
+  if (allergiesListLoading) {
     return (
       <Flex height="100%" align="center" justify="center">
         <LoadingPlaceholder />
@@ -115,12 +117,7 @@ const PatientAllergiesTable = () => {
 
   return (
     <ScrollArea>
-      <DataTable
-        data={data?.allergies ?? []}
-        columns={columns}
-        disablePagination
-        sticky
-      />
+      <DataTable data={data ?? []} columns={columns} disablePagination sticky />
     </ScrollArea>
   )
 }

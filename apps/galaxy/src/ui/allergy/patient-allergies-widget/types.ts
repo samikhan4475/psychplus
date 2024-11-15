@@ -1,31 +1,59 @@
 import { type Row } from '@tanstack/react-table'
 
-type AllergySeverity = 'Mild' | 'Moderate' | 'Severe'
-
 type AllergyStatus = 'active' | 'inactive'
 
 interface PatientAllergy {
-  type: string
-  name: string
-  reaction: string
-  severity: AllergySeverity
-  status: AllergyStatus
-  observationDate: string
-  endDate: string
-  notes?: string
-  addToNote: boolean
+  allergyType: string
+  allergyName: string
+  reactionId: string
+  severity: string
+  archive: AllergyStatus
+  onsetBegan: string
+  onsetEnded: string
+  comment?: string
+  severityCode: string
 }
 
-type PatientAllergyRow = Row<PatientAllergy>
+interface AllergyDataResponse {
+  scriptSureAllergyId: number
+  patientId: number
+  scriptSurePatientId: number
+  allergyName: string
+  encounterId: number
+  rxNormCode: string
+  nationalDrugCode: string
+  allergyType: string
+  reaction: string
+  severityCode: string
+  adverseEventCode: string
+  onsetBegan: string
+  onsetEnded: string
+  archive: number | string
+  severity?: string
+  comment?: string
+  status: AllergyStatus
+}
+
+interface AllergiesSearchParams {
+  observationDate?: string | null
+  endDate?: string | null
+  name?: string
+  allergyType?: string
+  status?: string
+  severity?: string
+  patientIds?: string[]
+}
+
+type PatientAllergyRow = Row<AllergyDataResponse>
 
 interface GetPatientAllergiesResponse {
-  allergies: PatientAllergy[]
-  total: number
+  data?: AllergyDataResponse[]
 }
 
 export type {
   PatientAllergy,
-  AllergySeverity,
   PatientAllergyRow,
   GetPatientAllergiesResponse,
+  AllergiesSearchParams,
+  AllergyDataResponse,
 }

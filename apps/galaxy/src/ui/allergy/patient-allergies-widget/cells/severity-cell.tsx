@@ -1,5 +1,5 @@
 import { Badge, BadgeProps } from '@radix-ui/themes'
-import type { AllergySeverity, PatientAllergyRow } from '../types'
+import type { PatientAllergyRow } from '../types'
 
 interface SeverityCellProps {
   row: PatientAllergyRow
@@ -7,13 +7,18 @@ interface SeverityCellProps {
 
 const SeverityCell = ({ row }: SeverityCellProps) => {
   return (
-    <Badge size="1" variant="soft" mx="1" color={getBadgeColor(row.original.severity)}>
-      {row.original.severity}
+    <Badge
+      size="1"
+      variant="soft"
+      mx="1"
+      color={getBadgeColor(row.original.severityCode)}
+    >
+      {row.original.severityCode}
     </Badge>
   )
 }
 
-const getBadgeColor = (severity: AllergySeverity): BadgeProps['color'] => {
+const getBadgeColor = (severity: string): BadgeProps['color'] => {
   switch (severity) {
     case 'Mild':
       return 'green'
