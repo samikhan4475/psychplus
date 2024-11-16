@@ -28,6 +28,7 @@ import { rescheduleAppointment } from '@/features/appointments/upcoming/actions'
 import { NewProviderSelectedDialog } from '../new-provider-selected-dialog'
 import { PrimaryProviderAppointedDialog } from '../primary-provider-appointed-dialog'
 
+import { useStore } from '@/features/appointments/search/store'
 const errorMessage = 'You must agree to the above policies'
 const schema = z.object({
   userAgreed: z.coerce.boolean().refine(
@@ -83,6 +84,7 @@ const BookAppointmentButton = ({
     checkIfPolicyBSigned(userConsents),
   )
 
+  const stateCode = useStore((state) => state.stateCode)
   useEffect(() => {
     setError('')
   }, [paymentMethod, patientInsurances])
@@ -144,6 +146,7 @@ const BookAppointmentButton = ({
         serviceId: slot.servicesOffered?.[0],
         locationId: clinic.id,
         isSelfPay: paymentMethod === PaymentType.SelfPay,
+        stateCode: stateCode
       })
 
       if (result.state === 'error') {
@@ -161,6 +164,7 @@ const BookAppointmentButton = ({
         duration: slot.duration,
         serviceId: slot.servicesOffered?.[0],
         isSelfPay: paymentMethod === PaymentType.SelfPay,
+        stateCode: stateCode
       })
 
       if (result.state === 'error') {

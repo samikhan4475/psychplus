@@ -32,12 +32,14 @@ interface Store {
   location?: CurrentLocation
   careTeam: CareTeamMember[]
   state?: string
+  stateCode:string
   setStartingDate: (value: string) => void
   setProviderType: (value: ProviderType) => void
   setAppointmentType: (value: AppointmentType) => void
   setZipCode: (value: string) => void
   setLanguage: (value: string) => void
   setState: (value: string) => void
+  setStateCode:(value: string) => void
   setSortBy: (value: AppointmentSortBy) => void
   setLocation: (value: CurrentLocation) => void
   setLoading: (value: boolean) => void
@@ -63,6 +65,8 @@ const useStore = create<Store>()(
       state: undefined,
       startingDate: getCalendarDateLabel(today(getLocalTimeZone())),
       careTeam: [],
+      stateCode: '',
+      setStateCode: (stateCode) => set({ stateCode }),
       setStartingDate: (startingDate) => set({ startingDate }),
       setCareTeam: (careTeam) => set({ careTeam }),
       setProviderType: (providerType) => set({ providerType }),
@@ -180,6 +184,7 @@ const useStore = create<Store>()(
         appointmentType: state.appointmentType,
         providerType: state.providerType,
         zipCode: state.zipCode,
+        stateCode: state.stateCode,
       }),
       skipHydration: true,
     },

@@ -14,6 +14,7 @@ interface BookAppointmentParams {
   reason?: string
   serviceId?: string
   isSelfPay?: boolean
+  stateCode:string
 }
 
 const bookAppointmentAction = async ({
@@ -25,6 +26,7 @@ const bookAppointmentAction = async ({
   duration,
   serviceId,
   isSelfPay,
+  stateCode,
 }: BookAppointmentParams) => {
   const result = await api.POST(`${API_URL}/api/appointments/book`, {
     locationId,
@@ -35,6 +37,7 @@ const bookAppointmentAction = async ({
     duration,
     serviceId,
     isSelfPay,
+    stateCode
   })
 
   if (result.state === 'error') {

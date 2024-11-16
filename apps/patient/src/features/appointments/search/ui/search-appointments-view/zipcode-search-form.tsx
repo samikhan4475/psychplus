@@ -27,11 +27,12 @@ interface StateListType {
 }
 
 const ZipCodeSearchForm = () => {
-  const { zipCode, setZipCode, state, setState } = useStore((state) => ({
+  const { zipCode, setZipCode, state, setState, setStateCode} = useStore((state) => ({
     zipCode: state.zipCode,
     setZipCode: state.setZipCode,
     state: state.state,
     setState: state.setState,
+    setStateCode: state.setStateCode
   }))
 
   const [zipStates, setZipStates] = useState<StateListType[]>([])
@@ -61,6 +62,7 @@ const ZipCodeSearchForm = () => {
     if (zipStates.length > 0) {
       form.setValue('state', zipStates[0].long_name)
       setState(zipStates[0].long_name)
+      setStateCode(zipStates[0].short_name)
     }
   }, [setState, zipStates])
 
@@ -89,6 +91,7 @@ const ZipCodeSearchForm = () => {
                 form.setValue('state', value)
                 form.trigger('state')
                 setState(value)
+                setStateCode(zipStates.find(state => state.long_name === value)?.short_name || "")
               }}
               options={zipStates}
             />
