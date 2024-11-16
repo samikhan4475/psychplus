@@ -149,6 +149,12 @@ function getLastDayOfWeek(date?: Date) {
   return lastDay
 }
 
+const convertToLocalISOString = (dateString: string) => {
+  const date = new Date(dateString)
+  const localDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000)
+  return localDate.toISOString().slice(0, -1) // Remove the 'Z'
+}
+
 export {
   isEmptyDate,
   daysAgo,
@@ -165,4 +171,5 @@ export {
   getFirstDayOfWeek,
   parseDateString,
   getLastDayOfWeek,
+  convertToLocalISOString,
 }

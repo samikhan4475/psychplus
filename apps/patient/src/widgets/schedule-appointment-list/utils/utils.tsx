@@ -8,7 +8,11 @@ import { type Clinic } from '@psychplus/clinics'
 import { type Staff } from '@psychplus/staff'
 import { isMobile } from '@psychplus/utils/client'
 import { APP_ENV } from '@psychplus/utils/constants'
-import { formatDateYmd, parseDateString } from '@psychplus/utils/time'
+import {
+  convertToLocalISOString,
+  formatDateYmd,
+  parseDateString,
+} from '@psychplus/utils/time'
 import { type Location, type StaffWithClinicsAndSlots } from '../types'
 
 function groupStaffWithClinicsAndSlots(
@@ -234,6 +238,30 @@ const renderProfileImage = (
   />
 )
 
+const convertUtcToLocalTimeInSlots = (data: StaffAppointmentAvailabilities) => {
+  const { staffAppointmentAvailabilities } = data
+  const availabilities = staffAppointmentAvailabilities.map(
+    (staffAppointment) => {
+      const { availableSlots } = staffAppointment
+      const updatedSlots = availableSlots.map((slot) => {
+        const startDate = convertToLocalISOString(slot.startDate)
+        return {
+          ...slot,
+          startDate,
+        }
+      })
+      return {
+        ...staffAppointment,
+        availableSlots: updatedSlots,
+      }
+    },
+  )
+
+  return {
+    staffAppointmentAvailabilities: availabilities,
+  }
+}
+
 function getLoginRedirectUrl() {
   return APP_ENV === 'production'
     ? 'https://psychplus.io/'
@@ -248,4 +276,5 @@ export {
   renderStaffName,
   renderProfileImage,
   getLoginRedirectUrl,
+  convertUtcToLocalTimeInSlots,
 }

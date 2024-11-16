@@ -30,7 +30,11 @@ import {
 } from './components'
 import { useStore } from './store'
 import type { StaffWithClinicsAndSlots } from './types'
-import { applyFilters, groupStaffWithClinicsAndSlots } from './utils'
+import {
+  applyFilters,
+  convertUtcToLocalTimeInSlots,
+  groupStaffWithClinicsAndSlots,
+} from './utils'
 
 interface ScheduleAppointmentListClientProps {
   mapKey: string
@@ -116,14 +120,15 @@ const ScheduleAppointmentListClient = ({
           filters.appointmentType === 'In-Person' ? 'InPerson' : 'TeleVisit',
         specialistTypeCode: filters.providerType === 'Psychiatry' ? 1 : 2,
         startingDate: isBefore(new Date(filters.startingDate), today)
-          ? formatDateYmd(today)
-          : filters.startingDate,
+          ? today.toISOString()
+          : new Date(filters.startingDate).toISOString(),
         maxDaysOutToLook,
         staffIds: staffIdParam ? [staffIdParam] : [],
         state: filters.state,
       },
       filters.appointmentType === 'In-Person',
     ).then((data) => {
+      data = convertUtcToLocalTimeInSlots(data)
       setStaffAppointmentAvailabilities(data)
       setIsLoading(false)
     })
