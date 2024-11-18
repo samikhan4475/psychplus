@@ -9,20 +9,20 @@ import { FilterForm } from './mse-filter-form'
 import { MseHistoryTable } from './mse-history-table'
 import { useStore } from './store'
 
-interface PhysicalExamHistoryProps {
+interface MseHistoryProps {
   patientId: string
   sectionName: QuickNoteSectionName
 }
 
-const HistoryView = ({ patientId, sectionName }: PhysicalExamHistoryProps) => {
-  const { fetchPhysicalExamHistories, loading } = useStore((state) => ({
-    fetchPhysicalExamHistories: state.fetchPhysicalExamHistories,
+const HistoryView = ({ patientId, sectionName }: MseHistoryProps) => {
+  const { fetchMseHistories, loading } = useStore((state) => ({
+    fetchMseHistories: state.fetchMseHistories,
     loading: state.loading,
   }))
 
   useEffect(() => {
     if (!patientId) return
-    fetchPhysicalExamHistories(patientId, sectionName)
+    fetchMseHistories(patientId, sectionName)
   }, [patientId, sectionName])
 
   return (

@@ -4,17 +4,13 @@ import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { HistoryButton } from './history'
 import { MseSaveButton } from './mse-save-button'
 
-interface PhysicalExamHeaderProps {
+interface MseHeaderProps {
   patientId: string
   getData: (schema: any) => QuickNoteSectionItem[]
   sectionName: QuickNoteSectionName
 }
 
-const MseHeader = ({
-  patientId,
-  getData,
-  sectionName,
-}: PhysicalExamHeaderProps) => {
+const MseHeader = ({ patientId, getData, sectionName }: MseHeaderProps) => {
   return (
     <Flex
       justify="between"

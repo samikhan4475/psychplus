@@ -31,9 +31,9 @@ const columns: ColumnDef<QuickNoteHistory>[] = [
 ]
 
 const MseHistoryTable = () => {
-  const { setSelectedRow, physicalExamHistory } = useStore((state) => ({
+  const { setSelectedRow, MseHistory } = useStore((state) => ({
     setSelectedRow: state.setSelectedRow,
-    physicalExamHistory: state.mseHistory,
+    MseHistory: state.mseHistory,
   }))
 
   const onRowSelect = (
@@ -52,7 +52,7 @@ const MseHistoryTable = () => {
       <Box className="outline-pp outline-pp-table-border h-full w-full outline outline-1 -outline-offset-1">
         <DataTable
           columns={columns}
-          data={physicalExamHistory ?? []}
+          data={MseHistory ?? []}
           onRowClick={onRowSelect}
           selectFirstRow={true}
           sticky

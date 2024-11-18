@@ -8,6 +8,7 @@ import {
   WidgetTagButton,
 } from '@/components'
 import { QuickNoteSectionItem } from '@/types'
+import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { AssessmentPlanTabs, AssessmentPlanTabsId } from '../constants'
 import {
   AssessmentTreatmentPlanNotesBlock,
@@ -43,7 +44,7 @@ const TherapyAssessmentPlanTab = ({
       )}
       <WidgetFormContainer
         patientId={patientId}
-        widgetId={AssessmentPlanTabsId.TAP_ID}
+        widgetId={QuickNoteSectionName.QuicknoteSectionTherapyAssessmentPlan}
         title={!isTherapyAssessmentPlanTab ? AssessmentPlanTabs.TAP : undefined}
         getData={transformOut(patientId)}
         headerRight={

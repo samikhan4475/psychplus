@@ -1,4 +1,5 @@
 import { QuickNoteSectionItem } from '@/types'
+import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { QUICKNOTE_SECTION_NAME } from './constants'
 import { PhysicalExamWidgetSchemaType } from './physical-exam-widget-schema'
 import { createEmptyFormValues } from './physicalExamDefaults'
@@ -341,6 +342,15 @@ const transformOut =
           })
         })
     })
+
+    if (!result.length) {
+      result.push({
+        sectionItemValue: '2',
+        sectionName: QuickNoteSectionName.QuicknoteSectionPhysicalExam,
+        sectionItem: '2',
+        pid: Number(patientId),
+      })
+    }
     return result
   }
 

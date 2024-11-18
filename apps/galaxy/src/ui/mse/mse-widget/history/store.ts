@@ -13,7 +13,7 @@ interface Store {
   formValues?: Partial<SchemaType>
   selectedRow?: QuickNoteHistory
   mseHistory?: QuickNoteHistory[]
-  fetchPhysicalExamHistories: (
+  fetchMseHistories: (
     patientId: string,
     sectionName: QuickNoteSectionName,
     formValues?: Partial<SchemaType>,
@@ -29,7 +29,7 @@ const useStore = create<Store>((set) => ({
   selectedRow: undefined,
   mseHistory: [],
 
-  fetchPhysicalExamHistories: async (
+  fetchMseHistories: async (
     patientId: string,
     sectionName: QuickNoteSectionName,
     formValues?: Partial<SchemaType>,

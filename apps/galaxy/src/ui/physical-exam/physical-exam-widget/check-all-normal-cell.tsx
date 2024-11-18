@@ -10,16 +10,14 @@ const CheckAllNormalCell = ({
   checked: boolean
   onSelectAllNormal: (checked: boolean) => void
 }) => {
-  const [selected, setSelected] = useState(checked)
   const handleCheckAllChange = () => {
-    onSelectAllNormal(!selected)
-    setSelected(!selected)
+    onSelectAllNormal(!checked)
   }
 
   return (
     <CheckboxCell
       label="Check All Normal"
-      checked={selected}
+      checked={checked}
       onClick={handleCheckAllChange}
     />
   )

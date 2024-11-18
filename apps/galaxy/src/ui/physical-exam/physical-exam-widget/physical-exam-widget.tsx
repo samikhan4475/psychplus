@@ -130,7 +130,7 @@ const PhysicalExamWidget = ({
       )}
       <WidgetFormContainer
         patientId={patientId}
-        widgetId="physical-exam"
+        widgetId={QuickNoteSectionName.QuicknoteSectionPhysicalExam}
         getData={transformOut(patientId)}
         title={!isPhysicalExamTab ? 'Physical Exam' : undefined}
         headerRight={

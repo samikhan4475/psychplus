@@ -22,7 +22,9 @@ const PsychiatryAssessmentPlanView = async ({
 
   return (
     <ActualNoteDetailsWrapper
-      sectionName={QuickNoteSectionName.QuickNoteSectionPastPsychHx}
+      sectionName={
+        QuickNoteSectionName.QuicknoteSectionPsychiatryAssessmentPlan
+      }
     >
       <Details data={transformIn(response.data)} />
     </ActualNoteDetailsWrapper>

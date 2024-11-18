@@ -38,8 +38,8 @@ interface FilterFormProps {
 }
 
 const FilterForm = ({ patientId, sectionName }: FilterFormProps) => {
-  const { fetchPhysicalExamHistories } = useStore((state) => ({
-    fetchPhysicalExamHistories: state.fetchPhysicalExamHistories,
+  const { fetchMseHistories } = useStore((state) => ({
+    fetchMseHistories: state.fetchMseHistories,
   }))
 
   const form = useForm<SchemaType>({
@@ -52,7 +52,7 @@ const FilterForm = ({ patientId, sectionName }: FilterFormProps) => {
   })
 
   const onSubmit: SubmitHandler<SchemaType> = async (data) => {
-    return fetchPhysicalExamHistories(patientId, sectionName, data)
+    return fetchMseHistories(patientId, sectionName, data)
   }
 
   return (

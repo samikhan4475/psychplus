@@ -11,11 +11,11 @@ interface ClearButtonProps {
 }
 const ClearButton = ({ patientId, sectionName }: ClearButtonProps) => {
   const form = useFormContext<SchemaType>()
-  const { fetchPhysicalExamHistories } = useStore((state) => ({
-    fetchPhysicalExamHistories: state.fetchPhysicalExamHistories,
+  const { fetchMseHistories } = useStore((state) => ({
+    fetchMseHistories: state.fetchMseHistories,
   }))
   const handleResetForm = () => {
-    fetchPhysicalExamHistories(patientId, sectionName)
+    fetchMseHistories(patientId, sectionName)
     form.reset({
       historyCreatedTo: undefined,
       historyCreatedFrom: undefined,

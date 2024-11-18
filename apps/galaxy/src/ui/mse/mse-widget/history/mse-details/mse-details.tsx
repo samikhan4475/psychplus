@@ -37,7 +37,7 @@ const MseDetails = ({ patientId }: { patientId: string }) => {
   return (
     <ScrollArea className="h-full w-full pr-2" scrollbars="vertical">
       <Text size="4" weight="bold">
-        Physical Exam
+        Mental Status Exam
       </Text>
       <OrientationBlock result={result} />
       <AppearanceBlock result={result} />

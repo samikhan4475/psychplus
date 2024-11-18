@@ -65,25 +65,25 @@ const Details = ({ data }: Props<PhysicalExamWidgetSchemaType>) => {
             label = 'Chest'
             break
           case 'cardiovascularCvs':
-            label = 'Cardiovascular/CVS'
+            label = 'Cardiovascular (CVS)'
             break
           case 'lungs':
             label = 'Lungs'
             break
           case 'gastrointestinalGi':
-            label = 'Gastrointestinal/GI'
+            label = 'Gastrointestinal (GI)'
             break
           case 'adhdHyperactive':
             label = 'ADHD/Hyperactive'
             break
           case 'gynecologicalGyn':
-            label = 'Gynecological/Gyn'
+            label = 'Gynecological (Gyn)'
             break
           case 'genitourinaryGu':
-            label = 'Genitourinary/GU'
+            label = 'Genitourinary (GU)'
             break
           case 'centralNervousSystemCns':
-            label = 'Central Nervous System/CNS'
+            label = 'Central Nervous System (CNS)'
             break
           case 'musculoskeletal':
             label = 'Musculoskeletal'
@@ -95,7 +95,7 @@ const Details = ({ data }: Props<PhysicalExamWidgetSchemaType>) => {
             label = 'Psychiatric'
             break
           case 'cranialNervesExam':
-            label = 'Cranial Nerves Exam'
+            label = 'Neurological Examination of Cranial Nerves'
             break
           default:
             label = key

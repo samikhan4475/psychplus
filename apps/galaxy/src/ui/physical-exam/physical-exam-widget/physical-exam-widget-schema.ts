@@ -1,5 +1,10 @@
 import { z } from 'zod'
 
+const limitedStringSchema = z
+  .string()
+  .trim()
+  .max(30, 'Max 30 characters are allowed.')
+
 type PhysicalExamWidgetSchemaType = z.infer<typeof physicalExamWidgetSchema>
 
 const physicalExamWidgetSchema = z.object({
@@ -20,23 +25,23 @@ const physicalExamWidgetSchema = z.object({
   nutrition: z.array(z.string()),
   psychiatric: z.array(z.string()),
   cranialNervesExam: z.array(z.string()),
-  cneOtherDetails: z.string().trim(),
-  gnOtherDetails: z.string().trim(),
-  sknOtherDetails: z.string().trim(),
-  hntOtherDetails: z.string().trim(),
-  nkOtherDetails: z.string().trim(),
-  lnOtherDetails: z.string().trim(),
-  chsOtherDetails: z.string().trim(),
-  cvsOtherDetails: z.string().trim(),
-  lngOtherDetails: z.string().trim(),
-  giOtherDetails: z.string().trim(),
-  gynOtherDetails: z.string().trim(),
-  guOtherDetails: z.string().trim(),
-  cnsOtherDetails: z.string().trim(),
-  msuOtherDetails: z.string().trim(),
-  mutOtherDetails: z.string().trim(),
-  psyOtherDetails: z.string().trim(),
-  nutOtherDetails: z.string().trim(),
+  cneOtherDetails: limitedStringSchema,
+  gnOtherDetails: limitedStringSchema,
+  sknOtherDetails: limitedStringSchema,
+  hntOtherDetails: limitedStringSchema,
+  nkOtherDetails: limitedStringSchema,
+  lnOtherDetails: limitedStringSchema,
+  chsOtherDetails: limitedStringSchema,
+  cvsOtherDetails: limitedStringSchema,
+  lngOtherDetails: limitedStringSchema,
+  giOtherDetails: limitedStringSchema,
+  gynOtherDetails: limitedStringSchema,
+  guOtherDetails: limitedStringSchema,
+  cnsOtherDetails: limitedStringSchema,
+  msuOtherDetails: limitedStringSchema,
+  mutOtherDetails: limitedStringSchema,
+  psyOtherDetails: limitedStringSchema,
+  nutOtherDetails: limitedStringSchema,
 })
 
 export { physicalExamWidgetSchema, type PhysicalExamWidgetSchemaType }

@@ -49,7 +49,7 @@ const MseWidget = ({ patientId, initialValue, isMseTab }: MseWidgetProps) => {
       )}
       <WidgetFormContainer
         patientId={patientId}
-        widgetId="mse"
+        widgetId={QuickNoteSectionName.QuicknoteSectionMse}
         getData={transformOut(patientId)}
         title={!isMseTab ? 'Mental Status Exam' : undefined}
         headerRight={

@@ -37,7 +37,7 @@ const cneOptions: GroupSelectOption<string>[] = [
 
 const BLOCK_ID = 'cranialNervesExam'
 
-const BLOCK_TITLE = 'Cranial Nerves Exam'
+const BLOCK_TITLE = 'Neurological Examination of Cranial Nerves'
 
 const CranialNervesExamBlock = ({
   normalChipsSelected,
@@ -63,8 +63,8 @@ const CranialNervesExamBlock = ({
         />
       ) : (
         <PhysicalExamGroupSelectSection
-          label={'Cranial Nerves Exam'}
-          field={'cranialNervesExam'}
+          label={BLOCK_TITLE}
+          field={BLOCK_ID}
           options={cneOptions}
           normalChipsSelected={normalChipsSelected}
           setNormalChipsSelected={setNormalChipsSelected}

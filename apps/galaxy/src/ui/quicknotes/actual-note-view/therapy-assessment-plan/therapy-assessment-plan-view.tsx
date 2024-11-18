@@ -22,7 +22,7 @@ const TherapyAssessmentPlanView = async ({
 
   return (
     <ActualNoteDetailsWrapper
-      sectionName={QuickNoteSectionName.QuickNoteSectionPastPsychHx}
+      sectionName={QuickNoteSectionName.QuicknoteSectionTherapyAssessmentPlan}
     >
       <Details data={transformIn(response.data)} />
     </ActualNoteDetailsWrapper>

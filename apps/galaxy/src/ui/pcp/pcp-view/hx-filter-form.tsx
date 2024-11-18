@@ -39,15 +39,7 @@ const HxFilterForm = ({ patientId }: { patientId: string }) => {
     return []
   }
 
-  const onSubmit: SubmitHandler<SchemaType> = (data) => {
-    const formattedData = {
-      ...data,
-      sentFrom: formatDateToISOString(data.sentFrom),
-      sentTo: formatDateToISOString(data.sentTo, true),
-      patientId: patientId,
-    }
-    console.log('🚀 ~ HxFilterForm ~ formattedData:', formattedData)
-  }
+  const onSubmit: SubmitHandler<SchemaType> = () => {}
 
   return (
     <FormContainer form={form} onSubmit={onSubmit}>

@@ -1,4 +1,5 @@
 import { QuickNoteSectionItem } from '@/types'
+import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { MseWidgetSchemaType } from './mse-widget-schema'
 import { createEmptyFormValues } from './mseDefaults'
 
@@ -354,7 +355,6 @@ const transformIn = (value?: QuickNoteSectionItem[]): MseWidgetSchemaType => {
 const transformOut =
   (patientId: string) =>
   (schema: MseWidgetSchemaType): QuickNoteSectionItem[] => {
-    console.log('🚀 ~ schema:', schema)
     const result: QuickNoteSectionItem[] = []
 
     Object.entries(schema).forEach(([key, value]) => {
@@ -380,7 +380,14 @@ const transformOut =
           })
         })
     })
-    console.log('🚀 ~ result:', result)
+    if (!result.length) {
+      result.push({
+        sectionItem: '2',
+        pid: Number(patientId),
+        sectionName: QuickNoteSectionName.QuicknoteSectionMse,
+        sectionItemValue: '2',
+      })
+    }
     return result
   }
 
