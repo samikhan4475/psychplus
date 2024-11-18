@@ -24,7 +24,7 @@ import { SocialHx } from './social-hx'
 import { SubstanceUseHx } from './substance-use-hx'
 import { Therapy } from './therapy'
 import { TherapyAssessmentPlanView } from './therapy-assessment-plan'
-import { VitalsTable } from './vitals-table'
+import { VitalsView } from './vitals'
 import { WorkingDiagnosisDetailView } from './working-diagnosis'
 
 interface ActualNoteViewProps {
@@ -47,7 +47,7 @@ const ActualNoteView = ({ patientId, appointmentId }: ActualNoteViewProps) => {
           <AllergiesDetailsView patientId={patientId} />
           <Question />
           <ReviewOfSystem patientId={patientId} />
-          <VitalsTable />
+          <VitalsView patientId={patientId} appointmentId={appointmentId} />
           <WorkingDiagnosisDetailView patientId={patientId} />
           <MentalStatusExamHx patientId={patientId} />
           <Psychoanalysis />

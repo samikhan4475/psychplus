@@ -10,6 +10,7 @@ interface GetPatientVitalsParams {
     recordStatuses?: string[]
     fromDateTime?: string
     toDateTime?: string
+    vitalIds?: number[]
   }
 }
 

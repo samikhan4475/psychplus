@@ -1,5 +1,6 @@
 'use client'
 
+import { useRouter } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Box, Flex, Table } from '@radix-ui/themes'
 import { useForm, type SubmitHandler } from 'react-hook-form'
@@ -82,6 +83,8 @@ const AddVitalsForm = ({
     reValidateMode: 'onChange',
   })
 
+  const router = useRouter()
+
   const onSubmit: SubmitHandler<SchemaType> = async (formData) => {
     const vitalData = {
       ...removeNaNValues({
@@ -127,6 +130,8 @@ const AddVitalsForm = ({
       response.data,
       ...((quicknotesData || []) as PatientVital[]),
     ])
+
+    router.refresh()
   }
 
   return (
