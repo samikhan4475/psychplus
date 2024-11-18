@@ -35,6 +35,7 @@ import {
   generateDateRange,
   getEarliestSlot,
   isDateInNextRange,
+  parseDateAbsoluteToLocal,
 } from '../../utils'
 import { ClinicSelector } from './clinic-selector'
 
@@ -169,11 +170,7 @@ const ProviderAvailabilityCard = ({
         minSlot = earliestSlot
         minIndex = i
       }
-
-      const result = parseAbsoluteToLocal(earliestSlot.startDate).compare(
-        parseAbsoluteToLocal(minSlot.startDate),
-      )
-
+      const result = parseDateAbsoluteToLocal(earliestSlot,minSlot)
       if (result < 0) {
         minSlot = earliestSlot
         minIndex = i

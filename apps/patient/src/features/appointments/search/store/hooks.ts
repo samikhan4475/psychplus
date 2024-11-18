@@ -1,7 +1,7 @@
 import { parseAbsoluteToLocal } from '@internationalized/date'
 import { getCalendarDate } from '@psychplus-v2/utils'
 import { AppointmentSortBy } from '../constants'
-import { generateDateRange, getEarliestSlot } from '../utils'
+import { generateDateRange, getEarliestSlot, parseDateAbsoluteToLocal } from '../utils'
 import { useStore } from './store'
 
 const useSortedFilteredData = () => {
@@ -40,10 +40,7 @@ const useSortedFilteredData = () => {
     } else if (!earliestSlotB) {
       return earliestSlotA ? -1 : 0
     }
-
-    return parseAbsoluteToLocal(earliestSlotA.startDate).compare(
-      parseAbsoluteToLocal(earliestSlotB.startDate),
-    )
+    return parseDateAbsoluteToLocal(earliestSlotA, earliestSlotB)
   })
 }
 

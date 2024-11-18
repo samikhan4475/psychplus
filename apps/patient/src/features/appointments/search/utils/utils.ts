@@ -1,7 +1,7 @@
-import { CalendarDate } from '@internationalized/date'
+import { CalendarDate, parseAbsoluteToLocal } from '@internationalized/date'
 import { CareTeamMember } from '@psychplus-v2/types'
 import { getCalendarDateLabel } from '@psychplus-v2/utils'
-import { SlotsByDay } from '../types'
+import { AppointmentSlot, SlotsByDay } from '../types'
 
 const generateDateRange = (start: CalendarDate) => {
   const dateRange = [start]
@@ -30,6 +30,14 @@ const getEarliestSlot = (slots: SlotsByDay, dateRange: CalendarDate[]) => {
   }
 }
 
+const parseDateAbsoluteToLocal = (earliestSlotA : AppointmentSlot, earliestSlotB : AppointmentSlot) => {
+  const slotA = earliestSlotA.startDateUtc ?? new Date(earliestSlotA.startDate).toISOString();
+  const slotB = earliestSlotB.startDateUtc ?? new Date(earliestSlotB.startDate).toISOString();
+    return parseAbsoluteToLocal(slotA).compare(
+      parseAbsoluteToLocal(slotB),
+    )
+}
+
 const checkCareTeamExists = (
   careTeam: CareTeamMember[],
   providerType: string,
@@ -40,4 +48,5 @@ export {
   getEarliestSlot,
   checkCareTeamExists,
   isDateInNextRange,
+  parseDateAbsoluteToLocal,
 }

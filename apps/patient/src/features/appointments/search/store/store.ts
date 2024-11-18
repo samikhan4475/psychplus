@@ -113,7 +113,7 @@ const useStore = create<Store>()(
           state: get().state,
         })
 
-        if (get().cache[cacheKey]) {
+        if (!get().sortBy && get().cache[cacheKey]) {
           set({
             data: get().cache[cacheKey],
             loading: false,
