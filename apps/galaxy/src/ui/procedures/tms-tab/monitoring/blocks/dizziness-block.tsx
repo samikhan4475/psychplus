@@ -11,9 +11,12 @@ const DizzinessBlock = () => {
   const dizziness = form.watch(BLOCK_ID)
   return (
     <>
-      <YesNoSelect label={BLOCK_TITLE} field={BLOCK_ID} />
+      <YesNoSelect label={BLOCK_TITLE} field={BLOCK_ID} isNoFirst />
       {dizziness === 'yes' && (
-        <TextAreaInput field="tmsDizzinessBlockDetail" className="h-full w-full" />
+        <TextAreaInput
+          field="tmsDizzinessBlockDetail"
+          className="h-full w-full"
+        />
       )}
     </>
   )

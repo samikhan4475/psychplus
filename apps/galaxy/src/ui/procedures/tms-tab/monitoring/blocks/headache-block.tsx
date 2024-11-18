@@ -1,5 +1,6 @@
+import { Flex } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
-import { TextAreaInput, YesNoSelect } from '@/components'
+import { FormFieldLabel, TextAreaInput, YesNoSelect } from '@/components'
 import { TmsWidgetSchemaType } from '../../tms-widget-schema'
 
 const BLOCK_ID = 'tmsHeadacheBlock'
@@ -9,13 +10,21 @@ const HeadacheBlock = () => {
   const form = useFormContext<TmsWidgetSchemaType>()
   const headache = form.watch(BLOCK_ID)
   return (
-    <>
-      <YesNoSelect label={BLOCK_TITLE} field={BLOCK_ID} />
+    <Flex direction={'column'} gap={'1'}>
+      <YesNoSelect label={BLOCK_TITLE} field={BLOCK_ID} isNoFirst/>
       {headache === 'yes' && (
-        <TextAreaInput field="tmsHeadacheBlockDetail" className="h-full w-full" />
+        <Flex gap={'1'} direction={'column'}>
+          <FormFieldLabel required>
+            Measures taken to address this adverse reaction
+          </FormFieldLabel>
+          <TextAreaInput
+            field="tmsHeadacheBlockDetail"
+            className="h-full w-full"
+          />
+        </Flex>
       )}
-    </>
+    </Flex>
   )
 }
 
-export default HeadacheBlock;
+export default HeadacheBlock

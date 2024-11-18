@@ -73,7 +73,7 @@ const transformIn = (value: QuickNoteSectionItem[]) => {
     treatmentAdjustmentDetail: 'Minor adjustments to stimulation parameters were made based on patient response and tolerance.',
     frequencyOfSession: '5',
     frequencyUnit: 'Week',
-    plannedSession: '',
+    plannedSession: '00',
     durationFrom: '20',
     intermittentDurationFrom: '190',
     durationTo: '40',

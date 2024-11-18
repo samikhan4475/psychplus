@@ -1,5 +1,6 @@
+import { Flex, Text } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
-import { TextAreaInput, YesNoSelect } from '@/components'
+import { FormFieldLabel, TextAreaInput, YesNoSelect } from '@/components'
 import { TmsWidgetSchemaType } from '../../tms-widget-schema'
 
 const BLOCK_ID = 'tmsSeizureBlock'
@@ -9,15 +10,20 @@ const SeizureBlock = () => {
   const form = useFormContext<TmsWidgetSchemaType>()
   const seizure = form.watch(BLOCK_ID)
   return (
-    <>
-      <YesNoSelect label={BLOCK_TITLE} field={BLOCK_ID} />
+    <Flex direction={'column'} gap={'1'}>
+      <YesNoSelect label={BLOCK_TITLE} field={BLOCK_ID} isNoFirst />
       {seizure === 'yes' && (
-        <TextAreaInput
-          field="tmsSeizureBlockDetail"
-          className="h-full w-full"
-        />
+        <Flex gap={'1'} direction={'column'}>
+          <FormFieldLabel required>
+            Measures taken to address this adverse reaction
+          </FormFieldLabel>
+          <TextAreaInput
+            field="tmsSeizureBlockDetail"
+            className="h-full w-full"
+          />
+        </Flex>
       )}
-    </>
+    </Flex>
   )
 }
 

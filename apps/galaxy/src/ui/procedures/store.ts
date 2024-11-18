@@ -5,11 +5,14 @@ interface Store {
   activeTab: string
   viewedTabs: Set<string>
   setActiveTab: (tab: string) => void
+  patientId: string
+  setPatientId: (patientId: string) => void
 }
 
 const useStore = create<Store>((set, get) => ({
   activeTab: ProcedureTabs.ECT,
   viewedTabs: new Set([ProcedureTabs.ECT]),
+  patientId: '',
   setActiveTab: (activeTab) => {
     const viewedTabs = get().viewedTabs
     viewedTabs.add(activeTab)
@@ -19,6 +22,11 @@ const useStore = create<Store>((set, get) => ({
       viewedTabs,
     })
   },
+  setPatientId: (patientId) => {
+    set({
+      patientId,
+    })
+  }
 }))
 
 export { useStore }

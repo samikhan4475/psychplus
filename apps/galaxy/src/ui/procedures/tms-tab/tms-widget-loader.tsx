@@ -1,18 +1,18 @@
 import * as api from '@/api'
 import { QuickNoteSectionItem } from '@/types'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
-import { EctWidget } from './ect-widget'
+import { TmsTab } from './tms-widget'
 
-interface EctWidgetLoaderProps {
+interface TmsWidgetLoaderProps {
   patientId: string
 }
 
-const EctWidgetLoader = async ({ patientId }: EctWidgetLoaderProps) => {
+const TmsWidgetLoader = async ({ patientId }: TmsWidgetLoaderProps) => {
   const response = await api.POST<QuickNoteSectionItem[]>(
     api.NOTE_DETAILS_SEARCH_ENDPOINT,
     {
       patientId: Number(patientId),
-      sectionName: [QuickNoteSectionName.QuicknoteSectionProcedureEtcTab],
+      sectionName: [QuickNoteSectionName.ProcedureTMS],
       isLatest: true,
     },
   )
@@ -21,7 +21,7 @@ const EctWidgetLoader = async ({ patientId }: EctWidgetLoaderProps) => {
     return <div>fail</div>
   }
 
-  return <EctWidget patientId={patientId} procedureEctData={response.data} />
+  return <TmsTab patientId={patientId} procedureTmsData={response.data} />
 }
 
-export { EctWidgetLoader }
+export { TmsWidgetLoader }

@@ -3,7 +3,7 @@ import { useFormContext } from 'react-hook-form'
 import { BlockLabel } from '@/components'
 import { WeekDetail } from './week-detail-block'
 
-const WEEK_DETAILS = [
+export const WEEK_DETAILS = [
   {
     id: 1,
     description: '30 Sessions (Mon - Fri)',

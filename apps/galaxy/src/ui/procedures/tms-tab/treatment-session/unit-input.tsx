@@ -6,6 +6,7 @@ interface UnitInputProps {
   symbol: string
   disabled?: boolean
   label?: string
+  format?: string
 }
 
 const UnitInput = ({
@@ -13,6 +14,7 @@ const UnitInput = ({
   symbol,
   disabled = false,
   label,
+  format = '###',
 }: UnitInputProps) => {
   return (
     <Flex direction="row" gap="1" align="center">
@@ -26,7 +28,7 @@ const UnitInput = ({
         className="border-pp-grey bg-pp-bg-table-cell h-6 w-[87px] justify-center rounded-2 border border-solid"
       >
         <NumberInput
-          format="###"
+          format={format}
           field={field}
           disabled={disabled}
           placeholder="000"

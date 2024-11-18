@@ -51,18 +51,22 @@ const DischargePlanBlock = () => {
       </Flex>
       <GroupSelectSection label="" field={BLOCK_ID} options={BLOCK_OPTIONS} />
       {dischargeBlock.map((dischargeBlockItem, index) => (
-        <FormFieldContainer key={dischargeBlockItem + index} className="mt-2">
-          {dischargeBlockItem === 'modifyTreatmentPlan' && (
-            <ModifyTreatmentPlanBlock />
+        <>
+          {dischargeBlockItem !== 'continueWithCurrentProtocol' && (
+            <FormFieldContainer key={dischargeBlockItem + index}>
+              {dischargeBlockItem === 'modifyTreatmentPlan' && (
+                <ModifyTreatmentPlanBlock />
+              )}
+              {dischargeBlockItem === 'discontinueTreatment' && (
+                <DiscontinueBlock />
+              )}
+              {dischargeBlockItem === 'referral' && <ReferralBlock />}
+              {dischargeBlockItem === 'followupAssessmentScreening' && (
+                <FollowUpBlock />
+              )}
+            </FormFieldContainer>
           )}
-          {dischargeBlockItem === 'discontinueTreatment' && (
-            <DiscontinueBlock />
-          )}
-          {dischargeBlockItem === 'referral' && <ReferralBlock />}
-          {dischargeBlockItem === 'followupAssessmentScreening' && (
-            <FollowUpBlock />
-          )}
-        </FormFieldContainer>
+        </>
       ))}
     </FormFieldContainer>
   )

@@ -1,4 +1,5 @@
 import React from 'react'
+import { Flex, Text } from '@radix-ui/themes'
 import { GroupSelectSection } from '@/components'
 
 const BLOCK_ID = 'followUpBlock'
@@ -26,11 +27,10 @@ const BLOCK_OPTIONS = [
 ]
 const FollowUpBlock = () => {
   return (
-    <GroupSelectSection
-      label="Follow Up Assessment Screening"
-      field={BLOCK_ID}
-      options={BLOCK_OPTIONS}
-    />
+    <Flex align={'center'} gap={'2'}>
+      <Text className="text-2 font-medium">Follow Up Assessment Screening</Text>
+      <GroupSelectSection label="" field={BLOCK_ID} options={BLOCK_OPTIONS} />
+    </Flex>
   )
 }
 

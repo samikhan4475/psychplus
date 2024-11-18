@@ -5,12 +5,12 @@ const BLOCK_ID = 'suicide'
 
 const SuicideBlock = () => {
   return (
-    <FormFieldContainer>
+    <FormFieldContainer className="gap-1">
       <Text size="1" weight="medium">
         Did the patient experience any suicidal ideations during treatment or
         since the last treatment session?
       </Text>
-      <YesNoSelect field={BLOCK_ID} />
+      <YesNoSelect field={BLOCK_ID} isNoFirst />
     </FormFieldContainer>
   )
 }

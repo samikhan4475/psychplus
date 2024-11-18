@@ -25,6 +25,7 @@ const FIELDS = [
     field: 'stimulationLevel',
     symbol: '%',
     disabled: true,
+    format: '####',
   },
 ]
 
@@ -53,6 +54,7 @@ const StimulationIntensity = () => {
           field={item.field}
           symbol={item.symbol}
           disabled={item.disabled}
+          format={item.format}
         />
       ))}
     </Flex>

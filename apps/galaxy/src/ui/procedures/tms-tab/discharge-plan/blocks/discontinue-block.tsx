@@ -1,10 +1,11 @@
 import React from 'react'
-import { FormFieldContainer, FormFieldLabel, TextAreaInput } from '@/components'
+import { Text } from '@radix-ui/themes'
+import { FormFieldContainer, TextAreaInput } from '@/components'
 
 const DiscontinueBlock = () => {
   return (
     <FormFieldContainer>
-      <FormFieldLabel>Discontinue Treatment</FormFieldLabel>
+      <Text className="text-2 font-medium">Discontinue Treatment</Text>
       <TextAreaInput
         field="discontinueTreatmentDetail"
         className="h-full w-full"

@@ -1,5 +1,6 @@
 import { Flex, ScrollArea } from '@radix-ui/themes'
 import { ActualNoteViewClient } from './actual-note-client'
+import { EctDetailView } from './ect'
 import { CodesDetailsView } from './codes'
 import { FamilyInternalMedicineAssessmentPlanView } from './family-internal-medicine-assessment-plan'
 import { FamilyPsychDetailView } from './family-psych-hx'
@@ -23,6 +24,7 @@ import { ReviewOfSystem } from './ros'
 import { SocialHx } from './social-hx'
 import { SubstanceUseHx } from './substance-use-hx'
 import { Therapy } from './therapy'
+import { TmsDetailView } from './tms'
 import { TherapyAssessmentPlanView } from './therapy-assessment-plan'
 import { VitalsView } from './vitals'
 import { WorkingDiagnosisDetailView } from './working-diagnosis'
@@ -41,6 +43,8 @@ const ActualNoteView = ({ patientId, appointmentId }: ActualNoteViewProps) => {
           <HpiDetailView patientId={patientId} />
           <PastPsychlDetailView patientId={patientId} />
           <FamilyPsychDetailView patientId={patientId} />
+          <EctDetailView patientId={patientId} />
+          <TmsDetailView patientId={patientId} />
           <SocialHx />
           <SubstanceUseHx />
           <PastMedicalHx patientId={patientId} />
