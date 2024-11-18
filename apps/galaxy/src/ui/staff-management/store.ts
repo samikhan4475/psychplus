@@ -13,7 +13,11 @@ interface Store {
   sort?: Sort
   pageCache: Record<number, GetStaffListResponse>
   jumpToPage: (page: number) => void
-  search: (payload?: Partial<Staff>, page?: number, reset?: boolean) => void
+  search: (
+    payload?: Partial<Omit<Staff, 'language'>>,
+    page?: number,
+    reset?: boolean,
+  ) => void
   showFilters: boolean
   toggleFilters: () => void
   sortData: (column: string) => void
@@ -28,7 +32,7 @@ const useStore = create<Store>((set, get) => ({
   sort: undefined,
   showFilters: true,
   toggleFilters: () => set({ showFilters: !get().showFilters }),
-  search: async (payload?: Partial<Staff>, page = 1, reset = false) => {
+  search: async (payload, page = 1, reset = false) => {
     set({
       error: undefined,
       loading: true,

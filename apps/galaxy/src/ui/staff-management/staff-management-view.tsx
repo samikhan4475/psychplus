@@ -1,12 +1,19 @@
+'use client'
+
 import React from 'react'
 import { Flex } from '@radix-ui/themes'
 import { TabContentHeading } from '@/components'
+import { GooglePlacesContextProvider } from '@/providers/google-places-provider'
 import { AddStaffButton } from './add-staff-button'
 import { StaffFilterForm } from './staff-filter-form'
 import { StaffListTable } from './staff-list-table'
 import { StaffListTablePagination } from './staff-list-table-pagination'
 
-const StaffManagementView = () => {
+interface StaffManagementViewProps {
+  googleApiKey: string
+}
+
+const StaffManagementView = ({ googleApiKey }: StaffManagementViewProps) => {
   return (
     <Flex
       gap="1"
@@ -14,7 +21,9 @@ const StaffManagementView = () => {
       direction="column"
     >
       <TabContentHeading title="Staff">
-        <AddStaffButton />
+        <GooglePlacesContextProvider apiKey={googleApiKey}>
+          <AddStaffButton />
+        </GooglePlacesContextProvider>
       </TabContentHeading>
       <StaffFilterForm />
       <StaffListTable />

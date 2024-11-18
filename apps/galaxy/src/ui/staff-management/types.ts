@@ -1,5 +1,3 @@
-import { Metadata } from '@/types'
-
 interface GeoCoordinates {
   longitude: number
   latitude: number
@@ -32,6 +30,17 @@ interface ContactInfo {
   addresses: Address[]
   isMailingAddressSameAsPrimary: boolean
 }
+interface EmergencyContact {
+  name: LegalName
+  relationship: string
+  contact: ContactInfo
+}
+interface Guardian {
+  name: LegalName
+  isEmergencyContact: boolean
+  relationship: string
+  contact: ContactInfo
+}
 
 interface LegalName {
   firstName: string
@@ -44,29 +53,35 @@ interface LegalName {
 }
 
 interface Staff {
-  id: number
-  metadata: Metadata
-  isTest: boolean
+  otpCode: string
   legalName: LegalName
-  staffRoleCode: string
+  dateOfBirth: string
+  gender: string
+  socialSecurityNumber: string
+  userRoleId: number
+  isTest: boolean
   contactInfo: ContactInfo
-  spokenLanguages: string[]
-  virtualRoomLink: string
-  bio: string
-  hasPhoto: boolean
-  rating: number
+  language: string[]
+  preferredLanguage: string
+  emergencyContact?: EmergencyContact
+  guardian?: Guardian
+  password: string
+  passwordConfirm: string
+  referralSource: string
+  referralName: string
+  hipaaConsentOn: string
+  termsOfServiceConsentOn: string
+  privacyPolicyConsentOn: string
+  staffRoleId: number
+  supervisedBy: string
+  supervisorStaffId: number
   npi: string
   status: string
-  gender: string
-  phoneContact: string
-  supervisedBy: string
-  dateOfBirth: string
-  staffType: string
-  staffUserRoles: string[]
+  virtualRoomLink: string
   organizationIds: string[]
   practiceIds: string[]
   providerAttributions: string[]
-  supervisorStaffId: number
+  staffUserRoleIds: string[]
 }
 interface GetStaffListResponse {
   staff: Staff[]
