@@ -1,6 +1,5 @@
 import { Flex, Text } from '@radix-ui/themes'
 import { CreateNewNoteButton } from './create-new-note-button'
-import { NotesPrintButton } from './notes-print-button'
 
 const NotesHeader = () => {
   return (
@@ -16,7 +15,6 @@ const NotesHeader = () => {
           Notes
         </Text>
         <Flex gap="2" wrap="wrap">
-          <NotesPrintButton />
           <CreateNewNoteButton />
         </Flex>
       </Flex>

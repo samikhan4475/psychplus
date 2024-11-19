@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Box, Flex, Heading, Text } from '@radix-ui/themes'
 import { NoteIcon } from '@/components/icons/note-icon'
+import { NotesPrintButton } from '../notes-print-button'
 import { useStore } from '../store'
 import { AddendumButton } from './addendum-button'
 import { AddendumForm } from './addendum-form'
@@ -23,13 +24,17 @@ const NoteDetailsSection = () => {
   }, [selectedRow])
 
   return (
-    <Box className="border-pp-gray-2 bg-white border-l border-r">
-      <Flex wrap="wrap" className="border-pp-gray-2 gap-2 border-b px-4 py-2.5">
+    <Box
+      id="note-view-print"
+      className="border-pp-gray-2 bg-white border-l border-r"
+    >
+      <Flex wrap="wrap" className="border-pp-gray-2 gap-2 border-b px-3 py-2.5">
         <Heading className="text-[18px] font-bold">Details</Heading>
         <SignButton />
         <MarkErrorButton />
         <AddendumButton onClick={() => setAddAddendum(true)} />
         <RemoveConsignerButton />
+        {!!selectedRow && <NotesPrintButton id="note-view-print" />}
       </Flex>
       {selectedRow === undefined ? (
         <Flex direction="column" align="center" className="gap-y-1 py-3">

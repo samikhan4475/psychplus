@@ -1,6 +1,5 @@
-import { Suspense, use } from 'react'
+import { Suspense } from 'react'
 import { Flex, Separator, Text } from '@radix-ui/themes'
-import { getAppointment } from '@/api'
 import { LoadingPlaceholder } from '@/components'
 import { QuickNotesClearButton } from './quicknotes-clear-button'
 import { QuickNotesCopyMyPreviousButton } from './quicknotes-copy-my-previous-button'
@@ -8,7 +7,6 @@ import { QuickNotesCopyPreviousButton } from './quicknotes-copy-previous-button'
 import { QuickNotesCosignerDropdown } from './quicknotes-cosigner-dropdown'
 import { QuickNotesDateInput } from './quicknotes-date-input'
 import { QuickNotesLocationDropdown } from './quicknotes-location-dropdown'
-import { QuickNotesPrintButton } from './quicknotes-print-button'
 import { QuickNotesProviderDropdown } from './quicknotes-provider-dropdown'
 import { QuickNotesProviderTypeDropdown } from './quicknotes-provider-type-dropdown'
 import { QuickNotesSaveButton } from './quicknotes-save-button'
@@ -46,7 +44,6 @@ const QuickNotesHeader = async ({ appointmentId }: QuickNotesHeaderProps) => {
             Quick Notes
           </Text>
           <Flex gap="2" wrap="wrap">
-            <QuickNotesPrintButton />
             <QuickNotesViewNoteButton />
             <QuickNotesCopyPreviousButton />
             <QuickNotesCopyMyPreviousButton />

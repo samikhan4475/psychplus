@@ -12,7 +12,7 @@ const ActualNoteViewClient = ({ children }: ActualNoteViewProps) => {
   const showActualNoteView = useStore((state) => state.showActualNoteView)
 
   if (!showActualNoteView) return null
-  return <Flex>{children}</Flex>
+  return <Flex id="actual-note-view">{children}</Flex>
 }
 
 export { ActualNoteViewClient }
