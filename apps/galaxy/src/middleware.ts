@@ -56,8 +56,7 @@ export const middleware = async (request: NextRequest) => {
   }
 
   if (!ok) {
-    const requestPath = request.nextUrl.pathname
-
+    const requestPath = request.nextUrl.pathname + request.nextUrl.search
     const redirectUrl = request.nextUrl.clone()
     redirectUrl.pathname = LOGIN_PATH
 

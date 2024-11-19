@@ -1,6 +1,7 @@
 import { Suspense } from 'react'
 import { Flex, Separator, Text } from '@radix-ui/themes'
 import { LoadingPlaceholder } from '@/components'
+import { Appointment } from '@/types'
 import { QuickNotesClearButton } from './quicknotes-clear-button'
 import { QuickNotesCopyMyPreviousButton } from './quicknotes-copy-my-previous-button'
 import { QuickNotesCopyPreviousButton } from './quicknotes-copy-previous-button'
@@ -20,10 +21,10 @@ import { QuickNotesVisitNumberDropdown } from './quicknotes-visit-number-dropdow
 import { QuickNotesVisitTypeDropdown } from './quicknotes-visit-type-dropdown'
 
 interface QuickNotesHeaderProps {
-  appointmentId: string
+  appointment: Appointment
 }
 
-const QuickNotesHeader = async ({ appointmentId }: QuickNotesHeaderProps) => {
+const QuickNotesHeader = async ({ appointment }: QuickNotesHeaderProps) => {
   return (
     <Suspense
       fallback={
@@ -55,16 +56,22 @@ const QuickNotesHeader = async ({ appointmentId }: QuickNotesHeaderProps) => {
         </Flex>
         <Separator className="w-full" />
         <Flex align="center" gap="2" wrap="wrap" p="2">
-          <QuickNotesTitleDropdown />
-          <QuickNotesVisitTypeDropdown />
-          <QuickNotesProviderTypeDropdown />
-          <QuickNotesProviderDropdown />
-          <QuickNotesCosignerDropdown />
-          <QuickNotesLocationDropdown />
-          <QuickNotesServiceDropdown />
+          <QuickNotesTitleDropdown title={appointment.visitNoteTitle} />
+          <QuickNotesVisitTypeDropdown visitType={appointment.visitType} />
+          <QuickNotesProviderTypeDropdown
+            providerType={appointment.providerType}
+          />
+          <QuickNotesProviderDropdown provider={appointment.physicianName} />
+          <QuickNotesCosignerDropdown
+            cosigners={appointment?.cosigners ?? []}
+          />
+          <QuickNotesLocationDropdown location={appointment.locationName} />
+          <QuickNotesServiceDropdown service={appointment.service} />
           <QuickNotesDateInput />
           <QuickNotesTimeDropdown />
-          <QuickNotesVisitNumberDropdown />
+          <QuickNotesVisitNumberDropdown
+            visitNo={appointment.encounterNumber}
+          />
         </Flex>
       </Flex>
     </Suspense>

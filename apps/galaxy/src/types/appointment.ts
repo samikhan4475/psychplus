@@ -1,4 +1,4 @@
-import { Metadata } from '@/types'
+import { Cosigner, Metadata } from '@/types'
 
 type PaymentType =
   | 'CoPay'
@@ -51,11 +51,13 @@ interface Appointment {
   patientCardVerificationStatus: boolean
   providerId: number
   providerName: string
+  physicianName: string
   providerType: string
   visitType: string
   visitSequence: string
   visitMedium: string
   visitStatus: string
+  visitNoteTitle?: string
   insuranceVerification: string
   primaryInsuranceName: string
   secondaryInsuranceName: string
@@ -96,8 +98,14 @@ interface Appointment {
   facilityAdmissionId: string
   lengthOfStay: number
   patientId: number
+  startDate?: string
+  endDate?: string
+  duration?: number
+  visitTypeCode?: string
+  encounterNumber?: string
   type?: string
   specialistTypeCode?: number
+  cosigners: Cosigner[]
 }
 
 export { type Appointment, type PaymentType }

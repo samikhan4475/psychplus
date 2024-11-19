@@ -1,0 +1,73 @@
+const getNavLinks = (appointmentId: string | null) => {
+  const defaultBottomLinks = [
+    { label: 'Patient Info', href: '/patient-info' },
+    { label: 'Referrals', href: '/referrals' },
+    { label: 'PCP', href: '/pcp' },
+    { label: 'Pharmacy', href: '/pharmacy' },
+    { label: 'Staff Comments', href: '/staff-comments' },
+    { label: 'Scheduling History', href: '/scheduling-history' },
+    // { label: 'Rating', href: '/rating' },
+    // { label: 'Notifications', href: '/notifications' },
+    // { label: 'Patient Tracking', href: '/patient-tracking' },
+  ]
+  const baseLinks = [
+    { label: 'Scheduling History', href: '/scheduling-history' },
+    { label: 'Notes', href: '/notes' },
+    { label: 'Diagnosis', href: '/diagnosis' },
+    { label: 'Medications', href: '/medications' },
+    { label: 'Drug History', href: '/drug-history' },
+    { label: 'Allergies', href: '/allergies' },
+    { label: 'Treatment Plan', href: '/treatment-plan' },
+    ...defaultBottomLinks,
+    { label: 'Procedures', href: '/procedures' },
+    { label: 'Billing History', href: '/billing-history' },
+  ]
+
+  const navLinks = [
+    { label: 'Quick Notes', href: '/quicknotes' },
+    { label: 'Notes', href: '/notes' },
+    { label: 'HPI', href: '/hpi' },
+    { label: 'History', href: '/histories' },
+    { label: 'Questionnaires', href: '/questionnaires' },
+    { label: 'Mental Status Exam', href: '/mse' },
+    { label: 'Add On', href: '/add-on' },
+    { label: 'Codes', href: '/codes' },
+    { label: 'Diagnosis', href: '/diagnosis' },
+    { label: 'Review of System', href: '/ros' },
+    { label: 'Vitals', href: '/vitals' },
+    { label: 'Physical Exam', href: '/physical-exam' },
+    { label: 'Medical History', href: '/medical-history' },
+    { label: 'Therapy', href: '/therapy' },
+    { label: 'Allergies', href: '/allergies' },
+    { label: 'Medications', href: '/medications' },
+    { label: 'Hospital', href: '/hospital' },
+    { label: 'Injection', href: '/injection' },
+    { label: 'Follow Up', href: '/follow-up' },
+    { label: 'Assessment & Plan', href: '/assessment-plan' },
+    { label: 'Procedures', href: '/procedures' },
+    ...defaultBottomLinks,
+  ]
+
+  if (appointmentId) {
+    return navLinks
+  }
+
+  return baseLinks
+}
+
+const constructQuickNotesUrl = (
+  patientId: number,
+  appointmentId: number,
+  visitType: string | undefined,
+  visitSequence: string,
+) => {
+  return `/chart/${patientId}/quicknotes?id=${appointmentId}&visitType=${
+    visitType ?? ''
+  }&visitSequence=${visitSequence ?? ''}`
+}
+
+const isHospitalCareVisit = (visitType: string | null) => {
+  return visitType?.includes('HospitalCare')
+}
+
+export { constructQuickNotesUrl, getNavLinks, isHospitalCareVisit }

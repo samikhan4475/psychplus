@@ -20,7 +20,6 @@ const searchPatientReferralsAction = async ({
   const url = new URL(api.GET_PATIENT_REFERRALS_ENDPOINT)
   url.searchParams.append('limit', String(PATIENT_REFERRALS_TABLE_PAGE_SIZE))
   url.searchParams.append('offset', String(offset))
-  console.log(url.toString(), { patientIds, ...payload })
   const response = await api.POST<PatientReferral[]>(url.toString(), {
     patientIds,
     ...payload,

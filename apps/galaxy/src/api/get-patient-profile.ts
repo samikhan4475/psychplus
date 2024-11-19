@@ -6,6 +6,11 @@ const getPatientProfile = async (
 ): Promise<api.ActionResult<PatientProfile>> => {
   const response = await api.GET<PatientProfile>(
     api.PATIENT_PROFILE_ENDPOINT(id),
+    {
+      next: {
+        revalidate: 60,
+      },
+    },
   )
 
   if (response.state === 'error') {

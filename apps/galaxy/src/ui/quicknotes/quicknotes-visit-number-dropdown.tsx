@@ -2,7 +2,11 @@
 
 import { Flex, Select, Text } from '@radix-ui/themes'
 
-const QuickNotesVisitNumberDropdown = () => {
+interface Props {
+  visitNo?: string
+}
+
+const QuickNotesVisitNumberDropdown = ({ visitNo }: Props) => {
   return (
     <Flex direction="column" gap="1">
       <Text size="1" weight="medium">
@@ -14,7 +18,7 @@ const QuickNotesVisitNumberDropdown = () => {
           highContrast
           onCloseAutoFocus={(e) => e.preventDefault()}
         >
-          <Select.Item value="12536337">12536337</Select.Item>
+          <Select.Item value="12536337">{visitNo}</Select.Item>
         </Select.Content>
       </Select.Root>
     </Flex>

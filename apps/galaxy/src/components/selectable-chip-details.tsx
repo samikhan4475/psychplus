@@ -72,7 +72,6 @@ const SelectableChipDetails = ({
               format={format}
               field={field}
               className="w-[45px]"
-              autoFocus
               placeholder={placeHolder}
             />
           )}

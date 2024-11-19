@@ -24,6 +24,8 @@ enum QuickNoteSectionName {
   QuickNoteSectionPrimaryCode = 'QuicknoteSectionPrimaryCode',
   QuicknoteSectionProcedureEtcTab = 'QuicknoteSectionProcedureEtcTab',
   ProcedureTMS = 'ProcedureTMS',
+  ProcedureECT = 'ProcedureECT',
+  QuicknoteSectionProcedureSpravatoTab = 'QuicknoteSectionProcedureSpravatoTab',
   QuicknoteSectionProcedureSpravato = 'QuicknoteSectionProcedureSpravato',
   QuicknoteSectionHPI = 'QuicknoteSectionHPI',
   Addon = 'QuicknoteSectionAddOn',
@@ -33,6 +35,17 @@ enum QuickNoteSectionName {
   QuicknoteSectionPsychiatryAssessmentPlan = 'QuicknoteSectionPsychiatryAssessmentPlan',
   QuicknoteSectionTherapyAssessmentPlan = 'QuicknoteSectionTherapyAssessmentPlan',
   QuicknoteSectionFamilyInternalMedicineAssessmentPlan = 'QuicknoteSectionFamilyInternalMedicineAssessmentPlan',
+  QuicknoteSectionPatientAllergies = 'QuicknoteSectionPatientAllergies',
+  QuicknoteSectionAssessmentPlan = 'QuicknoteSectionAssessmentPlan',
+  QuicknoteSectionQuestionnaires = 'QuicknoteSectionQuestionnaires',
+  QuicknoteSectionReferrals = 'QuicknoteSectionReferrals',
+  QuicknoteSectionCodes = 'QuicknoteSectionCodes',
+  QuicknoteSectionMedications = 'QuicknoteSectionMedications',
+  QuicknoteSectionHospitalInitial = 'QuicknoteSectionHospitalInitial',
+  QuicknoteSectionHospitalOrders = 'QuicknoteSectionHospitalOrders',
+  QuicknoteSectionHospitalDischarge = 'QuicknoteSectionHospitalDischarge',
+  QuicknoteSectionAdmittingDiagnosis = 'QuicknoteSectionAdmittingDiagnosis',
+  QuicknoteSectionWorkingDischargeDiagnosis = 'QuicknoteSectionWorkingDischargeDiagnosis',
 }
 
 export { QuickNoteSectionName }

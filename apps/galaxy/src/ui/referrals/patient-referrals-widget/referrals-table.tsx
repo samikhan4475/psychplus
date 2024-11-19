@@ -23,7 +23,7 @@ const ReferralsTable = () => {
   }, [fetchPatientReferrals])
 
   if (loading) {
-    return <LoadingPlaceholder className="bg-white h-full" />
+    return <LoadingPlaceholder className="bg-white min-h-40 h-full" />
   }
   return (
     <ScrollArea scrollbars="both" className="bg-white h-full p-2">

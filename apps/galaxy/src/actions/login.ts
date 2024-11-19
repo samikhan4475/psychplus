@@ -65,7 +65,6 @@ const loginAction = async ({
   }
 
   setAuthCookies(session)
-
   const redirectPath = next ?? '/'
   redirect(redirectPath)
 }

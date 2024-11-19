@@ -82,7 +82,6 @@ const RadioSelectInput = ({
                   <NumberInput
                     field={option.value}
                     className="w-[35px]"
-                    autoFocus
                     format="##"
                   />
                   <FormFieldError name={option.value} />

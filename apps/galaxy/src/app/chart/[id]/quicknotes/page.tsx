@@ -6,11 +6,21 @@ interface QuickNotesPageProps {
   }
   searchParams: {
     id: string
+    visitType: string
+    visitSequence: string
   }
 }
 
-const QuickNotesPage = ({ params, searchParams }: QuickNotesPageProps) => (
-  <QuickNotesView patientId={params.id} appointmentId={searchParams.id} />
+const QuickNotesPage = ({
+  params,
+  searchParams: { id, visitType, visitSequence },
+}: QuickNotesPageProps) => (
+  <QuickNotesView
+    patientId={params.id}
+    appointmentId={id}
+    visitType={visitType}
+    visitSequence={visitSequence}
+  />
 )
 
 export default QuickNotesPage

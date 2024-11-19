@@ -1,25 +1,49 @@
 'use client'
 
+import { Appointment, PatientProfile } from '@/types'
+import { getPatientFullName, getSlashedDateString, getTimeLabel } from '@/utils'
 import { BlockContainer, LabelAndValue } from './shared'
 
-const PsychiatricEvaluation = () => {
+interface Props {
+  appointment: Appointment
+  patient: PatientProfile
+}
+
+const PsychiatricEvaluation = ({ appointment, patient }: Props) => {
   return (
-    <BlockContainer heading="Psychiatric Evaluation">
-      <LabelAndValue label="Title:" value="Psychiatric Evaluation" />
-      <LabelAndValue label="Visit Type:" value="Outpatient Office Visit" />
-      <LabelAndValue label="Visit Sequence:" value="Initial" />
-      <LabelAndValue label="Visit Medium:" value="In-Person" />
-      <LabelAndValue label="Provider Type:" value="Therapy" />
-      <LabelAndValue label="Provider:" value="John Smith, MD" />
-      <LabelAndValue label="Location:" value="Willow Brooks" />
-      <LabelAndValue label="Service:" value="Willow Brooks" />
-      <LabelAndValue label="Date:" value="11/22/24" />
-      <LabelAndValue label="Time:" value="00:00" />
-      <LabelAndValue label="Duration:" value="20 mins" />
-      <LabelAndValue label="Patient:" value="Ross Galler" />
-      <LabelAndValue label="DOB:" value="11/21/2024" />
+    <BlockContainer heading={appointment.visitNoteTitle ?? ''}>
+      <LabelAndValue label="Title:" value={appointment.visitNoteTitle} />
+      <LabelAndValue label="Visit Type:" value={appointment?.visitType} />
+      <LabelAndValue
+        label="Visit Sequence:"
+        value={appointment.visitSequence}
+      />
+      <LabelAndValue label="Visit Medium:" value={appointment.visitMedium} />
+      <LabelAndValue label="Provider Type:" value={appointment.providerType} />
+      <LabelAndValue label="Provider:" value={appointment.providerName} />
+      <LabelAndValue label="Location:" value={appointment.locationName} />
+      <LabelAndValue label="Service:" value={appointment.service} />
+      <LabelAndValue
+        label="Date:"
+        value={getSlashedDateString(appointment.startDate ?? '')}
+      />
+      <LabelAndValue
+        label="Time:"
+        value={getTimeLabel(appointment.startDate ?? '')}
+      />
+      <LabelAndValue label="Duration:" value={`${appointment.duration} min`} />
+      <LabelAndValue
+        label="Patient:"
+        value={getPatientFullName(patient.legalName)}
+      />
+      <LabelAndValue
+        label="DOB:"
+        value={
+          patient.dateOfBirth ? getSlashedDateString(patient.dateOfBirth) : ''
+        }
+      />
       <LabelAndValue label="Cosigner:" value="John Smith, MD" />
-      <LabelAndValue label="Visit #:" value="0000198" />
+      <LabelAndValue label="Visit #:" value={appointment.encounterNumber} />
     </BlockContainer>
   )
 }

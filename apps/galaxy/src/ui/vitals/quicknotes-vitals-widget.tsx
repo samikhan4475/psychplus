@@ -37,7 +37,7 @@ const QuicknotesVitalsWidget = ({ patientId }: { patientId: string }) => {
 
   useEffect(() => {
     const saveToNote = async () => {
-      if (quicknotesData?.length == 0 && data && data.length > 0) {
+      if (quicknotesData?.length === 0 && data && data.length > 0) {
         const vitalsWithin48Hours = filterVitalsWithin48Hours(data)
 
         const selectedVitalIds =

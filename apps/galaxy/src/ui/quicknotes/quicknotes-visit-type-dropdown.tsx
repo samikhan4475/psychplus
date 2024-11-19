@@ -2,7 +2,11 @@
 
 import { Flex, Select, Text, Tooltip } from '@radix-ui/themes'
 
-const QuickNotesVisitTypeDropdown = () => {
+interface Props {
+  visitType?: string
+}
+
+const QuickNotesVisitTypeDropdown = ({ visitType }: Props) => {
   return (
     <Flex direction="column" gap="1">
       <Text size="1" weight="medium">
@@ -17,7 +21,7 @@ const QuickNotesVisitTypeDropdown = () => {
           onCloseAutoFocus={(e) => e.preventDefault()}
         >
           <Select.Item value="est-patient-outpatient-visit">
-            Est Pt, Outpatient Visit
+            {visitType}
           </Select.Item>
         </Select.Content>
       </Select.Root>

@@ -17,7 +17,7 @@ const PatientReferralsWidget = ({ patientId }: PatientReferralsWidgetProps) => {
       <Flex
         direction="column"
         width="100%"
-        className="bg-white h-[calc(100dvh_-_278px)] rounded-1 shadow-2"
+        className="bg-white max-h-[calc(100dvh_-_278px)] rounded-1 shadow-2"
       >
         <Flex gap="1" direction="column" mb="1">
           <ReferralsHeader patientId={patientId} />

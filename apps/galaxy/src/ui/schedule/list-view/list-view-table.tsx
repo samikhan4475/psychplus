@@ -7,6 +7,7 @@ import { Table } from '@tanstack/react-table'
 import { DataTable, LoadingPlaceholder } from '@/components'
 import { useStore as useRootStore } from '@/store'
 import { Appointment } from '@/types'
+import { constructQuickNotesUrl } from '@/utils'
 import { useBookedAppointmentsStore, useStore } from '../store'
 import { columns } from './table-columns'
 
@@ -41,7 +42,7 @@ const ListViewTable = () => {
   }))
   const router = useRouter()
   const addTab = useRootStore((state) => state.addTab)
-
+  console.log(data)
   return (
     <Flex direction="column" className="w-[100vw] flex-1 px-[26px]">
       <ScrollArea className="mt-[13px] w-full px-2" scrollbars="horizontal">
@@ -50,7 +51,13 @@ const ListViewTable = () => {
         ) : (
           <DataTable
             onRowClick={(row) => {
-              const href = `/chart/${row.original.patientId}/quicknotes?id=${row.original.appointmentId}`
+              const href = constructQuickNotesUrl(
+                row.original.patientId,
+                row.original.appointmentId,
+                row.original.visitTypeCode,
+                row.original.visitSequence,
+              )
+
               addTab({
                 href,
                 label: `${row.original?.name}-${row.original.patientMrn}-${row.original.appointmentId}`,

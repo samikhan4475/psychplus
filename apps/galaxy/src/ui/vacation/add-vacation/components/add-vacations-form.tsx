@@ -96,7 +96,6 @@ const AddVacationForm = ({
 
       const totalMinutes = differenceInMinutes(toDateTime, fromDateTime)
       const totalHours = totalMinutes / 60
-      console.log({ totalMinutes, totalHours })
 
       const days = Math.floor(totalHours / 24)
       const hours = totalHours % 24
