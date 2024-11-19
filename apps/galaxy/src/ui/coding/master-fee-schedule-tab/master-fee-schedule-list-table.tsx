@@ -1,8 +1,7 @@
 'use client'
 
 import { useEffect } from 'react'
-import { MagnifyingGlassIcon } from '@radix-ui/react-icons'
-import { Badge, Flex, ScrollArea, Text } from '@radix-ui/themes'
+import { Badge, Flex, ScrollArea } from '@radix-ui/themes'
 import { badgePropDefs } from '@radix-ui/themes/dist/cjs/components/badge.props.js'
 import { type ColumnDef } from '@tanstack/react-table'
 import {
@@ -181,7 +180,13 @@ const columns = (
           column={column}
         />
       ),
-      cell: ({ row }) => <TextCell>{row.original.gender}</TextCell>,
+      cell: ({ row }) => (
+        <TextCell>
+          {row.original.gender === 'NotSpecified'
+            ? 'Not Specified'
+            : row.original.gender}
+        </TextCell>
+      ),
     },
     {
       id: 'minimumAge',
@@ -260,26 +265,18 @@ const MasterFeeScheduleTable = () => {
   if (!data) {
     return (
       <Flex height="100%" align="center" justify="center">
-        <Text
-          weight="light"
-          className="flex items-center gap-2 text-[14px] text-gray-10"
-        >
-          <MagnifyingGlassIcon width={18} height={18} />
-          Use the form to search for cpts
-        </Text>
+        <LoadingPlaceholder />
       </Flex>
     )
   }
   return (
-    <ScrollArea className="max-w-[calc(100vw-200px)]">
+    <ScrollArea>
       <DataTable
         data={data.cptList}
         columns={columns(CPTCodeSet, sort, sortData)}
-        onRowClick={(row) => {
-          // TODO: Row click can be implemented here
-        }}
         disablePagination
-        sticky
+        tableClass="bg-white w-[calc(100vw_-_198px)] [&_.rt-ScrollAreaRoot]:!overflow-visible"
+        theadClass="z-[1]"
       />
     </ScrollArea>
   )

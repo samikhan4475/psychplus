@@ -35,4 +35,11 @@ const previewFile = async <TBody>(
   window.URL.revokeObjectURL(url)
 }
 
-export { truncateString, previewFile }
+const formatAmount = (amount: number) => {
+  return amount.toLocaleString('en-US', {
+    style: 'currency',
+    currency: 'USD',
+  })
+}
+
+export { truncateString, previewFile, formatAmount }

@@ -143,7 +143,7 @@ const SearchProcedureCodes = ({
 
             <Separator color="gray" size="4" />
             <Flex direction="column" py="1" gap="1">
-              <ScrollArea scrollbars="vertical" className="max-h-[250px]">
+              <ScrollArea scrollbars="vertical" className="max-h-[100px]">
                 {results.map((item) => (
                   <Box key={item.code} className="cursor-pointer">
                     {renderItem(item)}

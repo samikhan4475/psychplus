@@ -10,7 +10,7 @@ import { UploadExcelButton } from './upload-excel-button'
 
 const MasterFeeScheduleTabView = () => {
   return (
-    <Flex direction="column" className="gap-0.5">
+    <Flex direction="column" className="gap-0.5" width="100%">
       <TabContentHeading title="Master Fee Schedule">
         <Flex gapX="2">
           <UploadExcelButton />
@@ -21,7 +21,7 @@ const MasterFeeScheduleTabView = () => {
           </AddMasterFeeScheduleDialog>
         </Flex>
       </TabContentHeading>
-      <Flex direction="column" className="bg-white w-full py-1">
+      <Flex direction="column" className="bg-white overflow-hidden">
         <MasterFeeScheduleFilterForm />
         <MasterFeeScheduleTable />
         <MasterFeeScheduleTablePagination />

@@ -49,7 +49,11 @@ const MasterFeeScheduleFilterForm = () => {
   })
 
   const onSubmit: SubmitHandler<SchemaType> = (data) => {
-    const sanitizedData = sanitizeFormData(data)
+    const payload = {
+      ...data,
+      resourceStatusList: data.recordStatus && [data.recordStatus],
+    }
+    const sanitizedData = sanitizeFormData(payload)
     return search(sanitizedData, 1, true)
   }
 

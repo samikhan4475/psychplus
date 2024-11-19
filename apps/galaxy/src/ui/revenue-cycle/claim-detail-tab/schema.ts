@@ -31,7 +31,7 @@ const claimServiceLinesSchema = z
     dateOfServiceTo: z.custom<DateValue>().optional(),
     units: z.coerce.number().optional(),
     nationalDrugCodeMeasureUnit: z.string().optional(),
-    unitAmount: z.coerce.number().optional(),
+    unitAmount: z.coerce.number().min(0).optional(),
     totalAmount: z.coerce.number().optional(),
     isDoNotBill: z.boolean(),
     statusCode: z.string().optional(),

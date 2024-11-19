@@ -15,7 +15,7 @@ const TableCellPOS: React.FC<TableCellPOSProps> = ({ rowIndex }) => {
         field={`claimServiceLines.${rowIndex}.placeOfService`}
         placeholder="Select"
         fetchOptions={getPOSCodesOptions}
-        buttonClassName="w-full h-6 box-shadow-none"
+        buttonClassName="w-[100px] h-6 box-shadow-none"
         className="h-full flex-1"
       />
       <FormFieldError name={`claimServiceLines.${rowIndex}.placeOfService`} />

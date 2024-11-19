@@ -8,7 +8,7 @@ import {
 import { Sort, type Claim } from '@/types'
 import { getSortDir } from '@/utils'
 import { formatDate } from '@/utils/date'
-import { getInsurancePayerName } from '../utils'
+import { formatAmount, getInsurancePayerName } from '../utils'
 import { ActionsCell } from './actions-cell'
 import { ClaimNumberCell } from './table-row-claim-number-cell'
 import { NoteSignedStatusCell } from './table-row-note-signed-status-cell'
@@ -476,7 +476,38 @@ const columns = (
         },
       ],
     },
-
+    {
+      id: 'totalAmount',
+      header: ({ column }) => (
+        <ColumnHeader
+          label="Total Amount"
+          sortable
+          sortDir={getSortDir(column.id, sort)}
+          onClick={() => {
+            onSort?.(column.id)
+          }}
+        />
+      ),
+      cell: ({ row }) => (
+        <TextCell>{formatAmount(row.original.totalAmount)}</TextCell>
+      ),
+    },
+    {
+      id: 'amountDue',
+      header: ({ column }) => (
+        <ColumnHeader
+          label="Due Balance"
+          sortable
+          sortDir={getSortDir(column.id, sort)}
+          onClick={() => {
+            onSort?.(column.id)
+          }}
+        />
+      ),
+      cell: ({ row }) => (
+        <TextCell>{formatAmount(row.original.amountDue)}</TextCell>
+      ),
+    },
     {
       id: 'createdOn',
       header: ({ column }) => (
@@ -517,7 +548,6 @@ const columns = (
         )
       },
     },
-
     {
       id: 'recordStatus',
       header: ({ column }) => (

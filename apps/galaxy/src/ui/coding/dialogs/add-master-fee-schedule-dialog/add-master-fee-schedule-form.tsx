@@ -37,7 +37,11 @@ const AddMasterFeeScheduleForm = ({
   onCloseModal,
   cpt,
 }: AddMasterFeeScheduleFormProps) => {
-  const search = useStore((state) => state.search)
+  const { search, formValues, page } = useStore((state) => ({
+    search: state.search,
+    formValues: state.formValues,
+    page: state.page,
+  }))
   const form = useForm<SchemaType>({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -72,7 +76,7 @@ const AddMasterFeeScheduleForm = ({
           toast.success(
             `CPT record ${cpt?.id ? 'updated' : 'created'} successfully`,
           )
-          search()
+          search(formValues, page)
           onCloseModal(false)
         } else if (result.state === 'error') {
           toast.error(
