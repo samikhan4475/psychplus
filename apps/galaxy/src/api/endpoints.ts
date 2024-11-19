@@ -27,6 +27,8 @@ const MASTER_FEE_SCHEDULE_ENDPOINT = (scheduleId: string) =>
 const ADD_ON_DRUGS_SEARCH_ENDPOINT = `${API_URL}/api/drugs/core/actions/search`
 const NOTE_DETAILS_SAVE_ENDPOINT = (id: string) =>
   `${API_URL}/api/patients/${id}/notedetails`
+const NOTE_SIGN_ENDPOINT = (patientId: string, appointmentId: string) =>
+  `${API_URL}/api/patients/${patientId}/encounters/${appointmentId}/notes`
 const GET_PATIENT_PROFILE_ENDPOINT = (id: string) =>
   `${API_URL}/api/patients/${id}/profile`
 const GET_PATIENT_CONSENTS_ENDPOINT = (id: string) =>
@@ -485,6 +487,7 @@ export {
   GET_ALLERGIES_ENDPOINT,
   PATIENT_CARE_TEAM_ENDPOINT,
   PATIENT_CHARGE_PAYMENT_ENDPOINT,
+  NOTE_SIGN_ENDPOINT,
   GET_STAFF_LICENSE,
   GET_CPT_CODES,
 }

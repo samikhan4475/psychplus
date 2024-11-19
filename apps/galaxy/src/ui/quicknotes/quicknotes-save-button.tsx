@@ -11,14 +11,7 @@ const QuickNotesSaveButton = () => {
   }))
 
   return (
-    <Button
-      size="1"
-      onClick={() => {
-        save()
-      }}
-      disabled={loading}
-      highContrast
-    >
+    <Button size="1" onClick={save} disabled={loading} highContrast>
       <SaveIcon height={14} width={14} strokeWidth={2} />
       Save
     </Button>

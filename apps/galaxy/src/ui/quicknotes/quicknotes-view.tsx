@@ -3,6 +3,7 @@ import { Flex, ScrollArea } from '@radix-ui/themes'
 import { getAppointment } from '@/api'
 import { ActualNoteView } from './actual-note-view'
 import { QuickNotesHeader } from './quicknotes-header'
+import { QuickNotesMarkAsError } from './quicknotes-mark-as-error'
 import { QuickNotesSaver } from './quicknotes-saver'
 import { getCachedWidgetsByVisitType } from './utils'
 
@@ -46,6 +47,7 @@ const QuickNotesView = async ({
           widgets={widgets}
         />
       </Flex>
+      <QuickNotesMarkAsError />
     </Flex>
   )
 }
