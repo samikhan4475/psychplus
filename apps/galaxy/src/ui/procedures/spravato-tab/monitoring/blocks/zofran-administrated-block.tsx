@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { useSearchParams } from 'next/navigation'
+import { Time } from '@internationalized/date'
 import { Flex } from '@radix-ui/themes'
 import { format } from 'date-fns'
 import { useFormContext } from 'react-hook-form'
@@ -8,11 +9,10 @@ import {
   FormFieldContainer,
   FormFieldError,
   RadioSelectSection,
+  TimeInput,
   YesNoSelect,
 } from '@/components'
 import { useBookedAppointmentsStore } from '@/ui/schedule/store'
-import { SpravatoWidgetSchemaType } from '../../spravato-widget-schema'
-import { TimeSelectionBlock } from './time-selection-block'
 
 const DOSE_OPTIONS = [
   {
@@ -38,7 +38,7 @@ const DOSE_OPTIONS = [
 ]
 
 const ZofranAdministratedBlock = () => {
-  const form = useFormContext<SpravatoWidgetSchemaType>()
+  const form = useFormContext()
   const zofranAdministrated = form.watch('zofranAdministrated')
   const zofranAdministratedTime = form.watch('zofranAdministratedTime')
 
@@ -79,7 +79,29 @@ const ZofranAdministratedBlock = () => {
       {zofranAdministrated === 'yes' && (
         <Flex direction="row" gap="4">
           <FormFieldContainer className="flex-row items-center gap-1">
-            <TimeSelectionBlock label="Time" field="zofranAdministratedTime" />
+            <BlockLabel required>Time</BlockLabel>
+            <TimeInput
+              field="zofranAdministratedTime"
+              label=""
+              hourCycle={24}
+              dateInputClass="h-5"
+              onChange={(value) =>
+                form.setValue(
+                  'zofranAdministratedTime',
+                  `${value.hour}:${value.minute}`,
+                )
+              }
+              value={
+                zofranAdministratedTime
+                  ? ({
+                      hour: zofranAdministratedTime.split(':')[0],
+                      minute: zofranAdministratedTime.split(':')[1],
+                      millisecond: 0,
+                      second: 0,
+                    } as Time)
+                  : null
+              }
+            />
             <FormFieldError name="zofranAdministratedTime" />
           </FormFieldContainer>
           <RadioSelectSection

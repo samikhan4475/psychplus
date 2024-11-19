@@ -1,45 +1,29 @@
-import { ExclamationTriangleIcon } from '@radix-ui/react-icons'
-import { Dialog, Flex, Text } from '@radix-ui/themes'
-import { X } from 'lucide-react'
+import { Box, Flex, Text } from '@radix-ui/themes'
+import { ErrorIcon } from '@/components/icons'
+import { cn } from '@/utils'
 
 const AlertMessage = ({
-  alertMessage,
-  setAlertMessage,
+  message,
+  error = true,
 }: {
-  alertMessage: { open: boolean; message: string }
-  setAlertMessage: ({
-    open,
-    message,
-  }: {
-    open: boolean
-    message: string
-  }) => void
+  message: string
+  error?: boolean
 }) => {
   return (
-    <Dialog.Root
-      open={alertMessage.open}
-      onOpenChange={(open) => {
-        if (!open) {
-          setAlertMessage({
-            open: false,
-            message: '',
-          })
-        }
-      }}
-    >
-      <Dialog.Content className="bg-pp-warning-bg-1  border-pp-warning-border w-[440px] rounded-4 border border-solid p-6 [box-shadow:none]">
-        <Dialog.Close className="absolute right-4 top-6 cursor-pointer">
-          <X size={20} strokeWidth={1.5} />
-        </Dialog.Close>
-
-        <Flex direction="row" gap="3">
-          <ExclamationTriangleIcon color="#F2AE40" width={24} height={24} />
-          <Flex className="w-[330px]">
-            <Text size="2">{alertMessage.message}</Text>
-          </Flex>
-        </Flex>
-      </Dialog.Content>
-    </Dialog.Root>
+    <Flex direction="row" gap="1" align="center" ml={error ? '4' : '2'}>
+      {error ? (
+        <ErrorIcon className="h-4 w-4" />
+      ) : (
+        <Box className="bg-pp-icon-sub rounded-full h-1 w-1" />
+      )}
+      <Text
+        weight="regular"
+        size="1"
+        className={cn(error && 'text-pp-states-error')}
+      >
+        {message}
+      </Text>
+    </Flex>
   )
 }
 

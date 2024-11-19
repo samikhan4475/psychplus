@@ -1,5 +1,5 @@
-import { useState } from 'react'
 import { Flex } from '@radix-ui/themes'
+import { useFormContext } from 'react-hook-form'
 import { CheckboxInput, FormFieldContainer, YesNoSelect } from '@/components'
 import { SectionHeading } from '@/ui/procedures/spravato-tab/sections/section-heading'
 import { AlertMessage } from './alert-message'
@@ -7,13 +7,9 @@ import {
   PRECAUTION_OPTIONS,
   RADIO_BUTTON_OPTIONS,
 } from './precaution-warning-options'
-import { RadioButton } from './radio-button'
 
 const PrecautionsAndWarningSection = () => {
-  const [alertMessage, setAlertMessage] = useState({
-    open: false,
-    message: '',
-  })
+  const form = useFormContext()
 
   return (
     <FormFieldContainer className="bg-white  p-2.5 shadow-2">
@@ -35,36 +31,37 @@ const PrecautionsAndWarningSection = () => {
           gap="1"
         >
           {RADIO_BUTTON_OPTIONS.map((item) => (
-            <RadioButton
-              key={item.field}
-              field={item.field}
-              label={item.label}
-              message={item.message}
-              setAlertMessage={setAlertMessage}
-            />
+            <Flex direction="column" gap="2" key={item.field}>
+              <YesNoSelect
+                isNoFirst
+                field={item.field}
+                label={item.label}
+                required
+              />
+              {form.watch(item.field) === 'yes' && (
+                <AlertMessage message={item.message} error={false} />
+              )}
+            </Flex>
           ))}
         </Flex>
 
         {PRECAUTION_OPTIONS.map((option) => (
-          <CheckboxInput
-            key={option.field}
-            label={option.label}
-            field={option.field}
-            labelClassName="max-w-max"
-            defaultChecked
-            onCheckedChange={(checked) =>
-              setAlertMessage({
-                open: !checked,
-                message: option.message,
-              })
-            }
-          />
+          <Flex direction="column" gap="1" key={option.field}>
+            <CheckboxInput
+              label={option.label}
+              field={option.field}
+              labelClassName="max-w-max"
+              defaultChecked
+              onCheckedChange={(checked) =>
+                form.setValue(option.field, `${checked}`)
+              }
+            />
+            {form.watch(option.field) === 'false' && (
+              <AlertMessage message={option.message} />
+            )}
+          </Flex>
         ))}
       </Flex>
-      <AlertMessage
-        alertMessage={alertMessage}
-        setAlertMessage={setAlertMessage}
-      />
     </FormFieldContainer>
   )
 }

@@ -1,13 +1,17 @@
 import { useEffect } from 'react'
+import { Time } from '@internationalized/date'
 import { Flex } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
-import { BlockLabel, FormFieldContainer, FormFieldError } from '@/components'
+import {
+  BlockLabel,
+  FormFieldContainer,
+  FormFieldError,
+  TimeInput,
+} from '@/components'
 import { UnitInput } from '@/ui/procedures/tms-tab/treatment-session/unit-input'
-import { SpravatoWidgetSchemaType } from '../../spravato-widget-schema'
-import { TimeSelectionBlock } from './time-selection-block'
 
 const TimeOfSpravatoBlock = () => {
-  const form = useFormContext<SpravatoWidgetSchemaType>()
+  const form = useFormContext()
   const spravatoAdministrationTime = form.watch('spravatoAdministrationTime')
   const dischargeTime = form.watch('dischargeTime')
 
@@ -30,13 +34,52 @@ const TimeOfSpravatoBlock = () => {
   return (
     <FormFieldContainer className="flex-row items-center gap-4">
       <Flex direction="row" align="center" gap="1">
-        <BlockLabel>Time of Spravato Administration</BlockLabel>
-        <TimeSelectionBlock field="spravatoAdministrationTime" label="" />
+        <BlockLabel required>Time of Spravato Administration</BlockLabel>
+        <TimeInput
+          field="spravatoAdministrationTime"
+          label=""
+          hourCycle={24}
+          dateInputClass="h-5"
+          onChange={(value) =>
+            form.setValue(
+              'spravatoAdministrationTime',
+              `${value.hour}:${value.minute}`,
+            )
+          }
+          value={
+            spravatoAdministrationTime
+              ? ({
+                  hour: spravatoAdministrationTime.split(':')[0],
+                  minute: spravatoAdministrationTime.split(':')[1],
+                  millisecond: 0,
+                  second: 0,
+                } as Time)
+              : null
+          }
+        />
         <FormFieldError name="spravatoAdministrationTime" />
       </Flex>
       <Flex direction="row" align="center" gap="1">
-        <BlockLabel>Time of Discharge</BlockLabel>
-        <TimeSelectionBlock field="dischargeTime" label="" />
+        <BlockLabel required>Time of Discharge</BlockLabel>
+        <TimeInput
+          field="dischargeTime"
+          label=""
+          hourCycle={24}
+          dateInputClass="h-5"
+          onChange={(value) =>
+            form.setValue('dischargeTime', `${value.hour}:${value.minute}`)
+          }
+          value={
+            dischargeTime
+              ? ({
+                  hour: dischargeTime.split(':')[0],
+                  minute: dischargeTime.split(':')[1],
+                  millisecond: 0,
+                  second: 0,
+                } as Time)
+              : null
+          }
+        />
         <FormFieldError name="dischargeTime" />
       </Flex>
       <Flex direction="row" align="center" gap="1">

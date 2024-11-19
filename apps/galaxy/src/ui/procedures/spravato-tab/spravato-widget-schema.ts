@@ -59,8 +59,8 @@ const spravatoWidgetSchema = z
     zofranAdministrated: z.string(),
     zofranAdministratedTime: z.string().optional(),
     dose: z.enum(['2mg', '4mg', '8mg', '16mg', '32mg']).optional(),
-    spravatoAdministrationTime: z.string(),
-    dischargeTime: z.string(),
+    spravatoAdministrationTime: z.string().optional(),
+    dischargeTime: z.string().optional(),
     totalTimeMonitored: z.string().optional(),
     isPatientDischarge: z.string(),
     timeForPatientReadyForDischarge: z.string(),
@@ -88,10 +88,25 @@ const spravatoWidgetSchema = z
   .superRefine((data, ctx) => {
     const validations = [
       {
+        condition: data?.aneurysmalVascularDisease === 'false',
+        path: ['aneurysmalVascularDisease'],
+      },
+      {
+        condition: data?.pregnancyStatus === 'false',
+        path: ['pregnancyStatus'],
+      },
+      {
+        condition: data?.adverseReactionsEducation === 'false',
+        path: ['adverseReactionsEducation'],
+      },
+      {
+        condition: data?.postTreatmentSafety === 'false',
+        path: ['postTreatmentSafety'],
+      },
+      {
         condition: !data?.certifiedTechnician,
         path: ['certifiedTechnician'],
       },
-
       {
         condition: !data?.doseAdminstered,
         path: ['doseAdminstered'],
