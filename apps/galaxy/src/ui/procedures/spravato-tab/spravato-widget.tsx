@@ -23,7 +23,7 @@ interface SpravatoTabProps {
   procedureSpravatoData: QuickNoteSectionItem[]
 }
 
-const SpravatoTab = ({ procedureSpravatoData }: SpravatoTabProps) => {
+const SpravatoWidget = ({ procedureSpravatoData }: SpravatoTabProps) => {
   const { id } = useParams<{ id: string }>()
   const initialValues = transformIn(procedureSpravatoData)
   const form = useSpravatoWidgetForm(initialValues)
@@ -56,4 +56,4 @@ const SpravatoTab = ({ procedureSpravatoData }: SpravatoTabProps) => {
   )
 }
 
-export { SpravatoTab }
+export { SpravatoWidget }

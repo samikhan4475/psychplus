@@ -1,1 +1,1 @@
-export * from './spravato-tab'
+export * from './spravato-widget'

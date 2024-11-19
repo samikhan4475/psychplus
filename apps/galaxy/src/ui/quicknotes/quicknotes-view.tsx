@@ -23,6 +23,7 @@ import { QuicknotesDiagnosisWidget } from '../diagnosis/quicknotes-diagnosis-wid
 import { QuicknotesFollowUpWidget } from '../follow-up'
 import { PhysicalExamWidget } from '../physical-exam'
 import { EctWidgetLoader as EctWidget } from '../procedures/ect-tab/ect-widget-loader'
+import { SpravatoWidgetLoader } from '../procedures/spravato-tab/spravato-widget-loader'
 import { TmsWidgetLoader as TmsWidget } from '../procedures/tms-tab/tms-widget-loader'
 import { QuicknotesVitalsWidget } from '../vitals'
 import { ActualNoteView } from './actual-note-view'
@@ -66,6 +67,7 @@ const QuickNotesView = ({ patientId, appointmentId }: QuickNotesViewProps) => {
             <TherapyWidget patientId={patientId} />
             <EctWidget patientId={patientId} />
             <TmsWidget patientId={patientId} />
+            <SpravatoWidgetLoader patientId={patientId} />
           </Flex>
         </ScrollArea>
         <ActualNoteView patientId={patientId} appointmentId={appointmentId} />

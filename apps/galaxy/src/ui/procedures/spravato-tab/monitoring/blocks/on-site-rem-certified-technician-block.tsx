@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useFormContext } from 'react-hook-form'
 import {
   BlockLabel,
   FormFieldContainer,
@@ -6,9 +7,13 @@ import {
   SelectInput,
 } from '@/components'
 import { getStaffLicense } from '../../api'
+import { SpravatoWidgetSchemaType } from '../../spravato-widget-schema'
 
 const OnSiteREMCertifiedTechnician = () => {
-  const [selectOptions, setSelectOptions] = useState([])
+  const form = useFormContext<SpravatoWidgetSchemaType>()
+  const [selectOptions, setSelectOptions] = useState<
+    { label: string; value: string }[]
+  >([])
 
   useEffect(() => {
     getStaffLicense().then((response: any) => {
@@ -27,7 +32,17 @@ const OnSiteREMCertifiedTechnician = () => {
   return (
     <FormFieldContainer className="flex-row gap-1 align-middle">
       <BlockLabel required>On Site REM Certified Technician</BlockLabel>
-      <SelectInput field="certifiedTechnician" options={selectOptions} />
+      <SelectInput
+        field="certifiedTechnician"
+        options={selectOptions}
+        onValueChange={(value) => {
+          form.setValue('certifiedTechnician', value)
+          form.setValue(
+            'certifiedTechnicianName',
+            selectOptions.find((item) => item.value === value)?.label,
+          )
+        }}
+      />
       <FormFieldError name="certifiedTechnician" />
     </FormFieldContainer>
   )

@@ -56,6 +56,7 @@ const spravatoWidgetSchema = z
     postTreatmentTransportation: z.string().optional(),
     othertransportation: z.string().optional(),
     certifiedTechnician: z.string().optional(),
+    certifiedTechnicianName: z.string().optional(),
     zofranAdministrated: z.string(),
     zofranAdministratedTime: z.string().optional(),
     dose: z.enum(['2mg', '4mg', '8mg', '16mg', '32mg']).optional(),

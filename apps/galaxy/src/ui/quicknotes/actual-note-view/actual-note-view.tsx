@@ -22,6 +22,7 @@ import { Question } from './question'
 import { Referral } from './referral'
 import { ReviewOfSystem } from './ros'
 import { SocialHx } from './social-hx'
+import { SpravatoDetailView } from './spravato'
 import { SubstanceUseHx } from './substance-use-hx'
 import { Therapy } from './therapy'
 import { TmsDetailView } from './tms'
@@ -66,6 +67,7 @@ const ActualNoteView = ({ patientId, appointmentId }: ActualNoteViewProps) => {
           <TherapyAssessmentPlanView patientId={patientId} />
           <FamilyInternalMedicineAssessmentPlanView patientId={patientId} />
           <PhysicalExamView patientId={patientId} />
+          <SpravatoDetailView patientId={patientId} />
         </Flex>
       </ScrollArea>
     </ActualNoteViewClient>

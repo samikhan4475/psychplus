@@ -7,7 +7,7 @@ import { TabsTrigger } from '@/components'
 import { QuickNoteSectionItem } from '@/types'
 import { ProcedureTabs } from './constants'
 import { EctWidget } from './ect-tab'
-import { SpravatoTab } from './spravato-tab'
+import { SpravatoWidget } from './spravato-tab'
 import { useStore } from './store'
 import { TmsTab } from './tms-tab'
 
@@ -61,7 +61,7 @@ const ProceduresView = ({
         <TmsTab patientId={patientId} procedureTmsData={procedureTmsData} />
       </TabsContent>
       <TabsContent value={ProcedureTabs.SPRAVATO}>
-        <SpravatoTab procedureSpravatoData={procedureSpravatoData} />
+        <SpravatoWidget procedureSpravatoData={procedureSpravatoData} />
       </TabsContent>
     </Tabs.Root>
   )

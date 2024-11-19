@@ -1,18 +1,16 @@
-'use server'
-
+import { Text } from '@radix-ui/themes'
 import * as api from '@/api'
 import { QuickNoteSectionItem } from '@/types'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
+import { SpravatoWidget } from './spravato-widget'
 
-interface GetProcedureSpravatoParams {
+interface SpravatoWidgetLoaderProps {
   patientId: string
 }
 
-const getProcedureSpravato = async ({
+const SpravatoWidgetLoader = async ({
   patientId,
-}: GetProcedureSpravatoParams): Promise<
-  api.ActionResult<QuickNoteSectionItem[]>
-> => {
+}: SpravatoWidgetLoaderProps) => {
   const response = await api.POST<QuickNoteSectionItem[]>(
     api.NOTE_DETAILS_SEARCH_ENDPOINT,
     {
@@ -21,17 +19,12 @@ const getProcedureSpravato = async ({
       isLatest: true,
     },
   )
+
   if (response.state === 'error') {
-    return {
-      state: 'error',
-      error: response.error,
-    }
+    return <Text>{response.error}</Text>
   }
 
-  return {
-    state: 'success',
-    data: response.data,
-  }
+  return <SpravatoWidget procedureSpravatoData={response.data} />
 }
 
-export { getProcedureSpravato }
+export { SpravatoWidgetLoader }

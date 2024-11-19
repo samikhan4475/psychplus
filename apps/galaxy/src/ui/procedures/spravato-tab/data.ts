@@ -16,8 +16,7 @@ const transformOut =
       if (key !== 'newVitalSign') {
         result.push({
           pid: Number(patientId),
-          sectionName:
-            QuickNoteSectionName.QuicknoteSectionProcedureSpravatoTab,
+          sectionName: QuickNoteSectionName.QuicknoteSectionProcedureSpravato,
           sectionItem: key,
           sectionItemValue: newValue as string,
         })
