@@ -120,6 +120,13 @@
         name: app-config
         key: scriptSureBasePlatformUrl
 
+  - name: SCRIPTSURE_BASE_API_URL
+    valueFrom:
+      configMapKeyRef:
+        name: app-config
+        key: scriptSureBaseApiUrl
+        optional: true
+
   - name: SCRIPTSURE_SESSION_COOKIE_NAME
     valueFrom:
       configMapKeyRef:

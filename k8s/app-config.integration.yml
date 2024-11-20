@@ -17,6 +17,7 @@ data:
   reactAppPlatformUrl: 'http://localhost:8000/platform'
   scriptSureBaseApplicationUrl: 'https://stage.scriptsure.com'
   scriptSureBasePlatformUrl: 'https://stage-platform.scriptsure.com'
+  scriptSureBaseApiUrl: 'https://ssa.scriptsure.com'
   scriptSureSessionCookieName: 'p+_scriptsure_session'
   scriptSureSessionCookieCreateAt: 'p+_scriptsure_session_created_at'
   apiUrl: 'https://api-pr-2000.ode.psychplus.dev'
