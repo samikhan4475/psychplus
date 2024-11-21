@@ -4,6 +4,7 @@ import { format } from 'date-fns'
 import { ChevronsUpDown } from 'lucide-react'
 import { CheckboxCell, ColumnHeader, DataTable, TextCell } from '@/components'
 import { QuickNoteHistory } from '@/types'
+import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { AddToNoteCell } from './cells'
 import { ScoreCell } from './cells/score-cell'
 
@@ -64,9 +65,14 @@ const createColumns = (
       </Flex>
     ),
     cell: ({ row }) => {
-      const { totalScore } = row.original
-
-      return <ScoreCell value={totalScore || ''} />
+      const { totalScore, data, sectionName } = row.original
+      return (
+        <ScoreCell
+          value={totalScore || ''}
+          data={data}
+          quickNoteSectionName={sectionName as QuickNoteSectionName}
+        />
+      )
     },
   },
   {
@@ -100,7 +106,6 @@ const HistorySheetTable = ({ data, setData }: SheetViewDataProps) => {
           )
     setData(newList)
   }
-
   const allChecked = data.every((item) => item.addToNote)
 
   const columns = createColumns(handleCheckAddToNote, allChecked, data)

@@ -1,6 +1,7 @@
 import * as api from '@/api'
 import { QuickNoteSectionItem } from '@/types'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
+import { getQuestionnairesHistories } from './api/get-questionnaires-history'
 import { TmsTab } from './tms-widget'
 
 interface TmsWidgetLoaderProps {
@@ -17,11 +18,21 @@ const TmsWidgetLoader = async ({ patientId }: TmsWidgetLoaderProps) => {
     },
   )
 
-  if (response.state === 'error') {
+  const questionnairesHistories = await getQuestionnairesHistories({
+    patientId,
+  })
+
+  if (response.state === 'error' || questionnairesHistories.state === 'error') {
     return <div>fail</div>
   }
 
-  return <TmsTab patientId={patientId} procedureTmsData={response.data} />
+  return (
+    <TmsTab
+      patientId={patientId}
+      procedureTmsData={response.data}
+      questionnaireHistories={questionnairesHistories.data}
+    />
+  )
 }
 
 export { TmsWidgetLoader }

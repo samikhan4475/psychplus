@@ -1,12 +1,18 @@
 import { Flex } from '@radix-ui/themes'
 import { BlockLabel, TextInput } from '@/components'
+import { QuickNoteHistory } from '@/types'
 import { CurrentTreatmentSessionView } from './current-treatment-session'
-import { TreatmentObservation } from './treatment-observation'
-import { ProtocolUsed } from './protocol-used'
-import { PrecautionAndWarning } from './precaution-warning'
 import { MotorThreshold } from './motor-threshold'
+import { PrecautionAndWarning } from './precaution-warning'
+import { ProtocolUsed } from './protocol-used'
+import { TreatmentObservation } from './treatment-observation'
 
-const TreatmentSessionView = () => {
+interface TreatmentSessionViewProps {
+  questionnaireHistories: QuickNoteHistory[]
+}
+const TreatmentSessionView = ({
+  questionnaireHistories,
+}: TreatmentSessionViewProps) => {
   return (
     <>
       <BlockLabel required className="text-3 font-[600]">
@@ -24,7 +30,7 @@ const TreatmentSessionView = () => {
       <PrecautionAndWarning />
       <MotorThreshold />
       <CurrentTreatmentSessionView />
-      <TreatmentObservation />
+      <TreatmentObservation data={questionnaireHistories} />
     </>
   )
 }

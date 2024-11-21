@@ -1,5 +1,11 @@
-import { Button, Flex, Text } from '@radix-ui/themes'
+import { Flex, Text } from '@radix-ui/themes'
 import { BlockLabel, FormFieldError, TextAreaInput } from '@/components'
+import { QuickNoteHistory } from '@/types'
+import { HistoryButton } from '@/ui/questionnaires/shared'
+import { ViewButton } from '@/ui/questionnaires/shared/view/view-button'
+import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
+import DateViewBlock from './blocks/date-view-block'
+import PhqScoreBlock from './blocks/phq-score-block'
 
 const Badge = ({ text }: { text: string }) => {
   return (
@@ -14,7 +20,9 @@ const Badge = ({ text }: { text: string }) => {
   )
 }
 
-const TreatmentObservation = () => {
+const TreatmentObservation = ({ data }: { data: QuickNoteHistory[] }) => {
+  const hasData = data.length > 0
+
   return (
     <Flex direction="column" gap="1">
       <Flex align={'center'} gap={'2'}>
@@ -39,24 +47,25 @@ const TreatmentObservation = () => {
           <Text className="text-pp-black-3 text-1 font-[600]">
             {`Today's PHQ-9`}
           </Text>
-          <Badge text="Score 9" />
-          <Badge text="Completed" />
-          <Text className="text-pp-black-3 text-1 font-regular">
-            03/25/2024, 09:27:30
-          </Text>
+          {hasData ? (
+            <>
+              <PhqScoreBlock data={data[0].data} />
+              <Badge text="Completed" />
+              <DateViewBlock date={data[0].createdOn} />
+            </>
+          ) : null}
         </Flex>
-        <Flex direction="row" align="center" gap="2">
-          <Button className="border-pp-grey bg-white h-5 w-7 rounded-1 border border-solid">
-            <Text weight="regular" className="text-pp-black-3 text-1">
-              HX
-            </Text>
-          </Button>
-          <Button className="border-pp-grey bg-white h-5 w-10 rounded-1 border border-solid">
-            <Text weight="regular" className="text-pp-black-3 text-1">
-              View
-            </Text>
-          </Button>
-        </Flex>
+        {hasData && (
+          <Flex direction="row" align="center" gap="2">
+            <HistoryButton
+              questionnaire={QuickNoteSectionName.QuickNoteSectionPhq9}
+            />
+            <ViewButton
+              data={hasData ? data[0].data : []}
+              quickNoteSectionName={QuickNoteSectionName.QuickNoteSectionPhq9}
+            />
+          </Flex>
+        )}
       </Flex>
     </Flex>
   )

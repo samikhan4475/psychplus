@@ -3,6 +3,7 @@ import { ProceduresView } from 'src/ui/procedures'
 import { getProcedureEct } from '@/ui/procedures/ect-tab/api'
 import { getProcedureSpravato } from '@/ui/procedures/spravato-tab/api'
 import { getProcedureTms } from '@/ui/procedures/tms-tab/api'
+import { getQuestionnairesHistories } from '@/ui/procedures/tms-tab/api/get-questionnaires-history'
 
 interface ProcedurePageProps {
   params: {
@@ -15,10 +16,12 @@ const ProcedurePage = async ({ params }: ProcedurePageProps) => {
     procedureEctResponse,
     procedureTmsResponse,
     procedureSpravatoResponse,
+    questionnaireHistoriesResponse,
   ] = await Promise.all([
     getProcedureEct({ patientId: params.id }),
     getProcedureTms({ patientId: params.id }),
     getProcedureSpravato({ patientId: params.id }),
+    getQuestionnairesHistories({ patientId: params.id }),
     //add more APis for other tabs
   ])
 
@@ -50,6 +53,11 @@ const ProcedurePage = async ({ params }: ProcedurePageProps) => {
       procedureSpravatoData={
         procedureSpravatoResponse.state === 'success'
           ? procedureSpravatoResponse.data
+          : []
+      }
+      questionnaireHistories={
+        questionnaireHistoriesResponse.state === 'success'
+          ? questionnaireHistoriesResponse.data
           : []
       }
     />

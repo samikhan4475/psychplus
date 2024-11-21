@@ -26,6 +26,7 @@ interface QuestionnairesFormProps {
   scoreInterpretationRanges: ScoreInterpretationRange[]
   classNameHeaderCell?: string
   classNameCell?: string
+  disabled?: boolean
 }
 
 const QuestionnairesForm = ({
@@ -35,6 +36,7 @@ const QuestionnairesForm = ({
   scoreInterpretationRanges,
   classNameHeaderCell,
   classNameCell,
+  disabled = false,
 }: QuestionnairesFormProps) => {
   return (
     <Box className="w-full">
@@ -90,6 +92,7 @@ const QuestionnairesForm = ({
                         className="bg-0 rounded-0 border-0"
                         field={`${item.id}`}
                         options={[option]}
+                        disabled={disabled}
                       />
                     )}
                   </Table.Cell>

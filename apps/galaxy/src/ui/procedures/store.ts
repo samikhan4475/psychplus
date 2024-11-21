@@ -7,12 +7,15 @@ interface Store {
   setActiveTab: (tab: string) => void
   patientId: string
   setPatientId: (patientId: string) => void
+  phq9Score: string
+  setPhq9Score: (phq9Score: string) => void
 }
 
 const useStore = create<Store>((set, get) => ({
   activeTab: ProcedureTabs.ECT,
   viewedTabs: new Set([ProcedureTabs.ECT]),
   patientId: '',
+  phq9Score: '',
   setActiveTab: (activeTab) => {
     const viewedTabs = get().viewedTabs
     viewedTabs.add(activeTab)
@@ -25,6 +28,11 @@ const useStore = create<Store>((set, get) => ({
   setPatientId: (patientId) => {
     set({
       patientId,
+    })
+  },
+  setPhq9Score: (phq9Score) => {
+    set({
+      phq9Score,
     })
   }
 }))

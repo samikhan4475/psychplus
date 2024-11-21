@@ -4,7 +4,7 @@ import { useEffect } from 'react'
 import * as Tabs from '@radix-ui/react-tabs'
 import { Flex } from '@radix-ui/themes'
 import { TabsTrigger } from '@/components'
-import { QuickNoteSectionItem } from '@/types'
+import { QuickNoteHistory, QuickNoteSectionItem } from '@/types'
 import { ProcedureTabs } from './constants'
 import { EctWidget } from './ect-tab'
 import { SpravatoWidget } from './spravato-tab'
@@ -16,6 +16,7 @@ interface ProceduresViewProps {
   procedureEctData: QuickNoteSectionItem[]
   procedureTmsData: QuickNoteSectionItem[]
   procedureSpravatoData: QuickNoteSectionItem[]
+  questionnaireHistories: QuickNoteHistory[]
 }
 
 const ProceduresView = ({
@@ -23,6 +24,7 @@ const ProceduresView = ({
   procedureEctData,
   procedureTmsData,
   procedureSpravatoData,
+  questionnaireHistories,
 }: ProceduresViewProps) => {
   const { activeTab, setActiveTab, setPatientId } = useStore((state) => ({
     activeTab: state.activeTab,
@@ -58,7 +60,11 @@ const ProceduresView = ({
         <EctWidget patientId={patientId} procedureEctData={procedureEctData} />
       </TabsContent>
       <TabsContent value={ProcedureTabs.TMS}>
-        <TmsTab patientId={patientId} procedureTmsData={procedureTmsData} />
+        <TmsTab
+          patientId={patientId}
+          procedureTmsData={procedureTmsData}
+          questionnaireHistories={questionnaireHistories}
+        />
       </TabsContent>
       <TabsContent value={ProcedureTabs.SPRAVATO}>
         <SpravatoWidget procedureSpravatoData={procedureSpravatoData} />
