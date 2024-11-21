@@ -3,17 +3,23 @@
 import * as api from '@/api'
 import type { ClaimPayment, UpdateClaimPaymentPayload } from '../types'
 
-const addClaimPaymentAction = async (
-  payload: UpdateClaimPaymentPayload,
-): Promise<api.ActionResult<ClaimPayment>> => {
+interface AddCaimPaymentActionParams {
+  payload: UpdateClaimPaymentPayload
+  paymentId: string
+}
+
+const addClaimPaymentAction = async ({
+  payload,
+  paymentId,
+}: AddCaimPaymentActionParams): Promise<api.ActionResult<ClaimPayment>> => {
   const response = await api.POST<ClaimPayment>(
-    api.ADD_CLAIM_PAYMENT(payload.paymentId ?? '0'),
+    api.ADD_CLAIM_PAYMENT(paymentId),
     payload,
   )
   if (response.state === 'error') {
     return {
       state: 'error',
-      error: JSON.stringify(response),
+      error: response.error,
     }
   }
 

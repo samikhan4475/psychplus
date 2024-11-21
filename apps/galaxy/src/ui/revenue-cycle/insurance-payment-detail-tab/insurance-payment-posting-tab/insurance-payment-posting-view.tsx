@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import React, { BaseSyntheticEvent } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Flex } from '@radix-ui/themes'
 import { useForm } from 'react-hook-form'
@@ -10,6 +10,7 @@ import { addClaimPaymentAction } from '../../actions/add-claim-payment'
 import { updateClaimPaymentAction } from '../../actions/update-claim-payment'
 import { useStore } from '../../insurance-payment-tab/store'
 import { useStore as TabStore } from '../../store'
+import { PaymentListTypes } from '../types'
 import { transformInDefault, transformOut } from './data'
 import { InsurancePaymentClaimSummary } from './insurance-payment-claim-summary'
 import { InsurancePaymentPostingTable } from './insurance-payment-posting-table'
@@ -32,10 +33,12 @@ const InsurancePaymentPostingView = ({
     reValidateMode: 'onChange',
     defaultValues: transformInDefault(paymentPostingId, paymentPostingClaim),
   })
-  const onSubmit = (data: SchemaType, event: any) => {
-    const { name } = event.nativeEvent.submitter
+  const onSubmit = async (data: SchemaType, event?: BaseSyntheticEvent) => {
+    const { name } = (event?.nativeEvent as SubmitEvent)
+      .submitter as HTMLButtonElement
 
-    const isPosted = name === 'Save_Post' ? 'Posted' : 'NotPosted'
+    const isPosted =
+      name === 'Save_Post' ? PaymentListTypes.Posted : 'NotPosted'
 
     const updatedPayload = transformOut(
       { ...data, status: isPosted },
@@ -43,17 +46,24 @@ const InsurancePaymentPostingView = ({
     )
 
     const claimPaymentAction = !updatedPayload?.id
-      ? addClaimPaymentAction(updatedPayload)
-      : updateClaimPaymentAction(updatedPayload)
+      ? addClaimPaymentAction({
+          payload: updatedPayload,
+          paymentId: paymentPostingId,
+        })
+      : updateClaimPaymentAction({
+          payload: updatedPayload,
+          paymentId: paymentPostingId,
+          id: updatedPayload.id,
+        })
 
-    claimPaymentAction.then((result) => {
-      if (result.state === 'success') {
-        fetchPaymentDetail(paymentPostingId)
-        onCancel()
-      } else if (result.state === 'error') {
-        toast.error(result.error)
-      }
-    })
+    const result = await claimPaymentAction
+
+    if (result.state === 'success') {
+      fetchPaymentDetail(paymentPostingId)
+      onCancel()
+    } else if (result.state === 'error') {
+      toast.error(result.error)
+    }
   }
   const onCancel = () => setPaymentPostingClaim(activeTab)
 

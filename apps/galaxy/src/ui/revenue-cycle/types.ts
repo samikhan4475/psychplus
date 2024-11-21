@@ -136,9 +136,25 @@ interface ClaimPayment extends Claim {
   claimServiceLinePayments: ClaimServiceLinePayment[]
 }
 
+type AmountKeys =
+  | 'billedAmount'
+  | 'allowedAmount'
+  | 'paidAmount'
+  | 'copayAmount'
+  | 'coinsuranceAmount'
+  | 'deductibleAmount'
+  | 'otherPr'
+  | 'writeOffAmount'
+
 interface UpdateClaimPaymentPayload
   extends Partial<
-    Omit<ClaimPayment, 'dateOfServiceFrom' | 'dateOfServiceTo' | 'id'>
+    Omit<
+      ClaimPayment,
+      | 'dateOfServiceFrom'
+      | 'dateOfServiceTo'
+      | 'id'
+      | 'claimServiceLinePayments'
+    >
   > {
   id: string | null
   dateOfServiceFrom?: string | Date
@@ -151,6 +167,9 @@ interface UpdateClaimPaymentPayload
   nationalDrugCodeMeasureUnit?: string
   nationalDrugCodeQuantity?: string
   serviceLineNotes?: string
+  claimServiceLinePayments: (Omit<ClaimServiceLinePayment, AmountKeys> & {
+    [key in AmountKeys]: number
+  })[]
 }
 interface GetSubmissionResponse {
   submissions: Claim[]

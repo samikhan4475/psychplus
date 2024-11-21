@@ -1,7 +1,8 @@
 import React from 'react'
+import { useFormContext } from 'react-hook-form'
 import { CodesetSelect, FormFieldContainer, FormFieldLabel } from '@/components'
 import { CODESETS } from '@/constants'
-import { useFormContext } from 'react-hook-form'
+import { PaymentListTypes } from '../types'
 import { SchemaType } from './schema'
 
 const ClaimStatusSelect = () => {
@@ -12,11 +13,12 @@ const ClaimStatusSelect = () => {
       <FormFieldLabel className="!text-1">Status:</FormFieldLabel>
       <CodesetSelect
         name="status"
-        defaultValue='NotPosted'
         disabled
         codeset={CODESETS.PaymentPostingStatus}
         size="1"
-        className={`w-[100px] border-none disabled:bg-transparent ${status === 'Posted' && 'disabled:text-green-9'} bg-transparent text-1 font-bold`}
+        className={`w-[100px] border-none disabled:bg-transparent ${
+          status === PaymentListTypes.Posted && 'disabled:text-green-9'
+        } bg-transparent text-1 font-bold`}
       />
     </FormFieldContainer>
   )

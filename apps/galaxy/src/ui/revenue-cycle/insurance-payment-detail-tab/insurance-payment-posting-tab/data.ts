@@ -1,4 +1,5 @@
 import { ClaimPayment, UpdateClaimPaymentPayload } from '../../types'
+import { PaymentListTypes } from '../types'
 
 const transformInDefault = (
   paymentPostingId: string,
@@ -42,10 +43,11 @@ const transformInDefault = (
     dateOfServiceTo: new Date(paymentPostingClaim?.dateOfServiceTo ?? ''),
     claimId: paymentPostingClaim?.claimId ?? paymentPostingClaim.id ?? '',
     paymentSource: paymentPostingClaim.paymentSource ?? 'Primary',
-    processedAsCode: paymentPostingClaim.processedAsCode ?? '',
+    processedAsCode:
+      paymentPostingClaim.processedAsCode ?? 'ProcessedAsPrimary',
     insuranceInternalControlNumber:
       paymentPostingClaim.insuranceInternalControlNumber ?? '',
-    status: paymentPostingClaim.status ?? 'NotPosted',
+    status: paymentPostingClaim.status ?? PaymentListTypes.Unposted,
     billedAmount: String(paymentPostingClaim.billedAmount ?? '0'),
     allowedAmount: String(paymentPostingClaim.allowedAmount ?? '0'),
     paidAmount: String(paymentPostingClaim.paidAmount ?? '0'),
@@ -61,7 +63,6 @@ const transformOut = (
   claimPayment: Partial<ClaimPayment>,
   paymentClaim?: Partial<ClaimPayment>,
 ): UpdateClaimPaymentPayload => {
-
   const insurancePolicies: Record<string, string> = {
     ProcessedAsPrimary: paymentClaim?.primaryPatientInsurancePolicyId ?? '',
     ProcessedAsSecondary: paymentClaim?.secondaryPatientInsurancePolicyId ?? '',
@@ -76,7 +77,18 @@ const transformOut = (
     ...claimPayment,
     id: claimPayment.id || null,
     insurancePolicyId,
-    claimServiceLinePayments: claimPayment.claimServiceLinePayments ?? [],
+    claimServiceLinePayments:
+      claimPayment.claimServiceLinePayments?.map((serviceLine) => ({
+        ...serviceLine,
+        billedAmount: +serviceLine.billedAmount,
+        allowedAmount: +serviceLine.allowedAmount,
+        paidAmount: +serviceLine.paidAmount,
+        copayAmount: +serviceLine.copayAmount,
+        coinsuranceAmount: +serviceLine.coinsuranceAmount,
+        deductibleAmount: +serviceLine.deductibleAmount,
+        otherPr: +serviceLine.otherPr,
+        writeOffAmount: +serviceLine.writeOffAmount,
+      })) ?? [],
     dateOfServiceFrom:
       new Date(claimPayment.dateOfServiceFrom ?? '').toISOString() ?? '',
     dateOfServiceTo:
