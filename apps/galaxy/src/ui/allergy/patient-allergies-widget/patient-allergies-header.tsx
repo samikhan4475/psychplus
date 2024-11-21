@@ -1,12 +1,15 @@
 import { Flex, Text } from '@radix-ui/themes'
-import { PatientAllergiesAddButton } from './patient-allergies-add-button'
+import { WidgetAddButton } from '@/components'
+import { AddAllergyButton } from './add-allergy-button'
 import { PatientAllergiesPrintButton } from './patient-allergies-print-button'
 
 interface PhysicalExamHeaderProps {
-  patientId: string
+  scriptSureAppUrl: string
 }
 
-const PatientAllergiesHeader = ({ patientId }: PhysicalExamHeaderProps) => {
+const PatientAllergiesHeader = ({
+  scriptSureAppUrl,
+}: PhysicalExamHeaderProps) => {
   return (
     <Flex
       justify="between"
@@ -18,7 +21,9 @@ const PatientAllergiesHeader = ({ patientId }: PhysicalExamHeaderProps) => {
       </Text>
       <Flex className="gap-x-2 text-[20px]" align="center">
         <PatientAllergiesPrintButton />
-        <PatientAllergiesAddButton />
+        <WidgetAddButton title="Add Allergy">
+          <AddAllergyButton scriptSureAppUrl={scriptSureAppUrl} />
+        </WidgetAddButton>
       </Flex>
     </Flex>
   )

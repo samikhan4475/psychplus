@@ -318,6 +318,10 @@ const PATIENT_CARE_TEAM_ENDPOINT = (patientId: string) =>
   `${API_URL}/api/patients/${patientId}/careteam`
 
 const GET_STAFF_LICENSE = `${API_URL}/api/stafflicenses/actions/search`
+const GET_SCRIPT_SURE_SESSION_TOKEN = (partnerShortName: string) =>
+  `${API_URL}/api/integration/partners/${partnerShortName}/actions/authtoken`
+const GET_SCRIPT_SURE_EXTERNAL_PATIENT_ID = (patientId: string) =>
+  `${API_URL}/api/patients/${patientId}/prescriptions/actions/externalpatient/search`
 
 export {
   USER_ENDPOINT,
@@ -490,4 +494,6 @@ export {
   NOTE_SIGN_ENDPOINT,
   GET_STAFF_LICENSE,
   GET_CPT_CODES,
+  GET_SCRIPT_SURE_SESSION_TOKEN,
+  GET_SCRIPT_SURE_EXTERNAL_PATIENT_ID,
 }

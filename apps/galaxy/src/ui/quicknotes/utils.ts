@@ -1,6 +1,6 @@
 import { cache } from 'react'
 import { AddOnWidget } from '@/ui/add-on'
-import { PatientAllergiesWidget } from '@/ui/allergy'
+import { PatientAllergiesView, PatientAllergiesWidget } from '@/ui/allergy'
 import { FamilyInternalMedicineAssessmentPlanWidget } from '@/ui/assessment-plan/family-internal-medicine-assessment-plan-tab/family-internal-medicine-assessment-plan-widget'
 import { PsychiatryAssessmentPlanWidget } from '@/ui/assessment-plan/psychiatry-assessment-plan-tab/psychiatry-assessment-plan-widget'
 import { TherapyAssessmentPlanWidget } from '@/ui/assessment-plan/therapy-assessment-plan-tab/therapy-assessment-plan-widget'
@@ -86,7 +86,7 @@ const widgets: Array<WidgetType> = [
     actualNoteComponent: PastMedicalHx,
   },
   {
-    component: PatientAllergiesWidget,
+    component: PatientAllergiesView,
     id: QuickNoteSectionName.QuicknoteSectionPatientAllergies,
     actualNoteComponent: AllergiesDetailsView,
   },

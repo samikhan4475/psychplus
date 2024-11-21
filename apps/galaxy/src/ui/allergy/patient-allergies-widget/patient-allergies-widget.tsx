@@ -1,6 +1,6 @@
 'use client'
 
-import { WidgetContainer } from '@/components'
+import { WidgetAddButton, WidgetContainer } from '@/components'
 import { AddAllergyButton } from './add-allergy-button'
 import { PatientAllergiesFilterForm } from './patient-allergies-filter-form'
 import { PatientAllergiesHeader } from './patient-allergies-header'
@@ -10,24 +10,32 @@ import { StoreProvider } from './store'
 interface PatientAllergiesWidgetProps {
   patientId: string
   isPatientAllergiesTab?: boolean
+  scriptSureAppUrl: string
 }
 
 const PatientAllergiesWidget = ({
   patientId,
   isPatientAllergiesTab = false,
+  scriptSureAppUrl,
 }: PatientAllergiesWidgetProps) => {
   return (
     <StoreProvider patientId={patientId}>
       {isPatientAllergiesTab && (
         <>
-          <PatientAllergiesHeader patientId={patientId} />
+          <PatientAllergiesHeader scriptSureAppUrl={scriptSureAppUrl} />
           <PatientAllergiesFilterForm patientId={patientId} />
         </>
       )}
 
       <WidgetContainer
         title={isPatientAllergiesTab ? '' : 'Allergies'}
-        headerRight={!isPatientAllergiesTab && <AddAllergyButton />}
+        headerRight={
+          !isPatientAllergiesTab && (
+            <WidgetAddButton title="Add Allergy">
+              <AddAllergyButton scriptSureAppUrl={scriptSureAppUrl} />
+            </WidgetAddButton>
+          )
+        }
       >
         <PatientAllergiesTable />
       </WidgetContainer>

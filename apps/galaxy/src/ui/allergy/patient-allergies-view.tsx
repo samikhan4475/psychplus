@@ -1,4 +1,5 @@
 import { Flex } from '@radix-ui/themes'
+import { SCRIPTSURE_BASE_APPLICATION_URL } from '@/constants'
 import { PatientAllergiesWidget } from './patient-allergies-widget'
 
 interface PatientAllergiesViewProps {
@@ -12,6 +13,7 @@ const PatientAllergiesView = ({ patientId }: PatientAllergiesViewProps) => {
         <PatientAllergiesWidget
           patientId={patientId}
           isPatientAllergiesTab={true}
+          scriptSureAppUrl={SCRIPTSURE_BASE_APPLICATION_URL}
         />
       </Flex>
     </Flex>
