@@ -47,6 +47,7 @@ const getInitialValues = (patient: PatientProfile) => {
     },
     birthdate: patient?.birthdate ?? '',
     hasGuardian: patient?.hasGuardian ?? false, // Ensure default value is set
+    isTest: patient?.isTest ?? false,
     gender: patient?.gender ?? '',
     genderOrientation: patient?.genderOrientation ?? '',
     genderExpression: patient?.genderExpression ?? '',

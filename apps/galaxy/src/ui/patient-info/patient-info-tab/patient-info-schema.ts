@@ -66,6 +66,7 @@ const patientInfoSchema = z
       honors: optionalString,
     }),
     birthdate: requiredString,
+    isTest: z.boolean().optional(),
     hasGuardian: z.boolean(),
     gender: z.string(),
     genderOrientation: z.string().optional(),

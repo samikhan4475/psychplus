@@ -8,6 +8,7 @@ interface PatientProfile {
   phone?: string
   email: string
   hasGuardian: boolean
+  isTest: boolean
   guardianFirstName?: string
   guardianLastName?: string
 }

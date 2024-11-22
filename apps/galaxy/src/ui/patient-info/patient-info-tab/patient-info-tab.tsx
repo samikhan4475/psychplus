@@ -24,6 +24,7 @@ import { RelationshipCard } from './relationship'
 // import { ResetPasswordButton } from './reset-password-button'
 import { SaveButton } from './save-button'
 import { StatusSelect } from './status-selector'
+import { TestPatientCheckbox } from './test-patient-checkbox'
 import { AddressCard } from './user-address'
 
 const TAB_TITLE = 'Patient Info'
@@ -65,6 +66,7 @@ const PatientInfoTab = ({
         >
           <TabContentHeading title={TAB_TITLE}>
             <Flex align="center" justify="end" gap="2" className="flex-1">
+              <TestPatientCheckbox />
               <StatusSelect />
               <PatientHistoryDialog
                 patientId={patientId}
