@@ -69,6 +69,10 @@ export const RichTextEditorWrapper = ({
     messageId?: string,
     attachmentId?: string,
   ) => {
+    const isConfirmed = confirm(
+      'Are you sure you want to delete this attachment?',
+    )
+    if (!isConfirmed) return
     if (attachmentId && messageId) {
       setDeletingAttachmentIds((prev) => [...prev, attachmentId])
       const results = await deleteAttachmentsAction({
@@ -86,7 +90,7 @@ export const RichTextEditorWrapper = ({
   }
 
   return (
-    <Box className="bg-pp-bg-table-cell border-pp-gray-2 !mt-6 w-[750px] rounded-4 border">
+    <Box className="bg-pp-bg-table-cell border-pp-gray-2 !mt-6 rounded-4 border">
       {children}
       <ReactQuill
         value={text || ''}

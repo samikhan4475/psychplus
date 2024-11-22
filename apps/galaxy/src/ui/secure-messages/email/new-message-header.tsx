@@ -17,7 +17,7 @@ const NewMessageHeader = () => {
   const noComposeEmail = activeComponent !== ActiveComponent.COMPOSE_MAIL
   const closeMessageEditor = () => {
     setPreviewSecureMessage({ activeTab, secureMessage: null })
-    setActiveComponent(ActiveComponent.NEW_EMAIL)
+    setActiveComponent(ActiveComponent.NEW_EMAIL_PLACEHOLDER)
   }
   return (
     <Flex

@@ -5,10 +5,10 @@ import { useFormContext } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { ReactTags, Tag } from 'react-tag-autocomplete'
 import { FormFieldError } from '@/components'
+import { LegalName } from '@/types'
 import { cn } from '@/utils'
 import 'react-tag-autocomplete/example/src/styles.css'
 import { useDebouncedCallback } from 'use-debounce'
-import { v4 as uuidv4 } from 'uuid'
 import {
   getAllChannelsAgainstMessageIdAction,
   getAllRecipientSuggestionsAction,
@@ -17,11 +17,10 @@ import {
 import { useStore } from '../store'
 import {
   ActiveComponent,
-  EmailRecipient,
   EmailRecipients,
   EmailRecipientTypes,
+  GetEmailRecipientPayload,
   ReceiverUserRole,
-  SecureMessagesTab,
   SendMode,
   UserRecipientProps,
 } from '../types'
@@ -35,23 +34,30 @@ const UserRecipientsEmails = ({
   setUserEmailSuggestions,
   setUserRecipientsTag,
 }: UserRecipientProps) => {
+  const [userEmailSuggestionsTags, setUserEmailSuggestionsTags] = useState<
+    Tag[]
+  >([])
+  const { previewSecureMessage, activeComponent } = useStore((state) => state)
   const form = useFormContext<SendMessageSchemaType>()
+
   const fetchRecipientSuggestions = useCallback(
-    async (
-      keyword: string,
-      userType: EmailRecipientTypes,
-    ): Promise<EmailRecipients[]> => {
-      const payload: EmailRecipient = {
-        userType,
+    async (keyword: string): Promise<EmailRecipients[] | []> => {
+      const payload: GetEmailRecipientPayload = {
+        userType: EmailRecipientTypes.PATIENT,
       }
+      const messageId = form.getValues('messageId')
       if (isEmail(keyword)) {
         payload.email = keyword
       } else {
         payload.name = keyword
       }
-
-      const response = await getAllRecipientSuggestionsAction(uuidv4(), payload)
+      if (!messageId) return []
+      const response = await getAllRecipientSuggestionsAction(
+        messageId,
+        payload,
+      )
       if (response.state === 'error') {
+        toast.error(response.error)
         return []
       }
       return response.data
@@ -59,107 +65,73 @@ const UserRecipientsEmails = ({
     [],
   )
 
-  const [userEmailSuggestionsTags, setUserEmailSuggestionsTags] = useState<
-    Tag[]
-  >([])
-  const { previewSecureMessage, activeComponent } = useStore((state) => state)
-
   const handleReply = () => {
-    const isUserRecipient =
-      previewSecureMessage?.secureMessage?.channels?.[0]?.sendMode ===
-      EmailRecipientTypes.PATIENT
-    const channel = previewSecureMessage?.secureMessage?.channels?.[0]
-    if (isUserRecipient) {
-      const email =
-        previewSecureMessage.activeTab === SecureMessagesTab.INBOX
-          ? channel?.externalEmail
-          : channel?.receiverEmail
-      const tag = {
-        label: email || '',
-        value: email || '',
+    const { secureMessage } = previewSecureMessage
+
+    if (
+      secureMessage?.senderEmail &&
+      secureMessage?.senderUserRole === ReceiverUserRole.PATIENT
+    ) {
+      const userRecipient: EmailRecipients = {
+        id: secureMessage.senderUserId ?? 0,
+        legalName: secureMessage.senderName as LegalName,
+        userRoleCode: secureMessage.senderUserRole ?? '',
+        contactInfo: { email: secureMessage.senderEmail },
+        staffId: 0,
+        patientId: secureMessage.senderUserId ?? 0,
       }
-      setUserRecipientsTag([tag])
+      if (userRecipient?.id) {
+        const tag = {
+          value: secureMessage.senderEmail || '',
+          label: `${secureMessage?.senderName?.firstName} ${secureMessage?.senderName?.lastName} <${secureMessage.senderEmail}>`,
+        }
+        setUserEmailSuggestions([userRecipient])
+        setUserEmailSuggestionsTags([tag])
+        setUserRecipientsTag([tag])
+        form.setValue('userRecipients', [userRecipient])
+      }
     }
   }
 
   const handleReplyAll = async () => {
     if (previewSecureMessage?.secureMessage?.id) {
-      const channels = await fetchChannels(
+      const res = await getAllChannelsAgainstMessageIdAction(
         previewSecureMessage?.secureMessage?.id,
       )
-      if (channels === 'error') {
+      if (res.state === 'error') {
         toast.error('Failed to get channels')
         return 'error'
       }
-      const patientTags = channels
-        .filter(
-          (channel) =>
-            channel.sendMode === SendMode.INTERNAL &&
-            channel.receiverUserRole === ReceiverUserRole.PATIENT,
-        )
-        .map((item) => {
-          const email =
-            previewSecureMessage.activeTab === SecureMessagesTab.INBOX
-              ? item?.externalEmail
-              : item?.receiverEmail
-          return {
-            label: email || '',
-            value: email || '',
-          }
+      let channels = res.data
+
+      channels = channels.filter(
+        (item) =>
+          item.sendMode === SendMode.INTERNAL &&
+          item.receiverUserRole === ReceiverUserRole.PATIENT,
+      )
+      if (!channels.length) return
+
+      const userEmailSuggestions: EmailRecipients[] = []
+      const userTags = channels.map((item) => {
+        userEmailSuggestions.push({
+          id: item.receiverUserId as number,
+          legalName: item.receiverName as LegalName,
+          userRoleCode: item.receiverUserRole,
+          contactInfo: { email: item.receiverEmail },
+          staffId: 0,
+          patientId: item.receiverUserId ?? 0,
         })
-      if (patientTags.length === 0) return
-
-      const allUpdatedRecipients = []
-      const tags = []
-      const userEmailSuggestionsArray = []
-
-      for (const tag of patientTags) {
-        if (tag.value) {
-          const userRecipientsResponse = await fetchRecipientSuggestions(
-            tag.value,
-            EmailRecipientTypes.PATIENT,
-          )
-          const userEmailSuggestion = userRecipientsResponse.find(
-            (suggestion): suggestion is EmailRecipients =>
-              suggestion.contactInfo?.email === tag.value,
-          )
-          if (userEmailSuggestion) {
-            const userRecipientsTags = userRecipientsResponse.map(
-              (recipient) => ({
-                value: recipient?.contactInfo?.email || '',
-                label: `${recipient?.legalName?.firstName || ''} ${
-                  recipient?.legalName?.lastName || ''
-                }`,
-              }),
-            )
-
-            tags.push(...userRecipientsTags)
-            userEmailSuggestionsArray.push(...userRecipientsResponse)
-
-            allUpdatedRecipients.push({
-              ...userEmailSuggestion,
-              staffId: userEmailSuggestion.staffId ?? 0,
-              patientId: userEmailSuggestion.patientId ?? 0,
-            })
-          }
+        return {
+          label: `${item.receiverName.firstName} ${item.receiverName.lastName} <${item.receiverEmail}>`,
+          value: item.receiverEmail,
         }
-      }
+      })
 
-      if (allUpdatedRecipients.length > 0) {
-        form.setValue(
-          'userRecipients',
-          allUpdatedRecipients as {
-            staffId: number
-            patientId: number
-            id?: number
-            legalName?: { firstName: string; lastName: string; suffix?: string }
-            userRoleCode?: string
-            contactInfo?: { email?: string }
-          }[],
-        )
-        setUserRecipientsTag(patientTags)
-        setUserEmailSuggestionsTags(tags)
-        setUserEmailSuggestions(userEmailSuggestionsArray)
+      if (userEmailSuggestions.length > 0) {
+        setUserEmailSuggestions(userEmailSuggestions)
+        setUserEmailSuggestionsTags(userTags)
+        setUserRecipientsTag(userTags)
+        form.setValue('userRecipients', userEmailSuggestions)
       }
     }
   }
@@ -175,8 +147,7 @@ const UserRecipientsEmails = ({
           item.receiverUserRole === EmailRecipientTypes.PATIENT,
       )
       .map((item) => ({
-        label:
-          item.receiverName.firstName + ' ' + item.receiverName.lastName || '',
+        label: `${item.receiverName.firstName} ${item.receiverName.lastName} <${item.receiverEmail}>`,
         value: item.receiverEmail || '',
       }))
 
@@ -186,7 +157,6 @@ const UserRecipientsEmails = ({
       if (tag.value) {
         const userRecipientsResponse = await fetchRecipientSuggestions(
           tag.value,
-          EmailRecipientTypes.PATIENT,
         )
         const userEmailSuggestion = userRecipientsResponse.find(
           (suggestion): suggestion is EmailRecipients =>
@@ -197,7 +167,7 @@ const UserRecipientsEmails = ({
         if (userEmailSuggestion) {
           allUpdatedRecipients.push({
             ...userEmailSuggestion,
-            staffId: userEmailSuggestion.staffId ?? 0,
+            staffId: 0,
             patientId: userEmailSuggestion.patientId ?? 0,
           })
         }
@@ -206,14 +176,6 @@ const UserRecipientsEmails = ({
     form.setValue('userRecipients', allUpdatedRecipients)
     setUserEmailSuggestions(channels)
     setUserRecipientsTag(patientTags)
-  }
-  const fetchChannels = async (messageId: string) => {
-    const channels = await getAllChannelsAgainstMessageIdAction(messageId)
-    if (channels.state === 'error') {
-      toast.error('Failed to get channels')
-      return 'error'
-    }
-    return channels.data
   }
 
   useEffect(() => {
@@ -240,14 +202,11 @@ const UserRecipientsEmails = ({
   const handleChange = useCallback(
     async (keyword: string) => {
       if (keyword) {
-        const userRecipientsResponse = await fetchRecipientSuggestions(
-          keyword,
-          EmailRecipientTypes.PATIENT,
-        )
+        const userRecipientsResponse = await fetchRecipientSuggestions(keyword)
         if (userRecipientsResponse?.length) {
           const tags = userRecipientsResponse.map((recipient) => ({
             value: recipient?.contactInfo?.email || '',
-            label: `${recipient?.legalName?.firstName} ${recipient?.legalName?.lastName}`,
+            label: `${recipient?.legalName?.firstName} ${recipient?.legalName?.lastName} <${recipient?.contactInfo?.email}>`,
           }))
           setUserEmailSuggestionsTags(tags)
           setUserEmailSuggestions(userRecipientsResponse)
@@ -270,7 +229,7 @@ const UserRecipientsEmails = ({
         ...existingUserRecipients,
         {
           ...userEmailSuggestion,
-          staffId: userEmailSuggestion.staffId ?? 0,
+          staffId: 0,
           patientId: userEmailSuggestion.patientId ?? 0,
         },
       ]
@@ -285,13 +244,13 @@ const UserRecipientsEmails = ({
         (item, index) =>
           item.sendMode === EmailRecipientTypes.INTERNAL &&
           item.receiverUserRole === EmailRecipientTypes.PATIENT &&
-          userRecipientsTag[index].value === item?.externalEmail,
+          userRecipientsTag?.[index]?.value === item?.externalEmail,
       )
       if (previewSecureMessage?.secureMessage?.id && channel?.id) {
         const result = await updateChannelAction(
           previewSecureMessage?.secureMessage?.id,
           channel?.id,
-          { recordStatus: 'Deleted' },
+          { ...channel, recordStatus: 'Deleted' },
         )
         if (result.state === 'error') {
           toast.error('Failed to remove email')
@@ -312,12 +271,12 @@ const UserRecipientsEmails = ({
     <>
       <Flex
         direction="row"
-        className="border-pp-gray-4 h-[40px]  border-b"
+        className="border-pp-gray-4 min-h-[40px]  border-b"
         align={'center'}
         position="relative"
       >
         <SendToUserTitle />
-        <Box className="max-h-[40px] max-w-[639px] flex-grow overflow-y-auto">
+        <Box className="min-h-[40px] flex-1 flex-wrap">
           <ReactTags
             selected={userRecipientsTag}
             suggestions={userEmailSuggestionsTags}
@@ -328,13 +287,28 @@ const UserRecipientsEmails = ({
             noOptionsText="No Matches"
             placeholderText=""
             labelText=""
-            renderInput={(inputProps) => (
-              <input {...inputProps} className="flex-grow outline-none" />
+            renderInput={({ className, ...inputProps }) => (
+              <input
+                {...inputProps}
+                className={cn(className, 'flex-grow outline-none')}
+              />
             )}
-            renderTag={({ classNames, tag, onClick, color, ...tagProps }) => {
+            renderTag={({
+              classNames,
+              tag,
+              onClick,
+              title,
+              color,
+              ...tagProps
+            }) => {
               return (
                 <Button type="button" className={classNames.tag} {...tagProps}>
-                  <Text className={cn('text-pp-black-3', classNames.tagName)}>
+                  <Text
+                    className={cn(
+                      'text-pp-black-3 text-[12px] font-[510]',
+                      classNames.tagName,
+                    )}
+                  >
                     {tag.label}
                   </Text>
                   <IconButton
@@ -342,17 +316,18 @@ const UserRecipientsEmails = ({
                     onClick={onClick}
                     size="1"
                     variant="ghost"
+                    title={title}
                   >
                     <XIcon size="16" color="gray" />
                   </IconButton>
                 </Button>
               )
             }}
-            renderRoot={({ children, ...rootProps }) => (
+            renderRoot={({ children, className, ...rootProps }) => (
               <Flex
                 align="center"
                 gap="1"
-                className="border-none"
+                className={cn(className, 'flex-wrap border-none')}
                 {...rootProps}
               >
                 {children}

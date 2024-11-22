@@ -4,7 +4,11 @@ import { useStore } from '../../store'
 
 const ViewMessagePopoverFrom = () => {
   const { previewSecureMessage } = useStore((state) => state)
-  const externalEmailAddress = previewSecureMessage.secureMessage?.senderEmail
+  const email = previewSecureMessage.secureMessage?.senderEmail
+  const { senderName } = previewSecureMessage.secureMessage ?? {}
+  const name = [senderName?.firstName, senderName?.lastName]
+    .filter(Boolean)
+    .join(' ')
 
   return (
     <>
@@ -12,7 +16,7 @@ const ViewMessagePopoverFrom = () => {
         from:
       </Text>
       <Text className="bg-white break-words text-[12px] font-[400]">
-        {`<${externalEmailAddress}>`}
+        {name ? `${name} <${email}>` : `<${email}>`}
       </Text>
     </>
   )

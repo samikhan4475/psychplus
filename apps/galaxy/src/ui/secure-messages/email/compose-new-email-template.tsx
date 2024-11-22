@@ -5,6 +5,7 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { FormContainer } from '@/components'
 import { useStore as globalStore } from '@/store'
+import { LegalName } from '@/types'
 import 'react-quill/dist/quill.snow.css'
 import { Tag } from 'react-tag-autocomplete'
 import {
@@ -14,20 +15,21 @@ import {
   SubjectInput,
 } from '.'
 import {
-  getAllChannelsAgainstMessageIdAction,
+  createChannelsAction,
   initializeAttachmentsAction,
-  postChannelAction,
   postSecureMessagesAction,
   updateChannelAction,
+  updateMessageAction,
+  uploadAttachmentAction,
 } from '../actions'
-import { updateMessageAction } from '../actions/update-message'
-import { uploadAttachmentAction } from '../actions/upload-attachments'
 import { useStore } from '../store'
 import {
   ActiveComponent,
   Attachment,
   Channel,
   EmailRecipients,
+  ReceiverUserRole,
+  RecordStatus,
   SecureMessage,
   SecureMessagesTab,
   SendMode,
@@ -50,7 +52,10 @@ const ComposeNewEmail = () => {
     page,
   } = useStore((state) => state)
   const [attachments, setAttachments] = useState<Partial<Attachment>[]>(
-    previewSecureMessage?.secureMessage?.attachments || [],
+    previewSecureMessage?.secureMessage?.id &&
+      activeComponent === ActiveComponent.DRAFT
+      ? previewSecureMessage?.secureMessage?.attachments ?? []
+      : [],
   )
   const [internalRecipientsTag, setInternalRecipientsTag] = useState<Tag[]>([])
   const [internalEmailSuggestions, setInternalEmailSuggestions] = useState<
@@ -64,24 +69,56 @@ const ComposeNewEmail = () => {
   const [userEmailSuggestions, setUserEmailSuggestions] = useState<
     EmailRecipients[] | Channel[]
   >([])
-  const [sendType, setSendType] = useState('Send')
+  const [sendType, setSendType] = useState<SendType>(SendType.SEND)
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
   const [uploadingAttachmentIds, setUploadingAttachmentIds] = useState<
     string[]
   >([])
   const [deletingAttachmentIds, setDeletingAttachmentIds] = useState<string[]>(
     [],
   )
-  const form = useForm<SendMessageSchemaType>({
-    resolver: zodResolver(sendMessageSchema),
-    criteriaMode: 'all',
-    defaultValues: {
-      messageId: previewSecureMessage?.secureMessage?.id ?? undefined,
-      subject: previewSecureMessage?.secureMessage?.subject ?? '',
-      text: previewSecureMessage?.secureMessage?.text ?? '',
+  const getDefaultValues = () => {
+    const baseValues = {
+      messageId: undefined,
+      subject: '',
+      text: '',
       externalEmails: [],
       internalEmails: [],
       userRecipients: [],
-    },
+    }
+    const { secureMessage } = previewSecureMessage || {}
+    const { id = '', subject = '', text = '' } = secureMessage || {}
+    if (
+      (activeComponent === ActiveComponent.DRAFT ||
+        activeComponent === ActiveComponent.FORWARD) &&
+      id
+    ) {
+      return {
+        ...baseValues,
+        messageId: id,
+        subject: subject || '',
+        text: text || '',
+      }
+    } else if (
+      (activeComponent === ActiveComponent.REPLY ||
+        activeComponent === ActiveComponent.REPLY_TO_ALL) &&
+      id &&
+      subject
+    ) {
+      const startsWithRe = subject?.startsWith('Re: ')
+      return {
+        ...baseValues,
+        subject: startsWithRe ? subject : `Re: ${subject}`,
+      }
+    }
+
+    return baseValues
+  }
+
+  const form = useForm<SendMessageSchemaType>({
+    resolver: zodResolver(sendMessageSchema),
+    criteriaMode: 'all',
+    defaultValues: getDefaultValues(),
   })
   const user = globalStore((state) => state.user)
 
@@ -92,8 +129,8 @@ const ComposeNewEmail = () => {
     externalEmails,
     userRecipients,
   }) => {
-    const messageId =
-      previewSecureMessage?.secureMessage?.id || form.getValues('messageId')
+    setIsSubmitting(true)
+    const messageId = form.getValues('messageId')
 
     const updatedExternalEmails: Tag[] =
       externalEmails?.map((email) => ({
@@ -101,25 +138,47 @@ const ComposeNewEmail = () => {
         value: email.value ?? '',
       })) || []
 
-    await createChannels(
+    const channelsCreated = await createChannels(
       internalEmails as (Partial<EmailRecipients> | undefined)[],
       updatedExternalEmails,
       userRecipients as (EmailRecipients | undefined)[],
       messageId,
     )
-
-    await messageHandler(sendType, subject, text)
+    if (!channelsCreated) {
+      return setIsSubmitting(false)
+    }
+    const updatedMessageId = await updateMessage(sendType, subject, text)
+    if (!updatedMessageId) {
+      return setIsSubmitting(false)
+    }
     await handleReplyAction()
     toast.success(`Message sent successfully`)
-    setActiveComponent(ActiveComponent.NEW_EMAIL)
+    setActiveComponent(ActiveComponent.NEW_EMAIL_PLACEHOLDER)
+    setIsSubmitting(false)
     search({ messageStatus: activeTab }, page, true)
   }
 
   useEffect(() => {
-    if (activeComponent === ActiveComponent.COMPOSE_MAIL) {
+    if (
+      [
+        ActiveComponent.COMPOSE_MAIL,
+        ActiveComponent.REPLY,
+        ActiveComponent.REPLY_TO_ALL,
+      ].includes(activeComponent)
+    ) {
       createNewMessageId()
     }
   }, [])
+
+  useEffect(() => {
+    if (
+      activeComponent === ActiveComponent.FORWARD &&
+      previewSecureMessage?.secureMessage?.attachments &&
+      attachments.length === 0
+    ) {
+      setAttachments(previewSecureMessage?.secureMessage?.attachments)
+    }
+  }, [activeComponent, previewSecureMessage.secureMessage?.id])
 
   useEffect(() => {
     if (activeComponent === ActiveComponent.COMPOSE_MAIL) {
@@ -133,25 +192,6 @@ const ComposeNewEmail = () => {
       form.reset()
     }
   }, [activeComponent])
-
-  useEffect(() => {
-    if (previewSecureMessage?.secureMessage?.id) {
-      if (activeComponent === ActiveComponent.DRAFT) {
-        const text = previewSecureMessage?.secureMessage?.text || ''
-        const attachments =
-          previewSecureMessage?.secureMessage?.attachments || []
-        form.setValue('text', text)
-        setAttachments(attachments)
-      } else if (activeComponent === ActiveComponent.FORWARD) {
-        const text = previewSecureMessage?.secureMessage?.text || ''
-        const attachments =
-          previewSecureMessage?.secureMessage?.attachments || []
-        form.setValue('text', text)
-        setAttachments(attachments)
-        createNewMessageId()
-      }
-    }
-  }, [activeComponent, previewSecureMessage.secureMessage?.id])
 
   const createChannels = async (
     internalEmails: (Partial<EmailRecipients> | undefined)[],
@@ -187,32 +227,85 @@ const ComposeNewEmail = () => {
       ...userRecipientsUpdatedData,
     ]
     if (messageId && emailRecords.length) {
-      const results = await postChannelAction(messageId, emailRecords)
+      const results = await createChannelsAction(messageId, emailRecords)
       if (results.state === 'error') {
         toast.error('Failed to create some channels')
+        return false
       }
+      return results.data
     }
   }
 
   const createNewMessageId = async () => {
+    const { secureMessage } = previewSecureMessage || {}
     const secureMessageData: Partial<SecureMessage> = {
-      subject: '',
+      subject: form.getValues('subject'),
       text: '',
-      externalEmailAddress: '',
+      externalEmailAddress: null,
       isMessageSent: false,
       messageStatus: SendMode.DRAFT,
-      recordStatus: 'Active',
+      recordStatus: RecordStatus.ACTIVE,
       senderUserId: user.id,
+    }
+    if (
+      activeComponent === ActiveComponent.REPLY ||
+      activeComponent === ActiveComponent.REPLY_TO_ALL
+    ) {
+      secureMessageData.conversationId =
+        secureMessage?.conversationId ?? secureMessage?.id
     }
     const result = await postSecureMessagesAction(secureMessageData)
     if (result.state === 'error') {
       return toast.error('Failed to create message')
     } else {
       form.setValue('messageId', result.data.id)
+      const newMessageId = result.data.id
+      if (
+        activeComponent !== ActiveComponent.REPLY &&
+        activeComponent !== ActiveComponent.REPLY_TO_ALL
+      )
+        return
+      let channels: Partial<Channel>[] = []
+      const internalRecipient: EmailRecipients = {
+        id: secureMessage?.senderUserId ?? 0,
+        legalName: secureMessage?.senderName as LegalName,
+        userRoleCode: secureMessage?.senderUserRole ?? '',
+        contactInfo: { email: secureMessage?.senderEmail ?? '' },
+        staffId:
+          secureMessage?.senderUserRole === ReceiverUserRole.STAFF
+            ? secureMessage.senderUserId ?? 0
+            : 0,
+        patientId:
+          secureMessage?.senderUserRole === ReceiverUserRole.PATIENT
+            ? secureMessage.senderUserId ?? 0
+            : 0,
+      }
+      const senderChannel = mapEmailData({
+        emails: [internalRecipient],
+        messageId: newMessageId,
+      })?.[0]
+      if (senderChannel?.messageId) channels.push(senderChannel as Channel)
+      if (
+        activeComponent === ActiveComponent.REPLY_TO_ALL &&
+        secureMessage?.channels?.length
+      ) {
+        channels = [
+          ...channels,
+          ...secureMessage.channels.filter(
+            (channel) => channel.receiverUserId !== user.id,
+          ),
+        ]
+      }
+      if (newMessageId && channels?.length) {
+        const results = await createChannelsAction(newMessageId, channels)
+        if (results.state === 'error') {
+          toast.error('Failed to create some channels')
+        }
+      }
     }
   }
 
-  const messageHandler = async (
+  const updateMessage = async (
     sendType: string,
     subject: string,
     text: string,
@@ -222,11 +315,11 @@ const ComposeNewEmail = () => {
       : subject
     const messageId = form.getValues('messageId')
 
-    const secureMessageData: {
+    const secureMessagePayload: {
       id?: string
       subject: string
       text: string
-      externalEmailAddress: string
+      externalEmailAddress: string | null
       isMessageSent?: boolean
       messageStatus: SendMode
       recordStatus: string
@@ -236,33 +329,41 @@ const ComposeNewEmail = () => {
       id: messageId,
       subject: sanitizedSubject,
       text,
-      externalEmailAddress: '',
+      externalEmailAddress: null,
       isMessageSent: true,
       messageStatus:
         sendType === SendType.SEND ? SendMode.SUCCESS : SendMode.DRAFT,
-      recordStatus: 'Active',
+      recordStatus: RecordStatus.ACTIVE,
       senderUserId: user.id,
     }
-    if (activeComponent === ActiveComponent.REPLY) {
-      secureMessageData.conversationId = previewSecureMessage?.secureMessage?.id
+    if (
+      [ActiveComponent.REPLY, ActiveComponent.REPLY_TO_ALL].includes(
+        activeComponent,
+      )
+    ) {
+      secureMessagePayload.conversationId =
+        previewSecureMessage?.secureMessage?.conversationId ||
+        previewSecureMessage?.secureMessage?.id
     }
     if (sendType !== SendType.SEND) {
-      delete secureMessageData.isMessageSent
+      delete secureMessagePayload.isMessageSent
     }
     if (
       (activeComponent === ActiveComponent.DRAFT &&
         previewSecureMessage.activeTab === SecureMessagesTab.DRAFT &&
         previewSecureMessage.secureMessage?.id) ||
-      (activeComponent === ActiveComponent.COMPOSE_MAIL && messageId)
+      ([
+        ActiveComponent.COMPOSE_MAIL,
+        ActiveComponent.REPLY,
+        ActiveComponent.REPLY_TO_ALL,
+        ActiveComponent.FORWARD,
+      ].includes(activeComponent) &&
+        messageId)
     ) {
-      secureMessageData.id = messageId
-      const result = await updateMessageAction(
-        previewSecureMessage.secureMessage?.id || messageId,
-        secureMessageData,
-      )
+      const result = await updateMessageAction(messageId, secureMessagePayload)
       if (result.state === 'error') {
         toast.error(result.error || 'Failed to update message')
-        return
+        return false
       } else {
         return result.data.id
       }
@@ -330,69 +431,79 @@ const ComposeNewEmail = () => {
     await Promise.all(uploadPromises)
   }
 
-  const replyEmail = async (messageId: string, channelId: string) => {
-    if (messageId) {
-      const updateChannel = await updateChannelAction(messageId, channelId, {
-        isReplied: true,
-        messageId,
-        externalEmail: 'string',
-        externalMessageId: 'string',
-      })
-      if (updateChannel.state === 'error') {
-        toast.error('Failed to reply email')
-        return
-      }
+  const replyEmail = async (messageId: string, channel: Channel) => {
+    if (!messageId || !channel.id) return
+    const payload = {
+      ...channel,
+      isReplied: true,
+      // messageId,
+      // externalEmail: null,
+      // externalMessageId: null,
     }
-  }
-
-  const replyAll = async (messageId: string) => {
-    const channels = await getAllChannelsAgainstMessageIdAction(messageId)
-    if (channels.state === 'error') {
-      toast.error('Failed to get channels')
-      return
-    }
-
-    await Promise.all(
-      channels.data.map(async (item) => {
-        if (!item?.id) {
-          toast.error(`Invalid channel item:`)
-          return null
-        }
-        const result = await updateChannelAction(messageId, item.id, {
-          isReplied: true,
-          messageId,
-          externalEmail: 'string',
-          externalMessageId: 'string',
-        })
-        if (result.state === 'error') {
-          toast.error('Failed to reply email')
-        }
-      }),
+    const updateChannel = await updateChannelAction(
+      messageId,
+      channel.id,
+      payload,
     )
+    if (updateChannel.state === 'error') {
+      toast.error('Failed to reply email')
+      return false
+    }
   }
+
+  // const replyAll = async (messageId: string) => {
+  //   const channels = await getAllChannelsAgainstMessageIdAction(messageId)
+  //   if (channels.state === 'error') {
+  //     toast.error('Failed to get channels')
+  //     return
+  //   }
+
+  //   await Promise.all(
+  //     channels.data.map(async (item) => {
+  //       if (!item?.id) {
+  //         toast.error(`Invalid channel item:`)
+  //         return null
+  //       }
+  //       const result = await updateChannelAction(messageId, item.id, {
+  //         isReplied: true,
+  //         messageId,
+  //         externalEmail: null,
+  //         externalMessageId: null,
+  //       })
+  //       console.log('replyAll:', result)
+  //       if (result.state === 'error') {
+  //         toast.error('Failed to reply email')
+  //       }
+  //     }),
+  //   )
+  // }
 
   const handleReplyAction = async () => {
     const { activeTab } = previewSecureMessage
-    const messageId = form.getValues('messageId')
-    const channelId = previewSecureMessage.secureMessage?.channels?.find(
+    const messageId = previewSecureMessage.secureMessage?.id
+    const channel = previewSecureMessage.secureMessage?.channels?.find(
       (a) => a.receiverUserId === user.id,
-    )?.id
+    )
     if (
-      activeComponent === ActiveComponent.REPLY &&
-      channelId &&
+      [ActiveComponent.REPLY, ActiveComponent.REPLY_TO_ALL].includes(
+        activeComponent,
+      ) &&
+      channel?.id &&
       messageId &&
+      // @TODO: We may not need this condition for activeTab because user can change the tab during replying
       (activeTab === SecureMessagesTab.INBOX ||
         activeTab === SecureMessagesTab.ARCHIVED)
     ) {
-      await replyEmail(messageId, channelId)
-    } else if (
-      activeComponent === ActiveComponent.REPLY_TO_ALL &&
-      messageId &&
-      (activeTab === SecureMessagesTab.INBOX ||
-        activeTab === SecureMessagesTab.ARCHIVED)
-    ) {
-      await replyAll(messageId)
+      return await replyEmail(messageId, channel)
     }
+    // else if (
+    //   activeComponent === ActiveComponent.REPLY_TO_ALL &&
+    //   messageId &&
+    //   (activeTab === SecureMessagesTab.INBOX ||
+    //     activeTab === SecureMessagesTab.ARCHIVED)
+    // ) {
+    //   await replyAll(messageId)
+    // }
   }
 
   return (
@@ -422,7 +533,7 @@ const ComposeNewEmail = () => {
             userEmailSuggestions={userEmailSuggestions}
             setUserEmailSuggestions={setUserEmailSuggestions}
           />
-          <SubjectInput />
+          <SubjectInput disabled={isSubmitting} />
           <RichTextEditor
             attachments={attachments}
             setAttachments={(a: Partial<Attachment>[]) => {
@@ -444,8 +555,16 @@ const ComposeNewEmail = () => {
             setDeletingAttachmentIds={setDeletingAttachmentIds}
           />
           <Flex gap="3" pt="3">
-            <SendButton onClick={() => setSendType('Send')} />
-            <SaveDraftButton onClick={() => setSendType('Draft')} />
+            <SendButton
+              onClick={() => setSendType(SendType.SEND)}
+              loading={isSubmitting && sendType === SendType.SEND}
+              disabled={isSubmitting}
+            />
+            <SaveDraftButton
+              onClick={() => setSendType(SendType.DRAFT)}
+              loading={isSubmitting && sendType === SendType.DRAFT}
+              disabled={isSubmitting}
+            />
           </Flex>
         </Flex>
       </Flex>

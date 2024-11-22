@@ -13,7 +13,7 @@ enum SecureMessagesTab {
 }
 
 enum ActiveComponent {
-    NEW_EMAIL = 'new-email',
+    NEW_EMAIL_PLACEHOLDER = 'new-email-placeholder',
     COMPOSE_MAIL = "New Message",
     PREVIEW_EMAIL = 'preview-email',
     FORWARD = 'Forward',
@@ -31,6 +31,7 @@ enum SendMode {
 
 enum SendType {
     SEND = 'Send',
+    DRAFT = 'Draft',
 }
 
 enum ReceiverUserRole {
@@ -42,9 +43,11 @@ enum SecureMessageStatus {
     READ = 'READ',
     UNREAD = 'UNREAD',
     REPLIED = 'REPLIED',
+}
+enum RecordStatus {
+    ACTIVE = 'Active',
     ARCHIVED = 'Archived',
 }
-
 enum EmailRecipientTypes {
     INTERNAL = 'Internal',
     EXTERNAL = 'EmrDirect',
@@ -96,8 +99,8 @@ interface Channel {
     receiverType: string;
     receiverStatus: string;
     sendMode: string;
-    receiverStatusDetail: string;
-    externalMessageId: string;
+    receiverStatusDetail: string | null;
+    externalMessageId: string | null;
     externalEmail: string | null;
     readTimeStamp: string;
     isRead: boolean;
@@ -133,7 +136,7 @@ interface SecureMessage {
     senderName: Name;
     senderUserRole: string;
     conversationId: string;
-    externalEmailAddress: string;
+    externalEmailAddress: string | null;
     subject: string;
     text: string;
     messageStatus: string;
@@ -176,7 +179,7 @@ interface ChannelMessageStatus {
     isReplied: boolean
 }
 
-interface EmailRecipient {
+interface GetEmailRecipientPayload {
     name?: string
     email?: string
     userType: string
@@ -219,6 +222,8 @@ interface SecureMessageStore {
     setActiveComponent: (activeComponent: ActiveComponent) => void,
     secureMessages: Partial<SecureMessage>[],
     setSecureMessages: (secureMessages: Partial<SecureMessage>[]) => void;
+    createForwardMessage: () => Promise<boolean>;
+    creatingForwardMessage: boolean
     previewSecureMessage: {
         secureMessage: Partial<SecureMessage> | null;
         activeTab: SecureMessagesTab;
@@ -234,13 +239,11 @@ interface SecureMessageStore {
         formValues: Partial<SchemaType>,
         page?: number,
         reset?: boolean,
-    ) => void
-    next: () => void
-    prev: () => void
+    ) => Promise<Partial<SecureMessage>[]>
+    next: () => Promise<Partial<SecureMessage>[]>
+    prev: () => Partial<SecureMessage>[]
     jumpToPage: (page: number) => void
 }
-
-
 
 type SecureMessageStoreType = SecureMessageStore
 
@@ -252,14 +255,14 @@ interface PhoneNumber {
 }
 interface ContactInfo {
     email: string
-    emailVerificationStatus: string
-    phoneNumbers: PhoneNumber[]
-    addresses: ClinicAddress[]
-    isMailingAddressSameAsPrimary: boolean
+    emailVerificationStatus?: string
+    phoneNumbers?: PhoneNumber[]
+    addresses?: ClinicAddress[]
+    isMailingAddressSameAsPrimary?: boolean
 }
 interface EmailRecipients {
     id: number
-    metadata: MetadataMapping
+    metadata?: MetadataMapping
     legalName: LegalName
     userRoleCode: string
     contactInfo: ContactInfo
@@ -354,12 +357,13 @@ export {
     type EmailPreviewTypes,
     type EmailPreview,
     type ChannelMessageStatus,
-    type EmailRecipient,
+    type GetEmailRecipientPayload,
     type Attachment,
     type Channel,
     type InitializeAttachmentsParams,
     type UploadAttachmentsParams,
     SecureMessageStatus,
+    RecordStatus,
     SecureMessagesTab,
     ActiveComponent,
     EmailRecipientTypes,

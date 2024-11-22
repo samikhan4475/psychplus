@@ -4,7 +4,7 @@ import { Flex } from '@radix-ui/themes'
 import { DateValue } from 'react-aria-components'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { FormContainer } from '@/components'
-import { formatDateToISOString, sanitizeFormData } from '@/utils'
+import { formatDateToISOString } from '@/utils'
 import { Filter } from './filter'
 import { FiltersButton } from './filter-button'
 import { MessageSearch } from './message-search'
@@ -12,7 +12,7 @@ import { NewEmailButton } from './new-email-button'
 import { schema, SchemaType } from './schema'
 import { useStore } from './store'
 import { ActiveComponent, messageStatus, SecureMessagesTab } from './types'
-import { splitName } from './utils'
+import { sanitizeFormData } from './utils'
 
 const MessageHeader = () => {
   const [showFilter, setShowFilter] = useState(false)
@@ -40,23 +40,25 @@ const MessageHeader = () => {
   })
 
   const onSubmit: SubmitHandler<SchemaType> = (data) => {
-    const { firstName, lastName } = splitName(data?.name || '')
     const cleanedPayload = {
       ...data,
       messageStatus: activeTab,
-      firstName,
-      lastName,
       to: data.to ? formatDateToISOString(data.to as DateValue) : undefined,
       from: data.from
         ? formatDateToISOString(data.from as DateValue, true)
         : undefined,
     }
     if (
-      activeTab === SecureMessagesTab.SENT ||
-      activeTab === SecureMessagesTab.DRAFT
+      activeTab === SecureMessagesTab.INBOX ||
+      activeTab === SecureMessagesTab.ARCHIVED
     ) {
-      cleanedPayload.isReplied = data.status === messageStatus.REPLIED
-      cleanedPayload.isRead = data.status === messageStatus.READ
+      if (data.status === messageStatus.READ) {
+        cleanedPayload.isRead = true
+      } else if (data.status === messageStatus.UNREAD) {
+        cleanedPayload.isRead = false
+      } else if (data.status === messageStatus.REPLIED) {
+        cleanedPayload.isReplied = true
+      }
     } else {
       delete data.sendMode
     }

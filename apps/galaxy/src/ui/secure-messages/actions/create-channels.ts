@@ -3,7 +3,7 @@
 import * as api from '@/api'
 import { Channel } from '../types'
 
-const postChannelAction = async (
+const createChannelsAction = async (
   messageId: string,
   data: Partial<Channel>[],
 ): Promise<api.ActionResult<Channel>> => {
@@ -25,4 +25,4 @@ const postChannelAction = async (
   }
 }
 
-export { postChannelAction }
+export { createChannelsAction }

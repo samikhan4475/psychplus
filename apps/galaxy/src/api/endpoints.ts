@@ -114,6 +114,8 @@ const DELETE_ATTACHMENTS_SECURE_MESSAGE = (
 ) =>
   `${API_URL}/api/securemessaging/messages/${messageId}/attachements/${attachmentId}`
 const SEND_SECURE_MESSAGE = `${API_URL}/api/users/self/securemessaging/messages`
+const CREATE_FORWARD_SECURE_MESSAGE = (messageId: string) =>
+  `${API_URL}/api/users/self/securemessaging/messages/${messageId}/actions/forward`
 const GET_RECIPIENT_SECURE_MESSAGE = (messageId: string) =>
   `${API_URL}/api/users/self/securemessages/${messageId}/recipients/actions/search`
 const SEARCH_PHARMACIES = (patientId: string) =>
@@ -379,6 +381,7 @@ export {
   GET_AVAILABLE_APPOINTMENT_ENDPOINT,
   GET_SECURE_MESSAGES,
   SEND_SECURE_MESSAGE,
+  CREATE_FORWARD_SECURE_MESSAGE,
   GET_RECIPIENT_SECURE_MESSAGE,
   CREATE_CHANNEL_SECURE_MESSAGE,
   ATTACHMENTS_SECURE_MESSAGE,

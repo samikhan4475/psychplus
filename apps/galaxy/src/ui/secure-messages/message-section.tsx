@@ -10,7 +10,7 @@ import { ActiveComponent } from './types'
 const MessageSection = () => {
   const { activeComponent } = useStore((state) => state)
   const renderEmailBody = useMemo(() => {
-    if (activeComponent === ActiveComponent.NEW_EMAIL)
+    if (activeComponent === ActiveComponent.NEW_EMAIL_PLACEHOLDER)
       return <EmailPlaceHolder />
     else if (activeComponent === ActiveComponent.PREVIEW_EMAIL)
       return <ReviewEmail />

@@ -4,9 +4,10 @@ import { SearchButton } from '@/ui/schedule/calendar-view/search-button'
 import { ClearButton } from './clear-button'
 import { EndDate } from './end-date-filter'
 import { FilterHeading } from './filter-heading'
+import { FirstNameInput } from './firstname-input'
 import { FromDateFilter } from './from-date-filter'
 import { FromDropdownFilter } from './from-dropdown-filter'
-import { NameInputField } from './input-label'
+import { LastNameInput } from './lastname-input'
 import { StatusDropdownFilter } from './status-dropdown'
 
 const Filter = () => {
@@ -30,7 +31,8 @@ const Filter = () => {
           justify="between"
           mt="2"
         >
-          <NameInputField />
+          <FirstNameInput />
+          <LastNameInput />
           <ClearButton />
           <SearchButton />
         </Flex>

@@ -7,8 +7,8 @@ const updateChannelAction = async (
   messageId: string,
   channelId: string,
   data: Partial<Channel>,
-): Promise<api.ActionResult<undefined>> => {
-  const response = await api.PUT(
+): Promise<api.ActionResult<Channel>> => {
+  const response = await api.PUT<Channel>(
     api.UPDATE_CHANNEL_MESSAGES_STATUS(messageId, channelId),
     data,
   )
@@ -20,7 +20,7 @@ const updateChannelAction = async (
   }
   return {
     state: 'success',
-    data: undefined,
+    data: response.data,
   }
 }
 

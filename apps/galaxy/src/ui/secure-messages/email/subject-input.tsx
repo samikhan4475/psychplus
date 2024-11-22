@@ -1,32 +1,11 @@
-import React, { useEffect } from 'react'
 import { Box, Flex, TextField } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
 import { FormFieldError } from '@/components'
-import { useStore } from '../store'
-import { ActiveComponent } from '../types'
 import { SendMessageSchemaType } from './send-message-schema'
 import { SubjectTitle } from './subject-title'
 
-const SubjectInput = () => {
+const SubjectInput = ({ disabled }: { disabled: boolean }) => {
   const form = useFormContext<SendMessageSchemaType>()
-  const { previewSecureMessage, activeComponent } = useStore((state) => state)
-
-  useEffect(() => {
-    if (!previewSecureMessage.secureMessage?.id) return
-
-    const subject = previewSecureMessage?.secureMessage?.subject || ''
-    switch (activeComponent) {
-      case ActiveComponent.FORWARD:
-        form.setValue('subject', `Fw: ${subject}`)
-        break
-      case ActiveComponent.DRAFT:
-        form.setValue('subject', subject)
-        break
-      default:
-        break
-    }
-  }, [activeComponent, previewSecureMessage.secureMessage?.id])
-
   return (
     <Box className="!mt-4">
       <FormFieldError name="subject" />
@@ -41,6 +20,7 @@ const SubjectInput = () => {
           size="3"
           type="text"
           className="rounded-lg h-[20px] w-full outline-none [box-shadow:none]"
+          disabled={disabled}
           {...form.register('subject')}
         />
       </Flex>

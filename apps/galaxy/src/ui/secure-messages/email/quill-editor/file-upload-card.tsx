@@ -61,12 +61,9 @@ const FileUploadCard = ({
         </Text>
         <Flex className="items-center" gap="1">
           <Text className="text-[12px]" color="gray">
-            {`${
-              isFile(attachment) ? bytesToMegaBytes(attachment.size) : ''
-            } MB`}
-          </Text>
-          <Text className="text-[12px]" color="gray">
-            .
+            {isFile(attachment)
+              ? `${bytesToMegaBytes(attachment.size)} MB`
+              : ''}
           </Text>
           {hasError && <ErrorBadge />}
         </Flex>

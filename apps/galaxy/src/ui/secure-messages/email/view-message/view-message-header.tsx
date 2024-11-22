@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
   ArrowLeftIcon,
   ChevronLeftIcon,
@@ -8,71 +8,100 @@ import { Button, Flex } from '@radix-ui/themes'
 import { Text } from 'react-aria-components'
 import toast from 'react-hot-toast'
 import { ArchiveIcon, MailIcon } from '@/components/icons'
+import { useStore as globalStore } from '@/store'
+import { cn } from '@/utils'
 import { updateChannelAction } from '../../actions'
+import { PAGE_SIZE } from '../../contants'
 import { useStore } from '../../store'
-import {
-  ActiveComponent,
-  SecureMessagesTab,
-  SecureMessageStatus,
-} from '../../types'
+import { ActiveComponent, RecordStatus, SecureMessagesTab } from '../../types'
 
 const ViewMessageHeader = () => {
+  const user = globalStore((state) => state.user)
   const {
     secureMessages = [],
+    page,
+    total,
     previewSecureMessage,
     setPreviewSecureMessage,
+    next,
+    prev,
     setActiveComponent,
     activeTab,
   } = useStore((state) => state)
 
-  const [currentPage, setCurrentPage] = useState(1)
+  const [currentActiveMessage, setCurrentActiveMessage] = useState(1)
 
   useEffect(() => {
     if (previewSecureMessage?.secureMessage?.id) {
-      const findIndex =
-        secureMessages.findIndex(
-          (item) => item.id === previewSecureMessage?.secureMessage?.id,
-        ) + 1
-      setCurrentPage(findIndex)
+      const findIndex = secureMessages.findIndex(
+        (item) => item.id === previewSecureMessage?.secureMessage?.id,
+      )
+      if (findIndex === -1) return
+      setCurrentActiveMessage((page - 1) * PAGE_SIZE + findIndex + 1)
     }
-  }, [secureMessages, previewSecureMessage])
+  }, [secureMessages, previewSecureMessage.secureMessage?.id, page])
 
-  const nextMessageHandler = () => {
-    if (currentPage < secureMessages.length) {
-      const nextMessage = secureMessages[currentPage]
+  const nextMessageHandler = async () => {
+    const totalMessagesLoaded = (page - 1) * PAGE_SIZE + secureMessages.length
+    if (currentActiveMessage < totalMessagesLoaded) {
+      const nextMessageIndex = currentActiveMessage % PAGE_SIZE
+      const nextMessage = secureMessages[nextMessageIndex]
       if (nextMessage) {
         setPreviewSecureMessage({
           secureMessage: nextMessage,
           activeTab: previewSecureMessage.activeTab,
         })
-        setCurrentPage(currentPage + 1)
+        setCurrentActiveMessage(currentActiveMessage + 1)
+      }
+    } else if (page * PAGE_SIZE < total) {
+      const messages = await next()
+      const nextMessage = messages?.[0]
+      if (!nextMessage) return
+      setPreviewSecureMessage({
+        ...previewSecureMessage,
+        secureMessage: nextMessage,
+      })
+      setCurrentActiveMessage(page * PAGE_SIZE + 1)
+    }
+  }
+
+  const previousMessageHandler = async () => {
+    if (currentActiveMessage % PAGE_SIZE === 1 && page > 1) {
+      const prevMessages = prev()
+      const prevMessage = prevMessages[PAGE_SIZE - 1]
+      if (prevMessage) {
+        setPreviewSecureMessage({
+          ...previewSecureMessage,
+          secureMessage: prevMessage,
+        })
+        return setCurrentActiveMessage((page - 1) * PAGE_SIZE)
+      }
+    } else if (currentActiveMessage > 1) {
+      const prevMessageIndex = (currentActiveMessage - 2) % PAGE_SIZE
+      const prevMessage = secureMessages[prevMessageIndex]
+      if (prevMessage) {
+        setPreviewSecureMessage({
+          ...previewSecureMessage,
+          secureMessage: prevMessage,
+        })
+        setCurrentActiveMessage(currentActiveMessage - 1)
       }
     }
   }
 
-  const previousMessageHandler = () => {
-    if (currentPage > 1) {
-      const prevMessage = secureMessages[currentPage - 2]
-      if (prevMessage) {
-        setPreviewSecureMessage({
-          secureMessage: prevMessage,
-          activeTab: previewSecureMessage.activeTab,
-        })
-        setCurrentPage(currentPage - 1)
-      }
-    }
-  }
   const onSubmit = async (type: string) => {
-    const channel = previewSecureMessage?.secureMessage?.channels?.[0]
-    if (channel && channel.id && previewSecureMessage?.secureMessage?.id) {
+    const channel = previewSecureMessage?.secureMessage?.channels?.find(
+      (channel) => channel.receiverUserId === user.id,
+    )
+    if (channel?.id && previewSecureMessage?.secureMessage?.id) {
       const payload = {
         ...channel,
       }
 
       if (type === 'messageStatus') {
-        payload.isRead = true
+        payload.isRead = !payload.isRead
       } else if (type === 'recordStatus') {
-        payload.recordStatus = SecureMessageStatus.ARCHIVED
+        payload.recordStatus = RecordStatus.ARCHIVED
       }
 
       const result = await updateChannelAction(
@@ -82,7 +111,7 @@ const ViewMessageHeader = () => {
       )
 
       if (result.state === 'error') {
-        toast.error('Failed to update channel')
+        toast.error(result.error || 'Failed to update channel')
       }
     }
   }
@@ -95,7 +124,13 @@ const ViewMessageHeader = () => {
     >
       <Flex align="center" gap="4" className="pl-6">
         <ArrowLeftIcon
-          onClick={() => setActiveComponent(ActiveComponent.NEW_EMAIL)}
+          onClick={() => {
+            setPreviewSecureMessage({
+              ...previewSecureMessage,
+              secureMessage: null,
+            })
+            setActiveComponent(ActiveComponent.NEW_EMAIL_PLACEHOLDER)
+          }}
           className="text-pp-gray-1 cursor-pointer"
         />
         {activeTab === SecureMessagesTab.INBOX && (
@@ -136,7 +171,7 @@ const ViewMessageHeader = () => {
       </Flex>
       <Flex align="center" gap="4" className="pr-6">
         <Text>
-          {currentPage} of {secureMessages.length}
+          {currentActiveMessage} of {total}
         </Text>
         <Flex>
           <ChevronLeftIcon
@@ -145,7 +180,10 @@ const ViewMessageHeader = () => {
           />
           <ChevronRightIcon
             onClick={nextMessageHandler}
-            className="cursor-pointer"
+            className={cn(
+              'cursor-pointer',
+              currentActiveMessage === total && 'hidden',
+            )}
           />
         </Flex>
       </Flex>

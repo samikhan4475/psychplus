@@ -56,8 +56,8 @@ const mapEmailData = ({
                     readTimeStamp: new Date().toISOString(),
                     isRead: false,
                     isReplied: false,
-                    receiverStatusDetail: 'string',
-                    externalMessageId: 'string',
+                    receiverStatusDetail: null,
+                    externalMessageId: null,
                 };
             }) || []
     );
@@ -74,9 +74,21 @@ const getFullName = (
     lastName?: string,
     externalEmail?: string | null,
 ) =>
-    firstName && lastName ? `${firstName} ${lastName}` : externalEmail || '-'
+    firstName && lastName ? `${firstName} ${lastName}` : externalEmail ?? '-'
 function isEmail(keyword: string) {
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     return emailRegex.test(keyword);
 }
-export { bytesToMegaBytes, mapEmailData, getRecipientLabel, splitName, getFullName, isEmail }
+function sanitizeFormData<T extends object>(obj: T): T {
+    return Object.fromEntries(
+      Object.entries(obj).filter(
+        ([_, value]) =>
+          value !== undefined &&
+          value !== null &&
+          value !== '' &&
+          value?.length !== 0
+      ),
+    ) as T
+}
+
+export { bytesToMegaBytes, mapEmailData, getRecipientLabel, splitName, getFullName, isEmail, sanitizeFormData }

@@ -13,6 +13,7 @@ const ViewMessageText = () => {
         value={text || ''}
         readOnly
         modules={{ toolbar: null }}
+        className='w-full'
         placeholder="Write your message here..."
       />
     </Flex>

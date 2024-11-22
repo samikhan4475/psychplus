@@ -1,12 +1,16 @@
 import React from 'react'
 import { Flex, Text } from '@radix-ui/themes'
-import { useFormContext } from 'react-hook-form'
+import { useFormContext, useWatch } from 'react-hook-form'
 import { SelectInput } from '@/components'
 import { SchemaType } from './schema'
 import { SendMode } from './types'
 
 const FromDropdownFilter = () => {
   const form = useFormContext<SchemaType>()
+  const sendMode = useWatch({
+    name: 'sendMode',
+    control: form.control,
+  })
 
   return (
     <Flex width="100%" gap="1" align="center">
@@ -17,8 +21,8 @@ const FromDropdownFilter = () => {
         field="Select"
         label=""
         className=" w-[238px]"
-        value={form.watch('sendMode') || ''}
-        onValueChange={(vals) => form.setValue('sendMode', vals)}
+        value={sendMode || ''}
+        onValueChange={(value) => form.setValue('sendMode', value)}
         buttonClassName="w-full"
         options={[
           { label: 'Internal', value: SendMode.INTERNAL },

@@ -5,16 +5,25 @@ import { useStore } from '../../store'
 import { ActiveComponent } from '../../types'
 
 const ViewMessageActions = () => {
-  const { setActiveComponent } = useStore((state) => state)
+  const { creatingForwardMessage, createForwardMessage, setActiveComponent } =
+    useStore((state) => state)
 
   return (
     <Box className="mt-4 flex  space-x-2">
       <ReplyAllButton
+        disabled={creatingForwardMessage}
         onClick={() => setActiveComponent(ActiveComponent.REPLY_TO_ALL)}
       />
-      <ReplyButton onClick={() => setActiveComponent(ActiveComponent.REPLY)} />
+      <ReplyButton
+        disabled={creatingForwardMessage}
+        onClick={() => setActiveComponent(ActiveComponent.REPLY)}
+      />
       <ForwardButton
-        onClick={() => setActiveComponent(ActiveComponent.FORWARD)}
+        onClick={async () => {
+          const isSuccess = await createForwardMessage()
+          if (isSuccess) setActiveComponent(ActiveComponent.FORWARD)
+        }}
+        disabled={creatingForwardMessage}
       />
     </Box>
   )

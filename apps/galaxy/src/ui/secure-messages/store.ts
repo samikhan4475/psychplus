@@ -1,11 +1,14 @@
 'use client'
 
+import toast from 'react-hot-toast'
 import { create } from 'zustand'
-import { getAllSecureMessagesAction } from './actions'
+import {
+  createForwardMessageAction,
+  getAllSecureMessagesAction,
+} from './actions'
 import { SchemaType } from './schema'
 import {
   ActiveComponent,
-  messageStatus,
   SecureMessage,
   SecureMessagesTab,
   SecureMessageStoreType,
@@ -33,6 +36,7 @@ const useStore = create<SecureMessageStoreType>((set, get) => ({
   },
   error: undefined,
   loading: true,
+  creatingForwardMessage: false,
   formValues: undefined,
   page: 1,
   total: 0,
@@ -41,7 +45,7 @@ const useStore = create<SecureMessageStoreType>((set, get) => ({
   setActiveTab: (activeTab: SecureMessagesTab) => {
     set({ activeTab })
   },
-  activeComponent: ActiveComponent.NEW_EMAIL,
+  activeComponent: ActiveComponent.NEW_EMAIL_PLACEHOLDER,
   setActiveComponent: (activeComponent: ActiveComponent) => {
     set({ activeComponent })
   },
@@ -55,13 +59,6 @@ const useStore = create<SecureMessageStoreType>((set, get) => ({
       loading: true,
       formValues,
     })
-    if (formValues.status === messageStatus.READ) {
-      formValues.isRead = true
-    } else if (formValues.status === messageStatus.UNREAD) {
-      formValues.isRead = false
-    } else if (formValues.status === messageStatus.REPLIED) {
-      formValues.isReplied = true
-    }
 
     const result = await getAllSecureMessagesAction({
       page,
@@ -69,21 +66,46 @@ const useStore = create<SecureMessageStoreType>((set, get) => ({
     })
 
     if (result.state === 'error') {
-      return set({
+      toast.error(result.error || 'Failed to fetch data')
+      set({
         error: result.error,
         loading: false,
       })
+      return []
     }
-
-    const { messages } = result.data
+    const { messages, total } = result.data
     set({
       secureMessages: messages,
+      total,
       loading: false,
       pageCache: reset
         ? { [page]: messages }
         : { ...get().pageCache, [page]: messages },
       page,
     })
+    return messages
+  },
+  createForwardMessage: async () => {
+    set({ creatingForwardMessage: true })
+    const { previewSecureMessage } = get()
+
+    if (!previewSecureMessage.secureMessage?.id) return false
+    const result = await createForwardMessageAction(
+      previewSecureMessage.secureMessage?.id,
+    )
+    set({ creatingForwardMessage: false })
+    if (result.state === 'error') {
+      toast.error('Failed to forward message')
+      return false
+    } else {
+      set({
+        previewSecureMessage: {
+          ...previewSecureMessage,
+          secureMessage: result.data,
+        },
+      })
+      return true
+    }
   },
   jumpToPage: (page: number) => {
     if (page < 1) {
@@ -98,17 +120,18 @@ const useStore = create<SecureMessageStoreType>((set, get) => ({
     }
     get().search(get().formValues || {}, page)
   },
-  next: () => {
+  next: async (): Promise<Partial<SecureMessage>[]> => {
     const page = get().page + 1
 
     if (get().pageCache[page]) {
-      return set({
+      set({
         secureMessages: get().pageCache[page],
         page,
       })
+      return get().pageCache[page]
     }
 
-    get().search(get().formValues || {}, page, false)
+    return get().search(get().formValues || {}, page, false)
   },
   prev: () => {
     const page = get().page - 1
@@ -117,6 +140,7 @@ const useStore = create<SecureMessageStoreType>((set, get) => ({
       secureMessages: get().pageCache[page],
       page,
     })
+    return get().pageCache[page]
   },
 }))
 

@@ -1,11 +1,11 @@
 'use server'
 
 import * as api from '@/api'
-import { EmailRecipient, EmailRecipients } from '../types'
+import { GetEmailRecipientPayload, EmailRecipients } from '../types'
 
 const getAllRecipientSuggestionsAction = async (
   messageId: string,
-  data: EmailRecipient,
+  data: GetEmailRecipientPayload,
 ): Promise<api.ActionResult<EmailRecipients[]>> => {
   const response = await api.POST<EmailRecipients[]>(
     api.GET_RECIPIENT_SECURE_MESSAGE(messageId),

@@ -39,4 +39,5 @@
 .react-tags__list {
   display: flex !important;
   gap: 2px !important;
+  flex-wrap: wrap;
 }

@@ -18,7 +18,6 @@ import {
   ActiveComponent,
   EmailRecipientTypes,
   ExternalRecipientProps,
-  SecureMessagesTab,
 } from '../types'
 import { SendMessageSchemaType } from './send-message-schema'
 
@@ -32,47 +31,29 @@ const ExternalRecipientsEmails = ({
   const { previewSecureMessage, activeComponent } = useStore((state) => state)
 
   const handleReply = () => {
-    if (previewSecureMessage.activeTab !== SecureMessagesTab.INBOX) {
-      return
-    }
+    const { externalEmailAddress: email } =
+      previewSecureMessage?.secureMessage ?? {}
 
-    const channels = previewSecureMessage?.secureMessage?.channels || []
-    if (
-      channels.length === 0 ||
-      channels[0]?.sendMode !== EmailRecipientTypes.EXTERNAL
-    ) {
-      return
-    }
-
-    const email =
-      previewSecureMessage.activeTab === SecureMessagesTab.INBOX
-        ? channels[0]?.receiverEmail
-        : channels[0]?.externalEmail || ''
-
-    if (!email) {
-      return
-    }
+    if (!email) return
 
     const tag = {
       label: email,
       value: email,
     }
-    setExternalEmailSuggestions((prevSuggestions) => {
-      const suggestionsSet = new Set(prevSuggestions.map((s) => s.value))
 
-      if (email && typeof email === 'string') {
-        suggestionsSet.add(email)
-      }
+    const suggestionsSet = new Set(externalEmailSuggestions.map((s) => s.value))
 
-      const updatedSuggestions = Array.from(suggestionsSet).map((value) => ({
-        label: String(value),
-        value: String(value),
-      }))
+    if (typeof email === 'string') {
+      suggestionsSet.add(email)
+    }
 
-      form.setValue('externalEmails', updatedSuggestions)
-      return updatedSuggestions
-    })
+    const updatedSuggestions = Array.from(suggestionsSet).map((value) => ({
+      label: String(value),
+      value: String(value),
+    }))
 
+    form.setValue('externalEmails', updatedSuggestions)
+    setExternalEmailSuggestions(updatedSuggestions)
     setExternalRecipientsTag([tag])
   }
 
@@ -107,13 +88,9 @@ const ExternalRecipientsEmails = ({
     const externalTags = channels
       .filter((item) => item.sendMode === EmailRecipientTypes.EXTERNAL)
       .map((item) => {
-        const email =
-          previewSecureMessage.activeTab === SecureMessagesTab.INBOX
-            ? item.receiverEmail
-            : item.externalEmail
         return {
-          label: email || '',
-          value: email || '',
+          label: item.externalEmail ?? '',
+          value: item.externalEmail ?? '',
         }
       })
 
@@ -183,7 +160,7 @@ const ExternalRecipientsEmails = ({
       const channel = channels.find(
         (item, index) =>
           item.sendMode === EmailRecipientTypes.EXTERNAL &&
-          externalRecipientsTag[index].value === item?.externalEmail,
+          externalRecipientsTag?.[index]?.value === item?.externalEmail,
       )
       if (previewSecureMessage?.secureMessage?.id && channel?.id) {
         const result = await updateChannelAction(
@@ -209,12 +186,12 @@ const ExternalRecipientsEmails = ({
     <>
       <Flex
         direction="row"
-        className="border-pp-gray-4 h-[40px]  border-b"
+        className="border-pp-gray-4 min-h-[40px] border-b"
         align={'center'}
         position="relative"
       >
         <SendExternalTitle />
-        <Box className="max-h-[40px] max-w-[639px] flex-grow overflow-y-auto">
+        <Box className="min-h-[40px] flex-1 flex-wrap">
           <ReactTags
             selected={externalRecipientsTag}
             suggestions={externalEmailSuggestions}
@@ -225,13 +202,28 @@ const ExternalRecipientsEmails = ({
             noOptionsText="No Matches"
             placeholderText=""
             labelText=""
-            renderInput={(inputProps) => (
-              <input {...inputProps} className="flex-grow outline-none" />
+            renderInput={({ className, ...inputProps }) => (
+              <input
+                {...inputProps}
+                className={cn(className, 'flex-grow outline-none')}
+              />
             )}
-            renderTag={({ classNames, tag, onClick, color, ...tagProps }) => {
+            renderTag={({
+              classNames,
+              tag,
+              onClick,
+              title,
+              color,
+              ...tagProps
+            }) => {
               return (
                 <Button type="button" className={classNames.tag} {...tagProps}>
-                  <Text className={cn('text-pp-black-3', classNames.tagName)}>
+                  <Text
+                    className={cn(
+                      'text-pp-black-3 text-[12px] font-[510]',
+                      classNames.tagName,
+                    )}
+                  >
                     {tag.label}
                   </Text>
                   <IconButton
@@ -239,17 +231,18 @@ const ExternalRecipientsEmails = ({
                     onClick={onClick}
                     size="1"
                     variant="ghost"
+                    title={title}
                   >
                     <XIcon size="16" color="gray" />
                   </IconButton>
                 </Button>
               )
             }}
-            renderRoot={({ children, ...rootProps }) => (
+            renderRoot={({ children, className, ...rootProps }) => (
               <Flex
                 align="center"
                 gap="1"
-                className="border-none"
+                className={cn(className, 'flex-wrap border-none')}
                 {...rootProps}
               >
                 {children}

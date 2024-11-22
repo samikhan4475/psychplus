@@ -4,21 +4,21 @@ import { useFormContext } from 'react-hook-form'
 import { FormFieldError, FormFieldLabel } from '@/components'
 import { SchemaType } from './schema'
 
-const NameInputField = () => {
+const LastNameInput = () => {
   const form = useFormContext<SchemaType>()
 
   return (
     <Flex width="100%" gap="1">
-      <FormFieldLabel className="!text-1">Name</FormFieldLabel>
+      <FormFieldLabel className="!text-1">Last Name</FormFieldLabel>
       <TextField.Root
         size="1"
-        placeholder="Search by name"
+        placeholder="Search by Last Name"
         className="h-[24px] w-full"
-        {...form.register('name')}
+        {...form.register('lastName')}
       />
-      <FormFieldError name="name" />
+      <FormFieldError name="lastName" />
     </Flex>
   )
 }
 
-export { NameInputField }
+export { LastNameInput }

@@ -10,6 +10,7 @@ import {
   DataTablePagination,
   LoadingPlaceholder,
 } from '@/components'
+import { useStore as globalStore } from '@/store'
 import { updateChannelAction } from '../actions'
 import { PAGE_SIZE } from '../contants'
 import { useStore } from '../store'
@@ -36,6 +37,7 @@ const SecureMessagesTable = () => {
     setActiveComponent,
     jumpToPage,
   } = useStore((state) => state)
+  const user = globalStore((state) => state.user)
 
   const DataTableFooter = useMemo(() => {
     return (
@@ -76,11 +78,14 @@ const SecureMessagesTable = () => {
       {
         id: 'from',
         size: 50,
-
         header: ({ column }) =>
           ColumnHeader({
             column,
-            label: 'From',
+            label:
+              activeTab === SecureMessagesTab.DRAFT ||
+              activeTab === SecureMessagesTab.SENT
+                ? 'To'
+                : 'From',
             className: 'text-3 font-regular text-black',
           }),
         cell: MessageFromCell,
@@ -130,10 +135,13 @@ const SecureMessagesTable = () => {
         setActiveComponent(ActiveComponent.DRAFT)
       } else {
         setActiveComponent(ActiveComponent.PREVIEW_EMAIL)
-
-        // Update the 'isRead' status for non-SENT messages
-        if (activeTab !== SecureMessagesTab.SENT) {
-          const channel = secureMessage?.channels?.[0]
+        if (
+          activeTab === SecureMessagesTab.INBOX ||
+          activeTab === SecureMessagesTab.ARCHIVED
+        ) {
+          const channel = secureMessage?.channels?.find(
+            (channel) => channel.receiverUserId === user.id,
+          )
           if (!channel?.id || !secureMessage.id) return
 
           const payload = { ...channel, isRead: true }
@@ -146,7 +154,7 @@ const SecureMessagesTable = () => {
           if (result.state === 'error') {
             toast.error('Failed to update channel')
           } else {
-            secureMessage.channels[0].isRead = true
+            channel.isRead = true
             const updatedMessages = secureMessages.map((msg) =>
               msg.id === secureMessage.id ? secureMessage : msg,
             )
@@ -160,7 +168,7 @@ const SecureMessagesTable = () => {
 
   if (loading) {
     return (
-      <Flex height="100vh" align="center" justify="center">
+      <Flex height="50vh" align="center" justify="center">
         <LoadingPlaceholder />
       </Flex>
     )
@@ -174,9 +182,11 @@ const SecureMessagesTable = () => {
       columns={columns}
       tableClass="bg-white mt-4"
       renderFooter={() => DataTableFooter}
-      onRowClick={(row: Row<SecureMessage>) =>
+      onRowClick={(row: Row<SecureMessage>, table) => {
         onClickSecureMessage(row.original)
-      }
+        table.toggleAllPageRowsSelected(false)
+        row.toggleSelected()
+      }}
     />
   )
 }
