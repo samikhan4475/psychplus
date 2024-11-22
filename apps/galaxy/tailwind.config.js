@@ -43,6 +43,7 @@ const config = {
         'pp-gray-4': '#EDEDF2',
         'pp-gray-6': '#E7E8E3',
         'pp-gray-7': '#fefefe',
+        'pp-gray-8': '#CDCED6',
         'pp-alt-blue': '#0F6CBD',
         'pp-accent-mint': '#8BD5C9',
         'pp-green-100': '#E9F9EE',
@@ -102,7 +103,7 @@ const config = {
         'light-08':
           '0px 0px 2px 0px rgba(0, 0, 0, 0.12), 0px 4px 8px 0px rgba(0, 0, 0, 0.14)',
         'light-gray-08': '0px 4px 4px 0px #00000014',
-        'ss-gray': '0px 1px 2px 0px #1C202408'
+        'ss-gray': '0px 1px 2px 0px #1C202408',
       },
     },
   },

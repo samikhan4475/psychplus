@@ -10,7 +10,7 @@ const BLOCK_OPTIONS = [
   { label: 'Weight Gain', value: 'medWeightGain' },
   { label: 'Headache', value: 'medHeadache' },
   { label: 'Rash', value: 'medRash' },
-  { label: 'Hair Loss', value: 'medHairLoss' },
+  { label: 'Hair loss', value: 'medHairLoss' },
   { label: 'Dystonia', value: 'medDystonia' },
   { label: 'Akathesia', value: 'medAkathesia' },
   { label: 'Tardive Dyskinesia', value: 'medTardiveDyskinesia' },
@@ -22,7 +22,6 @@ const BLOCK_OPTIONS = [
     value: 'medOther',
     details: {
       type: 'text' as DetailsType,
-      label: 'Details',
       field: 'medOtherDetails',
     },
   },

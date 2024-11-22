@@ -32,7 +32,7 @@ const QuickNotesView = async ({
     <Flex width="100%" direction="column">
       <QuickNotesSaver />
       <QuickNotesHeader appointment={appointment.data} />
-      <Flex className="h-full max-h-[calc(100dvh_-_385px)] w-full">
+      <Flex className="h-full max-h-[calc(100dvh-408px)] w-full">
         <ScrollArea className="h-full pr-3" type="always" scrollbars="vertical">
           <Flex direction="column" height="100%" gap="2">
             {widgets.map(({ component: WidgetComponent, id }) => {

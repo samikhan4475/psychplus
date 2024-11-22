@@ -26,7 +26,7 @@ const BLOCK_OPTIONS = [
     value: 'adiDifficultyOrganizing',
   },
   {
-    label: 'Difficulty to do Detail-Oriented Tasks',
+    label: 'Difficulty to do Detail Oriented Tasks',
     value: 'adiDifficultyToDoDetailOrientedTasks',
   },
   {

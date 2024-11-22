@@ -1,19 +1,12 @@
-import { Flex, TextField } from '@radix-ui/themes'
-import { useFormContext } from 'react-hook-form'
-import { BlockLabel } from '@/components'
-import { type HpiWidgetSchemaType } from '../hpi-widget-schema'
+import { Flex } from '@radix-ui/themes'
+import { AutoResizeInput, BlockLabel, FormFieldError } from '@/components'
 
 const OtherBlock = () => {
-  const form = useFormContext<HpiWidgetSchemaType>()
-
   return (
-    <Flex align="center" gap="2">
+    <Flex align="start" gap="2" width="100%">
       <BlockLabel>Other</BlockLabel>
-      <TextField.Root
-        size="1"
-        className="w-full max-w-lg"
-        {...form.register('hpiOther')}
-      ></TextField.Root>
+      <AutoResizeInput field="hpiOther" />
+      <FormFieldError name="hpiOther" />
     </Flex>
   )
 }

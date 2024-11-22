@@ -40,7 +40,7 @@ const hpiWidgetSchema = z
     hpiOther: z
       .string()
       .trim()
-      .max(128, 'Max 128 characters allowed')
+      .max(200, 'Max 200 characters allowed')
       .optional(),
   })
   .superRefine((data, ctx) => {

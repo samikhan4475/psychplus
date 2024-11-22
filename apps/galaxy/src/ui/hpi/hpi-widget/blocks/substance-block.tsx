@@ -19,7 +19,6 @@ const BLOCK_OPTIONS = [
     value: 'subOther',
     details: {
       type: 'text' as DetailsType,
-      label: 'Details',
       field: 'subOtherDetails',
     },
   },

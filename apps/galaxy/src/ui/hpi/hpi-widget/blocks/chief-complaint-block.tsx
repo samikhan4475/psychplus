@@ -81,7 +81,6 @@ const BLOCK_OPTIONS = [
     value: 'ccOther',
     details: {
       type: 'text' as DetailsType,
-      label: 'Details',
       field: 'ccOtherDetails',
     },
   },

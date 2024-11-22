@@ -5,13 +5,13 @@ import { HpiWidgetSchemaKey } from './hpi-narration'
 const formatSymptoms = (filteredSymptoms: string[]): string => {
   const count = filteredSymptoms.length
   if (count === 0) return ''
-  if (count === 1) return filteredSymptoms?.[0]?.toLowerCase()
+  if (count === 1) return filteredSymptoms?.[0]
 
   return (
     filteredSymptoms
-      .map((symptom) => symptom?.toLowerCase())
+      .map((symptom) => symptom)
       .slice(0, -1)
-      .join(', ') + ` and ${filteredSymptoms?.[count - 1]?.toLowerCase()}`
+      .join(', ') + ` and ${filteredSymptoms?.[count - 1]}`
   )
 }
 
@@ -35,8 +35,8 @@ const formatOthersDetail = (
 }
 
 const schizophreniaMap: Record<string, HpiWidgetSchemaKey> = {
-  hallucination: 'schizophreniaHallucinationsValues',
-  delusion: 'schizophreniaDelusionValues',
+  Hallucination: 'schizophreniaHallucinationsValues',
+  Delusion: 'schizophreniaDelusionValues',
 }
 
 const otherDetailsMap: Record<string, { key: string; detailsKey: string }> = {
@@ -61,7 +61,7 @@ const appendMuliSelectOptions = (
     return complaints
   }
 
-  const suffix = key === 'delusion' ? 'delusion' : 'hallucination'
+  const suffix = key === 'Delusion' ? 'Delusion' : 'Hallucination'
   complaints = complaints.filter((symptom) => symptom !== key)
   complaints.unshift(
     ...values.map(

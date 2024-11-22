@@ -1,3 +1,4 @@
 const QUICKNOTE_SECTION_NAME = 'QuicknoteSectionHPI'
 
+
 export { QUICKNOTE_SECTION_NAME }

@@ -225,16 +225,21 @@ const transformIn = (
 ): HpiWidgetSchemaType => {
   const result = getInitialValues()
   const specificFields = assignSpecificFields(result)
-  value.forEach((item) => {
-    if (item.sectionItem in specificFields) {
-      specificFields[item.sectionItem](item.sectionItemValue)
+  const orderedKeys = Object.keys(valueToLabel)
+  orderedKeys.forEach((key) => {
+    const matchingItem = value.find((item) => item.sectionItem === key)
+    if (!matchingItem) return
+
+    if (key in specificFields) {
+      specificFields[key](matchingItem.sectionItemValue)
       return
     }
 
-    const [prefix, _] = item.sectionItem.split('_')
+    const [prefix] = key.split('_')
     const itemValue = isLabel
-      ? valueToLabel[item.sectionItem] || valueToSchema[item.sectionItem]
-      : valueToSchema[item.sectionItem]
+      ? valueToLabel[key] || valueToSchema[key]
+      : valueToSchema[key]
+
     switch (prefix) {
       case ANXIETY_PREFIX:
         result.anxiety.push(itemValue)
@@ -299,7 +304,6 @@ const transformOut =
     const result: QuickNoteSectionItem[] = []
 
     const sanitizedFormData = sanitizeFormData(schema)
-
     Object.entries(sanitizedFormData).forEach(([key, value]) => {
       if (
         key.includes('Other') ||

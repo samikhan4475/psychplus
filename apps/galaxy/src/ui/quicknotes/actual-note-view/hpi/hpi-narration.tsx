@@ -58,7 +58,7 @@ const HpiNarration = ({ patient, symptoms }: Props) => {
       if (Array.isArray(complaintSymptoms) && complaintSymptoms.length > 0) {
         narration += ` The patient reports that ${
           optionsValueToLabel[complaint] ?? complaint
-        } symptoms are consistent with `
+        } symptoms are consistent with issues with `
 
         const details = otherDetailsMap[complaint]
         if (details) {

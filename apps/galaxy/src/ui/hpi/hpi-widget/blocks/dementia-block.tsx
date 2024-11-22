@@ -7,11 +7,14 @@ const BLOCK_TITLE = 'Dementia'
 const BLOCK_OPTIONS = [
   { label: 'Memory Loss', value: 'demMemoryLoss' },
   { label: 'Confusion', value: 'demConfusion' },
-  { label: 'Difficulty with ADLs', value: 'demDifficultyWithAdls' },
+  {
+    label: 'Difficulty with Activities of Daily Living',
+    value: 'demDifficultyWithAdls',
+  },
   { label: 'Wandering', value: 'demWandering' },
   { label: 'Agitation', value: 'demAgitation' },
-  { label: 'AH', value: 'demAh' },
-  { label: 'VH', value: 'demVh' },
+  { label: 'Auditory Hallucinations', value: 'demAh' },
+  { label: 'Visual Hallucinations', value: 'demVh' },
   { label: 'Parkinson Symptoms', value: 'demParkinsonSymptoms' },
 ]
 

@@ -26,7 +26,7 @@ const getNavLinks = (appointmentId: string | null) => {
   const navLinks = [
     { label: 'Quick Notes', href: '/quicknotes' },
     { label: 'Notes', href: '/notes' },
-    { label: 'HPI', href: '/hpi' },
+    { label: 'HPI/Presenting Symptoms', href: '/hpi' },
     { label: 'History', href: '/histories' },
     { label: 'Questionnaires', href: '/questionnaires' },
     { label: 'Mental Status Exam', href: '/mse' },
