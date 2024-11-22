@@ -55,6 +55,73 @@ const getNavLinks = (appointmentId: string | null) => {
   return baseLinks
 }
 
+const getStaffNavLinks = (staffId: string | null) => {
+  const baseHref = `/staff/${staffId}`
+
+  return [
+    {
+      label: 'Dashboard',
+      href: `${baseHref}/dashboard`,
+    },
+    {
+      label: 'Profile',
+      href: `${baseHref}/profile`,
+    },
+    {
+      label: 'Credentialing',
+      href: `${baseHref}/credentialing`,
+    },
+    {
+      label: 'License',
+      href: `${baseHref}/license`,
+    },
+    {
+      label: 'Malpractice',
+      href: `${baseHref}/malpractice`,
+    },
+    {
+      label: 'Preferences',
+      href: `${baseHref}/preferences`,
+    },
+    {
+      label: 'Clinic Scheduler',
+      href: `${baseHref}/clinic-scheduler`,
+    },
+    {
+      label: 'Forward Inbox',
+      href: `${baseHref}/forward-inbox`,
+    },
+    {
+      label: 'Groups',
+      href: `${baseHref}/groups`,
+    },
+    {
+      label: 'Billing',
+      href: `${baseHref}/billing`,
+    },
+    {
+      label: 'Policy',
+      href: `${baseHref}/policy`,
+    },
+    {
+      label: 'Tracking',
+      href: `${baseHref}/tracking`,
+    },
+    {
+      label: 'Location / Zone',
+      href: `${baseHref}/location-zone`,
+    },
+    {
+      label: 'Treatment Team',
+      href: `${baseHref}/treatment-team`,
+    },
+    {
+      label: 'Practice',
+      href: `${baseHref}/practice`,
+    },
+  ]
+}
+
 const constructQuickNotesUrl = (
   patientId: number,
   appointmentId: number,
@@ -70,4 +137,9 @@ const isHospitalCareVisit = (visitType: string | null) => {
   return visitType?.includes('HospitalCare')
 }
 
-export { constructQuickNotesUrl, getNavLinks, isHospitalCareVisit }
+export {
+  constructQuickNotesUrl,
+  getNavLinks,
+  isHospitalCareVisit,
+  getStaffNavLinks,
+}

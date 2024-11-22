@@ -1,0 +1,60 @@
+'use client'
+
+import { useMemo } from 'react'
+import NextLink from 'next/link'
+import { usePathname } from 'next/navigation'
+import { Box, Flex, ScrollArea } from '@radix-ui/themes'
+import { cn, getStaffNavLinks } from '@/utils'
+
+interface StaffNavigationProps {
+  staffId: string
+}
+
+const StaffNavigation = ({ staffId }: StaffNavigationProps) => {
+  const navLinks = useMemo(() => getStaffNavLinks(staffId), [staffId])
+
+  return (
+    <Box className="bg-white mb-4 w-[160px] rounded-1 shadow-2">
+      <ScrollArea>
+        <Flex direction="column">
+          {navLinks.map((widget) => (
+            <NavigationLink key={widget.label} href={widget.href}>
+              {widget.label}
+            </NavigationLink>
+          ))}
+        </Flex>
+      </ScrollArea>
+    </Box>
+  )
+}
+
+interface NavigationLinkProps {
+  href?: string
+}
+
+const NavigationLink = ({
+  href,
+  children,
+}: React.PropsWithChildren<NavigationLinkProps>) => {
+  const pathname = usePathname()
+
+  href = href ? `${href}` : `/management`
+
+  const isActive = pathname === href
+
+  return (
+    <NextLink
+      href={href}
+      className={cn(
+        'px-2 py-1 text-[11.5px] first:rounded-t-1 hover:bg-accent-2',
+        {
+          'text-white bg-accent-12 font-[600] hover:bg-accent-12': isActive,
+        },
+      )}
+    >
+      {children}
+    </NextLink>
+  )
+}
+
+export { StaffNavigation }

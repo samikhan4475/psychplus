@@ -53,6 +53,7 @@ interface LegalName {
 }
 
 interface Staff {
+  id: string
   otpCode: string
   legalName: LegalName
   dateOfBirth: string

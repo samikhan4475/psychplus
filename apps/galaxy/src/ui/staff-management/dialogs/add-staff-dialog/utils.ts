@@ -111,7 +111,7 @@ const getInitialValues = (staff?: Staff) => ({
   supervisedBy: staff?.supervisedBy ?? '',
   supervisorStaffId: staff?.supervisorStaffId ?? undefined,
   npi: staff?.npi ?? '',
-  status: staff?.status ?? 'active',
+  status: staff?.status ?? '',
   virtualRoomLink: staff?.virtualRoomLink ?? '',
 })
 

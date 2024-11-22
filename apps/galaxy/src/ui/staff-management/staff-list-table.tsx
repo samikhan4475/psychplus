@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import { Flex, ScrollArea } from '@radix-ui/themes'
 import { type ColumnDef } from '@tanstack/react-table'
 import {
@@ -9,6 +10,7 @@ import {
   LoadingPlaceholder,
   TextCell,
 } from '@/components'
+import { useStore as useRootStore } from '@/store'
 import { Sort } from '@/types'
 import { getSortDir } from '@/utils'
 import { ActionsCell, CollapseCell } from './cells'
@@ -300,6 +302,10 @@ const columns = (
 }
 
 const StaffListTable = () => {
+  const router = useRouter()
+
+  const addTab = useRootStore((state) => state.addTab)
+
   const { data, search, loading, sort, sortData } = useStore((state) => ({
     data: state.data,
     loading: state.loading,
@@ -323,6 +329,14 @@ const StaffListTable = () => {
     <ScrollArea className="bg-white max-w-[calc(100vw-188px)]">
       <DataTable
         data={data?.staff ?? []}
+        onRowClick={(row) => {
+          const href = `/staff/${row.original.id}/dashboard`
+          addTab({
+            href,
+            label: `${row.original?.legalName?.firstName} ${row.original.legalName?.lastName}`,
+          })
+          router.push(href)
+        }}
         columns={columns(sort, sortData)}
         disablePagination
         sticky
