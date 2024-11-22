@@ -32,14 +32,14 @@ interface Store {
   location?: CurrentLocation
   careTeam: CareTeamMember[]
   state?: string
-  stateCode:string
+  stateCode: string
   setStartingDate: (value: string) => void
   setProviderType: (value: ProviderType) => void
   setAppointmentType: (value: AppointmentType) => void
   setZipCode: (value: string) => void
   setLanguage: (value: string) => void
   setState: (value: string) => void
-  setStateCode:(value: string) => void
+  setStateCode: (value: string) => void
   setSortBy: (value: AppointmentSortBy) => void
   setLocation: (value: CurrentLocation) => void
   setLoading: (value: boolean) => void
@@ -113,7 +113,7 @@ const useStore = create<Store>()(
           state: get().state,
         })
 
-        if (!get().sortBy && get().cache[cacheKey]) {
+        if (get().cache[cacheKey]) {
           set({
             data: get().cache[cacheKey],
             loading: false,
@@ -138,7 +138,7 @@ const useStore = create<Store>()(
           includeDistance: get().appointmentType === AppointmentType.InPerson,
           includeStaffBio: false,
           currentLocation: get().location ?? null,
-          nextAvailableAppointment: true
+          nextAvailableAppointment: true,
         })
 
         if (result.state === 'error') {

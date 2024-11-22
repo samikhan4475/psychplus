@@ -149,6 +149,10 @@ const ProviderAvailabilityCard = ({
   )
 
   useEffect(() => {
+    setSelectedClinic(0)
+  }, [appointmentType])
+
+  useEffect(() => {
     if (!sortBy || sortBy === AppointmentSortBy.Nearest) {
       setSelectedClinic(0)
       return
@@ -170,7 +174,7 @@ const ProviderAvailabilityCard = ({
         minSlot = earliestSlot
         minIndex = i
       }
-      const result = parseDateAbsoluteToLocal(earliestSlot,minSlot)
+      const result = parseDateAbsoluteToLocal(earliestSlot, minSlot)
       if (result < 0) {
         minSlot = earliestSlot
         minIndex = i
