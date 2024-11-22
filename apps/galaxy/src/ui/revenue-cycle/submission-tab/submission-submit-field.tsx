@@ -7,9 +7,14 @@ import { SelectOptionType } from '@/types'
 import { cn } from '@/utils'
 import { ClaimSubmissionDialog } from '../dialogs'
 import { useStore } from './store'
+import { TabValue } from './types'
+import { ViewHcfaButton } from './view-hcfa-button'
 
 const SubmissionSubmitField = () => {
-  const claims = useStore((state) => state.data?.submissions)
+  const { claims, selectedTab } = useStore((state) => ({
+    selectedTab: state.selectedTab,
+    claims: state.data?.submissions,
+  }))
   const [submissionTypes, setSubmissionTypes] = useState<SelectOptionType[]>([])
   const [clearingHouse, setClearingHouse] = useState('')
   const [isScrubOnly, setIsScrubOnly] = useState(false)
@@ -68,6 +73,7 @@ const SubmissionSubmitField = () => {
           Submit
         </Button>
       </ClaimSubmissionDialog>
+      {selectedTab === TabValue.PaperSubmission && <ViewHcfaButton />}
     </Flex>
   )
 }

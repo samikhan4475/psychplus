@@ -1,10 +1,11 @@
 import { Flex, IconButton } from '@radix-ui/themes'
 import { TableEditIcon } from '@/components/icons'
 import { InsuranceClaimPolicy } from '@/types'
+import { DownloadHcfaActionCell } from './download-hcfa-action-cell'
 
 interface ActionsCellProps {
-  onEdit?: (item: InsuranceClaimPolicy) => void;
-  item?: InsuranceClaimPolicy;
+  onEdit?: (item: InsuranceClaimPolicy) => void
+  item?: InsuranceClaimPolicy
 }
 
 const ActionsCell = ({ onEdit, item }: ActionsCellProps) => {
@@ -16,8 +17,9 @@ const ActionsCell = ({ onEdit, item }: ActionsCellProps) => {
       >
         <TableEditIcon height={18} />
       </IconButton>
+      {item && item.viewHcfa && <DownloadHcfaActionCell item={item} />}
     </Flex>
-  );
-};
+  )
+}
 
-export { ActionsCell };
+export { ActionsCell }

@@ -181,6 +181,7 @@ const GENERATE_PATIENT_STATEMENTS_ENDPOINT = (fileFormat: string) =>
 const DOWNLOAD_PATIENT_STATEMENTS_ENDPOINT = (fileFormat: string) =>
   `${API_URL}/api/billingstatements/actions/preview/${fileFormat}`
 const GET_PATIENT_STATEMENTS_LIST_ENDPOINT = `${API_URL}/api/billingstatements/actions/search`
+const DOWNLOAD_HCFA_FILE_ENDPOINT = `${API_URL}/api/claimssubmissions/actions/previewclaimform`
 const GET_RESPONSE_HISTORY_LIST_ENDPOINT = `${API_URL}/api/claimssubmissions/responses/actions/search`
 const GET_RESPONSE_HISTORY_DETAIL_LIST_ENDPOINT = (id: string) =>
   `${API_URL}/api/claimssubmissions/responses/${id}/details/actions/search`
@@ -497,6 +498,7 @@ export {
   NOTE_SIGN_ENDPOINT,
   GET_STAFF_LICENSE,
   GET_CPT_CODES,
+  DOWNLOAD_HCFA_FILE_ENDPOINT,
   GET_SCRIPT_SURE_SESSION_TOKEN,
   GET_SCRIPT_SURE_EXTERNAL_PATIENT_ID,
 }

@@ -1,0 +1,57 @@
+import { useState } from 'react'
+import { EyeOpenIcon } from '@radix-ui/react-icons'
+import { IconButton, Tooltip } from '@radix-ui/themes'
+import { useFormContext } from 'react-hook-form'
+import toast from 'react-hot-toast'
+import { DOWNLOAD_HCFA_FILE_ENDPOINT } from '@/api/endpoints'
+import { InsuranceClaimPolicy } from '@/types'
+import { previewFile } from '../../utils'
+import { ClaimUpdateSchemaType } from '../schema'
+
+interface ActionsCellProps {
+  item?: InsuranceClaimPolicy
+}
+
+const DownloadHcfaActionCell = ({ item }: ActionsCellProps) => {
+  const form = useFormContext<ClaimUpdateSchemaType>()
+  const [loading, setLoading] = useState(false)
+  const previewHcfaFile = async () => {
+    const claimId = form.getValues('id')
+    setLoading(true)
+    try {
+      const payload = {
+        claimIds: [claimId],
+        insurancePolicyPriority: item?.insurancePolicyPriority,
+        claimType: 'Professional',
+      }
+      await previewFile(
+        DOWNLOAD_HCFA_FILE_ENDPOINT,
+        `hcfa_file`,
+        'POST',
+        payload,
+      )
+    } catch (error) {
+      const message =
+        (error instanceof Error && error.message) || 'Failed to download.'
+      toast.error(message)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  return (
+    <Tooltip content="View HCFA file">
+      <IconButton
+        variant="ghost"
+        onClick={previewHcfaFile}
+        className="text-black"
+        loading={loading}
+        type="button"
+      >
+        <EyeOpenIcon height={18} />
+      </IconButton>
+    </Tooltip>
+  )
+}
+
+export { DownloadHcfaActionCell }

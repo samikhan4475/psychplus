@@ -1,10 +1,10 @@
 import { create } from 'zustand'
 import { Sort } from '@/types'
 import { getNewSortDir } from '@/utils'
+import { getSubmissionListAction } from '../actions/get-submissions-list'
 import { GetSubmissionResponse } from '../types'
 import { SchemaType } from './submission-filter-form'
 import { TabValue } from './types'
-import { getSubmissionListAction } from '../actions/get-submissions-list'
 
 interface Store {
   data?: GetSubmissionResponse
@@ -28,6 +28,8 @@ interface Store {
   selectedTab: TabValue | string
   setSelectedTab: (value: string) => void
   reset: () => void
+  filterInsurancePolicyPriority: string
+  setFilterInsurancePolicyPriority: (value: string) => void
 }
 const useStore = create<Store>((set, get) => ({
   data: undefined,
@@ -37,6 +39,7 @@ const useStore = create<Store>((set, get) => ({
   page: 1,
   formValues: undefined,
   pageCache: {},
+  filterInsurancePolicyPriority: 'Primary',
   search: async (
     formValues: Partial<SchemaType> = {},
     page = 1,
@@ -129,5 +132,7 @@ const useStore = create<Store>((set, get) => ({
   setSelectedTab: (currentTab) => set({ selectedTab: currentTab }),
   selectedRows: [],
   setSelectedRows: (selectedRows) => set({ selectedRows }),
+  setFilterInsurancePolicyPriority: (value) =>
+    set({ filterInsurancePolicyPriority: value }),
 }))
 export { useStore }

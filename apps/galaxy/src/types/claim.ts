@@ -377,6 +377,7 @@ interface InsuranceClaimPolicy {
   policyName?: string
   terminationDate?: string
   verificationStatus?: string
+  viewHcfa?: boolean
 }
 
 interface ClaimUpdateApiResponse {
