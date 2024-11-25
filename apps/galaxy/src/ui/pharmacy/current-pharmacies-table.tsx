@@ -2,17 +2,14 @@
 
 import { Heading, ScrollArea } from '@radix-ui/themes'
 import { DataTable, LoadingPlaceholder } from '@/components'
-import { Pharmacy } from './types'
 import { columns } from './columns'
+import { useStore } from './store'
 
-interface CurrentPharmaciesTableProps {
-  data: Pharmacy[]
-  loading?: boolean
-}
-const CurrentPharmaciesTable = ({
-  data = [],
-  loading,
-}: CurrentPharmaciesTableProps) => {
+const CurrentPharmaciesTable = () => {
+  const { data, loading } = useStore((state) => ({
+    data: state.data,
+    loading: state.loading,
+  }))
   return (
     <ScrollArea className="bg-white min-h-[150px] max-w-[calc(100vw_-_198px)] p-2">
       <Heading size="3" weight="medium" className="pb-1">
@@ -23,7 +20,7 @@ const CurrentPharmaciesTable = ({
       ) : (
         <DataTable
           columns={columns}
-          data={data}
+          data={data ?? []}
           theadClass=""
           isRowSpan
           sticky

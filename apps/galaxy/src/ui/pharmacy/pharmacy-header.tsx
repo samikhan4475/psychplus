@@ -1,17 +1,24 @@
 'use client'
 
-import { PropsWithChildren } from 'react'
 import { Flex, Text } from '@radix-ui/themes'
+import { WidgetAddButton } from '@/components'
+import { PharmacyAddButton } from './pharmacy-add-button'
 
-const PharmacyHeader = ({ children }: PropsWithChildren) => {
+const PharmacyHeader = ({ scriptSureAppUrl }: { scriptSureAppUrl: string }) => {
   return (
-    <Flex direction="column" gap="1" className="bg-pp-bg-accent">
-      <Flex className="bg-white" p="2">
-        <Text size="4" weight="medium">
-          Pharmacy
-        </Text>
+    <Flex
+      justify="between"
+      align="center"
+      className="bg-white px-2 py-1 pr-3 shadow-2"
+    >
+      <Text className="flex items-center gap-x-[11px] text-[20px] font-bold">
+        Pharmacy
+      </Text>
+      <Flex className="gap-x-2 text-[20px]" align="center">
+        <WidgetAddButton title="Add Pharmacy">
+          <PharmacyAddButton scriptSureAppUrl={scriptSureAppUrl} />
+        </WidgetAddButton>
       </Flex>
-      {children}
     </Flex>
   )
 }

@@ -325,7 +325,6 @@ const GET_SCRIPT_SURE_SESSION_TOKEN = (partnerShortName: string) =>
   `${API_URL}/api/integration/partners/${partnerShortName}/actions/authtoken`
 const GET_SCRIPT_SURE_EXTERNAL_PATIENT_ID = (patientId: string) =>
   `${API_URL}/api/patients/${patientId}/prescriptions/actions/externalpatient/search`
-
 export {
   USER_ENDPOINT,
   REFRESH_ENDPOINT,

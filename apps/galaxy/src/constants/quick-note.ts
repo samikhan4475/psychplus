@@ -1,3 +1,4 @@
 const QUICKNOTE_HPI_SECTION = 'QuicknoteSectionHPI'
+const DAWSYS = 'DAWSYS'
 
-export { QUICKNOTE_HPI_SECTION }
+export { DAWSYS, QUICKNOTE_HPI_SECTION }
