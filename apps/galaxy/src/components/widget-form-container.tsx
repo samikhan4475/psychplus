@@ -73,8 +73,8 @@ const WidgetFormContainer = ({
       if (event.data.type !== 'quicknotes:save') {
         return
       }
-
-      if (isDirty) {
+      const shouldToast = event.data.showToast ? true : false
+      if (isDirty || shouldToast) {
         onSubmit(false)()
       } else {
         window.postMessage(

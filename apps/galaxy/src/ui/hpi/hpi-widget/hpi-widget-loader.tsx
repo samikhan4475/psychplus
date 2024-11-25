@@ -6,9 +6,13 @@ import { HpiWidget } from './hpi-widget'
 
 interface HpiWidgetLoaderProps {
   patientId: string
+  isHpiHeader?: boolean
 }
 
-const HpiWidgetLoader = async ({ patientId }: HpiWidgetLoaderProps) => {
+const HpiWidgetLoader = async ({
+  patientId,
+  isHpiHeader,
+}: HpiWidgetLoaderProps) => {
   const response = await api.POST<QuickNoteSectionItem[]>(
     api.NOTE_DETAILS_SEARCH_ENDPOINT,
     {
@@ -24,7 +28,13 @@ const HpiWidgetLoader = async ({ patientId }: HpiWidgetLoaderProps) => {
 
   const initialValue = transformIn(response.data)
 
-  return <HpiWidget patientId={patientId} initialValue={initialValue} />
+  return (
+    <HpiWidget
+      patientId={patientId}
+      initialValue={initialValue}
+      isHpiHeader={isHpiHeader}
+    />
+  )
 }
 
 export { HpiWidgetLoader }

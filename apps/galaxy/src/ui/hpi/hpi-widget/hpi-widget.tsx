@@ -1,7 +1,12 @@
 'use client'
 
 import { FormProvider } from 'react-hook-form'
-import { WidgetFormContainer, WidgetSaveButton } from '@/components'
+import {
+  WidgetFormContainer,
+  WidgetHxButton,
+  WidgetSaveButton,
+  WidgetTagButton,
+} from '@/components'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import {
   AdhdHyperactiveBlock,
@@ -24,27 +29,36 @@ import {
 import { ClearButton } from './clear-button'
 import { transformOut } from './data'
 import { useHpiWidgetForm } from './hpi-widget-form'
+import { HpiWidgetHeader } from './hpi-widget-header'
 import { type HpiWidgetSchemaType } from './hpi-widget-schema'
 
 interface HpiWidgetProps {
   patientId: string
   initialValue: HpiWidgetSchemaType
+  isHpiHeader?: boolean
 }
 
-const HpiWidget = ({ patientId, initialValue }: HpiWidgetProps) => {
+const HpiWidget = ({
+  patientId,
+  initialValue,
+  isHpiHeader,
+}: HpiWidgetProps) => {
   const form = useHpiWidgetForm(initialValue)
 
   return (
     <FormProvider {...form}>
+      {isHpiHeader && <HpiWidgetHeader />}
       <WidgetFormContainer
         patientId={patientId}
         widgetId={QuickNoteSectionName.QuicknoteSectionHPI}
         getData={transformOut(patientId)}
-        title="History of Present Illness/Presenting Symptoms"
+        title={!isHpiHeader ? 'HPI/Presenting Symptoms' : undefined}
         sticky
         className="p-2 pt-0"
         headerRight={
           <>
+            {!isHpiHeader && <WidgetHxButton />}
+            <WidgetTagButton />
             <ClearButton />
             <WidgetSaveButton />
           </>

@@ -7,7 +7,7 @@ interface HpiPageProps {
 }
 
 const HpiPage = ({ params }: HpiPageProps) => {
-  return <HpiView patientId={params.id} />
+  return <HpiView patientId={params.id} isHpiHeader={true} />
 }
 
 export default HpiPage

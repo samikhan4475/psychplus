@@ -3,13 +3,14 @@ import { HpiWidget } from './hpi-widget'
 
 interface HpiViewProps {
   patientId: string
+  isHpiHeader?: boolean
 }
 
-const HpiView = ({ patientId }: HpiViewProps) => {
+const HpiView = ({ patientId, isHpiHeader }: HpiViewProps) => {
   return (
     <Flex direction="column" width="100%">
       <Flex direction="column" gap="2">
-        <HpiWidget patientId={patientId} />
+        <HpiWidget patientId={patientId} isHpiHeader={isHpiHeader} />
       </Flex>
     </Flex>
   )
