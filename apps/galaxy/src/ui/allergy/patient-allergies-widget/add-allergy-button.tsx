@@ -32,7 +32,7 @@ const AddAllergyButton = ({ scriptSureAppUrl }: AddAllergyButtonProps) => {
       const externalPatientId = externalPatientResponse.data.externalPatientId
       const sessionToken = sessionTokenResponse.data
 
-      const url = `${scriptSureAppUrl}/widgets/allergy/${externalPatientId}?sessiontoken=${sessionToken}`
+      const url = `${scriptSureAppUrl}/widgets/allergy/${externalPatientId}?sessiontoken=${sessionToken}&darkmode=off`
       setIframeSrc(url)
       setLoading(false)
     } else {
