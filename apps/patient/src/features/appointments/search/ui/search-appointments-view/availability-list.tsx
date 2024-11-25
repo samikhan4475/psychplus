@@ -379,6 +379,7 @@ const AppointmentTimeSlots = ({
         <NextLink
           href={getRedirectToPaymentMethodUrl(slot)}
           key={`${slot.startDate}:${slot.duration}`}
+          prefetch={false}
         >
           <Button
             variant="outline"
