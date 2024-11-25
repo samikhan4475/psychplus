@@ -7,7 +7,6 @@ import {
   YesNoSelect,
 } from '@/components'
 import { ChipList } from '@/components/chip-list'
-import { MseGroupDetailSection } from '../history/mse-details/mse-group-detail-section'
 import { MseWidgetSchemaType } from '../mse-widget-schema'
 import { SelectedIndicator } from '../select-indicotor'
 
@@ -44,6 +43,7 @@ const DelusionHallucinationSection = ({
         ]}
         disabled={!!result}
         defaultValue={defaultValue}
+        resetOnSameValue={true}
       />
       {defaultValue === 'yes' && (
         <>

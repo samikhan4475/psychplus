@@ -18,6 +18,7 @@ interface RadioSelectSectionProps {
   disabled?: boolean
   defaultValue?: string
   onChange?: (value: string) => void
+  resetOnSameValue?: boolean
 }
 
 interface RadioSelectOption {
@@ -35,25 +36,26 @@ const RadioSelectSection = ({
   disabled = false,
   defaultValue,
   onChange,
+  resetOnSameValue = false,
 }: RadioSelectSectionProps) => {
   const form = useFormContext()
 
   const value = disabled ? defaultValue : form.watch(field)
 
-  const handleValueChange = (newValue: string) => {
-    if (!disabled) form.setValue(field, newValue)
-    if (onChange) onChange(newValue)
+  const handleOptionClick = (clickedValue: string) => {
+    if (resetOnSameValue && value === clickedValue && value !== '') {
+      form.setValue(field, '')
+    } else if (!disabled) {
+      form.setValue(field, clickedValue)
+    }
+    if (onChange) onChange(clickedValue)
   }
 
   return (
     <Flex align="start" justify="start" gap="2">
       {label && <BlockLabel required={required}>{label}</BlockLabel>}
       {description && <BlockDescription>{description}</BlockDescription>}
-      <RadioGroup.Root
-        onValueChange={handleValueChange}
-        value={value}
-        className="flex gap-1.5"
-      >
+      <RadioGroup.Root value={value} className="flex gap-1.5">
         {options.map((option) => {
           const isSelected = value === option.value && className
           const id = `${field}-radio-${option.value}`
@@ -77,6 +79,9 @@ const RadioSelectSection = ({
                 value={option.value}
                 id={id}
                 disabled={disabled}
+                onClick={() => {
+                  handleOptionClick(option.value)
+                }}
               >
                 <RadioGroup.Indicator className="after:bg-white after:rounded-full flex h-full w-full items-center justify-center after:block after:h-[4px] after:w-[4px] after:content-['']" />
               </RadioGroup.Item>

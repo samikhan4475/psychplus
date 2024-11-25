@@ -192,22 +192,31 @@ const transformIn = (value?: QuickNoteSectionItem[]): MseWidgetSchemaType => {
     if (item.sectionItem.includes('YesNo')) {
       switch (item.sectionItem) {
         case 'tcsiYesNo':
-          result.tcsiYesNo = item.sectionItemValue as 'yes' | 'no'
+          result.tcsiYesNo = item.sectionItemValue as 'yes' | 'no' | ''
           break
         case 'tchiYesNo':
-          result.tchiYesNo = item.sectionItemValue as 'yes' | 'no'
+          result.tchiYesNo = item.sectionItemValue as 'yes' | 'no' | ''
           break
         case 'tcDelusionsYesNo':
-          result.tcDelusionsYesNo = item.sectionItemValue as 'yes' | 'no'
+          result.tcDelusionsYesNo = item.sectionItemValue as 'yes' | 'no' | ''
           break
         case 'tcHallucinationsYesNo':
-          result.tcHallucinationsYesNo = item.sectionItemValue as 'yes' | 'no'
+          result.tcHallucinationsYesNo = item.sectionItemValue as
+            | 'yes'
+            | 'no'
+            | ''
           break
         case 'mmRecentIntactYesNo':
-          result.mmRecentIntactYesNo = item.sectionItemValue as 'yes' | 'no'
+          result.mmRecentIntactYesNo = item.sectionItemValue as
+            | 'yes'
+            | 'no'
+            | ''
           break
         case 'mmRemoteIntactYesNo':
-          result.mmRemoteIntactYesNo = item.sectionItemValue as 'yes' | 'no'
+          result.mmRemoteIntactYesNo = item.sectionItemValue as
+            | 'yes'
+            | 'no'
+            | ''
           break
         default:
           break
@@ -219,7 +228,7 @@ const transformIn = (value?: QuickNoteSectionItem[]): MseWidgetSchemaType => {
         case 'mmOtherDetails':
           result.mmOtherDetails = item.sectionItemValue
           break
-        case 'mmhtOtherDetails':
+        case 'mhtOtherDetails':
           result.mhtOtherDetails = item.sectionItemValue
           break
         case 'intOtherDetails':
@@ -266,6 +275,12 @@ const transformIn = (value?: QuickNoteSectionItem[]): MseWidgetSchemaType => {
           break
         case 'tcOtherDetails':
           result.tcOtherDetails = item.sectionItemValue
+          break
+        case 'hiOtherDetails':
+          result.hiOtherDetails = item.sectionItemValue
+          break
+        case 'siOtherDetails':
+          result.siOtherDetails = item.sectionItemValue
           break
         default:
           break

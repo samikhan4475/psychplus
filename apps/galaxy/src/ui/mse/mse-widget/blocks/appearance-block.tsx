@@ -17,7 +17,7 @@ const BLOCK_OPTIONS: GroupSelectOption<string>[] = [
     value: 'appDisheveled',
   },
   {
-    label: 'Bad odor',
+    label: 'Bad order',
     value: 'appBadOrder',
   },
   {

@@ -40,6 +40,7 @@ const MemoryBlock = ({ result }: { result?: MseWidgetSchemaType }) => {
           defaultValue={
             result ? (result?.['mmRecentIntactYesNo'] as string) : undefined
           }
+          resetOnSameValue={true}
         />
         <YesNoSelect
           label="Remote Intact"
@@ -48,6 +49,7 @@ const MemoryBlock = ({ result }: { result?: MseWidgetSchemaType }) => {
           defaultValue={
             result ? (result?.['mmRemoteIntactYesNo'] as string) : undefined
           }
+          resetOnSameValue={true}
         />
 
         <>

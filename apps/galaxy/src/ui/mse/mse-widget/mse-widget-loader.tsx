@@ -1,3 +1,4 @@
+import { Box } from '@radix-ui/themes'
 import * as api from '@/api'
 import { QuickNoteSectionItem } from '@/types'
 import { transformIn } from './data'
@@ -22,7 +23,7 @@ const MseWidgetLoader = async ({
   )
 
   if (response.state === 'error') {
-    return <div>fail</div>
+    return <Box>fail</Box>
   }
 
   const initialValue = transformIn(response.data)

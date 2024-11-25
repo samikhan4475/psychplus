@@ -1,6 +1,7 @@
 import { z } from 'zod'
 
 type MseWidgetSchemaType = z.infer<typeof mseWidgetSchema>
+const yesNoEnumSchema = z.enum(['yes', 'no', ''])
 
 const mseWidgetSchema = z.object({
   orientation: z.array(z.string()),
@@ -24,14 +25,14 @@ const mseWidgetSchema = z.object({
   schizophreniaHallucinationsValues: z.array(z.string()),
   siUnDisclosed: z.array(z.string()),
   hiUnDisclosed: z.array(z.string()),
-  mmRecentIntactYesNo: z.enum(['yes', 'no']),
-  mmRemoteIntactYesNo: z.enum(['yes', 'no']),
-  tcsiYesNo: z.enum(['yes', 'no']),
-  tchiYesNo: z.enum(['yes', 'no']),
-  tcDelusionsYesNo: z.enum(['yes', 'no']),
-  tcHallucinationsYesNo: z.enum(['yes', 'no']),
-  tchiOtherDetails: z.string(),
-  tcsiOtherDetails: z.string(),
+  mmRecentIntactYesNo: yesNoEnumSchema,
+  mmRemoteIntactYesNo: yesNoEnumSchema,
+  tcsiYesNo: yesNoEnumSchema,
+  tchiYesNo: yesNoEnumSchema,
+  tcDelusionsYesNo: yesNoEnumSchema,
+  tcHallucinationsYesNo: yesNoEnumSchema,
+  hiOtherDetails: z.string(),
+  siOtherDetails: z.string(),
   mmOtherDetails: z.string(),
   mhtOtherDetails: z.string(),
   intOtherDetails: z.string(),

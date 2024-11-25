@@ -5,11 +5,11 @@ import { QuickNoteSectionName } from '../../constants'
 import { ActualNoteDetailsWrapper } from '../shared'
 import { Details } from './details'
 
-type MentalStatusExamHxProps = {
+type MentalStatusExamProps = {
   patientId: string
 }
 
-const MentalStatusExamHx = async ({ patientId }: MentalStatusExamHxProps) => {
+const MentalStatusExam = async ({ patientId }: MentalStatusExamProps) => {
   const response = await getQuickNoteDetailAction(patientId, [
     QuickNoteSectionName.QuicknoteSectionMse,
   ])
@@ -19,11 +19,11 @@ const MentalStatusExamHx = async ({ patientId }: MentalStatusExamHxProps) => {
   }
   return (
     <ActualNoteDetailsWrapper
-      sectionName={QuickNoteSectionName.QuickNoteSectionPastMedicalHx}
+      sectionName={QuickNoteSectionName.QuicknoteSectionMse}
     >
       <Details data={transformIn(response.data)} />
     </ActualNoteDetailsWrapper>
   )
 }
 
-export { MentalStatusExamHx }
+export { MentalStatusExam }

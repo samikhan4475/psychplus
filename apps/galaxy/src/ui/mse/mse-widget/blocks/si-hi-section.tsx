@@ -31,6 +31,7 @@ const SiHiSection = ({
         ]}
         disabled={!!result}
         defaultValue={result ? (result?.[field] as string) : undefined}
+        resetOnSameValue={true}
       />
 
       {isYes === 'yes' && (
@@ -63,7 +64,7 @@ const SiHiSection = ({
             )}
             <TextInput
               className="pl-0"
-              field={`tc${label.toLowerCase()}OtherDetails`}
+              field={`${label.toLowerCase()}OtherDetails`}
               autoFocus
               placeHolder="Add text"
             />

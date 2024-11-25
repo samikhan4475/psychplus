@@ -34,7 +34,7 @@ import {
   FollowUp,
   HpiDetailView,
   Medications,
-  MentalStatusExamHx,
+  MentalStatusExam,
   PastMedicalHx,
   PastPsychlDetailView,
   PhysicalExamView,
@@ -113,7 +113,7 @@ const widgets: Array<WidgetType> = [
   {
     component: MseWidget,
     id: QuickNoteSectionName.QuicknoteSectionMse,
-    actualNoteComponent: MentalStatusExamHx,
+    actualNoteComponent: MentalStatusExam,
   },
   {
     component: QuicknotesDiagnosisWidget,
