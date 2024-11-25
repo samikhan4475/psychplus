@@ -40,7 +40,7 @@ const HpiWidget = ({ patientId, initialValue }: HpiWidgetProps) => {
         patientId={patientId}
         widgetId={QuickNoteSectionName.QuicknoteSectionHPI}
         getData={transformOut(patientId)}
-        title="HPI/Presenting Symptoms"
+        title="History of Present Illness/Presenting Symptoms"
         sticky
         className="p-2 pt-0"
         headerRight={

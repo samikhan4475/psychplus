@@ -91,7 +91,7 @@ const HpiNarration = ({ patient, symptoms }: Props) => {
     return narration
   }
   return (
-    <BlockContainer heading="HPI/Presenting Symptoms">
+    <BlockContainer heading="History of Present Illness/Presenting Symptoms">
       <Flex direction="column">
         <Text size="1" weight="regular">
           {generateNarration()}

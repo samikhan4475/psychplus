@@ -4,7 +4,7 @@ import { BlockContainer, LabelAndValue } from './shared'
 
 const SocialHx = () => {
   return (
-    <BlockContainer heading="Social Hx">
+    <BlockContainer heading="Social History">
       <LabelAndValue label="Relationship Status:" value="Single" />
       <LabelAndValue label="Professional Education:" value="In School" />
       <LabelAndValue label="Employed:" value="Yes" />

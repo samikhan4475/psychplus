@@ -14,6 +14,7 @@ const getQuestionnairesAddToNotes = async ({
   api.ActionResult<QuickNoteHistory[]>
 > => {
   const addToNotesSections = [
+    QuickNoteSectionName.QuickNoteSectionDashboard,
     `${QuickNoteSectionName.AddToNoteQuestionnaire}-${QuickNoteSectionName.QuickNoteSectionPhq9}`,
     `${QuickNoteSectionName.AddToNoteQuestionnaire}-${QuickNoteSectionName.QuickNoteSectionGad7}`,
     `${QuickNoteSectionName.AddToNoteQuestionnaire}-${QuickNoteSectionName.QuickNoteSectionSnapIV}`,

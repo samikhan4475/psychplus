@@ -16,7 +16,7 @@ const Details = ({ data }: Props<PastMedicalHxWidgetSchemaType>) => {
     .join(', ')
 
   return (
-    <BlockContainer heading="Past Medical Hx">
+    <BlockContainer heading="Past Medical History">
       {data.pregnantDate && (
         <LabelAndValue
           label="Pregnant:"

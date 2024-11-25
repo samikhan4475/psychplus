@@ -41,7 +41,7 @@ const PastMedicalHxWidget = ({
         <WidgetFormContainer
           patientId={patientId}
           widgetId={QuickNoteSectionName.QuickNoteSectionPastMedicalHx}
-          title={!isHistoryHeader ? 'Past Medical Hx' : undefined}
+          title={!isHistoryHeader ? 'Past Medical History' : undefined}
           getData={transformOut(patientId)}
           toggleable={!isHistoryHeader}
           headerRight={

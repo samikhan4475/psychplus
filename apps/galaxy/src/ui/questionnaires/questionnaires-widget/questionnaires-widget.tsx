@@ -2,7 +2,7 @@
 
 import React, { useEffect } from 'react'
 import { useParams } from 'next/navigation'
-import { Flex, Text } from '@radix-ui/themes'
+import { Checkbox, Flex, Text } from '@radix-ui/themes'
 import { useStore } from '../store'
 import { QuestionnairesDetails, SelectableChip } from './blocks'
 import { BLOCK_OPTIONS, BLOCK_TITLE } from './constants'
@@ -18,13 +18,19 @@ interface QuestionnaireRow {
 
 const QuestionnairesWidget = () => {
   const patientId = useParams().id as string
-  const { selectedTabs, setSelectedTabs, initializeQuestionnaires } = useStore(
-    (state) => ({
-      selectedTabs: state.selectedTabs,
-      setSelectedTabs: state.setSelectedTabs,
-      initializeQuestionnaires: state.initializeQuestionnaires,
-    }),
-  )
+  const {
+    showNoteViewValue,
+    selectedTabs,
+    setSelectedTabs,
+    initializeQuestionnaires,
+    updateShowNoteView,
+  } = useStore((state) => ({
+    showNoteViewValue: state.showNoteViewValue,
+    selectedTabs: state.selectedTabs,
+    setSelectedTabs: state.setSelectedTabs,
+    initializeQuestionnaires: state.initializeQuestionnaires,
+    updateShowNoteView: state.updateShowNoteView,
+  }))
 
   useEffect(() => {
     initializeQuestionnaires(patientId)
@@ -39,6 +45,14 @@ const QuestionnairesWidget = () => {
       className="bg-white px-2.5 shadow-2"
     >
       <Flex align="center" gap="2">
+        <Checkbox
+          checked={showNoteViewValue === 'show' ? true : false}
+          onCheckedChange={(checked) =>
+            updateShowNoteView(!!checked, patientId)
+          }
+          highContrast
+          className="cursor-pointer"
+        />
         <Text size="3" weight="medium">
           {BLOCK_TITLE}
         </Text>

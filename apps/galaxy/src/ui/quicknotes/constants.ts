@@ -1,5 +1,5 @@
 enum QuickNoteSectionName {
-  QuickNoteSectionDashboard = 'QuicknoteSectionQuestionnaireDashboard',
+  QuickNoteSectionDashboard = 'QuicknoteSectionDashboard',
   AddToNoteQuestionnaire = 'AddToNoteQuestionnaire',
   QuickNoteSectionDast10 = 'QuicknoteSectionQuestionnaireDast10',
   QuickNoteSectionGad7 = 'QuicknoteSectionQuestionnaireGad7',

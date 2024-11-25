@@ -32,12 +32,15 @@ interface Store {
   initializeQuestionnaires: (patientId: string) => void
   histories: { [key: string]: QuickNoteHistory[] }
   addedToNotes: { [key: string]: string[] }
+  showNoteViewValue: string | null
+  updateShowNoteView: (checked: boolean, patientId: string) => Promise<void>
 }
 
 const initialState = {
   selectedTabs: [],
   histories: {},
   addedToNotes: {},
+  showNoteViewValue: null,
 }
 
 const useStore = create<Store>((set, get) => ({
@@ -75,11 +78,11 @@ const useStore = create<Store>((set, get) => ({
     }
   },
   handleAddToNotes: async (data, questionnaire, patientId) => {
-    const filterd = Array.isArray(data)
+    const filtered = Array.isArray(data)
       ? data.filter((item) => item.addToNote)
       : []
     const addToNoteData = [] as string[]
-    filterd.forEach((element) => {
+    filtered.forEach((element) => {
       addToNoteData.push(element.createdOn)
     })
 
@@ -123,13 +126,39 @@ const useStore = create<Store>((set, get) => ({
 
     if (addToNotesResponse.state === 'success') {
       const addedToNotes = transformAddToNotesData(addToNotesResponse.data)
+      const showNoteViewValue =
+        addedToNotes['ShowNoteView']?.[0] === 'show' ? 'show' : 'hide'
       const addedToNotesKeys = Object.keys(addedToNotes)
-      set({ addedToNotes, selectedTabs: addedToNotesKeys })
+      set({ showNoteViewValue, addedToNotes, selectedTabs: addedToNotesKeys })
     }
 
     if (historiesResponse.state === 'success') {
       const histories = transformHistories(historiesResponse.data)
       set({ histories })
+    }
+  },
+  updateShowNoteView: async (checked, patientId) => {
+    const result = await saveWidgetAction({
+      patientId: patientId.toString(),
+      data: [
+        {
+          pid: Number(patientId),
+          sectionName: QuickNoteSectionName.QuickNoteSectionDashboard,
+          sectionItem: 'ShowNoteView',
+          sectionItemValue: checked ? 'show' : 'hide',
+        },
+      ],
+    })
+
+    if (result.state === 'success') {
+      set({ showNoteViewValue: checked ? 'show' : 'hide' })
+      toast.success(
+        checked
+          ? 'Added in Actual Note View!'
+          : 'Removed from Actual Note View!!',
+      )
+    } else {
+      toast.error('Failed to save!')
     }
   },
 }))

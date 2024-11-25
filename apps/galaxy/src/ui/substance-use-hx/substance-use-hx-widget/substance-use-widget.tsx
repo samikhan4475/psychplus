@@ -38,7 +38,7 @@ const SubstanceUseHxWidget = ({
       <WidgetFormContainer
         patientId={patientId}
         widgetId="substance-use-hx"
-        title={!isHistoryHeader ? 'Substance Use Hx' : undefined}
+        title={!isHistoryHeader ? 'Substance Use History' : undefined}
         getData={transformOut(patientId)}
         toggleable={!isHistoryHeader}
         headerRight={

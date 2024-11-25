@@ -4,7 +4,7 @@ import { BlockContainer, LabelAndValue } from './shared'
 
 const PresentingSymptoms = () => {
   return (
-    <BlockContainer heading="HPI/Presenting Symptoms">
+    <BlockContainer heading="History of Present Illness/Presenting Symptoms">
       <LabelAndValue
         label="Chief Complaint:"
         value="Depression, ADHD, PTSD, Schizophrenia"

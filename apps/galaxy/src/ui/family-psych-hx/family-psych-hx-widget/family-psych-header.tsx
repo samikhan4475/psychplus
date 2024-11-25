@@ -11,7 +11,7 @@ interface PastFamilyHeaderProps {
 
 const PastFamilyHeader = ({ patientId, getData }: PastFamilyHeaderProps) => {
   return (
-    <TabContentHeading title="Family Psych Hx">
+    <TabContentHeading title="Family Psych History">
       <Flex align="center" justify="end" gap="2" className="flex-1">
         <HistoryButton />
         <FamilyPsychSaveButton patientId={patientId} getData={getData} />

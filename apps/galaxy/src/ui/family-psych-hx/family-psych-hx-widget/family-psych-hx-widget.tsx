@@ -39,7 +39,7 @@ const FamilyPsychHxWidget = ({
       <WidgetFormContainer
         patientId={patientId}
         widgetId={QuickNoteSectionName.QuickNoteSectionFamilyPsychHx}
-        title={!isHistoryHeader ? 'Family Psych Hx' : undefined}
+        title={!isHistoryHeader ? 'Family Psych History' : undefined}
         getData={transformOut(patientId)}
         toggleable={!isHistoryHeader}
         headerRight={

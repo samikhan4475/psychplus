@@ -46,7 +46,7 @@ const SocialHxWidget = ({
       <WidgetFormContainer
         patientId={patientId}
         widgetId="social-hx"
-        title="Social Hx"
+        title="Social History"
         getData={transformOut(patientId)}
         toggleable={!isHistoryHeader}
         headerRight={

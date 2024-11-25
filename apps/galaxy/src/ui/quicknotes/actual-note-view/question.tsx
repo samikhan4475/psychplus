@@ -1,16 +1,17 @@
 'use client'
 
-import { Strong } from '@radix-ui/themes'
-import { BlockContainer, LabelAndValue } from './shared'
-import { useStore } from '@/ui/questionnaires/store'
-import { QuickNoteHistory } from '@/types'
+import { Flex, Strong } from '@radix-ui/themes'
 import { format } from 'date-fns'
+import { QuickNoteHistory } from '@/types'
 import { BLOCK_OPTIONS } from '@/ui/questionnaires/questionnaires-widget/constants'
+import { useStore } from '@/ui/questionnaires/store'
+import { BlockContainer, LabelAndValue } from './shared'
 
 const Question = () => {
-  const { addedToNotes, histories } = useStore((state) => ({
+  const { showNoteViewValue, addedToNotes, histories } = useStore((state) => ({
+    showNoteViewValue: state.showNoteViewValue,
     histories: state.histories,
-    addedToNotes: state.addedToNotes
+    addedToNotes: state.addedToNotes,
   }))
 
   const groupedHistories: Record<string, QuickNoteHistory[]> = {}
@@ -18,24 +19,31 @@ const Question = () => {
     groupedHistories[sectionName] = histories[sectionName]
   }
 
-  return (
+  return showNoteViewValue === 'show' ? (
     <BlockContainer heading="Questionnaires">
       {Object.entries(groupedHistories).map(([sectionName, entries]) => {
         const addedTonNotesDates = addedToNotes[sectionName] || []
-      
         const filteredEntries = entries.filter((entry) =>
-          addedTonNotesDates.includes(entry.createdOn)
+          addedTonNotesDates.includes(entry.createdOn),
         )
 
-        return filteredEntries.length > 0 && (
-          <BlockContainer heading={getLabelBySectionName(sectionName) || sectionName} key={sectionName} separator={false}>
-            {filteredEntries.map((entry) => (
-              <HistoryDetail entry={entry} key={entry.createdOn} />
-            ))}
-          </BlockContainer>
+        return (
+          filteredEntries.length > 0 && (
+            <BlockContainer
+              heading={getLabelBySectionName(sectionName) || sectionName}
+              key={sectionName}
+              separator={false}
+            >
+              {filteredEntries.map((entry) => (
+                <HistoryDetail entry={entry} key={entry.createdOn} />
+              ))}
+            </BlockContainer>
+          )
         )
       })}
     </BlockContainer>
+  ) : (
+    <Flex />
   )
 }
 
@@ -43,7 +51,6 @@ const getLabelBySectionName = (sectionName: string): string | null => {
   const option = BLOCK_OPTIONS.find((opt) => opt.value === sectionName)
   return option ? option.label : null
 }
-
 
 const HistoryDetail = ({ entry }: { entry: QuickNoteHistory }) => {
   const totalScore = entry.data.reduce(
@@ -56,7 +63,8 @@ const HistoryDetail = ({ entry }: { entry: QuickNoteHistory }) => {
       label={`Score ${totalScore}:`}
       value={
         <>
-          Completed on {format(new Date(entry.createdOn), 'MM/dd/yyyy HH:mm')} by <Strong>{entry.createdByRole}</Strong>
+          Completed on {format(new Date(entry.createdOn), 'MM/dd/yyyy HH:mm')}{' '}
+          by <Strong>{entry.createdByRole}</Strong>
         </>
       }
     />

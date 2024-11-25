@@ -4,7 +4,7 @@ import { BlockContainer, LabelAndValue } from './shared'
 
 const SubstanceUseHx = () => {
   return (
-    <BlockContainer heading="Substance Use Hx">
+    <BlockContainer heading="Substance Use History">
       <LabelAndValue label="Tobacco:" value="Yes" />
       <LabelAndValue
         label="Smoke:"
