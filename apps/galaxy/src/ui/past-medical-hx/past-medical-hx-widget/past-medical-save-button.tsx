@@ -2,40 +2,18 @@
 
 import { Button } from '@radix-ui/themes'
 import { SaveIcon } from 'lucide-react'
-import { useFormContext } from 'react-hook-form'
-import toast from 'react-hot-toast'
-import { saveWidgetAction } from '@/actions/save-widget'
-import { QuickNoteSectionItem } from '@/types'
+import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 
-interface PastMedicalSaveButtonProps {
-  patientId: string
-  getData: (schema: any) => QuickNoteSectionItem[]
-}
-const PastMedicalSaveButton = ({
-  patientId,
-  getData,
-}: PastMedicalSaveButtonProps) => {
-  const form = useFormContext()
-  const { isSubmitting } = form.formState
-
-  const onSubmit = form.handleSubmit(async (data) => {
-    const payload = { patientId, data: getData(data) }
-    const result = await saveWidgetAction(payload)
-    if (result.state === 'error') {
-      toast.error('Failed to save!')
-      return
-    }
-    form.reset(data)
-    toast.success('Saved!')
-  })
+const PastMedicalSaveButton = () => {
+  const handleSave = () => {
+    window.postMessage({
+      type: 'quicknotes:save',
+      widgetId: QuickNoteSectionName.QuickNoteSectionPastMedicalHx,
+      showToast: true,
+    })
+  }
   return (
-    <Button
-      onClick={onSubmit}
-      disabled={isSubmitting}
-      type="submit"
-      size="1"
-      highContrast
-    >
+    <Button onClick={handleSave} size="1" highContrast>
       <SaveIcon width={15} height={15} strokeWidth={1.75} />
       Save
     </Button>

@@ -8,6 +8,7 @@ import {
   WidgetSaveButton,
   WidgetTagButton,
 } from '@/components'
+import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import {
   EducationBlock,
   EmployedBlock,
@@ -37,16 +38,11 @@ const SocialHxWidget = ({
 
   return (
     <FormProvider {...form}>
-      {isHistoryHeader && (
-        <SocialHxHeader
-          patientId={patientId}
-          getData={transformOut(patientId)}
-        />
-      )}
+      {isHistoryHeader && <SocialHxHeader />}
       <WidgetFormContainer
         patientId={patientId}
-        widgetId="social-hx"
-        title="Social History"
+        widgetId={QuickNoteSectionName.QuickNoteSectionSocialHx}
+        title={!isHistoryHeader ? 'Social Hx' : undefined}
         getData={transformOut(patientId)}
         toggleable={!isHistoryHeader}
         headerRight={

@@ -321,6 +321,8 @@ const PATIENT_CARE_TEAM_ENDPOINT = (patientId: string) =>
   `${API_URL}/api/patients/${patientId}/careteam`
 
 const GET_STAFF_LICENSE = `${API_URL}/api/stafflicenses/actions/search`
+const GET_LAB_ORDERS = (appointmentId: string) =>
+  `${API_URL}/api/appointments/${appointmentId}/laborders/actions/search`
 const GET_SCRIPT_SURE_SESSION_TOKEN = (partnerShortName: string) =>
   `${API_URL}/api/integration/partners/${partnerShortName}/actions/authtoken`
 const GET_SCRIPT_SURE_EXTERNAL_PATIENT_ID = (patientId: string) =>
@@ -496,6 +498,7 @@ export {
   PATIENT_CHARGE_PAYMENT_ENDPOINT,
   NOTE_SIGN_ENDPOINT,
   GET_STAFF_LICENSE,
+  GET_LAB_ORDERS,
   GET_CPT_CODES,
   DOWNLOAD_HCFA_FILE_ENDPOINT,
   GET_SCRIPT_SURE_SESSION_TOKEN,

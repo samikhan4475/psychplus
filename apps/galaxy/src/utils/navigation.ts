@@ -33,6 +33,7 @@ const getNavLinks = (appointmentId: string | null) => {
     { label: 'Add On', href: '/add-on' },
     { label: 'Codes', href: '/codes' },
     { label: 'Diagnosis', href: '/diagnosis' },
+    { label: 'Lab Orders', href: '/lab-orders' },
     { label: 'Review of System', href: '/ros' },
     { label: 'Vitals', href: '/vitals' },
     { label: 'Physical Exam', href: '/physical-exam' },

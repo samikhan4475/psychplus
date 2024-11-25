@@ -1,7 +1,7 @@
 'use client'
 
+import { getProvidersOptionsAction } from '@/actions'
 import { AsyncSelect, FormFieldLabel } from '@/components'
-import { getProvidersOptionsAction } from '../../actions'
 import { useFiltersContext } from '../../context'
 import { FormFieldContainer } from '../../shared'
 import { SchedulerFilters } from '../../types'

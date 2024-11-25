@@ -32,12 +32,7 @@ const PastMedicalHxWidget = ({
   return (
     <Flex direction="column" width="100%" gap="2">
       <FormProvider {...form}>
-        {isHistoryHeader && (
-          <PastMedicalHeader
-            patientId={patientId}
-            getData={transformOut(patientId)}
-          />
-        )}
+        {isHistoryHeader && <PastMedicalHeader />}
         <WidgetFormContainer
           patientId={patientId}
           widgetId={QuickNoteSectionName.QuickNoteSectionPastMedicalHx}

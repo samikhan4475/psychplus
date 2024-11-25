@@ -75,7 +75,7 @@ const WidgetFormContainer = ({
       }
       const shouldToast = event.data.showToast ? true : false
       if (isDirty || shouldToast) {
-        onSubmit(false)()
+        onSubmit(shouldToast)()
       } else {
         window.postMessage(
           {

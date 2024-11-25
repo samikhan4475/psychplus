@@ -1,15 +1,14 @@
 'use client'
 
 import { getProvidersOptionsAction } from '@/actions'
-import { AsyncSelect, FormFieldLabel } from '@/components'
-import { FormFieldContainer } from '../../shared'
+import { AsyncSelect, FormFieldContainer, FormFieldLabel } from '@/components'
 
-const ProviderDropdown = () => {
+const OrderBySelect = () => {
   return (
-    <FormFieldContainer className="flex-1">
-      <FormFieldLabel>Provider</FormFieldLabel>
+    <FormFieldContainer className="flex-row items-center gap-1">
+      <FormFieldLabel>Ordered By</FormFieldLabel>
       <AsyncSelect
-        field="staffIds"
+        field="orderBy"
         placeholder="Select"
         fetchOptions={getProvidersOptionsAction}
         buttonClassName="w-full h-6"
@@ -19,4 +18,4 @@ const ProviderDropdown = () => {
   )
 }
 
-export { ProviderDropdown }
+export { OrderBySelect }

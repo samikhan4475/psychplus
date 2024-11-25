@@ -29,12 +29,7 @@ const SubstanceUseHxWidget = ({
 
   return (
     <FormProvider {...form}>
-      {isHistoryHeader && (
-        <SubstanceUseHxHxHeader
-          patientId={patientId}
-          getData={transformOut(patientId)}
-        />
-      )}
+      {isHistoryHeader && <SubstanceUseHxHxHeader />}
       <WidgetFormContainer
         patientId={patientId}
         widgetId="substance-use-hx"

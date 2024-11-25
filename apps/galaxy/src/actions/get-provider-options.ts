@@ -1,6 +1,7 @@
 'use server'
 
 import * as api from '@/api'
+import { STAFF_ROLE_CODE_PRESCRIBER } from '@/constants'
 import { StaffResource } from '@/types'
 import { sanitizeFormData } from '@/utils'
 
@@ -8,7 +9,7 @@ const getProvidersOptionsAction = async (
   providerType?: string,
 ): Promise<api.ActionResult<{ label: string; value: string }[]>> => {
   const body = {
-    roleCodes: ['1'],
+    roleCodes: [STAFF_ROLE_CODE_PRESCRIBER],
     providerType,
   }
 

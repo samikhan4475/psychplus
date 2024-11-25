@@ -30,12 +30,7 @@ const FamilyPsychHxWidget = ({
 
   return (
     <FormProvider {...form}>
-      {isHistoryHeader && (
-        <PastFamilyHeader
-          patientId={patientId}
-          getData={transformOut(patientId)}
-        />
-      )}
+      {isHistoryHeader && <PastFamilyHeader />}
       <WidgetFormContainer
         patientId={patientId}
         widgetId={QuickNoteSectionName.QuickNoteSectionFamilyPsychHx}

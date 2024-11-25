@@ -1,6 +1,6 @@
+import { getProvidersOptionsAction } from '@/actions'
 import { AsyncSelect, FormFieldLabel } from '@/components'
 import { FormFieldContainer } from '../../shared'
-import { getProvidersOptionsAction } from '../../actions'
 
 const ProviderDropdown = () => {
   return (
