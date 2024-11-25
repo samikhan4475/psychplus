@@ -407,9 +407,11 @@ const getWidgetsByVisitType = (visitType: string, visitSequence: string) => {
     return []
   }
 
-  const widgetsForVisitType = widgets.filter((widget) =>
-    widgetIds.includes(widget.id),
-  )
+  const widgetsForVisitType = widgetIds.reduce((acc, id) => {
+    const widget = widgets.find((widget) => widget.id === id)
+    if (widget) acc.push(widget)
+    return acc
+  }, [] as typeof widgets)
 
   return widgetsForVisitType
 }

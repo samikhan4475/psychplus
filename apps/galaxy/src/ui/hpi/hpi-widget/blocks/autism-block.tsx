@@ -6,10 +6,10 @@ const BLOCK_TITLE = 'Autism'
 
 const BLOCK_OPTIONS = [
   { label: 'Delayed Milestones', value: 'autDelayedMilestones' },
-  { label: 'Repetitive/restrictive behaviors', value: 'autRepetitive' },
+  { label: 'Repetitive/Restrictive Behaviors', value: 'autRepetitive' },
   { label: 'Regression', value: 'autRegression' },
-  { label: 'Social/communication issues', value: 'autSocial' },
-  { label: 'Aversions/special interests', value: 'autAversions' },
+  { label: 'Social/Communication Issues', value: 'autSocial' },
+  { label: 'Aversions/Special Interests', value: 'autAversions' },
   { label: 'Masking', value: 'autMasking' },
   { label: 'Emotional Dysregulations', value: 'autEmotionalDysregulation' },
 ]

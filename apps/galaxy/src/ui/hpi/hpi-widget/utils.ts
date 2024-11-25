@@ -159,7 +159,7 @@ const labels = {
     fidgeting: 'Delayed Milestones',
     repetitive: 'Repetitive/Restrictive Behaviors',
     regression: 'Regression',
-    social: 'Social Communication Issues',
+    social: 'Social/Communication Issues',
     aversions: 'Aversions/Special Interests',
     masking: 'Masking',
     emotionalDysregulation: 'Emotional Dysregulation',
@@ -475,5 +475,5 @@ export {
   getInitialValues,
   valueToLabel,
   optionsValueToLabel,
-  labels
+  labels,
 }
