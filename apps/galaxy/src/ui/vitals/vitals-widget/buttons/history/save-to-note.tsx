@@ -28,6 +28,10 @@ const SaveToNoteButton = ({
       ?.filter((item) => item.addToNote)
       .map((item) => String(item.id))
 
+    if (!selectedVitalIds?.length) {
+      selectedVitalIds?.push('0')
+    }
+
     const payload = transformOut(
       patientId,
       appointmentId,

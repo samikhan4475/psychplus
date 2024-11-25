@@ -24,7 +24,7 @@ const transformOut =
       if (value !== '') {
         result.push({
           pid: Number(patientId),
-          sectionName: QuickNoteSectionName.QuickNoteSectionHospital,
+          sectionName: QuickNoteSectionName.QuickNoteSectionHospitalOrders,
           sectionItem: key,
           sectionItemValue: value?.toString() || '',
         })

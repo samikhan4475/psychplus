@@ -1,46 +1,56 @@
 import * as Tabs from '@radix-ui/react-tabs'
 import { Flex } from '@radix-ui/themes'
 import { XIcon } from 'lucide-react'
-import { HospitalInitialWidget } from './hospital-initial-widget'
+import { QuickNoteSectionItem } from '@/types'
+import { HospitalWidget } from './hospital-orders-widget'
 
 interface HospitalViewProps {
   patientId: string
+  quicknotesHospitalLabOrderResponse: QuickNoteSectionItem[]
 }
 
 enum TabsValue {
-  Initial = 'Initial',
-  Discharge = 'Discharge',
+  LabsOrders = 'Labs & Orders',
+  FacilityMedications = 'Facility Medications',
+  MAR = 'MAR',
 }
 
-const HospitalView = ({ patientId }: HospitalViewProps) => {
+const HospitalOrdersView = ({
+  patientId,
+  quicknotesHospitalLabOrderResponse,
+}: HospitalViewProps) => {
   return (
     <Tabs.Root
-      defaultValue={TabsValue.Initial}
+      defaultValue={TabsValue.LabsOrders}
       className="flex w-full flex-col"
     >
       <Flex>
         <Tabs.List>
-          <TabsTrigger value={TabsValue.Initial}>
-            {TabsValue.Initial}
+          <TabsTrigger value={TabsValue.LabsOrders}>
+            {TabsValue.LabsOrders}
           </TabsTrigger>
         </Tabs.List>
         <Tabs.List>
-          <TabsTrigger value={TabsValue.Discharge}>
-            {TabsValue.Discharge}
+          <TabsTrigger value={TabsValue.FacilityMedications}>
+            {TabsValue.FacilityMedications}
           </TabsTrigger>
+        </Tabs.List>
+        <Tabs.List>
+          <TabsTrigger value={TabsValue.MAR}>{TabsValue.MAR}</TabsTrigger>
         </Tabs.List>
         <Flex className="flex-1 border-b border-gray-5" />
       </Flex>
 
-      <TabsContent value={TabsValue.Initial}>
-        <HospitalInitialWidget
+      <TabsContent value={TabsValue.LabsOrders}>
+        <HospitalWidget
           patientId={patientId}
-          isHospitalInitialTab={true}
+          data={quicknotesHospitalLabOrderResponse}
         />
       </TabsContent>
-      <TabsContent value={TabsValue.Discharge}>
-        {TabsValue.Discharge}
+      <TabsContent value={TabsValue.FacilityMedications}>
+        {TabsValue.FacilityMedications}
       </TabsContent>
+      <TabsContent value={TabsValue.MAR}>{TabsValue.MAR}</TabsContent>
     </Tabs.Root>
   )
 }
@@ -85,4 +95,4 @@ const TabsContent = ({
   return <Tabs.Content value={value}>{children}</Tabs.Content>
 }
 
-export { HospitalView, TabsValue }
+export { HospitalOrdersView }

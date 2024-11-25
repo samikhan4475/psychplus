@@ -23,6 +23,7 @@ interface SelectableChipDetailsProps {
   isOptionsChip?: boolean
   className?: string
   rightLabel?: string
+  editable?: boolean
 }
 
 const SelectableChipDetails = ({
@@ -38,9 +39,12 @@ const SelectableChipDetails = ({
   isOptionsChip,
   hideSelectedCount = false,
   rightLabel,
+  editable = true,
 }: SelectableChipDetailsProps) => {
   const form = useFormContext()
   const error = form.getFieldState(field, form.formState).error
+
+  const disabled = !editable || isDisabled
 
   return (
     <>
@@ -62,7 +66,7 @@ const SelectableChipDetails = ({
           {type === 'text' && (
             <TextInput
               field={field}
-              disabled={isDisabled}
+              disabled={disabled}
               autoFocus={!form.watch(field)}
               placeHolder={placeHolder}
             />
@@ -73,14 +77,17 @@ const SelectableChipDetails = ({
               field={field}
               className="w-[45px]"
               placeholder={placeHolder}
+              disabled={disabled}
             />
           )}
-          {type === 'select' && <SelectInput field={field} options={options} />}
+          {type === 'select' && (
+            <SelectInput field={field} options={options} disabled={disabled} />
+          )}
           {type === 'date' && (
             <Box className="w-[100px]">
               <DatePickerInput
                 field={field}
-                isDisabled={isDisabled}
+                isDisabled={disabled}
                 isRequired={true}
               />
             </Box>
@@ -93,6 +100,7 @@ const SelectableChipDetails = ({
               options={options || []}
               defaultValues={form.watch(field)}
               hideSelectedCount={hideSelectedCount}
+              disabled={disabled}
             />
           )}
         </Flex>

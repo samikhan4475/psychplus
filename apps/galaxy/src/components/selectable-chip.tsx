@@ -9,6 +9,7 @@ interface SelectableChipProps {
   onClick: () => void
   isTooltip?: boolean
   tooltipContent?: string
+  editable?: boolean
 }
 
 const SelectableChip = ({
@@ -18,6 +19,7 @@ const SelectableChip = ({
   onClick,
   isTooltip = false,
   tooltipContent,
+  editable = true,
 }: React.PropsWithChildren<SelectableChipProps>) => {
   const chipContent = (
     <Text
@@ -36,9 +38,18 @@ const SelectableChip = ({
         onClick={onClick}
         align="center"
         className={cn(
-          'h-[var(--chip-height)] cursor-pointer rounded-1 border border-gray-9 py-[1px]',
+          'h-[var(--chip-height)] rounded-1 border border-gray-9 py-[1px]',
           {
-            'bg-pp-focus-bg border-pp-focus-outline': selected,
+            'cursor-pointer': editable,
+          },
+          {
+            'cursor-not-allowed border-gray-7 bg-gray-3': !editable,
+          },
+          {
+            'bg-pp-focus-bg border-pp-focus-outline': selected && editable,
+          },
+          {
+            'border-black bg-gray-3': selected && !editable,
           },
         )}
       >

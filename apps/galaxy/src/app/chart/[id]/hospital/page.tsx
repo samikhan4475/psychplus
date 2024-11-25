@@ -9,25 +9,7 @@ interface QuestionnairesPageProps {
 }
 
 const HospitalInfoPage = async ({ params }: QuestionnairesPageProps) => {
-  const response = await getQuickNotesHospitalLabOrders({
-    patientId: params.id,
-  })
-
-  if (response.state === 'error') {
-    toast.error(response.error)
-  }
-
-  const data =
-    response.state === 'success'
-      ? response.data.quicknotesHospitalLabOrdersData
-      : []
-
-  return (
-    <HospitalView
-      patientId={params.id}
-      quicknotesHospitalLabOrderResponse={data}
-    />
-  )
+  return <HospitalView patientId={params.id} />
 }
 
 export default HospitalInfoPage

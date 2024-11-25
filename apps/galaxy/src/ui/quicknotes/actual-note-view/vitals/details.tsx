@@ -6,9 +6,11 @@ import { BlockContainer } from '../shared'
 const Details = ({ data }: { data: PatientVital[] }) => {
   return (
     <BlockContainer heading="Vitals">
-      <Flex className="max-w-[360px]">
-        <VitalsTable data={data} unitSystem={UnitSystem.Metric} />
-      </Flex>
+      {data.length > 0 && (
+        <Flex className="max-w-[360px]">
+          <VitalsTable data={data} unitSystem={UnitSystem.Metric} />
+        </Flex>
+      )}
     </BlockContainer>
   )
 }
