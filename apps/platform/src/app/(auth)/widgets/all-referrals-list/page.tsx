@@ -1,3 +1,4 @@
+import { type SearchParams } from '@psychplus/utils/url'
 import {
   AllReferralsListWidget,
   CreateReferralWidget,
@@ -10,7 +11,14 @@ import { Client } from './client'
 const TITLE = 'All Referrals Widget'
 const DESCRIPTION = 'A table displaying all referrals.'
 
-const PatientReferralsListWidgetPage = () => {
+const PatientReferralsListWidgetPage = ({
+  searchParams,
+}: {
+  searchParams: SearchParams
+}) => {
+  if (!searchParams.patientId) {
+    return <div>Patient ID is required</div>
+  }
   return (
     <>
       <Client />

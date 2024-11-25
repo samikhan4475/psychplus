@@ -24,6 +24,8 @@ const CreateReferralWidgetServer = async ({
     getReferrals({ patientId }),
   ])
 
+  if (!patient.id) return <div>Patient with id {patientId} not found</div>
+
   return (
     <>
       <Preloader

@@ -104,6 +104,7 @@ const useRefetchReferrals = () => {
 
   const refetch = useMemo(
     () => () => {
+      if (!patientId) return
       getPatientReferrals({ patientId })
         .then(setReferrals)
         .catch((err) => alert(err.message))

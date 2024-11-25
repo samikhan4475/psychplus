@@ -1,5 +1,6 @@
 'use client'
 
+import { usePatientId } from '@psychplus/patient'
 import { CloseDialogTrigger } from '@psychplus/ui/close-dialog-trigger'
 import { Dialog } from '@psychplus/ui/dialog'
 import { usePubsub } from '@psychplus/utils/event'
@@ -8,12 +9,17 @@ import { EventType } from '@psychplus/widgets/events'
 import { useDialog, usePublishLoaded } from '@psychplus/widgets/hooks'
 import { CreateReferralForm } from './components'
 import { useRefetchReferrals } from './hooks'
+import { useStore } from './store'
 
 const CreateReferralWidgetClient = () => {
+  const patientId = usePatientId(useStore)
   const { publish } = usePubsub()
+
   const { open } = useDialog(CREATE_REFERRAL_WIDGET)
   usePublishLoaded(CREATE_REFERRAL_WIDGET)
   useRefetchReferrals()
+
+  if (!patientId) return null
 
   return (
     <Dialog.Root

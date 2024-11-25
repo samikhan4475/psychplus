@@ -19,6 +19,8 @@ const PatientWidgetClient = () => {
   usePublishSize(PATIENT_WIDGET, ref)
   useSubscribeClosePopover(PATIENT_WIDGET)
 
+  if (!patient) return null
+
   return (
     <Flex
       direction="column"
