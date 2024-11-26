@@ -1,6 +1,7 @@
 'use client'
 
 import {
+  WidgetAddButton,
   WidgetClearButton,
   WidgetContainer,
   WidgetHxButton,
@@ -10,18 +11,24 @@ import { AddMedicationButton } from './add-medication-button'
 import { PatientMedicationsTable } from './patient-medications-table'
 import { StoreProvider } from './store'
 
-interface PatientAllergiesWidgetProps {
+interface PatientMedicationsWidgetProps {
   patientId: string
+  scriptSureAppUrl: string
 }
 
-const PatientMedicationsWidget = ({ patientId }: PatientAllergiesWidgetProps) => {
+const PatientMedicationsWidget = ({
+  patientId,
+  scriptSureAppUrl,
+}: PatientMedicationsWidgetProps) => {
   return (
     <StoreProvider patientId={patientId}>
       <WidgetContainer
         title="Medications"
         headerLeft={
           <>
-            <AddMedicationButton />
+            <WidgetAddButton title="Add Medication">
+              <AddMedicationButton scriptSureAppUrl={scriptSureAppUrl} />
+            </WidgetAddButton>
           </>
         }
         headerRight={

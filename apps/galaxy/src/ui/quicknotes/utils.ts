@@ -9,7 +9,7 @@ import { QuicknotesDiagnosisWidget } from '@/ui/diagnosis/quicknotes-diagnosis-w
 import { FamilyPsychHxWidget } from '@/ui/family-psych-hx'
 import { QuicknotesFollowUpWidget } from '@/ui/follow-up'
 import { HpiWidget } from '@/ui/hpi'
-import { PatientMedicationsWidget } from '@/ui/medications'
+import { PatientMedicationsView } from '@/ui/medications'
 import { MseWidget } from '@/ui/mse'
 import { PastMedicalHxWidget } from '@/ui/past-medical-hx'
 import { PastPsychHxWidget } from '@/ui/past-psych-hx'
@@ -124,7 +124,7 @@ const widgets: Array<WidgetType> = [
   },
   { component: AddOnWidget, id: QuickNoteSectionName.Addon },
   {
-    component: PatientMedicationsWidget,
+    component: PatientMedicationsView,
     id: QuickNoteSectionName.QuicknoteSectionMedications,
     actualNoteComponent: Medications,
   },

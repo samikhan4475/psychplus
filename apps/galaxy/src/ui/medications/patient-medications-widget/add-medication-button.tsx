@@ -1,15 +1,26 @@
 'use client'
 
-import { Button } from '@radix-ui/themes'
-import { PlusIcon } from 'lucide-react'
+import { useParams } from 'next/navigation'
+import { LoadingPlaceholder } from '@/components'
+import { useGetScriptSureIframeUrl } from '@/hooks'
+import { PatientMedicationIframe } from './patient-medication-iframe'
 
-const AddMedicationButton = () => {
-  return (
-    <Button variant="outline" size="1" color="gray" className="text-black">
-      <PlusIcon height={16} width={16} />
-      Add
-    </Button>
+const AddMedicationButton = ({
+  scriptSureAppUrl,
+}: {
+  scriptSureAppUrl: string
+}) => {
+  const { id } = useParams<{ id: string }>()
+  const { iframeUrl, loading } = useGetScriptSureIframeUrl(
+    id,
+    scriptSureAppUrl,
+    'drug-list',
   )
+  if (loading) {
+    return <LoadingPlaceholder className="h-full" />
+  }
+
+  return <PatientMedicationIframe iframeSrc={iframeUrl} />
 }
 
 export { AddMedicationButton }
