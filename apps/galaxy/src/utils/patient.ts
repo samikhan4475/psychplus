@@ -142,6 +142,23 @@ const getPatientMainAddress = (addresses?: PatientAddress[]) => {
   return `${address.street1}, ${address.city}, ${address.state} ${address.postalCode}`
 }
 
+const getPatientStreet = (
+  addresses?: PatientAddress[],
+  type: PatientAddressType = 'Home',
+) => {
+  if (!addresses || addresses.length === 0) {
+    return undefined
+  }
+
+  let address = addresses.find((addr) => addr.type === type)
+
+  if (!address) {
+    address = addresses[0]
+  }
+
+  return address.street1 || address.street2 || undefined
+}
+
 const getPatientGender = (gender: Gender) => GENDER_ABBREVIATIONS[gender]
 
 const getGuardianFirstName = (guardian?: PatientGuardian) =>
@@ -174,4 +191,5 @@ export {
   getPatientCity,
   getPatientState,
   getPatientInsuranceName,
+  getPatientStreet,
 }

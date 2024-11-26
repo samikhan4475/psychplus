@@ -1,9 +1,9 @@
 import { PatientAddress, PatientProfile } from '@/types'
 import {
   getPatientCity,
-  getPatientMainAddress,
   getPatientPostalCode,
   getPatientState,
+  getPatientStreet,
 } from '@/utils'
 import { LabelAndValue } from './label-and-value'
 
@@ -18,7 +18,7 @@ const UserContactDetailsSection = async ({ user }: PatientBannerProps) => {
         label="Address"
         value={
           user.contactDetails.addresses
-            ? getPatientMainAddress(
+            ? getPatientStreet(
                 user.contactDetails.addresses as PatientAddress[],
               )
             : undefined
