@@ -4,6 +4,7 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import z from 'zod'
 import { FormContainer, FormError } from '@/components'
 import { sanitizeFormData } from '@/utils'
+import { MasterFeeScheduleFilter } from '../types'
 import { AgeRangeField } from './age-range-field'
 import { CategorySelectField } from './category-select-field'
 import { ClearFilterFormButton } from './clear-filter-form-button'
@@ -52,8 +53,9 @@ const MasterFeeScheduleFilterForm = () => {
     const payload = {
       ...data,
       resourceStatusList: data.recordStatus && [data.recordStatus],
+      cptCode: data.cptCode && [data.cptCode],
     }
-    const sanitizedData = sanitizeFormData(payload)
+    const sanitizedData = sanitizeFormData(payload) as MasterFeeScheduleFilter
     return search(sanitizedData, 1, true)
   }
 

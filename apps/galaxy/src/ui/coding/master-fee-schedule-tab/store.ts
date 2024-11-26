@@ -2,7 +2,7 @@ import { create } from 'zustand'
 import { Sort } from '@/types'
 import { getNewSortDir } from '@/utils'
 import { getCptListAction } from '../actions/get-cpt-list'
-import { CptListResponse } from '../types'
+import { CptListResponse, MasterFeeScheduleFilter } from '../types'
 import { SchemaType } from './master-fee-schedule-filter-form'
 
 interface Store {
@@ -11,10 +11,10 @@ interface Store {
   sort?: Sort
   loading?: boolean
   page: number
-  formValues?: Partial<SchemaType>
+  formValues?: Partial<MasterFeeScheduleFilter>
   pageCache: Record<number, CptListResponse>
   search: (
-    formValues?: Partial<SchemaType>,
+    formValues?: Partial<MasterFeeScheduleFilter>,
     page?: number,
     reset?: boolean,
   ) => void
@@ -32,7 +32,7 @@ const useStore = create<Store>((set, get) => ({
   formValues: undefined,
   pageCache: {},
   search: async (
-    formValues: Partial<SchemaType> = {},
+    formValues: Partial<MasterFeeScheduleFilter> = {},
     page = 1,
     reset = false,
   ) => {

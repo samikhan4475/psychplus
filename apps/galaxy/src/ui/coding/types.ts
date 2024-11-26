@@ -39,4 +39,23 @@ interface CptListResponse {
   cptList: CPT[]
   total: number
 }
-export { CodingTab, type PosList, type CptListResponse, type CPT }
+
+interface MasterFeeScheduleFilter {
+  cptCode?: string[]
+  placeOfService?: string
+  description?: string
+  requirement?: string
+  category?: string
+  gender?: string
+  recordStatus?: string
+  minimumAge?: string
+  maximumAge?: string
+}
+
+export {
+  CodingTab,
+  type PosList,
+  type CptListResponse,
+  type CPT,
+  type MasterFeeScheduleFilter,
+}

@@ -3,10 +3,10 @@
 import * as api from '@/api'
 import { Sort } from '@/types'
 import { MASTER_FEE_SCHEDULE_TABLE_PAGE_SIZE } from '../constants'
-import type { CPT, CptListResponse } from '../types'
+import type { CPT, CptListResponse, MasterFeeScheduleFilter } from '../types'
 
 interface CptSearchParams {
-  payload?: Partial<CPT>
+  payload?: Partial<MasterFeeScheduleFilter>
   page: number
   sort?: Sort
 }
