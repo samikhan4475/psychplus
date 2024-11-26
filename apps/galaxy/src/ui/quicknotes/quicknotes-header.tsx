@@ -18,6 +18,7 @@ import { QuickNotesTitleDropdown } from './quicknotes-title-dropdown'
 import { QuickNotesUploadButton } from './quicknotes-upload-button'
 import { QuickNotesViewNoteButton } from './quicknotes-view-note-button'
 import { QuickNotesVisitNumberDropdown } from './quicknotes-visit-number-dropdown'
+import { QuickNotesVisitSequenceDropdown } from './quicknotes-visit-sequence-dropdown'
 import { QuickNotesVisitTypeDropdown } from './quicknotes-visit-type-dropdown'
 
 interface QuickNotesHeaderProps {
@@ -58,6 +59,9 @@ const QuickNotesHeader = async ({ appointment }: QuickNotesHeaderProps) => {
         <Flex align="center" gap="2" wrap="wrap" p="2">
           <QuickNotesTitleDropdown title={appointment.visitNoteTitle} />
           <QuickNotesVisitTypeDropdown visitType={appointment.visitType} />
+          <QuickNotesVisitSequenceDropdown
+            visitSequence={appointment.visitSequence}
+          />
           <QuickNotesProviderTypeDropdown
             providerType={appointment.providerType}
           />

@@ -3,17 +3,17 @@
 import { Flex, Select, Text, Tooltip } from '@radix-ui/themes'
 
 interface Props {
-  visitType?: string
+  visitSequence?: string
 }
 
-const QuickNotesVisitTypeDropdown = ({ visitType }: Props) => {
+const QuickNotesVisitSequenceDropdown = ({ visitSequence }: Props) => {
   return (
     <Flex direction="column" gap="1">
       <Text size="1" weight="medium">
-        Visit Type
+        Visit Sequence
       </Text>
       <Select.Root size="1" value="est-patient-outpatient-visit" disabled>
-        <Tooltip content={visitType}>
+        <Tooltip content={visitSequence}>
           <Select.Trigger className="max-w-[125px]" />
         </Tooltip>
         <Select.Content
@@ -21,7 +21,7 @@ const QuickNotesVisitTypeDropdown = ({ visitType }: Props) => {
           onCloseAutoFocus={(e) => e.preventDefault()}
         >
           <Select.Item value="est-patient-outpatient-visit">
-            {visitType}
+            {visitSequence}
           </Select.Item>
         </Select.Content>
       </Select.Root>
@@ -29,4 +29,4 @@ const QuickNotesVisitTypeDropdown = ({ visitType }: Props) => {
   )
 }
 
-export { QuickNotesVisitTypeDropdown }
+export { QuickNotesVisitSequenceDropdown }
