@@ -3,6 +3,7 @@
 import * as Tabs from '@radix-ui/react-tabs'
 import { Flex } from '@radix-ui/themes'
 import { TabsTrigger } from '@/components'
+import { PatientLabResultView } from '../lab-result'
 import { LabOrdersTabs } from './lab-orders-widget/constant'
 import { LabOrdersWidget } from './lab-orders-widget/lab-orders-widget'
 import { useStore } from './lab-orders-widget/store'
@@ -34,6 +35,9 @@ const LabOrdersView = ({ IsLabOrderHeader }: LabOrderHeaderProps) => {
 
       <TabsContent value={LabOrdersTabs.LAB_ORDERS}>
         <LabOrdersWidget IsLabOrderHeader={IsLabOrderHeader} />
+      </TabsContent>
+      <TabsContent value={LabOrdersTabs.LAB_RESULTS}>
+        <PatientLabResultView />
       </TabsContent>
     </Tabs.Root>
   )

@@ -39,6 +39,7 @@ interface DataTableProps<TData, TValue> {
   tableClass?: string
   tableRowClass?: string
   selectFirstRow?: boolean
+  stickyRow?: boolean
 }
 
 const DataTable = <TData, TValue>({
@@ -57,6 +58,7 @@ const DataTable = <TData, TValue>({
   tableClass,
   selectFirstRow,
   tableRowClass,
+  stickyRow = false,
 }: DataTableProps<TData, TValue>) => {
   const [sorting, setSorting] = useState<SortingState>([])
   const [pagination, setPagination] = useState<PaginationState>({
@@ -125,7 +127,7 @@ const DataTable = <TData, TValue>({
         >
           {table.getHeaderGroups().map((headerGroup) => (
             <Table.Row key={headerGroup.id}>
-              {headerGroup.headers.map((header) => {
+              {headerGroup.headers.map((header, index) => {
                 const columnRelativeDepth = header.depth - header.column.depth
 
                 if (
@@ -154,6 +156,8 @@ const DataTable = <TData, TValue>({
                         'last:border-r-pp-gray-2 first:border-l-pp-gray-2 first:rounded-tl-1 last:rounded-tr-1 last:border-r':
                           header.depth <= 1,
                         'border-t-pp-table-border': header.depth > 1,
+                        'bg-pp-focus-bg-2 sticky left-0 z-10':
+                          stickyRow && index === 0,
                       },
                       `w-[${header.getSize()}px]`,
                     )}
@@ -190,10 +194,15 @@ const DataTable = <TData, TValue>({
                   },
                 )}
               >
-                {row.getVisibleCells().map((cell) => (
+                {row.getVisibleCells().map((cell, index) => (
                   <Table.Cell
                     key={cell.id}
-                    className="border-pp-table-border last:border-r-pp-gray-2 first:border-l-pp-gray-2 group-last/row-hover:!border-b-pp-gray-2 h-5 border-b border-l border-r-0 px-1 py-0.5 last:border-r group-last/row-hover:first:rounded-bl-1 group-last/row-hover:last:rounded-br-1"
+                    className={cn(
+                      'border-pp-table-border last:border-r-pp-gray-2 first:border-l-pp-gray-2 group-last/row-hover:!border-b-pp-gray-2 h-5 border-b border-l border-r-0 px-1 py-0.5 last:border-r group-last/row-hover:first:rounded-bl-1 group-last/row-hover:last:rounded-br-1',
+                      {
+                        'bg-white sticky left-0 z-10': stickyRow && index === 0,
+                      },
+                    )}
                   >
                     <Flex height="100%" align="center" width="100%">
                       {flexRender(
