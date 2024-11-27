@@ -10,7 +10,7 @@ import { NoteDetailsSection } from './note-detail'
 import { NotesTable } from './notes-table'
 
 const scrollClass = `max-h-[calc(100dvh_-_325px)] max-w-[50%] flex-1 [&>.rt-ScrollAreaViewport>div]:w-auto`
-const NotesLayout = () => {
+const NotesLayout = ({ patientId }: { patientId: string }) => {
   const [isVisible, setIsVisible] = useState<boolean>(true)
 
   return (
@@ -38,10 +38,10 @@ const NotesLayout = () => {
                 <ListFilterIcon width={16} height={16} />
               </IconButton>
             </LeftPanelActions>
-            {isVisible && <LeftPanelFilters />}
+            {isVisible && <LeftPanelFilters patientId={patientId} />}
           </Flex>
           <Box className="bg-white p-2 shadow-2">
-            <NotesTable />
+            <NotesTable patientId={patientId} />
           </Box>
         </Flex>
       </ScrollArea>

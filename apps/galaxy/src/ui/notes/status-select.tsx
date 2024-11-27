@@ -4,22 +4,11 @@ import { Flex } from '@radix-ui/themes'
 import { FormFieldError, FormFieldLabel, SelectInput } from '@/components'
 
 const options = [
-  {
-    label: 'test1',
-    value: 'test1',
-  },
-  {
-    label: 'test2',
-    value: 'test2',
-  },
-  {
-    label: 'test3',
-    value: 'test3',
-  },
-  {
-    label: 'test4',
-    value: 'test4',
-  },
+  { label: 'Pending', value: 'Pending' },
+  { label: 'Signed', value: 'Signed' },
+  { label: 'Signed/Pending', value: 'Signed/Pending' },
+  { label: 'Co-Signed', value: 'Co-Signed' },
+  { label: 'Error', value: 'Error' },
 ]
 
 const StatusSelect = () => {

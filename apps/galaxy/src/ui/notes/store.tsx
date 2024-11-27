@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { getPatientNotesAction } from './actions'
+import { getPatientNotesAction, GetPatientNotesParams } from './actions'
 import type { GetPatientNotesResponse } from './types'
 
 interface Store {
@@ -7,9 +7,14 @@ interface Store {
   data?: GetPatientNotesResponse
   loading?: boolean
   error?: string
-  fetch: (page?: number, reset?: boolean) => void
+  fetch: (
+    payload: GetPatientNotesParams,
+    page?: number,
+    reset?: boolean,
+  ) => void
   selectedRow: string | undefined
   selectedRows: string[]
+  setPatientId: (id: string) => void
   setSelectedRow: (value: string | undefined) => void
   setSelectedRows: (value: string[]) => void
   isCreateNoteView: boolean
@@ -25,22 +30,27 @@ const useStore = create<Store>((set, get) => ({
   data: undefined,
   loading: true,
   error: undefined,
-  fetch: async () => {
+  fetch: async (payload) => {
+    // if (!get().patientId) return
+
     set({
       error: undefined,
       loading: true,
     })
 
-    const result = await getPatientNotesAction({
-      patientId: get().patientId,
-    })
+    console.log('🚀 ~ getPatientNotesAction ~ calling:')
+
+    const result = await getPatientNotesAction(payload)
 
     if (result.state === 'error') {
+      console.log('🚀 ~ fetch: ~ result.error:', result.error)
       return set({
         error: result.error,
         loading: false,
       })
     }
+
+    console.log('🚀 ~ getPatientNotesAction ~ result.data:', result.data)
 
     set({
       data: result.data,
@@ -49,6 +59,7 @@ const useStore = create<Store>((set, get) => ({
   },
   selectedRow: undefined,
   selectedRows: [],
+  setPatientId: (patientId) => set({ patientId }),
   setSelectedRow: (selectedRow) => set({ selectedRow }),
   setSelectedRows: (selectedRows) => set({ selectedRows }),
   isCreateNoteView: false,

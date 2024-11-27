@@ -327,6 +327,8 @@ const GET_SCRIPT_SURE_SESSION_TOKEN = (partnerShortName: string) =>
   `${API_URL}/api/integration/partners/${partnerShortName}/actions/authtoken`
 const GET_SCRIPT_SURE_EXTERNAL_PATIENT_ID = (patientId: string) =>
   `${API_URL}/api/patients/${patientId}/prescriptions/actions/externalpatient/search`
+const GET_DETAILED_NOTE_ENDPOINT = (patientId: string) =>
+  `${API_URL}/api/patients/${patientId}/detailednotes/actions/search`
 const GET_STAFF_DEA_ENDPOINT = `${API_URL}/api/staffdea/actions/search`
 const GET_STAFF_LICENSE_HISTORY_ENDPOINT = `${API_URL}/api/staffdea/history/actions/search`
 
@@ -508,4 +510,5 @@ export {
   DOWNLOAD_HCFA_FILE_ENDPOINT,
   GET_SCRIPT_SURE_SESSION_TOKEN,
   GET_SCRIPT_SURE_EXTERNAL_PATIENT_ID,
+  GET_DETAILED_NOTE_ENDPOINT,
 }

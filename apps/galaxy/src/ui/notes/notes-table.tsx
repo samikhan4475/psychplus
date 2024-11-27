@@ -6,135 +6,152 @@ import { ColumnDef, Row, Table } from '@tanstack/react-table'
 import {
   ColumnHeader,
   DataTable,
+  DateTimeCell,
   LoadingPlaceholder,
   TextCell,
 } from '@/components'
+import { CODESETS } from '@/constants'
+import { useCodesetCodes } from '@/hooks'
+import { SharedCode } from '@/types'
+import { formatDateTime } from '@/utils'
 import { TableHeaderCheckboxCell, TableRowCheckboxCell } from './cells'
 import { useStore } from './store'
 import { PatientNotes } from './types'
+import { getAuthorName } from './utils'
 
-const columns: ColumnDef<PatientNotes>[] = [
-  {
-    id: 'select',
-    header: ({ table }) => (
-      <TableHeaderCheckboxCell
-        checked={table.getIsAllPageRowsSelected()}
-        onCheckedChange={table.toggleAllPageRowsSelected}
-      />
-    ),
-    cell: ({ row }) => (
-      <Box className="pl-[2px]">
-        <TableRowCheckboxCell
-          checked={row.getIsSelected()}
-          onCheckedChange={row.toggleSelected}
+const getColumns = (codes: SharedCode[]) => {
+  const getStateDisplayName = (codes: SharedCode[], state: string) => {
+    return codes.find((element) => element.value === state)?.display
+  }
+
+  const columns: ColumnDef<PatientNotes>[] = [
+    {
+      id: 'select',
+      header: ({ table }) => (
+        <TableHeaderCheckboxCell
+          checked={table.getIsAllPageRowsSelected()}
+          onCheckedChange={table.toggleAllPageRowsSelected}
         />
-      </Box>
-    ),
-  },
-  {
-    id: 'date',
-    accessorKey: 'date',
-    header: () => <ColumnHeader label="Date" />,
-    cell: ({ row }) => (
-      <Flex className="gap-x-2">
-        <TextCell>{row.original.date} </TextCell>
-        <TextCell>{row.original.time} </TextCell>
-      </Flex>
-    ),
-  },
-  {
-    id: 'authors',
-    accessorKey: 'time',
-    header: () => <ColumnHeader label="Author(s)" />,
-    cell: ({ row }) => (
-      <Box className="truncate">
-        <TextCell>{row.original.authors} </TextCell>
-      </Box>
-    ),
-  },
-  {
-    id: 'visit-type',
-    accessorKey: 'visitType',
-    header: () => <ColumnHeader label="Visit Type" />,
-    cell: ({ row }) => (
-      <Box className="truncate">
-        <TextCell>{row.original.visitType} </TextCell>
-      </Box>
-    ),
-  },
-  {
-    id: 'visit-title',
-    accessorKey: 'visitTitle',
-    header: () => <ColumnHeader label="Visit Title" />,
-    cell: ({ row }) => (
-      <Box className="truncate">
-        <TextCell>{row.original.visitTitle}</TextCell>
-      </Box>
-    ),
-  },
-  {
-    id: 'location',
-    accessorKey: 'location',
-    header: () => <ColumnHeader label="Location" />,
-    cell: ({ row }) => (
-      <Box className="truncate">
-        <TextCell>{row.original.location}</TextCell>
-      </Box>
-    ),
-  },
-  {
-    id: 'service',
-    accessorKey: 'service',
-    header: () => <ColumnHeader label="Service" />,
-    cell: ({ row }) => (
-      <Box className="truncate">
-        <TextCell>{row.original.service}</TextCell>
-      </Box>
-    ),
-  },
-  {
-    id: 'state',
-    accessorKey: 'state',
-    header: () => <ColumnHeader label="State" />,
-    cell: ({ row }) => (
-      <Box className="truncate">
-        <TextCell>{row.original.state}</TextCell>
-      </Box>
-    ),
-  },
-  {
-    id: 'practice',
-    accessorKey: 'practice',
-    header: () => <ColumnHeader label="Practice" />,
-    cell: ({ row }) => (
-      <Box className="truncate">
-        <TextCell>{row.original.practice}</TextCell>
-      </Box>
-    ),
-  },
-  {
-    id: 'organization',
-    accessorKey: 'organization',
-    header: () => <ColumnHeader label="Organization" />,
-    cell: ({ row }) => (
-      <Box className="truncate">
-        <TextCell>{row.original.organization}</TextCell>
-      </Box>
-    ),
-  },
-  {
-    id: 'status',
-    accessorKey: 'status',
-    header: () => <ColumnHeader label="Status" />,
-    cell: ({ row }) => (
-      <Box className="truncate">
-        <TextCell>{row.original.status}</TextCell>
-      </Box>
-    ),
-  },
-]
+      ),
+      cell: ({ row }) => (
+        <Box className="pl-[2px]">
+          <TableRowCheckboxCell
+            checked={row.getIsSelected()}
+            onCheckedChange={row.toggleSelected}
+          />
+        </Box>
+      ),
+    },
+    {
+      id: 'date',
+      accessorKey: 'date',
+      header: () => <ColumnHeader label="Date" />,
+      cell: ({ row }) => (
+        <DateTimeCell>
+          {formatDateTime(row.original.metadata?.createdOn, false)}
+        </DateTimeCell>
+      ),
+    },
+    {
+      id: 'authors',
+      accessorKey: 'time',
+      header: () => <ColumnHeader label="Author(s)" />,
+      cell: ({ row }) => (
+        <Box className="truncate">
+          <TextCell>{getAuthorName(row.original)} </TextCell>
+        </Box>
+      ),
+    },
+    {
+      id: 'visit-type',
+      accessorKey: 'visitType',
+      header: () => <ColumnHeader label="Visit Type" />,
+      cell: ({ row }) => (
+        <Box className="truncate">
+          <TextCell>
+            {`${row.original.visitType} | ${row.original.visitSequence} | ${row.original.visitMedium}`}{' '}
+          </TextCell>
+        </Box>
+      ),
+    },
+    {
+      id: 'visit-title',
+      accessorKey: 'visitTitle',
+      header: () => <ColumnHeader label="Visit Title" />,
+      cell: ({ row }) => (
+        <Box className="truncate">
+          <TextCell>{row.original.visitTitle}</TextCell>
+        </Box>
+      ),
+    },
+    {
+      id: 'location',
+      accessorKey: 'location',
+      header: () => <ColumnHeader label="Location" />,
+      cell: ({ row }) => (
+        <Box className="truncate">
+          <TextCell>{row.original.locationName}</TextCell>
+        </Box>
+      ),
+    },
+    {
+      id: 'service',
+      accessorKey: 'service',
+      header: () => <ColumnHeader label="Service" />,
+      cell: ({ row }) => (
+        <Box className="truncate">
+          <TextCell>{row.original.serviceOffered}</TextCell>
+        </Box>
+      ),
+    },
+    {
+      id: 'state',
+      accessorKey: 'state',
+      header: () => <ColumnHeader label="State" />,
+      cell: ({ row }) => (
+        <Box className="truncate">
+          <TextCell>
+            {getStateDisplayName(codes, row.original.stateCode)}
+          </TextCell>
+        </Box>
+      ),
+    },
+    {
+      id: 'practice',
+      accessorKey: 'practice',
+      header: () => <ColumnHeader label="Practice" />,
+      cell: ({ row }) => (
+        <Box className="truncate">
+          <TextCell>{row.original.practiceName}</TextCell>
+        </Box>
+      ),
+    },
+    {
+      id: 'organization',
+      accessorKey: 'organization',
+      header: () => <ColumnHeader label="Organization" />,
+      cell: ({ row }) => (
+        <Box className="truncate">
+          <TextCell>{row.original.organizationName}</TextCell>
+        </Box>
+      ),
+    },
+    {
+      id: 'status',
+      accessorKey: 'status',
+      header: () => <ColumnHeader label="Status" />,
+      cell: ({ row }) => (
+        <Box className="truncate">
+          <TextCell>{row.original.noteStatus}</TextCell>
+        </Box>
+      ),
+    },
+  ]
 
-const NotesTable = () => {
+  return columns
+}
+
+const NotesTable = ({ patientId }: { patientId: string }) => {
   const { data, fetch, loading, setSelectedRow } = useStore((state) => ({
     data: state.data,
     loading: state.loading,
@@ -142,8 +159,10 @@ const NotesTable = () => {
     setSelectedRow: state.setSelectedRow,
   }))
 
+  const codes = useCodesetCodes(CODESETS.UsStates)
+
   useEffect(() => {
-    fetch()
+    fetch({ patientId })
   }, [])
 
   const onRowSelect = (row: Row<PatientNotes>, table: Table<PatientNotes>) => {
@@ -162,7 +181,7 @@ const NotesTable = () => {
   return (
     <Box className="min-w-[100%]">
       <DataTable
-        columns={columns}
+        columns={getColumns(codes)}
         data={data?.notes || []}
         onRowClick={onRowSelect}
       />
