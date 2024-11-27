@@ -9,7 +9,7 @@ const CredentialsSelect = () => {
       <CodesetSelect
         size="1"
         codeset={CODESETS.PractitionerHonor}
-        name="credentials"
+        name="legalName.honors"
       />
     </FormFieldContainer>
   )

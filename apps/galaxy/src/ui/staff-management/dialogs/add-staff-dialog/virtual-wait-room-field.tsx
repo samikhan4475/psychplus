@@ -8,7 +8,7 @@ const VirtualWaitRoomField = () => {
   const form = useFormContext<SchemaType>()
   return (
     <FormFieldContainer className="w-full">
-      <FormFieldLabel required>Virtual Wait Room</FormFieldLabel>
+      <FormFieldLabel>Virtual Wait Room</FormFieldLabel>
       <TextField.Root
         size="1"
         className="border-pp-gray-2 w-full border border-solid !outline-none [box-shadow:none] "

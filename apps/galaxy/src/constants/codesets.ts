@@ -58,6 +58,7 @@ const CODESETS = {
   // PsychPlusPublic Codesets
   TMSCoilType: 'PsychPlusPublic.TMSCoilType',
   TMSStimulationSite: 'PsychPlusPublic.TMSStimulationSite',
+  ProviderAttributions: 'PsychPlusPublic.ProviderAttributions',
   ProcessedAsCode: 'ProcessedAsCode',
   AdjustmentGroupCode: 'AdjustmentGroupCode',
   PaymentPostingStatus: 'PaymentPostingStatus',

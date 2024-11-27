@@ -1,7 +1,11 @@
 import React from 'react'
 import { TextField } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
-import { FormFieldContainer, FormFieldLabel } from '@/components'
+import {
+  FormFieldContainer,
+  FormFieldError,
+  FormFieldLabel,
+} from '@/components'
 import { SchemaType } from './schema'
 
 const LastNameField = () => {
@@ -14,6 +18,7 @@ const LastNameField = () => {
         className="border-pp-gray-2 w-full border border-solid !outline-none [box-shadow:none] "
         {...form.register('legalName.lastName')}
       />
+      <FormFieldError name="legalName.lastName" />
     </FormFieldContainer>
   )
 }

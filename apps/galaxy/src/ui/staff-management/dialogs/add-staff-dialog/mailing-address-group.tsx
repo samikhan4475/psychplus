@@ -12,19 +12,18 @@ const MailingAddressGroup = () => {
   )
 
   useEffect(() => {
-    if (isMailingAddressSameAsPrimary) {
-      resetField('contactInfo.addresses.1', {
-        defaultValue: {
-          postalCode: '',
-          type: 'Mailing',
-          street1: '',
-          street2: '',
-          city: '',
-          state: '',
-          country: '',
-        },
-      })
-    }
+    resetField('contactInfo.addresses.1', {
+      defaultValue: {
+        postalCode: '',
+        type: 'Mailing',
+        street1: '',
+        street2: '',
+        city: '',
+        state: '',
+        country: '',
+        timeZoneId: '',
+      },
+    })
   }, [isMailingAddressSameAsPrimary, resetField])
 
   return (
