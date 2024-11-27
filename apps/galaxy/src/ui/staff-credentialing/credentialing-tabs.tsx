@@ -3,6 +3,7 @@
 import * as Tabs from '@radix-ui/react-tabs'
 import { Box, Flex, Text } from '@radix-ui/themes'
 import { TabsTrigger } from '@/components'
+import { DEAView } from './dea'
 import { useStore } from './store'
 import { CredentialingTab } from './types'
 
@@ -13,9 +14,9 @@ const CredentialingTabs = () => {
   }))
 
   return (
-    <Box className="flex-1 px-1 pt-1">
+    <Box className="flex-1 px-1">
       <Tabs.Root
-        defaultValue={CredentialingTab.License}
+        defaultValue={CredentialingTab.DEA}
         value={activeTab}
         onValueChange={setActiveTab}
         className="flex w-full flex-col"
@@ -40,7 +41,7 @@ const CredentialingTabs = () => {
           <Text>License View </Text>
         </TabsContent>
         <TabsContent value={CredentialingTab.DEA}>
-          <Text>Dea View</Text>
+          <DEAView />
         </TabsContent>
         <TabsContent value={CredentialingTab.CSA}>
           <Text>CSA </Text>

@@ -5,6 +5,7 @@ interface TextCellProps {
   empty?: boolean
   hasPayment?: boolean
   className?: string
+  wrapperClass?: string
 }
 
 const TextCell = ({
@@ -12,9 +13,10 @@ const TextCell = ({
   hasPayment,
   children,
   className,
+  wrapperClass,
 }: React.PropsWithChildren<TextCellProps>) => {
   return (
-    <Flex height="100%" align="center">
+    <Flex height="100%" align="center" className={cn(wrapperClass)}>
       <Text
         className={cn(
           'text-pp-black-3',

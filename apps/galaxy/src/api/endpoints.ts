@@ -327,6 +327,9 @@ const GET_SCRIPT_SURE_SESSION_TOKEN = (partnerShortName: string) =>
   `${API_URL}/api/integration/partners/${partnerShortName}/actions/authtoken`
 const GET_SCRIPT_SURE_EXTERNAL_PATIENT_ID = (patientId: string) =>
   `${API_URL}/api/patients/${patientId}/prescriptions/actions/externalpatient/search`
+const GET_STAFF_DEA_ENDPOINT = `${API_URL}/api/staffdea/actions/search`
+const GET_STAFF_LICENSE_HISTORY_ENDPOINT = `${API_URL}/api/staffdea/history/actions/search`
+
 export {
   USER_ENDPOINT,
   REFRESH_ENDPOINT,
@@ -498,6 +501,8 @@ export {
   PATIENT_CHARGE_PAYMENT_ENDPOINT,
   NOTE_SIGN_ENDPOINT,
   GET_STAFF_LICENSE,
+  GET_STAFF_DEA_ENDPOINT,
+  GET_STAFF_LICENSE_HISTORY_ENDPOINT,
   GET_LAB_ORDERS,
   GET_CPT_CODES,
   DOWNLOAD_HCFA_FILE_ENDPOINT,

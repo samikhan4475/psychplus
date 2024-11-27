@@ -53,6 +53,7 @@ const CODESETS = {
   ContactMadeStatus: 'ContactMadeStatus',
   ReferralSource: 'ReferralSource',
   ParameterAdjustmentStatus: 'ParameterAdjustmentStatus',
+  LicenseStatus: 'LicenseStatus',
 
   // PsychPlusPublic Codesets
   TMSCoilType: 'PsychPlusPublic.TMSCoilType',

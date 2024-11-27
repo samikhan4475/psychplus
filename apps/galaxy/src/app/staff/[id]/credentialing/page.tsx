@@ -1,5 +1,5 @@
 import React from 'react'
-import { CredentialingView } from '@/ui/staff-management/staff-credentialing'
+import { CredentialingView } from '@/ui/staff-credentialing'
 
 const StaffCredentialing = () => {
   return <CredentialingView />
