@@ -68,7 +68,7 @@ const columns = (
           column={column}
         />
       ),
-      cell: ({ row }) => <TextCell>{row.original.psyDAmount}</TextCell>,
+      cell: ({ row }) => <TextCell hasPayment>{row.original.psyDAmount}</TextCell>,
     },
     {
       id: 'npAmount',
@@ -83,7 +83,7 @@ const columns = (
           column={column}
         />
       ),
-      cell: ({ row }) => <TextCell>{row.original.npAmount}</TextCell>,
+      cell: ({ row }) => <TextCell hasPayment>{row.original.npAmount}</TextCell>,
     },
     {
       id: 'paAmount',
@@ -98,7 +98,7 @@ const columns = (
           column={column}
         />
       ),
-      cell: ({ row }) => <TextCell>{row.original.paAmount}</TextCell>,
+      cell: ({ row }) => <TextCell hasPayment>{row.original.paAmount}</TextCell>,
     },
     {
       id: 'psyDAmount',
