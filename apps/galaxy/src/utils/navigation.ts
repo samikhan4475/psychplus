@@ -86,8 +86,8 @@ const getStaffNavLinks = (staffId: string | null) => {
       href: `${baseHref}/preferences`,
     },
     {
-      label: 'Clinic Scheduler',
-      href: `${baseHref}/clinic-scheduler`,
+      label: 'Clinic Schedule',
+      href: `${baseHref}/clinic-schedule`,
     },
     {
       label: 'Forward Inbox',
