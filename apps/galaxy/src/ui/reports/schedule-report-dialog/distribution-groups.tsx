@@ -11,7 +11,7 @@ const DistributionGroupsSelect = () => {
 
   return (
     <FormFieldContainer className="w-full">
-      <FormFieldLabel className="!text-1 mt-3">
+      <FormFieldLabel className="!text-1 mt-3" required>
         Distribution Groups
       </FormFieldLabel>
       <TagsMultiSelect

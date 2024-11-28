@@ -3,16 +3,20 @@
 import {
   DatePickerInput,
   FormFieldContainer,
+  FormFieldError,
   FormFieldLabel
 } from '@/components'
+import { I18nProvider } from 'react-aria-components'
 
 const StartDate = () => {
   return (
-    <FormFieldContainer className="flex-row items-center gap-1">
+    <FormFieldContainer className="flex-row items-start gap-1">
       <FormFieldLabel className="!text-1" required>
-        Start Date
+        Start Date of Schedule
       </FormFieldLabel>
-      <DatePickerInput field="startDate" className="min-w-[120px]" />
+      <I18nProvider locale="en-US">
+        <DatePickerInput field="beginOn" className="min-w-[140px]" />
+      </I18nProvider>
     </FormFieldContainer>
   )
 }

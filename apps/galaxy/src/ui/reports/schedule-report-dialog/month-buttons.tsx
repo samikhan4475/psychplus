@@ -7,16 +7,10 @@ interface MonthButtonsProps {
 
 const MonthButtons = ({ dayOfMonth, weekday }: MonthButtonsProps) => {
   return (
-    <>
-      <IntervalButton
-        label={`On day ${dayOfMonth ?? ''}`}
-        option={`On day ${dayOfMonth ?? ''}`}
-      />
-      <IntervalButton
-        label={`On the first ${weekday ?? ''}`}
-        option={`On the first ${weekday ?? ''}`}
-      />
-    </>
+    <IntervalButton
+      label={`On day ${dayOfMonth ?? ''} of a month`}
+      option={`${dayOfMonth ?? ''}`}
+    />
   );
 };
 

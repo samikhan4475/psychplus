@@ -1,8 +1,9 @@
 'use client'
 
-import { Flex } from '@radix-ui/themes'
+import { Flex, Text } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
 import { INTERVAL, REPEAT_INTERVAL } from '../types'
+import DataRangeAndParameter from './data-range-and-parameter'
 import { EndDate } from './end-date-input'
 import { IntervalButtonGroup } from './interval-button-group'
 import { RepeatSelect } from './repeat-select'
@@ -16,9 +17,8 @@ const ScheduleReportIntervals = () => {
   const repeatInterval = form.watch('repeatInterval');
   return (
     <>
-      <Flex className="gap-x-3.5 mt-2">
+      <Flex className="gap-x-3.5 mt-2 py-2" align="start">
         <StartDate />
-        {repeatCount === REPEAT_INTERVAL.NOREPEAT && <EndDate />}
         <RepeatSelect />
       </Flex>
 
@@ -28,7 +28,9 @@ const ScheduleReportIntervals = () => {
       {repeatCount !== REPEAT_INTERVAL.NOREPEAT && (repeatInterval === INTERVAL.MONTH || repeatInterval === INTERVAL.YEAR) && (
         <IntervalButtonGroup intervalType={repeatInterval as INTERVAL.MONTH | INTERVAL.YEAR} />
       )}
-      {repeatCount !== REPEAT_INTERVAL.NOREPEAT && <EndDate />}
+      <DataRangeAndParameter />
+      <Text size="1" weight="medium" className='my-2'>Occurs until</Text>
+      <EndDate />
     </>
   )
 }

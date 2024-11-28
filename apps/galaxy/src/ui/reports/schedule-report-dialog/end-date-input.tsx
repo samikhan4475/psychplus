@@ -11,13 +11,13 @@ import { ScheduleTemplateSchemaType } from './schedule-report-form';
 
 const EndDate = () => {
   const form = useFormContext<ScheduleTemplateSchemaType>();
-  const startDate = form.watch('startDate');
+  const beginOn = form.watch('beginOn');
   return (
     <Flex className="items-center gap-1">
-      <FormFieldLabel className="!text-1" required>
+      <FormFieldLabel className="!text-1">
         End Date
       </FormFieldLabel>
-      <DatePickerInput field="endDate" minValue={startDate} className='w-[120px]' />
+      <DatePickerInput field="terminateOn" minValue={beginOn} className='w-[120px]' />
       <RemoveEndDateButton />
     </Flex>
   );

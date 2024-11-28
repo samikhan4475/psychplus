@@ -6,10 +6,10 @@ import { ScheduleTemplateSchemaType } from './schedule-report-form';
 
 const RemoveEndDateButton = () => {
   const form = useFormContext<ScheduleTemplateSchemaType>();
-  const endDate = form.watch('endDate');
+  const endDate = form.watch('terminateOn');
 
   const handleClearEndDate = () => {
-    form.resetField('endDate');
+    form.resetField('terminateOn');
   };
 
   if (!endDate) return null;

@@ -10,7 +10,7 @@ const RepeatSelect = () => {
   const repeatCount = watch('repeatCount');
 
   return (
-    <FormFieldContainer className="flex-row items-center gap-1">
+    <FormFieldContainer className="flex-row items-start gap-1">
       <RepeatCountSelect />
       {repeatCount !== REPEAT_INTERVAL.NOREPEAT && <IntervalSelect />}
     </FormFieldContainer>

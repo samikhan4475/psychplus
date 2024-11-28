@@ -21,6 +21,7 @@ const IntervalButton = ({ label, option }: IntervalButtonProps) => {
       size="1"
       variant='outline'
       color='gray'
+      type='button'
       className={cn(
         'px-3 py-1 rounded-full cursor-pointer border bg-white border-pp-focus-border text-black',
         { 'bg-pp-focus-bg text-black border-pp-focus-border': selectedOption === option }

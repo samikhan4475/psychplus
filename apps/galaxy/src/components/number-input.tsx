@@ -20,6 +20,7 @@ interface NumberInputProps {
   showError?: boolean
   min?: number
   max?: number
+  isAllowed?: (values: any) => boolean;
 }
 
 const NumberInput = ({
@@ -34,6 +35,7 @@ const NumberInput = ({
   showError = false,
   min,
   max,
+  isAllowed
 }: NumberInputProps) => {
   const form = useFormContext()
 
@@ -66,7 +68,6 @@ const NumberInput = ({
       onChange(min?.toString() || '');
     }
   };
-
   return (
     <Flex align="center" gap="2">
       {label && (
@@ -99,6 +100,7 @@ const NumberInput = ({
               customInput={TextField.Root}
               getInputRef={field.ref}
               className={cn('h-[var(--chip-height)]', className)}
+              {...(isAllowed && { isAllowed })} 
             />
           )
         }}

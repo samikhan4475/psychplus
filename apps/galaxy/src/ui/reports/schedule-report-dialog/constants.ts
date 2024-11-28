@@ -12,6 +12,14 @@ export const intervalOptions = [
 export const repeatCountOptions = [
   { label: 'Do not Repeat', value: REPEAT_INTERVAL.NOREPEAT },
   { label: '1', value: REPEAT_INTERVAL.ONE },
-  { label: '2', value: REPEAT_INTERVAL.TWO },
+];
+export const monthRepeatCountOptions = [
+  { label: 'Do not Repeat', value: REPEAT_INTERVAL.NOREPEAT },
+  { label: '1', value: REPEAT_INTERVAL.ONE },
   { label: '3', value: REPEAT_INTERVAL.THREE },
+  { label: '6', value: REPEAT_INTERVAL.SIX },
+];
+export const durationOptions = [
+  { label: 'Last', value: 'last' },
+  { label: 'Current', value: 'current' },
 ];

@@ -3,12 +3,12 @@ import { Code, MetadataCodeset } from "@/types"
 
 export interface TemplateParameter {
   id?: string;
-    parameterCode: string;
-    displayName: string;
-    resourceStatus: string;
-    reportTemplateId?: string;
-    displayOrder: number;
-    runValue?: string;
+  parameterCode: string;
+  displayName: string;
+  resourceStatus: string;
+  reportTemplateId?: string;
+  displayOrder: number;
+  runValue?: string;
 }
 
 interface Template {
@@ -17,7 +17,7 @@ interface Template {
   displayName: string
   reportCategoryCode: string
   isAdhocAllowed?: boolean
-  parameters?:TemplateParameter[];
+  parameters?: TemplateParameter[];
   permittedRoles?: string[]
 }
 
@@ -49,7 +49,25 @@ interface StaffDataOptions {
   value: string;
   label: string;
 }
-
+interface ScheduleJob {
+  id?: string,
+  cronScheduleDefinition: string,
+  runHistoryExpireDays: number,
+  shortName?: Date | string | null,
+  displayName?: string
+}
+interface SchedulingReport {
+  templateId?: string;
+  beginOn: string | null;
+  terminateOn?: string| null;
+  parameters: {
+    templateParameterId: string;
+    reportTemplateId: string | undefined;
+    scheduleParameterValue: string;
+  }[];
+  distributionGroup: string[];
+  jobId?: string
+}
 export enum CODE_PARAM_ATTRIBUTES {
   DATA_TYPE = 'DataType',
   TEXTBOX = 'TextBox',
@@ -78,10 +96,11 @@ export enum REPEAT_INTERVAL {
   NOREPEAT = 'notrepeat',
   ONE = '1',
   TWO = '2',
-  THREE = '3'
+  THREE = '3',
+  SIX = '6'
 }
 export enum STAFF_SELECTION {
   STAFF_SELECTION_SPECIALIST_TYPE = 'StaffSelectionSpecialistType',
   SPECIALIST_TYPE = 'SpecialistType',
 }
-export type { Template, Parameter, CodeSetIndex, ReportFilterParameters,ParameterCodeSet, StaffDataOptions }
+export type { Template, Parameter, CodeSetIndex, ReportFilterParameters, ParameterCodeSet, StaffDataOptions, ScheduleJob, SchedulingReport }

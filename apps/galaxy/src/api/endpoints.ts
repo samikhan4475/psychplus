@@ -319,7 +319,6 @@ const UPDATE_PATIENT_RELATIONSHIP_ENDPOINT = (
 const GET_ALLERGIES_ENDPOINT = `${API_URL}/api/allergies/actions/search`
 const PATIENT_CARE_TEAM_ENDPOINT = (patientId: string) =>
   `${API_URL}/api/patients/${patientId}/careteam`
-
 const GET_STAFF_LICENSE = `${API_URL}/api/stafflicenses/actions/search`
 const GET_LAB_ORDERS = (appointmentId: string) =>
   `${API_URL}/api/appointments/${appointmentId}/laborders/actions/search`
@@ -331,7 +330,8 @@ const GET_DETAILED_NOTE_ENDPOINT = (patientId: string) =>
   `${API_URL}/api/patients/${patientId}/detailednotes/actions/search`
 const GET_STAFF_DEA_ENDPOINT = `${API_URL}/api/staffdea/actions/search`
 const GET_STAFF_LICENSE_HISTORY_ENDPOINT = `${API_URL}/api/staffdea/history/actions/search`
-
+const ADD_SCHEDULE_REPORT_ENDPOINT = `${API_URL}/api/reporting/schedules`
+const RUN_SCHEDULE_REPORT_JOB_ENDPOINT = `${API_URL}/api/jobmanager/jobs`
 export {
   USER_ENDPOINT,
   REFRESH_ENDPOINT,
@@ -511,4 +511,6 @@ export {
   GET_SCRIPT_SURE_SESSION_TOKEN,
   GET_SCRIPT_SURE_EXTERNAL_PATIENT_ID,
   GET_DETAILED_NOTE_ENDPOINT,
+  ADD_SCHEDULE_REPORT_ENDPOINT,  
+  RUN_SCHEDULE_REPORT_JOB_ENDPOINT,
 }

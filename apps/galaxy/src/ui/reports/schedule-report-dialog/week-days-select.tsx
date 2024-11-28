@@ -1,11 +1,17 @@
-import { Flex } from '@radix-ui/themes';
-import { useState } from 'react';
+import { Flex, Text } from '@radix-ui/themes';
+import { useEffect, useState } from 'react';
+import { useFormContext } from 'react-hook-form';
 import { weekdays } from './constants';
+import { ScheduleTemplateSchemaType } from './schedule-report-form';
 import { WeekdayButton } from './weekday-button';
-import { WeekdayLabel } from './weekday-label';
 
 const WeekdaysSelect = () => {
   const [activeDays, setActiveDays] = useState<string[]>([]);
+  const form = useFormContext<ScheduleTemplateSchemaType>();
+
+  useEffect(() => {
+    form.setValue('scheduleDays', activeDays);
+  }, [activeDays, form]);
 
   const toggleDay = (day: string) => {
     setActiveDays((prevDays) =>
@@ -14,21 +20,17 @@ const WeekdaysSelect = () => {
   };
 
   return (
-    <>
-      <Flex gap="2" justify="start" align="center" className="my-4">
-        {weekdays.map((day) => (
-          <WeekdayButton
-            key={day}
-            day={day}
-            isActive={activeDays.includes(day)}
-            onToggle={() => toggleDay(day)}
-          />
-        ))}
-      </Flex>
-      <Flex justify="start" align="center" className="mb-2 font-medium">
-        <WeekdayLabel activeDays={activeDays} />
-      </Flex>
-    </>
+    <Flex gap="2" justify="start" align="center" className="my-4">
+      <Text size="1" weight="medium">on</Text>
+      {weekdays.map((day) => (
+        <WeekdayButton
+          key={day}
+          day={day}
+          isActive={activeDays.includes(day)}
+          onToggle={() => toggleDay(day)}
+        />
+      ))}
+    </Flex>
   );
 };
 

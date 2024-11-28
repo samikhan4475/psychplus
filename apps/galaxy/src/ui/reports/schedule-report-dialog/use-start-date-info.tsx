@@ -5,7 +5,7 @@ import { ScheduleTemplateSchemaType } from './schedule-report-form';
 
 const useStartDateInfo = () => {
   const { watch } = useFormContext<ScheduleTemplateSchemaType>();
-  const startDate = watch('startDate');
+  const startDate = watch('beginOn');
   const [dayOfMonth, setDayOfMonth] = useState<number | null>(null);
   const [weekday, setWeekday] = useState<string | null>(null);
   const [monthName, setMonthName] = useState<string | null>(null);
