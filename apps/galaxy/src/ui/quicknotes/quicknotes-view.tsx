@@ -37,7 +37,13 @@ const QuickNotesView = async ({
           <Flex direction="column" height="100%" gap="2">
             {widgets.map(({ component: WidgetComponent, id }) => {
               if (!WidgetComponent) return null
-              return <WidgetComponent key={id} patientId={patientId} />
+              return (
+                <WidgetComponent
+                  key={id}
+                  patientId={patientId}
+                  appointmentId={appointmentId}
+                />
+              )
             })}
           </Flex>
         </ScrollArea>

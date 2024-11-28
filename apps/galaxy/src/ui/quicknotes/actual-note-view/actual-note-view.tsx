@@ -37,7 +37,7 @@ const ActualNoteView = async ({
               <ActualNoteComponent
                 key={id}
                 patientId={patientId}
-                appointmentId={String(appointment.appointmentId)}
+                appointmentId={String(appointment.id)}
               />
             )
           })}

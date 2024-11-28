@@ -24,6 +24,7 @@ interface Diagnosis {
 }
 
 interface Appointment {
+  id: number
   appointmentId: number
   app_id?: string
   metadata: Metadata

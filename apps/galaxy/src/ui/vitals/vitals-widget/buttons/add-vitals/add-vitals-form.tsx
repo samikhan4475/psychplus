@@ -86,6 +86,13 @@ const AddVitalsForm = ({
   const router = useRouter()
 
   const onSubmit: SubmitHandler<SchemaType> = async (formData) => {
+    if (Object.keys(sanitizeFormData(formData)).length === 0) {
+      setError('Add vitals values to save')
+      toast.error('Failed to save!')
+
+      return
+    }
+
     const vitalData = {
       ...removeNaNValues({
         ...createVitalsObject(sanitizeFormData(formData), unitSystem),
