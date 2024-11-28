@@ -1,38 +1,45 @@
 import { ColumnDef } from '@tanstack/react-table'
+import { Path } from 'react-hook-form'
 import { ColumnHeader, DataTable, TextCell } from '@/components'
 import { SelectOptionType } from '@/types'
-import { CodeSelectCell } from '../cells/code-select-cell'
+import { CodeSelectCell, PrimaryHeaderCell } from '../cells'
+import { CodesWidgetSchemaType } from '../codes-widget-schema'
 
-const FIELD = 'primaryCode'
+const FIELD: Path<CodesWidgetSchemaType> = 'cptPrimaryCodes'
 
-export const primaryCodeData = [
-  { label: '99202 ', value: '99202' },
-  { label: '99203', value: '99203' },
-  { label: '99204', value: '99204' },
-  { label: '99205', value: '99205' },
-]
-
-const columns = (): ColumnDef<SelectOptionType>[] => [
+const columns = (isDisabled?: boolean): ColumnDef<SelectOptionType>[] => [
   {
     id: 'codes-label',
     accessorKey: 'label',
     size: 400,
-    header: ({ column }) => <ColumnHeader column={column} label="Primary" />,
-    cell: ({ row }) => <TextCell>{row.original.label}</TextCell>,
+    header: PrimaryHeaderCell,
+    cell: ({
+      row: {
+        original: { label, value },
+      },
+    }) => <TextCell>{`${value} ${label}`}</TextCell>,
   },
   {
     id: 'codes-select',
     accessorKey: 'value',
     size: 50,
     header: () => <ColumnHeader label="Select" />,
-    cell: ({ row }) => <CodeSelectCell row={row} field={FIELD} />,
+    cell: ({ row }) => (
+      <CodeSelectCell row={row} field={FIELD} isDisabled={isDisabled} />
+    ),
   },
 ]
-const PrimaryCodeTable = () => {
+
+interface PrimaryCodeTableProps {
+  codes: SelectOptionType[]
+  isDisabled?: boolean
+}
+const PrimaryCodeTable = ({ codes, isDisabled }: PrimaryCodeTableProps) => {
   return (
     <DataTable
-      data={primaryCodeData ?? []}
-      columns={columns()}
+      data={codes ?? []}
+      columns={columns(isDisabled)}
+      theadClass="z-[1]"
       disablePagination
       sticky
     />

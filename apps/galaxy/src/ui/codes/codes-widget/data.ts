@@ -1,38 +1,74 @@
-import { QuickNoteSectionItem } from '@/types'
+import { CptCodeKeys, QuickNoteSectionItem } from '@/types'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { sanitizeFormData } from '@/utils'
 import { CodesWidgetSchemaType } from './codes-widget-schema'
+import { visitSpecificCodes } from './utils'
 
 const transformOut =
-  (patientId: string) =>
+  (patientId: string, appId?: string) =>
   (schema: CodesWidgetSchemaType): QuickNoteSectionItem[] => {
     const result: QuickNoteSectionItem[] = []
+    const visitSpecificCodesSet = new Set(
+      visitSpecificCodes.map((item) => item.code.trim()),
+    )
+    Object.entries(sanitizeFormData(schema)).forEach(
+      ([sectionItem, values]) => {
+        Array.isArray(values) &&
+          values.forEach((value) => {
+            const sectionItemObj: QuickNoteSectionItem = {
+              pid: Number(patientId),
+              sectionName: QuickNoteSectionName.QuicknoteSectionCodes,
+              sectionItem,
+              sectionItemValue: value,
+            }
 
-    const data = sanitizeFormData(schema)
-    data.primaryCode.map((primaryCode) => {
-      result.push({
-        pid: Number(patientId),
-        sectionName: QuickNoteSectionName.QuickNoteSectionPrimaryCode,
-        sectionItem: primaryCode,
-        sectionItemValue: primaryCode,
-      })
-    })
+            if (
+              (appId && sectionItem === CptCodeKeys.PRIMARY_CODE_KEY) ||
+              visitSpecificCodesSet.has(value)
+            ) {
+              sectionItemObj.appId = Number(appId)
+            }
+            result.push(sectionItemObj)
+          })
+      },
+    )
 
     return result
   }
 
 const transformIn = (value: QuickNoteSectionItem[]): CodesWidgetSchemaType => {
   const result: CodesWidgetSchemaType = {
-    primaryCode: [],
-    modifierCode: [],
-    addOns: [],
+    cptPrimaryCodes: [],
+    cptmodifierCodes: [],
+    cptAddonCodes: [],
   }
-
-  value.forEach((item) => {
-    result.primaryCode.push(item.sectionItemValue)
+  value.forEach(({ sectionItem, sectionItemValue }) => {
+    switch (sectionItem) {
+      case CptCodeKeys.PRIMARY_CODE_KEY:
+        result.cptPrimaryCodes.push(sectionItemValue)
+        break
+      case CptCodeKeys.ADD_ONS_KEY:
+        result.cptAddonCodes.push(sectionItemValue)
+        break
+      case CptCodeKeys.MODIFIER_KEY:
+        result.cptmodifierCodes.push(sectionItemValue)
+        break
+      default:
+        break
+    }
   })
 
   return result
 }
 
-export { transformIn, transformOut }
+const transformInAppointmentCodes = (
+  codesResultData: QuickNoteSectionItem[],
+  appointmentCodeResultData: QuickNoteSectionItem[],
+): CodesWidgetSchemaType => {
+  return transformIn([
+    ...appointmentCodeResultData.filter(({ appId }) => appId),
+    ...codesResultData.filter(({ appId }) => !appId),
+  ])
+}
+
+export { transformIn, transformOut, transformInAppointmentCodes }

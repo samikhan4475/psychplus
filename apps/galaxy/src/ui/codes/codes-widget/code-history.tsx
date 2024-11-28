@@ -2,23 +2,28 @@ import { useMemo } from 'react'
 import * as Popover from '@radix-ui/react-popover'
 import { Box, Flex, Heading, Text } from '@radix-ui/themes'
 import { HistoryIcon } from 'lucide-react'
-import { UseFormReturn } from 'react-hook-form'
+import { useFormContext } from 'react-hook-form'
 import { CodesWidgetSchemaType } from './codes-widget-schema'
 import { CodesHistoryTable } from './history/history-table'
 
-interface CodeHistoryProps {
-  form: UseFormReturn<CodesWidgetSchemaType>
+interface Props {
+  cptCodesLookup: Record<string, string>
 }
-
-const CodeHistory = ({ form }: CodeHistoryProps) => {
+const CodeHistory = ({ cptCodesLookup }: Props) => {
+  const form = useFormContext<CodesWidgetSchemaType>()
   const formValues = form.watch()
+
   const getJoinedValues = useMemo(() => {
+    const lookupKeys = Object.keys(cptCodesLookup)
     return Object.values(formValues)
-      .map((value) => (Array.isArray(value) ? value.join(', ') : value))
+      .map((codes) =>
+        lookupKeys.filter((key) => codes.includes(key)).join(', '),
+      )
       .filter(Boolean)
       .join(' | ')
-  }, [formValues])
+  }, [formValues, cptCodesLookup])
 
+  console.log(cptCodesLookup)
   return (
     <Box className="flex h-4 items-center justify-between pb-1">
       <Text className="text-1">{getJoinedValues}</Text>

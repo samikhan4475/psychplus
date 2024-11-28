@@ -11,8 +11,10 @@ import { WidgetLoadingOverlay } from './widget-loading-overlay'
 interface WidgetFormContainerProps extends WidgetContainerProps {
   patientId: string
   widgetId: string
-  getData: (schema: any) => QuickNoteSectionItem[]
-  enableEvents?: boolean // TODO: Remove this prop if event are necessary, panding aryan's feedback
+  getData: (
+    schema: any,
+  ) => QuickNoteSectionItem[] | Promise<QuickNoteSectionItem[]>
+  enableEvents?: boolean
 }
 
 const WidgetFormContainer = ({
@@ -28,7 +30,8 @@ const WidgetFormContainer = ({
 
   const onSubmit = (shouldToast = true) =>
     form.handleSubmit(async (data) => {
-      const payload = { patientId, data: getData(data) }
+      const values = await getData(data)
+      const payload = { patientId, data: values }
 
       const result = await saveWidgetAction(payload)
 

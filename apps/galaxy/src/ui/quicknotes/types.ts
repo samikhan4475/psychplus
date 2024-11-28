@@ -1,3 +1,4 @@
+import { Appointment } from '@/types'
 import { QuickNoteSectionName } from './constants'
 
 type WidgetType = {
@@ -5,6 +6,7 @@ type WidgetType = {
   actualNoteComponent?: React.ComponentType<{
     patientId: string
     appointmentId: string
+    appointment?: Appointment
   }>
   id: QuickNoteSectionName
 }

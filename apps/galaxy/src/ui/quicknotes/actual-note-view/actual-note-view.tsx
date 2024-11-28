@@ -38,6 +38,7 @@ const ActualNoteView = async ({
                 key={id}
                 patientId={patientId}
                 appointmentId={String(appointment.id)}
+                appointment={appointment}
               />
             )
           })}

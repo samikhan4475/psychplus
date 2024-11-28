@@ -1,1 +1,1 @@
-export * from './codes-widget'
+export { CodesWidgetLoader as CodesWidget } from './codes-widget-loader'

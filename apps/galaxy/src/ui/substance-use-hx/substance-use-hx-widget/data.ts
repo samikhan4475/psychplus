@@ -1,12 +1,14 @@
-import { QuickNoteSectionItem } from '@/types'
+import { CodesWidgetItem, CptCodeKeys, QuickNoteSectionItem } from '@/types'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { sanitizeFormData } from '@/utils'
+import { manageCodes } from '@/utils/codes'
 import {
   DRUGS_OPTIONS,
   TOBACCO_DRUGS_ALCOHOL_QUESTIONNAIRE,
   TOBACCO_OPTIONS,
 } from './constants'
 import { SubstanceUseHxWidgetSchemaType } from './substance-use-hx-schema'
+import { cptCodeKeysToWatch, cptCodeMap, substanceCptCodes } from './utils'
 
 const transformIn = (
   value: QuickNoteSectionItem[],
@@ -59,7 +61,7 @@ const transformIn = (
       result[detailKey] = itemValue
       result[key] = true
     } else {
-      result[key] = itemValue === 'true' ? true : false
+      result[key] = itemValue === 'true'
     }
   })
 
@@ -67,9 +69,11 @@ const transformIn = (
 }
 
 const transformOut =
-  (patientId: string) =>
-  (schema: Record<string, undefined>): QuickNoteSectionItem[] => {
+  (patientId: string, appointmentId: string) =>
+  async (schema: Record<string, undefined>) => {
     const result: QuickNoteSectionItem[] = []
+
+    const selectedCodes: CodesWidgetItem[] = []
 
     const QuickNotesPayload = {
       pid: Number(patientId),
@@ -121,7 +125,24 @@ const transformOut =
       }
     })
 
-    return result
+    cptCodeKeysToWatch.forEach((key, index) => {
+      const duration = schema[key]
+      if (duration) {
+        const type = ['smoking', 'alcohol'][index] as keyof typeof cptCodeMap
+        selectedCodes.push({
+          key: CptCodeKeys.ADD_ONS_KEY,
+          code: cptCodeMap[type][duration] || cptCodeMap[type].default,
+        })
+      }
+    })
+
+    const codesResult = await manageCodes(
+      patientId,
+      appointmentId,
+      substanceCptCodes,
+      selectedCodes,
+    )
+    return [...result, ...codesResult]
   }
 
 export { transformIn, transformOut }

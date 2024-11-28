@@ -1,5 +1,6 @@
 'use client'
 
+import { useSearchParams } from 'next/navigation'
 import { FormProvider } from 'react-hook-form'
 import {
   WidgetClearButton,
@@ -8,6 +9,7 @@ import {
   WidgetSaveButton,
   WidgetTagButton,
 } from '@/components'
+import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { AlcoholDrugsBlock, TobaccoBlock } from './blocks'
 import { transformOut } from './data'
 import { useSubstanceHxWidgetForm } from './substance-use-hx-form'
@@ -25,6 +27,7 @@ const SubstanceUseHxWidget = ({
   initialValue,
   isHistoryHeader = false,
 }: SocialHxWidgetProps) => {
+  const appointmentId = useSearchParams().get('id') as string
   const form = useSubstanceHxWidgetForm(initialValue)
 
   return (
@@ -32,9 +35,9 @@ const SubstanceUseHxWidget = ({
       {isHistoryHeader && <SubstanceUseHxHxHeader />}
       <WidgetFormContainer
         patientId={patientId}
-        widgetId="substance-use-hx"
+        widgetId={QuickNoteSectionName.QuicknoteSectionCodes}
         title={!isHistoryHeader ? 'Substance Use History' : undefined}
-        getData={transformOut(patientId)}
+        getData={transformOut(patientId, appointmentId)}
         toggleable={!isHistoryHeader}
         headerRight={
           <>

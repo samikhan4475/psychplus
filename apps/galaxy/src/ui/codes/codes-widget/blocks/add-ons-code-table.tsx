@@ -1,85 +1,44 @@
 import { ColumnDef } from '@tanstack/react-table'
+import { Path } from 'react-hook-form'
 import { ColumnHeader, DataTable, TextCell } from '@/components'
 import { SelectOptionType } from '@/types'
 import { CodeSelectCell } from '../cells/code-select-cell'
+import { CodesWidgetSchemaType } from '../codes-widget-schema'
 
-const FIELD = 'addOns'
-export const addOnCodeData = [
-  {
-    label: '96127 (screening questions)',
-    value: '96127',
-  },
-  {
-    label: '96127 (screening questions)',
-    value: '96127',
-  },
-  {
-    label: '96372 (injection)',
-    value: '96372',
-  },
-  {
-    label: '90833 (therapy 16 min)',
-    value: '90833',
-  },
-  {
-    label: '90836 (therapy 38 min)',
-    value: '90836',
-  },
-  {
-    label: '90838 (therapy 52 min)',
-    value: '90838',
-  },
-  {
-    label: '90845 (psychoanalysis)',
-    value: '90845',
-  },
-  {
-    label: '90785 (interactive complexity)',
-    value: '90785',
-  },
-  {
-    label: '99406 (smoking 3 min)',
-    value: '99406',
-  },
-  {
-    label: '99407 (smoking 11 min)',
-    value: '99407',
-  },
-  {
-    label: '99408 (alcohol-sa 15 min)',
-    value: '99408',
-  },
-  {
-    label: '99409 (alcohol-sa 31 min)',
-    value: '99409',
-  },
-  {
-    label: '99050 (afterhours)',
-    value: '99050',
-  },
-]
+const FIELD: Path<CodesWidgetSchemaType> = 'cptAddonCodes'
 
-const columns: ColumnDef<SelectOptionType>[] = [
+const columns = (isDisabled?: boolean): ColumnDef<SelectOptionType>[] => [
   {
     id: 'codes-addon',
     accessorKey: 'label',
     size: 400,
     header: ({ column }) => <ColumnHeader column={column} label="Addons" />,
-    cell: ({ row }) => <TextCell>{row.original.label}</TextCell>,
+    cell: ({
+      row: {
+        original: { label, value },
+      },
+    }) => <TextCell>{`${value} ${label}`}</TextCell>,
   },
   {
     id: 'codes-value',
     accessorKey: 'value',
     size: 50,
     header: () => <ColumnHeader label=" " />,
-    cell: ({ row }) => <CodeSelectCell row={row} field={FIELD} />,
+    cell: ({ row }) => (
+      <CodeSelectCell row={row} field={FIELD} isDisabled={isDisabled} />
+    ),
   },
 ]
-const AddonsTable = () => {
+interface AddonsTableProps {
+  codes: SelectOptionType[]
+  isDisabled?: boolean
+}
+const AddonsTable = ({ codes, isDisabled }: AddonsTableProps) => {
   return (
     <DataTable
-      data={addOnCodeData ?? []}
-      columns={columns}
+      data={codes ?? []}
+      columns={columns(isDisabled)}
+      theadClass="z-[1]"
       disablePagination
       sticky
     />

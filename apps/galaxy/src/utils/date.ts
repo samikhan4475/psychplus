@@ -259,6 +259,18 @@ const calculateMinutes = (startTime: string, endTime: string) => {
   return 0
 }
 
+function convertToTimeZoneTime(
+  dateString: string | undefined,
+  timezoneId: string | undefined,
+) {
+  if (!dateString || !timezoneId) return null
+  const date = new Date(dateString)
+  const options = { timeZone: timezoneId, hour12: false }
+  const formatter = new Intl.DateTimeFormat('en-US', options)
+  const formattedTime = formatter.format(date)
+
+  return parseInt(formattedTime, 10)
+}
 const generateTimeOptions = (interval = 20): SelectOptionType[] => {
   const options = []
   const totalMinutesInDay = 24 * 60
@@ -297,4 +309,5 @@ export {
   daysAgo,
   calculateMinutes,
   generateTimeOptions,
+  convertToTimeZoneTime,
 }
