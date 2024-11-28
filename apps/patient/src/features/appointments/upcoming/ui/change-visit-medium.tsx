@@ -57,7 +57,13 @@ const ChangeVisitMedium = ({ appointment }: ChangeVisitMediumProp) => {
   }
 
   return (
-    <Dialog.Root open={open} onOpenChange={setOpen}>
+    <Dialog.Root
+      open={open}
+      onOpenChange={() => {
+        setOpen(!open)
+        setError(undefined)
+      }}
+    >
       <Dialog.Trigger>
         <Button variant="outline" highContrast className="w-full" color="gray">
           <Text className="whitespace-nowrap">
