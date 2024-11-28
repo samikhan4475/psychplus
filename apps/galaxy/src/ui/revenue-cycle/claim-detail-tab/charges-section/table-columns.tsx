@@ -1,6 +1,6 @@
 import { ColumnDef } from '@tanstack/react-table'
 import { ColumnHeader } from '@/components'
-import { ClaimServiceLine } from '@/types'
+import { ClaimServiceLine, StaffResource } from '@/types'
 import { ClaimRowActionDropdown } from './table-action-cell'
 import { TableCellEndChargesTime } from './table-cell-charges-end-time'
 import { TableCellStartChargesTime } from './table-cell-charges-start-time'
@@ -32,6 +32,7 @@ const getRowIndex = (
 
 const columns = (
   claimServiceLines: ClaimServiceLine[],
+  staffData?: StaffResource | undefined,
 ): ColumnDef<ClaimServiceLine>[] => {
   const rowIndexMap = createRowIndexMap(claimServiceLines)
 
@@ -77,7 +78,10 @@ const columns = (
         />
       ),
       cell: ({ row }) => (
-        <TableCellProcedure rowIndex={getRowIndex(rowIndexMap, row)} />
+        <TableCellProcedure
+          rowIndex={getRowIndex(rowIndexMap, row)}
+          selectedStaff={staffData}
+        />
       ),
 
       enableHiding: true,

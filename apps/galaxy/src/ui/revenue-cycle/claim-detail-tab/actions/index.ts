@@ -4,3 +4,4 @@ export * from './get-service-procedures'
 export * from "./get-service-providers"
 export * from "./get-service-claim"
 export * from "./update-claim"
+export * from "./get-service-staff-by-id"

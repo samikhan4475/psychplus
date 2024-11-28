@@ -27,7 +27,7 @@ const TableCellUnits: React.FC<TableCellUnitsProps> = ({ rowIndex }) => {
   return (
     <TextField.Root
       size="1"
-      placeholder="Units"
+      placeholder="0"
       className="[box-shadow:none]"
       {...register(`claimServiceLines.${rowIndex}.units`, {
         onChange: (e) => {

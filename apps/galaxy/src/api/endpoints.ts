@@ -320,6 +320,8 @@ const GET_ALLERGIES_ENDPOINT = `${API_URL}/api/allergies/actions/search`
 const PATIENT_CARE_TEAM_ENDPOINT = (patientId: string) =>
   `${API_URL}/api/patients/${patientId}/careteam`
 const GET_STAFF_LICENSE = `${API_URL}/api/stafflicenses/actions/search`
+const GET_STAFF_BY_ID = (staffId: number) => `${API_URL}/api/staff/${staffId}`
+
 const GET_LAB_ORDERS = (appointmentId: string) =>
   `${API_URL}/api/appointments/${appointmentId}/laborders/actions/search`
 const GET_SCRIPT_SURE_SESSION_TOKEN = (partnerShortName: string) =>
@@ -503,6 +505,7 @@ export {
   PATIENT_CHARGE_PAYMENT_ENDPOINT,
   NOTE_SIGN_ENDPOINT,
   GET_STAFF_LICENSE,
+  GET_STAFF_BY_ID,
   GET_STAFF_DEA_ENDPOINT,
   GET_STAFF_LICENSE_HISTORY_ENDPOINT,
   GET_LAB_ORDERS,

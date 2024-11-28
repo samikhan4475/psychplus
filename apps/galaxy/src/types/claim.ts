@@ -353,6 +353,11 @@ interface CPTRecord {
   description: string
   requirement: string
   medicareAmount: string
+  npAmount: number
+  paAmount: number
+  mdDoAmount: number
+  psyDAmount: number
+  mastersAmount: number
 }
 
 interface CodeItem {
@@ -506,6 +511,25 @@ interface ClaimDiagnosisApiResponse {
   sequenceNo?: number
 }
 
+interface ServiceMasterFeeScheduleResponse {
+  id: string
+  gender: string
+  category: string
+  minimumAge: number
+  maximumAge: number
+  metadata: Metadata
+  placeOfService: string
+  recordStatus: string
+  cptCode: string
+  description: string
+  requirement: string
+  paAmount: number
+  mdDoAmount: number
+  npAmount: number
+  psyDAmount: number
+  mastersAmount: number
+}
+
 export type {
   Claim,
   ClaimUpdate,
@@ -520,4 +544,5 @@ export type {
   ClaimUpdateApiResponse,
   ClaimServiceLineApiResponse,
   ClaimDiagnosisApiResponse,
+  ServiceMasterFeeScheduleResponse,
 }

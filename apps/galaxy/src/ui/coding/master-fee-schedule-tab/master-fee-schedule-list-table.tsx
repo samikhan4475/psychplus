@@ -68,7 +68,7 @@ const columns = (
           column={column}
         />
       ),
-      cell: ({ row }) => <TextCell hasPayment>{row.original.psyDAmount}</TextCell>,
+      cell: ({ row }) => <TextCell hasPayment>{row.original.mdDoAmount}</TextCell>,
     },
     {
       id: 'npAmount',

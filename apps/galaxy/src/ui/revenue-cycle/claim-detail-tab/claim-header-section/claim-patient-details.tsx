@@ -25,7 +25,7 @@ const calculateBilledAmount = (
     (charge: ClaimServiceLine) => charge.recordStatus !== 'Deleted',
   )
   return activeClaimServiceLines.reduce((sum, serviceLine) => {
-    return sum + (serviceLine.totalAmount ?? 0)
+    return sum + Number(serviceLine.totalAmount)
   }, 0)
 }
 const PatientClaimDetails = () => {
