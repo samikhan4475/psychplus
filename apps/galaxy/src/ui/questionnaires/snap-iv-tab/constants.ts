@@ -37,10 +37,10 @@ const SCORE_INTERPRETATION_RANGES_OPPOSITION = [
     label: 'Not Significant',
     color: 'white',
     min: 0,
-    max: 8,
+    max: 7,
     rangeTitle: '<8',
   },
-  { label: 'Mild Symptoms', color: 'green', min: 9, max: 13 },
+  { label: 'Mild Symptoms', color: 'green', min: 8, max: 13 },
   { label: 'Moderate Symptoms', color: 'yellow', min: 14, max: 18 },
   { label: 'Severe Symptoms', color: 'red', min: 19, max: 24 },
 ]

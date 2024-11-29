@@ -1,5 +1,5 @@
 const LABELS = [
-  'Over the last two weeks, how often have you been bothered by any of the following problems?',
+  'Over the last 1 month, how often have you been bothered by any of the following problems?',
   'Not at all',
   'A little bit',
   'Quite a bit',
