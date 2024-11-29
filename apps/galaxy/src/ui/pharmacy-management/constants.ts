@@ -1,0 +1,3 @@
+const LIST_TABLE_PAGE_SIZE = 20
+
+export { LIST_TABLE_PAGE_SIZE }

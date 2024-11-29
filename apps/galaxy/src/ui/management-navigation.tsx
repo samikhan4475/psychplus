@@ -11,16 +11,14 @@ const ManagementNavigation = () => {
       <ScrollArea>
         <Flex direction="column">
           <NavigationLink href="/coding">Coding</NavigationLink>
-          <NavigationLink href="/staff">
-            Staff
-          </NavigationLink>
+          <NavigationLink href="/staff">Staff</NavigationLink>
           <NavigationLink href="/clearinghouse">
             Clearing House Setup
           </NavigationLink>
           <NavigationLink href="/location">Location</NavigationLink>
           <NavigationLink href="/reports">Reports</NavigationLink>
-          <NavigationLink href="/payer">Payer</NavigationLink> 
-
+          <NavigationLink href="/pharmacy">Pharmacy</NavigationLink>
+          <NavigationLink href="/payer">Payer</NavigationLink>
         </Flex>
       </ScrollArea>
     </Box>

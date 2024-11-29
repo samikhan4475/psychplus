@@ -310,6 +310,7 @@ const GET_PATIENT_PAYMENTS_ENDPOINT = (patientId: string) =>
   `${API_URL}/api/patients/${patientId}/payments`
 const DOWNLOAD_PATIENT_PAYMENTS_PDF_ENDPOINT = (patientId: string) =>
   `/api/patients/${patientId}/payments/actions/receipts/pdf`
+const GET_PHARMACIES = `${API_URL}/api/pharmacies/actions/search`
 const PATIENT_CHARGE_PAYMENT_ENDPOINT = `${API_URL}/api/payments/actions/charge`
 
 const UPDATE_PATIENT_RELATIONSHIP_ENDPOINT = (
@@ -499,6 +500,7 @@ export {
   FETCH_EXTERNAL_PROVIDER_WITH_PATIENT_ENDPOINT,
   FETCH_EXTERNAL_PROVIDERS_ENDPOINT,
   PCP_HISTORY_ENDPOINT,
+  GET_PHARMACIES,
   DELETE_PATIENT_APPOINTMENT_ENDPOINT,
   GET_ALLERGIES_ENDPOINT,
   PATIENT_CARE_TEAM_ENDPOINT,
