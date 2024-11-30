@@ -1,17 +1,17 @@
 import { Text } from '@radix-ui/themes'
 import { getQuickNoteDetailAction } from '@/actions/get-quicknote-detail'
-import { transformIn } from '@/ui/hospital/hospital-initial-widget/data'
+import { transformIn } from '@/ui/hospital/hospital-discharge-widget/data'
 import { QuickNoteSectionName } from '../../constants'
 import { ActualNoteDetailsWrapper } from '../shared'
 import { Details } from './details'
 
-type HospitalInitialProps = {
+type HospitalDischargeProps = {
   patientId: string
 }
 
-const HospitalInitialView = async ({ patientId }: HospitalInitialProps) => {
+const HospitalDischargeView = async ({ patientId }: HospitalDischargeProps) => {
   const response = await getQuickNoteDetailAction(patientId, [
-    QuickNoteSectionName.QuickNoteSectionHospitalInitial,
+    QuickNoteSectionName.QuicknoteSectionHospitalDischarge,
   ])
 
   if (response.state === 'error') {
@@ -20,11 +20,11 @@ const HospitalInitialView = async ({ patientId }: HospitalInitialProps) => {
 
   return (
     <ActualNoteDetailsWrapper
-      sectionName={QuickNoteSectionName.QuickNoteSectionHospitalInitial}
+      sectionName={QuickNoteSectionName.QuicknoteSectionHospitalDischarge}
     >
       <Details data={transformIn(response.data)} />
     </ActualNoteDetailsWrapper>
   )
 }
 
-export { HospitalInitialView }
+export { HospitalDischargeView }

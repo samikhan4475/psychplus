@@ -1,1 +1,1 @@
-export { HospitalInitialWidgetLoader as HospitalInitialWidget } from './hospital-initial-widget-loader'
+export { HospitalInitialWidget } from './hospital-initial-widget'

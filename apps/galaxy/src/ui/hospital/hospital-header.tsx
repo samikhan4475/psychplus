@@ -1,6 +1,6 @@
 import { Flex, Text } from '@radix-ui/themes'
 import { WidgetHxButton } from '@/components'
-import { HospitalInitialSaveButton } from './hospital-initial-widget/hospital-initial-save-button'
+import { HospitalSaveButton } from './hospital-save-button'
 
 interface PhysicalExamHeaderProps {
   title: string
@@ -17,7 +17,7 @@ const HospitalHeader = ({ title }: PhysicalExamHeaderProps) => {
         <Text className="text-[16px] font-[600]">{title}</Text>
         <Flex className="gap-x-2 text-[20px]" align="center">
           <WidgetHxButton />
-          <HospitalInitialSaveButton />
+          <HospitalSaveButton />
         </Flex>
       </Flex>
     </Flex>

@@ -86,6 +86,15 @@ const transformOut =
             sectionItemValue: '1',
           })
         })
+
+      if (!result.length) {
+        result.push({
+          sectionItem: '2',
+          pid: Number(patientId),
+          sectionName: QuickNoteSectionName.QuickNoteSectionHospitalInitial,
+          sectionItemValue: '2',
+        })
+      }
     })
 
     return result

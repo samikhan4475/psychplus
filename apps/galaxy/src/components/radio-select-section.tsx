@@ -7,6 +7,7 @@ import { useFormContext } from 'react-hook-form'
 import { cn } from '@/utils'
 import { BlockDescription } from './block-description'
 import { BlockLabel } from './block-label'
+import { SelectedIndicator } from '@/ui/mse/mse-widget/select-indicotor'
 
 interface RadioSelectSectionProps {
   label?: string
@@ -18,6 +19,7 @@ interface RadioSelectSectionProps {
   disabled?: boolean
   defaultValue?: string
   onChange?: (value: string) => void
+  lastOptionIndicator?: boolean
   resetOnSameValue?: boolean
 }
 
@@ -36,6 +38,7 @@ const RadioSelectSection = ({
   disabled = false,
   defaultValue,
   onChange,
+  lastOptionIndicator = false,
   resetOnSameValue = false,
 }: RadioSelectSectionProps) => {
   const form = useFormContext()
@@ -51,11 +54,18 @@ const RadioSelectSection = ({
     if (onChange) onChange(clickedValue)
   }
 
+  const isLastOptionSelected = value === options[options.length - 1]?.value 
+
   return (
     <Flex align="start" justify="start" gap="2">
       {label && <BlockLabel required={required}>{label}</BlockLabel>}
       {description && <BlockDescription>{description}</BlockDescription>}
-      <RadioGroup.Root value={value} className="flex gap-1.5">
+      <Flex position="relative" align="center">
+      <RadioGroup.Root
+        onValueChange={handleOptionClick}
+        value={value}
+        className="flex gap-1.5"
+      >
         {options.map((option) => {
           const isSelected = value === option.value && className
           const id = `${field}-radio-${option.value}`
@@ -101,6 +111,8 @@ const RadioSelectSection = ({
           )
         })}
       </RadioGroup.Root>
+      {isLastOptionSelected && lastOptionIndicator && <SelectedIndicator />}
+      </Flex>
     </Flex>
   )
 }

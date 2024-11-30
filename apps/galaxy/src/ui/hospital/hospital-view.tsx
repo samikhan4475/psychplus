@@ -1,21 +1,34 @@
+'use client'
+
 import * as Tabs from '@radix-ui/react-tabs'
 import { Flex } from '@radix-ui/themes'
-import { XIcon } from 'lucide-react'
-import { HospitalInitialWidget } from './hospital-initial-widget'
+import { TabsTrigger } from '@/components'
+import { QuickNoteSectionItem } from '@/types'
+import { TabsValue } from './constants'
+import { HospitalDischargeTab } from './hospital-discharge-widget/hospital-discharge-tab'
+import { HospitalInitialTab } from './hospital-initial-widget/hospital-initial-tab'
+import { useStore } from './store'
 
 interface HospitalViewProps {
   patientId: string
+  hospitalInitialData: QuickNoteSectionItem[]
+  hospitalDischargeData: QuickNoteSectionItem[]
 }
 
-enum TabsValue {
-  Initial = 'Initial',
-  Discharge = 'Discharge',
-}
+const HospitalView = ({
+  patientId,
+  hospitalInitialData,
+  hospitalDischargeData,
+}: HospitalViewProps) => {
+  const { activeTab, setActiveTab } = useStore((state) => ({
+    activeTab: state.activeTab,
+    setActiveTab: state.setActiveTab,
+  }))
 
-const HospitalView = ({ patientId }: HospitalViewProps) => {
   return (
     <Tabs.Root
-      defaultValue={TabsValue.Initial}
+      value={activeTab}
+      onValueChange={setActiveTab}
       className="flex w-full flex-col"
     >
       <Flex>
@@ -31,49 +44,23 @@ const HospitalView = ({ patientId }: HospitalViewProps) => {
         </Tabs.List>
         <Flex className="flex-1 border-b border-gray-5" />
       </Flex>
-
       <TabsContent value={TabsValue.Initial}>
-        <HospitalInitialWidget
+        <HospitalInitialTab
           patientId={patientId}
           isHospitalInitialTab={true}
+          hospitalInitialData={hospitalInitialData}
         />
       </TabsContent>
       <TabsContent value={TabsValue.Discharge}>
-        {TabsValue.Discharge}
+        <HospitalDischargeTab
+          patientId={patientId}
+          isHospitalDischargeTab={true}
+          hospitalDischargeData={hospitalDischargeData}
+        />
       </TabsContent>
     </Tabs.Root>
   )
 }
-
-interface TabsTriggerProps {
-  value: string
-  children: React.ReactNode
-  onClose?: () => void
-}
-
-const TabsTrigger = ({ value, children, onClose }: TabsTriggerProps) => (
-  <Tabs.Trigger
-    value={value}
-    className="data-[state=active]:border-b-white data-[state=active]:bg-white border border-l-0 border-accent-6 border-b-gray-5 bg-accent-4 p-0 px-2 py-1 text-[12px] text-gray-12 first:border-l data-[state=active]:cursor-default data-[state=active]:border-gray-5 data-[state=active]:font-[600] data-[state=active]:text-accent-12"
-  >
-    <Flex align="center" gap="2">
-      {children}
-      {onClose ? (
-        <Flex
-          align="center"
-          justify="center"
-          className="rounded-full hover:text-black h-[18px] w-[18px] cursor-pointer text-gray-11 transition-colors hover:bg-gray-3"
-          onPointerDown={(e) => {
-            e.preventDefault()
-          }}
-          onClick={onClose}
-        >
-          <XIcon width={14} height={14} strokeWidth={1.5} />
-        </Flex>
-      ) : null}
-    </Flex>
-  </Tabs.Trigger>
-)
 
 const TabsContent = ({
   value,
@@ -82,7 +69,17 @@ const TabsContent = ({
   value: string
   children: React.ReactNode
 }) => {
-  return <Tabs.Content value={value}>{children}</Tabs.Content>
+  const viewedTabs = useStore((state) => state.viewedTabs)
+
+  return (
+    <Tabs.Content
+      value={value}
+      forceMount={viewedTabs.has(value) ? true : undefined}
+      className="hidden flex-1 flex-col gap-2 overflow-auto data-[state=active]:flex"
+    >
+      {children}
+    </Tabs.Content>
+  )
 }
 
 export { HospitalView, TabsValue }

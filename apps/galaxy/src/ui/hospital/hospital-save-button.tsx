@@ -1,7 +1,7 @@
 import { Button } from '@radix-ui/themes'
 import { SaveIcon } from 'lucide-react'
 
-const HospitalInitialSaveButton = () => {
+const HospitalSaveButton = () => {
   return (
     <Button size="1" highContrast type="submit">
       <SaveIcon height={14} width={14} strokeWidth={2} />
@@ -10,4 +10,4 @@ const HospitalInitialSaveButton = () => {
   )
 }
 
-export { HospitalInitialSaveButton }
+export { HospitalSaveButton }

@@ -55,6 +55,8 @@ import {
 import { HospitalInitialView } from './actual-note-view/hospital-initial'
 import { QuickNoteSectionName } from './constants'
 import { WidgetType } from './types'
+import { HospitalDischargeView } from './actual-note-view/hospital-discharge'
+import { HospitalDischargeWidget } from '../hospital/hospital-discharge-widget'
 
 const widgets: Array<WidgetType> = [
   {
@@ -179,10 +181,15 @@ const widgets: Array<WidgetType> = [
     actualNoteComponent: SpravatoDetailView,
   },
   {
+    component: HospitalDischargeWidget,
+    id: QuickNoteSectionName.QuicknoteSectionHospitalDischarge,
+    actualNoteComponent: HospitalDischargeView,
+  },
+  {
     component: HospitalInitialWidget,
     id: QuickNoteSectionName.QuickNoteSectionHospitalInitial,
     actualNoteComponent: HospitalInitialView,
-  },
+  }
 ]
 
 const visitTypeToWidgets: Record<string, QuickNoteSectionName[]> = {

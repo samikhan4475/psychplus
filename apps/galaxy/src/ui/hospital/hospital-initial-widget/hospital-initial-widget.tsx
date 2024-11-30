@@ -1,79 +1,30 @@
-'use client'
-
-import { FormProvider } from 'react-hook-form'
-import {
-  WidgetClearButton,
-  WidgetFormContainer,
-  WidgetHxButton,
-  WidgetSaveButton,
-} from '@/components'
+import { getQuickNoteDetailAction } from '@/actions/get-quicknote-detail'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
-import {
-  DcPlanBlock,
-  LiabilitiesBlock,
-  NeedForLevelOfCareBlock,
-  PrecautionsBlock,
-  ShortTermGoalsBlock,
-  StrengthsBlock,
-} from './blocks'
-import { transformOut } from './data'
-import { HistoryButton } from './history'
-import { HospitalHeader } from './hospital-initial-header'
-import { useHospitalInitialWidgetForm } from './hospital-initial-widget-form'
-import { HospitalInitialWidgetSchemaType } from './hospital-initial-widget-schema'
+import { HospitalInitialTab } from './hospital-initial-tab'
 
-interface HospitalWidgetProps {
+interface HospitalInitialWidgetLoaderProps {
   patientId: string
-  initialValue: HospitalInitialWidgetSchemaType
-  isHospitalInitialTab: boolean
+  isHospitalInitialTab?: boolean
 }
 
-const HospitalInitialWidget = ({
+const HospitalInitialWidget = async ({
   patientId,
-  initialValue,
-  isHospitalInitialTab,
-}: HospitalWidgetProps) => {
-  const form = useHospitalInitialWidgetForm(initialValue)
+  isHospitalInitialTab = false,
+}: HospitalInitialWidgetLoaderProps) => {
+  const response = await getQuickNoteDetailAction(patientId, [
+    QuickNoteSectionName.QuickNoteSectionHospitalInitial,
+  ])
+
+  if (response.state === 'error') {
+    return <div>fail</div>
+  }
 
   return (
-    <FormProvider {...form}>
-      <WidgetFormContainer
-        patientId={patientId}
-        widgetId={QuickNoteSectionName.QuickNoteSectionHospitalInitial}
-        getData={transformOut(patientId)}
-        title={!isHospitalInitialTab ? 'Hospital Initial' : undefined}
-        headerRight={
-          <>
-            {!isHospitalInitialTab && (
-              // <HistoryButton
-              //   patientId={patientId}
-              //   sectionName={
-              //     QuickNoteSectionName.QuickNoteSectionHospitalInitial
-              //   }
-              // />
-              <WidgetHxButton />
-            )}
-            {!isHospitalInitialTab && <WidgetClearButton />}
-            {!isHospitalInitialTab && <WidgetSaveButton />}
-          </>
-        }
-      >
-        {isHospitalInitialTab && (
-          <HospitalHeader
-            title="Initial"
-            patientId={patientId}
-            sectionName={QuickNoteSectionName.QuickNoteSectionHospitalInitial}
-          />
-        )}
-
-        <StrengthsBlock />
-        <LiabilitiesBlock />
-        <NeedForLevelOfCareBlock />
-        <ShortTermGoalsBlock />
-        <PrecautionsBlock />
-        <DcPlanBlock />
-      </WidgetFormContainer>
-    </FormProvider>
+    <HospitalInitialTab
+      patientId={patientId}
+      isHospitalInitialTab={isHospitalInitialTab}
+      hospitalInitialData={response.data}
+    />
   )
 }
 
