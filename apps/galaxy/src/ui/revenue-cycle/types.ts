@@ -281,6 +281,7 @@ interface ResponseHistoryRecord {
   isProcessed: string
   isManualImport: boolean
   fileCount: number
+  filePath?: string
 }
 
 interface ResponseHistoryListResponse {

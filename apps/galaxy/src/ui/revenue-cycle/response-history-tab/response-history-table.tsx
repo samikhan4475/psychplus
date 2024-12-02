@@ -62,9 +62,8 @@ const columns = (
       ),
       cell: ({ row }) => <TextCell>{row.original.practiceName}</TextCell>,
     },
-
     {
-      id: 'zipFilePath',
+      id: 'filePath',
       header: ({ column }) => (
         <ColumnHeader
           label="File Path"
@@ -75,9 +74,8 @@ const columns = (
           }}
         />
       ),
-      cell: ({ row }) => <TextCell>{row.original.zipFilePath}</TextCell>,
+      cell: ({ row }) => <TextCell>{row.original.filePath}</TextCell>,
     },
-
     {
       id: 'isProcessed',
       header: ({ column }) => (
@@ -94,24 +92,8 @@ const columns = (
         <TextCell>{String(row.original.isProcessed)}</TextCell>
       ),
     },
-
     {
-      id: 'fileCount',
-      header: ({ column }) => (
-        <ColumnHeader
-          label="File Count"
-          sortable
-          sortDir={getSortDir(column.id, sort)}
-          onClick={() => {
-            onSort?.(column.id)
-          }}
-        />
-      ),
-      cell: ({ row }) => <TextCell>{row.original.fileCount}</TextCell>,
-    },
-
-    {
-      id: 'manualImport',
+      id: 'isManualImport',
       header: ({ column }) => (
         <ColumnHeader
           label="Manual Import"
@@ -126,7 +108,6 @@ const columns = (
         <TextCell>{String(row.original.isManualImport)}</TextCell>
       ),
     },
-
     {
       id: 'actions',
       header: () => <ColumnHeader label="Actions" />,

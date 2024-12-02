@@ -124,7 +124,7 @@ const ClaimSubmissionDialog = ({
   return (
     <Dialog.Root open={isOpenDialog} onOpenChange={handleOpenDialog}>
       <Dialog.Trigger>{children}</Dialog.Trigger>
-      <Dialog.Content className="relative max-w-[1121px]">
+      <Dialog.Content className="relative max-w-[800px]">
         <CloseDialogTrigger />
         <Dialog.Title className="flex items-end gap-1 font-sans -tracking-[0.25px]">
           <ReportIcon /> {DIALOG_TITLE}

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Flex, Text } from '@radix-ui/themes'
+import { Box, Flex, Text } from '@radix-ui/themes'
 import { LoadingPlaceholder } from '@/components'
 import { ErrorIcon, TickIcon } from '@/components/icons'
 import { ClaimResponseType } from '../../types'
@@ -16,33 +16,37 @@ const ClaimSubmissionResponseView = ({
 }: ClaimSubmissionResponseInterface) => {
   if (loading) return <LoadingPlaceholder className="bg-white min-h-[23vh]" />
   return (
-    <Flex direction="column" gapY="2">
+    <Flex direction="column" gapY="2" className="text-sm">
       {claimCleanResponses.length > 0 && (
-        <Flex wrap="wrap">
-          <TickIcon rectRx="24" width="22" height="22" />
-          <Text weight="bold" mx="1">
-            Claims
-          </Text>
-          <Text mx="1" weight="bold">
-            {claimCleanResponses.map((response) => response.claimId + ', ')}
-          </Text>
-          were successfully submitted to
-          <Text ml="1" weight="bold">
-            clearing house
-          </Text>
+        <Flex direction="row" gap="2">
+          <Box>
+            <TickIcon rectRx="24" width="22" height="22" />
+          </Box>
+          <Box>
+            <Text mx="1" size="2">
+              <span className="font-bold">
+                Claims{' '}
+                {claimCleanResponses.map((response) => response.claimId + ', ')}{' '}
+              </span>
+              were successfully submitted to{' '}
+              <span className="font-bold">clearing house</span>
+            </Text>
+          </Box>
         </Flex>
       )}
       {claimErrorResponses?.map(({ claimId, message }) =>
-        message.map((errorMessage, index) => (
-          <Flex key={claimId} wrap="wrap">
-            <ErrorIcon />
-            <Text weight="bold" mx="1">
-              Claim {claimId}
-            </Text>
-            was unsuccessful because of
-            <Text weight="bold" key={`${claimId}-${index}`} ml="1">
-              {errorMessage}
-            </Text>
+        message.map((errorMessage) => (
+          <Flex key={claimId} direction="row" gap="2">
+            <Box>
+              <ErrorIcon />
+            </Box>
+            <Box>
+              <Text mx="1" size="2">
+                <span className="font-bold">Claim {claimId}</span> was
+                unsuccessful because of{' '}
+                <span className="font-bold">{errorMessage}</span>
+              </Text>
+            </Box>
           </Flex>
         )),
       )}

@@ -18,7 +18,7 @@ const SubmissionHistoryDetailDialog = ({
         setActiveBatchId('')
       }}
     >
-      <Dialog.Content className="relative max-w-[1121px]">
+      <Dialog.Content className="relative max-w-[800px]">
         <CloseDialogTrigger />
         <Dialog.Title className="font-sans -tracking-[0.25px]">
           Submission Detail

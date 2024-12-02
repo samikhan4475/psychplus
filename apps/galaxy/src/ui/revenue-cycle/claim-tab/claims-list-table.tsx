@@ -3,10 +3,12 @@
 import { useEffect } from 'react'
 import { Flex, ScrollArea } from '@radix-ui/themes'
 import { DataTable, LoadingPlaceholder } from '@/components'
+import { useStore as useRootStore } from '../store'
 import { columns } from './columns'
 import { useStore } from './store'
 
 const ClaimListTable = () => {
+  const { activeTab } = useRootStore((state) => state)
   const {
     claimsListData,
     claimsListSearch,
@@ -23,7 +25,7 @@ const ClaimListTable = () => {
 
   useEffect(() => {
     claimsListSearch({})
-  }, [])
+  }, [activeTab])
 
   if (claimsListLoading) {
     return (

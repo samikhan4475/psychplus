@@ -10,19 +10,25 @@ import { SubmissionTabs } from './submission-tabs'
 import { TabValue } from './types'
 
 const SubmissionTabView = () => {
-  const { selectedTab, setSelectedTab, reset } = useStore((state) => ({
-    selectedTab: state.selectedTab,
-    setSelectedTab: state.setSelectedTab,
-    reset: state.reset,
-  }))
+  const { selectedTab, setSelectedTab, reset, setSelectedRows } = useStore(
+    (state) => ({
+      selectedTab: state.selectedTab,
+      setSelectedTab: state.setSelectedTab,
+      reset: state.reset,
+      setSelectedRows: state.setSelectedRows,
+    }),
+  )
   const handleTabSelection = (activeTab: TabValue | string) => {
     setSelectedTab(activeTab)
+    setSelectedRows([])
     reset()
   }
   return (
     <Flex direction="column" className="gap-0.5">
       <TabContentHeading title="Submission">
-        {selectedTab !== TabValue.SubmissionHistory && <SubmissionSubmitField />}
+        {selectedTab !== TabValue.SubmissionHistory && (
+          <SubmissionSubmitField />
+        )}
       </TabContentHeading>
       <Tabs.Root
         defaultValue={selectedTab}

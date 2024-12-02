@@ -69,6 +69,8 @@ const SubmissionSubmitField = () => {
           size="1"
           highContrast
           className="disabled:text-white ml-1 h-[25px]"
+          type="button"
+          disabled={!clearingHouse}
         >
           Submit
         </Button>
