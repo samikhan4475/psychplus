@@ -1,4 +1,8 @@
-import { LabOrderStatus } from '@/ui/lab-orders/lab-orders-widget/types'
+import {
+  FlagOrderStatus,
+  LabOrderStatus,
+  ResultOrderStatus,
+} from '@/ui/lab-orders/lab-orders-widget/types'
 import { Appointment } from './appointment'
 import { ContactDetails } from './contact'
 import { Metadata } from './metadata'
@@ -40,13 +44,14 @@ interface LabResult {
   resultValueUnit?: string
   recommendedValue?: string
   statusCode: string
-  abnormalRangeCode: string
+  abnormalRangeCode: FlagOrderStatus
   physicianComments: string
   externalResultId: string
   labComments: string
   resultValueType: string
   valueDescription: string
-  recordStatus: string
+  recordStatus: ResultOrderStatus
+  recomendedValue: string
 }
 
 interface LabDocument {
@@ -99,4 +104,4 @@ interface LabOrders {
   recordStatus: string
 }
 
-export { type LabOrders }
+export { type LabOrders, type LabTest, type LabResult }

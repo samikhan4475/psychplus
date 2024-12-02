@@ -1,10 +1,8 @@
-import { type Row } from '@tanstack/react-table'
 import { AdaptiveRowActionsCell, type RowAction } from '@/components'
 import { LabOrders } from '@/types'
+import { LabOrderRow } from '../types'
 import { RowActionAdd } from './row-action-add'
 import { RowActionSend } from './row-action-send'
-
-type LabOrderRow = Row<LabOrders>
 
 const rowActions: RowAction<LabOrders>[] = [
   {

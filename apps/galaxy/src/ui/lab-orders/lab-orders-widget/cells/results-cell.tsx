@@ -2,18 +2,18 @@ import { type Row } from '@tanstack/react-table'
 import { AdaptiveRowActionsCell, type RowAction } from '@/components'
 import { LabOrders } from '@/types'
 import { RowResultAttachment } from './row-result-attachment'
-import { RowResultPaper } from './row-result-paper'
+import { RowResultView } from './row-result-view'
 
 type LabOrderRow = Row<LabOrders>
 
 const rowActions: RowAction<LabOrders>[] = [
   {
-    id: 'row-results-attachment',
-    render: RowResultAttachment,
+    id: 'row-results-view',
+    render: RowResultView,
   },
   {
-    id: 'row-results-paper',
-    render: RowResultPaper,
+    id: 'row-results-attachment',
+    render: RowResultAttachment,
   },
 ]
 

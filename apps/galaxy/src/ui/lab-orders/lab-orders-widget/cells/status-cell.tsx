@@ -23,6 +23,7 @@ const badgeColorMap: Record<LabOrderStatus, BadgeProps['color']> = {
   'Submission Pending': 'blue',
   'Pre-order': 'yellow',
   Cancelled: 'red',
+  Pending: 'yellow',
 }
 
 const getBadgeColor = (status: LabOrderStatus): BadgeProps['color'] =>

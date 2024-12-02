@@ -75,13 +75,16 @@ const LabOrderTable = () => {
   const appointmentId = searchParams.get('id')
 
   useEffect(() => {
-    fetch({
-      appointmentId: '32764',
-      payload: {
-        patientId: ['3318'],
-        appointmentIds: ['32764'],
-      },
-    })
+    if (appointmentId) {
+      const payload = {
+        patientId: [id],
+        appointmentIds: [appointmentId],
+      }
+      fetch({
+        appointmentId: appointmentId,
+        payload,
+      })
+    }
   }, [appointmentId, id])
 
   if (loading) {
@@ -91,7 +94,6 @@ const LabOrderTable = () => {
       </Flex>
     )
   }
-
   return (
     <ScrollArea>
       <DataTable data={data ?? []} columns={columns} disablePagination sticky />
