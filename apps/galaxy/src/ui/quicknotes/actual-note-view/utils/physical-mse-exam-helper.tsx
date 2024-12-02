@@ -8,6 +8,16 @@ const formatValue = (value: string): string => {
     RegularRateRhythm: 'Regular rate/rhythm',
     YesterdayEvents: "Yesterday's events",
     UnDisclosed: 'UnDisclosed',
+    DoeDyspneaOnExertion: 'DOE (Dyspnea on exertion)',
+    PersistentRashSpots: 'Persistent rash/spots',
+    BreastLumpsDischarge: 'Breast lumps/discharge',
+    HypertensionHtn: 'Hypertension (HTN)',
+    DiarrheaConstipation: 'Diarrhea/constipation',
+    LossOfConsciousnessLoc: 'Loss of consciousness (LOC)',
+    JointAchesSwelling: 'Joint aches/swelling',
+    ClubbingCyanosisEdema: 'Clubbing/Cyanosis/Edema',
+    SuicideContemplatedAttempted: 'Suicide contemplated/attempted',
+    VisualHearingProblems: 'Visual/hearing Problems',
   }
 
   if (specialCases[trimmedValue]) {

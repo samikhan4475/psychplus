@@ -34,6 +34,7 @@ import { HistoryButton } from './history'
 import { PhysicalExamHeader } from './physical-exam-header'
 import { usePhysicalExamWidgetForm } from './physical-exam-widget-form'
 import { type PhysicalExamWidgetSchemaType } from './physical-exam-widget-schema'
+import { containsAbnormal, normal } from './utils'
 import { WidgetClearButton } from './widget-clear-button'
 
 interface PhysicalExamWidgetProps {
@@ -68,45 +69,6 @@ const PhysicalExamWidget = ({
       (value) =>
         value.includes('Normal') || dependentNormalValues.includes(value),
     )
-  const normal = [
-    'gnNormal',
-    'sknNormal',
-    'hntNormal',
-    'nkNormal',
-    'lnNormal',
-    'chsNormal',
-    'cvsNormal',
-    'giNormal',
-    'gynNormal',
-    'guNormal',
-    'cnsNormal',
-    'msuNormal',
-    'nutNormal',
-    'psyNormal',
-    'lngNormal',
-    'cneOlfactoryNormal',
-    'cneOlfactory',
-    'cneOpticalNormal',
-    'cneOptical',
-    'cneTrochlearNormal',
-    'cneTrochlear',
-    'cneTrigeminalNormal',
-    'cneTrigeminal',
-    'cneAbducensNormal',
-    'cneAbducens',
-    'cneFacialNormal',
-    'cneFacial',
-    'cneAuditoryNormal',
-    'cneAuditory',
-    'cneGlossopharyngealNormal',
-    'cneGlossopharyngeal',
-    'cneVagusNormal',
-    'cneVagus',
-    'cneSpinalAccessoryNormal',
-    'cneSpinalAccessory',
-    'cneHypoglossalNormal',
-    'cneHypoglossal',
-  ]
 
   const [normalChipsSelected, setNormalChipsSelected] =
     useState<string[]>(normalValues)
@@ -150,7 +112,10 @@ const PhysicalExamWidget = ({
           <Flex className={cn(isPhysicalExamTab && 'ml-[-11px]')}>
             <CheckAllNormalCell
               onSelectAllNormal={handleSelectAllNormal}
-              checked={normalChipsSelected.length === normal.length}
+              checked={
+                normalChipsSelected.length === normal.length &&
+                !containsAbnormal(normalChipsSelected)
+              }
             />
           </Flex>
         }

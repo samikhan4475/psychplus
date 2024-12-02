@@ -1,6 +1,7 @@
 import { PhysicalExamWidgetSchemaType } from '@/ui/physical-exam/physical-exam-widget/physical-exam-widget-schema'
 import { BlockContainer, LabelAndValue } from '../shared'
 import { renderDataWithOther } from '../utils'
+import { updateToNormalOrAbnormal, valueMapping } from './utils'
 
 interface Props<T> {
   data: T
@@ -37,11 +38,23 @@ const Details = ({ data }: Props<PhysicalExamWidgetSchemaType>) => {
             .replace(/^./, (str) => str.toUpperCase())
 
         if (Array.isArray(value) && value.length > 0) {
+          let sortedValues = value
+
+          if (valueMapping[key]) {
+            const sortingCriteria = (a: string, b: string) =>
+              valueMapping[key].indexOf(a) - valueMapping[key].indexOf(b)
+            sortedValues = value.slice().sort(sortingCriteria)
+          }
+
+          if (key === 'cranialNervesExam') {
+            sortedValues = updateToNormalOrAbnormal(sortedValues)
+          }
+
           return (
             <LabelAndValue
               key={key}
               label={`${label}:`}
-              value={renderDataWithOther(key, value, data)}
+              value={renderDataWithOther(key, sortedValues, data)}
             />
           )
         }

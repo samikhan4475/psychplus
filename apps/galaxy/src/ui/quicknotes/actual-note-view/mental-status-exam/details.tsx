@@ -1,6 +1,7 @@
 import { MseWidgetSchemaType } from '@/ui/mse/mse-widget/mse-widget-schema'
 import { BlockContainer, LabelAndValue } from '../shared'
 import { renderDataWithOther } from '../utils'
+import { desiredOrderMse, mseValueMapping, reorderObjectKeys } from './utils'
 
 interface Props<T> {
   data: T
@@ -12,10 +13,18 @@ const Details = ({ data }: Props<MseWidgetSchemaType>) => {
     appearance: 'Appearance',
     behavior: 'Behavior',
     psychomotor: 'Psychomotor',
+    speech: 'Speech',
+    mood: 'Mood',
+    affect: 'Affect',
     thoughtProcess: 'Thought Process',
-    memoryHowTested: 'Memory',
+    memoryHowTested: 'Memory How Tested',
     insight: 'Insight',
+    insightHowTested: 'Insight How Tested',
     judgment: 'Judgment',
+    judgmentHowTested: 'Judgment How Tested',
+    intelligence: 'Intelligence',
+    intelligenceHowTested: 'Intelligence How Tested',
+    memoryRemoteIntactOther: 'Memory',
     schizophreniaDelusionValues: 'Thought Content Delusion',
     schizophreniaHallucinationsValues: 'Thought Content Hallucinations',
     tcsiYesNo: 'Thought Content Si',
@@ -28,17 +37,27 @@ const Details = ({ data }: Props<MseWidgetSchemaType>) => {
     hiUnDisclosed: 'Thought Content Hi',
   }
 
+  const reorderedData = reorderObjectKeys(data, [...desiredOrderMse])
+
   return (
     <BlockContainer heading="Mental Status Exam">
-      {Object.entries(data).map(([key, value]) => {
+      {Object.entries(reorderedData).map(([key, value]) => {
         const label = labelMapping[key] || key.replace(/([A-Z])/g, ' $1')
 
         if (Array.isArray(value) && value.length > 0) {
+          let sortedValues = value
+
+          if (mseValueMapping[key]) {
+            const sortingCriteria = (a: string, b: string) =>
+              mseValueMapping[key].indexOf(a) - mseValueMapping[key].indexOf(b)
+            sortedValues = value.slice().sort(sortingCriteria)
+          }
+
           return (
             <LabelAndValue
               key={key}
               label={`${label}:`}
-              value={renderDataWithOther(key, value, data)}
+              value={renderDataWithOther(key, sortedValues, reorderedData)}
             />
           )
         } else if (

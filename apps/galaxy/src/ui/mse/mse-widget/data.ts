@@ -24,7 +24,6 @@ enum ExamPrefixes {
   JUDGMENT_HOW_TESTED = 'JDGHT',
   MEMORY_RECENT_INTACT = 'MRCI',
   MEMORY_REMOTE_INTACT = 'MRMI',
-  MEMORY_REMOTE_INTACT_OTHER = 'MRMIO',
   MEMORY = 'MM',
   THOUGHT_CONTENT_SI = 'SI',
   THOUGHT_CONTENT_HI = 'HI',
@@ -335,9 +334,6 @@ const transformIn = (value?: QuickNoteSectionItem[]): MseWidgetSchemaType => {
         result.judgmentHowTested.push(valueToSchemaPe[item.sectionItem])
         break
       case ExamPrefixes.MEMORY:
-        result.memoryHowTested.push(valueToSchemaPe[item.sectionItem])
-        break
-      case ExamPrefixes.MEMORY_REMOTE_INTACT_OTHER:
         result.memoryRemoteIntactOther.push(valueToSchemaPe[item.sectionItem])
         break
       case ExamPrefixes.THOUGHT_CONTENT:
@@ -403,6 +399,7 @@ const transformOut =
         sectionItemValue: '2',
       })
     }
+
     return result
   }
 

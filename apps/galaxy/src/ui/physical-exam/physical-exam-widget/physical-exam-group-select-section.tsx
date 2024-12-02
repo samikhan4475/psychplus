@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { Box, Flex } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
 import {
@@ -9,6 +9,12 @@ import {
   SelectableChipDetails,
   SelectableChipDetailsProps,
 } from '@/components'
+import {
+  containsAbnormal,
+  getAlternate,
+  normal,
+  removeValueFromArray,
+} from './utils'
 
 interface GroupSelectSectionProps<T extends string> {
   label: string
@@ -68,14 +74,17 @@ const PhysicalExamGroupSelectSection = <T extends string>({
       )
       .map((v) => v.value)
 
-    if (setNormalChipsSelected) {
-      if (normalValues.every((item) => normalChipsSelected.includes(item))) {
-        const newValues = [...new Set([...values, ...normalValues])]
-        form.setValue(field, newValues, { shouldDirty: true })
-      } else {
-        const filteredValues = values.filter((v) => !normalValues.includes(v))
-        form.setValue(field, filteredValues, { shouldDirty: true })
-      }
+    if (normalChipsSelected.length === normal.length) {
+      const newValues = [...new Set([...values, ...normalValues])]
+      const filteredArray = newValues.filter(
+        (value) => !value.includes('Abnormal'),
+      )
+
+      if (!containsAbnormal(normalChipsSelected))
+        form.setValue(field, filteredArray, { shouldDirty: true })
+    } else if (normalChipsSelected.length === 0) {
+      const filteredValues = values.filter((v) => !normal.includes(v))
+      form.setValue(field, filteredValues, { shouldDirty: true })
     }
   }, [normalChipsSelected])
 
@@ -94,20 +103,54 @@ const PhysicalExamGroupSelectSection = <T extends string>({
         values.filter((v) => v !== value),
         { shouldDirty: true },
       )
+
+      if (normal.includes(value) && setNormalChipsSelected) {
+        form.setValue(
+          field,
+          values.filter((item) => !item.includes(value)),
+          { shouldDirty: true },
+        )
+      }
+
       if (normalChipsSelected.includes(value)) {
         if (setNormalChipsSelected) {
-          setNormalChipsSelected(
-            normalChipsSelected.filter((item) => item !== value),
-          )
+          setNormalChipsSelected([
+            ...new Set(normalChipsSelected.filter((item) => item !== value)),
+          ])
         }
       }
     } else {
       form.setValue(field, [...values, value], { shouldDirty: true })
+      const updatedValues = form.getValues(field) as string[]
+      const alterValue = getAlternate(value)
+      const newValues = removeValueFromArray(updatedValues, alterValue)
+
       if (
+        field === 'cranialNervesExam' &&
+        alterValue &&
+        setNormalChipsSelected &&
+        updatedValues.length !== newValues.length
+      ) {
+        let updatedNormalChipsSelected = [...normalChipsSelected]
+
+        updatedNormalChipsSelected = updatedNormalChipsSelected.filter(
+          (item) => {
+            return !item.startsWith('cne')
+          },
+        )
+
+        updatedNormalChipsSelected = [
+          ...new Set([...updatedNormalChipsSelected, ...newValues]),
+        ]
+
+        form.setValue(field, [...newValues], { shouldDirty: true })
+        setNormalChipsSelected(updatedNormalChipsSelected)
+      } else if (
+        field !== 'cranialNervesExam' &&
         setNormalChipsSelected &&
         (value.includes('Normal') || dependentNormalValues.includes(value))
       ) {
-        setNormalChipsSelected([...normalChipsSelected, value])
+        setNormalChipsSelected([...new Set([...normalChipsSelected, value])])
       }
     }
   }
