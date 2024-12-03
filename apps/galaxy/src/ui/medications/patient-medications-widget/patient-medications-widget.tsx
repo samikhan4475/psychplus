@@ -1,6 +1,11 @@
 'use client'
 
+import { useParams, usePathname } from 'next/navigation'
+import * as Tabs from '@radix-ui/react-tabs'
+import { Box, Flex } from '@radix-ui/themes'
 import {
+  CheckboxCell,
+  TabsTrigger,
   WidgetAddButton,
   WidgetClearButton,
   WidgetContainer,
@@ -8,39 +13,63 @@ import {
   WidgetSaveButton,
 } from '@/components'
 import { AddMedicationButton } from './add-medication-button'
-import { PatientMedicationsTable } from './patient-medications-table'
+import {
+  CURRENT_MEDICATIONS_TAB,
+  EXTERNAL_MEDICATIONS_TAB,
+  HOME_MEDICATIONS_TAB,
+} from './constants'
+import { PatientMedicationsDataTable } from './patient-medications-data-table'
+import { PatientMedicationsTabContent } from './patient-medications-tab-content'
+import { PatientMedicationsTabView } from './patient-medications-tab-view'
+import { SearchMedications } from './search-medications'
 import { StoreProvider } from './store'
 
 interface PatientMedicationsWidgetProps {
-  patientId: string
   scriptSureAppUrl: string
 }
 
 const PatientMedicationsWidget = ({
-  patientId,
   scriptSureAppUrl,
 }: PatientMedicationsWidgetProps) => {
+  const handleCheckAllChange = () => {}
+  const patientId = useParams().id as string
+  const path = usePathname()
+  const tabViewEnabled = path.includes('medications')
   return (
     <StoreProvider patientId={patientId}>
-      <WidgetContainer
-        title="Medications"
-        headerLeft={
-          <>
-            <WidgetAddButton title="Add Medication">
-              <AddMedicationButton scriptSureAppUrl={scriptSureAppUrl} />
-            </WidgetAddButton>
-          </>
-        }
-        headerRight={
-          <>
-            <WidgetHxButton />
-            <WidgetClearButton />
-            <WidgetSaveButton />
-          </>
-        }
-      >
-        <PatientMedicationsTable />
-      </WidgetContainer>
+      {tabViewEnabled ? (
+        <PatientMedicationsTabView scriptSureAppUrl={scriptSureAppUrl} />
+      ) : (
+        <Box position="relative" width="100%">
+          <WidgetContainer
+            title="Medications"
+            headerRight={
+              <>
+                <WidgetHxButton />
+                <WidgetClearButton />
+                <WidgetSaveButton />
+              </>
+            }
+            headerLeft={
+              <>
+                <SearchMedications />
+                <WidgetAddButton title="Add Medication">
+                  <AddMedicationButton scriptSureAppUrl={scriptSureAppUrl} />
+                </WidgetAddButton>
+                <Flex>
+                  <CheckboxCell
+                    label="PMP is reviewed"
+                    checked={false}
+                    onCheckedChange={handleCheckAllChange}
+                  />
+                </Flex>
+              </>
+            }
+          >
+            <PatientMedicationsDataTable />
+          </WidgetContainer>
+        </Box>
+      )}
     </StoreProvider>
   )
 }

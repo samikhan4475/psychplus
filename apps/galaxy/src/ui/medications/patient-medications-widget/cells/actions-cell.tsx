@@ -1,25 +1,30 @@
-import { RowActionsCell, type RowAction } from '@/components'
-import type { PatientMedication, PatientMedicationRow } from '../types'
-import { RowActionDetails } from './row-action-details'
+import {
+  AdaptiveRowActionsCell,
+  type PropsWithRow,
+  type RowAction,
+} from '@/components'
+import { PatientMedication } from '../types'
+import { RowActionDelete } from './row-action-delete'
 import { RowActionEdit } from './row-action-edit'
+import { RowActionRefresh } from './row-action-refresh'
 
 const rowActions: RowAction<PatientMedication>[] = [
   {
-    id: 'patient-medications-row-action-details',
-    render: RowActionDetails,
+    id: 'pharmacy-list-row-action-delete',
+    render: RowActionDelete,
   },
   {
-    id: 'patient-medications-row-action-edit',
+    id: 'pharmacy-list-row-action-refresh',
+    render: RowActionRefresh,
+  },
+  {
+    id: 'pharmacy-list-row-action-edit',
     render: RowActionEdit,
   },
 ]
 
-interface ActionsCellProps {
-  row: PatientMedicationRow
-}
-
-const ActionsCell = ({ row }: ActionsCellProps) => {
-  return <RowActionsCell row={row} actions={rowActions} />
+const ActionsCell = ({ row }: PropsWithRow<PatientMedication>) => {
+  return <AdaptiveRowActionsCell actions={rowActions} row={row} />
 }
 
 export { ActionsCell }

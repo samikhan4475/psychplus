@@ -8,8 +8,8 @@ interface TabContentHeadingProps {
 
 const TabContentHeading = ({
   title,
-  className,
   children,
+  className = '',
 }: React.PropsWithChildren<TabContentHeadingProps>) => {
   return (
     <Flex

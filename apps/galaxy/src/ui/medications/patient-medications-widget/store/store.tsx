@@ -1,7 +1,7 @@
 import { createContext } from 'react'
 import { createStore as zustandCreateStore } from 'zustand'
-import type { GetPatientMedicationsResponse } from '../types'
 import { getPatientMedicationsAction } from '../actions'
+import type { GetPatientMedicationsResponse } from '../types'
 
 interface StoreInit {
   patientId: string
@@ -12,7 +12,7 @@ interface StoreState {
   data?: GetPatientMedicationsResponse
   loading?: boolean
   error?: string
-  fetch: (page?: number, reset?: boolean) => void
+  fetchPatientMedications: () => void
 }
 
 type Store = ReturnType<typeof createStore>
@@ -23,15 +23,14 @@ const createStore = (init: StoreInit) => {
     data: undefined,
     loading: true,
     error: undefined,
-    fetch: async (page = 1, reset = false) => {
+    fetchPatientMedications: async () => {
       set({
         error: undefined,
         loading: true,
       })
 
       const result = await getPatientMedicationsAction({
-        patientId: get().patientId,
-        page,
+        patientIds: [get().patientId],
       })
 
       if (result.state === 'error') {
