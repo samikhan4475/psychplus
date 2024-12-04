@@ -8,7 +8,7 @@ interface Props<T> {
 }
 
 const Details = ({ data }: Props<PastPsychHxWidgetSchemaType>) => {
-  return (
+  return data.widgetContainerCheckboxField === 'show' ? (
     <BlockContainer heading="Past Psychiatry History">
       <Flex direction="row">
         <LabelAndValue
@@ -33,7 +33,7 @@ const Details = ({ data }: Props<PastPsychHxWidgetSchemaType>) => {
         />
       ))}
     </BlockContainer>
-  )
+  ) : null
 }
 
 export { Details }

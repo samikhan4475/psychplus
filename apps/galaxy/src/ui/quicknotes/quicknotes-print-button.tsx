@@ -15,7 +15,7 @@ const QuickNotesPrintButton = ({ id }: QuickNotesPrintButtonProps) => {
       color="gray"
       size="1"
       className="text-black"
-      onClick={() => handlePrint(id)}
+      onClick={() => handlePrint(id, 'Actual Note View')}
     >
       <PrinterIcon height={14} width={14} strokeWidth={1.5} />
       Print

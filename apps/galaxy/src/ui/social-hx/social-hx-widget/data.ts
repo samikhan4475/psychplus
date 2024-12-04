@@ -21,8 +21,11 @@ const transformOut =
     return result
   }
 
-const transformIn = (value:QuickNoteSectionItem[]):SocialHxWidgetSchemaType =>{
- const result = {
+const transformIn = (
+  value: QuickNoteSectionItem[],
+): SocialHxWidgetSchemaType => {
+  const result = {
+    widgetContainerCheckboxField: '',
     relationshipStatus: '',
     professionalEducation: '',
     employed: '',
@@ -30,13 +33,14 @@ const transformIn = (value:QuickNoteSectionItem[]):SocialHxWidgetSchemaType =>{
     living: '',
     traumaHx: '',
     other: '',
- }
+  }
 
-    value.forEach((item) => {
-    result[item.sectionItem as keyof SocialHxWidgetSchemaType] = item.sectionItemValue
-    })
+  value.forEach((item) => {
+    result[item.sectionItem as keyof SocialHxWidgetSchemaType] =
+      item.sectionItemValue
+  })
 
-    return result as SocialHxWidgetSchemaType
+  return result as SocialHxWidgetSchemaType
 }
 
-export { transformIn,transformOut }
+export { transformIn, transformOut }

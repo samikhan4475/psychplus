@@ -1,3 +1,4 @@
+import { WidgetContainerCheckboxField } from '@/components'
 import { QuickNoteSectionItem } from '@/types'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { sanitizeFormData } from '@/utils'
@@ -7,6 +8,7 @@ const transformIn = (
   value: QuickNoteSectionItem[],
 ): PastPsychHxWidgetSchemaType => {
   const result: Record<string, number | string | undefined | boolean> = {
+    widgetContainerCheckboxField: undefined,
     psychHospitalizations: undefined,
     suicideAttempts: undefined,
     depression: undefined,
@@ -50,6 +52,9 @@ const transformIn = (
     const itemValue = item.sectionItemValue
     if (['psychHospitalizations', 'suicideAttempts'].includes(key)) {
       result[key] = Number(itemValue)
+      // This field is used to toggle widget data on actual noteview
+    } else if (key === 'widgetContainerCheckboxField') {
+      result[key] = itemValue
     } else if (key === 'other') {
       result.other = true
       result.otherDetails = itemValue
@@ -104,6 +109,13 @@ const transformOut =
         ...QuickNotesPayload,
         sectionItem: 'empity',
         sectionItemValue: 'true',
+      })
+    }
+    if (formData.widgetContainerCheckboxField) {
+      result.push({
+        ...QuickNotesPayload,
+        sectionItem: WidgetContainerCheckboxField,
+        sectionItemValue: formData.widgetContainerCheckboxField,
       })
     }
     return result

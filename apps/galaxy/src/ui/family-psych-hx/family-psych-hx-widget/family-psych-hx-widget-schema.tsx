@@ -6,6 +6,7 @@ const booleanOptional = z.boolean().optional()
 const stringOptional = z.string().optional()
 const stringArrayOptional = z.array(z.string()).optional()
 const familyPsychHxWidgetSchema = z.object({
+  widgetContainerCheckboxField: z.string().optional(),
   depression: booleanOptional,
   depressionRelation: stringArrayOptional,
   anxiety: booleanOptional,

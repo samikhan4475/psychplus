@@ -9,7 +9,7 @@ interface Props<T> {
 type FamilyPsychHxKey = keyof FamilyPsychHxWidgetSchemaType
 
 const Details = ({ data }: Props<FamilyPsychHxWidgetSchemaType>) => {
-  return (
+  return data.widgetContainerCheckboxField === 'show' ? (
     <BlockContainer heading="Family Psychiatry History">
       {FAMILY_PSYCH_BLOCK_OPTIONS.map((option) => {
         return (
@@ -18,16 +18,21 @@ const Details = ({ data }: Props<FamilyPsychHxWidgetSchemaType>) => {
             label={option.label + ':'}
             value={
               data[option.field as FamilyPsychHxKey]
-                ? `Relation: ${data[
-                    option.detailsField as FamilyPsychHxKey
-                  ]?.toString()}`
+                ? `Relation: ${data[option.detailsField as FamilyPsychHxKey]
+                    ?.toString()
+                    .split(',')
+                    .map(
+                      (relation) =>
+                        relation.charAt(0).toUpperCase() + relation.slice(1),
+                    )
+                    .join(', ')}`
                 : ''
             }
           />
         )
       })}
     </BlockContainer>
-  )
+  ) : null
 }
 
 export { Details }

@@ -42,7 +42,7 @@ const SocialHxWidget = ({
       <WidgetFormContainer
         patientId={patientId}
         widgetId={QuickNoteSectionName.QuickNoteSectionSocialHx}
-        title={!isHistoryHeader ? 'Social Hx' : undefined}
+        title={!isHistoryHeader ? 'Social History' : undefined}
         getData={transformOut(patientId)}
         toggleable={!isHistoryHeader}
         headerRight={

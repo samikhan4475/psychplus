@@ -15,7 +15,7 @@ const Details = ({ data }: Props<PastMedicalHxWidgetSchemaType>) => {
     .map((option) => option.label)
     .join(', ')
 
-  return (
+  return data.widgetContainerCheckboxField === 'show' ? (
     <BlockContainer heading="Past Medical History">
       {data.pregnantDate && (
         <LabelAndValue
@@ -34,7 +34,7 @@ const Details = ({ data }: Props<PastMedicalHxWidgetSchemaType>) => {
         <LabelAndValue label="Other:" value={` ${data.otherDetails}`} />
       )}
     </BlockContainer>
-  )
+  ) : null
 }
 
 export { Details }

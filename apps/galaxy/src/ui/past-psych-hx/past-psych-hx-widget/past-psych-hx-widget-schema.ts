@@ -6,6 +6,7 @@ const conditionalPositiveInt = z.coerce.number().optional()
 
 const pastPsychHxWidgetSchema = z
   .object({
+    widgetContainerCheckboxField: z.string().optional(),
     psychHospitalizations: conditionalPositiveInt,
     suicideAttempts: conditionalPositiveInt,
     depression: z.oboolean(),
@@ -56,24 +57,32 @@ const pastPsychHxWidgetSchema = z
       { condition: 'autism', ageField: 'autismAge' },
       { condition: 'eatingDisorder', ageField: 'eatingDisorderAge' },
       { condition: 'exposureToTrauma', ageField: 'exposureToTraumaAge' },
-      { condition: 'cuttingSelfHarmBehavior', ageField: 'cuttingSelfHarmBehaviorAge' },
+      {
+        condition: 'cuttingSelfHarmBehavior',
+        ageField: 'cuttingSelfHarmBehaviorAge',
+      },
       { condition: 'problemsWithSleep', ageField: 'problemsWithSleepAge' },
       { condition: 'dementia', ageField: 'dementiaAge' },
       { condition: 'personalityDisorder', ageField: 'personalityDisorderAge' },
-      { condition: 'intellectualDisability', ageField: 'intellectualDisabilityAge' },
-    ];
+      {
+        condition: 'intellectualDisability',
+        ageField: 'intellectualDisabilityAge',
+      },
+    ]
 
     //We are just checking if the condition is true and the age is not provided
     issues.forEach(({ condition, ageField }) => {
-      if (data[condition as keyof typeof data]  && !data[ageField as keyof typeof data]) {
+      if (
+        data[condition as keyof typeof data] &&
+        !data[ageField as keyof typeof data]
+      ) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
           path: [ageField],
           message: 'Required',
-        });
+        })
       }
-    });
-
+    })
   })
 
 export { pastPsychHxWidgetSchema, type PastPsychHxWidgetSchemaType }

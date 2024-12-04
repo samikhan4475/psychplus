@@ -41,7 +41,6 @@ const useStore = create<Store>()((set, get) => ({
       return
     }
 
-
     if (signResults.error.includes('mark that note as error?')) {
       set({
         loading: false,

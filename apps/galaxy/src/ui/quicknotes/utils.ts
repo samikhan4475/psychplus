@@ -24,6 +24,7 @@ import { SubstanceUseHxWidget } from '@/ui/substance-use-hx'
 import { TherapyWidget } from '@/ui/therapy'
 import { QuicknotesVitalsWidget } from '@/ui/vitals'
 import { isHospitalCareVisit } from '@/utils'
+import { HospitalDischargeWidget } from '../hospital/hospital-discharge-widget'
 import { HospitalInitialWidget } from '../hospital/hospital-initial-widget'
 import { SpravatoWidgetLoader as SpravatoWidget } from '../procedures/spravato-tab/spravato-widget-loader'
 import {
@@ -43,7 +44,7 @@ import {
   Question,
   Referral,
   ReviewOfSystem,
-  SocialHx,
+  SocialHxDetailView,
   SpravatoDetailView,
   SubstanceUseHx,
   Therapy,
@@ -52,11 +53,10 @@ import {
   VitalsView,
   WorkingDiagnosisDetailView,
 } from './actual-note-view'
+import { HospitalDischargeView } from './actual-note-view/hospital-discharge'
 import { HospitalInitialView } from './actual-note-view/hospital-initial'
 import { QuickNoteSectionName } from './constants'
 import { WidgetType } from './types'
-import { HospitalDischargeView } from './actual-note-view/hospital-discharge'
-import { HospitalDischargeWidget } from '../hospital/hospital-discharge-widget'
 
 const widgets: Array<WidgetType> = [
   {
@@ -77,7 +77,7 @@ const widgets: Array<WidgetType> = [
   {
     component: SocialHxWidget,
     id: QuickNoteSectionName.QuickNoteSectionSocialHx,
-    actualNoteComponent: SocialHx,
+    actualNoteComponent: SocialHxDetailView,
   },
   {
     component: SubstanceUseHxWidget,
@@ -189,7 +189,7 @@ const widgets: Array<WidgetType> = [
     component: HospitalInitialWidget,
     id: QuickNoteSectionName.QuickNoteSectionHospitalInitial,
     actualNoteComponent: HospitalInitialView,
-  }
+  },
 ]
 
 const visitTypeToWidgets: Record<string, QuickNoteSectionName[]> = {

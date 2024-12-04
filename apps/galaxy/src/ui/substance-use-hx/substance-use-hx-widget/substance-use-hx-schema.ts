@@ -3,6 +3,7 @@ import { z } from 'zod'
 type SubstanceUseHxWidgetSchemaType = z.infer<typeof substanceUseHxWidgetSchema>
 
 const substanceUseHxWidgetSchema = z.object({
+  widgetContainerCheckboxField: z.string().optional(),
   tobacco: z.enum(['yes', 'no']).optional(),
   tobaccoChewSmoke: z.enum(['chew', 'smoke']).optional(),
   smokePacks: z.enum(['0.5', '1', '2']).optional(),

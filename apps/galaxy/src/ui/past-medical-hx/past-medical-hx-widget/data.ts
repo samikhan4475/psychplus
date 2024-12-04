@@ -1,3 +1,4 @@
+import { WidgetContainerCheckboxField } from '@/components'
 import { QuickNoteSectionItem } from '@/types'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { sanitizeFormData } from '@/utils'
@@ -7,6 +8,7 @@ const transformIn = (
   value: QuickNoteSectionItem[],
 ): PastMedicalHxWidgetSchemaType => {
   const result: Record<string, number | string | undefined | boolean | Date> = {
+    widgetContainerCheckboxField: undefined,
     asthma: undefined,
     copd: undefined,
     htn: undefined,
@@ -64,8 +66,9 @@ const transformIn = (
           ? itemValue
           : undefined
     }
-
-    if (key === 'pregnantDate') {
+    if (key === 'widgetContainerCheckboxField') {
+      result.widgetContainerCheckboxField = itemValue
+    } else if (key === 'pregnantDate') {
       result.pregnantDate =
         itemValue !== 'undefined' && itemValue !== undefined
           ? itemValue
@@ -110,6 +113,14 @@ const transformOut =
           )
           break
 
+        case WidgetContainerCheckboxField:
+          if (formData.widgetContainerCheckboxField) {
+            addQuickNote(
+              WidgetContainerCheckboxField,
+              formData.widgetContainerCheckboxField,
+            )
+          }
+          break
         case 'pregnant':
           if (value && formData.pregnantDate) {
             addQuickNote('pregnantDate', formData.pregnantDate.toString())
@@ -136,7 +147,6 @@ const transformOut =
           break
       }
     })
-
     return result
   }
 

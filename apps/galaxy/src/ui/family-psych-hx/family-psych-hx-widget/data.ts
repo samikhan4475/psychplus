@@ -1,3 +1,4 @@
+import { WidgetContainerCheckboxField } from '@/components'
 import { QuickNoteSectionItem } from '@/types'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { sanitizeFormData } from '@/utils'
@@ -7,6 +8,7 @@ const transformIn = (
   value: QuickNoteSectionItem[],
 ): FamilyPsychHxWidgetSchemaType => {
   const result: Record<string, string | boolean | string[]> = {
+    widgetContainerCheckboxField: false,
     completedSuicide: false,
     completedSuicideRelation: [],
     anxiety: false,
@@ -34,6 +36,8 @@ const transformIn = (
 
     if (key === 'other') {
       result.other = item.sectionItemValue
+    } else if (key === 'widgetContainerCheckboxField') {
+      result.widgetContainerCheckboxField = item.sectionItemValue
     } else if (key in result) {
       result[relationKey] = itemValue
       result[key] = true
@@ -74,7 +78,13 @@ const transformOut =
         }
       }
     })
-
+    if (formData.widgetContainerCheckboxField) {
+      result.push({
+        ...defaultPayload,
+        sectionItem: WidgetContainerCheckboxField,
+        sectionItemValue: formData.widgetContainerCheckboxField,
+      })
+    }
     if (result.length === 0) {
       result.push({
         ...defaultPayload,
@@ -82,7 +92,6 @@ const transformOut =
         sectionItemValue: 'true',
       })
     }
-
     return result
   }
 

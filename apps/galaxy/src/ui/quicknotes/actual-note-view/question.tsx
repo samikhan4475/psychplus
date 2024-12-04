@@ -1,6 +1,6 @@
 'use client'
 
-import { Flex, Strong } from '@radix-ui/themes'
+import { Strong } from '@radix-ui/themes'
 import { format } from 'date-fns'
 import { QuickNoteHistory } from '@/types'
 import { BLOCK_OPTIONS } from '@/ui/questionnaires/questionnaires-widget/constants'
@@ -42,9 +42,7 @@ const Question = () => {
         )
       })}
     </BlockContainer>
-  ) : (
-    <Flex />
-  )
+  ) : null
 }
 
 const getLabelBySectionName = (sectionName: string): string | null => {

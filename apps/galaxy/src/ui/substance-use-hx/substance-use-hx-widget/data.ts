@@ -1,3 +1,4 @@
+import { WidgetContainerCheckboxField } from '@/components'
 import { CodesWidgetItem, CptCodeKeys, QuickNoteSectionItem } from '@/types'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { sanitizeFormData } from '@/utils'
@@ -17,6 +18,7 @@ const transformIn = (
     string,
     number | string | undefined | boolean | string[]
   > = {
+    widgetContainerCheckboxField: undefined,
     tobacco: undefined,
     tobaccoChewSmoke: undefined,
     smokePacks: undefined,
@@ -52,6 +54,8 @@ const transformIn = (
     if (key === 'referralTreatment') {
       const list = itemValue.split(',')
       result[key] = list || []
+    } else if (key === 'widgetContainerCheckboxField') {
+      result[key] = itemValue
     } else if (TOBACCO_DRUGS_ALCOHOL_QUESTIONNAIRE.includes(key)) {
       result[key] = itemValue
     } else if (TOBACCO_OPTIONS.includes(key)) {
@@ -124,7 +128,13 @@ const transformOut =
         }
       }
     })
-
+    if (formData.widgetContainerCheckboxField) {
+      result.push({
+        ...QuickNotesPayload,
+        sectionItem: WidgetContainerCheckboxField,
+        sectionItemValue: formData.widgetContainerCheckboxField,
+      })
+    }
     cptCodeKeysToWatch.forEach((key, index) => {
       const duration = schema[key]
       if (duration) {

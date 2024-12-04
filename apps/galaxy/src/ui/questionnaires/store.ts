@@ -107,6 +107,7 @@ const useStore = create<Store>((set, get) => ({
 
     if (result.state === 'success') {
       toast.success('Saved!')
+
       set({
         addedToNotes: {
           ...get().addedToNotes,

@@ -5,6 +5,7 @@ type PastMedicalHxWidgetSchemaType = z.infer<typeof pastMedicalHxWidgetSchema>
 
 const pastMedicalHxWidgetSchema = z
   .object({
+    widgetContainerCheckboxField: z.string().optional(),
     asthma: z.oboolean(),
     copd: z.oboolean(),
     htn: z.oboolean(),

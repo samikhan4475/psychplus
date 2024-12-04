@@ -1,6 +1,7 @@
 'use client'
 
 import { Checkbox, Flex, Text } from '@radix-ui/themes'
+import { useFormContext } from 'react-hook-form'
 import { cn } from '@/utils'
 import { LoadingPlaceholder } from './loading-placeholder'
 import { WidgetBlocksContainer } from './widget-blocks-container'
@@ -10,12 +11,14 @@ type WidgetContainerProps = React.PropsWithChildren<{
   loading?: boolean
   error?: string
   contentHeight?: number
-  toggleable?: boolean
+  toggleable?: boolean //This is linked with checkbox field named "displayWidgetCheckbox" values are 'show' and 'hide'
   headerLeft?: React.ReactNode
   headerRight?: React.ReactNode
   sticky?: boolean
   className?: string
 }>
+
+const WidgetContainerCheckboxField = 'widgetContainerCheckboxField'
 
 const WidgetContainer = ({
   title,
@@ -29,6 +32,17 @@ const WidgetContainer = ({
   sticky = false,
   className,
 }: WidgetContainerProps) => {
+  const form = useFormContext() ?? null
+  const checked =
+    form && WidgetContainerCheckboxField
+      ? form.watch(WidgetContainerCheckboxField) === 'show'
+      : false
+
+  const handleCheckedChange = (newChecked: boolean) => {
+    if (form && WidgetContainerCheckboxField) {
+      form.setValue(WidgetContainerCheckboxField, newChecked ? 'show' : 'hide')
+    }
+  }
   return (
     <Flex
       direction="column"
@@ -41,14 +55,13 @@ const WidgetContainer = ({
         justify="between"
         gap="2"
         wrap="wrap"
-        className={cn({
-          'bg-white sticky top-0 z-10 py-2': sticky,
-        })}
+        className={cn({ 'bg-white sticky top-0 z-10 py-2': sticky })}
       >
         <Flex align="center" gap="2">
           {toggleable && (
             <Checkbox
-              onCheckedChange={() => {}}
+              checked={checked}
+              onCheckedChange={handleCheckedChange}
               highContrast
               className="cursor-pointer"
             />
@@ -79,4 +92,8 @@ const WidgetContainer = ({
   )
 }
 
-export { WidgetContainer, type WidgetContainerProps }
+export {
+  WidgetContainer,
+  type WidgetContainerProps,
+  WidgetContainerCheckboxField,
+}

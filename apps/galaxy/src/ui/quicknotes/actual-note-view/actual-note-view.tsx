@@ -26,7 +26,13 @@ const ActualNoteView = async ({
     <ActualNoteViewClient>
       <ScrollArea className="h-full w-96">
         <NoteViewHeader />
-        <Flex gap="1" p="2" className="bg-white" direction="column">
+        <Flex
+          id="actual-note-view"
+          gap="1"
+          p="2"
+          className="bg-white"
+          direction="column"
+        >
           <PsychiatricEvaluation
             patient={patient.data}
             appointment={appointment}
