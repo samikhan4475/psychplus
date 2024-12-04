@@ -1,0 +1,1 @@
+export { TcmWidgetLoader as TcmWidget } from './tcm-widget-loader'

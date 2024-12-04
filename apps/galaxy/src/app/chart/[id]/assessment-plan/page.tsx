@@ -1,6 +1,8 @@
 import { AssessmentPlanView } from '@/ui/assessment-plan'
 import { getAssessmentPlanAction } from '@/ui/assessment-plan/actions'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
+import { Text } from '@radix-ui/themes'
+import toast from 'react-hot-toast'
 
 interface AssessmentPlanPageProps {
   params: {
@@ -14,6 +16,7 @@ const AssessmentPlanPage = async ({ params }: AssessmentPlanPageProps) => {
     therapyAssessmentPlanResponse,
     familyInternalMedicineAssessmentPlanResponse,
     addOnAssessementPlanData,
+    tcmDataResponse,
   ] = await Promise.all([
     getAssessmentPlanAction({
       patientId: params.id,
@@ -33,20 +36,28 @@ const AssessmentPlanPage = async ({ params }: AssessmentPlanPageProps) => {
       patientId: params.id,
       sectionName: QuickNoteSectionName.Addon,
     }),
+    getAssessmentPlanAction({
+      patientId: params.id,
+      sectionName: QuickNoteSectionName.QuicknoteSectionTcm,
+    }),
   ])
 
   if (psychiatryAssessmentPlanResponse.state === 'error') {
-    throw new Error(psychiatryAssessmentPlanResponse.error)
+    return <Text>{psychiatryAssessmentPlanResponse.error}</Text>;
   }
 
   if (therapyAssessmentPlanResponse.state === 'error') {
-    throw new Error(therapyAssessmentPlanResponse.error)
+    return <Text>{therapyAssessmentPlanResponse.error}</Text>;
   }
   if (familyInternalMedicineAssessmentPlanResponse.state === 'error') {
-    throw new Error(familyInternalMedicineAssessmentPlanResponse.error)
+    return <Text>{familyInternalMedicineAssessmentPlanResponse.error}</Text>;
+
   }
   if (addOnAssessementPlanData.state === 'error') {
-    throw new Error(addOnAssessementPlanData.error)
+    return <Text>{addOnAssessementPlanData.error}</Text>;
+  }
+  if (tcmDataResponse.state === 'error') {
+    return <Text>{tcmDataResponse.error}</Text>;
   }
 
   return (
@@ -58,6 +69,7 @@ const AssessmentPlanPage = async ({ params }: AssessmentPlanPageProps) => {
         familyInternalMedicineAssessmentPlanResponse.data
       }
       addOnAssessementPlanData={addOnAssessementPlanData.data}
+      tcmData={tcmDataResponse.data}
     />
   )
 }

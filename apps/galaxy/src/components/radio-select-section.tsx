@@ -19,8 +19,10 @@ interface RadioSelectSectionProps {
   disabled?: boolean
   defaultValue?: string
   onChange?: (value: string) => void
+  disableOtherOptions?: boolean
   lastOptionIndicator?: boolean
   resetOnSameValue?: boolean
+  optionEnableTag?:string
 }
 
 interface RadioSelectOption {
@@ -38,11 +40,12 @@ const RadioSelectSection = ({
   disabled = false,
   defaultValue,
   onChange,
+  disableOtherOptions = false, // Default to false
+  optionEnableTag,
   lastOptionIndicator = false,
   resetOnSameValue = false,
 }: RadioSelectSectionProps) => {
   const form = useFormContext()
-
   const value = disabled ? defaultValue : form.watch(field)
 
   const handleOptionClick = (clickedValue: string) => {
@@ -69,7 +72,7 @@ const RadioSelectSection = ({
         {options.map((option) => {
           const isSelected = value === option.value && className
           const id = `${field}-radio-${option.value}`
-
+          const shouldDisable = disableOtherOptions && option.value !== optionEnableTag
           return (
             <Text
               key={option.value}
@@ -80,15 +83,16 @@ const RadioSelectSection = ({
                 className,
                 {
                   'border-pp-focus-outline bg-pp-focus-bg': isSelected,
+                  'opacity-60 cursor-not-allowed bg-gray-200': shouldDisable,
                 },
-                { 'cursor-pointer': !disabled },
+                { 'cursor-pointer': !disabled && !shouldDisable },
               )}
             >
               <RadioGroup.Item
                 className="rounded-full flex h-[12px] w-[12px] items-center justify-center border border-gray-9 data-[state=checked]:bg-blue-11"
                 value={option.value}
                 id={id}
-                disabled={disabled}
+                disabled={disabled || shouldDisable}
                 onClick={() => {
                   handleOptionClick(option.value)
                 }}
@@ -102,7 +106,7 @@ const RadioSelectSection = ({
                   {
                     'font-medium': isSelected,
                   },
-                  { 'cursor-pointer': !disabled },
+                  { 'cursor-pointer': !disabled && !shouldDisable },
                 )}
               >
                 {option.label}
@@ -116,5 +120,4 @@ const RadioSelectSection = ({
     </Flex>
   )
 }
-
 export { RadioSelectSection }

@@ -3,6 +3,7 @@ const CODE_ETHNICITY = '2133-7'
 const RACES_GROUPING_CODES = ['R', 'R1', 'R2', 'R3', 'R4', 'R5']
 const ETHNICITIES_GROUPING_CODES = ['E', 'E1', 'E2']
 const CODE_NOT_SET = 'NotSet'
+const HOSPITAL_SERVICE_GROUP = ['Hospital']
 
 const CODESETS = {
   Gender: 'Gender',
@@ -85,4 +86,5 @@ export {
   ETHNICITIES_GROUPING_CODES,
   RACES_GROUPING_CODES,
   CODE_NOT_SET,
+  HOSPITAL_SERVICE_GROUP
 }

@@ -26,6 +26,7 @@ import { QuicknotesVitalsWidget } from '@/ui/vitals'
 import { isHospitalCareVisit } from '@/utils'
 import { HospitalDischargeWidget } from '../hospital/hospital-discharge-widget'
 import { HospitalInitialWidget } from '../hospital/hospital-initial-widget'
+import { TcmWidget } from '../assessment-plan/tcm-widget'
 import { SpravatoWidgetLoader as SpravatoWidget } from '../procedures/spravato-tab/spravato-widget-loader'
 import {
   AllergiesDetailsView,
@@ -57,6 +58,7 @@ import { HospitalDischargeView } from './actual-note-view/hospital-discharge'
 import { HospitalInitialView } from './actual-note-view/hospital-initial'
 import { QuickNoteSectionName } from './constants'
 import { WidgetType } from './types'
+import { TcmView } from './actual-note-view/tcm'
 
 const widgets: Array<WidgetType> = [
   {
@@ -190,6 +192,11 @@ const widgets: Array<WidgetType> = [
     id: QuickNoteSectionName.QuickNoteSectionHospitalInitial,
     actualNoteComponent: HospitalInitialView,
   },
+  {
+    component: TcmWidget,
+    id: QuickNoteSectionName.QuicknoteSectionTcm,
+    actualNoteComponent: TcmView,
+  },
 ]
 
 const visitTypeToWidgets: Record<string, QuickNoteSectionName[]> = {
@@ -214,7 +221,6 @@ const visitTypeToWidgets: Record<string, QuickNoteSectionName[]> = {
     QuickNoteSectionName.QuicknoteSectionReferrals,
     QuickNoteSectionName.FollowUps,
     QuickNoteSectionName.QuicknoteSectionCodes,
-    QuickNoteSectionName.QuickNoteSectionHospitalInitial,
   ],
   EdVisit: [
     QuickNoteSectionName.QuicknoteSectionHPI,
@@ -237,7 +243,6 @@ const visitTypeToWidgets: Record<string, QuickNoteSectionName[]> = {
     QuickNoteSectionName.QuicknoteSectionReferrals,
     QuickNoteSectionName.FollowUps,
     QuickNoteSectionName.QuicknoteSectionCodes,
-    QuickNoteSectionName.QuickNoteSectionHospitalInitial,
   ],
   TransitionalCare: [
     QuickNoteSectionName.QuicknoteSectionHPI,
@@ -261,7 +266,8 @@ const visitTypeToWidgets: Record<string, QuickNoteSectionName[]> = {
     QuickNoteSectionName.QuicknoteSectionReferrals,
     QuickNoteSectionName.FollowUps,
     QuickNoteSectionName.QuicknoteSectionCodes,
-    QuickNoteSectionName.QuickNoteSectionHospitalInitial,
+    QuickNoteSectionName.QuicknoteSectionTcm,
+
   ],
   IndividualPsychotherapy: [
     QuickNoteSectionName.QuicknoteSectionHPI,
@@ -278,7 +284,6 @@ const visitTypeToWidgets: Record<string, QuickNoteSectionName[]> = {
     QuickNoteSectionName.QuicknoteSectionReferrals,
     QuickNoteSectionName.FollowUps,
     QuickNoteSectionName.QuicknoteSectionCodes,
-    QuickNoteSectionName.QuickNoteSectionHospitalInitial,
   ],
   FamilyPsychotherapy: [
     QuickNoteSectionName.QuicknoteSectionHPI,
@@ -296,7 +301,6 @@ const visitTypeToWidgets: Record<string, QuickNoteSectionName[]> = {
     QuickNoteSectionName.QuicknoteSectionReferrals,
     QuickNoteSectionName.FollowUps,
     QuickNoteSectionName.QuicknoteSectionCodes,
-    QuickNoteSectionName.QuickNoteSectionHospitalInitial,
   ],
   ECTVisit: [
     QuickNoteSectionName.ProcedureECT,
@@ -346,13 +350,13 @@ const visitTypeToWidgets: Record<string, QuickNoteSectionName[]> = {
     QuickNoteSectionName.QuicknoteSectionPhysicalExam,
     QuickNoteSectionName.QuicknoteSectionMse,
     QuickNoteSectionName.QuickNoteSectionDiagnosis,
-    QuickNoteSectionName.QuickNoteSectionHospitalInitial,
     QuickNoteSectionName.QuicknoteSectionPsychiatryAssessmentPlan,
     QuickNoteSectionName.QuicknoteSectionFamilyInternalMedicineAssessmentPlan,
     QuickNoteSectionName.Addon,
     QuickNoteSectionName.QuickNoteSectionHospitalOrders,
     QuickNoteSectionName.QuicknoteSectionReferrals,
     QuickNoteSectionName.QuicknoteSectionCodes,
+
   ],
   'HospitalCare/Discharge': [
     QuickNoteSectionName.QuicknoteSectionAdmittingDiagnosis,
@@ -369,7 +373,6 @@ const visitTypeToWidgets: Record<string, QuickNoteSectionName[]> = {
     QuickNoteSectionName.QuicknoteSectionPhysicalExam,
     QuickNoteSectionName.QuicknoteSectionMse,
     QuickNoteSectionName.QuicknoteSectionHospitalDischarge,
-    QuickNoteSectionName.QuickNoteSectionHospitalInitial,
     QuickNoteSectionName.QuicknoteSectionPsychiatryAssessmentPlan,
     QuickNoteSectionName.QuicknoteSectionFamilyInternalMedicineAssessmentPlan,
     QuickNoteSectionName.Addon,
@@ -392,6 +395,7 @@ const visitTypeToWidgets: Record<string, QuickNoteSectionName[]> = {
     QuickNoteSectionName.QuicknoteSectionPhysicalExam,
     QuickNoteSectionName.QuicknoteSectionMse,
     QuickNoteSectionName.QuickNoteSectionDiagnosis,
+    QuickNoteSectionName.QuickNoteSectionHospitalInitial,
     QuickNoteSectionName.QuicknoteSectionHospitalDischarge,
     QuickNoteSectionName.QuicknoteSectionPsychiatryAssessmentPlan,
     QuickNoteSectionName.QuicknoteSectionFamilyInternalMedicineAssessmentPlan,
@@ -400,6 +404,7 @@ const visitTypeToWidgets: Record<string, QuickNoteSectionName[]> = {
     QuickNoteSectionName.QuicknoteSectionReferrals,
     QuickNoteSectionName.FollowUps,
     QuickNoteSectionName.QuicknoteSectionCodes,
+
   ],
 }
 

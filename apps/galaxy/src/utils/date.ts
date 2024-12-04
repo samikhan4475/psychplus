@@ -5,7 +5,7 @@ import {
   parseDate,
   type DateValue,
 } from '@internationalized/date'
-import { format } from 'date-fns'
+import { format, differenceInCalendarDays } from 'date-fns'
 import { Period, SelectOptionType } from '@/types'
 
 const MONTH_LABELS = [
@@ -286,6 +286,12 @@ const generateTimeOptions = (interval = 20): SelectOptionType[] => {
   return options
 }
 
+const getDateDifference = (dateObjEnd : DateValue, dateObjStart: DateValue) => {
+  const startDateObj = new Date(dateObjStart.year, dateObjStart.month - 1, dateObjStart.day)
+  const endDateObj = new Date(dateObjEnd.year, dateObjEnd.month - 1, dateObjEnd.day)
+  return differenceInCalendarDays(endDateObj, startDateObj) 
+}
+
 export {
   getCalendarDate,
   getLocalCalendarDate,
@@ -309,5 +315,6 @@ export {
   daysAgo,
   calculateMinutes,
   generateTimeOptions,
+  getDateDifference,
   convertToTimeZoneTime,
 }

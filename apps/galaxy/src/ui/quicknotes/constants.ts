@@ -45,6 +45,8 @@ enum QuickNoteSectionName {
   QuicknoteSectionHospitalDischarge = 'QuicknoteSectionHospitalDischarge',
   QuicknoteSectionAdmittingDiagnosis = 'QuicknoteSectionAdmittingDiagnosis',
   QuicknoteSectionWorkingDischargeDiagnosis = 'QuicknoteSectionWorkingDischargeDiagnosis',
+  QuicknoteSectionTcm = 'QuicknoteSectionTcm',
+
 }
 
 export { QuickNoteSectionName }

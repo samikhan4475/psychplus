@@ -11,6 +11,7 @@ import { FamilyInternalMedicineAssessmentPlanTab } from './family-internal-medic
 import { PsychiatryAssessmentPlanTab } from './psychiatry-assessment-plan-tab'
 import { useStore } from './store'
 import { TherapyAssessmentPlanTab } from './therapy-assessment-plan-tab'
+import { TcmWidget } from './tcm-widget/tcm-widget'
 
 interface AssessmentPlanViewProps {
   patientId: string
@@ -18,6 +19,7 @@ interface AssessmentPlanViewProps {
   therapyAssessmentPlanData: QuickNoteSectionItem[]
   familyInternalMedicineAssessmentPlanData: QuickNoteSectionItem[]
   addOnAssessementPlanData: QuickNoteSectionItem[]
+  tcmData: QuickNoteSectionItem[]
 }
 
 const AssessmentPlanView = ({
@@ -26,6 +28,7 @@ const AssessmentPlanView = ({
   therapyAssessmentPlanData,
   familyInternalMedicineAssessmentPlanData,
   addOnAssessementPlanData,
+  tcmData,
 }: AssessmentPlanViewProps) => {
   const { activeTab, setActiveTab } = useStore((state) => ({
     activeTab: state.activeTab,
@@ -51,6 +54,9 @@ const AssessmentPlanView = ({
           </TabsTrigger>
           <TabsTrigger value={AssessmentPlanTabs.AOAP}>
             {AssessmentPlanTabs.AOAP}
+          </TabsTrigger>
+          <TabsTrigger value={AssessmentPlanTabs.TCM}>
+            {AssessmentPlanTabs.TCM}
           </TabsTrigger>
         </Tabs.List>
         <Flex className="flex-1 border-b border-gray-5" />
@@ -85,6 +91,13 @@ const AssessmentPlanView = ({
         <AddOnView
           patientId={patientId}
           addOnAssessementPlanData={addOnAssessementPlanData}
+        />
+      </TabsContent>
+      <TabsContent value={AssessmentPlanTabs.TCM}>
+        <TcmWidget
+          patientId={patientId}
+          tcmData={tcmData}
+          isTcmTab={true}
         />
       </TabsContent>
     </Tabs.Root>

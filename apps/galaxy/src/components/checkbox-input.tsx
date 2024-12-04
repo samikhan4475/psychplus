@@ -9,6 +9,7 @@ interface CheckboxInputProps extends React.ComponentProps<typeof Checkbox> {
   label?: string
   labelClassName?: string
   field: string
+  required?:boolean
 }
 
 const CheckboxInput = ({
@@ -16,6 +17,7 @@ const CheckboxInput = ({
   labelClassName,
   field: fieldName,
   className,
+  required=false,
   ...checkboxProps
 }: CheckboxInputProps) => {
   const form = useFormContext()
@@ -45,6 +47,7 @@ const CheckboxInput = ({
         <BlockLabel
           name={fieldName}
           className={cn('text-wrap max-w-xl font-regular', labelClassName)}
+          required={required}
         >
           {label}
         </BlockLabel>
