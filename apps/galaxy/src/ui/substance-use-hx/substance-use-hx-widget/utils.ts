@@ -8,13 +8,12 @@ const substanceCptCodes: CodesWidgetItem[] = [
 ]
 
 const cptCodeMap = {
-  smoking: { '>=3m': '99406', default: '99407' },
-  alcohol: { '>=15m': '99408', default: '99409' },
+  smokingCessationDiscussionDuration: { '>=3m': '99406', '>=11m': '99407' },
+  alcoholSubstanceCessationDiscussionDuration: {
+    '>=15m': '99408',
+    '>=31m': '99409',
+  },
+  tobacco: { yes: '99406' },
 }
 
-const cptCodeKeysToWatch = [
-  'smokingCessationDiscussionDuration',
-  'alcoholSubstanceCessationDiscussionDuration',
-]
-
-export { substanceCptCodes, cptCodeMap, cptCodeKeysToWatch }
+export { substanceCptCodes, cptCodeMap }

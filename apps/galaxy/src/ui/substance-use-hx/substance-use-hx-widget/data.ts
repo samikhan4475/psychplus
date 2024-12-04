@@ -9,7 +9,7 @@ import {
   TOBACCO_OPTIONS,
 } from './constants'
 import { SubstanceUseHxWidgetSchemaType } from './substance-use-hx-schema'
-import { cptCodeKeysToWatch, cptCodeMap, substanceCptCodes } from './utils'
+import { cptCodeMap, substanceCptCodes } from './utils'
 
 const transformIn = (
   value: QuickNoteSectionItem[],
@@ -135,13 +135,19 @@ const transformOut =
         sectionItemValue: formData.widgetContainerCheckboxField,
       })
     }
-    cptCodeKeysToWatch.forEach((key, index) => {
-      const duration = schema[key]
-      if (duration) {
-        const type = ['smoking', 'alcohol'][index] as keyof typeof cptCodeMap
+    Object.entries(cptCodeMap).forEach(([key, value]) => {
+      if (key === 'tobacco' && schema?.smokingCessationDiscussionDuration) {
+        return
+      }
+      const schemaKey = schema?.[key]
+      const code =
+        typeof value === 'object'
+          ? value?.[schemaKey as keyof typeof value]
+          : value
+      if (code && schemaKey) {
         selectedCodes.push({
+          code,
           key: CptCodeKeys.ADD_ONS_KEY,
-          code: cptCodeMap[type][duration] || cptCodeMap[type].default,
         })
       }
     })

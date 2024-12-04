@@ -35,6 +35,9 @@ interface PrimaryCodeTableProps {
   isDisabled?: boolean
 }
 const PrimaryCodeTable = ({ codes, isDisabled }: PrimaryCodeTableProps) => {
+  if (!codes.length) {
+    return null
+  }
   return (
     <DataTable
       data={codes ?? []}

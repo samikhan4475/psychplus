@@ -23,7 +23,6 @@ const CodeHistory = ({ cptCodesLookup }: Props) => {
       .join(' | ')
   }, [formValues, cptCodesLookup])
 
-  console.log(cptCodesLookup)
   return (
     <Box className="flex h-4 items-center justify-between pb-1">
       <Text className="text-1">{getJoinedValues}</Text>

@@ -7,6 +7,7 @@ const getQuickNoteDetailAction = async (
   patientId: string,
   sectionNames: string[],
   appointmentId?: string,
+  isWithOutAppointmentId?: boolean,
 ): Promise<api.ActionResult<QuickNoteSectionItem[]>> => {
   const payload: QuickNoteDetailsPayload = {
     patientId: Number(patientId),
@@ -16,6 +17,9 @@ const getQuickNoteDetailAction = async (
 
   if (appointmentId) payload.appointmentId = Number(appointmentId)
 
+  if (isWithOutAppointmentId !== undefined) {
+    payload.isWithAppointmentNull = isWithOutAppointmentId
+  }
   const response = await api.POST<QuickNoteSectionItem[]>(
     api.NOTE_DETAILS_SEARCH_ENDPOINT,
     payload,

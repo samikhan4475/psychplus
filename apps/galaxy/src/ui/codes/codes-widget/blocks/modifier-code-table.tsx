@@ -35,6 +35,9 @@ interface ModifierTableProps {
   isDisabled?: boolean
 }
 const ModifierTable = ({ codes, isDisabled }: ModifierTableProps) => {
+  if (!codes?.length) {
+    return null
+  }
   return (
     <DataTable
       data={codes ?? []}

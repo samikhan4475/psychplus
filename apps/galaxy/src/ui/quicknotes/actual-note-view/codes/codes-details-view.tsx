@@ -18,9 +18,12 @@ const CodesDetailsView = async ({
   appointment,
 }: WorkingDiagnosisDetailProps) => {
   const [codesResult, appointmentCodeResult] = await Promise.all([
-    getQuickNoteDetailAction(patientId, [
-      QuickNoteSectionName.QuicknoteSectionCodes,
-    ]),
+    getQuickNoteDetailAction(
+      patientId,
+      [QuickNoteSectionName.QuicknoteSectionCodes],
+      undefined,
+      true,
+    ),
     getQuickNoteDetailAction(
       patientId,
       [QuickNoteSectionName.QuicknoteSectionCodes],

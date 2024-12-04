@@ -18,8 +18,9 @@ const Details = ({
   appointment,
 }: Props<CodesWidgetSchemaType>) => {
   const { cptCodesLookup } = getCptCodeOptions(
-    appointment?.cptPrimaryCodes,
-    appointment?.cptAddonCodes,
+    appointment?.cptPrimaryCodes ?? [],
+    appointment?.cptAddonCodes ?? [],
+    appointment?.cptModifiersCodes ?? [],
   )
 
   return (

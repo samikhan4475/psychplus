@@ -18,9 +18,12 @@ const CodesWidgetLoader = async ({
 }: CodesWidgetLoaderProps) => {
   const [codesResult, appointmentCodeResult, appointmentResult] =
     await Promise.all([
-      getQuickNoteDetailAction(patientId, [
-        QuickNoteSectionName.QuicknoteSectionCodes,
-      ]),
+      getQuickNoteDetailAction(
+        patientId,
+        [QuickNoteSectionName.QuicknoteSectionCodes],
+        undefined,
+        true,
+      ),
 
       getQuickNoteDetailAction(
         patientId,

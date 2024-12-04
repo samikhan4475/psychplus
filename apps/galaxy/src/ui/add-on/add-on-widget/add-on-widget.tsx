@@ -1,5 +1,6 @@
 'use client'
 
+import { useSearchParams } from 'next/navigation'
 import { Flex } from '@radix-ui/themes'
 import { FormProvider } from 'react-hook-form'
 import {
@@ -24,6 +25,7 @@ interface AddOnWidgetProps {
 
 const AddOnWidget = ({ patientId, initialValue }: AddOnWidgetProps) => {
   const form = useAddOnWidgetForm(initialValue)
+  const appointmentId = useSearchParams().get('id') as string
 
   return (
     <FormProvider {...form}>
@@ -31,7 +33,7 @@ const AddOnWidget = ({ patientId, initialValue }: AddOnWidgetProps) => {
         patientId={patientId}
         widgetId={QuickNoteSectionName.Addon}
         title="Add On"
-        getData={transformOut(patientId)}
+        getData={transformOut(patientId, appointmentId)}
         headerRight={
           <>
             <WidgetHxButton />

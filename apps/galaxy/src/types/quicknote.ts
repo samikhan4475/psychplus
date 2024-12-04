@@ -6,6 +6,7 @@ interface QuickNoteSectionItem {
   sectionItem: string
   sectionItemValue: string
   encounterType?: string
+  isWithOutAppointmentId?: boolean
 }
 
 interface QuickNoteHistory {
@@ -26,6 +27,7 @@ interface QuickNoteDetailsPayload {
   sectionName: string[]
   appointmentId?: number
   isLatest: boolean
+  isWithAppointmentNull?: boolean
 }
 
 export type { QuickNoteSectionItem, QuickNoteHistory, QuickNoteDetailsPayload }

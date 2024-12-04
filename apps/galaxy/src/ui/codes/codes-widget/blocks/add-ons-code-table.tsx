@@ -34,6 +34,9 @@ interface AddonsTableProps {
   isDisabled?: boolean
 }
 const AddonsTable = ({ codes, isDisabled }: AddonsTableProps) => {
+  if (!codes?.length) {
+    return null
+  }
   return (
     <DataTable
       data={codes ?? []}

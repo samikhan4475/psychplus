@@ -1,6 +1,6 @@
 'use client'
 
-import { ComponentType, useEffect, useState } from 'react'
+import { ComponentType, useEffect } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { Box } from '@radix-ui/themes'
 import { FormProvider } from 'react-hook-form'
@@ -19,9 +19,8 @@ import { transformOut } from './data'
 import { VisitProps } from './types'
 import {
   getCptCodeOptions,
-  getDefaultCptCodes,
+  getModifiedCptCodes,
   handleDefaultSubmission,
-  hasInitialValues,
 } from './utils'
 import { OutpatientOffice, Tcm } from './visits'
 
@@ -41,39 +40,44 @@ const CodesWidget = ({
   appointment,
 }: CodesWidgetProps) => {
   const params = useSearchParams()
-  const [dropdownValue, setDropdownValue] = useState('Outpatient Office Visit')
-  const defaultCodes = getDefaultCptCodes(appointment)
   const form = useCodesWidgetForm(initialValues)
-  const handleDropdownChange = (value: string) => {
-    setDropdownValue(value)
-  }
   const VisitComponent = visitsMap?.[params.get('visitType') ?? '']
 
   useEffect(() => {
-    if (!hasInitialValues(initialValues) && defaultCodes?.length) {
-      const mergedValues = { ...initialValues, cptPrimaryCodes: defaultCodes }
-      form.reset(mergedValues)
-      handleDefaultSubmission(patientId, appointmentId, mergedValues)
+    const { isChanged, updatedCodes } = getModifiedCptCodes(
+      initialValues,
+      appointment,
+    )
+    if (isChanged) {
+      form.reset(updatedCodes)
+      handleDefaultSubmission(patientId, appointmentId, updatedCodes)
     }
-  }, [appointmentId, patientId])
+  }, [appointmentId, patientId, initialValues, appointment])
 
-  const { primaryCodeOptions, addOnCodeOptions, cptCodesLookup } =
-    getCptCodeOptions(appointment?.cptPrimaryCodes, appointment?.cptAddonCodes)
-
+  const {
+    primaryCodeOptions,
+    addOnCodeOptions,
+    modifierCodeOptions,
+    cptCodesLookup,
+  } = getCptCodeOptions(
+    appointment?.cptPrimaryCodes,
+    appointment?.cptAddonCodes,
+    appointment?.cptModifiersCodes,
+    initialValues,
+  )
   return (
     <FormProvider {...form}>
       {isCodesHeader && (
         <CodesHeader
           patientId={patientId}
           getData={transformOut(patientId, appointmentId)}
-          onDropdownChange={handleDropdownChange}
         />
       )}
 
       <WidgetFormContainer
         patientId={patientId}
         widgetId={QuickNoteSectionName.QuicknoteSectionCodes}
-        title={isCodesHeader ? `${dropdownValue}` : 'Codes'}
+        title="Codes"
         getData={transformOut(patientId, appointmentId)}
         headerRight={
           <>
@@ -92,6 +96,7 @@ const CodesWidget = ({
             <VisitComponent
               cptPrimaryCodes={primaryCodeOptions}
               cptAddOnsCodes={addOnCodeOptions}
+              cptmodifierCodes={modifierCodeOptions}
               appointment={appointment}
               patientId={patientId}
             />

@@ -23,13 +23,10 @@ interface Diagnosis {
   recordStatus: string
 }
 
-interface PrimaryCode {
-  primaryCodes: string
-  isDefault: boolean
-}
-interface AddonCode {
+interface CptCode {
   code: string
-  display: string
+  display?: string
+  isDefault?: boolean
 }
 interface Appointment {
   id: number
@@ -116,9 +113,11 @@ interface Appointment {
   type?: string
   specialistTypeCode?: number
   locationtimzoneId?: string
+  appointmentDateInLocationTimezone: string
   cosigners: Cosigner[]
-  cptPrimaryCodes: PrimaryCode[]
-  cptAddonCodes: AddonCode[]
+  cptPrimaryCodes: CptCode[]
+  cptAddonCodes: CptCode[]
+  cptModifiersCodes: CptCode[]
 }
 
-export { type Appointment, type PaymentType, type PrimaryCode, type AddonCode }
+export { type Appointment, type PaymentType, type CptCode }

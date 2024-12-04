@@ -1,8 +1,10 @@
 import { DateValue } from 'react-aria-components'
-import { QuickNoteSectionItem } from '@/types'
+import { CodesWidgetItem, CptCodeKeys, QuickNoteSectionItem } from '@/types'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { sanitizeFormData } from '@/utils'
+import { manageCodes } from '@/utils/codes'
 import { AddOnWidgetSchemaType } from './add-on-widget-schema'
+import { addOnCodes, cptCodeMap } from './utils'
 
 interface ModalityTransferenceData {
   value: string
@@ -116,14 +118,16 @@ const transformIn = (value: QuickNoteSectionItem[]): AddOnWidgetSchemaType => {
 }
 
 const transformOut =
-  (patientId: string) =>
-  (
+  (patientId: string, appointmentId: string) =>
+  async (
     schema: Record<
       string,
       string | undefined | boolean | ModalityTransferenceData[]
     >,
-  ): QuickNoteSectionItem[] => {
+  ): Promise<QuickNoteSectionItem[]> => {
     const result: QuickNoteSectionItem[] = []
+    const selectedCodes: CodesWidgetItem[] = []
+
     const injectionSectionValue = INJECTION_BLOCK_OPTIONS.every(
       (option) =>
         schema[option] === '' ||
@@ -221,7 +225,27 @@ const transformOut =
       }
     })
 
-    return result
+    Object.entries(cptCodeMap).forEach(([key, value]) => {
+      const schemaKey = schema?.[key]
+      const code =
+        typeof value === 'object'
+          ? value?.[schemaKey as keyof typeof value]
+          : value
+      if (code && schemaKey) {
+        selectedCodes.push({
+          code,
+          key: CptCodeKeys.ADD_ONS_KEY,
+        })
+      }
+    })
+    const codesResult = await manageCodes(
+      patientId,
+      appointmentId,
+      addOnCodes,
+      selectedCodes,
+    )
+
+    return [...result, ...codesResult]
   }
 
 export { transformIn, transformOut }
