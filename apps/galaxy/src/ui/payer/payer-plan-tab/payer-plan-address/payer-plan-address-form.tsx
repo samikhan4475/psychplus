@@ -1,12 +1,24 @@
 'use client'
 
+import { useEffect } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Button, Checkbox, Flex, Text } from '@radix-ui/themes'
+import { Button, Flex, Text } from '@radix-ui/themes'
 import { SaveIcon } from 'lucide-react'
 import { useForm } from 'react-hook-form'
+import toast from 'react-hot-toast'
 import z from 'zod'
-import { AddressFieldsGroup, CheckboxInput, FormContainer } from '@/components'
-import { PayerPlanAddress } from '@/types/payer'
+import {
+  AddressFieldsGroup,
+  CheckboxInput,
+  FormContainer,
+  TextInput,
+} from '@/components'
+import { PayerPlanAddressResponse } from '@/types'
+import { sanitizeFormData } from '@/utils'
+import {
+  addPayerPlanAddressAction,
+  updatePayerPlanAddressAction,
+} from '../../actions'
 
 const addressSchema = z.object({
   address1: z.string().min(1, { message: 'Address is required' }),
@@ -19,23 +31,65 @@ const addressSchema = z.object({
 type SchemaType = z.infer<typeof addressSchema>
 
 interface PayerPlanAddressFormProps {
-  data?: PayerPlanAddress | null
+  data?: PayerPlanAddressResponse | null
+  isEditMode?: boolean
+  payerId?: string
+  onCloseModal: (open: boolean) => void
 }
-const PayerPlanAddressForm = ({ data }: PayerPlanAddressFormProps) => {
+const PayerPlanAddressForm = ({
+  data,
+  isEditMode,
+  payerId,
+  onCloseModal,
+}: PayerPlanAddressFormProps) => {
   const form = useForm<SchemaType>({
     resolver: zodResolver(addressSchema),
     defaultValues: {
-      address1: data?.address1 ?? '',
-      address2: data?.address2 ?? '',
-      city: data?.city ?? '',
-      state: data?.state ?? '',
-      zip: data?.zip ?? '',
-      status: data?.status === 'Active',
+      address1: data?.address?.street1 ?? '',
+      address2: data?.address?.street2 ?? '',
+      city: data?.address?.city ?? '',
+      state: data?.address?.state ?? '',
+      zip: data?.address?.postalCode ?? '',
+      status: data?.recoredStatus === 'Active',
     },
   })
 
+  useEffect(() => {
+    if (isEditMode) {
+      form.setFocus('address2')
+    }
+  }, [])
   const onsubmit = async (formData: SchemaType) => {
-    // #TODO save API
+    const reqPayload: PayerPlanAddressResponse = {
+      id: data?.id ?? '',
+      recoredStatus: formData.status ? 'Active' : 'Inactive',
+      address: {
+        type: data?.address.type ?? 'Business',
+        street1: formData.address1,
+        street2: formData.address2 ?? '',
+        city: formData.city,
+        state: formData.state,
+        postalCode: formData.zip,
+      },
+    }
+
+    const sanitizedPayload = sanitizeFormData(reqPayload)
+    const response = isEditMode
+      ? await updatePayerPlanAddressAction(
+          sanitizedPayload,
+          payerId ?? '',
+          data?.id ?? '',
+        )
+      : await addPayerPlanAddressAction(sanitizedPayload, payerId ?? '')
+    if (response.state === 'error') {
+      toast.error(response.error)
+      return
+    }
+    if (response.state === 'success') {
+      form.reset()
+      toast.success('Record has been saved successfully')
+      onCloseModal(false)
+    }
   }
 
   return (

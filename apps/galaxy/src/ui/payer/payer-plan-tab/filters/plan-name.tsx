@@ -7,7 +7,7 @@ const PlanName = () => {
   return (
     <FormFieldContainer className="flex-row items-center gap-2">
       <FormFieldLabel className="!text-1">Plan</FormFieldLabel>
-      <TextInput field="plan" className="w-full" placeHolder="Name" />
+      <TextInput field="name" className="w-full" placeHolder="Plan Name" />
     </FormFieldContainer>
   )
 }

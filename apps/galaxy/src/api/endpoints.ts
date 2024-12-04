@@ -323,14 +323,32 @@ const GET_ALLERGIES_ENDPOINT = `${API_URL}/api/allergies/actions/search`
 const PATIENT_CARE_TEAM_ENDPOINT = (patientId: string) =>
   `${API_URL}/api/patients/${patientId}/careteam`
 const GET_STAFF_LICENSE = `${API_URL}/api/stafflicenses/actions/search`
-const GET_STAFF_BY_ID = (staffId: number) => `${API_URL}/api/staff/${staffId}`
-
 const GET_LAB_ORDERS = (appointmentId: string) =>
   `${API_URL}/api/appointments/${appointmentId}/laborders/actions/search`
 const GET_SCRIPT_SURE_SESSION_TOKEN = (partnerShortName: string) =>
   `${API_URL}/api/integration/partners/${partnerShortName}/actions/authtoken`
 const GET_SCRIPT_SURE_EXTERNAL_PATIENT_ID = (patientId: string) =>
   `${API_URL}/api/patients/${patientId}/prescriptions/actions/externalpatient/search`
+
+const GET_STAFF_BY_ID = (staffId: number) => `${API_URL}/api/staff/${staffId}`
+const GET_PAYER_PLANS_LIST = `${API_URL}/api/insurance/plans/actions/search`
+const ADD_PAYER_PLAN = (id: string) =>
+  `${API_URL}/api/insurance/payers/${id}/insuranceplans`
+const UPDATE_PAYER_PLAN = (payerId: string, insuranceid: string) =>
+  `${API_URL}/api/insurance/payers/${payerId}/insuranceplans/${insuranceid}`
+const GET_PAYERS = `${API_URL}/api/insurance/payers?includePlans=false&includeInactive=false&includeTest=false&publicViewable=true&offset=0&limit=0`
+const ADD_PAYER = () => `${API_URL}/api/insurance/payers`
+const PAYER_PLAN_BY_ID = (id: string) => `${API_URL}/api/insurance/plans/${id}`
+const GET_PAYER_PLAN_ADDRESS = (id: string) =>
+  `${API_URL}/api/insurance/payers/${id}/addresses`
+const UPDATE_PAYER_PLAN_ADDRESS = (payerId: string, payerAddressId: string) =>
+  `${API_URL}/api/insurance/payers/${payerId}/addresses/${payerAddressId}`
+const ADD_PAYER_PLAN_ADDRESS = (payerId: string) =>
+  `${API_URL}/api/insurance/payers/${payerId}/addresses`
+const DELETE_PAYER_PLAN = (payerId: string, insurancePlanId: string) =>
+  `${API_URL}/api/insurance/payers/${payerId}/insuranceplans/${insurancePlanId}`
+const DELETE_PAYER_PLAN_ADDRESS = (payerId: string, payerAddressId: string) =>
+  `${API_URL}/api/insurance/payers/${payerId}/addresses/${payerAddressId}`
 const GET_DETAILED_NOTE_ENDPOINT = (patientId: string) =>
   `${API_URL}/api/patients/${patientId}/detailednotes/actions/search`
 const GET_STAFF_DEA_ENDPOINT = `${API_URL}/api/staffdea/actions/search`
@@ -518,6 +536,17 @@ export {
   DOWNLOAD_HCFA_FILE_ENDPOINT,
   GET_SCRIPT_SURE_SESSION_TOKEN,
   GET_SCRIPT_SURE_EXTERNAL_PATIENT_ID,
+  GET_PAYER_PLANS_LIST,
+  ADD_PAYER_PLAN,
+  UPDATE_PAYER_PLAN,
+  GET_PAYERS,
+  ADD_PAYER,
+  PAYER_PLAN_BY_ID,
+  GET_PAYER_PLAN_ADDRESS,
+  UPDATE_PAYER_PLAN_ADDRESS,
+  ADD_PAYER_PLAN_ADDRESS,
+  DELETE_PAYER_PLAN,
+  DELETE_PAYER_PLAN_ADDRESS,
   GET_DETAILED_NOTE_ENDPOINT,
   ADD_SCHEDULE_REPORT_ENDPOINT,  
   RUN_SCHEDULE_REPORT_JOB_ENDPOINT,

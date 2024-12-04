@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { Box, Grid, Text } from '@radix-ui/themes'
 import { AddPayerDialog } from '../payer-dialog'
 import { type SchemaType } from '../schema'
@@ -20,6 +21,7 @@ interface PayerPlanFormProps {
 }
 
 const PayerPlanForm = ({ isEditMode }: PayerPlanFormProps) => {
+  const [addingNewPayer, setAddingNewPayer] = useState(false)
   return (
     <>
       <Box className="border-pp-grey  ml-1 mr-1 mt-2 rounded-[4px] border">
@@ -30,8 +32,13 @@ const PayerPlanForm = ({ isEditMode }: PayerPlanFormProps) => {
         </Box>
 
         <Grid columns="2" className="mb-2 mt-2 gap-3 pl-2 pr-2">
-          <PayerSelect />
-          {!isEditMode && <AddPayerDialog />}
+          <PayerSelect
+            isEditMode={isEditMode}
+            addingNewPayer={addingNewPayer}
+          />
+          {!isEditMode && (
+            <AddPayerDialog setAddingNewPayer={setAddingNewPayer} />
+          )}
         </Grid>
       </Box>
 

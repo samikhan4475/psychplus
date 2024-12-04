@@ -1,17 +1,17 @@
 import { ColumnDef } from '@tanstack/react-table'
 import { ColumnHeader, TextCell } from '@/components'
-import { Sort } from '@/types'
-import { PayerPlan } from '@/types/payer'
+import { PayerPlanResponse, Sort } from '@/types'
 import { getSortDir } from '@/utils'
 import { ActionsCell } from './table-cell-action'
+import { TableCellStatus } from './table-column-status'
 
 const columns = (
   sort?: Sort,
   onSort?: (column: string) => void,
-): ColumnDef<PayerPlan>[] => {
+): ColumnDef<PayerPlanResponse>[] => {
   return [
     {
-      id: 'payer',
+      id: 'payerName',
       header: ({ column }) => (
         <ColumnHeader
           label="Payer"
@@ -25,7 +25,7 @@ const columns = (
       cell: ({ row }) => <TextCell>{row.original.payerName}</TextCell>,
     },
     {
-      id: 'plan',
+      id: 'name',
       header: ({ column }) => (
         <ColumnHeader
           label="Plan"
@@ -50,14 +50,14 @@ const columns = (
           }}
         />
       ),
-      cell: ({ row }) => <TextCell>{row.original.payerType}</TextCell>,
+      cell: ({ row }) => <TextCell>{row.original.payerTypeDescription}</TextCell>,
     },
 
     {
-      id: 'payerStatus',
+      id: 'isActive',
       header: ({ column }) => (
         <ColumnHeader
-          label="Payer Status"
+          label="Plan Status"
           sortable
           sortDir={getSortDir(column.id, sort)}
           onClick={() => {
@@ -65,7 +65,7 @@ const columns = (
           }}
         />
       ),
-      cell: ({ row }) => <TextCell>{row.original.payerStatus}</TextCell>,
+      cell: ({ row }) => <TableCellStatus row={row} />,
     },
     {
       id: 'actions',
@@ -75,77 +75,4 @@ const columns = (
   ]
 }
 
-const mockPayerPlans: PayerPlan[] = [
-  {
-    id: '1',
-    payerName: 'Health Insurance Co',
-    payerType: 'Private',
-    payerStatus: 'Active',
-    name: 'Basic Health Plan',
-  },
-  {
-    id: '2',
-    payerName: 'Medicare',
-    payerType: 'Government',
-    payerStatus: 'Active',
-    name: 'Senior Citizen Health Plan',
-  },
-  {
-    id: '3',
-    payerName: 'Blue Shield',
-    payerType: 'Private',
-    payerStatus: 'Inactive',
-    name: 'Comprehensive Coverage',
-  },
-  {
-    id: '4',
-    payerName: 'Medicaid',
-    payerType: 'Government',
-    payerStatus: 'Pending',
-    name: 'Low Income Support Plan',
-  },
-  {
-    id: '5',
-    payerName: 'Employer Health',
-    payerType: 'Employer Sponsored',
-    payerStatus: 'Active',
-    name: 'Employee Basic Plan',
-  },
-  {
-    id: '6',
-    payerName: 'Veterans Health',
-    payerType: 'Government',
-    payerStatus: 'Active',
-    name: 'Veteran Health Benefits',
-  },
-  {
-    id: '7',
-    payerName: 'Family Health Network',
-    payerType: 'Private',
-    payerStatus: 'Inactive',
-    name: 'Family Comprehensive Plan',
-  },
-  {
-    id: '8',
-    payerName: 'State Health Services',
-    payerType: 'State',
-    payerStatus: 'Active',
-    name: 'State Basic Health Plan',
-  },
-  {
-    id: '9',
-    payerName: 'International Health Inc.',
-    payerType: 'Private',
-    payerStatus: 'Pending',
-    name: 'International Travel Plan',
-  },
-  {
-    id: '10',
-    payerName: 'Dental Services Co',
-    payerType: 'Private',
-    payerStatus: 'Active',
-    name: 'Dental Basic Plan',
-  },
-]
-
-export { columns, mockPayerPlans }
+export { columns }

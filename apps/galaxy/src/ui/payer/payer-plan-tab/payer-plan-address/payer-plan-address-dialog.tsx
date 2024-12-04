@@ -1,19 +1,38 @@
 'use client'
 
+import { useState } from 'react'
 import { Pencil1Icon, PlusIcon } from '@radix-ui/react-icons'
 import { Button, Dialog, IconButton } from '@radix-ui/themes'
 import { CloseDialogTrigger } from '@/components/close-dialog-trigger'
-import { PayerPlanAddress } from '@/types/payer'
+import { PayerPlanAddressResponse } from '@/types'
+import { useStore } from '../store'
 import { PayerPlanAddressForm } from './payer-plan-address-form'
 
 interface PayerPlanAddressFormProps {
   isEditMode: boolean
-  data?: PayerPlanAddress | null
+  data?: PayerPlanAddressResponse | null
+  payerId: string
 }
 
-const PayerPlanAddressDialog = ({ isEditMode,data }: PayerPlanAddressFormProps) => {
+const PayerPlanAddressDialog = ({
+  isEditMode,
+  data,
+  payerId,
+}: PayerPlanAddressFormProps) => {
+  const { searchAddress } = useStore((state) => ({
+    searchAddress: state.searchAddress,
+  }))
+  const [open, setOpen] = useState(false)
+
+  const onOpenChange = (open: boolean) => {
+    if (!open) {
+      searchAddress(payerId)
+    }
+    setOpen(open)
+  }
+
   return (
-    <Dialog.Root>
+    <Dialog.Root open={open} onOpenChange={onOpenChange}>
       <Dialog.Trigger>
         {isEditMode ? (
           <IconButton variant="ghost">
@@ -30,7 +49,12 @@ const PayerPlanAddressDialog = ({ isEditMode,data }: PayerPlanAddressFormProps) 
         <Dialog.Title className="font-sans -tracking-[0.25px]">
           {isEditMode ? 'Edit' : 'Add'} Payer Address
         </Dialog.Title>
-        <PayerPlanAddressForm data={data} />
+        <PayerPlanAddressForm
+          data={data}
+          isEditMode={isEditMode}
+          payerId={payerId}
+          onCloseModal={onOpenChange}
+        />
       </Dialog.Content>
     </Dialog.Root>
   )

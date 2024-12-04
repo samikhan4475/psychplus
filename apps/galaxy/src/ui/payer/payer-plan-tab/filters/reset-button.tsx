@@ -2,14 +2,17 @@
 
 import { Button } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
+import { useStore } from '../store'
 import { SchemaType } from './payer-tab-form-filters'
 
 const ResetButton = () => {
+  const { search } = useStore((state) => ({ search: state.search }))
   const form = useFormContext<SchemaType>()
 
   const onClear = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault()
     form.reset()
+    search({})
   }
   return (
     <Button

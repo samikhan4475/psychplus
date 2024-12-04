@@ -1,9 +1,10 @@
 import React from 'react'
 import { Flex } from '@radix-ui/themes'
+import { PayerPlanDialog } from './add-payer-plan-dialog'
 import { PayerListFilterForm } from './filters'
 import { PayerPlanTabHeader } from './payer-plan-tab-header'
 import { PayerPlanListTable } from './table'
-import { PayerPlanDialog } from './add-payer-plan-dialog'
+import { PayerPlanTablePagination } from './table/payer-table-pagination'
 
 const PayerPlanTabView = () => {
   return (
@@ -14,6 +15,7 @@ const PayerPlanTabView = () => {
       <Flex direction="column" gap="1" className="bg-white w-full py-1">
         <PayerListFilterForm />
         <PayerPlanListTable />
+        <PayerPlanTablePagination />
       </Flex>
     </Flex>
   )

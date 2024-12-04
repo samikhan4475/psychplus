@@ -1,19 +1,19 @@
 import { Badge } from '@radix-ui/themes'
 import { Row } from '@tanstack/react-table'
-import { PayerPlanAddressResponse } from '@/types'
+import { PayerPlanResponse } from '@/types'
 
 interface StatusCellProps {
-  row: Row<PayerPlanAddressResponse>
+  row: Row<PayerPlanResponse>
 }
 
 const TableCellStatus = ({ row }: StatusCellProps) => {
   return (
     <Badge
-      color={row.original.recoredStatus === 'Active' ? 'green' : 'red'}
+      color={row.original.isActive ? 'green' : 'red'}
       size="1"
       className="rounded-1 font-regular"
     >
-      {row.original.recoredStatus === 'Active' ? 'Active' : 'Inactive'}
+      {row.original.isActive ? 'Active' : 'Inactive'}
     </Badge>
   )
 }

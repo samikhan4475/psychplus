@@ -3,20 +3,26 @@
 import * as Tabs from '@radix-ui/react-tabs'
 import { Box, Flex } from '@radix-ui/themes'
 import { TabsTrigger } from '@/components'
+import { EdiTabView } from '../clearing-house/edi-tab'
 import { PayerPlanTabView } from './payer-plan-tab'
 import { EditPayerPlanDetail } from './payer-plan-tab/edit-payer-plan/edit-payer-plan-detail'
 import { useStore } from './store'
 import { PayerTabs } from './types'
 
 const PayerTabView = () => {
-  const { activeTab, setActiveTab, closeTab, closeableTabs } = useStore(
-    (state) => ({
-      closeableTabs: Array.from(state.closeableTabs),
-      activeTab: state.activeTab,
-      setActiveTab: state.setActiveTab,
-      closeTab: state.closeTab,
-    }),
-  )
+  const {
+    activeTab,
+    setActiveTab,
+    closeTab,
+    closeableTabs,
+    selectPayerPlanId,
+  } = useStore((state) => ({
+    closeableTabs: Array.from(state.closeableTabs),
+    activeTab: state.activeTab,
+    setActiveTab: state.setActiveTab,
+    closeTab: state.closeTab,
+    selectPayerPlanId: state.selectPayerPlanId,
+  }))
   const tabId = activeTab?.split('#')[1]
   return (
     <Box className="flex-1 px-1 pt-1">
@@ -34,9 +40,7 @@ const PayerTabView = () => {
               {PayerTabs.PayerType}
             </TabsTrigger>
             <TabsTrigger value={PayerTabs.Plan}>{PayerTabs.Plan}</TabsTrigger>
-            <TabsTrigger value={PayerTabs.MasterFeeSchedule}>
-              {PayerTabs.MasterFeeSchedule}
-            </TabsTrigger>
+            <TabsTrigger value={PayerTabs.EDI}>{PayerTabs.EDI}</TabsTrigger>
             {closeableTabs.map((tab) => (
               <TabsTrigger onClose={() => closeTab(tab)} key={tab} value={tab}>
                 {tab.replace('#', '')}
@@ -50,11 +54,11 @@ const PayerTabView = () => {
         <TabsContent value={PayerTabs.Plan}>
           <PayerPlanTabView />
         </TabsContent>
-        <TabsContent value={PayerTabs.MasterFeeSchedule}>
-          MasterFeeSchedule
+        <TabsContent value={PayerTabs.EDI}>
+          <EdiTabView />
         </TabsContent>
         <TabsContent value={`${PayerTabs.PlanDetails}${tabId}`}>
-          <EditPayerPlanDetail />
+          <EditPayerPlanDetail selectPayerPlanId={selectPayerPlanId} />
         </TabsContent>
       </Tabs.Root>
     </Box>

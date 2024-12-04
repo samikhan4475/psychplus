@@ -1,25 +1,53 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Grid } from '@radix-ui/themes'
 import { useForm } from 'react-hook-form'
+import toast from 'react-hot-toast'
 import z from 'zod'
 import { FormContainer } from '@/components'
+import { AddPayer } from '@/types'
+import { sanitizeFormData } from '@/utils'
+import { addPayerAction } from '../../actions'
 import { PayerName } from './payer-name-input'
 import { SubmitFormButton } from './submit-button'
 
+interface AddPayerFormProps {
+  onCloseModal: (open: boolean) => void
+  setAddingNewPayer: (open: boolean) => void
+}
+
 const schema = z.object({
   id: z.string().optional(),
-  name: z.string(),
+  payername: z.string().min(1, 'Required'),
 })
-type SchemaType = z.infer<typeof schema>
+type PayerFormSchemaType = z.infer<typeof schema>
 
-const PayerForm = () => {
-  const form = useForm<SchemaType>({
+const PayerForm = ({ onCloseModal, setAddingNewPayer }: AddPayerFormProps) => {
+  const form = useForm<PayerFormSchemaType>({
     resolver: zodResolver(schema),
     defaultValues: {},
   })
 
-  const onsubmit = async (formData: SchemaType) => {
-    // #TODO save api
+  const onsubmit = async (formData: PayerFormSchemaType) => {
+    setAddingNewPayer(true)
+    const reqPayload: Partial<AddPayer> = {
+      ...formData,
+      name: formData.payername,
+    }
+
+    const sanitizedPayload = sanitizeFormData(reqPayload)
+    const response = await addPayerAction(sanitizedPayload)
+
+    if (response.state === 'error') {
+      setAddingNewPayer(false)
+      toast.error(response.error)
+      return
+    }
+    if (response.state === 'success') {
+      onCloseModal(false)
+      form.reset()
+      toast.success('Record has been saved successfully')
+      setAddingNewPayer(false)
+    }
   }
 
   return (
@@ -32,4 +60,4 @@ const PayerForm = () => {
   )
 }
 
-export { PayerForm, type SchemaType }
+export { PayerForm, type PayerFormSchemaType }

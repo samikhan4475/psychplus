@@ -3,7 +3,7 @@ enum PayerTabs {
   Payer = 'Payer',
   PayerType = 'Payer Type',
   Plan = 'Plan',
-  MasterFeeSchedule = 'Master Fee Schedule',
+  EDI = 'Ins. Plan EDI',
   PlanDetails = 'Plan#',
 }
 export { PayerTabs }

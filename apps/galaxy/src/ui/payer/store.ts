@@ -7,6 +7,8 @@ interface Store {
   activeTab: Tab
   viewedTabs: Set<Tab>
   closeableTabs: Set<Tab>
+  selectPayerPlanId: string
+  setSelectedPayerPlan: (selectPayerPlanId: string) => void
   setActiveTab: (tab: Tab) => void
   closeTab: (tab: Tab) => void
 }
@@ -44,8 +46,12 @@ const useStore = create<Store>((set, get) => ({
       activeTab: PayerTabs.Plan,
       closeableTabs: updatedCloseableTabs,
       viewedTabs: updatedViewedTabs,
+      selectPayerPlanId: '',
     })
   },
+  selectPayerPlanId: '',
+  setSelectedPayerPlan: (selectPayerPlanId: string) =>
+    set(() => ({ selectPayerPlanId: selectPayerPlanId })),
 }))
 
 export { useStore }

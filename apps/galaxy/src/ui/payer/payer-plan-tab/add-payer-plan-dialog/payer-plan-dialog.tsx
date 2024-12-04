@@ -1,13 +1,19 @@
 'use client'
 
+import { useState } from 'react'
 import { PlusIcon } from '@radix-ui/react-icons'
 import { Button, Dialog } from '@radix-ui/themes'
 import { CloseDialogTrigger } from '@/components/close-dialog-trigger'
 import { AddPayerPlanForm } from './add-payer-plan-form'
 
 const PayerPlanDialog = () => {
+  const [open, setOpen] = useState(false)
+
+  const onOpenChange = (open: boolean) => {
+    setOpen(open)
+  }
   return (
-    <Dialog.Root>
+    <Dialog.Root open={open} onOpenChange={onOpenChange}>
       <Dialog.Trigger>
         <Button size="1" highContrast>
           <PlusIcon /> Add Plan
@@ -18,7 +24,7 @@ const PayerPlanDialog = () => {
         <Dialog.Title className="font-sans -tracking-[0.25px]">
           Add Payer Plan
         </Dialog.Title>
-        <AddPayerPlanForm />
+        <AddPayerPlanForm onCloseModal={onOpenChange} />
       </Dialog.Content>
     </Dialog.Root>
   )

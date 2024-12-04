@@ -1,4 +1,9 @@
-import { CodesetSelect, FormFieldContainer, FormFieldLabel } from '@/components'
+import {
+  CodesetSelect,
+  FormFieldContainer,
+  FormFieldError,
+  FormFieldLabel,
+} from '@/components'
 import { CODESETS } from '@/constants'
 
 const PayerTypeSelect = () => {
@@ -11,6 +16,7 @@ const PayerTypeSelect = () => {
         size="1"
         className="h-full flex-1"
       />
+      <FormFieldError name="payerType" />
     </FormFieldContainer>
   )
 }

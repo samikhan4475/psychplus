@@ -1,22 +1,49 @@
 import z from 'zod'
 
-const payerPlanSchema = z.object({
+const addPayerPlanSchema = z.object({
   id: z.string().optional(),
-  name: z.string(),
-  isTest: z.boolean(),
-  isPublicViewable: z.boolean(),
+  payerId: z.string(),
   payerType: z.string(),
-  payerName: z.string(),
+  name: z.string().min(1, "Required"),
   payerStatus: z.string(),
+  payerName: z.string().optional(),
+  isTest: z.boolean().optional(),
+  isPublicViewable: z.boolean().optional(),
   providerPortalUrl: z.string().optional(),
   claimProcessingPhoneNumber: z.string().optional(),
   credentialOrContractingPhoneNumber: z.string().optional(),
   networkRepresentativeName: z.string().optional(),
   claimProcessingFaxNumber: z.string().optional(),
-  credentialOrContractingEmail: z.string().optional(),
-  networkRepresentativeEmail: z.string().optional(),
+  credentialOrContractingEmail: z.union([z.literal(''), z.string().email("Invalid email format")]).optional(),
+  networkRepresentativeEmail: z.union([z.literal(''), z.string().email("Invalid email format")]).optional(),
+  isActive: z.boolean().optional(),
 })
 
-type SchemaType = z.infer<typeof payerPlanSchema>
+const updatePayerPlanSchema = z.object({
+  id: z.string(),
+  payerId: z.string(),
+  payerType: z.string(),
+  name: z.string().min(1, "Required"),
+  payerStatus: z.string(),
+  payerName: z.string().optional(),
+  isTest: z.boolean().optional(),
+  isPublicViewable: z.boolean().optional(),
+  providerPortalUrl: z.string().optional(),
+  claimProcessingPhoneNumber: z.string().optional(),
+  credentialOrContractingPhoneNumber: z.string().optional(),
+  networkRepresentativeName: z.string().optional(),
+  claimProcessingFaxNumber: z.string().optional(),
+  credentialOrContractingEmail: z.union([z.literal(''), z.string().email("Invalid email format")]).optional(),
+  networkRepresentativeEmail: z.union([z.literal(''), z.string().email("Invalid email format")]).optional(),
+  isActive: z.boolean().optional(),
+})
 
-export { payerPlanSchema, type SchemaType }
+type SchemaType = z.infer<typeof addPayerPlanSchema>
+type UpdatePayerPlanSchemaType = z.infer<typeof updatePayerPlanSchema>
+
+export {
+  addPayerPlanSchema,
+  updatePayerPlanSchema,
+  type SchemaType,
+  type UpdatePayerPlanSchemaType,
+}
