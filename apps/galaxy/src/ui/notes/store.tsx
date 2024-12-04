@@ -1,4 +1,6 @@
 import { create } from 'zustand'
+import { getAppointment } from '@/actions'
+import { Appointment } from '@/types'
 import { getPatientNotesAction, GetPatientNotesParams } from './actions'
 import type { GetPatientNotesResponse } from './types'
 
@@ -7,6 +9,7 @@ interface Store {
   data?: GetPatientNotesResponse
   loading?: boolean
   error?: string
+  appointment?: Appointment
   fetch: (
     payload: GetPatientNotesParams,
     page?: number,
@@ -23,6 +26,7 @@ interface Store {
   setErrorMessage: (value: string) => void
   isErrorAlertOpen: boolean
   setIsErrorAlertOpen: (value: boolean) => void
+  fetchAppointment: (appointmentId: string) => void
 }
 
 const useStore = create<Store>((set, get) => ({
@@ -30,27 +34,21 @@ const useStore = create<Store>((set, get) => ({
   data: undefined,
   loading: true,
   error: undefined,
+  appointment: undefined,
   fetch: async (payload) => {
-    // if (!get().patientId) return
-
     set({
       error: undefined,
       loading: true,
     })
 
-    console.log('🚀 ~ getPatientNotesAction ~ calling:')
-
     const result = await getPatientNotesAction(payload)
 
     if (result.state === 'error') {
-      console.log('🚀 ~ fetch: ~ result.error:', result.error)
       return set({
         error: result.error,
         loading: false,
       })
     }
-
-    console.log('🚀 ~ getPatientNotesAction ~ result.data:', result.data)
 
     set({
       data: result.data,
@@ -68,6 +66,27 @@ const useStore = create<Store>((set, get) => ({
   setErrorMessage: (errorMessage) => set({ errorMessage }),
   isErrorAlertOpen: false,
   setIsErrorAlertOpen: (isErrorAlertOpen) => set({ isErrorAlertOpen }),
+
+  fetchAppointment: async (appointmentId: string) => {
+    set({
+      error: undefined,
+      loading: true,
+    })
+
+    const appointment = await getAppointment(appointmentId)
+
+    if (appointment.state === 'error') {
+      return set({
+        error: appointment.error,
+        loading: false,
+      })
+    }
+
+    set({
+      appointment: appointment.data,
+      loading: false,
+    })
+  },
 }))
 
 export { useStore }

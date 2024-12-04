@@ -1,17 +1,27 @@
 'use client'
 
 import { Flex } from '@radix-ui/themes'
-import { FormFieldError, FormFieldLabel, SelectInput } from '@/components'
+import { getProvidersOptionsAction } from '@/actions'
+import {
+  AsyncSelect,
+  FormFieldError,
+  FormFieldLabel,
+  SelectInput,
+} from '@/components'
+import { Appointment } from '@/types'
 
-const CosignerDropdown = () => {
+const CosignerDropdown = ({ appointment }: { appointment?: Appointment }) => {
   return (
     <Flex direction="column" className={'w-full gap-0.5'}>
       <FormFieldLabel className="text-1 leading-[16px]">
         Cosigner
       </FormFieldLabel>
-      <SelectInput
+      <AsyncSelect
         field="cosigner"
         placeholder="Select Cosigner"
+        fetchOptions={() =>
+          getProvidersOptionsAction(appointment?.providerType)
+        }
         buttonClassName={buttonClassName}
       />
       <FormFieldError name="cosigner" />

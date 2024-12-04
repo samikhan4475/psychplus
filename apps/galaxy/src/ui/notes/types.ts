@@ -1,4 +1,5 @@
 import { type Row } from '@tanstack/react-table'
+import { DateValue } from 'react-aria-components'
 import { Metadata } from '@/types'
 
 interface PatientNotes {
@@ -26,6 +27,39 @@ interface PatientNotes {
   signedByUserId: number
   signedByUserName: number
   serviceOffered: string
+}
+
+export type PayloadType = {
+  date: DateValue
+  time: string
+  visitType: string
+  visitTitle: string
+  description: string
+  cosigner: string
+  provider: string
+}
+
+interface EncounterSignedNoteDetail {
+  sectionName: string
+  sectionItem: string
+  sectionItemValue: string
+}
+
+interface NoteObject {
+  patientId: string
+  appointmentId: string | null
+  signedByUserId: string
+  noteType: string
+  noteTitle?: string
+  coSignedByUserId?: string
+  signedDate?: string
+  encounterSignedNoteDetails: EncounterSignedNoteDetail[]
+}
+
+export interface CreateSignNoteParams {
+  patientId: string
+  appointmentId: string | null
+  payload: NoteObject
 }
 
 type PatientNoteRow = Row<PatientNotes>

@@ -80,6 +80,7 @@ interface Appointment {
   locationId: string
   locationName: string
   locationTimezoneId: string
+  physicianStaffId?: string
   unitResource: {
     id: string
     metadata: Metadata

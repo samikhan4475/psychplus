@@ -1,27 +1,28 @@
 'use client'
 
+import { useEffect } from 'react'
+import { useParams, useSearchParams } from 'next/navigation'
 import { Box, Flex } from '@radix-ui/themes'
 import { DatePickerInput } from '@/components'
+import { useStore } from '../store'
 import { CosignerDropdown } from './cosigner.dropdown'
 import { CreateNoteForm } from './create-note-form'
 import { CreateNoteHeader } from './create-note-header'
 import { DescriptionTextArea } from './description-textarea'
+import { NoteTitleDropdown } from './note-title-dropdown'
+import { NoteTypeDropdown } from './note-type-dropdown'
 import { ProviderDropdown } from './provider.dropdown'
 import { TimeInput } from './time-input'
-import { VisitTitleDropdown } from './visit-title-dropdown'
-import { VisitTypeDropdown } from './visit-type-dropdown'
 
 const CreateNoteView = () => {
   return (
     <CreateNoteForm>
       <CreateNoteHeader />
       <Flex align={'start'} gap={'2'} p={'2'} className="bg-white shadow-2">
-        <Box className="max-w-[88px]">
-          <DatePickerInput label="Date" field="date" />
-        </Box>
+        <DatePickerInput label="Date" field="date" className="max-w-[101px]" />
         <TimeInput />
-        <VisitTypeDropdown />
-        <VisitTitleDropdown />
+        <NoteTypeDropdown />
+        <NoteTitleDropdown />
         <ProviderDropdown />
         <CosignerDropdown />
       </Flex>

@@ -236,6 +236,8 @@ const UPDATE_PATIENT_DRIVING_LICENSE_IMAGE_ENDPOINT = (
 ) => `${API_URL}/api/patients/${patientId}/driverslicenseimage/${side}`
 const GET_PATIENT_MEDICATIONS = () =>
   `${API_URL}/api/prescriptions/actions/search`
+const NOTE_UPLOAD_FILE = (patientId: string, appointmentId: string | null) =>
+  `${API_URL}/api/patients/${patientId}/appointments/${appointmentId}/documents`
 const GET_ORGANIZATION_ROLES = `${API_URL}/api/organizations/actions/search`
 const GET_PATIENT_UNPAID_APPOINTMENTS_ENDPOINT = (
   patientId: string,
@@ -319,6 +321,11 @@ const UPDATE_PATIENT_RELATIONSHIP_ENDPOINT = (
   patientId: number,
   relationshipId: string,
 ) => `${API_URL}/api/patients/${patientId}/relationships/${relationshipId}`
+const CREATE_NOTE_ENDPOINT = (
+  patientId: string,
+  appointmentId: string | null,
+) =>
+  `${API_URL}/api/patients/${patientId}/encounters/${appointmentId}/secondarynotes?errormark=true`
 const GET_ALLERGIES_ENDPOINT = `${API_URL}/api/allergies/actions/search`
 const PATIENT_CARE_TEAM_ENDPOINT = (patientId: string) =>
   `${API_URL}/api/patients/${patientId}/careteam`
@@ -356,6 +363,7 @@ const GET_STAFF_LICENSE_HISTORY_ENDPOINT = `${API_URL}/api/staffdea/history/acti
 const ADD_SCHEDULE_REPORT_ENDPOINT = `${API_URL}/api/reporting/schedules`
 const RUN_SCHEDULE_REPORT_JOB_ENDPOINT = `${API_URL}/api/jobmanager/jobs`
 export {
+  NOTE_UPLOAD_FILE,
   USER_ENDPOINT,
   REFRESH_ENDPOINT,
   GET_CLAIM_SUBMISSION_LIST,
@@ -548,6 +556,7 @@ export {
   DELETE_PAYER_PLAN,
   DELETE_PAYER_PLAN_ADDRESS,
   GET_DETAILED_NOTE_ENDPOINT,
-  ADD_SCHEDULE_REPORT_ENDPOINT,  
+  ADD_SCHEDULE_REPORT_ENDPOINT,
   RUN_SCHEDULE_REPORT_JOB_ENDPOINT,
+  CREATE_NOTE_ENDPOINT,
 }

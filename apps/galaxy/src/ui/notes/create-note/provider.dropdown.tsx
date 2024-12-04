@@ -2,16 +2,29 @@
 
 import { Flex } from '@radix-ui/themes'
 import { FormFieldError, FormFieldLabel, SelectInput } from '@/components'
+import { useStore } from '../store'
 
 const ProviderDropdown = () => {
+  const { appointment } = useStore()
+
+  const options = [
+    {
+      label: appointment?.providerName as string,
+      value: appointment?.physicianStaffId as string,
+    },
+  ]
+
   return (
     <Flex direction="column" gap="1" className={'w-full gap-0.5'}>
       <FormFieldLabel className="text-1 leading-[16px]">
-        Visit Title
+        Provider
       </FormFieldLabel>
       <SelectInput
+        placeholder=""
         field="provider"
-        placeholder="Select Provider"
+        options={options}
+        value={appointment?.physicianStaffId as string}
+        disabled
         buttonClassName={buttonClassName}
       />
       <FormFieldError name="provider" />

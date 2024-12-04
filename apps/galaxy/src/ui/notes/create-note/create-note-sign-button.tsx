@@ -1,9 +1,89 @@
+'use client'
+
+import { useState } from 'react'
+import { useParams, useSearchParams } from 'next/navigation'
 import { Button } from '@radix-ui/themes'
 import { PenLineIcon } from 'lucide-react'
+import { useFormContext } from 'react-hook-form'
+import toast from 'react-hot-toast'
+import { fileUploadAction } from './action/file-upload-action'
+import { getSignNoteAction } from './action/sign-note-action'
+import { formatDateTime } from './utils'
 
 const CreateNoteSignButton = () => {
+  const [loading, setLoading] = useState(false)
+  const { getValues } = useFormContext()
+  const searchParams = useSearchParams()
+  const patientId = useParams().id as string
+  const appointmentId = searchParams.get('id')
+
+  const handleSign = async () => {
+    setLoading(true)
+    const data = getValues()
+
+    const formattedDateTime = formatDateTime(data)
+
+    const payload = {
+      patientId: patientId,
+      appointmentId: appointmentId,
+      signedByUserId: data.provider,
+      noteType: data.noteType,
+      noteTitle: data.noteTitle,
+      coSignedByUserId: data.cosigner,
+      signedDate: formattedDateTime,
+      encounterSignedNoteDetails: [
+        {
+          sectionName: 'CreateNote',
+          sectionItem: 'CreateNote',
+          sectionItemValue: data.description || '',
+        },
+      ],
+    }
+
+    const result = await getSignNoteAction({
+      patientId,
+      appointmentId,
+      payload,
+    })
+
+    if (result.state === 'success') {
+      if (data.file) {
+        const formData = new FormData()
+
+        formData.append('files', data.file)
+        formData.append('documentType', 'Secondary')
+        formData.append('patientId', patientId)
+        formData.append('appointmentId', appointmentId as string)
+
+        const fileUploadResult = await fileUploadAction({
+          data: formData,
+          patientId: patientId,
+          appointmentId: appointmentId,
+        })
+
+        if (fileUploadResult.state !== 'success') {
+          toast.error(`Error uploading file: ${fileUploadResult.error}`)
+          setLoading(false)
+          return
+        }
+      }
+
+      toast.success('Signed')
+      setLoading(false)
+    } else {
+      toast.error('Failed to signed')
+      setLoading(false)
+    }
+  }
+
   return (
-    <Button size="1" highContrast type="button">
+    <Button
+      size="1"
+      highContrast
+      type="button"
+      onClick={handleSign}
+      disabled={loading}
+    >
       <PenLineIcon height={14} width={14} strokeWidth={2} />
       Sign
     </Button>
