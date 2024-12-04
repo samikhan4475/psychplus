@@ -8,7 +8,7 @@ const ManagementLayout = ({ children }: React.PropsWithChildren) => {
       <Flex gap="3" px="2" className="flex-1 overflow-auto">
         <ManagementNavigation />
         <ScrollArea className="flex-1">
-          <Flex className="flex-1" mb="4">
+          <Flex className="flex-1 h-full" mb="4">
             {children}
           </Flex>
         </ScrollArea>

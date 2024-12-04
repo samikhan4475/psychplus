@@ -49,7 +49,7 @@ const ReportExportButtons = () => {
   };
 
   return (
-    <Flex justify="end" gap="2" mt="2" px="2">
+    <Flex className='bg-pp-bg-table-cell' justify="end" gap="2" mt="2" px="2">
       <ExportPdfButton onClick={() => handleExport(REPORT_TYPE.PDF)} loading={loadingPDF}/>
       <ExportCsvButton onClick={() => handleExport(REPORT_TYPE.CSV)} loading={loadingCSV} />
     </Flex>

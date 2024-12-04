@@ -137,7 +137,7 @@ const DynamicTemplateFilters = () => {
   return (
     <>
       <FormContainer form={form} onSubmit={onSubmit}>
-        <Flex direction="row" align="center" className="flex-wrap gap-2 bg-white px-2 py-2 mt-1">
+        <Flex direction="row" align="center" className="flex-wrap gap-2 bg-white px-2 py-2 mt-1 shadow-light-08">
           {sortedParameters.map((item, i) => {
             const { isString, isDate, isSelect, isMultiple } = getFieldTypes(item.parameterCode);
             return (

@@ -10,7 +10,7 @@ const TemplateTitleHeader = () => {
 
   return (
     <>
-      <Flex className="bg-white h-[32px]" align="center" justify="between">
+      <Flex className="bg-white h-[32px] shadow-light-gray-08" align="center" justify="between">
         <Text className="px-2" weight="medium">
           {selectedTemplate?.displayName || 'No template selected'}
         </Text>

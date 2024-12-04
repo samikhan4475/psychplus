@@ -12,7 +12,7 @@ type ExpandedSidebarProps = {
 };
 
 const ExpandedSidebar = ({ toggleSidebar }: ExpandedSidebarProps) => {
-  const { setSelectedTemplate, templates, selectedReport, selectedTemplate,setGeneratedReport } = useStore();
+  const { setSelectedTemplate, templates, selectedReport, selectedTemplate, setGeneratedReport } = useStore();
 
   const filteredTemplates = templates.filter(
     (template) => template.reportCategoryCode === selectedReport?.code
@@ -24,17 +24,17 @@ const ExpandedSidebar = ({ toggleSidebar }: ExpandedSidebarProps) => {
   };
 
   return (
-    <Box className="w-[224px] transition-all duration-300 bg-white relative">
-      <Flex
-        justify="center"
-        align="center"
-        onClick={toggleSidebar}
-        className="absolute right-[-4px] top-[16px] z-50 h-[20px] w-[20px] cursor-pointer justify-center rounded-full border border-pp-black-3/30 bg-white shadow-light-08"
-      >
-        <ChevronLeftIcon />
-      </Flex>
+    <Box className="w-[224px] transition-all duration-300 relative bg-white">
+      <ScrollArea className='md:h-[80vh] xl:h-full'>
+        <Flex
+          justify="center"
+          align="center"
+          onClick={toggleSidebar}
+          className="absolute right-[-4px] top-[16px] z-50 h-[20px] w-[20px] cursor-pointer justify-center rounded-full border border-pp-black-3/30 bg-white shadow-light-08"
+        >
+          <ChevronLeftIcon />
+        </Flex>
 
-      <ScrollArea className='h-[600px] bg-white'>
         <Flex direction="column" className="p-2 gap-1">
           <Flex align="center" className="my-2">
             <MedicalReportIcon />

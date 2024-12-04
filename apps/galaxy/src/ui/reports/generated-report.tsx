@@ -29,14 +29,10 @@ const GeneratedReport = () => {
   const { headers, data } = parseGeneratedReport(generatedReport);
   const columns = generateColumns(headers);
   return (
-    <Box className="mt-1 w-full h-[82%] overflow-hidden bg-white">
-      <Box className="rounded-1 p-1">
-        <ScrollArea className="max-h-[470px]">
-          <Box className="bg-white max-w-full">
-            <DataTable columns={columns} data={data} sticky disablePagination />
-          </Box>
-        </ScrollArea>
-      </Box>
+    <Box className="mt-1 w-full md:h-[60vh] lg:h-[67vh] xl:h-[78vh] ">
+      <ScrollArea className="rounded-1 p-1 bg-white mb-0">
+        <DataTable columns={columns} data={data} sticky disablePagination />
+      </ScrollArea>
     </Box>
   );
 };
