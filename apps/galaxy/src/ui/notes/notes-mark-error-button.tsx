@@ -2,34 +2,45 @@
 
 import { Button } from '@radix-ui/themes'
 import { WarningIcon } from '@/components/icons'
+import { useCosignDialog } from './hooks'
+import { MarkErrorDialog } from './mark-error-dialog'
 import { useStore } from './store'
 
 const NotesMarkErrorButton = () => {
-  const { selectedRows, setErrorMessage, setIsErrorAlertOpen } = useStore(
+  const { isOpen, closeDialog, openDialog } = useCosignDialog()
+
+  const { selectedRow, setErrorMessage, setIsErrorAlertOpen } = useStore(
     (state) => ({
+      selectedRow: state.selectedRow,
       setErrorMessage: state.setErrorMessage,
       setIsErrorAlertOpen: state.setIsErrorAlertOpen,
-      selectedRows: state.selectedRows,
     }),
   )
-
   const handleClick = () => {
-    if (!selectedRows.length) {
+    if (!selectedRow) {
       setIsErrorAlertOpen(true)
-      setErrorMessage('Please select one note to click this button')
+      setErrorMessage('Please select note to click this button')
+      return
     }
+    openDialog()
   }
+
   return (
-    <Button
-      variant="outline"
-      color="gray"
-      size="1"
-      className="text-black"
-      onClick={handleClick}
-    >
-      <WarningIcon width={16} height={16} />
-      Mark as Error
-    </Button>
+    <>
+      <Button
+        variant="outline"
+        color="gray"
+        size="1"
+        className="text-black"
+        onClick={handleClick}
+      >
+        <WarningIcon width={16} height={16} />
+        Mark as Error
+      </Button>
+      {isOpen && (
+        <MarkErrorDialog isOpen={isOpen} removecloseDialog={closeDialog} />
+      )}
+    </>
   )
 }
 

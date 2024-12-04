@@ -6,15 +6,15 @@ import { useStore } from './store'
 
 const NotesSendCosignerButton = () => {
   const { isOpen, closeDialog, openDialog } = useCosignDialog()
-  const { selectedRows, setErrorMessage, setIsErrorAlertOpen } = useStore(
+  const { setErrorMessage, setIsErrorAlertOpen, selectedRow } = useStore(
     (state) => ({
       setErrorMessage: state.setErrorMessage,
       setIsErrorAlertOpen: state.setIsErrorAlertOpen,
-      selectedRows: state.selectedRows,
+      selectedRow: state.selectedRow,
     }),
   )
   const handleClick = () => {
-    if (!selectedRows.length) {
+    if (!selectedRow) {
       setIsErrorAlertOpen(true)
       setErrorMessage('Please select one note to click this button')
       return

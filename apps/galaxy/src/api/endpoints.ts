@@ -43,6 +43,17 @@ const STANDARD_CODESET_ENDPOINT = (
 const METADATA_CODESET_ENDPOINT = (name: string) =>
   `${API_URL}/api/metadata/codesets/${name}`
 const GET_STAFF_ENDPOINT = `${API_URL}/api/staff/search`
+const GET_APPOINTMENT_COSIGNERS_ENDPOINT = (appointmentId: number) =>
+  `${API_URL}/api/appointments/${appointmentId}?isIncludeCosigners=true`
+
+
+const NOTE_MARK_ERROR_ENDPOINT = (
+  appointmentId?: string,
+  noteId?: string,
+  patientId?: string,
+) =>
+  `${API_URL}/api/patients/${patientId}/encounters/${appointmentId}/notes/${noteId}/actions/markerror`
+
 const GET_CLINICS_ENDPOINT = `${API_URL}/api/clinics`
 const GET_PROVIDERS_ENDPOINT = `${API_URL}/api/staff/search`
 const GET_VISIT_TYPE_ENDPOINT = `${API_URL}/api/encounters/actions/search`
@@ -362,6 +373,14 @@ const GET_STAFF_DEA_ENDPOINT = `${API_URL}/api/staffdea/actions/search`
 const GET_STAFF_LICENSE_HISTORY_ENDPOINT = `${API_URL}/api/staffdea/history/actions/search`
 const ADD_SCHEDULE_REPORT_ENDPOINT = `${API_URL}/api/reporting/schedules`
 const RUN_SCHEDULE_REPORT_JOB_ENDPOINT = `${API_URL}/api/jobmanager/jobs`
+const SENT_TO_COSIGNER_NOTE_ENDPOINT = (
+  patientId: string,
+  appointmentId?: string,
+  noteId?: string,
+  staffId?: number,
+) =>
+  `${API_URL}/api/patients/${patientId}/encounters/${appointmentId}/notes/${noteId}/cosigners/${staffId}/actions/replace`
+
 export {
   NOTE_UPLOAD_FILE,
   USER_ENDPOINT,
@@ -383,6 +402,7 @@ export {
   STATES_BY_COUNTRY_ENDPOINT,
   ADD_VACATION,
   GET_PATIENT_NOTIFICATIONS_ENDPOINT,
+  SENT_TO_COSIGNER_NOTE_ENDPOINT,
   PATIENT_PROFILE_ENDPOINT,
   NOTE_DETAILS_SEARCH_ENDPOINT,
   NOTE_DETAILS_HISTORY_ENDPOINT,
@@ -559,4 +579,6 @@ export {
   ADD_SCHEDULE_REPORT_ENDPOINT,
   RUN_SCHEDULE_REPORT_JOB_ENDPOINT,
   CREATE_NOTE_ENDPOINT,
+  GET_APPOINTMENT_COSIGNERS_ENDPOINT,
+  NOTE_MARK_ERROR_ENDPOINT,
 }

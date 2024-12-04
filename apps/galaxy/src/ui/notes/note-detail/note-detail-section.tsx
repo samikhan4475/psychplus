@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react'
 import { Box, Flex, Heading, Text } from '@radix-ui/themes'
 import { NoteIcon } from '@/components/icons/note-icon'
+import { NotesMarkErrorButton } from '../notes-mark-error-button'
 import { NotesPrintButton } from '../notes-print-button'
+import { NotesRemoveConsignerButton } from '../notes-remove-cosigner-button'
+import { NotesSendCosignerButton } from '../notes-send-consigner-button'
 import { useStore } from '../store'
 import { AddendumButton } from './addendum-button'
 import { AddendumForm } from './addendum-form'
-import { MarkErrorButton } from './mark-error-button'
 import { NoteDetail } from './note-detail'
-import { RemoveConsignerButton } from './remove-cosigner-button'
-import { SignButton } from './send-sign-button'
 
 const NoteDetailsSection = () => {
   const { selectedRow } = useStore((state) => ({
@@ -30,10 +30,10 @@ const NoteDetailsSection = () => {
     >
       <Flex wrap="wrap" className="border-pp-gray-2 gap-2 border-b px-3 py-2.5">
         <Heading className="text-[18px] font-bold">Details</Heading>
-        <SignButton />
-        <MarkErrorButton />
+        <NotesSendCosignerButton />
+        <NotesMarkErrorButton />
         <AddendumButton onClick={() => setAddAddendum(true)} />
-        <RemoveConsignerButton />
+        <NotesRemoveConsignerButton />
         {!!selectedRow && <NotesPrintButton id="note-view-print" />}
       </Flex>
       {selectedRow === undefined ? (
