@@ -25,6 +25,7 @@ import { CheckAllNoConcernCell } from './check-all-no-concern-cell'
 import { transformOut } from './data'
 import { useRosWidgetForm } from './ros-widget-form'
 import { RosWidgetSchemaType } from './ros-widget-schema'
+import { getInitialValues } from './utils'
 
 interface HpiWidgetProps {
   patientId: string
@@ -44,7 +45,7 @@ const RosWidget = ({ patientId, initialValue }: HpiWidgetProps) => {
           <>
             <WidgetTagButton />
             <WidgetHxButton />
-            <WidgetClearButton />
+            <WidgetClearButton defaultInitialValues={getInitialValues} />
             <WidgetSaveButton />
           </>
         }

@@ -1,0 +1,23 @@
+const getInitialValues = () => ({
+  cardiovascular: [],
+  constitutional: [],
+  entMouth: [],
+  eyes: [],
+  respiratory: [],
+  gastrointestinal: [],
+  genitourinary: [],
+  musculoskeletal: [],
+  neuro: [],
+  skin: [],
+  ctOtherDetails: '',
+  entOtherDetails: '',
+  eyesOtherDetails: '',
+  cvsOtherDetails: '',
+  resOtherDetails: '',
+  giOtherDetails: '',
+  guOtherDetails: '',
+  msuOtherDetails: '',
+  sknOtherDetails: '',
+  neuOtherDetails: '',
+})
+export { getInitialValues }

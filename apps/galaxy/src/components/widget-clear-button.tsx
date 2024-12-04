@@ -1,10 +1,16 @@
 'use client'
 
 import { Button } from '@radix-ui/themes'
-import { useFormContext } from 'react-hook-form'
+import { FieldValues, useFormContext } from 'react-hook-form'
 
-const WidgetClearButton = () => {
-  const form = useFormContext()
+interface WidgetClearButtonProps<T extends FieldValues> {
+  defaultInitialValues?: T
+}
+
+const WidgetClearButton = <T extends FieldValues>({
+  defaultInitialValues,
+}: WidgetClearButtonProps<T>) => {
+  const form = useFormContext<T>()
 
   return (
     <Button
@@ -14,7 +20,7 @@ const WidgetClearButton = () => {
       className="text-black"
       onClick={(e) => {
         e.preventDefault()
-        form?.reset()
+        form?.reset(defaultInitialValues)
       }}
     >
       Clear
