@@ -24,11 +24,11 @@ const LINKS = [
     label: 'Insurance',
     Icon: ShieldCheck,
   },
-  // {
-  //   href: '/billing/membership',
-  //   label: 'Membership',
-  //   Icon: CrossIcon,
-  // },
+  {
+    href: '/billing/membership',
+    label: 'Membership',
+    Icon: CrossIcon,
+  },
 ]
 
 const BillingLayout = ({ children }: { children: React.ReactNode }) => (

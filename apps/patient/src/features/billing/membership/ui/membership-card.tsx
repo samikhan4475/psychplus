@@ -55,9 +55,10 @@ const MembershipCard = ({
                   Inactive
                 </Badge>
               </Text>
-              <MembershipBenefitsDialog />
             </Flex>
-            <ActivateMembership user={user} creditCards={creditCards} />
+            <Badge color="blue" className="ml-1">
+              Coming soon
+            </Badge>
           </Flex>
         )}
       </FeatureCard>
