@@ -23,12 +23,12 @@ import {
 import { bookAppointmentAction } from '@/features/appointments/book/actions'
 import { BookSlotButtonProps } from '@/features/appointments/book/types'
 import { isProviderMemberOfCareTeam } from '@/features/appointments/book/utils'
+import { useStore } from '@/features/appointments/search/store'
 import { checkCareTeamExists } from '@/features/appointments/search/utils'
 import { rescheduleAppointment } from '@/features/appointments/upcoming/actions'
 import { NewProviderSelectedDialog } from '../new-provider-selected-dialog'
 import { PrimaryProviderAppointedDialog } from '../primary-provider-appointed-dialog'
 
-import { useStore } from '@/features/appointments/search/store'
 const errorMessage = 'You must agree to the above policies'
 const schema = z.object({
   userAgreed: z.coerce.boolean().refine(
@@ -146,7 +146,7 @@ const BookAppointmentButton = ({
         serviceId: slot.servicesOffered?.[0],
         locationId: clinic.id,
         isSelfPay: paymentMethod === PaymentType.SelfPay,
-        stateCode: stateCode
+        stateCode: stateCode,
       })
 
       if (result.state === 'error') {
@@ -164,7 +164,7 @@ const BookAppointmentButton = ({
         duration: slot.duration,
         serviceId: slot.servicesOffered?.[0],
         isSelfPay: paymentMethod === PaymentType.SelfPay,
-        stateCode: stateCode
+        stateCode: stateCode,
       })
 
       if (result.state === 'error') {

@@ -1,11 +1,13 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { AppointmentType } from '@psychplus-v2/constants'
 import { CareTeamMember, Consent } from '@psychplus-v2/types'
 import { getProviderTypeLabel } from '@psychplus-v2/utils'
 import { Box, Flex, Text } from '@radix-ui/themes'
 import { clickTrack } from '@psychplus/utils/tracking'
+import { useProfileStore } from '@/features/account/profile/store'
 import { useStore } from '@/features/appointments/search/store'
 import { checkCareTeamExists } from '../../utils'
 import { AppointmentSort } from './appointment-sort'
@@ -15,6 +17,7 @@ import {
 } from './availability-list'
 import { ClinicsMapView } from './clinics-map-view'
 import { DaysHeader } from './days-header'
+import { DifferentStateDialog } from './different-state-dialog'
 import { LoadingPlaceholder } from './loading-placeholder'
 import { ProviderCountLabel } from './provider-count-label'
 import { ProviderLanguageFilter } from './provider-language-filter'
@@ -35,6 +38,27 @@ const SearchAppointmentsView = ({
 }: SearchAppointmentsViewProps) => {
   const [hasHydrated, setHasHydrated] = useState(false)
 
+  const [dialogState, setDialogState] = useState<{
+    isOpen: boolean
+    navigation: { queryString: string } | null
+  }>({
+    isOpen: false,
+    navigation: null,
+  })
+
+  const handleDialogClose = () => {
+    setDialogState({ isOpen: false, navigation: null })
+  }
+
+  const handleDialogConfirm = () => {
+    if (dialogState.navigation) {
+      router.push(`book?${dialogState.navigation.queryString}`)
+    }
+    handleDialogClose()
+  }
+
+  const router = useRouter()
+
   const {
     loading,
     search,
@@ -46,6 +70,23 @@ const SearchAppointmentsView = ({
     state,
     setCareTeam,
   } = useStore()
+
+  const { profile } = useProfileStore((state) => ({
+    profile: state.profile,
+  }))
+
+  useEffect(() => {
+    if (!hasHydrated) return
+
+    if (profile?.contactDetails?.addresses?.[0]) {
+      const newZipCode = profile.contactDetails.addresses[0].postalCode
+      const newState = profile.contactDetails.addresses[0].state
+
+      if (newZipCode !== zipCode || newState !== state) {
+        search()
+      }
+    }
+  }, [profile, hasHydrated, search, zipCode, state])
 
   useEffect(() => {
     useStore.persist.rehydrate()
@@ -141,7 +182,10 @@ const SearchAppointmentsView = ({
           <Flex>
             <Flex className="flex-1" direction="column">
               {careTeamExists ? (
-                <PrimaryProviderAvailabilityCard userConsents={userConsents} />
+                <PrimaryProviderAvailabilityCard
+                  userConsents={userConsents}
+                  setShowDifferentStateDialog={setDialogState}
+                />
               ) : null}
 
               {careTeamExists ? (
@@ -154,7 +198,10 @@ const SearchAppointmentsView = ({
                   </Text>
                 </Box>
               ) : null}
-              <AvailabilityList userConsents={userConsents} />
+              <AvailabilityList
+                userConsents={userConsents}
+                setShowDifferentStateDialog={setDialogState}
+              />
             </Flex>
             <ClinicsMapView
               mapKey={mapKey}
@@ -162,6 +209,16 @@ const SearchAppointmentsView = ({
             />
           </Flex>
         </>
+      )}
+      {dialogState.isOpen && (
+        <DifferentStateDialog
+          open={dialogState.isOpen}
+          setOpen={(isOpen) => setDialogState((prev) => ({ ...prev, isOpen }))}
+          onClose={handleDialogClose}
+          onConfirm={handleDialogConfirm}
+          myState={profile?.contactDetails?.addresses?.[0]?.state ?? 'Unknown'}
+          providerState={dialogState.navigation?.queryString ?? 'Unknown'}
+        />
       )}
     </Flex>
   )

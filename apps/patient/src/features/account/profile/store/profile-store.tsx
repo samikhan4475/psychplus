@@ -3,6 +3,7 @@
 import { createContext, useContext, useRef } from 'react'
 import type { PatientProfile } from '@psychplus-v2/types'
 import { create, useStore, type StoreApi } from 'zustand'
+import { persist } from 'zustand/middleware'
 
 const ProfileStoreContext = createContext<StoreApi<ProfileStore> | undefined>(
   undefined,
@@ -13,13 +14,19 @@ interface ProfileStore {
   setProfile: (profile: PatientProfile) => void
 }
 
-const createProfileStore = (profile: PatientProfile) =>
-  create<ProfileStore>((set) => ({
-    profile,
-    setProfile: (profile) => {
-      set({ profile })
-    },
-  }))
+const createProfileStore = (initialProfile: PatientProfile) =>
+  create<ProfileStore>()(
+    persist(
+      (set) => ({
+        profile: initialProfile,
+        setProfile: (profile) => set({ profile }),
+      }),
+      {
+        name: 'profile-storage',
+        getStorage: () => sessionStorage,
+      },
+    ),
+  )
 
 interface ProfileStoreProviderProps {
   profile: PatientProfile

@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import NextLink from 'next/link'
-import { useSearchParams } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { CalendarDate, parseAbsoluteToLocal } from '@internationalized/date'
 import { GlobeIcon } from '@psychplus-v2/components'
 import { AppointmentType } from '@psychplus-v2/constants'
@@ -22,6 +22,7 @@ import {
   FeatureEmpty,
   ProviderAvatar,
 } from '@/components-v2'
+import { useProfileStore } from '@/features/account/profile/store'
 import { useStore } from '@/features/appointments/search/store'
 import type {
   AppointmentAvailability,
@@ -39,12 +40,19 @@ import {
 } from '../../utils'
 import { ClinicSelector } from './clinic-selector'
 
+interface DialogAction {
+  isOpen: boolean
+  navigation: { queryString: string }
+}
+
 interface AvailabilityListProps {
   userConsents: Consent[]
+  setShowDifferentStateDialog: (action: DialogAction) => void
 }
 
 interface PrimaryProviderAvailabilityCardProps {
   userConsents: Consent[]
+  setShowDifferentStateDialog: (action: DialogAction) => void
 }
 
 type RedirectUrlQueryParams = {
@@ -64,6 +72,7 @@ const getNextAvailableDateLabel = (nextSlotDate: CalendarDate) => {
 
 const PrimaryProviderAvailabilityCard = ({
   userConsents,
+  setShowDifferentStateDialog,
 }: PrimaryProviderAvailabilityCardProps) => {
   const data = useSortedFilteredData()
 
@@ -85,11 +94,15 @@ const PrimaryProviderAvailabilityCard = ({
     <ProviderAvailabilityCard
       userConsents={userConsents}
       data={primaryProviderAvailabilityData}
+      setShowDifferentStateDialog={setShowDifferentStateDialog}
     />
   )
 }
 
-const AvailabilityList = ({ userConsents }: AvailabilityListProps) => {
+const AvailabilityList = ({
+  userConsents,
+  setShowDifferentStateDialog,
+}: AvailabilityListProps) => {
   const data = useSortedFilteredData()
 
   const careTeamMember = useStore((state) => state.careTeamMember())
@@ -109,6 +122,7 @@ const AvailabilityList = ({ userConsents }: AvailabilityListProps) => {
           userConsents={userConsents}
           key={availability.specialist.id}
           data={availability}
+          setShowDifferentStateDialog={setShowDifferentStateDialog}
         />
       )
   })
@@ -117,9 +131,11 @@ const AvailabilityList = ({ userConsents }: AvailabilityListProps) => {
 const ProviderAvailabilityCard = ({
   data,
   userConsents,
+  setShowDifferentStateDialog,
 }: {
   userConsents: Consent[]
   data: AppointmentAvailability
+  setShowDifferentStateDialog: (action: DialogAction) => void
 }) => {
   const [selectedClinic, setSelectedClinic] = useState(0)
   const [showMore, setShowMore] = useState(false)
@@ -283,6 +299,9 @@ const ProviderAvailabilityCard = ({
                           clinic={data.clinics[selectedClinic]}
                           specialist={data.specialist}
                           slots={data.allSlotsByDay[getCalendarDateLabel(date)]}
+                          setShowDifferentStateDialog={
+                            setShowDifferentStateDialog
+                          }
                         />
                       ) : (
                         <AppointmentTimeSlots
@@ -294,6 +313,9 @@ const ProviderAvailabilityCard = ({
                             data.clinics[selectedClinic].slotsByDay[
                               getCalendarDateLabel(date)
                             ]
+                          }
+                          setShowDifferentStateDialog={
+                            setShowDifferentStateDialog
                           }
                         />
                       )}
@@ -324,6 +346,7 @@ const AppointmentTimeSlots = ({
   slots,
   userConsents,
   showMore,
+  setShowDifferentStateDialog,
   ...rest
 }: {
   userConsents: Consent[]
@@ -331,10 +354,17 @@ const AppointmentTimeSlots = ({
   specialist: AppointmentSpecialist
   showMore: boolean
   clinic: AppointmentClinic
+  setShowDifferentStateDialog: (action: DialogAction) => void
 }) => {
   const { appointmentType, providerType } = useStore((state) => ({
     appointmentType: state.appointmentType,
     providerType: state.providerType,
+  }))
+
+  const router = useRouter()
+
+  const { profile } = useProfileStore((state) => ({
+    profile: state.profile,
   }))
 
   const searchParams = useSearchParams()
@@ -345,7 +375,10 @@ const AppointmentTimeSlots = ({
 
   const endIndex = showMore ? slots.length : 3
 
-  const getRedirectToPaymentMethodUrl = (slot: AppointmentSlot) => {
+  const handleSlotClick = (slot: AppointmentSlot) => {
+    const profileState = profile.contactDetails.addresses?.[0]?.state
+    const clinicState = rest.clinic.contact.addresses?.[0]?.state
+
     const queryParams: RedirectUrlQueryParams = {
       appointmentId: searchParams.get('appointmentId')?.toString(),
       appointmentType: JSON.stringify(appointmentType).toString(),
@@ -370,26 +403,32 @@ const AppointmentTimeSlots = ({
 
     const queryString = new URLSearchParams(queryParams).toString()
 
-    return `book?${queryString}`
+    if (appointmentType === AppointmentType.InPerson) {
+      if (profileState !== clinicState) {
+        setShowDifferentStateDialog({
+          isOpen: true,
+          navigation: { queryString },
+        })
+        return
+      }
+    }
+
+    router.push(`book?${queryString}`)
   }
 
   return (
     <>
       {slots.slice(0, endIndex).map((slot: AppointmentSlot) => (
-        <NextLink
-          href={getRedirectToPaymentMethodUrl(slot)}
+        <Button
           key={`${slot.startDate}:${slot.duration}`}
-          prefetch={false}
+          variant="outline"
+          highContrast
+          style={{ boxShadow: 'none' }}
+          className="hover:text-white whitespace-nowrap text-[16px] text-[#24366B] outline outline-1 outline-[#b9bbc6] hover:bg-accent-12 hover:outline-accent-12"
+          onClick={() => handleSlotClick(slot)}
         >
-          <Button
-            variant="outline"
-            highContrast
-            style={{ boxShadow: 'none' }}
-            className="hover:text-white whitespace-nowrap text-[16px] text-[#24366B] outline outline-1 outline-[#b9bbc6] hover:bg-accent-12 hover:outline-accent-12"
-          >
-            {getTimeLabel(slot.startDate)}
-          </Button>
-        </NextLink>
+          {getTimeLabel(slot.startDate)}
+        </Button>
       ))}
     </>
   )

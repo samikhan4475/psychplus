@@ -1,5 +1,6 @@
 import { AppointmentType, ProviderType } from '@psychplus-v2/constants'
 import type {
+  Address,
   Clinic,
   ClinicContactDetails,
   LegalName,
@@ -24,12 +25,21 @@ interface AppointmentSlot {
   clinicId?: string
 }
 
+interface ProviderAddress extends Address {
+  type: 'Business' | 'Mailing'
+}
+interface AppointmentContactDetails {
+  addresses: ProviderAddress[]
+  email: string
+}
+
 interface AppointmentSpecialist {
   id: number
   isTest?: boolean
   legalName: LegalName
   spokenLanguages?: string[]
   rating: number
+  contactInfo?: AppointmentContactDetails
 }
 
 interface AppointmentClinic {
@@ -67,6 +77,15 @@ interface AppointmentsSearchApiResponse {
   staffAppointmentAvailabilities: AvailabilityApiResponse[]
 }
 
+interface DifferentStateDialogProps {
+  open: boolean
+  setOpen: (open: boolean) => void
+  onClose: (open: boolean) => void
+  myState: string
+  providerState: string
+  onConfirm?: () => void
+}
+
 export type {
   AppointmentSpecialist,
   CurrentLocation,
@@ -75,4 +94,5 @@ export type {
   AppointmentSlot,
   AppointmentClinic,
   AppointmentsSearchApiResponse,
+  DifferentStateDialogProps,
 }
