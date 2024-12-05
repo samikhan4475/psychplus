@@ -32,7 +32,6 @@ const AimsTab = ({
     <FormProvider {...form}>
       <Flex direction="column" gap=".5rem">
         <WidgetFormContainer
-          enableEvents={false}
           patientId={patientId}
           widgetId={QuestionnaireTabs.AIMS_TAB}
           getData={transformOut(patientId)}

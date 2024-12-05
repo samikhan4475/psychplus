@@ -4,7 +4,7 @@ import { Cross1Icon } from '@radix-ui/react-icons'
 import { Box, Flex, Text } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
 import { FormFieldError } from '@/components'
-import { ICD10Code } from '@/types'
+import { DiagnosisIcd10Code } from '@/types'
 import { ClaimUpdateSchemaType } from '../schema'
 import { SearchDiagnosisInput } from './search-diagnosis-input'
 
@@ -13,7 +13,7 @@ const DiagnosisView = () => {
   const { getValues } = form
   const claimDiagnosis = form.watch('claimDiagnosis')
 
-  const handleSelectedItem = (selectedItem: ICD10Code) => {
+  const handleSelectedItem = (selectedItem: DiagnosisIcd10Code) => {
     const currentDiagnosisList = getValues('claimDiagnosis')
     // check if diag code exist dont add
     const isExist = currentDiagnosisList.some(

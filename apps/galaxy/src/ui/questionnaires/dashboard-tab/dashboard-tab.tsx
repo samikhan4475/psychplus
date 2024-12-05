@@ -3,6 +3,7 @@
 import { Flex } from '@radix-ui/themes'
 import { TabContentHeading } from '@/components'
 import { QuickNoteSectionItem } from '@/types'
+import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { QuestionnaireTabs } from '../constants'
 import { transformIn } from '../shared/data'
 import { QUESTIONS } from './constants'
@@ -10,14 +11,18 @@ import { DashboardTable } from './dashboard-table'
 
 const DashboardTab = ({
   patientId,
-  questionnairesDashboardData,
+  data,
 }: {
   patientId: string
-  questionnairesDashboardData: QuickNoteSectionItem[]
+  data: QuickNoteSectionItem[]
 }) => {
   const totalQuestions = QUESTIONS.length
 
-  const initialValue = transformIn(questionnairesDashboardData, totalQuestions)
+  const initialValue = transformIn(
+    data,
+    totalQuestions,
+    QuickNoteSectionName.QuickNoteSectionDashboard,
+  )
 
   return (
     <>

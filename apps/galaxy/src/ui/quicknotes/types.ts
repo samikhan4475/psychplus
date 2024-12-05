@@ -1,4 +1,4 @@
-import { Appointment } from '@/types'
+import { Appointment, PatientProfile } from '@/types'
 import { QuickNoteSectionName } from './constants'
 
 type WidgetType = {
@@ -7,6 +7,7 @@ type WidgetType = {
     patientId: string
     appointmentId: string
     appointment?: Appointment
+    patient?: PatientProfile
   }>
   id: QuickNoteSectionName
 }

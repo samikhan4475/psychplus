@@ -4,22 +4,21 @@ import { RecommendedDiagnosisView } from './recommended-diagnosis-view'
 import { WorkingDiagnosisView } from './working-diagnosis-view'
 
 interface DiagnosisWidgetProps {
-  patientId: string
   recommended?: boolean
 }
 
-const DiagnosisWidget = ({ patientId, recommended }: DiagnosisWidgetProps) => {
+const DiagnosisWidget = ({ recommended }: DiagnosisWidgetProps) => {
   return (
     <Flex className="bg-whiteA-12" gap="2">
       <Flex width="70%" direction="column">
         <Text className="bg-pp-bg-table-label px-2 py-1 font-bold">
           Working Diagnosis
         </Text>
-        <WorkingDiagnosisView patientId={patientId} />
+        <WorkingDiagnosisView />
         {recommended && <RecommendedDiagnosisView />}
       </Flex>
       <Flex width="30%" direction="column">
-        <FavoriteView patientId={patientId}/>
+        <FavoriteView />
       </Flex>
     </Flex>
   )

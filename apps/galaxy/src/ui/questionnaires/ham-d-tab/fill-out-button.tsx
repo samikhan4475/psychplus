@@ -2,7 +2,7 @@ import { PropsWithChildren } from 'react'
 import { useParams } from 'next/navigation'
 import { QuickNoteSectionItem } from '@/types'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
-import { QuestionnaireTabs } from '../constants'
+import { QuestionnairesTitles, QuestionnaireTabs } from '../constants'
 import {
   FillOutButton,
   FillOutTabsView,
@@ -19,7 +19,7 @@ const FillOutButtonHamD = ({ data }: FillOutButtonHamDProps) => {
   const patientId = useParams().id as string
 
   return (
-    <FillOutButton title="Hamilton Depression Rating Scale (HAM-D)">
+    <FillOutButton title={QuestionnairesTitles['HAM-D']}>
       <FillOutTabsView
         questionnaire={QuickNoteSectionName.QuickNoteSectionHamD}
       >

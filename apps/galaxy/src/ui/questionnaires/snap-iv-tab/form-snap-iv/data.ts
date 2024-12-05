@@ -2,7 +2,7 @@ import { QuickNoteSectionItem } from '@/types'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { SnapIvSchemaType } from '../snap-iv-schema'
 
-const transformIn = (value: QuickNoteSectionItem[]): SnapIvSchemaType => {
+const transformIn = (data: QuickNoteSectionItem[]): SnapIvSchemaType => {
   const result: SnapIvSchemaType = {
     InattentionQ1: '',
     InattentionQ2: '',
@@ -31,6 +31,11 @@ const transformIn = (value: QuickNoteSectionItem[]): SnapIvSchemaType => {
     'Hyperactivity/ImpulsivityQ17': '',
     'Hyperactivity/ImpulsivityQ18': '',
   }
+  const value =
+    data.filter(
+      (item) =>
+        item.sectionName === QuickNoteSectionName.QuickNoteSectionSnapIV,
+    ) || []
   value?.forEach((item: QuickNoteSectionItem) => {
     result[item.sectionItem] = item.sectionItemValue
   })

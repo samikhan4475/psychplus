@@ -1,29 +1,15 @@
 'use server'
 
 import * as api from '@/api'
-import { Metadata } from '@/types'
+import { DiagnosisIcd10Code } from '@/types'
 
-interface ServiceDiagnosisData {
-  description: string
-  code: string
-  id: string
-  isFavorite: boolean
-  isActive: boolean
-  metadata: Metadata
-}
-
-interface GetServiceDiagnosisResponse {
-  serviceDiagnosisData: ServiceDiagnosisData[]
-}
-
-const getServiceDiagnosis = async (
-  value: string,
-): Promise<api.ActionResult<GetServiceDiagnosisResponse>> => {
-  const response = await api.POST<ServiceDiagnosisData[]>(
-    api.SERVICE_DIAGNOSIS_SEARCH_ENDPOINT,
-    {
-      CodeOrDescription: value,
-    },
+const getIcd10Diagnosis = async (payload: {
+  CodeOrDescription?: string
+  DiagnosisCodes?: string[]
+}): Promise<api.ActionResult<DiagnosisIcd10Code[]>> => {
+  const response = await api.POST<DiagnosisIcd10Code[]>(
+    api.DIAGNOSIS_SEARCH_ICD10CODES_ENDPOINT,
+    payload,
   )
 
   if (response.state === 'error') {
@@ -35,10 +21,8 @@ const getServiceDiagnosis = async (
 
   return {
     state: 'success',
-    data: {
-      serviceDiagnosisData: response.data,
-    },
+    data: response.data,
   }
 }
 
-export { getServiceDiagnosis }
+export { getIcd10Diagnosis }

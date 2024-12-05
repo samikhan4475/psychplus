@@ -2,7 +2,7 @@ import { PropsWithChildren } from 'react'
 import { useParams } from 'next/navigation'
 import { QuickNoteSectionItem } from '@/types'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
-import { QuestionnaireTabs } from '../constants'
+import { QuestionnairesTitles, QuestionnaireTabs } from '../constants'
 import {
   FillOutButton,
   FillOutTabsView,
@@ -18,7 +18,7 @@ const FillOutButtonPcl5 = ({ data }: FillOutButtonPcl5Props) => {
   const patientId = useParams().id as string
 
   return (
-    <FillOutButton title="Posttraumatic Stress Disorder Checklist (PCL-5)">
+    <FillOutButton title={QuestionnairesTitles['PCL-5']}>
       <FillOutTabsView
         questionnaire={QuickNoteSectionName.QuickNoteSectionPcl5}
       >

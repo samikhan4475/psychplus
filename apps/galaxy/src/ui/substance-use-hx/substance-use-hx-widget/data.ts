@@ -12,7 +12,7 @@ import { SubstanceUseHxWidgetSchemaType } from './substance-use-hx-schema'
 import { cptCodeMap, substanceCptCodes } from './utils'
 
 const transformIn = (
-  value: QuickNoteSectionItem[],
+  list: QuickNoteSectionItem[],
 ): SubstanceUseHxWidgetSchemaType => {
   const result: Record<
     string,
@@ -47,6 +47,11 @@ const transformIn = (
     otherAlcoholDrugs: undefined,
   }
 
+  const value = list.filter(
+    (item) =>
+      item.sectionName === QuickNoteSectionName.QuickNoteSectionSubstanceUseHx,
+  )
+
   value.forEach((item) => {
     const key = item.sectionItem
     const itemValue = item.sectionItemValue
@@ -54,6 +59,8 @@ const transformIn = (
     if (key === 'referralTreatment') {
       const list = itemValue.split(',')
       result[key] = list || []
+    } else if (key === 'briefIntervention') {
+      result[key] = itemValue === 'true' ? true : false
     } else if (key === 'widgetContainerCheckboxField') {
       result[key] = itemValue
     } else if (TOBACCO_DRUGS_ALCOHOL_QUESTIONNAIRE.includes(key)) {
@@ -62,7 +69,7 @@ const transformIn = (
       result[key] = itemValue
     } else if (DRUGS_OPTIONS.includes(key)) {
       const detailKey = `${key}Details`
-      result[detailKey] = itemValue
+      result[detailKey] = itemValue === 'undefined' ? '' : itemValue
       result[key] = true
     } else {
       result[key] = itemValue === 'true'
@@ -73,7 +80,11 @@ const transformIn = (
 }
 
 const transformOut =
-  (patientId: string, appointmentId: string) =>
+  (
+    patientId: string,
+    appointmentId: string,
+    responseData: QuickNoteSectionItem[],
+  ) =>
   async (schema: Record<string, undefined>) => {
     const result: QuickNoteSectionItem[] = []
 
@@ -158,7 +169,71 @@ const transformOut =
       substanceCptCodes,
       selectedCodes,
     )
-    return [...result, ...codesResult]
+
+    const diagnosisSections = getDiagnosisSections(
+      responseData,
+      schema,
+      patientId,
+    )
+    return [...result, ...codesResult, ...diagnosisSections]
   }
 
+const getDiagnosisSections = (
+  responseData: QuickNoteSectionItem[],
+  schema: Record<string, undefined>,
+  patientId: string,
+) => {
+  const QuickNoteSectionDiagnosisResponse = responseData.filter(
+    (item) =>
+      item.sectionName === QuickNoteSectionName.QuickNoteSectionDiagnosis,
+  )
+  const formData = sanitizeFormData(schema)
+  const { tobacco, alcohol, drugs } = formData
+  const substanceUseCodes = [
+    'F11.10',
+    'F13.10',
+    'F14.10',
+    'F15.10',
+    'F16.10',
+    'F18.10',
+    'F17.200',
+    'F10.10',
+  ]
+  const diagnosisCodesToAdd =
+    QuickNoteSectionDiagnosisResponse[0]?.sectionItemValue
+      .split(',')
+      .filter((item) => !substanceUseCodes.includes(item)) || []
+  const drugsDiagnosisMap: Record<string, string> = {
+    opioids: 'F11.10',
+    sedative: 'F13.10',
+    cocaine: 'F14.10',
+    amphetamine: 'F15.10',
+    pcp: 'F16.10',
+    inhalants: 'F18.10',
+  }
+  if (tobacco === 'yes') diagnosisCodesToAdd.push('F17.200')
+  if (alcohol === 'yes') diagnosisCodesToAdd.push('F10.10')
+  if (drugs === 'yes')
+    Object.entries(drugsDiagnosisMap).forEach(([key, code]) => {
+      if (formData[key]) {
+        diagnosisCodesToAdd.push(code)
+      }
+    })
+
+  const sectionItemValue = String(
+    diagnosisCodesToAdd.filter(
+      (item, index) => diagnosisCodesToAdd.indexOf(item) === index,
+    ),
+  )
+  const diagnosisCodesToAddSet = [
+    {
+      pid: Number(patientId),
+      sectionName: QuickNoteSectionName.QuickNoteSectionDiagnosis,
+      sectionItem: 'diagnosisCodes',
+      sectionItemValue: sectionItemValue || 'empty',
+    },
+  ]
+
+  return diagnosisCodesToAddSet
+}
 export { transformIn, transformOut }

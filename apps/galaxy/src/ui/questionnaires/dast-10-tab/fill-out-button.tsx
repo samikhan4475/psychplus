@@ -2,7 +2,7 @@ import { PropsWithChildren } from 'react'
 import { useParams } from 'next/navigation'
 import { QuickNoteSectionItem } from '@/types'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
-import { QuestionnaireTabs } from '../constants'
+import { QuestionnairesTitles, QuestionnaireTabs } from '../constants'
 import {
   FillOutButton,
   FillOutTabsView,
@@ -19,7 +19,7 @@ const FillOutButtonDast10 = ({ data }: FillOutButtonDast10Props) => {
   const patientId = useParams().id as string
 
   return (
-    <FillOutButton title="Drug Abuse Screening Test (DAST-10)">
+    <FillOutButton title={QuestionnairesTitles['DAST-10']}>
       <FillOutTabsView
         questionnaire={QuickNoteSectionName.QuickNoteSectionDast10}
       >

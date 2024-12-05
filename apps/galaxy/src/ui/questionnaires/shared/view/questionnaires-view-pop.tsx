@@ -34,7 +34,6 @@ const QuestionnaireViewPopup = ({
       <Flex direction="column" gap=".5rem">
         <WidgetFormContainer
           title=""
-          enableEvents={false}
           patientId={patientId as string}
           widgetId={`${currentQuestionnaireViewConstants.questionnaireTab.toLowerCase()} popup`}
           getData={() => []}

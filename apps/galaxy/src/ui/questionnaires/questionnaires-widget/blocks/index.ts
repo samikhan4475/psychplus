@@ -1,4 +1,3 @@
-export * from './send-to-patient-button'
 export * from './delete-button'
 export * from './send-reminder-button'
 export * from './view-button'

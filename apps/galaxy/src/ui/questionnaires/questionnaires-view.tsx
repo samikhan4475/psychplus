@@ -20,32 +20,12 @@ import { useStore } from './store'
 import { YBocsTab } from './y-bocs-tab'
 
 interface QuestionnairesViewProps {
-  questionnairesDashboardData: QuickNoteSectionItem[]
-  questionnairesGad7Response: QuickNoteSectionItem[]
-  questionnairesPcl5Response: QuickNoteSectionItem[]
-  questionnairesPhq9Response: QuickNoteSectionItem[]
-  questionnairesSnapIvResponse: QuickNoteSectionItem[]
-  questionnairesDast10Response: QuickNoteSectionItem[]
-  questionnairesAuditResponse: QuickNoteSectionItem[]
-  questionnairesAimsResponse: QuickNoteSectionItem[]
-  questionnairesHamDResponse: QuickNoteSectionItem[]
-  questionnairesYBocsResponse: QuickNoteSectionItem[]
-  questionnairesMocaResponse: QuickNoteSectionItem[]
+  data: QuickNoteSectionItem[]
   patientId: string
 }
 
 const QuestionnairesView = ({
-  questionnairesDashboardData,
-  questionnairesSnapIvResponse,
-  questionnairesYBocsResponse,
-  questionnairesGad7Response,
-  questionnairesPcl5Response,
-  questionnairesPhq9Response,
-  questionnairesDast10Response,
-  questionnairesAuditResponse,
-  questionnairesAimsResponse,
-  questionnairesHamDResponse,
-  questionnairesMocaResponse,
+  data,
   patientId,
 }: QuestionnairesViewProps) => {
   const {
@@ -108,40 +88,37 @@ const QuestionnairesView = ({
         <Flex className="flex-1 border-b border-gray-5" />
       </Flex>
       <TabsContent value={QuestionnaireTabs.DASHBOARD_TAB}>
-        <DashboardTab
-          patientId={patientId}
-          questionnairesDashboardData={questionnairesDashboardData}
-        />
+        <DashboardTab patientId={patientId} data={data} />
       </TabsContent>
       <TabsContent value={QuestionnaireTabs.PHQ_9_TAB}>
-        <Phq9Tab patientId={patientId} data={questionnairesPhq9Response} />
+        <Phq9Tab patientId={patientId} data={data} />
       </TabsContent>
       <TabsContent value={QuestionnaireTabs.GAD_7_TAB}>
-        <Gad7Tab patientId={patientId} data={questionnairesGad7Response} />
+        <Gad7Tab patientId={patientId} data={data} />
       </TabsContent>
       <TabsContent value={QuestionnaireTabs.SNAP_IV_TAB}>
-        <SnapIvTab patientId={patientId} data={questionnairesSnapIvResponse} />
+        <SnapIvTab patientId={patientId} data={data} />
       </TabsContent>
       <TabsContent value={QuestionnaireTabs.PCL_5_TAB}>
-        <Pcl5Tab patientId={patientId} data={questionnairesPcl5Response} />
+        <Pcl5Tab patientId={patientId} data={data} />
       </TabsContent>
       <TabsContent value={QuestionnaireTabs.Y_BOCS_TAB}>
-        <YBocsTab patientId={patientId} data={questionnairesYBocsResponse} />
+        <YBocsTab patientId={patientId} data={data} />
       </TabsContent>
       <TabsContent value={QuestionnaireTabs.AIMS_TAB}>
-        <AimsTab patientId={patientId} data={questionnairesAimsResponse} />
+        <AimsTab patientId={patientId} data={data} />
       </TabsContent>
       <TabsContent value={QuestionnaireTabs.AUDIT_TAB}>
-        <AuditTab patientId={patientId} data={questionnairesAuditResponse} />
+        <AuditTab patientId={patientId} data={data} />
       </TabsContent>
       <TabsContent value={QuestionnaireTabs.DAST_10_TAB}>
-        <Dast10Tab patientId={patientId} data={questionnairesDast10Response} />
+        <Dast10Tab patientId={patientId} data={data} />
       </TabsContent>
       <TabsContent value={QuestionnaireTabs.MOCA_TAB}>
-        <MocaTab patientId={patientId} data={questionnairesMocaResponse} />
+        <MocaTab patientId={patientId} data={data} />
       </TabsContent>
       <TabsContent value={QuestionnaireTabs.HAM_D_TAB}>
-        <HamDTab patientId={patientId} data={questionnairesHamDResponse} />
+        <HamDTab patientId={patientId} data={data} />
       </TabsContent>
     </Tabs.Root>
   )

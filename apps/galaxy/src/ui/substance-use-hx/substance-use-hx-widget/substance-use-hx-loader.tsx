@@ -1,8 +1,8 @@
 import * as api from '@/api'
 import { QuickNoteSectionItem } from '@/types'
+import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { transformIn } from './data'
 import { SubstanceUseHxWidget } from './substance-use-widget'
-import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 
 interface SubstanceUseHxWidgetLoaderProps {
   patientId: string
@@ -15,7 +15,10 @@ const SubstanceUseHxLoader = async ({
     api.NOTE_DETAILS_SEARCH_ENDPOINT,
     {
       patientId: Number(patientId),
-      sectionName: [QuickNoteSectionName.QuickNoteSectionSubstanceUseHx],
+      sectionName: [
+        QuickNoteSectionName.QuickNoteSectionSubstanceUseHx,
+        QuickNoteSectionName.QuickNoteSectionDiagnosis,
+      ],
       isLatest: true,
     },
   )
@@ -26,7 +29,13 @@ const SubstanceUseHxLoader = async ({
 
   const initialValue = transformIn(response.data)
 
-  return <SubstanceUseHxWidget patientId={patientId} initialValue={initialValue} />
+  return (
+    <SubstanceUseHxWidget
+      patientId={patientId}
+      initialValue={initialValue}
+      responseData={response.data}
+    />
+  )
 }
 
 export { SubstanceUseHxLoader }

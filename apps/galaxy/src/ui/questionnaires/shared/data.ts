@@ -3,13 +3,18 @@ import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { QuestionnaireSchemaType } from './questionnaires-schema'
 
 const transformIn = (
-  value: QuickNoteSectionItem[],
+  data: QuickNoteSectionItem[],
   totalQuestions: number,
+  section?: QuickNoteSectionName,
 ): QuestionnaireSchemaType => {
   const result: QuestionnaireSchemaType = {}
   for (let i = 1; i <= totalQuestions; i++) {
     result[`Q${i}`] = ''
   }
+
+  let value = data
+  if (section)
+    value = value.filter((item) => item.sectionName === section) || []
 
   value?.forEach((item: QuickNoteSectionItem) => {
     if (item.sectionItem in result) {

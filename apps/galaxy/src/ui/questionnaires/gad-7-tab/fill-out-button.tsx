@@ -6,7 +6,7 @@ import {
   SCORE_INTERPRETATION_RANGES,
 } from '@/ui/questionnaires/shared/constants'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
-import { QuestionnaireTabs } from '../constants'
+import { QuestionnairesTitles, QuestionnaireTabs } from '../constants'
 import {
   FillOutButton,
   FillOutTabsView,
@@ -22,7 +22,7 @@ const FillOutButtonGad7 = ({ data }: FillOutButtonGad7Props) => {
   const patientId = useParams().id as string
 
   return (
-    <FillOutButton title="Generalized Anxiety Disorder (GAD-7)">
+    <FillOutButton title={QuestionnairesTitles['GAD-7']}>
       <FillOutTabsView
         questionnaire={QuickNoteSectionName.QuickNoteSectionGad7}
       >

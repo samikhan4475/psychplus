@@ -50,9 +50,9 @@ const RadioSelectSection = ({
 
   const handleOptionClick = (clickedValue: string) => {
     if (resetOnSameValue && value === clickedValue && value !== '') {
-      form.setValue(field, '')
+      form.setValue(field, '', { shouldDirty: true })
     } else if (!disabled) {
-      form.setValue(field, clickedValue)
+      form.setValue(field, clickedValue, { shouldDirty: true })
     }
     if (onChange) onChange(clickedValue)
   }

@@ -27,7 +27,11 @@ const AuditTab = ({
   data: QuickNoteSectionItem[]
 }) => {
   const totalQuestions = QUESTIONS.length
-  const initialValue = transformIn(data, totalQuestions)
+  const initialValue = transformIn(
+    data,
+    totalQuestions,
+    QuickNoteSectionName.QuickNoteSectionAudit,
+  )
   const { totalScore, ...form } = useQuestionnaireForm(
     initialValue,
     totalQuestions,
@@ -41,7 +45,6 @@ const AuditTab = ({
     <FormProvider {...form}>
       <Flex direction="column" gap=".5rem">
         <WidgetFormContainer
-          enableEvents={false}
           patientId={patientId}
           widgetId={QuestionnaireTabs.AUDIT_TAB}
           getData={transformOut(
@@ -52,7 +55,9 @@ const AuditTab = ({
           headerRight={
             <Flex gap="2">
               <SendToPatientButton />
-              <HistoryButton questionnaire={QuickNoteSectionName.QuickNoteSectionAudit} />
+              <HistoryButton
+                questionnaire={QuickNoteSectionName.QuickNoteSectionAudit}
+              />
               <SaveButton />
             </Flex>
           }

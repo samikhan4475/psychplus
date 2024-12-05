@@ -2,7 +2,7 @@ import { QuickNoteSectionItem } from '@/types'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { AimsSchemaType } from '../aims-schema'
 
-const transformIn = (value: QuickNoteSectionItem[]): AimsSchemaType => {
+const transformIn = (data: QuickNoteSectionItem[]): AimsSchemaType => {
   const result: AimsSchemaType = {
     FacialAndOralMovementsQ1: '',
     FacialAndOralMovementsQ2: '',
@@ -19,6 +19,10 @@ const transformIn = (value: QuickNoteSectionItem[]): AimsSchemaType => {
     DentalStatusQ13: '',
     DentalStatusQ14: '',
   }
+  const value =
+    data.filter(
+      (item) => item.sectionName === QuickNoteSectionName.QuickNoteSectionAims,
+    ) || []
   value?.forEach((item: QuickNoteSectionItem) => {
     result[item.sectionItem] = item.sectionItemValue
   })

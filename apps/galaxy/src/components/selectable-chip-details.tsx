@@ -52,7 +52,10 @@ const SelectableChipDetails = ({
         {showIndicator && <SelectedIndicator />}
         <Flex
           align="center"
-          className={cn('bg-pp-focus-bg-2 rounded-1 pl-1', className)}
+          className={cn(
+            `bg-pp-focus-bg-2 rounded-1 ${label ? 'pl-1' : ''}`,
+            className,
+          )}
         >
           {label && (
             <Text

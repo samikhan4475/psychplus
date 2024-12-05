@@ -96,7 +96,7 @@ const useStore = create<Store>((set, get) => ({
         pid: Number(patientId),
         sectionName: `${QuickNoteSectionName.AddToNoteQuestionnaire}-${questionnaire}`,
         sectionItem: questionnaire,
-        sectionItemValue: addToNoteData?.toString() || 'empity',
+        sectionItemValue: addToNoteData?.toString() || 'empty',
       },
     ]
 
@@ -144,7 +144,7 @@ const useStore = create<Store>((set, get) => ({
       data: [
         {
           pid: Number(patientId),
-          sectionName: QuickNoteSectionName.QuickNoteSectionDashboard,
+          sectionName: QuickNoteSectionName.QuestionnaireActualNoteView,
           sectionItem: 'ShowNoteView',
           sectionItemValue: checked ? 'show' : 'hide',
         },

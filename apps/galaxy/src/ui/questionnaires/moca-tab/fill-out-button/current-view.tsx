@@ -24,7 +24,6 @@ const CurrentView = ({ patientId, data }: FilloutCurrentView) => {
       <Flex direction="column" gap=".5rem">
         <WidgetFormContainer
           title=""
-          enableEvents={false}
           patientId={patientId}
           widgetId="moca popup"
           getData={transformOut(patientId)}

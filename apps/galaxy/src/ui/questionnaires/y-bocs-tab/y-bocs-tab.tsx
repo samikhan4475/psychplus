@@ -26,7 +26,11 @@ interface QuestionnairesFormYBocsProps {
 
 const YBocsTab = ({ patientId, data }: QuestionnairesFormYBocsProps) => {
   const totalQuestions = YBOCS_TABLES.length
-  const initialValue = transformIn(data, totalQuestions)
+  const initialValue = transformIn(
+    data,
+    totalQuestions,
+    QuickNoteSectionName.QuickNoteSectionYbcos,
+  )
   const { totalScore, ...form } = useQuestionnaireForm(
     initialValue,
     totalQuestions,
@@ -36,7 +40,6 @@ const YBocsTab = ({ patientId, data }: QuestionnairesFormYBocsProps) => {
     <FormProvider {...form}>
       <Flex direction="column" gap=".5rem">
         <WidgetFormContainer
-          enableEvents={false}
           patientId={patientId}
           widgetId={QuestionnaireTabs.Y_BOCS_TAB}
           getData={transformOut(

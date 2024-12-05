@@ -6,25 +6,21 @@ import {
 } from '@hello-pangea/dnd'
 import { Flex, Text } from '@radix-ui/themes'
 import { MoveVertical, StarIcon, Trash2 } from 'lucide-react'
+import { LoadingPlaceholder } from '@/components'
 import { useStore } from '../../store'
-import { QuickNoteSectionItem } from '@/types'
 
 interface WorkingDiagnosisViewProps {
-  patientId: string
   width?: string
 }
 
-const WorkingDiagnosisView = ({
-  width,
-  patientId,
-}: WorkingDiagnosisViewProps) => {
+const WorkingDiagnosisView = ({ width }: WorkingDiagnosisViewProps) => {
   const {
     workingDiagnosisData,
     updateWorkingDiagnosisData,
     deleteWorkingDiagnosis,
     markDiagnosisFavorites,
     favouriteDiagnosisData,
-    unmarkDiagnosisFavorites
+    loadingWorkingDiagnosis,
   } = useStore()
 
   const onDragEnd = (result: DropResult) => {
@@ -36,26 +32,17 @@ const WorkingDiagnosisView = ({
     updateWorkingDiagnosisData(updatedData)
   }
 
-  const isItemFavorite = (sectionItemValue: string) => {
-    return favouriteDiagnosisData.some((fav) => fav.description === sectionItemValue)
+  const isItemFavorite = (code: string) => {
+    return favouriteDiagnosisData.some((fav) => fav.icd10Code === code)
   }
 
-  const markAsFavorite = (icdCodeId: string, item: QuickNoteSectionItem) => {
-    markDiagnosisFavorites(icdCodeId, item);
-  };
-
-  const unmarkAsFavorite = (icdCodeId: string, itemId: string) => {
-    unmarkDiagnosisFavorites(icdCodeId, itemId);
-  };
-
-
-  const handleFavoriteToggle = (icdCodeId: string, item: QuickNoteSectionItem) => {
-    if (isItemFavorite(item.sectionItemValue)) {
-      unmarkAsFavorite(icdCodeId, item.id!);
-    } else {
-      markAsFavorite(icdCodeId, item);
-    }
-  };
+  if (loadingWorkingDiagnosis) {
+    return (
+      <Flex direction="column" p="5" gap="2" width={width || '100%'}>
+        <LoadingPlaceholder />
+      </Flex>
+    )
+  }
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
@@ -70,12 +57,11 @@ const WorkingDiagnosisView = ({
             {...provided.droppableProps}
           >
             {workingDiagnosisData.map((item, index) => {
-              const icdCodeId = item?.sectionItemValue?.split(' ')[0]
-              const isFavourite = isItemFavorite(item.sectionItemValue)
+              const isFavourite = isItemFavorite(item.code)
               return (
                 <Draggable
-                  key={item.sectionItem}
-                  draggableId={item.sectionItem}
+                  key={item.code}
+                  draggableId={item.code}
                   index={index}
                 >
                   {(provided) => (
@@ -105,10 +91,7 @@ const WorkingDiagnosisView = ({
                             width="18"
                           />
                           <Text className="text-[11px]">
-                            {item.sectionItemValue}
-                          </Text>
-                          <Text className="text-[11px]">
-                            {item.encounterType}
+                            {item.code} {item.description}
                           </Text>
                         </Flex>
                         <Flex align="center" gap="2">
@@ -116,9 +99,7 @@ const WorkingDiagnosisView = ({
                             height="14"
                             width="14"
                             cursor="pointer"
-                            onClick={() =>
-                              deleteWorkingDiagnosis(patientId, index)
-                            }
+                            onClick={() => deleteWorkingDiagnosis(item)}
                           />
                           <StarIcon
                             stroke={isFavourite ? '#A0B6DC' : '#0F6CBD'}
@@ -128,7 +109,11 @@ const WorkingDiagnosisView = ({
                             height="15"
                             width="15"
                             onClick={() =>
-                              handleFavoriteToggle(icdCodeId, item)
+                              markDiagnosisFavorites(
+                                item,
+                                item.code,
+                                !isItemFavorite(item.code),
+                              )
                             }
                           />
                         </Flex>

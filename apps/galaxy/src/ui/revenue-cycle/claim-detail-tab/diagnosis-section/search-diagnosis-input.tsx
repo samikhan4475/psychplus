@@ -4,24 +4,23 @@ import { Box, Flex, ScrollArea, Text, TextField } from '@radix-ui/themes'
 import useOnclickOutside from 'react-cool-onclickoutside'
 import toast from 'react-hot-toast'
 import { useDebouncedCallback } from 'use-debounce'
-import { ICD10Code } from '@/types'
-import { getServiceDiagnosis } from '@/ui/diagnosis/diagnosis/actions/get-service-diagnosis'
-import { SearchButton } from '@/ui/schedule/shared'
+import { DiagnosisIcd10Code } from '@/types'
+import { getIcd10Diagnosis } from '@/ui/diagnosis/diagnosis/actions/get-service-diagnosis'
 import { cn } from '@/utils'
 
-interface DropdownMenuSearchProps<T> {
+interface DropdownMenuSearchProps {
   placeholder?: string
-  onSelectItem: (selectedItem: ICD10Code) => void
+  onSelectItem: (selectedItem: DiagnosisIcd10Code) => void
 }
 
 const DiagnosisList = ({
   diagnosisDataList,
   onSelectItem,
 }: {
-  diagnosisDataList: ICD10Code[]
-  onSelectItem: (item: ICD10Code) => void
+  diagnosisDataList: DiagnosisIcd10Code[]
+  onSelectItem: (item: DiagnosisIcd10Code) => void
 }) => {
-  return diagnosisDataList.map((option: ICD10Code, index: number) => (
+  return diagnosisDataList.map((option: DiagnosisIcd10Code) => (
     <Flex
       key={option.id}
       align="center"
@@ -35,31 +34,35 @@ const DiagnosisList = ({
     </Flex>
   ))
 }
-const SearchDiagnosisInput = <T extends ICD10Code>({
+const SearchDiagnosisInput = ({
   placeholder,
   onSelectItem,
-}: DropdownMenuSearchProps<T>) => {
-  const [diagnosisDataList, setDiagnosisDataList] = useState<ICD10Code[]>([])
+}: DropdownMenuSearchProps) => {
+  const [diagnosisDataList, setDiagnosisDataList] = useState<
+    DiagnosisIcd10Code[]
+  >([])
   const [loadingDiagnosis, setLoadingDiagnosis] = useState(false)
   const [open, setOpen] = useState(false)
 
   const handleSearchService = useDebouncedCallback(async (value: string) => {
     if (value.length < 2) return
     setLoadingDiagnosis(true)
-    const response = await getServiceDiagnosis(value)
+    const response = await getIcd10Diagnosis({
+      CodeOrDescription: value,
+    })
     if (response.state === 'success') {
-      setDiagnosisDataList(response.data.serviceDiagnosisData || [])
+      setDiagnosisDataList(response.data || [])
       setLoadingDiagnosis(false)
-    } else {
-      setDiagnosisDataList([])
-      setLoadingDiagnosis(false)
-      toast('Error fetching diagnosis data')
+      return
     }
+    setDiagnosisDataList([])
+    setLoadingDiagnosis(false)
+    toast('Error fetching diagnosis data')
   }, 500)
 
   const ref = useOnclickOutside(() => setOpen(false))
 
-  const handleSelectItem = (item: ICD10Code) => {
+  const handleSelectItem = (item: DiagnosisIcd10Code) => {
     setOpen(false)
     onSelectItem(item)
   }
@@ -77,6 +80,7 @@ const SearchDiagnosisInput = <T extends ICD10Code>({
         onSelectItem={handleSelectItem}
       />
     )
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [diagnosisDataList, loadingDiagnosis])
 
   return (
@@ -91,7 +95,7 @@ const SearchDiagnosisInput = <T extends ICD10Code>({
       >
         <TextField.Root
           size="1"
-          className="min-w-14 !outline-white w-[500px] flex-1 [box-shadow:none] flex-row-reverse"
+          className="min-w-14 !outline-white w-[500px] flex-1 flex-row-reverse [box-shadow:none]"
           placeholder={placeholder}
           onChange={(e) => handleSearchService(e.target.value)}
           onFocus={() => setOpen(true)}

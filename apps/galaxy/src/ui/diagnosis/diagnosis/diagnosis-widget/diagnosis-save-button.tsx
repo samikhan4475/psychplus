@@ -1,16 +1,15 @@
 'use client'
 
+import { useParams } from 'next/navigation'
 import { Button } from '@radix-ui/themes'
-import { useStore } from '../../store'
+import { useStore } from '@/ui/diagnosis/store'
 
-interface DiagnosisSaveButtonProps {
-  patientId: string
-}
-const DiagnosisSaveButton = ({ patientId }: DiagnosisSaveButtonProps) => {
+const DiagnosisSaveButton = () => {
+  const patientId = useParams().id as string
   const { saveWorkingDiagnosis } = useStore()
 
-  const handleSaveDiagnosis =  () => {
-     saveWorkingDiagnosis(patientId)
+  const handleSaveDiagnosis = () => {
+    saveWorkingDiagnosis(patientId)
   }
   return (
     <Button

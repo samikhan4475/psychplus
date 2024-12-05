@@ -1,43 +1,36 @@
 import { Table, Text } from '@radix-ui/themes'
 import { StarIcon } from 'lucide-react'
 import { LoadingPlaceholder } from '@/components'
+import { FavouriteDiagnosisData } from '@/types'
 import { useStore } from '../../store'
 import { SearchFavorite } from './search-favorite'
-import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 
-
-interface FavoriteViewProps {
-  patientId: string
-}
-
-const FavoriteView = ({ patientId }: FavoriteViewProps) => {
+const FavoriteView = () => {
   const {
     favouriteDiagnosisData,
     loadingFavouriteDiagnosis,
-    unmarkDiagnosisFavorites,
     workingDiagnosisData,
-    updateWorkingDiagnosisData
+    updateWorkingDiagnosisData,
+    markDiagnosisFavorites,
   } = useStore()
 
-  const handleValueChange = async (value: string) => {
-
+  const handleValueChange = async (favorite: FavouriteDiagnosisData) => {
     const isValueAlreadyExist = workingDiagnosisData.some(
-      (item) => item.sectionItemValue === value
-    );
+      (item) => item.code === favorite.icd10Code,
+    )
+    if (isValueAlreadyExist) return
 
-    if (!isValueAlreadyExist) {
-      const data = [
-        ...workingDiagnosisData,
-        {
-          pid: Number(patientId),
-          sectionName: QuickNoteSectionName.QuickNoteSectionDiagnosis,
-          sectionItem: value,
-          sectionItemValue: value,
-        },
-      ];
-      updateWorkingDiagnosisData( data);
-    }
-  };
+    const data = [
+      ...workingDiagnosisData,
+      {
+        code: favorite.icd10Code,
+        description: favorite.description,
+        isFavorite: false,
+        isActive: true,
+      },
+    ]
+    updateWorkingDiagnosisData(data)
+  }
 
   return (
     <>
@@ -50,11 +43,12 @@ const FavoriteView = ({ patientId }: FavoriteViewProps) => {
         <Table.Body className="align-middle">
           {favouriteDiagnosisData.map((item, index) => {
             return (
-              <Table.Row key={`${item.id ?? ''}-${index}`} >
-                <Table.Cell className="border-pp-table-border cursor-pointer h-5 border-b px-1 py-0.5 truncate max-w-[280px]"
-                  onClick={() => handleValueChange(item.description)}
+              <Table.Row key={`${item.id ?? ''}-${index}`}>
+                <Table.Cell
+                  className="border-pp-table-border h-5 max-w-[280px] cursor-pointer truncate border-b px-1 py-0.5"
+                  onClick={() => handleValueChange(item)}
                 >
-                  <Text className="text-[11px]" >{item.description}</Text>
+                  <Text className="text-[11px]">{item.description}</Text>
                 </Table.Cell>
 
                 <Table.Cell className="border-pp-table-border h-5 border-b px-0 py-0.5 text-right ">
@@ -64,7 +58,10 @@ const FavoriteView = ({ patientId }: FavoriteViewProps) => {
                     height="15"
                     cursor="pointer"
                     width="15"
-                    onClick={() => item.id && unmarkDiagnosisFavorites(item.icd10Code, item.id)}
+                    onClick={() =>
+                      item.id &&
+                      markDiagnosisFavorites(item, item.icd10Code, false)
+                    }
                   />
                 </Table.Cell>
               </Table.Row>

@@ -1,6 +1,7 @@
 import React from 'react'
 import { Button, Flex } from '@radix-ui/themes'
 import { Input, Label } from 'react-aria-components'
+import { SaveButton } from '../save-button'
 
 type FilloutCurrentTabProps = React.PropsWithChildren<{
   max: number
@@ -13,13 +14,7 @@ const FilloutCurrentTab = ({
   children,
 }: FilloutCurrentTabProps) => {
   return (
-    <Flex
-    maxWidth="100%"
-    className="bg-white"
-    px="3"
-    py="1"
-    direction="column"
-  >
+    <Flex maxWidth="100%" className="bg-white" px="3" py="1" direction="column">
       <Flex mt="2" direction="column">
         <Flex gap="2">
           <Label>{`${value}/${max}`}</Label>
@@ -47,14 +42,7 @@ const FilloutCurrentTab = ({
         >
           Request Patient to Fill
         </Button>
-        <Button
-          type="submit"
-          size="1"
-          highContrast
-          className="h-auto p-2 text-[12px] font-[500]"
-        >
-          Save
-        </Button>
+        <SaveButton isGhost />
       </Flex>
     </Flex>
   )

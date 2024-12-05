@@ -46,7 +46,6 @@ const QuestionnairePopupCurrentView = ({
       <Flex direction="column" gap=".5rem">
         <WidgetFormContainer
           title=""
-          enableEvents={false}
           patientId={patientId}
           widgetId={`${questionnaireTab.toLowerCase()} popup`}
           getData={transformOut(patientId, quickNoteSectionName)}

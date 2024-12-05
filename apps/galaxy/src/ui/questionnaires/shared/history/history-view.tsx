@@ -16,7 +16,6 @@ interface HistoryViewProps {
 
 const HistoryView = ({ questionnaire }: HistoryViewProps) => {
   const [data, setData] = useState<QuickNoteHistory[]>([])
-  // const [loader, setLoader] = useState<boolean>(true)
   const patientId = useParams().id as string
 
   const { addedToNotes, histories, handleAddToNotes } = useStore((state) => ({

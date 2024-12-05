@@ -27,7 +27,11 @@ const Phq9Tab = ({
   data: QuickNoteSectionItem[]
 }) => {
   const totalQuestions = QUESTIONS.length
-  const initialValue = transformIn(data, totalQuestions)
+  const initialValue = transformIn(
+    data,
+    totalQuestions,
+    QuickNoteSectionName.QuickNoteSectionPhq9,
+  )
   const { totalScore, ...form } = useQuestionnaireForm(
     initialValue,
     totalQuestions,
@@ -41,7 +45,6 @@ const Phq9Tab = ({
     <FormProvider {...form}>
       <Flex direction="column" gap=".5rem">
         <WidgetFormContainer
-          enableEvents={false}
           patientId={patientId}
           widgetId={QuestionnaireTabs.PHQ_9_TAB}
           getData={transformOut(
@@ -52,7 +55,9 @@ const Phq9Tab = ({
           headerRight={
             <Flex gap="2">
               <SendToPatientButton />
-              <HistoryButton questionnaire={QuickNoteSectionName.QuickNoteSectionPhq9} />
+              <HistoryButton
+                questionnaire={QuickNoteSectionName.QuickNoteSectionPhq9}
+              />
               <SaveButton />
             </Flex>
           }

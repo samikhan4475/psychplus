@@ -26,7 +26,6 @@ const MocaTab = ({
     <FormProvider {...form}>
       <Flex direction="column" gap=".5rem">
         <WidgetFormContainer
-          enableEvents={false}
           patientId={patientId}
           widgetId={QuestionnaireTabs.MOCA_TAB}
           getData={transformOut(patientId)}

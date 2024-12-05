@@ -7,10 +7,9 @@ import { SearchDiagnosis } from './diagnosis-widget/search-diagnosis'
 
 interface DiagnosisProps {
   recommended: boolean
-  patientId: string
 }
 
-const Diagnosis = ({ recommended, patientId }: DiagnosisProps) => {
+const Diagnosis = ({ recommended }: DiagnosisProps) => {
   return (
     <>
       <Flex
@@ -22,11 +21,11 @@ const Diagnosis = ({ recommended, patientId }: DiagnosisProps) => {
       >
         <Flex gap="2">
           <Text className="text-[16px] font-[600]">Diagnosis</Text>
-          <SearchDiagnosis patientId={patientId} />
+          <SearchDiagnosis />
         </Flex>
-        <DiagnosisSaveButton patientId={patientId} />
+        <DiagnosisSaveButton />
       </Flex>
-      <DiagnosisWidget patientId={patientId} recommended={recommended} />
+      <DiagnosisWidget recommended={recommended} />
     </>
   )
 }

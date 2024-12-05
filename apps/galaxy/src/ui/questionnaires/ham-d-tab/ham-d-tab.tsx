@@ -27,7 +27,11 @@ const HamDTab = ({
   data: QuickNoteSectionItem[]
 }) => {
   const totalQuestions = QUESTIONS.length
-  const initialValue = transformIn(data, totalQuestions)
+  const initialValue = transformIn(
+    data,
+    totalQuestions,
+    QuickNoteSectionName.QuickNoteSectionHamD,
+  )
   const { totalScore, ...form } = useQuestionnaireForm(
     initialValue,
     totalQuestions,
@@ -41,7 +45,6 @@ const HamDTab = ({
     <FormProvider {...form}>
       <Flex direction="column" gap=".5rem">
         <WidgetFormContainer
-          enableEvents={false}
           patientId={patientId}
           widgetId={QuestionnaireTabs.HAM_D_TAB}
           getData={transformOut(
@@ -52,7 +55,9 @@ const HamDTab = ({
           headerRight={
             <Flex gap="2">
               <SendToPatientButton />
-              <HistoryButton questionnaire={QuickNoteSectionName.QuickNoteSectionHamD} />
+              <HistoryButton
+                questionnaire={QuickNoteSectionName.QuickNoteSectionHamD}
+              />
               <SaveButton />
             </Flex>
           }

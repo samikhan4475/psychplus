@@ -50,9 +50,9 @@ const DischargePlanBlock = () => {
         <FormFieldError name={BLOCK_ID} />
       </Flex>
       <GroupSelectSection label="" field={BLOCK_ID} options={BLOCK_OPTIONS} />
-      {dischargeBlock.map((dischargeBlockItem, index) => (
-        <>
-          {dischargeBlockItem !== 'continueWithCurrentProtocol' && (
+      {dischargeBlock.map(
+        (dischargeBlockItem, index) =>
+          dischargeBlockItem !== 'continueWithCurrentProtocol' && (
             <FormFieldContainer key={dischargeBlockItem + index}>
               {dischargeBlockItem === 'modifyTreatmentPlan' && (
                 <ModifyTreatmentPlanBlock />
@@ -65,9 +65,8 @@ const DischargePlanBlock = () => {
                 <FollowUpBlock />
               )}
             </FormFieldContainer>
-          )}
-        </>
-      ))}
+          ),
+      )}
     </FormFieldContainer>
   )
 }

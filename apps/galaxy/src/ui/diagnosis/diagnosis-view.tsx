@@ -34,7 +34,7 @@ const DiagnosisView = ({ patientId }: DiagnosisViewProps) => {
       </Flex>
 
       <TabsContent value="Diagnosis">
-        <Diagnosis recommended={true} patientId={patientId} />
+        <Diagnosis recommended={true} />
       </TabsContent>
 
       <TabsContent value="History">

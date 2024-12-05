@@ -28,7 +28,11 @@ const Dast10Tab = ({
   data: QuickNoteSectionItem[]
 }) => {
   const totalQuestions = QUESTIONS.length
-  const initialValue = transformIn(data, totalQuestions)
+  const initialValue = transformIn(
+    data,
+    totalQuestions,
+    QuickNoteSectionName.QuickNoteSectionDast10,
+  )
   const { totalScore, ...form } = useQuestionnaireForm(
     initialValue,
     totalQuestions,
@@ -42,7 +46,6 @@ const Dast10Tab = ({
     <FormProvider {...form}>
       <Flex direction="column" gap=".5rem">
         <WidgetFormContainer
-          enableEvents={false}
           patientId={patientId}
           widgetId={QuestionnaireTabs.DAST_10_TAB}
           getData={transformOut(
@@ -53,7 +56,9 @@ const Dast10Tab = ({
           headerRight={
             <Flex gap="2">
               <SendToPatientButton />
-              <HistoryButton questionnaire={QuickNoteSectionName.QuickNoteSectionDast10} />
+              <HistoryButton
+                questionnaire={QuickNoteSectionName.QuickNoteSectionDast10}
+              />
               <SaveButton />
             </Flex>
           }

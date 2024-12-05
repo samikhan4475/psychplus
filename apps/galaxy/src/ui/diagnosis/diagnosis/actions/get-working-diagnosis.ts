@@ -8,14 +8,10 @@ interface GetQuicknotesWorkingDiagnosisParams {
   patientId: string
 }
 
-interface GetQuicknoteWorkingDiagnosisResponse {
-  workingDiagnosisData: QuickNoteSectionItem[]
-}
-
 const getQuickNotesWorkingDiagnosis = async ({
   patientId,
 }: GetQuicknotesWorkingDiagnosisParams): Promise<
-  api.ActionResult<GetQuicknoteWorkingDiagnosisResponse>
+  api.ActionResult<QuickNoteSectionItem[]>
 > => {
   const response = await api.POST<QuickNoteSectionItem[]>(
     api.NOTE_DETAILS_SEARCH_ENDPOINT,
@@ -33,11 +29,8 @@ const getQuickNotesWorkingDiagnosis = async ({
   }
   return {
     state: 'success',
-    data: {
-      workingDiagnosisData: response.data,
-    },
+    data: response.data,
   }
 }
 
 export { getQuickNotesWorkingDiagnosis }
-

@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect } from 'react'
+import { useParams } from 'next/navigation'
 import { Flex } from '@radix-ui/themes'
 import {
   TabContentHeading,
@@ -10,19 +11,32 @@ import {
 } from '@/components'
 import { WorkingDiagnosisView } from '@/ui/diagnosis/diagnosis/diagnosis-widget'
 import { SearchDiagnosis } from '@/ui/diagnosis/diagnosis/diagnosis-widget/search-diagnosis'
+import { QuickNoteSectionName } from '../quicknotes/constants'
 import { Diagnosis } from './diagnosis'
 import { DiagnosisSaveButton } from './diagnosis/diagnosis-widget/diagnosis-save-button'
 import { useStore } from './store'
 
-interface DiagnosisWidgetProps {
-  patientId: string
-}
-
-const QuicknotesDiagnosisWidget = ({ patientId }: DiagnosisWidgetProps) => {
+const QuicknotesDiagnosisWidget = () => {
+  const patientId = useParams().id as string
   const { fetchWorkingDiagnosis, fetchFavouriteDiagnosis } = useStore()
+
+  const handleEvent = (event: MessageEvent) => {
+    const { widgetId, type, success } = event.data
+    if (type === 'widget:save' && success) {
+      switch (widgetId) {
+        case QuickNoteSectionName.QuickNoteSectionSubstanceUseHx:
+          fetchWorkingDiagnosis(patientId)
+          break
+        default:
+          break
+      }
+    }
+  }
+
   useEffect(() => {
     fetchWorkingDiagnosis(patientId)
     fetchFavouriteDiagnosis()
+    window.addEventListener('message', handleEvent)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [patientId])
   return (
@@ -30,24 +44,23 @@ const QuicknotesDiagnosisWidget = ({ patientId }: DiagnosisWidgetProps) => {
       <TabContentHeading title={'Diagnosis'}>
         <Flex justify="between" align="center" width="100%">
           <Flex pl="4" gap="2" align="center">
-            <SearchDiagnosis patientId={patientId} />
+            <SearchDiagnosis />
           </Flex>
           <Flex gap="2">
             <WidgetAddButton title="Add Diagnosis">
-              <Diagnosis patientId={patientId} recommended={false} />
+              <Diagnosis recommended={false} />
             </WidgetAddButton>
             <WidgetHxButton />
             <WidgetClearButton />
-            <DiagnosisSaveButton patientId={patientId} />
+            <DiagnosisSaveButton />
           </Flex>
         </Flex>
       </TabContentHeading>
       <Flex className="bg-white">
-        <WorkingDiagnosisView patientId={patientId} />
+        <WorkingDiagnosisView />
       </Flex>
     </>
   )
 }
 
 export { QuicknotesDiagnosisWidget }
-

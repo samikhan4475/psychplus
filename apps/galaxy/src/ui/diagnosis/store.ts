@@ -1,39 +1,31 @@
 import toast from 'react-hot-toast'
 import { create } from 'zustand'
 import { saveWidgetAction } from '@/actions/save-widget'
-import { QuickNoteSectionItem } from '@/types'
+import { DiagnosisIcd10Code, FavouriteDiagnosisData } from '@/types'
+import { QuickNoteSectionName } from '../quicknotes/constants'
 import { getFavouriteDiagnosis } from './diagnosis/actions/get-favorites-diagnosis'
-import { getServiceDiagnosis } from './diagnosis/actions/get-service-diagnosis'
+import { getIcd10Diagnosis } from './diagnosis/actions/get-service-diagnosis'
 import { getQuickNotesWorkingDiagnosis } from './diagnosis/actions/get-working-diagnosis'
 import { markDiagnosisFavorite } from './diagnosis/actions/mark-diagnosis-favorite'
 import { unmarkFavoriteDiagnosis } from './diagnosis/actions/unmark-diagnosis-favorite'
 
-interface FavouriteDiagnosisData {
-  id?: number | string
-  icd10Code: string
-  description: string
-  isFavourite: boolean
-}
-
 interface Store {
   loadingServicesDiagnosis: boolean
   loadingFavouriteDiagnosis: boolean
+  loadingWorkingDiagnosis: boolean
   favouriteDiagnosisData: FavouriteDiagnosisData[]
-  workingDiagnosisData: QuickNoteSectionItem[]
+  workingDiagnosisData: DiagnosisIcd10Code[]
   fetchWorkingDiagnosis: (patientId: string) => void
-  setWorkingDiagnosisData: (
-    workingDiagnosisData: QuickNoteSectionItem[],
-  ) => void
-  updateWorkingDiagnosisData: (data: QuickNoteSectionItem[]) => void
-  deleteWorkingDiagnosis: (patientId: string, value: number) => void
-  serviceDiagnosisData: { label: string; value: string }[]
+  updateWorkingDiagnosisData: (data: DiagnosisIcd10Code[]) => void
+  deleteWorkingDiagnosis: (item: DiagnosisIcd10Code) => void
+  serviceDiagnosisData: DiagnosisIcd10Code[]
   fetchServiceDiagnosis: (patientId: string) => void
   fetchFavouriteDiagnosis: (value?: string) => void
   markDiagnosisFavorites: (
+    item: DiagnosisIcd10Code | FavouriteDiagnosisData,
     icd10Code: string,
-    item: QuickNoteSectionItem,
+    markFavourite?: boolean,
   ) => void
-  unmarkDiagnosisFavorites: (icd10Code: string, id: number | string) => void
   encodeId: (id: string) => string
   saveWorkingDiagnosis: (patientId: string) => Promise<void>
 }
@@ -43,56 +35,82 @@ const useStore = create<Store>((set, get) => ({
   favouriteDiagnosisData: [],
   loadingServicesDiagnosis: false,
   loadingFavouriteDiagnosis: false,
+  loadingWorkingDiagnosis: false,
+  serviceDiagnosisData: [],
+
   encodeId: (id: string) => id.replace(/\./g, '%2E'),
   fetchWorkingDiagnosis: async (patientId: string) => {
-    const { setWorkingDiagnosisData } = get()
-    const response = await getQuickNotesWorkingDiagnosis({ patientId })
-    if (response.state === 'error') {
+    set({ loadingWorkingDiagnosis: true })
+    const quickNotesResponse = await getQuickNotesWorkingDiagnosis({
+      patientId,
+    })
+
+    if (quickNotesResponse.state === 'error') {
       toast.error('Failed to fetch working diagnosis')
+      set({ loadingWorkingDiagnosis: false })
+      return
     }
-    if (response.state === 'success') {
-      const data = response.data.workingDiagnosisData
-      data.sort((a, b) => parseInt(a.sectionItem) - parseInt(b.sectionItem))
-      setWorkingDiagnosisData(data)
+    const { sectionItemValue } = quickNotesResponse.data?.[0] || {}
+    const DiagnosisCodes = sectionItemValue?.split(',') || []
+    if (sectionItemValue === 'empty' || DiagnosisCodes?.length === 0) {
+      set({ loadingWorkingDiagnosis: false })
+      return
     }
+    const response = await getIcd10Diagnosis({
+      DiagnosisCodes,
+    })
+    set({ loadingWorkingDiagnosis: false })
+
+    if (response.state === 'error') return
+
+    const sortedData = response.data.toSorted((a, b) => {
+      return DiagnosisCodes.indexOf(a.code) - DiagnosisCodes.indexOf(b.code)
+    })
+
+    set({ workingDiagnosisData: sortedData })
   },
-  setWorkingDiagnosisData: (workingDiagnosisData) => {
-    set({ workingDiagnosisData })
-  },
-  updateWorkingDiagnosisData: async (data: QuickNoteSectionItem[]) => {
+
+  updateWorkingDiagnosisData: async (data) => {
     set({ workingDiagnosisData: data })
   },
 
   saveWorkingDiagnosis: async (patientId: string) => {
-    const { workingDiagnosisData } = get()
-    const dataCopy = get().workingDiagnosisData
-    const payload = workingDiagnosisData.map((item, index) => ({
-      ...item,
-      sectionItem: `${index + 1}`,
-    }))
+    const codes = get().workingDiagnosisData.map((item) => item.code)
 
-    const response = await saveWidgetAction({ patientId, data: payload })
+    const response = await saveWidgetAction({
+      patientId,
+      data: [
+        {
+          pid: Number(patientId),
+          sectionName: QuickNoteSectionName.QuickNoteSectionDiagnosis,
+          sectionItem: 'diagnosis',
+          sectionItemValue: codes.toString() || 'empty',
+        },
+      ],
+    })
+
     if (response.state === 'error') {
-      toast.error('Failed to save!')
-      set({ workingDiagnosisData: dataCopy })
+      toast.error(response.error)
     } else {
       toast.success('Saved!')
     }
   },
 
-  deleteWorkingDiagnosis: async (patientId: string, value: number) => {
+  deleteWorkingDiagnosis: async (item) => {
     const { workingDiagnosisData, updateWorkingDiagnosisData } = get()
-    const updatedData = workingDiagnosisData.filter((_, i) => i !== value)
-    await saveWidgetAction({ patientId, data: updatedData })
+    const updatedData = workingDiagnosisData.filter(
+      (diagnose) => diagnose.code !== item.code,
+    )
     updateWorkingDiagnosisData(updatedData)
   },
 
-  serviceDiagnosisData: [],
   fetchServiceDiagnosis: async (value: string) => {
     set({ serviceDiagnosisData: [] })
     if (value.length < 3) return
     set({ loadingServicesDiagnosis: true })
-    const response = await getServiceDiagnosis(value)
+    const response = await getIcd10Diagnosis({
+      CodeOrDescription: value,
+    })
 
     if (response.state === 'error') {
       toast.error('Failed to fetch service diagnosis')
@@ -100,48 +118,44 @@ const useStore = create<Store>((set, get) => ({
       return
     }
 
-    const optionsData = response.data.serviceDiagnosisData.map(
-      (item: { code: string; description: string }) => ({
-        label: `${item.code} ${item.description}`,
-        value: `${item.code} ${item.description}`,
-      }),
-    )
-    set({ serviceDiagnosisData: optionsData, loadingServicesDiagnosis: false })
+    set({
+      serviceDiagnosisData: response.data,
+      loadingServicesDiagnosis: false,
+    })
   },
 
-  markDiagnosisFavorites: async (
-    icd10Code: string,
-    sectionItem: QuickNoteSectionItem,
-  ) => {
+  markDiagnosisFavorites: async (item, icd10Code, markFavourite) => {
     const { favouriteDiagnosisData, encodeId } = get()
-    const updatedFavorites = [
-      ...favouriteDiagnosisData,
-      {
-        id: sectionItem?.id,
-        icd10Code: sectionItem.sectionItemValue.split(' ')[0],
-        description: sectionItem.sectionItemValue,
-        isFavourite: true,
-      },
-    ]
-    set({ favouriteDiagnosisData: updatedFavorites })
     const encodedIcd10CodeId = encodeId(icd10Code)
-    const response = await markDiagnosisFavorite(encodedIcd10CodeId)
-    if (response.state === 'success') {
+
+    if (markFavourite) {
+      const updatedFavorites = [
+        ...favouriteDiagnosisData,
+        {
+          id: item?.id,
+          icd10Code: icd10Code,
+          description: `${icd10Code} ${item.description}`,
+          isFavourite: true,
+        },
+      ]
+      set({ favouriteDiagnosisData: updatedFavorites })
+
+      const response = await markDiagnosisFavorite(encodedIcd10CodeId)
+      if (response.state === 'error') {
+        toast.error('Failed to mark as favorite')
+        return
+      }
       toast.success('Saved!')
     } else {
-      toast.error('Failed to mark as favorite')
-    }
-  },
-
-  unmarkDiagnosisFavorites: async (icd10Code: string, id: number | string) => {
-    const { favouriteDiagnosisData, encodeId } = get()
-    const encodedIcd10CodeId = encodeId(icd10Code)
-    const updatedFavorites = favouriteDiagnosisData.filter(
-      (item) => item.id !== id,
-    )
-    set({ favouriteDiagnosisData: updatedFavorites })
-    const response = await unmarkFavoriteDiagnosis(encodedIcd10CodeId)
-    if (response.state === 'success') {
+      const updatedFavorites = favouriteDiagnosisData.filter(
+        (item) => item.icd10Code !== icd10Code,
+      )
+      set({ favouriteDiagnosisData: updatedFavorites })
+      const response = await unmarkFavoriteDiagnosis(encodedIcd10CodeId)
+      if (response.state === 'error') {
+        toast.error('Failed to mark as favorite')
+        return
+      }
       toast.success('Saved!')
     }
   },

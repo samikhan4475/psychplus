@@ -26,7 +26,7 @@ const SMOKE_PACKS_OPTIONS = [
 const SMOKING_CESSATION_OPTIONS = [
   { label: 'Nicotine Replacement', value: 'nicotine' },
   { label: 'Wellbutrin', value: 'wellbutrin' },
-  { label: 'Chantix', value: 'Chantix' },
+  { label: 'Chantix', value: 'chantix' },
   { label: 'Patient Refused', value: 'patientRefused' },
   { label: 'Counseling', value: 'counseling' },
 ]
@@ -74,12 +74,12 @@ const DRUG_DETAILS_OPTIONS = [
 
 const REFFERAL_TREATMENT_OPTIONS = [
   { label: 'Detox', value: 'Detox' },
-  { label: 'Residential', value: 'residential' },
-  { label: 'Online Program', value: 'online' },
-  { label: 'Alcohol Anonymous', value: 'alcohol' },
-  { label: 'Narcotics Anonymous', value: 'narcotics' },
-  { label: 'Outpatient Therapy', value: 'outpatientTherapy' },
-  { label: 'Medications', value: 'medications' },
+  { label: 'Residential', value: 'Residential' },
+  { label: 'Online Program', value: 'Online' },
+  { label: 'Alcohol Anonymous', value: 'Alcohol' },
+  { label: 'Narcotics Anonymous', value: 'Aarcotics' },
+  { label: 'Outpatient Therapy', value: 'OutpatientTherapy' },
+  { label: 'Medications', value: 'Medications' },
 ]
 
 export {

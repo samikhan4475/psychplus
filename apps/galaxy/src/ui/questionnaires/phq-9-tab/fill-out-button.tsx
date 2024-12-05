@@ -4,7 +4,7 @@ import {
   SCORE_INTERPRETATION_RANGES,
 } from '@/ui/questionnaires/shared/constants'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
-import { QuestionnaireTabs } from '../constants'
+import { QuestionnairesTitles, QuestionnaireTabs } from '../constants'
 import {
   FillOutButton,
   FillOutTabsView,
@@ -15,7 +15,7 @@ import { QUESTIONS } from './constants'
 const FillOutButtonPhq9 = () => {
   const patientId = useParams().id as string
   return (
-    <FillOutButton title="Patient Health Questionnaire (PHQ-9)">
+    <FillOutButton title={QuestionnairesTitles['PHQ-9']}>
       <FillOutTabsView
         questionnaire={QuickNoteSectionName.QuickNoteSectionPhq9}
       >

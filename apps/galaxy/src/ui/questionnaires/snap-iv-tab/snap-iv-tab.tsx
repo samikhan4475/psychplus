@@ -34,7 +34,6 @@ const SnapIvTab = ({
     <FormProvider {...form}>
       <Flex direction="column" gap=".5rem">
         <WidgetFormContainer
-          enableEvents={false}
           patientId={patientId}
           widgetId={QuestionnaireTabs.SNAP_IV_TAB}
           getData={transformOut(patientId)}

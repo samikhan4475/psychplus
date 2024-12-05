@@ -12,7 +12,7 @@ const FillOutButton = ({ title, children }: FillOutButtonProps) => {
   return (
     <Dialog.Root>
       <Dialog.Trigger>
-        <Button size="2" className="h-auto bg-accent-11 px-6 py-1">
+        <Button size="1" className="h-auto bg-accent-11 px-3 py-1">
           Fill out
         </Button>
       </Dialog.Trigger>

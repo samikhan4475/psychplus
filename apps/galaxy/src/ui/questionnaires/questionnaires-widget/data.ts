@@ -4,7 +4,7 @@ const transformAddToNotesData = (data: QuickNoteHistory[]) => {
   const result: { [key: string]: string[] } = {}
   data?.forEach((item) => {
     item.data?.forEach((dataItem) => {
-      if (dataItem.sectionItemValue !== 'empity') {
+      if (dataItem.sectionItemValue !== 'empty') {
         result[dataItem.sectionItem] = dataItem.sectionItemValue.split(',')
       }
     })

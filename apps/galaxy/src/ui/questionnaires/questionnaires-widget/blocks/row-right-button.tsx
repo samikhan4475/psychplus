@@ -1,10 +1,7 @@
 import { Flex } from '@radix-ui/themes'
 import { HistoryButton } from '../../shared'
-// import { QuestionnairesStatus } from '../../constants'
 import { DeleteButton } from './delete-button'
 import { FilloutButtonBlock } from './fillout-button-block'
-// import { SendReminderButton } from './send-reminder-button'
-// import { SendToPatientButton } from './send-to-patient-button'
 import { ViewButton } from './view-button'
 
 interface RowRightButtonsProps {

@@ -6,20 +6,12 @@ import { PlusCircleIcon } from 'lucide-react'
 import useOnclickOutside from 'react-cool-onclickoutside'
 import { useDebouncedCallback } from 'use-debounce'
 import { LoadingPlaceholder } from '@/components'
-import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
+import { DiagnosisIcd10Code } from '@/types'
 import { SearchButton } from '@/ui/schedule/shared'
 import { cn } from '@/utils'
 import { useStore } from '../../store'
 
-interface options {
-  label: string
-  value: string
-}
-interface SearchDiagnosisProps {
-  patientId: string
-}
-
-const ServiceDiagnosisList = ({ patientId }: SearchDiagnosisProps) => {
+const ServiceDiagnosisList = () => {
   const {
     loadingServicesDiagnosis,
     workingDiagnosisData,
@@ -28,20 +20,11 @@ const ServiceDiagnosisList = ({ patientId }: SearchDiagnosisProps) => {
   } = useStore()
 
   const selectedOptions = useMemo(() => {
-    return workingDiagnosisData.map((item) => item.sectionItemValue)
+    return workingDiagnosisData.map((item) => item.code)
   }, [workingDiagnosisData])
 
-  const handleValueChange = async (value: string) => {
-    const data = [
-      ...workingDiagnosisData,
-      {
-        pid: Number(patientId),
-        sectionName: QuickNoteSectionName.QuickNoteSectionDiagnosis,
-        sectionItem: value,
-        sectionItemValue: value,
-      },
-    ]
-    updateWorkingDiagnosisData(data)
+  const handleValueChange = async (option: DiagnosisIcd10Code) => {
+    updateWorkingDiagnosisData([...workingDiagnosisData, option])
   }
   if (loadingServicesDiagnosis) {
     return <LoadingPlaceholder className="mt-5" />
@@ -54,36 +37,38 @@ const ServiceDiagnosisList = ({ patientId }: SearchDiagnosisProps) => {
     )
   }
 
-  return serviceDiagnosisData.map((option: options, index: number) => {
-    const isDisabled = selectedOptions.includes(option.value)
-    return (
-      <Flex
-        key={option.value + index}
-        justify="between"
-        align="center"
-        p="1"
-        onClick={() => (isDisabled ? null : handleValueChange(option.value))}
-        className={cn(
-          `hover:bg-pp-bg-accent rounded-2 ${
-            isDisabled
-              ? 'cursor-not-allowed opacity-30'
-              : 'cursor-pointer opacity-100'
-          }`,
-        )}
-      >
-        <Text className="w-[85%] text-[11px]">{option.label}</Text>
-        <PlusCircleIcon
-          stroke="#194595"
-          strokeWidth="2"
-          height="15"
-          width="15"
-        />
-      </Flex>
-    )
-  })
+  return serviceDiagnosisData.map(
+    (option: DiagnosisIcd10Code, index: number) => {
+      const isDisabled = selectedOptions.includes(option.code)
+      return (
+        <Flex
+          key={option.code + index}
+          justify="between"
+          align="center"
+          p="1"
+          onClick={() => (isDisabled ? null : handleValueChange(option))}
+          className={cn(
+            `hover:bg-pp-bg-accent rounded-2 ${
+              isDisabled
+                ? 'cursor-not-allowed opacity-30'
+                : 'cursor-pointer opacity-100'
+            }`,
+          )}
+        >
+          <Text className="w-[85%] text-[11px]">{`${option.code} ${option.description}`}</Text>
+          <PlusCircleIcon
+            stroke="#194595"
+            strokeWidth="2"
+            height="15"
+            width="15"
+          />
+        </Flex>
+      )
+    },
+  )
 }
 
-const SearchDiagnosis = ({ patientId }: SearchDiagnosisProps) => {
+const SearchDiagnosis = () => {
   const { loadingServicesDiagnosis, fetchServiceDiagnosis } = useStore()
   const [showOptions, setShowOptions] = useState(false)
 
@@ -112,7 +97,7 @@ const SearchDiagnosis = ({ patientId }: SearchDiagnosisProps) => {
             }
             size="1"
             className="min-w-14 !outline-white w-[500px] flex-1 [box-shadow:none]"
-            placeholder="Select Practice"
+            placeholder="Search Diagnosis"
             onChange={(e) => handleSearchService(e.target.value)}
             onFocus={() => setShowOptions(true)}
           />
@@ -126,7 +111,7 @@ const SearchDiagnosis = ({ patientId }: SearchDiagnosisProps) => {
               }`,
             )}
           >
-            <ServiceDiagnosisList patientId={patientId} />
+            <ServiceDiagnosisList />
           </ScrollArea>
         )}
       </Box>
