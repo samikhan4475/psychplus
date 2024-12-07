@@ -9,7 +9,7 @@ const createNoteSchema = z.object({
   provider: z.string().trim().min(1, 'Required'),
   cosigner: z.string().trim().optional(),
   description: z.string().trim().min(1, 'Required'),
-  file: z.any().optional(),
+  file: z.array(z.instanceof(File)).optional(),
 })
 
 type CreateNoteSchema = z.infer<typeof createNoteSchema>

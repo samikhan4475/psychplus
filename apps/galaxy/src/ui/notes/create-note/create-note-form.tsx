@@ -63,7 +63,9 @@ const CreateNoteForm = ({ children }: React.PropsWithChildren<unknown>) => {
       if (data.file) {
         const formData = new FormData()
 
-        formData.append('files', data.file)
+        data.file.forEach((file: File) => {
+          formData.append('files', file)
+        })
         formData.append('documentType', 'Secondary')
         formData.append('patientId', patientId)
         formData.append('appointmentId', appointmentId as string)

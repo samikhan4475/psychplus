@@ -17,13 +17,11 @@ const CreateNoteUploadButton = () => {
     }
   }
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0]
-    if (!file) {
-      toast.error('No file selected.')
+    const selectedFiles = event.target.files
+    if (!selectedFiles || selectedFiles.length === 0) {
+      toast.error('No files selected.')
       return
     }
-
-    form.setValue('file', file, { shouldDirty: true })
 
     const allowedTypes = [
       'application/pdf',
@@ -31,15 +29,29 @@ const CreateNoteUploadButton = () => {
       'image/png',
       'text/plain',
     ]
-    if (!allowedTypes.includes(file.type)) {
-      toast.error(
-        'Invalid file type. Please upload a PDF, JPEG, PNG, or TXT file.',
-      )
 
-      return
-    }
+    const existingFiles = form.getValues('file') || []
+    const existingFileNames = existingFiles.map((file: File) => file.name)
+    const newFiles = Array.from(selectedFiles).filter((file) => {
+      if (!allowedTypes.includes(file.type)) {
+        toast.error(`${file.name} is an invalid file type.`)
+        return false
+      }
+      if (existingFileNames.includes(file.name)) {
+        toast.error(`${file.name} is already uploaded.`)
+        return false
+      }
+      return true
+    })
+
+    if (newFiles.length === 0) return
+
+    form.setValue('file', [...existingFiles, ...newFiles], {
+      shouldDirty: true,
+    })
+    toast.success('Files selected successfully!')
+
     event.target.value = ''
-    toast.success('File selected successfully!')
   }
 
   return (
@@ -59,6 +71,7 @@ const CreateNoteUploadButton = () => {
         style={{ display: 'none' }}
         onChange={handleFileChange}
         accept=".pdf, .txt, image/*"
+        multiple
       />
     </Button>
   )

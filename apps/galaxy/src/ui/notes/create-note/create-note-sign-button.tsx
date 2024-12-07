@@ -50,7 +50,9 @@ const CreateNoteSignButton = () => {
       if (data.file) {
         const formData = new FormData()
 
-        formData.append('files', data.file)
+        data.file.forEach((file: File) => {
+          formData.append('files', file)
+        })
         formData.append('documentType', 'Secondary')
         formData.append('patientId', patientId)
         formData.append('appointmentId', appointmentId as string)
@@ -63,7 +65,6 @@ const CreateNoteSignButton = () => {
 
         if (fileUploadResult.state !== 'success') {
           toast.error(`Error uploading file: ${fileUploadResult.error}`)
-          setLoading(false)
           return
         }
       }
