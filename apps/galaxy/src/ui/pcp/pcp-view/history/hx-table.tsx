@@ -17,7 +17,8 @@ const columns: ColumnDef<ExternalProviderDetail>[] = [
     cell: ({ row }) => (
       <TextCell>
         {row?.original?.externalProvider?.legalName?.firstName}{' '}
-        {row?.original?.externalProvider?.legalName?.lastName}{' '}
+        {row?.original?.externalProvider?.legalName?.lastName}
+        {', '}
         {row?.original?.externalProvider?.legalName?.title}
       </TextCell>
     ),
