@@ -12,9 +12,11 @@ type PastPsychHxDetailsProps = {
 const FamilyPsychDetailView = async ({
   patientId,
 }: PastPsychHxDetailsProps) => {
-  const response = await getQuickNoteDetailAction(patientId, [
-    QuickNoteSectionName.QuickNoteSectionFamilyPsychHx,
-  ])
+  const response = await getQuickNoteDetailAction(
+    patientId,
+    [QuickNoteSectionName.QuickNoteSectionFamilyPsychHx],
+    true,
+  )
 
   if (response.state === 'error') {
     return <Text>{response.error}</Text>

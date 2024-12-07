@@ -14,6 +14,10 @@ const useAddOnWidgetForm = (initialValue: AddOnWidgetSchemaType) => {
       ...initialValue,
       expirationDate: convertDateField(initialValue?.expirationDate),
     },
+    values: {
+      ...initialValue,
+      expirationDate: convertDateField(initialValue?.expirationDate),
+    },
   })
 
   return form

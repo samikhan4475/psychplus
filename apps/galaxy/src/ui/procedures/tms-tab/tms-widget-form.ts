@@ -7,6 +7,7 @@ const useTmsWidgetForm = (initialValue: TmsWidgetSchemaType) => {
     resolver: zodResolver(tmsWidgetSchema),
     reValidateMode: 'onChange',
     defaultValues: initialValue,
+    values: initialValue,
   })
 
   return form

@@ -1,9 +1,7 @@
-import * as api from '@/api'
-import { QuickNoteSectionItem } from '@/types'
+import { getQuickNoteDetailAction } from '@/actions/get-quicknote-detail'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { transformIn } from './data'
 import { PastMedicalHxWidget } from './past-medical-hx-widget'
-
 
 interface PastMedicalHxWidgetLoaderProps {
   patientId: string
@@ -12,14 +10,9 @@ interface PastMedicalHxWidgetLoaderProps {
 const PastMedicalHxLoader = async ({
   patientId,
 }: PastMedicalHxWidgetLoaderProps) => {
-  const response = await api.POST<QuickNoteSectionItem[]>(
-    api.NOTE_DETAILS_SEARCH_ENDPOINT,
-    {
-      patientId: Number(patientId),
-      sectionName: [QuickNoteSectionName.QuickNoteSectionPastMedicalHx],
-      isLatest: true,
-    },
-  )
+  const response = await getQuickNoteDetailAction(patientId, [
+    QuickNoteSectionName.QuickNoteSectionPastMedicalHx,
+  ])
 
   if (response.state === 'error') {
     return <div>fail</div>
@@ -27,7 +20,9 @@ const PastMedicalHxLoader = async ({
 
   const initialValue = transformIn(response.data)
 
-  return <PastMedicalHxWidget patientId={patientId} initialValue={initialValue} />
+  return (
+    <PastMedicalHxWidget patientId={patientId} initialValue={initialValue} />
+  )
 }
 
 export { PastMedicalHxLoader }

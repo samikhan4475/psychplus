@@ -1,5 +1,4 @@
-import * as api from '@/api'
-import { QuickNoteSectionItem } from '@/types'
+import { getQuickNoteDetailAction } from '@/actions/get-quicknote-detail'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { getQuestionnairesHistories } from './api/get-questionnaires-history'
 import { TmsTab } from './tms-widget'
@@ -9,14 +8,9 @@ interface TmsWidgetLoaderProps {
 }
 
 const TmsWidgetLoader = async ({ patientId }: TmsWidgetLoaderProps) => {
-  const response = await api.POST<QuickNoteSectionItem[]>(
-    api.NOTE_DETAILS_SEARCH_ENDPOINT,
-    {
-      patientId: Number(patientId),
-      sectionName: [QuickNoteSectionName.ProcedureTMS],
-      isLatest: true,
-    },
-  )
+  const response = await getQuickNoteDetailAction(patientId, [
+    QuickNoteSectionName.ProcedureTMS,
+  ])
 
   const questionnairesHistories = await getQuestionnairesHistories({
     patientId,

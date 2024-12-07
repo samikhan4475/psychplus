@@ -1,5 +1,4 @@
-import * as api from '@/api'
-import { QuickNoteSectionItem } from '@/types'
+import { getQuickNoteDetailAction } from '@/actions/get-quicknote-detail'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { transformIn } from './data'
 import { HpiWidget } from './hpi-widget'
@@ -13,14 +12,9 @@ const HpiWidgetLoader = async ({
   patientId,
   isHpiHeader,
 }: HpiWidgetLoaderProps) => {
-  const response = await api.POST<QuickNoteSectionItem[]>(
-    api.NOTE_DETAILS_SEARCH_ENDPOINT,
-    {
-      patientId: Number(patientId),
-      sectionName: [QuickNoteSectionName.QuicknoteSectionHPI],
-      isLatest: true,
-    },
-  )
+  const response = await getQuickNoteDetailAction(patientId, [
+    QuickNoteSectionName.QuicknoteSectionHPI,
+  ])
 
   if (response.state === 'error') {
     return <div>fail</div>

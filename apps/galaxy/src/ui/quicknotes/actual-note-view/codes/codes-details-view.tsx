@@ -21,13 +21,16 @@ const CodesDetailsView = async ({
     getQuickNoteDetailAction(
       patientId,
       [QuickNoteSectionName.QuicknoteSectionCodes],
+      false,
       undefined,
       true,
     ),
     getQuickNoteDetailAction(
       patientId,
       [QuickNoteSectionName.QuicknoteSectionCodes],
+      false,
       appointmentId,
+      false,
     ),
   ])
 

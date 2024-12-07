@@ -10,9 +10,11 @@ type ReviewOfSystemProps = {
 }
 
 const ReviewOfSystem = async ({ patientId }: ReviewOfSystemProps) => {
-  const response = await getQuickNoteDetailAction(patientId, [
-    QuickNoteSectionName.QuicknoteSectionReviewOfSystem,
-  ])
+  const response = await getQuickNoteDetailAction(
+    patientId,
+    [QuickNoteSectionName.QuicknoteSectionReviewOfSystem],
+    true,
+  )
   if (response.state === 'error') {
     return <Text>{response.error}</Text>
   }

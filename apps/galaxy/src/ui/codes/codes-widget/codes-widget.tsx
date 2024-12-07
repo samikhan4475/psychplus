@@ -109,6 +109,6 @@ const CodesWidget = ({
 
 const visitsMap: Record<string, ComponentType<VisitProps>> = {
   Outpatient: OutpatientOffice,
-  TransitionalCare : Tcm
+  TransitionalCare: Tcm,
 }
 export { CodesWidget }

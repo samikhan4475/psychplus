@@ -12,6 +12,7 @@ const usePsychiatryAssessmentPlanTabForm = (
     resolver: zodResolver(psychiatryAssessmentPlanTabSchema),
     reValidateMode: 'onChange',
     defaultValues: initialValue,
+    values: initialValue,
   })
   return form
 }

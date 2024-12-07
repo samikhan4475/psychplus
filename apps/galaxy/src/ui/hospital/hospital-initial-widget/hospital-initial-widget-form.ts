@@ -12,6 +12,7 @@ const useHospitalInitialWidgetForm = (
     resolver: zodResolver(hospitalInitialWidgetSchema),
     reValidateMode: 'onChange',
     defaultValues: initialValue,
+    values: initialValue,
   })
 
   return form

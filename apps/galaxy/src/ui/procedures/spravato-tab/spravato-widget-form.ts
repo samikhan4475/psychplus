@@ -10,6 +10,7 @@ const useSpravatoWidgetForm = (initialValues: SpravatoWidgetSchemaType) => {
     resolver: zodResolver(spravatoWidgetSchema),
     reValidateMode: 'onChange',
     defaultValues: initialValues,
+    values: initialValues,
   })
 
   return form

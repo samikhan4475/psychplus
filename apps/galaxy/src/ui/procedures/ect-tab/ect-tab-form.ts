@@ -7,6 +7,7 @@ const useEctWidgetForm = (initialValue: EctWidgetSchemaType) => {
     resolver: zodResolver(ectWidgetSchema),
     reValidateMode: 'onChange',
     defaultValues: initialValue,
+    values: initialValue,
   })
   return form
 }

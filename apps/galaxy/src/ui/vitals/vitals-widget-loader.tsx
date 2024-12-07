@@ -21,6 +21,7 @@ const VitalsWidgetLoader = async ({
   const response = await getQuickNoteDetailAction(
     patientId,
     [QuickNoteSectionName.Vitals],
+    false,
     appointmentId,
   )
 

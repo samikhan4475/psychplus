@@ -12,9 +12,11 @@ interface TherapyAssessmentPlanViewProps {
 const TherapyAssessmentPlanView = async ({
   patientId,
 }: TherapyAssessmentPlanViewProps) => {
-  const response = await getQuickNoteDetailAction(patientId, [
-    QuickNoteSectionName.QuicknoteSectionTherapyAssessmentPlan,
-  ])
+  const response = await getQuickNoteDetailAction(
+    patientId,
+    [QuickNoteSectionName.QuicknoteSectionTherapyAssessmentPlan],
+    true,
+  )
 
   if (response.state === 'error') {
     return <Text>{response.error}</Text>

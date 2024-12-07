@@ -1,5 +1,6 @@
 'use server'
 
+import { getQuickNoteDetailAction } from '@/actions/get-quicknote-detail'
 import * as api from '@/api'
 import { QuickNoteSectionItem } from '@/types'
 
@@ -14,14 +15,8 @@ const getAssessmentPlanAction = async ({
 }: GetAssessmentPlanParams): Promise<
   api.ActionResult<QuickNoteSectionItem[]>
 > => {
-  const response = await api.POST<QuickNoteSectionItem[]>(
-    api.NOTE_DETAILS_SEARCH_ENDPOINT,
-    {
-      patientId: Number(patientId),
-      sectionName: [sectionName],
-      isLatest: true,
-    },
-  )
+  const response = await getQuickNoteDetailAction(patientId, [sectionName])
+
   if (response.state === 'error') {
     return {
       state: 'error',

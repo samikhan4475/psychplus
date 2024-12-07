@@ -10,9 +10,11 @@ type PastMedicalHxProps = {
 }
 
 const PastMedicalHx = async ({ patientId }: PastMedicalHxProps) => {
-  const response = await getQuickNoteDetailAction(patientId, [
-    QuickNoteSectionName.QuickNoteSectionPastMedicalHx,
-  ])
+  const response = await getQuickNoteDetailAction(
+    patientId,
+    [QuickNoteSectionName.QuickNoteSectionPastMedicalHx],
+    true,
+  )
 
   if (response.state === 'error') {
     return <Text>{response.error}</Text>

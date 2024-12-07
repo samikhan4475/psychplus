@@ -7,6 +7,7 @@ const useHpiWidgetForm = (initialValue: HpiWidgetSchemaType) => {
     resolver: zodResolver(hpiWidgetSchema),
     reValidateMode: 'onChange',
     defaultValues: initialValue,
+    values: initialValue,
   })
   return form
 }

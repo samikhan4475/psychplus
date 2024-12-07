@@ -1,5 +1,5 @@
-import * as api from '@/api'
-import { QuickNoteSectionItem } from '@/types'
+import { getQuickNoteDetailAction } from '@/actions/get-quicknote-detail'
+import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { transformIn } from './data'
 import { PhysicalExamWidget } from './physical-exam-widget'
 
@@ -12,14 +12,9 @@ const PhysicalExamWidgetLoader = async ({
   patientId,
   isPhysicalExamTab = false,
 }: HpiWidgetLoaderProps) => {
-  const response = await api.POST<QuickNoteSectionItem[]>(
-    api.NOTE_DETAILS_SEARCH_ENDPOINT,
-    {
-      patientId: Number(patientId),
-      sectionName: ['QuicknoteSectionPhysicalExam'],
-      isLatest: true,
-    },
-  )
+  const response = await getQuickNoteDetailAction(patientId, [
+    QuickNoteSectionName.QuicknoteSectionPhysicalExam,
+  ])
 
   if (response.state === 'error') {
     return <div>fail</div>

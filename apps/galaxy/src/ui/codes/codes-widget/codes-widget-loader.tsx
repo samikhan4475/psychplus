@@ -21,6 +21,7 @@ const CodesWidgetLoader = async ({
       getQuickNoteDetailAction(
         patientId,
         [QuickNoteSectionName.QuicknoteSectionCodes],
+        false,
         undefined,
         true,
       ),
@@ -28,7 +29,9 @@ const CodesWidgetLoader = async ({
       getQuickNoteDetailAction(
         patientId,
         [QuickNoteSectionName.QuicknoteSectionCodes],
+        false,
         appointmentId,
+        false,
       ),
 
       getAppointment(appointmentId as string),

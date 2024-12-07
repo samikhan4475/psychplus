@@ -1,6 +1,5 @@
 import { Box } from '@radix-ui/themes'
-import * as api from '@/api'
-import { QuickNoteSectionItem } from '@/types'
+import { getQuickNoteDetailAction } from '@/actions/get-quicknote-detail'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { AlertDialog } from '../alert-dialog'
 import { transformIn } from './data'
@@ -13,16 +12,9 @@ interface PsychiatryAssessmentPlanWidgetProps {
 const PsychiatryAssessmentPlanWidget = async ({
   patientId,
 }: PsychiatryAssessmentPlanWidgetProps) => {
-  const response = await api.POST<QuickNoteSectionItem[]>(
-    api.NOTE_DETAILS_SEARCH_ENDPOINT,
-    {
-      patientId: Number(patientId),
-      sectionName: [
-        QuickNoteSectionName.QuicknoteSectionPsychiatryAssessmentPlan,
-      ],
-      isLatest: true,
-    },
-  )
+  const response = await getQuickNoteDetailAction(patientId, [
+    QuickNoteSectionName.QuicknoteSectionPsychiatryAssessmentPlan,
+  ])
 
   if (response.state === 'error') {
     return <Box>fail</Box>

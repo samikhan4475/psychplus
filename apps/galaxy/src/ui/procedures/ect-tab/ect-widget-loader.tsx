@@ -1,5 +1,4 @@
-import * as api from '@/api'
-import { QuickNoteSectionItem } from '@/types'
+import { getQuickNoteDetailAction } from '@/actions/get-quicknote-detail'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { EctWidget } from './ect-widget'
 
@@ -8,14 +7,9 @@ interface EctWidgetLoaderProps {
 }
 
 const EctWidgetLoader = async ({ patientId }: EctWidgetLoaderProps) => {
-  const response = await api.POST<QuickNoteSectionItem[]>(
-    api.NOTE_DETAILS_SEARCH_ENDPOINT,
-    {
-      patientId: Number(patientId),
-      sectionName: [QuickNoteSectionName.QuicknoteSectionProcedureEtcTab],
-      isLatest: true,
-    },
-  )
+  const response = await getQuickNoteDetailAction(patientId, [
+    QuickNoteSectionName.QuicknoteSectionProcedureEtcTab,
+  ])
 
   if (response.state === 'error') {
     return <div>fail</div>

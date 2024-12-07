@@ -15,9 +15,11 @@ interface HpiProps {
 const HpiDetailView = async ({ patientId }: HpiProps) => {
   const [profileResult, hpiResult] = await Promise.all([
     getPatientProfile(patientId),
-    getQuickNoteDetailAction(patientId, [
-      QuickNoteSectionName.QuicknoteSectionHPI,
-    ]),
+    getQuickNoteDetailAction(
+      patientId,
+      [QuickNoteSectionName.QuicknoteSectionHPI],
+      true,
+    ),
   ])
 
   if (profileResult.state === 'error') {

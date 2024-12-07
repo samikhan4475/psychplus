@@ -10,9 +10,11 @@ type MentalStatusExamProps = {
 }
 
 const MentalStatusExam = async ({ patientId }: MentalStatusExamProps) => {
-  const response = await getQuickNoteDetailAction(patientId, [
-    QuickNoteSectionName.QuicknoteSectionMse,
-  ])
+  const response = await getQuickNoteDetailAction(
+    patientId,
+    [QuickNoteSectionName.QuicknoteSectionMse],
+    true,
+  )
 
   if (response.state === 'error') {
     return <Text>{response.error}</Text>

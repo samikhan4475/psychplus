@@ -1,6 +1,5 @@
 import { Text } from '@radix-ui/themes'
-import * as api from '@/api'
-import { QuickNoteSectionItem } from '@/types'
+import { getQuickNoteDetailAction } from '@/actions/get-quicknote-detail'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { AddOnWidget } from './add-on-widget'
 import { transformIn } from './data'
@@ -10,14 +9,9 @@ interface AddOnLoaderProps {
 }
 
 const AddOnLoader = async ({ patientId }: AddOnLoaderProps) => {
-  const response = await api.POST<QuickNoteSectionItem[]>(
-    api.NOTE_DETAILS_SEARCH_ENDPOINT,
-    {
-      patientId: Number(patientId),
-      sectionName: [QuickNoteSectionName.Addon],
-      isLatest: true,
-    },
-  )
+  const response = await getQuickNoteDetailAction(patientId, [
+    QuickNoteSectionName.Addon,
+  ])
 
   if (response.state === 'error') {
     return <Text>{response.error}</Text>

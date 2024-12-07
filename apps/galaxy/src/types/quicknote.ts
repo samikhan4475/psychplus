@@ -28,6 +28,8 @@ interface QuickNoteDetailsPayload {
   appointmentId?: number
   isLatest: boolean
   isWithAppointmentNull?: boolean
+  historyCreatedByUserId?: number
+  isCopyMyPrevious?: boolean
 }
 
 export type { QuickNoteSectionItem, QuickNoteHistory, QuickNoteDetailsPayload }

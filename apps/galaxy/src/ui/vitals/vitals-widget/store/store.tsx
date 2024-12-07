@@ -94,6 +94,7 @@ const useStore = create<StoreState>((set, get) => ({
       const response = await getQuickNoteDetailAction(
         payload.patientId,
         [QuickNoteSectionName.Vitals],
+        false,
         payload.appointmentId,
       )
 

@@ -16,6 +16,10 @@ const usePastMedicalHxWidgetForm = (
       ...(initialValue || {}),
       pregnantDate: convertDateField(initialValue?.pregnantDate),
     },
+    values: {
+      ...(initialValue || {}),
+      pregnantDate: convertDateField(initialValue?.pregnantDate),
+    },
   })
 
   return form

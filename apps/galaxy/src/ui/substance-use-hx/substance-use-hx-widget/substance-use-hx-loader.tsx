@@ -1,5 +1,4 @@
-import * as api from '@/api'
-import { QuickNoteSectionItem } from '@/types'
+import { getQuickNoteDetailAction } from '@/actions/get-quicknote-detail'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { transformIn } from './data'
 import { SubstanceUseHxWidget } from './substance-use-widget'
@@ -11,17 +10,10 @@ interface SubstanceUseHxWidgetLoaderProps {
 const SubstanceUseHxLoader = async ({
   patientId,
 }: SubstanceUseHxWidgetLoaderProps) => {
-  const response = await api.POST<QuickNoteSectionItem[]>(
-    api.NOTE_DETAILS_SEARCH_ENDPOINT,
-    {
-      patientId: Number(patientId),
-      sectionName: [
-        QuickNoteSectionName.QuickNoteSectionSubstanceUseHx,
-        QuickNoteSectionName.QuickNoteSectionDiagnosis,
-      ],
-      isLatest: true,
-    },
-  )
+  const response = await getQuickNoteDetailAction(patientId, [
+    QuickNoteSectionName.QuickNoteSectionSubstanceUseHx,
+    QuickNoteSectionName.QuickNoteSectionDiagnosis,
+  ])
 
   if (response.state === 'error') {
     return <div>fail</div>

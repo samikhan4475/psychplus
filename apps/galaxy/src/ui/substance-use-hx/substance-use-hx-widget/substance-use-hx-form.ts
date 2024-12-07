@@ -12,6 +12,7 @@ const useSubstanceHxWidgetForm = (
     resolver: zodResolver(substanceUseHxWidgetSchema),
     reValidateMode: 'onChange',
     defaultValues: initialValue,
+    values: initialValue,
   })
 
   return form

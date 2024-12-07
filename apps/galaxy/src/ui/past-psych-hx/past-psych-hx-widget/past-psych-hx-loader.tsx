@@ -1,3 +1,4 @@
+import { getQuickNoteDetailAction } from '@/actions/get-quicknote-detail'
 import * as api from '@/api'
 import { QuickNoteSectionItem } from '@/types'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
@@ -11,14 +12,9 @@ interface PastPsychHxWidgetLoaderProps {
 const PastPsychHxLoader = async ({
   patientId,
 }: PastPsychHxWidgetLoaderProps) => {
-  const response = await api.POST<QuickNoteSectionItem[]>(
-    api.NOTE_DETAILS_SEARCH_ENDPOINT,
-    {
-      patientId: Number(patientId),
-      sectionName: [QuickNoteSectionName.QuickNoteSectionPastPsychHx],
-      isLatest: true,
-    },
-  )
+  const response = await getQuickNoteDetailAction(patientId, [
+    QuickNoteSectionName.QuickNoteSectionPastPsychHx,
+  ])
 
   if (response.state === 'error') {
     return <div>fail</div>

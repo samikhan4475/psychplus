@@ -7,6 +7,7 @@ const useTherapyForm = (initialValue: TherapySchemaType) => {
     resolver: zodResolver(TherapySchema),
     reValidateMode: 'onChange',
     defaultValues: initialValue,
+    values: initialValue,
   })
   return form
 }

@@ -1,5 +1,5 @@
 import { Text } from '@radix-ui/themes'
-import { saveWidgetAction } from '@/actions/save-widget'
+import * as api from '@/api'
 import { getBookedAppointmentsAction } from '../schedule/actions'
 import { transformOut } from './follow-up-widget/data'
 import { QuicknotesFollowUpWidget } from './quicknotes-follow-up-widget'
@@ -34,7 +34,7 @@ const FollowUpWidgetLoader = async ({
       appointmentId,
     )({ followUpsId: selectedFollowUpIds as string[] })
 
-    await saveWidgetAction({ patientId, data: payload })
+    await api.PUT(api.NOTE_DETAILS_SAVE_ENDPOINT(patientId), payload)
   }
 
   return (

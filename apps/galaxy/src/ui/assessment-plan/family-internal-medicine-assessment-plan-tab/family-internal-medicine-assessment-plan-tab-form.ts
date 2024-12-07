@@ -12,6 +12,7 @@ const useFamilyInternalMedicineAssessmentPlanTabForm = (
     resolver: zodResolver(familyInternalMedicineAssessmentPlanTabSchema),
     reValidateMode: 'onChange',
     defaultValues: initialValue,
+    values: initialValue,
   })
   return form
 }

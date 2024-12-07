@@ -1,5 +1,5 @@
 const formatValue = (value: string): string => {
-  const trimmedValue = value.replace(/^[a-z]+/, '')
+  const trimmedValue = value?.replace(/^[a-z]+/, '')
   const specialCases: Record<string, string> = {
     NoSlowAgitations: 'No slow/agitations',
     BadOrder: 'Bad order',
@@ -25,12 +25,12 @@ const formatValue = (value: string): string => {
   }
 
   const formattedValue = trimmedValue
-    .replace(/([a-z])([A-Z])/g, '$1 $2')
-    .replace(/([A-Z])([A-Z][a-z])/g, '$1 $2')
+    ?.replace(/([a-z])([A-Z])/g, '$1 $2')
+    ?.replace(/([A-Z])([A-Z][a-z])/g, '$1 $2')
 
   return (
-    formattedValue.charAt(0).toUpperCase() +
-    formattedValue.slice(1).toLowerCase()
+    formattedValue?.charAt(0).toUpperCase() +
+    formattedValue?.slice(1).toLowerCase()
   )
 }
 

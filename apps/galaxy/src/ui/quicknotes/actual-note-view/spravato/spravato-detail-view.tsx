@@ -10,9 +10,11 @@ type SpravatoDetailsProps = {
 }
 
 const SpravatoDetailView = async ({ patientId }: SpravatoDetailsProps) => {
-  const response = await getQuickNoteDetailAction(patientId, [
-    QuickNoteSectionName.QuicknoteSectionProcedureSpravato,
-  ])
+  const response = await getQuickNoteDetailAction(
+    patientId,
+    [QuickNoteSectionName.QuicknoteSectionProcedureSpravato],
+    true,
+  )
 
   if (response.state === 'error') {
     return <Text>{response.error}</Text>

@@ -10,9 +10,11 @@ type PhysicalExamProps = {
 }
 
 const PhysicalExamView = async ({ patientId }: PhysicalExamProps) => {
-  const response = await getQuickNoteDetailAction(patientId, [
-    QuickNoteSectionName.QuicknoteSectionPhysicalExam,
-  ])
+  const response = await getQuickNoteDetailAction(
+    patientId,
+    [QuickNoteSectionName.QuicknoteSectionPhysicalExam],
+    true,
+  )
 
   if (response.state === 'error') {
     return <Text>{response.error}</Text>

@@ -1,6 +1,5 @@
 import { Flex } from '@radix-ui/themes'
-import * as api from '@/api'
-import { QuickNoteSectionItem } from '@/types'
+import { getQuickNoteDetailAction } from '@/actions/get-quicknote-detail'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { transformIn } from './data'
 import { TherapyWidget } from './therapy-widget'
@@ -10,14 +9,9 @@ interface TherapyWidgetLoaderProps {
 }
 
 const TherapyLoader = async ({ patientId }: TherapyWidgetLoaderProps) => {
-  const response = await api.POST<QuickNoteSectionItem[]>(
-    api.NOTE_DETAILS_SEARCH_ENDPOINT,
-    {
-      patientId: Number(patientId),
-      sectionName: [QuickNoteSectionName.QuickNoteSectionTherapy],
-      isLatest: true,
-    },
-  )
+  const response = await getQuickNoteDetailAction(patientId, [
+    QuickNoteSectionName.QuickNoteSectionTherapy,
+  ])
 
   if (response.state === 'error') {
     return <div>fail</div>

@@ -7,6 +7,7 @@ const useRosWidgetForm = (initialValue: RosWidgetSchemaType) => {
     resolver: zodResolver(rosWidgetSchema),
     reValidateMode: 'onChange',
     defaultValues: initialValue,
+    values: initialValue,
   })
 
   return form

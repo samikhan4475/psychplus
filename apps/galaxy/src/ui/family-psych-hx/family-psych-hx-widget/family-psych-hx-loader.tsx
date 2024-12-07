@@ -1,5 +1,4 @@
-import * as api from '@/api'
-import { QuickNoteSectionItem } from '@/types'
+import { getQuickNoteDetailAction } from '@/actions/get-quicknote-detail'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { transformIn } from './data'
 import { FamilyPsychHxWidget } from './family-psych-hx-widget'
@@ -11,14 +10,9 @@ interface FamilyPsychHxWidgetLoaderProps {
 const FamilyPsychHxLoader = async ({
   patientId,
 }: FamilyPsychHxWidgetLoaderProps) => {
-  const response = await api.POST<QuickNoteSectionItem[]>(
-    api.NOTE_DETAILS_SEARCH_ENDPOINT,
-    {
-      patientId: Number(patientId),
-      sectionName: [QuickNoteSectionName.QuickNoteSectionFamilyPsychHx],
-      isLatest: true,
-    },
-  )
+  const response = await getQuickNoteDetailAction(patientId, [
+    QuickNoteSectionName.QuickNoteSectionFamilyPsychHx,
+  ])
 
   if (response.state === 'error') {
     return <div>fail</div>

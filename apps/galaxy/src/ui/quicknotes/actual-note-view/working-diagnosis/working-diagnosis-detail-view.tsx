@@ -11,9 +11,11 @@ type WorkingDiagnosisDetailProps = {
 const WorkingDiagnosisDetailView = async ({
   patientId,
 }: WorkingDiagnosisDetailProps) => {
-  const response = await getQuickNoteDetailAction(patientId, [
-    QuickNoteSectionName.QuickNoteSectionDiagnosis,
-  ])
+  const response = await getQuickNoteDetailAction(
+    patientId,
+    [QuickNoteSectionName.QuickNoteSectionDiagnosis],
+    true,
+  )
 
   if (response.state === 'error') {
     return <Text>{response.error}</Text>

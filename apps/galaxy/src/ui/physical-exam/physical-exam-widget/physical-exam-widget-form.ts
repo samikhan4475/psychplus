@@ -12,6 +12,7 @@ const usePhysicalExamWidgetForm = (
     resolver: zodResolver(physicalExamWidgetSchema),
     reValidateMode: 'onChange',
     defaultValues: initialValue,
+    values: initialValue,
   })
 
   return form

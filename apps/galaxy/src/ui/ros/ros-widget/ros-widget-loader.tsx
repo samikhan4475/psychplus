@@ -1,5 +1,4 @@
-import * as api from '@/api'
-import { QuickNoteSectionItem } from '@/types'
+import { getQuickNoteDetailAction } from '@/actions/get-quicknote-detail'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { transformIn } from './data'
 import { RosWidget } from './ros-widget'
@@ -9,14 +8,9 @@ interface RosWidgetProps {
 }
 
 const RosWidgetLoader = async ({ patientId }: RosWidgetProps) => {
-  const response = await api.POST<QuickNoteSectionItem[]>(
-    api.NOTE_DETAILS_SEARCH_ENDPOINT,
-    {
-      patientId: Number(patientId),
-      sectionName: [QuickNoteSectionName.QuicknoteSectionReviewOfSystem],
-      isLatest: true,
-    },
-  )
+  const response = await getQuickNoteDetailAction(patientId, [
+    QuickNoteSectionName.QuicknoteSectionReviewOfSystem,
+  ])
 
   if (response.state === 'error') {
     return <div>fail</div>

@@ -15,6 +15,7 @@ const VitalsView = async ({ patientId, appointmentId }: VitalsProps) => {
   const response = await getQuickNoteDetailAction(
     patientId,
     [QuickNoteSectionName.Vitals],
+    true,
     appointmentId,
   )
 

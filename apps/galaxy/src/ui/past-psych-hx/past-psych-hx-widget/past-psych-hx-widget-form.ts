@@ -12,6 +12,7 @@ const usePastPsychHxWidgetForm = (
     resolver: zodResolver(pastPsychHxWidgetSchema),
     reValidateMode: 'onChange',
     defaultValues: initialValue,
+    values: initialValue,
   })
 
   return form

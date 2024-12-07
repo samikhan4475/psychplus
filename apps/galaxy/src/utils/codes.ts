@@ -30,6 +30,7 @@ const fetchCodes = async (patientId: string, appointmentId?: string) => {
     getQuickNoteDetailAction(
       patientId,
       [QuickNoteSectionName.QuicknoteSectionCodes],
+      false,
       undefined,
       true,
     ),
@@ -37,6 +38,7 @@ const fetchCodes = async (patientId: string, appointmentId?: string) => {
     getQuickNoteDetailAction(
       patientId,
       [QuickNoteSectionName.QuicknoteSectionCodes],
+      false,
       appointmentId,
     ),
   ])

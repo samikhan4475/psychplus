@@ -7,6 +7,7 @@ const useMseWidgetForm = (initialValue: MseWidgetSchemaType) => {
     resolver: zodResolver(mseWidgetSchema),
     reValidateMode: 'onChange',
     defaultValues: initialValue,
+    values: initialValue,
   })
 
   return form

@@ -12,6 +12,7 @@ const useFamilyPsychHxWidgetForm = (
     resolver: zodResolver(familyPsychHxWidgetSchema),
     reValidateMode: 'onChange',
     defaultValues: initialValue,
+    values: initialValue,
   })
 
   return form
