@@ -1,24 +1,23 @@
 'use client'
 
+import { useMemo } from 'react'
 import NextLink from 'next/link'
-import { usePathname } from 'next/navigation'
+import { useParams, usePathname } from 'next/navigation'
 import { Box, Flex, ScrollArea } from '@radix-ui/themes'
-import { cn } from '@/utils'
+import { cn, getManagementNavLinks } from '@/utils'
 
 const ManagementNavigation = () => {
+  const { id, type } = useParams<{ id: string; type: string }>()
+  const navLinks = useMemo(() => getManagementNavLinks(type, id), [type, id])
   return (
     <Box className="bg-white mb-4 w-[160px] rounded-1 shadow-2">
       <ScrollArea>
         <Flex direction="column">
-          <NavigationLink href="/coding">Coding</NavigationLink>
-          <NavigationLink href="/staff">Staff</NavigationLink>
-          <NavigationLink href="/clearinghouse">
-            Clearing House Setup
-          </NavigationLink>
-          <NavigationLink href="/location">Location</NavigationLink>
-          <NavigationLink href="/reports">Reports</NavigationLink>
-          <NavigationLink href="/pharmacy">Pharmacy</NavigationLink>
-          <NavigationLink href="/payer">Payer</NavigationLink>
+          {navLinks.map((widget) => (
+            <NavigationLink key={widget.label} href={widget.href}>
+              {widget.label}
+            </NavigationLink>
+          ))}
         </Flex>
       </ScrollArea>
     </Box>
@@ -35,7 +34,7 @@ const NavigationLink = ({
 }: React.PropsWithChildren<NavigationLinkProps>) => {
   const pathname = usePathname()
 
-  href = href ? `/management${href}` : `/management`
+  href = href ? href : `/management`
 
   const isActive = pathname === href
 

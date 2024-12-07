@@ -139,9 +139,117 @@ const isHospitalCareVisit = (visitType: string | null) => {
   return visitType?.includes('HospitalCare')
 }
 
+const getManagementNavLinks = (type: string | null, id: string | null) => {
+  const baseHref = `/management`
+
+  if (type === 'organizations') {
+    const orgBase = `${baseHref}/organization-practice/organizations/${id}`
+    return [
+      {
+        label: 'Profile',
+        href: `${orgBase}/organization-profile`,
+      },
+      {
+        label: 'Practice',
+        href: `${orgBase}/practice`,
+      },
+      {
+        label: 'Policies',
+        href: `${orgBase}/policies`,
+      },
+      {
+        label: 'Staff',
+        href: `${orgBase}/staff`,
+      },
+      {
+        label: 'Users',
+        href: `${orgBase}/users`,
+      },
+      {
+        label: 'Roles & Permissions',
+        href: `${orgBase}/roles-permissions`,
+      },
+    ]
+  }
+
+  if (type === 'practices') {
+    const practiceBase = `${baseHref}/organization-practice/practices/${id}`
+    return [
+      {
+        label: 'Profile',
+        href: `${practiceBase}/profile`,
+      },
+      {
+        label: 'Virtual Address',
+        href: `${practiceBase}/virtual-address`,
+      },
+      {
+        label: 'Provider Types',
+        href: `${practiceBase}/provider-types`,
+      },
+      {
+        label: 'Clearing House Setup',
+        href: `${practiceBase}/staff`,
+      },
+      {
+        label: 'Plan List',
+        href: `${practiceBase}/plan-list`,
+      },
+      {
+        label: 'Settings',
+        href: `${practiceBase}/settings`,
+      },
+      {
+        label: 'Staff',
+        href: `${practiceBase}/staff`,
+      },
+      {
+        label: 'Roles & Permissions',
+        href: `${practiceBase}/roles-permissions`,
+      },
+    ]
+  }
+
+  return [
+    {
+      label: 'Coding',
+      href: `${baseHref}/coding`,
+    },
+    {
+      label: 'Staff',
+      href: `${baseHref}/staff`,
+    },
+    {
+      label: 'Clearing House Setup',
+      href: `${baseHref}/clearinghouse`,
+    },
+    {
+      label: 'Location',
+      href: `${baseHref}/location`,
+    },
+    {
+      label: 'Reports',
+      href: `${baseHref}/reports`,
+    },
+    {
+      label: 'Pharmacy',
+      href: `${baseHref}/pharmacy`,
+    },
+    {
+      label: 'Payer',
+      href: `${baseHref}/payer`,
+    },
+    {
+      label: 'Organization and Practice',
+      href: `${baseHref}/organization-practice`,
+    },
+  ]
+}
+
 export {
   constructQuickNotesUrl,
   getNavLinks,
   isHospitalCareVisit,
   getStaffNavLinks,
+  getManagementNavLinks,
 }
