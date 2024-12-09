@@ -34,7 +34,7 @@ const UserDropdownMenu = ({ user }: UserDropdownMenuProps) => {
             />
           </button>
           <Text weight="medium" size="1">
-            Michael
+            {`${user.firstName} ${user.lastName}`}
           </Text>
           <TriangleDownIcon />
         </Flex>
