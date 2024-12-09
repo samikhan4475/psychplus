@@ -6,7 +6,7 @@ import { createColumns } from './parameter-table-columns';
 import { TemplateSchemaType } from './schema';
 
 const ParametersTable = () => {
-  const { control, setValue, watch } = useFormContext<TemplateSchemaType>();
+  const { control, setValue, watch, formState: { errors }  } = useFormContext<TemplateSchemaType>();
   const { fields, append, remove, move } = useFieldArray({
     control,
     name: 'parameters',
@@ -31,12 +31,19 @@ const ParametersTable = () => {
     }
     setValue(`parameters.${index}.displayOrder`, index);
   });
+  const parameterErrors = errors.parameters || {};
+  const firstErrorKey = Object.keys(parameterErrors).find((key) => {
+    const numericKey = Number(key);
+    return parameterErrors[numericKey]?.parameterCode;
+  });
 
   return (
     <>
       <AddRowButton onAddRow={addRow} />
       <DataTable columns={createColumns(move, remove, fields.length)} data={fields} />
-      <FormFieldError name={`parameters[0].parameterCode`} />
+      {firstErrorKey && (
+        <FormFieldError name={`parameters.${firstErrorKey}.parameterCode`} />
+      )}
     </>
   );
 };

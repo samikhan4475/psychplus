@@ -15,7 +15,13 @@ const templateSchema = z.object({
       reportTemplateId: z.string().optional(),
       displayOrder: z.number(),
     })
-  ).optional(),
+  ).optional()
+    .refine((params) => {
+      if (!params || params.length === 0) return true;
+      return params.every((param) => param.parameterCode.trim() !== "");
+    }, {
+      message: "Please fill out all the parameter rows",
+    }),
   permittedRoles: z.array(z.string()).optional(),
 });
 

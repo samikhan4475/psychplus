@@ -13,9 +13,9 @@ import { UploadIcon } from '@/components/icons';
 const ReportUploader = () => {
   const form = useFormContext();
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [selectedReportName, setSelectedReportName] = useState<string | null>(null);
   const [uploadedReport, setUploadedReport] = useState<string | null>(null);
   const [isDownloading, setIsDownloading] = useState(false);
+  const fileName = form.watch('fileName');
 
   const definitionPayloadUrl = form.watch('definitionPayloadUrl');
   const templateId = form.watch('id');
@@ -29,8 +29,8 @@ const ReportUploader = () => {
   const handleReportChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      form.setValue('definitionPayloadUrl', file);
-      setSelectedReportName(file.name);
+      form.setValue('definitionPayloadUrl', file, { shouldValidate: true });
+      form.setValue('fileName', file.name);
     }
   };
 
@@ -41,8 +41,8 @@ const ReportUploader = () => {
   };
 
   const handleRemoveReport = () => {
-    form.setValue('definitionPayloadUrl', null);
-    setSelectedReportName(null);
+    form.setValue('definitionPayloadUrl', null, { shouldValidate: true });
+    form.setValue('fileName', null);
     setUploadedReport(null);
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
@@ -100,16 +100,16 @@ const ReportUploader = () => {
             </Flex>
           ) : (
             <Button
-              onClick={selectedReportName ? handleRemoveReport : handleButtonClick}
+              onClick={fileName ? handleRemoveReport : handleButtonClick}
               variant="outline"
               type="button"
               color="gray"
               className="w-fit text-black h-[24px] py-2 px-3 flex items-center justify-center bg-white cursor-pointer"
             >
               <Text className="text-[12px] font-regular text-pp-black-1 flex gap-1 items-center justify-center">
-                {selectedReportName ? (
+                {fileName ? (
                   <>
-                    <Cross2Icon color="red" /> {truncateFileName(selectedReportName)}
+                    <Cross2Icon color="red" /> {truncateFileName(fileName)}
                   </>
                 ) : (
                   <>
