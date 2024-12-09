@@ -47,6 +47,8 @@ const UserDropdownMenu = ({ user }: UserDropdownMenuProps) => {
           Icon={LogOutIcon}
           onClick={() => {
             logoutAction()
+            localStorage.clear()
+            sessionStorage.clear()
           }}
         >
           Log out

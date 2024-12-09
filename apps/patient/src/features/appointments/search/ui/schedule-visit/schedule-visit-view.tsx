@@ -55,7 +55,10 @@ const ScheduleVisitView = () => {
 
   const [zipStates, setZipStates] = useState<StateListType[]>([])
 
-  const profile = useProfileStore((state) => state.profile)
+  const { profile, setProfile } = useProfileStore((state) => ({
+    profile: state.profile,
+    setProfile: state.setProfile,
+  }))
 
   const updatedSchema = profile.contactDetails?.addresses
     ? schema.omit({
@@ -147,6 +150,7 @@ const ScheduleVisitView = () => {
         },
       })
       if (res.state === 'success') {
+        setProfile(res.data)
         const appointmentData = {
           providerType: data.providerType,
           appointmentType: data.appointmentType,
