@@ -22,7 +22,7 @@ import {
   getModifiedCptCodes,
   handleDefaultSubmission,
 } from './utils'
-import { OutpatientOffice, Tcm } from './visits'
+import { OutpatientOffice, SpravatoVisit, Tcm } from './visits'
 
 interface CodesWidgetProps {
   patientId: string
@@ -110,5 +110,6 @@ const CodesWidget = ({
 const visitsMap: Record<string, ComponentType<VisitProps>> = {
   Outpatient: OutpatientOffice,
   TransitionalCare: Tcm,
+  SpravatoVisit: SpravatoVisit,
 }
 export { CodesWidget }

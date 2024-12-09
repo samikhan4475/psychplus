@@ -1,11 +1,13 @@
-import { QuickNoteSectionItem } from '@/types'
+import { CodesWidgetItem, CptCodeKeys, QuickNoteSectionItem } from '@/types'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { sanitizeFormData } from '@/utils'
+import { manageCodes } from '@/utils/codes'
 import { SpravatoWidgetSchemaType } from './spravato-widget-schema'
+import { PrecurementMethod, spravatoCodes } from './utils'
 
 const transformOut =
-  (patientId: string) =>
-  (schema: SpravatoWidgetSchemaType): QuickNoteSectionItem[] => {
+  (patientId: string, appointmentId: string, visitSequence: string) =>
+  async (schema: SpravatoWidgetSchemaType) => {
     const result: QuickNoteSectionItem[] = []
     const data = sanitizeFormData(schema)
     Object.entries(data).forEach(([key, value]) => {
@@ -22,8 +24,66 @@ const transformOut =
         })
       }
     })
+    const selectedCodes: CodesWidgetItem[] = []
 
-    return result
+    const addCodes = (codes: CodesWidgetItem[]) => {
+      selectedCodes.push(...codes)
+    }
+
+    if (
+      data.procurementMethod === PrecurementMethod.BUY_AND_BILL &&
+      data.doseAdminstered === '56mg'
+    ) {
+      addCodes([{ key: CptCodeKeys.PRIMARY_CODE_KEY, code: 'G2082*1' }])
+    }
+
+    if (
+      data.procurementMethod === PrecurementMethod.BUY_AND_BILL &&
+      data.doseAdminstered === '84mg'
+    ) {
+      addCodes([{ key: CptCodeKeys.PRIMARY_CODE_KEY, code: 'G2083*1' }])
+    }
+
+    if (
+      data.procurementMethod === PrecurementMethod.ONLY_BILL &&
+      visitSequence === 'New'
+    ) {
+      addCodes([{ key: CptCodeKeys.PRIMARY_CODE_KEY, code: '99205*1' }])
+    }
+
+    if (
+      data.procurementMethod === PrecurementMethod.ONLY_BILL &&
+      visitSequence === 'Established'
+    ) {
+      addCodes([{ key: CptCodeKeys.PRIMARY_CODE_KEY, code: ' 99215*1' }])
+    }
+
+    if (data.procurementMethod === PrecurementMethod.ONLY_BILL) {
+      addCodes([{ key: CptCodeKeys.MODIFIER_KEY, code: '25' }])
+    }
+
+    if (
+      data.procurementMethod === PrecurementMethod.ONLY_BILL &&
+      visitSequence === 'New'
+    ) {
+      addCodes([{ key: CptCodeKeys.ADD_ONS_KEY, code: '99417*3' }])
+    }
+
+    if (
+      data.procurementMethod === PrecurementMethod.ONLY_BILL &&
+      visitSequence === 'Established'
+    ) {
+      addCodes([{ key: CptCodeKeys.PRIMARY_CODE_KEY, code: ' 99417*4' }])
+    }
+
+    const codesResult = await manageCodes(
+      patientId,
+      appointmentId,
+      spravatoCodes,
+      selectedCodes,
+    )
+
+    return [...result, ...codesResult]
   }
 
 const transformIn = (
@@ -91,6 +151,7 @@ const transformIn = (
       respiratoryRate: '',
       systolic: '',
     },
+    procurementMethod: '',
   }
 
   value.forEach((item) => {

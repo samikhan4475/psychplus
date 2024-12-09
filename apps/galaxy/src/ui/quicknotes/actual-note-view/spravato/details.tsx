@@ -7,6 +7,7 @@ import { AdverseReaction } from './adverse-reaction'
 import { DischargePlan } from './discharge-plan'
 import { Monitoring } from './monitoring'
 import { PrecautionAndWarning } from './precaution-and-warning'
+import { ProcurementMethod } from './procurement-method'
 import { SpravatoListView } from './spravato-list-view'
 import { VitalSigns } from './vital-signs'
 
@@ -41,6 +42,8 @@ const Details = ({ data }: Props<SpravatoWidgetSchemaType>) => {
         <AdverseReaction data={data} />
         <Separator className="my-3 w-full" />
         <DischargePlan data={data} />
+        <Separator className="my-3 w-full" />
+        <ProcurementMethod data={data} />
       </Flex>
     </BlockContainer>
   )

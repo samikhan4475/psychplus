@@ -1,6 +1,6 @@
 'use client'
 
-import { useParams } from 'next/navigation'
+import { useParams, useSearchParams } from 'next/navigation'
 import { FormProvider } from 'react-hook-form'
 import {
   WidgetFormContainer,
@@ -15,6 +15,7 @@ import { transformIn, transformOut } from './data'
 import { DischargePlan } from './discharge-plan'
 import { MonitoringView } from './monitoring'
 import { PostTreatmentTransportation } from './post-treatment'
+import { ProcurementMethod } from './procurement-method'
 import { DosingSection, PrecautionsAndWarningSection } from './sections'
 import { useSpravatoWidgetForm } from './spravato-widget-form'
 import { VitalSignsView } from './vital-signs'
@@ -27,6 +28,8 @@ const SpravatoWidget = ({ procedureSpravatoData }: SpravatoTabProps) => {
   const { id } = useParams<{ id: string }>()
   const initialValues = transformIn(procedureSpravatoData)
   const form = useSpravatoWidgetForm(initialValues)
+  const appointmentId = useSearchParams().get('id') as string
+  const visitSequence = useSearchParams().get('visitSequence') || ''
 
   return (
     <FormProvider {...form}>
@@ -34,7 +37,7 @@ const SpravatoWidget = ({ procedureSpravatoData }: SpravatoTabProps) => {
         patientId={id}
         widgetId={ProcedureTabsId.SPRAVATO_ID}
         title={ProcedureTabs.SPRAVATO}
-        getData={transformOut(id)}
+        getData={transformOut(id, appointmentId, visitSequence)}
         headerRight={
           <>
             <WidgetHxButton />
@@ -51,6 +54,7 @@ const SpravatoWidget = ({ procedureSpravatoData }: SpravatoTabProps) => {
         <AdverseEventQuestionView />
         <DischargePlan />
         <PostTreatmentTransportation />
+        <ProcurementMethod />
       </WidgetFormContainer>
     </FormProvider>
   )

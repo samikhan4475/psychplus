@@ -16,6 +16,8 @@ const visitSpecificCodes: CodesWidgetItem[] = [
   { key: CptCodeKeys.ADD_ONS_KEY, code: '99050' },
   { key: CptCodeKeys.MODIFIER_KEY, code: '95' },
   { key: CptCodeKeys.MODIFIER_KEY, code: '25' },
+  { key: CptCodeKeys.ADD_ONS_KEY, code: '99417*3' },
+  { key: CptCodeKeys.ADD_ONS_KEY, code: '99417*4' },
   { key: CptCodeKeys.MODIFIER_KEY, code: '59' },
 ]
 const restrictedVisitsForAddOnCodes = ['SpravatoVisit']

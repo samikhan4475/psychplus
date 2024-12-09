@@ -4,6 +4,7 @@ type SpravatoWidgetSchemaType = z.infer<typeof spravatoWidgetSchema>
 
 const spravatoWidgetSchema = z
   .object({
+    procurementMethod: z.string().optional(),
     treatmentNumber: z.string().optional(),
     doseAdminstered: z.string().optional(),
     lotNumber: z.string().optional(),
@@ -111,6 +112,10 @@ const spravatoWidgetSchema = z
       {
         condition: !data?.doseAdminstered,
         path: ['doseAdminstered'],
+      },
+      {
+        condition: !data?.procurementMethod,
+        path: ['procurementMethod'],
       },
       {
         condition: data.vitalSigns.length === 0,
