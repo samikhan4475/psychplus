@@ -18,6 +18,8 @@ import {
   getLocalCalendarDate,
   sanitizeFormData,
 } from '@/utils'
+import { ENABLE_FORM_STATUSES } from '../constants'
+import { useStore } from '../store'
 import { AccidentAndLabView } from './accident-lab-section'
 import { getClaimById } from './actions/get-service-claim'
 import { updateClaimAction } from './actions/update-claim'
@@ -43,6 +45,7 @@ interface ClaimDetailViewProps {
   claimId: string
 }
 const ClaimDetailView = ({ claimId }: ClaimDetailViewProps) => {
+  const selectedClaimStatus = useStore((state) => state.selectedClaimStatus)
   const [openItems, setOpenItems] = useState<string[]>([
     'Billing Provider',
     'Accidents And Labs',
@@ -53,8 +56,8 @@ const ClaimDetailView = ({ claimId }: ClaimDetailViewProps) => {
     'Submission Response',
     'Insurances',
   ])
-
   const form = useForm<ClaimUpdateSchemaType>({
+    disabled: !ENABLE_FORM_STATUSES.includes(selectedClaimStatus),
     resolver: zodResolver(claimUpdateSchema),
     reValidateMode: 'onChange',
     defaultValues: {

@@ -12,7 +12,7 @@ const DiagnosisView = () => {
   const form = useFormContext<ClaimUpdateSchemaType>()
   const { getValues } = form
   const claimDiagnosis = form.watch('claimDiagnosis')
-
+  const isDisabled = form.formState.disabled
   const handleSelectedItem = (selectedItem: DiagnosisIcd10Code) => {
     const currentDiagnosisList = getValues('claimDiagnosis')
     // check if diag code exist dont add
@@ -118,11 +118,13 @@ const DiagnosisView = () => {
               >
                 <Flex align="center" justify="center" gap="2">
                   <Text>{icdItem.diagnosisCode}</Text>
-                  <Cross1Icon
-                    onClick={() =>
-                      removeDiagnosis(icdItem.id, icdItem.diagnosisCode)
-                    }
-                  />
+                  {!isDisabled && (
+                    <Cross1Icon
+                      onClick={() =>
+                        removeDiagnosis(icdItem.id, icdItem.diagnosisCode)
+                      }
+                    />
+                  )}
                 </Flex>
               </Box>
             )

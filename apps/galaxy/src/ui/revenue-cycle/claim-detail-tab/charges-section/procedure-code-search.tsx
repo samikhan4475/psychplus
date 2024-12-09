@@ -51,6 +51,32 @@ const SearchProcedureCodes = ({
     setLoading(false)
   }, 500)
 
+  const onOpenChange = (open: boolean) => {
+    if (!disabled) {
+      setOpen(open)
+    }
+  }
+
+  const renderItem = (item: CodeItem) => {
+    return (
+      <Box
+        py="1"
+        px="2"
+        className={cn('hover:bg-pp-black-1 hover:text-white mx-1 rounded-1', {
+          'bg-pp-states-disabled cursor-not-allowed': disabled,
+        })}
+        onClick={() => {
+          if (onChange) onChange(item)
+          onOpenChange(false)
+        }}
+      >
+        <Text size="1" weight="regular">
+          {item.code}
+        </Text>
+      </Box>
+    )
+  }
+
   const renderColumn = (value: string, disabled?: boolean) => {
     const content = value ? (
       <Text>{value}</Text>
@@ -64,8 +90,9 @@ const SearchProcedureCodes = ({
       <Box
         className={cn(
           'width-full flex w-full cursor-pointer items-center justify-between',
+          { 'bg-pp-states-disabled cursor-not-allowed': disabled },
         )}
-        onClick={() => setOpen(true)}
+        onClick={() => onOpenChange(true)}
       >
         <Flex
           py="2"
@@ -81,31 +108,12 @@ const SearchProcedureCodes = ({
       </Box>
     )
   }
-
-  const renderItem = (item: CodeItem) => {
-    return (
-      <Box
-        py="1"
-        px="2"
-        className="hover:bg-pp-black-1 hover:text-white mx-1 rounded-1"
-        onClick={() => {
-          if (onChange) onChange(item)
-          setOpen(false)
-        }}
-      >
-        <Text size="1" weight="regular">
-          {item.code}
-        </Text>
-      </Box>
-    )
-  }
-
   return (
     <Controller
       name={fieldName}
       control={control}
       render={({ field }) => (
-        <Popover.Root open={open} onOpenChange={setOpen}>
+        <Popover.Root open={open} onOpenChange={onOpenChange}>
           <Popover.Trigger disabled={disabled}>
             {renderColumn(field.value, disabled)}
           </Popover.Trigger>
@@ -119,6 +127,7 @@ const SearchProcedureCodes = ({
                 autoFocus
                 className="bg-white h-6 flex-1 border-0 outline-none [&>*]:bg-transparent [&>*]:outline-none"
                 required={required}
+                disabled={disabled}
               >
                 <TextField.Slot>
                   <MagnifyingGlassIcon height="16" width="16" />

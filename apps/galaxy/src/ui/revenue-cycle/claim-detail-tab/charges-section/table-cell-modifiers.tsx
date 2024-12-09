@@ -15,14 +15,18 @@ interface TableCellModifierProps {
 }
 
 const TableCellModifier = ({ rowIndex }: TableCellModifierProps) => {
-  const { setValue } = useFormContext<ClaimUpdateSchemaType>()
+  const form = useFormContext<ClaimUpdateSchemaType>()
+  const isDisabled = form.formState.disabled
+
   const handleModifiersCodeSelection = async (
     fieldName: `claimServiceLines.${number}.${
-      'modifierCode1' | 'modifierCode2' | 'modifierCode3' | 'modifierCode4'
-    }`,
+      | 'modifierCode1'
+      | 'modifierCode2'
+      | 'modifierCode3'
+      | 'modifierCode4'}`,
     selectedItem: CodeItem,
   ) => {
-    setValue(fieldName, selectedItem.code)
+    form.setValue(fieldName, selectedItem.code)
   }
 
   return (
@@ -37,6 +41,7 @@ const TableCellModifier = ({ rowIndex }: TableCellModifierProps) => {
               selectedItem,
             )
           }
+          disabled={isDisabled}
         />
       </Box>
       <Box className="border-pp-border flex-1 border-l">
@@ -49,6 +54,7 @@ const TableCellModifier = ({ rowIndex }: TableCellModifierProps) => {
               selectedItem,
             )
           }
+          disabled={isDisabled}
         />
       </Box>
       <Box className="border-pp-border flex-1 border-l">
@@ -61,6 +67,7 @@ const TableCellModifier = ({ rowIndex }: TableCellModifierProps) => {
               selectedItem,
             )
           }
+          disabled={isDisabled}
         />
       </Box>
       <Box className="border-pp-border flex-1 border-l">
@@ -73,6 +80,7 @@ const TableCellModifier = ({ rowIndex }: TableCellModifierProps) => {
               selectedItem,
             )
           }
+          disabled={isDisabled}
         />
       </Box>
     </>

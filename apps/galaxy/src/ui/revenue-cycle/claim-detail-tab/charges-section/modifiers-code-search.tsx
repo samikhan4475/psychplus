@@ -56,6 +56,12 @@ const SearchModifierCodes = ({
     setLoading(false)
   }, 500)
 
+  const onOpenChange = (open: boolean) => {
+    if (!disabled) {
+      setOpen(open)
+    }
+  }
+
   const renderColumn = (value: string, disabled?: boolean) => {
     const content = value ? (
       <Text>{value}</Text>
@@ -67,8 +73,10 @@ const SearchModifierCodes = ({
 
     return (
       <Box
-        className={cn('flex cursor-pointer items-center')}
-        onClick={() => setOpen(true)}
+        className={cn('flex cursor-pointer items-center', {
+          'bg-pp-states-disabled cursor-not-allowed': disabled,
+        })}
+        onClick={() => onOpenChange(true)}
       >
         <Flex
           py="2"
@@ -88,10 +96,12 @@ const SearchModifierCodes = ({
       <Box
         py="1"
         px="2"
-        className="hover:bg-pp-black-1 hover:text-white mx-1 rounded-1"
+        className={cn('hover:bg-pp-black-1 hover:text-white mx-1 rounded-1', {
+          'bg-pp-states-disabled cursor-not-allowed': disabled,
+        })}
         onClick={() => {
           if (onChange) onChange(item)
-          setOpen(false)
+          onOpenChange(false)
         }}
       >
         <Text size="1" weight="regular">
@@ -106,7 +116,7 @@ const SearchModifierCodes = ({
       name={fieldName}
       control={control}
       render={({ field }) => (
-        <Popover.Root open={open} onOpenChange={setOpen}>
+        <Popover.Root open={open} onOpenChange={onOpenChange}>
           <Popover.Trigger disabled={disabled}>
             {renderColumn(field.value || initialValue, disabled)}
           </Popover.Trigger>
@@ -120,6 +130,7 @@ const SearchModifierCodes = ({
                 autoFocus
                 className="bg-white h-6 flex-1 border-0 outline-none [&>*]:bg-transparent [&>*]:outline-none"
                 required={required}
+                disabled={disabled}
               >
                 <TextField.Slot>
                   <MagnifyingGlassIcon height="16" width="16" />

@@ -101,6 +101,7 @@ const TableCellProcedure: React.FC<TableCellProcedureProps> = ({
       <SearchProcedureCodes
         fieldName={`claimServiceLines.${rowIndex}.cptCode`}
         onChange={handleProcedureCodeSelected}
+        disabled={form.formState.disabled}
       />
       <FormFieldError name={`claimServiceLines.${rowIndex}.cptCode`} />
     </Flex>

@@ -7,13 +7,17 @@ import type { Claim } from '@/types'
 import { useStore } from '../store'
 
 const RowActionEdit = ({ row: { original: claim } }: PropsWithRow<Claim>) => {
-  const { setSelectedClaim, setActiveTab } = useStore((state) => ({
-    setActiveTab: state.setActiveTab,
-    setSelectedClaim: state.setSelectedClaim,
-  }))
+  const { setSelectedClaim, setActiveTab, setSelectedClaimStatus } = useStore(
+    (state) => ({
+      setActiveTab: state.setActiveTab,
+      setSelectedClaim: state.setSelectedClaim,
+      setSelectedClaimStatus: state.setSelectedClaimStatus,
+    }),
+  )
   const onOpenClaim = () => {
     setActiveTab('Claim# ' + claim.claimNumber)
     setSelectedClaim(claim.id)
+    setSelectedClaimStatus(claim.claimStatusCode)
   }
 
   return (
