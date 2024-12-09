@@ -4,7 +4,7 @@ const BLOCK_ID = 'living'
 
 const BLOCK_TITLE = 'Living'
 
-const BLOCK_OPTIONS = [
+const LIVING_BLOCK_OPTIONS = [
   {
     label: 'Alone',
     value: 'alone',
@@ -24,9 +24,9 @@ const LivingBlock = () => {
     <RadioSelectSection
       label={BLOCK_TITLE}
       field={BLOCK_ID}
-      options={BLOCK_OPTIONS}
+      options={LIVING_BLOCK_OPTIONS}
     />
   )
 }
 
-export { LivingBlock }
+export { LivingBlock, LIVING_BLOCK_OPTIONS }

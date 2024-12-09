@@ -68,14 +68,14 @@ const PAST_PSYCH_CONDITIONS_BLOCK_OPTIONS = [
     detailsField: 'problemsWithSleepAge',
   },
   {
-    label: 'Dementia',
-    field: 'dementia',
-    detailsField: 'dementiaAge',
-  },
-  {
     label: 'Panic Attacks',
     field: 'panicAttacks',
     detailsField: 'panicAttacksAge',
+  },
+  {
+    label: 'Dementia',
+    field: 'dementia',
+    detailsField: 'dementiaAge',
   },
   {
     label: 'Personality Disorder',
@@ -104,7 +104,7 @@ const ConditionsBlock = () => {
           label={option.label}
           details={{
             type: option.field === 'other' ? 'text' : 'number',
-            label: option.field === 'other' ? 'Details' : 'Age Started',
+            label: option.field === 'other' ? '' : 'Age Started',
             field: option.detailsField,
           }}
         />

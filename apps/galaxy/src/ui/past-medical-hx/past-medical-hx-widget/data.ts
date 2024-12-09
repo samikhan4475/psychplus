@@ -3,54 +3,13 @@ import { QuickNoteSectionItem } from '@/types'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { sanitizeFormData } from '@/utils'
 import { PastMedicalHxWidgetSchemaType } from './past-medical-hx-widget-schema'
+import { getInitialValues } from './utils'
 
 const transformIn = (
   value: QuickNoteSectionItem[],
 ): PastMedicalHxWidgetSchemaType => {
-  const result: Record<string, number | string | undefined | boolean | Date> = {
-    widgetContainerCheckboxField: undefined,
-    asthma: undefined,
-    copd: undefined,
-    htn: undefined,
-    hld: undefined,
-    dm: undefined,
-    autoimmune: undefined,
-    cad: undefined,
-    stroke: undefined,
-    migraines: undefined,
-    headInjury: undefined,
-    seizures: undefined,
-    parkinsons: undefined,
-    cirrhosis: undefined,
-    hepatitis: undefined,
-    hiv: undefined,
-    sleepApnea: undefined,
-    gerd: undefined,
-    adhdAge: undefined,
-    multipleSclerosis: undefined,
-    kidneyDisease: undefined,
-    kidneyStones: undefined,
-    hypothyroidism: undefined,
-    anemia: undefined,
-    alzheimers: undefined,
-    pregnant: undefined,
-    pregnantDate: undefined,
-    breastFeeding: undefined,
-    breastFeedingDaysPostPartum: undefined,
-    communicable: undefined,
-    measles: undefined,
-    mumps: undefined,
-    rubella: undefined,
-    chickenPox: undefined,
-    syphilis: undefined,
-    rash: undefined,
-    glaucoma: undefined,
-    chlamydias: undefined,
-    gonorrhea: undefined,
-    gastricBypass: undefined,
-    other: undefined,
-    otherDetails: undefined,
-  }
+  const result: Record<string, number | string | undefined | boolean | Date> =
+    getInitialValues()
 
   value.forEach((item) => {
     const key = item.sectionItem

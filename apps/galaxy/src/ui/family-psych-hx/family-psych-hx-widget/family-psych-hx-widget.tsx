@@ -14,6 +14,7 @@ import { transformOut } from './data'
 import { PastFamilyHeader } from './family-psych-header'
 import { useFamilyPsychHxWidgetForm } from './family-psych-hx-widget-form'
 import { FamilyPsychHxWidgetSchemaType } from './family-psych-hx-widget-schema'
+import { getInitialValues } from './utils'
 
 interface FamilyPsychHxWidgetProps {
   patientId: string
@@ -41,7 +42,7 @@ const FamilyPsychHxWidget = ({
           <>
             <WidgetTagButton />
             {!isHistoryHeader && <WidgetHxButton />}
-            <WidgetClearButton />
+            <WidgetClearButton defaultInitialValues={getInitialValues} />
             {!isHistoryHeader && <WidgetSaveButton />}
           </>
         }

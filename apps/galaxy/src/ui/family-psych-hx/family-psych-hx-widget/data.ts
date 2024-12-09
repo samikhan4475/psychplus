@@ -3,30 +3,12 @@ import { QuickNoteSectionItem } from '@/types'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { sanitizeFormData } from '@/utils'
 import { FamilyPsychHxWidgetSchemaType } from './family-psych-hx-widget-schema'
+import { getInitialValues } from './utils'
 
 const transformIn = (
   value: QuickNoteSectionItem[],
 ): FamilyPsychHxWidgetSchemaType => {
-  const result: Record<string, string | boolean | string[]> = {
-    widgetContainerCheckboxField: false,
-    completedSuicide: false,
-    completedSuicideRelation: [],
-    anxiety: false,
-    anxietyRelation: [],
-    depression: false,
-    depressionRelation: [],
-    ocd: false,
-    ocdRelation: [],
-    bipolarDisorder: false,
-    bipolarDisorderRelation: [],
-    schizophrenia: false,
-    schizophreniaRelation: [],
-    alcoholUseDisorder: false,
-    alcoholUseDisorderRelation: [],
-    dementia: false,
-    dementiaRelation: [],
-    other: '',
-  }
+  const result: Record<string, string | boolean | string[]> = getInitialValues()
 
   value.forEach((item) => {
     const key = item.sectionItem as keyof FamilyPsychHxWidgetSchemaType

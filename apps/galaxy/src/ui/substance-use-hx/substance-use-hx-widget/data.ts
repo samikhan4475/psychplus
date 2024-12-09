@@ -9,43 +9,15 @@ import {
   TOBACCO_OPTIONS,
 } from './constants'
 import { SubstanceUseHxWidgetSchemaType } from './substance-use-hx-schema'
-import { cptCodeMap, substanceCptCodes } from './utils'
+import { cptCodeMap, getInitialValues, substanceCptCodes } from './utils'
 
 const transformIn = (
   list: QuickNoteSectionItem[],
 ): SubstanceUseHxWidgetSchemaType => {
   const result: Record<
     string,
-    number | string | undefined | boolean | string[]
-  > = {
-    widgetContainerCheckboxField: undefined,
-    tobacco: undefined,
-    tobaccoChewSmoke: undefined,
-    smokePacks: undefined,
-    smokingCessationOption: undefined,
-    counselingOption: undefined,
-    smokingCessationDiscussionDuration: undefined,
-    otherTobacco: undefined,
-    alcohol: undefined,
-    drugs: undefined,
-    opioids: undefined,
-    opioidsDetails: undefined,
-    sedative: undefined,
-    sedativeDetails: undefined,
-    cocaine: undefined,
-    cocaineDetails: undefined,
-    amphetamine: undefined,
-    amphetamineDetails: undefined,
-    pcp: undefined,
-    pcpDetails: undefined,
-    inhalants: undefined,
-    inhalantsDetails: undefined,
-    questionnaire: undefined,
-    briefIntervention: undefined,
-    referralTreatment: undefined,
-    alcoholSubstanceCessationDiscussionDuration: undefined,
-    otherAlcoholDrugs: undefined,
-  }
+    number | string | undefined | boolean | string[] | null
+  > = getInitialValues()
 
   const value = list.filter(
     (item) =>

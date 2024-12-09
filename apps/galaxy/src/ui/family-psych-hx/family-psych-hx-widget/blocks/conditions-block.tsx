@@ -37,9 +37,9 @@ const FAMILY_PSYCH_BLOCK_OPTIONS = [
   },
 
   {
-    label: 'Bipolor disorder',
-    field: 'bipolorDisorder',
-    detailsField: 'bipolorDisorderRelation',
+    label: 'Bipolar disorder',
+    field: 'bipolarDisorder',
+    detailsField: 'bipolarDisorderRelation',
   },
   {
     label: 'Alcohol use disorder',

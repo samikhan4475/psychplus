@@ -22,6 +22,7 @@ import { transformOut } from './data'
 import { SocialHxHeader } from './social-hx-header'
 import { useSocialHxWidgetForm } from './social-hx-widget-form'
 import { SocialHxWidgetSchemaType } from './social-hx-widget-schema'
+import { getInitialValues } from './utils'
 
 interface SocialHxWidgetProps {
   patientId: string
@@ -46,12 +47,19 @@ const SocialHxWidget = ({
         getData={transformOut(patientId)}
         toggleable={!isHistoryHeader}
         headerRight={
-          <>
-            <WidgetTagButton />
-            {!isHistoryHeader && <WidgetHxButton />}
-            <WidgetClearButton />
-            {!isHistoryHeader && <WidgetSaveButton />}
-          </>
+          !isHistoryHeader ? (
+            <>
+              <WidgetTagButton />
+              <WidgetHxButton />
+              <WidgetClearButton defaultInitialValues={getInitialValues} />
+              <WidgetSaveButton />
+            </>
+          ) : (
+            <>
+              <WidgetClearButton defaultInitialValues={getInitialValues} />
+              <WidgetTagButton />
+            </>
+          )
         }
       >
         <RelationshipStatusBlock />

@@ -70,6 +70,11 @@ const WidgetFormContainer = ({
       if (event.data.type !== 'quicknotes:save') {
         return
       }
+
+      if (event.data.widgetId !== widgetId) {
+        return
+      }
+
       const shouldToast = event.data.showToast ? true : false
       if (isDirty) {
         onSubmit(shouldToast)()
@@ -90,7 +95,7 @@ const WidgetFormContainer = ({
     return () => {
       window.removeEventListener('message', handleMessage)
     }
-  }, [isDirty])
+  }, [isDirty, widgetId])
 
   useEffect(() => {
     const handleMessage = (event: MessageEvent) => {

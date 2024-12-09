@@ -2,6 +2,7 @@ import { QuickNoteSectionItem } from '@/types'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { sanitizeFormData } from '@/utils'
 import { SocialHxWidgetSchemaType } from './social-hx-widget-schema'
+import { getInitialValues } from './utils'
 
 const transformOut =
   (patientId: string) =>
@@ -24,16 +25,7 @@ const transformOut =
 const transformIn = (
   value: QuickNoteSectionItem[],
 ): SocialHxWidgetSchemaType => {
-  const result = {
-    widgetContainerCheckboxField: '',
-    relationshipStatus: '',
-    professionalEducation: '',
-    employed: '',
-    legalHistory: '',
-    living: '',
-    traumaHx: '',
-    other: '',
-  }
+  const result: Record<string, string> = getInitialValues()
 
   value.forEach((item) => {
     result[item.sectionItem as keyof SocialHxWidgetSchemaType] =

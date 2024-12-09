@@ -4,7 +4,7 @@ const BLOCK_ID = 'relationshipStatus'
 
 const BLOCK_TITLE = 'Relationship Status'
 
-const BLOCK_OPTIONS = [
+const RELATIONSHIP_BLOCK_OPTIONS = [
   {
     label: 'Single',
     value: 'single',
@@ -28,9 +28,9 @@ const RelationshipStatusBlock = () => {
     <RadioSelectSection
       label={BLOCK_TITLE}
       field={BLOCK_ID}
-      options={BLOCK_OPTIONS}
+      options={RELATIONSHIP_BLOCK_OPTIONS}
     />
   )
 }
 
-export { RelationshipStatusBlock }
+export { RelationshipStatusBlock, RELATIONSHIP_BLOCK_OPTIONS }

@@ -16,6 +16,7 @@ import { useStore } from '@/ui/questionnaires/store'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { AlcoholDrugsBlock, TobaccoBlock } from './blocks'
 import { transformOut } from './data'
+import { getInitialValues } from './utils'
 import { useSubstanceHxWidgetForm } from './substance-use-hx-form'
 import { SubstanceUseHxHxHeader } from './substance-use-hx-header'
 import { SubstanceUseHxWidgetSchemaType } from './substance-use-hx-schema'
@@ -66,7 +67,7 @@ const SubstanceUseHxWidget = ({
           <>
             <WidgetTagButton />
             {!isHistoryHeader && <WidgetHxButton />}
-            <WidgetClearButton />
+            <WidgetClearButton defaultInitialValues={getInitialValues} />
             {!isHistoryHeader && <WidgetSaveButton />}
           </>
         }

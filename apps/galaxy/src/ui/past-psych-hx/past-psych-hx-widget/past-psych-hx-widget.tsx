@@ -19,6 +19,7 @@ import { transformOut } from './data'
 import { PastPsychHeader } from './past-psych-header'
 import { usePastPsychHxWidgetForm } from './past-psych-hx-widget-form'
 import { PastPsychHxWidgetSchemaType } from './past-psych-hx-widget-schema'
+import { getInitialValues } from './utils'
 
 interface PastPsychHxWidgetProps {
   patientId: string
@@ -43,12 +44,19 @@ const PastPsychHxWidget = ({
         getData={transformOut(patientId)}
         toggleable={!isHistoryHeader}
         headerRight={
-          <>
-            <WidgetTagButton />
-            {!isHistoryHeader && <WidgetHxButton />}
-            <WidgetClearButton />
-            {!isHistoryHeader && <WidgetSaveButton />}
-          </>
+          !isHistoryHeader ? (
+            <>
+              <WidgetTagButton />
+              <WidgetHxButton />
+              <WidgetClearButton defaultInitialValues={getInitialValues} />
+              <WidgetSaveButton />
+            </>
+          ) : (
+            <>
+              <WidgetClearButton defaultInitialValues={getInitialValues} />
+              <WidgetTagButton />
+            </>
+          )
         }
       >
         <Flex align="center" gap="2">

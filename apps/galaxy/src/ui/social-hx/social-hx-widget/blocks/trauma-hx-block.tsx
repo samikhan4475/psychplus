@@ -4,7 +4,7 @@ const BLOCK_ID = 'traumaHx'
 
 const BLOCK_TITLE = 'Trauma Hx'
 
-const BLOCK_OPTIONS = [
+const TRAUMA_HX_BLOCK_OPTIONS = [
   {
     label: 'Physical',
     value: 'physical',
@@ -24,9 +24,9 @@ const TraumaHxBlock = () => {
     <RadioSelectSection
       label={BLOCK_TITLE}
       field={BLOCK_ID}
-      options={BLOCK_OPTIONS}
+      options={TRAUMA_HX_BLOCK_OPTIONS}
     />
   )
 }
 
-export { TraumaHxBlock }
+export { TraumaHxBlock, TRAUMA_HX_BLOCK_OPTIONS }

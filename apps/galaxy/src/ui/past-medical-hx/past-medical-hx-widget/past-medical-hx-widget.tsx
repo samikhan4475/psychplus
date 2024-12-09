@@ -15,6 +15,7 @@ import { transformOut } from './data'
 import { PastMedicalHeader } from './past-medical-header'
 import { usePastMedicalHxWidgetForm } from './past-medical-hx-widget-form'
 import { PastMedicalHxWidgetSchemaType } from './past-medical-hx-widget-schema'
+import { getInitialValues } from './utils'
 
 interface PastMedicalHxWidgetProps {
   patientId: string
@@ -43,7 +44,7 @@ const PastMedicalHxWidget = ({
             <>
               <WidgetTagButton />
               {!isHistoryHeader && <WidgetHxButton />}
-              <WidgetClearButton />
+              <WidgetClearButton defaultInitialValues={getInitialValues} />
               {!isHistoryHeader && <WidgetSaveButton />}
             </>
           }

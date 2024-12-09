@@ -60,4 +60,4 @@ const YesNoSelect = ({
   )
 }
 
-export { YesNoSelect }
+export { YesNoSelect, defaultOptions }

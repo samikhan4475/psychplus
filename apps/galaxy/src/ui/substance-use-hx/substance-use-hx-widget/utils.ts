@@ -16,4 +16,39 @@ const cptCodeMap = {
   tobacco: { yes: '99406' },
 }
 
-export { substanceCptCodes, cptCodeMap }
+const cptCodeKeysToWatch = [
+  'smokingCessationDiscussionDuration',
+  'alcoholSubstanceCessationDiscussionDuration',
+]
+
+const getInitialValues = () => ({
+  widgetContainerCheckboxField: undefined,
+  tobacco: null,
+  tobaccoChewSmoke: undefined,
+  smokePacks: undefined,
+  smokingCessationOption: undefined,
+  counselingOption: undefined,
+  smokingCessationDiscussionDuration: undefined,
+  otherTobacco: undefined,
+  alcohol: null,
+  drugs: null,
+  opioids: undefined,
+  opioidsDetails: undefined,
+  sedative: undefined,
+  sedativeDetails: undefined,
+  cocaine: undefined,
+  cocaineDetails: undefined,
+  amphetamine: undefined,
+  amphetamineDetails: undefined,
+  pcp: undefined,
+  pcpDetails: undefined,
+  inhalants: undefined,
+  inhalantsDetails: undefined,
+  questionnaire: null,
+  briefIntervention: undefined,
+  referralTreatment: undefined,
+  alcoholSubstanceCessationDiscussionDuration: undefined,
+  otherAlcoholDrugs: null,
+})
+
+export { substanceCptCodes, cptCodeMap, cptCodeKeysToWatch, getInitialValues }

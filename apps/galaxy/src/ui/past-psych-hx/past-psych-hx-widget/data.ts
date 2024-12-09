@@ -3,49 +3,13 @@ import { QuickNoteSectionItem } from '@/types'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { sanitizeFormData } from '@/utils'
 import { PastPsychHxWidgetSchemaType } from './past-psych-hx-widget-schema'
+import { getInitialValues } from './utils'
 
 const transformIn = (
   value: QuickNoteSectionItem[],
 ): PastPsychHxWidgetSchemaType => {
-  const result: Record<string, number | string | undefined | boolean> = {
-    widgetContainerCheckboxField: undefined,
-    psychHospitalizations: undefined,
-    suicideAttempts: undefined,
-    depression: undefined,
-    depressionAge: undefined,
-    anxiety: undefined,
-    anxietyAge: undefined,
-    schizophrenia: undefined,
-    schizophreniaAge: undefined,
-    bipolar: undefined,
-    bipolarAge: undefined,
-    disorder: undefined,
-    disorderAge: undefined,
-    obsessiveThinking: undefined,
-    obsessiveThinkingAge: undefined,
-    compulsiveBehavior: undefined,
-    compulsiveBehaviorAge: undefined,
-    adhd: undefined,
-    adhdAge: undefined,
-    autism: undefined,
-    autismAge: undefined,
-    eatingDisorder: undefined,
-    eatingDisorderAge: undefined,
-    exposureToTrauma: undefined,
-    exposureToTraumaAge: undefined,
-    cuttingSelfHarmBehavior: undefined,
-    cuttingSelfHarmBehaviorAge: undefined,
-    problemsWithSleep: undefined,
-    problemsWithSleepAge: undefined,
-    dementia: undefined,
-    dementiaAge: undefined,
-    personalityDisorder: undefined,
-    personalityDisorderAge: undefined,
-    intellectualDisability: undefined,
-    intellectualDisabilityAge: undefined,
-    other: undefined,
-    otherDetails: undefined,
-  }
+  const result: Record<string, number | string | undefined | boolean> =
+    getInitialValues()
 
   value.forEach((item) => {
     const key = item.sectionItem

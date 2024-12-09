@@ -35,6 +35,8 @@ const pastPsychHxWidgetSchema = z
     cuttingSelfHarmBehaviorAge: conditionalPositiveInt,
     problemsWithSleep: z.oboolean(),
     problemsWithSleepAge: conditionalPositiveInt,
+    panicAttacks: z.oboolean(),
+    panicAttacksAge: conditionalPositiveInt,
     dementia: z.oboolean(),
     dementiaAge: conditionalPositiveInt,
     personalityDisorder: z.oboolean(),
@@ -62,6 +64,7 @@ const pastPsychHxWidgetSchema = z
         ageField: 'cuttingSelfHarmBehaviorAge',
       },
       { condition: 'problemsWithSleep', ageField: 'problemsWithSleepAge' },
+      { condition: 'panicAttacks', ageField: 'panicAttacksAge' },
       { condition: 'dementia', ageField: 'dementiaAge' },
       { condition: 'personalityDisorder', ageField: 'personalityDisorderAge' },
       {
