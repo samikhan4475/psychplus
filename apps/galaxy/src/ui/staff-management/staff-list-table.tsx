@@ -24,16 +24,7 @@ const columns = (
   return [
     {
       id: 'hx',
-      header: ({ column }) => (
-        <ColumnHeader
-          label="Hx"
-          sortable
-          sortDir={getSortDir(column.id, sort)}
-          onClick={() => {
-            onSort?.(column.id)
-          }}
-        />
-      ),
+      header: () => <ColumnHeader label="Hx" />,
       maxSize: 30,
       cell: CollapseCell,
     },
@@ -54,6 +45,22 @@ const columns = (
       ),
     },
     {
+      id: 'middleName',
+      header: ({ column }) => (
+        <ColumnHeader
+          label="Middle Name"
+          sortable
+          sortDir={getSortDir(column.id, sort)}
+          onClick={() => {
+            onSort?.(column.id)
+          }}
+        />
+      ),
+      cell: ({ row }) => (
+        <TextCell>{row.original.legalName?.middleName}</TextCell>
+      ),
+    },
+    {
       id: 'lastName',
       header: ({ column }) => (
         <ColumnHeader
@@ -70,7 +77,7 @@ const columns = (
       ),
     },
     {
-      id: 'noindex',
+      id: 'staffType',
       header: ({ column }) => (
         <ColumnHeader
           label="Staff Type"
@@ -81,10 +88,12 @@ const columns = (
           }}
         />
       ),
-      cell: ({ row }) => <TextCell>--</TextCell>,
+      cell: ({ row }) => (
+        <TextCell>{row.original.staffTypes?.join(', ') ?? ''}</TextCell>
+      ),
     },
     {
-      id: 'noindex',
+      id: 'staffUserRoleIds',
       header: ({ column }) => (
         <ColumnHeader
           label="Role"
@@ -95,10 +104,14 @@ const columns = (
           }}
         />
       ),
-      cell: ({ row }) => <TextCell>--</TextCell>,
+      cell: ({ row }) => (
+        <TextCell className="w-[110px]">
+          {row.original.staffUserRoleIds.join(',')}
+        </TextCell>
+      ),
     },
     {
-      id: 'noindex',
+      id: 'honors',
       header: ({ column }) => (
         <ColumnHeader
           label="Credentials"
@@ -109,10 +122,10 @@ const columns = (
           }}
         />
       ),
-      cell: ({ row }) => <TextCell>--</TextCell>,
+      cell: ({ row }) => <TextCell>{row.original.legalName.honors}</TextCell>,
     },
     {
-      id: 'noindex',
+      id: 'supervisedBy',
       header: ({ column }) => (
         <ColumnHeader
           label="Supervised By"
@@ -123,10 +136,10 @@ const columns = (
           }}
         />
       ),
-      cell: ({ row }) => <TextCell>--</TextCell>,
+      cell: ({ row }) => <TextCell>{row.original.supervisedBy}</TextCell>,
     },
     {
-      id: 'noindex',
+      id: 'organizationIds',
       header: ({ column }) => (
         <ColumnHeader
           label="Organization"
@@ -137,10 +150,12 @@ const columns = (
           }}
         />
       ),
-      cell: ({ row }) => <TextCell>--</TextCell>,
+      cell: ({ row }) => (
+        <TextCell>{row.original.organizationIds.join(',')}</TextCell>
+      ),
     },
     {
-      id: 'noindex',
+      id: 'practiceIds',
       header: ({ column }) => (
         <ColumnHeader
           label="Practice"
@@ -151,10 +166,14 @@ const columns = (
           }}
         />
       ),
-      cell: ({ row }) => <TextCell>--</TextCell>,
+      cell: ({ row }) => (
+        <TextCell className="w-[120px]">
+          {row.original.practiceIds?.join(',')}
+        </TextCell>
+      ),
     },
     {
-      id: 'noindex',
+      id: 'npi',
       header: ({ column }) => (
         <ColumnHeader
           label="Individual NPI"
@@ -165,10 +184,10 @@ const columns = (
           }}
         />
       ),
-      cell: ({ row }) => <TextCell>--</TextCell>,
+      cell: ({ row }) => <TextCell>{row.original.npi}</TextCell>,
     },
     {
-      id: 'noindex',
+      id: 'status',
       header: ({ column }) => (
         <ColumnHeader
           label="Status"
@@ -179,10 +198,10 @@ const columns = (
           }}
         />
       ),
-      cell: ({ row }) => <TextCell>--</TextCell>,
+      cell: ({ row }) => <TextCell>{row.original.status}</TextCell>,
     },
     {
-      id: 'noindex',
+      id: 'dateOfBirth',
       header: ({ column }) => (
         <ColumnHeader
           label="DOB"
@@ -193,10 +212,14 @@ const columns = (
           }}
         />
       ),
-      cell: ({ row }) => <TextCell>--</TextCell>,
+      cell: ({ row }) => (
+        <TextCell className="w-[85px]">
+          {String(row.original.dateOfBirth)}
+        </TextCell>
+      ),
     },
     {
-      id: 'noindex',
+      id: 'gender',
       header: ({ column }) => (
         <ColumnHeader
           label="Gender"
@@ -207,10 +230,10 @@ const columns = (
           }}
         />
       ),
-      cell: ({ row }) => <TextCell>--</TextCell>,
+      cell: ({ row }) => <TextCell>{row.original.gender}</TextCell>,
     },
     {
-      id: 'noindex',
+      id: 'spokenLanguages',
       header: ({ column }) => (
         <ColumnHeader
           label="Language"
@@ -221,10 +244,14 @@ const columns = (
           }}
         />
       ),
-      cell: ({ row }) => <TextCell>--</TextCell>,
+      cell: ({ row }) => (
+        <TextCell className="w-[120px]">
+          {row.original.spokenLanguages?.join(', ')}
+        </TextCell>
+      ),
     },
     {
-      id: 'noindex',
+      id: 'providerAttributions',
       header: ({ column }) => (
         <ColumnHeader
           label="Provider Preference"
@@ -235,10 +262,14 @@ const columns = (
           }}
         />
       ),
-      cell: ({ row }) => <TextCell>--</TextCell>,
+      cell: ({ row }) => (
+        <TextCell className="w-[120px]">
+          {row.original.providerAttributions?.join(', ')}
+        </TextCell>
+      ),
     },
     {
-      id: 'noindex',
+      id: 'email',
       header: ({ column }) => (
         <ColumnHeader
           label="Email"
@@ -249,10 +280,10 @@ const columns = (
           }}
         />
       ),
-      cell: ({ row }) => <TextCell>--</TextCell>,
+      cell: ({ row }) => <TextCell>{row.original.contactInfo?.email}</TextCell>,
     },
     {
-      id: 'noindex',
+      id: 'phoneNumbers',
       header: ({ column }) => (
         <ColumnHeader
           label="Phone"
@@ -263,10 +294,12 @@ const columns = (
           }}
         />
       ),
-      cell: ({ row }) => <TextCell>--</TextCell>,
+      cell: ({ row }) => (
+        <TextCell className="w-[100px]">{row.original.phoneContact}</TextCell>
+      ),
     },
     {
-      id: 'noindex',
+      id: 'virtualRoomLink',
       header: ({ column }) => (
         <ColumnHeader
           label="Virtual Wait Room"
@@ -277,10 +310,10 @@ const columns = (
           }}
         />
       ),
-      cell: ({ row }) => <TextCell>--</TextCell>,
+      cell: ({ row }) => <TextCell>{row.original.virtualRoomLink}</TextCell>,
     },
     {
-      id: 'noindex',
+      id: 'contactInfo.addresses',
       header: ({ column }) => (
         <ColumnHeader
           label="Home Address"
@@ -291,7 +324,18 @@ const columns = (
           }}
         />
       ),
-      cell: ({ row }) => <TextCell>--</TextCell>,
+      cell: ({ row }) => {
+        let address = ''
+        if (row.original?.contactInfo?.addresses?.length > 0) {
+          const { street1, city, country, postalCode } =
+            row.original.contactInfo.addresses[0]
+          address = `${street1 ?? ''}, ${country ?? ''}, ${city ?? ''},${
+            postalCode ?? ''
+          }`
+        }
+
+        return <TextCell className="w-[180px]">{address}</TextCell>
+      },
     },
     {
       id: 'actions',
@@ -306,16 +350,19 @@ const StaffListTable = () => {
 
   const addTab = useRootStore((state) => state.addTab)
 
-  const { data, search, loading, sort, sortData } = useStore((state) => ({
-    data: state.data,
-    loading: state.loading,
-    search: state.search,
-    sort: state.sort,
-    sortData: state.sortData,
-  }))
+  const { data, search, loading, sort, sortData, getDropDownOptions } =
+    useStore((state) => ({
+      data: state.data,
+      loading: state.loading,
+      search: state.search,
+      sort: state.sort,
+      sortData: state.sortData,
+      getDropDownOptions: state.getDropDownOptions,
+    }))
 
   useEffect(() => {
     search({})
+    getDropDownOptions()
   }, [])
   if (loading) {
     return (
@@ -324,16 +371,16 @@ const StaffListTable = () => {
       </Flex>
     )
   }
-
   return (
     <ScrollArea className="bg-white max-w-[calc(100vw-188px)]">
       <DataTable
+        tableRowClass="h-[28px]"
         data={data?.staff ?? []}
         onRowClick={(row) => {
           const href = `/staff/${row.original.id}/dashboard`
           addTab({
             href,
-            label: `${row.original?.legalName?.firstName} ${row.original.legalName?.lastName}`,
+            label: `${row.original?.legalName?.firstName} ${row.original.legalName?.lastName} - ${row.original.id}`,
           })
           router.push(href)
         }}

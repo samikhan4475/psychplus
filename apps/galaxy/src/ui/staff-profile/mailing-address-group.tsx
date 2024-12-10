@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { Flex } from '@radix-ui/themes'
+import { Box } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
 import { AddressFieldsGroup } from '@/components'
 import { MailingRadioButton } from './mailing-radio-button'
@@ -8,13 +8,11 @@ import { TabContentHeading } from './tab-content-heading'
 
 const MailingAddressGroup = () => {
   const { watch, resetField } = useFormContext<SchemaType>()
-  const isMailingAddressSameAsPrimary = watch(
-    'contactInfo.isMailingAddressSameAsPrimary',
-  )
+  const isMailingAddressSameAsPrimary = watch('isMailingAddressSameAsPrimary')
 
   useEffect(() => {
-    if (isMailingAddressSameAsPrimary) {
-      resetField('contactInfo.addresses.1', {
+    if (isMailingAddressSameAsPrimary)
+      resetField('addresses.1', {
         defaultValue: {
           postalCode: '',
           type: 'Mailing',
@@ -23,22 +21,21 @@ const MailingAddressGroup = () => {
           city: '',
           state: '',
           country: '',
+          timeZoneId: '',
         },
       })
-    }
   }, [isMailingAddressSameAsPrimary, resetField])
-
   return (
-    <Flex direction="column">
-      <TabContentHeading title="Mailing">
+    <Box>
+      <TabContentHeading title="Mailing Address">
         <MailingRadioButton />
       </TabContentHeading>
       <AddressFieldsGroup
         disabled={isMailingAddressSameAsPrimary}
-        prefix="contactInfo.addresses.1"
+        prefix="addresses.1"
         addressFieldName="street1"
       />
-    </Flex>
+    </Box>
   )
 }
 

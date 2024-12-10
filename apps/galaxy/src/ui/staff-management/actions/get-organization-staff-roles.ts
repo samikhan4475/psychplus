@@ -1,8 +1,8 @@
 'use server'
 
 import * as api from '@/api'
+import { transformInOptions } from '../data'
 import type { OrganizationOptions, OrganizationOptionsResponse } from '../types'
-import { transformInOptions } from './data'
 
 const payload = {
   isIncludeMetadataResourceChangeControl: false,

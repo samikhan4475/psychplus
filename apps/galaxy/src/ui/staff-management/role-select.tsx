@@ -1,21 +1,27 @@
-'use client'
-
 import React from 'react'
 import {
-  DropdownSelect,
   FormFieldContainer,
+  FormFieldError,
   FormFieldLabel,
+  SelectInput,
 } from '@/components'
-import { CODESETS } from '@/constants'
-import { useCodesetOptions } from '@/hooks'
+import { useStore } from './store'
 
-const RoleSelect = () => {
-  const options = useCodesetOptions(CODESETS.StaffRole)
+const StaffRoleSelect = () => {
+  const roles = useStore((state) => state.dropDownOptions.roles)
   return (
-    <FormFieldContainer className="flex-row items-center gap-1">
+    <FormFieldContainer className="flex-row items-center gap-2">
       <FormFieldLabel>Role</FormFieldLabel>
-      <DropdownSelect field="staffRoleCode" options={options} />
+      <SelectInput
+        options={roles}
+        disabled={roles.length === 0}
+        field="staffUserRoleIds.[0]"
+        className="w-full"
+        buttonClassName="border-pp-gray-2 h-6 w-full border border-solid !outline-none [box-shadow:none]"
+      />
+      <FormFieldError name="staffUserRoleIds.[0]" />
     </FormFieldContainer>
   )
 }
-export { RoleSelect }
+
+export { StaffRoleSelect }

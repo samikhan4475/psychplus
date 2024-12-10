@@ -9,12 +9,12 @@ interface GeoCoordinates {
 
 interface Address {
   type: string
-  street1: string
+  street1?: string
   street2?: string
-  city: string
-  state: string
-  country: string
-  postalCode: string
+  city?: string
+  state?: string
+  country?: string
+  postalCode?: string
   geoCoordinates?: GeoCoordinates
   timeZoneId?: string
 }
@@ -57,6 +57,7 @@ interface LegalName {
 
 interface Staff {
   id: string
+  userId: string
   otpCode: string
   legalName: LegalName
   dateOfBirth: DateValue | string | null
@@ -81,12 +82,38 @@ interface Staff {
   supervisorStaffId: string
   npi: string
   status: string
+  staffType: string
+  bio: string
+  phoneContact: string
   virtualRoomLink: string
+  staffTypes: string[]
   organizationIds: string[]
   practiceIds: string[]
-  staffType: string
+  spokenLanguages: string[]
   providerAttributions: string[]
   staffUserRoleIds: string[]
+}
+
+interface StaffSearchParams extends Staff {
+  isIncludeMetadataResourceChangeControl: boolean
+  isIncludeMetadataResourceIds: boolean
+  isIncludeMetadataResourceStatus: boolean
+  locationIds: string[]
+  firstName: string
+  lastName: string
+  roleCodes: string[]
+  staffIds: string[]
+  statuses: string[]
+  spokenLanguage: string
+  providerType: string
+  isIncludeBiography: boolean
+  isExcludeSelf: boolean
+  isIncludeAttributions: boolean
+  isIncludeOrganizations: boolean
+  isIncludePractices: boolean
+  organizationsIds: string[]
+  practicesIds: string[]
+  providerAttributionCodes: string[]
 }
 
 interface User {
@@ -125,10 +152,11 @@ interface GetStaffListResponse {
   staff: Staff[]
   total: number
 }
-
 export {
   type Staff,
+  type Address,
   type GetStaffListResponse,
   type OrganizationOptionsResponse,
+  type StaffSearchParams,
   type OrganizationOptions,
 }

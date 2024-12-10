@@ -7,7 +7,7 @@ const DobField = () => {
   return (
     <FormFieldContainer>
       <FormFieldLabel>DOB</FormFieldLabel>
-      <DatePickerInput isRequired={false} field="dateOfBirth" />
+      <DatePickerInput isRequired={false} field="dob" />
     </FormFieldContainer>
   )
 }

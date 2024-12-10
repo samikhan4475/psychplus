@@ -1,21 +1,20 @@
-'use client'
-
 import React from 'react'
-import {
-  DropdownSelect,
-  FormFieldContainer,
-  FormFieldLabel,
-} from '@/components'
-import { CODESETS } from '@/constants'
-import { useCodesetOptions } from '@/hooks'
+import { FormFieldContainer, FormFieldLabel, SelectInput } from '@/components'
+import { useStore } from './store'
 
 const StaffTypeSelect = () => {
-  const options = useCodesetOptions(CODESETS.Gender)
+  const staffs = useStore((state) => state.dropDownOptions.staffs)
   return (
-    <FormFieldContainer className="w-auto flex-row items-center gap-1">
+    <FormFieldContainer className="flex-row items-center gap-2">
       <FormFieldLabel>Staff Type</FormFieldLabel>
-      <DropdownSelect field="staffType" options={options} />
+      <SelectInput
+        options={staffs}
+        field="staffType"
+        className="w-full"
+        buttonClassName="border-pp-gray-2 h-6 w-full border border-solid !outline-none [box-shadow:none]"
+      />
     </FormFieldContainer>
   )
 }
+
 export { StaffTypeSelect }

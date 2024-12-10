@@ -13,6 +13,7 @@ const ResetPasswordButton = () => {
       variant="surface"
       type="button"
       highContrast
+      disabled
       onClick={onReset}
       className="mt-auto h-fit p-1 text-[11px] font-[600]"
     >

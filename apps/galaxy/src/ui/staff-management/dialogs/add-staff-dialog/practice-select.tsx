@@ -1,25 +1,14 @@
-import React, { useEffect, useState } from 'react'
-import toast from 'react-hot-toast'
+import React from 'react'
 import {
   FormFieldContainer,
   FormFieldError,
   FormFieldLabel,
   SelectInput,
 } from '@/components'
-import { SelectOptionType } from '@/types'
-import { getStaffRolesOrganizationAction } from '../../actions/get-organization-staff-roles'
+import { useStore } from '../../store'
 
 const PracticeSelect = () => {
-  const [practices, setPractices] = useState<SelectOptionType[]>([])
-  useEffect(() => {
-    getStaffRolesOrganizationAction().then((result) => {
-      if (result.state === 'success') {
-        setPractices(result.data.practices)
-      } else if (result.state === 'error') {
-        toast.error(result.error)
-      }
-    })
-  }, [])
+  const practices = useStore((state) => state.dropDownOptions.practices)
   return (
     <FormFieldContainer>
       <FormFieldLabel required>Practice</FormFieldLabel>

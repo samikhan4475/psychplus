@@ -5,7 +5,11 @@ import { useStore as zustandUseStore, type StoreApi } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
 import { createStore as zustandCreateStore } from 'zustand/vanilla'
 import { GALAXY_APP_LOCAL_STORAGE_KEY } from '@/constants'
-import type { CodesetCache, RolePermission, UserResponse as User } from '@/types'
+import type {
+  CodesetCache,
+  RolePermission,
+  UserResponse as User,
+} from '@/types'
 
 interface NavigationTab {
   href: string
@@ -19,6 +23,7 @@ interface Store {
   tabs: NavigationTab[]
   addTab: (tab: NavigationTab) => void
   removeTab: (name: string) => void
+  updateTab: (tab: NavigationTab) => void
 }
 
 interface StoreInitialState {
@@ -37,6 +42,7 @@ const createStore = (initialState: StoreInitialState) =>
         tabs: [],
         addTab: (tab) => set(addTabReducer(tab)),
         removeTab: (name) => set(removeTabReducer(name)),
+        updateTab: (tab) => set(updateTabReducer(tab)),
       }),
       {
         name: GALAXY_APP_LOCAL_STORAGE_KEY,
@@ -47,6 +53,14 @@ const createStore = (initialState: StoreInitialState) =>
       },
     ),
   )
+
+const updateTabReducer =
+  (tab: NavigationTab) =>
+  (prev: Store): Partial<Store> => {
+    return {
+      tabs: prev.tabs.map((_tab) => (_tab.href === tab.href ? tab : _tab)),
+    }
+  }
 
 const addTabReducer =
   (tab: NavigationTab) =>

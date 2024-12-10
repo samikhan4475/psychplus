@@ -1,7 +1,8 @@
 import { create } from 'zustand'
-import { Sort } from '@/types'
+import { SelectOptionType, Sort } from '@/types'
 import { getNewSortDir } from '@/utils'
 import { getStaffListAction } from './actions'
+import { getStaffRolesOrganizationAction } from './actions/get-organization-staff-roles'
 import { GetStaffListResponse, Staff } from './types'
 
 interface Store {
@@ -18,6 +19,12 @@ interface Store {
     page?: number,
     reset?: boolean,
   ) => void
+  getDropDownOptions: () => void
+  dropDownOptions: Record<
+    'staffs' | 'organizations' | 'roles' | 'practices',
+    SelectOptionType[]
+  >
+
   showFilters: boolean
   toggleFilters: () => void
   sortData: (column: string) => void
@@ -31,6 +38,26 @@ const useStore = create<Store>((set, get) => ({
   pageCache: {},
   sort: undefined,
   showFilters: true,
+  dropDownOptions: {
+    organizations: [],
+    staffs: [],
+    practices: [],
+    roles: [],
+  },
+  getDropDownOptions: async () => {
+    const result = await getStaffRolesOrganizationAction()
+    if (result.state === 'success') {
+      const { organizations, staffs, roles, practices } = result.data
+      set({
+        dropDownOptions: {
+          organizations,
+          staffs,
+          practices,
+          roles,
+        },
+      })
+    }
+  },
   toggleFilters: () => set({ showFilters: !get().showFilters }),
   search: async (payload, page = 1, reset = false) => {
     set({

@@ -1,18 +1,17 @@
 import React from 'react'
-import { TextField } from '@radix-ui/themes'
-import { useFormContext } from 'react-hook-form'
-import { FormFieldContainer, FormFieldLabel } from '@/components'
-import { SchemaType } from './staff-filter-form'
+import {
+  FormFieldContainer,
+  FormFieldLabel,
+  PhoneNumberInput,
+} from '@/components'
 
 const PhoneField = () => {
-  const form = useFormContext<SchemaType>()
   return (
     <FormFieldContainer className="w-full flex-row items-center gap-2">
       <FormFieldLabel>Phone</FormFieldLabel>
-      <TextField.Root
-        size="1"
-        className="border-pp-gray-2 w-full border border-solid !outline-none [box-shadow:none] "
-        {...form.register('phoneContact')}
+      <PhoneNumberInput
+        className="border-pp-gray-2 border border-solid !outline-none [box-shadow:none]"
+        field="phone"
         placeholder="Search"
       />
     </FormFieldContainer>

@@ -1,6 +1,7 @@
+import { SelectOptionType } from '@/types'
 import { Staff } from './types'
 
-const getInitialValues = (staff?: Staff) => ({
+const getInitialValues = (staff?: Partial<Staff>) => ({
   otpCode: staff?.otpCode ?? '',
   legalName: {
     firstName: staff?.legalName?.firstName ?? '',
@@ -12,7 +13,7 @@ const getInitialValues = (staff?: Staff) => ({
     honors: staff?.legalName?.honors ?? '',
   },
 
-  dateOfBirth: staff?.dateOfBirth ?? undefined,
+  dateOfBirth: undefined,
   gender: staff?.gender ?? '',
   socialSecurityNumber: staff?.socialSecurityNumber ?? '',
   userRoleId: staff?.userRoleId ?? undefined,
@@ -117,4 +118,10 @@ const getInitialValues = (staff?: Staff) => ({
   practiceIds: staff?.practiceIds ?? [''],
 })
 
-export { getInitialValues }
+const createOptionsLookup = (options: SelectOptionType[]) =>
+  options.reduce(
+    (acc, { label, value }) => ({ ...acc, [value]: { label, value } }),
+    {} as Record<string, SelectOptionType>,
+  )
+
+export { getInitialValues, createOptionsLookup }

@@ -10,11 +10,8 @@ const PhoneField = () => {
   return (
     <FormFieldContainer>
       <FormFieldLabel required>Phone Number</FormFieldLabel>
-      <PhoneNumberInput
-        field="contactInfo.phoneNumbers[0].number"
-        placeholder="Phone Number"
-      />
-      <FormFieldError name="contactInfo.phoneNumbers[0].number" />
+      <PhoneNumberInput field="phoneContact" placeholder="Phone Number" />
+      <FormFieldError name="phoneContact" />
     </FormFieldContainer>
   )
 }

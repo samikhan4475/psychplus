@@ -4,10 +4,16 @@ import React from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Box, Flex, Grid } from '@radix-ui/themes'
 import { SubmitHandler, useForm } from 'react-hook-form'
+import toast from 'react-hot-toast'
 import { FormContainer, TabContentHeading } from '@/components'
 import { GooglePlacesContextProvider } from '@/providers/google-places-provider'
+import { useStore as useRootStore } from '@/store'
+import { formatDate, formatDateToISOString, sanitizeFormData } from '@/utils'
+import { OrganizationOptions } from '../staff-management/types'
+import { updateStaffAction } from './actions/update-staff'
 import { BioField } from './bio-field'
 import { CredentialsSelect } from './credentials-select'
+import { transformOut } from './data'
 import { DobField } from './dob-field'
 import { EmailField } from './email-field'
 import { FirstNameField } from './first-name-field'
@@ -29,21 +35,51 @@ import { schema, SchemaType } from './schema'
 import { StaffRoleSelect } from './staff-role-select'
 import { StaffTypeSelect } from './staff-type-select'
 import { StatusSelect } from './status-select'
+import { StaffUpdatePayload } from './types'
+import { getInitialValues } from './utils'
 import { VirtualWaitRoomField } from './virtual-wait-room-field'
-import { getInitialValues } from '../staff-management/utils'
-
 
 interface StaffProfileFormProps {
   googleApiKey: string
+  staff: StaffUpdatePayload
+  selectOptions: OrganizationOptions
 }
-const StaffProfileForm = ({ googleApiKey }: StaffProfileFormProps) => {
+const StaffProfileForm = ({
+  googleApiKey,
+  staff,
+  selectOptions,
+}: StaffProfileFormProps) => {
+  const updateTab = useRootStore((state) => state.updateTab)
   const form = useForm<SchemaType>({
     resolver: zodResolver(schema),
     reValidateMode: 'onSubmit',
-    defaultValues: getInitialValues(),
+    defaultValues: getInitialValues(staff),
   })
-  const onSubmit: SubmitHandler<SchemaType> = (data) => {
-    // TODO : need api integration here
+  const onSubmit: SubmitHandler<SchemaType> = async (data) => {
+    const formattedDate = formatDateToISOString(data.dob)
+    const finalData = {
+      ...data,
+      dob: typeof formattedDate === 'string' ? formatDate(formattedDate) : null,
+    }
+    const sanatizedData = sanitizeFormData(finalData)
+
+    const result = await updateStaffAction({
+      staffId: staff.staffId,
+      payload: transformOut(sanatizedData),
+    })
+    if (result.state === 'success') {
+      toast.success('Staff Updated Successfully')
+
+      const {
+        id,
+        legalName: { firstName, lastName },
+      } = result.data
+      const href = `/staff/${id}/profile`
+      const label = `${firstName} ${lastName} - ${id}`
+      updateTab({ href, label })
+    } else if (result.state === 'error') {
+      toast.error(result.error)
+    }
   }
 
   return (
@@ -60,13 +96,13 @@ const StaffProfileForm = ({ googleApiKey }: StaffProfileFormProps) => {
             <FirstNameField />
             <MiddleNameField />
             <LastNameField />
-            <StaffTypeSelect />
-            <StaffRoleSelect />
+            <StaffTypeSelect staffs={selectOptions.staffs} />
+            <StaffRoleSelect roles={selectOptions.roles} />
             <CredentialsSelect />
           </Grid>
           <Grid columns="6" gap="2">
-            <OrganizationSelect />
-            <PracticeSelect />
+            <OrganizationSelect organizations={selectOptions.organizations} />
+            <PracticeSelect practices={selectOptions.practices} />
             <IndividualNpiField />
             <StatusSelect />
             <DobField />

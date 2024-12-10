@@ -3,8 +3,19 @@
 import * as api from '@/api'
 import { Sort } from '@/types'
 import { STAFF_LIST_TABLE_PAGE_SIZE } from '../constants'
+import { transformInStaffList } from '../data'
 import type { GetStaffListResponse, Staff } from '../types'
 
+const defaultPayload = {
+  isIncludeBiography: true,
+  isExcludeSelf: true,
+  isIncludeAttributions: true,
+  isIncludeOrganizations: true,
+  isIncludePractices: true,
+  isIncludeMetadataResourceChangeControl: true,
+  isIncludeMetadataResourceIds: true,
+  isIncludeMetadataResourceStatus: true,
+}
 interface GetStaffListParams {
   payload?: Partial<Staff>
   page?: number
@@ -26,7 +37,10 @@ const getStaffListAction = async ({
     url.searchParams.append('orderBy', `${sort.column} ${sort.direction}`)
   }
 
-  const response = await api.POST<Staff[]>(`${url}`, payload)
+  const response = await api.POST<Staff[]>(`${url}`, {
+    ...defaultPayload,
+    ...payload,
+  })
 
   if (response.state === 'error') {
     return {
@@ -38,7 +52,7 @@ const getStaffListAction = async ({
   return {
     state: 'success',
     data: {
-      staff: response.data,
+      staff: await transformInStaffList(response.data),
       total: Number(response.headers.get('psychplus-totalresourcecount')),
     },
   }

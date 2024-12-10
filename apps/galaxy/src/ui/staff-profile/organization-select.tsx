@@ -1,12 +1,29 @@
-import React from 'react'
-import { CodesetSelect, FormFieldContainer, FormFieldLabel } from '@/components'
-import { CODESETS } from '@/constants'
+'use client'
 
-const OrganizationSelect = () => {
+import React from 'react'
+import {
+  FormFieldContainer,
+  FormFieldError,
+  FormFieldLabel,
+  SelectInput,
+} from '@/components'
+import { SelectOptionType } from '@/types'
+
+interface OrganizationSelectProps {
+  organizations: SelectOptionType[]
+}
+
+const OrganizationSelect = ({ organizations }: OrganizationSelectProps) => {
   return (
     <FormFieldContainer>
       <FormFieldLabel required>Organization</FormFieldLabel>
-      <CodesetSelect size="1" codeset={CODESETS.Gender} name="organization" />
+      <SelectInput
+        options={organizations}
+        disabled={organizations.length === 0}
+        field="organizationIds.[0]"
+        buttonClassName="border-pp-gray-2 h-6 w-full border border-solid !outline-none [box-shadow:none]"
+      />
+      <FormFieldError name="organizationIds.[0]" />
     </FormFieldContainer>
   )
 }

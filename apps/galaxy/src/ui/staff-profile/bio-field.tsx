@@ -11,8 +11,9 @@ const BioField = () => {
       <FormFieldLabel>Bio</FormFieldLabel>
       <TextField.Root
         size="1"
+        maxLength={128}
         className="border-pp-gray-2 w-full border border-solid !outline-none [box-shadow:none] "
-        {...form.register('legalName.honors')}
+        {...form.register('biography')}
       />
     </FormFieldContainer>
   )

@@ -1,82 +1,108 @@
 import { DateValue } from 'react-aria-components'
 import { z } from 'zod'
+import { Address } from '../staff-management/types'
 
-const ContactInfoSchema = z.object({
-  email: z.string().email(),
-  emailVerificationStatus: z.string().nullable(),
-  phoneNumbers: z
-    .array(
-      z.object({
-        type: z.string(),
-        number: z.string().min(1, { message: 'Required' }),
-        extension: z.string().optional(),
-        comment: z.string().optional(),
-      }),
-    )
-    .min(1, { message: 'Required' }),
-  addresses: z.array(
-    z.object({
-      type: z.string(),
-      street1: z.string(),
-      street2: z.string().optional(),
-      city: z.string(),
-      state: z.string(),
-      country: z.string(),
-      postalCode: z.string(),
-      geoCoordinates: z
-        .object({
-          longitude: z.number(),
-          latitude: z.number(),
-          altitude: z.number(),
-        })
-        .optional(),
-      timeZoneId: z.string().optional(),
-    }),
-  ),
-  isMailingAddressSameAsPrimary: z.boolean(),
+const requiredString = z
+  .string()
+  .min(1, 'Required')
+  .max(128, { message: 'Cannot exceed 128 characters' })
+
+const requiredName = z
+  .string()
+  .min(1, 'Required')
+  .max(35, { message: 'Cannot exceed 35 characters' })
+
+const optionalString = z
+  .string()
+  .max(128, { message: 'Cannot exceed 128 characters' })
+  .optional()
+const addressSchema = z.object({
+  type: z.string(),
+  street1: optionalString,
+  street2: optionalString,
+  city: optionalString,
+  state: optionalString,
+  country: optionalString,
+  postalCode: optionalString,
+  geoCoordinates: z
+    .object({
+      longitude: z.number(),
+      latitude: z.number(),
+      altitude: z.number(),
+    })
+    .optional(),
+  timeZoneId: optionalString,
 })
 
-const NameSchema = z.object({
-  firstName: z.string().min(1, { message: 'Required' }),
-  middleName: z.string().optional(),
-  lastName: z.string().min(1, { message: 'Required' }),
-  preferredName: z.string().optional(),
-  title: z.string().optional(),
-  suffix: z.string().optional(),
-  honors: z.string().optional(),
-})
+const validateAddressFields = (
+  address: Address,
+  pathPrefix: string,
+  ctx: z.RefinementCtx,
+) => {
+  const fields = ['street1', 'city', 'state', 'postalCode']
+  fields.forEach((field) => {
+    const fieldValue = address[field as keyof Address]
+    if (typeof fieldValue !== 'string' || fieldValue.trim().length < 1) {
+      ctx.addIssue({
+        path: [`addresses.${pathPrefix}.${field}`],
+        message: 'Required',
+        code: z.ZodIssueCode.custom,
+      })
+    }
+  })
+}
 
-const GuardianSchema = z.object({
-  name: NameSchema,
-  isEmergencyContact: z.boolean(),
-  relationship: z.string(),
-  contact: ContactInfoSchema,
-})
-
-const schema = z.object({
-  otpCode: z.string(),
-  legalName: NameSchema,
-  dateOfBirth: z
-    .custom<DateValue | null>()
-    .refine((value) => value !== undefined, {
+const schema = z
+  .object({
+    staffId: requiredString,
+    userId: requiredString,
+    staffRoleId: optionalString,
+    status: requiredString,
+    staffUserRoleIds: z.array(requiredString),
+    firstName: requiredName,
+    lastName: requiredName,
+    dob: z.custom<DateValue | null>().refine((value) => value !== undefined, {
       message: 'Required',
     }),
-  gender: z.string().min(1, { message: 'Required' }),
-  socialSecurityNumber: z.string(),
-  userRoleId: z.string(),
-  contactInfo: ContactInfoSchema,
-  language: z.array(z.string()),
-  preferredLanguage: z.string(),
-  guardian: GuardianSchema.optional(),
-  password: z.string(),
-  passwordConfirm: z.string(),
-  staffRoleId: z.string(),
-  supervisedBy: z.string(),
-  supervisorStaffId: z.string(),
-  npi: z.string().min(10, { message: 'NPI must be 10 characters' }),
-  status: z.string(),
-  virtualRoomLink: z.string().url().optional(),
-})
+    middleName: optionalString,
+    spokenLanguages: z
+      .array(requiredString)
+      .min(1, { message: 'Minimum 1 is required' }),
+    virtualRoomLink: optionalString,
+    biography: optionalString,
+    title: optionalString,
+    address: optionalString,
+    address2: optionalString,
+    country: optionalString,
+    stateCode: optionalString,
+    city: optionalString,
+    postalCode: optionalString,
+    secondaryAddress: optionalString,
+    secondaryAddress2: optionalString,
+    secondaryCountry: optionalString,
+    secondaryStateCode: optionalString,
+    secondaryCity: optionalString,
+    secondaryPostalCode: optionalString,
+    npi: z.string().min(10, { message: 'NPI must be 10 characters' }),
+    gender: requiredString,
+    email: requiredString.email(),
+    addresses: z.array(addressSchema),
+    phoneContact: requiredString,
+    supervisedBy: optionalString,
+    supervisorStaffId: z.string(),
+    specialists: z.array(requiredString),
+    providerAttributions: z.array(requiredString),
+    organizationIds: z.array(requiredString),
+    practiceIds: z.array(requiredString),
+    isMailingAddressSameAsPrimary: z.boolean(),
+  })
+  .superRefine((data, ctx) => {
+    const { addresses, isMailingAddressSameAsPrimary } = data
+
+    validateAddressFields(addresses[0], '0', ctx)
+    if (!isMailingAddressSameAsPrimary)
+      validateAddressFields(addresses[1], '1', ctx)
+  })
 
 type SchemaType = z.infer<typeof schema>
 

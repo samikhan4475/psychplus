@@ -12,7 +12,7 @@ const LanguageSelect = () => {
   return (
     <FormFieldContainer className="flex-row items-center gap-1">
       <FormFieldLabel>Language</FormFieldLabel>
-      <DropdownSelect field="language" options={options} />
+      <DropdownSelect field="spokenLanguage" options={options} />
     </FormFieldContainer>
   )
 }

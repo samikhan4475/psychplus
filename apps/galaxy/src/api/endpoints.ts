@@ -42,11 +42,9 @@ const STANDARD_CODESET_ENDPOINT = (
   `${API_URL}/api/codeset/authorities/${assigningAuthority}/codesets/${codeSystemName}`
 const METADATA_CODESET_ENDPOINT = (name: string) =>
   `${API_URL}/api/metadata/codesets/${name}`
-const GET_STAFF_ENDPOINT = `${API_URL}/api/staff/search`
+const GET_STAFF_ENDPOINT = `${API_URL}/api/staff/search?includeInactive=true`
 const GET_APPOINTMENT_COSIGNERS_ENDPOINT = (appointmentId: number) =>
   `${API_URL}/api/appointments/${appointmentId}?isIncludeCosigners=true`
-
-
 const NOTE_MARK_ERROR_ENDPOINT = (
   appointmentId?: string,
   noteId?: string,
@@ -65,6 +63,8 @@ const GET_PATIENT_RELATIONSHIPS = (patientId: string) =>
   `${API_URL}/api/patients/${patientId}/relationships`
 const GET_PATIENT_PREFERRED_PARTNERS = (patientId: string) =>
   `${API_URL}/api/patients/${patientId}/preferredpartners`
+const DELETE_STAFF_ENDPOINT = (staffId: string) =>
+  `${API_URL}/api/staff/${staffId}`
 const GET_INSURANCE_PAYERS_ENDPOINT = (includePlans: boolean) =>
   `${API_URL}/api/insurance/payers?includePlans=${includePlans}&includeInactive=false&includeTest=false&publicViewable=true&offset=0&limit=0`
 const GET_INSURANCE_PAYER_PLANS = (payerId: string) =>
@@ -391,6 +391,7 @@ const SENT_TO_COSIGNER_NOTE_ENDPOINT = (
 export {
   NOTE_UPLOAD_FILE,
   USER_ENDPOINT,
+  DELETE_STAFF_ENDPOINT,
   REFRESH_ENDPOINT,
   GET_CLAIM_SUBMISSION_LIST,
   ADD_CLAIM_PAYMENT,

@@ -11,12 +11,10 @@ const MailingRadioButton = () => {
       <RadioGroup
         className="ml-2 border-none"
         field="isMailingAddressSameAsPrimary"
-        defaultValue={
-          watch('contactInfo.isMailingAddressSameAsPrimary') ? 'Yes' : 'No'
+        defaultValue={watch('isMailingAddressSameAsPrimary') ? 'Yes' : 'No'}
+        onValueChange={(val) =>
+          setValue('isMailingAddressSameAsPrimary', val === 'Yes')
         }
-        onValueChange={(val) => {
-          setValue('contactInfo.isMailingAddressSameAsPrimary', val === 'Yes')
-        }}
         options={[
           { label: 'No', value: 'No' },
           { label: 'Yes', value: 'Yes' },

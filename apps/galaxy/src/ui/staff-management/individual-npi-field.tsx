@@ -13,9 +13,10 @@ const IndividualNpiField = () => {
       <FormFieldLabel>Individual NPI</FormFieldLabel>
       <TextField.Root
         size="1"
+        maxLength={10}
         className="border-pp-gray-2 w-full border border-solid !outline-none [box-shadow:none] "
         {...form.register('npi')}
-        placeholder="Name"
+        placeholder="Search"
       />
     </FormFieldContainer>
   )

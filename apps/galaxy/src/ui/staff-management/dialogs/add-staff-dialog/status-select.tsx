@@ -6,7 +6,12 @@ const StatusSelect = () => {
   return (
     <FormFieldContainer>
       <FormFieldLabel>Status</FormFieldLabel>
-      <CodesetSelect size="1" codeset={CODESETS.RecordStatus} name="status" />
+      <CodesetSelect
+        size="1"
+        exclude={['Archived', 'Deleted']}
+        codeset={CODESETS.RecordStatus}
+        name="status"
+      />
     </FormFieldContainer>
   )
 }

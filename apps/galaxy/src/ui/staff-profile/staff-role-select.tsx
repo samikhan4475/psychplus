@@ -1,12 +1,27 @@
 import React from 'react'
-import { CodesetSelect, FormFieldContainer, FormFieldLabel } from '@/components'
-import { CODESETS } from '@/constants'
+import {
+  FormFieldContainer,
+  FormFieldError,
+  FormFieldLabel,
+  SelectInput,
+} from '@/components'
+import { SelectOptionType } from '@/types'
 
-const StaffRoleSelect = () => {
+interface StaffRoleSelectProps {
+  roles: SelectOptionType[]
+}
+
+const StaffRoleSelect = ({ roles }: StaffRoleSelectProps) => {
   return (
     <FormFieldContainer>
-      <FormFieldLabel>Role</FormFieldLabel>
-      <CodesetSelect size="1" codeset={CODESETS.StaffRole} name="staffRoleId" />
+      <FormFieldLabel required>Role</FormFieldLabel>
+      <SelectInput
+        field="staffUserRoleIds.0"
+        options={roles}
+        disabled={roles.length === 0}
+        buttonClassName="border-pp-gray-2 h-6 w-full border border-solid !outline-none [box-shadow:none]"
+      />
+      <FormFieldError name="staffUserRoleIds.[0]" />
     </FormFieldContainer>
   )
 }

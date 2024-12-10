@@ -16,9 +16,9 @@ const EmailField = () => {
       <TextField.Root
         size="1"
         className="border-pp-gray-2 w-full border border-solid !outline-none [box-shadow:none] "
-        {...form.register('contactInfo.email')}
+        {...form.register('email')}
       />
-      <FormFieldError name="contactInfo.email" />
+      <FormFieldError name="email" />
     </FormFieldContainer>
   )
 }
