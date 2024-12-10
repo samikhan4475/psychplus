@@ -2,7 +2,7 @@ import { create } from 'zustand'
 import { getAppointment } from '@/actions'
 import { Appointment } from '@/types'
 import { getPatientNotesAction, GetPatientNotesParams } from './actions'
-import type { GetPatientNotesResponse } from './types'
+import type { GetPatientNotesResponse, PatientNotes } from './types'
 
 interface Store {
   patientId: string
@@ -15,11 +15,11 @@ interface Store {
     page?: number,
     reset?: boolean,
   ) => void
-  selectedRow: string | undefined
-  selectedRows: string[]
+  selectedRow: PatientNotes | undefined
+  selectedRows: PatientNotes[]
   setPatientId: (id: string) => void
-  setSelectedRow: (value: string | undefined) => void
-  setSelectedRows: (value: string[]) => void
+  setSelectedRow: (value: PatientNotes | undefined) => void
+  setSelectedRows: (value: PatientNotes[]) => void
   isCreateNoteView: boolean
   setIsCreateNoteView: (value: boolean) => void
   errorMessage: string

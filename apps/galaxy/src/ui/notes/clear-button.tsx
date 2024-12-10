@@ -5,7 +5,13 @@ import { useFormContext } from 'react-hook-form'
 import { type NotesFilterSchemaType } from './left-panel-filters'
 import { useStore } from './store'
 
-const ClearButton = ({ patientId }: { patientId: string }) => {
+const ClearButton = ({
+  patientId,
+  disabled = false,
+}: {
+  patientId: string
+  disabled?: boolean
+}) => {
   const form = useFormContext<NotesFilterSchemaType>()
 
   const { fetch } = useStore((state) => ({
@@ -30,6 +36,7 @@ const ClearButton = ({ patientId }: { patientId: string }) => {
       variant="outline"
       type="button"
       onClick={onClear}
+      disabled={disabled}
     >
       Clear
     </Button>

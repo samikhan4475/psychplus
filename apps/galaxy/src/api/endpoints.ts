@@ -373,6 +373,13 @@ const GET_STAFF_DEA_ENDPOINT = `${API_URL}/api/staffdea/actions/search`
 const GET_STAFF_LICENSE_HISTORY_ENDPOINT = `${API_URL}/api/staffdea/history/actions/search`
 const ADD_SCHEDULE_REPORT_ENDPOINT = `${API_URL}/api/reporting/schedules`
 const RUN_SCHEDULE_REPORT_JOB_ENDPOINT = `${API_URL}/api/jobmanager/jobs`
+const SAVE_ADDENDUMS_AGAINST_NOTE_ID = (
+  patientId: string,
+  appointmentId: string,
+  noteId: string,
+  isCoSigner: boolean,
+) =>
+  `${API_URL}/api/patients/${patientId}/encounters/${appointmentId}/notes/${noteId}/addendums?IsCoSigner=${isCoSigner}`
 const SENT_TO_COSIGNER_NOTE_ENDPOINT = (
   patientId: string,
   appointmentId?: string,
@@ -578,6 +585,7 @@ export {
   GET_DETAILED_NOTE_ENDPOINT,
   ADD_SCHEDULE_REPORT_ENDPOINT,
   RUN_SCHEDULE_REPORT_JOB_ENDPOINT,
+  SAVE_ADDENDUMS_AGAINST_NOTE_ID,
   CREATE_NOTE_ENDPOINT,
   GET_APPOINTMENT_COSIGNERS_ENDPOINT,
   NOTE_MARK_ERROR_ENDPOINT,

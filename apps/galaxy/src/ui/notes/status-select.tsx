@@ -6,12 +6,12 @@ import { FormFieldError, FormFieldLabel, SelectInput } from '@/components'
 const options = [
   { label: 'Pending', value: 'Pending' },
   { label: 'Signed', value: 'Signed' },
-  { label: 'Signed/Pending', value: 'Signed/Pending' },
-  { label: 'Co-Signed', value: 'Co-Signed' },
+  { label: 'Signed/Pending', value: 'SignedPending' },
+  { label: 'Co-Signed', value: 'Cosigned' },
   { label: 'Error', value: 'Error' },
 ]
 
-const StatusSelect = () => {
+const StatusSelect = ({ disabled = false }: { disabled?: boolean }) => {
   return (
     <Flex direction="column" className={'w-full gap-0.5'}>
       <FormFieldLabel className="text-1 leading-[16px]">Status</FormFieldLabel>
@@ -20,6 +20,7 @@ const StatusSelect = () => {
         placeholder="Select"
         options={options}
         buttonClassName={buttonClassName}
+        disabled={disabled}
       />
       <FormFieldError name="status" />
     </Flex>

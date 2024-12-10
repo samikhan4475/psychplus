@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect } from 'react'
-import { Box, Flex } from '@radix-ui/themes'
+import { Box, Flex, ScrollArea } from '@radix-ui/themes'
 import { ColumnDef, Row, Table } from '@tanstack/react-table'
 import {
   ColumnHeader,
@@ -28,13 +28,15 @@ const getColumns = (codes: SharedCode[]) => {
     {
       id: 'select',
       header: ({ table }) => (
-        <TableHeaderCheckboxCell
-          checked={table.getIsAllPageRowsSelected()}
-          onCheckedChange={table.toggleAllPageRowsSelected}
-        />
+        <Flex className="justify-center">
+          <TableHeaderCheckboxCell
+            checked={table.getIsAllPageRowsSelected()}
+            onCheckedChange={table.toggleAllPageRowsSelected}
+          />
+        </Flex>
       ),
       cell: ({ row }) => (
-        <Box className="pl-[2px]">
+        <Box className="justify-center">
           <TableRowCheckboxCell
             checked={row.getIsSelected()}
             onCheckedChange={row.toggleSelected}
@@ -47,7 +49,7 @@ const getColumns = (codes: SharedCode[]) => {
       accessorKey: 'date',
       header: () => <ColumnHeader label="Date" />,
       cell: ({ row }) => (
-        <DateTimeCell>
+        <DateTimeCell className="whitespace-nowrap">
           {formatDateTime(row.original.metadata?.createdOn, false)}
         </DateTimeCell>
       ),
@@ -167,7 +169,7 @@ const NotesTable = ({ patientId }: { patientId: string }) => {
 
   const onRowSelect = (row: Row<PatientNotes>, table: Table<PatientNotes>) => {
     table.setRowSelection({ [row.id]: true })
-    setSelectedRow(row.id)
+    setSelectedRow(row.original)
   }
 
   if (loading) {
@@ -179,13 +181,13 @@ const NotesTable = ({ patientId }: { patientId: string }) => {
   }
 
   return (
-    <Box className="min-w-[100%]">
+    <ScrollArea className="pb-2">
       <DataTable
         columns={getColumns(codes)}
         data={data?.notes || []}
         onRowClick={onRowSelect}
       />
-    </Box>
+    </ScrollArea>
   )
 }
 
