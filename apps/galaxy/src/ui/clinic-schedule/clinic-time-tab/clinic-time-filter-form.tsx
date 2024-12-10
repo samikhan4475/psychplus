@@ -35,7 +35,7 @@ const schema = z.object({
 type ClinicTimeFilterSchemaType = z.infer<typeof schema>
 
 const ClinicTimeFilterForm = () => {
-  const form = useForm({
+  const form = useForm<ClinicTimeFilterSchemaType>({
     resolver: zodResolver(schema),
     criteriaMode: 'all',
     defaultValues: {},

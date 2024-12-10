@@ -1,4 +1,4 @@
-import { CodesetSelect, FormFieldLabel, SelectInput } from '@/components'
+import { CodesetSelect, FormFieldLabel } from '@/components'
 import { CODESETS } from '@/constants'
 import { FilterFieldContainer } from '../../shared'
 

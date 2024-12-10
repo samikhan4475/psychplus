@@ -45,6 +45,7 @@ const TimeInput = <T extends TimeValue>({
             name={name}
             value={value ?? null}
             onChange={onChange}
+            hourCycle={24}
             onBlur={onBlur}
             isInvalid={invalid}
             className="w-full"

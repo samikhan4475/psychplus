@@ -36,6 +36,7 @@ interface DataTableProps<TData, TValue> {
   sticky?: boolean
   isRowSpan?: boolean // Use rowspan to prevent table layout issues. Nested columns apply only when the optional `isRowSpan` prop is true, as data tables don't support them directly.
   theadClass?: string
+  thClass?: string
   tdClass?: string
   tableClass?: string
   tableRowClass?: string
@@ -56,6 +57,7 @@ const DataTable = <TData, TValue>({
   onRowSelectionChange,
   isRowSpan,
   theadClass,
+  thClass,
   tdClass,
   tableClass,
   selectFirstRow,
@@ -162,6 +164,7 @@ const DataTable = <TData, TValue>({
                           stickyRow && index === 0,
                       },
                       `w-[${header.getSize()}px]`,
+                      thClass,
                     )}
                   >
                     {!isRowSpan && header.isPlaceholder

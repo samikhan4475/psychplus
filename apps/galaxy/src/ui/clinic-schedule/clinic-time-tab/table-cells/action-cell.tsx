@@ -1,7 +1,7 @@
-import { CounterClockwiseClockIcon } from '@radix-ui/react-icons'
 import { Flex, IconButton } from '@radix-ui/themes'
 import { PropsWithRow } from '@/components'
 import { TableEditIcon } from '@/components/icons'
+import { EditClinicScheduleDialog } from '../../dialogs/clinic-schedule-dialog'
 import { ClinicTime } from '../../types'
 
 const ActionCell = ({
@@ -9,9 +9,11 @@ const ActionCell = ({
 }: PropsWithRow<ClinicTime>) => {
   return (
     <Flex justify="start" px="1" align="center">
-      <IconButton variant="ghost">
-        <TableEditIcon height={18} />
-      </IconButton>
+      <EditClinicScheduleDialog>
+        <IconButton variant="ghost">
+          <TableEditIcon height={18} />
+        </IconButton>
+      </EditClinicScheduleDialog>
     </Flex>
   )
 }

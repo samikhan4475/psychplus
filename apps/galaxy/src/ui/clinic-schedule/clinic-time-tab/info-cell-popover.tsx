@@ -1,7 +1,8 @@
-import { Box, Flex, IconButton, Popover } from '@radix-ui/themes'
+import { Flex, IconButton, Popover } from '@radix-ui/themes'
 import { ColumnDef } from '@tanstack/react-table'
 import { Info, X } from 'lucide-react'
 import { DataTable } from '@/components'
+import { BlockTableContainer } from '../shared'
 
 interface InfoCellPopoverProps<T> {
   columns: ColumnDef<T>[]
@@ -22,9 +23,9 @@ const InfoCellPopover = <T,>({ columns, data }: InfoCellPopoverProps<T>) => {
             <X width={16} height={16} />
           </Popover.Close>
         </Flex>
-        <Box className="border-pp-focus-bg rounded-[4px] border p-1.5">
+        <BlockTableContainer>
           <DataTable columns={columns} data={data} />
-        </Box>
+        </BlockTableContainer>
       </Popover.Content>
     </Popover.Root>
   )
