@@ -39,7 +39,7 @@ const Details = ({ data }: Props<MseWidgetSchemaType>) => {
 
   const reorderedData = reorderObjectKeys(data, [...desiredOrderMse])
 
-  return (
+  return data.widgetContainerCheckboxField === 'show' ? (
     <BlockContainer heading="Mental Status Exam">
       {Object.entries(reorderedData).map(([key, value]) => {
         const label = labelMapping[key] || key.replace(/([A-Z])/g, ' $1')
@@ -70,7 +70,7 @@ const Details = ({ data }: Props<MseWidgetSchemaType>) => {
         return null
       })}
     </BlockContainer>
-  )
+  ) : null
 }
 
 export { Details }

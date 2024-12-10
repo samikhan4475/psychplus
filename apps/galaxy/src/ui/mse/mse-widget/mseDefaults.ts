@@ -47,4 +47,5 @@ export const createEmptyFormValues = (): MseWidgetSchemaType => ({
   affOtherDetails: '',
   thpOtherDetails: '',
   tcOtherDetails: '',
+  widgetContainerCheckboxField: '',
 })

@@ -95,6 +95,7 @@ const PhysicalExamWidget = ({
         widgetId={QuickNoteSectionName.QuicknoteSectionPhysicalExam}
         getData={transformOut(patientId)}
         title={!isPhysicalExamTab ? 'Physical Exam' : undefined}
+        toggleable={!isPhysicalExamTab}
         headerRight={
           <>
             <WidgetTagButton />

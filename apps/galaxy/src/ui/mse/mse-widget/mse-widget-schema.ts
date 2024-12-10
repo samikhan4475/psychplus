@@ -4,6 +4,7 @@ type MseWidgetSchemaType = z.infer<typeof mseWidgetSchema>
 const yesNoEnumSchema = z.enum(['yes', 'no', ''])
 
 const mseWidgetSchema = z.object({
+  widgetContainerCheckboxField: z.string().optional(),
   orientation: z.array(z.string()),
   appearance: z.array(z.string()),
   behavior: z.array(z.string()),

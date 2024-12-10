@@ -181,6 +181,9 @@ const transformIn = (value?: QuickNoteSectionItem[]): MseWidgetSchemaType => {
   const result = createEmptyFormValues()
 
   value?.forEach((item) => {
+    if (item.sectionItem === 'widgetContainerCheckboxField') {
+      result.widgetContainerCheckboxField = item.sectionItemValue
+    }
     if (item.sectionItem.includes('schizophreniaHallucinationsValues')) {
       result.schizophreniaHallucinationsValues =
         item.sectionItemValue.split(',')
@@ -378,6 +381,15 @@ const transformOut =
           sectionName: QUICKNOTE_SECTION_NAME,
           sectionItem: key,
           sectionItemValue: `${value}`,
+        })
+      }
+
+      if (key.includes('widgetContainerCheckboxField') && value.length > 0) {
+        result.push({
+          pid: Number(patientId),
+          sectionName: QUICKNOTE_SECTION_NAME,
+          sectionItem: key,
+          sectionItemValue: String(value),
         })
       }
 

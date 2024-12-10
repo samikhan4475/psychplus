@@ -200,6 +200,9 @@ const transformIn = (
   const result = createEmptyFormValues()
 
   value.forEach((item) => {
+    if (item.sectionItem === 'widgetContainerCheckboxField') {
+      result.widgetContainerCheckboxField = item.sectionItemValue
+    }
     if (item.sectionItem.includes('Other')) {
       switch (item.sectionItem) {
         case 'cneOtherDetails':
@@ -323,6 +326,15 @@ const transformOut =
     const result: QuickNoteSectionItem[] = []
 
     Object.entries(schema).forEach(([key, value]) => {
+      if (key.includes('widgetContainerCheckboxField') && value.length > 0) {
+        result.push({
+          pid: Number(patientId),
+          sectionName: QUICKNOTE_SECTION_NAME,
+          sectionItem: key,
+          sectionItemValue: String(value),
+        })
+      }
+
       if (key.includes('Other') && value.length > 0) {
         result.push({
           pid: Number(patientId),

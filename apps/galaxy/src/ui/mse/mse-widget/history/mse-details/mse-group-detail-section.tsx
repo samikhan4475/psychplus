@@ -27,7 +27,7 @@ const MseGroupDetailSection = <T extends string>({
   const values = result ? result[field as MseKeys] : []
 
   const isSelected = (value: string) => {
-    return values.includes(value)
+    return values?.includes(value) || false
   }
 
   return (

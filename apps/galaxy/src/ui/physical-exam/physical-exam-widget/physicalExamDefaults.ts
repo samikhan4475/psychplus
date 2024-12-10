@@ -35,4 +35,5 @@ export const createEmptyFormValues = (): PhysicalExamWidgetSchemaType => ({
   mutOtherDetails: '',
   psyOtherDetails: '',
   nutOtherDetails: '',
+  widgetContainerCheckboxField: '',
 })

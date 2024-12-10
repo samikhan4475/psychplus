@@ -8,6 +8,7 @@ const limitedStringSchema = z
 type PhysicalExamWidgetSchemaType = z.infer<typeof physicalExamWidgetSchema>
 
 const physicalExamWidgetSchema = z.object({
+  widgetContainerCheckboxField: z.string().optional(),
   general: z.array(z.string()),
   skin: z.array(z.string()),
   heent: z.array(z.string()),

@@ -52,6 +52,7 @@ const MseWidget = ({ patientId, initialValue, isMseTab }: MseWidgetProps) => {
         widgetId={QuickNoteSectionName.QuicknoteSectionMse}
         getData={transformOut(patientId)}
         title={!isMseTab ? 'Mental Status Exam' : undefined}
+        toggleable={!isMseTab}
         headerRight={
           <>
             <WidgetTagButton />

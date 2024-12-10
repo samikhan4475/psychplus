@@ -28,7 +28,7 @@ const Details = ({ data }: Props<PhysicalExamWidgetSchemaType>) => {
     cranialNervesExam: 'Neurological Examination of Cranial Nerves',
   }
 
-  return (
+  return data.widgetContainerCheckboxField === 'show' ? (
     <BlockContainer heading="Physical Exam">
       {Object.entries(data).map(([key, value]) => {
         const label =
@@ -62,7 +62,7 @@ const Details = ({ data }: Props<PhysicalExamWidgetSchemaType>) => {
         return null
       })}
     </BlockContainer>
-  )
+  ) : null
 }
 
 export { Details }
