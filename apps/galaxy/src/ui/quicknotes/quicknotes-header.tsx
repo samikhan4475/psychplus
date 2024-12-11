@@ -65,7 +65,7 @@ const QuickNotesHeader = async ({ appointment }: QuickNotesHeaderProps) => {
           <QuickNotesProviderTypeDropdown
             providerType={appointment.providerType}
           />
-          <QuickNotesProviderDropdown provider={appointment.physicianName} />
+          <QuickNotesProviderDropdown provider={appointment.providerName} />
           <QuickNotesCosignerDropdown
             cosigners={appointment?.cosigners ?? []}
           />

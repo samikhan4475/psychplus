@@ -5,11 +5,8 @@ import { DiagnosisWidget } from './diagnosis-widget'
 import { DiagnosisSaveButton } from './diagnosis-widget/diagnosis-save-button'
 import { SearchDiagnosis } from './diagnosis-widget/search-diagnosis'
 
-interface DiagnosisProps {
-  recommended: boolean
-}
 
-const Diagnosis = ({ recommended }: DiagnosisProps) => {
+const Diagnosis = () => {
   return (
     <>
       <Flex
@@ -25,7 +22,7 @@ const Diagnosis = ({ recommended }: DiagnosisProps) => {
         </Flex>
         <DiagnosisSaveButton />
       </Flex>
-      <DiagnosisWidget recommended={recommended} />
+      <DiagnosisWidget />
     </>
   )
 }

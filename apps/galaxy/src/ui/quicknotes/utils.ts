@@ -1,11 +1,11 @@
 import { cache } from 'react'
 import { AddOnWidget } from '@/ui/add-on'
-import { PatientAllergiesView, PatientAllergiesWidget } from '@/ui/allergy'
+import { PatientAllergiesView } from '@/ui/allergy'
 import { FamilyInternalMedicineAssessmentPlanWidget } from '@/ui/assessment-plan/family-internal-medicine-assessment-plan-tab/family-internal-medicine-assessment-plan-widget'
 import { PsychiatryAssessmentPlanWidget } from '@/ui/assessment-plan/psychiatry-assessment-plan-tab/psychiatry-assessment-plan-widget'
 import { TherapyAssessmentPlanWidget } from '@/ui/assessment-plan/therapy-assessment-plan-tab/therapy-assessment-plan-widget'
 import { CodesWidget } from '@/ui/codes'
-import { QuicknotesDiagnosisWidget } from '@/ui/diagnosis/quicknotes-diagnosis-widget'
+import { DiagnosisWidget } from '@/ui/diagnosis/diagnosis-widget'
 import { FamilyPsychHxWidget } from '@/ui/family-psych-hx'
 import { QuicknotesFollowUpWidget } from '@/ui/follow-up'
 import { HpiWidget } from '@/ui/hpi'
@@ -24,9 +24,9 @@ import { SubstanceUseHxWidget } from '@/ui/substance-use-hx'
 import { TherapyWidget } from '@/ui/therapy'
 import { QuicknotesVitalsWidget } from '@/ui/vitals'
 import { isHospitalCareVisit } from '@/utils'
+import { TcmWidget } from '../assessment-plan/tcm-widget'
 import { HospitalDischargeWidget } from '../hospital/hospital-discharge-widget'
 import { HospitalInitialWidget } from '../hospital/hospital-initial-widget'
-import { TcmWidget } from '../assessment-plan/tcm-widget'
 import { SpravatoWidgetLoader as SpravatoWidget } from '../procedures/spravato-tab/spravato-widget-loader'
 import {
   AllergiesDetailsView,
@@ -56,9 +56,9 @@ import {
 } from './actual-note-view'
 import { HospitalDischargeView } from './actual-note-view/hospital-discharge'
 import { HospitalInitialView } from './actual-note-view/hospital-initial'
+import { TcmView } from './actual-note-view/tcm'
 import { QuickNoteSectionName } from './constants'
 import { WidgetType } from './types'
-import { TcmView } from './actual-note-view/tcm'
 
 const widgets: Array<WidgetType> = [
   {
@@ -122,7 +122,7 @@ const widgets: Array<WidgetType> = [
     actualNoteComponent: MentalStatusExam,
   },
   {
-    component: QuicknotesDiagnosisWidget,
+    component: DiagnosisWidget,
     id: QuickNoteSectionName.QuickNoteSectionDiagnosis,
     actualNoteComponent: WorkingDiagnosisDetailView,
   },
@@ -267,7 +267,6 @@ const visitTypeToWidgets: Record<string, QuickNoteSectionName[]> = {
     QuickNoteSectionName.FollowUps,
     QuickNoteSectionName.QuicknoteSectionCodes,
     QuickNoteSectionName.QuicknoteSectionTcm,
-
   ],
   IndividualPsychotherapy: [
     QuickNoteSectionName.QuicknoteSectionHPI,
@@ -356,7 +355,6 @@ const visitTypeToWidgets: Record<string, QuickNoteSectionName[]> = {
     QuickNoteSectionName.QuickNoteSectionHospitalOrders,
     QuickNoteSectionName.QuicknoteSectionReferrals,
     QuickNoteSectionName.QuicknoteSectionCodes,
-
   ],
   'HospitalCare/Discharge': [
     QuickNoteSectionName.QuicknoteSectionAdmittingDiagnosis,
@@ -404,7 +402,6 @@ const visitTypeToWidgets: Record<string, QuickNoteSectionName[]> = {
     QuickNoteSectionName.QuicknoteSectionReferrals,
     QuickNoteSectionName.FollowUps,
     QuickNoteSectionName.QuicknoteSectionCodes,
-
   ],
 }
 

@@ -1,5 +1,6 @@
 import { Text } from '@radix-ui/themes'
-import { getQuickNoteDetailAction } from '@/actions/get-quicknote-detail'
+import { getQuicknoteSections } from '@/api'
+import { getIcd10DiagnosisAPI } from '@/ui/diagnosis/api'
 import { QuickNoteSectionName } from '../../constants'
 import { ActualNoteDetailsWrapper } from '../shared'
 import { Details } from './details'
@@ -11,21 +12,32 @@ type WorkingDiagnosisDetailProps = {
 const WorkingDiagnosisDetailView = async ({
   patientId,
 }: WorkingDiagnosisDetailProps) => {
-  const response = await getQuickNoteDetailAction(
-    patientId,
-    [QuickNoteSectionName.QuickNoteSectionDiagnosis],
-    true,
-  )
+  const quickNotesResponse = await getQuicknoteSections({
+    patientId: Number(patientId),
+    sectionName: [QuickNoteSectionName.QuickNoteSectionDiagnosis],
+  })
 
-  if (response.state === 'error') {
-    return <Text>{response.error}</Text>
+  if (quickNotesResponse.state === 'error') {
+    return <Text>{quickNotesResponse.error}</Text>
+  }
+  const { sectionItemValue } = quickNotesResponse.data?.[0] || {}
+  const DiagnosisCodes = sectionItemValue?.split(',') || []
+  if (sectionItemValue === 'empty' || DiagnosisCodes?.length === 0) {
+    return
+  }
+  const Icd10DiagnosisResponse = await getIcd10DiagnosisAPI({
+    DiagnosisCodes,
+  })
+
+  if (Icd10DiagnosisResponse.state === 'error') {
+    return <Text>{Icd10DiagnosisResponse.error}</Text>
   }
 
   return (
     <ActualNoteDetailsWrapper
       sectionName={QuickNoteSectionName.QuickNoteSectionDiagnosis}
     >
-      <Details data={response.data} />
+      <Details data={Icd10DiagnosisResponse.data} />
     </ActualNoteDetailsWrapper>
   )
 }

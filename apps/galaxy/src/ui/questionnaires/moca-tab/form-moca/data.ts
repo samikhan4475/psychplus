@@ -3,10 +3,6 @@ import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { MocaSchemaType } from '../moca-schema'
 
 const transformIn = (data: QuickNoteSectionItem[]): MocaSchemaType => {
-  const value =
-    data.filter(
-      (item) => item.sectionName === QuickNoteSectionName.QuickNoteSectionMoca,
-    ) || []
   const result: MocaSchemaType = {
     VisuospatialExecutiveQ1: '',
     VisuospatialExecutiveQ2: '',
@@ -49,7 +45,7 @@ const transformIn = (data: QuickNoteSectionItem[]): MocaSchemaType => {
     OrientationPlaceQ1: '',
     OrientationCityQ1: '',
   }
-  value?.forEach((item: QuickNoteSectionItem) => {
+  data?.forEach((item: QuickNoteSectionItem) => {
     result[item.sectionItem] = item.sectionItemValue
   })
   return result

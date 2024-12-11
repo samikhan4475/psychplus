@@ -26,6 +26,7 @@ interface QuestionnairesMocaData {
 interface QuestionnairesFormMocaProps {
   labels?: string[]
   totalScore: { [key: string]: number }
+  disabled?: boolean
 }
 
 export type FormValues = z.infer<typeof mocaSchema>

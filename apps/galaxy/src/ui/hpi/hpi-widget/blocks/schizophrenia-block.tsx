@@ -22,7 +22,7 @@ const DELUSION_OPTIONS = [
   { label: 'Persecution', value: 'persecution' },
   { label: 'Unspecified', value: 'unspecified' },
   { label: 'Infidelity', value: 'infidelity' },
-  { label: 'misidentification syndrome', value: 'misidentificationSyndrome' },
+  { label: 'Misidentification syndrome', value: 'misidentificationSyndrome' },
 ]
 
 const HALLUCINATIONS_OPTIONS = [

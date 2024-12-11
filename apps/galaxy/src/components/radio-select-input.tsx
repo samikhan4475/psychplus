@@ -83,6 +83,8 @@ const RadioSelectInput = ({
                     field={option.value}
                     className="w-[35px]"
                     format="##"
+                    min={option.min}
+                    max={option.max}
                   />
                   <FormFieldError name={option.value} />
                 </>

@@ -7,6 +7,7 @@ import { QuestionnairesFormMocaDataTable } from './moca-data-table'
 const QuestionnairesFormMoca = ({
   labels,
   totalScore,
+  disabled,
 }: QuestionnairesFormMocaProps) => {
   const numberOfColumns = labels ? labels.length : 1
 
@@ -46,6 +47,7 @@ const QuestionnairesFormMoca = ({
                     isRanges={isRanges}
                     isWidthFifty={isWidthFifty}
                     heading={heading}
+                    disabled={disabled}
                   />
                 </Table.Cell>
               </Table.Row>

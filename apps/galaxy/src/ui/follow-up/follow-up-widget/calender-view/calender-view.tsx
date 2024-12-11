@@ -40,7 +40,7 @@ const CalenderView = () => {
           type="button"
         >
           <Plus width={16} height={16} />
-          Calender
+          Calendar
         </Button>
       </Dialog.Trigger>
 
@@ -49,7 +49,7 @@ const CalenderView = () => {
 
         <Dialog.Title className="font-sans -tracking-[0.25px]">
           <Flex>
-            Calender View
+            Calendar View
             <SchedulerDateStepper noOfDays={6} />
           </Flex>
         </Dialog.Title>

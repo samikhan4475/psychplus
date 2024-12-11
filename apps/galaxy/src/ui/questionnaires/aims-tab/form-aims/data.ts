@@ -19,11 +19,7 @@ const transformIn = (data: QuickNoteSectionItem[]): AimsSchemaType => {
     DentalStatusQ13: '',
     DentalStatusQ14: '',
   }
-  const value =
-    data.filter(
-      (item) => item.sectionName === QuickNoteSectionName.QuickNoteSectionAims,
-    ) || []
-  value?.forEach((item: QuickNoteSectionItem) => {
+  data?.forEach((item: QuickNoteSectionItem) => {
     result[item.sectionItem] = item.sectionItemValue
   })
   return result

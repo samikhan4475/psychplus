@@ -9,36 +9,50 @@ import {
   WidgetClearButton,
   WidgetHxButton,
 } from '@/components'
+import { DiagnosisIcd10Code, FavouriteDiagnosisData } from '@/types'
 import { WorkingDiagnosisView } from '@/ui/diagnosis/diagnosis/diagnosis-widget'
 import { SearchDiagnosis } from '@/ui/diagnosis/diagnosis/diagnosis-widget/search-diagnosis'
-import { QuickNoteSectionName } from '../quicknotes/constants'
-import { Diagnosis } from './diagnosis'
-import { DiagnosisSaveButton } from './diagnosis/diagnosis-widget/diagnosis-save-button'
-import { useStore } from './store'
+import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
+import { Diagnosis } from '../diagnosis'
+import { DiagnosisSaveButton } from '../diagnosis/diagnosis-widget/diagnosis-save-button'
+import { useStore } from '../store'
 
-const QuicknotesDiagnosisWidget = () => {
+const Widgets = [QuickNoteSectionName.QuickNoteSectionSubstanceUseHx]
+
+interface DiagnosisWidgetProps {
+  workingDiagnosis?: DiagnosisIcd10Code[]
+  favouriteDiagnosis?: FavouriteDiagnosisData[]
+}
+
+const DiagnosisWidget = ({
+  workingDiagnosis,
+  favouriteDiagnosis,
+}: DiagnosisWidgetProps) => {
   const patientId = useParams().id as string
-  const { fetchWorkingDiagnosis, fetchFavouriteDiagnosis } = useStore()
+  const {
+    fetchWorkingDiagnosis,
+    updateFavoritesDiagnosis,
+    updateWorkingDiagnosisData,
+  } = useStore((state) => ({
+    fetchWorkingDiagnosis: state.fetchWorkingDiagnosis,
+    updateFavoritesDiagnosis: state.updateFavoritesDiagnosis,
+    updateWorkingDiagnosisData: state.updateWorkingDiagnosisData,
+  }))
 
   const handleEvent = (event: MessageEvent) => {
     const { widgetId, type, success } = event.data
-    if (type === 'widget:save' && success) {
-      switch (widgetId) {
-        case QuickNoteSectionName.QuickNoteSectionSubstanceUseHx:
-          fetchWorkingDiagnosis(patientId)
-          break
-        default:
-          break
-      }
+    if (type === 'widget:save' && success && Widgets.includes(widgetId)) {
+      fetchWorkingDiagnosis(patientId)
     }
   }
 
   useEffect(() => {
-    fetchWorkingDiagnosis(patientId)
-    fetchFavouriteDiagnosis()
+    workingDiagnosis && updateWorkingDiagnosisData(workingDiagnosis)
+    favouriteDiagnosis && updateFavoritesDiagnosis(favouriteDiagnosis)
     window.addEventListener('message', handleEvent)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [patientId])
+  }, [workingDiagnosis, favouriteDiagnosis])
+
   return (
     <>
       <TabContentHeading title={'Diagnosis'}>
@@ -63,4 +77,4 @@ const QuicknotesDiagnosisWidget = () => {
   )
 }
 
-export { QuicknotesDiagnosisWidget }
+export { DiagnosisWidget }

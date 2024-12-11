@@ -28,6 +28,7 @@ interface Store {
   ) => void
   encodeId: (id: string) => string
   saveWorkingDiagnosis: (patientId: string) => Promise<void>
+  updateFavoritesDiagnosis: (data: FavouriteDiagnosisData[]) => void
 }
 
 const useStore = create<Store>((set, get) => ({
@@ -75,7 +76,9 @@ const useStore = create<Store>((set, get) => ({
   },
 
   saveWorkingDiagnosis: async (patientId: string) => {
-    const codes = get().workingDiagnosisData.map((item) => item.code)
+    const codes = get()
+      .workingDiagnosisData.map((item) => item.code)
+      .filter((code) => code !== 'empty')
 
     const response = await saveWidgetAction({
       patientId,
@@ -97,11 +100,11 @@ const useStore = create<Store>((set, get) => ({
   },
 
   deleteWorkingDiagnosis: async (item) => {
-    const { workingDiagnosisData, updateWorkingDiagnosisData } = get()
+    const { workingDiagnosisData } = get()
     const updatedData = workingDiagnosisData.filter(
       (diagnose) => diagnose.code !== item.code,
     )
-    updateWorkingDiagnosisData(updatedData)
+    set({ workingDiagnosisData: updatedData })
   },
 
   fetchServiceDiagnosis: async (value: string) => {
@@ -188,6 +191,10 @@ const useStore = create<Store>((set, get) => ({
       favouriteDiagnosisData: optionsData,
       loadingFavouriteDiagnosis: false,
     })
+  },
+
+  updateFavoritesDiagnosis: async (data) => {
+    set({ favouriteDiagnosisData: data })
   },
 }))
 

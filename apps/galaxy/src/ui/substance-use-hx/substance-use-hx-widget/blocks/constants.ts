@@ -75,7 +75,6 @@ const DRUG_DETAILS_OPTIONS = [
 const REFFERAL_TREATMENT_OPTIONS = [
   { label: 'Detox', value: 'Detox' },
   { label: 'Residential', value: 'Residential' },
-  { label: 'Online Program', value: 'Online' },
   { label: 'Alcohol Anonymous', value: 'Alcohol' },
   { label: 'Narcotics Anonymous', value: 'Aarcotics' },
   { label: 'Outpatient Therapy', value: 'OutpatientTherapy' },

@@ -1,3 +1,4 @@
+import { getQuickNoteDetailAction } from '@/actions/get-quicknote-detail'
 import { WidgetContainerCheckboxField } from '@/components'
 import { CodesWidgetItem, CptCodeKeys, QuickNoteSectionItem } from '@/types'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
@@ -33,6 +34,8 @@ const transformIn = (
       result[key] = list || []
     } else if (key === 'briefIntervention') {
       result[key] = itemValue === 'true' ? true : false
+    } else if (key === 'briefInterventionDetail') {
+      result[key] = itemValue
     } else if (key === 'widgetContainerCheckboxField') {
       result[key] = itemValue
     } else if (TOBACCO_DRUGS_ALCOHOL_QUESTIONNAIRE.includes(key)) {
@@ -52,11 +55,7 @@ const transformIn = (
 }
 
 const transformOut =
-  (
-    patientId: string,
-    appointmentId: string,
-    responseData: QuickNoteSectionItem[],
-  ) =>
+  (patientId: string, appointmentId: string) =>
   async (schema: Record<string, undefined>) => {
     const result: QuickNoteSectionItem[] = []
 
@@ -69,6 +68,7 @@ const transformOut =
 
     if (schema.alcohol === 'no' && schema.drugs === 'no') {
       schema['briefIntervention'] = undefined
+      schema['briefInterventionDetail'] = undefined
     }
     if (schema.tobacco === 'no') {
       TOBACCO_OPTIONS.forEach((option) => {
@@ -109,6 +109,13 @@ const transformOut =
             sectionItemValue: String(formData[detailsKey]),
           })
         }
+        if (key === 'briefInterventionDetail') {
+          result.push({
+            ...QuickNotesPayload,
+            sectionItem: key,
+            sectionItemValue: String(value),
+          })
+        }
       }
     })
     if (formData.widgetContainerCheckboxField) {
@@ -142,23 +149,21 @@ const transformOut =
       selectedCodes,
     )
 
-    const diagnosisSections = getDiagnosisSections(
-      responseData,
-      schema,
-      patientId,
-    )
+    const diagnosisSections = await getDiagnosisSections(schema, patientId)
     return [...result, ...codesResult, ...diagnosisSections]
   }
 
-const getDiagnosisSections = (
-  responseData: QuickNoteSectionItem[],
+const getDiagnosisSections = async (
   schema: Record<string, undefined>,
   patientId: string,
 ) => {
-  const QuickNoteSectionDiagnosisResponse = responseData.filter(
-    (item) =>
-      item.sectionName === QuickNoteSectionName.QuickNoteSectionDiagnosis,
-  )
+  const response = await getQuickNoteDetailAction(patientId, [
+    QuickNoteSectionName.QuickNoteSectionDiagnosis,
+  ])
+
+  if (response.state === 'error') {
+    return []
+  }
   const formData = sanitizeFormData(schema)
   const { tobacco, alcohol, drugs } = formData
   const substanceUseCodes = [
@@ -172,7 +177,7 @@ const getDiagnosisSections = (
     'F10.10',
   ]
   const diagnosisCodesToAdd =
-    QuickNoteSectionDiagnosisResponse[0]?.sectionItemValue
+    response.data[0]?.sectionItemValue
       .split(',')
       .filter((item) => !substanceUseCodes.includes(item)) || []
   const drugsDiagnosisMap: Record<string, string> = {

@@ -1,6 +1,5 @@
 'use client'
 
-import { Button, Tooltip } from '@radix-ui/themes'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { FillOutButtonAims } from '../../aims-tab/fill-out-button'
 import { FillOutButtonAudit } from '../../audit-tab/fill-out-button'
@@ -30,13 +29,8 @@ const FilloutButtonBlock = ({ questionnaire }: { questionnaire: string }) => {
   const FillOutComponent =
     fillOutButtons[questionnaire as keyof typeof fillOutButtons]
 
-  return (
-    <Tooltip content="Fillout">
-      <Button variant="ghost" onClick={(e) => e.preventDefault()}>
-        {FillOutComponent && <FillOutComponent data={[]} />}
-      </Button>
-    </Tooltip>
-  )
+  if (!FillOutComponent) return
+  return <FillOutComponent data={[]} />
 }
 
 export { FilloutButtonBlock }

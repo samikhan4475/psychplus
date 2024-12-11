@@ -15,8 +15,8 @@ import {
   SendToPatientButton,
   useQuestionnaireForm,
 } from '../shared'
-import { transformIn, transformOut } from '../shared/data'
 import { SCORE_INTERPRETATION_RANGES, YBOCS_TABLES } from './constants'
+import { transformIn, transformOut } from './data'
 import { QuestionnairesFormYBocsDataTable } from './y-bocs-data-table'
 
 interface QuestionnairesFormYBocsProps {
@@ -26,11 +26,7 @@ interface QuestionnairesFormYBocsProps {
 
 const YBocsTab = ({ patientId, data }: QuestionnairesFormYBocsProps) => {
   const totalQuestions = YBOCS_TABLES.length
-  const initialValue = transformIn(
-    data,
-    totalQuestions,
-    QuickNoteSectionName.QuickNoteSectionYbcos,
-  )
+  const initialValue = transformIn(data, totalQuestions)
   const { totalScore, ...form } = useQuestionnaireForm(
     initialValue,
     totalQuestions,

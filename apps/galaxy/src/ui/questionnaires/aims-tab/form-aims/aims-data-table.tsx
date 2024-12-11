@@ -11,6 +11,7 @@ interface QuestionnairesFormAimsDatatableProps {
   label: string
   isRanges?: boolean
   isSameOptions?: boolean
+  disabled?: boolean
 }
 
 const QuestionnairesFormAimsDataTable = ({
@@ -20,6 +21,7 @@ const QuestionnairesFormAimsDataTable = ({
   scoreInterpretationRanges,
   isRanges,
   isSameOptions,
+  disabled
 }: QuestionnairesFormAimsDatatableProps) => {
   const OPTIONS = isSameOptions ? AIMS_OPTIONS : AIMS_DENTAL_STATUS_OPTIONS
   return (
@@ -66,6 +68,7 @@ const QuestionnairesFormAimsDataTable = ({
                     className="bg-0 rounded-0 border-0"
                     field={`${item.id}`}
                     options={[option]}
+                    disabled = {disabled}
                   />
                 </Table.Cell>
               ))}

@@ -29,7 +29,7 @@ const QuestionnairesInfoPage = async ({ params }: QuestionnairesPageProps) => {
   })
 
   if (response.state === 'error') {
-    return <div>fail</div>
+    return <div>fail Questionnaires: {response.error}</div>
   }
 
   return <QuestionnairesView patientId={params.id} data={response.data} />

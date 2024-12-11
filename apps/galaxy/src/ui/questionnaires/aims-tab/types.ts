@@ -15,6 +15,7 @@ interface QuestionnairesAimsData {
 interface QuestionnairesFormAimsProps {
   labels?: string[]
   totalScore: { [key: string]: number }
+  disabled?: boolean
 }
 
 export type {

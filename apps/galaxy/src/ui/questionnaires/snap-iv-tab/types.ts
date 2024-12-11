@@ -14,6 +14,7 @@ interface QuestionnairesSnapIvData {
 interface QuestionnairesFormSnapIvProps {
   labels?: string[]
   totalScore: { [key: string]: number }
+  disabled?: boolean
 }
 
 export type {

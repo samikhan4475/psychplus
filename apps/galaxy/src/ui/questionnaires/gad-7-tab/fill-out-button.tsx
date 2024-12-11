@@ -1,18 +1,14 @@
 import { PropsWithChildren } from 'react'
 import { useParams } from 'next/navigation'
 import { QuickNoteSectionItem } from '@/types'
-import {
-  LABELS,
-  SCORE_INTERPRETATION_RANGES,
-} from '@/ui/questionnaires/shared/constants'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
-import { QuestionnairesTitles, QuestionnaireTabs } from '../constants'
+import { QuestionnairesTitles } from '../constants'
 import {
   FillOutButton,
   FillOutTabsView,
   QuestionnairePopupCurrentView,
 } from '../shared'
-import { QUESTIONS } from './constants'
+import { LABELS, QUESTIONS, SCORE_INTERPRETATION_RANGES } from './constants'
 
 type FillOutButtonGad7Props = PropsWithChildren<{
   data: QuickNoteSectionItem[]
@@ -33,7 +29,6 @@ const FillOutButtonGad7 = ({ data }: FillOutButtonGad7Props) => {
           labels={LABELS}
           scoreInterpretationRanges={SCORE_INTERPRETATION_RANGES}
           quickNoteSectionName={QuickNoteSectionName.QuickNoteSectionGad7}
-          questionnaireTab={QuestionnaireTabs.GAD_7_TAB}
         />
       </FillOutTabsView>
     </FillOutButton>

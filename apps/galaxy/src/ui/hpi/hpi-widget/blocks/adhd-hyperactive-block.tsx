@@ -30,7 +30,7 @@ const BLOCK_OPTIONS = [
     value: 'adhExcessiveTalking',
   },
   {
-    label: 'Blurts Out Answers',
+    label: 'Blurt Out Answers',
     value: 'adhBlurtsOutAnswers',
   },
   {

@@ -7,6 +7,7 @@ import { QuestionnairesFormSnapIvDataTable } from './snap-iv-data-table'
 const QuestionnairesFormSnapIv = ({
   labels,
   totalScore,
+  disabled
 }: QuestionnairesFormSnapIvProps) => {
   const numberOfColumns = labels ? labels.length : 1
 
@@ -44,6 +45,7 @@ const QuestionnairesFormSnapIv = ({
                   {...table}
                   totalScore={tableScore}
                   scoreInterpretationRanges={ScoreInterpretation}
+                  disabled = {disabled}
                 />
               </Table.Cell>
             </Table.Row>

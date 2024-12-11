@@ -8,10 +8,6 @@ import { SendToPatientButton } from '@/ui/questionnaires/shared'
 import { useStore } from '@/ui/questionnaires/store'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 
-const QUESTIONNAIRE_LABEL = 'Your Questionnaire Label'
-const QUESTIONNAIRE_DESCRIPTION = 'Your Questionnaire Description'
-const QUESTIONNAIRE_ID = 'yourQuestionnaireId'
-
 type QuestionnaireRowProps = {
   label: QuickNoteSectionName
   badgeLabel: string
@@ -51,7 +47,11 @@ const QuestionnaireRow = ({ label, badgeLabel }: QuestionnaireRowProps) => {
           {title}
         </Text>
         {latestHistory && (
-          <QuestionnaireRowDetail option={latestHistory} label={badgeLabel} />
+          <QuestionnaireRowDetail
+            option={latestHistory}
+            label={badgeLabel}
+            questionnaire={questionnaire}
+          />
         )}
       </Flex>
       <Flex align="center" gap="2">
@@ -68,9 +68,9 @@ const QuestionnairesBlock: React.FC = () => {
   return (
     <>
       <YesNoSelect
-        label={QUESTIONNAIRE_LABEL}
-        description={QUESTIONNAIRE_DESCRIPTION}
-        field={QUESTIONNAIRE_ID}
+        label="Questionnaire"
+        description="Pt was agreeable to detailed assessment"
+        field="questionnaire"
         isNoFirst
       />
 

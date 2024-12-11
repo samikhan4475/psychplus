@@ -2,7 +2,7 @@ import { Flex, Text } from '@radix-ui/themes'
 import { RadioSelectSection, TextInput } from '@/components'
 import { PatientProfile } from '@/types'
 import { AlcoholBlock } from './alcohol-block'
-import { BriefInterventionBlock } from './brief-invention-block'
+import { BriefInterventionDetail } from './brief-intervention-block'
 import { DrugsBlock } from './drugs-block'
 import { QuestionnairesBlock } from './questionnaires-block'
 import { ReferralTreatmentBlock } from './referral-treatement-block'
@@ -27,7 +27,10 @@ const AlcoholDrugsBlock = ({ patientInfo }: AlcoholDrugsBlockProps) => {
       <DrugsBlock />
 
       <QuestionnairesBlock />
-      <BriefInterventionBlock />
+      <BriefInterventionDetail
+        label="Brief Intervention"
+        defaultValue="Discussed with patient reasons for use of substance, health risk associated with use, how ready and confident the patient is about quitting, gave advice and discussed the following goal"
+      />
       <ReferralTreatmentBlock />
       <RadioSelectSection
         label="Discussed alcohol/substance use cessation for"

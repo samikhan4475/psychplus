@@ -11,7 +11,7 @@ import {
   WidgetSaveButton,
   WidgetTagButton,
 } from '@/components'
-import { PatientProfile, QuickNoteSectionItem } from '@/types'
+import { PatientProfile } from '@/types'
 import { useStore } from '@/ui/questionnaires/store'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { AlcoholDrugsBlock, TobaccoBlock } from './blocks'
@@ -25,14 +25,12 @@ interface SocialHxWidgetProps {
   patientId: string
   initialValue: SubstanceUseHxWidgetSchemaType
   isHistoryHeader?: boolean
-  responseData: QuickNoteSectionItem[]
 }
 
 const SubstanceUseHxWidget = ({
   patientId,
   initialValue,
   isHistoryHeader = false,
-  responseData,
 }: SocialHxWidgetProps) => {
   const { initializeQuestionnaires } = useStore((state) => ({
     initializeQuestionnaires: state.initializeQuestionnaires,
@@ -61,7 +59,7 @@ const SubstanceUseHxWidget = ({
         patientId={patientId}
         widgetId={QuickNoteSectionName.QuickNoteSectionSubstanceUseHx}
         title={!isHistoryHeader ? 'Substance Use History' : undefined}
-        getData={transformOut(patientId, appointmentId, responseData)}
+        getData={transformOut(patientId, appointmentId)}
         toggleable={!isHistoryHeader}
         headerRight={
           <>

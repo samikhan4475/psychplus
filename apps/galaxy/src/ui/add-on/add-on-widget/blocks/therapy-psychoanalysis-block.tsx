@@ -46,7 +46,7 @@ const TherapyPsychoAnalysisBlock = () => {
           <PsychoAnalysisBlock />
           <TherapyDetail
             field="additionalPsychoAnalysisDetail"
-            label="Additional Therapy Details"
+            label="Additional Psychoanalysis Details"
             defaultValue="The patient displayed transference that may be the result of unconscious conflicts. The provider encouraged the patient to reflect on past experiences that could be impacting the patient’s life. The provider further explored repressed thoughts with the patient to help the patient become aware of the root causes of their psychological distress. Continued support and discussion of the transference are recommended for continued growth."
           />
         </>

@@ -4,7 +4,6 @@ import { FormProvider } from 'react-hook-form'
 import { WidgetFormContainer } from '@/components'
 import { QuickNoteSectionItem } from '@/types'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
-import { QuestionnaireTabs } from '../constants'
 import { transformIn, transformOut } from './data'
 import { FilloutCurrentTab } from './fill-out'
 import { QuestionnairesData, QuestionnairesForm } from './questionnaires-form'
@@ -20,7 +19,6 @@ type QuestionnairePopupCurrentView = React.PropsWithChildren<{
   patientId: string
   scoreInterpretationRanges: ScoreInterpretationRange[]
   quickNoteSectionName: QuickNoteSectionName
-  questionnaireTab: QuestionnaireTabs
 }>
 
 const QuestionnairePopupCurrentView = ({
@@ -32,7 +30,6 @@ const QuestionnairePopupCurrentView = ({
   patientId,
   scoreInterpretationRanges,
   quickNoteSectionName,
-  questionnaireTab,
 }: QuestionnairePopupCurrentView) => {
   const totalQuestions = questions.length
   const initialValue = transformIn(data, totalQuestions)
@@ -47,7 +44,7 @@ const QuestionnairePopupCurrentView = ({
         <WidgetFormContainer
           title=""
           patientId={patientId}
-          widgetId={`${questionnaireTab.toLowerCase()} popup`}
+          widgetId={quickNoteSectionName}
           getData={transformOut(patientId, quickNoteSectionName)}
         >
           <FilloutCurrentTab

@@ -73,7 +73,7 @@ const InjectionBlock = () => {
             required={true}
           />
           <SelectInput
-            label={'Manufacturer'}
+            label={'Manufacture'}
             field={'manufacturer'}
             options={manufacturersList}
             buttonClassName="flex-1"

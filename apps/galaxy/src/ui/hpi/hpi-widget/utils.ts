@@ -150,7 +150,7 @@ const labels = {
     hardToEnjoyRelaxing: 'Hard to Enjoy Relaxing',
     onTheGo: 'On the go',
     excessiveTalking: 'Excessive Talking',
-    blurtsOutAnswers: 'Blurts Out Answers',
+    blurtsOutAnswers: 'Blurt Out Answers',
     impatient: 'Impatient',
     interrupts: 'Interrupts',
     behaviorOutbursts: 'Behavior Outbursts',

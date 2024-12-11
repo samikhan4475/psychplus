@@ -76,7 +76,7 @@ const transformIn = (value: QuickNoteSectionItem[]): AddOnWidgetSchemaType => {
     '16-37 mins': undefined,
     '38-52 mins': undefined,
     '53-99 mins': undefined,
-    sessionParticipants: undefined,
+    sessionParticipants: 'Patients',
     patientOther: undefined,
     therapyDetailsModality: [],
     therapyDetailsInterventions: [],

@@ -8,21 +8,24 @@ import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { SCORE_INTERPRETATION_RANGES as AUDIT_SCORE_INTERPRETATION_RANGES } from '../../audit-tab/constants'
 import { QuestionnaireTabs } from '../../constants'
 import { SCORE_INTERPRETATION_RANGES as DAST10_SCORE_INTERPRETATION_RANGES } from '../../dast-10-tab/constants'
+import { SCORE_INTERPRETATION_RANGES as GAD7_SCORE_INTERPRETATION_RANGES } from '../../gad-7-tab/constants'
 import { SCORE_INTERPRETATION_RANGES as HAMD_SCORE_INTERPRETATION_RANGES } from '../../ham-d-tab/constants'
 import { SCORE_INTERPRETATION_RANGES_ORIENTATION } from '../../moca-tab/constants'
 import { SCORE_INTERPRETATION_RANGES as PCL5_SCORE_INTERPRETATION_RANGES } from '../../pcl-5-tab/constants'
+import { SCORE_INTERPRETATION_RANGES as PHQ9_SCORE_INTERPRETATION_RANGES } from '../../phq-9-tab/constants'
 import { getBadgeColor, getRange, ScoreInterpretationRange } from '../../shared'
-import { SCORE_INTERPRETATION_RANGES } from '../../shared/constants'
+import { ViewButton } from '../../shared/view/view-button'
 import {
   SCORE_INTERPRETATION_RANGES_HYPERACTIVITY,
   SCORE_INTERPRETATION_RANGES_INATTENTION,
   SCORE_INTERPRETATION_RANGES_OPPOSITION,
   SNAP_IV_SECTIONS,
 } from '../../snap-iv-tab/constants'
+import { useStore } from '../../store'
 import { SCORE_INTERPRETATION_RANGES as YBOCS_SCORE_INTERPRETATION_RANGES } from '../../y-bocs-tab/constants'
 import { ChartView, ListView, TabsContent, TabsTrigger } from '../tabs'
+import { DeleteButton } from './delete-button'
 import { RowRightButtons } from './row-right-button'
-import { useStore } from '../../store'
 
 interface QuestionnairesDetailsProps {
   questionnaire: string
@@ -45,8 +48,8 @@ const QuestionnairesDetails = ({
 
   // get the added to notes dates for the current questionnaire
   const addedTonNotesDates = addedToNotes[questionnaire] || []
-  const historiesData = histories[questionnaire] || []  
-  
+  const historiesData = histories[questionnaire] || []
+
   const filteredHistories = historiesData.filter((history) =>
     addedTonNotesDates.includes(history.createdOn),
   )
@@ -91,6 +94,8 @@ const QuestionnairesDetails = ({
                     option={option}
                     label={badgeLabel}
                     key={option.createdOn}
+                    historiesData={filteredHistories.length}
+                    questionnaire={questionnaire}
                   />
                 )
               })}
@@ -100,14 +105,19 @@ const QuestionnairesDetails = ({
 
         <RowRightButtons
           questionnaire={questionnaire}
-          historiesData={historiesData.length}
+          historiesData={filteredHistories.length}
+          viewData={filteredHistories[0]}
         />
       </Flex>
 
       {filteredHistories.length > 1 && (
         <Tabs.Root value={activeTab} onValueChange={setActiveTab}>
           <TabsContent value="ListView">
-            <ListView options={filteredHistories} label={questionnaire} />
+            <ListView
+              options={filteredHistories}
+              label={option?.label}
+              questionnaire={questionnaire}
+            />
           </TabsContent>
           <TabsContent value="DataView">
             <ChartView />
@@ -121,46 +131,66 @@ const QuestionnairesDetails = ({
 const QuestionnaireRowDetail = ({
   option,
   label,
+  historiesData,
+  questionnaire,
 }: {
   option: QuickNoteHistory
   label: string
+  historiesData?: number
+  questionnaire: string
 }) => {
   const totalScore = option.data.reduce(
     (acc, item) => acc + Number(item.sectionItemValue),
     0,
   )
+
   return (
-    <Flex key={option.createdOn} gap="2" align="center">
-      <Badge
-        size="1"
-        variant="surface"
-        color={getBadgeColor(
-          getRange(
-            scoreInterpretationRanges(label, option.sectionName),
-            totalScore,
-          ),
+    <Flex key={option.createdOn} gap="2" align="center" className="w-full">
+      <Flex gap="2" align="center" className="w-full">
+        <Badge
+          size="1"
+          variant="surface"
+          color={getBadgeColor(
+            getRange(
+              scoreInterpretationRanges(label, option.sectionName),
+              totalScore,
+            ),
+          )}
+        >
+          Score {totalScore}
+        </Badge>
+
+        <Badge variant="surface" size="1" color={'green'}>
+          Completed
+        </Badge>
+
+        <Text className="text-[11px]" color="gray" weight="medium">
+          ON {format(new Date(option.createdOn), 'MM/dd/yyyy HH:mm')}
+        </Text>
+
+        {option.createdByRole && (
+          <>
+            <Text className="text-[11px]" color="gray" weight="medium">
+              BY
+            </Text>
+            <Badge variant="surface" size="1" color="gray">
+              {option.createdByRole}
+            </Badge>
+          </>
         )}
-      >
-        Score {totalScore}
-      </Badge>
-
-      <Badge variant="surface" size="1" color={'green'}>
-        Completed
-      </Badge>
-
-      <Text className="text-[11px]" color="gray" weight="medium">
-        ON {format(new Date(option.createdOn), 'MM/dd/yyyy HH:mm')}
-      </Text>
-
-      {option.createdByRole && (
-        <>
-          <Text className="text-[11px]" color="gray" weight="medium">
-            BY
-          </Text>
-          <Badge variant="surface" size="1" color="gray">
-            {option.createdByRole}
-          </Badge>
-        </>
+      </Flex>
+      {historiesData && historiesData > 1 && (
+        <Flex gap="4" align="center" mr="1">
+          <ViewButton
+            justIcon={true}
+            data={option.data}
+            quickNoteSectionName={option.sectionName as QuickNoteSectionName}
+          />
+          <DeleteButton
+            questionnaireDate={option.createdOn}
+            questionnaire={questionnaire}
+          />
+        </Flex>
       )}
     </Flex>
   )
@@ -184,8 +214,8 @@ const scoreInterpretationRanges = (
   }
 
   const rangesMap: { [key: string]: ScoreInterpretationRange[] } = {
-    [QuestionnaireTabs.PHQ_9_TAB]: SCORE_INTERPRETATION_RANGES,
-    [QuestionnaireTabs.GAD_7_TAB]: SCORE_INTERPRETATION_RANGES,
+    [QuestionnaireTabs.PHQ_9_TAB]: PHQ9_SCORE_INTERPRETATION_RANGES,
+    [QuestionnaireTabs.GAD_7_TAB]: GAD7_SCORE_INTERPRETATION_RANGES,
     [QuestionnaireTabs.PCL_5_TAB]: PCL5_SCORE_INTERPRETATION_RANGES,
     [QuestionnaireTabs.Y_BOCS_TAB]: YBOCS_SCORE_INTERPRETATION_RANGES,
     [QuestionnaireTabs.AIMS_TAB]: [{ color: 'green', min: 0, max: 40 }],

@@ -28,6 +28,7 @@ const substanceUseHxWidgetSchema = z
     inhalantsDetails: z.ostring(),
     questionnaire: z.enum(['yes', 'no']).optional(),
     briefIntervention: z.oboolean(),
+    briefInterventionDetail: z.ostring(),
     referralTreatment: z.array(z.string()).optional(),
     alcoholSubstanceCessationDiscussionDuration: z
       .enum(['>=15m', '>=31m'])

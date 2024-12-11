@@ -14,6 +14,7 @@ interface QuestionnairesFormMocaDatatableProps {
   isRanges?: boolean
   isWidthFifty?: boolean
   heading?: string[]
+  disabled?: boolean
 }
 
 const QuestionnairesFormMocaDataTable = ({
@@ -24,6 +25,7 @@ const QuestionnairesFormMocaDataTable = ({
   isWidthFifty,
   heading,
   scoreInterpretationRanges,
+  disabled,
 }: QuestionnairesFormMocaDatatableProps) => {
   const renderTableComponent = () => {
     if (!heading || heading.length === 0) return null
@@ -85,6 +87,7 @@ const QuestionnairesFormMocaDataTable = ({
                                     className="bg-0 rounded-0 border-0"
                                     field={`${item.id}`}
                                     options={[option]}
+                                    disabled={disabled}
                                   />
                                 </Box>
                               ))}

@@ -115,7 +115,6 @@ const HistoryView = () => {
           patientId={patientId}
           initialValue={data.substanceUseHxData}
           isHistoryHeader={true}
-          responseData={data.responseData}
         />
       </TabsContent>
     </Tabs.Root>

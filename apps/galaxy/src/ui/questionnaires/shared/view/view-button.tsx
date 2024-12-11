@@ -7,8 +7,12 @@ import { EyeIcon } from '@/components/icons'
 import { QuickNoteSectionItem } from '@/types'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { QuestionnairesTitles } from '../../constants'
+import { AimsView } from './aims-view'
 import { questionnaireViewConstants } from './constant'
+import { MocaView } from './moca-view'
 import { QuestionnaireViewPopup } from './questionnaires-view-pop'
+import { SnapIvView } from './snap-iv-view'
+import { YBocView } from './y-boc-view'
 
 type ViewButtonBlockProps = PropsWithChildren<{
   justIcon?: boolean
@@ -24,24 +28,22 @@ const ViewButton = ({
   const currentQuestionnaire = questionnaireViewConstants(
     quickNoteSectionName as QuickNoteSectionName,
   )
+  const otherQuestionnaire =
+    currentQuestionnaire.questions &&
+    currentQuestionnaire.labels &&
+    currentQuestionnaire.scoreRange
   return (
     <Tooltip content="View">
-      <Button variant="ghost" onClick={(e) => e.preventDefault()}>
+      <Button
+        size="1"
+        color="gray"
+        variant={justIcon ? 'ghost' : 'surface'}
+        highContrast
+        className="h-auto px-1 py-1 text-[11px] font-[300]"
+      >
         <Dialog.Root>
           <Dialog.Trigger>
-            {justIcon ? (
-              <EyeIcon height="14" width="14" />
-            ) : (
-              <Button
-                size="1"
-                color="gray"
-                variant="surface"
-                highContrast
-                className="h-auto px-1 py-1 text-[11px] font-[300]"
-              >
-                View
-              </Button>
-            )}
+            {justIcon ? <EyeIcon height="14" width="14" /> : <span>View</span>}
           </Dialog.Trigger>
 
           <Dialog.Content maxWidth="70vw" className="relative">
@@ -62,10 +64,26 @@ const ViewButton = ({
                   <Cross2Icon />
                 </Dialog.Close>
               </Flex>
-              <QuestionnaireViewPopup
-                data={data || []}
-                quickNoteSectionName={quickNoteSectionName}
-              />
+              {otherQuestionnaire && (
+                <QuestionnaireViewPopup
+                  data={data || []}
+                  quickNoteSectionName={quickNoteSectionName}
+                />
+              )}
+              {quickNoteSectionName ===
+                'QuicknoteSectionQuestionnaireSnapIV' && (
+                <SnapIvView data={data || []} />
+              )}
+              {quickNoteSectionName ===
+                'QuicknoteSectionQuestionnaireYbocs' && (
+                <YBocView data={data || []} />
+              )}
+              {quickNoteSectionName === 'QuicknoteSectionQuestionnaireAims' && (
+                <AimsView data={data || []} />
+              )}
+              {quickNoteSectionName === 'QuicknoteSectionQuestionnaireMoca' && (
+                <MocaView data={data || []} />
+              )}
             </ScrollArea>
           </Dialog.Content>
         </Dialog.Root>

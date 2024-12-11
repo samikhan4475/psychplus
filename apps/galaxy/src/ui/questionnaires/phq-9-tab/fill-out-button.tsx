@@ -1,16 +1,12 @@
 import { useParams } from 'next/navigation'
-import {
-  LABELS,
-  SCORE_INTERPRETATION_RANGES,
-} from '@/ui/questionnaires/shared/constants'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
-import { QuestionnairesTitles, QuestionnaireTabs } from '../constants'
+import { QuestionnairesTitles } from '../constants'
 import {
   FillOutButton,
   FillOutTabsView,
   QuestionnairePopupCurrentView,
 } from '../shared'
-import { QUESTIONS } from './constants'
+import { LABELS, QUESTIONS, SCORE_INTERPRETATION_RANGES } from './constants'
 
 const FillOutButtonPhq9 = () => {
   const patientId = useParams().id as string
@@ -26,7 +22,6 @@ const FillOutButtonPhq9 = () => {
           labels={LABELS}
           scoreInterpretationRanges={SCORE_INTERPRETATION_RANGES}
           quickNoteSectionName={QuickNoteSectionName.QuickNoteSectionPhq9}
-          questionnaireTab={QuestionnaireTabs.PHQ_9_TAB}
         />
       </FillOutTabsView>
     </FillOutButton>

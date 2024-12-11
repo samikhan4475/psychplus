@@ -32,7 +32,7 @@ const QuickNotesCosignerDropdown = ({
         onValueChange={setSelectedOption}
         value={selectedOption}
       >
-        <Tooltip content={getLabel(selectedOption)}>
+        <Tooltip content={getLabel(selectedOption) || 'Cosigners'}>
           <Select.Trigger className="max-w-[150px]" placeholder="Cosigners" />
         </Tooltip>
         <Select.Content

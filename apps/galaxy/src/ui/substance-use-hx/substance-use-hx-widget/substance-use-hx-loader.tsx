@@ -22,11 +22,7 @@ const SubstanceUseHxLoader = async ({
   const initialValue = transformIn(response.data)
 
   return (
-    <SubstanceUseHxWidget
-      patientId={patientId}
-      initialValue={initialValue}
-      responseData={response.data}
-    />
+    <SubstanceUseHxWidget patientId={patientId} initialValue={initialValue} />
   )
 }
 

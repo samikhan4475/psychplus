@@ -15,7 +15,7 @@ const getInitialValues = (): TherapySchemaType => ({
 const SESSION_PARTICIPANT_OPTIONS = [
   { label: 'Patients', value: 'Patients' },
   {
-    label: 'Patient with Patient/Guardian',
+    label: 'Patient with Parent/Guardian',
     value: 'PatientwithPatient/Guardian',
   },
   { label: 'Patient & Partner', value: 'Patient&Partner' },

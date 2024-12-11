@@ -9,6 +9,7 @@ interface QuestionnairesFormSnapIvDatatableProps {
   totalScore: number
   scoreInterpretationRanges: ScoreInterpretationRange[]
   label: string
+  disabled?: boolean
 }
 
 const QuestionnairesFormSnapIvDataTable = ({
@@ -16,6 +17,7 @@ const QuestionnairesFormSnapIvDataTable = ({
   totalScore,
   label,
   scoreInterpretationRanges,
+  disabled,
 }: QuestionnairesFormSnapIvDatatableProps) => {
   return (
     <Flex direction="column">
@@ -50,6 +52,7 @@ const QuestionnairesFormSnapIvDataTable = ({
                     className="bg-0 rounded-0 border-0"
                     field={`${item.id}`}
                     options={[option]}
+                    disabled={disabled}
                   />
                 </Table.Cell>
               ))}

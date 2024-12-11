@@ -8,6 +8,7 @@ import { QuestionnairesFormAimsDataTable } from './aims-data-table'
 const QuestionnairesFormAims = ({
   labels,
   totalScore,
+  disabled
 }: QuestionnairesFormAimsProps) => {
   const numberOfColumns = labels ? labels.length : 1
 
@@ -52,6 +53,7 @@ const QuestionnairesFormAims = ({
                     scoreInterpretationRanges={ScoreInterpretation}
                     isRanges={isRanges}
                     isSameOptions={isSameOptions}
+                    disabled={disabled}
                   />
                 </Table.Cell>
               </Table.Row>

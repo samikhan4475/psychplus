@@ -63,19 +63,23 @@ const Details = ({
             />
           </>
         )}
-        <LabelAndValue
-          label="Alcohol:"
-          value={`Do you drink ${isFemale ? 3 : 4} alcoholic drinks/day or ${
-            isFemale ? '>7' : '>14'
-          } alcoholic drinks/week: ${data.alcohol}`}
-          className="flex-nowrap"
-        />
-        <LabelAndValue
-          label="Drugs:"
-          value={`
+        {data.alcohol && (
+          <LabelAndValue
+            label="Alcohol:"
+            value={`Do you drink ${isFemale ? 3 : 4} alcoholic drinks/day or ${
+              isFemale ? '>7' : '>14'
+            } alcoholic drinks/week: ${data.alcohol}`}
+            className="flex-nowrap"
+          />
+        )}
+        {data.drugs && (
+          <LabelAndValue
+            label="Drugs:"
+            value={`
           In the past 6 months, have you used a recreational drug or used a prescription medication for nonmedical reasons? ${data.drugs}`}
-          className="flex-nowrap"
-        />
+            className="flex-nowrap"
+          />
+        )}
         {data.drugs === 'yes' && (
           <>
             <LabelAndValue

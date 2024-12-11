@@ -21,13 +21,18 @@ const QuestionnaireViewPopup = ({
 }: QuestionnaireViewPopup) => {
   const currentQuestionnaireViewConstants =
     questionnaireViewConstants(quickNoteSectionName)
-  const totalQuestions = currentQuestionnaireViewConstants.questions.length
+  const totalQuestions = currentQuestionnaireViewConstants.questions?.length || 0
   const initialValue = transformIn(data, totalQuestions)
   const { totalScore, ...form } = useQuestionnaireForm(
     initialValue,
     totalQuestions,
   )
   const { id: patientId } = useParams()
+
+  const otherQuestionnaire =
+    currentQuestionnaireViewConstants.questions &&
+    currentQuestionnaireViewConstants.labels &&
+    currentQuestionnaireViewConstants.scoreRange
 
   return (
     <FormProvider {...form}>
@@ -38,15 +43,17 @@ const QuestionnaireViewPopup = ({
           widgetId={`${currentQuestionnaireViewConstants.questionnaireTab.toLowerCase()} popup`}
           getData={() => []}
         >
-          <QuestionnairesForm
-            data={currentQuestionnaireViewConstants.questions}
-            labels={currentQuestionnaireViewConstants.labels}
-            totalScore={totalScore}
-            scoreInterpretationRanges={
-              currentQuestionnaireViewConstants.scoreRange
-            }
-            disabled
-          />
+          {otherQuestionnaire && (
+            <QuestionnairesForm
+              data={currentQuestionnaireViewConstants.questions}
+              labels={currentQuestionnaireViewConstants.labels}
+              totalScore={totalScore}
+              scoreInterpretationRanges={
+                currentQuestionnaireViewConstants.scoreRange
+              }
+              disabled
+            />
+          )}
         </WidgetFormContainer>
       </Flex>
     </FormProvider>

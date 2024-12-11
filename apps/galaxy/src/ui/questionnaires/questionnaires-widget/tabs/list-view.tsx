@@ -1,14 +1,16 @@
 import React from 'react'
 import { Flex } from '@radix-ui/themes'
 import { QuickNoteHistory } from '@/types'
-import { QuestionnaireRowDetail, RowRightButtons } from '../blocks'
+import { QuestionnaireRowDetail } from '../blocks'
 
 const ListView = ({
   options,
   label,
+  questionnaire,
 }: {
   options: QuickNoteHistory[]
   label: string
+  questionnaire: string
 }) => {
   return (
     <Flex direction="column">
@@ -22,8 +24,12 @@ const ListView = ({
             justify="between"
             key={`${index}+${option.createdOn}`}
           >
-            <QuestionnaireRowDetail option={option} label={label} />
-            {/* <RowRightButtons options={options} /> */}
+            <QuestionnaireRowDetail
+              option={option}
+              label={label}
+              historiesData={options.length}
+              questionnaire={questionnaire}
+            />
           </Flex>
         ))}
     </Flex>

@@ -15,9 +15,8 @@ import {
   SendToPatientButton,
   useQuestionnaireForm,
 } from '../shared'
-import { LABELS, SCORE_INTERPRETATION_RANGES } from '../shared/constants'
 import { transformIn, transformOut } from '../shared/data'
-import { QUESTIONS } from './constants'
+import { LABELS, QUESTIONS, SCORE_INTERPRETATION_RANGES } from './constants'
 
 const Phq9Tab = ({
   patientId,

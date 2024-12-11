@@ -9,14 +9,20 @@ export const BLOCK_OPTIONS = [
   {
     label: '16-37 mins',
     value: 'timeRangeOne',
+    min: 16,
+    max: 37,
   },
   {
     label: '38-52 mins',
     value: 'timeRangeTwo',
+    min: 38,
+    max: 52,
   },
   {
     label: '53-99 mins',
     value: 'timeRangeThree',
+    min: 53,
+    max: 99,
   },
 ]
 

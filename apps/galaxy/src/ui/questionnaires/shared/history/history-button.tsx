@@ -19,22 +19,21 @@ const HistoryButton = ({
 }: HistoryButtonBlockProps) => {
   return (
     <Tooltip content="History">
-      <Button variant="ghost" onClick={(e) => e.preventDefault()}>
+      <Button
+        size="1"
+        color="gray"
+        variant={justIcon ? 'ghost' : 'surface'}
+        className="flex items-center p-1"
+      >
         <Dialog.Root>
           <Dialog.Trigger>
             {justIcon ? (
               <HistoryIcon color="black" height="14" width="14" />
             ) : (
-              <Button
-                size="1"
-                color="gray"
-                variant="surface"
-                highContrast
-                className="h-auto px-1 py-1 text-[11px] font-[300]"
-              >
+              <Flex gap="1">
                 <HistoryIcon width={15} height={15} strokeWidth={1.75} />
                 History
-              </Button>
+              </Flex>
             )}
           </Dialog.Trigger>
 

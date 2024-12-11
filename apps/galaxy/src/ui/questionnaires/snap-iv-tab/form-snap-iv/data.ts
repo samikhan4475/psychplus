@@ -31,12 +31,8 @@ const transformIn = (data: QuickNoteSectionItem[]): SnapIvSchemaType => {
     'Hyperactivity/ImpulsivityQ17': '',
     'Hyperactivity/ImpulsivityQ18': '',
   }
-  const value =
-    data.filter(
-      (item) =>
-        item.sectionName === QuickNoteSectionName.QuickNoteSectionSnapIV,
-    ) || []
-  value?.forEach((item: QuickNoteSectionItem) => {
+  
+  data?.forEach((item: QuickNoteSectionItem) => {
     result[item.sectionItem] = item.sectionItemValue
   })
   return result

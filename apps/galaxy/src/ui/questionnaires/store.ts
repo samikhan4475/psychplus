@@ -29,6 +29,11 @@ interface Store {
     questionnaire: string,
     patientId: string | number,
   ) => void
+  handleDeleteQuestionnaire: (
+    questionnaireDate: string,
+    questionnaire: string,
+    patientId: string,
+  ) => void
   initializeQuestionnaires: (patientId: string) => void
   histories: { [key: string]: QuickNoteHistory[] }
   addedToNotes: { [key: string]: string[] }
@@ -160,6 +165,38 @@ const useStore = create<Store>((set, get) => ({
       )
     } else {
       toast.error('Failed to save!')
+    }
+  },
+  handleDeleteQuestionnaire: async (
+    questionnaireDate: string,
+    questionnaire: string,
+    patientId: string,
+  ) => {
+    const filtered = get().addedToNotes[questionnaire].filter(
+      (item) => item !== questionnaireDate,
+    )
+    const payload = [
+      {
+        pid: Number(patientId),
+        sectionName: `${QuickNoteSectionName.AddToNoteQuestionnaire}-${questionnaire}`,
+        sectionItem: questionnaire,
+        sectionItemValue: filtered?.toString() || 'empty',
+      },
+    ]
+    const result = await saveWidgetAction({
+      patientId: patientId.toString(),
+      data: payload,
+    })
+    if (result.state === 'success') {
+      toast.success('Deleted!')
+      set({
+        addedToNotes: {
+          ...get().addedToNotes,
+          [questionnaire]: filtered,
+        },
+      })
+    } else {
+      toast.error('Failed to delete!')
     }
   },
 }))

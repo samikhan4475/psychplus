@@ -1,17 +1,17 @@
 import { Text } from '@radix-ui/themes'
-import { QuickNoteSectionItem } from '@/types'
+import { DiagnosisIcd10Code } from '@/types'
 import { BlockContainer } from '../shared'
 
 interface Props<T> {
   data: T
 }
 
-const Details = ({ data }: Props<QuickNoteSectionItem[]>) => {
+const Details = ({ data }: Props<DiagnosisIcd10Code[]>) => {
   return (
     <BlockContainer heading="Working Diagnosis">
       {data.map((diagnosis) => (
         <Text key={diagnosis.id} size="1">
-          {diagnosis.sectionItemValue}
+          {`${diagnosis.code} ${diagnosis.description}`}
         </Text>
       ))}
     </BlockContainer>
