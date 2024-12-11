@@ -207,6 +207,8 @@ const GENERATE_PATIENT_STATEMENTS_ENDPOINT = (fileFormat: string) =>
   `${API_URL}/api/billingstatements/actions/generate/${fileFormat}`
 const DOWNLOAD_PATIENT_STATEMENTS_ENDPOINT = (fileFormat: string) =>
   `${API_URL}/api/billingstatements/actions/preview/${fileFormat}`
+const DOWNLOAD_CLAIM_SUBMISSION_HISTORY_ENDPOINT = (submissionId: string) =>
+  `${API_URL}/api/claimssubmissions/${submissionId}/actions/download`
 const GET_PATIENT_STATEMENTS_LIST_ENDPOINT = `${API_URL}/api/billingstatements/actions/search`
 const DOWNLOAD_HCFA_FILE_ENDPOINT = `${API_URL}/api/claimssubmissions/actions/previewclaimform`
 const GET_RESPONSE_HISTORY_LIST_ENDPOINT = `${API_URL}/api/claimssubmissions/responses/actions/search`
@@ -612,4 +614,5 @@ export {
   CREATE_NOTE_ENDPOINT,
   GET_APPOINTMENT_COSIGNERS_ENDPOINT,
   NOTE_MARK_ERROR_ENDPOINT,
+  DOWNLOAD_CLAIM_SUBMISSION_HISTORY_ENDPOINT,
 }
