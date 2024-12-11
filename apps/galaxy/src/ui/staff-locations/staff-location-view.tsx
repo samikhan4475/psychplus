@@ -3,6 +3,7 @@
 import React from 'react'
 import { Flex } from '@radix-ui/themes'
 import { StaffLocationFilter } from './staff-location-filters'
+import { StaffLocationListPagination } from './staff-location-list-pagination'
 import { StaffLocationTable } from './staff-location-table'
 import { TabContentHeading } from './tab-content-heading'
 
@@ -17,6 +18,7 @@ const StaffLocationView = () => {
         <StaffLocationFilter />
       </TabContentHeading>
       <StaffLocationTable />
+      <StaffLocationListPagination />
     </Flex>
   )
 }

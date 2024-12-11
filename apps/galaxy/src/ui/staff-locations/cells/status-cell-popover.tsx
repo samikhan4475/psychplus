@@ -5,9 +5,9 @@ import { StaffLocationHistoryTable } from '../staff-location-history-table'
 import { StatusCellHeading } from './status-cell-heading'
 
 interface StatusCellPopoverProps {
-  staffId: string
+  providerLocationId: string
 }
-const StatusCellPopover = ({ staffId }: StatusCellPopoverProps) => {
+const StatusCellPopover = ({ providerLocationId }: StatusCellPopoverProps) => {
   return (
     <Popover.Root modal>
       <Popover.Trigger>
@@ -22,12 +22,12 @@ const StatusCellPopover = ({ staffId }: StatusCellPopoverProps) => {
         </Button>
       </Popover.Trigger>
       <Popover.Content
-        className=" w-screen  max-w-[300px] rounded-1 !p-0"
+        className=" w-screen  max-w-[350px] rounded-1 !p-0"
         align="start"
         alignOffset={3}
       >
         <StatusCellHeading />
-        <StaffLocationHistoryTable staffId={staffId} />
+        <StaffLocationHistoryTable providerLocationId={providerLocationId} />
       </Popover.Content>
     </Popover.Root>
   )

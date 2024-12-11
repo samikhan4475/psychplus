@@ -7,7 +7,7 @@ import { AddLocationSelect } from './add-location-select'
 import { StateSelect } from './state-select'
 
 const schema = z.object({
-  state: z.string().optional(),
+  stateName: z.string().optional(),
 })
 
 type SchemaType = z.infer<typeof schema>
@@ -17,7 +17,7 @@ const StaffLocationFilter = () => {
     resolver: zodResolver(schema),
     reValidateMode: 'onSubmit',
     defaultValues: {
-      state: '',
+      stateName: '',
     },
   })
   const onSubmit: SubmitHandler<SchemaType> = (data) => {
@@ -35,4 +35,4 @@ const StaffLocationFilter = () => {
   )
 }
 
-export { StaffLocationFilter }
+export { StaffLocationFilter, type SchemaType }

@@ -2,15 +2,15 @@
 
 import { Flex } from '@radix-ui/themes'
 import { PropsWithRow } from '@/components'
-import { Staff } from '@/ui/staff-management/types'
 import { StatusSelect } from '../status-select'
+import { StaffLocation } from '../types'
 import { StatusCellPopover } from './status-cell-popover'
 
 const StatusCell = ({
   row: {
-    original: { id: staffId },
+    original: { id, locationId, recordStatus },
   },
-}: PropsWithRow<Staff>) => {
+}: PropsWithRow<StaffLocation>) => {
   return (
     <Flex
       justify="center"
@@ -20,8 +20,8 @@ const StatusCell = ({
       gapX="2"
       onClick={(e) => e.stopPropagation()}
     >
-      <StatusCellPopover staffId={staffId} />
-      <StatusSelect />
+      <StatusCellPopover providerLocationId={id} />
+      <StatusSelect locationId={locationId} recordStatus={recordStatus} />
     </Flex>
   )
 }

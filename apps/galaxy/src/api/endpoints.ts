@@ -45,6 +45,7 @@ const METADATA_CODESET_ENDPOINT = (name: string) =>
 const GET_STAFF_ENDPOINT = `${API_URL}/api/staff/search?includeInactive=true`
 const GET_APPOINTMENT_COSIGNERS_ENDPOINT = (appointmentId: number) =>
   `${API_URL}/api/appointments/${appointmentId}?isIncludeCosigners=true`
+
 const NOTE_MARK_ERROR_ENDPOINT = (
   appointmentId?: string,
   noteId?: string,
@@ -71,6 +72,21 @@ const GET_INSURANCE_PAYER_PLANS = (payerId: string) =>
   `${API_URL}/api/insurance/payers/${payerId}?includePlans=true&includeInactive=false&includeTest=false&publicViewable=true`
 const GET_USER_PERMISSIONS_ENDPOINT = `${API_URL}/api/users/self/organizations?includePermissions=true`
 const SEARCH_LOCATION_SERVICES_ENDPOINT = `${API_URL}/api/locationservices/actions/search`
+const ADD_PROVIDER_LOCATION_ENDPOINT = (staffId: string) =>
+  `${API_URL}/api/staff/${staffId}/locations`
+const GET_PROVIDER_LOCATIONS_ENDPOINT = `${API_URL}/api/providerlocations/actions/search`
+const UPDATE_PROVIDER_LOCATION_STATUS_ENDPOINT = (
+  staffId: string,
+  locationId: string,
+) => `${API_URL}/api/staff/${staffId}/locations/${locationId}`
+const PRESCRIBER_DIRECTORY_ENDPOINT = (staffId: string, locationId: string) =>
+  `${API_URL}/api/providers/${staffId}/locations/${locationId}/directories`
+const DISABLE_PRESCRIBER_DIRECTORY_ENDPOINT = (
+  staffId: string,
+  locationId: string,
+) =>
+  `${API_URL}/api/providers/${staffId}/locations/${locationId}/directories/actions/disable`
+const GET_PROVIDER_LOCATION_HISTORY = `${API_URL}/api/providerlocations/actions/history/search`
 const SEARCH_BOOKED_APPOINTMENTS_ENDPOINT = `${API_URL}/api/appointments/actions/search`
 const GET_CLEARNING_HOUSE_RECEIVERS = `${API_URL}/api/clearinghousereceivers/actions/search`
 const GET_CLEARNING_HOUSE_EDI_ENDPOINT = `${API_URL}/api/integrationconfiguration/insuranceplans/actions/search`
@@ -395,6 +411,12 @@ export {
   REFRESH_ENDPOINT,
   GET_CLAIM_SUBMISSION_LIST,
   ADD_CLAIM_PAYMENT,
+  PRESCRIBER_DIRECTORY_ENDPOINT,
+  DISABLE_PRESCRIBER_DIRECTORY_ENDPOINT,
+  ADD_PROVIDER_LOCATION_ENDPOINT,
+  GET_PROVIDER_LOCATIONS_ENDPOINT,
+  UPDATE_PROVIDER_LOCATION_STATUS_ENDPOINT,
+  GET_PROVIDER_LOCATION_HISTORY,
   UPDATE_CLAIM_PAYMENT,
   ADD_MASTER_FEE_SCHEDULE_ENDPOINT,
   MASTER_FEE_SCHEDULE_ENDPOINT,

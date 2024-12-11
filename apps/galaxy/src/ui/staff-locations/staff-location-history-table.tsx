@@ -1,58 +1,68 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { ScrollArea } from '@radix-ui/themes'
 import { type ColumnDef } from '@tanstack/react-table'
+import toast from 'react-hot-toast'
 import {
   ColumnHeader,
   DataTable,
   LoadingPlaceholder,
   TextCell,
 } from '@/components'
-import { useStore } from '../staff-management/store'
-import { Staff } from '../staff-management/types'
+import { formatDateTime } from '@/utils'
+import { getProviderLocationHistoryAction } from './actions'
+import { StaffLocation } from './types'
 
-const columns: ColumnDef<Staff>[] = [
+const columns: ColumnDef<StaffLocation>[] = [
   {
-    id: 'dateTime',
+    id: 'User',
     header: () => <ColumnHeader label="User" />,
-    cell: ({ row }) => <TextCell>{row.original.legalName?.firstName}</TextCell>,
+    cell: ({ row }) => (
+      <TextCell>{row.original.metadata?.createdByFullName}</TextCell>
+    ),
   },
   {
-    id: 'user',
+    id: 'metadata.createdOn',
     header: () => <ColumnHeader label="Date/Time" />,
-    cell: ({ row }) => <TextCell>{row.original.legalName?.firstName}</TextCell>,
+    cell: ({ row }) => (
+      <TextCell>{formatDateTime(row.original.metadata?.createdOn)}</TextCell>
+    ),
   },
   {
     id: 'status',
     header: () => <ColumnHeader label="Status" />,
-    cell: ({ row }) => <TextCell>{row.original.legalName?.firstName}</TextCell>,
+    cell: ({ row }) => (
+      <TextCell>{row.original?.recordStatus ?? '--'}</TextCell>
+    ),
   },
 ]
 
 interface StaffLocationHistoryTableProps {
-  staffId: string
+  providerLocationId: string
 }
 const StaffLocationHistoryTable = ({
-  staffId,
+  providerLocationId,
 }: StaffLocationHistoryTableProps) => {
-  const { data, loading } = useStore((state) => ({
-    data: state.data,
-    loading: state.loading,
-    search: state.search,
-    sort: state.sort,
-    sortData: state.sortData,
-  }))
+  const [historyList, setHistoryList] = useState<StaffLocation[]>([])
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    // search({})
+    getProviderLocationHistoryAction(providerLocationId).then((result) => {
+      if (result.state === 'success') {
+        setHistoryList(result.data.staffLocations)
+      } else if (result.state === 'error') {
+        toast.error(result.error)
+      }
+      setLoading(false)
+    })
   }, [])
   if (loading) return <LoadingPlaceholder className="h-20" />
 
   return (
     <ScrollArea className="bg-white max-h-44 p-2">
       <DataTable
-        data={data?.staff ?? []}
+        data={historyList ?? []}
         columns={columns}
         disablePagination
         sticky

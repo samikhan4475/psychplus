@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect } from 'react'
+import { useParams } from 'next/navigation'
 import { Flex, ScrollArea } from '@radix-ui/themes'
 import { type ColumnDef } from '@tanstack/react-table'
 import {
@@ -11,17 +12,17 @@ import {
 } from '@/components'
 import { Sort } from '@/types'
 import { getSortDir } from '@/utils'
-import { useStore } from '../staff-management/store'
-import { Staff } from '../staff-management/types'
 import { StatusCell } from './cells'
+import { useStore } from './store'
+import { StaffLocation } from './types'
 
 const columns = (
   sort?: Sort,
   onSort?: (column: string) => void,
-): ColumnDef<Staff>[] => {
+): ColumnDef<StaffLocation>[] => {
   return [
     {
-      id: 'firstName',
+      id: 'locationName',
       header: ({ column }) => (
         <ColumnHeader
           label="Name"
@@ -32,12 +33,10 @@ const columns = (
           }}
         />
       ),
-      cell: ({ row }) => (
-        <TextCell>{row.original.legalName?.firstName}</TextCell>
-      ),
+      cell: ({ row }) => <TextCell>{row.original.location?.name}</TextCell>,
     },
     {
-      id: 'lastName',
+      id: 'type',
       header: ({ column }) => (
         <ColumnHeader
           label="Type"
@@ -49,7 +48,7 @@ const columns = (
         />
       ),
       cell: ({ row }) => (
-        <TextCell>{row.original.legalName?.lastName}</TextCell>
+        <TextCell>{row.original?.location?.locationType}</TextCell>
       ),
     },
     {
@@ -67,7 +66,7 @@ const columns = (
       cell: ({ row }) => <TextCell>--</TextCell>,
     },
     {
-      id: 'noindex',
+      id: 'npi',
       header: ({ column }) => (
         <ColumnHeader
           label="NPI"
@@ -78,10 +77,10 @@ const columns = (
           }}
         />
       ),
-      cell: ({ row }) => <TextCell>--</TextCell>,
+      cell: ({ row }) => <TextCell>{row.original.location?.npi}</TextCell>,
     },
     {
-      id: 'noindex',
+      id: 'externalProviderId',
       header: ({ column }) => (
         <ColumnHeader
           label="SPI"
@@ -92,10 +91,10 @@ const columns = (
           }}
         />
       ),
-      cell: ({ row }) => <TextCell>--</TextCell>,
+      cell: ({ row }) => <TextCell>{row.original.externalProviderId}</TextCell>,
     },
     {
-      id: 'noindex',
+      id: 'address',
       header: ({ column }) => (
         <ColumnHeader
           label="Address"
@@ -106,10 +105,19 @@ const columns = (
           }}
         />
       ),
-      cell: ({ row }) => <TextCell>--</TextCell>,
+      cell: ({ row }) => {
+        if (row.original?.location?.address) {
+          const { street1, street2, postalCode } = row.original.location.address
+          return (
+            <TextCell className="w-[240px]">{`${street1 ?? ''}, ${
+              street2 ?? ''
+            }, ${postalCode ?? ''}`}</TextCell>
+          )
+        }
+      },
     },
     {
-      id: 'noindex',
+      id: 'phone',
       header: ({ column }) => (
         <ColumnHeader
           label="Phone"
@@ -120,10 +128,12 @@ const columns = (
           }}
         />
       ),
-      cell: ({ row }) => <TextCell>--</TextCell>,
+      cell: ({ row }) => (
+        <TextCell>{row.original.location?.phone?.number}</TextCell>
+      ),
     },
     {
-      id: 'noindex',
+      id: 'fax',
       header: ({ column }) => (
         <ColumnHeader
           label="Fax"
@@ -134,7 +144,9 @@ const columns = (
           }}
         />
       ),
-      cell: ({ row }) => <TextCell>--</TextCell>,
+      cell: ({ row }) => (
+        <TextCell>{row.original.location?.fax?.number}</TextCell>
+      ),
     },
 
     {
@@ -162,9 +174,10 @@ const StaffLocationTable = () => {
     sort: state.sort,
     sortData: state.sortData,
   }))
+  const { id } = useParams()
 
   useEffect(() => {
-    search({})
+    if (id && typeof id === 'string') search({ staffId: id })
   }, [])
   if (loading) {
     return (
@@ -177,7 +190,7 @@ const StaffLocationTable = () => {
   return (
     <ScrollArea className="bg-white max-w-[calc(100vw-188px)]">
       <DataTable
-        data={data?.staff ?? []}
+        data={data?.staffLocations ?? []}
         columns={columns(sort, sortData)}
         disablePagination
         sticky
