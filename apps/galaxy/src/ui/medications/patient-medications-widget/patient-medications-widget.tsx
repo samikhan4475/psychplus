@@ -1,25 +1,16 @@
 'use client'
 
 import { useParams, usePathname } from 'next/navigation'
-import * as Tabs from '@radix-ui/react-tabs'
 import { Box, Flex } from '@radix-ui/themes'
 import {
   CheckboxCell,
-  TabsTrigger,
   WidgetAddButton,
   WidgetClearButton,
   WidgetContainer,
-  WidgetHxButton,
   WidgetSaveButton,
 } from '@/components'
 import { AddMedicationButton } from './add-medication-button'
-import {
-  CURRENT_MEDICATIONS_TAB,
-  EXTERNAL_MEDICATIONS_TAB,
-  HOME_MEDICATIONS_TAB,
-} from './constants'
 import { PatientMedicationsDataTable } from './patient-medications-data-table'
-import { PatientMedicationsTabContent } from './patient-medications-tab-content'
 import { PatientMedicationsTabView } from './patient-medications-tab-view'
 import { SearchMedications } from './search-medications'
 import { StoreProvider } from './store'
@@ -45,7 +36,6 @@ const PatientMedicationsWidget = ({
             title="Medications"
             headerRight={
               <>
-                <WidgetHxButton />
                 <WidgetClearButton />
                 <WidgetSaveButton />
               </>

@@ -1,7 +1,6 @@
 import { Flex, Text } from '@radix-ui/themes'
 import { QuickNoteSectionItem } from '@/types'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
-import { HistoryButton } from './history'
 import { PhysicalExamSaveButton } from './physical-exam-save-button'
 
 interface PhysicalExamHeaderProps {
@@ -13,7 +12,6 @@ interface PhysicalExamHeaderProps {
 const PhysicalExamHeader = ({
   patientId,
   getData,
-  sectionName,
 }: PhysicalExamHeaderProps) => {
   return (
     <Flex
@@ -25,7 +23,6 @@ const PhysicalExamHeader = ({
         Physical Exam
       </Text>
       <Flex className="gap-x-2 text-[20px]" align="center">
-        <HistoryButton patientId={patientId} sectionName={sectionName} />
         <PhysicalExamSaveButton patientId={patientId} getData={getData} />
       </Flex>
     </Flex>

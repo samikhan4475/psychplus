@@ -2,7 +2,6 @@ import { Flex, Text } from '@radix-ui/themes'
 import { QuickNoteSectionItem } from '@/types'
 import { CodesSaveButton } from './codes-save-button'
 import { CodesWidgetSchemaType } from './codes-widget-schema'
-import { HistoryButton } from './history/history-button'
 
 interface CodesHeaderProps {
   patientId: string
@@ -23,7 +22,6 @@ const CodesHeader = ({ patientId, getData }: CodesHeaderProps) => {
       </Flex>
 
       <Flex className="gap-x-2 text-[20px]" align="center">
-        <HistoryButton />
         <CodesSaveButton patientId={patientId} getData={getData} />
       </Flex>
     </Flex>

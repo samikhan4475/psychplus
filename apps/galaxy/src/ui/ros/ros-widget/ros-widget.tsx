@@ -4,9 +4,7 @@ import { FormProvider } from 'react-hook-form'
 import {
   WidgetClearButton,
   WidgetFormContainer,
-  WidgetHxButton,
   WidgetSaveButton,
-  WidgetTagButton,
 } from '@/components'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import {
@@ -43,8 +41,6 @@ const RosWidget = ({ patientId, initialValue }: HpiWidgetProps) => {
         getData={transformOut(patientId)}
         headerRight={
           <>
-            <WidgetTagButton />
-            <WidgetHxButton />
             <WidgetClearButton defaultInitialValues={getInitialValues} />
             <WidgetSaveButton />
           </>

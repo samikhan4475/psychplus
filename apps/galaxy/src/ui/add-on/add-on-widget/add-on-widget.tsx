@@ -5,7 +5,6 @@ import { Flex } from '@radix-ui/themes'
 import { FormProvider } from 'react-hook-form'
 import {
   WidgetFormContainer,
-  WidgetHxButton,
   WidgetSaveButton,
 } from '@/components'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
@@ -36,7 +35,6 @@ const AddOnWidget = ({ patientId, initialValue }: AddOnWidgetProps) => {
         getData={transformOut(patientId, appointmentId)}
         headerRight={
           <>
-            <WidgetHxButton />
             <WidgetSaveButton />
           </>
         }

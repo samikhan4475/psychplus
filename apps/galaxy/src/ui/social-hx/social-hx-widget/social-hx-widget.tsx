@@ -4,9 +4,7 @@ import { FormProvider } from 'react-hook-form'
 import {
   WidgetClearButton,
   WidgetFormContainer,
-  WidgetHxButton,
   WidgetSaveButton,
-  WidgetTagButton,
 } from '@/components'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import {
@@ -49,15 +47,12 @@ const SocialHxWidget = ({
         headerRight={
           !isHistoryHeader ? (
             <>
-              <WidgetTagButton />
-              <WidgetHxButton />
               <WidgetClearButton defaultInitialValues={getInitialValues} />
               <WidgetSaveButton />
             </>
           ) : (
             <>
               <WidgetClearButton defaultInitialValues={getInitialValues} />
-              <WidgetTagButton />
             </>
           )
         }

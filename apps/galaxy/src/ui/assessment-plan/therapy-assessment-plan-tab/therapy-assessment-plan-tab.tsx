@@ -1,15 +1,10 @@
 'use client'
 
 import { FormProvider } from 'react-hook-form'
-import {
-  WidgetFormContainer,
-  WidgetHxButton,
-  WidgetSaveButton,
-  WidgetTagButton,
-} from '@/components'
+import { WidgetFormContainer, WidgetSaveButton } from '@/components'
 import { QuickNoteSectionItem } from '@/types'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
-import { AssessmentPlanTabs, AssessmentPlanTabsId } from '../constants'
+import { AssessmentPlanTabs } from '../constants'
 import {
   AssessmentTreatmentPlanNotesBlock,
   PatientDiscussionCompletedBlock,
@@ -49,8 +44,6 @@ const TherapyAssessmentPlanTab = ({
         getData={transformOut(patientId)}
         headerRight={
           <>
-            <WidgetTagButton />
-            {!isTherapyAssessmentPlanTab && <WidgetHxButton />}
             <WidgetClearButton />
             {!isTherapyAssessmentPlanTab && <WidgetSaveButton />}
           </>

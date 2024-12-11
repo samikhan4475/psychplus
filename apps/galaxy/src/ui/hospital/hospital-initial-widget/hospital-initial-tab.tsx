@@ -4,7 +4,6 @@ import { FormProvider } from 'react-hook-form'
 import {
   WidgetClearButton,
   WidgetFormContainer,
-  WidgetHxButton,
   WidgetSaveButton,
 } from '@/components'
 import { QuickNoteSectionItem } from '@/types'
@@ -44,7 +43,6 @@ const HospitalInitialTab = ({
         title={!isHospitalInitialTab ? 'Hospital Initial' : undefined}
         headerRight={
           <>
-            {!isHospitalInitialTab && <WidgetHxButton />}
             {!isHospitalInitialTab && <WidgetClearButton />}
             {!isHospitalInitialTab && <WidgetSaveButton />}
           </>

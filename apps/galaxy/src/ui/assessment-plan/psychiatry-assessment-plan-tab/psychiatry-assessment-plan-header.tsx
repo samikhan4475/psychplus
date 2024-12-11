@@ -1,5 +1,4 @@
 import { Flex, Text } from '@radix-ui/themes'
-import { WidgetHxButton } from '@/components'
 import { QuickNoteSectionItem } from '@/types'
 import { AssessmentPlanTabs } from '../constants'
 import { PsychiatryAssessmentPlanSaveButton } from './psychiatry-assessment-plan-save-button'
@@ -23,7 +22,6 @@ const PsychiatryAssessmentPlanHeader = ({
         {AssessmentPlanTabs.PAP}
       </Text>
       <Flex className="gap-x-2 text-[20px]" align="center">
-        <WidgetHxButton />
         <PsychiatryAssessmentPlanSaveButton
           patientId={patientId}
           getData={getData}

@@ -4,7 +4,6 @@ import { useEffect } from 'react'
 import { FormProvider } from 'react-hook-form'
 import {
   WidgetFormContainer,
-  WidgetHxButton,
   WidgetSaveButton,
 } from '@/components'
 import { QuickNoteHistory, QuickNoteSectionItem } from '@/types'
@@ -45,7 +44,6 @@ const TmsTab = ({
         getData={transformOut(patientId)}
         headerRight={
           <>
-            <WidgetHxButton />
             <WidgetSaveButton />
           </>
         }

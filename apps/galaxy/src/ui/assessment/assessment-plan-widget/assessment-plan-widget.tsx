@@ -4,9 +4,7 @@ import { FormProvider } from 'react-hook-form'
 import {
   WidgetClearButton,
   WidgetFormContainer,
-  WidgetHxButton,
   WidgetSaveButton,
-  WidgetTagButton,
 } from '@/components'
 import { useAssessmentPlanWidgetForm } from './assessment-plan-widget-form'
 import { AssessmentPlanBlock } from './blocks'
@@ -27,8 +25,6 @@ const AssessmentPlanWidget = ({ patientId }: AssessmentPlanWidgetProps) => {
         getData={() => []}
         headerRight={
           <>
-            <WidgetTagButton />
-            <WidgetHxButton />
             <WidgetClearButton />
             <WidgetSaveButton />
           </>

@@ -4,9 +4,7 @@ import { FormProvider } from 'react-hook-form'
 import {
   WidgetClearButton,
   WidgetFormContainer,
-  WidgetHxButton,
   WidgetSaveButton,
-  WidgetTagButton,
 } from '@/components'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { ConditionsBlock, OtherBlock } from './blocks'
@@ -40,8 +38,6 @@ const FamilyPsychHxWidget = ({
         toggleable={!isHistoryHeader}
         headerRight={
           <>
-            <WidgetTagButton />
-            {!isHistoryHeader && <WidgetHxButton />}
             <WidgetClearButton defaultInitialValues={getInitialValues} />
             {!isHistoryHeader && <WidgetSaveButton />}
           </>

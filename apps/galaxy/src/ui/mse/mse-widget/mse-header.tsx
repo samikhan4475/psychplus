@@ -1,7 +1,6 @@
 import { Flex, Text } from '@radix-ui/themes'
 import { QuickNoteSectionItem } from '@/types'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
-import { HistoryButton } from './history'
 import { MseSaveButton } from './mse-save-button'
 
 interface MseHeaderProps {
@@ -21,7 +20,6 @@ const MseHeader = ({ patientId, getData, sectionName }: MseHeaderProps) => {
         Mental Status Exam
       </Text>
       <Flex className="gap-x-2 text-[20px]" align="center">
-        <HistoryButton patientId={patientId} sectionName={sectionName} />
         <MseSaveButton patientId={patientId} getData={getData} />
       </Flex>
     </Flex>

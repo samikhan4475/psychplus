@@ -1,7 +1,6 @@
 'use client'
 
 import { Flex, Text } from '@radix-ui/themes'
-import { WidgetHxButton } from '@/components'
 import { QuickNoteSectionItem } from '@/types'
 import { LabsAndOrderTab } from './labs-and-orders'
 
@@ -23,7 +22,6 @@ const HospitalWidget = ({ patientId, data }: HospitalWidgetProps) => {
         <Text className="text-[16px] font-[600] text-accent-12">
           Labs & Orders
         </Text>
-        <WidgetHxButton />
       </Flex>
       <LabsAndOrderTab patientId={patientId} data={data} />
     </Flex>

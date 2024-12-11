@@ -7,19 +7,17 @@ import { getPatientProfileAction } from '@/actions'
 import {
   WidgetClearButton,
   WidgetFormContainer,
-  WidgetHxButton,
   WidgetSaveButton,
-  WidgetTagButton,
 } from '@/components'
 import { PatientProfile } from '@/types'
 import { useStore } from '@/ui/questionnaires/store'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { AlcoholDrugsBlock, TobaccoBlock } from './blocks'
 import { transformOut } from './data'
-import { getInitialValues } from './utils'
 import { useSubstanceHxWidgetForm } from './substance-use-hx-form'
 import { SubstanceUseHxHxHeader } from './substance-use-hx-header'
 import { SubstanceUseHxWidgetSchemaType } from './substance-use-hx-schema'
+import { getInitialValues } from './utils'
 
 interface SocialHxWidgetProps {
   patientId: string
@@ -63,8 +61,6 @@ const SubstanceUseHxWidget = ({
         toggleable={!isHistoryHeader}
         headerRight={
           <>
-            <WidgetTagButton />
-            {!isHistoryHeader && <WidgetHxButton />}
             <WidgetClearButton defaultInitialValues={getInitialValues} />
             {!isHistoryHeader && <WidgetSaveButton />}
           </>

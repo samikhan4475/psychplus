@@ -1,5 +1,4 @@
 import { Flex, Text } from '@radix-ui/themes'
-import { HistoryButton } from './history'
 import { SaveButton } from './save-button'
 
 interface PcpHeaderProps {
@@ -18,7 +17,6 @@ const CreatePcpHeader = ({ patientId }: PcpHeaderProps) => {
         </Text>
       </Flex>
       <Flex className="gap-x-2 text-[20px]" align="center">
-        <HistoryButton patientId={patientId} />
         <SaveButton />
       </Flex>
     </Flex>

@@ -4,7 +4,6 @@ import { useParams, useSearchParams } from 'next/navigation'
 import { FormProvider } from 'react-hook-form'
 import {
   WidgetFormContainer,
-  WidgetHxButton,
   WidgetSaveButton,
 } from '@/components'
 import { QuickNoteSectionItem } from '@/types'
@@ -40,7 +39,6 @@ const SpravatoWidget = ({ procedureSpravatoData }: SpravatoTabProps) => {
         getData={transformOut(id, appointmentId, visitSequence)}
         headerRight={
           <>
-            <WidgetHxButton />
             <WidgetSaveButton />
           </>
         }

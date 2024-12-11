@@ -3,11 +3,7 @@
 import { useState } from 'react'
 import { Flex } from '@radix-ui/themes'
 import { FormProvider } from 'react-hook-form'
-import {
-  WidgetFormContainer,
-  WidgetSaveButton,
-  WidgetTagButton,
-} from '@/components'
+import { WidgetFormContainer, WidgetSaveButton } from '@/components'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { cn } from '@/utils'
 import {
@@ -30,7 +26,6 @@ import {
 } from './blocks'
 import { CheckAllNormalCell } from './check-all-normal-cell'
 import { transformOut } from './data'
-import { HistoryButton } from './history'
 import { PhysicalExamHeader } from './physical-exam-header'
 import { usePhysicalExamWidgetForm } from './physical-exam-widget-form'
 import { type PhysicalExamWidgetSchemaType } from './physical-exam-widget-schema'
@@ -98,13 +93,6 @@ const PhysicalExamWidget = ({
         toggleable={!isPhysicalExamTab}
         headerRight={
           <>
-            <WidgetTagButton />
-            {!isPhysicalExamTab && (
-              <HistoryButton
-                patientId={patientId}
-                sectionName={QuickNoteSectionName.QuicknoteSectionPhysicalExam}
-              />
-            )}
             <WidgetClearButton handleOnClear={handleOnClear} />
             {!isPhysicalExamTab && <WidgetSaveButton />}
           </>

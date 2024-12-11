@@ -6,7 +6,6 @@ import {
   FormFieldContainer,
   StaticLabel,
   WidgetFormContainer,
-  WidgetHxButton,
   WidgetSaveButton,
 } from '@/components'
 import { QuickNoteSectionItem } from '@/types'
@@ -45,7 +44,6 @@ const EctWidget = ({ patientId, procedureEctData }: EctTabProps) => {
         getData={transformOut(patientId)}
         headerRight={
           <>
-            <WidgetHxButton />
             <WidgetSaveButton />
           </>
         }

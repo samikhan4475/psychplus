@@ -1,11 +1,7 @@
 'use client'
 
 import { FormProvider } from 'react-hook-form'
-import {
-  WidgetFormContainer,
-  WidgetSaveButton,
-  WidgetTagButton,
-} from '@/components'
+import { WidgetFormContainer, WidgetSaveButton } from '@/components'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import {
   AffectBlock,
@@ -23,7 +19,6 @@ import { InsightsBlock } from './blocks/insights-block'
 import { IntelligenceBlock } from './blocks/intelligence'
 import { JudgementBlock } from './blocks/judgment-block'
 import { transformOut } from './data'
-import { HistoryButton } from './history'
 import { MseHeader } from './mse-header'
 import { useMseWidgetForm } from './mse-widget-form'
 import { MseWidgetSchemaType } from './mse-widget-schema'
@@ -55,13 +50,6 @@ const MseWidget = ({ patientId, initialValue, isMseTab }: MseWidgetProps) => {
         toggleable={!isMseTab}
         headerRight={
           <>
-            <WidgetTagButton />
-            {!isMseTab && (
-              <HistoryButton
-                patientId={patientId}
-                sectionName={QuickNoteSectionName.QuicknoteSectionMse}
-              />
-            )}
             <WidgetClearButton />
             {!isMseTab && <WidgetSaveButton />}
           </>

@@ -7,7 +7,6 @@ import {
   TabContentHeading,
   WidgetAddButton,
   WidgetClearButton,
-  WidgetHxButton,
 } from '@/components'
 import { WorkingDiagnosisView } from '@/ui/diagnosis/diagnosis/diagnosis-widget'
 import { SearchDiagnosis } from '@/ui/diagnosis/diagnosis/diagnosis-widget/search-diagnosis'
@@ -50,7 +49,6 @@ const QuicknotesDiagnosisWidget = () => {
             <WidgetAddButton title="Add Diagnosis">
               <Diagnosis />
             </WidgetAddButton>
-            <WidgetHxButton />
             <WidgetClearButton />
             <DiagnosisSaveButton />
           </Flex>

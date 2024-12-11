@@ -1,7 +1,7 @@
 'use client'
 
 import { FormProvider } from 'react-hook-form'
-import { WidgetFormContainer, WidgetHxButton, WidgetSaveButton, WidgetTagButton } from '@/components'
+import { WidgetFormContainer, WidgetSaveButton } from '@/components'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import {
   AdhdHyperactiveBlock,
@@ -51,14 +51,10 @@ const HpiWidget = ({
         sticky
         className="p-2 pt-0"
         headerRight={
-          !isHpiHeader && (
-            <>
-              <WidgetHxButton />
-              <WidgetTagButton />
-              <ClearButton />
-              <WidgetSaveButton />
-            </>
-          )
+          <>
+            <ClearButton />
+            <WidgetSaveButton />
+          </>
         }
       >
         <ChiefComplaintBlock />

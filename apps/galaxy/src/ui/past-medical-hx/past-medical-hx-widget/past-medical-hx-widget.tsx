@@ -5,9 +5,7 @@ import { FormProvider } from 'react-hook-form'
 import {
   WidgetClearButton,
   WidgetFormContainer,
-  WidgetHxButton,
   WidgetSaveButton,
-  WidgetTagButton,
 } from '@/components'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { ConditionsBlock } from './blocks'
@@ -42,8 +40,6 @@ const PastMedicalHxWidget = ({
           toggleable={!isHistoryHeader}
           headerRight={
             <>
-              <WidgetTagButton />
-              {!isHistoryHeader && <WidgetHxButton />}
               <WidgetClearButton defaultInitialValues={getInitialValues} />
               {!isHistoryHeader && <WidgetSaveButton />}
             </>
