@@ -1,8 +1,9 @@
 'use client'
 
 import { ChangeEvent, useState } from 'react'
+import { zipCodeSchema } from '@psychplus-v2/utils'
 import * as ToggleGroup from '@radix-ui/react-toggle-group'
-import { Button, Flex, Text } from '@radix-ui/themes'
+import { Button, Flex, Text, TextField } from '@radix-ui/themes'
 import { type SubmitHandler } from 'react-hook-form'
 import { z } from 'zod'
 import {
@@ -18,7 +19,9 @@ import { usePubsub } from '@psychplus/utils/event'
 import { getZipcodeInfo } from '@psychplus/utils/map'
 import { clickTrack } from '@psychplus/utils/tracking'
 import { SCHEDULE_APPOINTMENT_DIALOG } from '@psychplus/widgets'
+import { useGooglePlacesContext } from '@/providers'
 import { useStore } from '@/widgets/schedule-appointment-list/store'
+import WebPlacesAutocomplete from './web-places-autocomplete'
 
 interface NewPatientProps {
   onclose?: () => void
@@ -34,6 +37,14 @@ interface ScheduledAppointment {
   dateOfBirth: string
   zipCode: string
   state: string
+  primaryStreet1: string
+  primaryStreet2: string
+  primaryStreet: string
+  primaryStreetNumber: string
+  primaryCity: string
+  primaryState: string
+  primaryPostalCode: string
+  primaryCountry: string
 }
 
 interface StateOptions {
@@ -46,6 +57,14 @@ const schema = z
     dateOfBirth: validate.requiredString,
     zipCode: validate.requiredString,
     state: validate.requiredString,
+    primaryStreet1: z.string().min(1, 'Required'),
+    primaryStreet2: z.string().optional(),
+    primaryStreet: z.string().optional(),
+    primaryStreetNumber: z.string().optional(),
+    primaryCity: z.string().min(1, 'Required'),
+    primaryState: z.string().min(1, 'Required'),
+    primaryPostalCode: zipCodeSchema,
+    primaryCountry: z.string().optional(),
   })
   .superRefine(({ dateOfBirth, zipCode }, ctx) => {
     const currentDate = new Date()
@@ -78,6 +97,8 @@ type SchemaType = z.infer<typeof schema>
 const NewPatient = ({ onclose, mapKey }: NewPatientProps) => {
   const { publish } = usePubsub()
 
+  const { loaded } = useGooglePlacesContext()
+
   const form = useForm({
     schema,
     criteriaMode: 'all',
@@ -89,11 +110,19 @@ const NewPatient = ({ onclose, mapKey }: NewPatientProps) => {
     dateOfBirth: new Date().toISOString(),
     zipCode: '',
     state: '',
+    primaryStreet1: '',
+    primaryStreet2: '',
+    primaryStreet: '',
+    primaryStreetNumber: '',
+    primaryCity: '',
+    primaryState: '',
+    primaryPostalCode: '',
+    primaryCountry: '',
   })
 
   const [stateOptions, setStateOptions] = useState<StateOptions[]>([])
 
-  const { setPatient } = useStore()
+  const { setPatient, setAddress } = useStore()
 
   const onScheduleChange = (key: keyof ScheduledAppointment, value: string) => {
     setSchedule((prev) => ({ ...prev, [key]: value }))
@@ -152,6 +181,14 @@ const NewPatient = ({ onclose, mapKey }: NewPatientProps) => {
 
     setPatient({
       dateOfBirth: form.getValues().dateOfBirth,
+    })
+
+    setAddress({
+      primaryStreet1: form.getValues().primaryStreet1,
+      primaryStreet2: form.getValues().primaryStreet2,
+      primaryCity: form.getValues().primaryCity,
+      primaryState: form.getValues().primaryState,
+      primaryPostalCode: form.getValues().primaryPostalCode,
     })
 
     clickTrack({
@@ -292,8 +329,18 @@ const NewPatient = ({ onclose, mapKey }: NewPatientProps) => {
                 buttonClassName="h-[45px] w-[210px] text-4 rounded-6"
                 options={stateOptions}
               />
+              <TextField.Root />
             </Flex>
           </Flex>
+          {loaded && (
+            <Flex direction="column" className="font-regular" mt="2">
+              <WebPlacesAutocomplete
+                name="primary"
+                label="Primary"
+                editable={false}
+              />
+            </Flex>
+          )}
         </Flex>
         <Flex className="gap-6 max-md:w-full" direction="column" mt="5">
           <Flex gap="3" direction="row">

@@ -2,7 +2,7 @@ import { StaffAppointmentAvailabilities } from '@psychplus/appointments'
 import { Clinic } from '@psychplus/clinics'
 import { CodeSetState } from '@psychplus/codeset'
 import { type Staff } from '@psychplus/staff'
-import { User } from '@psychplus/user'
+import { PrimaryAddress, User } from '@psychplus/user'
 import {
   type Filters,
   type StaffWithClinicsAndSlots,
@@ -41,7 +41,9 @@ interface AppointmentFiltersState {
 
 interface PatientState {
   patient: User | undefined
+  address: PrimaryAddress | undefined
   setPatient: (patient: User) => void
+  setAddress: (address: PrimaryAddress) => void
 }
 
 type StoreType = AppointmentState &

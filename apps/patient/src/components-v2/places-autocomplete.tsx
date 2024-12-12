@@ -1,7 +1,6 @@
 'use client'
 
 import { useCallback, useState, type ChangeEvent } from 'react'
-import { CODESETS } from '@psychplus-v2/constants'
 import { Box, Flex, Text, TextFieldInput } from '@radix-ui/themes'
 import useOnclickOutside from 'react-cool-onclickoutside'
 import { useFormContext, type FieldValues } from 'react-hook-form'
@@ -11,7 +10,6 @@ import usePlacesAutocomplete, {
   type Suggestion,
 } from 'use-places-autocomplete'
 import {
-  CodesetFormSelect,
   FormFieldContainer,
   FormFieldError,
   FormFieldLabel,
@@ -234,12 +232,12 @@ const PlacesAutocomplete = ({
         {includeState && (
           <FormFieldContainer className="flex-1">
             <FormFieldLabel required>State</FormFieldLabel>
-            <CodesetFormSelect
+            <TextFieldInput
               size="3"
-              name={stateField}
-              codeset={CODESETS.UsStates}
+              radius="full"
+              {...form.register(stateField)}
               disabled={true}
-              placeholder={editable ? '' : 'Select state'}
+              placeholder={getPlaceholder('state', !editable)}
             />
             <FormFieldError name={stateField} />
           </FormFieldContainer>

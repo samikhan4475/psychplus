@@ -34,6 +34,17 @@ interface Address {
   }
 }
 
+interface PrimaryAddress {
+  primaryStreet1: string
+  primaryStreet2?: string
+  primaryStreet?: string
+  primaryStreetNumber?: string
+  primaryCity: string
+  primaryState: string
+  primaryPostalCode: string
+  primaryCountry?: string
+}
+
 interface ContactInfo {
   email: string
   phoneNumbers?: PhoneNumber[]
@@ -73,4 +84,4 @@ interface Staff {
   virtualRoomLink?: string
 }
 
-export type { User, Staff, Name, ContactInfo, Guardian }
+export type { User, Staff, Name, ContactInfo, Guardian, PrimaryAddress }

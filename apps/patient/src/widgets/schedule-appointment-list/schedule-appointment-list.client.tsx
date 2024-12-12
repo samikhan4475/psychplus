@@ -120,8 +120,8 @@ const ScheduleAppointmentListClient = ({
           filters.appointmentType === 'In-Person' ? 'InPerson' : 'TeleVisit',
         specialistTypeCode: filters.providerType === 'Psychiatry' ? 1 : 2,
         startingDate: isBefore(new Date(filters.startingDate), today)
-          ? today.toISOString()
-          : new Date(filters.startingDate).toISOString(),
+          ? today.toISOString().split('T')[0]
+          : new Date(filters.startingDate).toISOString().split('T')[0],
         maxDaysOutToLook,
         staffIds: staffIdParam ? [staffIdParam] : [],
         state: filters.state,

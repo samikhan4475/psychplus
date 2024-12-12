@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import NextLink from 'next/link'
 import { useRouter } from 'next/navigation'
+import { zipCodeSchema } from '@psychplus-v2/utils'
 import { Flex, Link, Text } from '@radix-ui/themes'
 import { type SubmitHandler } from 'react-hook-form'
 import { z } from 'zod'
@@ -94,7 +95,7 @@ const PersonalDetailsForm = () => {
     criteriaMode: 'all',
   })
 
-  const { patient, setPatient } = useStore()
+  const { patient, setPatient, address } = useStore()
   const [alertError, setAlertError] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
   const { publish, subscribe } = usePubsub()
@@ -191,7 +192,7 @@ const PersonalDetailsForm = () => {
           setIsLoading(false)
         })
     })
-  }, [form, subscribe, publish, isLoading, router, setPatient])
+  }, [form, subscribe, publish, isLoading, router, setPatient, address])
 
   const sendOtpHandler = (email: string, phoneNumber: string) => {
     setAlertError(null)
@@ -321,6 +322,70 @@ const PersonalDetailsForm = () => {
                 data-testid="phone-number-input"
                 {...form.register('phoneNumber')}
                 className="h-14 w-full"
+              />
+            </Flex>
+          </Flex>
+          <Flex className="flex-col sm:flex-row" gap="4">
+            <Flex direction="column" gap="1" className="w-full">
+              <Text>Primary Address 1</Text>
+              <FormTextInput
+                type="text"
+                name="primaryAddress"
+                label=""
+                className="h-14 w-full"
+                data-testid="first-name-input"
+                defaultValue={address?.primaryStreet1 || ''}
+                disabled
+              />
+            </Flex>
+            <Flex direction="column" gap="1" className="w-full">
+              <Text>Primary Address 2</Text>
+              <FormTextInput
+                type="text"
+                name="primaryAddress2"
+                label=""
+                className="h-14 w-full"
+                data-testid="last-name-input"
+                defaultValue={address?.primaryStreet2 || ''}
+                disabled
+              />
+            </Flex>
+          </Flex>
+          <Flex className="flex-col sm:flex-row" gap="4">
+            <Flex direction="column" gap="1" className="w-full">
+              <Text>City</Text>
+              <FormTextInput
+                type="text"
+                name="city"
+                label=""
+                className="h-14 w-full"
+                data-testid="first-name-input"
+                defaultValue={address?.primaryCity || ''}
+                disabled
+              />
+            </Flex>
+            <Flex direction="column" gap="1" className="w-full">
+              <Text>State</Text>
+              <FormTextInput
+                type="text"
+                name="state"
+                label=""
+                className="h-14 w-full"
+                data-testid="last-name-input"
+                defaultValue={address?.primaryState || ''}
+                disabled
+              />
+            </Flex>
+            <Flex direction="column" gap="1" className="w-full">
+              <Text>Zip</Text>
+              <FormTextInput
+                type="text"
+                name="zip"
+                label=""
+                className="h-14 w-full"
+                data-testid="last-name-input"
+                defaultValue={address?.primaryPostalCode || ''}
+                disabled
               />
             </Flex>
           </Flex>
