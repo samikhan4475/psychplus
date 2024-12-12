@@ -1,7 +1,9 @@
 'use server'
 
+import { revalidateTag } from 'next/cache'
 import * as api from '@/api'
 import { PatientReferral } from '@/types'
+import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { SchemaType } from '../create-referral-form'
 
 const createPatientReferralAction = async (
@@ -18,6 +20,7 @@ const createPatientReferralAction = async (
     }
   }
 
+  revalidateTag(QuickNoteSectionName.QuicknoteSectionReferrals)
   return {
     state: 'success',
     data: response.data,

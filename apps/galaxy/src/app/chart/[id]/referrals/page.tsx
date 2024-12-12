@@ -7,7 +7,7 @@ interface PatientReferralsPageProps {
 }
 
 const PatientReferralsPage = ({ params }: PatientReferralsPageProps) => {
-  return <PatientReferralsView patientId={params.id} />
+  return <PatientReferralsView patientId={params.id} isTabView />
 }
 
 export default PatientReferralsPage

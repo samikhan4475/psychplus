@@ -60,7 +60,6 @@ const EditReferralForm = ({
     },
   })
   const [error, setError] = useState<string>()
-
   const onSubmit: SubmitHandler<SchemaType> = async (data) => {
     setError(undefined)
 

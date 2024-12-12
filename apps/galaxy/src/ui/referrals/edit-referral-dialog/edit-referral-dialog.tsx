@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { Dialog, Flex, IconButton, Separator } from '@radix-ui/themes'
 import { PencilLine, X } from 'lucide-react'
 import { PatientReferral } from '@/types'
+import { isContactStatusError } from '../patient-referrals-widget/utils'
 import { EditReferralForm } from './edit-referral-form'
 
 interface EditReferralDialogProps {
@@ -17,14 +18,13 @@ const EditReferralDialog = ({ referral, onClose }: EditReferralDialogProps) => {
 
   return (
     <Dialog.Root open={isOpen} onOpenChange={(isOpen) => setIsOpen(isOpen)}>
-      <Dialog.Trigger>
+      <Dialog.Trigger disabled={isContactStatusError(referral.contactStatus)}>
         <IconButton
           size="1"
           color="gray"
           variant="ghost"
           className="text-black !m-0"
           type="button"
-          onClick={() => console.log(referral)}
         >
           <PencilLine size={14} />
         </IconButton>

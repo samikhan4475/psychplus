@@ -8,6 +8,7 @@ import { useCodesetOptions } from '@/hooks'
 import { PatientReferral } from '@/types'
 import { updatePatientReferralAction } from '../../actions'
 import { StatusSelect } from '../status-select'
+import { isContactStatusError } from '../utils'
 
 interface Props extends PropsWithRow<PatientReferral> {
   disabled?: boolean
@@ -25,7 +26,7 @@ const ReferralStatusCell = ({
     const result = await updatePatientReferralAction({
       ...referral,
       resourceStatus: value,
-  })
+    })
     if (result.state === 'success') {
       toast.success('Successfully updated!')
     } else if (result.state === 'error') {
@@ -38,7 +39,7 @@ const ReferralStatusCell = ({
       value={selectedValue}
       onValueChange={updateContactMadeStatus}
       options={options}
-      disabled={disabled}
+      disabled={disabled || isContactStatusError(referral.contactStatus)}
     />
   )
 }

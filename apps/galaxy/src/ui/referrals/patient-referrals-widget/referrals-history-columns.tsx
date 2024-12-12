@@ -102,6 +102,30 @@ const columns: ColumnDef<PatientReferral>[] = [
       <LongTextCell>{referral?.comments}</LongTextCell>
     ),
   },
+  {
+    id: 'updated-at',
+    accessorKey: 'metadata.createdOn',
+    header: ({ column }) => (
+      <ColumnHeader column={column} clientSideSort label="Updated At" />
+    ),
+    cell: ({ row: { original: referral } }) => (
+      <TextCell className="truncate">
+        {formatDateTime(referral?.metadata?.createdOn)}
+      </TextCell>
+    ),
+  },
+  {
+    id: 'updated-by',
+    accessorKey: 'metadata.createdByFullName',
+    header: ({ column }) => (
+      <ColumnHeader column={column} clientSideSort label="Updated By" />
+    ),
+    cell: ({ row: { original: referral } }) => (
+      <TextCell className="truncate">
+        {referral?.metadata?.createdByFullName}
+      </TextCell>
+    ),
+  },
 ]
 
 export { columns }

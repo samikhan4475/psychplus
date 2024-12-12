@@ -2,12 +2,9 @@
 
 import { Button, DropdownMenu, Flex } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
-import {
-  CloseIcon,
-  NotRequestedIcon,
-  QuestionIcon,
-  TickIcon,
-} from '@/components/icons'
+import { CloseIcon, QuestionIcon, TickIcon } from '@/components/icons'
+import { CODESETS } from '@/constants'
+import { useCodesetOptions } from '@/hooks'
 import { cn } from '@/utils'
 import { InsuranceSchemaType } from './schema'
 
@@ -15,12 +12,11 @@ const icons: Record<string, JSX.Element> = {
   Pending: <QuestionIcon />,
   Verified: <TickIcon />,
   Unverifiable: <CloseIcon />,
-  NotRequested: <NotRequestedIcon />,
 }
 const StatusDropdown = () => {
   const form = useFormContext<InsuranceSchemaType>()
   const status = form.watch('verificationStatus')
-
+  const options = useCodesetOptions(CODESETS.VerificationStatus)
   const { isSubmitting } = form.formState
 
   const getLabelFromValue = (value: string) => {
@@ -68,22 +64,4 @@ const StatusDropdown = () => {
     </DropdownMenu.Root>
   )
 }
-const options = [
-  {
-    label: 'Yes',
-    value: 'Verified',
-  },
-  {
-    label: 'No',
-    value: 'Unverifiable',
-  },
-  {
-    label: 'Pending',
-    value: 'Pending',
-  },
-  {
-    label: 'Not Requested',
-    value: 'NotRequested',
-  },
-]
 export default StatusDropdown

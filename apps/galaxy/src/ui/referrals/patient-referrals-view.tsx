@@ -3,13 +3,17 @@ import { PatientReferralsWidget } from './patient-referrals-widget'
 
 interface PatientReferralsViewProps {
   patientId: string
+  isTabView?: boolean
 }
 
-const PatientReferralsView = ({ patientId }: PatientReferralsViewProps) => {
+const PatientReferralsView = ({
+  patientId,
+  isTabView,
+}: PatientReferralsViewProps) => {
   return (
     <Flex direction="column" width="100%">
       <Flex direction="column" gap="2">
-        <PatientReferralsWidget patientId={patientId} />
+        <PatientReferralsWidget patientId={patientId} isTabView={isTabView} />
       </Flex>
     </Flex>
   )

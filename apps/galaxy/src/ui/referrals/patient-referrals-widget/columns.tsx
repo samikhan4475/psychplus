@@ -11,7 +11,7 @@ import {
   ReferralStatusCell,
 } from './cells'
 
-const columns: ColumnDef<PatientReferral>[] = [
+const columns = (isTabView?: boolean): ColumnDef<PatientReferral>[] => [
   {
     id: 'referral-history',
     header: () => <ColumnHeader label="Hx" />,
@@ -116,7 +116,7 @@ const columns: ColumnDef<PatientReferral>[] = [
   {
     id: 'actions',
     header: () => <ColumnHeader label="Actions" />,
-    cell: ActionCell,
+    cell: ({ row }) => <ActionCell row={row} isTabView={isTabView} />,
     size: 50,
   },
 ]

@@ -6,8 +6,9 @@ import { useStore as zustandUseStore } from 'zustand'
 import { DataTable, LoadingPlaceholder } from '@/components'
 import { columns } from './columns'
 import { useStore } from './store'
+import { isContactStatusError } from './utils'
 
-const ReferralsTable = () => {
+const ReferralsTable = ({ isTabView }: { isTabView?: boolean }) => {
   const store = useStore()
   const { loading, data, fetchPatientReferrals } = zustandUseStore(
     store,
@@ -29,10 +30,13 @@ const ReferralsTable = () => {
     <ScrollArea scrollbars="both" className="bg-white h-full p-2">
       <DataTable
         data={data?.referrals ?? []}
-        columns={columns}
+        columns={columns(isTabView)}
         tableClass="[&_.rt-ScrollAreaScrollbar]:!hidden"
         tableRowClass="relative"
         theadClass="z-[1]"
+        isRowDisabled={(row) =>
+          isContactStatusError(row.original.contactStatus)
+        }
         disablePagination
         isRowSpan
         sticky

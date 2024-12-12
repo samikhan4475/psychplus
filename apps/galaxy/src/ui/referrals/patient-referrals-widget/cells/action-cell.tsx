@@ -5,11 +5,17 @@ import { useStore as zustandUseStore } from 'zustand'
 import { PropsWithRow } from '@/components'
 import { PatientReferral } from '@/types'
 import { EditReferralDialog } from '../../edit-referral-dialog'
+import { BookButton } from '../book-button'
+import { DeleteButton } from '../delete-button'
 import { useStore } from '../store'
 
+interface ActionCellProps extends PropsWithRow<PatientReferral> {
+  isTabView?: boolean
+}
 const ActionCell = ({
   row: { original: referral },
-}: PropsWithRow<PatientReferral>) => {
+  isTabView,
+}: ActionCellProps) => {
   const store = useStore()
   const { refetch } = zustandUseStore(store, (state) => ({
     refetch: state.refetch,
@@ -19,8 +25,10 @@ const ActionCell = ({
   }
 
   return (
-    <Flex justify="center" width="100%">
+    <Flex justify="center" gap="1" width="100%">
+      {isTabView && <DeleteButton referral={referral} />}
       <EditReferralDialog referral={referral} onClose={onClose} />
+      {isTabView && <BookButton referral={referral} />}
     </Flex>
   )
 }

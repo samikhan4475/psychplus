@@ -10,7 +10,7 @@ type PatientReferralRow = Row<PatientReferral>
 
 interface GetPatientReferralsResponse {
   referrals: PatientReferral[]
-  total: number
+  total?: number
 }
 
 interface PatientReferralsPayload {

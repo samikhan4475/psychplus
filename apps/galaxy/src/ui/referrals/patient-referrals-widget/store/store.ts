@@ -5,6 +5,7 @@ import { getNewSortDir } from '@/utils'
 import { searchPatientReferralsAction } from '../actions'
 import type {
   GetPatientReferralsResponse,
+  PatientReferral,
   PatientReferralsPayload,
 } from '../types'
 
@@ -29,6 +30,7 @@ interface StoreState {
     reset?: boolean,
   ) => void
   sort?: Sort
+  setData: (data: PatientReferral[]) => void
   sortData: (column: string) => void
   next: () => void
   prev: () => void
@@ -52,7 +54,8 @@ const createStore = (init: StoreInit) => {
     page: 1,
     pageCache: {},
     showFilters: true,
-
+    setData: (referrals) =>
+      set({ data: { referrals, total: get().data?.total } }),
     toggleFilters: () => set({ showFilters: !get().showFilters }),
     fetchPatientReferrals: async (
       formValues: Partial<PatientReferralsPayload> = {},

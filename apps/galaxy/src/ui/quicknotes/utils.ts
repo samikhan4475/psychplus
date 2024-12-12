@@ -43,7 +43,7 @@ import {
   PhysicalExamView,
   PsychiatryAssessmentPlanView,
   Question,
-  Referral,
+  ReferralsDetailsView,
   ReviewOfSystem,
   SocialHxDetailView,
   SpravatoDetailView,
@@ -142,7 +142,7 @@ const widgets: Array<WidgetType> = [
   {
     component: PatientReferralsWidget,
     id: QuickNoteSectionName.QuicknoteSectionReferrals,
-    actualNoteComponent: Referral,
+    actualNoteComponent: ReferralsDetailsView,
   },
   {
     component: QuicknotesFollowUpWidget,

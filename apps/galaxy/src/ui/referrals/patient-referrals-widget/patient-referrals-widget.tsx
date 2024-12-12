@@ -9,9 +9,13 @@ import { StoreProvider } from './store'
 
 interface PatientReferralsWidgetProps {
   patientId: string
+  isTabView?: boolean
 }
 
-const PatientReferralsWidget = ({ patientId }: PatientReferralsWidgetProps) => {
+const PatientReferralsWidget = ({
+  patientId,
+  isTabView,
+}: PatientReferralsWidgetProps) => {
   return (
     <StoreProvider patientId={patientId}>
       <Flex
@@ -21,9 +25,9 @@ const PatientReferralsWidget = ({ patientId }: PatientReferralsWidgetProps) => {
       >
         <Flex gap="1" direction="column" mb="1">
           <ReferralsHeader patientId={patientId} />
-          <ReferralsFilterForm />
+          {isTabView && <ReferralsFilterForm />}
         </Flex>
-        <ReferralsTable />
+        <ReferralsTable isTabView={isTabView} />
         <ReferralsTablePagination />
       </Flex>
     </StoreProvider>
