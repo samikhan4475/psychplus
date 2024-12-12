@@ -20,13 +20,18 @@ const QuickNotesView = async ({
   visitType,
   visitSequence,
 }: QuickNotesViewProps) => {
-  const widgets = getCachedWidgetsByVisitType(visitType, visitSequence) || []
-
   const appointment = await getAppointment(appointmentId)
 
   if (appointment.state === 'error' || !visitType) {
     return notFound()
   }
+
+  const widgets =
+    getCachedWidgetsByVisitType(
+      visitType,
+      visitSequence,
+      appointment.data.providerType,
+    ) || []
 
   return (
     <Flex width="100%" direction="column">

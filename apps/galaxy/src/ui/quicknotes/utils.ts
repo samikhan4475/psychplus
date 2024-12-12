@@ -60,6 +60,13 @@ import { TcmView } from './actual-note-view/tcm'
 import { QuickNoteSectionName } from './constants'
 import { WidgetType } from './types'
 
+enum ProviderType {
+  Psychiatry = 'Psychiatrist',
+  Therapy = 'Therapy',
+  InternalMedicine = 'InternalMedicine',
+  FamilyMedicine = 'FamilyMedicine',
+}
+
 const widgets: Array<WidgetType> = [
   {
     component: HpiWidget,
@@ -166,16 +173,19 @@ const widgets: Array<WidgetType> = [
     component: TherapyAssessmentPlanWidget,
     id: QuickNoteSectionName.QuicknoteSectionTherapyAssessmentPlan,
     actualNoteComponent: TherapyAssessmentPlanView,
+    providerTypes: [ProviderType.Therapy],
   },
   {
     component: PsychiatryAssessmentPlanWidget,
     id: QuickNoteSectionName.QuicknoteSectionPsychiatryAssessmentPlan,
     actualNoteComponent: PsychiatryAssessmentPlanView,
+    providerTypes: [ProviderType.Psychiatry],
   },
   {
     component: FamilyInternalMedicineAssessmentPlanWidget,
     id: QuickNoteSectionName.QuicknoteSectionFamilyInternalMedicineAssessmentPlan,
     actualNoteComponent: FamilyInternalMedicineAssessmentPlanView,
+    providerTypes: [ProviderType.InternalMedicine, ProviderType.FamilyMedicine],
   },
   {
     component: SpravatoWidget,
@@ -215,6 +225,7 @@ const visitTypeToWidgets: Record<string, QuickNoteSectionName[]> = {
     QuickNoteSectionName.QuicknoteSectionMse,
     QuickNoteSectionName.QuickNoteSectionDiagnosis,
     QuickNoteSectionName.QuicknoteSectionPsychiatryAssessmentPlan,
+    QuickNoteSectionName.QuicknoteSectionTherapyAssessmentPlan,
     QuickNoteSectionName.QuicknoteSectionFamilyInternalMedicineAssessmentPlan,
     QuickNoteSectionName.Addon,
     QuickNoteSectionName.QuicknoteSectionMedications,
@@ -237,6 +248,7 @@ const visitTypeToWidgets: Record<string, QuickNoteSectionName[]> = {
     QuickNoteSectionName.QuicknoteSectionMse,
     QuickNoteSectionName.QuickNoteSectionDiagnosis,
     QuickNoteSectionName.QuicknoteSectionPsychiatryAssessmentPlan,
+    QuickNoteSectionName.QuicknoteSectionTherapyAssessmentPlan,
     QuickNoteSectionName.QuicknoteSectionFamilyInternalMedicineAssessmentPlan,
     QuickNoteSectionName.Addon,
     QuickNoteSectionName.QuicknoteSectionMedications,
@@ -259,6 +271,7 @@ const visitTypeToWidgets: Record<string, QuickNoteSectionName[]> = {
     QuickNoteSectionName.QuicknoteSectionMse,
     QuickNoteSectionName.QuickNoteSectionDiagnosis,
     QuickNoteSectionName.QuicknoteSectionPsychiatryAssessmentPlan,
+    QuickNoteSectionName.QuicknoteSectionTherapyAssessmentPlan,
     QuickNoteSectionName.QuicknoteSectionFamilyInternalMedicineAssessmentPlan,
     QuickNoteSectionName.ProcedureTMS,
     QuickNoteSectionName.Addon,
@@ -278,7 +291,9 @@ const visitTypeToWidgets: Record<string, QuickNoteSectionName[]> = {
     QuickNoteSectionName.QuicknoteSectionMse,
     QuickNoteSectionName.QuickNoteSectionDiagnosis,
     QuickNoteSectionName.QuickNoteSectionTherapy,
+    QuickNoteSectionName.QuicknoteSectionPsychiatryAssessmentPlan,
     QuickNoteSectionName.QuicknoteSectionTherapyAssessmentPlan,
+    QuickNoteSectionName.QuicknoteSectionFamilyInternalMedicineAssessmentPlan,
     QuickNoteSectionName.Addon,
     QuickNoteSectionName.QuicknoteSectionReferrals,
     QuickNoteSectionName.FollowUps,
@@ -295,6 +310,7 @@ const visitTypeToWidgets: Record<string, QuickNoteSectionName[]> = {
     QuickNoteSectionName.QuickNoteSectionDiagnosis,
     QuickNoteSectionName.QuickNoteSectionTherapy,
     QuickNoteSectionName.QuicknoteSectionPsychiatryAssessmentPlan,
+    QuickNoteSectionName.QuicknoteSectionTherapyAssessmentPlan,
     QuickNoteSectionName.QuicknoteSectionFamilyInternalMedicineAssessmentPlan,
     QuickNoteSectionName.Addon,
     QuickNoteSectionName.QuicknoteSectionReferrals,
@@ -329,6 +345,7 @@ const visitTypeToWidgets: Record<string, QuickNoteSectionName[]> = {
     QuickNoteSectionName.QuickNoteSectionDiagnosis,
     QuickNoteSectionName.QuickNoteSectionHospitalInitial,
     QuickNoteSectionName.QuicknoteSectionPsychiatryAssessmentPlan,
+    QuickNoteSectionName.QuicknoteSectionTherapyAssessmentPlan,
     QuickNoteSectionName.QuicknoteSectionFamilyInternalMedicineAssessmentPlan,
     QuickNoteSectionName.Addon,
     QuickNoteSectionName.QuickNoteSectionHospitalOrders,
@@ -349,7 +366,9 @@ const visitTypeToWidgets: Record<string, QuickNoteSectionName[]> = {
     QuickNoteSectionName.QuicknoteSectionPhysicalExam,
     QuickNoteSectionName.QuicknoteSectionMse,
     QuickNoteSectionName.QuickNoteSectionDiagnosis,
+    QuickNoteSectionName.QuickNoteSectionHospitalInitial,
     QuickNoteSectionName.QuicknoteSectionPsychiatryAssessmentPlan,
+    QuickNoteSectionName.QuicknoteSectionTherapyAssessmentPlan,
     QuickNoteSectionName.QuicknoteSectionFamilyInternalMedicineAssessmentPlan,
     QuickNoteSectionName.Addon,
     QuickNoteSectionName.QuickNoteSectionHospitalOrders,
@@ -372,6 +391,7 @@ const visitTypeToWidgets: Record<string, QuickNoteSectionName[]> = {
     QuickNoteSectionName.QuicknoteSectionMse,
     QuickNoteSectionName.QuicknoteSectionHospitalDischarge,
     QuickNoteSectionName.QuicknoteSectionPsychiatryAssessmentPlan,
+    QuickNoteSectionName.QuicknoteSectionTherapyAssessmentPlan,
     QuickNoteSectionName.QuicknoteSectionFamilyInternalMedicineAssessmentPlan,
     QuickNoteSectionName.Addon,
     QuickNoteSectionName.QuickNoteSectionHospitalOrders,
@@ -396,6 +416,7 @@ const visitTypeToWidgets: Record<string, QuickNoteSectionName[]> = {
     QuickNoteSectionName.QuickNoteSectionHospitalInitial,
     QuickNoteSectionName.QuicknoteSectionHospitalDischarge,
     QuickNoteSectionName.QuicknoteSectionPsychiatryAssessmentPlan,
+    QuickNoteSectionName.QuicknoteSectionTherapyAssessmentPlan,
     QuickNoteSectionName.QuicknoteSectionFamilyInternalMedicineAssessmentPlan,
     QuickNoteSectionName.Addon,
     QuickNoteSectionName.QuickNoteSectionHospitalOrders,
@@ -405,7 +426,11 @@ const visitTypeToWidgets: Record<string, QuickNoteSectionName[]> = {
   ],
 }
 
-const getWidgetsByVisitType = (visitType: string, visitSequence: string) => {
+const getWidgetsByVisitType = (
+  visitType: string,
+  visitSequence: string,
+  providerType: string,
+) => {
   if (isHospitalCareVisit(visitType)) {
     visitType = `${visitType}/${visitSequence}`
   }
@@ -418,7 +443,14 @@ const getWidgetsByVisitType = (visitType: string, visitSequence: string) => {
 
   const widgetsForVisitType = widgetIds.reduce((acc, id) => {
     const widget = widgets.find((widget) => widget.id === id)
-    if (widget) acc.push(widget)
+
+    if (
+      widget &&
+      (!widget.providerTypes || widget.providerTypes.includes(providerType))
+    ) {
+      acc.push(widget)
+    }
+
     return acc
   }, [] as typeof widgets)
 

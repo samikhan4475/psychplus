@@ -10,6 +10,7 @@ type WidgetType = {
     patient?: PatientProfile
   }>
   id: QuickNoteSectionName
+  providerTypes?: string[]
 }
 
 export type { WidgetType }
