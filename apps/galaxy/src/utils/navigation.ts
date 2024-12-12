@@ -151,7 +151,7 @@ const getManagementNavLinks = (type: string | null, id: string | null) => {
       },
       {
         label: 'Practice',
-        href: `${orgBase}/practice`,
+        href: `${orgBase}/organization-practices`,
       },
       {
         label: 'Policies',
