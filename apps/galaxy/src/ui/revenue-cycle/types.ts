@@ -9,6 +9,7 @@ enum RevenueCycleTab {
   PatientStatement = 'Patient Statement',
   ClaimDetails = 'Claim#',
   CheckDetails = 'Check#',
+  ViewFile = 'File',
 }
 
 enum FileFormats {

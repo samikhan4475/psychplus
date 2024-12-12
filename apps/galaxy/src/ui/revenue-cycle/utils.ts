@@ -19,6 +19,7 @@ const previewFile = async <TBody>(
   filename: string,
   method: 'GET' | 'POST' = 'GET',
   bodyData?: TBody,
+  returnUrl?: boolean,
 ) => {
   const options: RequestInit = {
     method,
@@ -31,6 +32,9 @@ const previewFile = async <TBody>(
   }
   const blob = await result.blob()
   const url = window.URL.createObjectURL(blob)
+  if (returnUrl) {
+    return url
+  }
   window.open(url, '_blank')
   window.URL.revokeObjectURL(url)
 }
@@ -42,4 +46,10 @@ const formatAmount = (amount: number) => {
   })
 }
 
-export { truncateString, previewFile, formatAmount }
+function getRandomId() {
+  const array = new Uint32Array(1)
+  crypto.getRandomValues(array)
+  return array[0]
+}
+
+export { truncateString, previewFile, formatAmount, getRandomId }

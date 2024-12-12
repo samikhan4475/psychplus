@@ -8,6 +8,9 @@ interface Store {
   viewedTabs: Set<Tab>
   closeableTabs: Set<Tab>
   selectedClaimId: string
+  selectedPdfFileUrl: string
+  prevTab: Tab
+  setSelectedPdfFileUrl: (selectedPdfFileUrl: string) => void
   selectedClaimStatus: string
   setSelectedClaimStatus: (selectedClaimStatus: string) => void
   setSelectedClaim: (selectedClaimId: string) => void
@@ -26,14 +29,18 @@ const useStore = create<Store>((set, get) => ({
   activeTab: RevenueCycleTab.Claim,
   viewedTabs: new Set([RevenueCycleTab.Claim]),
   closeableTabs: new Set(),
+  prevTab: RevenueCycleTab.Claim,
   insurancePayers: [],
   clinics: [],
   claimsListData: undefined,
+  selectedPdfFileUrl: '',
+  setSelectedPdfFileUrl: (selectedPdfFileUrl: string) =>
+    set(() => ({ selectedPdfFileUrl: selectedPdfFileUrl })),
   setActiveTab: (activeTab) => {
     const viewedTabs = get().viewedTabs
     viewedTabs.add(activeTab)
     if (isActiveTabCloseable(activeTab, RevenueCycleTab)) {
-      set({ activeTab, viewedTabs })
+      set({ activeTab, viewedTabs, prevTab: activeTab })
     } else {
       set({
         activeTab: activeTab,
@@ -48,7 +55,7 @@ const useStore = create<Store>((set, get) => ({
     const updatedViewedTabs = get().viewedTabs
     updatedViewedTabs.delete(tab)
     set({
-      activeTab: RevenueCycleTab.Claim,
+      activeTab: get().prevTab ?? RevenueCycleTab.Claim,
       closeableTabs: updatedCloseableTabs,
       viewedTabs: updatedViewedTabs,
       selectedClaimId: '',

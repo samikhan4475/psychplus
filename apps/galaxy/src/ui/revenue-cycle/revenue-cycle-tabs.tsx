@@ -12,16 +12,24 @@ import { ResponseHistoryTabView } from './response-history-tab'
 import { useStore } from './store'
 import { SubmissionTabView } from './submission-tab'
 import { RevenueCycleTab } from './types'
+import { FileView } from './view-file-tab'
 
 const RevenueCycleTabs = () => {
-  const { activeTab, closeableTabs, closeTab, setActiveTab, selectedClaimId } =
-    useStore((state) => ({
-      closeableTabs: Array.from(state.closeableTabs),
-      activeTab: state.activeTab,
-      setActiveTab: state.setActiveTab,
-      closeTab: state.closeTab,
-      selectedClaimId: state.selectedClaimId,
-    }))
+  const {
+    activeTab,
+    closeableTabs,
+    closeTab,
+    setActiveTab,
+    selectedClaimId,
+    selectedPdfFileUrl,
+  } = useStore((state) => ({
+    closeableTabs: Array.from(state.closeableTabs),
+    activeTab: state.activeTab,
+    setActiveTab: state.setActiveTab,
+    closeTab: state.closeTab,
+    selectedClaimId: state.selectedClaimId,
+    selectedPdfFileUrl: state.selectedPdfFileUrl,
+  }))
 
   // Claim# 1234, Check# 1234, tabId is 1234
   const tabId = activeTab?.split(' ')[1]
@@ -78,6 +86,9 @@ const RevenueCycleTabs = () => {
         </TabsContent>
         <TabsContent value={`${RevenueCycleTab.CheckDetails} ${tabId}`}>
           <InsurancePaymentDetailView checkId={tabId} />
+        </TabsContent>
+        <TabsContent value={`${RevenueCycleTab.ViewFile} ${tabId}`}>
+          <FileView url={selectedPdfFileUrl} />
         </TabsContent>
       </Tabs.Root>
     </Box>

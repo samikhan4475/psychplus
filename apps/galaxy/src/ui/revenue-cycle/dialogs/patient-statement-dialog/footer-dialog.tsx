@@ -3,18 +3,26 @@ import { Box, Button, Dialog } from '@radix-ui/themes'
 import { toast } from 'react-hot-toast'
 import { DOWNLOAD_PATIENT_STATEMENTS_ENDPOINT } from '@/api/endpoints'
 import { generatePatientStatementAction } from '../../actions'
+import { useStore as useRootStore } from '../../store'
 import {
   FileFormats,
   patientStatementRecordStatuses,
   patientStatementSlaimStatusCodes,
 } from '../../types'
-import { previewFile } from '../../utils'
+import { getRandomId, previewFile } from '../../utils'
 import { useStore } from './store'
 
 const FooterDialog = ({ patientId }: { patientId: number }) => {
+  const { setSelectedPdfFileUrl, setActiveTab } = useRootStore((state) => ({
+    setActiveTab: state.setActiveTab,
+    setSelectedPdfFileUrl: state.setSelectedPdfFileUrl,
+  }))
   const [previewLoading, setPreviewLoading] = useState(false)
   const [loading, setLoading] = useState(false)
-  const selectedStatements = useStore((state) => state.selectedStatements)
+  const { selectedStatements, setSelectedStatements } = useStore((state) => ({
+    selectedStatements: state.selectedStatements,
+    setSelectedStatements: state.setSelectedStatements,
+  }))
 
   const onSubmit = async () => {
     if (selectedStatements.length === 0) {
@@ -54,17 +62,23 @@ const FooterDialog = ({ patientId }: { patientId: number }) => {
         claimIds: selectedStatements,
       }
 
-      await previewFile(
+      const url = await previewFile(
         fullUrl,
         `patient_statement_${patientId}`,
         'POST',
         payload,
+        true,
       )
+      if (url) {
+        setActiveTab('File ' + getRandomId())
+        setSelectedPdfFileUrl(url)
+      }
     } catch (error) {
       const message =
         (error instanceof Error && error.message) || 'Failed to download.'
       toast.error(message)
     } finally {
+      setSelectedStatements([])
       setPreviewLoading(false)
     }
   }

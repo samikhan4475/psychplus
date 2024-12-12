@@ -2,7 +2,8 @@ import React, { useState } from 'react'
 import { Button } from '@radix-ui/themes'
 import toast from 'react-hot-toast'
 import { DOWNLOAD_HCFA_FILE_ENDPOINT } from '@/api/endpoints'
-import { previewFile } from '../utils'
+import { useStore as useRootStore } from '../store'
+import { getRandomId, previewFile } from '../utils'
 import { useStore } from './store'
 
 const ViewHcfaButton = () => {
@@ -11,6 +12,11 @@ const ViewHcfaButton = () => {
     state.selectedRows,
     state.filterInsurancePolicyPriority,
   ])
+
+  const { setSelectedPdfFileUrl, setActiveTab } = useRootStore((state) => ({
+    setActiveTab: state.setActiveTab,
+    setSelectedPdfFileUrl: state.setSelectedPdfFileUrl,
+  }))
 
   const previewHcfaFile = async () => {
     if (selectedRows.length === 0) {
@@ -24,12 +30,17 @@ const ViewHcfaButton = () => {
         insurancePolicyPriority: filterInsurancePolicyPriority,
         claimType: 'Professional',
       }
-      await previewFile(
+      const url = await previewFile(
         DOWNLOAD_HCFA_FILE_ENDPOINT,
         `hcfa_file`,
         'POST',
         payload,
+        true,
       )
+      if (url) {
+        setActiveTab('File ' + getRandomId())
+        setSelectedPdfFileUrl(url)
+      }
     } catch (error) {
       const message =
         (error instanceof Error && error.message) || 'Failed to download.'
