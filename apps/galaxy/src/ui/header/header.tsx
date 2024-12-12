@@ -1,7 +1,10 @@
 import { PlusCircledIcon } from '@radix-ui/react-icons'
 import { Button, Flex, Text } from '@radix-ui/themes'
 import { NavLogo } from '@/components'
+import { GOOGLE_MAPS_API_KEY } from '@/constants'
 import { getAuthCookies } from '@/utils/auth'
+import { AddPatientDialog } from '../patient-lookup/add-patient-dialog/add-patient-dialog'
+import { AddVisit } from '../visit/add-visit'
 import { InboxLink } from './inbox-link'
 import { NavigationLinks } from './navigation-links'
 import { NavigationTabs } from './navigation-tabs'
@@ -17,35 +20,30 @@ const Header = () => {
         <Flex align="center" justify="between" px="5">
           <NavLogo />
           <Flex height="100%" align="center" gap="2">
-            <Button
-              variant="outline"
-              size="2"
-              color="gray"
-              highContrast
-              className="pb-[14px] pt-[14px]"
-            >
-              <PlusCircledIcon />
-              Patient
-            </Button>
-            <Button
-              variant="outline"
-              size="2"
-              color="gray"
-              highContrast
-              className="pb-[14px] pt-[14px]"
-            >
-              <PlusCircledIcon />
-              Visit
-            </Button>
-            <Button
-              variant="outline"
-              size="2"
-              color="gray"
-              highContrast
-              className="pb-[14px] pt-[14px]"
-            >
-              Help
-            </Button>
+            <AddPatientDialog googleApiKey={GOOGLE_MAPS_API_KEY}>
+              <Button
+                variant="outline"
+                size="2"
+                color="gray"
+                highContrast
+                className="pb-[14px] pt-[14px]"
+              >
+                <PlusCircledIcon />
+                Patient
+              </Button>
+            </AddPatientDialog>
+            <AddVisit>
+              <Button
+                variant="outline"
+                size="2"
+                color="gray"
+                highContrast
+                className="pb-[14px] pt-[14px]"
+              >
+                <PlusCircledIcon />
+                Visit
+              </Button>
+            </AddVisit>
             <Flex height="100%" align="center" gap="3" ml="2">
               <Text weight="medium" size="1">
                 Mercy Hospital

@@ -1,7 +1,7 @@
 'use client'
 
 import { Flex } from '@radix-ui/themes'
-import { AddPatientDialog } from '../add-patient-dialog'
+import { AddPatient } from '../add-patient-dialog'
 import { CreditCardButton } from './credit-card-button'
 import { InsuranceVerificationButton } from './insurance-verification-button'
 import { NoFollowUpButton } from './no-follow-up-button'
@@ -21,7 +21,7 @@ const SmartFilters = ({ googleApiKey }: SmartFiltersProps) => {
       <PolicyConsentsButton />
       <InsuranceVerificationButton />
       <PatientVerificationButton />
-      <AddPatientDialog googleApiKey={googleApiKey} />
+      <AddPatient googleApiKey={googleApiKey} />
     </Flex>
   )
 }

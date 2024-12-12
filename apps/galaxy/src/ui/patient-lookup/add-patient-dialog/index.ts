@@ -1,1 +1,1 @@
-export * from './add-patient-dialog'
+export * from './add-patient'
