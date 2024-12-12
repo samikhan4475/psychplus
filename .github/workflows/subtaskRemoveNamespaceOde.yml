@@ -46,7 +46,8 @@ jobs:
           use-kubelogin: true
 
       - name: Remove namespace if it exists
+        timeout-minutes: 5
         run: |
           if kubectl get namespace ${{ inputs.namespace_name }} ; then
-            kubectl delete namespace ${{ inputs.namespace_name }}
+            kubectl delete namespace ${{ inputs.namespace_name }} --grace-period=1
           fi

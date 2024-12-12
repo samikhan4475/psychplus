@@ -51,6 +51,7 @@ jobs:
           use-kubelogin: true
 
       - name: Configure namespace
+        timeout-minutes: 5
         run: |
           kubectl create namespace ${{ inputs.env_namespace }} --dry-run=client -o yaml | kubectl apply -f -
           kubectl annotate namespace ${{ inputs.env_namespace }} linkerd.io/inject=enabled
