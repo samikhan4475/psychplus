@@ -1,3 +1,5 @@
 export * from './injection-block'
 export * from './interactive-complexity-block'
 export * from './therapy-psychoanalysis-block'
+export * from './ect-block'
+export * from './therapy-block'

@@ -28,10 +28,6 @@ const INTERACTIVE_COMPLEXITY_BLOCK_OPTIONS = [
 const InteractiveComplexityBlock = () => {
   const form = useFormContext()
 
-  if (form.watch('therapyPsychoanalysis') === 'neither') {
-    return null
-  }
-
   return (
     <Flex
       direction="column"

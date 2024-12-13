@@ -4,7 +4,7 @@ import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { sanitizeFormData } from '@/utils'
 import { manageCodes } from '@/utils/codes'
 import { AddOnWidgetSchemaType } from './add-on-widget-schema'
-import { addOnCodes, cptCodeMap } from './utils'
+import { addOnCodes, getCptCodeMap } from './utils'
 
 interface ModalityTransferenceData {
   value: string
@@ -71,12 +71,13 @@ const transformIn = (value: QuickNoteSectionItem[]): AddOnWidgetSchemaType => {
     manufacturer: '',
     lotNumber: '',
     expirationDate: '',
+    therapy: false,
     therapyPsychoanalysis: 'therapy',
     therapyTimeSpent: undefined,
     '16-37 mins': undefined,
     '38-52 mins': undefined,
     '53-99 mins': undefined,
-    sessionParticipants: 'Patients',
+    therapySessionParticipants: 'Patients',
     patientOther: undefined,
     therapyDetailsModality: [],
     therapyDetailsInterventions: [],
@@ -89,6 +90,26 @@ const transformIn = (value: QuickNoteSectionItem[]): AddOnWidgetSchemaType => {
     caregiverEmotions: false,
     sentinelEvent: false,
     languageBarrier: false,
+    ect: false,
+    seriesMaintenance: 'series',
+    series: '',
+    maintenance: '',
+    biteblock: 'yes',
+    timeOut: '',
+    timeOfProcedure: '',
+    ectTypeBlock: '',
+    ectSettingBlockPw: '',
+    ectSettingBlockFrequency: '120',
+    ectSettingBlockDuration: '8',
+    ectSettingBlockCurrent: '800',
+    ectSeizureDuration: '000',
+    ectPostOpMedicationBlock: '',
+    ectPostOpMedicationBlockDetails: '',
+    ectComplicationsBlock: '',
+    ectComplicationsBlockDetails: '',
+    ectAssessment: '',
+    ectContinuePBlock: '',
+    providerType: '',
   }
 
   value.forEach((item) => {
@@ -118,7 +139,7 @@ const transformIn = (value: QuickNoteSectionItem[]): AddOnWidgetSchemaType => {
 }
 
 const transformOut =
-  (patientId: string, appointmentId: string) =>
+  (patientId: string, appointmentId: string, visitType: string) =>
   async (
     schema: Record<
       string,
@@ -126,7 +147,6 @@ const transformOut =
     >,
   ): Promise<QuickNoteSectionItem[]> => {
     const result: QuickNoteSectionItem[] = []
-    const selectedCodes: CodesWidgetItem[] = []
 
     const injectionSectionValue = INJECTION_BLOCK_OPTIONS.every(
       (option) =>
@@ -225,19 +245,7 @@ const transformOut =
       }
     })
 
-    Object.entries(cptCodeMap).forEach(([key, value]) => {
-      const schemaKey = schema?.[key]
-      const code =
-        typeof value === 'object'
-          ? value?.[schemaKey as keyof typeof value]
-          : value
-      if (code && schemaKey) {
-        selectedCodes.push({
-          code,
-          key: CptCodeKeys.ADD_ONS_KEY,
-        })
-      }
-    })
+    const selectedCodes = await getCodes(schema, visitType)
     const codesResult = await manageCodes(
       patientId,
       appointmentId,
@@ -247,5 +255,30 @@ const transformOut =
 
     return [...result, ...codesResult]
   }
+
+const getCodes = async (
+  schema: Record<
+    string,
+    string | undefined | boolean | ModalityTransferenceData[]
+  >,
+  visitType: string,
+) => {
+  const selectedCodes: CodesWidgetItem[] = []
+  const cptCodeMap = await getCptCodeMap(visitType)
+  Object.entries(cptCodeMap).forEach(([key, value]) => {
+    const schemaKey = schema?.[key]
+    const code =
+      typeof value === 'object'
+        ? value?.[schemaKey as keyof typeof value]
+        : value
+    if (code && schemaKey) {
+      selectedCodes.push({
+        code,
+        key: CptCodeKeys.ADD_ONS_KEY,
+      })
+    }
+  })
+  return selectedCodes
+}
 
 export { transformIn, transformOut }

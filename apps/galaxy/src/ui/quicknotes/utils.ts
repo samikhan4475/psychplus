@@ -105,7 +105,7 @@ const widgets: Array<WidgetType> = [
   },
   {
     component: QuestionnairesWidget,
-    id: QuickNoteSectionName.AddToNoteQuestionnaire,
+    id: QuickNoteSectionName.QuicknoteSectionQuestionnaires,
     actualNoteComponent: Question,
   },
   {
@@ -218,7 +218,7 @@ const visitTypeToWidgets: Record<string, QuickNoteSectionName[]> = {
     QuickNoteSectionName.QuickNoteSectionSubstanceUseHx,
     QuickNoteSectionName.QuickNoteSectionPastMedicalHx,
     QuickNoteSectionName.QuicknoteSectionPatientAllergies,
-    QuickNoteSectionName.AddToNoteQuestionnaire,
+    QuickNoteSectionName.QuicknoteSectionQuestionnaires,
     QuickNoteSectionName.QuicknoteSectionReviewOfSystem,
     QuickNoteSectionName.Vitals,
     QuickNoteSectionName.QuicknoteSectionPhysicalExam,
@@ -241,7 +241,7 @@ const visitTypeToWidgets: Record<string, QuickNoteSectionName[]> = {
     QuickNoteSectionName.QuickNoteSectionSubstanceUseHx,
     QuickNoteSectionName.QuickNoteSectionPastMedicalHx,
     QuickNoteSectionName.QuicknoteSectionPatientAllergies,
-    QuickNoteSectionName.AddToNoteQuestionnaire,
+    QuickNoteSectionName.QuicknoteSectionQuestionnaires,
     QuickNoteSectionName.QuicknoteSectionReviewOfSystem,
     QuickNoteSectionName.Vitals,
     QuickNoteSectionName.QuicknoteSectionPhysicalExam,
@@ -264,7 +264,7 @@ const visitTypeToWidgets: Record<string, QuickNoteSectionName[]> = {
     QuickNoteSectionName.QuickNoteSectionSubstanceUseHx,
     QuickNoteSectionName.QuickNoteSectionPastMedicalHx,
     QuickNoteSectionName.QuicknoteSectionPatientAllergies,
-    QuickNoteSectionName.AddToNoteQuestionnaire,
+    QuickNoteSectionName.QuicknoteSectionQuestionnaires,
     QuickNoteSectionName.QuicknoteSectionReviewOfSystem,
     QuickNoteSectionName.Vitals,
     QuickNoteSectionName.QuicknoteSectionPhysicalExam,
@@ -317,17 +317,18 @@ const visitTypeToWidgets: Record<string, QuickNoteSectionName[]> = {
     QuickNoteSectionName.FollowUps,
     QuickNoteSectionName.QuicknoteSectionCodes,
   ],
-  ECTVisit: [
+  Ect: [
     QuickNoteSectionName.ProcedureECT,
     QuickNoteSectionName.QuickNoteSectionDiagnosis,
     QuickNoteSectionName.QuicknoteSectionReferrals,
     QuickNoteSectionName.FollowUps,
     QuickNoteSectionName.QuicknoteSectionCodes,
   ],
-  TMSVisit: [QuickNoteSectionName.ProcedureTMS],
-  SpravatoVisit: [
+  Tms: [QuickNoteSectionName.ProcedureTMS],
+  Spravato: [
     QuickNoteSectionName.QuicknoteSectionProcedureSpravato,
     QuickNoteSectionName.QuicknoteSectionCodes,
+    QuickNoteSectionName.Addon,
   ],
   'HospitalCare/Initial': [
     QuickNoteSectionName.QuicknoteSectionHPI,

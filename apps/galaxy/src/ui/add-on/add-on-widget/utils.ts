@@ -8,14 +8,59 @@ const addOnCodes: CodesWidgetItem[] = [
   { key: CptCodeKeys.ADD_ONS_KEY, code: '90845' },
 ]
 
-const cptCodeMap = {
-  injection: '96372',
-  therapyTimeSpent: {
-    timeRangeOne: '90833',
-    timeRangeTwo: '90836',
-    timeRangeThree: '90838',
-  },
-  therapyPsychoanalysis: { psychoanalysis: '90845' },
+const theratimeSpentCodes = {
+  timeRangeOne: '90833',
+  timeRangeTwo: '90836',
+  timeRangeThree: '90838',
+}
+const therapyPsychoanalysisCodes = { psychoanalysis: '90845' }
+
+const getCptCodeMap = (visitType: string) => {
+  let cptCodeMap: {
+    injection?: string
+    therapyTimeSpent?: Record<string, string>
+    therapyPsychoanalysis?: Record<string, string>
+    ect?: string
+    interactiveComplexity?: string
+  } = {}
+
+  switch (visitType) {
+    case 'EdVisit':
+      cptCodeMap = {
+        therapyTimeSpent: theratimeSpentCodes,
+        therapyPsychoanalysis: therapyPsychoanalysisCodes,
+      }
+      break
+    case 'HospitalCare':
+      cptCodeMap = {
+        ...cptCodeMap,
+        ect: '90837',
+      }
+      break
+    case 'IndividualPsychotherapy':
+    case 'FamilyPsychotherapy':
+      cptCodeMap = {
+        interactiveComplexity: '90785',
+      }
+      break
+    case 'SpravatoVisit':
+      cptCodeMap = {
+        therapyTimeSpent: theratimeSpentCodes,
+      }
+      break
+    case 'TMSVisit':
+    case 'ECTVisit':
+      cptCodeMap = {}
+      break
+    default:
+      cptCodeMap = {
+        injection: '96372',
+        therapyTimeSpent: theratimeSpentCodes,
+        therapyPsychoanalysis: therapyPsychoanalysisCodes,
+      }
+      break
+  }
+  return cptCodeMap
 }
 
-export { addOnCodes, cptCodeMap }
+export { addOnCodes, getCptCodeMap }

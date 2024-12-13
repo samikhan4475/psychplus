@@ -19,6 +19,15 @@ const visitSpecificCodes: CodesWidgetItem[] = [
   { key: CptCodeKeys.ADD_ONS_KEY, code: '99417*3' },
   { key: CptCodeKeys.ADD_ONS_KEY, code: '99417*4' },
   { key: CptCodeKeys.MODIFIER_KEY, code: '59' },
+  // add on codes start here
+  { key: CptCodeKeys.ADD_ONS_KEY, code: '96372' },
+  { key: CptCodeKeys.ADD_ONS_KEY, code: '90833' },
+  { key: CptCodeKeys.ADD_ONS_KEY, code: '90836' },
+  { key: CptCodeKeys.ADD_ONS_KEY, code: '90838' },
+  { key: CptCodeKeys.ADD_ONS_KEY, code: '90845' },
+  { key: CptCodeKeys.ADD_ONS_KEY, code: '90837' },
+  { key: CptCodeKeys.ADD_ONS_KEY, code: '90785' },
+  // add on codes End here
 ]
 const restrictedVisitsForAddOnCodes = ['SpravatoVisit']
 const allowedDuplicateCodes = ['96127']
