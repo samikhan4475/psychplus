@@ -40,3 +40,4 @@ export * from './diagnosis'
 export * from './payer'
 export * from './labs-order'
 export * from './codes'
+export * from "./link-account"

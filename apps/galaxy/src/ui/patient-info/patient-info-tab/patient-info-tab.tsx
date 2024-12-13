@@ -15,6 +15,7 @@ import { AdditionalContactInfoCard } from './additional-contact-info'
 import { AlternativeInfoCard } from './alternate-info'
 import { CreateUserCard } from './create-user'
 import { DescriptiveCard } from './descriptive'
+import { LinkAccountCard } from './link-account'
 import { LockPageSwitch } from './lock-page-switch'
 import { PatientDataCard } from './patient-data'
 import { PatientHistoryDialog } from './patient-history-dialog'
@@ -55,6 +56,7 @@ const PatientInfoTab = ({
     (consent) => consent?.type === POLICY_TYPE_A,
   )
 
+
   return (
     <Box position="relative">
       <LockPageSwitch />
@@ -88,6 +90,11 @@ const PatientInfoTab = ({
               setDriverLicenseImage={setDriverLicenseImage}
             />
             <AddressCard />
+            <LinkAccountCard
+              patientId={patientId}
+              lintAccounts={[]}
+            />
+
             <PreferredPartnerCard
               preferredPartners={patientPreferredPartners ?? []}
             />

@@ -58,3 +58,4 @@ export * from './union-pay-card-icon'
 export * from './diners-club-card-icon'
 export * from './info-icon'
 export * from './information-line'
+export  * from "./shuffel-icon"
