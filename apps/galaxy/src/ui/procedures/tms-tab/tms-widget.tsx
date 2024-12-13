@@ -6,7 +6,7 @@ import {
   WidgetFormContainer,
   WidgetSaveButton,
 } from '@/components'
-import { QuickNoteHistory, QuickNoteSectionItem } from '@/types'
+import { Appointment, QuickNoteHistory, QuickNoteSectionItem } from '@/types'
 import { useStore } from '@/ui/questionnaires/store'
 import { ProcedureTabs, ProcedureTabsId } from '../constants'
 import { transformIn, transformOut } from './data'
@@ -19,14 +19,22 @@ interface TmsTabProps {
   patientId: string
   procedureTmsData: QuickNoteSectionItem[]
   questionnaireHistories: QuickNoteHistory[]
+  appointmentData: Appointment | null
 }
 
 const TmsTab = ({
   patientId,
   procedureTmsData,
   questionnaireHistories,
+  appointmentData,
 }: TmsTabProps) => {
-  const initialValue = transformIn(procedureTmsData)
+  const initialValue = transformIn([
+    ...procedureTmsData,
+    {
+      sectionItem: 'tmdSessionNo',
+      sectionItemValue: appointmentData?.encounterNumber?.split('-')[1] || '',
+    } as QuickNoteSectionItem,
+  ])
   const form = useTmsWidgetForm(initialValue)
   const { initializeQuestionnaires } = useStore((state) => ({
     initializeQuestionnaires: state.initializeQuestionnaires,

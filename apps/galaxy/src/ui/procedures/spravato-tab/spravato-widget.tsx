@@ -6,7 +6,7 @@ import {
   WidgetFormContainer,
   WidgetSaveButton,
 } from '@/components'
-import { QuickNoteSectionItem } from '@/types'
+import { Appointment, QuickNoteSectionItem } from '@/types'
 import { ProcedureTabs, ProcedureTabsId } from '../constants'
 import { AdverseEventQuestionView } from './adverse-event-question'
 import { AdverseReactionView } from './adverse-reaction'
@@ -21,11 +21,21 @@ import { VitalSignsView } from './vital-signs'
 
 interface SpravatoTabProps {
   procedureSpravatoData: QuickNoteSectionItem[]
+  appointmentData: Appointment | null
 }
 
-const SpravatoWidget = ({ procedureSpravatoData }: SpravatoTabProps) => {
+const SpravatoWidget = ({
+  procedureSpravatoData,
+  appointmentData,
+}: SpravatoTabProps) => {
   const { id } = useParams<{ id: string }>()
-  const initialValues = transformIn(procedureSpravatoData)
+  const initialValues = transformIn([
+    ...procedureSpravatoData,
+    {
+      sectionItem: 'treatmentNumber',
+      sectionItemValue: appointmentData?.encounterNumber?.split('-')[1] || '',
+    } as QuickNoteSectionItem,
+  ])
   const form = useSpravatoWidgetForm(initialValues)
   const appointmentId = useSearchParams().get('id') as string
   const visitSequence = useSearchParams().get('visitSequence') || ''

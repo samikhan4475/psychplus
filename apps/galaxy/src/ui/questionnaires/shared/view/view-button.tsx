@@ -10,9 +10,9 @@ import { QuestionnairesTitles } from '../../constants'
 import { AimsView } from './aims-view'
 import { questionnaireViewConstants } from './constant'
 import { MocaView } from './moca-view'
-import { QuestionnaireViewPopup } from './questionnaires-view-pop'
 import { SnapIvView } from './snap-iv-view'
 import { YBocView } from './y-boc-view'
+import { QuestionnaireViewPopup } from './questionnaires-view-popup'
 
 type ViewButtonBlockProps = PropsWithChildren<{
   justIcon?: boolean

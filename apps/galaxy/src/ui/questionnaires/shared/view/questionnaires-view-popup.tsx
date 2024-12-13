@@ -4,10 +4,10 @@ import { Flex } from '@radix-ui/themes'
 import { FormProvider } from 'react-hook-form'
 import { WidgetFormContainer } from '@/components'
 import { QuickNoteSectionItem } from '@/types'
-import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { transformIn } from '../data'
 import { QuestionnairesForm } from '../questionnaires-form'
 import { useQuestionnaireForm } from '../use-questionnaire-form'
+import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { questionnaireViewConstants } from './constant'
 
 type QuestionnaireViewPopup = React.PropsWithChildren<{

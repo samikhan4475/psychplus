@@ -1,10 +1,12 @@
 import { Flex, Text } from '@radix-ui/themes'
+import { Appointment } from '@/types'
 import { SpravatoWidgetSchemaType } from '@/ui/procedures/spravato-tab/spravato-widget-schema'
 import { LabelAndValue } from '../shared'
 
 interface SpravatoListViewProps {
   label?: string
   data: SpravatoWidgetSchemaType
+  appointment?: Appointment
 }
 
 const DOSING_SECTION: {
@@ -29,7 +31,28 @@ const DOSING_SECTION: {
   },
 ]
 
-const SpravatoListView = ({ label, data }: SpravatoListViewProps) => {
+const getValueForKey = (
+  key: string,
+  data: SpravatoWidgetSchemaType,
+  appointment?: Appointment,
+  defaultValue?: string,
+) => {
+  if (key === 'treatmentNumber' && appointment?.encounterNumber) {
+    return appointment?.encounterNumber?.split('-')[1] || ''
+  }
+
+  const dataValue = data[key as keyof SpravatoWidgetSchemaType]
+  if (dataValue) {
+    return dataValue.toString()
+  }
+
+  return defaultValue || ''
+}
+const SpravatoListView = ({
+  label,
+  data,
+  appointment,
+}: SpravatoListViewProps) => {
   return (
     <Flex direction="column">
       {label && (
@@ -42,12 +65,7 @@ const SpravatoListView = ({ label, data }: SpravatoListViewProps) => {
           <LabelAndValue
             key={option.label}
             label={option.label}
-            value={
-              option.key &&
-              data[option.key as keyof SpravatoWidgetSchemaType]?.toString()
-                ? data[option.key as keyof SpravatoWidgetSchemaType]?.toString()
-                : option?.value ?? ''
-            }
+            value={getValueForKey(option.key, data, appointment, option?.value)}
           />
         ),
       )}

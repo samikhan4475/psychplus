@@ -1,5 +1,6 @@
 import React from 'react'
 import { Flex, Heading, Text } from '@radix-ui/themes'
+import { Appointment } from '@/types'
 import { TmsWidgetSchemaType } from '@/ui/procedures/tms-tab/tms-widget-schema'
 import { ProtocolTitles } from '@/ui/procedures/tms-tab/treatment-session/types'
 import {
@@ -12,9 +13,13 @@ import { LabelAndValue } from '../../shared'
 
 interface Props<T> {
   data: T
+  appointment?: Appointment
 }
 
-const TreatmentSection = ({ data }: Props<TmsWidgetSchemaType>) => {
+const TreatmentSection = ({
+  data,
+  appointment,
+}: Props<TmsWidgetSchemaType>) => {
   const renderProtocolSection = {
     [ProtocolTitles.StandardProtocol]: <StandardProtocolSection />,
     [ProtocolTitles.AcceleratedProtocol]: <SaintSection />,
@@ -39,7 +44,10 @@ const TreatmentSection = ({ data }: Props<TmsWidgetSchemaType>) => {
       <Heading size="3" className="my-1">
         Treatment Session
       </Heading>
-      <LabelAndValue label="TMS Session No:" value={data.tmdSessionNo} />
+      <LabelAndValue
+        label="TMS Session No:"
+        value={appointment?.encounterNumber?.split('-')[1] || ''}
+      />
       <LabelAndValue label="Protocol Used:" value={data.protocol} />
       <Text className="text-2 font-medium">{data.protocol}:</Text>
       {renderProtocolSection[data.protocol as ProtocolTitles]}

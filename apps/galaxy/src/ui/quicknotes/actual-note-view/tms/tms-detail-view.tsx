@@ -1,5 +1,6 @@
 import { Text } from '@radix-ui/themes'
 import { getQuickNoteDetailAction } from '@/actions/get-quicknote-detail'
+import { Appointment } from '@/types'
 import { transformIn } from '@/ui/procedures/tms-tab/data'
 import { QuickNoteSectionName } from '../../constants'
 import { ActualNoteDetailsWrapper } from '../shared'
@@ -7,9 +8,10 @@ import { Details } from './details'
 
 type TmsDetailsProps = {
   patientId: string
+  appointment?: Appointment
 }
 
-const TmsDetailView = async ({ patientId }: TmsDetailsProps) => {
+const TmsDetailView = async ({ patientId, appointment }: TmsDetailsProps) => {
   const response = await getQuickNoteDetailAction(
     patientId,
     [QuickNoteSectionName.ProcedureTMS],
@@ -22,7 +24,7 @@ const TmsDetailView = async ({ patientId }: TmsDetailsProps) => {
 
   return (
     <ActualNoteDetailsWrapper sectionName={QuickNoteSectionName.ProcedureTMS}>
-      <Details data={transformIn(response.data)} />
+      <Details data={transformIn(response.data)} appointment={appointment} />
     </ActualNoteDetailsWrapper>
   )
 }

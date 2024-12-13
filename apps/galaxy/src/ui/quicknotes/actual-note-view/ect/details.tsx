@@ -1,4 +1,4 @@
-import { Flex, Separator, Text } from '@radix-ui/themes'
+import { Flex, Text } from '@radix-ui/themes'
 import {
   ectActualViewKeysSection1,
   ectActualViewKeysSection2,
@@ -15,19 +15,6 @@ interface Props<T> {
 const Details = ({ data }: Props<EctWidgetSchemaType>) => {
   return (
     <BlockContainer heading="ECT">
-      <LabelAndValue label="Title:" value="Psychiatric Evaluation" />
-      <LabelAndValue label="Visit Type:" value="Outpatient Office Visit" />
-      <LabelAndValue label="Provider Type:" value="Therapy" />
-      <LabelAndValue label="Provider:" value="John Smith, MD" />
-      <LabelAndValue label="Location:" value="Willow Brooks" />
-      <LabelAndValue label="Service:" value="Willow Brooks" />
-      <LabelAndValue label="Date:" value="11/22/24" />
-      <LabelAndValue label="Duration:" value="20 mins" />
-      <LabelAndValue label="Patient:" value="Ross Galler" />
-      <LabelAndValue label="DOB:" value="11/21/2024" />
-      <LabelAndValue label="Cosigner:" value="John Smith, MD" />
-      <LabelAndValue label="Visit #:" value="0000198" />
-      <Separator className="my-3 w-full" />
       <Flex direction="column" gap="3">
         <EctListView keys={ectActualViewKeysSection1} data={data} />
         <EctListView
