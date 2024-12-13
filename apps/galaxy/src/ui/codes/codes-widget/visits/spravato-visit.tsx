@@ -1,7 +1,11 @@
 import { AddonsTable, ModifierTable, PrimaryCodeTable } from '../blocks'
 import { VisitProps } from '../types'
 
-const SpravatoVisit = ({ cptAddOnsCodes, cptPrimaryCodes }: VisitProps) => {
+const SpravatoVisit = ({
+  cptAddOnsCodes,
+  cptPrimaryCodes,
+  cptmodifierCodes,
+}: VisitProps) => {
   return (
     <>
       <PrimaryCodeTable codes={cptPrimaryCodes} isDisabled />
@@ -10,6 +14,5 @@ const SpravatoVisit = ({ cptAddOnsCodes, cptPrimaryCodes }: VisitProps) => {
     </>
   )
 }
-const cptmodifierCodes = [{ label: '', value: '25' }]
 
 export { SpravatoVisit }

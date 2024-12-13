@@ -6,17 +6,17 @@ import { QuickNoteSectionName } from '../../constants'
 import { ActualNoteDetailsWrapper } from '../shared'
 import { Details } from './details'
 
-type WorkingDiagnosisDetailProps = {
+type CodesDetailsViewProps = {
   patientId: string
   appointmentId: string
-  appointment?: Appointment
+  appointment: Appointment
 }
 
 const CodesDetailsView = async ({
   patientId,
   appointmentId,
   appointment,
-}: WorkingDiagnosisDetailProps) => {
+}: CodesDetailsViewProps) => {
   const [codesResult, appointmentCodeResult] = await Promise.all([
     getQuickNoteDetailAction(
       patientId,

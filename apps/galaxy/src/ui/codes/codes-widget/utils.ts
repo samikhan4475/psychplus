@@ -68,9 +68,17 @@ const modifyCodesOptions = (
         occurance > 1 &&
         allowedDuplicateCodes.includes(item.code)
       ) {
-        options.push({ label: item?.display ?? '', value: String(item?.code) })
+        options.push({
+          label: item?.display ?? '',
+          value: String(item?.code),
+          disabled: item?.isDisabled,
+        })
       }
-      options.push({ label: item?.display ?? '', value: String(item?.code) })
+      options.push({
+        label: item?.display ?? '',
+        value: String(item?.code),
+        disabled: item?.isDisabled,
+      })
       cptCodesLookup[item?.code] = String(item?.code)
     })
   })
@@ -142,10 +150,10 @@ const handleDefaultSubmission = async (
 
 const isVisitAfterWorkingHours = (appointment?: Appointment): boolean => {
   const visitHours = convertToTimeZoneTime(
-    appointment?.appointmentDateInLocationTimezone,
-    appointment?.locationtimzoneId,
+    appointment?.startDate,
+    appointment?.locationTimezoneId,
   )
-  return Boolean(visitHours && (visitHours < 8 || visitHours > 18))
+  return Boolean(visitHours?.toString() && (visitHours < 8 || visitHours > 18))
 }
 
 const getSortedCptCodes = (
@@ -214,13 +222,6 @@ const getCptCodesConditions = (
       code: '59',
       condition: availableAddonsCodes.length >= 2,
     },
-    {
-      codes: cptAddonCodes,
-      code: '99050',
-      condition:
-        isCptCodeExist(appointment?.cptAddonCodes, '99050') &&
-        isVisitAfterWorkingHours(appointment),
-    },
   ]
 }
 function getModifiedCptCodes(
@@ -228,7 +229,6 @@ function getModifiedCptCodes(
   appointment: Appointment,
 ): { isChanged: boolean; updatedCodes: CodesWidgetSchemaType } {
   const defaultCodes = getDefaultSelectedCptCodes(appointment)
-
   let isChanged = false
 
   let cptPrimaryCodes = initialValues?.cptPrimaryCodes
@@ -245,11 +245,21 @@ function getModifiedCptCodes(
     defaultCodes.cptAddonCodes,
   )
 
+  if (
+    isCptCodeExist(appointment?.cptAddonCodes, '99050') &&
+    !cptAddonCodes.includes('99050') &&
+    isVisitAfterWorkingHours(appointment)
+  ) {
+    cptAddonCodes.push('99050')
+    isChanged = true
+  }
+
   const conditions = getCptCodesConditions(
     cptAddonCodes,
     cptmodifierCodes,
     appointment,
   )
+
   const isCodesChanged = updatedCptCodes(
     restrictedVisitsForAddOnCodes.includes(appointment.visitType)
       ? []
@@ -273,4 +283,5 @@ export {
   getSortedCptCodes,
   getModifiedCptCodes,
   visitSpecificCodes,
+  updatedCptCodes,
 }

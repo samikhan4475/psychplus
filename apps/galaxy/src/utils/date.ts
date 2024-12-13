@@ -2,10 +2,11 @@ import {
   CalendarDate,
   DateFormatter,
   getDayOfWeek,
+  parseAbsolute,
   parseDate,
   type DateValue,
 } from '@internationalized/date'
-import { format, differenceInCalendarDays } from 'date-fns'
+import { differenceInCalendarDays, format } from 'date-fns'
 import { Period, SelectOptionType } from '@/types'
 
 const MONTH_LABELS = [
@@ -264,12 +265,9 @@ function convertToTimeZoneTime(
   timezoneId: string | undefined,
 ) {
   if (!dateString || !timezoneId) return null
-  const date = new Date(dateString)
-  const options = { timeZone: timezoneId, hour12: false }
-  const formatter = new Intl.DateTimeFormat('en-US', options)
-  const formattedTime = formatter.format(date)
-
-  return parseInt(formattedTime, 10)
+  const { hour, minute } = parseAbsolute(dateString, timezoneId)
+  const fractionalHour = hour + minute / 60
+  return fractionalHour
 }
 const generateTimeOptions = (interval = 20): SelectOptionType[] => {
   const options = []
@@ -286,10 +284,18 @@ const generateTimeOptions = (interval = 20): SelectOptionType[] => {
   return options
 }
 
-const getDateDifference = (dateObjEnd : DateValue, dateObjStart: DateValue) => {
-  const startDateObj = new Date(dateObjStart.year, dateObjStart.month - 1, dateObjStart.day)
-  const endDateObj = new Date(dateObjEnd.year, dateObjEnd.month - 1, dateObjEnd.day)
-  return differenceInCalendarDays(endDateObj, startDateObj) 
+const getDateDifference = (dateObjEnd: DateValue, dateObjStart: DateValue) => {
+  const startDateObj = new Date(
+    dateObjStart.year,
+    dateObjStart.month - 1,
+    dateObjStart.day,
+  )
+  const endDateObj = new Date(
+    dateObjEnd.year,
+    dateObjEnd.month - 1,
+    dateObjEnd.day,
+  )
+  return differenceInCalendarDays(endDateObj, startDateObj)
 }
 
 export {

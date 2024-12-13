@@ -1,7 +1,7 @@
 import { AddonsTable, ModifierTable, PrimaryCodeTable } from '../blocks'
 import { VisitProps } from '../types'
 
-const OutpatientOffice = ({
+const CommonVisit = ({
   cptAddOnsCodes,
   cptPrimaryCodes,
   cptmodifierCodes,
@@ -14,4 +14,4 @@ const OutpatientOffice = ({
     </>
   )
 }
-export { OutpatientOffice }
+export { CommonVisit }

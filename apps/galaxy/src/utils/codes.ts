@@ -40,6 +40,7 @@ const fetchCodes = async (patientId: string, appointmentId?: string) => {
       [QuickNoteSectionName.QuicknoteSectionCodes],
       false,
       appointmentId,
+      false,
     ),
   ])
 

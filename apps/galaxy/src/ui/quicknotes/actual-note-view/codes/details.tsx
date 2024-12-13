@@ -4,24 +4,25 @@ import { Appointment } from '@/types'
 import { CodesWidgetSchemaType } from '@/ui/codes/codes-widget/codes-widget-schema'
 import {
   getCptCodeOptions,
+  getModifiedCptCodes,
   getSortedCptCodes,
 } from '@/ui/codes/codes-widget/utils'
 import { BlockContainer, LabelAndValue } from '../shared'
 
 interface Props<T> {
   data: T
-  appointment?: Appointment
+  appointment: Appointment
 }
 
-const Details = ({
-  data: { cptPrimaryCodes, cptAddonCodes, cptmodifierCodes },
-  appointment,
-}: Props<CodesWidgetSchemaType>) => {
+const Details = ({ data, appointment }: Props<CodesWidgetSchemaType>) => {
   const { cptCodesLookup } = getCptCodeOptions(
     appointment?.cptPrimaryCodes ?? [],
     appointment?.cptAddonCodes ?? [],
     appointment?.cptModifiersCodes ?? [],
   )
+  const {
+    updatedCodes: { cptAddonCodes, cptPrimaryCodes, cptmodifierCodes },
+  } = getModifiedCptCodes(data, appointment)
 
   return (
     <BlockContainer heading="Codes">

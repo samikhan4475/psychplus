@@ -6,7 +6,7 @@ type WidgetType = {
   actualNoteComponent?: React.ComponentType<{
     patientId: string
     appointmentId: string
-    appointment?: Appointment
+    appointment: Appointment
     patient?: PatientProfile
   }>
   id: QuickNoteSectionName

@@ -29,7 +29,7 @@ const CodeSelectCell = ({ row, field, isDisabled }: CodeSelectCellProps) => {
         checked={isSelected(row.original.value)}
         onCheckedChange={toggleSelected(row.original.value)}
         highContrast
-        disabled={isDisabled}
+        disabled={isDisabled || row?.original?.disabled}
         className="data-[state=checked]:before:bg-pp-text-primary-base data-[state=checked]:data-[disabled]:before:bg-pp-gray-5 data-[disabled]:before:!bg-pp-gray-4"
       />
     </Flex>

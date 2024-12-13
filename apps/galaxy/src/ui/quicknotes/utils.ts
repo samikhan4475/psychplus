@@ -317,15 +317,15 @@ const visitTypeToWidgets: Record<string, QuickNoteSectionName[]> = {
     QuickNoteSectionName.FollowUps,
     QuickNoteSectionName.QuicknoteSectionCodes,
   ],
-  Ect: [
+  "Ect": [
     QuickNoteSectionName.ProcedureECT,
     QuickNoteSectionName.QuickNoteSectionDiagnosis,
     QuickNoteSectionName.QuicknoteSectionReferrals,
     QuickNoteSectionName.FollowUps,
     QuickNoteSectionName.QuicknoteSectionCodes,
   ],
-  Tms: [QuickNoteSectionName.ProcedureTMS],
-  Spravato: [
+  "Tms": [QuickNoteSectionName.ProcedureTMS],
+  "Spravato": [
     QuickNoteSectionName.QuicknoteSectionProcedureSpravato,
     QuickNoteSectionName.QuicknoteSectionCodes,
     QuickNoteSectionName.Addon,
@@ -400,7 +400,7 @@ const visitTypeToWidgets: Record<string, QuickNoteSectionName[]> = {
     QuickNoteSectionName.FollowUps,
     QuickNoteSectionName.QuicknoteSectionCodes,
   ],
-  'HospitalCare/Initial/Discharge': [
+  'HospitalCare/InitialDischarge': [
     QuickNoteSectionName.QuicknoteSectionHPI,
     QuickNoteSectionName.QuickNoteSectionPastPsychHx,
     QuickNoteSectionName.QuickNoteSectionFamilyPsychHx,

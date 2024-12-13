@@ -27,6 +27,7 @@ interface CptCode {
   code: string
   display?: string
   isDefault?: boolean
+  isDisabled?: boolean
 }
 interface Appointment {
   id: number
@@ -112,8 +113,6 @@ interface Appointment {
   encounterNumber?: string
   type?: string
   specialistTypeCode?: number
-  locationtimzoneId?: string
-  appointmentDateInLocationTimezone: string
   cosigners: Cosigner[]
   cptPrimaryCodes: CptCode[]
   cptAddonCodes: CptCode[]

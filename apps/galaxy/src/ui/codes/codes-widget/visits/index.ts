@@ -1,3 +1,3 @@
-export * from './outpatient-office'
+export * from './common'
 export * from './spravato-visit'
 export * from './tcm'

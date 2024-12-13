@@ -22,7 +22,7 @@ import {
   getModifiedCptCodes,
   handleDefaultSubmission,
 } from './utils'
-import { OutpatientOffice, SpravatoVisit, Tcm } from './visits'
+import { CommonVisit, SpravatoVisit, Tcm } from './visits'
 
 interface CodesWidgetProps {
   patientId: string
@@ -41,7 +41,8 @@ const CodesWidget = ({
 }: CodesWidgetProps) => {
   const params = useSearchParams()
   const form = useCodesWidgetForm(initialValues)
-  const VisitComponent = visitsMap?.[params.get('visitType') ?? '']
+  const VisitComponent =
+    visitsMap?.[params.get('visitType') ?? ''] ?? visitsMap['common']
 
   useEffect(() => {
     const { isChanged, updatedCodes } = getModifiedCptCodes(
@@ -108,7 +109,7 @@ const CodesWidget = ({
 }
 
 const visitsMap: Record<string, ComponentType<VisitProps>> = {
-  Outpatient: OutpatientOffice,
+  common: CommonVisit,
   TransitionalCare: Tcm,
   SpravatoVisit: SpravatoVisit,
 }
