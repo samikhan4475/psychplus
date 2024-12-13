@@ -77,8 +77,10 @@ const CODESETS = {
   QueryByLastDays: 'QueryByLastDays',
   ServiceLevelType: 'ServiceLevelType',
   PayerType: 'PayerType',
+  AbnormalFlag: 'HL7v2.AbnormalFlags',
+  StatusCodes: 'HL7v2.ObservationResultStatusCodes',
+  Unit: 'CDC.PHVS_UnitofMeasure_TB',
 }
-
 export {
   CODESETS,
   CODE_ETHNICITY,

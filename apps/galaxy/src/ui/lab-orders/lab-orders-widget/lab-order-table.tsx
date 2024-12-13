@@ -58,11 +58,13 @@ const columns: ColumnDef<LabOrders>[] = [
   },
   {
     id: 'results',
+    size: 100,
     header: () => <ColumnHeader clientSideSort label="Results" />,
     cell: ({ row }) => <ResultsCell row={row} />,
   },
   {
     id: 'actions',
+    size: 50,
     header: () => <ColumnHeader label="Actions" />,
     cell: ({ row }) => <ActionsCell row={row} />,
   },

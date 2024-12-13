@@ -1,8 +1,5 @@
-import {
-  FlagOrderStatus,
-  LabOrderStatus,
-  ResultOrderStatus,
-} from '@/ui/lab-orders/lab-orders-widget/types'
+import { DateValue } from 'react-aria-components'
+import { LabOrderStatus } from '@/ui/lab-orders/lab-orders-widget/types'
 import { Appointment } from './appointment'
 import { ContactDetails } from './contact'
 import { Metadata } from './metadata'
@@ -37,21 +34,35 @@ interface LabResult {
   metadata: Metadata
   labTestId: string
   orderId: string
-  observationTime: string
+  observationTime?: string | DateValue | null
   resultCode: string
   resultName: string
   resultValue: string
   resultValueUnit?: string
   recommendedValue?: string
   statusCode: string
-  abnormalRangeCode: FlagOrderStatus
+  abnormalRangeCode: string
   physicianComments: string
   externalResultId: string
   labComments: string
   resultValueType: string
   valueDescription: string
-  recordStatus: ResultOrderStatus
+  recordStatus: string
   recomendedValue: string
+}
+interface LabResultPayload {
+  id: string
+  labTestId: string
+  orderId: string
+  observationTime?: string | DateValue | null
+  resultName?: string
+  recordStatus?: string
+  resultCode?: string
+  resultValue?: string
+  resultValueUnit?: string
+  recomendedValue?: string
+  abnormalRangeCode?: string
+  physicianComments?: string
 }
 
 interface LabDocument {
@@ -104,4 +115,4 @@ interface LabOrders {
   recordStatus: string
 }
 
-export { type LabOrders, type LabTest, type LabResult }
+export type { LabOrders, LabTest, LabResult, LabResultPayload }

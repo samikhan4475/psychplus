@@ -6,10 +6,6 @@ import { RowActionSend } from './row-action-send'
 
 const rowActions: RowAction<LabOrders>[] = [
   {
-    id: 'lab-orders-row-action-add',
-    render: RowActionAdd,
-  },
-  {
     id: 'lab-orders-row-action-send',
     render: RowActionSend,
   },

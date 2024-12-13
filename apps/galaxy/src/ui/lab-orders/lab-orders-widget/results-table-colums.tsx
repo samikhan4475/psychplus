@@ -1,59 +1,75 @@
+'use client'
+
 import { ColumnDef } from '@tanstack/react-table'
-import { ColumnHeader, DateTimeCell, TextCell } from '@/components'
+import { ColumnHeader } from '@/components'
 import { LabResult } from '@/types'
-import { formatDateTime, getUserFullName } from '@/utils'
-import { FlagStatusCell } from './cells/lab-flag-status'
-import { ResultStatusCell } from './cells/result-status-cell'
+import {
+  AbnormalFlagDropdown,
+  CodefieldCell,
+  LabResultStatusDropdown,
+  NotesfieldCell,
+  ObservationTimeFieldCell,
+  RefRangefieldCell,
+  ResultfieldCell,
+  TestNameCell,
+  UnitDropdown,
+} from './cells'
+import { ViewActionsCell } from './cells/view-action-cell'
 
 const columns: ColumnDef<LabResult>[] = [
   {
     id: 'test-name',
     header: () => <ColumnHeader clientSideSort label="Test Name" />,
-    cell: ({ row }) => <TextCell>{row.original.resultName}</TextCell>,
+    cell: ({ row }) => <TestNameCell row={row} />,
   },
   {
     id: 'date-time',
+    size: 200,
     header: () => <ColumnHeader clientSideSort label="Date/Time" />,
-    cell: ({ row }) => (
-      <DateTimeCell>
-        {formatDateTime(row.original.observationTime)}
-      </DateTimeCell>
-    ),
+    cell: ({ row }) => <ObservationTimeFieldCell row={row} />,
+    accessorKey: 'observationTime',
   },
   {
     id: 'result-value',
     header: () => <ColumnHeader clientSideSort label="Result" />,
-    cell: ({ row }) => <TextCell>{row.original.resultValue}</TextCell>,
+    cell: ({ row }) => <ResultfieldCell row={row} />,
   },
+
   {
     id: 'unit',
     header: () => <ColumnHeader clientSideSort label="Unit" />,
-    cell: ({ row }) => <TextCell>{row.original.resultValueUnit}</TextCell>,
+    cell: ({ row }) => <UnitDropdown row={row} />,
   },
   {
     id: 'code',
     header: () => <ColumnHeader clientSideSort label="Code" />,
-    cell: ({ row }) => <TextCell>{row.original.resultCode}</TextCell>,
+    cell: ({ row }) => <CodefieldCell row={row} />,
   },
   {
     id: 'ref-range',
     header: () => <ColumnHeader clientSideSort label="Ref. Range" />,
-    cell: ({ row }) => <TextCell>{row.original.recomendedValue}</TextCell>,
+    cell: ({ row }) => <RefRangefieldCell row={row} />,
   },
   {
     id: 'flag',
     header: () => <ColumnHeader clientSideSort label="Flag" />,
-    cell: ({ row }) => <FlagStatusCell row={row} />,
+    cell: ({ row }) => <AbnormalFlagDropdown row={row} />,
   },
   {
     id: 'status',
     header: () => <ColumnHeader clientSideSort label="Status" />,
-    cell: ({ row }) => <ResultStatusCell row={row} />,
+    cell: ({ row }) => <LabResultStatusDropdown row={row} />,
   },
   {
     id: 'notes',
     header: () => <ColumnHeader clientSideSort label="Notes" />,
-    cell: ({ row }) => <TextCell>{row.original.physicianComments}</TextCell>,
+    cell: ({ row }) => <NotesfieldCell row={row} />,
+  },
+  {
+    id: 'actions',
+    size: 50,
+    header: () => <ColumnHeader label="Actions" />,
+    cell: ({ row }) => <ViewActionsCell row={row} />,
   },
 ]
 export { columns }

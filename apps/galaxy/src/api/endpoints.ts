@@ -406,6 +406,12 @@ const SENT_TO_COSIGNER_NOTE_ENDPOINT = (
 ) =>
   `${API_URL}/api/patients/${patientId}/encounters/${appointmentId}/notes/${noteId}/cosigners/${staffId}/actions/replace`
 
+const UPDATE_LAB_ORDERS_RESULT_ENDPOINT = (
+  appointmentId: string,
+  orderId: string,
+  id: string,
+) =>
+  `${API_URL}/api/appointments/${appointmentId}/laborders/${orderId}/labresults/${id}`
 export {
   NOTE_UPLOAD_FILE,
   USER_ENDPOINT,
@@ -614,5 +620,6 @@ export {
   CREATE_NOTE_ENDPOINT,
   GET_APPOINTMENT_COSIGNERS_ENDPOINT,
   NOTE_MARK_ERROR_ENDPOINT,
+  UPDATE_LAB_ORDERS_RESULT_ENDPOINT,
   DOWNLOAD_CLAIM_SUBMISSION_HISTORY_ENDPOINT,
 }

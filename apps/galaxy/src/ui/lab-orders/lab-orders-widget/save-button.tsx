@@ -1,10 +1,21 @@
-'use client'
-
+import React from 'react'
 import { Button } from '@radix-ui/themes'
+import { useFormContext } from 'react-hook-form'
+import { SchemaType } from './schema'
 
 const SaveButton = () => {
+  const form = useFormContext<SchemaType>()
+
+  const { isSubmitting } = form.formState
+
   return (
-    <Button highContrast size="3" type="submit">
+    <Button
+      size="2"
+      loading={isSubmitting}
+      highContrast
+      name="Save"
+      type="submit"
+    >
       Save
     </Button>
   )

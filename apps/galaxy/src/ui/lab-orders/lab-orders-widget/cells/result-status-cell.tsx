@@ -1,7 +1,6 @@
 import { Badge, BadgeProps } from '@radix-ui/themes'
 import { Row } from '@tanstack/react-table'
 import { LabResult } from '@/types'
-import { ResultOrderStatus } from '../types'
 
 interface StatusCellProps {
   row: Row<LabResult>
@@ -16,12 +15,12 @@ const ResultStatusCell = ({ row }: StatusCellProps) => {
   )
 }
 
-const badgeColorMap: Record<ResultOrderStatus, BadgeProps['color']> = {
+const badgeColorMap: Record<string, BadgeProps['color']> = {
   Final: 'green',
   Partial: 'yellow',
 }
 
-const getBadgeColor = (status: ResultOrderStatus): BadgeProps['color'] =>
+const getBadgeColor = (status: string): BadgeProps['color'] =>
   badgeColorMap[status] || 'gray'
 
 export { ResultStatusCell }

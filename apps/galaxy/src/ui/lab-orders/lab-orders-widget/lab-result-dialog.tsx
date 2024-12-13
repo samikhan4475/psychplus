@@ -6,9 +6,14 @@ import { FileText } from 'lucide-react'
 interface LabResultDialogProps {
   title?: string
   children: ReactNode
+  onClose?: () => void
 }
 
-const LabResultDialog = ({ title, children }: LabResultDialogProps) => {
+const LabResultDialog = ({
+  title,
+  children,
+  onClose,
+}: LabResultDialogProps) => {
   return (
     <Dialog.Root>
       <Dialog.Trigger>
@@ -21,9 +26,9 @@ const LabResultDialog = ({ title, children }: LabResultDialogProps) => {
             weight="bold"
             className="text-black m-0 font-sans"
           >
-            View Result of {title}
+            {title}
           </Dialog.Title>
-          <Dialog.Close className="cursor-pointer">
+          <Dialog.Close className="cursor-pointer" onClick={onClose}>
             <Cross2Icon />
           </Dialog.Close>
         </Flex>
