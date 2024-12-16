@@ -214,6 +214,7 @@ const DOWNLOAD_HCFA_FILE_ENDPOINT = `${API_URL}/api/claimssubmissions/actions/pr
 const GET_RESPONSE_HISTORY_LIST_ENDPOINT = `${API_URL}/api/claimssubmissions/responses/actions/search`
 const GET_RESPONSE_HISTORY_DETAIL_LIST_ENDPOINT = (id: string) =>
   `${API_URL}/api/claimssubmissions/responses/${id}/details/actions/search`
+const GET_CLAIMS_AUDIT_HISTORY_LIST_ENDPOINT = `${API_URL}/api/claims/history`
 const GET_CLAIMS_LIST_ENDPOINT = `${API_URL}/api/claims/actions/search`
 const CLAIM_SUBMIT_ENDPOINT = `${API_URL}/api/claimssubmissions/actions/srcubandsubmit`
 const GET_CLAIM_SUBMISSION_LIST = `${API_URL}/api/claimssubmissions/actions/search`
@@ -591,6 +592,7 @@ export {
   GET_ALLERGIES_ENDPOINT,
   PATIENT_CARE_TEAM_ENDPOINT,
   PATIENT_CHARGE_PAYMENT_ENDPOINT,
+  GET_CLAIMS_AUDIT_HISTORY_LIST_ENDPOINT,
   NOTE_SIGN_ENDPOINT,
   GET_STAFF_LICENSE,
   GET_STAFF_BY_ID,

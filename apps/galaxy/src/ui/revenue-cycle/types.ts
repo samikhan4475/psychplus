@@ -312,6 +312,25 @@ interface ResponseHistoryDetailListResponse {
   total: number
 }
 
+interface ClaimAuditHistory {
+  metadata: Metadata
+  sectionName: string
+  fieldName: string
+  actionType: string
+  oldValue: string
+  newValue: string
+}
+
+interface ClaimAuditHistoryPayload {
+  dateFrom?: string
+  dateTo?: string
+  claimId?: string
+}
+
+interface ClaimAuditHistoryFilterFormProps {
+  onFilterSubmit: (data: ClaimAuditHistoryPayload) => void
+}
+
 export {
   RevenueCycleTab,
   FileFormats,
@@ -343,4 +362,7 @@ export {
   type ResponseHistoryPayload,
   type ResponseHistoryDetail,
   type ResponseHistoryDetailListResponse,
+  type ClaimAuditHistory,
+  type ClaimAuditHistoryPayload,
+  type ClaimAuditHistoryFilterFormProps,
 }

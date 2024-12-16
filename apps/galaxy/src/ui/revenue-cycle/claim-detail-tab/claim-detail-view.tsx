@@ -214,7 +214,7 @@ const ClaimDetailView = ({ claimId }: ClaimDetailViewProps) => {
   return (
     <FormContainer form={form} onSubmit={onSubmit} className="bg-pp-bg-accent ">
       <ClaimDetailHeader />
-      <ClaimActions />
+      <ClaimActions claimId={claimId} />
       <PatientClaimDetails />
       <Flex direction="column" className="bg-white overflow-hidden rounded-1">
         <Accordion.Root
