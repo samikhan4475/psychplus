@@ -20,6 +20,7 @@ import { QuickNotesViewNoteButton } from './quicknotes-view-note-button'
 import { QuickNotesVisitNumberDropdown } from './quicknotes-visit-number-dropdown'
 import { QuickNotesVisitSequenceDropdown } from './quicknotes-visit-sequence-dropdown'
 import { QuickNotesVisitTypeDropdown } from './quicknotes-visit-type-dropdown'
+import { QuickNotesDuration } from './quicknotes-duration'
 
 interface QuickNotesHeaderProps {
   appointment: Appointment
@@ -73,6 +74,7 @@ const QuickNotesHeader = async ({ appointment }: QuickNotesHeaderProps) => {
           <QuickNotesServiceDropdown service={appointment.service} />
           <QuickNotesDateInput />
           <QuickNotesTimeDropdown />
+          <QuickNotesDuration duration={appointment.duration} />
           <QuickNotesVisitNumberDropdown
             visitNo={appointment.encounterNumber}
           />

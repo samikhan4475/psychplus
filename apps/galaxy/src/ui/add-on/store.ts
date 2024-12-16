@@ -20,7 +20,7 @@ interface DrugListItem {
 interface Store {
   loading: boolean
   drugsData: DrugListItem[]
-  fetchDrugs: (value: string) => void
+  fetchDrugs: (value: string, selectedDrug?: string) => void
   selectedDrug: DrugItem | null
   setSelectedDrug: (item: DrugListItem) => void
 }
@@ -28,7 +28,7 @@ interface Store {
 const useStore = create<Store>((set, get) => ({
   loading: false,
   drugsData: [],
-  fetchDrugs: async (value: string) => {
+  fetchDrugs: async (value, selectedDrug) => {
     set({ drugsData: [], loading: true })
     const response = await getAddOnDrugs(value)
     if (response.state === 'error') {
@@ -45,13 +45,20 @@ const useStore = create<Store>((set, get) => ({
       }
     })
 
+    if (selectedDrug) {
+      const selectedDrugItem = list.find((drug) =>
+        drug.value.toLowerCase().includes(selectedDrug.toLowerCase()),
+      )
+      set({ selectedDrug: selectedDrugItem })
+    }
+
     set({ drugsData: list, loading: false })
   },
   selectedDrug: null,
-  setSelectedDrug: (item: DrugListItem) => {
+  setSelectedDrug: (item) => {
     const { drugsData } = get()
     const selectedDrug = drugsData.find((drug) =>
-      drug.value.toLowerCase().includes(item.value.toLowerCase()),
+      drug.value.toLowerCase().includes(item.value?.toLowerCase()),
     ) as DrugItem | null
     set({ selectedDrug })
   },
