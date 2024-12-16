@@ -1,5 +1,6 @@
 'use client'
 
+import { useParams } from 'next/navigation'
 import { Button } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
 import { useStore } from '../store'
@@ -11,13 +12,20 @@ const ClearButton = () => {
     loading: state.loading,
     fetchLabResults: state.fetchLabResults,
   }))
+  const patientId = useParams().id as string
 
-  const handleResetForm = () => {
-    fetchLabResults({})
+  const handleResetForm = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+  ) => {
+    e.preventDefault()
     form.reset({
-      resourceStatus: '',
-      fromReferralDate: null,
-      toReferralDate: null,
+      labTestName: '',
+      dateFrom: null,
+      dateTo: null,
+    })
+    return fetchLabResults({
+      patientId: patientId,
+      resourceStatusList: ['Active'],
     })
   }
   return (

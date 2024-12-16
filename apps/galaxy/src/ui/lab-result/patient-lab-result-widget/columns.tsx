@@ -1,18 +1,26 @@
+import { ColumnDef } from '@tanstack/react-table'
 import { ColumnHeader, TextCell } from '@/components'
+import { formatDate } from '@/utils/date'
 import { CollapseCell } from './cells/collapse-cell'
+import { LabResults } from './types'
+import { LabResultResponseUpdated } from './utils'
 
-const Columns = (data: any) => {
-  //TODO: replace any with proper type once data schema is decided on the backend
-  const labReports = data?.labReports ?? []
+const Columns = (
+  data: LabResultResponseUpdated[],
+): ColumnDef<LabResultResponseUpdated>[] => {
+  const labReports = data ?? []
 
   const uniqueDates = [
     ...new Set(
-      labReports.flatMap((report: any) => [
-        report.date,
-        ...(report.subRows?.map((subRow: any) => subRow.date) || []),
+      labReports.flatMap((report: LabResultResponseUpdated) => [
+        ...(report.subRows?.map(
+          (subRow: LabResults) => subRow.observationTime,
+        ) || []),
       ]),
     ),
-  ].sort((a: any, b: any) => new Date(a).getTime() - new Date(b).getTime())
+  ].sort(
+    (a: string, b: string) => new Date(a).getTime() - new Date(b).getTime(),
+  )
 
   return [
     {
@@ -22,22 +30,24 @@ const Columns = (data: any) => {
         if (row.depth === 0) {
           return <CollapseCell row={row} />
         } else {
-          return <TextCell>{row.original.testPanel || 'N/A'}</TextCell>
+          return <TextCell>{row.original?.resultName}</TextCell>
         }
       },
       size: 20,
     },
 
-    ...uniqueDates.map((date: any, index: number) => ({
+    ...uniqueDates.map((date: string, index: number) => ({
       id: `date-${index}`,
-      header: () => <ColumnHeader label={date} />,
+      header: () => <ColumnHeader label={formatDate(date)} />,
       cell: ({ row }: any) => {
         const original = row.original
 
         if (row.depth > 0) {
           return (
             <TextCell>
-              {original.date === date ? original.quantity : 'N/A'}
+              {original.observationTime === date
+                ? `${original.resultValue} ${original.resultUnit}`
+                : 'N/A'}
             </TextCell>
           )
         }

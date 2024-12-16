@@ -1,11 +1,15 @@
 'use client'
 
+import { useParams } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons'
 import { Flex } from '@radix-ui/themes'
 import { useForm } from 'react-hook-form'
 import { FormContainer, FormSubmitButton } from '@/components'
-import { cn } from '@/utils'
+import { cn, formatDateToISOString } from '@/utils'
+import { useStore } from '../store'
+import { LabResultsPayload } from '../types'
+import { removeEmptyValues } from '../utils'
 import { ClearButton } from './clear-button'
 import { FromDatePicker } from './from-date-picker'
 import { labresultSchema, LabResultSchemaType } from './schema'
@@ -18,9 +22,24 @@ const LabResultFilterForm = () => {
     criteriaMode: 'all',
     mode: 'onBlur',
   })
+  const patientId = useParams().id as string
 
-  const handleFormSubmit = form.handleSubmit(() => {})
+  const { fetchLabResults } = useStore((state) => ({
+    fetchLabResults: state.fetchLabResults,
+  }))
+  const handleFormSubmit = form.handleSubmit((data) => {
+    const formattedData = {
+      ...data,
+      dateFrom: formatDateToISOString(data.dateFrom),
+      dateTo: formatDateToISOString(data.dateTo, true),
+      patientId,
+      resourceStatusList: ['Active'],
+    }
 
+    const cleanedData = removeEmptyValues(formattedData)
+
+    fetchLabResults(cleanedData as LabResultsPayload)
+  })
   return (
     <FormContainer
       form={form}

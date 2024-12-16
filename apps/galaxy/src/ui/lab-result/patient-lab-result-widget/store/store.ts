@@ -1,15 +1,14 @@
 import toast from 'react-hot-toast'
 import { create } from 'zustand'
-import { getLabResultsAction } from '../actions'
+import { fetchLabResultsAction } from '../actions'
+import { LabResultResponse, LabResultsPayload } from '../types'
 
 interface Store {
-  data?: any //TODO: replace any with proper type once data schema is decided on the backend
+  data?: LabResultResponse[]
   error?: string
   loading?: boolean
 
-  formValues?: Partial<any>
-
-  fetchLabResults: (formValues?: Partial<any>) => void
+  fetchLabResults: (payload: LabResultsPayload) => void
 }
 
 const useStore = create<Store>((set, get) => ({
@@ -18,14 +17,13 @@ const useStore = create<Store>((set, get) => ({
   loading: undefined,
   formValues: undefined,
 
-  fetchLabResults: async (formValues: Partial<any> = {}) => {
+  fetchLabResults: async (payload: LabResultsPayload) => {
     set({
       error: undefined,
       loading: true,
-      formValues,
     })
 
-    const result = await getLabResultsAction()
+    const result = await fetchLabResultsAction(payload)
 
     if (result.state === 'error') {
       toast.error(result.error ?? 'Error while fetching Billing History')

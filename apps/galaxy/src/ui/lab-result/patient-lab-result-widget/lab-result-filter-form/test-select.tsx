@@ -1,20 +1,20 @@
 'use client'
 
-import { FormFieldContainer, FormFieldLabel, SelectInput } from '@/components'
-import { CODESETS } from '@/constants'
-import { useCodesetOptions } from '@/hooks'
+import { TextField } from '@radix-ui/themes'
+import { useFormContext } from 'react-hook-form'
+import { FormFieldContainer, FormFieldLabel } from '@/components'
+import { LabResultSchemaType } from './schema'
 
 const TestSelect = () => {
-  const options = useCodesetOptions(CODESETS.ResourceStatus)
-
+  const form = useFormContext<LabResultSchemaType>()
   return (
-    <FormFieldContainer className="flex-row gap-1">
+    <FormFieldContainer className="flex-row items-center gap-1">
       <FormFieldLabel>Test</FormFieldLabel>
-      <SelectInput
-        options={options}
-        field="resourceStatus"
-        buttonClassName="h-6"
-        placeholder={'Select Test'}
+      <TextField.Root
+        size="1"
+        placeholder="Test name"
+        className="border-pp-gray-2 h-6 w-[122px] border border-solid !outline-none [box-shadow:none]"
+        {...form.register('labTestName')}
       />
     </FormFieldContainer>
   )

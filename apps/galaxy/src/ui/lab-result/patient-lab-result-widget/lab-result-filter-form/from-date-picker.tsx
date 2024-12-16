@@ -10,7 +10,7 @@ const FromDatePicker = () => {
   return (
     <FormFieldContainer className="max-w-44 flex-1 flex-row">
       <FormFieldLabel className="!text-1">Result From</FormFieldLabel>
-      <DatePickerInput field="fromReferralDate" />
+      <DatePickerInput field="dateFrom" />
     </FormFieldContainer>
   )
 }

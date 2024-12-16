@@ -58,6 +58,8 @@ const GET_PROVIDERS_ENDPOINT = `${API_URL}/api/staff/search`
 const GET_VISIT_TYPE_ENDPOINT = `${API_URL}/api/encounters/actions/search`
 const GET_FACILITY_ADMISSION_IDS_ENDPOINT = (patientId: number) =>
   `${API_URL}/api/patients/${patientId}/appointments/actions/facilityadmitids`
+const GET_LAB_RESULTS_ENDPOINT = (patientId: string) =>
+  `${API_URL}/api/patients/${patientId}/labresults/actions/search`
 const GET_INSURANCE_PAYMENT_DETAIL_ENDPOINT = (paymentId: string) =>
   `${API_URL}/api/payments/${paymentId}`
 const GET_PATIENT_RELATIONSHIPS = (patientId: string) =>
@@ -414,6 +416,7 @@ const UPDATE_LAB_ORDERS_RESULT_ENDPOINT = (
 ) =>
   `${API_URL}/api/appointments/${appointmentId}/laborders/${orderId}/labresults/${id}`
 export {
+  GET_LAB_RESULTS_ENDPOINT,
   NOTE_UPLOAD_FILE,
   USER_ENDPOINT,
   DELETE_STAFF_ENDPOINT,
