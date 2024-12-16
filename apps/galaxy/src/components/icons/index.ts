@@ -59,3 +59,5 @@ export * from './diners-club-card-icon'
 export * from './info-icon'
 export * from './information-line'
 export  * from "./shuffel-icon"
+export * from './message2-icon'
+export * from './download-down-arrow-icon'

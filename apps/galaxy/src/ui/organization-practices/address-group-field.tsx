@@ -10,6 +10,7 @@ const AddressGroup = () => {
         fieldContainerClassName="flex-row"
         className="flex-row flex"
         stateFieldContainerClassName="w-[70%]"
+        fieldLabelClassName="!text1 text-[12px]"
       />
   )
 }

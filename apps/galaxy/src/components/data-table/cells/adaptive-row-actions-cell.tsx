@@ -20,12 +20,13 @@ const AdaptiveRowActionsCell = <TData,>({
   const toggleRowClick = () => {
     setIsRowDisabled((prev) => !prev) // Disable row after action is clicked
   }
-  const [firstAction, secondAction, ...otherActions] = actions
+  const [firstAction, secondAction, thirdAction, ...otherActions] = actions
 
   return (
     <Flex width="100%" align="center" gap="2">
       {firstAction?.render({ row, toggleRowClick, disabled: isRowDisabled })}
       {secondAction?.render({ row, toggleRowClick, disabled: isRowDisabled })}
+      {thirdAction?.render({ row, toggleRowClick, disabled: isRowDisabled })}
 
 
       {otherActions.length > 0 && (
