@@ -6,13 +6,7 @@ import { VitalsTabsContent, VitalsTabsList } from '../../tabs'
 import { VitalsFilterForm } from '../../vitals-filter-form'
 import { SaveToNoteButton } from './save-to-note'
 
-const VitalsHistoryButton = ({
-  patientId,
-  appointmentId,
-}: {
-  patientId: string
-  appointmentId: string
-}) => {
+const VitalsHistoryButton = ({ patientId }: { patientId: string }) => {
   return (
     <Dialog.Root>
       <Dialog.Trigger>
@@ -36,21 +30,13 @@ const VitalsHistoryButton = ({
             className="bg-white sticky top-0 z-10 py-2"
           >
             <VitalsTabsList />
-            <VitalsFilterForm
-              patientId={patientId}
-              appointmentId={appointmentId}
-              quickNoteView={true}
-            />
-            <SaveToNoteButton
-              patientId={patientId}
-              appointmentId={appointmentId}
-            />
+            <VitalsFilterForm patientId={patientId} quickNoteView={true} />
+            <SaveToNoteButton patientId={patientId} />
           </Flex>
 
           <ScrollArea className="max-h-[calc(100vh_-_250px)] flex-1 overflow-y-auto pr-2.5">
             <VitalsTabsContent
               patientId={patientId}
-              appointmentId={appointmentId}
               showAddToNote={true}
               editStatusCell={false}
             />

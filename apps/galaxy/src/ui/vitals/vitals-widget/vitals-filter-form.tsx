@@ -13,7 +13,6 @@ import { formatDateToISOString, sanitizeFormData } from '@/utils'
 import { ClearButton } from './buttons'
 import { FromField, StatusSelect, ToField } from './filter-fields'
 import { useStore, VitalsParams } from './store'
-import { VitalsProps } from './types'
 
 const schema = z.object({
   from: z.custom<DateValue>().nullable(),
@@ -25,9 +24,11 @@ type SchemaType = z.infer<typeof schema>
 
 const VitalsFilterForm = ({
   patientId,
-  appointmentId,
   quickNoteView = false,
-}: VitalsProps & { quickNoteView?: boolean }) => {
+}: {
+  patientId: string
+  quickNoteView?: boolean
+}) => {
   const { fetch, setIsFilterEnabled } = useStore((state) => ({
     fetch: state.fetch,
     setIsFilterEnabled: state.setIsFilterEnabled,
@@ -48,13 +49,7 @@ const VitalsFilterForm = ({
     const hasFilters = Boolean(values.from || values.to || values.status)
 
     setIsFilterEnabled(hasFilters)
-  }, [
-    form.watch('from'),
-    form.watch('to'),
-    form.watch('status'),
-    appointmentId,
-    patientId,
-  ])
+  }, [form.watch('from'), form.watch('to'), form.watch('status'), patientId])
 
   const onSubmit: SubmitHandler<SchemaType> = (data) => {
     if (data.from && data.to && data.to < data.from) {
@@ -65,7 +60,6 @@ const VitalsFilterForm = ({
     const formattedData = {
       fromDateTime: formatDateToISOString(data.from),
       toDateTime: formatDateToISOString(data.to, true),
-      appointmentId,
       patientId,
       recordStatuses: data.status ? [data.status] : [],
     }
@@ -84,11 +78,7 @@ const VitalsFilterForm = ({
       <ToField />
       <StatusSelect />
 
-      <ClearButton
-        patientId={patientId}
-        appointmentId={appointmentId}
-        quickNoteView={quickNoteView}
-      />
+      <ClearButton patientId={patientId} quickNoteView={quickNoteView} />
 
       <Button highContrast size="1" type="submit">
         <MagnifyingGlassIcon strokeWidth={2} />

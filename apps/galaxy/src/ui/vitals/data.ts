@@ -9,14 +9,13 @@ const schema = z.object({
 type VitalWidgetSchemaType = z.infer<typeof schema>
 
 const transformOut =
-  (patientId: string, appointmentId: string) =>
+  (patientId: string) =>
   (schema: VitalWidgetSchemaType): QuickNoteSectionItem[] => {
     const result: QuickNoteSectionItem[] = []
 
     schema.vitalsId.map((vitalId) => {
       result.push({
         pid: Number(patientId),
-        appId: Number(appointmentId),
         sectionName: QuickNoteSectionName.Vitals,
         sectionItem: `vitalId`,
         sectionItemValue: vitalId,

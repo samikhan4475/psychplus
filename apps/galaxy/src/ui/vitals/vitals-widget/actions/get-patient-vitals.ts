@@ -6,7 +6,6 @@ import type { PatientVital } from '../types'
 interface GetPatientVitalsParams {
   payload: {
     patientId: string
-    appointmentId: number
     recordStatuses?: string[]
     fromDateTime?: string
     toDateTime?: string

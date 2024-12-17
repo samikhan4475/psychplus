@@ -3,9 +3,8 @@
 import { Flex, Text } from '@radix-ui/themes'
 import { AddVitalsButton } from './buttons'
 import { VitalsTabsList } from './tabs'
-import { VitalsProps } from './types'
 
-const VitalsHeader = ({ patientId, appointmentId }: VitalsProps) => {
+const VitalsHeader = ({ patientId }: { patientId: string }) => {
   return (
     <Flex
       align="center"
@@ -18,11 +17,7 @@ const VitalsHeader = ({ patientId, appointmentId }: VitalsProps) => {
       </Flex>
 
       <Flex>
-        <AddVitalsButton
-          title="Add Vitals"
-          patientId={patientId}
-          appointmentId={appointmentId}
-        />
+        <AddVitalsButton title="Add Vitals" patientId={patientId} />
       </Flex>
     </Flex>
   )

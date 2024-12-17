@@ -7,7 +7,6 @@ import type { PatientVital } from '../types'
 
 interface VitalsParams {
   patientId: string
-  appointmentId: string
   recordStatuses?: string[]
   fromDateTime?: string
   toDateTime?: string
@@ -74,7 +73,6 @@ const useStore = create<StoreState>((set, get) => ({
     const result = await getPatientVitalsAction({
       payload: {
         ...payload,
-        appointmentId: Number(payload.appointmentId),
       },
     })
 
@@ -91,12 +89,9 @@ const useStore = create<StoreState>((set, get) => ({
     })
 
     if (quickNoteView) {
-      const response = await getQuickNoteDetailAction(
-        payload.patientId,
-        [QuickNoteSectionName.Vitals],
-        false,
-        payload.appointmentId,
-      )
+      const response = await getQuickNoteDetailAction(payload.patientId, [
+        QuickNoteSectionName.Vitals,
+      ])
 
       if (response.state === 'error') {
         return set({

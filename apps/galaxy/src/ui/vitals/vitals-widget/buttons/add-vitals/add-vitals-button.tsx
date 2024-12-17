@@ -5,6 +5,7 @@ import { Cross2Icon } from '@radix-ui/react-icons'
 import { Button, Dialog, Flex } from '@radix-ui/themes'
 import { PlusIcon } from 'lucide-react'
 import { FormError, LoadingPlaceholder } from '@/components'
+import { cn } from '@/utils'
 import { getPatientVitalsAction } from '../../actions'
 import { UnitSystem } from '../../constants'
 import { useStore } from '../../store'
@@ -18,14 +19,12 @@ import { RadioButton } from './radio-button'
 const AddVitalsButton = ({
   title,
   patientId,
-  appointmentId,
 }: {
   title: string
   patientId: string
-  appointmentId: string
 }) => {
   const [unitSystem, setUnitSystem] = useState(UnitSystem.Metric)
-  const [addNewRecord, setAddNewRecord] = useState(true)
+  const [addNewRecord, setAddNewRecord] = useState(false)
 
   const { error } = useStore((state) => ({
     error: state.error,
@@ -38,7 +37,6 @@ const AddVitalsButton = ({
     setLoading(true)
     const result = await getPatientVitalsAction({
       payload: {
-        appointmentId: Number(appointmentId),
         patientId: patientId,
       },
     })
@@ -52,7 +50,7 @@ const AddVitalsButton = ({
   return (
     <Dialog.Root
       onOpenChange={(open) => {
-        setAddNewRecord(true)
+        setAddNewRecord(false)
         if (open) fetchPatientVitals()
       }}
     >
@@ -86,13 +84,12 @@ const AddVitalsButton = ({
             <LoadingPlaceholder />
           ) : (
             <Flex align="start">
-              <Flex className="w-[669px]">
+              <Flex className={cn(addNewRecord ? 'w-[669px]' : 'w-full')}>
                 <AddVitalsTable unitSystem={unitSystem} data={data} />
               </Flex>
               {addNewRecord && (
                 <AddVitalsForm
                   patientId={patientId}
-                  appointmentId={appointmentId}
                   unitSystem={unitSystem}
                   setAddNewRecord={setAddNewRecord}
                   addNewVital={setData}

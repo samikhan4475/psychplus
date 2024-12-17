@@ -8,15 +8,13 @@ import { Details } from './details'
 
 type VitalsProps = {
   patientId: string
-  appointmentId: string
 }
 
-const VitalsView = async ({ patientId, appointmentId }: VitalsProps) => {
+const VitalsView = async ({ patientId }: VitalsProps) => {
   const response = await getQuickNoteDetailAction(
     patientId,
     [QuickNoteSectionName.Vitals],
     true,
-    appointmentId,
   )
 
   if (response.state === 'error') {
@@ -27,7 +25,6 @@ const VitalsView = async ({ patientId, appointmentId }: VitalsProps) => {
 
   const result = await getPatientVitalsAction({
     payload: {
-      appointmentId: Number(appointmentId),
       patientId: patientId,
       vitalIds: vitalsIds.map(Number),
     },

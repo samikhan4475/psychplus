@@ -9,21 +9,14 @@ import { filterVitalsWithin48Hours } from './vitals-widget/utils'
 
 interface HospitalInitialWidgetLoaderProps {
   patientId: string
-  appointmentId?: string
 }
 
 const VitalsWidgetLoader = async ({
   patientId,
-  appointmentId,
 }: HospitalInitialWidgetLoaderProps) => {
-  if (!appointmentId) return
-
-  const response = await getQuickNoteDetailAction(
-    patientId,
-    [QuickNoteSectionName.Vitals],
-    false,
-    appointmentId,
-  )
+  const response = await getQuickNoteDetailAction(patientId, [
+    QuickNoteSectionName.Vitals,
+  ])
 
   if (response.state === 'error') {
     return <Text>{response.error}</Text>
@@ -33,7 +26,6 @@ const VitalsWidgetLoader = async ({
 
   const result = await getPatientVitalsAction({
     payload: {
-      appointmentId: Number(appointmentId),
       patientId: patientId,
     },
   })
@@ -48,10 +40,7 @@ const VitalsWidgetLoader = async ({
     const selectedVitalIds =
       vitalsWithin48Hours?.map((item) => String(item.id)) ?? []
 
-    const payload = transformOut(
-      patientId,
-      appointmentId,
-    )({
+    const payload = transformOut(patientId)({
       vitalsId: selectedVitalIds,
     })
 
@@ -61,7 +50,6 @@ const VitalsWidgetLoader = async ({
   return (
     <QuicknotesVitalsWidget
       patientId={patientId}
-      appointmentId={appointmentId}
       quicknoteData={result.data.filter((vital) =>
         vitalsIds.includes(String(vital.id)),
       )}

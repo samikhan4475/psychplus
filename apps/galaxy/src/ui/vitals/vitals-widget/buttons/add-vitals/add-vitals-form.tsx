@@ -47,7 +47,6 @@ export type SchemaType = z.infer<typeof schema>
 
 interface AddVitalsFormProps {
   patientId: string
-  appointmentId: string
   unitSystem: UnitSystem
   setAddNewRecord: (value: boolean) => void
   addNewVital(data: PatientVital[]): void
@@ -56,7 +55,6 @@ interface AddVitalsFormProps {
 
 const AddVitalsForm = ({
   patientId,
-  appointmentId,
   unitSystem,
   setAddNewRecord,
   addNewVital,
@@ -97,7 +95,6 @@ const AddVitalsForm = ({
       ...removeNaNValues({
         ...createVitalsObject(sanitizeFormData(formData), unitSystem),
         patientId,
-        appointmentId: Number(appointmentId),
       }),
       recordStatus: 'Active',
     }
@@ -121,10 +118,9 @@ const AddVitalsForm = ({
 
     selectedVitalIds.push(String(response.data.id))
 
-    const payload = transformOut(
-      patientId,
-      appointmentId,
-    )({ vitalsId: selectedVitalIds as string[] })
+    const payload = transformOut(patientId)({
+      vitalsId: selectedVitalIds as string[],
+    })
 
     const result = await saveWidgetAction({ patientId, data: payload })
 

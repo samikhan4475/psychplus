@@ -7,13 +7,7 @@ import { transformOut } from '@/ui/vitals/data'
 import { useStore } from '../../store'
 import { PatientVital } from '../../types'
 
-const SaveToNoteButton = ({
-  patientId,
-  appointmentId,
-}: {
-  patientId: string
-  appointmentId: string
-}) => {
+const SaveToNoteButton = ({ patientId }: { patientId: string }) => {
   const [loading, setLoading] = useState(false)
   const router = useRouter()
 
@@ -32,10 +26,7 @@ const SaveToNoteButton = ({
       selectedVitalIds?.push('0')
     }
 
-    const payload = transformOut(
-      patientId,
-      appointmentId,
-    )({
+    const payload = transformOut(patientId)({
       vitalsId: selectedVitalIds as string[],
     })
 

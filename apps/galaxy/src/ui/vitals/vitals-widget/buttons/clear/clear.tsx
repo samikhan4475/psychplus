@@ -3,13 +3,14 @@
 import { Button } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
 import { useStore } from '../../store'
-import { VitalsProps } from '../../types'
 
 const ClearButton = ({
   patientId,
-  appointmentId,
   quickNoteView,
-}: VitalsProps & { quickNoteView?: boolean }) => {
+}: {
+  patientId: string
+  quickNoteView?: boolean
+}) => {
   const form = useFormContext()
 
   const { fetch } = useStore((state) => ({
@@ -27,7 +28,6 @@ const ClearButton = ({
     return fetch(
       {
         patientId,
-        appointmentId,
       },
       quickNoteView,
     )

@@ -7,13 +7,11 @@ import { VitalsTable } from '../vitals-table'
 
 const VitalsTabsContent = ({
   patientId,
-  appointmentId,
   showAddToNote = false,
   editStatusCell = true,
   handleQuicknotesLoading = false,
 }: {
   patientId: string
-  appointmentId: string
   showAddToNote?: boolean
   editStatusCell?: boolean
   handleQuicknotesLoading?: boolean
@@ -25,7 +23,7 @@ const VitalsTabsContent = ({
   }))
 
   useEffect(() => {
-    fetch({ appointmentId, patientId }, true, handleQuicknotesLoading)
+    fetch({ patientId }, true, handleQuicknotesLoading)
   }, [])
 
   if (loading) return <LoadingPlaceholder />

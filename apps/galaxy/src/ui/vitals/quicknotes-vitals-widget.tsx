@@ -11,12 +11,10 @@ import { VitalsTable } from './vitals-widget/vitals-table'
 
 const QuicknotesVitalsWidget = ({
   patientId,
-  appointmentId,
   data,
   quicknoteData,
 }: {
   patientId: string
-  appointmentId: string
   data: PatientVital[]
   quicknoteData: PatientVital[]
 }) => {
@@ -29,7 +27,7 @@ const QuicknotesVitalsWidget = ({
   useEffect(() => {
     setData(data)
     setQuicknotesData(quicknoteData)
-  }, [patientId, appointmentId, data, quicknoteData])
+  }, [patientId, data, quicknoteData])
 
   return (
     <Tabs.Root defaultValue="SheetView" className="flex w-full flex-col">
@@ -37,15 +35,8 @@ const QuicknotesVitalsWidget = ({
         title="Vitals"
         headerRight={
           <>
-            <AddVitalsButton
-              title="Add"
-              patientId={patientId}
-              appointmentId={appointmentId}
-            />
-            <VitalsHistoryButton
-              patientId={patientId}
-              appointmentId={appointmentId}
-            />
+            <AddVitalsButton title="Add" patientId={patientId} />
+            <VitalsHistoryButton patientId={patientId} />
           </>
         }
       >
