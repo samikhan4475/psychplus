@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useFormContext, useWatch } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import {
@@ -16,6 +16,7 @@ import { SchemaType } from '../schema'
 import { useAddVisitStore } from '../store'
 
 const ServiceDropdown = () => {
+  const [loading, setLoading] = useState<boolean>(false)
   const form = useFormContext<SchemaType>()
   const { services, setServices } = useAddVisitStore()
   const serviceCodes = useCodesetCodes(CODESETS.ServicesOffered)
@@ -35,7 +36,9 @@ const ServiceDropdown = () => {
   useEffect(() => {
     if (!locationId) return
     form.resetField('service')
+    setLoading(true)
     getLocationServices({ locationId }).then((res) => {
+      setLoading(false)
       if (res.state === 'error') {
         setServices([])
         return toast.error(res.error)
@@ -55,6 +58,7 @@ const ServiceDropdown = () => {
         }))}
         buttonClassName="h-6 w-full"
         disabled={!locationId}
+        loading={loading}
         onValueChange={(value) => {
           const selectedService = services.find((option) => option.id === value)
           form.setValue(

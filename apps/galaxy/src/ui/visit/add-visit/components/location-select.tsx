@@ -14,6 +14,7 @@ import { SchemaType } from '../schema'
 
 const LocationDropdown = ({ states }: { states: StateCodeSet[] }) => {
   const form = useFormContext<SchemaType>()
+  const [loading, setLoading] = useState(false)
   const [locations, setLocations] = useState<
     { label: string; value: string }[]
   >([])
@@ -25,8 +26,10 @@ const LocationDropdown = ({ states }: { states: StateCodeSet[] }) => {
   useEffect(() => {
     const state = states.find((state) => state.stateCode === stateCode)
     if (state?.id) {
+      setLoading(true)
       form.resetField('location')
       getClinicLocations(state?.id).then((res) => {
+        setLoading(false)
         if (res.state === 'error') return setLocations([])
         setLocations(res.data)
       })
@@ -41,6 +44,7 @@ const LocationDropdown = ({ states }: { states: StateCodeSet[] }) => {
         options={locations}
         buttonClassName="h-6 w-full"
         disabled={!stateCode}
+        loading={loading}
       />
       <FormFieldError name={'location'} />
     </FormFieldContainer>
