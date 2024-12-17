@@ -2,7 +2,13 @@
 
 import { ColumnDef } from '@tanstack/react-table'
 import { ColumnHeader, LongTextCell, TextCell } from '@/components'
-import { ActionCell, CollapseCell, ContactMadeSelectCell } from './cells'
+import {
+  ActionCell,
+  CollapseCell,
+  ContactMadeSelectCell,
+  CreditCardCell,
+  GuardianCell,
+} from './cells'
 import { StatusIcon } from './status-icon'
 import { Patient } from './types'
 
@@ -83,9 +89,7 @@ const columns: ColumnDef<Patient>[] = [
       {
         id: 'cc',
         header: () => <ColumnHeader label="CC" />,
-        cell: ({ row: { original: patient } }) => (
-          <StatusIcon status={patient?.ccVerification} />
-        ),
+        cell: CreditCardCell,
       },
     ],
   },
@@ -150,6 +154,11 @@ const columns: ColumnDef<Patient>[] = [
   //   cell: ({ row }) => <PracticeSelectCell row={row} />,
   // },
   {
+    id: 'guardian',
+    header: () => <ColumnHeader label="Guardian" />,
+    cell: GuardianCell,
+  },
+  {
     id: 'insurance',
     header: () => <ColumnHeader label="Insurance" />,
     cell: ({ row: { original } }) => (
@@ -192,7 +201,7 @@ const columns: ColumnDef<Patient>[] = [
   },
   {
     id: 'contact-made',
-    header: () => <ColumnHeader label="Contact Made" />,
+    header: () => <ColumnHeader label="Contact Initiated" />,
     cell: ContactMadeSelectCell,
   },
   {

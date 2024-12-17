@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { Avatar, Box } from '@radix-ui/themes'
+import { useFormContext } from 'react-hook-form'
 import { ImageControls } from '@/components'
 import {
   FormFieldContainer,
@@ -9,6 +10,7 @@ import {
   FormFieldLabel,
 } from '@/components/form'
 import { PictureFallback } from '@/components/icons'
+import { PatientInfoSchemaType } from '../patient-info-schema'
 
 interface ProfilePictureProps {
   setProfileImage: (file: File | undefined) => void
@@ -19,6 +21,7 @@ const ProfilePicture = ({
   setProfileImage,
   savedProfileImageUrl,
 }: ProfilePictureProps) => {
+  const form = useFormContext<PatientInfoSchemaType>()
   const [profileImageUrl, setProfileImageUrl] = useState<string>(
     savedProfileImageUrl ?? '',
   )
@@ -45,6 +48,7 @@ const ProfilePicture = ({
       <ImageControls
         onFileChange={handleProfileImageUpload}
         previewSrc={profileImageUrl}
+        disableControls={form.formState?.disabled}
       />
       <FormFieldError name="profilePicture" />
     </FormFieldContainer>

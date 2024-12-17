@@ -58,7 +58,7 @@ const ImageControls = ({
           accept="image/*"
         />
       </button>
-      <ImageCaptureDialog onCapture={onFileChange} />
+      <ImageCaptureDialog onCapture={onFileChange} disabled={disableControls} />
     </Flex>
   )
 }

@@ -3,13 +3,15 @@
 import { useRef, useState } from 'react'
 import { Box, Button, Dialog, Flex } from '@radix-ui/themes'
 import { XIcon } from 'lucide-react'
+import { cn } from '@/utils'
 import { CameraIcon } from './icons'
 
 type CameraDialogProps = {
   onCapture: (file: File) => void
+  disabled?: boolean
 }
 
-const ImageCaptureDialog = ({ onCapture }: CameraDialogProps) => {
+const ImageCaptureDialog = ({ onCapture, disabled }: CameraDialogProps) => {
   const videoRef = useRef<HTMLVideoElement>(null)
   const [cameraStream, setCameraStream] = useState<MediaStream | null>(null)
 
@@ -53,8 +55,12 @@ const ImageCaptureDialog = ({ onCapture }: CameraDialogProps) => {
 
   return (
     <Dialog.Root onOpenChange={disableCamera}>
-      <Dialog.Trigger onClick={enableCamera}>
-        <CameraIcon className="cursor-pointer" />
+      <Dialog.Trigger onClick={enableCamera} disabled={disabled}>
+        <CameraIcon
+          className={cn('cursor-pointer', {
+            '!pointer-events-none': disabled,
+          })}
+        />
       </Dialog.Trigger>
       <Dialog.Content className="relative font-bold">
         <Dialog.Close className="absolute right-3 top-3 cursor-pointer">

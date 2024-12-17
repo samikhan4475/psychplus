@@ -78,7 +78,7 @@ interface PatientProfile {
   insurancePolicies?: Insurance[]
   mostRecentAppointmentDate?: string
   contactMadeStatus?: string
-  ccVerification?: string
+  creditCardVerificationStatus?: string
   insuranceVerification?: string
   patientConsent?: string
   upcomingAppointmentDate?: string

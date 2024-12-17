@@ -25,8 +25,6 @@ const transformOut = (data: PatientLookUpSchemaType): SearchPatientsParams => {
     patientCreatedTo,
     dateOfBirth,
     hasGuardian,
-    consentVerificationStatus,
-    creditCardVerificationStatus,
     contactMadeStatuses,
     ...rest
   } = data
@@ -36,15 +34,9 @@ const transformOut = (data: PatientLookUpSchemaType): SearchPatientsParams => {
     patientCreatedFrom: getOptionalDateString(patientCreatedFrom),
     patientCreatedTo: getOptionalDateString(patientCreatedTo),
     dateOfBirth: getOptionalDateString(dateOfBirth),
-    consentVerificationStatuses: consentVerificationStatus
-      ? [consentVerificationStatus]
-      : undefined,
-    creditCardVerificationStatuses: creditCardVerificationStatus
-      ? [creditCardVerificationStatus]
-      : undefined,
-      contactMadeStatuses: contactMadeStatuses
+    contactMadeStatuses: contactMadeStatuses
       ? [contactMadeStatuses]
-      : undefined, 
+      : undefined,
     ...(hasGuardian ? { hasGuardian: hasGuardian === 'yes' } : {}),
   })
 }

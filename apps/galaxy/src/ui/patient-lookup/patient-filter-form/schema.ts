@@ -44,8 +44,8 @@ const patientLookupSchema = z.object({
     .trim()
     .regex(phoneRegex, 'Invalid phone number')
     .optional(),
-  consentVerificationStatus: z.string().trim().optional(),
-  creditCardVerificationStatus: z.string().trim().optional(),
+  consentVerificationStatuses: z.array(z.string()).optional(),
+  creditCardVerificationStatuses: z.array(z.string()).optional(),
   patientCreatedFrom: z.custom<null | DateValue>().optional(),
   patientCreatedTo: z.custom<null | DateValue>().optional(),
   ssn: z

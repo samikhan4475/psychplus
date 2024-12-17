@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { Avatar, Box } from '@radix-ui/themes'
+import { useFormContext } from 'react-hook-form'
 import { ImageControls } from '@/components'
 import {
   FormFieldContainer,
@@ -9,6 +10,7 @@ import {
   FormFieldLabel,
 } from '@/components/form'
 import { PictureFallback } from '@/components/icons'
+import { PatientInfoSchemaType } from '../patient-info-schema'
 
 interface DrivingLicensePictureProps {
   setDriverLicenseImage: (file: File | undefined) => void
@@ -18,6 +20,7 @@ const DrivingLicensePicture = ({
   setDriverLicenseImage,
   savedDriverLicenseUrl,
 }: DrivingLicensePictureProps) => {
+  const form = useFormContext<PatientInfoSchemaType>()
   const [drivingLicenseImageUrl, setDrivingLicenseImageUrl] = useState<string>(
     savedDriverLicenseUrl ?? '',
   )
@@ -45,6 +48,7 @@ const DrivingLicensePicture = ({
       <ImageControls
         onFileChange={handleinsuranceImageUpload}
         previewSrc={drivingLicenseImageUrl}
+        disableControls={form.formState?.disabled}
       />
       <FormFieldError name="drivingLicensePicture" />
     </FormFieldContainer>

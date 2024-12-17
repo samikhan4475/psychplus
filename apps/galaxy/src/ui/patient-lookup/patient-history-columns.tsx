@@ -2,7 +2,7 @@
 
 import { ColumnDef } from '@tanstack/react-table'
 import { ColumnHeader, LongTextCell, TextCell } from '@/components'
-import { getSlashedPaddedDateString } from '@/utils'
+import { GuardianCell, UpdatedDateTimeCell } from './cells'
 import { StatusIcon } from './status-icon'
 import { Patient } from './types'
 
@@ -82,20 +82,18 @@ const columns: ColumnDef<Patient>[] = [
   {
     id: 'gaurdian',
     header: () => <ColumnHeader label="Gaurdian" />,
-    cell: ({ row: { original: patient } }) => (
-      <TextCell>{patient?.hasGuardian ? 'Yes' : 'No'}</TextCell>
-    ),
+    cell: ({ row }) => <GuardianCell row={row} />,
   },
   {
     id: 'status',
-    header: () => <ColumnHeader label="Status" />,
+    header: () => <ColumnHeader label="Pt Status" />,
     cell: ({ row: { original: patient } }) => (
       <TextCell>{patient?.status}</TextCell>
     ),
   },
   {
     id: 'verificationStatus',
-    header: () => <ColumnHeader label="PT V" />,
+    header: () => <ColumnHeader label="Pt Verification" />,
     cell: ({ row: { original: patient } }) => (
       <StatusIcon status={patient?.verificationStatus} />
     ),
@@ -103,19 +101,15 @@ const columns: ColumnDef<Patient>[] = [
   },
   {
     id: 'contact',
-    header: () => <ColumnHeader label="Contact" />,
+    header: () => <ColumnHeader label="Contact Initiated" />,
     cell: ({ row: { original: patient } }) => (
       <TextCell className="truncate">{patient?.contactMadeStatus}</TextCell>
     ),
   },
   {
     id: 'updated-at',
-    header: () => <ColumnHeader label="Updated At" />,
-    cell: ({ row: { original: patient } }) => (
-      <LongTextCell className="min-w-24">
-        {getSlashedPaddedDateString(patient.metadata?.createdOn)}
-      </LongTextCell>
-    ),
+    header: () => <ColumnHeader label="Updated Date/Time" />,
+    cell: ({ row }) => <UpdatedDateTimeCell row={row} />,
   },
   {
     id: 'updated-by',

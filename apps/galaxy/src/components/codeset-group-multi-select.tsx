@@ -33,6 +33,7 @@ const CodesetGroupMultiSelect = ({
   ...selectProps
 }: CodesetFormSelectProps) => {
   const form = useFormContext()
+  const isDisabled = form.formState.disabled
   const codes = useCodesetCodes(codeset)
 
   const selected: string[] = form.watch(name)
@@ -107,9 +108,11 @@ const CodesetGroupMultiSelect = ({
             {codes.find((code) => code.value === item)?.display}
           </Text>
           <Cross2Icon
-            onClick={() => !selectProps.disabled && removeValue(item)}
+            onClick={() =>
+              !selectProps.disabled && !isDisabled && removeValue(item)
+            }
             className={cn('cursor-pointer', {
-              'cursor-not-allowed': selectProps.disabled,
+              'cursor-not-allowed': selectProps.disabled || isDisabled,
             })}
           />
         </Flex>

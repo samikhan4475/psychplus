@@ -12,7 +12,7 @@ const ContactMadeSelect = () => {
   const options = useCodesetOptions(CODESETS.ContactMadeStatus)
   return (
     <FormFieldContainer className="flex-row gap-1">
-      <FormFieldLabel className="!text-1">Contact Made</FormFieldLabel>
+      <FormFieldLabel className="!text-1">Contact Initiated</FormFieldLabel>
       <DropdownSelect field="contactMadeStatuses" options={options} />
     </FormFieldContainer>
   )
