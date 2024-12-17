@@ -4,7 +4,7 @@ import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { sanitizeFormData } from '@/utils'
 import { manageCodes } from '@/utils/codes'
 import { AddOnWidgetSchemaType } from './add-on-widget-schema'
-import { addOnCodes, getCptCodeMap } from './utils'
+import { addOnCodes, getCptCodeMap } from './cpt-code-map'
 
 interface ModalityTransferenceData {
   value: string

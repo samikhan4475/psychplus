@@ -57,10 +57,7 @@ const visitTypeToBlocks: Record<string, string[]> = {
   ],
   IndividualPsychotherapy: ['InteractiveComplexityBlock'],
   FamilyPsychotherapy: ['InteractiveComplexityBlock'],
-  GroupTherapy: [],
   Spravato: ['TherapyBlock'],
-  // ECTVisit: [],
-  // TMSVisit: [],
 }
 
 const getBlocksByVisitType = (visitType: string, visitSequence: string) => {

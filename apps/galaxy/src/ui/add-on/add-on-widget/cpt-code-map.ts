@@ -43,13 +43,13 @@ const getCptCodeMap = (visitType: string) => {
         interactiveComplexity: '90785',
       }
       break
-    case 'SpravatoVisit':
+    case 'Spravato':
       cptCodeMap = {
         therapyTimeSpent: theratimeSpentCodes,
       }
       break
-    case 'TMSVisit':
-    case 'ECTVisit':
+    case 'Tms':
+    case 'Ect':
       cptCodeMap = {}
       break
     default:
