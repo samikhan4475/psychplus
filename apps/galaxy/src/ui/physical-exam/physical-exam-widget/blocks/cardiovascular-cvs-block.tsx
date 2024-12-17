@@ -26,6 +26,7 @@ const CVS_OPTIONS: GroupSelectOption<string>[] = [
     details: {
       type: 'text',
       field: 'cvsOtherDetails',
+      maxLength: 30,
     },
   },
 ]

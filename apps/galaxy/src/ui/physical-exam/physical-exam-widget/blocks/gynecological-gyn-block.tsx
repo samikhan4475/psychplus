@@ -38,6 +38,7 @@ const GYN_OPTIONS: GroupSelectOption<string>[] = [
     details: {
       type: 'text',
       field: 'gynOtherDetails',
+      maxLength: 30,
     },
   },
 ]

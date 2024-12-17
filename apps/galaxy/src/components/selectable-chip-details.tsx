@@ -24,6 +24,7 @@ interface SelectableChipDetailsProps {
   className?: string
   rightLabel?: string
   editable?: boolean
+  maxLength?: number
 }
 
 const SelectableChipDetails = ({
@@ -40,6 +41,7 @@ const SelectableChipDetails = ({
   hideSelectedCount = false,
   rightLabel,
   editable = true,
+  maxLength,
 }: SelectableChipDetailsProps) => {
   const form = useFormContext()
   const error = form.getFieldState(field, form.formState).error
@@ -72,6 +74,7 @@ const SelectableChipDetails = ({
               disabled={disabled}
               autoFocus={!form.watch(field)}
               placeHolder={placeHolder}
+              maxLength={maxLength}
             />
           )}
           {type === 'number' && (

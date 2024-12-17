@@ -48,6 +48,7 @@ const HNT_OPTIONS: GroupSelectOption<string>[] = [
     details: {
       type: 'text',
       field: 'hntOtherDetails',
+      maxLength: 30,
     },
   },
 ]

@@ -54,6 +54,7 @@ const MSU_OPTIONS: GroupSelectOption<string>[] = [
     details: {
       type: 'text',
       field: 'gnOtherDetails',
+      maxLength: 30,
     },
   },
 ]

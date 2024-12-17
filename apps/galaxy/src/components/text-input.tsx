@@ -13,6 +13,7 @@ interface TextInputProps {
   placeHolder?: string
   disabled?: boolean
   required?: boolean
+  maxLength?: number
 }
 
 const TextInput = ({
@@ -23,6 +24,7 @@ const TextInput = ({
   placeHolder,
   disabled = false,
   required = false,
+  maxLength,
 }: TextInputProps) => {
   const form = useFormContext()
 
@@ -40,6 +42,7 @@ const TextInput = ({
         placeholder={placeHolder}
         disabled={disabled}
         className={cn('h-[var(--chip-height)]', className)}
+        maxLength={maxLength}
         {...form.register(field)}
       />
     </Flex>

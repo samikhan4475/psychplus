@@ -22,6 +22,7 @@ const NK_OPTIONS: GroupSelectOption<string>[] = [
     details: {
       type: 'text',
       field: 'nkOtherDetails',
+      maxLength: 30,
     },
   },
 ]

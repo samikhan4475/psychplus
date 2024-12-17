@@ -38,6 +38,7 @@ const NUT_OPTIONS: GroupSelectOption<string>[] = [
     details: {
       type: 'text',
       field: 'nutOtherDetails',
+      maxLength: 30,
     },
   },
 ]

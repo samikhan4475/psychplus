@@ -31,6 +31,7 @@ const cneOptions: GroupSelectOption<string>[] = [
     details: {
       type: 'text',
       field: 'cneOtherDetails',
+      maxLength: 30,
     },
   },
 ]

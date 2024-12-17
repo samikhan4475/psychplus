@@ -20,6 +20,7 @@ const GU_OPTIONS: GroupSelectOption<string>[] = [
     details: {
       type: 'text',
       field: 'guOtherDetails',
+      maxLength: 30,
     },
   },
 ]

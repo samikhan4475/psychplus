@@ -18,6 +18,8 @@ interface SelectableChipDetailsProps {
   options?: { label: string; value: string }[]
   format?: string
   isDisabled?: boolean
+  maxLength?: number
+
 }
 
 interface PhysicalExamHistoryParams {

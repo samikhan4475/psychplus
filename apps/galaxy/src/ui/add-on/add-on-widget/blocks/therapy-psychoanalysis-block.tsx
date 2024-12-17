@@ -76,7 +76,7 @@ const TherapyPsychoAnalysisBlock = ({
               <PsychoAnalysisBlock />
               <TherapyDetail
                 field="additionalPsychoAnalysisDetail"
-                label="Additional Therapy Details"
+                label="Additional Psychoanalysis Details"
                 defaultValue={DEFAULT_PSYCHOANALYSIS_DETAIL}
               />
             </>
