@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { FormContainer } from '@psychplus-v2/components'
-import { cn, zipCodeSchema } from '@psychplus-v2/utils'
-import { Flex, Select } from '@radix-ui/themes'
+import { zipCodeSchema } from '@psychplus-v2/utils'
+import { Flex } from '@radix-ui/themes'
 import { useForm } from 'react-hook-form'
 import z from 'zod'
 import { getZipcodeInfo } from '@/actions'
@@ -35,6 +35,7 @@ const ZipCodeSearchForm = () => {
     setStateCode: state.setStateCode
   }))
 
+
   const [zipStates, setZipStates] = useState<StateListType[]>([])
 
   const getZipCodeInfoApi = async (zipCode: string | undefined) => {
@@ -59,14 +60,6 @@ const ZipCodeSearchForm = () => {
   })
 
   useEffect(() => {
-    if (zipStates.length > 0) {
-      form.setValue('state', zipStates[0].long_name)
-      setState(zipStates[0].long_name)
-      setStateCode(zipStates[0].short_name)
-    }
-  }, [setState, zipStates])
-
-  useEffect(() => {
     getZipCodeInfoApi(form.watch('zipCode'))
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [form, form.watch('zipCode')])
@@ -74,6 +67,11 @@ const ZipCodeSearchForm = () => {
   const onSubmit = (data: SchemaType) => {
     form.reset(form.getValues())
     setZipCode(data.zipCode)
+    if (zipStates.length > 0) {
+      form.setValue('state', zipStates[0].long_name)
+      setState(zipStates[0].long_name)
+      setStateCode(zipStates[0].short_name)
+    }
   }
 
   return (
