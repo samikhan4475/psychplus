@@ -30,8 +30,8 @@ const SmokingCessationBlock = () => {
         label="Discussed smoking cessation for"
         field="smokingCessationDiscussionDuration"
         options={[
-          { label: '≥ 3 mins', value: '>=3m' },
-          { label: '≥ 11 mins', value: '>=11m' },
+          { label: '≥ 3 mins', value: '≥ 3 mins' },
+          { label: '≥ 11 mins', value: '≥ 11 mins' },
         ]}
       />
     </Flex>

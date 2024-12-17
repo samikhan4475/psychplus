@@ -24,19 +24,19 @@ const SMOKE_PACKS_OPTIONS = [
 ]
 
 const SMOKING_CESSATION_OPTIONS = [
-  { label: 'Nicotine Replacement', value: 'nicotine' },
-  { label: 'Wellbutrin', value: 'wellbutrin' },
-  { label: 'Chantix', value: 'chantix' },
-  { label: 'Patient Refused', value: 'patientRefused' },
-  { label: 'Counseling', value: 'counseling' },
+  { label: 'Nicotine Replacement', value: 'Nicotine Replacement' },
+  { label: 'Wellbutrin', value: 'Wellbutrin' },
+  { label: 'Chantix', value: 'Chantix' },
+  { label: 'Patient Refused', value: 'Patient Refused' },
+  { label: 'Counseling', value: 'Counseling' },
 ]
 
 const COUNSELING_OPTIONS = [
-  { label: 'Individual Counseling', value: 'individual' },
-  { label: 'Group counseling', value: 'group' },
-  { label: 'Online Program', value: 'online' },
-  { label: '1-800-QUIT-NOW', value: 'quitNow' },
-  { label: 'Patient Refused', value: 'patientRefused' },
+  { label: 'Individual Counseling', value: 'Individual Counseling' },
+  { label: 'Group counseling', value: 'Group counseling' },
+  { label: 'Online Program', value: 'Online Program' },
+  { label: '1-800-QUIT-NOW', value: '1-800-QUIT-NOW' },
+  { label: 'Patient Refused', value: 'Patient Refused' },
 ]
 
 const DRUG_DETAILS_OPTIONS = [

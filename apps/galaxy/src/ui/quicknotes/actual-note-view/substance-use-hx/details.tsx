@@ -1,6 +1,6 @@
 'use client'
 
-import { Flex } from '@radix-ui/themes'
+import { Flex, Text } from '@radix-ui/themes'
 import { format } from 'date-fns'
 import { PatientProfile } from '@/types'
 import { useStore } from '@/ui/questionnaires/store'
@@ -61,12 +61,16 @@ const Details = ({
               label="Discussed smoking cessation for:"
               value={data.smokingCessationDiscussionDuration}
             />
+            <LabelAndValue label="Other:" value={data.otherTobacco} />
           </>
         )}
+        <Text size="2" weight="medium">
+          Screening for drug/alcohol use:
+        </Text>
         {data.alcohol && (
           <LabelAndValue
             label="Alcohol:"
-            value={`Do you drink ${isFemale ? 3 : 4} alcoholic drinks/day or ${
+            value={`Do you drink >${isFemale ? 3 : 4} alcoholic drinks/day or ${
               isFemale ? '>7' : '>14'
             } alcoholic drinks/week: ${data.alcohol}`}
             className="flex-nowrap"
@@ -105,7 +109,10 @@ const Details = ({
             />
           </>
         )}
-        <LabelAndValue label="Questionnaire:" value={data.questionnaire} />
+        <LabelAndValue
+          label="Questionnaire (Pt was agreeable to detailed assessment):"
+          value={data.questionnaire}
+        />
         {data.alcohol === 'yes' && (
           <LabelAndValue
             label="AUDIT:"

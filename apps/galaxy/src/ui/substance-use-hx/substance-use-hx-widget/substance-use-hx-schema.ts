@@ -10,7 +10,7 @@ const substanceUseHxWidgetSchema = z
     smokePacks: z.enum(['0.5', '1', '2']).optional(),
     smokingCessationOption: z.string().optional(),
     counselingOption: z.string().optional(),
-    smokingCessationDiscussionDuration: z.enum(['>=3m', '>=11m']).optional(),
+    smokingCessationDiscussionDuration: z.enum(['≥ 3 mins', '≥ 11 mins']).optional(),
     otherTobacco: z.string().optional(),
     alcohol: z.enum(['yes', 'no']).optional(),
     drugs: z.enum(['yes', 'no']).optional(),
@@ -31,7 +31,7 @@ const substanceUseHxWidgetSchema = z
     briefInterventionDetail: z.ostring(),
     referralTreatment: z.array(z.string()).optional(),
     alcoholSubstanceCessationDiscussionDuration: z
-      .enum(['>=15m', '>=31m'])
+      .enum(['≥ 15 mins', '≥ 31 mins'])
       .optional(),
     otherAlcoholDrugs: z.string().optional(),
   })

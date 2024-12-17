@@ -36,8 +36,8 @@ const AlcoholDrugsBlock = ({ patientInfo }: AlcoholDrugsBlockProps) => {
         label="Discussed alcohol/substance use cessation for"
         field="alcoholSubstanceCessationDiscussionDuration"
         options={[
-          { label: '≥ 15 mins', value: '>=15m' },
-          { label: '≥ 31 mins', value: '>=31m' },
+          { label: '≥ 15 mins', value: '≥ 15 mins' },
+          { label: '≥ 31 mins', value: '≥ 31 mins' },
         ]}
       />
       <TextInput label="Other" field="otherAlcoholDrugs" />

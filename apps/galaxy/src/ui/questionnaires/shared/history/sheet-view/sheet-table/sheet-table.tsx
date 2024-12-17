@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { Flex, ScrollArea } from '@radix-ui/themes'
 import { type ColumnDef } from '@tanstack/react-table'
 import { format } from 'date-fns'
@@ -13,18 +14,44 @@ interface SheetViewDataProps {
   setData: (data: QuickNoteHistory[]) => void
 }
 
+enum SortOrder {
+  Asc = 'asc',
+  Desc = 'desc',
+}
+
+const SortableHeader = ({
+  label,
+  onClick,
+}: {
+  label: string
+  onClick?: () => void
+}) => (
+  <Flex justify="between" align="center" pr="2">
+    <ColumnHeader label={label} />
+    {onClick && (
+      <ChevronsUpDown
+        cursor="pointer"
+        size="16"
+        stroke="#8B8D98"
+        onClick={onClick}
+      />
+    )}
+  </Flex>
+)
+
 const createColumns = (
   onCheckAddToNote: (checked: boolean, index?: number) => void,
   allChecked: boolean,
   data: QuickNoteHistory[],
+  handleSortData: (value: string) => void,
 ): ColumnDef<QuickNoteHistory>[] => [
   {
     id: 'dateTime',
     header: () => (
-      <Flex justify="between" align="center" pr="2">
-        <ColumnHeader label="Date/Time" />
-        <ChevronsUpDown size="16" stroke="#8B8D98" />
-      </Flex>
+      <SortableHeader
+        label="Date/Time"
+        onClick={() => handleSortData('createdOn')}
+      />
     ),
     cell: ({ row }) => (
       <TextCell>
@@ -34,35 +61,23 @@ const createColumns = (
   },
   {
     id: 'note',
-    header: () => (
-      <Flex justify="between" align="center" pr="2">
-        <ColumnHeader label="Note" />
-        <ChevronsUpDown size="16" stroke="#8B8D98" />
-      </Flex>
-    ),
+    header: () => <SortableHeader label="Note" />,
     cell: ({ row }) => <TextCell>{row.original.note}</TextCell>,
   },
   {
     id: 'filledBy',
-    header: () => (
-      <Flex justify="between" align="center" pr="2">
-        <ColumnHeader label="Filled By" />
-        <ChevronsUpDown size="16" stroke="#8B8D98" />
-      </Flex>
-    ),
+    header: () => <SortableHeader label="Filled By" />,
     cell: ({ row }) => (
-      <TextCell>
-        {row.original.createdByRole || row.original.createdByFullName}
-      </TextCell>
+      <TextCell>{`${row.original.createdByFullName}`}</TextCell>
     ),
   },
   {
     id: 'totalScore',
     header: () => (
-      <Flex justify="between" align="center" pr="2">
-        <ColumnHeader label="Total Score" />
-        <ChevronsUpDown size="16" stroke="#8B8D98" />
-      </Flex>
+      <SortableHeader
+        label="Total Score"
+        onClick={() => handleSortData('totalScore')}
+      />
     ),
     cell: ({ row }) => {
       const { totalScore, data, sectionName } = row.original
@@ -97,6 +112,37 @@ const createColumns = (
 ]
 
 const HistorySheetTable = ({ data, setData }: SheetViewDataProps) => {
+  const [sortOrder, setSortOrder] = useState<SortOrder>(SortOrder.Asc)
+
+  const handleSortData = (value: string) => {
+    const sortedData = [...data]
+    const newSortOrder =
+      sortOrder === SortOrder.Asc ? SortOrder.Desc : SortOrder.Asc
+    setSortOrder(newSortOrder)
+
+    sortedData.sort((a, b) => {
+      switch (value) {
+        case 'createdOn': {
+          const dateA = new Date(a.createdOn).getTime()
+          const dateB = new Date(b.createdOn).getTime()
+          return newSortOrder === SortOrder.Asc ? dateA - dateB : dateB - dateA
+        }
+        case 'totalScore': {
+          const scoreA = Number(a.totalScore)
+          const scoreB = Number(b.totalScore)
+          return newSortOrder === SortOrder.Asc
+            ? scoreA - scoreB
+            : scoreB - scoreA
+        }
+
+        default:
+          return 0
+      }
+    })
+
+    setData(sortedData)
+  }
+
   const handleCheckAddToNote = (checked: boolean, index?: number) => {
     const newList =
       index === undefined
@@ -106,9 +152,15 @@ const HistorySheetTable = ({ data, setData }: SheetViewDataProps) => {
           )
     setData(newList)
   }
+
   const allChecked = data.every((item) => item.addToNote)
 
-  const columns = createColumns(handleCheckAddToNote, allChecked, data)
+  const columns = createColumns(
+    handleCheckAddToNote,
+    allChecked,
+    data,
+    handleSortData,
+  )
 
   return (
     <ScrollArea>

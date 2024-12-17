@@ -92,7 +92,7 @@ const useStore = create<Store>((set, get) => ({
     })
 
     if (addToNoteData.length > 10) {
-      toast.error('You can only add up to 10 notes at a time!')
+      toast.error('You can only add maximums 10 scores in note.')
       return
     }
 

@@ -8,31 +8,40 @@ import { FilloutButtonBlock } from './fillout-button-block'
 
 interface RowRightButtonsProps {
   questionnaire: string
-  historiesData: number
-  viewData: QuickNoteHistory
+  historiesData: QuickNoteHistory[]
+  filteredHistories: QuickNoteHistory[]
 }
 
 const RowRightButtons = ({
   questionnaire,
   historiesData,
-  viewData,
+  filteredHistories,
 }: RowRightButtonsProps) => {
+  const viewData = filteredHistories[0]
+  const showButton =
+    filteredHistories.length > 0 && filteredHistories.length < 2
+
   return (
-    <Flex gap="4" align="center" justify='between' mr='1'>
-      {historiesData === 0 && (
+    <Flex gap="4" align="center" justify="between" mr="1">
+      {historiesData.length === 0 && (
         <FilloutButtonBlock questionnaire={questionnaire} />
       )}
-      {historiesData === 1 && viewData && (
+      {showButton && (
         <ViewButton
           justIcon={true}
           data={viewData?.data}
           quickNoteSectionName={viewData?.sectionName as QuickNoteSectionName}
         />
       )}
-      {historiesData > 0 && (
+      {historiesData.length > 0 && (
         <HistoryButton questionnaire={questionnaire} justIcon />
       )}
-      {historiesData < 2 && <DeleteButton questionnaireDate = {viewData?.createdOn} questionnaire={questionnaire} />}
+      {showButton && (
+        <DeleteButton
+          questionnaireDate={viewData?.createdOn}
+          questionnaire={questionnaire}
+        />
+      )}
     </Flex>
   )
 }

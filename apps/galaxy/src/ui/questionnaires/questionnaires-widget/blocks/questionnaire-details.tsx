@@ -105,8 +105,8 @@ const QuestionnairesDetails = ({
 
         <RowRightButtons
           questionnaire={questionnaire}
-          historiesData={filteredHistories.length}
-          viewData={filteredHistories[0]}
+          historiesData={historiesData}
+          filteredHistories={filteredHistories}
         />
       </Flex>
 

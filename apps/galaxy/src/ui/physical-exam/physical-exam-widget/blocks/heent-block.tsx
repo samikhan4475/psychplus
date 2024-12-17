@@ -9,6 +9,10 @@ const BLOCK_TITLE = 'HEENT'
 
 const HNT_OPTIONS: GroupSelectOption<string>[] = [
   {
+    label: 'Normal',
+    value: 'hntNormal',
+  },
+  {
     label: 'Headache',
     value: 'hntHeadache',
   },
