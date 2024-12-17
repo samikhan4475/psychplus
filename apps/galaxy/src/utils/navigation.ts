@@ -163,7 +163,7 @@ const getManagementNavLinks = (type: string | null, id: string | null) => {
       },
       {
         label: 'Users',
-        href: `${orgBase}/users`,
+        href: `${orgBase}/organization-users`,
       },
       {
         label: 'Roles & Permissions',

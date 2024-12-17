@@ -61,3 +61,4 @@ export * from './information-line'
 export  * from "./shuffel-icon"
 export * from './message2-icon'
 export * from './download-down-arrow-icon'
+export * from './mail2-icon'
