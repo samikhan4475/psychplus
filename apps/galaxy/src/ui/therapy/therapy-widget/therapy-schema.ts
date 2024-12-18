@@ -2,6 +2,21 @@ import { z } from 'zod'
 
 type TherapySchemaType = z.infer<typeof TherapySchema>
 
+const TherapySessionParticipantsEnum = z.enum(
+  [
+    'Patients',
+    'PatientwithPatient/Guardian',
+    'Patient&Partner',
+    'Patient&Family',
+    'Patient&Other',
+  ],
+  { required_error: 'Session Participants is required' },
+)
+
+type TherapySessionParticipantsEnumType = z.infer<
+  typeof TherapySessionParticipantsEnum
+>
+
 const TherapySchema = z.object({
   therapyTimeSpent: z.string().min(1, { message: 'Time Spent is required' }),
   timeRangeOne: z
@@ -22,9 +37,7 @@ const TherapySchema = z.object({
       message: 'Value must be between 53 and 99',
     })
     .optional(),
-  therapySessionParticipants: z
-    .string()
-    .min(1, { message: 'Session Participants is required' }),
+  therapySessionParticipants: TherapySessionParticipantsEnum,
   patientOther: z.string().optional(),
   therapyDetailsModality: z
     .array(
@@ -47,4 +60,9 @@ const TherapySchema = z.object({
     .min(1, { message: 'Additional Therapy Detail is required' }),
 })
 
-export { TherapySchema, type TherapySchemaType }
+export {
+  TherapySchema,
+  type TherapySchemaType,
+  TherapySessionParticipantsEnum,
+  type TherapySessionParticipantsEnumType,
+}

@@ -1,21 +1,16 @@
 import { Avatar } from '@radix-ui/themes'
 import { PatientProfile } from '@/types'
 
-interface PatientBannerProps {
+interface UserAvatarProps {
   user: PatientProfile
 }
 
-const UserAvatar = async ({ user }: PatientBannerProps) => {
-  return (
-    <Avatar
-      src={
-        user.hasPhoto ? `/ehr/api/patients/${user.id}/profileimage` : undefined
-      }
-      fallback="NA"
-      size="7"
-      highContrast
-    />
-  )
+const UserAvatar = ({ user }: UserAvatarProps) => {
+  const avatarSrc = user.hasPhoto
+    ? `/ehr/api/patients/${user.id}/profileimage`
+    : undefined
+
+  return <Avatar src={avatarSrc} fallback="NA" size="7" highContrast />
 }
 
 export { UserAvatar }

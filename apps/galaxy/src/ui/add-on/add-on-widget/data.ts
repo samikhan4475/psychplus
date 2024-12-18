@@ -45,9 +45,9 @@ const INTERACTIVE_COMPLEXITY_BLOCK_OPTIONS = [
 
 const THERAPY_OPTIONS = [
   'therapyTimeSpent',
-  '16-37 mins',
-  '38-52 mins',
-  '53-99 mins',
+  'timeRangeOne',
+  'timeRangeTwo',
+  'timeRangeThree',
   'therapySessionParticipants',
   'additionalTherapyDetail',
 ]
@@ -74,10 +74,10 @@ const transformIn = (value: QuickNoteSectionItem[]): AddOnWidgetSchemaType => {
     therapy: false,
     therapyPsychoanalysis: 'therapy',
     therapyTimeSpent: undefined,
-    '16-37 mins': undefined,
-    '38-52 mins': undefined,
-    '53-99 mins': undefined,
-    therapySessionParticipants: 'Patients',
+    timeRangeOne: undefined,
+    timeRangeTwo: undefined,
+    timeRangeThree: undefined,
+    therapySessionParticipants: undefined,
     patientOther: undefined,
     therapyDetailsModality: [],
     therapyDetailsInterventions: [],
@@ -120,12 +120,11 @@ const transformIn = (value: QuickNoteSectionItem[]): AddOnWidgetSchemaType => {
       result[key] = true
     } else if (THERAPY_PSYCHOANALYSIS_TABLE_DATA.includes(key)) {
       const columnData = itemValue.split(',')
-      const modifiedData: ModalityTransferenceData[] = columnData.map(
-        (data) => {
-          const [value, display] = data.split(' ')
-          return { value, display }
-        },
-      )
+      const modifiedData = columnData.map((data) => {
+        const [value, ...displayParts] = data.split(' ')
+        const display = displayParts.join(' ')
+        return { value, display }
+      })
 
       result[key] = modifiedData
     } else if (key === 'expirationDate') {

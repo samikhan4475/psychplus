@@ -14,7 +14,7 @@ interface PatientBannerProps {
   user: PatientProfile
 }
 
-const UserInfoSection = async ({ user }: PatientBannerProps) => {
+const UserInfoSection = ({ user }: PatientBannerProps) => {
   return (
     <>
       <Flex direction="column" className="gap-[2px] md:flex-1">

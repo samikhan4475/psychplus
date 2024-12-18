@@ -10,7 +10,7 @@ interface TherapyWidgetLoaderProps {
 
 const TherapyLoader = async ({ patientId }: TherapyWidgetLoaderProps) => {
   const response = await getQuickNoteDetailAction(patientId, [
-    QuickNoteSectionName.QuickNoteSectionTherapy,
+    QuickNoteSectionName.Addon,
   ])
 
   if (response.state === 'error') {

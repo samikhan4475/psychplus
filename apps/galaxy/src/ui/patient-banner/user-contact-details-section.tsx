@@ -1,4 +1,4 @@
-import { PatientAddress, PatientProfile } from '@/types'
+import { PatientProfile } from '@/types'
 import {
   getPatientCity,
   getPatientPostalCode,
@@ -11,16 +11,14 @@ interface PatientBannerProps {
   user: PatientProfile
 }
 
-const UserContactDetailsSection = async ({ user }: PatientBannerProps) => {
+const UserContactDetailsSection = ({ user }: PatientBannerProps) => {
   return (
     <>
       <LabelAndValue
         label="Address"
         value={
           user.contactDetails.addresses
-            ? getPatientStreet(
-                user.contactDetails.addresses as PatientAddress[],
-              )
+            ? getPatientStreet(user.contactDetails.addresses)
             : undefined
         }
       />
@@ -29,12 +27,10 @@ const UserContactDetailsSection = async ({ user }: PatientBannerProps) => {
         value={
           user.contactDetails.addresses
             ? `${getPatientCity(
-                user.contactDetails.addresses as PatientAddress[],
+                user.contactDetails.addresses,
               )}, ${getPatientState(
-                user.contactDetails.addresses as PatientAddress[],
-              )} ${getPatientPostalCode(
-                user.contactDetails.addresses as PatientAddress[],
-              )}`
+                user.contactDetails.addresses,
+              )} ${getPatientPostalCode(user.contactDetails.addresses)}`
             : undefined
         }
       />

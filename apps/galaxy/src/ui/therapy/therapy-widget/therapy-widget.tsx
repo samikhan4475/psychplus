@@ -1,7 +1,9 @@
 'use client'
 
+import { useSearchParams } from 'next/navigation'
 import { FormProvider } from 'react-hook-form'
 import { WidgetFormContainer } from '@/components'
+import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { AdditionalTherapyDetailBlock } from './blocks/additional-therapy-detail'
 import { ClearButton } from './blocks/clear-button'
 import { SaveButton } from './blocks/save-button'
@@ -19,13 +21,14 @@ interface TherapyWidgetProps {
 
 const TherapyWidget = ({ patientId, initialValue }: TherapyWidgetProps) => {
   const form = useTherapyForm(initialValue)
+  const appointmentId = useSearchParams().get('id') as string
   return (
     <FormProvider {...form}>
       <WidgetFormContainer
         patientId={patientId}
-        widgetId="therapy-details"
+        widgetId={QuickNoteSectionName.QuickNoteSectionTherapy}
         title="Therapy"
-        getData={transformOut(patientId)}
+        getData={transformOut(patientId, appointmentId)}
         headerRight={
           <>
             <ClearButton />

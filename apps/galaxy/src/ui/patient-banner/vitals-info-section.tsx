@@ -1,26 +1,15 @@
-import { Text } from '@radix-ui/themes'
-import { getPatientVitalsAction } from './actions'
+import { PatientVital } from '../vitals'
 import { LabelAndValue } from './label-and-value'
 
-interface PatientBannerProps {
-  patientId: string
+interface VitalsInfoSectionProps {
+  vitals: PatientVital
 }
 
-const VitalsInfoSection = async ({ patientId }: PatientBannerProps) => {
-  const response = await getPatientVitalsAction(patientId)
-  if (response.state === 'error') {
-    return <Text>{response.error}</Text>
-  }
-
-  const vitals = response.data[response.data.length - 1]
-
-  const formatHeightInInches = (heightCm?: number) => {
-    return heightCm ? (heightCm * 0.39).toFixed(2) : undefined
-  }
-
-  const formatBloodPressure = (systolic?: number, diastolic?: number) => {
-    return systolic && diastolic ? `${systolic}/${diastolic}` : undefined
-  }
+const VitalsInfoSection = ({ vitals }: VitalsInfoSectionProps) => {
+  const formatHeightInInches = (heightCm?: number) =>
+    heightCm ? (heightCm * 0.39).toFixed(2) : undefined
+  const formatBloodPressure = (systolic?: number, diastolic?: number) =>
+    systolic && diastolic ? `${systolic}/${diastolic}` : undefined
 
   return (
     <>

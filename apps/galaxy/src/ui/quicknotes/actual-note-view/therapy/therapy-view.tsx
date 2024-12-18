@@ -12,7 +12,7 @@ type TherapyProps = {
 const Therapy = async ({ patientId }: TherapyProps) => {
   const response = await getQuickNoteDetailAction(
     patientId,
-    [QuickNoteSectionName.QuickNoteSectionTherapy],
+    [QuickNoteSectionName.Addon],
     true,
   )
 
@@ -21,7 +21,7 @@ const Therapy = async ({ patientId }: TherapyProps) => {
   }
   return (
     <ActualNoteDetailsWrapper
-      sectionName={QuickNoteSectionName.QuickNoteSectionTherapy}
+      sectionName={QuickNoteSectionName.Addon}
     >
       <Details data={transformIn(response.data)} />
     </ActualNoteDetailsWrapper>

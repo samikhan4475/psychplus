@@ -4,6 +4,7 @@ import { useEffect } from 'react'
 import { Flex, Text } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
 import { CheckboxInput, RadioSelectSection } from '@/components'
+import { AdditionalTherapyDetailBlock } from '@/ui/therapy/therapy-widget/blocks/additional-therapy-detail'
 import { TherapySessionParticipantsBlock } from '@/ui/therapy/therapy-widget/blocks/session-participants'
 import { TherapyTableBlock } from '@/ui/therapy/therapy-widget/blocks/therapy-table-block'
 import { TherapyTimeSpentBlock } from '@/ui/therapy/therapy-widget/blocks/time-spent'
@@ -57,7 +58,6 @@ const TherapyPsychoAnalysisBlock = ({
             field="therapyPsychoanalysis"
             options={THERAPY_PSYCHOANALYSIS_OPTIONS}
           />
-
           {therapyPsychoanalysis === 'therapy' && (
             <>
               <Text className="cursor-default" weight="medium">
@@ -66,11 +66,7 @@ const TherapyPsychoAnalysisBlock = ({
               <TherapyTimeSpentBlock />
               <TherapySessionParticipantsBlock />
               <TherapyTableBlock />
-              <TherapyDetail
-                field="additionalTherapyDetail"
-                label="Additional Therapy Details"
-                defaultValue="Patient presented with signs of transference, indicating a strong misplacement of feelings associated with unresolved past experiences.  Provider engaged in schema exploration with patient to gain insight regarding patient’s irrational thoughts and maladaptive behavior patterns. Provider encouraged patient to self-reflect to make connections between dysfunctional beliefs, behaviors, and assumptions that may have affected their perception. Continued exploration of irrational thoughts and behaviors is recommended to map all types and directions of transference."
-              />
+              <AdditionalTherapyDetailBlock />
             </>
           )}
           {therapyPsychoanalysis === 'psychoanalysis' && (

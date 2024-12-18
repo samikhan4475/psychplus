@@ -1,11 +1,14 @@
-import { TherapySchemaType } from '../therapy-schema'
+import {
+  TherapySchemaType,
+  TherapySessionParticipantsEnum,
+} from '../therapy-schema'
 
 const getInitialValues = (): TherapySchemaType => ({
-  therapyTimeSpent: '',
+  therapyTimeSpent: 'timeRangeOne',
   timeRangeOne: '',
   timeRangeTwo: '',
   timeRangeThree: '',
-  therapySessionParticipants: '',
+  therapySessionParticipants: TherapySessionParticipantsEnum.Values.Patients,
   patientOther: '',
   therapyDetailsModality: [],
   therapyDetailsInterventions: [],

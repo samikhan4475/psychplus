@@ -1,36 +1,68 @@
-import { QuickNoteSectionItem } from '@/types'
+import { CodesWidgetItem, CptCodeKeys, QuickNoteSectionItem } from '@/types'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { sanitizeFormData } from '@/utils'
-import { TherapySchemaType } from './therapy-schema'
+import { manageCodes } from '@/utils/codes'
+import { addOnCodes, getCptCodeMap } from './cpt-code-map'
+import {
+  TherapySchemaType,
+  TherapySessionParticipantsEnum,
+  TherapySessionParticipantsEnumType,
+} from './therapy-schema'
+
+interface ModalityTransferenceData {
+  value: string
+  display: string
+}
 
 const transformOut =
-  (patientId: string) =>
-  (schema: TherapySchemaType): QuickNoteSectionItem[] => {
+  (patientId: string, appointmentId: string) =>
+  async (schema: TherapySchemaType): Promise<QuickNoteSectionItem[]> => {
     const result: QuickNoteSectionItem[] = []
 
     const data = sanitizeFormData(schema)
 
     Object.entries(data).forEach(([key, value]) => {
-      const sectionItemValue =
-        typeof value === 'object' && value !== null
-          ? JSON.stringify(value)
-          : (value as string)
+      if (Array.isArray(value)) {
+        const updatedData = (value as ModalityTransferenceData[]).map(
+          (item: ModalityTransferenceData) => `${item.value} ${item.display}`,
+        )
+        result.push({
+          pid: Number(patientId),
+          sectionName: QuickNoteSectionName.Addon,
+          sectionItem: key,
+          sectionItemValue: String(updatedData),
+        })
+      } else {
+        const sectionItemValue = value as string
 
-      result.push({
-        pid: Number(patientId),
-        sectionName: QuickNoteSectionName.QuickNoteSectionTherapy,
-        sectionItem: key,
-        sectionItemValue,
-      })
+        result.push({
+          pid: Number(patientId),
+          sectionName: QuickNoteSectionName.Addon,
+          sectionItem: key,
+          sectionItemValue,
+        })
+      }
     })
-
-    return result
+    result.push({
+      pid: Number(patientId),
+      sectionName: QuickNoteSectionName.Addon,
+      sectionItem: 'therapy',
+      sectionItemValue: 'true',
+    })
+    const selectedCodes = await getCodes(schema)
+    const codesResult = await manageCodes(
+      patientId,
+      appointmentId,
+      addOnCodes,
+      selectedCodes,
+    )
+    return [...result, ...codesResult]
   }
 
 const transformIn = (value: QuickNoteSectionItem[]): TherapySchemaType => {
   const result: TherapySchemaType = {
     therapyTimeSpent: 'timeRangeOne',
-    therapySessionParticipants: 'Patients',
+    therapySessionParticipants: TherapySessionParticipantsEnum.Values.Patients,
     patientOther: '',
     therapyDetailsModality: [],
     therapyDetailsInterventions: [],
@@ -39,33 +71,63 @@ const transformIn = (value: QuickNoteSectionItem[]): TherapySchemaType => {
 
   value.forEach((item) => {
     const key = item.sectionItem as keyof TherapySchemaType
+    const itemValue = item.sectionItemValue
 
     if (
       key === 'therapyDetailsModality' ||
       key === 'therapyDetailsInterventions'
     ) {
-      result[key] = (() => {
-        try {
-          return JSON.parse(item.sectionItemValue) as {
-            value: string
-            display: string
-          }[]
-        } catch (error) {
-          console.warn(`Could not parse ${key}:`, item.sectionItemValue)
-          return []
-        }
-      })()
+      const columnData = itemValue.split(',')
+      const modifiedData = columnData.map((data) => {
+        const [value, ...displayParts] = data.split(' ')
+        const display = displayParts.join(' ')
+        return { value, display }
+      })
+
+      result[key] = modifiedData as TherapySchemaType[typeof key]
     } else if (key === 'therapyTimeSpent') {
-      result[key] = item.sectionItemValue as
+      result[key] = itemValue as
         | 'timeRangeOne'
         | 'timeRangeTwo'
         | 'timeRangeThree'
+    } else if (key === 'therapySessionParticipants') {
+      if (
+        Object.values(TherapySessionParticipantsEnum.Values).includes(
+          itemValue as TherapySessionParticipantsEnumType,
+        )
+      ) {
+        result[key] = itemValue as TherapySessionParticipantsEnumType
+      }
     } else {
-      result[key] = item.sectionItemValue
+      result[key] = itemValue as string
     }
   })
 
   return result
+}
+
+const getCodes = async (
+  schema: Record<
+    string,
+    string | undefined | boolean | ModalityTransferenceData[]
+  >,
+) => {
+  const selectedCodes: CodesWidgetItem[] = []
+  const cptCodeMap = getCptCodeMap()
+  Object.entries(cptCodeMap).forEach(([key, value]) => {
+    const schemaKey = schema?.[key]
+    const code =
+      typeof value === 'object'
+        ? value?.[schemaKey as keyof typeof value]
+        : value
+    if (code && schemaKey) {
+      selectedCodes.push({
+        code,
+        key: CptCodeKeys.ADD_ONS_KEY,
+      })
+    }
+  })
+  return selectedCodes
 }
 
 export { transformOut, transformIn }
