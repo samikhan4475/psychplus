@@ -5,14 +5,17 @@ import { Box } from "@radix-ui/themes"
 import { OrganizationPracticesListFilterForm } from "./organization-practices-list-filter-form"
 import { OrganizationPracticesListTable } from "./organization-practices-list-table"
 import { PracticesHeading } from "./practices-heading"
+
 interface OrganizationPracticesViewProps {
   googleApiKey: string
+  isPractices?: boolean
 }
-const OrganizationPracticesView = ({ googleApiKey }: OrganizationPracticesViewProps) => {
+
+const OrganizationPracticesView = ({ googleApiKey, isPractices }: OrganizationPracticesViewProps) => {
   return (
     <GooglePlacesContextProvider apiKey={googleApiKey}>
       <Box className="w-full py-1">
-        <PracticesHeading />
+        {!isPractices && <PracticesHeading />}
         <OrganizationPracticesListFilterForm />
         <OrganizationPracticesListTable />
       </Box>
