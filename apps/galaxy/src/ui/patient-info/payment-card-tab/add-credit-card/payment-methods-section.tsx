@@ -11,6 +11,7 @@ interface PaymentMethodsProps {
   onClose?(): void
   patientId: string
   patientCards?: CreditCard[]
+  isPrimaryCard?:boolean
 }
 
 const PaymentMethodSection = ({
@@ -18,6 +19,7 @@ const PaymentMethodSection = ({
   stripeApiKey,
   patientId,
   patientCards,
+  isPrimaryCard
 }: PaymentMethodsProps) => {
   const stripePromise = useMemo(() => loadStripe(stripeApiKey), [stripeApiKey])
 
@@ -27,6 +29,7 @@ const PaymentMethodSection = ({
         onClose={onClose}
         patientId={patientId}
         patientCards={patientCards}
+        isPrimaryCard={isPrimaryCard}
       />
     </Elements>
   )

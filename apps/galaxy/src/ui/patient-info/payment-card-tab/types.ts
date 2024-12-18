@@ -10,6 +10,7 @@ interface AddCardRequestBody {
   expireYear: number
   numberLastFour: string
   billingAddress: PatientAddress
+  isPrimary?: boolean
 }
 
 interface AddPatientCardParams {

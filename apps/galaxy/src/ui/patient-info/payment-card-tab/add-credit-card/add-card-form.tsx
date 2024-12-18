@@ -17,7 +17,7 @@ import {
 import { CreditCardType } from '@/constants'
 import { AllowedCards, CreditCard } from '@/types'
 import { cn, zipCodeSchema } from '@/utils'
-import { addPatientCardAction } from '../actions'
+import { addPatientCardAction, setPrimaryPatientCard } from '../actions'
 import { BillingAddress } from './billing-address'
 import { CardDetails } from './card-details'
 import { InfoBox } from './info-box'
@@ -35,6 +35,7 @@ interface AddCardFormProps {
   onClose?: () => void
   patientId: string
   patientCards?: CreditCard[]
+  isPrimaryCard?: boolean
 }
 
 const schema = z.object({
@@ -57,6 +58,7 @@ const AddCardForm = ({
   onClose,
   patientId,
   patientCards,
+  isPrimaryCard,
 }: AddCardFormProps) => {
   const stripe = useStripe()
   const router = useRouter()
@@ -124,6 +126,7 @@ const AddCardForm = ({
       expireMonth: exp_month,
       expireYear: exp_year,
       numberLastFour: last4,
+      ...(isPrimaryCard && { isPrimary: true }),
       billingAddress: {
         type: 'Billing',
         street1: data.address1,
@@ -139,6 +142,12 @@ const AddCardForm = ({
       return
     }
 
+    if (isPrimaryCard) {
+      await setPrimaryPatientCard({
+        patientId: Number(patientId),
+        creditCardId: result?.data?.id,
+      })
+    }
     toast.success('Credit Card Added')
     onSuccess()
   }

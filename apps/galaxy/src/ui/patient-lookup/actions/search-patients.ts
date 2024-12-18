@@ -1,7 +1,7 @@
 'use server'
 
 import * as api from '@/api'
-import { InsurancePolicyPriority, PatientProfile, Sort } from '@/types'
+import { PatientProfile, Sort } from '@/types'
 import { PATIENT_LOOKUP_TABLE_PAGE_SIZE } from '../constants'
 import { transformResponseData } from '../transform'
 import type { SearchPatientsData, SearchPatientsParams } from '../types'
@@ -22,7 +22,6 @@ const defaultPayload = {
   isIncludeConsentVerification: true,
   isIncludeMostUpcomingAppointment: true,
   isIncludeMostRecentAppointment: true,
-  insurancePriority: InsurancePolicyPriority.Primary,
 }
 
 const searchPatientsAction = async ({

@@ -50,6 +50,7 @@ const AddCardDialog = ({
               stripeApiKey={stripeApiKey}
               patientId={patientId}
               onClose={OnClose}
+              isPrimaryCard
             />
           </GooglePlacesContextProvider>
         </Flex>

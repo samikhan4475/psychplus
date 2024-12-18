@@ -13,7 +13,9 @@ const DescriptionInput = () => {
   const form = useFormContext<CustomChargeSchemaType>()
   return (
     <FormFieldContainer className="flex-column w-auto gap-1">
-      <FormFieldLabel className="!text-1">Description</FormFieldLabel>
+      <FormFieldLabel className="!text-1" required>
+        Description
+      </FormFieldLabel>
       <TextField.Root
         placeholder="Add description..."
         size="1"

@@ -56,9 +56,9 @@ const useAppointmentOptions = ({
       ? setCoPayMap
       : setCoInsuranceMap
 
-  const options = useMemo(() => {
+  const { options, paymentMap } = useMemo(() => {
     const paymentMap: PaymentMap = {}
-    const result = appointments.map((data) => {
+    const options = appointments.map((data) => {
       const appointmentId = String(data.app_id)
       const amount =
         paymentType === AppointmentOptionType.CoPay
@@ -73,10 +73,12 @@ const useAppointmentOptions = ({
         } | ${data.providerName} | ${data.app_id}`,
       }
     })
+    return { options, paymentMap }
+  }, [appointments, paymentType])
 
+  useEffect(() => {
     setMap(paymentMap)
-    return result
-  }, [appointments, setMap, paymentType])
+  }, [paymentMap, setMap])
 
   return options
 }

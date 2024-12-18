@@ -6,7 +6,10 @@ const optionalString = z.string().optional()
 const chargeSchema = z
   .object({
     type: z.string().min(1, 'Required'),
-    description: z.string().max(50, 'Max 50 characters allowed').optional(),
+    description: z
+      .string()
+      .min(1, 'Required')
+      .max(50, 'Max 50 characters allowed'),
     unappliedPayment: z.string().optional(),
     chargeDate: z
       .custom<DateValue>()
