@@ -11,7 +11,7 @@ const OrganizationNameCell = ({
   const addTab = useRootStore((state) => state.addTab)
 
   const openTab = () => {
-    const href = `/management/organization-practice/organizations/1/organization-profile`
+    const href = `/management/organization-practice/organizations/${organization.id}/organization-profile`
     addTab({
       href,
       label: organization.displayName,
