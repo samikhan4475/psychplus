@@ -20,7 +20,9 @@ const WorkingDiagnosisDetailView = async ({
   if (quickNotesResponse.state === 'error') {
     return <Text>{quickNotesResponse.error}</Text>
   }
-  const { sectionItemValue } = quickNotesResponse.data?.[0] || {}
+  const { sectionItemValue } =
+    quickNotesResponse.data?.find((item) => item.sectionItem === 'diagnosis') ||
+    {}
   const DiagnosisCodes = sectionItemValue?.split(',') || []
   if (sectionItemValue === 'empty' || DiagnosisCodes?.length === 0) {
     return

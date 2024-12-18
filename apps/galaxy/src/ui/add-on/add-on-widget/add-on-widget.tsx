@@ -3,10 +3,7 @@
 import { useSearchParams } from 'next/navigation'
 import { Flex } from '@radix-ui/themes'
 import { FormProvider } from 'react-hook-form'
-import {
-  WidgetFormContainer,
-  WidgetSaveButton,
-} from '@/components'
+import { WidgetFormContainer, WidgetSaveButton } from '@/components'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { getCachedBlocksByVisitType } from '../utils'
 import { useAddOnWidgetForm } from './add-on-widget-form'

@@ -1,3 +1,5 @@
+'use client'
+
 import { useEffect } from 'react'
 import { Flex, Text } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'

@@ -7,7 +7,9 @@ interface PatientAllergiesPageProps {
 }
 
 const PatientAllergiesPage = ({ params }: PatientAllergiesPageProps) => {
-  return <PatientAllergiesView patientId={params.id} />
+  return (
+    <PatientAllergiesView patientId={params.id} isPatientAllergiesTab={true} />
+  )
 }
 
 export default PatientAllergiesPage

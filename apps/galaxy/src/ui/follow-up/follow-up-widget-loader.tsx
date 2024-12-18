@@ -1,7 +1,5 @@
 import { Text } from '@radix-ui/themes'
-import * as api from '@/api'
 import { getBookedAppointmentsAction } from '../schedule/actions'
-import { transformOut } from './follow-up-widget/data'
 import { QuicknotesFollowUpWidget } from './quicknotes-follow-up-widget'
 
 interface FollowUpWidgetLoaderProps {
@@ -23,18 +21,6 @@ const FollowUpWidgetLoader = async ({
 
   if (response.state === 'error') {
     return <Text>{response.error}</Text>
-  }
-
-  if (response.data.length > 0) {
-    const selectedFollowUpIds =
-      response.data.map((item) => String(item.appointmentId)) ?? []
-
-    const payload = transformOut(
-      patientId,
-      appointmentId,
-    )({ followUpsId: selectedFollowUpIds as string[] })
-
-    await api.PUT(api.NOTE_DETAILS_SAVE_ENDPOINT(patientId), payload)
   }
 
   return (

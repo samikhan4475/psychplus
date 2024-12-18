@@ -4,15 +4,19 @@ import { PatientAllergiesWidget } from './patient-allergies-widget'
 
 interface PatientAllergiesViewProps {
   patientId: string
+  isPatientAllergiesTab?: boolean
 }
 
-const PatientAllergiesView = ({ patientId }: PatientAllergiesViewProps) => {
+const PatientAllergiesView = async ({
+  patientId,
+  isPatientAllergiesTab,
+}: PatientAllergiesViewProps) => {
   return (
     <Flex direction="column" width="100%">
       <Flex direction="column" gap="2">
         <PatientAllergiesWidget
           patientId={patientId}
-          isPatientAllergiesTab={true}
+          isPatientAllergiesTab={isPatientAllergiesTab}
           scriptSureAppUrl={SCRIPTSURE_BASE_APPLICATION_URL}
         />
       </Flex>

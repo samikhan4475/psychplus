@@ -62,4 +62,4 @@ const InteractiveComplexityBlock = () => {
   )
 }
 
-export { InteractiveComplexityBlock }
+export { InteractiveComplexityBlock, INTERACTIVE_COMPLEXITY_BLOCK_OPTIONS }

@@ -40,7 +40,7 @@ const Details = ({
     (acc, item) => acc + Number(item.sectionItemValue),
     0,
   )
-  return (
+  return data.widgetContainerCheckboxField === 'show' ? (
     <BlockContainer heading={sectionName}>
       <Flex direction="column">
         <LabelAndValue label="Tobacco:" value={data.tobacco} />
@@ -160,7 +160,7 @@ const Details = ({
         )}
       </Flex>
     </BlockContainer>
-  )
+  ) : null
 }
 
 export { Details }

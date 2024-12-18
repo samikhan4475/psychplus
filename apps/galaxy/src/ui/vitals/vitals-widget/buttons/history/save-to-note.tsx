@@ -20,7 +20,7 @@ const SaveToNoteButton = ({ patientId }: { patientId: string }) => {
     setLoading(true)
     const selectedVitalIds = data
       ?.filter((item) => item.addToNote)
-      .map((item) => String(item.id))
+      ?.map((item) => String(item.id))
 
     if (!selectedVitalIds?.length) {
       selectedVitalIds?.push('0')

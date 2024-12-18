@@ -18,8 +18,10 @@ const DiagnosisWidgetLoader = async ({
   if (quickNotesResponse.state === 'error') {
     return <Text>{quickNotesResponse.error}</Text>
   }
+  const { sectionItemValue } =
+    quickNotesResponse.data?.find((item) => item.sectionItem === 'diagnosis') ||
+    {}
 
-  const { sectionItemValue } = quickNotesResponse.data?.[0] || {}
   const DiagnosisCodes = sectionItemValue?.split(',') || []
   if (sectionItemValue === 'empty' || DiagnosisCodes?.length === 0) {
     return
@@ -35,6 +37,7 @@ const DiagnosisWidgetLoader = async ({
     workingResponse.state === 'success' ? workingResponse.data : []
   const favouritesDiagnosisData =
     favouritesResponse.state === 'success' ? favouritesResponse.data : []
+
   return (
     <DiagnosisWidget
       workingDiagnosis={workingDiagnosisData}

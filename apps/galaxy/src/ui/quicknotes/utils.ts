@@ -54,6 +54,7 @@ import {
   VitalsView,
   WorkingDiagnosisDetailView,
 } from './actual-note-view'
+import { AddOnView } from './actual-note-view/add-on'
 import { HospitalDischargeView } from './actual-note-view/hospital-discharge'
 import { HospitalInitialView } from './actual-note-view/hospital-initial'
 import { TcmView } from './actual-note-view/tcm'
@@ -133,7 +134,11 @@ const widgets: Array<WidgetType> = [
     id: QuickNoteSectionName.QuickNoteSectionDiagnosis,
     actualNoteComponent: WorkingDiagnosisDetailView,
   },
-  { component: AddOnWidget, id: QuickNoteSectionName.Addon },
+  {
+    component: AddOnWidget,
+    id: QuickNoteSectionName.Addon,
+    actualNoteComponent: AddOnView,
+  },
   {
     component: PatientMedicationsView,
     id: QuickNoteSectionName.QuicknoteSectionMedications,

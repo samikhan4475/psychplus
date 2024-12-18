@@ -31,9 +31,11 @@ const PatientAllergiesWidget = ({
         title={isPatientAllergiesTab ? '' : 'Allergies'}
         headerRight={
           !isPatientAllergiesTab && (
-            <WidgetAddButton title="Add Allergy">
-              <AddAllergyButton scriptSureAppUrl={scriptSureAppUrl} />
-            </WidgetAddButton>
+            <>
+              <WidgetAddButton title="Add Allergy1">
+                <AddAllergyButton scriptSureAppUrl={scriptSureAppUrl} />
+              </WidgetAddButton>
+            </>
           )
         }
       >
