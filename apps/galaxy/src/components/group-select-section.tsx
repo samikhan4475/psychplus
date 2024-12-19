@@ -18,6 +18,7 @@ interface GroupSelectSectionProps<T extends string> {
   hasChild?: boolean
   onToggle?: (value: string) => void
   editable?: boolean
+  chipClassName?: string
 }
 
 interface GroupSelectOption<T extends string> {
@@ -36,6 +37,7 @@ const GroupSelectSection = <T extends string>({
   hasChild,
   onToggle,
   editable = true,
+  chipClassName,
 }: GroupSelectSectionProps<T>) => {
   const form = useFormContext()
 
@@ -106,6 +108,7 @@ const GroupSelectSection = <T extends string>({
           selected={isSelected(option.value)}
           onClick={toggleSelected(option.value, option)}
           editable={editable}
+          className={chipClassName}
         >
           {isSelected(option.value) && option.details && (
             <SelectableChipDetails {...option.details} editable={editable} />

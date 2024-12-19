@@ -1,3 +1,5 @@
+import { useEffect } from 'react'
+import { useFormContext } from 'react-hook-form'
 import { DetailsType, GroupSelectSection } from '@/components'
 
 const BLOCK_ID = 'chiefComplaint'
@@ -87,12 +89,26 @@ const BLOCK_OPTIONS = [
 ]
 
 const ChiefComplaintBlock = () => {
+  const form = useFormContext()
+  const error = form.formState?.errors.chiefComplaint?.message
+
+  useEffect(() => {
+    const subscription = form.watch((value, { name }) => {
+      if (name && ['chiefComplaint', 'ccOtherDetails'].includes(name)) {
+        form.clearErrors('chiefComplaint')
+      }
+    })
+
+    return () => subscription.unsubscribe()
+  }, [form])
+
   return (
     <GroupSelectSection
       label={BLOCK_TITLE}
       field={BLOCK_ID}
       options={BLOCK_OPTIONS}
       hasChild
+      chipClassName={`${error ? 'border border-tomato-11' : ''}`}
     />
   )
 }

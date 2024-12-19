@@ -10,6 +10,7 @@ interface SelectableChipProps {
   isTooltip?: boolean
   tooltipContent?: string
   editable?: boolean
+  className?: string
 }
 
 const SelectableChip = ({
@@ -20,6 +21,7 @@ const SelectableChip = ({
   isTooltip = false,
   tooltipContent,
   editable = true,
+  className,
 }: React.PropsWithChildren<SelectableChipProps>) => {
   const chipContent = (
     <Text
@@ -51,6 +53,7 @@ const SelectableChip = ({
           {
             'border-black bg-gray-3': selected && !editable,
           },
+          className,
         )}
       >
         {isTooltip ? (

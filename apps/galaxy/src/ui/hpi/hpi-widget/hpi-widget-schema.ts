@@ -46,6 +46,11 @@ const hpiWidgetSchema = z
   .superRefine((data, ctx) => {
     const issues = [
       {
+        condition: 'chiefComplaint',
+        field: 'chiefComplaint',
+        requiredField: 'chiefComplaint',
+      },
+      {
         condition: 'ccOther',
         field: 'chiefComplaint',
         requiredField: 'ccOtherDetails',
@@ -78,6 +83,14 @@ const hpiWidgetSchema = z
     ]
 
     issues.forEach(({ condition, field, requiredField }) => {
+      if (data[condition as keyof typeof data]?.length === 0) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: [requiredField],
+          message: 'Select at least one symptom',
+        })
+      }
+
       const fieldValue = data[field as keyof typeof data]
       const requiredValue = data[requiredField as keyof typeof data]
       if (fieldValue?.includes(condition) && !requiredValue?.length) {
