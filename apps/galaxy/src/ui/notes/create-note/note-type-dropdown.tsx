@@ -1,7 +1,6 @@
 import { Flex } from '@radix-ui/themes'
-import { useFormContext } from 'react-hook-form'
-import { FormFieldError, FormFieldLabel, SelectInput } from '@/components'
-import { CreateNoteSchema } from './schema'
+import { CodesetSelect, FormFieldError, FormFieldLabel } from '@/components'
+import { CODESETS } from '@/constants'
 
 export enum NoteType {
   Labs = 'Labs (results)',
@@ -28,33 +27,21 @@ export enum NoteType {
   PhoneCall = 'Phone call (communication)',
 }
 
-const noteTypeOptions = Object.entries(NoteType).map(([key, value]) => ({
-  label: value,
-  value: key,
-}))
-
 const NoteTypeDropdown = () => {
-  const form = useFormContext<CreateNoteSchema>()
   return (
     <Flex direction="column" className={'w-full gap-0.5'}>
       <FormFieldLabel className="text-1 leading-[16px]">
         Note Type
       </FormFieldLabel>
-      <SelectInput
-        field="noteType"
-        options={noteTypeOptions}
-        placeholder="Select Note Type"
-        buttonClassName={buttonClassName}
-        onValueChange={(newValue) => {
-          form.setValue('noteType', newValue, { shouldDirty: true })
-        }}
+      <CodesetSelect
+        name="noteTypeCode"
+        codeset={CODESETS.NoteType}
+        size="1"
+        className="h-6 w-full"
       />
-      <FormFieldError name="noteType" />
+      <FormFieldError name="noteTypeCode" />
     </Flex>
   )
 }
-
-const buttonClassName =
-  'border-pp-gray-2 w-full h-6 border border-solid !outline-none [box-shadow:none]'
 
 export { NoteTypeDropdown }

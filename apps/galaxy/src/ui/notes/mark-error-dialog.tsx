@@ -25,7 +25,7 @@ const MarkErrorDialog = ({
 
     if (!payload) return
 
-    const result = await markToErrorAction(payload.payload)
+    const result = await markToErrorAction(payload)
 
     if (result.state === 'error') {
       toast.error(result?.error || 'Failed to mark as error')

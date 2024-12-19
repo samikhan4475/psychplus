@@ -26,7 +26,6 @@ const RemoveCosignDialog = ({
 }: RemoveCosignDialogProps) => {
   const { validateAndPreparePayload } = useNoteActions()
   const [loading, setLoading] = useState(false)
-
   const form = useForm<SchemaType>({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -36,12 +35,10 @@ const RemoveCosignDialog = ({
 
   const onSubmit: SubmitHandler<SchemaType> = async () => {
     setLoading(true)
-
-    const payload = validateAndPreparePayload({ staffId: 0 })
-
+    const payload = validateAndPreparePayload()
     if (!payload) return
 
-    const result = await removeToCosignerAction(payload.payload)
+    const result = await removeToCosignerAction({ ...payload, staffId: '0' })
 
     if (result.state === 'error') {
       toast.error(result?.error || 'Failed to mark as error')

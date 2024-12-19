@@ -27,8 +27,8 @@ const CreateNoteForm = ({ children }: React.PropsWithChildren<unknown>) => {
     defaultValues: {
       date: undefined,
       time: undefined,
-      noteType: '',
-      noteTitle: '',
+      noteTypeCode: '',
+      noteTitleCode: '',
       provider: undefined,
       cosigner: undefined,
       description: '',
@@ -41,8 +41,8 @@ const CreateNoteForm = ({ children }: React.PropsWithChildren<unknown>) => {
       patientId: patientId,
       appointmentId: appointmentId,
       signedByUserId: data.provider,
-      noteType: data.noteType,
-      noteTitle: data.noteTitle,
+      noteTypeCode: data.noteTypeCode,
+      noteTitleCode: data.noteTitleCode,
       coSignedByUserId: data.cosigner,
       encounterSignedNoteDetails: [
         {
@@ -97,4 +97,4 @@ const CreateNoteForm = ({ children }: React.PropsWithChildren<unknown>) => {
   )
 }
 
-export { CreateNoteForm }
+export { CreateNoteForm, type SchemaType }

@@ -1,4 +1,4 @@
-import { PatientNotes } from './types'
+import { GroupedBySectionName, NoteDetail, PatientNotes } from './types'
 
 const getAuthorName = (note: PatientNotes) => {
   const { createdBy, createdByFullName } = note.metadata || {}
@@ -35,4 +35,25 @@ const getAuthorName = (note: PatientNotes) => {
     : `${cssNameText}, ${pendingText}`
 }
 
-export { getAuthorName }
+const groupBySectionName = (
+  encounterSignedNote: NoteDetail,
+): GroupedBySectionName => {
+  const encounterSignedNoteDetail =
+    encounterSignedNote[0]?.encounterSignedNoteDetails
+
+  const result = encounterSignedNoteDetail?.reduce<GroupedBySectionName>(
+    (acc, detail) => {
+      let { sectionName } = detail
+
+      if (!acc[sectionName]) {
+        acc[sectionName] = []
+      }
+      acc[sectionName].push(detail)
+      return acc
+    },
+    {},
+  )
+  return result || {}
+}
+
+export { getAuthorName, groupBySectionName }

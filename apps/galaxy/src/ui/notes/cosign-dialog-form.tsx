@@ -2,41 +2,47 @@
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Flex } from '@radix-ui/themes'
-import { SubmitHandler, useForm } from 'react-hook-form'
+import { SubmitHandler, useForm, useFormContext } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import z from 'zod'
-import { getProvidersOptionsAction } from '@/actions'
 import {
-  AsyncSelect,
   FormContainer,
   FormFieldError,
   FormFieldLabel,
   FormSubmitButton,
 } from '@/components'
 import { sendToCosignerAction } from './actions/sent-to-cosigner'
+import { NotesCosignerDropdown } from './note-detail/note-cosigner-dropdown'
+import { useStore } from './store'
 import { useNoteActions } from './use-note-actions'
 
 const schema = z.object({
   provider: z.string().min(1, 'Provider is required'),
 })
-type SchemaType = z.infer<typeof schema>
+type CosignSchemaType = z.infer<typeof schema>
 
 const CosignDialogForm = () => {
+  const { appointment } = useStore((state) => ({
+    appointment: state.appointment,
+  }))
   const { validateAndPreparePayload } = useNoteActions()
 
-  const form = useForm<SchemaType>({
+  const form = useForm<CosignSchemaType>({
     resolver: zodResolver(schema),
     defaultValues: {
       provider: '',
     },
   })
 
-  const onSubmit: SubmitHandler<SchemaType> = async (values) => {
-    const payload = validateAndPreparePayload({ staffId: values.provider })
+  const onSubmit: SubmitHandler<CosignSchemaType> = async (values) => {
+    const payload = validateAndPreparePayload()
 
     if (!payload) return
 
-    const result = await sendToCosignerAction(payload.payload)
+    const result = await sendToCosignerAction({
+      ...payload,
+      staffId: values.provider,
+    })
 
     if (result.state === 'error') {
       toast.error(result.error || 'Failed to send to co-signer')
@@ -46,17 +52,18 @@ const CosignDialogForm = () => {
     toast.success('Successfully sent to co-signer')
   }
 
+  const updateFormField = (value: string) => {
+    form.setValue('provider', value)
+  }
+
   return (
     <FormContainer form={form} onSubmit={onSubmit}>
       <Flex direction="column" width="100%" gap="6">
         <Flex direction="column" className={selectButtonClass}>
           <FormFieldLabel>Select Provider to Transfer</FormFieldLabel>
-
-          <AsyncSelect
-            field="provider"
-            placeholder="Select"
-            fetchOptions={() => getProvidersOptionsAction()}
-            buttonClassName="w-full h-6"
+          <NotesCosignerDropdown
+            cosigners={appointment?.cosigners}
+            setField={updateFormField}
           />
           <FormFieldError name="provider" />
         </Flex>
@@ -73,4 +80,4 @@ const CosignDialogForm = () => {
 const selectButtonClass =
   'w-full gap-[2px] [&__button]:border-pp-gray-2 [&__button]:w-full [&__button]:h-6 [&__button]:border [&__button]:border-solid [&__button]:!outline-none [&__button]:[box-shadow:none]'
 
-export { CosignDialogForm }
+export { CosignDialogForm, type CosignSchemaType }

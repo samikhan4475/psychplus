@@ -80,6 +80,8 @@ const CODESETS = {
   AbnormalFlag: 'HL7v2.AbnormalFlags',
   StatusCodes: 'HL7v2.ObservationResultStatusCodes',
   Unit: 'CDC.PHVS_UnitofMeasure_TB',
+  NoteType: 'PsychPlusPublic.NoteType',
+  NoteTitle: 'PsychPlusPublic.NoteTitle',
 }
 export {
   CODESETS,
@@ -88,5 +90,5 @@ export {
   ETHNICITIES_GROUPING_CODES,
   RACES_GROUPING_CODES,
   CODE_NOT_SET,
-  HOSPITAL_SERVICE_GROUP
+  HOSPITAL_SERVICE_GROUP,
 }

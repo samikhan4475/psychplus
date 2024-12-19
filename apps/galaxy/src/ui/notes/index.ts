@@ -1,1 +1,1 @@
-export * from './notes.view'
+export * from './notes-view'

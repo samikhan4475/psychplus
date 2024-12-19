@@ -4,8 +4,8 @@ import z from 'zod'
 const createNoteSchema = z.object({
   date: z.custom<DateValue>().optional(),
   time: z.string().trim().optional(),
-  noteType: z.string().trim().min(1, 'Required'),
-  noteTitle: z.string().trim().optional(),
+  noteTypeCode: z.string().trim().min(1, 'Required'),
+  noteTitleCode: z.string().trim().optional(),
   provider: z.string().trim().min(1, 'Required'),
   cosigner: z.string().trim().optional(),
   description: z.string().trim().min(1, 'Required'),

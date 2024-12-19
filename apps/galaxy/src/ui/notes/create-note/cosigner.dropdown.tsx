@@ -1,28 +1,26 @@
 'use client'
 
 import { Flex } from '@radix-ui/themes'
-import { getProvidersOptionsAction } from '@/actions'
-import {
-  AsyncSelect,
-  FormFieldError,
-  FormFieldLabel,
-  SelectInput,
-} from '@/components'
+import { useFormContext } from 'react-hook-form'
+import { FormFieldError, FormFieldLabel } from '@/components'
 import { Appointment } from '@/types'
+import { NotesCosignerDropdown } from '../note-detail/note-cosigner-dropdown'
+import { SchemaType } from './create-note-form'
 
 const CosignerDropdown = ({ appointment }: { appointment?: Appointment }) => {
+  const form = useFormContext<SchemaType>()
+  const updateFormField = (value: string) => {
+    form.setValue('cosigner', value)
+  }
   return (
     <Flex direction="column" className={'w-full gap-0.5'}>
       <FormFieldLabel className="text-1 leading-[16px]">
         Cosigner
       </FormFieldLabel>
-      <AsyncSelect
-        field="cosigner"
+      <NotesCosignerDropdown
+        cosigners={appointment?.cosigners}
+        setField={updateFormField}
         placeholder="Select Cosigner"
-        fetchOptions={() =>
-          getProvidersOptionsAction(appointment?.providerType)
-        }
-        buttonClassName={buttonClassName}
       />
       <FormFieldError name="cosigner" />
     </Flex>

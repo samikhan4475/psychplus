@@ -7,7 +7,7 @@ interface SentToCosignerParams {
   patientId: string
   appointmentId?: string
   noteId?: string
-  staffId: number
+  staffId: string
 }
 
 const sendToCosignerAction = async (payload: SentToCosignerParams) => {

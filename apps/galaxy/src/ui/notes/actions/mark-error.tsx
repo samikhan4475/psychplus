@@ -4,7 +4,7 @@ import * as api from '@/api'
 import { ApiResponse } from '../create-note/types'
 
 interface MarkErrorParams {
-  patientId: string
+  patientId?: string
   appointmentId?: string
   noteId?: string
 }

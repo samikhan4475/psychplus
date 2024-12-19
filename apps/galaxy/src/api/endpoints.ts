@@ -81,6 +81,8 @@ const UPDATE_PROVIDER_LOCATION_STATUS_ENDPOINT = (
   staffId: string,
   locationId: string,
 ) => `${API_URL}/api/staff/${staffId}/locations/${locationId}`
+const GET_STAFF_USER_ENDPOINT = (staffId: number) =>
+  `${API_URL}/api/staff/${staffId}`
 const PRESCRIBER_DIRECTORY_ENDPOINT = (staffId: string, locationId: string) =>
   `${API_URL}/api/providers/${staffId}/locations/${locationId}/directories`
 const DISABLE_PRESCRIBER_DIRECTORY_ENDPOINT = (
@@ -358,6 +360,12 @@ const CREATE_NOTE_ENDPOINT = (
   appointmentId: string | null,
 ) =>
   `${API_URL}/api/patients/${patientId}/encounters/${appointmentId}/secondarynotes?errormark=true`
+const GET_NOTE_DOCUMENT_ENDPOINT = (
+  patientId: string,
+  appointmentId: string,
+  documentId: string,
+) =>
+  `${API_URL}/api/patients/${patientId}/appointments/${appointmentId}/documents/${documentId}/actions/download`
 const GET_ALLERGIES_ENDPOINT = `${API_URL}/api/allergies/actions/search`
 const PATIENT_CARE_TEAM_ENDPOINT = (patientId: string) =>
   `${API_URL}/api/patients/${patientId}/careteam`
@@ -390,6 +398,16 @@ const DELETE_PAYER_PLAN_ADDRESS = (payerId: string, payerAddressId: string) =>
   `${API_URL}/api/insurance/payers/${payerId}/addresses/${payerAddressId}`
 const GET_DETAILED_NOTE_ENDPOINT = (patientId: string) =>
   `${API_URL}/api/patients/${patientId}/detailednotes/actions/search`
+const GET_NOTE_VIEW_ENDPOINT = (
+  patientId: string,
+  appointmentId: string | null,
+) =>
+  `${API_URL}/api/patients/${patientId}/encounters/${appointmentId}/notes/actions/search`
+const GET_NOTE_DOCUMENTS_ENDPOINT = (
+  patientId: string,
+  appointmentId: string | null,
+) =>
+  `${API_URL}/api/patients/${patientId}/appointments/${appointmentId}/documents/actions/search`
 const GET_STAFF_DEA_ENDPOINT = `${API_URL}/api/staffdea/actions/search`
 const GET_STAFF_LICENSE_HISTORY_ENDPOINT = `${API_URL}/api/staffdea/history/actions/search`
 const ADD_SCHEDULE_REPORT_ENDPOINT = `${API_URL}/api/reporting/schedules`
@@ -405,7 +423,7 @@ const SENT_TO_COSIGNER_NOTE_ENDPOINT = (
   patientId: string,
   appointmentId?: string,
   noteId?: string,
-  staffId?: number,
+  staffId?: string,
 ) =>
   `${API_URL}/api/patients/${patientId}/encounters/${appointmentId}/notes/${noteId}/cosigners/${staffId}/actions/replace`
 
@@ -418,6 +436,7 @@ const UPDATE_LAB_ORDERS_RESULT_ENDPOINT = (
 export {
   GET_LAB_RESULTS_ENDPOINT,
   NOTE_UPLOAD_FILE,
+  GET_NOTE_VIEW_ENDPOINT,
   USER_ENDPOINT,
   DELETE_STAFF_ENDPOINT,
   REFRESH_ENDPOINT,
@@ -627,4 +646,7 @@ export {
   NOTE_MARK_ERROR_ENDPOINT,
   UPDATE_LAB_ORDERS_RESULT_ENDPOINT,
   DOWNLOAD_CLAIM_SUBMISSION_HISTORY_ENDPOINT,
+  GET_NOTE_DOCUMENTS_ENDPOINT,
+  GET_STAFF_USER_ENDPOINT,
+  GET_NOTE_DOCUMENT_ENDPOINT,
 }

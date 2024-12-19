@@ -3,26 +3,27 @@
 import { useParams } from 'next/navigation'
 import toast from 'react-hot-toast'
 import { useStore } from './store'
+import { PatientNotes } from './types'
 
+interface Payload {
+  patientId: string
+  appointmentId: string
+  noteId: string
+}
 interface UseNoteActionsReturn {
   patientId: string
-  note: any
-  validateAndPreparePayload: (
-    additionalFields?: Record<string, any>,
-  ) => any | null
+  note: PatientNotes | undefined
+  validateAndPreparePayload: () => Payload | null
 }
 
 const useNoteActions = (): UseNoteActionsReturn => {
   const patientId = useParams().id as string
-  const { data, selectedRow } = useStore((state) => ({
-    data: state.data,
+  const { selectedRow } = useStore((state) => ({
     selectedRow: state.selectedRow,
   }))
 
-  const note = data?.notes[Number(selectedRow)]
-
-  const validateAndPreparePayload = (additionalFields = {}) => {
-    if (!note) {
+  const validateAndPreparePayload = (): Payload | null => {
+    if (!selectedRow) {
       toast.error('No note selected')
       return null
     }
@@ -32,20 +33,16 @@ const useNoteActions = (): UseNoteActionsReturn => {
       return null
     }
 
-    const payload = {
-      patientId,
-      appointmentId: note.appointmentId,
-      noteId: note.id,
-      ...additionalFields,
-    }
     return {
-      payload,
+      patientId,
+      appointmentId: selectedRow.appointmentId,
+      noteId: selectedRow.id,
     }
   }
 
   return {
     patientId,
-    note,
+    note: selectedRow,
     validateAndPreparePayload,
   }
 }

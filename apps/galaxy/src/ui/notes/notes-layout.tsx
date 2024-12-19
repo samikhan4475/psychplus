@@ -9,13 +9,17 @@ import { LeftPanelFilters } from './left-panel-filters'
 import { NoteDetailsSection } from './note-detail'
 import { NotesTable } from './notes-table'
 
-const scrollClass = `max-h-[calc(100dvh_-_325px)] max-w-[50%] flex-1 [&>.rt-ScrollAreaViewport>div]:w-auto`
+const scrollClass = `max-h-[calc(100dvh_-_325px)] flex-1 [&>.rt-ScrollAreaViewport>div]:w-auto`
 const NotesLayout = ({ patientId }: { patientId: string }) => {
   const [isVisible, setIsVisible] = useState<boolean>(true)
 
   return (
     <Flex className="w-full flex-1" gap={'1'}>
-      <ScrollArea scrollbars="vertical" type="hover" className={scrollClass}>
+      <ScrollArea
+        scrollbars="vertical"
+        type="hover"
+        className={cn(`${scrollClass}`, 'max-w-[660px]')}
+      >
         <Flex className={cn('w-full gap-1')} direction={'column'}>
           <Flex
             direction={'column'}

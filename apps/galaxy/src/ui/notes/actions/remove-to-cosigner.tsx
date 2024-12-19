@@ -7,7 +7,7 @@ interface RemoveToCosignerParams {
   patientId: string
   appointmentId?: string
   noteId?: string
-  staffId: number
+  staffId: string
 }
 
 const removeToCosignerAction = async (payload: RemoveToCosignerParams) => {

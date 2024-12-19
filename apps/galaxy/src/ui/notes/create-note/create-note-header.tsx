@@ -11,9 +11,15 @@ import { SaveButton } from './save-button'
 const secondaryButtonClasses = 'shadow-2 h-6 text-black'
 
 const CreateNoteHeader = () => {
-  const { setIsCreateNoteView } = useStore((state) => ({
+  const { setIsCreateNoteView, setSelectedRow } = useStore((state) => ({
     setIsCreateNoteView: state.setIsCreateNoteView,
+    setSelectedRow: state.setSelectedRow,
   }))
+
+  const clearNoteViewState = () => {
+    setIsCreateNoteView(false)
+    setSelectedRow(undefined)
+  }
 
   return (
     <Flex
@@ -27,7 +33,7 @@ const CreateNoteHeader = () => {
           variant="outline"
           color="gray"
           type="button"
-          onClick={() => setIsCreateNoteView(false)}
+          onClick={() => clearNoteViewState()}
         >
           <ChevronLeft width={24} height={24} />
         </IconButton>

@@ -6,6 +6,7 @@ import { NotesPrintButton } from '../notes-print-button'
 import { NotesRemoveConsignerButton } from '../notes-remove-cosigner-button'
 import { NotesSendCosignerButton } from '../notes-send-consigner-button'
 import { useStore } from '../store'
+import { WidgetType } from '../types'
 import { AddendumButton } from './addendum-button'
 import { AddendumForm } from './addendum-form'
 import { NoteDetail } from './note-detail'
@@ -13,6 +14,7 @@ import { NoteDetail } from './note-detail'
 const NoteDetailsSection = () => {
   const { selectedRow } = useStore((state) => ({
     selectedRow: state.selectedRow,
+    appointment: state.appointment,
   }))
 
   const [addAddendum, setAddAddendum] = useState<boolean>(false)

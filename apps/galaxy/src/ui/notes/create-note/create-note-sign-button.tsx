@@ -27,8 +27,8 @@ const CreateNoteSignButton = () => {
       patientId: patientId,
       appointmentId: appointmentId,
       signedByUserId: data.provider,
-      noteType: data.noteType,
-      noteTitle: data.noteTitle,
+      noteTypeCode: data.noteTypeCode,
+      noteTitleCode: data.noteTitleCode,
       coSignedByUserId: data.cosigner,
       signedDate: formattedDateTime,
       encounterSignedNoteDetails: [

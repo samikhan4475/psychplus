@@ -1,8 +1,8 @@
 import { Text } from '@radix-ui/themes'
 import { getQuickNoteDetailAction } from '@/actions/get-quicknote-detail'
+import { tmsKeys, transformIn } from '@/ui/assessment-plan/tcm-widget/data'
 import { QuickNoteSectionName } from '../../constants'
 import { ActualNoteDetailsWrapper } from '../shared'
-import { tmsKeys, transformIn } from '@/ui/assessment-plan/tcm-widget/data'
 import { Details } from './details'
 
 type TcmProps = {
@@ -10,10 +10,7 @@ type TcmProps = {
   appointmentId: string
 }
 
-const TcmView = async ({
-  patientId,
-  appointmentId,
-}: TcmProps) => {
+const TcmView = async ({ patientId, appointmentId }: TcmProps) => {
   const response = await getQuickNoteDetailAction(patientId, [
     QuickNoteSectionName.QuicknoteSectionTcm,
     appointmentId,

@@ -1,15 +1,7 @@
 import { Text } from '@radix-ui/themes'
 import { getSlashedPaddedDateString } from '@/utils'
 import { BlockContainer } from '../shared'
-
-interface Allergy {
-  allergyName: string
-  allergyType: string
-  reaction: string
-  severityCode: string
-  onsetBegan: string
-  onsetEnded: string
-}
+import { Allergy } from '../types'
 
 interface Props {
   data: Allergy[]

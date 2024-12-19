@@ -117,6 +117,7 @@ interface Appointment {
   cptPrimaryCodes: CptCode[]
   cptAddonCodes: CptCode[]
   cptModifiersCodes: CptCode[]
+  providerStaffId?: number
 }
 
 export { type Appointment, type PaymentType, type CptCode }

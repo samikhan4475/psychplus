@@ -1,6 +1,4 @@
-'use client'
-
-import { NotesWidget } from './notes.widget'
+import { NotesWidget } from './notes-widget'
 
 interface NotesViewProps {
   patientId: string

@@ -1,5 +1,7 @@
 'use client'
 
+import { useEffect } from 'react'
+import { useParams } from 'next/navigation'
 import { Strong } from '@radix-ui/themes'
 import { format } from 'date-fns'
 import { QuickNoteHistory } from '@/types'
@@ -8,11 +10,22 @@ import { useStore } from '@/ui/questionnaires/store'
 import { BlockContainer, LabelAndValue } from './shared'
 
 const Question = () => {
-  const { showNoteViewValue, addedToNotes, histories } = useStore((state) => ({
+  const patientId = useParams().id as string
+  const {
+    showNoteViewValue,
+    addedToNotes,
+    histories,
+    initializeQuestionnaires,
+  } = useStore((state) => ({
     showNoteViewValue: state.showNoteViewValue,
     histories: state.histories,
     addedToNotes: state.addedToNotes,
+    initializeQuestionnaires: state.initializeQuestionnaires,
   }))
+
+  useEffect(() => {
+    initializeQuestionnaires(patientId)
+  }, [])
 
   const groupedHistories: Record<string, QuickNoteHistory[]> = {}
   for (const sectionName in histories) {
