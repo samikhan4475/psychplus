@@ -30,9 +30,15 @@ const getQuickNoteDetailAction = async (
   if (isWithOutAppointmentId !== undefined) {
     payload.isWithAppointmentNull = isWithOutAppointmentId
   }
+
   const response = await api.POST<QuickNoteSectionItem[]>(
     api.NOTE_DETAILS_SEARCH_ENDPOINT,
     payload,
+    {
+      ...(sectionNames?.length && {
+        next: { tags: [sectionNames[0]] },
+      }),
+    },
   )
 
   if (response.state === 'error') {

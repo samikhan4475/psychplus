@@ -14,12 +14,14 @@ interface WidgetFormContainerProps extends WidgetContainerProps {
   getData: (
     schema: any,
   ) => QuickNoteSectionItem[] | Promise<QuickNoteSectionItem[]>
+  tags?: string[]
 }
 
 const WidgetFormContainer = ({
   patientId,
   widgetId,
   getData,
+  tags = [],
   ...props
 }: WidgetFormContainerProps) => {
   const form = useFormContext()
@@ -29,7 +31,7 @@ const WidgetFormContainer = ({
   const onSubmit = (shouldToast = true) =>
     form.handleSubmit(async (data) => {
       const values = await getData(data)
-      const payload = { patientId, data: values }
+      const payload = { patientId, data: values, tags }
 
       const result = await saveWidgetAction(payload)
 
@@ -76,6 +78,7 @@ const WidgetFormContainer = ({
       }
 
       const shouldToast = event.data.showToast ? true : false
+
       if (isDirty) {
         onSubmit(shouldToast)()
       } else {

@@ -14,6 +14,7 @@ type WidgetContainerProps = React.PropsWithChildren<{
   toggleable?: boolean //This is linked with checkbox field named "displayWidgetCheckbox" values are 'show' and 'hide'
   headerLeft?: React.ReactNode
   headerRight?: React.ReactNode
+  topHeader?: React.ReactNode
   sticky?: boolean
   className?: string
 }>
@@ -28,6 +29,7 @@ const WidgetContainer = ({
   contentHeight = 200,
   headerLeft,
   headerRight,
+  topHeader,
   children,
   sticky = false,
   className,
@@ -44,51 +46,55 @@ const WidgetContainer = ({
     }
   }
   return (
-    <Flex
-      direction="column"
-      py="3"
-      gap="2"
-      className={cn('bg-white px-2.5 shadow-2', className)}
-    >
+    <>
+      {topHeader && <>{topHeader}</>}
       <Flex
-        align="center"
-        justify="between"
+        direction="column"
+        py="3"
         gap="2"
-        wrap="wrap"
-        className={cn({ 'bg-white sticky top-0 z-10 py-2': sticky })}
+        mt="1"
+        className={cn('bg-white px-2.5 shadow-2', className)}
       >
-        <Flex align="center" gap="2">
-          {toggleable && (
-            <Checkbox
-              checked={checked}
-              onCheckedChange={handleCheckedChange}
-              highContrast
-              className="cursor-pointer"
-            />
-          )}
-          <Text weight="medium" size="3">
-            {title}
-          </Text>
-          <Flex gap="2">{headerLeft}</Flex>
-        </Flex>
-        <Flex gap="2">{headerRight}</Flex>
-      </Flex>
-      {loading && (
         <Flex
           align="center"
-          justify="center"
-          style={{ height: `${contentHeight}px` }}
+          justify="between"
+          gap="2"
+          wrap="wrap"
+          className={cn({ 'bg-white sticky top-0 z-10 py-2': sticky })}
         >
-          <LoadingPlaceholder />
+          <Flex align="center" gap="2">
+            {toggleable && (
+              <Checkbox
+                checked={checked}
+                onCheckedChange={handleCheckedChange}
+                highContrast
+                className="cursor-pointer"
+              />
+            )}
+            <Text weight="medium" size="3">
+              {title}
+            </Text>
+            <Flex gap="2">{headerLeft}</Flex>
+          </Flex>
+          <Flex gap="2">{headerRight}</Flex>
         </Flex>
-      )}
-      {error && <Text>{error}</Text>}
-      {!loading && !error && (
-        <Flex direction="column">
-          <WidgetBlocksContainer>{children}</WidgetBlocksContainer>
-        </Flex>
-      )}
-    </Flex>
+        {loading && (
+          <Flex
+            align="center"
+            justify="center"
+            style={{ height: `${contentHeight}px` }}
+          >
+            <LoadingPlaceholder />
+          </Flex>
+        )}
+        {error && <Text>{error}</Text>}
+        {!loading && !error && (
+          <Flex direction="column">
+            <WidgetBlocksContainer>{children}</WidgetBlocksContainer>
+          </Flex>
+        )}
+      </Flex>
+    </>
   )
 }
 

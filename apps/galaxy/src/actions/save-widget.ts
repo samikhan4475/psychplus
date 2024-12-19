@@ -1,5 +1,6 @@
 'use server'
 
+import { revalidateTag } from 'next/cache'
 import { cookies } from 'next/headers'
 import * as api from '@/api'
 import type { QuickNoteSectionItem } from '@/types'
@@ -7,11 +8,13 @@ import type { QuickNoteSectionItem } from '@/types'
 interface SaveWidgetActionParams {
   patientId: string
   data: QuickNoteSectionItem[]
+  tags?: string[]
 }
 
 const saveWidgetAction = async ({
   patientId,
   data,
+  tags,
 }: SaveWidgetActionParams): Promise<api.ActionResult<void>> => {
   const cookieStore = await cookies()
 
@@ -27,6 +30,11 @@ const saveWidgetAction = async ({
       state: 'error',
       error: response.error,
     }
+  }
+  if (tags?.length) {
+    tags.forEach((tag) => {
+      revalidateTag(tag)
+    })
   }
 
   return {

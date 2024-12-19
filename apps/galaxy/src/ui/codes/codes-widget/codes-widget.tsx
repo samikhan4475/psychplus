@@ -79,6 +79,7 @@ const CodesWidget = ({
         patientId={patientId}
         widgetId={QuickNoteSectionName.QuicknoteSectionCodes}
         title="Codes"
+        tags={isCodesHeader ? [QuickNoteSectionName.QuicknoteSectionCodes] : []}
         getData={transformOut(patientId, appointmentId)}
         headerRight={
           <>

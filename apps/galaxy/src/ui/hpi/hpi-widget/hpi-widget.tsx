@@ -42,20 +42,23 @@ const HpiWidget = ({
 
   return (
     <FormProvider {...form}>
-      {isHpiHeader && <HpiWidgetHeader />}
       <WidgetFormContainer
         patientId={patientId}
+        tags={isHpiHeader ? [QuickNoteSectionName.QuicknoteSectionHPI] : []}
         widgetId={QuickNoteSectionName.QuicknoteSectionHPI}
         getData={transformOut(patientId)}
         title={!isHpiHeader ? 'HPI/Presenting Symptoms' : undefined}
         sticky
         className="p-2 pt-0"
         headerRight={
-          <>
-            <ClearButton />
-            <WidgetSaveButton />
-          </>
+          !isHpiHeader && (
+            <>
+              <ClearButton />
+              <WidgetSaveButton />
+            </>
+          )
         }
+        topHeader={isHpiHeader && <HpiWidgetHeader />}
       >
         <ChiefComplaintBlock />
         <DepressionBlock />
