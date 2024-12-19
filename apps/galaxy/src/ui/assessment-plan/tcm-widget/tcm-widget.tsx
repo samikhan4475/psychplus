@@ -29,13 +29,12 @@ const TcmWidget = ({ patientId, tcmData, isTcmTab }: TcmWidget) => {
   const initialValue = transformIn(tcmData)
   const form = useTcmWidgetForm(initialValue)
   const appointmentId = useSearchParams().get('id') as string
-  const visitSequence = useSearchParams().get('visitSequence') || ''
   return (
     <FormProvider {...form}>
       <WidgetFormContainer
         patientId={patientId}
         widgetId="tcm-widget"
-        getData={transformOut(patientId, appointmentId, visitSequence)}
+        getData={transformOut(patientId, appointmentId)}
         title={!isTcmTab ? 'TCM' : undefined}
         headerRight={
           <>

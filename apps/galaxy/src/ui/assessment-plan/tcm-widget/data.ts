@@ -48,18 +48,14 @@ const transformIn = (value: QuickNoteSectionItem[]): TcmWidgetSchemaType => {
   return result as TcmWidgetSchemaType;
 }
 
-const transformOut = (patientId: string, appointmentId: string, visitSequence: string) =>
+const transformOut = (patientId: string, appointmentId: string) =>
   async (schema: Record<string, string | DateValue | null>) => {
     const result: QuickNoteSectionItem[] = []
     const data = sanitizeFormData(schema)
-    let ifAnyEmpty = false
     Object.entries(data).forEach(([key, value]) => {
       let newValue = value
       if ((key === 'dcDate' || key === 'tcmDate') && value) {
         newValue = value.toString()
-      }
-      if (newValue === "") {
-        ifAnyEmpty = true
       }
       result.push({
         pid: Number(patientId),
@@ -85,20 +81,6 @@ const transformOut = (patientId: string, appointmentId: string, visitSequence: s
       addCodes([{ key: CptCodeKeys.PRIMARY_CODE_KEY, code: "99495" }]);
     }
     
-    if (visitSequence === "Initial") {
-      if (datesDifference <= 30 || ifAnyEmpty) {
-        addCodes([
-          { key: CptCodeKeys.PRIMARY_CODE_KEY, code: "99204" },
-          { key: CptCodeKeys.PRIMARY_CODE_KEY, code: "99205" },
-        ]);
-      }
-    } else if (visitSequence === "Established" && ifAnyEmpty) {
-      addCodes([
-        { key: CptCodeKeys.PRIMARY_CODE_KEY, code: "99214" },
-        { key: CptCodeKeys.PRIMARY_CODE_KEY, code: "99215" },
-      ]);
-    }
-
     const codesResult = await manageCodes(
       patientId,
       appointmentId,
