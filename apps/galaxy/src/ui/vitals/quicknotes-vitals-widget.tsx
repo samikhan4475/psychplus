@@ -25,7 +25,14 @@ const QuicknotesVitalsWidget = ({
   }))
 
   useEffect(() => {
-    setData(data)
+    setData(
+      data?.map((vital) => ({
+        ...vital,
+        addToNote: quicknoteData
+          .map((quicknote) => String(quicknote.id))
+          .includes(String(vital.id)),
+      })),
+    )
     setQuicknotesData(quicknoteData)
   }, [patientId, data, quicknoteData])
 
