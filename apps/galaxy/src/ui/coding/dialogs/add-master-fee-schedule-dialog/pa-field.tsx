@@ -1,24 +1,22 @@
 'use client'
 
-import { TextField } from '@radix-ui/themes'
-import { useFormContext } from 'react-hook-form'
+import { NumericInput } from '@/components'
 import {
   FormFieldContainer,
   FormFieldError,
   FormFieldLabel,
 } from '@/components/form'
-import { SchemaType } from './schema'
 
 const PaField = () => {
-  const form = useFormContext<SchemaType>()
-
   return (
     <FormFieldContainer>
       <FormFieldLabel required>PA</FormFieldLabel>
-      <TextField.Root
-        size="1"
-        {...form.register('paAmount')}
-        placeholder="PA $"
+
+      <NumericInput
+        placeholder="$0.00"
+        field="paAmount"
+        className="border-pp-gray-2 w-100 !h-6 border border-solid outline-none [box-shadow:none]"
+        maxLimit={100000}
       />
       <FormFieldError name="paAmount" />
     </FormFieldContainer>

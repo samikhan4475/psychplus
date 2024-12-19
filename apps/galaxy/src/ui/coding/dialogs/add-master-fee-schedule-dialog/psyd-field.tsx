@@ -1,24 +1,21 @@
 'use client'
 
-import { TextField } from '@radix-ui/themes'
-import { useFormContext } from 'react-hook-form'
+import { NumericInput } from '@/components'
 import {
   FormFieldContainer,
   FormFieldError,
   FormFieldLabel,
 } from '@/components/form'
-import { SchemaType } from './schema'
 
 const PsyDField = () => {
-  const form = useFormContext<SchemaType>()
-
   return (
     <FormFieldContainer>
       <FormFieldLabel required>PsyD</FormFieldLabel>
-      <TextField.Root
-        size="1"
-        {...form.register('psyDAmount')}
-        placeholder="PsyD $"
+      <NumericInput
+        placeholder="$0.00"
+        field="psyDAmount"
+        className="border-pp-gray-2 w-100 !h-6 border border-solid outline-none [box-shadow:none]"
+        maxLimit={100000}
       />
       <FormFieldError name="psyDAmount" />
     </FormFieldContainer>

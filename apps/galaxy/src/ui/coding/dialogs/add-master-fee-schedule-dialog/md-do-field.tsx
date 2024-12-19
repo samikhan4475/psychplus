@@ -1,24 +1,21 @@
 'use client'
 
-import { TextField } from '@radix-ui/themes'
-import { useFormContext } from 'react-hook-form'
+import { NumericInput } from '@/components'
 import {
   FormFieldContainer,
   FormFieldError,
   FormFieldLabel,
 } from '@/components/form'
-import { SchemaType } from './schema'
 
 const MdDoField = () => {
-  const form = useFormContext<SchemaType>()
-
   return (
     <FormFieldContainer>
       <FormFieldLabel required>MD/DO</FormFieldLabel>
-      <TextField.Root
-        size="1"
-        {...form.register('mdDoAmount')}
-        placeholder="MCD $"
+      <NumericInput
+        placeholder="$0.00"
+        field="mdDoAmount"
+        className="border-pp-gray-2 w-[198px] !h-6 border border-solid outline-none [box-shadow:none]"
+        maxLimit={100000}
       />
       <FormFieldError name="mdDoAmount" />
     </FormFieldContainer>

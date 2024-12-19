@@ -52,7 +52,7 @@ const NumericInput = ({
               placeholder={placeholder}
               name={fieldName}
               allowNegative={allowNegative}
-              value={field.value}
+              value={formatValueWithDecimals(field.value)}
               disabled={field.disabled || disabled}
               onValueChange={({ value }) => field.onChange(value)}
               isAllowed={(values) => {
