@@ -1,9 +1,8 @@
 import { PlusCircledIcon } from '@radix-ui/react-icons'
 import { Button, Flex, Text } from '@radix-ui/themes'
 import { NavLogo } from '@/components'
-import { GOOGLE_MAPS_API_KEY } from '@/constants'
 import { getAuthCookies } from '@/utils/auth'
-import { AddPatientDialog } from '../patient-lookup/add-patient-dialog/add-patient-dialog'
+import { AddPatient } from '../patient/add-patient'
 import { AddVisit } from '../visit/add-visit'
 import { InboxLink } from './inbox-link'
 import { NavigationLinks } from './navigation-links'
@@ -20,7 +19,7 @@ const Header = () => {
         <Flex align="center" justify="between" px="5">
           <NavLogo />
           <Flex height="100%" align="center" gap="2">
-            <AddPatientDialog googleApiKey={GOOGLE_MAPS_API_KEY}>
+            <AddPatient>
               <Button
                 variant="outline"
                 size="2"
@@ -29,9 +28,9 @@ const Header = () => {
                 className="pb-[14px] pt-[14px]"
               >
                 <PlusCircledIcon />
-                Patient
+                User
               </Button>
-            </AddPatientDialog>
+            </AddPatient>
             <AddVisit>
               <Button
                 variant="outline"

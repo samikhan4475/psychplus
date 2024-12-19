@@ -3,14 +3,14 @@
 import { PropsWithChildren, useState } from 'react'
 import { Dialog } from '@radix-ui/themes'
 import { CloseDialogTrigger } from '@/components/close-dialog-trigger'
-import { AddPatientForm } from './components'
 import { NewPatient } from '@/types'
+import { AddPatientForm } from './components'
 
 const AddPatient = ({
-  onPatientAdd,
+  onPatientAdd = () => null,
   children,
 }: PropsWithChildren<{
-  onPatientAdd: (data: NewPatient) => void
+  onPatientAdd?: (data: NewPatient) => void
 }>) => {
   const [isOpenDialog, setIsOpenDialog] = useState(false)
 

@@ -6,7 +6,7 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { FormContainer } from '@/components'
 import { sanitizeFormData } from '@/utils'
-import { addNoEmailPatienAction } from '../actions'
+import { addPatientAction } from '../actions'
 import { AddressDetails } from './address-details'
 import { CancelButton } from './cancel-button'
 import { DOBDatePicker } from './dob-date-picker'
@@ -64,7 +64,7 @@ const AddPatientForm = ({ closeDialog }: AddPatientFormProps) => {
 
   const onSubmit: SubmitHandler<AddPatientSchemaType> = async (data) => {
     const sanitizedFormData = sanitizeFormData(data)
-    const result = await addNoEmailPatienAction(transformOut(sanitizedFormData))
+    const result = await addPatientAction(transformOut(sanitizedFormData))
 
     if (result.state === 'error') {
       toast.error(result.error)

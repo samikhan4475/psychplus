@@ -3,13 +3,10 @@
 import * as api from '@/api'
 import { AddPatientSchemaType } from '../add-patient-form'
 
-const addNoEmailPatienAction = async (
+const addPatientAction = async (
   payload: AddPatientSchemaType,
 ): Promise<api.ActionResult<void>> => {
-  const result = await api.POST<void>(
-    api.ADD_NO_EMAIL_PATIENT_ENDPOINT,
-    payload,
-  )
+  const result = await api.POST<void>(api.ADD_PATIENT_ENDPOINT, payload)
 
   if (result.state === 'error') {
     return {
@@ -23,4 +20,4 @@ const addNoEmailPatienAction = async (
   }
 }
 
-export { addNoEmailPatienAction }
+export { addPatientAction }

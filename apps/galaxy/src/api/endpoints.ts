@@ -290,7 +290,6 @@ const UPDATE_PATIENT_VITAL_ENDPOINT = (
 ) => `${API_URL}/api/patients/${patientId}/vitalsigns/${vitalSignId}`
 const GET_STAFF = `${API_URL}/api/staff?includeInactive=false&offset=0&limit=0&orderBy=legalName asc`
 const GET_POS_CODES = `${API_URL}/api/codeset/authorities/PsychPlusPublic/codesets/PlaceOfService?includeExtraDetails=false&offset=0&limit=100&orderBy=displayName asc`
-const ADD_NO_EMAIL_PATIENT_ENDPOINT = `${API_URL}/api/users/actions/patientsignup`
 const GET_CLEARNING_HOUSE_SUBMITTER_ENDPOINT = `${API_URL}/api/clearinghousesubmitters/actions/search`
 const DELETE_CLEARNING_HOUSE_SUBMITTER_ENDPOINT = (id: string) =>
   `${API_URL}/api/clearinghousesubmitters/${id}`
@@ -565,7 +564,6 @@ export {
   GET_ORGANIZATIONS_ENDPOINT,
   GET_PRACTICES_ENDPOINT,
   GET_PATIENT_VITALS_ENDPOINT,
-  ADD_NO_EMAIL_PATIENT_ENDPOINT,
   GET_CLEARNING_HOUSE_SUBMITTER_ENDPOINT,
   DELETE_CLEARNING_HOUSE_SUBMITTER_ENDPOINT,
   ADD_CLEARNING_HOUSE_SUBMITTER_ENDPOINT,
