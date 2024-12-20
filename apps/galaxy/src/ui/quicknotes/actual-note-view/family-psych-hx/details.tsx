@@ -4,6 +4,7 @@ import { BlockContainer, LabelAndValue } from '../shared'
 
 interface Props<T> {
   data: T
+  actualNoteViewVisibility?: boolean
 }
 
 type FamilyPsychHxKey = keyof FamilyPsychHxWidgetSchemaType
@@ -35,10 +36,8 @@ const renderFamilyPsychHistory = (
   )
 }
 
-const Details = ({ data }: Props<FamilyPsychHxWidgetSchemaType>) => {
-  const shouldRender = data.widgetContainerCheckboxField === 'show'
-
-  if (!shouldRender) {
+const Details = ({ data, actualNoteViewVisibility }: Props<FamilyPsychHxWidgetSchemaType>) => {
+  if (!actualNoteViewVisibility) {
     return null
   }
 

@@ -1,5 +1,6 @@
 'use client'
 
+import { useEffect } from 'react'
 import { Checkbox, Flex, Text } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
 import { cn } from '@/utils'
@@ -12,6 +13,8 @@ type WidgetContainerProps = React.PropsWithChildren<{
   error?: string
   contentHeight?: number
   toggleable?: boolean //This is linked with checkbox field named "displayWidgetCheckbox" values are 'show' and 'hide'
+  toggleableChecked?: boolean
+  toggleableDiabled?: boolean
   headerLeft?: React.ReactNode
   headerRight?: React.ReactNode
   topHeader?: React.ReactNode
@@ -26,6 +29,8 @@ const WidgetContainer = ({
   loading,
   error,
   toggleable,
+  toggleableChecked,
+  toggleableDiabled,
   contentHeight = 200,
   headerLeft,
   headerRight,
@@ -45,6 +50,15 @@ const WidgetContainer = ({
       form.setValue(WidgetContainerCheckboxField, newChecked ? 'show' : 'hide')
     }
   }
+
+  useEffect(() => {
+    if (toggleableChecked !== undefined) {
+      form?.reset({
+        WidgetContainerCheckboxField: toggleableChecked ? 'show' : 'hide',
+      })
+    }
+  }, [toggleableChecked])
+
   return (
     <>
       {topHeader && <>{topHeader}</>}
@@ -65,10 +79,13 @@ const WidgetContainer = ({
           <Flex align="center" gap="2">
             {toggleable && (
               <Checkbox
-                checked={checked}
+                checked={toggleableChecked !== undefined ? toggleable : checked}
                 onCheckedChange={handleCheckedChange}
                 highContrast
-                className="cursor-pointer"
+                className={cn(
+                  toggleableDiabled ? 'cursor-not-allowed' : 'cursor-pointer',
+                )}
+                disabled={toggleableDiabled}
               />
             )}
             <Text weight="medium" size="3">

@@ -47,6 +47,7 @@ const QuickNotesView = async ({
                   key={id}
                   patientId={patientId}
                   appointmentId={appointmentId}
+                  appointment={appointment.data}
                 />
               )
             })}
@@ -56,6 +57,8 @@ const QuickNotesView = async ({
           patientId={patientId}
           appointment={appointment.data}
           widgets={widgets}
+          visitType={visitType}
+          visitSequence={visitSequence}
         />
       </Flex>
       <QuickNotesMarkAsError />

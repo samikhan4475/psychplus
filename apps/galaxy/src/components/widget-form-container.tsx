@@ -1,10 +1,12 @@
 'use client'
 
 import { useEffect } from 'react'
+import { useSearchParams } from 'next/navigation'
 import { useFormContext } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { saveWidgetAction } from '@/actions/save-widget'
-import type { QuickNoteSectionItem } from '@/types'
+import type { Appointment, QuickNoteSectionItem } from '@/types'
+import { getWidgetContainerCheckboxStateByWidgetId } from '@/utils'
 import { WidgetContainer, type WidgetContainerProps } from './widget-container'
 import { WidgetLoadingOverlay } from './widget-loading-overlay'
 
@@ -14,6 +16,7 @@ interface WidgetFormContainerProps extends WidgetContainerProps {
   getData: (
     schema: any,
   ) => QuickNoteSectionItem[] | Promise<QuickNoteSectionItem[]>
+  appointment?: Appointment
   tags?: string[]
 }
 
@@ -21,10 +24,14 @@ const WidgetFormContainer = ({
   patientId,
   widgetId,
   getData,
+  appointment,
   tags = [],
   ...props
 }: WidgetFormContainerProps) => {
   const form = useFormContext()
+  const params = useSearchParams()
+  const visitSequence = params.get('visitSequence')
+  const visitType = params.get('visitType')
 
   const { isDirty } = form.formState
 
@@ -126,11 +133,24 @@ const WidgetFormContainer = ({
     )
   }, [isDirty])
 
+  const widgetContainerCheckboxState =
+    getWidgetContainerCheckboxStateByWidgetId({
+      widgetId,
+      visitType,
+      visitSequence,
+      initialValue: form.watch('widgetContainerCheckboxField'),
+      providerType: appointment?.providerType,
+    })
+
   return (
     <form onSubmit={onSubmit()}>
       <fieldset disabled={form.formState.isSubmitting}>
         {form.formState.isSubmitting && <WidgetLoadingOverlay />}
-        <WidgetContainer {...props} />
+        <WidgetContainer
+          {...props}
+          toggleableChecked={widgetContainerCheckboxState?.checked}
+          toggleableDiabled={widgetContainerCheckboxState?.disabled}
+        />
       </fieldset>
     </form>
   )

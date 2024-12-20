@@ -3,10 +3,14 @@ import { BlockContainer, LabelAndValue } from '../shared'
 
 interface Props<T> {
   data: T
+  actualNoteViewVisibility?: boolean
 }
 
-const Details = ({ data }: Props<SocialHxWidgetSchemaType>) => {
-  if (data.widgetContainerCheckboxField !== 'show') {
+const Details = ({
+  data,
+  actualNoteViewVisibility,
+}: Props<SocialHxWidgetSchemaType>) => {
+  if (!actualNoteViewVisibility) {
     return null
   }
 

@@ -89,7 +89,7 @@ const PhysicalExamGroupSelectSection = <T extends string>({
   }, [normalChipsSelected])
 
   const isSelected = (value: string) => {
-    return values.includes(value) || normalChipsSelected.includes(value)
+    return values?.includes(value) || normalChipsSelected.includes(value)
   }
 
   const toggleSelected = (value: string) => () => {

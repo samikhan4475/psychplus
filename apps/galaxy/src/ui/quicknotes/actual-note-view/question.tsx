@@ -27,12 +27,24 @@ const Question = () => {
     initializeQuestionnaires(patientId)
   }, [])
 
+  const hasScored = Object.keys(addedToNotes).some(
+    (key) => key !== 'ShowNoteView',
+  )
+
+  const hasCheckBoxState = Object.keys(addedToNotes).some(
+    (key) => key === 'ShowNoteView',
+  )
+
+  const actualNoteViewVisibility = hasCheckBoxState
+    ? showNoteViewValue === 'show'
+    : hasScored
+
   const groupedHistories: Record<string, QuickNoteHistory[]> = {}
   for (const sectionName in histories) {
     groupedHistories[sectionName] = histories[sectionName]
   }
 
-  return showNoteViewValue === 'show' ? (
+  return actualNoteViewVisibility ? (
     <BlockContainer heading="Questionnaires">
       {Object.entries(groupedHistories).map(([sectionName, entries]) => {
         const addedTonNotesDates = addedToNotes[sectionName] || []

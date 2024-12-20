@@ -12,12 +12,14 @@ interface Props<T> {
   sectionName: string
   data: T
   patient?: PatientProfile
+  actualNoteViewVisibility?: boolean
 }
 
 const Details = ({
   sectionName,
   data,
   patient,
+  actualNoteViewVisibility,
 }: Props<SubstanceUseHxWidgetSchemaType>) => {
   const { histories } = useStore((state) => ({
     histories: state.histories,
@@ -40,7 +42,7 @@ const Details = ({
     (acc, item) => acc + Number(item.sectionItemValue),
     0,
   )
-  return data.widgetContainerCheckboxField === 'show' ? (
+  return actualNoteViewVisibility ? (
     <BlockContainer heading={sectionName}>
       <Flex direction="column">
         <LabelAndValue label="Tobacco:" value={data.tobacco} />

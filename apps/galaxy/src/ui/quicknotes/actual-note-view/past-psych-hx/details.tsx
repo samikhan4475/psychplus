@@ -5,10 +5,14 @@ import { BlockContainer, LabelAndValue } from '../shared'
 
 interface Props<T> {
   data: T
+  actualNoteViewVisibility?: boolean
 }
 
-const Details = ({ data }: Props<PastPsychHxWidgetSchemaType>) => {
-  return data.widgetContainerCheckboxField === 'show' ? (
+const Details = ({
+  data,
+  actualNoteViewVisibility,
+}: Props<PastPsychHxWidgetSchemaType>) => {
+  return actualNoteViewVisibility ? (
     <BlockContainer heading="Past Psychiatry History">
       <Flex direction="row">
         <LabelAndValue

@@ -2,6 +2,7 @@
 
 import { FormProvider } from 'react-hook-form'
 import { WidgetFormContainer, WidgetSaveButton } from '@/components'
+import { Appointment } from '@/types'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import {
   AffectBlock,
@@ -28,9 +29,15 @@ interface MseWidgetProps {
   patientId: string
   initialValue: MseWidgetSchemaType
   isMseTab: boolean
+  appointment?: Appointment
 }
 
-const MseWidget = ({ patientId, initialValue, isMseTab }: MseWidgetProps) => {
+const MseWidget = ({
+  patientId,
+  initialValue,
+  isMseTab,
+  appointment,
+}: MseWidgetProps) => {
   const form = useMseWidgetForm(initialValue)
 
   return (
@@ -48,6 +55,7 @@ const MseWidget = ({ patientId, initialValue, isMseTab }: MseWidgetProps) => {
         getData={transformOut(patientId)}
         title={!isMseTab ? 'Mental Status Exam' : undefined}
         toggleable={!isMseTab}
+        appointment={appointment}
         headerRight={
           <>
             <WidgetClearButton />

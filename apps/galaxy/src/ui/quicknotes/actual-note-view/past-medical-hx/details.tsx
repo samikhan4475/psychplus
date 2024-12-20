@@ -4,9 +4,13 @@ import { BlockContainer, LabelAndValue } from '../shared'
 
 interface Props<T> {
   data: T
+  actualNoteViewVisibility?: boolean
 }
 
-const Details = ({ data }: Props<PastMedicalHxWidgetSchemaType>) => {
+const Details = ({
+  data,
+  actualNoteViewVisibility,
+}: Props<PastMedicalHxWidgetSchemaType>) => {
   const selectedOptions = BLOCK_OPTIONS.filter((option) => {
     if (['Pregnant', 'Breast Feeding', 'Other'].includes(option.label))
       return false
@@ -15,7 +19,7 @@ const Details = ({ data }: Props<PastMedicalHxWidgetSchemaType>) => {
     .map((option) => option.label)
     .join(', ')
 
-  return data.widgetContainerCheckboxField === 'show' ? (
+  return actualNoteViewVisibility ? (
     <BlockContainer heading="Past Medical History">
       {data.pregnantDate && (
         <LabelAndValue

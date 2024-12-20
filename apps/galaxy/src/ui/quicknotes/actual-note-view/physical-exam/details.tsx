@@ -5,9 +5,13 @@ import { updateToNormalOrAbnormal, valueMapping } from './utils'
 
 interface Props<T> {
   data: T
+  actualNoteViewVisibility?: boolean
 }
 
-const Details = ({ data }: Props<PhysicalExamWidgetSchemaType>) => {
+const Details = ({
+  data,
+  actualNoteViewVisibility,
+}: Props<PhysicalExamWidgetSchemaType>) => {
   const labelMapping: Record<string, string> = {
     general: 'General',
     skin: 'Skin',
@@ -28,7 +32,7 @@ const Details = ({ data }: Props<PhysicalExamWidgetSchemaType>) => {
     cranialNervesExam: 'Neurological Examination of Cranial Nerves',
   }
 
-  return data.widgetContainerCheckboxField === 'show' ? (
+  return actualNoteViewVisibility ? (
     <BlockContainer heading="Physical Exam">
       {Object.entries(data).map(([key, value]) => {
         const label =

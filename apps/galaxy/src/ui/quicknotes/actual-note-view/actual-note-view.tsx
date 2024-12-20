@@ -10,11 +10,15 @@ interface ActualNoteViewProps {
   patientId: string
   appointment: Appointment
   widgets: WidgetType[]
+  visitType: string
+  visitSequence: string
 }
 const ActualNoteView = async ({
   appointment,
   patientId,
   widgets,
+  visitType,
+  visitSequence,
 }: ActualNoteViewProps) => {
   const patient = await getPatientProfile(patientId)
 
@@ -46,6 +50,8 @@ const ActualNoteView = async ({
                 appointmentId={String(appointment.id)}
                 appointment={appointment}
                 patient={patient.data}
+                visitType={visitType}
+                visitSequence={visitSequence}
               />
             )
           })}

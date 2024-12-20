@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { Flex } from '@radix-ui/themes'
 import { FormProvider } from 'react-hook-form'
 import { WidgetFormContainer, WidgetSaveButton } from '@/components'
+import { Appointment } from '@/types'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { cn } from '@/utils'
 import {
@@ -36,12 +37,14 @@ interface PhysicalExamWidgetProps {
   patientId: string
   initialValue: PhysicalExamWidgetSchemaType
   isPhysicalExamTab: boolean
+  appointment?: Appointment
 }
 
 const PhysicalExamWidget = ({
   patientId,
   initialValue,
   isPhysicalExamTab,
+  appointment,
 }: PhysicalExamWidgetProps) => {
   const form = usePhysicalExamWidgetForm(initialValue)
   const dependentNormalValues = [
@@ -91,6 +94,7 @@ const PhysicalExamWidget = ({
         getData={transformOut(patientId)}
         title={!isPhysicalExamTab ? 'Physical Exam' : undefined}
         toggleable={!isPhysicalExamTab}
+        appointment={appointment}
         headerRight={
           <>
             <WidgetClearButton handleOnClear={handleOnClear} />

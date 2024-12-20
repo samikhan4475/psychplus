@@ -51,7 +51,7 @@ const visitTypeToBlocks: Record<string, string[]> = {
     'ECTBlock',
   ],
   'HospitalCare/Discharge': ['InjectionBlock', 'TherapyPsychoAnalysisBlock'],
-  'HospitalCare/Initial/Discharge': [
+  'HospitalCare/InitialDischarge': [
     'InjectionBlock',
     'TherapyPsychoAnalysisBlock',
   ],

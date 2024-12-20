@@ -5,9 +5,13 @@ import { desiredOrderMse, mseValueMapping, reorderObjectKeys } from './utils'
 
 interface Props<T> {
   data: T
+  actualNoteViewVisibility?: boolean
 }
 
-const Details = ({ data }: Props<MseWidgetSchemaType>) => {
+const Details = ({
+  data,
+  actualNoteViewVisibility,
+}: Props<MseWidgetSchemaType>) => {
   const labelMapping: Record<string, string> = {
     orientation: 'Orientation',
     appearance: 'Appearance',
@@ -39,7 +43,7 @@ const Details = ({ data }: Props<MseWidgetSchemaType>) => {
 
   const reorderedData = reorderObjectKeys(data, [...desiredOrderMse])
 
-  return data.widgetContainerCheckboxField === 'show' ? (
+  return actualNoteViewVisibility ? (
     <BlockContainer heading="Mental Status Exam">
       {Object.entries(reorderedData).map(([key, value]) => {
         const label = labelMapping[key] || key.replace(/([A-Z])/g, ' $1')
