@@ -102,6 +102,7 @@ const RelationshipTable = ({
       <DataTable
         data={patientRelationships ?? []}
         columns={columns}
+        theadClass="z-[1]"
         disablePagination
         sticky
       />

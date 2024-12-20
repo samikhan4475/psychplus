@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Box, Flex } from '@radix-ui/themes'
+import { Box, Flex, ScrollArea } from '@radix-ui/themes'
 import { GooglePlacesContextProvider } from '@/providers/google-places-provider'
 import {
   PatientConsent,
@@ -15,7 +15,7 @@ import { AdditionalContactInfoCard } from './additional-contact-info'
 import { AlternativeInfoCard } from './alternate-info'
 import { CreateUserCard } from './create-user'
 import { DescriptiveCard } from './descriptive'
-import { LinkAccountCard } from './link-account'
+// import { LinkAccountCard } from './link-account'
 import { LockPageSwitch } from './lock-page-switch'
 import { PatientDataCard } from './patient-data'
 import { PatientHistoryDialog } from './patient-history-dialog'
@@ -56,7 +56,6 @@ const PatientInfoTab = ({
     (consent) => consent?.type === POLICY_TYPE_A,
   )
 
-
   return (
     <Box position="relative">
       <LockPageSwitch />
@@ -78,34 +77,31 @@ const PatientInfoTab = ({
               <SaveButton />
             </Flex>
           </TabContentHeading>
-
-          <Flex direction="column" gap="2">
-            <CreateUserCard
-              patientId={patientId}
-              patientPolicyAStatus={patientPolicyA?.verificationStatus}
-            />
-            <PatientDataCard
-              patientId={patientId}
-              setProfileImage={setProfileImage}
-              setDriverLicenseImage={setDriverLicenseImage}
-            />
-            <AddressCard />
-            <LinkAccountCard
-              patientId={patientId}
-              lintAccounts={[]}
-            />
-
-            <PreferredPartnerCard
-              preferredPartners={patientPreferredPartners ?? []}
-            />
-            <RelationshipCard
-              patientId={patientId}
-              patientRelationships={patientRelationships ?? []}
-            />
-            <AdditionalContactInfoCard />
-            <AlternativeInfoCard />
-            <DescriptiveCard />
-          </Flex>
+          <ScrollArea className="max-h-[calc(100dvh-375px)]">
+            <Flex direction="column" gap="2">
+              <CreateUserCard
+                patientId={patientId}
+                patientPolicyAStatus={patientPolicyA?.verificationStatus}
+              />
+              <PatientDataCard
+                patientId={patientId}
+                setProfileImage={setProfileImage}
+                setDriverLicenseImage={setDriverLicenseImage}
+              />
+              <AddressCard />
+              {/* PHASE 2 item - <LinkAccountCard patientId={patientId} lintAccounts={[]} /> */}
+              <PreferredPartnerCard
+                preferredPartners={patientPreferredPartners ?? []}
+              />
+              <RelationshipCard
+                patientId={patientId}
+                patientRelationships={patientRelationships ?? []}
+              />
+              <AdditionalContactInfoCard />
+              <AlternativeInfoCard />
+              <DescriptiveCard />
+            </Flex>
+          </ScrollArea>
         </PatientInfoForm>
       </GooglePlacesContextProvider>
     </Box>

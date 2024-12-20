@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
-import { Flex } from '@radix-ui/themes'
+import { Flex, ScrollArea } from '@radix-ui/themes'
 import { EmptyFileIcon } from '@/components/icons'
 import { Insurance, InsurancePayer } from '@/types'
 import { InsuranceForms } from './form-section'
@@ -47,22 +47,24 @@ const InsuranceView = ({
   return (
     <Flex direction="column" ref={scrollRef} gap="1">
       <InsuranceHeader />
-      {(filteredInsurances && filteredInsurances?.length > 0) ||
-      isAddFormOpen ? (
-        <InsuranceForms
-          patientId={patientId}
-          insurances={filteredInsurances}
-          isAddFormOpen={isAddFormOpen}
-          insurancePayers={insurancePayers}
-        />
-      ) : (
-        !isAddFormOpen && (
-          <FeatureEmpty
-            description="No insurance added yet"
-            Icon={EmptyFileIcon}
+      <ScrollArea className="max-h-[calc(100dvh-375px)]">
+        {(filteredInsurances && filteredInsurances?.length > 0) ||
+        isAddFormOpen ? (
+          <InsuranceForms
+            patientId={patientId}
+            insurances={filteredInsurances}
+            isAddFormOpen={isAddFormOpen}
+            insurancePayers={insurancePayers}
           />
-        )
-      )}
+        ) : (
+          !isAddFormOpen && (
+            <FeatureEmpty
+              description="No insurance added yet"
+              Icon={EmptyFileIcon}
+            />
+          )
+        )}
+      </ScrollArea>
     </Flex>
   )
 }

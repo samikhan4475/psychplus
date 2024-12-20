@@ -1,13 +1,13 @@
 'use client'
 
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
 import { IconButton } from '@radix-ui/themes'
 import { Trash2 } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { PropsWithRow } from '@/components'
 import { Relationship } from '@/types'
 import { deletePatientRelationshipAction } from '../../actions'
+import { usePatientRelationshipContext } from '../context'
 
 const ActionsCell = ({
   row: {
@@ -15,18 +15,18 @@ const ActionsCell = ({
   },
 }: PropsWithRow<Relationship>) => {
   const [disabled, setDisabled] = useState(false)
-  const router = useRouter()
-
+  const { setRelationships } = usePatientRelationshipContext()
   const onDeleteRelation = async () => {
     setDisabled(true)
     const result = await deletePatientRelationshipAction(String(patientId), id)
     if (result.state === 'error') {
       return toast.error(result.error as string)
     }
-
-    toast.success('Relationship deleted')
+    setRelationships((relationships) =>
+      relationships.filter((relation) => relation.id !== id),
+    )
     setDisabled(false)
-    router.refresh()
+    toast.success('Relationship deleted')
   }
   return (
     <IconButton

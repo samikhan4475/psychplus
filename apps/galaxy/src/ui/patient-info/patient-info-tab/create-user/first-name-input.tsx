@@ -23,7 +23,7 @@ const FirstNameInput = () => {
         placeholder="First Name"
         {...form.register('legalName.firstName')}
       />
-      <FormFieldError name="legalName.firstName'" />
+      <FormFieldError name="legalName.firstName" />
     </FormFieldContainer>
   )
 }

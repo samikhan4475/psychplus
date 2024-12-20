@@ -1,7 +1,7 @@
 'use server'
 
 import * as api from '@/api'
-import { LegalName, PatientAddress, PhoneNumber } from '@/types'
+import { LegalName, PatientAddress, PhoneNumber, Relationship } from '@/types'
 
 interface AddRelationshipRequestBody {
   patientId: number
@@ -20,8 +20,8 @@ interface AddRelationshipRequestBody {
 const addPatientRelationshipAction = async (
   patientId: string,
   relationship: AddRelationshipRequestBody,
-) => {
-  const result = await api.POST(
+): Promise<api.ActionResult<Relationship>> => {
+  const result = await api.POST<Relationship>(
     api.ADD_PATIENT_RELATIONSHIP_ENDPOINT(patientId),
     relationship,
   )
@@ -32,10 +32,9 @@ const addPatientRelationshipAction = async (
       error: result.error,
     }
   }
-
   return {
     state: 'success',
-    data: undefined,
+    data: result.data,
   }
 }
 

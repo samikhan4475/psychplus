@@ -20,8 +20,7 @@ const DobInput = () => {
       </FormFieldLabel>
       <TextField.Root
         type="date"
-        min={getCalendarDateLabel(today.subtract({ years: 120 }))}
-        max={getCalendarDateLabel(today.subtract({ years: 18 }))}
+        max={getCalendarDateLabel(today)}
         data-testid="dob-input"
         size="1"
         {...form.register('birthdate')}

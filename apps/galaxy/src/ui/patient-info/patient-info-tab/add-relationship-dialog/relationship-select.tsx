@@ -11,7 +11,9 @@ import { CODESETS } from '@/constants'
 const RelationshipSelect = () => {
   return (
     <FormFieldContainer className="w-full">
-      <FormFieldLabel className="!text-1">Relationship</FormFieldLabel>
+      <FormFieldLabel className="!text-1" required>
+        Relationship
+      </FormFieldLabel>
       <CodesetSelect
         name="relationship"
         codeset={CODESETS.Relationship}
