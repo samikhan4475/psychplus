@@ -27,14 +27,15 @@ interface StateListType {
 }
 
 const ZipCodeSearchForm = () => {
-  const { zipCode, setZipCode, state, setState, setStateCode} = useStore((state) => ({
-    zipCode: state.zipCode,
-    setZipCode: state.setZipCode,
-    state: state.state,
-    setState: state.setState,
-    setStateCode: state.setStateCode
-  }))
-
+  const { zipCode, setZipCode, state, setState, setStateCode } = useStore(
+    (state) => ({
+      zipCode: state.zipCode,
+      setZipCode: state.setZipCode,
+      state: state.state,
+      setState: state.setState,
+      setStateCode: state.setStateCode,
+    }),
+  )
 
   const [zipStates, setZipStates] = useState<StateListType[]>([])
 
@@ -64,14 +65,21 @@ const ZipCodeSearchForm = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [form, form.watch('zipCode')])
 
+  useEffect(() => {
+    if (zipStates.length > 0) {
+      form.setValue('state', zipStates[0].long_name)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [zipStates])
+
   const onSubmit = (data: SchemaType) => {
-    form.reset(form.getValues())
     setZipCode(data.zipCode)
     if (zipStates.length > 0) {
       form.setValue('state', zipStates[0].long_name)
       setState(zipStates[0].long_name)
       setStateCode(zipStates[0].short_name)
     }
+    form.reset(form.getValues())
   }
 
   return (
@@ -89,7 +97,10 @@ const ZipCodeSearchForm = () => {
                 form.setValue('state', value)
                 form.trigger('state')
                 setState(value)
-                setStateCode(zipStates.find(state => state.long_name === value)?.short_name || "")
+                setStateCode(
+                  zipStates.find((state) => state.long_name === value)
+                    ?.short_name || '',
+                )
               }}
               options={zipStates}
             />
