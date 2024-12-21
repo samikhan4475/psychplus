@@ -1,5 +1,6 @@
 'use client'
 
+import { useSearchParams } from 'next/navigation'
 import { Flex } from '@radix-ui/themes'
 import { ReferralsFilterForm } from './referrals-filter-form'
 import { ReferralsHeader } from './referrals-header'
@@ -16,15 +17,25 @@ const PatientReferralsWidget = ({
   patientId,
   isTabView,
 }: PatientReferralsWidgetProps) => {
+  const searchParams = useSearchParams()
+  const appointmentId = searchParams.get('id') ?? ''
+
   return (
-    <StoreProvider patientId={patientId}>
+    <StoreProvider
+      patientId={patientId}
+      isTabView={isTabView}
+      appointmentId={appointmentId}
+    >
       <Flex
         direction="column"
         width="100%"
-        className="bg-white max-h-[calc(100dvh_-_278px)] rounded-1 shadow-2"
+        className="bg-white max-h-[calc(100dvh_-_300px)] rounded-1 shadow-2"
       >
         <Flex gap="1" direction="column" mb="1">
-          <ReferralsHeader patientId={patientId} />
+          <ReferralsHeader
+            patientId={patientId}
+            appointmentId={appointmentId}
+          />
           {isTabView && <ReferralsFilterForm />}
         </Flex>
         <ReferralsTable isTabView={isTabView} />

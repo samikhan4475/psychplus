@@ -20,7 +20,7 @@ import { ServiceStatusSelect } from './service-status-selector'
 const schema = z.object({
   service: z.string(),
   servicesStatus: z.string(),
-  comments: z.string(),
+  comments: z.string().max(30, 'Max 300 characters allowed').optional(),
   contactStatus: z.string().optional(),
   resourceStatus: z.string(),
   referredByName: z

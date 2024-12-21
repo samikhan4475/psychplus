@@ -29,6 +29,9 @@ interface PatientReferral {
   visitDateTime?: string
   comments: string
   visitId?: string
+  nextVisit?: string
+  patientVisitHistory?: string
+  intiatedByUserRole?: string
 }
 
 interface GetPatientReferralsParams {

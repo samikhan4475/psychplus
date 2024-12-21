@@ -7,12 +7,14 @@ import { Provider, StaffResource } from '@/types'
 const getProvidersAction = async (
   input: string,
 ): Promise<api.ActionResult<Provider[]>> => {
-  const response = await api.POST<StaffResource[]>(api.SEARCH_STAFF_ENDPOINT, {
-    body: JSON.stringify({
-      name: input,
-      roleCodes: [STAFF_ROLE_CODE_PRESCRIBER],
-    }),
-  })
+  const payload = {
+    name: input,
+    roleCodes: [STAFF_ROLE_CODE_PRESCRIBER],
+  }
+  const response = await api.POST<StaffResource[]>(
+    api.SEARCH_STAFF_ENDPOINT,
+    payload,
+  )
   if (response.state === 'error') {
     return {
       state: 'error',

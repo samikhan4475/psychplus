@@ -7,8 +7,12 @@ import { useStore } from './store'
 
 interface ReferralsHeaderProps {
   patientId: string
+  appointmentId?: string
 }
-const ReferralsHeader = ({ patientId }: ReferralsHeaderProps) => {
+const ReferralsHeader = ({
+  patientId,
+  appointmentId,
+}: ReferralsHeaderProps) => {
   const store = useStore()
   const { refetch } = zustandUseStore(store, (state) => ({
     refetch: state.refetch,
@@ -28,7 +32,13 @@ const ReferralsHeader = ({ patientId }: ReferralsHeaderProps) => {
       <Heading size="4" weight="medium">
         Referrals
       </Heading>
-      <CreateReferralDialog patientId={patientId} onClose={onClose} />
+      {appointmentId && (
+        <CreateReferralDialog
+          patientId={patientId}
+          appointmentId={appointmentId}
+          onClose={onClose}
+        />
+      )}
     </Flex>
   )
 }

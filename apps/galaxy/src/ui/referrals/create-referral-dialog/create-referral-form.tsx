@@ -8,20 +8,26 @@ import toast from 'react-hot-toast'
 import { z } from 'zod'
 import { FormContainer, FormError } from '@/components'
 import { StaffResource } from '@/types'
+import { sanitizeFormData } from '@/utils'
 import { DEFAULT_REFERRAL_SERVICE_STATUS } from '../patient-referrals-widget/constants'
 import { isPrescriber } from '../patient-referrals-widget/utils'
 import { createPatientReferralAction } from './actions'
 import { CancelButton } from './cancel-button'
 import { CommentsInput } from './comments-input'
+import { ConfirmDialog } from './confirm-dialog'
 import { ProviderSelector } from './provider-selector'
 import { SaveButton } from './save-button'
 import { ServiceSelect } from './service-select'
 import { ServiceStatusSelect } from './service-status-selector'
 
+const REFERRAL_90_DAYS_ERROR = '90 days'
+
 const schema = z.object({
   patientId: z.string(),
+  appointmentId: z.string().optional(),
   service: z.string(),
   servicesStatus: z.string(),
+  isByPass90DayRule: z.boolean().optional(),
   comments: z.string().max(300, 'Max 300 characters allowed').optional(),
   referredByName: z
     .object({
@@ -37,6 +43,7 @@ type SchemaType = z.infer<typeof schema>
 
 interface CreateReferralFormProps {
   patientId?: string
+  appointmentId?: string
   staff: StaffResource
   onClose?: () => void
   handleCloseDialog: () => void
@@ -45,12 +52,14 @@ const CreateReferralForm = ({
   staff,
   patientId,
   onClose,
+  appointmentId,
   handleCloseDialog,
 }: CreateReferralFormProps) => {
   const form = useForm<SchemaType>({
     resolver: zodResolver(schema),
     defaultValues: {
       patientId: patientId,
+      appointmentId: appointmentId ?? undefined,
       servicesStatus: DEFAULT_REFERRAL_SERVICE_STATUS,
       comments: '',
       referredByName: isPrescriber(staff)
@@ -63,18 +72,50 @@ const CreateReferralForm = ({
     },
   })
   const [error, setError] = useState<string>()
+  const [confirm, setConfirm] =
+    useState<(confirm: boolean) => void | undefined>()
+
+  const handleError = async (error: string, data: SchemaType) => {
+    if (!error.includes(REFERRAL_90_DAYS_ERROR)) {
+      toast.error(error)
+      return
+    }
+
+    const confirmed = await new Promise<boolean>((resolve) => {
+      setConfirm(() => resolve)
+    })
+    setConfirm(undefined)
+
+    if (!confirmed) {
+      return
+    }
+
+    const retryResponse = await createPatientReferralAction({
+      ...data,
+      isByPass90DayRule: true,
+    })
+
+    if (retryResponse.state === 'error') {
+      toast.error(retryResponse.error)
+      return
+    }
+
+    toast.success('Created successfully!')
+    onClose?.()
+    handleCloseDialog()
+  }
 
   const onSubmit: SubmitHandler<SchemaType> = async (data) => {
     setError(undefined)
 
-    const response = await createPatientReferralAction(data)
+    const sanitizedData = sanitizeFormData(data)
+    const response = await createPatientReferralAction(sanitizedData)
 
     if (response.state === 'error') {
-      toast.error(response?.error)
+      await handleError(response.error, sanitizedData)
       return
     }
-
-    toast.success('created successfully!')
+    toast.success('Created successfully!')
     onClose?.()
     handleCloseDialog()
   }
@@ -96,6 +137,7 @@ const CreateReferralForm = ({
         <CancelButton />
         <SaveButton />
       </Flex>
+      <ConfirmDialog confirm={confirm} />
     </FormContainer>
   )
 }

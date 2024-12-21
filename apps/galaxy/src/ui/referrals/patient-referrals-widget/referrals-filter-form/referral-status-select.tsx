@@ -6,25 +6,25 @@ import {
   FormFieldLabel,
   MultiSelectField,
 } from '@/components'
-import { CODE_NOT_SET, CODESETS } from '@/constants'
+import { CODESETS } from '@/constants'
 import { useCodesetOptions } from '@/hooks'
 import { PatientReferralsSchemaType } from './schema'
 
-const ServiceStatusSelect = () => {
-  const options = useCodesetOptions(CODESETS.ServicesStatus, '', [CODE_NOT_SET])
+const ReferralStatusSelect = () => {
+  const options = useCodesetOptions(CODESETS.ResourceStatus)
   const form = useFormContext<PatientReferralsSchemaType>()
 
   return (
     <FormFieldContainer className="flex-1 flex-row gap-1">
-      <FormFieldLabel className="!text-1">Service Status</FormFieldLabel>
+      <FormFieldLabel className="!text-1">Referral Status</FormFieldLabel>
       <MultiSelectField
         options={options}
-        defaultValues={form.getValues('serviceStatusList')}
-        onChange={(values) => form.setValue('serviceStatusList', values)}
+        defaultValues={form.getValues('resourceStatusList')}
+        onChange={(values) => form.setValue('resourceStatusList', values)}
         className="w-full"
       />
     </FormFieldContainer>
   )
 }
 
-export { ServiceStatusSelect }
+export { ReferralStatusSelect }

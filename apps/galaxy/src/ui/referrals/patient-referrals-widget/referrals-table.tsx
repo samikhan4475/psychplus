@@ -22,7 +22,6 @@ const ReferralsTable = ({ isTabView }: { isTabView?: boolean }) => {
   useEffect(() => {
     fetchPatientReferrals()
   }, [fetchPatientReferrals])
-
   if (loading) {
     return <LoadingPlaceholder className="bg-white min-h-40 h-full" />
   }

@@ -3,15 +3,16 @@
 import { ColumnDef } from '@tanstack/react-table'
 import { ColumnHeader, LongTextCell, TextCell } from '@/components'
 import { PatientReferral } from '@/types'
-import { formatDateTime, getPatientFullName } from '@/utils'
+import { formatDate, formatDateTime, getPatientFullName } from '@/utils'
 import {
   ActionCell,
   CollapseCell,
   ContactMadeSelectCell,
   ReferralStatusCell,
+  ServiceNameCell,
 } from './cells'
 
-const columns = (isTabView?: boolean): ColumnDef<PatientReferral>[] => [
+const columns = (isTabView = false): ColumnDef<PatientReferral>[] => [
   {
     id: 'referral-history',
     header: () => <ColumnHeader label="Hx" />,
@@ -19,10 +20,18 @@ const columns = (isTabView?: boolean): ColumnDef<PatientReferral>[] => [
     size: 20,
   },
   {
+    id: 'service',
+    accessorKey: 'service',
+    header: ({ column }) => (
+      <ColumnHeader column={column} clientSideSort label="Service" />
+    ),
+    cell: ServiceNameCell,
+  },
+  {
     id: 'referral date',
     accessorKey: 'referralDate',
     header: ({ column }) => (
-      <ColumnHeader column={column} clientSideSort label="Date" />
+      <ColumnHeader column={column} clientSideSort label="Service Date/Time" />
     ),
     cell: ({ row: { original: referral } }) => (
       <TextCell className="truncate">
@@ -31,13 +40,13 @@ const columns = (isTabView?: boolean): ColumnDef<PatientReferral>[] => [
     ),
   },
   {
-    id: 'service',
-    accessorKey: 'service',
+    id: 'visitId',
+    accessorKey: 'visitId',
     header: ({ column }) => (
-      <ColumnHeader column={column} clientSideSort label="Service" />
+      <ColumnHeader column={column} clientSideSort label="Visit ID" />
     ),
     cell: ({ row: { original: referral } }) => (
-      <TextCell>{referral?.service}</TextCell>
+      <TextCell className="truncate">{referral?.visitId}</TextCell>
     ),
   },
   {
@@ -51,51 +60,34 @@ const columns = (isTabView?: boolean): ColumnDef<PatientReferral>[] => [
     ),
   },
   {
-    id: 'created by',
-    accessorKey: 'metadata.createdByFullName',
+    id: 'intiatedByUserRole',
+    accessorKey: 'intiatedByUserRole',
     header: ({ column }) => (
       <ColumnHeader column={column} clientSideSort label="Initiated By" />
     ),
     cell: ({ row: { original: referral } }) => (
-      <TextCell className="truncate">
-        {referral?.metadata?.createdByFullName}
-      </TextCell>
+      <LongTextCell>{referral?.intiatedByUserRole}</LongTextCell>
     ),
   },
   {
-    id: 'referring provider',
-    accessorKey: 'referringProvider',
+    id: 'provider',
+    accessorKey: 'referral.referredByName.firstName',
     header: ({ column }) => (
-      <ColumnHeader column={column} clientSideSort label="Referring Provider" />
+      <ColumnHeader column={column} clientSideSort label="Provider" />
     ),
     cell: ({ row: { original: referral } }) => (
-      <TextCell>
-        {referral?.referredByName &&
-          getPatientFullName(referral?.referredByName)}
-      </TextCell>
+      <LongTextCell>
+        {getPatientFullName(referral?.referredByName)}
+      </LongTextCell>
     ),
   },
   {
     id: 'contact status',
     accessorKey: 'contactStatus',
     header: ({ column }) => (
-      <ColumnHeader column={column} clientSideSort label="Contact" />
+      <ColumnHeader column={column} clientSideSort label="Contact Made" />
     ),
     cell: ContactMadeSelectCell,
-  },
-  {
-    id: 'visit date',
-    accessorKey: 'visitDateTime',
-    header: ({ column }) => (
-      <ColumnHeader column={column} clientSideSort label="Visit Date" />
-    ),
-    cell: ({ row: { original: referral } }) => (
-      <TextCell>
-        {referral?.visitDateTime
-          ? formatDateTime(referral?.visitDateTime)
-          : 'N/A'}
-      </TextCell>
-    ),
   },
   {
     id: 'referral status',
@@ -104,6 +96,29 @@ const columns = (isTabView?: boolean): ColumnDef<PatientReferral>[] => [
       <ColumnHeader column={column} clientSideSort label="Referral Status" />
     ),
     cell: ReferralStatusCell,
+  },
+  {
+    accessorKey: 'nextVisit',
+    header: ({ column }) => (
+      <ColumnHeader column={column} clientSideSort label="Next Visit" />
+    ),
+    cell: ({ row: { original } }) => (
+      <TextCell className="truncate">
+        {formatDate(original?.nextVisit) ?? 'N/A'}
+      </TextCell>
+    ),
+  },
+  {
+    id: 'visit-hx',
+    accessorKey: 'patientVisitHistory',
+    header: ({ column }) => (
+      <ColumnHeader column={column} clientSideSort label="Visit Hx" />
+    ),
+    cell: ({ row: { original } }) => (
+      <TextCell className="truncate">
+        {formatDate(original?.patientVisitHistory) ?? 'N/A'}
+      </TextCell>
+    ),
   },
   {
     id: 'comments',

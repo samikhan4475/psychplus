@@ -7,4 +7,16 @@ const isPrescriber = (staff?: StaffResource) =>
 const isContactStatusError = (status: string) =>
   status === ContactMadeStatuses.Error
 
-export { isPrescriber, isContactStatusError }
+const getDefaultContactMadeStatuses = () => [
+  ContactMadeStatuses.NotSet,
+  ContactMadeStatuses.Pending,
+  ContactMadeStatuses.AuthInProcess,
+  ContactMadeStatuses.AttemptedContact,
+  ContactMadeStatuses.Refused,
+  ContactMadeStatuses.Scheduled,
+  ContactMadeStatuses.Cancelled,
+  ContactMadeStatuses.Admitted,
+  ContactMadeStatuses.SecondAttempt,
+  ContactMadeStatuses.ThirdAttempt,
+]
+export { isPrescriber, isContactStatusError, getDefaultContactMadeStatuses }

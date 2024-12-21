@@ -17,10 +17,15 @@ const ClearButton = () => {
     fetchPatientReferrals({}, 1, true)
     form.reset({
       contactStatusList: [],
-      servicesOfferedList: [],
       resourceStatusList: [],
-      fromReferralDate: null,
-      toReferralDate: null,
+      servicesOfferedList: [],
+      fromServiceDate: null,
+      toServiceDate: null,
+      nextVisit: '',
+      initiatedByRole: [],
+      providerIds: [],
+      serviceStatusList: [],
+      visitHx: '',
     })
   }
   return (

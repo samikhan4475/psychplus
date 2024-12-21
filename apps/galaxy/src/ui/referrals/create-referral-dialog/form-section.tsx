@@ -8,6 +8,7 @@ import { CreateReferralForm } from './create-referral-form'
 
 interface FormSectionProps {
   patientId: string
+  appointmentId?: string
   onClose?: () => void
   handleCloseDialog: () => void
 }
@@ -15,6 +16,7 @@ const FormSection = ({
   patientId,
   onClose,
   handleCloseDialog,
+  appointmentId,
 }: FormSectionProps) => {
   const [staff, setStaff] = useState<StaffResource>()
   const [error, setError] = useState('')
@@ -42,6 +44,7 @@ const FormSection = ({
     <CreateReferralForm
       staff={staff as StaffResource}
       patientId={patientId}
+      appointmentId={appointmentId}
       onClose={onClose}
       handleCloseDialog={handleCloseDialog}
     />

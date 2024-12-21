@@ -1,7 +1,6 @@
 import { Text } from '@radix-ui/themes'
 import { getPatientReferralsAction } from '@/actions/get-patient-referrals'
 import { QuickNoteSectionName } from '../../constants'
-import { ActualNoteDetailsWrapper } from '../shared'
 import { Details } from './details'
 import { getDefaultPayload } from './utils'
 
@@ -20,13 +19,7 @@ const ReferralsDetailsView = async ({
   if (result.state === 'error') {
     return <Text>{result.error}</Text>
   }
-  return (
-    <ActualNoteDetailsWrapper
-      sectionName={QuickNoteSectionName.QuicknoteSectionReferrals}
-    >
-      <Details data={result?.data?.referrals} />
-    </ActualNoteDetailsWrapper>
-  )
+  return <Details data={result?.data?.referrals} />
 }
 
 export { ReferralsDetailsView }

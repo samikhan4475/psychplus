@@ -1,32 +1,30 @@
 'use client'
 
 import { ColumnDef } from '@tanstack/react-table'
-import { ColumnHeader, LongTextCell, TextCell } from '@/components'
+import { ColumnHeader, TextCell } from '@/components'
 import { PatientReferral } from '@/types'
-import { formatDateTime, getPatientFullName } from '@/utils'
-import { ContactMadeSelectCell, ReferralStatusCell } from './cells'
+import { formatDate, formatDateTime, getPatientFullName } from '@/utils'
+import { ReferralStatusCell, ServiceNameCell } from './cells'
 
 const columns: ColumnDef<PatientReferral>[] = [
-  {
-    id: 'referral date',
-    accessorKey: 'referralDate',
-    header: ({ column }) => (
-      <ColumnHeader column={column} clientSideSort label="Date" />
-    ),
-    cell: ({ row: { original: referral } }) => (
-      <TextCell className="truncate">
-        {referral?.referralDate && formatDateTime(referral?.referralDate)}
-      </TextCell>
-    ),
-  },
   {
     id: 'service',
     accessorKey: 'service',
     header: ({ column }) => (
       <ColumnHeader column={column} clientSideSort label="Service" />
     ),
+    cell: ({ row }) => <ServiceNameCell row={row} />,
+  },
+  {
+    id: 'referral date',
+    accessorKey: 'referralDate',
+    header: ({ column }) => (
+      <ColumnHeader column={column} clientSideSort label="Service Date/Time" />
+    ),
     cell: ({ row: { original: referral } }) => (
-      <TextCell>{referral?.service}</TextCell>
+      <TextCell className="truncate">
+        {referral?.referralDate && formatDateTime(referral?.referralDate)}
+      </TextCell>
     ),
   },
   {
@@ -40,49 +38,48 @@ const columns: ColumnDef<PatientReferral>[] = [
     ),
   },
   {
-    id: 'created by',
-    accessorKey: 'metadata.createdByFullName',
+    id: 'initiated by',
+    accessorKey: 'intiatedByUserRole',
     header: ({ column }) => (
       <ColumnHeader column={column} clientSideSort label="Initiated By" />
     ),
     cell: ({ row: { original: referral } }) => (
+      <TextCell className="truncate">{referral?.intiatedByUserRole}</TextCell>
+    ),
+  },
+  {
+    accessorKey: 'nextVisit',
+    header: ({ column }) => (
+      <ColumnHeader column={column} clientSideSort label="Next Visit" />
+    ),
+    cell: ({ row: { original } }) => (
       <TextCell className="truncate">
-        {referral?.metadata?.createdByFullName}
+        {formatDate(original?.nextVisit) ?? 'N/A'}
       </TextCell>
     ),
   },
   {
-    id: 'referring provider',
-    accessorKey: 'referringProvider',
+    id: 'visit-hx',
+    accessorKey: 'patientVisitHistory',
     header: ({ column }) => (
-      <ColumnHeader column={column} clientSideSort label="Referring Provider" />
+      <ColumnHeader column={column} clientSideSort label="Visit Hx" />
+    ),
+    cell: ({ row: { original } }) => (
+      <TextCell className="truncate">
+        {formatDate(original?.patientVisitHistory) ?? 'N/A'}
+      </TextCell>
+    ),
+  },
+  {
+    id: 'ordering provider',
+    accessorKey: 'referral.referredByName.firstName',
+    header: ({ column }) => (
+      <ColumnHeader column={column} clientSideSort label="Ordering Provider" />
     ),
     cell: ({ row: { original: referral } }) => (
       <TextCell>
         {referral?.referredByName &&
           getPatientFullName(referral?.referredByName)}
-      </TextCell>
-    ),
-  },
-  {
-    id: 'contact status',
-    accessorKey: 'contactStatus',
-    header: ({ column }) => (
-      <ColumnHeader column={column} clientSideSort label="Contact" />
-    ),
-    cell: ({ row }) => <ContactMadeSelectCell row={row} disabled />,
-  },
-  {
-    id: 'visit date',
-    accessorKey: 'visitDateTime',
-    header: ({ column }) => (
-      <ColumnHeader column={column} clientSideSort label="Visit Date" />
-    ),
-    cell: ({ row: { original: referral } }) => (
-      <TextCell>
-        {referral?.visitDateTime
-          ? formatDateTime(referral?.visitDateTime)
-          : 'N/A'}
       </TextCell>
     ),
   },
@@ -93,14 +90,6 @@ const columns: ColumnDef<PatientReferral>[] = [
       <ColumnHeader column={column} clientSideSort label="Referral Status" />
     ),
     cell: ({ row }) => <ReferralStatusCell row={row} disabled />,
-  },
-  {
-    id: 'comments',
-    accessorKey: 'comments',
-    header: () => <ColumnHeader label="Comments" />,
-    cell: ({ row: { original: referral } }) => (
-      <LongTextCell>{referral?.comments}</LongTextCell>
-    ),
   },
   {
     id: 'updated-at',

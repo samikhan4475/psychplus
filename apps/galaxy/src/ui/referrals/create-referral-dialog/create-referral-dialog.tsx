@@ -7,12 +7,14 @@ import { FormSection } from './form-section'
 
 interface CreateReferralDialogProps {
   patientId: string
+  appointmentId?:string
   onClose?: () => void
 }
 
 const CreateReferralDialog = ({
   patientId,
   onClose,
+  appointmentId
 }: CreateReferralDialogProps) => {
   const [isOpen, setIsOpen] = useState(false)
   const handleClose = () => setIsOpen(false)
@@ -45,6 +47,7 @@ const CreateReferralDialog = ({
         />
         <FormSection
           patientId={patientId}
+          appointmentId={appointmentId}
           onClose={onClose}
           handleCloseDialog={handleClose}
         />

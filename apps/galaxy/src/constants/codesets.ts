@@ -3,6 +3,7 @@ const CODE_ETHNICITY = '2133-7'
 const RACES_GROUPING_CODES = ['R', 'R1', 'R2', 'R3', 'R4', 'R5']
 const ETHNICITIES_GROUPING_CODES = ['E', 'E1', 'E2']
 const CODE_NOT_SET = 'NotSet'
+const CODE_NOT_USED = 'NotUsed'
 const HOSPITAL_SERVICE_GROUP = ['Hospital']
 
 const CODESETS = {
@@ -21,6 +22,7 @@ const CODESETS = {
   RaceAndEthnicity: 'cdc.PH_RaceAndEthnicity_CDC',
   ProfSuffix: 'HL7v2.Degree',
   StaffRole: 'StaffRole',
+  UserRoleEnum: 'UserRoleEnum',
   LanguageAbility: 'HL7v3.LanguageAbilityMode',
   LanguageProficiency: 'HL7v3.LanguageAbilityProficiency',
   Religion: 'HL7v3.ReligiousAffiliation',
@@ -92,4 +94,5 @@ export {
   RACES_GROUPING_CODES,
   CODE_NOT_SET,
   HOSPITAL_SERVICE_GROUP,
+  CODE_NOT_USED,
 }

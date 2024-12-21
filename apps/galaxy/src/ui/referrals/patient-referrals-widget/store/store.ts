@@ -1,20 +1,26 @@
 import { createContext } from 'react'
+import toast from 'react-hot-toast'
 import { createStore as zustandCreateStore } from 'zustand'
-import { Sort, StaffResource } from '@/types'
+import { SelectOptionType, Sort, StaffResource } from '@/types'
 import { getNewSortDir } from '@/utils'
-import { searchPatientReferralsAction } from '../actions'
+import { getStaffOptionsAction, searchPatientReferralsAction } from '../actions'
 import type {
   GetPatientReferralsResponse,
   PatientReferral,
   PatientReferralsPayload,
 } from '../types'
+import { getDefaultContactMadeStatuses } from '../utils'
 
 interface StoreInit {
   patientId: string
+  appointmentId?: string
+  isTabView?: boolean
 }
 
 interface StoreState {
   patientId: string
+  appointmentId?: string
+  isTabView?: boolean
   data?: GetPatientReferralsResponse
   error?: string
   staffError?: string
@@ -24,11 +30,13 @@ interface StoreState {
   pageCache: Record<number, GetPatientReferralsResponse>
   showFilters: boolean
   staff?: StaffResource
+  providerOptions: SelectOptionType[]
   fetchPatientReferrals: (
     formValues?: Partial<PatientReferralsPayload>,
     page?: number,
     reset?: boolean,
   ) => void
+  fetchStaffOptions: (roleCode: string[]) => void
   sort?: Sort
   setData: (data: PatientReferral[]) => void
   sortData: (column: string) => void
@@ -44,6 +52,8 @@ type Store = ReturnType<typeof createStore>
 const createStore = (init: StoreInit) => {
   return zustandCreateStore<StoreState>()((set, get) => ({
     patientId: init.patientId,
+    appointmentId: init?.appointmentId,
+    isTabView: init?.isTabView,
     staff: undefined,
     data: undefined,
     error: undefined,
@@ -51,6 +61,7 @@ const createStore = (init: StoreInit) => {
     loading: undefined,
     formValues: undefined,
     sort: undefined,
+    providerOptions: [],
     page: 1,
     pageCache: {},
     showFilters: true,
@@ -62,15 +73,24 @@ const createStore = (init: StoreInit) => {
       page = 1,
       reset = false,
     ) => {
+      const appointmentId = get().appointmentId
+
       set({
         error: undefined,
         loading: true,
         formValues,
       })
 
+      const payload = {
+        ...formValues,
+        contactStatusList:
+          appointmentId && !get().isTabView
+            ? getDefaultContactMadeStatuses()
+            : formValues.contactStatusList,
+      }
       const result = await searchPatientReferralsAction({
         patientIds: [get().patientId],
-        payload: formValues,
+        payload,
         page,
       })
 
@@ -89,6 +109,13 @@ const createStore = (init: StoreInit) => {
           : { ...get().pageCache, [page]: result.data },
         page,
       })
+    },
+    fetchStaffOptions: async (roleCode) => {
+      const result = await getStaffOptionsAction(roleCode)
+      if (result.state === 'error') {
+        return toast.error(result.error)
+      }
+      set({ providerOptions: result?.data ?? [] })
     },
     next: () => {
       const page = get().page + 1
