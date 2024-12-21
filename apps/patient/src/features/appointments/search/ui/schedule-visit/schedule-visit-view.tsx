@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useEffect, useState } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { FormContainer } from '@psychplus-v2/components'
 import { AppointmentType, ProviderType } from '@psychplus-v2/constants'
@@ -50,7 +50,7 @@ interface StateListType {
   types: string[]
 }
 
-const ScheduleVisitView = () => {
+const ScheduleVisitView = ({ googleAPIkey }: { googleAPIkey: string }) => {
   const router = useRouter()
 
   const [zipStates, setZipStates] = useState<StateListType[]>([])
@@ -102,6 +102,67 @@ const ScheduleVisitView = () => {
       primaryPostalCode: '',
     },
   })
+
+  const getUserLocation = async () => {
+    if (!navigator.geolocation) {
+      console.error('Geolocation is not supported by your browser.')
+      return
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        const { latitude, longitude } = position.coords
+        try {
+          const response = await fetch(
+            `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${googleAPIkey}`,
+          )
+          const data = await response.json()
+          const zipCodeComponent = data.results[0]?.address_components.find(
+            (component: any) => component.types.includes('postal_code'),
+          )
+          const zipCode = zipCodeComponent?.long_name
+          if (zipCode) {
+            form.setValue('zipCode', zipCode)
+            getZipCodeInfoApi(zipCode)
+          }
+        } catch (error) {
+          console.error('Error fetching ZIP code:', error)
+        }
+      },
+      (error) => {
+        switch (error.code) {
+          case 1:
+            console.error(
+              'Error: Permission denied. Please allow location access.',
+            )
+            break
+          case 2:
+            console.error(
+              'Error: Position unavailable. Check your device or network.',
+            )
+            break
+          case 3:
+            console.error('Error: Timeout. Try again later.')
+            break
+          default:
+            console.error('Error fetching location:', error.message)
+        }
+      },
+      { timeout: 10000 }, // Timeout of 10 seconds
+    )
+  }
+
+  useEffect(() => {
+    getUserLocation()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  useEffect(() => {
+    if (zipStates.length > 0) {
+      form.setValue('state', zipStates[0].long_name)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [zipStates])
 
   useEffect(() => {
     getZipCodeInfoApi(form.watch('zipCode'))
@@ -237,7 +298,7 @@ const ScheduleVisitView = () => {
               </FormFieldContainer>
 
               <FormFieldContainer className="w-3/4">
-                <FormFieldLabel required>State</FormFieldLabel>
+                <FormFieldLabel required>State of Residence</FormFieldLabel>
                 <ZipCodeStateDropdown
                   size="3"
                   name="state"

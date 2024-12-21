@@ -45,8 +45,8 @@ const DifferentStateDialog = ({
     >
       <Dialog.Content className="relative">
         <CloseDialogIcon />
-        <Dialog.Title className="font-sans -tracking-[0.25px]">
-          Provider in different state
+        <Dialog.Title className="font-sans capitalize -tracking-[0.25px]">
+          Verify your location before booking
         </Dialog.Title>
         <Dialog.Description size="3">
           You&apos;re about to book an appointment with the provider in &quot;

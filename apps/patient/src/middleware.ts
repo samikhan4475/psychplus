@@ -22,6 +22,15 @@ export const middleware = async (request: NextRequest) => {
   if (SKIP_MIDDLEWARE.includes(request.nextUrl.pathname)) {
     return NextResponse.next()
   }
+
+  if (request.nextUrl.pathname.startsWith('/pre-checkin-assessment')) {
+    const url = request.nextUrl.clone()
+    url.pathname = '/404' 
+    if (process.env.API_URL === 'https://api.psychplus.io') {
+      return NextResponse.redirect(url)
+    }
+  }
+
   if (request.nextUrl.pathname.startsWith('/widgets')) {
     // Skip middleware for widget requests.
     return NextResponse.next()

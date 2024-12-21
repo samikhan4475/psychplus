@@ -19,7 +19,7 @@ const ScheduleVisitPage = async () => {
     <ProfileStoreProvider profile={profileResponse.data}>
       <CodesetStoreProvider codesets={codesets}>
         <GooglePlacesContextProvider apiKey={GOOGLE_MAPS_API_KEY}>
-          <ScheduleVisitView />
+          <ScheduleVisitView googleAPIkey={GOOGLE_MAPS_API_KEY} />
         </GooglePlacesContextProvider>
       </CodesetStoreProvider>
     </ProfileStoreProvider>
