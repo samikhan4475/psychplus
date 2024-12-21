@@ -7,15 +7,15 @@ import {
   ColumnHeader,
   DataTable,
   DateCell,
-  DateTimeCell,
   LoadingPlaceholder,
   LongTextCell,
   TextCell,
 } from '@/components'
 import { Sort } from '@/types'
 import { getSortDir } from '@/utils'
-import { formatDate, formatDateTime } from '@/utils/date'
+import { formatDate } from '@/utils/date'
 import { InsurancePayment } from '../types'
+import { addSpaceToCamelCase } from '../utils'
 import { ActionsCell } from './actions-cell'
 import { CheckNumberCell } from './check-number-cell'
 import { useStore } from './store'
@@ -53,7 +53,9 @@ const columns = (
           }}
         />
       ),
-      cell: ({ row }) => <TextCell>{row.original.paymentType}</TextCell>,
+      cell: ({ row }) => (
+        <TextCell>{row.original.paymentType.toUpperCase()}</TextCell>
+      ),
     },
     {
       id: 'insuranceName',
@@ -147,7 +149,9 @@ const columns = (
           }}
         />
       ),
-      cell: ({ row }) => <LongTextCell>{row.original.status}</LongTextCell>,
+      cell: ({ row }) => (
+        <LongTextCell>{addSpaceToCamelCase(row.original.status)}</LongTextCell>
+      ),
     },
     {
       id: 'noindex', // noindex is here because right now we are not mapping any value against this column

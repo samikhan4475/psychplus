@@ -12,7 +12,7 @@ const PaymentMethodSelect = () => {
         codeset={CODESETS.PaymentMethod}
         size="1"
         className="h-[26px] w-full"
-        required
+        disabled
       />
     </FormFieldContainer>
   )

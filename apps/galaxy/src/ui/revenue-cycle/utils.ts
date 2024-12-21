@@ -52,4 +52,14 @@ function getRandomId() {
   return array[0]
 }
 
-export { truncateString, previewFile, formatAmount, getRandomId }
+function addSpaceToCamelCase(str: string) {
+  return str.replace(/([a-z])([A-Z])/g, '$1 $2')
+}
+
+export {
+  truncateString,
+  previewFile,
+  formatAmount,
+  getRandomId,
+  addSpaceToCamelCase,
+}

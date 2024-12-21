@@ -3,9 +3,9 @@ import z from 'zod'
 
 const schema = z.object({
   id: z.string(),
-  insuranceName: z.string().optional(),
+  insuranceName: z.string().min(1, { message: 'Insurance name is required' }),
   paymentMethod: z.string().min(1, { message: 'Payment method is required' }),
-  checkNumber: z.string().optional(),
+  checkNumber: z.string().min(1, { message: 'Check number is required' }),
   amount: z.preprocess(
     (val) => {
       if (typeof val === 'string') {

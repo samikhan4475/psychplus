@@ -109,6 +109,10 @@ const ClaimSubmissionDialog = ({
   }
 
   const handleOpenDialog = (modalState: boolean) => {
+    if (!modalState) {
+      setIsOpenDialog(modalState)
+      return
+    }
     if (claimId) {
       setIsOpenDialog(modalState)
       fetchSingleClaimResponse(claimId)

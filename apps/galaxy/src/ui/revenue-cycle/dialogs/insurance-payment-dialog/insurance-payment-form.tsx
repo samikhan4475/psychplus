@@ -47,7 +47,7 @@ const InsurancePaymentForm = ({
     defaultValues: {
       id: data?.id ?? '',
       insuranceName: data?.insuranceName ?? '',
-      paymentMethod: data?.paymentMethod ?? '',
+      paymentMethod: data?.paymentMethod ?? 'Check',
       amount: data?.amount,
       checkNumber: data?.checkNumber ?? '',
       comments: data?.comments ?? '',
@@ -89,7 +89,7 @@ const InsurancePaymentForm = ({
 
     delete formData.attachments
 
-    const reqPayload: Partial<InsurancePayment> = {
+    let reqPayload: Partial<InsurancePayment> = {
       ...formData,
       checkDate: formatDateToISOString(formData.checkDate) || '',
       receivedDate: formatDateToISOString(formData.receivedDate) || '',
@@ -99,7 +99,16 @@ const InsurancePaymentForm = ({
     }
 
     if (data && data?.id) {
-      reqPayload.id = data.id
+      reqPayload = {
+        ...data,
+        ...reqPayload,
+      }
+    } else {
+      reqPayload = {
+        ...reqPayload,
+        status: 'NeedPosted',
+        paymentType: 'Eob',
+      }
     }
 
     const sanitizedPayload = sanitizeFormData(reqPayload)

@@ -14,7 +14,7 @@ const CheckNumberField = () => {
 
   return (
     <FormFieldContainer className="flex-1 gap-0">
-      <FormFieldLabel>Check Number</FormFieldLabel>
+      <FormFieldLabel required>Check Number</FormFieldLabel>
       <TextField.Root
         size="1"
         {...form.register('checkNumber')}

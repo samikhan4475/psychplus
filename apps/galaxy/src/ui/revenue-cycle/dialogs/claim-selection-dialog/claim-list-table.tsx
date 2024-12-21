@@ -13,6 +13,8 @@ import {
 import { Sort, type Claim } from '@/types'
 import { getSortDir } from '@/utils'
 import { formatDate } from '@/utils/date'
+import { CLAIM_STATUSES } from '../../constants'
+import { addSpaceToCamelCase } from '../../utils'
 import { ClaimNumberCell } from './claim-number-cell'
 import { useStore } from './store'
 
@@ -119,7 +121,9 @@ const columns = (
           }}
         />
       ),
-      cell: ({ row }) => <TextCell>{row.original.claimStatusCode}</TextCell>,
+      cell: ({ row }) => (
+        <TextCell>{addSpaceToCamelCase(row.original.claimStatusCode)}</TextCell>
+      ),
     },
   ]
 }
@@ -144,7 +148,9 @@ const ClaimListTable = ({
   }))
 
   useEffect(() => {
-    claimsListSearch({})
+    claimsListSearch({
+      claimStatusCodes: CLAIM_STATUSES,
+    })
   }, [])
 
   if (claimsListLoading) {

@@ -4,6 +4,7 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import z from 'zod'
 import { FormContainer } from '@/components'
 import { sanitizeFormData } from '@/utils'
+import { CLAIM_STATUSES } from '../../constants'
 import { ClaimListSearchParams } from '../../types'
 import { ClaimNumberField } from './claim-number-field'
 import { ClearFilterFormButton } from './clear-filter-form-button'
@@ -25,7 +26,10 @@ const ClaimListFilterForm = () => {
 
   const onSubmit: SubmitHandler<SchemaType> = (data) => {
     const cleanedData = sanitizeFormData(data) as ClaimListSearchParams
-    return claimsListSearch(cleanedData)
+    return claimsListSearch({
+      ...cleanedData,
+      claimStatusCodes: CLAIM_STATUSES,
+    })
   }
 
   const form = useForm<SchemaType>({

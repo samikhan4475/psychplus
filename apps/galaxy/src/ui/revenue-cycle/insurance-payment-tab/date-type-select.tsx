@@ -9,7 +9,7 @@ const DateTypeSelect = () => {
       <FormFieldLabel>Select Date</FormFieldLabel>
       <CodesetSelect
         name="dateType"
-        codeset={CODESETS.ClaimFiltrationDateType}
+        codeset={CODESETS.PaymentDateType}
         size="1"
         className="w-[101px]"
       />

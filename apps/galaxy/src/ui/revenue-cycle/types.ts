@@ -227,6 +227,7 @@ interface ClaimListSearchParams {
   isIncludePatientInsurancePlan?: boolean
   receiverName?: string
   isForcePaper?: boolean
+  claimStatusCodes?: string[]
 }
 
 interface InsurancePaymentSearchParams {

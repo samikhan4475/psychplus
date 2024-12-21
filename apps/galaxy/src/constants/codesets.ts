@@ -80,6 +80,7 @@ const CODESETS = {
   AbnormalFlag: 'HL7v2.AbnormalFlags',
   StatusCodes: 'HL7v2.ObservationResultStatusCodes',
   Unit: 'CDC.PHVS_UnitofMeasure_TB',
+  PaymentDateType: 'PaymentDateType',
   NoteType: 'PsychPlusPublic.NoteType',
   NoteTitle: 'PsychPlusPublic.NoteTitle',
 }
