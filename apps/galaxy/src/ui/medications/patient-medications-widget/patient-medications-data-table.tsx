@@ -24,43 +24,31 @@ const columns: ColumnDef<PatientMedication>[] = [
     accessorKey: 'medicationDrug',
     header: () => <ColumnHeader label="Drug" />,
     cell: ({ row }) => (
-      <TextCell>
-        {row.original.prescriptionDrugs?.[0]?.drugName ?? 'N/A'}
-      </TextCell>
+      <LongTextCell>{row.original.drugDescription ?? 'N/A'}</LongTextCell>
     ),
   },
   {
     id: 'medication-strength',
     header: () => <ColumnHeader label="Strength" />,
-    cell: ({ row }) => (
-      <TextCell>{row.original.prescriptionDrugs?.[0]?.strength}</TextCell>
-    ),
+    cell: ({ row }) => <LongTextCell>{row.original.medicationDetails.strength}</LongTextCell>,
   },
   {
     id: 'medication-direction',
     accessorKey: 'medicationDirection',
     header: () => <ColumnHeader label="Direction" />,
-    cell: ({ row }) => (
-      <LongTextCell>
-        {row.original.prescriptionDrugs?.[0]?.directions}
-      </LongTextCell>
-    ),
+    cell: ({ row }) => <LongTextCell>{row.original.medicationDetails.directions}</LongTextCell>,
   },
   {
     id: 'medication-quantity',
     accessorKey: 'medicationQuantity',
     header: () => <ColumnHeader label="Quantity" />,
-    cell: ({ row }) => (
-      <TextCell>
-        {row.original.prescriptionDrugs?.[0]?.quantity ?? 'N/A'}
-      </TextCell>
-    ),
+    cell: ({ row }) => <TextCell>{row.original.quantityValue ?? 'N/A'}</TextCell>,
   },
   {
     id: 'medication-refill',
     accessorKey: 'medicationRefill',
     header: () => <ColumnHeader label="Refill" />,
-    cell: ({ row }) => <TextCell>{row.original.refillCount ?? 'N/A'}</TextCell>,
+    cell: ({ row }) => <TextCell>{row.original.refills ?? 'N/A'}</TextCell>,
   },
   {
     id: 'medication-written-date',
@@ -75,7 +63,7 @@ const columns: ColumnDef<PatientMedication>[] = [
     accessorKey: 'medicationEndDate',
     header: () => <ColumnHeader label="End Date" />,
     cell: ({ row }) => (
-      <DateCell>{formatDate(row.original.endDate) ?? 'N/A'}</DateCell>
+      <DateCell>{formatDate(row.original.endDateTime) ?? 'N/A'}</DateCell>
     ),
   },
   {
@@ -83,7 +71,7 @@ const columns: ColumnDef<PatientMedication>[] = [
     accessorKey: 'medicationPrescriber',
     header: () => <ColumnHeader label="Prescriber" />,
     cell: ({ row }) => (
-      <TextCell>{row.original.providerName ?? 'N/A'}</TextCell>
+      <TextCell>{row.original.medicationDetails.providerName ?? 'N/A'}</TextCell>
     ),
   },
   {
@@ -98,7 +86,7 @@ const columns: ColumnDef<PatientMedication>[] = [
     header: () => <ColumnHeader label="Status" />,
     cell: ({ row }) => (
       <SelectCell
-        value={row.original.prescriptionStatus ?? 'Unknown'}
+        value={row.original.medicationDetails.prescriptionStatus ?? 'Unknown'}
         options={STATUS_CODESET}
       />
     ),

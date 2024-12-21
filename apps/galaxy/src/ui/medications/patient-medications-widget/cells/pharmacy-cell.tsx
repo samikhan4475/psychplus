@@ -8,7 +8,7 @@ interface PharmacyCellProps {
 }
 
 const PharmacyCell = ({ row }: PharmacyCellProps) => {
-  const { pharmacyName } = row.original
+  const { pharmacyName } = row.original.medicationDetails
 
   return (
     <Flex className="w-40 items-center gap-2">

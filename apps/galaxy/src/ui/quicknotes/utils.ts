@@ -36,7 +36,7 @@ import {
   FamilyPsychDetailView,
   FollowUp,
   HpiDetailView,
-  Medications,
+  MedicationsDetailsView,
   MentalStatusExam,
   PastMedicalHx,
   PastPsychlDetailView,
@@ -143,7 +143,7 @@ const widgets: Array<WidgetType> = [
   {
     component: PatientMedicationsView,
     id: QuickNoteSectionName.QuicknoteSectionMedications,
-    actualNoteComponent: Medications,
+    actualNoteComponent: MedicationsDetailsView,
   },
   {
     component: PatientReferralsWidget,

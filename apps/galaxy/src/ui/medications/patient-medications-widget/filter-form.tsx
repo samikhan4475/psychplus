@@ -45,12 +45,12 @@ const FilterForm = () => {
     const uniqueMedications: UniqueMedications[] = []
 
     data?.medications?.forEach((med) => {
-      const key = `${med.pharmacyName}-${med.providerName}`
+      const key = `${med.medicationDetails.pharmacyName}-${med.medicationDetails.providerName}`
       if (!uniqueMedicationsMap.has(key)) {
         uniqueMedicationsMap.add(key)
         uniqueMedications.push({
-          pharmacyName: med.pharmacyName,
-          providerName: med.providerName,
+          pharmacyName: med.medicationDetails.pharmacyName,
+          providerName: med.medicationDetails.providerName,
         })
       }
     })

@@ -2,33 +2,30 @@ import { type Row } from '@tanstack/react-table'
 
 type PatientMedicationStatus = 'Active' | 'Pending' | 'Discontinued'
 
-interface PrescriptionDrug {
-  drugName: string
+interface MedicationDetails {
   drugDuration: string
-  quantity: number
-  quantityQualifier: string
+  pharmacyName: string
+  providerName: string
+  dosagePerDayText: string
+  prescriptionStatus: string
+  durationQualifier: string
   strength: string
   directions: string
+  quantityQualifier: string
 }
 
 interface PatientMedication {
-  externalEncounterId: string
-  fillDateTime: string
-  pharmacyName: string
-  staffId: number
-  providerId: number
-  patientId: number
-  refillCount: string
+  prescriptionId: string
+  drugDescription: string
+  quantityValue: number
+  quantityCodeListQualifier: string
   writtenDate: string
-  durationQualifier: string
-  appointmentId: number
-  prescriptionDrugs?: PrescriptionDrug[]
-  providerName: string
-  prescriptionStatus: string
-  endDate: string
-  dosagePerDayText: string
-  refillText: string
-  addToNote: boolean
+  isSubstitutionsAllowed: boolean
+  refills: number
+  isMedicationAsNeeded: boolean
+  startDateTime: string
+  endDateTime: string
+  medicationDetails: MedicationDetails
 }
 
 type PatientMedicationRow = Row<PatientMedication>
