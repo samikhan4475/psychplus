@@ -6,6 +6,7 @@ import { Relationship } from '@/types'
 interface PatientRelationshipContextType {
   relationships: Relationship[]
   setRelationships: Dispatch<SetStateAction<Relationship[]>>
+  setLoading: Dispatch<SetStateAction<boolean>>
 }
 
 const PatientRelationshipContext = createContext<

@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { Flex, Switch, Text } from '@radix-ui/themes'
 import toast from 'react-hot-toast'
 import { PropsWithRow } from '@/components'
@@ -11,6 +12,7 @@ import { RRIHistory } from '../rri-history'
 const RriCell = ({
   row: { original: relationship },
 }: PropsWithRow<Relationship>) => {
+  const router = useRouter()
   const [isAllowedToReleaseInformation, setIsAllowedToReleaseInformation] =
     useState(relationship?.isAllowedToReleaseInformation)
 
@@ -26,6 +28,7 @@ const RriCell = ({
     })
     if (result.state === 'success') {
       toast.success('Successfully updated!')
+      router.refresh()
     } else if (result.state === 'error') {
       setIsAllowedToReleaseInformation(!checked)
       toast.error(result.error ?? 'Failed to update RRI status')

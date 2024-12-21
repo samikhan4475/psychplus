@@ -9,7 +9,7 @@ import { ActionCell } from './action-cell'
 import { DateTimeCell } from './date-time-cell'
 
 const columns = (
-  fetchComments: (payload: StaffCommentParams) => void,
+  fetchStaffComments: (payload: StaffCommentParams) => void,
 ): ColumnDef<StaffComment>[] => [
   {
     accessorKey: 'data_time',
@@ -42,29 +42,29 @@ const columns = (
   },
   {
     id: 'comments',
-    cell: ({ row }) => <TextCell>{row?.original?.staffCommment}</TextCell>,
+    cell: ({ row }) => <TextCell>{row?.original?.comment}</TextCell>,
     header: () => (
       <ColumnHeader className="min-w-80 !text-1 !font-medium" label="Comment" />
     ),
   },
   {
     id: 'action',
-    cell: ({ row }) => <ActionCell row={row} fetchComments={fetchComments} />,
+    cell: ({ row }) => <ActionCell row={row} fetchComments={fetchStaffComments} />,
   },
 ]
 
 const TreatmentTable = ({
   data,
-  fetchComments,
+  fetchStaffComments,
 }: {
   data: StaffComment[]
-  fetchComments: (payload: StaffCommentParams) => void
+  fetchStaffComments: (payload: StaffCommentParams) => void
 }) => {
   return (
     <ScrollArea className="max-h-[150px]">
       <DataTable
         data={data}
-        columns={columns(fetchComments)}
+        columns={columns(fetchStaffComments)}
         disablePagination
         sticky
       />

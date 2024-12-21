@@ -1,6 +1,11 @@
 import { ScrollArea } from '@radix-ui/themes'
 import { ColumnDef } from '@tanstack/react-table'
-import { ColumnHeader, DataTable, TextCell } from '@/components'
+import {
+  ColumnHeader,
+  DataTable,
+  LoadingPlaceholder,
+  TextCell,
+} from '@/components'
 import { Relationship } from '@/types'
 import { getAddressLabel } from '@/utils/address'
 import {
@@ -13,6 +18,7 @@ import {
 
 interface RelationshipTableProps {
   patientRelationships: Relationship[]
+  loading?: boolean
 }
 
 const columns: ColumnDef<Relationship>[] = [
@@ -96,7 +102,11 @@ const columns: ColumnDef<Relationship>[] = [
 
 const RelationshipTable = ({
   patientRelationships,
+  loading,
 }: RelationshipTableProps) => {
+  if (loading) {
+    return <LoadingPlaceholder className="min-h-40" />
+  }
   return (
     <ScrollArea scrollbars="vertical" className="max-h-52 p-2">
       <DataTable

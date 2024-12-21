@@ -2,7 +2,6 @@
 
 import * as api from '@/api'
 import type { StaffComment } from '@/types'
-import { getAuthCookies } from '@/utils/auth'
 
 interface CreateCommentParams {
   patientId?: string
@@ -10,20 +9,14 @@ interface CreateCommentParams {
   isBillingComment: boolean
   isTreatmentComment: boolean
   isUrgentComment?: boolean
-  staffCommment: string
+  comment: string
 }
 
 const createStaffCommentAction = async ({
-  ...rest
+  ...payload
 }: CreateCommentParams): Promise<api.ActionResult<StaffComment>> => {
-  const auth = getAuthCookies()
-
-  const payload = {
-    staffId: auth?.user.userId,
-    ...rest,
-  }
   const response = await api.POST<StaffComment>(
-    api.CREATE_STAFF_COMMENT_ENDPOINT(rest.appointmentId),
+    api.CREATE_STAFF_COMMENT_ENDPOINT(payload.appointmentId),
     payload,
   )
   if (response.state === 'error') {

@@ -15,18 +15,23 @@ const ActionsCell = ({
   },
 }: PropsWithRow<Relationship>) => {
   const [disabled, setDisabled] = useState(false)
-  const { setRelationships } = usePatientRelationshipContext()
+  const { setRelationships, setLoading } = usePatientRelationshipContext()
   const onDeleteRelation = async () => {
     setDisabled(true)
     const result = await deletePatientRelationshipAction(String(patientId), id)
+    setLoading(true)
     if (result.state === 'error') {
-      return toast.error(result.error as string)
+      toast.error(result.error as string)
+    } else {
+      setRelationships((relationships) =>
+        relationships.filter((relation) => relation.id !== id),
+      )
+      toast.success('Relationship deleted')
     }
-    setRelationships((relationships) =>
-      relationships.filter((relation) => relation.id !== id),
-    )
+    setTimeout(() => {
+      setLoading(false)
+    }, 500)
     setDisabled(false)
-    toast.success('Relationship deleted')
   }
   return (
     <IconButton

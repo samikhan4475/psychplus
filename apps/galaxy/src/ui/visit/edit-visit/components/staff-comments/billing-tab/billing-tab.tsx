@@ -15,15 +15,15 @@ const BillingTab = ({ appointmentId }: { appointmentId: number }) => {
   const [comments, setComments] = useState<StaffComment[]>([])
 
   useEffect(() => {
-    fetchComments({
+    fetchStaffComments({
       isTreatment: false,
       isBilling: true,
-      appointmentId: appointmentId.toString(),
+      appointmentId,
       recordStatuses: [STAFF_COMMENT_STATUS.Active],
     })
   }, [appointmentId])
 
-  const fetchComments = async (payload: StaffCommentParams) => {
+  const fetchStaffComments = async (payload: StaffCommentParams) => {
     setLoading(true)
 
     const result = await getPatientStaffCommentsAction(payload)
@@ -40,12 +40,12 @@ const BillingTab = ({ appointmentId }: { appointmentId: number }) => {
     <Flex direction="column" gap="2" width="100%" py="2">
       <BillingCommentForm
         appointmentId={appointmentId}
-        fetchComments={fetchComments}
+        fetchStaffComments={fetchStaffComments}
       />
       {loading ? (
         <LoadingPlaceholder className="bg-white min-h-[80px] rounded-1 border border-gray-5" />
       ) : (
-        <BillingTable data={comments} fetchComments={fetchComments} />
+        <BillingTable data={comments} fetchStaffComments={fetchStaffComments} />
       )}
     </Flex>
   )

@@ -9,7 +9,7 @@ import { updateStaffCommentAction } from '../../actions'
 
 const UrgentCell = ({
   row: {
-    original: { isUrgentComment, id, recordStatus, staffCommment },
+    original: { isUrgentComment, id, recordStatus, comment },
   },
 }: PropsWithRow<StaffComment>) => {
   const [isChecked, setIsChecked] = useState(isUrgentComment)
@@ -21,8 +21,8 @@ const UrgentCell = ({
 
     const result = await updateStaffCommentAction({
       commentId: id,
-      IsUrgentComment: checked,
-      StaffCommment: staffCommment,
+      isUrgentComment: checked,
+      comment: comment,
     })
 
     if (result.state === 'error') {

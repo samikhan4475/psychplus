@@ -19,10 +19,10 @@ export type TreatmentCommentFormSchemaType = z.infer<typeof schema>
 
 const TreatmentCommentForm = ({
   appointmentId,
-  fetchComments,
+  fetchStaffComments,
 }: {
   appointmentId: number
-  fetchComments: (formValues: StaffCommentParams) => void
+  fetchStaffComments: (formValues: StaffCommentParams) => void
 }) => {
   const form = useForm<TreatmentCommentFormSchemaType>({
     resolver: zodResolver(schema),
@@ -36,7 +36,7 @@ const TreatmentCommentForm = ({
   ) => {
     const requestData = {
       recordStatus: STAFF_COMMENT_STATUS.Active,
-      staffCommment: data.comment,
+      comment: data.comment,
       appointmentId: appointmentId,
       isTreatmentComment: true,
       isBillingComment: false,
@@ -50,10 +50,10 @@ const TreatmentCommentForm = ({
 
     toast.success('Comment created successfully')
     form.reset()
-    fetchComments({
+    fetchStaffComments({
       isTreatment: true,
       isBilling: false,
-      appointmentId: appointmentId.toString(),
+      appointmentId: appointmentId,
       recordStatuses: [STAFF_COMMENT_STATUS.Active],
     })
   }

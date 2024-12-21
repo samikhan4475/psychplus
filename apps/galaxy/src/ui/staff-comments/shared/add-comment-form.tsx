@@ -4,39 +4,42 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Button, Flex, Heading } from '@radix-ui/themes'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
+import { useStore as zustandUseStore } from 'zustand'
 import { FormContainer } from '@/components'
 import { createStaffCommentAction } from '../actions'
+import { BILLING_TAB } from '../constants'
 import { AddCommentField, commentSchema, CommentSchemaType } from '../shared'
 import { useStore } from '../store'
 
-interface AddCommentFormProps {
-  patientId: string
-}
-
-const AddCommentForm = ({ patientId }: AddCommentFormProps) => {
-  const { fetchComments, activeTab } = useStore((state) => ({
-    fetchComments: state.fetchComments,
-    activeTab: state.activeTab,
-  }))
+const AddCommentForm = () => {
+  const store = useStore()
+  const { fetchComments, activeTab, appointmentId } = zustandUseStore(
+    store,
+    (state) => ({
+      fetchComments: state.fetchComments,
+      activeTab: state.activeTab,
+      patientId: state.patientId,
+      appointmentId: state.appointmentId,
+    }),
+  )
 
   const form = useForm<CommentSchemaType>({
     resolver: zodResolver(commentSchema),
     defaultValues: {
-      staffComment: '',
+      comment: '',
     },
   })
 
   const { isSubmitting } = form.formState
 
   const onSubmit: SubmitHandler<CommentSchemaType> = async (data) => {
-    const isBilling = activeTab === 'Billing'
+    const isBilling = activeTab === BILLING_TAB
 
     const requestData = {
-      PatientId: patientId,
-      StaffCommment: data.staffComment,
-      AppointmentId: 11938,
-      IsTreatmentComment: !isBilling,
-      IsBillingComment: isBilling,
+      ...data,
+      appointmentId: Number(appointmentId),
+      isTreatmentComment: !isBilling,
+      isBillingComment: isBilling,
     }
 
     const result = await createStaffCommentAction(requestData)
@@ -49,9 +52,8 @@ const AddCommentForm = ({ patientId }: AddCommentFormProps) => {
     toast.success('Comment created successfully')
     form.reset()
     fetchComments({
-      PatientId: patientId,
-      IsTreatment: !isBilling,
-      IsBilling: isBilling,
+      isTreatment: !isBilling,
+      isBilling: isBilling,
     })
   }
   return (

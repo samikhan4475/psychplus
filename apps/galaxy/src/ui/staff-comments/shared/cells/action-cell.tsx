@@ -4,24 +4,28 @@ import { useState } from 'react'
 import { IconButton } from '@radix-ui/themes'
 import { Trash2 } from 'lucide-react'
 import toast from 'react-hot-toast'
+import { useStore as zustandUseStore } from 'zustand'
 import { PropsWithRow } from '@/components'
 import { StaffComment } from '@/types'
 import { deleteStaffCommentAction } from '../../actions'
+import { BILLING_TAB } from '../../constants'
 import { useStore } from '../../store'
 
 const ActionCell = ({
   row: {
-    original: { recordStatus, id, patientId },
+    original: { recordStatus, id },
   },
 }: PropsWithRow<StaffComment>) => {
-  const { fetchComments, activeTab } = useStore((state) => ({
+  const store = useStore()
+  const { fetchComments, activeTab } = zustandUseStore(store, (state) => ({
     fetchComments: state.fetchComments,
     activeTab: state.activeTab,
   }))
+
   const [loading, setLoading] = useState<boolean>(false)
 
   const handleDelete = async () => {
-    const isBilling = activeTab === 'Billing'
+    const isBilling = activeTab === BILLING_TAB
 
     setLoading(true)
 
@@ -33,9 +37,8 @@ const ActionCell = ({
 
     toast.success('Comment deleted successfully')
     fetchComments({
-      PatientId: String(patientId),
-      IsTreatment: !isBilling,
-      IsBilling: isBilling,
+      isTreatment: !isBilling,
+      isBilling: isBilling,
     })
 
     setLoading(false)

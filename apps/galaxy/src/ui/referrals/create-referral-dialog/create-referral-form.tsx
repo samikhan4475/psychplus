@@ -70,7 +70,7 @@ const CreateReferralForm = ({
     const response = await createPatientReferralAction(data)
 
     if (response.state === 'error') {
-      toast.error(response.error)
+      toast.error(response?.error)
       return
     }
 

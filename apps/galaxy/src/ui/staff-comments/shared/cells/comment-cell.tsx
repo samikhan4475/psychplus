@@ -6,7 +6,7 @@ import { cn } from '@/utils'
 
 const CommentCell = ({
   row: {
-    original: { recordStatus, staffCommment },
+    original: { recordStatus, comment },
   },
 }: PropsWithRow<StaffComment>) => {
   return (
@@ -15,7 +15,7 @@ const CommentCell = ({
         'text-pp-send-icon line-through': recordStatus === 'Deleted',
       })}
     >
-      {staffCommment}
+      {comment}
     </TextCell>
   )
 }

@@ -5,7 +5,7 @@ interface StaffComment {
   date_time: string
   staff: string
   organization?: string
-  staffCommment: string
+  comment: string
   isDeleted?: boolean
   isBillingComment?: boolean
   isTreatmentComment?: boolean
@@ -18,15 +18,15 @@ interface StaffComment {
 }
 
 interface StaffCommentParams {
-  StartDate?: string
-  EndDate?: string
-  PartialComment?: string
-  IsBilling: boolean
-  IsTreatment: boolean
-  PatientId?: string
-  AppointmentId?: string
+  startDate?: string
+  endDate?: string
+  partialComment?: string
+  isBilling?: boolean
+  isTreatment?: boolean
+  patientId?: string
+  appointmentId?: number
   staff?: string
-  RecordStatuses?: string[] | null
+  recordStatuses?: string[] | null
 }
 interface GetCommentsData {
   comments: StaffComment[]

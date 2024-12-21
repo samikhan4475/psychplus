@@ -11,10 +11,10 @@ const AddCommentField = () => {
     <FormFieldContainer className="w-full">
       <TextField.Root
         size="1"
-        {...form.register('staffComment')}
+        {...form.register('comment')}
         className="border-pp-gray-2 h-6 w-full border border-solid !outline-none [box-shadow:none]"
       />
-      <FormFieldError name="staffComment" />
+      <FormFieldError name="comment" />
     </FormFieldContainer>
   )
 }

@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect } from 'react'
+import { useStore as zustandUseStore } from 'zustand'
 import { SelectOptionType } from '@/types'
 import { AddCommentForm, TabContentHeading } from '../shared'
 import { useStore } from '../store'
@@ -9,28 +10,29 @@ import { TreatmentDataTable } from './treatment-data-table'
 const TAB_TITLE = 'Treatment'
 
 interface TreatmentTabProps {
-  patientId: string
   staffOptions: SelectOptionType[]
 }
-const TreatmentTab = ({ patientId, staffOptions }: TreatmentTabProps) => {
-  const { treatmentComments, fetchComments, loading } = useStore((state) => ({
-    treatmentComments: state.treatmentComments,
-    loading: state.loading,
-    fetchComments: state.fetchComments,
-  }))
-
+const TreatmentTab = ({ staffOptions }: TreatmentTabProps) => {
+  const store = useStore()
+  const { treatmentComments, fetchComments, loading } = zustandUseStore(
+    store,
+    (state) => ({
+      treatmentComments: state.treatmentComments,
+      loading: state.loading,
+      fetchComments: state.fetchComments,
+    }),
+  )
   useEffect(() => {
-    fetchComments({ PatientId: patientId, IsTreatment: true, IsBilling: false })
-  }, [])
+    fetchComments({ isTreatment: true, isBilling: false })
+  }, [fetchComments])
 
   return (
     <>
       <TabContentHeading title={TAB_TITLE} />
-      <AddCommentForm patientId={patientId} />
+      <AddCommentForm />
       <TreatmentDataTable
         comments={treatmentComments ?? []}
         staffOptions={staffOptions}
-        patientId={patientId}
         loading={loading}
       />
     </>

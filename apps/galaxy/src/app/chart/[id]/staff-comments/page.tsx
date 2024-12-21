@@ -4,10 +4,15 @@ interface StaffCommentsProps {
   params: {
     id: string
   }
+  searchParams: {
+    id: string
+  }
 }
 
-const StaffComments = ({ params }: StaffCommentsProps) => {
-  return <StaffCommentsView patientId={params.id} />
+const StaffComments = ({ params, searchParams }: StaffCommentsProps) => {
+  return (
+    <StaffCommentsView patientId={params.id} appointmentId={searchParams.id} />
+  )
 }
 
 export default StaffComments

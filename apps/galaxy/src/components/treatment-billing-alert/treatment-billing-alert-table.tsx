@@ -24,7 +24,7 @@ const columns: ColumnDef<StaffComment>[] = [
     id: 'comments',
     size: 600,
     header: ({ column }) => <ColumnHeader column={column} label="Comments" />,
-    cell: ({ row }) => <TextCell>{row.original.staffCommment}</TextCell>,
+    cell: ({ row }) => <TextCell>{row.original.comment}</TextCell>,
   },
 ]
 

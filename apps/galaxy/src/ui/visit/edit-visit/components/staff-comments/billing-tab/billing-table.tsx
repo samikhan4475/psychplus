@@ -45,7 +45,7 @@ const columns = (
     header: () => (
       <ColumnHeader className="min-w-80 !text-1 !font-medium" label="Comment" />
     ),
-    cell: ({ row }) => <TextCell>{row?.original?.staffCommment}</TextCell>,
+    cell: ({ row }) => <TextCell>{row?.original?.comment}</TextCell>,
   },
   {
     id: 'action',
@@ -55,16 +55,16 @@ const columns = (
 
 const BillingTable = ({
   data,
-  fetchComments,
+  fetchStaffComments,
 }: {
   data: StaffComment[]
-  fetchComments: (payload: StaffCommentParams) => void
+  fetchStaffComments: (payload: StaffCommentParams) => void
 }) => {
   return (
     <ScrollArea className="max-h-[150px]">
       <DataTable
         data={data}
-        columns={columns(fetchComments)}
+        columns={columns(fetchStaffComments)}
         sticky
         disablePagination
       />

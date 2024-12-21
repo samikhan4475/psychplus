@@ -4,9 +4,11 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons'
 import { Button } from '@radix-ui/themes'
 import { SubmitHandler, useForm } from 'react-hook-form'
+import { useStore as zustandUseStore } from 'zustand'
 import { FormContainer } from '@/components'
 import { SelectOptionType } from '@/types'
 import { getCalendarDateLabel, sanitizeFormData } from '@/utils'
+import { BILLING_TAB } from '../constants'
 import {
   CommentInput,
   DateFromInput,
@@ -19,14 +21,15 @@ import { useStore } from '../store'
 
 interface BillingFilterFormProps {
   staffOptions: SelectOptionType[]
-  patientId: string
 }
-const FilterForm = ({ patientId, staffOptions }: BillingFilterFormProps) => {
-  const { fetchComments, activeTab } = useStore((state) => ({
+const FilterForm = ({ staffOptions }: BillingFilterFormProps) => {
+  const store = useStore()
+  const { activeTab, fetchComments } = zustandUseStore(store, (state) => ({
     fetchComments: state.fetchComments,
     activeTab: state.activeTab,
   }))
-  const isBilling = activeTab === 'Billing'
+
+  const isBilling = activeTab === BILLING_TAB
 
   const form = useForm<FilterFormSchemaType>({
     resolver: zodResolver(filterFormschema),
@@ -36,35 +39,31 @@ const FilterForm = ({ patientId, staffOptions }: BillingFilterFormProps) => {
       partialComment: '',
       isBilling: false,
       isTreatment: true,
-      patientId: patientId,
       staffId: '',
     },
     mode: 'onChange',
   })
-  const { isDirty, isSubmitting } = form.formState
+  const { isSubmitting } = form.formState
 
   const onSubmit: SubmitHandler<FilterFormSchemaType> = (data) => {
-    if (!isDirty) return
-
     const sanitizedData = sanitizeFormData({
-      PatientId: data.patientId,
-      StartDate: data.startDate ? getCalendarDateLabel(data.startDate) : '',
-      EndDate: data.endDate ? getCalendarDateLabel(data.endDate) : '',
-      PartialComment: data.partialComment,
-      IsBilling: isBilling,
-      IsTreatment: !isBilling,
-      StaffId: data.staffId,
+      startDate: data.startDate ? getCalendarDateLabel(data.startDate) : '',
+      endDate: data.endDate ? getCalendarDateLabel(data.endDate) : '',
+      partialComment: data.partialComment,
+      staffId: data.staffId,
     })
-    return fetchComments(sanitizedData)
+    return fetchComments({
+      ...sanitizedData,
+      isTreatment: !isBilling,
+      isBilling: isBilling,
+    })
   }
 
   const handleReset = () => {
-    if (!isDirty) return
     form.reset()
     fetchComments({
-      PatientId: patientId,
-      IsTreatment: !isBilling,
-      IsBilling: isBilling,
+      isBilling: isBilling,
+      isTreatment: !isBilling,
     })
   }
 

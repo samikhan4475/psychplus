@@ -4,7 +4,7 @@ import { DateValue } from 'react-aria-components'
 import z from 'zod'
 
 const commentSchema = z.object({
-  staffComment: z
+  comment: z
     .string()
     .min(1, 'Required')
     .max(128, 'Max 128 characters are allowed.'), // Max 128 characters
@@ -16,7 +16,6 @@ const filterFormschema = z.object({
   partialComment: z.string().optional(),
   isBilling: z.boolean(),
   isTreatment: z.boolean(),
-  patientId: z.string(),
   staffId: z.string().optional(),
 })
 

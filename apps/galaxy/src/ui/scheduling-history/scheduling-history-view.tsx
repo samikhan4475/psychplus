@@ -43,7 +43,7 @@ const comment: StaffComment[] = [...Array(1)].map((i) => ({
   id: Number(i),
   date_time: '03/12/24',
   staff: 'John Smith, MD',
-  staffCommment:
+  comment:
     "The EHR's scheduling module has made appointment management much easier and more organized. It’s great to have automated reminders for both patients and staff",
 }))
 

@@ -4,7 +4,9 @@ const getNavLinks = (appointmentId: string | null) => {
     { label: 'Referrals', href: '/referrals' },
     { label: 'PCP', href: '/pcp' },
     { label: 'Pharmacy', href: '/pharmacy' },
-    { label: 'Staff Comments', href: '/staff-comments' },
+    ...(appointmentId
+      ? [{ label: 'Staff Comments', href: '/staff-comments' }]
+      : []),
     { label: 'Scheduling History', href: '/scheduling-history' },
 
     // { label: 'Rating', href: '/rating' },

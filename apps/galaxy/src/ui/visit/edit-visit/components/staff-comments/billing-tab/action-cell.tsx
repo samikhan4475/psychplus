@@ -31,7 +31,7 @@ const ActionCell = ({
     toast.success('Comment deleted successfully')
 
     fetchComments({
-      appointmentId: String(appointmentId),
+      appointmentId,
       isTreatment: false,
       isBilling: true,
       recordStatuses: [STAFF_COMMENT_STATUS.Active],

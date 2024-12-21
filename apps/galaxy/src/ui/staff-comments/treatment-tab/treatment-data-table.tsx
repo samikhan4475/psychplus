@@ -5,19 +5,17 @@ import { DataTable, FilterForm, ViewLoadingPlaceholder } from '../shared'
 
 interface TreatmentDataTableProps {
   comments: StaffComment[]
-  patientId: string
   staffOptions: SelectOptionType[]
   loading?: boolean
 }
 const TreatmentDataTable = ({
   comments,
-  patientId,
   staffOptions,
   loading,
 }: TreatmentDataTableProps) => {
   return (
     <>
-      <FilterForm patientId={patientId} staffOptions={staffOptions} />
+      <FilterForm staffOptions={staffOptions} />
       {loading ? (
         <ViewLoadingPlaceholder />
       ) : (

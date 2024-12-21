@@ -4,9 +4,9 @@ import * as api from '@/api'
 import type { StaffComment } from '@/types'
 
 interface UpdateCommentParams {
-  IsUrgentComment: boolean
+  isUrgentComment: boolean
   commentId: number
-  StaffCommment: string
+  comment: string
 }
 
 const updateStaffCommentAction = async ({

@@ -140,7 +140,7 @@ interface StaffCommentParams {
   isBilling: boolean
   isTreatment: boolean
   patientId?: string
-  appointmentId?: string
+  appointmentId?: number
   staff?: string
   recordStatuses?: string[] | null
 }
