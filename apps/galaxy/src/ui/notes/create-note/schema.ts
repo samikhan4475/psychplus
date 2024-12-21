@@ -7,7 +7,7 @@ const createNoteSchema = z.object({
   noteTypeCode: z.string().trim().min(1, 'Required'),
   noteTitleCode: z.string().trim().optional(),
   provider: z.string().trim().min(1, 'Required'),
-  cosigner: z.string().trim().optional(),
+  cosigner: z.string().trim().min(1, 'Required'),
   description: z.string().trim().min(1, 'Required'),
   file: z.array(z.instanceof(File)).optional(),
 })

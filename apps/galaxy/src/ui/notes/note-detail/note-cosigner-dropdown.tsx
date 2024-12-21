@@ -2,10 +2,8 @@
 
 import { useState } from 'react'
 import { Flex, Select } from '@radix-ui/themes'
-import { useFormContext } from 'react-hook-form'
 import { Cosigner } from '@/types'
 import { getPatientFullName } from '@/utils'
-import { CosignSchemaType } from '../cosign-dialog-form'
 
 interface NotesCosignerDropdownProps {
   cosigners?: Cosigner[]
@@ -19,9 +17,7 @@ const NotesCosignerDropdown = ({
   placeholder = 'Cosigners',
 }: NotesCosignerDropdownProps) => {
   const [selectedOption, setSelectedOption] = useState('')
-  const form = useFormContext<CosignSchemaType>()
   setField(selectedOption)
-  form.setValue('provider', selectedOption)
 
   return (
     <Flex direction="column" gap="1">
@@ -35,8 +31,8 @@ const NotesCosignerDropdown = ({
           highContrast
           onCloseAutoFocus={(e) => e.preventDefault()}
         >
-          {cosigners?.map(({ id, legalName }, ind) => (
-            <Select.Item key={`${id}-${ind}`} value={String(id)}>
+          {cosigners?.map(({ id, legalName, userId }, ind) => (
+            <Select.Item key={`${id}-${ind}`} value={String(userId)}>
               {getPatientFullName(legalName)}
             </Select.Item>
           ))}

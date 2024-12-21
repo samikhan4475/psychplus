@@ -84,7 +84,7 @@ const CreateNoteForm = ({ children }: React.PropsWithChildren<unknown>) => {
 
       toast.success('Saved')
     } else {
-      toast.error('Failed to save')
+      toast.error(result?.error || 'Failed to save')
     }
   }
 

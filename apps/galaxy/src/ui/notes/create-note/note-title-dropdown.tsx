@@ -4,17 +4,14 @@ import { Flex, Text } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
 import { CodesetSelect, FormFieldError } from '@/components'
 import { CODESETS } from '@/constants'
-import { NoteType } from './note-type-dropdown'
+import { useCodesetCodes } from '@/hooks'
 import { CreateNoteSchema } from './schema'
-import { formatValue } from './utils'
+import { formatValue, getDisplayByValue } from './utils'
 
 const NoteTitleDropdown = () => {
   const form = useFormContext<CreateNoteSchema>()
   const noteType = form.watch('noteTypeCode')
-
-  const value =
-    (noteType && NoteType[noteType as keyof typeof NoteType]) ||
-    'Unknown Note Type'
+  const value = getDisplayByValue(noteType, useCodesetCodes(CODESETS.NoteType))
 
   const formattedValue = formatValue(value)
   form.setValue('noteTitleCode', formattedValue)

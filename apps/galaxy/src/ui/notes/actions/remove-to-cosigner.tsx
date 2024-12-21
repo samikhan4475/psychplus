@@ -7,18 +7,16 @@ interface RemoveToCosignerParams {
   patientId: string
   appointmentId?: string
   noteId?: string
-  staffId: string
 }
 
 const removeToCosignerAction = async (payload: RemoveToCosignerParams) => {
-  const endpoint = api.SENT_TO_COSIGNER_NOTE_ENDPOINT(
+  const endpoint = api.REMOVE_TO_COSIGNER_NOTE_ENDPOINT(
     payload.patientId,
     payload.appointmentId,
     payload.noteId,
-    payload.staffId,
   )
 
-  const response = await api.POST<ApiResponse>(endpoint)
+  const response = await api.DELETE<ApiResponse>(endpoint)
 
   if (response.state === 'error') {
     return {

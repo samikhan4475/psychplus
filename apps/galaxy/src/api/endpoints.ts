@@ -424,7 +424,14 @@ const SENT_TO_COSIGNER_NOTE_ENDPOINT = (
   noteId?: string,
   staffId?: string,
 ) =>
-  `${API_URL}/api/patients/${patientId}/encounters/${appointmentId}/notes/${noteId}/cosigners/${staffId}/actions/replace`
+  `${API_URL}/api/patients/${patientId}/encounters/${appointmentId}/notes/${noteId}/cosigners/${staffId}`
+
+const REMOVE_TO_COSIGNER_NOTE_ENDPOINT = (
+  patientId: string,
+  appointmentId?: string,
+  noteId?: string,
+) =>
+  `${API_URL}/api/patients/${patientId}/encounters/${appointmentId}/notes/${noteId}/cosigner`
 
 const UPDATE_LAB_ORDERS_RESULT_ENDPOINT = (
   appointmentId: string,
@@ -647,4 +654,5 @@ export {
   GET_NOTE_DOCUMENTS_ENDPOINT,
   GET_STAFF_USER_ENDPOINT,
   GET_NOTE_DOCUMENT_ENDPOINT,
+  REMOVE_TO_COSIGNER_NOTE_ENDPOINT,
 }

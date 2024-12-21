@@ -15,6 +15,7 @@ interface Cosigner {
   bio: string
   hasPhoto: boolean
   rating: number
+  userId?: string
 }
 
 interface ServiceUnit {

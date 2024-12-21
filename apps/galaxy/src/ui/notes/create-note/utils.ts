@@ -1,4 +1,5 @@
 import { FieldValues } from 'react-hook-form'
+import { SharedCode } from '@/types/codeset'
 
 export const formatDateTime = (data: FieldValues) => {
   const { year, month, day } = data.date
@@ -8,10 +9,10 @@ export const formatDateTime = (data: FieldValues) => {
   return formattedDate.toISOString()
 }
 
-export const formatValue = (value: string): string => {
+export const formatValue = (value?: string): string => {
   const regex = /\(([^()]+)\)/
-  const match = regex.exec(value)
-  if (!match) return value
+  const match = regex.exec(value || '')
+  if (!match) return value || ''
 
   const extracted = match[1]
 
@@ -21,6 +22,14 @@ export const formatValue = (value: string): string => {
     .join('')
 
   return formatted
+}
+
+export const getDisplayByValue = (
+  value: string,
+  data: SharedCode[],
+): string | undefined => {
+  const foundItem = data.find((item) => item.value === value)
+  return foundItem?.display
 }
 
 export const getFileSize = (size: number): string => {

@@ -37,11 +37,10 @@ const RemoveCosignDialog = ({
     setLoading(true)
     const payload = validateAndPreparePayload()
     if (!payload) return
-
-    const result = await removeToCosignerAction({ ...payload, staffId: '0' })
+    const result = await removeToCosignerAction({ ...payload })
 
     if (result.state === 'error') {
-      toast.error(result?.error || 'Failed to mark as error')
+      toast.error(result?.error || 'Failed to removeCosigner')
       removecloseDialog()
       setLoading(false)
       return
