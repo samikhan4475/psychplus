@@ -6,6 +6,7 @@ import { FollowUpNoteDetailView } from '@/ui/quicknotes/actual-note-view/follow-
 import { HospitalDischargeNoteDetailView } from '@/ui/quicknotes/actual-note-view/hospital-discharge/hospital-discharge-note-detail-view'
 import { HospitalInitialNoteDetailView } from '@/ui/quicknotes/actual-note-view/hospital-initial/hospital-initial-note-detail-view'
 import { HpiNoteDetailView } from '@/ui/quicknotes/actual-note-view/hpi/hpi-note-detail-view'
+import { MedicationsNoteDetailsView } from '@/ui/quicknotes/actual-note-view/medications/medications-note-details-view'
 import { MentalStatusExamNoteDetailView } from '@/ui/quicknotes/actual-note-view/mental-status-exam/mental-status-exam-note-detail-view'
 import { PastMedicalHxNoteDetailView } from '@/ui/quicknotes/actual-note-view/past-medical-hx/past-medical-hx-note-detail-view'
 import { PastPsychlNoteDetailView } from '@/ui/quicknotes/actual-note-view/past-psych-hx/past-psych-note-detail-view'
@@ -88,10 +89,10 @@ const widgetsArray: Array<WidgetType> = [
     id: QuickNoteSectionName.QuickNoteSectionDiagnosis,
     actualNoteDetailComponent: WorkingDiagnosisNoteDetailView,
   },
-  // {
-  //   id: QuickNoteSectionName.QuicknoteSectionMedications,
-  //   actualNoteDetailComponent: MedicationsNoteDetailView,
-  // },// TODO: will remove when MedicationsNoteDetailView will be done in actual note
+  {
+    id: QuickNoteSectionName.QuicknoteSectionMedications,
+    actualNoteDetailComponent: MedicationsNoteDetailsView,
+  },
   {
     id: QuickNoteSectionName.QuicknoteSectionReferrals,
     actualNoteDetailComponent: ReferralNoteDetailView,

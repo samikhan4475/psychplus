@@ -14,7 +14,6 @@ import { CODESETS } from '@/constants'
 import { useCodesetCodes } from '@/hooks'
 import { SharedCode } from '@/types'
 import { formatDateTime } from '@/utils'
-import { TableHeaderCheckboxCell, TableRowCheckboxCell } from './cells'
 import { useStore } from './store'
 import { PatientNotes } from './types'
 import { getAuthorName } from './utils'
@@ -25,25 +24,6 @@ const getColumns = (codes: SharedCode[]) => {
   }
 
   const columns: ColumnDef<PatientNotes>[] = [
-    {
-      id: 'select',
-      header: ({ table }) => (
-        <Flex className="justify-center">
-          <TableHeaderCheckboxCell
-            checked={table.getIsAllPageRowsSelected()}
-            onCheckedChange={table.toggleAllPageRowsSelected}
-          />
-        </Flex>
-      ),
-      cell: ({ row }) => (
-        <Box className="justify-center">
-          <TableRowCheckboxCell
-            checked={row.getIsSelected()}
-            onCheckedChange={row.toggleSelected}
-          />
-        </Box>
-      ),
-    },
     {
       id: 'date',
       accessorKey: 'date',
