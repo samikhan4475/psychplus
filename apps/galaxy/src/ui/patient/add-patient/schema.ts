@@ -2,12 +2,22 @@ import { DateValue } from 'react-aria-components'
 import z from 'zod'
 
 const phoneRegex = /^\+?[1-9]\d{7,14}$/
+const nameRegex = /^[^\d]*$/
 
 const schema = z
   .object({
-    firstName: z.string().min(1, 'Required'),
-    middleName: z.coerce.string().optional(),
-    lastName: z.string().min(1, 'Required'),
+    firstName: z
+      .string()
+      .min(1, 'Required')
+      .regex(nameRegex, 'Cannot contain numbers'),
+    middleName: z.coerce
+      .string()
+      .regex(nameRegex, 'Cannot contain numbers')
+      .optional(),
+    lastName: z
+      .string()
+      .min(1, 'Required')
+      .regex(nameRegex, 'Cannot contain numbers'),
     gender: z.string().min(1, 'Required'),
     dateOfBirth: z
       .custom<DateValue>()
@@ -20,8 +30,20 @@ const schema = z
       .regex(phoneRegex, 'Invalid phone number'),
     email: z.string().min(1, 'Required').email('Invalid email address'),
     hasGuardian: z.string(),
-    guardianFirstName: z.string().optional(),
-    guardianLastName: z.string().optional(),
+    guardianFirstName: z
+      .string()
+      .optional()
+      .refine(
+        (val) => val !== undefined && nameRegex.test(val),
+        'Cannot contain numbers',
+      ),
+    guardianLastName: z
+      .string()
+      .optional()
+      .refine(
+        (val) => val !== undefined && nameRegex.test(val),
+        'Cannot contain numbers',
+      ),
     relationship: z.string().optional(),
     patientPolicyA: z.boolean().optional(),
     patientPolicyB: z.boolean().optional(),
@@ -31,14 +53,14 @@ const schema = z
       if (!data.guardianFirstName) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
-          message: "Required",
+          message: 'Required',
           path: ['guardianFirstName'],
         })
       }
       if (!data.guardianLastName) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
-          message: "Required",
+          message: 'Required',
           path: ['guardianLastName'],
         })
       }

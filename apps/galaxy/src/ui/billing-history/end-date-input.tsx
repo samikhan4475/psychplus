@@ -9,7 +9,7 @@ interface EndDateInput {
 const EndDateInput = ({ disabled }: EndDateInput) => {
   return (
     <Flex align="center" gap="1">
-      <FormFieldLabel className="!text-1">End Date</FormFieldLabel>
+      <FormFieldLabel className="!text-1">To Date</FormFieldLabel>
       <Box className="w-[103px]">
         <DatePickerInput field="endDate" isDisabled={disabled} />
       </Box>

@@ -9,7 +9,7 @@ interface StartDateInput {
 const StartDateInput = ({ disabled }: StartDateInput) => {
   return (
     <Flex align="center" gap="1">
-      <FormFieldLabel className="!text-1">Start Date</FormFieldLabel>
+      <FormFieldLabel className="!text-1">From Date</FormFieldLabel>
       <Box className="w-[103px]">
         <DatePickerInput field="fromDate" isDisabled={disabled} />
       </Box>

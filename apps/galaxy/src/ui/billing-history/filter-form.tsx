@@ -65,10 +65,10 @@ const BillingFilterForm = ({ patientId }: BillingFilterFormProps) => {
       {showFilters && (
         <Flex align="center" gap="2" wrap="wrap">
           <ClaimNoInput />
+          <InsuranceSelect />
+          <LocationsSelect />
           <StartDateInput disabled={isSubmitting} />
           <EndDateInput disabled={isSubmitting} />
-          <LocationsSelect />
-          <InsuranceSelect />
         </Flex>
       )}
       <Flex gap="2" align="center">
