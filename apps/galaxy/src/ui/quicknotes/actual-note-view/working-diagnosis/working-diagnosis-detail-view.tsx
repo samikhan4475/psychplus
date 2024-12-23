@@ -20,26 +20,25 @@ const WorkingDiagnosisDetailView = async ({
   if (quickNotesResponse.state === 'error') {
     return <Text>{quickNotesResponse.error}</Text>
   }
-  const { sectionItemValue } =
-    quickNotesResponse.data?.find((item) => item.sectionItem === 'diagnosis') ||
-    {}
-  const DiagnosisCodes = sectionItemValue?.split(',') || []
+  const { sectionItemValue } = quickNotesResponse.data?.[0] || {}
+  let DiagnosisCodes = sectionItemValue?.split(',') || []
   if (sectionItemValue === 'empty' || DiagnosisCodes?.length === 0) {
-    return
+    DiagnosisCodes = []
   }
   const Icd10DiagnosisResponse = await getIcd10DiagnosisAPI({
     DiagnosisCodes,
   })
 
-  if (Icd10DiagnosisResponse.state === 'error') {
-    return <Text>{Icd10DiagnosisResponse.error}</Text>
-  }
+  const codesData =
+    Icd10DiagnosisResponse.state === 'success'
+      ? Icd10DiagnosisResponse.data
+      : []
 
   return (
     <ActualNoteDetailsWrapper
       sectionName={QuickNoteSectionName.QuickNoteSectionDiagnosis}
     >
-      <Details data={Icd10DiagnosisResponse.data} />
+      <Details data={codesData} />
     </ActualNoteDetailsWrapper>
   )
 }

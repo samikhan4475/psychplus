@@ -13,7 +13,7 @@ import { PastPsychlNoteDetailView } from '@/ui/quicknotes/actual-note-view/past-
 import { AllergiesNoteDetailsView } from '@/ui/quicknotes/actual-note-view/patient-allergies/allergies-note-details-view'
 import { PhysicalExamNoteDetailView } from '@/ui/quicknotes/actual-note-view/physical-exam/physical-exam-note-detail-view'
 import { PsychiatryAssessmentPlanNoteDetailView } from '@/ui/quicknotes/actual-note-view/psychiatry-assessment-plan/psychiatry-assessment-plan-note-detail-view'
-import { Question } from '@/ui/quicknotes/actual-note-view/question'
+import { QuestionnairesNoteDetailView } from '@/ui/quicknotes/actual-note-view/questionnaires'
 import { ReferralNoteDetailView } from '@/ui/quicknotes/actual-note-view/referrals/referrals-note-detail-view'
 import { ReviewofSystemNoteDetailView } from '@/ui/quicknotes/actual-note-view/ros/ros-note-detail-view'
 import { SocialHxNoteDetailView } from '@/ui/quicknotes/actual-note-view/social-hx/social-hx-note-detail-view'
@@ -67,7 +67,7 @@ const widgetsArray: Array<WidgetType> = [
   },
   {
     id: QuickNoteSectionName.QuicknoteSectionQuestionnaires,
-    actualNoteDetailComponent: Question,
+    actualNoteDetailComponent: QuestionnairesNoteDetailView,
   },
   {
     id: QuickNoteSectionName.QuicknoteSectionReviewOfSystem,

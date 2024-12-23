@@ -162,6 +162,7 @@ const transformOut =
     const QuickNotesPayload = {
       pid: Number(patientId),
       sectionName: QuickNoteSectionName.Addon,
+      appointmentId: Number(appointmentId),
     }
     if (!schema.injection) {
       INJECTION_BLOCK_OPTIONS.forEach((option) => {

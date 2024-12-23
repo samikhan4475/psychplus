@@ -50,4 +50,18 @@ enum QuickNoteSectionName {
   QuicknoteSectionCreateNote = 'CreateNote',
 }
 
-export { QuickNoteSectionName }
+const questionnairesAddToNotesSection = [
+  QuickNoteSectionName.QuestionnaireActualNoteView,
+  `${QuickNoteSectionName.AddToNoteQuestionnaire}-${QuickNoteSectionName.QuickNoteSectionPhq9}`,
+  `${QuickNoteSectionName.AddToNoteQuestionnaire}-${QuickNoteSectionName.QuickNoteSectionGad7}`,
+  `${QuickNoteSectionName.AddToNoteQuestionnaire}-${QuickNoteSectionName.QuickNoteSectionSnapIV}`,
+  `${QuickNoteSectionName.AddToNoteQuestionnaire}-${QuickNoteSectionName.QuickNoteSectionDast10}`,
+  `${QuickNoteSectionName.AddToNoteQuestionnaire}-${QuickNoteSectionName.QuickNoteSectionAudit}`,
+  `${QuickNoteSectionName.AddToNoteQuestionnaire}-${QuickNoteSectionName.QuickNoteSectionHamD}`,
+  `${QuickNoteSectionName.AddToNoteQuestionnaire}-${QuickNoteSectionName.QuickNoteSectionYbcos}`,
+  `${QuickNoteSectionName.AddToNoteQuestionnaire}-${QuickNoteSectionName.QuickNoteSectionMoca}`,
+  `${QuickNoteSectionName.AddToNoteQuestionnaire}-${QuickNoteSectionName.QuickNoteSectionAims}`,
+  `${QuickNoteSectionName.AddToNoteQuestionnaire}-${QuickNoteSectionName.QuickNoteSectionPcl5}`,
+]
+
+export { QuickNoteSectionName, questionnairesAddToNotesSection }

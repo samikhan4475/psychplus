@@ -1,5 +1,6 @@
 'use client'
 
+import { useSearchParams } from 'next/navigation'
 import { Box, Flex, Text } from '@radix-ui/themes'
 import { FormProvider } from 'react-hook-form'
 import { WidgetFormContainer } from '@/components'
@@ -25,6 +26,7 @@ interface QuestionnairesFormYBocsProps {
 }
 
 const YBocsTab = ({ patientId, data }: QuestionnairesFormYBocsProps) => {
+  const appointmentId = useSearchParams().get('id') as string
   const totalQuestions = YBOCS_TABLES.length
   const initialValue = transformIn(data, totalQuestions)
   const { totalScore, ...form } = useQuestionnaireForm(
@@ -37,10 +39,11 @@ const YBocsTab = ({ patientId, data }: QuestionnairesFormYBocsProps) => {
       <Flex direction="column" gap=".5rem">
         <WidgetFormContainer
           patientId={patientId}
-          widgetId={QuestionnaireTabs.Y_BOCS_TAB}
+          widgetId={QuickNoteSectionName.QuickNoteSectionYbcos}
           getData={transformOut(
             patientId,
             QuickNoteSectionName.QuickNoteSectionYbcos,
+            appointmentId,
           )}
           title={QuestionnaireTabs.Y_BOCS_TAB}
           headerRight={

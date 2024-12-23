@@ -4,14 +4,14 @@ import { useState } from 'react'
 import { CheckboxCell } from '@/components'
 
 const AddToPreVisitAssessmentCell = () => {
-  const [addToNote, setAddToNote] = useState(false)
+  const [addToPrevisit, setAddToPrevisit] = useState(false)
 
   return (
     <CheckboxCell
       label="Add to Pre-Visit Assessment"
-      checked={addToNote}
+      checked={addToPrevisit}
       onCheckedChange={(checked) => {
-        setAddToNote(checked)
+        setAddToPrevisit(checked)
       }}
     />
   )

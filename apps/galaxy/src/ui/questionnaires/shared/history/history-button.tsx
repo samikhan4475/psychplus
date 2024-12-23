@@ -20,6 +20,7 @@ const HistoryButton = ({
   return (
     <Tooltip content="History">
       <Button
+        type="button"
         size="1"
         color="gray"
         variant={justIcon ? 'ghost' : 'surface'}

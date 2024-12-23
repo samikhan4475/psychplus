@@ -75,6 +75,7 @@ const NotesWidget = ({ patientId }: NotesViewProps) => {
       }
     }
     fetchData()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedRow])
 
   useEffect(() => {
@@ -86,13 +87,14 @@ const NotesWidget = ({ patientId }: NotesViewProps) => {
             visitSequence: selectedRow.visitSequence ?? '',
             providerType: appointment.providerType ?? '',
           }),
-          fetchStaff(noteDetail[0].coSignedByUserId),
-          fetchProvider(noteDetail[0].signedByUserId),
+          fetchStaff(noteDetail[0]?.coSignedByUserId),
+          fetchProvider(noteDetail[0]?.signedByUserId),
         ])
         setLoadingDetail(false)
       }
     }
     fetchData()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [appointment])
 
   return (

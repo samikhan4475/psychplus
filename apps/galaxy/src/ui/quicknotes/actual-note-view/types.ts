@@ -17,6 +17,7 @@ interface NoteDetailProps {
   patientId: string
   appointmentId: string
   patient?: PatientProfile
+  groupedData?: Record<string, QuickNoteSectionItem[]>
 }
 
 export type { NoteDetailProps, Allergy }

@@ -43,7 +43,7 @@ const groupBySectionName = (
 
   const result = encounterSignedNoteDetail?.reduce<GroupedBySectionName>(
     (acc, detail) => {
-      let { sectionName } = detail
+      const { sectionName } = detail
 
       if (!acc[sectionName]) {
         acc[sectionName] = []

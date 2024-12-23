@@ -1,5 +1,6 @@
 'use client'
 
+import { useSearchParams } from 'next/navigation'
 import { Flex } from '@radix-ui/themes'
 import { FormProvider } from 'react-hook-form'
 import { ViewLoadingPlaceholder, WidgetFormContainer } from '@/components'
@@ -16,7 +17,7 @@ import {
   useQuestionnaireForm,
 } from '../shared'
 import { transformIn, transformOut } from '../shared/data'
-import { QUESTIONS, SCORE_INTERPRETATION_RANGES, LABELS } from './constants'
+import { LABELS, QUESTIONS, SCORE_INTERPRETATION_RANGES } from './constants'
 
 const Gad7Tab = ({
   patientId,
@@ -25,6 +26,7 @@ const Gad7Tab = ({
   patientId: string
   data: QuickNoteSectionItem[]
 }) => {
+  const appointmentId = useSearchParams().get('id') as string
   const totalQuestions = QUESTIONS.length
   const initialValue = transformIn(
     data,
@@ -45,10 +47,11 @@ const Gad7Tab = ({
       <Flex direction="column" gap=".5rem">
         <WidgetFormContainer
           patientId={patientId}
-          widgetId={QuestionnaireTabs.GAD_7_TAB}
+          widgetId={QuickNoteSectionName.QuickNoteSectionGad7}
           getData={transformOut(
             patientId,
             QuickNoteSectionName.QuickNoteSectionGad7,
+            appointmentId,
           )}
           title={QuestionnaireTabs.GAD_7_TAB}
           headerRight={

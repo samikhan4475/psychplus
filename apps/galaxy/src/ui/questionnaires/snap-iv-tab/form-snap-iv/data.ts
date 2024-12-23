@@ -1,5 +1,6 @@
 import { QuickNoteSectionItem } from '@/types'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
+import { getCodes } from '../../shared/cpt-code-map'
 import { SnapIvSchemaType } from '../snap-iv-schema'
 
 const transformIn = (data: QuickNoteSectionItem[]): SnapIvSchemaType => {
@@ -31,7 +32,7 @@ const transformIn = (data: QuickNoteSectionItem[]): SnapIvSchemaType => {
     'Hyperactivity/ImpulsivityQ17': '',
     'Hyperactivity/ImpulsivityQ18': '',
   }
-  
+
   data?.forEach((item: QuickNoteSectionItem) => {
     result[item.sectionItem] = item.sectionItemValue
   })
@@ -39,8 +40,8 @@ const transformIn = (data: QuickNoteSectionItem[]): SnapIvSchemaType => {
 }
 
 const transformOut =
-  (patientId: string) =>
-  (schema: SnapIvSchemaType): QuickNoteSectionItem[] => {
+  (patientId: string, appointmentId: string) =>
+  async (schema: SnapIvSchemaType): Promise<QuickNoteSectionItem[]> => {
     const result: QuickNoteSectionItem[] = []
 
     Object.entries(schema).forEach(([key, value]) => {
@@ -53,8 +54,8 @@ const transformOut =
         })
       }
     })
-
-    return result
+    const codesResult = await getCodes(patientId, appointmentId)
+    return [...result, ...codesResult]
   }
 
 export { transformIn, transformOut }

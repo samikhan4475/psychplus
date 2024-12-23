@@ -106,6 +106,7 @@ type WidgetType = {
     patientId: string
     appointmentId: string
     patient?: PatientProfile
+    groupedData?: GroupedBySectionName
   }>
   id: QuickNoteSectionName
   providerTypes?: string[]

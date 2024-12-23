@@ -1,4 +1,5 @@
 import React from 'react'
+import { useSearchParams } from 'next/navigation'
 import { Flex } from '@radix-ui/themes'
 import { FormProvider } from 'react-hook-form'
 import { WidgetFormContainer } from '@/components'
@@ -15,6 +16,7 @@ type FilloutCurrentView = React.PropsWithChildren<{
 }>
 
 const CurrentView = ({ patientId, data }: FilloutCurrentView) => {
+  const appointmentId = useSearchParams().get('id') as string
   const initialValue = transformIn(data)
   const { totalScore, totalFilledQuestions, ...form } =
     useQuestionnaireFormAims(initialValue)
@@ -26,7 +28,7 @@ const CurrentView = ({ patientId, data }: FilloutCurrentView) => {
           title=""
           patientId={patientId}
           widgetId="snap-iv popup"
-          getData={transformOut(patientId)}
+          getData={transformOut(patientId, appointmentId)}
         >
           <FilloutCurrentTab
             max={Object.keys(initialValue).length}

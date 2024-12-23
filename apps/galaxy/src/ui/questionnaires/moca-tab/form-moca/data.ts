@@ -1,5 +1,6 @@
 import { QuickNoteSectionItem } from '@/types'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
+import { getCodes } from '../../shared/cpt-code-map'
 import { MocaSchemaType } from '../moca-schema'
 
 const transformIn = (data: QuickNoteSectionItem[]): MocaSchemaType => {
@@ -52,8 +53,8 @@ const transformIn = (data: QuickNoteSectionItem[]): MocaSchemaType => {
 }
 
 const transformOut =
-  (patientId: string) =>
-  (schema: MocaSchemaType): QuickNoteSectionItem[] => {
+  (patientId: string, appointmentId: string) =>
+  async (schema: MocaSchemaType): Promise<QuickNoteSectionItem[]> => {
     const result: QuickNoteSectionItem[] = []
 
     Object.entries(schema).forEach(([key, value]) => {
@@ -66,7 +67,8 @@ const transformOut =
         })
       }
     })
-    return result
+    const codesResult = await getCodes(patientId, appointmentId)
+    return [...result, ...codesResult]
   }
 
 export { transformIn, transformOut }

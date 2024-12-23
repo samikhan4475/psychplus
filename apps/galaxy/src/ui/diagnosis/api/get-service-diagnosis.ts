@@ -5,6 +5,12 @@ const getIcd10DiagnosisAPI = async (payload: {
   CodeOrDescription?: string
   DiagnosisCodes?: string[]
 }): Promise<api.ActionResult<DiagnosisIcd10Code[]>> => {
+  if (payload.DiagnosisCodes && payload.DiagnosisCodes.length === 0) {
+    return {
+      state: 'error',
+      error: 'no diagnosis codes',
+    }
+  }
   const response = await api.POST<DiagnosisIcd10Code[]>(
     api.DIAGNOSIS_SEARCH_ICD10CODES_ENDPOINT,
     payload,

@@ -1,9 +1,11 @@
 'use client'
 
+import { useSearchParams } from 'next/navigation'
 import { Flex } from '@radix-ui/themes'
 import { FormProvider } from 'react-hook-form'
 import { WidgetFormContainer } from '@/components'
 import { QuickNoteSectionItem } from '@/types'
+import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { QuestionnaireTabs } from '../constants'
 import {
   AddToNoteCell,
@@ -18,7 +20,6 @@ import {
   useQuestionnaireFormSnapIv,
 } from './form-snap-iv'
 import { transformIn, transformOut } from './form-snap-iv/data'
-import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 
 const SnapIvTab = ({
   patientId,
@@ -27,6 +28,7 @@ const SnapIvTab = ({
   patientId: string
   data: QuickNoteSectionItem[]
 }) => {
+  const appointmentId = useSearchParams().get('id') as string
   const initialValue = transformIn(data)
   const { totalScore, ...form } = useQuestionnaireFormSnapIv(initialValue)
 
@@ -35,13 +37,15 @@ const SnapIvTab = ({
       <Flex direction="column" gap=".5rem">
         <WidgetFormContainer
           patientId={patientId}
-          widgetId={QuestionnaireTabs.SNAP_IV_TAB}
-          getData={transformOut(patientId)}
+          widgetId={QuickNoteSectionName.QuickNoteSectionSnapIV}
+          getData={transformOut(patientId, appointmentId)}
           title={QuestionnaireTabs.SNAP_IV_TAB}
           headerRight={
             <Flex gap="2">
               <SendToPatientButton />
-              <HistoryButton questionnaire={QuickNoteSectionName.QuickNoteSectionSnapIV} />
+              <HistoryButton
+                questionnaire={QuickNoteSectionName.QuickNoteSectionSnapIV}
+              />
               <SaveButton />
             </Flex>
           }

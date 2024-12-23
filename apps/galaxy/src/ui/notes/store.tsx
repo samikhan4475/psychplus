@@ -71,7 +71,7 @@ interface Store {
   }) => void
 }
 
-const useStore = create<Store>((set, get) => ({
+const useStore = create<Store>((set) => ({
   patientId: '',
   appointmentId: '',
   data: undefined,

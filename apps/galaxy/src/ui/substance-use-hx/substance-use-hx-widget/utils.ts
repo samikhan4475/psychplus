@@ -23,15 +23,15 @@ const cptCodeKeysToWatch = [
 
 const getInitialValues = () => ({
   widgetContainerCheckboxField: undefined,
-  tobacco: null,
+  tobacco: undefined,
   tobaccoChewSmoke: undefined,
   smokePacks: undefined,
   smokingCessationOption: undefined,
   counselingOption: undefined,
   smokingCessationDiscussionDuration: undefined,
   otherTobacco: undefined,
-  alcohol: null,
-  drugs: null,
+  alcohol: undefined,
+  drugs: undefined,
   opioids: undefined,
   opioidsDetails: undefined,
   sedative: undefined,
@@ -44,10 +44,10 @@ const getInitialValues = () => ({
   pcpDetails: undefined,
   inhalants: undefined,
   inhalantsDetails: undefined,
-  questionnaire: null,
+  questionnaire: undefined,
   briefIntervention: undefined,
   referralTreatment: undefined,
-  alcoholSubstanceCessationDiscussionDuration: null,
+  alcoholSubstanceCessationDiscussionDuration: undefined,
   otherAlcoholDrugs: undefined,
 })
 

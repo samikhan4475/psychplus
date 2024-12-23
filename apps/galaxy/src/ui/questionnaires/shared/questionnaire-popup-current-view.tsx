@@ -1,4 +1,5 @@
 import React from 'react'
+import { useSearchParams } from 'next/navigation'
 import { Flex } from '@radix-ui/themes'
 import { FormProvider } from 'react-hook-form'
 import { WidgetFormContainer } from '@/components'
@@ -38,6 +39,8 @@ const QuestionnairePopupCurrentView = ({
     totalQuestions,
   )
 
+  const appointmentId = useSearchParams().get('id') as string
+
   return (
     <FormProvider {...form}>
       <Flex direction="column" gap=".5rem">
@@ -45,7 +48,7 @@ const QuestionnairePopupCurrentView = ({
           title=""
           patientId={patientId}
           widgetId={quickNoteSectionName}
-          getData={transformOut(patientId, quickNoteSectionName)}
+          getData={transformOut(patientId, quickNoteSectionName, appointmentId)}
         >
           <FilloutCurrentTab
             max={Object.keys(initialValue).length}

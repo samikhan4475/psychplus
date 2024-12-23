@@ -1,32 +1,20 @@
 'use client'
 
-import { useEffect } from 'react'
-import { useParams } from 'next/navigation'
 import { Strong } from '@radix-ui/themes'
 import { format } from 'date-fns'
 import { QuickNoteHistory } from '@/types'
 import { BLOCK_OPTIONS } from '@/ui/questionnaires/questionnaires-widget/constants'
-import { useStore } from '@/ui/questionnaires/store'
-import { BlockContainer, LabelAndValue } from './shared'
+import { BlockContainer, LabelAndValue } from '../shared'
 
-const Question = () => {
-  const patientId = useParams().id as string
-  const {
-    showNoteViewValue,
-    addedToNotes,
-    histories,
-    initializeQuestionnaires,
-  } = useStore((state) => ({
-    showNoteViewValue: state.showNoteViewValue,
-    histories: state.histories,
-    addedToNotes: state.addedToNotes,
-    initializeQuestionnaires: state.initializeQuestionnaires,
-  }))
-
-  useEffect(() => {
-    initializeQuestionnaires(patientId)
-  }, [])
-
+const Questionnaires = ({
+  histories,
+  showNoteViewValue,
+  addedToNotes,
+}: {
+  histories: Record<string, QuickNoteHistory[]>
+  showNoteViewValue: string | null
+  addedToNotes: Record<string, string[] | string>
+}) => {
   const hasScored = Object.keys(addedToNotes).some(
     (key) => key !== 'ShowNoteView',
   )
@@ -39,14 +27,9 @@ const Question = () => {
     ? showNoteViewValue === 'show'
     : hasScored
 
-  const groupedHistories: Record<string, QuickNoteHistory[]> = {}
-  for (const sectionName in histories) {
-    groupedHistories[sectionName] = histories[sectionName]
-  }
-
   return actualNoteViewVisibility ? (
     <BlockContainer heading="Questionnaires">
-      {Object.entries(groupedHistories).map(([sectionName, entries]) => {
+      {Object.entries(histories).map(([sectionName, entries]) => {
         const addedTonNotesDates = addedToNotes[sectionName] || []
         const filteredEntries = entries.filter((entry) =>
           addedTonNotesDates.includes(entry.createdOn),
@@ -94,4 +77,4 @@ const HistoryDetail = ({ entry }: { entry: QuickNoteHistory }) => {
   )
 }
 
-export { Question }
+export { Questionnaires }

@@ -22,13 +22,24 @@ interface TherapyWidgetProps {
 const TherapyWidget = ({ patientId, initialValue }: TherapyWidgetProps) => {
   const form = useTherapyForm(initialValue)
   const appointmentId = useSearchParams().get('id') as string
+  const visitSequence = useSearchParams().get('visitSequence') || ''
+  const vistiType = useSearchParams().get('visitType') || ''
   return (
     <FormProvider {...form}>
       <WidgetFormContainer
         patientId={patientId}
+        tags={[
+          QuickNoteSectionName.QuickNoteSectionTherapy,
+          QuickNoteSectionName.QuicknoteSectionCodes,
+        ]}
         widgetId={QuickNoteSectionName.QuickNoteSectionTherapy}
         title="Therapy"
-        getData={transformOut(patientId, appointmentId)}
+        getData={transformOut(
+          patientId,
+          appointmentId,
+          vistiType,
+          visitSequence,
+        )}
         headerRight={
           <>
             <ClearButton />

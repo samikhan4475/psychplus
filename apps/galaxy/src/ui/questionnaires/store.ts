@@ -39,6 +39,10 @@ interface Store {
   addedToNotes: { [key: string]: string[] }
   showNoteViewValue: string | null
   updateShowNoteView: (checked: boolean, patientId: string) => Promise<void>
+  initializeNotesQuesionnaires: (
+    patientId: string,
+    addedToNotesData: { [key: string]: string[] | string },
+  ) => void
 }
 
 const initialState = {
@@ -137,6 +141,21 @@ const useStore = create<Store>((set, get) => ({
       const addedToNotesKeys = Object.keys(addedToNotes)
       set({ showNoteViewValue, addedToNotes, selectedTabs: addedToNotesKeys })
     }
+
+    if (historiesResponse.state === 'success') {
+      const histories = transformHistories(historiesResponse.data)
+      set({ histories })
+    }
+  },
+
+  initializeNotesQuesionnaires: async (patientId, addedToNotesData) => {
+    set(initialState)
+    const [historiesResponse] = await Promise.all([
+      getQuestionnairesHistories({ patientId }),
+    ])
+    const showNoteViewValue =
+      addedToNotesData['ShowNoteView'] === 'show' ? 'show' : 'hide'
+    set({ showNoteViewValue })
 
     if (historiesResponse.state === 'success') {
       const histories = transformHistories(historiesResponse.data)

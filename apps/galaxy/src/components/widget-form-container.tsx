@@ -76,14 +76,9 @@ const WidgetFormContainer = ({
 
   useEffect(() => {
     const handleMessage = (event: MessageEvent) => {
-      if (event.data.type !== 'quicknotes:save') {
-        return
-      }
+      if (event.data.type !== 'quicknotes:save') return
 
-      if (event.data.widgetId !== widgetId) {
-        return
-      }
-
+      if (event.data.widgetId && event.data.widgetId !== widgetId) return
       const shouldToast = event.data.showToast ? true : false
 
       if (isDirty) {

@@ -1,16 +1,17 @@
 'use client'
 
+import { useSearchParams } from 'next/navigation'
 import { Flex } from '@radix-ui/themes'
 import { FormProvider } from 'react-hook-form'
 import { WidgetFormContainer } from '@/components'
 import { QuickNoteSectionItem } from '@/types'
+import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { QuestionnaireTabs } from '../constants'
 import { AddToNoteCell, HistoryButton, SaveButton } from '../shared'
 import { MOCA_LABELS } from './constants'
 import { QuestionnairesFormMoca } from './form-moca/aims-form'
 import { transformIn, transformOut } from './form-moca/data'
 import { useQuestionnaireFormMoca } from './form-moca/use-moca-form'
-import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 
 const MocaTab = ({
   patientId,
@@ -21,18 +22,21 @@ const MocaTab = ({
 }) => {
   const initialValue = transformIn(data)
   const { totalScore, ...form } = useQuestionnaireFormMoca(initialValue)
+  const appointmentId = useSearchParams().get('id') as string
 
   return (
     <FormProvider {...form}>
       <Flex direction="column" gap=".5rem">
         <WidgetFormContainer
           patientId={patientId}
-          widgetId={QuestionnaireTabs.MOCA_TAB}
-          getData={transformOut(patientId)}
+          widgetId={QuickNoteSectionName.QuickNoteSectionMoca}
+          getData={transformOut(patientId, appointmentId)}
           title={QuestionnaireTabs.MOCA_TAB}
           headerRight={
             <Flex gap="2">
-              <HistoryButton questionnaire={QuickNoteSectionName.QuickNoteSectionMoca} />
+              <HistoryButton
+                questionnaire={QuickNoteSectionName.QuickNoteSectionMoca}
+              />
               <SaveButton />
             </Flex>
           }

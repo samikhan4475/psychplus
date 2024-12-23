@@ -1,3 +1,4 @@
+import { useSearchParams } from 'next/navigation'
 import { Box, Flex, Text } from '@radix-ui/themes'
 import { FormProvider } from 'react-hook-form'
 import { WidgetFormContainer } from '@/components'
@@ -24,6 +25,7 @@ const CurrentView = ({ patientId, data }: FilloutCurrentView) => {
     initialValue,
     totalQuestions,
   )
+  const appointmentId = useSearchParams().get('id') as string
 
   return (
     <FormProvider {...form}>
@@ -35,6 +37,7 @@ const CurrentView = ({ patientId, data }: FilloutCurrentView) => {
           getData={transformOut(
             patientId,
             QuickNoteSectionName.QuickNoteSectionYbcos,
+            appointmentId,
           )}
         >
           <FilloutCurrentTab

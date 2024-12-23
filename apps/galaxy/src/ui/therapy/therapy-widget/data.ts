@@ -15,9 +15,19 @@ interface ModalityTransferenceData {
 }
 
 const transformOut =
-  (patientId: string, appointmentId: string) =>
+  (
+    patientId: string,
+    appointmentId: string,
+    visitType: string,
+    visitSequence: string,
+  ) =>
   async (schema: TherapySchemaType): Promise<QuickNoteSectionItem[]> => {
     const result: QuickNoteSectionItem[] = []
+    const defaultPayload = {
+      pid: Number(patientId),
+      sectionName: QuickNoteSectionName.Addon,
+      appointmentId: Number(appointmentId),
+    }
 
     const data = sanitizeFormData(schema)
 
@@ -26,9 +36,9 @@ const transformOut =
         const updatedData = (value as ModalityTransferenceData[]).map(
           (item: ModalityTransferenceData) => `${item.value} ${item.display}`,
         )
+
         result.push({
-          pid: Number(patientId),
-          sectionName: QuickNoteSectionName.Addon,
+          ...defaultPayload,
           sectionItem: key,
           sectionItemValue: String(updatedData),
         })
@@ -36,20 +46,18 @@ const transformOut =
         const sectionItemValue = value as string
 
         result.push({
-          pid: Number(patientId),
-          sectionName: QuickNoteSectionName.Addon,
+          ...defaultPayload,
           sectionItem: key,
           sectionItemValue,
         })
       }
     })
     result.push({
-      pid: Number(patientId),
-      sectionName: QuickNoteSectionName.Addon,
+      ...defaultPayload,
       sectionItem: 'therapy',
       sectionItemValue: 'true',
     })
-    const selectedCodes = await getCodes(schema)
+    const selectedCodes = await getCodes(schema, visitType, visitSequence)
     const codesResult = await manageCodes(
       patientId,
       appointmentId,
@@ -111,19 +119,29 @@ const getCodes = async (
     string,
     string | undefined | boolean | ModalityTransferenceData[]
   >,
+  visitType: string,
+  visitSequence: string,
 ) => {
   const selectedCodes: CodesWidgetItem[] = []
-  const cptCodeMap = getCptCodeMap()
+  const cptCodeMap = getCptCodeMap(visitType, visitSequence)
+
+  if (cptCodeMap === '90791') {
+    selectedCodes.push({
+      code: cptCodeMap,
+      key: CptCodeKeys.PRIMARY_CODE_KEY,
+    })
+    return selectedCodes
+  }
   Object.entries(cptCodeMap).forEach(([key, value]) => {
     const schemaKey = schema?.[key]
     const code =
       typeof value === 'object'
         ? value?.[schemaKey as keyof typeof value]
         : value
-    if (code && schemaKey) {
+    if (typeof code === 'string' && schemaKey) {
       selectedCodes.push({
         code,
-        key: CptCodeKeys.ADD_ONS_KEY,
+        key: CptCodeKeys.PRIMARY_CODE_KEY,
       })
     }
   })

@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect } from 'react'
-import { useParams } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import { Flex } from '@radix-ui/themes'
 import {
   TabContentHeading,
@@ -29,6 +29,7 @@ const DiagnosisWidget = ({
   favouriteDiagnosis,
 }: DiagnosisWidgetProps) => {
   const patientId = useParams().id as string
+  const router = useRouter()
   const {
     fetchWorkingDiagnosis,
     updateFavoritesDiagnosis,
@@ -43,6 +44,7 @@ const DiagnosisWidget = ({
     const { widgetId, type, success } = event.data
     if (type === 'widget:save' && success && Widgets.includes(widgetId)) {
       fetchWorkingDiagnosis(patientId)
+      router.refresh()
     }
   }
 

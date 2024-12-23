@@ -18,6 +18,7 @@ import {
 import { CLASSNAME_CELL, CLASSNAME_HEADER_CELL } from '../shared/constants'
 import { transformIn, transformOut } from '../shared/data'
 import { LABELS, QUESTIONS, SCORE_INTERPRETATION_RANGES } from './constants'
+import { useSearchParams } from 'next/navigation'
 
 const AuditTab = ({
   patientId,
@@ -26,6 +27,7 @@ const AuditTab = ({
   patientId: string
   data: QuickNoteSectionItem[]
 }) => {
+  const appointmentId = useSearchParams().get('id') as string
   const totalQuestions = QUESTIONS.length
   const initialValue = transformIn(
     data,
@@ -46,10 +48,11 @@ const AuditTab = ({
       <Flex direction="column" gap=".5rem">
         <WidgetFormContainer
           patientId={patientId}
-          widgetId={QuestionnaireTabs.AUDIT_TAB}
+          widgetId={QuickNoteSectionName.QuickNoteSectionAudit}
           getData={transformOut(
             patientId,
             QuickNoteSectionName.QuickNoteSectionAudit,
+            appointmentId
           )}
           title={QuestionnaireTabs.AUDIT_TAB}
           headerRight={

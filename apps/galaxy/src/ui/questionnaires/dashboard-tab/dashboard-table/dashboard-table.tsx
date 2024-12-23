@@ -18,7 +18,7 @@ interface DashboardTableProps {
 const createColumns = (
   handleCheckAllTests: (checked: string) => void,
   handleCheckOneTest: (id: string, checked: string) => void,
-  checkedTests: Record<string, string>,
+  checkedTests: QuestionnaireSchemaType,
   allChecked: boolean,
 ): ColumnDef<{ id: string; question: string }>[] => [
   {
@@ -58,13 +58,15 @@ const createColumns = (
 ]
 
 const DashboardTable = ({ patientId, data }: DashboardTableProps) => {
-  const [checkedTests, setCheckedTests] = useState<Record<string, string>>(data)
+  const [checkedTests, setCheckedTests] =
+    useState<QuestionnaireSchemaType>(data)
 
   const updateQuickNotes = async (list: QuestionnaireSchemaType) => {
     setCheckedTests(list)
-    const outData = transformOut(
+    const outData = await transformOut(
       patientId,
       QuickNoteSectionName.QuickNoteSectionDashboard,
+      '123',
     )(list)
 
     const result = await saveWidgetAction({ patientId, data: outData })

@@ -1,5 +1,6 @@
 import { QuickNoteSectionItem } from '@/types'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
+import { getCodes } from './cpt-code-map'
 import { QuestionnaireSchemaType } from './questionnaires-schema'
 
 const transformIn = (
@@ -26,8 +27,12 @@ const transformIn = (
 }
 
 const transformOut =
-  (patientId: string, QuickNoteSectionName: QuickNoteSectionName) =>
-  (schema: QuestionnaireSchemaType): QuickNoteSectionItem[] => {
+  (
+    patientId: string,
+    QuickNoteSectionName: QuickNoteSectionName,
+    appointmentId: string,
+  ) =>
+  async (schema: QuestionnaireSchemaType): Promise<QuickNoteSectionItem[]> => {
     const result: QuickNoteSectionItem[] = []
 
     Object.entries(schema).forEach(([key, value]) => {
@@ -41,7 +46,10 @@ const transformOut =
       }
     })
 
-    return result
+    const codesResult = appointmentId
+      ? await getCodes(patientId, appointmentId)
+      : []
+    return [...result, ...codesResult]
   }
 
 export { transformIn, transformOut }

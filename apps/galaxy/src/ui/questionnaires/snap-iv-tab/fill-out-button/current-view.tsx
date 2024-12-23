@@ -1,4 +1,5 @@
 import React from 'react'
+import { useSearchParams } from 'next/navigation'
 import { Flex } from '@radix-ui/themes'
 import { FormProvider } from 'react-hook-form'
 import { WidgetFormContainer } from '@/components'
@@ -21,6 +22,8 @@ const CurrentView = ({ patientId, data }: FilloutCurrentView) => {
   const { totalScore, totalFilledQuestions, ...form } =
     useQuestionnaireFormSnapIv(initialValue)
 
+  const appointmentId = useSearchParams().get('id') as string
+
   return (
     <FormProvider {...form}>
       <Flex direction="column" gap=".5rem">
@@ -28,7 +31,7 @@ const CurrentView = ({ patientId, data }: FilloutCurrentView) => {
           title=""
           patientId={patientId}
           widgetId="snap-iv popup"
-          getData={transformOut(patientId)}
+          getData={transformOut(patientId, appointmentId)}
         >
           <FilloutCurrentTab
             max={Object.keys(initialValue).length}

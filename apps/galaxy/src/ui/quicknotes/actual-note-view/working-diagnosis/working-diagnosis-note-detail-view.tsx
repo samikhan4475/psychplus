@@ -12,9 +12,9 @@ const WorkingDiagnosisNoteDetailView = ({ data }: NoteDetailProps) => {
   useEffect(() => {
     const fetchData = async () => {
       const { sectionItemValue } = data?.[0] || {}
-      const DiagnosisCodes = sectionItemValue?.split(',') || []
+      let DiagnosisCodes = sectionItemValue?.split(',') || []
       if (sectionItemValue === 'empty' || DiagnosisCodes?.length === 0) {
-        return
+        DiagnosisCodes = []
       }
       const Icd10DiagnosisResponse = await getIcd10DiagnosisAction({
         DiagnosisCodes,

@@ -42,7 +42,7 @@ import {
   PastPsychlDetailView,
   PhysicalExamView,
   PsychiatryAssessmentPlanView,
-  Question,
+  QuestionnairesActualnoteView,
   ReferralsDetailsView,
   ReviewOfSystem,
   SocialHxDetailView,
@@ -108,7 +108,7 @@ const widgets: Array<WidgetType> = [
   {
     component: QuestionnairesWidget,
     id: QuickNoteSectionName.QuicknoteSectionQuestionnaires,
-    actualNoteComponent: Question,
+    actualNoteComponent: QuestionnairesActualnoteView,
   },
   {
     component: RosWidget,

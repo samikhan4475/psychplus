@@ -1,4 +1,5 @@
 import React from 'react'
+import { useSearchParams } from 'next/navigation'
 import { Flex } from '@radix-ui/themes'
 import { FormProvider } from 'react-hook-form'
 import { WidgetFormContainer } from '@/components'
@@ -18,6 +19,7 @@ const CurrentView = ({ patientId, data }: FilloutCurrentView) => {
   const initialValue = transformIn(data)
   const { totalScore, totalFilledQuestions, ...form } =
     useQuestionnaireFormMoca(initialValue)
+  const appointmentId = useSearchParams().get('id') as string
 
   return (
     <FormProvider {...form}>
@@ -26,7 +28,7 @@ const CurrentView = ({ patientId, data }: FilloutCurrentView) => {
           title=""
           patientId={patientId}
           widgetId="moca popup"
-          getData={transformOut(patientId)}
+          getData={transformOut(patientId, appointmentId)}
         >
           <FilloutCurrentTab
             max={Object.keys(initialValue).length}

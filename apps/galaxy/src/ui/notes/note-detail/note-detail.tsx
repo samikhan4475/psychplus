@@ -43,6 +43,7 @@ const NoteDetail = ({ children }: PropsWithChildren) => {
   if (provider) {
     providerName = getPatientFullName(provider?.legalName)
   }
+
   return (
     <Flex gap="1" p="2" className="bg-white px-2 py-3" direction="column">
       {groupedData['CreateNote']?.length > 0 ? (
@@ -63,6 +64,7 @@ const NoteDetail = ({ children }: PropsWithChildren) => {
                   patientId={patientId}
                   appointmentId={appointmentId}
                   patient={patient}
+                  groupedData={groupedData}
                 />
               </Box>
             )

@@ -1,5 +1,6 @@
 'use client'
 
+import { useSearchParams } from 'next/navigation'
 import { Flex } from '@radix-ui/themes'
 import { FormProvider } from 'react-hook-form'
 import { ViewLoadingPlaceholder, WidgetFormContainer } from '@/components'
@@ -27,6 +28,7 @@ const Dast10Tab = ({
   patientId: string
   data: QuickNoteSectionItem[]
 }) => {
+  const appointmentId = useSearchParams().get('id') as string
   const totalQuestions = QUESTIONS.length
   const initialValue = transformIn(
     data,
@@ -47,10 +49,11 @@ const Dast10Tab = ({
       <Flex direction="column" gap=".5rem">
         <WidgetFormContainer
           patientId={patientId}
-          widgetId={QuestionnaireTabs.DAST_10_TAB}
+          widgetId={QuickNoteSectionName.QuickNoteSectionDast10}
           getData={transformOut(
             patientId,
             QuickNoteSectionName.QuickNoteSectionDast10,
+            appointmentId,
           )}
           title={QuestionnaireTabs.DAST_10_TAB}
           headerRight={

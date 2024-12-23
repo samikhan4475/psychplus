@@ -18,13 +18,11 @@ const DiagnosisWidgetLoader = async ({
   if (quickNotesResponse.state === 'error') {
     return <Text>{quickNotesResponse.error}</Text>
   }
-  const { sectionItemValue } =
-    quickNotesResponse.data?.find((item) => item.sectionItem === 'diagnosis') ||
-    {}
+  const { sectionItemValue } = quickNotesResponse.data?.[0] || {}
 
-  const DiagnosisCodes = sectionItemValue?.split(',') || []
+  let DiagnosisCodes = sectionItemValue?.split(',') || []
   if (sectionItemValue === 'empty' || DiagnosisCodes?.length === 0) {
-    return
+    DiagnosisCodes = []
   }
   const [workingResponse, favouritesResponse] = await Promise.all([
     getIcd10DiagnosisAPI({
