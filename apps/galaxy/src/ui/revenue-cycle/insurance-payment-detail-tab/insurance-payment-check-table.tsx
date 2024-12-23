@@ -41,7 +41,7 @@ const columns: ColumnDef<ClaimPayment>[] = [
     header: ({ column }) => (
       <ColumnHeader column={column} label="Claim Status" />
     ),
-    cell: ({ row }) => <TextCell>{row.original.status}</TextCell>,
+    cell: ({ row }) => <TextCell>{row.original.claimStatusCode}</TextCell>,
   },
   {
     id: 'patientName',
@@ -53,7 +53,9 @@ const columns: ColumnDef<ClaimPayment>[] = [
   {
     id: 'processedAsCode',
     header: ({ column }) => <ColumnHeader column={column} label="Process As" />,
-    cell: ({ row }) => <TextCell className='min-w-fit'>{row.original.processedAsCode}</TextCell>,
+    cell: ({ row }) => (
+      <TextCell className="min-w-fit">{row.original.processedAsCode}</TextCell>
+    ),
   },
   {
     id: 'billedAmount',

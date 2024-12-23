@@ -1,5 +1,6 @@
 import { DateValue } from 'react-aria-components'
 import z from 'zod'
+import { formatDateToISOString } from '@/utils'
 
 const schema = z.object({
   id: z.string(),
@@ -27,11 +28,21 @@ const schema = z.object({
     .refine((val) => val !== undefined && val !== null, {
       message: 'Check date is required',
     }),
-  receivedDate: z
-    .custom<DateValue>()
-    .refine((val) => val !== undefined && val !== null, {
-      message: 'Received date is required',
-    }),
+  receivedDate: z.custom<DateValue>().superRefine((val, ctx) => {
+    if (val === undefined || val === null) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'Received date is required',
+      })
+    }
+    const convertedDate = formatDateToISOString(val) ?? ''
+    if (val && new Date(convertedDate) > new Date()) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'Received date cannot be future date',
+      })
+    }
+  }),
   depositDate: z
     .custom<DateValue>()
     .refine((val) => val !== undefined && val !== null, {
