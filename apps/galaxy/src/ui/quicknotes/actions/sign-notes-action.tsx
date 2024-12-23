@@ -8,14 +8,15 @@ interface signNoteActionParams {
   patientId: string
   appointmentId: string
   isError?: boolean
-  signedByUserId?: string
+  signedDate?: string
+  coSignedByUserId?: string
 }
 
-const signNoteAction = async ({
-  patientId,
-  appointmentId,
-  isError = false,
-}: signNoteActionParams): Promise<api.ActionResult<QuickNoteSectionItem[]>> => {
+const signNoteAction = async (
+  signPayload: signNoteActionParams,
+): Promise<api.ActionResult<QuickNoteSectionItem[]>> => {
+  const { patientId, appointmentId, isError, signedDate, coSignedByUserId } =
+    signPayload
   const auth = getAuthCookies()
 
   const url = new URL(api.NOTE_SIGN_ENDPOINT(patientId, appointmentId))
@@ -25,6 +26,8 @@ const signNoteAction = async ({
     patientId: parseInt(patientId),
     appointmentId: parseInt(appointmentId),
     signedByUserId: auth?.user.userId ? parseInt(auth?.user.userId) : undefined,
+    coSignedByUserId,
+    signedDate,
   })
   if (response.state === 'error') {
     return {

@@ -53,7 +53,7 @@ const QuickNotesHeader = async ({ appointment }: QuickNotesHeaderProps) => {
             <QuickNotesClearButton />
             <QuickNotesSaveButton />
             <QuickNotesUploadButton />
-            <QuickNotesSignButton />
+            <QuickNotesSignButton appointment={appointment} />
           </Flex>
         </Flex>
         <Separator className="w-full" />

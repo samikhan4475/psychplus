@@ -1,12 +1,18 @@
+import { format } from 'date-fns'
 import toast from 'react-hot-toast'
 import { create } from 'zustand'
+import { Appointment } from '@/types'
 import { signNoteAction } from './actions'
 import { QuickNoteSectionName } from './constants'
 
 interface Store {
   loading: boolean
   save: () => void
-  sign: (payload: { patientId: string; appointmentId: string }) => void
+  sign: (payload: {
+    patientId: string
+    appointmentId: string
+    appointment?: Appointment
+  }) => void
   unsavedChanges: Record<string, boolean>
   setUnsavedChanges: (widgetName: string, unsavedChanges: boolean) => void
   toggleActualNoteView: () => void
@@ -15,6 +21,8 @@ interface Store {
   closeMarkErrorModal: (isMarkedAsError: boolean) => void
   markAsError: (payload: { patientId: string; appointmentId: string }) => void
   errorMessage?: string
+  signOptions: Record<string, string>
+  setSignOptions: (option: Record<string, string>) => void
 }
 
 const useStore = create<Store>()((set, get) => ({
@@ -22,6 +30,9 @@ const useStore = create<Store>()((set, get) => ({
   showActualNoteView: true,
   isMarkedAsError: false,
   errorMessage: '',
+  signOptions: { time: format(new Date(), 'HH:mm') },
+  setSignOptions: (option) =>
+    set({ signOptions: { ...get().signOptions, ...option } }),
   toggleActualNoteView: () =>
     set({ showActualNoteView: !get().showActualNoteView }),
   save: async () => {
@@ -34,7 +45,18 @@ const useStore = create<Store>()((set, get) => ({
   sign: async (payload) => {
     set({ loading: true })
     await saveWidgets()
-    const signResults = await signNoteAction(payload)
+    const { time, coSignedByUserId } = get().signOptions || {}
+
+    const [hours, minutes] = time.split(':').map(Number)
+    const signedDate = new Date(payload.appointment?.startDate || new Date())
+    signedDate.setUTCHours(hours, minutes)
+
+    const signResults = await signNoteAction({
+      ...payload,
+      signedDate: signedDate.toISOString(),
+      coSignedByUserId,
+    })
+
     if (signResults.state === 'success') {
       toast.success('Quicknote signed!')
       set({ loading: false })

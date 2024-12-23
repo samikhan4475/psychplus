@@ -1,9 +1,9 @@
 'use client'
 
-import { useState } from 'react'
 import { Flex, Select, Text, Tooltip } from '@radix-ui/themes'
 import { Cosigner } from '@/types'
 import { getPatientFullName } from '@/utils'
+import { useStore } from './quicknotes-store'
 
 interface QuickNotesCosignerDropdownProps {
   cosigners: Cosigner[]
@@ -11,7 +11,10 @@ interface QuickNotesCosignerDropdownProps {
 const QuickNotesCosignerDropdown = ({
   cosigners,
 }: QuickNotesCosignerDropdownProps) => {
-  const [selectedOption, setSelectedOption] = useState('')
+  const { signOptions, setSignOptions } = useStore((state) => ({
+    signOptions: state.signOptions,
+    setSignOptions: state.setSignOptions,
+  }))
 
   const getLabel = (value: string) => {
     const selectedOption = cosigners.find(
@@ -29,10 +32,10 @@ const QuickNotesCosignerDropdown = ({
       </Text>
       <Select.Root
         size="1"
-        onValueChange={setSelectedOption}
-        value={selectedOption}
+        onValueChange={(value) => setSignOptions({ coSignedByUserId: value })}
+        value={signOptions.coSignedByUserId}
       >
-        <Tooltip content={getLabel(selectedOption) || 'Cosigners'}>
+        <Tooltip content={getLabel(signOptions.coSignedByUserId)}>
           <Select.Trigger className="max-w-[150px]" placeholder="Cosigners" />
         </Tooltip>
         <Select.Content

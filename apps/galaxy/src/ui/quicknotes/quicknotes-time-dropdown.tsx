@@ -1,13 +1,16 @@
 'use client'
 
-import { useState } from 'react'
 import { Flex, Select, Text } from '@radix-ui/themes'
-import { format } from 'date-fns'
 import { generateTimeOptions } from '@/utils'
+import { useStore } from './quicknotes-store'
 
 const QuickNotesTimeDropdown = () => {
   const options = generateTimeOptions()
-  const [time, setTime] = useState(format(new Date(), 'HH:mm'))
+
+  const { setSignOptions, signOptions } = useStore((state) => ({
+    setSignOptions: state.setSignOptions,
+    signOptions: state.signOptions,
+  }))
 
   const items = options.map((option) => (
     <Select.Item
@@ -24,8 +27,14 @@ const QuickNotesTimeDropdown = () => {
       <Text size="1" weight="medium">
         Time
       </Text>
-      <Select.Root onValueChange={setTime} size="1" value={time}>
-        <Select.Trigger className="max-w-[125px]">{time}</Select.Trigger>
+      <Select.Root
+        onValueChange={(e) => setSignOptions({ time: e })}
+        size="1"
+        value={signOptions.time}
+      >
+        <Select.Trigger className="max-w-[125px]">
+          {signOptions.time}
+        </Select.Trigger>
         <Select.Content highContrast>{items}</Select.Content>
       </Select.Root>
     </Flex>
