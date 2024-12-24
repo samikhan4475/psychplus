@@ -292,7 +292,7 @@ interface ClaimUpdate {
   claimStatusCode?: string
   isMarkAsSubmitted: boolean
   isSubmitted: boolean
-  submittedDate?: string
+  submittedDate?: DateValue | string
   isHoldStatement: boolean
   isResubmitted: boolean
   isForcePaper: boolean
@@ -529,7 +529,17 @@ interface ServiceMasterFeeScheduleResponse {
   psyDAmount: number
   mastersAmount: number
 }
-
+interface ClaimSubmissionResponse {
+  recordStatus?: string;
+  entryDate?: string;
+  status?: string;
+  patientAccount?: string;
+  response?: string;
+  categoryCode?: string;
+  statusCode?: string;
+  payerControlNumber?: string;
+  receiverName?: string;
+}
 export type {
   Claim,
   ClaimUpdate,
@@ -545,4 +555,5 @@ export type {
   ClaimServiceLineApiResponse,
   ClaimDiagnosisApiResponse,
   ServiceMasterFeeScheduleResponse,
+  ClaimSubmissionResponse
 }

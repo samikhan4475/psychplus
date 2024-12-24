@@ -142,6 +142,9 @@ const ClaimDetailView = ({ claimId }: ClaimDetailViewProps) => {
       dateOfServiceTo: claimData.dateOfServiceTo
         ? getLocalCalendarDate(claimData.dateOfServiceTo)
         : undefined,
+      submittedDate: claimData.submittedDate
+        ? getLocalCalendarDate(claimData.submittedDate)
+        : undefined,
       renderingProviderId:
         claimData.renderingProviderId?.toString() ?? undefined,
       attendingProviderId:

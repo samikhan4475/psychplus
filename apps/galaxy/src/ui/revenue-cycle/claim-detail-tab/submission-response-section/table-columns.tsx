@@ -1,59 +1,33 @@
 import { ColumnDef } from '@tanstack/react-table'
 import { ColumnHeader, TextCell } from '@/components'
-import { Sort } from '@/types'
-import { getSortDir } from '@/utils'
+import { ClaimSubmissionResponse, Sort } from '@/types'
+import { formatDate } from '@/utils'
 
-interface SubmissionResponseType {
-  entrydate: string
-  statusdate: string
-  status: string
-  patientaccount: string
-  response: string
-  responsefrom: string
-  payercontrol: string
-  categorycode: string
-  statuscode: string
-}
-
-const columns = (sort?: Sort): ColumnDef<SubmissionResponseType>[] => {
+const columns = (sort?: Sort): ColumnDef<ClaimSubmissionResponse>[] => {
   return [
     {
       id: 'entryDate',
       accessorKey: 'entryDate',
       header: ({ column }) => (
         <ColumnHeader
-          sortable
-          sortDir={getSortDir(column.id, sort)}
           className="!text-black justfy-center !font-medium"
           column={column}
           label="Entry Date"
         />
       ),
-      cell: ({ row }) => <TextCell>{row.original.entrydate}</TextCell>,
-      enableHiding: true,
-    },
-    {
-      id: 'statusDate',
-      accessorKey: 'statusDate',
-      header: ({ column }) => (
-        <ColumnHeader
-          sortable
-          sortDir={getSortDir(column.id, sort)}
-          className="!text-black justfy-center !font-medium"
-          column={column}
-          label="Status Date"
-        />
+      cell: ({ row }) => (
+        <TextCell>
+          {formatDate(`${row.original.entryDate}`, 'MM/dd/yyyy')}
+        </TextCell>
       ),
-      cell: ({ row }) => <TextCell>{row.original.statuscode}</TextCell>,
       enableHiding: true,
     },
+
     {
       id: 'status',
       accessorKey: 'status',
       header: ({ column }) => (
         <ColumnHeader
-          sortable
-          sortDir={getSortDir(column.id, sort)}
           className="!text-black justfy-center !font-medium"
           column={column}
           label="Status"
@@ -68,14 +42,12 @@ const columns = (sort?: Sort): ColumnDef<SubmissionResponseType>[] => {
       accessorKey: 'patientAccount',
       header: ({ column }) => (
         <ColumnHeader
-          sortable
-          sortDir={getSortDir(column.id, sort)}
           className="!text-black justfy-center !font-medium"
           column={column}
           label="Patient Account"
         />
       ),
-      cell: ({ row }) => <TextCell>{row.original.patientaccount}</TextCell>,
+      cell: ({ row }) => <TextCell>{row.original.patientAccount}</TextCell>,
 
       enableHiding: true,
     },
@@ -84,8 +56,6 @@ const columns = (sort?: Sort): ColumnDef<SubmissionResponseType>[] => {
       accessorKey: 'response',
       header: ({ column }) => (
         <ColumnHeader
-          sortable
-          sortDir={getSortDir(column.id, sort)}
           className="!text-black justfy-center !font-medium"
           column={column}
           label="Response"
@@ -100,14 +70,12 @@ const columns = (sort?: Sort): ColumnDef<SubmissionResponseType>[] => {
       accessorKey: 'responseFrom',
       header: ({ column }) => (
         <ColumnHeader
-          sortable
-          sortDir={getSortDir(column.id, sort)}
           className="!text-black justfy-center !font-medium"
           column={column}
           label="Response From"
         />
       ),
-      cell: ({ row }) => <TextCell>{row.original.responsefrom}</TextCell>,
+      cell: ({ row }) => <TextCell>{row.original.receiverName}</TextCell>,
 
       enableHiding: true,
     },
@@ -116,14 +84,12 @@ const columns = (sort?: Sort): ColumnDef<SubmissionResponseType>[] => {
       accessorKey: 'categoryCode',
       header: ({ column }) => (
         <ColumnHeader
-          sortable
-          sortDir={getSortDir(column.id, sort)}
           className="!text-black justfy-center !font-medium"
           column={column}
           label="Category Code"
         />
       ),
-      cell: ({ row }) => <TextCell>{row.original.categorycode}</TextCell>,
+      cell: ({ row }) => <TextCell>{row.original.categoryCode}</TextCell>,
 
       enableHiding: true,
     },
@@ -132,14 +98,12 @@ const columns = (sort?: Sort): ColumnDef<SubmissionResponseType>[] => {
       accessorKey: 'statusCode',
       header: ({ column }) => (
         <ColumnHeader
-          sortable
-          sortDir={getSortDir(column.id, sort)}
           className="!text-black justfy-center !font-medium"
           column={column}
           label="Status Code"
         />
       ),
-      cell: ({ row }) => <TextCell>{row.original.statuscode}</TextCell>,
+      cell: ({ row }) => <TextCell>{row.original.statusCode}</TextCell>,
 
       enableHiding: true,
     },
@@ -148,14 +112,12 @@ const columns = (sort?: Sort): ColumnDef<SubmissionResponseType>[] => {
       accessorKey: 'payerControl',
       header: ({ column }) => (
         <ColumnHeader
-          sortable
-          sortDir={getSortDir(column.id, sort)}
           className="!text-black justfy-center !font-medium"
           column={column}
           label="Payer Control"
         />
       ),
-      cell: ({ row }) => <TextCell>{row.original.payercontrol}</TextCell>,
+      cell: ({ row }) => <TextCell>{row.original.payerControlNumber}</TextCell>,
 
       enableHiding: true,
     },

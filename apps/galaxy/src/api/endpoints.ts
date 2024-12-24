@@ -439,6 +439,9 @@ const UPDATE_LAB_ORDERS_RESULT_ENDPOINT = (
   id: string,
 ) =>
   `${API_URL}/api/appointments/${appointmentId}/laborders/${orderId}/labresults/${id}`
+const GET_CLAIM_SUBMISSION_RESPONSE = (claimId: string) =>
+  `${API_URL}/api/claimssubmissions/${claimId}/responses/actions/search`
+
 export {
   GET_LAB_RESULTS_ENDPOINT,
   NOTE_UPLOAD_FILE,
@@ -654,5 +657,6 @@ export {
   GET_NOTE_DOCUMENTS_ENDPOINT,
   GET_STAFF_USER_ENDPOINT,
   GET_NOTE_DOCUMENT_ENDPOINT,
+  GET_CLAIM_SUBMISSION_RESPONSE,
   REMOVE_TO_COSIGNER_NOTE_ENDPOINT,
 }
