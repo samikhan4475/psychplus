@@ -282,9 +282,12 @@ interface ResponseHistoryRecord {
   practiceId: string
   practiceName: string
   zipFilePath: string
+  fileType: string
   processingStatus: string
   isProcessed: string
   isManualImport: boolean
+  isCheckAlreadyExists: boolean
+  transcationReferenceNumber: boolean
   fileCount: number
   filePath?: string
 }

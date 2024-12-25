@@ -12,7 +12,6 @@ import {
 import { Sort } from '@/types'
 import { getSortDir } from '@/utils'
 import { ResponseHistoryRecord } from '../types'
-import { ActionsCell } from './actions-cell'
 import { useStore } from './store'
 
 const columns = (
@@ -20,6 +19,20 @@ const columns = (
   onSort?: (column: string) => void,
 ): ColumnDef<ResponseHistoryRecord>[] => {
   return [
+    {
+      id: 'practiceName',
+      header: ({ column }) => (
+        <ColumnHeader
+          label="Practice Name"
+          sortable
+          sortDir={getSortDir(column.id, sort)}
+          onClick={() => {
+            onSort?.(column.id)
+          }}
+        />
+      ),
+      cell: ({ row }) => <TextCell>{row.original.practiceName}</TextCell>,
+    },
     {
       id: 'receiverName',
       header: ({ column }) => (
@@ -49,20 +62,6 @@ const columns = (
       cell: ({ row }) => <TextCell>{row.original.submitterName}</TextCell>,
     },
     {
-      id: 'practiceName',
-      header: ({ column }) => (
-        <ColumnHeader
-          label="Practice Name"
-          sortable
-          sortDir={getSortDir(column.id, sort)}
-          onClick={() => {
-            onSort?.(column.id)
-          }}
-        />
-      ),
-      cell: ({ row }) => <TextCell>{row.original.practiceName}</TextCell>,
-    },
-    {
       id: 'filePath',
       header: ({ column }) => (
         <ColumnHeader
@@ -77,10 +76,24 @@ const columns = (
       cell: ({ row }) => <TextCell>{row.original.filePath}</TextCell>,
     },
     {
-      id: 'isProcessed',
+      id: 'fileType',
       header: ({ column }) => (
         <ColumnHeader
-          label="Processing Status"
+          label="File Type"
+          sortable
+          sortDir={getSortDir(column.id, sort)}
+          onClick={() => {
+            onSort?.(column.id)
+          }}
+        />
+      ),
+      cell: ({ row }) => <TextCell>{row.original.fileType}</TextCell>,
+    },
+    {
+      id: 'transcationReferenceNumber',
+      header: ({ column }) => (
+        <ColumnHeader
+          label="Trans Reference Number"
           sortable
           sortDir={getSortDir(column.id, sort)}
           onClick={() => {
@@ -89,7 +102,7 @@ const columns = (
         />
       ),
       cell: ({ row }) => (
-        <TextCell>{String(row.original.isProcessed)}</TextCell>
+        <TextCell>{row.original.transcationReferenceNumber}</TextCell>
       ),
     },
     {
@@ -109,9 +122,50 @@ const columns = (
       ),
     },
     {
-      id: 'actions',
-      header: () => <ColumnHeader label="Actions" />,
-      cell: ({ row }) => <ActionsCell row={row} />,
+      id: 'isProcessed',
+      header: ({ column }) => (
+        <ColumnHeader
+          label="Processing Status"
+          sortable
+          sortDir={getSortDir(column.id, sort)}
+          onClick={() => {
+            onSort?.(column.id)
+          }}
+        />
+      ),
+      cell: ({ row }) => (
+        <TextCell>{String(row.original.isProcessed)}</TextCell>
+      ),
+    },
+    {
+      id: 'isCheckAlreadyExists',
+      header: ({ column }) => (
+        <ColumnHeader
+          label="Check Already Exists"
+          sortable
+          sortDir={getSortDir(column.id, sort)}
+          onClick={() => {
+            onSort?.(column.id)
+          }}
+        />
+      ),
+      cell: ({ row }) => (
+        <TextCell>{String(row.original.isCheckAlreadyExists)}</TextCell>
+      ),
+    },
+    {
+      id: 'recordStatus',
+      header: ({ column }) => (
+        <ColumnHeader
+          label="Status"
+          sortable
+          sortDir={getSortDir(column.id, sort)}
+          onClick={() => {
+            onSort?.(column.id)
+          }}
+        />
+      ),
+      cell: ({ row }) => <TextCell>{row.original.recordStatus}</TextCell>,
     },
   ]
 }

@@ -42,7 +42,7 @@ const ResponseHistoryFilterForm = () => {
         ? formatDateToISOString(data.createdOn as DateValue)
         : undefined,
     }) as ResponseHistoryPayload
-    return search(sanitizedData)
+    search(sanitizedData, 1, true)
   }
 
   return (
