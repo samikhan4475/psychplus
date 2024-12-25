@@ -35,13 +35,15 @@ const PaymentCheckHeader = ({ paymentDetail }: PaymentCheckHeaderProps) => {
         <Text weight="bold" size="1">
           Applied Amount:
         </Text>
-        <Text size="1">--</Text>
+        <Text size="1">{formatCurrency(paymentDetail.postedAmount)}</Text>
       </Flex>
       <Flex gap="2">
         <Text weight="bold" size="1">
           Unapplied Amount:
         </Text>
-        <Text size="1">--</Text>
+        <Text size="1">
+          {formatCurrency(paymentDetail.unPostedAmount ?? paymentDetail.amount)}
+        </Text>
       </Flex>
       <Flex gap="2">
         <Text weight="bold" size="1">

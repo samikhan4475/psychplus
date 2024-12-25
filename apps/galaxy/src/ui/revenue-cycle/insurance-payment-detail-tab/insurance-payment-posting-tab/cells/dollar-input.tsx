@@ -7,6 +7,8 @@ interface DollarInputProps {
   name: string
   placeholder?: string
   onKeyDown?: (event: React.KeyboardEvent<HTMLInputElement>) => void
+  onInput?: (event: React.ChangeEvent<HTMLInputElement>) => void
+  onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void
   className?: string
   disabled?: boolean
 }
@@ -15,6 +17,8 @@ const DollarInput = ({
   name,
   placeholder = '0.00',
   onKeyDown,
+  onInput,
+  onBlur,
   className,
   disabled = false,
 }: DollarInputProps) => {
@@ -23,8 +27,10 @@ const DollarInput = ({
   return (
     <TextField.Root
       {...register(name as keyof SchemaType)}
+      onInput={onInput}
       disabled={disabled}
       onKeyDown={onKeyDown}
+      onBlur={onBlur}
       variant="soft"
       placeholder={placeholder}
       className={`h-4 !rounded-[0px] !border-transparent bg-transparent !outline-none ${className}`}

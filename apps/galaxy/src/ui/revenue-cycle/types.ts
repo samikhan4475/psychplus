@@ -100,6 +100,8 @@ interface InsurancePayment {
   checkNumber: string
   checkDate: string
   receivedDate: string
+  postedAmount: number
+  unPostedAmount: number
   depositDate: string
   patientId: number
   payerId: string
@@ -126,6 +128,7 @@ interface ClaimPayment extends Claim {
   dateOfServiceFrom: Date
   dateOfServiceTo: Date
   status: string
+  isPostedPayment: boolean
   billedAmount: string
   allowedAmount: string
   paidAmount: string

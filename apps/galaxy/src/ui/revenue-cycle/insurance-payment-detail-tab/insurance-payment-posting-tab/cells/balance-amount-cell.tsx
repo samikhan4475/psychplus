@@ -1,10 +1,17 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Text, TextField } from '@radix-ui/themes'
+import { useFormContext } from 'react-hook-form'
 import { PropsWithRow } from '@/components'
 import { ClaimServiceLinePayment } from '../../../types'
+import { SchemaType } from '../schema'
+import { calculateBalanceAmount } from './utils'
 
 const BalanceAmountCell = ({ row }: PropsWithRow<ClaimServiceLinePayment>) => {
-  const [balanceAmount] = useState('00.00')
+  const form = useFormContext<SchemaType>()
+
+  const serviceLine = form.watch(`claimServiceLinePayments.${row.index}`)
+  const balanceAmount = calculateBalanceAmount(serviceLine)
+
   return (
     <TextField.Root
       value={balanceAmount}

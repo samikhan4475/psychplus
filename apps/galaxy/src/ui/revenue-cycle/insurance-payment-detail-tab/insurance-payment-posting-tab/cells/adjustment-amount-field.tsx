@@ -1,14 +1,16 @@
 import React, { FormEvent } from 'react'
 import { TextField } from '@radix-ui/themes'
+import { amountCheck } from './utils'
 
-interface RemarkCodeProps {
+interface AdjustmentAmountProps {
   onChange: (event: FormEvent<HTMLInputElement>) => void
   value: string
 }
-const RemarkCodeField = ({ onChange, value }: RemarkCodeProps) => {
+const AdjustmentAmountField = ({ onChange, value }: AdjustmentAmountProps) => {
   return (
     <TextField.Root
-      name="remarkCode"
+      onKeyDown={amountCheck}
+      name="adjustmentAmount"
       onChange={onChange}
       value={value}
       variant="soft"
@@ -18,4 +20,4 @@ const RemarkCodeField = ({ onChange, value }: RemarkCodeProps) => {
   )
 }
 
-export { RemarkCodeField }
+export { AdjustmentAmountField }

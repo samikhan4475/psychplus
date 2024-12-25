@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react'
-import { Box, Flex, ScrollArea, Text } from '@radix-ui/themes'
+import { Flex, Text } from '@radix-ui/themes'
 import { ColumnDef } from '@tanstack/react-table'
 import { ColumnHeader, DataTable, DateCell, TextCell } from '@/components'
 import { formatDate } from '@/utils'

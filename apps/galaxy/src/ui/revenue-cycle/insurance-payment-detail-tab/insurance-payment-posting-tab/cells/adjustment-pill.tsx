@@ -3,6 +3,7 @@ import { Cross1Icon } from '@radix-ui/react-icons'
 import { Box, Text } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
 import { ServiceLinePaymentAdjustment } from '@/ui/revenue-cycle/types'
+import { AdjustmentField, adjustmentMapping } from '../constants'
 import { SchemaType } from '../schema'
 
 interface AdjustmentPillProps {
@@ -14,7 +15,7 @@ interface AdjustmentPillProps {
 const AdjustmentPill = ({
   paymentAdjustment: {
     adjustmentGroupCode,
-    remarkCode,
+    adjustmentAmount,
     adjustmentReasonCode,
   },
   adjustments,
@@ -33,6 +34,23 @@ const AdjustmentPill = ({
       })
       .filter((v) => v !== null)
 
+    const adjustmentKey = `${adjustmentGroupCode}_${adjustmentReasonCode}`
+
+    const field = adjustmentMapping[adjustmentKey] as AdjustmentField
+
+    if (field) {
+      form.setValue(
+        `claimServiceLinePayments.${serviceLineIndex}.${field}`,
+        '0',
+      )
+    }
+
+    if (field === 'allowedAmount') {
+      form.setValue(
+        `claimServiceLinePayments.${serviceLineIndex}.writeOffAmount`,
+        '0',
+      )
+    }
     form.setValue(
       `claimServiceLinePayments.${serviceLineIndex}.serviceLinePaymentAdjustments`,
       updatedAdjustments,
@@ -42,7 +60,7 @@ const AdjustmentPill = ({
   return (
     <Box className="rounded-full flex min-w-fit items-center bg-blue-4 px-2 py-[2px]">
       <Text className="text-[10px]" weight="medium">
-        {adjustmentGroupCode} ,{adjustmentReasonCode}, {remarkCode}
+        {adjustmentGroupCode}-{adjustmentReasonCode} - {`$${adjustmentAmount}`}
       </Text>
       <Cross1Icon
         onClick={removeAdjustment}

@@ -85,13 +85,6 @@ const columns: ColumnDef<ClaimPayment>[] = [
     ),
   },
   {
-    id: 'noindex',
-    header: ({ column }) => (
-      <ColumnHeader column={column} label="Patient Paid" />
-    ),
-    cell: ({ row }) => <TextCell>--</TextCell>,
-  },
-  {
     id: 'copayAmount',
     header: ({ column }) => <ColumnHeader column={column} label="Copay" />,
     cell: ({ row }) => (

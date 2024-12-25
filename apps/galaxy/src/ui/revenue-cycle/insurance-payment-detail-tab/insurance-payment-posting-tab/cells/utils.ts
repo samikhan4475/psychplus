@@ -1,3 +1,9 @@
+import {
+  ClaimServiceLinePayment,
+  ServiceLinePaymentAdjustment,
+} from '@/ui/revenue-cycle/types'
+import { DEDUCTIBLE_ADJUSTMENT } from '../constants'
+
 const amountRegex = /^\d{0,3}(\.\d{0,2})?$/
 const specialKeys = ['Backspace', 'Tab', 'Control', 'Shift', 'Alt']
 const amountCheck = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -6,4 +12,151 @@ const amountCheck = (e: React.KeyboardEvent<HTMLInputElement>) => {
   if (!amountRegex.test(newValue)) return e.preventDefault()
 }
 
-export { amountCheck }
+interface AdjustmentParams {
+  serviceLinePaymentAdjustments: ServiceLinePaymentAdjustment[]
+  billedAmount?: string
+  allowedAmount?: string
+  claimPayment: ClaimServiceLinePayment
+  claimPaymentId?: string
+  defaultAdjustmentAmount?: number
+}
+interface AdjustmentType extends Partial<AdjustmentParams> {
+  adjustmentGroupCode: string
+  adjustmentReasonCode: string
+  adjustmentAmount?: number
+}
+
+const updateOrAddAdjustment = ({
+  adjustmentGroupCode,
+  adjustmentReasonCode,
+  adjustmentAmount,
+  serviceLinePaymentAdjustments,
+}: AdjustmentType) => {
+  if (!adjustmentGroupCode || !adjustmentReasonCode || !adjustmentAmount)
+    return serviceLinePaymentAdjustments
+
+  const parsedAdjustmentAmount = isNaN(adjustmentAmount) ? 0 : adjustmentAmount
+
+  const existingAdjustmentIndex = (
+    serviceLinePaymentAdjustments ?? []
+  ).findIndex(
+    (adj) =>
+      adj.adjustmentGroupCode === adjustmentGroupCode &&
+      adj.adjustmentReasonCode === adjustmentReasonCode,
+  )
+
+  if (existingAdjustmentIndex !== -1) {
+    return serviceLinePaymentAdjustments?.map((adj, index) =>
+      index === existingAdjustmentIndex
+        ? {
+            ...adj,
+            adjustmentAmount: parsedAdjustmentAmount,
+          }
+        : adj,
+    )
+  } else {
+    const newAdjustment = {
+      adjustmentAmount: parsedAdjustmentAmount,
+      adjustmentGroupCode: adjustmentGroupCode,
+      adjustmentReasonCode: adjustmentReasonCode,
+      remarkCode: '',
+      recordStatus: 'Active',
+    }
+
+    return [...(serviceLinePaymentAdjustments ?? []), newAdjustment]
+  }
+}
+
+const handleAdjustment = ({
+  serviceLinePaymentAdjustments,
+  adjustmentGroupCode,
+  adjustmentReasonCode,
+  adjustmentAmount,
+  claimPaymentId,
+}: AdjustmentType) => {
+  const existingAdjustment = serviceLinePaymentAdjustments?.find(
+    (adjustment) =>
+      adjustment.adjustmentGroupCode === adjustmentGroupCode &&
+      adjustment.adjustmentReasonCode === adjustmentReasonCode &&
+      adjustment.recordStatus !== 'Inactive',
+  )
+
+  const newAdjustment = {
+    adjustmentGroupCode,
+    adjustmentReasonCode,
+    adjustmentAmount: adjustmentAmount ?? 0,
+    claimServiceLinePaymentId: claimPaymentId ?? '',
+    remarkCode: '',
+    recordStatus: 'Active',
+  }
+
+  const updatedAdjustments = existingAdjustment
+    ? serviceLinePaymentAdjustments?.map((adjustment) =>
+        adjustment.adjustmentGroupCode === adjustmentGroupCode &&
+        adjustment.adjustmentReasonCode === adjustmentReasonCode &&
+        adjustment.recordStatus !== 'Inactive'
+          ? { ...adjustment, ...newAdjustment }
+          : adjustment,
+      )
+    : [...(serviceLinePaymentAdjustments ?? []), newAdjustment]
+  return updatedAdjustments
+}
+
+const addInsuranceAdjustment = ({
+  serviceLinePaymentAdjustments,
+  adjustmentGroupCode,
+  adjustmentReasonCode,
+  adjustmentAmount,
+}: AdjustmentType) => {
+  if (adjustmentAmount === 0) return serviceLinePaymentAdjustments
+  return handleAdjustment({
+    serviceLinePaymentAdjustments,
+    adjustmentGroupCode,
+    adjustmentReasonCode,
+    adjustmentAmount,
+  })
+}
+
+const removeInsuranceAdjustment = ({
+  serviceLinePaymentAdjustments,
+  adjustmentGroupCode,
+  adjustmentReasonCode,
+}: AdjustmentType) => {
+  const clonedAdjustments = structuredClone(serviceLinePaymentAdjustments)
+
+  return clonedAdjustments?.map((adjustment) =>
+    adjustment.adjustmentGroupCode === adjustmentGroupCode &&
+    adjustment.adjustmentReasonCode === adjustmentReasonCode &&
+    adjustment.recordStatus !== 'Inactive'
+      ? { ...adjustment, recordStatus: 'Inactive' }
+      : adjustment,
+  )
+}
+
+const calculateBalanceAmount = (
+  serviceLinePayment: ClaimServiceLinePayment,
+) => {
+  const balance =
+    +serviceLinePayment.allowedAmount -
+    +serviceLinePayment.paidAmount -
+    +serviceLinePayment.otherPr
+  const otherAdjustments =
+    serviceLinePayment.serviceLinePaymentAdjustments?.reduce(
+      (acc, adj) =>
+        adj.adjustmentGroupCode === DEDUCTIBLE_ADJUSTMENT.adjustmentGroupCode &&
+        adj.recordStatus !== 'Inactive'
+          ? acc + adj.adjustmentAmount
+          : acc,
+      0,
+    ) ?? 0
+
+  return (balance - otherAdjustments).toFixed(2)
+}
+
+export {
+  amountCheck,
+  addInsuranceAdjustment,
+  updateOrAddAdjustment,
+  calculateBalanceAmount,
+  removeInsuranceAdjustment,
+}

@@ -1,15 +1,29 @@
 import React from 'react'
+import { Text, TextField } from '@radix-ui/themes'
+import { useFormContext } from 'react-hook-form'
 import { PropsWithRow } from '@/components'
 import { ClaimServiceLinePayment } from '@/ui/revenue-cycle/types'
-import { DollarInput } from './dollar-input'
-import { amountCheck } from './utils'
+import { SchemaType } from '../schema'
 
 const WriteoffAmountCell = ({ row }: PropsWithRow<ClaimServiceLinePayment>) => {
+  const form = useFormContext<SchemaType>()
+  const writeOffAmount = form.watch(
+    `claimServiceLinePayments.${row.index}.writeOffAmount`,
+  )
+
   return (
-    <DollarInput
-      name={`claimServiceLinePayments.${row.index}.writeOffAmount`}
-      onKeyDown={amountCheck}
-    />
+    <TextField.Root
+      value={writeOffAmount}
+      variant="soft"
+      disabled
+      placeholder="00.00"
+      className="h-4 !rounded-[0px] !border-transparent bg-transparent !outline-none"
+      size="1"
+    >
+      <TextField.Slot>
+        <Text className="text-[12px]">$</Text>
+      </TextField.Slot>
+    </TextField.Root>
   )
 }
 

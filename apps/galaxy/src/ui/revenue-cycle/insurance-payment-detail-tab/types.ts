@@ -4,4 +4,14 @@ enum PaymentListTypes {
   Unposted = 'NeedPosted',
   Unlinked = 'Unlinked',
 }
-export { PaymentListTypes }
+
+interface PaymentAdjustment {
+  adjustmentGroupCode: string
+  adjustmentReasonCode: string
+  adjustmentAmount: number
+  claimServiceLinePaymentId: string
+  remarkCode: string
+  recordStatus: string
+}
+
+export { PaymentListTypes, type PaymentAdjustment }

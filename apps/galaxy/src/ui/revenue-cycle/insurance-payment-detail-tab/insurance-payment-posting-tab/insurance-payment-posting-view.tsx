@@ -10,17 +10,21 @@ import { addClaimPaymentAction } from '../../actions/add-claim-payment'
 import { updateClaimPaymentAction } from '../../actions/update-claim-payment'
 import { useStore } from '../../insurance-payment-tab/store'
 import { useStore as TabStore } from '../../store'
+import { InsurancePayment } from '../../types'
 import { PaymentListTypes } from '../types'
 import { transformInDefault, transformOut } from './data'
 import { InsurancePaymentClaimSummary } from './insurance-payment-claim-summary'
 import { InsurancePaymentPostingTable } from './insurance-payment-posting-table'
 import { schema, SchemaType } from './schema'
+import { validatePayment } from './utils'
 
 interface InsurancePaymentPostingViewProps {
   fetchPaymentDetail: (checkId: string) => void
+  paymentDetail: InsurancePayment
 }
 const InsurancePaymentPostingView = ({
   fetchPaymentDetail,
+  paymentDetail,
 }: InsurancePaymentPostingViewProps) => {
   const activeTab = TabStore((state) => state.activeTab)
   const { paymentPostingClaim, setPaymentPostingClaim } = useStore((state) => ({
@@ -38,31 +42,40 @@ const InsurancePaymentPostingView = ({
       .submitter as HTMLButtonElement
 
     const isPosted =
-      name === 'Save_Post' ? PaymentListTypes.Posted : 'NotPosted'
+      name === 'Save_Post' ? PaymentListTypes.Posted : PaymentListTypes.Unposted
 
-    const updatedPayload = transformOut(
-      { ...data, status: isPosted },
-      paymentPostingClaim,
-    )
+    const validationMessage = validatePayment({
+      paymentDetail,
+      claimPayment: data,
+    })
 
-    const claimPaymentAction = !updatedPayload?.id
-      ? addClaimPaymentAction({
-          payload: updatedPayload,
-          paymentId: paymentPostingId,
-        })
-      : updateClaimPaymentAction({
-          payload: updatedPayload,
-          paymentId: paymentPostingId,
-          id: updatedPayload.id,
-        })
+    if (validationMessage) {
+      toast.error(validationMessage)
+    } else {
+      const updatedPayload = transformOut(
+        { ...data, isPostedPayment: name === 'Save_Post', status: isPosted },
+        paymentPostingClaim,
+      )
 
-    const result = await claimPaymentAction
+      const claimPaymentAction = !updatedPayload?.id
+        ? addClaimPaymentAction({
+            payload: updatedPayload,
+            paymentId: paymentPostingId,
+          })
+        : updateClaimPaymentAction({
+            payload: updatedPayload,
+            paymentId: paymentPostingId,
+            id: updatedPayload.id,
+          })
 
-    if (result.state === 'success') {
-      fetchPaymentDetail(paymentPostingId)
-      onCancel()
-    } else if (result.state === 'error') {
-      toast.error(result.error)
+      const result = await claimPaymentAction
+
+      if (result.state === 'success') {
+        fetchPaymentDetail(paymentPostingId)
+        onCancel()
+      } else if (result.state === 'error') {
+        toast.error(result.error)
+      }
     }
   }
   const onCancel = () => setPaymentPostingClaim(activeTab)

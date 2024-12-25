@@ -88,6 +88,11 @@ const transformOut = (
         deductibleAmount: +serviceLine.deductibleAmount,
         otherPr: +serviceLine.otherPr,
         writeOffAmount: +serviceLine.writeOffAmount,
+        serviceLinePaymentAdjustments:
+          serviceLine.serviceLinePaymentAdjustments?.map((adj) => ({
+            ...adj,
+            claimServiceLinePaymentId: serviceLine.claimServiceLineId ?? null,
+          })),
       })) ?? [],
     dateOfServiceFrom:
       new Date(claimPayment.dateOfServiceFrom ?? '').toISOString() ?? '',
