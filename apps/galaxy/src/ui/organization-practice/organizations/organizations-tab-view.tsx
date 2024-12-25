@@ -10,7 +10,7 @@ import { OrganizationsListTablePagination } from './organizations-list-table-pag
 const OrganizationsTabView = () => {
   return (
     <Flex direction="column" className="gap-0.5" width="100%">
-      <TabContentHeading title="Organizations">
+      <TabContentHeading title="Organization">
         <OrganizationDialog />
       </TabContentHeading>
       <OrganizationsListFilterForm />

@@ -179,7 +179,7 @@ const getManagementNavLinks = (type: string | null, id: string | null) => {
     return [
       {
         label: 'Profile',
-        href: `${practiceBase}/profile`,
+        href: `${practiceBase}/practices-profile`,
       },
       {
         label: 'Virtual Address',

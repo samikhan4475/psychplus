@@ -1,5 +1,6 @@
 interface PracticeDetails {
-  practiceName?: string;
+  id: string;
+  practiceName: string;
   npi?: string;
   tin?: string;
   taxonomyCode?: string;

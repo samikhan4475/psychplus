@@ -8,10 +8,11 @@ import {
 import { Box, ScrollArea } from '@radix-ui/themes'
 import { type ColumnDef } from '@tanstack/react-table'
 import { ActionsCell } from './cells'
-import { SchemaType } from './organization-practices-list-filter-form'
 import { PracticesHistoryDialog } from './practices-history-dialog'
+import { PracticeDetails } from './types'
+import { PracticeNameCell } from './table-row-practice-name-cell'
 
-const columns: ColumnDef<SchemaType>[] =
+const columns = (isPractices?: boolean): ColumnDef<PracticeDetails>[] =>
   [
     {
       id: 'practiceName',
@@ -21,7 +22,12 @@ const columns: ColumnDef<SchemaType>[] =
           sortable
         />
       ),
-      cell: ({ row }) => <TextCell>{row.original.practiceName}</TextCell>,
+      cell: ({ row }) =>
+        isPractices ? (
+          <PracticeNameCell row={row} />
+        ) : (
+          <TextCell>{row.original.practiceName}</TextCell>
+        ),
     },
     {
       id: 'npi',
@@ -74,24 +80,24 @@ const columns: ColumnDef<SchemaType>[] =
       cell: ({ row }) => <TextCell>{row.original.organization}</TextCell>,
     },
     {
-      id: 'address1',
+      id: 'primaryAddress',
       header: ({ column }) => (
         <ColumnHeader
           label="Address 1"
           sortable
         />
       ),
-      cell: ({ row }) => <TextCell>{row.original.address1}</TextCell>,
+      cell: ({ row }) => <TextCell>{row.original.primaryAddress}</TextCell>,
     },
     {
-      id: 'address2',
+      id: 'primaryAddress2',
       header: ({ column }) => (
         <ColumnHeader
           label="Address 2"
           sortable
         />
       ),
-      cell: ({ row }) => <TextCell>{row.original.address2}</TextCell>,
+      cell: ({ row }) => <TextCell>{row.original.primaryAddress2}</TextCell>,
     },
     {
       id: 'city',
@@ -185,14 +191,15 @@ const columns: ColumnDef<SchemaType>[] =
 // Will be removed in next integration ticket
 const dummyData = [
   {
+    id: "1",
     practiceName: "ABC Medical Practice",
     npi: "1234567890",
     tin: "987654321",
     taxonomyCode: "207R00000X",
     clia: "12D4567890",
     organization: "ABC Health Inc.",
-    address1: "123 Main Street",
-    address2: "Suite 101",
+    primaryAddress: "123 Main Street",
+    primaryAddress2: "Suite 101",
     city: "New York",
     state: "NY",
     zip: "10001",
@@ -203,14 +210,15 @@ const dummyData = [
     status: "Active",
   },
   {
+    id: "2",
     practiceName: "XYZ Family Care",
     npi: "9876543210",
     tin: "123456789",
     taxonomyCode: "207Q00000X",
     clia: "45D1236789",
     organization: "XYZ Healthcare Group",
-    address1: "789 Oak Avenue",
-    address2: "Floor 2",
+    primaryAddress: "789 Oak Avenue",
+    primaryAddress2: "Floor 2",
     city: "Los Angeles",
     state: "CA",
     zip: "90001",
@@ -221,14 +229,15 @@ const dummyData = [
     status: "Pending",
   },
   {
+    id: "3",
     practiceName: "LMN Pediatrics",
     npi: "4561237890",
     tin: "321654987",
     taxonomyCode: "208000000X",
     clia: "89D1234567",
     organization: "LMN Kids Healthcare",
-    address1: "456 Birch Street",
-    address2: "Building C",
+    primaryAddress: "456 Birch Street",
+    primaryAddress2: "Building C",
     city: "Chicago",
     state: "IL",
     zip: "60601",
@@ -239,13 +248,16 @@ const dummyData = [
     status: "Inactive",
   },
 ];
-const OrganizationPracticesListTable = () => {
+interface OrganizationPracticesListTableProps {
+  isPractices?: boolean
+}
+const OrganizationPracticesListTable = ({ isPractices }: OrganizationPracticesListTableProps) => {
   return (
     <Box className='bg-white rounded p-1 my-1'>
       <ScrollArea className='p-1 rounded'>
         <DataTable
           data={dummyData}
-          columns={columns}
+          columns={columns(isPractices)}
           disablePagination
           sticky
           tableClass="bg-white w-[calc(100vw_-_198px)] [&_.rt-ScrollAreaRoot]:!overflow-visible"

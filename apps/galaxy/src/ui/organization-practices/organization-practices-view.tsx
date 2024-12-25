@@ -17,7 +17,7 @@ const OrganizationPracticesView = ({ googleApiKey, isPractices }: OrganizationPr
       <Box className="w-full py-1">
         {!isPractices && <PracticesHeading />}
         <OrganizationPracticesListFilterForm />
-        <OrganizationPracticesListTable />
+        <OrganizationPracticesListTable isPractices={isPractices}/>
       </Box>
     </GooglePlacesContextProvider>
   )

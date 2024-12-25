@@ -6,7 +6,7 @@ import { GOOGLE_MAPS_API_KEY } from '@/constants'
 const PracticesTabView = () => {
   return (
     <Flex direction="column" className="gap-0.5">
-      <TabContentHeading title="Practices" />
+      <TabContentHeading title="Practice" />
       <OrganizationPracticesView  googleApiKey={GOOGLE_MAPS_API_KEY} isPractices/>
     </Flex>
   )

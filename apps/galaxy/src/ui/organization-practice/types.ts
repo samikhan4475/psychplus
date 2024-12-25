@@ -1,8 +1,8 @@
 import { Metadata, Organization as OrganizationRoot, User } from '@/types'
 
 enum OrganizationPracticeTab {
-  ORGANIZATIONS = 'Organizations',
-  PRACTICES = 'Practices',
+  ORGANIZATIONS = 'Organization',
+  PRACTICES = 'Practice',
 }
 
 interface Practice {
