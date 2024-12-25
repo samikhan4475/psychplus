@@ -1,4 +1,5 @@
 import React from 'react'
+import { I18nProvider } from 'react-aria-components'
 import {
   DatePickerInput,
   FormFieldContainer,
@@ -9,7 +10,9 @@ const SubmitDateInput = () => {
   return (
     <FormFieldContainer className="w-auto flex-row items-center gap-1">
       <FormFieldLabel>Submit Date</FormFieldLabel>
-      <DatePickerInput className="w-[102px]" field="submitDate" />
+      <I18nProvider locale="en-US">
+        <DatePickerInput className="w-[102px]" field="submitDate" />
+      </I18nProvider>
     </FormFieldContainer>
   )
 }
