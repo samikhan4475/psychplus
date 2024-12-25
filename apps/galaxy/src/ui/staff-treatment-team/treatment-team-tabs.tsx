@@ -3,6 +3,7 @@
 import * as Tabs from '@radix-ui/react-tabs'
 import { Box, Flex, Text } from '@radix-ui/themes'
 import { TabsTrigger } from '@/components'
+import { CareTeamsView } from './care-teams/care-teams-view'
 import { useStore } from './store'
 import { TreatmentTeamTab } from './types'
 import { VisitsView } from './visits/visit-view'
@@ -39,6 +40,9 @@ const TreatmentTeamTabs = () => {
         </Flex>
         <TabsContent value={TreatmentTeamTab.Visits}>
           <VisitsView />
+        </TabsContent>
+        <TabsContent value={TreatmentTeamTab.Care_Teams}>
+          <CareTeamsView />
         </TabsContent>
       </Tabs.Root>
     </Box>

@@ -15,9 +15,15 @@ interface VisitsList {
   visitType: string
   visitStatus: string
 }
+
+interface ClinicalStaffList {
+  clinicalStaff: string
+  addedOn: string
+  status: string
+}
 interface VisitPayload {
   status?: string
 }
 
 export { TreatmentTeamTab }
-export type { VisitsList, VisitPayload }
+export type { VisitsList, VisitPayload, ClinicalStaffList }

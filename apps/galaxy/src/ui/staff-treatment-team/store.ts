@@ -1,7 +1,8 @@
 import toast from 'react-hot-toast'
 import { create } from 'zustand'
+import { getClinicalStaffAction } from './actions/get-clinical-staff'
 import { getVisitsListAction } from './actions/get-visits-lists'
-import { TreatmentTeamTab, VisitsList } from './types'
+import { ClinicalStaffList, TreatmentTeamTab, VisitsList } from './types'
 
 type Tab = TreatmentTeamTab | string
 
@@ -10,8 +11,11 @@ interface Store {
   viewedTabs: Set<Tab>
   setActiveTab: (tab: Tab) => void
   visitsData: VisitsList[]
+  clinicalStaffData: ClinicalStaffList[]
   loadingVisits: boolean
+  loadingClinicalstaff: boolean
   fetchVistsList: (staffId: number) => void
+  fetchClinicalStaff: (staffId: number) => void
 }
 
 const useStore = create<Store>((set, get) => ({
@@ -26,7 +30,9 @@ const useStore = create<Store>((set, get) => ({
     })
   },
   visitsData: [],
+  clinicalStaffData: [],
   loadingVisits: false,
+  loadingClinicalstaff: false,
   fetchVistsList: async (staffId: number) => {
     set({ loadingVisits: true })
 
@@ -42,6 +48,26 @@ const useStore = create<Store>((set, get) => ({
         ...visit,
       })),
       loadingVisits: false,
+    })
+  },
+  fetchClinicalStaff: async (staffId: number) => {
+    set({ loadingClinicalstaff: true })
+
+    const result = await getClinicalStaffAction({
+      staffId: staffId,
+      payload: {},
+    })
+
+    if (result.state === 'error') {
+      toast.error(result.error ?? 'Error while fetching data')
+      return set({ loadingClinicalstaff: false })
+    }
+
+    set({
+      clinicalStaffData: result.data.map((clinical) => ({
+        ...clinical,
+      })),
+      loadingClinicalstaff: false,
     })
   },
 }))
