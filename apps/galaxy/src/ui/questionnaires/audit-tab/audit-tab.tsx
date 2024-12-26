@@ -1,5 +1,6 @@
 'use client'
 
+import { useSearchParams } from 'next/navigation'
 import { Flex } from '@radix-ui/themes'
 import { FormProvider } from 'react-hook-form'
 import { ViewLoadingPlaceholder, WidgetFormContainer } from '@/components'
@@ -7,18 +8,14 @@ import { QuickNoteSectionItem } from '@/types'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { QuestionnaireTabs } from '../constants'
 import {
-  AddToNoteCell,
-  AddToPreVisitAssessmentCell,
   HistoryButton,
   QuestionnairesForm,
   SaveButton,
-  SendToPatientButton,
   useQuestionnaireForm,
 } from '../shared'
 import { CLASSNAME_CELL, CLASSNAME_HEADER_CELL } from '../shared/constants'
 import { transformIn, transformOut } from '../shared/data'
 import { LABELS, QUESTIONS, SCORE_INTERPRETATION_RANGES } from './constants'
-import { useSearchParams } from 'next/navigation'
 
 const AuditTab = ({
   patientId,
@@ -52,22 +49,15 @@ const AuditTab = ({
           getData={transformOut(
             patientId,
             QuickNoteSectionName.QuickNoteSectionAudit,
-            appointmentId
+            appointmentId,
           )}
           title={QuestionnaireTabs.AUDIT_TAB}
           headerRight={
             <Flex gap="2">
-              <SendToPatientButton />
               <HistoryButton
                 questionnaire={QuickNoteSectionName.QuickNoteSectionAudit}
               />
               <SaveButton />
-            </Flex>
-          }
-          headerLeft={
-            <Flex>
-              <AddToPreVisitAssessmentCell />
-              <AddToNoteCell />
             </Flex>
           }
         />

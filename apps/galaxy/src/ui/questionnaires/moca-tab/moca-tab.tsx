@@ -7,7 +7,7 @@ import { WidgetFormContainer } from '@/components'
 import { QuickNoteSectionItem } from '@/types'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { QuestionnaireTabs } from '../constants'
-import { AddToNoteCell, HistoryButton, SaveButton } from '../shared'
+import { HistoryButton, SaveButton } from '../shared'
 import { MOCA_LABELS } from './constants'
 import { QuestionnairesFormMoca } from './form-moca/aims-form'
 import { transformIn, transformOut } from './form-moca/data'
@@ -38,11 +38,6 @@ const MocaTab = ({
                 questionnaire={QuickNoteSectionName.QuickNoteSectionMoca}
               />
               <SaveButton />
-            </Flex>
-          }
-          headerLeft={
-            <Flex>
-              <AddToNoteCell />
             </Flex>
           }
         />

@@ -8,12 +8,9 @@ import { QuickNoteSectionItem } from '@/types'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { QuestionnaireTabs } from '../constants'
 import {
-  AddToNoteCell,
-  AddToPreVisitAssessmentCell,
   HistoryButton,
   QuestionnairesForm,
   SaveButton,
-  SendToPatientButton,
   useQuestionnaireForm,
 } from '../shared'
 import { transformIn, transformOut } from '../shared/data'
@@ -56,17 +53,10 @@ const Phq9Tab = ({
           title={QuestionnaireTabs.PHQ_9_TAB}
           headerRight={
             <Flex gap="2">
-              <SendToPatientButton />
               <HistoryButton
                 questionnaire={QuickNoteSectionName.QuickNoteSectionPhq9}
               />
               <SaveButton />
-            </Flex>
-          }
-          headerLeft={
-            <Flex>
-              <AddToPreVisitAssessmentCell />
-              <AddToNoteCell />
             </Flex>
           }
         />

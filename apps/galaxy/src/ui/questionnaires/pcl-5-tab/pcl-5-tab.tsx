@@ -7,13 +7,7 @@ import { ViewLoadingPlaceholder, WidgetFormContainer } from '@/components'
 import { QuickNoteSectionItem } from '@/types'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { QuestionnaireTabs } from '../constants'
-import {
-  AddToNoteCell,
-  AddToPreVisitAssessmentCell,
-  HistoryButton,
-  SaveButton,
-  SendToPatientButton,
-} from '../shared'
+import { HistoryButton, SaveButton } from '../shared'
 import { transformIn, transformOut } from '../shared/data'
 import { QuestionnairesForm } from '../shared/questionnaires-form'
 import { useQuestionnaireForm } from '../shared/use-questionnaire-form'
@@ -56,17 +50,10 @@ const Pcl5Tab = ({
           title={QuestionnaireTabs.PCL_5_TAB}
           headerRight={
             <Flex gap="2">
-              <SendToPatientButton />
               <HistoryButton
                 questionnaire={QuickNoteSectionName.QuickNoteSectionPcl5}
               />
               <SaveButton />
-            </Flex>
-          }
-          headerLeft={
-            <Flex>
-              <AddToPreVisitAssessmentCell />
-              <AddToNoteCell />
             </Flex>
           }
         />

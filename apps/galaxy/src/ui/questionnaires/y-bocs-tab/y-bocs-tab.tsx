@@ -8,12 +8,9 @@ import { QuickNoteSectionItem } from '@/types'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { QuestionnaireTabs } from '../constants'
 import {
-  AddToNoteCell,
-  AddToPreVisitAssessmentCell,
   HistoryButton,
   SaveButton,
   ScoreInterpretation,
-  SendToPatientButton,
   useQuestionnaireForm,
 } from '../shared'
 import { SCORE_INTERPRETATION_RANGES, YBOCS_TABLES } from './constants'
@@ -48,17 +45,10 @@ const YBocsTab = ({ patientId, data }: QuestionnairesFormYBocsProps) => {
           title={QuestionnaireTabs.Y_BOCS_TAB}
           headerRight={
             <Flex gap="2">
-              <SendToPatientButton />
               <HistoryButton
                 questionnaire={QuickNoteSectionName.QuickNoteSectionYbcos}
               />
               <SaveButton />
-            </Flex>
-          }
-          headerLeft={
-            <Flex>
-              <AddToPreVisitAssessmentCell />
-              <AddToNoteCell />
             </Flex>
           }
         />

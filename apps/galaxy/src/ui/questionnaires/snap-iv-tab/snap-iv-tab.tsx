@@ -7,13 +7,7 @@ import { WidgetFormContainer } from '@/components'
 import { QuickNoteSectionItem } from '@/types'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { QuestionnaireTabs } from '../constants'
-import {
-  AddToNoteCell,
-  AddToPreVisitAssessmentCell,
-  HistoryButton,
-  SaveButton,
-  SendToPatientButton,
-} from '../shared'
+import { HistoryButton, SaveButton } from '../shared'
 import { SNAP_IV_LABELS } from './constants'
 import {
   QuestionnairesFormSnapIv,
@@ -42,17 +36,10 @@ const SnapIvTab = ({
           title={QuestionnaireTabs.SNAP_IV_TAB}
           headerRight={
             <Flex gap="2">
-              <SendToPatientButton />
               <HistoryButton
                 questionnaire={QuickNoteSectionName.QuickNoteSectionSnapIV}
               />
               <SaveButton />
-            </Flex>
-          }
-          headerLeft={
-            <Flex>
-              <AddToPreVisitAssessmentCell />
-              <AddToNoteCell />
             </Flex>
           }
         />

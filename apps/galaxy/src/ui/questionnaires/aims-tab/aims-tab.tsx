@@ -7,13 +7,7 @@ import { WidgetFormContainer } from '@/components'
 import { QuickNoteSectionItem } from '@/types'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { QuestionnaireTabs } from '../constants'
-import {
-  AddToNoteCell,
-  AddToPreVisitAssessmentCell,
-  HistoryButton,
-  SaveButton,
-  SendToPatientButton,
-} from '../shared'
+import { HistoryButton, SaveButton } from '../shared'
 import { AIMS_LABELS } from './constants'
 import { QuestionnairesFormAims } from './form-aims/aims-form'
 import { transformIn, transformOut } from './form-aims/data'
@@ -40,17 +34,10 @@ const AimsTab = ({
           title={QuestionnaireTabs.AIMS_TAB}
           headerRight={
             <Flex gap="2">
-              <SendToPatientButton />
               <HistoryButton
                 questionnaire={QuickNoteSectionName.QuickNoteSectionAims}
               />
               <SaveButton />
-            </Flex>
-          }
-          headerLeft={
-            <Flex>
-              <AddToPreVisitAssessmentCell />
-              <AddToNoteCell />
             </Flex>
           }
         />
