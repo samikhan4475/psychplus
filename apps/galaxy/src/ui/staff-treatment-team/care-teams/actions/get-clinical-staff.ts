@@ -1,15 +1,14 @@
 'use server'
 
 import * as api from '@/api'
-import { ClinicalStaffList, VisitPayload } from '../types'
+import { ClinicalStaffList } from '../types'
 
 interface ClinicalStaffListParams {
   staffId: number
-  payload?: VisitPayload
 }
 
 const getClinicalStaffAction = async ({
-  payload,
+  staffId,
 }: ClinicalStaffListParams): Promise<api.ActionResult<ClinicalStaffList[]>> => {
   const mockVisitsList: ClinicalStaffList[] = [
     {

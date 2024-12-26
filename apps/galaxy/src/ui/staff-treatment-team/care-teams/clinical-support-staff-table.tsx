@@ -2,9 +2,9 @@
 
 import { ScrollArea } from '@radix-ui/themes'
 import { DataTable } from '@/components'
-import { useStore } from '../store'
 import { ClinicalStaffHeader } from './clinical-staff-header'
 import { columns } from './clinical-support-staff-column'
+import { useStore } from './store'
 
 const ClinicalSupportStaffTable = () => {
   const { clinicalStaffData } = useStore()

@@ -1,7 +1,7 @@
 import { CounterClockwiseClockIcon } from '@radix-ui/react-icons'
 import { Flex, Text } from '@radix-ui/themes'
 import { Row } from '@tanstack/react-table'
-import { ClinicalStaffList } from '../../types'
+import { ClinicalStaffList } from '../types'
 
 interface StatusCellProps {
   row: Row<ClinicalStaffList>

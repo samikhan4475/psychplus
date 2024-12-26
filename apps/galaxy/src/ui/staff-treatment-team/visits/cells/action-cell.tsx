@@ -1,6 +1,6 @@
 import { type Row } from '@tanstack/react-table'
 import { AdaptiveRowActionsCell, type RowAction } from '@/components'
-import { VisitsList } from '../../types'
+import { VisitsList } from '../types'
 import { RowActionEdit } from './row-action-edit'
 import { RowActionView } from './row-action-view'
 

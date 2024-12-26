@@ -1,23 +1,42 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
+import { useParams } from 'next/navigation'
 import { Flex } from '@radix-ui/themes'
 import { LoadingPlaceholder } from '@/components'
-import { useStore } from '../store'
 import { VisitTable } from './visit-table'
+import { VisitsFilterForm } from './visits-filter-form'
 import { VisitHeader } from './visits-header'
+import { VisitsTablePagination } from './visits-pagination-table'
+import { useStore } from './store'
 
 const VisitsView = () => {
+  const { id } = useParams()
   const { fetchVistsList, loadingVisits } = useStore()
+  const [isPartialFilterView, setIsPartialFilterView] = useState(false)
   useEffect(() => {
-    fetchVistsList(0)
+    const payload = {
+      providerIds: [Number(id)],
+      appointmentStatus: 'Scheduled',
+    }
+    fetchVistsList(payload)
   }, [])
   return (
     <Flex direction="column" width="100%" gap="1">
-      <VisitHeader />
+      <VisitHeader
+        onClick={() => setIsPartialFilterView(true)}
+        isPartialFilterView={isPartialFilterView}
+      />
 
+      <VisitsFilterForm
+        isPartialFilterView={isPartialFilterView}
+        onHide={() => setIsPartialFilterView(false)}
+      />
       {loadingVisits ? (
         <LoadingPlaceholder className="bg-white min-h-[46vh]" />
       ) : (
-        <VisitTable />
+        <>
+          <VisitTable />
+          <VisitsTablePagination />
+        </>
       )}
     </Flex>
   )

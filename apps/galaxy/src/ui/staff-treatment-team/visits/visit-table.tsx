@@ -2,8 +2,8 @@
 
 import { ScrollArea } from '@radix-ui/themes'
 import { DataTable } from '@/components'
-import { useStore } from '../store'
 import { columns } from './columns'
+import { useStore } from './store'
 
 const VisitTable = () => {
   const { visitsData } = useStore()
@@ -12,7 +12,7 @@ const VisitTable = () => {
     <ScrollArea className="bg-white min-h-[150px] max-w-[calc(100vw_-_198px)] p-2">
       <DataTable
         columns={columns}
-        data={visitsData}
+        data={visitsData?.visitsListData ?? []}
         tdClass="!p-0"
         isRowSpan
         sticky

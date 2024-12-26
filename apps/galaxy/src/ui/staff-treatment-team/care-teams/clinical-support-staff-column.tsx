@@ -1,8 +1,8 @@
 import { ColumnDef } from '@tanstack/react-table'
 import { format } from 'date-fns'
 import { ColumnHeader, TextCell } from '@/components'
-import { ClinicalStaffList } from '../types'
 import { StatusCell } from './cells/status-cell'
+import { ClinicalStaffList } from './types'
 
 const columns: ColumnDef<ClinicalStaffList>[] = [
   {

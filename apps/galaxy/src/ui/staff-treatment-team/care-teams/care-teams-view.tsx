@@ -1,9 +1,9 @@
 import { useEffect } from 'react'
 import { Flex } from '@radix-ui/themes'
 import { LoadingPlaceholder } from '@/components'
-import { useStore } from '../store'
 import { CareTeamsHeader } from './care-teams-header'
 import { ClinicalSupportStaffTable } from './clinical-support-staff-table'
+import { useStore } from './store'
 
 const CareTeamsView = () => {
   const { fetchClinicalStaff, loadingClinicalstaff } = useStore()

@@ -1,7 +1,8 @@
 import { ColumnDef } from '@tanstack/react-table'
+import { format } from 'date-fns'
 import { ColumnHeader, TextCell } from '@/components'
-import { VisitsList } from '../types'
 import { ActionsCell } from './cells/action-cell'
+import { VisitsList } from './types'
 
 const columns: ColumnDef<VisitsList>[] = [
   {
@@ -10,7 +11,17 @@ const columns: ColumnDef<VisitsList>[] = [
     header: ({ column }) => (
       <ColumnHeader column={column} clientSideSort label="Date/Time" />
     ),
-    cell: ({ row }) => <TextCell>{row.original.dateTime}</TextCell>,
+    cell: ({ row }) => (
+      <TextCell>
+        {format(
+          new Date(
+            row.original?.metadata?.createdOn ??
+              row.original?.metadata?.updatedOn,
+          ),
+          'MM/dd/yyyy HH:mm',
+        )}
+      </TextCell>
+    ),
   },
   {
     accessorKey: 'patientName',
@@ -34,7 +45,7 @@ const columns: ColumnDef<VisitsList>[] = [
     header: ({ column }) => (
       <ColumnHeader clientSideSort column={column} label="DOB" />
     ),
-    cell: ({ row }) => <TextCell>{row.original.DOB}</TextCell>,
+    cell: ({ row }) => <TextCell>{row.original.dob}</TextCell>,
   },
   {
     id: 'mrn',
@@ -42,7 +53,7 @@ const columns: ColumnDef<VisitsList>[] = [
     header: ({ column }) => (
       <ColumnHeader clientSideSort column={column} label="MRN" />
     ),
-    cell: ({ row }) => <TextCell>{row.original.MRN}</TextCell>,
+    cell: ({ row }) => <TextCell>{row.original.patientId}</TextCell>,
   },
   {
     id: 'visitId',
@@ -54,7 +65,7 @@ const columns: ColumnDef<VisitsList>[] = [
     id: 'location',
     size: 100,
     header: () => <ColumnHeader clientSideSort label="Location" />,
-    cell: ({ row }) => <TextCell>{row.original.location}</TextCell>,
+    cell: ({ row }) => <TextCell>{row.original.locationName}</TextCell>,
   },
   {
     id: 'visitType',
