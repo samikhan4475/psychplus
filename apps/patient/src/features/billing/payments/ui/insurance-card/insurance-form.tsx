@@ -57,12 +57,18 @@ const schema = z
       .min(1, 'Required')
       .max(16, 'Invalid Gruop Number'),
     isPatientPolicyHolder: z.boolean(),
-    policyHolderFirstName: z.string().max(28, 'Max 28 characters are allowed'),
-    policyHolderLastName: z.string().max(28, 'Max 28 characters are allowed'),
-    policyHolderGender: z.string().optional(),
-    policyHolderRelationship: z.string().optional(),
+    policyHolderFirstName: z
+      .string()
+      .max(28, 'Max 28 characters are allowed')
+      .optional(),
+    policyHolderLastName: z
+      .string()
+      .max(28, 'Max 28 characters are allowed')
+      .optional(),
+    policyHolderGender: z.string().optional().optional(),
+    policyHolderRelationship: z.string().optional().optional(),
     insurancePolicyPriority: z.string().min(1, 'Required'),
-    policyHolderDateOfBirth: z.string(),
+    policyHolderDateOfBirth: z.string().optional(),
     policyHolderSocialSecurityNumber: z.string().optional(),
     hasCardFrontImage: z.boolean(),
     hasCardBackImage: z.boolean(),
@@ -200,7 +206,7 @@ const InsuranceForm = ({
     // defaultValues: { isPatientPolicyHolder: true }
     defaultValues: getFormDefaultValues(insurance),
   })
-  const { register, watch, unregister, reset } = form
+  const { register, watch, unregister, reset, clearErrors } = form
   const watchisPatientPolicyHolder = watch('isPatientPolicyHolder')
 
   useEffect(() => {
@@ -308,6 +314,13 @@ const InsuranceForm = ({
   }
 
   const onCheckedChange = (isPolicyHolder: boolean) => {
+    if (isPolicyHolder) {
+      clearErrors('policyHolderFirstName')
+      clearErrors('policyHolderLastName')
+      clearErrors('policyHolderDateOfBirth')
+      clearErrors('policyHolderGender')
+      clearErrors('policyHolderRelationship')
+    }
     form.setValue('isPatientPolicyHolder', isPolicyHolder, {
       shouldValidate: true,
       shouldDirty: true,

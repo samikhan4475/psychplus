@@ -105,8 +105,6 @@ interface InsurancePayment {
   depositDate: string
   patientId: number
   payerId: string
-  postedAmount: number
-  unPostedAmount: number
   receiverId: string
   creditCardId: string
   creditCardTransactionId: string
