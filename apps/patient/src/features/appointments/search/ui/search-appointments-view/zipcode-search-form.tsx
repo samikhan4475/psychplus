@@ -66,7 +66,10 @@ const ZipCodeSearchForm = () => {
   }, [form, form.watch('zipCode')])
 
   useEffect(() => {
-    if (zipStates.length > 0) {
+    if (
+      zipStates.length > 0 &&
+      !zipStates.some((zipState) => zipState.long_name === state)
+    ) {
       form.setValue('state', zipStates[0].long_name)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
