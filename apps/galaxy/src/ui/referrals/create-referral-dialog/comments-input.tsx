@@ -14,7 +14,9 @@ const CommentsInput = () => {
 
   return (
     <FormFieldContainer className="col-span-full">
-      <FormFieldLabel className="!text-1">Comments</FormFieldLabel>
+      <FormFieldLabel className="!text-1" required>
+        Comments
+      </FormFieldLabel>
       <TextArea
         size="1"
         id="comments"

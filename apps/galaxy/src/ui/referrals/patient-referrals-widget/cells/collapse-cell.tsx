@@ -1,7 +1,7 @@
 'use client'
 
 import { Box, Button, Flex, Popover } from '@radix-ui/themes'
-import { ChevronDownIcon, ChevronRightIcon } from 'lucide-react'
+import { History } from 'lucide-react'
 import { PropsWithRow } from '@/components'
 import { PatientReferral } from '@/types'
 import { ReferralsHistoryTable } from '../referrals-history-table'
@@ -23,11 +23,7 @@ const CollapseCell = ({
         size="1"
         onClick={() => toggleSelected()}
       >
-        {getIsSelected() ? (
-          <ChevronDownIcon size={16} />
-        ) : (
-          <ChevronRightIcon size={16} />
-        )}
+        <History size={16} />
       </Button>
       <Flex
         justify="center"

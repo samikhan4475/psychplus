@@ -83,10 +83,9 @@ const createStore = (init: StoreInit) => {
 
       const payload = {
         ...formValues,
-        contactStatusList:
-          appointmentId && !get().isTabView
-            ? getDefaultContactMadeStatuses()
-            : formValues.contactStatusList,
+        ...(appointmentId && !get().isTabView
+          ? { contactStatusList: getDefaultContactMadeStatuses() }
+          : {}),
       }
       const result = await searchPatientReferralsAction({
         patientIds: [get().patientId],
@@ -95,6 +94,7 @@ const createStore = (init: StoreInit) => {
       })
 
       if (result.state === 'error') {
+        toast.error(result.error)
         return set({
           error: result.error,
           loading: false,

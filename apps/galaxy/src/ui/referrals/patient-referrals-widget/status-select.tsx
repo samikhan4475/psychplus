@@ -11,6 +11,7 @@ interface StatusSelectProps {
   className?: string
   disabled?: boolean
   options?: SelectOptionType[]
+  isOptionsDisabled?: boolean
 }
 
 const StatusSelect = ({
@@ -19,6 +20,7 @@ const StatusSelect = ({
   className,
   disabled,
   options,
+  isOptionsDisabled,
 }: StatusSelectProps) => {
   return (
     <Select.Root size="1" value={value} onValueChange={onValueChange}>
@@ -41,10 +43,10 @@ const StatusSelect = ({
               'bg-white text-black hover:!bg-pp-gray-4 hover:text-black my-0.5',
               {
                 [variants?.[value as keyof typeof variants]]: value,
-                'cursor-not-allowed opacity-50': disabled,
+                'cursor-not-allowed opacity-50': disabled ?? isOptionsDisabled,
               },
             )}
-            disabled={disabled}
+            disabled={disabled ?? isOptionsDisabled}
           >
             {label}
           </Select.Item>

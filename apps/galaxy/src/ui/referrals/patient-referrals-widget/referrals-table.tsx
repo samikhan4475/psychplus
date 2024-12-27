@@ -6,7 +6,7 @@ import { useStore as zustandUseStore } from 'zustand'
 import { DataTable, LoadingPlaceholder } from '@/components'
 import { columns } from './columns'
 import { useStore } from './store'
-import { isContactStatusError } from './utils'
+import { isReferralDeleted } from './utils'
 
 const ReferralsTable = ({ isTabView }: { isTabView?: boolean }) => {
   const store = useStore()
@@ -18,7 +18,6 @@ const ReferralsTable = ({ isTabView }: { isTabView?: boolean }) => {
       loading: state.loading,
     }),
   )
-
   useEffect(() => {
     fetchPatientReferrals()
   }, [fetchPatientReferrals])
@@ -33,9 +32,7 @@ const ReferralsTable = ({ isTabView }: { isTabView?: boolean }) => {
         tableClass="[&_.rt-ScrollAreaScrollbar]:!hidden"
         tableRowClass="relative"
         theadClass="z-[1]"
-        isRowDisabled={(row) =>
-          isContactStatusError(row.original.contactStatus)
-        }
+        isRowDisabled={(row) => isReferralDeleted(row.original?.resourceStatus)}
         disablePagination
         isRowSpan
         sticky

@@ -2,10 +2,10 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { Flex, IconButton } from '@radix-ui/themes'
+import { IconButton } from '@radix-ui/themes'
 import { Trash2 } from 'lucide-react'
 import toast from 'react-hot-toast'
-import { PropsWithRow } from '@/components'
+import { DeleteConfirmDialog, PropsWithRow } from '@/components'
 import { CreditCard } from '@/types'
 import { deletePatientCardAction } from '../actions'
 
@@ -15,9 +15,12 @@ const ActionsCell = ({
   },
 }: PropsWithRow<CreditCard>) => {
   const router = useRouter()
+  const [isOpen, setIsOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
 
-  const handleClick = async () => {
+  const toggleOpen = (open: boolean) => setIsOpen(open)
+
+  const handleDelete = async () => {
     setIsLoading(true)
 
     try {
@@ -38,22 +41,27 @@ const ActionsCell = ({
       toast.error(message)
     } finally {
       setIsLoading(false)
+      toggleOpen(false)
     }
   }
 
   return (
-    <Flex justify="start" px="1" align="center" width="100%" height="100%">
+    <DeleteConfirmDialog
+      isOpen={isOpen}
+      onDelete={handleDelete}
+      toggleOpen={toggleOpen}
+      loading={isLoading}
+    >
       <IconButton
         size="1"
         color="gray"
         variant="ghost"
-        className="text-black"
+        className="text-black !m-0"
         disabled={isLoading}
-        onClick={handleClick}
       >
         <Trash2 size={16} />
       </IconButton>
-    </Flex>
+    </DeleteConfirmDialog>
   )
 }
 

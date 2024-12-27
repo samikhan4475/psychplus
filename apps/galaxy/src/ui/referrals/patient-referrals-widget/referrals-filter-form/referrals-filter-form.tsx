@@ -10,6 +10,7 @@ import { FormContainer, FormSubmitButton } from '@/components'
 import { STAFF_ROLE_CODE_PRESCRIBER } from '@/constants'
 import { formatDateToISOString, sanitizeFormData } from '@/utils'
 import { useStore } from '../store'
+import { transformOutProviderNames } from '../transform'
 import { ClearButton } from './clear-button'
 import { ContactMadeSelect } from './contact-made-select'
 import { FilterToggleButton } from './filter-toggle-button'
@@ -49,20 +50,21 @@ const ReferralsFilterForm = () => {
       contactStatusList: [],
       servicesOfferedList: [],
       resourceStatusList: [],
-      fromServiceDate: null,
-      toServiceDate: null,
+      fromReferralDate: null,
+      toReferralDate: null,
       nextVisit: '',
       initiatedByRole: [],
-      providerIds: [],
-      serviceStatusList: [],
+      providerNames: [],
+      serviceStatuses: [],
       visitHx: '',
     },
   })
   const handleFormSubmit = form.handleSubmit((data) => {
     const payload = sanitizeFormData({
       ...data,
-      fromServiceDate: formatDateToISOString(data?.fromServiceDate) ?? '',
-      toServiceDate: formatDateToISOString(data?.toServiceDate) ?? '',
+      fromReferralDate: formatDateToISOString(data?.fromReferralDate) ?? '',
+      toReferralDate: formatDateToISOString(data?.toReferralDate) ?? '',
+      providerNames: transformOutProviderNames(data?.providerNames) ?? [],
     })
     fetchPatientReferrals(payload, 1, true)
   })

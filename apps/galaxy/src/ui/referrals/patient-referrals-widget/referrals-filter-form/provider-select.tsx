@@ -19,8 +19,8 @@ const ProviderSelect = ({ options }: ProviderSelectProps) => {
       <FormFieldLabel className="!text-1">Provider</FormFieldLabel>
       <MultiSelectField
         options={options}
-        defaultValues={form.getValues('providerIds')}
-        onChange={(values) => form.setValue('providerIds', values)}
+        defaultValues={form.getValues('providerNames')}
+        onChange={(values) => form.setValue('providerNames', values)}
         className="w-full"
       />
     </FormFieldContainer>

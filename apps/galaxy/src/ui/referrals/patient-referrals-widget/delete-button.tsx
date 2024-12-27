@@ -1,60 +1,72 @@
-'use client'
-
+import React, { useState } from 'react'
 import { IconButton } from '@radix-ui/themes'
 import { Trash2 } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { useStore as zustandUseStore } from 'zustand'
-import { ContactMadeStatuses, PatientReferral } from '@/types'
+import { DeleteConfirmDialog } from '@/components'
+import { PatientReferral, ReferralStatuses } from '@/types'
 import { updatePatientReferralAction } from '../actions'
 import { useStore } from './store'
-import { isContactStatusError } from './utils'
+import { isReferralDeleted } from './utils'
 
-interface DeleteButtonProps {
+interface DeleteReferralButtonProps {
   referral: PatientReferral
 }
-const DeleteButton = ({ referral }: DeleteButtonProps) => {
+const DeleteReferralButton = ({ referral }: DeleteReferralButtonProps) => {
+  const [isOpen, setIsOpen] = useState(false)
+  const [loading, setLoading] = useState(false)
   const store = useStore()
   const { data, setData } = zustandUseStore(store, (state) => ({
     setData: state.setData,
     data: state.data,
   }))
+  const toggleOpen = (open: boolean) => setIsOpen(open)
 
   const deleteReferral = async () => {
+    setLoading(true)
     const result = await updatePatientReferralAction({
       ...referral,
-      contactStatus: ContactMadeStatuses.Error,
+      resourceStatus: ReferralStatuses.Deleted,
     })
-    if (result.state === 'success') {
-      toast.success('Successfully updated!')
-      if (!data) return
-      const updatedData = data?.referrals.map((item) => {
-        if (referral.id === item.id) {
-          return {
-            ...item,
-            contactStatus: ContactMadeStatuses.Error,
-          }
-        }
-        return item
-      })
-      setData(updatedData)
-    } else if (result.state === 'error') {
-      toast.error(result.error ?? 'Failed to update!')
+    if (result.state === 'error') {
+      setLoading(false)
+      return toast.error(result.error ?? 'Failed to update!')
     }
+    const updatedData = data?.referrals.map((item) => {
+      if (referral.id === item.id) {
+        return {
+          ...item,
+          resourceStatus: ReferralStatuses.Deleted,
+        }
+      }
+      return item
+    })
+    setData(updatedData ?? [])
+    toast.success('Successfully deleted!')
+    toggleOpen(false)
+    setLoading(false)
   }
 
   return (
-    <IconButton
-      size="1"
-      color="gray"
-      variant="ghost"
-      className="text-black !m-0"
-      type="button"
-      disabled={isContactStatusError(referral.contactStatus)}
-      onClick={deleteReferral}
+    <DeleteConfirmDialog
+      isOpen={isOpen}
+      toggleOpen={toggleOpen}
+      onDelete={deleteReferral}
+      loading={loading}
+      title="referral"
     >
-      <Trash2 size={14} />
-    </IconButton>
+      <IconButton
+        size="1"
+        color="gray"
+        variant="ghost"
+        className="text-black !m-0"
+        type="button"
+        disabled={isReferralDeleted(referral?.resourceStatus)}
+      >
+        <Trash2 size={14} />
+      </IconButton>
+    </DeleteConfirmDialog>
   )
 }
 
-export { DeleteButton }
+export { DeleteReferralButton }

@@ -3,7 +3,11 @@
 import { ColumnDef } from '@tanstack/react-table'
 import { ColumnHeader, LongTextCell, TextCell } from '@/components'
 import { PatientReferral } from '@/types'
-import { formatDate, formatDateTime, getPatientFullName } from '@/utils'
+import {
+  formatDateTime,
+  getPatientFullName,
+  getSlashedPaddedDateString,
+} from '@/utils'
 import {
   ActionCell,
   CollapseCell,
@@ -31,22 +35,24 @@ const columns = (isTabView = false): ColumnDef<PatientReferral>[] => [
     id: 'referral date',
     accessorKey: 'referralDate',
     header: ({ column }) => (
-      <ColumnHeader column={column} clientSideSort label="Service Date/Time" />
+      <ColumnHeader column={column} clientSideSort label="Order Date/Time" />
     ),
     cell: ({ row: { original: referral } }) => (
       <TextCell className="truncate">
-        {referral?.referralDate && formatDateTime(referral?.referralDate)}
+        {referral?.referralDate
+          ? formatDateTime(referral?.referralDate)
+          : 'N/A'}
       </TextCell>
     ),
   },
   {
-    id: 'visitId',
-    accessorKey: 'visitId',
+    id: 'appointmentId',
+    accessorKey: 'appointmentId',
     header: ({ column }) => (
       <ColumnHeader column={column} clientSideSort label="Visit ID" />
     ),
     cell: ({ row: { original: referral } }) => (
-      <TextCell className="truncate">{referral?.visitId}</TextCell>
+      <TextCell className="truncate">{referral?.appointmentId}</TextCell>
     ),
   },
   {
@@ -77,7 +83,8 @@ const columns = (isTabView = false): ColumnDef<PatientReferral>[] => [
     ),
     cell: ({ row: { original: referral } }) => (
       <LongTextCell>
-        {getPatientFullName(referral?.referredByName)}
+        {referral?.referredByName &&
+          getPatientFullName(referral?.referredByName)}
       </LongTextCell>
     ),
   },
@@ -104,7 +111,9 @@ const columns = (isTabView = false): ColumnDef<PatientReferral>[] => [
     ),
     cell: ({ row: { original } }) => (
       <TextCell className="truncate">
-        {formatDate(original?.nextVisit) ?? 'N/A'}
+        {original?.nextVisit
+          ? getSlashedPaddedDateString(original?.nextVisit)
+          : 'N/A'}
       </TextCell>
     ),
   },
@@ -116,7 +125,9 @@ const columns = (isTabView = false): ColumnDef<PatientReferral>[] => [
     ),
     cell: ({ row: { original } }) => (
       <TextCell className="truncate">
-        {formatDate(original?.patientVisitHistory) ?? 'N/A'}
+        {original?.patientVisitHistory
+          ? getSlashedPaddedDateString(original?.patientVisitHistory)
+          : 'N/A'}
       </TextCell>
     ),
   },

@@ -48,22 +48,24 @@ const InsuranceView = ({
     <Flex direction="column" ref={scrollRef} gap="1">
       <InsuranceHeader />
       <ScrollArea className="max-h-[calc(100dvh-375px)]">
-        {(filteredInsurances && filteredInsurances?.length > 0) ||
-        isAddFormOpen ? (
-          <InsuranceForms
-            patientId={patientId}
-            insurances={filteredInsurances}
-            isAddFormOpen={isAddFormOpen}
-            insurancePayers={insurancePayers}
-          />
-        ) : (
-          !isAddFormOpen && (
-            <FeatureEmpty
-              description="No insurance added yet"
-              Icon={EmptyFileIcon}
+        <Flex direction="column" gap="1">
+          {(filteredInsurances && filteredInsurances?.length > 0) ||
+          isAddFormOpen ? (
+            <InsuranceForms
+              patientId={patientId}
+              insurances={filteredInsurances}
+              isAddFormOpen={isAddFormOpen}
+              insurancePayers={insurancePayers}
             />
-          )
-        )}
+          ) : (
+            !isAddFormOpen && (
+              <FeatureEmpty
+                description="No insurance added yet"
+                Icon={EmptyFileIcon}
+              />
+            )
+          )}
+        </Flex>
       </ScrollArea>
     </Flex>
   )

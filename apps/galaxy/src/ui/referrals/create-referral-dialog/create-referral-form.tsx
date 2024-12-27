@@ -28,7 +28,10 @@ const schema = z.object({
   service: z.string(),
   servicesStatus: z.string(),
   isByPass90DayRule: z.boolean().optional(),
-  comments: z.string().max(300, 'Max 300 characters allowed').optional(),
+  comments: z
+    .string()
+    .max(300, 'Max 300 characters allowed')
+    .min(1, 'Required'),
   referredByName: z
     .object({
       avatar: z.string().optional(),
@@ -89,17 +92,14 @@ const CreateReferralForm = ({
     if (!confirmed) {
       return
     }
-
     const retryResponse = await createPatientReferralAction({
       ...data,
       isByPass90DayRule: true,
     })
-
     if (retryResponse.state === 'error') {
       toast.error(retryResponse.error)
       return
     }
-
     toast.success('Created successfully!')
     onClose?.()
     handleCloseDialog()

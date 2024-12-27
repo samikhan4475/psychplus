@@ -19,12 +19,12 @@ const ClearButton = () => {
       contactStatusList: [],
       resourceStatusList: [],
       servicesOfferedList: [],
-      fromServiceDate: null,
-      toServiceDate: null,
+      fromReferralDate: null,
+      toReferralDate: null,
       nextVisit: '',
       initiatedByRole: [],
-      providerIds: [],
-      serviceStatusList: [],
+      providerNames: [],
+      serviceStatuses: [],
       visitHx: '',
     })
   }

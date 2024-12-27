@@ -19,7 +19,7 @@ const Details = ({ data }: Props<PatientReferral>) => {
               {[
                 referral?.service,
                 formatDateTime(referral?.referralDate) ?? 'N/A',
-                referral?.visitId ?? 'N/A',
+                referral?.appointmentId ?? 'N/A',
                 referral?.servicesStatus ?? 'N/A',
                 referral?.metadata?.createdByFullName ?? 'N/A',
                 referral?.referredByName

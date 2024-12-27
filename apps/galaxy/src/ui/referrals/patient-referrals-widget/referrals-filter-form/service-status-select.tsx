@@ -19,8 +19,8 @@ const ServiceStatusSelect = () => {
       <FormFieldLabel className="!text-1">Service Status</FormFieldLabel>
       <MultiSelectField
         options={options}
-        defaultValues={form.getValues('serviceStatusList')}
-        onChange={(values) => form.setValue('serviceStatusList', values)}
+        defaultValues={form.getValues('serviceStatuses')}
+        onChange={(values) => form.setValue('serviceStatuses', values)}
         className="w-full"
       />
     </FormFieldContainer>

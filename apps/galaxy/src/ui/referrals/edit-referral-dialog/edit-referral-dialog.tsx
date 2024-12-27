@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { Dialog, Flex, IconButton, Separator } from '@radix-ui/themes'
 import { PencilLine, X } from 'lucide-react'
 import { PatientReferral } from '@/types'
-import { isContactStatusError } from '../patient-referrals-widget/utils'
+import { isReferralDeleted } from '../patient-referrals-widget/utils'
 import { EditReferralForm } from './edit-referral-form'
 
 interface EditReferralDialogProps {
@@ -18,7 +18,7 @@ const EditReferralDialog = ({ referral, onClose }: EditReferralDialogProps) => {
 
   return (
     <Dialog.Root open={isOpen} onOpenChange={(isOpen) => setIsOpen(isOpen)}>
-      <Dialog.Trigger disabled={isContactStatusError(referral.contactStatus)}>
+      <Dialog.Trigger disabled={isReferralDeleted(referral?.resourceStatus)}>
         <IconButton
           size="1"
           color="gray"

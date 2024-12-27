@@ -1,11 +1,11 @@
 import { STAFF_ROLE_CODE_PRESCRIBER } from '@/constants'
-import { ContactMadeStatuses, StaffResource } from '@/types'
+import { ContactMadeStatuses, ReferralStatuses, StaffResource } from '@/types'
 
 const isPrescriber = (staff?: StaffResource) =>
   staff?.staffRoleCode === STAFF_ROLE_CODE_PRESCRIBER
 
-const isContactStatusError = (status: string) =>
-  status === ContactMadeStatuses.Error
+const isReferralDeleted = (resourceStatus = '') =>
+  resourceStatus === ReferralStatuses.Deleted
 
 const getDefaultContactMadeStatuses = () => [
   ContactMadeStatuses.NotSet,
@@ -19,4 +19,4 @@ const getDefaultContactMadeStatuses = () => [
   ContactMadeStatuses.SecondAttempt,
   ContactMadeStatuses.ThirdAttempt,
 ]
-export { isPrescriber, isContactStatusError, getDefaultContactMadeStatuses }
+export { isPrescriber, isReferralDeleted, getDefaultContactMadeStatuses }

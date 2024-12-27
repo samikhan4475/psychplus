@@ -10,12 +10,12 @@ import { PatientReferralsSchemaType } from './schema'
 
 const ToDatePicker = () => {
   const { watch } = useFormContext<PatientReferralsSchemaType>()
-  const isDisabled = watch('fromServiceDate')
+  const isDisabled = watch('fromReferralDate')
 
   return (
     <FormFieldContainer className="flex-1 flex-row gap-1">
-      <FormFieldLabel className="!text-1">Service To</FormFieldLabel>
-      <DatePickerInput field="toServiceDate" isDisabled={!isDisabled} />
+      <FormFieldLabel className="!text-1">Order To</FormFieldLabel>
+      <DatePickerInput field="toReferralDate" isDisabled={!isDisabled} />
     </FormFieldContainer>
   )
 }

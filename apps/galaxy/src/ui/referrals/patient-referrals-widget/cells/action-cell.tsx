@@ -5,8 +5,8 @@ import { useStore as zustandUseStore } from 'zustand'
 import { PropsWithRow } from '@/components'
 import { PatientReferral } from '@/types'
 import { EditReferralDialog } from '../../edit-referral-dialog'
-import { BookButton } from '../book-button'
-import { DeleteButton } from '../delete-button'
+// import { BookButton } from '../book-button'
+import { DeleteReferralButton } from '../delete-button'
 import { useStore } from '../store'
 
 interface ActionCellProps extends PropsWithRow<PatientReferral> {
@@ -26,9 +26,9 @@ const ActionCell = ({
 
   return (
     <Flex justify="center" gap="1" width="100%">
-      {isTabView && <DeleteButton referral={referral} />}
+      {isTabView && <DeleteReferralButton referral={referral} />}
       <EditReferralDialog referral={referral} onClose={onClose} />
-      {isTabView && <BookButton referral={referral} />}
+      {/*Delayed implementation : {isTabView && <BookButton referral={referral} />} */}
     </Flex>
   )
 }

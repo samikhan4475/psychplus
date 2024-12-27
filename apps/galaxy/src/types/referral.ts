@@ -14,11 +14,18 @@ enum ContactMadeStatuses {
   ThirdAttempt = 'ThirdAttempt',
   Error = 'Error',
 }
+
+enum ReferralStatuses {
+  Deleted = 'Deleted',
+}
 interface PatientReferral {
   id: number
   metadata?: Metadata
   patientId: number
   patientName: LegalName
+  patientStatus?: string
+  patientDateOfBirth?: string
+  patientGender?: string
   referralDate?: string
   resourceStatus?: string
   referredByType?: string
@@ -28,10 +35,12 @@ interface PatientReferral {
   contactStatus: string
   visitDateTime?: string
   comments: string
+  appointmentId?: string
   visitId?: string
   nextVisit?: string
   patientVisitHistory?: string
   intiatedByUserRole?: string
+  stateCode?: string
 }
 
 interface GetPatientReferralsParams {
@@ -51,4 +60,5 @@ export {
   type PatientReferral,
   type GetPatientReferralsParams,
   ContactMadeStatuses,
+  ReferralStatuses,
 }

@@ -16,6 +16,7 @@ const ReferralStatusSelector = () => {
         name="resourceStatus"
         size="1"
         codeset={CODESETS.ResourceStatus}
+        disabled
       />
       <FormFieldError name="resourceStatus" />
     </FormFieldContainer>

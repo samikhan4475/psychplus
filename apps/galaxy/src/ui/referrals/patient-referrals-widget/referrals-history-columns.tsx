@@ -19,11 +19,13 @@ const columns: ColumnDef<PatientReferral>[] = [
     id: 'referral date',
     accessorKey: 'referralDate',
     header: ({ column }) => (
-      <ColumnHeader column={column} clientSideSort label="Service Date/Time" />
+      <ColumnHeader column={column} clientSideSort label="Order Date/Time" />
     ),
     cell: ({ row: { original: referral } }) => (
       <TextCell className="truncate">
-        {referral?.referralDate && formatDateTime(referral?.referralDate)}
+        {referral?.referralDate
+          ? formatDateTime(referral?.referralDate)
+          : 'N/A'}
       </TextCell>
     ),
   },
@@ -54,7 +56,7 @@ const columns: ColumnDef<PatientReferral>[] = [
     ),
     cell: ({ row: { original } }) => (
       <TextCell className="truncate">
-        {formatDate(original?.nextVisit) ?? 'N/A'}
+        {original?.nextVisit ? formatDateTime(original?.nextVisit) : 'N/A'}
       </TextCell>
     ),
   },
@@ -66,7 +68,9 @@ const columns: ColumnDef<PatientReferral>[] = [
     ),
     cell: ({ row: { original } }) => (
       <TextCell className="truncate">
-        {formatDate(original?.patientVisitHistory) ?? 'N/A'}
+        {original?.patientVisitHistory
+          ? formatDate(original?.patientVisitHistory)
+          : 'N/A'}
       </TextCell>
     ),
   },
@@ -99,7 +103,9 @@ const columns: ColumnDef<PatientReferral>[] = [
     ),
     cell: ({ row: { original: referral } }) => (
       <TextCell className="truncate">
-        {formatDateTime(referral?.metadata?.createdOn)}
+        {referral?.metadata?.createdOn
+          ? formatDateTime(referral?.metadata?.createdOn)
+          : 'N/A'}
       </TextCell>
     ),
   },
