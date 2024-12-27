@@ -110,7 +110,7 @@ const ClaimDetailView = ({ claimId }: ClaimDetailViewProps) => {
   const fetchClaimData = async (claimId: string) => {
     const claimResponse = await getClaimById(claimId)
     if (claimResponse.state === 'success') {
-      const transformedClaimData = transformClaimData(claimResponse.data)
+      const transformedClaimData = transformClaimData(claimResponse.data)   
       form.reset(transformedClaimData)
     } else {
       toast('Failed to fetch claim data')
@@ -154,6 +154,10 @@ const ClaimDetailView = ({ claimId }: ClaimDetailViewProps) => {
       orderingProviderId: claimData.orderingProviderId?.toString() ?? undefined,
       referringProviderId:
         claimData.referringProviderId?.toString() ?? undefined,
+      updatedByName:
+        (claimData.metadata?.updatedByFullName ||
+          claimData.metadata?.createdByFullName) ??
+        'NA',
       claimServiceLines: (claimData.claimServiceLines ?? []).map(
         (line: ClaimServiceLineApiResponse) => ({
           ...line,

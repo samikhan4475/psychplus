@@ -283,7 +283,7 @@ interface ClaimUpdate {
   primaryPaid?: number
   secondaryPaid?: number
   tertiaryPaid?: number
-  patientPaid?: number | null
+  patientPaid?: number
   primaryWriteOff?: number
   secondaryWriteOff?: number
   tertiaryWriteOff?: number
@@ -327,6 +327,7 @@ interface ClaimUpdate {
   patientDateOfBirth: string
   claimServiceLines: ClaimServiceLine[]
   claimDiagnosis: ClaimDiagnosis[]
+  updatedByName?: string
 }
 
 interface DiagnosisCode {
@@ -385,6 +386,8 @@ interface InsuranceClaimPolicy {
   terminationDate?: string
   verificationStatus?: string
   viewHcfa?: boolean
+  policyHolderRelationship?: string
+  claimStatus?: string
 }
 
 interface ClaimUpdateApiResponse {
@@ -422,7 +425,7 @@ interface ClaimUpdateApiResponse {
   primaryPaid?: number
   secondaryPaid?: number
   tertiaryPaid?: number
-  patientPaid?: number | null
+  patientPaid?: number
   primaryWriteOff?: number
   secondaryWriteOff?: number
   tertiaryWriteOff?: number
@@ -534,15 +537,15 @@ interface ServiceMasterFeeScheduleResponse {
   mastersAmount: number
 }
 interface ClaimSubmissionResponse {
-  recordStatus?: string;
-  entryDate?: string;
-  status?: string;
-  patientAccount?: string;
-  response?: string;
-  categoryCode?: string;
-  statusCode?: string;
-  payerControlNumber?: string;
-  receiverName?: string;
+  recordStatus?: string
+  entryDate?: string
+  status?: string
+  patientAccount?: string
+  response?: string
+  categoryCode?: string
+  statusCode?: string
+  payerControlNumber?: string
+  receiverName?: string
 }
 export type {
   Claim,
@@ -559,5 +562,5 @@ export type {
   ClaimServiceLineApiResponse,
   ClaimDiagnosisApiResponse,
   ServiceMasterFeeScheduleResponse,
-  ClaimSubmissionResponse
+  ClaimSubmissionResponse,
 }

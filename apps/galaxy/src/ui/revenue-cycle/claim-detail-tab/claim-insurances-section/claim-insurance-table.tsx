@@ -14,8 +14,7 @@ const ClaimInsuranceTable = () => {
   const claimInsurancePolicies = form.watch('claimInsurancePolicies') || []
   const [editRowId, setEditRowId] = useState<number | null>(null)
 
-  const columns = getColumns(editRowId, setEditRowId)
-
+  const columns = getColumns(editRowId, setEditRowId)  
   const transformedInsurances = useMemo(() => {
     const primaryStatusCode = form.getValues('primaryStatusCode')
     const secondaryStatusCode = form.getValues('secondaryStatusCode')

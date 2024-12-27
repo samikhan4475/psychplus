@@ -48,7 +48,7 @@ const DownloadHcfaActionCell = ({ item }: ActionsCellProps) => {
       setLoading(false)
     }
   }
-
+  
   return (
     <Tooltip content="View HCFA file">
       <IconButton

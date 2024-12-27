@@ -117,6 +117,7 @@ const claimInsurancePoliciesSchema = z.object({
   policyName: z.string().optional(),
   terminationDate: z.string().optional(),
   verificationStatus: z.string().optional(),
+  policyHolderRelationship: z.string().optional(),
 })
 
 // Define Claim update Schema
@@ -154,6 +155,8 @@ const claimUpdateSchema = z
     primaryPaid: z.coerce.number().optional(),
     secondaryPaid: z.coerce.number().optional(),
     tertiaryPaid: z.coerce.number().optional(),
+    patientPaid: z.coerce.number().optional(),
+    totalWriteOff: z.coerce.number().optional(),
     claimStatusCode: z.string().optional(),
     isMarkAsSubmitted: z.boolean(),
     isSubmitted: z.boolean(),
@@ -190,6 +193,7 @@ const claimUpdateSchema = z
     patientGender: z.string(),
     claimInsurancePolicies: z.array(claimInsurancePoliciesSchema),
     claimServiceLines: z.array(claimServiceLinesSchema),
+    updatedByName: z.string().optional(),
     claimDiagnosis: z
       .array(claimDiagnosisSchema)
 

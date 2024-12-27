@@ -1,4 +1,3 @@
-import { CounterClockwiseClockIcon } from '@radix-ui/react-icons'
 import { Flex, IconButton } from '@radix-ui/themes'
 import { Row } from '@tanstack/react-table'
 import toast from 'react-hot-toast'
@@ -45,9 +44,6 @@ const ActionsCell = ({ row, payerId }: ActionsCellProps) => {
         onClick={handleDeletePayerPlanAddress}
       >
         <DeleteIcon height={18} />
-      </IconButton>
-      <IconButton type="button" variant="ghost" className="text-pp-gray-1">
-        <CounterClockwiseClockIcon />
       </IconButton>
     </Flex>
   )

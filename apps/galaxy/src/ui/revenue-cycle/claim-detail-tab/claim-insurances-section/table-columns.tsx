@@ -56,7 +56,7 @@ const columns = ( editRowId: number | null,setEditRowId: (id: number | null) => 
           label="Relationship"
         />
       ),
-      cell: ({ row }) => <TextCell>{}</TextCell>,
+      cell: ({ row }) => <TextCell>{row.original?.policyHolderRelationship}</TextCell>,
 
       enableHiding: true,
     },
@@ -98,7 +98,7 @@ const columns = ( editRowId: number | null,setEditRowId: (id: number | null) => 
           label="Status"
         />
       ),
-      cell: ({ row }) => <TextCell>{row.original.verificationStatus}</TextCell>,
+      cell: ({ row }) => <TextCell>{row.original?.claimStatus}</TextCell>,
 
       enableHiding: true,
     },

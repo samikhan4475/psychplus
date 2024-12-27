@@ -10,7 +10,7 @@ interface ActionsCellProps {
 
 const ActionsCell = ({ onEdit, item }: ActionsCellProps) => {
   return (
-    <Flex gap="1" align="center" justify="center" className="flex-1">
+    <Flex gap="1" className="flex-1">
       <IconButton
         variant="ghost"
         onClick={() => onEdit && item && onEdit(item)}

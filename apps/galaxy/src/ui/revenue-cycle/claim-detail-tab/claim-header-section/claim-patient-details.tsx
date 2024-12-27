@@ -37,12 +37,16 @@ const PatientClaimDetails = () => {
   const accountNumber = watch('patientAccountNumber')
   const claimStatusCode = watch('claimStatusCode')
   const billedAmt = watch('totalAmount') ?? 0.0
-  const amountDue= form.getValues("amountDue")
+  const amountDue = form.getValues('amountDue')
   const claimServiceLines = useWatch({
     control: form.control,
     name: 'claimServiceLines',
   })
-
+  const updatedByName = form.watch('updatedByName')
+  const primaryPaid = form.watch('primaryPaid') ?? 0.0
+  const secondaryPaid = form.watch('secondaryPaid') ?? 0.0
+  const totalWriteOff = form.watch('totalWriteOff') ?? 0.0
+  const patientPaid = form.watch('patientPaid') ?? 0.0
   useEffect(() => {
     const billedAmount = calculateBilledAmount(claimServiceLines)
     setValue('totalAmount', billedAmount)
@@ -62,12 +66,24 @@ const PatientClaimDetails = () => {
         <LabelAndValue label="Account Number" value={accountNumber} />
       </Grid>
       <Grid columns="4" gap="3" rows="repeat(2)" className="w-3/5">
-        <LabelAndValue label="Billed" value={`${billedAmt.toFixed(2)}`} />
-        <LabelAndValue label="Secondary Paid" value="$ 0.00" />
-        <LabelAndValue label="Write Off" value="$ 0.00" />
-        <LabelAndValue label="Last Modified By" value="NA" />
-        <LabelAndValue label="Primary Paid" value="$ 0.00" />
-        <LabelAndValue label="Patient Paid" value="$ 0.00" />
+        <LabelAndValue label="Billed" value={`$ ${billedAmt.toFixed(2)}`} />
+        <LabelAndValue
+          label="Secondary Paid"
+          value={`$ ${secondaryPaid.toFixed(2)}`}
+        />
+        <LabelAndValue
+          label="Write Off"
+          value={`$ ${totalWriteOff.toFixed(2)}`}
+        />
+        <LabelAndValue label="Last Modified By" value={updatedByName} />
+        <LabelAndValue
+          label="Primary Paid"
+          value={`$ ${primaryPaid.toFixed(2)}`}
+        />
+        <LabelAndValue
+          label="Patient Paid"
+          value={`$ ${patientPaid.toFixed(2)}`}
+        />
         <LabelAndValue label="Balance" value={amountDue?.toFixed(2)} />
         <LabelAndValue label="Claim Status" value={claimStatusCode} />
       </Grid>
