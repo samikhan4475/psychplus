@@ -1,0 +1,239 @@
+import { useState } from 'react'
+import { useParams, useSearchParams } from 'next/navigation'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { SubmitHandler, useForm } from 'react-hook-form'
+import toast from 'react-hot-toast'
+import { useStore } from '../lab-orders-widget/store'
+import {
+  addDiagnosis,
+  addLabOrderApi,
+  addSpecimenApi,
+  addTestLabsApi,
+  editLabOrderApi,
+  editSpecimenApi,
+  placeLabOrderApi,
+} from './api'
+import { SpecimenData } from './blocks/types'
+import { labOrderSchema, LabOrderSchemaType } from './lab-order-schema'
+
+const useLabOrderForm = (
+  labOrderData: LabOrderSchemaType,
+  setOpen: (value: boolean) => void,
+) => {
+  const { id } = useParams<{ id: string }>()
+  const appointmentId = useSearchParams().get('id') ?? ''
+  const { updateLabOrdersList } = useStore()
+  const [loadingSubmit, setLoadingSubmit] = useState(false)
+  const [loadingPlaceOrder, setLoadingPlaceOrder] = useState(false)
+
+  const form = useForm<LabOrderSchemaType>({
+    resolver: zodResolver(labOrderSchema),
+    reValidateMode: 'onChange',
+    defaultValues: labOrderData,
+  })
+
+  const createPayload = (
+    data: LabOrderSchemaType,
+    orderSentDateTime: string,
+  ) => ({
+    patientId: id,
+    appointmentId,
+    orderStatus: data.labOrderStatus,
+    billType: data.labBillingType,
+    labOrderNumber: data?.labOrderNumber,
+    orderingStaffName: data?.orderingStaffName,
+    labOrderDate: orderSentDateTime,
+    OrderingStaffId: data?.providerDetail?.providerStaffId,
+    labId: form.getValues('labLocationData')?.id ?? '',
+    isFasting: data.isFasting === 'yes',
+    isPscHold: data.isPSCHold === 'yes',
+    IsTest: true,
+    locationId: 0,
+    orderingLab: {
+      name: form.getValues('labLocationData')?.name ?? '',
+      locationId: form.getValues('labLocationData')?.id ?? '',
+    },
+  })
+
+  const labTestAction = async (orderId: string, isEdit: boolean) => {
+    const labQuestions = form.getValues('labQuestions')
+
+    const updatedTests = form.getValues('testLabs')?.map((item: any) => {
+      const { id, isNewTestLab, metadata, ...rest } = item
+
+      const extraParam = isEdit && !isNewTestLab ? { id } : {}
+
+      const newLabTestAnswers = item.askAtOrderEntries?.map((question: any) => {
+        const entryAnswer =
+          labQuestions[`${item.labTestCode}_${question.questionCode}`].answer
+        delete question.id
+        return {
+          ...question,
+          entryAnswer,
+        }
+      })
+
+      const existingLabTestAnswers = item?.labTestAnswers?.map(
+        (question: any) => {
+          return {
+            ...question,
+            entryAnswer:
+              labQuestions[`${item.labTestCode}_${question.questionCode}`]
+                .answer,
+          }
+        },
+      )
+
+      return {
+        ...rest,
+        ...extraParam,
+        orderId,
+        labTestAnswers: existingLabTestAnswers || newLabTestAnswers,
+      }
+    })
+
+    const result = await addTestLabsApi(updatedTests)
+    console.log(result, 'resultresultresultresultresult')
+    return result
+  }
+
+  const diagnosisAction = async (orderId: string) => {
+    const activeDiagnostics = form
+      .getValues('diagnosis')
+      .filter(
+        (item) =>
+          (item?.activeStatus === 'Active' || item?.isActive === true) &&
+          item?.newDignoses === true,
+      )
+      .map((item) => {
+        delete item.id
+        delete item.metadata
+        return {
+          ...item,
+          symptomCode: item?.code,
+          diagnosisCode: item?.code,
+          orderId,
+          recordStatus: 'Active',
+          symptomCodeDescription: item?.description,
+          DiagnosisDescription: item?.description,
+        }
+      })
+
+    if (activeDiagnostics.length > 0) {
+      const diagnosisResult = await addDiagnosis(activeDiagnostics)
+      console.log(diagnosisResult, 'diagnosisResultdiagnosisResult')
+    }
+  }
+
+  const labOrderAction = async (data: LabOrderSchemaType) => {
+    const orderId = form.getValues('labOrderId')
+    const orderSentDateTime = `${data.orderDate}T${data.orderTime}:00Z`
+    const payload = createPayload(data, orderSentDateTime)
+    if (orderId) {
+      const result = await editLabOrderApi(orderId, { ...payload, id: orderId })
+      return { ...result, isEdit: true }
+    } else {
+      const result = await addLabOrderApi(payload)
+      return { ...result, isEdit: false }
+    }
+  }
+
+  const addSpecimen = async (item: SpecimenData) => {
+    delete item.id
+    const startDate = `${item.StartDate}T${item.StartTime}:00Z`
+    const endDate = `${item.EndDate}T${item.EndTime}:00Z`
+    const volume =
+      typeof item.volume === 'string' ? parseFloat(item.volume) : item.volume
+    await addSpecimenApi({
+      ...item,
+      collectedOn: startDate,
+      collectionReceivedDateTime: endDate,
+      volume,
+      labSpecimen: item?.TestId,
+      orderId: form.getValues('labOrderId'),
+    })
+  }
+
+  const editSpecimen = async (item: SpecimenData) => {
+    const startDate = `${item.StartDate}T${item.StartTime}:00Z`
+    const endDate = `${item.EndDate}T${item.EndTime}:00Z`
+    const volume =
+      typeof item.volume === 'string' ? parseFloat(item.volume) : item.volume
+    await editSpecimenApi(appointmentId, {
+      ...item,
+      collectedOn: startDate,
+      collectionReceivedDateTime: endDate,
+      volume,
+    })
+  }
+
+  const specimenActions = async () => {
+    const specimenList = form.getValues('specimenList')
+
+    const createdSpecimens = specimenList.filter((item) => item.newSpecimen)
+    const editSpecimens = specimenList.filter(
+      (item) => !item.newSpecimen && item.id,
+    )
+
+    if (createdSpecimens.length > 0) {
+      await Promise.all(createdSpecimens.map(addSpecimen))
+    }
+
+    if (editSpecimens.length > 0) {
+      await Promise.all(editSpecimens.map(editSpecimen))
+    }
+  }
+
+  const onSaveOrder = async (
+    data: LabOrderSchemaType,
+    successMessage: string = 'Saved!',
+    placeOrderApi?: (id: string) => Promise<{}>,
+  ) => {
+    const result = await labOrderAction(data)
+    if (result.state === 'success') {
+      if (placeOrderApi) {
+        await placeOrderApi(result.data.id)
+      }
+      const specimenList = form.getValues('specimenList')
+      const labTestResult = await labTestAction(
+        result.data.id ?? '',
+        result.isEdit,
+      )
+      await diagnosisAction(result.data.id ?? '')
+      if (result.isEdit && specimenList.length > 0) {
+        await specimenActions()
+      }
+      const updatedLabOrder: any = {
+        ...result.data,
+        labTests:
+          labTestResult.state === 'success' ? [...labTestResult.data] : [],
+      }
+      updateLabOrdersList(updatedLabOrder) //local
+      toast.success(successMessage)
+    } else {
+      toast.error('Error while saving!')
+    }
+    setOpen(false)
+    setLoadingSubmit(false)
+    setLoadingPlaceOrder(false)
+  }
+
+  const onClickPlaceOrder = (e: any) => {
+    form.handleSubmit(
+      (data) => {
+        setLoadingPlaceOrder(true)
+        onSaveOrder(data, 'Order Placed!', placeLabOrderApi)
+      },
+      (error) => console.log(error),
+    )(e)
+  }
+
+  const onSubmit: SubmitHandler<LabOrderSchemaType> = async (data) => {
+    setLoadingSubmit(true)
+    onSaveOrder(data)
+  }
+
+  return { form, onSubmit, onClickPlaceOrder, loadingPlaceOrder, loadingSubmit }
+}
+
+export { useLabOrderForm }

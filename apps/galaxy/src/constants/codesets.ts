@@ -85,6 +85,12 @@ const CODESETS = {
   PaymentDateType: 'PaymentDateType',
   NoteType: 'PsychPlusPublic.NoteType',
   NoteTitle: 'PsychPlusPublic.NoteTitle',
+  LabOrderStatus: 'LabOrderStatus',
+  LabBillingType: 'LabBillingType',
+  SpecimenType: 'HL7v2.SpecimenType',
+  SpecimenRole: 'HL7v2.SpecimenRole',
+  SpecimentAdditive: 'HL7v2.SpecimentAdditive',
+  SpecimenCollectionMethod: 'HL7v2.SpecimenCollectionMethod',
 }
 export {
   CODESETS,

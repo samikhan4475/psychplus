@@ -1,5 +1,6 @@
 import { AdaptiveRowActionsCell, type RowAction } from '@/components'
 import { LabOrders } from '@/types'
+import { AddLabOrderView } from '../../add-lab-order'
 import { LabOrderRow } from '../types'
 import { RowActionAdd } from './row-action-add'
 import { RowActionSend } from './row-action-send'
@@ -7,7 +8,13 @@ import { RowActionSend } from './row-action-send'
 const rowActions: RowAction<LabOrders>[] = [
   {
     id: 'lab-orders-row-action-send',
-    render: RowActionSend,
+    render: ({ row }) => <RowActionSend orderId={row.original.id} />,
+  },
+  {
+    id: '',
+    render: ({ row }) => (
+      <AddLabOrderView isEdit={true} labOrderData={row.original} />
+    ),
   },
 ]
 

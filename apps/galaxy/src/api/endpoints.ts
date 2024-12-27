@@ -442,6 +442,41 @@ const UPDATE_LAB_ORDERS_RESULT_ENDPOINT = (
 const GET_TREATMENT_TEAM_VISITS = `${API_URL}/api/appointments/actions/search`
 const GET_CLAIM_SUBMISSION_RESPONSE = (claimId: string) =>
   `${API_URL}/api/claimssubmissions/${claimId}/responses/actions/search`
+const GET_SEARCHED_LAB_TESTS = `${API_URL}/api/labcompendiums/actions/search`
+const GET_LABS_LOCATION = `${API_URL}/api/labs/actions/search`
+const LAB_ORDER = (appointmentId: number) =>
+  `${API_URL}/api/appointments/${appointmentId}/laborders`
+const ADD_LAB_DIAGNOSIS = `${API_URL}/api/labdiagnoses/actions/updaterange`
+const ADD_LAB_TESTS = `${API_URL}/api/labtests/actions/updaterange`
+const GET_PATIENT_DIAGNOSIS = (appointmentId: string, orderId: string) =>
+  `${API_URL}/api/appointments/${appointmentId}/laborders/${orderId}/labdiagnoses/actions/search`
+const DELETE_LAB_TEST = (
+  appointmentId: number | string,
+  orderId: string,
+  testId: string,
+) =>
+  `${API_URL}/api/appointments/${appointmentId}/laborders/${orderId}/labtests/${testId}`
+const DELETE_DIAGNOSIS = (
+  appointmentId: number | string,
+  orderId: string,
+  dignosisId: number | string,
+) =>
+  `${API_URL}/api/appointments/${appointmentId}/laborders/${orderId}/labdiagnoses/${dignosisId}`
+const ADD_LAB_TEST_SPECIMEN = (testId: number | string) =>
+  `${API_URL}/api/labtests/${testId}/labspecimens`
+const GET_LAB_TEST_SPECIMEN = (
+  appointmentId: number | string,
+  orderId: string,
+) =>
+  `${API_URL}/api/appointments/${appointmentId}/laborders/${orderId}/labspecimens/actions/search`
+const EDIT_DELETE_LAB_TEST_SPECIMEN = (
+  appointmentId: number | string,
+  orderId: string,
+  specimenId: string,
+) =>
+  `${API_URL}/api/appointments/${appointmentId}/laborders/${orderId}/labspecimens/${specimenId}`
+const PLACE_LAB_ORDER = (orderId: string) =>
+  `${API_URL}/api/laborders/${orderId}/actions/submit`
 
 export {
   GET_LAB_RESULTS_ENDPOINT,
@@ -661,4 +696,16 @@ export {
   GET_NOTE_DOCUMENT_ENDPOINT,
   GET_CLAIM_SUBMISSION_RESPONSE,
   REMOVE_TO_COSIGNER_NOTE_ENDPOINT,
+  GET_SEARCHED_LAB_TESTS,
+  GET_LABS_LOCATION,
+  LAB_ORDER,
+  ADD_LAB_DIAGNOSIS,
+  ADD_LAB_TESTS,
+  GET_PATIENT_DIAGNOSIS,
+  DELETE_LAB_TEST,
+  DELETE_DIAGNOSIS,
+  ADD_LAB_TEST_SPECIMEN,
+  GET_LAB_TEST_SPECIMEN,
+  EDIT_DELETE_LAB_TEST_SPECIMEN,
+  PLACE_LAB_ORDER,
 }

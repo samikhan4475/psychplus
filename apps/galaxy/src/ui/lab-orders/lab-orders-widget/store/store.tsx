@@ -5,7 +5,7 @@ import { LabOrdersTabs } from '../constant'
 import { GetLabOrdersParams } from '../types'
 
 interface StoreState {
-  data?: LabOrders[]
+  data: LabOrders[]
   loading: boolean
   error?: string
   payload?: GetLabOrdersParams
@@ -14,6 +14,8 @@ interface StoreState {
   fetch: (payload: GetLabOrdersParams) => void
   setActiveTab: (tab: string) => void
   setLabResult: (labResult: LabResult) => void
+  updateLabOrdersList: (labOrder: LabOrders) => void
+  updateLabOrderTestList: (orderId: string, testId: string) => void
 }
 
 const useStore = create<StoreState>((set, get) => ({
@@ -69,6 +71,45 @@ const useStore = create<StoreState>((set, get) => ({
     set({
       activeTab,
       viewedTabs,
+    })
+  },
+
+  updateLabOrdersList: (labOrder) => {
+    const { data } = get()
+    const index = data?.findIndex((item) => item.id === labOrder.id) ?? 0
+
+    if (index === -1) {
+      const newData = [labOrder, ...data]
+      set({
+        data: newData,
+      })
+    } else {
+      const newData = [...data]
+      newData[index] = { ...newData[index], ...labOrder }
+      set({
+        data: newData,
+      })
+    }
+  },
+  updateLabOrderTestList: (orderId, testId) => {
+    const { data } = get()
+    const index = data.findIndex((e) => e.id === orderId)
+    const newLabTests = data[index]?.labTests.map((item) => {
+      if (item.id === testId) {
+        return {
+          ...item,
+          recordStatus: 'Deleted',
+        }
+      }
+      return item
+    })
+    const newData = [...data]
+    newData[index] = {
+      ...newData[index],
+      labTests: [...newLabTests],
+    }
+    set({
+      data: [...newData],
     })
   },
 }))

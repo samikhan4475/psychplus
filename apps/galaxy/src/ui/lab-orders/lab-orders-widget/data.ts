@@ -7,26 +7,29 @@ const transformInDefault = (
   labTestId: string,
   labResults: LabResult[],
 ): Partial<SchemaType> => {
-  const labTestData = labResults
-    .filter((labResult) => labResult.labTestId === labTestId)
-    .map((labresult) => {
-      return {
-        id: labresult.id,
-        orderId: labresult.orderId,
-        observationTime: getCalendarDate(
-          (labresult?.observationTime as string) ?? '',
-        ),
-        resultName: labresult?.resultName ?? '',
-        recordStatus: labresult?.recordStatus ?? '',
-        resultCode: labresult?.resultCode ?? '',
-        resultValue: labresult?.resultValue ?? '',
-        resultValueUnit: labresult?.resultValueUnit ?? '',
-        recomendedValue: labresult?.recomendedValue ?? '',
-        abnormalRangeCode: labresult?.abnormalRangeCode ?? '',
-        physicianComments: labresult?.physicianComments ?? '',
-        labTestId: labresult.labTestId,
-      }
-    })
+  const labTestData =
+    labResults && labResults?.length > 0
+      ? labResults
+          .filter((labResult) => labResult.labTestId === labTestId)
+          .map((labresult) => {
+            return {
+              id: labresult.id,
+              orderId: labresult.orderId,
+              observationTime: getCalendarDate(
+                (labresult?.observationTime as string) ?? '',
+              ),
+              resultName: labresult?.resultName ?? '',
+              recordStatus: labresult?.recordStatus ?? '',
+              resultCode: labresult?.resultCode ?? '',
+              resultValue: labresult?.resultValue ?? '',
+              resultValueUnit: labresult?.resultValueUnit ?? '',
+              recomendedValue: labresult?.recomendedValue ?? '',
+              abnormalRangeCode: labresult?.abnormalRangeCode ?? '',
+              physicianComments: labresult?.physicianComments ?? '',
+              labTestId: labresult.labTestId,
+            }
+          })
+      : []
 
   return {
     labResults: labTestData,
