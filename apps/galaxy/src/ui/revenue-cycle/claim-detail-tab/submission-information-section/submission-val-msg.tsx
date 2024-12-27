@@ -11,7 +11,7 @@ const SubmissionValidationMessage = () => {
       <FormFieldLabel>System Validation Message</FormFieldLabel>
       <TextField.Root
         size="1"
-        {...form.register('submittedDate')}
+        {...form.register('systemValidationMessage')}
         disabled={true}
       />
     </FormFieldContainer>

@@ -293,10 +293,12 @@ interface ClaimUpdate {
   isMarkAsSubmitted: boolean
   isSubmitted: boolean
   submittedDate?: DateValue | string
+  submissionBatchId?: string
+  systemValidationMessage?: string
+  rejectionReason?: string
   isHoldStatement: boolean
   isResubmitted: boolean
   isForcePaper: boolean
-  rejectionReason?: string
   isSelfPay: boolean
   isDraft: boolean
   isHold: boolean
@@ -430,10 +432,12 @@ interface ClaimUpdateApiResponse {
   isMarkAsSubmitted: boolean
   isSubmitted: boolean
   submittedDate?: string
+  submissionBatchId?: string
+  systemValidationMessage?: string
+  rejectionReason?: string
   isHoldStatement: boolean
   isResubmitted: boolean
   isForcePaper: boolean
-  rejectionReason?: string
   isSelfPay: boolean
   isDraft: boolean
   isHold: boolean

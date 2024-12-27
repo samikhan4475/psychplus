@@ -37,7 +37,7 @@ const PatientClaimDetails = () => {
   const accountNumber = watch('patientAccountNumber')
   const claimStatusCode = watch('claimStatusCode')
   const billedAmt = watch('totalAmount') ?? 0.0
-
+  const amountDue= form.getValues("amountDue")
   const claimServiceLines = useWatch({
     control: form.control,
     name: 'claimServiceLines',
@@ -68,7 +68,7 @@ const PatientClaimDetails = () => {
         <LabelAndValue label="Last Modified By" value="NA" />
         <LabelAndValue label="Primary Paid" value="$ 0.00" />
         <LabelAndValue label="Patient Paid" value="$ 0.00" />
-        <LabelAndValue label="Balance" value="$ 0.00" />
+        <LabelAndValue label="Balance" value={amountDue?.toFixed(2)} />
         <LabelAndValue label="Claim Status" value={claimStatusCode} />
       </Grid>
     </Flex>

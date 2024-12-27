@@ -11,7 +11,7 @@ const SubmissionBatch = () => {
       <FormFieldLabel>Submission Batch #</FormFieldLabel>
       <TextField.Root
         size="1"
-        {...form.register('submittedDate')}
+        {...form.register('submissionBatchId')}
         disabled={true}
       />
     </FormFieldContainer>
