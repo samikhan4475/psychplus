@@ -4,4 +4,9 @@ interface ClinicalStaffList {
   status: string
 }
 
-export type { ClinicalStaffList }
+interface AdminList {
+  admin: string
+  addedOn: string
+  status: string
+}
+export type { ClinicalStaffList, AdminList }

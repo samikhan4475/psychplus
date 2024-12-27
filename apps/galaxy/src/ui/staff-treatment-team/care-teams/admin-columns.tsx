@@ -1,17 +1,16 @@
 import { ColumnDef } from '@tanstack/react-table'
 import { format } from 'date-fns'
 import { ColumnHeader, TextCell } from '@/components'
+import { AdminStatusCell } from './cells/admin-status-cell'
 import { StatusCell } from './cells/status-cell'
-import { ClinicalStaffList } from './types'
+import { AdminList } from './types'
 
-const columns: ColumnDef<ClinicalStaffList>[] = [
+const columns: ColumnDef<AdminList>[] = [
   {
-    id: 'clinical-staff',
+    id: 'admin',
     size: 200,
-    header: () => (
-      <ColumnHeader clientSideSort label="Clinical Support Staff" />
-    ),
-    cell: ({ row }) => <TextCell>{row.original.clinicalStaff}</TextCell>,
+    header: () => <ColumnHeader clientSideSort label="Admin Name" />,
+    cell: ({ row }) => <TextCell>{row.original.admin}</TextCell>,
   },
   {
     id: 'added-on',
@@ -25,7 +24,7 @@ const columns: ColumnDef<ClinicalStaffList>[] = [
   {
     id: 'status',
     header: () => <ColumnHeader clientSideSort label="Status" />,
-    cell: ({ row }) => <StatusCell row={row} />,
+    cell: ({ row }) => <AdminStatusCell row={row} />,
   },
 ]
 

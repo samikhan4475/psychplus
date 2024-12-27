@@ -2,22 +2,22 @@
 
 import { ScrollArea } from '@radix-ui/themes'
 import { DataTable, LoadingPlaceholder } from '@/components'
-import { ClinicalStaffHeader } from './clinical-staff-header'
-import { columns } from './clinical-support-staff-column'
+import { columns } from './admin-columns'
+import { AdminHeader } from './admin-header'
 import { useStore } from './store'
 
-const ClinicalSupportStaffTable = () => {
-  const { clinicalStaffData, loadingClinicalstaff } = useStore()
+const AdminTable = () => {
+  const { adminData, loadingadmin } = useStore()
 
   return (
     <ScrollArea className="bg-white min-h-[150px] max-w-[calc(100vw_-_198px)] p-2">
-      <ClinicalStaffHeader />
-      {loadingClinicalstaff ? (
+      <AdminHeader />
+      {loadingadmin ? (
         <LoadingPlaceholder className="bg-white min-h-[46vh]" />
       ) : (
         <DataTable
           columns={columns}
-          data={clinicalStaffData}
+          data={adminData}
           tdClass="!p-0"
           isRowSpan
           sticky
@@ -29,4 +29,4 @@ const ClinicalSupportStaffTable = () => {
   )
 }
 
-export { ClinicalSupportStaffTable }
+export { AdminTable }
