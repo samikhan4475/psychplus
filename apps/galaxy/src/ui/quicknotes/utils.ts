@@ -60,6 +60,7 @@ import { HospitalInitialView } from './actual-note-view/hospital-initial'
 import { TcmView } from './actual-note-view/tcm'
 import { QuickNoteSectionName } from './constants'
 import { WidgetType } from './types'
+import { UploadedDocumentsWidget } from '../uploaded-documents/uploaded-documents-widget'
 
 enum ProviderType {
   Psychiatry = 'Psychiatrist',
@@ -186,6 +187,10 @@ const widgets: Array<WidgetType> = [
     id: QuickNoteSectionName.QuicknoteSectionPsychiatryAssessmentPlan,
     actualNoteComponent: PsychiatryAssessmentPlanView,
     providerTypes: [ProviderType.Psychiatry],
+  },
+  {
+    component: UploadedDocumentsWidget,
+    id: QuickNoteSectionName.QuicknoteSectionUploadedDocuments,
   },
   {
     component: FamilyInternalMedicineAssessmentPlanWidget,

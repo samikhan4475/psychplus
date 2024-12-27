@@ -48,6 +48,7 @@ enum QuickNoteSectionName {
   QuicknoteSectionWorkingDischargeDiagnosis = 'QuicknoteSectionWorkingDischargeDiagnosis',
   QuicknoteSectionTcm = 'QuicknoteSectionTcm',
   QuicknoteSectionCreateNote = 'CreateNote',
+  QuicknoteSectionUploadedDocuments = 'QuicknoteSectionUploadedDocuments',
 }
 
 const questionnairesAddToNotesSection = [
