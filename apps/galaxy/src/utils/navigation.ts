@@ -199,7 +199,7 @@ const getManagementNavLinks = (type: string | null, id: string | null) => {
       },
       {
         label: 'Settings',
-        href: `${practiceBase}/settings`,
+        href: `${practiceBase}/practice-settings`,
       },
       {
         label: 'Staff',
