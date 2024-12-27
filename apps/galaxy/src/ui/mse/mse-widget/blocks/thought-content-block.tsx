@@ -17,7 +17,7 @@ const DELUSION_OPTIONS = [
   { label: 'Mixed', value: 'sdMixed' },
   { label: 'Nihilistic', value: 'sdNihilistic' },
   { label: 'Thought broadcasting', value: 'sdThoughtBroadcasting' },
-  { label: 'Thought Insertion', value: 'sdThughtInsertion' },
+  { label: 'Thought Insertion', value: 'sdThoughtInsertion' },
   { label: 'Guilt', value: 'sdGuilt' },
   { label: 'Persecution', value: 'sdPersecution' },
   { label: 'Unspecified', value: 'sdUnspecified' },

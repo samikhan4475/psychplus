@@ -54,6 +54,7 @@ const WidgetContainer = ({
   useEffect(() => {
     if (toggleableChecked !== undefined) {
       form?.reset({
+        ...form.getValues(),
         WidgetContainerCheckboxField: toggleableChecked ? 'show' : 'hide',
       })
     }

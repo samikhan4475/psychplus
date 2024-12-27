@@ -33,6 +33,7 @@ const Details = ({
     schizophreniaHallucinationsValues: 'Thought Content Hallucinations',
     tcsiYesNo: 'Thought Content Si',
     tchiYesNo: 'Thought Content Hi',
+    thoughtContentOther: 'Thought Content',
     tcDelusionsYesNo: 'Thought Content Delusions',
     tcHallucinationsYesNo: 'Thought Content Hallucinations',
     mmRecentIntactYesNo: 'Memory Recent Intact',

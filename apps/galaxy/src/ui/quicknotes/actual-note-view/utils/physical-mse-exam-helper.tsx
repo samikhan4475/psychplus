@@ -59,7 +59,7 @@ const renderDataWithOther = (
     }
 
     if (value === 'siUnDisclosed' || value === 'hiUnDisclosed') {
-      otherDetail = `Other: ${otherDetailText}`
+      otherDetail = `${otherDetailText}`
     }
   })
 

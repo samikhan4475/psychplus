@@ -154,7 +154,7 @@ const valueToSchemaPe: { [key: string]: string } = {
   SD_Nihilistic: 'sdNihilistic',
   SD_ThoughtBroadcasting: 'sdThoughtBroadcasting',
   SD_Guilt: 'sdGuilt',
-  SD_ThoughtInsertion: 'sdThughtInsertion',
+  SD_ThoughtInsertion: 'sdThoughtInsertion',
   SD_Persecution: 'sdPersecution',
   SD_Unspecified: 'sdUnspecified',
   SD_Infidelity: 'sdInfidelity',

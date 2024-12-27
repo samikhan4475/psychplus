@@ -100,11 +100,11 @@ interface InsurancePayment {
   checkNumber: string
   checkDate: string
   receivedDate: string
-  postedAmount: number
   depositDate: string
   patientId: number
   payerId: string
   unPostedAmount: number
+  postedAmount: number
   receiverId: string
   creditCardId: string
   creditCardTransactionId: string
