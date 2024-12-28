@@ -12,7 +12,7 @@ const transformInDefault = (
     []
   const claimServiceLinePayments = serviceLines?.map((serviceLine) => ({
     ...serviceLine,
-    chargeId: serviceLine.claimServiceLineId ?? serviceLine.id ?? '',
+    chargeId: serviceLine.chargeId ?? '',
     claimPaymentId: paymentPostingClaim.claimId ? paymentPostingClaim.id : '',
     dateOfServiceFrom: serviceLine.dateOfServiceFrom ?? '',
     dateOfServiceTo: serviceLine.dateOfServiceTo ?? '',

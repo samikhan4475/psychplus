@@ -45,6 +45,7 @@ interface ClaimServiceLine {
   isDoNotBill: boolean
   statusCode?: string
   isAnesthesia: boolean
+  chargeId?: string
 }
 
 interface ClaimDiagnosis {

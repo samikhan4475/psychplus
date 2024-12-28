@@ -1,7 +1,9 @@
+import { useState } from 'react'
 import { Pencil1Icon } from '@radix-ui/react-icons'
 import { Flex, IconButton } from '@radix-ui/themes'
 import { Row } from '@tanstack/react-table'
 import toast from 'react-hot-toast'
+import { DeleteConfirmDialog } from '@/components'
 import { DeleteIcon } from '@/components/icons'
 import { PayerPlanResponse } from '@/types'
 import { deletePayerPlanRecord } from '../../actions'
@@ -13,6 +15,8 @@ interface ActionsCellProps {
 }
 
 const ActionsCell = ({ row }: ActionsCellProps) => {
+  const [open, setOpen] = useState(false)
+  const [loading, setLoading] = useState(false)
   const { setActiveTab, setSelectedPayerPlan } = useStore((state) => ({
     setActiveTab: state.setActiveTab,
     setSelectedPayerPlan: state.setSelectedPayerPlan,
@@ -27,15 +31,25 @@ const ActionsCell = ({ row }: ActionsCellProps) => {
     setSelectedPayerPlan(row.original.id)
   }
 
-  const handleDeletePayerPlan = async () => {
-    const { id, payerId } = row.original
-    const result = await deletePayerPlanRecord(payerId, id)
-    if (result.state === 'error') {
-      toast.error(result.error ?? 'Failed to delete Payer Plan')
-    } else if (result.state === 'success') {
-      toast.success('Payer Plan deleted successfully')
-      search(payload, page)
+  const deleteRecord = async () => {
+    if (row.original.payerId) {
+      setLoading(true)
+      const result = await deletePayerPlanRecord(
+        row.original.payerId,
+        row.original.id,
+      )
+      if (result.state === 'error') {
+        toast.error(result.error ?? 'Failed to delete the record')
+      } else if (result.state === 'success') {
+        toast.success('The record has been deleted successfully')
+        search(payload, page)
+      }
+      setLoading(false)
     }
+  }
+
+  const toggleOpen = (open: boolean) => {
+    setOpen(open)
   }
 
   return (
@@ -43,13 +57,17 @@ const ActionsCell = ({ row }: ActionsCellProps) => {
       <IconButton variant="ghost" onClick={handlePayerPlanEdit}>
         <Pencil1Icon width={16} height={16} className="text-pp-gray-1" />
       </IconButton>
-      <IconButton
-        variant="ghost"
-        className="text-pp-gray-1"
-        onClick={handleDeletePayerPlan}
+      <DeleteConfirmDialog
+        isOpen={open}
+        toggleOpen={toggleOpen}
+        onDelete={deleteRecord}
+        loading={loading}
+        title="payer record"
       >
-        <DeleteIcon height={18} />
-      </IconButton>
+        <IconButton variant="ghost" className="text-pp-gray-1">
+          <DeleteIcon height={18} />
+        </IconButton>
+      </DeleteConfirmDialog>
     </Flex>
   )
 }

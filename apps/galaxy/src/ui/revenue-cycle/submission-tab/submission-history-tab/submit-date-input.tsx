@@ -11,7 +11,7 @@ const SubmitDateInput = () => {
     <FormFieldContainer className="w-auto flex-row items-center gap-1">
       <FormFieldLabel>Submit Date</FormFieldLabel>
       <I18nProvider locale="en-US">
-        <DatePickerInput className="w-[102px]" field="submitDate" />
+        <DatePickerInput className="w-[102px]" field="submittedDate" />
       </I18nProvider>
     </FormFieldContainer>
   )

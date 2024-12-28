@@ -35,7 +35,10 @@ const PatientStatementsListFilterForm = () => {
   })
 
   const onSubmit: SubmitHandler<SchemaType> = (data) => {
-    const sanitizedData = sanitizeFormData(data) as PatientStatementPayload
+    const sanitizedData = sanitizeFormData({
+      ...data,
+      patientIds: data.patientId ? [data.patientId] : undefined,
+    }) as PatientStatementPayload
     return search(sanitizedData)
   }
 

@@ -210,7 +210,7 @@ interface PatientStatementPayload {
   patientFirstName?: string
   patientLastName?: string
   accountNumber?: string
-  isGroupByPatient?: boolean
+  isGroupedByPatient?: boolean
 }
 
 interface PatientStatementsListResponse {

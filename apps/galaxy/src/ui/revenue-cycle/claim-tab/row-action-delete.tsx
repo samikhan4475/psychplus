@@ -1,32 +1,49 @@
 'use client'
 
+import { useState } from 'react'
 import { TrashIcon } from '@radix-ui/react-icons'
 import { IconButton } from '@radix-ui/themes'
 import toast from 'react-hot-toast'
-import { type PropsWithRow } from '@/components'
+import { DeleteConfirmDialog, type PropsWithRow } from '@/components'
 import type { Claim } from '@/types'
 import { deleteClaim } from '../actions'
 import { useStore } from './store'
 
 const RowActionDelete = ({ row: { original: claim } }: PropsWithRow<Claim>) => {
   const claimsListSearch = useStore((state) => state.claimsListSearch)
+  const [open, setOpen] = useState(false)
+  const [loading, setLoading] = useState(false)
 
   const deleteRecord = async () => {
     if (claim.id) {
+      setLoading(true)
       const result = await deleteClaim(claim.id)
       if (result.state === 'error') {
-        toast.error(result.error ?? 'Failed to delete claim')
+        toast.error(result.error ?? 'Failed to delete the record')
       } else if (result.state === 'success') {
-        toast.success('Claim deleted successfully')
+        toast.success('The record has been deleted successfully')
         claimsListSearch({})
       }
+      setLoading(false)
     }
   }
 
+  const toggleOpen = (open: boolean) => {
+    setOpen(open)
+  }
+
   return (
-    <IconButton onClick={deleteRecord} size="1" color="gray" variant="ghost">
-      <TrashIcon width={16} height={16} className="text-pp-gray-1" />
-    </IconButton>
+    <DeleteConfirmDialog
+      isOpen={open}
+      toggleOpen={toggleOpen}
+      onDelete={deleteRecord}
+      loading={loading}
+      title="claim"
+    >
+      <IconButton size="1" color="gray" variant="ghost">
+        <TrashIcon width={16} height={16} className="text-pp-gray-1" />
+      </IconButton>
+    </DeleteConfirmDialog>
   )
 }
 

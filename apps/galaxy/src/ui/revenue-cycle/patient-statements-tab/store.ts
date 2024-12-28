@@ -55,6 +55,7 @@ const useStore = create<Store>((set, get) => ({
       return set({
         error: result.error,
         loading: false,
+        data: undefined,
       })
     }
     set({

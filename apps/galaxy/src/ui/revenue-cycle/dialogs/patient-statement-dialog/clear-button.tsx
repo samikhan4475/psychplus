@@ -15,7 +15,7 @@ const ClearButton = ({ patientId }: { patientId: number }) => {
     e.preventDefault()
     form.reset()
     return search(patientId, {
-      isGroupByPatient: false,
+      isGroupedByPatient: false,
       patientId: [patientId],
     })
   }

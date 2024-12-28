@@ -5,6 +5,7 @@ import { ColumnDef } from '@tanstack/react-table'
 import { ColumnHeader, DataTable, DateCell, TextCell } from '@/components'
 import { formatDate } from '@/utils'
 import { ClaimPayment, InsurancePayment } from '../types'
+import { addSpaceToCamelCase } from '../utils'
 import { ActionsCell } from './actions-cell'
 import { InsurancePaymentTableTabs } from './insurance-payment-table-tabs'
 import { PaymentDetailHeader } from './payment-detail-header'
@@ -41,7 +42,9 @@ const columns: ColumnDef<ClaimPayment>[] = [
     header: ({ column }) => (
       <ColumnHeader column={column} label="Claim Status" />
     ),
-    cell: ({ row }) => <TextCell>{row.original.claimStatusCode}</TextCell>,
+    cell: ({ row }) => (
+      <TextCell>{addSpaceToCamelCase(row.original.claimStatusCode)}</TextCell>
+    ),
   },
   {
     id: 'patientName',
@@ -54,7 +57,9 @@ const columns: ColumnDef<ClaimPayment>[] = [
     id: 'processedAsCode',
     header: ({ column }) => <ColumnHeader column={column} label="Process As" />,
     cell: ({ row }) => (
-      <TextCell className="min-w-fit">{row.original.processedAsCode}</TextCell>
+      <TextCell className="min-w-fit">
+        {addSpaceToCamelCase(row.original.processedAsCode)}
+      </TextCell>
     ),
   },
   {
@@ -169,14 +174,12 @@ const PaymentCheckTable = ({ paymentDetail }: PaymentCheckHeaderProps) => {
             paymentListType={paymentListType}
             setPaymentListType={setPaymentListType}
           />
-          <ScrollArea>
-            <DataTable
-              data={claimPayments ?? []}
-              columns={columns}
-              disablePagination
-              sticky
-            />
-          </ScrollArea>
+          <DataTable
+            data={claimPayments ?? []}
+            columns={columns}
+            disablePagination
+            tableClass="[&_.rt-ScrollAreaRoot]:pb-2 max-w-[calc(100vw-23px)]"
+          />
         </Accordion.AccordionContent>
       </Accordion.Item>
     </Accordion.Root>

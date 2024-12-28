@@ -25,7 +25,7 @@ const defaultPayLoad = {
   isIncludeMetadataResourceStatus: true,
   claimStatusCodes: [patientStatementSlaimStatusCodes.BILLED_TO_PATIENT],
   recordStatuses: [patientStatementRecordStatuses.ACTIVE],
-  isGroupByPatient: true,
+  isGroupedByPatient: true,
   includeServiceLinePayment: true,
 }
 
@@ -54,7 +54,7 @@ const getPatientStatementsListAction = async ({
     ...payload,
   }
 
-  if (!reqPayload.isGroupByPatient) {
+  if (!reqPayload.isGroupedByPatient) {
     url = new URL(api.GET_PATIENT_STATEMENTS_LIST_ENDPOINT)
   }
 

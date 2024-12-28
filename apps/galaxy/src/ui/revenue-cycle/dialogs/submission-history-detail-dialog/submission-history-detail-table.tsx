@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Flex, ScrollArea } from '@radix-ui/themes'
+import { ScrollArea } from '@radix-ui/themes'
 import { ColumnDef } from '@tanstack/react-table'
 import toast from 'react-hot-toast'
 import {
@@ -10,10 +10,9 @@ import {
   TextCell,
 } from '@/components'
 import { Sort } from '@/types'
-import { formatDate, getNewSortDir, getSortDir } from '@/utils'
+import { formatCurrency, formatDate, getNewSortDir, getSortDir } from '@/utils'
 import { getSubmissionHistoryDetail } from '../../actions/get-submission-history-detail'
 import { ClaimSubmissionHistoryDetail } from '../../submission-tab/submission-history-tab/types'
-import { DueAmountCell } from './due-amount-cell'
 
 const columns = (
   sort?: Sort,
@@ -69,7 +68,7 @@ const columns = (
     ),
     cell: ({ row }) => (
       <DateTimeCell>
-        {formatDate(row.original.dateOfServiceFrom, 'MM-dd-yyyy') || '-'}
+        {formatDate(row.original.dateOfServiceFrom, 'MM/dd/yyyy') || '/'}
       </DateTimeCell>
     ),
   },
@@ -89,7 +88,7 @@ const columns = (
     ),
     cell: ({ row }) => (
       <DateTimeCell>
-        {formatDate(row.original.metadata.createdOn, 'MM-dd-yyyy')}
+        {formatDate(row.original.metadata.createdOn, 'MM/dd/yyyy')}
       </DateTimeCell>
     ),
   },
@@ -107,11 +106,7 @@ const columns = (
         label="Due Amount"
       />
     ),
-    cell: ({ row }) => (
-      <DueAmountCell>
-        {`$${row.original.amount !== undefined ? row.original.amount : 0}`}
-      </DueAmountCell>
-    ),
+    cell: ({ row }) => formatCurrency(row.original.amount),
   },
   {
     id: 'status',
