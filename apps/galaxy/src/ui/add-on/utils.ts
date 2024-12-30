@@ -9,7 +9,9 @@ import {
 } from './add-on-widget/blocks'
 
 interface Block {
-  component: React.ComponentType<{ isChecked?: boolean }>
+  component: React.ComponentType<{
+    isChecked?: boolean
+  }>
   id: string
 }
 

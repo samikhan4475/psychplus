@@ -16,7 +16,9 @@ interface AddOnWidgetProps {
 }
 
 interface Block {
-  component: React.ComponentType<{ isChecked?: boolean }>
+  component: React.ComponentType<{
+    isChecked?: boolean
+  }>
   id: string
   isChecked?: boolean
 }

@@ -1,5 +1,10 @@
 import { DateValue } from 'react-aria-components'
-import { CodesWidgetItem, CptCodeKeys, QuickNoteSectionItem } from '@/types'
+import {
+  Appointment,
+  CodesWidgetItem,
+  CptCodeKeys,
+  QuickNoteSectionItem,
+} from '@/types'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { sanitizeFormData } from '@/utils'
 import { manageCodes } from '@/utils/codes'
@@ -59,7 +64,19 @@ const THERAPY_PSYCHOANALYSIS_TABLE_DATA = [
   'psychoanalyticTechnique',
 ]
 
-const transformIn = (value: QuickNoteSectionItem[]): AddOnWidgetSchemaType => {
+const transformIn = (
+  value: QuickNoteSectionItem[],
+  appointmentData?: Appointment[],
+  visitType?: string,
+): AddOnWidgetSchemaType => {
+  const therapy = visitType
+    ? ['Outpatient', 'EdVisit', 'TransitionalCare'].includes(visitType)
+    : false
+  let therapyPsychoanalysis = ''
+  if (therapy && appointmentData) {
+    therapyPsychoanalysis =
+      appointmentData.length >= 2 ? 'psychoanalysis' : 'therapy'
+  }
   const result: Record<
     string,
     string | undefined | boolean | ModalityTransferenceData[] | DateValue
@@ -71,8 +88,8 @@ const transformIn = (value: QuickNoteSectionItem[]): AddOnWidgetSchemaType => {
     manufacturer: '',
     lotNumber: '',
     expirationDate: '',
-    therapy: false,
-    therapyPsychoanalysis: 'therapy',
+    therapy,
+    therapyPsychoanalysis,
     therapyTimeSpent: undefined,
     timeRangeOne: undefined,
     timeRangeTwo: undefined,

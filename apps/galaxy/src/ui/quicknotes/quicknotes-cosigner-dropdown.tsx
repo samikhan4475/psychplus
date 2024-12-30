@@ -34,6 +34,7 @@ const QuickNotesCosignerDropdown = ({
         size="1"
         onValueChange={(value) => setSignOptions({ coSignedByUserId: value })}
         value={signOptions.coSignedByUserId}
+        defaultValue={String(cosigners[0]?.id)}
       >
         <Tooltip content={getLabel(signOptions.coSignedByUserId)}>
           <Select.Trigger className="max-w-[150px]" placeholder="Cosigners" />

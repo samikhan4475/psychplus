@@ -162,19 +162,6 @@ const AssessmentPlanView = ({
         <Flex className="flex-1 border-b border-gray-5" />
       </Flex>
       {renderTab}
-
-      {/*TODO: Commenting out the last two tabs */}
-      {/*
-      <TabsContent value={AssessmentPlanTabs.AOAP}>
-        <AddOnView
-          patientId={patientId}
-          addOnAssessementPlanData={addOnAssessementPlanData}
-        />
-      </TabsContent>
-      <TabsContent value={AssessmentPlanTabs.TCM}>
-        <TcmWidget patientId={patientId} tcmData={tcmData} isTcmTab={true} />
-      </TabsContent>
-      */}
     </Tabs.Root>
   )
 }

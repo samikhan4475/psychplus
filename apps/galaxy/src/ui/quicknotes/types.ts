@@ -5,7 +5,9 @@ type WidgetType = {
   component?: React.ComponentType<{
     patientId: string
     appointmentId?: string
-    appointment: Appointment
+    appointment?: Appointment
+    visitType: string
+    visitSequence: string
   }>
   actualNoteComponent?: React.ComponentType<{
     patientId: string

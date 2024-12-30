@@ -48,6 +48,8 @@ const QuickNotesView = async ({
                   patientId={patientId}
                   appointmentId={appointmentId}
                   appointment={appointment.data}
+                  visitType={visitType}
+                  visitSequence={visitSequence}
                 />
               )
             })}

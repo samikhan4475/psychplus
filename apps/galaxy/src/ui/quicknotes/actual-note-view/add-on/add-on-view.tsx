@@ -7,6 +7,7 @@ import { Details } from './details'
 
 type AddOnProps = {
   patientId: string
+  visitType: string
 }
 
 const AddOnView = async ({ patientId }: AddOnProps) => {
@@ -18,7 +19,9 @@ const AddOnView = async ({ patientId }: AddOnProps) => {
     return <Text>{response.error}</Text>
   }
 
-  const data = transformIn(response.state === 'success' ? response.data : [])
+  const addOnSections = response.data ?? []
+
+  const data = transformIn(addOnSections)
 
   return (
     <ActualNoteDetailsWrapper sectionName={QuickNoteSectionName.Addon}>
