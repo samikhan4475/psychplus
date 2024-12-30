@@ -1,8 +1,15 @@
 import React from 'react'
-import { Box } from '@radix-ui/themes'
+import { Flex } from '@radix-ui/themes'
+import AllergiesView from './allergies/AllergiesView'
+import MedicationView from './medication/MedicationView'
 
 const AllergiesAndMedications = () => {
-  return <Box>pre-checkin-assessment-allergies-medications</Box>
+  return (
+    <Flex direction={'column'} gap={'5'}>
+      <AllergiesView />
+      <MedicationView />
+    </Flex>
+  )
 }
 
 export { AllergiesAndMedications }
