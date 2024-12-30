@@ -8,7 +8,10 @@ const substanceCptCodes: CodesWidgetItem[] = [
 ]
 
 const cptCodeMap = {
-  smokingCessationDiscussionDuration: { '≥ 3 mins': '99406', '≥ 11 mins': '99407' },
+  smokingCessationDiscussionDuration: {
+    '≥ 3 mins': '99406',
+    '≥ 11 mins': '99407',
+  },
   alcoholSubstanceCessationDiscussionDuration: {
     '≥ 15 mins': '99408',
     '≥ 31 mins': '99409',
@@ -46,6 +49,7 @@ const getInitialValues = () => ({
   inhalantsDetails: undefined,
   questionnaire: undefined,
   briefIntervention: undefined,
+  briefInterventionDetail: undefined,
   referralTreatment: undefined,
   alcoholSubstanceCessationDiscussionDuration: undefined,
   otherAlcoholDrugs: undefined,

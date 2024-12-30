@@ -4,28 +4,66 @@ type FamilyPsychHxWidgetSchemaType = z.infer<typeof familyPsychHxWidgetSchema>
 
 const booleanOptional = z.boolean().optional()
 const stringOptional = z.string().optional()
-const stringArrayOptional = z.array(z.string()).optional()
-const familyPsychHxWidgetSchema = z.object({
-  widgetContainerCheckboxField: z.string().optional(),
-  depression: booleanOptional,
-  depressionRelation: stringArrayOptional,
-  anxiety: booleanOptional,
-  anxietyRelation: stringArrayOptional,
-  completedSuicide: booleanOptional,
-  completedSuicideRelation: stringArrayOptional,
+const stringArray = z.array(z.string()).optional()
 
-  schizophrenia: booleanOptional,
-  schizophreniaRelation: stringArrayOptional,
+const familyPsychHxWidgetSchema = z
+  .object({
+    widgetContainerCheckboxField: z.string().optional(),
+    depression: booleanOptional,
+    depressionRelation: stringArray,
+    anxiety: booleanOptional,
+    anxietyRelation: stringArray,
+    completedSuicide: booleanOptional,
+    completedSuicideRelation: stringArray,
+    schizophrenia: booleanOptional,
+    schizophreniaRelation: stringArray,
+    ocd: booleanOptional,
+    ocdRelation: stringArray,
+    bipolarDisorder: booleanOptional,
+    bipolarDisorderRelation: stringArray,
+    alcoholUseDisorder: booleanOptional,
+    alcoholUseDisorderRelation: stringArray,
+    dementia: booleanOptional,
+    dementiaRelation: stringArray,
+    other: stringOptional,
+  })
+  .superRefine((data, ctx) => {
+    const issues = [
+      { condition: 'depression', relationField: 'depressionRelation' },
+      { condition: 'anxiety', relationField: 'anxietyRelation' },
+      {
+        condition: 'completedSuicide',
+        relationField: 'completedSuicideRelation',
+      },
+      { condition: 'schizophrenia', relationField: 'schizophreniaRelation' },
+      { condition: 'ocd', relationField: 'ocdRelation' },
+      {
+        condition: 'bipolarDisorder',
+        relationField: 'bipolarDisorderRelation',
+      },
+      {
+        condition: 'alcoholUseDisorder',
+        relationField: 'alcoholUseDisorderRelation',
+      },
+      { condition: 'dementia', relationField: 'dementiaRelation' },
+    ]
 
-  ocd: booleanOptional,
-  ocdRelation: stringArrayOptional,
-  bipolarDisorder: booleanOptional,
-  bipolarDisorderRelation: stringArrayOptional,
-  alcoholUseDisorder: booleanOptional,
-  alcoholUseDisorderRelation: stringArrayOptional,
-  dementia: booleanOptional,
-  dementiaRelation: stringArrayOptional,
-  other: stringOptional,
-})
+    issues.forEach(({ condition, relationField }) => {
+      const conditionValue = data[condition as keyof typeof data]
+      const relationValue = data[relationField as keyof typeof data]
+
+      if (
+        conditionValue &&
+        Array.isArray(relationValue) &&
+        relationValue?.length === 0
+      ) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: [relationField],
+          message: 'Required',
+        })
+      }
+    })
+  })
 
 export { familyPsychHxWidgetSchema, type FamilyPsychHxWidgetSchemaType }

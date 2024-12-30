@@ -50,10 +50,10 @@ const MSU_OPTIONS: GroupSelectOption<string>[] = [
   },
   {
     label: 'Other',
-    value: 'gnOther',
+    value: 'msuOther',
     details: {
       type: 'text',
-      field: 'gnOtherDetails',
+      field: 'msuOtherDetails',
       maxLength: 30,
     },
   },

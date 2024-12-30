@@ -150,6 +150,13 @@ const transformOut =
     )
 
     const diagnosisSections = await getDiagnosisSections(schema, patientId)
+    if (!result.length) {
+      result.push({
+        ...QuickNotesPayload,
+        sectionItem: 'empty',
+        sectionItemValue: 'true',
+      })
+    }
     return [...result, ...codesResult, ...diagnosisSections]
   }
 

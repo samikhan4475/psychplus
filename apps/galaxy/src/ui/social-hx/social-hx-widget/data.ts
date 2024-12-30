@@ -19,6 +19,15 @@ const transformOut =
       })
     })
 
+    if (!result.length) {
+      result.push({
+        pid: Number(patientId),
+        sectionName: QuickNoteSectionName.QuickNoteSectionSocialHx,
+        sectionItem: 'empty',
+        sectionItemValue: 'true',
+      })
+    }
+
     return result
   }
 

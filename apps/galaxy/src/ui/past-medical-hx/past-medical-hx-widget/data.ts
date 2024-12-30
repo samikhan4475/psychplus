@@ -106,6 +106,15 @@ const transformOut =
           break
       }
     })
+
+    if (!result.length) {
+      result.push({
+        ...QuickNotesPayload,
+        sectionItem: 'empty',
+        sectionItemValue: 'true',
+      })
+    }
+
     return result
   }
 

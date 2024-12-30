@@ -22,6 +22,7 @@ import { SocialHxWidgetSchemaType } from '@/ui/social-hx/social-hx-widget/social
 import { transformIn as transformSubstanceUseHx } from '@/ui/substance-use-hx/substance-use-hx-widget/data'
 import { SubstanceUseHxWidgetSchemaType } from '@/ui/substance-use-hx/substance-use-hx-widget/substance-use-hx-schema'
 import { SubstanceUseHxWidget } from '@/ui/substance-use-hx/substance-use-hx-widget/substance-use-widget'
+import { QuickNoteSectionName } from '../quicknotes/constants'
 import { getHistoryAction } from './actions'
 import { HistoryTabs } from './constant'
 
@@ -53,11 +54,29 @@ const HistoryView = () => {
         return
       }
 
-      const pastPsychHxData = transformPastPsychHx(response.data)
-      const familyPsychHxData = transformFamilyPsychHx(response.data)
-      const medicalPsychHxData = transformPastMedicalHx(response.data)
-      const socialHxData = transformSocialHx(response.data)
-      const substanceUseHxData = transformSubstanceUseHx(response.data)
+      const groupedData = response.data.reduce((acc, item) => {
+        if (!acc[item.sectionName]) {
+          acc[item.sectionName] = []
+        }
+        acc[item.sectionName].push(item)
+        return acc
+      }, {} as Record<string, QuickNoteSectionItem[]>)
+
+      const pastPsychHxData = transformPastPsychHx(
+        groupedData[QuickNoteSectionName.QuickNoteSectionPastPsychHx],
+      )
+      const familyPsychHxData = transformFamilyPsychHx(
+        groupedData[QuickNoteSectionName.QuickNoteSectionFamilyPsychHx],
+      )
+      const medicalPsychHxData = transformPastMedicalHx(
+        groupedData[QuickNoteSectionName.QuickNoteSectionPastMedicalHx],
+      )
+      const socialHxData = transformSocialHx(
+        groupedData[QuickNoteSectionName.QuickNoteSectionSocialHx],
+      )
+      const substanceUseHxData = transformSubstanceUseHx(
+        groupedData[QuickNoteSectionName.QuickNoteSectionSubstanceUseHx],
+      )
 
       setData({
         pastPsychHxData,

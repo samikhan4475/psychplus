@@ -10,7 +10,9 @@ const substanceUseHxWidgetSchema = z
     smokePacks: z.enum(['0.5', '1', '2']).optional(),
     smokingCessationOption: z.string().optional(),
     counselingOption: z.string().optional(),
-    smokingCessationDiscussionDuration: z.enum(['≥ 3 mins', '≥ 11 mins']).optional(),
+    smokingCessationDiscussionDuration: z
+      .enum(['≥ 3 mins', '≥ 11 mins'])
+      .optional(),
     otherTobacco: z.string().optional(),
     alcohol: z.enum(['yes', 'no']).optional(),
     drugs: z.enum(['yes', 'no']).optional(),
@@ -33,7 +35,7 @@ const substanceUseHxWidgetSchema = z
     alcoholSubstanceCessationDiscussionDuration: z
       .enum(['≥ 15 mins', '≥ 31 mins'])
       .optional(),
-    otherAlcoholDrugs: z.string().optional(),
+    otherAlcoholDrugs: z.ostring(),
   })
   .superRefine((data, ctx) => {
     const conditions = [
