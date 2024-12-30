@@ -26,6 +26,7 @@ const BannerAppointmentButton = ({
           providerType: ProviderType.Psychiatrist,
           appointmentType: appointmentType,
           zipCode: '77070',
+          state: 'Texas',
         },
       }),
     )

@@ -31,6 +31,7 @@ const CareTeamBookButton = ({
               : ProviderType.Therapist,
           appointmentType: AppointmentType.Virtual,
           zipCode: '77070',
+          state: 'Texas',
         },
       }),
     )

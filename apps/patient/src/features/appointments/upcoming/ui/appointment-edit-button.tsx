@@ -29,6 +29,7 @@ const AppointmentEditButton = ({
           providerType: providerType,
           appointmentType: appointmentType,
           zipCode: '77070',
+          state: 'Texas',
         },
       }),
     )
