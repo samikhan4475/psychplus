@@ -50,6 +50,7 @@ const LoginPage = () => {
 
   const onSubmit: SubmitHandler<SchemaType> = async (data) => {
     setError(undefined)
+    sessionStorage.clear()
 
     return loginAction({
       username: data.username.trim(),
