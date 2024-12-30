@@ -45,9 +45,8 @@ const schema = z.object({
 type SchemaType = z.infer<typeof schema>
 
 interface StateListType {
-  long_name: string
-  short_name: string
-  types: string[]
+  code: string
+  displayName: string
 }
 
 const ScheduleVisitView = ({ googleAPIkey }: { googleAPIkey: string }) => {
@@ -159,7 +158,7 @@ const ScheduleVisitView = ({ googleAPIkey }: { googleAPIkey: string }) => {
 
   useEffect(() => {
     if (zipStates.length > 0) {
-      form.setValue('state', zipStates[0].long_name)
+      form.setValue('state', zipStates[0].displayName)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [zipStates])
@@ -188,7 +187,7 @@ const ScheduleVisitView = ({ googleAPIkey }: { googleAPIkey: string }) => {
 
   useEffect(() => {
     if (zipStates.length > 0) {
-      form.setValue('state', zipStates[0].long_name)
+      form.setValue('state', zipStates[0].displayName)
     }
   }, [zipStates])
 

@@ -21,9 +21,8 @@ const schema = z.object({
 
 type SchemaType = z.infer<typeof schema>
 interface StateListType {
-  long_name: string
-  short_name: string
-  types: string[]
+  code: string
+  displayName: string
 }
 
 const ZipCodeSearchForm = () => {
@@ -41,7 +40,7 @@ const ZipCodeSearchForm = () => {
 
   const getZipCodeInfoApi = async (zipCode: string | undefined) => {
     setZipStates([])
-    if (zipCode?.length === 5) {
+    if (zipCode?.trim().length === 5) {
       const zipCodeInfo = await getZipcodeInfo(zipCode)
       if (zipCodeInfo.state === 'error') {
         return
@@ -68,9 +67,11 @@ const ZipCodeSearchForm = () => {
   useEffect(() => {
     if (
       zipStates.length > 0 &&
-      !zipStates.some((zipState) => zipState.long_name === state)
+      !zipStates.some((zipState) => zipState.displayName === state)
     ) {
-      form.setValue('state', zipStates[0].long_name)
+      form.setValue('state', zipStates[0].displayName)
+      setState(zipStates[0].displayName)
+      setStateCode(zipStates[0].code)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [zipStates])
@@ -78,9 +79,9 @@ const ZipCodeSearchForm = () => {
   const onSubmit = (data: SchemaType) => {
     setZipCode(data.zipCode)
     if (zipStates.length > 0) {
-      form.setValue('state', zipStates[0].long_name)
-      setState(zipStates[0].long_name)
-      setStateCode(zipStates[0].short_name)
+      form.setValue('state', zipStates[0].displayName)
+      setState(zipStates[0].displayName)
+      setStateCode(zipStates[0].code)
     }
     form.reset(form.getValues())
   }
@@ -101,8 +102,8 @@ const ZipCodeSearchForm = () => {
                 form.trigger('state')
                 setState(value)
                 setStateCode(
-                  zipStates.find((state) => state.long_name === value)
-                    ?.short_name || '',
+                  zipStates.find((state) => state.displayName === value)
+                    ?.code || '',
                 )
               }}
               options={zipStates}

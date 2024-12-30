@@ -2,9 +2,8 @@ import { cn } from '@psychplus-v2/utils'
 import { Select } from '@radix-ui/themes'
 
 interface StateListType {
-  long_name: string
-  short_name: string
-  types: string[]
+  code: string
+  displayName: string
 }
 
 interface ZipCodeStateDropdownProps {
@@ -43,10 +42,10 @@ const ZipCodeStateDropdown = ({
             className={cn('hover:bg-[#151B4A] hover:text-[white]', {
               className,
             })}
-            value={state.long_name}
-            key={state.short_name}
+            value={state.displayName}
+            key={state.code}
           >
-            {state.long_name}
+            {state.displayName}
           </Select.Item>
         ))}
       </Select.Content>
