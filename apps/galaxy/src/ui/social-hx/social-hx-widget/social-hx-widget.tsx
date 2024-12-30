@@ -1,5 +1,6 @@
 'use client'
 
+import { useEffect } from 'react'
 import { FormProvider } from 'react-hook-form'
 import {
   WidgetClearButton,
@@ -37,9 +38,11 @@ const SocialHxWidget = ({
 
   return (
     <FormProvider {...form}>
-      {isHistoryHeader && <SocialHxHeader />}
       <WidgetFormContainer
         patientId={patientId}
+        tags={
+          isHistoryHeader ? [QuickNoteSectionName.QuickNoteSectionSocialHx] : []
+        }
         widgetId={QuickNoteSectionName.QuickNoteSectionSocialHx}
         title={!isHistoryHeader ? 'Social History' : undefined}
         getData={transformOut(patientId)}
@@ -56,6 +59,7 @@ const SocialHxWidget = ({
             </>
           )
         }
+        topHeader={isHistoryHeader && <SocialHxHeader />}
       >
         <RelationshipStatusBlock />
         <EducationBlock />

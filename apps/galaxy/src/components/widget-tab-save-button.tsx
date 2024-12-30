@@ -3,7 +3,7 @@
 import { Button } from '@radix-ui/themes'
 import { SaveIcon } from 'lucide-react'
 
-const SaveButton = () => {
+const WidgetTabSaveButton = () => {
   return (
     <Button type="submit" size="1" highContrast>
       <SaveIcon width={15} height={15} strokeWidth={1.75} />
@@ -11,4 +11,4 @@ const SaveButton = () => {
     </Button>
   )
 }
-export { SaveButton }
+export { WidgetTabSaveButton }

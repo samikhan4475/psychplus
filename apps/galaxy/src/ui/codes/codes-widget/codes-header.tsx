@@ -1,14 +1,7 @@
 import { Flex, Text } from '@radix-ui/themes'
-import { QuickNoteSectionItem } from '@/types'
-import { CodesSaveButton } from './codes-save-button'
-import { CodesWidgetSchemaType } from './codes-widget-schema'
+import { WidgetTabSaveButton } from '@/components'
 
-interface CodesHeaderProps {
-  patientId: string
-  getData: (schema: CodesWidgetSchemaType) => QuickNoteSectionItem[]
-}
-
-const CodesHeader = ({ patientId, getData }: CodesHeaderProps) => {
+const CodesHeader = () => {
   return (
     <Flex
       justify="between"
@@ -22,7 +15,7 @@ const CodesHeader = ({ patientId, getData }: CodesHeaderProps) => {
       </Flex>
 
       <Flex className="gap-x-2 text-[20px]" align="center">
-        <CodesSaveButton patientId={patientId} getData={getData} />
+        <WidgetTabSaveButton />
       </Flex>
     </Flex>
   )

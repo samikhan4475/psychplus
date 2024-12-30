@@ -34,10 +34,14 @@ const PastPsychHxWidget = ({
 
   return (
     <FormProvider {...form}>
-      {isHistoryHeader && <PastPsychHeader />}
       <WidgetFormContainer
         patientId={patientId}
         widgetId={QuickNoteSectionName.QuickNoteSectionPastPsychHx}
+        tags={
+          isHistoryHeader
+            ? [QuickNoteSectionName.QuickNoteSectionPastPsychHx]
+            : []
+        }
         title={!isHistoryHeader ? 'Past Psych History' : undefined}
         getData={transformOut(patientId)}
         toggleable={!isHistoryHeader}
@@ -53,6 +57,7 @@ const PastPsychHxWidget = ({
             </>
           )
         }
+        topHeader={isHistoryHeader && <PastPsychHeader />}
       >
         <Flex align="center" gap="2">
           <PsychHospitalizationsBlock />

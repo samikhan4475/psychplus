@@ -42,13 +42,6 @@ const MseWidget = ({
 
   return (
     <FormProvider {...form}>
-      {isMseTab && (
-        <MseHeader
-          patientId={patientId}
-          getData={transformOut(patientId)}
-          sectionName={QuickNoteSectionName.QuicknoteSectionMse}
-        />
-      )}
       <WidgetFormContainer
         patientId={patientId}
         widgetId={QuickNoteSectionName.QuicknoteSectionMse}
@@ -62,6 +55,8 @@ const MseWidget = ({
             {!isMseTab && <WidgetSaveButton />}
           </>
         }
+        tags={isMseTab ? [QuickNoteSectionName.QuicknoteSectionMse] : []}
+        topHeader={isMseTab && <MseHeader />}
       >
         <OrientationBlock />
         <AppearanceBlock />

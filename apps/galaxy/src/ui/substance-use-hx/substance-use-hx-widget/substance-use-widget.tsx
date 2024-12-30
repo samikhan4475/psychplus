@@ -52,11 +52,15 @@ const SubstanceUseHxWidget = ({
 
   return (
     <FormProvider {...form}>
-      {isHistoryHeader && <SubstanceUseHxHxHeader />}
       <WidgetFormContainer
         patientId={patientId}
         widgetId={QuickNoteSectionName.QuickNoteSectionSubstanceUseHx}
         title={!isHistoryHeader ? 'Substance Use History' : undefined}
+        tags={
+          isHistoryHeader
+            ? [QuickNoteSectionName.QuickNoteSectionSubstanceUseHx]
+            : []
+        }
         getData={transformOut(patientId, appointmentId)}
         toggleable={!isHistoryHeader}
         headerRight={
@@ -65,6 +69,7 @@ const SubstanceUseHxWidget = ({
             {!isHistoryHeader && <WidgetSaveButton />}
           </>
         }
+        topHeader={isHistoryHeader && <SubstanceUseHxHxHeader />}
       >
         <TobaccoBlock />
         {patientInfo && <AlcoholDrugsBlock patientInfo={patientInfo} />}

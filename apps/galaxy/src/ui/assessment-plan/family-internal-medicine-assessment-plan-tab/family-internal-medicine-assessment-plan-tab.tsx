@@ -31,12 +31,6 @@ const FamilyInternalMedicineAssessmentPlanTab = ({
 
   return (
     <FormProvider {...form}>
-      {isFamilyInternalMedicineAssessmentPlanTab && (
-        <FamilyInternalMedicineAssessmentPlanHeader
-          patientId={patientId}
-          getData={transformOut(patientId)}
-        />
-      )}
       <WidgetFormContainer
         patientId={patientId}
         widgetId={
@@ -53,6 +47,18 @@ const FamilyInternalMedicineAssessmentPlanTab = ({
             <WidgetClearButton />
             {!isFamilyInternalMedicineAssessmentPlanTab && <WidgetSaveButton />}
           </>
+        }
+        tags={
+          isFamilyInternalMedicineAssessmentPlanTab
+            ? [
+                QuickNoteSectionName.QuicknoteSectionFamilyInternalMedicineAssessmentPlan,
+              ]
+            : []
+        }
+        topHeader={
+          isFamilyInternalMedicineAssessmentPlanTab && (
+            <FamilyInternalMedicineAssessmentPlanHeader />
+          )
         }
       >
         <AssessmentTreatmentPlanNotesBlock />

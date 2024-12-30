@@ -1,17 +1,8 @@
 import { Flex, Text } from '@radix-ui/themes'
-import { QuickNoteSectionItem } from '@/types'
 import { AssessmentPlanTabs } from '../constants'
-import { PsychiatryAssessmentPlanSaveButton } from './psychiatry-assessment-plan-save-button'
+import { WidgetTabSaveButton } from '@/components'
 
-interface PhysicalExamHeaderProps {
-  patientId: string
-  getData: (schema: any) => QuickNoteSectionItem[]
-}
-
-const PsychiatryAssessmentPlanHeader = ({
-  patientId,
-  getData,
-}: PhysicalExamHeaderProps) => {
+const PsychiatryAssessmentPlanHeader = () => {
   return (
     <Flex
       justify="between"
@@ -22,10 +13,7 @@ const PsychiatryAssessmentPlanHeader = ({
         {AssessmentPlanTabs.PAP}
       </Text>
       <Flex className="gap-x-2 text-[20px]" align="center">
-        <PsychiatryAssessmentPlanSaveButton
-          patientId={patientId}
-          getData={getData}
-        />
+        <WidgetTabSaveButton />
       </Flex>
     </Flex>
   )

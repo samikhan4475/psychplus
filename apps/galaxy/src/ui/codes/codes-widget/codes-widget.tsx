@@ -68,13 +68,6 @@ const CodesWidget = ({
   )
   return (
     <FormProvider {...form}>
-      {isCodesHeader && (
-        <CodesHeader
-          patientId={patientId}
-          getData={transformOut(patientId, appointmentId)}
-        />
-      )}
-
       <WidgetFormContainer
         patientId={patientId}
         widgetId={QuickNoteSectionName.QuicknoteSectionCodes}
@@ -91,6 +84,7 @@ const CodesWidget = ({
             )}
           </>
         }
+        topHeader={isCodesHeader && <CodesHeader />}
       >
         <Box className="border-pp-focus-bg relative w-full max-w-[580px] border p-1">
           <CodeHistory cptCodesLookup={cptCodesLookup} />

@@ -81,13 +81,6 @@ const PhysicalExamWidget = ({
 
   return (
     <FormProvider {...form}>
-      {isPhysicalExamTab && (
-        <PhysicalExamHeader
-          patientId={patientId}
-          getData={transformOut(patientId)}
-          sectionName={QuickNoteSectionName.QuicknoteSectionPhysicalExam}
-        />
-      )}
       <WidgetFormContainer
         patientId={patientId}
         widgetId={QuickNoteSectionName.QuicknoteSectionPhysicalExam}
@@ -95,6 +88,11 @@ const PhysicalExamWidget = ({
         title={!isPhysicalExamTab ? 'Physical Exam' : undefined}
         toggleable={!isPhysicalExamTab}
         appointment={appointment}
+        tags={
+          isPhysicalExamTab
+            ? [QuickNoteSectionName.QuicknoteSectionPhysicalExam]
+            : []
+        }
         headerRight={
           <>
             <WidgetClearButton handleOnClear={handleOnClear} />
@@ -112,6 +110,7 @@ const PhysicalExamWidget = ({
             />
           </Flex>
         }
+        topHeader={isPhysicalExamTab && <PhysicalExamHeader />}
       >
         <GeneralBlock
           normalChipsSelected={normalChipsSelected}

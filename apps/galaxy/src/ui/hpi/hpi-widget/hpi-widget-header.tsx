@@ -1,7 +1,6 @@
 import { Flex } from '@radix-ui/themes'
-import { TabContentHeading } from '@/components'
+import { WidgetTabSaveButton, TabContentHeading } from '@/components'
 import { ClearButton } from './clear-button'
-import { SaveButton } from './save-button'
 
 const HpiWidgetHeader = () => {
   return (
@@ -11,7 +10,7 @@ const HpiWidgetHeader = () => {
     >
       <Flex align="center" justify="end" gap="1" className="flex-1">
         <ClearButton />
-        <SaveButton />
+        <WidgetTabSaveButton />
       </Flex>
     </TabContentHeading>
   )

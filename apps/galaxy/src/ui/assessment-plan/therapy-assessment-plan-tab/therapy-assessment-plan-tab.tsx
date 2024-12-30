@@ -31,12 +31,6 @@ const TherapyAssessmentPlanTab = ({
 
   return (
     <FormProvider {...form}>
-      {isTherapyAssessmentPlanTab && (
-        <TherapyAssessmentPlanHeader
-          patientId={patientId}
-          getData={transformOut(patientId)}
-        />
-      )}
       <WidgetFormContainer
         patientId={patientId}
         widgetId={QuickNoteSectionName.QuicknoteSectionTherapyAssessmentPlan}
@@ -47,6 +41,14 @@ const TherapyAssessmentPlanTab = ({
             <WidgetClearButton />
             {!isTherapyAssessmentPlanTab && <WidgetSaveButton />}
           </>
+        }
+        tags={
+          isTherapyAssessmentPlanTab
+            ? [QuickNoteSectionName.QuicknoteSectionTherapyAssessmentPlan]
+            : []
+        }
+        topHeader={
+          isTherapyAssessmentPlanTab && <TherapyAssessmentPlanHeader />
         }
       >
         <AssessmentTreatmentPlanNotesBlock />

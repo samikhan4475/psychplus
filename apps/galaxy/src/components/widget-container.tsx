@@ -40,6 +40,7 @@ const WidgetContainer = ({
   className,
 }: WidgetContainerProps) => {
   const form = useFormContext() ?? null
+  const values = form?.getValues()
   const checked =
     form && WidgetContainerCheckboxField
       ? form.watch(WidgetContainerCheckboxField) === 'show'
@@ -56,6 +57,7 @@ const WidgetContainer = ({
       form?.reset({
         ...form.getValues(),
         WidgetContainerCheckboxField: toggleableChecked ? 'show' : 'hide',
+        ...values,
       })
     }
   }, [toggleableChecked])

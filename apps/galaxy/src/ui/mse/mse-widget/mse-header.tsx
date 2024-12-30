@@ -1,15 +1,7 @@
 import { Flex, Text } from '@radix-ui/themes'
-import { QuickNoteSectionItem } from '@/types'
-import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
-import { MseSaveButton } from './mse-save-button'
+import { WidgetTabSaveButton } from '@/components'
 
-interface MseHeaderProps {
-  patientId: string
-  getData: (schema: any) => QuickNoteSectionItem[]
-  sectionName: QuickNoteSectionName
-}
-
-const MseHeader = ({ patientId, getData, sectionName }: MseHeaderProps) => {
+const MseHeader = () => {
   return (
     <Flex
       justify="between"
@@ -20,7 +12,7 @@ const MseHeader = ({ patientId, getData, sectionName }: MseHeaderProps) => {
         Mental Status Exam
       </Text>
       <Flex className="gap-x-2 text-[20px]" align="center">
-        <MseSaveButton patientId={patientId} getData={getData} />
+        <WidgetTabSaveButton />
       </Flex>
     </Flex>
   )

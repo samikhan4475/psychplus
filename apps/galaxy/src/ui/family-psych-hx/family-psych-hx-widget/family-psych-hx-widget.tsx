@@ -29,9 +29,13 @@ const FamilyPsychHxWidget = ({
 
   return (
     <FormProvider {...form}>
-      {isHistoryHeader && <PastFamilyHeader />}
       <WidgetFormContainer
         patientId={patientId}
+        tags={
+          isHistoryHeader
+            ? [QuickNoteSectionName.QuickNoteSectionFamilyPsychHx]
+            : []
+        }
         widgetId={QuickNoteSectionName.QuickNoteSectionFamilyPsychHx}
         title={!isHistoryHeader ? 'Family Psych History' : undefined}
         getData={transformOut(patientId)}
@@ -42,6 +46,7 @@ const FamilyPsychHxWidget = ({
             {!isHistoryHeader && <WidgetSaveButton />}
           </>
         }
+        topHeader={isHistoryHeader && <PastFamilyHeader />}
       >
         <ConditionsBlock />
         <OtherBlock />

@@ -1,8 +1,6 @@
 'use client'
 
-import { saveWidgetAction } from '@/actions/save-widget'
 import { CheckboxCell, PropsWithRow } from '@/components'
-import { transformOut } from '../../data'
 import { useStore } from '../store'
 import { PatientVital } from '../types'
 

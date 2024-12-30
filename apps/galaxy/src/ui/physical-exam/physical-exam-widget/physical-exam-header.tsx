@@ -1,18 +1,7 @@
 import { Flex, Text } from '@radix-ui/themes'
-import { QuickNoteSectionItem } from '@/types'
-import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
-import { PhysicalExamSaveButton } from './physical-exam-save-button'
+import { WidgetTabSaveButton } from '@/components'
 
-interface PhysicalExamHeaderProps {
-  patientId: string
-  getData: (schema: any) => QuickNoteSectionItem[]
-  sectionName: QuickNoteSectionName
-}
-
-const PhysicalExamHeader = ({
-  patientId,
-  getData,
-}: PhysicalExamHeaderProps) => {
+const PhysicalExamHeader = () => {
   return (
     <Flex
       justify="between"
@@ -23,7 +12,7 @@ const PhysicalExamHeader = ({
         Physical Exam
       </Text>
       <Flex className="gap-x-2 text-[20px]" align="center">
-        <PhysicalExamSaveButton patientId={patientId} getData={getData} />
+        <WidgetTabSaveButton />
       </Flex>
     </Flex>
   )

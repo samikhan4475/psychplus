@@ -31,9 +31,13 @@ const PastMedicalHxWidget = ({
   return (
     <Flex direction="column" width="100%" gap="2">
       <FormProvider {...form}>
-        {isHistoryHeader && <PastMedicalHeader />}
         <WidgetFormContainer
           patientId={patientId}
+          tags={
+            isHistoryHeader
+              ? [QuickNoteSectionName.QuickNoteSectionPastMedicalHx]
+              : []
+          }
           widgetId={QuickNoteSectionName.QuickNoteSectionPastMedicalHx}
           title={!isHistoryHeader ? 'Past Medical History' : undefined}
           getData={transformOut(patientId)}
@@ -44,6 +48,7 @@ const PastMedicalHxWidget = ({
               {!isHistoryHeader && <WidgetSaveButton />}
             </>
           }
+          topHeader={isHistoryHeader && <PastMedicalHeader />}
         >
           <ConditionsBlock />
         </WidgetFormContainer>
