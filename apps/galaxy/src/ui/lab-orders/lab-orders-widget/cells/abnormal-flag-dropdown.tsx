@@ -2,8 +2,7 @@ import { Row } from '@tanstack/react-table'
 import { CodesetSelect } from '@/components'
 import { CODESETS } from '@/constants'
 import { LabResult } from '@/types'
-import { useFormContext } from 'react-hook-form'
-import { SchemaType } from '../schema'
+import { useStore } from '../store'
 import { FlagStatusCell } from './lab-flag-status'
 
 interface FlagStatusCellProps {
@@ -11,15 +10,17 @@ interface FlagStatusCellProps {
 }
 
 const AbnormalFlagDropdown = ({ row }: FlagStatusCellProps) => {
- const form = useFormContext<SchemaType>()
-  const isEditing = form.getValues('editingLabResultId') === row.original.id
-  return isEditing ? (
+  const { editAbleLabResults } = useStore()
+  const isAddingOrEditing = editAbleLabResults?.id === row.original.id
+  return isAddingOrEditing ? (
     <CodesetSelect
-      name={`labResults.${row.index}.abnormalRangeCode`}
+      name={`labResults.abnormalRangeCode`}
       codeset={CODESETS.AbnormalFlag}
       size="1"
     />
-  ) : <FlagStatusCell row={row} />
+  ) : (
+    <FlagStatusCell row={row} />
+  )
 }
 
 export { AbnormalFlagDropdown }

@@ -1,5 +1,5 @@
 import { ElementType } from 'react'
-import { DropdownMenu, IconButton } from '@radix-ui/themes'
+import { DropdownMenu, IconButton, Tooltip } from '@radix-ui/themes'
 
 interface ActionItemProps {
   Icon: ElementType
@@ -16,15 +16,22 @@ const ActionItem = ({
 }: ActionItemProps) => {
   if (!title) {
     return (
-      <IconButton
-        size="1"
-        color="gray"
-        variant="ghost"
-        onClick={onClick}
-        disabled={disabled}
-      >
-        <Icon width={16} height={16} color="black" className="text-pp-gray-1" />
-      </IconButton>
+      <Tooltip content="Attachment">
+        <IconButton
+          size="1"
+          color="gray"
+          variant="ghost"
+          onClick={onClick}
+          disabled={disabled}
+        >
+          <Icon
+            width={16}
+            height={16}
+            color="black"
+            className="text-pp-gray-1"
+          />
+        </IconButton>
+      </Tooltip>
     )
   }
 

@@ -4,6 +4,7 @@ import { useEffect } from 'react'
 import { useParams, useSearchParams } from 'next/navigation'
 import { Flex, ScrollArea } from '@radix-ui/themes'
 import { type ColumnDef } from '@tanstack/react-table'
+import { format } from 'date-fns'
 import {
   ColumnHeader,
   DataTable,
@@ -12,41 +13,58 @@ import {
   TextCell,
 } from '@/components'
 import { LabOrders } from '@/types'
-import { formatDateTime } from '@/utils/date'
 import { LabTestCell, ResultsCell, StatusCell } from './cells'
 import { ActionsCell } from './cells/actions-cell'
 import { useStore } from './store'
 
 const columns: ColumnDef<LabOrders>[] = [
   {
-    id: 'order-date',
-    header: () => <ColumnHeader clientSideSort label="Order Date" />,
+    id: 'labOrderDate',
+    accessorKey: 'labOrderDate',
+    header: ({ column }) => (
+      <ColumnHeader column={column} clientSideSort label="Order Date" />
+    ),
     cell: ({ row }) => (
-      <DateTimeCell>{formatDateTime(row.original.labOrderDate)}</DateTimeCell>
+      <DateTimeCell>
+        {format(new Date(row.original.labOrderDate), 'MM/dd/yyyy HH:mm')}
+      </DateTimeCell>
     ),
   },
   {
-    id: 'lab-order',
-    header: () => <ColumnHeader clientSideSort label="Lab Order #" />,
+    id: 'labOrderNumber',
+    accessorKey: 'labOrderNumber',
+    header: ({ column }) => (
+      <ColumnHeader column={column} clientSideSort label="Lab Order Number" />
+    ),
     cell: ({ row }) => <TextCell>{row.original.labOrderNumber}</TextCell>,
   },
   {
-    id: 'ordered-by',
-    header: () => <ColumnHeader clientSideSort label="Ordered By" />,
+    id: 'orderingStaffName',
+    accessorKey: 'orderingStaffName',
+    header: ({ column }) => (
+      <ColumnHeader column={column} clientSideSort label="Ordered By" />
+    ),
     cell: ({ row }) => <TextCell>{row.original.orderingStaffName}</TextCell>,
   },
   {
-    id: 'test-panel',
-    header: () => <ColumnHeader clientSideSort label="Test/Panel" />,
+    id: 'labTests',
+    accessorKey: 'labTests',
+    header: ({ column }) => (
+      <ColumnHeader column={column} clientSideSort label="Test/Panel" />
+    ),
     cell: ({ row }) => <LabTestCell row={row} />,
   },
   {
-    id: 'lab-location',
-    header: () => <ColumnHeader clientSideSort label="Lab Location" />,
+    id: 'orderingLab.name',
+    accessorKey: 'orderingLab.name',
+    header: ({ column }) => (
+      <ColumnHeader column={column} clientSideSort label="Lab Location" />
+    ),
     cell: ({ row }) => <TextCell>{row.original?.orderingLab?.name}</TextCell>,
   },
   {
-    accessorKey: 'status',
+    id: 'orderStatus',
+    accessorKey: 'orderStatus',
     header: ({ column }) => (
       <ColumnHeader
         label="Status"
@@ -59,7 +77,7 @@ const columns: ColumnDef<LabOrders>[] = [
   {
     id: 'results',
     size: 100,
-    header: () => <ColumnHeader clientSideSort label="Results" />,
+    header: () => <ColumnHeader label="Result" />,
     cell: ({ row }) => <ResultsCell row={row} />,
   },
   {
@@ -91,7 +109,7 @@ const LabOrderTable = () => {
 
   if (loading) {
     return (
-      <Flex height="100%" align="center" justify="center">
+      <Flex height="100%" align="center" justify="center" className="mt-5">
         <LoadingPlaceholder />
       </Flex>
     )

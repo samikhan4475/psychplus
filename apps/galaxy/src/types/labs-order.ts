@@ -1,3 +1,4 @@
+import { CalendarDate } from '@internationalized/date'
 import { DateValue } from 'react-aria-components'
 import { LabOrderStatus } from '@/ui/lab-orders/lab-orders-widget/types'
 import { Appointment } from './appointment'
@@ -30,33 +31,33 @@ interface LabTest {
 }
 
 interface LabResult {
-  id: string
-  metadata: Metadata
-  labTestId: string
-  orderId: string
-  observationTime?: string | DateValue | null
-  resultCode: string
-  resultName: string
-  resultValue: string
-  resultValueUnit?: string
-  recommendedValue?: string
+  id?: string
+  metadata?: Metadata
+  labTestId?: string
+  orderId?: string
+  observationTime?: string | CalendarDate
+  resultCode?: string
+  resultName?: string
+  resultValue?: string
+  resultValueUnit: string
+  recomendedValue?: string
   statusCode: string
   abnormalRangeCode: string
-  physicianComments: string
-  externalResultId: string
-  labComments: string
-  resultValueType: string
-  valueDescription: string
-  recordStatus: string
-  recomendedValue: string
-}
-interface LabResultPayload {
-  id: string
-  labTestId: string
-  orderId: string
-  observationTime?: string | DateValue | null
-  resultName?: string
+  physicianComments?: string
+  externalResultId?: string
+  labComments?: string
+  resultValueType?: string
+  valueDescription?: string
   recordStatus?: string
+}
+
+interface LabResultPayload {
+  id?: string
+  labTestId?: string
+  orderId?: string
+  observationTime?: DateValue | null
+  resultName?: string
+  statusCode?: string
   resultCode?: string
   resultValue?: string
   resultValueUnit?: string
@@ -82,7 +83,7 @@ interface LabOrders {
   labId: string
   patientId: number
   appointmentId: number
-  orderStatus: LabOrderStatus
+  statusCode: string
   orderingStaffId: number
   orderingStaffName: string
   billType: string
@@ -113,6 +114,7 @@ interface LabOrders {
   patient: PatientProfile
   appointment: Appointment
   recordStatus: string
+  orderStatus: LabOrderStatus
 }
 
 export type { LabOrders, LabTest, LabResult, LabResultPayload }

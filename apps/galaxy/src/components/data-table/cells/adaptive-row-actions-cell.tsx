@@ -28,7 +28,6 @@ const AdaptiveRowActionsCell = <TData,>({
       {secondAction?.render({ row, toggleRowClick, disabled: isRowDisabled })}
       {thirdAction?.render({ row, toggleRowClick, disabled: isRowDisabled })}
 
-
       {otherActions.length > 0 && (
         <DropdownMenu.Root>
           <DropdownMenu.Trigger>

@@ -1,26 +1,36 @@
-import { Badge, BadgeProps } from '@radix-ui/themes'
+import { Badge, BadgeProps, Tooltip } from '@radix-ui/themes'
 import { Row } from '@tanstack/react-table'
+import { CODESETS } from '@/constants'
+import { useCodesetCodes } from '@/hooks'
 import { LabResult } from '@/types'
+import { ResultStatusCode } from '../types'
 
 interface StatusCellProps {
   row: Row<LabResult>
 }
 
 const ResultStatusCell = ({ row }: StatusCellProps) => {
-  const { recordStatus } = row.original
+  const { statusCode } = row.original
+  const codes = useCodesetCodes(CODESETS.StatusCodes)
+  const resultStatus = codes?.find((item) => item?.value === statusCode)
   return (
-    <Badge className="!rounded-none" color={getBadgeColor(recordStatus)}>
-      {recordStatus}
-    </Badge>
+    <Tooltip content={resultStatus?.display}>
+      <Badge
+        className="!rounded-none"
+        color={getBadgeColor(statusCode as ResultStatusCode)}
+      >
+        {resultStatus?.value}
+      </Badge>
+    </Tooltip>
   )
 }
 
-const badgeColorMap: Record<string, BadgeProps['color']> = {
-  Final: 'green',
-  Partial: 'yellow',
+const badgeColorMap: Record<ResultStatusCode, BadgeProps['color']> = {
+  [ResultStatusCode.Final]: 'blue',
+  [ResultStatusCode.Partial]: 'orange',
 }
 
-const getBadgeColor = (status: string): BadgeProps['color'] =>
+const getBadgeColor = (status: ResultStatusCode): BadgeProps['color'] =>
   badgeColorMap[status] || 'gray'
 
 export { ResultStatusCell }

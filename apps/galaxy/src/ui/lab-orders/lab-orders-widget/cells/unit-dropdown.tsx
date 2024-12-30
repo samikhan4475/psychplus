@@ -1,23 +1,26 @@
+import { Flex } from '@radix-ui/themes'
 import { Row } from '@tanstack/react-table'
-import { useFormContext } from 'react-hook-form'
-import { CodesetSelect, TextCell } from '@/components'
+import { CodesetSelect, FormFieldError, TextCell } from '@/components'
 import { CODESETS } from '@/constants'
 import { LabResult } from '@/types'
-import { SchemaType } from '../schema'
+import { useStore } from '../store'
 
 interface FlagStatusCellProps {
   row: Row<LabResult>
 }
 
 const UnitDropdown = ({ row }: FlagStatusCellProps) => {
-  const form = useFormContext<SchemaType>()
-  const isEditing = form.getValues('editingLabResultId') === row.original.id
-  return isEditing ? (
-    <CodesetSelect
-      name={`labResults.${row.index}.resultValueUnit`}
-      codeset={CODESETS.Unit}
-      size="1"
-    />
+  const { editAbleLabResults } = useStore()
+  const isAddingOrEditing = editAbleLabResults?.id === row.original.id
+  return isAddingOrEditing ? (
+    <Flex direction="column" className="w-full">
+      <CodesetSelect
+        name={`labResults.resultValueUnit`}
+        codeset={CODESETS.Unit}
+        size="1"
+      />
+      <FormFieldError name="labResults.resultValueUnit" />
+    </Flex>
   ) : (
     <TextCell>{row.original.resultValueUnit}</TextCell>
   )

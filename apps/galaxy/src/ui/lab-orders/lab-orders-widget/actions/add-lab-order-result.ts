@@ -1,16 +1,15 @@
 'use server'
 
 import * as api from '@/api'
-import { LabResult, LabResultPayload } from '@/types'
+import { LabResult } from '@/types'
 
-const updateLabOrdersResultAction = async (
-  payload: Partial<LabResultPayload>,
+const addLabOrdersResultAction = async (
+  payload: Partial<LabResult>,
   appointmentId: string,
   orderId: string,
-  id: string,
 ): Promise<api.ActionResult<LabResult>> => {
-  const response = await api.PUT<LabResult>(
-    api.UPDATE_LAB_ORDERS_RESULT_ENDPOINT(appointmentId, orderId, id),
+  const response = await api.POST<LabResult>(
+    api.ADD_LAB_ORDERS_RESULT_ENDPOINT(appointmentId, orderId),
     payload,
   )
 
@@ -26,4 +25,4 @@ const updateLabOrdersResultAction = async (
   }
 }
 
-export { updateLabOrdersResultAction }
+export { addLabOrdersResultAction }

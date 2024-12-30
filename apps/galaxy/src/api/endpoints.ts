@@ -439,7 +439,15 @@ const UPDATE_LAB_ORDERS_RESULT_ENDPOINT = (
   id: string,
 ) =>
   `${API_URL}/api/appointments/${appointmentId}/laborders/${orderId}/labresults/${id}`
+
+const ADD_LAB_ORDERS_RESULT_ENDPOINT = (
+  appointmentId: string,
+  orderId: string,
+) =>
+  `${API_URL}/api/appointments/${appointmentId}/laborders/${orderId}/labresults`
+
 const GET_TREATMENT_TEAM_VISITS = `${API_URL}/api/appointments/actions/search`
+
 const GET_CLAIM_SUBMISSION_RESPONSE = (claimId: string) =>
   `${API_URL}/api/claimssubmissions/${claimId}/responses/actions/search`
 const GET_SEARCHED_LAB_TESTS = `${API_URL}/api/labcompendiums/actions/search`
@@ -706,6 +714,7 @@ export {
   NOTE_MARK_ERROR_ENDPOINT,
   UPDATE_LAB_ORDERS_RESULT_ENDPOINT,
   DOWNLOAD_CLAIM_SUBMISSION_HISTORY_ENDPOINT,
+  ADD_LAB_ORDERS_RESULT_ENDPOINT,
   GET_TREATMENT_TEAM_VISITS,
   GET_NOTE_DOCUMENTS_ENDPOINT,
   GET_STAFF_USER_ENDPOINT,

@@ -25,7 +25,7 @@ const columns: ColumnDef<LabResult>[] = [
   {
     id: 'date-time',
     size: 200,
-    header: () => <ColumnHeader clientSideSort label="Date/Time" />,
+    header: () => <ColumnHeader clientSideSort label="Date" />,
     cell: ({ row }) => <ObservationTimeFieldCell row={row} />,
     accessorKey: 'observationTime',
   },
@@ -69,7 +69,9 @@ const columns: ColumnDef<LabResult>[] = [
     id: 'actions',
     size: 50,
     header: () => <ColumnHeader label="Actions" />,
-    cell: ({ row }) => <ViewActionsCell row={row} />,
+    cell: ({ row }) => {
+      return row.original.id !== '' ? <ViewActionsCell row={row} /> : null
+    },
   },
 ]
 export { columns }

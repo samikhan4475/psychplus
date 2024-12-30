@@ -1,5 +1,5 @@
 import { Row } from '@tanstack/react-table'
-import { LabOrders, LabResult, Metadata } from '@/types'
+import { LabOrders, LabResult } from '@/types'
 
 type LabOrderStatus =
   | 'Draft'
@@ -20,6 +20,16 @@ type LabOrderPayload = {
 interface GetLabOrdersParams {
   appointmentId: string
   payload?: LabOrderPayload
+}
+
+export enum FlagStatus {
+  High = 'H',
+  Low = 'L',
+  Normal = 'N',
+}
+export enum ResultStatusCode {
+  Final = 'F',
+  Partial = 'P',
 }
 
 export type {

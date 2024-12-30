@@ -7,7 +7,13 @@ interface CancelButtonProps {
 
 const CancelButton = ({ onCancel }: CancelButtonProps) => {
   return (
-    <Button onClick={onCancel} variant="outline" color="gray" size="2">
+    <Button
+      type="button"
+      onClick={onCancel}
+      variant="outline"
+      color="gray"
+      size="2"
+    >
       Cancel
     </Button>
   )

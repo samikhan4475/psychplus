@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { IconButton } from '@radix-ui/themes'
+import { IconButton, Tooltip } from '@radix-ui/themes'
 import { SendHorizontal } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { placeLabOrderApi } from '../../add-lab-order/api'
@@ -29,7 +29,9 @@ const RowActionSend = ({ orderId }: { orderId: string }) => {
       onClick={onClickSend}
       disabled={disabled}
     >
-      <SendHorizontal color="black" width={16} height={16} />
+      <Tooltip content="Place Order">
+        <SendHorizontal color="black" width={16} height={16} />
+      </Tooltip>
     </IconButton>
   )
 }
