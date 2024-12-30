@@ -85,6 +85,7 @@ const InsurancePaymentPostingView = ({
       <FormContainer form={form} onSubmit={onSubmit}>
         <InsurancePaymentClaimSummary claim={paymentPostingClaim} />
         <InsurancePaymentPostingTable
+          paymentDetail={paymentDetail}
           onCancel={onCancel}
           claimServiceLinePayments={form.getValues('claimServiceLinePayments')}
         />

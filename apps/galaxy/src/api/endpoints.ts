@@ -56,6 +56,7 @@ const NOTE_MARK_ERROR_ENDPOINT = (
 const GET_CLINICS_ENDPOINT = `${API_URL}/api/clinics`
 const GET_PROVIDERS_ENDPOINT = `${API_URL}/api/staff/search`
 const GET_VISIT_TYPE_ENDPOINT = `${API_URL}/api/encounters/actions/search`
+const GET_PAYMENT_ADJUSTMENT_CODES = `${API_URL}/api/paymentadjustmentcodes/actions/search`
 const GET_FACILITY_ADMISSION_IDS_ENDPOINT = (patientId: number) =>
   `${API_URL}/api/patients/${patientId}/appointments/actions/facilityadmitids`
 const GET_LAB_RESULTS_ENDPOINT = (patientId: string) =>
@@ -507,6 +508,7 @@ export {
   NOTE_UPLOAD_FILE,
   GET_NOTE_VIEW_ENDPOINT,
   USER_ENDPOINT,
+  GET_PAYMENT_ADJUSTMENT_CODES,
   DELETE_STAFF_ENDPOINT,
   REFRESH_ENDPOINT,
   GET_CLAIM_SUBMISSION_LIST,

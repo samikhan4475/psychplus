@@ -5,12 +5,14 @@ import { Flex, Text } from '@radix-ui/themes'
 import toast from 'react-hot-toast'
 import { LoadingPlaceholder } from '@/components'
 import { getPaymentDetailAction } from '../actions'
+import { getAdjustmentCodesAction } from '../actions/get-adjustment-codes'
 import { useStore } from '../insurance-payment-tab/store'
 import { useStore as useTabStore } from '../store'
 import { InsurancePayment, RevenueCycleTab } from '../types'
 import { PaymentCheckHeader } from './insurance-payment-check-header'
 import { PaymentCheckTable } from './insurance-payment-check-table'
 import { InsurancePaymentPostingView } from './insurance-payment-posting-tab'
+import { transformInPayment } from './utils'
 
 interface InsurancePaymentDetailViewProps {
   checkId: string
@@ -24,16 +26,30 @@ const InsurancePaymentDetailView = ({
   const paymentPostingClaim = useStore(
     (state) => state.paymentPostingClaim[activeTab],
   )
-  const fetchPaymentDetail = (checkId: string) => {
+  const fetchPaymentDetail = async (checkId: string) => {
     setIsLoading(true)
-    getPaymentDetailAction(checkId).then((result) => {
-      if (result.state === 'success') {
-        setPaymentDetail(result.data)
-      } else if (result.state === 'error') {
-        toast.error(result.error)
-      }
-      setIsLoading(false)
-    })
+    const result = await getPaymentDetailAction(checkId)
+    if (result.state === 'success') {
+      const adjustmentResult = await getAdjustmentCodesAction({
+        practiceIds: [result.data.practiceId],
+        recordStatuses: ['Active'],
+      })
+
+      const adjustmentCodes =
+        adjustmentResult.state === 'success' ? adjustmentResult.data : []
+
+      setPaymentDetail(
+        adjustmentCodes.length > 0
+          ? transformInPayment({
+              paymentDetail: result.data,
+              adjustmentCodes,
+            })
+          : result.data,
+      )
+    } else if (result.state === 'error') {
+      toast.error(result.error)
+    }
+    setIsLoading(false)
   }
 
   useEffect(() => {

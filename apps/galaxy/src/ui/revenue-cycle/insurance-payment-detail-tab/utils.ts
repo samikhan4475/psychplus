@@ -1,4 +1,54 @@
 import { SharedCode } from '@/types'
+import {
+  ClaimServiceLinePayment,
+  InsurancePayment,
+  ServiceLinePaymentAdjustment,
+} from '../types'
+import { adjustmentMapping } from './insurance-payment-posting-tab/constants'
+import { PaymentAdjustment } from './types'
+
+interface TransformInPaymentParams {
+  paymentDetail: InsurancePayment
+  adjustmentCodes: PaymentAdjustment[]
+}
+
+const transformInPayment = ({
+  paymentDetail,
+  adjustmentCodes,
+}: TransformInPaymentParams) => {
+  const getAdjustmentStatus = (adjustment: ServiceLinePaymentAdjustment) => {
+    const matchingCode = adjustmentCodes.find(
+      (code) =>
+        code.groupCode === adjustment.adjustmentGroupCode &&
+        code.reasonCode === adjustment.adjustmentReasonCode &&
+        adjustment.recordStatus !== 'Inactive' &&
+        !adjustmentMapping[
+          `${adjustment.adjustmentGroupCode}_${adjustment.adjustmentReasonCode}`
+        ],
+    )
+    return matchingCode?.adjustmentStatus ?? ''
+  }
+
+  const updateAdjustments = (serviceLine: ClaimServiceLinePayment) =>
+    serviceLine.serviceLinePaymentAdjustments?.map(
+      (adjustment: ServiceLinePaymentAdjustment) => ({
+        ...adjustment,
+        adjustmentStatus: getAdjustmentStatus(adjustment),
+      }),
+    )
+
+  const updatedPayments = paymentDetail.claimPayments?.map((payment) => ({
+    ...payment,
+    claimServiceLinePayments: payment.claimServiceLinePayments.map(
+      (serviceLine: ClaimServiceLinePayment) => ({
+        ...serviceLine,
+        serviceLinePaymentAdjustments: updateAdjustments(serviceLine),
+      }),
+    ),
+  }))
+
+  return { ...paymentDetail, claimPayments: updatedPayments }
+}
 
 const getPaymentDisplay = (
   codeValue: string,
@@ -12,4 +62,4 @@ const getPaymentDisplay = (
   return codeSetLookup[codeValue] ?? codeValue
 }
 
-export { getPaymentDisplay }
+export { getPaymentDisplay, transformInPayment }

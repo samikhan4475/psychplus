@@ -54,6 +54,7 @@ interface ServiceLinePaymentAdjustment {
   claimServiceLinePaymentId?: string
   adjustmentAmount: number
   adjustmentReasonCode: string
+  adjustmentStatus?: string
   remarkCode: string
   adjustmentGroupCode: string
 }

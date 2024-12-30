@@ -17,13 +17,16 @@ const AdjustmentPill = ({
     adjustmentGroupCode,
     adjustmentAmount,
     adjustmentReasonCode,
+    adjustmentStatus,
   },
   adjustments,
   serviceLineIndex,
   adjustmentIndex,
 }: AdjustmentPillProps) => {
   const form = useFormContext<SchemaType>()
-
+  const writeOffAmount = form.watch(
+    `claimServiceLinePayments.${serviceLineIndex}.writeOffAmount`,
+  )
   const removeAdjustment = () => {
     const updatedAdjustments = adjustments
       .map((adj, index) => {
@@ -48,9 +51,15 @@ const AdjustmentPill = ({
     if (field === 'allowedAmount') {
       form.setValue(
         `claimServiceLinePayments.${serviceLineIndex}.writeOffAmount`,
-        '0',
+        `${+writeOffAmount - +adjustmentAmount}`,
       )
     }
+    if (adjustmentStatus === 'WriteOff')
+      form.setValue(
+        `claimServiceLinePayments.${serviceLineIndex}.writeOffAmount`,
+        `${+writeOffAmount - +adjustmentAmount}`,
+      )
+
     form.setValue(
       `claimServiceLinePayments.${serviceLineIndex}.serviceLinePaymentAdjustments`,
       updatedAdjustments,

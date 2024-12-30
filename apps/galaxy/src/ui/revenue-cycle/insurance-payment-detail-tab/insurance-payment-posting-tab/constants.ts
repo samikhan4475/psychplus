@@ -1,26 +1,28 @@
 const WRITE_OFF_ADJUSTMENT = {
   adjustmentGroupCode: 'CO',
   adjustmentReasonCode: '45',
-  status: 'W',
+  adjustmentStatus: 'WriteOff',
 } as const
 
 const DEDUCTIBLE_ADJUSTMENT = {
   adjustmentGroupCode: 'PR',
   adjustmentReasonCode: '1',
-  status: 'PR',
+  adjustmentStatus: 'PatientResponsibility',
 } as const
 
 const CO_INSURANCE_ADJUSTMENT = {
   adjustmentGroupCode: 'PR',
   adjustmentReasonCode: '2',
-  status: 'PR',
+  adjustmentStatus: 'PatientResponsibility',
 } as const
 
 const CO_PAY_ADJUSTMENT = {
   adjustmentGroupCode: 'PR',
   adjustmentReasonCode: '3',
-  status: 'PR',
+  adjustmentStatus: 'PatientResponsibility',
 } as const
+
+const DEFAULT_ADJUSTMENT_TYPE = 'Denied'
 
 const adjustmentMapping = {
   [`${WRITE_OFF_ADJUSTMENT.adjustmentGroupCode}_${WRITE_OFF_ADJUSTMENT.adjustmentReasonCode}`]:
@@ -41,6 +43,7 @@ type AdjustmentField =
 
 export {
   WRITE_OFF_ADJUSTMENT,
+  DEFAULT_ADJUSTMENT_TYPE,
   CO_INSURANCE_ADJUSTMENT,
   DEDUCTIBLE_ADJUSTMENT,
   CO_PAY_ADJUSTMENT,

@@ -2,7 +2,8 @@ import {
   ClaimServiceLinePayment,
   ServiceLinePaymentAdjustment,
 } from '@/ui/revenue-cycle/types'
-import { DEDUCTIBLE_ADJUSTMENT } from '../constants'
+import { PaymentAdjustment } from '../../types'
+import { DEDUCTIBLE_ADJUSTMENT, DEFAULT_ADJUSTMENT_TYPE } from '../constants'
 
 const amountRegex = /^\d{0,3}(\.\d{0,2})?$/
 const specialKeys = ['Backspace', 'Tab', 'Control', 'Shift', 'Alt']
@@ -24,12 +25,14 @@ interface AdjustmentType extends Partial<AdjustmentParams> {
   adjustmentGroupCode: string
   adjustmentReasonCode: string
   adjustmentAmount?: number
+  adjustmentStatus?: string
 }
 
 const updateOrAddAdjustment = ({
   adjustmentGroupCode,
   adjustmentReasonCode,
   adjustmentAmount,
+  adjustmentStatus,
   serviceLinePaymentAdjustments,
 }: AdjustmentType) => {
   if (!adjustmentGroupCode || !adjustmentReasonCode || !adjustmentAmount)
@@ -59,6 +62,7 @@ const updateOrAddAdjustment = ({
       adjustmentAmount: parsedAdjustmentAmount,
       adjustmentGroupCode: adjustmentGroupCode,
       adjustmentReasonCode: adjustmentReasonCode,
+      adjustmentStatus,
       remarkCode: '',
       recordStatus: 'Active',
     }
@@ -143,7 +147,10 @@ const calculateBalanceAmount = (
   const otherAdjustments =
     serviceLinePayment.serviceLinePaymentAdjustments?.reduce(
       (acc, adj) =>
-        adj.adjustmentGroupCode === DEDUCTIBLE_ADJUSTMENT.adjustmentGroupCode &&
+        (adj.adjustmentGroupCode ===
+          DEDUCTIBLE_ADJUSTMENT.adjustmentGroupCode ||
+          adj.adjustmentStatus === DEFAULT_ADJUSTMENT_TYPE ||
+          adj.adjustmentStatus === 'PatientResponsibility') &&
         adj.recordStatus !== 'Inactive'
           ? acc + adj.adjustmentAmount
           : acc,
@@ -153,9 +160,26 @@ const calculateBalanceAmount = (
   return (balance - otherAdjustments).toFixed(2)
 }
 
+interface AdjustmentStatusParams {
+  adjustmentCodes: PaymentAdjustment[]
+  adjustmentGroupCode: string
+  adjustmentReasonCode: string
+}
+const getAdjustmentStatus = ({
+  adjustmentCodes,
+  adjustmentGroupCode,
+  adjustmentReasonCode,
+}: AdjustmentStatusParams): string =>
+  adjustmentCodes.find(
+    (code) =>
+      code.groupCode === adjustmentGroupCode &&
+      code.reasonCode === adjustmentReasonCode,
+  )?.adjustmentStatus ?? DEFAULT_ADJUSTMENT_TYPE
+
 export {
   amountCheck,
   addInsuranceAdjustment,
+  getAdjustmentStatus,
   updateOrAddAdjustment,
   calculateBalanceAmount,
   removeInsuranceAdjustment,

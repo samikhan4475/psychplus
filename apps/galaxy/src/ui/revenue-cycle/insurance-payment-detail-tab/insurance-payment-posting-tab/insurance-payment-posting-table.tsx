@@ -5,7 +5,7 @@ import { Flex, Text } from '@radix-ui/themes'
 import { ColumnDef } from '@tanstack/react-table'
 import { ColumnHeader, DataTable, DateCell, TextCell } from '@/components'
 import { formatDate } from '@/utils'
-import { ClaimServiceLinePayment } from '../../types'
+import { ClaimServiceLinePayment, InsurancePayment } from '../../types'
 import CancelButton from './cancel-button'
 import {
   AdjustmentReasonRemarkCell,
@@ -21,7 +21,9 @@ import {
 import { SaveAndPostButton } from './save-and-post-button'
 import { SaveButton } from './save-button'
 
-const columns: ColumnDef<ClaimServiceLinePayment>[] = [
+const columns = (
+  paymentDetail: InsurancePayment,
+): ColumnDef<ClaimServiceLinePayment>[] => [
   {
     id: 'chargeId',
     header: ({ column }) => (
@@ -157,18 +159,26 @@ const columns: ColumnDef<ClaimServiceLinePayment>[] = [
     header: ({ column }) => (
       <ColumnHeader column={column} label="Adjustment/Reason/Remark Code" />
     ),
-    cell: AdjustmentReasonRemarkCell,
+    cell: ({ row }) => (
+      <AdjustmentReasonRemarkCell
+        paymentDetail={paymentDetail}
+        row={row}
+        key={row.index}
+      />
+    ),
   },
 ]
 
 interface InsurancePaymentPostingTableProps {
   claimServiceLinePayments: ClaimServiceLinePayment[]
   onCancel: () => void
+  paymentDetail: InsurancePayment
 }
 
 const InsurancePaymentPostingTable = ({
   claimServiceLinePayments,
   onCancel,
+  paymentDetail,
 }: InsurancePaymentPostingTableProps) => {
   return (
     <Flex direction="column">
@@ -179,7 +189,7 @@ const InsurancePaymentPostingTable = ({
       <DataTable
         tableClass="[&_.rt-ScrollAreaRoot]:pb-2 max-w-[calc(100vw-23px)]"
         data={claimServiceLinePayments ?? []}
-        columns={columns}
+        columns={columns(paymentDetail)}
         disablePagination
       />
 

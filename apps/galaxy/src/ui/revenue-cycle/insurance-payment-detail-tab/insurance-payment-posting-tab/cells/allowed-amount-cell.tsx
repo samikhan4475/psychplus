@@ -11,6 +11,10 @@ import { addInsuranceAdjustment, amountCheck } from './utils'
 const AllowedAmountCell = ({ row }: PropsWithRow<ClaimServiceLinePayment>) => {
   const form = useFormContext<SchemaType>()
 
+  const writeOffAmount = form.watch(
+    `claimServiceLinePayments.${row.index}.writeOffAmount`,
+  )
+
   const billedAmount = form.watch(
     `claimServiceLinePayments.${row.index}.billedAmount`,
   )
@@ -45,6 +49,7 @@ const AllowedAmountCell = ({ row }: PropsWithRow<ClaimServiceLinePayment>) => {
           adj.adjustmentReasonCode !==
             WRITE_OFF_ADJUSTMENT.adjustmentReasonCode,
       )
+
       form.setValue(
         `claimServiceLinePayments.${row.index}.serviceLinePaymentAdjustments`,
         updatedAdjustments,
@@ -60,7 +65,7 @@ const AllowedAmountCell = ({ row }: PropsWithRow<ClaimServiceLinePayment>) => {
 
       form.setValue(
         `claimServiceLinePayments.${row.index}.writeOffAmount`,
-        String(adjustmentAmount),
+        `${+adjustmentAmount + +writeOffAmount}`,
       )
       form.setValue(
         `claimServiceLinePayments.${row.index}.serviceLinePaymentAdjustments`,
