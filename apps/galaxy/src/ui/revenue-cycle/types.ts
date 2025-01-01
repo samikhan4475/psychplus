@@ -97,6 +97,7 @@ interface InsurancePayment {
   practiceId: string
   status: string
   isDuplicate: boolean
+  claimCount: string
   insuranceName: string
   checkNumber: string
   checkDate: string

@@ -14,15 +14,15 @@ import { PaymentCheckTable } from './insurance-payment-check-table'
 import { InsurancePaymentPostingView } from './insurance-payment-posting-tab'
 import { transformInPayment } from './utils'
 
-interface InsurancePaymentDetailViewProps {
-  checkId: string
-}
-const InsurancePaymentDetailView = ({
-  checkId,
-}: InsurancePaymentDetailViewProps) => {
+const InsurancePaymentDetailView = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [paymentDetail, setPaymentDetail] = useState<InsurancePayment>()
-  const activeTab = useTabStore((state) => state.activeTab)
+
+  const { activeTab, selectedPaymentId } = useTabStore((state) => ({
+    activeTab: state.activeTab,
+    selectedPaymentId: state.selectedPayments[state.activeTab],
+  }))
+
   const paymentPostingClaim = useStore(
     (state) => state.paymentPostingClaim[activeTab],
   )
@@ -54,8 +54,8 @@ const InsurancePaymentDetailView = ({
 
   useEffect(() => {
     if (!activeTab.includes(RevenueCycleTab.CheckDetails)) return
-    fetchPaymentDetail(checkId)
-  }, [checkId, activeTab])
+    fetchPaymentDetail(selectedPaymentId)
+  }, [selectedPaymentId, activeTab])
 
   if (isLoading) return <LoadingPlaceholder className="bg-white min-h-[46vh]" />
 

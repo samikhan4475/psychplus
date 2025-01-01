@@ -85,7 +85,7 @@ const RevenueCycleTabs = () => {
           <ClaimDetailView claimId={selectedClaimId} />
         </TabsContent>
         <TabsContent value={`${RevenueCycleTab.CheckDetails} ${tabId}`}>
-          <InsurancePaymentDetailView checkId={tabId} />
+          <InsurancePaymentDetailView />
         </TabsContent>
         <TabsContent value={`${RevenueCycleTab.ViewFile} ${tabId}`}>
           <FileView url={selectedPdfFileUrl} />

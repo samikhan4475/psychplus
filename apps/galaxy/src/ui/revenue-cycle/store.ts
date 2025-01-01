@@ -8,12 +8,14 @@ interface Store {
   viewedTabs: Set<Tab>
   closeableTabs: Set<Tab>
   selectedClaimId: string
+  selectedPayments: Record<string, string>
   selectedPdfFileUrl: string
   prevTab: Tab
   setSelectedPdfFileUrl: (selectedPdfFileUrl: string) => void
   selectedClaimStatus: string
   setSelectedClaimStatus: (selectedClaimStatus: string) => void
   setSelectedClaim: (selectedClaimId: string) => void
+  setSelectedPayment: (selectedPaymentId: string, checkNumber: string) => void
   setActiveTab: (tab: Tab) => void
   closeTab: (tab: Tab) => void
 }
@@ -54,16 +56,32 @@ const useStore = create<Store>((set, get) => ({
     updatedCloseableTabs.delete(tab)
     const updatedViewedTabs = get().viewedTabs
     updatedViewedTabs.delete(tab)
+    
     set({
       activeTab: get().prevTab ?? RevenueCycleTab.Claim,
       closeableTabs: updatedCloseableTabs,
       viewedTabs: updatedViewedTabs,
       selectedClaimId: '',
+      selectedPayments: tab.includes(RevenueCycleTab.CheckDetails)
+        ? Object.fromEntries(
+            Object.entries(get().selectedPayments).filter(
+              ([key]) => tab !== key,
+            ),
+          )
+        : get().selectedPayments,
     })
   },
   selectedClaimId: '',
   setSelectedClaim: (selectedClaimId: string) =>
     set(() => ({ selectedClaimId: selectedClaimId })),
+  selectedPayments: {},
+  setSelectedPayment: (selectedPaymentId, checkNumber) =>
+    set(() => ({
+      selectedPayments: {
+        ...get().selectedPayments,
+        [checkNumber]: selectedPaymentId,
+      },
+    })),
   selectedClaimStatus: '',
   setSelectedClaimStatus: (selectedClaimStatus: string) =>
     set(() => ({ selectedClaimStatus: selectedClaimStatus })),

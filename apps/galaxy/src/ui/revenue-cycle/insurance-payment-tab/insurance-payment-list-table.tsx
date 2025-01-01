@@ -122,7 +122,7 @@ const columns = (
       ),
     },
     {
-      id: 'noindex', // noindex is here because right now we are not mapping any value against this column
+      id: 'claimCount', // noindex is here because right now we are not mapping any value against this column
       header: ({ column }) => (
         <ColumnHeader
           label="Total Claim"
@@ -133,9 +133,7 @@ const columns = (
           }}
         />
       ),
-      cell: ({ row }) => {
-        return '-'
-      },
+      cell: ({ row }) => <TextCell>{row.original.claimCount}</TextCell>,
     },
     {
       id: 'status',
@@ -154,7 +152,7 @@ const columns = (
       ),
     },
     {
-      id: 'noindex', // noindex is here because right now we are not mapping any value against this column
+      id: 'postedAmount',
       header: ({ column }) => (
         <ColumnHeader
           label="Posted Amount"
@@ -165,13 +163,13 @@ const columns = (
           }}
         />
       ),
-      cell: ({ row }) => {
-        return '-'
-      },
+      cell: ({ row }) => (
+        <TextCell hasPayment>{row.original.postedAmount}</TextCell>
+      ),
     },
 
     {
-      id: 'amount',
+      id: 'unPostedAmount',
       header: ({ column }) => (
         <ColumnHeader
           label="Unposted Amount"
@@ -182,7 +180,9 @@ const columns = (
           }}
         />
       ),
-      cell: ({ row }) => <TextCell hasPayment>{row.original.amount}</TextCell>,
+      cell: ({ row }) => (
+        <TextCell hasPayment>{row.original.unPostedAmount}</TextCell>
+      ),
     },
     {
       id: 'actions',

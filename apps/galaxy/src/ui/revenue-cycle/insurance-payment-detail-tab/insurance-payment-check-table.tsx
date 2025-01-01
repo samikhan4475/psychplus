@@ -16,7 +16,7 @@ const columns: ColumnDef<ClaimPayment>[] = [
     id: 'claimId',
     header: ({ column }) => <ColumnHeader column={column} label="Claim #" />,
     cell: ({ row }) => (
-      <TextCell className="min-w-[235px]">{row.original.claimId}</TextCell>
+      <TextCell className="min-w-[235px]">{row.original.claimNumber}</TextCell>
     ),
   },
   {

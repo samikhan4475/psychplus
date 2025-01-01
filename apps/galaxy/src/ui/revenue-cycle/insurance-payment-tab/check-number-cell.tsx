@@ -12,9 +12,14 @@ const CheckNumberCell = ({
   row,
   children,
 }: React.PropsWithChildren<CheckNumberCellProps>) => {
-  const setActiveTab = useStore((state) => state.setActiveTab)
+  const { setActiveTab, setSelectedPayment } = useStore((state) => ({
+    setActiveTab: state.setActiveTab,
+    setSelectedPayment: state.setSelectedPayment,
+  }))
   const openPaymentDetail = () => {
-    setActiveTab('Check# ' + row.original.id)
+    const { id, checkNumber } = row.original
+    setSelectedPayment(id, `Check# ${checkNumber}`)
+    setActiveTab(`Check# ${checkNumber}`)
   }
   return (
     <Flex height="100%" align="center" onClick={openPaymentDetail}>
