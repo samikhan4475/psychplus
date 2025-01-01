@@ -1,5 +1,6 @@
 import { Button } from '@radix-ui/themes'
 import { SignIcon } from '@/components/icons'
+import { useHasPermission } from '@/hooks'
 import { CosignDialog } from './cosign-dialog'
 import { useCosignDialog } from './hooks'
 import { useStore } from './store'
@@ -13,12 +14,25 @@ const NotesSendCosignerButton = () => {
       selectedRow: state.selectedRow,
     }),
   )
+
+  const sentToCosignerButtonPermission = useHasPermission(
+    'sendToCosignerButtonNotesPage',
+  )
   const handleClick = () => {
     if (!selectedRow) {
       setIsErrorAlertOpen(true)
       setErrorMessage('Please select one note to click this button')
       return
     }
+
+    if (!sentToCosignerButtonPermission) {
+      setIsErrorAlertOpen(true)
+      setErrorMessage(
+        'You do not have permission to Send Note to Cosigner. Please contact your supervisor if you need any further assistance.',
+      )
+      return
+    }
+
     openDialog()
   }
 

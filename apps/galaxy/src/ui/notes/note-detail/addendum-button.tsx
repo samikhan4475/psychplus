@@ -2,18 +2,29 @@
 
 import { PlusIcon } from '@radix-ui/react-icons'
 import { Button } from '@radix-ui/themes'
+import { useHasPermission } from '@/hooks'
+import { useStore as useGlobalStore } from '@/store'
 import { useStore } from '../store'
 
 interface AddendumButtonProps {
   onClick: () => void
 }
 const AddendumButton = ({ onClick }: AddendumButtonProps) => {
-  const { selectedRow, setErrorMessage, setIsErrorAlertOpen } = useStore(
-    (state) => ({
+  const { staffId } = useGlobalStore((state) => state.user)
+  const { selectedRow, appointment, setErrorMessage, setIsErrorAlertOpen } =
+    useStore((state) => ({
       selectedRow: state.selectedRow,
+      appointment: state.appointment,
       setErrorMessage: state.setErrorMessage,
       setIsErrorAlertOpen: state.setIsErrorAlertOpen,
-    }),
+    }))
+
+  const createAddendumNotProviderPermission = useHasPermission(
+    'createAddendumNotProviderNotesPage',
+  )
+
+  const createAddendumProviderPermission = useHasPermission(
+    'createAddendumProviderNotesPage',
   )
 
   const handleClick = () => {
@@ -22,7 +33,22 @@ const AddendumButton = ({ onClick }: AddendumButtonProps) => {
       setErrorMessage('Please select note to click this button')
       return
     }
+    const hasPermissionToCreateAddendumProviderPermission =
+      appointment?.providerStaffId === staffId &&
+      createAddendumProviderPermission
 
+    const hasPermissionToCreateAddendumPermission =
+      hasPermissionToCreateAddendumProviderPermission
+        ? true
+        : !!createAddendumNotProviderPermission
+
+    if (!hasPermissionToCreateAddendumPermission) {
+      setIsErrorAlertOpen(true)
+      setErrorMessage(
+        'You do not have permission to Create Addendum. Please contact your supervisor if you need any further assistance.',
+      )
+      return
+    }
     onClick()
   }
 

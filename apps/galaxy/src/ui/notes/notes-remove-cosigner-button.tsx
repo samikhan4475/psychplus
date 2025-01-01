@@ -2,6 +2,7 @@
 
 import { Button } from '@radix-ui/themes'
 import { WarningIcon } from '@/components/icons'
+import { useHasPermission } from '@/hooks'
 import { useCosignDialog } from './hooks'
 import { RemoveCosignDialog } from './remove-cosign-dialog'
 import { useStore } from './store'
@@ -16,13 +17,24 @@ const NotesRemoveConsignerButton = () => {
       selectedRow: state.selectedRow,
     }),
   )
-
+  const removeCosignerButtonPermission = useHasPermission(
+    'removeCosignerButtonNotesPage',
+  )
   const handleClick = () => {
     if (!selectedRow) {
       setIsErrorAlertOpen(true)
       setErrorMessage('Please select note to click this button')
       return
     }
+
+    if (!removeCosignerButtonPermission) {
+      setIsErrorAlertOpen(true)
+      setErrorMessage(
+        'You do not have permission to Remove Cosigner. Please contact your supervisor if you need any further assistance.',
+      )
+      return
+    }
+
     openDialog()
   }
   return (

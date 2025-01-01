@@ -42,6 +42,11 @@ interface AuthSession {
   accessTokenExpiry: string
 }
 
+interface UserType {
+  userType: string
+  resourceId: number
+}
+
 interface RefreshRequest {
   userId: string
   refreshToken: string
@@ -54,4 +59,5 @@ export type {
   AuthResponse,
   AuthSession,
   RefreshRequest,
+  UserType,
 }

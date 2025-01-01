@@ -14,7 +14,7 @@ import {
 } from '@/actions'
 import { DatePickerInput, FormContainer, MultiSelectField } from '@/components'
 import { CODE_NOT_SET, CODESETS } from '@/constants'
-import { useCodesetOptions } from '@/hooks'
+import { useCodesetOptions, useHasPermission } from '@/hooks'
 import { SelectOptionType } from '@/types'
 import { formatDateToISOString, sanitizeFormData } from '@/utils'
 import {
@@ -53,6 +53,10 @@ const threeeMonthsAgo = new Date()
 threeeMonthsAgo.setMonth(today.getMonth() - 3)
 
 const LeftPanelFilters = ({ patientId }: { patientId: string }) => {
+  const search90DaysOldNotesPermission = useHasPermission(
+    'search90DaysOldNotes',
+  )
+
   const form = useForm<NotesFilterSchemaType>({
     resolver: zodResolver(schema),
     criteriaMode: 'all',
@@ -79,9 +83,18 @@ const LeftPanelFilters = ({ patientId }: { patientId: string }) => {
     },
   })
 
-  const { fetch, loading } = useStore((state) => ({
+  const {
+    fetch,
+    loading,
+    setSelectedRow,
+    setIsErrorAlertOpen,
+    setErrorMessage,
+  } = useStore((state) => ({
     fetch: state.fetch,
     loading: state.loading,
+    setSelectedRow: state.setSelectedRow,
+    setIsErrorAlertOpen: state.setIsErrorAlertOpen,
+    setErrorMessage: state.setErrorMessage,
   }))
 
   const onSubmit: SubmitHandler<NotesFilterSchemaType> = (data) => {
@@ -103,8 +116,25 @@ const LeftPanelFilters = ({ patientId }: { patientId: string }) => {
       organizationIds: data.organization,
       status: data.status,
     }
+    const now = new Date()
+    const dateFrom = new Date(payload.dateFrom)
+    const dateTo = new Date(payload.dateTo)
 
+    const ninetyDaysAgo = new Date()
+
+    ninetyDaysAgo.setDate(now.getDate() - 90)
+    if (
+      (data.dateFrom && dateFrom < ninetyDaysAgo) ||
+      (data.dateTo && dateTo < ninetyDaysAgo && !search90DaysOldNotesPermission)
+    ) {
+      setIsErrorAlertOpen(true)
+      setErrorMessage(
+        'You do not have permission to Search 90 Days Old Notes. Please contact your supervisor if you need any further assistance.',
+      )
+      return
+    }
     fetch(sanitizeFormData(payload))
+    setSelectedRow(undefined)
   }
 
   const [locations, setLocations] = useState<SelectOptionType[]>([])

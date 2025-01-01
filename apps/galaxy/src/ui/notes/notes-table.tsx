@@ -11,7 +11,7 @@ import {
   TextCell,
 } from '@/components'
 import { CODESETS } from '@/constants'
-import { useCodesetCodes } from '@/hooks'
+import { useCodesetCodes, useHasPermission } from '@/hooks'
 import { SharedCode } from '@/types'
 import { formatDateTime } from '@/utils'
 import { useStore } from './store'
@@ -134,11 +134,24 @@ const getColumns = (codes: SharedCode[]) => {
 }
 
 const NotesTable = ({ patientId }: { patientId: string }) => {
-  const { data, fetch, loading, setSelectedRow } = useStore((state) => ({
+  const clickSpecificNoteFromPanelPermission = useHasPermission(
+    'clickSpecificNoteFromPanelNotesPage',
+  )
+
+  const {
+    data,
+    fetch,
+    loading,
+    setSelectedRow,
+    setIsErrorAlertOpen,
+    setErrorMessage,
+  } = useStore((state) => ({
     data: state.data,
     loading: state.loading,
     fetch: state.fetch,
     setSelectedRow: state.setSelectedRow,
+    setIsErrorAlertOpen: state.setIsErrorAlertOpen,
+    setErrorMessage: state.setErrorMessage,
   }))
 
   const codes = useCodesetCodes(CODESETS.UsStates)
@@ -149,6 +162,14 @@ const NotesTable = ({ patientId }: { patientId: string }) => {
 
   const onRowSelect = (row: Row<PatientNotes>, table: Table<PatientNotes>) => {
     table.setRowSelection({ [row.id]: true })
+
+    if (!clickSpecificNoteFromPanelPermission) {
+      setIsErrorAlertOpen(true)
+      setErrorMessage(
+        'You do not have permission to view it’s details. Please contact your supervisor if you need any further assistance.',
+      )
+      return
+    }
     setSelectedRow(row.original)
   }
 

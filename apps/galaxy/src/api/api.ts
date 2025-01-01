@@ -72,40 +72,39 @@ const POST = async <T>(
   body?: FormData | object,
   options: PostOptions = {},
 ): Promise<NetworkResult<T>> => {
-  const { headers, ...rest } = options;
+  const { headers, ...rest } = options
 
   const isBodyFormData = body instanceof FormData
   const reqHeaders = rest.ignoreHeaders
     ? createJsonHeader()
     : createHeaders({
-      ...(isBodyFormData ? {} : createJsonHeader()),
-      ...headers,
-    })
+        ...(isBodyFormData ? {} : createJsonHeader()),
+        ...headers,
+      })
 
   const response = await fetch(url, {
     method: 'POST',
     headers: reqHeaders,
     body: isBodyFormData ? body : JSON.stringify(body),
     ...rest,
-  });
+  })
 
-  const data = getResponseData(await response.text());
+  const data = getResponseData(await response.text())
 
   if (!response.ok) {
     return {
       state: 'error',
       error: getErrorMessage(data),
       headers: response.headers,
-    };
+    }
   }
 
   return {
     state: 'success',
     data,
     headers: response.headers,
-  };
-};
-
+  }
+}
 
 const PATCH = async <T>(
   url: string,
@@ -118,9 +117,9 @@ const PATCH = async <T>(
   const reqHeaders = rest.ignoreHeaders
     ? createJsonHeader()
     : createHeaders({
-      ...(isBodyFormData ? {} : createJsonHeader()),
-      ...headers,
-    })
+        ...(isBodyFormData ? {} : createJsonHeader()),
+        ...headers,
+      })
 
   const response = await fetch(url, {
     method: 'PATCH',
@@ -153,10 +152,13 @@ const PUT = async <T>(
 ): Promise<NetworkResult<T>> => {
   const { headers, ...rest } = options
 
-  const isBodyFormData = body instanceof FormData;
+  const isBodyFormData = body instanceof FormData
   const reqHeaders = rest.ignoreHeaders
     ? createJsonHeader()
-    : createHeaders({ ...(isBodyFormData ? {} : createJsonHeader()), ...headers })
+    : createHeaders({
+        ...(isBodyFormData ? {} : createJsonHeader()),
+        ...headers,
+      })
 
   const response = await fetch(url, {
     method: 'PUT',

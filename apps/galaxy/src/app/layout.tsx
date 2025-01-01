@@ -4,6 +4,7 @@ import { Josefin_Sans } from 'next/font/google'
 import { Flex, Theme } from '@radix-ui/themes'
 import { Toaster } from 'react-hot-toast'
 import { getCodesets, getLoggedInUser, getUserPermissions } from '@/api'
+import { getUserType } from '@/api/get-user-type'
 import { CODESETS } from '@/constants'
 import { StoreProvider } from '@/store'
 import { Header } from '@/ui/header'
@@ -55,9 +56,14 @@ const RootLayout = async ({ children }: React.PropsWithChildren) => {
       getUserPermissions(),
       getLoggedInUser(),
     ])
+    const userType = await getUserType(`${user.id}`)
 
     return (
-      <StoreProvider user={user} permissions={permissions} codesets={codesets}>
+      <StoreProvider
+        user={{ ...user, staffId: userType.resourceId }}
+        permissions={permissions}
+        codesets={codesets}
+      >
         {content}
       </StoreProvider>
     )

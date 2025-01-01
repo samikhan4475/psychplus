@@ -120,6 +120,11 @@ const USER_PERMISSIONS = {
   changeUnit: 'changeUnit',
   changeRoom: 'changeRoom',
   changeGroup: 'changeGroup',
+  sendToCosignerButtonNotesPage: 'sendToCosignerButtonNotesPage',
+  markAsErrorNotProviderNotesPage: 'markAsErrorNotProviderNotesPage',
+  createAddendumNotProviderNotesPage: 'createAddendumNotProviderNotesPage',
+  removeCosignerButtonNotesPage: 'removeCosignerButtonNotesPage',
+  search90DaysOldNotes: 'search90DaysOldNotes',
 }
 
 export { USER_PERMISSIONS }

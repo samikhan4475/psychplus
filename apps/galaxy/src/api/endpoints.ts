@@ -447,6 +447,7 @@ const ADD_LAB_ORDERS_RESULT_ENDPOINT = (
 ) =>
   `${API_URL}/api/appointments/${appointmentId}/laborders/${orderId}/labresults`
 
+const GET_USER_TYPE = (userId: string) => `${API_URL}/api/users/${userId}/type`
 const GET_TREATMENT_TEAM_VISITS = `${API_URL}/api/appointments/actions/search`
 
 const GET_CLAIM_SUBMISSION_RESPONSE = (claimId: string) =>
@@ -486,23 +487,21 @@ const EDIT_DELETE_LAB_TEST_SPECIMEN = (
   `${API_URL}/api/appointments/${appointmentId}/laborders/${orderId}/labspecimens/${specimenId}`
 const PLACE_LAB_ORDER = (orderId: string) =>
   `${API_URL}/api/laborders/${orderId}/actions/submit`
-  const UPLOAD_QUICK_NOTE_DOCUMENT = (
-    patientId: number,
-    appointmentId: number,
-  ) => `${API_URL}/api/patients/${patientId}/appointments/${appointmentId}/documents`
-  const GET_ALL_QUICK_NOTE_DOCUMENT = (
-    patientId: number,
-    appointmentId: number,
-  ) => `${API_URL}/api/patients/${patientId}/appointments/${appointmentId}/documents/actions/search`
-  const DOWNLOAD_QUICK_NOTE_DOCUMENT = (
-    patientId: number,
-    appointmentId: number,
-    documentId: string,
-  ) => `${API_URL}/api/patients/${patientId}/appointments/${appointmentId}/documents/${documentId}/actions/download`
-  const DELETE_QUICK_NOTE_DOCUMENT = (
-    patientId: number,
-    appointmentId: number,
-  ) => `${API_URL}/api/patients/${patientId}/appointments/${appointmentId}/documents`
+const UPLOAD_QUICK_NOTE_DOCUMENT = (patientId: number, appointmentId: number) =>
+  `${API_URL}/api/patients/${patientId}/appointments/${appointmentId}/documents`
+const GET_ALL_QUICK_NOTE_DOCUMENT = (
+  patientId: number,
+  appointmentId: number,
+) =>
+  `${API_URL}/api/patients/${patientId}/appointments/${appointmentId}/documents/actions/search`
+const DOWNLOAD_QUICK_NOTE_DOCUMENT = (
+  patientId: number,
+  appointmentId: number,
+  documentId: string,
+) =>
+  `${API_URL}/api/patients/${patientId}/appointments/${appointmentId}/documents/${documentId}/actions/download`
+const DELETE_QUICK_NOTE_DOCUMENT = (patientId: number, appointmentId: number) =>
+  `${API_URL}/api/patients/${patientId}/appointments/${appointmentId}/documents`
 export {
   GET_LAB_RESULTS_ENDPOINT,
   NOTE_UPLOAD_FILE,
@@ -721,6 +720,7 @@ export {
   GET_NOTE_DOCUMENTS_ENDPOINT,
   GET_STAFF_USER_ENDPOINT,
   GET_NOTE_DOCUMENT_ENDPOINT,
+  GET_USER_TYPE,
   GET_CLAIM_SUBMISSION_RESPONSE,
   REMOVE_TO_COSIGNER_NOTE_ENDPOINT,
   GET_SEARCHED_LAB_TESTS,
