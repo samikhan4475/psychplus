@@ -399,11 +399,11 @@ interface ClaimUpdateApiResponse {
   appointmentId?: number
   claimNumber?: string
   locationId?: string
-  renderingProviderId?: number
-  attendingProviderId?: number
-  supervisingProviderId?: number
-  orderingProviderId?: number
-  referringProviderId?: number
+  renderingProviderId?: number | null
+  attendingProviderId?: number | null
+  supervisingProviderId?: number | null
+  orderingProviderId?: number | null
+  referringProviderId?: number | null
   patientId?: number
   placeOfService?: string
   dateOfServiceFrom?: string

@@ -6,8 +6,14 @@ import { SelectOptionType, StaffResource } from '@/types'
 const getProviderOptionsAction = async (): Promise<
   api.ActionResult<SelectOptionType[]>
 > => {
-  const response = await api.GET<StaffResource[]>(api.GET_STAFF)
-
+  const payload = {
+    isExcludeSelf: false,
+    isIncludeTestProviders: true,
+  }
+  const response = await api.POST<StaffResource[]>(
+    api.SEARCH_STAFF_ENDPOINT,
+    payload,
+  )
   if (response.state === 'error') {
     return {
       state: 'error',
@@ -19,7 +25,6 @@ const getProviderOptionsAction = async (): Promise<
     value: data.id.toString(),
     label: data.legalName.firstName,
   }))
-
   return {
     state: 'success',
     data: transformedData,

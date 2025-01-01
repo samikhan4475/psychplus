@@ -1,3 +1,4 @@
+import { I18nProvider } from 'react-aria-components'
 import {
   DatePickerInput,
   FormFieldContainer,
@@ -8,7 +9,9 @@ const AccidentDate = () => {
   return (
     <FormFieldContainer>
       <FormFieldLabel>Accident Date</FormFieldLabel>
-      <DatePickerInput field="accidentDate" />
+      <I18nProvider locale="en-US">
+        <DatePickerInput field="accidentDate" />
+      </I18nProvider>
     </FormFieldContainer>
   )
 }

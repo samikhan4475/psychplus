@@ -84,11 +84,21 @@ const ClaimDetailView = ({ claimId }: ClaimDetailViewProps) => {
       dateOfServiceFrom: getDateString(data.dateOfServiceFrom),
       dateOfServiceTo: getDateString(data.dateOfServiceTo),
       submittedDate: getDateString(data.submittedDate),
-      renderingProviderId: Number(data.renderingProviderId),
-      attendingProviderId: Number(data.attendingProviderId),
-      supervisingProviderId: Number(data.supervisingProviderId),
-      orderingProviderId: Number(data.orderingProviderId),
-      referringProviderId: Number(data.referringProviderId),
+      renderingProviderId: data.renderingProviderId
+        ? Number(data.renderingProviderId)
+        : null,
+      attendingProviderId: data.attendingProviderId
+        ? Number(data.attendingProviderId)
+        : null,
+      supervisingProviderId: data.supervisingProviderId
+        ? Number(data.supervisingProviderId)
+        : null,
+      orderingProviderId: data.orderingProviderId
+        ? Number(data.orderingProviderId)
+        : null,
+      referringProviderId: data.referringProviderId
+        ? Number(data.referringProviderId)
+        : null,
       claimServiceLines: (data.claimServiceLines ?? []).map(
         (line: ClaimServiceLine) => ({
           ...line,
@@ -110,7 +120,7 @@ const ClaimDetailView = ({ claimId }: ClaimDetailViewProps) => {
   const fetchClaimData = async (claimId: string) => {
     const claimResponse = await getClaimById(claimId)
     if (claimResponse.state === 'success') {
-      const transformedClaimData = transformClaimData(claimResponse.data)   
+      const transformedClaimData = transformClaimData(claimResponse.data)
       form.reset(transformedClaimData)
     } else {
       toast('Failed to fetch claim data')

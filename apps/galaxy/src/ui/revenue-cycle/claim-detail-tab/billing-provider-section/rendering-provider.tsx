@@ -37,6 +37,7 @@ const RenderingProvider = () => {
   const form = useFormContext()
   const [open, setOpen] = useState(false)
   const handleValueChange = (value: string) => {
+    if (!value) return
     form.setValue('renderingProviderId', value)
     setOpen(true)
   }

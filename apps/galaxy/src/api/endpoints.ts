@@ -315,7 +315,7 @@ const GET_ALL_STAFF_ENDPOINT = `${API_URL}/api/staff`
 const UPDATE_PATIENT_ENDPOINT = (patientId: number) =>
   `${API_URL}/api/patients/${patientId}`
 
-const SEARCH_STAFF_ENDPOINT = `${API_URL}/api/staff/search?limit=10`
+const SEARCH_STAFF_ENDPOINT = `${API_URL}/api/staff/search`
 const GET_SELF_STAFF_DETAILS_ENDPOINT = `${API_URL}/api/staff/self`
 const GET_PATIENT_REFERRALS_ENDPOINT = `${API_URL}/api/referrals/search`
 const GET_PATIENT_REFERRALS_HISTORY_ENDPOINT = (liveReferralId: string) =>

@@ -1,5 +1,6 @@
 'use client'
 
+import { I18nProvider } from 'react-aria-components'
 import { DatePickerInput } from '@/components'
 
 interface TableCellDosToProps {
@@ -8,10 +9,12 @@ interface TableCellDosToProps {
 
 const TableCellDosTo: React.FC<TableCellDosToProps> = ({ rowIndex }) => {
   return (
-    <DatePickerInput
-      field={`claimServiceLines.${rowIndex}.dateOfServiceTo`}
-      dateInputClass={'!border-none'}
-    />
+    <I18nProvider locale="en-US">
+      <DatePickerInput
+        field={`claimServiceLines.${rowIndex}.dateOfServiceTo`}
+        dateInputClass={'!border-none'}
+      />
+    </I18nProvider>
   )
 }
 
