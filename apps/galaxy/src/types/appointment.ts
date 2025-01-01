@@ -118,6 +118,7 @@ interface Appointment {
   cptAddonCodes: CptCode[]
   cptModifiersCodes: CptCode[]
   providerStaffId?: number
+  IsPatientHadAnyCheckedOutVisit?: boolean
 }
 
 export { type Appointment, type PaymentType, type CptCode }

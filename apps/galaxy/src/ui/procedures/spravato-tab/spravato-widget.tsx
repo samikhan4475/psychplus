@@ -2,10 +2,7 @@
 
 import { useParams, useSearchParams } from 'next/navigation'
 import { FormProvider } from 'react-hook-form'
-import {
-  WidgetFormContainer,
-  WidgetSaveButton,
-} from '@/components'
+import { WidgetFormContainer, WidgetSaveButton } from '@/components'
 import { Appointment, QuickNoteSectionItem } from '@/types'
 import { ProcedureTabs, ProcedureTabsId } from '../constants'
 import { AdverseEventQuestionView } from './adverse-event-question'
@@ -38,7 +35,6 @@ const SpravatoWidget = ({
   ])
   const form = useSpravatoWidgetForm(initialValues)
   const appointmentId = useSearchParams().get('id') as string
-  const visitSequence = useSearchParams().get('visitSequence') || ''
 
   return (
     <FormProvider {...form}>
@@ -46,7 +42,7 @@ const SpravatoWidget = ({
         patientId={id}
         widgetId={ProcedureTabsId.SPRAVATO_ID}
         title={ProcedureTabs.SPRAVATO}
-        getData={transformOut(id, appointmentId, visitSequence)}
+        getData={transformOut(id, appointmentId, appointmentData)}
         headerRight={
           <>
             <WidgetSaveButton />

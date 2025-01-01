@@ -1,4 +1,9 @@
-import { CodesWidgetItem, CptCodeKeys, QuickNoteSectionItem } from '@/types'
+import {
+  Appointment,
+  CodesWidgetItem,
+  CptCodeKeys,
+  QuickNoteSectionItem,
+} from '@/types'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { sanitizeFormData } from '@/utils'
 import { manageCodes } from '@/utils/codes'
@@ -6,8 +11,14 @@ import { SpravatoWidgetSchemaType } from './spravato-widget-schema'
 import { PrecurementMethod, spravatoCodes } from './utils'
 
 const transformOut =
-  (patientId: string, appointmentId: string, visitSequence: string) =>
+  (
+    patientId: string,
+    appointmentId: string,
+    appointmentData: Appointment | null,
+  ) =>
   async (schema: SpravatoWidgetSchemaType) => {
+    const hasPriorActiveVistis = appointmentData?.IsPatientHadAnyCheckedOutVisit
+
     const result: QuickNoteSectionItem[] = []
     const data = sanitizeFormData(schema)
     Object.entries(data).forEach(([key, value]) => {
@@ -46,14 +57,14 @@ const transformOut =
 
     if (
       data.procurementMethod === PrecurementMethod.ONLY_BILL &&
-      visitSequence === 'New'
+      !hasPriorActiveVistis
     ) {
       addCodes([{ key: CptCodeKeys.PRIMARY_CODE_KEY, code: '99205*1' }])
     }
 
     if (
       data.procurementMethod === PrecurementMethod.ONLY_BILL &&
-      visitSequence === 'Established'
+      hasPriorActiveVistis
     ) {
       addCodes([{ key: CptCodeKeys.PRIMARY_CODE_KEY, code: ' 99215*1' }])
     }
@@ -64,14 +75,14 @@ const transformOut =
 
     if (
       data.procurementMethod === PrecurementMethod.ONLY_BILL &&
-      visitSequence === 'New'
+      !hasPriorActiveVistis
     ) {
       addCodes([{ key: CptCodeKeys.ADD_ONS_KEY, code: '99417*3' }])
     }
 
     if (
       data.procurementMethod === PrecurementMethod.ONLY_BILL &&
-      visitSequence === 'Established'
+      hasPriorActiveVistis
     ) {
       addCodes([{ key: CptCodeKeys.PRIMARY_CODE_KEY, code: ' 99417*4' }])
     }
