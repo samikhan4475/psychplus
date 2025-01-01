@@ -11,11 +11,13 @@ import { StoreProvider } from './store'
 interface PatientReferralsWidgetProps {
   patientId: string
   isTabView?: boolean
+  hideHeader?: boolean
 }
 
 const PatientReferralsWidget = ({
   patientId,
   isTabView,
+  hideHeader,
 }: PatientReferralsWidgetProps) => {
   const searchParams = useSearchParams()
   const appointmentId = searchParams.get('id') ?? ''
@@ -32,10 +34,12 @@ const PatientReferralsWidget = ({
         className="bg-white max-h-[calc(100dvh_-_300px)] rounded-1 shadow-2"
       >
         <Flex gap="1" direction="column" mb="1">
-          <ReferralsHeader
-            patientId={patientId}
-            appointmentId={appointmentId}
-          />
+          {!hideHeader && (
+            <ReferralsHeader
+              patientId={patientId}
+              appointmentId={appointmentId}
+            />
+          )}
           {isTabView && <ReferralsFilterForm />}
         </Flex>
         <ReferralsTable isTabView={isTabView} />

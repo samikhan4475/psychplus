@@ -13,7 +13,11 @@ const ReferralBlock = () => {
     <FormFieldContainer>
       <Text className="text-2 font-medium">Referral</Text>
       <TextAreaInput field="referralDetail" className="h-full w-full" />
-      <PatientReferralsWidget patientId={patientId} />
+      <PatientReferralsWidget
+        patientId={patientId}
+        hideHeader
+        isTabView={false}
+      />
     </FormFieldContainer>
   )
 }

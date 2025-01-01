@@ -25,7 +25,7 @@ const TreatmentRegime = () => {
       <Flex direction="row" gap="1" align="center">
         <NumberInput
           label="Frequency of Sessions"
-          field="frequencyOfSession"
+          field="thetaBurstFrequencyOfSession"
           className="h-6 w-9"
           required
           showError

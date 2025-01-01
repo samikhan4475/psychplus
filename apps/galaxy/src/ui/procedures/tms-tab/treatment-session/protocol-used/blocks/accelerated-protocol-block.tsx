@@ -11,7 +11,7 @@ const WEEK_DETAILS = [
   },
   {
     id: 2,
-    description: '3 sessions per day (Morning/Midday/Afternoon)',
+    description: '3 sessions per day (Morning / Midday / Afternoon)',
     title: 'Day 6 - 10',
   },
 ]

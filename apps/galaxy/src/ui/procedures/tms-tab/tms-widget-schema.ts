@@ -33,12 +33,13 @@ const tmsWidgetSchema = z.object({
   followUpBlock: z.array(z.string()),
   typeOfThetaBurst: z.string(),
   frequency: z.string(),
-  frequencyOfSession: z.string().min(1,'required'),
+  frequencyOfSession: z.string().min(1, 'required'),
+  thetaBurstFrequencyOfSession: z.string(),
   frequencyUnit: z.string(),
-  plannedSession: z.string().min(1,'required'),
-  durationFrom: z.string().min(1,'required'),
-  intermittentDurationFrom: z.string().min(1,'required'),
-  durationTo: z.string().min(1,'required'),
+  plannedSession: z.string().min(1, 'required'),
+  durationFrom: z.string().min(1, 'required'),
+  intermittentDurationFrom: z.string().min(1, 'required'),
+  durationTo: z.string().min(1, 'required'),
   optimalStimulationLevel: z.string(),
   motorThershold: z.array(
     z.object({

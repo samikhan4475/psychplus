@@ -1,13 +1,13 @@
 'use client'
 
 import { useEffect } from 'react'
+import { Flex } from '@radix-ui/themes'
 import { FormProvider } from 'react-hook-form'
-import {
-  WidgetFormContainer,
-  WidgetSaveButton,
-} from '@/components'
+import { WidgetFormContainer, WidgetSaveButton } from '@/components'
 import { Appointment, QuickNoteHistory, QuickNoteSectionItem } from '@/types'
+import { Diagnosis } from '@/ui/diagnosis/diagnosis'
 import { useStore } from '@/ui/questionnaires/store'
+import { useStore as useDiagnosisStore } from '../../diagnosis/store'
 import { ProcedureTabs, ProcedureTabsId } from '../constants'
 import { transformIn, transformOut } from './data'
 import { DischargePlanView } from './discharge-plan'
@@ -39,6 +39,15 @@ const TmsTab = ({
   const { initializeQuestionnaires } = useStore((state) => ({
     initializeQuestionnaires: state.initializeQuestionnaires,
   }))
+
+  const { fetchWorkingDiagnosis, fetchFavouriteDiagnosis } = useDiagnosisStore()
+
+  useEffect(() => {
+    fetchWorkingDiagnosis(patientId)
+    fetchFavouriteDiagnosis()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [patientId])
+
   useEffect(() => {
     initializeQuestionnaires(patientId)
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -59,6 +68,9 @@ const TmsTab = ({
         <TreatmentSessionView questionnaireHistories={questionnaireHistories} />
         <MonitoringView />
         <DischargePlanView />
+        <Flex className="mt-2" direction={'column'}>
+          <Diagnosis />
+        </Flex>
       </WidgetFormContainer>
     </FormProvider>
   )
