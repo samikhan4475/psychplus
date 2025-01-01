@@ -82,6 +82,11 @@ const widgets: Array<WidgetType> = [
     actualNoteComponent: PastPsychlDetailView,
   },
   {
+    component: PastMedicalHxWidget,
+    id: QuickNoteSectionName.QuickNoteSectionPastMedicalHx,
+    actualNoteComponent: PastMedicalHx,
+  },
+  {
     component: FamilyPsychHxWidget,
     id: QuickNoteSectionName.QuickNoteSectionFamilyPsychHx,
     actualNoteComponent: FamilyPsychDetailView,
@@ -95,11 +100,6 @@ const widgets: Array<WidgetType> = [
     component: SubstanceUseHxWidget,
     id: QuickNoteSectionName.QuickNoteSectionSubstanceUseHx,
     actualNoteComponent: SubstanceUseHx,
-  },
-  {
-    component: PastMedicalHxWidget,
-    id: QuickNoteSectionName.QuickNoteSectionPastMedicalHx,
-    actualNoteComponent: PastMedicalHx,
   },
   {
     component: PatientAllergiesView,

@@ -20,7 +20,7 @@ const renderFamilyPsychHistory = (
           label={`${option.label}:`}
           value={
             data[option.field as FamilyPsychHxKey]
-              ? `Relation: ${data[option.detailsField as FamilyPsychHxKey]
+              ? `Relationship: ${data[option.detailsField as FamilyPsychHxKey]
                   ?.toString()
                   .split(',')
                   .map(
@@ -32,6 +32,7 @@ const renderFamilyPsychHistory = (
           }
         />
       ))}
+      {data.other && <LabelAndValue label="Other:" value={data.other} />}
     </BlockContainer>
   )
 }

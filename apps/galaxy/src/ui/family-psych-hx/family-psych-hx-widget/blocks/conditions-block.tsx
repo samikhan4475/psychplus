@@ -5,8 +5,8 @@ const RELATIONSHIP_OPTIONS = [
   { label: 'Parent', value: 'parent' },
   { label: 'Sibling', value: 'sibling' },
   { label: 'Child', value: 'child' },
-  { label: 'Grand parent', value: 'grandparent' },
-  { label: 'Parents sibling', value: 'parentSibling' },
+  { label: 'Grand parent', value: 'Grand parent' },
+  { label: 'Parents sibling', value: 'Parents sibling' },
 ]
 
 const FAMILY_PSYCH_BLOCK_OPTIONS = [
@@ -66,6 +66,8 @@ const ConditionsBlock = () => {
             label: 'Relationship',
             field: option.detailsField,
             options: RELATIONSHIP_OPTIONS,
+            hideSelectedCount: true,
+            isOptionsChip: true,
           }}
         />
       ))}

@@ -1,7 +1,7 @@
 enum HistoryTabs {
   PPH = 'Past Psych Hx',
   PMH = 'Past Medical Hx',
-  FH = 'Family Hx',
+  FH = 'Family Psych Hx',
   SH = 'Social Hx',
   SUH = 'Substance Use Hx',
 }

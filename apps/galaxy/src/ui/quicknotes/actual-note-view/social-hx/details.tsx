@@ -25,6 +25,7 @@ const Details = ({
       {renderIfValue('Legal History:', data.legalHistory)}
       {renderIfValue('Living:', data.living)}
       {renderIfValue('Trauma Hx:', data.traumaHx)}
+      {renderIfValue('Other:', data.other)}
     </BlockContainer>
   )
 }

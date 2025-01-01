@@ -30,7 +30,7 @@ const Details = ({
       {data.breastFeedingDaysPostPartum && (
         <LabelAndValue
           label="Breast Feeding:"
-          value={`Days Post Partum: ${data.breastFeedingDaysPostPartum}`}
+          value={`The number of postpartum weeks: ${data.breastFeedingDaysPostPartum}`}
         />
       )}
       {selectedOptions && <LabelAndValue label="" value={selectedOptions} />}
