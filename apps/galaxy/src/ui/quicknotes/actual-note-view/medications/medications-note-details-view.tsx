@@ -35,6 +35,7 @@ const MedicationsNoteDetailsView = ({ patientId }: NoteDetailProps) => {
       </Flex>
     )
   }
+  if (response.length === 0) return null
 
   return <Details data={response} />
 }

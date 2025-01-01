@@ -1,3 +1,4 @@
+import { AddOnDetailView } from '@/ui/quicknotes/actual-note-view/add-on/add-on-detail-view'
 import { CodesNoteDetailsView } from '@/ui/quicknotes/actual-note-view/codes/codes-note-details-view'
 import { EctNoteDetailView } from '@/ui/quicknotes/actual-note-view/ect/ect-note-detail-view'
 import { FamilyInternalMedicineAssessmentPlanNoteDetailView } from '@/ui/quicknotes/actual-note-view/family-internal-medicine-assessment-plan/family-internal-medicine-assessment-plan-note-detail-view'
@@ -88,6 +89,10 @@ const widgetsArray: Array<WidgetType> = [
   {
     id: QuickNoteSectionName.QuickNoteSectionDiagnosis,
     actualNoteDetailComponent: WorkingDiagnosisNoteDetailView,
+  },
+  {
+    id: QuickNoteSectionName.Addon,
+    actualNoteDetailComponent: AddOnDetailView,
   },
   {
     id: QuickNoteSectionName.QuicknoteSectionMedications,

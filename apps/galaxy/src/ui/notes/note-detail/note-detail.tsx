@@ -18,6 +18,7 @@ const NoteDetail = ({ children }: PropsWithChildren) => {
     widgets,
     patient,
     provider,
+    selectedRow,
   } = useStore((state) => ({
     loadingDetail: state.loadingDetail,
     patient: state.patient,
@@ -29,6 +30,7 @@ const NoteDetail = ({ children }: PropsWithChildren) => {
     appointmentId: state.appointmentId,
     widgets: state.widgets,
     provider: state.provider,
+    selectedRow: state.selectedRow,
   }))
 
   const groupedData = noteDetail ? groupBySectionName(noteDetail) : {}
@@ -65,6 +67,8 @@ const NoteDetail = ({ children }: PropsWithChildren) => {
                   appointmentId={appointmentId}
                   patient={patient}
                   groupedData={groupedData}
+                  visitSequence={selectedRow?.visitSequence ?? ''}
+                  visitType={selectedRow?.visitTypeCode ?? ''}
                 />
               </Box>
             )
