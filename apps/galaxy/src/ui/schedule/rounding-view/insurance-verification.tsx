@@ -1,23 +1,44 @@
 'use client'
 
-import { CodesetSelect, FormFieldLabel } from '@/components'
+import { useMemo } from 'react'
+import { FormFieldLabel, SelectInput } from '@/components'
 import { CODESETS } from '@/constants'
-import { FormFieldContainer } from '../shared'
+import { useCodesetCodes } from '@/hooks'
 import { useFiltersContext } from '../context'
+import { FormFieldContainer } from '../shared'
 import { SchedulerFilters } from '../types'
 
 const InsuranceVerificationSelect = () => {
   const { filters } = useFiltersContext()
+  const codes = useCodesetCodes(CODESETS.BillingVerificationStatus)
+  const options = useMemo(
+    () =>
+      codes
+        .toSorted((a, b) => {
+          const aValue =
+            a.attributes?.find((attr) => attr.name === 'SortValue')?.value ?? 0
+          const bValue =
+            b.attributes?.find((attr) => attr.name === 'SortValue')?.value ?? 0
+          return +aValue - +bValue
+        })
+        .map((item) => ({
+          label: item.display,
+          value: item.value,
+        })),
+    [codes],
+  )
+
   if (!filters.includes(SchedulerFilters.InsVerification)) return null
 
   return (
     <FormFieldContainer>
       <FormFieldLabel>Ins Verification</FormFieldLabel>
-      <CodesetSelect
-        name="patientInsuranceVerificationStatus"
-        codeset={CODESETS.VerificationStatus}
-        size="1"
-        className="flex-1"
+      <SelectInput
+        field="patientInsuranceVerificationStatus"
+        placeholder="Select"
+        options={options}
+        buttonClassName="w-full h-6"
+        className="h-full flex-1"
       />
     </FormFieldContainer>
   )

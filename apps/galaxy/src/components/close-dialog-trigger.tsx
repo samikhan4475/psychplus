@@ -1,8 +1,9 @@
 import { Cross1Icon } from '@radix-ui/react-icons'
 import { Dialog, Flex } from '@radix-ui/themes'
+import { ComponentProps } from 'react'
 
-const CloseDialogTrigger = () => (
-  <Dialog.Close className="absolute right-3 top-3 cursor-pointer">
+const CloseDialogTrigger = ({ onClick }: ComponentProps<typeof Dialog.Close>) => (
+  <Dialog.Close className="absolute right-3 top-3 cursor-pointer" onClick={onClick}>
     <Flex
       align="center"
       justify="center"

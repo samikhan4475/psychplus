@@ -4,23 +4,12 @@ import * as api from '@/api'
 import { SelectOptionType } from '@/types'
 
 const getFacilityAdmissionIdsOptionsAction = async (
-  patientId: number,
+  patientId?: number,
 ): Promise<api.ActionResult<SelectOptionType[]>> => {
-  const response = await api.GET<string[]>(
-    api.GET_FACILITY_ADMISSION_IDS_ENDPOINT(patientId),
-  )
-  if (response.state === 'error') {
-    return {
-      state: 'error',
-      error: response.error,
-    }
-  }
+  // @TODO: API will be integrated in next phase, for now we have one default option
   return {
     state: 'success',
-    data: [
-      { label: 'Create New', value: 'createNew' },
-      ...response.data.map((id) => ({ label: id, value: id })),
-    ],
+    data: [{ label: 'Create New', value: 'createNew' }],
   }
 }
 

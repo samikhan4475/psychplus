@@ -8,16 +8,15 @@ import {
   FormFieldLabel,
   SelectInput,
 } from '@/components'
+import { SelectOptionType } from '@/types'
 import { getClinicLocations } from '../../actions'
 import { StateCodeSet } from '../../types'
 import { SchemaType } from '../schema'
 
 const LocationDropdown = ({ states }: { states: StateCodeSet[] }) => {
   const form = useFormContext<SchemaType>()
-  const [loading, setLoading] = useState(false)
-  const [locations, setLocations] = useState<
-    { label: string; value: string }[]
-  >([])
+  const [loading, setLoading] = useState<boolean>(false)
+  const [locations, setLocations] = useState<SelectOptionType[]>([])
   const stateCode = useWatch({
     control: form.control,
     name: 'state',
@@ -34,7 +33,7 @@ const LocationDropdown = ({ states }: { states: StateCodeSet[] }) => {
         setLocations(res.data)
       })
     }
-  }, [stateCode])
+  }, [stateCode, states])
 
   return (
     <FormFieldContainer className="flex-1">

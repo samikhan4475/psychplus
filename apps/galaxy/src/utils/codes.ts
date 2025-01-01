@@ -1,5 +1,5 @@
 import { getQuickNoteDetailAction } from '@/actions/get-quicknote-detail'
-import { CodesWidgetItem, QuickNoteSectionItem } from '@/types'
+import { CodesWidgetItem, QuickNoteSectionItem, SharedCode } from '@/types'
 import {
   transformInAppointmentCodes,
   transformOut,
@@ -57,4 +57,7 @@ const fetchCodes = async (patientId: string, appointmentId?: string) => {
   )
 }
 
-export { manageCodes }
+const getCodesetDisplayName = (value: string, codes: SharedCode[]): string =>
+  codes.find((code) => code.value === value)?.display ?? ''
+
+export { manageCodes, getCodesetDisplayName }

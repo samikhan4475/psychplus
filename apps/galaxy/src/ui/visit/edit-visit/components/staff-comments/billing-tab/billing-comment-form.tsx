@@ -45,10 +45,10 @@ const BillingCommentForm = ({
     const result = await createStaffCommentAction(requestData)
 
     if (result.state === 'error') {
-      return toast.error(result.error)
+      return toast.error(result.error || 'Failed to create comment')
     }
 
-    toast.success('Comment created successfully')
+    toast.success('Comment added successfully')
     form.reset()
     fetchStaffComments({
       isTreatment: false,

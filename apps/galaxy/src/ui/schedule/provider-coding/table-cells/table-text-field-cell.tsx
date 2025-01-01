@@ -1,17 +1,19 @@
 import { PropsWithRow, TextCell } from '@/components'
-import { DayString, MergedRecord, WeekDay } from '../types'
+import { MergedRecord, WeekDay } from '../types'
 
 interface TextCellProps extends PropsWithRow<MergedRecord> {
   day: WeekDay
+  className?: string
 }
 
 const TableTextCell = ({
   row: { original: appointment },
+  className,
   day,
 }: TextCellProps) => {
-  const visitType = appointment[day.id as DayString]?.visitType || ''
+  const visitType = appointment.weekDays[day.id]?.visitType || ''
 
-  return <TextCell>{visitType ?? ''}</TextCell>
+  return <TextCell className={className}>{visitType ?? ''}</TextCell>
 }
 
 export { TableTextCell }

@@ -132,7 +132,8 @@
 }
 
 /* Loader for Select Input */
-.hide-default-select-icon.loading::after {
+.hide-default-select-icon.loading::after,
+.loading-icon::after {
   content: '';
   position: absolute;
   right: 6px;

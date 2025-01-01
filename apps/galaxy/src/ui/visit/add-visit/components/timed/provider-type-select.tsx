@@ -1,66 +1,12 @@
-import { useMemo } from 'react'
-import { useFormContext, useWatch } from 'react-hook-form'
-import {
-  FormFieldContainer,
-  FormFieldError,
-  FormFieldLabel,
-  SelectInput,
-} from '@/components'
-import { CODESETS } from '@/constants'
-import { useCodesetCodes } from '@/hooks'
-import { ProviderType, ServiceType } from '../../../types'
+import { useFormContext } from 'react-hook-form'
 import { SchemaType } from '../../schema'
-import { useAddVisitStore } from '../../store'
+import { ProviderTypeDropdown } from '../provider-type-select'
 
-const ProviderTypeDropdown = () => {
+const ProviderTypeSelect = () => {
   const form = useFormContext<SchemaType>()
-  const codes = useCodesetCodes(CODESETS.ProviderType)
-  const { services } = useAddVisitStore()
-  const serviceId = useWatch({
-    control: form.control,
-    name: 'service',
-  })
+  const service = form.watch('service')
 
-  const options = useMemo(() => {
-    const service = services.find((s) => s.id === serviceId)
-    if (!service?.serviceOffered) return []
-
-    const filteredOptions = codes.filter((providerType) => {
-      switch (service?.serviceOffered) {
-        case ServiceType.Aba:
-          return providerType.value === ProviderType.Bcba
-        case ServiceType.Therapy:
-        case ServiceType.CouplesFamilyTherapy:
-        case ServiceType.GroupTherapy:
-          return (
-            providerType.value === ProviderType.Therapist ||
-            providerType.value === ProviderType.Psychiatrist
-          )
-        default:
-          return ![ProviderType.Bcba, ProviderType.Therapist].includes(
-            providerType.value as ProviderType,
-          )
-      }
-    })
-
-    return filteredOptions.map((code) => ({
-      label: code.display,
-      value: code.value,
-    }))
-  }, [codes, serviceId])
-
-  return (
-    <FormFieldContainer className="flex-1">
-      <FormFieldLabel required>Provider Type</FormFieldLabel>
-      <SelectInput
-        field="providerType"
-        options={options}
-        buttonClassName="h-6 w-full"
-        disabled={!serviceId}
-      />
-      <FormFieldError name={'providerType'} />
-    </FormFieldContainer>
-  )
+  return <ProviderTypeDropdown isDisabled={!service} />
 }
 
-export { ProviderTypeDropdown }
+export { ProviderTypeSelect }

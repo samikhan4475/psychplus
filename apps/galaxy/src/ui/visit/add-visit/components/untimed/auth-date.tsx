@@ -11,17 +11,18 @@ import { SchemaType } from '../../schema'
 
 const AuthDate = () => {
   const form = useFormContext<SchemaType>()
-  const legal = useWatch({
+  const [patient, state, service, location] = useWatch({
     control: form.control,
-    name: 'legal',
+    name: ['patient', 'state', 'service', 'location'],
   })
+  const isDisabled = !patient || !state || !service || !location
 
   return (
     <FormFieldContainer className="flex-1 gap-[2px]">
-      <FormFieldLabel required>Auth Date</FormFieldLabel>
+      <FormFieldLabel>Auth Date</FormFieldLabel>
       <DatePickerInput
         field="authDate"
-        isDisabled={!legal}
+        isDisabled={isDisabled}
         dateInputClass="h-6 w-full"
       />
       <FormFieldError name="authDate" />

@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect } from 'react'
-import { Flex, ScrollArea } from '@radix-ui/themes'
+import { ScrollArea } from '@radix-ui/themes'
 import { Table } from '@tanstack/react-table'
 import { DataTable } from '@/components'
 import { useStore } from './store'
@@ -29,7 +29,7 @@ const DataTableHeader = (table: Table<MergedRecord>) => {
 
   return null
 }
-const ProvierCodingTableView = () => {
+const ProviderCodingTableView = () => {
   const { data, currentWeekDays, fetchUnitsAndGroups } = useStore((state) => ({
     data: state.data || [],
     currentWeekDays: state.currentWeekDays,
@@ -45,17 +45,18 @@ const ProvierCodingTableView = () => {
   }, [data])
 
   return (
-    <Flex direction="column" className="w-[100vw] flex-1 px-[26px]">
-      <ScrollArea className="mt-[13px] w-full px-2" scrollbars="horizontal">
-        <DataTable
-          columns={getColumns(currentWeekDays)}
-          data={data}
-          renderHeader={DataTableHeader}
-          isRowSpan
-        />
-      </ScrollArea>
-    </Flex>
+    <ScrollArea className="bg-white h-full flex-1 px-2.5 py-2" scrollbars="both">
+      <DataTable
+        columns={getColumns(currentWeekDays)}
+        data={data}
+        renderHeader={DataTableHeader}
+        tableClass="[&_.rt-ScrollAreaScrollbar]:!hidden"
+        theadClass='z-10'
+        isRowSpan
+        sticky
+      />
+    </ScrollArea>
   )
 }
 
-export { ProvierCodingTableView }
+export { ProviderCodingTableView }

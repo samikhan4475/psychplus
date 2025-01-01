@@ -14,6 +14,7 @@ const Age = () => {
       <FormFieldLabel>Age</FormFieldLabel>
       <TextField.Root
         placeholder="Add Age"
+        className='flex-1'
         size="1"
         type="number"
         {...form.register('age', {

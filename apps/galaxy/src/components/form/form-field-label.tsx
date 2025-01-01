@@ -19,7 +19,7 @@ const FormFieldLabel = ({
         {children}
       </Text>
       {required ? (
-        <Text className="ml-[2px] text-[12px] text-red-9">*</Text>
+        <Text className="ml-[2px] text-[11px] text-red-9">*</Text>
       ) : null}
     </Flex>
   )

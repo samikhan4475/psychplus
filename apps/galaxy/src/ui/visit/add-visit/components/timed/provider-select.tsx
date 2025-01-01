@@ -8,13 +8,15 @@ import {
   FormFieldLabel,
   SelectInput,
 } from '@/components'
+import { SelectOptionType } from '@/types'
 import { getProviders } from '../../../actions'
 import { Provider } from '../../../types'
 import { SchemaType } from '../../schema'
 
 const ProviderDropdown = () => {
   const form = useFormContext<SchemaType>()
-  const [options, setOptions] = useState<{ label: string; value: string }[]>([])
+  const [loading, setLoading] = useState<boolean>(false)
+  const [options, setOptions] = useState<SelectOptionType[]>([])
 
   const [providerType, location] = useWatch({
     control: form.control,
@@ -23,12 +25,13 @@ const ProviderDropdown = () => {
 
   useEffect(() => {
     form.resetField('provider')
-
     if (!providerType || !location) return
+    setLoading(true)
     getProviders({
       locationIds: [location],
       providerType: providerType,
     }).then((res) => {
+      setLoading(false)
       if (res.state === 'error') return setOptions([])
       setOptions(
         res.data.map((provider: Provider) => ({
@@ -47,6 +50,7 @@ const ProviderDropdown = () => {
         options={options}
         buttonClassName="h-6 w-full"
         disabled={!providerType}
+        loading={loading}
       />
       <FormFieldError name="provider" />
     </FormFieldContainer>

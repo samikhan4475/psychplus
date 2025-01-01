@@ -1,18 +1,21 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useMemo } from 'react'
 import { useRouter } from 'next/navigation'
-import { Flex, ScrollArea } from '@radix-ui/themes'
-import { Table } from '@tanstack/react-table'
-import { DataTable, LoadingPlaceholder } from '@/components'
+import { ScrollArea } from '@radix-ui/themes'
+import { Row, Table } from '@tanstack/react-table'
+import { DataTable } from '@/components'
+import { CODESETS } from '@/constants'
+import { useCodesetCodes } from '@/hooks'
 import { useStore as useRootStore } from '@/store'
 import { Appointment } from '@/types'
 import { constructQuickNotesUrl } from '@/utils'
-import { useBookedAppointmentsStore, useStore } from '../store'
+import { useStore as RootStore } from '../store'
+import { useStore } from './store'
 import { columns } from './table-columns'
 
 const DataTableHeader = (table: Table<Appointment>) => {
-  const listViewFilters = useStore((state) => state.tableFilters)
+  const listViewFilters = RootStore((state) => state.tableFilters)
 
   useEffect(() => {
     // reset columns visibility
@@ -36,42 +39,62 @@ const DataTableHeader = (table: Table<Appointment>) => {
 }
 
 const ListViewTable = () => {
-  const { data, loading } = useBookedAppointmentsStore((state) => ({
-    data: state.listViewData,
-    loading: state.loading,
-  }))
+  const data = useStore((state) => state.appointments)
   const router = useRouter()
   const addTab = useRootStore((state) => state.addTab)
-  console.log(data)
-  return (
-    <Flex direction="column" className="w-[100vw] flex-1 px-[26px]">
-      <ScrollArea className="mt-[13px] w-full px-2" scrollbars="horizontal">
-        {loading ? (
-          <LoadingPlaceholder />
-        ) : (
-          <DataTable
-            onRowClick={(row) => {
-              const href = constructQuickNotesUrl(
-                row.original.patientId,
-                row.original.appointmentId,
-                row.original.visitTypeCode,
-                row.original.visitSequence,
-              )
+  const visitStatusCodes = useCodesetCodes(CODESETS.AppointmentStatus)
 
-              addTab({
-                href,
-                label: `${row.original?.name}-${row.original.patientMrn}-${row.original.appointmentId}`,
-              })
-              router.push(href)
-            }}
-            columns={columns}
-            data={data}
-            renderHeader={DataTableHeader}
-            isRowSpan
-          />
-        )}
-      </ScrollArea>
-    </Flex>
+  const inactiveVisitStatusCodes = useMemo(() => {
+    return visitStatusCodes
+      .filter((code) => {
+        const group = code.attributes?.[0].value ?? ''
+        const role = code.attributes?.[1].value ?? ''
+        if (group === 'Inactive' && role === 'Timed') {
+          return true
+        }
+        return false
+      })
+      .map((code) => code.value)
+  }, [visitStatusCodes])
+
+  const isRowDisabled = (row: Row<Appointment>) => {
+    const visitStatus = row.getValue('visitStatus') as string
+
+    if (inactiveVisitStatusCodes.includes(visitStatus)) return true
+    return false
+  }
+
+  return (
+    <ScrollArea
+      className="bg-white h-full flex-1 px-2.5 py-2"
+      scrollbars="both"
+    >
+      <DataTable
+        onRowClick={(row) => {
+          const href = constructQuickNotesUrl(
+            row.original.patientId,
+            row.original.appointmentId,
+            row.original.visitTypeCode,
+            row.original.visitSequence,
+          )
+
+          addTab({
+            href,
+            label: `${row.original?.name}-${row.original.patientMrn}-${row.original.appointmentId}`,
+          })
+          router.push(href)
+        }}
+        tableClass="[&_.rt-ScrollAreaScrollbar]:!hidden"
+        theadClass="z-10"
+        disablePagination
+        columns={columns}
+        isRowDisabled={isRowDisabled}
+        data={data}
+        renderHeader={DataTableHeader}
+        isRowSpan
+        sticky
+      />
+    </ScrollArea>
   )
 }
 

@@ -7,27 +7,40 @@ import {
   FormFieldLabel,
   SelectInput,
 } from '@/components'
+import { useHasPermission } from '@/hooks'
+import { SelectOptionType } from '@/types'
+import { PermissionAlert } from '@/ui/schedule/shared'
+import { EDIT_ADMITTING_PROVIDER } from '@/ui/visit/constants'
 import { getProviders } from '../../../actions'
 import { Provider } from '../../../types'
 import { SchemaType } from '../../schema'
 
-const AdmittingProviderSelect = () => {
+const AdmittingProviderSelect = ({
+  isPsychiatristVisitTypeSequence,
+}: {
+  isPsychiatristVisitTypeSequence?: boolean
+}) => {
   const form = useFormContext<SchemaType>()
-  const [options, setOptions] = useState<{ label: string; value: string }[]>([])
-  const [location, nonTimeProviderType] = useWatch({
+  const [loading, setLoading] = useState<boolean>(false)
+  const [isOpen, setIsOpen] = useState<boolean>(false)
+  const [options, setOptions] = useState<SelectOptionType[]>([])
+  const [location, providerType] = useWatch({
     control: form.control,
-    name: ['location', 'nonTimeProviderType'],
+    name: ['location', 'providerType'],
   })
+  const canChangeAdmittingProvider = useHasPermission('editAdmittingProvider')
 
   useEffect(() => {
     form.resetField('admittingProvider')
-    if (!location || !nonTimeProviderType) return
+    if (!location || !providerType) return
+    setLoading(true)
     getProviders({
       locationIds: [location],
-      providerType: nonTimeProviderType,
+      providerType: providerType,
     }).then((res) => {
+      setLoading(false)
       if (res.state === 'error') {
-        toast.error('Failed to fetch providers')
+        toast.error(res.error || 'Failed to fetch providers')
         return setOptions([])
       }
       setOptions(
@@ -37,15 +50,28 @@ const AdmittingProviderSelect = () => {
         })),
       )
     })
-  }, [location, nonTimeProviderType])
+  }, [location, providerType])
 
   return (
     <FormFieldContainer>
+      <PermissionAlert
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+        message={EDIT_ADMITTING_PROVIDER}
+      />
       <FormFieldLabel required>Admitting Provider</FormFieldLabel>
       <SelectInput
         field="admittingProvider"
+        disabled={isPsychiatristVisitTypeSequence}
         options={options}
         buttonClassName="h-6 w-full"
+        loading={loading}
+        onValueChange={(value) => {
+          if (canChangeAdmittingProvider) {
+            form.setValue('admittingProvider', value)
+          }
+          setIsOpen(true)
+        }}
       />
       <FormFieldError name={'admittingProvider'} />
     </FormFieldContainer>

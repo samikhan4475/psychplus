@@ -29,7 +29,7 @@ const BillingTab = ({ appointmentId }: { appointmentId: number }) => {
     const result = await getPatientStaffCommentsAction(payload)
 
     if (result.state === 'error') {
-      toast.error(result.error ?? 'Error while fetching Staff Comments')
+      toast.error(result.error || 'Error while fetching Staff Comments')
       return setLoading(false)
     }
     setComments(result?.data?.comments)

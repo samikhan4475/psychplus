@@ -45,7 +45,7 @@ const columns = (
     header: () => (
       <ColumnHeader className="min-w-80 !text-1 !font-medium" label="Comment" />
     ),
-    cell: ({ row }) => <TextCell>{row?.original?.comment}</TextCell>,
+    cell: ({ row }) => <TextCell className='[overflow-wrap:anywhere]'>{row?.original?.comment}</TextCell>,
   },
   {
     id: 'action',

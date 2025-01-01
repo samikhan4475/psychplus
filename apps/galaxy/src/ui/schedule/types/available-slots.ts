@@ -1,4 +1,4 @@
-import { Metadata, ServiceGroup, ServiceUnit } from '@/types'
+import { Metadata, ServiceGroup, ServiceRoom, ServiceUnit } from '@/types'
 
 interface Visit {
   type: string
@@ -76,7 +76,7 @@ interface PatientRecord {
 }
 
 interface AvailableSlots {
-  type: 'in-person' | 'video' | 'unavailable'
+  type: string
   isPlusSlot: boolean
   startDate: string
   endDate: string
@@ -122,6 +122,7 @@ interface GetAppointmentSlotsResponse<T> {
 interface GetUnitsGroupsResponse {
   serviceGroups: ServiceGroup[]
   serviceUnits: ServiceUnit[]
+  serviceRooms: ServiceRoom[]
 }
 
 interface Appointment {
@@ -225,6 +226,7 @@ interface AppointmentParams {
   patientStatuses?: string[]
   locationId?: string
   serviceIds?: string[]
+  stateIds?: string[]
   providerIds?: number[]
   providerType?: string
   unitId?: string
@@ -254,6 +256,7 @@ interface AppointmentParams {
   balanceDueMax?: number
   noteSigned?: string
   isFollowUp?: boolean
+  isServiceTimeDependant?: boolean
 }
 
 interface ProviderCoding {
@@ -286,15 +289,15 @@ interface ProviderCoding {
 
 interface AvailableSlotsParams {
   startingDate?: string
-  endingDate?: string
   serviceIds?: string[]
   stateId?: string
   locationIds?: string[]
-  staffIds?: string[]
+  staffIds?: number[]
   specialistTypeCode?: string
   gender?: string
   language?: string
   isFirstResponder?: boolean
+  maxDaysOutToLook?: number
 }
 
 interface GetUnitsGroupsResponse {
@@ -321,6 +324,7 @@ enum SchedulerFilters {
   Legal = 'Legal',
   LOS = 'LOS',
   Location = 'Location',
+  Service = 'Service',
   NoteSigned = 'Note Signed',
   PrimaryInsurance = 'Primary Insurance',
   Provider = 'Provider',
@@ -334,6 +338,7 @@ enum SchedulerFilters {
   VisitType = 'Visit Type',
   CptCode = 'CPT Code',
   Diagnosis = 'Diagnosis',
+  FacilityAdmissionId = 'Facility Admission Id'
 }
 
 export type {

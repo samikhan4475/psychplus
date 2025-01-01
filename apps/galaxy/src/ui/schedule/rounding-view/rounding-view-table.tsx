@@ -1,16 +1,16 @@
 'use client'
 
 import { useEffect } from 'react'
-import { Flex, ScrollArea } from '@radix-ui/themes'
+import { ScrollArea } from '@radix-ui/themes'
 import { Table } from '@tanstack/react-table'
 import { DataTable } from '@/components'
-import { useBookedAppointmentsStore, useStore } from '../store'
-import { useStore as useRoundingViewStore } from './store'
-import { columns } from './table-columns'
 import { Appointment } from '@/types'
+import { useStore as useRootStore } from '../store'
+import { useStore as useRoundingViewStore, useStore } from './store'
+import { columns } from './table-columns'
 
 const DataTableHeader = (table: Table<Appointment>) => {
-  const roundingFilters = useStore((state) => state.tableFilters)
+  const roundingFilters = useRootStore((state) => state.tableFilters)
 
   useEffect(() => {
     // reset columns visibility
@@ -34,7 +34,7 @@ const DataTableHeader = (table: Table<Appointment>) => {
 }
 
 const RoundingViewTable = () => {
-  const data = useBookedAppointmentsStore((state) => state.roundingViewData)
+  const data = useStore(state => state.appointments)
   const fetchUnitsAndGroups = useRoundingViewStore(
     (state) => state.fetchUnitsAndGroups,
   )
@@ -48,16 +48,21 @@ const RoundingViewTable = () => {
   }, [data])
 
   return (
-    <Flex direction="column" className="w-[100vw] flex-1 px-[26px]">
-      <ScrollArea className="mt-[13px] w-full px-2" scrollbars="horizontal">
-        <DataTable
-          columns={columns}
-          data={data}
-          renderHeader={DataTableHeader}
-          isRowSpan
-        />
-      </ScrollArea>
-    </Flex>
+    <ScrollArea
+      className="bg-white h-full flex-1 px-2.5 py-2"
+      scrollbars="both"
+    >
+      <DataTable
+        columns={columns}
+        data={data}
+        renderHeader={DataTableHeader}
+        disablePagination
+        tableClass="[&_.rt-ScrollAreaScrollbar]:!hidden"
+        theadClass="z-10"
+        isRowSpan
+        sticky
+      />
+    </ScrollArea>
   )
 }
 

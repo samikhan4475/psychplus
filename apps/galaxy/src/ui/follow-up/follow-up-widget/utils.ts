@@ -1,3 +1,5 @@
+import { parseAbsoluteToLocal } from '@internationalized/date'
+import { Appointment, BookVisitPayload } from '@/types'
 import { NEXT_OPTIONS } from './constants'
 
 const removeEmptyValues = (obj: Record<string, any>): Record<string, any> => {
@@ -15,6 +17,13 @@ const removeEmptyValues = (obj: Record<string, any>): Record<string, any> => {
       .filter(([_, value]) => value !== null && value !== ''),
   )
 }
+
+const sanitizeFormData = <T extends object>(obj: T): T =>
+  Object.fromEntries(
+    Object.entries(obj).filter(
+      ([_, value]) => value !== undefined && value !== '' && value !== null,
+    ),
+  ) as T
 
 const getEndDate = (selectedValue: string) => {
   const today = new Date()
@@ -54,4 +63,76 @@ const getEndDate = (selectedValue: string) => {
   return endDate
 }
 
-export { removeEmptyValues, getEndDate }
+const getOffsetStartDate = (next: string, date: string) => {
+  const [offset, type] = next.split(' ')
+  const parsedDate = parseAbsoluteToLocal(date)
+
+  if (type === 'week') {
+    const offsetDate = parsedDate.add({ weeks: Number(offset) })
+    return offsetDate.toDate().toISOString()
+  }
+  if (type === 'day') {
+    const offsetDate = parsedDate.add({ days: Number(offset) })
+    return offsetDate.toDate().toISOString()
+  }
+  return parsedDate.toDate().toISOString()
+}
+
+const transformIn = (appointment: Appointment) => {
+  let payload: Omit<
+    BookVisitPayload,
+    'isOverridePermissionProvided' | 'isProceedPermissionProvided'
+  > = {
+    appointmentId: 0,
+    patientId: appointment.patientId,
+    stateCode: appointment.stateCode,
+    locationId: appointment.locationId,
+    serviceId: appointment.serviceId,
+    providerType: appointment.providerType,
+    encounterType: appointment.visitTypeCode,
+    visitSequenceType: appointment.visitSequence,
+    type: appointment.visitMedium,
+    paymentResponsibilityTypeCode: appointment.paymentResponsibility,
+    isFollowup: true,
+    isPrimaryProviderType: appointment.isPrimaryProviderType,
+    specialistStaffId: appointment.providerId,
+    durationMinutes: 0,
+    startDate: appointment.appointmentDate,
+    visitFrequency: 1,
+  }
+  if (appointment.isServiceTimeDependent) {
+    payload = {
+      ...payload,
+      durationMinutes: appointment.appointmentDuration ?? 0,
+      dischargeDate: appointment.dischargeDate,
+      dischargeLocation: appointment.dischargeLocationName,
+      isEdVisit: appointment.isEdDischarge,
+      visitFrequency: appointment.appointmentInterval ?? 0,
+    }
+  } else {
+    payload = {
+      ...payload,
+      admissionId: appointment.facilityAdmissionDetailId,
+      admissionDate: appointment.dateOfAdmission,
+      appointmentStatus: appointment.visitStatus,
+      insuranceVerificationStatusCode:
+        appointment.patientInsuranceVerificationStatus,
+      admissionLegalStatus: appointment.legalStatus,
+      authorizationNumber: appointment.authorizationNumber,
+      authorizationDate: appointment.authorizationDate,
+      lastAuthorizationCoveredDate: appointment.lastCoverageDate,
+      unitId: appointment.unitResource?.unit,
+      roomId: appointment.roomResource?.room,
+      groupId: appointment.groupResource?.group,
+    }
+  }
+  return payload
+}
+
+export {
+  removeEmptyValues,
+  getEndDate,
+  transformIn,
+  getOffsetStartDate,
+  sanitizeFormData,
+}

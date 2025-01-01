@@ -3,7 +3,7 @@ import { Button } from '@radix-ui/themes'
 import { NotepadIcon } from '@/components/icons'
 import { useStore as useRootStore } from '@/store'
 import { Appointment } from '@/types'
-import { getPatientMRN } from '@/utils'
+import { constructQuickNotesUrl, getPatientMRN } from '@/utils'
 
 interface OpenPatientChartButtonProps {
   appointment: Appointment
@@ -12,7 +12,8 @@ interface OpenPatientChartButtonProps {
 const OpenPatientChartButton = ({
   appointment,
 }: OpenPatientChartButtonProps) => {
-  const { patientId, name, appointmentId } = appointment
+  const { patientId, name, appointmentId, visitTypeCode, visitSequence } =
+    appointment
   const addTab = useRootStore((state) => state.addTab)
   const router = useRouter()
 
@@ -21,7 +22,12 @@ const OpenPatientChartButton = ({
       variant="ghost"
       className="text-pp-bg-primary cursor-pointer gap-x-1 text-[12px] font-[510]"
       onClick={() => {
-        const href = `/chart/${patientId}/quicknotes?id=${appointmentId}`
+        const href = constructQuickNotesUrl(
+          patientId,
+          appointmentId,
+          visitTypeCode,
+          visitSequence,
+        )
         addTab({
           href,
           label: `${name}-${getPatientMRN(patientId)}-${appointmentId}`,

@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { Cross1Icon } from '@radix-ui/react-icons'
 import { Button, Dialog, Flex } from '@radix-ui/themes'
 import { Plus } from 'lucide-react'
+import { NewPatient } from '@/types'
 import {
   DateStepper as SchedulerDateStepper,
   SchedulerView,
@@ -21,7 +22,7 @@ const CloseDialogIcon = () => (
   </Dialog.Close>
 )
 
-const CalenderView = () => {
+const CalenderView = ({ patient }: { patient: undefined | NewPatient }) => {
   const [isOpen, setIsOpen] = useState(false)
 
   return (
@@ -54,7 +55,11 @@ const CalenderView = () => {
           </Flex>
         </Dialog.Title>
 
-        <SchedulerView showFollowUpFilter={true} noOfDays={6} />
+        <SchedulerView
+          showFollowUpFilter={true}
+          noOfDays={6}
+          patient={patient}
+        />
       </Dialog.Content>
     </Dialog.Root>
   )

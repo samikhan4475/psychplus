@@ -10,43 +10,42 @@ import { generateTimeIntervals } from '../../util'
 
 const DateTimeOfAdmission = () => {
   const form = useFormContext<SchemaType>()
-
-  const [facilityAdmissionId, providerType] = useWatch({
+  const [dischargeDate, patient, state, service, location] = useWatch({
     control: form.control,
-    name: ['facilityAdmissionId', 'providerType'],
+    name: ['dischargeDate', 'patient', 'state', 'service', 'location'],
   })
-
+  const isDisabled = !patient || !state || !service || !location
   const timeSlots = useMemo(() => generateTimeIntervals(), [])
-
-  const isDisabled = !facilityAdmissionId && !providerType
-
   const options = timeSlots.map((v) => ({
     label: v.label,
     value: v.value,
   }))
-
   return (
-    <Box className="flex-1">
-      <Flex direction={'column'} className="flex-1 gap-[2px]">
-        <FormFieldLabel required>Date/Time of Admission</FormFieldLabel>
-        <Box className="appointment-date-time grid grid-cols-5 gap-3">
-          <DatePickerInput
-            field="dateOfAdmission"
-            isDisabled={isDisabled}
-            dateInputClass="h-6 w-full"
+    <Flex direction={'column'} className="flex-1 gap-[2px]">
+      <FormFieldLabel required>Date/Time of Admission</FormFieldLabel>
+      <Flex className="flex-1 gap-1">
+        <DatePickerInput
+          field="dateOfAdmission"
+          className="w-auto flex-1"
+          isDisabled={isDisabled}
+          dateInputClass="h-6 flex-1"
+          handleChange={(date) => {
+            if (dischargeDate && date > dischargeDate) {
+              form.setValue('dischargeDate', undefined)
+            }
+          }}
+        />
+        <Box>
+          <SelectInput
+            field="timeOfAdmission"
+            disabled={isDisabled}
+            options={options}
+            buttonClassName="h-6 w-full"
           />
-          <Box className="flex-1">
-            <SelectInput
-              field="timeOfAdmission"
-              options={options}
-              buttonClassName="h-6 w-full"
-              disabled={isDisabled}
-            />
-            <FormFieldError name="timeOfAdmission" />
-          </Box>
+          <FormFieldError name="timeOfAdmission" />
         </Box>
       </Flex>
-    </Box>
+    </Flex>
   )
 }
 

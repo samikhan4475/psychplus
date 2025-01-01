@@ -3,20 +3,17 @@
 import { getLocalTimeZone, today } from '@internationalized/date'
 import * as api from '@/api'
 import { AppointmentParams } from '../../types'
-import { AppointmentRecord } from '../types'
+import { Appointment } from '@/types'
 
 const getAppointmentsAction = async (
   params?: AppointmentParams,
-): Promise<api.ActionResult<AppointmentRecord[]>> => {
+): Promise<api.ActionResult<Appointment[]>> => {
   const startDate = today(getLocalTimeZone())
   const year = startDate.year
   const month = `${startDate.month}`.padStart(2, '0')
   const day = `${startDate.day}`.padStart(2, '0')
 
   const body = {
-    isIncludeMetadataResourceChangeControl: true,
-    isIncludeMetadataResourceIds: true,
-    isIncludeMetadataResourceStatus: true,
     startingDate: `${year}-${month}-${day}`,
     includePatientData: true,
     includeFinancialData: true,
@@ -26,11 +23,13 @@ const getAppointmentsAction = async (
     includeEncounterTypes: true,
     includeServiceUnit: true,
     includeServiceGroup: true,
+    includeCptCodes: true,
     includePatientNotes: true,
+    isServiceTimeDependant: false,
     ...params,
   }
 
-  const response = await api.POST<AppointmentRecord[]>(
+  const response = await api.POST<Appointment[]>(
     api.SEARCH_BOOKED_APPOINTMENTS_ENDPOINT,
     body,
   )

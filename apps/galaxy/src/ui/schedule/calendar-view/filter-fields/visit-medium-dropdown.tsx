@@ -5,13 +5,11 @@ import { FormFieldContainer } from '../../shared'
 
 const VisitMediumDropdown = () => {
   const codes = useCodesetCodes(CODESETS.VisitMedium)
-  const options = codes
-    .filter((code) => code.attributes?.[0].value === 'Primary')
-    .map((code) => ({
-      label: code.display,
-      value: code.value,
-    }))
-    
+  const options = codes.map((code) => ({
+    label: code.display,
+    value: code.value,
+  }))
+
   return (
     <FormFieldContainer>
       <FormFieldLabel>Visit Medium</FormFieldLabel>

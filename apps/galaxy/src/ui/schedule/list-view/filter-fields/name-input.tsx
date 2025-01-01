@@ -16,6 +16,7 @@ const NameInput = () => {
         placeholder="Search by Name"
         size="1"
         {...form.register('name')}
+        className='flex-1'
       />
     </FormFieldContainer>
   )

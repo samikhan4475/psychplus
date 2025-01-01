@@ -1,7 +1,5 @@
 'use client'
 
-import { useEffect } from 'react'
-import { useFormContext } from 'react-hook-form'
 import {
   CodesetSelect,
   FormFieldContainer,
@@ -9,20 +7,18 @@ import {
   FormFieldLabel,
 } from '@/components'
 import { CODESETS } from '@/constants'
-import { SchemaType } from '../../schema'
 
-const LegalSelect = () => {
-  const form = useFormContext<SchemaType>()
-
-  useEffect(() => {
-    form.setValue('legal', 'voluntary')
-  }, [])
-
+const LegalSelect = ({
+  isPsychiatristVisitTypeSequence,
+}: {
+  isPsychiatristVisitTypeSequence?: boolean
+}) => {
   return (
     <FormFieldContainer className="flex-1">
       <FormFieldLabel>Legal</FormFieldLabel>
       <CodesetSelect
         name="legal"
+        disabled={isPsychiatristVisitTypeSequence}
         codeset={CODESETS.AdmissionLegalStatus}
         size="1"
         className="h-6 w-full"

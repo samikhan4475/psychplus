@@ -2,6 +2,7 @@
 
 import { parseAbsolute } from '@internationalized/date'
 import * as api from '@/api'
+import { AvailableSlotsParams } from '../../types'
 import {
   AppointmentAvailability,
   AppointmentClinic,
@@ -10,11 +11,10 @@ import {
   SlotsByDay,
 } from '../types'
 import { extractDate } from '../utils'
-import { AvailableSlotsParams } from '../../types'
 
-const searchAppointmentsAction = async (params: AvailableSlotsParams): Promise<
-  api.ActionResult<AppointmentAvailability[]>
-> => {
+const searchAppointmentsAction = async (
+  params: AvailableSlotsParams,
+): Promise<api.ActionResult<AppointmentAvailability[]>> => {
   const result = await api.POST<AppointmentsSearchApiResponse>(
     api.SEARCH_AVAILABLE_APPOINTMENT_SLOTS_ENDPOINT,
     { maxDaysOutToLook: 90, ...params },
@@ -53,7 +53,8 @@ const transformResponseData = (data: AppointmentsSearchApiResponse) => {
   const availabilities: AppointmentAvailability[] = []
 
   for (const availability of data.staffAppointmentAvailabilities) {
-    const provider = seenProviders[availability.specialist.id]
+    const provider =
+      seenProviders[`${availability.specialist.id}-${availability.clinic.id}`]
 
     if (provider) {
       const slotsByDay = getSlotsByDay(availability)
@@ -84,11 +85,13 @@ const transformResponseData = (data: AppointmentsSearchApiResponse) => {
         allSlotsByDay: slotsByDay,
         specialistTypeCode: availability.specialistTypeCode,
         specialist: availability.specialist,
+        clinic: clinic,
         clinics: [clinic],
       }
 
       availabilities.push(newAvailability)
-      seenProviders[availability.specialist.id] = newAvailability
+      seenProviders[`${availability.specialist.id}-${availability.clinic.id}`] =
+        newAvailability
     }
   }
   availabilities.forEach((availability) => {

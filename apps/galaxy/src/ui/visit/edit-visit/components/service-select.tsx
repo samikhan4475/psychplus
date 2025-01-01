@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useFormContext, useWatch } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import {
@@ -17,6 +17,7 @@ import { useEditVisitStore } from '../store'
 
 const ServiceSelect = () => {
   const form = useFormContext<SchemaType>()
+  const [loading, setLoading] = useState<boolean>(false)
   const { services, setServices } = useEditVisitStore()
   const serviceCodes = useCodesetCodes(CODESETS.ServicesOffered)
 
@@ -34,9 +35,11 @@ const ServiceSelect = () => {
   useEffect(() => {
     if (!locationId) return
     form.resetField('service')
+    setLoading(true)
     getLocationServices({ locationId }).then((res) => {
+      setLoading(false)
       if (res.state === 'error') {
-        toast.error(res.error)
+        toast.error(res.error || 'Failed to fetch services')
         return setServices([])
       }
       setServices(res.data)
@@ -67,6 +70,7 @@ const ServiceSelect = () => {
           form.resetField('visitMedium')
         }}
         disabled={!isServiceTimeDependent}
+        loading={loading}
       />
       <FormFieldError name={'service'} />
     </FormFieldContainer>

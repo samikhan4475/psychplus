@@ -1,16 +1,26 @@
-import { Flex, ScrollArea } from '@radix-ui/themes'
+import { useEffect } from 'react'
+import { Flex } from '@radix-ui/themes'
+import { LoadingPlaceholder } from '@/components'
 import { ListViewFilterCard } from './list-view-filter-card'
+import { ListViewPagination } from './list-view-pagination'
 import { ListViewTable } from './list-view-table'
+import { useStore } from './store'
 
 const ListView = () => {
+  const { fetchAppointments, loading } = useStore((state) => ({
+    fetchAppointments: state.fetchAppointments,
+    loading: state.loading,
+  }))
+
+  useEffect(() => {
+    fetchAppointments()
+  }, [])
+
   return (
-    <Flex direction="column" className="h-full overflow-auto">
-      <ScrollArea className="flex-1">
-        <Flex direction="column" className="flex-1">
-          <ListViewFilterCard />
-          <ListViewTable />
-        </Flex>
-      </ScrollArea>
+    <Flex direction="column" className="h-full !overflow-hidden">
+      <ListViewFilterCard />
+      {loading ? <LoadingPlaceholder /> : <ListViewTable />}
+      <ListViewPagination />
     </Flex>
   )
 }

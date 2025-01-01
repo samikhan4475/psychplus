@@ -1,41 +1,48 @@
 'use client'
 
+import { useMemo } from 'react'
+import { useFormContext } from 'react-hook-form'
 import { FormFieldLabel, SelectInput } from '@/components'
+import { ServiceRoom } from '@/types'
 import { useFiltersContext } from '../../context'
 import { FormFieldContainer } from '../../shared'
 import { SchedulerFilters } from '../../types'
+import { ProviderCodingSchema } from '../provider-coding-view-schema'
 
-const options = [
-  {
-    label: 'Room 1',
-    value: 'Room 1',
-  },
-  {
-    label: 'Room 2',
-    value: 'Room 2',
-  },
-  {
-    label: 'Room 3',
-    value: 'Room 3',
-  },
-]
-
-const RoomDropdown = () => {
+const RoomSelect = ({
+  rooms,
+  loading,
+}: {
+  rooms: ServiceRoom[]
+  loading: boolean
+}) => {
   const { filters } = useFiltersContext()
+  const { watch } = useFormContext<ProviderCodingSchema>()
+  const services = watch('serviceIds')
+  const roomOptions = useMemo(
+    () =>
+      rooms.map((room) => ({
+        label: room.room,
+        value: room.id,
+      })),
+    [rooms],
+  )
   if (!filters.includes(SchedulerFilters.Room)) return null
 
   return (
     <FormFieldContainer className="h-full">
       <FormFieldLabel>Room</FormFieldLabel>
       <SelectInput
-        field="room"
+        field="roomId"
         placeholder="Select"
-        options={options}
+        options={roomOptions}
+        disabled={services.length === 0}
         buttonClassName="w-full h-6"
         className="h-full flex-1"
+        loading={loading}
       />
     </FormFieldContainer>
   )
 }
 
-export { RoomDropdown }
+export { RoomSelect }

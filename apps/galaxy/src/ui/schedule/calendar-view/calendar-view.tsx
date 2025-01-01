@@ -1,10 +1,18 @@
 import { LoadingPlaceholder } from '@/components'
-import { useBookedAppointmentsStore } from '../store'
 import { BigCalendar } from './calendar'
 import { CalendarFilterCard } from './calendar-filter-card'
+import { useEffect } from 'react'
+import { useStore } from './store'
 
 const CalendarView = () => {
-  const loading = useBookedAppointmentsStore((state) => state.loading)
+  const { loading, fetchData } = useStore(state => ({
+    loading: state.loading,
+    fetchData: state.fetchData,
+  }))
+
+  useEffect(() => {
+    fetchData()
+  }, [])
 
   return (
     <>

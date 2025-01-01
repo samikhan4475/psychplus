@@ -57,6 +57,7 @@ interface Props {
   className?: string
   disabled?: boolean
   hideSelectedCount?: boolean
+  loading?: boolean
 }
 
 const MultiSelectField = ({
@@ -69,6 +70,7 @@ const MultiSelectField = ({
   className,
   disabled = false,
   hideSelectedCount = false,
+  loading = false,
 }: Props) => {
   const [selectedValues, setSelectedValues] = useState<string[]>(
     defaultValues ?? [],
@@ -134,6 +136,7 @@ const MultiSelectField = ({
                 'text-black !bg-white border-pp-gray-2 relative flex h-6 w-full cursor-default items-center !justify-between border border-solid px-1.5 pr-5 [box-shadow:none]',
                 {
                   '!bg-pp-states-disabled': disable,
+                  'loading-icon': loading,
                 },
               )}
             >
@@ -152,6 +155,7 @@ const MultiSelectField = ({
                 height={14}
                 className={cn('absolute right-[3px] top-0 h-full', {
                   'pointer-events-none': disable,
+                  'text-transparent': loading,
                 })}
               />
             </Button>

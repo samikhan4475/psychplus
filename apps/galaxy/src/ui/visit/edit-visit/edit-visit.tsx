@@ -11,8 +11,14 @@ import { EditVisitForm } from './components'
 
 const EditVisit = ({
   appointmentId,
+  onEdit,
+  disabled = false,
   children,
-}: PropsWithChildren<{ appointmentId: number }>) => {
+}: PropsWithChildren<{
+  appointmentId: number
+  disabled?: boolean
+  onEdit?: () => void
+}>) => {
   const [visitDetails, setVisitDetails] = useState<Appointment>()
   const [isOpen, setIsOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
@@ -26,7 +32,7 @@ const EditVisit = ({
       appointmentIds: [appointmentId],
     }).then((response) => {
       if (response.state === 'error') {
-        toast.error('Failed to retrieve appointments data')
+        toast.error(response.error || 'Failed to retrieve appointment\'s data')
       } else {
         const visit = response.data[0]
         setVisitDetails(visit)
@@ -42,7 +48,7 @@ const EditVisit = ({
         setIsOpen(open)
       }}
     >
-      <Dialog.Trigger>{children}</Dialog.Trigger>
+      <Dialog.Trigger disabled={disabled}>{children}</Dialog.Trigger>
 
       <Dialog.Content className="relative max-w-[700px]">
         <CloseDialogTrigger />
@@ -56,8 +62,10 @@ const EditVisit = ({
         ) : (
           <EditVisitForm
             appointmentId={appointmentId}
+            onEdit={onEdit}
             isLoading={isLoading}
             visitDetails={visitDetails as Appointment}
+            onClose={() => setIsOpen(false)}
           />
         )}
       </Dialog.Content>

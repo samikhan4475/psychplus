@@ -1,15 +1,21 @@
 'use client'
 
 import { useMemo } from 'react'
+import { useFormContext } from 'react-hook-form'
 import { FormFieldLabel, SelectInput } from '@/components'
+import { ServiceUnit } from '@/types'
 import { useFiltersContext } from '../../context'
 import { FormFieldContainer } from '../../shared'
 import { SchedulerFilters } from '../../types'
-import { ServiceUnit } from '@/types'
-import { useFormContext } from 'react-hook-form'
 import { ProviderCodingSchema } from '../provider-coding-view-schema'
 
-const UnitSelect = ({ units }: { units: ServiceUnit[] }) => {
+const UnitSelect = ({
+  units,
+  loading,
+}: {
+  units: ServiceUnit[]
+  loading: boolean
+}) => {
   const { filters } = useFiltersContext()
   const { watch } = useFormContext<ProviderCodingSchema>()
   const services = watch('serviceIds')
@@ -33,6 +39,7 @@ const UnitSelect = ({ units }: { units: ServiceUnit[] }) => {
         disabled={services.length === 0}
         buttonClassName="w-full h-6"
         className="h-full flex-1"
+        loading={loading}
       />
     </FormFieldContainer>
   )

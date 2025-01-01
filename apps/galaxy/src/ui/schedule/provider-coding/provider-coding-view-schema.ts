@@ -16,14 +16,14 @@ const providerCodingViewSchema = z.object({
     }),
   providerType: z.string().optional(),
   unitId: z.string().optional(),
-  room: z.string().optional(),
+  roomId: z.string().optional(),
   groupId: z.string().optional(),
   primaryInsuranceName: z.string().optional(),
   secondaryInsuranceName: z.string().optional(),
   visitType: z.string().optional(),
   visitSequence: z.string().optional(),
   visitMedium: z.string().optional(),
-  visitStatus: z.string().optional(),
+  appointmentStatus: z.string().optional(),
   patientInsuranceVerificationStatus: z.string().optional(),
   diagnosisCode: z.string().optional(),
   cptCode: z.string().optional(),
@@ -40,7 +40,8 @@ const providerCodingViewSchema = z.object({
   coInsuranceDueMax: z.coerce.number().optional(),
   balanceDueMin: z.coerce.number().optional(),
   balanceDueMax: z.coerce.number().optional(),
-  isNoteSigned: z.string().optional(),
+  noteSignedStatus: z.string().optional(),
+  facilityAdmissionIds: z.string().optional(),
 })
 
 type ProviderCodingSchema = z.infer<typeof providerCodingViewSchema>

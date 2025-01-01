@@ -1,4 +1,5 @@
-import { Gender, LegalName } from '@/types'
+import { Clinic, Gender, LegalName } from '@/types'
+import { Specialist } from '../schedule/types'
 
 interface GeoCoordinates {
   longitude: number
@@ -14,24 +15,10 @@ interface Address {
   geoCoordinates: GeoCoordinates
 }
 
-interface Contact {
-  addresses: Address[]
-}
-
 interface Metadata {
   createdOn: string
   createdBy?: number
   updatedOn?: string
-}
-
-interface Clinic {
-  id: string
-  metadata: Metadata
-  isTest: boolean
-  name: string
-  group: string
-  description: string
-  contact: Contact
 }
 
 interface VisitTypesPayload {
@@ -116,6 +103,10 @@ enum ProviderType {
   Psychiatrist = 'Psychiatrist',
   Therapist = 'Therapy',
   Bcba = 'Bcba',
+  NotSet = 'NotSet',
+  FamilyMedicine = 'FamilyMedicine',
+  InternalMedicine = 'InternalMedicine',
+  Anesthesiology = 'Anesthesiology',
 }
 
 enum ServicesOffered {
@@ -145,6 +136,73 @@ interface StaffCommentParams {
   recordStatuses?: string[] | null
 }
 
+interface BookVisitPayload {
+  admissionId?: string
+  admissionLegalStatus?: string
+  appointmentId: number
+  appointmentStatus?: string
+  authorizationDate?: string
+  authorizationNumber?: string
+  dischargeDate?: string
+  dischargeLocation?: string
+  durationMinutes: number
+  encounterReason?: string
+  encounterType?: string
+  facilityAppointmentStatus?: string
+  visitFrequency: string
+  groupId?: string
+  groupTherapyTypeCode?: string
+  isEdVisit?: boolean
+  isFollowup: boolean
+  isNewAdmissionIdRequired: boolean
+  isOverridePermissionProvided: boolean
+  isPrimaryProviderType: boolean
+  isProceedPermissionProvided: boolean
+  isSelfPay?: boolean
+  lastAuthorizationCoveredDate?: string
+  locationId: string
+  patientId: number
+  paymentResponsibilityTypeCode?: string
+  pharmacyName?: string
+  providerType?: string
+  reason?: string
+  roomId?: string
+  serviceId: string
+  specialistStaffId: number
+  startDate: string
+  admissionDate?:string
+  consultationDate?: string
+  stateCode: string
+  stateId?: string
+  type: string
+  unitId?: string
+  visitSequenceType?: string
+  visitTypeId?: string
+}
+
+interface BookVisitResponse {
+  id: number
+  metadata: Metadata
+  status: string
+  type: string
+  encounterNumber: string
+  encounterTypeCode: number
+  clinic: Clinic
+  specialist: Specialist
+  specialistTypeCode: number
+  locationId: string
+  serviceId: string
+  physicianStaffId: number
+  physicianName: string
+  startDate: string
+  endDate: string
+  duration: number
+  coPay: number
+  virtualRoomLink: string
+  isCopayPaid: boolean
+  isSelfPay: boolean
+}
+
 export {
   type Clinic,
   type DropdownOptions,
@@ -158,6 +216,8 @@ export {
   type VisitTypesPayload,
   type ServerSearchSelectID,
   type StaffCommentParams,
+  type BookVisitPayload,
+  type BookVisitResponse,
   ServiceType,
   ProviderType,
   TCMVisitTypes,

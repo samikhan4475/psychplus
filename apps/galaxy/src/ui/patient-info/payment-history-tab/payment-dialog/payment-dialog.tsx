@@ -3,23 +3,20 @@
 import React, { PropsWithChildren, useState } from 'react'
 import { Dialog } from '@radix-ui/themes'
 import { X } from 'lucide-react'
+import { useConstants } from '@/hooks/use-constants'
 import { Appointment } from '@/types'
 import { resetAllStores } from './create-resetable-store'
 import { PaymentSection } from './payment-section'
 
 interface Props {
-  stripeApiKey: string
   patientId: string
-  googleApiKey: string
   appointment?: Appointment
   onClose?: () => void
 }
 
 const PaymentDialog = ({
   children,
-  stripeApiKey,
   patientId,
-  googleApiKey,
   appointment,
   onClose,
 }: PropsWithChildren<Props>) => {
@@ -29,6 +26,7 @@ const PaymentDialog = ({
     onClose?.()
     resetAllStores()
   }
+  const { googleApiKey, stripeApiKey } = useConstants()
 
   return (
     <Dialog.Root

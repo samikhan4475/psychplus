@@ -1,17 +1,25 @@
+import { Flex } from '@radix-ui/themes'
 import { getUsStatesOptionsAction } from '@/actions'
-import { AsyncSelect, FormFieldLabel } from '@/components'
-import { FormFieldContainer } from '../../shared'
+import {
+  AsyncSelect,
+  FormFieldContainer,
+  FormFieldError,
+  FormFieldLabel,
+} from '@/components'
 
 const StateSelect = () => {
   return (
-    <FormFieldContainer>
-      <FormFieldLabel>State</FormFieldLabel>
-      <AsyncSelect
-        field="stateId"
-        fetchOptions={getUsStatesOptionsAction}
-        buttonClassName="flex-1 h-6"
-        className="flex-1"
-      />
+    <FormFieldContainer className="flex-1 gap-x-1">
+      <Flex className="flex-1 gap-x-1" align="center">
+        <FormFieldLabel required>State</FormFieldLabel>
+        <AsyncSelect
+          field="stateIds"
+          fetchOptions={getUsStatesOptionsAction}
+          buttonClassName="flex-1 h-6"
+          className="flex-1"
+        />
+      </Flex>
+      <FormFieldError name="stateIds" />
     </FormFieldContainer>
   )
 }

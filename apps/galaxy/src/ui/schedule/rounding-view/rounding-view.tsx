@@ -1,22 +1,28 @@
 'use client'
 
-import { Flex, ScrollArea } from '@radix-ui/themes'
+import { useEffect } from 'react'
+import { Flex } from '@radix-ui/themes'
 import { LoadingPlaceholder } from '@/components'
 import { RoundingViewFilterCard } from './rounding-view-filter-card'
+import { RoundingViewPagination } from './rounding-view-pagination'
 import { RoundingViewTable } from './rounding-view-table'
-import { useBookedAppointmentsStore } from '../store'
+import { useStore } from './store'
 
 const RoundingView = () => {
-  const loading = useBookedAppointmentsStore((state) => state.loading)
+  const { fetchAppointments, loading } = useStore((state) => ({
+    fetchAppointments: state.fetchAppointments,
+    loading: state.loading,
+  }))
+
+  useEffect(() => {
+    fetchAppointments()
+  }, [])
 
   return (
-    <Flex direction="column" className="h-full overflow-auto">
-      <ScrollArea className="flex-1">
-        <Flex direction="column" className="flex-1">
-          <RoundingViewFilterCard />
-          {loading ? <LoadingPlaceholder /> : <RoundingViewTable />}
-        </Flex>
-      </ScrollArea>
+    <Flex direction="column" className="h-full !overflow-hidden">
+      <RoundingViewFilterCard />
+      {loading ? <LoadingPlaceholder /> : <RoundingViewTable />}
+      <RoundingViewPagination />
     </Flex>
   )
 }

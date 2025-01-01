@@ -1,15 +1,21 @@
 'use client'
 
 import { useMemo } from 'react'
-import { FormFieldLabel, SelectInput } from '@/components'
 import { useFormContext } from 'react-hook-form'
+import { FormFieldLabel, SelectInput } from '@/components'
+import { ServiceGroup } from '@/types'
 import { useFiltersContext } from '../../context'
 import { FormFieldContainer } from '../../shared'
 import { SchedulerFilters } from '../../types'
-import { ServiceGroup } from '@/types'
 import { ProviderCodingSchema } from '../provider-coding-view-schema'
 
-const GroupSelect = ({ groups }: { groups: ServiceGroup[] }) => {
+const GroupSelect = ({
+  groups,
+  loading,
+}: {
+  groups: ServiceGroup[]
+  loading: boolean
+}) => {
   const { filters } = useFiltersContext()
   const { watch } = useFormContext<ProviderCodingSchema>()
   const services = watch('serviceIds')
@@ -33,6 +39,7 @@ const GroupSelect = ({ groups }: { groups: ServiceGroup[] }) => {
         disabled={services.length === 0}
         buttonClassName="w-full h-6"
         className="h-full flex-1"
+        loading={loading}
       />
     </FormFieldContainer>
   )

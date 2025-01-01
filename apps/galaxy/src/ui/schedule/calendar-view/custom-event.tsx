@@ -1,9 +1,12 @@
+import { useMemo } from 'react'
 import * as Popover from '@radix-ui/react-popover'
 import { Box, Flex, Heading, Text } from '@radix-ui/themes'
 import format from 'date-fns/format'
 import { type EventProps } from 'react-big-calendar'
+import { CODESETS } from '@/constants'
+import { useCodesetCodes } from '@/hooks'
 import { Appointment } from '@/types'
-import { cn } from '@/utils'
+import { cn, getCodesetDisplayName } from '@/utils'
 import { AvailableSlotsEvent } from '../types'
 import { EditVisitDetailsButton } from './edit-visit-details-button'
 import { OpenPatientChartButton } from './open-patient-chart-button'
@@ -59,6 +62,10 @@ const AppointmentEvent = ({
 const CustomEvent = ({
   event,
 }: EventProps<AvailableSlotsEvent<Appointment>>) => {
+  const stateCodes = useCodesetCodes(CODESETS.UsStates)
+  const serviceCodes = useCodesetCodes(CODESETS.ServicesOffered)
+  const frequencyCodes = useCodesetCodes(CODESETS.VisitRepeatFrequency)
+  const verificationStatusCodes = useCodesetCodes(CODESETS.VerificationStatus)
   const startTime = format(new Date(event.start), 'HH:mm')
   const endTime = format(new Date(event.end), 'HH:mm')
   const appointmentDate = format(new Date(event.start), 'MM/dd/yyyy')
@@ -68,17 +75,37 @@ const CustomEvent = ({
   )} mins`
 
   const {
+    appointmentId,
     name,
     providerName,
-    state,
-    service,
+    stateCode,
     locationName,
     providerType,
     visitType,
-    visitStatus,
-    patientConsentStatus,
-    visitSequence,
+    patientInsuranceVerificationStatus,
   } = event.data as Appointment
+  const state = useMemo(
+    () => getCodesetDisplayName(stateCode, stateCodes),
+    [stateCode],
+  )
+  const service = useMemo(
+    () => getCodesetDisplayName(event.data.service, serviceCodes),
+    [event.data.service],
+  )
+  const frequency = useMemo(() => {
+    const transformedFrequencyCodes = frequencyCodes.map((code) => {
+      const value = code?.attributes?.find((attr) => attr.name === 'ResourceId')
+        ?.value as string
+      return {
+        ...code,
+        value: value,
+      }
+    })
+    return getCodesetDisplayName(
+      `${event.data.appointmentInterval}`,
+      transformedFrequencyCodes,
+    )
+  }, [event.data.appointmentInterval, frequencyCodes])
 
   return (
     <Popover.Root>
@@ -99,14 +126,16 @@ const CustomEvent = ({
                 Visit Details
               </Heading>
               <Flex align="center" className="gap-x-1">
-                <Text className="text-[12px] font-[510]">Visit Status</Text>
-                <VisitStatusDropdown value={visitStatus} />
+                <Text className="whitespace-nowrap text-[12px] font-[510]">
+                  Visit Status
+                </Text>
+                <VisitStatusDropdown appointment={event.data} />
               </Flex>
               <Flex align="center" className="gap-x-3">
                 <OpenPatientChartButton
                   appointment={event.data as Appointment}
                 />
-                <EditVisitDetailsButton />
+                <EditVisitDetailsButton appointmentId={appointmentId} />
               </Flex>
             </Flex>
             <Flex className="mb-2.5 gap-x-1 text-[14px]">
@@ -138,9 +167,12 @@ const CustomEvent = ({
                   <Text className="text-pp-text-sub">{customDuration}</Text>
                 </Flex>
                 <Flex className="gap-x-1">
-                  <Text className="font-[510]">Apt Verification</Text>
+                  <Text className="font-[510]">Ins Verification</Text>
                   <Text className="text-pp-text-sub">
-                    {patientConsentStatus}
+                    {getCodesetDisplayName(
+                      patientInsuranceVerificationStatus,
+                      verificationStatusCodes,
+                    )}
                   </Text>
                 </Flex>
               </Flex>
@@ -166,7 +198,7 @@ const CustomEvent = ({
                 </Flex>
                 <Flex className="gap-x-1">
                   <Text className="font-[510]">Frequency</Text>
-                  <Text className="text-pp-text-sub">{visitSequence}</Text>
+                  <Text className="text-pp-text-sub">{frequency}</Text>
                 </Flex>
               </Flex>
             </Flex>

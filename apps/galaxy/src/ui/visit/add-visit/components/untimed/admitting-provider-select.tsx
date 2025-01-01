@@ -6,45 +6,47 @@ import {
   FormFieldLabel,
   SelectInput,
 } from '@/components'
+import { SelectOptionType } from '@/types'
 import { getProviders } from '../../../actions'
 import { Provider } from '../../../types'
 import { SchemaType } from '../../schema'
 
 const AdmittingProviderSelector = () => {
   const form = useFormContext<SchemaType>()
-  const [options, setOptions] = useState<{ label: string; value: string }[]>([])
-  const [facilityAdmissionId, providerType, location] = useWatch({
+  const [loading, setLoading] = useState<boolean>(false)
+  const [options, setOptions] = useState<SelectOptionType[]>([])
+  const [location, patient, state, service] = useWatch({
     control: form.control,
-    name: ['facilityAdmissionId', 'providerType', 'location'],
+    name: ['location', 'patient', 'state', 'service'],
   })
-
+  const isDisabled = !patient || !state || !service || !location
   useEffect(() => {
-    if (location && providerType) {
-      form.resetField('provider')
-      getProviders({
-        locationIds: [location],
-        providerType: providerType,
-      }).then((res) => {
-        if (res.state === 'error') return setOptions([])
-        setOptions(
-          res.data.map((provider: Provider) => ({
-            label: `${provider.firstName} ${provider.lastName}`,
-            value: `${provider.id}`,
-          })),
-        )
-      })
-    }
-  }, [location, providerType])
+    form.setValue('admittingProvider', '')
+    if (!location) return
+    setLoading(true)
+    getProviders({
+      locationIds: [location],
+    }).then((res) => {
+      setLoading(false)
+      if (res.state === 'error') return setOptions([])
+      setOptions(
+        res.data.map((provider: Provider) => ({
+          label: `${provider.firstName} ${provider.lastName}`,
+          value: `${provider.id}`,
+        })),
+      )
+    })
+  }, [location])
 
   return (
-    <FormFieldContainer>
+    <FormFieldContainer className="flex-1">
       <FormFieldLabel required>Admitting Provider</FormFieldLabel>
-
       <SelectInput
         field="admittingProvider"
         options={options}
         buttonClassName="h-6 w-full"
-        disabled={!facilityAdmissionId}
+        disabled={isDisabled}
+        loading={loading}
       />
       <FormFieldError name={'admittingProvider'} />
     </FormFieldContainer>

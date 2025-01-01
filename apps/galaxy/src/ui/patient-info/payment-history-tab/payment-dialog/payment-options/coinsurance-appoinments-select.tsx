@@ -1,5 +1,6 @@
 'use client'
 
+import { useEffect } from 'react'
 import { useFormContext } from 'react-hook-form'
 import {
   FormFieldContainer,
@@ -15,19 +16,30 @@ import { twoDecimal } from '../utils'
 interface CoinsuranceAppoinmentProps {
   disabled?: boolean
   patientId: string
+  appointmentId?: number
 }
 const CoinsuranceAppoinmentSelect = ({
   patientId,
+  appointmentId,
   disabled = true,
 }: CoinsuranceAppoinmentProps) => {
   const form = useFormContext<PaymentDetailSchemaType>()
 
   const coInsuranceMap = useStore((state) => state.coInsuranceMap)
 
+  const amount = appointmentId ? coInsuranceMap[appointmentId] : undefined
+
   const options = useAppointmentOptions({
     patientId,
     paymentType: AppointmentOptionType.CoInsurance,
   })
+
+  useEffect(() => {
+    if (!appointmentId) return
+    if (amount) {
+      form.setValue('coInsAmount', twoDecimal(amount))
+    }
+  }, [appointmentId, amount])
 
   const handleChange = (selectedIds: string[]) => {
     const totalCoInsurance = selectedIds.reduce(

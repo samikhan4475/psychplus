@@ -29,7 +29,7 @@ const DayHeader = ({ noOfDays = 13 }: { noOfDays?: number }) => {
   }
 
   return (
-    <Grid columns="16" className="mx-[26px] mt-[7px]" position="sticky" top="0">
+    <Grid columns="16" className="pl-2.5 pr-5 mt-[7px]" position="sticky" top="0">
       <Flex align="center">
         <Text className="text-pp-black-3 col-span-2 text-[14px] font-bold">{`${serverProviderAvailabilities.length} Providers`}</Text>
       </Flex>

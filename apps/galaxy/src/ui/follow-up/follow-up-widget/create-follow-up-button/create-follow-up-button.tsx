@@ -6,7 +6,6 @@ import { useFormContext } from 'react-hook-form'
 import { Appointment } from '@/types'
 
 const CreateFollowUpButton = ({
-  appointment,
   disabled,
 }: {
   appointment?: Appointment
@@ -23,7 +22,7 @@ const CreateFollowUpButton = ({
       className="text-black"
       size="1"
       variant="outline"
-      type="button"
+      type="submit"
       onClick={onSubmit}
       disabled={disabled}
     >

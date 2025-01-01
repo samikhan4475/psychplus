@@ -1,3 +1,4 @@
+import { useCallback } from 'react'
 import { useFormContext, useWatch } from 'react-hook-form'
 import {
   AsyncSelect,
@@ -10,23 +11,26 @@ import { SchemaType } from '../../schema'
 
 const FacilityAdmissionDropdown = () => {
   const form = useFormContext<SchemaType>()
-  const [visitType, patient] = useWatch({
+  const patient = useWatch({
     control: form.control,
-    name: ['visitType', 'patient'],
+    name: 'patient',
   })
+  const fetchOptions = useCallback(() => {
+    if (!patient?.id)
+      return Promise.resolve({
+        state: 'success' as const,
+        data: [{ label: 'Create New', value: 'createNew' }],
+      })
+    return getFacilityAdmissionIdsOptionsAction(patient?.id)
+  }, [patient?.id])
   return (
     <FormFieldContainer className="flex-1">
       <FormFieldLabel required>Facility Admission ID</FormFieldLabel>
       <AsyncSelect
-        fetchOptions={() => {
-          if (!patient?.id) {
-            return Promise.resolve({ state: 'success', data: [] })
-          }
-          return getFacilityAdmissionIdsOptionsAction(patient?.id)
-        }}
+        fetchOptions={fetchOptions}
         buttonClassName="h-6 w-full"
         field="facilityAdmissionId"
-        disabled={!visitType}
+        disabled
       />
       <FormFieldError name={'facilityAdmissionId'} />
     </FormFieldContainer>

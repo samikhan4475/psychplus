@@ -1,7 +1,6 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { Box } from '@radix-ui/themes'
 import { useFormContext, useWatch } from 'react-hook-form'
 import {
   FormFieldContainer,
@@ -11,14 +10,15 @@ import {
 } from '@/components'
 import { CODESETS } from '@/constants'
 import { useCodesetCodes } from '@/hooks'
+import { SelectOptionType } from '@/types'
 import { SchemaType } from '../../schema'
 import { useAddVisitStore } from '../../store'
 
 const GroupTypeDropdown = () => {
   const form = useFormContext<SchemaType>()
-  const [groupTypeOptions, setGroupTypeOptions] = useState<
-    { label: string; value: string }[]
-  >([])
+  const [groupTypeOptions, setGroupTypeOptions] = useState<SelectOptionType[]>(
+    [],
+  )
   const codes = useCodesetCodes(CODESETS.GroupTherapyType)
   const { visitTypes } = useAddVisitStore()
 
@@ -33,7 +33,7 @@ const GroupTypeDropdown = () => {
         (type) => type.encouterType === visitTypeId,
       )
       if (visitType) {
-        const isGroupVisit = visitType.encouterType === 'Group Therapy'
+        const isGroupVisit = visitType.visitTypeCode === 'GroupTherapy'
         form.setValue('showGroupTypeField', isGroupVisit)
         setGroupTypeOptions(
           codes.map((visitType) => ({

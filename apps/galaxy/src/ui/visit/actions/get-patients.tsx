@@ -3,9 +3,15 @@
 import * as api from '@/api'
 import type { Patient, PatientRaw } from '../types'
 
-const searchPatientsAction = async (
-  name: string,
-): Promise<api.ActionResult<Patient[]>> => {
+const searchPatientsAction = async ({
+  firstName,
+  lastName,
+  name,
+}: {
+  firstName?: string
+  lastName?: string
+  name?: string
+}): Promise<api.ActionResult<Patient[]>> => {
   const url = new URL(api.SEARCH_PATIENTS_ENDPOINT)
 
   url.searchParams.append('limit', '50')
@@ -13,6 +19,8 @@ const searchPatientsAction = async (
   url.searchParams.append('includeInactive', 'false')
 
   const response = await api.POST<PatientRaw[]>(url.toString(), {
+    firstName,
+    lastName,
     name,
     roleCodes: ['1'],
   })

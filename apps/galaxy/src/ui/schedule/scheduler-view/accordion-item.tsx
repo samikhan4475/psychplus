@@ -3,10 +3,13 @@
 import { useMemo, useState } from 'react'
 import * as Accordion from '@radix-ui/react-accordion'
 import { ChevronDownIcon, ChevronUpIcon } from '@radix-ui/react-icons'
-import { Box, Flex, Grid, Text } from '@radix-ui/themes'
+import { Box, Button, Flex, Grid, Text } from '@radix-ui/themes'
 import { CODESETS } from '@/constants'
 import { useCodesetCodes } from '@/hooks'
-import { cn } from '@/utils'
+import { NewPatient } from '@/types'
+import { AddVisit } from '@/ui/visit/add-visit'
+import { cn, getCodesetDisplayName } from '@/utils'
+import { AvailableSlots } from '../types'
 import { useStore } from './store'
 import { AppointmentAvailability, SlotsByDay } from './types'
 import { currentWeekTotalSlots, extractTime, nextWeekTotalSlots } from './utils'
@@ -14,6 +17,7 @@ import { currentWeekTotalSlots, extractTime, nextWeekTotalSlots } from './utils'
 interface Props {
   provider: AppointmentAvailability
   value: string
+  patient: undefined | NewPatient
 }
 
 const Slots = ({
@@ -46,10 +50,17 @@ const Slots = ({
   </Flex>
 )
 
-const AccordionItem = ({ provider, value }: Props) => {
+const AccordionItem = ({ provider, value, patient }: Props) => {
   const [isOpen, setIsOpen] = useState<boolean>(false)
-  const dates = useStore((state) => state.dates)
+  const { dates, formData, fetchData } = useStore((state) => ({
+    dates: state.dates,
+    formData: state.formData,
+    fetchData: state.fetchAppointments,
+  }))
   const codes = useCodesetCodes(CODESETS.SpecialistType)
+  const stateCodes = useCodesetCodes(CODESETS.UsStates)
+  const providerState = provider.clinic?.contact?.addresses?.[0]?.state ?? ''
+  const stateLabel = getCodesetDisplayName(providerState, stateCodes)
 
   const specialistTypeIndex: Record<string, string> = useMemo(
     () =>
@@ -70,7 +81,7 @@ const AccordionItem = ({ provider, value }: Props) => {
 
   return (
     <Accordion.Item value={value}>
-      <Grid columns="16" className="mx-[26px]">
+      <Grid columns="16" className="ml-2.5 mr-[20px]">
         <Accordion.Header
           className={cn(
             'border-pp-focus-bg col-span-2 border-b-2 border-l border-t',
@@ -79,7 +90,7 @@ const AccordionItem = ({ provider, value }: Props) => {
           <Accordion.Trigger
             asChild
             onClick={() => setIsOpen(!isOpen)}
-            className={cn('cursor-pointer py-2.5 pl-2')}
+            className={cn('cursor-pointer py-2.5')}
           >
             <Flex className="w-full gap-x-4">
               {isOpen ? (
@@ -87,17 +98,17 @@ const AccordionItem = ({ provider, value }: Props) => {
               ) : (
                 <ChevronDownIcon width={18} height={18} />
               )}
-
               <Flex direction="column">
                 <Text className="text-pp-dark-grey text-[12px] font-medium">
                   {`${provider.specialist.legalName.firstName} 
                   ${provider.specialist.legalName.lastName}, `}
                   {provider.specialist.legalName.honors}
                 </Text>
-
                 <Text className="text-pp-black-1 text-[12px] font-bold">
                   {specialistTypeIndex?.[provider.specialistTypeCode] ?? ''}
                 </Text>
+                <Text className="text-[12px] font-medium">{`${provider.clinic.name}`}</Text>
+                <Text className="text-[12px] font-medium">{`${stateLabel}`}</Text>
               </Flex>
             </Flex>
           </Accordion.Trigger>
@@ -168,14 +179,28 @@ const AccordionItem = ({ provider, value }: Props) => {
                   {provider.allSlotsByDay[`${day.monthAndDay}`]
                     ? provider.allSlotsByDay[`${day.monthAndDay}`]?.map(
                         (slot) => (
-                          <Flex
-                            justify="center"
-                            align="center"
-                            className="border-pp-grey h-6 rounded-[4px] border px-[15px] py-1 text-[12px] font-medium"
+                          <AddVisit
+                            dateTime={slot.startDate}
+                            timezone={slot.timeZoneId}
+                            onAdd={() => fetchData(formData)}
+                            slotDetails={getSlotDetails(
+                              slot,
+                              provider,
+                              specialistTypeIndex,
+                            )}
+                            isTimed
                             key={slot.startDate}
+                            patient={patient}
                           >
-                            {extractTime(slot.startDate, slot.timeZoneId)}
-                          </Flex>
+                            <Button
+                              variant="outline"
+                              size="1"
+                              color="gray"
+                              className="text-black text-[12px]"
+                            >
+                              {extractTime(slot.startDate, slot.timeZoneId)}
+                            </Button>
+                          </AddVisit>
                         ),
                       )
                     : null}
@@ -187,6 +212,22 @@ const AccordionItem = ({ provider, value }: Props) => {
       </Grid>
     </Accordion.Item>
   )
+}
+
+const getSlotDetails = (
+  slot: AvailableSlots,
+  provider: AppointmentAvailability,
+  specialistTypeIndex: Record<string, string>,
+) => {
+  const slotRes = {
+    state: provider.clinic?.contact?.addresses?.[0]?.state ?? '',
+    location: provider.clinic.id,
+    providerType: specialistTypeIndex?.[provider.specialistTypeCode] ?? '',
+    providerId: `${provider.specialist.id}`,
+    duration: `${slot.duration}`,
+    service: slot.servicesOffered[0] ?? '',
+  }
+  return slotRes
 }
 
 export { AccordionItem }

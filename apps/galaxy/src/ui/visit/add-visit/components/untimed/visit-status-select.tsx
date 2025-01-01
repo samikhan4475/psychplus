@@ -24,7 +24,6 @@ const VisitStatusSelect = () => {
         exclude={exclude}
         size="1"
         className="h-6 w-full"
-        disabled
       />
       <FormFieldError name={'visitStatus'} />
     </FormFieldContainer>

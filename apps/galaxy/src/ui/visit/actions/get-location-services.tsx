@@ -5,7 +5,7 @@ import { Service } from '@/types'
 
 const getLocationServices = async (payload: {
   locationId?: string
-  serviceIds?: string[]
+  locationServiceIds?: string[]
   includeServiceVisitType?: boolean
   includeServiceUnit?: boolean
   includeServiceGroup?: boolean

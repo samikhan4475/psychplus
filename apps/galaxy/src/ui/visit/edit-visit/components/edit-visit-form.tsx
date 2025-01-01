@@ -3,16 +3,23 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Box, Flex, Grid, Separator, Text } from '@radix-ui/themes'
 import { SubmitHandler, useForm, useWatch } from 'react-hook-form'
 import toast from 'react-hot-toast'
+import { updateVisitAction } from '@/actions/update-visit'
 import {
   FormContainer,
   FormSubmitButton,
   LoadingPlaceholder,
 } from '@/components'
-import { Appointment, State } from '@/types'
-import { getCalendarDate, getTimeLabel } from '@/utils'
+import { useHasPermission } from '@/hooks'
+import { Appointment, BookVisitPayload, State } from '@/types'
+import { getLocalCalendarDate } from '@/utils'
 import { getUsStatesAction } from '../../actions'
+import { SAVE_APPOINTMENT } from '../../constants'
+import { convertToTimezone, sanitizeFormData } from '../../utils'
 import { StaffComments } from '../components/staff-comments'
 import { schema, SchemaType } from '../schema'
+import { useEditVisitStore } from '../store'
+import { transformRequestPayload } from '../transform'
+import { EditVisitAlert } from './edit-visit-alert'
 import { LocationSelect } from './location-select'
 import { PatientText } from './patient-text'
 import { ServiceSelect } from './service-select'
@@ -22,72 +29,113 @@ import { UntimedVisitForm } from './untimed/untimed-visit-form'
 
 const EditVisitForm = ({
   appointmentId,
+  onEdit,
+  isPsychiatristVisitTypeSequence,
   isLoading,
   visitDetails,
+  onClose,
 }: {
   appointmentId: number
+  onEdit?: () => void
   isLoading: boolean
+  isPsychiatristVisitTypeSequence?: boolean
   visitDetails: Appointment
+  onClose: () => void
 }) => {
   const [states, setStates] = useState<State[]>([])
+  const [alertInfo, setAlertInfo] = useState<{
+    statusCode: number
+    message: string
+  }>({
+    message: '',
+    statusCode: 0,
+  })
+  const [isAlertOpen, setIsAlertOpen] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
+  const { visitTypes } = useEditVisitStore()
+  const hasPermissionToClickSaveButton = useHasPermission(
+    'clickSaveOnEditVisit',
+  )
+  const { date, time } = convertToTimezone(
+    visitDetails?.appointmentDate,
+    visitDetails?.locationTimezoneId,
+  )
+  const { date: dateOfAdmission, time: timeOfAdmission } = convertToTimezone(
+    visitDetails?.dateOfAdmission,
+    visitDetails?.locationTimezoneId,
+  )
+  const { date: dischargeDate } = convertToTimezone(
+    visitDetails?.dischargeDate,
+    visitDetails?.locationTimezoneId,
+  )
   const form = useForm<SchemaType>({
     resolver: zodResolver(schema),
     defaultValues: {
+      appointmentId: visitDetails?.appointmentId,
       patient: {
-        firstName: visitDetails.name,
-        status: visitDetails.patientStatus,
-        id: 0,
+        firstName: visitDetails?.name,
+        status: visitDetails?.patientStatus,
+        id: visitDetails?.patientId,
         middleName: '',
         lastName: '',
-        gender: visitDetails.gender,
-        state: visitDetails.state,
+        gender: visitDetails?.gender,
+        state: visitDetails?.state,
         medicalRecordNumber: '',
-        birthdate: visitDetails.dob,
+        birthdate: visitDetails?.dob,
       },
-      visitDate: visitDetails.appointmentDate
-        ? getCalendarDate(visitDetails.appointmentDate)
+      visitDate: date,
+      duration: visitDetails?.appointmentDuration?.toString(),
+      frequency: visitDetails?.appointmentInterval?.toString(),
+      state: visitDetails?.stateCode,
+      location: visitDetails?.locationId,
+      timeZoneId: visitDetails?.locationTimezoneId,
+      isServiceTimeDependent: visitDetails?.isServiceTimeDependent,
+      service: visitDetails?.serviceId,
+      visitType: visitDetails?.visitTypeCode,
+      providerType: visitDetails?.providerType,
+      dcDate: visitDetails?.dischargeDate
+        ? getLocalCalendarDate(visitDetails?.dischargeDate)
         : undefined,
-      duration: visitDetails.appointmentDuration?.toString(),
-      frequency: visitDetails.appointmentInterval?.toString(),
-      state: visitDetails.stateCode || 'TX',
-      location: visitDetails.locationId,
-      isServiceTimeDependent: visitDetails.isServiceTimeDependent,
-      service: visitDetails.serviceId,
-      visitType: visitDetails.visitType,
-      providerType: visitDetails.providerType,
-      provider: visitDetails.providerId?.toString(),
-      visitTime: getTimeLabel(visitDetails.appointmentDate, false),
-      visitSequence: visitDetails.visitSequence,
-      visitMedium: visitDetails.visitMedium,
-      nonTimeProviderType: visitDetails.providerType,
-      facilityAdmissionId: visitDetails.facilityAdmissionId,
-      dateOfAdmission: visitDetails.dateOfAdmission
-        ? getCalendarDate(visitDetails.dateOfAdmission)
-        : undefined,
-      visitStatus: visitDetails.visitStatus,
+      dischargeDate: dischargeDate,
+      dcLocation: visitDetails?.dischargeLocationName,
+      edDischarge: visitDetails?.isEdDischarge ? 'Yes' : 'No',
+      provider: visitDetails?.providerId?.toString(),
+      visitTime: time,
+      visitSequence: visitDetails?.visitSequence,
+      visitMedium: visitDetails?.visitMedium,
+      facilityAdmissionDetailId: visitDetails?.facilityAdmissionDetailId,
+      facilityAdmissionId: visitDetails?.facilityAdmissionId,
+      dateOfAdmission: dateOfAdmission,
+      timeOfAdmission: timeOfAdmission,
+      groupType: visitDetails?.groupTherapyTypeCode ?? '',
+      visitStatus: visitDetails?.visitStatus,
       insuranceVerificationStatus:
-        visitDetails.patientInsuranceVerificationStatus,
-      legal: visitDetails.legalStatus,
-      insuranceAuthorizationNumber: visitDetails.authorizationNumber,
-      authDate: visitDetails.authorizationDate
-        ? getCalendarDate(visitDetails.authorizationDate)
+        visitDetails?.patientInsuranceVerificationStatus,
+      legal: visitDetails?.legalStatus,
+      insuranceAuthorizationNumber: visitDetails?.authorizationNumber,
+      authDate: visitDetails?.authorizationDate
+        ? getLocalCalendarDate(visitDetails?.authorizationDate)
         : undefined,
       unit: visitDetails?.unitResource?.unit,
+      room: visitDetails?.roomResource?.room,
       group: visitDetails?.groupResource?.group,
 
-      admittingProvider: '',
-      timeOfAdmission: '',
-      visitFrequency: 'Daily',
-      lastCoverageDate: visitDetails.lastCoverageDate
-        ? getCalendarDate(visitDetails.lastCoverageDate)
+      admittingProvider: visitDetails?.providerId?.toString(),
+      visitFrequency: '1',
+      paymentResponsibility: visitDetails?.paymentResponsibility,
+      lastCoverageDate: visitDetails?.lastCoverageDate
+        ? getLocalCalendarDate(visitDetails?.lastCoverageDate)
         : undefined,
+      isPrimaryProviderType: visitDetails?.isPrimaryProviderType,
+      isOverridePermissionProvided: false,
+      isProceedPermissionProvided: false,
     },
   })
 
   useEffect(() => {
     getUsStatesAction().then((response) => {
       if (response.state === 'error') {
-        toast.error('Failed to fetch US States')
+        toast.error(response.error || 'Failed to fetch US States')
         setStates([])
       } else {
         setStates(response.data)
@@ -99,9 +147,45 @@ const EditVisitForm = ({
     control: form.control,
     name: 'isServiceTimeDependent',
   })
+  const onSubmit: SubmitHandler<SchemaType> = (data) => {
+    if (!hasPermissionToClickSaveButton) {
+      setIsAlertOpen(true)
+      setAlertInfo({
+        message: SAVE_APPOINTMENT,
+        statusCode: 0,
+      })
+      return
+    }
+    setIsSubmitting(true)
+    const selectedVisitType = visitTypes.find((type) =>
+      [type.visitTypeCode, type.encouterType].includes(data.visitType),
+    )
+    const payload: BookVisitPayload = transformRequestPayload(
+      data,
+      selectedVisitType,
+    )
+    const sanitizedData = sanitizeFormData(payload)
 
-  const onSubmit: SubmitHandler<SchemaType> = () => {
-    // @Todo: API call
+    updateVisitAction(sanitizedData).then((res) => {
+      setIsSubmitting(false)
+      if (res.state === 'error') {
+        if (res.status) {
+          setIsAlertOpen(true)
+          setAlertInfo({
+            message: res.error,
+            statusCode: res.status ?? 0,
+          })
+          return
+        }
+        toast.error(res.error || 'Failed to update visit')
+        return
+      }
+      if (onEdit) {
+        onEdit()
+      }
+      toast.success('Visit updated successfully')
+      onClose()
+    })
   }
 
   if (isLoading) return <LoadingPlaceholder className="bg-white min-h-[46vh]" />
@@ -109,6 +193,16 @@ const EditVisitForm = ({
   return (
     <>
       <FormContainer form={form} onSubmit={onSubmit}>
+        <EditVisitAlert
+          isOpen={isAlertOpen}
+          alertInfo={alertInfo}
+          onClose={() => setIsAlertOpen(false)}
+          onConfirm={(data) => {
+            setIsAlertOpen(false)
+            onSubmit(data)
+            setAlertInfo({ message: '', statusCode: 0 })
+          }}
+        />
         <Grid columns="12" className="min-w-[648px] gap-3">
           <Box className="col-span-12">
             <PatientText visitDetails={visitDetails} />
@@ -123,12 +217,22 @@ const EditVisitForm = ({
             <ServiceSelect />
           </Box>
 
-          {isServiceTimeDependent ? <TimedVisitForm /> : <UntimedVisitForm />}
+          {isServiceTimeDependent ? (
+            <TimedVisitForm
+              isPsychiatristVisitTypeSequence={isPsychiatristVisitTypeSequence}
+            />
+          ) : (
+            <UntimedVisitForm
+              isPsychiatristVisitTypeSequence={isPsychiatristVisitTypeSequence}
+              visitDetails={visitDetails}
+            />
+          )}
         </Grid>
         <Flex justify="between" mt="3">
           <FormSubmitButton
             className="bg-pp-black-1 text-white ml-auto cursor-pointer px-3 py-1.5"
             form={form}
+            loading={isSubmitting}
           >
             <Text size="2">Save</Text>
           </FormSubmitButton>

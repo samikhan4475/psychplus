@@ -1,13 +1,14 @@
 import {
   CalendarDate,
+  CalendarDateTime,
   DateFormatter,
   getLocalTimeZone,
   parseAbsolute,
   startOfWeek,
+  toCalendarDateTime,
   today,
 } from '@internationalized/date'
-import { DateValue } from 'react-aria-components'
-import { getCalendarDateLabel } from '@/utils'
+import { DateValue, TimeValue } from 'react-aria-components'
 import { START_OF_WEEK_LOCALE } from '../constants'
 
 const getCurrentLocalDate = (): CalendarDate => {
@@ -46,7 +47,9 @@ const formatDate = (date: DateValue): string => {
 
 const formatDateCell = (date: string, timezoneId: string) => {
   const zonedDate = parseAbsolute(date, timezoneId)
-  return `${zonedDate.month}/${zonedDate.day}/${zonedDate.year}`
+  const month = `${zonedDate.month}`.padStart(2, '0')
+  const day = `${zonedDate.day}`.padStart(2, '0')
+  return `${month}/${day}/${zonedDate.year}`
 }
 
 const formatTimeCell = (date: string, timezoneId: string) => {
@@ -56,8 +59,67 @@ const formatTimeCell = (date: string, timezoneId: string) => {
   return `${hours}:${minutes}`
 }
 
-const getDateString = (date?: DateValue | null): string | undefined =>
-  date ? getCalendarDateLabel(date) : undefined
+const getDateString = (date?: DateValue | null): string | undefined => {
+  if (date) {
+    const dateOb = date.toDate(getLocalTimeZone())
+    return dateOb.toISOString()
+  }
+  return undefined
+}
+
+const getUtcDateWithoutTime = (date?: DateValue | null): string | undefined => {
+  if (date) {
+    const dateObj = date.toDate(getLocalTimeZone())
+    const utcDate = `${dateObj.getUTCDate()}`.padStart(2, '0')
+    const utcMonth = `${dateObj.getUTCMonth() + 1}`.padStart(2, '0')
+    const utcYear = `${dateObj.getUTCFullYear()}`
+    return `${utcYear}-${utcMonth}-${utcDate}`
+  }
+}
+
+const getCalendarDateLabel = (date?: DateValue): string | undefined => {
+  if (date) {
+    const day = `${date.day}`.padStart(2, '0')
+    const month = `${date.month}`.padStart(2, '0')
+    return `${date.year}-${month}-${day}`
+  }
+  return undefined
+}
+
+const getUtcTime = (time?: TimeValue) => {
+  if (!time) return undefined
+  const calendarDate = today(getLocalTimeZone())
+  const calendarDateTime = toCalendarDateTime(calendarDate, time)
+  const date = calendarDateTime.toDate(getLocalTimeZone())
+  const hourInUtc = `${date.getUTCHours()}`.padStart(2, '0')
+  const minutesInUtc = `${date.getUTCMinutes()}`.padStart(2, '0')
+  const secondsInUtc = `${date.getUTCSeconds()}`.padStart(2, '0')
+  return `${hourInUtc}:${minutesInUtc}:${secondsInUtc}`
+}
+
+const getDateTimeString = (
+  date?: DateValue | null,
+  time?: TimeValue | null,
+) => {
+  if (date && !time) {
+    const { year, day, month } = date
+    const dateTime = new CalendarDateTime(year, month, day)
+    return dateTime.toDate(getLocalTimeZone()).toISOString()
+  } else if (date && time) {
+    const { year, day, month } = date
+    const { hour, minute, second } = time
+    const dateTime = new CalendarDateTime(
+      year,
+      month,
+      day,
+      hour,
+      minute,
+      second,
+    )
+    return dateTime.toDate(getLocalTimeZone()).toISOString()
+  }
+  return undefined
+}
 
 const convertToZonedDate = (date: string, timezone: string): Date => {
   const { year, month, day, hour, minute } = parseAbsolute(date, timezone)
@@ -75,4 +137,8 @@ export {
   getDateString,
   convertToZonedDate,
   getWeekStartDateFormatted,
+  getDateTimeString,
+  getCalendarDateLabel,
+  getUtcTime,
+  getUtcDateWithoutTime,
 }

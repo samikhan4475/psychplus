@@ -1,23 +1,29 @@
 'use client'
 
-import { CodesetSelect, FormFieldLabel } from '@/components'
+import { useMemo } from 'react'
+import { FormFieldLabel, SelectInput } from '@/components'
 import { CODESETS } from '@/constants'
+import { useCodesetCodes } from '@/hooks'
 import { useFiltersContext } from '../../context'
 import { FormFieldContainer } from '../../shared'
 import { SchedulerFilters } from '../../types'
+import { sortVisitStatusCodes } from '../../utils'
 
 const VisitStatusSelect = () => {
   const { filters } = useFiltersContext()
+  const codes = useCodesetCodes(CODESETS.AppointmentStatus)
+  const options = useMemo(() => sortVisitStatusCodes(codes), [codes])
   if (!filters.includes(SchedulerFilters.VisitStatus)) return null
 
   return (
     <FormFieldContainer>
       <FormFieldLabel>Visit Status</FormFieldLabel>
-      <CodesetSelect
-        name="visitStatus"
-        codeset={CODESETS.AppointmentStatus}
-        size="1"
-        className="flex-1"
+      <SelectInput
+        field="appointmentStatus"
+        options={options}
+        placeholder="Select"
+        buttonClassName="w-full h-6"
+        className="h-full flex-1"
       />
     </FormFieldContainer>
   )

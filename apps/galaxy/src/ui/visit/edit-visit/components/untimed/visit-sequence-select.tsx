@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useFormContext, useWatch } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import {
@@ -9,62 +9,102 @@ import {
 } from '@/components'
 import { CODESETS } from '@/constants'
 import { useCodesetCodes } from '@/hooks'
-import { SelectOptionType, Service } from '@/types'
+import { Appointment, SelectOptionType, Service } from '@/types'
 import { getLocationServices } from '@/ui/visit/actions'
 import { SchemaType } from '../../schema'
+import { useEditVisitStore } from '../../store'
 
-const VisitSequenceSelect = () => {
+const VisitSequenceSelect = ({
+  visitDetails,
+  isPsychiatristVisitTypeSequence,
+}: {
+  visitDetails: Appointment
+  isPsychiatristVisitTypeSequence?: boolean
+}) => {
   const form = useFormContext<SchemaType>()
   const [service, setService] = useState<Service>()
+  const [loading, setLoading] = useState<boolean>(false)
   const [options, setOptions] = useState<SelectOptionType[]>()
   const codes = useCodesetCodes(CODESETS.VisitSequenceType)
+  const visitStatusCodes = useCodesetCodes(CODESETS.AppointmentStatus)
   const providerCodes = useCodesetCodes(CODESETS.ProviderType)
-  const [serviceId, providerType, facilityAdmissionId] = useWatch({
-    control: form.control,
-    name: ['service', 'providerType', 'facilityAdmissionId'],
-  })
+  const { groupedVisitTypes } = useEditVisitStore()
+  const [serviceId, providerType, facilityAdmissionId, visitType, visitMedium] =
+    useWatch({
+      control: form.control,
+      name: [
+        'service',
+        'providerType',
+        'facilityAdmissionId',
+        'visitType',
+        'visitMedium',
+      ],
+    })
 
   useEffect(() => {
     if (!serviceId) return
-    getLocationServices({ serviceIds: [serviceId] }).then((res) => {
+    setLoading(true)
+    getLocationServices({ locationServiceIds: [serviceId] }).then((res) => {
+      setLoading(false)
       if (res.state === 'error') {
         setService(undefined)
-        return toast.error(res.error)
+        return toast.error(res.error || 'Failed to fetch services')
       }
       setService(res.data[0])
     })
   }, [serviceId])
 
+  const isNonActiveVisitStatus = useMemo(() => {
+    return visitStatusCodes
+      .find((code) => code.value === visitDetails.visitStatus)
+      ?.attributes?.find(
+        (attr) => attr.name === 'Group' && attr.value === 'Inactive',
+      )
+  }, [visitDetails.visitStatus, visitStatusCodes])
+
+  const visitSequenceCodes = useMemo(
+    () =>
+      codes.filter((code) =>
+        groupedVisitTypes?.[visitType]?.find(
+          (vt) =>
+            vt.visitSequence === code.value && vt.visitMedium === visitMedium,
+        ),
+      ),
+    [codes, visitType, visitMedium, groupedVisitTypes],
+  )
+
   useEffect(() => {
     if (!service || !providerCodes.length) return
-
     if (serviceId && providerType && service && providerCodes) {
       const isPrimaryProviderType = service.primaryProviderType === providerType
-      const isNewFacilityAdmissionId = facilityAdmissionId === 'createNew'
-      const filteredOptions = codes.filter((code) => {
+      const filteredOptions = visitSequenceCodes.filter((code) => {
+        if (visitDetails.visitSequence === code.value) {
+          return true
+        }
+        if (
+          visitDetails.visitSequence === 'Subsequent' &&
+          isNonActiveVisitStatus
+        ) {
+          return ['Initial', 'Discharge'].includes(code.value)
+        }
         if (!isPrimaryProviderType) {
-          return code.value !== 'Discharge' && code.value !== 'InitialDischarge'
+          return !['Discharge', 'InitialDischarge'].includes(code.value)
         }
-        if (!isNewFacilityAdmissionId) {
-          return code.value !== 'Initial' && code.value !== 'New'
-        }
-        if (isNewFacilityAdmissionId) {
-          return code.value === 'Initial' || code.value === 'InitialDischarge'
-        }
-
-        return code.value !== 'Initial'
+        return !['Initial', 'New'].includes(code.value)
       })
       setOptions(
         filteredOptions
-          .filter((attr) =>
-            attr.attributes?.find(
-              (attr) =>
-                attr.name === 'Group' && attr.value === 'NonTimedServices',
-            ),
+          .filter(
+            (code) =>
+              code.attributes?.some(
+                (attr) =>
+                  attr.name === 'Group' && attr.value === 'NonTimedServices',
+              ) || visitDetails.visitSequence === code.value,
           )
           .map((option) => ({
             value: option.value,
             label: option.display,
+            disabled: option.value === visitDetails.visitSequence,
           })),
       )
     }
@@ -75,8 +115,10 @@ const VisitSequenceSelect = () => {
       <FormFieldLabel required>Visit Sequence</FormFieldLabel>
       <SelectInput
         field="visitSequence"
+        disabled={isPsychiatristVisitTypeSequence}
         buttonClassName="h-6 w-full"
         options={options}
+        loading={loading}
       />
       <FormFieldError name={'visitSequence'} />
     </FormFieldContainer>

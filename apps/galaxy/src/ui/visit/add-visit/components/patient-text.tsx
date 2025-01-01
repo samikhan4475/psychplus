@@ -2,7 +2,7 @@ import { parseDate } from '@internationalized/date'
 import { TextField } from '@radix-ui/themes'
 import { FormFieldContainer, FormFieldLabel } from '@/components'
 import { NewPatient } from '@/types'
-import { getAgeFromDate, getSlashedDateString } from '@/utils'
+import { getAgeFromDate } from '@/utils'
 
 const PatientText = ({ patient }: { patient: NewPatient }) => {
   const {
@@ -12,19 +12,24 @@ const PatientText = ({ patient }: { patient: NewPatient }) => {
     patientMrn = '',
     patientStatus = '',
   } = patient
-  const name = `${legalName.firstName} ${legalName.middleName} ${legalName.lastName}`
-  const age = getAgeFromDate(parseDate(dob))
+  const name = `${legalName.firstName} ${
+    legalName.middleName ? legalName.middleName + ' ' : ''
+  }${legalName.lastName}`
+  const age = dob ? getAgeFromDate(parseDate(dob)) : ''
+  const value = [
+    name && `${name}`,
+    age && `${age} yo`,
+    gender && `${gender[0]}`,
+    dob && `| ${dob}`,
+    patientMrn && `| ${patientMrn}`,
+    patientStatus && `| ${patientStatus}`,
+  ]
+    .filter(Boolean)
+    .join(' ')
   return (
     <FormFieldContainer>
       <FormFieldLabel required>Patient Name</FormFieldLabel>
-      <TextField.Root
-        size="1"
-        value={`${name} ${age} yo ${gender[0] ?? ''} | ${getSlashedDateString(
-          dob,
-        )} | ${patientMrn} | ${patientStatus}`}
-        disabled
-        className="h-6"
-      />
+      <TextField.Root size="1" value={value} disabled className="h-6" />
     </FormFieldContainer>
   )
 }

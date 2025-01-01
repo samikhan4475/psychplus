@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { Box, Flex, Popover, Separator, Text } from '@radix-ui/themes'
 import { Controller, useFormContext } from 'react-hook-form'
+import toast from 'react-hot-toast'
 import { useDebounce } from 'use-debounce'
 import { ActionResult } from '@/api'
 import { LoadingPlaceholder } from '@/components'
@@ -47,11 +48,11 @@ const ServerSearchSelect = <T extends ServerSearchSelectID>({
         if (res.state === 'success') {
           setResults(res.data)
         } else {
-          console.error('Error fetching', res.error)
+          toast.error(res.error || 'Failed to fetch options')
         }
       })
     }
-  }, [debouncedInput, fetchResults])
+  }, [debouncedInput])
 
   const renderTrigger = (item?: T, disabled?: boolean) => {
     let content = null
@@ -142,9 +143,9 @@ const ServerSearchSelect = <T extends ServerSearchSelectID>({
               <LoadingPlaceholder className="bg-white min-h-[46vh]" />
             )}
 
-            {results ? <Separator color="gray" size="4" /> : null}
+            {results?.length ? <Separator color="gray" size="4" /> : null}
 
-            {results?.length === 0 ? (
+            {results?.length === 0 && !isLoading ? (
               <Flex py="4" justify="center">
                 <Text size="2" color="gray" align="center">
                   No results

@@ -10,9 +10,10 @@ import { CoinsuranceAppoinmentSelect } from './coinsurance-appoinments-select'
 
 interface CoInsuranceRowProps {
   patientId: string
+  appointmentId?: number
 }
 
-const CoInsuranceRow = ({ patientId }: CoInsuranceRowProps) => {
+const CoInsuranceRow = ({ patientId, appointmentId }: CoInsuranceRowProps) => {
   const {
     shouldDisable,
     form: { register, unregister },
@@ -37,6 +38,7 @@ const CoInsuranceRow = ({ patientId }: CoInsuranceRowProps) => {
       <Flex gap="2">
         <CoinsuranceAppoinmentSelect
           patientId={patientId}
+          appointmentId={appointmentId}
           disabled={shouldDisable(PaymentType.CoIns)}
         />
         <CoinsuranceAmountInput />

@@ -61,4 +61,17 @@ interface BookedAppointment {
   lengthOfStay: number
 }
 
+enum VisitStatusCodes {
+  SeenDcByPrimary = 'SeenDischargeByPrimary',
+  UnseenDcByPrimary = 'UnseenDischargeByPrimary',
+  Seen = 'Seen',
+  SeenByOther = 'SeenByOther',
+  Unseen = 'Unseen',
+  Absent = 'Absent',
+  Error = 'Error',
+  TransferToOther = 'TransferToOther',
+}
+
 export type { BookedAppointment }
+
+export { VisitStatusCodes }

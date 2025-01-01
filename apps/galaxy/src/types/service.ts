@@ -1,7 +1,7 @@
 import { ContactDetails } from './contact'
 import { Metadata } from './metadata'
 import { LegalName } from './name'
-import { VisitType } from './visitType'
+import { VisitType } from './visit-type'
 
 interface Cosigner {
   id: number

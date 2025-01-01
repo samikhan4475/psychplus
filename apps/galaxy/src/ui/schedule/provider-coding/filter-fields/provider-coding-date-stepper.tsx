@@ -1,7 +1,5 @@
 'use client'
 
-import { useEffect } from 'react'
-import { getLocalTimeZone, startOfWeek, today } from '@internationalized/date'
 import { Box, Flex, Text } from '@radix-ui/themes'
 import { addDays } from 'date-fns'
 import { useStore } from '../store'
@@ -11,15 +9,6 @@ const DateStepper = () => {
   const appointmentDates = useStore((state) => state.dates)
   const setAppointmentDates = useStore((state) => state.setDates)
   const endDateIndex = appointmentDates.length - 1
-
-  useEffect(() => {
-    const timeZone = getLocalTimeZone()
-    const currentDate = today(timeZone)
-    const weekStartDateValue = startOfWeek(currentDate, 'en-US').add({
-      days: 1,
-    })
-    setAppointmentDates(weekStartDateValue.toDate(timeZone))
-  }, [])
 
   const stepForward = () => {
     const nextWeekDay = addDays(

@@ -41,7 +41,7 @@ const ServiceDropdown = () => {
       setLoading(false)
       if (res.state === 'error') {
         setServices([])
-        return toast.error(res.error)
+        return toast.error(res.error || 'Failed to fetch services')
       }
       setServices(res.data)
     })

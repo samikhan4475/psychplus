@@ -1,3 +1,4 @@
+import { useFormContext, useWatch } from 'react-hook-form'
 import {
   FormFieldContainer,
   FormFieldError,
@@ -6,15 +7,25 @@ import {
 } from '@/components'
 import { CODESETS } from '@/constants'
 import { useCodesetCodes } from '@/hooks'
+import { SchemaType } from '../../schema'
+import { useEditVisitStore } from '../../store'
 
 const VisitMediumSelect = () => {
+  const form = useFormContext<SchemaType>()
+  const { groupedVisitTypes } = useEditVisitStore()
   const codes = useCodesetCodes(CODESETS.AppointmentType)
+  const visitType = useWatch({
+    control: form.control,
+    name: 'visitType',
+  })
 
   const options = codes
-    .filter((attr) =>
-      attr.attributes?.find(
-        (attr) => attr.name === 'Group' && attr.value === 'Primary',
-      ),
+    .filter(
+      (attr) =>
+        attr.value !== 'Either' &&
+        groupedVisitTypes?.[visitType]?.find(
+          (vt) => vt.visitMedium === attr.value,
+        ),
     )
     .map((option) => {
       return {

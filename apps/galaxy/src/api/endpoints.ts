@@ -94,6 +94,9 @@ const DISABLE_PRESCRIBER_DIRECTORY_ENDPOINT = (
 const GET_PROVIDER_LOCATION_HISTORY = `${API_URL}/api/providerlocations/actions/history/search`
 const SEARCH_BOOKED_APPOINTMENTS_ENDPOINT = `${API_URL}/api/appointments/actions/search`
 const GET_CLEARNING_HOUSE_RECEIVERS = `${API_URL}/api/clearinghousereceivers/actions/search`
+const BOOK_APPOINTMENT = (patientId: number) => `${API_URL}/api/patients/${patientId}/appointments/actions/book`
+const UPDATE_APPOINTMENT = (patientId: number, appointmentId: number) =>
+  `${API_URL}/api/patients/${patientId}/appointments/${appointmentId}`
 const GET_CLEARNING_HOUSE_EDI_ENDPOINT = `${API_URL}/api/integrationconfiguration/insuranceplans/actions/search`
 const ADD_CLEARNING_HOUSE_EDI_ENDPOINT = `${API_URL}/api/integrationconfiguration/insuranceplans`
 const UPDATE_CLEARNING_HOUSE_EDI_ENDPOINT = (id: string) =>
@@ -441,13 +444,16 @@ const UPDATE_LAB_ORDERS_RESULT_ENDPOINT = (
 ) =>
   `${API_URL}/api/appointments/${appointmentId}/laborders/${orderId}/labresults/${id}`
 
+const GET_USER_TYPE = (userId: string) => `${API_URL}/api/users/${userId}/type`
+
+const GET_FACILITY_ADMISSION_DATA = `${API_URL}/api/facilityadmissions/actions/search`
+
 const ADD_LAB_ORDERS_RESULT_ENDPOINT = (
   appointmentId: string,
   orderId: string,
 ) =>
   `${API_URL}/api/appointments/${appointmentId}/laborders/${orderId}/labresults`
 
-const GET_USER_TYPE = (userId: string) => `${API_URL}/api/users/${userId}/type`
 const GET_TREATMENT_TEAM_VISITS = `${API_URL}/api/appointments/actions/search`
 
 const GET_CLAIM_SUBMISSION_RESPONSE = (claimId: string) =>
@@ -557,6 +563,8 @@ export {
   GET_USER_PERMISSIONS_ENDPOINT,
   SEARCH_LOCATION_SERVICES_ENDPOINT,
   SEARCH_BOOKED_APPOINTMENTS_ENDPOINT,
+  BOOK_APPOINTMENT,
+  UPDATE_APPOINTMENT,
   ADD_PATIENT_ENDPOINT,
   GET_US_STATES_ENDPOINT,
   GET_STATES_LOCATIONS_ENDPOINT,
@@ -721,6 +729,7 @@ export {
   GET_STAFF_USER_ENDPOINT,
   GET_NOTE_DOCUMENT_ENDPOINT,
   GET_USER_TYPE,
+  GET_FACILITY_ADMISSION_DATA,
   GET_CLAIM_SUBMISSION_RESPONSE,
   REMOVE_TO_COSIGNER_NOTE_ENDPOINT,
   GET_SEARCHED_LAB_TESTS,

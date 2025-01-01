@@ -1,45 +1,15 @@
-import { useState } from 'react'
-import { CodesetSelectCell, PropsWithRow } from '@/components'
-import { CODESETS } from '@/constants'
+import { PropsWithRow } from '@/components'
 import { Appointment } from '@/types'
-import { useStore as globalStore } from '@/store'
-
-const VISIT_STATUS_PERMISSION =
-  'You do not have permission to change the visit status to this. Please contact your supersvisor if you need any further assistance.'
-
+import { NonTimedVisitStatusSelect } from './nontimed-visit-status-select'
+import { TimedVisitStatusSelect } from './timed-visit-status-select'
 
 const VisitStatusSelectCell = ({
   row: { original: appointment },
 }: PropsWithRow<Appointment>) => {
-  const [visitStatus, setVisitStatus] = useState<string>(
-    appointment.visitStatus,
-  )
-  const user = globalStore(state => state.user)
-  const userId = user.id
-
-  const hasPermissionToChangeStatus = (status: string) => {
-    if (status === 'CheckedIn' && userId !== appointment.providerId) {
-      return false
-    } else if (status === 'CheckedOut' && !appointment.isNoteSigned) {
-      return false
-    } else if (status === 'ConfirmedS') {
-      return false
-    } else if (status === 'CancelledS' && userId !== appointment.providerId) {
-      return false
-    }
-    else return true
+  if (appointment.isServiceTimeDependent) {
+    return <TimedVisitStatusSelect appointment={appointment} />
   }
-
-  return (
-    <CodesetSelectCell
-      codeset={CODESETS.AppointmentStatus}
-      value={visitStatus}
-      onValueChange={(val) => {
-        if (hasPermissionToChangeStatus(val)) setVisitStatus(val)
-        else alert(VISIT_STATUS_PERMISSION)
-      }}
-    />
-  )
+  return <NonTimedVisitStatusSelect appointment={appointment} />
 }
 
 export { VisitStatusSelectCell }

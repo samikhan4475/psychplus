@@ -4,7 +4,7 @@ import { FormFieldContainer } from '../../shared'
 const StartDateInput = () => {
   return (
     <FormFieldContainer>
-      <FormFieldLabel>From</FormFieldLabel>
+      <FormFieldLabel>From Date</FormFieldLabel>
       <DatePickerInput field="startingDate" dateInputClass="h-6" />
     </FormFieldContainer>
   )

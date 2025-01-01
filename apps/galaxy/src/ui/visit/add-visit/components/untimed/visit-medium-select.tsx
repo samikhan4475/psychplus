@@ -8,22 +8,40 @@ import {
 import { CODESETS } from '@/constants'
 import { useCodesetCodes } from '@/hooks'
 import { SchemaType } from '../../schema'
+import { useAddVisitStore } from '../../store'
 
 const VisitMediumSelect = () => {
   const form = useFormContext<SchemaType>()
-  const visitSequence = useWatch({
-    control: form.control,
-    name: 'visitSequence',
-  })
+  const { groupedVisitTypes } = useAddVisitStore()
+  const [patient, state, location, service, dateOfAdmission, visitType] =
+    useWatch({
+      control: form.control,
+      name: [
+        'patient',
+        'state',
+        'location',
+        'service',
+        'dateOfAdmission',
+        'visitType',
+      ],
+    })
   const codes = useCodesetCodes(CODESETS.AppointmentType)
 
-  const isDisabled = !visitSequence
+  const isDisabled =
+    !patient ||
+    !state ||
+    !location ||
+    !service ||
+    !dateOfAdmission ||
+    !visitType
 
   const options = codes
-    .filter((attr) =>
-      attr.attributes?.find(
-        (attr) => attr.name === 'Group' && attr.value === 'Primary',
-      ),
+    .filter(
+      (attr) =>
+        attr.value !== 'Either' &&
+        groupedVisitTypes?.[visitType]?.find(
+          (vt) => vt.visitMedium === attr.value,
+        ),
     )
     .map((option) => {
       return {

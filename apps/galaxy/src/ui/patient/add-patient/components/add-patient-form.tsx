@@ -198,7 +198,6 @@ const AddPatientForm = ({
     const data = form.getValues()
     onPatientAdd({
       ...resData,
-      // @Todo: these will be removed once the API is updated
       dob: data.dateOfBirth.toString(),
       gender: data.gender,
     })
@@ -209,8 +208,8 @@ const AddPatientForm = ({
     const resData = await createPatient(data)
     setIsLoading(false)
     if (!resData?.accessToken) return
-    form.reset()
     onPatientAddSuccess(resData)
+    form.reset()
   }
 
   return (

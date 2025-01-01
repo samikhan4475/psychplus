@@ -2,11 +2,11 @@ import { ColumnDef } from '@tanstack/react-table'
 import { ColumnHeader, TextCell } from '@/components'
 import { Sort } from '@/types'
 import { getSortDir } from '@/utils'
-import {
-  ActionsCell,
-  RoomSelectCell,
-} from '../shared/table-cells'
-import { GroupSelectCell, UnitSelectCell } from './table-cells'
+import { GenderCell } from '../list-view/table-cells/gender-cell'
+import { ProviderTypeCell, ServiceCell } from '../shared/table-cells'
+import { formatDateCell } from '../utils'
+import { GroupSelectCell, RoomSelectCell, UnitSelectCell } from './table-cells'
+import { ActionsCell } from './table-cells/actions-cell'
 import { CptCodeCell } from './table-cells/table-cpt-code-cell'
 import { DiagnosisCodesCell } from './table-cells/table-diagnosis-cell'
 import { LegalSelectCell } from './table-cells/table-legal-select-cell'
@@ -48,19 +48,21 @@ const generateColumns = (weekDays: WeekDay[]): ColumnDef<MergedRecord>[] => {
         accessorKey: `${day.id}.visitType`,
         header: ({ column }) => (
           <ColumnHeader
-            className="!text-black justfy-center !font-medium"
+            className="!text-black justify-center !font-medium"
             column={column}
             label="Visit Type"
           />
         ),
-        cell: ({ row }) => <TableTextCell row={row} day={day} />,
+        cell: ({ row }) => (
+          <TableTextCell className="whitespace-nowrap" row={row} day={day} />
+        ),
         enableHiding: true,
       },
       {
         accessorKey: `${day.id}.visitSequence`,
         header: ({ column }) => (
           <ColumnHeader
-            className="!text-black justfy-center !font-medium"
+            className="!text-black justify-center !font-medium"
             column={column}
             label="Sequence"
           />
@@ -72,7 +74,7 @@ const generateColumns = (weekDays: WeekDay[]): ColumnDef<MergedRecord>[] => {
         accessorKey: `${day.id}.visitMedium`,
         header: ({ column }) => (
           <ColumnHeader
-            className="!text-black justfy-center !font-medium"
+            className="!text-black justify-center !font-medium"
             column={column}
             label="Medium"
           />
@@ -85,7 +87,7 @@ const generateColumns = (weekDays: WeekDay[]): ColumnDef<MergedRecord>[] => {
         accessorKey: `${day.id}.visitStatus`,
         header: ({ column }) => (
           <ColumnHeader
-            className="!text-black justfy-center !font-medium"
+            className="!text-black justify-center !font-medium"
             column={column}
             label="Status"
           />
@@ -97,7 +99,7 @@ const generateColumns = (weekDays: WeekDay[]): ColumnDef<MergedRecord>[] => {
         accessorKey: `${day.id}.diagnosis`,
         header: ({ column }) => (
           <ColumnHeader
-            className="!text-black justfy-center !font-medium"
+            className="!text-black justify-center !font-medium"
             column={column}
             label="Diagnosis"
           />
@@ -106,15 +108,21 @@ const generateColumns = (weekDays: WeekDay[]): ColumnDef<MergedRecord>[] => {
         enableHiding: true,
       },
       {
-        accessorKey: `${day.id}.isNoteSigned`,
+        accessorKey: `${day.id}.noteSignedStatus`,
         header: ({ column }) => (
           <ColumnHeader
-            className="!text-black justfy-center !font-medium"
+            className="!text-black justify-center !font-medium"
             column={column}
-            label="Note Signed"
+            label="Note Signed Status"
           />
         ),
         cell: ({ row }) => <NoteSignedCell row={row} day={day} />,
+        enableHiding: true,
+      },
+      {
+        id: `${day.id}-actions-column`,
+        header: () => <ColumnHeader label="Actions" className="!font-medium" />,
+        cell: ({ row }) => <ActionsCell row={row} day={day} />,
         enableHiding: true,
       },
     ],
@@ -132,7 +140,7 @@ const columns = (
         <ColumnHeader
           sortable
           sortDir={getSortDir(column.id, sort)}
-          className="!text-black justfy-center !font-medium"
+          className="!text-black justify-center !font-medium"
           column={column}
           label="Name"
         />
@@ -147,7 +155,7 @@ const columns = (
         <ColumnHeader
           sortable
           sortDir={getSortDir(column.id, sort)}
-          className="!text-black justfy-center !font-medium"
+          className="!text-black justify-center !font-medium"
           column={column}
           label="Age"
         />
@@ -162,13 +170,13 @@ const columns = (
         <ToggleVisibilityColumnHeader
           sortable
           sortDir={getSortDir(column.id, sort)}
-          className="!text-black justfy-center !font-medium"
+          className="!text-black justify-center !font-medium"
           column={column}
           table={table}
           label="Gender"
         />
       ),
-      cell: ({ row }) => <TextCell>{row.original.gender}</TextCell>,
+      cell: ({ row }) => <GenderCell value={row.original.gender} />,
       enableHiding: false,
     },
     {
@@ -178,12 +186,14 @@ const columns = (
         <ColumnHeader
           sortable
           sortDir={getSortDir(column.id, sort)}
-          className="!text-black justfy-center !font-medium"
+          className="!text-black justify-center !font-medium"
           column={column}
           label="DOB"
         />
       ),
-      cell: ({ row }) => <TextCell>{row.original.dob}</TextCell>,
+      cell: ({ row }) => (
+        <TextCell className="whitespace-nowrap">{row.original.dob}</TextCell>
+      ),
       enableHiding: true,
     },
     {
@@ -193,7 +203,7 @@ const columns = (
         <ColumnHeader
           sortable
           sortDir={getSortDir(column.id, sort)}
-          className="!text-black justfy-center !font-medium"
+          className="!text-black justify-center !font-medium"
           column={column}
           label="Facility Admission ID"
         />
@@ -210,7 +220,7 @@ const columns = (
         <ColumnHeader
           sortable
           sortDir={getSortDir(column.id, sort)}
-          className="!text-black justfy-center !font-medium"
+          className="!text-black justify-center !font-medium"
           column={column}
           label="Location"
         />
@@ -226,12 +236,12 @@ const columns = (
         <ColumnHeader
           sortable
           sortDir={getSortDir(column.id, sort)}
-          className="!text-black justfy-center !font-medium"
+          className="!text-black justify-center !font-medium"
           column={column}
           label="Service"
         />
       ),
-      cell: ({ row }) => <TextCell>{row.original.service}</TextCell>,
+      cell: ({ row }) => <ServiceCell serviceCode={row.original.service} />,
       enableHiding: true,
     },
     {
@@ -241,12 +251,12 @@ const columns = (
         <ColumnHeader
           sortable
           sortDir={getSortDir(column.id, sort)}
-          className="!text-black justfy-center !font-medium"
+          className="!text-black justify-center !font-medium"
           column={column}
           label="Provider Type"
         />
       ),
-      cell: ({ row }) => <TextCell>{row.original.providerType}</TextCell>,
+      cell: ({ row }) => <ProviderTypeCell code={row.original.providerType} />,
       enableHiding: true,
     },
     {
@@ -256,7 +266,7 @@ const columns = (
         <ColumnHeader
           sortable
           sortDir={getSortDir(column.id, sort)}
-          className="!text-black justfy-center !font-medium"
+          className="!text-black justify-center !font-medium"
           column={column}
           label="Unit"
         />
@@ -266,17 +276,17 @@ const columns = (
     },
     {
       id: 'room',
-      accessorKey: 'room',
+      accessorKey: 'roomResource.room',
       header: ({ column }) => (
         <ColumnHeader
           sortable
           sortDir={getSortDir(column.id, sort)}
-          className="!text-black justfy-center !font-medium"
+          className="!text-black justify-center !font-medium"
           column={column}
           label="Room"
         />
       ),
-      cell: ({ row }) => <RoomSelectCell />,
+      cell: ({ row }) => <RoomSelectCell row={row} />,
       enableHiding: true,
     },
     {
@@ -286,7 +296,7 @@ const columns = (
         <ColumnHeader
           sortable
           sortDir={getSortDir(column.id, sort)}
-          className="!text-black justfy-center !font-medium"
+          className="!text-black justify-center !font-medium"
           column={column}
           label="Group"
         />
@@ -301,7 +311,7 @@ const columns = (
         <ColumnHeader
           sortable
           sortDir={getSortDir(column.id, sort)}
-          className="!text-black justfy-center !font-medium"
+          className="!text-black justify-center !font-medium"
           column={column}
           label="Primary Insurance"
         />
@@ -319,12 +329,21 @@ const columns = (
         <ColumnHeader
           sortable
           sortDir={getSortDir(column.id, sort)}
-          className="!text-black justfy-center !font-medium"
+          className="!text-black justify-center !font-medium"
           column={column}
           label="DOA"
         />
       ),
-      cell: ({ row }) => <TextCell>{row.original.dateOfAdmission}</TextCell>,
+      cell: ({ row }) => (
+        <TextCell className="whitespace-nowrap">
+          {row.original.dateOfAdmission
+            ? formatDateCell(
+                row.original.dateOfAdmission,
+                row.original.locationTimezoneId,
+              )
+            : ''}
+        </TextCell>
+      ),
       enableHiding: true,
     },
     {
@@ -334,7 +353,7 @@ const columns = (
         <ColumnHeader
           sortable
           sortDir={getSortDir(column.id, sort)}
-          className="!text-black justfy-center !font-medium"
+          className="!text-black justify-center !font-medium"
           column={column}
           label="LOS"
         />
@@ -349,12 +368,16 @@ const columns = (
         <ColumnHeader
           sortable
           sortDir={getSortDir(column.id, sort)}
-          className="!text-black justfy-center !font-medium"
+          className="!text-black justify-center !font-medium"
           column={column}
           label="LCD"
         />
       ),
-      cell: ({ row }) => <TextCell>{'Missing'}</TextCell>,
+      cell: ({ row }) => (
+        <TextCell className="whitespace-nowrap">
+          {row.original.lastCoverageDate ?? ''}
+        </TextCell>
+      ),
       enableHiding: true,
     },
     {
@@ -364,7 +387,7 @@ const columns = (
         <ColumnHeader
           sortable
           sortDir={getSortDir(column.id, sort)}
-          className="!text-black justfy-center !font-medium"
+          className="!text-black justify-center !font-medium"
           column={column}
           label="Auth #"
         />
@@ -381,7 +404,7 @@ const columns = (
         <ColumnHeader
           sortable
           sortDir={getSortDir(column.id, sort)}
-          className="!text-black justfy-center !font-medium"
+          className="!text-black justify-center !font-medium"
           column={column}
           label="Legal"
         />
@@ -390,14 +413,6 @@ const columns = (
       enableHiding: true,
     },
     ...generateColumns(currentWeekDays),
-    {
-      id: 'actions-column',
-      header: () => <ColumnHeader label="Actions" className="!font-medium" />,
-      cell: ({ row }) => (
-        <ActionsCell appointmentId={row.original.appointmentId || 0} />
-      ),
-      enableHiding: false,
-    },
   ]
 }
 

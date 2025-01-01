@@ -4,11 +4,13 @@ const INTERNAL_ERROR_MESSAGE = 'Something went wrong!'
 
 interface ActionSuccessState<T = undefined> {
   state: 'success'
-  data: T
+  data: T,
+  total?: number
 }
 
 interface ActionErrorState {
   state: 'error'
+  status?: number
   error: string
 }
 
@@ -22,6 +24,7 @@ interface NetworkSuccessState<T> {
 
 interface NetworkErrorState {
   state: 'error'
+  status?: number
   error: string
   headers: Headers
 }
@@ -94,6 +97,7 @@ const POST = async <T>(
   if (!response.ok) {
     return {
       state: 'error',
+      status: response.status,
       error: getErrorMessage(data),
       headers: response.headers,
     }
@@ -133,6 +137,7 @@ const PATCH = async <T>(
   if (!response.ok) {
     return {
       state: 'error',
+      status: response.status,
       error: getErrorMessage(data),
       headers: response.headers,
     }
@@ -172,6 +177,7 @@ const PUT = async <T>(
   if (!response.ok) {
     return {
       state: 'error',
+      status: response.status,
       error: getErrorMessage(data),
       headers: response.headers,
     }

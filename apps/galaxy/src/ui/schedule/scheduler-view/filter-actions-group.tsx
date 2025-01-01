@@ -1,17 +1,17 @@
 import { useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { startOfWeek } from '@internationalized/date'
+import { getLocalTimeZone, startOfWeek, today } from '@internationalized/date'
 import { Flex } from '@radix-ui/themes'
 import { DateValue } from 'react-aria-components'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import z from 'zod'
 import { FormContainer } from '@/components'
 import { sanitizeFormData } from '@/utils'
+import { START_OF_WEEK_LOCALE } from '../constants'
 import { getDateString, isDirty } from '../utils'
 import { ClearFilterButton } from './clear-filter-button'
 import {
   EndDateInput,
-  FirstResponderSelect,
   GenderSelect,
   LanguageSelect,
   LocationDropdown,
@@ -26,19 +26,13 @@ import { HideFiltersButton } from './hide-filters-button'
 import { SearchButton } from './search-button'
 import { ShowFiltersButton } from './show-filters-button'
 import { useStore } from './store'
-import { START_OF_WEEK_LOCALE } from '../constants'
-
-const IS_FIRST_RESPONDER: Record<string, boolean> = {
-  yes: true,
-  no: false,
-}
 
 const dateValidation = z.custom<DateValue>()
 
 const schema = z.object({
   startingDate: dateValidation.optional(),
   endingDate: dateValidation.optional(),
-  stateId: z.string().optional(),
+  stateId: z.string().min(1, 'Required'),
   locationIds: z.string().optional(),
   serviceIds: z
     .array(z.string())
@@ -49,8 +43,7 @@ const schema = z.object({
   specialistTypeCode: z.string().optional(),
   gender: z.string().optional(),
   language: z.string().optional(),
-  isFirstResponder: z.string().optional(),
-  slotType: z.string().optional(),
+  type: z.string().optional(),
 })
 
 type SchemaType = z.infer<typeof schema>
@@ -80,10 +73,15 @@ const SchedulerFilterGroup = ({
       specialistTypeCode: '',
       gender: '',
       language: '',
-      isFirstResponder: '',
-      slotType: '',
+      type: '',
     },
   })
+
+  const getMaxDaysOutToLookFor = (start?: DateValue, end?: DateValue) => {
+    if (!end) return
+    const startingDate = start ? start : today(getLocalTimeZone())
+    return Math.abs(end.compare(startingDate)) + 1
+  }
 
   const { dirtyFields } = form.formState
 
@@ -92,18 +90,23 @@ const SchedulerFilterGroup = ({
     const transformedData = {
       ...data,
       startingDate: getDateString(data.startingDate),
-      endingDate: getDateString(data.endingDate),
       locationIds: data.locationIds ? [data.locationIds] : [],
-      staffIds: data.staffIds ? [data.staffIds] : [],
-      isFirstResponder: data.isFirstResponder
-        ? IS_FIRST_RESPONDER[data.isFirstResponder]
-        : undefined,
+      staffIds: data.staffIds ? [Number(data.staffIds)] : [],
+      maxDaysOutToLook: getMaxDaysOutToLookFor(
+        data.startingDate,
+        data.endingDate,
+      ),
     }
+
     if (data.startingDate) {
-      const weekStartDateValue = startOfWeek(data.startingDate, START_OF_WEEK_LOCALE)
+      const weekStartDateValue = startOfWeek(
+        data.startingDate,
+        START_OF_WEEK_LOCALE,
+      )
       setDates(new Date(weekStartDateValue.toString()))
     }
     const sanitizedData = sanitizeFormData(transformedData)
+    delete sanitizedData.endingDate
     fetchData(sanitizedData)
   }
 
@@ -115,12 +118,7 @@ const SchedulerFilterGroup = ({
   }
 
   return (
-    <Flex
-      className="rounded-[4px] px-1.5 shadow-3"
-      direction="column"
-      mx="5"
-      mt="1"
-    >
+    <Flex className="rounded-[4px] px-2.5 shadow-3" direction="column">
       <FormContainer form={form} onSubmit={onSubmit}>
         <Flex
           direction="column"
@@ -129,7 +127,7 @@ const SchedulerFilterGroup = ({
           className="bg-white sticky top-0"
         >
           {showFollowUpFilter ? (
-            <Flex gap="2" align="center">
+            <Flex gap="2" align="start">
               <StateSelect />
               <LocationDropdown />
               <ServiceMultiSelect />
@@ -142,7 +140,7 @@ const SchedulerFilterGroup = ({
               </Flex>
             </Flex>
           ) : (
-            <Flex gap="2">
+            <Flex gap="2" align="start">
               <StartDateInput />
               <EndDateInput />
               <StateSelect />
@@ -161,12 +159,11 @@ const SchedulerFilterGroup = ({
             </Flex>
           )}
           {!isPartialFilterView && (
-            <Flex gap="2" align="center">
-              <VisitMediumSelect />
+            <Flex gap="2" align="start">
               <ProviderTypeDropdown />
               <GenderSelect />
+              <VisitMediumSelect />
               <LanguageSelect />
-              <FirstResponderSelect />
               <Flex className="flex-1" justify="end" gap="2" align="center">
                 <HideFiltersButton
                   onClick={() => setIsPartialFilterView(true)}

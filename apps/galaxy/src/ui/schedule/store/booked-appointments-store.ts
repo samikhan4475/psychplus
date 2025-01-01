@@ -2,7 +2,7 @@ import toast from 'react-hot-toast'
 import { create } from 'zustand'
 import { Appointment } from '@/types'
 import { getBookedAppointmentsAction } from '../actions'
-import { AppointmentParams, AvailableSlotsEvent, View } from '../types'
+import { AppointmentParams, AvailableSlotsEvent, TabValue } from '../types'
 import { convertToZonedDate, getWeekStartDateFormatted } from '../utils'
 
 interface ActionParams {
@@ -14,15 +14,22 @@ interface Store {
   roundingViewData: Appointment[]
   listViewData: Appointment[]
   calendarViewData: AvailableSlotsEvent<Appointment>[]
+  roundingViewFormData: AppointmentParams
+  listViewFormData: AppointmentParams
+  getFormValues: (tab: string) => AppointmentParams
   error?: string
   loading?: boolean
   fetchData: (arg?: ActionParams) => void
+  setRoundingViewFormData: (data: AppointmentParams) => void
+  setListViewFormData: (data: AppointmentParams) => void
 }
 
-const useBookedAppointmentsStore = create<Store>((set) => ({
+const useBookedAppointmentsStore = create<Store>((set, get) => ({
   roundingViewData: [],
   listViewData: [],
   calendarViewData: [],
+  roundingViewFormData: {},
+  listViewFormData: {},
   error: undefined,
   loading: undefined,
   fetchData: async (options) => {
@@ -34,26 +41,26 @@ const useBookedAppointmentsStore = create<Store>((set) => ({
     const params = { startingDate, ...(options?.params ?? {}) }
     const result = await getBookedAppointmentsAction(params)
     if (result.state === 'error') {
-      toast.error('Failed to retrieve appointments data')
+      toast.error(result.error || 'Failed to retrieve appointments data')
       return set({
         error: result.error,
         loading: false,
       })
     }
     switch (options?.view) {
-      case View.Rounding:
+      case TabValue.Rounding:
         return set({
           roundingViewData: result.data.filter(
             (appointment) => !appointment.isServiceTimeDependent,
           ),
           loading: false,
         })
-      case View.List:
+      case TabValue.List:
         return set({
           listViewData: result.data,
           loading: false,
         })
-      case View.Calendar:
+      case TabValue.Calendar:
         return set({
           calendarViewData: transformInBookedAppointments(result.data),
           loading: false,
@@ -68,6 +75,26 @@ const useBookedAppointmentsStore = create<Store>((set) => ({
           loading: false,
         })
     }
+  },
+  getFormValues: (tab) => {
+    switch (tab) {
+      case TabValue.List:
+        return get().listViewFormData
+      case TabValue.Rounding:
+        return get().roundingViewFormData
+      default:
+        return {}
+    }
+  },
+  setRoundingViewFormData: (data) => {
+    set({
+      roundingViewFormData: data,
+    })
+  },
+  setListViewFormData: (data) => {
+    set({
+      listViewFormData: data,
+    })
   },
 }))
 

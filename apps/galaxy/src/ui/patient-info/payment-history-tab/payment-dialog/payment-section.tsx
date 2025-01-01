@@ -52,11 +52,15 @@ const PaymentSection = ({
     <Flex direction="column" gap="2" mt="2">
       <PaymentDetailForm
         patientId={patientId}
+        appointmentId={appointment?.appointmentId}
         onClose={onClose}
         remainingBalance={remainingBalance}
         loading={loading}
       >
-        <PaymentOptions patientId={patientId} />
+        <PaymentOptions
+          patientId={patientId}
+          appointmentId={appointment?.appointmentId}
+        />
         <PaymentDetails
           stripeApiKey={stripeApiKey}
           patientId={patientId}

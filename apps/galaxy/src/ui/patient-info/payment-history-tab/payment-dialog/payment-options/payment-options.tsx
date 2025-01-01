@@ -12,8 +12,9 @@ import { RemainingDueRow } from './remaining-due-row'
 
 interface PaymentOptionsProps {
   patientId: string
+  appointmentId?: number
 }
-const PaymentOptions = ({ patientId }: PaymentOptionsProps) => {
+const PaymentOptions = ({ patientId, appointmentId }: PaymentOptionsProps) => {
   return (
     <Flex direction="column" className="rounded-2 shadow-2">
       <Flex className="w-full bg-blue-3 px-2 py-0.5">
@@ -26,8 +27,8 @@ const PaymentOptions = ({ patientId }: PaymentOptionsProps) => {
 
       <Flex direction="column" gap="2" className="px-2 py-2">
         <Flex direction="column" pt="2" className="gap-1.5">
-          <CopayRow patientId={patientId} />
-          <CoInsuranceRow patientId={patientId} />
+          <CopayRow appointmentId={appointmentId} patientId={patientId} />
+          <CoInsuranceRow appointmentId={appointmentId} patientId={patientId} />
           <RemainingDueRow />
           <CustomAmountRow />
           <PaymentPlanRow />

@@ -10,7 +10,7 @@ import { RoundingView } from './rounding-view'
 import { ViewHeader } from './schedule-view-header'
 import { TabsList } from './schedule-view-tabs-list'
 import { SchedulerView } from './scheduler-view'
-import { useBookedAppointmentsStore, useStore } from './store'
+import { useEncounterTypeStore, useStore } from './store'
 import { TabValue } from './types'
 
 const ScheduleView = () => {
@@ -18,12 +18,10 @@ const ScheduleView = () => {
     activeTab: state.activeTab,
     setActiveTab: state.setActiveTab,
   }))
-  const fetchBookedAppointments = useBookedAppointmentsStore(
-    (state) => state.fetchData,
-  )
+  const { fetchVisitEncounterTypes } = useEncounterTypeStore()
 
   useEffect(() => {
-    fetchBookedAppointments()
+    fetchVisitEncounterTypes()
   }, [])
 
   return (
@@ -32,11 +30,7 @@ const ScheduleView = () => {
       onValueChange={setActiveTab}
       className="flex w-full flex-1 flex-col overflow-y-auto"
     >
-      <Flex
-        align="center"
-        className="py-0.5 pl-[22px] pr-5 shadow-1"
-        justify="between"
-      >
+      <Flex align="center" className="px-2.5 py-0.5 shadow-1" justify="between">
         <Flex>
           <Heading className="text-xl font-semibold">Schedule</Heading>
           <TabsList />

@@ -9,13 +9,15 @@ import {
   FormFieldLabel,
   SelectInput,
 } from '@/components'
+import { SelectOptionType } from '@/types'
 import { getProviders } from '@/ui/visit/actions'
 import { Provider } from '../../../types'
 import { SchemaType } from '../../schema'
 
 const ProviderSelect = () => {
   const form = useFormContext<SchemaType>()
-  const [options, setOptions] = useState<{ label: string; value: string }[]>([])
+  const [loading, setLoading] = useState<boolean>(false)
+  const [options, setOptions] = useState<SelectOptionType[]>([])
 
   const [providerType, location] = useWatch({
     control: form.control,
@@ -25,12 +27,14 @@ const ProviderSelect = () => {
   useEffect(() => {
     if (!location || !providerType) return
     form.resetField('provider')
+    setLoading(true)
     getProviders({
       locationIds: [location],
       providerType,
     }).then((res) => {
+      setLoading(false)
       if (res.state === 'error') {
-        toast.error('Failed to fetch providers')
+        toast.error(res.error || 'Failed to fetch providers')
         return setOptions([])
       }
       setOptions(
@@ -49,6 +53,7 @@ const ProviderSelect = () => {
         options={options}
         buttonClassName="h-6 w-full"
         field="provider"
+        loading={loading}
       />
       <FormFieldError name="provider" />
     </FormFieldContainer>

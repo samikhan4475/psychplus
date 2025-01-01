@@ -5,12 +5,13 @@ import { Service } from '@/types'
 import { GetUnitsGroupsResponse } from '../types'
 
 const getUnitsGroupsAction = async (
-  serviceIds: string[],
+  locationServiceIds: string[],
 ): Promise<api.ActionResult<GetUnitsGroupsResponse>> => {
   const body = {
     includeServiceUnit: true,
     includeServiceGroup: true,
-    serviceIds,
+    isIncludeServiceRoom: true,
+    locationServiceIds,
   }
 
   const response = await api.POST<Service[]>(
@@ -27,8 +28,9 @@ const getUnitsGroupsAction = async (
 
   const transformedData = response.data.reduce(
     (acc, service) => ({
-      serviceUnits: [...(service.serviceUnits ?? []), ...(acc.serviceUnits?? [])],
-      serviceGroups: [...(service.serviceGroups ?? []), ...(acc.serviceGroups?? [])],
+      serviceUnits: [...(service?.serviceUnits ?? []), ...(acc?.serviceUnits?? [])],
+      serviceGroups: [...(service?.serviceGroups ?? []), ...(acc?.serviceGroups?? [])],
+      serviceRooms: [...(service?.serviceRooms?? []), ...(acc?.serviceRooms?? [])]
     }),
     {} as GetUnitsGroupsResponse,
   )

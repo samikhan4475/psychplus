@@ -8,6 +8,7 @@ interface Store {
   loading?: boolean
   error?: string
   data: AppointmentAvailability[]
+  formData?: AvailableSlotsParams
   dates: AppointmentDate[]
   setDays?: (arg: Date) => void
   fetchAppointments: (params?: AvailableSlotsParams) => void
@@ -18,11 +19,13 @@ const useStore = create<Store>((set) => ({
   loading: undefined,
   error: undefined,
   data: [],
+  formData: undefined,
   dates: [],
   fetchAppointments: async (params) => {
     set({
       error: undefined,
       loading: true,
+      formData: params,
     })
     const result = await searchAppointmentsAction(params ?? {})
     if (result.state === 'error') {

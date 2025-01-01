@@ -6,7 +6,7 @@ import { CalenderViewSchemaType } from '../../types'
 
 const LocationDropdown = () => {
   const form = useFormContext<CalenderViewSchemaType>()
-  const stateId = form.watch('stateId')
+  const stateId = form.watch('stateIds')
 
   return (
     <FormFieldContainer>

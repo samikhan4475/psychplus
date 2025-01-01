@@ -15,6 +15,7 @@ import { getInitialValues } from './utils'
 
 interface PaymentDetailFormProps {
   patientId: string
+  appointmentId?: number
   onClose: () => void
   remainingBalance?: string
   loading: boolean
@@ -22,6 +23,7 @@ interface PaymentDetailFormProps {
 
 const PaymentDetailForm = ({
   patientId,
+  appointmentId,
   children,
   remainingBalance,
   onClose,
@@ -37,7 +39,7 @@ const PaymentDetailForm = ({
     criteriaMode: 'all',
     resolver: zodResolver(paymentSchema),
     reValidateMode: 'onChange',
-    defaultValues: getInitialValues(),
+    defaultValues: getInitialValues(appointmentId),
   })
 
   useEffect(() => {

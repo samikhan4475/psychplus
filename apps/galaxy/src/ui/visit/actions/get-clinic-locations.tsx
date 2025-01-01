@@ -1,8 +1,7 @@
 'use server'
 
 import * as api from '@/api'
-import { SelectOptionType } from '@/types'
-import { Clinic } from '../types'
+import { Clinic, SelectOptionType } from '@/types'
 
 const getClinicLocations = async (
   stateId: string,

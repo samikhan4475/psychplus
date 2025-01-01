@@ -28,7 +28,7 @@ const StateDropdown = ({ states }: { states: StateCodeSet[] }) => {
       <StateChangeAlert
         isOpen={isOpen}
         onConfirm={(isConfirmed: boolean) => {
-          if (!isConfirmed) form.setValue('state', patient.state)
+          if (!isConfirmed && patient?.state) form.setValue('state', patient.state)
           setIsOpen(false)
         }}
       />
@@ -41,7 +41,9 @@ const StateDropdown = ({ states }: { states: StateCodeSet[] }) => {
           disabled={!patient}
           onValueChange={(newValue) => {
             form.setValue('state', newValue)
-            setIsOpen(true)
+            if (newValue && newValue !== patient.state) {
+              setIsOpen(true)
+            }
           }}
         />
         <FormFieldError name={'state'} />

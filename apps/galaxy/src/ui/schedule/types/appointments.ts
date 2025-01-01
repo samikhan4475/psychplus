@@ -37,11 +37,61 @@ type StaffAppointmentAvailability = {
   availableSlots: AvailableSlot[]
 }
 
+interface TransformedAppointment {
+  appointmentId: number
+  patientId: number
+  stateCode: string
+  locationId: string
+  serviceId: string
+  providerType: string
+  encounterType: string
+  visitSequenceType: string
+  type: string
+  isFollowup: boolean
+  isPrimaryProviderType: boolean
+  specialistStaffId: number
+  startDate: string
+  durationMinutes: number
+  visitFrequency: number
+  isOverridePermissionProvided: boolean
+  isProceedPermissionProvided: boolean
+  appointmentStatus: string
+  unitId?: string
+  groupId?: string
+  roomId?: string
+  admissionLegalStatus: string
+  insuranceVerificationStatusCode: string
+  admissionId?: string
+  paymentResponsibilityTypeCode: string
+  dischargeDate?: string
+  dischargeLocation?: string
+  isEdVisit?: boolean
+  admissionDate?: string
+  authorizationNumber: string
+  authorizationDate: string
+  lastAuthorizationCoveredDate: string
+  groupTherapyTypeCode: string
+}
+
 type StaffAppointmentAvailabilityResponse = {
   staffAppointmentAvailabilities: StaffAppointmentAvailability[]
+}
+
+interface AlertState {
+  message: string
+  status?: number
+  open: boolean
+}
+
+interface UpdateVisitAlertProps {
+  state: AlertState
+  onConfirm: (confirmed: boolean, status?: number) => void
 }
 
 export type {
   StaffAppointmentAvailabilityResponse,
   StaffAppointmentAvailability,
+  TransformedAppointment,
+  UpdateVisitAlertProps,
+  AlertState,
 }

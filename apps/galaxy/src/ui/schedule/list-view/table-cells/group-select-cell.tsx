@@ -1,15 +1,32 @@
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
+import { Flex } from '@radix-ui/themes'
 import { PropsWithRow, SelectCell } from '@/components'
 import { Appointment } from '@/types'
+import { CHANGE_GROUP_PERMISSION } from '../../constants'
+import {
+  useInactiveRowStatus,
+  useRefetchAppointments,
+  useSchedulerPermissions,
+} from '../../hooks'
+import { PermissionAlert } from '../../shared'
+import { transformIn, updateVisit } from '../../utils'
 import { useStore } from '../store'
 
 const GroupSelectCell = ({
   row: { original: appointment },
 }: PropsWithRow<Appointment>) => {
+  const [isOpen, setIsOpen] = useState<boolean>(false)
   const data = useStore((state) => state.data)
+  const refetch = useRefetchAppointments()
+  const isInactiveVisit = useInactiveRowStatus(
+    appointment.visitStatus,
+    appointment.isServiceTimeDependent,
+  )
+  const [group, setGroup] = useState(appointment.groupResource?.id ?? '')
+  const { changeGroupPermission } = useSchedulerPermissions()
   const groupOptions = useMemo(() => {
     const groups =
-      data.serviceGroups.filter(
+      data.serviceGroups?.filter(
         (group) => group.serviceId === appointment.serviceId,
       ) ?? []
     return groups.map((group) => ({
@@ -19,11 +36,32 @@ const GroupSelectCell = ({
   }, [data])
 
   return (
-    <SelectCell
-      value={appointment.groupResource?.id}
-      options={groupOptions}
-      disabled={appointment.isServiceTimeDependent}
-    />
+    <Flex
+      width="100%"
+      height="100%"
+      align="center"
+      onClick={(e) => e.stopPropagation()}
+    >
+      <PermissionAlert
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+        message={CHANGE_GROUP_PERMISSION}
+      />
+      <SelectCell
+        value={group}
+        options={groupOptions}
+        onValueChange={async (val) => {
+          if (changeGroupPermission) {
+            const transformedBody = transformIn(appointment)
+            transformedBody.groupId = val
+            updateVisit(transformedBody, refetch)
+            return setGroup(val)
+          }
+          setIsOpen(true)
+        }}
+        disabled={appointment.isServiceTimeDependent || isInactiveVisit}
+      />
+    </Flex>
   )
 }
 

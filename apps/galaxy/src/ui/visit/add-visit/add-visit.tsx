@@ -5,14 +5,27 @@ import { Dialog } from '@radix-ui/themes'
 import { CloseDialogTrigger } from '@/components/close-dialog-trigger'
 import { NewPatient } from '@/types'
 import { AddVisitForm } from './components'
+import { SlotDetails } from './types'
+
+
 
 interface AddVisitProps {
   patient?: NewPatient
   showAddUser?: boolean
+  onAdd?: () => void
+  dateTime?: string
+  timezone?: string
+  isTimed?: boolean
+  slotDetails?: SlotDetails
 }
 
 const AddVisit = ({
   children,
+  slotDetails,
+  onAdd,
+  dateTime,
+  timezone,
+  isTimed,
   patient,
   showAddUser,
 }: PropsWithChildren<AddVisitProps>) => {
@@ -34,7 +47,16 @@ const AddVisit = ({
           Add Visit
         </Dialog.Title>
 
-        <AddVisitForm patient={patient} showAddUser={showAddUser} />
+        <AddVisitForm
+          dateTime={dateTime}
+          onAdd={onAdd}
+          timezone={timezone}
+          slotDetails={slotDetails}
+          isTimed={isTimed}
+          onClose={() => setIsOpen(false)}
+          patient={patient}
+          showAddUser={showAddUser}
+        />
       </Dialog.Content>
     </Dialog.Root>
   )

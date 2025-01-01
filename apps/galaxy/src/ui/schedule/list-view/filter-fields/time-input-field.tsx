@@ -7,7 +7,7 @@ const TimeInputField = () => {
   return (
     <FormFieldContainer className="flex-1">
       <FormFieldLabel>Time</FormFieldLabel>
-      <TimeInput field="time" dateInputClass='h-6' />
+      <TimeInput field="bookedAppointmentTime" dateInputClass="h-6" />
     </FormFieldContainer>
   )
 }

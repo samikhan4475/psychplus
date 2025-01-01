@@ -5,8 +5,8 @@ import { useFormContext } from 'react-hook-form'
 import { FormFieldLabel } from '@/components'
 import { useFiltersContext } from '../../context'
 import { FormFieldContainer } from '../../shared'
-import { ProviderCodingSchema } from '../provider-coding-view-schema'
 import { SchedulerFilters } from '../../types'
+import { ProviderCodingSchema } from '../provider-coding-view-schema'
 
 const CoInsuranceRange = () => {
   const form = useFormContext<ProviderCodingSchema>()
@@ -21,16 +21,18 @@ const CoInsuranceRange = () => {
         size="1"
         placeholder="$ From"
         type="number"
-
-        {...form.register('coInsuranceDueMin')}
+        {...form.register('coInsuranceDueMin', {
+          setValueAs: (val) => val || undefined,
+        })}
       />
       <TextField.Root
         className="h-6"
         size="1"
         placeholder="$ To"
         type="number"
-
-        {...form.register('coInsuranceDueMax')}
+        {...form.register('coInsuranceDueMax', {
+          setValueAs: (val) => val || undefined,
+        })}
       />
     </FormFieldContainer>
   )

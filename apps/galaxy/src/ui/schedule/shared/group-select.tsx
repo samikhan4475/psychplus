@@ -4,12 +4,18 @@ import { useMemo } from 'react'
 import { useFormContext } from 'react-hook-form'
 import { FormFieldLabel, SelectInput } from '@/components'
 import { ServiceGroup } from '@/types'
+import { useFiltersContext } from '../context'
+import { BookedAppointmentsSchemaType } from '../schema'
 import { SchedulerFilters } from '../types'
 import { FormFieldContainer } from './form-field-container'
-import { BookedAppointmentsSchemaType } from '../schema'
-import { useFiltersContext } from '../context'
 
-const GroupDropdown = ({ groups }: { groups: ServiceGroup[] }) => {
+const GroupDropdown = ({
+  groups,
+  loading,
+}: {
+  groups: ServiceGroup[]
+  loading: boolean
+}) => {
   const { filters } = useFiltersContext()
   const { watch } = useFormContext<BookedAppointmentsSchemaType>()
   const services = watch('serviceIds')
@@ -33,6 +39,7 @@ const GroupDropdown = ({ groups }: { groups: ServiceGroup[] }) => {
         disabled={services.length === 0}
         buttonClassName="w-full h-6"
         className="h-full flex-1"
+        loading={loading}
       />
     </FormFieldContainer>
   )

@@ -2,14 +2,14 @@
 
 import { useEffect, useMemo, useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { DateValue } from '@internationalized/date'
 import { Flex, Grid } from '@radix-ui/themes'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { FormContainer } from '@/components'
-import { getCalendarDateLabel, sanitizeFormData } from '@/utils'
+import { sanitizeFormData } from '@/utils'
 import { PROVIDER_CODING_FILTERS } from '../constants'
 import { FiltersContext } from '../context'
 import { AddFiltersPopover, FiltersButtonsGroup } from '../shared'
+import { getCalendarDateLabel, getDateString } from '../utils'
 import { Age } from './filter-fields/age'
 import { BalanceRange } from './filter-fields/bal-range'
 import { CoInsuranceRange } from './filter-fields/co-ins-range'
@@ -19,6 +19,7 @@ import { DateOfAdmissionRange } from './filter-fields/date-of-admission-range'
 import { Diagnosis } from './filter-fields/diagnosis'
 import { DateOfBirthInput } from './filter-fields/dob-input'
 import { EndDate } from './filter-fields/end-date'
+import { FacilityFilters } from './filter-fields/facility-filters'
 import { GenderSelect } from './filter-fields/gender-select'
 import { InsuranceVerificationDropdown } from './filter-fields/ins-verification-dropdown'
 import { LastCoverageDateRange } from './filter-fields/last-coverage-date-range'
@@ -32,7 +33,6 @@ import { PrimaryInsuranceDropdown } from './filter-fields/primary-insurance-drop
 import { ProviderDropdown } from './filter-fields/provider-dropdown'
 import { SecondaryInsuranceDropdown } from './filter-fields/secondary-insurance-dropdown'
 import { SequenceDropdown } from './filter-fields/sequence-dropdown'
-import { ServiceFieldGrouping } from './filter-fields/service-group-field'
 import { ServiceMultiSelect } from './filter-fields/service-multiselect'
 import { StartDate } from './filter-fields/start-date'
 import { StatusDropdown } from './filter-fields/status-dropdown'
@@ -42,6 +42,7 @@ import {
   providerCodingViewSchema,
 } from './provider-coding-view-schema'
 import { useStore } from './store'
+import { FacilityAdmissionIdSelect } from './filter-fields/facility-admission-id-select'
 
 const defaultValues = {
   startingDate: undefined,
@@ -55,14 +56,14 @@ const defaultValues = {
   serviceIds: [],
   providerType: '',
   unitId: '',
-  room: '',
+  roomId: '',
   groupId: '',
   primaryInsuranceName: '',
   secondaryInsuranceName: '',
   visitType: '',
   visitSequence: '',
   visitMedium: '',
-  visitStatus: '',
+  appointmentStatus: '',
   patientInsuranceVerificationStatus: '',
   diagnosisCode: '',
   cptCode: '',
@@ -79,10 +80,9 @@ const defaultValues = {
   coInsuranceDueMax: undefined,
   balanceDueMin: undefined,
   balanceDueMax: undefined,
-  isNoteSigned: '',
+  noteSignedStatus: '',
+  facilityAdmissionIds: '',
 }
-const getDateString = (date?: DateValue): string | undefined =>
-  date ? getCalendarDateLabel(date) : undefined
 
 const ProviderCodingFilters = () => {
   const [filters, setFilters] = useState<string[]>(PROVIDER_CODING_FILTERS)
@@ -90,10 +90,12 @@ const ProviderCodingFilters = () => {
     providerCodingFilters,
     saveProviderCodingFilters,
     fetchProviderCodingView,
+    setFormData,
   } = useStore((state) => ({
     providerCodingFilters: state.providerCodingFilters,
     saveProviderCodingFilters: state.saveProviderCodingFilters,
     fetchProviderCodingView: state.fetchProviderCodingView,
+    setFormData: state.setFormData,
   }))
   const ctxValue = useMemo(
     () => ({
@@ -132,34 +134,42 @@ const ProviderCodingFilters = () => {
       ...data,
       startingDate: getDateString(startingDate),
       endingDate: getDateString(endingDate),
-      dateOfBirth: getDateString(dateOfBirth),
+      dateOfBirth: getCalendarDateLabel(dateOfBirth),
       dateOfAdmissionStart: getDateString(dateOfAdmissionStart),
       dateOfAdmissionEnd: getDateString(dateOfAdmissionEnd),
       lastCoverageDateStart: getDateString(lastCoverageDateStart),
       lastCoverageDateEnd: getDateString(lastCoverageDateEnd),
+      facilityAdmissionIds: data.facilityAdmissionIds
+        ? [data.facilityAdmissionIds]
+        : '',
     }
 
     const sanitizedParams = sanitizeFormData(transformedData)
+    setFormData(sanitizedParams)
     return fetchProviderCodingView(sanitizedParams)
   }
 
   const resetFilters = () => {
     if (!isDirty) return
     form.reset()
-    fetchProviderCodingView({})
+    setFormData({})
+    fetchProviderCodingView()
   }
 
   return (
     <Flex
       direction="column"
-      className="bg-white z-10 mx-[26px] p-2 shadow-3"
+      className="bg-white z-10 p-2 px-2.5 shadow-3"
       position="sticky"
       top="0"
     >
       <FiltersContext.Provider value={ctxValue}>
         <FormContainer form={form} onSubmit={onSubmit}>
           <Flex align="start" direction="column" wrap="wrap" gap="2">
-            <Flex align="start" width="100%" gap="2">
+            <Grid
+              className="grid w-full grid-cols-[repeat(auto-fill,minmax(235px,1fr))]"
+              gap="2"
+            >
               <StartDate />
               <EndDate />
               <Name />
@@ -168,33 +178,26 @@ const ProviderCodingFilters = () => {
               <DateOfBirthInput />
               <LocationDropdown />
               <ServiceMultiSelect />
-            </Flex>
-            <Flex align="start" width="100%" gap="2">
               <ProviderDropdown />
-              <ServiceFieldGrouping />
+              <FacilityFilters />
               <PrimaryInsuranceDropdown />
               <SecondaryInsuranceDropdown />
-            </Flex>
-            <Flex align="start" width="100%" gap="2">
               <VisitTypeDropdown />
               <SequenceDropdown />
               <MediumDropdown />
               <StatusDropdown />
               <InsuranceVerificationDropdown />
               <Diagnosis />
-            </Flex>
-            <Flex align="start" width="100%" gap="2">
               <CPTCode />
               <DateOfAdmissionRange />
               <LengthOfStayRange />
               <LastCoverageDateRange />
               <LegalStatusDropdown />
               <CoPayRange />
-            </Flex>
-            <Grid columns="6" gap="2">
               <CoInsuranceRange />
               <BalanceRange />
               <NoteSignedDropdown />
+              <FacilityAdmissionIdSelect />
               <FiltersButtonsGroup resetFilters={resetFilters}>
                 <AddFiltersPopover
                   view="Provider Coding"

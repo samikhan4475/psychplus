@@ -12,11 +12,13 @@ import { Calendar, dateFnsLocalizer, EventProps } from 'react-big-calendar'
 import { PlusIcon } from '@/components/icons'
 import { Appointment } from '@/types'
 import { AddVisit } from '@/ui/visit/add-visit'
-import { useBookedAppointmentsStore } from '../store'
 import { AvailableSlotsEvent } from '../types'
 import { CustomEvent } from './custom-event'
 import './styles.css'
 import 'react-big-calendar/lib/css/react-big-calendar.css'
+import { useHasPermission } from '@/hooks'
+import { CLICK_PLUS_BUTTON_CALENDAR } from '../constants'
+import { PermissionAlert } from '../shared'
 import { useStore } from './store'
 
 const locales = {
@@ -41,28 +43,49 @@ interface DateLocalizerInterface {
 // @ts-ignore
 const CustomTimeSlot = (props) => {
   const [showButton, setShowButton] = useState<boolean>(false)
+  const canClickPlusButton = useHasPermission('clickCalendarViewPlusButton')
+  const [isOpen, setIsOpen] = useState<boolean>(false)
 
   if (props.resource === undefined) return props.children
 
   return (
-    <Flex
-      justify="end"
-      className="relative"
-      flexGrow="1"
-      onMouseEnter={() => setShowButton(true)}
-      onMouseLeave={() => setShowButton(false)}
-    >
-      {showButton && (
-        <AddVisit>
-          <IconButton
-            variant="ghost"
-            className="bg-pp-primary-light absolute right-0 top-0 z-[200] h-5 w-5 translate-x-[-25%] translate-y-[25%] rounded-[0px] p-0.5"
-          >
-            <PlusIcon />
-          </IconButton>
-        </AddVisit>
-      )}
-    </Flex>
+    <>
+      <PermissionAlert
+        isOpen={isOpen}
+        message={CLICK_PLUS_BUTTON_CALENDAR}
+        onClose={() => setIsOpen(false)}
+      />
+      <Flex
+        justify="end"
+        className="relative"
+        flexGrow="1"
+        onMouseEnter={() => setShowButton(true)}
+        onMouseLeave={() => setShowButton(false)}
+      >
+        {showButton &&
+          (canClickPlusButton ? (
+            <AddVisit
+              dateTime={props.value ? new Date(props.value).toISOString() : ''}
+              isTimed
+            >
+              <IconButton
+                variant="ghost"
+                className="bg-pp-primary-light absolute right-0 top-0 z-[200] h-5 w-5 translate-x-[-25%] translate-y-[25%] rounded-[0px] p-0.5"
+              >
+                <PlusIcon />
+              </IconButton>
+            </AddVisit>
+          ) : (
+            <IconButton
+              variant="ghost"
+              onClick={() => setIsOpen(true)}
+              className="bg-pp-primary-light absolute right-0 top-0 z-[200] h-5 w-5 translate-x-[-25%] translate-y-[25%] rounded-[0px] p-0.5"
+            >
+              <PlusIcon />
+            </IconButton>
+          ))}
+      </Flex>
+    </>
   )
 }
 
@@ -99,18 +122,17 @@ const CalendarComponent = {
 }
 
 const formats = {
-  timeGutterFormat: 'hh a',
+  timeGutterFormat: 'HH',
 }
 
 const BigCalendar = () => {
-  const events = useBookedAppointmentsStore((state) => state.calendarViewData)
-
-  const { weekStartDate } = useStore((state) => ({
+  const { weekStartDate, events } = useStore((state) => ({
     weekStartDate: state.weekStartDate,
+    events: state.data,
   }))
 
   return (
-    <Flex direction="column" className="mt-1.5 flex-1 overflow-y-auto" px="5">
+    <Flex direction="column" className="mt-1.5 flex-1 overflow-y-auto px-2.5">
       <Flex direction="column" className="h-full">
         <Calendar
           localizer={localizer}

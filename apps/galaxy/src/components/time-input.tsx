@@ -57,7 +57,7 @@ const TimeInput = <T extends TimeValue>({
           >
             <DateInput
               className={cn(
-                'border-pp-gray-2 flex h-7 w-full items-center overflow-hidden rounded-1 border px-1 ',
+                'border-pp-gray-2 flex h-7 w-full items-center overflow-hidden rounded-1 border px-1 data-[disabled]:cursor-not-allowed data-[disabled]:bg-gray-3',
                 dateInputClass,
               )}
             >

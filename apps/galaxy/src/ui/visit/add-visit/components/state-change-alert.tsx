@@ -12,19 +12,15 @@ const StateChangeAlert = ({
   onConfirm: (isConfirmed: boolean) => void
 }) => {
   return (
-    <Dialog.Root
-      open={isOpen}
-      onOpenChange={(dialogNewState) => {
-        if (!dialogNewState && isOpen) {
-          onConfirm(true)
-        }
-      }}
-    >
-      <Dialog.Content className="bg-pp-warning-bg-1 border-pp-warning-border relative max-w-[440px] rounded-2 border p-4 pb-5 [box-shadow:none]">
-        <CloseDialogTrigger />
+    <Dialog.Root open={isOpen}>
+      <Dialog.Content
+        className="bg-pp-warning-bg-1 border-pp-warning-border relative max-w-[440px] rounded-2 border p-4 pb-5 [box-shadow:none]"
+        onOpenAutoFocus={(e) => e.preventDefault()}
+      >
+        <CloseDialogTrigger onClick={() => onConfirm(false)} />
         <Flex direction="row" gap="3" align="start">
           <TriangleAlert className="min-w-6 text-pp-warning-border" size={24} />
-          <Flex direction="column" gap="3" pt="1" className="pr-4">
+          <Flex direction="column" gap="3" pt="1" className="pr-5">
             <Dialog.Title size="4" className="m-0 font-medium">
               <Text size="4">
                 This patient&lsquo;s primary address is not in the service
@@ -41,7 +37,10 @@ const StateChangeAlert = ({
               </Button>
 
               <Dialog.Close>
-                <Button className="border-pp-gray-2 text-pp-black-3 bg-white w-[166px] cursor-pointer border border-solid">
+                <Button
+                  className="border-pp-gray-2 text-pp-black-3 bg-white w-[166px] cursor-pointer border border-solid"
+                  onClick={() => onConfirm(false)}
+                >
                   <Text size="2">No</Text>
                 </Button>
               </Dialog.Close>

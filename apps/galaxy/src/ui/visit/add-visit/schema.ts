@@ -8,11 +8,11 @@ const schema = z
       firstName: z.string(),
       middleName: z.string().optional(),
       lastName: z.string(),
-      birthdate: z.string(),
-      gender: z.string(),
-      medicalRecordNumber: z.string(),
-      status: z.string(),
-      state: z.string(),
+      birthdate: z.string().optional(),
+      gender: z.string().optional(),
+      medicalRecordNumber: z.string().optional(),
+      status: z.string().optional(),
+      state: z.string().optional(),
     }),
     state: z.string().min(1, 'Required'),
     location: z.string().min(1, 'Required'),
@@ -23,11 +23,11 @@ const schema = z
     visitSequence: z.string().min(1, 'Required'),
     visitMedium: z.string().min(1, 'Required'),
     paymentResponsibility: z.string().optional(),
-    visitDate: z
-      .custom<DateValue>()
-      .refine((val) => val !== null && val !== undefined, {
-        message: 'Required',
-      }),
+    visitDate: z.custom<DateValue>().optional(),
+    isPrimaryProviderType: z.boolean(),
+    isOverridePermissionProvided: z.boolean(),
+    isProceedPermissionProvided: z.boolean(),
+    timeZoneId: z.string().optional(),
 
     // Timed Service
     provider: z.string().optional(),
@@ -65,10 +65,10 @@ const schema = z
       const requiredFields = [
         { field: 'providerType', message: 'Required' },
         { field: 'provider', message: 'Required' },
+        { field: 'visitDate', message: 'Required' },
         { field: 'visitTime', message: 'Required' },
         { field: 'duration', message: 'Required' },
         { field: 'frequency', message: 'Required' },
-        { field: 'upto', message: 'Required' },
       ]
       if (data.showGroupTypeField) {
         requiredFields.push({ field: 'groupType', message: 'Required' })
@@ -99,7 +99,6 @@ const schema = z
         { field: 'dateOfAdmission', message: 'Required' },
         { field: 'timeOfAdmission', message: 'Required' },
         { field: 'admittingProvider', message: 'Required' },
-        { field: 'dischargeDate', message: 'Required' },
         { field: 'visitFrequency', message: 'Required' },
         { field: 'legal', message: 'Required' },
       ]

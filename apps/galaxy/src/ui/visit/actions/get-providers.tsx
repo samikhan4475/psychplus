@@ -23,6 +23,7 @@ const getProviders = async (payload: {
   const response = await api.POST<GetProviderResponse[]>(url.toString(), {
     ...payload,
     roleCodes: ['1'],
+    IsIncludeProviderForFacility: true,
   })
   if (response.state === 'error') {
     return {

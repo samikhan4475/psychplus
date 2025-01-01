@@ -105,9 +105,7 @@ const PatientInfoTabs = ({
       </TabsContent>
       <TabsContent value={PAYMENT_HISTORY_TAB}>
         <PaymentHistoryTab
-          stripeApiKey={stripeApiKey}
           patientId={patientId}
-          googleApiKey={googleApiKey}
         />
       </TabsContent>
       <TabsContent value={PAYMENT_CARDS_TAB}>

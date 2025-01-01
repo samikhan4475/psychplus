@@ -1,7 +1,7 @@
 'use client'
 
 import { CodesetSelect, FormFieldLabel } from '@/components'
-import { CODESETS } from '@/constants'
+import { CODE_NOT_SET, CODESETS } from '@/constants'
 import { FormFieldContainer } from '../../shared'
 import { useFiltersContext } from '../../context'
 import { SchedulerFilters } from '../../types'
@@ -16,6 +16,7 @@ const LegalStatusDropdown = () => {
       <CodesetSelect
         name="legalStatus"
         codeset={CODESETS.LegalStatus}
+        exclude={[CODE_NOT_SET]}
         size="1"
         className="flex-1"
       />

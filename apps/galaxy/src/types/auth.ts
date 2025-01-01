@@ -22,6 +22,11 @@ interface UserResponse {
   userRoles: Role[]
 }
 
+interface UserType {
+  userType: string
+  resourceId: number
+}
+
 interface AuthRequest {
   username: string
   password: string

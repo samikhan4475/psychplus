@@ -5,8 +5,9 @@ import { useFormContext } from 'react-hook-form'
 import { FormFieldLabel } from '@/components'
 import { useFiltersContext } from '../../context'
 import { FormFieldContainer } from '../../shared'
-import { ProviderCodingSchema } from '../provider-coding-view-schema'
 import { SchedulerFilters } from '../../types'
+import { ProviderCodingSchema } from '../provider-coding-view-schema'
+
 const BalanceRange = () => {
   const form = useFormContext<ProviderCodingSchema>()
   const { filters } = useFiltersContext()
@@ -19,13 +20,17 @@ const BalanceRange = () => {
         size="1"
         placeholder="$ From"
         type="number"
-        {...form.register('balanceDueMin')}
+        {...form.register('balanceDueMin', {
+          setValueAs: (val) => val || undefined,
+        })}
       />
       <TextField.Root
         size="1"
         placeholder="$ To"
         type="number"
-        {...form.register('balanceDueMax')}
+        {...form.register('balanceDueMax', {
+          setValueAs: (val) => val || undefined,
+        })}
       />
     </FormFieldContainer>
   )

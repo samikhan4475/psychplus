@@ -1,16 +1,15 @@
-import { CodesetSelectCell, PropsWithRow } from '@/components'
-import { CODESETS } from '@/constants'
+import { PropsWithRow } from '@/components'
 import { Appointment } from '@/types'
+import { TimedVisitSequenceSelect } from './timed-visit-sequence-select'
+import { NonTimedVisitSequenceSelect } from './nontimed-visit-sequence-select'
 
 const VisitSequenceSelectCell = ({
   row: { original: appointment },
 }: PropsWithRow<Appointment>) => {
-  return (
-    <CodesetSelectCell
-      codeset={CODESETS.VisitSequence}
-      value={appointment.visitSequence}
-    />
-  )
+  if (appointment.isServiceTimeDependent) {
+    return <TimedVisitSequenceSelect appointment={appointment} />
+  }
+  return <NonTimedVisitSequenceSelect appointment={appointment} />
 }
 
 export { VisitSequenceSelectCell }

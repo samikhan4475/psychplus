@@ -10,9 +10,10 @@ import { CopayAppoinmentSelect } from './copay-appoinments-select'
 
 interface CopayRowProps {
   patientId: string
+  appointmentId?: number
 }
 
-const CopayRow = ({ patientId }: CopayRowProps) => {
+const CopayRow = ({ patientId, appointmentId }: CopayRowProps) => {
   const {
     shouldDisable,
     form: { register, unregister },
@@ -36,6 +37,7 @@ const CopayRow = ({ patientId }: CopayRowProps) => {
       />
       <Flex gap="2">
         <CopayAppoinmentSelect
+          appointmentId={appointmentId}
           patientId={patientId}
           disabled={shouldDisable(PaymentType.CoPay)}
         />

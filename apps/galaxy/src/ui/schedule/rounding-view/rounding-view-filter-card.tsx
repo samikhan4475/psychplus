@@ -6,16 +6,19 @@ import { Flex, Grid } from '@radix-ui/themes'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { FormContainer } from '@/components'
 import { sanitizeFormData } from '@/utils'
-import { NOTE_SIGNED, ROUNDING_FILTERS } from '../constants'
+import { ROUNDING_FILTERS } from '../constants'
 import { FiltersContext } from '../context'
 import {
   bookedAppointmentsSchema,
   BookedAppointmentsSchemaType,
 } from '../schema'
-import { AddFiltersPopover, FacilityFields, FiltersButtonsGroup } from '../shared'
-import { useBookedAppointmentsStore, useStore } from '../store'
-import { View } from '../types'
-import { getDateString, isDirty } from '../utils'
+import {
+  AddFiltersPopover,
+  FacilityFields,
+  FiltersButtonsGroup,
+} from '../shared'
+import { useStore as useRootStore } from '../store'
+import { getCalendarDateLabel, getDateString, isDirty } from '../utils'
 import { AgeInput } from './age-input'
 import { BalanceRange } from './balance-range'
 import { CoInsuranceRange } from './co-insurance-range'
@@ -39,58 +42,20 @@ import { ProviderTypeDropdown } from './provider-type-dropdown'
 import { SecondaryInsuranceDropdown } from './seondary-insurance-select'
 import { ServiceDropdown } from './service-dropdown'
 import { StartDateInput } from './start-date-input'
+import { useStore } from './store'
 import { VisitMediumSelect } from './visit-medium-select'
 import { VisitSequenceSelect } from './visit-sequence-select'
-import { VisitStatus } from './visit-status'
+import { VisitStatusSelect } from './visit-status'
 import { VisitTypeSelect } from './visit-type-select'
-
-const defaultValues = {
-  startingDate: undefined,
-  endingDate: undefined,
-  name: '',
-  age: undefined,
-  gender: '',
-  dateOfBirth: undefined,
-  patientStatuses: '',
-  locationId: '',
-  serviceIds: [],
-  providerType: '',
-  unitId: '',
-  room: '',
-  groupId: '',
-  primaryInsuranceName: '',
-  secondaryInsuranceName: '',
-  visitType: '',
-  visitSequence: '',
-  visitMedium: '',
-  visitStatus: '',
-  patientInsuranceVerificationStatus: '',
-  diagnosisCode: '',
-  cptCode: '',
-  dateOfAdmissionStart: undefined,
-  dateOfAdmissionEnd: undefined,
-  lengthOfStayMin: undefined,
-  lengthOfStayMax: undefined,
-  lastCoverageDateStart: undefined,
-  lastCoverageDateEnd: undefined,
-  legalStatus: '',
-  copayDueMin: undefined,
-  copayDueMax: undefined,
-  coInsuranceDueMin: undefined,
-  coInsuranceDueMax: undefined,
-  balanceDueMin: undefined,
-  balanceDueMax: undefined,
-  isNoteSigned: '',
-}
 
 const RoundingViewFilterCard = () => {
   const [filters, setFilters] = useState<string[]>(ROUNDING_FILTERS)
-  const fetchData = useBookedAppointmentsStore((state) => state.fetchData)
-  const { cachedFilters, saveFilters } = useStore((state) => ({
+  const { cachedFilters, saveFilters } = useRootStore((state) => ({
     cachedFilters: state.cachedFiltersRounding,
     saveFilters: state.saveRoundingFilters,
   }))
-  
+  const fetchData = useStore((state) => state.fetchAppointments)
+
   const ctxValue = useMemo(
     () => ({
       filters,
@@ -102,7 +67,45 @@ const RoundingViewFilterCard = () => {
   const form = useForm<BookedAppointmentsSchemaType>({
     resolver: zodResolver(bookedAppointmentsSchema),
     criteriaMode: 'all',
-    defaultValues: { ...defaultValues },
+    defaultValues: {
+      startingDate: undefined,
+      endingDate: undefined,
+      name: '',
+      age: undefined,
+      gender: '',
+      dateOfBirth: undefined,
+      patientStatuses: '',
+      locationId: '',
+      serviceIds: [],
+      providerType: '',
+      unitId: '',
+      roomId: '',
+      stateIds: [],
+      groupId: '',
+      primaryInsuranceName: '',
+      secondaryInsuranceName: '',
+      visitType: '',
+      visitSequence: '',
+      visitMedium: '',
+      appointmentStatus: '',
+      patientInsuranceVerificationStatus: '',
+      diagnosisCode: '',
+      cptCode: '',
+      dateOfAdmissionStart: undefined,
+      dateOfAdmissionEnd: undefined,
+      lengthOfStayMin: undefined,
+      lengthOfStayMax: undefined,
+      lastCoverageDateStart: undefined,
+      lastCoverageDateEnd: undefined,
+      legalStatus: '',
+      copayDueMin: undefined,
+      copayDueMax: undefined,
+      coInsuranceDueMin: undefined,
+      coInsuranceDueMax: undefined,
+      balanceDueMin: undefined,
+      balanceDueMax: undefined,
+      noteSignedStatus: '',
+    },
   })
   const { dirtyFields } = form.formState
 
@@ -122,37 +125,35 @@ const RoundingViewFilterCard = () => {
       dateOfAdmissionEnd,
       lastCoverageDateStart,
       lastCoverageDateEnd,
-      isNoteSigned,
       patientStatuses,
     } = data
     const transformedData = {
       ...data,
       startingDate: getDateString(startingDate),
       endingDate: getDateString(endingDate),
-      dateOfBirth: getDateString(dateOfBirth),
+      dateOfBirth: getCalendarDateLabel(dateOfBirth),
       dateOfAdmissionStart: getDateString(dateOfAdmissionStart),
       dateOfAdmissionEnd: getDateString(dateOfAdmissionEnd),
       lastCoverageDateStart: getDateString(lastCoverageDateStart),
       lastCoverageDateEnd: getDateString(lastCoverageDateEnd),
-      isNoteSigned: isNoteSigned? NOTE_SIGNED[isNoteSigned]: undefined,
       patientStatuses: patientStatuses ? [patientStatuses] : [],
       providerIds: [],
     }
 
     const sanitizedParams = sanitizeFormData(transformedData)
-    fetchData({ params: sanitizedParams, view: View.Rounding })
+    fetchData(sanitizedParams, 1)
   }
 
   const resetFilters = () => {
     if (!isDirty(dirtyFields)) return
     form.reset()
-    fetchData({ view: View.Rounding })
+    fetchData()
   }
 
   return (
     <Flex
       direction="column"
-      className="bg-white z-10 mx-[26px] p-2 shadow-3"
+      className="bg-white z-10 p-2 px-2.5 shadow-3"
       position="sticky"
       top="0"
     >
@@ -170,7 +171,10 @@ const RoundingViewFilterCard = () => {
               <LocationDropdown />
               <ServiceDropdown />
             </Flex>
-            <Grid columns="6" gap="2">
+            <Grid
+              className="grid w-full grid-cols-[repeat(auto-fill,minmax(235px,1fr))]"
+              gap="2"
+            >
               <ProviderTypeDropdown />
               <FacilityFields />
               <PrimaryInsuranceDropdown />
@@ -178,7 +182,7 @@ const RoundingViewFilterCard = () => {
               <VisitTypeSelect />
               <VisitSequenceSelect />
               <VisitMediumSelect />
-              <VisitStatus />
+              <VisitStatusSelect />
               <InsuranceVerificationSelect />
               <DiagnosisInput />
               <CptCodeInput />

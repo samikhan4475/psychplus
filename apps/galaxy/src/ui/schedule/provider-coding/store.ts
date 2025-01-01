@@ -1,17 +1,13 @@
 import { addDays, eachDayOfInterval, format } from 'date-fns'
 import toast from 'react-hot-toast'
 import { create } from 'zustand'
+import { Appointment } from '@/types'
 import { getUnitsGroupsAction } from '../actions'
 import { AppointmentDate } from '../scheduler-view/types'
 import { AppointmentParams, GetUnitsGroupsResponse } from '../types'
 import { getAppointmentsAction } from './actions/get-appointments'
-import {
-  AppointmentRecord,
-  DayString,
-  MergedRecord,
-  WeekDay,
-  WeekdayData,
-} from './types'
+import { DayString, MergedRecord, WeekDay, WeekdayData } from './types'
+import { extractWeekDay } from './util'
 
 interface Store {
   data?: MergedRecord[]
@@ -22,11 +18,13 @@ interface Store {
   currentWeekDays: WeekDay[]
   dates: AppointmentDate[]
   unitsandgroupslist: GetUnitsGroupsResponse
+  formData: AppointmentParams
   fetchProviderCodingView: (formValues?: AppointmentParams) => void
   saveProviderCodingFilters: (filters: string[]) => void
   generateCurrentWeekDays: (value: Date) => void
   setDates: (value: Date) => void
   fetchUnitsAndGroups: (arg: string[]) => void
+  setFormData: (data: AppointmentParams) => void
 }
 
 const useStore = create<Store>((set, get) => ({
@@ -34,10 +32,11 @@ const useStore = create<Store>((set, get) => ({
   error: undefined,
   loading: false,
   providerCodingFilters: [],
+  formData: {},
   tableFilters: [],
   currentWeekDays: [],
   dates: [],
-  unitsandgroupslist: { serviceGroups: [], serviceUnits: [] },
+  unitsandgroupslist: { serviceGroups: [], serviceUnits: [], serviceRooms: [] },
   generateCurrentWeekDays: (startDate) => {
     const weekDays = []
     const firstDayOfWeek = new Date(startDate)
@@ -47,23 +46,33 @@ const useStore = create<Store>((set, get) => ({
     for (let i = 0; i < 7; i++) {
       const date = new Date(firstDayOfWeek)
       date.setDate(firstDayOfWeek.getDate() + i)
-      const dayLabel = date.toLocaleString('default', { weekday: 'short' })
+      const dayLabel = date.toLocaleString('default', {
+        weekday: 'short',
+      }) as DayString
       const formattedDate = `${dayLabel} ${
         date.getMonth() + 1
       }/${date.getDate()}`
 
-      weekDays.push({ id: dayLabel, label: formattedDate })
+      weekDays.push({ id: formattedDate, label: formattedDate })
     }
     set({ currentWeekDays: weekDays })
   },
   fetchProviderCodingView: async (formValues) => {
+    const dates = get().dates
+    const startDateUtc = dates[0].date.toISOString()
+
+    const payload = {
+      startingDate: startDateUtc,
+      ...(formValues ?? {}),
+    }
     set({
       error: undefined,
       loading: true,
     })
-    const result = await getAppointmentsAction(formValues ?? {})
+
+    const result = await getAppointmentsAction(payload)
     if (result.state === 'error') {
-      toast.error(result.error ?? 'Error while fetching Provider coding view')
+      toast.error(result.error || 'Error while fetching Provider coding view')
       return set({
         error: result.error,
         loading: false,
@@ -108,6 +117,11 @@ const useStore = create<Store>((set, get) => ({
       unitsandgroupslist: result.data,
     })
   },
+  setFormData: (data) => {
+    set({
+      formData: data,
+    })
+  },
 }))
 
 const createDays = (startDate: Date): AppointmentDate[] => {
@@ -123,13 +137,8 @@ const createDays = (startDate: Date): AppointmentDate[] => {
   }))
 }
 
-const getWeekdayName = (dateString: string): string => {
-  const date = new Date(dateString)
-  return date.toLocaleString('en-US', { weekday: 'short' })
-}
-
 const mergeDataByFacilityAdmissionId = (
-  data: AppointmentRecord[],
+  data: Appointment[],
 ): MergedRecord[] => {
   const mergedData: MergedRecord[] = []
   const map = new Map<string, MergedRecord>()
@@ -143,52 +152,69 @@ const mergeDataByFacilityAdmissionId = (
       visitSequence,
       visitStatus,
       visitType,
-      isNoteSigned,
+      noteSignedStatus,
+      providerType,
+      isPrimaryProviderType,
       cptCodes,
+      appointmentId,
       ...otherFields
     } = record
 
-    const weekdayName = getWeekdayName(appointmentDate) as DayString
-    if (facilityAdmissionId === undefined) {
+    const timezone = otherFields.locationTimezoneId
+    const weekdayName = extractWeekDay(appointmentDate, timezone)
+
+    if (
+      facilityAdmissionId === undefined) {
       return
     }
 
     const newRecord: MergedRecord = {
       facilityAdmissionId,
       appointmentDate,
+      providerType,
       ...otherFields,
-      [weekdayName]: {
-        diagnosis: diagnosis ? [...diagnosis] : [],
-        visitMedium,
-        visitSequence,
-        visitStatus,
-        visitType,
-        isNoteSigned,
-        cptCodes: cptCodes || [],
-      } as WeekdayData,
+      weekDays: {
+        [weekdayName]: {
+          diagnosis: diagnosis ? [...diagnosis] : [],
+          visitMedium,
+          visitSequence,
+          appointmentId,
+          isPrimaryProviderType,
+          visitStatus,
+          visitType,
+          noteSignedStatus,
+          cptCodes: cptCodes || [],
+        } as WeekdayData,
+      }
     }
-    if (!map.has(facilityAdmissionId)) {
-      map.set(facilityAdmissionId, newRecord)
+    const key = `${facilityAdmissionId}-${providerType}`
+    if (!map.has(key)) {
+      map.set(key, newRecord)
     } else {
-      const existingRecord = map.get(facilityAdmissionId)
+      const existingRecord = map.get(key)
 
       if (existingRecord) {
-        if (existingRecord[weekdayName]) {
-          existingRecord[weekdayName].diagnosis.push(...(diagnosis || []))
-          existingRecord[weekdayName].visitMedium = visitMedium
-          existingRecord[weekdayName].visitSequence = visitSequence
-          existingRecord[weekdayName].visitStatus = visitStatus
-          existingRecord[weekdayName].visitType = visitType
-          existingRecord[weekdayName].isNoteSigned = isNoteSigned
-          existingRecord[weekdayName].cptCodes = cptCodes || []
+        if (existingRecord.weekDays[weekdayName]) {
+          existingRecord.weekDays[weekdayName].diagnosis.push(...(diagnosis || []))
+          existingRecord.weekDays[weekdayName].visitMedium = visitMedium
+          existingRecord.weekDays[weekdayName].visitSequence = visitSequence
+          existingRecord.weekDays[weekdayName].appointmentId = appointmentId
+          existingRecord.weekDays[weekdayName].visitStatus = visitStatus
+          existingRecord.weekDays[weekdayName].isPrimaryProviderType =
+            isPrimaryProviderType
+          existingRecord.weekDays[weekdayName].visitType = visitType
+          existingRecord.weekDays[weekdayName].noteSignedStatus = noteSignedStatus
+          existingRecord.weekDays[weekdayName].cptCodes = cptCodes || []
         } else {
-          existingRecord[weekdayName] = {
+          existingRecord.weekDays[weekdayName] = {
             diagnosis: diagnosis ? [...diagnosis] : [],
             visitMedium,
             visitSequence,
+            appointmentId,
             visitStatus,
+            isPrimaryProviderType,
             visitType,
-            isNoteSigned,
+            noteSignedStatus,
             cptCodes: cptCodes || [],
           } as WeekdayData
         }

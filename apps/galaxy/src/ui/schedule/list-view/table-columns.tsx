@@ -1,30 +1,26 @@
-import { CheckCircledIcon, CrossCircledIcon } from '@radix-ui/react-icons'
-import { Text } from '@radix-ui/themes'
 import { ColumnDef } from '@tanstack/react-table'
 import { ColumnHeader, TextCell } from '@/components'
 import { Appointment } from '@/types'
 import { formatDateOfBirth } from '@/utils'
 import {
-  ActionsCell,
+  InsuranceVerificationStatusCell,
   LegalSelectCell,
-  NoteSignedCell,
+  ServiceCell,
   VisitSequenceSelectCell,
   VisitStatusSelectCell,
 } from '../shared/table-cells'
-import { VerificationStatus } from '../types'
+import { ProviderTypeCell } from '../shared/table-cells/provider-type-cell'
+import { StateCell } from '../shared/table-cells/state-cell'
 import { formatDateCell, formatTimeCell } from '../utils'
-import { GroupSelectCell, UnitSelectCell } from './table-cells'
-
-const verificationStatus = (status: string): JSX.Element => {
-  switch (status) {
-    case VerificationStatus.Verified:
-      return <CheckCircledIcon className="text-pp-states-success" />
-    case VerificationStatus.UnVerifiable:
-      return <CrossCircledIcon className="text-pp-states-error" />
-    default:
-      return <Text>?</Text>
-  }
-}
+import {
+  ActionsCell,
+  GroupSelectCell,
+  RoomSelectCell,
+  UnitSelectCell,
+  VerificationStatusCell,
+  VisitMediumCell,
+} from './table-cells'
+import { GenderCell } from './table-cells/gender-cell'
 
 const columns: ColumnDef<Appointment>[] = [
   {
@@ -33,9 +29,9 @@ const columns: ColumnDef<Appointment>[] = [
     header: ({ column }) => (
       <ColumnHeader
         clientSideSort
-        className="!text-black justfy-center !font-medium"
+        className="!text-black justify-center !font-medium"
         column={column}
-        label="Visit Date"
+        label="Date"
       />
     ),
     cell: ({ row }) => (
@@ -54,7 +50,7 @@ const columns: ColumnDef<Appointment>[] = [
     header: ({ column }) => (
       <ColumnHeader
         clientSideSort
-        className="!text-black justfy-center !font-medium"
+        className="!text-black justify-center !font-medium"
         column={column}
         label="Time"
       />
@@ -75,14 +71,12 @@ const columns: ColumnDef<Appointment>[] = [
     header: ({ column }) => (
       <ColumnHeader
         clientSideSort
-        className="!text-black justfy-center !font-medium"
+        className="!text-black justify-center !font-medium"
         column={column}
         label="Service"
       />
     ),
-    cell: ({ row }) => (
-      <TextCell className="whitespace-nowrap">{row.original.service}</TextCell>
-    ),
+    cell: ({ row }) => <ServiceCell serviceCode={row.original.service} />,
   },
   {
     id: 'patient-name',
@@ -90,7 +84,7 @@ const columns: ColumnDef<Appointment>[] = [
     header: ({ column }) => (
       <ColumnHeader
         clientSideSort
-        className="!text-black justfy-center !font-medium"
+        className="!text-black justify-center !font-medium"
         column={column}
         label="Name"
       />
@@ -106,7 +100,7 @@ const columns: ColumnDef<Appointment>[] = [
     header: ({ column }) => (
       <ColumnHeader
         clientSideSort
-        className="!text-black justfy-center !font-medium"
+        className="!text-black justify-center !font-medium"
         column={column}
         label="Age"
       />
@@ -120,12 +114,12 @@ const columns: ColumnDef<Appointment>[] = [
     header: ({ column }) => (
       <ColumnHeader
         clientSideSort
-        className="!text-black justfy-center !font-medium"
+        className="!text-black justify-center !font-medium"
         column={column}
         label="Gender"
       />
     ),
-    cell: ({ row }) => <TextCell>{row.original.gender}</TextCell>,
+    cell: ({ row }) => <GenderCell value={row.original.gender} />,
   },
   {
     id: 'date-of-birth',
@@ -133,7 +127,7 @@ const columns: ColumnDef<Appointment>[] = [
     header: ({ column }) => (
       <ColumnHeader
         clientSideSort
-        className="!text-black justfy-center !font-medium"
+        className="!text-black justify-center !font-medium"
         column={column}
         label="DOB"
       />
@@ -150,7 +144,7 @@ const columns: ColumnDef<Appointment>[] = [
     header: ({ column }) => (
       <ColumnHeader
         clientSideSort
-        className="!text-black justfy-center !font-medium"
+        className="!text-black justify-center !font-medium"
         column={column}
         label="Pt. Status"
       />
@@ -162,82 +156,74 @@ const columns: ColumnDef<Appointment>[] = [
     accessorKey: 'verify',
     header: ({ column }) => (
       <ColumnHeader
-        className="!text-black justfy-center mx-auto !font-medium"
+        className="!text-black mx-auto justify-center !font-medium"
         column={column}
         label="Verify"
       />
     ),
     columns: [
       {
-        accessorKey: 'p',
+        accessorKey: 'patientInfoVerificationStatus',
         header: ({ column }) => (
           <ColumnHeader
             clientSideSort
-            className="!text-black justfy-center !font-medium"
+            className="!text-black justify-center !font-medium"
             column={column}
             label="P"
           />
         ),
         cell: ({ row }) => (
-          <TextCell>
-            {verificationStatus(row.original.patientInfoVerificationStatus)}
-          </TextCell>
+          <VerificationStatusCell
+            value={row.original.patientInfoVerificationStatus}
+          />
         ),
         enableHiding: false,
       },
       {
-        accessorKey: 'i',
+        accessorKey: 'patientInsuranceVerificationStatus',
         header: ({ column }) => (
           <ColumnHeader
             clientSideSort
-            className="!text-black justfy-center !font-medium"
+            className="!text-black justify-center !font-medium"
             column={column}
             label="I"
           />
         ),
         cell: ({ row }) => (
-          <TextCell className="pl-1">
-            {verificationStatus(
-              row.original.patientInsuranceVerificationStatus,
-            )}
-          </TextCell>
+          <VerificationStatusCell
+            value={row.original.patientInsuranceVerificationStatus}
+          />
         ),
         enableHiding: false,
       },
       {
-        accessorKey: 'c',
+        accessorKey: 'patientConsentStatus',
         header: ({ column }) => (
           <ColumnHeader
             clientSideSort
-            className="!text-black justfy-center !font-medium"
+            className="!text-black justify-center !font-medium"
             column={column}
-            label="C"
+            label="P&C"
           />
         ),
         cell: ({ row }) => (
-          <TextCell>
-            {verificationStatus(row.original.patientConsentStatus)}
-          </TextCell>
+          <VerificationStatusCell value={row.original.patientConsentStatus} />
         ),
         enableHiding: false,
       },
       {
-        accessorKey: 'cc',
+        accessorKey: 'patientCardVerificationStatus',
         header: ({ column }) => (
           <ColumnHeader
             clientSideSort
-            className="!text-black justfy-center !font-medium"
+            className="!text-black justify-center !font-medium"
             column={column}
             label="CC"
           />
         ),
         cell: ({ row }) => (
           <TextCell className="pl-1">
-            {row.original.patientCardVerificationStatus ? (
-              <CheckCircledIcon className="text-pp-states-success" />
-            ) : (
-              <CrossCircledIcon className="text-pp-states-error" />
-            )}
+            {row.original.patientCardVerificationStatus ? 'Yes' : 'No'}
           </TextCell>
         ),
         enableHiding: false,
@@ -250,20 +236,20 @@ const columns: ColumnDef<Appointment>[] = [
     header: ({ column }) => (
       <ColumnHeader
         clientSideSort
-        className="!text-black justfy-center !font-medium"
+        className="!text-black justify-center !font-medium"
         column={column}
         label="State"
       />
     ),
-    cell: ({ row }) => <TextCell>{row.original.state}</TextCell>,
+    cell: ({ row }) => <StateCell code={row.original.stateCode} />,
   },
   {
     id: 'location',
-    accessorKey: 'clinicLocation',
+    accessorKey: 'locationName',
     header: ({ column }) => (
       <ColumnHeader
         clientSideSort
-        className="!text-black justfy-center !font-medium"
+        className="!text-black justify-center !font-medium"
         column={column}
         label="Location"
       />
@@ -281,21 +267,21 @@ const columns: ColumnDef<Appointment>[] = [
     header: ({ column }) => (
       <ColumnHeader
         clientSideSort
-        className="!text-black justfy-center !font-medium"
+        className="!text-black justify-center !font-medium"
         column={column}
         label="Provider Type"
       />
     ),
-    cell: ({ row }) => <TextCell>{row.original.providerType}</TextCell>,
+    cell: ({ row }) => <ProviderTypeCell code={row.original.providerType} />,
     enableHiding: false,
   },
   {
     id: 'provider',
-    accessorKey: 'provider',
+    accessorKey: 'providerName',
     header: ({ column }) => (
       <ColumnHeader
         clientSideSort
-        className="!text-black justfy-center !font-medium"
+        className="!text-black justify-center !font-medium"
         column={column}
         label="Provider"
       />
@@ -313,7 +299,7 @@ const columns: ColumnDef<Appointment>[] = [
     header: ({ column }) => (
       <ColumnHeader
         clientSideSort
-        className="!text-black justfy-center !font-medium"
+        className="!text-black justify-center !font-medium"
         column={column}
         label="Primary Insurance"
       />
@@ -327,7 +313,7 @@ const columns: ColumnDef<Appointment>[] = [
     header: ({ column }) => (
       <ColumnHeader
         clientSideSort
-        className="!text-black justfy-center !font-medium"
+        className="!text-black justify-center !font-medium"
         column={column}
         label="Secondary Insurance"
       />
@@ -341,7 +327,7 @@ const columns: ColumnDef<Appointment>[] = [
     accessorKey: 'visit',
     header: ({ column }) => (
       <ColumnHeader
-        className="!text-black justfy-center mx-auto !font-medium"
+        className="!text-black mx-auto justify-center !font-medium"
         column={column}
         label="Visit"
       />
@@ -352,7 +338,7 @@ const columns: ColumnDef<Appointment>[] = [
         header: ({ column }) => (
           <ColumnHeader
             clientSideSort
-            className="!text-black justfy-center !font-medium"
+            className="!text-black justify-center !font-medium"
             column={column}
             label="Type"
           />
@@ -369,7 +355,7 @@ const columns: ColumnDef<Appointment>[] = [
         header: ({ column }) => (
           <ColumnHeader
             clientSideSort
-            className="!text-black justfy-center !font-medium"
+            className="!text-black justify-center !font-medium"
             column={column}
             label="Sequence"
           />
@@ -382,12 +368,12 @@ const columns: ColumnDef<Appointment>[] = [
         header: ({ column }) => (
           <ColumnHeader
             clientSideSort
-            className="!text-black justfy-center !font-medium"
+            className="!text-black justify-center !font-medium"
             column={column}
             label="Medium"
           />
         ),
-        cell: ({ row }) => <TextCell>{row.original.visitMedium}</TextCell>,
+        cell: ({ row }) => <VisitMediumCell value={row.original.visitMedium} />,
         enableHiding: false,
       },
       {
@@ -395,7 +381,7 @@ const columns: ColumnDef<Appointment>[] = [
         header: ({ column }) => (
           <ColumnHeader
             clientSideSort
-            className="!text-black justfy-center !font-medium"
+            className="!text-black justify-center !font-medium"
             column={column}
             label="Status"
           />
@@ -408,14 +394,12 @@ const columns: ColumnDef<Appointment>[] = [
         header: ({ column }) => (
           <ColumnHeader
             clientSideSort
-            className="!text-black justfy-center !font-medium"
+            className="!text-black justify-center !font-medium"
             column={column}
             label="Ins Verification"
           />
         ),
-        cell: ({ row }) => (
-          <TextCell>{row.original.insuranceVerification}</TextCell>
-        ),
+        cell: ({ row }) => <InsuranceVerificationStatusCell row={row} />,
         enableHiding: false,
       },
     ],
@@ -425,7 +409,7 @@ const columns: ColumnDef<Appointment>[] = [
     accessorKey: 'copay',
     header: ({ column }) => (
       <ColumnHeader
-        className="!text-black justfy-center !font-medium"
+        className="!text-black justify-center !font-medium"
         column={column}
         label="Co-Pay"
       />
@@ -438,7 +422,7 @@ const columns: ColumnDef<Appointment>[] = [
         header: ({ column }) => (
           <ColumnHeader
             clientSideSort
-            className="!text-black justfy-center !font-medium"
+            className="!text-black justify-center !font-medium"
             column={column}
             label="Due"
           />
@@ -454,7 +438,7 @@ const columns: ColumnDef<Appointment>[] = [
         header: ({ column }) => (
           <ColumnHeader
             clientSideSort
-            className="!text-black justfy-center !font-medium"
+            className="!text-black justify-center !font-medium"
             column={column}
             label="Paid"
           />
@@ -471,7 +455,7 @@ const columns: ColumnDef<Appointment>[] = [
     accessorKey: 'coIns',
     header: ({ column }) => (
       <ColumnHeader
-        className="!text-black justfy-center !font-medium"
+        className="!text-black justify-center !font-medium"
         column={column}
         label="Co-Ins"
       />
@@ -480,11 +464,11 @@ const columns: ColumnDef<Appointment>[] = [
     columns: [
       {
         id: 'coIns-due',
-        accessorKey: 'copayDue',
+        accessorKey: 'coInsuranceDue',
         header: ({ column }) => (
           <ColumnHeader
             clientSideSort
-            className="!text-black justfy-center !font-medium"
+            className="!text-black justify-center !font-medium"
             column={column}
             label="Due"
           />
@@ -495,11 +479,11 @@ const columns: ColumnDef<Appointment>[] = [
       },
       {
         id: 'coIns-paid',
-        accessorKey: 'copayPaid',
+        accessorKey: 'coInsurancePaid',
         header: ({ column }) => (
           <ColumnHeader
             clientSideSort
-            className="!text-black justfy-center !font-medium"
+            className="!text-black justify-center !font-medium"
             column={column}
             label="Paid"
           />
@@ -515,7 +499,7 @@ const columns: ColumnDef<Appointment>[] = [
     accessorKey: 'balance',
     header: ({ column }) => (
       <ColumnHeader
-        className="!text-black justfy-center !font-medium"
+        className="!text-black justify-center !font-medium"
         column={column}
         label="Balance"
       />
@@ -528,7 +512,7 @@ const columns: ColumnDef<Appointment>[] = [
         header: ({ column }) => (
           <ColumnHeader
             clientSideSort
-            className="!text-black justfy-center !font-medium"
+            className="!text-black justify-center !font-medium"
             column={column}
             label="Due"
           />
@@ -543,7 +527,7 @@ const columns: ColumnDef<Appointment>[] = [
         header: ({ column }) => (
           <ColumnHeader
             clientSideSort
-            className="!text-black justfy-center !font-medium"
+            className="!text-black justify-center !font-medium"
             column={column}
             label="Paid"
           />
@@ -560,7 +544,7 @@ const columns: ColumnDef<Appointment>[] = [
     header: ({ column }) => (
       <ColumnHeader
         clientSideSort
-        className="!text-black justfy-center !font-medium"
+        className="!text-black justify-center !font-medium"
         column={column}
         label="Unit"
       />
@@ -569,12 +553,26 @@ const columns: ColumnDef<Appointment>[] = [
     enableHiding: true,
   },
   {
+    id: 'room',
+    accessorKey: 'roomResource.room',
+    header: ({ column }) => (
+      <ColumnHeader
+        clientSideSort
+        className="!text-black justify-center !font-medium"
+        column={column}
+        label="Room"
+      />
+    ),
+    cell: ({ row }) => <RoomSelectCell row={row} />,
+    enableHiding: true,
+  },
+  {
     id: 'appointment-group',
     accessorKey: 'groupResource.group',
     header: ({ column }) => (
       <ColumnHeader
         clientSideSort
-        className="!text-black justfy-center !font-medium"
+        className="!text-black justify-center !font-medium"
         column={column}
         label="Group"
       />
@@ -588,14 +586,22 @@ const columns: ColumnDef<Appointment>[] = [
     header: ({ column }) => (
       <ColumnHeader
         clientSideSort
-        className="!text-black justfy-center !font-medium"
+        className="!text-black justify-center !font-medium"
         column={column}
         label="DOA"
       />
     ),
     cell: ({ row }) => (
-      <TextCell empty={row.original.isServiceTimeDependent}>
-        {row.original.dateOfAdmission}
+      <TextCell
+        empty={row.original.isServiceTimeDependent}
+        className="whitespace-nowrap"
+      >
+        {row.original.dateOfAdmission
+          ? formatDateCell(
+              row.original.dateOfAdmission,
+              row.original.locationTimezoneId,
+            )
+          : ''}
       </TextCell>
     ),
     enableHiding: true,
@@ -606,7 +612,7 @@ const columns: ColumnDef<Appointment>[] = [
     header: ({ column }) => (
       <ColumnHeader
         clientSideSort
-        className="!text-black justfy-center !font-medium"
+        className="!text-black justify-center !font-medium"
         column={column}
         label="LOS"
       />
@@ -624,13 +630,16 @@ const columns: ColumnDef<Appointment>[] = [
     header: ({ column }) => (
       <ColumnHeader
         clientSideSort
-        className="!text-black justfy-center !font-medium"
+        className="!text-black justify-center !font-medium"
         column={column}
         label="LCD"
       />
     ),
     cell: ({ row }) => (
-      <TextCell empty={row.original.isServiceTimeDependent}>
+      <TextCell
+        empty={row.original.isServiceTimeDependent}
+        className="whitespace-nowrap"
+      >
         {row.original.lastCoverageDate}
       </TextCell>
     ),
@@ -642,12 +651,16 @@ const columns: ColumnDef<Appointment>[] = [
     header: ({ column }) => (
       <ColumnHeader
         clientSideSort
-        className="!text-black justfy-center !font-medium"
+        className="!text-black justify-center !font-medium"
         column={column}
         label="Auth #"
       />
     ),
-    cell: ({ row }) => <TextCell>{row.original.authorizationNumber}</TextCell>,
+    cell: ({ row }) => (
+      <TextCell empty={row.original.isServiceTimeDependent}>
+        {row.original.authorizationNumber}
+      </TextCell>
+    ),
     enableHiding: true,
   },
   {
@@ -656,7 +669,7 @@ const columns: ColumnDef<Appointment>[] = [
     header: ({ column }) => (
       <ColumnHeader
         clientSideSort
-        className="!text-black justfy-center !font-medium"
+        className="!text-black justify-center !font-medium"
         column={column}
         label="Legal"
       />
@@ -667,21 +680,21 @@ const columns: ColumnDef<Appointment>[] = [
 
   {
     id: 'note-signed',
-    accessorKey: 'isNoteSigned',
+    accessorKey: 'noteSignedStatus',
     header: ({ column }) => (
       <ColumnHeader
         clientSideSort
-        className="!text-black justfy-center !font-medium"
+        className="!text-black justify-center !font-medium"
         column={column}
-        label="Note Signed"
+        label="Note Signed Status"
       />
     ),
-    cell: ({ row }) => <NoteSignedCell row={row} />,
+    cell: ({ row }) => <TextCell>{row.original.noteSignedStatus}</TextCell>,
   },
   {
     id: 'actions-column',
     header: () => <ColumnHeader label="Actions" className="!font-medium" />,
-    cell: ({ row }) => <ActionsCell appointmentId={row.original.appointmentId} />,
+    cell: ActionsCell,
   },
 ]
 

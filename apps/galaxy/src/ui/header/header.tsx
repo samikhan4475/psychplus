@@ -1,5 +1,5 @@
 import { PlusCircledIcon } from '@radix-ui/react-icons'
-import { Button, Flex, Text } from '@radix-ui/themes'
+import { Button, Flex, IconButton, Text } from '@radix-ui/themes'
 import { NavLogo } from '@/components'
 import { getAuthCookies } from '@/utils/auth'
 import { AddPatient } from '../patient/add-patient'

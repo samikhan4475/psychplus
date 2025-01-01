@@ -61,6 +61,7 @@ interface ClinicContactDetails {
 interface AppointmentAvailability {
   allSlotsByDay: SlotsByDay
   specialist: AppointmentSpecialist
+  clinic: AppointmentClinic
   clinics: AppointmentClinic[]
   specialistTypeCode: ProviderType
 }

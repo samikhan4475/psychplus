@@ -1,7 +1,7 @@
 'use server'
 
 import * as api from '@/api'
-import { Service } from '@/types'
+import { SelectOptionType, Service } from '@/types'
 
 const getUnitsGroupsAction = async ({
   serviceId,
@@ -13,12 +13,12 @@ const getUnitsGroupsAction = async ({
   isUnit?: boolean
   isRoom?: boolean
   isGroup?: boolean
-}): Promise<api.ActionResult<{ label: string; value: string }[]>> => {
+}): Promise<api.ActionResult<SelectOptionType[]>> => {
   const body = {
     includeServiceUnit: isUnit,
     includeServiceRoom: isRoom,
     includeServiceGroup: isGroup,
-    serviceIds: [serviceId],
+    locationServiceIds: [serviceId],
   }
 
   const response = await api.POST<Service[]>(
@@ -37,7 +37,7 @@ const getUnitsGroupsAction = async ({
     return {
       state: 'success',
       data:
-        response.data[0].serviceUnits?.map((v) => ({
+        response.data[0]?.serviceUnits?.map((v) => ({
           label: v.unit,
           value: v.id,
         })) ?? [],
@@ -46,7 +46,7 @@ const getUnitsGroupsAction = async ({
     return {
       state: 'success',
       data:
-        response.data[0].serviceRooms?.map((v) => ({
+        response.data[0]?.serviceRooms?.map((v) => ({
           label: v.room,
           value: v.id,
         })) ?? [],
@@ -55,7 +55,7 @@ const getUnitsGroupsAction = async ({
   return {
     state: 'success',
     data:
-      response.data[0].serviceGroups?.map((v) => ({
+      response.data[0]?.serviceGroups?.map((v) => ({
         label: v.group,
         value: v.id,
       })) ?? [],

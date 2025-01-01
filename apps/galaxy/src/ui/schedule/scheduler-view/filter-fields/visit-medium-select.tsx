@@ -7,7 +7,7 @@ const VisitMediumSelect = () => {
     <FormFieldContainer>
       <FormFieldLabel>Visit Medium</FormFieldLabel>
       <CodesetSelect
-        name="slotType"
+        name="type"
         className="flex-1"
         codeset={CODESETS.VisitMedium}
         size="1"

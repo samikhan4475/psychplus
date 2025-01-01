@@ -7,21 +7,45 @@ import {
   FormFieldLabel,
   SelectInput,
 } from '@/components'
-import { CODESETS } from '@/constants'
+import { CODE_NOT_SET, CODESETS } from '@/constants'
 import { useCodesetCodes } from '@/hooks'
 import { SchemaType } from '../../schema'
 
 const LegalDropdown = () => {
   const form = useFormContext<SchemaType>()
-  const visitFrequency = useWatch({
+  const [
+    patient,
+    state,
+    service,
+    location,
+    dateOfAdmission,
+    admittingProvider,
+    providerType,
+  ] = useWatch({
     control: form.control,
-    name: 'visitFrequency',
+    name: [
+      'patient',
+      'state',
+      'service',
+      'location',
+      'dateOfAdmission',
+      'admittingProvider',
+      'providerType',
+    ],
   })
   const codes = useCodesetCodes(CODESETS.AdmissionLegalStatus)
+  const isDisabled =
+    !patient ||
+    !state ||
+    !service ||
+    !location ||
+    !dateOfAdmission ||
+    !admittingProvider ||
+    !providerType
 
   const options = codes.map((option) => {
     return { label: option.display, value: option.value }
-  })
+  }).filter(option => option.value !== CODE_NOT_SET)
 
   return (
     <FormFieldContainer className="flex-1">
@@ -30,7 +54,7 @@ const LegalDropdown = () => {
         field="legal"
         options={options}
         buttonClassName="h-6 w-full"
-        disabled={!visitFrequency}
+        disabled={isDisabled}
       />
       <FormFieldError name="legal" />
     </FormFieldContainer>

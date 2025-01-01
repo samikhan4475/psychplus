@@ -7,13 +7,16 @@ import { DayHeader } from './day-header'
 import { SchedulerFilterGroup } from './filter-actions-group'
 import { ProvidersAccordionMenu } from './providers-accordion-menu'
 import { useStore } from './store'
+import { NewPatient } from '@/types'
 
 const SchedulerView = ({
   showFollowUpFilter = false,
   noOfDays = 13,
+  patient,
 }: {
   showFollowUpFilter?: boolean
   noOfDays?: number
+  patient?:NewPatient
 }) => {
   const { fetchAvailableSlots, loading } = useStore((state) => ({
     fetchAvailableSlots: state.fetchAppointments,
@@ -25,7 +28,7 @@ const SchedulerView = ({
   }, [])
 
   return (
-    <Flex direction="column" className="overfow-auto h-full">
+    <Flex direction="column" className="h-full">
       <ScrollArea className="flex-1">
         <Flex
           direction="column"
@@ -42,7 +45,7 @@ const SchedulerView = ({
             <LoadingPlaceholder />
           </Flex>
         ) : (
-          <ProvidersAccordionMenu />
+          <ProvidersAccordionMenu patient={patient} />
         )}
       </ScrollArea>
     </Flex>

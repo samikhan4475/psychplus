@@ -16,15 +16,9 @@ import { useStore } from './store'
 
 const TAB_TITLE = 'Payment Hx'
 interface PaymentHistoryTabProps {
-  stripeApiKey: string
   patientId: string
-  googleApiKey: string
 }
-const PaymentHistoryTab = ({
-  stripeApiKey,
-  patientId,
-  googleApiKey,
-}: PaymentHistoryTabProps) => {
+const PaymentHistoryTab = ({ patientId }: PaymentHistoryTabProps) => {
   const { data, fetchPatientPaymentHistory, refetch } = useStore((state) => ({
     loading: state.loading,
     fetchPatientPaymentHistory: state.fetchPatientPaymentHistory,
@@ -51,12 +45,7 @@ const PaymentHistoryTab = ({
           >
             <AddCustomChargeButton />
           </AddCustomChargeDialog>
-          <PaymentDialog
-            stripeApiKey={stripeApiKey}
-            patientId={patientId}
-            googleApiKey={googleApiKey}
-            onClose={handleCloseDialog}
-          >
+          <PaymentDialog patientId={patientId} onClose={handleCloseDialog}>
             <PaymentButton />
           </PaymentDialog>
         </Flex>

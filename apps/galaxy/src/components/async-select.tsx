@@ -39,6 +39,7 @@ const AsyncSelect = ({ fetchOptions, ...selectProps }: AsyncSelectProps) => {
       <SelectInput
         options={options}
         disabled={loading || error !== null}
+        loading={loading}
         {...selectProps}
       />
     </Box>

@@ -8,17 +8,21 @@ import {
 } from '@/components'
 import { CODESETS } from '@/constants'
 import { useCodesetCodes } from '@/hooks'
-import { ProviderType, ServiceType } from '../../../types'
-import { SchemaType } from '../../schema'
-import { useEditVisitStore } from '../../store'
+import { ProviderType, ServiceType } from '../../types'
+import { SchemaType } from '../schema'
+import { useEditVisitStore } from '../store'
 
-const ProviderTypeSelect = () => {
+const ProviderTypeSelect = ({
+  isPsychiatristVisitTypeSequence,
+}: {
+  isPsychiatristVisitTypeSequence?: boolean
+}) => {
   const form = useFormContext<SchemaType>()
   const { services } = useEditVisitStore()
   const codes = useCodesetCodes(CODESETS.ProviderType)
-  const serviceId = useWatch({
+  const [serviceId, isServiceTimeDependent] = useWatch({
     control: form.control,
-    name: 'service',
+    name: ['service', 'isServiceTimeDependent'],
   })
 
   const options = useMemo(() => {
@@ -26,6 +30,15 @@ const ProviderTypeSelect = () => {
     if (!service?.serviceOffered) return []
 
     const filteredOptions = codes.filter((providerType) => {
+      if (
+        [
+          ProviderType.NotSet,
+          ProviderType.FamilyMedicine,
+          ProviderType.InternalMedicine,
+          ProviderType.Anesthesiology,
+        ].includes(providerType.value as ProviderType)
+      )
+        return false
       switch (service?.serviceOffered) {
         case ServiceType.Aba:
           return providerType.value === ProviderType.Bcba
@@ -47,8 +60,7 @@ const ProviderTypeSelect = () => {
       label: code.display,
       value: code.value,
     }))
-  }, [codes, serviceId])
-
+  }, [codes, serviceId, services])
   return (
     <FormFieldContainer className="flex-1">
       <FormFieldLabel required>Provider Type</FormFieldLabel>
@@ -56,7 +68,10 @@ const ProviderTypeSelect = () => {
         options={options}
         buttonClassName="h-6 w-full"
         field="providerType"
-        disabled={!serviceId}
+        disabled={
+          (!serviceId || !isServiceTimeDependent) &&
+          !isPsychiatristVisitTypeSequence
+        }
       />
       <FormFieldError name={'providerType'} />
     </FormFieldContainer>

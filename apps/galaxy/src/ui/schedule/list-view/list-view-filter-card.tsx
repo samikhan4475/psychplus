@@ -6,16 +6,25 @@ import { Flex, Grid } from '@radix-ui/themes'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { FormContainer } from '@/components'
 import { sanitizeFormData } from '@/utils'
-import { LIST_VIEW_FILTERS, NOTE_SIGNED } from '../constants'
+import { LIST_VIEW_FILTERS } from '../constants'
 import { FiltersContext } from '../context'
 import {
   bookedAppointmentsSchema,
   BookedAppointmentsSchemaType,
 } from '../schema'
-import { AddFiltersPopover, FacilityFields, FiltersButtonsGroup } from '../shared'
-import { useBookedAppointmentsStore, useStore } from '../store'
-import { View } from '../types'
-import { getDateString, isDirty } from '../utils'
+import {
+  AddFiltersPopover,
+  FacilityFields,
+  FiltersButtonsGroup,
+} from '../shared'
+import { useStore as useRootStore } from '../store'
+import {
+  getCalendarDateLabel,
+  getDateString,
+  getUtcDateWithoutTime,
+  getUtcTime,
+  isDirty,
+} from '../utils'
 import {
   AgeInput,
   AuthorizationNumberInput,
@@ -47,11 +56,14 @@ import {
   VisitStatusSelect,
   VisitTypeSelect,
 } from './filter-fields'
+import { useStore } from './store'
 
 const ListViewFilterCard = () => {
   const [filters, setFilters] = useState<string[]>(LIST_VIEW_FILTERS)
-  const fetchData = useBookedAppointmentsStore((state) => state.fetchData)
-  const { cachedFilters, saveFilters } = useStore((state) => ({
+  const { fetchData } = useStore((state) => ({
+    fetchData: state.fetchAppointments,
+  }))
+  const { cachedFilters, saveFilters } = useRootStore((state) => ({
     cachedFilters: state.cachedFiltersList,
     saveFilters: state.saveListFilters,
   }))
@@ -69,29 +81,29 @@ const ListViewFilterCard = () => {
     defaultValues: {
       startingDate: undefined,
       endingDate: undefined,
-      time: undefined,
+      bookedAppointmentTime: undefined,
       name: '',
       age: undefined,
       gender: '',
       dateOfBirth: undefined,
       patientStatuses: '',
-      stateId: '',
+      stateIds: [],
       locationId: '',
       serviceIds: [],
       providerType: '',
       providerIds: '',
       unitId: '',
-      room: '',
+      roomId: '',
       groupId: '',
       primaryInsuranceName: '',
       secondaryInsuranceName: '',
       visitType: '',
       visitSequence: '',
       visitMedium: '',
-      visitStatus: '',
+      appointmentStatus: '',
       patientInsuranceVerificationStatus: '',
       diagnosisCode: '',
-      authorizationNumber: '',
+      insuranceAuthorizationNumber: '',
       cptCode: '',
       dateOfAdmissionStart: undefined,
       dateOfAdmissionEnd: undefined,
@@ -106,7 +118,7 @@ const ListViewFilterCard = () => {
       coInsuranceDueMax: undefined,
       balanceDueMin: undefined,
       balanceDueMax: undefined,
-      isNoteSigned: '',
+      noteSignedStatus: '',
     },
   })
 
@@ -122,32 +134,31 @@ const ListViewFilterCard = () => {
     if (!isDirty(dirtyFields)) return
     const transformedData = {
       ...data,
-      startingDate: getDateString(data.startingDate),
-      endingDate: getDateString(data.endingDate),
-      dateOfBirth: getDateString(data.dateOfBirth),
+      startingDate: getUtcDateWithoutTime(data.startingDate),
+      endingDate: getUtcDateWithoutTime(data.endingDate),
+      dateOfBirth: getCalendarDateLabel(data.dateOfBirth),
       dateOfAdmissionStart: getDateString(data.dateOfAdmissionStart),
       dateOfAdmissionEnd: getDateString(data.dateOfAdmissionEnd),
       lastCoverageDateStart: getDateString(data.lastCoverageDateStart),
       lastCoverageDateEnd: getDateString(data.lastCoverageDateEnd),
-      isNoteSigned: data.isNoteSigned ? NOTE_SIGNED[data.isNoteSigned] : undefined,
       patientStatuses: data.patientStatuses ? [data.patientStatuses] : [],
-      time: data.time? data.time.toString(): undefined,
-      providerIds: data.providerIds? [Number(data.providerIds)]: [],
+      bookedAppointmentTime: getUtcTime(data.bookedAppointmentTime),
+      providerIds: data.providerIds ? [Number(data.providerIds)] : [],
     }
     const sanitizedData = sanitizeFormData(transformedData)
-    fetchData({ params: sanitizedData, view: View.List })
+    fetchData(sanitizedData, 1)
   }
 
   const resetFilters = () => {
     if (!isDirty(dirtyFields)) return
     form.reset()
-    fetchData({ view: View.List })
+    fetchData()
   }
 
   return (
     <Flex
       direction="column"
-      className="bg-white z-10 p-2 shadow-1"
+      className="bg-white z-10 px-2.5 py-2 shadow-3"
       position="sticky"
       top="0"
     >
@@ -156,7 +167,7 @@ const ListViewFilterCard = () => {
           <Flex align="start" direction="column" wrap="wrap" gap="2">
             <Flex align="start" width="100%" gap="2">
               <StartDateInput />
-              <EndDateInput />  
+              <EndDateInput />
               <TimeInputField />
               <NameInput />
               <AgeInput />
@@ -165,7 +176,10 @@ const ListViewFilterCard = () => {
               <PatientStatusSelect />
               <StateSelect />
             </Flex>
-            <Grid columns="6" gap="2">
+            <Grid
+              className="grid w-full grid-cols-[repeat(auto-fill,minmax(235px,1fr))]"
+              gap="2"
+            >
               <LocationDropdown />
               <ServiceMultiSelect />
               <FacilityFields />

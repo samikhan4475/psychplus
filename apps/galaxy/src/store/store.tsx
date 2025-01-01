@@ -7,6 +7,7 @@ import { createStore as zustandCreateStore } from 'zustand/vanilla'
 import { GALAXY_APP_LOCAL_STORAGE_KEY } from '@/constants'
 import type {
   CodesetCache,
+  Constants,
   RolePermission,
   UserResponse as User,
 } from '@/types'
@@ -20,6 +21,7 @@ interface Store {
   user: User
   codesets: CodesetCache
   permissions: Record<string, RolePermission>
+  constants: Constants
   tabs: NavigationTab[]
   addTab: (tab: NavigationTab) => void
   removeTab: (name: string) => void
@@ -30,6 +32,7 @@ interface StoreInitialState {
   user: User
   codesets: CodesetCache
   permissions: Record<string, RolePermission>
+  constants: Constants
 }
 
 const createStore = (initialState: StoreInitialState) =>
@@ -38,6 +41,7 @@ const createStore = (initialState: StoreInitialState) =>
       (set, get) => ({
         codesets: initialState.codesets,
         permissions: initialState.permissions,
+        constants: initialState.constants,
         user: initialState.user,
         tabs: [],
         addTab: (tab) => set(addTabReducer(tab)),

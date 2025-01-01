@@ -1,5 +1,5 @@
 import { PropsWithRow, TextCell } from '@/components'
-import { DayString, MergedRecord, WeekDay } from '../types'
+import { MergedRecord, WeekDay } from '../types'
 
 interface CptCodeCellProps extends PropsWithRow<MergedRecord> {
   day: WeekDay
@@ -9,7 +9,7 @@ const DiagnosisCodesCell = ({
   row: { original: appointment },
   day,
 }: CptCodeCellProps) => {
-  const diagnosis = appointment[day.id as DayString]?.diagnosis || []
+  const diagnosis = appointment.weekDays[day.id]?.diagnosis || []
 
   const diaCodeString = diagnosis.map((d) => d.icd10Code).join(', ')
 

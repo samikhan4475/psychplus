@@ -1,5 +1,6 @@
 'use client'
 
+import { useCallback } from 'react'
 import { useFormContext, useWatch } from 'react-hook-form'
 import { AsyncSelect, FormFieldContainer, FormFieldLabel } from '@/components'
 import { getUnitsGroupsAction } from '@/ui/visit/actions/get-units-groups'
@@ -7,18 +8,53 @@ import { SchemaType } from '../../schema'
 
 const UnitDropdown = () => {
   const form = useFormContext<SchemaType>()
-  const [serviceId, legal] = useWatch({
+  const [
+    serviceId,
+    legal,
+    patient,
+    state,
+    service,
+    location,
+    dateOfAdmission,
+    admittingProvider,
+    providerType,
+  ] = useWatch({
     control: form.control,
-    name: ['service', 'legal'],
+    name: [
+      'service',
+      'legal',
+      'patient',
+      'state',
+      'service',
+      'location',
+      'dateOfAdmission',
+      'admittingProvider',
+      'providerType',
+    ],
   })
+  const isDisabled =
+    !patient ||
+    !state ||
+    !service ||
+    !location ||
+    !legal ||
+    !dateOfAdmission ||
+    !admittingProvider ||
+    !providerType 
+    
+  const fetchOptions = useCallback(() => {
+    if (!serviceId)
+      return Promise.resolve({ state: 'success' as const, data: [] })
+    return getUnitsGroupsAction({ serviceId, isUnit: true })
+  }, [serviceId])
   return (
     <FormFieldContainer className="flex-1">
       <FormFieldLabel>Unit</FormFieldLabel>
       <AsyncSelect
-        fetchOptions={() => getUnitsGroupsAction({ serviceId, isUnit: true })}
+        fetchOptions={fetchOptions}
         buttonClassName="h-6 w-full"
         field="unit"
-        disabled={!legal}
+        disabled={isDisabled}
       />
     </FormFieldContainer>
   )

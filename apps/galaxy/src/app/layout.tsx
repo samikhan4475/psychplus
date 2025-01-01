@@ -4,12 +4,16 @@ import { Josefin_Sans } from 'next/font/google'
 import { Flex, Theme } from '@radix-ui/themes'
 import { Toaster } from 'react-hot-toast'
 import { getCodesets, getLoggedInUser, getUserPermissions } from '@/api'
-import { getUserType } from '@/api/get-user-type'
-import { CODESETS } from '@/constants'
+import {
+  CODESETS,
+  GOOGLE_MAPS_API_KEY,
+  STRIPE_PUBLISHABLE_KEY,
+} from '@/constants'
 import { StoreProvider } from '@/store'
 import { Header } from '@/ui/header'
 import { cn } from '@/utils'
 import { getAuthCookies } from '@/utils/auth'
+import { getUserType } from '@/api/get-user-type'
 
 export const metadata: Metadata = {
   title: 'PsychPlus',
@@ -57,12 +61,17 @@ const RootLayout = async ({ children }: React.PropsWithChildren) => {
       getLoggedInUser(),
     ])
     const userType = await getUserType(`${user.id}`)
+    const constants = {
+      googleApiKey: GOOGLE_MAPS_API_KEY,
+      stripeApiKey: STRIPE_PUBLISHABLE_KEY,
+    }
 
     return (
       <StoreProvider
-        user={{ ...user, staffId: userType.resourceId }}
+        user={{...user, staffId: userType.resourceId}}
         permissions={permissions}
         codesets={codesets}
+        constants={constants}
       >
         {content}
       </StoreProvider>

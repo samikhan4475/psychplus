@@ -1,5 +1,5 @@
 import { PaymentDetailSchemaType } from './payment-schema'
-import { PaymentMethod } from './types'
+import { PaymentMethod, PaymentType } from './types'
 
 const paymentMethodRequiredFields: Record<
   PaymentMethod,
@@ -29,11 +29,11 @@ const maskCardNumber = (lastDigits: string): string => {
   return `****-****-***-${lastDigits}`
 }
 
-const getInitialValues = () => ({
+const getInitialValues = (appointmentId?: number) => ({
   paymentMethod: PaymentMethod.CreditCard,
-  paymentType: [],
-  coInsApp: [],
-  coPayApp: [],
+  paymentType: appointmentId ? [PaymentType.CoPay, PaymentType.CoIns] : [],
+  coInsApp: appointmentId ? [`${appointmentId}`] : [],
+  coPayApp: appointmentId ? [`${appointmentId}`] : [],
   coInsAmount: '',
   coPayAmount: '',
   remainingBalance: '',

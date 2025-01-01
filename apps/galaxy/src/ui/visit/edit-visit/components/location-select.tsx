@@ -16,6 +16,7 @@ import { SchemaType } from '../schema'
 
 const LocationSelect = ({ states }: { states: StateCodeSet[] }) => {
   const form = useFormContext<SchemaType>()
+  const [loading, setLoading] = useState<boolean>(false)
   const [locations, setLocations] = useState<SelectOptionType[]>([])
   const [stateCode, isServiceTimeDependent] = useWatch({
     control: form.control,
@@ -27,9 +28,11 @@ const LocationSelect = ({ states }: { states: StateCodeSet[] }) => {
       states.filter((state) => state.stateCode === stateCode)?.[0] || {}
     if (!state.id) return
     form.resetField('location')
+    setLoading(true)
     getClinicLocations(state.id).then((res) => {
+      setLoading(false)
       if (res.state === 'error') {
-        toast.error('Failed to fetch locations')
+        toast.error(res.error || 'Failed to fetch locations')
         return setLocations([])
       }
       setLocations(res.data)
@@ -44,6 +47,7 @@ const LocationSelect = ({ states }: { states: StateCodeSet[] }) => {
         buttonClassName="h-6 w-full"
         field="location"
         disabled={!isServiceTimeDependent}
+        loading={loading}
       />
       <FormFieldError name={'location'} />
     </FormFieldContainer>

@@ -11,24 +11,36 @@ import { PaymentDetailSchemaType } from '../payment-schema'
 import { useStore } from '../store'
 import { AppointmentOptionType } from '../types'
 import { twoDecimal } from '../utils'
+import { useEffect } from 'react'
 
 interface CopayAppoinmentProps {
   disabled?: boolean
   patientId: string
+  appointmentId?: number
 }
 
 const CopayAppoinmentSelect = ({
   disabled,
+  appointmentId,
   patientId,
 }: CopayAppoinmentProps) => {
   const form = useFormContext<PaymentDetailSchemaType>()
 
   const coPayMap = useStore((state) => state.coPayMap)
 
+  const amount = appointmentId ? coPayMap[appointmentId] : undefined
+
   const options = useAppointmentOptions({
     patientId,
     paymentType: AppointmentOptionType.CoPay,
   })
+
+  useEffect(() => {
+    if (!appointmentId) return
+    if (amount) {
+      form.setValue('coPayAmount', twoDecimal(amount))
+    }
+  }, [appointmentId, amount])
 
   const handleChange = (selectedIds: string[]) => {
     const totalCoPay = selectedIds.reduce(

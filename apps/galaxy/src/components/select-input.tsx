@@ -28,6 +28,7 @@ const SelectInput = <T extends string>({
   tooltip,
   required,
   loading,
+  disabled,
   ...selectProps
 }: SelectInputProps<T>) => {
   const form = useFormContext()
@@ -65,6 +66,7 @@ const SelectInput = <T extends string>({
             <Select.Root
               size="1"
               onValueChange={onValueChange ?? field.onChange}
+              disabled={disabled || loading}
               {...rest}
               {...selectProps}
             >

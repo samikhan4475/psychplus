@@ -1,4 +1,12 @@
-import { Cosigner, Metadata } from '@/types'
+import {
+  Clinic,
+  Metadata,
+  ServiceGroup,
+  ServiceRoom,
+  Cosigner,
+  ServiceUnit,
+} from '@/types'
+import { Specialist } from '@/ui/schedule/types'
 
 type PaymentType =
   | 'CoPay'
@@ -42,6 +50,7 @@ interface Appointment {
   appointmentDateTime?: string
   name: string
   age: number
+  patientId: number
   clinicLocation: string
   state: string
   stateCode: string
@@ -60,6 +69,9 @@ interface Appointment {
   providerName: string
   physicianName: string
   providerType: string
+  dischargeDate: string
+  dischargeLocationName: string
+  isEdDischarge: boolean
   visitType: string
   visitSequence: string
   visitMedium: string
@@ -78,23 +90,10 @@ interface Appointment {
   locationId: string
   locationName: string
   locationTimezoneId: string
+  unitResource: ServiceUnit
+  roomResource: ServiceRoom
+  groupResource: ServiceGroup
   physicianStaffId?: string
-  unitResource: {
-    id: string
-    metadata: Metadata
-    locationId: string
-    serviceId: string
-    unit: string
-    coSignerId: number
-  }
-  groupResource: {
-    id: string
-    metadata: Metadata
-    locationId: string
-    serviceId: string
-    group: string
-    coSignerId: number
-  }
   room: string
   diagnosis: Diagnosis[]
   cptCodes: string[]
@@ -103,9 +102,12 @@ interface Appointment {
   authorizationDate: string
   dateOfAdmission: string
   lastCoverageDate: string
-  facilityAdmissionId: string
+  paymentResponsibility: string
+  facilityAdmissionDetailId: string
+  facilityAdmissionId: number
   lengthOfStay: number
-  patientId: number
+  isPrimaryProviderType: boolean
+  noteSignedStatus: string
   startDate?: string
   endDate?: string
   duration?: number
@@ -118,7 +120,74 @@ interface Appointment {
   cptAddonCodes: CptCode[]
   cptModifiersCodes: CptCode[]
   providerStaffId?: number
+  groupTherapyTypeCode: string
   IsPatientHadAnyCheckedOutVisit?: boolean
 }
 
-export { type Appointment, type PaymentType, type CptCode }
+interface BookVisitPayload {
+  admissionId?: string
+  admissionLegalStatus?: string
+  appointmentId: number
+  admissionDate?: string
+  appointmentStatus?: string
+  authorizationDate?: string
+  authorizationNumber?: string
+  dischargeDate?: string
+  dischargeLocation?: string
+  durationMinutes: number
+  encounterReason?: string
+  encounterType?: string
+  facilityAppointmentStatus?: string
+  visitFrequency: number
+  groupId?: string
+  groupTherapyTypeCode?: string
+  insuranceVerificationStatusCode?: string
+  isEdVisit?: boolean
+  isFollowup: boolean
+  isOverridePermissionProvided: boolean
+  isPrimaryProviderType: boolean
+  isProceedPermissionProvided: boolean
+  isSelfPay?: boolean
+  lastAuthorizationCoveredDate?: string
+  locationId: string
+  patientId: number
+  paymentResponsibilityTypeCode?: string
+  pharmacyName?: string
+  providerType?: string
+  reason?: string
+  roomId?: string
+  serviceId: string
+  specialistStaffId: number
+  startDate: string
+  stateCode: string
+  stateId?: string
+  type: string
+  unitId?: string
+  visitSequenceType?: string
+  visitTypeId?: string
+}
+
+interface BookVisitResponse {
+  id: number
+  metadata: Metadata
+  status: string
+  type: string
+  encounterNumber: string
+  encounterTypeCode: number
+  clinic: Clinic
+  specialist: Specialist
+  specialistTypeCode: number
+  locationId: string
+  serviceId: string
+  physicianStaffId: number
+  physicianName: string
+  startDate: string
+  endDate: string
+  duration: number
+  coPay: number
+  virtualRoomLink: string
+  isCopayPaid: boolean
+  isSelfPay: boolean
+}
+
+export type { Appointment, BookVisitPayload, BookVisitResponse, Diagnosis, PaymentType, CptCode }

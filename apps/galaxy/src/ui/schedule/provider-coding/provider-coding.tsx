@@ -1,29 +1,33 @@
 'use client'
 
 import { useEffect } from 'react'
-import { Flex, ScrollArea } from '@radix-ui/themes'
+import { Flex } from '@radix-ui/themes'
 import { LoadingPlaceholder } from '@/components'
 import { ProviderCodingFilters } from './provider-coding-filters'
-import { ProvierCodingTableView } from './provider-coding-table-view'
+import { ProviderCodingTableView } from './provider-coding-table-view'
 import { useStore } from './store'
+import { getLocalTimeZone, startOfWeek, today } from '@internationalized/date'
+import { START_OF_WEEK_LOCALE } from '../constants'
 
 const ProviderCoding = () => {
-  const { fetchProviderCodingView, loading } = useStore((state) => ({
+  const { fetchProviderCodingView, loading, setDates } = useStore((state) => ({
     fetchProviderCodingView: state.fetchProviderCodingView,
     loading: state.loading,
+    setDates: state.setDates,
   }))
+
   useEffect(() => {
+    const timeZone = getLocalTimeZone()
+    const currentDate = today(timeZone)
+    const weekStartDateValue = startOfWeek(currentDate, START_OF_WEEK_LOCALE)
+    setDates(weekStartDateValue.toDate(timeZone))
     fetchProviderCodingView()
   }, [])
 
   return (
-    <Flex direction="column" className="h-full overflow-auto">
-      <ScrollArea className="flex-1">
-        <Flex direction="column" className="flex-1">
-          <ProviderCodingFilters />
-          {loading ? <LoadingPlaceholder /> : <ProvierCodingTableView />}
-        </Flex>
-      </ScrollArea>
+    <Flex direction="column" className="h-full !overflow-hidden">
+      <ProviderCodingFilters />
+      {loading ? <LoadingPlaceholder /> : <ProviderCodingTableView />}
     </Flex>
   )
 }

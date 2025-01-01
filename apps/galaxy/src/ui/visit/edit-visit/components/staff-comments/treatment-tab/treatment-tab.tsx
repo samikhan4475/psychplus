@@ -29,7 +29,7 @@ const TreatmentTab = ({ appointmentId }: { appointmentId: number }) => {
     const result = await getPatientStaffCommentsAction(payload)
 
     if (result.state === 'error') {
-      toast.error(result.error ?? 'Error while fetching Staff Comments')
+      toast.error(result.error || 'Error while fetching Staff Comments')
       return setLoading(false)
     }
     setComments(result?.data?.comments)
@@ -45,7 +45,10 @@ const TreatmentTab = ({ appointmentId }: { appointmentId: number }) => {
       {loading ? (
         <LoadingPlaceholder className="bg-white min-h-[80px] rounded-1 border border-gray-5" />
       ) : (
-        <TreatmentTable data={comments} fetchStaffComments={fetchStaffComments} />
+        <TreatmentTable
+          data={comments}
+          fetchStaffComments={fetchStaffComments}
+        />
       )}
     </Flex>
   )
