@@ -3,7 +3,7 @@
 import { ScrollArea } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
 import { DataTable, FormError } from '@/components'
-import { TherapySchemaType } from '../therapy-schema'
+import { TherapySchemaType } from '../individual/therapy-schema'
 import { TherapyTableColumns } from './therapy-table-columns'
 
 interface TherapyData {

@@ -1,1 +1,0 @@
-export { TherapyLoader as TherapyWidget} from "./therapy-loader"

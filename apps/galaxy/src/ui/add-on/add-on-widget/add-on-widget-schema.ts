@@ -1,6 +1,6 @@
+import { TherapySchema } from '@/ui/therapy/therapy-widget/individual/therapy-schema'
 import { DateValue } from 'react-aria-components'
 import { z } from 'zod'
-import { TherapySchema } from '@/ui/therapy/therapy-widget/therapy-schema'
 
 type AddOnWidgetSchemaType = z.infer<typeof addOnWidgetSchema>
 const ModalityTransferenceData = z.array(
@@ -28,7 +28,6 @@ const addOnWidgetSchema = z
       .optional(),
     transferenceDescription: ModalityTransferenceData,
     psychoanalyticTechnique: ModalityTransferenceData,
-    additionalTherapyDetail: z.string().optional(),
     additionalPsychoAnalysisDetail: z.string().optional(),
     interactiveComplexity: z.boolean().optional(),
     maladaptiveCommunication: z.boolean().optional(),

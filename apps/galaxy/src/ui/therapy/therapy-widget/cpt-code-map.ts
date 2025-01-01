@@ -9,12 +9,6 @@ const addOnCodes: CodesWidgetItem[] = [
   { key: CptCodeKeys.PRIMARY_CODE_KEY, code: '90791' },
 ]
 
-const theratimeSpentCodes = {
-  timeRangeOne: '90832',
-  timeRangeTwo: '90834',
-  timeRangeThree: '90837',
-}
-
 const getCptCodeMap = (visitType: string, visitSequence: string) => {
   let cptCodeMap = {}
   switch (visitType) {
@@ -24,14 +18,18 @@ const getCptCodeMap = (visitType: string, visitSequence: string) => {
         break
       }
       cptCodeMap = {
-        therapyTimeSpent: theratimeSpentCodes,
+        therapyTimeSpent: {
+          timeRangeOne: '90832',
+          timeRangeTwo: '90834',
+          timeRangeThree: '90837',
+        },
       }
       break
     case 'FamilyPsychotherapy':
       cptCodeMap = {
         therapySessionParticipants: {
-          'Patient&Partner': '90847',
-          'Patient&Family': '90846',
+          FamilyWithOutPatientPresent: '90846',
+          FamilyWithPatientPresent: '90847',
         },
       }
       break

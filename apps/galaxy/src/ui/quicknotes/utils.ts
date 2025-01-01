@@ -163,7 +163,7 @@ const widgets: Array<WidgetType> = [
   },
   {
     component: TherapyWidget,
-    id: QuickNoteSectionName.QuickNoteSectionTherapy,
+    id: QuickNoteSectionName.QuickNoteSectionIndividualTherapy,
     actualNoteComponent: Therapy,
   },
   {

@@ -2,7 +2,7 @@ import { ColumnDef } from '@tanstack/react-table'
 import { useFormContext } from 'react-hook-form'
 import { CODESETS } from '@/constants'
 import { useCodesetCodes } from '@/hooks'
-import { TherapySchemaType } from '../therapy-schema'
+import { TherapySchemaType } from '../individual/therapy-schema'
 import { TableCellLongText } from './table-cell'
 import { TableHeadingCell } from './table-heading-cell'
 

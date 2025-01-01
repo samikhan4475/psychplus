@@ -8,7 +8,8 @@ const getInitialValues = (): TherapySchemaType => ({
   timeRangeOne: '',
   timeRangeTwo: '',
   timeRangeThree: '',
-  therapySessionParticipants: TherapySessionParticipantsEnum.Values.Patients,
+  therapySessionParticipants:
+    TherapySessionParticipantsEnum.Values.PatientsOnly,
   patientOther: '',
   therapyDetailsModality: [],
   therapyDetailsInterventions: [],
@@ -16,13 +17,11 @@ const getInitialValues = (): TherapySchemaType => ({
 })
 
 const SESSION_PARTICIPANT_OPTIONS = [
-  { label: 'Patients', value: 'Patients' },
+  { label: 'Patients Only', value: 'PatientsOnly' },
   {
     label: 'Patient with Parent/Guardian',
     value: 'PatientwithPatient/Guardian',
   },
-  { label: 'Patient & Partner', value: 'Patient&Partner' },
-  { label: 'Patient & Family', value: 'Patient&Family' },
   { label: 'Patient and Other', value: 'Patient&Other' },
 ]
 

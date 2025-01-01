@@ -4,22 +4,22 @@ import { useSearchParams } from 'next/navigation'
 import { FormProvider } from 'react-hook-form'
 import { WidgetFormContainer } from '@/components'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
-import { AdditionalTherapyDetailBlock } from './blocks/additional-therapy-detail'
+import { AdditionalTherapyDetailBlock } from '../blocks/additional-therapy-detail'
+import { SaveButton } from '../blocks/save-button'
+import { TherapyTableBlock } from '../blocks/therapy-table-block'
 import { ClearButton } from './blocks/clear-button'
-import { SaveButton } from './blocks/save-button'
 import { TherapySessionParticipantsBlock } from './blocks/session-participants'
-import { TherapyTableBlock } from './blocks/therapy-table-block'
 import { TherapyTimeSpentBlock } from './blocks/time-spent'
 import { transformOut } from './data'
 import { useTherapyForm } from './therapy-form'
-import { TherapySchemaType } from './therapy-schema'
+import { FamilyTherapySchemaType } from './therapy-schema'
 
 interface TherapyWidgetProps {
   patientId: string
-  initialValue: TherapySchemaType
+  initialValue: FamilyTherapySchemaType
 }
 
-const TherapyWidget = ({ patientId, initialValue }: TherapyWidgetProps) => {
+const FamilyTherapyView = ({ patientId, initialValue }: TherapyWidgetProps) => {
   const form = useTherapyForm(initialValue)
   const appointmentId = useSearchParams().get('id') as string
   const visitSequence = useSearchParams().get('visitSequence') || ''
@@ -29,10 +29,10 @@ const TherapyWidget = ({ patientId, initialValue }: TherapyWidgetProps) => {
       <WidgetFormContainer
         patientId={patientId}
         tags={[
-          QuickNoteSectionName.QuickNoteSectionTherapy,
+          QuickNoteSectionName.QuickNoteSectionFamilyTherapy,
           QuickNoteSectionName.QuicknoteSectionCodes,
         ]}
-        widgetId={QuickNoteSectionName.QuickNoteSectionTherapy}
+        widgetId={QuickNoteSectionName.QuickNoteSectionFamilyTherapy}
         title="Therapy"
         getData={transformOut(
           patientId,
@@ -56,4 +56,4 @@ const TherapyWidget = ({ patientId, initialValue }: TherapyWidgetProps) => {
   )
 }
 
-export { TherapyWidget }
+export { FamilyTherapyView }

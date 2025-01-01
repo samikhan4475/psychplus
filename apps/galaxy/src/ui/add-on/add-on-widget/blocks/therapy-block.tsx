@@ -4,10 +4,10 @@ import { useEffect } from 'react'
 import { Flex, Text } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
 import { CheckboxInput } from '@/components'
-import { TherapySessionParticipantsBlock } from '@/ui/therapy/therapy-widget/blocks/session-participants'
 import { TherapyTableBlock } from '@/ui/therapy/therapy-widget/blocks/therapy-table-block'
-import { TherapyTimeSpentBlock } from '@/ui/therapy/therapy-widget/blocks/time-spent'
 import { TherapyDetail } from './therapy-details'
+import { TherapyTimeSpentBlock } from '@/ui/therapy/therapy-widget/individual/blocks/time-spent'
+import { TherapySessionParticipantsBlock } from '@/ui/therapy/therapy-widget/individual/blocks/session-participants'
 
 const DEFAULT_THERAPY_DETAIL =
   'Patient presented with signs of transference, indicating a strong misplacement of feelings associated with unresolved past experiences. Provider engaged in schema exploration with patient to gain insight regarding patient’s irrational thoughts and maladaptive behavior patterns. Provider encouraged patient to self-reflect to make connections between dysfunctional beliefs, behaviors, and assumptions that may have affected their perception. Continued exploration of irrational thoughts and behaviors is recommended to map all types and directions of transference.'

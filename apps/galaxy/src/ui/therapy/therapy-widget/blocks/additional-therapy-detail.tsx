@@ -6,7 +6,8 @@ import {
   FormFieldContainer,
   TextAreaInput,
 } from '@/components'
-import { TherapySchemaType } from '../therapy-schema'
+import { TherapySchemaType } from '../individual/therapy-schema'
+
 
 const AdditionalTherapyDetailBlock = () => {
   const {

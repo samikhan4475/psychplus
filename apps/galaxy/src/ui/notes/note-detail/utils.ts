@@ -22,7 +22,6 @@ import { SpravatoNoteDetailView } from '@/ui/quicknotes/actual-note-view/spravat
 import { SubstanceUseHxNoteDetailView } from '@/ui/quicknotes/actual-note-view/substance-use-hx/substance-use-hx-note-detail-view'
 import { TcmNoteDetailView } from '@/ui/quicknotes/actual-note-view/tcm/tcm-note-detail-view'
 import { TherapyAssessmentPlanNoteDetailView } from '@/ui/quicknotes/actual-note-view/therapy-assessment-plan/therapy-assessment-plan-note-detail-view'
-import { TherapyNoteDetailView } from '@/ui/quicknotes/actual-note-view/therapy/therapy-note-detail-view'
 import { TmsNoteDetailView } from '@/ui/quicknotes/actual-note-view/tms/tms-note-detail-view'
 import { VitalsNoteDetailView } from '@/ui/quicknotes/actual-note-view/vitals/vitals-note-detail-view'
 import { WorkingDiagnosisNoteDetailView } from '@/ui/quicknotes/actual-note-view/working-diagnosis/working-diagnosis-note-detail-view'
@@ -110,10 +109,7 @@ const widgetsArray: Array<WidgetType> = [
     id: QuickNoteSectionName.QuicknoteSectionCodes,
     actualNoteDetailComponent: CodesNoteDetailsView,
   },
-  {
-    id: QuickNoteSectionName.QuickNoteSectionTherapy,
-    actualNoteDetailComponent: TherapyNoteDetailView,
-  },
+ 
   {
     id: QuickNoteSectionName.ProcedureECT,
     actualNoteDetailComponent: EctNoteDetailView,

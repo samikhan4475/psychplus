@@ -4,7 +4,7 @@ import React from 'react'
 import { DropdownMenu, Flex, Text } from '@radix-ui/themes'
 import { CirclePlus, PlusIcon } from 'lucide-react'
 import { useFormContext } from 'react-hook-form'
-import { TherapySchemaType } from '../therapy-schema'
+import { TherapySchemaType } from '../individual/therapy-schema'
 
 interface ThearpyDataOption {
   value: string
