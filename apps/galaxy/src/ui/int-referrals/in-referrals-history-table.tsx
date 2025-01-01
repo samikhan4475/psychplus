@@ -5,14 +5,16 @@ import { ScrollArea } from '@radix-ui/themes'
 import toast from 'react-hot-toast'
 import { DataTable, LoadingPlaceholder } from '@/components'
 import { PatientReferral } from '@/types'
-import { getPatientReferralsHistoryAction } from './actions'
-import { columns } from './referrals-history-columns'
+import { getPatientReferralsHistoryAction } from '../referrals/patient-referrals-widget/actions'
+import { columns } from './int-referrals-history-columns'
 
 interface ReferralsHistoryTableProps {
   referralId: string
 }
 
-const ReferralsHistoryTable = ({ referralId }: ReferralsHistoryTableProps) => {
+const IntReferralsHistoryTable = ({
+  referralId,
+}: ReferralsHistoryTableProps) => {
   const [loading, setLoading] = useState(false)
   const [data, setData] = useState<PatientReferral[]>([])
 
@@ -24,6 +26,7 @@ const ReferralsHistoryTable = ({ referralId }: ReferralsHistoryTableProps) => {
       } else if (response.state === 'success') {
         setData(response?.data ?? [])
       }
+      
       setLoading(false)
     })
   }, [referralId])
@@ -45,4 +48,4 @@ const ReferralsHistoryTable = ({ referralId }: ReferralsHistoryTableProps) => {
   )
 }
 
-export { ReferralsHistoryTable }
+export { IntReferralsHistoryTable }

@@ -7,6 +7,9 @@ const isPrescriber = (staff?: StaffResource) =>
 const isReferralDeleted = (resourceStatus = '') =>
   resourceStatus === ReferralStatuses.Deleted
 
+const isContactMadeScheduledOrCancelled = (ContactMadeStatus = '') =>
+  ContactMadeStatus ===  ContactMadeStatuses.Scheduled || ContactMadeStatus ===   ContactMadeStatuses.Cancelled
+
 const getDefaultContactMadeStatuses = () => [
   ContactMadeStatuses.NotSet,
   ContactMadeStatuses.Pending,
@@ -19,4 +22,4 @@ const getDefaultContactMadeStatuses = () => [
   ContactMadeStatuses.SecondAttempt,
   ContactMadeStatuses.ThirdAttempt,
 ]
-export { isPrescriber, isReferralDeleted, getDefaultContactMadeStatuses }
+export { isPrescriber, isReferralDeleted, getDefaultContactMadeStatuses ,isContactMadeScheduledOrCancelled}

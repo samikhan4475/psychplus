@@ -23,6 +23,17 @@ const transformOutProviderNames = (data: string[] = []): string[] => {
   return data?.map((item) => item?.split(PROVIDER_NAME_PRIFIX)?.[0])
 }
 
+const transformOutStateValue = (
+  value: string | undefined | null,
+  options: SelectOptionType[],
+): string | undefined => {
+  if (!value) {
+    return undefined
+  }
+  const foundOption = options.find((option) => option.value === value)
+  return foundOption?.label
+}
+
 const transformOutPatientRow = ({
   id,
   patientName: { firstName = '', lastName = '', middleName = '' },
@@ -51,4 +62,5 @@ export {
   transformInStaffOptions,
   transformOutPatientRow,
   transformOutProviderNames,
+  transformOutStateValue,
 }

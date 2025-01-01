@@ -22,8 +22,9 @@ interface PatientReferralsPayload {
 }
 interface GetPatientReferralsParams {
   patientIds: string[]
-  payload: Partial<PatientReferralsPayload>
+  payload: Partial<PatientReferralsPayload> | object
   page?: number
+  IsIncludeInsurance?: boolean
 }
 export {
   QueryByNextDays,

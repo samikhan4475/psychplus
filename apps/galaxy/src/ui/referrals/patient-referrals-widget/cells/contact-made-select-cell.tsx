@@ -9,7 +9,7 @@ import { PatientReferral } from '@/types'
 import { updatePatientReferralAction } from '../../actions'
 import { DISABLE_CODESET_ATTRIBUTE } from '../constants'
 import { StatusSelect } from '../status-select'
-import { isReferralDeleted } from '../utils'
+import { isContactMadeScheduledOrCancelled, isReferralDeleted } from '../utils'
 
 interface Props extends PropsWithRow<PatientReferral> {
   disabled?: boolean
@@ -42,7 +42,11 @@ const ContactMadeSelectCell = ({
       options={options}
       value={selectedValue}
       onValueChange={updateContactMadeStatus}
-      disabled={disabled || isReferralDeleted(referral?.resourceStatus)}
+      disabled={
+        disabled ||
+        isReferralDeleted(referral?.resourceStatus) ||
+        isContactMadeScheduledOrCancelled(referral?.contactStatus)
+      }
     />
   )
 }

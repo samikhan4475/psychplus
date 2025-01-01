@@ -12,7 +12,10 @@ const getPatientReferralsHistoryAction = async ({
 }: GetPatientReferralsParams): Promise<api.ActionResult<PatientReferral[]>> => {
   const response = await api.POST<PatientReferral[]>(
     api.GET_PATIENT_REFERRALS_HISTORY_ENDPOINT(referralId),
-    {},
+    {
+      IsIncludeInsurance: true,
+      IsIncludeNextAndPastVisits: true,
+    },
   )
 
   if (response.state === 'error') {
