@@ -1,17 +1,22 @@
 import { create } from 'zustand'
-import { LabOrders, LabResult } from '@/types'
+import { LabOrderResponseList, LabOrders, LabResult } from '@/types'
 import { getLabOrdersAction } from '../actions'
 import { LabOrdersTabs } from '../constant'
-import { GetLabOrdersParams } from '../types'
+import { LabOrderPayload } from '../types'
 
 interface StoreState {
-  data: LabOrders[]
+  data: LabOrderResponseList
   loading: boolean
   error?: string
-  payload?: GetLabOrdersParams
+  payload?: LabOrderPayload
   activeTab: string
   viewedTabs: Set<string>
-  fetch: (payload: GetLabOrdersParams) => void
+  fetch: (
+    appointmentId: string,
+    payload: LabOrderPayload,
+    page?: number,
+    reset?: boolean,
+  ) => void
   setActiveTab: (tab: string) => void
   addLabResult: (labResult: LabResult) => void
   setLabResult: (labeResult: LabResult) => void
@@ -23,10 +28,23 @@ interface StoreState {
   setTestLabResult: (labResult: LabResult[]) => void
   updateLabOrdersList: (labOrder: LabOrders) => void
   updateLabOrderTestList: (orderId: string, testId: string) => void
+  pageCache: Record<number, LabOrderResponseList>
+  next: () => void
+  prev: () => void
+  jumpToPage: (page: number) => void
+  setAppointmentId: (appointmentId: string) => void
+  page: number
+  appointmentId: string
 }
 
 const useStore = create<StoreState>((set, get) => ({
-  data: [],
+  appointmentId: '',
+  page: 1,
+  pageCache: {},
+  data: {
+    labOrders: [],
+    total: 0,
+  },
   testLabResult: [],
   setTestLabResult: (labResult) => {
     set({
@@ -53,7 +71,7 @@ const useStore = create<StoreState>((set, get) => ({
   viewedTabs: new Set([LabOrdersTabs.LAB_ORDERS]),
   addLabResult: (labResult) => {
     const { data, testLabResult } = get()
-    const updatedData = data?.map((labOrder) => {
+    const updatedData = data?.labOrders.map((labOrder) => {
       if (labOrder.id === labResult.orderId) {
         return {
           ...labOrder,
@@ -64,7 +82,10 @@ const useStore = create<StoreState>((set, get) => ({
     })
 
     set({
-      data: updatedData,
+      data: {
+        ...data,
+        labOrders: updatedData,
+      },
       testLabResult: [
         ...testLabResult.filter((labResult) => labResult.id),
         labResult,
@@ -75,7 +96,8 @@ const useStore = create<StoreState>((set, get) => ({
 
   setLabResult: async (labResult: LabResult) => {
     const { data, testLabResult } = get()
-    const updatedData = data?.map((labOrder) => {
+
+    const updatedLabOrders = data.labOrders.map((labOrder) => {
       if (labOrder.id === labResult.orderId) {
         const updatedLabResults = labOrder.labResults.map((result) =>
           result.id === labResult.id ? { ...result, ...labResult } : result,
@@ -87,17 +109,22 @@ const useStore = create<StoreState>((set, get) => ({
       }
       return labOrder
     })
+
     set({
-      data: updatedData,
+      data: {
+        ...data,
+        labOrders: updatedLabOrders,
+      },
       testLabResult: testLabResult.map((result) =>
         result.id === labResult.id ? labResult : result,
       ),
       editAbleLabResults: undefined,
     })
   },
-  fetch: async (payload: GetLabOrdersParams) => {
+
+  fetch: async (appointmentId, payload, page = 1, reset = false) => {
     set({ error: undefined, loading: true, payload })
-    const result = await getLabOrdersAction(payload)
+    const result = await getLabOrdersAction({ appointmentId, payload, page })
 
     if (result.state === 'error') {
       set({
@@ -108,9 +135,13 @@ const useStore = create<StoreState>((set, get) => ({
       set({
         data: result.data,
         loading: false,
+        pageCache: reset
+          ? { [page]: result.data }
+          : { ...get().pageCache, [page]: result.data },
       })
     }
   },
+
   setActiveTab: (activeTab) => {
     const { viewedTabs } = get()
     viewedTabs.add(activeTab)
@@ -122,16 +153,24 @@ const useStore = create<StoreState>((set, get) => ({
   },
   updateLabOrdersList: (labOrder) => {
     const { data } = get()
-    const index = data?.findIndex((item) => item.id === labOrder.id) ?? 0
+    const index =
+      data?.labOrders.findIndex((item) => item.id === labOrder.id) ?? 0
 
     if (index === -1) {
-      const newData = [labOrder, ...data]
+      const newData = {
+        ...data,
+        labOrders: [labOrder, ...data.labOrders],
+      }
       set({
         data: newData,
       })
     } else {
-      const newData = [...data]
-      newData[index] = { ...newData[index], ...labOrder }
+      const newLabOrders = [...data.labOrders]
+      newLabOrders[index] = { ...newLabOrders[index], ...labOrder }
+      const newData = {
+        ...data,
+        labOrders: newLabOrders,
+      }
       set({
         data: newData,
       })
@@ -139,8 +178,8 @@ const useStore = create<StoreState>((set, get) => ({
   },
   updateLabOrderTestList: (orderId, testId) => {
     const { data } = get()
-    const index = data.findIndex((e) => e.id === orderId)
-    const newLabTests = data[index]?.labTests.map((item) => {
+    const index = data.labOrders.findIndex((e) => e.id === orderId)
+    const newLabTests = data.labOrders[index]?.labTests.map((item) => {
       if (item.id === testId) {
         return {
           ...item,
@@ -149,15 +188,53 @@ const useStore = create<StoreState>((set, get) => ({
       }
       return item
     })
-    const newData = [...data]
-    newData[index] = {
-      ...newData[index],
+    const newLabOrders = [...data.labOrders]
+    newLabOrders[index] = {
+      ...newLabOrders[index],
       labTests: [...newLabTests],
     }
+    const newData = {
+      ...data,
+      labOrders: [...newLabOrders],
+    }
+
     set({
-      data: [...newData],
+      data: newData,
     })
   },
+  next: () => {
+    const page = get().page + 1
+
+    if (get().pageCache[page]) {
+      return set({
+        data: get().pageCache[page],
+        page,
+      })
+    }
+    get().fetch(get().appointmentId!, get().payload!, page)
+  },
+  prev: () => {
+    const page = get().page - 1
+
+    set({
+      data: get().pageCache[page],
+      page,
+    })
+  },
+  jumpToPage: (page: number) => {
+    if (page < 1) {
+      return
+    }
+
+    if (get().pageCache[page]) {
+      return set({
+        data: get().pageCache[page],
+        page,
+      })
+    }
+    get().fetch(get().appointmentId, get().payload!, page)
+  },
+  setAppointmentId: (appointmentId: string) => set({ appointmentId }),
 }))
 
 export { useStore }

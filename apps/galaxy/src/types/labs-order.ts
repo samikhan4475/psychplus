@@ -116,5 +116,15 @@ interface LabOrders {
   recordStatus: string
   orderStatus: LabOrderStatus
 }
+interface LabOrderResponseList {
+  labOrders: LabOrders[]
+  total: number
+}
 
-export type { LabOrders, LabTest, LabResult, LabResultPayload }
+export {
+  type LabOrders,
+  type LabTest,
+  type LabResult,
+  type LabOrderResponseList,
+  type LabResultPayload,
+}

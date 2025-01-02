@@ -1,5 +1,6 @@
 import { Row } from '@tanstack/react-table'
-import { LabOrders, LabResult } from '@/types'
+import { DateValue } from 'react-aria-components'
+import { LabOrders, LegalName, Metadata } from '@/types'
 
 type LabOrderStatus =
   | 'Draft'
@@ -16,10 +17,35 @@ type LabResultRow = Row<LabResult>
 type LabOrderPayload = {
   appointmentIds: string[]
   patientId: string[]
+  orderStatus?: string
+  orderCreatedDate?: DateValue | null | string
+  orderingStaffId?: string
+  labTestName?: string
+  location?: string
+  labTestCode?: string
 }
-interface GetLabOrdersParams {
-  appointmentId: string
-  payload?: LabOrderPayload
+
+interface LabResult {
+  id: string
+  metadata: Metadata
+  labTestId: string
+  orderId: string
+  observationTime: string
+  resultCode: string
+  resultName: string
+  resultValue: string
+  resultValueUnit?: string
+  recommendedValue?: string
+  statusCode: string
+  abnormalRangeCode: string
+  physicianComments: string
+  externalResultId: string
+  labComments: string
+  resultValueType: string
+  valueDescription: string
+  recordStatus: string
+  recomendedValue: string
+  patientLegalName: LegalName
 }
 
 export enum FlagStatus {
@@ -36,6 +62,6 @@ export type {
   LabOrderRow,
   LabOrderStatus,
   LabOrderPayload,
-  GetLabOrdersParams,
+  LabResult,
   LabResultRow,
 }

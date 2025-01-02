@@ -90,20 +90,18 @@ const columns: ColumnDef<LabOrders>[] = [
 
 const LabOrderTable = () => {
   const searchParams = useSearchParams()
-  const { data, fetch, loading } = useStore()
+  const { data, fetch, loading, setAppointmentId } = useStore()
   const { id } = useParams<{ id: string }>()
   const appointmentId = searchParams.get('id')
 
   useEffect(() => {
     if (appointmentId) {
+      setAppointmentId(appointmentId)
       const payload = {
         patientId: [id],
         appointmentIds: [appointmentId],
       }
-      fetch({
-        appointmentId: appointmentId,
-        payload,
-      })
+      fetch(appointmentId, payload)
     }
   }, [appointmentId, id])
 
@@ -114,9 +112,15 @@ const LabOrderTable = () => {
       </Flex>
     )
   }
+
   return (
     <ScrollArea>
-      <DataTable data={data ?? []} columns={columns} disablePagination sticky />
+      <DataTable
+        data={data?.labOrders ?? []}
+        columns={columns}
+        disablePagination
+        sticky
+      />
     </ScrollArea>
   )
 }

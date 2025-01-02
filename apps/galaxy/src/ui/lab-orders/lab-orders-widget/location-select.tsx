@@ -12,7 +12,7 @@ const LocationSelect = () => {
       <FormFieldLabel>Location</FormFieldLabel>
       <SelectInput
         options={options}
-        field="location"
+        field="orderingLab"
         buttonClassName="w-[101px] h-6"
       />
     </FormFieldContainer>

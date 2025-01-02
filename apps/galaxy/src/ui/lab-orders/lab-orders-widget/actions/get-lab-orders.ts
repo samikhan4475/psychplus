@@ -1,22 +1,30 @@
 'use server'
 
 import * as api from '@/api'
-import { LabOrders } from '@/types'
+import { LabOrderResponseList, LabOrders } from '@/types'
+import { LABS_ORDER_TABLE_PAGE_SIZE } from '../constant'
 import { LabOrderPayload } from '../types'
 
 interface GetLabOrdersActionProps {
   appointmentId: string
   payload?: LabOrderPayload
+  page?: number
 }
 
 const getLabOrdersAction = async ({
   appointmentId,
   payload,
-}: GetLabOrdersActionProps): Promise<api.ActionResult<LabOrders[]>> => {
-  const response = await api.POST<LabOrders[]>(
-    api.GET_LAB_ORDERS(appointmentId),
-    payload,
-  )
+  page = 1,
+}: GetLabOrdersActionProps): Promise<
+  api.ActionResult<LabOrderResponseList>
+> => {
+  const url = new URL(api.GET_LAB_ORDERS(appointmentId))
+  const offset = (page - 1) * LABS_ORDER_TABLE_PAGE_SIZE
+
+  url.searchParams.append('limit', String(LABS_ORDER_TABLE_PAGE_SIZE))
+  url.searchParams.append('offset', String(offset))
+
+  const response = await api.POST<LabOrders[]>(`${url}`, payload)
 
   if (response.state === 'error') {
     return {
@@ -24,10 +32,12 @@ const getLabOrdersAction = async ({
       error: response.error,
     }
   }
-
   return {
     state: 'success',
-    data: response.data,
+    data: {
+      labOrders: response.data,
+      total: Number(response.headers.get('psychplus-totalresourcecount')),
+    },
   }
 }
 

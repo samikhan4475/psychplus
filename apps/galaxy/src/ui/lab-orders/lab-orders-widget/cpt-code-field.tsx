@@ -15,7 +15,7 @@ const CptCodeField = () => {
         size="1"
         placeholder="Search by CPT Code"
         className="border-pp-gray-2 h-6 w-[150px] border border-solid !outline-none [box-shadow:none]"
-        {...form.register('cptCode')}
+        {...form.register('labTestCode')}
       />
     </FormFieldContainer>
   )

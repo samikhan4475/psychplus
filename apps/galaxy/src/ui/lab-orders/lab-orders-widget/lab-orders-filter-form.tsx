@@ -1,6 +1,6 @@
 'use client'
 
-import { useParams } from 'next/navigation'
+import { useParams, useSearchParams } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons'
 import { Button } from '@radix-ui/themes'
@@ -8,57 +8,77 @@ import { DateValue } from 'react-aria-components'
 import { useForm, type SubmitHandler } from 'react-hook-form'
 import { z } from 'zod'
 import { FormContainer } from '@/components'
-import { formatDateToISOString } from '@/utils'
+import { formatDateToISOString, sanitizeFormData } from '@/utils'
 import { CptCodeField } from './cpt-code-field'
 import { LocationSelect } from './location-select'
 import { OrderBySelect } from './order-by-select'
 import { OrderDateField } from './order-date-field'
 import { StatusSelect } from './status-select'
+import { useStore } from './store'
 import { TestField } from './test-field'
 
 const schema = z.object({
-  orderDate: z.custom<DateValue | null>().nullable(),
-  orderBy: z.string().optional(),
-  test: z.string().trim().optional(),
-  location: z.string().optional(),
-  status: z.string().optional(),
-  cptCode: z.string().trim().optional(),
+  orderCreatedDate: z.custom<DateValue | null>().nullable(),
+  orderingStaffId: z.string().optional(),
+  labTestName: z.string().trim().optional(),
+  orderingLab: z.string().optional(),
+  orderStatus: z.string().optional(),
+  labTestCode: z.string().trim().optional(),
 })
 
 export type SchemaType = z.infer<typeof schema>
 
 const LabOrdersFilterForm = () => {
+  const searchParams = useSearchParams()
+  const { fetch } = useStore()
+  const appointmentId = searchParams.get('id')
+
   const { id } = useParams<{ id: string }>()
+
   const form = useForm<SchemaType>({
     resolver: zodResolver(schema),
     reValidateMode: 'onChange',
     defaultValues: {
-      orderDate: undefined,
-      orderBy: '',
-      test: '',
-      location: '',
-      status: '',
-      cptCode: '',
+      orderCreatedDate: undefined,
+      orderingStaffId: '',
+      labTestName: '',
+      orderingLab: '',
+      orderStatus: '',
+      labTestCode: '',
     },
   })
 
   const onClear = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault()
     form.reset({
-      orderDate: null,
-      orderBy: '',
-      test: '',
-      location: '',
-      status: '',
-      cptCode: '',
+      orderCreatedDate: undefined,
+      orderingStaffId: '',
+      labTestName: '',
+      orderingLab: '',
+      orderStatus: '',
+      labTestCode: '',
+    })
+    fetch(appointmentId!, {
+      appointmentIds: [appointmentId!],
+      patientId: [id],
     })
   }
 
   const onSubmit: SubmitHandler<SchemaType> = (data) => {
-    const _formattedData = {
+    const formattedData = {
       ...data,
-      orderDate: formatDateToISOString(data.orderDate),
-      patientId: id,
+      orderCreatedDate: formatDateToISOString(data.orderCreatedDate)?.split(
+        'T',
+      )[0],
+    }
+    const sanitizedData = sanitizeFormData(formattedData)
+    if (appointmentId) {
+      const payload = {
+        appointmentIds: [appointmentId],
+        patientId: [id],
+        ...sanitizedData,
+      }
+      fetch(appointmentId, payload)
     }
   }
 

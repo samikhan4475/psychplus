@@ -8,7 +8,7 @@ const OrderBySelect = () => {
     <FormFieldContainer className="flex-row items-center gap-1">
       <FormFieldLabel>Ordered By</FormFieldLabel>
       <AsyncSelect
-        field="orderBy"
+        field="orderingStaffId"
         placeholder="Select"
         fetchOptions={getProvidersOptionsAction}
         buttonClassName="w-full h-6"

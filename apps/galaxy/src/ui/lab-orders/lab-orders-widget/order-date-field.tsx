@@ -12,7 +12,7 @@ const OrderDateField = () => {
     <FormFieldContainer className="flex-row items-center gap-1">
       <FormFieldLabel>Order Date</FormFieldLabel>
       <I18nProvider locale="en-US">
-        <DatePickerInput field="sentFrom" className="w-[120px]" />
+        <DatePickerInput field="orderCreatedDate" className="w-[120px]" />
       </I18nProvider>
     </FormFieldContainer>
   )

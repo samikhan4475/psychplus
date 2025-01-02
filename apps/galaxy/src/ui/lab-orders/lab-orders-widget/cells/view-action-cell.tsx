@@ -1,6 +1,6 @@
+import { Row } from '@tanstack/react-table'
 import { AdaptiveRowActionsCell, type RowAction } from '@/components'
 import { LabResult } from '@/types'
-import { LabResultRow } from '../types'
 import { ViewActionEdit } from './view-action-edit'
 
 const rowActions: RowAction<LabResult>[] = [
@@ -11,7 +11,7 @@ const rowActions: RowAction<LabResult>[] = [
 ]
 
 interface ActionsCellProps {
-  row: LabResultRow
+  row: Row<LabResult>
 }
 
 const ViewActionsCell = ({ row }: ActionsCellProps) => {
