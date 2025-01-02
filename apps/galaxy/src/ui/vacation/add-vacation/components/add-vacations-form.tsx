@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { getLocalTimeZone } from '@internationalized/date'
 import { Box, Button, Flex, Grid, Text } from '@radix-ui/themes'
 import { differenceInMinutes, parseISO } from 'date-fns'
 import { useForm, useWatch } from 'react-hook-form'
@@ -59,14 +60,11 @@ const AddVacationForm = ({
     const body = {
       recordStatus: 'Active',
       staffId: Number(staffId),
-      startDate: data.fromDate?.toString(),
-      endDate: data.toDate?.toString(),
-      startTime: `${data.fromTime}:00`,
-      endTime: `${data.toTime}:00`,
+      startDateTime: data.fromDate?.toDate(getLocalTimeZone()).toISOString(),
+      endDateTime: data.toDate?.toDate(getLocalTimeZone()).toISOString(),
       duration: data.duration.toString(),
       vacationStatus: data.vacationStatus,
     }
-
     const result = await addVacation({ staffId, body })
     setIsLoading(false)
 

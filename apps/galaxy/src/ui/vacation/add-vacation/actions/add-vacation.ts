@@ -6,10 +6,8 @@ import { Metadata } from '@/types'
 interface VacationsBody {
   recordStatus: string
   staffId: number
-  startDate: string
-  endDate: string
-  startTime: string
-  endTime: string
+  startDateTime: string
+  endDateTime: string
   duration: string
   vacationStatus: string
 }
