@@ -1,0 +1,34 @@
+'use client'
+
+import { useFormContext } from 'react-hook-form'
+import { SelectableChip } from './selectable-chip'
+import { SelectableChipDetails } from './selectable-chip-details'
+
+type SelectableChipProps = Omit<
+  React.ComponentProps<typeof SelectableChip>,
+  'onClick' | 'selected'
+>
+
+interface MultiSelectChip extends SelectableChipProps {
+  field: string
+  details?: React.ComponentProps<typeof SelectableChipDetails>
+}
+
+const MultiSelectChip = ({ field, details, ...props }: MultiSelectChip) => {
+  const form = useFormContext()
+
+  const isSelected = form.watch(field) === true
+
+  const toggleSelected = () => {
+    form.clearErrors(details?.field)
+    form.setValue(field, !form.getValues(field))
+  }
+
+  return (
+    <SelectableChip selected={isSelected} onClick={toggleSelected} {...props}>
+      {isSelected && details && <SelectableChipDetails {...details} />}
+    </SelectableChip>
+  )
+}
+
+export { MultiSelectChip }
