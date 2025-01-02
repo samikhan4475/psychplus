@@ -47,6 +47,7 @@ const QuestionnairePopupCurrentView = ({
         <WidgetFormContainer
           title=""
           patientId={patientId}
+          tags={[quickNoteSectionName]}
           widgetId={quickNoteSectionName}
           getData={transformOut(patientId, quickNoteSectionName, appointmentId)}
         >

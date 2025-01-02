@@ -29,7 +29,7 @@ const visitSpecificCodes: CodesWidgetItem[] = [
   { key: CptCodeKeys.ADD_ONS_KEY, code: '90785' },
   // add on codes End here
 ]
-const restrictedVisitsForAddOnCodes = ['SpravatoVisit']
+const restrictedVisitsForAddOnCodes = ['Spravato Visit']
 const allowedDuplicateCodes = ['96127']
 
 const getSelectedCodes = (codes: CptCode[]) =>

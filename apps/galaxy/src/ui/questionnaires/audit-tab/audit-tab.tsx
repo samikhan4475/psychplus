@@ -45,6 +45,7 @@ const AuditTab = ({
       <Flex direction="column" gap=".5rem">
         <WidgetFormContainer
           patientId={patientId}
+          tags={[QuickNoteSectionName.QuickNoteSectionAudit]}
           widgetId={QuickNoteSectionName.QuickNoteSectionAudit}
           getData={transformOut(
             patientId,

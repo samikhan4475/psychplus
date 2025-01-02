@@ -108,7 +108,7 @@ const useStore = create<Store>((set, get) => ({
         sectionItemValue: addToNoteData?.toString() || 'empty',
       },
     ]
-
+  
     const result = await saveWidgetAction({
       patientId: patientId.toString(),
       data: payload,

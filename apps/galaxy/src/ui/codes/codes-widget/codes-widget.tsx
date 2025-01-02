@@ -106,6 +106,6 @@ const CodesWidget = ({
 const visitsMap: Record<string, ComponentType<VisitProps>> = {
   common: CommonVisit,
   TransitionalCare: Tcm,
-  SpravatoVisit: SpravatoVisit,
+  Spravato: SpravatoVisit,
 }
 export { CodesWidget }

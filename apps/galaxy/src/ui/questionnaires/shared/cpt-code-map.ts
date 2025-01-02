@@ -1,4 +1,4 @@
-import { CodesWidgetItem, CptCodeKeys, QuickNoteSectionItem } from '@/types'
+import { CptCodeKeys, QuickNoteSectionItem } from '@/types'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { manageCodes } from '@/utils/codes'
 
@@ -6,18 +6,9 @@ const getCodes = async (
   patientId: string,
   appointmentId: string,
 ): Promise<QuickNoteSectionItem[]> => {
-  const addOnCodes: CodesWidgetItem[] = [
-    { key: CptCodeKeys.ADD_ONS_KEY, code: '96127' },
-  ]
+  const codesResult = await manageCodes(patientId, appointmentId, [], [])
 
-  const codesResult = await manageCodes(
-    patientId,
-    appointmentId,
-    addOnCodes,
-    [],
-  )
-
-  const list = codesResult.filter((code) => (code.sectionItemValue = '96127'))
+  const list = codesResult.filter((code) => code.sectionItemValue === '96127')
 
   if (list.length === 2) {
     return codesResult

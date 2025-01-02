@@ -29,6 +29,7 @@ const MocaTab = ({
       <Flex direction="column" gap=".5rem">
         <WidgetFormContainer
           patientId={patientId}
+          tags={[QuickNoteSectionName.QuickNoteSectionMoca]}
           widgetId={QuickNoteSectionName.QuickNoteSectionMoca}
           getData={transformOut(patientId, appointmentId)}
           title={QuestionnaireTabs.MOCA_TAB}

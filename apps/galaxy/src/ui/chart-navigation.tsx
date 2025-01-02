@@ -12,22 +12,33 @@ const ChartNavigation = () => {
   const visitType = searchParams.get('visitType')
   const visitSequence = searchParams.get('visitSequence')
 
-  const navLinks = useMemo(() => getNavLinks(appointmentId), [appointmentId])
+  const navLinks = useMemo(
+    () => getNavLinks(appointmentId, visitType),
+    [appointmentId, visitType],
+  )
   return (
     <Box className="bg-white mb-4 w-[160px] rounded-1 shadow-2">
       <ScrollArea>
         <Flex direction="column">
-          {navLinks.map((widget) => (
-            <NavigationLink
-              key={widget.label}
-              href={widget.href}
-              appointmentId={appointmentId}
-              visitType={visitType}
-              visitSequence={visitSequence}
-            >
-              {widget.label}
-            </NavigationLink>
-          ))}
+          {navLinks.map((widget) => {
+            const shouldRender =
+              !widget.conditions || widget.conditions.every(Boolean)
+            if (shouldRender) {
+              return (
+                <NavigationLink
+                  key={widget.label}
+                  href={widget.href}
+                  appointmentId={appointmentId}
+                  visitType={visitType}
+                  visitSequence={visitSequence}
+                >
+                  {widget.label}
+                </NavigationLink>
+              )
+            }
+
+            return null
+          })}
         </Flex>
       </ScrollArea>
     </Box>

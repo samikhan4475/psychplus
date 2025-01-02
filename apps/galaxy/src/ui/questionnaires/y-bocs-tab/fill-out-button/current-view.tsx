@@ -33,7 +33,8 @@ const CurrentView = ({ patientId, data }: FilloutCurrentView) => {
         <WidgetFormContainer
           title=""
           patientId={patientId}
-          widgetId="y-bocs popup"
+          tags={[QuickNoteSectionName.QuickNoteSectionYbcos]}
+          widgetId={QuickNoteSectionName.QuickNoteSectionYbcos}
           getData={transformOut(
             patientId,
             QuickNoteSectionName.QuickNoteSectionYbcos,

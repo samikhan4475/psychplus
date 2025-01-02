@@ -1,12 +1,27 @@
 import {
   Clinic,
+  Cosigner,
   Metadata,
   ServiceGroup,
   ServiceRoom,
-  Cosigner,
   ServiceUnit,
 } from '@/types'
 import { Specialist } from '@/ui/schedule/types'
+
+enum VisitTypes {
+  Outpatient = 'Outpatient',
+  EdVisit = 'EdVisit',
+  TransitionalCare = 'TransitionalCare',
+  IndividualPsychotherapy = 'IndividualPsychotherapy',
+  FamilyPsychotherapy = 'FamilyPsychotherapy',
+  Ect = 'Ect',
+  Tms = 'Tms',
+  Spravato = 'Spravato',
+  HospitalCareInitial = 'HospitalCare/Initial',
+  HospitalCareSubsequent = 'HospitalCare/Subsequent',
+  HospitalCareDischarge = 'HospitalCare/Discharge',
+  HospitalCareInitialDischarge = 'HospitalCare/InitialDischarge',
+}
 
 type PaymentType =
   | 'CoPay'
@@ -190,4 +205,12 @@ interface BookVisitResponse {
   isSelfPay: boolean
 }
 
-export type { Appointment, BookVisitPayload, BookVisitResponse, Diagnosis, PaymentType, CptCode }
+export {
+  type Appointment,
+  type BookVisitPayload,
+  type BookVisitResponse,
+  type Diagnosis,
+  type PaymentType,
+  type CptCode,
+  VisitTypes,
+}

@@ -4,6 +4,7 @@ import { Flex } from '@radix-ui/themes'
 import { FormProvider } from 'react-hook-form'
 import { WidgetFormContainer } from '@/components'
 import { QuickNoteSectionItem } from '@/types'
+import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { FilloutCurrentTab } from '../../shared'
 import { MOCA_LABELS } from '../constants'
 import { QuestionnairesFormMoca } from '../form-moca/aims-form'
@@ -27,7 +28,8 @@ const CurrentView = ({ patientId, data }: FilloutCurrentView) => {
         <WidgetFormContainer
           title=""
           patientId={patientId}
-          widgetId="moca popup"
+          tags={[QuickNoteSectionName.QuickNoteSectionMoca]}
+          widgetId={QuickNoteSectionName.QuickNoteSectionMoca}
           getData={transformOut(patientId, appointmentId)}
         >
           <FilloutCurrentTab

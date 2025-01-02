@@ -136,7 +136,7 @@ const columns = (isTabView = false): ColumnDef<PatientReferral>[] => [
     accessorKey: 'comments',
     header: () => <ColumnHeader label="Comments" />,
     cell: ({ row: { original: referral } }) => (
-      <LongTextCell>{referral?.comments}</LongTextCell>
+      <LongTextCell className="max-w-24">{referral?.comments}</LongTextCell>
     ),
   },
   {

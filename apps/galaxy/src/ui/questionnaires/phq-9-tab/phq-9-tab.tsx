@@ -44,6 +44,7 @@ const Phq9Tab = ({
       <Flex direction="column" gap=".5rem">
         <WidgetFormContainer
           patientId={patientId}
+          tags={[QuickNoteSectionName.QuickNoteSectionPhq9]}
           widgetId={QuickNoteSectionName.QuickNoteSectionPhq9}
           getData={transformOut(
             patientId,

@@ -1,12 +1,20 @@
-const getNavLinks = (appointmentId: string | null) => {
+import { VisitTypes } from '@/types'
+
+const getNavLinks = (
+  appointmentId: string | null,
+  visitType: string | null,
+) => {
   const defaultBottomLinks = [
     { label: 'Patient Info', href: '/patient-info' },
     { label: 'Referrals', href: '/referrals' },
     { label: 'PCP', href: '/pcp' },
     { label: 'Pharmacy', href: '/pharmacy' },
-    ...(appointmentId
-      ? [{ label: 'Staff Comments', href: '/staff-comments' }]
-      : []),
+    {
+      label: 'Staff Comments',
+      href: '/staff-comments',
+      conditions: [!!appointmentId],
+    },
+
     { label: 'Scheduling History', href: '/scheduling-history' },
 
     // { label: 'Rating', href: '/rating' },
@@ -41,7 +49,14 @@ const getNavLinks = (appointmentId: string | null) => {
     { label: 'Vitals', href: '/vitals' },
     { label: 'Physical Exam', href: '/physical-exam' },
     { label: 'Medical History', href: '/medical-history' },
-    { label: 'Therapy', href: '/therapy' },
+    {
+      label: 'Therapy',
+      href: '/therapy',
+      conditions: [
+        visitType === VisitTypes.FamilyPsychotherapy ||
+          visitType === VisitTypes.IndividualPsychotherapy,
+      ],
+    },
     { label: 'Allergies', href: '/allergies' },
     { label: 'Medications', href: '/medications' },
     { label: 'Hospital', href: '/hospital' },

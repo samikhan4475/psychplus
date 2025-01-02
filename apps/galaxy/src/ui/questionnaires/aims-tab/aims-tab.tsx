@@ -29,6 +29,7 @@ const AimsTab = ({
       <Flex direction="column" gap=".5rem">
         <WidgetFormContainer
           patientId={patientId}
+          tags={[QuickNoteSectionName.QuickNoteSectionAims]}
           widgetId={QuickNoteSectionName.QuickNoteSectionAims}
           getData={transformOut(patientId, appointmentId)}
           title={QuestionnaireTabs.AIMS_TAB}

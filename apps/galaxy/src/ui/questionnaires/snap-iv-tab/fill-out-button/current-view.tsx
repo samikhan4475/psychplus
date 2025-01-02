@@ -4,6 +4,7 @@ import { Flex } from '@radix-ui/themes'
 import { FormProvider } from 'react-hook-form'
 import { WidgetFormContainer } from '@/components'
 import { QuickNoteSectionItem } from '@/types'
+import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { FilloutCurrentTab } from '../../shared'
 import { SNAP_IV_LABELS } from '../constants'
 import {
@@ -30,7 +31,8 @@ const CurrentView = ({ patientId, data }: FilloutCurrentView) => {
         <WidgetFormContainer
           title=""
           patientId={patientId}
-          widgetId="snap-iv popup"
+          tags={[QuickNoteSectionName.QuickNoteSectionSnapIV]}
+          widgetId={QuickNoteSectionName.QuickNoteSectionSnapIV}
           getData={transformOut(patientId, appointmentId)}
         >
           <FilloutCurrentTab
