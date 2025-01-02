@@ -1,49 +1,54 @@
 'use client'
 
-import { ScrollArea } from '@radix-ui/themes'
+import { useEffect } from 'react'
+import { useParams } from 'next/navigation'
+import { Flex, ScrollArea } from '@radix-ui/themes'
 import { ColumnDef } from '@tanstack/react-table'
-import { ColumnHeader, DataTable, TextCell } from '@/components'
-import { History } from './types'
+import { format } from 'date-fns'
+import {
+  ColumnHeader,
+  DataTable,
+  LoadingPlaceholder,
+  TextCell,
+} from '@/components'
+import { useStore } from './store'
+import { PatientTransactionHistory } from './types'
 
-const data: History[] = [...Array(5)].map(() => ({
-  user: 'John Smith, MD',
-  dateTime: '03/21/24 00:00',
-  coins: {
-    due: '$20',
-    paid: '$20',
-  },
-  balance: {
-    due: '$20',
-    paid: '$20',
-  },
-  coPay: {
-    due: '$20',
-    paid: '$20',
-  },
-}))
-const columns: ColumnDef<History>[] = [
+const columns: ColumnDef<PatientTransactionHistory>[] = [
   {
-    accessorKey: 'date/time',
+    id: 'metadata.createdOn',
+    accessorKey: 'metadata.createdOn',
     header: ({ column }) => (
       <ColumnHeader
         column={column}
+        clientSideSort
         label="Date/Time"
         className="!text-black !font-medium"
       />
     ),
-    cell: ({ row }) => <TextCell>{row.original.dateTime} </TextCell>,
+    cell: ({ row }) => (
+      <TextCell>
+        {format(
+          new Date(row?.original?.metadata.createdOn),
+          'MM/dd/yyyy HH:mm',
+        )}
+      </TextCell>
+    ),
   },
   {
-    id: 'user',
-    accessorKey: 'user',
+    id: 'metadata.createdByFullName',
+    accessorKey: 'metadata.createdByFullName',
     header: ({ column }) => (
       <ColumnHeader
         column={column}
+        clientSideSort
         label="User"
         className="!text-black !font-medium"
       />
     ),
-    cell: ({ row }) => <TextCell>{row.original.user} </TextCell>,
+    cell: ({ row }) => (
+      <TextCell> {row.original.metadata.createdByFullName} </TextCell>
+    ),
   },
   {
     accessorKey: 'coPay',
@@ -56,26 +61,30 @@ const columns: ColumnDef<History>[] = [
     ),
     columns: [
       {
-        accessorKey: 'coPay.due',
+        id: 'coPayDue',
+        accessorKey: 'coPayDue',
         header: ({ column }) => (
           <ColumnHeader
             column={column}
+            clientSideSort
             label="Due"
             className="!text-black !font-medium"
           />
         ),
-        cell: ({ row }) => <TextCell>{row.original.coPay?.due} </TextCell>,
+        cell: ({ row }) => <TextCell>{row.original.coPayDue} </TextCell>,
       },
       {
-        accessorKey: 'coPay.paid',
+        id: 'coPayPaid',
+        accessorKey: 'coPayPaid',
         header: ({ column }) => (
           <ColumnHeader
             column={column}
+            clientSideSort
             label="Paid"
             className="!text-black !font-medium"
           />
         ),
-        cell: ({ row }) => <TextCell>{row.original.coPay?.paid} </TextCell>,
+        cell: ({ row }) => <TextCell>{row.original.coPayPaid} </TextCell>,
       },
     ],
   },
@@ -90,26 +99,30 @@ const columns: ColumnDef<History>[] = [
     ),
     columns: [
       {
-        accessorKey: 'coins.due',
+        id: 'coInsuranceDue',
+        accessorKey: 'coInsuranceDue',
         header: ({ column }) => (
           <ColumnHeader
             column={column}
+            clientSideSort
             label="Due"
             className="!text-black !font-medium"
           />
         ),
-        cell: ({ row }) => <TextCell>{row.original.coins?.due} </TextCell>,
+        cell: ({ row }) => <TextCell>{row.original.coInsuranceDue} </TextCell>,
       },
       {
-        accessorKey: 'coins.paid',
+        id: 'coInsurancePaid',
+        accessorKey: 'coInsurancePaid',
         header: ({ column }) => (
           <ColumnHeader
             column={column}
+            clientSideSort
             label="Paid"
             className="!text-black !font-medium"
           />
         ),
-        cell: ({ row }) => <TextCell>{row.original.coins?.paid} </TextCell>,
+        cell: ({ row }) => <TextCell>{row.original.coInsurancePaid} </TextCell>,
       },
     ],
   },
@@ -124,34 +137,55 @@ const columns: ColumnDef<History>[] = [
     ),
     columns: [
       {
-        accessorKey: 'balance.due',
+        id: 'balanceDue',
+        accessorKey: 'balanceDue',
         header: ({ column }) => (
           <ColumnHeader
             column={column}
+            clientSideSort
             label="Due"
             className="!text-black !font-medium"
           />
         ),
-        cell: ({ row }) => <TextCell>{row.original.balance?.due} </TextCell>,
+        cell: ({ row }) => <TextCell>{row.original.balanceDue} </TextCell>,
       },
       {
-        accessorKey: 'balance.paid',
+        id: 'balancePaid',
+        accessorKey: 'balancePaid',
         header: ({ column }) => (
           <ColumnHeader
             column={column}
+            clientSideSort
             label="Paid"
             className="!text-black !font-medium"
           />
         ),
-        cell: ({ row }) => <TextCell>{row.original.balance?.paid}</TextCell>,
+        cell: ({ row }) => <TextCell>{row.original.balancePaid}</TextCell>,
       },
     ],
   },
 ]
-const HistoryTable = () => {
+const HistoryTable = ({ appointmentId }: { appointmentId: number }) => {
+  const { id } = useParams<{ id: string }>()
+
+  const {
+    patientTransactionData: data,
+    patientTransactionHistoryLoading,
+    fetchPatientTransactionHistory,
+  } = useStore()
+
+  useEffect(() => {
+    fetchPatientTransactionHistory(id, appointmentId)
+  }, [id, appointmentId])
   return (
     <ScrollArea className="h-36" scrollbars="vertical">
-      <DataTable data={data} columns={columns} isRowSpan />
+      {patientTransactionHistoryLoading ? (
+        <Flex height="100%" align="center" justify="center">
+          <LoadingPlaceholder />
+        </Flex>
+      ) : (
+        <DataTable columns={columns} data={data ?? []} isRowSpan />
+      )}
     </ScrollArea>
   )
 }

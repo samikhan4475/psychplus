@@ -5,9 +5,11 @@ import { Flex, Heading, Popover } from '@radix-ui/themes'
 import { X } from 'lucide-react'
 import { PropsWithRow } from '@/components'
 import { FacilityAdmissionTable } from '../facility-admission-table'
-import { SchedulingHistory } from '../types'
+import { SchedulingHistoryData } from '../types'
 
-const FacilityAdmissionCell = ({ row }: PropsWithRow<SchedulingHistory>) => {
+const FacilityAdmissionCell = ({
+  row,
+}: PropsWithRow<SchedulingHistoryData>) => {
   return (
     <Popover.Root>
       <Popover.Trigger>
@@ -18,7 +20,7 @@ const FacilityAdmissionCell = ({ row }: PropsWithRow<SchedulingHistory>) => {
       <Popover.Content className="min-w-[650px] rounded-[10px] p-2 shadow-2">
         <Flex className="w-full gap-1.5" direction="column">
           <Flex justify="between" align="center" gap="2">
-            <Heading size="4">Facility Admission 165278 Hx</Heading>
+            <Heading size="4">Facility Admission Hx</Heading>
             <Popover.Close>
               <X
                 size={24}
@@ -27,7 +29,7 @@ const FacilityAdmissionCell = ({ row }: PropsWithRow<SchedulingHistory>) => {
               />
             </Popover.Close>
           </Flex>
-          <FacilityAdmissionTable />
+          <FacilityAdmissionTable appointmentId={row.original.appointmentId} />
         </Flex>
       </Popover.Content>
     </Popover.Root>

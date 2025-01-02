@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { getClinicsOptionsAction } from '@/actions'
 import { FormFieldContainer, FormFieldLabel, SelectInput } from '@/components'
-import { SelectOptionType } from './types'
+import { SelectOptionType } from '../types'
 
 const LocationSelect = () => {
   const [locationsResult, setLocationsResult] = useState<SelectOptionType[]>([])
@@ -20,7 +20,7 @@ const LocationSelect = () => {
     <FormFieldContainer className="flex-row items-center gap-1">
       <FormFieldLabel>Location</FormFieldLabel>
       <SelectInput
-        field="location"
+        field="locationId"
         buttonClassName={buttonClassName}
         options={locationsResult}
       />

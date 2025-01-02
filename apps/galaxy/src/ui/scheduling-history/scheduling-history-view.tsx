@@ -5,13 +5,10 @@ import { Box, Flex, Heading } from '@radix-ui/themes'
 import { TreatmentBillingAlert } from '@/components'
 import { StaffComment } from '@/types'
 import { SchedulingHistoryTable } from './scheduling-history-table'
+import { SchedulingHistoryTablePagination } from './scheduling-history-table-pagination'
 
-interface SchedulingHistoryViewProps {
-  patientId: string
-}
-
-const SchedulingHistoryView = ({ patientId }: SchedulingHistoryViewProps) => {
-  const [isOpen, setIsOpen] = useState(true)
+const SchedulingHistoryView = () => {
+  const [isOpen, setIsOpen] = useState(false)
 
   const closeDialog = () => {
     setIsOpen(false)
@@ -28,7 +25,10 @@ const SchedulingHistoryView = ({ patientId }: SchedulingHistoryViewProps) => {
       >
         <Heading size="4">Scheduling History</Heading>
       </Box>
-      <SchedulingHistoryTable />
+      <Flex direction="column" className="bg-white w-full">
+        <SchedulingHistoryTable />
+        <SchedulingHistoryTablePagination />
+      </Flex>
       <TreatmentBillingAlert
         title="Billing"
         isOpen={isOpen}

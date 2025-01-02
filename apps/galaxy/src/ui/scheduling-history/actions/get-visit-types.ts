@@ -20,6 +20,7 @@ const getVisitTypesAction = async (): Promise<
     label: item.encounterName,
     value: String(item.id),
   }))
+
   return {
     state: 'success',
     data: transformedData,

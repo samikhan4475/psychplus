@@ -30,7 +30,7 @@ const PhysicalConditionBlock = () => {
                 lastOptionIndicator={true}
             />
             {
-                physicalCondtion == "No" &&
+                physicalCondtion === "No" &&
                 <SelectableChipDetails
                     key={"physicalConditionDescription"}
                     label={"Text"}

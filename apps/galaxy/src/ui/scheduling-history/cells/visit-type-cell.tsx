@@ -4,13 +4,12 @@ import React from 'react'
 import { CounterClockwiseClockIcon } from '@radix-ui/react-icons'
 import { Flex } from '@radix-ui/themes'
 import { PropsWithRow, TextCell } from '@/components'
-import { SchedulingHistory } from '../types'
+import { SchedulingHistoryData } from '../types'
 
-const VisitTypeCell = ({ row }: PropsWithRow<SchedulingHistory>) => {
+const VisitTypeCell = ({ row }: PropsWithRow<SchedulingHistoryData>) => {
   return (
     <Flex align="center" gap="1" p="1">
-      <CounterClockwiseClockIcon className="text-black" />
-      <TextCell>{row?.original?.visitStatus}</TextCell>
+      <TextCell>{`${row.original.visitTypeCode} ${row.original.visitSequenceType}  ${row.original.visitMedium}`}</TextCell>
     </Flex>
   )
 }

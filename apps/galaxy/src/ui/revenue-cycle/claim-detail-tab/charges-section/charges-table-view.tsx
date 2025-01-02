@@ -23,7 +23,7 @@ const ChargesTableView = () => {
       if (data.state === 'success') {
         setStaffData(
           data.data?.find(
-            (staff) => staff.id.toString() == renderingProviderId?.toString(),
+            (staff) => staff.id.toString() === renderingProviderId?.toString(),
           ),
         )
       }

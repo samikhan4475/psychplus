@@ -2,9 +2,11 @@
 
 import { Flex, Select } from '@radix-ui/themes'
 import { PropsWithRow } from '@/components'
-import { SchedulingHistory } from '../types'
+import { SchedulingHistoryData } from '../types'
 
-const AdmittingProviderCell = ({ row }: PropsWithRow<SchedulingHistory>) => {
+const AdmittingProviderCell = ({
+  row,
+}: PropsWithRow<SchedulingHistoryData>) => {
   return (
     <Flex p="1" width="100%">
       <Select.Root defaultValue="John Smith, MD" size="1">

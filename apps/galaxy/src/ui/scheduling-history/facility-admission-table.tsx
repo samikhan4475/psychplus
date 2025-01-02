@@ -1,51 +1,115 @@
 'use client'
 
+import { useEffect } from 'react'
+import { useParams } from 'next/navigation'
+import { Flex } from '@radix-ui/themes'
 import { ColumnDef } from '@tanstack/react-table'
-import { ColumnHeader, DataTable, TextCell } from '@/components'
-import { FacilityAdmission } from './types'
+import { format } from 'date-fns'
+import {
+  ColumnHeader,
+  DataTable,
+  LoadingPlaceholder,
+  TextCell,
+} from '@/components'
+import { useStore } from './store'
+import { PatientFacilityHistory } from './types'
 
-const columns: ColumnDef<FacilityAdmission>[] = [
+const columns: ColumnDef<PatientFacilityHistory>[] = [
   {
-    accessorKey: 'dateTime',
-    header: ({ column }) => <ColumnHeader column={column} label="Date/Time" />,
-    cell: ({ row }) => <TextCell>{row?.original?.dateTime}</TextCell>,
-  },
-  {
-    accessorKey: 'user',
-    header: ({ column }) => <ColumnHeader column={column} label="User" />,
-    cell: ({ row }) => <TextCell>{row?.original?.user}</TextCell>,
-  },
-  {
-    accessorKey: 'admitDateTime',
+    id: 'metadata.createdOn',
+    accessorKey: 'metadata.createdOn',
     header: ({ column }) => (
-      <ColumnHeader column={column} label="Admit Date/Time" />
+      <ColumnHeader clientSideSort column={column} label="Date/Time" />
     ),
-    cell: ({ row }) => <TextCell>{row?.original?.admitDateTime}</TextCell>,
+    cell: ({ row }) => (
+      <TextCell>
+        {row?.original?.metadata &&
+          format(
+            new Date(row?.original?.metadata.createdOn),
+            'MM/dd/yyyy HH:mm',
+          )}
+      </TextCell>
+    ),
   },
   {
+    id: 'metadata.createdByFullName',
+    accessorKey: 'metadata.createdByFullName',
+    header: ({ column }) => (
+      <ColumnHeader clientSideSort column={column} label="User" />
+    ),
+    cell: ({ row }) => (
+      <TextCell>{row?.original?.metadata.createdByFullName}</TextCell>
+    ),
+  },
+  {
+    id: 'admissionDate',
+    accessorKey: 'admissionDate',
+    header: ({ column }) => (
+      <ColumnHeader column={column} clientSideSort label="Admit Date/Time" />
+    ),
+    cell: ({ row }) => (
+      <TextCell>
+        {row?.original?.admissionDate &&
+          format(new Date(row?.original?.admissionDate), 'MM/dd/yyyy HH:mm')}
+      </TextCell>
+    ),
+  },
+  {
+    id: 'dischargeDate',
     accessorKey: 'dischargeDate',
     header: ({ column }) => (
-      <ColumnHeader column={column} label="Discharge Date" />
+      <ColumnHeader column={column} clientSideSort label="Discharge Date" />
     ),
-    cell: ({ row }) => <TextCell>{row?.original?.dischargeDate}</TextCell>,
+    cell: ({ row }) => (
+      <TextCell>
+        {row?.original?.dischargeDate &&
+          format(new Date(row?.original?.dischargeDate), 'MM/dd/yyyy HH:mm')}
+      </TextCell>
+    ),
   },
   {
-    accessorKey: 'admittingProvider',
+    id: 'admittingProviderName.firstName',
+    accessorKey: 'admittingProviderName.firstName',
     header: ({ column }) => (
-      <ColumnHeader column={column} label="Admitting Provider" />
+      <ColumnHeader column={column} clientSideSort label="Admitting Provider" />
     ),
-    cell: ({ row }) => <TextCell>{row?.original?.admittingProvider}</TextCell>,
+    cell: ({ row }) => (
+      <TextCell>
+        {`${row.original.admittingProviderName.firstName} 
+    ${row.original.admittingProviderName.lastName} 
+    ${row.original.admittingProviderName.honors}`}
+      </TextCell>
+    ),
   },
 ]
-const FacilityAdmissionTable = () => {
-  return <DataTable columns={columns} data={data} />
+const FacilityAdmissionTable = ({
+  appointmentId,
+}: {
+  appointmentId: number
+}) => {
+  const { id } = useParams<{ id: string }>()
+
+  const {
+    patientFacilityData: data,
+    patientFacilityLoader: loading,
+    fetchPatientFacilityHistory,
+  } = useStore()
+
+  useEffect(() => {
+    fetchPatientFacilityHistory(id, appointmentId)
+  }, [id, appointmentId])
+
+  return (
+    <>
+      {loading ? (
+        <Flex height="100%" align="center" justify="center">
+          <LoadingPlaceholder />
+        </Flex>
+      ) : (
+        <DataTable columns={columns} data={data ?? []} />
+      )}
+    </>
+  )
 }
 
-const data: FacilityAdmission[] = [...Array(6)].map(() => ({
-  admitDateTime: '03/12/24 00:00',
-  user: 'John Smith, MD',
-  dateTime: '03/12/24 00:00',
-  admittingProvider: 'John Smith, MD',
-  dischargeDate: '03/12/24',
-}))
 export { FacilityAdmissionTable }

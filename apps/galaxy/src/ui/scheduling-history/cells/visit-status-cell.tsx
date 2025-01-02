@@ -5,10 +5,10 @@ import { CounterClockwiseClockIcon } from '@radix-ui/react-icons'
 import { Flex, Heading, Popover } from '@radix-ui/themes'
 import { X } from 'lucide-react'
 import { PropsWithRow, TextCell } from '@/components'
-import { SchedulingHistory } from '../types'
+import { SchedulingHistoryData } from '../types'
 import { VisitStatusTable } from '../visit-status-table'
 
-const VisitStatusCell = ({ row }: PropsWithRow<SchedulingHistory>) => {
+const VisitStatusCell = ({ row }: PropsWithRow<SchedulingHistoryData>) => {
   return (
     <Popover.Root>
       <Flex align="center" gap="1" p="1" width="100%">
@@ -28,7 +28,7 @@ const VisitStatusCell = ({ row }: PropsWithRow<SchedulingHistory>) => {
                 />
               </Popover.Close>
             </Flex>
-            <VisitStatusTable />
+            <VisitStatusTable appointmentId={row.original.appointmentId} />
           </Flex>
         </Popover.Content>
       </Flex>

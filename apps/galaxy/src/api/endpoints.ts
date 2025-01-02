@@ -358,6 +358,25 @@ const UPDATE_PATIENT_RELATIONSHIP_ENDPOINT = (
   patientId: number,
   relationshipId: string,
 ) => `${API_URL}/api/patients/${patientId}/relationships/${relationshipId}`
+const GET_PATIENT_SCHEDULING_HISTORY = (patientId: string) =>
+  `${API_URL}/api/patients/${patientId}/schedulinghistory/actions/search`
+const GET_PATIENT_FACILITY_HISTORY = (
+  patientId: string,
+  appointmentId: number,
+) =>
+  `${API_URL}/api/patients/${patientId}/appointments/${appointmentId}/actions/facilityhistory`
+
+const GET_PATIENT_SCHEDULING_STATUS_HISTORY = (
+  patientId: string,
+  appointmentId: number,
+) =>
+  `${API_URL}/api/patients/${patientId}/appointments/${appointmentId}/actions/schedulestatushistory`
+
+const GET_PATIENT_TRANSACTION_HISTORY = (
+  patientId: string,
+  appointmentId: number,
+) =>
+  `${API_URL}/api/patients/${patientId}/appointments/${appointmentId}/transactions/actions/history`
 const CREATE_NOTE_ENDPOINT = (
   patientId: string,
   appointmentId: string | null,
@@ -686,6 +705,10 @@ export {
   FETCH_EXTERNAL_PROVIDER_WITH_PATIENT_ENDPOINT,
   FETCH_EXTERNAL_PROVIDERS_ENDPOINT,
   PCP_HISTORY_ENDPOINT,
+  GET_PATIENT_SCHEDULING_HISTORY,
+  GET_PATIENT_FACILITY_HISTORY,
+  GET_PATIENT_SCHEDULING_STATUS_HISTORY,
+  GET_PATIENT_TRANSACTION_HISTORY,
   GET_PHARMACIES,
   DELETE_PATIENT_APPOINTMENT_ENDPOINT,
   GET_ALLERGIES_ENDPOINT,

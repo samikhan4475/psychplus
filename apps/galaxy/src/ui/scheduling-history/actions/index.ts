@@ -1,2 +1,7 @@
 export * from './get-patient-scheduling-history'
 export * from './get-visit-types'
+export * from './get-patient-facility-history'
+export * from './get-patient-transaction-history'
+export * from './get-patient-scheduling-status-history'
+export * from './get-location-service'
+export * from './get-insurance-plan-options'

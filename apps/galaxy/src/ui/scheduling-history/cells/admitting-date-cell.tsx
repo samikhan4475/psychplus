@@ -2,9 +2,9 @@
 
 import { Flex, TextField } from '@radix-ui/themes'
 import { PropsWithRow } from '@/components'
-import { SchedulingHistory } from '../types'
+import { SchedulingHistoryData } from '../types'
 
-const AdmittingDateCell = ({ row }: PropsWithRow<SchedulingHistory>) => {
+const AdmittingDateCell = ({ row }: PropsWithRow<SchedulingHistoryData>) => {
   const now = new Date()
   const currentTime = now.toISOString().slice(0, 16)
   return (

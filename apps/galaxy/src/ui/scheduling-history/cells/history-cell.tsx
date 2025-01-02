@@ -6,9 +6,9 @@ import { Flex, Heading, Popover } from '@radix-ui/themes'
 import { X } from 'lucide-react'
 import { PropsWithRow } from '@/components'
 import { HistoryTable } from '../history-table'
-import { SchedulingHistory } from '../types'
+import { SchedulingHistoryData } from '../types'
 
-const HistoryCell = ({ row }: PropsWithRow<SchedulingHistory>) => {
+const HistoryCell = ({ row }: PropsWithRow<SchedulingHistoryData>) => {
   return (
     <Popover.Root>
       <Flex align="center" gap="1" p="1" width="100%">
@@ -27,7 +27,7 @@ const HistoryCell = ({ row }: PropsWithRow<SchedulingHistory>) => {
                 />
               </Popover.Close>
             </Flex>
-            <HistoryTable />
+            <HistoryTable appointmentId={row.original.appointmentId} />
           </Flex>
         </Popover.Content>
       </Flex>

@@ -1,22 +1,29 @@
 'use client'
 
 import { useEffect } from 'react'
+import { useParams } from 'next/navigation'
 import { Box, Flex, ScrollArea } from '@radix-ui/themes'
 import { DataTable, LoadingPlaceholder } from '@/components'
 import { FilterForm } from './filter-form'
 import { useStore } from './store'
-import { columns } from './table-columns'
+import { getSchedulingColumns as column } from './table-columns'
 
 const SchedulingHistoryTable = () => {
-  const { data, fetchSchedulingHistory, loading } = useStore((state) => ({
-    data: state.data,
-    loading: state.loading,
-    fetchSchedulingHistory: state.fetchSchedulingHistory,
-  }))
+  const { id } = useParams<{ id: string }>()
+  const {
+    data,
+    fetchSchedulingHistory,
+    loading,
+    isTCMVisitType,
+    sort,
+    setPatientId,
+    sortData,
+  } = useStore()
 
   useEffect(() => {
-    fetchSchedulingHistory()
-  }, [])
+    setPatientId(id)
+    fetchSchedulingHistory(id)
+  }, [id])
 
   return (
     <Flex direction="column" className="gap-1">
@@ -28,9 +35,9 @@ const SchedulingHistoryTable = () => {
           </Flex>
         ) : (
           <Box className="min-w-max">
-            <DataTable //Add addTab logic like list view table
-              columns={columns}
-              data={data?.schedulingHistories ?? []}
+            <DataTable
+              columns={column(isTCMVisitType, sort, sortData)}
+              data={data?.list ?? []}
               isRowSpan
             />
           </Box>

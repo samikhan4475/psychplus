@@ -1,15 +1,40 @@
-'use client'
+'use server'
 
 import * as api from '@/api'
-import { SchedulingHistorySchemaType } from '../filter-form'
-import type { GetSchedulingHistoryData, SchedulingHistory } from '../types'
+import { Sort } from '@/types'
+import { SCHEDULING_HISTORY_LIST_TABLE_PAGE_SIZE } from '../constants'
+import type {
+  GetSchedulingHistoryListResponse,
+  SchedulingHistoryData,
+  SchedulingHistoryPayload,
+} from '../types'
 
+interface GetSchedulingListParams {
+  patientId: string
+  payload?: Partial<SchedulingHistoryPayload>
+  page?: number
+  sort?: Sort
+}
 const getPatientSchedulingHistoryAction = async ({
-  ...rest
-}: Partial<SchedulingHistorySchemaType>): Promise<
-  api.ActionResult<GetSchedulingHistoryData>
+  patientId,
+  payload,
+  sort,
+  page = 1,
+}: GetSchedulingListParams): Promise<
+  api.ActionResult<GetSchedulingHistoryListResponse>
 > => {
-  const response = await mockFetchPatientSchedulingHistory()
+  const offset = (page - 1) * SCHEDULING_HISTORY_LIST_TABLE_PAGE_SIZE
+
+  const url = new URL(api.GET_PATIENT_SCHEDULING_HISTORY(patientId))
+  if (sort) {
+    url.searchParams.append('orderBy', `${sort?.column} ${sort?.direction}`)
+  }
+  url.searchParams.append(
+    'limit',
+    String(SCHEDULING_HISTORY_LIST_TABLE_PAGE_SIZE),
+  )
+  url.searchParams.append('offset', String(offset))
+  const response = await api.POST<SchedulingHistoryData[]>(`${url}`, payload)
   if (response.state === 'error') {
     return {
       state: 'error',
@@ -20,66 +45,10 @@ const getPatientSchedulingHistoryAction = async ({
   return {
     state: 'success',
     data: {
-      schedulingHistories: response.data,
+      list: response.data,
+      total: Number(response.headers.get('psychplus-totalresourcecount')),
     },
   }
-}
-
-const mockFetchPatientSchedulingHistory = async (): Promise<
-  api.NetworkResult<SchedulingHistory[]>
-> => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve({
-        headers: new Headers({}),
-        state: 'success',
-        data: [...Array(20)].map(() => ({
-          visitNumber: 165272278,
-          id: 165278,
-          dateOfService: '03/12/24',
-          visitType: 'Hospital Care, Subsequent, In-Person',
-          location: 'Willow Brook',
-          visitStatus: 'Checked In',
-          residingState: 'Texas',
-          facilityAdmission: {
-            id: 165278,
-            admittingProvider: 'John Smith, MD',
-            admitDateTime: '03/12/24 00:00',
-            dischargeDate: '03/12/24',
-            user: '',
-            dateTime: '',
-          },
-          service: '',
-          provider: 'John Smith, MD',
-          providerType: 'Therapy',
-          cosigner: '',
-          dcDate: '',
-          dcHospiceName: '',
-          institutionalPractice: '',
-          insurance: {
-            primaryInsurance: 'Medicare',
-            secondaryInsurance: 'Medicare',
-            institutionalPractice: 'Medicare',
-            professionalPractice: 'Medicare',
-          },
-          practice: '',
-          organization: '',
-          coPay: {
-            due: '$20',
-            paid: '$20',
-          },
-          coins: {
-            due: '$20',
-            paid: '$20',
-          },
-          balance: {
-            due: '$20',
-            paid: '$20',
-          },
-        })),
-      })
-    }, 2000)
-  })
 }
 
 export { getPatientSchedulingHistoryAction }

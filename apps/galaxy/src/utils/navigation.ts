@@ -14,9 +14,6 @@ const getNavLinks = (
       href: '/staff-comments',
       conditions: [!!appointmentId],
     },
-
-    { label: 'Scheduling History', href: '/scheduling-history' },
-
     // { label: 'Rating', href: '/rating' },
     // { label: 'Notifications', href: '/notifications' },
     // { label: 'Patient Tracking', href: '/patient-tracking' },
@@ -64,6 +61,7 @@ const getNavLinks = (
     { label: 'Follow Up', href: '/follow-up' },
     { label: 'Assessment & Plan', href: '/assessment-plan' },
     { label: 'Procedures', href: '/procedures' },
+    { label: 'Scheduling History', href: '/scheduling-history' },
     ...defaultBottomLinks,
   ]
 

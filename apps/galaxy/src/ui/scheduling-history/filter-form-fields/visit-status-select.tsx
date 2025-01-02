@@ -8,7 +8,7 @@ const VisitStatusSelect = () => {
     <FormFieldContainer className="flex-row items-center gap-1">
       <FormFieldLabel className="!text-1">Visit Status</FormFieldLabel>
       <CodesetSelect
-        name="visitStatus"
+        name="visitStatuses"
         codeset={CODESETS.AppointmentStatus}
         className={buttonClassName}
         size="1"

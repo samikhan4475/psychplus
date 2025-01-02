@@ -9,8 +9,8 @@ import {
 const FromDateField = () => {
   return (
     <FormFieldContainer className="flex-row items-center gap-1">
-      <FormFieldLabel>From</FormFieldLabel>
-      <DatePickerInput field="dateFrom" className="w-[101px]" />
+      <FormFieldLabel>From Date</FormFieldLabel>
+      <DatePickerInput field="fromDate" className="w-[101px]" />
     </FormFieldContainer>
   )
 }

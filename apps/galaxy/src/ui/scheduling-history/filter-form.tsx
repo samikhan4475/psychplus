@@ -1,67 +1,152 @@
 'use client'
 
+import { useEffect } from 'react'
+import { useParams } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons'
 import { Button } from '@radix-ui/themes'
-import { DateValue } from 'react-aria-components'
 import { SubmitHandler, useForm } from 'react-hook-form'
-import z from 'zod'
 import { FormContainer } from '@/components'
-import { FromDateField } from './from-date-field'
-import { LocationSelect } from './location-select'
-import { LocationTypeSelect } from './location-type-select'
-import { SignSelect } from './sign-select'
-import { ToDateField } from './to-date-field'
-import { VisitStatusSelect } from './visit-status-select'
-import { VisitTypeSelect } from './visit-type-select'
-
-const schema = z.object({
-  dateFrom: z.custom<DateValue>(),
-  dateTo: z.custom<DateValue>(),
-  visitType: z.string().optional(),
-  location: z.string().optional(),
-  locationType: z.string().optional(),
-  visitStatus: z.string().optional(),
-  sign: z.string().optional(),
-})
-type SchedulingHistorySchemaType = z.infer<typeof schema>
+import { sanitizeFormData } from '@/utils'
+import { getDateString } from '../schedule/utils'
+import { TCM } from './constants'
+import {
+  AdmitDateField,
+  AdmitTimeField,
+  AdmittingProviderSelect,
+  BalanceDue,
+  BalancePaid,
+  CoInsDue,
+  CoInsPaid,
+  CosignerSelect,
+  DateOfServiceField,
+  DcDateField,
+  DcHospitalField,
+  DischargeDateField,
+  FacilityAdmissionIdField,
+  FromDateField,
+  LocationSelect,
+  PrimaryInsuranceSelect,
+  ProviderSelect,
+  ProviderTypeSelect,
+  SecondaryInsuranceSelect,
+  ServiceSelect,
+  ToDateField,
+  VisitNumberField,
+  VisitStatusSelect,
+  VisitTypeSelect,
+} from './filter-form-fields'
+import { CoPayDue } from './filter-form-fields/copay-due'
+import { CopayPaid } from './filter-form-fields/copay-paid'
+import { ResetButton } from './reset-button'
+import { SchedulingHistorySchemaType, schema } from './schema'
+import { useStore } from './store'
+import { TCMVisitTypes } from './types'
 
 const FilterForm = () => {
+  const { id } = useParams<{ id: string }>()
+  const { fetchSchedulingHistory, visitTypes, setIsTCMVisitType } = useStore()
+
   const form = useForm<SchedulingHistorySchemaType>({
     resolver: zodResolver(schema),
     defaultValues: {
-      dateFrom: undefined,
-      dateTo: undefined,
-      visitType: '',
-      location: '',
-      locationType: '',
-      visitStatus: '',
-      sign: '',
+      patientId: undefined,
+      fromDate: undefined,
+      toDate: undefined,
+      visitId: '',
+      facilityAdmissionId: '',
+      visitTypeCode: '',
+      locationId: '',
+      visitStatuses: '',
+      admittingProviderName: '',
+      admissionDateTime: undefined,
+      admitTime: undefined,
+      dischargeVisitSequenceDate: undefined,
+      dateOfService: undefined,
+      serviceId: '',
+      providerType: '',
+      providerStaffId: '',
+      cosignerStaffId: '',
+      dischargeHospitalName: '',
+      dischargeHospitalDate: undefined,
+      residingStateCode: '',
+      primaryInsurancePolicyId: '',
+      secondaryInsurancePolicyId: '',
+      coPayDue: '',
+      coPayPaid: '',
+      coInsDue: '',
+      coInsPaid: '',
+      balanceDue: '',
+      balancePaid: '',
     },
+    mode: 'onBlur',
   })
-  const onSubmit: SubmitHandler<SchedulingHistorySchemaType> = () => {}
+
+  const onSubmit: SubmitHandler<SchedulingHistorySchemaType> = (data) => {
+    const formattedData = {
+      ...data,
+      fromDate: getDateString(data.fromDate),
+      admitTime: data.admitTime ? data.admitTime.toString() : undefined,
+      toDate: getDateString(data.toDate),
+      admissionDateTime: getDateString(data.admissionDateTime),
+      dischargeVisitSequenceDate: getDateString(
+        data.dischargeVisitSequenceDate,
+      ),
+      dateOfService: getDateString(data.dateOfService),
+      dischargeHospitalDate: getDateString(data.dischargeHospitalDate),
+    }
+    const sanatizedData = sanitizeFormData(formattedData)
+    fetchSchedulingHistory(id, sanatizedData)
+  }
+  const selectedVisitTypeCode = form.watch('visitTypeCode')
+  const selectedVisitType = visitTypes?.find(
+    (item) => item?.value === selectedVisitTypeCode,
+  )
+
+  const isTCMVisitType = selectedVisitType
+    ? TCM.includes(selectedVisitType.label as TCMVisitTypes)
+    : false
+
+  useEffect(() => {
+    setIsTCMVisitType(isTCMVisitType)
+  }, [isTCMVisitType])
   return (
     <FormContainer
-      className="bg-white flex-row gap-1.5 rounded-b-2 rounded-t-1 px-2 py-1 shadow-2"
+      className="bg-white flex-row flex-wrap gap-2 rounded-b-2 rounded-t-1 px-2 py-1 shadow-2"
       form={form}
       onSubmit={onSubmit}
     >
       <FromDateField />
       <ToDateField />
+      <VisitNumberField />
+      <FacilityAdmissionIdField />
+      <AdmittingProviderSelect />
+      <AdmitDateField />
+      <AdmitTimeField />
+      <DischargeDateField />
+      <DateOfServiceField />
       <VisitTypeSelect />
       <LocationSelect />
-      <LocationTypeSelect />
+      <ServiceSelect />
+      <ProviderTypeSelect />
+      <ProviderSelect />
+      <CosignerSelect />
+      {isTCMVisitType && (
+        <>
+          <DcHospitalField />
+          <DcDateField />
+        </>
+      )}
       <VisitStatusSelect />
-      <SignSelect />
-      <Button
-        color="gray"
-        className="text-black"
-        size="1"
-        variant="outline"
-        type="button"
-      >
-        Clear
-      </Button>
+      <PrimaryInsuranceSelect />
+      <SecondaryInsuranceSelect />
+      <CoPayDue />
+      <CopayPaid />
+      <CoInsDue />
+      <CoInsPaid />
+      <BalanceDue />
+      <BalancePaid />
+      <ResetButton />
       <Button highContrast size="1" type="submit">
         <MagnifyingGlassIcon strokeWidth={2} />
       </Button>
@@ -69,4 +154,4 @@ const FilterForm = () => {
   )
 }
 
-export { FilterForm,type SchedulingHistorySchemaType }
+export { FilterForm, type SchedulingHistorySchemaType }
