@@ -4,6 +4,8 @@ import { useState } from 'react'
 import * as Tabs from '@radix-ui/react-tabs'
 import { Box, Flex, Text } from '@radix-ui/themes'
 import { cn } from '@psychplus/ui/cn'
+import { CreditCard } from '@/features/billing/credit-debit-cards/types'
+import { Insurance, InsurancePayer } from '@/features/billing/payments/types'
 import PreCheckinAssessmentFooterButton from './shared-blocks/pre-checkin-assessment-footer-button'
 import {
   AddInsurance,
@@ -17,31 +19,55 @@ import {
   ReviewOfSystems,
 } from './steps'
 
-const tabData = [
-  { id: 'patient-info', label: 'Patient Info', content: <PatientInfo /> },
-  { id: 'insurance', label: 'Insurance', content: <AddInsurance /> },
-  { id: 'payment', label: 'Payment', content: <Payment /> },
-  {
-    id: 'allergies',
-    label: 'Allergies/ Medications',
-    content: <AllergiesAndMedications />,
-  },
-  { id: 'pharmacy', label: 'Pharmacy', content: <Pharmacy /> },
-  {
-    id: 'presenting-symptoms-HPI',
-    label: 'Presenting symptoms (HPI)',
-    content: <PresentingSymptoms />,
-  },
-  { id: 'histories', label: 'Histories', content: <Histories /> },
-  {
-    id: 'review-of-Systems',
-    label: 'Review  of Systems',
-    content: <ReviewOfSystems />,
-  },
-  { id: 'questionnaire', label: 'Questionnaire', content: <Questionnaire /> },
-]
-
-const PreCheckinAssessmentStapper = () => {
+const PreCheckinAssessmentStapper = ({
+  insurancePayers,
+  patientInsurances,
+  creditCards,
+  stripeAPIKey,
+}: {
+  insurancePayers: InsurancePayer[]
+  patientInsurances: Insurance[]
+  creditCards: CreditCard[]
+  stripeAPIKey: string
+}) => {
+  const tabData = [
+    { id: 'patient-info', label: 'Patient Info', content: <PatientInfo /> },
+    {
+      id: 'insurance',
+      label: 'Insurance',
+      content: (
+        <AddInsurance
+          insurancePayers={insurancePayers}
+          patientInsurances={patientInsurances}
+        />
+      ),
+    },
+    {
+      id: 'payment',
+      label: 'Payment',
+      content: (
+        <Payment creditCards={creditCards} stripeApiKey={stripeAPIKey} />
+      ),
+    },
+    {
+      id: 'allergies',
+      label: 'Allergies/ Medications',
+      content: <AllergiesAndMedications />,
+    },
+    { id: 'pharmacy', label: 'Pharmacy', content: <Pharmacy /> },
+    {
+      id: 'presenting-symptoms-HPI',
+      label: 'Presenting symptoms (HPI)',
+      content: <PresentingSymptoms />,
+    },
+    { id: 'histories', label: 'Histories', content: <Histories /> },
+    {
+      id: 'review-of-Systems',
+      label: 'Review  of Systems',
+      content: <ReviewOfSystems />,
+    },
+    { id: 'questionnaire', label: 'Questionnaire', content: <Questionnaire /> },
+  ]
   const [completedTabs, setCompletedTabs] = useState<string[]>(['patient-info'])
   const [activeTab, setActiveTab] = useState('patient-info')
 

@@ -2,30 +2,21 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { zodResolver } from '@hookform/resolvers/zod'
 import { type ActionErrorState } from '@psychplus-v2/api'
 import { DocumentType } from '@psychplus-v2/types'
-import { cn, zipCodeSchema } from '@psychplus-v2/utils'
-import {
-  Box,
-  Flex,
-  Text,
-  TextFieldInput,
-} from '@radix-ui/themes'
+import { cn } from '@psychplus-v2/utils'
+import { Box, Flex, Text } from '@radix-ui/themes'
 import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js'
 import { useForm } from 'react-hook-form'
-import z from 'zod'
 import {
-  BillingAddressAutocompleteForm,
   ConsentView,
   CreditDebitCardsIcon,
   FormFieldContainer,
-  FormFieldError,
   FormFieldLabel,
   ToggleableForm,
 } from '@/components-v2'
+import { useProfileStore } from '@/features/account/profile/store'
 import { addCreditCardAction } from '@/features/billing/credit-debit-cards/actions'
-import { useGooglePlacesContext } from '@/providers'
 import { CreditCard } from '../../types'
 
 const STRIPE_INPUT_STYLE = {
@@ -38,19 +29,6 @@ const STRIPE_INPUT_STYLE = {
 }
 
 const ALLOWED_CARDS = ['amex', 'discover', 'mastercard', 'visa']
-
-const schema = z.object({
-  fullname: z.string().min(1, 'Required'),
-  address: z
-    .string()
-    .min(1, 'Required')
-    .max(100, 'Max 100 characters are allowed.'),
-  city: z.string().min(1, 'Required'),
-  state: z.string().min(1, 'Required'),
-  postalCode: zipCodeSchema,
-})
-
-type SchemaType = z.infer<typeof schema>
 
 const CreditCardForm = ({
   trigger,
@@ -70,25 +48,21 @@ const CreditCardForm = ({
 
   const elements = useElements()
 
+  const { profile } = useProfileStore((state) => ({
+    profile: state.profile,
+  }))
+
   const [focus, setFocus] = useState(false)
   const [showConsentView, setShowConsentView] = useState({
     visible: false,
     type: DocumentType.TERMS_AND_CONDITIONS,
   })
 
-  const form = useForm<SchemaType>({
-    resolver: zodResolver(schema),
+  const form = useForm({
     reValidateMode: 'onChange',
-    defaultValues: {
-      fullname: creditCard?.name || '',
-      address: creditCard?.billingAddress.street1 || '',
-      city: creditCard?.billingAddress.city || '',
-      state: creditCard?.billingAddress.state || '',
-      postalCode: creditCard?.billingAddress.postalCode || '',
-    },
   })
 
-  const onSubmit = async (data: SchemaType) => {
+  const onSubmit = async () => {
     if (!stripe || !elements) {
       return
     }
@@ -141,33 +115,21 @@ const CreditCardForm = ({
     cardBrand = cardBrand === 'amex' ? 'AmericanExpress' : cardBrand
 
     return addCreditCardAction({
-      name: data.fullname,
+      name: profile.legalName.firstName + ' ' + profile.legalName.lastName,
       cardKey: stripeResult.paymentMethod.id,
       cardType: cardBrand,
       expireMonth: card.exp_month,
       expireYear: card.exp_year,
       numberLastFour: card.last4,
-      postalCode: data.postalCode,
-      address: data.address,
-      city: data.city,
-      state: data.state,
-      isPrimary: !existingCards?.length,
+      isActive: true,
+      patientId: profile.id,
     })
   }
 
   const onSuccess = () => {
     router.refresh()
-    form.reset({
-      fullname: '',
-      address: '',
-      city: '',
-      state: '',
-      postalCode: '',
-    })
     onFormClose?.()
   }
-
-  const { loaded } = useGooglePlacesContext()
 
   return (
     <ToggleableForm
@@ -213,61 +175,31 @@ const CreditCardForm = ({
             Credit & Debit Card Details
           </Text>
         </Flex>
-
-        <Flex
-          className="w-full font-regular"
-          align="center"
-          justify="between"
-          gap="4"
-        >
-          <FormFieldContainer className="flex-1">
-            <FormFieldLabel required>Name on Card</FormFieldLabel>
-
-            <TextFieldInput
-              size="3"
-              {...form.register('fullname')}
-              placeholder="Full name on card"
-              autoFocus
+        <FormFieldContainer className="w-5/12">
+          <FormFieldLabel required>Card Number</FormFieldLabel>
+          <Box
+            py="2"
+            px="3"
+            className={cn('-m-[1px] h-10 rounded-6 border border-gray-6', {
+              'border-transparent shadow-[0_0_0_2px_var(--color-focus-root)]':
+                focus,
+            })}
+          >
+            <CardElement
+              onFocus={() => {
+                setFocus(true)
+              }}
+              onBlur={() => {
+                setFocus(false)
+              }}
+              options={{
+                style: STRIPE_INPUT_STYLE,
+                hidePostalCode: true,
+              }}
             />
-          </FormFieldContainer>
-
-          <FormFieldContainer className="flex-1">
-            <FormFieldLabel required>Card Number</FormFieldLabel>
-            <Box
-              py="2"
-              px="3"
-              className={cn('-m-[1px] h-10 rounded-6 border border-gray-6', {
-                'border-transparent shadow-[0_0_0_2px_var(--color-focus-root)]':
-                  focus,
-              })}
-            >
-              <CardElement
-                onFocus={() => {
-                  setFocus(true)
-                }}
-                onBlur={() => {
-                  setFocus(false)
-                }}
-                options={{
-                  style: STRIPE_INPUT_STYLE,
-                  hidePostalCode: true,
-                }}
-              />
-            </Box>
-          </FormFieldContainer>
-        </Flex>
-        <Flex mt="-3">
-          <FormFieldError name="fullname" />
-        </Flex>
-
-        <Flex className="w-full  rounded-t-1 bg-[#F0F4FF]" px="2" py="2">
-          <Text size="2" weight="medium">
-            Billing Address
-          </Text>
-        </Flex>
+          </Box>
+        </FormFieldContainer>
       </Flex>
-
-      {loaded ? <BillingAddressAutocompleteForm /> : null}
     </ToggleableForm>
   )
 }

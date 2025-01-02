@@ -137,6 +137,7 @@ interface InsuranceFormProps {
   insurance?: Insurance
   trigger?: React.ReactNode
   onFormClose?: () => void
+  onAddInsuranceClick?: (value: string) => void
 }
 
 const InsuranceForm = ({
@@ -144,6 +145,7 @@ const InsuranceForm = ({
   insurance,
   trigger,
   onFormClose,
+  onAddInsuranceClick,
 }: InsuranceFormProps) => {
   const [cardFrontImage, setCardFrontImage] = useState<File | undefined>(
     undefined,

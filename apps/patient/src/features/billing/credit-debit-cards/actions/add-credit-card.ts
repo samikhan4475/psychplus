@@ -11,35 +11,15 @@ interface AddCreditCardParams {
   numberLastFour: string
   expireMonth: number
   expireYear: number
-  postalCode: string
-  address: string
-  city: string
-  state: string
-  isPrimary: boolean
+  isActive: boolean
+  patientId: number
 }
 
 const addCreditCardAction = async ({
-  name,
-  postalCode,
-  address,
-  city,
-  state,
   ...params
 }: AddCreditCardParams): Promise<ActionResult<void>> => {
-  if (!name) {
-    name = `${params.cardType}:${params.numberLastFour}`
-  }
-
   const result = await api.POST(`${API_URL}/api/patients/self/creditcards`, {
     ...params,
-    name,
-    billingAddress: {
-      type: 'Billing',
-      street1: address,
-      postalCode,
-      city,
-      state,
-    },
   })
 
   if (result.state === 'error') {
