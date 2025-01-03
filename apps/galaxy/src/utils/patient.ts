@@ -19,9 +19,9 @@ const GENDER_ABBREVIATIONS: Record<Gender, GenderAbbreviation> = {
   Undetermined: 'U',
 }
 
-const getPatientFirstName = (name: LegalName) => name.firstName
+const getPatientFirstName = (name: LegalName) => name?.firstName
 
-const getPatientLastName = (name: LegalName) => name.lastName
+const getPatientLastName = (name: LegalName) => name?.lastName
 
 const getPatientMiddleName = (name: LegalName) => name.middleName
 

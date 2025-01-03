@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation'
-import { Flex, ScrollArea } from '@radix-ui/themes'
+import { Flex, ScrollArea, Text } from '@radix-ui/themes'
 import { getAppointment } from '@/api'
 import { ActualNoteView } from './actual-note-view'
 import { QuickNotesHeader } from './quicknotes-header'
@@ -22,8 +22,12 @@ const QuickNotesView = async ({
 }: QuickNotesViewProps) => {
   const appointment = await getAppointment(appointmentId)
 
-  if (appointment.state === 'error' || !visitType) {
-    return notFound()
+  if (appointment.state === 'error') {
+    return <Text>{appointment.error}</Text>
+  }
+
+  if (!visitType) {
+    return <Text>Missing VisitType</Text>
   }
 
   const widgets =
