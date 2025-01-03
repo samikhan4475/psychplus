@@ -9,7 +9,7 @@ const StartDate = () => {
   const form = useFormContext<ProviderCodingSchema>()
   return (
     <FormFieldContainer className="flex-1">
-      <FormFieldLabel>From</FormFieldLabel>
+      <FormFieldLabel>From Date</FormFieldLabel>
       <DatePickerInput
         field="startingDate"
         maxValue={form.watch('endingDate') ?? undefined}

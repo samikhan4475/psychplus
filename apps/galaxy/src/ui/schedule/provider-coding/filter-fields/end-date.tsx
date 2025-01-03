@@ -9,7 +9,7 @@ const EndDate = () => {
   const form = useFormContext<BookedAppointmentsSchemaType>()
   return (
     <FormFieldContainer className="flex-1">
-      <FormFieldLabel>To</FormFieldLabel>
+      <FormFieldLabel>To Date</FormFieldLabel>
       <DatePickerInput
         field="endingDate"
         minValue={form.watch('startingDate') ?? undefined}
