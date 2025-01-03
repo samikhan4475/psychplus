@@ -7,7 +7,7 @@ import { FormFieldContainer } from '../../shared/form-field-container'
 const PatientStatusSelect = () => {
   return (
     <FormFieldContainer className="flex-1">
-      <FormFieldLabel>Pt. Status</FormFieldLabel>
+      <FormFieldLabel>User Status</FormFieldLabel>
       <CodesetSelect
         name="patientStatuses"
         codeset={CODESETS.CustomerStatus}

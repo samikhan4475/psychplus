@@ -146,7 +146,7 @@ const columns: ColumnDef<Appointment>[] = [
         clientSideSort
         className="!text-black justify-center !font-medium"
         column={column}
-        label="Pt. Status"
+        label="User Status"
       />
     ),
     cell: ({ row }) => <TextCell>{row.original.patientStatus}</TextCell>,
