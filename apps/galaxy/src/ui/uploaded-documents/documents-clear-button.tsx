@@ -41,8 +41,10 @@ const DocumentsClearButton = ({
     if (result.state === 'success') {
       toast.success('Documents successfully deleted.')
       onClearSuccess()
+      setIsLoading(false)
     } else {
       toast.error('Failed to delete documents.')
+      setIsLoading(false)
     }
 
   }
