@@ -3,9 +3,9 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Button, Flex } from '@radix-ui/themes'
+import { Button, Flex, Text } from '@radix-ui/themes'
 import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js'
-import { SubmitHandler, useForm } from 'react-hook-form'
+import { SubmitErrorHandler, SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import z from 'zod'
 import {
@@ -66,7 +66,7 @@ const AddCardForm = ({
   const [error, setError] = useState<string>()
   const elements = useElements()
   const [focus, setFocus] = useState(false)
-
+  const [isCardEmpty, setIsCardEmpty] = useState<boolean | undefined>(undefined)
   const form = useForm<AddCardFormSchemaType>({
     resolver: zodResolver(schema),
     reValidateMode: 'onChange',
@@ -164,8 +164,14 @@ const AddCardForm = ({
     })
     onClose?.()
   }
+
+  const onError: SubmitErrorHandler<AddCardFormSchemaType> = () => {
+    if (isCardEmpty === undefined) {
+      setIsCardEmpty(true)
+    }
+  }
   return (
-    <FormContainer form={form} onSubmit={onSubmit}>
+    <FormContainer form={form} onSubmit={onSubmit} onError={onError}>
       <FormError message={error} />
       <InfoBox />
       <Flex gap="2" width="100%" direction="column">
@@ -178,6 +184,9 @@ const AddCardForm = ({
               }}
               onBlur={() => {
                 setFocus(false)
+              }}
+              onChange={(event) => {
+                setIsCardEmpty(event.empty ?? false)
               }}
               options={{
                 style: STRIPE_INPUT_STYLE,
@@ -194,6 +203,9 @@ const AddCardForm = ({
                 },
               }}
             />
+            {isCardEmpty && (
+              <Text className="text-[12px] text-tomato-11">Required</Text>
+            )}
           </FormFieldContainer>
         </CardDetails>
         <BillingAddress />
