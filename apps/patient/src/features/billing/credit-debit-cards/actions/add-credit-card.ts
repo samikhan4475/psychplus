@@ -13,6 +13,7 @@ interface AddCreditCardParams {
   expireYear: number
   isActive: boolean
   patientId: number
+  isPrimary: boolean
 }
 
 const addCreditCardAction = async ({

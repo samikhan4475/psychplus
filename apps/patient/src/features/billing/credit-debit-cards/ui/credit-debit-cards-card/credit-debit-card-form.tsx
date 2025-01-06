@@ -123,6 +123,7 @@ const CreditCardForm = ({
       numberLastFour: card.last4,
       isActive: true,
       patientId: profile.id,
+      isPrimary: !existingCards?.length,
     })
   }
 
