@@ -47,7 +47,7 @@ const HistoryView = () => {
   })
 
   useEffect(() => {
-    ;(async () => {
+    const fetchData = async () => {
       const response = await getHistoryAction({ patientId })
       if (response.state === 'error') {
         toast.error(response.error)
@@ -63,19 +63,19 @@ const HistoryView = () => {
       }, {} as Record<string, QuickNoteSectionItem[]>)
 
       const pastPsychHxData = transformPastPsychHx(
-        groupedData[QuickNoteSectionName.QuickNoteSectionPastPsychHx],
+        groupedData[QuickNoteSectionName.QuickNoteSectionPastPsychHx] || [],
       )
       const familyPsychHxData = transformFamilyPsychHx(
-        groupedData[QuickNoteSectionName.QuickNoteSectionFamilyPsychHx],
+        groupedData[QuickNoteSectionName.QuickNoteSectionFamilyPsychHx] || [],
       )
       const medicalPsychHxData = transformPastMedicalHx(
-        groupedData[QuickNoteSectionName.QuickNoteSectionPastMedicalHx],
+        groupedData[QuickNoteSectionName.QuickNoteSectionPastMedicalHx] || [],
       )
       const socialHxData = transformSocialHx(
-        groupedData[QuickNoteSectionName.QuickNoteSectionSocialHx],
+        groupedData[QuickNoteSectionName.QuickNoteSectionSocialHx] || [],
       )
       const substanceUseHxData = transformSubstanceUseHx(
-        groupedData[QuickNoteSectionName.QuickNoteSectionSubstanceUseHx],
+        groupedData[QuickNoteSectionName.QuickNoteSectionSubstanceUseHx] || [],
       )
 
       setData({
@@ -86,7 +86,9 @@ const HistoryView = () => {
         substanceUseHxData,
         responseData: response.data,
       })
-    })()
+    }
+
+    fetchData()
   }, [patientId])
 
   return (
