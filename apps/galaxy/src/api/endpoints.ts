@@ -94,7 +94,8 @@ const DISABLE_PRESCRIBER_DIRECTORY_ENDPOINT = (
 const GET_PROVIDER_LOCATION_HISTORY = `${API_URL}/api/providerlocations/actions/history/search`
 const SEARCH_BOOKED_APPOINTMENTS_ENDPOINT = `${API_URL}/api/appointments/actions/search`
 const GET_CLEARNING_HOUSE_RECEIVERS = `${API_URL}/api/clearinghousereceivers/actions/search`
-const BOOK_APPOINTMENT = (patientId: number) => `${API_URL}/api/patients/${patientId}/appointments/actions/book`
+const BOOK_APPOINTMENT = (patientId: number) =>
+  `${API_URL}/api/patients/${patientId}/appointments/actions/book`
 const UPDATE_APPOINTMENT = (patientId: number, appointmentId: number) =>
   `${API_URL}/api/patients/${patientId}/appointments/${appointmentId}`
 const GET_CLEARNING_HOUSE_EDI_ENDPOINT = `${API_URL}/api/integrationconfiguration/insuranceplans/actions/search`
@@ -328,7 +329,7 @@ const UPDATE_PATIENT_REFERRAL_ENDPOINT = (
   referralId: number,
 ) => `${API_URL}/api/patients/${patientId}/referrals/${referralId}`
 const GET_APPOINTMENT = (appointmentId: string) =>
-  `${API_URL}/api/appointments/${appointmentId}?isIncludeCodes=true&isIncludeCosigners=true`
+  `${API_URL}/api/appointments/${appointmentId}?isIncludeCodes=true&isIncludeCosigners=true&isIncludeLocation=true`
 const CREATE_PATIENT_REFERRAL_ENDPOINT = (patientId: string) =>
   `${API_URL}/api/patients/${patientId}/referrals`
 const DELETE_PATIENT_APPOINTMENT_ENDPOINT = (

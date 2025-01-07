@@ -15,11 +15,19 @@ const CodeHistory = ({ cptCodesLookup }: Props) => {
   const formValues = form.watch()
 
   const getJoinedValues = useMemo(() => {
+    const formSchemaKeys: (keyof CodesWidgetSchemaType)[] = [
+      'cptPrimaryCodes',
+      'cptmodifierCodes',
+      'cptAddonCodes',
+    ]
     const lookupKeys = Object.keys(cptCodesLookup)
-    return Object.values(formValues)
-      .map((codes) =>
-        lookupKeys.filter((key) => codes.includes(key)).join(', '),
-      )
+    return formSchemaKeys
+      .map((key) => {
+        const codes = formValues?.[key] ?? []
+        return lookupKeys
+          .filter((lookupKey) => codes.includes(lookupKey))
+          .join(', ')
+      })
       .filter(Boolean)
       .join(' | ')
   }, [formValues, cptCodesLookup])

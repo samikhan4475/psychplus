@@ -67,7 +67,6 @@ const visitTypeToWidgets: Record<string, QuickNoteSectionName[]> = {
     QuickNoteSectionName.QuicknoteSectionTherapyAssessmentPlan,
     QuickNoteSectionName.QuicknoteSectionFamilyInternalMedicineAssessmentPlan,
     QuickNoteSectionName.QuicknoteSectionUploadedDocuments,
-    QuickNoteSectionName.ProcedureTMS,
     QuickNoteSectionName.Addon,
     QuickNoteSectionName.QuicknoteSectionMedications,
     QuickNoteSectionName.QuicknoteSectionReferrals,
