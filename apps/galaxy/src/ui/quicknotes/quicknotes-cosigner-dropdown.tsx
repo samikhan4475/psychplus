@@ -25,6 +25,12 @@ const QuickNotesCosignerDropdown = ({
       : undefined
   }
 
+  const cosignerId = signOptions.coSignedByUserId
+    ? signOptions.cosSignedByUserId
+    : String(cosigners[0]?.id)
+
+  const label = getLabel(cosignerId)
+
   return (
     <Flex direction="column" gap="1">
       <Text size="1" weight="medium">
@@ -36,9 +42,13 @@ const QuickNotesCosignerDropdown = ({
         value={signOptions.coSignedByUserId}
         defaultValue={String(cosigners[0]?.id)}
       >
-        <Tooltip content={getLabel(signOptions.coSignedByUserId)}>
+        {label ? (
+          <Tooltip content={label}>
+            <Select.Trigger className="max-w-[150px]" placeholder="Cosigners" />
+          </Tooltip>
+        ) : (
           <Select.Trigger className="max-w-[150px]" placeholder="Cosigners" />
-        </Tooltip>
+        )}
         <Select.Content
           highContrast
           onCloseAutoFocus={(e) => e.preventDefault()}
