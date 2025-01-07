@@ -2,10 +2,10 @@
 
 import { useEffect, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
-import { FormFieldLabel, MultiSelectField } from '@/components'
+import { MultiSelectField } from '@/components'
 import { getLocationServicesAction } from '../../actions'
 import { useServiceCodesMap } from '../../hooks'
-import { FormFieldContainer } from '../../shared'
+import { FieldLabel, FormFieldContainer } from '../../shared'
 import { Option } from '../../types'
 import { getServiceFilterOptions } from '../../utils'
 import { SchemaType } from '../filter-actions-group'
@@ -31,7 +31,7 @@ const ServiceMultiSelect = () => {
 
   return (
     <FormFieldContainer>
-      <FormFieldLabel>Service</FormFieldLabel>
+      <FieldLabel>Service</FieldLabel>
       <MultiSelectField
         disabled={!selectedLocation}
         defaultValues={services}

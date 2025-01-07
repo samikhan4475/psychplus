@@ -1,9 +1,9 @@
 'use client'
 
-import { CodesetSelect, FormFieldLabel } from '@/components'
+import { CodesetSelect } from '@/components'
 import { CODESETS } from '@/constants'
-import { FormFieldContainer } from '../../shared'
 import { useFiltersContext } from '../../context'
+import { FieldLabel, FormFieldContainer } from '../../shared'
 import { SchedulerFilters } from '../../types'
 
 const VisitMediumSelect = () => {
@@ -12,13 +12,13 @@ const VisitMediumSelect = () => {
 
   return (
     <FormFieldContainer>
-      <FormFieldLabel>Visit Medium</FormFieldLabel>
-        <CodesetSelect
-          name="visitMedium"
-          className='flex-1'
-          codeset={CODESETS.VisitMedium}
-          size="1"
-        />
+      <FieldLabel>Visit Medium</FieldLabel>
+      <CodesetSelect
+        name="visitMedium"
+        className="flex-1"
+        codeset={CODESETS.VisitMedium}
+        size="1"
+      />
     </FormFieldContainer>
   )
 }

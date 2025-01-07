@@ -1,11 +1,11 @@
 'use client'
 
 import { useMemo } from 'react'
-import { FormFieldLabel, SelectInput } from '@/components'
+import { SelectInput } from '@/components'
 import { CODESETS } from '@/constants'
 import { useCodesetCodes } from '@/hooks'
 import { useFiltersContext } from '../context'
-import { FormFieldContainer } from '../shared'
+import { FieldLabel, FormFieldContainer } from '../shared'
 import { SchedulerFilters } from '../types'
 import { sortVisitStatusCodes } from '../utils'
 
@@ -20,7 +20,7 @@ const VisitStatusSelect = () => {
 
   return (
     <FormFieldContainer>
-      <FormFieldLabel>Visit Status</FormFieldLabel>
+      <FieldLabel>Visit Status</FieldLabel>
       <SelectInput
         field="appointmentStatus"
         options={options}

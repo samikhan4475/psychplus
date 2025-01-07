@@ -1,12 +1,12 @@
 'use client'
 
-import { FormFieldLabel, TimeInput } from '@/components'
-import { FormFieldContainer } from '../../shared'
+import { TimeInput } from '@/components'
+import { FieldLabel, FormFieldContainer } from '../../shared'
 
 const TimeInputField = () => {
   return (
     <FormFieldContainer className="flex-1">
-      <FormFieldLabel>Time</FormFieldLabel>
+      <FieldLabel>Time</FieldLabel>
       <TimeInput field="bookedAppointmentTime" dateInputClass="h-6" />
     </FormFieldContainer>
   )

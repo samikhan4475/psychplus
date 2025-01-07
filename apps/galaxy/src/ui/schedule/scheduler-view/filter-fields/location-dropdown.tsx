@@ -3,10 +3,10 @@
 import { useEffect, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import { FormFieldLabel, SelectInput } from '@/components'
+import { SelectInput } from '@/components'
 import { SelectOptionType } from '@/types'
 import { getStateClinicsOptionsAction } from '../../actions'
-import { FormFieldContainer } from '../../shared'
+import { FieldLabel, FormFieldContainer } from '../../shared'
 import { SchemaType } from '../filter-actions-group'
 
 const LocationDropdown = () => {
@@ -30,7 +30,7 @@ const LocationDropdown = () => {
 
   return (
     <FormFieldContainer className="h-full flex-1">
-      <FormFieldLabel>Location</FormFieldLabel>
+      <FieldLabel>Location</FieldLabel>
       <SelectInput
         field="locationIds"
         placeholder="Select"

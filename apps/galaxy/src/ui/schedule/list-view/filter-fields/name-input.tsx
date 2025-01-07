@@ -2,8 +2,7 @@
 
 import { TextField } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
-import { FormFieldLabel } from '@/components'
-import { FormFieldContainer } from '../../shared'
+import { FieldLabel, FormFieldContainer } from '../../shared'
 import { BookedAppointmentsSchemaType } from '../../schema'
 
 const NameInput = () => {
@@ -11,7 +10,7 @@ const NameInput = () => {
 
   return (
     <FormFieldContainer className="flex-1">
-      <FormFieldLabel>Name</FormFieldLabel>
+      <FieldLabel>Name</FieldLabel>
       <TextField.Root
         placeholder="Search by Name"
         size="1"

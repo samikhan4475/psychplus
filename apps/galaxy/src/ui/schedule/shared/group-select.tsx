@@ -2,11 +2,12 @@
 
 import { useMemo } from 'react'
 import { useFormContext } from 'react-hook-form'
-import { FormFieldLabel, SelectInput } from '@/components'
+import { SelectInput } from '@/components'
 import { ServiceGroup } from '@/types'
 import { useFiltersContext } from '../context'
 import { BookedAppointmentsSchemaType } from '../schema'
 import { SchedulerFilters } from '../types'
+import { FieldLabel } from './field-label'
 import { FormFieldContainer } from './form-field-container'
 
 const GroupDropdown = ({
@@ -31,7 +32,7 @@ const GroupDropdown = ({
 
   return (
     <FormFieldContainer className="h-full">
-      <FormFieldLabel>Group</FormFieldLabel>
+      <FieldLabel>Group</FieldLabel>
       <SelectInput
         field="groupId"
         placeholder="Select"

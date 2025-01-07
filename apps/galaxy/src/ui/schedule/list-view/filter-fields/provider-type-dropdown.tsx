@@ -1,9 +1,10 @@
 'use client'
 
-import { CodesetSelect, FormFieldLabel } from '@/components'
+import { Flex } from '@radix-ui/themes'
+import { CodesetSelect } from '@/components'
 import { CODE_NOT_SET, CODESETS } from '@/constants'
 import { useFiltersContext } from '../../context'
-import { FormFieldContainer } from '../../shared'
+import { FieldLabel, FormFieldContainer } from '../../shared'
 import { SchedulerFilters } from '../../types'
 
 const ProviderTypeDropdown = () => {
@@ -12,14 +13,16 @@ const ProviderTypeDropdown = () => {
 
   return (
     <FormFieldContainer>
-      <FormFieldLabel>Provider Type</FormFieldLabel>
-      <CodesetSelect
-        codeset={CODESETS.ProviderType}
-        exclude={[CODE_NOT_SET]}
-        size="1"
-        name="providerType"
-        className="flex-1"
-      />
+      <FieldLabel>Provider Type</FieldLabel>
+      <Flex className="flex-1">
+        <CodesetSelect
+          codeset={CODESETS.ProviderType}
+          exclude={[CODE_NOT_SET]}
+          size="1"
+          name="providerType"
+          className="min-w-full max-w-[10px] truncate"
+        />
+      </Flex>
     </FormFieldContainer>
   )
 }

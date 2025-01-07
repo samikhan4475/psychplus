@@ -1,26 +1,26 @@
 import { DateValue } from 'react-aria-components'
-import { z } from 'zod'
+import z from 'zod'
 import { INVALID_RANGE_ERROR } from '../constants'
 import { validateDate } from '../utils'
 
 const dateValidation = z.custom<DateValue>()
 
-const calenderViewSchema = z
+const schema = z
   .object({
     startingDate: dateValidation.optional(),
     endingDate: dateValidation.optional(),
-    stateIds: z.string().min(1, 'Required'),
-    locationId: z.string().optional(),
+    stateId: z.string().min(1, 'Required'),
+    locationIds: z.string().optional(),
     serviceIds: z
       .array(z.string())
       .refine((value) => value.every((item) => typeof item === 'string'), {
         message: 'Array must be empty or contain only strings',
       }),
-    providerIds: z.string().optional(),
-    visitMedium: z.string().optional(),
-    providerType: z.string().optional(),
+    staffIds: z.string().optional(),
+    specialistTypeCode: z.string().optional(),
     gender: z.string().optional(),
-    providerLanguage: z.string().optional(),
+    language: z.string().optional(),
+    type: z.string().optional(),
   })
   .superRefine((data, ctx) => {
     const { startingDate, endingDate } = data
@@ -37,7 +37,6 @@ const calenderViewSchema = z
         path: ['startingDate'],
       })
     }
-
     if (isEndDateValid < 0) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
@@ -47,4 +46,4 @@ const calenderViewSchema = z
     }
   })
 
-export { calenderViewSchema }
+export { schema }

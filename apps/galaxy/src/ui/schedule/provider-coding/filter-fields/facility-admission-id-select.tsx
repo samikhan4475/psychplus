@@ -1,8 +1,8 @@
 'use client'
 
-import { AsyncSelect, FormFieldLabel } from '@/components'
-import { FormFieldContainer } from '../../shared'
+import { AsyncSelect } from '@/components'
 import { useFiltersContext } from '../../context'
+import { FieldLabel, FormFieldContainer } from '../../shared'
 import { SchedulerFilters } from '../../types'
 import { getFacilityAdmissionIdsOptions } from '../actions/get-facility-admission-ids-options'
 
@@ -12,7 +12,7 @@ const FacilityAdmissionIdSelect = () => {
 
   return (
     <FormFieldContainer className="h-full flex-1">
-      <FormFieldLabel>Facility Admission ID</FormFieldLabel>
+      <FieldLabel>Facility Admission ID</FieldLabel>
       <AsyncSelect
         field="facilityAdmissionIds"
         placeholder="Select"

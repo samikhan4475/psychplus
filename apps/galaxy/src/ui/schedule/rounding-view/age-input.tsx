@@ -2,9 +2,9 @@
 
 import { Flex, TextField } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
-import { FormFieldError, FormFieldLabel } from '@/components'
+import { FormFieldError } from '@/components'
 import { BookedAppointmentsSchemaType } from '../schema'
-import { FormFieldContainer } from '../shared'
+import { FieldLabel, FormFieldContainer } from '../shared'
 
 const AgeInput = () => {
   const form = useFormContext<BookedAppointmentsSchemaType>()
@@ -12,7 +12,7 @@ const AgeInput = () => {
   return (
     <Flex direction="column">
       <FormFieldContainer className="flex-1">
-        <FormFieldLabel>Age</FormFieldLabel>
+        <FieldLabel>Age</FieldLabel>
         <TextField.Root
           placeholder="Add Age"
           type="number"

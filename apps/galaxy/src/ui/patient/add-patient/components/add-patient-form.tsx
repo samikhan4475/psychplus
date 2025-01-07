@@ -217,7 +217,7 @@ const AddPatientForm = ({
       <Box className="border-pp-grey  ml-1 mr-1 mt-2 rounded-[4px] border">
         <Box className="bg-pp-table-subRows pb-1 pl-2 pr-2 pt-1">
           <Text size="2" weight={'bold'} className="text-black mb-2 pb-2">
-            Person Details
+            Personal Details
           </Text>
         </Box>
 

@@ -1,7 +1,7 @@
 import { useFormContext } from 'react-hook-form'
-import { AsyncSelect, FormFieldLabel } from '@/components'
+import { AsyncSelect } from '@/components'
 import { getStateClinicsOptionsAction } from '../../actions'
-import { FormFieldContainer } from '../../shared'
+import { FieldLabel, FormFieldContainer } from '../../shared'
 import { CalenderViewSchemaType } from '../../types'
 
 const LocationDropdown = () => {
@@ -10,7 +10,7 @@ const LocationDropdown = () => {
 
   return (
     <FormFieldContainer>
-      <FormFieldLabel>Location</FormFieldLabel>
+      <FieldLabel>Location</FieldLabel>
       <AsyncSelect
         field="locationId"
         placeholder="Select"

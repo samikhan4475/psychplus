@@ -1,9 +1,9 @@
 'use client'
 
-import { CodesetSelect, FormFieldLabel } from '@/components'
+import { CodesetSelect } from '@/components'
 import { CODESETS } from '@/constants'
-import { FormFieldContainer } from '../shared'
 import { useFiltersContext } from '../context'
+import { FieldLabel, FormFieldContainer } from '../shared'
 import { SchedulerFilters } from '../types'
 
 const LegalStatusSelect = () => {
@@ -12,7 +12,7 @@ const LegalStatusSelect = () => {
 
   return (
     <FormFieldContainer>
-      <FormFieldLabel>Legal</FormFieldLabel>
+      <FieldLabel>Legal</FieldLabel>
       <CodesetSelect
         name="legalStatus"
         codeset={CODESETS.LegalStatus}

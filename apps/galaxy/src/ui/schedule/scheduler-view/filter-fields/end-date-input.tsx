@@ -1,11 +1,18 @@
-import { DatePickerInput, FormFieldLabel } from '@/components'
-import { FormFieldContainer } from '../../shared'
+import { useFormContext } from 'react-hook-form'
+import { DatePickerInput } from '@/components'
+import { FieldLabel, FormFieldContainer } from '../../shared'
+import { SchemaType } from '../filter-actions-group'
 
 const EndDateInput = () => {
+  const form = useFormContext<SchemaType>()
   return (
     <FormFieldContainer>
-      <FormFieldLabel>To Date</FormFieldLabel>
-      <DatePickerInput field="endingDate" dateInputClass="h-6" />
+      <FieldLabel>To Date</FieldLabel>
+      <DatePickerInput
+        field="endingDate"
+        dateInputClass="h-6"
+        minValue={form.watch('startingDate')}
+      />
     </FormFieldContainer>
   )
 }

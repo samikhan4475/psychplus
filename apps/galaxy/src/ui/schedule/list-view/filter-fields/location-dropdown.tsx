@@ -3,12 +3,12 @@
 import { useEffect, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import { FormFieldLabel, SelectInput } from '@/components'
+import { SelectInput } from '@/components'
 import { SelectOptionType } from '@/types'
 import { getStateClinicsOptionsAction } from '../../actions'
 import { useFiltersContext } from '../../context'
 import { BookedAppointmentsSchemaType } from '../../schema'
-import { FormFieldContainer } from '../../shared'
+import { FieldLabel, FormFieldContainer } from '../../shared'
 import { SchedulerFilters } from '../../types'
 
 const LocationDropdown = () => {
@@ -36,14 +36,14 @@ const LocationDropdown = () => {
 
   return (
     <FormFieldContainer className="h-full flex-1">
-      <FormFieldLabel className="text-[12px]">Location</FormFieldLabel>
+      <FieldLabel>Location</FieldLabel>
       <SelectInput
         field="locationId"
         placeholder="Select"
         options={clinicLocations}
         loading={loading}
         disabled={!stateIds.length}
-        buttonClassName="h-6 w-full"
+        buttonClassName="h-6 w-full max-w-[10px] min-w-full truncate"
         className="h-full flex-1"
       />
     </FormFieldContainer>

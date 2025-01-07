@@ -17,7 +17,11 @@ interface AddFiltersPopoverProps {
   viewFilters: string[]
 }
 
-const AddFiltersPopover = ({ view, onSave, viewFilters }: AddFiltersPopoverProps) => {
+const AddFiltersPopover = ({
+  view,
+  onSave,
+  viewFilters,
+}: AddFiltersPopoverProps) => {
   const { filters, setFilters } = useFiltersContext()
 
   const isFilterVisible = (name: string): boolean => {
@@ -35,10 +39,11 @@ const AddFiltersPopover = ({ view, onSave, viewFilters }: AddFiltersPopoverProps
 
   return (
     <Popover.Root>
-      <Popover.Trigger>
+      <Popover.Trigger className='px-0'>
         <Button
-          className="text-pp-text-primary-base text-[12px] font-[500]"
-          variant="ghost"
+          className="text-pp-text-primary-base bg-white text-[12px] font-[500] [box-shadow:none]"
+          size="1"
+          variant="outline"
         >
           <PlusIcon width="16" height="16" className="text-pp-icon-soft" />
           Add Filters

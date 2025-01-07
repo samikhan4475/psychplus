@@ -1,10 +1,10 @@
 'use client'
 
 import { useMemo } from 'react'
-import { FormFieldLabel, SelectInput } from '@/components'
+import { SelectInput } from '@/components'
 import { CODE_NOT_SET, CODESETS } from '@/constants'
 import { useCodesetCodes } from '@/hooks'
-import { FormFieldContainer } from '../../shared'
+import { FieldLabel, FormFieldContainer } from '../../shared'
 
 const ProviderTypeDropdown = () => {
   const codes = useCodesetCodes(CODESETS.ProviderType)
@@ -26,7 +26,7 @@ const ProviderTypeDropdown = () => {
 
   return (
     <FormFieldContainer>
-      <FormFieldLabel>Provider Type</FormFieldLabel>
+      <FieldLabel>Provider Type</FieldLabel>
       <SelectInput
         field="specialistTypeCode"
         options={options}

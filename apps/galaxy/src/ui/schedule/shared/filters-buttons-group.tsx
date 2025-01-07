@@ -14,7 +14,7 @@ const FiltersButtonsGroup = ({ children, resetFilters }: PropsWithChildren<Props
   const form = useFormContext<BookedAppointmentsSchemaType>()
 
   return (
-    <Flex align="center" className="flex-1 " gap="2">
+    <Flex align="start" className="flex-1 " gap="2">
       {children}
       <Button
         variant="outline"

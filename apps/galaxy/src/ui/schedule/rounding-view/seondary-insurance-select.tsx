@@ -1,9 +1,9 @@
 'use client'
 
-import { AsyncSelect, FormFieldLabel } from '@/components'
+import { AsyncSelect } from '@/components'
 import { getInsurancePlanOptionsAction } from '../actions'
 import { useFiltersContext } from '../context'
-import { FormFieldContainer } from '../shared'
+import { FieldLabel, FormFieldContainer } from '../shared'
 import { SchedulerFilters } from '../types'
 
 const SecondaryInsuranceDropdown = () => {
@@ -12,12 +12,12 @@ const SecondaryInsuranceDropdown = () => {
 
   return (
     <FormFieldContainer className="h-full">
-      <FormFieldLabel>Secondary Insurance</FormFieldLabel>
+      <FieldLabel>Secondary Insurance</FieldLabel>
       <AsyncSelect
         field="secondaryInsuranceName"
         placeholder="Select"
         fetchOptions={getInsurancePlanOptionsAction}
-        buttonClassName="w-full h-6"
+        buttonClassName="w-full h-6 truncate max-w-[10px] min-w-full"
         className="h-full flex-1"
       />
     </FormFieldContainer>

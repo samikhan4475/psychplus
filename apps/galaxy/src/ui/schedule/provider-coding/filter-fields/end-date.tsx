@@ -1,18 +1,19 @@
 'use client'
 
 import { useFormContext } from 'react-hook-form'
-import { DatePickerInput, FormFieldLabel } from '@/components'
+import { DatePickerInput } from '@/components'
 import { BookedAppointmentsSchemaType } from '../../schema'
-import { FormFieldContainer } from '../../shared'
+import { FieldLabel, FormFieldContainer } from '../../shared'
 
 const EndDate = () => {
   const form = useFormContext<BookedAppointmentsSchemaType>()
   return (
     <FormFieldContainer className="flex-1">
-      <FormFieldLabel>To Date</FormFieldLabel>
+      <FieldLabel>To Date</FieldLabel>
       <DatePickerInput
         field="endingDate"
         minValue={form.watch('startingDate') ?? undefined}
+        dateInputClass="h-6"
       />
     </FormFieldContainer>
   )

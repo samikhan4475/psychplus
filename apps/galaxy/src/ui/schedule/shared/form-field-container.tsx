@@ -9,7 +9,7 @@ const FormFieldContainer = ({
   className,
   children,
 }: React.PropsWithChildren<FormFieldContainerProps>) => (
-  <Flex className={cn('gap-x-1 flex-1', className)} align="center">
+  <Flex className={cn('gap-x-1 flex-1', className)} align="start">
     {children}
   </Flex>
 )

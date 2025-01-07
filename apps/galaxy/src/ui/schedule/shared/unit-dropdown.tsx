@@ -2,12 +2,13 @@
 
 import { useMemo } from 'react'
 import { useFormContext } from 'react-hook-form'
-import { FormFieldLabel, SelectInput } from '@/components'
+import { SelectInput } from '@/components'
 import { ServiceUnit } from '@/types'
 import { useFiltersContext } from '../context'
 import { BookedAppointmentsSchemaType } from '../schema'
 import { SchedulerFilters } from '../types'
 import { FormFieldContainer } from './form-field-container'
+import { FieldLabel } from './field-label'
 
 const UnitDropdown = ({
   units,
@@ -31,7 +32,7 @@ const UnitDropdown = ({
 
   return (
     <FormFieldContainer className="h-full">
-      <FormFieldLabel>Unit</FormFieldLabel>
+      <FieldLabel>Unit</FieldLabel>
       <SelectInput
         field="unitId"
         placeholder="Select"

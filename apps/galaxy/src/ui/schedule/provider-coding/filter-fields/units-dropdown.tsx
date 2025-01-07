@@ -2,10 +2,10 @@
 
 import { useMemo } from 'react'
 import { useFormContext } from 'react-hook-form'
-import { FormFieldLabel, SelectInput } from '@/components'
+import { SelectInput } from '@/components'
 import { ServiceUnit } from '@/types'
 import { useFiltersContext } from '../../context'
-import { FormFieldContainer } from '../../shared'
+import { FieldLabel, FormFieldContainer } from '../../shared'
 import { SchedulerFilters } from '../../types'
 import { ProviderCodingSchema } from '../provider-coding-view-schema'
 
@@ -31,7 +31,7 @@ const UnitSelect = ({
 
   return (
     <FormFieldContainer className="h-full">
-      <FormFieldLabel>Unit</FormFieldLabel>
+      <FieldLabel>Unit</FieldLabel>
       <SelectInput
         field="unitId"
         placeholder="Select"

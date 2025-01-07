@@ -1,18 +1,18 @@
 'use client'
 
 import { getClinicsOptionsAction } from '@/actions'
-import { AsyncSelect, FormFieldLabel } from '@/components'
-import { FormFieldContainer } from '../../shared'
+import { AsyncSelect } from '@/components'
+import { FieldLabel, FormFieldContainer } from '../../shared'
 
 const LocationDropdown = () => {
   return (
     <FormFieldContainer className="h-full flex-1">
-      <FormFieldLabel>Location</FormFieldLabel>
+      <FieldLabel>Location</FieldLabel>
       <AsyncSelect
         field="locationId"
         placeholder="Select"
         fetchOptions={getClinicsOptionsAction}
-        buttonClassName="w-full h-6"
+        buttonClassName="w-full h-6 max-w-[10px] min-w-full truncate"
         className="h-full flex-1"
       />
     </FormFieldContainer>

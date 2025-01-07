@@ -27,7 +27,7 @@ const AddPatient = ({
         <CloseDialogTrigger />
 
         <Dialog.Title className="font-sans -tracking-[0.25px]">
-          Add Patient
+          Add User
         </Dialog.Title>
 
         <AddPatientForm

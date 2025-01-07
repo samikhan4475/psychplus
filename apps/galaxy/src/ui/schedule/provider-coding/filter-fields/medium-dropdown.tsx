@@ -1,19 +1,18 @@
 'use client'
 
-import { CodesetSelect, FormFieldLabel } from '@/components'
+import { CodesetSelect } from '@/components'
 import { CODESETS } from '@/constants'
-import { FormFieldContainer } from '../../shared'
 import { useFiltersContext } from '../../context'
+import { FieldLabel, FormFieldContainer } from '../../shared'
 import { SchedulerFilters } from '../../types'
 
 const MediumDropdown = () => {
   const { filters } = useFiltersContext()
   if (!filters.includes(SchedulerFilters.VisitMedium)) return null
 
-
   return (
     <FormFieldContainer>
-      <FormFieldLabel>Medium</FormFieldLabel>
+      <FieldLabel>Medium</FieldLabel>
       <CodesetSelect
         name="visitMedium"
         codeset={CODESETS.VisitMedium}

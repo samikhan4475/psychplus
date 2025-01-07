@@ -1,9 +1,10 @@
 'use client'
 
-import { CodesetSelect, FormFieldLabel } from '@/components'
+import { Flex } from '@radix-ui/themes'
+import { CodesetSelect } from '@/components'
 import { CODESETS } from '@/constants'
-import { FormFieldContainer } from '../../shared'
 import { useFiltersContext } from '../../context'
+import { FieldLabel, FormFieldContainer } from '../../shared'
 import { SchedulerFilters } from '../../types'
 
 const VisitTypeDropdown = () => {
@@ -12,13 +13,15 @@ const VisitTypeDropdown = () => {
 
   return (
     <FormFieldContainer className="flex-1">
-      <FormFieldLabel>Visit Type</FormFieldLabel>
-      <CodesetSelect
-        name="visitType"
-        codeset={CODESETS.VisitType}
-        size="1"
-        className="flex-1"
-      />
+      <FieldLabel>Visit Type</FieldLabel>
+      <Flex className="flex-1">
+        <CodesetSelect
+          name="visitType"
+          codeset={CODESETS.VisitType}
+          size="1"
+          className="min-w-full max-w-[10px] truncate"
+        />
+      </Flex>
     </FormFieldContainer>
   )
 }

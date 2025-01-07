@@ -1,11 +1,11 @@
 'use client'
 
-import { CodesetSelect, FormFieldLabel } from '@/components'
+import { CodesetSelect } from '@/components'
 import { CODESETS } from '@/constants'
-import { FormFieldContainer } from '../../shared'
 import { useFiltersContext } from '../../context'
-import { SchedulerFilters } from '../../types'
 import { useVisitSequenceCodeset } from '../../hooks'
+import { FieldLabel, FormFieldContainer } from '../../shared'
+import { SchedulerFilters } from '../../types'
 
 const SequenceDropdown = () => {
   const { filters } = useFiltersContext()
@@ -14,7 +14,7 @@ const SequenceDropdown = () => {
 
   return (
     <FormFieldContainer className="h-full">
-      <FormFieldLabel>Sequence</FormFieldLabel>
+      <FieldLabel>Sequence</FieldLabel>
       <CodesetSelect
         name="visitSequence"
         codeset={CODESETS.VisitSequence}

@@ -1,11 +1,18 @@
-import { DatePickerInput, FormFieldLabel } from '@/components'
-import { FormFieldContainer } from '../../shared'
+import { useFormContext } from 'react-hook-form'
+import { DatePickerInput } from '@/components'
+import { FieldLabel, FormFieldContainer } from '../../shared'
+import { CalenderViewSchemaType } from '../../types'
 
 const StartDateInput = () => {
+  const form = useFormContext<CalenderViewSchemaType>()
   return (
     <FormFieldContainer>
-      <FormFieldLabel>From Date</FormFieldLabel>
-      <DatePickerInput field="startingDate" dateInputClass="h-6" />
+      <FieldLabel>From Date</FieldLabel>
+      <DatePickerInput
+        field="startingDate"
+        dateInputClass="h-6"
+        maxValue={form.watch('endingDate')}
+      />
     </FormFieldContainer>
   )
 }

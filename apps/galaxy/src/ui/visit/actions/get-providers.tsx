@@ -24,6 +24,7 @@ const getProviders = async (payload: {
     ...payload,
     roleCodes: ['1'],
     IsIncludeProviderForFacility: true,
+    isIncludeProviderWithLicenseOnly: true,
   })
   if (response.state === 'error') {
     return {

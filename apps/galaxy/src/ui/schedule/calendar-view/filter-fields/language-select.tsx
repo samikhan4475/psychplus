@@ -1,11 +1,11 @@
-import { CodesetSelect, FormFieldLabel } from '@/components'
+import { CodesetSelect } from '@/components'
 import { CODESETS } from '@/constants'
-import { FormFieldContainer } from '../../shared'
+import { FieldLabel, FormFieldContainer } from '../../shared'
 
 const LanguageSelect = () => {
   return (
     <FormFieldContainer>
-      <FormFieldLabel>Language</FormFieldLabel>
+      <FieldLabel>Language</FieldLabel>
       <CodesetSelect
         name="providerLanguage"
         codeset={CODESETS.Language}

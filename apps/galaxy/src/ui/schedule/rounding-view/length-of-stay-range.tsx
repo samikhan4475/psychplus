@@ -2,8 +2,7 @@
 
 import { TextField } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
-import { FormFieldLabel } from '@/components'
-import { FormFieldContainer } from '../shared'
+import { FieldLabel, FormFieldContainer } from '../shared'
 import { useFiltersContext } from '../context'
 import { BookedAppointmentsSchemaType } from '../schema'
 import { SchedulerFilters } from '../types'
@@ -15,7 +14,7 @@ const LengthOfStayRange = () => {
 
   return (
     <FormFieldContainer>
-      <FormFieldLabel>LOS</FormFieldLabel>
+      <FieldLabel>LOS</FieldLabel>
       <TextField.Root
         className="h-6"
         placeholder="From"

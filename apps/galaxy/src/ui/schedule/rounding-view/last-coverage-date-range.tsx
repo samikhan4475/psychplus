@@ -1,8 +1,14 @@
 'use client'
 
-import { DatePickerInput, FormFieldLabel } from '@/components'
-import { FormFieldContainer } from '../shared'
+import { Flex } from '@radix-ui/themes'
 import { useFiltersContext } from '../context'
+import {
+  DateRangeEnd,
+  DateRangeError,
+  DateRangeStart,
+  FieldLabel,
+  FormFieldContainer,
+} from '../shared'
 import { SchedulerFilters } from '../types'
 
 const LastCoverageDateRange = () => {
@@ -10,11 +16,23 @@ const LastCoverageDateRange = () => {
   if (!filters.includes(SchedulerFilters.LCD)) return null
 
   return (
-    <FormFieldContainer>
-      <FormFieldLabel>LCD</FormFieldLabel>
-      <DatePickerInput field="lastCoverageDateStart" />
-      <DatePickerInput field="lastCoverageDateEnd" />
-    </FormFieldContainer>
+    <Flex direction="column" gap="1">
+      <FormFieldContainer>
+        <FieldLabel>LCD</FieldLabel>
+        <DateRangeStart
+          dateField="lastCoverageDateStart"
+          referenceDateField="lastCoverageDateEnd"
+        />
+        <DateRangeEnd
+          dateField="lastCoverageDateEnd"
+          referenceDateField="lastCoverageDateStart"
+        />
+      </FormFieldContainer>
+      <DateRangeError
+        startDateName="lastCoverageDateStart"
+        endDateName="lastCoverageDateEnd"
+      />
+    </Flex>
   )
 }
 

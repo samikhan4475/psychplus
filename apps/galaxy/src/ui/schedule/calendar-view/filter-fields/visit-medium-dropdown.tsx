@@ -1,7 +1,7 @@
-import { FormFieldLabel, SelectInput } from '@/components'
+import { SelectInput } from '@/components'
 import { CODESETS } from '@/constants'
 import { useCodesetCodes } from '@/hooks'
-import { FormFieldContainer } from '../../shared'
+import { FieldLabel, FormFieldContainer } from '../../shared'
 
 const VisitMediumDropdown = () => {
   const codes = useCodesetCodes(CODESETS.VisitMedium)
@@ -12,7 +12,7 @@ const VisitMediumDropdown = () => {
 
   return (
     <FormFieldContainer>
-      <FormFieldLabel>Visit Medium</FormFieldLabel>
+      <FieldLabel>Visit Medium</FieldLabel>
       <SelectInput
         field="visitMedium"
         placeholder="Select"

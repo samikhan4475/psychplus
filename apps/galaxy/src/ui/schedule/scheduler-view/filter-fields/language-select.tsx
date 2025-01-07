@@ -1,13 +1,14 @@
 'use client'
 
-import { CodesetSelect, FormFieldLabel } from '@/components'
+import { CodesetSelect } from '@/components'
 import { CODESETS } from '@/constants'
 import { FormFieldContainer } from '../../shared/form-field-container'
+import { FieldLabel } from '../../shared'
 
 const LanguageSelect = () => {
   return (
     <FormFieldContainer className="flex-1">
-      <FormFieldLabel>Language</FormFieldLabel>
+      <FieldLabel>Language</FieldLabel>
       <CodesetSelect
         name="language"
         codeset={CODESETS.Language}

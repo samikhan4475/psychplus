@@ -1,8 +1,8 @@
 'use client'
 
-import { CodesetSelect, FormFieldLabel } from '@/components'
+import { CodesetSelect } from '@/components'
 import { CODESETS } from '@/constants'
-import { FormFieldContainer } from '../shared'
+import { FieldLabel, FormFieldContainer } from '../shared'
 import { useFiltersContext } from '../context'
 import { useFormContext } from 'react-hook-form'
 import { BookedAppointmentsSchemaType } from '../schema'
@@ -16,7 +16,7 @@ const VisitMediumSelect = () => {
 
   return (
     <FormFieldContainer>
-      <FormFieldLabel>Visit Medium</FormFieldLabel>
+      <FieldLabel>Visit Medium</FieldLabel>
       <CodesetSelect
         name="visitMedium"
         codeset={CODESETS.VisitMedium}

@@ -1,12 +1,12 @@
 'use client'
 
-import { DatePickerInput, FormFieldLabel } from '@/components'
-import { FormFieldContainer } from '../../shared'
+import { DatePickerInput } from '@/components'
+import { FieldLabel, FormFieldContainer } from '../../shared'
 
 const DateOfBirthInput = () => {
   return (
     <FormFieldContainer className='flex-1'>
-      <FormFieldLabel>DOB</FormFieldLabel>
+      <FieldLabel>DOB</FieldLabel>
       <DatePickerInput field="dateOfBirth" dateInputClass='h-6' />
     </FormFieldContainer>
   )

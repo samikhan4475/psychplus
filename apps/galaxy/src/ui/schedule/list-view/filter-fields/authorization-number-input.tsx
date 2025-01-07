@@ -2,11 +2,10 @@
 
 import { TextField } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
-import { FormFieldLabel } from '@/components'
-import { FormFieldContainer } from '../../shared'
 import { useFiltersContext } from '../../context'
-import { SchedulerFilters } from '../../types'
 import { BookedAppointmentsSchemaType } from '../../schema'
+import { FieldLabel, FormFieldContainer } from '../../shared'
+import { SchedulerFilters } from '../../types'
 
 const AuthorizationNumberInput = () => {
   const form = useFormContext<BookedAppointmentsSchemaType>()
@@ -15,10 +14,10 @@ const AuthorizationNumberInput = () => {
 
   return (
     <FormFieldContainer>
-      <FormFieldLabel>Auth #</FormFieldLabel>
+      <FieldLabel>Auth #</FieldLabel>
       <TextField.Root
         className="flex-1"
-        placeholder='Auth #'
+        placeholder="Auth #"
         size="1"
         {...form.register('insuranceAuthorizationNumber')}
       />

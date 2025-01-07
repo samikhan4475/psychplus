@@ -44,9 +44,6 @@ const Header = () => {
               </Button>
             </AddVisit>
             <Flex height="100%" align="center" gap="3" ml="2">
-              <Text weight="medium" size="1">
-                Mercy Hospital
-              </Text>
               <UserDropdownMenu user={auth.user} />
             </Flex>
           </Flex>

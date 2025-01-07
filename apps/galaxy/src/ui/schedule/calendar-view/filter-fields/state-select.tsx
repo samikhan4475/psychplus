@@ -11,7 +11,9 @@ const StateSelect = () => {
   return (
     <FormFieldContainer className="flex-1 gap-x-1">
       <Flex className="flex-1 gap-x-1" align="center">
-        <FormFieldLabel required>State</FormFieldLabel>
+        <FormFieldLabel className="h-6" required>
+          State
+        </FormFieldLabel>
         <AsyncSelect
           field="stateIds"
           fetchOptions={getUsStatesOptionsAction}

@@ -2,9 +2,8 @@
 
 import { TextField } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
-import { FormFieldLabel } from '@/components'
 import { useFiltersContext } from '../../context'
-import { FormFieldContainer } from '../../shared'
+import { FieldLabel, FormFieldContainer } from '../../shared'
 import { SchedulerFilters } from '../../types'
 import { ProviderCodingSchema } from '../provider-coding-view-schema'
 
@@ -15,7 +14,7 @@ const CoPayRange = () => {
 
   return (
     <FormFieldContainer>
-      <FormFieldLabel className="min-w-10">Co-Pay</FormFieldLabel>
+      <FieldLabel className="min-w-10">Co-Pay</FieldLabel>
       <TextField.Root
         size="1"
         placeholder="$ From"

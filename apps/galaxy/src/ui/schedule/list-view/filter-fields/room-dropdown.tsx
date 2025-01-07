@@ -1,7 +1,7 @@
 'use client'
 
-import { FormFieldLabel, SelectInput } from '@/components'
-import { FormFieldContainer } from '../../shared'
+import { SelectInput } from '@/components'
+import { FieldLabel, FormFieldContainer } from '../../shared'
 import { useFormContext } from 'react-hook-form'
 import { useFiltersContext } from '../../context'
 import { SchedulerFilters } from '../../types'
@@ -30,7 +30,7 @@ const RoomDropdown = () => {
 
   return (
     <FormFieldContainer className="h-full">
-      <FormFieldLabel>Room</FormFieldLabel>
+      <FieldLabel>Room</FieldLabel>
       <SelectInput
         field="room"
         placeholder="Select"

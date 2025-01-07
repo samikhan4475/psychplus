@@ -1,11 +1,11 @@
-import { CodesetSelect, FormFieldLabel } from '@/components'
+import { CodesetSelect } from '@/components'
 import { CODESETS } from '@/constants'
-import { FormFieldContainer } from '../../shared'
+import { FieldLabel, FormFieldContainer } from '../../shared'
 
 const VisitMediumSelect = () => {
   return (
     <FormFieldContainer>
-      <FormFieldLabel>Visit Medium</FormFieldLabel>
+      <FieldLabel>Visit Medium</FieldLabel>
       <CodesetSelect
         name="type"
         className="flex-1"

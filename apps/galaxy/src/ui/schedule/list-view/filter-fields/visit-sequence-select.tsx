@@ -1,8 +1,8 @@
 'use client'
 
-import { CodesetSelect, FormFieldLabel } from '@/components'
+import { CodesetSelect } from '@/components'
 import { CODESETS } from '@/constants'
-import { FormFieldContainer } from '../../shared'
+import { FieldLabel, FormFieldContainer } from '../../shared'
 import { useFiltersContext } from '../../context'
 import { SchedulerFilters } from '../../types'
 
@@ -12,7 +12,7 @@ const VisitSequenceSelect = () => {
 
   return (
     <FormFieldContainer className="h-full">
-      <FormFieldLabel>Visit Sequence</FormFieldLabel>
+      <FieldLabel>Visit Sequence</FieldLabel>
         <CodesetSelect
           name="visitSequence"
           codeset={CODESETS.VisitSequence}

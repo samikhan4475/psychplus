@@ -1,18 +1,18 @@
 'use client'
 
-import { CodesetSelect, FormFieldLabel } from '@/components'
-import { FormFieldContainer } from '../shared'
-import { useFiltersContext } from '../context'
-import { SchedulerFilters } from '../types'
+import { CodesetSelect } from '@/components'
 import { CODESETS } from '@/constants'
+import { useFiltersContext } from '../context'
+import { FieldLabel, FormFieldContainer } from '../shared'
+import { SchedulerFilters } from '../types'
 
-const   NoteSignedSelect = () => {
+const NoteSignedSelect = () => {
   const { filters } = useFiltersContext()
   if (!filters.includes(SchedulerFilters.NoteSigned)) return null
 
   return (
     <FormFieldContainer>
-      <FormFieldLabel>Note Signed Status</FormFieldLabel>
+      <FieldLabel>Note Signed Status</FieldLabel>
       <CodesetSelect
         name="noteSignedStatus"
         codeset={CODESETS.NoteSignatureStatus}

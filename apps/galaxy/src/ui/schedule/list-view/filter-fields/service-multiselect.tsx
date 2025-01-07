@@ -2,12 +2,12 @@
 
 import { useEffect, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
-import { FormFieldLabel, MultiSelectField } from '@/components'
+import { MultiSelectField } from '@/components'
 import { getLocationServicesAction } from '../../actions'
 import { useFiltersContext } from '../../context'
 import { useServiceCodesMap } from '../../hooks'
 import { BookedAppointmentsSchemaType } from '../../schema'
-import { FormFieldContainer } from '../../shared'
+import { FieldLabel, FormFieldContainer } from '../../shared'
 import { Option, SchedulerFilters } from '../../types'
 import { getServiceFilterOptions } from '../../utils'
 
@@ -35,7 +35,7 @@ const ServiceMultiSelect = () => {
 
   return (
     <FormFieldContainer>
-      <FormFieldLabel>Service</FormFieldLabel>
+      <FieldLabel>Service</FieldLabel>
       <MultiSelectField
         disabled={!selectedLocation}
         defaultValues={services}

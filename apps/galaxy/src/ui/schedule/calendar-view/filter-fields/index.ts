@@ -1,6 +1,5 @@
 export * from './start-date-input'
 export * from './end-date-input'
-export * from './first-responder-select'
 export * from './gender-select'
 export * from './language-select'
 export * from './location-dropdown'

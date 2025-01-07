@@ -1,13 +1,13 @@
 'use client'
 
 import { getProvidersOptionsAction } from '@/actions'
-import { AsyncSelect, FormFieldLabel } from '@/components'
-import { FormFieldContainer } from '../../shared'
+import { AsyncSelect } from '@/components'
+import { FieldLabel, FormFieldContainer } from '../../shared'
 
 const ProviderDropdown = () => {
   return (
     <FormFieldContainer className="flex-1">
-      <FormFieldLabel>Provider</FormFieldLabel>
+      <FieldLabel>Provider</FieldLabel>
       <AsyncSelect
         field="staffIds"
         placeholder="Select"

@@ -4,10 +4,10 @@ import { useEffect, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { getUsStatesOptionsAction } from '@/actions'
-import { FormFieldLabel, MultiSelectField } from '@/components'
+import { MultiSelectField } from '@/components'
 import { SelectOptionType } from '@/types'
 import { BookedAppointmentsSchemaType } from '../../schema'
-import { FormFieldContainer } from '../../shared'
+import { FieldLabel, FormFieldContainer } from '../../shared'
 
 const StateSelect = () => {
   const form = useFormContext<BookedAppointmentsSchemaType>()
@@ -28,7 +28,7 @@ const StateSelect = () => {
 
   return (
     <FormFieldContainer className="flex-1">
-      <FormFieldLabel className="text-[12px]">State</FormFieldLabel>
+      <FieldLabel>State</FieldLabel>
       <MultiSelectField
         defaultValues={states}
         options={stateOptions}

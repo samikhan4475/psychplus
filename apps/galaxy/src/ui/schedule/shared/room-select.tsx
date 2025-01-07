@@ -2,12 +2,13 @@
 
 import { useMemo } from 'react'
 import { useFormContext } from 'react-hook-form'
-import { FormFieldLabel, SelectInput } from '@/components'
+import { SelectInput } from '@/components'
 import { ServiceRoom } from '@/types'
 import { useFiltersContext } from '../context'
 import { BookedAppointmentsSchemaType } from '../schema'
 import { SchedulerFilters } from '../types'
 import { FormFieldContainer } from './form-field-container'
+import { FieldLabel } from './field-label'
 
 const RoomSelect = ({
   rooms,
@@ -31,7 +32,7 @@ const RoomSelect = ({
 
   return (
     <FormFieldContainer className="h-full">
-      <FormFieldLabel>Room</FormFieldLabel>
+      <FieldLabel>Room</FieldLabel>
       <SelectInput
         field="roomId"
         placeholder="Select"

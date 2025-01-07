@@ -2,11 +2,10 @@
 
 import { TextField } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
-import { FormFieldLabel } from '@/components'
 import { useFiltersContext } from '../../context'
-import { FormFieldContainer } from '../../shared'
-import { ProviderCodingSchema } from '../provider-coding-view-schema'
+import { FieldLabel, FormFieldContainer } from '../../shared'
 import { SchedulerFilters } from '../../types'
+import { ProviderCodingSchema } from '../provider-coding-view-schema'
 
 const Diagnosis = () => {
   const form = useFormContext<ProviderCodingSchema>()
@@ -15,7 +14,7 @@ const Diagnosis = () => {
 
   return (
     <FormFieldContainer>
-      <FormFieldLabel>Diagnosis</FormFieldLabel>
+      <FieldLabel>Diagnosis</FieldLabel>
       <TextField.Root
         className="flex-1"
         placeholder="Diagnosis"

@@ -2,10 +2,10 @@
 
 import { useMemo } from 'react'
 import { useFormContext } from 'react-hook-form'
-import { FormFieldLabel, SelectInput } from '@/components'
+import { SelectInput } from '@/components'
 import { ServiceRoom } from '@/types'
 import { useFiltersContext } from '../../context'
-import { FormFieldContainer } from '../../shared'
+import { FieldLabel, FormFieldContainer } from '../../shared'
 import { SchedulerFilters } from '../../types'
 import { ProviderCodingSchema } from '../provider-coding-view-schema'
 
@@ -31,7 +31,7 @@ const RoomSelect = ({
 
   return (
     <FormFieldContainer className="h-full">
-      <FormFieldLabel>Room</FormFieldLabel>
+      <FieldLabel>Room</FieldLabel>
       <SelectInput
         field="roomId"
         placeholder="Select"

@@ -36,6 +36,7 @@ interface DatePickerInputProps<T extends DateValue> extends DatePickerProps<T> {
   datePickerClass?: string
   dateInputClass?: string
   handleChange?: (date: CalendarDate) => void
+  showError?: boolean
 }
 
 const DatePickerInput = <T extends DateValue>({
@@ -48,6 +49,7 @@ const DatePickerInput = <T extends DateValue>({
   datePickerClass,
   dateInputClass,
   handleChange,
+  showError = true,
   ...props
 }: DatePickerInputProps<T>) => {
   const form = useFormContext()
@@ -146,7 +148,7 @@ const DatePickerInput = <T extends DateValue>({
           </DatePicker>
         )}
       />
-      <FormFieldError name={field} />
+      {showError && <FormFieldError name={field} />}
     </FormFieldContainer>
   )
 }

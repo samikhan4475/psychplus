@@ -127,6 +127,8 @@ const CLICK_DOLLAR_ICON = 'You do not have permission to view payment details. P
 
 const SCHEDULER_PAGE_SIZE_LIMIT = 20
 
+const INVALID_RANGE_ERROR = 'Invalid date range'
+
 
 enum StatusCode {
   NoPermission = 406,
@@ -156,4 +158,5 @@ export {
   EDIT_APPOINTMENT,
   CLICK_DOLLAR_ICON,
   StatusCode,
+  INVALID_RANGE_ERROR,
 }

@@ -1,11 +1,11 @@
-import { CodesetSelect, FormFieldLabel } from '@/components'
+import { CodesetSelect } from '@/components'
 import { CODE_NOT_SET, CODESETS } from '@/constants'
-import { FormFieldContainer } from '../../shared'
+import { FieldLabel, FormFieldContainer } from '../../shared'
 
 const ProviderTypeDropdown = () => {
   return (
     <FormFieldContainer>
-      <FormFieldLabel>Provider Type</FormFieldLabel>
+      <FieldLabel>Provider Type</FieldLabel>
       <CodesetSelect
         codeset={CODESETS.ProviderType}
         size="1"
