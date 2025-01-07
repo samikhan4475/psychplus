@@ -10,8 +10,7 @@ import { getLocalTimeZone, startOfWeek, today } from '@internationalized/date'
 import { START_OF_WEEK_LOCALE } from '../constants'
 
 const ProviderCoding = () => {
-  const { fetchProviderCodingView, loading, setDates } = useStore((state) => ({
-    fetchProviderCodingView: state.fetchProviderCodingView,
+  const { loading, setDates } = useStore((state) => ({
     loading: state.loading,
     setDates: state.setDates,
   }))
@@ -21,7 +20,6 @@ const ProviderCoding = () => {
     const currentDate = today(timeZone)
     const weekStartDateValue = startOfWeek(currentDate, START_OF_WEEK_LOCALE)
     setDates(weekStartDateValue.toDate(timeZone))
-    fetchProviderCodingView()
   }, [])
 
   return (

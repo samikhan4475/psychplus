@@ -26,7 +26,7 @@ const ProvidersAccordionMenu = ({ patient }: { patient: undefined | NewPatient }
             align="center"
             className="border-pp-focus-bg col-[3_/_span_14] border-b border-l border-r py-2 text-[12px]"
           >
-            No results found
+            No results
           </Text>
         </Grid>
       )}

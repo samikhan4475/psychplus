@@ -8,6 +8,7 @@ import z from 'zod'
 import { FormContainer } from '@/components'
 import { sanitizeFormData } from '@/utils'
 import { START_OF_WEEK_LOCALE } from '../constants'
+import { useProviderId } from '../hooks'
 import { getDateString, isDirty } from '../utils'
 import { ClearFilterButton } from './clear-filter-button'
 import {
@@ -41,6 +42,7 @@ const SchedulerFilterGroup = ({
     setDates: state.setDates,
     fetchData: state.fetchAppointments,
   }))
+  const providerId = useProviderId()
 
   const form = useForm<SchemaType>({
     resolver: zodResolver(schema),
@@ -51,7 +53,7 @@ const SchedulerFilterGroup = ({
       stateId: '',
       locationIds: '',
       serviceIds: [],
-      staffIds: '',
+      staffIds: providerId ?? '',
       specialistTypeCode: '',
       gender: '',
       language: '',
@@ -95,8 +97,9 @@ const SchedulerFilterGroup = ({
   const resetFilters = () => {
     if (!isDirty(dirtyFields)) return
     form.reset()
-
-    fetchData()
+    if (providerId) {
+      fetchData({ staffIds: [Number(providerId)] })
+    }
   }
 
   return (

@@ -5,7 +5,7 @@ import { useFormContext } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { SelectInput } from '@/components'
 import { SelectOptionType } from '@/types'
-import { getStateClinicsOptionsAction } from '../../actions'
+import { searchLocationOptionsAction } from '../../actions'
 import { useFiltersContext } from '../../context'
 import { BookedAppointmentsSchemaType } from '../../schema'
 import { FieldLabel, FormFieldContainer } from '../../shared'
@@ -21,8 +21,7 @@ const LocationDropdown = () => {
   useEffect(() => {
     if (stateIds.length) {
       setLoading(true)
-      // @TODO: use updated api for fetching locations based on multiple states selected
-      getStateClinicsOptionsAction(stateIds[0]).then((response) => {
+      searchLocationOptionsAction({ stateId: stateIds }).then((response) => {
         setLoading(false)
         if (response.state === 'error') {
           toast.error('Failed to fetch clinic locations')

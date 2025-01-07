@@ -8,6 +8,7 @@ import { FormContainer } from '@/components'
 import { sanitizeFormData } from '@/utils'
 import { LIST_VIEW_FILTERS } from '../constants'
 import { FiltersContext } from '../context'
+import { useProviderId } from '../hooks'
 import {
   bookedAppointmentsSchema,
   BookedAppointmentsSchemaType,
@@ -67,6 +68,7 @@ const ListViewFilterCard = () => {
     cachedFilters: state.cachedFiltersList,
     saveFilters: state.saveListFilters,
   }))
+  const providerId = useProviderId()
   const ctxValue = useMemo(
     () => ({
       filters,
@@ -91,7 +93,7 @@ const ListViewFilterCard = () => {
       locationId: '',
       serviceIds: [],
       providerType: '',
-      providerIds: '',
+      providerIds: providerId ?? '',
       unitId: '',
       roomId: '',
       groupId: '',
@@ -152,7 +154,9 @@ const ListViewFilterCard = () => {
   const resetFilters = () => {
     if (!isDirty(dirtyFields)) return
     form.reset()
-    fetchData()
+    if (providerId) {
+      fetchData({ providerIds: [Number(providerId)] })
+    }
   }
 
   return (

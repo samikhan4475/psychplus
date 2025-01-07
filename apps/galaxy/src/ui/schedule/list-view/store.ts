@@ -42,7 +42,7 @@ const useStore = create<Store>((set, get) => ({
       formData: body,
     })
     const startingDate = getDateString(today(getLocalTimeZone()))
-    const requestBody = body ? body : { startingDate }
+    const requestBody = { startingDate, ...(body ?? {}) }
     const result = await getBookedAppointmentsAction(requestBody, page)
     if (result.state === 'error') {
       toast.error(result.error || 'Failed to retrieve appointments')

@@ -6,6 +6,7 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import { FormContainer } from '@/components'
 import { sanitizeFormData } from '@/utils'
 import { START_OF_WEEK_LOCALE } from '../constants'
+import { useProviderId } from '../hooks'
 import { CalenderViewSchemaType } from '../types'
 import { getDateString, isDirty } from '../utils'
 import { calenderViewSchema } from './calender-view-schema'
@@ -33,6 +34,8 @@ const CalendarFilterCard = () => {
     setStartDate: state.setStartDate,
     fetchData: state.fetchData,
   }))
+  const providerId = useProviderId()
+
   const form = useForm<CalenderViewSchemaType>({
     resolver: zodResolver(calenderViewSchema),
     criteriaMode: 'all',
@@ -42,7 +45,7 @@ const CalendarFilterCard = () => {
       stateIds: '',
       locationId: '',
       serviceIds: [],
-      providerIds: '',
+      providerIds: providerId ?? '',
       visitMedium: '',
       providerType: '',
       gender: '',
@@ -72,12 +75,15 @@ const CalendarFilterCard = () => {
   const resetFilters = () => {
     if (!isDirty(dirtyFields)) return
     form.reset()
-    fetchData()
+    if (providerId) {
+      fetchData({ providerIds: [Number(providerId)] })
+    }
   }
 
   const FilterButton = isPartialFilterView
     ? ShowFiltersButton
     : HideFiltersButton
+
   return (
     <Flex className="bg-white z-10 rounded-[4px] px-2.5 shadow-3">
       <FormContainer form={form} onSubmit={onSubmit}>

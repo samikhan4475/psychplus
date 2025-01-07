@@ -26,6 +26,7 @@ import { ServiceSelect } from './service-select'
 import { StateSelect } from './state-select'
 import { TimedVisitForm } from './timed/timed-visit-form'
 import { UntimedVisitForm } from './untimed/untimed-visit-form'
+import { isDirty } from '@/ui/schedule/utils'
 
 const EditVisitForm = ({
   appointmentId,
@@ -148,6 +149,8 @@ const EditVisitForm = ({
     name: 'isServiceTimeDependent',
   })
   const onSubmit: SubmitHandler<SchemaType> = (data) => {
+    const { dirtyFields } = form.formState
+    if (!isDirty(dirtyFields)) return
     if (!hasPermissionToClickSaveButton) {
       setIsAlertOpen(true)
       setAlertInfo({

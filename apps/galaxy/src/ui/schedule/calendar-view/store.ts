@@ -37,7 +37,7 @@ const useStore = create<Store>((set, get) => ({
       formData: body,
     })
     const startingDate = getDateString(getCurrentWeekStartDate())
-    const params = body ? body : { startingDate }
+    const params = { startingDate, ...(body?? {})}
     const result = await getBookedAppointmentsAction({
       ...params,
       isServiceTimeDependant: true,

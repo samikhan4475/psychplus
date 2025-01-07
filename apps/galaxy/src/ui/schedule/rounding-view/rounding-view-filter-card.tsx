@@ -147,7 +147,6 @@ const RoundingViewFilterCard = () => {
   const resetFilters = () => {
     if (!isDirty(dirtyFields)) return
     form.reset()
-    fetchData()
   }
 
   return (

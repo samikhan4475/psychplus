@@ -17,7 +17,9 @@ interface Store {
   updateTableFilters: (filter: string[]) => void
 }
 
-const useStore = create<Store>()(persist((set, get) => ({
+const useStore = create<Store>()(
+  persist(
+    (set, get) => ({
       activeTab: TabValue.List,
       visitedTabs: new Set([TabValue.List]),
       cachedFiltersRounding: [],

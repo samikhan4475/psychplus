@@ -3,11 +3,12 @@
 import { useEffect } from 'react'
 import { Flex, ScrollArea } from '@radix-ui/themes'
 import { LoadingPlaceholder } from '@/components'
+import { NewPatient } from '@/types'
+import { useProviderId } from '../hooks'
 import { DayHeader } from './day-header'
 import { SchedulerFilterGroup } from './filter-actions-group'
 import { ProvidersAccordionMenu } from './providers-accordion-menu'
 import { useStore } from './store'
-import { NewPatient } from '@/types'
 
 const SchedulerView = ({
   showFollowUpFilter = false,
@@ -16,15 +17,17 @@ const SchedulerView = ({
 }: {
   showFollowUpFilter?: boolean
   noOfDays?: number
-  patient?:NewPatient
+  patient?: NewPatient
 }) => {
   const { fetchAvailableSlots, loading } = useStore((state) => ({
     fetchAvailableSlots: state.fetchAppointments,
     loading: state.loading,
   }))
+  const providerId = useProviderId()
 
   useEffect(() => {
-    fetchAvailableSlots()
+    if (!providerId) return
+    fetchAvailableSlots({ staffIds: [Number(providerId)] })
   }, [])
 
   return (

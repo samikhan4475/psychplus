@@ -9,6 +9,7 @@ import type {
   CodesetCache,
   Constants,
   RolePermission,
+  StaffResource,
   UserResponse as User,
 } from '@/types'
 
@@ -19,6 +20,7 @@ interface NavigationTab {
 
 interface Store {
   user: User
+  staffResource: StaffResource
   codesets: CodesetCache
   permissions: Record<string, RolePermission>
   constants: Constants
@@ -30,6 +32,7 @@ interface Store {
 
 interface StoreInitialState {
   user: User
+  staffResource: StaffResource
   codesets: CodesetCache
   permissions: Record<string, RolePermission>
   constants: Constants
@@ -43,6 +46,7 @@ const createStore = (initialState: StoreInitialState) =>
         permissions: initialState.permissions,
         constants: initialState.constants,
         user: initialState.user,
+        staffResource: initialState.staffResource,
         tabs: [],
         addTab: (tab) => set(addTabReducer(tab)),
         removeTab: (name) => set(removeTabReducer(name)),

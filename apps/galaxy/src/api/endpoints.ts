@@ -528,6 +528,7 @@ const DOWNLOAD_QUICK_NOTE_DOCUMENT = (
   `${API_URL}/api/patients/${patientId}/appointments/${appointmentId}/documents/${documentId}/actions/download`
 const DELETE_QUICK_NOTE_DOCUMENT = (patientId: number, appointmentId: number) =>
   `${API_URL}/api/patients/${patientId}/appointments/${appointmentId}/documents`
+
 export {
   GET_LAB_RESULTS_ENDPOINT,
   NOTE_UPLOAD_FILE,

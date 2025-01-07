@@ -99,17 +99,19 @@ const ActionsCell = ({
           <TableEditIcon height={18} />
         </IconButton>
       )}
-      <AddProviderTypeDialog
-        appointmentId={appointment.appointmentId}
-        isPsychiatristVisitTypeSequence={isPsychiatristVisitTypeSequence}
-      >
-        <IconButton
-          variant="ghost"
-          disabled={!isPsychiatristVisitTypeSequence || isInactiveVisit}
+      {!appointment.isServiceTimeDependent && (
+        <AddProviderTypeDialog
+          appointmentId={appointment.appointmentId}
+          isPsychiatristVisitTypeSequence={isPsychiatristVisitTypeSequence}
         >
-          <CirclePlus color="black" width={16} height={16} />
-        </IconButton>
-      </AddProviderTypeDialog>
+          <IconButton
+            variant="ghost"
+            disabled={!isPsychiatristVisitTypeSequence || isInactiveVisit}
+          >
+            <CirclePlus color="black" width={16} height={16} />
+          </IconButton>
+        </AddProviderTypeDialog>
+      )}
     </Flex>
   )
 }

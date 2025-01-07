@@ -153,7 +153,6 @@ const ProviderCodingFilters = () => {
     if (!isDirty) return
     form.reset()
     setFormData({})
-    fetchProviderCodingView()
   }
 
   return (
