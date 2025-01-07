@@ -21,7 +21,7 @@ const PatientAllergiesHeader = ({
       </Text>
       <Flex className="gap-x-2 text-[20px]" align="center">
         <PatientAllergiesPrintButton />
-        <WidgetAddButton title="Add Allergy">
+        <WidgetAddButton title="Add Allergies">
           <AddAllergyButton scriptSureAppUrl={scriptSureAppUrl} />
         </WidgetAddButton>
       </Flex>

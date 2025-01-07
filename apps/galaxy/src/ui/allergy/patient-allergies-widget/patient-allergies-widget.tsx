@@ -32,7 +32,7 @@ const PatientAllergiesWidget = ({
         headerRight={
           !isPatientAllergiesTab && (
             <>
-              <WidgetAddButton title="Add Allergy1">
+              <WidgetAddButton title="Add Allergies">
                 <AddAllergyButton scriptSureAppUrl={scriptSureAppUrl} />
               </WidgetAddButton>
             </>
