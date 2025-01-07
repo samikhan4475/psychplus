@@ -289,7 +289,7 @@ const AddVisitForm = ({
                 })
               }}
             >
-              <Text size="1">Add Vacation1</Text>
+              <Text size="1">Add Vacation</Text>
             </Button>
           ))}
         <FormSubmitButton
