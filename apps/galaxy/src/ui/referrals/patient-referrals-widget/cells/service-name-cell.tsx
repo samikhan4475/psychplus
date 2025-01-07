@@ -1,6 +1,6 @@
 'use client'
 
-import { LongTextCell, PropsWithRow } from '@/components'
+import { PropsWithRow, TextCell } from '@/components'
 import { CODE_NOT_SET, CODESETS } from '@/constants'
 import { useCodesetOptions } from '@/hooks'
 import { PatientReferral, SelectOptionType } from '@/types'
@@ -13,7 +13,9 @@ const ServiceNameCell = ({
   ])
 
   return (
-    <LongTextCell>{getServiceLabel(options, referral.service)}</LongTextCell>
+    <TextCell className="truncate">
+      {getServiceLabel(options, referral.service)}
+    </TextCell>
   )
 }
 

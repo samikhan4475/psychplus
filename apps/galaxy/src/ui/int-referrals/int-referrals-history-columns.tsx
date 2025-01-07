@@ -4,7 +4,7 @@ import { ColumnDef } from '@tanstack/react-table'
 import { ColumnHeader, LongTextCell, TextCell } from '@/components'
 import { PatientReferral } from '@/types'
 import { formatDate, formatDateTime, getPatientFullName } from '@/utils'
-import { ContactMadeSelectCell } from '../referrals/patient-referrals-widget/cells'
+import { ContactMadeSelectCell, ServiceNameCell } from '../referrals/patient-referrals-widget/cells'
 import { ReferralStatusCell, ServiceStatusSelectCell } from './cells'
 import { getPrimaryInsuranceName, getSecondaryInsuranceName } from './utils'
 
@@ -41,9 +41,7 @@ const columns: ColumnDef<PatientReferral>[] = [
   {
     id: 'service',
     header: () => <ColumnHeader label="Service" />,
-    cell: ({ row: { original } }) => (
-      <TextCell className="truncate">{original?.service}</TextCell>
-    ),
+    cell: ServiceNameCell,
   },
   {
     id: 'service-date-time',
@@ -56,7 +54,7 @@ const columns: ColumnDef<PatientReferral>[] = [
   },
   {
     id: 'service-status',
-    header: () => <ColumnHeader label="Service status" />,
+    header: () => <ColumnHeader label="Service Priority Status" />,
     cell: ({ row }) => <ServiceStatusSelectCell row={row} disabled />,
   },
   {

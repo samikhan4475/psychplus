@@ -1,6 +1,6 @@
 'use client'
 
-import { Grid } from '@radix-ui/themes'
+import { Flex, Grid } from '@radix-ui/themes'
 import { SelectOptionType } from '@/types'
 import { AgeInput } from './age-input'
 import { CityInput } from './city-input'
@@ -50,31 +50,40 @@ const Filters = ({ options }: FiltersProps) => {
         <DOBDatePicker />
         <PhoneNumberInput />
       </Grid>
-      <Grid columns="1" gap="2" align="baseline">
+      <Grid columns="2" gap="2" align="baseline">
         <EmailInput />
+        <StateInput />
       </Grid>
-      <StateInput />
       <Grid columns="2" gap="2" align="baseline">
         <CityInput />
         <ZipInput />
       </Grid>
-
-      <PrimaryInsuranceSelect />
-      <SecondaryInsuranceSelect />
+      <Grid columns="2" gap="2" align="baseline">
+        <PrimaryInsuranceSelect />
+        <SecondaryInsuranceSelect />
+      </Grid>
       <ServiceSelect />
-      <FromDatePicker />
-      <ToDatePicker />
-      <VisitIdInput />
-      <ServiceStatusSelect />
-      <InitiatedBySelect />
-      <ProviderSelect options={options} />
+      <Grid columns="2" gap="2" align="baseline">
+        <FromDatePicker />
+        <ToDatePicker />
+      </Grid>
+      <Grid columns="2" gap="2" align="baseline">
+        <VisitIdInput />
+        <ServiceStatusSelect />
+      </Grid>
+      <Grid columns="2" gap="2" align="baseline">
+        <InitiatedBySelect />
+        <ProviderSelect options={options} />
+      </Grid>
       {/* will implement later */}
       {/* <Grid columns="2" gap="2" align="baseline">
         <PracticeSelect />
       <OrganizationSelect />
       </Grid> */}
-      <ContactMadeSelect />
-      <ReferralStatusSelect />
+      <Grid columns="2" gap="2" align="baseline">
+        <ContactMadeSelect />
+        <ReferralStatusSelect />
+      </Grid>
       <Grid columns="2" gap="2" align="baseline">
         <NextVisitSelect />
         <VisitHxSelect />

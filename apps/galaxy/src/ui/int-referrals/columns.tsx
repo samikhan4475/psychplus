@@ -32,7 +32,7 @@ const columns: ColumnDef<PatientReferral>[] = [
   },
   {
     id: 'pt-status',
-    header: () => <ColumnHeader label="Patient Status" />,
+    header: () => <ColumnHeader label="User Status" />,
     cell: GenderLabelCell,
   },
   {
@@ -62,7 +62,7 @@ const columns: ColumnDef<PatientReferral>[] = [
     cell: ({ row: { original } }) => (
       <TextCell className="truncate">
         {original?.patientDateOfBirth &&
-          formatDate(original?.patientDateOfBirth, 'dd-MM-yyyy')}
+          formatDate(original?.patientDateOfBirth, 'dd/MM/yyyy')}
       </TextCell>
     ),
   },
@@ -145,7 +145,7 @@ const columns: ColumnDef<PatientReferral>[] = [
 
   {
     id: 'service-status',
-    header: () => <ColumnHeader label="Service status" />,
+    header: () => <ColumnHeader label="Service Priority Status" />,
     cell: ({ row: { original } }) => (
       <TextCell className="truncate">{original?.servicesStatus}</TextCell>
     ),
@@ -184,7 +184,7 @@ const columns: ColumnDef<PatientReferral>[] = [
     header: () => <ColumnHeader label="Next Visit" />,
     cell: ({ row: { original } }) => (
       <TextCell className="truncate">
-        {formatDate(original?.nextVisit, 'dd-MM-yyyy') ?? 'N/A'}
+        {formatDate(original?.nextVisit, 'dd/MM/yyyy') ?? 'N/A'}
       </TextCell>
     ),
   },
@@ -193,7 +193,7 @@ const columns: ColumnDef<PatientReferral>[] = [
     header: () => <ColumnHeader label="Visit Hx" />,
     cell: ({ row: { original } }) => (
       <TextCell className="truncate">
-        {formatDate(original?.patientVisitHistory, 'dd-MM-yyyy') ?? 'N/A'}
+        {formatDate(original?.patientVisitHistory, 'dd/MM/yyyy') ?? 'N/A'}
       </TextCell>
     ),
   },
