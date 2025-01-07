@@ -18,6 +18,9 @@ import { TcmReviewCheckBox } from './blocks/tcm-review-check-box-block'
 import { transformIn, transformOut } from './data'
 import { TcmHeader } from './tcm-header'
 import { useTcmWidgetForm } from './tcm-widget-form'
+import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
+import { DateValue } from 'react-aria-components'
+import { defaultValues } from './utils'
 
 interface TcmWidget {
   patientId: string
@@ -33,12 +36,12 @@ const TcmWidget = ({ patientId, tcmData, isTcmTab }: TcmWidget) => {
     <FormProvider {...form}>
       <WidgetFormContainer
         patientId={patientId}
-        widgetId="tcm-widget"
+        widgetId={QuickNoteSectionName.QuicknoteSectionTcm}
         getData={transformOut(patientId, appointmentId)}
         title={!isTcmTab ? 'TCM' : undefined}
         headerRight={
           <>
-            {!isTcmTab && <WidgetClearButton />}
+            {!isTcmTab && <WidgetClearButton defaultInitialValues={defaultValues} />}
             {!isTcmTab && <WidgetSaveButton />}
           </>
         }

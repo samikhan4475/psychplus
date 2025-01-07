@@ -17,6 +17,7 @@ const Tcm = ({
 }: VisitProps) => {
   const [updatedPrimaryCodes, setUpdatedPrimaryCodes] = useState([...cptPrimaryCodes]);
   const form = useFormContext<CodesWidgetSchemaType>()
+  const [isDisabled, setIsDisabled] = useState(true)
   const formValues = form.getValues()
   const handleTCMCodes =  async() => {
     const disableCode = (code: SelectOptionType, disabled: boolean) => ({ ...code, disabled });
@@ -38,6 +39,7 @@ const Tcm = ({
           return disableCode(code, true);
         }
       }
+      setIsDisabled(false)
       return disableCode(code, false);
     });
     setUpdatedPrimaryCodes(updatedCodes);
@@ -49,7 +51,7 @@ const Tcm = ({
 
   return (
     <>
-      <PrimaryCodeTable codes={updatedPrimaryCodes}  />
+      <PrimaryCodeTable codes={updatedPrimaryCodes} isDisabled={isDisabled}   />
       <ModifierTable codes={cptmodifierCodes} isDisabled />
       <AddonsTable codes={cptAddOnsCodes} isDisabled />
     </>

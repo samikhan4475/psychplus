@@ -16,7 +16,7 @@ const DcHospitalServiceType = () => {
         codeset={CODESETS.PlaceOfSerivce}
         groupingCodes={HOSPITAL_SERVICE_GROUP}
         size="1"
-        className="w-[150px]"
+        className="w-auto"
       />
     </FormFieldContainer>
   )

@@ -20,6 +20,8 @@ const ResultBlock = () => {
       setDisableOptions(isBeyondTwoDays);
       isBeyondTwoDays && setValue(BLOCK_ID, 'Unable to contact pt within 2 days of DC');
       clearErrors();
+    } else {
+      setDisableOptions(false)
     }
   }, [dcDate, tcmDate])
 
