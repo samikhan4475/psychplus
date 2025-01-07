@@ -5,8 +5,9 @@ import { Cross2Icon } from '@radix-ui/react-icons'
 import { Button, Dialog, Flex, ScrollArea, Tooltip } from '@radix-ui/themes'
 import { HistoryIcon } from 'lucide-react'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
-import { QuestionnairesTitles } from '../../constants'
-import { HistoryView } from './history-view'
+import { quickNotesSectionsTitles } from '../../constants'
+import { QuestionnaireHistory } from './questionnaire-history-popup'
+import { useStore } from './store'
 
 type HistoryButtonBlockProps = PropsWithChildren<{
   questionnaire: string
@@ -17,6 +18,10 @@ const HistoryButton = ({
   questionnaire,
   justIcon = false,
 }: HistoryButtonBlockProps) => {
+  const { clearTabs } = useStore((state) => ({
+    clearTabs: state.clearTabs,
+  }))
+
   return (
     <Tooltip content="History">
       <Button
@@ -26,7 +31,13 @@ const HistoryButton = ({
         variant={justIcon ? 'ghost' : 'surface'}
         className="flex items-center p-1"
       >
-        <Dialog.Root>
+        <Dialog.Root
+          onOpenChange={(isOpen) => {
+            if (!isOpen) {
+              clearTabs()
+            }
+          }}
+        >
           <Dialog.Trigger>
             {justIcon ? (
               <HistoryIcon color="black" height="14" width="14" />
@@ -47,8 +58,8 @@ const HistoryButton = ({
                   className="text-black m-0 font-sans"
                 >
                   {
-                    QuestionnairesTitles[
-                      questionnaire as keyof typeof QuestionnairesTitles
+                    quickNotesSectionsTitles[
+                      questionnaire as keyof typeof quickNotesSectionsTitles
                     ]
                   }
                 </Dialog.Title>
@@ -56,7 +67,7 @@ const HistoryButton = ({
                   <Cross2Icon />
                 </Dialog.Close>
               </Flex>
-              <HistoryView
+              <QuestionnaireHistory
                 questionnaire={questionnaire as QuickNoteSectionName}
               />
             </ScrollArea>

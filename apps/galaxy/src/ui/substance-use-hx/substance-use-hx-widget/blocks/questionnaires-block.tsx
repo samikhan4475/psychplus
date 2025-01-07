@@ -3,8 +3,8 @@ import { Flex, Text } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
 import { YesNoSelect } from '@/components'
 import { QuestionnaireRowDetail } from '@/ui/questionnaires/questionnaires-widget/blocks'
-import { FilloutButtonBlock } from '@/ui/questionnaires/questionnaires-widget/blocks/fillout-button-block'
 import { SendToPatientButton } from '@/ui/questionnaires/shared'
+import { FillOutButton } from '@/ui/questionnaires/shared/fill-out'
 import { useStore } from '@/ui/questionnaires/store'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 
@@ -56,7 +56,7 @@ const QuestionnaireRow = ({ label, badgeLabel }: QuestionnaireRowProps) => {
       </Flex>
       <Flex align="center" gap="2">
         <SendToPatientButton />
-        <FilloutButtonBlock questionnaire={questionnaire} />
+        <FillOutButton sectionName={questionnaire} data={[]} />
       </Flex>
     </Flex>
   )

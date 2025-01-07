@@ -10,6 +10,8 @@ interface QuickNoteSectionItem {
 }
 
 interface QuickNoteHistory {
+  visitType: string
+  visitId: string
   patientId: number
   sectionName: string
   createdOn: string

@@ -1,6 +1,6 @@
-import { QuestionnairesTitles } from '../constants'
+import { quickNotesSectionsTitles } from '../constants'
 
-const QUESTIONS = Object.values(QuestionnairesTitles).map(
+const QUESTIONS = Object.values(quickNotesSectionsTitles).map(
   (question, index) => ({
     id: `Q${index + 1}`,
     question,

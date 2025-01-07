@@ -1,35 +1,38 @@
 import React from 'react'
-import { useSearchParams } from 'next/navigation'
+import { useParams, useSearchParams } from 'next/navigation'
 import { Flex } from '@radix-ui/themes'
 import { FormProvider } from 'react-hook-form'
 import { WidgetFormContainer } from '@/components'
 import { QuickNoteSectionItem } from '@/types'
+import { AIMS_LABELS } from '@/ui/questionnaires/aims-tab/constants'
+import { QuestionnairesFormAims } from '@/ui/questionnaires/aims-tab/form-aims/aims-form'
+import {
+  transformIn,
+  transformOut,
+} from '@/ui/questionnaires/aims-tab/form-aims/data'
+import { useQuestionnaireFormAims } from '@/ui/questionnaires/aims-tab/form-aims/use-aims-form'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
-import { FilloutCurrentTab } from '../../shared'
-import { AIMS_LABELS } from '../constants'
-import { QuestionnairesFormAims } from '../form-aims/aims-form'
-import { transformIn, transformOut } from '../form-aims/data'
-import { useQuestionnaireFormAims } from '../form-aims/use-aims-form'
+import { FilloutCurrentTab } from '..'
 
-type FilloutCurrentView = React.PropsWithChildren<{
-  patientId: string
+type FilloutAimsProps = React.PropsWithChildren<{
+  sectionName: QuickNoteSectionName
   data: QuickNoteSectionItem[]
 }>
 
-const CurrentView = ({ patientId, data }: FilloutCurrentView) => {
+const FilloutAims = ({ sectionName, data }: FilloutAimsProps) => {
   const appointmentId = useSearchParams().get('id') as string
   const initialValue = transformIn(data)
   const { totalScore, totalFilledQuestions, ...form } =
     useQuestionnaireFormAims(initialValue)
+  const patientId = useParams().id as string
 
   return (
     <FormProvider {...form}>
       <Flex direction="column" gap=".5rem">
         <WidgetFormContainer
-          title=""
           patientId={patientId}
-          tags={[QuickNoteSectionName.QuickNoteSectionAims]}
-          widgetId={QuickNoteSectionName.QuickNoteSectionAims}
+          tags={[sectionName]}
+          widgetId={sectionName}
           getData={transformOut(patientId, appointmentId)}
         >
           <FilloutCurrentTab
@@ -47,4 +50,4 @@ const CurrentView = ({ patientId, data }: FilloutCurrentView) => {
   )
 }
 
-export { CurrentView }
+export { FilloutAims }

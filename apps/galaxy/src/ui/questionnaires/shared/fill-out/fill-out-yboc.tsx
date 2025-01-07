@@ -1,8 +1,13 @@
-import { useSearchParams } from 'next/navigation'
+import { useParams, useSearchParams } from 'next/navigation'
 import { Box, Flex, Text } from '@radix-ui/themes'
 import { FormProvider } from 'react-hook-form'
 import { WidgetFormContainer } from '@/components'
 import { QuickNoteSectionItem } from '@/types'
+import {
+  SCORE_INTERPRETATION_RANGES,
+  YBOCS_TABLES,
+} from '@/ui/questionnaires/y-bocs-tab/constants'
+import { QuestionnairesFormYBocsDataTable } from '@/ui/questionnaires/y-bocs-tab/y-bocs-data-table'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import {
   FilloutCurrentTab,
@@ -10,15 +15,13 @@ import {
   useQuestionnaireForm,
 } from '../../shared'
 import { transformIn, transformOut } from '../../shared/data'
-import { SCORE_INTERPRETATION_RANGES, YBOCS_TABLES } from '../constants'
-import { QuestionnairesFormYBocsDataTable } from '../y-bocs-data-table'
 
-type FilloutCurrentView = React.PropsWithChildren<{
-  patientId: string
+type FillOutButtonYBocsProps = React.PropsWithChildren<{
+  sectionName: string
   data: QuickNoteSectionItem[]
 }>
 
-const CurrentView = ({ patientId, data }: FilloutCurrentView) => {
+const FilloutYboc = ({ data, sectionName }: FillOutButtonYBocsProps) => {
   const totalQuestions = YBOCS_TABLES.length
   const initialValue = transformIn(data, totalQuestions)
   const { totalScore, totalFilledQuestions, ...form } = useQuestionnaireForm(
@@ -26,6 +29,7 @@ const CurrentView = ({ patientId, data }: FilloutCurrentView) => {
     totalQuestions,
   )
   const appointmentId = useSearchParams().get('id') as string
+  const patientId = useParams().id as string
 
   return (
     <FormProvider {...form}>
@@ -33,11 +37,11 @@ const CurrentView = ({ patientId, data }: FilloutCurrentView) => {
         <WidgetFormContainer
           title=""
           patientId={patientId}
-          tags={[QuickNoteSectionName.QuickNoteSectionYbcos]}
-          widgetId={QuickNoteSectionName.QuickNoteSectionYbcos}
+          tags={[sectionName]}
+          widgetId={sectionName}
           getData={transformOut(
             patientId,
-            QuickNoteSectionName.QuickNoteSectionYbcos,
+            sectionName as QuickNoteSectionName,
             appointmentId,
           )}
         >
@@ -73,4 +77,4 @@ const CurrentView = ({ patientId, data }: FilloutCurrentView) => {
   )
 }
 
-export { CurrentView }
+export { FilloutYboc }

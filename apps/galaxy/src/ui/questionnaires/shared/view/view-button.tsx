@@ -7,12 +7,8 @@ import { EyeIcon } from '@/components/icons'
 import { QuickNoteSectionItem } from '@/types'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { QuestionnairesTitles } from '../../constants'
-import { AimsView } from './aims-view'
 import { questionnaireViewConstants } from './constant'
-import { MocaView } from './moca-view'
-import { SnapIvView } from './snap-iv-view'
-import { YBocView } from './y-boc-view'
-import { QuestionnaireViewPopup } from './questionnaires-view-popup'
+import { QuestionnaireDetailView } from './questionnaires-view-common'
 
 type ViewButtonBlockProps = PropsWithChildren<{
   justIcon?: boolean
@@ -28,10 +24,6 @@ const ViewButton = ({
   const currentQuestionnaire = questionnaireViewConstants(
     quickNoteSectionName as QuickNoteSectionName,
   )
-  const otherQuestionnaire =
-    currentQuestionnaire.questions &&
-    currentQuestionnaire.labels &&
-    currentQuestionnaire.scoreRange
   return (
     <Tooltip content="View">
       <Button
@@ -64,26 +56,10 @@ const ViewButton = ({
                   <Cross2Icon />
                 </Dialog.Close>
               </Flex>
-              {otherQuestionnaire && (
-                <QuestionnaireViewPopup
-                  data={data || []}
-                  quickNoteSectionName={quickNoteSectionName}
-                />
-              )}
-              {quickNoteSectionName ===
-                'QuicknoteSectionQuestionnaireSnapIV' && (
-                <SnapIvView data={data || []} />
-              )}
-              {quickNoteSectionName ===
-                'QuicknoteSectionQuestionnaireYbocs' && (
-                <YBocView data={data || []} />
-              )}
-              {quickNoteSectionName === 'QuicknoteSectionQuestionnaireAims' && (
-                <AimsView data={data || []} />
-              )}
-              {quickNoteSectionName === 'QuicknoteSectionQuestionnaireMoca' && (
-                <MocaView data={data || []} />
-              )}
+              <QuestionnaireDetailView
+                data={data}
+                sectionName={quickNoteSectionName}
+              />
             </ScrollArea>
           </Dialog.Content>
         </Dialog.Root>

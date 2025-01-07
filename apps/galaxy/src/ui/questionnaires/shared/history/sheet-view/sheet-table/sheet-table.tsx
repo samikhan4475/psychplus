@@ -5,7 +5,6 @@ import { format } from 'date-fns'
 import { ChevronsUpDown } from 'lucide-react'
 import { CheckboxCell, ColumnHeader, DataTable, TextCell } from '@/components'
 import { QuickNoteHistory } from '@/types'
-import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { AddToNoteCell } from './cells'
 import { ScoreCell } from './cells/score-cell'
 
@@ -26,16 +25,15 @@ const SortableHeader = ({
   label: string
   onClick?: () => void
 }) => (
-  <Flex justify="between" align="center" pr="2">
+  <Flex
+    justify="between"
+    align="center"
+    pr="2"
+    onClick={onClick}
+    className={`${onClick ? 'cursor-pointer' : ''}`}
+  >
     <ColumnHeader label={label} />
-    {onClick && (
-      <ChevronsUpDown
-        cursor="pointer"
-        size="16"
-        stroke="#8B8D98"
-        onClick={onClick}
-      />
-    )}
+    {onClick && <ChevronsUpDown size="16" stroke="#8B8D98" />}
   </Flex>
 )
 
@@ -60,16 +58,21 @@ const createColumns = (
     ),
   },
   {
-    id: 'note',
-    header: () => <SortableHeader label="Note" />,
-    cell: ({ row }) => <TextCell>{row.original.note}</TextCell>,
-  },
-  {
     id: 'filledBy',
     header: () => <SortableHeader label="Filled By" />,
     cell: ({ row }) => (
-      <TextCell>{`${row.original.createdByFullName}`}</TextCell>
+      <TextCell>{`${row.original.createdByFullName} (${row.original.createdByRole})`}</TextCell>
     ),
+  },
+  {
+    id: 'visitType',
+    header: () => <SortableHeader label="Visit Type" />,
+    cell: ({ row }) => <TextCell>{row.original.visitType}</TextCell>,
+  },
+  {
+    id: 'visitId',
+    header: () => <SortableHeader label="Visit ID" />,
+    cell: ({ row }) => <TextCell>{row.original.visitId}</TextCell>,
   },
   {
     id: 'totalScore',
@@ -80,13 +83,9 @@ const createColumns = (
       />
     ),
     cell: ({ row }) => {
-      const { totalScore, data, sectionName } = row.original
+      const { totalScore } = row.original
       return (
-        <ScoreCell
-          value={totalScore || ''}
-          data={data}
-          quickNoteSectionName={sectionName as QuickNoteSectionName}
-        />
+        <ScoreCell value={totalScore || ''} data={data} row={row.original} />
       )
     },
   },

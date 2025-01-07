@@ -1,10 +1,10 @@
 import { Flex } from '@radix-ui/themes'
 import { QuickNoteHistory } from '@/types'
+import { FillOutButton } from '@/ui/questionnaires/shared/fill-out/fill-out-button'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { HistoryButton } from '../../shared'
 import { ViewButton } from '../../shared/view/view-button'
 import { DeleteButton } from './delete-button'
-import { FilloutButtonBlock } from './fillout-button-block'
 
 interface RowRightButtonsProps {
   questionnaire: string
@@ -24,7 +24,10 @@ const RowRightButtons = ({
   return (
     <Flex gap="4" align="center" justify="between" mr="1">
       {historiesData.length === 0 && (
-        <FilloutButtonBlock questionnaire={questionnaire} />
+        <FillOutButton
+          sectionName={questionnaire as QuickNoteSectionName}
+          data={[]}
+        />
       )}
       {showButton && (
         <ViewButton

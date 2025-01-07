@@ -1,26 +1,30 @@
 import React from 'react'
-import { useSearchParams } from 'next/navigation'
+import { useParams, useSearchParams } from 'next/navigation'
 import { Flex } from '@radix-ui/themes'
 import { FormProvider } from 'react-hook-form'
 import { WidgetFormContainer } from '@/components'
 import { QuickNoteSectionItem } from '@/types'
+import { MOCA_LABELS } from '@/ui/questionnaires/moca-tab/constants'
+import { QuestionnairesFormMoca } from '@/ui/questionnaires/moca-tab/form-moca/aims-form'
+import {
+  transformIn,
+  transformOut,
+} from '@/ui/questionnaires/moca-tab/form-moca/data'
+import { useQuestionnaireFormMoca } from '@/ui/questionnaires/moca-tab/form-moca/use-moca-form'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { FilloutCurrentTab } from '../../shared'
-import { MOCA_LABELS } from '../constants'
-import { QuestionnairesFormMoca } from '../form-moca/aims-form'
-import { transformIn, transformOut } from '../form-moca/data'
-import { useQuestionnaireFormMoca } from '../form-moca/use-moca-form'
 
-type FilloutCurrentView = React.PropsWithChildren<{
-  patientId: string
+type FilloutMocaProps = React.PropsWithChildren<{
+  sectionName: QuickNoteSectionName
   data: QuickNoteSectionItem[]
 }>
 
-const CurrentView = ({ patientId, data }: FilloutCurrentView) => {
+const FilloutMoca = ({ sectionName, data }: FilloutMocaProps) => {
   const initialValue = transformIn(data)
   const { totalScore, totalFilledQuestions, ...form } =
     useQuestionnaireFormMoca(initialValue)
   const appointmentId = useSearchParams().get('id') as string
+  const patientId = useParams().id as string
 
   return (
     <FormProvider {...form}>
@@ -28,8 +32,8 @@ const CurrentView = ({ patientId, data }: FilloutCurrentView) => {
         <WidgetFormContainer
           title=""
           patientId={patientId}
-          tags={[QuickNoteSectionName.QuickNoteSectionMoca]}
-          widgetId={QuickNoteSectionName.QuickNoteSectionMoca}
+          tags={[sectionName]}
+          widgetId={sectionName}
           getData={transformOut(patientId, appointmentId)}
         >
           <FilloutCurrentTab
@@ -47,4 +51,4 @@ const CurrentView = ({ patientId, data }: FilloutCurrentView) => {
   )
 }
 
-export { CurrentView }
+export { FilloutMoca }

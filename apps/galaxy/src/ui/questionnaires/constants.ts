@@ -1,3 +1,5 @@
+import { QuickNoteSectionName } from '../quicknotes/constants'
+
 enum QuestionnaireTabs {
   DASHBOARD_TAB = 'Dashboard',
   PHQ_9_TAB = 'PHQ-9',
@@ -23,17 +25,45 @@ enum QuestionnairesFilledBy {
 }
 
 enum QuestionnairesTitles {
-  "PHQ-9" = 'Patient Health Questionnaire (PHQ-9)',
-  "GAD-7" = 'Generalized Anxiety Disorder (GAD-7)',
-  "SNAP-IV" = 'Swanson, Nolan and Pelham (SNAP-IV)',
-  "PCL-5" = 'Posttraumatic Stress Disorder Checklist (PCL-5)',
-  "Y-BOCS" = 'Yale-Brown Obsessive Compulsive (Y-BOCS)',
-  "AIMS" = 'Abnormal Involuntary Movement Scale (AIMS)',
-  "AUDIT" = 'Alcohol Use Disorders Identification Test (AUDIT)',
-  "DAST-10" = 'Drug Abuse Screening Test (DAST-10)',
-  "MOCA" = 'Montreal Cognitive Assessment (MoCA)',
-  "HAM-D" = 'Hamilton Depression Rating Scale (HAM-D)',
+  'PHQ-9' = 'Patient Health Questionnaire (PHQ-9)',
+  'GAD-7' = 'Generalized Anxiety Disorder (GAD-7)',
+  'SNAP-IV' = 'Swanson, Nolan and Pelham (SNAP-IV)',
+  'PCL-5' = 'Posttraumatic Stress Disorder Checklist (PCL-5)',
+  'Y-BOCS' = 'Yale-Brown Obsessive Compulsive (Y-BOCS)',
+  'AIMS' = 'Abnormal Involuntary Movement Scale (AIMS)',
+  'AUDIT' = 'Alcohol Use Disorders Identification Test (AUDIT)',
+  'DAST-10' = 'Drug Abuse Screening Test (DAST-10)',
+  'MOCA' = 'Montreal Cognitive Assessment (MoCA)',
+  'HAM-D' = 'Hamilton Depression Rating Scale (HAM-D)',
 }
 
+const quickNotesSectionsTitles = {
+  [QuickNoteSectionName.QuickNoteSectionPhq9]:
+    'Patient Health Questionnaire (PHQ-9)',
+  [QuickNoteSectionName.QuickNoteSectionGad7]:
+    'Generalized Anxiety Disorder (GAD-7)',
+  [QuickNoteSectionName.QuickNoteSectionPcl5]:
+    'Posttraumatic Stress Disorder Checklist (PCL-5)',
+  [QuickNoteSectionName.QuickNoteSectionSnapIV]:
+    'Swanson, Nolan and Pelham (SNAP-IV)',
+  [QuickNoteSectionName.QuickNoteSectionYbcos]:
+    'Yale-Brown Obsessive Compulsive (Y-BOCS)',
+  [QuickNoteSectionName.QuickNoteSectionAudit]:
+    'Alcohol Use Disorders Identification Test (AUDIT)',
+  [QuickNoteSectionName.QuickNoteSectionAims]:
+    'Abnormal Involuntary Movement Scale (AIMS)',
+  [QuickNoteSectionName.QuickNoteSectionHamD]:
+    'Hamilton Depression Rating Scale (HAM-D)',
+  [QuickNoteSectionName.QuickNoteSectionMoca]:
+    'Montreal Cognitive Assessment (MoCA)',
+  [QuickNoteSectionName.QuickNoteSectionDast10]:
+    'Drug Abuse Screening Test (DAST-10)',
+}
 
-export { QuestionnaireTabs, QuestionnairesStatus, QuestionnairesFilledBy, QuestionnairesTitles }
+export {
+  QuestionnaireTabs,
+  QuestionnairesStatus,
+  QuestionnairesFilledBy,
+  QuestionnairesTitles,
+  quickNotesSectionsTitles,
+}

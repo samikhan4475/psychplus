@@ -1,0 +1,78 @@
+import {
+  LABELS as AUDIT_LABELS,
+  QUESTIONS as AUDIT_QUESTIONS,
+  SCORE_INTERPRETATION_RANGES as AUDIT_SCORE_INTERPRETATION_RANGES,
+} from '@/ui/questionnaires/audit-tab/constants'
+import {
+  LABELS as DAST_LABELS,
+  QUESTIONS as DAST_QUESTIONS,
+  SCORE_INTERPRETATION_RANGES as DAST_SCORE_INTERPRETATION_RANGES,
+} from '@/ui/questionnaires/dast-10-tab/constants'
+import {
+  LABELS as GAD7_LABELS,
+  QUESTIONS as GAD7_QUESTIONS,
+  SCORE_INTERPRETATION_RANGES as GAD7_SCORE_INTERPRETATION_RANGES,
+} from '@/ui/questionnaires/gad-7-tab/constants'
+import {
+  LABELS as HAMD_LABELS,
+  QUESTIONS as HAMD_QUESTIONS,
+  SCORE_INTERPRETATION_RANGES as HAMD_SCORE_INTERPRETATION_RANGES,
+} from '@/ui/questionnaires/ham-d-tab/constants'
+import {
+  LABELS as PCL5_LABELS,
+  QUESTIONS as PCL5_QUESTIONS,
+  SCORE_INTERPRETATION_RANGES as PCL5_SCORE_INTERPRETATION_RANGES,
+} from '@/ui/questionnaires/pcl-5-tab/constants'
+import {
+  LABELS as PHQ9_LABELS,
+  QUESTIONS as PHQ9_QUESTIONS,
+  SCORE_INTERPRETATION_RANGES as PHQ9_SCORE_INTERPRETATION_RANGES,
+} from '@/ui/questionnaires/phq-9-tab/constants'
+import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
+import { QuestionnairesData } from '../questionnaires-form'
+import { ScoreInterpretationRange } from '../score-interpretation'
+
+export const META_INFO: {
+  [key: string]: {
+    questions: QuestionnairesData[]
+    labels: string[]
+    scoreInterpretationRanges: ScoreInterpretationRange[]
+  }
+} = {
+  //AUDIT
+  [QuickNoteSectionName.QuickNoteSectionAudit]: {
+    questions: AUDIT_QUESTIONS,
+    labels: AUDIT_LABELS,
+    scoreInterpretationRanges: AUDIT_SCORE_INTERPRETATION_RANGES,
+  },
+  // PCL5
+  [QuickNoteSectionName.QuickNoteSectionPcl5]: {
+    questions: PCL5_QUESTIONS,
+    labels: PCL5_LABELS,
+    scoreInterpretationRanges: PCL5_SCORE_INTERPRETATION_RANGES,
+  },
+  // HAMD
+  [QuickNoteSectionName.QuickNoteSectionHamD]: {
+    questions: HAMD_QUESTIONS,
+    labels: HAMD_LABELS,
+    scoreInterpretationRanges: HAMD_SCORE_INTERPRETATION_RANGES,
+  },
+  // DAST
+  [QuickNoteSectionName.QuickNoteSectionDast10]: {
+    questions: DAST_QUESTIONS,
+    labels: DAST_LABELS,
+    scoreInterpretationRanges: DAST_SCORE_INTERPRETATION_RANGES,
+  },
+  // PHQ9
+  [QuickNoteSectionName.QuickNoteSectionPhq9]: {
+    questions: PHQ9_QUESTIONS,
+    labels: PHQ9_LABELS,
+    scoreInterpretationRanges: PHQ9_SCORE_INTERPRETATION_RANGES,
+  },
+  // GAD7
+  [QuickNoteSectionName.QuickNoteSectionGad7]: {
+    questions: GAD7_QUESTIONS,
+    labels: GAD7_LABELS,
+    scoreInterpretationRanges: GAD7_SCORE_INTERPRETATION_RANGES,
+  },
+}
