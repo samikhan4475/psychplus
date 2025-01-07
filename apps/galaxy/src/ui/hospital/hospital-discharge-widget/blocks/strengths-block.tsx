@@ -31,8 +31,8 @@ const BLOCK_OPTIONS = [
     value: 'Social Support',
   },
   {
-    label: 'Childern',
-    value: 'Childern'
+    label: 'Children',
+    value: 'Children',
   },
   {
     label: 'Health',

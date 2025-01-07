@@ -40,7 +40,34 @@ export const hospitalDischargeKeys = [
   {
     label: 'Social functioning WNL:',
     key: 'socialFunctioningWNL',
-    detail:'socialFunctioningWNLDescription'
+    detail:'socialFunctioningWNLDescription',
+  },
+  {
+    label: 'Activity:',
+    key: 'activity',
+    detail: 'activityOtherDescription',
+  },
+  {
+    label: 'Diet:',
+    key: 'diet',
+    detail: 'dietOtherDescription',
+  },
+  {
+    label: 'Discharge Type:',
+    key: 'dischargeType',
+    detail: 'dischargeTypeDescription',
+  },
+  {
+    label: 'Disposition:',
+    key: 'disposition',
+  },
+  {
+    label: 'Follow Up if Other:',
+    key: 'followUp',
+  },
+  {
+    label: 'Discharge Time Spent:',
+    key: 'dischargeTimeSpent',
   },
 ]
 const transformIn = (
