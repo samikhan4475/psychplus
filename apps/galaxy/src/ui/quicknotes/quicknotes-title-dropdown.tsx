@@ -12,15 +12,19 @@ const QuickNotesTitleDropdown = ({ title }: Props) => {
       <Text size="1" weight="medium">
         Title
       </Text>
-      <Select.Root size="1" value="psychiatric-evaluation" disabled>
-        <Tooltip content="Psychiatric Evaluation">
+      <Select.Root size="1" value={title} disabled>
+        {title ? (
+          <Tooltip content={title}>
+            <Select.Trigger className="max-w-[125px]" />
+          </Tooltip>
+        ) : (
           <Select.Trigger className="max-w-[125px]" />
-        </Tooltip>
+        )}
         <Select.Content
           highContrast
           onCloseAutoFocus={(e) => e.preventDefault()}
         >
-          <Select.Item value="psychiatric-evaluation">{title}</Select.Item>
+          <Select.Item value={title ?? ''}>{title}</Select.Item>
         </Select.Content>
       </Select.Root>
     </Flex>
