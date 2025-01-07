@@ -20,7 +20,7 @@ const FirstNameInput = () => {
   return (
     <Flex className="col-span-1">
       <FormFieldContainer className="w-full">
-        <FormFieldLabel>First Name</FormFieldLabel>
+        <FormFieldLabel required>First Name</FormFieldLabel>
         <ServerSearchSelect
           fieldName="firstName"
           placeholder=""
@@ -101,7 +101,7 @@ const FirstNameInput = () => {
             })
           }}
         />
-        <FormFieldError name="physicianName" />
+        <FormFieldError name="firstName" />
       </FormFieldContainer>
     </Flex>
   )

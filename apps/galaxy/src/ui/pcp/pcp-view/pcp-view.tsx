@@ -1,9 +1,11 @@
 'use client'
 
 import React from 'react'
-import { CreatePcpHeader, PcpFormView } from '.'
+
 import { PcpViewWithInitialValueProps } from '../types'
 import { CreatePcpForm } from './create-pcp-form'
+import { CreatePcpHeader } from './create-pcp-header'
+import { PcpFormView } from './pcp-form-view'
 
 const PcpView = ({
   patientId,

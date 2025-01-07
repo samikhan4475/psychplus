@@ -14,7 +14,7 @@ const EmailInput = () => {
   return (
     <Flex className="col-span-2">
       <FormFieldContainer className="w-full">
-        <FormFieldLabel>Email</FormFieldLabel>
+        <FormFieldLabel required>Email</FormFieldLabel>
         <TextField.Root
           placeholder="Email"
           size="1"

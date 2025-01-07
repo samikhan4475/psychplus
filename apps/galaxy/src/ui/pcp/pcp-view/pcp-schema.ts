@@ -22,19 +22,19 @@ const zipCodeRegex = /(^\d{5}$)|(^\d{5}-\d{4}$)|^$/
 const zipCodeValidation = z
   .string()
   .regex(zipCodeRegex, 'Invalid zip code!')
-  .optional()
+  .min(1, 'Required')
   .default('')
 
 const pcpSchema = z
 
   .object({
     id: z.string().optional(),
-    firstName: z.string(),
-    lastName: z.string(),
+    firstName: z.string().min(1, 'Required'),
+    lastName: z.string().min(1, 'Required'),
     credentials: z.string().min(1, 'Required'),
-    phone: z.string().trim().length(10, 'Invalid phone number'),
-    email: z.string().trim().email(),
-    fax: z.string().length(10, 'Invalid fax number'),
+    phone: z.string().min(1, 'Required').length(10, 'Invalid phone number'),
+    email: z.string().min(1, 'Required').email(),
+    fax: z.string().min(1, 'Required').length(10, 'Invalid fax number'),
     isMailingAddressSameAsHome: z.enum(['yes', 'no']),
     officeAddress: z.object({
       type: pcpAddressTypeEnum.default('Home'),
@@ -52,11 +52,15 @@ const pcpSchema = z
       city: optionalString,
       state: optionalString,
       country: optionalString,
-      postalCode: zipCodeValidation,
+      postalCode: z
+        .string()
+        .regex(zipCodeRegex, 'Invalid zip code!')
+        .optional()
+        .default(''),
     }),
   })
   .superRefine((data, ctx) => {
-    if (!data.isMailingAddressSameAsHome) {
+    if (data.isMailingAddressSameAsHome === 'no') {
       const mailingAddressFields: (keyof typeof data.mailingAddress)[] = [
         'street1',
         'city',
@@ -69,7 +73,7 @@ const pcpSchema = z
           ctx.addIssue({
             code: z.ZodIssueCode.custom,
             message: 'Required',
-            path: [`contactDetails.mailingAddress.${field}`],
+            path: [`mailingAddress.${field}`],
           })
         }
       }

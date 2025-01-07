@@ -6,11 +6,14 @@ import { useForm, type SubmitHandler } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import z from 'zod'
 import { FormContainer } from '@/components'
+import { useHasPermission } from '@/hooks'
 import { ExternalProvider } from '../types'
 import { addPcpAction } from './actions/add-pcp'
 import { attachPcpToPatientAction } from './actions/attach-pcp-to-patient'
 import { pcpAddressTypeEnum, pcpSchema } from './pcp-schema'
 import { transformData } from './utils'
+import { useState } from 'react'
+import { PcpAlertDialog } from './pcp-alert-dialog'
 
 const schema = pcpSchema
 
@@ -27,6 +30,10 @@ const CreatePcpForm = ({
   initialValue,
   children,
 }: CreatePcpFormProps) => {
+
+  const [isAlertOpen, setIsAlertOpen] = useState(false)
+  const [alertMessage, setAlertMessage] = useState('')
+
   const defaultValues: SchemaType = {
     id: initialValue?.id || '',
     firstName: initialValue?.legalName.firstName || '',
@@ -65,11 +72,18 @@ const CreatePcpForm = ({
     criteriaMode: 'all',
     defaultValues,
   })
+  const savePcpPermission = useHasPermission('savePCP')
 
   const onSubmit: SubmitHandler<SchemaType> = async (data) => {
-    const payload = transformData(data)
+    if (!savePcpPermission) {
+      setIsAlertOpen(true)
+      setAlertMessage(
+        'You do not have permission to save PCP form. Please contact your supervisor if you need any further assistance.',
+      )
+      return
+    }
 
-    const result = await addPcpAction(payload)
+    const result = await addPcpAction(transformData(data))
 
     if (result.state === 'error') {
       return
@@ -93,6 +107,14 @@ const CreatePcpForm = ({
       <Flex direction="column" className="gap-[2px] p-1">
         {children}
       </Flex>
+      <PcpAlertDialog
+        isOpen={isAlertOpen}
+        message={alertMessage}
+        onClose={() => {
+          setIsAlertOpen(false)
+          setAlertMessage('')
+        }}
+      />
     </FormContainer>
   )
 }

@@ -13,7 +13,7 @@ const PhoneInput = () => {
   return (
     <Flex className="col-span-2">
       <FormFieldContainer className="w-full">
-        <FormFieldLabel>Phone</FormFieldLabel>
+        <FormFieldLabel required>Phone</FormFieldLabel>
         <PhoneNumberInputBase field="phone" placeholder="Phone Number" />
         <FormFieldError name="phone" />
       </FormFieldContainer>

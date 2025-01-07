@@ -14,13 +14,13 @@ const LastNameInput = () => {
   return (
     <Flex className="col-span-1">
       <FormFieldContainer className="w-full">
-        <FormFieldLabel>Last Name</FormFieldLabel>
+        <FormFieldLabel required>Last Name</FormFieldLabel>
         <TextField.Root
           placeholder="Last Name"
           size="1"
           {...form.register('lastName')}
         />
-        <FormFieldError name="physicianName" />
+        <FormFieldError name="lastName" />
       </FormFieldContainer>
     </Flex>
   )
