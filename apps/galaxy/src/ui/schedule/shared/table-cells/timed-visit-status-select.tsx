@@ -98,7 +98,7 @@ const TimedVisitStatusSelect = ({
       }
     }
 
-    if (!statusPermissions[status]) {
+    if (status in statusPermissions && !statusPermissions[status]) {
       return false
     }
 
