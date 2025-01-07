@@ -42,13 +42,11 @@ const AllergiesView = () => {
           <ReactionBlock />
           <ObservationBlock />
         </Flex>
-      </ToggleableForm>
-      <ToggleableFormContext.Provider value={undefined}>
-        <Flex className="mt-10" direction={'column'} gap={'2'}>
+        <Flex className="mt-10" direction={'column'} gap={'2'} width={'100%'}>
           <MedicationTable />
           <CommentBlock />
         </Flex>
-      </ToggleableFormContext.Provider>
+      </ToggleableForm>
     </Flex>
   )
 }

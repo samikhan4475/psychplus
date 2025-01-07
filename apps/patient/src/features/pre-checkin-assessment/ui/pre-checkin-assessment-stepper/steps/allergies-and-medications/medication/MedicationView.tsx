@@ -7,11 +7,11 @@ import CommentBlock from './blocks/comment-block'
 import DoseBlock from './blocks/dose-block'
 import FrequencyBlock from './blocks/frequency-block'
 import { HeadingBlock } from './blocks/heading-block'
+import MedicationTable from './blocks/medication-table'
 import PrescribedDateBlock from './blocks/prescribed-date-block'
 import RouteBlock from './blocks/route-block'
 import SearchBlock from './blocks/search-block'
 import StatusBlock from './blocks/status-block'
-import MedicationTable from './blocks/medication-table'
 
 const MedicationView = () => {
   const form = useForm()
@@ -46,13 +46,11 @@ const MedicationView = () => {
         <Flex className="mb-3 w-full">
           <PrescribedDateBlock />
         </Flex>
-      </ToggleableForm>
-      <ToggleableFormContext.Provider value={undefined}>
-        <Flex className="mt-10" direction={'column'} gap={'2'}>
+        <Flex className="mt-10" direction={'column'} gap={'2'} width={'100%'}>
           <MedicationTable />
           <CommentBlock />
         </Flex>
-      </ToggleableFormContext.Provider>
+      </ToggleableForm>
     </Flex>
   )
 }
