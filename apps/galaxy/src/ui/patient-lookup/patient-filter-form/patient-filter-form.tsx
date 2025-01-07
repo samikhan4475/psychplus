@@ -36,16 +36,16 @@ const PatientFilterForm = () => {
     defaultValues: getInitialValues(),
     values: {
       ...(formValues || {}),
+      dateOfBirth: convertDateField(formValues?.dateOfBirth),
       patientCreatedFrom: convertDateField(formValues?.patientCreatedFrom),
-      dateOfBirth: convertDateField(formValues?.patientCreatedFrom),
-      patientCreatedTo: convertDateField(formValues?.patientCreatedFrom),
+      patientCreatedTo: convertDateField(formValues?.patientCreatedTo),
     },
   })
 
   const onSubmit: SubmitHandler<PatientLookUpSchemaType> = (data) => {
     return search(data, 1, true)
   }
-
+  console.log(form.formState.errors)
   const onError: SubmitErrorHandler<PatientLookUpSchemaType> = (errors) => {
     if (!showFilters && hasFieldErrors(errors)) {
       toggleFilters()

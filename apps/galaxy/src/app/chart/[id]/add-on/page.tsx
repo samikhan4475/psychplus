@@ -22,7 +22,7 @@ const PatientAllergiesPage = async ({
 }: PatientAllergiesPageProps) => {
   const appointmentId = searchParams.id
   const visitType = searchParams.visitType
-  const appointment = await getAppointment(searchParams.id)
+  const appointment = await getAppointment({ id: searchParams.id })
 
   if (appointment.state === 'error') {
     return <Text>Appointment with {appointmentId} not found</Text>

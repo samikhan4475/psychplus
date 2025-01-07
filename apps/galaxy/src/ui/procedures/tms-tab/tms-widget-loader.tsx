@@ -17,7 +17,7 @@ const TmsWidgetLoader = async ({
     await Promise.all([
       getQuickNoteDetailAction(patientId, [QuickNoteSectionName.ProcedureTMS]),
       getQuestionnairesHistories({ patientId }),
-      getAppointment(appointmentId as string),
+      getAppointment({ id: appointmentId as string }),
     ])
 
   if (response.state === 'error') {

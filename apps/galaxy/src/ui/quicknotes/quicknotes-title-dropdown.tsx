@@ -24,7 +24,7 @@ const QuickNotesTitleDropdown = ({ title }: Props) => {
           highContrast
           onCloseAutoFocus={(e) => e.preventDefault()}
         >
-          <Select.Item value={title ?? ''}>{title}</Select.Item>
+          {title && <Select.Item value={title ?? ''}>{title}</Select.Item>}
         </Select.Content>
       </Select.Root>
     </Flex>

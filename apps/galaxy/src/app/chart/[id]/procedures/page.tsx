@@ -29,7 +29,7 @@ const ProcedurePage = async ({ params, searchParams }: ProcedurePageProps) => {
     getProcedureTms({ patientId: params.id }),
     getProcedureSpravato({ patientId: params.id }),
     getQuestionnairesHistories({ patientId: params.id }),
-    getAppointment(searchParams.id),
+    getAppointment({ id: searchParams.id }),
 
     //add more APis for other tabs
   ])

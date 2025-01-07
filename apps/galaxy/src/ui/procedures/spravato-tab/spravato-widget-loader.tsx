@@ -17,7 +17,7 @@ const SpravatoWidgetLoader = async ({
     getQuickNoteDetailAction(patientId, [
       QuickNoteSectionName.QuicknoteSectionProcedureSpravato,
     ]),
-    getAppointment(appointmentId as string),
+    getAppointment({ id: appointmentId as string }),
   ])
 
   if (response.state === 'error') {

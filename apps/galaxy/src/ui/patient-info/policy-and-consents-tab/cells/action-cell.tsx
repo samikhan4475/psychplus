@@ -1,6 +1,6 @@
 import { AdaptiveRowActionsCell, PropsWithRow, RowAction } from '@/components'
 import { PatientConsent } from '@/types'
-import { RowActionCall } from './row-action-call'
+// import { RowActionCall } from './row-action-call'
 import { RowActionDownload } from './row-action-download'
 import { RowActionEmail } from './row-action-email'
 import { RowActionHistory } from './row-action-history'
@@ -14,7 +14,7 @@ const ActionCell = ({ row }: PropsWithRow<PatientConsent>) => {
     { id: 'History', render: RowActionHistory },
     !signingDate && { id: 'Message', render: RowActionMessage },
     !signingDate && { id: 'Email', render: RowActionEmail },
-    !signingDate && { id: 'Call', render: RowActionCall },
+    // !signingDate && { id: 'Call', render: RowActionCall },
     signingDate && { id: 'Download', render: RowActionDownload },
     { id: 'Mark as error', render: RowActionMarkError },
   ].filter(Boolean) as RowAction<PatientConsent>[]

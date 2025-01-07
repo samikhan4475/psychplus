@@ -43,4 +43,11 @@ const convertDateField = (field: DateValue | null | undefined) => {
 const hasFieldErrors = (errors: FieldErrors): boolean =>
   Object.keys(errors)?.length > 0
 
-export { getInitialValues, convertDateField, hasFieldErrors }
+const validateDate = (
+  date: DateValue,
+  referenceDate: DateValue | undefined | null,
+) => {
+  return referenceDate ? date?.compare(referenceDate) : 0
+}
+
+export { getInitialValues, convertDateField, hasFieldErrors, validateDate }

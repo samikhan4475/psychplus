@@ -34,7 +34,12 @@ const CodesWidgetLoader = async ({
         false,
       ),
 
-      getAppointment(appointmentId as string),
+      getAppointment({
+        id: appointmentId as string,
+        isIncludeCodes: true,
+        isIncludeCosigners: true,
+        isIncludeLocation: true,
+      }),
     ])
 
   if (codesResult.state === 'error') {

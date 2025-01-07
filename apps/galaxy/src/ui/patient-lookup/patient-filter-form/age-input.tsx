@@ -1,26 +1,26 @@
 'use client'
 
-import { Flex, TextField } from '@radix-ui/themes'
-import { useFormContext } from 'react-hook-form'
+import { Flex } from '@radix-ui/themes'
 import {
   FormFieldContainer,
   FormFieldError,
   FormFieldLabel,
+  NumericInput,
 } from '@/components'
-import { PatientLookUpSchemaType } from './schema'
 
 const AgeInput = () => {
-  const form = useFormContext<PatientLookUpSchemaType>()
   return (
     <FormFieldContainer className="gap-1">
       <Flex gap="1">
         <FormFieldLabel className="!text-1">Age</FormFieldLabel>
-        <TextField.Root
-          size="1"
+        <NumericInput
+          field="age"
+          allowNegative={false}
+          prefix=""
           placeholder="Age"
-          type="number"
+          maxLimit={101}
+          decimalScale={0}
           className="border-pp-gray-2 h-6 w-full border border-solid !outline-none [box-shadow:none]"
-          {...form.register('age')}
         />
       </Flex>
       <FormFieldError name="age" />

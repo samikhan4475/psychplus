@@ -1,10 +1,25 @@
 import * as api from '@/api'
 import { Appointment } from '@/types'
 
-const getAppointment = async (
-  id: string,
-): Promise<api.ActionResult<Appointment>> => {
-  const response = await api.GET<Appointment>(api.GET_APPOINTMENT(id))
+interface AppointmentParams {
+  id: string
+  isIncludeCodes?: boolean
+  isIncludeCosigners?: boolean
+  isIncludeLocation?: boolean
+}
+
+const getAppointment = async ({
+  id,
+  isIncludeCodes = false,
+  isIncludeCosigners = false,
+  isIncludeLocation = false,
+}: AppointmentParams): Promise<api.ActionResult<Appointment>> => {
+  const url = new URL(api.GET_APPOINTMENT(id))
+  if (isIncludeCodes) url.searchParams.append('isIncludeCodes', 'true')
+  if (isIncludeCosigners) url.searchParams.append('isIncludeCosigners', 'true')
+  if (isIncludeLocation) url.searchParams.append('isIncludeLocation', 'true')
+
+  const response = await api.GET<Appointment>(url.toString())
 
   if (response.state === 'error') {
     return {

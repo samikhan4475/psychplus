@@ -19,7 +19,13 @@ const QuickNotesView = async ({
   visitType,
   visitSequence,
 }: QuickNotesViewProps) => {
-  const appointment = await getAppointment(appointmentId)
+  const appointment = await getAppointment({
+    id: appointmentId,
+    isIncludeCodes: true,
+    isIncludeCosigners: true,
+    isIncludeLocation: true,
+  })
+
   if (appointment.state === 'error') {
     return <Text>{appointment.error}</Text>
   }

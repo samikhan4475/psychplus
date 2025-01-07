@@ -21,11 +21,11 @@ import { Patient, SearchPatientsParams } from './types'
 
 const transformOut = (data: PatientLookUpSchemaType): SearchPatientsParams => {
   const {
-    patientCreatedFrom,
-    patientCreatedTo,
     dateOfBirth,
     hasGuardian,
     contactMadeStatuses,
+    patientCreatedFrom,
+    patientCreatedTo,
     ...rest
   } = data
 

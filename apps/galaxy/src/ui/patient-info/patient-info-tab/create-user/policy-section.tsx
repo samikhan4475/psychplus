@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { Button, Flex, Text } from '@radix-ui/themes'
-import { MailIcon, MessageSquareTextIcon, PhoneCall } from 'lucide-react'
+import { MailIcon, MessageSquareTextIcon } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { sendPolicyNoticeAction } from '@/actions'
 import {
@@ -124,7 +124,7 @@ const PolicySection = ({
           <MailIcon strokeWidth={1.5} size={14} />
           Send Email
         </Button>
-        <Button
+        {/* <Button
           size="1"
           variant="solid"
           color="blue"
@@ -134,7 +134,7 @@ const PolicySection = ({
         >
           <PhoneCall strokeWidth={1.5} size={14} />
           Call Patient
-        </Button>
+        </Button> */}
       </Flex>
     </Flex>
   )

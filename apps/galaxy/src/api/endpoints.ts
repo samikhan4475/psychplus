@@ -329,7 +329,7 @@ const UPDATE_PATIENT_REFERRAL_ENDPOINT = (
   referralId: number,
 ) => `${API_URL}/api/patients/${patientId}/referrals/${referralId}`
 const GET_APPOINTMENT = (appointmentId: string) =>
-  `${API_URL}/api/appointments/${appointmentId}?isIncludeCodes=true&isIncludeCosigners=true&isIncludeLocation=true`
+  `${API_URL}/api/appointments/${appointmentId}`
 const CREATE_PATIENT_REFERRAL_ENDPOINT = (patientId: string) =>
   `${API_URL}/api/patients/${patientId}/referrals`
 const DELETE_PATIENT_APPOINTMENT_ENDPOINT = (

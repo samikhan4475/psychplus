@@ -72,9 +72,12 @@ const DataTablePagination = ({
             key={`${pageNumber}-${idx}`}
             color="gray"
             size="1"
-            className={cn('disabled:!text-pp-gray-3 !m-0 h-6 w-6 p-0 text-2', {
-              'text-black': page === pageNumber,
-            })}
+            className={cn(
+              'disabled:!text-pp-gray-3 min-w-4 !m-0 h-6 !px-1 py-0 text-2',
+              {
+                'text-black min-w-6': page === pageNumber,
+              },
+            )}
             variant={page === pageNumber ? 'outline' : 'ghost'}
             disabled={loading}
           >

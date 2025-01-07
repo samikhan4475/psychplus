@@ -26,7 +26,7 @@ const AssessmentPlanPage = async ({
     addOnAssessementPlanData,
     tcmDataResponse,
   ] = await Promise.all([
-    getAppointment(searchParams.id),
+    getAppointment({ id: searchParams.id }),
     getAssessmentPlanAction({
       patientId: params.id,
       sectionName:

@@ -16,7 +16,7 @@ const ImageViewDialog = ({
           <Avatar
             size="9"
             color="gray"
-            className="mx-auto h-[100%] w-[100%]"
+            className="mx-auto h-[100%] w-[100%] [&__.rt-AvatarImage]:[imageRendering:-webkit-optimize-contrast]"
             src={previewSrc}
             fallback={
               <Box>

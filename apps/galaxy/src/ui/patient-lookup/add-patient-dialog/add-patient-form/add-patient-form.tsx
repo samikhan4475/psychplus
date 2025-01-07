@@ -30,6 +30,7 @@ interface AddPatientFormProps {
 const AddPatientForm = ({ closeDialog }: AddPatientFormProps) => {
   const form = useForm<AddPatientSchemaType>({
     resolver: zodResolver(addPatientSchema),
+    mode: 'onChange',
     defaultValues: {
       legalName: {
         firstName: '',
