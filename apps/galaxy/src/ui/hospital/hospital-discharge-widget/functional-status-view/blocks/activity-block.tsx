@@ -1,17 +1,17 @@
 'use client'
 
+import { Flex } from '@radix-ui/themes'
+import { useFormContext } from 'react-hook-form'
 import { RadioSelectSection, SelectableChipDetails } from '@/components'
 import { HospitalDischargeWidgetSchemaType } from '../../hospital-discharge-widget-schema'
-import { useFormContext } from 'react-hook-form'
-import { Flex } from '@radix-ui/themes'
 
 const BLOCK_ID = 'activity'
 const BLOCK_LABEL = 'Activity'
 
 const BLOCK_OPTIONS = [
   {
-    label: 'as Needed',
-    value: 'as Needed',
+    label: 'as needed',
+    value: 'as needed',
   },
   {
     label: 'Other',
@@ -30,16 +30,15 @@ const ActivityBlock = () => {
         options={BLOCK_OPTIONS}
         lastOptionIndicator={true}
       />
-      {
-        activity == "Other" &&
+      {activity == 'Other' && (
         <SelectableChipDetails
-          key={"activityOtherDescription"}
-          label={"Text"}
+          key={'activityOtherDescription'}
+          label={'Text'}
           type={'text'}
-          field={"activityOtherDescription"}
+          field={'activityOtherDescription'}
           showIndicator={false}
         />
-      }
+      )}
     </Flex>
   )
 }

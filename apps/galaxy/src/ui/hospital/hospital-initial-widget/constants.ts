@@ -32,12 +32,12 @@ const HospitalInitialFieldMapping = [
   },
   {
     label:
-      'Severe Depression due to which patient is suicidal and unable to function or perform activities of daily living',
+      'Severe Depression due to which patient is suicidal and unable to function or perform ADLs',
     value: 'nfloc_severe_depression',
   },
   {
     label:
-      'Severe psychosis due to which patient is impulsive and can harm self or others and unable to function or perform activities of daily living',
+      'Severe psychosis due to which patient is impulsive and can harm self or others and unable to function or perform ADLs',
     value: 'nfloc_severe_psychosis',
   },
   {
@@ -47,7 +47,7 @@ const HospitalInitialFieldMapping = [
   },
   {
     label:
-      'Unable to care for self or perform activities of daily living due to underlying mental health or substance use',
+      'Unable to care for self or perform ADLs due to underlying mental health or substance use',
     value: 'nfloc_unable_to_care',
   },
   {
@@ -82,6 +82,7 @@ const HospitalInitialFieldMapping = [
 
   //precautions codeset
   { label: 'Suicide', value: 'precautions_suicide' },
+  { label: 'Assault', value: 'precautions_assault' },
   { label: 'Elopement', value: 'precautions_elopement' },
   { label: 'Falls', value: 'precautions_falls' },
   { label: 'Seizure', value: 'precautions_seizure' },
@@ -93,7 +94,7 @@ const HospitalInitialFieldMapping = [
   { label: 'PHP', value: 'dcplan_php' },
   { label: 'IOP', value: 'dcplan_iop' },
   { label: 'Residential', value: 'dcplan_residential' },
-  { label: 'Output Provider', value: 'dcplan_output_provider' },
+  { label: 'Outpt Provider', value: 'dcplan_outpt_provider' },
   { label: 'Other', value: 'dcplan_other' },
 ]
 
