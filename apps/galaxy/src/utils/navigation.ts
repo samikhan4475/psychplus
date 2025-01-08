@@ -196,7 +196,7 @@ const getManagementNavLinks = (type: string | null, id: string | null) => {
       },
       {
         label: 'Virtual Address',
-        href: `${practiceBase}/virtual-address`,
+        href: `${practiceBase}/practices-virtual-addresses`,
       },
       {
         label: 'Provider Types',
