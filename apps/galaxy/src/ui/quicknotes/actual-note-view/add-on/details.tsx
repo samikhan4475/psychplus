@@ -2,6 +2,7 @@ import { Flex } from '@radix-ui/themes'
 import { AddOnWidgetSchemaType } from '@/ui/add-on/add-on-widget/add-on-widget-schema'
 import { INTERACTIVE_COMPLEXITY_BLOCK_OPTIONS } from '@/ui/add-on/add-on-widget/blocks'
 import { BlockContainer, LabelAndValue } from '../shared'
+import { InjectionDetails } from './injection-block'
 
 const formatList = (
   items: (
@@ -73,21 +74,8 @@ const Details = ({ data }: { data: AddOnWidgetSchemaType }) => {
   return (
     <BlockContainer heading="Add On">
       <Flex direction="column" gap="2">
-        {data.injection && (
-          <LabelAndValue
-            label="Injection"
-            value={[
-              data.drugName,
-              data.dose,
-              data.siteLocations,
-              data.manufacturer,
-              data.lotNumber,
-              data.expirationDate,
-            ]
-              .filter(Boolean)
-              .join(' | ')}
-          />
-        )}
+        <InjectionDetails data={data} />
+
         {therapyValue && <LabelAndValue label="Therapy" value={therapyValue} />}
         {psychoanalysisValue && (
           <LabelAndValue label="Psychoanalysis" value={psychoanalysisValue} />

@@ -94,6 +94,8 @@ const CODESETS = {
   SpecimenRole: 'HL7v2.SpecimenRole',
   SpecimentAdditive: 'HL7v2.SpecimentAdditive',
   SpecimenCollectionMethod: 'HL7v2.SpecimenCollectionMethod',
+  InjectionAddon: 'PsychPlusPublic.InjectionAddon',
+  InjectionSite: 'PsychPlusPublic.InjectionSite',
 }
 export {
   CODESETS,

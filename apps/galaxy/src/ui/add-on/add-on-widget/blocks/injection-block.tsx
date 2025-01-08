@@ -1,3 +1,5 @@
+'use client'
+
 import { Flex, Text } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
 import {
@@ -7,37 +9,47 @@ import {
   SelectInput,
   TextInput,
 } from '@/components'
-import { useStore } from '../../store'
-import { SearchDrugsBlock } from './search-drugs-block'
-
-interface Option {
-  label: string
-  value: string
-}
-
-const SITE_LOCATIONS = [
-  { label: 'Right Upper Arm', value: 'right_upper_arm' },
-  { label: 'Left Upper Arm', value: 'left_upper_arm' },
-  { label: 'Right Thigh', value: 'right_thigh' },
-  { label: 'Left Thigh', value: 'left_thigh' },
-  { label: 'Right Buttocks', value: 'right_buttocks' },
-  { label: 'Left Buttocks', value: 'left_buttocks' },
-  { label: 'Right Hip', value: 'right_hip' },
-  { label: 'Left Hip', value: 'left_hip' },
-]
+import { CODESETS } from '@/constants'
+import { useCodesetCodes } from '@/hooks'
+import { codesetAttributesOptions } from '@/utils'
 
 const InjectionBlock = () => {
-  const { selectedDrug } = useStore()
   const form = useFormContext()
   const { watch } = form
 
-  const manufacturersList = selectedDrug
-    ? selectedDrug?.manufacturer.map((item) => ({ label: item, value: item }))
-    : []
+  const injectionAddonCodeset = useCodesetCodes(CODESETS.InjectionAddon)
+  const injectionSiteCodeset = useCodesetCodes(CODESETS.InjectionSite)
 
-  const dosesList: Option[] = selectedDrug
-    ? selectedDrug?.doses.map((item) => ({ label: item, value: item }))
-    : []
+  const injectionAddonOptions = injectionAddonCodeset.map(
+    ({ display, value }) => ({
+      label: display,
+      value: value,
+    }),
+  )
+
+  const injectionSiteOptions = injectionSiteCodeset.map(
+    ({ display, value }) => ({
+      label: display,
+      value: value,
+    }),
+  )
+  const selectedDrug = form.watch('drugName')
+
+  const selectedDrugAttributes = injectionAddonCodeset.find(
+    (item) => item.value === selectedDrug,
+  )
+
+  const dosesList = codesetAttributesOptions({
+    attribute: 'Doses',
+    splitter: '|',
+    codeset: selectedDrugAttributes,
+  })
+
+  const manufacturersList = codesetAttributesOptions({
+    attribute: 'Manufacturer',
+    splitter: '|',
+    codeset: selectedDrugAttributes,
+  })
 
   return (
     <Flex
@@ -55,21 +67,28 @@ const InjectionBlock = () => {
       </Flex>
       {watch('injection') && (
         <Flex align="center" gap="2" wrap="wrap">
-          <SearchDrugsBlock />
+          <SelectInput
+            label="Drug Name"
+            field={'drugName'}
+            options={injectionAddonOptions}
+            buttonClassName="flex-1"
+            className="min-w-[15%]"
+            required={true}
+          />
           <SelectInput
             label={'Dose'}
             field={'dose'}
             options={dosesList}
             buttonClassName="flex-1"
-            className="w-[25%]"
+            className="min-w-[15%]"
             required={true}
           />
           <SelectInput
             label={'Site Locations'}
             field={'siteLocations'}
-            options={SITE_LOCATIONS}
+            options={injectionSiteOptions}
             buttonClassName="flex-1"
-            className="w-[25%]"
+            className="min-w-[15%]"
             required={true}
           />
           <SelectInput
@@ -77,7 +96,7 @@ const InjectionBlock = () => {
             field={'manufacturer'}
             options={manufacturersList}
             buttonClassName="flex-1"
-            className="w-[25%]"
+            className="min-w-[15%]"
             required={true}
             disabled={!watch('drugName')}
           />

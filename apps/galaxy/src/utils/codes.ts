@@ -60,4 +60,22 @@ const fetchCodes = async (patientId: string, appointmentId?: string) => {
 const getCodesetDisplayName = (value: string, codes: SharedCode[]): string =>
   codes.find((code) => code.value === value)?.display ?? ''
 
-export { manageCodes, getCodesetDisplayName }
+const codesetAttributesOptions = (data: {
+  attribute: string
+  splitter: string
+  codeset?: SharedCode
+}) => {
+  const { attribute, splitter, codeset } = data
+  if (!codeset) return []
+  const res = codeset.attributes
+    ?.find((item) => item.name === attribute)
+    ?.value.split(splitter)
+    .map((item) => ({
+      label: item,
+      value: item,
+    }))
+
+  return res
+}
+
+export { manageCodes, getCodesetDisplayName, codesetAttributesOptions }
