@@ -137,6 +137,7 @@ interface Appointment {
   providerStaffId?: number
   groupTherapyTypeCode: string
   IsPatientHadAnyCheckedOutVisit?: boolean
+  isNoteSignedByProviderInLastYear?: boolean
 }
 
 interface BookVisitPayload {

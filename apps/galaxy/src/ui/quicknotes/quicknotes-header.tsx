@@ -7,6 +7,7 @@ import { QuickNotesCopyMyPreviousButton } from './quicknotes-copy-my-previous-bu
 import { QuickNotesCopyPreviousButton } from './quicknotes-copy-previous-button'
 import { QuickNotesCosignerDropdown } from './quicknotes-cosigner-dropdown'
 import { QuickNotesDateInput } from './quicknotes-date-input'
+import { QuickNotesDuration } from './quicknotes-duration'
 import { QuickNotesLocationDropdown } from './quicknotes-location-dropdown'
 import { QuickNotesProviderDropdown } from './quicknotes-provider-dropdown'
 import { QuickNotesProviderTypeDropdown } from './quicknotes-provider-type-dropdown'
@@ -20,7 +21,6 @@ import { QuickNotesViewNoteButton } from './quicknotes-view-note-button'
 import { QuickNotesVisitNumberDropdown } from './quicknotes-visit-number-dropdown'
 import { QuickNotesVisitSequenceDropdown } from './quicknotes-visit-sequence-dropdown'
 import { QuickNotesVisitTypeDropdown } from './quicknotes-visit-type-dropdown'
-import { QuickNotesDuration } from './quicknotes-duration'
 
 interface QuickNotesHeaderProps {
   appointment: Appointment
@@ -49,7 +49,7 @@ const QuickNotesHeader = async ({ appointment }: QuickNotesHeaderProps) => {
           <Flex gap="2" wrap="wrap">
             <QuickNotesViewNoteButton />
             <QuickNotesCopyPreviousButton />
-            <QuickNotesCopyMyPreviousButton />
+            <QuickNotesCopyMyPreviousButton appointment={appointment} />
             <QuickNotesClearButton />
             <QuickNotesSaveButton />
             <QuickNotesUploadButton />

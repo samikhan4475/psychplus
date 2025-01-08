@@ -19,6 +19,7 @@ const AuthorizationNumberInput = () => {
         className="flex-1"
         placeholder="Auth #"
         size="1"
+        type="number"
         {...form.register('insuranceAuthorizationNumber')}
       />
     </FormFieldContainer>
