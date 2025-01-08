@@ -1,28 +1,25 @@
 'use client'
+
 import * as Tabs from '@radix-ui/react-tabs'
 import { Box, Flex, Text } from '@radix-ui/themes'
 import { TabsTrigger } from '@/components'
-import { LocationView } from './location-view'
+import { LocationView } from './location-tab'
 
 interface LocationTabsProps {
   googleApiKey: string
 }
 
-const LocationTabs = ({googleApiKey}: LocationTabsProps) => {
+const LocationTabs = ({ googleApiKey }: LocationTabsProps) => {
   return (
-    <Box className="px-3 pt-4">
+    <Box width="100%" height="100%">
       <Tabs.Root
         defaultValue="location"
-        className="flex w-full flex-col"
+        className="flex h-full w-full flex-col"
       >
-        <Flex className="z-50 w-full bg-white mb-1">
+        <Flex className="z-50 mb-1 w-full">
           <Tabs.List>
-            <TabsTrigger value="location">
-              Location
-            </TabsTrigger>
-            <TabsTrigger value="service">
-              Service
-            </TabsTrigger>
+            <TabsTrigger value="location">Location</TabsTrigger>
+            <TabsTrigger value="service">Service</TabsTrigger>
           </Tabs.List>
         </Flex>
         <Tabs.Content value="location">

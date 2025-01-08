@@ -1,27 +1,36 @@
 'use client'
 
 import { useState } from 'react'
-import { Button, Dialog } from '@radix-ui/themes'
+import { Button, Dialog, IconButton, Tooltip } from '@radix-ui/themes'
 import { X } from 'lucide-react'
 import { LinkIcon } from '@/components/icons'
-import { AddServiceForm } from './add-service-form'
 import { GooglePlacesContextProvider } from '@/providers/google-places-provider'
+import { AddServiceForm } from './add-service-form'
 
 interface AddLocationServiceDialogProps {
   googleApiKey: string
 }
 
-const AddLocationServiceDialog = ({googleApiKey}: AddLocationServiceDialogProps) => {
+const AddLocationServiceDialog = ({
+  googleApiKey,
+}: AddLocationServiceDialogProps) => {
   const [openDialog, setOpenDialog] = useState(false)
   return (
     <Dialog.Root open={openDialog} onOpenChange={setOpenDialog}>
       <Dialog.Trigger>
-        <Button
-          color="gray"
-          className="p-0 bg-transparent"
-          size="1"
-        >
-          <LinkIcon />
+        <Button color="gray" className="bg-transparent p-0" size="1">
+          <Tooltip content="Add Service">
+            <IconButton
+              variant="ghost"
+              className="!m-0"
+              type="button"
+              color="gray"
+              size="1"
+              highContrast
+            >
+              <LinkIcon />
+            </IconButton>
+          </Tooltip>
         </Button>
       </Dialog.Trigger>
       <Dialog.Content className="relative max-w-[662px] !overflow-visible rounded-3 p-6">

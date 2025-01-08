@@ -9,7 +9,7 @@ const SEARCH_PATIENTS_ENDPOINT = `${API_URL}/api/patients/search`
 const CLINIC_LOCATIONS_ENDPOINT = `${API_URL}/api/clinics`
 const FACILITY_ADMISSION_ID_ENDPOINT = `${API_URL}/api/facilityadmissionids`
 const LOCATION_SERVICES_ENDPOINT = `${API_URL}/api/locationservices/actions/search`
-const LOCATION_ENDPOINT = `${API_URL}/api/locations/actions/search`
+const LOCATION_ENDPOINT = `${API_URL}/api/locations/actions/search?orderBy=createdOn%20desc`
 const VISIT_TYPES_ENDPOINT = `${API_URL}/api/visittypes/actions/search`
 const STATES_BY_COUNTRY_ENDPOINT = (countryCode: string) =>
   `${API_URL}/api/countries/${countryCode}/states`
@@ -109,6 +109,9 @@ const GET_PATIENT_CONSENT_SIGNED_PDF_ENDPOINT = (
   consentId: string,
 ) => `${API_URL}/api/patients/${patientId}/consents/${consentId}/signedpdf`
 const ADD_PATIENT_ENDPOINT = `${API_URL}/api/users/actions/patientsignup`
+const ADD_LOCATION_ENDPOINT = `${API_URL}/api/locations`
+const GET_LOCATION_HISTORY = (locationId: string) =>
+  `${API_URL}/api/locations/${locationId}/history/actions/search?offset=0&limit=0&orderBy=createdOn`
 const GET_US_STATES_ENDPOINT = `${API_URL}/api/countries/united states/states`
 const GET_STATES_LOCATIONS_ENDPOINT = (stateId: string) =>
   `${API_URL}/api/clinics?stateId=${stateId}`
@@ -189,6 +192,8 @@ const ADD_PATIENT_POLICY_ENDPOINT = (patientId: string) =>
   `${API_URL}/api/patients/${patientId}/policies`
 const UPDATE_PATIENT_POLICY_ENDPOINT = (patientId: string, policyId: string) =>
   `${API_URL}/api/patients/${patientId}/policies/${policyId}`
+const UPDATE_LOCATION_ENDPOINT = (locationId: string) =>
+  `${API_URL}/api/locations/${locationId}`
 const DELETE_PATIENT_POLICY_ENDPOINT = (patientId: string, policyId: string) =>
   `${API_URL}/api/patients/${patientId}/policies/${policyId}`
 const UPDATE_INSURANCE_PAYMENT_ENDPOINT = (id: string) =>
@@ -600,6 +605,8 @@ export {
   BOOK_APPOINTMENT,
   UPDATE_APPOINTMENT,
   ADD_PATIENT_ENDPOINT,
+  ADD_LOCATION_ENDPOINT,
+  GET_LOCATION_HISTORY,
   GET_US_STATES_ENDPOINT,
   GET_STATES_LOCATIONS_ENDPOINT,
   SEARCH_INSURANCE_PLANS_ENDPOINT,
@@ -633,6 +640,7 @@ export {
   GET_PATIENT_POLICIES,
   ADD_PATIENT_POLICY_ENDPOINT,
   UPDATE_PATIENT_POLICY_ENDPOINT,
+  UPDATE_LOCATION_ENDPOINT,
   DELETE_PATIENT_POLICY_ENDPOINT,
   GET_PATIENT_PAYMENT_HISTORY,
   GET_PATIENT_TRANSACTIONS_HISTORY,

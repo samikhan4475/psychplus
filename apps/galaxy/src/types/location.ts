@@ -15,7 +15,7 @@ interface Location {
     type: string
     number: string
   }
-  isTestLocation: false
+  isTestLocation: boolean
   address: ClinicAddress
   cityId: string
   stateId: string

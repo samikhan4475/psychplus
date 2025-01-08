@@ -4,15 +4,17 @@ import { ManagementNavigation } from '@/ui/management-navigation'
 
 const ManagementLayout = ({ children }: React.PropsWithChildren) => {
   return (
-    <Flex height="100%" direction="column" gap="1" className="bg-pp-bg-accent">
-      <Flex gap="3" px="2" className="flex-1 overflow-auto">
-        <ManagementNavigation />
-        <ScrollArea className="flex-1">
-          <Flex className="flex-1 h-full" mb="4">
-            {children}
-          </Flex>
-        </ScrollArea>
-      </Flex>
+    <Flex
+      gap="3"
+      height="100%"
+      width="100%"
+      p="2"
+      className="bg-pp-bg-accent flex-1"
+    >
+      <ManagementNavigation />
+      <ScrollArea className="flex-1">
+        <Flex className="h-full flex-1">{children}</Flex>
+      </ScrollArea>
     </Flex>
   )
 }

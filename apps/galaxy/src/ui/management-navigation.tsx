@@ -10,7 +10,7 @@ const ManagementNavigation = () => {
   const { id, type } = useParams<{ id: string; type: string }>()
   const navLinks = useMemo(() => getManagementNavLinks(type, id), [type, id])
   return (
-    <Box className="bg-white mb-4 w-[160px] rounded-1 shadow-2">
+    <Box className="bg-white w-[160px] rounded-1 shadow-2">
       <ScrollArea>
         <Flex direction="column">
           {navLinks.map((widget) => (

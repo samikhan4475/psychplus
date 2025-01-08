@@ -1,28 +1,28 @@
 'use client'
+
 import { TextField } from '@radix-ui/themes'
+import { useFormContext } from 'react-hook-form'
 import {
   FormFieldContainer,
   FormFieldError,
   FormFieldLabel,
 } from '@/components'
-import { useFormContext } from 'react-hook-form';
-import { FormSchemaType } from '../form-schema';
+import { LocationFormSchemaType } from './schema'
 
-const ZipField = () => {
-  const form = useFormContext<FormSchemaType>()
-  
+const ZipInput = () => {
+  const form = useFormContext<LocationFormSchemaType>()
+
   return (
     <FormFieldContainer className="flex flex-row gap-1">
       <FormFieldLabel>Zip</FormFieldLabel>
       <TextField.Root
         size="1"
-        className="w-[120px]"
         placeholder="Add Postal Code"
-        {...form.register('locationZip')}
+        {...form.register('zip')}
       />
-      <FormFieldError name="locationZip" />
+      <FormFieldError name="zip" />
     </FormFieldContainer>
   )
 }
 
-export { ZipField }
+export { ZipInput }
