@@ -5,8 +5,8 @@ import { SaveIcon } from 'lucide-react';
 
 const SaveButton = () => {
   return (
-    <Button size="1" highContrast>
-      <SaveIcon width={15} height={15} strokeWidth={1.75} />
+    <Button type="submit" size="1" highContrast>
+      <SaveIcon width={15} height={15} strokeWidth={1.75}/>
       Save
     </Button>
   );

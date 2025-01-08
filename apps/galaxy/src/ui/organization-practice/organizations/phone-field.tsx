@@ -14,7 +14,7 @@ const PhoneField = () => {
       <TextField.Root
         size="1"
         className="border-pp-gray-2 h-6 w-[130px] border border-solid !outline-none [box-shadow:none]"
-        {...form.register('phone')}
+        {...form.register('phoneNumber')}
         placeholder="Search"
       />
     </FormFieldContainer>

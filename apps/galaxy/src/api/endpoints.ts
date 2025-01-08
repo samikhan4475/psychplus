@@ -290,6 +290,9 @@ const GET_PATIENT_UNPAID_APPOINTMENTS_ENDPOINT = (
 ) =>
   `${API_URL}/api/patients/${patientId}/appointments/actions/unpaid/${paymentType}`
 const GET_ORGANIZATIONS_ENDPOINT = `${API_URL}/api/organizations/actions/search`
+const ADD_ORGANIZATION_ENDPOINT = `${API_URL}/api/organizations`
+const UPDATE_ORGANIZATION_ENDPOINT = (organizationId: string) =>
+  `${API_URL}/api/organizations/${organizationId}`
 const GET_INSURANCE_PAYERS_LIST_ENDPOINT = `${API_URL}/api/insurance/plans/actions/search`
 const GET_PRACTICES_ENDPOINT = `${API_URL}/api/practices/actions/search`
 const GET_PATIENT_VITALS_ENDPOINT = `${API_URL}/api/patientvitalsigns/actions/search`
@@ -759,6 +762,8 @@ export {
   DOWNLOAD_CLAIM_SUBMISSION_HISTORY_ENDPOINT,
   ADD_LAB_ORDERS_RESULT_ENDPOINT,
   GET_TREATMENT_TEAM_VISITS,
+  ADD_ORGANIZATION_ENDPOINT,
+  UPDATE_ORGANIZATION_ENDPOINT,
   GET_NOTE_DOCUMENTS_ENDPOINT,
   GET_STAFF_USER_ENDPOINT,
   GET_NOTE_DOCUMENT_ENDPOINT,

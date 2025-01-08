@@ -1,7 +1,5 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
-import toast from 'react-hot-toast'
 import {
   FormFieldContainer,
   FormFieldError,
@@ -9,27 +7,38 @@ import {
   SelectInput,
 } from '@/components'
 import { SelectOptionType } from '@/types'
-import { getStaffRolesOrganizationAction } from '../staff-management/actions/get-organization-staff-roles'
+import { useParams } from 'next/navigation'
+import { useEffect, useState } from 'react'
+import { getAllOrganizationsOptionsListAction } from './actions'
 
 const OrganizationSelect = () => {
   const [organizations, setOrganizations] = useState<SelectOptionType[]>([])
+  const [selectedOption, setSelectedOption] = useState<string>('')
+  const { id } = useParams<{ id: string }>()
+
   useEffect(() => {
-    getStaffRolesOrganizationAction().then((result) => {
+    const fetchData = async () => {
+      const result = await getAllOrganizationsOptionsListAction({})
       if (result.state === 'success') {
-        setOrganizations(result.data.organizations)
-      } else if (result.state === 'error') {
-        toast.error(result.error)
+        setOrganizations(result.data)
+        const matchingOption = result.data.find((option) => option.value === id)
+        if (matchingOption) {
+          setSelectedOption(matchingOption.value)
+        }
       }
-    })
-  }, [])
+    }
+    fetchData()
+  }, [id])
 
   return (
     <FormFieldContainer>
       <FormFieldLabel required>Organization Name</FormFieldLabel>
       <SelectInput
         options={organizations}
+        value={selectedOption}
+        field="id"
         disabled
-        field="organizationIds.[0]"
+        placeholder='Loading...'
         buttonClassName="border-pp-gray-2 h-6 w-full border border-solid !outline-none [box-shadow:none]"
       />
       <FormFieldError name="organizationIds.[0]" />

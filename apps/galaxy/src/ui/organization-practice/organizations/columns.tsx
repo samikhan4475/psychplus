@@ -38,7 +38,7 @@ const columns = (
           }}
         />
       ),
-      cell: ({ row }) => <TextCell>{row.original.shortName}</TextCell>,
+      cell: ({ row }) => <TextCell>{row.original.displayName}</TextCell>,
     },
 
     {
@@ -57,7 +57,7 @@ const columns = (
               }}
             />
           ),
-          cell: ({ row }) => <TextCell>{row.original.shortName}</TextCell>,
+          cell: ({ row }) => <TextCell>{row.original.contactName}</TextCell>,
         },
         {
           id: 'phone',
@@ -73,7 +73,7 @@ const columns = (
               }}
             />
           ),
-          cell: ({ row }) => <TextCell>{row.original.phone}</TextCell>,
+          cell: ({ row }) => <TextCell>{row.original.contactPhone}</TextCell>,
         },
         {
           id: 'email',
@@ -88,7 +88,7 @@ const columns = (
               }}
             />
           ),
-          cell: ({ row }) => <TextCell>{row.original.email}</TextCell>,
+          cell: ({ row }) => <TextCell>{row.original.contactEmail}</TextCell>,
         },
       ],
     },
@@ -105,7 +105,9 @@ const columns = (
           }}
         />
       ),
-      cell: ({ row }) => <TextCell>{row.original.address1}</TextCell>,
+      cell: ({ row }) => (
+        <TextCell>{row.original.organizationAddress?.street1}</TextCell>
+      ),
     },
     {
       id: 'address2',
@@ -120,7 +122,9 @@ const columns = (
           }}
         />
       ),
-      cell: ({ row }) => <TextCell>{row.original.address2}</TextCell>,
+      cell: ({ row }) => (
+        <TextCell>{row.original.organizationAddress?.street2}</TextCell>
+      ),
     },
     {
       id: 'city',
@@ -134,7 +138,9 @@ const columns = (
           }}
         />
       ),
-      cell: ({ row }) => <TextCell>{row.original.city}</TextCell>,
+      cell: ({ row }) => (
+        <TextCell>{row.original.organizationAddress?.city}</TextCell>
+      ),
     },
     {
       id: 'state',
@@ -148,7 +154,9 @@ const columns = (
           }}
         />
       ),
-      cell: ({ row }) => <TextCell>{row.original.state}</TextCell>,
+      cell: ({ row }) => (
+        <TextCell>{row.original.organizationAddress?.state}</TextCell>
+      ),
     },
     {
       id: 'zip',
@@ -162,7 +170,9 @@ const columns = (
           }}
         />
       ),
-      cell: ({ row }) => <TextCell>{row.original.zip}</TextCell>,
+      cell: ({ row }) => (
+        <TextCell>{row.original.organizationAddress?.postalCode}</TextCell>
+      ),
     },
     {
       id: 'recordStatus',

@@ -19,12 +19,23 @@ interface Practice {
   users: User[]
 }
 
+interface OrganizationAddress {
+  type?: string
+  street1: string
+  street2: string
+  city: string
+  state: string
+  country?: string
+  postalCode: string
+  timeZoneId?: string
+}
+
 interface Organization extends OrganizationRoot {
   contactName: string
   email: string
   phone: string
-  address1: string
-  address2: string
+  street1: string
+  street2: string
   city: string
   state: string
   zip: string
@@ -32,6 +43,10 @@ interface Organization extends OrganizationRoot {
   last4: string
   users: User[]
   practices: Practice[]
+  locationId: string
+  contactPhone: string
+  contactEmail: string
+  organizationAddress: OrganizationAddress
 }
 
 interface GetOrganizationsListResponse {
@@ -43,13 +58,23 @@ interface OrganizationsSearchParams {
   isIncludeMetadataResourceChangeControl?: boolean
   isIncludeMetadataResourceIds?: boolean
   isIncludeMetadataResourceStatus?: boolean
-  includePractices: boolean
+  isIncludeLocations?: boolean
+  includePractices?: boolean
   includeUsers?: boolean
   includeRoles?: boolean
   includePermissions?: boolean
   organizationId?: string
   practiceId?: string
   partialShortName?: string
+  partialContactName?: string
+  phoneNumber?: string
+  email?: string
+  partialAddress1?: string
+  partialAddress2?: string
+  city?: string
+  stateName?: string
+  stateCode?: string
+  zip?: string
   recordStatuses?: string[]
 }
 
@@ -58,4 +83,5 @@ export {
   type Organization,
   type GetOrganizationsListResponse,
   type OrganizationsSearchParams,
+  type Practice,
 }

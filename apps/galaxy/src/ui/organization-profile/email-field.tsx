@@ -12,10 +12,10 @@ const EmailField = () => {
       <TextField.Root
         size="1"
         className="border-pp-gray-2 w-full border border-solid !outline-none [box-shadow:none] "
-        {...form.register('email')}
+        {...form.register('contactEmail')}
         placeholder="email@gmail.com"
       />
-      <FormFieldError name='email' />
+      <FormFieldError name='contactEmail' />
     </FormFieldContainer>
   )
 }

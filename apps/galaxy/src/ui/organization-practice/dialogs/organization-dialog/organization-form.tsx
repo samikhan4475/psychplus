@@ -1,7 +1,11 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Box, Grid, Text } from '@radix-ui/themes'
 import { useForm } from 'react-hook-form'
+import { toast } from 'react-hot-toast'
 import { FormContainer } from '@/components'
+import { sanitizeFormData } from '@/utils'
+import { addOrganizationAction, updateOrganizationAction } from '../../actions'
+import { useStore } from '../../organizations/store'
 import { Organization } from '../../types'
 import { AddressFields } from './address-fields'
 import { ContactNameField } from './contact-name-field'
@@ -19,13 +23,52 @@ interface FormProps {
 }
 
 const OrganizationForm = ({ data, onCloseModal }: FormProps) => {
+  const { search } = useStore((state) => ({
+    search: state.search,
+  }))
   const form = useForm<SchemaType>({
     resolver: zodResolver(schema),
     defaultValues: defaultValues(data),
   })
 
   const onSave = async (formData: SchemaType) => {
-    // TODO: Add logic for saving the data
+    const reqPayload: Partial<Organization> = {
+      ...formData,
+      displayName: formData.name,
+      shortName: formData.name,
+      organizationAddress: {
+        street1: formData.address1,
+        street2: formData.address2 ?? '',
+        city: formData.city,
+        state: formData.state,
+        postalCode: formData.zip,
+      },
+    }
+
+    if (data && data?.id) {
+      reqPayload.id = data.id
+    }
+
+    const sanitizedPayload = sanitizeFormData(reqPayload)
+
+    const response =
+      data && data.id
+        ? await updateOrganizationAction(sanitizedPayload, data?.id)
+        : await addOrganizationAction(sanitizedPayload)
+
+    if (response.state === 'error') {
+      toast.error(response.error)
+      return
+    }
+
+    if (response.data) {
+      onCloseModal(false)
+      form.reset()
+      toast.success('Record has been saved successfully')
+      search()
+    } else {
+      toast.error('Unable to save record')
+    }
   }
 
   return (

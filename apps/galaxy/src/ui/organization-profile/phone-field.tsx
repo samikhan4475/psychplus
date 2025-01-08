@@ -11,10 +11,10 @@ const PhoneField = () => {
     <FormFieldContainer>
       <FormFieldLabel>Phone Number</FormFieldLabel>
       <PhoneNumberInput
-        field="contactInfo.phoneNumbers.0.number"
+        field="contactPhone"
         placeholder="Phone Number"
       />
-      <FormFieldError name="contactInfo.phoneNumbers.0.number" />
+      <FormFieldError name="contactPhone" />
     </FormFieldContainer>
   )
 }

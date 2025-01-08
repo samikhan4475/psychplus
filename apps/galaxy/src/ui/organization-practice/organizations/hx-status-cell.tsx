@@ -1,30 +1,49 @@
 'use client'
 
-import React from 'react'
+import React, { useMemo, useState } from 'react'
 import { CounterClockwiseClockIcon } from '@radix-ui/react-icons'
 import { Flex, Heading, Popover } from '@radix-ui/themes'
 import { X } from 'lucide-react'
+import { toast } from 'react-hot-toast'
 import { PropsWithRow, SelectCell } from '@/components'
+import { CODESETS } from '@/constants'
+import { useCodesetCodes } from '@/hooks'
+import { updateOrganizationAction } from '../actions'
 import { Organization } from '../types'
 import { HxListTable } from './hx-list-table'
 
-// TODO: will change it when doing API integration
-const STATUS_CODESET = [
-  {
-    label: 'Active',
-    value: 'Active',
-  },
-  {
-    label: 'Inactive',
-    value: 'Inactive',
-  },
-  {
-    label: 'Error',
-    value: 'Error',
-  },
-]
-
 const HxStatusCell = ({ row }: PropsWithRow<Organization>) => {
+  const [currentStatus, setCurrentStatus] = useState(row.original.recordStatus)
+  const codes = useCodesetCodes(CODESETS.RecordStatus)
+
+  const items = useMemo(
+    () =>
+      codes.map((code) => ({
+        label: code.display,
+        value: code.value,
+      })),
+    [],
+  )
+
+  const handleStatusChange = async (status: string) => {
+    setCurrentStatus(status)
+    const response = await updateOrganizationAction(
+      {
+        ...row.original,
+        recordStatus: status,
+      },
+      row.original?.id,
+    )
+
+    if (response.state === 'error') {
+      setCurrentStatus(row.original.recordStatus)
+      toast.error(response.error)
+      return
+    }
+
+    toast.success('Status updated successfully')
+  }
+
   return (
     <Flex>
       <Popover.Root>
@@ -51,8 +70,10 @@ const HxStatusCell = ({ row }: PropsWithRow<Organization>) => {
         </Flex>
       </Popover.Root>
       <SelectCell
-        options={STATUS_CODESET}
+        options={items}
         className="w-[100px] bg-gray-3 text-gray-10"
+        onValueChange={handleStatusChange}
+        value={currentStatus}
       />
     </Flex>
   )

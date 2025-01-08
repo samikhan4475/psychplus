@@ -9,7 +9,7 @@ const Statuselect = () => {
       <FormFieldLabel>Status</FormFieldLabel>
       <CodesetSelect
         name="status"
-        codeset={CODESETS.ClaimFiltrationDateType}
+        codeset={CODESETS.RecordStatus}
         size="1"
         className="w-[101px]"
       />

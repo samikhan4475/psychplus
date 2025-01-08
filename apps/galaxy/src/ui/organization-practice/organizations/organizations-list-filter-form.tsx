@@ -18,9 +18,9 @@ import { useStore } from './store'
 
 const schema = z.object({
   name: z.string().optional(),
-  practice: z.string().optional(),
-  contactName: z.string().optional(),
-  phone: z.string().optional(),
+  practiceId: z.string().optional(),
+  partialContactName: z.string().optional(),
+  phoneNumber: z.string().optional(),
   email: z.string().optional(),
   address1: z.string().optional(),
   address2: z.string().optional(),
@@ -42,9 +42,9 @@ const OrganizationsListFilterForm = () => {
     reValidateMode: 'onChange',
     defaultValues: {
       name: '',
-      practice: '',
-      contactName: '',
-      phone: '',
+      practiceId: '',
+      partialContactName: '',
+      phoneNumber: '',
       email: '',
       address1: '',
       address2: '',
@@ -59,9 +59,9 @@ const OrganizationsListFilterForm = () => {
     e.preventDefault()
     form.reset({
       name: '',
-      practice: '',
-      contactName: '',
-      phone: '',
+      practiceId: '',
+      partialContactName: '',
+      phoneNumber: '',
       email: '',
       address1: '',
       address2: '',
@@ -76,6 +76,11 @@ const OrganizationsListFilterForm = () => {
   const onSubmit: SubmitHandler<SchemaType> = (data) => {
     const formattedData = {
       ...data,
+      partialShortName: data.name,
+      partialAddress1: data.address1,
+      partialAddress2: data.address2,
+      stateCode: data.state,
+      recordStatuses: data.status ? [data.status] : undefined,
     }
     const cleanedData = sanitizeFormData(
       formattedData,
