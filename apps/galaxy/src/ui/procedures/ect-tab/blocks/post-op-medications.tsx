@@ -10,8 +10,8 @@ import { EctWidgetSchemaType } from '../ect-tab-schema'
 const POST_MEDICATION_OP_ID = 'ectPostOpMedicationBlock'
 const POST_MEDICATION_LABEL = 'Post Op Medications'
 const postOpMedicationsOptions = [
-  { label: 'No', value: 'no' },
-  { label: 'Yes', value: 'yes' },
+  { label: 'No', value: 'No' },
+  { label: 'Yes', value: 'Yes' },
 ]
 
 const PostOpMedicationsBlock = () => {
@@ -27,7 +27,7 @@ const PostOpMedicationsBlock = () => {
         required
       />
       <FormFieldError name={POST_MEDICATION_OP_ID} />
-      {postOpMedication === 'yes' && (
+      {postOpMedication === 'Yes' && (
         <TextAreaInput
           field="ectPostOpMedicationBlockDetails"
           className="h-full w-full"

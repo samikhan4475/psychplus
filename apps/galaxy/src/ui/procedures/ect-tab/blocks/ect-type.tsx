@@ -6,15 +6,15 @@ const BLOCK_LABEL = 'ECT Type'
 const BLOCK_OPTIONS = [
   {
     label: 'Bilateral',
-    value: 'bilateral',
+    value: 'Bilateral',
   },
   {
     label: 'Standard RUL',
-    value: 'standardRul',
+    value: 'Standard RUL',
   },
   {
     label: 'Ultra-brief RUL',
-    value: 'ultraBriefRUL',
+    value: 'Ultra-brief RUL',
   },
 ]
 

@@ -11,6 +11,7 @@ import { ProcedureTabs, ProcedureTabsId } from '../constants'
 import { transformIn, transformOut } from './data'
 import { useEctWidgetForm } from './ect-tab-form'
 import { ECTView } from './ect-view'
+import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 
 interface EctTabProps {
   patientId: string
@@ -25,7 +26,7 @@ const EctWidget = ({ patientId, procedureEctData }: EctTabProps) => {
     <FormProvider {...form}>
       <WidgetFormContainer
         patientId={patientId}
-        widgetId={ProcedureTabsId.ECT_ID}
+        widgetId={QuickNoteSectionName.QuicknoteSectionProcedureEtcTab}
         title={ProcedureTabs.ECT}
         getData={transformOut(patientId)}
         headerRight={

@@ -12,7 +12,6 @@ export const ectActualViewKeysSection1 = [
   {
     label: 'Anesthesiologist:',
     key: 'anesthesiologist',
-    value: 'Select',
   },
   {
     label: 'Time Out:',
@@ -78,7 +77,7 @@ export const ectActualViewKeysSection3 = [
     key: 'ectComplicationsBlockDetails',
   },
   {
-    label: 'Assessment:',
+    label: 'ECT Assessment:',
     key: 'ectAssessment',
   },
   {
@@ -110,7 +109,7 @@ const transformIn = (value: QuickNoteSectionItem[]): EctWidgetSchemaType => {
     seriesMaintenance: 'series',
     series: '',
     maintenance: '',
-    biteblock: 'yes',
+    biteblock: 'Yes',
     timeOut: '',
     timeOfProcedure: '',
     ectTypeBlock: '',
@@ -125,7 +124,8 @@ const transformIn = (value: QuickNoteSectionItem[]): EctWidgetSchemaType => {
     ectComplicationsBlockDetails: '',
     ectAssessment: '',
     ectContinuePBlock: '',
-    providerType: '',
+    anesthesiologist: '',
+    machineName:'Mecta'
   }
 
   value.forEach((item) => {

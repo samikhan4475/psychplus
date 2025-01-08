@@ -6,7 +6,7 @@ const ectWidgetSchema = z.object({
   seriesMaintenance: z.enum(['series', 'maintenance']).optional(),
   series: z.string(),
   maintenance: z.string(),
-  biteblock: z.enum(['yes', 'no']),
+  biteblock: z.enum(['Yes', 'No']),
   timeOut: z.string().trim().min(1, 'Required'),
   timeOfProcedure: z.string().trim().min(1, 'Required'),
   ectTypeBlock: z.string().min(1, 'Required'),
@@ -21,7 +21,7 @@ const ectWidgetSchema = z.object({
   ectComplicationsBlockDetails: z.string().optional(),
   ectAssessment: z.string().min(1, 'Required'),
   ectContinuePBlock: z.string().min(1, 'Required'),
-  providerType: z.string(),
+  anesthesiologist: z.string(),
 })
 
 export { ectWidgetSchema, type EctWidgetSchemaType }

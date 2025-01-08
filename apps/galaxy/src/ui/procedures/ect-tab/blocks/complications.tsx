@@ -10,8 +10,8 @@ import { EctWidgetSchemaType } from '../ect-tab-schema'
 const COMPLICATION_ID = 'ectComplicationsBlock'
 const COMPLICATION_LABEL = 'Complications'
 const complicationOptions = [
-  { label: 'No', value: 'no' },
-  { label: 'Yes', value: 'yes' },
+  { label: 'No', value: 'No' },
+  { label: 'Yes', value: 'Yes' },
 ]
 const ComplicationsBlock = () => {
   const form = useFormContext<EctWidgetSchemaType>()
@@ -26,7 +26,7 @@ const ComplicationsBlock = () => {
         required
       />
       <FormFieldError name={COMPLICATION_ID} />
-      {complication === 'yes' && (
+      {complication === 'Yes' && (
         <TextAreaInput
           field="ectComplicationsBlockDetails"
           className="h-full w-full"

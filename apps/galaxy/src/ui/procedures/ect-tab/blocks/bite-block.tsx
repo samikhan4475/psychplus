@@ -7,11 +7,11 @@ const BLOCK_LABEL = 'Bite Block'
 const BLOCK_OPTIONS = [
   {
     label: 'No',
-    value: 'no',
+    value: 'No',
   },
   {
     label: 'Yes',
-    value: 'yes',
+    value: 'Yes',
   },
   
 ]

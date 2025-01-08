@@ -11,11 +11,11 @@ const BLOCK_LABEL = 'Continue ECT'
 const BLOCK_OPTIONS = [
   {
     label: 'Series',
-    value: 'series',
+    value: 'Series',
   },
   {
     label: 'Maintenance',
-    value: 'maintenance',
+    value: 'Maintenance',
   },
 ]
 

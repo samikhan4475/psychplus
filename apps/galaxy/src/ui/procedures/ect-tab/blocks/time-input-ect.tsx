@@ -25,7 +25,10 @@ const TimeInputFieldECT = ({ name, label }: TimeInputEctProps) => {
         field={name}
         hourCycle={24}
         onChange={(value) =>
-          form.setValue(name, `${value.hour}:${value.minute}`)
+          form.setValue(
+            name,
+            `${String(value.hour).padStart(2, '0')}:${String(value.minute).padStart(2, '0')}`
+          )
         }
         value={
           {
