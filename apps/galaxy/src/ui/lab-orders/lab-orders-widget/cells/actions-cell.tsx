@@ -8,7 +8,12 @@ import { RowActionSend } from './row-action-send'
 const rowActions: RowAction<LabOrders>[] = [
   {
     id: 'lab-orders-row-action-send',
-    render: ({ row }) => <RowActionSend orderId={row.original.id} />,
+    render: ({ row }) => (
+      <RowActionSend
+        orderId={row.original.id}
+        labLocationName={row.original?.orderingLab?.name}
+      />
+    ),
   },
   {
     id: '',

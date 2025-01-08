@@ -11,6 +11,7 @@ import {
   addTestLabsApi,
   editLabOrderApi,
   editSpecimenApi,
+  getLabOrderRequisition,
   placeLabOrderApi,
 } from './api'
 import { SpecimenData } from './blocks/types'
@@ -186,14 +187,10 @@ const useLabOrderForm = (
 
   const onSaveOrder = async (
     data: LabOrderSchemaType,
-    successMessage: string = 'Saved!',
-    placeOrderApi?: (id: string) => Promise<{}>,
+    isPlaceOrder?: boolean,
   ) => {
     const result = await labOrderAction(data)
     if (result.state === 'success') {
-      if (placeOrderApi) {
-        await placeOrderApi(result.data.id)
-      }
       const specimenList = form.getValues('specimenList')
       const labTestResult = await labTestAction(
         result.data.id ?? '',
@@ -209,7 +206,23 @@ const useLabOrderForm = (
           labTestResult.state === 'success' ? [...labTestResult.data] : [],
       }
       updateLabOrdersList(updatedLabOrder) //local
-      toast.success(successMessage)
+      if (isPlaceOrder) {
+        const requisitionResponse = await getLabOrderRequisition(result.data.id)
+        if (requisitionResponse.state === 'success') {
+          const placeOrderResponse = await placeLabOrderApi(result.data.id)
+          if (placeOrderResponse.state === 'success') {
+            toast.success('Order Placed!')
+          } else {
+            toast.error(
+              placeOrderResponse?.error ?? 'Error while placing order',
+            )
+          }
+        } else {
+          toast.error(requisitionResponse?.error ?? 'Error while placing order')
+        }
+      } else {
+        toast.success('Saved!')
+      }
     } else {
       toast.error('Error while saving!')
     }
@@ -222,7 +235,7 @@ const useLabOrderForm = (
     form.handleSubmit(
       (data) => {
         setLoadingPlaceOrder(true)
-        onSaveOrder(data, 'Order Placed!', placeLabOrderApi)
+        onSaveOrder(data, true)
       },
       (error) => console.log(error),
     )(e)
