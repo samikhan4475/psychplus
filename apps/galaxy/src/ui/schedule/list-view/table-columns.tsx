@@ -31,7 +31,7 @@ const columns: ColumnDef<Appointment>[] = [
         clientSideSort
         className="!text-black justify-center !font-medium"
         column={column}
-        label="Date"
+        label="Visit Date"
       />
     ),
     cell: ({ row }) => (

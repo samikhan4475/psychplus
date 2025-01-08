@@ -119,6 +119,17 @@ const schema = z
     } else {
       validateUntimedService(data, ctx)
     }
+    if (
+      data.dcDate &&
+      data.visitDate &&
+      data.dcDate?.compare(data.visitDate) >= 0
+    ) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ['visitDate'],
+        message: 'visit date must be greater than dc date',
+      })
+    }
   })
 
 type SchemaType = z.infer<typeof schema>

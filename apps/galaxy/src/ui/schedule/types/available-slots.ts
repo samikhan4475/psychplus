@@ -257,6 +257,7 @@ interface AppointmentParams {
   noteSigned?: string
   isFollowUp?: boolean
   isServiceTimeDependant?: boolean
+  isShowActiveVisits?: boolean
 }
 
 interface ProviderCoding {

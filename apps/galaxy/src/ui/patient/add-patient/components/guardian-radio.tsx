@@ -1,11 +1,23 @@
+import { useEffect } from 'react'
 import * as RadixRadioGroup from '@radix-ui/react-radio-group'
 import { Flex, Text } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
+import { getAgeFromDate } from '@/utils'
 import { SchemaType } from '../schema'
 
 const GuardianRadio = () => {
   const form = useFormContext<SchemaType>()
   const value = form.watch('hasGuardian')
+  const dob = form.watch('dateOfBirth')
+  const age = dob ? getAgeFromDate(dob) : 18
+
+  useEffect(() => {
+    if (age < 18) {
+      form.setValue('hasGuardian', 'yes')
+    } else {
+      form.setValue('hasGuardian', 'no')
+    }
+  }, [age])
 
   return (
     <Flex

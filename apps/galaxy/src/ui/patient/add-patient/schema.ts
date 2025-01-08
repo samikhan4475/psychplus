@@ -1,7 +1,8 @@
+import { getLocalTimeZone, today } from '@internationalized/date'
 import { DateValue } from 'react-aria-components'
 import z from 'zod'
 
-const phoneRegex = /^\+?[1-9]\d{7,14}$/
+const phoneRegex = /^(\+?[1-9]\d{9}|^$)$/
 const nameRegex = /^[^\d]*$/
 
 const schema = z
@@ -49,6 +50,7 @@ const schema = z
     patientPolicyB: z.boolean().optional(),
   })
   .superRefine((data, ctx) => {
+    const { dateOfBirth } = data
     if (data.hasGuardian === 'yes') {
       if (!data.guardianFirstName) {
         ctx.addIssue({
@@ -71,6 +73,13 @@ const schema = z
           path: ['relationship'],
         })
       }
+    }
+    if (dateOfBirth && today(getLocalTimeZone()).compare(dateOfBirth) < 0) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'Invalid date of birth',
+        path: ['dateOfBirth']
+      })
     }
   })
 

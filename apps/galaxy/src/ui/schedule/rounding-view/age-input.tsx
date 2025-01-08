@@ -10,7 +10,7 @@ const AgeInput = () => {
   const form = useFormContext<BookedAppointmentsSchemaType>()
 
   return (
-    <Flex direction="column">
+    <Flex direction="column" gap="1">
       <FormFieldContainer className="flex-1">
         <FieldLabel>Age</FieldLabel>
         <TextField.Root

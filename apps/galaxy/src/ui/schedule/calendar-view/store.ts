@@ -41,6 +41,7 @@ const useStore = create<Store>((set, get) => ({
     const result = await getBookedAppointmentsAction({
       ...params,
       isServiceTimeDependant: true,
+      isShowActiveVisits: true,
     })
     if (result.state === 'error') {
       toast.error(result.error || 'Failed to retrieve appointments')

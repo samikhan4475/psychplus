@@ -10,7 +10,7 @@ const bookedAppointmentsSchema = z
     startingDate: dateValidation.optional(),
     endingDate: dateValidation.optional(),
     name: z.string().optional(),
-    age: z.coerce.number().optional(),
+    age: z.coerce.number().positive('Invalid age').optional(),
     gender: z.string().optional(),
     stateIds: z
       .array(z.string())

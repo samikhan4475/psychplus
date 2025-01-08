@@ -44,7 +44,7 @@ const AddPatientForm = ({
       email: '',
       guardianFirstName: '',
       guardianLastName: '',
-      hasGuardian: 'yes',
+      hasGuardian: 'no',
     },
   })
 
