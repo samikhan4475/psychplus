@@ -152,6 +152,7 @@ interface Claim {
   dateOfServiceTo: Date
   claimType: string
   isAnesthesiaClaim: boolean
+  claimId: string
   authorizationNumber: string
   referralNumber: string
   primaryPatientInsurancePolicyId: string

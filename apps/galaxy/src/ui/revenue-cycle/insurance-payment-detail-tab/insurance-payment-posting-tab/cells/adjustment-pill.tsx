@@ -18,6 +18,7 @@ const AdjustmentPill = ({
     adjustmentAmount,
     adjustmentReasonCode,
     adjustmentStatus,
+    remarkCode,
   },
   adjustments,
   serviceLineIndex,
@@ -65,11 +66,11 @@ const AdjustmentPill = ({
       updatedAdjustments,
     )
   }
-
   return (
     <Box className="rounded-full flex min-w-fit items-center bg-blue-4 px-2 py-[2px]">
       <Text className="text-[10px]" weight="medium">
-        {adjustmentGroupCode}-{adjustmentReasonCode} - {`$${adjustmentAmount}`}
+        {adjustmentGroupCode}-{adjustmentReasonCode}
+        {remarkCode && `-${remarkCode}`} - {`$${adjustmentAmount}`}
       </Text>
       <Cross1Icon
         onClick={removeAdjustment}

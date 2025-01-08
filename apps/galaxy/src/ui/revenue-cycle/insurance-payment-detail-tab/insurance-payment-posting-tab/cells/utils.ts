@@ -24,6 +24,7 @@ interface AdjustmentParams {
 interface AdjustmentType extends Partial<AdjustmentParams> {
   adjustmentGroupCode: string
   adjustmentReasonCode: string
+  remarkCode?: string
   adjustmentAmount?: number
   adjustmentStatus?: string
 }
@@ -32,6 +33,7 @@ const updateOrAddAdjustment = ({
   adjustmentGroupCode,
   adjustmentReasonCode,
   adjustmentAmount,
+  remarkCode,
   adjustmentStatus,
   serviceLinePaymentAdjustments,
 }: AdjustmentType) => {
@@ -60,10 +62,10 @@ const updateOrAddAdjustment = ({
   } else {
     const newAdjustment = {
       adjustmentAmount: parsedAdjustmentAmount,
-      adjustmentGroupCode: adjustmentGroupCode,
-      adjustmentReasonCode: adjustmentReasonCode,
+      adjustmentGroupCode,
+      adjustmentReasonCode,
+      remarkCode: remarkCode ?? '',
       adjustmentStatus,
-      remarkCode: '',
       recordStatus: 'Active',
     }
 
@@ -76,6 +78,7 @@ const handleAdjustment = ({
   adjustmentGroupCode,
   adjustmentReasonCode,
   adjustmentAmount,
+  remarkCode,
   claimPaymentId,
 }: AdjustmentType) => {
   const existingAdjustment = serviceLinePaymentAdjustments?.find(
@@ -90,7 +93,7 @@ const handleAdjustment = ({
     adjustmentReasonCode,
     adjustmentAmount: adjustmentAmount ?? 0,
     claimServiceLinePaymentId: claimPaymentId ?? '',
-    remarkCode: '',
+    remarkCode: remarkCode ?? '',
     recordStatus: 'Active',
   }
 
@@ -110,6 +113,7 @@ const addInsuranceAdjustment = ({
   serviceLinePaymentAdjustments,
   adjustmentGroupCode,
   adjustmentReasonCode,
+  remarkCode,
   adjustmentAmount,
 }: AdjustmentType) => {
   if (adjustmentAmount === 0) return serviceLinePaymentAdjustments
@@ -117,6 +121,7 @@ const addInsuranceAdjustment = ({
     serviceLinePaymentAdjustments,
     adjustmentGroupCode,
     adjustmentReasonCode,
+    remarkCode,
     adjustmentAmount,
   })
 }

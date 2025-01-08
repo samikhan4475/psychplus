@@ -26,6 +26,7 @@ const InsurancePaymentDetailView = () => {
   const paymentPostingClaim = useStore(
     (state) => state.paymentPostingClaim[activeTab],
   )
+
   const fetchPaymentDetail = async (checkId: string) => {
     setIsLoading(true)
     const result = await getPaymentDetailAction(checkId)

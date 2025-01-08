@@ -1,5 +1,6 @@
-import { Claim } from '@/types'
+import { Claim, SharedCode } from '@/types'
 import { ClaimResponseType, ClaimSubmissionResponse } from '../types'
+import { getClaimStatusDisplay } from '../utils'
 
 const transformIn = (data: ClaimSubmissionResponse, claims?: Claim[]) => {
   const claimLookup: Record<string, string> =
@@ -24,4 +25,16 @@ const transformIn = (data: ClaimSubmissionResponse, claims?: Claim[]) => {
   return { claimErrorResponses, claimCleanResponses }
 }
 
-export { transformIn }
+const transformInSubmissions = (
+  claimStatusCodes: SharedCode[],
+  submissions: Claim[],
+) =>
+  submissions?.map((submission) => ({
+    ...submission,
+    claimStatusCode: getClaimStatusDisplay(
+      claimStatusCodes,
+      submission.claimStatusCode,
+    ),
+  })) ?? []
+
+export { transformIn, transformInSubmissions }

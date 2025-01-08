@@ -56,7 +56,7 @@ interface ServiceLinePaymentAdjustment {
   adjustmentAmount: number
   adjustmentReasonCode: string
   adjustmentStatus?: string
-  remarkCode: string
+  remarkCode?: string
   adjustmentGroupCode: string
 }
 

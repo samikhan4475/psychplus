@@ -9,7 +9,7 @@ import { FormContainer } from '@/components'
 import { addClaimPaymentAction } from '../../actions/add-claim-payment'
 import { updateClaimPaymentAction } from '../../actions/update-claim-payment'
 import { useStore } from '../../insurance-payment-tab/store'
-import { useStore as TabStore } from '../../store'
+import { useStore as useTabStore } from '../../store'
 import { InsurancePayment } from '../../types'
 import { PaymentListTypes } from '../types'
 import { transformInDefault, transformOut } from './data'
@@ -26,16 +26,18 @@ const InsurancePaymentPostingView = ({
   fetchPaymentDetail,
   paymentDetail,
 }: InsurancePaymentPostingViewProps) => {
-  const activeTab = TabStore((state) => state.activeTab)
+  const { activeTab, selectedPaymentId } = useTabStore((state) => ({
+    activeTab: state.activeTab,
+    selectedPaymentId: state.selectedPayments[state.activeTab],
+  }))
   const { paymentPostingClaim, setPaymentPostingClaim } = useStore((state) => ({
     setPaymentPostingClaim: state.setPaymentPostingClaim,
     paymentPostingClaim: state.paymentPostingClaim[activeTab],
   }))
-  const paymentPostingId = activeTab.split(' ')[1]
   const form = useForm<SchemaType>({
     resolver: zodResolver(schema),
     reValidateMode: 'onChange',
-    defaultValues: transformInDefault(paymentPostingId, paymentPostingClaim),
+    defaultValues: transformInDefault(selectedPaymentId, paymentPostingClaim),
   })
   const onSubmit = async (data: SchemaType, event?: BaseSyntheticEvent) => {
     const { name } = (event?.nativeEvent as SubmitEvent)
@@ -60,18 +62,18 @@ const InsurancePaymentPostingView = ({
       const claimPaymentAction = !updatedPayload?.id
         ? addClaimPaymentAction({
             payload: updatedPayload,
-            paymentId: paymentPostingId,
+            paymentId: selectedPaymentId,
           })
         : updateClaimPaymentAction({
             payload: updatedPayload,
-            paymentId: paymentPostingId,
+            paymentId: selectedPaymentId,
             id: updatedPayload.id,
           })
 
       const result = await claimPaymentAction
 
       if (result.state === 'success') {
-        fetchPaymentDetail(paymentPostingId)
+        fetchPaymentDetail(selectedPaymentId)
         onCancel()
       } else if (result.state === 'error') {
         toast.error(result.error)

@@ -1,9 +1,11 @@
 import { SharedCode } from '@/types'
 import {
+  ClaimPayment,
   ClaimServiceLinePayment,
   InsurancePayment,
   ServiceLinePaymentAdjustment,
 } from '../types'
+import { getClaimStatusDisplay } from '../utils'
 import { adjustmentMapping } from './insurance-payment-posting-tab/constants'
 import { PaymentAdjustment } from './types'
 
@@ -11,6 +13,18 @@ interface TransformInPaymentParams {
   paymentDetail: InsurancePayment
   adjustmentCodes: PaymentAdjustment[]
 }
+
+const transformInClaimPayments = (
+  claimStatusCodes: SharedCode[],
+  payments: ClaimPayment[],
+) =>
+  payments?.map((payment) => ({
+    ...payment,
+    claimStatusCode: getClaimStatusDisplay(
+      claimStatusCodes,
+      payment.claimStatusCode,
+    ),
+  })) ?? []
 
 const transformInPayment = ({
   paymentDetail,
@@ -62,4 +76,4 @@ const getPaymentDisplay = (
   return codeSetLookup[codeValue] ?? codeValue
 }
 
-export { getPaymentDisplay, transformInPayment }
+export { getPaymentDisplay, transformInPayment, transformInClaimPayments }

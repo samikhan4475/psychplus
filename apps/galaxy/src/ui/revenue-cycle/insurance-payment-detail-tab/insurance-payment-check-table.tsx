@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import * as Accordion from '@radix-ui/react-accordion'
-import { ScrollArea } from '@radix-ui/themes'
 import { ColumnDef } from '@tanstack/react-table'
 import { ColumnHeader, DataTable, DateCell, TextCell } from '@/components'
+import { CODESETS } from '@/constants'
+import { useCodesetCodes } from '@/hooks'
 import { formatDate } from '@/utils'
 import { ClaimPayment, InsurancePayment } from '../types'
 import { addSpaceToCamelCase } from '../utils'
@@ -10,13 +11,14 @@ import { ActionsCell } from './actions-cell'
 import { InsurancePaymentTableTabs } from './insurance-payment-table-tabs'
 import { PaymentDetailHeader } from './payment-detail-header'
 import { PaymentListTypes } from './types'
+import { transformInClaimPayments } from './utils'
 
 const columns: ColumnDef<ClaimPayment>[] = [
   {
     id: 'claimId',
     header: ({ column }) => <ColumnHeader column={column} label="Claim #" />,
     cell: ({ row }) => (
-      <TextCell className="min-w-[235px]">{row.original.claimNumber}</TextCell>
+      <TextCell className="min-w-[80px]">{row.original.claimNumber}</TextCell>
     ),
   },
   {
@@ -38,13 +40,11 @@ const columns: ColumnDef<ClaimPayment>[] = [
     ),
   },
   {
-    id: 'status',
+    id: 'claimStatusCode',
     header: ({ column }) => (
       <ColumnHeader column={column} label="Claim Status" />
     ),
-    cell: ({ row }) => (
-      <TextCell>{addSpaceToCamelCase(row.original.claimStatusCode)}</TextCell>
-    ),
+    cell: ({ row }) => <TextCell>{row.original.claimStatusCode}</TextCell>,
   },
   {
     id: 'patientName',
@@ -159,6 +159,7 @@ const PaymentCheckTable = ({ paymentDetail }: PaymentCheckHeaderProps) => {
           ) ?? [],
     )
   }, [paymentListType])
+  const claimStatusCodes = useCodesetCodes(CODESETS.ClaimStatus)
 
   return (
     <Accordion.Root
@@ -167,7 +168,7 @@ const PaymentCheckTable = ({ paymentDetail }: PaymentCheckHeaderProps) => {
       defaultValue="item-1"
       collapsible
     >
-      <Accordion.Item className="shadow-sm " value="item-1">
+      <Accordion.Item className="shadow-sm" value="item-1">
         <PaymentDetailHeader />
         <Accordion.AccordionContent className="px-3 py-2">
           <InsurancePaymentTableTabs
@@ -175,7 +176,7 @@ const PaymentCheckTable = ({ paymentDetail }: PaymentCheckHeaderProps) => {
             setPaymentListType={setPaymentListType}
           />
           <DataTable
-            data={claimPayments ?? []}
+            data={transformInClaimPayments(claimStatusCodes, claimPayments)}
             columns={columns}
             disablePagination
             tableClass="[&_.rt-ScrollAreaRoot]:pb-2 max-w-[calc(100vw-23px)]"

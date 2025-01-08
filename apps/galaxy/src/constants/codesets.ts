@@ -77,6 +77,7 @@ const CODESETS = {
   TherapyModality: 'PsychPlusPublic.TherapyModality',
   TherapyIntervention: 'PsychPlusPublic.TherapyIntervention',
   PractitionerHonor: 'PsychPlusPublic.PractitionerHonor',
+  ClaimStatus: 'PsychPlusPublic.ClaimStatus',
   QueryByLastDays: 'QueryByLastDays',
   NoteSignatureStatus: 'NoteSignatureStatus',
   ServiceLevelType: 'ServiceLevelType',

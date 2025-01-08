@@ -7,7 +7,7 @@ const ServiceLinePaymentAdjustmentSchema = z.object({
   claimServiceLinePaymentId: z.string().optional(),
   adjustmentAmount: z.number(),
   adjustmentReasonCode: z.string(),
-  remarkCode: z.string(),
+  remarkCode: z.string().optional(),
   adjustmentGroupCode: z.string(),
 })
 

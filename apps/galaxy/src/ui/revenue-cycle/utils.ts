@@ -1,4 +1,4 @@
-import { ClaimInsurancePolicy } from '@/types'
+import { ClaimInsurancePolicy, SharedCode } from '@/types'
 
 const getInsurancePayerName = (
   type: string,
@@ -56,8 +56,15 @@ function addSpaceToCamelCase(str: string) {
   return str.replace(/([a-z])([A-Z])/g, '$1 $2')
 }
 
+const getClaimStatusDisplay = (codes: SharedCode[], claimStatusCode: string) =>
+  claimStatusCode
+    ? codes.find((code) => code.value === claimStatusCode)?.display ??
+      claimStatusCode
+    : claimStatusCode
+
 export {
   truncateString,
+  getClaimStatusDisplay,
   previewFile,
   formatAmount,
   getRandomId,

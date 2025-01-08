@@ -11,10 +11,13 @@ import {
   LoadingPlaceholder,
   TextCell,
 } from '@/components'
+import { CODESETS } from '@/constants'
+import { useCodesetCodes } from '@/hooks'
 import { Claim, Sort } from '@/types'
 import { formatDate, getSortDir } from '@/utils'
 import { getInsurancePayerName } from '../utils'
 import { TableHeaderCheckboxCell, TableRowCheckboxCell } from './cells'
+import { transformInSubmissions } from './data'
 import { useStore } from './store'
 
 const columns = (
@@ -255,6 +258,9 @@ const SubmissionTable = () => {
     sortData: state.sortData,
     search: state.search,
   }))
+
+  const claimStatusCodes = useCodesetCodes(CODESETS.ClaimStatus)
+
   useEffect(() => {
     search(defaultPayload)
   }, [])
@@ -281,7 +287,7 @@ const SubmissionTable = () => {
   return (
     <ScrollArea>
       <DataTable
-        data={data.submissions}
+        data={transformInSubmissions(claimStatusCodes, data.submissions)}
         columns={columns(sort, sortData)}
         onRowClick={(row) => {
           // TODO: Row click can be implemented here

@@ -12,6 +12,7 @@ import { AdjustmentAmountField } from './adjustment-amount-field'
 import { AdjustmentCodeField } from './adjustment-code-field'
 import { AdjustmentPill } from './adjustment-pill'
 import { ReasonCodeField } from './reason-code-field'
+import { RemarkCodeField } from './remark-code-field'
 import { getAdjustmentStatus, updateOrAddAdjustment } from './utils'
 
 interface AdjustmentReasonRemarkCellProps
@@ -28,6 +29,7 @@ const AdjustmentReasonRemarkCell = ({
   const [adjustment, setAdjustment] = useState({
     adjustmentCode: '',
     adjustmentAmount: '',
+    remarkCode: '',
     reasonCode: '',
   })
   const [isLoading, setIsLoading] = useState(false)
@@ -51,7 +53,8 @@ const AdjustmentReasonRemarkCell = ({
   }, [form, row.index])
 
   const addAdjustment = () => {
-    const { adjustmentCode, reasonCode, adjustmentAmount } = adjustment
+    const { adjustmentCode, reasonCode, adjustmentAmount, remarkCode } =
+      adjustment
     const { billedAmount } = row.original
     if (!adjustmentCode || !reasonCode || !adjustmentAmount) {
       toast.error('Adjustment GroupCode - ReasonCode - Amount must be filled')
@@ -66,6 +69,7 @@ const AdjustmentReasonRemarkCell = ({
         adjustmentAmount: +adjustmentAmount,
         adjustmentReasonCode: reasonCode,
         adjustmentGroupCode: adjustmentCode,
+        remarkCode: remarkCode,
         serviceLinePaymentAdjustments,
       })
 
@@ -93,13 +97,15 @@ const AdjustmentReasonRemarkCell = ({
         adjustmentCode: '',
         adjustmentAmount: '',
         reasonCode: '',
+        remarkCode: '',
       })
     }
   }
 
   const onBlur = async () => {
     const { writeOffAmount } = row.original
-    const { adjustmentCode, adjustmentAmount, reasonCode } = adjustment
+    const { adjustmentCode, adjustmentAmount, reasonCode, remarkCode } =
+      adjustment
     if (
       !adjustmentCode ||
       !reasonCode ||
@@ -124,6 +130,7 @@ const AdjustmentReasonRemarkCell = ({
         adjustmentAmount: +adjustmentAmount,
         adjustmentReasonCode: reasonCode,
         adjustmentGroupCode: adjustmentCode,
+        remarkCode,
         adjustmentStatus,
         serviceLinePaymentAdjustments,
       })
@@ -165,6 +172,7 @@ const AdjustmentReasonRemarkCell = ({
           onChange={onChangeSelect}
         />
         <ReasonCodeField value={adjustment.reasonCode} onChange={onChange} />
+        <RemarkCodeField value={adjustment.remarkCode} onChange={onChange} />
         <AdjustmentAmountField
           onBlur={onBlur}
           rowIndex={row.index}

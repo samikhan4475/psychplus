@@ -27,14 +27,10 @@ const columns = (
   {
     id: 'chargeId',
     header: ({ column }) => (
-      <ColumnHeader
-        className="w-[75px]"
-        column={column}
-        label="Service Line #"
-      />
+      <ColumnHeader column={column} label="Service Line #" />
     ),
     cell: ({ row }) => (
-      <TextCell className="flex w-[280px] items-center">
+      <TextCell className="flex min-w-[70px] items-center">
         {row.original.chargeId}
       </TextCell>
     ),
@@ -157,7 +153,10 @@ const columns = (
   {
     id: 'adj-reason-remark',
     header: ({ column }) => (
-      <ColumnHeader column={column} label="Adjustment/Reason/Remark Code" />
+      <ColumnHeader
+        column={column}
+        label="Adjustment/Reason/Remark Code/Amount"
+      />
     ),
     cell: ({ row }) => (
       <AdjustmentReasonRemarkCell

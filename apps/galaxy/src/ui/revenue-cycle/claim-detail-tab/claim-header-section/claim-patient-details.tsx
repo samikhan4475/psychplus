@@ -1,8 +1,11 @@
 import { useEffect } from 'react'
 import { Flex, Grid, Text } from '@radix-ui/themes'
 import { useFormContext, useWatch } from 'react-hook-form'
+import { CODESETS } from '@/constants'
+import { useCodesetCodes } from '@/hooks'
 import { ClaimServiceLine } from '@/types'
 import { cn } from '@/utils'
+import { getClaimStatusDisplay } from '../../utils'
 import { ClaimUpdateSchemaType } from '../schema'
 
 const formatDateOfBirth = (dob: string | undefined): string => {
@@ -52,6 +55,12 @@ const PatientClaimDetails = () => {
     setValue('totalAmount', billedAmount)
   }, [claimServiceLines])
 
+  const claimStatuses = useCodesetCodes(CODESETS.ClaimStatus)
+
+  const claimStatus = claimStatusCode
+    ? getClaimStatusDisplay(claimStatuses, claimStatusCode)
+    : claimStatusCode
+
   return (
     <Flex className="bg-pp-header-bg rounded-[5px] p-2">
       <Grid
@@ -85,7 +94,7 @@ const PatientClaimDetails = () => {
           value={`$ ${patientPaid.toFixed(2)}`}
         />
         <LabelAndValue label="Balance" value={amountDue?.toFixed(2)} />
-        <LabelAndValue label="Claim Status" value={claimStatusCode} />
+        <LabelAndValue label="Claim Status" value={claimStatus} />
       </Grid>
     </Flex>
   )
