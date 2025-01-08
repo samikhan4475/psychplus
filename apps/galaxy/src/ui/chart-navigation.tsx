@@ -16,6 +16,7 @@ const ChartNavigation = () => {
     () => getNavLinks(appointmentId, visitType),
     [appointmentId, visitType],
   )
+
   return (
     <Box className="bg-white mb-4 w-[160px] rounded-1 shadow-2">
       <ScrollArea>
