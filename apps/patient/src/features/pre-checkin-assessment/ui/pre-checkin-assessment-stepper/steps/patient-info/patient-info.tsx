@@ -21,6 +21,7 @@ import { getPlaceholder } from '@/features/account/profile/utils'
 import { addInsuranceAction } from '@/features/billing/payments/actions'
 import PreCheckinAssessmentImageUploader from '../../shared-blocks/pre-checkin-assessment-image-uploader'
 import { patientSchema, patientSchemaType } from './patient-info-schema'
+import { StateSelect } from './state-select'
 
 const PatientInfo = () => {
   const router = useRouter()
@@ -170,12 +171,14 @@ const PatientInfo = () => {
                   <FormFieldContainer>
                     <Flex
                       direction="column"
-                      className="min-h-[60px] min-w-[280px] flex-1  rounded-4 bg-[#f0f4ff] px-4 py-3"
+                      className="min-h-[60px] min-w-[280px] flex-1  rounded-4 bg-[#f0f4ff] py-3 pl-2"
                     >
-                      <FormFieldLabel className="text-[12px] font-medium">
-                        Do you have a Parent/Guardian?
-                      </FormFieldLabel>
-
+                      <Flex direction="row" align="center">
+                        <FormFieldLabel required>Guardian</FormFieldLabel>
+                        <FormFieldLabel className="whitespace-nowrap">
+                          (Do you have a Parent/Guardian?)
+                        </FormFieldLabel>
+                      </Flex>
                       <RadioGroup.Root
                         name="hasGuardian"
                         value=""
@@ -260,18 +263,19 @@ const PatientInfo = () => {
 
             <Flex width="100%" gap="4">
               <FormFieldContainer className="flex-1">
-                <FormFieldLabel>City</FormFieldLabel>
-                <TextFieldInput size="3" value="xyz" disabled />
+                <FormFieldLabel required>City</FormFieldLabel>
+                <TextFieldInput size="3" placeholder="Enter city" disabled />
               </FormFieldContainer>
 
-              <FormFieldContainer className="flex-1">
-                <FormFieldLabel>State</FormFieldLabel>
-                <TextFieldInput size="3" value="abc" disabled />
-              </FormFieldContainer>
+              <StateSelect name="state 1" />
 
               <FormFieldContainer className="flex-1">
-                <FormFieldLabel>Zip Code</FormFieldLabel>
-                <TextFieldInput size="3" value="00000" disabled />
+                <FormFieldLabel required>Zip Code</FormFieldLabel>
+                <TextFieldInput
+                  size="3"
+                  placeholder="Enter ZIP code"
+                  disabled
+                />
               </FormFieldContainer>
             </Flex>
           </Flex>
@@ -334,18 +338,18 @@ const PatientInfo = () => {
 
             <Flex width="100%" gap="4">
               <FormFieldContainer className="flex-1">
-                <FormFieldLabel>City</FormFieldLabel>
-                <TextFieldInput size="3" value="xyz" disabled />
+                <FormFieldLabel required>City</FormFieldLabel>
+                <TextFieldInput size="3" placeholder="Enter city" disabled />
               </FormFieldContainer>
+              <StateSelect name="state 2" /> 
 
               <FormFieldContainer className="flex-1">
-                <FormFieldLabel>State</FormFieldLabel>
-                <TextFieldInput size="3" value="abc" disabled />
-              </FormFieldContainer>
-
-              <FormFieldContainer className="flex-1">
-                <FormFieldLabel>Zip Code</FormFieldLabel>
-                <TextFieldInput size="3" value="00000" disabled />
+                <FormFieldLabel required>Zip Code</FormFieldLabel>
+                <TextFieldInput
+                  size="3"
+                  placeholder="Enter ZIP code"
+                  disabled
+                />
               </FormFieldContainer>
             </Flex>
           </Flex>
