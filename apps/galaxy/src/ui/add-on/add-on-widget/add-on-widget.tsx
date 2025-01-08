@@ -39,6 +39,7 @@ const AddOnWidget = ({ patientId, initialValue }: AddOnWidgetProps) => {
       <WidgetFormContainer
         patientId={patientId}
         widgetId={QuickNoteSectionName.Addon}
+        tags={[QuickNoteSectionName.Addon]}
         title="Add On"
         getData={transformOut(patientId, appointmentId, visitType)}
         headerRight={

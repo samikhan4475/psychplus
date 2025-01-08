@@ -23,11 +23,12 @@ import { SocialHxWidget } from '@/ui/social-hx'
 import { SubstanceUseHxWidget } from '@/ui/substance-use-hx'
 import { TherapyWidget } from '@/ui/therapy'
 import { QuicknotesVitalsWidget } from '@/ui/vitals'
-import { isHospitalCareVisit, visitTypeToWidgets } from '@/utils'
+import { isHospitalCareVisit, VisitTypeEnum, visitTypeToWidgets } from '@/utils'
 import { TcmWidget } from '../assessment-plan/tcm-widget'
 import { HospitalDischargeWidget } from '../hospital/hospital-discharge-widget'
 import { HospitalInitialWidget } from '../hospital/hospital-initial-widget'
 import { SpravatoWidgetLoader as SpravatoWidget } from '../procedures/spravato-tab/spravato-widget-loader'
+import { UploadedDocumentsWidget } from '../uploaded-documents/uploaded-documents-widget'
 import {
   AllergiesDetailsView,
   CodesDetailsView,
@@ -60,7 +61,6 @@ import { HospitalInitialView } from './actual-note-view/hospital-initial'
 import { TcmView } from './actual-note-view/tcm'
 import { QuickNoteSectionName } from './constants'
 import { WidgetType } from './types'
-import { UploadedDocumentsWidget } from '../uploaded-documents/uploaded-documents-widget'
 
 enum ProviderType {
   Psychiatry = 'Psychiatrist',
@@ -168,7 +168,7 @@ const widgets: Array<WidgetType> = [
   },
   {
     component: EctWidget,
-    id: QuickNoteSectionName.ProcedureECT,
+    id: QuickNoteSectionName.QuicknoteSectionProcedureEtcTab,
     actualNoteComponent: EctDetailView,
   },
   {
@@ -229,7 +229,7 @@ const getWidgetsByVisitType = (
     visitType = `${visitType}/${visitSequence}`
   }
 
-  const widgetIds = visitTypeToWidgets[visitType]
+  const widgetIds = visitTypeToWidgets[visitType as VisitTypeEnum]
 
   if (!widgetIds) {
     return []

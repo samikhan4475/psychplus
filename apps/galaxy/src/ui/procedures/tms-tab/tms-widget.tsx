@@ -7,8 +7,9 @@ import { WidgetFormContainer, WidgetSaveButton } from '@/components'
 import { Appointment, QuickNoteHistory, QuickNoteSectionItem } from '@/types'
 import { Diagnosis } from '@/ui/diagnosis/diagnosis'
 import { useStore } from '@/ui/questionnaires/store'
+import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { useStore as useDiagnosisStore } from '../../diagnosis/store'
-import { ProcedureTabs, ProcedureTabsId } from '../constants'
+import { ProcedureTabs } from '../constants'
 import { transformIn, transformOut } from './data'
 import { DischargePlanView } from './discharge-plan'
 import MonitoringView from './monitoring/monitoring-view'
@@ -56,7 +57,8 @@ const TmsTab = ({
     <FormProvider {...form}>
       <WidgetFormContainer
         patientId={patientId}
-        widgetId={ProcedureTabsId.TMS_ID}
+        widgetId={QuickNoteSectionName.ProcedureTMS}
+        tags={[QuickNoteSectionName.ProcedureTMS]}
         title={ProcedureTabs.TMS}
         getData={transformOut(patientId)}
         headerRight={

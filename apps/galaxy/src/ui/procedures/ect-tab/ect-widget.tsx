@@ -2,16 +2,13 @@
 
 import { Flex } from '@radix-ui/themes'
 import { FormProvider } from 'react-hook-form'
-import {
-  WidgetFormContainer,
-  WidgetSaveButton,
-} from '@/components'
+import { WidgetFormContainer, WidgetSaveButton } from '@/components'
 import { QuickNoteSectionItem } from '@/types'
-import { ProcedureTabs, ProcedureTabsId } from '../constants'
+import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
+import { ProcedureTabs } from '../constants'
 import { transformIn, transformOut } from './data'
 import { useEctWidgetForm } from './ect-tab-form'
 import { ECTView } from './ect-view'
-import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 
 interface EctTabProps {
   patientId: string
@@ -27,6 +24,7 @@ const EctWidget = ({ patientId, procedureEctData }: EctTabProps) => {
       <WidgetFormContainer
         patientId={patientId}
         widgetId={QuickNoteSectionName.QuicknoteSectionProcedureEtcTab}
+        tags={[QuickNoteSectionName.QuicknoteSectionProcedureEtcTab]}
         title={ProcedureTabs.ECT}
         getData={transformOut(patientId)}
         headerRight={

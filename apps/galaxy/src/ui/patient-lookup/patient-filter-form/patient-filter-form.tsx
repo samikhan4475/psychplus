@@ -45,7 +45,6 @@ const PatientFilterForm = () => {
   const onSubmit: SubmitHandler<PatientLookUpSchemaType> = (data) => {
     return search(data, 1, true)
   }
-  console.log(form.formState.errors)
   const onError: SubmitErrorHandler<PatientLookUpSchemaType> = (errors) => {
     if (!showFilters && hasFieldErrors(errors)) {
       toggleFilters()

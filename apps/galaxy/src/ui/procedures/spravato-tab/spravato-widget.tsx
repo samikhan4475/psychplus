@@ -4,7 +4,8 @@ import { useParams, useSearchParams } from 'next/navigation'
 import { FormProvider } from 'react-hook-form'
 import { WidgetFormContainer, WidgetSaveButton } from '@/components'
 import { Appointment, QuickNoteSectionItem } from '@/types'
-import { ProcedureTabs, ProcedureTabsId } from '../constants'
+import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
+import { ProcedureTabs } from '../constants'
 import { AdverseEventQuestionView } from './adverse-event-question'
 import { AdverseReactionView } from './adverse-reaction'
 import { transformIn, transformOut } from './data'
@@ -40,7 +41,8 @@ const SpravatoWidget = ({
     <FormProvider {...form}>
       <WidgetFormContainer
         patientId={id}
-        widgetId={ProcedureTabsId.SPRAVATO_ID}
+        widgetId={QuickNoteSectionName.QuicknoteSectionProcedureSpravato}
+        tags={[QuickNoteSectionName.QuicknoteSectionProcedureSpravato]}
         title={ProcedureTabs.SPRAVATO}
         getData={transformOut(id, appointmentId, appointmentData)}
         headerRight={

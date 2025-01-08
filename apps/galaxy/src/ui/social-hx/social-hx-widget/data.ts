@@ -27,7 +27,6 @@ const transformOut =
         sectionItemValue: 'true',
       })
     }
-
     return result
   }
 
@@ -40,7 +39,6 @@ const transformIn = (
     result[item.sectionItem as keyof SocialHxWidgetSchemaType] =
       item.sectionItemValue
   })
-
   return result as SocialHxWidgetSchemaType
 }
 

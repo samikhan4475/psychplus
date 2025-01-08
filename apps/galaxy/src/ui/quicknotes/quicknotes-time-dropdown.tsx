@@ -31,6 +31,7 @@ const QuickNotesTimeDropdown = () => {
         onValueChange={(e) => setSignOptions({ time: e })}
         size="1"
         value={signOptions.time}
+        disabled={true}
       >
         <Select.Trigger className="max-w-[125px]">
           {signOptions.time}

@@ -17,10 +17,11 @@ const QuickNotesSignButton = ({ appointment }: QuickNotesSignButtonProps) => {
   }))
 
   const patientId = useParams().id as string
+  const visitType = useSearchParams().get('visitType') as string
   const appointmentId = useSearchParams().get('id') as string
 
   const signNote = async () => {
-    sign({ patientId, appointmentId, appointment })
+    sign({ patientId, appointmentId, appointment, visitType })
   }
 
   return (

@@ -26,7 +26,7 @@ import { TmsNoteDetailView } from '@/ui/quicknotes/actual-note-view/tms/tms-note
 import { VitalsNoteDetailView } from '@/ui/quicknotes/actual-note-view/vitals/vitals-note-detail-view'
 import { WorkingDiagnosisNoteDetailView } from '@/ui/quicknotes/actual-note-view/working-diagnosis/working-diagnosis-note-detail-view'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
-import { isHospitalCareVisit, visitTypeToWidgets } from '@/utils'
+import { isHospitalCareVisit, VisitTypeEnum, visitTypeToWidgets } from '@/utils'
 import { WidgetType } from '../types'
 
 enum ProviderType {
@@ -109,9 +109,9 @@ const widgetsArray: Array<WidgetType> = [
     id: QuickNoteSectionName.QuicknoteSectionCodes,
     actualNoteDetailComponent: CodesNoteDetailsView,
   },
- 
+
   {
-    id: QuickNoteSectionName.ProcedureECT,
+    id: QuickNoteSectionName.QuicknoteSectionProcedureEtcTab,
     actualNoteDetailComponent: EctNoteDetailView,
   },
   {
@@ -161,7 +161,7 @@ const getWidgetsArrayByVisitType = (
     visitType = `${visitType}/${visitSequence}`
   }
 
-  const widgetIds = visitTypeToWidgets[visitType]
+  const widgetIds = visitTypeToWidgets[visitType as VisitTypeEnum]
 
   if (!widgetIds) {
     return []

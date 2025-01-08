@@ -14,8 +14,6 @@ const updateStaffLocationAction = async ({
   locationId,
   status,
 }: UpdateStaffLocationParams): Promise<api.ActionResult<StaffLocation>> => {
-  console.log(staffId, locationId, status)
-
   const response = await api.PUT<StaffLocation>(
     api.UPDATE_PROVIDER_LOCATION_STATUS_ENDPOINT(staffId, locationId),
     {

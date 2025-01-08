@@ -75,20 +75,17 @@ const WidgetFormContainer = ({
     })
 
   useEffect(() => {
-    const handleMessage = (event: MessageEvent) => {
+    const handleMessage = async (event: MessageEvent) => {
       if (event.data.type !== 'quicknotes:save') return
-
-      if (event.data.widgetId && event.data.widgetId !== widgetId) return
-      const shouldToast = event.data.showToast ? true : false
-
-      if (isDirty) {
-        onSubmit(shouldToast)()
+      const isFormValid = await form.trigger()
+      if (isDirty && isFormValid) {
+        onSubmit(false)()
       } else {
         window.postMessage(
           {
             type: 'widget:save',
             widgetId: widgetId,
-            success: true,
+            success: isFormValid,
           },
           '*',
         )

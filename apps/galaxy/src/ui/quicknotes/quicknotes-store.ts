@@ -2,17 +2,20 @@ import { format } from 'date-fns'
 import toast from 'react-hot-toast'
 import { create } from 'zustand'
 import { Appointment } from '@/types'
+import { VisitTypeEnum, visitTypeToSavingWidgets } from '@/utils'
 import { signNoteAction } from './actions'
-import { QuickNoteSectionName } from './constants'
+
+interface SignPayloadProps {
+  patientId: string
+  appointmentId: string
+  appointment: Appointment
+  visitType: string
+}
 
 interface Store {
   loading: boolean
-  save: () => void
-  sign: (payload: {
-    patientId: string
-    appointmentId: string
-    appointment?: Appointment
-  }) => void
+  save: (visitType: string) => void
+  sign: (payload: SignPayloadProps) => void
   unsavedChanges: Record<string, boolean>
   setUnsavedChanges: (widgetName: string, unsavedChanges: boolean) => void
   toggleActualNoteView: () => void
@@ -35,16 +38,22 @@ const useStore = create<Store>()((set, get) => ({
     set({ signOptions: { ...get().signOptions, ...option } }),
   toggleActualNoteView: () =>
     set({ showActualNoteView: !get().showActualNoteView }),
-  save: async () => {
+  save: async (visitType) => {
     set({ loading: true })
-    await saveWidgets()
-    toast.success('Quicknote saved!')
+    const isSaved = await saveWidgets(visitType)
+    if (isSaved) {
+      toast.success('Quicknote saved!')
+    }
     set({ loading: false })
   },
 
   sign: async (payload) => {
     set({ loading: true })
-    await saveWidgets()
+    const isSaved = await saveWidgets(payload.visitType)
+    if (!isSaved) {
+      set({ loading: false })
+      return
+    }
     const { time, coSignedByUserId } = get().signOptions || {}
 
     const [hours, minutes] = time.split(':').map(Number)
@@ -104,17 +113,17 @@ const useStore = create<Store>()((set, get) => ({
   },
 }))
 
-const saveWidgets = () => {
-  const widgets = [QuickNoteSectionName.QuicknoteSectionHPI]
+const saveWidgets = async (visitType: string) => {
+  const widgets = visitTypeToSavingWidgets[visitType as VisitTypeEnum] || []
   const promises = widgets.map((widgetId) => {
-    return new Promise<boolean>((resolve) => {
+    return new Promise<{ success: boolean; widgetId: string }>((resolve) => {
       const handleMessage = (event: MessageEvent) => {
         if (
           event.data.type === 'widget:save' &&
           event.data.widgetId === widgetId
         ) {
           window.removeEventListener('message', handleMessage)
-          resolve(event.data.success)
+          resolve(event.data)
         }
       }
 
@@ -123,8 +132,13 @@ const saveWidgets = () => {
   })
 
   window.postMessage({ type: 'quicknotes:save' }, '*')
-
-  return Promise.all(promises)
+  const responses = await Promise.all(promises)
+  responses.forEach((element: { success: boolean; widgetId: string }) => {
+    if (!element.success) {
+      toast.error(`Failed to save! ${element.widgetId}`)
+    }
+  })
+  return responses.every((element) => element.success)
 }
 
 export { useStore }
