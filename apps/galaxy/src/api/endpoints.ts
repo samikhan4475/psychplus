@@ -225,6 +225,12 @@ const GET_RESPONSE_HISTORY_DETAIL_LIST_ENDPOINT = (id: string) =>
   `${API_URL}/api/claimssubmissions/responses/${id}/details/actions/search`
 const GET_CLAIMS_AUDIT_HISTORY_LIST_ENDPOINT = `${API_URL}/api/claims/history`
 const GET_CLAIMS_LIST_ENDPOINT = `${API_URL}/api/claims/actions/search`
+const EXPORT_CLAIMS_LIST_ENDPOINT = (fileFormat: string) =>
+  `${API_URL}/api/claims/actions/export/${fileFormat}`
+const EXPORT_SUBMISSIONS_LIST_ENDPOINT = (fileFormat: string) =>
+  `${API_URL}/api/claimssubmissions/actions/export/${fileFormat}`
+const EXPORT_PAYMENTS_LIST_ENDPOINT = (fileFormat: string) =>
+  `${API_URL}/api/payments/actions/export/${fileFormat}`
 const CLAIM_SUBMIT_ENDPOINT = `${API_URL}/api/claimssubmissions/actions/srcubandsubmit`
 const GET_CLAIM_SUBMISSION_LIST = `${API_URL}/api/claimssubmissions/actions/search`
 const CLAIM_SUBMISSION_REJECTION_DETAIL_ENDPOINT = (claimId: string) =>
@@ -541,8 +547,11 @@ export {
   ADD_CLAIM_PAYMENT,
   PRESCRIBER_DIRECTORY_ENDPOINT,
   DISABLE_PRESCRIBER_DIRECTORY_ENDPOINT,
+  EXPORT_CLAIMS_LIST_ENDPOINT,
+  EXPORT_PAYMENTS_LIST_ENDPOINT,
   ADD_PROVIDER_LOCATION_ENDPOINT,
   GET_PROVIDER_LOCATIONS_ENDPOINT,
+  EXPORT_SUBMISSIONS_LIST_ENDPOINT,
   UPDATE_PROVIDER_LOCATION_STATUS_ENDPOINT,
   GET_PROVIDER_LOCATION_HISTORY,
   UPDATE_CLAIM_PAYMENT,

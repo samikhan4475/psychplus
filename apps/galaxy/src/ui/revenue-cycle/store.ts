@@ -56,7 +56,7 @@ const useStore = create<Store>((set, get) => ({
     updatedCloseableTabs.delete(tab)
     const updatedViewedTabs = get().viewedTabs
     updatedViewedTabs.delete(tab)
-    
+
     set({
       activeTab: get().prevTab ?? RevenueCycleTab.Claim,
       closeableTabs: updatedCloseableTabs,

@@ -16,6 +16,7 @@ import { ClearFilterFormButton } from './clear-filter-form-button'
 import { DateFromInput } from './date-from-input'
 import { DateToInput } from './date-to-input'
 import { DateTypeSelect } from './date-type-select'
+import { ExportExcelButton } from './export-excel-button'
 import { InsuranceNameSelect } from './insurance-name-select'
 import { InsuranceTypeSelect } from './insurance-type-select'
 import { LocationSelect } from './location-select'
@@ -73,6 +74,7 @@ const FilterForm = () => {
         form={form}
         onSubmit={onSubmit}
       >
+        <ExportExcelButton />
         <ClaimNumberInput />
         <PatientInput />
         <InsuranceNameSelect />

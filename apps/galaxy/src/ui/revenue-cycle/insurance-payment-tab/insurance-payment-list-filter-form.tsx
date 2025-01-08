@@ -11,6 +11,7 @@ import { formatDateToISOString, sanitizeFormData } from '@/utils'
 import { InsurancePaymentSearchParams } from '../types'
 import { CheckNumberField } from './check-number-field'
 import { DateTypeSelect } from './date-type-select'
+import { ExportExcelButton } from './export-excel-button'
 import { FromDateField } from './from-date-field'
 import { InsuranceNameField } from './insurance-name-field'
 import { PaymentTypeSelect } from './payment-type-select'
@@ -65,6 +66,7 @@ const InsurancePaymentListFilterForm = () => {
       form={form}
       onSubmit={onSubmit}
     >
+      <ExportExcelButton />
       <PaymentTypeSelect />
       <CheckNumberField />
       <InsuranceNameField />

@@ -14,6 +14,7 @@ enum RevenueCycleTab {
 
 enum FileFormats {
   PDF = 'pdf',
+  EXCEL = 'xlsx',
 }
 
 enum insurancePaymentRecordStatuses {

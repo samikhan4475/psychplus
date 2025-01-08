@@ -28,7 +28,7 @@ const SubmissionSubmitField = () => {
     })
   }, [])
   return (
-    <Flex align="center" gapX="2" className="ml-auto">
+    <Flex align="center" gapX="2" className="ml-auto mr-[115px]">
       <FormFieldContainer className="flex-row items-center gap-x-2">
         <FormFieldLabel>Clearinghouse</FormFieldLabel>
         <Select.Root
