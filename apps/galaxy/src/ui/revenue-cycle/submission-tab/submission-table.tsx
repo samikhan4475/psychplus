@@ -287,6 +287,7 @@ const SubmissionTable = () => {
   return (
     <ScrollArea>
       <DataTable
+        tableClass="[&_.rt-ScrollAreaRoot]:pb-2"
         data={transformInSubmissions(claimStatusCodes, data.submissions)}
         columns={columns(sort, sortData)}
         onRowClick={(row) => {

@@ -178,6 +178,7 @@ const SubmissionHistoryTable = () => {
   return (
     <ScrollArea>
       <DataTable
+        tableClass="[&_.rt-ScrollAreaRoot]:pb-2"
         data={data.submissionHistory}
         columns={columns(sort, sortData)}
         onRowClick={(row) => {

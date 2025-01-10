@@ -22,6 +22,7 @@ const SubmissionSubmitField = () => {
     getReceiverListOptionsAction().then((result) => {
       if (result.state === 'success') {
         setSubmissionTypes(result.data)
+        if (result.data.length > 0) setClearingHouse(result.data[0].value)
       } else if (result.state === 'error') {
         toast.error(result.error)
       }
@@ -38,7 +39,7 @@ const SubmissionSubmitField = () => {
         >
           <Select.Trigger
             disabled={submissionTypes.length === 0}
-            placeholder="Submission Type"
+            placeholder="Please Select"
             className={cn('h-[var(--chip-height)] w-[122px]')}
           />
           <Select.Content position="popper" align="center" highContrast>

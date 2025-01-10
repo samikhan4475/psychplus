@@ -11,7 +11,7 @@ const BatchNameInput = () => {
       <FormFieldLabel>Batch Name</FormFieldLabel>
       <TextField.Root
         size="1"
-        placeholder='example'
+        placeholder="Batch Name"
         className="border-pp-gray-2 h-[var(--chip-height)] w-[102px] border border-solid !outline-none [box-shadow:none]"
         {...form.register('batchName')}
       />
