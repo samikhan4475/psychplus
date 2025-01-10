@@ -11,13 +11,18 @@ import { DistanceIcon } from '@/components/icons/distance-icon'
 import { LocationMarkerIcon } from '@/components/icons/location-marker-icon'
 import { WeeklyAvailabilitySlots } from '../../components'
 import { useStore } from '../../store'
-import type { ClinicWithSlots, StaffWithClinicsAndSlots } from '../../types'
+import type {
+  ClinicWithSlots,
+  StaffWithClinicsAndSlots,
+} from '../../types'
 import { renderProfileImage, renderStaffName } from '../../utils'
 
 const ProviderWithClinicAndWeeklyAvailability = ({
   staffWithClinicsAndSlots,
+  onConfirm,
 }: {
   staffWithClinicsAndSlots: StaffWithClinicsAndSlots
+  onConfirm?: () => void
 }) => {
   const [profileImage, setProfileImage] = useState<string | undefined>()
   const { codeSetIndex, filters } = useStore()
@@ -92,6 +97,7 @@ const ProviderWithClinicAndWeeklyAvailability = ({
           clinicWithSlots={staffWithClinicsAndSlots.clinicWithSlots.find(
             (clinic) => clinic.clinic.id === selectedClinicId,
           )}
+          onConfirm={onConfirm}
         />
       </Flex>
     </Flex>
@@ -120,7 +126,7 @@ const renderLanguageAndLocation = (
 
     {appointmentType === 'In-Person' && (
       <Flex align="start" className="w-52 flex-wrap justify-between" gap="2">
-          <Flex align="end" className="gap-[17px]">
+        <Flex align="end" className="gap-[17px]">
             <DistanceIcon />
             <Text className="text-[#575759] text-[14px]">
               {

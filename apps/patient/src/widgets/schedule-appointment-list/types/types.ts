@@ -60,6 +60,15 @@ type ConfirmationNote = {
   notes: string[]
 }
 
+interface DifferentStateDialogProps {
+  open: boolean
+  setOpen: (open: boolean) => void
+  onClose: (open: boolean) => void
+  myState: string
+  providerState: string
+  onConfirm?: () => void
+}
+
 export type {
   Filters,
   FilterOptionButtonProps,
@@ -69,4 +78,5 @@ export type {
   StaffWithClinicsAndSlots,
   ClinicWithSlots,
   ConfirmationNote,
+  DifferentStateDialogProps,
 }

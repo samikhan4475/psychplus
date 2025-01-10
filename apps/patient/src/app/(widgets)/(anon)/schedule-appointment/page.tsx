@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { useSearchParams } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { Flex, Text } from '@radix-ui/themes'
 import { useDebounce } from 'use-debounce'
 import { StaffAppointmentAvailabilities } from '@psychplus/appointments'
@@ -24,6 +24,8 @@ import {
 const ScheduleAppointmentPage = () => {
   const searchParams = useSearchParams()
 
+  const router = useRouter()
+
   const {
     filters,
     staffWithClinicsAndSlots,
@@ -43,6 +45,10 @@ const ScheduleAppointmentPage = () => {
   const [zipCodeState, setZipCodeState] = useState(filters.zipCode)
 
   const [debouncedZipCode] = useDebounce(zipCodeState, 500)
+
+  const handleDialogConfirm = () => {
+    router.push(`/schedule-appointment/personal-details`)
+  }
 
   useEffect(() => {
     setZipCodeState(filters.zipCode)
@@ -140,6 +146,7 @@ const ScheduleAppointmentPage = () => {
             >
               <ProviderWithClinicAndWeeklyAvailability
                 staffWithClinicsAndSlots={staffWithClinicsAndSlots}
+                onConfirm={handleDialogConfirm}
               />
             </Flex>
           ))}

@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { Button, Flex, Text } from '@radix-ui/themes'
 import { Slot } from '@psychplus/appointments'
 import { Staff } from '@psychplus/staff'
@@ -16,10 +16,12 @@ const WeeklyAvailabilitySlots = ({
   staff,
   staffTypeCode,
   clinicWithSlots,
+  onConfirm,
 }: {
   staff: Staff
   staffTypeCode: number
   clinicWithSlots: ClinicWithSlots | undefined
+  onConfirm?: () => void
 }) => {
   const { filters } = useStore()
 
@@ -37,9 +39,9 @@ const WeeklyAvailabilitySlots = ({
             clinicWithSlots={clinicWithSlots}
             staff={staff}
             staffTypeCode={staffTypeCode}
+            onConfirm={onConfirm}
           />
         </Flex>
-
       ))}
     </Flex>
   )
@@ -50,16 +52,23 @@ const SlotComponent = ({
   clinicWithSlots,
   staff,
   staffTypeCode,
+  onConfirm,
 }: {
   slots: Slot[]
   clinicWithSlots: ClinicWithSlots | undefined
   staff: Staff
   staffTypeCode: number
+  onConfirm?: () => void
 }) => {
   const [showAll, setShowAll] = useState(false)
   const handleShowMore = () => setShowAll(!showAll)
-  const { setBookedSlot, filters } = useStore()
+  const { setBookedSlot, filters, address } = useStore()
   const router = useRouter()
+
+  const searchParams = useSearchParams()
+
+  const state = searchParams.get('state')
+  
 
   function setBookedSlotDetails(slot: Slot) {
     setBookedSlot({
@@ -72,6 +81,24 @@ const SlotComponent = ({
       servicesOffered: slot.servicesOffered,
     })
 
+    if (filters.appointmentType !== "Virtual") {
+      if (
+        address?.primaryState !== state
+      ) {
+        const userResponse = window.confirm(
+          `You're about to book an appointment with the provider in "${state}", but your primary address is in "${address?.primaryState}". Are you currently in the state where you are booking the appointment?`
+        );
+        if (userResponse) {
+          console.log("User confirmed the action!");
+          onConfirm?.()
+          return
+        } else {
+          console.log("User canceled the action.");
+          return
+        }
+      }
+    }
+
     clickTrack({
       productArea: 'Patient',
       productPageKey: 'Schedule Appointment Screen',
@@ -83,7 +110,7 @@ const SlotComponent = ({
   }
 
   return (
-      <Flex
+    <Flex
         className="flex-row overflow-x-auto whitespace-nowrap pb-4 sm:flex-col"
         gap="4"
       >
@@ -96,7 +123,7 @@ const SlotComponent = ({
               onBookedSlot={setBookedSlotDetails}
             />
           ))}
-           {!isMobile() && slots.length > 3 && (
+          {!isMobile() && slots.length > 3 && (
           <Button
             className="h-[36px] w-full p-2 rounded-[40px] bg-[#f0f4ff] text-[#24366b] font-medium text-[14px] leading-5 hover:bg-[#151B4A] hover:text-[white]"
             onClick={handleShowMore}
@@ -107,8 +134,6 @@ const SlotComponent = ({
       </Flex>
   )
 }
-
-
 
 const SlotItem = ({
   slot,

@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { useSearchParams } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { Flex, Text } from '@radix-ui/themes'
 import { isBefore } from 'date-fns'
 import { useDebounce } from 'use-debounce'
@@ -44,6 +44,12 @@ const ScheduleAppointmentListClient = ({
   mapKey,
 }: ScheduleAppointmentListClientProps) => {
   const ref = useRef<HTMLDivElement>(null)
+
+  const router = useRouter()
+
+  const handleDialogConfirm = () => {
+    router.push(`/schedule-appointment/personal-details`)
+  }
 
   usePublishLoaded(SCHEDULE_APPOINTMENT_LIST)
   usePublishSize(SCHEDULE_APPOINTMENT_LIST, ref)
@@ -203,75 +209,78 @@ const ScheduleAppointmentListClient = ({
   }
 
   return (
-    <Flex direction="column" className="w-full" ref={ref}>
-      <FilterPanel stateOptions={stateOptions} />
-      <Flex
-        className="w-full border border-gray-3"
-        py="5"
-        px="7"
-        align="center"
-      >
-        <Flex style={{ flex: 1 }} align="center">
-          <Flex className="w-[300px] text-[#151B4A] lg:w-[380px]">
-            <Text size="5">
-              {staffWithClinicsAndSlotsState?.length} Providers
-            </Text>
-          </Flex>
-          <Flex style={{ flex: 2.3 }}>
-            <WeekCalendarRow />
-          </Flex>
-        </Flex>
-        {!isMobile() && (
-          <Flex
-            style={{
-              flex: filters.appointmentType === 'In-Person' ? 0.28 : 0,
-            }}
-          ></Flex>
-        )}
-      </Flex>
-
-      <Flex className="w-full">
+    <>
+      <Flex direction="column" className="w-full" ref={ref}>
+        <FilterPanel stateOptions={stateOptions} />
         <Flex
-          className="max-h-full overflow-y-auto"
-          direction="column"
-          pb="7"
-          style={{ flex: 1 }}
+          className="w-full border border-gray-3"
+          py="5"
+          px="7"
+          align="center"
         >
-          {staffWithClinicsAndSlotsState?.map((staffWithClinicsAndSlots) => (
-            <Flex
-              py="5"
-              px="7"
-              className="h-auto w-full border-b border-b-gray-3"
-              key={staffWithClinicsAndSlots.staff.id}
-            >
-              <ProviderWithClinicAndWeeklyAvailability
-                staffWithClinicsAndSlots={staffWithClinicsAndSlots}
-              />
+          <Flex style={{ flex: 1 }} align="center">
+            <Flex className="w-[300px] text-[#151B4A] lg:w-[380px]">
+              <Text size="5">
+                {staffWithClinicsAndSlotsState?.length} Providers
+              </Text>
             </Flex>
-          ))}
+            <Flex style={{ flex: 2.3 }}>
+              <WeekCalendarRow />
+            </Flex>
+          </Flex>
+          {!isMobile() && (
+            <Flex
+              style={{
+                flex: filters.appointmentType === 'In-Person' ? 0.28 : 0,
+              }}
+            ></Flex>
+          )}
         </Flex>
 
-        {!isMobile() && (
+        <Flex className="w-full">
           <Flex
-            justify="end"
-            style={{
-              flex: filters.appointmentType === 'In-Person' ? 0.28 : 0,
-            }}
+            className="max-h-full overflow-y-auto"
+            direction="column"
+            pb="7"
+            style={{ flex: 1 }}
           >
-            {/*{filters.appointmentType === 'In-Person' && (*/}
-            {/*  <LocationMap*/}
-            {/*    width={350}*/}
-            {/*    height={640}*/}
-            {/*    zoom={17}*/}
-            {/*    locations={extractLocations(*/}
-            {/*      filteredStaffAppointmentAvailabilities,*/}
-            {/*    )}*/}
-            {/*  />*/}
-            {/*)}*/}
+            {staffWithClinicsAndSlotsState?.map((staffWithClinicsAndSlots) => (
+              <Flex
+                py="5"
+                px="7"
+                className="h-auto w-full border-b border-b-gray-3"
+                key={staffWithClinicsAndSlots.staff.id}
+              >
+                <ProviderWithClinicAndWeeklyAvailability
+                  staffWithClinicsAndSlots={staffWithClinicsAndSlots}
+                  onConfirm={handleDialogConfirm}
+                />
+              </Flex>
+            ))}
           </Flex>
-        )}
+
+          {!isMobile() && (
+            <Flex
+              justify="end"
+              style={{
+                flex: filters.appointmentType === 'In-Person' ? 0.28 : 0,
+              }}
+            >
+              {/*{filters.appointmentType === 'In-Person' && (*/}
+              {/*  <LocationMap*/}
+              {/*    width={350}*/}
+              {/*    height={640}*/}
+              {/*    zoom={17}*/}
+              {/*    locations={extractLocations(*/}
+              {/*      filteredStaffAppointmentAvailabilities,*/}
+              {/*    )}*/}
+              {/*  />*/}
+              {/*)}*/}
+            </Flex>
+          )}
+        </Flex>
       </Flex>
-    </Flex>
+    </>
   )
 }
 
