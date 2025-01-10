@@ -28,7 +28,7 @@ const UploadedDocumentTab = ({
   const appointmentId = useSearchParams().get('id') as string;
   const parsedAppointmentId = Number(appointmentId);
   const parsedPatientId = Number(patientId);
-  
+
   const fetchDocuments = async () => {
     if (!appointmentId || !patientId) return;
     setLoading(true);
@@ -64,6 +64,7 @@ const UploadedDocumentTab = ({
   }, []);
 
   if (error) return <Box>{error}</Box>;
+  if (!documents.length) return null;
 
   return (
     <WidgetContainer
