@@ -9,60 +9,18 @@ import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { sanitizeFormData } from '@/utils'
 import { manageCodes } from '@/utils/codes'
 import { AddOnWidgetSchemaType } from './add-on-widget-schema'
+import {
+  INJECTION_BLOCK_OPTIONS,
+  INTERACTIVE_COMPLEXITY_BLOCK_OPTIONS,
+  THERAPY_OPTIONS,
+  THERAPY_PSYCHOANALYSIS_TABLE_DATA,
+} from './constants'
 import { addOnCodes, getCptCodeMap } from './cpt-code-map'
 
 interface ModalityTransferenceData {
   value: string
   display: string
 }
-
-const INJECTION_BLOCK_OPTIONS = [
-  'drugName',
-  'dose',
-  'siteLocations',
-  'manufacturer',
-  'lotNumber',
-  'expirationDate',
-]
-
-const INTERACTIVE_COMPLEXITY_BLOCK_OPTIONS = [
-  {
-    label:
-      'The need to manage maladaptive communication (related to, e.g., high anxiety, high reactivity, repeated questions, or disagreement) among participants that complicates delivery of care.',
-    field: 'maladaptiveCommunication',
-  },
-  {
-    label:
-      'Caregiver emotions or behaviors that interfere with implementation of the treatment plan.',
-    field: 'caregiverEmotions',
-  },
-  {
-    label:
-      'Evidence or disclosure of a sentinel event and mandated report to a third party (e.g., abuse or neglect with report to state agency) with initiation of discussion of the sentinel event and/or report with patient and other visit participants',
-    field: 'sentinelEvent',
-  },
-  {
-    label:
-      'Use of play equipment, physical devices, interpreter or translator to overcome barriers to diagnostic or therapeutic interaction with a patient who is not fluent in the same language or who has not developed or lost expressive or receptive language skills to use or understand typical language.',
-    field: 'languageBarrier',
-  },
-]
-
-const THERAPY_OPTIONS = [
-  'therapyTimeSpent',
-  'timeRangeOne',
-  'timeRangeTwo',
-  'timeRangeThree',
-  'therapySessionParticipants',
-  'additionalTherapyDetail',
-]
-
-const THERAPY_PSYCHOANALYSIS_TABLE_DATA = [
-  'therapyDetailsModality',
-  'therapyDetailsInterventions',
-  'transferenceDescription',
-  'psychoanalyticTechnique',
-]
 
 const transformIn = (
   value: QuickNoteSectionItem[],
@@ -133,21 +91,30 @@ const transformIn = (
     const key = item.sectionItem
     const itemValue = item.sectionItemValue
 
-    if (itemValue === 'true') {
-      result[key] = true
-    } else if (THERAPY_PSYCHOANALYSIS_TABLE_DATA.includes(key)) {
+    if (THERAPY_PSYCHOANALYSIS_TABLE_DATA.includes(key)) {
       const columnData = itemValue.split(',')
-      const modifiedData = columnData.map((data) => {
-        const [value, ...displayParts] = data.split(' ')
-        const display = displayParts.join(' ')
-        return { value, display }
-      })
-
+      const modifiedData = columnData
+        .map((data) => {
+          const [value, display] = data.split('|')
+          return { value, display }
+        })
+        .filter((data) => data.value && data.display)
       result[key] = modifiedData
-    } else if (key === 'expirationDate') {
-      result['expirationDate'] = itemValue
-    } else if (key in result) {
-      result[key] = itemValue
+    } else {
+      switch (itemValue) {
+        case 'true':
+          result[key] = true
+          break
+        case 'false':
+          result[key] = false
+          break
+        case 'undefined':
+          result[key] = ''
+          break
+        default:
+          result[key] = itemValue
+          break
+      }
     }
   })
 
@@ -163,104 +130,34 @@ const transformOut =
     >,
   ): Promise<QuickNoteSectionItem[]> => {
     const result: QuickNoteSectionItem[] = []
-
-    const injectionSectionValue = INJECTION_BLOCK_OPTIONS.every(
-      (option) =>
-        schema[option] === '' ||
-        schema[option] === null ||
-        schema[option] === undefined,
-    )
-    const interactiveComplexitySectionValue =
-      INTERACTIVE_COMPLEXITY_BLOCK_OPTIONS.every(
-        (option) =>
-          schema[option.field] === false || schema[option.field] === undefined,
-      )
-
-    const QuickNotesPayload = {
-      pid: Number(patientId),
-      sectionName: QuickNoteSectionName.Addon,
-      appointmentId: Number(appointmentId),
-    }
-    if (!schema.injection) {
-      INJECTION_BLOCK_OPTIONS.forEach((option) => {
-        schema[option] = undefined
-      })
-    }
-    if (injectionSectionValue) {
-      schema['injection'] = false
-    }
-    if (
-      typeof schema.therapyTimeSpent === 'string' &&
-      ['16-37 mins', '38-52 mins', '53-99 mins'].includes(
-        schema.therapyTimeSpent,
-      )
-    ) {
-      const timeKeys = ['16-37 mins', '38-52 mins', '53-99 mins']
-
-      timeKeys.forEach((key) => {
-        if (key !== schema.therapyTimeSpent) {
-          schema[key] = undefined
-        }
-      })
-    }
-
-    if (schema.therapyPsychoanalysis === 'neither') {
-      THERAPY_PSYCHOANALYSIS_TABLE_DATA.forEach((option) => {
-        schema[option] = []
-      })
-      THERAPY_OPTIONS.forEach((option) => {
-        schema[option] = undefined
-      })
-      schema['additionalPsychoAnalysisDetail'] = undefined
-    }
-
-    if (schema.therapyPsychoanalysis === 'therapy') {
-      schema['transferenceDescription'] = []
-      schema['psychoanalyticTechnique'] = []
-      schema['additionalPsychoAnalysisDetail'] = undefined
-    }
-    if (schema.therapyPsychoanalysis === 'psychoanalysis') {
-      THERAPY_OPTIONS.forEach((option) => {
-        schema[option] = undefined
-      })
-      schema['therapyDetailsModality'] = []
-      schema['therapyDetailsInterventions'] = []
-    }
-    if (interactiveComplexitySectionValue) {
-      schema['interactiveComplexity'] = false
-    }
-    if (!schema.interactiveComplexity) {
-      INTERACTIVE_COMPLEXITY_BLOCK_OPTIONS.forEach((option) => {
-        schema[option.field] = undefined
-      })
-    }
-
     const formData = sanitizeFormData(schema)
-
-    Object.entries(formData).forEach(([key, value]) => {
-      if (Array.isArray(value)) {
-        const updatedData = (value as ModalityTransferenceData[]).map(
-          (item: ModalityTransferenceData) => `${item.value} ${item.display}`,
-        )
-        result.push({
-          ...QuickNotesPayload,
-          sectionItem: key,
-          sectionItemValue: String(updatedData),
-        })
-      } else if (key === 'expirationDate' && value) {
-        result.push({
-          ...QuickNotesPayload,
-          sectionItem: key,
-          sectionItemValue: value.toString(),
-        })
-      } else if (value) {
-        result.push({
-          ...QuickNotesPayload,
-          sectionItem: key,
-          sectionItemValue: String(value),
-        })
+    const tranformProps = {
+      patientId,
+      appointmentId,
+      schema: formData,
+    }
+    if (!formData) return result
+    if (formData.injection) {
+      const injectionSections = await transfromOutInjectionBlock(tranformProps)
+      result.push(...injectionSections)
+    }
+    if (formData.interactiveComplexity) {
+      const interactiveComplexitySections =
+        await transfromOutInteractiveComplexity(tranformProps)
+      result.push(...interactiveComplexitySections)
+    }
+    if (formData.therapy) {
+      if (formData.therapyPsychoanalysis === 'therapy') {
+        const therapySections = await transfromOutTherapyBlock(tranformProps)
+        result.push(...therapySections)
       }
-    })
+      if (formData.therapyPsychoanalysis === 'psychoanalysis') {
+        const psychoanalysisSections = await transfromOutPsychoanalysisBlock(
+          tranformProps,
+        )
+        result.push(...psychoanalysisSections)
+      }
+    }
 
     const selectedCodes = await getCodes(schema, visitType)
     const codesResult = await manageCodes(
@@ -270,8 +167,205 @@ const transformOut =
       selectedCodes,
     )
 
-    return [...result, ...codesResult]
+    if (result.length === 0) {
+      const QuickNotesPayload = {
+        pid: Number(patientId),
+        sectionName: QuickNoteSectionName.Addon,
+        appointmentId: Number(appointmentId),
+      }
+      result.push({
+        ...QuickNotesPayload,
+        sectionItem: 'empty',
+        sectionItemValue: 'true',
+      })
+    }
+    result.push(...codesResult)
+
+    return result
   }
+
+const transfromOutInjectionBlock = (tranformProps: {
+  patientId: string
+  appointmentId: string
+  schema: Record<
+    string,
+    string | undefined | boolean | ModalityTransferenceData[]
+  >
+}) => {
+  const { patientId, appointmentId, schema } = tranformProps
+
+  const QuickNotesPayload = {
+    pid: Number(patientId),
+    sectionName: QuickNoteSectionName.Addon,
+    appointmentId: Number(appointmentId),
+  }
+
+  const result: QuickNoteSectionItem[] = [
+    {
+      ...QuickNotesPayload,
+      sectionItem: 'injection',
+      sectionItemValue: 'true',
+    },
+  ]
+
+  INJECTION_BLOCK_OPTIONS.forEach((option) => {
+    if (schema[option])
+      result.push({
+        ...QuickNotesPayload,
+        sectionItem: option,
+        sectionItemValue: String(schema[option]),
+      })
+  })
+  return result
+}
+
+const transfromOutInteractiveComplexity = (tranformProps: {
+  patientId: string
+  appointmentId: string
+  schema: Record<
+    string,
+    string | undefined | boolean | ModalityTransferenceData[]
+  >
+}) => {
+  const { patientId, appointmentId, schema } = tranformProps
+
+  const QuickNotesPayload = {
+    pid: Number(patientId),
+    sectionName: QuickNoteSectionName.Addon,
+    appointmentId: Number(appointmentId),
+  }
+
+  const result: QuickNoteSectionItem[] = [
+    {
+      ...QuickNotesPayload,
+      sectionItem: 'interactiveComplexity',
+      sectionItemValue: 'true',
+    },
+  ]
+
+  INTERACTIVE_COMPLEXITY_BLOCK_OPTIONS.forEach((option) => {
+    console.log(schema[option.field], 'schema[option.field]')
+
+    if (schema[option.field]) {
+      result.push({
+        ...QuickNotesPayload,
+        sectionItem: option.field,
+        sectionItemValue: 'true',
+      })
+    }
+  })
+
+  return result
+}
+
+const transfromOutTherapyBlock = (tranformProps: {
+  patientId: string
+  appointmentId: string
+  schema: Record<
+    string,
+    string | undefined | boolean | ModalityTransferenceData[]
+  >
+}) => {
+  const { patientId, appointmentId, schema } = tranformProps
+
+  const QuickNotesPayload = {
+    pid: Number(patientId),
+    sectionName: QuickNoteSectionName.Addon,
+    appointmentId: Number(appointmentId),
+  }
+  const result: QuickNoteSectionItem[] = [
+    {
+      ...QuickNotesPayload,
+      sectionItem: 'therapy',
+      sectionItemValue: 'true',
+    },
+    {
+      ...QuickNotesPayload,
+      sectionItem: 'therapyPsychoanalysis',
+      sectionItemValue: 'therapy',
+    },
+  ]
+
+  THERAPY_OPTIONS.forEach((option) => {
+    const data = schema[option]
+    if (data) {
+      result.push({
+        ...QuickNotesPayload,
+        sectionItem: option,
+        sectionItemValue: String(data),
+      })
+    }
+  })
+
+  const arrayData = ['therapyDetailsInterventions', 'therapyDetailsModality']
+
+  arrayData.forEach((item) => {
+    if (schema[item] && typeof schema[item] === 'object') {
+      let value = ''
+      schema[item]?.forEach((data: ModalityTransferenceData) => {
+        value += `${data.value}|${data.display},`
+      })
+      result.push({
+        ...QuickNotesPayload,
+        sectionItem: item,
+        sectionItemValue: value,
+      })
+    }
+  })
+
+  return result
+}
+
+const transfromOutPsychoanalysisBlock = (tranformProps: {
+  patientId: string
+  appointmentId: string
+  schema: Record<
+    string,
+    string | undefined | boolean | ModalityTransferenceData[]
+  >
+}) => {
+  const { patientId, appointmentId, schema } = tranformProps
+  const QuickNotesPayload = {
+    pid: Number(patientId),
+    sectionName: QuickNoteSectionName.Addon,
+    appointmentId: Number(appointmentId),
+  }
+  const result: QuickNoteSectionItem[] = [
+    {
+      ...QuickNotesPayload,
+      sectionItem: 'therapy',
+      sectionItemValue: 'true',
+    },
+    {
+      ...QuickNotesPayload,
+      sectionItem: 'therapyPsychoanalysis',
+      sectionItemValue: 'psychoanalysis',
+    },
+    {
+      ...QuickNotesPayload,
+      sectionItem: 'additionalPsychoAnalysisDetail',
+      sectionItemValue: String(schema.additionalPsychoAnalysisDetail),
+    },
+  ]
+
+  const arrayData = ['psychoanalyticTechnique', 'transferenceDescription']
+
+  arrayData.forEach((item) => {
+    if (schema[item] && typeof schema[item] === 'object') {
+      let value = ''
+      schema[item]?.forEach((data: ModalityTransferenceData) => {
+        value += `${data.value}|${data.display},`
+      })
+      result.push({
+        ...QuickNotesPayload,
+        sectionItem: item,
+        sectionItemValue: value,
+      })
+    }
+  })
+
+  return result
+}
 
 const getCodes = async (
   schema: Record<

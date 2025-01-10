@@ -42,11 +42,7 @@ const AddOnWidget = ({ patientId, initialValue }: AddOnWidgetProps) => {
         tags={[QuickNoteSectionName.Addon]}
         title="Add On"
         getData={transformOut(patientId, appointmentId, visitType)}
-        headerRight={
-          <>
-            <WidgetSaveButton />
-          </>
-        }
+        headerRight={<WidgetSaveButton />}
       >
         <Flex direction="column" gap="2">
           {blocks.map(({ component: BlockComponent, id, isChecked }) => (

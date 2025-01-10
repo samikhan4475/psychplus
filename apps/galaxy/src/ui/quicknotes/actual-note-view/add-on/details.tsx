@@ -1,14 +1,14 @@
 import { Flex } from '@radix-ui/themes'
 import { AddOnWidgetSchemaType } from '@/ui/add-on/add-on-widget/add-on-widget-schema'
-import { INTERACTIVE_COMPLEXITY_BLOCK_OPTIONS } from '@/ui/add-on/add-on-widget/blocks'
+import { INTERACTIVE_COMPLEXITY_BLOCK_OPTIONS } from '@/ui/add-on/add-on-widget/constants'
 import { BlockContainer, LabelAndValue } from '../shared'
 import { InjectionDetails } from './injection-block'
 
 const formatList = (
   items: (
     | {
-        value: string
-        display: string
+        value?: string
+        display?: string
       }
     | undefined
   )[],
@@ -25,9 +25,11 @@ const Details = ({ data }: { data: AddOnWidgetSchemaType }) => {
     Conducted Therapy in this session interacting with ${
       data.therapySessionParticipants
     } for ${data.therapyTimeSpent} minutes.
-    Therapy modalities used include: ${formatList(data.therapyDetailsModality)}.
+    Therapy modalities used include: ${formatList(
+      data.therapyDetailsModality || [],
+    )}.
     Interventions completed include: ${formatList(
-      data.therapyDetailsInterventions,
+      data.therapyDetailsInterventions || [],
     )}.
     ${data.additionalTherapyDetail}
     Patient presented with signs of transference, indicating a strong misplacement of feelings associated with unresolved past experiences.
@@ -40,10 +42,10 @@ const Details = ({ data }: { data: AddOnWidgetSchemaType }) => {
     `
     Conducted psychoanalysis in this session interacting with the patient.
     Descriptions of transference include: ${formatList(
-      data.transferenceDescription,
+      data.transferenceDescription || [],
     )}.
     Psychoanalytic techniques used include: ${formatList(
-      data.psychoanalyticTechnique,
+      data.psychoanalyticTechnique || [],
     )}.
     ${data.additionalPsychoAnalysisDetail}
     Patient displayed transference possibly resulting from unconscious conflicts.

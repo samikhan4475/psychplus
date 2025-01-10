@@ -4,6 +4,7 @@ import { Flex, Select } from '@radix-ui/themes'
 import { Controller, useFormContext } from 'react-hook-form'
 import { cn } from '@/utils'
 import { BlockLabel } from './block-label'
+import { FormFieldError } from './form'
 
 interface SelectInputProps<T> extends React.ComponentProps<typeof Select.Root> {
   label?: string
@@ -15,6 +16,7 @@ interface SelectInputProps<T> extends React.ComponentProps<typeof Select.Root> {
   tooltip?: boolean
   required?: boolean
   loading?: boolean
+  showError?: boolean
 }
 
 const SelectInput = <T extends string>({
@@ -29,6 +31,7 @@ const SelectInput = <T extends string>({
   required,
   loading,
   disabled,
+  showError = false,
   ...selectProps
 }: SelectInputProps<T>) => {
   const form = useFormContext()
@@ -90,6 +93,7 @@ const SelectInput = <T extends string>({
           )
         }}
       />
+      {field && showError && <FormFieldError name={field} />}
     </Flex>
   )
 }

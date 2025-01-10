@@ -21,8 +21,8 @@ interface DataOption {
 }
 
 const Columns = ({
-  transferenceDescription,
-  psychoanalyticTechnique,
+  transferenceDescription = [],
+  psychoanalyticTechnique = [],
 }: ColumnsProps): ColumnDef<PsychoAnalysisData>[] => {
   const { setValue } = useFormContext<AddOnWidgetSchemaType>()
 

@@ -16,7 +16,6 @@ import { codesetAttributesOptions } from '@/utils'
 const InjectionBlock = () => {
   const form = useFormContext()
   const { watch } = form
-
   const injectionAddonCodeset = useCodesetCodes(CODESETS.InjectionAddon)
   const injectionSiteCodeset = useCodesetCodes(CODESETS.InjectionSite)
 
@@ -74,6 +73,7 @@ const InjectionBlock = () => {
             buttonClassName="flex-1"
             className="min-w-[15%]"
             required={true}
+            showError
           />
           <SelectInput
             label={'Dose'}
@@ -82,6 +82,7 @@ const InjectionBlock = () => {
             buttonClassName="flex-1"
             className="min-w-[15%]"
             required={true}
+            showError
           />
           <SelectInput
             label={'Site Locations'}
@@ -90,6 +91,7 @@ const InjectionBlock = () => {
             buttonClassName="flex-1"
             className="min-w-[15%]"
             required={true}
+            showError
           />
           <SelectInput
             label={'Manufacture'}
@@ -99,6 +101,7 @@ const InjectionBlock = () => {
             className="min-w-[15%]"
             required={true}
             disabled={!watch('drugName')}
+            showError
           />
 
           <TextInput label="Lot Number" field="lotNumber" />

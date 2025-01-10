@@ -23,38 +23,38 @@ const TherapyTableBlock = () => {
     therapyDetailsInterventions,
   })
 
-  const combineInterventionAndModality = (): TherapyData[] => {
-    const combinedArray: TherapyData[] = []
-    therapyDetailsModality.forEach((modality) => {
-      combinedArray.push({ modality: modality.display })
-    })
-    therapyDetailsInterventions.forEach((intervention, index) => {
-      if (combinedArray[index]) {
-        combinedArray[index].intervention = intervention.display
-      } else {
-        combinedArray.push({ intervention: intervention.display })
-      }
-    })
-    return combinedArray
+  const combinedList = (): TherapyData[] => {
+    const largeList =
+      therapyDetailsModality.length > therapyDetailsInterventions.length
+        ? therapyDetailsModality
+        : therapyDetailsInterventions
+
+    return largeList.map((_, index) => ({
+      modality: therapyDetailsModality[index]?.display,
+      intervention: therapyDetailsInterventions[index]?.display,
+    }))
   }
 
-  const modalityError = errors.therapyDetailsModality?.message || ''
-  const interventionError = errors.therapyDetailsInterventions?.message || ''
+  const getCombinedErrorMessage = (): string => {
+    const modalityError = errors.therapyDetailsModality?.message || ''
+    const interventionError = errors.therapyDetailsInterventions?.message || ''
 
-  let combinedErrorMessage = ''
-  const modalityEmpty = !therapyDetailsModality.length && modalityError
-  const interventionEmpty =
-    !therapyDetailsInterventions.length && interventionError
+    const modalityEmpty = !therapyDetailsModality.length && modalityError
+    const interventionEmpty =
+      !therapyDetailsInterventions.length && interventionError
 
-  if (modalityEmpty && interventionEmpty) {
-    combinedErrorMessage = 'Therapy Modality & Interventions are required'
-  } else {
-    combinedErrorMessage = modalityEmpty
-      ? modalityError
-      : interventionEmpty
-      ? interventionError
-      : ''
+    if (modalityEmpty && interventionEmpty) {
+      return 'Therapy Modality & Interventions are required'
+    }
+    if (modalityEmpty) {
+      return modalityError
+    }
+    if (interventionEmpty) {
+      return interventionError
+    }
+    return ''
   }
+
   return (
     <>
       <ScrollArea
@@ -62,14 +62,14 @@ const TherapyTableBlock = () => {
         className="rounded-2"
       >
         <DataTable
-          data={combineInterventionAndModality()}
+          data={combinedList()}
           columns={therapyColumns}
           disablePagination
           sticky
         />
       </ScrollArea>
 
-      <FormError message={combinedErrorMessage} />
+      <FormError message={getCombinedErrorMessage()} />
     </>
   )
 }
