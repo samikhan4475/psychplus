@@ -50,9 +50,6 @@ const UserDropdownMenu = ({ user }: UserDropdownMenuProps) => {
         </Flex>
         <DropdownMenu.Separator className="m-1" />
         <NextLink href="#">
-          <MenuItem Icon={UserIcon}>Account</MenuItem>
-        </NextLink>
-        <NextLink href="#">
           <MenuItem Icon={MessageCircleQuestionIcon}>Help</MenuItem>
         </NextLink>
         <DropdownMenu.Separator className="m-1" />
