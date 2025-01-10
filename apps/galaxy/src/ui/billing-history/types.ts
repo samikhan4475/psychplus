@@ -3,6 +3,7 @@ import { Metadata } from '@/types'
 import { BillingFilterSchemaType } from './filter-form'
 
 interface BillingHistory {
+  locationService: string
   metadata?: Metadata
   visitNumber: string
   appointmentId: number

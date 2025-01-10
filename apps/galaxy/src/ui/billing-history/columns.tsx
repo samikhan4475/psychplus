@@ -52,6 +52,19 @@ const columns: ColumnDef<BillingHistory>[] = [
     ),
   },
   {
+    accessorKey: 'serviceType',
+    size: 200,
+
+    header: ({ column }) => (
+      <ColumnHeader column={column} clientSideSort label="Service" />
+    ),
+    cell: ({ row }) => (
+      <LongTextCell className="min-w-24 max-w-32">
+        {row.original.locationService}
+      </LongTextCell>
+    ),
+  },
+  {
     accessorKey: 'visitType',
     size: 200,
     header: ({ column }) => (

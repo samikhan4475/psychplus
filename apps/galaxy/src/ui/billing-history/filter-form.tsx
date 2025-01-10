@@ -8,6 +8,7 @@ import z from 'zod'
 import { FormContainer } from '@/components'
 import { cn, sanitizeFormData } from '@/utils'
 import { ClaimNoInput } from './claim-no-input'
+import { DateTypeSelect } from './date-type-select'
 import { EndDateInput } from './end-date-input'
 import { FiltersToggleButton } from './filters-toggle-button'
 import { InsuranceSelect } from './insurance-select'
@@ -22,6 +23,7 @@ const schema = z.object({
   claimNumber: z.string().optional(),
   fromDate: z.custom<DateValue | null>().optional(),
   endDate: z.custom<DateValue | null>().optional(),
+  dateType: z.string().optional(),
   locationId: z.string().optional(),
   patientInsurancePayerId: z.string().optional(),
 })
@@ -67,6 +69,7 @@ const BillingFilterForm = ({ patientId }: BillingFilterFormProps) => {
           <ClaimNoInput />
           <InsuranceSelect />
           <LocationsSelect />
+          <DateTypeSelect />
           <StartDateInput disabled={isSubmitting} />
           <EndDateInput disabled={isSubmitting} />
         </Flex>
