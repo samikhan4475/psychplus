@@ -162,7 +162,7 @@ const UpcomingAppointmentsSummaryComponent = async () => {
                         <Flex>
                           <Text className="text-[14px] text-[#194595]">
                             {getProviderTypeLabel(
-                              row.providerType,
+                              row.specialistTypeCode,
                             ).toLocaleUpperCase()}
                           </Text>
                           <DotIcon color="gray" />

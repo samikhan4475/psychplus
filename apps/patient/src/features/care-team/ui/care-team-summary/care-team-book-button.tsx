@@ -3,7 +3,6 @@
 import { useRouter } from 'next/navigation'
 import { AppointmentType, ProviderType } from '@psychplus-v2/constants'
 import { CareTeamMember } from '@psychplus-v2/types'
-import { getProviderTypeLabel } from '@psychplus-v2/utils'
 import { Button } from '@radix-ui/themes'
 import { EditIcon } from '@/components'
 import { APPOINTMENTS_SEARCH_SESSION_KEY } from '@/features/appointments/search/constants'
