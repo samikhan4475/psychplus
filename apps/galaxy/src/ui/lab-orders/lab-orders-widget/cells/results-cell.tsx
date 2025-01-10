@@ -6,22 +6,30 @@ import { RowResultView } from './row-result-view'
 
 type LabOrderRow = Row<LabOrders>
 
-const rowActions: RowAction<LabOrders>[] = [
-  {
-    id: 'row-results-view',
-    render: RowResultView,
-  },
-  {
-    id: 'row-results-attachment',
-    render: RowResultAttachment,
-  },
-]
-
 interface ActionsCellProps {
   row: LabOrderRow
 }
 
 const ResultsCell = ({ row }: ActionsCellProps) => {
+  const rowActions: RowAction<LabOrders>[] =
+    row.original.labDocuments.length === 0
+      ? [
+          {
+            id: 'row-results-view',
+            render: RowResultView,
+          },
+        ]
+      : [
+          {
+            id: 'row-results-view',
+            render: RowResultView,
+          },
+          {
+            id: 'row-results-attachment',
+            render: RowResultAttachment,
+          },
+        ]
+
   return <AdaptiveRowActionsCell actions={rowActions} row={row} />
 }
 

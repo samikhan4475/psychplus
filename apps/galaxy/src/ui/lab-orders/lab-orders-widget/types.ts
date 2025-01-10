@@ -24,7 +24,20 @@ type LabOrderPayload = {
   location?: string
   labTestCode?: string
 }
+interface LabDocument {
+  id: string
+  metadata?: Metadata
+  orderId: string
+  documentType?: string
+  documentUrl: string
+  documentName?: string
+  recordStatus?: string
+}
 
+export enum LabOrderPdf {
+  ResultsPdf = 'ResultsPdf',
+  RequisitionPdf = 'RequisitionPdf',
+}
 interface LabResult {
   id: string
   metadata: Metadata
@@ -77,4 +90,5 @@ export type {
   LabOrderPayload,
   LabResult,
   LabResultRow,
+  LabDocument,
 }
