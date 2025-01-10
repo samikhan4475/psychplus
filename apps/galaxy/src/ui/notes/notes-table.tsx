@@ -3,6 +3,7 @@
 import { useEffect } from 'react'
 import { Box, Flex, ScrollArea } from '@radix-ui/themes'
 import { ColumnDef, Row, Table } from '@tanstack/react-table'
+import { format } from 'date-fns'
 import {
   ColumnHeader,
   DataTable,
@@ -30,7 +31,19 @@ const getColumns = (codes: SharedCode[]) => {
       header: () => <ColumnHeader label="Date" />,
       cell: ({ row }) => (
         <DateTimeCell className="whitespace-nowrap">
-          {formatDateTime(row.original.metadata?.createdOn, false)}
+          {row.original.metadata?.createdOn &&
+            format(new Date(row.original.metadata?.createdOn), 'MM/dd/yyy')}
+        </DateTimeCell>
+      ),
+    },
+    {
+      id: 'time',
+      accessorKey: 'time',
+      header: () => <ColumnHeader label="Time" />,
+      cell: ({ row }) => (
+        <DateTimeCell className="whitespace-nowrap">
+          {row.original.metadata?.createdOn &&
+            format(new Date(row.original.metadata?.createdOn), 'HH:mm')}
         </DateTimeCell>
       ),
     },
@@ -121,7 +134,7 @@ const getColumns = (codes: SharedCode[]) => {
     {
       id: 'status',
       accessorKey: 'status',
-      header: () => <ColumnHeader label="Status" />,
+      header: () => <ColumnHeader label="Note Status" />,
       cell: ({ row }) => (
         <Box className="truncate">
           <TextCell>{row.original.noteStatus}</TextCell>
