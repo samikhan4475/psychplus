@@ -7,6 +7,7 @@ import {
 } from '@/components'
 import { CODESETS } from '@/constants'
 import { useCodesetCodes } from '@/hooks'
+import { formatDate } from '@/utils'
 import { searchPatientsAction } from '../../actions'
 import { Patient } from '../../types'
 import { SchemaType } from '../schema'
@@ -35,7 +36,7 @@ const PatientSelect = ({ slotDetails }: { slotDetails?: SlotDetails }) => {
       value.lastName,
       value.birthdate ? calculateAge(value.birthdate) : '',
       value.gender,
-      value.birthdate ? `| ${value.birthdate}` : '',
+      value.birthdate ? `| ${formatDate(value.birthdate, 'MM/dd/yyyy')}` : '',
       value.medicalRecordNumber ? `| ${value.medicalRecordNumber}` : '',
       value.status ? `| ${mappedStatuses[value.status]}` : '',
     ]
@@ -50,7 +51,7 @@ const PatientSelect = ({ slotDetails }: { slotDetails?: SlotDetails }) => {
         isOpen={isOpen}
         onConfirm={(isConfirmed: boolean) => {
           if (isConfirmed) {
-            form.setValue('state', slotDetails?.state?? '')
+            form.setValue('state', slotDetails?.state ?? '')
           }
           setIsOpen(false)
         }}
@@ -61,9 +62,7 @@ const PatientSelect = ({ slotDetails }: { slotDetails?: SlotDetails }) => {
         <ServerSearchSelect
           fieldName="patient"
           placeholder="Search patients…"
-          fetchResults={(name: string) =>
-            searchPatientsAction({ name: name })
-          }
+          fetchResults={(name: string) => searchPatientsAction({ name: name })}
           formatText={formatText}
           required
           onChange={(value: Patient) => {

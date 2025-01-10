@@ -17,7 +17,7 @@ const schema = z
     state: z.string().min(1, 'Required'),
     location: z.string().min(1, 'Required'),
     service: z.string().min(1, 'Required'),
-    isServiceTimeDependent: z.boolean().default(true),
+    isServiceTimeDependent: z.boolean().default(false),
     providerType: z.string().min(1, 'Required'),
     visitType: z.string().min(1, 'Required'),
     visitSequence: z.string().min(1, 'Required'),
