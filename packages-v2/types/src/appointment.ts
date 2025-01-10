@@ -11,6 +11,7 @@ interface Appointment {
   clinic: Clinic
   specialist: Specialist
   specialistTypeCode: ProviderType
+  providerType: ProviderType
   startDate: string
   endDate: string
   duration: number

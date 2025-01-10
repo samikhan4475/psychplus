@@ -223,7 +223,7 @@ const ProviderAvailabilityCard = ({
                 weight="medium"
                 className="text-pp-gray-1 text-[12px] uppercase"
               >
-                {getProviderTypeLabel(data.specialistTypeCode)}
+                {getProviderTypeLabel(data.providerType)}
               </Text>
               <Flex align="center">
                 {Array.from({ length: 5 }, (_, index) => index + 1).map(

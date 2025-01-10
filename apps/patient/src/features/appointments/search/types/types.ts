@@ -56,6 +56,7 @@ interface AppointmentAvailability {
   specialist: AppointmentSpecialist
   clinics: AppointmentClinic[]
   specialistTypeCode: ProviderType
+  providerType: ProviderType
 }
 
 interface AvailabilityApiResponse {

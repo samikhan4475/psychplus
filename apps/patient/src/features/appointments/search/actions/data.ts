@@ -23,6 +23,7 @@ interface AvailabilityApiResponse {
   specialist: Specialist
   clinic: Clinic
   specialistTypeCode: ProviderType
+  providerType: ProviderType
 }
 
 interface AppointmentsSearchApiResponse {
@@ -81,6 +82,7 @@ const transformResponseData = (
         specialistTypeCode: availability.specialistTypeCode,
         specialist: availability.specialist,
         clinics: [clinic],
+        providerType: availability.providerType,
       }
 
       availabilities.push(newAvailability)
