@@ -1,7 +1,7 @@
 'use client'
 
 import { WarningAlertDialog } from '../alerts'
-import { useStore } from './store'
+import { useStore } from './quicknotes-store'
 
 const AlertDialog = () => {
   const {

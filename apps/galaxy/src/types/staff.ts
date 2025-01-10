@@ -15,6 +15,7 @@ interface StaffResource {
   hasPhoto: boolean
   rating: number
   avatar?: string
+  userId?: string
 }
 
 enum STAFF_COMMENT_STATUS {

@@ -1,7 +1,9 @@
 import { Suspense } from 'react'
 import { Flex, Separator, Text } from '@radix-ui/themes'
 import { LoadingPlaceholder } from '@/components'
-import { Appointment } from '@/types'
+import { Appointment, StaffResource } from '@/types'
+import { getAuthCookies } from '@/utils/auth'
+import { AlertDialog } from './alert-dialog'
 import { QuickNotesClearButton } from './quicknotes-clear-button'
 import { QuickNotesCopyMyPreviousButton } from './quicknotes-copy-my-previous-button'
 import { QuickNotesCopyPreviousButton } from './quicknotes-copy-previous-button'
@@ -24,9 +26,14 @@ import { QuickNotesVisitTypeDropdown } from './quicknotes-visit-type-dropdown'
 
 interface QuickNotesHeaderProps {
   appointment: Appointment
+  appointmentProvider?: StaffResource
 }
 
-const QuickNotesHeader = async ({ appointment }: QuickNotesHeaderProps) => {
+const QuickNotesHeader = async ({
+  appointment,
+  appointmentProvider,
+}: QuickNotesHeaderProps) => {
+  const auth = getAuthCookies()
   return (
     <Suspense
       fallback={
@@ -53,7 +60,11 @@ const QuickNotesHeader = async ({ appointment }: QuickNotesHeaderProps) => {
             <QuickNotesClearButton />
             <QuickNotesSaveButton />
             <QuickNotesUploadButton />
-            <QuickNotesSignButton appointment={appointment} />
+            <QuickNotesSignButton
+              appointment={appointment}
+              auth={auth}
+              appointmentProvider={appointmentProvider}
+            />
           </Flex>
         </Flex>
         <Separator className="w-full" />
@@ -78,6 +89,7 @@ const QuickNotesHeader = async ({ appointment }: QuickNotesHeaderProps) => {
           <QuickNotesVisitNumberDropdown
             visitNo={appointment.encounterNumber}
           />
+          <AlertDialog />
         </Flex>
       </Flex>
     </Suspense>

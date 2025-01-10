@@ -26,6 +26,9 @@ interface Store {
   errorMessage?: string
   signOptions: Record<string, string>
   setSignOptions: (option: Record<string, string>) => void
+  isErrorAlertOpen: boolean
+  setErrorMessage: (value: string) => void
+  setIsErrorAlertOpen: (value: boolean) => void
 }
 
 const useStore = create<Store>()((set, get) => ({
@@ -33,6 +36,9 @@ const useStore = create<Store>()((set, get) => ({
   showActualNoteView: true,
   isMarkedAsError: false,
   errorMessage: '',
+  isErrorAlertOpen: false,
+  setErrorMessage: (errorMessage) => set({ errorMessage }),
+  setIsErrorAlertOpen: (isErrorAlertOpen) => set({ isErrorAlertOpen }),
   signOptions: { time: format(new Date(), 'HH:mm') },
   setSignOptions: (option) =>
     set({ signOptions: { ...get().signOptions, ...option } }),
