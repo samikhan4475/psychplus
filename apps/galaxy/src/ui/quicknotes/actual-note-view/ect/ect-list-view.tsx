@@ -9,7 +9,14 @@ interface EctListViewProps {
   anesthesiologistCodes?: Record<string, string>
 }
 
-const EctListView = ({ label, keys, data, anesthesiologistCodes }: EctListViewProps) => (
+const secondsToAddIn = ['ectSettingBlockDuration', 'ectSeizureDuration']
+
+const EctListView = ({
+  label,
+  keys,
+  data,
+  anesthesiologistCodes,
+}: EctListViewProps) => (
   <Flex direction="column">
     {label && (
       <Text className="whitespace-nowrap text-1 font-medium">{label}</Text>
@@ -17,19 +24,23 @@ const EctListView = ({ label, keys, data, anesthesiologistCodes }: EctListViewPr
     {keys.map((option) => {
       const value = option.key
         ? data[option.key as keyof EctWidgetSchemaType]
-        : '';
+        : ''
       const displayValue =
         option.key === 'anesthesiologist' && anesthesiologistCodes
           ? anesthesiologistCodes[value as string] || value
-          : value;
+          : value
 
       return (
         <LabelAndValue
           key={option.label}
           label={option.label}
-          value={displayValue}
+          value={
+            secondsToAddIn.includes(option.key)
+              ? `${displayValue} seconds`
+              : displayValue
+          }
         />
-      );
+      )
     })}
   </Flex>
 )
