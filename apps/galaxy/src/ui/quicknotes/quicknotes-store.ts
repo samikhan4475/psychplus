@@ -82,7 +82,7 @@ const useStore = create<Store>()((set, get) => ({
       set({
         loading: false,
         isMarkedAsError: true,
-        errorMessage: signResults.error,
+        errorMessage: "Primary note for this visit already exists, if you sign this note, it will mark the existing note as ERROR",
       })
       return
     }
