@@ -17,7 +17,7 @@ const DCLocationText = () => {
   })
   return (
     <FormFieldContainer className="flex-1">
-      <FormFieldLabel required>DC Location</FormFieldLabel>
+      <FormFieldLabel required>DC Hospital Name</FormFieldLabel>
       <TextField.Root
         size="1"
         {...form.register('dcLocation')}

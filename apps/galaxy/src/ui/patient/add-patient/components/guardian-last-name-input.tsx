@@ -12,7 +12,7 @@ const GuardianLastNameInput = () => {
 
   return (
     <FormFieldContainer className="flex-1">
-      <FormFieldLabel required>Guardian Last Name</FormFieldLabel>
+      <FormFieldLabel required>Last Name</FormFieldLabel>
       <TextField.Root
         size="1"
         {...form.register('guardianLastName')}

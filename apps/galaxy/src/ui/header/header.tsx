@@ -7,7 +7,6 @@ import { AddVisit } from '../visit/add-visit'
 import { InboxLink } from './inbox-link'
 import { NavigationLinks } from './navigation-links'
 import { NavigationTabs } from './navigation-tabs'
-import { PatientSearchInput } from './patient-search-input'
 import { UserDropdownMenu } from './user-dropdown-menu'
 
 const Header = () => {
@@ -57,10 +56,7 @@ const Header = () => {
         className="text-white bg-accent-11"
       >
         <NavigationLinks />
-        <Flex align="center" gap="1">
-          <PatientSearchInput />
-          <InboxLink href="/secure-messages" label="Messages" />
-        </Flex>
+        <InboxLink href="/secure-messages" label="Messages" />
       </Flex>
       <NavigationTabs />
     </>

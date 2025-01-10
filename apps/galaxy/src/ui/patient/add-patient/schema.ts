@@ -4,6 +4,7 @@ import z from 'zod'
 
 const phoneRegex = /^(\+?[1-9]\d{9}|^$)$/
 const nameRegex = /^[^\d]*$/
+const INVALID_DATE_MESSAGE = 'Invalid date of birth'
 
 const schema = z
   .object({
@@ -77,7 +78,14 @@ const schema = z
     if (dateOfBirth && today(getLocalTimeZone()).compare(dateOfBirth) < 0) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
-        message: 'Invalid date of birth',
+        message: INVALID_DATE_MESSAGE,
+        path: ['dateOfBirth']
+      })
+    }
+    if (dateOfBirth && dateOfBirth.year < 1900) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: INVALID_DATE_MESSAGE,
         path: ['dateOfBirth']
       })
     }
