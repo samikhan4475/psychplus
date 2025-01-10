@@ -542,8 +542,17 @@ const DOWNLOAD_QUICK_NOTE_DOCUMENT = (
   `${API_URL}/api/patients/${patientId}/appointments/${appointmentId}/documents/${documentId}/actions/download`
 const DELETE_QUICK_NOTE_DOCUMENT = (patientId: number, appointmentId: number) =>
   `${API_URL}/api/patients/${patientId}/appointments/${appointmentId}/documents`
+
+const DELETE_LAB_ORDERS_RESULT_ENDPOINT = (
+  appointmentId: string,
+  orderId: string,
+  id: string,
+) =>
+  `${API_URL}/api/appointments/${appointmentId}/laborders/${orderId}/labresults/${id}`
+
 const LAB_ORDER_GET_REQUISITION = (orderId: string) =>
   `${API_URL}/api/laborders/${orderId}/actions/getrequisition`
+
 export {
   GET_LAB_RESULTS_ENDPOINT,
   NOTE_UPLOAD_FILE,
@@ -796,5 +805,6 @@ export {
   GET_ALL_QUICK_NOTE_DOCUMENT,
   DOWNLOAD_QUICK_NOTE_DOCUMENT,
   DELETE_QUICK_NOTE_DOCUMENT,
+  DELETE_LAB_ORDERS_RESULT_ENDPOINT,
   LAB_ORDER_GET_REQUISITION,
 }

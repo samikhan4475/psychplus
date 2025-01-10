@@ -28,6 +28,7 @@ interface StoreState {
   setTestLabResult: (labResult: LabResult[]) => void
   updateLabOrdersList: (labOrder: LabOrders) => void
   updateLabOrderTestList: (orderId: string, testId: string) => void
+  deleteLabOrders: (labOrder: LabResult) => void
   pageCache: Record<number, LabOrderResponseList>
   next: () => void
   prev: () => void
@@ -176,6 +177,33 @@ const useStore = create<StoreState>((set, get) => ({
       })
     }
   },
+  deleteLabOrders: (labResult) => {
+    const { data, testLabResult } = get()
+
+    const updatedData = data.labOrders.map((labOrder) => {
+      if (labOrder.id === labResult.orderId) {
+        return {
+          ...labOrder,
+          labResults: labOrder.labResults.filter(
+            (result) => result.id !== labResult.id,
+          ),
+        }
+      }
+      return labOrder
+    })
+
+    set({
+      data: {
+        ...data,
+        labOrders: updatedData,
+      },
+      testLabResult: testLabResult.filter(
+        (result) => result.id !== labResult.id,
+      ),
+      editAbleLabResults: undefined,
+    })
+  },
+
   updateLabOrderTestList: (orderId, testId) => {
     const { data } = get()
     const index = data.labOrders.findIndex((e) => e.id === orderId)

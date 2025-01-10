@@ -10,12 +10,21 @@ import { EditViewLabResult } from '../edit-view-lab-result'
 import { LabResultDialog } from '../lab-result-dialog'
 import { schema, SchemaType } from '../schema'
 import { useStore } from '../store'
+import { OrderingLabName, OrderStatus } from '../types'
 
 interface LabResultsProps {
   row: Row<LabOrders>
 }
 
 const RowResultView = ({ row }: LabResultsProps) => {
+  const {
+    orderingLab: { name: orderingLabName },
+    orderStatus,
+  } = row.original
+
+  const shouldEditLabResult =
+    orderStatus === OrderStatus.ResultReceived &&
+    orderingLabName === OrderingLabName.PsychPlus
   const { setSelectedTestId } = useStore()
   const [selectedTestName, setSelectedTestName] = useState('')
 
@@ -39,6 +48,7 @@ const RowResultView = ({ row }: LabResultsProps) => {
         onClose={handleCancel}
       >
         <EditViewLabResult
+          shouldEditLabResult={shouldEditLabResult}
           row={row}
           form={form}
           setSelectedTestName={setSelectedTestName}

@@ -4,10 +4,10 @@ import { LabOrders, LegalName, Metadata } from '@/types'
 
 type LabOrderStatus =
   | 'Draft'
-  | 'Result Received'
-  | 'Order Completed'
+  | 'ResultReceived'
+  | 'OrderCompleted'
   | 'Submission Pending'
-  | 'Pre-order'
+  | 'PreOrder'
   | 'Cancelled'
   | 'Pending'
 
@@ -56,6 +56,19 @@ export enum FlagStatus {
 export enum ResultStatusCode {
   Final = 'F',
   Partial = 'P',
+}
+export enum RecordStatus {
+  Deleted = 'Deleted',
+  Active = 'Active',
+}
+export enum OrderingLabName {
+  Quest = 'Quest',
+  PsychPlus = 'PsychPlus',
+}
+
+export enum OrderStatus {
+  OrderCompleted = 'OrderCompleted',
+  ResultReceived = 'ResultReceived',
 }
 
 export type {

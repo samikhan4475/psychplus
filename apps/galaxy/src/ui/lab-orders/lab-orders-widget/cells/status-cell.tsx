@@ -18,10 +18,10 @@ const StatusCell = ({ row }: StatusCellProps) => {
 
 const badgeColorMap: Record<LabOrderStatus, BadgeProps['color']> = {
   Draft: 'gray',
-  'Result Received': 'green',
-  'Order Completed': 'blue',
+  ResultReceived: 'green',
+  OrderCompleted: 'blue',
   'Submission Pending': 'blue',
-  'Pre-order': 'yellow',
+  PreOrder: 'yellow',
   Cancelled: 'red',
   Pending: 'yellow',
 }

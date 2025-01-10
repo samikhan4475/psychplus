@@ -14,23 +14,35 @@ import { addLabOrdersResultAction } from './actions/add-lab-order-result'
 import { CancelButton } from './cancel-button'
 import { transformOut } from './data'
 import { LabTestHeader } from './lab-test-header'
-import { columns } from './results-table-columns'
+import { getColumns } from './results-table-columns'
 import { SaveButton } from './save-button'
 import { SchemaType } from './schema'
 import { useStore } from './store'
+import { OrderingLabName, OrderStatus } from './types'
 
 interface LabResultsProps {
   row: Row<LabOrders>
   form: UseFormReturn<SchemaType>
   setSelectedTestName: React.Dispatch<React.SetStateAction<string>>
   selectedTestName: string
+  shouldEditLabResult: boolean
 }
 
 const EditViewLabResult = ({
   row,
   form,
   setSelectedTestName,
+  shouldEditLabResult,
 }: LabResultsProps) => {
+  const {
+    orderingLab: { name: orderingLabName },
+    orderStatus,
+  } = row.original
+
+  const shouldAddLabResult =
+    orderingLabName === OrderingLabName.PsychPlus &&
+    orderStatus === OrderStatus.OrderCompleted
+
   const {
     setLabResult,
     addLabResult,
@@ -60,20 +72,32 @@ const EditViewLabResult = ({
   const handleLabTest = (test: LabTest) => {
     setSelectedTestId(test.id)
     setSelectedTestName(test.testName)
-    setEditAbleLabResults(newRow)
-    setTestLabResult([
-      ...row.original.labResults.filter(
-        (result) => result.labTestId === test.id,
-      ),
-      {
+    if (shouldAddLabResult) {
+      setEditAbleLabResults(newRow)
+      setTestLabResult([
+        ...row.original.labResults.filter(
+          (result) =>
+            result.labTestId === test.id && result.recordStatus !== 'Deleted',
+        ),
+        {
+          ...newRow,
+          labTestId: test.id,
+        },
+      ])
+      form.setValue('labResults', {
         ...newRow,
         labTestId: test.id,
-      },
-    ])
-    form.setValue('labResults', {
-      ...newRow,
-      labTestId: test.id,
-    })
+      })
+    } else {
+      setEditAbleLabResults(undefined)
+      setTestLabResult(
+        row.original.labResults.filter(
+          (result) =>
+            result.labTestId === test.id && result.recordStatus !== 'Deleted',
+        ),
+      )
+      form.reset({ labResults: undefined })
+    }
   }
 
   useEffect(() => {
@@ -152,25 +176,26 @@ const EditViewLabResult = ({
         <Text className="flex items-center justify-center">No Test Found</Text>
       ) : (
         <>
-          <Box className="flex justify-end">
-            <Button
-              type="button"
-              highContrast
-              className="flex justify-end"
-              onClick={handleAdd}
-            >
-              Add
-            </Button>
-          </Box>
+          {shouldAddLabResult && (
+            <Box className="flex justify-end">
+              <Button
+                type="button"
+                highContrast
+                className="flex justify-end"
+                onClick={handleAdd}
+              >
+                Add
+              </Button>
+            </Box>
+          )}
           <LabTestHeader
             labTests={row.original.labTests}
             selectedTestId={selectedTestId}
             handleLabTest={handleLabTest}
           />
-
           <DataTable
             data={testLabResult ?? []}
-            columns={columns}
+            columns={getColumns(shouldEditLabResult)}
             disablePagination
             sticky
           />

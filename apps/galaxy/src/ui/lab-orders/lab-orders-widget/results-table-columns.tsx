@@ -1,5 +1,3 @@
-'use client'
-
 import { ColumnDef } from '@tanstack/react-table'
 import { ColumnHeader } from '@/components'
 import { LabResult } from '@/types'
@@ -16,7 +14,7 @@ import {
 } from './cells'
 import { ViewActionsCell } from './cells/view-action-cell'
 
-const columns: ColumnDef<LabResult>[] = [
+const getColumns = (shouldEditLabResult: boolean): ColumnDef<LabResult>[] => [
   {
     id: 'test-name',
     header: () => <ColumnHeader clientSideSort label="Test Name" />,
@@ -70,8 +68,11 @@ const columns: ColumnDef<LabResult>[] = [
     size: 50,
     header: () => <ColumnHeader label="Actions" />,
     cell: ({ row }) => {
-      return row.original.id !== '' ? <ViewActionsCell row={row} /> : null
+      return row.original.id !== '' ? (
+        <ViewActionsCell shouldEditLabResult={shouldEditLabResult} row={row} />
+      ) : null
     },
   },
 ]
-export { columns }
+
+export { getColumns }

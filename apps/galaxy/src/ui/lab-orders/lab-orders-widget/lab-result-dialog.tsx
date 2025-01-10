@@ -1,4 +1,4 @@
-import { ReactNode } from 'react'
+import { ReactNode, useState } from 'react'
 import { Cross2Icon } from '@radix-ui/react-icons'
 import { Dialog, Flex, ScrollArea, Tooltip } from '@radix-ui/themes'
 import { FileText } from 'lucide-react'
@@ -15,8 +15,15 @@ const LabResultDialog = ({
   children,
   onClose,
 }: LabResultDialogProps) => {
+  const [isOpen, setIsOpen] = useState(false)
+  const handleOpenChange = (open: boolean) => {
+    setIsOpen(open)
+    if (!open && onClose) {
+      onClose()
+    }
+  }
   return (
-    <Dialog.Root>
+    <Dialog.Root open={isOpen} onOpenChange={handleOpenChange}>
       <Tooltip content="View Results" side="top" align="center">
         <Dialog.Trigger>
           <FileText width={16} height={16} color="black" />
