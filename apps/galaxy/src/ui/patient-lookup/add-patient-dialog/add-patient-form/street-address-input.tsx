@@ -11,11 +11,11 @@ const StreetAddressInput = () => {
   return (
     <GooglePlacesAutocomplete
       name="street1"
-      label="Street Address"
+      label="Address 1"
       labelClassName="!text-1"
       address2FieldName="contactInfo.addresses.0.street2"
       zipFieldName="contactInfo.addresses.0.postalCode"
-      placeholder="Street address"
+      placeholder="Address 1"
       prefix="contactInfo.addresses.0"
     />
   )

@@ -13,7 +13,7 @@ const PostalCodeInput = () => {
   const form = useFormContext<AddPatientSchemaType>()
   return (
     <FormFieldContainer className="gap-1">
-      <FormFieldLabel className="!text-1">Postal Code</FormFieldLabel>
+      <FormFieldLabel className="!text-1">Zip</FormFieldLabel>
       <TextField.Root
         size="1"
         placeholder="Zip"
