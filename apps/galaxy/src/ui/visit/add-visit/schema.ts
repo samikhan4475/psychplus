@@ -120,6 +120,7 @@ const schema = z
       validateUntimedService(data, ctx)
     }
     if (
+      data.showDCFields &&
       data.dcDate &&
       data.visitDate &&
       data.dcDate?.compare(data.visitDate) >= 0
