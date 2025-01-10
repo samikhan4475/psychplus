@@ -3,16 +3,18 @@
 import { useState } from 'react'
 import { Flex } from '@radix-ui/themes'
 import toast from 'react-hot-toast'
-import { CodesetSelectCell, PropsWithRow } from '@/components'
+import { PropsWithRow, SelectCell } from '@/components'
 import { CODESETS } from '@/constants'
+import { useCodesetCodes } from '@/hooks'
 import { updatePatientAction } from '../actions'
 import { Patient } from '../types'
+import { sortCodesetBySortAttribute } from '../utils'
 
 const ContactMadeSelectCell = ({
   row: { original: patient },
 }: PropsWithRow<Patient>) => {
   const [selectedValue, setSelectedValue] = useState(patient?.contactMadeStatus)
-
+  const codes = useCodesetCodes(CODESETS.ContactMadeStatus)
   const updateContactMadeStatus = async (value: string) => {
     setSelectedValue(value)
     const result = await updatePatientAction(patient.id, {
@@ -25,7 +27,6 @@ const ContactMadeSelectCell = ({
       toast.error(result.error ?? 'Failed to update!')
     }
   }
-
   return (
     <Flex
       width="100%"
@@ -33,9 +34,9 @@ const ContactMadeSelectCell = ({
       align="center"
       onClick={(e) => e.stopPropagation()}
     >
-      <CodesetSelectCell
+      <SelectCell
         value={selectedValue}
-        codeset={CODESETS.ContactMadeStatus}
+        options={sortCodesetBySortAttribute(codes, { includeDisabled: true })}
         onValueChange={updateContactMadeStatus}
         className="border-pp-gray-2 h-4 w-full border border-solid !outline-none [box-shadow:none]"
       />

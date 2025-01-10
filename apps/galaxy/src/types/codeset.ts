@@ -60,4 +60,13 @@ interface POSCodeSets {
 
 type CodesetCache = Record<string, SharedCodeset>
 
-export type { Codeset, Code, SharedCodeset, SharedCode, MetadataCodeset, CodesetCache ,POSCodeSets}
+export type {
+  Codeset,
+  Code,
+  SharedCodeset,
+  SharedCode,
+  MetadataCodeset,
+  CodesetCache,
+  POSCodeSets,
+  SharedCodeAttribute,
+}

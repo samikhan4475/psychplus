@@ -1,5 +1,6 @@
 'use client'
 
+import { I18nProvider } from 'react-aria-components'
 import {
   DatePickerInput,
   FormFieldContainer,
@@ -10,7 +11,9 @@ const DOBDatePicker = () => {
   return (
     <FormFieldContainer className="flex-row gap-1">
       <FormFieldLabel className="!text-1">DOB</FormFieldLabel>
-      <DatePickerInput field="dateOfBirth" />
+      <I18nProvider locale="en-US">
+        <DatePickerInput field="dateOfBirth" />
+      </I18nProvider>
     </FormFieldContainer>
   )
 }

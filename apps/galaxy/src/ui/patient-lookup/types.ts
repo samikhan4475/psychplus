@@ -60,10 +60,14 @@ interface SearchPatientsParams
   contactMadeStatuses?: string[]
 }
 
+interface SortCodesetOptions {
+  includeDisabled?: boolean
+}
 export {
   QueryByNextDays,
   type Patient,
   type PatientRaw,
   type SearchPatientsData,
   type SearchPatientsParams,
+  type SortCodesetOptions,
 }

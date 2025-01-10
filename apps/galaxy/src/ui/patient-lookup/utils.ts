@@ -1,7 +1,9 @@
 import { DateValue } from 'react-aria-components'
 import { FieldErrors } from 'react-hook-form'
+import { SharedCode, SharedCodeAttribute } from '@/types'
 import { convertToCalendarDate } from '@/utils'
 import { PatientLookUpSchemaType } from './patient-filter-form'
+import { SortCodesetOptions } from './types'
 
 const getInitialValues = (): PatientLookUpSchemaType => {
   return {
@@ -50,4 +52,52 @@ const validateDate = (
   return referenceDate ? date?.compare(referenceDate) : 0
 }
 
-export { getInitialValues, convertDateField, hasFieldErrors, validateDate }
+const sortCodesetBySortAttribute = (
+  data: SharedCode[],
+  options: SortCodesetOptions = {},
+) => {
+  const { includeDisabled = false } = options
+
+  return data
+    .toSorted((a, b) => {
+      const sortValueA = parseInt(
+        a?.attributes?.find(
+          (attr: SharedCodeAttribute) => attr.name === 'SortValue',
+        )?.value ?? '0',
+        10,
+      )
+      const sortValueB = parseInt(
+        b?.attributes?.find(
+          (attr: SharedCodeAttribute) => attr.name === 'SortValue',
+        )?.value ?? '0',
+        10,
+      )
+      return sortValueA - sortValueB
+    })
+    .map((item) => {
+      const baseItem = {
+        label: item.display,
+        value: item.value,
+      }
+
+      if (includeDisabled) {
+        const isUserSelectable = item?.attributes?.find(
+          (attr: SharedCodeAttribute) => attr.name === 'IsUserSelectable',
+        )?.value
+
+        return {
+          ...baseItem,
+          disabled: isUserSelectable === 'False',
+        }
+      }
+      return baseItem
+    })
+}
+
+export {
+  getInitialValues,
+  convertDateField,
+  hasFieldErrors,
+  validateDate,
+  sortCodesetBySortAttribute,
+}

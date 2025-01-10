@@ -69,7 +69,7 @@ const DropdownSelect = ({
               key={`${opt?.value}-${idx}`}
               disabled={opt?.disabled}
               className={cn(
-                'group-hover:bg-white group-hover:text-black hover:!text-white hover:!bg-pp-black-1 text-1',
+                'group-hover:bg-white group-hover:text-black hover:!text-white hover:!bg-pp-black-1  data-[disabled]:!bg-white text-1 data-[disabled]:!text-grayA-8',
                 {
                   'text-white bg-pp-black-1': opt?.value === value,
                 },
