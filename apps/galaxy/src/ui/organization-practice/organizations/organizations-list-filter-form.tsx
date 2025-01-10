@@ -26,7 +26,11 @@ const schema = z.object({
   address2: z.string().optional(),
   city: z.string().optional(),
   state: z.string().optional(),
-  zip: z.string().optional(),
+  zip: z
+    .string()
+    .max(5, { message: 'Zip should be 5 digits' })
+    .nullable()
+    .optional(),
   status: z.string().optional(),
 })
 

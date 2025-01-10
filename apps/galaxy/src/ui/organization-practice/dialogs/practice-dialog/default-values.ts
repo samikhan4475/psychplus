@@ -14,7 +14,6 @@ const defaultValues = (data?: Organization) => {
     contactEmail: data?.contactEmail ?? '',
     contactPhone: data?.contactPhone ?? '',
     contactName: data?.contactName ?? '',
-    ehrPartner: data?.ehrPartner ?? false,
   }
 }
 

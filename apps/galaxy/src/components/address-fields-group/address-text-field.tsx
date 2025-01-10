@@ -34,6 +34,13 @@ const AddressTextField = ({
 
   const { onChange, ...rest } = register(field, { disabled: disabled })
 
+  const handleZipChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const fieldValue = e.target.value
+    if (fieldValue.length <= 5) {
+      setValue(field, fieldValue, { shouldValidate: true })
+    }
+  }
+
   return (
     <FormFieldContainer className={fieldContainerClassName}>
       <FormFieldLabel
@@ -50,9 +57,7 @@ const AddressTextField = ({
           'border-pp-gray-2 h-6 w-full border border-solid !outline-none [box-shadow:none]',
           className,
         )}
-        onChange={(e) =>
-          setValue(field, e.target.value, { shouldValidate: true })
-        }
+        onChange={handleZipChange}
         {...props}
         {...rest}
       />

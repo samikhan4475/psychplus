@@ -26,7 +26,7 @@ const OrganizationNameCell = ({
         className="flex max-w-[200px] cursor-pointer items-center overflow-hidden text-ellipsis whitespace-nowrap"
         onClick={openTab}
       >
-        {organization.shortName}
+        {organization.displayName}
       </Text>
     </Box>
   )

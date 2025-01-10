@@ -9,6 +9,9 @@ import {
   LoadingPlaceholder,
   TextCell,
 } from '@/components'
+import { formatDateTime } from '@/utils'
+import { getAllOrganizationHxStatusListAction } from '../actions'
+import { Organization } from '../types'
 
 interface HxListTableProps {
   organizationId: string
@@ -20,33 +23,47 @@ interface HxStatus {
   user: string
 }
 
-const columns: ColumnDef<HxStatus>[] = [
+const columns: ColumnDef<Organization>[] = [
   {
     id: 'user',
     header: ({ column }) => <ColumnHeader label="User" />,
-    cell: ({ row }) => <TextCell>{row.original.user}</TextCell>,
+    cell: ({ row }) => (
+      <TextCell>{row.original.metadata?.createdByFullName}</TextCell>
+    ),
   },
   {
     id: 'date',
     header: ({ column }) => <ColumnHeader label="Date/Time" />,
-    cell: ({ row }) => <TextCell>{row.original.date}</TextCell>,
+    cell: ({ row }) => (
+      <TextCell>
+        {row.original.metadata?.createdOn &&
+          formatDateTime(row.original.metadata?.createdOn)}
+      </TextCell>
+    ),
   },
   {
     id: 'status',
     header: ({ column }) => <ColumnHeader label="Status" />,
-    cell: ({ row }) => <TextCell>{row.original.status}</TextCell>,
+    cell: ({ row }) => <TextCell>{row.original.recordStatus}</TextCell>,
   },
 ]
 
 const HxListTable = ({ organizationId }: HxListTableProps) => {
-  const [data, setData] = useState([])
+  const [data, setData] = useState<Organization[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    setLoading(false)
-    // TODO: need to call action here to fetch data
-    setData([])
+    init()
   }, [organizationId])
+
+  const init = async () => {
+    setLoading(true)
+    const response = await getAllOrganizationHxStatusListAction(organizationId)
+    if (response.state === 'success') {
+      setData(response.data)
+    }
+    setLoading(false)
+  }
 
   if (loading) {
     return (

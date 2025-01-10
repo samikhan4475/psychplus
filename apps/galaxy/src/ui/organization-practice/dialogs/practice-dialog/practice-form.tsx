@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Box, Grid, Text } from '@radix-ui/themes'
+import { Box, Grid } from '@radix-ui/themes'
 import { useForm } from 'react-hook-form'
 import { toast } from 'react-hot-toast'
 import { FormContainer } from '@/components'
@@ -7,22 +7,28 @@ import { sanitizeFormData } from '@/utils'
 import { addOrganizationAction, updateOrganizationAction } from '../../actions'
 import { useStore } from '../../organizations/store'
 import { Organization } from '../../types'
-import { AddressFields } from './address-fields'
-import { ContactNameField } from './contact-name-field'
+import { CliaField } from './clia-field'
+import { DefProviderField } from './def-provider-field'
 import { defaultValues } from './default-values'
-import { EmailField } from './email-field'
+import { FaxField } from './fax-field'
 import { NameField } from './name-field'
+import { NpiField } from './npi-field'
+import { OrganizationSelect } from './organization-select'
+import { PayerAddressFields } from './payer-address-fields'
 import { PhoneField } from './phone-field'
+import { PrimaryAddressFields } from './primary-address-fields'
 import { schema, type SchemaType } from './schema'
 import { StatusSelect } from './status-select'
 import { SubmitFormButton } from './submit-form-button'
+import { TaxonomyCodeField } from './taxonomy-code-field'
+import { TinField } from './tin-field'
 
 interface FormProps {
   data?: Organization
   onCloseModal: (open: boolean) => void
 }
 
-const OrganizationForm = ({ data, onCloseModal }: FormProps) => {
+const PracticeForm = ({ data, onCloseModal }: FormProps) => {
   const { search } = useStore((state) => ({
     search: state.search,
   }))
@@ -80,28 +86,41 @@ const OrganizationForm = ({ data, onCloseModal }: FormProps) => {
     <FormContainer onSubmit={onSave} form={form}>
       <Box className="ml-1 mr-1 mt-2 pl-2 pr-2">
         <Grid columns="12" className="mb-2 mt-2 gap-3">
-          <Box className="col-span-12">
+          <Box className="col-span-8">
             <NameField />
+          </Box>
+          <Box className="col-span-2">
+            <NpiField />
+          </Box>
+          <Box className="col-span-2">
+            <TinField />
           </Box>
         </Grid>
 
-        <Box className="pb-1 pt-1">
-          <Text size="2" className="pb-1 text-[14px]" weight="medium">
-            Contact
-          </Text>
-        </Box>
+        <Grid columns="12" className="mb-2 mt-2 gap-3">
+          <Box className="col-span-3">
+            <TaxonomyCodeField />
+          </Box>
+          <Box className="col-span-3">
+            <CliaField />
+          </Box>
+          <Box className="col-span-6">
+            <OrganizationSelect />
+          </Box>
+        </Grid>
 
         <Grid columns="4" className="col-span-full gap-3">
-          <ContactNameField />
           <PhoneField />
-          <EmailField />
+          <FaxField />
+          <DefProviderField />
           <StatusSelect />
         </Grid>
-        <AddressFields />
+        <PrimaryAddressFields />
+        <PayerAddressFields />
       </Box>
       <SubmitFormButton />
     </FormContainer>
   )
 }
 
-export { OrganizationForm, type SchemaType }
+export { PracticeForm, type SchemaType }

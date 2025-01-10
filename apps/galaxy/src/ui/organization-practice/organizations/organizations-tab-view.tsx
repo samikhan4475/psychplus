@@ -14,7 +14,7 @@ const OrganizationsTabView = () => {
         <OrganizationDialog />
       </TabContentHeading>
       <OrganizationsListFilterForm />
-      <Flex direction="column" className="bg-white w-full">
+      <Flex direction="column" className="bg-white overflow-hidden">
         <OrganizationsListTable />
         <OrganizationsListTablePagination />
       </Flex>

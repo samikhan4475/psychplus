@@ -13,7 +13,7 @@ const columns = (
 ): ColumnDef<Organization>[] => {
   return [
     {
-      id: 'name',
+      id: 'displayName',
       header: ({ column }) => (
         <ColumnHeader
           label="Organization Name"
@@ -27,7 +27,7 @@ const columns = (
       cell: OrganizationNameCell,
     },
     {
-      id: 'practices',
+      id: 'practicesNames',
       header: ({ column }) => (
         <ColumnHeader
           label="Practices"
@@ -38,7 +38,7 @@ const columns = (
           }}
         />
       ),
-      cell: ({ row }) => <TextCell>{row.original.displayName}</TextCell>,
+      cell: ({ row }) => <TextCell>{row.original.practicesNames}</TextCell>,
     },
 
     {
@@ -60,7 +60,7 @@ const columns = (
           cell: ({ row }) => <TextCell>{row.original.contactName}</TextCell>,
         },
         {
-          id: 'phone',
+          id: 'contactPhone',
           size: 50,
           header: ({ column }) => (
             <ColumnHeader
@@ -76,7 +76,7 @@ const columns = (
           cell: ({ row }) => <TextCell>{row.original.contactPhone}</TextCell>,
         },
         {
-          id: 'email',
+          id: 'contactEmail',
           header: ({ column }) => (
             <ColumnHeader
               label="Email"
@@ -93,7 +93,7 @@ const columns = (
       ],
     },
     {
-      id: 'address1',
+      id: 'organizationAddress.street1',
       header: ({ column }) => (
         <ColumnHeader
           label="Address 1"
@@ -110,7 +110,7 @@ const columns = (
       ),
     },
     {
-      id: 'address2',
+      id: 'organizationAddress.street2',
       header: ({ column }) => (
         <ColumnHeader
           label="Address 2"
@@ -127,7 +127,7 @@ const columns = (
       ),
     },
     {
-      id: 'city',
+      id: 'organizationAddress.city',
       header: ({ column }) => (
         <ColumnHeader
           label="City"
@@ -143,7 +143,7 @@ const columns = (
       ),
     },
     {
-      id: 'state',
+      id: 'organizationAddress.state',
       header: ({ column }) => (
         <ColumnHeader
           label="State"
@@ -159,7 +159,7 @@ const columns = (
       ),
     },
     {
-      id: 'zip',
+      id: 'organizationAddress.postalCode',
       header: ({ column }) => (
         <ColumnHeader
           label="Zip"

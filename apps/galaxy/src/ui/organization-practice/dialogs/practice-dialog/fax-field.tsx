@@ -7,14 +7,14 @@ import {
   FormFieldLabel,
 } from '@/components/form'
 
-const EmailField = () => {
+const FaxField = () => {
   return (
     <FormFieldContainer className="flex-1 gap-0">
-      <FormFieldLabel className="pb-[3px]">Email</FormFieldLabel>
-      <TextInput field="contactEmail" className="h-6 w-full" />
-      <FormFieldError name="contactEmail" />
+      <FormFieldLabel className="pb-[3px]">Fax</FormFieldLabel>
+      <TextInput field="fax" className="h-6 w-full" />
+      <FormFieldError name="fax" />
     </FormFieldContainer>
   )
 }
 
-export { EmailField }
+export { FaxField }

@@ -7,10 +7,17 @@ const schema = z.object({
   address2: z.string().optional(),
   city: z.string().min(1, { message: 'City is required' }),
   state: z.string().min(1, { message: 'State is required' }),
-  zip: z.string().min(1, { message: 'Zip is required' }),
-  phone: z.string().optional(),
-  email: z.string().optional(),
+  zip: z.string().min(5, { message: 'Valid zip is required' }).max(5, {
+    message: 'Valid zip is required',
+  }),
+  contactPhone: z.string().optional(),
+  contactEmail: z
+    .string()
+    .email('Invalid email address')
+    .optional()
+    .or(z.literal('')),
   recordStatus: z.string().min(1, { message: 'Status is required' }),
+  ehrPartner: z.boolean().optional(),
 })
 
 type SchemaType = z.infer<typeof schema>

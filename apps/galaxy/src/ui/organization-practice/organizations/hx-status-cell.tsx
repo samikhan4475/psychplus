@@ -71,7 +71,7 @@ const HxStatusCell = ({ row }: PropsWithRow<Organization>) => {
       </Popover.Root>
       <SelectCell
         options={items}
-        className="w-[100px] bg-gray-3 text-gray-10"
+        className="w-[100px] text-gray-10"
         onValueChange={handleStatusChange}
         value={currentStatus}
       />

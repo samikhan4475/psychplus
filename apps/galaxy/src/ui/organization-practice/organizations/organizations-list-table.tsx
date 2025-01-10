@@ -18,7 +18,9 @@ const OrganizationsListTable = () => {
   }))
 
   useEffect(() => {
-    search()
+    search({
+      includePractices: true,
+    })
   }, [activeTab])
 
   if (loading) {
@@ -30,13 +32,14 @@ const OrganizationsListTable = () => {
   }
 
   return (
-    <ScrollArea className="h-full p-2">
+    <ScrollArea>
       <DataTable
         data={data?.organizations ?? []}
         columns={columns(sort, sortData)}
         disablePagination
         sticky
         isRowSpan
+        tableClass="bg-white w-[calc(100vw_-_198px)] [&_.rt-ScrollAreaRoot]:!overflow-visible"
         theadClass="z-[1]"
       />
     </ScrollArea>

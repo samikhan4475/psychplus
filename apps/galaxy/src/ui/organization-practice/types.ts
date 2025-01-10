@@ -47,6 +47,8 @@ interface Organization extends OrganizationRoot {
   contactPhone: string
   contactEmail: string
   organizationAddress: OrganizationAddress
+  ehrPartner?: boolean
+  practicesNames?: string
 }
 
 interface GetOrganizationsListResponse {

@@ -11,7 +11,7 @@ import { CODESETS } from '@/constants'
 const StatusSelect = () => {
   return (
     <FormFieldContainer className="flex w-full">
-      <FormFieldLabel required>Status</FormFieldLabel>
+      <FormFieldLabel>Status</FormFieldLabel>
       <CodesetSelect name="recordStatus" codeset={CODESETS.RecordStatus} />
       <FormFieldError name="recordStatus" />
     </FormFieldContainer>
