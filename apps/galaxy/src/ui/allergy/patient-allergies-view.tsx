@@ -11,6 +11,12 @@ const PatientAllergiesView = async ({
   patientId,
   isPatientAllergiesTab,
 }: PatientAllergiesViewProps) => {
+  // Added this for logging Purpose Will Remove after testing
+  console.log(
+    'SCRIPTSURE_BASE_APPLICATION_URL',
+    SCRIPTSURE_BASE_APPLICATION_URL,
+  )
+
   return (
     <Flex direction="column" width="100%">
       <Flex direction="column" gap="2">
