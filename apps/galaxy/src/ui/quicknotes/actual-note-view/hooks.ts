@@ -7,10 +7,9 @@ const useWidgetSaveListener = (
 ) => {
   useEffect(() => {
     const handleMessage = (event: MessageEvent) => {
-      const { type, widgetId, success } = event.data
+      const { type, widgetId } = event.data
 
       if (type === 'widget:save' && widgetId === sectionName) {
-        console.log(`Widget ${widgetId} saved successfully: ${success}`)
         onWidgetSave()
       }
     }

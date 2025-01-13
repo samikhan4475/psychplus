@@ -54,6 +54,7 @@ import {
   TmsDetailView,
   VitalsView,
   WorkingDiagnosisDetailView,
+  UploadedDocumentView,
 } from './actual-note-view'
 import { AddOnView } from './actual-note-view/add-on'
 import { HospitalDischargeView } from './actual-note-view/hospital-discharge'
@@ -191,6 +192,7 @@ const widgets: Array<WidgetType> = [
   {
     component: UploadedDocumentsWidget,
     id: QuickNoteSectionName.QuicknoteSectionUploadedDocuments,
+    actualNoteComponent: UploadedDocumentView
   },
   {
     component: FamilyInternalMedicineAssessmentPlanWidget,

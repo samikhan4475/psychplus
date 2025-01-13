@@ -12,6 +12,7 @@ import { getAllDocumentsAction } from './actions';
 import { UploadedDocumentsBlock } from './blocks';
 import { DocumentsClearButton } from './documents-clear-button';
 import { Documents } from './types';
+import { QuickNoteSectionName } from '../quicknotes/constants';
 
 interface UploadedDocumentTabProps {
   patientId: string;
@@ -53,7 +54,8 @@ const UploadedDocumentTab = ({
 
   useEffect(() => {
     const handleDocumentUpload = (event: MessageEvent) => {
-      if (event.data.type === 'quicknotes:uploadDocument') {
+      const { type, widgetId } = event.data
+      if (type === 'widget:save' && widgetId === QuickNoteSectionName.QuicknoteSectionUploadedDocuments) {
         fetchDocuments();
       }
     };

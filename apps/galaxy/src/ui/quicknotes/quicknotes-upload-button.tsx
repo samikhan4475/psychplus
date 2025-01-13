@@ -36,7 +36,7 @@ const QuickNotesUploadButton = ({ isWhiteBg = false, isIcon = true }: QuickNotes
     if (response.state === 'success') {
       toast.success('Document uploaded successfully');
       window.postMessage({
-        type: 'quicknotes:uploadDocument',
+        type: 'widget:save',
         widgetId: QuickNoteSectionName.QuicknoteSectionUploadedDocuments,
       })
       return true;

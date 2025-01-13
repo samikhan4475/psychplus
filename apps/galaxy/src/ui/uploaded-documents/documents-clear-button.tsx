@@ -5,6 +5,7 @@ import { deleteAllDocumentsAction } from './actions'
 import { Documents } from './types'
 import toast from 'react-hot-toast'
 import { useState } from 'react'
+import { QuickNoteSectionName } from '../quicknotes/constants'
 
 interface DocumentsClearButtonProps {
   documents: Documents[]
@@ -41,6 +42,10 @@ const DocumentsClearButton = ({
     if (result.state === 'success') {
       toast.success('Documents successfully deleted.')
       onClearSuccess()
+      window.postMessage({
+        type: 'widget:save',
+        widgetId: QuickNoteSectionName.QuicknoteSectionUploadedDocuments,
+      })
       setIsLoading(false)
     } else {
       toast.error('Failed to delete documents.')
