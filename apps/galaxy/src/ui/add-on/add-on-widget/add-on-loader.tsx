@@ -34,7 +34,13 @@ const AddOnLoader = async ({
     visitType,
   )
 
-  return <AddOnWidget patientId={patientId} initialValue={initialValue} />
+  return (
+    <AddOnWidget
+      patientId={patientId}
+      appointment={appointment}
+      initialValue={initialValue}
+    />
+  )
 }
 
 export { AddOnLoader }

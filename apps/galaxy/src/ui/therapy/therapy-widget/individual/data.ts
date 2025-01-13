@@ -34,7 +34,7 @@ export const transformIn = (
   value: QuickNoteSectionItem[],
 ): TherapySchemaType => {
   const defaultSchema: TherapySchemaType = {
-    therapyTimeSpent: 'timeRangeOne',
+    therapyTimeSpent: '',
     therapySessionParticipants:
       TherapySessionParticipantsEnum.Values.PatientsOnly,
     patientOther: '',
@@ -42,6 +42,9 @@ export const transformIn = (
     therapyDetailsInterventions: [],
     additionalTherapyDetail:
       'Patient presented with signs of transference, indicating a strong misplacement of feelings associated with unresolved past experiences.  Provider engaged in schema exploration with patient to gain insight regarding patient’s irrational thoughts and maladaptive behavior patterns. Provider encouraged patient to self-reflect to make connections between dysfunctional beliefs, behaviors, and assumptions that may have affected their perception. Continued exploration of irrational thoughts and behaviors is recommended to map all types and directions of transference.',
+    timeRangeOne: '',
+    timeRangeTwo: '',
+    timeRangeThree: '',
   }
 
   return transformInHelper(value, defaultSchema)

@@ -15,22 +15,22 @@ const TherapySchema = z.object({
   therapyTimeSpent: z.string().min(1, { message: 'Time Spent is required' }),
   timeRangeOne: z
     .string()
+    .min(1, { message: 'Required' })
     .refine((val) => val === '' || (Number(val) >= 16 && Number(val) <= 37), {
       message: 'Value must be between 16 and 37',
-    })
-    .optional(),
+    }),
   timeRangeTwo: z
     .string()
+    .min(1, { message: 'Required' })
     .refine((val) => val === '' || (Number(val) >= 38 && Number(val) <= 52), {
       message: 'Value must be between 38 and 52',
-    })
-    .optional(),
+    }),
   timeRangeThree: z
     .string()
+    .min(1, { message: 'Required' })
     .refine((val) => val === '' || (Number(val) >= 53 && Number(val) <= 99), {
       message: 'Value must be between 53 and 99',
-    })
-    .optional(),
+    }),
   therapySessionParticipants: TherapySessionParticipantsEnum,
   patientOther: z.string().optional(),
   therapyDetailsModality: z

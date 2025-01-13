@@ -4,35 +4,50 @@ import { useSearchParams } from 'next/navigation'
 import { Flex } from '@radix-ui/themes'
 import { FormProvider } from 'react-hook-form'
 import { WidgetFormContainer, WidgetSaveButton } from '@/components'
+import { Appointment } from '@/types'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
-import { getCachedBlocksByVisitType } from '../utils'
+import {
+  getCachedBlocksByVisitType,
+  mapAppointmentDurationToData,
+} from '../utils'
 import { useAddOnWidgetForm } from './add-on-widget-form'
 import { AddOnWidgetSchemaType } from './add-on-widget-schema'
 import { transformOut } from './data'
 
 interface AddOnWidgetProps {
   patientId: string
+  appointment?: Appointment
   initialValue: AddOnWidgetSchemaType
 }
 
 interface Block {
-  component: React.ComponentType<{
-    isChecked?: boolean
-  }>
+  component: React.ComponentType<{ isChecked?: boolean }>
   id: string
   isChecked?: boolean
 }
 
-const AddOnWidget = ({ patientId, initialValue }: AddOnWidgetProps) => {
-  const visitType = useSearchParams().get('visitType') || ''
-  const visitSequence = useSearchParams().get('visitSequence') || ''
-  const appointmentId = useSearchParams().get('id') as string
+const AddOnWidget = ({
+  patientId,
+  initialValue,
+  appointment,
+}: AddOnWidgetProps) => {
+  const searchParams = useSearchParams()
+  const visitType = searchParams.get('visitType') || ''
+  const visitSequence = searchParams.get('visitSequence') || ''
+  const appointmentId = searchParams.get('id') as string
 
   const blocks: Block[] = (
     getCachedBlocksByVisitType(visitType, visitSequence) || []
   ).filter((block): block is Block => block !== undefined)
 
-  const form = useAddOnWidgetForm(initialValue)
+  const durationData = !initialValue.therapyTimeSpent
+    ? mapAppointmentDurationToData(appointment?.duration)
+    : {}
+
+  const form = useAddOnWidgetForm({
+    ...initialValue,
+    ...durationData,
+  })
 
   return (
     <FormProvider {...form}>

@@ -4,7 +4,7 @@ import {
 } from '../therapy-schema'
 
 const getInitialValues = (): TherapySchemaType => ({
-  therapyTimeSpent: 'timeRangeOne',
+  therapyTimeSpent: '',
   timeRangeOne: '',
   timeRangeTwo: '',
   timeRangeThree: '',

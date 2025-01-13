@@ -50,7 +50,11 @@ const PatientAllergiesPage = async ({
 
   return (
     <Flex direction="column" width="100%">
-      <AddOnWidget patientId={params.id} initialValue={initialValue} />
+      <AddOnWidget
+        patientId={params.id}
+        appointment={appointment.data}
+        initialValue={initialValue}
+      />
     </Flex>
   )
 }

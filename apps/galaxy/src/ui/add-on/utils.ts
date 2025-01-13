@@ -15,6 +15,28 @@ interface Block {
   id: string
 }
 
+const mapAppointmentDurationToData = (duration?: number) => {
+  switch (duration) {
+    case 20:
+      return {
+        therapyTimeSpent: 'timeRangeOne',
+        timeRangeOne: '20',
+      }
+    case 40:
+      return {
+        therapyTimeSpent: 'timeRangeTwo',
+        timeRangeTwo: '40',
+      }
+    case 60:
+      return {
+        therapyTimeSpent: 'timeRangeThree',
+        timeRangeThree: '60',
+      }
+    default:
+      return {}
+  }
+}
+
 const blocks: Block[] = [
   {
     id: 'InjectionBlock',
@@ -95,4 +117,8 @@ const getBlocksByVisitType = (visitType: string, visitSequence: string) => {
 
 const getCachedBlocksByVisitType = cache(getBlocksByVisitType)
 
-export { visitTypeToBlocks, getCachedBlocksByVisitType }
+export {
+  mapAppointmentDurationToData,
+  visitTypeToBlocks,
+  getCachedBlocksByVisitType,
+}
