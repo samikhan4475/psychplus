@@ -1,25 +1,20 @@
 'use client'
 
-import { useState } from 'react'
-import NextLink from 'next/link'
-import { useSearchParams } from 'next/navigation'
+import { useParams, useSearchParams } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Flex, Heading, Text, TextField } from '@radix-ui/themes'
+import { Flex, Heading, Text } from '@radix-ui/themes'
 import { useForm, type SubmitHandler } from 'react-hook-form'
+import { toast } from 'react-hot-toast'
 import { z } from 'zod'
 import { loginAction } from '@/actions'
 import {
   FormContainer,
-  FormError,
-  FormFieldContainer,
-  FormFieldError,
-  FormFieldLabel,
   FormSubmitButton,
   NavLogo,
   PasswordInput,
 } from '@/components'
-
-const LOGIN_FORM_EMAIL_INPUT = 'login-form-email-input'
+import { WaitingTimeoutIcon } from '@/components/icons'
+import { decodeUrlString } from '@/utils'
 
 const schema = z.object({
   username: z.string().trim().min(1, 'Email is required').email(),
@@ -28,29 +23,27 @@ const schema = z.object({
 
 type SchemaType = z.infer<typeof schema>
 
-const LoginPage = () => {
+const LockScreen = () => {
   const searchParams = useSearchParams()
-  const [error, setError] = useState<string>()
+  const { email } = useParams<{ email: string }>()
 
   const form = useForm<SchemaType>({
     resolver: zodResolver(schema),
     reValidateMode: 'onChange',
     defaultValues: {
-      username: '',
+      username: decodeUrlString(email),
       password: '',
     },
   })
 
   const onSubmit: SubmitHandler<SchemaType> = async (data) => {
-    setError(undefined)
-
     return loginAction({
       username: data.username.trim(),
       password: data.password.trim(),
       next: searchParams?.get('next') ?? null,
     }).then((result) => {
       if (result?.state === 'error') {
-        setError(result.error)
+        toast.error(result.error)
       }
     })
   }
@@ -78,49 +71,27 @@ const LoginPage = () => {
           py="5"
           className="bg-white w-full max-w-[450px] rounded-3 shadow-3"
         >
-          <Heading weight="medium" mb="4">
-            Log in
+          <Flex justify="center" className="mb-5">
+            <WaitingTimeoutIcon />
+          </Flex>
+          <Heading weight="medium" mb="2" className="text-center">
+            Session Expired
           </Heading>
-          <FormError message={error} />
+          <Text className="text-pp-dark-grey mb-5 text-center" size="2">
+            Enter the password to continue work.
+          </Text>
           <FormContainer form={form} onSubmit={onSubmit}>
-            <Flex direction="column" gap="4" mb="4">
-              <FormFieldContainer>
-                <FormFieldLabel id={LOGIN_FORM_EMAIL_INPUT}>
-                  Email
-                </FormFieldLabel>
-                <TextField.Root
-                  size="2"
-                  id={LOGIN_FORM_EMAIL_INPUT}
-                  {...form.register('username')}
-                  radius="full"
-                />
-                <FormFieldError name="username" />
-              </FormFieldContainer>
-              <FormFieldContainer>
-                <PasswordInput field="password" label="Password" />
-                <Flex align="start">
-                  <FormFieldError name="password" />
-                  <NextLink
-                    href="/forgot-password"
-                    prefetch={false}
-                    className="ml-auto"
-                  >
-                    <Text className="text-[12px] text-accent-12 underline-offset-2 hover:underline">
-                      Forgot password?
-                    </Text>
-                  </NextLink>
-                </Flex>
-              </FormFieldContainer>
+            <Flex direction="column" gap="4" mb="4" className="mb-5">
+              <PasswordInput label="Password" field="password" autoFocus />
             </Flex>
             <FormSubmitButton
               form={form}
               size="3"
               className="w-full"
               highContrast
-              loading={form.formState.isSubmitting}
               radius="full"
             >
-              Log in
+              Login
             </FormSubmitButton>
           </FormContainer>
         </Flex>
@@ -129,4 +100,4 @@ const LoginPage = () => {
   )
 }
 
-export default LoginPage
+export { LockScreen }

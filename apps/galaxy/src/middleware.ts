@@ -5,6 +5,12 @@ import { apiGetSession } from './api/session'
 import { API_URL } from './constants'
 
 const LOGIN_PATH = '/login'
+const PUBLIC_ROUTES = [
+  /^\/login$/,
+  /^\/forgot-password$/,
+  /^\/change-password\/[^/]+$/,
+  /^\/lock\/[^/]+$/,
+]
 
 export const config = {
   matcher: ['/((?!_next/static|_next/image|favicon.ico).*)', { source: '/' }],
@@ -45,13 +51,15 @@ export const middleware = async (request: NextRequest) => {
 
   const [ok, refresh] = await apiGetSession()
 
-  const isLogin = request.nextUrl.pathname === LOGIN_PATH
+  const isPublicRoute = PUBLIC_ROUTES.some((pattern) =>
+    pattern.test(request.nextUrl.pathname),
+  )
 
-  if (ok && isLogin) {
+  if (ok && isPublicRoute) {
     return NextResponse.redirect(new URL('/', request.url))
   }
 
-  if (!ok && isLogin) {
+  if (!ok && isPublicRoute) {
     return clearAuthCookiesResponse(NextResponse.next())
   }
 

@@ -2,12 +2,6 @@
 
 import { Flex } from '@radix-ui/themes'
 import { AddPatient } from '../add-patient-dialog'
-import { CreditCardButton } from './credit-card-button'
-import { InsuranceVerificationButton } from './insurance-verification-button'
-import { NoFollowUpButton } from './no-follow-up-button'
-import { PatientVerificationButton } from './patient-verification-button'
-import { PolicyConsentsButton } from './policy-consents-button'
-import { RecentNewButton } from './recent-new-button'
 
 interface SmartFiltersProps {
   googleApiKey: string
@@ -15,12 +9,6 @@ interface SmartFiltersProps {
 const SmartFilters = ({ googleApiKey }: SmartFiltersProps) => {
   return (
     <Flex justify="end" flexGrow="1" gap="2">
-      <RecentNewButton />
-      <NoFollowUpButton />
-      <CreditCardButton />
-      <PolicyConsentsButton />
-      <InsuranceVerificationButton />
-      <PatientVerificationButton />
       <AddPatient googleApiKey={googleApiKey} />
     </Flex>
   )

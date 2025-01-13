@@ -17,6 +17,7 @@ import {
 } from '@/constants'
 import { StoreProvider } from '@/store'
 import { Header } from '@/ui/header'
+import { LockScreenProvider } from '@/ui/lock-screen-context'
 import { cn } from '@/utils'
 import { getAuthCookies } from '@/utils/auth'
 
@@ -51,7 +52,11 @@ const RootLayout = async ({ children }: React.PropsWithChildren) => {
         >
           {auth ? <Header /> : null}
           <Flex direction="column" className="flex-1 overflow-y-auto">
-            {children}
+            {auth ? (
+              <LockScreenProvider>{children}</LockScreenProvider>
+            ) : (
+              children
+            )}
           </Flex>
         </Theme>
       </body>

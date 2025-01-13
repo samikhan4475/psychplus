@@ -4,6 +4,7 @@ const USER_ENDPOINT = `${API_URL}/api/users/self`
 const REFRESH_ENDPOINT = `${AUTH_URL}/refresh`
 const SESSION_ENDPOINT = `${AUTH_URL}/session`
 const LOGIN_ENDPOINT = `${AUTH_URL}/login`
+const FORGOT_PASSWORD_ENDPOINT = `${API_URL}/api/users/self/forgotpassword`
 const GET_PATIENT_NOTIFICATIONS_ENDPOINT = `${API_URL}/api/patientnotifications/actions/search`
 const SEARCH_PATIENTS_ENDPOINT = `${API_URL}/api/patients/search`
 const CLINIC_LOCATIONS_ENDPOINT = `${API_URL}/api/clinics`
@@ -552,14 +553,12 @@ const DOWNLOAD_LAB_ORDER_DOCUMENT = (
 ) =>
   `${API_URL}/api/appointments/${appointmentId}/laborders/${orderId}/documents/${documentId}/actions/download`
 
-
 const DELETE_LAB_ORDERS_RESULT_ENDPOINT = (
   appointmentId: string,
   orderId: string,
   id: string,
 ) =>
   `${API_URL}/api/appointments/${appointmentId}/laborders/${orderId}/labresults/${id}`
-
 
 const LAB_ORDER_GET_REQUISITION = (orderId: string) =>
   `${API_URL}/api/laborders/${orderId}/actions/getrequisition`
@@ -817,6 +816,7 @@ export {
   GET_ALL_QUICK_NOTE_DOCUMENT,
   DOWNLOAD_QUICK_NOTE_DOCUMENT,
   DELETE_QUICK_NOTE_DOCUMENT,
+  FORGOT_PASSWORD_ENDPOINT,
   DOWNLOAD_LAB_ORDER_DOCUMENT,
   DELETE_LAB_ORDERS_RESULT_ENDPOINT,
   LAB_ORDER_GET_REQUISITION,
