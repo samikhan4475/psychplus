@@ -5,10 +5,7 @@ import { EctWidgetSchemaType } from './ect-tab-schema'
 
 
 export const ectActualViewKeysSection1 = [
-  {
-    label: 'Series:',
-    key: 'series',
-  },
+
   {
     label: 'Anesthesiologist:',
     key: 'anesthesiologist',
