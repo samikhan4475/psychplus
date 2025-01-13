@@ -1,4 +1,4 @@
-FROM node:18.19-alpine AS alpine
+FROM node:20-alpine AS alpine
 
 # Setup pnpm on alpine base
 FROM alpine AS base
@@ -10,14 +10,14 @@ FROM alpine AS base
 # Prune workspace
 FROM base AS pruner
     # Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
-    RUN apk update && apk add --no-cache libc6-compat
+    RUN apk update && apk add --no-cache
     WORKDIR /app
     COPY . .
     RUN turbo prune --scope=@psychplus/revcycle-app --docker
 
 # Build app
 FROM base AS builder
-    RUN apk update && apk add --no-cache libc6-compat
+    RUN apk update && apk add --no-cache
     WORKDIR /app
 
     # First install the dependencies (as they change less often)
