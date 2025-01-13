@@ -29,7 +29,7 @@ const PsychiatricEvaluation = ({ appointment, patient }: Props) => {
       />
       <LabelAndValue
         label="Time:"
-        value={getTimeLabel(appointment.startDate ?? '')}
+        value={getTimeLabel(appointment.startDate ?? '', false)}
       />
       <LabelAndValue label="Duration:" value={`${appointment.duration} min`} />
       <LabelAndValue
