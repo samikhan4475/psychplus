@@ -39,6 +39,9 @@ const visitTypeToSavingWidgets: Record<VisitTypeEnum, QuickNoteSectionName[]> =
     [VisitTypeEnum.Spravato]: [
       QuickNoteSectionName.QuicknoteSectionProcedureSpravato,
       QuickNoteSectionName.Addon,
+      QuickNoteSectionName.QuickNoteSectionDiagnosis,
+      QuickNoteSectionName.FollowUps,
+      QuickNoteSectionName.QuicknoteSectionMedications,
       QuickNoteSectionName.QuicknoteSectionCodes,
     ],
     [VisitTypeEnum.HospitalCareInitial]: [
@@ -183,6 +186,9 @@ const visitTypeToWidgets: Record<VisitTypeEnum, QuickNoteSectionName[]> = {
   [VisitTypeEnum.Spravato]: [
     QuickNoteSectionName.QuicknoteSectionProcedureSpravato,
     QuickNoteSectionName.QuicknoteSectionUploadedDocuments,
+    QuickNoteSectionName.QuickNoteSectionDiagnosis,
+    QuickNoteSectionName.FollowUps,
+    QuickNoteSectionName.QuicknoteSectionMedications,
     QuickNoteSectionName.Addon,
     QuickNoteSectionName.QuicknoteSectionCodes,
   ],
