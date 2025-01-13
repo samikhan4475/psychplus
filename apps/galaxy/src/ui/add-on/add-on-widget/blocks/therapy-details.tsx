@@ -3,7 +3,7 @@
 import { useEffect } from 'react'
 import { Flex, TextArea } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
-import { BlockLabel } from '@/components'
+import { BlockLabel, FormFieldError } from '@/components'
 
 interface TherapyDetailProps {
   field: string
@@ -26,11 +26,14 @@ const TherapyDetail = ({ field, label, defaultValue }: TherapyDetailProps) => {
       <BlockLabel name={field} required>
         {label}
       </BlockLabel>
-      <TextArea
-        size="1"
-        className="h-[90px] w-[800px] flex-grow"
-        {...form.register(field)}
-      />
+      <Flex direction={'column'}>
+        <TextArea
+          size="1"
+          className="h-[90px] w-[800px] flex-grow"
+          {...form.register(field)}
+        />
+        <FormFieldError name={field} />
+      </Flex>
     </Flex>
   )
 }

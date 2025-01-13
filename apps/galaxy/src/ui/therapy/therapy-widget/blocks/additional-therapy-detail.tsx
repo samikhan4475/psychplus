@@ -1,23 +1,14 @@
 import { Flex } from '@radix-ui/themes'
-import { useFormContext } from 'react-hook-form'
 import {
   BlockLabel,
-  FormError,
   FormFieldContainer,
+  FormFieldError,
   TextAreaInput,
 } from '@/components'
-import { TherapySchemaType } from '../individual/therapy-schema'
-
 
 const AdditionalTherapyDetailBlock = () => {
-  const {
-    formState: { errors },
-  } = useFormContext<TherapySchemaType>()
-
-  const errorMessage = errors.additionalTherapyDetail?.message || ''
-
   return (
-    <FormFieldContainer className="flex flex-row items-start justify-start flex-grow">
+    <FormFieldContainer className="flex flex-grow flex-row items-start justify-start">
       <BlockLabel className="flex-none self-start" required>
         Additional Therapy Details
       </BlockLabel>
@@ -25,9 +16,9 @@ const AdditionalTherapyDetailBlock = () => {
       <Flex className=" w-full max-w-full flex-grow flex-col">
         <TextAreaInput
           field="additionalTherapyDetail"
-          className="h-[90px] w-full max-w-full flex-grow mb-4"
+          className="mb-4 h-[90px] w-full max-w-full flex-grow"
         />
-        <FormError message={errorMessage} />
+        <FormFieldError name={'additionalTherapyDetail'} />
       </Flex>
     </FormFieldContainer>
   )

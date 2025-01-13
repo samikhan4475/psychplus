@@ -1,8 +1,9 @@
 'use client'
 
-import { ScrollArea } from '@radix-ui/themes'
+import { ScrollArea, Text } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
-import { DataTable, FormError } from '@/components'
+import { DataTable } from '@/components'
+import { cn } from '@/utils'
 import { TherapySchemaType } from '../individual/therapy-schema'
 import { TherapyTableColumns } from './therapy-table-columns'
 
@@ -69,7 +70,9 @@ const TherapyTableBlock = () => {
         />
       </ScrollArea>
 
-      <FormError message={getCombinedErrorMessage()} />
+      <Text className={cn('text-[12px] text-tomato-11')}>
+        {getCombinedErrorMessage()}
+      </Text>
     </>
   )
 }

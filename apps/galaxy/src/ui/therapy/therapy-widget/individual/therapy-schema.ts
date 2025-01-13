@@ -4,7 +4,7 @@ type TherapySchemaType = z.infer<typeof TherapySchema>
 
 const TherapySessionParticipantsEnum = z.enum(
   ['PatientsOnly', 'PatientwithPatient/Guardian', 'Patient&Other'],
-  { required_error: 'Session Participants is required' },
+  { required_error: 'required' },
 )
 
 type TherapySessionParticipantsEnumType = z.infer<
@@ -49,9 +49,7 @@ const TherapySchema = z.object({
       }),
     )
     .min(1, { message: 'Interventions is required' }),
-  additionalTherapyDetail: z
-    .string()
-    .min(1, { message: 'Additional Therapy Detail is required' }),
+  additionalTherapyDetail: z.string().min(1, { message: 'required' }),
 })
 
 export {

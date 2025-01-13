@@ -1,8 +1,9 @@
 'use client'
 
-import { ScrollArea } from '@radix-ui/themes'
+import { ScrollArea, Text } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
-import { DataTable, FormError } from '@/components'
+import { DataTable } from '@/components'
+import { cn } from '@/utils'
 import { AddOnWidgetSchemaType } from '../../../add-on-widget-schema'
 import { Columns } from './columns'
 
@@ -46,7 +47,6 @@ const PsychoAnalysisTable = () => {
     const transferenceDescriptionEmpty =
       !transferenceDescription.length && transferenceDescriptionError
 
-
     if (psychoanalyticTechniqueEmpty && transferenceDescriptionEmpty) {
       return 'Description of Transference & Psychoanalytic Technique are required'
     }
@@ -70,7 +70,9 @@ const PsychoAnalysisTable = () => {
         disablePagination
         sticky
       />
-      <FormError message={getCombinedErrorMessage()} />
+      <Text className={cn('text-[12px] text-tomato-11')}>
+        {getCombinedErrorMessage()}
+      </Text>
     </ScrollArea>
   )
 }

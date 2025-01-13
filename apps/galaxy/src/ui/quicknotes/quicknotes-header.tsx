@@ -23,6 +23,7 @@ import { QuickNotesViewNoteButton } from './quicknotes-view-note-button'
 import { QuickNotesVisitNumberDropdown } from './quicknotes-visit-number-dropdown'
 import { QuickNotesVisitSequenceDropdown } from './quicknotes-visit-sequence-dropdown'
 import { QuickNotesVisitTypeDropdown } from './quicknotes-visit-type-dropdown'
+import { QuickNotesVisitMediumDropdown } from './quicknotes-visit-medium-dropdown'
 
 interface QuickNotesHeaderProps {
   appointment: Appointment
@@ -71,6 +72,7 @@ const QuickNotesHeader = async ({
         <Flex align="center" gap="2" wrap="wrap" p="2">
           <QuickNotesTitleDropdown title={appointment.visitNoteTitle} />
           <QuickNotesVisitTypeDropdown visitType={appointment.visitType} />
+          <QuickNotesVisitMediumDropdown visitMedium={appointment.type} />
           <QuickNotesVisitSequenceDropdown
             visitSequence={appointment.visitSequence}
           />

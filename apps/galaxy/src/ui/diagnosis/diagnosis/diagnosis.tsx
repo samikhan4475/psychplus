@@ -17,7 +17,7 @@ const Diagnosis = () => {
         gap="2"
       >
         <Flex gap="2">
-          <Text className="text-[16px] font-[600]">Diagnosis</Text>
+          <Text className="text-[16px] font-[600]">Working Diagnosis</Text>
           <SearchDiagnosis />
         </Flex>
         <DiagnosisSaveButton />

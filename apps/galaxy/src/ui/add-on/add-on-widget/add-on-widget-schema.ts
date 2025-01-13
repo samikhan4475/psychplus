@@ -55,12 +55,12 @@ const injectionSchema = z.object({
 // Psychoanalysis schema validation
 const psychoanalysisSchema = z.object({
   transferenceDescription: codesetOptionsPsychoanalysis.min(1, {
-    message: 'Transference Description required',
+    message: 'Description of Transference is required',
   }),
   psychoanalyticTechnique: codesetOptionsPsychoanalysis.min(1, {
-    message: 'Psychoanalytic Technique required',
+    message: 'Psychoanalytic Technique is required',
   }),
-  additionalPsychoAnalysisDetail: z.string(),
+  additionalPsychoAnalysisDetail: z.string().min(1, 'required'),
 })
 
 // Base schema validation for all add-on widgets
@@ -129,13 +129,12 @@ const addOnWidgetSchema = baseSchema.superRefine(async (data, ctx) => {
   }
 
   if (data.therapy) {
-    // THERAPY schema validation
-    if (data.therapyPsychoanalysis === 'therapy') {
-      await validateSchema(TherapySchema, data, ctx)
-    }
     // PSYCHOANALYSIS schema validation
     if (data.therapyPsychoanalysis === 'psychoanalysis') {
       await validateSchema(psychoanalysisSchema, data, ctx)
+    } else {
+      // THERAPY schema validation
+      await validateSchema(TherapySchema, data, ctx)
     }
   }
 

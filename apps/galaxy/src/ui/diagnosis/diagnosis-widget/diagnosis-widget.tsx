@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react'
 import { useParams, useRouter } from 'next/navigation'
-import { Flex } from '@radix-ui/themes'
+import { Flex, Text } from '@radix-ui/themes'
 import {
   TabContentHeading,
   WidgetAddButton,
@@ -57,7 +57,10 @@ const DiagnosisWidget = ({
 
   return (
     <>
-      <TabContentHeading title={'Diagnosis'}>
+      <TabContentHeading title="">
+        <Flex className="flex-none">
+          <Text className="text-[16px] font-[600]">Working Diagnosis</Text>
+        </Flex>
         <Flex justify="between" align="center" width="100%">
           <Flex pl="4" gap="2" align="center">
             <SearchDiagnosis />

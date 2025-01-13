@@ -25,7 +25,7 @@ const TableCellLongText = ({
   onDelete
 }: TableCellLongTextProps) => {
   if (!text) {
-    return <TableCellEmpty />
+    return null
   }
 
   return (
