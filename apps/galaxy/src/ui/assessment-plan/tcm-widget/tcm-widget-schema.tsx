@@ -1,14 +1,15 @@
 import { z } from "zod";
 import { DateValue } from "react-aria-components";
+import { DISABLING_RESULTS } from "./constants";
 
 const dateValidation = z.custom<DateValue | null>();
 
 const tcmWidgetSchema = z
   .object({
     dcDate: dateValidation,
-    dcHospitalName: z.string().trim(),
+    dcHospitalName: z.string().trim().min(1,{ message: 'Hospital name is required'}),
     dcHospitalServiceType: z.string(),
-    dcContactMadeBy: z.string().trim().min(1, "Please Enter Contact Name"),
+    dcContactMadeBy: z.string().trim().optional(), 
     tcmDate: dateValidation,
     tcmResults: z.string().min(1, { message: 'Please Select an Option' }),
   })
@@ -20,7 +21,13 @@ const tcmWidgetSchema = z
     }
   )
   .refine(
-    (data) => data.tcmDate !== null,
+    (data) => {
+      const isDisabled = DISABLING_RESULTS.includes(data.tcmResults);
+      if (!isDisabled) {
+        return data.tcmDate !== null;
+      }
+      return true; 
+    },
     {
       message: "Date is required",
       path: ["tcmDate"],
@@ -41,11 +48,24 @@ const tcmWidgetSchema = z
         );
         return tcmDate >= dcDate;
       }
-      return true; 
+      return true;
     },
     {
       message: "Date cannot be smaller than Discharge Date",
       path: ["tcmDate"],
+    }
+  )
+  .refine(
+    (data) => {
+      const isDisabled = DISABLING_RESULTS.includes(data.tcmResults);
+      if (!isDisabled) {
+        return !!data.dcContactMadeBy?.trim(); 
+      }
+      return true; 
+    },
+    {
+      message: "Please Enter Contact Name",
+      path: ["dcContactMadeBy"],
     }
   );
 

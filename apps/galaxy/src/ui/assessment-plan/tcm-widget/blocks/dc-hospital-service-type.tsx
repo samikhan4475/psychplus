@@ -2,14 +2,13 @@ import React from 'react'
 import {
   CodesetSelect,
   FormFieldContainer,
-  FormFieldError,
   FormFieldLabel,
 } from '@/components'
 import { CODESETS, HOSPITAL_SERVICE_GROUP } from '@/constants'
 
 const DcHospitalServiceType = () => {
   return (
-    <FormFieldContainer className="w-full flex-row">
+    <FormFieldContainer className="flex-row items-center gap-2">
       <FormFieldLabel>DC Hospital Service Type</FormFieldLabel>
       <CodesetSelect
         name="dcHospitalServiceType"

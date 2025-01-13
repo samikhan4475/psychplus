@@ -10,14 +10,14 @@ const TcmContactMadeBy = () => {
     const isDisabled = DISABLING_RESULTS.includes(tcmResult);
        return (
         <Flex gap="2" direction={'row'}>
-            <BlockLabel required > Contact Made By </BlockLabel>
+           <BlockLabel required={!isDisabled}>Contact Made By</BlockLabel>
             <TextInput
                 field="dcContactMadeBy"
                 placeHolder="Add Name"
                 className="w-[100%]"
                 disabled={isDisabled}
             />
-            <FormFieldError name="dcContactMadeBy" />
+             {!isDisabled && <FormFieldError name="dcContactMadeBy" />}
         </Flex>
     )
 }

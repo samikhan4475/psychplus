@@ -1,18 +1,17 @@
-import { BlockLabel, FormFieldContainer, FormFieldError, TextAreaInput, TextInput } from '@/components'
-import { Flex } from '@radix-ui/themes'
+import { BlockLabel, FormFieldContainer, FormFieldError, TextInput } from '@/components';
 
 const DcHospitalName = () => {
-
     return (
-        <FormFieldContainer className="w-full flex-row">
-            <BlockLabel> DC Hospital Name </BlockLabel>
+        <FormFieldContainer className="flex-row items-center gap-2">
+            <BlockLabel required>DC Hospital Name</BlockLabel>
             <TextInput
                 field="dcHospitalName"
                 placeHolder="Add Name"
-                className="w-[100%]"
+                className="w-[200px]"
             />
+            <FormFieldError name="dcHospitalName" />
         </FormFieldContainer>
-    )
-}
+    );
+};
 
-export { DcHospitalName }
+export { DcHospitalName };

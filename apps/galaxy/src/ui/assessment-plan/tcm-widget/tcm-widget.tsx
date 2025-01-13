@@ -7,37 +7,35 @@ import {
   WidgetFormContainer,
   WidgetSaveButton,
 } from '@/components'
-import { QuickNoteSectionItem } from '@/types'
-import { TcmContactMadeBy } from './blocks/contact-made-by-block'
-import { DcDateBlock } from './blocks/dc-date-block'
-import { DcHospitalName } from './blocks/dc-hospital-name'
-import { DcHospitalServiceType } from './blocks/dc-hospital-service-type'
-import { ResultBlock } from './blocks/result-block'
-import { TcmDateBlock } from './blocks/tcm-date-block'
+import { Appointment, BookVisitPayload, QuickNoteSectionItem } from '@/types'
 import { TcmReviewCheckBox } from './blocks/tcm-review-check-box-block'
 import { transformIn, transformOut } from './data'
 import { TcmHeader } from './tcm-header'
 import { useTcmWidgetForm } from './tcm-widget-form'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
-import { DateValue } from 'react-aria-components'
 import { defaultValues } from './utils'
+import { DischargeBlock } from './blocks/discharge-block'
+import { ResultContactBlock } from './blocks/result-contact-block'
 
 interface TcmWidget {
   patientId: string
   tcmData: QuickNoteSectionItem[]
   isTcmTab: boolean
+  appointmentData: Appointment
 }
 
-const TcmWidget = ({ patientId, tcmData, isTcmTab }: TcmWidget) => {
-  const initialValue = transformIn(tcmData)
+const TcmWidget = ({ patientId, tcmData, isTcmTab, appointmentData }: TcmWidget) => {
+  const initialValue = transformIn(tcmData, appointmentData)
   const form = useTcmWidgetForm(initialValue)
   const appointmentId = useSearchParams().get('id') as string
+
+
   return (
     <FormProvider {...form}>
       <WidgetFormContainer
         patientId={patientId}
         widgetId={QuickNoteSectionName.QuicknoteSectionTcm}
-        getData={transformOut(patientId, appointmentId)}
+        getData={transformOut(patientId, appointmentId, appointmentData)}
         title={!isTcmTab ? 'TCM' : undefined}
         headerRight={
           <>
@@ -47,12 +45,9 @@ const TcmWidget = ({ patientId, tcmData, isTcmTab }: TcmWidget) => {
         }
       >
         {isTcmTab && <TcmHeader title="TCM" />}
-        <DcDateBlock />
-        <DcHospitalName />
-        <DcHospitalServiceType />
-        <TcmContactMadeBy />
-        <TcmDateBlock />
-        <ResultBlock />
+
+        <DischargeBlock/>
+        <ResultContactBlock/>
         <TcmReviewCheckBox />
       </WidgetFormContainer>
     </FormProvider>

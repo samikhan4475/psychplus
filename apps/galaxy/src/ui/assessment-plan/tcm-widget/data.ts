@@ -1,10 +1,12 @@
-import { CodesWidgetItem, CptCodeKeys, QuickNoteSectionItem } from '@/types'
-import { getDateDifference, sanitizeFormData } from '@/utils'
+import { Appointment, BookVisitPayload, CodesWidgetItem, CptCodeKeys, QuickNoteSectionItem } from '@/types'
+import {  formatDateToISOString, getDateDifference, getLocalCalendarDate, getPaddedDateString, manageCodes, sanitizeFormData } from '@/utils'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { TcmWidgetSchemaType } from './tcm-widget-schema'
 import { DateValue } from 'react-aria-components'
-import { manageCodes } from '@/utils/codes'
+
+import { updateVisitAction } from '@/actions'
 import { tcmCodes } from './utils'
+import { da } from 'date-fns/locale'
 
 export const tmsKeys = [
   {
@@ -33,10 +35,10 @@ export const tmsKeys = [
   },
 ]
 
-const transformIn = (value: QuickNoteSectionItem[]): TcmWidgetSchemaType => {
+const transformIn = (value: QuickNoteSectionItem[], appointmentData?: Appointment): TcmWidgetSchemaType => {
   const result: Record<string, string | DateValue | null> = {
-    dcDate: null,
-    dcHospitalName: "",
+    dcDate: appointmentData?.dischargeDate ? getLocalCalendarDate(appointmentData?.dischargeDate) : null,
+    dcHospitalName: appointmentData?.dischargeLocationName || "",
     dcHospitalServiceType: "",
     dcContactMadeBy: "",
     tcmDate: null,
@@ -48,7 +50,7 @@ const transformIn = (value: QuickNoteSectionItem[]): TcmWidgetSchemaType => {
   return result as TcmWidgetSchemaType;
 }
 
-const transformOut = (patientId: string, appointmentId: string) =>
+const transformOut = (patientId: string, appointmentId: string, appointmentData: Appointment) =>
   async (schema: Record<string, string | DateValue | null>) => {
     const result: QuickNoteSectionItem[] = []
     const data = sanitizeFormData(schema)
@@ -67,27 +69,60 @@ const transformOut = (patientId: string, appointmentId: string) =>
     })
     
     const selectedCodes: CodesWidgetItem[] = [];
-    const dischargeDate = data.dcDate as DateValue;
-    const serviceDate = data.tcmDate as DateValue;
-    const datesDifference = getDateDifference(serviceDate, dischargeDate);
-
-    const addCodes = (codes: CodesWidgetItem[]) => {
-      selectedCodes.push(...codes);
-    };
-
-    if (datesDifference <= 7) {
-      addCodes([{ key: CptCodeKeys.PRIMARY_CODE_KEY, code: "99496" }]);
-    } else if (datesDifference <= 14) {
-      addCodes([{ key: CptCodeKeys.PRIMARY_CODE_KEY, code: "99495" }]);
+    if(data.dcDate) {
+      const dischargeDate = data.dcDate as DateValue;
+      let datesDifference = 0
+      if(data.tcmDate){
+        const serviceDate = data.tcmDate as DateValue;
+        datesDifference = getDateDifference(serviceDate, dischargeDate);
+      }
+     
+      const addCodes = (codes: CodesWidgetItem[]) => {
+        selectedCodes.push(...codes);
+      };
+  
+      if (datesDifference <= 7) {
+        addCodes([{ key: CptCodeKeys.PRIMARY_CODE_KEY, code: "99496" }]);
+      } else if (datesDifference <= 14) {
+        addCodes([{ key: CptCodeKeys.PRIMARY_CODE_KEY, code: "99495" }]);
+      }
+      await manageCodes(patientId,  appointmentId,  tcmCodes,selectedCodes)
     }
     
-    const codesResult = await manageCodes(
-      patientId,
-      appointmentId,
-      tcmCodes,
-      selectedCodes,
+    appointmentData.dischargeDate = formatDateToISOString(data.dcDate as DateValue) || ""
+    appointmentData.dischargeLocationName = data.dcHospitalName as string|| ""
+    const payload: BookVisitPayload = transformVisitUpdatePayload(
+      appointmentData,
     )
-    return [...result, ...codesResult]
+    const sanitizedData = sanitizeFormData(payload)
+    await updateVisitAction(sanitizedData);
+    return [...result]
   }
+
+  const transformVisitUpdatePayload =(data: Appointment) => {
+  let payload: BookVisitPayload = {
+    appointmentId: data.appointmentId,
+    patientId: data.patientId,
+    stateCode: data.stateCode,
+    locationId: data.locationId,
+    dischargeDate: data.dischargeDate,
+    dischargeLocation: data.dischargeLocationName,
+    serviceId: data.serviceId,
+    providerType: data.providerType,
+    encounterType: data.visitTypeCode,
+    visitSequenceType: data.visitSequence,
+    type: data.visitMedium,
+    paymentResponsibilityTypeCode: data.paymentResponsibility,
+    isFollowup: false,
+    isPrimaryProviderType: data.isPrimaryProviderType,
+    specialistStaffId: data.providerId,
+    startDate: data.appointmentDate || "",
+    durationMinutes: data.duration || 0,
+    visitFrequency: data.appointmentInterval,
+    isOverridePermissionProvided:true,
+    isProceedPermissionProvided:false,
+  }
+  return payload
+}
 
 export { transformIn, transformOut }
