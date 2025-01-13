@@ -12,7 +12,7 @@ import {
   TimeInput,
   YesNoSelect,
 } from '@/components'
-import { useBookedAppointmentsStore } from '@/ui/schedule/store'
+import { Appointment } from '@/types'
 
 const DOSE_OPTIONS = [
   {
@@ -37,28 +37,24 @@ const DOSE_OPTIONS = [
   },
 ]
 
-const ZofranAdministratedBlock = () => {
+const ZofranAdministratedBlock = ({
+  appointmentData,
+}: {
+  appointmentData: Appointment | null
+}) => {
   const form = useFormContext()
   const zofranAdministrated = form.watch('zofranAdministrated')
   const zofranAdministratedTime = form.watch('zofranAdministratedTime')
 
-  const searchParams = useSearchParams()
-  const appointmentId = searchParams.get('id')
-
-  const appointmentData = useBookedAppointmentsStore((state) => {
-    if (appointmentId) {
-      return state.listViewData.find(
-        (item) => item.appointmentId === +appointmentId,
-      )
-    }
-    return null
-  })
-
   useEffect(() => {
-    if (appointmentData && !zofranAdministratedTime) {
+    if (
+      appointmentData &&
+      appointmentData.startDate &&
+      !zofranAdministratedTime
+    ) {
       form.setValue(
         'zofranAdministratedTime',
-        format(new Date(appointmentData.appointmentDate), 'HH:mm'),
+        format(new Date(appointmentData.startDate), 'HH:mm'),
       )
     }
   }, [appointmentData])

@@ -54,7 +54,7 @@ const SpravatoWidget = ({
         <DosingSection />
         <PrecautionsAndWarningSection />
 
-        <MonitoringView />
+        <MonitoringView appointmentData={appointmentData} />
         <VitalSignsView />
         <AdverseReactionView />
         <AdverseEventQuestionView />

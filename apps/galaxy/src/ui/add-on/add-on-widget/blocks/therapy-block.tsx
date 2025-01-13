@@ -35,7 +35,7 @@ const TherapyBlock: React.FC = ({ isChecked }: TherapyBlockProps) => {
         </Text>
       </Flex>
       {isTherapyChecked && (
-        <div>
+        <Flex direction="column" gap="2">
           <Text className="cursor-default" weight="medium">
             Therapy Details
           </Text>
@@ -47,7 +47,7 @@ const TherapyBlock: React.FC = ({ isChecked }: TherapyBlockProps) => {
             label="Additional Therapy Details"
             defaultValue={DEFAULT_THERAPY_DETAIL}
           />
-        </div>
+        </Flex>
       )}
     </>
   )
