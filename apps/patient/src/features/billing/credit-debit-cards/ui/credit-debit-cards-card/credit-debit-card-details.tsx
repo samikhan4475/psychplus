@@ -8,7 +8,7 @@ import { removeCreditCardAction } from '@/features/billing/credit-debit-cards/ac
 import { CreditCard } from '@/features/billing/credit-debit-cards/types'
 import { ChangePrimaryCardDialog } from '@/features/billing/credit-debit-cards/ui/credit-debit-cards-card/change-primary-card-dialog'
 
-const CardDetails = ({
+const CreditDebitCardDetails = ({
   creditCard,
   name,
   expiry,
@@ -65,4 +65,4 @@ const CardDetails = ({
   )
 }
 
-export default CardDetails
+export default CreditDebitCardDetails

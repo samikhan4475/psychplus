@@ -3,7 +3,7 @@ import { FeatureContainer } from '@/components-v2'
 import { CreditCard } from '@/features/billing/credit-debit-cards/types'
 import { sortCreditCardsByPrimary } from '@/features/billing/credit-debit-cards/utils'
 import { GooglePlacesContextProvider } from '@/providers'
-import Payments from './blocks/Payment'
+import { PaymentMethodsForm } from '@/features/billing/credit-debit-cards/ui/credit-debit-cards-card/credit-debit-cards-form'
 
 const Payment = ({
   creditCards,
@@ -15,10 +15,7 @@ const Payment = ({
   return (
     <GooglePlacesContextProvider apiKey={GOOGLE_MAPS_API_KEY}>
       <FeatureContainer>
-        <Payments
-          creditCards={sortCreditCardsByPrimary(creditCards)}
-          stripeApiKey={stripeApiKey}
-        />
+      <PaymentMethodsForm creditCards={sortCreditCardsByPrimary(creditCards)} stripeApiKey={stripeApiKey} />
       </FeatureContainer>
     </GooglePlacesContextProvider>
   )
