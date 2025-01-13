@@ -129,8 +129,9 @@ const columns: ColumnDef<PatientReferral>[] = [
     id: 'order-date-time',
     header: () => <ColumnHeader label="Order date/time" />,
     cell: ({ row: { original: referral } }) => (
-      <TextCell className="truncate">
-        {referral?.referralDate && formatDateTime(referral?.referralDate)}
+      <TextCell className="truncate" wrapperClass="bg-gray-3 w-full">
+        {referral?.referralDate &&
+          formatDateTime(referral?.referralDate, false)}
       </TextCell>
     ),
   },
@@ -142,19 +143,22 @@ const columns: ColumnDef<PatientReferral>[] = [
       <TextCell className="truncate">{original?.appointmentId}</TextCell>
     ),
   },
-
   {
     id: 'service-status',
     header: () => <ColumnHeader label="Service Priority Status" />,
     cell: ({ row: { original } }) => (
-      <TextCell className="truncate">{original?.servicesStatus}</TextCell>
+      <TextCell className="truncate" wrapperClass="bg-gray-3 w-full">
+        {original?.servicesStatus}
+      </TextCell>
     ),
   },
   {
     id: 'initiated-by',
     header: () => <ColumnHeader label="Initiated By" />,
     cell: ({ row: { original } }) => (
-      <TextCell className="truncate">{original?.intiatedByUserRole}</TextCell>
+      <TextCell className="truncate" wrapperClass="bg-gray-3 w-full">
+        {original?.intiatedByUserRole}
+      </TextCell>
     ),
   },
   {
@@ -183,7 +187,7 @@ const columns: ColumnDef<PatientReferral>[] = [
     id: 'next-visit',
     header: () => <ColumnHeader label="Next Visit" />,
     cell: ({ row: { original } }) => (
-      <TextCell className="truncate">
+      <TextCell className="truncate" wrapperClass="bg-gray-3 w-full">
         {formatDate(original?.nextVisit, 'dd/MM/yyyy') ?? 'N/A'}
       </TextCell>
     ),
@@ -192,7 +196,7 @@ const columns: ColumnDef<PatientReferral>[] = [
     id: 'visit-hx',
     header: () => <ColumnHeader label="Visit Hx" />,
     cell: ({ row: { original } }) => (
-      <TextCell className="truncate">
+      <TextCell className="truncate" wrapperClass="bg-gray-3 w-full">
         {formatDate(original?.patientVisitHistory, 'dd/MM/yyyy') ?? 'N/A'}
       </TextCell>
     ),

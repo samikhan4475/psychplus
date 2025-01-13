@@ -6,6 +6,7 @@ import { useStore as zustandUseStore } from 'zustand'
 import { DataTable, LoadingPlaceholder } from '@/components'
 import { columns } from './columns'
 import { useStore } from './store'
+import { isReferralDeleted } from '../referrals/patient-referrals-widget/utils'
 
 const IntReferralsTable = () => {
   const store = useStore()
@@ -33,6 +34,9 @@ const IntReferralsTable = () => {
         tableClass="[&_.rt-ScrollAreaScrollbar]:!hidden"
         tableRowClass="relative"
         theadClass="z-[1]"
+        isRowDisabled={(row) =>
+          isReferralDeleted(row.original.resourceStatus)
+        }
         disablePagination
         isRowSpan
         sticky

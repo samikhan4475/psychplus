@@ -13,7 +13,7 @@ const ServiceNameCell = ({
   ])
 
   return (
-    <TextCell className="truncate">
+    <TextCell className="truncate" wrapperClass="bg-gray-3 w-full">
       {getServiceLabel(options, referral.service)}
     </TextCell>
   )
