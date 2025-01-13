@@ -15,7 +15,10 @@ interface SignPayloadProps {
 interface Store {
   loading: boolean
   save: (visitType: string) => void
-  sign: (payload: SignPayloadProps) => void
+  sign: (
+    payload: SignPayloadProps,
+    closeConfirmationDialog?: () => void,
+  ) => void
   unsavedChanges: Record<string, boolean>
   setUnsavedChanges: (widgetName: string, unsavedChanges: boolean) => void
   toggleActualNoteView: () => void
@@ -57,7 +60,7 @@ const useStore = create<Store>()((set, get) => ({
     set({ loading: false })
   },
 
-  sign: async (payload) => {
+  sign: async (payload, closeConfirmationDialog) => {
     set({ loading: true })
     const isSaved = await saveWidgets(payload.visitType)
     if (!isSaved) {
@@ -79,6 +82,7 @@ const useStore = create<Store>()((set, get) => ({
     if (signResults.state === 'success') {
       toast.success('Quicknote signed!')
       set({ loading: false })
+      closeConfirmationDialog?.()
       return
     }
 
@@ -89,11 +93,13 @@ const useStore = create<Store>()((set, get) => ({
         errorMessage:
           'Primary note for this visit already exists, if you sign this note, it will mark the existing note as ERROR',
       })
+      closeConfirmationDialog?.()
       return
     }
 
     toast.error(signResults.error)
     set({ loading: false })
+    closeConfirmationDialog?.()
   },
   unsavedChanges: {},
   setUnsavedChanges: (widgetName, unsavedChanges) => {
