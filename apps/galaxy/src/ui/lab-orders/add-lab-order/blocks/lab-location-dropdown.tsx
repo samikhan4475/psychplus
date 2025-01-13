@@ -9,7 +9,7 @@ import { LabsLocation } from './types'
 const LabsLocationDropdown = () => {
   const form = useFormContext<LabOrderSchemaType>()
 
-  const [labLocations, setLabsLocations] = useState<any>([])
+  const [labLocations, setLabLocations] = useState<any>([])
 
   useEffect(() => {
     ;(async () => {
@@ -19,10 +19,10 @@ const LabsLocationDropdown = () => {
       if (response.data && response.data.length > 0) {
         const dropdownValues = response.data.map((item: LabsLocation) => ({
           label: item.name,
-          value: item.locationId,
+          value: item.id,
           data: item,
         }))
-        setLabsLocations(dropdownValues)
+        setLabLocations(dropdownValues)
       }
     })()
   }, [])
