@@ -9,6 +9,7 @@ import {
   VisitSequenceSelectCell,
   VisitStatusSelectCell,
 } from '../shared/table-cells'
+import { GenderCell } from '../shared/table-cells/gender-cell'
 import { ProviderTypeCell } from '../shared/table-cells/provider-type-cell'
 import { StateCell } from '../shared/table-cells/state-cell'
 import { formatDateCell, formatTimeCell } from '../utils'
@@ -20,7 +21,6 @@ import {
   VerificationStatusCell,
   VisitMediumCell,
 } from './table-cells'
-import { GenderCell } from './table-cells/gender-cell'
 
 const columns: ColumnDef<Appointment>[] = [
   {

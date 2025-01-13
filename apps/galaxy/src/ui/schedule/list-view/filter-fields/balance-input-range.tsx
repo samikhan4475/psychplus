@@ -17,7 +17,7 @@ const BalanceInputRange = () => {
       <FieldLabel>Balance</FieldLabel>
       <TextField.Root
         size="1"
-        placeholder="$ From"
+        placeholder="$ Due"
         type="number"
         {...form.register('balanceDueMin', {
           setValueAs: (val) => val || undefined,
@@ -25,9 +25,9 @@ const BalanceInputRange = () => {
       />
       <TextField.Root
         size="1"
-        placeholder="$ To"
+        placeholder="$ Paid"
         type="number"
-        {...form.register('balanceDueMax', {
+        {...form.register('balancePaid', {
           setValueAs: (val) => val || undefined,
         })}
       />

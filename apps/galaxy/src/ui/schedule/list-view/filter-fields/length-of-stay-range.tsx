@@ -16,20 +16,11 @@ const LengthOfStayRange = () => {
     <FormFieldContainer>
       <FieldLabel>LOS</FieldLabel>
       <TextField.Root
-        className="h-6"
-        placeholder="From"
+        className="h-6 flex-1"
+        placeholder="Days"
         size="1"
         type="number"
         {...form.register('lengthOfStayMin', {
-          setValueAs: (val) => val || undefined,
-        })}
-      />
-      <TextField.Root
-        className="h-6"
-        placeholder="To"
-        size="1"
-        type="number"
-        {...form.register('lengthOfStayMax', {
           setValueAs: (val) => val || undefined,
         })}
       />

@@ -18,7 +18,7 @@ const CoInsuranceInputRange = () => {
       <TextField.Root
         className="h-6"
         size="1"
-        placeholder="$ From"
+        placeholder="$ Due"
         type="number"
         {...form.register('coInsuranceDueMin', {
           setValueAs: (val) => val || undefined,
@@ -27,9 +27,9 @@ const CoInsuranceInputRange = () => {
       <TextField.Root
         className="h-6"
         size="1"
-        placeholder="$ To"
+        placeholder="$ Paid"
         type="number"
-        {...form.register('coInsuranceDueMax', {
+        {...form.register('coInsurancePaid', {
           setValueAs: (val) => val || undefined,
         })}
       />

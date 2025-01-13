@@ -17,7 +17,7 @@ const CoPayInputRange = () => {
       <FieldLabel className="min-w-10">Co-Pay</FieldLabel>
       <TextField.Root
         size="1"
-        placeholder="$ From"
+        placeholder="$ Due"
         type="number"
         {...form.register('copayDueMin', {
           setValueAs: (val) => val || undefined,
@@ -25,9 +25,9 @@ const CoPayInputRange = () => {
       />
       <TextField.Root
         size="1"
-        placeholder="$ To"
+        placeholder="$ Paid"
         type="number"
-        {...form.register('copayDueMax', {
+        {...form.register('copayPaid', {
           setValueAs: (val) => val || undefined,
         })}
       />

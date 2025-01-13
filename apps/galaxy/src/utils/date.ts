@@ -224,7 +224,7 @@ const formatDateOfBirth = (dob: string) => {
   const month = String(date.month).padStart(2, '0')
   const day = String(date.day).padStart(2, '0')
   const year = String(date.year).padStart(2, '0')
-  return `${month}-${day}-${year}`
+  return `${month}/${day}/${year}`
 }
 
 const convertToCalendarDate = (storedDate: DateValue | string) => {

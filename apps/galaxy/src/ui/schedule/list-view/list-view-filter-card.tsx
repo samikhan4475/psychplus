@@ -116,10 +116,13 @@ const ListViewFilterCard = () => {
       legalStatus: '',
       copayDueMin: undefined,
       copayDueMax: undefined,
+      copayPaid: undefined,
       coInsuranceDueMin: undefined,
       coInsuranceDueMax: undefined,
+      coInsurancePaid: undefined,
       balanceDueMin: undefined,
       balanceDueMax: undefined,
+      balancePaid: undefined,
       noteSignedStatus: '',
     },
   })
@@ -140,12 +143,16 @@ const ListViewFilterCard = () => {
       endingDate: getUtcDateWithoutTime(data.endingDate),
       dateOfBirth: getCalendarDateLabel(data.dateOfBirth),
       dateOfAdmissionStart: getDateString(data.dateOfAdmissionStart),
-      dateOfAdmissionEnd: getDateString(data.dateOfAdmissionEnd),
+      dateOfAdmissionEnd: getDateString(data.dateOfAdmissionStart),
       lastCoverageDateStart: getDateString(data.lastCoverageDateStart),
-      lastCoverageDateEnd: getDateString(data.lastCoverageDateEnd),
+      lastCoverageDateEnd: getDateString(data.lastCoverageDateStart),
       patientStatuses: data.patientStatuses ? [data.patientStatuses] : [],
       bookedAppointmentTime: getUtcTime(data.bookedAppointmentTime),
       providerIds: data.providerIds ? [Number(data.providerIds)] : [],
+      copayDueMax: data.copayDueMin,
+      coInsuranceDueMax: data.coInsuranceDueMin,
+      balanceDueMax: data.balanceDueMin,
+      lengthOfStayMax: data.lengthOfStayMin,
     }
     const sanitizedData = sanitizeFormData(transformedData)
     fetchData(sanitizedData, 1)

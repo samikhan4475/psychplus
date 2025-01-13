@@ -2,7 +2,6 @@ import { ColumnDef } from '@tanstack/react-table'
 import { ColumnHeader, LongTextCell, TextCell } from '@/components'
 import { Appointment } from '@/types'
 import { formatDateOfBirth } from '@/utils'
-import { GenderCell } from '../list-view/table-cells/gender-cell'
 import {
   InsuranceVerificationStatusCell,
   LegalSelectCell,
@@ -12,6 +11,7 @@ import {
   VisitSequenceSelectCell,
   VisitStatusSelectCell,
 } from '../shared/table-cells'
+import { GenderCell } from '../shared/table-cells/gender-cell'
 import { formatDateCell, formatTimeCell } from '../utils'
 import {
   ActionsCell,

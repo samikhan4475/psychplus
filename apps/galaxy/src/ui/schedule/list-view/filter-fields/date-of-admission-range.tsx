@@ -1,14 +1,9 @@
 'use client'
 
 import { Flex } from '@radix-ui/themes'
+import { DatePickerInput } from '@/components'
 import { useFiltersContext } from '../../context'
-import {
-  DateRangeEnd,
-  DateRangeError,
-  DateRangeStart,
-  FieldLabel,
-  FormFieldContainer,
-} from '../../shared'
+import { DateRangeError, FieldLabel, FormFieldContainer } from '../../shared'
 import { SchedulerFilters } from '../../types'
 
 const DateOfAdmissionRange = () => {
@@ -19,19 +14,8 @@ const DateOfAdmissionRange = () => {
     <Flex direction="column" gap="1">
       <FormFieldContainer>
         <FieldLabel>DOA</FieldLabel>
-        <DateRangeStart
-          dateField="dateOfAdmissionStart"
-          referenceDateField="dateOfAdmissionEnd"
-        />
-        <DateRangeEnd
-          dateField="dateOfAdmissionEnd"
-          referenceDateField="dateOfAdmissionStart"
-        />
+        <DatePickerInput field="dateOfAdmissionStart" showError={false} />
       </FormFieldContainer>
-      <DateRangeError
-        startDateName="dateOfAdmissionStart"
-        endDateName="dateOfAdmissionEnd"
-      />
     </Flex>
   )
 }

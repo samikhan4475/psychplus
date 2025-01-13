@@ -1,7 +1,7 @@
 import { DateValue, TimeValue } from 'react-aria-components'
 import z from 'zod'
-import { validateDate } from '../utils'
 import { INVALID_RANGE_ERROR } from '../constants'
+import { validateDate } from '../utils'
 
 const dateValidation = z.custom<DateValue>()
 
@@ -50,10 +50,13 @@ const bookedAppointmentsSchema = z
     legalStatus: z.string().optional(),
     copayDueMin: z.coerce.number().optional(),
     copayDueMax: z.coerce.number().optional(),
+    copayPaid: z.coerce.number().optional(),
     coInsuranceDueMin: z.coerce.number().optional(),
     coInsuranceDueMax: z.coerce.number().optional(),
+    coInsurancePaid: z.coerce.number().optional(),
     balanceDueMin: z.coerce.number().optional(),
     balanceDueMax: z.coerce.number().optional(),
+    balancePaid: z.coerce.number().optional(),
     noteSignedStatus: z.string().optional(),
   })
   .superRefine((data, ctx) => {
