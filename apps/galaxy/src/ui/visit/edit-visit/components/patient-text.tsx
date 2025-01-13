@@ -4,7 +4,7 @@ import { Appointment } from '@/types'
 import { getSlashedDateString } from '@/utils'
 
 const PatientText = ({ visitDetails }: { visitDetails: Appointment }) => {
-  const dob = getSlashedDateString(visitDetails.dob)
+  const dob = getSlashedDateString(visitDetails?.dob)
   const value = [
     visitDetails?.name && `${visitDetails.name}`,
     visitDetails?.age && `${visitDetails.age} yo`,

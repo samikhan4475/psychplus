@@ -1,7 +1,8 @@
 'use client'
 
+import { useMemo } from 'react'
 import { Flex } from '@radix-ui/themes'
-import { type ColumnDef } from '@tanstack/react-table'
+import { Row, type ColumnDef } from '@tanstack/react-table'
 import {
   ColumnHeader,
   DataTable,
@@ -10,8 +11,10 @@ import {
   LongTextCell,
   TextCell,
 } from '@/components'
+import { CODESETS } from '@/constants'
+import { useCodesetCodes } from '@/hooks'
 import { Appointment } from '@/types'
-import { formatDateTime } from '@/utils/date'
+import { formatDateCell, formatTimeCell } from '@/ui/schedule/utils'
 import { ActionsCell } from './cells'
 import { useStore } from './store'
 
@@ -23,7 +26,14 @@ const columns: ColumnDef<Appointment>[] = [
     cell: ({ row }) => {
       return (
         <DateTimeCell>
-          {formatDateTime(row.original.appointmentDate, false)}
+          {formatDateCell(
+            row.original.appointmentDate,
+            row.original.locationTimezoneId,
+          )}{' '}
+          {formatTimeCell(
+            row.original.appointmentDate,
+            row.original.locationTimezoneId,
+          )}
         </DateTimeCell>
       )
     },
@@ -72,21 +82,48 @@ const columns: ColumnDef<Appointment>[] = [
 ]
 
 const FollowUpTable = () => {
+  const visitStatusCodes = useCodesetCodes(CODESETS.AppointmentStatus)
   const { data, loading } = useStore((state) => ({
     data: state.data,
     loading: state.loading,
   }))
 
+  const inactiveVisitStatusCodes = useMemo(() => {
+    return visitStatusCodes
+      .filter((code) => {
+        const group = code.attributes?.[0].value ?? ''
+        const role = code.attributes?.[1].value ?? ''
+        if (group === 'Inactive' && role === 'Timed') {
+          return true
+        }
+        return false
+      })
+      .map((code) => code.value)
+  }, [visitStatusCodes])
+
+  const isRowDisabled = (row: Row<Appointment>) => {
+    const visitStatus = row.original.visitStatus as string
+
+    if (inactiveVisitStatusCodes.includes(visitStatus)) return true
+    return false
+  }
+
   if (loading) {
     return (
-      <Flex height="100%" align="center" justify="center">
+      <Flex minHeight="75px" align="center" justify="center">
         <LoadingPlaceholder />
       </Flex>
     )
   }
 
   return (
-    <DataTable data={data ?? []} columns={columns} disablePagination sticky />
+    <DataTable
+      data={data ?? []}
+      columns={columns}
+      isRowDisabled={isRowDisabled}
+      disablePagination
+      sticky
+    />
   )
 }
 

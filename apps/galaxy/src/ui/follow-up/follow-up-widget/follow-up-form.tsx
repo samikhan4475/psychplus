@@ -16,6 +16,7 @@ import { FollowUpVisitAlert } from './follow-up-visit-alert'
 import { LocationDropdown, ProviderDropdown } from './form-fields'
 import { NextDropdown } from './form-fields/next-dropdown'
 import { getOffsetStartDate, sanitizeFormData, transformIn } from './utils'
+import { useStore } from './store'
 
 const schema = z.object({
   next: z.string(),
@@ -44,6 +45,9 @@ const FollowUpForm = ({
     message: '',
     statusCode: 0,
   })
+  const { search } = useStore((state) => ({
+    search: state.search,
+  }))
 
   useEffect(() => {
     const fetchAppointmentData = async () => {
@@ -115,6 +119,10 @@ const FollowUpForm = ({
         }
         toast.error(res.error ?? 'Failed to create follow up visit')
       } else {
+        search({
+          patientIds: [Number(patientId)],
+          appointmentIds: [Number(appointmentId)],
+        })
         toast.success('Follow up visit created!')
       }
     })
