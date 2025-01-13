@@ -50,7 +50,11 @@ const PastMedicalHxWidget = ({
           }
           topHeader={isHistoryHeader && <PastMedicalHeader />}
         >
-          <ConditionsBlock />
+          {form.watch('widgetContainerCheckboxField') === 'show' && (
+            <>
+              <ConditionsBlock />
+            </>
+          )}
         </WidgetFormContainer>
       </FormProvider>
     </Flex>

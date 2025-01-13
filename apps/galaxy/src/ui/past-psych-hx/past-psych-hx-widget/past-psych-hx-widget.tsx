@@ -59,11 +59,15 @@ const PastPsychHxWidget = ({
         }
         topHeader={isHistoryHeader && <PastPsychHeader />}
       >
-        <Flex align="center" gap="2">
-          <PsychHospitalizationsBlock />
-          <SuicideAttemptsBlock />
-        </Flex>
-        <ConditionsBlock />
+        {form.watch('widgetContainerCheckboxField') === "show" && (
+          <>
+            <Flex align="center" gap="2">
+              <PsychHospitalizationsBlock />
+              <SuicideAttemptsBlock />
+            </Flex>
+            <ConditionsBlock />
+          </>
+        )}
       </WidgetFormContainer>
     </FormProvider>
   )

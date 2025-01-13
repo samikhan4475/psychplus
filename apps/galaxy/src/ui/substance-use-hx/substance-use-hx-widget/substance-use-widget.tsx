@@ -71,8 +71,12 @@ const SubstanceUseHxWidget = ({
         }
         topHeader={isHistoryHeader && <SubstanceUseHxHxHeader />}
       >
-        <TobaccoBlock />
-        {patientInfo && <AlcoholDrugsBlock patientInfo={patientInfo} />}
+        {form.watch('widgetContainerCheckboxField') === 'show' && (
+          <>
+            <TobaccoBlock />
+            {patientInfo && <AlcoholDrugsBlock patientInfo={patientInfo} />}
+          </>
+        )}
       </WidgetFormContainer>
     </FormProvider>
   )

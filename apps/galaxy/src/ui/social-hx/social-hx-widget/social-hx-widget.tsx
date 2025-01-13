@@ -1,6 +1,5 @@
 'use client'
 
-import { useEffect } from 'react'
 import { FormProvider } from 'react-hook-form'
 import {
   WidgetClearButton,
@@ -61,13 +60,17 @@ const SocialHxWidget = ({
         }
         topHeader={isHistoryHeader && <SocialHxHeader />}
       >
-        <RelationshipStatusBlock />
-        <EducationBlock />
-        <EmployedBlock />
-        <LegalHistoryBlock />
-        <LivingBlock />
-        <TraumaHxBlock />
-        <OtherBlock />
+        {form.watch('widgetContainerCheckboxField') === 'show' && (
+          <>
+            <RelationshipStatusBlock />
+            <EducationBlock />
+            <EmployedBlock />
+            <LegalHistoryBlock />
+            <LivingBlock />
+            <TraumaHxBlock />
+            <OtherBlock />
+          </>
+        )}
       </WidgetFormContainer>
     </FormProvider>
   )

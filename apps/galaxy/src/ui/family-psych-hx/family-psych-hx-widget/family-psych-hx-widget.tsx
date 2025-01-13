@@ -48,8 +48,12 @@ const FamilyPsychHxWidget = ({
         }
         topHeader={isHistoryHeader && <PastFamilyHeader />}
       >
-        <ConditionsBlock />
-        <OtherBlock />
+        {form.watch('widgetContainerCheckboxField') === 'show' && (
+          <>
+            <ConditionsBlock />
+            <OtherBlock />
+          </>
+        )}
       </WidgetFormContainer>
     </FormProvider>
   )
