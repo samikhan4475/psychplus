@@ -5,6 +5,7 @@ import { transformIn } from '@/ui/procedures/tms-tab/data'
 import { QuickNoteSectionName } from '../../constants'
 import { ActualNoteDetailsWrapper } from '../shared'
 import { Details } from './details'
+import { WorkingDiagnosisDetailView } from '../working-diagnosis'
 
 type TmsDetailsProps = {
   patientId: string
@@ -25,6 +26,7 @@ const TmsDetailView = async ({ patientId, appointment }: TmsDetailsProps) => {
   return (
     <ActualNoteDetailsWrapper sectionName={QuickNoteSectionName.ProcedureTMS}>
       <Details data={transformIn(response.data)} appointment={appointment} />
+      <WorkingDiagnosisDetailView patientId={patientId}/>
     </ActualNoteDetailsWrapper>
   )
 }
