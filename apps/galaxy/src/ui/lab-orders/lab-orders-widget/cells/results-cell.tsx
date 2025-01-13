@@ -11,8 +11,9 @@ interface ActionsCellProps {
 }
 
 const ResultsCell = ({ row }: ActionsCellProps) => {
+  const labDocuments = row.original.labDocuments || []
   const rowActions: RowAction<LabOrders>[] =
-    row.original.labDocuments.length === 0
+    labDocuments.length === 0
       ? [
           {
             id: 'row-results-view',

@@ -72,10 +72,12 @@ const EditViewLabResult = ({
   const handleLabTest = (test: LabTest) => {
     setSelectedTestId(test.id)
     setSelectedTestName(test.testName)
+    const labResults = row?.original?.labResults || []
+
     if (shouldAddLabResult) {
       setEditAbleLabResults(newRow)
       setTestLabResult([
-        ...row.original.labResults.filter(
+        ...labResults.filter(
           (result) =>
             result.labTestId === test.id && result.recordStatus !== 'Deleted',
         ),
@@ -91,7 +93,7 @@ const EditViewLabResult = ({
     } else {
       setEditAbleLabResults(undefined)
       setTestLabResult(
-        row.original.labResults.filter(
+        labResults.filter(
           (result) =>
             result.labTestId === test.id && result.recordStatus !== 'Deleted',
         ),

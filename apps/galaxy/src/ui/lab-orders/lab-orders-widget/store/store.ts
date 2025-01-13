@@ -76,7 +76,7 @@ const useStore = create<StoreState>((set, get) => ({
       if (labOrder.id === labResult.orderId) {
         return {
           ...labOrder,
-          labResults: [...labOrder.labResults, labResult],
+          labResults: [...(labOrder.labResults || []), labResult],
         }
       }
       return labOrder

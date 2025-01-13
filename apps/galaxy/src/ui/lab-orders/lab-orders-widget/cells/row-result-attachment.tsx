@@ -9,7 +9,8 @@ import { LabDocument, LabOrderPdf } from '../types'
 const RowResultAttachment = ({ row }: any) => {
   const { ResultsPdf, RequisitionPdf } = LabOrderPdf
 
-  const { labDocuments } = row.original
+  const labDocuments = row?.original?.labDocuments || []
+
   const resultPdfDetails = labDocuments.find(
     (item: LabDocument) => item?.documentType === ResultsPdf,
   )

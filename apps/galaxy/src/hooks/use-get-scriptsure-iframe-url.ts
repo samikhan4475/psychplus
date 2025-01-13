@@ -20,6 +20,7 @@ const useGetScriptSureIframeUrl = (
       const [sessionTokenResponse, externalPatientResponse] = await Promise.all(
         [getScriptSureSessionToken(DAWSYS), getScriptSureExternalPatient(id)],
       )
+
       if (
         sessionTokenResponse.state !== 'error' &&
         externalPatientResponse.state !== 'error'
