@@ -28,7 +28,7 @@ const NotesPrintButton = ({ id }: NotesPrintButtonProps) => {
       )
       return
     }
-    handlePrint(id)
+    handlePrint(id, 'Note Details')
   }
   return (
     <Button

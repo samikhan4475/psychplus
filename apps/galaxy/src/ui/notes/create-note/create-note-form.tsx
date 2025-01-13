@@ -8,6 +8,7 @@ import toast from 'react-hot-toast'
 import z from 'zod'
 import { FormContainer } from '@/components'
 import { createNoteSchema } from '.'
+import { useStore } from '../store'
 import { getCreateNoteAction } from './action/create-note-action'
 import { fileUploadAction } from './action/file-upload-action'
 
@@ -16,6 +17,10 @@ const schema = createNoteSchema
 type SchemaType = z.infer<typeof schema>
 
 const CreateNoteForm = ({ children }: React.PropsWithChildren<unknown>) => {
+  const { isCosigner, setIsCosigner } = useStore((state) => ({
+    setIsCosigner: state.setIsCosigner,
+    isCosigner: state.isCosigner,
+  }))
   const searchParams = useSearchParams()
   const patientId = useParams().id as string
   const appointmentId = searchParams.get('id')
@@ -30,7 +35,7 @@ const CreateNoteForm = ({ children }: React.PropsWithChildren<unknown>) => {
       noteTypeCode: '',
       noteTitleCode: '',
       provider: undefined,
-      cosigner: undefined,
+      cosigner: '',
       description: '',
       file: undefined,
     },
@@ -40,10 +45,8 @@ const CreateNoteForm = ({ children }: React.PropsWithChildren<unknown>) => {
     const payload = {
       patientId: patientId,
       appointmentId: appointmentId,
-      signedByUserId: data.provider,
       noteTypeCode: data.noteTypeCode,
       noteTitleCode: data.noteTitleCode,
-      coSignedByUserId: data.cosigner,
       encounterSignedNoteDetails: [
         {
           sectionName: 'CreateNote',
@@ -51,6 +54,9 @@ const CreateNoteForm = ({ children }: React.PropsWithChildren<unknown>) => {
           sectionItemValue: data.description || '',
         },
       ],
+    }
+    if (isCosigner) {
+      setIsCosigner(false)
     }
 
     const result = await getCreateNoteAction({

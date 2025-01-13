@@ -1,10 +1,19 @@
 import { FieldValues } from 'react-hook-form'
+import { Cosigner } from '@/types'
 import { SharedCode } from '@/types/codeset'
 
 export const formatDateTime = (data: FieldValues) => {
-  const { year, month, day } = data.date
-  const [hours, minutes] = data.time.split(':').map(Number)
-  const formattedDate = new Date(Date.UTC(year, month - 1, day, hours, minutes))
+  if (!data?.date || !data?.time) return ''
+  const date = data.date
+  const time = data.time
+
+  if (!date || !time) return ''
+  const { year, month, day } = date
+  const { hour, minute, second, millisecond } = time
+
+  const formattedDate = new Date(
+    Date.UTC(year, month - 1, day, hour, minute, second, millisecond),
+  )
 
   return formattedDate.toISOString()
 }
@@ -30,6 +39,10 @@ export const getDisplayByValue = (
 ): string | undefined => {
   const foundItem = data.find((item) => item.value === value)
   return foundItem?.display
+}
+
+export const filterDefaultCosigner = (cosigners: Cosigner[]) => {
+  return cosigners.find((item) => item?.isDefaultCosigner === true)
 }
 
 export const getFileSize = (size: number): string => {

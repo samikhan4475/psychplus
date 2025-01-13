@@ -40,6 +40,7 @@ interface Store {
   selectedRow: PatientNotes | undefined
   selectedRows: PatientNotes[]
   isCreateNoteView: boolean
+  isCosigner: boolean
   errorMessage: string
   isErrorAlertOpen: boolean
   setPatientId: (id: string) => void
@@ -48,6 +49,7 @@ interface Store {
   setSelectedRows: (value: PatientNotes[]) => void
   setAppointment: (value: Appointment) => void
   setIsCreateNoteView: (value: boolean) => void
+  setIsCosigner: (value: boolean) => void
   setErrorMessage: (value: string) => void
   setIsErrorAlertOpen: (value: boolean) => void
   fetchAppointment: (appointmentId: string) => void
@@ -85,6 +87,7 @@ const useStore = create<Store>((set) => ({
   selectedRow: undefined,
   selectedRows: [],
   isErrorAlertOpen: false,
+  isCosigner: false,
   errorMessage: '',
   isCreateNoteView: false,
   setPatientId: (patientId) => set({ patientId }),
@@ -94,6 +97,7 @@ const useStore = create<Store>((set) => ({
   setSelectedRow: (selectedRow) => set({ selectedRow }),
   setSelectedRows: (selectedRows) => set({ selectedRows }),
   setIsCreateNoteView: (isCreateNoteView) => set({ isCreateNoteView }),
+  setIsCosigner: (isCosigner) => set({ isCosigner }),
   setErrorMessage: (errorMessage) => set({ errorMessage }),
   setIsErrorAlertOpen: (isErrorAlertOpen) => set({ isErrorAlertOpen }),
   fetch: async (payload) => {

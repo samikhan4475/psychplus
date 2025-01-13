@@ -1,7 +1,6 @@
 import { Flex } from '@radix-ui/themes'
 import { PatientNotificationsView } from './patient-notifications-view/patient-notifications-view'
 
-
 interface PatientNotificationsViewProps {
   patientId: string
 }

@@ -14,14 +14,14 @@ const getAuthorName = (note: PatientNotes) => {
     ? `${createdByFullName} (as the scribe)`
     : ''
 
-  const coSignedText = coSignedDate ? `, ${cosignedByUserName}` : ''
-  const signedName = signedDate ? `, ${signedByUserName}` : ''
+  const coSignedText = coSignedDate ? `, ${cosignedByUserName || ''}` : ''
+  const signedName = signedDate ? `, ${signedByUserName || ''}` : ''
   const pendingText = signedDate ? '' : '"Pending"'
 
   if (createdBy === signedByUserId) {
     return coSignedDate
-      ? `${signedByUserName}${coSignedText}`
-      : signedByUserName
+      ? `${signedByUserName || ''}${coSignedText}`
+      : signedByUserName || ''
   }
 
   if (signedDate) {

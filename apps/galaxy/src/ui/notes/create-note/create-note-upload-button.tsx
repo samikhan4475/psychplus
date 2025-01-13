@@ -19,7 +19,7 @@ const CreateNoteUploadButton = () => {
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFiles = event.target.files
     if (!selectedFiles || selectedFiles.length === 0) {
-      toast.error('No files selected.')
+      toast.error('No File(s) Uploaded Successfully')
       return
     }
 
@@ -49,7 +49,7 @@ const CreateNoteUploadButton = () => {
     form.setValue('file', [...existingFiles, ...newFiles], {
       shouldDirty: true,
     })
-    toast.success('Files selected successfully!')
+    toast.success('File(s) Uploaded Successfully')
 
     event.target.value = ''
   }

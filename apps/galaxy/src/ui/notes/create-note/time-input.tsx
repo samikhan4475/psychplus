@@ -14,10 +14,11 @@ const TimeInput = () => {
 
   return (
     <FormFieldContainer>
-      <FormFieldLabel className="text-[12px] leading-[16px]">
+      <FormFieldLabel className="text-[12px] leading-[16px]" required>
         Time
       </FormFieldLabel>
       <TextField.Root
+        required
         type="time"
         size="1"
         {...form.register('time')}

@@ -1,9 +1,11 @@
 'use client'
 
-import { useState } from 'react'
 import { Flex, Select } from '@radix-ui/themes'
+import { useFormContext } from 'react-hook-form'
 import { Cosigner } from '@/types'
 import { getPatientFullName } from '@/utils'
+import { SchemaType } from '../create-note/create-note-form'
+import { filterDefaultCosigner } from '../create-note/utils'
 
 interface NotesCosignerDropdownProps {
   cosigners?: Cosigner[]
@@ -16,15 +18,17 @@ const NotesCosignerDropdown = ({
   setField,
   placeholder = 'Cosigners',
 }: NotesCosignerDropdownProps) => {
-  const [selectedOption, setSelectedOption] = useState('')
-  setField(selectedOption)
+  const form = useFormContext<SchemaType>()
+  const value = form.watch('cosigner')
+  const cosignerId = filterDefaultCosigner(cosigners || [])?.userId || ''
 
   return (
     <Flex direction="column" gap="1">
       <Select.Root
         size="1"
-        onValueChange={setSelectedOption}
-        value={selectedOption}
+        onValueChange={setField}
+        value={value}
+        defaultValue={(cosignerId as string) || ''}
       >
         <Select.Trigger className="h-6 w-full" placeholder={placeholder} />
         <Select.Content

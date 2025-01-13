@@ -2,6 +2,7 @@
 
 import { useEffect } from 'react'
 import { Flex } from '@radix-ui/themes'
+import { Appointment } from '@/types'
 import { AlertDialog } from './alert-dialog'
 import { CreateNoteView } from './create-note'
 import { NotesHeader } from './notes-header'
@@ -10,9 +11,10 @@ import { useStore } from './store'
 
 interface NotesViewProps {
   patientId: string
+  noteAppointment: Appointment
 }
 
-const NotesWidget = ({ patientId }: NotesViewProps) => {
+const NotesWidget = ({ patientId, noteAppointment }: NotesViewProps) => {
   const {
     appointment,
     selectedRow,
@@ -100,7 +102,7 @@ const NotesWidget = ({ patientId }: NotesViewProps) => {
   return (
     <Flex direction="column" width="100%" px="1">
       {isCreateNoteView ? (
-        <CreateNoteView />
+        <CreateNoteView noteAppointment={noteAppointment} />
       ) : (
         <>
           <NotesHeader />

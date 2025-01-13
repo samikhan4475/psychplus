@@ -4,7 +4,7 @@ import { PropsWithChildren } from 'react'
 import { Flex, Heading, Separator } from '@radix-ui/themes'
 
 interface BlockContainerProps extends PropsWithChildren {
-  heading: string
+  heading?: string
   subHeading?: string
   separator?: boolean
 }
@@ -12,7 +12,7 @@ const BlockContainer = ({
   heading,
   subHeading,
   children,
-  separator=true
+  separator = true,
 }: BlockContainerProps) => {
   return (
     <>
@@ -25,7 +25,9 @@ const BlockContainer = ({
         )}
         {children}
       </Flex>
-      {separator && <Separator orientation="horizontal" className="my-2 w-full" />}
+      {separator && (
+        <Separator orientation="horizontal" className="my-2 w-full" />
+      )}
     </>
   )
 }

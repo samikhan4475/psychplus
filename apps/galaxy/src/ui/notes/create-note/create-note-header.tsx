@@ -10,7 +10,7 @@ import { SaveButton } from './save-button'
 
 const secondaryButtonClasses = 'shadow-2 h-6 text-black'
 
-const CreateNoteHeader = () => {
+const CreateNoteHeader = ({ id }: { id: string }) => {
   const { setIsCreateNoteView, setSelectedRow } = useStore((state) => ({
     setIsCreateNoteView: state.setIsCreateNoteView,
     setSelectedRow: state.setSelectedRow,
@@ -42,7 +42,7 @@ const CreateNoteHeader = () => {
         </Text>
       </Flex>
       <Flex className="gap-x-2 text-[20px]" align="center">
-        <CreateNotePrintButton />
+        <CreateNotePrintButton id={id} />
         <CreateNoteClearButton />
         <CreateNoteUploadButton />
         <SaveButton />

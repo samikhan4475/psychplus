@@ -36,6 +36,7 @@ interface PatientNotes {
   signedByUserName: number
   serviceOffered: string
   visitTypeCode: string
+  noteTypeCode?: string
   notePositionCode: string
 }
 
@@ -52,7 +53,7 @@ type PayloadType = {
 interface NoteObject {
   patientId: string
   appointmentId: string | null
-  signedByUserId: string
+  signedByUserId?: string
   noteTypeCode: string
   noteTitleCode?: string
   coSignedByUserId?: string

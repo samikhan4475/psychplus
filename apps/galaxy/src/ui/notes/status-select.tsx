@@ -14,7 +14,9 @@ const options = [
 const StatusSelect = ({ disabled = false }: { disabled?: boolean }) => {
   return (
     <Flex direction="column" className={'w-full gap-0.5'}>
-      <FormFieldLabel className="text-1 leading-[16px]">Status</FormFieldLabel>
+      <FormFieldLabel className="text-1 leading-[16px]">
+        Note Status
+      </FormFieldLabel>
       <SelectInput
         field="status"
         placeholder="Select"

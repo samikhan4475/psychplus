@@ -1,5 +1,7 @@
 'use client'
 
+import { Box } from '@radix-ui/themes'
+import { Clock3 } from 'lucide-react'
 import {
   DateInput,
   DateSegment,
@@ -8,7 +10,11 @@ import {
   TimeValue,
 } from 'react-aria-components'
 import { Controller, useFormContext } from 'react-hook-form'
-import { FormFieldContainer, FormFieldLabel } from '@/components'
+import {
+  FormFieldContainer,
+  FormFieldError,
+  FormFieldLabel,
+} from '@/components'
 import { cn } from '@/utils'
 
 interface TimeInputProps<T extends TimeValue> extends TimeFieldProps<T> {
@@ -18,6 +24,8 @@ interface TimeInputProps<T extends TimeValue> extends TimeFieldProps<T> {
   aria_lable?: string
   className?: string
   dateInputClass?: string
+  showIcon?: boolean
+  showError?: boolean
 }
 
 const TimeInput = <T extends TimeValue>({
@@ -27,12 +35,14 @@ const TimeInput = <T extends TimeValue>({
   aria_lable,
   className,
   dateInputClass,
+  showIcon = false,
+  showError = false,
   ...props
 }: TimeInputProps<T>) => {
   const form = useFormContext()
   return (
     <FormFieldContainer className={cn('w-full', className)}>
-      {label && <FormFieldLabel>{label}</FormFieldLabel>}
+      {label && <FormFieldLabel required={isRequired}>{label}</FormFieldLabel>}
       <Controller
         control={form.control}
         name={field}
@@ -55,17 +65,25 @@ const TimeInput = <T extends TimeValue>({
             aria-label={aria_lable ?? 'time input field'}
             {...props}
           >
-            <DateInput
-              className={cn(
-                'border-pp-gray-2 flex h-7 w-full items-center overflow-hidden rounded-1 border px-1 data-[disabled]:cursor-not-allowed data-[disabled]:bg-gray-3',
-                dateInputClass,
+            <Box className="relative flex w-full items-center">
+              <DateInput
+                className={cn(
+                  'border-pp-gray-2 flex h-7 w-full items-center overflow-hidden rounded-1 border px-1 data-[disabled]:cursor-not-allowed data-[disabled]:bg-gray-3',
+                  dateInputClass,
+                )}
+              >
+                {(segment) => <DateSegment segment={segment} />}
+              </DateInput>
+              {showIcon && (
+                <Box className="pointer-events-none absolute right-2">
+                  <Clock3 height="14px" width="14px" color="gray" />
+                </Box>
               )}
-            >
-              {(segment) => <DateSegment segment={segment} />}
-            </DateInput>
+            </Box>
           </TimeField>
         )}
       />
+      {showError && <FormFieldError name={field} />}
     </FormFieldContainer>
   )
 }

@@ -1,7 +1,7 @@
 'use client'
 
 import { CalendarDate } from '@internationalized/date'
-import { Box, Text } from '@radix-ui/themes'
+import { Box, Flex, Text } from '@radix-ui/themes'
 import {
   Calendar as CalendarIcon,
   ChevronLeftIcon,
@@ -56,11 +56,16 @@ const DatePickerInput = <T extends DateValue>({
 
   return (
     <FormFieldContainer className={cn('w-full gap-0.5', className)}>
-      {label && (
-        <Text as="label" size="1" weight="medium">
-          {label}
-        </Text>
-      )}
+      <Flex>
+        {label && (
+          <Text as="label" size="1" weight="medium">
+            {label}
+          </Text>
+        )}
+        {isRequired && (
+          <Text className="ml-[2px] text-[11px] text-red-9">*</Text>
+        )}
+      </Flex>
       <Controller
         control={form.control}
         name={field}

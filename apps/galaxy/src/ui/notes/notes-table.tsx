@@ -15,11 +15,12 @@ import { CODESETS } from '@/constants'
 import { useCodesetCodes, useHasPermission } from '@/hooks'
 import { SharedCode } from '@/types'
 import { formatDateTime } from '@/utils'
+import { getDisplayByValue } from './create-note/utils'
 import { useStore } from './store'
 import { PatientNotes } from './types'
 import { getAuthorName } from './utils'
 
-const getColumns = (codes: SharedCode[]) => {
+const getColumns = (codes: SharedCode[], noteTypeCodes: SharedCode[]) => {
   const getStateDisplayName = (codes: SharedCode[], state: string) => {
     return codes.find((element) => element.value === state)?.display
   }
@@ -54,6 +55,18 @@ const getColumns = (codes: SharedCode[]) => {
       cell: ({ row }) => (
         <Box className="truncate">
           <TextCell>{getAuthorName(row.original)} </TextCell>
+        </Box>
+      ),
+    },
+    {
+      id: 'noteType',
+      accessorKey: 'noteType',
+      header: () => <ColumnHeader label="Note Type" />,
+      cell: ({ row }) => (
+        <Box className="truncate">
+          <TextCell>
+            {getDisplayByValue(row.original?.noteTypeCode || '', noteTypeCodes)}
+          </TextCell>
         </Box>
       ),
     },
@@ -168,6 +181,7 @@ const NotesTable = ({ patientId }: { patientId: string }) => {
   }))
 
   const codes = useCodesetCodes(CODESETS.UsStates)
+  const noteTypeCodes = useCodesetCodes(CODESETS.NoteType)
 
   useEffect(() => {
     fetch({ patientId })
@@ -197,7 +211,7 @@ const NotesTable = ({ patientId }: { patientId: string }) => {
   return (
     <ScrollArea className="pb-2">
       <DataTable
-        columns={getColumns(codes)}
+        columns={getColumns(codes, noteTypeCodes)}
         data={data?.notes || []}
         onRowClick={onRowSelect}
       />

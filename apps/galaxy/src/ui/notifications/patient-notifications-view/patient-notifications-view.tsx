@@ -4,7 +4,6 @@ import { WidgetContainer } from '@/components'
 import { NotificationFilterForm } from './notification-filter-form'
 import { PatientNotificationsTable } from './patient-notifications-table'
 
-
 interface PatientReferralsWidgetProps {
   patientId: string
 }

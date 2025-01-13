@@ -12,7 +12,14 @@ import {
   getProvidersOptionsAction,
   getUsStatesOptionsAction,
 } from '@/actions'
-import { DatePickerInput, FormContainer, MultiSelectField } from '@/components'
+import {
+  CodesetSelect,
+  DatePickerInput,
+  FormContainer,
+  FormFieldError,
+  FormFieldLabel,
+  MultiSelectField,
+} from '@/components'
 import { CODE_NOT_SET, CODESETS } from '@/constants'
 import { useCodesetOptions, useHasPermission } from '@/hooks'
 import { SelectOptionType } from '@/types'
@@ -23,6 +30,7 @@ import {
 } from '../patient-lookup/actions'
 import { getVisitTypesAction } from '../scheduling-history/actions'
 import { ClearButton } from './clear-button'
+import { NoteTypeDropdown } from './note-detail-note-type-dropdown'
 import { StatusSelect } from './status-select'
 import { useStore } from './store'
 
@@ -43,6 +51,7 @@ const schema = z.object({
   state: emptyOrStringArray,
   practice: emptyOrStringArray,
   organization: emptyOrStringArray,
+  noteType: z.string().optional().default(''),
   status: z.string().optional().default(''),
 })
 
@@ -79,6 +88,7 @@ const LeftPanelFilters = ({ patientId }: { patientId: string }) => {
       state: [],
       practice: [],
       organization: [],
+      noteType: '',
       status: '',
     },
   })
@@ -115,6 +125,7 @@ const LeftPanelFilters = ({ patientId }: { patientId: string }) => {
       practiceIds: data.practice,
       organizationIds: data.organization,
       status: data.status,
+      noteTypeCode: data.noteType,
     }
     const now = new Date()
     const dateFrom = new Date(payload.dateFrom)
@@ -189,6 +200,9 @@ const LeftPanelFilters = ({ patientId }: { patientId: string }) => {
             aria-label="date-to-filter-input"
             isDisabled={loading}
           />
+        </Box>
+        <Box className="col-span-3">
+          <NoteTypeDropdown />
         </Box>
         <Box className="col-span-2">
           <MultiSelectField

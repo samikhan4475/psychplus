@@ -47,7 +47,13 @@ const NoteDetail = ({ children }: PropsWithChildren) => {
   }
 
   return (
-    <Flex gap="1" p="2" className="bg-white px-2 py-3" direction="column">
+    <Flex
+      gap="1"
+      p="2"
+      className="bg-white px-2 py-3"
+      direction="column"
+      id="note-view-print"
+    >
       {groupedData['CreateNote']?.length > 0 ? (
         <CreateNoteDetailView data={groupedData['CreateNote']} />
       ) : (
@@ -76,12 +82,15 @@ const NoteDetail = ({ children }: PropsWithChildren) => {
         )
       )}
       <Box>{children}</Box>
-      <Heading size={'3'} my={'1'} weight={'medium'}>
-        E-Signed by: {providerName}, {provider?.legalName?.honors ?? ''} at{' '}
-        {noteDetail?.[0]?.signedDate
-          ? getSlashedDateString(noteDetail?.[0]?.signedDate)
-          : ''}
-      </Heading>
+
+      {noteDetail?.[0]?.signedDate && (
+        <Heading size={'3'} my={'1'} weight={'medium'}>
+          E-Signed by: {providerName}, {provider?.legalName?.honors ?? ''} at{' '}
+          {noteDetail?.[0]?.signedDate
+            ? getSlashedDateString(noteDetail?.[0]?.signedDate)
+            : ''}
+        </Heading>
+      )}
     </Flex>
   )
 }

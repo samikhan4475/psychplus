@@ -6,20 +6,33 @@ import { Button } from '@radix-ui/themes'
 import { PenLineIcon } from 'lucide-react'
 import { useFormContext } from 'react-hook-form'
 import toast from 'react-hot-toast'
+import { useStore } from '../store'
 import { fileUploadAction } from './action/file-upload-action'
 import { getSignNoteAction } from './action/sign-note-action'
 import { formatDateTime } from './utils'
 
 const CreateNoteSignButton = () => {
   const [loading, setLoading] = useState(false)
-  const { getValues } = useFormContext()
+  const { getValues, trigger } = useFormContext()
   const searchParams = useSearchParams()
   const patientId = useParams().id as string
   const appointmentId = searchParams.get('id')
+  const form = useFormContext()
+  const { setIsCosigner } = useStore((state) => ({
+    setIsCosigner: state.setIsCosigner,
+  }))
 
   const handleSign = async () => {
-    setLoading(true)
     const data = getValues()
+    setLoading(true)
+    const isValid = await trigger()
+    if (!isValid || !data.cosigner) {
+      if (!data.cosigner) {
+        setIsCosigner(true)
+      }
+      setLoading(false)
+      return
+    }
 
     const formattedDateTime = formatDateTime(data)
 
@@ -70,6 +83,7 @@ const CreateNoteSignButton = () => {
       }
 
       toast.success('Signed')
+      form?.reset()
       setLoading(false)
     } else {
       toast.error('Failed to signed')
