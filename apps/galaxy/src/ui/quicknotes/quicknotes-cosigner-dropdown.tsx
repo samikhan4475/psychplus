@@ -1,35 +1,49 @@
 'use client'
 
+import { useEffect } from 'react'
 import { Flex, Select, Text, Tooltip } from '@radix-ui/themes'
 import { Cosigner } from '@/types'
-import { getPatientFullName } from '@/utils'
+import { filterDefaultCosigner, getPatientFullName } from '@/utils'
 import { useStore } from './quicknotes-store'
 
 interface QuickNotesCosignerDropdownProps {
   cosigners: Cosigner[]
 }
+
 const QuickNotesCosignerDropdown = ({
   cosigners,
 }: QuickNotesCosignerDropdownProps) => {
-  const { signOptions, setSignOptions } = useStore((state) => ({
-    signOptions: state.signOptions,
-    setSignOptions: state.setSignOptions,
-  }))
+  const uniqueCosigners = Array.from(
+    new Map(cosigners.map((item) => [item.id, item])).values(),
+  )
+  const { signOptions, setSignOptions, setCosignerLabel } = useStore(
+    (state) => ({
+      signOptions: state.signOptions,
+      setSignOptions: state.setSignOptions,
+      setCosignerLabel: state.setCosignerLabel,
+    }),
+  )
 
   const getLabel = (value: string) => {
-    const selectedOption = cosigners.find(
+    const selectedOption = uniqueCosigners.find(
       (option) => option?.id === Number(value),
     )
     return selectedOption?.legalName
       ? getPatientFullName(selectedOption?.legalName)
-      : undefined
+      : ''
   }
 
-  const cosignerId = signOptions.coSignedByUserId
-    ? signOptions.cosSignedByUserId
-    : String(cosigners[0]?.id)
+  const cosignerId =
+    signOptions.coSignedByUserId !== undefined &&
+    signOptions.coSignedByUserId !== null
+      ? String(signOptions.coSignedByUserId)
+      : String(filterDefaultCosigner(uniqueCosigners || [])?.id || '')
 
   const label = getLabel(cosignerId)
+
+  useEffect(() => {
+    setCosignerLabel(label || '')
+  }, [label, setCosignerLabel])
 
   return (
     <Flex direction="column" gap="1">
@@ -39,8 +53,8 @@ const QuickNotesCosignerDropdown = ({
       <Select.Root
         size="1"
         onValueChange={(value) => setSignOptions({ coSignedByUserId: value })}
-        value={signOptions.coSignedByUserId}
-        defaultValue={String(cosigners[0]?.id)}
+        value={cosignerId || ''}
+        defaultValue={cosignerId || ''}
       >
         {label ? (
           <Tooltip content={label}>
@@ -53,7 +67,7 @@ const QuickNotesCosignerDropdown = ({
           highContrast
           onCloseAutoFocus={(e) => e.preventDefault()}
         >
-          {cosigners?.map(({ id, legalName }, ind) => (
+          {uniqueCosigners?.map(({ id, legalName }, ind) => (
             <Select.Item key={`${id}-${ind}`} value={String(id)}>
               {getPatientFullName(legalName)}
             </Select.Item>

@@ -2,6 +2,7 @@
 
 import { Appointment, PatientProfile } from '@/types'
 import { getPatientFullName, getSlashedDateString, getTimeLabel } from '@/utils'
+import { useStore } from '../quicknotes-store'
 import { BlockContainer, LabelAndValue } from './shared'
 
 interface Props {
@@ -10,6 +11,9 @@ interface Props {
 }
 
 const PsychiatricEvaluation = ({ appointment, patient }: Props) => {
+  const { cosignerLabel } = useStore((state) => ({
+    cosignerLabel: state.cosignerLabel,
+  }))
   return (
     <BlockContainer heading={appointment.visitNoteTitle ?? ''}>
       <LabelAndValue label="Title:" value={appointment.visitNoteTitle} />
@@ -42,7 +46,7 @@ const PsychiatricEvaluation = ({ appointment, patient }: Props) => {
           patient.dateOfBirth ? getSlashedDateString(patient.dateOfBirth) : ''
         }
       />
-      <LabelAndValue label="Cosigner:" value="John Smith, MD" />
+      <LabelAndValue label="Cosigner:" value={cosignerLabel ?? ''} />
       <LabelAndValue label="Visit #:" value={appointment.encounterNumber} />
     </BlockContainer>
   )

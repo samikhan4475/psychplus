@@ -29,6 +29,8 @@ interface Store {
   isErrorAlertOpen: boolean
   setErrorMessage: (value: string) => void
   setIsErrorAlertOpen: (value: boolean) => void
+  cosignerLabel?: string
+  setCosignerLabel: (value: string) => void
 }
 
 const useStore = create<Store>()((set, get) => ({
@@ -40,6 +42,8 @@ const useStore = create<Store>()((set, get) => ({
   setErrorMessage: (errorMessage) => set({ errorMessage }),
   setIsErrorAlertOpen: (isErrorAlertOpen) => set({ isErrorAlertOpen }),
   signOptions: { time: format(new Date(), 'HH:mm') },
+  cosignerLabel: '',
+  setCosignerLabel: (cosignerLabel) => set({ cosignerLabel }),
   setSignOptions: (option) =>
     set({ signOptions: { ...get().signOptions, ...option } }),
   toggleActualNoteView: () =>
@@ -82,7 +86,8 @@ const useStore = create<Store>()((set, get) => ({
       set({
         loading: false,
         isMarkedAsError: true,
-        errorMessage: "Primary note for this visit already exists, if you sign this note, it will mark the existing note as ERROR",
+        errorMessage:
+          'Primary note for this visit already exists, if you sign this note, it will mark the existing note as ERROR',
       })
       return
     }

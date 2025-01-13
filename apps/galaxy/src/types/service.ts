@@ -16,6 +16,7 @@ interface Cosigner {
   hasPhoto: boolean
   rating: number
   userId?: string
+  isDefaultCosigner?: boolean
 }
 
 interface ServiceUnit {

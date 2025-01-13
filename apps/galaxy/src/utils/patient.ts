@@ -1,5 +1,6 @@
 import type {
   ContactDetails,
+  Cosigner,
   Gender,
   GenderAbbreviation,
   Insurance,
@@ -24,6 +25,10 @@ const getPatientFirstName = (name: LegalName) => name?.firstName
 const getPatientLastName = (name: LegalName) => name?.lastName
 
 const getPatientMiddleName = (name: LegalName) => name.middleName
+
+const filterDefaultCosigner = (cosigners: Cosigner[]) => {
+  return cosigners.find((item) => item?.isDefaultCosigner === true)
+}
 
 const getPatientFullName = (name: LegalName) =>
   `${getPatientFirstName(name)} ${getPatientLastName(name)}`
@@ -192,4 +197,5 @@ export {
   getPatientState,
   getPatientInsuranceName,
   getPatientStreet,
+  filterDefaultCosigner,
 }
