@@ -91,7 +91,7 @@ const LockScreen = () => {
               highContrast
               radius="full"
             >
-              Login
+              Log in
             </FormSubmitButton>
           </FormContainer>
         </Flex>

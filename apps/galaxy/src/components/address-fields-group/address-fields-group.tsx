@@ -115,6 +115,7 @@ const AddressFieldsGroup = ({
           className={fieldClassName}
           labelClassName={fieldLabelClassName}
           fieldContainerClassName={fieldContainerClassName}
+          isZip
         />
       </Grid>
     </Flex>

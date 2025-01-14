@@ -99,7 +99,6 @@ const LoginPage = () => {
               <FormFieldContainer>
                 <PasswordInput field="password" label="Password" />
                 <Flex align="start">
-                  <FormFieldError name="password" />
                   <NextLink
                     href="/forgot-password"
                     prefetch={false}

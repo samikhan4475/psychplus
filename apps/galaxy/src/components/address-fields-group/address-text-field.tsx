@@ -17,6 +17,7 @@ interface AddressTextFieldProps
   placeholder?: string
   labelClassName?: string
   disabled?: boolean
+  isZip?: boolean
   fieldContainerClassName?: string
 }
 const AddressTextField = ({
@@ -27,6 +28,7 @@ const AddressTextField = ({
   placeholder,
   labelClassName,
   disabled,
+  isZip,
   fieldContainerClassName = 'flex-1',
   ...props
 }: AddressTextFieldProps) => {
