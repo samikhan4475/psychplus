@@ -324,7 +324,7 @@ interface ClaimUpdate {
   claimFrequencyCode?: string
   lastSeenDate?: DateValue | string
   patientName: string
-  patientAccountNumber: string
+  patientAccountNumber?: string
   patientGender: string
   patientDateOfBirth: string
   claimServiceLines: ClaimServiceLine[]
@@ -466,7 +466,7 @@ interface ClaimUpdateApiResponse {
   claimFrequencyCode?: string
   lastSeenDate?: string
   patientName: string
-  patientAccountNumber: string
+  patientAccountNumber?: string
   patientGender: string
   patientDateOfBirth: string
   claimServiceLines: ClaimServiceLineApiResponse[]

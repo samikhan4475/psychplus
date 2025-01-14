@@ -66,7 +66,6 @@ const ClaimDetailView = ({ claimId }: ClaimDetailViewProps) => {
     },
   })
   const { control } = form
-
   const { append } = useFieldArray({
     control,
     name: 'claimServiceLines',

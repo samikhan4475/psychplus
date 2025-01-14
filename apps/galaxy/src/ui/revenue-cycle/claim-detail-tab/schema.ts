@@ -188,7 +188,7 @@ const claimUpdateSchema = z
     claimFrequencyCode: z.string().optional(),
     lastSeenDate: z.custom<DateValue>().optional(),
     patientName: z.string(),
-    patientAccountNumber: z.string(),
+    patientAccountNumber: z.string().optional(),
     patientDateOfBirth: z.string(),
     patientGender: z.string(),
     claimInsurancePolicies: z.array(claimInsurancePoliciesSchema),
