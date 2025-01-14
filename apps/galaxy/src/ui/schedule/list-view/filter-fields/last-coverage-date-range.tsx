@@ -1,5 +1,6 @@
 'use client'
 
+import { CalendarDate } from '@internationalized/date'
 import { Flex } from '@radix-ui/themes'
 import { DatePickerInput } from '@/components'
 import { useFiltersContext } from '../../context'
@@ -14,7 +15,11 @@ const LastCoverageDateRange = () => {
     <Flex direction="column" gap="1">
       <FormFieldContainer>
         <FieldLabel>LCD</FieldLabel>
-        <DatePickerInput field="lastCoverageDateStart" showError={false} />
+        <DatePickerInput
+          field="lastCoverageDateStart"
+          showError={false}
+          minValue={new CalendarDate(2000, 1, 1)}
+        />
       </FormFieldContainer>
     </Flex>
   )

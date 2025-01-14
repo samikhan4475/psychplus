@@ -1,6 +1,7 @@
+import { CalendarDate } from '@internationalized/date'
 import { DateValue } from 'react-aria-components'
 import { z } from 'zod'
-import { INVALID_RANGE_ERROR } from '../constants'
+import { INVALID_RANGE_ERROR, OUT_OF_RANGE_ERROR } from '../constants'
 import { validateDate } from '../utils'
 
 const dateValidation = z.custom<DateValue>()
@@ -36,6 +37,15 @@ const calenderViewSchema = z
         message: INVALID_RANGE_ERROR,
         path: ['startingDate'],
       })
+    } else if (
+      startingDate &&
+      startingDate.compare(new CalendarDate(2000, 1, 1)) < 0
+    ) {
+      ctx.addIssue({
+        path: ['startingDate'],
+        message: OUT_OF_RANGE_ERROR,
+        code: z.ZodIssueCode.custom,
+      })
     }
 
     if (isEndDateValid < 0) {
@@ -43,6 +53,15 @@ const calenderViewSchema = z
         code: z.ZodIssueCode.custom,
         message: INVALID_RANGE_ERROR,
         path: ['endingDate'],
+      })
+    } else if (
+      endingDate &&
+      endingDate.compare(new CalendarDate(2000, 1, 1)) < 0
+    ) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ['endingDate'],
+        message: OUT_OF_RANGE_ERROR,
       })
     }
   })

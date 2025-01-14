@@ -71,6 +71,7 @@ const ServiceDropdown = () => {
           form.resetField('visitType')
           form.resetField('visitSequence')
           form.resetField('visitMedium')
+          form.resetField('duration')
         }}
       />
       <FormFieldError name={'service'} />

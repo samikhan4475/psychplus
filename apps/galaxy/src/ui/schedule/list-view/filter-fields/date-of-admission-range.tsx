@@ -1,9 +1,10 @@
 'use client'
 
+import { CalendarDate } from '@internationalized/date'
 import { Flex } from '@radix-ui/themes'
 import { DatePickerInput } from '@/components'
 import { useFiltersContext } from '../../context'
-import { DateRangeError, FieldLabel, FormFieldContainer } from '../../shared'
+import { FieldLabel, FormFieldContainer } from '../../shared'
 import { SchedulerFilters } from '../../types'
 
 const DateOfAdmissionRange = () => {
@@ -14,7 +15,11 @@ const DateOfAdmissionRange = () => {
     <Flex direction="column" gap="1">
       <FormFieldContainer>
         <FieldLabel>DOA</FieldLabel>
-        <DatePickerInput field="dateOfAdmissionStart" showError={false} />
+        <DatePickerInput
+          field="dateOfAdmissionStart"
+          showError={false}
+          minValue={new CalendarDate(2000, 1, 1)}
+        />
       </FormFieldContainer>
     </Flex>
   )

@@ -1,6 +1,7 @@
+import { CalendarDate } from '@internationalized/date'
 import { DateValue } from 'react-aria-components'
 import z from 'zod'
-import { INVALID_RANGE_ERROR } from '../constants'
+import { INVALID_RANGE_ERROR, OUT_OF_RANGE_ERROR } from '../constants'
 import { validateDate } from '../utils'
 
 const providerCodingViewSchema = z
@@ -92,19 +93,33 @@ const providerCodingViewSchema = z
       },
     ]
     startDateFields.forEach((field) => {
+      const value = data[field.name as keyof typeof data] as DateValue
       if (field.validity > 0) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
           message: INVALID_RANGE_ERROR,
           path: [field.name],
         })
+      } else if (value && value.compare(new CalendarDate(2000, 1, 1)) < 0) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: [field.name],
+          message: OUT_OF_RANGE_ERROR,
+        })
       }
     })
     endDateFields.forEach((field) => {
+      const value = data[field.name as keyof typeof data] as DateValue
       if (field.validity < 0) {
         ctx.addIssue({
-          code: z.ZodIssueCode.custom,
           message: INVALID_RANGE_ERROR,
+          code: z.ZodIssueCode.custom,
+          path: [field.name],
+        })
+      } else if (value && value.compare(new CalendarDate(2000, 1, 1)) < 0) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: OUT_OF_RANGE_ERROR,
           path: [field.name],
         })
       }

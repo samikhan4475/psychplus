@@ -129,6 +129,7 @@ const SCHEDULER_PAGE_SIZE_LIMIT = 20
 
 const INVALID_RANGE_ERROR = 'Invalid date range'
 
+const OUT_OF_RANGE_ERROR = 'Date must be after 1/1/2000'
 
 enum StatusCode {
   NoPermission = 406,
@@ -159,4 +160,5 @@ export {
   CLICK_DOLLAR_ICON,
   StatusCode,
   INVALID_RANGE_ERROR,
+  OUT_OF_RANGE_ERROR,
 }

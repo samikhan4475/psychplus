@@ -1,3 +1,5 @@
+import { DateValue, today } from '@internationalized/date'
+
 const calculateAge = (date?: string | Date) => {
   const today = new Date()
   const birthDate = new Date(date ?? '')
@@ -44,4 +46,11 @@ function generateTimeIntervals(): TimeInterval[] {
   return intervals
 }
 
-export { calculateAge, generateTimeIntervals }
+const isDatePriorTo30Days = (date: DateValue) => {
+  const currentDate = today('UTC')
+  const date30DaysAgo = currentDate.subtract({ days: 30 })
+  const isPrior30Days = date.compare(date30DaysAgo) <= 0
+  return isPrior30Days
+}
+
+export { calculateAge, generateTimeIntervals, isDatePriorTo30Days }

@@ -12,6 +12,7 @@ interface VisitType {
   typeOfVisit: string
   visitSequence: string
   visitMedium: string
+  visitDurations: number[]
 }
 
 export type { VisitType }

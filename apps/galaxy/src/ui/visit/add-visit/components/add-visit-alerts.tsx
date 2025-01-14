@@ -5,8 +5,6 @@ import { Button, Dialog, Flex, Text } from '@radix-ui/themes'
 import { TriangleAlert } from 'lucide-react'
 import { useFormContext } from 'react-hook-form'
 import { CloseDialogTrigger } from '@/components/close-dialog-trigger'
-import { useHasPermission } from '@/hooks'
-import { useStore as useGlobalStore } from '@/store'
 import { SchemaType } from '../schema'
 
 enum StatusCode {
@@ -28,21 +26,7 @@ const AddVisitAlert = ({
 }) => {
   const [currentMessageIndex, setCurrentMessageIndex] = useState(0)
   const form = useFormContext<SchemaType>()
-  const { staffId } = useGlobalStore((state) => state.user)
-  const overrideSelfSchedule = useHasPermission(
-    'overrideSelfSchedulePreference',
-  )
-  const overrideOtherProvidersSchedule = useHasPermission(
-    'overrideOtherProviderSchedulePreference',
-  )
-  const providerId = form.getValues('provider')
-  const hasPermissionToOverrideSelfSchedule =
-    String(staffId) === providerId && overrideSelfSchedule
-  const canOverrideProviderSchedule = hasPermissionToOverrideSelfSchedule
-    ? true
-    : !!overrideOtherProvidersSchedule
   const { message, statusCode } = alertInfo
-
   const isConfirmation = [
     StatusCode.OverridePermission,
     StatusCode.ProceedConfirmation,
@@ -85,16 +69,13 @@ const AddVisitAlert = ({
           <TriangleAlert className="min-w-6 text-pp-warning-border" size={24} />
           <Flex direction="column" gap="3" pt="1" className="pr-5">
             <Dialog.Title size="4" className="m-0 font-medium">
-              <Text size="4">
-                {currentMessage}
-              </Text>
+              <Text size="4">{currentMessage}</Text>
             </Dialog.Title>
             <Flex justify="start" width="100%" gap="2">
               {isConfirmation ? (
                 <>
                   <Button
                     className={`bg-pp-link-text text-white w-[166px] cursor-pointer`}
-                    disabled={!canOverrideProviderSchedule}
                     onClick={handleYesClick}
                   >
                     <Text size="2">Yes</Text>

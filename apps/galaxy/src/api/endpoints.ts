@@ -43,6 +43,7 @@ const STANDARD_CODESET_ENDPOINT = (
   `${API_URL}/api/codeset/authorities/${assigningAuthority}/codesets/${codeSystemName}`
 const METADATA_CODESET_ENDPOINT = (name: string) =>
   `${API_URL}/api/metadata/codesets/${name}`
+const GET_PROVIDER_SETTINGS_ENDPOINT = `${API_URL}/api/settings/actions/search`
 const GET_STAFF_ENDPOINT = `${API_URL}/api/staff/search?includeInactive=true`
 const GET_APPOINTMENT_COSIGNERS_ENDPOINT = (appointmentId: number) =>
   `${API_URL}/api/appointments/${appointmentId}?isIncludeCosigners=true`
@@ -608,6 +609,7 @@ export {
   SEND_POLICY_NOTICE_ENDPOINT,
   STANDARD_CODESET_ENDPOINT,
   METADATA_CODESET_ENDPOINT,
+  GET_PROVIDER_SETTINGS_ENDPOINT,
   GET_STAFF_ENDPOINT,
   GET_CLINICS_ENDPOINT,
   GET_STAFF,

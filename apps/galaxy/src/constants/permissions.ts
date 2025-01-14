@@ -142,6 +142,8 @@ const USER_PERMISSIONS = {
   createAddendumNotProviderNotesPage: 'createAddendumNotProviderNotesPage',
   removeCosignerButtonNotesPage: 'removeCosignerButtonNotesPage',
   search90DaysOldNotes: 'search90DaysOldNotes',
+  editVisitDuration: 'editVisitDuration',
+  addTheAdmitDateTimeUpTo_30DaysPriorFromTheCurrentDate: 'addTheAdmitDateTimeUpTo_30DaysPriorFromTheCurrentDate'
 }
 
 export { USER_PERMISSIONS }

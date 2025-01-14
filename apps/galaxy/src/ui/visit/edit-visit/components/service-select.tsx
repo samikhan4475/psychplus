@@ -68,6 +68,7 @@ const ServiceSelect = () => {
           form.resetField('visitType')
           form.resetField('visitSequence')
           form.resetField('visitMedium')
+          form.resetField('duration')
         }}
         disabled={!isServiceTimeDependent}
         loading={loading}

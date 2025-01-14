@@ -1,5 +1,6 @@
 'use client'
 
+import { CalendarDate } from '@internationalized/date'
 import { useFormContext } from 'react-hook-form'
 import { DatePickerInput } from '@/components'
 import { BookedAppointmentsSchemaType } from '../schema'
@@ -13,6 +14,7 @@ const StartDateInput = () => {
       <DatePickerInput
         field="startingDate"
         maxValue={form.watch('endingDate') ?? undefined}
+        minValue={new CalendarDate(2000, 1, 1)}
       />
     </FormFieldContainer>
   )

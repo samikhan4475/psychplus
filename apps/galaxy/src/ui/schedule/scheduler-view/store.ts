@@ -3,6 +3,7 @@ import { create } from 'zustand'
 import { AvailableSlotsParams } from '../types'
 import { searchAppointmentsAction } from './actions/search-appointments'
 import { AppointmentAvailability, AppointmentDate } from './types'
+import toast from 'react-hot-toast'
 
 interface Store {
   loading?: boolean
@@ -29,6 +30,7 @@ const useStore = create<Store>((set) => ({
     })
     const result = await searchAppointmentsAction(params ?? {})
     if (result.state === 'error') {
+      toast.error(result.error || 'Failed to retrieve available slots')
       return set({
         error: result.error,
         loading: false,

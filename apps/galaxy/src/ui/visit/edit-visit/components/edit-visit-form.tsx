@@ -11,7 +11,7 @@ import {
 } from '@/components'
 import { useHasPermission } from '@/hooks'
 import { Appointment, BookVisitPayload, State } from '@/types'
-import { getLocalCalendarDate } from '@/utils'
+import { getCalendarDate } from '@/utils'
 import { getUsStatesAction } from '../../actions'
 import { SAVE_APPOINTMENT } from '../../constants'
 import { convertToTimezone, sanitizeFormData } from '../../utils'
@@ -95,7 +95,7 @@ const EditVisitForm = ({
       visitType: visitDetails?.visitTypeCode,
       providerType: visitDetails?.providerType,
       dcDate: visitDetails?.dischargeDate
-        ? getLocalCalendarDate(visitDetails?.dischargeDate)
+        ? getCalendarDate(visitDetails?.dischargeDate)
         : undefined,
       dischargeDate: dischargeDate,
       dcLocation: visitDetails?.dischargeLocationName,
@@ -115,7 +115,7 @@ const EditVisitForm = ({
       legal: visitDetails?.legalStatus,
       insuranceAuthorizationNumber: visitDetails?.authorizationNumber,
       authDate: visitDetails?.authorizationDate
-        ? getLocalCalendarDate(visitDetails?.authorizationDate)
+        ? getCalendarDate(visitDetails?.authorizationDate)
         : undefined,
       unit: visitDetails?.unitResource?.unit,
       room: visitDetails?.roomResource?.room,
@@ -125,7 +125,7 @@ const EditVisitForm = ({
       visitFrequency: '1',
       paymentResponsibility: visitDetails?.paymentResponsibility,
       lastCoverageDate: visitDetails?.lastCoverageDate
-        ? getLocalCalendarDate(visitDetails?.lastCoverageDate)
+        ? getCalendarDate(visitDetails?.lastCoverageDate)
         : undefined,
       isPrimaryProviderType: visitDetails?.isPrimaryProviderType,
       isOverridePermissionProvided: false,

@@ -90,9 +90,7 @@ const UntimedVisitForm = ({
         />
       </Box>
       <Box className="col-span-4">
-        <LastCoverageDate
-          isPsychiatristVisitTypeSequence={isPsychiatristVisitTypeSequence}
-        />
+        <LastCoverageDate />
       </Box>
       <Box className="col-span-3">
         <PaymentResponsibilitySelect

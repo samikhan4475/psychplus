@@ -1,3 +1,4 @@
+import { CalendarDate } from '@internationalized/date'
 import { useFormContext } from 'react-hook-form'
 import { DatePickerInput } from '@/components'
 import { FieldLabel, FormFieldContainer } from '../../shared'
@@ -12,6 +13,7 @@ const StartDateInput = () => {
         field="startingDate"
         dateInputClass="h-6"
         maxValue={form.watch('endingDate')}
+        minValue={new CalendarDate(2000, 1, 1)}
       />
     </FormFieldContainer>
   )

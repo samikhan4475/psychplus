@@ -22,14 +22,22 @@ import { StateDropdown } from './state-select'
 import './style.css'
 import { getLocations } from '@/actions/get-locations'
 import { useHasPermission } from '@/hooks'
+import { useStore as useGlobalStore } from '@/store'
 import { useRefetchAppointments } from '@/ui/schedule/hooks'
 import { useRefetchAppointments as useRefetchProviderCodingAppointments } from '@/ui/schedule/provider-coding/hooks'
 import { useStore as useSchedulerStore } from '@/ui/schedule/store'
 import { TabValue } from '@/ui/schedule/types'
-import { ADD_VACATION, SAVE_APPOINTMENT } from '../../constants'
+import {
+  ADD_VACATION,
+  ADMIT_DATE_30_DAYS_PRIOR_POLICY,
+  OVERRIDE_OTHER_PROVIDER_SCHEDULE_PREFERENCE,
+  OVERRIDE_SELF_SCHEDULE_PREFERENCE,
+  SAVE_APPOINTMENT,
+} from '../../constants'
 import { convertToTimezone, sanitizeFormData } from '../../utils'
 import { transformRequestPayload } from '../transform'
 import { SlotDetails } from '../types'
+import { isDatePriorTo30Days } from '../util'
 import TimedVisitForm from './timed/timed-visit-form'
 import { NonTimedVisitForm } from './untimed/non-timed-visit-form'
 
@@ -57,11 +65,21 @@ const AddVisitForm = ({
 }: AddVisitFormProps) => {
   const [newPatient, setNewPatient] = useState<NewPatient>()
   const [states, setStates] = useState<State[]>([])
+  const { staffId } = useGlobalStore((state) => state.user)
   const hasPermissionToClickSaveButton = useHasPermission(
     'clickSaveButtonOnAddVisitPopUp',
   )
+  const hasPermissionToAddVisit30DaysPriorFromTheCurrentDate = useHasPermission(
+    'addTheAdmitDateTimeUpTo_30DaysPriorFromTheCurrentDate',
+  )
   const hasPermissionToClickAddVacation = useHasPermission(
     'clickAddVacationButtonOnAddVisitPopUp',
+  )
+  const overrideSelfSchedule = useHasPermission(
+    'overrideSelfSchedulePreference',
+  )
+  const overrideOtherProvidersSchedule = useHasPermission(
+    'overrideOtherProviderSchedulePreference',
   )
   const { activeTab } = useSchedulerStore((state) => ({
     activeTab: state.activeTab,
@@ -96,7 +114,7 @@ const AddVisitForm = ({
       dcDate: undefined,
       dcLocation: undefined,
       edDischarge: 'No',
-      duration: slotDetails?.duration ?? '20',
+      duration: slotDetails?.duration ?? '',
       insuranceAuthorizationNumber: '',
       frequency: '0',
       admittingProvider: '',
@@ -152,6 +170,43 @@ const AddVisitForm = ({
   }
 
   const onCreateNew: SubmitHandler<SchemaType> = (data) => {
+    if (
+      !data.isServiceTimeDependent &&
+      data.dateOfAdmission &&
+      isDatePriorTo30Days(data.dateOfAdmission) &&
+      hasPermissionToAddVisit30DaysPriorFromTheCurrentDate &&
+      data.visitSequence === 'Initial'
+    ) {
+      setIsAlertOpen(true)
+      setAlertInfo({
+        message: ADMIT_DATE_30_DAYS_PRIOR_POLICY,
+        statusCode: 0,
+      })
+      return
+    }
+    if (
+      data.isServiceTimeDependent &&
+      (data.isOverridePermissionProvided || data.isProceedPermissionProvided)
+    ) {
+      const providerId = form.getValues('provider')
+      const isSelfSchedule = String(staffId) === providerId
+      if (isSelfSchedule && !overrideSelfSchedule) {
+        setIsAlertOpen(true)
+        setAlertInfo({
+          message: OVERRIDE_SELF_SCHEDULE_PREFERENCE,
+          statusCode: 0,
+        })
+        return
+      }
+      if (!isSelfSchedule && !overrideOtherProvidersSchedule) {
+        setIsAlertOpen(true)
+        setAlertInfo({
+          message: OVERRIDE_OTHER_PROVIDER_SCHEDULE_PREFERENCE,
+          statusCode: 0,
+        })
+        return
+      }
+    }
     if (!hasPermissionToClickSaveButton) {
       setIsAlertOpen(true)
       setAlertInfo({
@@ -211,8 +266,8 @@ const AddVisitForm = ({
         onClose={() => setIsAlertOpen(false)}
         onConfirm={(data) => {
           setIsAlertOpen(false)
-          onCreateNew(data)
           setAlertInfo({ message: '', statusCode: 0 })
+          onCreateNew(data)
         }}
       />
       <Grid columns="12" className="min-w-[648px] gap-3">

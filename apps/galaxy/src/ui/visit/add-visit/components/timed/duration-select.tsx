@@ -1,35 +1,102 @@
 'use client'
 
+import { useEffect, useState } from 'react'
 import { useFormContext, useWatch } from 'react-hook-form'
+import toast from 'react-hot-toast'
 import {
   FormFieldContainer,
   FormFieldError,
   FormFieldLabel,
   SelectInput,
 } from '@/components'
+import { useHasPermission } from '@/hooks'
+import { SelectOptionType } from '@/types'
+import { PermissionAlert } from '@/ui/schedule/shared'
+import { getPrescriberSettings } from '@/ui/visit/actions/get-prescriber-settings'
+import { EDIT_DURATION } from '@/ui/visit/constants'
 import { SchemaType } from '../../schema'
+import { useAddVisitStore } from '../../store'
 
 const DurationDropdown = () => {
   const form = useFormContext<SchemaType>()
-  const visitTime = useWatch({
-    control: form.control,
-    name: 'visitTime',
-  })
+  const [isOpen, setIsOpen] = useState<boolean>(false)
+  const canEditDuration = useHasPermission('editVisitDuration')
+  const [loading, setLoading] = useState<boolean>(false)
+  const [options, setOptions] = useState<SelectOptionType[]>([])
+  const { visitTypes } = useAddVisitStore()
+  const [visitTime, provider, selectedVisitType, visitSequence, visitMedium] =
+    useWatch({
+      control: form.control,
+      name: [
+        'visitTime',
+        'provider',
+        'visitType',
+        'visitSequence',
+        'visitMedium',
+      ],
+    })
 
-  const duration = [
-    { label: '20', value: '20' },
-    { label: '40', value: '40' },
-    { label: '60', value: '60' },
-  ]
+  useEffect(() => {
+    if (!provider || !selectedVisitType || !visitSequence || !visitMedium)
+      return
+
+    const visitType = visitTypes.find(
+      (type) => type.encouterType === selectedVisitType,
+    )
+    setLoading(true)
+    const name = `${visitType?.visitTypeCode}_${visitSequence}_${visitMedium}`
+    getPrescriberSettings({ name, userId: provider ? +provider : 0 }).then(
+      (res) => {
+        setLoading(false)
+        if (res.state === 'error') {
+          return toast.error(res.error || 'Failed to fetch prescriber settings')
+        }
+        if (res.data?.[0]?.content)
+          form.setValue('duration', res.data?.[0]?.content)
+      },
+    )
+  }, [provider, selectedVisitType, visitSequence, visitMedium, visitTypes])
+
+  useEffect(() => {
+    if (!selectedVisitType) {
+      if (options.length) setOptions([])
+      return
+    }
+    const visitType = visitTypes.find(
+      (type) => type.encouterType === selectedVisitType,
+    )
+    if (visitType?.visitDurations) {
+      const durationOptions: SelectOptionType[] = visitType.visitDurations.map(
+        (value) => ({
+          label: `${value}`,
+          value: `${value}`,
+          disabled: false,
+        }),
+      )
+      setOptions(durationOptions)
+    }
+  }, [selectedVisitType])
 
   return (
     <FormFieldContainer className="flex-1">
+      <PermissionAlert
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+        message={EDIT_DURATION}
+      />
       <FormFieldLabel required>Duration</FormFieldLabel>
       <SelectInput
         field="duration"
-        options={duration}
+        options={options}
         buttonClassName="h-6 w-full"
         disabled={!visitTime}
+        loading={loading}
+        onValueChange={(value) => {
+          if (canEditDuration) {
+            return form.setValue('duration', value)
+          }
+          setIsOpen(true)
+        }}
       />
       <FormFieldError name="duration" />
     </FormFieldContainer>
