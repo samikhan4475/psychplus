@@ -10,7 +10,7 @@ jobs:
   build-configuration:
     uses: ./.github/workflows/subtaskEnvSettingsOde.yml
     with:
-      pull_request_id: ${{ github.event.pull_request.number }}
+      pull_request_id: ${{ github.event.inputs.pr_number }}
 
   configure_ode_namespace:
     if: ${{ github.event_name == 'workflow_dispatch' }}
@@ -18,7 +18,7 @@ jobs:
     uses: ./.github/workflows/subtaskSetupNamespaceOde.yml
     with:
       environment: development
-      pull_request_id: ${{ github.event.pull_request.number }}
+      pull_request_id: ${{ github.event.inputs.pr_number }}
       env_namespace: ${{ needs.build-configuration.outputs.env_namespace }}
     secrets: inherit
 
@@ -83,7 +83,7 @@ jobs:
       helm_app_version: ${{ needs.build-configuration.outputs.build_full_version }}
       image_tag: ${{ needs.build-configuration.outputs.image_tag }}
       env_namespace: ${{ needs.build-configuration.outputs.env_namespace }}
-      ingress_url: ui-pr-${{ github.event.pull_request.number }}.ode.psychplus.dev
+      ingress_url: ui-pr-${{ github.event.inputs.pr_number }}.ode.psychplus.dev
       autoscaling_min_replicas: 1
       autoscaling_max_replicas: 1
     secrets: inherit
@@ -99,7 +99,7 @@ jobs:
       helm_app_version: ${{ needs.build-configuration.outputs.build_full_version }}
       image_tag: ${{ needs.build-configuration.outputs.image_tag }}
       env_namespace: ${{ needs.build-configuration.outputs.env_namespace }}
-      ingress_url: ui-pr-${{ github.event.pull_request.number }}.ode.psychplus.dev
+      ingress_url: ui-pr-${{ github.event.inputs.pr_number }}.ode.psychplus.dev
       autoscaling_min_replicas: 1
       autoscaling_max_replicas: 1
     secrets: inherit
@@ -115,7 +115,7 @@ jobs:
       helm_app_version: ${{ needs.build-configuration.outputs.build_full_version }}
       image_tag: ${{ needs.build-configuration.outputs.image_tag }}
       env_namespace: ${{ needs.build-configuration.outputs.env_namespace }}
-      ingress_url: ui-pr-${{ github.event.pull_request.number }}.ode.psychplus.dev
+      ingress_url: ui-pr-${{ github.event.inputs.pr_number }}.ode.psychplus.dev
       autoscaling_min_replicas: 1
       autoscaling_max_replicas: 1
     secrets: inherit
@@ -131,7 +131,7 @@ jobs:
       helm_app_version: ${{ needs.build-configuration.outputs.build_full_version }}
       image_tag: ${{ needs.build-configuration.outputs.image_tag }}
       env_namespace: ${{ needs.build-configuration.outputs.env_namespace }}
-      ingress_url: ui-pr-${{ github.event.pull_request.number }}.ode.psychplus.dev
+      ingress_url: ui-pr-${{ github.event.inputs.pr_number }}.ode.psychplus.dev
       autoscaling_min_replicas: 1
       autoscaling_max_replicas: 1
     secrets: inherit
@@ -147,7 +147,7 @@ jobs:
       helm_app_version: ${{ needs.build-configuration.outputs.build_full_version }}
       image_tag: ${{ needs.build-configuration.outputs.image_tag }}
       env_namespace: ${{ needs.build-configuration.outputs.env_namespace }}
-      ingress_url: ui-pr-${{ github.event.pull_request.number }}.ode.psychplus.dev
+      ingress_url: ui-pr-${{ github.event.inputs.pr_number }}.ode.psychplus.dev
       autoscaling_min_replicas: 1
       autoscaling_max_replicas: 1
     secrets: inherit
