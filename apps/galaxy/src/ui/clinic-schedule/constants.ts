@@ -1,7 +1,7 @@
 enum ClinicScheduleTabs {
   ClinicTime = 'clinic-time',
   VacationTime = 'vacation-time',
-  ForwardingInbox = 'forwarding-inbox',
+  ForwardingInbox = 'forwarding-message',
 }
 
 export { ClinicScheduleTabs }

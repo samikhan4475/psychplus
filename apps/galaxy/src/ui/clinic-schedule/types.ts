@@ -16,4 +16,15 @@ interface ClinicTime {
     status: string
 }
 
-export type { ClinicTime }
+interface ForwardingMessage {
+    staffName:string
+    type:string
+    role:string
+    startDate: string
+    endDate: string
+    days: number
+    tasks:string[]
+    status:string
+}
+
+export type { ClinicTime, ForwardingMessage }
