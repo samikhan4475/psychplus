@@ -1,14 +1,18 @@
 import { Flex, Text } from '@radix-ui/themes'
 import { WidgetAddButton } from '@/components'
+import { FeatureFlag } from '@/types/feature-flag'
+import { AddAllergy } from './add-allergy'
 import { AddAllergyButton } from './add-allergy-button'
 import { PatientAllergiesPrintButton } from './patient-allergies-print-button'
 
 interface PhysicalExamHeaderProps {
   scriptSureAppUrl: string
+  featureFlags?: FeatureFlag[]
 }
 
 const PatientAllergiesHeader = ({
   scriptSureAppUrl,
+  featureFlags,
 }: PhysicalExamHeaderProps) => {
   return (
     <Flex
@@ -21,8 +25,12 @@ const PatientAllergiesHeader = ({
       </Text>
       <Flex className="gap-x-2 text-[20px]" align="center">
         <PatientAllergiesPrintButton />
-        <WidgetAddButton title="Add Allergies">
-          <AddAllergyButton scriptSureAppUrl={scriptSureAppUrl} />
+        <WidgetAddButton title="Add Allergies" className="max-w-[45vw]">
+          {featureFlags?.[0]?.environments?.[0]?.isEnabledDefault ? (
+            <AddAllergy />
+          ) : (
+            <AddAllergyButton scriptSureAppUrl={scriptSureAppUrl} />
+          )}
         </WidgetAddButton>
       </Flex>
     </Flex>

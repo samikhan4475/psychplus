@@ -1,6 +1,8 @@
 'use client'
 
 import { WidgetAddButton, WidgetContainer } from '@/components'
+import { FeatureFlag } from '@/types/feature-flag'
+import { AddAllergy } from './add-allergy'
 import { AddAllergyButton } from './add-allergy-button'
 import { PatientAllergiesFilterForm } from './patient-allergies-filter-form'
 import { PatientAllergiesHeader } from './patient-allergies-header'
@@ -11,18 +13,23 @@ interface PatientAllergiesWidgetProps {
   patientId: string
   isPatientAllergiesTab?: boolean
   scriptSureAppUrl: string
+  featureFlags?: FeatureFlag[]
 }
 
 const PatientAllergiesWidget = ({
   patientId,
   isPatientAllergiesTab = false,
   scriptSureAppUrl,
+  featureFlags,
 }: PatientAllergiesWidgetProps) => {
   return (
     <StoreProvider patientId={patientId}>
       {isPatientAllergiesTab && (
         <>
-          <PatientAllergiesHeader scriptSureAppUrl={scriptSureAppUrl} />
+          <PatientAllergiesHeader
+            scriptSureAppUrl={scriptSureAppUrl}
+            featureFlags={featureFlags}
+          />
           <PatientAllergiesFilterForm patientId={patientId} />
         </>
       )}
@@ -31,11 +38,13 @@ const PatientAllergiesWidget = ({
         title={isPatientAllergiesTab ? '' : 'Allergies'}
         headerRight={
           !isPatientAllergiesTab && (
-            <>
-              <WidgetAddButton title="Add Allergies">
+            <WidgetAddButton title="Add Allergies" className="max-w-[45vw]">
+              {featureFlags?.[0]?.environments?.[0]?.isEnabledDefault ? (
+                <AddAllergy />
+              ) : (
                 <AddAllergyButton scriptSureAppUrl={scriptSureAppUrl} />
-              </WidgetAddButton>
-            </>
+              )}
+            </WidgetAddButton>
           )
         }
       >

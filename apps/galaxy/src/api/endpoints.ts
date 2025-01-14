@@ -12,6 +12,7 @@ const FACILITY_ADMISSION_ID_ENDPOINT = `${API_URL}/api/facilityadmissionids`
 const LOCATION_SERVICES_ENDPOINT = `${API_URL}/api/locationservices/actions/search`
 const LOCATION_ENDPOINT = `${API_URL}/api/locations/actions/search?orderBy=createdOn%20desc`
 const VISIT_TYPES_ENDPOINT = `${API_URL}/api/visittypes/actions/search`
+const FEATURE_FLAGS = `${API_URL}/api/featureflags/actions/search`
 const STATES_BY_COUNTRY_ENDPOINT = (countryCode: string) =>
   `${API_URL}/api/countries/${countryCode}/states`
 const ADD_VACATION = (staffId: string) =>
@@ -595,6 +596,7 @@ export {
   LOCATION_SERVICES_ENDPOINT,
   LOCATION_ENDPOINT,
   VISIT_TYPES_ENDPOINT,
+  FEATURE_FLAGS,
   STATES_BY_COUNTRY_ENDPOINT,
   ADD_VACATION,
   GET_PATIENT_NOTIFICATIONS_ENDPOINT,

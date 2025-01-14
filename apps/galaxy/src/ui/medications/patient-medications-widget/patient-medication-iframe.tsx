@@ -6,7 +6,7 @@ interface PatientMedicationIframe {
 
 const PatientMedicationIframe = ({ iframeSrc }: PatientMedicationIframe) => {
   return (
-    <iframe src={iframeSrc} title="Add Allergy" className="h-[85vh] w-full" />
+    <iframe src={iframeSrc} title="Add Allergies" className="h-[85vh] w-full" />
   )
 }
 export { PatientMedicationIframe }

@@ -3,12 +3,18 @@
 import { PropsWithChildren } from 'react'
 import { Cross2Icon, PlusIcon } from '@radix-ui/react-icons'
 import { Button, Dialog, Flex, Text } from '@radix-ui/themes'
+import { cn } from '@/utils'
 
 type FillOutButtonProps = PropsWithChildren<{
   title?: string
+  className?: string
 }>
 
-const WidgetAddButton = ({ title, children }: FillOutButtonProps) => {
+const WidgetAddButton = ({
+  title,
+  children,
+  className,
+}: FillOutButtonProps) => {
   return (
     <Dialog.Root>
       <Dialog.Trigger>
@@ -20,7 +26,12 @@ const WidgetAddButton = ({ title, children }: FillOutButtonProps) => {
         </Button>
       </Dialog.Trigger>
 
-      <Dialog.Content className="relative max-h-[80vh] max-w-[70vw] overflow-y-scroll">
+      <Dialog.Content
+        className={cn(
+          'relative max-h-[80vh] max-w-[70vw] overflow-y-scroll',
+          className,
+        )}
+      >
         <Flex justify="between" align="center" mb="2">
           <Dialog.Title
             size="5"
