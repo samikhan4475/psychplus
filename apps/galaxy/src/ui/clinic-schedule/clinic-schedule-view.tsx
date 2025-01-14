@@ -6,13 +6,18 @@ import { TabsTrigger } from '@/components'
 import { ClinicTimeTab } from './clinic-time-tab'
 import { ClinicScheduleTabs } from './constants'
 import { useStore } from './store'
+import { VacationTimeTab } from './vacation-time-tab'
 
 const ClinicScheduleView = () => {
   const { activeTab, setActiveTab } = useStore()
 
   return (
-    <Tabs.Root value={activeTab} onValueChange={setActiveTab} className='flex-1'>
-      <Tabs.List className='mb-[3px]'>
+    <Tabs.Root
+      value={activeTab}
+      onValueChange={setActiveTab}
+      className="flex-1"
+    >
+      <Tabs.List className="mb-[3px]">
         <TabsTrigger value={ClinicScheduleTabs.ClinicTime}>
           Clinic Time
         </TabsTrigger>
@@ -27,7 +32,7 @@ const ClinicScheduleView = () => {
         <ClinicTimeTab />
       </TabsContent>
       <TabsContent value={ClinicScheduleTabs.VacationTime}>
-        Vacation Time
+        <VacationTimeTab />
       </TabsContent>
       <TabsContent value={ClinicScheduleTabs.ForwardingInbox}>
         Forwarding Inbox
@@ -46,7 +51,7 @@ const TabsContent = ({
     <Tabs.Content
       value={value}
       forceMount={visitedTabs.has(value) ? true : undefined}
-      className="hidden data-[state=active]:flex flex-1"
+      className="hidden flex-1 data-[state=active]:flex"
     >
       {children}
     </Tabs.Content>
