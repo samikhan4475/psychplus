@@ -44,6 +44,10 @@ const LocationDropdown = () => {
         disabled={!stateIds.length}
         buttonClassName="h-6 w-full max-w-[10px] min-w-full truncate"
         className="h-full flex-1"
+        onValueChange={(value) => {
+          form.setValue('locationId', value, { shouldDirty: true })
+          form.setValue('serviceIds', [])
+        }}
       />
     </FormFieldContainer>
   )

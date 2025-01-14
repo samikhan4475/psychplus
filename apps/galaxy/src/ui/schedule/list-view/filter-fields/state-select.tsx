@@ -34,9 +34,11 @@ const StateSelect = () => {
         options={stateOptions}
         className="flex-1"
         menuClassName="w-[155px]"
-        onChange={(values) =>
+        onChange={(values) => {
           form.setValue('stateIds', values, { shouldDirty: true })
-        }
+          form.resetField('locationId')
+          form.setValue('serviceIds', [])
+        }}
       />
     </FormFieldContainer>
   )
