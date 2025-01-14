@@ -1,7 +1,10 @@
-name: on Pull Request Workflow
+name: Manually Deploy On-Demand Environment Against PR Number
 on:
-  pull_request:
-    types: [opened, reopened, synchronize, ready_for_review]
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: 'Pull Request Number'
+        required: true
 
 jobs:
   build-configuration:
@@ -10,6 +13,7 @@ jobs:
       pull_request_id: ${{ github.event.pull_request.number }}
 
   configure_ode_namespace:
+    if: ${{ github.event_name == 'workflow_dispatch' }}
     needs: [build-configuration]
     uses: ./.github/workflows/subtaskSetupNamespaceOde.yml
     with:
@@ -19,6 +23,7 @@ jobs:
     secrets: inherit
 
   build_push_platform:
+    if: ${{ github.event_name == 'workflow_dispatch' }}
     needs: [build-configuration, configure_ode_namespace]
     uses: ./.github/workflows/subtaskBuildPushImage.yml
     with:
@@ -28,6 +33,7 @@ jobs:
     secrets: inherit
 
   build_push_clinical:
+    if: ${{ github.event_name == 'workflow_dispatch' }}
     needs: [build-configuration, configure_ode_namespace]
     uses: ./.github/workflows/subtaskBuildPushImage.yml
     with:
@@ -37,6 +43,7 @@ jobs:
     secrets: inherit
 
   build_push_patient:
+    if: ${{ github.event_name == 'workflow_dispatch' }}
     needs: [build-configuration, configure_ode_namespace]
     uses: ./.github/workflows/subtaskBuildPushImage.yml
     with:
@@ -46,6 +53,7 @@ jobs:
     secrets: inherit
 
   build_push_galaxy:
+    if: ${{ github.event_name == 'workflow_dispatch' }}
     needs: [build-configuration, configure_ode_namespace]
     uses: ./.github/workflows/subtaskBuildPushImage.yml
     with:
@@ -55,6 +63,7 @@ jobs:
     secrets: inherit
 
   build_push_revcycle:
+    if: ${{ github.event_name == 'workflow_dispatch' }}
     needs: [build-configuration, configure_ode_namespace]
     uses: ./.github/workflows/subtaskBuildPushImage.yml
     with:
@@ -64,6 +73,7 @@ jobs:
     secrets: inherit
 
   deploy_platform:
+    if: ${{ github.event_name == 'workflow_dispatch' }}
     needs: [build-configuration, build_push_platform]
     uses: ./.github/workflows/subtaskDeployHelmChart.yml
     with:
@@ -79,6 +89,7 @@ jobs:
     secrets: inherit
 
   deploy_clinical:
+    if: ${{ github.event_name == 'workflow_dispatch' }}
     needs: [build-configuration, build_push_clinical]
     uses: ./.github/workflows/subtaskDeployHelmChart.yml
     with:
@@ -94,6 +105,7 @@ jobs:
     secrets: inherit
 
   deploy_patient:
+    if: ${{ github.event_name == 'workflow_dispatch' }}
     needs: [build-configuration, build_push_patient]
     uses: ./.github/workflows/subtaskDeployHelmChart.yml
     with:
@@ -109,6 +121,7 @@ jobs:
     secrets: inherit
 
   deploy_galaxy:
+    if: ${{ github.event_name == 'workflow_dispatch' }}
     needs: [build-configuration, build_push_galaxy]
     uses: ./.github/workflows/subtaskDeployHelmChart.yml
     with:
@@ -124,6 +137,7 @@ jobs:
     secrets: inherit
 
   deploy_revcycle:
+    if: ${{ github.event_name == 'workflow_dispatch' }}
     needs: [build-configuration, build_push_revcycle]
     uses: ./.github/workflows/subtaskDeployHelmChart.yml
     with:
