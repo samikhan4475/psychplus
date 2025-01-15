@@ -1,12 +1,10 @@
-import { Suspense } from 'react'
+'use client'
+
 import { Flex, Separator, Text } from '@radix-ui/themes'
-import { LoadingPlaceholder } from '@/components'
-import { Appointment, StaffResource } from '@/types'
-import { getAuthCookies } from '@/utils/auth'
+import { Appointment } from '@/types'
 import { AlertDialog } from './alert-dialog'
 import { QuickNotesClearButton } from './quicknotes-clear-button'
 import { QuickNotesCopyMyPreviousButton } from './quicknotes-copy-my-previous-button'
-import { QuickNotesCopyPreviousButton } from './quicknotes-copy-previous-button'
 import { QuickNotesCosignerDropdown } from './quicknotes-cosigner-dropdown'
 import { QuickNotesDateInput } from './quicknotes-date-input'
 import { QuickNotesDuration } from './quicknotes-duration'
@@ -20,81 +18,59 @@ import { QuickNotesTimeDropdown } from './quicknotes-time-dropdown'
 import { QuickNotesTitleDropdown } from './quicknotes-title-dropdown'
 import { QuickNotesUploadButton } from './quicknotes-upload-button'
 import { QuickNotesViewNoteButton } from './quicknotes-view-note-button'
+import { QuickNotesVisitMediumDropdown } from './quicknotes-visit-medium-dropdown'
 import { QuickNotesVisitNumberDropdown } from './quicknotes-visit-number-dropdown'
 import { QuickNotesVisitSequenceDropdown } from './quicknotes-visit-sequence-dropdown'
 import { QuickNotesVisitTypeDropdown } from './quicknotes-visit-type-dropdown'
-import { QuickNotesVisitMediumDropdown } from './quicknotes-visit-medium-dropdown'
 
 interface QuickNotesHeaderProps {
   appointment: Appointment
-  appointmentProvider?: StaffResource
 }
 
-const QuickNotesHeader = async ({
-  appointment,
-  appointmentProvider,
-}: QuickNotesHeaderProps) => {
-  const auth = getAuthCookies()
+const QuickNotesHeader = ({ appointment }: QuickNotesHeaderProps) => {
   return (
-    <Suspense
-      fallback={
-        <Flex className="bg-white h-[146px] border-b border-b-gray-5">
-          <LoadingPlaceholder />
-        </Flex>
-      }
+    <Flex
+      direction="column"
+      mb="1"
+      className="bg-white z-10 shadow-1"
+      position="sticky"
+      top="0"
     >
-      <Flex
-        direction="column"
-        mb="1"
-        className="bg-white z-10 shadow-1"
-        position="sticky"
-        top="0"
-      >
-        <Flex align="center" justify="between" wrap="wrap" p="2">
-          <Text size="4" weight="medium">
-            Quick Notes
-          </Text>
-          <Flex gap="2" wrap="wrap">
-            <QuickNotesViewNoteButton />
-            <QuickNotesCopyPreviousButton />
-            <QuickNotesCopyMyPreviousButton appointment={appointment} />
-            <QuickNotesClearButton />
-            <QuickNotesSaveButton />
-            <QuickNotesUploadButton />
-            <QuickNotesSignButton
-              appointment={appointment}
-              auth={auth}
-              appointmentProvider={appointmentProvider}
-            />
-          </Flex>
-        </Flex>
-        <Separator className="w-full" />
-        <Flex align="center" gap="2" wrap="wrap" p="2">
-          <QuickNotesTitleDropdown title={appointment.visitNoteTitle} />
-          <QuickNotesVisitTypeDropdown visitType={appointment.visitType} />
-          <QuickNotesVisitMediumDropdown visitMedium={appointment.type} />
-          <QuickNotesVisitSequenceDropdown
-            visitSequence={appointment.visitSequence}
-          />
-          <QuickNotesProviderTypeDropdown
-            providerType={appointment.providerType}
-          />
-          <QuickNotesProviderDropdown provider={appointment.providerName} />
-          <QuickNotesCosignerDropdown
-            cosigners={appointment?.cosigners ?? []}
-          />
-          <QuickNotesLocationDropdown location={appointment.locationName} />
-          <QuickNotesServiceDropdown service={appointment.service} />
-          <QuickNotesDateInput />
-          <QuickNotesTimeDropdown />
-          <QuickNotesDuration duration={appointment.duration} />
-          <QuickNotesVisitNumberDropdown
-            visitNo={appointment.encounterNumber}
-          />
-          <AlertDialog />
+      <Flex align="center" justify="between" wrap="wrap" p="2">
+        <Text size="4" weight="medium">
+          Quick Notes
+        </Text>
+        <Flex gap="2" wrap="wrap">
+          <QuickNotesViewNoteButton />
+          <QuickNotesCopyMyPreviousButton appointment={appointment} />
+          <QuickNotesClearButton />
+          <QuickNotesSaveButton />
+          <QuickNotesUploadButton />
+          <QuickNotesSignButton appointment={appointment} />
         </Flex>
       </Flex>
-    </Suspense>
+      <Separator className="w-full" />
+      <Flex align="center" gap="2" wrap="wrap" p="2">
+        <QuickNotesTitleDropdown title={appointment.visitNoteTitle} />
+        <QuickNotesVisitTypeDropdown visitType={appointment.visitType} />
+        <QuickNotesVisitSequenceDropdown
+          visitSequence={appointment.visitSequence}
+        />
+        <QuickNotesProviderTypeDropdown
+          providerType={appointment.providerType}
+        />
+        <QuickNotesVisitMediumDropdown visitMedium={appointment.type} />
+        <QuickNotesProviderDropdown provider={appointment.providerName} />
+        <QuickNotesCosignerDropdown cosigners={appointment?.cosigners ?? []} />
+        <QuickNotesLocationDropdown location={appointment.locationName} />
+        <QuickNotesServiceDropdown service={appointment.service} />
+        <QuickNotesDateInput />
+        <QuickNotesTimeDropdown />
+        <QuickNotesDuration duration={appointment.duration} />
+        <QuickNotesVisitNumberDropdown visitNo={appointment.encounterNumber} />
+        <AlertDialog />
+      </Flex>
+    </Flex>
   )
 }
 

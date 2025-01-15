@@ -2,7 +2,7 @@ import { createContext } from 'react'
 import { createStore as zustandCreateStore } from 'zustand'
 import { Sort } from '@/types'
 import { getNewSortDir } from '@/utils'
-import { getPatientAllergiesAction } from '../actions'
+import { getPatientAllergiesAction } from '../client-actions'
 import type { AllergiesSearchParams, AllergyDataResponse } from '../types'
 
 interface StoreInit {

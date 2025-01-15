@@ -1,5 +1,5 @@
 import { Flex, Text } from '@radix-ui/themes'
-import { getPatientProfile } from '@/api'
+import { PatientProfile } from '@/types'
 import { searchPharmaciesAction } from '../pharmacy/actions'
 import {
   getInsuranceInfoAction,
@@ -19,19 +19,18 @@ import { VitalsInfoSection } from './vitals-info-section'
 
 interface PatientBannerProps {
   patientId: string
+  user: PatientProfile
 }
 
-const PatientBanner = async ({ patientId }: PatientBannerProps) => {
+const PatientBanner = async ({ patientId, user }: PatientBannerProps) => {
   try {
     const [
-      profileResponse,
       vitalsResponse,
       insuranceResponse,
       careTeamResponse,
       pcpResponse,
       pharmacyResponse,
     ] = await Promise.all([
-      getPatientProfile(patientId),
       getPatientVitalsAction(patientId),
       getInsuranceInfoAction(patientId),
       getPatientCareTeam(patientId),
@@ -40,7 +39,6 @@ const PatientBanner = async ({ patientId }: PatientBannerProps) => {
     ])
 
     if (
-      profileResponse.state === 'error' ||
       vitalsResponse.state === 'error' ||
       insuranceResponse.state === 'error' ||
       careTeamResponse.state === 'error' ||
@@ -50,7 +48,6 @@ const PatientBanner = async ({ patientId }: PatientBannerProps) => {
       return <Text>Failed to load patient data.</Text>
     }
 
-    const user = profileResponse.data
     const vitals = vitalsResponse.data[vitalsResponse.data.length - 1]
     const insurance =
       insuranceResponse.data[insuranceResponse.data.length - 1]

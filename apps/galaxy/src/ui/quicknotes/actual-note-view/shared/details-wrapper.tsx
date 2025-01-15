@@ -1,9 +1,8 @@
 'use client'
 
-import { PropsWithChildren, useCallback, useEffect } from 'react'
+import { PropsWithChildren, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { QuickNoteSectionName } from '../../constants'
-import { useStore } from '../../quicknotes-store'
 import { useWidgetSaveListener } from '../hooks'
 
 type Props = {
@@ -14,17 +13,11 @@ const ActualNoteDetailsWrapper = ({
   sectionName,
   children,
 }: PropsWithChildren<Props>) => {
-  const showActualNoteView = useStore((state) => state.showActualNoteView)
-
   const router = useRouter()
 
   const refetch = useCallback(async () => {
-    router.refresh()
+    // router.refresh()
   }, [router])
-
-  useEffect(() => {
-    refetch()
-  }, [showActualNoteView, refetch])
 
   useWidgetSaveListener(refetch, sectionName)
 

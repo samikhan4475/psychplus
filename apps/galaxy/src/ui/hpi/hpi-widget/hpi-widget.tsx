@@ -26,10 +26,11 @@ import { transformOut } from './data'
 import { useHpiWidgetForm } from './hpi-widget-form'
 import { HpiWidgetHeader } from './hpi-widget-header'
 import { type HpiWidgetSchemaType } from './hpi-widget-schema'
+import { getInitialValues } from './utils'
 
 interface HpiWidgetProps {
   patientId: string
-  initialValue: HpiWidgetSchemaType
+  initialValue?: HpiWidgetSchemaType
   isHpiHeader?: boolean
 }
 
@@ -38,7 +39,7 @@ const HpiWidget = ({
   initialValue,
   isHpiHeader,
 }: HpiWidgetProps) => {
-  const form = useHpiWidgetForm(initialValue)
+  const form = useHpiWidgetForm(initialValue ?? getInitialValues())
 
   return (
     <FormProvider {...form}>

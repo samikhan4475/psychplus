@@ -1,9 +1,7 @@
 'use server'
 
-import { revalidateTag } from 'next/cache'
 import * as api from '@/api'
 import { PatientReferral } from '@/types'
-import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 
 const updatePatientReferralAction = async (
   referral: PatientReferral,
@@ -18,7 +16,6 @@ const updatePatientReferralAction = async (
       error: response.error,
     }
   }
-  revalidateTag(QuickNoteSectionName.QuicknoteSectionReferrals)
   return {
     state: 'success',
     data: response.data,

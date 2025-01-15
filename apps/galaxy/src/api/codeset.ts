@@ -1,7 +1,7 @@
 import { Codeset, CodesetCache, MetadataCodeset } from '@/types'
 import * as api from './api'
 import {
-  METADATA_CODESET_ENDPOINT,
+  METADATA_CODESET_ALL_ENDPOINT,
   STANDARD_CODESET_ENDPOINT,
 } from './endpoints'
 
@@ -9,13 +9,9 @@ const CODESET_CACHE_SECONDS = 60 * 60
 
 const getCodesets = async (names: string[]): Promise<CodesetCache> => {
   const standardCodesetNames: string[] = []
-  const metadataCodesetNames: string[] = []
-
   names.forEach((name) => {
     if (name.includes('.')) {
       standardCodesetNames.push(name)
-    } else {
-      metadataCodesetNames.push(name)
     }
   })
 
@@ -32,17 +28,11 @@ const getCodesets = async (names: string[]): Promise<CodesetCache> => {
     }),
   )
 
-  const metadataCodesetPromises = Promise.all(
-    metadataCodesetNames.map((name) => {
-      return api.GET<MetadataCodeset>(METADATA_CODESET_ENDPOINT(name), {
-        next: { revalidate: CODESET_CACHE_SECONDS },
-      })
-    }),
-  )
-
   const [standardCodesetResults, metadataCodesetResults] = await Promise.all([
     standardCodesetPromises,
-    metadataCodesetPromises,
+    api.GET<MetadataCodeset[]>(METADATA_CODESET_ALL_ENDPOINT, {
+      next: { revalidate: CODESET_CACHE_SECONDS },
+    }),
   ])
 
   const codesetCache: CodesetCache = {}
@@ -67,15 +57,14 @@ const getCodesets = async (names: string[]): Promise<CodesetCache> => {
     }
   })
 
-  metadataCodesetResults.forEach((result) => {
-    if (result.state === 'error') {
-      throw new Error(result.error)
-    }
-
-    codesetCache[result.data.code] = {
-      name: result.data.code,
-      display: result.data.display,
-      codes: result.data.codes.map((code) => ({
+  if (metadataCodesetResults.state === 'error') {
+    throw new Error(metadataCodesetResults.error)
+  }
+  metadataCodesetResults?.data?.map((result) => {
+    codesetCache[result.code] = {
+      name: result.code,
+      display: result.display,
+      codes: result?.codes?.map((code) => ({
         value: code.code,
         display: code.display,
         groupingCode: code.groupingCode,

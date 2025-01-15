@@ -2,14 +2,13 @@
 
 import { Button, Text } from '@radix-ui/themes'
 import { EyeIcon, EyeOffIcon } from 'lucide-react'
-import { useStore } from './quicknotes-store'
+import { useStore } from './store'
 
 const QuickNotesViewNoteButton = () => {
   const { toggleActualNoteView, showActualNoteView } = useStore((state) => ({
     toggleActualNoteView: state.toggleActualNoteView,
     showActualNoteView: state.showActualNoteView,
   }))
-
   return (
     <Button
       onClick={toggleActualNoteView}

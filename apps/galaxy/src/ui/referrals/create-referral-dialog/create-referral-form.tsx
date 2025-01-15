@@ -8,7 +8,9 @@ import toast from 'react-hot-toast'
 import { z } from 'zod'
 import { FormContainer, FormError } from '@/components'
 import { StaffResource } from '@/types'
-import { sanitizeFormData } from '@/utils'
+import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
+import { useQuickNoteUpdate } from '@/ui/quicknotes/hooks'
+import { sanitizeFormData, sendEvent } from '@/utils'
 import { DEFAULT_REFERRAL_SERVICE_STATUS } from '../patient-referrals-widget/constants'
 import { isPrescriber } from '../patient-referrals-widget/utils'
 import { createPatientReferralAction } from './actions'
@@ -58,6 +60,8 @@ const CreateReferralForm = ({
   appointmentId,
   handleCloseDialog,
 }: CreateReferralFormProps) => {
+  const { isQuickNoteView } = useQuickNoteUpdate()
+
   const form = useForm<SchemaType>({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -117,6 +121,12 @@ const CreateReferralForm = ({
     }
     toast.success('Created successfully!')
     onClose?.()
+    if (isQuickNoteView) {
+      sendEvent({
+        widgetId: QuickNoteSectionName.QuicknoteSectionReferrals,
+        eventType: 'widget:save',
+      })
+    }
     handleCloseDialog()
   }
 

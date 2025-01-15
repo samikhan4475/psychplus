@@ -3,7 +3,10 @@ import toast from 'react-hot-toast'
 import { createStore as zustandCreateStore } from 'zustand'
 import { SelectOptionType, Sort, StaffResource } from '@/types'
 import { getNewSortDir } from '@/utils'
-import { getStaffOptionsAction, searchPatientReferralsAction } from '../actions'
+import {
+  getStaffOptionsAction,
+  searchPatientReferralsAction,
+} from '../client-actions'
 import type {
   GetPatientReferralsResponse,
   PatientReferral,

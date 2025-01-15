@@ -1,17 +1,16 @@
 'use client'
 
-import { useParams, useRouter } from 'next/navigation'
+import { useParams } from 'next/navigation'
 import { Button } from '@radix-ui/themes'
 import { useStore } from '@/ui/diagnosis/store'
+import { useStore as quicknoteStore } from '@/ui/quicknotes/store'
 
 const DiagnosisSaveButton = () => {
   const patientId = useParams().id as string
   const { saveWorkingDiagnosis } = useStore()
-  const router = useRouter()
-
+  const setWidgetsData = quicknoteStore((state) => state.setWidgetsData)
   const handleSaveDiagnosis = () => {
-    saveWorkingDiagnosis(patientId)
-    router.refresh()
+    saveWorkingDiagnosis(patientId, setWidgetsData)
   }
   return (
     <Button

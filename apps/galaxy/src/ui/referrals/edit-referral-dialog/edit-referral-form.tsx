@@ -9,6 +9,9 @@ import { z } from 'zod'
 import { FormContainer, FormError } from '@/components'
 import { CODE_NOT_SET } from '@/constants'
 import { PatientReferral } from '@/types'
+import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
+import { useQuickNoteUpdate } from '@/ui/quicknotes/hooks'
+import { sendEvent } from '@/utils'
 import { updatePatientReferralAction } from '../actions'
 import { CommentsInput } from './comments-input'
 import { ContactStatusSelector } from './contact-status-selector'
@@ -48,6 +51,7 @@ const EditReferralForm = ({
   onClose,
   handleCloseDialog,
 }: EditReferralFormProps) => {
+  const { isQuickNoteView } = useQuickNoteUpdate()
   const form = useForm<SchemaType>({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -75,6 +79,12 @@ const EditReferralForm = ({
     toast.success('Updated successfully!')
     onClose?.()
     handleCloseDialog()
+    if (isQuickNoteView) {
+      sendEvent({
+        widgetId: QuickNoteSectionName.QuicknoteSectionReferrals,
+        eventType: 'widget:save',
+      })
+    }
   }
 
   return (

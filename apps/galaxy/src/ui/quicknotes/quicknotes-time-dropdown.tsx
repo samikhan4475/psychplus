@@ -2,11 +2,10 @@
 
 import { Flex, Select, Text } from '@radix-ui/themes'
 import { generateTimeOptions } from '@/utils'
-import { useStore } from './quicknotes-store'
+import { useStore } from './store'
 
 const QuickNotesTimeDropdown = () => {
   const options = generateTimeOptions()
-
   const { setSignOptions, signOptions } = useStore((state) => ({
     setSignOptions: state.setSignOptions,
     signOptions: state.signOptions,

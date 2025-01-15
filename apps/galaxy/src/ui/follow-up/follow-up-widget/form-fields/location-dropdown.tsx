@@ -1,7 +1,7 @@
 'use client'
 
 import { AsyncSelect, FormFieldContainer, FormFieldLabel } from '@/components'
-import { getClinicsOptionsAction } from '@/ui/schedule/actions'
+import { getClinicsOptionsAction } from '@/ui/schedule/client-actions'
 
 const LocationDropdown = ({ disabled }: { disabled: boolean }) => {
   return (

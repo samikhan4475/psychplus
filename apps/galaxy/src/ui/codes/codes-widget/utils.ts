@@ -1,5 +1,5 @@
 import toast from 'react-hot-toast'
-import { saveWidgetAction } from '@/actions/save-widget'
+import { saveWidgetClientAction } from '@/actions'
 import {
   Appointment,
   CodesWidgetItem,
@@ -7,7 +7,6 @@ import {
   CptCodeKeys,
   SelectOptionType,
 } from '@/types'
-import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { convertToTimeZoneTime } from '@/utils'
 import { CodesWidgetSchemaType } from './codes-widget-schema'
 import { transformOut } from './data'
@@ -132,19 +131,12 @@ const handleDefaultSubmission = async (
     patientId,
     data: transformOut(patientId, appointmentId)(values),
   }
-  const result = await saveWidgetAction(payload)
+
+  const result = await saveWidgetClientAction(payload)
   if (result.state === 'error') {
     toast.error('Failed to submit!')
     return
   }
-  window.postMessage(
-    {
-      type: 'widget:save',
-      widgetId: QuickNoteSectionName.QuicknoteSectionCodes,
-      success: true,
-    },
-    '*',
-  )
   return values
 }
 

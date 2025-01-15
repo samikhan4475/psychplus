@@ -50,10 +50,10 @@ const VitalsWidgetLoader = async ({
   return (
     <QuicknotesVitalsWidget
       patientId={patientId}
-      quicknoteData={result.data.filter((vital) =>
-        vitalsIds.includes(String(vital.id)),
-      )}
-      data={result.data}
+      quicknoteData={
+        result.data.filter((vital) => vitalsIds.includes(String(vital.id))) ??
+        []
+      }
     />
   )
 }

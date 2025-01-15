@@ -47,6 +47,9 @@ const MseWidget = ({
         widgetId={QuickNoteSectionName.QuicknoteSectionMse}
         getData={transformOut(patientId)}
         title={!isMseTab ? 'Mental Status Exam' : undefined}
+        widgetContainerCheckboxFieldInitialValue={
+          initialValue.widgetContainerCheckboxField
+        }
         toggleable={!isMseTab}
         appointment={appointment}
         headerRight={

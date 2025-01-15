@@ -4,8 +4,11 @@ import { useEffect } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { useFormContext } from 'react-hook-form'
 import toast from 'react-hot-toast'
+import { saveWidgetClientAction } from '@/actions'
 import { saveWidgetAction } from '@/actions/save-widget'
 import type { Appointment, QuickNoteSectionItem } from '@/types'
+import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
+import { useQuickNoteUpdate } from '@/ui/quicknotes/hooks'
 import { getWidgetContainerCheckboxStateByWidgetId } from '@/utils'
 import { WidgetContainer, type WidgetContainerProps } from './widget-container'
 import { WidgetLoadingOverlay } from './widget-loading-overlay'
@@ -18,6 +21,7 @@ interface WidgetFormContainerProps extends WidgetContainerProps {
   ) => QuickNoteSectionItem[] | Promise<QuickNoteSectionItem[]>
   appointment?: Appointment
   tags?: string[]
+  widgetContainerCheckboxFieldInitialValue?: string
 }
 
 const WidgetFormContainer = ({
@@ -26,9 +30,11 @@ const WidgetFormContainer = ({
   getData,
   appointment,
   tags = [],
+  widgetContainerCheckboxFieldInitialValue,
   ...props
 }: WidgetFormContainerProps) => {
   const form = useFormContext()
+  const { updateWidgetsData, isQuickNoteView } = useQuickNoteUpdate()
   const params = useSearchParams()
   const visitSequence = params.get('visitSequence')
   const visitType = params.get('visitType')
@@ -39,8 +45,9 @@ const WidgetFormContainer = ({
     form.handleSubmit(async (data) => {
       const values = await getData(data)
       const payload = { patientId, data: values, tags }
-
-      const result = await saveWidgetAction(payload)
+      const result = await (isQuickNoteView
+        ? saveWidgetClientAction
+        : saveWidgetAction)(payload)
 
       if (result.state === 'error') {
         window.postMessage(
@@ -57,9 +64,6 @@ const WidgetFormContainer = ({
         }
         return
       }
-
-      form.reset(data)
-
       window.postMessage(
         {
           type: 'widget:save',
@@ -68,7 +72,7 @@ const WidgetFormContainer = ({
         },
         '*',
       )
-
+      updateWidgetsData?.(values)
       if (shouldToast) {
         toast.success('Saved!')
       }
@@ -130,10 +134,9 @@ const WidgetFormContainer = ({
       widgetId,
       visitType,
       visitSequence,
-      initialValue: form.watch('widgetContainerCheckboxField'),
+      initialValue: widgetContainerCheckboxFieldInitialValue,
       providerType: appointment?.providerType,
     })
-
   return (
     <form onSubmit={onSubmit()}>
       <fieldset disabled={form.formState.isSubmitting}>

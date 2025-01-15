@@ -7,7 +7,7 @@ import { QuestionnaireTabs } from './constants'
 import {
   getQuestionnairesAddToNotes,
   getQuestionnairesHistories,
-} from './questionnaires-widget/actions'
+} from './questionnaires-widget/client-actions'
 import {
   transformAddToNotesData,
   transformHistories,
@@ -108,7 +108,7 @@ const useStore = create<Store>((set, get) => ({
         sectionItemValue: addToNoteData?.toString() || 'empty',
       },
     ]
-  
+
     const result = await saveWidgetAction({
       patientId: patientId.toString(),
       data: payload,

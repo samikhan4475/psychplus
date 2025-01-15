@@ -1,15 +1,13 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { FormProvider } from 'react-hook-form'
-import { getPatientProfileAction } from '@/actions'
 import {
   WidgetClearButton,
   WidgetFormContainer,
   WidgetSaveButton,
 } from '@/components'
-import { PatientProfile } from '@/types'
 import { useStore } from '@/ui/questionnaires/store'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { AlcoholDrugsBlock, TobaccoBlock } from './blocks'
@@ -33,20 +31,15 @@ const SubstanceUseHxWidget = ({
   const { initializeQuestionnaires } = useStore((state) => ({
     initializeQuestionnaires: state.initializeQuestionnaires,
   }))
+
   const appointmentId = useSearchParams().get('id') as string
   const form = useSubstanceHxWidgetForm(initialValue)
-  const [patientInfo, setPatientInfo] = useState<PatientProfile | null>(null)
-  useEffect(() => {
-    const fetchPatientProfile = async () => {
-      const patientResponse = await getPatientProfileAction(patientId)
-      if (patientResponse.state === 'error') {
-        return
-      }
-      setPatientInfo(patientResponse.data)
-    }
-    initializeQuestionnaires(patientId)
 
-    fetchPatientProfile()
+  useEffect(() => {
+    if (isHistoryHeader) {
+      initializeQuestionnaires(patientId)
+    }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -56,6 +49,9 @@ const SubstanceUseHxWidget = ({
         patientId={patientId}
         widgetId={QuickNoteSectionName.QuickNoteSectionSubstanceUseHx}
         title={!isHistoryHeader ? 'Substance Use History' : undefined}
+        widgetContainerCheckboxFieldInitialValue={
+          initialValue.widgetContainerCheckboxField
+        }
         tags={
           isHistoryHeader
             ? [QuickNoteSectionName.QuickNoteSectionSubstanceUseHx]
@@ -74,7 +70,7 @@ const SubstanceUseHxWidget = ({
         {form.watch('widgetContainerCheckboxField') === 'show' && (
           <>
             <TobaccoBlock />
-            {patientInfo && <AlcoholDrugsBlock patientInfo={patientInfo} />}
+            <AlcoholDrugsBlock />
           </>
         )}
       </WidgetFormContainer>

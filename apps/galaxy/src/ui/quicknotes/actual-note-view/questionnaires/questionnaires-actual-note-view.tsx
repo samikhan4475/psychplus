@@ -1,30 +1,15 @@
 'use client'
 
-import { useEffect } from 'react'
-import { useParams } from 'next/navigation'
 import { QuickNoteHistory } from '@/types'
 import { useStore } from '@/ui/questionnaires/store'
 import { Questionnaires } from './questionnaires-view'
 
 const QuestionnairesActualnoteView = () => {
-  const patientId = useParams().id as string
-  const {
-    showNoteViewValue,
-    addedToNotes,
-    histories,
-    initializeQuestionnaires,
-  } = useStore((state) => ({
+  const { showNoteViewValue, addedToNotes, histories } = useStore((state) => ({
     showNoteViewValue: state.showNoteViewValue,
-    histories: state.histories,
     addedToNotes: state.addedToNotes,
-    initializeQuestionnaires: state.initializeQuestionnaires,
+    histories: state.histories,
   }))
-
-  useEffect(() => {
-    initializeQuestionnaires(patientId)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
   const groupedHistories: Record<string, QuickNoteHistory[]> = {}
   for (const sectionName in histories) {
     groupedHistories[sectionName] = histories[sectionName]

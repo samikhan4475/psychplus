@@ -5,6 +5,9 @@ import toast from 'react-hot-toast'
 import { useStore as zustandUseStore } from 'zustand'
 import { DeleteConfirmDialog } from '@/components'
 import { PatientReferral, ReferralStatuses } from '@/types'
+import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
+import { useQuickNoteUpdate } from '@/ui/quicknotes/hooks'
+import { sendEvent } from '@/utils'
 import { updatePatientReferralAction } from '../actions'
 import { useStore } from './store'
 import { isReferralDeleted } from './utils'
@@ -13,6 +16,7 @@ interface DeleteReferralButtonProps {
   referral: PatientReferral
 }
 const DeleteReferralButton = ({ referral }: DeleteReferralButtonProps) => {
+  const { isQuickNoteView } = useQuickNoteUpdate()
   const [isOpen, setIsOpen] = useState(false)
   const [loading, setLoading] = useState(false)
   const store = useStore()
@@ -43,6 +47,13 @@ const DeleteReferralButton = ({ referral }: DeleteReferralButtonProps) => {
     })
     setData(updatedData ?? [])
     toast.success('Successfully deleted!')
+
+    if (isQuickNoteView) {
+      sendEvent({
+        widgetId: QuickNoteSectionName.QuicknoteSectionReferrals,
+        eventType: 'widget:save',
+      })
+    }
     toggleOpen(false)
     setLoading(false)
   }

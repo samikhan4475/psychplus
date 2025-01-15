@@ -1,7 +1,11 @@
 import toast from 'react-hot-toast'
 import { create } from 'zustand'
 import { saveWidgetAction } from '@/actions/save-widget'
-import { DiagnosisIcd10Code, FavouriteDiagnosisData } from '@/types'
+import {
+  DiagnosisIcd10Code,
+  FavouriteDiagnosisData,
+  QuickNoteSectionItem,
+} from '@/types'
 import { QuickNoteSectionName } from '../quicknotes/constants'
 import { getFavouriteDiagnosis } from './diagnosis/actions/get-favorites-diagnosis'
 import { getIcd10Diagnosis } from './diagnosis/actions/get-service-diagnosis'
@@ -27,7 +31,10 @@ interface Store {
     markFavourite?: boolean,
   ) => void
   encodeId: (id: string) => string
-  saveWorkingDiagnosis: (patientId: string) => Promise<void>
+  saveWorkingDiagnosis: (
+    patientId: string,
+    setWidgetsData: (data: QuickNoteSectionItem[]) => void,
+  ) => Promise<void>
   updateFavoritesDiagnosis: (data: FavouriteDiagnosisData[]) => void
 }
 
@@ -75,11 +82,10 @@ const useStore = create<Store>((set, get) => ({
     set({ workingDiagnosisData: data })
   },
 
-  saveWorkingDiagnosis: async (patientId: string) => {
+  saveWorkingDiagnosis: async (patientId, setWidgetsData) => {
     const codes = get()
       .workingDiagnosisData.map((item) => item.code)
       .filter((code) => code !== 'empty')
-
     const response = await saveWidgetAction({
       patientId,
       data: [
@@ -96,6 +102,14 @@ const useStore = create<Store>((set, get) => ({
       toast.error(response.error)
     } else {
       toast.success('Saved!')
+      setWidgetsData([
+        {
+          pid: Number(patientId),
+          sectionName: QuickNoteSectionName.QuickNoteSectionDiagnosis,
+          sectionItem: 'diagnosis',
+          sectionItemValue: codes.toString() || 'empty',
+        },
+      ])
     }
   },
 

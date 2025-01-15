@@ -1,65 +1,64 @@
 import { cache } from 'react'
-import { AddOnWidget } from '@/ui/add-on'
-import { PatientAllergiesView } from '@/ui/allergy'
-import { FamilyInternalMedicineAssessmentPlanWidget } from '@/ui/assessment-plan/family-internal-medicine-assessment-plan-tab/family-internal-medicine-assessment-plan-widget'
-import { PsychiatryAssessmentPlanWidget } from '@/ui/assessment-plan/psychiatry-assessment-plan-tab/psychiatry-assessment-plan-widget'
-import { TherapyAssessmentPlanWidget } from '@/ui/assessment-plan/therapy-assessment-plan-tab/therapy-assessment-plan-widget'
-import { CodesWidget } from '@/ui/codes'
-import { DiagnosisWidget } from '@/ui/diagnosis/diagnosis-widget'
-import { FamilyPsychHxWidget } from '@/ui/family-psych-hx'
-import { QuicknotesFollowUpWidget } from '@/ui/follow-up'
-import { HpiWidget } from '@/ui/hpi'
-import { PatientMedicationsView } from '@/ui/medications'
-import { MseWidget } from '@/ui/mse'
-import { PastMedicalHxWidget } from '@/ui/past-medical-hx'
-import { PastPsychHxWidget } from '@/ui/past-psych-hx'
-import { PhysicalExamWidget } from '@/ui/physical-exam'
-import { EctWidgetLoader as EctWidget } from '@/ui/procedures/ect-tab/ect-widget-loader'
-import { TmsWidgetLoader as TmsWidget } from '@/ui/procedures/tms-tab/tms-widget-loader'
-import { QuestionnairesWidget } from '@/ui/questionnaires'
-import { PatientReferralsWidget } from '@/ui/referrals'
-import { RosWidget } from '@/ui/ros'
-import { SocialHxWidget } from '@/ui/social-hx'
-import { SubstanceUseHxWidget } from '@/ui/substance-use-hx'
-import { TherapyWidget } from '@/ui/therapy'
-import { QuicknotesVitalsWidget } from '@/ui/vitals'
+import { QuickNoteSectionItem } from '@/types'
+import { HpiWidgetClientLoader } from '@/ui/hpi/hpi-widget/hpi-widget-client-loader'
 import { isHospitalCareVisit, VisitTypeEnum, visitTypeToWidgets } from '@/utils'
-import { TcmWidget } from '../assessment-plan/tcm-widget'
-import { HospitalDischargeWidget } from '../hospital/hospital-discharge-widget'
-import { HospitalInitialWidget } from '../hospital/hospital-initial-widget'
-import { SpravatoWidgetLoader as SpravatoWidget } from '../procedures/spravato-tab/spravato-widget-loader'
-import { UploadedDocumentsWidget } from '../uploaded-documents/uploaded-documents-widget'
-import {
-  AllergiesDetailsView,
-  CodesDetailsView,
-  EctDetailView,
-  FamilyInternalMedicineAssessmentPlanView,
-  FamilyPsychDetailView,
-  FollowUp,
-  HpiDetailView,
-  MedicationsDetailsView,
-  MentalStatusExam,
-  PastMedicalHx,
-  PastPsychlDetailView,
-  PhysicalExamView,
-  PsychiatryAssessmentPlanView,
-  QuestionnairesActualnoteView,
-  ReferralsDetailsView,
-  ReviewOfSystem,
-  SocialHxDetailView,
-  SpravatoDetailView,
-  SubstanceUseHx,
-  Therapy,
-  TherapyAssessmentPlanView,
-  TmsDetailView,
-  VitalsView,
-  WorkingDiagnosisDetailView,
-  UploadedDocumentView,
-} from './actual-note-view'
-import { AddOnView } from './actual-note-view/add-on'
-import { HospitalDischargeView } from './actual-note-view/hospital-discharge'
-import { HospitalInitialView } from './actual-note-view/hospital-initial'
-import { TcmView } from './actual-note-view/tcm'
+import { AddOnClientLoader } from '../add-on/add-on-widget/add-on-client-loader'
+import { PatientAllergiesClientView } from '../allergy/patient-allergies-client-view'
+import { FamilyInternalMedicineAssessmentPlanClientLoader } from '../assessment-plan/family-internal-medicine-assessment-plan-tab/family-internal-medicine-assessment-plan-client-loader'
+import { PsychiatryAssessmentPlanClientLoader } from '../assessment-plan/psychiatry-assessment-plan-tab/psychiatry-assessment-plan-client-loader'
+import { TcmWidgetClientLoader } from '../assessment-plan/tcm-widget/tcm-widget-client-loader'
+import { TherapyAssessmentPlanClientLoader } from '../assessment-plan/therapy-assessment-plan-tab/therapy-assessment-plan-client-loader'
+import { CodesWidgetClientLoader } from '../codes/codes-widget/codes-widget-client-loader'
+import { DiagnosisWidgetClientLoader } from '../diagnosis/diagnosis-widget/diagnosis-client-loader'
+import { FamilyPsychHxClientLoader } from '../family-psych-hx/family-psych-hx-widget/family-psych-hx-client-loader'
+import { FollowUpWidgetLoader } from '../follow-up/follow-up-widget-client-loader'
+import { HospitalDischargeClientLoader } from '../hospital/hospital-discharge-widget/hospital-discharge-client-loader'
+import { HospitalInitialClientLoader } from '../hospital/hospital-initial-widget/hospital-initial-client-loader'
+import { PatientMedicationsClientLoader } from '../medications/patient-medications-client-loader'
+import { MseWidgetClientLoader } from '../mse/mse-widget/mse-widget-client-loader'
+import { PastMedicalHxClientLoader } from '../past-medical-hx/past-medical-hx-widget/past-medical-hx-client-loader'
+import { PastPsychHxClientLoader } from '../past-psych-hx/past-psych-hx-widget/past-psych-hx-client-loader'
+import { PhysicalExamWidgetClientLoader } from '../physical-exam/physical-exam-widget/physical-exam-widget-client-loader'
+import { EctWidgetClientLoader } from '../procedures/ect-tab/ect-widget-client-loader'
+import { SpravatoWidgetClientLoader } from '../procedures/spravato-tab/spravato-widget-client-loader'
+import { TmsWidgetClientLoader } from '../procedures/tms-tab/tms-widget-client-loader'
+import { QuestionnairesWidget } from '../questionnaires'
+import { PatientReferralsWidget } from '../referrals'
+import { RosWidgetClientLoader } from '../ros/ros-widget/ros-widget-client-loader'
+import { SocialHxClientLoader } from '../social-hx/social-hx-widget/social-hx-client-loader'
+import { SubstanceUseHxClientLoader } from '../substance-use-hx/substance-use-hx-widget/substance-use-hx-client-loader'
+import { TherapyWidgetClientLoader } from '../therapy/therapy-widget-client-loader'
+import { UploadedDocumentsClientWidget } from '../uploaded-documents/uploaded-documents-client-widget'
+import { VitalsWidgetLoader } from '../vitals/vitals-widget-client-loader'
+import { AddOnClientView } from './actual-note-view/add-on/add-on-client-view'
+import { CodesDetailsClientView } from './actual-note-view/codes/codes-details-client-view'
+import { EctDetailClientView } from './actual-note-view/ect/ect-detail-client-view'
+import { FamilyInternalMedicineAssessmentPlanClientView } from './actual-note-view/family-internal-medicine-assessment-plan/family-internal-medicine-assessment-plan-client-view'
+import { FamilyPsychDetailClientView } from './actual-note-view/family-psych-hx/family-psych-detail-client-view'
+import { FollowUpClient } from './actual-note-view/follow-up/follow-up-client-view'
+import { HospitalDischargeClientView } from './actual-note-view/hospital-discharge/hospital-discharge-client-view'
+import { HospitalInitialClientView } from './actual-note-view/hospital-initial/hospital-initial-client-view'
+import { HpiDetailClientView } from './actual-note-view/hpi/hpi-detail-client-view'
+import { MedicationsClientView } from './actual-note-view/medications/medications-client-view'
+import { MentalStatusExamClientView } from './actual-note-view/mental-status-exam/mental-status-exam-client-view'
+import { PastMedicalHxClientView } from './actual-note-view/past-medical-hx/past-medical-hx-client-view'
+import { PastPsychlDetailClientView } from './actual-note-view/past-psych-hx/past-psych-detail-client-view'
+import { AllergiesDetailsClientView } from './actual-note-view/patient-allergies/allergies-details-client-view'
+import { PhysicalExamClientView } from './actual-note-view/physical-exam/physical-exam-client-view'
+import { PsychiatryAssessmentPlanClientView } from './actual-note-view/psychiatry-assessment-plan/psychiatry-assessment-plan-client-view'
+import { QuestionnairesActualnoteView as QuestionnairesClientView } from './actual-note-view/questionnaires'
+import { ReferralsClientView } from './actual-note-view/referrals/referrals-client-view'
+import { ReviewOfSystemClientView } from './actual-note-view/ros/ros-client-view'
+import { SocialHxDetailClientView } from './actual-note-view/social-hx/social-hx-detail-client-view'
+import { SpravatoDetailClientView } from './actual-note-view/spravato/spravato-detail-client-view'
+import { SubstanceUseHxClientView } from './actual-note-view/substance-use-hx/substance-use-hx-client-view'
+import { TcmClientiew } from './actual-note-view/tcm/tcm-client-view'
+import { TherapyAssessmentPlanClientView } from './actual-note-view/therapy-assessment-plan/therapy-assessment-plan-client-view'
+import { TherapyClientView } from './actual-note-view/therapy/therapy-client-view'
+import { TmsDetailClientView } from './actual-note-view/tms/tms-detail-client-view'
+import { UploadedDocumentClientView } from './actual-note-view/uploaded-documents/uploaded-document-client-view'
+import { VitalsNoteClientView } from './actual-note-view/vitals/vitals-note-client-view'
+import { WorkingDiagnosisClientView } from './actual-note-view/working-diagnosis/working-diagnosis-client-view '
 import { QuickNoteSectionName } from './constants'
 import { WidgetType } from './types'
 
@@ -72,153 +71,165 @@ enum ProviderType {
 
 const widgets: Array<WidgetType> = [
   {
-    component: HpiWidget,
+    component: UploadedDocumentsClientWidget,
+    id: QuickNoteSectionName.QuicknoteSectionUploadedDocuments,
+    actualNoteComponent: UploadedDocumentClientView,
+  },
+  {
+    component: HpiWidgetClientLoader,
     id: QuickNoteSectionName.QuicknoteSectionHPI,
-    actualNoteComponent: HpiDetailView,
+    actualNoteComponent: HpiDetailClientView,
   },
-
   {
-    component: PastPsychHxWidget,
+    component: PastPsychHxClientLoader,
     id: QuickNoteSectionName.QuickNoteSectionPastPsychHx,
-    actualNoteComponent: PastPsychlDetailView,
+    actualNoteComponent: PastPsychlDetailClientView,
   },
   {
-    component: PastMedicalHxWidget,
-    id: QuickNoteSectionName.QuickNoteSectionPastMedicalHx,
-    actualNoteComponent: PastMedicalHx,
-  },
-  {
-    component: FamilyPsychHxWidget,
+    component: FamilyPsychHxClientLoader,
     id: QuickNoteSectionName.QuickNoteSectionFamilyPsychHx,
-    actualNoteComponent: FamilyPsychDetailView,
+    actualNoteComponent: FamilyPsychDetailClientView,
   },
   {
-    component: SocialHxWidget,
+    component: SocialHxClientLoader,
     id: QuickNoteSectionName.QuickNoteSectionSocialHx,
-    actualNoteComponent: SocialHxDetailView,
+    actualNoteComponent: SocialHxDetailClientView,
   },
   {
-    component: SubstanceUseHxWidget,
+    component: SubstanceUseHxClientLoader,
     id: QuickNoteSectionName.QuickNoteSectionSubstanceUseHx,
-    actualNoteComponent: SubstanceUseHx,
+    actualNoteComponent: SubstanceUseHxClientView,
   },
   {
-    component: PatientAllergiesView,
+    component: DiagnosisWidgetClientLoader,
+    id: QuickNoteSectionName.QuickNoteSectionDiagnosis,
+    actualNoteComponent: WorkingDiagnosisClientView,
+  },
+  {
+    component: AddOnClientLoader,
+    id: QuickNoteSectionName.Addon,
+    actualNoteComponent: AddOnClientView,
+  },
+  {
+    component: PastMedicalHxClientLoader,
+    id: QuickNoteSectionName.QuickNoteSectionPastMedicalHx,
+    actualNoteComponent: PastMedicalHxClientView,
+  },
+  {
+    component: PatientAllergiesClientView,
     id: QuickNoteSectionName.QuicknoteSectionPatientAllergies,
-    actualNoteComponent: AllergiesDetailsView,
+    actualNoteComponent: AllergiesDetailsClientView,
+    isClient: true,
   },
   {
     component: QuestionnairesWidget,
     id: QuickNoteSectionName.QuicknoteSectionQuestionnaires,
-    actualNoteComponent: QuestionnairesActualnoteView,
+    actualNoteComponent: QuestionnairesClientView,
+    isClient: true,
   },
   {
-    component: RosWidget,
+    component: RosWidgetClientLoader,
     id: QuickNoteSectionName.QuicknoteSectionReviewOfSystem,
-    actualNoteComponent: ReviewOfSystem,
+    actualNoteComponent: ReviewOfSystemClientView,
   },
   {
-    component: QuicknotesVitalsWidget,
+    component: VitalsWidgetLoader,
     id: QuickNoteSectionName.Vitals,
-    actualNoteComponent: VitalsView,
+    actualNoteComponent: VitalsNoteClientView,
   },
   {
-    component: PhysicalExamWidget,
+    component: PhysicalExamWidgetClientLoader,
     id: QuickNoteSectionName.QuicknoteSectionPhysicalExam,
-    actualNoteComponent: PhysicalExamView,
+    actualNoteComponent: PhysicalExamClientView,
   },
   {
-    component: MseWidget,
+    component: MseWidgetClientLoader,
     id: QuickNoteSectionName.QuicknoteSectionMse,
-    actualNoteComponent: MentalStatusExam,
+    actualNoteComponent: MentalStatusExamClientView,
   },
   {
-    component: DiagnosisWidget,
-    id: QuickNoteSectionName.QuickNoteSectionDiagnosis,
-    actualNoteComponent: WorkingDiagnosisDetailView,
-  },
-  {
-    component: AddOnWidget,
-    id: QuickNoteSectionName.Addon,
-    actualNoteComponent: AddOnView,
-  },
-  {
-    component: PatientMedicationsView,
+    component: PatientMedicationsClientLoader,
     id: QuickNoteSectionName.QuicknoteSectionMedications,
-    actualNoteComponent: MedicationsDetailsView,
+    actualNoteComponent: MedicationsClientView,
+    isClient: true,
   },
   {
     component: PatientReferralsWidget,
     id: QuickNoteSectionName.QuicknoteSectionReferrals,
-    actualNoteComponent: ReferralsDetailsView,
+    actualNoteComponent: ReferralsClientView,
+    isClient: true,
   },
   {
-    component: QuicknotesFollowUpWidget,
+    component: FollowUpWidgetLoader,
     id: QuickNoteSectionName.FollowUps,
-    actualNoteComponent: FollowUp,
+    actualNoteComponent: FollowUpClient,
+    isClient: true,
   },
   {
-    component: CodesWidget,
-    id: QuickNoteSectionName.QuicknoteSectionCodes,
-    actualNoteComponent: CodesDetailsView,
-  },
-  {
-    component: TherapyWidget,
+    component: TherapyWidgetClientLoader,
     id: QuickNoteSectionName.QuickNoteSectionIndividualTherapy,
-    actualNoteComponent: Therapy,
+    actualNoteComponent: TherapyClientView,
   },
   {
-    component: EctWidget,
+    component: TherapyWidgetClientLoader,
+    id: QuickNoteSectionName.QuickNoteSectionFamilyTherapy,
+    actualNoteComponent: TherapyClientView,
+  },
+  {
+    component: EctWidgetClientLoader,
     id: QuickNoteSectionName.QuicknoteSectionProcedureEtcTab,
-    actualNoteComponent: EctDetailView,
+    actualNoteComponent: EctDetailClientView,
   },
   {
-    component: TmsWidget,
+    component: TmsWidgetClientLoader,
     id: QuickNoteSectionName.ProcedureTMS,
-    actualNoteComponent: TmsDetailView,
+    actualNoteComponent: TmsDetailClientView,
+    isClient: true,
   },
   {
-    component: TherapyAssessmentPlanWidget,
+    component: TherapyAssessmentPlanClientLoader,
     id: QuickNoteSectionName.QuicknoteSectionTherapyAssessmentPlan,
-    actualNoteComponent: TherapyAssessmentPlanView,
+    actualNoteComponent: TherapyAssessmentPlanClientView,
     providerTypes: [ProviderType.Therapy],
   },
   {
-    component: PsychiatryAssessmentPlanWidget,
+    component: PsychiatryAssessmentPlanClientLoader,
     id: QuickNoteSectionName.QuicknoteSectionPsychiatryAssessmentPlan,
-    actualNoteComponent: PsychiatryAssessmentPlanView,
+    actualNoteComponent: PsychiatryAssessmentPlanClientView,
     providerTypes: [ProviderType.Psychiatry],
   },
   {
-    component: UploadedDocumentsWidget,
-    id: QuickNoteSectionName.QuicknoteSectionUploadedDocuments,
-    actualNoteComponent: UploadedDocumentView
-  },
-  {
-    component: FamilyInternalMedicineAssessmentPlanWidget,
+    component: FamilyInternalMedicineAssessmentPlanClientLoader,
     id: QuickNoteSectionName.QuicknoteSectionFamilyInternalMedicineAssessmentPlan,
-    actualNoteComponent: FamilyInternalMedicineAssessmentPlanView,
+    actualNoteComponent: FamilyInternalMedicineAssessmentPlanClientView,
     providerTypes: [ProviderType.InternalMedicine, ProviderType.FamilyMedicine],
   },
   {
-    component: SpravatoWidget,
+    component: SpravatoWidgetClientLoader,
     id: QuickNoteSectionName.QuicknoteSectionProcedureSpravato,
-    actualNoteComponent: SpravatoDetailView,
+    actualNoteComponent: SpravatoDetailClientView,
+    isClient: true,
   },
   {
-    component: HospitalDischargeWidget,
+    component: HospitalDischargeClientLoader,
     id: QuickNoteSectionName.QuicknoteSectionHospitalDischarge,
-    actualNoteComponent: HospitalDischargeView,
+    actualNoteComponent: HospitalDischargeClientView,
   },
   {
-    component: HospitalInitialWidget,
+    component: HospitalInitialClientLoader,
     id: QuickNoteSectionName.QuickNoteSectionHospitalInitial,
-    actualNoteComponent: HospitalInitialView,
+    actualNoteComponent: HospitalInitialClientView,
   },
   {
-    component: TcmWidget,
+    component: TcmWidgetClientLoader,
     id: QuickNoteSectionName.QuicknoteSectionTcm,
-    actualNoteComponent: TcmView,
+    actualNoteComponent: TcmClientiew,
+  },
+  {
+    component: CodesWidgetClientLoader,
+    id: QuickNoteSectionName.QuicknoteSectionCodes,
+    actualNoteComponent: CodesDetailsClientView,
+    isPatientAndAppointmentDependent: true,
   },
 ]
 
@@ -253,6 +264,26 @@ const getWidgetsByVisitType = (
   return widgetsForVisitType
 }
 
+const getWidgetIds = (widgets: WidgetType[]) => [
+  ...new Set(
+    widgets.reduce((acc, el) => {
+      if (!el.isClient && !el.isPatientAndAppointmentDependent) {
+        const uniqueItems = [el.id, ...(el.sectionNames ?? [])]
+        acc.push(...uniqueItems)
+      }
+      return acc
+    }, [] as string[]),
+  ),
+]
+
+const modifyWidgetResponse = (data: QuickNoteSectionItem[] = []) =>
+  data.reduce<Record<string, QuickNoteSectionItem[]>>((acc, item) => {
+    const key = item.sectionName
+    acc[key] = acc[key] || []
+    acc[key].push(item)
+    return acc
+  }, {})
+
 const getCachedWidgetsByVisitType = cache(getWidgetsByVisitType)
 
-export { getCachedWidgetsByVisitType }
+export { getCachedWidgetsByVisitType, getWidgetIds, modifyWidgetResponse }

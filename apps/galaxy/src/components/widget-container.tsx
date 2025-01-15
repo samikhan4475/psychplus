@@ -39,12 +39,9 @@ const WidgetContainer = ({
   sticky = false,
   className,
 }: WidgetContainerProps) => {
-  const form = useFormContext() ?? null
-  const values = form?.getValues()
-  const checked =
-    form && WidgetContainerCheckboxField
-      ? form.watch(WidgetContainerCheckboxField) === 'show'
-      : false
+  const form = useFormContext()
+  const widgetContainerCheckbox = form?.watch('WidgetContainerCheckboxField')
+  const checked = (form && widgetContainerCheckbox) ?? false
 
   const handleCheckedChange = (newChecked: boolean) => {
     if (form && WidgetContainerCheckboxField) {
@@ -53,13 +50,14 @@ const WidgetContainer = ({
   }
 
   useEffect(() => {
-    if (toggleableChecked !== undefined) {
-      form?.reset({
-        ...form.getValues(),
-        WidgetContainerCheckboxField: toggleableChecked ? 'show' : 'hide',
-        ...values,
-      })
-    }
+    setTimeout(() => {
+      if (toggleableChecked !== undefined) {
+        form?.reset({
+          ...form.getValues(),
+          widgetContainerCheckboxField: toggleableChecked ? 'show' : 'hide',
+        })
+      }
+    }, 100)
   }, [toggleableChecked])
 
   return (

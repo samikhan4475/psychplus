@@ -1,7 +1,5 @@
-import { getAllDocumentsAction } from '@/ui/uploaded-documents/actions'
 import { Text } from '@radix-ui/themes'
-import { QuickNoteSectionName } from '../../constants'
-import { ActualNoteDetailsWrapper } from '../shared'
+import { getAllDocumentsAction } from '@/ui/uploaded-documents/actions'
 import { Details } from './details'
 
 type UploadedDocumentProps = {
@@ -9,7 +7,10 @@ type UploadedDocumentProps = {
   appointmentId: string
 }
 
-const UploadedDocumentView = async ({ patientId, appointmentId }: UploadedDocumentProps) => {
+const UploadedDocumentView = async ({
+  patientId,
+  appointmentId,
+}: UploadedDocumentProps) => {
   const response = await getAllDocumentsAction({
     data: {
       appointmentId: Number(appointmentId),
@@ -18,18 +19,18 @@ const UploadedDocumentView = async ({ patientId, appointmentId }: UploadedDocume
     },
     patientId: Number(patientId),
     appointmentId: Number(appointmentId),
-  });
+  })
 
   if (response.state === 'error') {
     return <Text>{response.error}</Text>
   }
 
   return (
-    <ActualNoteDetailsWrapper
-      sectionName={QuickNoteSectionName.QuicknoteSectionUploadedDocuments}
-    >
-      <Details data={response.data} appointmentId={appointmentId} patientId={patientId} />
-    </ActualNoteDetailsWrapper>
+    <Details
+      data={response.data}
+      appointmentId={appointmentId}
+      patientId={patientId}
+    />
   )
 }
 

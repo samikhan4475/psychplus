@@ -42,5 +42,6 @@ export * from './diagnosis'
 export * from './payer'
 export * from './labs-order'
 export * from './codes'
-export * from "./link-account"
-export * from "./facility-admission"
+export * from './link-account'
+export * from './facility-admission'
+export * from './api'

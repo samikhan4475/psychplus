@@ -1,0 +1,47 @@
+'use client'
+
+import * as api from '@/api/api.client'
+import { GET_PATIENT_REFERRALS_ENDPOINT } from '@/api/endpoints'
+import { PATIENT_REFERRALS_TABLE_PAGE_SIZE } from '@/constants'
+import type { GetPatientReferralsParams, PatientReferral } from '@/types'
+
+const getPatientReferralsAction = async ({
+  patientIds,
+  payload = {},
+  page,
+}: GetPatientReferralsParams): Promise<
+  api.ActionResult<{
+    referrals: PatientReferral[]
+    total: number
+  }>
+> => {
+  let url = GET_PATIENT_REFERRALS_ENDPOINT
+  if (page) {
+    const pageSize = PATIENT_REFERRALS_TABLE_PAGE_SIZE ?? 20
+    const offset = (page - 1) * pageSize
+    url += `?limit=${pageSize}&offset=${offset}`
+  }
+  const response = await api.POST<PatientReferral[]>(url, {
+    patientIds,
+    ...payload,
+  })
+
+  if (response.state === 'error') {
+    return {
+      state: 'error',
+      error: response.error,
+    }
+  }
+
+  const total = Number(response.headers.get('psychplus-totalresourcecount'))
+
+  return {
+    state: 'success',
+    data: {
+      referrals: response.data,
+      total,
+    },
+  }
+}
+
+export { getPatientReferralsAction }

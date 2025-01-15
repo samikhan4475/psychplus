@@ -1,16 +1,15 @@
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
 import { Button } from '@radix-ui/themes'
 import toast from 'react-hot-toast'
 import { saveWidgetAction } from '@/actions/save-widget'
+import { useQuickNoteUpdate } from '@/ui/quicknotes/hooks'
 import { transformOut } from '@/ui/vitals/data'
 import { useStore } from '../../store'
 import { PatientVital } from '../../types'
 
 const SaveToNoteButton = ({ patientId }: { patientId: string }) => {
+  const { updateWidgetsData } = useQuickNoteUpdate()
   const [loading, setLoading] = useState(false)
-  const router = useRouter()
-
   const { data, setQuicknotesData } = useStore((state) => ({
     data: state.data,
     setQuicknotesData: state.setQuicknotesData,
@@ -43,10 +42,10 @@ const SaveToNoteButton = ({ patientId }: { patientId: string }) => {
     }
 
     toast.success('Saved!')
+    updateWidgetsData(payload)
 
     setQuicknotesData(data?.filter((item) => item.addToNote) as PatientVital[])
     setLoading(false)
-    router.refresh()
   }
   return (
     <Button

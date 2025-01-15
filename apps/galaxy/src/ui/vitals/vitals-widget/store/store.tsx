@@ -2,7 +2,7 @@ import { create } from 'zustand'
 import { getQuickNoteDetailAction } from '@/actions/get-quicknote-detail'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { transformIn } from '../../data'
-import { getPatientVitalsAction } from '../actions'
+import { getPatientVitalsAction } from '../client-actions'
 import type { PatientVital } from '../types'
 
 interface VitalsParams {

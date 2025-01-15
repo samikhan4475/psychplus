@@ -44,6 +44,7 @@ const STANDARD_CODESET_ENDPOINT = (
   `${API_URL}/api/codeset/authorities/${assigningAuthority}/codesets/${codeSystemName}`
 const METADATA_CODESET_ENDPOINT = (name: string) =>
   `${API_URL}/api/metadata/codesets/${name}`
+const METADATA_CODESET_ALL_ENDPOINT = `${API_URL}/api/metadata/codesets`
 const GET_PROVIDER_SETTINGS_ENDPOINT = `${API_URL}/api/settings/actions/search`
 const GET_STAFF_ENDPOINT = `${API_URL}/api/staff/search?includeInactive=true`
 const GET_APPOINTMENT_COSIGNERS_ENDPOINT = (appointmentId: number) =>
@@ -824,4 +825,5 @@ export {
   DOWNLOAD_LAB_ORDER_DOCUMENT,
   DELETE_LAB_ORDERS_RESULT_ENDPOINT,
   LAB_ORDER_GET_REQUISITION,
+  METADATA_CODESET_ALL_ENDPOINT,
 }

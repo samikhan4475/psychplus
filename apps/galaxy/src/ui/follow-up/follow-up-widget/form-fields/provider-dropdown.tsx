@@ -1,9 +1,9 @@
 'use client'
 
 import { useCallback } from 'react'
-import { getProvidersOptionsAction } from '@/actions'
 import { AsyncSelect, FormFieldContainer, FormFieldLabel } from '@/components'
 import { Appointment } from '@/types'
+import { getProvidersOptionsAction } from '@/ui/schedule/client-actions'
 
 const ProviderDropdown = ({
   appointment,

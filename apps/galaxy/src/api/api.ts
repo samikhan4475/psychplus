@@ -1,39 +1,12 @@
+import {
+  ActionErrorState,
+  ActionResult,
+  ActionSuccessState,
+  GetOptions,
+  NetworkResult,
+} from '@/types'
+import { getErrorMessage } from '@/utils'
 import { createHeaders, createJsonHeader } from './headers'
-
-const INTERNAL_ERROR_MESSAGE = 'Something went wrong!'
-
-interface ActionSuccessState<T = undefined> {
-  state: 'success'
-  data: T,
-  total?: number
-}
-
-interface ActionErrorState {
-  state: 'error'
-  status?: number
-  error: string
-}
-
-type ActionResult<T> = ActionSuccessState<T> | ActionErrorState
-
-interface NetworkSuccessState<T> {
-  state: 'success'
-  data: T
-  headers: Headers
-}
-
-interface NetworkErrorState {
-  state: 'error'
-  status?: number
-  error: string
-  headers: Headers
-}
-
-type NetworkResult<T> = NetworkSuccessState<T> | NetworkErrorState
-
-interface GetOptions extends RequestInit {
-  ignoreHeaders?: boolean
-}
 
 const GET = async <T>(
   url: string,
@@ -231,28 +204,6 @@ const getResponseData = (text: string) => {
   } catch {
     return text
   }
-}
-
-const getErrorMessage = (error: unknown): string => {
-  let message = INTERNAL_ERROR_MESSAGE
-
-  if (error instanceof Error) {
-    message = error.message
-  } else if (error && typeof error === 'object') {
-    if ('message' in error) {
-      message = String(error.message)
-    } else if ('errors' in error) {
-      const errorObj = error as { errors: Record<string, string[]> }
-      const firstErrorMessages = Object.values(errorObj.errors)[0]
-      if (Array.isArray(firstErrorMessages) && firstErrorMessages.length > 0) {
-        message = firstErrorMessages[0]
-      }
-    }
-  } else if (typeof error === 'string') {
-    message = error
-  }
-
-  return message
 }
 
 export {

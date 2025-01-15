@@ -43,6 +43,9 @@ const SocialHxWidget = ({
           isHistoryHeader ? [QuickNoteSectionName.QuickNoteSectionSocialHx] : []
         }
         widgetId={QuickNoteSectionName.QuickNoteSectionSocialHx}
+        widgetContainerCheckboxFieldInitialValue={
+          initialValue.widgetContainerCheckboxField
+        }
         title={!isHistoryHeader ? 'Social History' : undefined}
         getData={transformOut(patientId)}
         toggleable={!isHistoryHeader}
@@ -60,7 +63,7 @@ const SocialHxWidget = ({
         }
         topHeader={isHistoryHeader && <SocialHxHeader />}
       >
-        {form.watch('widgetContainerCheckboxField') === 'show' && (
+        {form.watch('widgetContainerCheckboxField') === 'show' ? (
           <>
             <RelationshipStatusBlock />
             <EducationBlock />
@@ -70,7 +73,7 @@ const SocialHxWidget = ({
             <TraumaHxBlock />
             <OtherBlock />
           </>
-        )}
+        ) : null}
       </WidgetFormContainer>
     </FormProvider>
   )

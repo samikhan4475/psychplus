@@ -4,22 +4,22 @@ import { useState } from 'react'
 import { useParams, useSearchParams } from 'next/navigation'
 import { Button, Dialog } from '@radix-ui/themes'
 import { PenLineIcon } from 'lucide-react'
-import { Appointment, AuthSession, StaffResource } from '@/types'
+import { useStore as useGlobalStore } from '@/store'
+import { Appointment, StaffResource } from '@/types'
 import { ConfirmationAlertDialogContent } from '../alerts'
-import { useStore } from './quicknotes-store'
+import { useStore } from './store'
 
 interface QuickNotesSignButtonProps {
   appointment: Appointment
-  auth: AuthSession | undefined
   appointmentProvider?: StaffResource
 }
 
 const QuickNotesSignButton = ({
   appointment,
-  auth,
   appointmentProvider,
 }: QuickNotesSignButtonProps) => {
   const [isOpen, setIsOpen] = useState(false)
+  const { staffId, id = '' } = useGlobalStore((state) => state.user)
   const { sign, loading, setErrorMessage, setIsErrorAlertOpen } = useStore(
     (state) => ({
       sign: state.sign,
@@ -34,12 +34,10 @@ const QuickNotesSignButton = ({
   const appointmentId = useSearchParams().get('id') as string
   const isFutureAppointment =
     appointment?.startDate && new Date(appointment.startDate) > new Date()
-  const isAppointmentProviderLoggedIn =
-    appointmentProvider?.userId === auth?.user.userId &&
-    appointmentProvider?.contactInfo?.email === auth?.user.email
+  const isAppointmentProviderLoggedIn = appointmentProvider?.userId === id
 
   const signNote = async () => {
-    if (!isAppointmentProviderLoggedIn) {
+    if (appointment.providerStaffId !== staffId) {
       setIsErrorAlertOpen(true)
       setErrorMessage(
         'You are not the provider for this note, therefore you can not sign this visit',

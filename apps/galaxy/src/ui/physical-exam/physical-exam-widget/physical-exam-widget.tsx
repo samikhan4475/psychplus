@@ -86,6 +86,9 @@ const PhysicalExamWidget = ({
         widgetId={QuickNoteSectionName.QuicknoteSectionPhysicalExam}
         getData={transformOut(patientId)}
         title={!isPhysicalExamTab ? 'Physical Exam' : undefined}
+        widgetContainerCheckboxFieldInitialValue={
+          initialValue.widgetContainerCheckboxField
+        }
         toggleable={!isPhysicalExamTab}
         appointment={appointment}
         tags={

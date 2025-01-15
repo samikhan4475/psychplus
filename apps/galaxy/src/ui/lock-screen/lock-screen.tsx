@@ -15,6 +15,7 @@ import {
 } from '@/components'
 import { WaitingTimeoutIcon } from '@/components/icons'
 import { decodeUrlString } from '@/utils'
+import { appendSearchParams } from '@/utils/params'
 
 const schema = z.object({
   username: z.string().trim().min(1, 'Email is required').email(),
@@ -35,12 +36,13 @@ const LockScreen = () => {
       password: '',
     },
   })
-
   const onSubmit: SubmitHandler<SchemaType> = async (data) => {
     return loginAction({
       username: data.username.trim(),
       password: data.password.trim(),
-      next: searchParams?.get('next') ?? null,
+      next:
+        appendSearchParams(searchParams?.get('next'), searchParams, 'next') ??
+        null,
     }).then((result) => {
       if (result?.state === 'error') {
         toast.error(result.error)

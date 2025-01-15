@@ -1,17 +1,14 @@
 import { Flex, Text } from '@radix-ui/themes'
 import { RadioSelectSection, TextInput } from '@/components'
-import { PatientProfile } from '@/types'
 import { AlcoholBlock } from './alcohol-block'
 import { BriefInterventionDetail } from './brief-intervention-block'
 import { DrugsBlock } from './drugs-block'
 import { QuestionnairesBlock } from './questionnaires-block'
 import { ReferralTreatmentBlock } from './referral-treatement-block'
 
-interface AlcoholDrugsBlockProps {
-  patientInfo: PatientProfile
-}
 
-const AlcoholDrugsBlock = ({ patientInfo }: AlcoholDrugsBlockProps) => {
+
+const AlcoholDrugsBlock = () => {
   return (
     <Flex
       direction="column"
@@ -23,7 +20,7 @@ const AlcoholDrugsBlock = ({ patientInfo }: AlcoholDrugsBlockProps) => {
         Screening for drug/alcohol use:
       </Text>
 
-      <AlcoholBlock patientInfo={patientInfo} />
+      <AlcoholBlock/>
       <DrugsBlock />
 
       <QuestionnairesBlock />

@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 import { Appointment } from '@/types'
-import { getBookedAppointmentsAction } from '@/ui/schedule/actions'
+import { getBookedAppointmentsAction } from '@/ui/schedule/client-actions'
 import { AppointmentParams } from '@/ui/schedule/types'
 
 interface StoreState {
@@ -29,6 +29,7 @@ const useStore = create<StoreState>((set, get) => ({
       return set({
         error: result.error,
         loading: false,
+        data: [],
       })
     }
 

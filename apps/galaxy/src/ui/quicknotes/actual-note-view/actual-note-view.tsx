@@ -1,35 +1,36 @@
-import { Flex, ScrollArea, Text } from '@radix-ui/themes'
-import { getPatientProfile } from '@/api'
-import { Appointment } from '@/types'
+'use client'
+
+import { Flex, ScrollArea } from '@radix-ui/themes'
+import { Appointment, PatientProfile, QuickNoteSectionItem } from '@/types'
+import { QuickNoteDataProvider } from '../quick-note-data-provider'
 import { WidgetType } from '../types'
 import { ActualNoteViewClient } from './actual-note-client'
-import { NoteViewHeader } from './note-view-header'
 import { PsychiatricEvaluation } from './psychiatric-evaluation'
 
 interface ActualNoteViewProps {
   patientId: string
   appointment: Appointment
   widgets: WidgetType[]
+  data: QuickNoteSectionItem[]
   visitType: string
   visitSequence: string
+  patient: PatientProfile
+  appointmentId: string
 }
-const ActualNoteView = async ({
+const ActualNoteView = ({
   appointment,
   patientId,
   widgets,
   visitType,
   visitSequence,
+  patient,
+  appointmentId,
+  data = [],
 }: ActualNoteViewProps) => {
-  const patient = await getPatientProfile(patientId)
-
-  if (patient.state === 'error') {
-    return <Text>{patient.error}</Text>
-  }
-
   return (
     <ActualNoteViewClient>
-      <ScrollArea className="h-full w-96">
-        <NoteViewHeader />
+      <ScrollArea className="max-w-96 min-w-96 h-full">
+        {/* <NoteViewHeader /> */}
         <Flex
           id="actual-note-view"
           gap="1"
@@ -37,21 +38,22 @@ const ActualNoteView = async ({
           className="bg-white"
           direction="column"
         >
-          <PsychiatricEvaluation
-            patient={patient.data}
-            appointment={appointment}
-          />
+          <PsychiatricEvaluation patient={patient} appointment={appointment} />
           {widgets.map(({ id, actualNoteComponent: ActualNoteComponent }) => {
             if (!ActualNoteComponent) return null
+
             return (
-              <ActualNoteComponent
+              <QuickNoteDataProvider
                 key={id}
-                patientId={patientId}
-                appointmentId={String(appointment.id)}
+                id={id}
+                component={ActualNoteComponent}
                 appointment={appointment}
-                patient={patient.data}
+                patient={patient}
+                patientId={patientId}
+                data={data?.filter(({ sectionName }) => sectionName === id)}
                 visitType={visitType}
                 visitSequence={visitSequence}
+                appointmentId={appointmentId}
               />
             )
           })}

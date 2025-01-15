@@ -1,6 +1,6 @@
 import { createContext } from 'react'
 import { createStore as zustandCreateStore } from 'zustand'
-import { getPatientMedicationsAction } from '../actions'
+import { getPatientMedicationsAction } from '../client-actions'
 import type { GetPatientMedicationsResponse } from '../types'
 
 interface StoreInit {

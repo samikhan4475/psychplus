@@ -5,16 +5,21 @@ import { Trash2 } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { useStore as zustandUseStore } from 'zustand'
 import { ContactMadeStatuses, PatientReferral } from '@/types'
+import { sendEvent } from '@/utils'
+import { QuickNoteSectionName } from '../quicknotes/constants'
+import { useQuickNoteUpdate } from '../quicknotes/hooks'
+import { updatePatientReferralAction } from '../referrals/actions'
 // import { updatePatientReferralAction } from '../actions'
 import { useStore } from './store'
 import { isContactStatusError } from './utils'
-import { updatePatientReferralAction } from '../referrals/actions'
 
 interface DeleteButtonProps {
   referral: PatientReferral
 }
 const DeleteButton = ({ referral }: DeleteButtonProps) => {
+  const { isQuickNoteView } = useQuickNoteUpdate()
   const store = useStore()
+
   const { data, setData } = zustandUseStore(store, (state) => ({
     setData: state.setData,
     data: state.data,
@@ -38,6 +43,12 @@ const DeleteButton = ({ referral }: DeleteButtonProps) => {
         return item
       })
       setData(updatedData)
+      if (isQuickNoteView) {
+        sendEvent({
+          widgetId: QuickNoteSectionName.QuicknoteSectionReferrals,
+          eventType: 'widget:save',
+        })
+      }
     } else if (result.state === 'error') {
       toast.error(result.error ?? 'Failed to update!')
     }

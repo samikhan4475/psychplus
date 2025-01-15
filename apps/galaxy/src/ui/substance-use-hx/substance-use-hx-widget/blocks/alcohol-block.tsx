@@ -1,6 +1,7 @@
 import React from 'react'
 import { YesNoSelect } from '@/components'
 import { PatientProfile } from '@/types'
+import { useStore } from '@/ui/quicknotes/store'
 import { ALCOHOL_ID, ALCOHOL_LABEL } from './constants'
 
 const ALCOHOL_DESCRIPTION = (patient: PatientProfile) => {
@@ -24,7 +25,8 @@ const ALCOHOL_DESCRIPTION = (patient: PatientProfile) => {
   )
 }
 
-const AlcoholBlock = ({ patientInfo }: { patientInfo: PatientProfile }) => {
+const AlcoholBlock = () => {
+  const patientInfo = useStore((state) => state.patient)
   return (
     <YesNoSelect
       label={ALCOHOL_LABEL}

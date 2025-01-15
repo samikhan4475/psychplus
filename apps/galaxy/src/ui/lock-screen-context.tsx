@@ -1,8 +1,9 @@
 'use client'
 
 import React, { useEffect, useRef } from 'react'
-import { usePathname } from 'next/navigation'
+import { usePathname, useSearchParams } from 'next/navigation'
 import { lockScreenAction } from '@/actions'
+import { appendSearchParams } from '@/utils/params'
 
 export const LockScreenProvider = ({
   children,
@@ -11,15 +12,18 @@ export const LockScreenProvider = ({
 }) => {
   const pathname = usePathname()
   const prevPathRef = useRef<string | null>(null)
+  const searchParams = useSearchParams()
+
   const lockScreen = () => {
     lockScreenAction(prevPathRef.current ?? '/')
   }
 
   useEffect(() => {
-    if (prevPathRef.current !== pathname) {
-      prevPathRef.current = pathname
+    const pathWithParams = appendSearchParams(pathname, searchParams)
+    if (prevPathRef.current !== pathWithParams) {
+      prevPathRef.current = pathWithParams
     }
-  }, [pathname])
+  }, [pathname, searchParams])
 
   useEffect(() => {
     let timer: NodeJS.Timeout

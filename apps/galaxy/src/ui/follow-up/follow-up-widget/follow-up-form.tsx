@@ -8,15 +8,15 @@ import toast from 'react-hot-toast'
 import { z } from 'zod'
 import { FormContainer } from '@/components'
 import { Appointment, BookVisitPayload } from '@/types'
-import { getBookedAppointmentsAction } from '@/ui/schedule/actions'
-import { bookVisitAction } from '@/ui/visit/actions/book-visit'
+import { getBookedAppointmentsAction } from '@/ui/schedule/client-actions'
+import { bookVisitAction } from '@/ui/visit/client-actions'
 import { CalenderView } from './calender-view'
 import { CreateFollowUpButton } from './create-follow-up-button'
 import { FollowUpVisitAlert } from './follow-up-visit-alert'
 import { LocationDropdown, ProviderDropdown } from './form-fields'
 import { NextDropdown } from './form-fields/next-dropdown'
-import { getOffsetStartDate, sanitizeFormData, transformIn } from './utils'
 import { useStore } from './store'
+import { getOffsetStartDate, sanitizeFormData, transformIn } from './utils'
 
 const schema = z.object({
   next: z.string(),

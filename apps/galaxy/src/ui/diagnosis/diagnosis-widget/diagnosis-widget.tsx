@@ -1,7 +1,6 @@
 'use client'
 
 import { useEffect } from 'react'
-import { useParams, useRouter } from 'next/navigation'
 import { Flex, Text } from '@radix-ui/themes'
 import {
   TabContentHeading,
@@ -12,12 +11,9 @@ import {
 import { DiagnosisIcd10Code, FavouriteDiagnosisData } from '@/types'
 import { WorkingDiagnosisView } from '@/ui/diagnosis/diagnosis/diagnosis-widget'
 import { SearchDiagnosis } from '@/ui/diagnosis/diagnosis/diagnosis-widget/search-diagnosis'
-import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { Diagnosis } from '../diagnosis'
 import { DiagnosisSaveButton } from '../diagnosis/diagnosis-widget/diagnosis-save-button'
 import { useStore } from '../store'
-
-const Widgets = [QuickNoteSectionName.QuickNoteSectionSubstanceUseHx]
 
 interface DiagnosisWidgetProps {
   workingDiagnosis?: DiagnosisIcd10Code[]
@@ -28,30 +24,18 @@ const DiagnosisWidget = ({
   workingDiagnosis,
   favouriteDiagnosis,
 }: DiagnosisWidgetProps) => {
-  const patientId = useParams().id as string
-  const router = useRouter()
-  const {
-    fetchWorkingDiagnosis,
-    updateFavoritesDiagnosis,
-    updateWorkingDiagnosisData,
-  } = useStore((state) => ({
-    fetchWorkingDiagnosis: state.fetchWorkingDiagnosis,
-    updateFavoritesDiagnosis: state.updateFavoritesDiagnosis,
-    updateWorkingDiagnosisData: state.updateWorkingDiagnosisData,
-  }))
-
-  const handleEvent = (event: MessageEvent) => {
-    const { widgetId, type, success } = event.data
-    if (type === 'widget:save' && success && Widgets.includes(widgetId)) {
-      fetchWorkingDiagnosis(patientId)
-      router.refresh()
-    }
-  }
+  const { updateFavoritesDiagnosis, updateWorkingDiagnosisData } = useStore(
+    (state) => ({
+      fetchWorkingDiagnosis: state.fetchWorkingDiagnosis,
+      updateFavoritesDiagnosis: state.updateFavoritesDiagnosis,
+      updateWorkingDiagnosisData: state.updateWorkingDiagnosisData,
+    }),
+  )
 
   useEffect(() => {
     workingDiagnosis && updateWorkingDiagnosisData(workingDiagnosis)
     favouriteDiagnosis && updateFavoritesDiagnosis(favouriteDiagnosis)
-    window.addEventListener('message', handleEvent)
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [workingDiagnosis, favouriteDiagnosis])
 

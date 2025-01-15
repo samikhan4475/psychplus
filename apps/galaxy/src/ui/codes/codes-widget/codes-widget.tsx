@@ -4,6 +4,7 @@ import { ComponentType, useEffect } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { Box } from '@radix-ui/themes'
 import { FormProvider } from 'react-hook-form'
+import toast from 'react-hot-toast'
 import {
   WidgetClearButton,
   WidgetFormContainer,
@@ -53,7 +54,8 @@ const CodesWidget = ({
       form.reset(updatedCodes)
       handleDefaultSubmission(patientId, appointmentId, updatedCodes)
     }
-  }, [appointmentId, patientId, initialValues, appointment])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [patientId, appointmentId, appointment])
 
   const {
     primaryCodeOptions,

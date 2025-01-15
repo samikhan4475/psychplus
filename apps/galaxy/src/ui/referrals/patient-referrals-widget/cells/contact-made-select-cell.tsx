@@ -6,6 +6,9 @@ import { PropsWithRow } from '@/components'
 import { CODESETS } from '@/constants'
 import { useCodesetOptions } from '@/hooks'
 import { PatientReferral } from '@/types'
+import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
+import { useQuickNoteUpdate } from '@/ui/quicknotes/hooks'
+import { sendEvent } from '@/utils'
 import { updatePatientReferralAction } from '../../actions'
 import { DISABLE_CODESET_ATTRIBUTE } from '../constants'
 import { StatusSelect } from '../status-select'
@@ -18,6 +21,7 @@ const ContactMadeSelectCell = ({
   row: { original: referral },
   disabled,
 }: Props) => {
+  const { isQuickNoteView } = useQuickNoteUpdate()
   const [selectedValue, setSelectedValue] = useState(referral?.contactStatus)
   const options = useCodesetOptions(
     CODESETS.ContactMadeStatus,
@@ -33,6 +37,12 @@ const ContactMadeSelectCell = ({
     if (result.state === 'error') {
       setSelectedValue(referral?.contactStatus ?? '')
       return toast.error(result.error ?? 'Failed to update!')
+    }
+    if (isQuickNoteView) {
+      sendEvent({
+        widgetId: QuickNoteSectionName.QuicknoteSectionReferrals,
+        eventType: 'widget:save',
+      })
     }
     toast.success('Successfully updated!')
   }

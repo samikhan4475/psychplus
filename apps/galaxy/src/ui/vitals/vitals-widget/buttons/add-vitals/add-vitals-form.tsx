@@ -1,6 +1,5 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Box, Flex, Table } from '@radix-ui/themes'
 import { useForm, type SubmitHandler } from 'react-hook-form'
@@ -8,6 +7,7 @@ import toast from 'react-hot-toast'
 import { z } from 'zod'
 import { saveWidgetAction } from '@/actions/save-widget'
 import { DateTimeCell, FormContainer } from '@/components'
+import { useQuickNoteUpdate } from '@/ui/quicknotes/hooks'
 import { transformOut } from '@/ui/vitals/data'
 import { cn, formatDateTime, sanitizeFormData } from '@/utils'
 import { addPatientVitalAction } from '../../actions'
@@ -60,6 +60,8 @@ const AddVitalsForm = ({
   addNewVital,
   vitalsData,
 }: AddVitalsFormProps) => {
+  const { updateWidgetsData } = useQuickNoteUpdate()
+
   const {
     data,
     quicknotesData,
@@ -80,8 +82,6 @@ const AddVitalsForm = ({
     resolver: zodResolver(schema),
     reValidateMode: 'onChange',
   })
-
-  const router = useRouter()
 
   const onSubmit: SubmitHandler<SchemaType> = async (formData) => {
     if (Object.keys(sanitizeFormData(formData)).length === 0) {
@@ -129,12 +129,12 @@ const AddVitalsForm = ({
       return
     }
 
+    updateWidgetsData(payload)
+
     setQuicknotesData([
       response.data,
       ...((quicknotesData || []) as PatientVital[]),
     ])
-
-    router.refresh()
   }
 
   return (

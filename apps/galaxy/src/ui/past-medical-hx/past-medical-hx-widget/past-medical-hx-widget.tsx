@@ -27,7 +27,6 @@ const PastMedicalHxWidget = ({
   isHistoryHeader = false,
 }: PastMedicalHxWidgetProps) => {
   const form = usePastMedicalHxWidgetForm(initialValue)
-
   return (
     <Flex direction="column" width="100%" gap="2">
       <FormProvider {...form}>
@@ -39,6 +38,9 @@ const PastMedicalHxWidget = ({
               : []
           }
           widgetId={QuickNoteSectionName.QuickNoteSectionPastMedicalHx}
+          widgetContainerCheckboxFieldInitialValue={
+            initialValue.widgetContainerCheckboxField
+          }
           title={!isHistoryHeader ? 'Past Medical History' : undefined}
           getData={transformOut(patientId)}
           toggleable={!isHistoryHeader}

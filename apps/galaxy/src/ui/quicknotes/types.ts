@@ -1,24 +1,23 @@
-import { Appointment, PatientProfile } from '@/types'
+import { Appointment, PatientProfile, QuickNoteSectionItem } from '@/types'
 import { QuickNoteSectionName } from './constants'
 
+type WidgetComponent = React.ComponentType<{
+  patientId: string
+  appointmentId: string
+  appointment: Appointment
+  data?: QuickNoteSectionItem[]
+  patient: PatientProfile
+  visitType: string
+  visitSequence: string
+}>
 type WidgetType = {
-  component?: React.ComponentType<{
-    patientId: string
-    appointmentId?: string
-    appointment?: Appointment
-    visitType: string
-    visitSequence: string
-  }>
-  actualNoteComponent?: React.ComponentType<{
-    patientId: string
-    appointmentId: string
-    appointment: Appointment
-    patient?: PatientProfile
-    visitType: string
-    visitSequence: string
-  }>
+  component?: WidgetComponent
+  actualNoteComponent?: WidgetComponent
   id: QuickNoteSectionName
   providerTypes?: string[]
+  isClient?: boolean
+  sectionNames?: string[]
+  isPatientAndAppointmentDependent?: boolean
 }
 
-export type { WidgetType }
+export type { WidgetType, WidgetComponent }
