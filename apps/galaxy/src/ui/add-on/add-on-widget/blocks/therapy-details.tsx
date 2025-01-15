@@ -1,6 +1,5 @@
 'use client'
 
-import { useEffect } from 'react'
 import { Flex, TextArea } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
 import { BlockLabel, FormFieldError } from '@/components'
@@ -8,18 +7,10 @@ import { BlockLabel, FormFieldError } from '@/components'
 interface TherapyDetailProps {
   field: string
   label: string
-  defaultValue: string
 }
 
-const TherapyDetail = ({ field, label, defaultValue }: TherapyDetailProps) => {
+const TherapyDetail = ({ field, label }: TherapyDetailProps) => {
   const form = useFormContext()
-
-  useEffect(() => {
-    if (!form.watch(field)) {
-      form.setValue(field, defaultValue)
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
 
   return (
     <Flex gap="2" align="start">

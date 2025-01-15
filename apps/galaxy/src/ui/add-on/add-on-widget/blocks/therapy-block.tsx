@@ -9,9 +9,6 @@ import { TherapySessionParticipantsBlock } from '@/ui/therapy/therapy-widget/ind
 import { TherapyTimeSpentBlock } from '@/ui/therapy/therapy-widget/individual/blocks/time-spent'
 import { TherapyDetail } from './therapy-details'
 
-const DEFAULT_THERAPY_DETAIL =
-  'Patient presented with signs of transference, indicating a strong misplacement of feelings associated with unresolved past experiences. Provider engaged in schema exploration with patient to gain insight regarding patient’s irrational thoughts and maladaptive behavior patterns. Provider encouraged patient to self-reflect to make connections between dysfunctional beliefs, behaviors, and assumptions that may have affected their perception. Continued exploration of irrational thoughts and behaviors is recommended to map all types and directions of transference.'
-
 interface TherapyBlockProps {
   isChecked?: boolean
 }
@@ -45,7 +42,6 @@ const TherapyBlock: React.FC = ({ isChecked }: TherapyBlockProps) => {
           <TherapyDetail
             field="additionalTherapyDetail"
             label="Additional Therapy Details"
-            defaultValue={DEFAULT_THERAPY_DETAIL}
           />
         </Flex>
       )}

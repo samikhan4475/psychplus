@@ -16,9 +16,6 @@ const THERAPY_PSYCHOANALYSIS_OPTIONS = [
   { label: 'Neither', value: 'neither' },
 ]
 
-const DEFAULT_PSYCHOANALYSIS_DETAIL =
-  'The patient displayed transference that may be the result of unconscious conflicts. The provider encouraged the patient to reflect on past experiences that could be impacting the patient’s life. The provider further explored repressed thoughts with the patient to help the patient become aware of the root causes of their psychological distress. Continued support and discussion of the transference are recommended for continued growth.'
-
 const TherapyPsychoAnalysisBlock = () => {
   const { watch } = useFormContext()
   const therapyPsychoanalysis = watch('therapyPsychoanalysis')
@@ -60,7 +57,6 @@ const TherapyPsychoAnalysisBlock = () => {
               <TherapyDetail
                 field="additionalPsychoAnalysisDetail"
                 label="Additional Psychoanalysis Details"
-                defaultValue={DEFAULT_PSYCHOANALYSIS_DETAIL}
               />
             </>
           )}

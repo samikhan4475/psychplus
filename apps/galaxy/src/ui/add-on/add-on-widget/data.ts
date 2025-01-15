@@ -21,7 +21,7 @@ interface ModalityTransferenceData {
   value: string
   display: string
 }
-
+type BlockType = string | undefined | boolean | ModalityTransferenceData[]
 const transformIn = (
   value: QuickNoteSectionItem[],
   appointmentData?: Appointment[],
@@ -36,10 +36,7 @@ const transformIn = (
       appointmentData.length >= 2 ? 'psychoanalysis' : 'therapy'
   }
 
-  const result: Record<
-    string,
-    string | undefined | boolean | ModalityTransferenceData[] | DateValue
-  > = {
+  const result: Record<string, BlockType | DateValue> = {
     injection: false,
     drugName: '',
     dose: '',
@@ -61,7 +58,8 @@ const transformIn = (
     psychoanalyticTechnique: [],
     additionalTherapyDetail:
       'Patient presented with signs of transference, indicating a strong misplacement of feelings associated with unresolved past experiences.  Provider engaged in schema exploration with patient to gain insight regarding patient’s irrational thoughts and maladaptive behavior patterns. Provider encouraged patient to self-reflect to make connections between dysfunctional beliefs, behaviors, and assumptions that may have affected their perception. Continued exploration of irrational thoughts and behaviors is recommended to map all types and directions of transference.',
-    additionalPsychoAnalysisDetail: '',
+    additionalPsychoAnalysisDetail:
+      'The patient displayed transference that may be the result of unconscious conflicts. The provider encouraged the patient to reflect on past experiences that could be impacting the patient’s life. The provider further explored repressed thoughts with the patient to help the patient become aware of the root causes of their psychological distress. Continued support and discussion of the transference are recommended for continued growth.',
     interactiveComplexity: false,
     maladaptiveCommunication: false,
     caregiverEmotions: false,
@@ -126,10 +124,7 @@ const transformIn = (
 const transformOut =
   (patientId: string, appointmentId: string, visitType: string) =>
   async (
-    schema: Record<
-      string,
-      string | undefined | boolean | ModalityTransferenceData[]
-    >,
+    schema: Record<string, BlockType>,
   ): Promise<QuickNoteSectionItem[]> => {
     const result: QuickNoteSectionItem[] = []
     const formData = sanitizeFormData(schema)
@@ -140,23 +135,22 @@ const transformOut =
     }
     if (!formData) return result
     if (formData.injection) {
-      const injectionSections = await transfromOutInjectionBlock(tranformProps)
+      const injectionSections = transfromOutInjectionBlock(tranformProps)
       result.push(...injectionSections)
     }
     if (formData.interactiveComplexity) {
       const interactiveComplexitySections =
-        await transfromOutInteractiveComplexity(tranformProps)
+        transfromOutInteractiveComplexity(tranformProps)
       result.push(...interactiveComplexitySections)
     }
     if (formData.therapy) {
       if (formData.therapyPsychoanalysis === 'therapy') {
-        const therapySections = await transfromOutTherapyBlock(tranformProps)
+        const therapySections = transfromOutTherapyBlock(tranformProps)
         result.push(...therapySections)
       }
       if (formData.therapyPsychoanalysis === 'psychoanalysis') {
-        const psychoanalysisSections = await transfromOutPsychoanalysisBlock(
-          tranformProps,
-        )
+        const psychoanalysisSections =
+          transfromOutPsychoanalysisBlock(tranformProps)
         result.push(...psychoanalysisSections)
       }
     }
@@ -189,10 +183,7 @@ const transformOut =
 const transfromOutInjectionBlock = (tranformProps: {
   patientId: string
   appointmentId: string
-  schema: Record<
-    string,
-    string | undefined | boolean | ModalityTransferenceData[]
-  >
+  schema: Record<string, BlockType>
 }) => {
   const { patientId, appointmentId, schema } = tranformProps
 
@@ -224,10 +215,7 @@ const transfromOutInjectionBlock = (tranformProps: {
 const transfromOutInteractiveComplexity = (tranformProps: {
   patientId: string
   appointmentId: string
-  schema: Record<
-    string,
-    string | undefined | boolean | ModalityTransferenceData[]
-  >
+  schema: Record<string, BlockType>
 }) => {
   const { patientId, appointmentId, schema } = tranformProps
 
@@ -263,10 +251,7 @@ const transfromOutInteractiveComplexity = (tranformProps: {
 const transfromOutTherapyBlock = (tranformProps: {
   patientId: string
   appointmentId: string
-  schema: Record<
-    string,
-    string | undefined | boolean | ModalityTransferenceData[]
-  >
+  schema: Record<string, BlockType>
 }) => {
   const { patientId, appointmentId, schema } = tranformProps
 
@@ -321,10 +306,7 @@ const transfromOutTherapyBlock = (tranformProps: {
 const transfromOutPsychoanalysisBlock = (tranformProps: {
   patientId: string
   appointmentId: string
-  schema: Record<
-    string,
-    string | undefined | boolean | ModalityTransferenceData[]
-  >
+  schema: Record<string, BlockType>
 }) => {
   const { patientId, appointmentId, schema } = tranformProps
   const QuickNotesPayload = {
@@ -370,14 +352,11 @@ const transfromOutPsychoanalysisBlock = (tranformProps: {
 }
 
 const getCodes = async (
-  schema: Record<
-    string,
-    string | undefined | boolean | ModalityTransferenceData[]
-  >,
+  schema: Record<string, BlockType>,
   visitType: string,
 ) => {
   const selectedCodes: CodesWidgetItem[] = []
-  const cptCodeMap = await getCptCodeMap(visitType)
+  const cptCodeMap = getCptCodeMap(visitType)
   Object.entries(cptCodeMap).forEach(([key, value]) => {
     const schemaKey = schema?.[key]
     const code =
