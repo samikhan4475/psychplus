@@ -63,6 +63,7 @@ const useStore = create<Store>((set, get) => ({
 
     const payload = {
       startingDate: startDateUtc,
+      includePatientTransactions: true,
       ...(formValues ?? {}),
     }
     set({

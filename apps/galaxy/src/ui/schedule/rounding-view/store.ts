@@ -44,7 +44,11 @@ const useStore = create<Store>((set, get) => ({
     const startingDate = getDateString(today(getLocalTimeZone()))
     const requestBody = body ? body : { startingDate }
     const result = await getBookedAppointmentsAction(
-      { ...requestBody, isServiceTimeDependant: false },
+      {
+        ...requestBody,
+        includePatientTransactions: true,
+        isServiceTimeDependant: false,
+      },
       page,
     )
     if (result.state === 'error') {

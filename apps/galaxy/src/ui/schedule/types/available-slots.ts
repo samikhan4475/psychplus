@@ -258,6 +258,7 @@ interface AppointmentParams {
   isFollowUp?: boolean
   isServiceTimeDependant?: boolean
   isShowActiveVisits?: boolean
+  includePatientTransactions?: boolean
 }
 
 interface ProviderCoding {
