@@ -39,11 +39,18 @@ const QuickNotesView = async ({
       appointmentResult.data.providerType,
     ) || []
 
-  const widgetsIds = getWidgetIds(widgets)
+  const patientDependentWidgetsIds = getWidgetIds({
+    widgets,
+  })
+
+  const patientAndAppointmentDependentWidgetsIds = getWidgetIds({
+    widgets,
+    isPatientAndAppointmentDependent: true,
+  })
 
   const [widgetsResponse, codesResponse, appoinmentCodesResponse] =
     await Promise.all([
-      getQuickNoteDetailAction(patientId, widgetsIds),
+      getQuickNoteDetailAction(patientId, patientDependentWidgetsIds),
       getQuickNoteDetailAction(
         patientId,
         [QuickNoteSectionName.QuicknoteSectionCodes],
@@ -53,7 +60,7 @@ const QuickNotesView = async ({
       ),
       getQuickNoteDetailAction(
         patientId,
-        [QuickNoteSectionName.QuicknoteSectionCodes],
+        patientAndAppointmentDependentWidgetsIds,
         false,
         appointmentId,
         false,

@@ -109,6 +109,7 @@ const widgets: Array<WidgetType> = [
     component: AddOnClientLoader,
     id: QuickNoteSectionName.Addon,
     actualNoteComponent: AddOnClientView,
+    isPatientAndAppointmentDependent: true,
   },
   {
     component: PastMedicalHxClientLoader,
@@ -264,10 +265,19 @@ const getWidgetsByVisitType = (
   return widgetsForVisitType
 }
 
-const getWidgetIds = (widgets: WidgetType[]) => [
+const getWidgetIds = ({
+  widgets,
+  isPatientAndAppointmentDependent,
+}: {
+  widgets: WidgetType[]
+  isPatientAndAppointmentDependent?: boolean
+}) => [
   ...new Set(
     widgets.reduce((acc, el) => {
-      if (!el.isClient && !el.isPatientAndAppointmentDependent) {
+      if (
+        !el.isClient &&
+        el.isPatientAndAppointmentDependent === isPatientAndAppointmentDependent
+      ) {
         const uniqueItems = [el.id, ...(el.sectionNames ?? [])]
         acc.push(...uniqueItems)
       }

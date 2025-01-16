@@ -170,7 +170,7 @@ const transformOut =
       const QuickNotesPayload = {
         pid: Number(patientId),
         sectionName: QuickNoteSectionName.Addon,
-        appointmentId: Number(appointmentId),
+        appId: Number(appointmentId),
       }
       result.push({
         ...QuickNotesPayload,
@@ -193,7 +193,7 @@ const transformOutInjectionBlock = (transformProps: {
   const QuickNotesPayload = {
     pid: Number(patientId),
     sectionName: QuickNoteSectionName.Addon,
-    appointmentId: Number(appointmentId),
+    appId: Number(appointmentId),
   }
 
   const result: QuickNoteSectionItem[] = [
@@ -225,7 +225,7 @@ const transformOutInteractiveComplexity = (transformProps: {
   const QuickNotesPayload = {
     pid: Number(patientId),
     sectionName: QuickNoteSectionName.Addon,
-    appointmentId: Number(appointmentId),
+    appId: Number(appointmentId),
   }
 
   const result: QuickNoteSectionItem[] = [
@@ -259,7 +259,7 @@ const transformOutTherapyBlock = (transformProps: {
   const QuickNotesPayload = {
     pid: Number(patientId),
     sectionName: QuickNoteSectionName.Addon,
-    appointmentId: Number(appointmentId),
+    appId: Number(appointmentId),
   }
   const result: QuickNoteSectionItem[] = [
     {
@@ -314,7 +314,7 @@ const transformOutPsychoanalysisBlock = (transformProps: {
   const QuickNotesPayload = {
     pid: Number(patientId),
     sectionName: QuickNoteSectionName.Addon,
-    appointmentId: Number(appointmentId),
+    appId: Number(appointmentId),
   }
   const result: QuickNoteSectionItem[] = [
     {

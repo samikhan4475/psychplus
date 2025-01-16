@@ -29,7 +29,12 @@ const PatientAllergiesPage = async ({
   }
 
   const [response, bookedAppointmentResponse] = await Promise.all([
-    getQuickNoteDetailAction(params.id, [QuickNoteSectionName.Addon]),
+    getQuickNoteDetailAction(
+      params.id,
+      [QuickNoteSectionName.Addon],
+      false,
+      appointmentId,
+    ),
     getBookedAppointmentApi(appointment.data),
   ])
 

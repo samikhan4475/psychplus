@@ -10,15 +10,22 @@ interface AddOnLoaderProps {
   patientId: string
   appointment?: Appointment
   visitType: string
+  appointmentId?: string
 }
 
 const AddOnLoader = async ({
   patientId,
   appointment,
   visitType,
+  appointmentId,
 }: AddOnLoaderProps) => {
   const [response, appointmentResponse] = await Promise.all([
-    getQuickNoteDetailAction(patientId, [QuickNoteSectionName.Addon]),
+    getQuickNoteDetailAction(
+      patientId,
+      [QuickNoteSectionName.Addon],
+      false,
+      appointmentId,
+    ),
     getBookedAppointmentApi(appointment),
   ])
 
