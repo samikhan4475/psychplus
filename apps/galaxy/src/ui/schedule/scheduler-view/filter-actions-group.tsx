@@ -24,10 +24,11 @@ import {
   VisitMediumSelect,
 } from './filter-fields'
 import { HideFiltersButton } from './hide-filters-button'
+import { schema } from './schema'
 import { SearchButton } from './search-button'
 import { ShowFiltersButton } from './show-filters-button'
 import { useStore } from './store'
-import { schema } from './schema'
+import { getCurrentWeekStart } from './utils'
 
 type SchemaType = z.infer<typeof schema>
 
@@ -98,6 +99,8 @@ const SchedulerFilterGroup = ({
     if (!isDirty(dirtyFields)) return
     form.reset()
     if (providerId) {
+      const currentDate = getCurrentWeekStart()
+      setDates(currentDate, 13)
       fetchData({ staffIds: [Number(providerId)] })
     }
   }
