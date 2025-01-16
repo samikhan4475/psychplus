@@ -1,6 +1,4 @@
 'use client'
-
-import { useEffect } from 'react'
 import * as Tabs from '@radix-ui/react-tabs'
 import { Flex } from '@radix-ui/themes'
 import { TabsTrigger } from '@/components'
@@ -28,15 +26,10 @@ const ProceduresView = ({
   questionnaireHistories,
   appointmentData,
 }: ProceduresViewProps) => {
-  const { activeTab, setActiveTab, setPatientId } = useStore((state) => ({
+  const { activeTab, setActiveTab } = useStore((state) => ({
     activeTab: state.activeTab,
     setActiveTab: state.setActiveTab,
-    setPatientId: state.setPatientId,
   }))
-  useEffect(() => {
-    setPatientId(patientId)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
 
   return (
     <Tabs.Root
