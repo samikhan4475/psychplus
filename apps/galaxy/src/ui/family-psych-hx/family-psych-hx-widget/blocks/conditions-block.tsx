@@ -1,59 +1,17 @@
+'use client'
+
 import { Flex } from '@radix-ui/themes'
 import { MultiSelectChip } from '@/components'
-
-const RELATIONSHIP_OPTIONS = [
-  { label: 'Parent', value: 'parent' },
-  { label: 'Sibling', value: 'sibling' },
-  { label: 'Child', value: 'child' },
-  { label: 'Grand parent', value: 'Grand parent' },
-  { label: 'Parents sibling', value: 'Parents sibling' },
-]
-
-const FAMILY_PSYCH_BLOCK_OPTIONS = [
-  {
-    label: 'Completed Suicide',
-    field: 'completedSuicide',
-    detailsField: 'completedSuicideRelation',
-  },
-  {
-    label: 'Anxiety',
-    field: 'anxiety',
-    detailsField: 'anxietyRelation',
-  },
-  {
-    label: 'Depression',
-    field: 'depression',
-    detailsField: 'depressionRelation',
-  },
-  {
-    label: 'OCD',
-    field: 'ocd',
-    detailsField: 'ocdRelation',
-  },
-  {
-    label: 'Schizophrenia',
-    field: 'schizophrenia',
-    detailsField: 'schizophreniaRelation',
-  },
-
-  {
-    label: 'Bipolar disorder',
-    field: 'bipolarDisorder',
-    detailsField: 'bipolarDisorderRelation',
-  },
-  {
-    label: 'Alcohol use disorder',
-    field: 'alcoholUseDisorder',
-    detailsField: 'alcoholUseDisorderRelation',
-  },
-  {
-    label: 'Dementia',
-    field: 'dementia',
-    detailsField: 'dementiaRelation',
-  },
-]
+import { CODESETS } from '@/constants'
+import { useCodesetCodes } from '@/hooks'
+import { mapCodesetToOptions } from '@/utils'
+import FAMILY_PSYCH_BLOCK_OPTIONS from './family-psych-options.json'
 
 const ConditionsBlock = () => {
+  const RELATIONSHIP_OPTIONS = mapCodesetToOptions(
+    useCodesetCodes(CODESETS.Relationship),
+  )
+
   return (
     <Flex gap="2" wrap="wrap">
       {FAMILY_PSYCH_BLOCK_OPTIONS.map((option) => (
@@ -75,4 +33,4 @@ const ConditionsBlock = () => {
   )
 }
 
-export { ConditionsBlock, FAMILY_PSYCH_BLOCK_OPTIONS }
+export { ConditionsBlock }

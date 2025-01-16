@@ -1,6 +1,6 @@
 import React from 'react'
 import { Flex, Text } from '@radix-ui/themes'
-import { PatientProfile } from '@/types'
+import { PatientProfile, SharedCode } from '@/types'
 import { HpiWidgetSchemaType } from '@/ui/hpi/hpi-widget/hpi-widget-schema'
 import { optionsValueToLabel } from '@/ui/hpi/hpi-widget/utils'
 import { BlockContainer, LabelAndValue } from '../shared'
@@ -15,11 +15,18 @@ import {
 interface Props {
   patient: Partial<PatientProfile>
   symptoms: HpiWidgetSchemaType
+  delusionTypeCodeset: SharedCode[]
+  hallucinationTypeCodeset: SharedCode[]
 }
 
 type HpiWidgetSchemaKey = keyof HpiWidgetSchemaType
 
-const HpiNarration = ({ patient, symptoms }: Props) => {
+const HpiNarration = ({
+  patient,
+  symptoms,
+  delusionTypeCodeset,
+  hallucinationTypeCodeset,
+}: Props) => {
   const generateNarration = () => {
     const chiefComplaints = symptoms.chiefComplaint || []
 
@@ -83,7 +90,11 @@ const HpiNarration = ({ patient, symptoms }: Props) => {
           })
         }
 
-        const formattedSymptoms = formatSymptoms(complaintSymptoms)
+        const formattedSymptoms = formatSymptoms(
+          complaintSymptoms,
+          delusionTypeCodeset,
+          hallucinationTypeCodeset,
+        )
         narration += formattedSymptoms + '.'
       }
     })

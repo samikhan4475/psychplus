@@ -1,0 +1,42 @@
+[
+  {
+    "label": "Completed Suicide",
+    "field": "completedSuicide",
+    "detailsField": "completedSuicideRelation"
+  },
+  {
+    "label": "Anxiety",
+    "field": "anxiety",
+    "detailsField": "anxietyRelation"
+  },
+  {
+    "label": "Depression",
+    "field": "depression",
+    "detailsField": "depressionRelation"
+  },
+  {
+    "label": "OCD",
+    "field": "ocd",
+    "detailsField": "ocdRelation"
+  },
+  {
+    "label": "Schizophrenia",
+    "field": "schizophrenia",
+    "detailsField": "schizophreniaRelation"
+  },
+  {
+    "label": "Bipolar disorder",
+    "field": "bipolarDisorder",
+    "detailsField": "bipolarDisorderRelation"
+  },
+  {
+    "label": "Alcohol use disorder",
+    "field": "alcoholUseDisorder",
+    "detailsField": "alcoholUseDisorderRelation"
+  },
+  {
+    "label": "Dementia",
+    "field": "dementia",
+    "detailsField": "dementiaRelation"
+  }
+]

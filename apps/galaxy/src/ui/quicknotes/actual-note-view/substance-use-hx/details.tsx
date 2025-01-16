@@ -2,9 +2,10 @@
 
 import { Flex, Text } from '@radix-ui/themes'
 import { format } from 'date-fns'
-import { PatientProfile } from '@/types'
+import { PatientProfile, SharedCode } from '@/types'
 import { useStore } from '@/ui/questionnaires/store'
 import { SubstanceUseHxWidgetSchemaType } from '@/ui/substance-use-hx/substance-use-hx-widget/substance-use-hx-schema'
+import { mapValuesToLabels } from '@/utils'
 import { QuickNoteSectionName } from '../../constants'
 import { BlockContainer, LabelAndValue } from '../shared'
 
@@ -13,6 +14,9 @@ interface Props<T> {
   data: T
   patient?: PatientProfile
   actualNoteViewVisibility?: boolean
+  counsellingCodeset: SharedCode[]
+  tobaccoTreatmentCodeset: SharedCode[]
+  referralTreatmentCodeset: SharedCode[]
 }
 
 const Details = ({
@@ -20,6 +24,9 @@ const Details = ({
   data,
   patient,
   actualNoteViewVisibility,
+  counsellingCodeset,
+  tobaccoTreatmentCodeset,
+  referralTreatmentCodeset,
 }: Props<SubstanceUseHxWidgetSchemaType>) => {
   const { histories } = useStore((state) => ({
     histories: state.histories,
@@ -56,8 +63,18 @@ const Details = ({
             )}
             <LabelAndValue
               value={`I have reviewed the risks of continued smoking with the patient and offered
-              Smoking Cessation Options ${data.smokingCessationOption || ''} and
-              Counseling Options ${data.counselingOption || ''}.`}
+              Smoking Cessation Options ${
+                mapValuesToLabels(
+                  [data.smokingCessationOption] as string[],
+                  tobaccoTreatmentCodeset,
+                ) || ''
+              } and
+              Counseling Options ${
+                mapValuesToLabels(
+                  [data.counselingOption] as string[],
+                  counsellingCodeset,
+                ) || ''
+              }.`}
             />
             <LabelAndValue
               label="Discussed smoking cessation for:"
@@ -151,7 +168,10 @@ const Details = ({
 
         <LabelAndValue
           label="Referral Treatment:"
-          value={data.referralTreatment?.join(', ')}
+          value={mapValuesToLabels(
+            data.referralTreatment as string[],
+            referralTreatmentCodeset,
+          )}
         />
         <LabelAndValue
           label="Alcohol Substance Cessation Discussion Duration:"

@@ -1,8 +1,18 @@
 import { Box, Flex, Text } from '@radix-ui/themes'
 import { RadioSelectSection, SelectInput } from '@/components'
-import { COUNSELING_OPTIONS, SMOKING_CESSATION_OPTIONS } from './constants'
+import { CODESETS } from '@/constants'
+import { useCodesetCodes } from '@/hooks'
+import { mapCodesetToOptions } from '@/utils'
 
 const SmokingCessationBlock = () => {
+  const COUNSELING_OPTIONS = mapCodesetToOptions(
+    useCodesetCodes(CODESETS.CounsellingOptions),
+  )
+
+  const SMOKING_CESSATION_OPTIONS = mapCodesetToOptions(
+    useCodesetCodes(CODESETS.TobaccoTreatment),
+  )
+
   return (
     <Flex align="center" gap="2" wrap="wrap">
       <Text size="1" className="flex h-[var(--chip-height)] items-center">

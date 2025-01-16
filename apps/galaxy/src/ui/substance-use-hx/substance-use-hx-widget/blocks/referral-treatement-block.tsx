@@ -6,11 +6,17 @@ import {
   FormFieldLabel,
   SelectableChipDetails,
 } from '@/components'
-import { REFFERAL_TREATMENT_OPTIONS } from './constants'
+import { CODESETS } from '@/constants'
+import { useCodesetCodes } from '@/hooks'
+import { mapCodesetToOptions } from '@/utils'
 
 const FORM_KEY = 'referralTreatment'
 
 const ReferralTreatmentBlock = () => {
+  const REFFERAL_TREATMENT_OPTIONS = mapCodesetToOptions(
+    useCodesetCodes(CODESETS.ReferralTreatment),
+  )
+
   return (
     <FormFieldContainer className="flex-row gap-1">
       <FormFieldLabel className="!text-1">Referral to Treatment</FormFieldLabel>

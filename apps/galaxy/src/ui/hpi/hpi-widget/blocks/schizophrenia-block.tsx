@@ -1,40 +1,25 @@
 import { useEffect } from 'react'
 import { useFormContext } from 'react-hook-form'
 import { DetailsType, GroupSelectSection } from '@/components'
+import { CODESETS } from '@/constants'
+import { useCodesetCodes } from '@/hooks'
+import { mapCodesetToOptions } from '@/utils'
 import { HpiWidgetSchemaType } from '../hpi-widget-schema'
 
 const BLOCK_ID = 'schizophrenia'
 
 const BLOCK_TITLE = 'Schizophrenia'
 
-const DELUSION_OPTIONS = [
-  { label: 'Grandiose', value: 'grandiose' },
-  { label: 'of reference', value: 'ofReference' },
-  { label: 'Erotomania', value: 'erotomania' },
-  { label: 'Persecutory', value: 'persecutory' },
-  { label: 'Jealous', value: 'jealous' },
-  { label: 'Bizarre', value: 'bizarre' },
-  { label: 'Mixed', value: 'mixed' },
-  { label: 'Nihilistic', value: 'nihilistic' },
-  { label: 'Thought broadcasting', value: 'thoughtBroadcasting' },
-  { label: 'Thought Insertion', value: 'thoughtInsertion' },
-  { label: 'Guilt', value: 'guilt' },
-  { label: 'Persecution', value: 'persecution' },
-  { label: 'Unspecified', value: 'unspecified' },
-  { label: 'Infidelity', value: 'infidelity' },
-  { label: 'Misidentification syndrome', value: 'misidentificationSyndrome' },
-]
-
-const HALLUCINATIONS_OPTIONS = [
-  { label: 'Auditory', value: 'auditory' },
-  { label: 'Visual', value: 'visual' },
-  { label: 'Olfactory', value: 'Olfactory' },
-  { label: 'Tactile', value: 'tactile' },
-  { label: 'Gustatory', value: 'gustatory' },
-  { label: 'Somatic', value: 'Somatic' },
-]
-
-const SCHIZOPHRENIA_BLOCK_OPTIONS = [
+const SCHIZOPHRENIA_BLOCK_OPTIONS = (
+  DELUSION_OPTIONS: {
+    label: string
+    value: string
+  }[],
+  HALLUCINATIONS_OPTIONS: {
+    label: string
+    value: string
+  }[],
+) => [
   {
     label: 'Delusion',
     value: 'schDelusion',
@@ -92,6 +77,14 @@ const SchizophreniaBlock = () => {
   const { watch, setValue, getValues } = useFormContext<HpiWidgetSchemaType>()
   const schizophreniaValues = watch('schizophrenia')
 
+  const DELUSION_OPTIONS = mapCodesetToOptions(
+    useCodesetCodes(CODESETS.DelusionType),
+  )
+
+  const HALLUCINATIONS_OPTIONS = mapCodesetToOptions(
+    useCodesetCodes(CODESETS.HallucinationType),
+  )
+
   useEffect(() => {
     if (!schizophreniaValues.length) {
       setValue('schizophreniaDelusionValues', [])
@@ -102,7 +95,10 @@ const SchizophreniaBlock = () => {
     <GroupSelectSection
       label={BLOCK_TITLE}
       field={BLOCK_ID}
-      options={SCHIZOPHRENIA_BLOCK_OPTIONS}
+      options={SCHIZOPHRENIA_BLOCK_OPTIONS(
+        DELUSION_OPTIONS,
+        HALLUCINATIONS_OPTIONS,
+      )}
       parentField="chiefComplaint"
       valueInParent="ccSchizophrenia"
     />

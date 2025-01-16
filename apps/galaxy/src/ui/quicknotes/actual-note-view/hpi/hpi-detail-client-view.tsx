@@ -1,5 +1,7 @@
 'use client'
 
+import { CODESETS } from '@/constants'
+import { useCodesetCodes } from '@/hooks'
 import { PatientProfile, QuickNoteSectionItem } from '@/types'
 import { transformIn } from '@/ui/hpi/hpi-widget/data'
 import { getPatientAge, getPatientFullName } from '@/utils'
@@ -16,6 +18,9 @@ interface HpiProps {
 const HpiDetailClientView = ({ data, patient }: HpiProps) => {
   const { legalName, birthdate, gender } = patient
 
+  const delusionTypeCodeset = useCodesetCodes(CODESETS.DelusionType)
+  const hallucinationTypeCodeset = useCodesetCodes(CODESETS.HallucinationType)
+
   return (
     <ActualNoteDetailsWrapper
       sectionName={QuickNoteSectionName.QuicknoteSectionHPI}
@@ -27,6 +32,8 @@ const HpiDetailClientView = ({ data, patient }: HpiProps) => {
           gender: getGenderValue(gender),
         }}
         symptoms={transformIn(data ?? [], true)}
+        delusionTypeCodeset={delusionTypeCodeset}
+        hallucinationTypeCodeset={hallucinationTypeCodeset}
       />
     </ActualNoteDetailsWrapper>
   )

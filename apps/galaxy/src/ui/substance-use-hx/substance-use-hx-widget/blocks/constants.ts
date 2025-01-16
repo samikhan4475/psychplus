@@ -23,22 +23,6 @@ const SMOKE_PACKS_OPTIONS = [
   { label: '2', value: '2' },
 ]
 
-const SMOKING_CESSATION_OPTIONS = [
-  { label: 'Nicotine Replacement', value: 'Nicotine Replacement' },
-  { label: 'Wellbutrin', value: 'Wellbutrin' },
-  { label: 'Chantix', value: 'Chantix' },
-  { label: 'Patient Refused', value: 'Patient Refused' },
-  { label: 'Counseling', value: 'Counseling' },
-]
-
-const COUNSELING_OPTIONS = [
-  { label: 'Individual Counseling', value: 'Individual Counseling' },
-  { label: 'Group counseling', value: 'Group counseling' },
-  { label: 'Online Program', value: 'Online Program' },
-  { label: '1-800-QUIT-NOW', value: '1-800-QUIT-NOW' },
-  { label: 'Patient Refused', value: 'Patient Refused' },
-]
-
 const DRUG_DETAILS_OPTIONS = [
   {
     label: 'Opioids',
@@ -72,15 +56,6 @@ const DRUG_DETAILS_OPTIONS = [
   },
 ]
 
-const REFFERAL_TREATMENT_OPTIONS = [
-  { label: 'Detox', value: 'Detox' },
-  { label: 'Residential', value: 'Residential' },
-  { label: 'Alcohol Anonymous', value: 'Alcohol' },
-  { label: 'Narcotics Anonymous', value: 'Aarcotics' },
-  { label: 'Outpatient Therapy', value: 'OutpatientTherapy' },
-  { label: 'Medications', value: 'Medications' },
-]
-
 export {
   ALCOHOL_ID,
   ALCOHOL_LABEL,
@@ -97,8 +72,5 @@ export {
   SMOKE_PACKS_ID,
   SMOKE_PACKS_LABEL,
   SMOKE_PACKS_OPTIONS,
-  SMOKING_CESSATION_OPTIONS,
-  COUNSELING_OPTIONS,
   DRUG_DETAILS_OPTIONS,
-  REFFERAL_TREATMENT_OPTIONS,
 }

@@ -1,5 +1,7 @@
 'use client'
 
+import { CODESETS } from '@/constants'
+import { useCodesetCodes } from '@/hooks'
 import { PatientProfile, QuickNoteSectionItem } from '@/types'
 import { transformIn } from '@/ui/substance-use-hx/substance-use-hx-widget/data'
 import { getWidgetContainerCheckboxStateByWidgetId } from '@/utils'
@@ -28,6 +30,10 @@ const SubstanceUseHxClientView = ({
     initialValue: transformedData.widgetContainerCheckboxField,
   })?.actualNoteViewVisibility
 
+  const counsellingCodeset = useCodesetCodes(CODESETS.CounsellingOptions)
+  const tobaccoTreatmentCodeset = useCodesetCodes(CODESETS.TobaccoTreatment)
+  const referralTreatmentCodeset = useCodesetCodes(CODESETS.ReferralTreatment)
+
   return (
     // <ActualNoteDetailsWrapper
     //   sectionName={QuickNoteSectionName.QuickNoteSectionSubstanceUseHx}
@@ -37,6 +43,9 @@ const SubstanceUseHxClientView = ({
       data={transformedData}
       patient={patient}
       actualNoteViewVisibility={actualNoteViewVisibility}
+      counsellingCodeset={counsellingCodeset}
+      tobaccoTreatmentCodeset={tobaccoTreatmentCodeset}
+      referralTreatmentCodeset={referralTreatmentCodeset}
     />
     // </ActualNoteDetailsWrapper>
   )

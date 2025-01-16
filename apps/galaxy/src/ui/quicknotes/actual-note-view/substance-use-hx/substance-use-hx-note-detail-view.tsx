@@ -1,5 +1,7 @@
 'use client'
 
+import { CODESETS } from '@/constants'
+import { useCodesetCodes } from '@/hooks'
 import { transformIn } from '@/ui/substance-use-hx/substance-use-hx-widget/data'
 import { getWidgetContainerCheckboxStateByWidgetId } from '@/utils'
 import { QuickNoteSectionName } from '../../constants'
@@ -22,12 +24,20 @@ const SubstanceUseHxNoteDetailView = ({
     visitSequence,
     initialValue: transformedData.widgetContainerCheckboxField,
   })?.actualNoteViewVisibility
+
+  const counsellingCodeset = useCodesetCodes(CODESETS.CounsellingOptions)
+  const tobaccoTreatmentCodeset = useCodesetCodes(CODESETS.TobaccoTreatment)
+  const referralTreatmentCodeset = useCodesetCodes(CODESETS.ReferralTreatment)
+
   return (
     <Details
       sectionName="Substance Use History"
       data={transformIn(data)}
       patient={patient}
       actualNoteViewVisibility={actualNoteViewVisibility}
+      counsellingCodeset={counsellingCodeset}
+      tobaccoTreatmentCodeset={tobaccoTreatmentCodeset}
+      referralTreatmentCodeset={referralTreatmentCodeset}
     />
   )
 }

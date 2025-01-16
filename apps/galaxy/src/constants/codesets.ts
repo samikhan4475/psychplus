@@ -96,6 +96,11 @@ const CODESETS = {
   SpecimenCollectionMethod: 'HL7v2.SpecimenCollectionMethod',
   InjectionAddon: 'PsychPlusPublic.InjectionAddon',
   InjectionSite: 'PsychPlusPublic.InjectionSite',
+  CounsellingOptions: 'PsychPlusPublic.CounsellingOptions',
+  TobaccoTreatment: 'PsychPlusPublic.TobaccoTreatment',
+  ReferralTreatment: 'PsychPlusPublic.ReferralTreatment',
+  HallucinationType: 'PsychPlusPublic.HallucinationType',
+  DelusionType: 'PsychPlusPublic.DelusionType',
 }
 export {
   CODESETS,

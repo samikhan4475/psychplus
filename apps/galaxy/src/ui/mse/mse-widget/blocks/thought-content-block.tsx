@@ -1,38 +1,13 @@
 import { Box, Flex } from '@radix-ui/themes'
 import { BlockLabel, GroupSelectSection } from '@/components'
-import { cn } from '@/utils'
+import { CODESETS } from '@/constants'
+import { useCodesetCodes } from '@/hooks'
+import { cn, mapCodesetToOptions } from '@/utils'
 import { MseGroupDetailSection } from '../history/mse-details/mse-group-detail-section'
 import { type MseWidgetSchemaType } from '../mse-widget-schema'
 import { GroupSelectOption } from '../types'
 import { DelusionHallucinationSection } from './delusion-hallucination-section'
 import { SiHiSection } from './si-hi-section'
-
-const DELUSION_OPTIONS = [
-  { label: 'Grandiose', value: 'sdGrandiose' },
-  { label: 'of reference', value: 'sdOfReference' },
-  { label: 'Erotomania', value: 'sdErotomania' },
-  { label: 'Persecutory', value: 'sdPersecutory' },
-  { label: 'Jealous', value: 'sdJealous' },
-  { label: 'Bizarre', value: 'sdBizarre' },
-  { label: 'Mixed', value: 'sdMixed' },
-  { label: 'Nihilistic', value: 'sdNihilistic' },
-  { label: 'Thought broadcasting', value: 'sdThoughtBroadcasting' },
-  { label: 'Thought Insertion', value: 'sdThoughtInsertion' },
-  { label: 'Guilt', value: 'sdGuilt' },
-  { label: 'Persecution', value: 'sdPersecution' },
-  { label: 'Unspecified', value: 'sdUnspecified' },
-  { label: 'Infidelity', value: 'sdInfidelity' },
-  { label: 'misidentification syndrome', value: 'sdMisidentificationSyndrome' },
-]
-
-const HALLUCINATIONS_OPTIONS = [
-  { label: 'Auditory', value: 'shAuditory' },
-  { label: 'Visual', value: 'shVisual' },
-  { label: 'Olfactory', value: 'shOlfactory' },
-  { label: 'Tactile', value: 'shTactile' },
-  { label: 'Gustatory', value: 'shGustatory' },
-  { label: 'Somatic', value: 'shSomatic' },
-]
 
 const THOUGHT_CONTENT_OTHER_BLOCK_OPTIONS: GroupSelectOption<string>[] = [
   {
@@ -46,6 +21,14 @@ const THOUGHT_CONTENT_OTHER_BLOCK_OPTIONS: GroupSelectOption<string>[] = [
 ]
 
 const ThoughtContentBlock = ({ result }: { result?: MseWidgetSchemaType }) => {
+  const HALLUCINATIONS_OPTIONS = mapCodesetToOptions(
+    useCodesetCodes(CODESETS.HallucinationType),
+  )
+
+  const DELUSION_OPTIONS = mapCodesetToOptions(
+    useCodesetCodes(CODESETS.DelusionType),
+  )
+
   return (
     <Flex direction="row" gap="2" className={cn(result && 'mt-3')}>
       <Box>

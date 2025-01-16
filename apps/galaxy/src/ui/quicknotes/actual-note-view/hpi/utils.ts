@@ -1,15 +1,33 @@
+import { SharedCode } from '@/types'
 import { HpiWidgetSchemaType } from '@/ui/hpi/hpi-widget/hpi-widget-schema'
 import { optionsValueToLabel } from '@/ui/hpi/hpi-widget/utils'
+import { replaceValueWithLabel } from '@/utils'
 import { HpiWidgetSchemaKey } from './hpi-narration'
 
-const formatSymptoms = (filteredSymptoms: string[]): string => {
+const formatSymptoms = (
+  filteredSymptoms: string[],
+  delusionTypeCodeset?: SharedCode[],
+  hallucinationTypeCodeset?: SharedCode[],
+): string => {
   const count = filteredSymptoms.length
   if (count === 0) return ''
-  if (count === 1) return filteredSymptoms?.[0]
+
+  let updatedSymptoms = filteredSymptoms
+
+  if (delusionTypeCodeset && hallucinationTypeCodeset)
+    updatedSymptoms = filteredSymptoms.map((item) => {
+      if (item.includes('Delusion'))
+        return replaceValueWithLabel(item, delusionTypeCodeset)
+      if (item.includes('Hallucination'))
+        return replaceValueWithLabel(item, hallucinationTypeCodeset)
+      return item
+    })
+
+  if (count === 1) return updatedSymptoms?.[0]
 
   return (
-    filteredSymptoms
-      .map((symptom) => symptom)
+    updatedSymptoms
+      ?.map((symptom) => symptom)
       .slice(0, -1)
       .join(', ') + ` and ${filteredSymptoms?.[count - 1]}`
   )

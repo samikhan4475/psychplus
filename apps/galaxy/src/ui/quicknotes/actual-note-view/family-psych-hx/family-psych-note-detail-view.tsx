@@ -1,5 +1,7 @@
 'use client'
 
+import { CODESETS } from '@/constants'
+import { useCodesetCodes } from '@/hooks'
 import { transformIn } from '@/ui/family-psych-hx/family-psych-hx-widget/data'
 import { getWidgetContainerCheckboxStateByWidgetId } from '@/utils'
 import { QuickNoteSectionName } from '../../constants'
@@ -20,11 +22,14 @@ const FamilyPsychNoteDetailView = ({
     initialValue: transformedData.widgetContainerCheckboxField,
   })?.actualNoteViewVisibility
 
+  const relationshipCodeset = useCodesetCodes(CODESETS.Relationship)
+
   if (data.length === 0) return null
   return (
     <Details
       data={transformedData}
       actualNoteViewVisibility={actualNoteViewVisibility}
+      relationshipCodeset={relationshipCodeset}
     />
   )
 }
