@@ -30,11 +30,10 @@ const transformIn = (
   const therapy = visitType
     ? ['Outpatient', 'EdVisit', 'TransitionalCare'].includes(visitType)
     : false
-  let therapyPsychoanalysis = ''
-  if (therapy && appointmentData) {
-    therapyPsychoanalysis =
-      appointmentData.length >= 2 ? 'psychoanalysis' : 'therapy'
-  }
+  const therapyPsychoanalysis =
+    therapy && appointmentData && appointmentData.length >= 2
+      ? 'psychoanalysis'
+      : 'therapy'
 
   const result: Record<string, BlockType | DateValue> = {
     injection: false,
@@ -101,20 +100,12 @@ const transformIn = (
         .filter((data) => data.value && data.display)
       result[key] = modifiedData
     } else {
-      switch (itemValue) {
-        case 'true':
-          result[key] = true
-          break
-        case 'false':
-          result[key] = false
-          break
-        case 'undefined':
-          result[key] = ''
-          break
-        default:
-          result[key] = itemValue
-          break
+      const jsonValue: { [key: string]: boolean | string } = {
+        true: true,
+        false: false,
+        undefined: '',
       }
+      result[key] = jsonValue[itemValue] ?? itemValue
     }
   })
 
@@ -128,30 +119,42 @@ const transformOut =
   ): Promise<QuickNoteSectionItem[]> => {
     const result: QuickNoteSectionItem[] = []
     const formData = sanitizeFormData(schema)
-    const tranformProps = {
+    const transformProps = {
       patientId,
       appointmentId,
       schema: formData,
     }
+
     if (!formData) return result
     if (formData.injection) {
-      const injectionSections = transfromOutInjectionBlock(tranformProps)
+      const injectionSections = transformOutInjectionBlock(transformProps)
       result.push(...injectionSections)
     }
     if (formData.interactiveComplexity) {
       const interactiveComplexitySections =
-        transfromOutInteractiveComplexity(tranformProps)
+        transformOutInteractiveComplexity(transformProps)
       result.push(...interactiveComplexitySections)
     }
     if (formData.therapy) {
-      if (formData.therapyPsychoanalysis === 'therapy') {
-        const therapySections = transfromOutTherapyBlock(tranformProps)
-        result.push(...therapySections)
-      }
       if (formData.therapyPsychoanalysis === 'psychoanalysis') {
         const psychoanalysisSections =
-          transfromOutPsychoanalysisBlock(tranformProps)
+          transformOutPsychoanalysisBlock(transformProps)
         result.push(...psychoanalysisSections)
+      } else if (formData.therapyPsychoanalysis === 'neither') {
+        const QuickNotesPayload = {
+          pid: Number(patientId),
+          sectionName: QuickNoteSectionName.Addon,
+          appointmentId: Number(appointmentId),
+        }
+
+        result.push({
+          ...QuickNotesPayload,
+          sectionItem: 'therapyPsychoanalysis',
+          sectionItemValue: 'neither',
+        })
+      } else {
+        const therapySections = transformOutTherapyBlock(transformProps)
+        result.push(...therapySections)
       }
     }
 
@@ -180,12 +183,12 @@ const transformOut =
     return result
   }
 
-const transfromOutInjectionBlock = (tranformProps: {
+const transformOutInjectionBlock = (transformProps: {
   patientId: string
   appointmentId: string
   schema: Record<string, BlockType>
 }) => {
-  const { patientId, appointmentId, schema } = tranformProps
+  const { patientId, appointmentId, schema } = transformProps
 
   const QuickNotesPayload = {
     pid: Number(patientId),
@@ -212,12 +215,12 @@ const transfromOutInjectionBlock = (tranformProps: {
   return result
 }
 
-const transfromOutInteractiveComplexity = (tranformProps: {
+const transformOutInteractiveComplexity = (transformProps: {
   patientId: string
   appointmentId: string
   schema: Record<string, BlockType>
 }) => {
-  const { patientId, appointmentId, schema } = tranformProps
+  const { patientId, appointmentId, schema } = transformProps
 
   const QuickNotesPayload = {
     pid: Number(patientId),
@@ -234,8 +237,6 @@ const transfromOutInteractiveComplexity = (tranformProps: {
   ]
 
   INTERACTIVE_COMPLEXITY_BLOCK_OPTIONS.forEach((option) => {
-    console.log(schema[option.field], 'schema[option.field]')
-
     if (schema[option.field]) {
       result.push({
         ...QuickNotesPayload,
@@ -248,12 +249,12 @@ const transfromOutInteractiveComplexity = (tranformProps: {
   return result
 }
 
-const transfromOutTherapyBlock = (tranformProps: {
+const transformOutTherapyBlock = (transformProps: {
   patientId: string
   appointmentId: string
   schema: Record<string, BlockType>
 }) => {
-  const { patientId, appointmentId, schema } = tranformProps
+  const { patientId, appointmentId, schema } = transformProps
 
   const QuickNotesPayload = {
     pid: Number(patientId),
@@ -287,11 +288,12 @@ const transfromOutTherapyBlock = (tranformProps: {
   const arrayData = ['therapyDetailsInterventions', 'therapyDetailsModality']
 
   arrayData.forEach((item) => {
-    if (schema[item] && typeof schema[item] === 'object') {
-      let value = ''
-      schema[item]?.forEach((data: ModalityTransferenceData) => {
-        value += `${data.value}|${data.display},`
-      })
+    if (schema[item] && Array.isArray(schema[item])) {
+      const value = schema[item]
+        .map(
+          (data: ModalityTransferenceData) => `${data.value}|${data.display}`,
+        )
+        .join(',')
       result.push({
         ...QuickNotesPayload,
         sectionItem: item,
@@ -303,12 +305,12 @@ const transfromOutTherapyBlock = (tranformProps: {
   return result
 }
 
-const transfromOutPsychoanalysisBlock = (tranformProps: {
+const transformOutPsychoanalysisBlock = (transformProps: {
   patientId: string
   appointmentId: string
   schema: Record<string, BlockType>
 }) => {
-  const { patientId, appointmentId, schema } = tranformProps
+  const { patientId, appointmentId, schema } = transformProps
   const QuickNotesPayload = {
     pid: Number(patientId),
     sectionName: QuickNoteSectionName.Addon,
@@ -335,11 +337,12 @@ const transfromOutPsychoanalysisBlock = (tranformProps: {
   const arrayData = ['psychoanalyticTechnique', 'transferenceDescription']
 
   arrayData.forEach((item) => {
-    if (schema[item] && typeof schema[item] === 'object') {
-      let value = ''
-      schema[item]?.forEach((data: ModalityTransferenceData) => {
-        value += `${data.value}|${data.display},`
-      })
+    if (schema[item] && Array.isArray(schema[item])) {
+      const value = schema[item]
+        .map(
+          (data: ModalityTransferenceData) => `${data.value}|${data.display}`,
+        )
+        .join(',')
       result.push({
         ...QuickNotesPayload,
         sectionItem: item,

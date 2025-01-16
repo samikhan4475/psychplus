@@ -25,9 +25,11 @@ const TherapyWidgetClientLoader = ({
   const visitType = useSearchParams().get('visitType') ?? ''
   const [individualInitialValue, setIndividualInitialValue] =
     useState<TherapySchemaType>(getInitialValues())
-
   useEffect(() => {
-    const durationData = !individualInitialValue.therapyTimeSpent
+    const hasTherapyTimeSpent = data.some(
+      (item) => item.sectionItem === 'therapyTimeSpent',
+    )
+    const durationData = !hasTherapyTimeSpent
       ? mapAppointmentDurationToData(appointment?.duration)
       : {}
     setIndividualInitialValue({

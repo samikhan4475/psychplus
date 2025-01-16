@@ -29,26 +29,31 @@ const TherapyClientView = ({ data = [] }: TherapyClientViewProps) => {
     const response = fetchTherapyData(data, visitType)
     if (response) {
       const { values, blockOptions, sessionParticipantOptions } = response
-      const paragraph = `Spent ${
-        values[values.therapyTimeSpent as keyof typeof values]
-          ? `${values[values.therapyTimeSpent as keyof typeof values]} minutes`
-          : blockOptions.find(
-              (option) => option.value === values.therapyTimeSpent,
-            )?.label ?? 'Unknown time'
-      } on this session interacting with ${
-        values.therapySessionParticipants === 'Patient&Other' &&
-        values.patientOther
-          ? `Patient & ${values.patientOther}`
-          : sessionParticipantOptions.find(
-              (option) => option.value === values.therapySessionParticipants,
-            )?.label ?? 'Unknown participants'
-      }. Therapy modalities that were used include but are not limited to ${values.therapyDetailsModality
-        .map((modality) => modality.display)
-        .join(
-          ', ',
-        )}. Interventions that were completed include but are not limited to ${values.therapyDetailsInterventions
-        .map((intervention) => intervention.display)
-        .join(', ')}.`
+      const paragraph = values.therapyTimeSpent
+        ? `Spent ${
+            values[values.therapyTimeSpent as keyof typeof values]
+              ? `${
+                  values[values.therapyTimeSpent as keyof typeof values]
+                } minutes`
+              : blockOptions.find(
+                  (option) => option.value === values.therapyTimeSpent,
+                )?.label ?? 'Unknown time'
+          } on this session interacting with ${
+            values.therapySessionParticipants === 'Patient&Other' &&
+            values.patientOther
+              ? `Patient & ${values.patientOther}`
+              : sessionParticipantOptions.find(
+                  (option) =>
+                    option.value === values.therapySessionParticipants,
+                )?.label ?? 'Unknown participants'
+          }. Therapy modalities that were used include but are not limited to ${values.therapyDetailsModality
+            .map((modality) => modality.display)
+            .join(
+              ', ',
+            )}. Interventions that were completed include but are not limited to ${values.therapyDetailsInterventions
+            .map((intervention) => intervention.display)
+            .join(', ')}.`
+        : ''
 
       const paragraphHeading =
         visitType === 'IndividualPsychotherapy'

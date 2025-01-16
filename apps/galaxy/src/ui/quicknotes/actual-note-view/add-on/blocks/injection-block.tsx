@@ -5,7 +5,7 @@ import { CODESETS } from '@/constants'
 import { useCodesetCodes } from '@/hooks'
 import { AddOnWidgetSchemaType } from '@/ui/add-on/add-on-widget/add-on-widget-schema'
 import { codesetAttributesOptions } from '@/utils'
-import { LabelAndValue } from '../shared'
+import { LabelAndValue } from '../../shared'
 
 const InjectionDetails = ({ data }: { data: AddOnWidgetSchemaType }) => {
   const injectionAddonCodeset = useCodesetCodes(CODESETS.InjectionAddon)

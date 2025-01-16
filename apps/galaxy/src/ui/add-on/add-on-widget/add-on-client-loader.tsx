@@ -50,7 +50,13 @@ const AddOnClientLoader = ({
 
   if (!values) return null
 
-  return <AddOnWidget patientId={patientId} initialValue={values} />
+  return (
+    <AddOnWidget
+      patientId={patientId}
+      initialValue={values}
+      appointment={appointment}
+    />
+  )
 }
 
 export { AddOnClientLoader }

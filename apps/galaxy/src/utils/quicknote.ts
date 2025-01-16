@@ -160,7 +160,7 @@ const visitTypeToWidgets: Record<VisitTypeEnum, QuickNoteSectionName[]> = {
     QuickNoteSectionName.QuicknoteSectionQuestionnaires,
     QuickNoteSectionName.QuicknoteSectionMse,
     QuickNoteSectionName.QuickNoteSectionDiagnosis,
-    QuickNoteSectionName.QuickNoteSectionIndividualTherapy,
+    QuickNoteSectionName.QuickNoteSectionFamilyTherapy,
     QuickNoteSectionName.QuicknoteSectionPsychiatryAssessmentPlan,
     QuickNoteSectionName.QuicknoteSectionTherapyAssessmentPlan,
     QuickNoteSectionName.QuicknoteSectionFamilyInternalMedicineAssessmentPlan,

@@ -132,6 +132,8 @@ const addOnWidgetSchema = baseSchema.superRefine(async (data, ctx) => {
     // PSYCHOANALYSIS schema validation
     if (data.therapyPsychoanalysis === 'psychoanalysis') {
       await validateSchema(psychoanalysisSchema, data, ctx)
+    } else if (data.therapyPsychoanalysis === 'neither') {
+      return
     } else {
       // THERAPY schema validation
       await validateSchema(TherapySchema, data, ctx)
