@@ -1,4 +1,5 @@
 import { ClaimPayment, InsurancePayment } from '../../types'
+import { removeNegative } from './cells/utils'
 
 interface ValidatePaymentParams {
   paymentDetail: InsurancePayment
@@ -50,8 +51,8 @@ const validatePayment = ({
       0,
     )
     const billedAmount = parseFloat(serviceLine.billedAmount)
-    const paidAmount = parseFloat(serviceLine.paidAmount)
-    const totalPaid = sumOfAdjustments + paidAmount
+    const paidAmount = parseFloat(removeNegative(serviceLine.paidAmount))
+    const totalPaid = +removeNegative(`${sumOfAdjustments}`) + paidAmount
 
     if (totalPaid > billedAmount) {
       serviceLineAmountExceeded = `Sum of all the amounts should not exceed billed amount - Service Line (${
@@ -81,7 +82,9 @@ const validatePayment = ({
       ) ?? 0
     const billedAmount = parseFloat(serviceLine.billedAmount)
     const sumOfAmounts =
-      +sumOfAdjustments + +serviceLine.paidAmount + +serviceLine.otherPr
+      +removeNegative(`${sumOfAdjustments}`) +
+      +removeNegative(serviceLine.paidAmount) +
+      +removeNegative(serviceLine.otherPr)
 
     if (sumOfAmounts.toFixed(2) !== billedAmount.toFixed(2)) {
       amountAdjustedEqually = `Billed Amount is not adjusted properly - Service Line (${

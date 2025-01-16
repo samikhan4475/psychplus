@@ -3,17 +3,20 @@ import { useFormContext } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { PropsWithRow } from '@/components'
 import { ClaimServiceLinePayment } from '../../../types'
-import { WRITE_OFF_ADJUSTMENT } from '../constants'
+import { PROCESSED_AS_REVERSAL, WRITE_OFF_ADJUSTMENT } from '../constants'
 import { SchemaType } from '../schema'
 import { DollarInput } from './dollar-input'
-import { addInsuranceAdjustment, amountCheck } from './utils'
+import {
+  addDefaultNegative,
+  addInsuranceAdjustment,
+  amountCheck,
+  getOtherWriteOff,
+  removeNegative,
+} from './utils'
 
 const AllowedAmountCell = ({ row }: PropsWithRow<ClaimServiceLinePayment>) => {
   const form = useFormContext<SchemaType>()
-
-  const writeOffAmount = form.watch(
-    `claimServiceLinePayments.${row.index}.writeOffAmount`,
-  )
+  const processedAsCode = form.watch('processedAsCode')
 
   const billedAmount = form.watch(
     `claimServiceLinePayments.${row.index}.billedAmount`,
@@ -29,7 +32,9 @@ const AllowedAmountCell = ({ row }: PropsWithRow<ClaimServiceLinePayment>) => {
   const onInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target
 
-    if (parseFloat(value) > parseFloat(billedAmount)) {
+    if (processedAsCode === PROCESSED_AS_REVERSAL) addDefaultNegative(event)
+
+    if (parseFloat(removeNegative(value)) > parseFloat(billedAmount)) {
       toast.error(`Allowed Amount cannot be greater than billed amount`)
       // Dont allow user to type if its not valid
       event.target.value = value.slice(0, value.length - 1)
@@ -39,9 +44,9 @@ const AllowedAmountCell = ({ row }: PropsWithRow<ClaimServiceLinePayment>) => {
   const onBlur = (event: React.FocusEvent<HTMLInputElement>) => {
     const { value } = event.target
     const adjustmentAmount =
-      parseFloat(billedAmount ?? '0') - parseFloat(allowedAmount ?? '0')
-
-    if (value === '' || value === '0' || adjustmentAmount === 0) {
+      parseFloat(billedAmount ?? '0') -
+      parseFloat(removeNegative(allowedAmount) || '0')
+    if (value === '' || value === '0' || removeNegative(value) === '') {
       const updatedAdjustments = serviceLinePaymentAdjustments?.filter(
         (adj) =>
           adj.adjustmentGroupCode !==
@@ -49,23 +54,36 @@ const AllowedAmountCell = ({ row }: PropsWithRow<ClaimServiceLinePayment>) => {
           adj.adjustmentReasonCode !==
             WRITE_OFF_ADJUSTMENT.adjustmentReasonCode,
       )
-
+      const otherAdjustments = getOtherWriteOff(serviceLinePaymentAdjustments)
       form.setValue(
         `claimServiceLinePayments.${row.index}.serviceLinePaymentAdjustments`,
         updatedAdjustments,
       )
+
+      form.setValue(
+        `claimServiceLinePayments.${row.index}.writeOffAmount`,
+        `${otherAdjustments}`,
+      )
+      form.setValue(`claimServiceLinePayments.${row.index}.paidAmount`, ``)
     } else {
+      const finalAdjustmentAmount =
+        processedAsCode === PROCESSED_AS_REVERSAL
+          ? -+adjustmentAmount
+          : +adjustmentAmount
+
       const updatedAdjustments = addInsuranceAdjustment({
-        adjustmentAmount,
+        adjustmentAmount: finalAdjustmentAmount,
         adjustmentGroupCode: WRITE_OFF_ADJUSTMENT.adjustmentGroupCode,
         adjustmentReasonCode: WRITE_OFF_ADJUSTMENT.adjustmentReasonCode,
         serviceLinePaymentAdjustments: serviceLinePaymentAdjustments ?? [],
         claimPayment: row.original,
       })
 
+      const otherAdjustments = getOtherWriteOff(serviceLinePaymentAdjustments)
+
       form.setValue(
         `claimServiceLinePayments.${row.index}.writeOffAmount`,
-        `${+adjustmentAmount + +writeOffAmount}`,
+        `${+finalAdjustmentAmount + +otherAdjustments}`,
       )
       form.setValue(
         `claimServiceLinePayments.${row.index}.serviceLinePaymentAdjustments`,
@@ -77,7 +95,9 @@ const AllowedAmountCell = ({ row }: PropsWithRow<ClaimServiceLinePayment>) => {
   return (
     <DollarInput
       name={`claimServiceLinePayments.${row.index}.allowedAmount`}
-      onKeyDown={amountCheck}
+      onKeyDown={(e) =>
+        amountCheck(e, processedAsCode === PROCESSED_AS_REVERSAL)
+      }
       onInput={onInput}
       onBlur={onBlur}
     />

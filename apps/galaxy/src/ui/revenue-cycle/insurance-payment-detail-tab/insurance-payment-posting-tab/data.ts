@@ -1,5 +1,6 @@
 import { ClaimPayment, UpdateClaimPaymentPayload } from '../../types'
 import { PaymentListTypes } from '../types'
+import { PROCESSED_AS_REVERSAL } from './constants'
 
 const transformInDefault = (
   paymentPostingId: string,
@@ -92,13 +93,16 @@ const transformOut = (
           serviceLine.serviceLinePaymentAdjustments?.map((adj) => ({
             ...adj,
             claimServiceLinePaymentId: serviceLine.claimServiceLineId ?? null,
-          })),
+          })) ?? [],
       })) ?? [],
     dateOfServiceFrom:
       new Date(claimPayment.dateOfServiceFrom ?? '').toISOString() ?? '',
     dateOfServiceTo:
       new Date(claimPayment.dateOfServiceTo ?? '').toISOString() ?? '',
   }
+
+  if (updatedModel.processedAsCode === PROCESSED_AS_REVERSAL)
+    delete updatedModel.insurancePolicyId
 
   if (!updatedModel.id)
     updatedModel.claimServiceLinePayments?.forEach((serviceLine) => {

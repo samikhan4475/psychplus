@@ -2,13 +2,15 @@ import React from 'react'
 import { useFormContext } from 'react-hook-form'
 import { PropsWithRow } from '@/components'
 import { ClaimServiceLinePayment } from '../../../types'
-import { CO_INSURANCE_ADJUSTMENT } from '../constants'
+import { CO_INSURANCE_ADJUSTMENT, PROCESSED_AS_REVERSAL } from '../constants'
 import { SchemaType } from '../schema'
 import { DollarInput } from './dollar-input'
 import {
+  addDefaultNegative,
   addInsuranceAdjustment,
   amountCheck,
   removeInsuranceAdjustment,
+  removeNegative,
 } from './utils'
 
 const CoInsuranceAmountCell = ({
@@ -18,12 +20,15 @@ const CoInsuranceAmountCell = ({
   const serviceLinePaymentAdjustments = form.watch(
     `claimServiceLinePayments.${row.index}.serviceLinePaymentAdjustments`,
   )
+  const processedAsCode = form.watch('processedAsCode')
+
+  const onInput = (event: React.ChangeEvent<HTMLInputElement>) =>
+    processedAsCode === PROCESSED_AS_REVERSAL && addDefaultNegative(event)
 
   const onBlur = (event: React.FocusEvent<HTMLInputElement>) => {
     const { value } = event.target
-
-    const isEmptyValue = value === '' || value === '0'
-
+    const removedNegative = removeNegative(value)
+    const isEmptyValue = removedNegative === '' || removedNegative === '0'
     const updatedAdjustments = isEmptyValue
       ? removeInsuranceAdjustment({
           adjustmentGroupCode: CO_INSURANCE_ADJUSTMENT.adjustmentGroupCode,
@@ -48,7 +53,10 @@ const CoInsuranceAmountCell = ({
     <DollarInput
       name={`claimServiceLinePayments.${row.index}.coinsuranceAmount`}
       onBlur={onBlur}
-      onKeyDown={amountCheck}
+      onInput={onInput}
+      onKeyDown={(e) =>
+        amountCheck(e, processedAsCode === PROCESSED_AS_REVERSAL)
+      }
     />
   )
 }

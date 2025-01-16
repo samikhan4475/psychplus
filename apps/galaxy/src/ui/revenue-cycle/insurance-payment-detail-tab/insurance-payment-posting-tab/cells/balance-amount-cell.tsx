@@ -10,8 +10,10 @@ const BalanceAmountCell = ({ row }: PropsWithRow<ClaimServiceLinePayment>) => {
   const form = useFormContext<SchemaType>()
 
   const serviceLine = form.watch(`claimServiceLinePayments.${row.index}`)
-  const balanceAmount = calculateBalanceAmount(serviceLine)
-
+  const calculatedAmount = calculateBalanceAmount(serviceLine)
+  const balanceAmount = isNaN(parseFloat(calculatedAmount))
+    ? '0.00'
+    : calculatedAmount
   return (
     <TextField.Root
       value={balanceAmount}

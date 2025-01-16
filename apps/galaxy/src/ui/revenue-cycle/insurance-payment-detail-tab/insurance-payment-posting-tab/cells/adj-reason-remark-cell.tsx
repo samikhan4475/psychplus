@@ -5,7 +5,11 @@ import toast from 'react-hot-toast'
 import { PropsWithRow } from '@/components'
 import { getAdjustmentCodesAction } from '@/ui/revenue-cycle/actions/get-adjustment-codes'
 import { ClaimServiceLinePayment, InsurancePayment } from '../../../types'
-import { adjustmentMapping, WRITE_OFF_ADJUSTMENT } from '../constants'
+import {
+  adjustmentMapping,
+  PROCESSED_AS_REVERSAL,
+  WRITE_OFF_ADJUSTMENT,
+} from '../constants'
 import { SchemaType } from '../schema'
 import { AdjustmentAddButton } from './adj-add-button'
 import { AdjustmentAmountField } from './adjustment-amount-field'
@@ -13,7 +17,11 @@ import { AdjustmentCodeField } from './adjustment-code-field'
 import { AdjustmentPill } from './adjustment-pill'
 import { ReasonCodeField } from './reason-code-field'
 import { RemarkCodeField } from './remark-code-field'
-import { getAdjustmentStatus, updateOrAddAdjustment } from './utils'
+import {
+  getAdjustmentStatus,
+  getOtherWriteOff,
+  updateOrAddAdjustment,
+} from './utils'
 
 interface AdjustmentReasonRemarkCellProps
   extends PropsWithRow<ClaimServiceLinePayment> {
@@ -25,7 +33,7 @@ const AdjustmentReasonRemarkCell = ({
   paymentDetail,
 }: AdjustmentReasonRemarkCellProps) => {
   const form = useFormContext<SchemaType>()
-
+  const processedAsCode = form.watch('processedAsCode')
   const [adjustment, setAdjustment] = useState({
     adjustmentCode: '',
     adjustmentAmount: '',
@@ -65,8 +73,13 @@ const AdjustmentReasonRemarkCell = ({
         `Adjustment amount can't be greater than billed amount $${billedAmount}`,
       )
     } else {
+      const finalAdjustmentAmount =
+        processedAsCode === PROCESSED_AS_REVERSAL
+          ? -+adjustmentAmount
+          : +adjustmentAmount
+
       const updatedServiceLineAdjustments = updateOrAddAdjustment({
-        adjustmentAmount: +adjustmentAmount,
+        adjustmentAmount: finalAdjustmentAmount,
         adjustmentReasonCode: reasonCode,
         adjustmentGroupCode: adjustmentCode,
         remarkCode: remarkCode,
@@ -83,13 +96,19 @@ const AdjustmentReasonRemarkCell = ({
         reasonCode === WRITE_OFF_ADJUSTMENT.adjustmentReasonCode
       ) {
         const allowedAmount = String(+billedAmount - +adjustmentAmount)
+
+        const finalAllowedAmount =
+          processedAsCode === PROCESSED_AS_REVERSAL
+            ? -+allowedAmount
+            : +adjustmentAmount
+        const otherAdjustments = getOtherWriteOff(serviceLinePaymentAdjustments)
         form.setValue(
           `claimServiceLinePayments.${row.index}.writeOffAmount`,
-          adjustmentAmount,
+          `${+finalAdjustmentAmount + +otherAdjustments}`,
         )
         form.setValue(
           `claimServiceLinePayments.${row.index}.allowedAmount`,
-          allowedAmount,
+          `${finalAllowedAmount}`,
         )
       }
 
@@ -125,9 +144,12 @@ const AdjustmentReasonRemarkCell = ({
         adjustmentGroupCode: adjustmentCode,
         adjustmentReasonCode: reasonCode,
       })
-
+      const finalAdjustmentAmount =
+        processedAsCode === PROCESSED_AS_REVERSAL
+          ? -+adjustmentAmount
+          : +adjustmentAmount
       const updatedServiceLineAdjustments = updateOrAddAdjustment({
-        adjustmentAmount: +adjustmentAmount,
+        adjustmentAmount: finalAdjustmentAmount,
         adjustmentReasonCode: reasonCode,
         adjustmentGroupCode: adjustmentCode,
         remarkCode,
@@ -140,17 +162,12 @@ const AdjustmentReasonRemarkCell = ({
         updatedServiceLineAdjustments,
       )
 
-      const existingAdjustmentAmount =
-        serviceLinePaymentAdjustments.find(
-          (adjustment) =>
-            adjustment.adjustmentGroupCode === adjustmentCode &&
-            adjustment.adjustmentReasonCode === reasonCode,
-        )?.adjustmentAmount ?? 0
+      const otherAdjustments = getOtherWriteOff(serviceLinePaymentAdjustments)
 
       if (adjustmentStatus === 'WriteOff')
         form.setValue(
           `claimServiceLinePayments.${row.index}.writeOffAmount`,
-          `${+writeOffAmount + +adjustmentAmount - +existingAdjustmentAmount}`,
+          `${+finalAdjustmentAmount + +writeOffAmount + +otherAdjustments}`,
         )
 
       setIsLoading(false)

@@ -3,14 +3,34 @@ import {
   ServiceLinePaymentAdjustment,
 } from '@/ui/revenue-cycle/types'
 import { PaymentAdjustment } from '../../types'
-import { DEDUCTIBLE_ADJUSTMENT, DEFAULT_ADJUSTMENT_TYPE } from '../constants'
+import {
+  DEDUCTIBLE_ADJUSTMENT,
+  DEFAULT_ADJUSTMENT_TYPE,
+  WRITE_OFF_ADJUSTMENT,
+} from '../constants'
 
 const amountRegex = /^\d{0,3}(\.\d{0,2})?$/
+const negativeAmountRegex = /^-?\d{0,3}(\.\d{0,2})?$/
 const specialKeys = ['Backspace', 'Tab', 'Control', 'Shift', 'Alt']
-const amountCheck = (e: React.KeyboardEvent<HTMLInputElement>) => {
+
+const removeNegative = (amount: string) => amount?.replace(/-/g, '') ?? amount
+const addDefaultNegative = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const { value } = event.target
+  if (value && !value.startsWith('-')) {
+    event.target.value = '-' + value
+  }
+}
+const amountCheck = (
+  e: React.KeyboardEvent<HTMLInputElement>,
+  allowNegative?: boolean,
+) => {
   const newValue = e.currentTarget.value + e.key
   if (specialKeys.includes(e.key)) return
-  if (!amountRegex.test(newValue)) return e.preventDefault()
+  const validationRegex = allowNegative ? negativeAmountRegex : amountRegex
+  if (!newValue.startsWith('-') && allowNegative) {
+    e.currentTarget.value = '-'
+  }
+  if (!validationRegex.test(newValue)) return e.preventDefault()
 }
 
 interface AdjustmentParams {
@@ -28,6 +48,23 @@ interface AdjustmentType extends Partial<AdjustmentParams> {
   adjustmentAmount?: number
   adjustmentStatus?: string
 }
+
+const getOtherWriteOff = (
+  serviceLinePaymentAdjustments?: ServiceLinePaymentAdjustment[],
+) =>
+  serviceLinePaymentAdjustments
+    ?.reduce(
+      (acc, adjustment) =>
+        adjustment.adjustmentGroupCode !==
+          WRITE_OFF_ADJUSTMENT.adjustmentGroupCode &&
+        adjustment.recordStatus !== 'Inactive' &&
+        adjustment.adjustmentReasonCode !==
+          WRITE_OFF_ADJUSTMENT.adjustmentReasonCode
+          ? acc + +adjustment.adjustmentAmount
+          : acc,
+      0,
+    )
+    ?.toFixed(2) ?? 0
 
 const updateOrAddAdjustment = ({
   adjustmentGroupCode,
@@ -183,9 +220,12 @@ const getAdjustmentStatus = ({
 
 export {
   amountCheck,
+  getOtherWriteOff,
   addInsuranceAdjustment,
   getAdjustmentStatus,
+  addDefaultNegative,
   updateOrAddAdjustment,
   calculateBalanceAmount,
   removeInsuranceAdjustment,
+  removeNegative,
 }

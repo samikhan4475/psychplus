@@ -24,6 +24,8 @@ const CO_PAY_ADJUSTMENT = {
 
 const DEFAULT_ADJUSTMENT_TYPE = 'Denied'
 
+const PROCESSED_AS_REVERSAL = 'ReversalOfPreviousPayment'
+
 const adjustmentMapping = {
   [`${WRITE_OFF_ADJUSTMENT.adjustmentGroupCode}_${WRITE_OFF_ADJUSTMENT.adjustmentReasonCode}`]:
     'allowedAmount',
@@ -48,5 +50,6 @@ export {
   DEDUCTIBLE_ADJUSTMENT,
   CO_PAY_ADJUSTMENT,
   adjustmentMapping,
+  PROCESSED_AS_REVERSAL,
   type AdjustmentField,
 }

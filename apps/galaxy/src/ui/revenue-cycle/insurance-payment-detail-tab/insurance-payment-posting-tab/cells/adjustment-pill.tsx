@@ -43,10 +43,7 @@ const AdjustmentPill = ({
     const field = adjustmentMapping[adjustmentKey] as AdjustmentField
 
     if (field) {
-      form.setValue(
-        `claimServiceLinePayments.${serviceLineIndex}.${field}`,
-        '0',
-      )
+      form.setValue(`claimServiceLinePayments.${serviceLineIndex}.${field}`, '')
     }
 
     if (field === 'allowedAmount') {
