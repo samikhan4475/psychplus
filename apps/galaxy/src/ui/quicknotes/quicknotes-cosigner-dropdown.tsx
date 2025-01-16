@@ -4,7 +4,7 @@ import { useEffect } from 'react'
 import { Flex, Select, Text, Tooltip } from '@radix-ui/themes'
 import { Cosigner } from '@/types'
 import { filterDefaultCosigner, getPatientFullName } from '@/utils'
-import { useStore } from './quicknotes-store'
+import { useStore } from './store'
 
 interface QuickNotesCosignerDropdownProps {
   cosigners: Cosigner[]

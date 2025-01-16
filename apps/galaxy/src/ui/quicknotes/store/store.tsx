@@ -5,8 +5,9 @@ import { format } from 'date-fns'
 import toast from 'react-hot-toast'
 import { useStore as zustandUseStore, type StoreApi } from 'zustand'
 import { createStore as zustandCreateStore } from 'zustand/vanilla'
+import { saveWidgetClientAction } from '@/actions'
 import { Appointment, PatientProfile, QuickNoteSectionItem } from '@/types'
-import { VisitTypeEnum, visitTypeToSavingWidgets } from '@/utils'
+import { postMessage, VisitTypeEnum, visitTypeToSavingWidgets } from '@/utils'
 import { signNoteAction } from '../actions'
 import { modifyWidgetResponse } from '../utils'
 
@@ -20,11 +21,10 @@ interface SignPayloadProps {
 interface Store {
   loading: boolean
   patient: PatientProfile
-  save: (visitType: string) => void
-  sign: (
-    payload: SignPayloadProps,
-    closeConfirmationDialog?: () => void,
-  ) => void
+  save: () => void
+  sign: (payload: SignPayloadProps) => Promise<any>
+  cosignerLabel?: string
+  setCosignerLabel: (value: string) => void
   unsavedChanges: Record<string, boolean>
   setUnsavedChanges: (widgetName: string, unsavedChanges: boolean) => void
   toggleActualNoteView: () => void
@@ -64,6 +64,8 @@ const createStore = (initialState: StoreInitialState) =>
     isMarkedAsError: false,
     errorMessage: '',
     isErrorAlertOpen: false,
+    cosignerLabel: '',
+    setCosignerLabel: (cosignerLabel) => set({ cosignerLabel }),
     setErrorMessage: (errorMessage) => set({ errorMessage }),
     setIsErrorAlertOpen: (isErrorAlertOpen) => set({ isErrorAlertOpen }),
     signOptions: { time: format(new Date(), 'HH:mm') },
@@ -71,56 +73,47 @@ const createStore = (initialState: StoreInitialState) =>
       set({ signOptions: { ...get().signOptions, ...option } }),
     toggleActualNoteView: () =>
       set({ showActualNoteView: !get().showActualNoteView }),
-    save: async (visitType) => {
+    save: async () => {
       set({ loading: true })
-      const isSaved = await saveWidgets(visitType)
-      if (isSaved) {
+      const response = await saveWidgets()
+      if (response.length) {
         toast.success('Quicknote saved!')
+        get().setWidgetsData(response)
       }
       set({ loading: false })
     },
-
-    sign: async (payload, closeConfirmationDialog) => {
-      set({ loading: true })
-      const isSaved = await saveWidgets(payload.visitType)
-      if (!isSaved) {
-        set({ loading: false })
-        return
-      }
-      const { time, coSignedByUserId } = get().signOptions || {}
-
-      const [hours, minutes] = time.split(':').map(Number)
-      const signedDate = new Date(payload.appointment?.startDate || new Date())
-      signedDate.setUTCHours(hours, minutes)
-
-      const signResults = await signNoteAction({
-        ...payload,
-        signedDate: signedDate.toISOString(),
-        coSignedByUserId,
-      })
-
-      if (signResults.state === 'success') {
-        toast.success('Quicknote signed!')
-        set({ loading: false })
-        closeConfirmationDialog?.()
-        return
-      }
-
-      if (signResults.error.includes('mark that note as error?')) {
-        set({
-          loading: false,
-          isMarkedAsError: true,
-          errorMessage:
-            'Primary note for this visit already exists, if you sign this note, it will mark the existing note as ERROR',
+    sign: async (payload) => {
+      try {
+        set({ loading: true })
+        const response = await saveWidgets()
+        if (!response.length) {
+          set({ loading: false })
+          return {
+            state: 'error',
+            error: 'Failed to save widgets',
+          }
+        }
+        get().setWidgetsData(response)
+        const { coSignedByUserId } = get().signOptions || {}
+        const signedDate = new Date(
+          payload.appointment?.startDate || new Date(),
+        ).toISOString()
+        const signResults = await signNoteAction({
+          ...payload,
+          signedDate,
+          coSignedByUserId,
         })
-        closeConfirmationDialog?.()
-        return
+        set({ loading: false })
+        return signResults
+      } catch (error) {
+        set({ loading: false })
+        return {
+          state: 'error',
+          error: JSON.stringify(error),
+        }
       }
-
-      toast.error(signResults.error)
-      set({ loading: false })
-      closeConfirmationDialog?.()
     },
+
     unsavedChanges: {},
     setUnsavedChanges: (widgetName, unsavedChanges) => {
       set((state) => {
@@ -179,13 +172,24 @@ const useStore = <T,>(selector: (store: Store) => T): T => {
   return zustandUseStore(context, selector)
 }
 
-const saveWidgets = async (visitType: string) => {
+const saveWidgets = async (): Promise<QuickNoteSectionItem[]> => {
+  const urlParams = new URLSearchParams(window.location.search)
+  const patientId = urlParams.get('id') as string
+  const visitType = urlParams.get('visitType') as string
+  const isValidateAll = await validateAll(visitType)
+  if (!isValidateAll) {
+    return []
+  }
   const widgets = visitTypeToSavingWidgets[visitType as VisitTypeEnum] || []
   const promises = widgets.map((widgetId) => {
-    return new Promise<{ success: boolean; widgetId: string }>((resolve) => {
+    return new Promise<{
+      success: boolean
+      widgetId: string
+      sections: QuickNoteSectionItem[]
+    }>((resolve) => {
       const handleMessage = (event: MessageEvent) => {
         if (
-          event.data.type === 'widget:save' &&
+          event.data.type === 'widget:saveAll' &&
           event.data.widgetId === widgetId
         ) {
           window.removeEventListener('message', handleMessage)
@@ -197,13 +201,66 @@ const saveWidgets = async (visitType: string) => {
     })
   })
 
-  window.postMessage({ type: 'quicknotes:save' }, '*')
+  postMessage({ type: 'quicknotes:saveAll' })
   const responses = await Promise.all(promises)
-  responses.forEach((element: { success: boolean; widgetId: string }) => {
+  const sections = responses.flatMap((response) => response.sections)
+
+  const uniqueSections = sections.filter(
+    (section, index, self) =>
+      index ===
+      self.findIndex(
+        (t) =>
+          t.sectionName === section.sectionName &&
+          t.sectionItemValue === section.sectionItemValue &&
+          t.sectionItem === section.sectionItem,
+      ),
+  )
+  const payload = { patientId, data: uniqueSections }
+
+  try {
+    const result = await saveWidgetClientAction(payload)
+    if (result.state === 'error') {
+      toast.error('Failed to save!')
+      return []
+    }
+    return uniqueSections
+  } catch (error) {
+    toast.error('Failed to save!')
+    return []
+  }
+}
+
+const validateAll = async (visitType: string) => {
+  const widgets = visitTypeToSavingWidgets[visitType as VisitTypeEnum] || []
+  const promises = widgets.map((widgetId) => {
+    return new Promise<{ success: boolean; widgetId: string }>((resolve) => {
+      const handleMessage = (event: MessageEvent) => {
+        if (
+          event.data.type === 'widget:validate' &&
+          event.data.widgetId === widgetId
+        ) {
+          window.removeEventListener('message', handleMessage)
+          resolve(event.data)
+        }
+      }
+
+      window.addEventListener('message', handleMessage)
+    })
+  })
+  postMessage({ type: 'quicknotes:validateAll' })
+  const responses = await Promise.all(promises)
+
+  let widgetErrors = ''
+  responses.forEach((element) => {
     if (!element.success) {
-      toast.error(`Failed to save! ${element.widgetId}`)
+      widgetErrors += `${element.widgetId.replace('QuicknoteSection', '')}, `
     }
   })
+  widgetErrors = widgetErrors.slice(0, widgetErrors.length - 2)
+
+  if (widgetErrors !== '') {
+    toast.error(`Please fill out all required fields in ${widgetErrors}`)
+  }
   return responses.every((element) => element.success)
 }
 

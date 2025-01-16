@@ -2,86 +2,139 @@
 
 import { useState } from 'react'
 import { useParams, useSearchParams } from 'next/navigation'
-import { Button, Dialog } from '@radix-ui/themes'
+import { Button } from '@radix-ui/themes'
 import { PenLineIcon } from 'lucide-react'
+import toast from 'react-hot-toast'
 import { useStore as useGlobalStore } from '@/store'
-import { Appointment, StaffResource } from '@/types'
-import { ConfirmationAlertDialogContent } from '../alerts'
+import { Appointment } from '@/types'
+import { AlertDialog } from '../alerts'
 import { useStore } from './store'
 
 interface QuickNotesSignButtonProps {
   appointment: Appointment
-  appointmentProvider?: StaffResource
 }
 
-const QuickNotesSignButton = ({
-  appointment,
-  appointmentProvider,
-}: QuickNotesSignButtonProps) => {
-  const [isOpen, setIsOpen] = useState(false)
-  const { staffId, id = '' } = useGlobalStore((state) => state.user)
-  const { sign, loading, setErrorMessage, setIsErrorAlertOpen } = useStore(
-    (state) => ({
-      sign: state.sign,
-      loading: state.loading,
-      setErrorMessage: state.setErrorMessage,
-      setIsErrorAlertOpen: state.setIsErrorAlertOpen,
-    }),
-  )
+enum AlertType {
+  warning = 'warning',
+  error = 'error',
+  confirmation = 'confirmation',
+  hide = 'hide',
+}
+
+const initialAlertInfo = {
+  title: 'Warning',
+  message: '',
+  type: AlertType.hide,
+  onProceed: () => {},
+  okButton: { text: 'Ok', onClick: () => {} },
+  cancelButton: { text: 'Cancel', onClick: () => {} },
+  disableClose: false,
+  show: false,
+}
+
+const QuickNotesSignButton = ({ appointment }: QuickNotesSignButtonProps) => {
+  const { staffId } = useGlobalStore((state) => state.user)
+  const { sign, loading, markAsError } = useStore((state) => ({
+    sign: state.sign,
+    loading: state.loading,
+    setIsErrorAlertOpen: state.setIsErrorAlertOpen,
+    markAsError: state.markAsError,
+  }))
+
+  const [alertInfo, setAlertInfo] = useState(initialAlertInfo)
 
   const patientId = useParams().id as string
   const visitType = useSearchParams().get('visitType') as string
   const appointmentId = useSearchParams().get('id') as string
+  const isAppointmentProvider = appointment.providerStaffId === staffId
   const isFutureAppointment =
     appointment?.startDate && new Date(appointment.startDate) > new Date()
-  const isAppointmentProviderLoggedIn = appointmentProvider?.userId === id
 
-  const signNote = async () => {
-    if (appointment.providerStaffId !== staffId) {
-      setIsErrorAlertOpen(true)
-      setErrorMessage(
-        'You are not the provider for this note, therefore you can not sign this visit',
-      )
-
+  const signNoteHandler = async () => {
+    if (!isAppointmentProvider) {
+      setAlertInfo((prev) => ({
+        ...prev,
+        show: true,
+        title: 'Warning',
+        type: AlertType.warning,
+        message:
+          'You are not the provider for this note, therefore you can not sign this visit',
+        disabelClose: true,
+      }))
+      return
+    }
+    if (!isFutureAppointment) {
+      setAlertInfo((prev) => ({
+        ...prev,
+        show: true,
+        title: 'Warning',
+        type: AlertType.warning,
+        message:
+          'Your note time is prior to visit scheduled time, do you wish to proceed?',
+        okButton: {
+          text: 'Proceed',
+          onClick: signNote,
+        },
+      }))
       return
     }
 
-    sign({ patientId, appointmentId, appointment, visitType }, () =>
-      setIsOpen(false),
-    )
+    signNote()
+  }
+
+  const signNote = async () => {
+    const signResults = await sign({
+      patientId,
+      appointmentId,
+      appointment,
+      visitType,
+    })
+
+    if (signResults.state === 'success') {
+      toast.success('Quicknote signed!')
+      return
+    }
+
+    if (signResults.error.includes('mark that note as error?')) {
+      setAlertInfo((prev) => ({
+        ...prev,
+        show: true,
+        type: AlertType.confirmation,
+        message:
+          'Primary note for this visit already exists, if you sign this note, it will mark the existing note as Error.',
+        okButton: {
+          text: 'Proceed',
+          onClick: () => {
+            setAlertInfo(initialAlertInfo)
+            markAsError({ patientId, appointmentId })
+          },
+        },
+      }))
+    }
   }
 
   return (
     <>
-      {isFutureAppointment && isAppointmentProviderLoggedIn ? (
-        <Dialog.Root
-          open={isOpen}
-          onOpenChange={(open) => {
-            setIsOpen(open)
-          }}
-        >
-          <Dialog.Trigger>
-            <Button size="1" disabled={loading} highContrast>
-              <PenLineIcon height={14} width={14} strokeWidth={2} />
-              Sign
-            </Button>
-          </Dialog.Trigger>
-          <ConfirmationAlertDialogContent
-            title="Sign"
-            loadingTitle="Signing"
-            onProceed={signNote}
-            loading={loading}
-            message="Your note time is prior to visit scheduled time, do you wish to proceed?"
-            okButtonText="Yes"
-            cancelButtonText="No"
-          />
-        </Dialog.Root>
-      ) : (
-        <Button size="1" onClick={signNote} disabled={loading} highContrast>
-          <PenLineIcon height={14} width={14} strokeWidth={2} />
-          Sign
-        </Button>
-      )}
+      <Button
+        size="1"
+        onClick={signNoteHandler}
+        disabled={loading}
+        highContrast
+      >
+        <PenLineIcon height={14} width={14} strokeWidth={2} />
+        Sign
+      </Button>
+
+      <AlertDialog
+        open={!!alertInfo.show}
+        onOpenChange={(open) => {
+          if (!open) {
+            setAlertInfo(initialAlertInfo)
+          }
+        }}
+        loading={loading}
+        {...alertInfo}
+      />
     </>
   )
 }

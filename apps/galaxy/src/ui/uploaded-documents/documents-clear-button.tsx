@@ -1,11 +1,12 @@
 'use client'
 
+import { useState } from 'react'
 import { Button } from '@radix-ui/themes'
+import toast from 'react-hot-toast'
+import { postMessage } from '@/utils'
+import { QuickNoteSectionName } from '../quicknotes/constants'
 import { deleteAllDocumentsAction } from './actions'
 import { Documents } from './types'
-import toast from 'react-hot-toast'
-import { useState } from 'react'
-import { QuickNoteSectionName } from '../quicknotes/constants'
 
 interface DocumentsClearButtonProps {
   documents: Documents[]
@@ -42,7 +43,7 @@ const DocumentsClearButton = ({
     if (result.state === 'success') {
       toast.success('Documents successfully deleted.')
       onClearSuccess()
-      window.postMessage({
+      postMessage({
         type: 'widget:save',
         widgetId: QuickNoteSectionName.QuicknoteSectionUploadedDocuments,
       })
@@ -51,7 +52,6 @@ const DocumentsClearButton = ({
       toast.error('Failed to delete documents.')
       setIsLoading(false)
     }
-
   }
 
   return (

@@ -2,7 +2,7 @@
 
 import { Appointment, PatientProfile } from '@/types'
 import { getPatientFullName, getSlashedDateString, getTimeLabel } from '@/utils'
-import { useStore } from '../quicknotes-store'
+import { useStore } from '../store'
 import { BlockContainer, LabelAndValue } from './shared'
 
 interface Props {

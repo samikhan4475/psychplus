@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react'
 import { useWarnIfUnsavedChanges } from '@/hooks'
-import { useStore } from './quicknotes-store'
+import { useStore } from './store'
 
 const QuickNotesSaver = () => {
   const { hasUnsavedChanges, setUnsavedChanges } = useStore((state) => ({

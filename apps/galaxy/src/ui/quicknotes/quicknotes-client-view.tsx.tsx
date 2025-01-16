@@ -6,7 +6,6 @@ import { Appointment, QuickNoteSectionItem } from '@/types'
 import { ActualNoteView } from './actual-note-view/actual-note-view'
 import { QuickNoteDataProvider } from './quick-note-data-provider'
 import { QuickNotesHeader } from './quicknotes-header'
-import { QuickNotesMarkAsError } from './quicknotes-mark-as-error'
 import { QuickNotesSaver } from './quicknotes-saver'
 import { useStore } from './store'
 import { WidgetType } from './types'
@@ -78,7 +77,6 @@ export function QuickNotesClientView({
           appointmentId={appointmentId}
         />
       </Flex>
-      <QuickNotesMarkAsError />
     </Flex>
   )
 }

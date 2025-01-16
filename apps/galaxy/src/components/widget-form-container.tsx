@@ -7,9 +7,8 @@ import toast from 'react-hot-toast'
 import { saveWidgetClientAction } from '@/actions'
 import { saveWidgetAction } from '@/actions/save-widget'
 import type { Appointment, QuickNoteSectionItem } from '@/types'
-import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { useQuickNoteUpdate } from '@/ui/quicknotes/hooks'
-import { getWidgetContainerCheckboxStateByWidgetId } from '@/utils'
+import { getWidgetContainerCheckboxStateByWidgetId, postMessage } from '@/utils'
 import { WidgetContainer, type WidgetContainerProps } from './widget-container'
 import { WidgetLoadingOverlay } from './widget-loading-overlay'
 
@@ -50,83 +49,104 @@ const WidgetFormContainer = ({
         : saveWidgetAction)(payload)
 
       if (result.state === 'error') {
-        window.postMessage(
-          {
-            type: 'widget:save',
-            widgetId: widgetId,
-            success: false,
-          },
-          '*',
-        )
+        postMessage({
+          type: 'widget:save',
+          widgetId: widgetId,
+          success: false,
+        })
 
         if (shouldToast) {
           toast.error('Failed to save!')
         }
         return
       }
-      window.postMessage(
-        {
-          type: 'widget:save',
-          widgetId: widgetId,
-          success: true,
-        },
-        '*',
-      )
+      postMessage({
+        type: 'widget:save',
+        widgetId: widgetId,
+        success: true,
+      })
       updateWidgetsData?.(values)
       if (shouldToast) {
         toast.success('Saved!')
       }
     })
 
+  const saveWidget = async (
+    event: MessageEvent,
+    form: ReturnType<typeof useFormContext>,
+  ) => {
+    if (event.data.widgetId && event.data.widgetId !== widgetId) return
+    const isFormValid = await form.trigger()
+    if (isFormValid) {
+      onSubmit()
+    } else {
+      postMessage({
+        type: 'widget:save',
+        widgetId: widgetId,
+        success: isFormValid,
+      })
+    }
+  }
+  // send all data widgets to the parent
+  const handleQuickNotesValidateAll = async (
+    form: ReturnType<typeof useFormContext>,
+  ) => {
+    const isFormValid = await form.trigger()
+    postMessage({
+      type: 'widget:validate',
+      widgetId,
+      success: isFormValid,
+    })
+  }
+
+  const handleQuickNotesSaveAll = async (
+    form: ReturnType<typeof useFormContext>,
+  ) => {
+    ;[]
+
+    const data = form.getValues()
+    const sections: QuickNoteSectionItem[] = await getData(data)
+
+    postMessage({
+      type: 'widget:saveAll',
+      widgetId,
+      sections,
+    })
+  }
+
+  // call the function to handle the message event
   useEffect(() => {
-    const handleMessage = async (event: MessageEvent) => {
-      if (event.data.type !== 'quicknotes:save') return
-      const isFormValid = await form.trigger()
-      if (isDirty && isFormValid) {
-        onSubmit(false)()
-      } else {
-        window.postMessage(
-          {
-            type: 'widget:save',
-            widgetId: widgetId,
-            success: isFormValid,
-          },
-          '*',
-        )
+    const handleEvents = (event: MessageEvent) => {
+      switch (event.data.type) {
+        case 'quicknotes:save':
+          saveWidget(event, form)
+          break
+        case 'quicknotes:validateAll':
+          handleQuickNotesValidateAll(form)
+          break
+        case 'quicknotes:saveAll':
+          handleQuickNotesSaveAll(form)
+          break
+        case 'quicknotes:clear':
+          form.reset()
+          break
+        default:
+          break
       }
     }
 
-    window.addEventListener('message', handleMessage)
-
+    window.addEventListener('message', handleEvents)
     return () => {
-      window.removeEventListener('message', handleMessage)
-    }
-  }, [isDirty, widgetId])
-
-  useEffect(() => {
-    const handleMessage = (event: MessageEvent) => {
-      if (event.data.type !== 'quicknotes:clear') {
-        return
-      }
-      form.reset()
-    }
-
-    window.addEventListener('message', handleMessage)
-
-    return () => {
-      window.removeEventListener('message', handleMessage)
+      window.removeEventListener('message', handleEvents)
     }
   }, [])
 
   useEffect(() => {
-    window.postMessage(
-      {
-        type: 'widget:dirty',
-        widgetId: widgetId,
-        isDirty,
-      },
-      '*',
-    )
+    postMessage({
+      type: 'widget:dirty',
+      widgetId: widgetId,
+      isDirty,
+    })
   }, [isDirty])
 
   const widgetContainerCheckboxState =

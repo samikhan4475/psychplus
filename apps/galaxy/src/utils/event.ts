@@ -9,5 +9,8 @@ const sendEvent = ({
   const message = { type: eventType, widgetId }
   window.postMessage(message, '*')
 }
+const postMessage = (message: any) => {
+  window.postMessage(message, '*')
+}
 
-export { sendEvent }
+export { sendEvent, postMessage }
