@@ -6,6 +6,7 @@ import { CloseIcon, QuestionIcon, TickIcon } from '@/components/icons'
 import { CODESETS } from '@/constants'
 import { useCodesetOptions } from '@/hooks'
 import { cn } from '@/utils'
+import { useResetVerificationStatus } from '../use-reset-status'
 import { PatientInfoSchemaType } from './patient-info-schema'
 
 const icons: Record<string, JSX.Element> = {
@@ -24,6 +25,8 @@ const StatusSelect = () => {
     const option = options.find((option) => option.value === value)
     return option ? option.label : 'Select'
   }
+
+  useResetVerificationStatus()
 
   return (
     <DropdownMenu.Root>
