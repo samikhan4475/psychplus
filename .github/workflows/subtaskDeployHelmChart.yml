@@ -122,7 +122,7 @@ jobs:
 
       - name: Install Helm
         uses: azure/setup-helm@v4
-
+        
       - name: Deploy Helm chart
         run: |
           if [ "${{ inputs.environment }}" == "development" ]; then

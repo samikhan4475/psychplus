@@ -151,4 +151,3 @@ jobs:
       autoscaling_min_replicas: 1
       autoscaling_max_replicas: 1
     secrets: inherit
-
