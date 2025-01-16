@@ -15,7 +15,10 @@ interface StatusSelectProps {
 }
 
 const StatusSelect = ({ recordStatus, locationId }: StatusSelectProps) => {
-  const search = useStore((state) => state.search)
+  const { search, sureScriptEnabled } = useStore((state) => ({
+    search: state.search,
+    sureScriptEnabled: state.sureScriptEnabled,
+  }))
   const { id } = useParams()
   const onValueChange = async (value: string) => {
     if (id && typeof id === 'string') {
@@ -25,21 +28,23 @@ const StatusSelect = ({ recordStatus, locationId }: StatusSelectProps) => {
         status: value === 'Active',
       })
 
-      if (value === 'Inactive') {
-        const disablePrescriberResult = await disablePrescriberDirectoryAction({
-          staffId: id,
-          locationId,
-        })
-
-        if (disablePrescriberResult.state === 'success') {
-          toast.success('Prescriber Disabled Successfully')
-        } else if (disablePrescriberResult.state === 'error') {
-          toast.error(disablePrescriberResult.error)
-        }
-      }
-
       if (result.state === 'success') {
         toast.success('Status Updated Successfully')
+
+        if (value === 'Inactive' && sureScriptEnabled) {
+          const disablePrescriberResult =
+            await disablePrescriberDirectoryAction({
+              staffId: id,
+              locationId,
+            })
+
+          if (disablePrescriberResult.state === 'success') {
+            toast.success('Prescriber Disabled Successfully')
+          } else if (disablePrescriberResult.state === 'error') {
+            toast.error(disablePrescriberResult.error)
+          }
+        }
+
         search({ staffId: id }, 1, true)
       } else if (result.state === 'error') {
         toast.error(result.error)

@@ -11,6 +11,8 @@ interface Store {
   payload?: Partial<StaffLocation>
   page: number
   sort?: Sort
+  sureScriptEnabled: boolean
+  setSureScriptEnabled: (value: boolean) => void
   pageCache: Record<number, GetStaffLocationListResponse>
   jumpToPage: (page: number) => void
   search: (
@@ -28,6 +30,9 @@ const useStore = create<Store>((set, get) => ({
   page: 1,
   pageCache: {},
   sort: undefined,
+  sureScriptEnabled: false,
+  setSureScriptEnabled: (sureScriptEnabled: boolean) =>
+    set({ sureScriptEnabled }),
   search: async (payload, page = 1, reset = false) => {
     set({
       error: undefined,

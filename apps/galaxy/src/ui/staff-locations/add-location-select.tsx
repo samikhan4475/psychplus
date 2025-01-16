@@ -12,7 +12,10 @@ import { SchemaType } from './staff-location-filters'
 import { useStore } from './store'
 
 const AddLocationSelect = () => {
-  const search = useStore((state) => state.search)
+  const { search, sureScriptEnabled } = useStore((state) => ({
+    search: state.search,
+    sureScriptEnabled: state.sureScriptEnabled,
+  }))
 
   const form = useFormContext<SchemaType>()
   const stateName = form.watch('stateName')
@@ -25,18 +28,20 @@ const AddLocationSelect = () => {
       })
 
       if (result.state === 'success') {
-        const prescriberResult = await createPrescriberDirectoryAction({
-          staffId: id,
-          locationId: option.value,
-        })
-
-        if (prescriberResult.state === 'success') {
-          toast.success('Prescriber Added successfully')
-        } else if (prescriberResult.state === 'error') {
-          toast.error(prescriberResult.error)
-        }
-
         toast.success('Location Added Successfully')
+
+        if (sureScriptEnabled) {
+          const prescriberResult = await createPrescriberDirectoryAction({
+            staffId: id,
+            locationId: option.value,
+          })
+
+          if (prescriberResult.state === 'success') {
+            toast.success('Prescriber Added successfully')
+          } else if (prescriberResult.state === 'error') {
+            toast.error(prescriberResult.error)
+          }
+        }
       } else if (result.state === 'error') {
         toast.error(result.error)
       }

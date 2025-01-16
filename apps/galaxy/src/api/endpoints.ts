@@ -11,6 +11,8 @@ const CLINIC_LOCATIONS_ENDPOINT = `${API_URL}/api/clinics`
 const FACILITY_ADMISSION_ID_ENDPOINT = `${API_URL}/api/facilityadmissionids`
 const LOCATION_SERVICES_ENDPOINT = `${API_URL}/api/locationservices/actions/search`
 const LOCATION_ENDPOINT = `${API_URL}/api/locations/actions/search?orderBy=createdOn%20desc`
+const GET_FEATURE_FLAG_ENDPOINT = (featureFlag: string) =>
+  `${API_URL}/api/featureflags/${featureFlag}/actions/enabled`
 const VISIT_TYPES_ENDPOINT = `${API_URL}/api/visittypes/actions/search`
 const FEATURE_FLAGS = `${API_URL}/api/featureflags/actions/search`
 const STATES_BY_COUNTRY_ENDPOINT = (countryCode: string) =>
@@ -576,6 +578,7 @@ export {
   REFRESH_ENDPOINT,
   GET_CLAIM_SUBMISSION_LIST,
   ADD_CLAIM_PAYMENT,
+  GET_FEATURE_FLAG_ENDPOINT,
   PRESCRIBER_DIRECTORY_ENDPOINT,
   DISABLE_PRESCRIBER_DIRECTORY_ENDPOINT,
   EXPORT_CLAIMS_LIST_ENDPOINT,

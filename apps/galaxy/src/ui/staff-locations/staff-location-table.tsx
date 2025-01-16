@@ -4,6 +4,7 @@ import { useEffect } from 'react'
 import { useParams } from 'next/navigation'
 import { Flex, ScrollArea } from '@radix-ui/themes'
 import { type ColumnDef } from '@tanstack/react-table'
+import toast from 'react-hot-toast'
 import {
   ColumnHeader,
   DataTable,
@@ -12,6 +13,7 @@ import {
 } from '@/components'
 import { Sort } from '@/types'
 import { getSortDir } from '@/utils'
+import { getScriptSurePermissionAction } from './actions/get-scriptsure-permission-action'
 import { StatusCell } from './cells'
 import { useStore } from './store'
 import { StaffLocation } from './types'
@@ -167,16 +169,27 @@ const columns = (
 }
 
 const StaffLocationTable = () => {
-  const { data, search, loading, sort, sortData } = useStore((state) => ({
-    data: state.data,
-    loading: state.loading,
-    search: state.search,
-    sort: state.sort,
-    sortData: state.sortData,
-  }))
+  const { data, search, loading, sort, sortData, setSureScriptEnabled } =
+    useStore((state) => ({
+      setSureScriptEnabled: state.setSureScriptEnabled,
+      data: state.data,
+      loading: state.loading,
+      search: state.search,
+      sort: state.sort,
+      sortData: state.sortData,
+    }))
   const { id } = useParams()
 
   useEffect(() => {
+    ;(async () => {
+      const result = await getScriptSurePermissionAction()
+      if (result.state === 'success') {
+        setSureScriptEnabled(result.data)
+      } else if (result.state === 'error') {
+        toast.error(result.error)
+      }
+    })()
+
     if (id && typeof id === 'string') search({ staffId: id })
   }, [])
   if (loading) {
