@@ -1,25 +1,21 @@
 'use client'
 
-import { TextField } from '@radix-ui/themes'
-import { useFormContext } from 'react-hook-form'
+import { PhoneNumberInput } from '@/components'
 import {
   FormFieldContainer,
   FormFieldError,
   FormFieldLabel,
 } from '@/components/form'
-import { PatientDataSchema } from './patient-data-schema'
 
 const SsnInput = () => {
-  const form = useFormContext<PatientDataSchema>()
-
   return (
     <FormFieldContainer className="flex-1">
       <FormFieldLabel className="!text-1">SSN</FormFieldLabel>
-      <TextField.Root
-        size="1"
-        placeholder="SNN"
-        {...form.register('socialSecurityNumber')}
+      <PhoneNumberInput
+        field="socialSecurityNumber"
         className={textFieldClassName}
+        placeholder="SSN"
+        format="###-##-####"
       />
       <FormFieldError name="socialSecurityNumber" />
     </FormFieldContainer>

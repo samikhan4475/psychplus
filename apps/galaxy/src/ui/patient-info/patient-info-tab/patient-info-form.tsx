@@ -1,5 +1,6 @@
 'use client'
 
+import { useRouter } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Flex } from '@radix-ui/themes'
 import { useForm, type SubmitHandler } from 'react-hook-form'
@@ -33,6 +34,7 @@ const PatientInfoForm = ({
   driverLicenseImage,
   children,
 }: React.PropsWithChildren<PatientInfoFormProps>) => {
+  const router = useRouter()
   const disabled = useStore((state) => state.isUserLocked)
 
   const form = useForm<PatientInfoSchemaType>({
@@ -95,6 +97,7 @@ const PatientInfoForm = ({
       }
 
       toast.success('Patient profile saved!')
+      router.refresh()
     }
   }
 

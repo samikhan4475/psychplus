@@ -178,6 +178,12 @@ const getPatientInsuranceName = (insurances: Insurance[] | undefined) => {
   }
   return insurances?.[0]?.policyName
 }
+
+const getMaskedSSN = (ssn?: string): string | undefined => {
+  if (!ssn?.trim()) return undefined
+  return ssn.replace(/\D/g, '').replace(/(\d{3})(\d{3})(\d{3})/, '$1-$2-$3')
+}
+
 export {
   getPatientFirstName,
   getPatientLastName,
@@ -198,4 +204,5 @@ export {
   getPatientInsuranceName,
   getPatientStreet,
   filterDefaultCosigner,
+  getMaskedSSN,
 }

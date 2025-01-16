@@ -1,21 +1,19 @@
-'use server'
-
 import * as api from '@/api'
 import { PatientProfile } from '@/types'
 
-const getInsuranceInfoAction = async (
-  patientId: string,
+interface PatientProfilePayload {
+  isIncludeInsurance?: boolean
+  isIncludeInsuranceVerification?: boolean
+  isIncludeCardVerification?: boolean
+  isIncludeConsentVerification?: boolean
+  patientIds: string[]
+}
+const getPatientProfileDetails = async (
+  payload: PatientProfilePayload,
 ): Promise<api.ActionResult<PatientProfile[]>> => {
-  const payload = {
-    isIncludeInsurance: true,
-    isIncludeInsuranceVerification: true,
-    isIncludeCardVerification: true,
-    isIncludeConsentVerification: true,
-    patientIds: [patientId],
-  }
   const response = await api.POST<PatientProfile[]>(
     api.SEARCH_PATIENTS_ENDPOINT,
-    payload,
+    { ...payload },
   )
 
   if (response.state === 'error') {
@@ -31,4 +29,4 @@ const getInsuranceInfoAction = async (
   }
 }
 
-export { getInsuranceInfoAction }
+export { getPatientProfileDetails }

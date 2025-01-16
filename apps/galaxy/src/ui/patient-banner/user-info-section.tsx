@@ -1,9 +1,14 @@
+'use client'
+
 import { Flex } from '@radix-ui/themes'
+import { CODESETS } from '@/constants'
+import { useCodesetOptions } from '@/hooks'
 import { PatientProfile, PhoneNumber } from '@/types'
 import {
   getAgeFromDate,
   getCalendarDate,
   getMaskedPhoneNumber,
+  getMaskedSSN,
   getPatientPhone,
   getSlashedPaddedDateString,
   getUserFullName,
@@ -15,6 +20,11 @@ interface PatientBannerProps {
 }
 
 const UserInfoSection = ({ user }: PatientBannerProps) => {
+  const statusOptions = useCodesetOptions(CODESETS.CustomerStatus)
+  const patientStatus = statusOptions?.find(
+    (item) => item?.value === user.status,
+  )
+
   return (
     <>
       <Flex direction="column" className="gap-[2px] md:flex-1">
@@ -28,7 +38,7 @@ const UserInfoSection = ({ user }: PatientBannerProps) => {
         <LabelAndValue label="Orientation" value={user.genderOrientation} />
         <LabelAndValue label="Pronouns" value={user.genderPronoun} />
         <LabelAndValue label="Language" value={user.language} />
-        <LabelAndValue label="Status" value={user.status} />
+        <LabelAndValue label="Status" value={patientStatus?.label} />
       </Flex>
       <Flex direction="column" className="gap-[2px] md:flex-1">
         <LabelAndValue label="MRN" value={user.medicalRecordNumber} />
@@ -45,7 +55,10 @@ const UserInfoSection = ({ user }: PatientBannerProps) => {
           )}
         />
         <LabelAndValue label="Email" value={user.contactDetails?.email} />
-        <LabelAndValue label="SSN" value={user.socialSecurityNumber} />
+        <LabelAndValue
+          label="SSN"
+          value={getMaskedSSN(user.socialSecurityNumber)}
+        />
       </Flex>
     </>
   )
