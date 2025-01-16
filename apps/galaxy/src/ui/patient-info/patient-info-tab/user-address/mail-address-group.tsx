@@ -9,25 +9,36 @@ import { MailAddressRadio } from './mail-address-radio'
 
 const MailAddressGroup = () => {
   const { watch, resetField } = useFormContext<PatientInfoSchemaType>()
-  const isMailingAddressSameAsPrimary = watch(
-    'contactDetails.isMailingAddressSameAsPrimary',
-  )
+  const contactDetails = watch('contactDetails')
+
+  const {
+    homeAddress: { city, country, postalCode, state, street1, street2, type },
+    isMailingAddressSameAsPrimary,
+  } = contactDetails
 
   useEffect(() => {
-    if (isMailingAddressSameAsPrimary) {
-      resetField('contactDetails.mailingAddress', {
-        defaultValue: {
-          postalCode: '',
-          type: 'Mailing',
-          street1: '',
-          street2: '',
-          city: '',
-          state: '',
-          country: '',
-        },
-      })
-    }
-  }, [isMailingAddressSameAsPrimary, resetField])
+    resetField('contactDetails.mailingAddress', {
+      defaultValue: {
+        postalCode: isMailingAddressSameAsPrimary ? postalCode : '',
+        type: 'Mailing',
+        street1: isMailingAddressSameAsPrimary ? street1 : '',
+        street2: isMailingAddressSameAsPrimary ? street2 : '',
+        city: isMailingAddressSameAsPrimary ? city : '',
+        state: isMailingAddressSameAsPrimary ? state : '',
+        country: isMailingAddressSameAsPrimary ? country : '',
+      },
+    })
+  }, [
+    isMailingAddressSameAsPrimary,
+    city,
+    country,
+    postalCode,
+    state,
+    street1,
+    street2,
+    type,
+    resetField,
+  ])
 
   return (
     <Flex direction="column" className="bg-white flex-1">
