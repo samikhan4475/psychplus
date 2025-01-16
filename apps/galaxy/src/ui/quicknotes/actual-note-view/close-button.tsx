@@ -2,7 +2,7 @@
 
 import { IconButton } from '@radix-ui/themes'
 import { X } from 'lucide-react'
-import { useStore } from '../quicknotes-store'
+import { useStore } from '../store'
 
 const CloseButton = () => {
   const toggleActualNoteView = useStore((state) => state.toggleActualNoteView)

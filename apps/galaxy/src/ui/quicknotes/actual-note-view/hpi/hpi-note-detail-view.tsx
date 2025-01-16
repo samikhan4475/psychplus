@@ -9,11 +9,11 @@ import { HpiNarration } from './hpi-narration'
 import { getGenderValue } from './utils'
 
 const HpiNoteDetailView = ({ data, patient }: NoteDetailProps) => {
-  if (!data) return null
-  if (!patient) return null
-
   const delusionTypeCodeset = useCodesetCodes(CODESETS.DelusionType)
   const hallucinationTypeCodeset = useCodesetCodes(CODESETS.HallucinationType)
+
+  if (!data) return null
+  if (!patient) return null
 
   return (
     <HpiNarration
@@ -28,5 +28,5 @@ const HpiNoteDetailView = ({ data, patient }: NoteDetailProps) => {
     />
   )
 }
-  
+
 export { HpiNoteDetailView }

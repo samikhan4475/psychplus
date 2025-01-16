@@ -14,8 +14,7 @@ import { modifyWidgetResponse } from '../utils'
 interface SignPayloadProps {
   patientId: string
   appointmentId: string
-  appointment: Appointment
-  visitType: string
+  signedByUserId: number
 }
 
 interface Store {
@@ -23,15 +22,13 @@ interface Store {
   patient: PatientProfile
   save: () => void
   sign: (payload: SignPayloadProps) => Promise<any>
+  markAsError: (payload: SignPayloadProps) => void
   cosignerLabel?: string
   setCosignerLabel: (value: string) => void
   unsavedChanges: Record<string, boolean>
   setUnsavedChanges: (widgetName: string, unsavedChanges: boolean) => void
   toggleActualNoteView: () => void
   showActualNoteView: boolean
-  isMarkedAsError: boolean
-  closeMarkErrorModal: (isMarkedAsError: boolean) => void
-  markAsError: (payload: { patientId: string; appointmentId: string }) => void
   errorMessage?: string
   signOptions: Record<string, string>
   setSignOptions: (option: Record<string, string>) => void
@@ -61,7 +58,6 @@ const createStore = (initialState: StoreInitialState) =>
     },
     loading: false,
     showActualNoteView: true,
-    isMarkedAsError: false,
     errorMessage: '',
     isErrorAlertOpen: false,
     cosignerLabel: '',
@@ -95,14 +91,12 @@ const createStore = (initialState: StoreInitialState) =>
         }
         get().setWidgetsData(response)
         const { coSignedByUserId } = get().signOptions || {}
-        const signedDate = new Date(
-          payload.appointment?.startDate || new Date(),
-        ).toISOString()
-        const signResults = await signNoteAction({
+        const body = {
           ...payload,
-          signedDate,
           coSignedByUserId,
-        })
+        }
+
+        const signResults = await signNoteAction(body)
         set({ loading: false })
         return signResults
       } catch (error) {
@@ -112,6 +106,22 @@ const createStore = (initialState: StoreInitialState) =>
           error: JSON.stringify(error),
         }
       }
+    },
+    markAsError: async (payload) => {
+      set({ loading: true })
+      const { coSignedByUserId } = get().signOptions || {}
+      const body = {
+        ...payload,
+        coSignedByUserId,
+        isError: true,
+      }
+      const signResults = await signNoteAction(body)
+      set({ loading: false })
+      if (signResults.state === 'success') {
+        toast.success('Quicknote signed!')
+        return
+      }
+      toast.error(signResults.error)
     },
 
     unsavedChanges: {},
@@ -124,22 +134,6 @@ const createStore = (initialState: StoreInitialState) =>
           },
         }
       })
-    },
-    closeMarkErrorModal: (isMarkedAsError) => {
-      set({ isMarkedAsError })
-    },
-    markAsError: async (payload) => {
-      set({ loading: true })
-      const signResults = await signNoteAction({
-        ...payload,
-        isError: true,
-      })
-      set({ isMarkedAsError: false, errorMessage: '', loading: false })
-      if (signResults.state === 'success') {
-        toast.success('Quicknote signed successfully')
-        return
-      }
-      toast.error(signResults.error)
     },
   }))
 

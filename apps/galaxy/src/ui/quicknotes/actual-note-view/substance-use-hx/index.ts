@@ -1,1 +1,1 @@
-export * from './substance-use-hx'
+export * from './substance-use-hx-client-view'

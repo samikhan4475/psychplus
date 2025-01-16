@@ -5,6 +5,7 @@ import { useParams, useSearchParams } from 'next/navigation'
 import { Button } from '@radix-ui/themes'
 import { PenLineIcon } from 'lucide-react'
 import toast from 'react-hot-toast'
+import { STAFF_ROLE_CODE_PRESCRIBER } from '@/constants'
 import { useStore as useGlobalStore } from '@/store'
 import { Appointment } from '@/types'
 import { AlertDialog } from '../alerts'
@@ -33,25 +34,34 @@ const initialAlertInfo = {
 }
 
 const QuickNotesSignButton = ({ appointment }: QuickNotesSignButtonProps) => {
-  const { staffId } = useGlobalStore((state) => state.user)
-  const { sign, loading, markAsError } = useStore((state) => ({
-    sign: state.sign,
+  const { staffId, staffRoleCode } = useGlobalStore((state) => ({
+    staffId: state.user.staffId,
+    staffRoleCode: state.staffResource.staffRoleCode,
+  }))
+  const { loading, sign, markAsError } = useStore((state) => ({
     loading: state.loading,
+    sign: state.sign,
     setIsErrorAlertOpen: state.setIsErrorAlertOpen,
     markAsError: state.markAsError,
   }))
-
+  const isPrescriber = staffRoleCode === STAFF_ROLE_CODE_PRESCRIBER
   const [alertInfo, setAlertInfo] = useState(initialAlertInfo)
 
   const patientId = useParams().id as string
-  const visitType = useSearchParams().get('visitType') as string
   const appointmentId = useSearchParams().get('id') as string
   const isAppointmentProvider = appointment.providerStaffId === staffId
   const isFutureAppointment =
     appointment?.startDate && new Date(appointment.startDate) > new Date()
 
+  const signPayload = {
+    patientId,
+    appointmentId,
+    signedByUserId: appointment.providerStaffId ?? staffId,
+    signedDate: isPrescriber ? new Date().toISOString() : undefined,
+  }
+
   const signNoteHandler = async () => {
-    if (!isAppointmentProvider) {
+    if (!isAppointmentProvider && isPrescriber) {
       setAlertInfo((prev) => ({
         ...prev,
         show: true,
@@ -63,7 +73,7 @@ const QuickNotesSignButton = ({ appointment }: QuickNotesSignButtonProps) => {
       }))
       return
     }
-    if (!isFutureAppointment) {
+    if (isFutureAppointment) {
       setAlertInfo((prev) => ({
         ...prev,
         show: true,
@@ -83,12 +93,7 @@ const QuickNotesSignButton = ({ appointment }: QuickNotesSignButtonProps) => {
   }
 
   const signNote = async () => {
-    const signResults = await sign({
-      patientId,
-      appointmentId,
-      appointment,
-      visitType,
-    })
+    const signResults = await sign(signPayload)
 
     if (signResults.state === 'success') {
       toast.success('Quicknote signed!')
@@ -106,7 +111,7 @@ const QuickNotesSignButton = ({ appointment }: QuickNotesSignButtonProps) => {
           text: 'Proceed',
           onClick: () => {
             setAlertInfo(initialAlertInfo)
-            markAsError({ patientId, appointmentId })
+            markAsError(signPayload)
           },
         },
       }))
@@ -122,7 +127,7 @@ const QuickNotesSignButton = ({ appointment }: QuickNotesSignButtonProps) => {
         highContrast
       >
         <PenLineIcon height={14} width={14} strokeWidth={2} />
-        Sign
+        {isPrescriber ? 'Sign' : 'Send To Sign'}
       </Button>
 
       <AlertDialog
