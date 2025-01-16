@@ -40,8 +40,8 @@ const WidgetContainer = ({
   className,
 }: WidgetContainerProps) => {
   const form = useFormContext()
-  const widgetContainerCheckbox = form?.watch('WidgetContainerCheckboxField')
-  const checked = (form && widgetContainerCheckbox) ?? false
+  const widgetContainerCheckbox = form?.watch('widgetContainerCheckboxField')
+  const checked = (form && widgetContainerCheckbox === 'show') ?? false
 
   const handleCheckedChange = (newChecked: boolean) => {
     if (form && WidgetContainerCheckboxField) {
@@ -80,7 +80,9 @@ const WidgetContainer = ({
           <Flex align="center" gap="2">
             {toggleable && (
               <Checkbox
-                checked={toggleableChecked !== undefined ? toggleable : checked}
+                checked={
+                  toggleableChecked !== undefined ? toggleableChecked : checked
+                }
                 onCheckedChange={handleCheckedChange}
                 highContrast
                 className={cn(

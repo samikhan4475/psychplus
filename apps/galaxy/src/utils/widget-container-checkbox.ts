@@ -59,14 +59,6 @@ const createWidgetContainerCheckboxState = ({
   providerType,
 }: WidgetContainerCheckboxState) => {
   const getWidgetState = (disabled: boolean, initialValue?: string) => {
-    if (['show', 'hide'].includes(initialValue ?? '')) {
-      return {
-        checked: undefined,
-        disabled: false,
-        actualNoteViewVisibility: initialValue === 'show',
-      }
-    }
-
     return {
       disabled,
       checked: disabled ? true : undefined,
