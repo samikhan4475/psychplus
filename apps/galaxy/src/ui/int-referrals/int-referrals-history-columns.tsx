@@ -4,8 +4,12 @@ import { ColumnDef } from '@tanstack/react-table'
 import { ColumnHeader, LongTextCell, TextCell } from '@/components'
 import { PatientReferral } from '@/types'
 import { formatDate, formatDateTime, getPatientFullName } from '@/utils'
-import { ContactMadeSelectCell, ServiceNameCell } from '../referrals/patient-referrals-widget/cells'
-import { ReferralStatusCell, ServiceStatusSelectCell } from './cells'
+import { ServiceNameCell } from '../referrals/patient-referrals-widget/cells'
+import {
+  ContactMadeSelectCell,
+  ReferralStatusCell,
+  ServiceStatusSelectCell,
+} from './cells'
 import { getPrimaryInsuranceName, getSecondaryInsuranceName } from './utils'
 
 const columns: ColumnDef<PatientReferral>[] = [

@@ -5,11 +5,15 @@ import { ColumnHeader, LongTextCell, TextCell } from '@/components'
 import { PatientReferral } from '@/types'
 import { formatDate, formatDateTime, getPatientFullName } from '@/utils'
 import {
-  ContactMadeSelectCell,
   GenderLabelCell,
   ServiceNameCell,
 } from '../referrals/patient-referrals-widget/cells'
-import { ActionCell, CollapseCell, ReferralStatusCell } from './cells'
+import {
+  ActionCell,
+  CollapseCell,
+  ContactMadeSelectCell,
+  ReferralStatusCell,
+} from './cells'
 import { getPrimaryInsuranceName, getSecondaryInsuranceName } from './utils'
 
 const columns: ColumnDef<PatientReferral>[] = [
