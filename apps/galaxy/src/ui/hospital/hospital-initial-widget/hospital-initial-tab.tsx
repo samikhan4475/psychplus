@@ -40,6 +40,11 @@ const HospitalInitialTab = ({
         patientId={patientId}
         widgetId={QuickNoteSectionName.QuickNoteSectionHospitalInitial}
         getData={transformOut(patientId)}
+        tags={
+          isHospitalInitialTab
+            ? [QuickNoteSectionName.QuickNoteSectionHospitalInitial]
+            : []
+        }
         title={!isHospitalInitialTab ? 'Hospital Initial' : undefined}
         headerRight={
           <>

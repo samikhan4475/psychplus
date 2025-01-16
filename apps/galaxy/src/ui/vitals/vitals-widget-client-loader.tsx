@@ -52,17 +52,19 @@ const VitalsWidgetLoader = ({
 
           await saveWidgetAction({ patientId, data: payload })
         }
-        setData(
-          result.data?.map((vital) => ({
-            ...vital,
-            addToNote: vitalsIds.includes(String(vital.id)),
-          })),
-        )
-        setQuicknotesData(
-          result.data?.filter((vital) =>
-            vitalsIds.includes(String(vital.id)),
-          ) ?? [],
-        )
+        if (!quicknotesData) {
+          setData(
+            result.data?.map((vital) => ({
+              ...vital,
+              addToNote: vitalsIds.includes(String(vital.id)),
+            })),
+          )
+          setQuicknotesData(
+            result.data?.filter((vital) =>
+              vitalsIds.includes(String(vital.id)),
+            ) ?? [],
+          )
+        }
       }
       setLoading(false)
     })

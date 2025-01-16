@@ -36,6 +36,11 @@ const HospitalDischargeTab = ({
       <WidgetFormContainer
         patientId={patientId}
         widgetId={QuickNoteSectionName.QuicknoteSectionHospitalDischarge}
+        tags={
+          isHospitalDischargeTab
+            ? [QuickNoteSectionName.QuicknoteSectionHospitalDischarge]
+            : []
+        }
         getData={transformOut(patientId)}
         title={!isHospitalDischargeTab ? 'Hospital Discharge' : undefined}
         headerRight={<>{!isHospitalDischargeTab && <WidgetSaveButton />}</>}
