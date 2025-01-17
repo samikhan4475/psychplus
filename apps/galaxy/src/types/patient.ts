@@ -84,6 +84,7 @@ interface PatientProfile {
   upcomingAppointmentDate?: string
   practice?: string
   dateOfBirth?: string
+  patientTypeEstablishedOrNew?: string
 }
 
 interface PatientHistoryParams {

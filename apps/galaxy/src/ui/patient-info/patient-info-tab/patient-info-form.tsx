@@ -5,11 +5,13 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Flex } from '@radix-ui/themes'
 import { useForm, type SubmitHandler } from 'react-hook-form'
 import toast from 'react-hot-toast'
+import { useStore as zustandUseStore } from 'zustand'
 import { updatePatientProfileAction } from '@/actions'
 import { ActionResult } from '@/api/api'
 import { FormContainer } from '@/components'
 import type { PatientProfile } from '@/types'
 import { sanitizeFormData } from '@/utils'
+import { useStore } from '../store'
 import {
   updatePatientDrivingLicenseImageAction,
   updatePatientProfileImageAction,
@@ -18,7 +20,6 @@ import {
   patientInfoSchema,
   type PatientInfoSchemaType,
 } from './patient-info-schema'
-import { useStore } from './store'
 import { transformOut } from './transform'
 import { getInitialValues } from './utils'
 
@@ -35,7 +36,8 @@ const PatientInfoForm = ({
   children,
 }: React.PropsWithChildren<PatientInfoFormProps>) => {
   const router = useRouter()
-  const disabled = useStore((state) => state.isUserLocked)
+  const store = useStore()
+  const disabled = zustandUseStore(store, (state) => state.isUserLocked)
 
   const form = useForm<PatientInfoSchemaType>({
     disabled: disabled,

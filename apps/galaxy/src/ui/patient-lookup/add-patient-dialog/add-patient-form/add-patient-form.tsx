@@ -6,6 +6,7 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { FormContainer } from '@/components'
 import { sanitizeFormData } from '@/utils'
+import { ALREADY_EXIST_ERROR_MESSAGE } from '../../constants'
 import { addPatientAction } from '../actions'
 import { AddressDetails } from './address-details'
 import { CancelButton } from './cancel-button'
@@ -68,6 +69,9 @@ const AddPatientForm = ({ closeDialog }: AddPatientFormProps) => {
     const result = await addPatientAction(transformOut(sanitizedFormData))
 
     if (result.state === 'error') {
+      if (result.status === 409) {
+        return toast.error(ALREADY_EXIST_ERROR_MESSAGE)
+      }
       toast.error(result.error)
     } else if (result.state === 'success') {
       toast.success('Patient added successfully')

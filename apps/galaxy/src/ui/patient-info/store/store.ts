@@ -9,19 +9,24 @@ interface StoreState {
   showPatientHistory: boolean
   openPatientHistory: () => void
   closePatientHistory: () => void
+  isUserLocked: boolean
+  toggleUserLock: () => void
+  setUserLock: (lockStatus: boolean) => void; 
 }
 
 type Store = ReturnType<typeof createStore>
 
 const createStore = () => {
   return zustandCreateStore<StoreState>()((set, get) => ({
-   
+    isUserLocked: true,
+    toggleUserLock: () =>
+      set((state) => ({ isUserLocked: !state.isUserLocked })),
     activeTab: PATIENT_INFO_TAB,
     viewedTabs: new Set([PATIENT_INFO_TAB]),
     setActiveTab: (activeTab) => {
       const viewedTabs = get().viewedTabs
       viewedTabs.add(activeTab)
-  
+
       set({
         activeTab,
         viewedTabs,
@@ -34,6 +39,7 @@ const createStore = () => {
         showPatientHistory: true,
       })
     },
+    setUserLock: (lockStatus: boolean) => set(() => ({ isUserLocked: lockStatus })),
     closePatientHistory: () => {
       set({
         activeTab:
@@ -43,7 +49,6 @@ const createStore = () => {
         showPatientHistory: false,
       })
     },
-
   }))
 }
 

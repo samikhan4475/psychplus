@@ -58,7 +58,7 @@ const PatientInfoTab = ({
 
   return (
     <Box position="relative">
-      <LockPageSwitch />
+      <LockPageSwitch patient={patientProfile} />
       <GooglePlacesContextProvider apiKey={googleApiKey}>
         <PatientInfoForm
           patient={patientProfile}

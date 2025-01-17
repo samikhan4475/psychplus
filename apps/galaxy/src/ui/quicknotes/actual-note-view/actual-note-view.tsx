@@ -5,6 +5,7 @@ import { Appointment, PatientProfile, QuickNoteSectionItem } from '@/types'
 import { QuickNoteDataProvider } from '../quick-note-data-provider'
 import { WidgetType } from '../types'
 import { ActualNoteViewClient } from './actual-note-client'
+import { NoteViewHeader } from './note-view-header'
 import { PsychiatricEvaluation } from './psychiatric-evaluation'
 
 interface ActualNoteViewProps {
@@ -30,7 +31,7 @@ const ActualNoteView = ({
   return (
     <ActualNoteViewClient>
       <ScrollArea className="max-w-96 min-w-96 h-full">
-        {/* <NoteViewHeader /> */}
+        <NoteViewHeader />
         <Flex
           id="actual-note-view"
           gap="1"

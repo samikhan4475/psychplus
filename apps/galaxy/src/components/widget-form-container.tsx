@@ -5,6 +5,7 @@ import { useSearchParams } from 'next/navigation'
 import { useFormContext } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { saveWidgetClientAction } from '@/actions'
+import { revalidateAction } from '@/actions/revalidate'
 import { saveWidgetAction } from '@/actions/save-widget'
 import type { Appointment, QuickNoteSectionItem } from '@/types'
 import { useQuickNoteUpdate } from '@/ui/quicknotes/hooks'
@@ -66,6 +67,10 @@ const WidgetFormContainer = ({
         success: true,
       })
       updateWidgetsData?.(values)
+      if (isQuickNoteView) {
+        revalidateAction()
+      }
+
       if (shouldToast) {
         toast.success('Saved!')
       }

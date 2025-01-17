@@ -12,6 +12,7 @@ const addPatientAction = async (
     return {
       state: 'error',
       error: result.error,
+      status: result.status,
     }
   }
   return {

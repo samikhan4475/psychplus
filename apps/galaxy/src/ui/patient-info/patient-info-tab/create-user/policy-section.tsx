@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { Button, Flex, Text } from '@radix-ui/themes'
 import { MailIcon, MessageSquareTextIcon } from 'lucide-react'
 import toast from 'react-hot-toast'
+import { useStore as zustandUseStore } from 'zustand'
 import { sendPolicyNoticeAction } from '@/actions'
 import {
   CloseIcon,
@@ -12,7 +13,7 @@ import {
   TickIcon,
 } from '@/components/icons'
 import { NotificationType, Policy } from '@/types'
-import { useStore } from '../store'
+import { useStore } from '../../store'
 
 interface PolicySectionProps {
   patientId: string
@@ -23,9 +24,11 @@ const PolicySection = ({
   patientId,
   patientPolicyAStatus,
 }: PolicySectionProps) => {
-  const { isUserLocked } = useStore((state) => ({
+  const store = useStore()
+  const { isUserLocked } = zustandUseStore(store, (state) => ({
     isUserLocked: state.isUserLocked,
   }))
+
   const [isSending, setIsSending] = useState(false)
 
   const renderStatusIcon = (status: string | undefined) => {
