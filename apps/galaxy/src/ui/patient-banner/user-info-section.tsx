@@ -44,7 +44,7 @@ const UserInfoSection = ({ user }: PatientBannerProps) => {
         <LabelAndValue label="MRN" value={user.medicalRecordNumber} />
         <LabelAndValue
           label="DOB"
-          value={getSlashedPaddedDateString(user.birthdate)}
+          value={getSlashedPaddedDateString(user.birthdate, true)}
         />
         <LabelAndValue
           label="Cell"

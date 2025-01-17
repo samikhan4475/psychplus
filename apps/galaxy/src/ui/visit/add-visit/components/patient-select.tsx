@@ -7,7 +7,7 @@ import {
 } from '@/components'
 import { CODESETS } from '@/constants'
 import { useCodesetCodes } from '@/hooks'
-import { formatDate } from '@/utils'
+import { getSlashedPaddedDateString } from '@/utils'
 import { searchPatientsAction } from '../../actions'
 import { Patient } from '../../types'
 import { SchemaType } from '../schema'
@@ -36,7 +36,9 @@ const PatientSelect = ({ slotDetails }: { slotDetails?: SlotDetails }) => {
       value.lastName,
       value.birthdate ? calculateAge(value.birthdate) : '',
       value.gender,
-      value.birthdate ? `| ${formatDate(value.birthdate, 'MM/dd/yyyy')}` : '',
+      value.birthdate
+        ? `| ${getSlashedPaddedDateString(value.birthdate, true)}`
+        : '',
       value.medicalRecordNumber ? `| ${value.medicalRecordNumber}` : '',
       value.status ? `| ${mappedStatuses[value.status]}` : '',
     ]

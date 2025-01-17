@@ -170,6 +170,7 @@ const formatDate = (
 
 const getSlashedPaddedDateString = (
   date: CalendarDate | string | undefined,
+  showFullYear: boolean = false,
 ) => {
   if (!date) {
     return ''
@@ -182,7 +183,9 @@ const getSlashedPaddedDateString = (
   }
   const month = String(date.month).padStart(2, '0')
   const day = String(date.day).padStart(2, '0')
-  const year = date.year % 100
+  const year = showFullYear
+    ? date.year
+    : String(date.year % 100).padStart(2, '0')
   return `${month}/${day}/${year}`
 }
 function formatExpirationDate(expireMonth: number, expireYear: number) {
