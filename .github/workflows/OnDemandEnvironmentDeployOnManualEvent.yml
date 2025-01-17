@@ -84,8 +84,6 @@ jobs:
       image_tag: ${{ needs.build-configuration.outputs.image_tag }}
       env_namespace: ${{ needs.build-configuration.outputs.env_namespace }}
       ingress_url: ui-pr-${{ github.event.inputs.pr_number }}.ode.psychplus.dev
-      autoscaling_min_replicas: 1
-      autoscaling_max_replicas: 1
     secrets: inherit
 
   deploy_clinical:
@@ -100,8 +98,6 @@ jobs:
       image_tag: ${{ needs.build-configuration.outputs.image_tag }}
       env_namespace: ${{ needs.build-configuration.outputs.env_namespace }}
       ingress_url: ui-pr-${{ github.event.inputs.pr_number }}.ode.psychplus.dev
-      autoscaling_min_replicas: 1
-      autoscaling_max_replicas: 1
     secrets: inherit
 
   deploy_patient:
@@ -116,8 +112,6 @@ jobs:
       image_tag: ${{ needs.build-configuration.outputs.image_tag }}
       env_namespace: ${{ needs.build-configuration.outputs.env_namespace }}
       ingress_url: ui-pr-${{ github.event.inputs.pr_number }}.ode.psychplus.dev
-      autoscaling_min_replicas: 1
-      autoscaling_max_replicas: 1
     secrets: inherit
 
   deploy_galaxy:
@@ -132,8 +126,6 @@ jobs:
       image_tag: ${{ needs.build-configuration.outputs.image_tag }}
       env_namespace: ${{ needs.build-configuration.outputs.env_namespace }}
       ingress_url: ui-pr-${{ github.event.inputs.pr_number }}.ode.psychplus.dev
-      autoscaling_min_replicas: 1
-      autoscaling_max_replicas: 1
     secrets: inherit
 
   deploy_revcycle:
@@ -148,6 +140,4 @@ jobs:
       image_tag: ${{ needs.build-configuration.outputs.image_tag }}
       env_namespace: ${{ needs.build-configuration.outputs.env_namespace }}
       ingress_url: ui-pr-${{ github.event.inputs.pr_number }}.ode.psychplus.dev
-      autoscaling_min_replicas: 1
-      autoscaling_max_replicas: 1
     secrets: inherit

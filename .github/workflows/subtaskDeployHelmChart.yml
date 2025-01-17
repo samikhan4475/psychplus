@@ -43,19 +43,32 @@ on:
         type: string
         required: true
 
-      autoscaling_min_replicas:
-        description: Minimum number of replicas if the helm chart has autoscaling enabled, otherwise ignored
-        type: string
-        default: '1'
-
-      autoscaling_max_replicas:
-        description: Maximum number of replicas if the helm chart has autoscaling enabled, otherwise ignored
-        type: string
-        default: '1'
-
-
 jobs:
+  deploy_variables:
+    permissions:
+      actions: read
+      contents: read
+      id-token: write
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    steps:
+      - name: Set deploy variables
+        id: deploy_variables
+        shell: pwsh
+        run: |
+          $autoscaling_min_replicas = [int]"${{ vars.AUTOSCALING_MIN_REPLICAS }}";
+          echo "autoscaling_min_replicas=$autoscaling_min_replicas" >> $env:GITHUB_OUTPUT
+          echo "output autoscaling_min_replicas: $autoscaling_min_replicas"
+          $autoscaling_max_replicas = [int]"${{ vars.AUTOSCALING_MAX_REPLICAS }}";
+          echo "autoscaling_max_replicas=$autoscaling_max_replicas" >> $env:GITHUB_OUTPUT
+          echo "output autoscaling_max_replicas: $autoscaling_max_replicas"
+    outputs:
+      autoscaling_min_replicas: ${{ steps.deploy_variables.outputs.autoscaling_min_replicas }}
+      autoscaling_max_replicas: ${{ steps.deploy_variables.outputs.autoscaling_max_replicas }}
+
+
   deploy:
+    needs: deploy_variables
     permissions:
       actions: read
       contents: read
@@ -143,6 +156,8 @@ jobs:
             --set ingress.hosts[0].host=${{ inputs.ingress_url }} \
             --set ingress.tls[0].hosts[0]=${{ inputs.ingress_url }} \
             --set ingress.tls[0].secretName=ui-${{ inputs.project }}-psychplus-tls \
+            --set autoscaling.minReplicas=${{ needs.deploy_variables.outputs.autoscaling_min_replicas }} \
+            --set autoscaling.maxReplicas=${{ needs.deploy_variables.outputs.autoscaling_max_replicas }} \
             --set environment=${{ inputs.environment }} \
             --values helm/${{ inputs.project }}/values.yaml
 
