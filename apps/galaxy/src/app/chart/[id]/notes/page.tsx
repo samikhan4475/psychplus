@@ -17,12 +17,9 @@ const NotesPage = async ({ params, searchParams }: NotesPageProps) => {
     isIncludeCosigners: true,
   })
 
-  if (noteAppointment.state === 'error') {
-    return <Text>{noteAppointment.error}</Text>
-  }
-  return (
-    <NotesView patientId={params.id} noteAppointment={noteAppointment.data} />
-  )
+  const appointmentData =
+    noteAppointment.state === 'error' ? undefined : noteAppointment.data
+  return <NotesView patientId={params.id} noteAppointment={appointmentData} />
 }
 
 export default NotesPage

@@ -3,7 +3,7 @@ import { NotesWidget } from './notes-widget'
 
 interface NotesViewProps {
   patientId: string
-  noteAppointment: Appointment
+  noteAppointment?: Appointment
 }
 
 const NotesView = ({ patientId, noteAppointment }: NotesViewProps) => {

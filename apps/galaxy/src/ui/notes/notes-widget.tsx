@@ -11,7 +11,7 @@ import { useStore } from './store'
 
 interface NotesViewProps {
   patientId: string
-  noteAppointment: Appointment
+  noteAppointment?: Appointment
 }
 
 const NotesWidget = ({ patientId, noteAppointment }: NotesViewProps) => {
@@ -101,11 +101,11 @@ const NotesWidget = ({ patientId, noteAppointment }: NotesViewProps) => {
 
   return (
     <Flex direction="column" width="100%" px="1">
-      {isCreateNoteView ? (
+      {noteAppointment && isCreateNoteView ? (
         <CreateNoteView noteAppointment={noteAppointment} />
       ) : (
         <>
-          <NotesHeader />
+          <NotesHeader noteAppointment={noteAppointment} />
           <NotesLayout patientId={patientId} />
         </>
       )}

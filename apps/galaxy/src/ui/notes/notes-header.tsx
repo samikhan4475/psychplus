@@ -1,7 +1,12 @@
 import { Flex, Text } from '@radix-ui/themes'
+import { Appointment } from '@/types'
 import { CreateNewNoteButton } from './create-new-note-button'
 
-const NotesHeader = () => {
+const NotesHeader = ({
+  noteAppointment,
+}: {
+  noteAppointment?: Appointment
+}) => {
   return (
     <Flex
       direction="column"
@@ -14,9 +19,11 @@ const NotesHeader = () => {
         <Text size="4" weight="medium">
           Notes
         </Text>
-        <Flex gap="2" wrap="wrap">
-          <CreateNewNoteButton />
-        </Flex>
+        {noteAppointment && (
+          <Flex gap="2" wrap="wrap">
+            <CreateNewNoteButton />
+          </Flex>
+        )}
       </Flex>
     </Flex>
   )
