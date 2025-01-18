@@ -51,7 +51,7 @@ const QuickNotesHeader = ({ appointment }: QuickNotesHeaderProps) => {
       </Flex>
       <Separator className="w-full" />
       <Flex align="center" gap="2" wrap="wrap" p="2">
-        <QuickNotesTitleDropdown title={appointment.visitNoteTitle} />
+        <QuickNotesTitleDropdown title={appointment.visitNoteTitle ?? 'NA'} />
         <QuickNotesVisitTypeDropdown visitType={appointment.visitType} />
         <QuickNotesVisitSequenceDropdown
           visitSequence={appointment.visitSequence}

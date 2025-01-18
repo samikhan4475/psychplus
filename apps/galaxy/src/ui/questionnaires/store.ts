@@ -163,6 +163,7 @@ const useStore = create<Store>((set, get) => ({
     }
   },
   updateShowNoteView: async (checked, patientId) => {
+    set({ showNoteViewValue: checked ? 'show' : 'hide' })
     const result = await saveWidgetAction({
       patientId: patientId.toString(),
       data: [
@@ -176,7 +177,6 @@ const useStore = create<Store>((set, get) => ({
     })
 
     if (result.state === 'success') {
-      set({ showNoteViewValue: checked ? 'show' : 'hide' })
       toast.success(
         checked
           ? 'Added in Actual Note View!'
@@ -184,6 +184,7 @@ const useStore = create<Store>((set, get) => ({
       )
     } else {
       toast.error('Failed to save!')
+      set({ showNoteViewValue: checked ? 'hide' : 'show' })
     }
   },
   handleDeleteQuestionnaire: async (
