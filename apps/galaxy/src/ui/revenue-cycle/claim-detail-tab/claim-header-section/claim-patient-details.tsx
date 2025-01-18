@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { Flex, Grid, Text } from '@radix-ui/themes'
 import { useFormContext, useWatch } from 'react-hook-form'
 import { CODESETS } from '@/constants'
@@ -34,13 +34,16 @@ const calculateBilledAmount = (
 const PatientClaimDetails = () => {
   const form = useFormContext<ClaimUpdateSchemaType>()
   const { watch, setValue } = form
+
+  const isInitialRender = useRef(true)
+
   const patientName = watch('patientName')
   const gender = watch('patientGender')
   const dob = watch('patientDateOfBirth')
   const accountNumber = watch('patientAccountNumber')
   const claimStatusCode = watch('claimStatusCode')
   const billedAmt = watch('totalAmount') ?? 0.0
-  const amountDue = form.getValues('amountDue')
+  const amountDue = form.watch('amountDue')
   const claimServiceLines = useWatch({
     control: form.control,
     name: 'claimServiceLines',
@@ -50,11 +53,22 @@ const PatientClaimDetails = () => {
   const secondaryPaid = form.watch('secondaryPaid') ?? 0.0
   const totalWriteOff = form.watch('totalWriteOff') ?? 0.0
   const patientPaid = form.watch('patientPaid') ?? 0.0
+
   useEffect(() => {
     const billedAmount = calculateBilledAmount(claimServiceLines)
     setValue('totalAmount', billedAmount)
   }, [claimServiceLines])
 
+  useEffect(() => {
+    if (isInitialRender.current) {
+      isInitialRender.current = false
+      return
+    }
+    const claimBalance =  billedAmt - (primaryPaid + secondaryPaid + patientPaid + totalWriteOff)
+    setValue('amountDue', claimBalance)
+  }, [billedAmt])
+
+  
   const claimStatuses = useCodesetCodes(CODESETS.ClaimStatus)
 
   const claimStatus = claimStatusCode
