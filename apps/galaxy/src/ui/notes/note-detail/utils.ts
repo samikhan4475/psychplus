@@ -28,6 +28,7 @@ import { WorkingDiagnosisNoteDetailView } from '@/ui/quicknotes/actual-note-view
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { isHospitalCareVisit, VisitTypeEnum, visitTypeToWidgets } from '@/utils'
 import { WidgetType } from '../types'
+import { TmsDetailClientView } from '@/ui/quicknotes/actual-note-view/tms/tms-detail-client-view'
 
 enum ProviderType {
   Psychiatry = 'Psychiatrist',
@@ -116,7 +117,7 @@ const widgetsArray: Array<WidgetType> = [
   },
   {
     id: QuickNoteSectionName.ProcedureTMS,
-    actualNoteDetailComponent: TmsNoteDetailView,
+    actualNoteDetailComponent: TmsDetailClientView,
   },
   {
     id: QuickNoteSectionName.QuicknoteSectionTherapyAssessmentPlan,

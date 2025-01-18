@@ -122,7 +122,12 @@ const useStore = create<Store>((set) => ({
       error: undefined,
     })
 
-    const appointment = await getAppointment(appointmentId)
+    const appointment = await getAppointment({
+      id: appointmentId,
+      shouldHaveCode: true,
+      shouldHaveCosigners: true,
+      shouldHaveLocation: true,
+    })
 
     if (appointment.state === 'error') {
       return set({
