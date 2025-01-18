@@ -1,7 +1,6 @@
 'use client'
 
 import { Flex, Text } from '@radix-ui/themes'
-import { FormFieldError } from '@/components'
 import { PaymentInput } from './shared'
 
 const BalanceBlock = () => {
@@ -15,7 +14,6 @@ const BalanceBlock = () => {
         <PaymentInput label="Due PP" field="balancePreferredPartner" disabled />
         <PaymentInput label="Paid" field="balancePaid" disabled />
       </Flex>
-      <FormFieldError name="balanceDue" />
     </Flex>
   )
 }

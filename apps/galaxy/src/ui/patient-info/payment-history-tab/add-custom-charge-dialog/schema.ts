@@ -17,12 +17,7 @@ const chargeSchema = z
         message: 'Required',
       }),
     chargeTime: z.string().min(1, 'Required'),
-    balanceDue: z
-      .string()
-      .min(1, 'Required')
-      .refine((value) => parseFloat(value) > 0, {
-        message: 'Balance Due must be greater than zero',
-      }),
+    balanceDue: z.string().optional(),
     coPayDue: optionalString,
     coPayPaid: optionalString,
     coInsuranceDue: optionalString,
