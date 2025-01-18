@@ -273,6 +273,7 @@ const visitTypeToWidgets: Record<VisitTypeEnum, QuickNoteSectionName[]> = {
   ],
   [VisitTypeEnum.Tms]: [
     QuickNoteSectionName.ProcedureTMS,
+    QuickNoteSectionName.QuickNoteSectionDiagnosis,
     QuickNoteSectionName.QuicknoteSectionCodes,
     QuickNoteSectionName.QuicknoteSectionUploadedDocuments,
   ],
