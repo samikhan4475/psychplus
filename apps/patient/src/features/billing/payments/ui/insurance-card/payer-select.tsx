@@ -12,9 +12,10 @@ import { type SchemaType } from './insurance-form'
 
 interface PayerSelectProps {
   payers: InsurancePayer[]
+  disabled?: boolean
 }
 
-const PayerSelect = ({ payers }: PayerSelectProps) => {
+const PayerSelect = ({ payers, disabled = false }: PayerSelectProps) => {
   const form = useFormContext<SchemaType>()
 
   const items = payers.map((payer) => (
@@ -38,6 +39,7 @@ const PayerSelect = ({ payers }: PayerSelectProps) => {
 
           return (
             <Select.Root
+              disabled={disabled}
               onValueChange={(value) => {
                 field.onChange(value)
                 form.setValue('insurancePlanId', '')

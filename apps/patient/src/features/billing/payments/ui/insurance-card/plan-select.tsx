@@ -12,7 +12,13 @@ import { getInsurancePayerPlans } from '../../actions'
 import type { InsurancePayer, InsurancePlan } from '../../types'
 import { type SchemaType } from './insurance-form'
 
-const PlanSelect = ({ payers }: { payers: InsurancePayer[] }) => {
+const PlanSelect = ({
+  payers,
+  disabled = false,
+}: {
+  payers: InsurancePayer[]
+  disabled?: boolean
+}) => {
   const form = useFormContext<SchemaType>()
   const [loading, setLoading] = useState(false)
   const [plans, setPlans] = useState<InsurancePlan[]>()
@@ -59,7 +65,7 @@ const PlanSelect = ({ payers }: { payers: InsurancePayer[] }) => {
 
           return (
             <Select.Root
-              disabled={loading || !plans}
+              disabled={loading || !plans || disabled}
               onValueChange={field.onChange}
               {...rest}
             >

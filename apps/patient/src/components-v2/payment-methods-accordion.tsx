@@ -19,6 +19,7 @@ import { InsurancePolicyPriority } from '@/features/billing/payments/constants'
 import { Insurance, InsurancePayer } from '@/features/billing/payments/types'
 import { InsuranceForm } from '@/features/billing/payments/ui/insurance-card/insurance-form'
 import { InsuranceFormTrigger } from '@/features/billing/payments/ui/insurance-card/Insurance-form-trigger'
+import { VerificationStatus } from '@/types'
 
 interface PaymentMethodAccordionProps {
   paymentMethod: PaymentType
@@ -27,6 +28,7 @@ interface PaymentMethodAccordionProps {
   patientInsurances: Insurance[]
   insurancePayers: InsurancePayer[]
 }
+
 
 const PaymentMethodAccordion = ({
   paymentMethod,
@@ -100,6 +102,9 @@ const PaymentMethodAccordion = ({
                       >
                         <Box className="w-full">
                           <InsuranceFormTrigger
+                            isReadOnly={
+                              insurance.verificationStatus === VerificationStatus.Verified
+                            }
                             insurance={insurance}
                             insurancePayers={insurancePayers}
                           />

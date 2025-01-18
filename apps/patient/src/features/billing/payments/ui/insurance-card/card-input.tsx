@@ -1,18 +1,24 @@
 import { ChangeEvent, useRef, useState } from 'react'
 import Image from 'next/image'
+import { cn } from '@psychplus-v2/utils'
 import { Box, Flex, IconButton, Text } from '@radix-ui/themes'
 import { XIcon } from 'lucide-react'
 import { EditCameraIcon, ImagePlaceholderIcon } from '@/components'
-import { cn } from '@psychplus-v2/utils'
 import { CardImgViewDialog } from './card-img-view-dialog'
 
 interface CardInputProps {
   savedImg?: string
   onImageChanged: (file: File | undefined) => void
   label: string
+  disabled?: boolean
 }
 
-const CardInput = ({ savedImg, onImageChanged, label }: CardInputProps) => {
+const CardInput = ({
+  savedImg,
+  onImageChanged,
+  label,
+  disabled = false,
+}: CardInputProps) => {
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [previewImage, setPreviewImage] = useState<string | null>(null)
   const [imgView, setImgView] = useState(false)
@@ -50,7 +56,10 @@ const CardInput = ({ savedImg, onImageChanged, label }: CardInputProps) => {
       <Flex
         align="center"
         justify="center"
-        className="h-[230px] cursor-pointer items-center justify-center rounded-[5px] border border-dashed border-[#bebebe] text-accent-12 sm:flex-1"
+        className={cn(
+          "h-[230px] cursor-pointer items-center justify-center rounded-[5px] border border-dashed border-[#bebebe] text-accent-12 sm:flex-1",
+          disabled && "cursor-not-allowed opacity-50",
+        )}
         onClick={handleImageInput}
       >
         {imageSrc ? (
@@ -98,6 +107,7 @@ const CardInput = ({ savedImg, onImageChanged, label }: CardInputProps) => {
           className="hidden"
           onChange={onImageChange}
           accept="image/png, image/jpeg, image/jpg"
+          disabled={disabled}
         />
       </Flex>
       <Flex gap="3" align="center" className="pt-2">

@@ -5,6 +5,7 @@ import { Insurance, InsurancePayer } from '@/features/billing/payments/types'
 import { InsuranceForm } from './insurance-form'
 import { InsuranceFormTrigger } from './Insurance-form-trigger'
 import { cn } from '@psychplus-v2/utils'
+import { VerificationStatus } from '@/types'
 
 interface InsuranceFormProps {
   insurancePayers: InsurancePayer[]
@@ -45,6 +46,9 @@ const InsuranceForms = ({
           {patientInsurances.map((insurance) => (
             <Flex className="w-full" direction="column" key={insurance.id}>
               <InsuranceFormTrigger
+                isReadOnly={
+                  insurance.verificationStatus === VerificationStatus.Verified
+                }
                 key={insurance.id}
                 insurance={insurance}
                 insurancePayers={insurancePayers}

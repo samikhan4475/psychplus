@@ -138,6 +138,7 @@ interface InsuranceFormProps {
   trigger?: React.ReactNode
   onFormClose?: () => void
   onAddInsuranceClick?: (value: string) => void
+  isReadOnly?: boolean
 }
 
 const InsuranceForm = ({
@@ -146,6 +147,7 @@ const InsuranceForm = ({
   trigger,
   onFormClose,
   onAddInsuranceClick,
+  isReadOnly = false,
 }: InsuranceFormProps) => {
   const [cardFrontImage, setCardFrontImage] = useState<File | undefined>(
     undefined,
@@ -365,6 +367,7 @@ const InsuranceForm = ({
         <FormFieldLabel>Insurance Card</FormFieldLabel>
         <Flex direction={{ initial: 'column', sm: 'row' }} width="100%" gap="3">
           <CardInput
+            disabled={isReadOnly}
             label="Upload Image Front Side"
             savedImg={
               insurance && form.watch('hasCardFrontImage')
@@ -380,6 +383,7 @@ const InsuranceForm = ({
             }}
           />
           <CardInput
+            disabled={isReadOnly}
             label="Upload Image Back Side"
             savedImg={
               insurance && form.watch('hasCardBackImage')
@@ -410,11 +414,11 @@ const InsuranceForm = ({
         </FormFieldContainer>
 
         <FormFieldContainer>
-          <PayerSelect payers={insurancePayers} />
+          <PayerSelect payers={insurancePayers} disabled={isReadOnly} />
         </FormFieldContainer>
 
         <FormFieldContainer>
-          <PlanSelect payers={insurancePayers} />
+          <PlanSelect payers={insurancePayers} disabled={isReadOnly} />
         </FormFieldContainer>
 
         <FormFieldContainer className="gap-[3px]">
@@ -424,6 +428,7 @@ const InsuranceForm = ({
             {...form.register('memberId')}
             placeholder="Enter member ID"
             maxLength={16}
+            disabled={isReadOnly}
           />
           <FormFieldError name="memberId" />
         </FormFieldContainer>
@@ -437,6 +442,7 @@ const InsuranceForm = ({
             {...form.register('groupNumber')}
             placeholder={getPlaceholder('groupNumber')}
             maxLength={16}
+            disabled={isReadOnly}
           />
           <FormFieldError name="groupNumber" />
         </FormFieldContainer>
@@ -449,6 +455,7 @@ const InsuranceForm = ({
             data-testid="effective-date-input"
             {...form.register('effectiveDate')}
             className="mr-4 h-[34px] w-full rounded-2 text-[14px]"
+            disabled={isReadOnly}
           />
           <FormFieldError name="effectiveDate" />
         </FormFieldContainer>
@@ -461,6 +468,7 @@ const InsuranceForm = ({
             min={minDate}
             data-testid="termination-date-input"
             {...form.register('terminationDate')}
+            disabled={isReadOnly}
             className="mr-4 h-[34px] w-full rounded-2 text-[14px]"
           />
           <FormFieldError name="terminationDate" />
@@ -487,6 +495,7 @@ const InsuranceForm = ({
               const isPolicyHolder = value === 'true'
               onCheckedChange(isPolicyHolder)
             }}
+            disabled={isReadOnly}
           >
             <Flex gap="4">
               {[

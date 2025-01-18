@@ -14,13 +14,16 @@ import {
 import { deleteInsurance } from '../../actions'
 import { InsuranceForm } from './insurance-form'
 
+interface InsuranceFormTriggerProps {
+  insurance: Insurance
+  insurancePayers: InsurancePayer[]
+  isReadOnly?: boolean
+}
 const InsuranceFormTrigger = ({
   insurance,
   insurancePayers,
-}: {
-  insurance: Insurance
-  insurancePayers: InsurancePayer[]
-}) => {
+  isReadOnly = false,
+}: InsuranceFormTriggerProps) => {
   const getStatusVariant = (
     variantType: keyof typeof InsuranceChipVariantType,
   ): string => {
@@ -108,6 +111,7 @@ const InsuranceFormTrigger = ({
       {isUpdateFormTrigger && (
         <Box className="mt-3">
           <InsuranceForm
+            isReadOnly={isReadOnly}
             key={insurance.id}
             insurance={insurance}
             insurancePayers={insurancePayers}
