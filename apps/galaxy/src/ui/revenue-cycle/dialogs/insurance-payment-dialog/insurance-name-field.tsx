@@ -6,14 +6,14 @@ import {
   FormFieldError,
   FormFieldLabel,
 } from '@/components/form'
-import { getInsurancePayerOptionsAction } from '../../actions'
+import { getInsurancePlanOptionsAction } from '../../actions'
 
 const InsuranceNameField = () => {
   return (
     <FormFieldContainer className="flex-1 gap-0">
       <FormFieldLabel required>Insurance Name</FormFieldLabel>
       <AsyncAutoCompleteTextField
-        fetchDataAction={getInsurancePayerOptionsAction}
+        fetchDataAction={getInsurancePlanOptionsAction}
         field="insuranceName"
         placeholder="Search"
         valueKey="label"
