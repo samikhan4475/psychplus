@@ -163,8 +163,13 @@ const CREATE_FORWARD_SECURE_MESSAGE = (messageId: string) =>
   `${API_URL}/api/users/self/securemessaging/messages/${messageId}/actions/forward`
 const GET_RECIPIENT_SECURE_MESSAGE = (messageId: string) =>
   `${API_URL}/api/users/self/securemessages/${messageId}/recipients/actions/search`
+const SEARCH_MODAL_PHARMACIES = `${API_URL}/api/pharmacies/actions/search`
 const SEARCH_PHARMACIES = (patientId: string) =>
   `${API_URL}/api/patients/${patientId}/pharmacies/actions/search`
+const ADD_PHARMACY = (patientId: string, pharmacyId: string) =>
+  `${API_URL}/api/patients/${patientId}/pharmacies/${pharmacyId}/actions/associate`
+const ADD_FAVORITE_PHARMACY = (pharmacyId: string, patientId: string) =>
+  `${API_URL}/api/patients/${patientId}/pharmacies/${pharmacyId}/actions/favorite`
 const GET_PATIENT_BILLING_HISTORY = (patientId: string) =>
   `${API_URL}/api/patients/${patientId}/billinghistory/actions/search`
 const ADD_PATIENT_RELATIONSHIP_ENDPOINT = (patientId: string) =>
@@ -567,6 +572,10 @@ const DELETE_LAB_ORDERS_RESULT_ENDPOINT = (
 
 const LAB_ORDER_GET_REQUISITION = (orderId: string) =>
   `${API_URL}/api/laborders/${orderId}/actions/getrequisition`
+const DELETE_PHARMACY = (pharmacyId: string, patientId: string) =>
+  `${API_URL}/api/patients/${patientId}/pharmacies/${pharmacyId}`
+const PRIORITY_PHARMACY = (pharmacyId: string, patientId: string) =>
+  `${API_URL}/api/patients/${patientId}/pharmacies/${pharmacyId}/actions/default`
 
 export {
   GET_LAB_RESULTS_ENDPOINT,
@@ -829,4 +838,9 @@ export {
   DELETE_LAB_ORDERS_RESULT_ENDPOINT,
   LAB_ORDER_GET_REQUISITION,
   METADATA_CODESET_ALL_ENDPOINT,
+  SEARCH_MODAL_PHARMACIES,
+  ADD_PHARMACY,
+  ADD_FAVORITE_PHARMACY,
+  DELETE_PHARMACY,
+  PRIORITY_PHARMACY,
 }

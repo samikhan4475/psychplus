@@ -7,19 +7,19 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import z from 'zod'
 import { FormContainer, PhoneNumberInput } from '@/components'
 import { sanitizeFormData } from '@/utils'
-import { useStore } from './store'
 import { Address } from './address-input'
 import { CitySelect } from './city-select'
 import { PharmacyName } from './pharmacy-input'
 import { StateSelect } from './states-select'
+import { useStore } from './store'
 
 const schema = z.object({
   pharmacyName: z.string().optional(),
-  address: z.string().optional(),
-  zipCode: z.string().optional(),
-  city: z.string().optional(),
-  state: z.string().optional(),
-  phoneNumber: z.string().optional(),
+  pharmacyAddress: z.string().optional(),
+  pharmacyZip: z.string().optional(),
+  pharmacyCity: z.string().optional(),
+  pharmacyStateCode: z.string().optional(),
+  pharmacyPhone: z.string().optional(),
 })
 type FilterSchemaType = z.infer<typeof schema>
 
@@ -34,16 +34,22 @@ const PharmacyFilterForm = ({ patientId }: PharmacyFilterFormProps) => {
   const form = useForm<FilterSchemaType>({
     resolver: zodResolver(schema),
     defaultValues: {
-      pharmacyName: undefined,
-      address: undefined,
-      zipCode: undefined,
-      city: undefined,
-      state: undefined,
-      phoneNumber: undefined,
+      pharmacyName: '',
+      pharmacyAddress: '',
+      pharmacyZip: undefined,
+      pharmacyCity: '',
+      pharmacyStateCode: '',
+      pharmacyPhone: undefined,
     },
     mode: 'onBlur',
   })
+
+  const { isDirty } = form.formState
+
   const onSubmit: SubmitHandler<FilterSchemaType> = (data) => {
+    if (!isDirty) {
+      return
+    }
     const sanitizedData = sanitizeFormData({
       ...data,
     })
@@ -52,11 +58,11 @@ const PharmacyFilterForm = ({ patientId }: PharmacyFilterFormProps) => {
   const handleReset = () => {
     form.reset({
       pharmacyName: '',
-      address: '',
-      zipCode: '',
-      city: '',
-      state: '',
-      phoneNumber: '',
+      pharmacyAddress: '',
+      pharmacyZip: '',
+      pharmacyCity: '',
+      pharmacyStateCode: '',
+      pharmacyPhone: '',
     })
     fetchPatientPharmacies(patientId)
   }
@@ -66,11 +72,11 @@ const PharmacyFilterForm = ({ patientId }: PharmacyFilterFormProps) => {
       onSubmit={onSubmit}
       className="bg-white rounded-bl-1 rounded-br-1 p-2"
     >
-      <Flex align="center" gap="2" wrap="wrap" width="100%">
+      <Flex align="center" gap="2">
         <PharmacyName />
         <Address />
         <PhoneNumberInput
-          field="zipCode"
+          field="pharmacyZip"
           label="ZIP Code"
           placeholder="ZIP Code"
           format="#####"
@@ -78,7 +84,7 @@ const PharmacyFilterForm = ({ patientId }: PharmacyFilterFormProps) => {
         <CitySelect />
         <StateSelect />
         <PhoneNumberInput
-          field="phoneNumber"
+          field="pharmacyPhone"
           label="Phone Number"
           placeholder="Add Phone"
         />
@@ -100,4 +106,4 @@ const PharmacyFilterForm = ({ patientId }: PharmacyFilterFormProps) => {
   )
 }
 
-export { PharmacyFilterForm, type FilterSchemaType }
+export { PharmacyFilterForm, schema, type FilterSchemaType }

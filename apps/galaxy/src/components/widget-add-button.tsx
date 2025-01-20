@@ -8,12 +8,14 @@ import { cn } from '@/utils'
 type FillOutButtonProps = PropsWithChildren<{
   title?: string
   className?: string
+  onClose?: () => void
 }>
 
 const WidgetAddButton = ({
   title,
   children,
   className,
+  onClose,
 }: FillOutButtonProps) => {
   return (
     <Dialog.Root>
@@ -40,7 +42,7 @@ const WidgetAddButton = ({
           >
             {title}
           </Dialog.Title>
-          <Dialog.Close className="cursor-pointer">
+          <Dialog.Close className="cursor-pointer" onClick={onClose}>
             <Cross2Icon />
           </Dialog.Close>
         </Flex>

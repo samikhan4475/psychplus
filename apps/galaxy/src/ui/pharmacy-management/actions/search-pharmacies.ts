@@ -5,7 +5,7 @@ import { LIST_TABLE_PAGE_SIZE } from '../constants'
 import type { GetPharmacyResponse, Pharmacy, PharmacyParams } from '../types'
 
 const searchPharmaciesAction = async (
-  payload: PharmacyParams = {},
+  payload: PharmacyParams,
   page = 1,
 ): Promise<api.ActionResult<GetPharmacyResponse>> => {
   const offset = (page - 1) * LIST_TABLE_PAGE_SIZE

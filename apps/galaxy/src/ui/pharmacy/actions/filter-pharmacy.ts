@@ -1,14 +1,13 @@
 'use server'
 
 import * as api from '@/api'
-import type { Pharmacy, PharmacyParams } from '../types'
+import type { Pharmacy, PharmacySearchParams } from '../types'
 
-const searchPharmaciesAction = async (
-  patientId: string,
-  payload: PharmacyParams = {},
+const filterPharmacyAction = async (
+  payload: PharmacySearchParams,
 ): Promise<api.ActionResult<Pharmacy[]>> => {
   const response = await api.POST<Pharmacy[]>(
-    api.SEARCH_PHARMACIES(patientId),
+    api.SEARCH_MODAL_PHARMACIES,
     payload,
   )
   if (response.state === 'error') {
@@ -24,4 +23,4 @@ const searchPharmaciesAction = async (
   }
 }
 
-export { searchPharmaciesAction }
+export { filterPharmacyAction }

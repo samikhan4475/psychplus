@@ -1,0 +1,40 @@
+import * as Tabs from '@radix-ui/react-tabs'
+import { Flex } from '@radix-ui/themes'
+import { XIcon } from 'lucide-react'
+
+const TabsTrigger = ({
+  value,
+  children,
+  onClose,
+  disabled = false,
+}: {
+  value: string
+  children: React.ReactNode
+  onClose?: () => void
+  disabled?: boolean
+}) => (
+  <Tabs.Trigger
+    value={value}
+    disabled={disabled}
+    className="data-[state=active]:border-b-white bg-white rounded-2 border border-accent-6 border-b-gray-5 p-0 px-2 py-1 text-[12px] text-gray-12 first:border-l data-[state=active]:cursor-default data-[state=active]:border-blue-11 data-[state=active]:bg-blue-11 data-[state=active]:font-[600] data-[state=active]:text-[white]"
+  >
+    <Flex align="center" gap="2">
+      {children}
+      {onClose ? (
+        <Flex
+          align="center"
+          justify="center"
+          className="rounded-full hover:text-black h-[18px] w-[18px] cursor-pointer text-gray-11 transition-colors hover:bg-gray-3"
+          onPointerDown={(e) => {
+            e.preventDefault()
+          }}
+          onClick={onClose}
+        >
+          <XIcon width={14} height={14} strokeWidth={1.5} />
+        </Flex>
+      ) : null}
+    </Flex>
+  </Tabs.Trigger>
+)
+
+export { TabsTrigger }

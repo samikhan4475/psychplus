@@ -1,98 +1,132 @@
 import { ColumnDef } from '@tanstack/react-table'
 import { ColumnHeader, LongTextCell, TextCell } from '@/components'
+import { FeatureFlag } from '@/types/feature-flag'
 import { formatDateTime } from '@/utils'
+import { ActionsCell } from './actions-cell'
 import { PrimaryRadioCell } from './primary-radio-cell'
 import { Pharmacy } from './types'
 
-const columns: ColumnDef<Pharmacy>[] = [
-  {
-    accessorKey: 'priority',
-    size: 50,
-    header: ({ column }) => (
-      <ColumnHeader column={column} clientSideSort label="Priority" />
-    ),
-    cell: ({ row }) => <PrimaryRadioCell row={row} />,
-  },
-  {
-    accessorKey: 'pharmacyName',
-    size: 200,
-    header: ({ column }) => (
-      <ColumnHeader column={column} clientSideSort label="Pharmacy Name" />
-    ),
-    cell: ({ row }) => <TextCell>{row.original?.pharmacyName ?? ''}</TextCell>,
-  },
-  {
-    accessorKey: 'address',
-    size: 100,
-    header: ({ column }) => (
-      <ColumnHeader column={column} clientSideSort label="Address" />
-    ),
-    cell: ({ row }) => (
-      <TextCell>
-        {row.original.pharmacyContactDetails?.addresses?.[0]?.street1 ?? ''}
-      </TextCell>
-    ),
-  },
-  {
-    accessorKey: 'zipCode',
-    size: 100,
-    header: ({ column }) => (
-      <ColumnHeader column={column} clientSideSort label="Zip Code" />
-    ),
-    cell: ({ row }) => (
-      <TextCell>
-        {row.original.pharmacyContactDetails?.addresses?.[0]?.postalCode ?? ''}
-      </TextCell>
-    ),
-  },
-  {
-    accessorKey: 'city',
-    size: 100,
-    header: ({ column }) => (
-      <ColumnHeader column={column} clientSideSort label="City" />
-    ),
-    cell: ({ row }) => (
-      <TextCell>
-        {row.original.pharmacyContactDetails?.addresses?.[0]?.city ?? ''}
-      </TextCell>
-    ),
-  },
-  {
-    accessorKey: 'state',
-    size: 100,
-    header: ({ column }) => (
-      <ColumnHeader column={column} clientSideSort label="State" />
-    ),
-    cell: ({ row }) => (
-      <TextCell>
-        {row.original.pharmacyContactDetails?.addresses?.[0]?.state ?? ''}
-      </TextCell>
-    ),
-  },
-  {
-    accessorKey: 'phoneNumber',
-    size: 200,
-    header: ({ column }) => (
-      <ColumnHeader column={column} clientSideSort label="Phone Number" />
-    ),
-    cell: ({ row }) => (
-      <LongTextCell className="min-w-24 max-w-32">
-        {row.original.pharmacyContactDetails?.phoneNumbers?.[0]?.number ?? ''}
-      </LongTextCell>
-    ),
-  },
-  {
-    accessorKey: 'lastUsed',
-    size: 100,
-    header: ({ column }) => (
-      <ColumnHeader column={column} clientSideSort label="Last Used" />
-    ),
-    cell: ({ row }) => (
-      <TextCell className="truncate">
-        {row?.original?.lastUsed && formatDateTime(row?.original.lastUsed)}
-      </TextCell>
-    ),
-  },
-]
+const columns = (featureFlags: FeatureFlag[]): ColumnDef<Pharmacy>[] => {
+  const isActionsEnabled =
+    !featureFlags?.[0]?.environments?.[0]?.isEnabledDefault
+  const baseColumns: ColumnDef<Pharmacy>[] = [
+    {
+      accessorKey: 'pharmacyName',
+      size: 200,
+      header: ({ column }) => (
+        <ColumnHeader column={column} clientSideSort label="Pharmacy Name" />
+      ),
+      cell: ({ row }) => (
+        <TextCell>{row.original?.pharmacyName ?? ''}</TextCell>
+      ),
+    },
+    {
+      accessorKey: 'address',
+      size: 100,
+      header: ({ column }) => (
+        <ColumnHeader column={column} clientSideSort label="Address" />
+      ),
+      accessorFn: (row) =>
+        row.pharmacyContactDetails?.addresses?.[0]?.street1 ?? '',
+      cell: ({ row }) => (
+        <TextCell>
+          {row.original.pharmacyContactDetails?.addresses?.[0]?.street1 ?? ''}
+        </TextCell>
+      ),
+    },
+    {
+      accessorKey: 'zipCode',
+      size: 100,
+      header: ({ column }) => (
+        <ColumnHeader column={column} clientSideSort label="Zip Code" />
+      ),
+      accessorFn: (row) =>
+        row.pharmacyContactDetails?.addresses?.[0]?.postalCode ?? '',
+      cell: ({ row }) => (
+        <TextCell>
+          {row.original.pharmacyContactDetails?.addresses?.[0]?.postalCode ??
+            ''}
+        </TextCell>
+      ),
+    },
+    {
+      accessorKey: 'city',
+      size: 100,
+      header: ({ column }) => (
+        <ColumnHeader column={column} clientSideSort label="City" />
+      ),
+      accessorFn: (row) =>
+        row.pharmacyContactDetails?.addresses?.[0]?.city ?? '',
+      cell: ({ row }) => (
+        <TextCell>
+          {row.original.pharmacyContactDetails?.addresses?.[0]?.city ?? ''}
+        </TextCell>
+      ),
+    },
+    {
+      accessorKey: 'state',
+      size: 100,
+      header: ({ column }) => (
+        <ColumnHeader column={column} clientSideSort label="State" />
+      ),
+      accessorFn: (row) =>
+        row.pharmacyContactDetails?.addresses?.[0]?.state ?? '',
+      cell: ({ row }) => (
+        <TextCell>
+          {row.original.pharmacyContactDetails?.addresses?.[0]?.state ?? ''}
+        </TextCell>
+      ),
+    },
+    {
+      accessorKey: 'phoneNumber',
+      size: 200,
+      header: ({ column }) => (
+        <ColumnHeader column={column} clientSideSort label="Phone Number" />
+      ),
+      accessorFn: (row) =>
+        row.pharmacyContactDetails?.phoneNumbers?.[0]?.number ?? '',
+      cell: ({ row }) => (
+        <LongTextCell className="min-w-24 max-w-32">
+          {row.original.pharmacyContactDetails?.phoneNumbers?.[0]?.number ?? ''}
+        </LongTextCell>
+      ),
+    },
+    {
+      accessorKey: 'lastUsed',
+      size: 100,
+      header: ({ column }) => (
+        <ColumnHeader column={column} clientSideSort label="Last Used" />
+      ),
+      cell: ({ row }) => (
+        <TextCell className="truncate">
+          {row?.original?.lastUsed && formatDateTime(row?.original.lastUsed)}
+        </TextCell>
+      ),
+    },
+  ]
 
+  if (isActionsEnabled) {
+    baseColumns.unshift({
+      accessorKey: 'isPreferred',
+      size: 50,
+      header: ({ column }) => (
+        <ColumnHeader column={column} clientSideSort label="Priority" />
+      ),
+      cell: ({ row }) => <PrimaryRadioCell row={row} />,
+    })
+
+    baseColumns.push({
+      accessorKey: 'action',
+      size: 100,
+      header: ({ column }) => <ColumnHeader column={column} label="Actions" />,
+      cell: ({ row }) => (
+        <ActionsCell
+          pharmacyId={row.original.pharmacyId}
+          isFavorite={row.original.isFavorite}
+        />
+      ),
+    })
+  }
+  return baseColumns
+}
 export { columns }

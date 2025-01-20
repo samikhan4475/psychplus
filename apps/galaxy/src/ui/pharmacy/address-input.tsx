@@ -12,9 +12,9 @@ const Address = () => {
       <FormFieldLabel className="!text-1">Address</FormFieldLabel>
       <TextField.Root
         size="1"
-        placeholder="Claim no"
+        placeholder="Search By Address"
         className="border-pp-gray-2 h-6 w-[122px] border border-solid !outline-none [box-shadow:none]"
-        {...form.register('address')}
+        {...form.register('pharmacyAddress')}
       />
     </FormFieldContainer>
   )

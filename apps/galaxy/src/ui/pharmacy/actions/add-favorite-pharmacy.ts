@@ -1,0 +1,26 @@
+'use server'
+
+import * as api from '@/api'
+import type { Pharmacy } from '../types'
+
+const addFavoritePharmacyAction = async (
+  pharmacyId: string,
+  patientId: string,
+): Promise<api.ActionResult<Pharmacy[]>> => {
+  const response = await api.POST<Pharmacy[]>(
+    api.ADD_FAVORITE_PHARMACY(pharmacyId, patientId),
+  )
+  if (response.state === 'error') {
+    return {
+      state: 'error',
+      error: response.error,
+    }
+  }
+
+  return {
+    state: 'success',
+    data: response.data,
+  }
+}
+
+export { addFavoritePharmacyAction }

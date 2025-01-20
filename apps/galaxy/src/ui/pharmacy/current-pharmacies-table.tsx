@@ -1,39 +1,52 @@
 'use client'
 
 import { useEffect } from 'react'
-import { Heading, ScrollArea } from '@radix-ui/themes'
+import { Box, Heading, ScrollArea } from '@radix-ui/themes'
 import { DataTable, LoadingPlaceholder } from '@/components'
+import { FeatureFlag } from '@/types/feature-flag'
 import { columns } from './columns'
 import { useStore } from './store'
 
-const CurrentPharmaciesTable = ({ patientId }: { patientId: string }) => {
-  const { data, loading, fetchPatientPharmacies } = useStore((state) => ({
-    data: state.data,
-    loading: state.loading,
-    fetchPatientPharmacies: state.fetchPatientPharmacies,
-  }))
+const CurrentPharmaciesTable = ({
+  patientId,
+  featureFlags,
+}: {
+  patientId: string
+  featureFlags: FeatureFlag[]
+}) => {
+  const { data, loading, fetchPatientPharmacies, fetchPatient } = useStore(
+    (state) => ({
+      data: state.data,
+      loading: state.loading,
+      fetchPatientPharmacies: state.fetchPatientPharmacies,
+      fetchPatient: state.fetchPatient,
+    }),
+  )
 
   useEffect(() => {
     fetchPatientPharmacies(patientId)
+    fetchPatient(patientId)
   }, [patientId, fetchPatientPharmacies])
   return (
-    <ScrollArea className="bg-white min-h-[150px] max-w-[calc(100vw_-_198px)] p-2">
+    <Box className="bg-white p-2">
       <Heading size="3" weight="medium" className="pb-1">
         Current Pharmacies
       </Heading>
-      {loading ? (
-        <LoadingPlaceholder className="bg-white min-h-[46vh]" />
-      ) : (
-        <DataTable
-          columns={columns}
-          data={data ?? []}
-          theadClass=""
-          isRowSpan
-          sticky
-          disablePagination
-        />
-      )}
-    </ScrollArea>
+      <ScrollArea className="max-h-[300px]">
+        {loading ? (
+          <LoadingPlaceholder className="bg-white min-h-[46vh]" />
+        ) : (
+          <DataTable
+            columns={columns(featureFlags)}
+            data={data ?? []}
+            theadClass=""
+            isRowSpan
+            sticky
+            disablePagination
+          />
+        )}
+      </ScrollArea>
+    </Box>
   )
 }
 
