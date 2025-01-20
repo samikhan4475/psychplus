@@ -48,7 +48,6 @@ const injectionSchema = z.object({
   dose: z.string().min(1, 'required'),
   siteLocations: z.string().min(1, 'required'),
   manufacturer: z.string().min(1, 'required'),
-  lotNumber: z.string().min(1, 'required'),
   expirationDate: dateValidation,
 })
 
