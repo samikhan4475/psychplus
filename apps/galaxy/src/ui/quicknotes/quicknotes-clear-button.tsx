@@ -3,7 +3,7 @@
 import React from 'react'
 import { Button, Dialog, Flex, Text } from '@radix-ui/themes'
 import { TriangleAlert, X } from 'lucide-react'
-import { postMessage } from '@/utils'
+import { postEvent } from '@/utils'
 
 const QuickNotesClearButton = () => {
   return (
@@ -35,7 +35,7 @@ const QuickNotesClearButton = () => {
               </Dialog.Close>
               <Dialog.Close>
                 <Button
-                  onClick={() => postMessage({ type: 'quicknotes:clear' })}
+                  onClick={() => postEvent({ type: 'quicknotes:clear' })}
                   className={`bg-pp-link-text text-white w-[166px] cursor-pointer`}
                 >
                   <Text size="2">Proceed</Text>

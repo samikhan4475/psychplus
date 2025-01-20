@@ -5,7 +5,7 @@ import { useParams, useSearchParams } from 'next/navigation'
 import { Button } from '@radix-ui/themes'
 import { UploadIcon } from 'lucide-react'
 import toast from 'react-hot-toast'
-import { cn } from '@/utils'
+import { cn, postEvent } from '@/utils'
 import { uploadDocumentAction } from './actions'
 import { QuickNoteSectionName } from './constants'
 
@@ -38,7 +38,7 @@ const QuickNotesUploadButton = ({
 
     if (response.state === 'success') {
       toast.success('Document uploaded successfully')
-      postMessage({
+      postEvent({
         type: 'widget:save',
         widgetId: QuickNoteSectionName.QuicknoteSectionUploadedDocuments,
       })

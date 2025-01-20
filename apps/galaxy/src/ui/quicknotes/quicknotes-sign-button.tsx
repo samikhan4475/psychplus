@@ -96,6 +96,7 @@ const QuickNotesSignButton = ({ appointment }: QuickNotesSignButtonProps) => {
     const signResults = await sign(signPayload)
 
     if (signResults.state === 'success') {
+      setAlertInfo(initialAlertInfo)
       toast.success('Quicknote signed!')
       return
     }

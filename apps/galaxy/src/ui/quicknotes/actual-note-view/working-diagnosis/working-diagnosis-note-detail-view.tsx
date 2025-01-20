@@ -12,21 +12,22 @@ const WorkingDiagnosisNoteDetailView = ({ data }: NoteDetailProps) => {
   useEffect(() => {
     const fetchData = async () => {
       const { sectionItemValue } = data?.[0] || {}
-      let DiagnosisCodes = sectionItemValue?.split(',') || []
-      if (sectionItemValue === 'empty' || DiagnosisCodes?.length === 0) {
-        DiagnosisCodes = []
+      const diagnosis = sectionItemValue?.split(',') || []
+      if (sectionItemValue === 'empty' || diagnosis?.length === 0) {
+        setResponse([])
+      } else {
+        getIcd10DiagnosisAction({
+          DiagnosisCodes: diagnosis,
+        }).then((response) => {
+          if (response.state === 'error') {
+            return
+          }
+          setResponse(response?.data ?? [])
+        })
       }
-      const Icd10DiagnosisResponse = await getIcd10DiagnosisAction({
-        DiagnosisCodes,
-      })
-
-      if (Icd10DiagnosisResponse.state === 'error') {
-        return
-      }
-      setResponse(Icd10DiagnosisResponse.data)
     }
     fetchData()
-  }, [])
+  }, [data])
 
   if (data.length === 0) return null
   return <Details data={response} />

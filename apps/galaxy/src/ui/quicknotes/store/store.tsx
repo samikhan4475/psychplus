@@ -7,7 +7,7 @@ import { useStore as zustandUseStore, type StoreApi } from 'zustand'
 import { createStore as zustandCreateStore } from 'zustand/vanilla'
 import { saveWidgetClientAction } from '@/actions'
 import { Appointment, PatientProfile, QuickNoteSectionItem } from '@/types'
-import { postMessage, VisitTypeEnum, visitTypeToSavingWidgets } from '@/utils'
+import { postEvent, VisitTypeEnum, visitTypeToSavingWidgets } from '@/utils'
 import { signNoteAction } from '../actions'
 import { modifyWidgetResponse } from '../utils'
 
@@ -195,7 +195,7 @@ const saveWidgets = async (): Promise<QuickNoteSectionItem[]> => {
     })
   })
 
-  postMessage({ type: 'quicknotes:saveAll' })
+  postEvent({ type: 'quicknotes:saveAll' })
   const responses = await Promise.all(promises)
   const sections = responses.flatMap((response) => response.sections)
 
@@ -241,7 +241,7 @@ const validateAll = async (visitType: string) => {
       window.addEventListener('message', handleMessage)
     })
   })
-  postMessage({ type: 'quicknotes:validateAll' })
+  postEvent({ type: 'quicknotes:validateAll' })
   const responses = await Promise.all(promises)
 
   let widgetErrors = ''

@@ -7,6 +7,7 @@ interface Props<T> {
 }
 
 const Details = ({ data }: Props<DiagnosisIcd10Code[]>) => {
+  if (data.length === 0) return null
   return (
     <BlockContainer heading="Working Diagnosis">
       {data.map((diagnosis) => (

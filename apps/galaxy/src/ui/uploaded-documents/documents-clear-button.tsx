@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { Button } from '@radix-ui/themes'
 import toast from 'react-hot-toast'
-import { postMessage } from '@/utils'
+import { postEvent } from '@/utils'
 import { QuickNoteSectionName } from '../quicknotes/constants'
 import { deleteAllDocumentsAction } from './actions'
 import { Documents } from './types'
@@ -43,7 +43,7 @@ const DocumentsClearButton = ({
     if (result.state === 'success') {
       toast.success('Documents successfully deleted.')
       onClearSuccess()
-      postMessage({
+      postEvent({
         type: 'widget:save',
         widgetId: QuickNoteSectionName.QuicknoteSectionUploadedDocuments,
       })

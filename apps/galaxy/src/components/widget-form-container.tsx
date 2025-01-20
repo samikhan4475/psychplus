@@ -9,7 +9,7 @@ import { revalidateAction } from '@/actions/revalidate'
 import { saveWidgetAction } from '@/actions/save-widget'
 import type { Appointment, QuickNoteSectionItem } from '@/types'
 import { useQuickNoteUpdate } from '@/ui/quicknotes/hooks'
-import { getWidgetContainerCheckboxStateByWidgetId, postMessage } from '@/utils'
+import { getWidgetContainerCheckboxStateByWidgetId, postEvent } from '@/utils'
 import { WidgetContainer, type WidgetContainerProps } from './widget-container'
 import { WidgetLoadingOverlay } from './widget-loading-overlay'
 
@@ -50,7 +50,7 @@ const WidgetFormContainer = ({
         : saveWidgetAction)(payload)
 
       if (result.state === 'error') {
-        postMessage({
+        postEvent({
           type: 'widget:save',
           widgetId: widgetId,
           success: false,
@@ -61,7 +61,7 @@ const WidgetFormContainer = ({
         }
         return
       }
-      postMessage({
+      postEvent({
         type: 'widget:save',
         widgetId: widgetId,
         success: true,
@@ -85,7 +85,7 @@ const WidgetFormContainer = ({
     if (isFormValid) {
       onSubmit()
     } else {
-      postMessage({
+      postEvent({
         type: 'widget:save',
         widgetId: widgetId,
         success: isFormValid,
@@ -97,7 +97,7 @@ const WidgetFormContainer = ({
     form: ReturnType<typeof useFormContext>,
   ) => {
     const isFormValid = await form.trigger()
-    postMessage({
+    postEvent({
       type: 'widget:validate',
       widgetId,
       success: isFormValid,
@@ -112,7 +112,7 @@ const WidgetFormContainer = ({
     const data = form.getValues()
     const sections: QuickNoteSectionItem[] = await getData(data)
 
-    postMessage({
+    postEvent({
       type: 'widget:saveAll',
       widgetId,
       sections,
@@ -147,7 +147,7 @@ const WidgetFormContainer = ({
   }, [])
 
   useEffect(() => {
-    postMessage({
+    postEvent({
       type: 'widget:dirty',
       widgetId: widgetId,
       isDirty,
