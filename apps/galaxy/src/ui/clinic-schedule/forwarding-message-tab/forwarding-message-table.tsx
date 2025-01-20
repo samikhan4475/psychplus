@@ -49,7 +49,7 @@ const columns: ColumnDef<ForwardingMessage>[] = [
       <ColumnHeader clientSideSort column={column} label="Duration" />
     ),
     cell: ({ row }) => (
-      <TextCell className="text-nowrap">{row.original.endDate}</TextCell>
+      <TextCell className="text-nowrap">{row.original.days} days</TextCell>
     ),
   },
   {
