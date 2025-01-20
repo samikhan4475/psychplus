@@ -26,6 +26,7 @@ const searchAppointmentsAction = async (
       error: result.error,
     }
   }
+
   return {
     state: 'success',
     data: transformResponseData(result.data),
@@ -37,7 +38,7 @@ const transformResponseData = (data: AppointmentsSearchApiResponse) => {
 
   for (const availability of data.staffAppointmentAvailabilities) {
     availability.availableSlots = availability.availableSlots.filter((slot) => {
-      const key = `${availability.specialist.id}:${slot.startDate}:${slot.duration}`
+      const key = `${availability.specialist.id}:${slot.startDate}:${slot.duration}:${availability.clinic.id}`
 
       if (seenSlots.has(key)) {
         return false
