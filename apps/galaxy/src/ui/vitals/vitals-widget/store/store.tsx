@@ -1,5 +1,6 @@
 import { create } from 'zustand'
 import { getQuickNoteDetailAction } from '@/actions/get-quicknote-detail'
+import { Appointment } from '@/types'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { transformIn } from '../../data'
 import { getPatientVitalsAction } from '../client-actions'
@@ -30,6 +31,12 @@ interface StoreState {
     quickNoteView?: boolean,
     handleQuicknotesLoading?: boolean,
   ) => void
+  alertErrorMessage?: string
+  setAlertErrorMessage: (error: string) => void
+  setIsErrorAlertOpen: (value: boolean) => void
+  isErrorAlertOpen: boolean
+  appointment?: Appointment
+  setAppointment: (appointment: Appointment) => void
 }
 
 const useStore = create<StoreState>((set, get) => ({
@@ -38,6 +45,13 @@ const useStore = create<StoreState>((set, get) => ({
   loading: true,
   error: undefined,
   isFilterEnabled: false,
+  isErrorAlertOpen: false,
+  alertErrorMessage: undefined,
+  appointment: undefined,
+  setAppointment: (appointment) => set({ appointment }),
+  setAlertErrorMessage: (alertErrorMessage: string) =>
+    set({ alertErrorMessage }),
+  setIsErrorAlertOpen: (isErrorAlertOpen) => set({ isErrorAlertOpen }),
   setIsFilterEnabled: (isFilterEnabled: boolean) => set({ isFilterEnabled }),
   setError: (error: string) => set({ error }),
   setData: (data: PatientVital[]) => set({ data }),

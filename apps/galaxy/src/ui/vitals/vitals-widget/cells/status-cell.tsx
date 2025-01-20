@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 import { SelectCell } from '@/components'
+import { useHasPermission } from '@/hooks'
 import { cn } from '@/utils'
 import { updatePatientVitalAction } from '../actions'
 import { STATUS_CODESET } from '../constants'
@@ -23,16 +24,36 @@ const VitalStatusCell = ({
     setVital(row)
   }, [row])
 
-  const { data, setData, quicknotesData, setQuicknotesData } = useStore(
-    (state) => ({
-      data: state.data,
-      setData: state.setData,
-      quicknotesData: state.quicknotesData,
-      setQuicknotesData: state.setQuicknotesData,
-    }),
+  const {
+    data,
+    setData,
+    quicknotesData,
+    setQuicknotesData,
+    setIsErrorAlertOpen,
+    setAlertErrorMessage,
+  } = useStore((state) => ({
+    data: state.data,
+    setData: state.setData,
+    quicknotesData: state.quicknotesData,
+    setQuicknotesData: state.setQuicknotesData,
+    setIsErrorAlertOpen: state.setIsErrorAlertOpen,
+    setAlertErrorMessage: state.setAlertErrorMessage,
+  }))
+
+  const changeStatusVitalsTabPermission = useHasPermission(
+    'changeStatusVitalsTab',
   )
 
   const onSubmit = async (status: string) => {
+    if (!changeStatusVitalsTabPermission) {
+      setIsErrorAlertOpen(true)
+      setAlertErrorMessage(
+        'You do not have permission to change the status. Please contact your supervisor if you need any further assistance.',
+      )
+
+      return
+    }
+
     setLoading(true)
 
     const response = await updatePatientVitalAction({

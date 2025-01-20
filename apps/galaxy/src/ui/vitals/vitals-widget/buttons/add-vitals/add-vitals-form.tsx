@@ -7,6 +7,7 @@ import toast from 'react-hot-toast'
 import { z } from 'zod'
 import { saveWidgetAction } from '@/actions/save-widget'
 import { DateTimeCell, FormContainer } from '@/components'
+import { useHasPermission } from '@/hooks'
 import { useQuickNoteUpdate } from '@/ui/quicknotes/hooks'
 import { transformOut } from '@/ui/vitals/data'
 import { cn, formatDateTime, sanitizeFormData } from '@/utils'
@@ -69,6 +70,8 @@ const AddVitalsForm = ({
     setQuicknotesData,
     setError,
     isFilterEnabled,
+    setIsErrorAlertOpen,
+    setAlertErrorMessage,
   } = useStore((state) => ({
     data: state.data,
     quicknotesData: state.quicknotesData,
@@ -76,6 +79,8 @@ const AddVitalsForm = ({
     setQuicknotesData: state.setQuicknotesData,
     setError: state.setError,
     isFilterEnabled: state.isFilterEnabled,
+    setIsErrorAlertOpen: state.setIsErrorAlertOpen,
+    setAlertErrorMessage: state.setAlertErrorMessage,
   }))
 
   const form = useForm<SchemaType>({
@@ -83,7 +88,18 @@ const AddVitalsForm = ({
     reValidateMode: 'onChange',
   })
 
+  const saveAddVitalsPopupPermission = useHasPermission('saveAddVitalsPopup')
+  
   const onSubmit: SubmitHandler<SchemaType> = async (formData) => {
+    if (!saveAddVitalsPopupPermission) {
+      setIsErrorAlertOpen(true)
+      setAlertErrorMessage(
+        'You do not have permission to to click on “Save” button to add multiple vitals. Please contact your supervisor if you need any further assistance.',
+      )
+
+      return
+    }
+
     if (Object.keys(sanitizeFormData(formData)).length === 0) {
       setError('Add vitals values to save')
       toast.error('Failed to save!')

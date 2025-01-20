@@ -2,6 +2,7 @@
 
 import * as Tabs from '@radix-ui/react-tabs'
 import { WidgetContainer } from '@/components'
+import { AlertDialog } from './alert-dialog'
 import { VitalsTabsContent } from './tabs'
 import { VitalsFilterForm } from './vitals-filter-form'
 import { VitalsHeader } from './vitals-header'
@@ -22,6 +23,7 @@ const VitalsWidget = ({ patientId }: VitalsWidgetProps) => {
           patientId={patientId}
           handleQuicknotesLoading={true}
         />
+        <AlertDialog />
       </WidgetContainer>
     </Tabs.Root>
   )

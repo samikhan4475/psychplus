@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { Text } from '@radix-ui/themes'
 import { saveWidgetAction } from '@/actions/save-widget'
 import { LoadingPlaceholder } from '@/components'
-import { QuickNoteSectionItem } from '@/types'
+import { Appointment, QuickNoteSectionItem } from '@/types'
 import { transformIn, transformOut } from './data'
 import { QuicknotesVitalsWidget } from './quicknotes-vitals-widget'
 import { getPatientVitalsAction } from './vitals-widget/client-actions'
@@ -14,11 +14,13 @@ import { filterVitalsWithin48Hours } from './vitals-widget/utils'
 interface HospitalInitialWidgetLoaderProps {
   patientId: string
   data?: QuickNoteSectionItem[]
+  appointment?: Appointment
 }
 
 const VitalsWidgetLoader = ({
   patientId,
   data: initialVitalData,
+  appointment,
 }: HospitalInitialWidgetLoaderProps) => {
   const [loading, setLoading] = useState(false)
   const { setData, setQuicknotesData, quicknotesData } = useStore((state) => ({
@@ -81,6 +83,7 @@ const VitalsWidgetLoader = ({
     <QuicknotesVitalsWidget
       patientId={patientId}
       quicknoteData={quicknotesData ?? []}
+      appointment={appointment}
     />
   )
 }

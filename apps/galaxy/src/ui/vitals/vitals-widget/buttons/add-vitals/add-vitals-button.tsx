@@ -26,8 +26,9 @@ const AddVitalsButton = ({
   const [unitSystem, setUnitSystem] = useState(UnitSystem.Metric)
   const [addNewRecord, setAddNewRecord] = useState(false)
 
-  const { error } = useStore((state) => ({
+  const { error, setError } = useStore((state) => ({
     error: state.error,
+    setError: state.setError,
   }))
 
   const [data, setData] = useState<PatientVital[]>([])
@@ -50,6 +51,7 @@ const AddVitalsButton = ({
   return (
     <Dialog.Root
       onOpenChange={(open) => {
+        setError('')
         setAddNewRecord(false)
         if (open) fetchPatientVitals()
       }}

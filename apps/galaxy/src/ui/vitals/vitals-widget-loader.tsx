@@ -1,6 +1,7 @@
 import { Text } from '@radix-ui/themes'
 import { getQuickNoteDetailAction } from '@/actions/get-quicknote-detail'
 import { saveWidgetAction } from '@/actions/save-widget'
+import { Appointment } from '@/types'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { transformIn, transformOut } from './data'
 import { QuicknotesVitalsWidget } from './quicknotes-vitals-widget'
@@ -9,10 +10,12 @@ import { filterVitalsWithin48Hours } from './vitals-widget/utils'
 
 interface HospitalInitialWidgetLoaderProps {
   patientId: string
+  appointment?: Appointment
 }
 
 const VitalsWidgetLoader = async ({
   patientId,
+  appointment,
 }: HospitalInitialWidgetLoaderProps) => {
   const response = await getQuickNoteDetailAction(patientId, [
     QuickNoteSectionName.Vitals,
@@ -54,6 +57,7 @@ const VitalsWidgetLoader = async ({
         result.data.filter((vital) => vitalsIds.includes(String(vital.id))) ??
         []
       }
+      appointment={appointment}
     />
   )
 }
