@@ -57,7 +57,6 @@ const getNavLinks = (
     { label: 'Allergies', href: '/allergies' },
     { label: 'Medications', href: '/medications' },
     { label: 'Hospital', href: '/hospital' },
-    { label: 'Injection', href: '/injection' },
     { label: 'Follow Up', href: '/follow-up' },
     { label: 'Assessment & Plan', href: '/assessment-plan' },
     { label: 'Procedures', href: '/procedures' },
