@@ -1,16 +1,17 @@
 'use client'
 
-import { getPOSCodesOptions } from '@/actions/get-poscodes'
-import { AsyncSelect, FormFieldContainer, FormFieldLabel } from '@/components'
+import { FormFieldContainer, FormFieldLabel, SelectInput } from '@/components'
+import { useRevCycleDataProvider } from '../../revCycleContext'
 
 const POSCodesSelect = () => {
+  const { posCodesData } = useRevCycleDataProvider()
   return (
     <FormFieldContainer>
       <FormFieldLabel required={true}>POS</FormFieldLabel>
-      <AsyncSelect
+      <SelectInput
         field="placeOfService"
         placeholder="Select"
-        fetchOptions={getPOSCodesOptions}
+        options={posCodesData}
         buttonClassName="w-full h-6"
         className="h-full flex-1"
       />

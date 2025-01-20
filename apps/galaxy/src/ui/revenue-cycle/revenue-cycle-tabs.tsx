@@ -33,7 +33,6 @@ const RevenueCycleTabs = () => {
 
   // Claim# 1234, Check# 1234, tabId is 1234
   const tabId = activeTab?.split(' ')[1]
-
   return (
     <Box className="flex-1 px-3 pt-4">
       <Tabs.Root

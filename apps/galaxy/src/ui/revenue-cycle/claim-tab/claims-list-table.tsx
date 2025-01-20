@@ -4,6 +4,7 @@ import { useEffect } from 'react'
 import { Flex, ScrollArea } from '@radix-ui/themes'
 import { DataTable, LoadingPlaceholder } from '@/components'
 import { useStore as useRootStore } from '../store'
+import { RevenueCycleTab } from '../types'
 import { columns } from './columns'
 import { useStore } from './store'
 
@@ -24,7 +25,9 @@ const ClaimListTable = () => {
   }))
 
   useEffect(() => {
-    claimsListSearch({})
+    if (activeTab === RevenueCycleTab.Claim) {      
+      claimsListSearch({})
+    }
   }, [activeTab])
 
   if (claimsListLoading) {

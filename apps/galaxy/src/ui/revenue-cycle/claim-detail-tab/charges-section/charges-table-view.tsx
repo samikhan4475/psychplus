@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 import { DataTable } from '@/components'
 import { ClaimServiceLine, StaffResource } from '@/types'
-import { getStaffActions } from '../actions/get-service-staff'
+import { useRevCycleDataProvider } from '../../revCycleContext'
 import { columns as getColumns } from './table-columns'
 
 const ChargesTableView = () => {
@@ -16,17 +16,16 @@ const ChargesTableView = () => {
   )
 
   const [staffData, setStaffData] = useState<StaffResource>()
+  const { selectedStaffData } = useRevCycleDataProvider()
 
   useEffect(() => {
     const fetchStaff = async () => {
-      const data = await getStaffActions()
-      if (data.state === 'success') {
-        setStaffData(
-          data.data?.find(
-            (staff) => staff.id.toString() === renderingProviderId?.toString(),
-          ),
-        )
-      }
+      if (!renderingProviderId) return
+      setStaffData(
+        selectedStaffData?.find(
+          (staff) => staff.id.toString() === renderingProviderId?.toString(),
+        ),
+      )
     }
 
     fetchStaff()

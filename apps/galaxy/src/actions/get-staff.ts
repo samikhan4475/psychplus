@@ -16,7 +16,7 @@ const getStaffOptionsAction = async (): Promise<
   }
 
   const transformedData = response.data.map((data) => ({
-    value: data.id,
+    value: data.id.toString(),
     label: data.legalName.firstName,
   }))
 

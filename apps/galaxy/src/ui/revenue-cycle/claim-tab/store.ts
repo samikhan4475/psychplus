@@ -37,7 +37,7 @@ const useStore = create<Store>((set, get) => ({
       claimsListError: undefined,
       claimsListLoading: true,
       claimsListPayload: payload,
-    })
+    })    
     const result = await getClaimsListAction({
       payload,
       sort: get().sort,

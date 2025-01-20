@@ -1,16 +1,17 @@
 'use client'
 
-import { AsyncSelect, FormFieldContainer, FormFieldLabel } from '@/components'
-import { getProviderOptionsAction } from '../actions'
+import { FormFieldContainer, FormFieldLabel, SelectInput } from '@/components'
+import { useRevCycleDataProvider } from '../../revCycleContext'
 
 const RefProvider = () => {
+  const { staffData } = useRevCycleDataProvider()
   return (
     <FormFieldContainer>
       <FormFieldLabel>Ref. Provider</FormFieldLabel>
-      <AsyncSelect
+      <SelectInput
         field="referringProviderId"
         placeholder="Select"
-        fetchOptions={getProviderOptionsAction}
+        options={staffData}
         buttonClassName="w-full h-6"
         className="h-full flex-1"
       />

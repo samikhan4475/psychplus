@@ -1,19 +1,16 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
-import { AsyncSelect, FormFieldContainer, FormFieldLabel } from '@/components'
+import { FormFieldContainer, FormFieldLabel, SelectInput } from '@/components'
 import {
   ClaimServiceLine,
   ServiceMasterFeeScheduleResponse,
   StaffResource,
 } from '@/types'
 import { ConfirmationDialog } from '../../dialogs/confirmation-dialog'
-import {
-  getProviderOptionsAction,
-  getServiceMasterFeeSchedule,
-  getStaffById,
-} from '../actions'
+import { useRevCycleDataProvider } from '../../revCycleContext'
+import { getServiceMasterFeeSchedule, getStaffById } from '../actions'
 
 const getAmountBasedOnHonors = (
   staffData: StaffResource,
@@ -36,6 +33,9 @@ const getAmountBasedOnHonors = (
 const RenderingProvider = () => {
   const form = useFormContext()
   const [open, setOpen] = useState(false)
+
+  const { staffData } = useRevCycleDataProvider()
+
   const handleValueChange = (value: string) => {
     if (!value) return
     form.setValue('renderingProviderId', value)
@@ -88,7 +88,6 @@ const RenderingProvider = () => {
   const handleClose = () => {
     setOpen(false)
   }
-
   return (
     <FormFieldContainer>
       <ConfirmationDialog
@@ -101,11 +100,12 @@ const RenderingProvider = () => {
         }
       />
       <FormFieldLabel required={true}>Rendering Provider</FormFieldLabel>
-      <AsyncSelect
+      <SelectInput
+        defaultValue={form.getValues('renderingProviderId')}
         value={form.getValues('renderingProviderId')}
         field="renderingProviderId"
         placeholder="Select"
-        fetchOptions={getProviderOptionsAction}
+        options={staffData}
         buttonClassName="w-full h-6"
         className="h-full flex-1"
         onValueChange={handleValueChange}

@@ -1,16 +1,17 @@
 'use client'
 
-import { AsyncSelect, FormFieldContainer, FormFieldLabel } from '@/components'
-import { getProviderOptionsAction } from '../actions'
+import { FormFieldContainer, FormFieldLabel, SelectInput } from '@/components'
+import { useRevCycleDataProvider } from '../../revCycleContext'
 
 const OrderingProvider = () => {
+  const { staffData } = useRevCycleDataProvider()
   return (
     <FormFieldContainer>
       <FormFieldLabel>Ordering Provider</FormFieldLabel>
-      <AsyncSelect
+      <SelectInput
         field="orderingProviderId"
         placeholder="Select"
-        fetchOptions={getProviderOptionsAction}
+        options={staffData}
         buttonClassName="w-full h-6"
         className="h-full flex-1"
       />

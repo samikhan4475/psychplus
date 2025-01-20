@@ -10,6 +10,7 @@ import { ClaimUpdateSchemaType } from '../schema'
 const BillingLocationAddress = () => {
   const form = useFormContext<ClaimUpdateSchemaType>()
   const locationId = form.getValues('locationId')
+  
   const [businessAddress, setBusinessAddress] = useState<string | undefined>(
     undefined,
   )

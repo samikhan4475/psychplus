@@ -106,6 +106,7 @@ const ClaimDetailView = ({ claimId }: ClaimDetailViewProps) => {
         }),
       ),
     }
+
     const sanitizeClaimData = sanitizeFormData(formattedClaimData)
     await updateClaimAction(data.id ?? '', sanitizeClaimData)
     toast.success('Record has been saved successfully')

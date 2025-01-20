@@ -1,20 +1,22 @@
 'use client'
 
-import { Box, Flex } from '@radix-ui/themes'
-import { getPOSCodesOptions } from '@/actions/get-poscodes'
-import { AsyncSelect, FormFieldError } from '@/components'
+import { useEffect } from 'react'
+import { Flex } from '@radix-ui/themes'
+import { FormFieldError, SelectInput } from '@/components'
+import { useRevCycleDataProvider } from '../../revCycleContext'
 
 interface TableCellPOSProps {
   rowIndex: number
 }
 
 const TableCellPOS: React.FC<TableCellPOSProps> = ({ rowIndex }) => {
+  const { posCodesData } = useRevCycleDataProvider()
   return (
     <Flex direction={'column'}>
-      <AsyncSelect
+      <SelectInput
         field={`claimServiceLines.${rowIndex}.placeOfService`}
         placeholder="Select"
-        fetchOptions={getPOSCodesOptions}
+        options={posCodesData}
         buttonClassName="w-[100px] h-6 box-shadow-none"
         className="h-full flex-1"
       />
