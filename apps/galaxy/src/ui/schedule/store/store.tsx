@@ -61,6 +61,7 @@ const useStore = create<Store>()(
       partialize: (state) => ({
         cachedFilters: state.cachedFiltersRounding,
         cachedFiltersList: state.cachedFiltersList,
+        activeTab: state.activeTab,
       }),
     },
   ),
