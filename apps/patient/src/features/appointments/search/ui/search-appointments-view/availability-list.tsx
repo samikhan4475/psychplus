@@ -253,7 +253,7 @@ const ProviderAvailabilityCard = ({
               onChange={setSelectedClinic}
             />
           ) : null}
-          <Flex gap="2" justify="between">
+          <Flex gap="2" justify="between" direction={"column"}>
             {renderSpokenLanguages(data)}
             {renderDistance(data.clinics[selectedClinic])}
           </Flex>
@@ -443,10 +443,10 @@ const renderSpokenLanguages = (data: AppointmentAvailability) => {
 
   return (
     <Flex gap="2">
-      <Box>
-        <GlobeIcon />
-      </Box>
-      <Text className="text-[12px] font-[300]">
+      <Text className='text-[12px] font-[500]'>
+        Language:
+      </Text>
+      <Text className="text-[12px] font-[500] text-pp-gray-1">
         {spokenLanguages.join(', ')}
       </Text>
     </Flex>
@@ -460,8 +460,8 @@ const renderDistance = (clinic: AppointmentClinic) => {
 
   return (
     <Flex align="center" gap="2">
-      <DistanceIcon />
-      <Text className="text-[12.5px] font-[300]">
+      <Text className='text-[12px] font-[500]'>Distance:</Text>
+      <Text className="text-[12.5px] font-[500] text-pp-gray-1">
         {Math.round(clinic.distanceInMiles * 10) / 10} mi
       </Text>
     </Flex>

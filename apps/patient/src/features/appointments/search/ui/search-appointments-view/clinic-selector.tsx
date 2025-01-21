@@ -18,23 +18,20 @@ const ClinicSelector = ({
 
   return (
     <Flex gap="1">
-      <MapPinIcon
-        width={20}
-        height={20}
-        strokeWidth={1.25}
-        className="mt-[6px] min-w-[20px] text-accent-12"
-      />
+      <Text className="text-[12px] font-[500]">
+        Location:
+      </Text>
       <DropdownMenu.Root modal={false}>
         <DropdownMenu.Trigger disabled={!hasMultipleClinics}>
           <Flex
             gap="2"
-            py="1"
             px="2"
+            width={"100%"}
             className={cn({
               'cursor-pointer rounded-2 hover:bg-gray-2': hasMultipleClinics,
             })}
           >
-            <Text className="text-[12px] font-[600]">
+            <Text className="text-[12px] font-[500] text-pp-gray-1">
               {clinics[selectedClinic].name}{' '}
               {getClinicAddressLabel(clinics[selectedClinic]?.contact?.addresses)}
             </Text>

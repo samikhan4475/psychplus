@@ -4,13 +4,22 @@ import { getCalendarDateLabel } from '@psychplus-v2/utils'
 import { AppointmentSlot, SlotsByDay } from '../types'
 
 const generateDateRange = (start: CalendarDate) => {
-  const dateRange = [start]
+  const jsDate = new Date(start.toString());
 
-  for (let i = 0; i < 6; ++i) {
-    dateRange.push(dateRange[i].add({ days: 1 }))
+  const dayOfWeek = jsDate.getUTCDay();
+  const daysToMonday = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
+
+  const adjustedStart = start.add({ days: -daysToMonday });
+
+  const dateRange = [adjustedStart];
+
+  for (let i = 1; i < 7; ++i) {
+    dateRange.push(adjustedStart.add({ days: i }));
   }
-  return dateRange
-}
+
+  return dateRange;
+};
+
 
 const isDateInNextRange = (
   startingDate: CalendarDate,

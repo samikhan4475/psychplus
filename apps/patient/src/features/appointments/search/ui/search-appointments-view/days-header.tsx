@@ -38,27 +38,37 @@ const DaysHeader = () => {
       />
       <Flex className="flex-1">
         {dateRange.map((date) => (
-          <Flex
-            key={date.toString()}
-            align="end"
-            justify="center"
-            gap="1"
-            className="flex-1"
-          >
-            {isToday(date, getLocalTimeZone()) ? (
-              <Text className="text-[14px]">Today</Text>
-            ) : (
-              <>
-                <Text className="text-[13px] text-gray-11">
-                  {getDayOfWeekLabel(date).slice(0, 3)}
-                </Text>
-                <Flex gap="1" className="-mb-[1px] text-[15px]">
-                  <Text>{getMonthLabel(date).slice(0, 3)}</Text>
-                  <Text>{date.day}</Text>
-                </Flex>
-              </>
-            )}
-          </Flex>
+              <Flex
+                key={date.toString()}
+                align="end"
+                className="flex-1"
+                justify="center"
+              >
+                {isToday(date, getLocalTimeZone()) ? (
+                  <Flex gap="1" align="baseline">
+                    <Text className="absolute -mt-[16px] text-[12px] font-medium text-[#194595]">
+                      Today
+                    </Text>
+                    <Text className="text-[13px] text-gray-11">
+                      {getDayOfWeekLabel(date).slice(0, 3)}
+                    </Text>
+                    <Text className="text-[#151B4A]">
+                      {getMonthLabel(date).slice(0, 3)}
+                      {date.day}
+                    </Text>
+                  </Flex>
+                ) : (
+                  <Flex gap="1" align="baseline">
+                    <Text className="text-[13px] text-gray-11">
+                      {getDayOfWeekLabel(date).slice(0, 3)}
+                    </Text>
+                    <Text className="text-[#151B4A]">
+                      {getMonthLabel(date).slice(0, 3)}
+                      {date.day}
+                    </Text>
+                  </Flex>
+                )}
+              </Flex>
         ))}
       </Flex>
       <PaginationIcon Icon={ChevronRightIcon} onClick={next} />
