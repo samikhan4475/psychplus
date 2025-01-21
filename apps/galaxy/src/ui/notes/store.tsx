@@ -11,9 +11,11 @@ import {
   GetPatientNotesParams,
   getStaffAction,
 } from './actions'
+import { getAddendumDetailsAction } from './actions/get-addendum'
 import { getNoteDocumentsAction } from './actions/get-note-documents'
 import { getWidgetsArrayByVisitType } from './note-detail/utils'
 import type {
+  Addendum,
   GetPatientNotesResponse,
   NoteDetail,
   NoteDocuments,
@@ -71,9 +73,15 @@ interface Store {
     visitSequence: string
     providerType: string
   }) => void
+  updateNotesDetails: (addendum: Addendum | {}) => void
+  fetchAddendumsDetails: (
+    patientId: string,
+    appointmentId: string,
+    noteId: string,
+  ) => void
 }
 
-const useStore = create<Store>((set) => ({
+const useStore = create<Store>((set, get) => ({
   patientId: '',
   appointmentId: '',
   data: undefined,
@@ -266,6 +274,42 @@ const useStore = create<Store>((set) => ({
       providerType,
     )
     set({ widgets: widgetsArray })
+  },
+
+  updateNotesDetails: (addendum) => {
+    const { noteDetail } = get()
+    if (addendum && noteDetail && noteDetail?.length > 0) {
+      const newNoteDetails = [...noteDetail]
+      newNoteDetails[0].addendum = { ...addendum }
+      set({
+        noteDetail: newNoteDetails,
+      })
+    }
+  },
+
+  fetchAddendumsDetails: async (
+    patientId: string,
+    appointmentId: string,
+    noteId: string,
+  ) => {
+    set({
+      error: undefined,
+    })
+    const { updateNotesDetails } = get()
+
+    const response = await getAddendumDetailsAction(
+      patientId,
+      appointmentId,
+      noteId,
+    )
+
+    if (response.state === 'error') {
+      return set({
+        error: response.error,
+      })
+    }
+
+    updateNotesDetails(response.data)
   },
 }))
 

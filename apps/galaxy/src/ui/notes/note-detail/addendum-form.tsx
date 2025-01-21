@@ -31,8 +31,9 @@ const AddendumForm = ({ onCancel }: AddendumFormProps) => {
       text: '',
     },
   })
-  const { selectedRow } = useStore((state) => ({
+  const { selectedRow, updateNotesDetails } = useStore((state) => ({
     selectedRow: state.selectedRow,
+    updateNotesDetails: state.updateNotesDetails,
   }))
 
   const onSubmit = async (data: SchemaType) => {
@@ -49,6 +50,7 @@ const AddendumForm = ({ onCancel }: AddendumFormProps) => {
 
     if (response.state === 'error') toast.error('Failed to save')
     else {
+      updateNotesDetails(response?.data ?? {})
       toast.success('Saved')
       onCancel()
     }

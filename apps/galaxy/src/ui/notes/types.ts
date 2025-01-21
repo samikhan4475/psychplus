@@ -115,6 +115,14 @@ type WidgetType = {
   providerTypes?: string[]
 }
 
+interface Addendum {
+  id?: string
+  noteId?: string
+  signerDescription?: string
+  signerId?: number
+  signerCreateDate?: string
+}
+
 interface EncounterSignedNote {
   metadata: Metadata
   id: string
@@ -127,6 +135,7 @@ interface EncounterSignedNote {
   noteTitleCode?: string
   noteTypeCode?: string
   encounterSignedNoteDetails: QuickNoteSectionItem[]
+  addendum?: Addendum
 }
 
 type NoteDetail = EncounterSignedNote[]
@@ -158,4 +167,5 @@ export type {
   EncounterSignedNote,
   GetNoteDocumentParams,
   NoteDocument,
+  Addendum,
 }

@@ -581,6 +581,14 @@ const UPDATE_PRACTICE_ENDPOINT = (organizationId: string, practiceId: string) =>
   `${API_URL}/api/organizations/${organizationId}/practices/${practiceId}`
 const GET_PRACTICE_HISTORY_ENDPOINT = (practiceId: string) =>
   `${API_URL}/api/practices/${practiceId}/history/actions/search`
+
+const GET_ADDENDUMS_AGAINST_NOTE_ID = (
+  patientId: string,
+  appointmentId: string,
+  noteId: string,
+) =>
+  `${API_URL}/api/patients/${patientId}/encounters/${appointmentId}/notes/${noteId}/addendums`
+
 export {
   GET_LAB_RESULTS_ENDPOINT,
   NOTE_UPLOAD_FILE,
@@ -850,4 +858,5 @@ export {
   GET_ORGANIZATION_PRACTICES_ENDPOINT,
   UPDATE_PRACTICE_ENDPOINT,
   GET_PRACTICE_HISTORY_ENDPOINT,
+  GET_ADDENDUMS_AGAINST_NOTE_ID,
 }

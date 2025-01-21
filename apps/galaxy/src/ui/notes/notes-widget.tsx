@@ -32,6 +32,7 @@ const NotesWidget = ({ patientId, noteAppointment }: NotesViewProps) => {
     fetchDocuments,
     fetchStaff,
     fetchProvider,
+    fetchAddendumsDetails,
   } = useStore((state) => ({
     isCreateNoteView: state.isCreateNoteView,
     appointment: state.appointment,
@@ -50,12 +51,14 @@ const NotesWidget = ({ patientId, noteAppointment }: NotesViewProps) => {
     fetchDocuments: state.fetchDocuments,
     fetchStaff: state.fetchStaff,
     fetchProvider: state.fetchProvider,
+    fetchAddendumsDetails: state.fetchAddendumsDetails,
   }))
 
   useEffect(() => {
     const fetchData = async () => {
       setPatientId(patientId)
       if (selectedRow) {
+        console.log(selectedRow, 'selectedRowselectedRowselectedRow')
         const payload = {
           patientId: patientId,
           appointmentId: selectedRow?.appointmentId,
@@ -73,6 +76,11 @@ const NotesWidget = ({ patientId, noteAppointment }: NotesViewProps) => {
           fetchAppointments(patientId, selectedRow.appointmentId),
           fetchAppointment(selectedRow.appointmentId),
           fetchDocuments(patientId, selectedRow.appointmentId),
+          fetchAddendumsDetails(
+            patientId,
+            selectedRow?.appointmentId,
+            selectedRow?.id,
+          ),
         ])
       }
     }

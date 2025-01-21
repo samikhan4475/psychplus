@@ -1,5 +1,5 @@
 import { PropsWithChildren } from 'react'
-import { Box, Flex, Heading } from '@radix-ui/themes'
+import { Box, Flex, Heading, Separator, Text } from '@radix-ui/themes'
 import { LoadingPlaceholder } from '@/components/loading-placeholder'
 import { getPatientFullName, getSlashedDateString } from '@/utils'
 import { useStore } from '../store'
@@ -82,6 +82,16 @@ const NoteDetail = ({ children }: PropsWithChildren) => {
         )
       )}
       <Box>{children}</Box>
+
+      {noteDetail?.[0]?.addendum && (
+        <Flex gap="1" direction="column">
+          <Heading size="3">Addendum</Heading>
+          <Text size="1">
+            {noteDetail?.[0]?.addendum?.signerDescription ?? ''}
+          </Text>
+          <Separator className="w-full" mt="1" />
+        </Flex>
+      )}
 
       {noteDetail?.[0]?.signedDate && (
         <Heading size={'3'} my={'1'} weight={'medium'}>

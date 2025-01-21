@@ -1,6 +1,7 @@
 'use server'
 
 import * as api from '@/api'
+import { Addendum } from '@/ui/notes/types'
 
 interface SaveAddendumsAgainstNoteIdActionParams {
   patientId: string
@@ -13,7 +14,7 @@ interface SaveAddendumsAgainstNoteIdActionParams {
 const SaveAddendumsAgainstNoteIdAction = async (
   payload: SaveAddendumsAgainstNoteIdActionParams,
 ) => {
-  const result = await api.POST<api.ActionResult<void>>(
+  const result = await api.POST<api.ActionResult<Addendum>>(
     api.SAVE_ADDENDUMS_AGAINST_NOTE_ID(
       payload.patientId,
       payload.appointmentId,
@@ -32,6 +33,7 @@ const SaveAddendumsAgainstNoteIdAction = async (
 
   return {
     state: 'success',
+    data: result.data,
   }
 }
 
