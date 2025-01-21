@@ -50,6 +50,7 @@ const PastMedicalHxWidget = ({
               {!isHistoryHeader && <WidgetSaveButton />}
             </>
           }
+          formResetValues={getInitialValues()}
           topHeader={isHistoryHeader && <PastMedicalHeader />}
         >
           {form.watch('widgetContainerCheckboxField') === 'show' && (

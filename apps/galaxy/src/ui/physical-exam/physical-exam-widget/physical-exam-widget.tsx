@@ -30,6 +30,7 @@ import { transformOut } from './data'
 import { PhysicalExamHeader } from './physical-exam-header'
 import { usePhysicalExamWidgetForm } from './physical-exam-widget-form'
 import { type PhysicalExamWidgetSchemaType } from './physical-exam-widget-schema'
+import { createEmptyFormValues } from './physicalExamDefaults'
 import { containsAbnormal, normal } from './utils'
 import { WidgetClearButton } from './widget-clear-button'
 
@@ -114,6 +115,8 @@ const PhysicalExamWidget = ({
           </Flex>
         }
         topHeader={isPhysicalExamTab && <PhysicalExamHeader />}
+        formResetValues={createEmptyFormValues()}
+        handleOnClear={handleOnClear}
       >
         <GeneralBlock
           normalChipsSelected={normalChipsSelected}

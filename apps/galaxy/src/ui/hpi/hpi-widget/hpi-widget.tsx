@@ -60,6 +60,7 @@ const HpiWidget = ({
           )
         }
         topHeader={isHpiHeader && <HpiWidgetHeader />}
+        formResetValues={getInitialValues()}
       >
         <ChiefComplaintBlock />
         <DepressionBlock />

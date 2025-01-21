@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import { useEffect } from 'react'
 import { useSearchParams } from 'next/navigation'
@@ -21,7 +21,9 @@ interface WidgetFormContainerProps extends WidgetContainerProps {
   ) => QuickNoteSectionItem[] | Promise<QuickNoteSectionItem[]>
   appointment?: Appointment
   tags?: string[]
+  formResetValues?: any
   widgetContainerCheckboxFieldInitialValue?: string
+  handleOnClear?: () => void
 }
 
 const WidgetFormContainer = ({
@@ -30,7 +32,9 @@ const WidgetFormContainer = ({
   getData,
   appointment,
   tags = [],
+  formResetValues,
   widgetContainerCheckboxFieldInitialValue,
+  handleOnClear,
   ...props
 }: WidgetFormContainerProps) => {
   const form = useFormContext()
@@ -133,7 +137,8 @@ const WidgetFormContainer = ({
           handleQuickNotesSaveAll(form)
           break
         case 'quicknotes:clear':
-          form.reset()
+          form.reset({ ...formResetValues })
+          handleOnClear?.()
           break
         default:
           break

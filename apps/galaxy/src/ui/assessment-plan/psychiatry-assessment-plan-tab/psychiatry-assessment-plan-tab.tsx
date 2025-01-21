@@ -13,6 +13,7 @@ import { transformIn, transformOut } from './data'
 import { PsychiatryAssessmentPlanHeader } from './psychiatry-assessment-plan-header'
 import { usePsychiatryAssessmentPlanTabForm } from './psychiatry-assessment-plan-tab-form'
 import { WidgetClearButton } from './widget-clear-button'
+import { createEmptyFormValues } from './psychiatry-assessment-plan-defaults'
 
 interface PsychiatryAssessmentPlanTabProps {
   patientId: string
@@ -52,6 +53,7 @@ const PsychiatryAssessmentPlanTab = ({
         topHeader={
           isPsychiatryAssessmentPlanTab && <PsychiatryAssessmentPlanHeader />
         }
+        formResetValues={createEmptyFormValues()}
       >
         <AssessmentTreatmentPlanNotesBlock />
         <PatientDiscussionCompletedBlock />

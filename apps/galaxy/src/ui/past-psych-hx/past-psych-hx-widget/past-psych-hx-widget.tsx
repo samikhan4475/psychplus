@@ -62,6 +62,7 @@ const PastPsychHxWidget = ({
             </>
           )
         }
+        formResetValues={getInitialValues()}
         topHeader={isHistoryHeader && <PastPsychHeader />}
       >
         {watch('widgetContainerCheckboxField') === 'show' && (

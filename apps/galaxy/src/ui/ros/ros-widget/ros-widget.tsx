@@ -46,6 +46,7 @@ const RosWidget = ({ patientId, initialValue }: HpiWidgetProps) => {
           </>
         }
         headerLeft={<CheckAllNoConcernCell form={form} />}
+        formResetValues={getInitialValues()}
       >
         <ConstitutionalBlock />
         <EntMouthBlock />

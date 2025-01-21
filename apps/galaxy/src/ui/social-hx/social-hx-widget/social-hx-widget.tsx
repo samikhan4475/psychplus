@@ -61,6 +61,7 @@ const SocialHxWidget = ({
             </>
           )
         }
+        formResetValues={getInitialValues()}
         topHeader={isHistoryHeader && <SocialHxHeader />}
       >
         {form.watch('widgetContainerCheckboxField') === 'show' ? (

@@ -49,6 +49,7 @@ const FamilyPsychHxWidget = ({
             {!isHistoryHeader && <WidgetSaveButton />}
           </>
         }
+        formResetValues={getInitialValues()}
         topHeader={isHistoryHeader && <PastFamilyHeader />}
       >
         {watch('widgetContainerCheckboxField') === 'show' && (

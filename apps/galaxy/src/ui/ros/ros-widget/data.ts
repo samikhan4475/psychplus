@@ -1,6 +1,6 @@
-import { QuickNoteSectionItem } from '@/types'
-import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
-import { RosWidgetSchemaType } from './ros-widget-schema'
+import { QuickNoteSectionItem } from '@/types';
+import { QuickNoteSectionName } from '@/ui/quicknotes/constants';
+import { RosWidgetSchemaType } from './ros-widget-schema';
 
 enum ROSPrefixes {
   CONSTITUTIONAL = 'CT',
@@ -237,6 +237,16 @@ const transformOut =
           })
         })
     })
+
+    if (!result.length) {
+      result.push({
+        pid: Number(patientId),
+        sectionName: QuickNoteSectionName.QuicknoteSectionReviewOfSystem,
+        sectionItem: 'empty',
+        sectionItemValue: 'true',
+      })
+    }
+
     return result
   }
 

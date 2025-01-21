@@ -65,6 +65,7 @@ const SubstanceUseHxWidget = ({
             {!isHistoryHeader && <WidgetSaveButton />}
           </>
         }
+        formResetValues={getInitialValues()}
         topHeader={isHistoryHeader && <SubstanceUseHxHxHeader />}
       >
         {form.watch('widgetContainerCheckboxField') === 'show' && (

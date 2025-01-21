@@ -87,6 +87,7 @@ const CodesWidget = ({
           </>
         }
         topHeader={isCodesHeader && <CodesHeader />}
+        formResetValues={initialValues}
       >
         <Box className="border-pp-focus-bg relative w-full max-w-[580px] border p-1">
           <CodeHistory cptCodesLookup={cptCodesLookup} />

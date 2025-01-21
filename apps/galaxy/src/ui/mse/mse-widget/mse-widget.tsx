@@ -23,6 +23,7 @@ import { transformOut } from './data'
 import { MseHeader } from './mse-header'
 import { useMseWidgetForm } from './mse-widget-form'
 import { MseWidgetSchemaType } from './mse-widget-schema'
+import { createEmptyFormValues } from './mseDefaults'
 import { WidgetClearButton } from './widget-clear-button'
 
 interface MseWidgetProps {
@@ -58,6 +59,7 @@ const MseWidget = ({
             {!isMseTab && <WidgetSaveButton />}
           </>
         }
+        formResetValues={createEmptyFormValues()}
         tags={isMseTab ? [QuickNoteSectionName.QuicknoteSectionMse] : []}
         topHeader={isMseTab && <MseHeader />}
       >
