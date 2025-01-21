@@ -45,12 +45,6 @@ const ScheduleAppointmentListClient = ({
 }: ScheduleAppointmentListClientProps) => {
   const ref = useRef<HTMLDivElement>(null)
 
-  const router = useRouter()
-
-  const handleDialogConfirm = () => {
-    router.push(`/schedule-appointment/personal-details`)
-  }
-
   usePublishLoaded(SCHEDULE_APPOINTMENT_LIST)
   usePublishSize(SCHEDULE_APPOINTMENT_LIST, ref)
   useSubscribeClosePopover(SCHEDULE_APPOINTMENT_LIST)
@@ -253,7 +247,6 @@ const ScheduleAppointmentListClient = ({
               >
                 <ProviderWithClinicAndWeeklyAvailability
                   staffWithClinicsAndSlots={staffWithClinicsAndSlots}
-                  onConfirm={handleDialogConfirm}
                 />
               </Flex>
             ))}

@@ -24,8 +24,6 @@ import {
 const ScheduleAppointmentPage = () => {
   const searchParams = useSearchParams()
 
-  const router = useRouter()
-
   const {
     filters,
     staffWithClinicsAndSlots,
@@ -45,10 +43,6 @@ const ScheduleAppointmentPage = () => {
   const [zipCodeState, setZipCodeState] = useState(filters.zipCode)
 
   const [debouncedZipCode] = useDebounce(zipCodeState, 500)
-
-  const handleDialogConfirm = () => {
-    router.push(`/schedule-appointment/personal-details`)
-  }
 
   useEffect(() => {
     setZipCodeState(filters.zipCode)
@@ -146,7 +140,6 @@ const ScheduleAppointmentPage = () => {
             >
               <ProviderWithClinicAndWeeklyAvailability
                 staffWithClinicsAndSlots={staffWithClinicsAndSlots}
-                onConfirm={handleDialogConfirm}
               />
             </Flex>
           ))}

@@ -19,10 +19,8 @@ import { renderProfileImage, renderStaffName } from '../../utils'
 
 const ProviderWithClinicAndWeeklyAvailability = ({
   staffWithClinicsAndSlots,
-  onConfirm,
 }: {
   staffWithClinicsAndSlots: StaffWithClinicsAndSlots
-  onConfirm?: () => void
 }) => {
   const [profileImage, setProfileImage] = useState<string | undefined>()
   const { codeSetIndex, filters } = useStore()
@@ -97,7 +95,6 @@ const ProviderWithClinicAndWeeklyAvailability = ({
           clinicWithSlots={staffWithClinicsAndSlots.clinicWithSlots.find(
             (clinic) => clinic.clinic.id === selectedClinicId,
           )}
-          onConfirm={onConfirm}
         />
       </Flex>
     </Flex>

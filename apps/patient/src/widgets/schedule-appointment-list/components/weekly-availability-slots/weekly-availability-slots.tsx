@@ -16,12 +16,10 @@ const WeeklyAvailabilitySlots = ({
   staff,
   staffTypeCode,
   clinicWithSlots,
-  onConfirm,
 }: {
   staff: Staff
   staffTypeCode: number
   clinicWithSlots: ClinicWithSlots | undefined
-  onConfirm?: () => void
 }) => {
   const { filters } = useStore()
 
@@ -39,7 +37,6 @@ const WeeklyAvailabilitySlots = ({
             clinicWithSlots={clinicWithSlots}
             staff={staff}
             staffTypeCode={staffTypeCode}
-            onConfirm={onConfirm}
           />
         </Flex>
       ))}
@@ -52,13 +49,11 @@ const SlotComponent = ({
   clinicWithSlots,
   staff,
   staffTypeCode,
-  onConfirm,
 }: {
   slots: Slot[]
   clinicWithSlots: ClinicWithSlots | undefined
   staff: Staff
   staffTypeCode: number
-  onConfirm?: () => void
 }) => {
   const [showAll, setShowAll] = useState(false)
   const handleShowMore = () => setShowAll(!showAll)
@@ -85,17 +80,8 @@ const SlotComponent = ({
       if (
         address?.primaryState !== state
       ) {
-        const userResponse = window.confirm(
-          `You're about to book an appointment with the provider in "${state}", but your primary address is in "${address?.primaryState}". Are you currently in the state where you are booking the appointment?`
-        );
-        if (userResponse) {
-          console.log("User confirmed the action!");
-          onConfirm?.()
-          return
-        } else {
-          console.log("User canceled the action.");
-          return
-        }
+        router.push(`/widgets/schedule-appointment-confirmation?myState=${address?.primaryState}&providerState=${state}`)
+        return
       }
     }
 
