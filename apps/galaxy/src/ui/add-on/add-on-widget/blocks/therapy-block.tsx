@@ -3,7 +3,6 @@
 import { useEffect } from 'react'
 import { Flex, Text } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
-import { CheckboxInput } from '@/components'
 import { TherapyTableBlock } from '@/ui/therapy/therapy-widget/blocks/therapy-table-block'
 import { TherapySessionParticipantsBlock } from '@/ui/therapy/therapy-widget/individual/blocks/session-participants'
 import { TherapyTimeSpentBlock } from '@/ui/therapy/therapy-widget/individual/blocks/time-spent'
@@ -25,12 +24,9 @@ const TherapyBlock: React.FC = ({ isChecked }: TherapyBlockProps) => {
 
   return (
     <>
-      <Flex align="center" gap="2">
-        <CheckboxInput field="therapy" checked={isTherapyChecked} />
-        <Text className="cursor-default" weight="medium">
-          Therapy Block
-        </Text>
-      </Flex>
+      <Text className="cursor-default" weight="medium">
+        Therapy Block
+      </Text>
       {isTherapyChecked && (
         <Flex direction="column" gap="2">
           <Text className="cursor-default" weight="medium">

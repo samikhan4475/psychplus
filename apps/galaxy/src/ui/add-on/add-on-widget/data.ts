@@ -80,7 +80,9 @@ const transformIn = (
   visitType?: string,
 ): AddOnWidgetSchemaType => {
   const therapy = visitType
-    ? ['Outpatient', 'EdVisit', 'TransitionalCare'].includes(visitType)
+    ? ['Outpatient', 'EdVisit', 'TransitionalCare', 'Spravato'].includes(
+        visitType,
+      )
     : false
 
   let therapyPsychoanalysis = 'therapy'
@@ -88,8 +90,7 @@ const transformIn = (
     therapyPsychoanalysis = 'psychoanalysis'
   }
   if (
-    value &&
-    value.length &&
+    value?.length &&
     value[0].sectionItem === 'empty' &&
     value[0].sectionItemValue === 'true'
   ) {
