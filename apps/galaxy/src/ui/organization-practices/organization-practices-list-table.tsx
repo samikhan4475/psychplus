@@ -3,30 +3,44 @@
 import {
   ColumnHeader,
   DataTable,
+  LoadingPlaceholder,
   TextCell
 } from '@/components'
-import { Box, ScrollArea } from '@radix-ui/themes'
+import { Sort } from '@/types'
+import { getSortDir } from '@/utils'
+import { Box, Flex, ScrollArea } from '@radix-ui/themes'
 import { type ColumnDef } from '@tanstack/react-table'
+import { useParams } from 'next/navigation'
+import { useEffect } from 'react'
+import { Practice } from '../organization-practice/types'
 import { ActionsCell } from './cells'
 import { PracticesHistoryDialog } from './practices-history-dialog'
-import { PracticeDetails } from './types'
+import { useStore } from './store'
 import { PracticeNameCell } from './table-row-practice-name-cell'
 
-const columns = (isPractices?: boolean): ColumnDef<PracticeDetails>[] =>
+const columns = (
+  isPractices?: boolean,
+  sort?: Sort,
+  onSort?: (column: string) => void,
+): ColumnDef<Practice>[] =>
   [
     {
-      id: 'practiceName',
+      id: 'displayName',
       header: ({ column }) => (
         <ColumnHeader
           label="Name"
           sortable
+          sortDir={getSortDir(column.id, sort)}
+          onClick={() => {
+            onSort?.(column.id)
+          }}
         />
       ),
       cell: ({ row }) =>
         isPractices ? (
           <PracticeNameCell row={row} />
         ) : (
-          <TextCell>{row.original.practiceName}</TextCell>
+          <TextCell>{row.original.displayName}</TextCell>
         ),
     },
     {
@@ -35,6 +49,10 @@ const columns = (isPractices?: boolean): ColumnDef<PracticeDetails>[] =>
         <ColumnHeader
           label="NPI"
           sortable
+          sortDir={getSortDir(column.id, sort)}
+          onClick={() => {
+            onSort?.(column.id)
+          }}
         />
       ),
       cell: ({ row }) => <TextCell>{row.original.npi}</TextCell>,
@@ -45,19 +63,27 @@ const columns = (isPractices?: boolean): ColumnDef<PracticeDetails>[] =>
         <ColumnHeader
           label="TIN"
           sortable
+          sortDir={getSortDir(column.id, sort)}
+          onClick={() => {
+            onSort?.(column.id)
+          }}
         />
       ),
-      cell: ({ row }) => <TextCell>{row.original.tin}</TextCell>,
+      cell: ({ row }) => <TextCell>{row.original.taxId}</TextCell>,
     },
     {
-      id: 'taxonomyCode',
+      id: 'taxonomy',
       header: ({ column }) => (
         <ColumnHeader
           label="Taxonomy Code"
           sortable
+          sortDir={getSortDir(column.id, sort)}
+          onClick={() => {
+            onSort?.(column.id)
+          }}
         />
       ),
-      cell: ({ row }) => <TextCell hasPayment>{row.original.taxonomyCode}</TextCell>,
+      cell: ({ row }) => <TextCell>{row.original.taxonomy}</TextCell>,
     },
     {
       id: 'clia',
@@ -65,19 +91,13 @@ const columns = (isPractices?: boolean): ColumnDef<PracticeDetails>[] =>
         <ColumnHeader
           label="CLIA"
           sortable
+          sortDir={getSortDir(column.id, sort)}
+          onClick={() => {
+            onSort?.(column.id)
+          }}
         />
       ),
       cell: ({ row }) => <TextCell>{row.original.clia}</TextCell>,
-    },
-    {
-      id: 'organization',
-      header: ({ column }) => (
-        <ColumnHeader
-          label="Organization"
-          sortable
-        />
-      ),
-      cell: ({ row }) => <TextCell>{row.original.organization}</TextCell>,
     },
     {
       id: 'primaryAddress',
@@ -85,9 +105,13 @@ const columns = (isPractices?: boolean): ColumnDef<PracticeDetails>[] =>
         <ColumnHeader
           label="Address 1"
           sortable
+          sortDir={getSortDir(column.id, sort)}
+          onClick={() => {
+            onSort?.(column.id)
+          }}
         />
       ),
-      cell: ({ row }) => <TextCell>{row.original.primaryAddress}</TextCell>,
+      cell: ({ row }) => <TextCell>{row.original.practiceAddress?.street1 ?? ""}</TextCell>,
     },
     {
       id: 'primaryAddress2',
@@ -95,9 +119,13 @@ const columns = (isPractices?: boolean): ColumnDef<PracticeDetails>[] =>
         <ColumnHeader
           label="Address 2"
           sortable
+          sortDir={getSortDir(column.id, sort)}
+          onClick={() => {
+            onSort?.(column.id)
+          }}
         />
       ),
-      cell: ({ row }) => <TextCell>{row.original.primaryAddress2}</TextCell>,
+      cell: ({ row }) => <TextCell>{row.original.practiceAddress?.street2 ?? ""}</TextCell>,
     },
     {
       id: 'city',
@@ -105,9 +133,13 @@ const columns = (isPractices?: boolean): ColumnDef<PracticeDetails>[] =>
         <ColumnHeader
           label="City"
           sortable
+          sortDir={getSortDir(column.id, sort)}
+          onClick={() => {
+            onSort?.(column.id)
+          }}
         />
       ),
-      cell: ({ row }) => <TextCell>{row.original.city}</TextCell>,
+      cell: ({ row }) => <TextCell>{row.original.practiceAddress?.city ?? ""}</TextCell>,
     },
     {
       id: 'state',
@@ -115,19 +147,27 @@ const columns = (isPractices?: boolean): ColumnDef<PracticeDetails>[] =>
         <ColumnHeader
           label="State"
           sortable
+          sortDir={getSortDir(column.id, sort)}
+          onClick={() => {
+            onSort?.(column.id)
+          }}
         />
       ),
-      cell: ({ row }) => <TextCell>{row.original.state}</TextCell>,
+      cell: ({ row }) => <TextCell>{row.original.practiceAddress?.state ?? ""}</TextCell>,
     },
     {
-      id: 'zip',
+      id: 'postalCode',
       header: ({ column }) => (
         <ColumnHeader
           label="ZIP"
           sortable
+          sortDir={getSortDir(column.id, sort)}
+          onClick={() => {
+            onSort?.(column.id)
+          }}
         />
       ),
-      cell: ({ row }) => <TextCell>{row.original.zip}</TextCell>,
+      cell: ({ row }) => <TextCell>{row.original.practiceAddress?.postalCode ?? ""}</TextCell>,
     },
     {
       id: 'phone',
@@ -135,9 +175,13 @@ const columns = (isPractices?: boolean): ColumnDef<PracticeDetails>[] =>
         <ColumnHeader
           label="Phone"
           sortable
+          sortDir={getSortDir(column.id, sort)}
+          onClick={() => {
+            onSort?.(column.id)
+          }}
         />
       ),
-      cell: ({ row }) => <TextCell>{row.original.phone}</TextCell>,
+      cell: ({ row }) => <TextCell>{row.original.practicePhone}</TextCell>,
     },
     {
       id: 'fax',
@@ -145,9 +189,13 @@ const columns = (isPractices?: boolean): ColumnDef<PracticeDetails>[] =>
         <ColumnHeader
           label="Fax"
           sortable
+          sortDir={getSortDir(column.id, sort)}
+          onClick={() => {
+            onSort?.(column.id)
+          }}
         />
       ),
-      cell: ({ row }) => <TextCell>{row.original.fax}</TextCell>,
+      cell: ({ row }) => <TextCell>{row.original.practiceFax}</TextCell>,
     },
     {
       id: 'payAddress',
@@ -155,9 +203,13 @@ const columns = (isPractices?: boolean): ColumnDef<PracticeDetails>[] =>
         <ColumnHeader
           label="Pay Address"
           sortable
+          sortDir={getSortDir(column.id, sort)}
+          onClick={() => {
+            onSort?.(column.id)
+          }}
         />
       ),
-      cell: ({ row }) => <TextCell>{row.original.payAddress}</TextCell>,
+      cell: ({ row }) => <TextCell>{row.original.practicePaymentAddress?.street1 ?? ""}</TextCell>,
     },
     {
       id: 'provider',
@@ -165,9 +217,13 @@ const columns = (isPractices?: boolean): ColumnDef<PracticeDetails>[] =>
         <ColumnHeader
           label="Default Provider"
           sortable
+          sortDir={getSortDir(column.id, sort)}
+          onClick={() => {
+            onSort?.(column.id)
+          }}
         />
       ),
-      cell: ({ row }) => <TextCell>{row.original.provider}</TextCell>,
+      cell: ({ row }) => <TextCell>{row.original.defaultProviderName}</TextCell>,
     },
     {
       id: 'status',
@@ -175,6 +231,10 @@ const columns = (isPractices?: boolean): ColumnDef<PracticeDetails>[] =>
         <ColumnHeader
           label="Status"
           sortable
+          sortDir={getSortDir(column.id, sort)}
+          onClick={() => {
+            onSort?.(column.id)
+          }}
         />
       ),
       cell: ({ row }) => (
@@ -188,76 +248,111 @@ const columns = (isPractices?: boolean): ColumnDef<PracticeDetails>[] =>
     },
   ]
 
-// Will be removed in next integration ticket
-const dummyData = [
-  {
-    id: "1",
-    practiceName: "ABC Medical Practice",
-    npi: "1234567890",
-    tin: "987654321",
-    taxonomyCode: "207R00000X",
-    clia: "12D4567890",
-    organization: "ABC Health Inc.",
-    primaryAddress: "123 Main Street",
-    primaryAddress2: "Suite 101",
-    city: "New York",
-    state: "NY",
-    zip: "10001",
-    phone: "(555) 123-4567",
-    fax: "(555) 987-6543",
-    payAddress: "456 Elm Street",
-    provider: "Dr. John Doe",
-    status: "Active",
-  },
-  {
-    id: "2",
-    practiceName: "XYZ Family Care",
-    npi: "9876543210",
-    tin: "123456789",
-    taxonomyCode: "207Q00000X",
-    clia: "45D1236789",
-    organization: "XYZ Healthcare Group",
-    primaryAddress: "789 Oak Avenue",
-    primaryAddress2: "Floor 2",
-    city: "Los Angeles",
-    state: "CA",
-    zip: "90001",
-    phone: "(555) 987-6543",
-    fax: "(555) 123-4567",
-    payAddress: "123 Pine Road",
-    provider: "Dr. Jane Smith",
-    status: "Pending",
-  },
-  {
-    id: "3",
-    practiceName: "LMN Pediatrics",
-    npi: "4561237890",
-    tin: "321654987",
-    taxonomyCode: "208000000X",
-    clia: "89D1234567",
-    organization: "LMN Kids Healthcare",
-    primaryAddress: "456 Birch Street",
-    primaryAddress2: "Building C",
-    city: "Chicago",
-    state: "IL",
-    zip: "60601",
-    phone: "(555) 654-3210",
-    fax: "(555) 210-6543",
-    payAddress: "987 Maple Drive",
-    provider: "Dr. Emily Brown",
-    status: "Inactive",
-  },
-];
 interface OrganizationPracticesListTableProps {
   isPractices?: boolean
 }
 const OrganizationPracticesListTable = ({ isPractices }: OrganizationPracticesListTableProps) => {
+  const { id } = useParams<{ id: string }>()
+  const { search, data, loading, sort, sortData } = useStore((state) => ({
+    data: state.data,
+    loading: state.loading,
+    search: state.search,
+    sort: state.sort,
+    sortData: state.sortData,
+  }))
+  useEffect(() => {
+    search({
+      organizationId: id,
+    })
+  }, [])
+
+  if (loading) {
+    return (
+      <Flex height="100%" width="100%" align="center" justify="center">
+        <LoadingPlaceholder />
+      </Flex>
+    )
+  }
+
+  //TODO: Will be removed once the main practice integration will be done
+  const dummyData: Practice[] = [
+    {
+      id: "1",
+      displayName: "ABC Medical Practice",
+      npi: "1234567890",
+      tin: "987654321",
+      taxonomy: "207R00000X",
+      clia: "12D4567890",
+      practiceOrganizationType: "ABC Health Inc.",
+      practiceAddress: {
+        street1: "123 Main Street",
+        street2: "Suite 101",
+        city: "New York",
+        state: "NY",
+        postalCode: "10001",
+      },
+      practicePhone: "(555) 123-4567",
+      practiceFax: "(555) 987-6543",
+      practicePaymentAddress: {
+        street1: "123 Main Street",
+        street2: "Suite 101",
+        city: "New York",
+        state: "NY",
+        postalCode: "10001",
+      },
+      defaultProviderName: "Dr. John Doe",
+      recordStatus: "Active",
+      metadata: {
+        createdOn: "",
+      },
+      shortName: "",
+      socialSecurityNumber: "",
+      defaultClearinghouseReceiverId: "",
+      taxId: "",
+      users: []
+    },
+    {
+      id: "2",
+      displayName: "XYZ ",
+      npi: "12345",
+      tin: "98765",
+      taxonomy: "207R00",
+      clia: "12D45",
+      practiceOrganizationType: "ABC Health Inc.",
+      practiceAddress: {
+        street1: "123 Main Street",
+        street2: "Suite 101",
+        city: "New York",
+        state: "NY",
+        postalCode: "10001",
+      },
+      practicePhone: "(555) 123-4567",
+      practiceFax: "(555) 987-6543",
+      practicePaymentAddress: {
+        street1: "123 Main Street",
+        street2: "Suite 101",
+        city: "New York",
+        state: "NY",
+        postalCode: "10001",
+      },
+      defaultProviderName: "Dr. John Doe",
+      recordStatus: "Active",
+      metadata: {
+        createdOn: "",
+      },
+      shortName: "",
+      socialSecurityNumber: "",
+      defaultClearinghouseReceiverId: "",
+      taxId: "",
+      users: []
+    },
+  ];
   return (
     <Box className='bg-white rounded p-1 my-1'>
       <ScrollArea className='p-1 rounded'>
         <DataTable
-          data={dummyData}
-          columns={columns(isPractices)}
+          data={isPractices ? dummyData : data || []}
+          columns={columns(isPractices, sort, sortData)}
           disablePagination
           sticky
           tableClass="bg-white w-[calc(100vw_-_198px)] [&_.rt-ScrollAreaRoot]:!overflow-visible"

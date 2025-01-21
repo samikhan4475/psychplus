@@ -13,7 +13,7 @@ const PracticeNameField = () => {
       <FormFieldLabel className="!text-1">Name</FormFieldLabel>
       <TextField.Root
         size="1"
-        {...form.register('practiceName')}
+        {...form.register('displayName')}
         placeholder="Search by name"
       />
     </FormFieldContainer>

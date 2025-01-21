@@ -17,7 +17,7 @@ const AddressFields = () => {
       <FormFieldLabel className="pb-2 text-[14px]">
         Primary Address
       </FormFieldLabel>
-      <Flex gap="2" className="flex" direction="column">
+      <Flex gap="2" direction="column">
         <Grid columns="2" gap="2" className="flex-1">
           {loaded && (
             <GooglePlacesAutocomplete

@@ -3,10 +3,11 @@ import { Box, Text } from '@radix-ui/themes'
 import { PropsWithRow } from '@/components'
 import { useStore as useRootStore } from '@/store'
 import { PracticeDetails } from './types'
+import { Practice } from '../organization-practice/types'
 
 const PracticeNameCell = ({
   row: { original: practice },
-}: PropsWithRow<PracticeDetails>) => {
+}: PropsWithRow<Practice>) => {
   const router = useRouter()
   const addTab = useRootStore((state) => state.addTab)
 
@@ -14,7 +15,7 @@ const PracticeNameCell = ({
     const href = `/management/organization-practice/practices/${practice.id}/practices-profile`
     addTab({
       href,
-      label: practice.practiceName,
+      label: practice.displayName,
     })
     router.push(href)
   }
@@ -26,7 +27,7 @@ const PracticeNameCell = ({
         className="flex max-w-[200px] cursor-pointer items-center overflow-hidden text-ellipsis whitespace-nowrap"
         onClick={openTab}
       >
-        {practice.practiceName}
+        {practice.displayName}
       </Text>
     </Box>
   )

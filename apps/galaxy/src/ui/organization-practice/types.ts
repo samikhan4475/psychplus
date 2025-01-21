@@ -17,6 +17,14 @@ interface Practice {
   defaultClearinghouseReceiverId: string
   taxId: string
   users: User[]
+  npi?: string
+  tin?: string
+  clia?: string
+  practiceAddress?: OrganizationAddress
+  practicePhone?: string
+  practiceFax?: string
+  practicePaymentAddress?: OrganizationAddress
+  defaultProviderName?: string
 }
 
 interface OrganizationAddress {
@@ -78,6 +86,41 @@ interface OrganizationsSearchParams {
   stateCode?: string
   zip?: string
   recordStatuses?: string[]
+  isIncludePracticeAddressLocation?: boolean
+  isIncludePaymentAddressLocation?: boolean
+}
+
+interface PracticeSearchParams {
+  isIncludeMetadataResourceChangeControl?: boolean
+  isIncludeMetadataResourceIds?: boolean
+  isIncludeMetadataResourceStatus?: boolean
+  isIncludeLocations?: boolean
+  includePractices?: boolean
+  includeUsers?: boolean
+  includeRoles?: boolean
+  includePermissions?: boolean
+  id?: string
+  organizationId: string
+  metadata?: Metadata
+  recordStatus?: string
+  practiceOrganizationType?: string
+  shortName?: string
+  displayName?: string
+  taxonomy?: string
+  socialSecurityNumber?: string
+  defaultClearinghouseReceiverId?: string
+  taxId?: string
+  users?: User[]
+  npi?: string
+  tin?: string
+  clia?: string
+  practiceAddress?: OrganizationAddress
+  practicePhone?: string
+  practiceFax?: string
+  practicePaymentAddress?: OrganizationAddress
+  defaultProviderName?: string
+  isIncludePracticeAddressLocation?: boolean
+  isIncludePaymentAddressLocation?: boolean
 }
 
 export {
@@ -86,4 +129,5 @@ export {
   type GetOrganizationsListResponse,
   type OrganizationsSearchParams,
   type Practice,
+  type PracticeSearchParams,
 }

@@ -3,18 +3,15 @@
 import * as api from '@/api'
 import { Sort } from '@/types'
 import {
-  DEFAULT_STATUSES,
-  ORGANIZATIONS_LIST_TABLE_PAGE_SIZE,
-} from '../constants'
+  DEFAULT_STATUSES
+} from '../../organization-practice/constants'
 import type {
-  GetOrganizationsListResponse,
-  Organization,
   OrganizationsSearchParams,
-} from '../types'
+  Practice
+} from '../../organization-practice/types'
 
 interface GetOrganizationsListParams {
   payload?: OrganizationsSearchParams
-  page?: number
   sort?: Sort
 }
 
@@ -24,26 +21,26 @@ const defaultPayload: OrganizationsSearchParams = {
   isIncludeMetadataResourceStatus: true,
   isIncludeLocations: true,
   recordStatuses: DEFAULT_STATUSES,
+  includePractices: true,
+  includeUsers: true,
+  includeRoles: true,
+  includePermissions: true,
+  isIncludePracticeAddressLocation: true,
+  isIncludePaymentAddressLocation: true,
 }
 
-const getAllOrganizationsListAction = async ({
+const getAllOrganizationPracticesListAction = async ({
   payload,
-  page = 1,
-  sort,
+  sort
 }: GetOrganizationsListParams): Promise<
-  api.ActionResult<GetOrganizationsListResponse>
+  api.ActionResult<Practice[]>
 > => {
-  const offset = (page - 1) * ORGANIZATIONS_LIST_TABLE_PAGE_SIZE
-
-  const url = new URL(api.GET_ORGANIZATIONS_ENDPOINT)
-  url.searchParams.append('limit', String(ORGANIZATIONS_LIST_TABLE_PAGE_SIZE))
-  url.searchParams.append('offset', String(offset))
-
+  const url = new URL(api.GET_ORGANIZATION_PRACTICES_ENDPOINT)
   if (sort) {
     url.searchParams.append('orderBy', `${sort.column} ${sort.direction}`)
   }
 
-  const response = await api.POST<Organization[]>(`${url}`, {
+  const response = await api.POST<Practice[]>(`${url}`, {
     ...defaultPayload,
     ...payload,
   })
@@ -57,11 +54,8 @@ const getAllOrganizationsListAction = async ({
 
   return {
     state: 'success',
-    data: {
-      organizations: response.data,
-      total: Number(response.headers.get('psychplus-totalresourcecount')),
-    },
+    data: response.data,
   }
 }
 
-export { getAllOrganizationsListAction }
+export { getAllOrganizationPracticesListAction }

@@ -1,30 +1,57 @@
 import { PropsWithRow, SelectCell } from '@/components'
+import { Practice } from '@/ui/organization-practice/types'
 import { CounterClockwiseClockIcon } from '@radix-ui/react-icons'
 import { Flex, Heading, Popover } from '@radix-ui/themes'
 import { X } from 'lucide-react'
+import { useParams } from 'next/navigation'
+import { useEffect, useState } from 'react'
+import toast from 'react-hot-toast'
+import { getAllPracticeHxListAction, updatePracticeAction } from '../actions'
 import { STATUS_CODESET } from '../constants'
-import { PracticeDetails } from '../types'
 import { HistoryDataTable } from './history-table'
 
-const PracticesHistoryDialog = ({ row }: PropsWithRow<PracticeDetails>) => {
-  // Will be removed after integration
-  const dummyPracticesHistory = [
-    {
-      user: "John Doe",
-      date: "2024-12-10 10:45",
-      status: "Inactive",
-    },
-    {
-      user: "Jane Smith",
-      date: "2024-12-09 03:15",
-      status: "Inactive",
-    },
-    {
-      user: "Emily Johnson",
-      date: "2024-12-08 09:30",
-      status: "Inactive",
-    },
-  ];
+const PracticesHistoryDialog = ({ row }: PropsWithRow<Practice>) => {
+  const [currentStatus, setCurrentStatus] = useState(row.original.recordStatus)
+  const [practiceHx, setPracticeHx] = useState<Practice[]>([]);
+  const [loading, setLoading] = useState(false);
+  const { id } = useParams<{ id: string }>();
+
+  const handleStatusChange = async (status: string) => {
+    setCurrentStatus(status)
+    const response = await updatePracticeAction(
+      {
+        ...row.original,
+        recordStatus: status,
+      },
+      id,
+      row.original?.id,
+    )
+
+    if (response.state === 'error') {
+      setCurrentStatus(row.original.recordStatus)
+      toast.error(response.error)
+      return
+    }
+    toast.success('Status updated successfully')
+  }
+
+  useEffect(() => {
+    const fetchPracticeHistory = async () => {
+      setLoading(true);
+      if (!row.original.id) return;
+
+      const response = await getAllPracticeHxListAction(row.original.id);
+      if (response.state === 'success') {
+        setPracticeHx(response.data);
+        setLoading(false);
+      } else {
+        setLoading(false);
+      }
+    };
+
+    fetchPracticeHistory();
+  }, [row.original.id]);
+
   return (
     <Flex>
       <Popover.Root>
@@ -44,7 +71,7 @@ const PracticesHistoryDialog = ({ row }: PropsWithRow<PracticeDetails>) => {
                   />
                 </Popover.Close>
               </Flex>
-              <HistoryDataTable data={dummyPracticesHistory} />
+              <HistoryDataTable data={practiceHx} loading={loading} />
             </Flex>
           </Popover.Content>
         </Flex>
@@ -52,6 +79,8 @@ const PracticesHistoryDialog = ({ row }: PropsWithRow<PracticeDetails>) => {
       <SelectCell
         options={STATUS_CODESET}
         className="bg-gray-3 text-gray-10 w-[100px]"
+        onValueChange={handleStatusChange}
+        value={currentStatus}
       />
     </Flex>
   )

@@ -18,20 +18,24 @@ import { ProviderSelect } from './provider-select'
 import { StatusSelect } from './status-select'
 import { TaxonomyCodeField } from './taxonomy-code-field'
 import { TINField } from './tin-field'
+import { useStore } from './store'
+import { PracticeSearchParams } from '../organization-practice/types'
+import { sanitizeFormData } from '@/utils'
+import { useParams } from 'next/navigation'
 
 const schema = z.object({
-  practiceName: z.string().optional(),
+  displayName: z.string().optional(),
   npi: z.string().optional(),
-  tin: z.string().optional(),
+  taxId: z.string().optional(),
   taxonomyCode: z.string().optional(),
   clia: z.string().optional(),
-  organization: z.string().optional(),
+  practiceOrganizationType: z.string().optional(),
   phone: z.string().optional(),
   fax: z.string().optional(),
   address1: z.string().optional(),
   address2: z.string().optional(),
   city: z.string().optional(),
-  provider: z.string().optional(),
+  defaultProviderStaffId: z.string().optional(),
   state: z.string().optional(),
   zip: z.string().optional(),
   payAddress: z.string().optional(),
@@ -39,24 +43,31 @@ const schema = z.object({
 })
 
 type SchemaType = z.infer<typeof schema>
+interface OrganizationPracticesFilterProps {
+  isPractices?: boolean
+}
 
-const OrganizationPracticesListFilterForm = () => {
+const OrganizationPracticesListFilterForm = ({ isPractices }: OrganizationPracticesFilterProps) => {
+  const { id } = useParams<{ id: string }>()
+  const { search } = useStore((state) => ({
+    search: state.search,
+  }))
   const form = useForm<SchemaType>({
     resolver: zodResolver(schema),
     reValidateMode: 'onChange',
     defaultValues: {
-      practiceName: '',
+      displayName: '',
       npi: '',
-      tin: '',
+      taxId: '',
       taxonomyCode: '',
       clia: '',
-      organization: '',
+      practiceOrganizationType: '',
       phone: '',
       fax: '',
       address1: '',
       address2: '',
       city: '',
-      provider: '',
+      defaultProviderStaffId: '',
       state: '',
       zip: '',
       payAddress: '',
@@ -64,7 +75,22 @@ const OrganizationPracticesListFilterForm = () => {
     },
   })
 
-  const onSubmit: SubmitHandler<SchemaType> = (data) => {}
+  const onSubmit: SubmitHandler<SchemaType> = (data) => {
+    const formattedData = {
+      ...data,
+      partialShortName: data.displayName,
+      partialAddress1: data.address1,
+      partialAddress2: data.address2,
+      stateCode: data.state,
+      cityName: data.city,
+      recordStatuses: data.status ? [data.status] : undefined,
+      organizationId: id
+    }
+    const cleanedData = sanitizeFormData(
+      formattedData,
+    ) as PracticeSearchParams
+    search(cleanedData)
+  }
 
   return (
     <FormContainer
@@ -77,7 +103,7 @@ const OrganizationPracticesListFilterForm = () => {
       <TINField />
       <TaxonomyCodeField />
       <CLIAField />
-      <OrganizationField />
+      {isPractices && <OrganizationField  />}
       <PhoneField />
       <FaxField />
       <AddressGroup />

@@ -576,7 +576,11 @@ const DELETE_PHARMACY = (pharmacyId: string, patientId: string) =>
   `${API_URL}/api/patients/${patientId}/pharmacies/${pharmacyId}`
 const PRIORITY_PHARMACY = (pharmacyId: string, patientId: string) =>
   `${API_URL}/api/patients/${patientId}/pharmacies/${pharmacyId}/actions/default`
-
+const GET_ORGANIZATION_PRACTICES_ENDPOINT = `${API_URL}/api/practices/actions/search`
+const UPDATE_PRACTICE_ENDPOINT = (organizationId: string, practiceId: string) =>
+  `${API_URL}/api/organizations/${organizationId}/practices/${practiceId}`
+const GET_PRACTICE_HISTORY_ENDPOINT = (practiceId: string) =>
+  `${API_URL}/api/practices/${practiceId}/history/actions/search`
 export {
   GET_LAB_RESULTS_ENDPOINT,
   NOTE_UPLOAD_FILE,
@@ -843,4 +847,7 @@ export {
   ADD_FAVORITE_PHARMACY,
   DELETE_PHARMACY,
   PRIORITY_PHARMACY,
+  GET_ORGANIZATION_PRACTICES_ENDPOINT,
+  UPDATE_PRACTICE_ENDPOINT,
+  GET_PRACTICE_HISTORY_ENDPOINT,
 }

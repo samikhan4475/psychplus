@@ -1,6 +1,6 @@
 'use client'
 
-import { Box, Button, Text } from '@radix-ui/themes'
+import { Box, Button, Flex, Text } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
 import { FormFieldContainer } from '@/components/form'
 import { SchemaType } from './practice-form'
@@ -13,11 +13,11 @@ const SubmitFormButton = () => {
 
   return (
     <FormFieldContainer className="flex-1 gap-0">
-      <Box className="mt-4 flex justify-end">
+      <Flex className="mt-4" justify="end">
         <Button loading={isSubmitting} className="bg-pp-black-2 text-white">
           <Text size="2">Save</Text>
         </Button>
-      </Box>
+      </Flex>
     </FormFieldContainer>
   )
 }

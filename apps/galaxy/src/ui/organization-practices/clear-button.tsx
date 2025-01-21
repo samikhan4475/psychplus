@@ -3,11 +3,20 @@
 import { Button } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
 import { SchemaType } from './organization-practices-list-filter-form'
+import { useStore } from './store'
+import { useParams } from 'next/navigation'
 const ClearButton = () => {
+  const { id } = useParams<{ id: string }>()
+  const { search } = useStore((state) => ({
+    search: state.search,
+  }))
   const form = useFormContext<SchemaType>()
   const onClear = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault()
-    form.reset() 
+    form.reset()
+    search({
+      organizationId: id,
+    })
   }
 
   return (

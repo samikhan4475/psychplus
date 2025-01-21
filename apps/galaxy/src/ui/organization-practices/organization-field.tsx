@@ -13,7 +13,7 @@ const OrganizationField = () => {
       <FormFieldLabel className="!text-1">Organization</FormFieldLabel>
       <TextField.Root
         size="1"
-        {...form.register('organization')}
+        {...form.register('practiceOrganizationType')}
         placeholder="Search by org."
       />
     </FormFieldContainer>

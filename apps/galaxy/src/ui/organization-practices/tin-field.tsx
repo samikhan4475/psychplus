@@ -13,7 +13,7 @@ const TINField = () => {
       <FormFieldLabel className="!text-1">TIN</FormFieldLabel>
       <TextField.Root
         size="1"
-        {...form.register('tin')}
+        {...form.register('taxId')}
         placeholder="Add TIN"
       />
     </FormFieldContainer>

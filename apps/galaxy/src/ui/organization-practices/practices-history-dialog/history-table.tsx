@@ -1,34 +1,49 @@
 'use client'
 
-import { ColumnHeader, DataTable, TextCell } from '@/components'
+import { ColumnHeader, DataTable, LoadingPlaceholder, TextCell } from '@/components'
+import { Practice } from '@/ui/organization-practice/types'
+import { formatDateTime } from '@/utils'
+import { Flex } from '@radix-ui/themes'
 import { ColumnDef } from '@tanstack/react-table'
-import { PracticesHistory } from '../types'
 
-const columns: ColumnDef<PracticesHistory>[] = [
+const columns: ColumnDef<Practice>[] = [
   {
     id: 'user',
-    accessorKey: 'user',
-    header: () => <ColumnHeader label="User" />,
-    cell: ({ row }) => <TextCell>{row.original.user}</TextCell>,
+    header: ({ column }) => <ColumnHeader label="User" />,
+    cell: ({ row }) => (
+      <TextCell>{row.original.metadata?.createdByFullName}</TextCell>
+    ),
   },
   {
     id: 'date',
-    accessorKey: 'date',
-    header: () => <ColumnHeader label="Date/Time" />,
-    cell: ({ row }) => <TextCell>{row.original.date}</TextCell>,
+    header: ({ column }) => <ColumnHeader label="Date/Time" />,
+    cell: ({ row }) => (
+      <TextCell>
+        {row.original.metadata?.createdOn &&
+          formatDateTime(row.original.metadata?.createdOn)}
+      </TextCell>
+    ),
   },
   {
     id: 'status',
-    accessorKey: 'status',
-    header: () => <ColumnHeader label="Status" />,
-    cell: ({ row }) => <TextCell>{row.original.status}</TextCell>,
-  }
+    header: ({ column }) => <ColumnHeader label="Status" />,
+    cell: ({ row }) => <TextCell>{row.original.recordStatus}</TextCell>,
+  },
 ]
 
 interface HistoryDataTableProps {
-  data: PracticesHistory[]
+  data: Practice[],
+  loading?: boolean
 }
-const HistoryDataTable = ({ data }: HistoryDataTableProps) => {
+
+const HistoryDataTable = ({ data, loading }: HistoryDataTableProps) => {
+  if (loading) {
+    return (
+      <Flex height="100%" width="100%" align="center" justify="center">
+        <LoadingPlaceholder />
+      </Flex>
+    )
+  }
   return <DataTable columns={columns} data={data} />
 }
 export { HistoryDataTable }

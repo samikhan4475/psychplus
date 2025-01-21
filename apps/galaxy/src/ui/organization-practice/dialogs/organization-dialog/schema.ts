@@ -7,9 +7,7 @@ const schema = z.object({
   address2: z.string().optional(),
   city: z.string().min(1, { message: 'City is required' }),
   state: z.string().min(1, { message: 'State is required' }),
-  zip: z.string().min(5, { message: 'Valid zip is required' }).max(5, {
-    message: 'Valid zip is required',
-  }),
+  zip: z.string().min(5, { message: 'Valid zip is required' }),
   contactPhone: z.string().optional(),
   contactEmail: z
     .string()
