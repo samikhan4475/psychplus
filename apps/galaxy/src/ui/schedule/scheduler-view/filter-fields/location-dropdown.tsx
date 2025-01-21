@@ -5,7 +5,7 @@ import { useFormContext } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { SelectInput } from '@/components'
 import { SelectOptionType } from '@/types'
-import { getStateClinicsOptionsAction } from '../../actions'
+import { getStateClinicsOptionsAction } from '../../client-actions'
 import { FieldLabel, FormFieldContainer } from '../../shared'
 import { SchemaType } from '../filter-actions-group'
 

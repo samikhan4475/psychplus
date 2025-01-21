@@ -1,6 +1,7 @@
-'use server'
+'use client'
 
-import * as api from '@/api'
+import { LOCATION_SERVICES_ENDPOINT } from '@/api/endpoints'
+import * as api from '@/api/api.client'
 import { Service } from '@/types'
 
 const getLocationServices = async (payload: {
@@ -11,7 +12,7 @@ const getLocationServices = async (payload: {
   includeServiceGroup?: boolean
 }): Promise<api.ActionResult<Service[]>> => {
   const response = await api.POST<Service[]>(
-    `${api.LOCATION_SERVICES_ENDPOINT}`,
+    `${LOCATION_SERVICES_ENDPOINT}`,
     payload,
   )
 

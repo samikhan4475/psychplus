@@ -1,13 +1,14 @@
-'use server'
+'use client'
 
-import * as api from '@/api'
+import * as api from '@/api/api.client'
+import { SEARCH_LOCATION_SERVICES_ENDPOINT } from '@/api/endpoints'
 import { Service } from '@/types'
 
 const getLocationServicesAction = async (
   locationId: string,
-): Promise<api.ActionResult<{label: string, value: string}[]>> => {
+): Promise<api.ActionResult<{ label: string; value: string }[]>> => {
   const response = await api.POST<Service[]>(
-    api.SEARCH_LOCATION_SERVICES_ENDPOINT,
+    SEARCH_LOCATION_SERVICES_ENDPOINT,
     {
       locationId,
     },
@@ -20,7 +21,6 @@ const getLocationServicesAction = async (
     }
   }
 
-  
   const transformedData = response.data.map((data) => ({
     value: data.id,
     label: data.serviceOffered,

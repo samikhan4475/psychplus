@@ -2,12 +2,12 @@ import { addDays, eachDayOfInterval, format } from 'date-fns'
 import toast from 'react-hot-toast'
 import { create } from 'zustand'
 import { Appointment } from '@/types'
-import { getUnitsGroupsAction } from '../actions'
 import { AppointmentDate } from '../scheduler-view/types'
 import { AppointmentParams, GetUnitsGroupsResponse } from '../types'
 import { getAppointmentsAction } from './actions/get-appointments'
 import { DayString, MergedRecord, WeekDay, WeekdayData } from './types'
 import { extractWeekDay } from './util'
+import { getUnitsGroupsAction } from '../client-actions'
 
 interface Store {
   data?: MergedRecord[]

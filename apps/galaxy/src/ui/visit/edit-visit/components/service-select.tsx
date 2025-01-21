@@ -11,7 +11,7 @@ import {
 } from '@/components'
 import { CODESETS } from '@/constants'
 import { useCodesetCodes } from '@/hooks'
-import { getLocationServices } from '../../actions'
+import { getLocationServices } from '../../client-actions'
 import { SchemaType } from '../schema'
 import { useEditVisitStore } from '../store'
 

@@ -1,12 +1,13 @@
-'use server'
+'use client'
 
-import * as api from '@/api'
+import * as api from '@/api/api.client'
+import { LOCATION_ENDPOINT } from '@/api/endpoints'
 import { Location, LocationSearchParams } from '@/types'
 
 const searchLocationOptionsAction = async (
   params: Partial<LocationSearchParams>,
 ): Promise<api.ActionResult<{ label: string; value: string }[]>> => {
-  const response = await api.POST<Location[]>(api.LOCATION_ENDPOINT, params)
+  const response = await api.POST<Location[]>(LOCATION_ENDPOINT, params)
   if (response.state === 'error') {
     return {
       state: 'error',

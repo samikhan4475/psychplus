@@ -12,7 +12,13 @@ import { StateCodeSet } from '../../types'
 import { SchemaType } from '../schema'
 import { StateChangeAlert } from './state-change-alert'
 
-const StateDropdown = ({ states }: { states: StateCodeSet[] }) => {
+const StateDropdown = ({
+  loadingStates,
+  states,
+}: {
+  loadingStates: boolean
+  states: StateCodeSet[]
+}) => {
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const form = useFormContext<SchemaType>()
   const patient = useWatch({
@@ -28,7 +34,8 @@ const StateDropdown = ({ states }: { states: StateCodeSet[] }) => {
       <StateChangeAlert
         isOpen={isOpen}
         onConfirm={(isConfirmed: boolean) => {
-          if (!isConfirmed && patient?.state) form.setValue('state', patient.state)
+          if (!isConfirmed && patient?.state)
+            form.setValue('state', patient.state)
           setIsOpen(false)
         }}
       />
@@ -39,6 +46,7 @@ const StateDropdown = ({ states }: { states: StateCodeSet[] }) => {
           options={options}
           buttonClassName="h-6 w-full"
           disabled={!patient}
+          loading={loadingStates}
           onValueChange={(newValue) => {
             form.setValue('state', newValue)
             if (newValue && newValue !== patient.state) {

@@ -1,7 +1,7 @@
 import toast from 'react-hot-toast'
 import { create } from 'zustand'
 import { Encounter } from '@/types'
-import { getVisitEncounterTypesAction } from '../actions/get-visit-types'
+import { getVisitEncounterTypesAction } from '../client-actions'
 
 interface Store {
   visitMediumOptionsMapper: { [key: string]: string[] }

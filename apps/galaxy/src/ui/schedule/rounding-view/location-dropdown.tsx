@@ -2,9 +2,9 @@
 
 import { useFormContext } from 'react-hook-form'
 import { AsyncSelect } from '@/components'
-import { getClinicsOptionsAction } from '../actions'
 import { BookedAppointmentsSchemaType } from '../schema'
 import { FieldLabel, FormFieldContainer } from '../shared'
+import { getClinicsOptionsAction } from '../client-actions'
 
 const LocationDropdown = () => {
   const form = useFormContext<BookedAppointmentsSchemaType>()

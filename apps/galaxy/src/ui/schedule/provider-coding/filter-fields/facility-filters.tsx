@@ -2,11 +2,11 @@ import { useEffect, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { ServiceGroup, ServiceRoom, ServiceUnit } from '@/types'
-import { getUnitsGroupsAction } from '../../actions'
 import { ProviderCodingSchema } from '../provider-coding-view-schema'
 import { GroupSelect } from './group-dropdown'
 import { RoomSelect } from './room-dropdown'
 import { UnitSelect } from './units-dropdown'
+import { getUnitsGroupsAction } from '../../client-actions'
 
 const FacilityFilters = () => {
   const form = useFormContext<ProviderCodingSchema>()

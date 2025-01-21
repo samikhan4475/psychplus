@@ -1,6 +1,7 @@
-'use server'
+'use client'
 
-import * as api from '@/api'
+import * as api from '@/api/api.client'
+import { GET_PROVIDER_SETTINGS_ENDPOINT } from '@/api/endpoints'
 import { Metadata } from '@/types'
 
 interface GetPrescriberSettingsResponse {
@@ -20,7 +21,7 @@ const getPrescriberSettings = async (payload: {
   name?: string
 }): Promise<api.ActionResult<GetPrescriberSettingsResponse[]>> => {
   const response = await api.POST<GetPrescriberSettingsResponse[]>(
-    api.GET_PROVIDER_SETTINGS_ENDPOINT,
+    GET_PROVIDER_SETTINGS_ENDPOINT,
     {
       categoryValue: 'ProviderDefaults',
       settingStatusCode: 'Active',

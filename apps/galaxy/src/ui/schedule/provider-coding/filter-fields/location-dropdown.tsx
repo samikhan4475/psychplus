@@ -1,10 +1,10 @@
 'use client'
 
 import { useFormContext } from 'react-hook-form'
-import { getClinicsOptionsAction } from '@/actions'
 import { AsyncSelect } from '@/components'
 import { FieldLabel, FormFieldContainer } from '../../shared'
 import { ProviderCodingSchema } from '../provider-coding-view-schema'
+import { getClinicsOptionsAction } from '../../client-actions'
 
 const LocationDropdown = () => {
   const form = useFormContext<ProviderCodingSchema>()

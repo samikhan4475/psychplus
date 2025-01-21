@@ -9,7 +9,7 @@ import {
   FormFieldLabel,
   SelectInput,
 } from '@/components'
-import { getLocationServices } from '@/ui/visit/actions'
+import { getLocationServices } from '@/ui/visit/client-actions'
 import { transformNonTimedVisitTypes } from '../../add-visit/transform'
 import { SchemaType } from '../schema'
 import { useEditVisitStore } from '../store'

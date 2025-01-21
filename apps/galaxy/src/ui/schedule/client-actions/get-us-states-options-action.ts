@@ -1,13 +1,18 @@
-'use server'
+'use client'
 
-import * as api from '@/api'
-import { State } from '@/types'
+import { GET_US_STATES_ENDPOINT } from '@/api/endpoints';
+import * as api from '@/api/api.client'
+import type { State } from '@/types'
 
-const getUsStatesAction = async (): Promise<
+const getUsStatesOptionsAction = async (): Promise<
   api.ActionResult<{ label: string; value: string }[]>
 > => {
-  const response = await api.GET<State[]>(api.GET_US_STATES_ENDPOINT)
-    
+  const response = await api.GET<State[]>(GET_US_STATES_ENDPOINT, {
+    next: {
+      revalidate: 3600,
+    },
+  })
+
   if (response.state === 'error') {
     return {
       state: 'error',
@@ -26,4 +31,4 @@ const getUsStatesAction = async (): Promise<
   }
 }
 
-export { getUsStatesAction }
+export { getUsStatesOptionsAction }

@@ -1,6 +1,6 @@
 'use client'
 
-import { getProvidersOptionsAction } from '@/actions'
+import { getProvidersOptionsAction } from '../../client-actions'
 import { AsyncSelect } from '@/components'
 import { useFiltersContext } from '../../context'
 import { FieldLabel, FormFieldContainer } from '../../shared'

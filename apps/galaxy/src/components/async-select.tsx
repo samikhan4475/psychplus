@@ -21,6 +21,7 @@ const AsyncSelect = ({ fetchOptions, ...selectProps }: AsyncSelectProps) => {
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
+    setLoading(true)
     fetchOptions()
       .then((result) => {
         if (result.state === 'success') {

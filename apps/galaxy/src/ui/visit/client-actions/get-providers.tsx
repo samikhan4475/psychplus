@@ -1,6 +1,7 @@
-'use server'
+'use client'
 
-import * as api from '@/api'
+import * as api from '@/api/api.client'
+import { GET_STAFF_ENDPOINT } from '@/api/endpoints'
 import type { Provider } from '../types'
 
 interface GetProviderResponse {
@@ -18,9 +19,7 @@ const getProviders = async (payload: {
   locationIds: string[]
   providerType?: string
 }): Promise<api.ActionResult<Provider[]>> => {
-  const url = new URL(api.GET_STAFF_ENDPOINT)
-
-  const response = await api.POST<GetProviderResponse[]>(url.toString(), {
+  const response = await api.POST<GetProviderResponse[]>(GET_STAFF_ENDPOINT, {
     ...payload,
     roleCodes: ['1'],
     IsIncludeProviderForFacility: true,

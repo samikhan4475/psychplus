@@ -2,11 +2,11 @@ import { useEffect, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { ServiceGroup, ServiceRoom, ServiceUnit } from '@/types'
-import { getUnitsGroupsAction } from '../actions'
 import { BookedAppointmentsSchemaType } from '../schema'
 import { GroupDropdown } from './group-select'
 import { RoomSelect } from './room-select'
 import { UnitDropdown } from './unit-dropdown'
+import { getUnitsGroupsAction } from '../client-actions'
 
 const FacilityFields = () => {
   const form = useFormContext<BookedAppointmentsSchemaType>()

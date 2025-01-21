@@ -1,6 +1,7 @@
-'use server'
+'use client'
 
-import * as api from '@/api'
+import * as api from '@/api/api.client'
+import { SEARCH_LOCATION_SERVICES_ENDPOINT } from '@/api/endpoints'
 import { Service } from '@/types'
 import { GetUnitsGroupsResponse } from '../types'
 
@@ -15,7 +16,7 @@ const getUnitsGroupsAction = async (
   }
 
   const response = await api.POST<Service[]>(
-    api.SEARCH_LOCATION_SERVICES_ENDPOINT,
+    SEARCH_LOCATION_SERVICES_ENDPOINT,
     body,
   )
 
@@ -28,9 +29,18 @@ const getUnitsGroupsAction = async (
 
   const transformedData = response.data.reduce(
     (acc, service) => ({
-      serviceUnits: [...(service?.serviceUnits ?? []), ...(acc?.serviceUnits?? [])],
-      serviceGroups: [...(service?.serviceGroups ?? []), ...(acc?.serviceGroups?? [])],
-      serviceRooms: [...(service?.serviceRooms?? []), ...(acc?.serviceRooms?? [])]
+      serviceUnits: [
+        ...(service?.serviceUnits ?? []),
+        ...(acc?.serviceUnits ?? []),
+      ],
+      serviceGroups: [
+        ...(service?.serviceGroups ?? []),
+        ...(acc?.serviceGroups ?? []),
+      ],
+      serviceRooms: [
+        ...(service?.serviceRooms ?? []),
+        ...(acc?.serviceRooms ?? []),
+      ],
     }),
     {} as GetUnitsGroupsResponse,
   )

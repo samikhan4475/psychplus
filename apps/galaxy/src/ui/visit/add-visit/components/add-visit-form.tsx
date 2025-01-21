@@ -4,21 +4,18 @@ import { Box, Button, Flex, Grid, Text } from '@radix-ui/themes'
 import { SubmitHandler, useForm, useWatch } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { FormContainer, FormSubmitButton } from '@/components'
-import { NewPatient, State } from '@/types'
+import { NewPatient } from '@/types'
 import { AddPatient } from '@/ui/patient/add-patient'
 import { AddVacation } from '@/ui/vacation/add-vacation'
 import { cn } from '@/utils'
-import { getUsStatesAction } from '../../actions'
-import { bookVisitAction } from '../../actions/book-visit'
+import { bookVisitAction } from '../../client-actions'
 import { BookVisitPayload } from '../../types'
 import { schema, SchemaType } from '../schema'
 import { useAddVisitStore } from '../store'
 import { AddVisitAlert } from './add-visit-alerts'
-import { LocationDropdown } from './location-select'
 import { PatientSelect } from './patient-select'
 import { PatientText } from './patient-text'
 import { ServiceDropdown } from './service-select'
-import { StateDropdown } from './state-select'
 import './style.css'
 import { getLocations } from '@/actions/get-locations'
 import { useHasPermission } from '@/hooks'
@@ -38,6 +35,7 @@ import { convertToTimezone, sanitizeFormData } from '../../utils'
 import { transformRequestPayload } from '../transform'
 import { SlotDetails } from '../types'
 import { isDatePriorTo30Days } from '../util'
+import { StateAndLocationFilters } from './state-and-location-filters'
 import TimedVisitForm from './timed/timed-visit-form'
 import { NonTimedVisitForm } from './untimed/non-timed-visit-form'
 
@@ -64,7 +62,6 @@ const AddVisitForm = ({
   patient,
 }: AddVisitFormProps) => {
   const [newPatient, setNewPatient] = useState<NewPatient>()
-  const [states, setStates] = useState<State[]>([])
   const { staffId } = useGlobalStore((state) => state.user)
   const hasPermissionToClickSaveButton = useHasPermission(
     'clickSaveButtonOnAddVisitPopUp',
@@ -247,17 +244,6 @@ const AddVisitForm = ({
     })
   }
 
-  useEffect(() => {
-    getUsStatesAction().then((response) => {
-      if (response.state === 'error') {
-        toast.error(response.error || 'Failed to fetch US States')
-        setStates([])
-      } else {
-        setStates(response.data)
-      }
-    })
-  }, [])
-
   return (
     <FormContainer form={form} onSubmit={onCreateNew}>
       <AddVisitAlert
@@ -295,13 +281,7 @@ const AddVisitForm = ({
             </AddPatient>
           </Box>
         )}
-
-        <Box className="col-span-4">
-          <StateDropdown states={states} />
-        </Box>
-        <Box className="col-span-4">
-          <LocationDropdown states={states} />
-        </Box>
+        <StateAndLocationFilters />
         <Box className="col-span-4">
           <ServiceDropdown />
         </Box>

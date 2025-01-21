@@ -11,7 +11,7 @@ import { useHasPermission } from '@/hooks'
 import { SelectOptionType } from '@/types'
 import { PermissionAlert } from '@/ui/schedule/shared'
 import { EDIT_ADMITTING_PROVIDER } from '@/ui/visit/constants'
-import { getProviders } from '../../../actions'
+import { getProviders } from '../../../client-actions'
 import { Provider } from '../../../types'
 import { SchemaType } from '../../schema'
 

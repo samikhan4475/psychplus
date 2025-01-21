@@ -10,7 +10,13 @@ import {
 import { StateCodeSet } from '../../types'
 import { SchemaType } from '../schema'
 
-const StateSelect = ({ states }: { states: StateCodeSet[] }) => {
+const StateSelect = ({
+  loadingStates,
+  states,
+}: {
+  loadingStates: boolean
+  states: StateCodeSet[]
+}) => {
   const form = useFormContext<SchemaType>()
   const options = states.map((v) => ({
     label: v.stateName,
@@ -28,6 +34,7 @@ const StateSelect = ({ states }: { states: StateCodeSet[] }) => {
         buttonClassName="h-6 w-full"
         options={options}
         disabled={!isServiceTimeDependent}
+        loading={loadingStates}
       />
       <FormFieldError name={'state'} />
     </FormFieldContainer>

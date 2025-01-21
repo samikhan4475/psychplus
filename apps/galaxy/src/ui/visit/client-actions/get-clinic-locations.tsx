@@ -1,15 +1,14 @@
-'use server'
+'use client'
 
-import * as api from '@/api'
+import * as api from '@/api/api.client'
+import { CLINIC_LOCATIONS_ENDPOINT } from '@/api/endpoints'
 import { Clinic, SelectOptionType } from '@/types'
 
 const getClinicLocations = async (
   stateId: string,
 ): Promise<api.ActionResult<SelectOptionType[]>> => {
-  const url = new URL(api.CLINIC_LOCATIONS_ENDPOINT)
-  url.searchParams.append('stateId', String(stateId))
-
-  const response = await api.GET<Clinic[]>(url.toString())
+  const url = `${CLINIC_LOCATIONS_ENDPOINT}?stateId=${stateId}`
+  const response = await api.GET<Clinic[]>(url)
 
   if (response.state === 'error') {
     return {

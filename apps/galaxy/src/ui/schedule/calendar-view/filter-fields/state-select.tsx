@@ -1,7 +1,6 @@
 import { useCallback } from 'react'
 import { Flex } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
-import { getUsStatesOptionsAction } from '@/actions'
 import {
   AsyncSelect,
   FormFieldContainer,
@@ -9,6 +8,7 @@ import {
   FormFieldLabel,
 } from '@/components'
 import { CalenderViewSchemaType } from '../../types'
+import { getUsStatesOptionsAction } from '../../client-actions'
 
 const StateSelect = () => {
   const form = useFormContext<CalenderViewSchemaType>()

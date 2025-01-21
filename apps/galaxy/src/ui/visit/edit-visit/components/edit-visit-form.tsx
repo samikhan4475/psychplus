@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Box, Flex, Grid, Separator, Text } from '@radix-ui/themes'
 import { SubmitHandler, useForm, useWatch } from 'react-hook-form'
@@ -10,9 +10,9 @@ import {
   LoadingPlaceholder,
 } from '@/components'
 import { useHasPermission } from '@/hooks'
-import { Appointment, BookVisitPayload, State } from '@/types'
+import { Appointment, BookVisitPayload } from '@/types'
+import { isDirty } from '@/ui/schedule/utils'
 import { getCalendarDate } from '@/utils'
-import { getUsStatesAction } from '../../actions'
 import { SAVE_APPOINTMENT } from '../../constants'
 import { convertToTimezone, sanitizeFormData } from '../../utils'
 import { StaffComments } from '../components/staff-comments'
@@ -20,13 +20,11 @@ import { schema, SchemaType } from '../schema'
 import { useEditVisitStore } from '../store'
 import { transformRequestPayload } from '../transform'
 import { EditVisitAlert } from './edit-visit-alert'
-import { LocationSelect } from './location-select'
 import { PatientText } from './patient-text'
 import { ServiceSelect } from './service-select'
-import { StateSelect } from './state-select'
+import { StateAndLocationFilters } from './state-and-location-filters'
 import { TimedVisitForm } from './timed/timed-visit-form'
 import { UntimedVisitForm } from './untimed/untimed-visit-form'
-import { isDirty } from '@/ui/schedule/utils'
 
 const EditVisitForm = ({
   appointmentId,
@@ -43,7 +41,6 @@ const EditVisitForm = ({
   visitDetails: Appointment
   onClose: () => void
 }) => {
-  const [states, setStates] = useState<State[]>([])
   const [alertInfo, setAlertInfo] = useState<{
     statusCode: number
     message: string
@@ -133,17 +130,6 @@ const EditVisitForm = ({
     },
   })
 
-  useEffect(() => {
-    getUsStatesAction().then((response) => {
-      if (response.state === 'error') {
-        toast.error(response.error || 'Failed to fetch US States')
-        setStates([])
-      } else {
-        setStates(response.data)
-      }
-    })
-  }, [])
-
   const isServiceTimeDependent = useWatch({
     control: form.control,
     name: 'isServiceTimeDependent',
@@ -210,12 +196,7 @@ const EditVisitForm = ({
           <Box className="col-span-12">
             <PatientText visitDetails={visitDetails} />
           </Box>
-          <Box className="col-span-4">
-            <StateSelect states={states} />
-          </Box>
-          <Box className="col-span-4">
-            <LocationSelect states={states} />
-          </Box>
+          <StateAndLocationFilters />
           <Box className="col-span-4">
             <ServiceSelect />
           </Box>

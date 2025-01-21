@@ -9,7 +9,7 @@ import {
   SelectInput,
 } from '@/components'
 import { SelectOptionType } from '@/types'
-import { getProviders } from '../../../actions'
+import { getProviders } from '../../../client-actions'
 import { Provider } from '../../../types'
 import { SchemaType } from '../../schema'
 

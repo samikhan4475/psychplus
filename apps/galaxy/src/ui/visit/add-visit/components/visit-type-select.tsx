@@ -10,7 +10,7 @@ import {
   SelectInput,
 } from '@/components'
 import { VisitType } from '@/types'
-import { getLocationServices } from '../../actions'
+import { getLocationServices } from '../../client-actions'
 import { SchemaType } from '../schema'
 import { useAddVisitStore } from '../store'
 import { transformNonTimedVisitTypes } from '../transform'

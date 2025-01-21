@@ -1,6 +1,7 @@
-'use server'
+'use client'
 
-import * as api from '@/api'
+import * as api from '@/api/api.client'
+import { SEARCH_LOCATION_SERVICES_ENDPOINT } from '@/api/endpoints'
 import { SelectOptionType, Service } from '@/types'
 
 const getUnitsGroupsAction = async ({
@@ -22,7 +23,7 @@ const getUnitsGroupsAction = async ({
   }
 
   const response = await api.POST<Service[]>(
-    api.SEARCH_LOCATION_SERVICES_ENDPOINT,
+    SEARCH_LOCATION_SERVICES_ENDPOINT,
     body,
   )
 

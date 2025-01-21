@@ -1,7 +1,7 @@
 'use client'
 
 import { AsyncSelect } from '@/components'
-import { getInsurancePlanOptionsAction } from '../../actions'
+import { getInsurancePlanOptionsAction } from '../../client-actions'
 import { useFiltersContext } from '../../context'
 import { FieldLabel, FormFieldContainer } from '../../shared'
 import { SchedulerFilters } from '../../types'

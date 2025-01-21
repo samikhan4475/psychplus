@@ -1,6 +1,7 @@
-'use server'
+'use client'
 
-import * as api from '@/api'
+import * as api from '@/api/api.client'
+import { SEARCH_INSURANCE_PLANS_ENDPOINT } from '@/api/endpoints'
 import type { InsurancePlan } from '@/types'
 
 const getInsurancePlanOptionsAction = async (): Promise<
@@ -8,7 +9,7 @@ const getInsurancePlanOptionsAction = async (): Promise<
 > => {
   const body = {}
   const response = await api.POST<InsurancePlan[]>(
-    api.SEARCH_INSURANCE_PLANS_ENDPOINT,
+    SEARCH_INSURANCE_PLANS_ENDPOINT,
     body,
     {
       next: {

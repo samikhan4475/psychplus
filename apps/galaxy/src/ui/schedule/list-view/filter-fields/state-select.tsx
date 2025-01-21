@@ -3,9 +3,9 @@
 import { useEffect, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import { getUsStatesOptionsAction } from '@/actions'
 import { MultiSelectField } from '@/components'
 import { SelectOptionType } from '@/types'
+import { getUsStatesOptionsAction } from '../../client-actions'
 import { BookedAppointmentsSchemaType } from '../../schema'
 import { FieldLabel, FormFieldContainer } from '../../shared'
 

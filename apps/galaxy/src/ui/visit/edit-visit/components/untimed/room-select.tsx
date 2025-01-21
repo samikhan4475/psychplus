@@ -3,7 +3,7 @@
 import { useCallback } from 'react'
 import { useFormContext, useWatch } from 'react-hook-form'
 import { AsyncSelect, FormFieldContainer, FormFieldLabel } from '@/components'
-import { getUnitsGroupsAction } from '@/ui/visit/actions/get-units-groups'
+import { getUnitsGroupsAction } from '@/ui/visit/client-actions'
 import { SchemaType } from '../../schema'
 
 const RoomSelect = ({

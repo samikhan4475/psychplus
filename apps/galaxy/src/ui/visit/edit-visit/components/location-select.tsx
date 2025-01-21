@@ -10,7 +10,7 @@ import {
   SelectInput,
 } from '@/components'
 import { SelectOptionType } from '@/types'
-import { getClinicLocations } from '../../actions'
+import { getClinicLocations } from '../../client-actions'
 import { StateCodeSet } from '../../types'
 import { SchemaType } from '../schema'
 

@@ -2,9 +2,10 @@ import { getLocalTimeZone, today } from '@internationalized/date'
 import toast from 'react-hot-toast'
 import { create } from 'zustand'
 import { Appointment } from '@/types'
-import { getBookedAppointmentsAction, getUnitsGroupsAction } from '../actions'
+import { getBookedAppointmentsAction } from '../actions'
 import { AppointmentParams, GetUnitsGroupsResponse } from '../types'
 import { getDateString } from '../utils'
+import { getUnitsGroupsAction } from '../client-actions'
 
 interface Store {
   appointments: Appointment[]

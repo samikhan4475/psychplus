@@ -1,12 +1,13 @@
-'use server'
+'use client'
 
-import * as api from '@/api'
+import * as api from '@/api/api.client'
+import { GET_VISIT_TYPE_ENDPOINT } from '@/api/endpoints'
 import { Encounter } from '@/types'
 
 const getVisitEncounterTypesAction = async (): Promise<
   api.ActionResult<Encounter[]>
 > => {
-  const result = await api.POST<Encounter[]>(api.GET_VISIT_TYPE_ENDPOINT, {})
+  const result = await api.POST<Encounter[]>(GET_VISIT_TYPE_ENDPOINT, {})
 
   if (result.state === 'error') {
     return {

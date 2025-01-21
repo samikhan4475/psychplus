@@ -1,10 +1,10 @@
 'use client'
 
 import { AsyncSelect } from '@/components'
+import { getFacilityAdmissionIdsOptions } from '../../client-actions'
 import { useFiltersContext } from '../../context'
 import { FieldLabel, FormFieldContainer } from '../../shared'
 import { SchedulerFilters } from '../../types'
-import { getFacilityAdmissionIdsOptions } from '../actions/get-facility-admission-ids-options'
 
 const FacilityAdmissionIdSelect = () => {
   const { filters } = useFiltersContext()

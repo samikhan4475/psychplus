@@ -9,7 +9,7 @@ import {
   FormFieldLabel,
 } from '@/components/form'
 import { SelectOptionType } from '@/types'
-import { getClinicLocations } from '@/ui/visit/actions'
+import { getClinicLocations } from '@/ui/visit/client-actions'
 import { StateCodeSet } from '@/ui/visit/types'
 import { SchemaType } from '../../schema'
 
