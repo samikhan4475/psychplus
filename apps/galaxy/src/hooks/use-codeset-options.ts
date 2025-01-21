@@ -26,4 +26,4 @@ const useCodesetOptions = (
   }, [codes, disableAttribute, exclude])
 }
 
-export { useCodesetOptions }
+export { useCodesetOptions, getCodeAttributeBoolean }

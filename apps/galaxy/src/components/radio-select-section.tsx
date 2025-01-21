@@ -95,10 +95,11 @@ const RadioSelectSection = ({
                     'bg-gray-200 cursor-not-allowed opacity-60': shouldDisable,
                   },
                   { 'cursor-pointer': !disabled && !shouldDisable },
+                  { 'cursor-not-allowed bg-gray-4': disabled || shouldDisable },
                 )}
               >
                 <RadioGroup.Item
-                  className="rounded-full flex h-[12px] w-[12px] items-center justify-center border border-gray-9 data-[state=checked]:bg-blue-11"
+                  className="rounded-full flex h-[12px] w-[12px] items-center justify-center border border-gray-9 data-[disabled]:cursor-not-allowed data-[state=checked]:bg-blue-11"
                   value={option.value}
                   id={id}
                   disabled={disabled || shouldDisable}

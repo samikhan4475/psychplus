@@ -18,6 +18,7 @@ interface Encounter {
   visitSequence: string
   visitMedium: string
   resourceStatus: string
+  visitTypeCode?: string
   encounterToServices: EncounterToService[]
 }
 

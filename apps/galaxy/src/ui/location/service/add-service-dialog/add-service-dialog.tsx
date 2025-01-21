@@ -5,18 +5,21 @@ import { Button, Dialog, IconButton, Tooltip } from '@radix-ui/themes'
 import { X } from 'lucide-react'
 import { LinkIcon } from '@/components/icons'
 import { GooglePlacesContextProvider } from '@/providers/google-places-provider'
-import { AddServiceForm } from './add-service-form'
+import { Location } from '@/types'
+import { ServiceForm } from './service-form'
 
 interface AddLocationServiceDialogProps {
   googleApiKey: string
+  location: Location
 }
 
 const AddLocationServiceDialog = ({
   googleApiKey,
+  location,
 }: AddLocationServiceDialogProps) => {
-  const [openDialog, setOpenDialog] = useState(false)
+  const [isOpen, setIsOpen] = useState(false)
   return (
-    <Dialog.Root open={openDialog} onOpenChange={setOpenDialog}>
+    <Dialog.Root open={isOpen} onOpenChange={setIsOpen}>
       <Dialog.Trigger>
         <Button color="gray" className="bg-transparent p-0" size="1">
           <Tooltip content="Add Service">
@@ -37,11 +40,11 @@ const AddLocationServiceDialog = ({
         <Dialog.Close className="absolute right-6 top-6 cursor-pointer">
           <X size={20} strokeWidth={1.5} />
         </Dialog.Close>
-        <Dialog.Title size="6" className="font-medium">
+        <Dialog.Title size="4" className="font-bold">
           Add Service
         </Dialog.Title>
         <GooglePlacesContextProvider apiKey={googleApiKey}>
-          <AddServiceForm />
+          <ServiceForm location={location} onClose={() => setIsOpen(false)} />
         </GooglePlacesContextProvider>
       </Dialog.Content>
     </Dialog.Root>

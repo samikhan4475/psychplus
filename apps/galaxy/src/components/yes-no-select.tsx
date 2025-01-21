@@ -11,7 +11,7 @@ interface YesNoSelectProps {
   disabled?: boolean
   defaultValue?: string
   onChange?: (value: string) => void
-  lastOptionIndicator?:boolean
+  lastOptionIndicator?: boolean
   resetOnSameValue?: boolean
 }
 
@@ -20,7 +20,7 @@ const defaultOptions = [
   { label: 'No', value: 'no' },
 ]
 
-const reversDefault = [
+const reverseDefault = [
   { label: 'No', value: 'no' },
   { label: 'Yes', value: 'yes' },
 ]
@@ -38,10 +38,9 @@ const YesNoSelect = ({
   onChange,
   lastOptionIndicator = false,
   resetOnSameValue,
-
 }: YesNoSelectProps) => {
   if (isNoFirst) {
-    options = reversDefault
+    options = reverseDefault
   }
   return (
     <RadioSelectSection

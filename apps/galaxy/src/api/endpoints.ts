@@ -14,6 +14,8 @@ const LOCATION_ENDPOINT = `${API_URL}/api/locations/actions/search?orderBy=creat
 const GET_FEATURE_FLAG_ENDPOINT = (featureFlag: string) =>
   `${API_URL}/api/featureflags/${featureFlag}/actions/enabled`
 const VISIT_TYPES_ENDPOINT = `${API_URL}/api/visittypes/actions/search`
+const ADD_SERVICE_ENDPOINT = (locationId: string) =>
+  `${API_URL}/api/locations/${locationId}/services`
 const FEATURE_FLAGS = `${API_URL}/api/featureflags/actions/search`
 const STATES_BY_COUNTRY_ENDPOINT = (countryCode: string) =>
   `${API_URL}/api/countries/${countryCode}/states`
@@ -609,6 +611,7 @@ export {
   EXPORT_SUBMISSIONS_LIST_ENDPOINT,
   UPDATE_PROVIDER_LOCATION_STATUS_ENDPOINT,
   GET_PROVIDER_LOCATION_HISTORY,
+  ADD_SERVICE_ENDPOINT,
   UPDATE_CLAIM_PAYMENT,
   ADD_MASTER_FEE_SCHEDULE_ENDPOINT,
   MASTER_FEE_SCHEDULE_ENDPOINT,

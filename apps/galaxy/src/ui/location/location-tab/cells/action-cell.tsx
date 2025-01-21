@@ -3,7 +3,7 @@
 import { Flex } from '@radix-ui/themes'
 import { PropsWithRow } from '@/components'
 import { Location } from '@/types'
-import { AddLocationServiceDialog } from '../../service/add-service-dialog/add-service-dialog'
+import { AddLocationServiceDialog } from '../../service'
 import { EditLocationButton } from '../edit-location-button'
 
 interface ActionCellProps extends PropsWithRow<Location> {
@@ -17,7 +17,10 @@ const ActionCell = ({
   return (
     <Flex gap="1" align="center">
       <EditLocationButton googleApiKey={googleApiKey} location={location} />
-      <AddLocationServiceDialog googleApiKey={googleApiKey} />
+      <AddLocationServiceDialog
+        googleApiKey={googleApiKey}
+        location={location}
+      />
     </Flex>
   )
 }
