@@ -3,6 +3,7 @@
 import * as Tabs from '@radix-ui/react-tabs'
 import { Flex } from '@radix-ui/themes'
 import { TabsTrigger } from '@/components'
+import { FeatureFlag } from '@/types/feature-flag'
 import {
   CURRENT_MEDICATIONS_TAB,
   EXTERNAL_MEDICATIONS_TAB,
@@ -13,9 +14,11 @@ import { PatientMedicationsTabContent } from './patient-medications-tab-content'
 
 interface PatientMedicationsTabViewProps {
   scriptSureAppUrl: string
+  featureFlags?: FeatureFlag[]
 }
 const PatientMedicationsTabView = ({
   scriptSureAppUrl,
+  featureFlags,
 }: PatientMedicationsTabViewProps) => {
   return (
     <Tabs.Root
@@ -41,6 +44,7 @@ const PatientMedicationsTabView = ({
         <PatientMedicationsTabContent
           tabTitle="Current Medications"
           scriptSureAppUrl={scriptSureAppUrl}
+          featureFlags={featureFlags}
         >
           <PatientMedicationsDataTable />
         </PatientMedicationsTabContent>
@@ -49,12 +53,14 @@ const PatientMedicationsTabView = ({
         <PatientMedicationsTabContent
           tabTitle="Home Medications"
           scriptSureAppUrl={scriptSureAppUrl}
+          featureFlags={featureFlags}
         />
       </TabsContent>
       <TabsContent value={EXTERNAL_MEDICATIONS_TAB}>
         <PatientMedicationsTabContent
           tabTitle="External Medications"
           scriptSureAppUrl={scriptSureAppUrl}
+          featureFlags={featureFlags}
         />
       </TabsContent>
     </Tabs.Root>

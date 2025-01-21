@@ -16,10 +16,17 @@ const STATUS_CODESET = [
     value: 'Discontinued',
   },
 ]
+const OPTIONS = [
+  { value: 'food_intolerance', label: 'Food Intolerance' },
+  { value: 'food_allergy', label: 'Food Allergy' },
+  { value: 'drug_allergy', label: 'Drug Allergy' },
+  { value: 'drug_intolerance', label: 'Drug Intolerance' },
+]
 export {
   PATIENT_MEDICATIONS_TABLE_PAGE_SIZE,
   CURRENT_MEDICATIONS_TAB,
   HOME_MEDICATIONS_TAB,
   EXTERNAL_MEDICATIONS_TAB,
   STATUS_CODESET,
+  OPTIONS,
 }

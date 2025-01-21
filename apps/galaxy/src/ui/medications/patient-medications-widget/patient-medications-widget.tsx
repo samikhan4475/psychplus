@@ -9,6 +9,8 @@ import {
   WidgetContainer,
   WidgetSaveButton,
 } from '@/components'
+import { FeatureFlag } from '@/types/feature-flag'
+import { AddMedication } from '../add-medication'
 import { AddMedicationButton } from './add-medication-button'
 import { PatientMedicationsDataTable } from './patient-medications-data-table'
 import { PatientMedicationsTabView } from './patient-medications-tab-view'
@@ -17,10 +19,12 @@ import { StoreProvider } from './store'
 
 interface PatientMedicationsWidgetProps {
   scriptSureAppUrl: string
+  featureFlags?: FeatureFlag[]
 }
 
 const PatientMedicationsWidget = ({
   scriptSureAppUrl,
+  featureFlags,
 }: PatientMedicationsWidgetProps) => {
   const handleCheckAllChange = () => {}
   const patientId = useParams().id as string
@@ -29,7 +33,10 @@ const PatientMedicationsWidget = ({
   return (
     <StoreProvider patientId={patientId}>
       {tabViewEnabled ? (
-        <PatientMedicationsTabView scriptSureAppUrl={scriptSureAppUrl} />
+        <PatientMedicationsTabView
+          scriptSureAppUrl={scriptSureAppUrl}
+          featureFlags={featureFlags}
+        />
       ) : (
         <Box position="relative" width="100%">
           <WidgetContainer
@@ -44,7 +51,13 @@ const PatientMedicationsWidget = ({
               <>
                 <SearchMedications />
                 <WidgetAddButton title="Add Medication">
-                  <AddMedicationButton scriptSureAppUrl={scriptSureAppUrl} />
+                  {
+                  featureFlags?.[0]?.environments?.[0]?.isEnabledDefault 
+                  ? (
+                    <AddMedication />
+                  ) : (
+                    <AddMedicationButton scriptSureAppUrl={scriptSureAppUrl} />
+                  )}
                 </WidgetAddButton>
                 <Flex>
                   <CheckboxCell

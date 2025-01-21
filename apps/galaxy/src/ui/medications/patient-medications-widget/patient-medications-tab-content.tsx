@@ -1,23 +1,29 @@
-'use client'
+'use client';
 
-import { Flex } from '@radix-ui/themes'
-import { TabContentHeading, WidgetAddButton } from '@/components'
-import { FilterForm } from '@/ui/medications/patient-medications-widget/filter-form'
-import { NotesPrintButton } from '@/ui/notes/notes-print-button'
-import { AddMedicationButton } from './add-medication-button'
-import { SearchMedications } from './search-medications'
+import { Flex } from '@radix-ui/themes';
+import { TabContentHeading, WidgetAddButton } from '@/components';
+import { FeatureFlag } from '@/types/feature-flag';
+import { FilterForm } from '@/ui/medications/patient-medications-widget/filter-form';
+import { NotesPrintButton } from '@/ui/notes/notes-print-button';
+import { AddMedication } from '../add-medication';
+import { AddMedicationButton } from './add-medication-button';
+import { SearchMedications } from './search-medications';
+
 
 interface PatientMedicalTabProps {
   tabTitle: string
   children?: React.ReactNode
   scriptSureAppUrl: string
+  featureFlags?: FeatureFlag[]
 }
 
 const PatientMedicationsTabContent = ({
   tabTitle,
   children,
   scriptSureAppUrl,
+  featureFlags,
 }: PatientMedicalTabProps) => {
+
   return (
     <Flex id="patient-medications" direction="column">
       <TabContentHeading title={tabTitle} className="whitespace-nowrap">
@@ -26,7 +32,13 @@ const PatientMedicationsTabContent = ({
           <Flex align="center" gap="2">
             <NotesPrintButton id="patient-medications" />
             <WidgetAddButton title="Add Medication">
-              <AddMedicationButton scriptSureAppUrl={scriptSureAppUrl} />
+                {
+                  featureFlags?.[0]?.environments?.[0]?.isEnabledDefault 
+                  ? (
+                    <AddMedication />
+                  ) : (
+                    <AddMedicationButton scriptSureAppUrl={scriptSureAppUrl} />
+                  )}
             </WidgetAddButton>
           </Flex>
         </Flex>
