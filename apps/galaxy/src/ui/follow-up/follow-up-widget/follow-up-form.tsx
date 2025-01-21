@@ -5,28 +5,19 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Flex } from '@radix-ui/themes'
 import { useForm, type SubmitHandler } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import { z } from 'zod'
 import { FormContainer } from '@/components'
 import { Appointment, BookVisitPayload } from '@/types'
 import { getBookedAppointmentsAction } from '@/ui/schedule/client-actions'
 import { bookVisitAction } from '@/ui/visit/client-actions'
+import { AlertDialog } from './alert-dialog'
 import { CalenderView } from './calender-view'
 import { CreateFollowUpButton } from './create-follow-up-button'
 import { FollowUpVisitAlert } from './follow-up-visit-alert'
 import { LocationDropdown, ProviderDropdown } from './form-fields'
 import { NextDropdown } from './form-fields/next-dropdown'
+import { schema, SchemaType } from './schema'
 import { useStore } from './store'
 import { getOffsetStartDate, sanitizeFormData, transformIn } from './utils'
-
-const schema = z.object({
-  next: z.string(),
-  location: z.string().optional(),
-  provider: z.string().optional(),
-  isOverridePermissionProvided: z.boolean().optional().default(false),
-  isProceedPermissionProvided: z.boolean().optional().default(false),
-})
-
-export type SchemaType = z.infer<typeof schema>
 
 const FollowUpForm = ({
   patientId,
@@ -38,6 +29,7 @@ const FollowUpForm = ({
   const [loading, setLoading] = useState(false)
   const [appointment, setAppointment] = useState<Appointment>()
   const [isAlertOpen, setIsAlertOpen] = useState<boolean>(false)
+  const [error, setError] = useState<string>('')
   const [alertState, setAlertState] = useState<{
     statusCode: number
     message: string
@@ -49,6 +41,16 @@ const FollowUpForm = ({
     search: state.search,
   }))
 
+  const form = useForm<SchemaType>({
+    resolver: zodResolver(schema),
+    reValidateMode: 'onChange',
+    defaultValues: {
+      next: '4 week',
+      location: undefined,
+      providerId: undefined,
+    },
+  })
+
   useEffect(() => {
     const fetchAppointmentData = async () => {
       setLoading(true)
@@ -58,32 +60,19 @@ const FollowUpForm = ({
       })
 
       if (response.state === 'error') {
-        return <div>fail</div>
+        setLoading(false)
+        return setError(response.error || 'Failed to fetch appointment data')
       }
 
-      setAppointment(response.data[0])
+      const data = response.data[0]
+      setAppointment(data)
+      form.setValue('location', data.locationId)
+      form.resetField('providerId', { defaultValue: `${data.providerId}` })
       setLoading(false)
     }
 
     fetchAppointmentData()
   }, [patientId, appointmentId])
-
-  useEffect(() => {
-    if (appointment) {
-      form.setValue('location', appointment.locationId)
-      form.setValue('provider', String(appointment.providerId))
-    }
-  }, [appointment])
-
-  const form = useForm<SchemaType>({
-    resolver: zodResolver(schema),
-    reValidateMode: 'onChange',
-    defaultValues: {
-      next: '4 week',
-      location: '',
-      provider: '',
-    },
-  })
 
   const onSubmit: SubmitHandler<SchemaType> = (data) => {
     const offsetStartDate = getOffsetStartDate(
@@ -96,7 +85,7 @@ const FollowUpForm = ({
       ...transformedAppointment,
       startDate: offsetStartDate,
       locationId: data.location ?? '',
-      specialistStaffId: data.provider ? Number(data.provider) : 0,
+      specialistStaffId: data.providerId ? Number(data.providerId) : 0,
       isOverridePermissionProvided: data.isOverridePermissionProvided,
       isProceedPermissionProvided: data.isProceedPermissionProvided,
       patientId: Number(patientId),
@@ -140,12 +129,17 @@ const FollowUpForm = ({
           setAlertState({ message: '', statusCode: 0 })
         }}
       />
+      <AlertDialog
+        message={error}
+        setIsOpen={() => setError('')}
+        isOpen={!!error}
+      />
       <Flex align="center" gap="2">
         <NextDropdown />
         <LocationDropdown disabled={loading} />
         <ProviderDropdown appointment={appointment} disabled={loading} />
 
-        <CreateFollowUpButton appointment={appointment} disabled={loading} />
+        <CreateFollowUpButton loading={loading} onSubmit={onSubmit} />
         <CalenderView
           patient={{
             accessToken: `${appointment?.patientId}`,
