@@ -68,7 +68,9 @@ const AdmittingProviderSelect = ({
         loading={loading}
         onValueChange={(value) => {
           if (canChangeAdmittingProvider) {
-            return form.setValue('admittingProvider', value)
+            return form.setValue('admittingProvider', value, {
+              shouldDirty: true,
+            })
           }
           setIsOpen(true)
         }}

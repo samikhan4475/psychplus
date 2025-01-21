@@ -100,7 +100,7 @@ const VisitTypeSelect = () => {
           const visitType = visitTypes.find(
             (vt) => vt.encouterType === newValue,
           )
-          form.setValue('visitType', newValue)
+          form.setValue('visitType', newValue, { shouldDirty: true })
           form.setValue('visitMedium', visitType?.visitMedium ?? '')
           form.setValue('visitSequence', visitType?.visitSequence ?? '')
         }}

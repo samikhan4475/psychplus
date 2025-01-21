@@ -59,7 +59,9 @@ const DateTimeOfAdmission = ({
                 buttonClassName="h-6 w-full"
                 onValueChange={(value) => {
                   if (canEditAdmissionDateTime) {
-                    form.setValue('timeOfAdmission', value)
+                    form.setValue('timeOfAdmission', value, {
+                      shouldDirty: true,
+                    })
                   }
                   setIsOpen(true)
                 }}
