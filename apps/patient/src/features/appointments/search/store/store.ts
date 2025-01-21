@@ -1,4 +1,4 @@
-import { getLocalTimeZone, today } from '@internationalized/date'
+import { getLocalTimeZone, startOfWeek, today } from '@internationalized/date'
 import { AppointmentType, ProviderType } from '@psychplus-v2/constants'
 import { CareTeamMember } from '@psychplus-v2/types'
 import {
@@ -18,6 +18,7 @@ import type {
   CurrentLocation,
 } from '@/features/appointments/search/types'
 import { transformResponseData } from '../actions/data'
+import { daysUntilSunday, getStartOfWeek } from '../utils'
 
 interface Store {
   loading: boolean
@@ -63,7 +64,7 @@ const useStore = create<Store>()(
       language: undefined,
       sortBy: undefined,
       state: undefined,
-      startingDate: getCalendarDateLabel(today(getLocalTimeZone())),
+      startingDate: getStartOfWeek(new Date()),
       careTeam: [],
       stateCode: '',
       setStateCode: (stateCode) => set({ stateCode }),
@@ -129,10 +130,10 @@ const useStore = create<Store>()(
         })
 
         const result = await searchAppointmentsAction({
-          appointmentType: get().appointmentType,
+          type: get().appointmentType,
           providerType: get().providerType,
           startingDate: get().startingDate,
-          maxDaysOutToLook: 7,
+          maxDaysOutToLook: daysUntilSunday(new Date(get().startingDate)),
           postalCode: get().zipCode ?? null,
           state: get().state ?? null,
           includeDistance: get().appointmentType === AppointmentType.InPerson,

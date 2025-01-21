@@ -32,7 +32,7 @@ interface SearchAppointmentsActionParams {
   includeStaffBio: boolean
   nextAvailableAppointment?: boolean
   postalCode: string | null
-  appointmentType: AppointmentType
+  type: AppointmentType
   providerType: ProviderType
   startingDate: string
   maxDaysOutToLook: number
@@ -45,7 +45,7 @@ interface SearchAppointmentsActionParams {
 
 const searchAppointmentsAction = async ({
   currentLocation,
-  appointmentType,
+  type,
   providerType,
   startingDate,
   maxDaysOutToLook,
@@ -69,7 +69,7 @@ const searchAppointmentsAction = async ({
     )
 
   const payload = {
-    type: appointmentType,
+    type: type,
     specialistTypeCode: providerType,
     startingDate: new Date(`${startingDate}, 00:00 AM`).toISOString(),
     maxDaysOutToLook,

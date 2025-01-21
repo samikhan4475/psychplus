@@ -1,4 +1,4 @@
-import { CalendarDate, parseAbsoluteToLocal } from '@internationalized/date'
+import { CalendarDate, parseAbsoluteToLocal, } from '@internationalized/date'
 import { CareTeamMember } from '@psychplus-v2/types'
 import { getCalendarDateLabel } from '@psychplus-v2/utils'
 import { AppointmentSlot, SlotsByDay } from '../types'
@@ -52,10 +52,42 @@ const checkCareTeamExists = (
   providerType: string,
 ) => careTeam.some((member) => member.specialist === providerType)
 
+function daysUntilSunday(date: Date): number {
+  const givenDate = new Date(date);
+  const dayOfWeek = givenDate.getDay();
+  const daysToSunday = (7 - dayOfWeek) % 7;
+
+  // Include the given day in the count
+  return daysToSunday === 0 ? 1 : daysToSunday + 1;
+}
+
+const getStartOfWeek = (date: Date = new Date()): string => {
+  // Create a copy of the date to avoid mutating the original
+  const startDate = new Date(date);
+  
+  // Get the day of the week (0 = Sunday, 1 = Monday, ..., 6 = Saturday)
+  const dayOfWeek = startDate.getDay();
+  
+  // Calculate the difference in days to Monday (0 = Sunday, 1 = Monday, ..., 6 = Saturday)
+  const daysToMonday = (dayOfWeek === 0 ? 6 : dayOfWeek - 1);
+  
+  // Subtract the calculated days from the current date
+  startDate.setDate(startDate.getDate() - daysToMonday);
+  
+  // Format the date as YYYY-MM-DD
+  const year = startDate.getFullYear();
+  const month = (startDate.getMonth() + 1).toString().padStart(2, '0');
+  const day = startDate.getDate().toString().padStart(2, '0');
+  
+  return `${year}-${month}-${day}`;
+};
+
 export {
   generateDateRange,
   getEarliestSlot,
   checkCareTeamExists,
   isDateInNextRange,
   parseDateAbsoluteToLocal,
+  daysUntilSunday,
+  getStartOfWeek
 }
