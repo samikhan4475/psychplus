@@ -61,21 +61,18 @@ const useStore = create<Store>((set, get) => ({
     const { sectionItemValue } = quickNotesResponse.data?.[0] || {}
     const DiagnosisCodes = sectionItemValue?.split(',') || []
     if (sectionItemValue === 'empty' || DiagnosisCodes?.length === 0) {
+      set({ loadingWorkingDiagnosis: false, workingDiagnosisData: [] })
+    } else {
+      const response = await getIcd10Diagnosis({
+        DiagnosisCodes,
+      })
       set({ loadingWorkingDiagnosis: false })
-      return
+      if (response.state === 'error') return
+      const sortedData = response.data.toSorted((a, b) => {
+        return DiagnosisCodes.indexOf(a.code) - DiagnosisCodes.indexOf(b.code)
+      })
+      set({ workingDiagnosisData: sortedData })
     }
-    const response = await getIcd10Diagnosis({
-      DiagnosisCodes,
-    })
-    set({ loadingWorkingDiagnosis: false })
-
-    if (response.state === 'error') return
-
-    const sortedData = response.data.toSorted((a, b) => {
-      return DiagnosisCodes.indexOf(a.code) - DiagnosisCodes.indexOf(b.code)
-    })
-
-    set({ workingDiagnosisData: sortedData })
   },
 
   updateWorkingDiagnosisData: async (data) => {

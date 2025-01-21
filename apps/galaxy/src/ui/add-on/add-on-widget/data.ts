@@ -17,6 +17,58 @@ import {
 } from './constants'
 import { addOnCodes, getCptCodeMap } from './cpt-code-map'
 
+type resultType = Record<string, BlockType | DateValue>
+const intialAddonValues: resultType = {
+  injection: false,
+  drugName: '',
+  dose: '',
+  siteLocations: '',
+  manufacturer: '',
+  lotNumber: '',
+  expirationDate: '',
+  therapy: '',
+  therapyPsychoanalysis: '',
+  therapyTimeSpent: undefined,
+  timeRangeOne: undefined,
+  timeRangeTwo: undefined,
+  timeRangeThree: undefined,
+  therapySessionParticipants: undefined,
+  patientOther: undefined,
+  therapyDetailsModality: [],
+  therapyDetailsInterventions: [],
+  transferenceDescription: [],
+  psychoanalyticTechnique: [],
+  additionalTherapyDetail:
+    'Patient presented with signs of transference, indicating a strong misplacement of feelings associated with unresolved past experiences.  Provider engaged in schema exploration with patient to gain insight regarding patient’s irrational thoughts and maladaptive behavior patterns. Provider encouraged patient to self-reflect to make connections between dysfunctional beliefs, behaviors, and assumptions that may have affected their perception. Continued exploration of irrational thoughts and behaviors is recommended to map all types and directions of transference.',
+  additionalPsychoAnalysisDetail:
+    'The patient displayed transference that may be the result of unconscious conflicts. The provider encouraged the patient to reflect on past experiences that could be impacting the patient’s life. The provider further explored repressed thoughts with the patient to help the patient become aware of the root causes of their psychological distress. Continued support and discussion of the transference are recommended for continued growth.',
+  interactiveComplexity: false,
+  maladaptiveCommunication: false,
+  caregiverEmotions: false,
+  sentinelEvent: false,
+  languageBarrier: false,
+  ect: false,
+  seriesMaintenance: 'series',
+  series: '',
+  maintenance: '',
+  biteblock: 'yes',
+  timeOut: '',
+  timeOfProcedure: '',
+  ectTypeBlock: '',
+  ectSettingBlockPw: '',
+  ectSettingBlockFrequency: '120',
+  ectSettingBlockDuration: '8',
+  ectSettingBlockCurrent: '800',
+  ectSeizureDuration: '000',
+  ectPostOpMedicationBlock: '',
+  ectPostOpMedicationBlockDetails: '',
+  ectComplicationsBlock: '',
+  ectComplicationsBlockDetails: '',
+  ectAssessment: '',
+  ectContinuePBlock: '',
+  providerType: '',
+}
+
 interface ModalityTransferenceData {
   value: string
   display: string
@@ -30,60 +82,24 @@ const transformIn = (
   const therapy = visitType
     ? ['Outpatient', 'EdVisit', 'TransitionalCare'].includes(visitType)
     : false
-  const therapyPsychoanalysis =
-    therapy && appointmentData && appointmentData.length >= 2
-      ? 'psychoanalysis'
-      : 'therapy'
 
-  const result: Record<string, BlockType | DateValue> = {
-    injection: false,
-    drugName: '',
-    dose: '',
-    siteLocations: '',
-    manufacturer: '',
-    lotNumber: '',
-    expirationDate: '',
-    therapy,
+  let therapyPsychoanalysis = 'therapy'
+  if (therapy && appointmentData && appointmentData.length >= 2) {
+    therapyPsychoanalysis = 'psychoanalysis'
+  }
+  if (
+    value &&
+    value.length &&
+    value[0].sectionItem === 'empty' &&
+    value[0].sectionItemValue === 'true'
+  ) {
+    return intialAddonValues as AddOnWidgetSchemaType
+  }
+
+  const result: resultType = {
+    ...intialAddonValues,
     therapyPsychoanalysis,
-    therapyTimeSpent: undefined,
-    timeRangeOne: undefined,
-    timeRangeTwo: undefined,
-    timeRangeThree: undefined,
-    therapySessionParticipants: undefined,
-    patientOther: undefined,
-    therapyDetailsModality: [],
-    therapyDetailsInterventions: [],
-    transferenceDescription: [],
-    psychoanalyticTechnique: [],
-    additionalTherapyDetail:
-      'Patient presented with signs of transference, indicating a strong misplacement of feelings associated with unresolved past experiences.  Provider engaged in schema exploration with patient to gain insight regarding patient’s irrational thoughts and maladaptive behavior patterns. Provider encouraged patient to self-reflect to make connections between dysfunctional beliefs, behaviors, and assumptions that may have affected their perception. Continued exploration of irrational thoughts and behaviors is recommended to map all types and directions of transference.',
-    additionalPsychoAnalysisDetail:
-      'The patient displayed transference that may be the result of unconscious conflicts. The provider encouraged the patient to reflect on past experiences that could be impacting the patient’s life. The provider further explored repressed thoughts with the patient to help the patient become aware of the root causes of their psychological distress. Continued support and discussion of the transference are recommended for continued growth.',
-    interactiveComplexity: false,
-    maladaptiveCommunication: false,
-    caregiverEmotions: false,
-    sentinelEvent: false,
-    languageBarrier: false,
-    ect: false,
-    seriesMaintenance: 'series',
-    series: '',
-    maintenance: '',
-    biteblock: 'yes',
-    timeOut: '',
-    timeOfProcedure: '',
-    ectTypeBlock: '',
-    ectSettingBlockPw: '',
-    ectSettingBlockFrequency: '120',
-    ectSettingBlockDuration: '8',
-    ectSettingBlockCurrent: '800',
-    ectSeizureDuration: '000',
-    ectPostOpMedicationBlock: '',
-    ectPostOpMedicationBlockDetails: '',
-    ectComplicationsBlock: '',
-    ectComplicationsBlockDetails: '',
-    ectAssessment: '',
-    ectContinuePBlock: '',
-    providerType: '',
+    therapy,
   }
 
   value.forEach((item) => {

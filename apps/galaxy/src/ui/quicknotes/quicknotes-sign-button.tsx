@@ -8,6 +8,8 @@ import toast from 'react-hot-toast'
 import { STAFF_ROLE_CODE_PRESCRIBER } from '@/constants'
 import { useStore as useGlobalStore } from '@/store'
 import { Appointment } from '@/types'
+import { useStore as useDiagnosisStore } from '@/ui/diagnosis/store'
+import { VisitTypeEnum } from '@/utils'
 import { AlertDialog } from '../alerts'
 import { useStore } from './store'
 
@@ -34,6 +36,7 @@ const initialAlertInfo = {
 }
 
 const QuickNotesSignButton = ({ appointment }: QuickNotesSignButtonProps) => {
+  const { workingDiagnosisData } = useDiagnosisStore()
   const { staffId, staffRoleCode } = useGlobalStore((state) => ({
     staffId: state.user.staffId,
     staffRoleCode: state.staffResource.staffRoleCode,
@@ -49,6 +52,7 @@ const QuickNotesSignButton = ({ appointment }: QuickNotesSignButtonProps) => {
 
   const patientId = useParams().id as string
   const appointmentId = useSearchParams().get('id') as string
+  const visitType = useSearchParams().get('visitType') as string
   const isAppointmentProvider = appointment.providerStaffId === staffId
   const isFutureAppointment =
     appointment?.startDate && new Date(appointment.startDate) > new Date()
@@ -61,6 +65,22 @@ const QuickNotesSignButton = ({ appointment }: QuickNotesSignButtonProps) => {
   }
 
   const signNoteHandler = async () => {
+    const spravatoOrTmsDiagnosisCodes = ['F32.2', 'F32.3', 'F33.2', 'F33.3']
+    const isSpravatoOrTms = [
+      VisitTypeEnum.Spravato,
+      VisitTypeEnum.Tms,
+    ].includes(visitType as VisitTypeEnum)
+
+    const missingDiagnosisCodes = spravatoOrTmsDiagnosisCodes
+      .filter(
+        (code) => !workingDiagnosisData.map((item) => item.code).includes(code),
+      )
+      .join(', ')
+
+    if (isSpravatoOrTms && missingDiagnosisCodes.length) {
+      toast.error(`Must have ${missingDiagnosisCodes} diagnosis for sign/send`)
+      return
+    }
     if (!isAppointmentProvider && isPrescriber) {
       setAlertInfo((prev) => ({
         ...prev,
@@ -116,7 +136,10 @@ const QuickNotesSignButton = ({ appointment }: QuickNotesSignButtonProps) => {
           },
         },
       }))
+      return
     }
+
+    setAlertInfo(initialAlertInfo)
   }
 
   return (
