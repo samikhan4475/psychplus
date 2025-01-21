@@ -5,22 +5,22 @@ import { format } from 'date-fns'
 import toast from 'react-hot-toast'
 import { useStore as zustandUseStore, type StoreApi } from 'zustand'
 import { createStore as zustandCreateStore } from 'zustand/vanilla'
-import { saveWidgetClientAction } from '@/actions'
 import { Appointment, PatientProfile, QuickNoteSectionItem } from '@/types'
-import { postEvent, VisitTypeEnum, visitTypeToSavingWidgets } from '@/utils'
 import { signNoteAction } from '../actions'
 import { modifyWidgetResponse } from '../utils'
+import { saveWidgets } from './utils'
 
 interface SignPayloadProps {
   patientId: string
   appointmentId: string
   signedByUserId: number
+  appointment: Appointment
 }
 
 interface Store {
   loading: boolean
   patient: PatientProfile
-  save: () => void
+  save: (appointment: Appointment) => void
   sign: (payload: SignPayloadProps) => Promise<any>
   markAsError: (payload: SignPayloadProps) => void
   cosignerLabel?: string
@@ -69,9 +69,9 @@ const createStore = (initialState: StoreInitialState) =>
       set({ signOptions: { ...get().signOptions, ...option } }),
     toggleActualNoteView: () =>
       set({ showActualNoteView: !get().showActualNoteView }),
-    save: async () => {
+    save: async (appointment) => {
       set({ loading: true })
-      const response = await saveWidgets()
+      const response = await saveWidgets(appointment)
       if (response.length) {
         toast.success('Quicknote saved!')
         get().setWidgetsData(response)
@@ -81,7 +81,7 @@ const createStore = (initialState: StoreInitialState) =>
     sign: async (payload) => {
       try {
         set({ loading: true })
-        const response = await saveWidgets()
+        const response = await saveWidgets(payload.appointment)
         if (!response.length) {
           set({ loading: false })
           return {
@@ -164,98 +164,6 @@ const useStore = <T,>(selector: (store: Store) => T): T => {
   }
 
   return zustandUseStore(context, selector)
-}
-
-const saveWidgets = async (): Promise<QuickNoteSectionItem[]> => {
-  const urlParams = new URLSearchParams(window.location.search)
-  const patientId = urlParams.get('id') as string
-  const visitType = urlParams.get('visitType') as string
-  const isValidateAll = await validateAll(visitType)
-  if (!isValidateAll) {
-    return []
-  }
-  const widgets = visitTypeToSavingWidgets[visitType as VisitTypeEnum] || []
-  const promises = widgets.map((widgetId) => {
-    return new Promise<{
-      success: boolean
-      widgetId: string
-      sections: QuickNoteSectionItem[]
-    }>((resolve) => {
-      const handleMessage = (event: MessageEvent) => {
-        if (
-          event.data.type === 'widget:saveAll' &&
-          event.data.widgetId === widgetId
-        ) {
-          window.removeEventListener('message', handleMessage)
-          resolve(event.data)
-        }
-      }
-
-      window.addEventListener('message', handleMessage)
-    })
-  })
-
-  postEvent({ type: 'quicknotes:saveAll' })
-  const responses = await Promise.all(promises)
-  const sections = responses.flatMap((response) => response.sections)
-
-  const uniqueSections = sections.filter(
-    (section, index, self) =>
-      index ===
-      self.findIndex(
-        (t) =>
-          t.sectionName === section.sectionName &&
-          t.sectionItemValue === section.sectionItemValue &&
-          t.sectionItem === section.sectionItem,
-      ),
-  )
-  const payload = { patientId, data: uniqueSections }
-
-  try {
-    const result = await saveWidgetClientAction(payload)
-    if (result.state === 'error') {
-      toast.error('Failed to save!')
-      return []
-    }
-    return uniqueSections
-  } catch (error) {
-    toast.error('Failed to save!')
-    return []
-  }
-}
-
-const validateAll = async (visitType: string) => {
-  const widgets = visitTypeToSavingWidgets[visitType as VisitTypeEnum] || []
-  const promises = widgets.map((widgetId) => {
-    return new Promise<{ success: boolean; widgetId: string }>((resolve) => {
-      const handleMessage = (event: MessageEvent) => {
-        if (
-          event.data.type === 'widget:validate' &&
-          event.data.widgetId === widgetId
-        ) {
-          window.removeEventListener('message', handleMessage)
-          resolve(event.data)
-        }
-      }
-
-      window.addEventListener('message', handleMessage)
-    })
-  })
-  postEvent({ type: 'quicknotes:validateAll' })
-  const responses = await Promise.all(promises)
-
-  let widgetErrors = ''
-  responses.forEach((element) => {
-    if (!element.success) {
-      widgetErrors += `${element.widgetId.replace('QuicknoteSection', '')}, `
-    }
-  })
-  widgetErrors = widgetErrors.slice(0, widgetErrors.length - 2)
-
-  if (widgetErrors !== '') {
-    toast.error(`Please fill out all required fields in ${widgetErrors}`)
-  }
-  return responses.every((element) => element.success)
 }
 
 export { StoreProvider, useStore, createStore }

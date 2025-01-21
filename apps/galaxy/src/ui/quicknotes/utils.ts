@@ -296,4 +296,9 @@ const modifyWidgetResponse = (data: QuickNoteSectionItem[] = []) =>
 
 const getCachedWidgetsByVisitType = cache(getWidgetsByVisitType)
 
-export { getCachedWidgetsByVisitType, getWidgetIds, modifyWidgetResponse }
+export {
+  getCachedWidgetsByVisitType,
+  getWidgetIds,
+  modifyWidgetResponse,
+  getWidgetsByVisitType,
+}

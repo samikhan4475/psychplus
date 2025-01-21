@@ -60,6 +60,7 @@ const QuickNotesSignButton = ({ appointment }: QuickNotesSignButtonProps) => {
   const signPayload = {
     patientId,
     appointmentId,
+    appointment,
     signedByUserId: appointment.providerStaffId ?? staffId,
     signedDate: isPrescriber ? new Date().toISOString() : undefined,
   }
