@@ -49,10 +49,9 @@ const DurationDropdown = () => {
       (res) => {
         setLoading(false)
         if (res.state === 'error') {
-          return toast.error(res.error || 'Failed to fetch prescriber settings')
+          return toast.error(res.error || 'Failed to fetch staff preferences')
         }
-        if (res.data?.[0]?.content)
-          form.setValue('duration', res.data?.[0]?.content)
+        form.setValue('duration', res.data?.[0]?.content ?? '')
       },
     )
   }, [provider, selectedVisitType, visitSequence, visitMedium, visitTypes])
