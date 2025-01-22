@@ -52,15 +52,6 @@ const checkCareTeamExists = (
   providerType: string,
 ) => careTeam.some((member) => member.specialist === providerType)
 
-function daysUntilSunday(date: Date): number {
-  const givenDate = new Date(date);
-  const dayOfWeek = givenDate.getDay();
-  const daysToSunday = (7 - dayOfWeek) % 7;
-
-  // Include the given day in the count
-  return daysToSunday === 0 ? 1 : daysToSunday + 1;
-}
-
 const getStartOfWeek = (date: Date = new Date()): string => {
   // Create a copy of the date to avoid mutating the original
   const startDate = new Date(date);
@@ -88,6 +79,5 @@ export {
   checkCareTeamExists,
   isDateInNextRange,
   parseDateAbsoluteToLocal,
-  daysUntilSunday,
   getStartOfWeek
 }

@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useState } from 'react'
-import { getLocalTimeZone, today } from '@internationalized/date'
 import { AppointmentType } from '@psychplus-v2/constants'
 import { Appointment } from '@psychplus-v2/types'
 import {
@@ -18,7 +17,7 @@ import { useToast } from '@/providers'
 import { searchAppointmentsAction } from '../../search/actions'
 import { transformResponseData } from '../../search/actions/data'
 import { useStore } from '../../search/store/store'
-import { daysUntilSunday, generateDateRange, getStartOfWeek } from '../../search/utils'
+import { generateDateRange, getStartOfWeek } from '../../search/utils'
 
 interface AvailabilityListProps {
   appointment: Appointment
@@ -54,7 +53,7 @@ const AvailabilityList = ({
         type: appointment.type,
         providerType: appointment.specialistTypeCode,
         startingDate: startingDate,
-        maxDaysOutToLook: daysUntilSunday(new Date(startingDate)),
+        maxDaysOutToLook: 7,
         staffIds: [appointment.specialist.id],
         locationIds: [appointment.clinic.id],
         includeDistance: appointment.type === AppointmentType.InPerson,
