@@ -365,6 +365,10 @@ const valueToLabel: { [key: string]: string } = {
   ADH_HardToEnjoyRelaxing: labels.adhdH.hardToEnjoyRelaxing,
   ADH_OnTheGo: labels.adhdH.onTheGo,
   ADH_ExcessiveTalking: labels.adhdH.excessiveTalking,
+  ADH_BlurtsOutAnswers: labels.adhdH.blurtsOutAnswers,
+  ADH_Impatient: labels.adhdH.impatient,
+  ADH_Interrupts: labels.adhdH.interrupts,
+  ADH_BehaviorOutbursts: labels.adhdH.behaviorOutbursts,
 
   // Autism Block
   AUT_Fidgeting: labels.autism.fidgeting,
