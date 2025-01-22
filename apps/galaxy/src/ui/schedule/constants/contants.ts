@@ -125,7 +125,7 @@ const EDIT_APPOINTMENT = 'You do not have permission to edit an appointment. Ple
 
 const CLICK_DOLLAR_ICON = 'You do not have permission to view payment details. Please contact your supervisor if you need any further assistance.'
 
-const SCHEDULER_PAGE_SIZE_LIMIT = 20
+const SCHEDULER_PAGE_SIZE_LIMIT = 100
 
 const INVALID_RANGE_ERROR = 'Invalid date range'
 
