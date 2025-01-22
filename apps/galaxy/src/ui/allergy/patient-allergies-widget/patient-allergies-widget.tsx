@@ -38,7 +38,7 @@ const PatientAllergiesWidget = ({
         headerRight={
           !isPatientAllergiesTab && (
             <WidgetAddButton title="Add Allergies" className="max-w-[45vw]">
-              {isFeatureFlagEnabled ? (
+              {!isFeatureFlagEnabled ? (
                 <AddAllergy />
               ) : (
                 <AddAllergyButton scriptSureAppUrl={scriptSureAppUrl} />

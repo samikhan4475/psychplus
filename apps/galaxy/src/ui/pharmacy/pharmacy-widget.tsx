@@ -18,7 +18,7 @@ const PharmacyWidget = ({ patientId }: PharmacyWidgetProps) => {
   return (
     <Flex direction="column" width="100%" gap="1">
       <PharmacyHeader />
-      {isFeatureFlagEnabled && <PharmacyFilterForm patientId={patientId} />}
+      {!isFeatureFlagEnabled && <PharmacyFilterForm patientId={patientId} />}
       <CurrentPharmaciesTable
         patientId={patientId}
         isFeatureFlagEnabled={isFeatureFlagEnabled}

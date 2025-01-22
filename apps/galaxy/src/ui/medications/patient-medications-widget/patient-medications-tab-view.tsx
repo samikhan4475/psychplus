@@ -14,11 +14,9 @@ import { PatientMedicationsTabContent } from './patient-medications-tab-content'
 
 interface PatientMedicationsTabViewProps {
   scriptSureAppUrl: string
-  featureFlags?: FeatureFlag[]
 }
 const PatientMedicationsTabView = ({
   scriptSureAppUrl,
-  featureFlags,
 }: PatientMedicationsTabViewProps) => {
   return (
     <Tabs.Root
@@ -44,7 +42,6 @@ const PatientMedicationsTabView = ({
         <PatientMedicationsTabContent
           tabTitle="Current Medications"
           scriptSureAppUrl={scriptSureAppUrl}
-          featureFlags={featureFlags}
         >
           <PatientMedicationsDataTable />
         </PatientMedicationsTabContent>
@@ -53,14 +50,12 @@ const PatientMedicationsTabView = ({
         <PatientMedicationsTabContent
           tabTitle="Home Medications"
           scriptSureAppUrl={scriptSureAppUrl}
-          featureFlags={featureFlags}
         />
       </TabsContent>
       <TabsContent value={EXTERNAL_MEDICATIONS_TAB}>
         <PatientMedicationsTabContent
           tabTitle="External Medications"
           scriptSureAppUrl={scriptSureAppUrl}
-          featureFlags={featureFlags}
         />
       </TabsContent>
     </Tabs.Root>

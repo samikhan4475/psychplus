@@ -28,7 +28,7 @@ const PatientAllergiesHeader = ({
       <Flex className="gap-x-2 text-[20px]" align="center">
         <PatientAllergiesPrintButton />
         <WidgetAddButton title="Add Allergies" className="max-w-[45vw]">
-          {isFeatureFlagEnabled ? (
+          {!isFeatureFlagEnabled ? (
             <AddAllergy />
           ) : (
             <AddAllergyButton scriptSureAppUrl={scriptSureAppUrl} />

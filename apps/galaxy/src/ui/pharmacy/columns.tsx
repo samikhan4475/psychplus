@@ -102,7 +102,7 @@ const columns = (isFeatureFlagEnabled: boolean): ColumnDef<Pharmacy>[] => {
     },
   ]
 
-  if (isFeatureFlagEnabled) {
+  if (!isFeatureFlagEnabled) {
     baseColumns.unshift({
       accessorKey: 'isPreferred',
       size: 50,

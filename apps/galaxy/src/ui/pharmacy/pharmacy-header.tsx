@@ -49,7 +49,7 @@ const PharmacyHeader = () => {
       <Text className="flex items-center gap-x-[11px] text-[20px] font-bold">
         Pharmacy
       </Text>
-      {isFeatureFlagEnabled && (
+      {!isFeatureFlagEnabled && (
         <WidgetAddButton
           title="Add Pharmacy"
           onClose={onClose}

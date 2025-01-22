@@ -9,6 +9,8 @@ import {
   WidgetContainer,
   WidgetSaveButton,
 } from '@/components'
+import { FEATURE_FLAGS } from '@/constants'
+import { useFeatureFlagEnabled } from '@/hooks/use-feature-flag-enabled'
 import { FeatureFlag } from '@/types/feature-flag'
 import { AddMedication } from '../add-medication'
 import { AddMedicationButton } from './add-medication-button'
@@ -19,13 +21,14 @@ import { StoreProvider } from './store'
 
 interface PatientMedicationsWidgetProps {
   scriptSureAppUrl: string
-  featureFlags?: FeatureFlag[]
 }
 
 const PatientMedicationsWidget = ({
   scriptSureAppUrl,
-  featureFlags,
 }: PatientMedicationsWidgetProps) => {
+  const isFeatureFlagEnabled = useFeatureFlagEnabled(
+    FEATURE_FLAGS.ehr8973EnableDawMedicationApi,
+  )
   const handleCheckAllChange = () => {}
   const patientId = useParams().id as string
   const path = usePathname()
@@ -33,10 +36,7 @@ const PatientMedicationsWidget = ({
   return (
     <StoreProvider patientId={patientId}>
       {tabViewEnabled ? (
-        <PatientMedicationsTabView
-          scriptSureAppUrl={scriptSureAppUrl}
-          featureFlags={featureFlags}
-        />
+        <PatientMedicationsTabView scriptSureAppUrl={scriptSureAppUrl} />
       ) : (
         <Box position="relative" width="100%">
           <WidgetContainer
@@ -51,9 +51,7 @@ const PatientMedicationsWidget = ({
               <>
                 <SearchMedications />
                 <WidgetAddButton title="Add Medication">
-                  {
-                  featureFlags?.[0]?.environments?.[0]?.isEnabledDefault 
-                  ? (
+                  {!isFeatureFlagEnabled ? (
                     <AddMedication />
                   ) : (
                     <AddMedicationButton scriptSureAppUrl={scriptSureAppUrl} />
