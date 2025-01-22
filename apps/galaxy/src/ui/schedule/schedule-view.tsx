@@ -2,6 +2,8 @@
 
 import { PropsWithChildren, useEffect } from 'react'
 import { Flex, Heading, Tabs } from '@radix-ui/themes'
+import { FEATURE_FLAGS } from '@/constants'
+import { useFeatureFlagEnabled } from '@/hooks/use-feature-flag-enabled'
 import { CalendarView } from './calendar-view'
 import { SchedulerActionButtonGroup } from './components/header'
 import { ListView } from './list-view'
@@ -14,6 +16,9 @@ import { useEncounterTypeStore, useStore } from './store'
 import { TabValue } from './types'
 
 const ScheduleView = () => {
+  const isFeatureFlagEnabled = useFeatureFlagEnabled(
+    FEATURE_FLAGS.ehr11786EnableGalaxySecondPhaseFeatures,
+  )
   const { activeTab, setActiveTab } = useStore((state) => ({
     activeTab: state.activeTab,
     setActiveTab: state.setActiveTab,
@@ -33,7 +38,7 @@ const ScheduleView = () => {
       <Flex align="center" className="px-2.5 py-0.5 shadow-1" justify="between">
         <Flex>
           <Heading className="text-xl font-semibold">Schedule</Heading>
-          <TabsList />
+          <TabsList isFeatureFlagEnabled={isFeatureFlagEnabled} />
         </Flex>
         <ViewHeader selectedTab={activeTab} />
         <SchedulerActionButtonGroup />

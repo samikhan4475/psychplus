@@ -1,14 +1,11 @@
 import { ColumnDef } from '@tanstack/react-table'
 import { ColumnHeader, LongTextCell, TextCell } from '@/components'
-import { FeatureFlag } from '@/types/feature-flag'
 import { formatDateTime } from '@/utils'
 import { ActionsCell } from './actions-cell'
 import { PrimaryRadioCell } from './primary-radio-cell'
 import { Pharmacy } from './types'
 
-const columns = (featureFlags: FeatureFlag[]): ColumnDef<Pharmacy>[] => {
-  const isActionsEnabled =
-    !featureFlags?.[0]?.environments?.[0]?.isEnabledDefault
+const columns = (isFeatureFlagEnabled: boolean): ColumnDef<Pharmacy>[] => {
   const baseColumns: ColumnDef<Pharmacy>[] = [
     {
       accessorKey: 'pharmacyName',
@@ -105,7 +102,7 @@ const columns = (featureFlags: FeatureFlag[]): ColumnDef<Pharmacy>[] => {
     },
   ]
 
-  if (isActionsEnabled) {
+  if (isFeatureFlagEnabled) {
     baseColumns.unshift({
       accessorKey: 'isPreferred',
       size: 50,

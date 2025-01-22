@@ -2,6 +2,8 @@
 
 import NextLink from 'next/link'
 import { MailIcon } from 'lucide-react'
+import { FEATURE_FLAGS } from '@/constants'
+import { useFeatureFlagEnabled } from '@/hooks/use-feature-flag-enabled'
 import { useStore } from '@/store'
 
 interface InboxLinkProps {
@@ -11,6 +13,12 @@ interface InboxLinkProps {
 
 const InboxLink = ({ href, label }: InboxLinkProps) => {
   const addTab = useStore((state) => state.addTab)
+
+  const isFeatureFlagEnabled = useFeatureFlagEnabled(
+    FEATURE_FLAGS.ehr11786EnableGalaxySecondPhaseFeatures,
+  )
+
+  if (!isFeatureFlagEnabled) return
   return (
     <NextLink
       href={href}

@@ -23,6 +23,7 @@ interface Store {
   staffResource: StaffResource
   codesets: CodesetCache
   permissions: Record<string, RolePermission>
+  featureFlags?: string[]
   constants: Constants
   tabs: NavigationTab[]
   addTab: (tab: NavigationTab) => void
@@ -35,6 +36,7 @@ interface StoreInitialState {
   staffResource: StaffResource
   codesets: CodesetCache
   permissions: Record<string, RolePermission>
+  featureFlags?: string[]
   constants: Constants
 }
 
@@ -44,6 +46,7 @@ const createStore = (initialState: StoreInitialState) =>
       (set, get) => ({
         codesets: initialState.codesets,
         permissions: initialState.permissions,
+        featureFlags: initialState.featureFlags,
         constants: initialState.constants,
         user: initialState.user,
         staffResource: initialState.staffResource,

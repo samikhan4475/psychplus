@@ -2,13 +2,17 @@
 
 import { useParams } from 'next/navigation'
 import { Flex, Text } from '@radix-ui/themes'
+import { FEATURE_FLAGS } from '@/constants'
 import { useHasPermission } from '@/hooks'
-import { FeatureFlag } from '@/types/feature-flag'
+import { useFeatureFlagEnabled } from '@/hooks/use-feature-flag-enabled'
 import { PharmacyAddButton } from './pharmacy-add-button'
 import { useStore } from './store'
 import { WidgetAddButton } from './widget-add-button'
 
-const PharmacyHeader = ({ featureFlags }: { featureFlags: FeatureFlag[] }) => {
+const PharmacyHeader = () => {
+  const isFeatureFlagEnabled = useFeatureFlagEnabled(
+    FEATURE_FLAGS.ehr8973EnableDawMedicationApi,
+  )
   const { setPharmacies, fetchPatientPharmacies } = useStore((state) => ({
     setPharmacies: state.setPharmacies,
     fetchPatientPharmacies: state.fetchPatientPharmacies,
@@ -45,7 +49,7 @@ const PharmacyHeader = ({ featureFlags }: { featureFlags: FeatureFlag[] }) => {
       <Text className="flex items-center gap-x-[11px] text-[20px] font-bold">
         Pharmacy
       </Text>
-      {!featureFlags?.[0]?.environments?.[0]?.isEnabledDefault && (
+      {isFeatureFlagEnabled && (
         <WidgetAddButton
           title="Add Pharmacy"
           onClose={onClose}

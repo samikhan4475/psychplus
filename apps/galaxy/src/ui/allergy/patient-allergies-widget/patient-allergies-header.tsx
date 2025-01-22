@@ -1,19 +1,21 @@
 import { Flex, Text } from '@radix-ui/themes'
 import { WidgetAddButton } from '@/components'
-import { FeatureFlag } from '@/types/feature-flag'
+import { FEATURE_FLAGS } from '@/constants'
+import { useFeatureFlagEnabled } from '@/hooks/use-feature-flag-enabled'
 import { AddAllergy } from './add-allergy'
 import { AddAllergyButton } from './add-allergy-button'
 import { PatientAllergiesPrintButton } from './patient-allergies-print-button'
 
 interface PhysicalExamHeaderProps {
   scriptSureAppUrl: string
-  featureFlags?: FeatureFlag[]
 }
 
 const PatientAllergiesHeader = ({
   scriptSureAppUrl,
-  featureFlags,
 }: PhysicalExamHeaderProps) => {
+  const isFeatureFlagEnabled = useFeatureFlagEnabled(
+    FEATURE_FLAGS.ehr8973EnableDawMedicationApi,
+  )
   return (
     <Flex
       justify="between"
@@ -26,7 +28,7 @@ const PatientAllergiesHeader = ({
       <Flex className="gap-x-2 text-[20px]" align="center">
         <PatientAllergiesPrintButton />
         <WidgetAddButton title="Add Allergies" className="max-w-[45vw]">
-          {featureFlags?.[0]?.environments?.[0]?.isEnabledDefault ? (
+          {isFeatureFlagEnabled ? (
             <AddAllergy />
           ) : (
             <AddAllergyButton scriptSureAppUrl={scriptSureAppUrl} />

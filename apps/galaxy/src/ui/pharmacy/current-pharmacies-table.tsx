@@ -3,16 +3,15 @@
 import { useEffect } from 'react'
 import { Box, Heading, ScrollArea } from '@radix-ui/themes'
 import { DataTable, LoadingPlaceholder } from '@/components'
-import { FeatureFlag } from '@/types/feature-flag'
 import { columns } from './columns'
 import { useStore } from './store'
 
 const CurrentPharmaciesTable = ({
   patientId,
-  featureFlags,
+  isFeatureFlagEnabled,
 }: {
   patientId: string
-  featureFlags: FeatureFlag[]
+  isFeatureFlagEnabled: boolean
 }) => {
   const { data, loading, fetchPatientPharmacies, fetchPatient } = useStore(
     (state) => ({
@@ -37,7 +36,7 @@ const CurrentPharmaciesTable = ({
           <LoadingPlaceholder className="bg-white min-h-[46vh]" />
         ) : (
           <DataTable
-            columns={columns(featureFlags)}
+            columns={columns(isFeatureFlagEnabled)}
             data={data ?? []}
             theadClass=""
             isRowSpan

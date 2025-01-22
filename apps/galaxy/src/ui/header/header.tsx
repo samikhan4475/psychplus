@@ -1,5 +1,5 @@
 import { PlusCircledIcon } from '@radix-ui/react-icons'
-import { Button, Flex, IconButton, Text } from '@radix-ui/themes'
+import { Button, Flex } from '@radix-ui/themes'
 import { NavLogo } from '@/components'
 import { getAuthCookies } from '@/utils/auth'
 import { AddPatient } from '../patient/add-patient'
@@ -9,7 +9,7 @@ import { NavigationLinks } from './navigation-links'
 import { NavigationTabs } from './navigation-tabs'
 import { UserDropdownMenu } from './user-dropdown-menu'
 
-const Header = () => {
+const Header = async () => {
   const auth = getAuthCookies()!
 
   return (

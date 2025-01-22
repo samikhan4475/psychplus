@@ -9,13 +9,16 @@ import {
   getStaffResource,
   getUserPermissions,
 } from '@/api'
+import { getFeatureFlags } from '@/api/get-feature-flags'
 import { getUserType } from '@/api/get-user-type'
 import {
+  APP_ENV,
   CODESETS,
   GOOGLE_MAPS_API_KEY,
   STRIPE_PUBLISHABLE_KEY,
 } from '@/constants'
 import { StoreProvider } from '@/store'
+import { RecordStatus } from '@/types/feature-flag'
 import { Header } from '@/ui/header'
 import { LockScreenProvider } from '@/ui/lock-screen-context'
 import { cn } from '@/utils'
@@ -65,12 +68,18 @@ const RootLayout = async ({ children }: React.PropsWithChildren) => {
 
   if (auth) {
     const CODESETLIST = Object.entries(CODESETS).map(([, value]) => value)
-    const [codesets, permissions, user, staffResource] = await Promise.all([
-      getCodesets(CODESETLIST),
-      getUserPermissions(),
-      getLoggedInUser(),
-      getStaffResource(),
-    ])
+    const [codesets, permissions, user, staffResource, featureFlags] =
+      await Promise.all([
+        getCodesets(CODESETLIST),
+        getUserPermissions(),
+        getLoggedInUser(),
+        getStaffResource(),
+        getFeatureFlags({
+          recordStatuses: [RecordStatus.ACTIVE],
+          environmentCodes: [APP_ENV],
+        }),
+      ])
+
     const userType = await getUserType(`${user.id}`)
     const constants = {
       googleApiKey: GOOGLE_MAPS_API_KEY,
@@ -84,6 +93,7 @@ const RootLayout = async ({ children }: React.PropsWithChildren) => {
         permissions={permissions}
         codesets={codesets}
         constants={constants}
+        featureFlags={featureFlags.data}
       >
         {content}
       </StoreProvider>

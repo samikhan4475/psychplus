@@ -21,8 +21,12 @@ interface Environment {
 
 interface FeatureFlagProps {
   recordStatuses: string[]
-  exactShortName: string
+  exactShortName?: string
   environmentCodes: string[]
+}
+
+enum RecordStatus {
+  ACTIVE = 'Active',
 }
 
 interface FeatureFlag {
@@ -35,4 +39,4 @@ interface FeatureFlag {
   environments: Environment[]
 }
 
-export type { FeatureFlag, FeatureFlagProps }
+export { type FeatureFlag, type FeatureFlagProps, RecordStatus }

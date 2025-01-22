@@ -1,7 +1,8 @@
 'use client'
 
 import { WidgetAddButton, WidgetContainer } from '@/components'
-import { FeatureFlag } from '@/types/feature-flag'
+import { FEATURE_FLAGS } from '@/constants'
+import { useFeatureFlagEnabled } from '@/hooks/use-feature-flag-enabled'
 import { AddAllergy } from './add-allergy'
 import { AddAllergyButton } from './add-allergy-button'
 import { PatientAllergiesFilterForm } from './patient-allergies-filter-form'
@@ -13,23 +14,21 @@ interface PatientAllergiesWidgetProps {
   patientId: string
   isPatientAllergiesTab?: boolean
   scriptSureAppUrl: string
-  featureFlags?: FeatureFlag[]
 }
 
 const PatientAllergiesWidget = ({
   patientId,
   isPatientAllergiesTab = false,
   scriptSureAppUrl,
-  featureFlags,
 }: PatientAllergiesWidgetProps) => {
+  const isFeatureFlagEnabled = useFeatureFlagEnabled(
+    FEATURE_FLAGS.ehr8973EnableDawMedicationApi,
+  )
   return (
     <StoreProvider patientId={patientId}>
       {isPatientAllergiesTab && (
         <>
-          <PatientAllergiesHeader
-            scriptSureAppUrl={scriptSureAppUrl}
-            featureFlags={featureFlags}
-          />
+          <PatientAllergiesHeader scriptSureAppUrl={scriptSureAppUrl} />
           <PatientAllergiesFilterForm patientId={patientId} />
         </>
       )}
@@ -39,7 +38,7 @@ const PatientAllergiesWidget = ({
         headerRight={
           !isPatientAllergiesTab && (
             <WidgetAddButton title="Add Allergies" className="max-w-[45vw]">
-              {featureFlags?.[0]?.environments?.[0]?.isEnabledDefault ? (
+              {isFeatureFlagEnabled ? (
                 <AddAllergy />
               ) : (
                 <AddAllergyButton scriptSureAppUrl={scriptSureAppUrl} />
