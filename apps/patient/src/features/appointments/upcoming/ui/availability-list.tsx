@@ -18,7 +18,7 @@ import { useToast } from '@/providers'
 import { searchAppointmentsAction } from '../../search/actions'
 import { transformResponseData } from '../../search/actions/data'
 import { useStore } from '../../search/store/store'
-import { generateDateRange } from '../../search/utils'
+import { daysUntilSunday, generateDateRange, getStartOfWeek } from '../../search/utils'
 
 interface AvailabilityListProps {
   appointment: Appointment
@@ -44,17 +44,17 @@ const AvailabilityList = ({
   }))
 
   useEffect(() => {
-    setStartingDate(getCalendarDateLabel(today(getLocalTimeZone())))
+    setStartingDate(getStartOfWeek(new Date()))
   }, [])
 
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true)
       const result = await searchAppointmentsAction({
-        appointmentType: appointment.type,
+        type: appointment.type,
         providerType: appointment.specialistTypeCode,
         startingDate: startingDate,
-        maxDaysOutToLook: 7,
+        maxDaysOutToLook: daysUntilSunday(new Date(startingDate)),
         staffIds: [appointment.specialist.id],
         locationIds: [appointment.clinic.id],
         includeDistance: appointment.type === AppointmentType.InPerson,

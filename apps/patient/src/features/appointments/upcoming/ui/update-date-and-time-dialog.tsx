@@ -14,6 +14,7 @@ import { AppointmentSlot } from '../../search/types'
 import { DaysHeader } from '../../search/ui/search-appointments-view/days-header'
 import { rescheduleAppointment } from '../actions'
 import { AvailabilityList } from './availability-list'
+import { getStartOfWeek } from '../../search/utils'
 
 interface SearchAppointmentsViewProps {
   appointment: Appointment
@@ -60,7 +61,7 @@ const UpdateDateAndTimeDialog = ({
           type: 'success',
           title: 'Date And Time Changed',
         })
-        setStartingDate(getCalendarDateLabel(today(getLocalTimeZone())))
+        setStartingDate(getStartOfWeek(new Date()))
         router.refresh()
       }
     }
@@ -73,7 +74,7 @@ const UpdateDateAndTimeDialog = ({
       onOpenChange={(open) => {
         setIsUpdateDateAndTimeDialog(open)
         setError('')
-        setStartingDate(getCalendarDateLabel(today(getLocalTimeZone())))
+        setStartingDate(getStartOfWeek(new Date()))
       }}
     >
       <Tooltip
