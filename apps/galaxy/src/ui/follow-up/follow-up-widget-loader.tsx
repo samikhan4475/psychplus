@@ -17,6 +17,7 @@ const FollowUpWidgetLoader = async ({
     patientIds: [Number(patientId)],
     appointmentIds: [Number(appointmentId)],
     isFollowUp: true,
+    isShowActiveVisits: true,
   })
 
   if (response.state === 'error') {

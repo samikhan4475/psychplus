@@ -23,6 +23,7 @@ const useStore = create<StoreState>((set, get) => ({
     const result = await getBookedAppointmentsAction({
       ...payload,
       isFollowUp: true,
+      isShowActiveVisits: true,
     })
 
     if (result.state === 'error') {

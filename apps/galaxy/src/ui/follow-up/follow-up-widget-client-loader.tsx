@@ -27,6 +27,7 @@ const FollowUpWidgetLoader = ({
       patientIds: [Number(patientId)],
       appointmentIds: [Number(appointmentId)],
       isFollowUp: true,
+      isShowActiveVisits: true,
     })
       .then((response) => {
         if (response.state === 'error') {
