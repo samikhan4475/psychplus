@@ -22,13 +22,13 @@ import { SpravatoNoteDetailView } from '@/ui/quicknotes/actual-note-view/spravat
 import { SubstanceUseHxNoteDetailView } from '@/ui/quicknotes/actual-note-view/substance-use-hx/substance-use-hx-note-detail-view'
 import { TcmNoteDetailView } from '@/ui/quicknotes/actual-note-view/tcm/tcm-note-detail-view'
 import { TherapyAssessmentPlanNoteDetailView } from '@/ui/quicknotes/actual-note-view/therapy-assessment-plan/therapy-assessment-plan-note-detail-view'
-import { TmsNoteDetailView } from '@/ui/quicknotes/actual-note-view/tms/tms-note-detail-view'
+import { TherapyClientView } from '@/ui/quicknotes/actual-note-view/therapy/therapy-client-view'
+import { TmsDetailClientView } from '@/ui/quicknotes/actual-note-view/tms/tms-detail-client-view'
 import { VitalsNoteDetailView } from '@/ui/quicknotes/actual-note-view/vitals/vitals-note-detail-view'
 import { WorkingDiagnosisNoteDetailView } from '@/ui/quicknotes/actual-note-view/working-diagnosis/working-diagnosis-note-detail-view'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { isHospitalCareVisit, VisitTypeEnum, visitTypeToWidgets } from '@/utils'
 import { WidgetType } from '../types'
-import { TmsDetailClientView } from '@/ui/quicknotes/actual-note-view/tms/tms-detail-client-view'
 
 enum ProviderType {
   Psychiatry = 'Psychiatrist',
@@ -150,6 +150,14 @@ const widgetsArray: Array<WidgetType> = [
   {
     id: QuickNoteSectionName.QuicknoteSectionTcm,
     actualNoteDetailComponent: TcmNoteDetailView,
+  },
+  {
+    id: QuickNoteSectionName.QuickNoteSectionIndividualTherapy,
+    actualNoteDetailComponent: TherapyClientView,
+  },
+  {
+    id: QuickNoteSectionName.QuickNoteSectionFamilyTherapy,
+    actualNoteDetailComponent: TherapyClientView,
   },
 ]
 
