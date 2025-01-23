@@ -11,10 +11,11 @@ const extractDate = (dateString: string, timezone: string) => {
 
 const currentWeekTotalSlots = (days: AppointmentDate[], slots: SlotsByDay) => {
   let total = 0
+  const noOfDays = days.length === 14 ? days.length / 2 : days.length
 
-  for (let i = 0; i < days.length / 2; i++) {
+  for (let i = 0; i < noOfDays; i++) {
     const day = days[i]
-    total += slots[`${day.monthAndDay}`]?.length || 0
+    total += slots[`${day.monthAndDay}`]?.length ?? 0
   }
   return total
 }
@@ -31,7 +32,7 @@ const nextWeekTotalSlots = (days: AppointmentDate[], slots: SlotsByDay) => {
 
   for (let i = days.length / 2; i < days.length; i++) {
     const day = days[i]
-    total += slots[`${day.monthAndDay}`]?.length || 0
+    total += slots[`${day.monthAndDay}`]?.length ?? 0
   }
   return total
 }
