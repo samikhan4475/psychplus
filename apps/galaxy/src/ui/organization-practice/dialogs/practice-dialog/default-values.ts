@@ -1,19 +1,24 @@
 import { Organization } from '../../types'
 
 const defaultValues = (data?: Organization) => {
+  const { street1, street2, city, state, postalCode } =
+    data?.organizationAddress ?? {}
   return {
-    id: data?.id ?? '',
-    name: data?.shortName ?? '',
-    displayName: data?.displayName ?? '',
-    recordStatus: data?.recordStatus ?? '',
-    address1: data?.organizationAddress?.street1 ?? '',
-    address2: data?.organizationAddress?.street2 ?? '',
-    city: data?.organizationAddress?.city ?? '',
-    state: data?.organizationAddress?.state ?? '',
-    zip: data?.organizationAddress?.postalCode ?? '',
-    contactEmail: data?.contactEmail ?? '',
-    contactPhone: data?.contactPhone ?? '',
-    contactName: data?.contactName ?? '',
+    organizationId: data?.id ?? '',
+    sameAsOrganizationAddress: true,
+    sameAsPrimaryAddress: true,
+    address1: street1 ?? '',
+    address2: street2 ?? '',
+    city: city ?? '',
+    state: state ?? '',
+    zip: postalCode ?? '',
+    payer: {
+      street1: street1 ?? '',
+      street2: street2 ?? '',
+      city: city ?? '',
+      state: state ?? '',
+      postalCode: postalCode ?? '',
+    },
   }
 }
 

@@ -20,7 +20,7 @@ const OrganizationSelect = () => {
         tooltip
         disabled
       />
-      <FormFieldError name="recordStatus" />
+      <FormFieldError name="organizationId" />
     </FormFieldContainer>
   )
 }

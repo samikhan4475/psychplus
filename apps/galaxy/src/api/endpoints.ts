@@ -310,6 +310,8 @@ const GET_PATIENT_UNPAID_APPOINTMENTS_ENDPOINT = (
 const GET_ORGANIZATIONS_ENDPOINT = `${API_URL}/api/organizations/actions/search`
 const GET_ORGANIZATION_HX_STATUS_ENDPOINT = (organizationId: string) =>
   `${API_URL}/api/organizations/${organizationId}/history/actions/search`
+const ADD_ORGANIZATION_PRACTICE_ENDPOINT = (organizationId: string) =>
+  `${API_URL}/api/organizations/${organizationId}/practices`
 const ADD_ORGANIZATION_ENDPOINT = `${API_URL}/api/organizations`
 const UPDATE_ORGANIZATION_ENDPOINT = (organizationId: string) =>
   `${API_URL}/api/organizations/${organizationId}`
@@ -848,6 +850,7 @@ export {
   GET_ALL_QUICK_NOTE_DOCUMENT,
   DOWNLOAD_QUICK_NOTE_DOCUMENT,
   DELETE_QUICK_NOTE_DOCUMENT,
+  ADD_ORGANIZATION_PRACTICE_ENDPOINT,
   FORGOT_PASSWORD_ENDPOINT,
   DOWNLOAD_LAB_ORDER_DOCUMENT,
   DELETE_LAB_ORDERS_RESULT_ENDPOINT,

@@ -3,6 +3,7 @@ import { ColumnHeader, TextCell } from '@/components'
 import { Sort } from '@/types'
 import { getSortDir } from '@/utils'
 import { Organization } from '../types'
+import { getPracticeName } from '../utils'
 import { ActionsCell } from './actions-cell'
 import { HxStatusCell } from './hx-status-cell'
 import { OrganizationNameCell } from './table-row-organization-name-cell'
@@ -36,9 +37,12 @@ const columns = (
           onClick={() => {
             onSort?.(column.id)
           }}
+          className="w-[200px]"
         />
       ),
-      cell: ({ row }) => <TextCell>{row.original.practicesNames}</TextCell>,
+      cell: ({ row }) => (
+        <TextCell>{getPracticeName(row.original.practices)}</TextCell>
+      ),
     },
 
     {

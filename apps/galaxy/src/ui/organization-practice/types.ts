@@ -5,6 +5,17 @@ enum OrganizationPracticeTab {
   PRACTICES = 'Practice',
 }
 
+interface OrganizationAddress {
+  type?: string
+  street1: string
+  street2: string
+  city: string
+  state: string
+  country?: string
+  postalCode: string
+  timeZoneId?: string
+}
+
 interface Practice {
   id: string
   metadata: Metadata
@@ -16,15 +27,18 @@ interface Practice {
   socialSecurityNumber: string
   defaultClearinghouseReceiverId: string
   taxId: string
+  practiceAddress: OrganizationAddress
+  practicePaymentAddress: OrganizationAddress
+  npi: string
+  clia: string
+  practicePhone: string
+  practiceFax: string
+  defaultProviderStaffId: number
+  defaultProviderName: string
+  practiceAddressId: string
+  paymentAddressId: string
   users: User[]
-  npi?: string
   tin?: string
-  clia?: string
-  practiceAddress?: OrganizationAddress
-  practicePhone?: string
-  practiceFax?: string
-  practicePaymentAddress?: OrganizationAddress
-  defaultProviderName?: string
 }
 
 interface OrganizationAddress {
@@ -129,5 +143,6 @@ export {
   type GetOrganizationsListResponse,
   type OrganizationsSearchParams,
   type Practice,
+  type OrganizationAddress,
   type PracticeSearchParams,
 }

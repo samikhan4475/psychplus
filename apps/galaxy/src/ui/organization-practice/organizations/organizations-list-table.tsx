@@ -40,7 +40,6 @@ const OrganizationsListTable = () => {
         sticky
         isRowSpan
         tableClass="bg-white w-[calc(100vw_-_198px)] [&_.rt-ScrollAreaRoot]:!overflow-visible"
-        theadClass="z-[1]"
       />
     </ScrollArea>
   )

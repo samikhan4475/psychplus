@@ -10,7 +10,9 @@ import {
 const NameField = () => {
   return (
     <FormFieldContainer className="flex-1 gap-0">
-      <FormFieldLabel className="pb-[3px]">Name</FormFieldLabel>
+      <FormFieldLabel className="pb-[3px]" required>
+        Name
+      </FormFieldLabel>
       <TextInput field="name" className="h-6 w-full" />
       <FormFieldError name="name" />
     </FormFieldContainer>

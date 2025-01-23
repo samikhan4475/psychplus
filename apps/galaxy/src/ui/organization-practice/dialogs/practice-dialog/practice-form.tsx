@@ -4,9 +4,9 @@ import { useForm } from 'react-hook-form'
 import { toast } from 'react-hot-toast'
 import { FormContainer } from '@/components'
 import { sanitizeFormData } from '@/utils'
-import { addOrganizationAction, updateOrganizationAction } from '../../actions'
+import { addOrganizationPracticeAction } from '../../actions'
 import { useStore } from '../../organizations/store'
-import { Organization } from '../../types'
+import { Organization, Practice } from '../../types'
 import { CliaField } from './clia-field'
 import { DefProviderField } from './def-provider-field'
 import { defaultValues } from './default-values'
@@ -24,7 +24,7 @@ import { TaxonomyCodeField } from './taxonomy-code-field'
 import { TinField } from './tin-field'
 
 interface FormProps {
-  data?: Organization
+  data: Organization
   onCloseModal: (open: boolean) => void
 }
 
@@ -38,11 +38,11 @@ const PracticeForm = ({ data, onCloseModal }: FormProps) => {
   })
 
   const onSave = async (formData: SchemaType) => {
-    const requestPayload: Partial<Organization> = {
+    const requestPayload: Partial<Practice> = {
       ...formData,
       displayName: formData.name,
       shortName: formData.name,
-      organizationAddress: {
+      practiceAddress: {
         street1: formData.address1,
         street2: formData.address2 ?? '',
         city: formData.city,
@@ -50,22 +50,22 @@ const PracticeForm = ({ data, onCloseModal }: FormProps) => {
         postalCode: formData.zip,
         type: 'Business',
       },
+      practicePaymentAddress: {
+        street1: formData.payer.street1 ?? '',
+        street2: formData.payer.street2 ?? '',
+        city: formData.payer.city,
+        state: formData.payer.state,
+        postalCode: formData.payer.postalCode,
+        type: 'Business',
+      },
     }
 
-    let reqPayload =
-      data && data?.id
-        ? {
-            ...data,
-            ...requestPayload,
-          }
-        : requestPayload
+    const sanitizedPayload = sanitizeFormData(requestPayload)
 
-    const sanitizedPayload = sanitizeFormData(reqPayload)
-
-    const response =
-      data && data.id
-        ? await updateOrganizationAction(sanitizedPayload, data?.id)
-        : await addOrganizationAction(sanitizedPayload)
+    const response = await addOrganizationPracticeAction(
+      data.id,
+      sanitizedPayload,
+    )
 
     if (response.state === 'error') {
       toast.error(response.error)
@@ -115,7 +115,7 @@ const PracticeForm = ({ data, onCloseModal }: FormProps) => {
           <DefProviderField />
           <StatusSelect />
         </Grid>
-        <PrimaryAddressFields />
+        <PrimaryAddressFields organizationAddress={data.organizationAddress} />
         <PayerAddressFields />
       </Box>
       <SubmitFormButton />

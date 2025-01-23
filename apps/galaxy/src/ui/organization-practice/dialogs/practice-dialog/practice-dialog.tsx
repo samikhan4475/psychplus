@@ -8,7 +8,7 @@ import { AddOrganizationPracticeButton } from './add-organization-practice-butto
 import { PracticeForm } from './practice-form'
 
 interface DialogProps {
-  data?: Organization
+  data: Organization
 }
 
 const PracticeDialog = ({ data }: DialogProps) => {

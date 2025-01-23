@@ -17,8 +17,8 @@ interface AddressTextFieldProps
   placeholder?: string
   labelClassName?: string
   disabled?: boolean
-  isZip?: boolean
   fieldContainerClassName?: string
+  isZip?: boolean
 }
 const AddressTextField = ({
   label,
@@ -38,9 +38,11 @@ const AddressTextField = ({
 
   const handleZipChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const fieldValue = e.target.value
-    if (fieldValue.length <= 5) {
-      setValue(field, fieldValue, { shouldValidate: true })
+    if (isZip && fieldValue.length > 5) {
+      return
     }
+
+    setValue(field, fieldValue, { shouldValidate: true })
   }
 
   return (

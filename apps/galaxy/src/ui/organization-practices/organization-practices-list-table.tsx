@@ -274,84 +274,11 @@ const OrganizationPracticesListTable = ({ isPractices }: OrganizationPracticesLi
     )
   }
 
-  //TODO: Will be removed once the main practice integration will be done
-  const dummyData: Practice[] = [
-    {
-      id: "1",
-      displayName: "ABC Medical Practice",
-      npi: "1234567890",
-      tin: "987654321",
-      taxonomy: "207R00000X",
-      clia: "12D4567890",
-      practiceOrganizationType: "ABC Health Inc.",
-      practiceAddress: {
-        street1: "123 Main Street",
-        street2: "Suite 101",
-        city: "New York",
-        state: "NY",
-        postalCode: "10001",
-      },
-      practicePhone: "(555) 123-4567",
-      practiceFax: "(555) 987-6543",
-      practicePaymentAddress: {
-        street1: "123 Main Street",
-        street2: "Suite 101",
-        city: "New York",
-        state: "NY",
-        postalCode: "10001",
-      },
-      defaultProviderName: "Dr. John Doe",
-      recordStatus: "Active",
-      metadata: {
-        createdOn: "",
-      },
-      shortName: "",
-      socialSecurityNumber: "",
-      defaultClearinghouseReceiverId: "",
-      taxId: "",
-      users: []
-    },
-    {
-      id: "2",
-      displayName: "XYZ ",
-      npi: "12345",
-      tin: "98765",
-      taxonomy: "207R00",
-      clia: "12D45",
-      practiceOrganizationType: "ABC Health Inc.",
-      practiceAddress: {
-        street1: "123 Main Street",
-        street2: "Suite 101",
-        city: "New York",
-        state: "NY",
-        postalCode: "10001",
-      },
-      practicePhone: "(555) 123-4567",
-      practiceFax: "(555) 987-6543",
-      practicePaymentAddress: {
-        street1: "123 Main Street",
-        street2: "Suite 101",
-        city: "New York",
-        state: "NY",
-        postalCode: "10001",
-      },
-      defaultProviderName: "Dr. John Doe",
-      recordStatus: "Active",
-      metadata: {
-        createdOn: "",
-      },
-      shortName: "",
-      socialSecurityNumber: "",
-      defaultClearinghouseReceiverId: "",
-      taxId: "",
-      users: []
-    },
-  ];
   return (
     <Box className='bg-white rounded p-1 my-1'>
       <ScrollArea className='p-1 rounded'>
         <DataTable
-          data={isPractices ? dummyData : data || []}
+          data={isPractices ? [] : data || []}
           columns={columns(isPractices, sort, sortData)}
           disablePagination
           sticky
