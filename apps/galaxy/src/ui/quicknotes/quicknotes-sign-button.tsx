@@ -11,6 +11,7 @@ import { Appointment } from '@/types'
 import { useStore as useDiagnosisStore } from '@/ui/diagnosis/store'
 import { VisitTypeEnum } from '@/utils'
 import { AlertDialog } from '../alerts'
+import { PolicyConsentDialog } from './policy-consent-dialog'
 import { useStore } from './store'
 
 interface QuickNotesSignButtonProps {
@@ -41,11 +42,12 @@ const QuickNotesSignButton = ({ appointment }: QuickNotesSignButtonProps) => {
     staffId: state.user.staffId,
     staffRoleCode: state.staffResource.staffRoleCode,
   }))
-  const { loading, sign, markAsError } = useStore((state) => ({
+  const { loading, sign, markAsError, patient } = useStore((state) => ({
     loading: state.loading,
     sign: state.sign,
     setIsErrorAlertOpen: state.setIsErrorAlertOpen,
     markAsError: state.markAsError,
+    patient: state.patient,
   }))
   const isPrescriber = staffRoleCode === STAFF_ROLE_CODE_PRESCRIBER
   const [alertInfo, setAlertInfo] = useState(initialAlertInfo)
@@ -65,6 +67,7 @@ const QuickNotesSignButton = ({ appointment }: QuickNotesSignButtonProps) => {
     signedDate: isPrescriber ? new Date().toISOString() : undefined,
     noteTitleCode: appointment.visitNoteTitle,
   }
+  const [isPolicyAlertOpen, setIsPolicyAlertOpen] = useState(false);
 
   const signNoteHandler = async () => {
     const spravatoOrTmsDiagnosisCodes = ['F32.2', 'F32.3', 'F33.2', 'F33.3']
@@ -73,6 +76,11 @@ const QuickNotesSignButton = ({ appointment }: QuickNotesSignButtonProps) => {
       VisitTypeEnum.Tms,
     ].includes(visitType as VisitTypeEnum)
 
+    if (patient.patientConsent !== "Verified") {
+      setIsPolicyAlertOpen(true);
+      return
+    }
+    
     const missingDiagnosisCodes = spravatoOrTmsDiagnosisCodes
       .filter(
         (code) => !workingDiagnosisData.map((item) => item.code).includes(code),
@@ -165,6 +173,13 @@ const QuickNotesSignButton = ({ appointment }: QuickNotesSignButtonProps) => {
         }}
         loading={loading}
         {...alertInfo}
+      />
+      <PolicyConsentDialog
+        open={isPolicyAlertOpen}
+        onOpenChange={setIsPolicyAlertOpen}
+        title="Warning"
+        message="Patient must sign the policy prior to signing the note. Please send the policy."
+        patientId={patientId}
       />
     </>
   )
