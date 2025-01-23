@@ -59,16 +59,16 @@ const labels = {
   },
 
   anxiety: {
-    abnormalFear: 'Abnormal Fear',
-    fatigue: 'Fatigue',
     feelingAnxious: 'Feeling Anxious',
-    irritable: 'Irritable',
+    worrying: 'Worrying',
+    restless: 'Restless',
+    fatigue: 'Fatigue',
     muscleTension: 'Muscle Tension',
+    irritable: 'Irritable',
+    socialAnxiety: 'Social Anxiety',
     panicAttacks: 'Panic Attacks',
     phobia: 'Phobia',
-    restless: 'Restless',
-    socialAnxiety: 'Social Anxiety',
-    worrying: 'Worrying',
+    abnormalFear: 'Abnormal Fear',
   },
   bipolarMania: {
     elevatedMood: 'Elevated Mood',
@@ -273,16 +273,16 @@ const valueToLabel: { [key: string]: string } = {
   DEP_Anger: labels.depression.anger,
 
   // Anxiety block
-  ANX_AbnormalFear: labels.anxiety.abnormalFear,
-  ANX_Fatigue: labels.anxiety.fatigue,
   ANX_FeelingAnxious: labels.anxiety.feelingAnxious,
-  ANX_Irritable: labels.anxiety.irritable,
+  ANX_Worrying: labels.anxiety.worrying,
+  ANX_Restless: labels.anxiety.restless,
+  ANX_Fatigue: labels.anxiety.fatigue,
   ANX_MuscleTension: labels.anxiety.muscleTension,
+  ANX_Irritable: labels.anxiety.irritable,
+  ANX_SocialAnxiety: labels.anxiety.socialAnxiety,
   ANX_PanicAttacks: labels.anxiety.panicAttacks,
   ANX_Phobia: labels.anxiety.phobia,
-  ANX_Restless: labels.anxiety.restless,
-  ANX_SocialAnxiety: labels.anxiety.socialAnxiety,
-  ANX_Worrying: labels.anxiety.worrying,
+  ANX_AbnormalFear: labels.anxiety.abnormalFear,
 
   // Bipolar/Mania block
   MAN_ElevatedMood: labels.bipolarMania.elevatedMood,
