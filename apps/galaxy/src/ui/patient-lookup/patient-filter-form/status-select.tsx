@@ -18,7 +18,7 @@ const PatientStatusSelect = () => {
 
   return (
     <FormFieldContainer className="flex-row gap-1">
-      <FormFieldLabel className="!text-1">Status</FormFieldLabel>
+      <FormFieldLabel className="!text-1">User Status</FormFieldLabel>
       <MultiSelectField
         defaultValues={patientStatuses ?? []}
         options={options}

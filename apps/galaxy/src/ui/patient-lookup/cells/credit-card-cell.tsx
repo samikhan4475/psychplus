@@ -5,12 +5,15 @@ import { Patient } from '../types'
 
 const CreditCardCell = ({
   row: { original: patient },
-}: PropsWithRow<Patient>) => {
-  return (
-    <TextCell>
-      {patient?.creditCardVerificationStatus === 'Active' ? 'Yes' : 'No'}
-    </TextCell>
-  )
-}
+}: PropsWithRow<Patient>) => (
+  <TextCell>
+    {creditCardVerifyMap?.[patient?.creditCardVerificationStatus ?? '']}
+  </TextCell>
+)
 
+const creditCardVerifyMap: Record<string, string> = {
+  Verified: 'Yes',
+  Unverifiable: 'No',
+  Pending: 'Pending',
+}
 export { CreditCardCell }

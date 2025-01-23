@@ -18,7 +18,7 @@ const PatientVerifySelect = () => {
 
   return (
     <FormFieldContainer className="flex-row gap-1">
-      <FormFieldLabel className="!text-1">Patient Verify</FormFieldLabel>
+      <FormFieldLabel className="!text-1">Verify P</FormFieldLabel>
       <MultiSelectField
         options={options}
         defaultValues={verificationStatuses}

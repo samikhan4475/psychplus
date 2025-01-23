@@ -12,7 +12,7 @@ import {
 import { useHasPermission } from '@/hooks'
 import { Appointment, BookVisitPayload } from '@/types'
 import { isDirty } from '@/ui/schedule/utils'
-import { getCalendarDate } from '@/utils'
+import { cn, getCalendarDate } from '@/utils'
 import { SAVE_APPOINTMENT } from '../../constants'
 import { convertToTimezone, sanitizeFormData } from '../../utils'
 import { StaffComments } from '../components/staff-comments'
@@ -33,6 +33,7 @@ const EditVisitForm = ({
   isLoading,
   visitDetails,
   onClose,
+  isFormDisabled,
 }: {
   appointmentId: number
   onEdit?: () => void
@@ -40,6 +41,7 @@ const EditVisitForm = ({
   isPsychiatristVisitTypeSequence?: boolean
   visitDetails: Appointment
   onClose: () => void
+  isFormDisabled?: boolean
 }) => {
   const [alertInfo, setAlertInfo] = useState<{
     statusCode: number
@@ -68,6 +70,7 @@ const EditVisitForm = ({
   )
   const form = useForm<SchemaType>({
     resolver: zodResolver(schema),
+    disabled: isFormDisabled,
     defaultValues: {
       appointmentId: visitDetails?.appointmentId,
       patient: {
@@ -214,7 +217,12 @@ const EditVisitForm = ({
         </Grid>
         <Flex justify="between" mt="3">
           <FormSubmitButton
-            className="bg-pp-black-1 text-white ml-auto cursor-pointer px-3 py-1.5"
+            className={cn(
+              'bg-pp-black-1 text-white ml-auto cursor-pointer px-3 py-1.5',
+              {
+                'cursor-not-allowed': isFormDisabled || isSubmitting,
+              },
+            )}
             form={form}
             loading={isSubmitting}
           >
@@ -223,9 +231,12 @@ const EditVisitForm = ({
         </Flex>
       </FormContainer>
 
-      <Separator size={'4'} className="bg-pp-gray-2 my-3 h-px w-full" />
-
-      <StaffComments appointmentId={appointmentId} />
+      {!isFormDisabled && (
+        <>
+          <Separator size={'4'} className="bg-pp-gray-2 my-3 h-px w-full" />
+          <StaffComments appointmentId={appointmentId} />
+        </>
+      )}
     </>
   )
 }

@@ -20,7 +20,7 @@ const InsuranceVerifySelect = () => {
 
   return (
     <FormFieldContainer className="flex-row gap-1">
-      <FormFieldLabel className="!text-1">Insurance Verify</FormFieldLabel>
+      <FormFieldLabel className="!text-1">Verify I</FormFieldLabel>
       <MultiSelectField
         options={options}
         defaultValues={insuranceVerificationStatuses}

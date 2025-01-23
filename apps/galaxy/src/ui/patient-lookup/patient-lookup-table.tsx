@@ -60,6 +60,7 @@ const PatientLookupTable = () => {
           })
           router.push(href)
         }}
+        tdClass="[&:has(.dialog-trigger-cell)]:!p-0"
         tableClass="[&_.rt-ScrollAreaScrollbar]:!hidden"
         theadClass="z-[1]"
         disablePagination

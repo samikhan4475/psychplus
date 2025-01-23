@@ -23,14 +23,17 @@ import { PastVisitStatusSelect } from './past-visit-status-select'
 import { PatientVerifySelect } from './patient-verify-select'
 import { PhoneNumberInput } from './phone-number-input'
 import { SocialSecurityInput } from './social-security-input'
+import { StateSelect } from './state-select'
 import { PatientStatusSelect } from './status-select'
 import { ZipInput } from './zip-input'
 
 const Filters = () => {
   return (
     <Grid className="col-span-full" columns="4" gap="2" align="baseline">
-      <FirstNameInput />
-      <LastNameInput />
+      <Grid columns="2" gap="2" align="baseline">
+        <FirstNameInput />
+        <LastNameInput />
+      </Grid>
       <Grid columns="2" gap="2" align="baseline">
         <AgeInput />
         <GenderSelect />
@@ -43,6 +46,7 @@ const Filters = () => {
         <CityInput />
         <ZipInput />
       </Grid>
+      <StateSelect />
       <Grid columns="2" gap="2" align="baseline">
         <GuardianSelect />
         <PhoneNumberInput />
@@ -51,14 +55,11 @@ const Filters = () => {
         <EmailInput />
         <SocialSecurityInput />
       </Grid>
-
-      {/* 
-        Todo in Phase 2 
-      <PracticeSelect /> */}
       <Grid columns="2" gap="2" align="baseline">
         <PatientStatusSelect />
         <PatientVerifySelect />
       </Grid>
+      {/* Todo in Phase 2 <PracticeSelect /> */}
       <InsuranceVerifySelect />
       <ConsentVerifySelect />
       <CreditCardVerifySelect />
@@ -73,7 +74,6 @@ const Filters = () => {
       </Grid>
       <ContactMadeSelect />
       <InsuranceSelect />
-
       {/* <OrganizationSelect /> */}
     </Grid>
   )

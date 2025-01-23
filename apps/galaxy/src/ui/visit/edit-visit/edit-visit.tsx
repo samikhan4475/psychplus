@@ -14,10 +14,12 @@ const EditVisit = ({
   onEdit,
   disabled = false,
   children,
+  isFormDisabled,
 }: PropsWithChildren<{
   appointmentId: number
   disabled?: boolean
   onEdit?: () => void
+  isFormDisabled?: boolean
 }>) => {
   const [visitDetails, setVisitDetails] = useState<Appointment>()
   const [isOpen, setIsOpen] = useState(false)
@@ -32,7 +34,7 @@ const EditVisit = ({
       appointmentIds: [appointmentId],
     }).then((response) => {
       if (response.state === 'error') {
-        toast.error(response.error || 'Failed to retrieve appointment\'s data')
+        toast.error(response.error || "Failed to retrieve appointment's data")
       } else {
         const visit = response.data[0]
         setVisitDetails(visit)
@@ -66,6 +68,7 @@ const EditVisit = ({
             isLoading={isLoading}
             visitDetails={visitDetails as Appointment}
             onClose={() => setIsOpen(false)}
+            isFormDisabled={isFormDisabled}
           />
         )}
       </Dialog.Content>

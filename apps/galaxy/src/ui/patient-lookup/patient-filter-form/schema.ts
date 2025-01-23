@@ -4,7 +4,6 @@ import { INVALID_RANGE_ERROR } from '../constants'
 import { validateDate } from '../utils'
 
 const zipCodeRegex = /(^\d{5}$)|(^\d{5}-\d{4}$)|^$/
-const phoneRegex = /^(\+?[1-9]\d{9}|^$)$/
 const patientLookupSchema = z
   .object({
     firstName: z
@@ -45,11 +44,7 @@ const patientLookupSchema = z
       .regex(zipCodeRegex, 'Invalid zip code!')
       .optional(),
     hasGuardian: z.string().trim().optional(),
-    telephone: z
-      .string()
-      .trim()
-      .regex(phoneRegex, 'Invalid phone number')
-      .optional(),
+    telephone: z.string().trim().optional(),
     consentVerificationStatuses: z.array(z.string()).optional(),
     creditCardVerificationStatuses: z.array(z.string()).optional(),
     patientCreatedFrom: z.custom<null | DateValue>().optional(),
@@ -70,6 +65,7 @@ const patientLookupSchema = z
     contactMadeStatuses: z.string().trim().optional(),
     insurancePolicyIds: z.array(z.string()).optional(),
     organizations: z.array(z.string()).optional(),
+    state: z.string().trim().optional(),
   })
   .superRefine((data, ctx) => {
     const { patientCreatedFrom, patientCreatedTo } = data

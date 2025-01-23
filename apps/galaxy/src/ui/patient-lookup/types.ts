@@ -34,6 +34,7 @@ interface Patient extends PatientProfile {
   state?: string
   userCreated?: string
   insurance?: string
+  mostRecentAppointmentId?: number
 }
 
 interface SearchPatientsData {

@@ -5,7 +5,7 @@ import {
   FormFieldContainer,
   FormFieldError,
   FormFieldLabel,
-  PhoneNumberInput,
+  NumericInput,
 } from '@/components'
 
 const SocialSecurityInput = () => {
@@ -13,11 +13,14 @@ const SocialSecurityInput = () => {
     <FormFieldContainer className="gap-1">
       <Flex gap="1">
         <FormFieldLabel className="!text-1">Social Security</FormFieldLabel>
-        <PhoneNumberInput
+        <NumericInput
           field="ssn"
           className="border-pp-gray-2 h-6 w-full border border-solid !outline-none [box-shadow:none]"
           placeholder="Social security"
-          format="###-##-####"
+          prefix="***-**-"
+          allowNegative={false}
+          decimalScale={0}
+          maxLimit={10000}
         />
       </Flex>
       <FormFieldError name="ssn" />

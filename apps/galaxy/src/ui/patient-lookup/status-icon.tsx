@@ -13,7 +13,7 @@ const statuses: Record<string, string> = {
 }
 
 const StatusIcon = ({ status = '' }: StatusIconProps) => (
-  <TextCell>{statuses?.[status] ?? statuses?.Pending}</TextCell>
+  <TextCell>{statuses?.[status]}</TextCell>
 )
 
 export { StatusIcon }

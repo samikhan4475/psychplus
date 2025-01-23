@@ -14,7 +14,7 @@ const useCodesetOptions = (
 
   return useMemo(() => {
     const filteredCodes = exclude
-      ? codes.filter((code) => !exclude.includes(code.value))
+      ? codes?.filter((code) => !exclude.includes(code.value))
       : codes
     return filteredCodes.map((code) => ({
       value: code.value,

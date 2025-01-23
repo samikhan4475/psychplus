@@ -15,7 +15,7 @@ const CreditCardVerifySelect = () => {
   const options = useCodesetOptions(CODESETS.VerificationStatus)
   return (
     <FormFieldContainer className="flex-row gap-1">
-      <FormFieldLabel className="!text-1">Credit Card Verify</FormFieldLabel>
+      <FormFieldLabel className="!text-1">CC</FormFieldLabel>
       <MultiSelectField
         defaultValues={form.watch('creditCardVerificationStatuses')}
         onChange={(values) =>

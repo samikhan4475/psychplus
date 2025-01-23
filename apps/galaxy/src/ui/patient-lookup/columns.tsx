@@ -8,6 +8,9 @@ import {
   ContactMadeSelectCell,
   CreditCardCell,
   GuardianCell,
+  InsuranceCell,
+  UserStatusCell,
+  VisitHistoryCell,
 } from './cells'
 import { StatusIcon } from './status-icon'
 import { Patient } from './types'
@@ -28,10 +31,8 @@ const columns: ColumnDef<Patient>[] = [
   },
   {
     id: 'pt-status',
-    header: () => <ColumnHeader label="Pt Status" />,
-    cell: ({ row: { original } }) => (
-      <TextCell className="truncate">{original?.status}</TextCell>
-    ),
+    header: () => <ColumnHeader label="User Status" />,
+    cell: UserStatusCell,
   },
   {
     id: 'age',
@@ -89,7 +90,7 @@ const columns: ColumnDef<Patient>[] = [
       {
         id: 'cc',
         header: () => <ColumnHeader label="CC" />,
-        cell: CreditCardCell,
+        cell: ({ row }) => <CreditCardCell row={row} />,
       },
     ],
   },
@@ -161,9 +162,7 @@ const columns: ColumnDef<Patient>[] = [
   {
     id: 'insurance',
     header: () => <ColumnHeader label="Insurance" />,
-    cell: ({ row: { original } }) => (
-      <TextCell className="truncate">{original?.insurance}</TextCell>
-    ),
+    cell: InsuranceCell,
   },
   {
     id: 'user-created',
@@ -193,11 +192,7 @@ const columns: ColumnDef<Patient>[] = [
   {
     id: 'visit-hx',
     header: () => <ColumnHeader label="Visit Hx" />,
-    cell: ({ row: { original } }) => (
-      <TextCell className="truncate">
-        {original?.mostRecentAppointmentDate}
-      </TextCell>
-    ),
+    cell: VisitHistoryCell,
   },
   {
     id: 'contact-made',

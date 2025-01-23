@@ -18,7 +18,7 @@ const AgeInput = () => {
           allowNegative={false}
           prefix=""
           placeholder="Age"
-          maxLimit={101}
+          maxLimit={1000}
           decimalScale={0}
           className="border-pp-gray-2 h-6 w-full border border-solid !outline-none [box-shadow:none]"
         />

@@ -15,7 +15,7 @@ const ConsentVerifySelect = () => {
   const options = useCodesetOptions(CODESETS.VerificationStatus)
   return (
     <FormFieldContainer className="flex-row gap-1">
-      <FormFieldLabel className="!text-1">Consent Verify</FormFieldLabel>
+      <FormFieldLabel className="!text-1">P&C</FormFieldLabel>
       <MultiSelectField
         defaultValues={form.watch('consentVerificationStatuses')}
         onChange={(values) =>

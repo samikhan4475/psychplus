@@ -1,6 +1,12 @@
 import { DateValue } from 'react-aria-components'
 import { FieldErrors } from 'react-hook-form'
-import { SharedCode, SharedCodeAttribute } from '@/types'
+import {
+  Insurance,
+  InsurancePolicyPriority,
+  SelectOptionType,
+  SharedCode,
+  SharedCodeAttribute,
+} from '@/types'
 import { convertToCalendarDate } from '@/utils'
 import { PatientLookUpSchemaType } from './patient-filter-form'
 import { SortCodesetOptions } from './types'
@@ -35,6 +41,7 @@ const getInitialValues = (): PatientLookUpSchemaType => {
     pastVisitStatus: '',
     nextVisitStatus: '',
     organizations: [],
+    state: '',
   }
 }
 
@@ -94,10 +101,20 @@ const sortCodesetBySortAttribute = (
     })
 }
 
+const getOptionLabel = (options: SelectOptionType[] = [], value = '') =>
+  options?.find((option) => option?.value === value)?.label
+
+const getPriorityInusranceName = (insurance: Insurance[]) =>
+  insurance?.find(
+    (ins) => ins?.insurancePolicyPriority === InsurancePolicyPriority.Primary,
+  )?.policyName
+
 export {
   getInitialValues,
   convertDateField,
   hasFieldErrors,
   validateDate,
   sortCodesetBySortAttribute,
+  getOptionLabel,
+  getPriorityInusranceName,
 }

@@ -2,7 +2,7 @@
 
 import { ColumnDef } from '@tanstack/react-table'
 import { ColumnHeader, LongTextCell, TextCell } from '@/components'
-import { GuardianCell, UpdatedDateTimeCell } from './cells'
+import { GuardianCell, UpdatedDateTimeCell, UserStatusCell } from './cells'
 import { StatusIcon } from './status-icon'
 import { Patient } from './types'
 
@@ -86,10 +86,8 @@ const columns: ColumnDef<Patient>[] = [
   },
   {
     id: 'status',
-    header: () => <ColumnHeader label="Pt Status" />,
-    cell: ({ row: { original: patient } }) => (
-      <TextCell>{patient?.status}</TextCell>
-    ),
+    header: () => <ColumnHeader label="User Status" />,
+    cell: ({ row }) => <UserStatusCell row={row} />,
   },
   {
     id: 'verificationStatus',

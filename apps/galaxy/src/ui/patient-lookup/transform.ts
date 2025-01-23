@@ -1,4 +1,9 @@
-import { Gender, NewPatient, PatientProfile } from '@/types'
+import {
+  Gender,
+  InsurancePolicyPriority,
+  NewPatient,
+  PatientProfile,
+} from '@/types'
 import {
   formatDate,
   getMaskedPhoneNumber,
@@ -26,6 +31,7 @@ const transformOut = (data: PatientLookUpSchemaType): SearchPatientsParams => {
     contactMadeStatuses,
     patientCreatedFrom,
     patientCreatedTo,
+    insurancePolicyIds,
     ...rest
   } = data
 
@@ -34,10 +40,14 @@ const transformOut = (data: PatientLookUpSchemaType): SearchPatientsParams => {
     patientCreatedFrom: getOptionalDateString(patientCreatedFrom),
     patientCreatedTo: getOptionalDateString(patientCreatedTo),
     dateOfBirth: getOptionalDateString(dateOfBirth),
+    insurancePolicyIds,
     contactMadeStatuses: contactMadeStatuses
       ? [contactMadeStatuses]
       : undefined,
     ...(hasGuardian ? { hasGuardian: hasGuardian === 'yes' } : {}),
+    ...(insurancePolicyIds?.length
+      ? { insurancePriority: InsurancePolicyPriority.Primary }
+      : {}),
   })
 }
 

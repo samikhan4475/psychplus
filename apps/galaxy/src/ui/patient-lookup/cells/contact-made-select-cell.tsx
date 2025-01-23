@@ -6,6 +6,7 @@ import toast from 'react-hot-toast'
 import { PropsWithRow, SelectCell } from '@/components'
 import { CODESETS } from '@/constants'
 import { useCodesetCodes } from '@/hooks'
+import { ContactMadeStatuses } from '@/types'
 import { updatePatientAction } from '../actions'
 import { Patient } from '../types'
 import { sortCodesetBySortAttribute } from '../utils'
@@ -13,7 +14,9 @@ import { sortCodesetBySortAttribute } from '../utils'
 const ContactMadeSelectCell = ({
   row: { original: patient },
 }: PropsWithRow<Patient>) => {
-  const [selectedValue, setSelectedValue] = useState(patient?.contactMadeStatus)
+  const [selectedValue, setSelectedValue] = useState(
+    patient?.contactMadeStatus ?? '',
+  )
   const codes = useCodesetCodes(CODESETS.ContactMadeStatus)
   const updateContactMadeStatus = async (value: string) => {
     setSelectedValue(value)
@@ -38,6 +41,10 @@ const ContactMadeSelectCell = ({
         value={selectedValue}
         options={sortCodesetBySortAttribute(codes, { includeDisabled: true })}
         onValueChange={updateContactMadeStatus}
+        disabled={[
+          ContactMadeStatuses.Cancelled,
+          ContactMadeStatuses.Scheduled,
+        ].includes(selectedValue as ContactMadeStatuses)}
         className="border-pp-gray-2 h-4 w-full border border-solid !outline-none [box-shadow:none]"
       />
     </Flex>

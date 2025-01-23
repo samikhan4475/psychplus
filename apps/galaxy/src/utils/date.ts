@@ -170,7 +170,7 @@ const formatDate = (
 
 const getSlashedPaddedDateString = (
   date: CalendarDate | string | undefined,
-  showFullYear: boolean = false,
+  showFullYear = false,
 ) => {
   if (!date) {
     return ''
@@ -178,9 +178,7 @@ const getSlashedPaddedDateString = (
   if (typeof date === 'string') {
     date = getCalendarDate(date)
   }
-  if (!date) {
-    date = getCalendarDate()
-  }
+
   const month = String(date.month).padStart(2, '0')
   const day = String(date.day).padStart(2, '0')
   const year = showFullYear
