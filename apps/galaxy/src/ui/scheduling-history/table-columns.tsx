@@ -85,130 +85,6 @@ const getSchedulingColumns = (
       cell: ({ row }) => <TextCell>{row.original.visitId} </TextCell>,
     },
     {
-      accessorKey: 'facilityAdmission',
-      header: ({ column }) => (
-        <ColumnHeader
-          column={column}
-          label="Facility Admission"
-          className="!text-black justify-center !font-medium"
-        />
-      ),
-      columns: [
-        {
-          id: 'facilityAdmissionId',
-          accessorKey: 'facilityAdmission.id',
-          header: ({ column }) => (
-            <ColumnHeader
-              sortable
-              sortDir={getSortDir(column.id, sort)}
-              onClick={() => {
-                onSort?.(column.id)
-              }}
-              label="ID"
-              className="!text-black p-1 !font-medium"
-              column={column}
-            />
-          ),
-          cell: ({ row }) => (
-            <TextCell>
-              {row.original.facilityAdmissionId !==
-                FACILITY_ADMISION_ID_CHECK && row.original.facilityAdmissionId}
-            </TextCell>
-          ),
-        },
-        {
-          id: 'admittingProvider',
-          accessorKey: 'facilityAdmission.admittingProvider',
-          header: ({ column }) => (
-            <ColumnHeader
-              sortable
-              sortDir={getSortDir(column.id, sort)}
-              onClick={() => {
-                onSort?.(column.id)
-              }}
-              label="Admitting Provider"
-              column={column}
-              className="!text-black p-1 !font-medium"
-            />
-          ),
-          cell: ({ row }) => (
-            <TextCell>
-              {row.original.facilityAdmissionId !==
-                FACILITY_ADMISION_ID_CHECK &&
-                row.original.admittingProviderName}
-            </TextCell>
-          ),
-        },
-        {
-          id: 'admissionDate',
-          accessorKey: 'facilityAdmission.admitDateTime',
-          header: ({ column }) => (
-            <ColumnHeader
-              sortable
-              sortDir={getSortDir(column.id, sort)}
-              onClick={() => {
-                onSort?.(column.id)
-              }}
-              label="Admit date/time"
-              column={column}
-              className="!text-black p-1 !font-medium"
-            />
-          ),
-          cell: ({ row }) => (
-            <TextCell>
-              {row.original.facilityAdmissionId !==
-                FACILITY_ADMISION_ID_CHECK &&
-                row.original.admissionDateTime &&
-                format(
-                  new Date(row.original.admissionDateTime),
-                  'MM/dd/yyyy HH:mm',
-                )}
-            </TextCell>
-          ),
-        },
-        {
-          id: 'dischargeVisitSequenceDate',
-          accessorKey: 'facilityAdmission.dischargeDate',
-          header: ({ column }) => (
-            <ColumnHeader
-              sortable
-              sortDir={getSortDir(column.id, sort)}
-              onClick={() => {
-                onSort?.(column.id)
-              }}
-              label="Discharge date"
-              column={column}
-              className="!text-black p-1 !font-medium"
-            />
-          ),
-          cell: ({ row }) => (
-            <TextCell>
-              {row.original.facilityAdmissionId !==
-                FACILITY_ADMISION_ID_CHECK &&
-                row.original.dischargeVisitSequenceDate &&
-                format(
-                  new Date(row.original.dischargeVisitSequenceDate),
-                  'MM/dd/yyyy HH:mm',
-                )}
-            </TextCell>
-          ),
-        },
-        {
-          id: 'hx',
-          size: 50,
-          header: () => (
-            <ColumnHeader label="Hx" className="!text-black p-1 !font-medium" />
-          ),
-          cell: ({ row }) => {
-            return row.original.facilityAdmissionId !==
-              FACILITY_ADMISION_ID_CHECK ? (
-              <FacilityAdmissionCell row={row} />
-            ) : null
-          },
-        },
-      ],
-    },
-    {
       id: 'appointmentDateTime',
       accessorKey: 'dateOfService',
       header: ({ column }) => (
@@ -543,6 +419,130 @@ const getSchedulingColumns = (
             />
           ),
           cell: ({ row }) => <TextCell>{row.original.balancePaid}</TextCell>,
+        },
+      ],
+    },
+    {
+      accessorKey: 'facilityAdmission',
+      header: ({ column }) => (
+        <ColumnHeader
+          column={column}
+          label="Facility Admission"
+          className="!text-black justify-center !font-medium"
+        />
+      ),
+      columns: [
+        {
+          id: 'facilityAdmissionId',
+          accessorKey: 'facilityAdmission.id',
+          header: ({ column }) => (
+            <ColumnHeader
+              sortable
+              sortDir={getSortDir(column.id, sort)}
+              onClick={() => {
+                onSort?.(column.id)
+              }}
+              label="ID"
+              className="!text-black p-1 !font-medium"
+              column={column}
+            />
+          ),
+          cell: ({ row }) => (
+            <TextCell>
+              {row.original.facilityAdmissionId !==
+                FACILITY_ADMISION_ID_CHECK && row.original.facilityAdmissionId}
+            </TextCell>
+          ),
+        },
+        {
+          id: 'admittingProvider',
+          accessorKey: 'facilityAdmission.admittingProvider',
+          header: ({ column }) => (
+            <ColumnHeader
+              sortable
+              sortDir={getSortDir(column.id, sort)}
+              onClick={() => {
+                onSort?.(column.id)
+              }}
+              label="Admitting Provider"
+              column={column}
+              className="!text-black p-1 !font-medium"
+            />
+          ),
+          cell: ({ row }) => (
+            <TextCell>
+              {row.original.facilityAdmissionId !==
+                FACILITY_ADMISION_ID_CHECK &&
+                row.original.admittingProviderName}
+            </TextCell>
+          ),
+        },
+        {
+          id: 'admissionDate',
+          accessorKey: 'facilityAdmission.admitDateTime',
+          header: ({ column }) => (
+            <ColumnHeader
+              sortable
+              sortDir={getSortDir(column.id, sort)}
+              onClick={() => {
+                onSort?.(column.id)
+              }}
+              label="Admit date/time"
+              column={column}
+              className="!text-black p-1 !font-medium"
+            />
+          ),
+          cell: ({ row }) => (
+            <TextCell>
+              {row.original.facilityAdmissionId !==
+                FACILITY_ADMISION_ID_CHECK &&
+                row.original.admissionDateTime &&
+                format(
+                  new Date(row.original.admissionDateTime),
+                  'MM/dd/yyyy HH:mm',
+                )}
+            </TextCell>
+          ),
+        },
+        {
+          id: 'dischargeVisitSequenceDate',
+          accessorKey: 'facilityAdmission.dischargeDate',
+          header: ({ column }) => (
+            <ColumnHeader
+              sortable
+              sortDir={getSortDir(column.id, sort)}
+              onClick={() => {
+                onSort?.(column.id)
+              }}
+              label="Discharge date"
+              column={column}
+              className="!text-black p-1 !font-medium"
+            />
+          ),
+          cell: ({ row }) => (
+            <TextCell>
+              {row.original.facilityAdmissionId !==
+                FACILITY_ADMISION_ID_CHECK &&
+                row.original.dischargeVisitSequenceDate &&
+                format(
+                  new Date(row.original.dischargeVisitSequenceDate),
+                  'MM/dd/yyyy HH:mm',
+                )}
+            </TextCell>
+          ),
+        },
+        {
+          id: 'hx',
+          size: 50,
+          header: () => (
+            <ColumnHeader label="Hx" className="!text-black p-1 !font-medium" />
+          ),
+          cell: ({ row }) => {
+            return row.original.facilityAdmissionId !==
+              FACILITY_ADMISION_ID_CHECK ? (
+              <FacilityAdmissionCell row={row} />
+            ) : null
+          },
         },
       ],
     },
