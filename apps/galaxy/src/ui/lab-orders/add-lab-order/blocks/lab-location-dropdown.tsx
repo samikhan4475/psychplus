@@ -1,44 +1,55 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useState } from 'react'
 import { Flex } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
-import { BlockLabel, FormFieldError, SelectInput } from '@/components'
+import { ActionResult } from '@/api'
+import { AsyncSelect, BlockLabel, FormFieldError } from '@/components'
 import { getLabsLocation } from '../api'
 import { LabOrderSchemaType } from '../lab-order-schema'
 import { LabsLocation } from './types'
 
+type Options = {
+  label: string
+  value: string
+  data: LabsLocation
+}
+
 const LabsLocationDropdown = () => {
   const form = useFormContext<LabOrderSchemaType>()
 
-  const [labLocations, setLabLocations] = useState<any>([])
+  const [labLocations, setLabLocations] = useState<Options[]>([])
 
-  useEffect(() => {
-    ;(async () => {
-      const response: any = await getLabsLocation({
+  const fetchOptions: () => Promise<ActionResult<Options[]>> =
+    useCallback(async () => {
+      const response = await getLabsLocation({
         recordStatuses: ['Active'],
       })
-      if (response.data && response.data.length > 0) {
+      if (response.state === 'success') {
         const dropdownValues = response.data.map((item: LabsLocation) => ({
-          label: item.name,
-          value: item.id,
+          label: item.name ?? '',
+          value: item.id ?? '',
           data: item,
         }))
         setLabLocations(dropdownValues)
+        return Promise.resolve({
+          state: 'success',
+          data: dropdownValues ?? [],
+        })
       }
-    })()
-  }, [])
+      return Promise.resolve({ state: 'success', data: [] })
+    }, [])
 
   return (
     <Flex direction="column" gap="1" className="flex-1">
       <BlockLabel required>Lab Location</BlockLabel>
-      <SelectInput
+      <AsyncSelect
         field="labLocation"
-        options={labLocations}
+        fetchOptions={fetchOptions}
         buttonClassName="flex-1 w-[144px] h-7"
         onValueChange={(value) => {
           form.setValue('labLocation', value)
           form.setValue(
             'labLocationData',
-            labLocations.find((e: any) => e.value === value)?.data,
+            labLocations.find((e: Options) => e.value === value)?.data,
           )
         }}
       />

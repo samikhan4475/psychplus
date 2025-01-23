@@ -19,7 +19,7 @@ const transformIn = (labOrderData: Partial<LabOrders>) => {
     ),
     labOrderId: labOrderData?.id,
     labLocationData: labOrderData ? labOrderData.orderingLab : undefined,
-    labLocation: labOrderData ? labOrderData?.orderingLab?.locationId : '',
+    labLocation: labOrderData ? labOrderData?.orderingLab?.id : '',
     specimenList: [],
     labOrderNumber: labOrderData?.labOrderNumber,
     orderingStaffName: labOrderData?.orderingStaffName,

@@ -20,6 +20,7 @@ const LabOrderTablePagination = () => {
 
   return (
     <DataTablePagination
+      className="border-0"
       total={data?.total}
       loading={loading ?? false}
       page={page}
