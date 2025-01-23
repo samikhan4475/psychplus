@@ -18,7 +18,9 @@ import { PermissionAlert } from '../permission-alert'
 import { UpdateVisitAlert } from '../update-visit-alert'
 
 const VISIT_STATUS_PERMISSION =
-  'You do not have permission to change the visit status to this. Please contact your supersvisor if you need any further assistance.'
+  'You do not have permission to change the visit status to this. Please contact your supervisor if you need any further assistance.'
+const RESCHEDULE_ALERT_MESSAGE =
+  "The Visit Status cannot be manually changed to 'Rescheduled.'"
 
 const TimedVisitStatusSelect = ({
   appointment,
@@ -38,6 +40,7 @@ const TimedVisitStatusSelect = ({
     useConfirmVisitUpdate()
   const refetch = useRefetchAppointments()
   const [isAlertOpen, setIsAlertOpen] = useState<boolean>(false)
+  const [alertMessage, setAlertMessage] = useState<string>('')
   const nonTimedVisitStatusCodes = useVisitStatusCodeset('NonTimed')
   const {
     canChangeVisitStatusToCheckedInOfSelfAppointments,
@@ -124,11 +127,18 @@ const TimedVisitStatusSelect = ({
 
   const onChange = async (val: string) => {
     if (hasPermissionToChangeStatus(val)) {
+      if (val === 'Rescheduled') {
+        setAlertMessage(RESCHEDULE_ALERT_MESSAGE)
+        return setIsAlertOpen(true)
+      }
       setVisitStatus(val)
       const transformedBody = transformIn(appointment)
       transformedBody.appointmentStatus = val
       updateVisit(transformedBody, refetch, onUpdateVisitError)
-    } else setIsAlertOpen(true)
+    } else {
+      setAlertMessage(VISIT_STATUS_PERMISSION)
+      setIsAlertOpen(true)
+    }
   }
 
   return (
@@ -141,8 +151,11 @@ const TimedVisitStatusSelect = ({
       <UpdateVisitAlert state={alertState} onConfirm={confirmVisitUpdate} />
       <PermissionAlert
         isOpen={isAlertOpen}
-        onClose={() => setIsAlertOpen(false)}
-        message={VISIT_STATUS_PERMISSION}
+        onClose={() => {
+          setIsAlertOpen(false)
+          setAlertMessage('')
+        }}
+        message={alertMessage}
       />
       <CodesetSelectCell
         codeset={CODESETS.AppointmentStatus}
