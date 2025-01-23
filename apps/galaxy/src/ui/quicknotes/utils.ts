@@ -1,5 +1,5 @@
 import { cache } from 'react'
-import { QuickNoteSectionItem } from '@/types'
+import { DiagnosisIcd10Code, QuickNoteSectionItem } from '@/types'
 import { HpiWidgetClientLoader } from '@/ui/hpi/hpi-widget/hpi-widget-client-loader'
 import { isHospitalCareVisit, VisitTypeEnum, visitTypeToWidgets } from '@/utils'
 import { AddOnClientLoader } from '../add-on/add-on-widget/add-on-client-loader'
@@ -294,6 +294,29 @@ const modifyWidgetResponse = (data: QuickNoteSectionItem[] = []) =>
     return acc
   }, {})
 
+const validateDiagnosis = ({
+  workingDiagnosisData,
+  visitType,
+}: {
+  workingDiagnosisData: DiagnosisIcd10Code[]
+  visitType: string
+}) => {
+  const spravatoOrTmsDiagnosisCodes = ['F32.2', 'F32.3', 'F33.2', 'F33.3']
+  const isSpravatoOrTms = [VisitTypeEnum.Spravato, VisitTypeEnum.Tms].includes(
+    visitType as VisitTypeEnum,
+  )
+  const missingDiagnosisCodes = spravatoOrTmsDiagnosisCodes
+    .filter(
+      (code) => !workingDiagnosisData.map((item) => item.code).includes(code),
+    )
+    .join(', ')
+
+  if (isSpravatoOrTms && missingDiagnosisCodes.length) {
+    return missingDiagnosisCodes
+  }
+  return ''
+}
+
 const getCachedWidgetsByVisitType = cache(getWidgetsByVisitType)
 
 export {
@@ -301,4 +324,5 @@ export {
   getWidgetIds,
   modifyWidgetResponse,
   getWidgetsByVisitType,
+  validateDiagnosis,
 }

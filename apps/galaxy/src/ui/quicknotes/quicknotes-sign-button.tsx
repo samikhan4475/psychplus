@@ -9,10 +9,10 @@ import { STAFF_ROLE_CODE_PRESCRIBER } from '@/constants'
 import { useStore as useGlobalStore } from '@/store'
 import { Appointment } from '@/types'
 import { useStore as useDiagnosisStore } from '@/ui/diagnosis/store'
-import { VisitTypeEnum } from '@/utils'
 import { AlertDialog } from '../alerts'
 import { PolicyConsentDialog } from './policy-consent-dialog'
 import { useStore } from './store'
+import { validateDiagnosis } from './utils'
 
 interface QuickNotesSignButtonProps {
   appointment: Appointment
@@ -37,18 +37,20 @@ const initialAlertInfo = {
 }
 
 const QuickNotesSignButton = ({ appointment }: QuickNotesSignButtonProps) => {
-  const { workingDiagnosisData } = useDiagnosisStore()
+  const { workingDiagnosisData, saveWorkingDiagnosis } = useDiagnosisStore()
   const { staffId, staffRoleCode } = useGlobalStore((state) => ({
     staffId: state.user.staffId,
     staffRoleCode: state.staffResource.staffRoleCode,
   }))
-  const { loading, sign, markAsError, patient } = useStore((state) => ({
-    loading: state.loading,
-    sign: state.sign,
-    setIsErrorAlertOpen: state.setIsErrorAlertOpen,
-    markAsError: state.markAsError,
-    patient: state.patient,
-  }))
+  const { loading, sign, markAsError, patient, setWidgetsData } = useStore(
+    (state) => ({
+      loading: state.loading,
+      sign: state.sign,
+      setWidgetsData: state.setWidgetsData,
+      markAsError: state.markAsError,
+      patient: state.patient,
+    }),
+  )
   const isPrescriber = staffRoleCode === STAFF_ROLE_CODE_PRESCRIBER
   const [alertInfo, setAlertInfo] = useState(initialAlertInfo)
 
@@ -67,30 +69,23 @@ const QuickNotesSignButton = ({ appointment }: QuickNotesSignButtonProps) => {
     signedDate: isPrescriber ? new Date().toISOString() : undefined,
     noteTitleCode: appointment.visitNoteTitle,
   }
-  const [isPolicyAlertOpen, setIsPolicyAlertOpen] = useState(false);
+  const [isPolicyAlertOpen, setIsPolicyAlertOpen] = useState(false)
 
   const signNoteHandler = async () => {
-    const spravatoOrTmsDiagnosisCodes = ['F32.2', 'F32.3', 'F33.2', 'F33.3']
-    const isSpravatoOrTms = [
-      VisitTypeEnum.Spravato,
-      VisitTypeEnum.Tms,
-    ].includes(visitType as VisitTypeEnum)
-
-    if (patient.patientConsent !== "Verified") {
-      setIsPolicyAlertOpen(true);
+    if (patient.patientConsent !== 'Verified') {
+      setIsPolicyAlertOpen(true)
       return
     }
-    
-    const missingDiagnosisCodes = spravatoOrTmsDiagnosisCodes
-      .filter(
-        (code) => !workingDiagnosisData.map((item) => item.code).includes(code),
-      )
-      .join(', ')
+    const missingDiagnosisCodes = await validateDiagnosis({
+      workingDiagnosisData,
+      visitType,
+    })
 
-    if (isSpravatoOrTms && missingDiagnosisCodes.length) {
+    if (missingDiagnosisCodes) {
       toast.error(`Must have ${missingDiagnosisCodes} diagnosis for sign/send`)
       return
     }
+    saveWorkingDiagnosis(patientId, setWidgetsData, false)
     if (!isAppointmentProvider && isPrescriber) {
       setAlertInfo((prev) => ({
         ...prev,
