@@ -131,6 +131,10 @@ const labOrderSchema = z
         condition: !data?.orderDate,
         path: ['orderDate'],
       },
+      {
+        condition: !data?.labOrderStatus,
+        path: ['labOrderStatus'],
+      },
     ]
 
     if (data.specimenList && data.specimenList.length > 0) {
