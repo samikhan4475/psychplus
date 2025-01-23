@@ -42,7 +42,9 @@ const columns = (
     ),
     cell: ({ row }) => (
       <DateCell className="w-[108px]">
-        {formatDate(row.original.dateOfServiceFrom.toString(), 'MM/dd/yyyy')}
+        {row.original.dateOfServiceFrom
+          ? formatDate(row.original.dateOfServiceFrom.toString(), 'MM/dd/yyyy')
+          : ''}
       </DateCell>
     ),
   },
@@ -53,7 +55,9 @@ const columns = (
     ),
     cell: ({ row }) => (
       <DateCell className="w-[108px]">
-        {formatDate(row.original.dateOfServiceTo.toString(), 'MM/dd/yyyy')}
+        {row.original.dateOfServiceTo
+          ? formatDate(row.original.dateOfServiceTo.toString(), 'MM/dd/yyyy')
+          : ''}
       </DateCell>
     ),
   },

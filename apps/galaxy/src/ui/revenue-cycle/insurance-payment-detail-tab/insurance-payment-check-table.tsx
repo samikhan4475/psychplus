@@ -26,7 +26,9 @@ const columns: ColumnDef<ClaimPayment>[] = [
     header: ({ column }) => <ColumnHeader column={column} label="DOS From" />,
     cell: ({ row }) => (
       <DateCell>
-        {formatDate(row.original.dateOfServiceFrom, 'MM/dd/yyyy')}
+        {row.original.dateOfServiceFrom
+          ? formatDate(row.original.dateOfServiceFrom, 'MM/dd/yyyy')
+          : ''}
       </DateCell>
     ),
   },
@@ -35,7 +37,9 @@ const columns: ColumnDef<ClaimPayment>[] = [
     header: ({ column }) => <ColumnHeader column={column} label="DOS To" />,
     cell: ({ row }) => (
       <DateCell>
-        {formatDate(row.original.dateOfServiceTo, 'MM/dd/yyyy')}
+        {row.original.dateOfServiceTo
+          ? formatDate(row.original.dateOfServiceTo, 'MM/dd/yyyy')
+          : ''}
       </DateCell>
     ),
   },

@@ -99,7 +99,7 @@ const columns = (
       ),
       cell: ({ row }) => (
         <DateCell>
-          {formatDate(`${row.original.checkDate}`, 'MM/dd/yyyy')}
+          {row.original.checkDate ? formatDate(`${row.original.checkDate}`, 'MM/dd/yyyy') : ''}
         </DateCell>
       ),
     },
@@ -117,7 +117,7 @@ const columns = (
       ),
       cell: ({ row }) => (
         <DateCell>
-          {formatDate(`${row.original.receivedDate}`, 'MM/dd/yyyy')}
+          {row.original.receivedDate ?  formatDate(`${row.original.receivedDate}`, 'MM/dd/yyyy') : ''}
         </DateCell>
       ),
     },
