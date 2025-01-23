@@ -63,6 +63,7 @@ const QuickNotesSignButton = ({ appointment }: QuickNotesSignButtonProps) => {
     appointment,
     signedByUserId: appointment.providerStaffId ?? staffId,
     signedDate: isPrescriber ? new Date().toISOString() : undefined,
+    noteTitleCode: appointment.visitNoteTitle,
   }
 
   const signNoteHandler = async () => {

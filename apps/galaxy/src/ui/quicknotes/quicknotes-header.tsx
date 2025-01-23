@@ -44,7 +44,7 @@ const QuickNotesHeader = ({ appointment }: QuickNotesHeaderProps) => {
           <QuickNotesViewNoteButton />
           <QuickNotesCopyMyPreviousButton appointment={appointment} />
           <QuickNotesClearButton />
-          <QuickNotesSaveButton  appointment={appointment} />
+          <QuickNotesSaveButton appointment={appointment} />
           <QuickNotesUploadButton />
           <QuickNotesSignButton appointment={appointment} />
         </Flex>

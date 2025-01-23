@@ -107,6 +107,7 @@ const visitTypeToWidgets: Record<VisitTypeEnum, QuickNoteSectionName[]> = {
   [VisitTypeEnum.IndividualPsychotherapy]: [
     QuickNoteSectionName.QuicknoteSectionHPI,
     QuickNoteSectionName.QuickNoteSectionPastPsychHx,
+    QuickNoteSectionName.QuickNoteSectionPastMedicalHx,
     QuickNoteSectionName.QuickNoteSectionFamilyPsychHx,
     QuickNoteSectionName.QuickNoteSectionSocialHx,
     QuickNoteSectionName.QuickNoteSectionSubstanceUseHx,
@@ -126,6 +127,7 @@ const visitTypeToWidgets: Record<VisitTypeEnum, QuickNoteSectionName[]> = {
   [VisitTypeEnum.FamilyPsychotherapy]: [
     QuickNoteSectionName.QuicknoteSectionHPI,
     QuickNoteSectionName.QuickNoteSectionPastPsychHx,
+    QuickNoteSectionName.QuickNoteSectionPastMedicalHx,
     QuickNoteSectionName.QuickNoteSectionFamilyPsychHx,
     QuickNoteSectionName.QuickNoteSectionSocialHx,
     QuickNoteSectionName.QuickNoteSectionSubstanceUseHx,

@@ -10,6 +10,16 @@ interface signNoteActionParams {
   signedDate?: string
   isError?: boolean
   coSignedByUserId?: string
+  noteTitleCode?: string
+}
+
+interface signNoteActionPayload {
+  patientId: number
+  appointmentId: number
+  signedByUserId: number
+  noteTitleCode?: string
+  signedDate?: string
+  coSignedByUserId?: string
 }
 
 const signNoteAction = async (
@@ -22,18 +32,27 @@ const signNoteAction = async (
     signedDate,
     coSignedByUserId,
     signedByUserId,
+    noteTitleCode,
   } = signPayload
 
   const url = new URL(api.NOTE_SIGN_ENDPOINT(patientId, appointmentId))
   if (isError) url.searchParams.append('errormark', 'true')
-
-  const response = await api.PUT<QuickNoteSectionItem[]>(url.toString(), {
+  const payload: signNoteActionPayload = {
     patientId: parseInt(patientId),
     appointmentId: parseInt(appointmentId),
     signedByUserId,
-    coSignedByUserId,
+    noteTitleCode,
     signedDate,
-  })
+  }
+
+  if (coSignedByUserId) {
+    payload['coSignedByUserId'] = coSignedByUserId
+  }
+
+  const response = await api.PUT<QuickNoteSectionItem[]>(
+    url.toString(),
+    payload,
+  )
   if (response.state === 'error') {
     return {
       state: 'error',
