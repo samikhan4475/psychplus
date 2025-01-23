@@ -171,7 +171,7 @@ const labels = {
     vengeful: 'Vengeful',
     deceitful: 'Deceitful',
     destructive: 'Destructive',
-    disproportionateAnger: 'Disproportionate anger',
+    disproportionateAnger: 'Disproportionate Anger',
     animalCruelty: 'Animal Cruelty',
     manipulative: 'Manipulative',
     suddenOutbursts: 'Sudden Outbursts',
