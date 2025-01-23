@@ -13,6 +13,7 @@ import { TherapyTimeSpentBlock } from './blocks/time-spent'
 import { transformOut } from './data'
 import { useTherapyForm } from './therapy-form'
 import { TherapySchemaType } from './therapy-schema'
+import { getInitialValues } from './blocks/utils'
 
 interface TherapyWidgetProps {
   patientId: string
@@ -49,6 +50,7 @@ const IndividualTherapyView = ({
             <SaveButton />
           </>
         }
+        formResetValues={getInitialValues()}
       >
         <TherapyTimeSpentBlock />
         <TherapySessionParticipantsBlock />

@@ -43,6 +43,7 @@ const TcmWidget = ({ patientId, tcmData, isTcmTab, appointmentData }: TcmWidget)
             {!isTcmTab && <WidgetSaveButton />}
           </>
         }
+        formResetValues={defaultValues}
       >
         {isTcmTab && <TcmHeader title="TCM" />}
 
