@@ -1,7 +1,9 @@
 'use client'
 
+import { useState } from 'react'
 import { Flex, TextField } from '@radix-ui/themes'
-import { useFormContext } from 'react-hook-form'
+import { useFormContext, useWatch } from 'react-hook-form'
+import { useDebouncedCallback } from 'use-debounce'
 import { FormFieldError } from '@/components/form'
 import { ClaimUpdateSchemaType } from '../schema'
 
@@ -11,17 +13,21 @@ interface TableCellUnitAmountProps {
 
 const TableCellUnitAmount = ({ rowIndex }: TableCellUnitAmountProps) => {
   const form = useFormContext<ClaimUpdateSchemaType>()
-  const { setValue, register, getValues } = form
-  const updateFieldsWithUnitAmount = (value: string) => {
-    const numberValue = value === '' ? undefined : parseFloat(value)
-    if (numberValue !== undefined && !isNaN(numberValue) && numberValue >= 0) {
-      const units = getValues(`claimServiceLines.${rowIndex}.units`) ?? 0
-      const calculatedTotal = parseFloat((numberValue * units).toFixed(2))
+  const { setValue, getValues } = form
 
-      setValue(`claimServiceLines.${rowIndex}.totalAmount`, calculatedTotal, {
-        shouldDirty: true,
-      })
-    }
+  const [unitAmount, setUnitAmount] = useState<string | number>(
+    getValues(`claimServiceLines.${rowIndex}.unitAmount`) || '',
+  )
+
+  const updateFieldsWithUnits = (value: number) => {
+    const units = getValues(`claimServiceLines.${rowIndex}.units`) ?? 0
+    const calculatedTotal = parseFloat((value * units).toFixed(2))
+    setValue(`claimServiceLines.${rowIndex}.unitAmount`, value, {
+      shouldDirty: true,
+    })
+    setValue(`claimServiceLines.${rowIndex}.totalAmount`, calculatedTotal, {
+      shouldDirty: true,
+    })
   }
   return (
     <Flex direction={'column'}>
@@ -29,9 +35,20 @@ const TableCellUnitAmount = ({ rowIndex }: TableCellUnitAmountProps) => {
         size="1"
         placeholder="0.00"
         className="[box-shadow:none]"
-        {...register(`claimServiceLines.${rowIndex}.unitAmount`, {
-          onChange: (e) => updateFieldsWithUnitAmount(e.target.value),
-        })}
+        value={unitAmount}
+        onChange={(e) => {
+          const inputValue = e.target.value
+          if (inputValue === '') {
+            setUnitAmount('')
+            setValue(`claimServiceLines.${rowIndex}.unitAmount`, 0)
+          } else {
+            const numberValue = parseFloat(inputValue)
+            if (!isNaN(numberValue)) {
+              setUnitAmount(inputValue)
+            }
+          }
+        }}
+        onBlur={(e) => updateFieldsWithUnits(Number(e.target.value))}
       />
       <FormFieldError name={`claimServiceLines.${rowIndex}.unitAmount`} />
     </Flex>

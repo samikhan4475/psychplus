@@ -1,7 +1,9 @@
 'use client'
 
+import { useState } from 'react'
 import { TextField } from '@radix-ui/themes'
-import { useFormContext, useWatch } from 'react-hook-form'
+import { useFormContext } from 'react-hook-form'
+import { useDebouncedCallback } from 'use-debounce'
 import { ClaimUpdateSchemaType } from '../schema'
 
 interface TableCellUnitsProps {
@@ -10,33 +12,43 @@ interface TableCellUnitsProps {
 
 const TableCellUnits: React.FC<TableCellUnitsProps> = ({ rowIndex }) => {
   const form = useFormContext<ClaimUpdateSchemaType>()
-  const { setValue, register } = form
+  const { setValue, getValues } = form
 
-  const unitAmount =
-    useWatch({
-      control: form.control,
-      name: `claimServiceLines.${rowIndex}.unitAmount`,
-    }) ?? 0
+  const [units, setUnits] = useState<string | number>(
+    getValues(`claimServiceLines.${rowIndex}.units`) || '',
+  )
 
   const updateFieldsWithUnits = (numberValue: number) => {
+    const unitAmount =
+      getValues(`claimServiceLines.${rowIndex}.unitAmount`) ?? 0
     const calculatedTotal = parseFloat((numberValue * unitAmount).toFixed(2))
+
+    setValue(`claimServiceLines.${rowIndex}.units`, numberValue)
     setValue(`claimServiceLines.${rowIndex}.totalAmount`, calculatedTotal, {
       shouldDirty: true,
     })
   }
+
   return (
     <TextField.Root
       size="1"
       placeholder="0"
       className="[box-shadow:none]"
-      {...register(`claimServiceLines.${rowIndex}.units`, {
-        onChange: (e) => {
-          const numberValue = parseFloat(e.target.value)
+      value={units}
+      onChange={(e) => {
+        const inputValue = e.target.value
+        if (inputValue === '') {
+          setUnits('')
+          setValue(`claimServiceLines.${rowIndex}.units`, 0)
+          setValue(`claimServiceLines.${rowIndex}.totalAmount`, 0)
+        } else {
+          const numberValue = parseFloat(inputValue)
           if (!isNaN(numberValue)) {
-            updateFieldsWithUnits(numberValue)
+            setUnits(inputValue)
           }
-        },
-      })}
+        }
+      }}
+      onBlur={(e) => updateFieldsWithUnits(Number(e.target.value))}
     />
   )
 }
