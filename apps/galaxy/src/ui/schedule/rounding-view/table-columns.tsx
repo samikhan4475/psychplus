@@ -22,7 +22,7 @@ import {
 
 const columns: ColumnDef<Appointment>[] = [
   {
-    id: 'date-header',
+    id: 'appointment-date',
     accessorKey: 'appointmentDate',
     header: ({ column }) => (
       <ColumnHeader

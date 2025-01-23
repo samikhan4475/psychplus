@@ -43,6 +43,7 @@ interface DataTableProps<TData, TValue> {
   tableRowClass?: string
   selectFirstRow?: boolean
   stickyRow?: boolean
+  defaultSorting?: SortingState
 }
 
 const DataTable = <TData, TValue>({
@@ -65,8 +66,9 @@ const DataTable = <TData, TValue>({
   tableRowClass,
   stickyRow = false,
   isRowDisabled,
+  defaultSorting = [],
 }: DataTableProps<TData, TValue>) => {
-  const [sorting, setSorting] = useState<SortingState>([])
+  const [sorting, setSorting] = useState<SortingState>(defaultSorting)
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
     pageSize: initialPageSize,

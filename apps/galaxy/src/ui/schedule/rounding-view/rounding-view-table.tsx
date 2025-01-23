@@ -34,7 +34,7 @@ const DataTableHeader = (table: Table<Appointment>) => {
 }
 
 const RoundingViewTable = () => {
-  const data = useStore(state => state.appointments)
+  const data = useStore((state) => state.appointments)
   const fetchUnitsAndGroups = useRoundingViewStore(
     (state) => state.fetchUnitsAndGroups,
   )
@@ -61,6 +61,7 @@ const RoundingViewTable = () => {
         theadClass="z-10"
         isRowSpan
         sticky
+        defaultSorting={[{ id: 'appointment-date', desc: true }]}
       />
     </ScrollArea>
   )

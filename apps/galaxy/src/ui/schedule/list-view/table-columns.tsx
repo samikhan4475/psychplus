@@ -24,7 +24,7 @@ import {
 
 const columns: ColumnDef<Appointment>[] = [
   {
-    id: 'date-header',
+    id: 'appointment-date',
     accessorKey: 'appointmentDate',
     header: ({ column }) => (
       <ColumnHeader
@@ -46,7 +46,22 @@ const columns: ColumnDef<Appointment>[] = [
   },
   {
     id: 'time',
-    accessorKey: 'time',
+    accessorKey: 'appointmentDate',
+    sortingFn: (a, b) => {
+      const timeA = formatTimeCell(
+        a.original.appointmentDate,
+        a.original.locationTimezoneId,
+      )
+      const timeB = formatTimeCell(
+        b.original.appointmentDate,
+        b.original.locationTimezoneId,
+      )
+      const toMinutes = (time: string) => {
+        const [hours, minutes] = time.split(':').map(Number)
+        return hours * 60 + minutes
+      }
+      return toMinutes(timeA) - toMinutes(timeB)
+    },
     header: ({ column }) => (
       <ColumnHeader
         clientSideSort
