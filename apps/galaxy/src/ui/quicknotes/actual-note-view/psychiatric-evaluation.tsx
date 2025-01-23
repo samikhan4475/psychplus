@@ -14,6 +14,7 @@ const PsychiatricEvaluation = ({ appointment, patient }: Props) => {
   const { cosignerLabel } = useStore((state) => ({
     cosignerLabel: state.cosignerLabel,
   }))
+
   return (
     <BlockContainer heading={appointment.visitNoteTitle ?? ''}>
       <LabelAndValue label="Title:" value={appointment.visitNoteTitle} />
@@ -22,7 +23,7 @@ const PsychiatricEvaluation = ({ appointment, patient }: Props) => {
         label="Visit Sequence:"
         value={appointment.visitSequence}
       />
-      <LabelAndValue label="Visit Medium:" value={appointment.visitMedium} />
+      <LabelAndValue label="Visit Medium:" value={appointment.type} />
       <LabelAndValue label="Provider Type:" value={appointment.providerType} />
       <LabelAndValue label="Provider:" value={appointment.providerName} />
       <LabelAndValue label="Location:" value={appointment.locationName} />
