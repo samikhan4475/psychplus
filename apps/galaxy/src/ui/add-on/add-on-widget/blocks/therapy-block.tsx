@@ -24,9 +24,6 @@ const TherapyBlock: React.FC = ({ isChecked }: TherapyBlockProps) => {
 
   return (
     <>
-      <Text className="cursor-default" weight="medium">
-        Therapy Block
-      </Text>
       {isTherapyChecked && (
         <Flex direction="column" gap="2">
           <Text className="cursor-default" weight="medium">
