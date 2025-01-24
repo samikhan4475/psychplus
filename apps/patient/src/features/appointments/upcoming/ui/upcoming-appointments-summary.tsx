@@ -47,6 +47,7 @@ import { ChangePaymentMethodDialog } from './change-payment-method-dialog'
 import { JoinVirtualCallBtn } from './join-virtual-call-button'
 import { PayCopayButton } from './pay-copay-button'
 import { UpdateDateAndTimeDialog } from './update-date-and-time-dialog'
+import { Appointment } from '@psychplus-v2/types'
 
 const UpcomingAppointmentsSummaryComponent = async () => {
   const [
@@ -115,6 +116,16 @@ const UpcomingAppointmentsSummaryComponent = async () => {
       </CardContainer>
     )
   }
+
+  const getPaymentType = (row: Appointment) => {
+    if (row.isSelfPay) {
+      return PaymentType.SelfPay;
+    }
+    if (patientVerification.primaryInsuranceName) {
+      return patientVerification.primaryInsuranceName;
+    }
+    return "Select Insurance";
+  };
 
   return (
     <CodesetStoreProvider codesets={codesets}>
@@ -194,17 +205,15 @@ const UpcomingAppointmentsSummaryComponent = async () => {
                   <Flex align="center" gap="2" ml={{ initial: '0', xs: '3' }}>
                     <Flex align="center" gap="1">
                       {row.isSelfPay && <CreditDebitCardIcon />}
-                      {!row.isSelfPay && patientVerification.hasInsurance && (
+                      {!row.isSelfPay && (
                         <ShieldFlashLineIcon />
                       )}
                       {!row.isSelfPay &&
                         !patientVerification.hasInsurance &&
-                        'Select Insurance'}
+                        ''}
 
                       <Text className="text-[12px] xs:text-[15px]">
-                        {row.isSelfPay
-                          ? PaymentType.SelfPay
-                          : patientVerification.primaryInsuranceName}
+                        {getPaymentType(row)}
                       </Text>
                       {!row.isSelfPay &&
                         patientVerification.primaryInsuranceName && (
