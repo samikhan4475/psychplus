@@ -31,6 +31,7 @@ type SchemaType = z.infer<typeof schema>
 const LoginPage = () => {
   const searchParams = useSearchParams()
   const [error, setError] = useState<string>()
+  const [isLoading, setIsLoading] = useState<boolean>(false)
 
   const form = useForm<SchemaType>({
     resolver: zodResolver(schema),
@@ -43,6 +44,7 @@ const LoginPage = () => {
 
   const onSubmit: SubmitHandler<SchemaType> = async (data) => {
     setError(undefined)
+    setIsLoading(true);
 
     return loginAction({
       username: data.username.trim(),
@@ -50,6 +52,7 @@ const LoginPage = () => {
       next: searchParams?.get('next') ?? null,
     }).then((result) => {
       if (result?.state === 'error') {
+        setIsLoading(false);
         setError(result.error)
       }
     })
@@ -74,10 +77,11 @@ const LoginPage = () => {
       >
         <Flex
           direction="column"
+          justify="center"
           px="5"
           py="5"
-          className="bg-white w-full max-w-[450px] rounded-3 shadow-3"
-        >
+          className="bg-white w-full max-w-[450px] min-h-[300] rounded-3 shadow-3"
+          >
           <Heading weight="medium" mb="4">
             Log in
           </Heading>
@@ -93,7 +97,7 @@ const LoginPage = () => {
                   id={LOGIN_FORM_EMAIL_INPUT}
                   {...form.register('username')}
                   radius="full"
-                />
+                  />
                 <FormFieldError name="username" />
               </FormFieldContainer>
               <FormFieldContainer>
@@ -103,7 +107,7 @@ const LoginPage = () => {
                     href="/forgot-password"
                     prefetch={false}
                     className="ml-auto"
-                  >
+                    >
                     <Text className="text-[12px] text-accent-12 underline-offset-2 hover:underline">
                       Forgot password?
                     </Text>
@@ -116,9 +120,9 @@ const LoginPage = () => {
               size="3"
               className="w-full"
               highContrast
-              loading={form.formState.isSubmitting}
+              loading={isLoading}
               radius="full"
-            >
+              >
               Log in
             </FormSubmitButton>
           </FormContainer>
