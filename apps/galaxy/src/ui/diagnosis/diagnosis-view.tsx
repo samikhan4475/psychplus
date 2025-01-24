@@ -5,7 +5,6 @@ import * as Tabs from '@radix-ui/react-tabs'
 import { Flex } from '@radix-ui/themes'
 import { XIcon } from 'lucide-react'
 import { Diagnosis } from './diagnosis'
-import { History } from './history'
 import { useStore } from './store'
 
 interface DiagnosisViewProps {
@@ -27,18 +26,11 @@ const DiagnosisView = ({ patientId }: DiagnosisViewProps) => {
         <Tabs.List>
           <TabsTrigger value="Diagnosis">Diagnosis</TabsTrigger>
         </Tabs.List>
-        <Tabs.List>
-          <TabsTrigger value="History">History</TabsTrigger>
-        </Tabs.List>
         <Flex className="flex-1 border-b border-gray-5" />
       </Flex>
 
       <TabsContent value="Diagnosis">
         <Diagnosis />
-      </TabsContent>
-
-      <TabsContent value="History">
-        <History />
       </TabsContent>
     </Tabs.Root>
   )

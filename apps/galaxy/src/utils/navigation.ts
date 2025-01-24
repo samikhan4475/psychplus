@@ -23,11 +23,8 @@ const getNavLinks = (
     { label: 'Notes', href: '/notes' },
     { label: 'Diagnosis', href: '/diagnosis' },
     { label: 'Medications', href: '/medications' },
-    { label: 'Drug History', href: '/drug-history' },
     { label: 'Allergies', href: '/allergies' },
-    { label: 'Treatment Plan', href: '/treatment-plan' },
     ...defaultBottomLinks,
-    { label: 'Procedures', href: '/procedures' },
     { label: 'Billing History', href: '/billing-history' },
   ]
 
@@ -45,7 +42,6 @@ const getNavLinks = (
     { label: 'Review of System', href: '/ros' },
     { label: 'Vitals', href: '/vitals' },
     { label: 'Physical Exam', href: '/physical-exam' },
-    { label: 'Medical History', href: '/medical-history' },
     {
       label: 'Therapy',
       href: '/therapy',

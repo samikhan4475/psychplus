@@ -3,11 +3,8 @@
 import * as Tabs from '@radix-ui/react-tabs'
 import { Flex } from '@radix-ui/themes'
 import { TabsTrigger } from '@/components'
-import { FeatureFlag } from '@/types/feature-flag'
 import {
   CURRENT_MEDICATIONS_TAB,
-  EXTERNAL_MEDICATIONS_TAB,
-  HOME_MEDICATIONS_TAB,
 } from './constants'
 import { PatientMedicationsDataTable } from './patient-medications-data-table'
 import { PatientMedicationsTabContent } from './patient-medications-tab-content'
@@ -28,12 +25,6 @@ const PatientMedicationsTabView = ({
           <TabsTrigger value={CURRENT_MEDICATIONS_TAB}>
             Current Medications
           </TabsTrigger>
-          <TabsTrigger value={HOME_MEDICATIONS_TAB} disabled>
-            Home Medications
-          </TabsTrigger>
-          <TabsTrigger value={EXTERNAL_MEDICATIONS_TAB} disabled>
-            External Medications
-          </TabsTrigger>
         </Tabs.List>
         <Flex className="flex-1 border-b border-gray-5" />
       </Flex>
@@ -45,18 +36,6 @@ const PatientMedicationsTabView = ({
         >
           <PatientMedicationsDataTable />
         </PatientMedicationsTabContent>
-      </TabsContent>
-      <TabsContent value={HOME_MEDICATIONS_TAB}>
-        <PatientMedicationsTabContent
-          tabTitle="Home Medications"
-          scriptSureAppUrl={scriptSureAppUrl}
-        />
-      </TabsContent>
-      <TabsContent value={EXTERNAL_MEDICATIONS_TAB}>
-        <PatientMedicationsTabContent
-          tabTitle="External Medications"
-          scriptSureAppUrl={scriptSureAppUrl}
-        />
       </TabsContent>
     </Tabs.Root>
   )

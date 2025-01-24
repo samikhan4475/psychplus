@@ -27,10 +27,14 @@ const NoteDetailsSection = () => {
     <Box className="border-pp-gray-2 bg-white border-l border-r">
       <Flex wrap="wrap" className="border-pp-gray-2 gap-2 border-b px-3 py-2.5">
         <Heading className="text-[18px] font-bold">Details</Heading>
-        <NotesSendCosignerButton />
-        <NotesMarkErrorButton />
-        <AddendumButton onClick={() => setAddAddendum(true)} />
-        <NotesRemoveConsignerButton />
+        {selectedRow !== undefined && (
+          <>
+          <NotesSendCosignerButton />
+          <NotesMarkErrorButton />
+          <AddendumButton onClick={() => setAddAddendum(true)} />
+          <NotesRemoveConsignerButton />
+          </>
+        )}
         {!!selectedRow && <NotesPrintButton id="note-view-print" />}
       </Flex>
       {selectedRow === undefined ? (

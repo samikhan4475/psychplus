@@ -53,7 +53,6 @@ const DiagnosisWidget = ({
             <WidgetAddButton title="Add Diagnosis">
               <Diagnosis />
             </WidgetAddButton>
-            <WidgetHxButton />
             <WidgetClearButton />
             <DiagnosisSaveButton />
           </Flex>
