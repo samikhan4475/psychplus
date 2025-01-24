@@ -2,34 +2,45 @@
 
 import { useEffect } from 'react'
 import { Flex } from '@radix-ui/themes'
-import { Appointment } from '@/types'
+import { Appointment, PatientProfile } from '@/types'
+import { Allergy } from '../quicknotes/actual-note-view/types'
 import { AlertDialog } from './alert-dialog'
 import { CreateNoteView } from './create-note'
 import { NotesHeader } from './notes-header'
 import { NotesLayout } from './notes-layout'
 import { useStore } from './store'
+import { PatientNotes } from './types'
 
 interface NotesViewProps {
   patientId: string
   noteAppointment?: Appointment
+  patientNotes: PatientNotes[]
+  PatientProfile: PatientProfile
+  allergies: Allergy[]
 }
 
-const NotesWidget = ({ patientId, noteAppointment }: NotesViewProps) => {
+const NotesWidget = ({
+  patientId,
+  noteAppointment,
+  patientNotes,
+  PatientProfile,
+  allergies,
+}: NotesViewProps) => {
   const {
     appointment,
     selectedRow,
     isCreateNoteView,
     noteDetail,
     setPatientId,
+    setData,
+    setPatient,
+    setAllergies,
     setAppointmentId,
     setLoadingDetail,
     fetchAppointment,
     fetchWidgets,
-    fetchPatient,
     fetchNoteDetail,
-    fetchAllergies,
     fetchAppointments,
-    fetchDocuments,
     fetchStaff,
     fetchProvider,
     fetchAddendumsDetails,
@@ -39,26 +50,31 @@ const NotesWidget = ({ patientId, noteAppointment }: NotesViewProps) => {
     selectedRow: state.selectedRow,
     noteDetail: state.noteDetail,
     setPatientId: state.setPatientId,
+    setData: state.setData,
+    setPatient: state.setPatient,
+    setAllergies: state.setAllergies,
     setAppointmentId: state.setAppointmentId,
     setAppointment: state.setAppointment,
     setLoadingDetail: state.setLoadingDetail,
     fetchNoteDetail: state.fetchNoteDetail,
-    fetchAllergies: state.fetchAllergies,
     fetchAppointments: state.fetchAppointments,
     fetchAppointment: state.fetchAppointment,
     fetchWidgets: state.fetchWidgets,
-    fetchPatient: state.fetchPatient,
-    fetchDocuments: state.fetchDocuments,
     fetchStaff: state.fetchStaff,
     fetchProvider: state.fetchProvider,
     fetchAddendumsDetails: state.fetchAddendumsDetails,
   }))
 
   useEffect(() => {
+    setData({ notes: patientNotes })
+    setPatientId(patientId)
+    setPatient(PatientProfile)
+    setAllergies(allergies)
+  }, [])
+
+  useEffect(() => {
     const fetchData = async () => {
-      setPatientId(patientId)
       if (selectedRow) {
-        console.log(selectedRow, 'selectedRowselectedRowselectedRow')
         const payload = {
           patientId: patientId,
           appointmentId: selectedRow?.appointmentId,
@@ -69,19 +85,20 @@ const NotesWidget = ({ patientId, noteAppointment }: NotesViewProps) => {
         }
         setAppointmentId(selectedRow.appointmentId)
         setLoadingDetail(true)
-        await Promise.all([
+        const promises = [
           fetchNoteDetail(payload),
-          fetchAllergies(patientId),
-          fetchPatient(patientId),
-          fetchAppointments(patientId, selectedRow.appointmentId),
           fetchAppointment(selectedRow.appointmentId),
-          fetchDocuments(patientId, selectedRow.appointmentId),
           fetchAddendumsDetails(
             patientId,
             selectedRow?.appointmentId,
             selectedRow?.id,
           ),
-        ])
+        ]
+        if (selectedRow.notePositionCode !== 'Secondary') {
+          promises.push(fetchAppointments(patientId, selectedRow.appointmentId))
+        }
+
+        await Promise.all(promises)
       }
     }
     fetchData()
@@ -91,15 +108,20 @@ const NotesWidget = ({ patientId, noteAppointment }: NotesViewProps) => {
   useEffect(() => {
     const fetchData = async () => {
       if (selectedRow && appointment && noteDetail) {
-        await Promise.all([
-          fetchWidgets({
-            visitType: selectedRow.visitTypeCode ?? '',
-            visitSequence: selectedRow.visitSequence ?? '',
-            providerType: appointment.providerType ?? '',
-          }),
+        const promises = [
           fetchStaff(noteDetail[0]?.coSignedByUserId),
           fetchProvider(noteDetail[0]?.signedByUserId),
-        ])
+        ]
+        if (selectedRow.notePositionCode !== 'Secondary') {
+          promises.push(
+            fetchWidgets({
+              visitType: selectedRow.visitTypeCode ?? '',
+              visitSequence: selectedRow.visitSequence ?? '',
+              providerType: appointment.providerType ?? '',
+            }),
+          )
+        }
+        await Promise.all(promises)
         setLoadingDetail(false)
       }
     }

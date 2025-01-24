@@ -1,6 +1,7 @@
 'use server'
 
 import * as api from '@/api'
+import { NoteDocumentResponse } from '../../types'
 
 interface FileUploadProps {
   data: FormData
@@ -13,7 +14,7 @@ const fileUploadAction = async ({
   patientId,
   appointmentId,
 }: FileUploadProps) => {
-  const result = await api.POST<void>(
+  const result = await api.POST<NoteDocumentResponse[]>(
     api.NOTE_UPLOAD_FILE(patientId, appointmentId),
     data,
     {
@@ -30,7 +31,7 @@ const fileUploadAction = async ({
 
   return {
     state: 'success',
-    data: undefined,
+    data: result.data,
   }
 }
 

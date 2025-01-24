@@ -1,13 +1,11 @@
-'use server'
-
 import * as api from '@/api'
-import type {
+import {
   GetPatientNotesParams,
   GetPatientNotesResponse,
   PatientNotes,
-} from '../types'
+} from '@/ui/notes/types'
 
-const getPatientNotesAction = async (
+const getPatientNotes = async (
   payload: GetPatientNotesParams,
 ): Promise<api.ActionResult<GetPatientNotesResponse>> => {
   const response = await api.POST(
@@ -30,4 +28,4 @@ const getPatientNotesAction = async (
   }
 }
 
-export { getPatientNotesAction }
+export { getPatientNotes }

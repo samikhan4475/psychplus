@@ -166,7 +166,6 @@ const NotesTable = ({ patientId }: { patientId: string }) => {
 
   const {
     data,
-    fetch,
     loading,
     setSelectedRow,
     setIsErrorAlertOpen,
@@ -174,7 +173,6 @@ const NotesTable = ({ patientId }: { patientId: string }) => {
   } = useStore((state) => ({
     data: state.data,
     loading: state.loading,
-    fetch: state.fetch,
     setSelectedRow: state.setSelectedRow,
     setIsErrorAlertOpen: state.setIsErrorAlertOpen,
     setErrorMessage: state.setErrorMessage,
@@ -182,10 +180,6 @@ const NotesTable = ({ patientId }: { patientId: string }) => {
 
   const codes = useCodesetCodes(CODESETS.UsStates)
   const noteTypeCodes = useCodesetCodes(CODESETS.NoteType)
-
-  useEffect(() => {
-    fetch({ patientId })
-  }, [])
 
   const onRowSelect = (row: Row<PatientNotes>, table: Table<PatientNotes>) => {
     table.setRowSelection({ [row.id]: true })

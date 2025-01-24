@@ -413,7 +413,7 @@ const CREATE_NOTE_ENDPOINT = (
   patientId: string,
   appointmentId: string | null,
 ) =>
-  `${API_URL}/api/patients/${patientId}/encounters/${appointmentId}/secondarynotes?errormark=true`
+  `${API_URL}/api/patients/${patientId}/encounters/${appointmentId}/secondarynotes`
 const GET_NOTE_DOCUMENT_ENDPOINT = (
   patientId: string,
   appointmentId: string,

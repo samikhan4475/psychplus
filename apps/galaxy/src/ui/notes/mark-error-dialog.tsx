@@ -5,6 +5,7 @@ import { Button, Dialog, Flex, Text } from '@radix-ui/themes'
 import { TriangleAlert, X } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { markToErrorAction } from './actions/mark-error'
+import { useStore } from './store'
 import { useNoteActions } from './use-note-actions'
 
 interface MarkErrorDialogProps {
@@ -17,6 +18,10 @@ const MarkErrorDialog = ({
   removecloseDialog,
 }: MarkErrorDialogProps) => {
   const [loading, setLoading] = useState(false)
+  const { fetch, patientId } = useStore((state) => ({
+    fetch: state.fetch,
+    patientId: state.patientId,
+  }))
   const { validateAndPreparePayload } = useNoteActions()
 
   const handleSubmit = async () => {
@@ -35,6 +40,7 @@ const MarkErrorDialog = ({
     }
 
     toast.success('Marked as error successfully')
+    fetch({ patientId })
     removecloseDialog()
     setLoading(false)
   }

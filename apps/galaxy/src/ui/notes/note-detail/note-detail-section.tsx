@@ -13,7 +13,6 @@ import { NoteDetail } from './note-detail'
 const NoteDetailsSection = () => {
   const { selectedRow } = useStore((state) => ({
     selectedRow: state.selectedRow,
-    appointment: state.appointment,
   }))
 
   const [addAddendum, setAddAddendum] = useState<boolean>(false)

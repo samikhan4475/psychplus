@@ -1,4 +1,5 @@
 import { type Row } from '@tanstack/react-table'
+import { Sort } from '@/types'
 
 type AllergyStatus = 'active' | 'inactive'
 
@@ -50,10 +51,16 @@ interface GetPatientAllergiesResponse {
   data?: AllergyDataResponse[]
 }
 
+interface GetPatientAllergiesParams {
+  payload?: AllergiesSearchParams
+  sort?: Sort
+}
+
 export type {
   PatientAllergy,
   PatientAllergyRow,
   GetPatientAllergiesResponse,
   AllergiesSearchParams,
   AllergyDataResponse,
+  GetPatientAllergiesParams,
 }

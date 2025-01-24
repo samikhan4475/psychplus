@@ -1,21 +1,19 @@
 import { create } from 'zustand'
-import { getAppointment, getPatientProfileAction } from '@/actions'
+import { getAppointment } from '@/actions'
 import { Appointment, PatientProfile, StaffResource } from '@/types'
-import { getPatientAllergiesAction } from '../allergy/patient-allergies-widget/actions'
 import { Allergy } from '../quicknotes/actual-note-view/types'
 import { getBookedAppointmentsAction } from '../schedule/actions'
 import {
   getNoteDetailsAction,
   GetNoteDetailsParams,
   getPatientNotesAction,
-  GetPatientNotesParams,
   getStaffAction,
 } from './actions'
 import { getAddendumDetailsAction } from './actions/get-addendum'
-import { getNoteDocumentsAction } from './actions/get-note-documents'
 import { getWidgetsArrayByVisitType } from './note-detail/utils'
 import type {
   Addendum,
+  GetPatientNotesParams,
   GetPatientNotesResponse,
   NoteDetail,
   NoteDocuments,
@@ -42,24 +40,22 @@ interface Store {
   selectedRow: PatientNotes | undefined
   selectedRows: PatientNotes[]
   isCreateNoteView: boolean
-  isCosigner: boolean
   errorMessage: string
   isErrorAlertOpen: boolean
   setPatientId: (id: string) => void
+  setData: (data: GetPatientNotesResponse) => void
+  setAllergies: (allergies: Allergy[]) => void
+  setPatient: (patient: PatientProfile) => void
   setAppointmentId: (id: string) => void
   setSelectedRow: (value: PatientNotes | undefined) => void
   setSelectedRows: (value: PatientNotes[]) => void
   setAppointment: (value: Appointment) => void
   setIsCreateNoteView: (value: boolean) => void
-  setIsCosigner: (value: boolean) => void
   setErrorMessage: (value: string) => void
   setIsErrorAlertOpen: (value: boolean) => void
   fetchAppointment: (appointmentId: string) => void
   fetchAppointments: (patientId: string, appointmentId: string) => void
-  fetchDocuments: (patientId: string, appointmentId: string) => void
   fetchNoteDetail: (payload: GetNoteDetailsParams) => void
-  fetchAllergies: (patientId: string) => void
-  fetchPatient: (patientId: string) => void
   fetchStaff: (staffId: number) => void
   fetchProvider: (staffId: number) => void
   setLoadingDetail: (loadingDetail: boolean) => void
@@ -85,7 +81,7 @@ const useStore = create<Store>((set, get) => ({
   patientId: '',
   appointmentId: '',
   data: undefined,
-  loading: true,
+  loading: false,
   loadingDetail: false,
   error: undefined,
   appointment: undefined,
@@ -95,9 +91,11 @@ const useStore = create<Store>((set, get) => ({
   selectedRow: undefined,
   selectedRows: [],
   isErrorAlertOpen: false,
-  isCosigner: false,
   errorMessage: '',
   isCreateNoteView: false,
+  setData: (data) => set({ data }),
+  setAllergies: (allergies) => set({ allergies }),
+  setPatient: (patient) => set({ patient }),
   setPatientId: (patientId) => set({ patientId }),
   setLoadingDetail: (loadingDetail) => set({ loadingDetail }),
   setAppointment: (appointment) => set({ appointment }),
@@ -105,7 +103,6 @@ const useStore = create<Store>((set, get) => ({
   setSelectedRow: (selectedRow) => set({ selectedRow }),
   setSelectedRows: (selectedRows) => set({ selectedRows }),
   setIsCreateNoteView: (isCreateNoteView) => set({ isCreateNoteView }),
-  setIsCosigner: (isCosigner) => set({ isCosigner }),
   setErrorMessage: (errorMessage) => set({ errorMessage }),
   setIsErrorAlertOpen: (isErrorAlertOpen) => set({ isErrorAlertOpen }),
   fetch: async (payload) => {
@@ -168,26 +165,6 @@ const useStore = create<Store>((set, get) => ({
       appointments: appointments.data,
     })
   },
-  fetchDocuments: async (patientId: string, appointmentId: string) => {
-    set({
-      error: undefined,
-    })
-
-    const appointments = await getNoteDocumentsAction({
-      patientId: patientId,
-      appointmentId: appointmentId,
-    })
-
-    if (appointments.state === 'error') {
-      return set({
-        error: appointments.error,
-      })
-    }
-
-    set({
-      documents: appointments.data,
-    })
-  },
   fetchNoteDetail: async (payload: GetNoteDetailsParams) => {
     set({
       error: undefined,
@@ -202,39 +179,6 @@ const useStore = create<Store>((set, get) => ({
 
     set({
       noteDetail: response.data,
-    })
-  },
-  fetchAllergies: async (patientId: string) => {
-    set({
-      error: undefined,
-    })
-    const result = await getPatientAllergiesAction({
-      payload: {
-        patientIds: [patientId],
-      },
-    })
-    if (result.state === 'error') {
-      return set({
-        error: result.error,
-      })
-    }
-    set({
-      allergies: result.data,
-    })
-  },
-
-  fetchPatient: async (patientId: string) => {
-    set({
-      error: undefined,
-    })
-    const patient = await getPatientProfileAction(patientId)
-    if (patient.state === 'error') {
-      return set({
-        error: patient.error,
-      })
-    }
-    set({
-      patient: patient.data,
     })
   },
   fetchStaff: async (staffId: number) => {

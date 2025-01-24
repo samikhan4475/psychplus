@@ -1,5 +1,10 @@
 import { Text } from '@radix-ui/themes'
-import { getAppointment } from '@/api'
+import {
+  getAppointment,
+  getPatientAllergies,
+  getPatientNotes,
+  getPatientProfile,
+} from '@/api'
 import { NotesView } from '@/ui/notes'
 
 interface NotesPageProps {
@@ -12,14 +17,43 @@ interface NotesPageProps {
 }
 
 const NotesPage = async ({ params, searchParams }: NotesPageProps) => {
-  const noteAppointment = await getAppointment({
-    id: searchParams.id,
-    isIncludeCosigners: true,
-  })
+  const [patientNotes, noteAppointment, patientAllergies, patientProfile] =
+    await Promise.all([
+      getPatientNotes({ patientId: params.id }),
+      getAppointment({
+        id: searchParams.id,
+        isIncludeCosigners: true,
+      }),
+      getPatientAllergies({
+        payload: {
+          patientIds: [params.id],
+        },
+      }),
+      getPatientProfile(params.id),
+    ])
 
   const appointmentData =
     noteAppointment.state === 'error' ? undefined : noteAppointment.data
-  return <NotesView patientId={params.id} noteAppointment={appointmentData} />
+
+  const patientNotesData =
+    patientNotes.state === 'error' ? [] : patientNotes.data.notes
+
+  const patientAllergiesData =
+    patientAllergies.state === 'error' ? [] : patientAllergies.data
+
+  if (patientProfile.state === 'error') {
+    return <Text>{patientProfile.error}</Text>
+  }
+
+  return (
+    <NotesView
+      patientId={params.id}
+      noteAppointment={appointmentData}
+      patientNotes={patientNotesData}
+      PatientProfile={patientProfile.data}
+      allergies={patientAllergiesData}
+    />
+  )
 }
 
 export default NotesPage

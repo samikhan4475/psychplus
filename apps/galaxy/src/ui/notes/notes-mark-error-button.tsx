@@ -10,6 +10,7 @@ import { useStore } from './store'
 
 const NotesMarkErrorButton = () => {
   const { staffId } = useGlobalStore((state) => state.user)
+
   const { isOpen, closeDialog, openDialog } = useCosignDialog()
 
   const { selectedRow, appointment, setErrorMessage, setIsErrorAlertOpen } =

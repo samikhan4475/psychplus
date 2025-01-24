@@ -45,6 +45,7 @@ const NotesRemoveConsignerButton = () => {
         size="1"
         className="text-black"
         onClick={handleClick}
+        disabled={selectedRow?.cosignedByUserId ? false : true}
       >
         <WarningIcon width={16} height={16} />
         Remove Cosigner

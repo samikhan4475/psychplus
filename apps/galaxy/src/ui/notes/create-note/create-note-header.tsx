@@ -1,3 +1,4 @@
+import { useParams } from 'next/navigation'
 import { Flex, IconButton, Text } from '@radix-ui/themes'
 import { ChevronLeft } from 'lucide-react'
 import { cn } from '@/utils'
@@ -6,19 +7,21 @@ import { CreateNoteClearButton } from './create-note-clear-button'
 import { CreateNotePrintButton } from './create-note-print-button'
 import { CreateNoteSignButton } from './create-note-sign-button'
 import { CreateNoteUploadButton } from './create-note-upload-button'
-import { SaveButton } from './save-button'
 
 const secondaryButtonClasses = 'shadow-2 h-6 text-black'
 
 const CreateNoteHeader = ({ id }: { id: string }) => {
-  const { setIsCreateNoteView, setSelectedRow } = useStore((state) => ({
+  const patientId = useParams().id as string
+  const { setIsCreateNoteView, setSelectedRow, fetch } = useStore((state) => ({
     setIsCreateNoteView: state.setIsCreateNoteView,
     setSelectedRow: state.setSelectedRow,
+    fetch: state.fetch,
   }))
 
   const clearNoteViewState = () => {
     setIsCreateNoteView(false)
     setSelectedRow(undefined)
+    fetch({ patientId })
   }
 
   return (
@@ -45,7 +48,6 @@ const CreateNoteHeader = ({ id }: { id: string }) => {
         <CreateNotePrintButton id={id} />
         <CreateNoteClearButton />
         <CreateNoteUploadButton />
-        <SaveButton />
         <CreateNoteSignButton />
       </Flex>
     </Flex>

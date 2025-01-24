@@ -3,23 +3,30 @@
 import { FileIcon } from '@radix-ui/react-icons'
 import { Flex, Text } from '@radix-ui/themes'
 import { GET_NOTE_DOCUMENT_ENDPOINT } from '@/api/endpoints'
+import { QuickNoteSectionItem } from '@/types'
+import { bytesToMegaBytes } from '@/ui/secure-messages/utils'
 import { cn } from '@/utils'
 import { downloadFile } from '@/utils/download'
-import { NoteDocument } from '../types'
+import { useStore } from '../store'
 
 interface FileUploadCardProps {
-  document: NoteDocument
+  document: QuickNoteSectionItem
 }
 
 const FileViewCard = ({ document }: FileUploadCardProps) => {
+  const [, id, size] = document.sectionItem.split(',')
+  const { noteDetail } = useStore((state) => ({
+    noteDetail: state.noteDetail,
+  }))
+
   const onPreview = async () => {
     await downloadFile(
       GET_NOTE_DOCUMENT_ENDPOINT(
-        document.patientId,
-        document.appointmentId,
-        document.documentId,
+        String(noteDetail?.[0].patientId),
+        String(noteDetail?.[0].appointmentId),
+        id,
       ),
-      document.fileName ?? 'file',
+      document.sectionItemValue ?? 'file',
       'POST',
       {},
     )
@@ -38,8 +45,11 @@ const FileViewCard = ({ document }: FileUploadCardProps) => {
           weight="bold"
           className="line-clamp-1 w-[105px] overflow-hidden text-ellipsis text-[12px]"
         >
-          {document.fileName}
+          {document.sectionItemValue}
         </Text>
+        <Text className="text-gray-500 text-[10px]">{`${bytesToMegaBytes(
+          Number(size),
+        )} MB`}</Text>
       </Flex>
     </Flex>
   )

@@ -8,7 +8,8 @@ function sanitizeFormData<T extends object>(obj: T): T {
         value !== null &&
         value !== '' &&
         value?.length !== 0 &&
-        value !== false,
+        value !== false &&
+        value !== 'undefined',
     ),
   ) as T
 }

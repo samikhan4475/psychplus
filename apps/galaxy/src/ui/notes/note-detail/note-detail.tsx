@@ -55,7 +55,10 @@ const NoteDetail = ({ children }: PropsWithChildren) => {
       id="note-view-print"
     >
       {groupedData['CreateNote']?.length > 0 ? (
-        <CreateNoteDetailView data={groupedData['CreateNote']} />
+        <CreateNoteDetailView
+          data={groupedData['CreateNote']}
+          noteDocuments={groupedData['UploadDocument']}
+        />
       ) : (
         widgets.map(
           ({ id, actualNoteDetailComponent: ActualNoteDetailComponent }) => {

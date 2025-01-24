@@ -38,6 +38,7 @@ interface PatientNotes {
   visitTypeCode: string
   noteTypeCode?: string
   notePositionCode: string
+  cosignedByUserId?: number
 }
 
 type PayloadType = {
@@ -152,6 +153,36 @@ interface NoteDocument {
 
 type NoteDocuments = NoteDocument[]
 
+interface NoteDocumentResponse {
+  id: number
+  resourceMetadata: Metadata
+  documentId: string
+  documentType: string
+  fileName: string
+  patientId: number
+  appointmentId: number
+  encounterDocumentSizeInBytes: number
+}
+interface NoteDocumentsItemList {
+  sectionName: string
+  sectionItem: string
+  sectionItemValue: string
+}
+
+interface GetPatientNotesParams {
+  patientId: string
+  dateFrom?: string
+  dateTo?: string
+  authorIds?: number[]
+  visitTypeIds?: number[]
+  locationIds?: string[]
+  locationServicesIds?: string[]
+  stateIds?: string[]
+  practiceIds?: string[]
+  organizationIds?: string[]
+  status?: string
+}
+
 export type {
   PatientNotes,
   PatientNoteRow,
@@ -168,4 +199,7 @@ export type {
   GetNoteDocumentParams,
   NoteDocument,
   Addendum,
+  NoteDocumentsItemList,
+  NoteDocumentResponse,
+  GetPatientNotesParams,
 }
