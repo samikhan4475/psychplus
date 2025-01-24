@@ -12,7 +12,7 @@ const providerCodingViewSchema = z
     age: z.coerce.number().positive('Invalid age').optional(),
     gender: z.string().optional(),
     dateOfBirth: z.custom<DateValue>().optional(),
-    locationId: z.string().optional(),
+    locationIds: z.string().optional(),
     serviceIds: z
       .array(z.string())
       .refine((value) => value.every((item) => typeof item === 'string'), {

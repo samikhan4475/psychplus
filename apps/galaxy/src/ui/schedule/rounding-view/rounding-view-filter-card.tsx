@@ -37,9 +37,7 @@ import { LocationDropdown } from './location-dropdown'
 import { NameInput } from './name-input'
 import { NoteSignedSelect } from './note-signed-select'
 import { PatientStatusSelect } from './patient-status-select'
-import { PrimaryInsuranceDropdown } from './primary-insurance-select'
 import { ProviderTypeDropdown } from './provider-type-dropdown'
-import { SecondaryInsuranceDropdown } from './seondary-insurance-select'
 import { ServiceDropdown } from './service-dropdown'
 import { StartDateInput } from './start-date-input'
 import { useStore } from './store'
@@ -47,6 +45,7 @@ import { VisitMediumSelect } from './visit-medium-select'
 import { VisitSequenceSelect } from './visit-sequence-select'
 import { VisitStatusSelect } from './visit-status'
 import { VisitTypeSelect } from './visit-type-select'
+import { InsuranceFilters } from './insurance-filters'
 
 const RoundingViewFilterCard = () => {
   const [filters, setFilters] = useState<string[]>(ROUNDING_FILTERS)
@@ -75,7 +74,7 @@ const RoundingViewFilterCard = () => {
       gender: '',
       dateOfBirth: undefined,
       patientStatuses: '',
-      locationId: '',
+      locationIds: [],
       serviceIds: [],
       providerType: '',
       unitId: '',
@@ -171,13 +170,12 @@ const RoundingViewFilterCard = () => {
               <ServiceDropdown />
             </Flex>
             <Grid
-              className="grid w-full grid-cols-[repeat(auto-fill,minmax(235px,1fr))]"
+              className="grid w-full grid-cols-[repeat(auto-fit,minmax(235px,1fr))]"
               gap="2"
             >
               <ProviderTypeDropdown />
               <FacilityFields />
-              <PrimaryInsuranceDropdown />
-              <SecondaryInsuranceDropdown />
+              <InsuranceFilters />
               <VisitTypeSelect />
               <VisitSequenceSelect />
               <VisitMediumSelect />

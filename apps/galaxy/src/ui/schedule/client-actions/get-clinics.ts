@@ -7,7 +7,11 @@ import { Clinic } from '@/types'
 const getClinicsOptionsAction = async (): Promise<
   api.ActionResult<{ label: string; value: string }[]>
 > => {
-  const response = await api.GET<Clinic[]>(GET_CLINICS_ENDPOINT)
+  const response = await api.GET<Clinic[]>(GET_CLINICS_ENDPOINT, {
+    next: {
+      revalidate: 3600,
+    }
+  })
 
   if (response.state === 'error') {
     return {

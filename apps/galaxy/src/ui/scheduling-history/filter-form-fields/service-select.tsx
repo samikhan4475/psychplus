@@ -6,11 +6,11 @@ import { FormFieldContainer, FormFieldLabel, SelectInput } from '@/components'
 import { CODESETS } from '@/constants'
 import { useCodesetCodes } from '@/hooks'
 import { Service } from '@/types'
-import { BookedAppointmentsSchemaType } from '@/ui/schedule/schema'
 import { getLocationServicesAction } from '../actions'
+import { SchedulingHistorySchemaType } from '../schema'
 
 const ServiceSelect = () => {
-  const form = useFormContext<BookedAppointmentsSchemaType>()
+  const form = useFormContext<SchedulingHistorySchemaType>()
   const selectedLocation = form.watch('locationId')
   const [servicesOptions, setServicesOptions] = useState<Service[]>([])
   const serviceCodes = useCodesetCodes(CODESETS.ServicesOffered)
@@ -23,7 +23,7 @@ const ServiceSelect = () => {
 
   useEffect(() => {
     if (selectedLocation) {
-      getLocationServicesAction(selectedLocation).then((response) => {
+      getLocationServicesAction([selectedLocation]).then((response) => {
         if (response.state === 'error') setServicesOptions([])
         else setServicesOptions(response.data)
       })

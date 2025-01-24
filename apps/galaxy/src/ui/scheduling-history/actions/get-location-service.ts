@@ -4,12 +4,12 @@ import * as api from '@/api'
 import { Service } from '@/types'
 
 const getLocationServicesAction = async (
-  locationId: string,
+  locationIds: string[],
 ): Promise<api.ActionResult<Service[]>> => {
   const response = await api.POST<Service[]>(
     api.SEARCH_LOCATION_SERVICES_ENDPOINT,
     {
-      locationId,
+      locationIds,
     },
   )
 

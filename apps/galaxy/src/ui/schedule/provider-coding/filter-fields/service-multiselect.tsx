@@ -8,11 +8,12 @@ import { FieldLabel, FormFieldContainer } from '../../shared'
 import { Option } from '../../types'
 import { getServiceFilterOptions } from '../../utils'
 import { getLocationServicesAction } from '../../client-actions'
+import { ProviderCodingSchema } from '../provider-coding-view-schema'
 
 const ServiceMultiSelect = () => {
-  const form = useFormContext()
+  const form = useFormContext<ProviderCodingSchema>()
   const [loading, setLoading] = useState<boolean>(false)
-  const selectedLocation = form.watch('locationId')
+  const selectedLocation = form.watch('locationIds')
   const services = form.watch('serviceIds')
   const [servicesOptions, setServicesOptions] = useState<Option[]>([])
   const mappedServices = useServiceCodesMap()
@@ -20,7 +21,7 @@ const ServiceMultiSelect = () => {
   useEffect(() => {
     if (selectedLocation) {
       setLoading(true)
-      getLocationServicesAction(selectedLocation).then((response) => {
+      getLocationServicesAction([selectedLocation]).then((response) => {
         setLoading(false)
         if (response.state === 'error') setServicesOptions([])
         else setServicesOptions(response.data)

@@ -5,18 +5,19 @@ import { INVALID_RANGE_ERROR, OUT_OF_RANGE_ERROR } from '../constants'
 import { validateDate } from '../utils'
 
 const dateValidation = z.custom<DateValue>()
+const arrayOfIdsValidation = z
+  .array(z.string())
+  .refine((value) => value.every((item) => typeof item === 'string'), {
+    message: 'Array must be empty or contain only strings',
+  })
 
 const schema = z
   .object({
     startingDate: dateValidation.optional(),
     endingDate: dateValidation.optional(),
-    stateId: z.string().min(1, 'Required'),
-    locationIds: z.string().optional(),
-    serviceIds: z
-      .array(z.string())
-      .refine((value) => value.every((item) => typeof item === 'string'), {
-        message: 'Array must be empty or contain only strings',
-      }),
+    stateIds: arrayOfIdsValidation,
+    locationIds: arrayOfIdsValidation,
+    serviceIds: arrayOfIdsValidation,
     staffIds: z.string().optional(),
     specialistTypeCode: z.string().optional(),
     gender: z.string().optional(),

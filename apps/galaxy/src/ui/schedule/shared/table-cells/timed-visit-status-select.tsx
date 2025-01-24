@@ -19,6 +19,7 @@ import { UpdateVisitAlert } from '../update-visit-alert'
 
 const VISIT_STATUS_PERMISSION =
   'You do not have permission to change the visit status to this. Please contact your supervisor if you need any further assistance.'
+
 const RESCHEDULE_ALERT_MESSAGE =
   "The Visit Status cannot be manually changed to 'Rescheduled.'"
 

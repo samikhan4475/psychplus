@@ -15,21 +15,21 @@ const ServiceMultiSelect = () => {
   const form = useFormContext<BookedAppointmentsSchemaType>()
   const { filters } = useFiltersContext()
   const [loading, setLoading] = useState<boolean>(false)
-  const selectedLocation = form.watch('locationId')
+  const selectedLocations = form.watch('locationIds')
   const services = form.watch('serviceIds')
   const [servicesOptions, setServicesOptions] = useState<Option[]>([])
   const mappedServices = useServiceCodesMap()
 
   useEffect(() => {
-    if (selectedLocation) {
+    if (selectedLocations.length) {
       setLoading(true)
-      getLocationServicesAction(selectedLocation).then((response) => {
+      getLocationServicesAction(selectedLocations).then((response) => {
         setLoading(false)
         if (response.state === 'error') setServicesOptions([])
         else setServicesOptions(response.data)
       })
     }
-  }, [selectedLocation])
+  }, [selectedLocations])
 
   if (!filters.includes(SchedulerFilters.Service)) return null
 
@@ -37,7 +37,7 @@ const ServiceMultiSelect = () => {
     <FormFieldContainer>
       <FieldLabel>Service</FieldLabel>
       <MultiSelectField
-        disabled={!selectedLocation}
+        disabled={!selectedLocations.length}
         defaultValues={services}
         options={getServiceFilterOptions(mappedServices, servicesOptions)}
         className="flex-1"

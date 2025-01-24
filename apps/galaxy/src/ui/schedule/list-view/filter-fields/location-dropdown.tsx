@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import { SelectInput } from '@/components'
+import { MultiSelectField } from '@/components'
 import { SelectOptionType } from '@/types'
 import { searchLocationOptionsAction } from '../../client-actions'
 import { useFiltersContext } from '../../context'
@@ -17,6 +17,7 @@ const LocationDropdown = () => {
   const form = useFormContext<BookedAppointmentsSchemaType>()
   const { filters } = useFiltersContext()
   const stateIds = form.watch('stateIds')
+  const locationIds = form.watch('locationIds')
 
   useEffect(() => {
     if (stateIds.length) {
@@ -36,18 +37,17 @@ const LocationDropdown = () => {
   return (
     <FormFieldContainer className="h-full flex-1">
       <FieldLabel>Location</FieldLabel>
-      <SelectInput
-        field="locationId"
-        placeholder="Select"
-        options={clinicLocations}
-        loading={loading}
+      <MultiSelectField
         disabled={!stateIds.length}
-        buttonClassName="h-6 w-full max-w-[10px] min-w-full truncate"
-        className="h-full flex-1"
-        onValueChange={(value) => {
-          form.setValue('locationId', value, { shouldDirty: true })
+        defaultValues={locationIds}
+        options={clinicLocations}
+        className="flex-1"
+        onChange={(values) => {
+          form.setValue('locationIds', values, { shouldDirty: true })
           form.setValue('serviceIds', [])
         }}
+        menuClassName="w-[155px]"
+        loading={loading}
       />
     </FormFieldContainer>
   )

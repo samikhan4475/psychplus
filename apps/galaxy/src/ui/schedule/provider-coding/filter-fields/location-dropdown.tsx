@@ -18,7 +18,7 @@ const LocationDropdown = () => {
         buttonClassName="w-full h-6 max-w-[10px] min-w-full truncate"
         className="h-full flex-1"
         onValueChange={(value) => {
-          form.setValue('locationId', value, { shouldDirty: true })
+          form.setValue('locationIds', value, { shouldDirty: true })
           form.setValue('serviceIds', [])
         }}
       />

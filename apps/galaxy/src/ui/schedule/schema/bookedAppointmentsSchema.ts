@@ -5,6 +5,11 @@ import { INVALID_RANGE_ERROR, OUT_OF_RANGE_ERROR } from '../constants'
 import { validateDate } from '../utils'
 
 const dateValidation = z.custom<DateValue>()
+const arrayOfIdsValidation = z
+  .array(z.string())
+  .refine((value) => value.every((item) => typeof item === 'string'), {
+    message: 'Array must be empty or contain only strings',
+  })
 
 const bookedAppointmentsSchema = z
   .object({
@@ -13,20 +18,12 @@ const bookedAppointmentsSchema = z
     name: z.string().optional(),
     age: z.coerce.number().positive('Invalid age').optional(),
     gender: z.string().optional(),
-    stateIds: z
-      .array(z.string())
-      .refine((value) => value.every((item) => typeof item === 'string'), {
-        message: 'Array must be empty or contain only strings',
-      }),
+    stateIds: arrayOfIdsValidation,
     bookedAppointmentTime: z.custom<TimeValue>(),
     dateOfBirth: dateValidation.optional(),
     patientStatuses: z.string().optional(),
-    locationId: z.string().optional(),
-    serviceIds: z
-      .array(z.string())
-      .refine((value) => value.every((item) => typeof item === 'string'), {
-        message: 'Array must be empty or contain only strings',
-      }),
+    locationIds: arrayOfIdsValidation,
+    serviceIds: arrayOfIdsValidation,
     providerType: z.string().optional(),
     providerIds: z.string().optional(),
     unitId: z.string().optional(),

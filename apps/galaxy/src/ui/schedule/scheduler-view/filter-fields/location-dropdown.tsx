@@ -3,9 +3,9 @@
 import { useEffect, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import { SelectInput } from '@/components'
+import { MultiSelectField } from '@/components'
 import { SelectOptionType } from '@/types'
-import { getStateClinicsOptionsAction } from '../../client-actions'
+import { searchLocationOptionsAction } from '../../client-actions'
 import { FieldLabel, FormFieldContainer } from '../../shared'
 import { SchemaType } from '../filter-actions-group'
 
@@ -13,12 +13,13 @@ const LocationDropdown = () => {
   const [clinicLocations, setClinicLocations] = useState<SelectOptionType[]>([])
   const [loading, setLoading] = useState<boolean>(false)
   const form = useFormContext<SchemaType>()
-  const stateId = form.watch('stateId')
+  const stateIds = form.watch('stateIds')
+  const locationIds = form.watch('locationIds')
 
   useEffect(() => {
-    if (stateId) {
+    if (stateIds.length) {
       setLoading(true)
-      getStateClinicsOptionsAction(stateId).then((response) => {
+      searchLocationOptionsAction({ stateId: stateIds }).then((response) => {
         setLoading(false)
         if (response.state === 'error') {
           toast.error('Failed to fetch clinic locations')
@@ -26,23 +27,22 @@ const LocationDropdown = () => {
         setClinicLocations(response.state === 'error' ? [] : response.data)
       })
     }
-  }, [stateId])
+  }, [stateIds])
 
   return (
     <FormFieldContainer className="h-full flex-1">
       <FieldLabel>Location</FieldLabel>
-      <SelectInput
-        field="locationIds"
-        placeholder="Select"
+      <MultiSelectField
+        disabled={!stateIds.length}
+        defaultValues={locationIds}
         options={clinicLocations}
-        disabled={!stateId}
-        buttonClassName="h-6 w-full"
-        className="h-full flex-1"
-        loading={loading}
-        onValueChange={(value) => {
-          form.setValue('locationIds', value, { shouldDirty: true })
+        className="flex-1"
+        onChange={(values) => {
+          form.setValue('locationIds', values, { shouldDirty: true })
           form.setValue('serviceIds', [])
         }}
+        menuClassName="w-[155px]"
+        loading={loading}
       />
     </FormFieldContainer>
   )

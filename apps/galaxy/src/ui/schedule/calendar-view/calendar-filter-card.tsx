@@ -42,8 +42,8 @@ const CalendarFilterCard = () => {
     defaultValues: {
       startingDate: undefined,
       endingDate: undefined,
-      stateIds: '',
-      locationId: '',
+      stateIds: [],
+      locationIds: [],
       serviceIds: [],
       providerIds: providerId ?? '',
       visitMedium: '',
@@ -62,7 +62,6 @@ const CalendarFilterCard = () => {
       startingDate: getDateString(data.startingDate),
       endingDate: getDateString(data.endingDate),
       providerIds: data.providerIds ? [Number(data.providerIds)] : [],
-      stateIds: data.stateIds ? [data.stateIds] : [],
     }
     if (data.startingDate) {
       const weekStartDate = startOfWeek(data.startingDate, START_OF_WEEK_LOCALE)

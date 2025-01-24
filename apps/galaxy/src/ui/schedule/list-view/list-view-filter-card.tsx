@@ -36,6 +36,7 @@ import {
   DateOfBirthInput,
   EndDateInput,
   GenderSelect,
+  InsuranceFilters,
   InsuranceVerificationSelect,
   LastCoverageDateRange,
   LegalStatusSelect,
@@ -44,10 +45,8 @@ import {
   NameInput,
   NoteSignedSelect,
   PatientStatusSelect,
-  PrimaryInsuranceDropdown,
   ProviderDropdown,
   ProviderTypeDropdown,
-  SecondaryInsuranceDropdown,
   ServiceMultiSelect,
   StartDateInput,
   StateSelect,
@@ -90,7 +89,7 @@ const ListViewFilterCard = () => {
       dateOfBirth: undefined,
       patientStatuses: '',
       stateIds: [],
-      locationId: '',
+      locationIds: [],
       serviceIds: [],
       providerType: '',
       providerIds: providerId ?? '',
@@ -188,7 +187,7 @@ const ListViewFilterCard = () => {
               <StateSelect />
             </Flex>
             <Grid
-              className="grid w-full grid-cols-[repeat(auto-fill,minmax(235px,1fr))]"
+              className="grid w-full grid-cols-[repeat(auto-fit,minmax(235px,1fr))]"
               gap="2"
             >
               <LocationDropdown />
@@ -201,8 +200,7 @@ const ListViewFilterCard = () => {
               <VisitMediumSelect />
               <VisitStatusSelect />
               <InsuranceVerificationSelect />
-              <PrimaryInsuranceDropdown />
-              <SecondaryInsuranceDropdown />
+              <InsuranceFilters />
               <CoPayInputRange />
               <CoInsuranceInputRange />
               <BalanceInputRange />

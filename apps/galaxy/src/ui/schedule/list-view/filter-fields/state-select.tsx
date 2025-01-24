@@ -36,7 +36,7 @@ const StateSelect = () => {
         menuClassName="w-[155px]"
         onChange={(values) => {
           form.setValue('stateIds', values, { shouldDirty: true })
-          form.resetField('locationId')
+          form.resetField('locationIds')
           form.setValue('serviceIds', [])
         }}
       />

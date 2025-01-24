@@ -5,12 +5,12 @@ import { SEARCH_LOCATION_SERVICES_ENDPOINT } from '@/api/endpoints'
 import { Service } from '@/types'
 
 const getLocationServicesAction = async (
-  locationId: string,
+  locationIds: string[],
 ): Promise<api.ActionResult<{ label: string; value: string }[]>> => {
   const response = await api.POST<Service[]>(
     SEARCH_LOCATION_SERVICES_ENDPOINT,
     {
-      locationId,
+      locationIds,
     },
   )
 

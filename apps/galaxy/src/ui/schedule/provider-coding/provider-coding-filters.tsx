@@ -19,9 +19,11 @@ import { DateOfAdmissionRange } from './filter-fields/date-of-admission-range'
 import { Diagnosis } from './filter-fields/diagnosis'
 import { DateOfBirthInput } from './filter-fields/dob-input'
 import { EndDate } from './filter-fields/end-date'
+import { FacilityAdmissionIdSelect } from './filter-fields/facility-admission-id-select'
 import { FacilityFilters } from './filter-fields/facility-filters'
 import { GenderSelect } from './filter-fields/gender-select'
 import { InsuranceVerificationDropdown } from './filter-fields/ins-verification-dropdown'
+import { InsuranceFilters } from './filter-fields/insurance-filters'
 import { LastCoverageDateRange } from './filter-fields/last-coverage-date-range'
 import { LegalStatusDropdown } from './filter-fields/legal-status-dropdown'
 import { LengthOfStayRange } from './filter-fields/length-of-stay-range'
@@ -29,9 +31,7 @@ import { LocationDropdown } from './filter-fields/location-dropdown'
 import { MediumDropdown } from './filter-fields/medium-dropdown'
 import { Name } from './filter-fields/name'
 import { NoteSignedDropdown } from './filter-fields/note-signed-dropdown'
-import { PrimaryInsuranceDropdown } from './filter-fields/primary-insurance-dropdown'
 import { ProviderDropdown } from './filter-fields/provider-dropdown'
-import { SecondaryInsuranceDropdown } from './filter-fields/secondary-insurance-dropdown'
 import { SequenceDropdown } from './filter-fields/sequence-dropdown'
 import { ServiceMultiSelect } from './filter-fields/service-multiselect'
 import { StartDate } from './filter-fields/start-date'
@@ -42,7 +42,6 @@ import {
   providerCodingViewSchema,
 } from './provider-coding-view-schema'
 import { useStore } from './store'
-import { FacilityAdmissionIdSelect } from './filter-fields/facility-admission-id-select'
 
 const defaultValues = {
   startingDate: undefined,
@@ -52,7 +51,7 @@ const defaultValues = {
   gender: '',
   dateOfBirth: undefined,
   patientStatuses: '',
-  locationId: '',
+  locationIds: '',
   serviceIds: [],
   providerType: '',
   unitId: '',
@@ -139,6 +138,7 @@ const ProviderCodingFilters = () => {
       dateOfAdmissionEnd: getDateString(dateOfAdmissionEnd),
       lastCoverageDateStart: getDateString(lastCoverageDateStart),
       lastCoverageDateEnd: getDateString(lastCoverageDateEnd),
+      locationIds: data.locationIds ? [data.locationIds] : [],
       facilityAdmissionIds: data.facilityAdmissionIds
         ? [data.facilityAdmissionIds]
         : '',
@@ -166,7 +166,7 @@ const ProviderCodingFilters = () => {
         <FormContainer form={form} onSubmit={onSubmit}>
           <Flex align="start" direction="column" wrap="wrap" gap="2">
             <Grid
-              className="grid w-full grid-cols-[repeat(auto-fill,minmax(235px,1fr))]"
+              className="grid w-full grid-cols-[repeat(auto-fit,minmax(235px,1fr))]"
               gap="2"
             >
               <StartDate />
@@ -179,8 +179,7 @@ const ProviderCodingFilters = () => {
               <ServiceMultiSelect />
               <ProviderDropdown />
               <FacilityFilters />
-              <PrimaryInsuranceDropdown />
-              <SecondaryInsuranceDropdown />
+              <InsuranceFilters />
               <VisitTypeDropdown />
               <SequenceDropdown />
               <MediumDropdown />

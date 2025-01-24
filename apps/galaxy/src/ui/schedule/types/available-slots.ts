@@ -224,7 +224,7 @@ interface AppointmentParams {
   gender?: string
   dateOfBirth?: string
   patientStatuses?: string[]
-  locationId?: string
+  locationIds?: string[]
   serviceIds?: string[]
   stateIds?: string[]
   providerIds?: number[]
@@ -292,7 +292,7 @@ interface ProviderCoding {
 interface AvailableSlotsParams {
   startingDate?: string
   serviceIds?: string[]
-  stateId?: string
+  stateIds?: string[]
   locationIds?: string[]
   staffIds?: number[]
   specialistTypeCode?: string
