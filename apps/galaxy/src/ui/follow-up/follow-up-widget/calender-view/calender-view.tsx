@@ -22,7 +22,13 @@ const CloseDialogIcon = () => (
   </Dialog.Close>
 )
 
-const CalenderView = ({ patient }: { patient: undefined | NewPatient }) => {
+const CalenderView = ({
+  onVisitAdd,
+  patient,
+}: {
+  onVisitAdd: () => void
+  patient: undefined | NewPatient
+}) => {
   const [isOpen, setIsOpen] = useState(false)
 
   return (
@@ -59,6 +65,7 @@ const CalenderView = ({ patient }: { patient: undefined | NewPatient }) => {
           showFollowUpFilter={true}
           noOfDays={6}
           patient={patient}
+          onVisitAdd={onVisitAdd}
         />
       </Dialog.Content>
     </Dialog.Root>

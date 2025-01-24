@@ -2,11 +2,17 @@
 
 import * as Accordion from '@radix-ui/react-accordion'
 import { Grid, Text } from '@radix-ui/themes'
+import { NewPatient } from '@/types'
 import { AccordionItem } from './accordion-item'
 import { useStore } from './store'
-import { NewPatient } from '@/types'
 
-const ProvidersAccordionMenu = ({ patient }: { patient: undefined | NewPatient }) => {
+const ProvidersAccordionMenu = ({
+  onVisitAdd,
+  patient,
+}: {
+  onVisitAdd?: () => void
+  patient: undefined | NewPatient
+}) => {
   const appointmentAvailabilities = useStore((state) => state.data)
 
   return (
@@ -18,6 +24,7 @@ const ProvidersAccordionMenu = ({ patient }: { patient: undefined | NewPatient }
             provider={providerAvailability}
             value={`${providerAvailability.specialist.id}-${providerAvailability.clinic.id}`}
             patient={patient}
+            onVisitAdd={onVisitAdd}
           />
         ))
       ) : (

@@ -14,10 +14,12 @@ const SchedulerView = ({
   showFollowUpFilter = false,
   noOfDays = 13,
   patient,
+  onVisitAdd,
 }: {
   showFollowUpFilter?: boolean
   noOfDays?: number
   patient?: NewPatient
+  onVisitAdd?: () => void
 }) => {
   const { fetchAvailableSlots, loading } = useStore((state) => ({
     fetchAvailableSlots: state.fetchAppointments,
@@ -48,7 +50,7 @@ const SchedulerView = ({
             <LoadingPlaceholder />
           </Flex>
         ) : (
-          <ProvidersAccordionMenu patient={patient} />
+          <ProvidersAccordionMenu patient={patient} onVisitAdd={onVisitAdd} />
         )}
       </ScrollArea>
     </Flex>

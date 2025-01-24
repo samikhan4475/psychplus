@@ -15,6 +15,7 @@ import { AppointmentAvailability, SlotsByDay } from './types'
 import { currentWeekTotalSlots, extractTime, nextWeekTotalSlots } from './utils'
 
 interface Props {
+  onVisitAdd?: () => void
   provider: AppointmentAvailability
   value: string
   patient: undefined | NewPatient
@@ -50,7 +51,7 @@ const Slots = ({
   </Flex>
 )
 
-const AccordionItem = ({ provider, value, patient }: Props) => {
+const AccordionItem = ({ onVisitAdd, provider, value, patient }: Props) => {
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const { dates, formData, fetchData } = useStore((state) => ({
     dates: state.dates,
@@ -182,7 +183,10 @@ const AccordionItem = ({ provider, value, patient }: Props) => {
                           <AddVisit
                             dateTime={slot.startDate}
                             timezone={slot.timeZoneId}
-                            onAdd={() => fetchData(formData)}
+                            onAdd={() => {
+                              fetchData(formData)
+                              onVisitAdd?.()
+                            }}
                             slotDetails={getSlotDetails(
                               slot,
                               provider,
