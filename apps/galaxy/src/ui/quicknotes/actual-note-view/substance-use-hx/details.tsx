@@ -8,6 +8,7 @@ import { SubstanceUseHxWidgetSchemaType } from '@/ui/substance-use-hx/substance-
 import { mapValuesToLabels } from '@/utils'
 import { QuickNoteSectionName } from '../../constants'
 import { BlockContainer, LabelAndValue } from '../shared'
+import { Tobacco } from './blocks/tobacco'
 
 interface Props<T> {
   sectionName: string
@@ -49,40 +50,16 @@ const Details = ({
     (acc, item) => acc + Number(item.sectionItemValue),
     0,
   )
+
   return actualNoteViewVisibility ? (
     <BlockContainer heading={sectionName}>
       <Flex direction="column">
         <LabelAndValue label="Tobacco:" value={data.tobacco} />
-        {data.tobacco === 'yes' && (
-          <>
-            {data.smokePacks && (
-              <LabelAndValue
-                label="Smoke:"
-                value={`Packs a day: ${data.smokePacks}`}
-              />
-            )}
-            <LabelAndValue
-              value={`I have reviewed the risks of continued smoking with the patient and offered
-              Smoking Cessation Options ${
-                mapValuesToLabels(
-                  [data.smokingCessationOption] as string[],
-                  tobaccoTreatmentCodeset,
-                ) || ''
-              } and
-              Counseling Options ${
-                mapValuesToLabels(
-                  [data.counselingOption] as string[],
-                  counsellingCodeset,
-                ) || ''
-              }.`}
-            />
-            <LabelAndValue
-              label="Discussed smoking cessation for:"
-              value={data.smokingCessationDiscussionDuration}
-            />
-            <LabelAndValue label="Other:" value={data.otherTobacco} />
-          </>
-        )}
+        <Tobacco
+          data={data}
+          tobaccoTreatmentCodeset={tobaccoTreatmentCodeset}
+          counsellingCodeset={counsellingCodeset}
+        />
         <Text size="2" weight="medium">
           Screening for drug/alcohol use:
         </Text>
