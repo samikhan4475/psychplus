@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { FormContainer } from '@psychplus-v2/components'
-import { PaymentType } from '@psychplus-v2/constants'
+import { AppointmentType, PaymentType } from '@psychplus-v2/constants'
 import { Consent, DocumentType } from '@psychplus-v2/types'
 import { getProviderTypeLabel } from '@psychplus-v2/utils'
 import { Button, Checkbox, Flex, Text } from '@radix-ui/themes'
@@ -123,13 +123,25 @@ const BookAppointmentButton = ({
     }
   }
 
+  const checkBoxDisabled =
+    (appointmentType === AppointmentType.Virtual &&
+      paymentMethod === PaymentType.Insurance &&
+      patientInsurances?.length === 0) ||
+    (appointmentType === AppointmentType.Virtual &&
+      paymentMethod === PaymentType.SelfPay &&
+      creditCards?.length === 0)
+
   const bookSlot = async () => {
     if (!form.getValues().userAgreed) {
       setError(errorMessage)
       return
     }
 
-    if (paymentMethod === PaymentType.Insurance && !patientInsurances?.length) {
+    if (
+      paymentMethod === PaymentType.Insurance &&
+      !patientInsurances?.length &&
+      appointmentType !== AppointmentType.InPerson
+    ) {
       setError('Please add insurance or choose self-pay to book an appointment')
       return
     }
@@ -229,7 +241,7 @@ const BookAppointmentButton = ({
               <Checkbox
                 id="terms-and-conditions-checkbox"
                 size="3"
-                disabled={!creditCards.length}
+                disabled={checkBoxDisabled}
                 onCheckedChange={(checked: boolean) => userAgreedValue(checked)}
                 {...form.register('userAgreed')}
                 highContrast
@@ -291,12 +303,10 @@ const BookAppointmentButton = ({
             radius="full"
             size="3"
             highContrast
-            disabled={loading || Boolean(error) || !creditCards.length}
+            disabled={loading || Boolean(error) || checkBoxDisabled}
             className={`bg-[#151B4A] ${loading ? 'bg-gray-3' : ''}`}
             style={
-              error || !creditCards.length
-                ? { opacity: 0.6, color: '#fff' }
-                : {}
+              error || checkBoxDisabled ? { opacity: 0.6, color: '#fff' } : {}
             }
           >
             <Text weight="medium">Book Appointment</Text>

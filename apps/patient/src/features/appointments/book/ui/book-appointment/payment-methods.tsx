@@ -1,5 +1,6 @@
 'use client'
 
+import { AppointmentType, PaymentType } from '@psychplus-v2/constants'
 import { Box, Flex, Text } from '@radix-ui/themes'
 import {
   PaymentMethodAccordion,
@@ -14,7 +15,14 @@ const PaymentMethods = ({
   setPaymentMethod,
   patientInsurances,
   insurancePayers,
+  appointmentType,
 }: PaymentMethodProps) => {
+  const optionalText = `${
+    paymentMethod === PaymentType.Insurance ? 'Insurance' : 'Credit/Debit Cards'
+  } ${
+    appointmentType === AppointmentType.InPerson ? '(Optional)' : '(Required)'
+  }`
+
   return (
     <Box>
       <Flex mt="5" pb="2" direction="column">
@@ -27,6 +35,9 @@ const PaymentMethods = ({
             onChange={setPaymentMethod}
           />
         </Flex>
+        <Text size="5" weight="medium" className="mt-7 text-[#151B4A]">
+          {optionalText}
+        </Text>
       </Flex>
 
       <PaymentMethodAccordion

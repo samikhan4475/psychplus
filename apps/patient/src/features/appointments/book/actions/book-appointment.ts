@@ -14,7 +14,7 @@ interface BookAppointmentParams {
   reason?: string
   serviceId?: string
   isSelfPay?: boolean
-  stateCode:string
+  stateCode: string
 }
 
 const bookAppointmentAction = async ({
@@ -37,7 +37,7 @@ const bookAppointmentAction = async ({
     duration,
     serviceId,
     isSelfPay,
-    stateCode
+    stateCode,
   })
 
   if (result.state === 'error') {

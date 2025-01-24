@@ -63,6 +63,7 @@ interface PaymentMethodProps {
   setPaymentMethod: (value: PaymentType) => void
   patientInsurances: Insurance[]
   insurancePayers: InsurancePayer[]
+  appointmentType?: AppointmentType
 }
 
 interface BookedAppointmentProps {

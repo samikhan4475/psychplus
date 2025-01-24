@@ -75,6 +75,7 @@ const BookAppointmentView = ({
             setPaymentMethod={setPaymentMethod}
             patientInsurances={patientInsurances}
             insurancePayers={insurancePayers}
+            appointmentType={appointmentType}
           />
           <Box mt="5">
             <BookAppointmentButton

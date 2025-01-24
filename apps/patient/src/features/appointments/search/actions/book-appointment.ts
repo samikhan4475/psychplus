@@ -47,6 +47,7 @@ const bookAppointmentAction = async ({
     },
   )
 
+
   if (result.state === 'error') {
     return {
       state: 'error',
