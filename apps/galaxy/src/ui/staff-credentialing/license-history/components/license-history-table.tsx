@@ -4,43 +4,54 @@ import { useEffect, useState } from 'react'
 import { Flex, ScrollArea } from '@radix-ui/themes'
 import toast from 'react-hot-toast'
 import { DataTable, LoadingPlaceholder } from '@/components'
+import { getDateString } from '@/ui/schedule/utils'
 import { getCalendarDate } from '@/utils'
-import { getLicenseHistoryAction } from '../../actions'
-import { LicenseHistory as LicenseHistoryType } from '../../types'
+import { getLicensesAction, GetLicensesParams } from '../../actions'
+import { useStore } from '../../store'
+import { License } from '../../types'
 import { columns } from './columns'
-import { FilterForm } from './filter-form'
+import { FilterForm, LicenseHistorySchemaType } from './filter-form'
 
-const LicenseHistoryTable = () => {
+const LicenseHistoryTable = ({ staffId }: { staffId: string }) => {
+  const [licenses, setLicenses] = useState<License[]>([])
+  const { historyRow } = useStore()
   const [loading, setLoading] = useState<boolean>(false)
-  const [data, setData] = useState<LicenseHistoryType[]>([])
+
   useEffect(() => {
     getHistory()
   }, [])
 
-  const getHistory = async () => {
+  const getHistory = async (filters?: LicenseHistorySchemaType) => {
+    if (!historyRow) return
     setLoading(true)
-    const res = await getLicenseHistoryAction({
-      staffId: 1,
-      payload: {},
-    })
-    setLoading(false)
-    if (res.state === 'error') {
-      toast.error(res.error ?? 'Error while fetching data')
-      return setLoading(false)
+    const payload: GetLicensesParams = {
+      providerStaffIds: [parseInt(staffId)],
+      licenseTypes: [historyRow.licenseType],
+      locationStateIds: historyRow.stateId ? [historyRow.stateId] : null,
+      startDate: filters?.dateFrom ? getDateString(filters?.dateFrom) : null,
+      endDate: filters?.dateTo ? getDateString(filters?.dateTo) : null,
+      statuses: filters?.status ? [filters?.status] : null,
     }
-    setData(
-      res.data.map((license) => ({
+    const result = await getLicensesAction(payload)
+    setLoading(false)
+    if (result.state === 'error') {
+      toast.error(result.error ?? 'Error while fetching history')
+      return
+    }
+    const { licenses = [] } = result.data
+    const data = licenses.map((license) => {
+      return {
         ...license,
-        createdAt: getCalendarDate(license.createdAt),
-        startDate: getCalendarDate(license.startDate),
-        endDate: getCalendarDate(license.endDate),
-      })),
-    )
+        startDate: getCalendarDate(license?.startDate),
+        endDate: getCalendarDate(license?.endDate),
+      }
+    })
+    setLicenses(data)
   }
 
   return (
     <Flex direction="column" className="gap-1">
-      <FilterForm />
+      <FilterForm getHistory={getHistory} />
 
       <ScrollArea className="bg-white min-h-[150px] max-w-[calc(100vw_-_198px)] py-2">
         {loading ? (
@@ -48,7 +59,7 @@ const LicenseHistoryTable = () => {
         ) : (
           <DataTable
             columns={columns}
-            data={data}
+            data={licenses}
             tdClass="!p-0"
             isRowSpan
             sticky

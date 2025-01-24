@@ -1,24 +1,41 @@
 'use client'
 
+import { useEffect, useState } from 'react'
 import * as Tabs from '@radix-ui/react-tabs'
 import { Box, Flex, Text } from '@radix-ui/themes'
-import { TabsTrigger } from '@/components'
+import toast from 'react-hot-toast'
+import { LoadingPlaceholder, TabsTrigger } from '@/components'
+import { State } from '@/types'
+import { getUsStatesAction } from '../visit/client-actions'
+import { CDSView } from './cds'
 import { DEAView } from './dea'
+import { LicenseView } from './license'
 import { useStore } from './store'
 import { CredentialingTab } from './types'
 
-const CredentialingTabs = () => {
-  const { activeTab, setActiveTab } = useStore((state) => ({
-    activeTab: state.activeTab,
-    setActiveTab: state.setActiveTab,
-  }))
+const CredentialingTabs = ({ staffId }: { staffId: string }) => {
+  const { activeTab, setActiveTab, setEditingRow } = useStore((state) => state)
+  const [states, setStates] = useState<State[]>([])
+  const [loadingStates, setLoadingStates] = useState<boolean>(false)
+  useEffect(() => {
+    setLoadingStates(true)
+    getUsStatesAction().then((res) => {
+      setLoadingStates(false)
+      if (res.state === 'error')
+        return toast.error(res.error || 'Failed to fetch states')
+      setStates(res.data)
+    })
+  }, [])
 
   return (
     <Box className="flex-1 px-1">
       <Tabs.Root
-        defaultValue={CredentialingTab.DEA}
+        defaultValue={CredentialingTab.License}
         value={activeTab}
-        onValueChange={setActiveTab}
+        onValueChange={(tab) => {
+          setActiveTab(tab)
+          setEditingRow(null)
+        }}
         className="flex w-full flex-col"
       >
         <Flex className="z-50">
@@ -29,26 +46,44 @@ const CredentialingTabs = () => {
             <TabsTrigger value={CredentialingTab.DEA}>
               {CredentialingTab.DEA}
             </TabsTrigger>
-            <TabsTrigger value={CredentialingTab.CSA}>
-              {CredentialingTab.CSA}
+            <TabsTrigger value={CredentialingTab.CDS}>
+              {CredentialingTab.CDS}
             </TabsTrigger>
             <TabsTrigger value={CredentialingTab.PrescriberSettings}>
               {CredentialingTab.PrescriberSettings}
             </TabsTrigger>
           </Tabs.List>
         </Flex>
-        <TabsContent value={CredentialingTab.License}>
-          <Text>License View </Text>
-        </TabsContent>
-        <TabsContent value={CredentialingTab.DEA}>
-          <DEAView />
-        </TabsContent>
-        <TabsContent value={CredentialingTab.CSA}>
-          <Text>CSA </Text>
-        </TabsContent>
-        <TabsContent value={CredentialingTab.PrescriberSettings}>
-          <Text>Prescriber Settings </Text>
-        </TabsContent>
+        {loadingStates ? (
+          <LoadingPlaceholder className="bg-white min-h-[46vh]" />
+        ) : (
+          <>
+            <TabsContent value={CredentialingTab.License}>
+              <LicenseView
+                staffId={staffId}
+                states={states}
+                loadingStates={loadingStates}
+              />
+            </TabsContent>
+            <TabsContent value={CredentialingTab.DEA}>
+              <DEAView
+                staffId={staffId}
+                states={states}
+                loadingStates={loadingStates}
+              />
+            </TabsContent>
+            <TabsContent value={CredentialingTab.CDS}>
+              <CDSView
+                staffId={staffId}
+                states={states}
+                loadingStates={loadingStates}
+              />
+            </TabsContent>
+            <TabsContent value={CredentialingTab.PrescriberSettings}>
+              <Text>Prescriber Settings </Text>
+            </TabsContent>
+          </>
+        )}
       </Tabs.Root>
     </Box>
   )

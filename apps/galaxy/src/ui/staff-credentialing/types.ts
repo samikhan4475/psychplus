@@ -1,12 +1,40 @@
 import { Row } from '@tanstack/react-table'
 import { DateValue } from 'react-aria-components'
-import { Metadata } from '@/types'
+import { LegalName, Metadata } from '@/types'
 
 enum CredentialingTab {
   License = 'License',
   DEA = 'DEA',
-  CSA = 'CSA',
+  CDS = 'CDS',
   PrescriberSettings = 'Prescriber Settings',
+}
+
+enum LicenseType {
+  License = 'License',
+  DEA = 'Dea',
+  CDS = 'Csa',
+}
+
+type Filters = {
+  staffId: number
+  status: LicenseStatus
+  licenseType: LicenseType
+}
+type StaffData = {
+  staffId: number
+  userId: number
+  legalName: LegalName
+} | null
+
+enum LicenseStatus {
+  Inactive = 'Inactive',
+  Active = 'Active',
+  Na = 'Na',
+}
+
+enum RecordStatus {
+  Active = 'Active',
+  InActive = 'InActive',
 }
 
 interface DEA {
@@ -19,12 +47,37 @@ interface DEA {
   alert: boolean
 }
 
-interface DEAResponse extends Omit<DEA, 'startDate' | 'endDate'> {
-  startDate: string
-  endDate: string
+interface License {
+  id: string
+  metadata?: Metadata
+  stateCode: string
+  stateId?: string
+  stateName?: string
+  providerStaffId: number
+  licenseNumber: string
+  licenseType: LicenseType
+  startDate: DateValue | undefined
+  endDate: DateValue | undefined
+  status: LicenseStatus
+  isAlertCheck: boolean
+  recordStatus: RecordStatus
+  isCDSState?: boolean
 }
 
-type DEARow = Row<DEA>
+interface GetLicensesResponse {
+  staffId: number
+  userId: number
+  legalName: LegalName
+  licenses: (Omit<License, 'startDate' | 'endDate'> & {
+    startDate: string | undefined
+    endDate: string | undefined
+  })[]
+}
+
+interface UpdateLicensePayload extends Omit<License, 'startDate' | 'endDate'> {
+  startDate: string | undefined
+  endDate: string | undefined
+}
 
 interface LicenseHistory {
   createdAt: DateValue
@@ -42,14 +95,31 @@ interface LicenseHistoryResponse
   endDate: string
 }
 
+interface AddLicensePayload {
+  stateCode: string
+  providerStaffId: number
+  licenseNumber: string
+  licenseType: LicenseType
+  startDate: string | undefined
+  endDate: string | undefined
+  isAlertCheck: boolean
+  status: LicenseStatus
+  recordStatus: RecordStatus
+}
+
 type LicenseHistoryRow = Row<LicenseHistory>
 
-export { CredentialingTab }
+export { CredentialingTab, LicenseStatus, LicenseType, RecordStatus }
+
 export type {
   DEA,
-  DEARow,
-  DEAResponse,
+  Filters,
+  StaffData,
+  GetLicensesResponse,
+  License,
   LicenseHistory,
   LicenseHistoryResponse,
   LicenseHistoryRow,
+  AddLicensePayload,
+  UpdateLicensePayload,
 }

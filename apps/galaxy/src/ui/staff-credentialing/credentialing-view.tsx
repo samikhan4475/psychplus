@@ -1,7 +1,7 @@
 import { CredentialingTabs } from './credentialing-tabs'
 
-const CredentialingView = () => {
-  return <CredentialingTabs />
+const CredentialingView = ({ staffId }: { staffId: string }) => {
+  return <CredentialingTabs staffId={staffId} />
 }
 
 export { CredentialingView }

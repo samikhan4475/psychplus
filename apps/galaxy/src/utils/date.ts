@@ -271,6 +271,22 @@ function convertToTimeZoneTime(
   const fractionalHour = hour + minute / 60
   return fractionalHour
 }
+
+const isDateInRange = (
+  date: DateValue,
+  startDate: DateValue,
+  endDate: DateValue,
+): boolean => {
+  const dateObj = new Date(date.year, date.month - 1, date.day)
+  const startDateObj = new Date(
+    startDate.year,
+    startDate.month - 1,
+    startDate.day,
+  )
+  const endDateObj = new Date(endDate.year, endDate.month - 1, endDate.day)
+  return dateObj >= startDateObj && dateObj <= endDateObj
+}
+
 const generateTimeOptions = (interval = 20): SelectOptionType[] => {
   const options = []
   const totalMinutesInDay = 24 * 60
@@ -325,4 +341,5 @@ export {
   generateTimeOptions,
   getDateDifference,
   convertToTimeZoneTime,
+  isDateInRange,
 }

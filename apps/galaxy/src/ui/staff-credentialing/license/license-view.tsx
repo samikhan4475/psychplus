@@ -7,10 +7,10 @@ import { getLicensesAction, GetLicensesParams } from '../actions'
 import { LicenseHistory } from '../license-history'
 import { transformData } from '../transform'
 import { License, LicenseType, StaffData } from '../types'
-import { DEAHeader } from './dea-header'
-import { DeaTable } from './dea-table'
+import { LicenseHeader } from './license-header'
+import { LicenseTable } from './license-table'
 
-const DEAView = ({
+const LicenseView = ({
   staffId,
   states,
   loadingStates,
@@ -31,7 +31,7 @@ const DEAView = ({
     setLoading(true)
     const payload: GetLicensesParams = {
       providerStaffIds: [parseInt(staffId)],
-      licenseTypes: [LicenseType.DEA],
+      licenseTypes: [LicenseType.License],
       recordStatuses: ['Active'],
     }
     const result = await getLicensesAction(payload)
@@ -44,7 +44,7 @@ const DEAView = ({
     const data = transformData({
       states,
       licenses,
-      licenseType: LicenseType.DEA,
+      licenseType: LicenseType.License,
     })
     setLicenses(data)
     setStaffData(rest)
@@ -52,13 +52,13 @@ const DEAView = ({
 
   return (
     <Flex direction="column" width="100%" gap="1">
-      <DEAHeader />
+      <LicenseHeader />
       <LicenseHistory staffId={staffId} />
 
       {loading ? (
         <LoadingPlaceholder className="bg-white min-h-[46vh]" />
       ) : (
-        <DeaTable
+        <LicenseTable
           licenses={licenses}
           fetchLicenseList={fetchLicenseList}
           staffData={staffData}
@@ -68,4 +68,4 @@ const DEAView = ({
   )
 }
 
-export { DEAView }
+export { LicenseView }

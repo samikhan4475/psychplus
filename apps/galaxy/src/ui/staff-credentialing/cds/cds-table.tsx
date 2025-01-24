@@ -22,9 +22,9 @@ import {
   StaffData,
 } from '../types'
 
-const DeaTable = ({
-  fetchLicenseList,
+const CDSTable = ({
   licenses,
+  fetchLicenseList,
   staffData,
 }: {
   licenses: License[]
@@ -40,11 +40,11 @@ const DeaTable = ({
       stateCode: '',
       stateName: '',
       status: undefined,
-      licenseType: LicenseType.DEA,
+      licenseType: LicenseType.CDS,
       licenseNumber: '',
       startDate: undefined,
       endDate: undefined,
-      isAlertCheck: true,
+      isAlertCheck: false,
     },
   })
 
@@ -114,7 +114,7 @@ const DeaTable = ({
         <DataTable
           columns={columns(onSubmit, showPermissionAlert)}
           data={licenses}
-          tdClass="!p-0 first:bg-white"
+          tdClass="!p-0"
           isRowSpan
           sticky
           disablePagination
@@ -126,4 +126,4 @@ const DeaTable = ({
   )
 }
 
-export { DeaTable }
+export { CDSTable }

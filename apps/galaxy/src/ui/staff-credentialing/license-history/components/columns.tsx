@@ -1,9 +1,9 @@
 import { ColumnDef } from '@tanstack/react-table'
 import { ColumnHeader, TextCell } from '@/components'
 import { getSlashedDateString } from '@/utils'
-import { LicenseHistory } from '../../types'
+import { License } from '../../types'
 
-const columns: ColumnDef<LicenseHistory>[] = [
+const columns: ColumnDef<License>[] = [
   {
     accessorKey: 'Date/Time',
     size: 200,
@@ -12,7 +12,7 @@ const columns: ColumnDef<LicenseHistory>[] = [
     ),
     cell: ({ row }) => (
       <TextCell>
-        {getSlashedDateString(row.original.createdAt.toString())}
+        {getSlashedDateString(row.original?.metadata?.createdOn ?? '')}
       </TextCell>
     ),
   },
@@ -22,7 +22,9 @@ const columns: ColumnDef<LicenseHistory>[] = [
     header: ({ column }) => (
       <ColumnHeader column={column} clientSideSort label="User" />
     ),
-    cell: ({ row }) => <TextCell>{row.original.user}</TextCell>,
+    cell: ({ row }) => (
+      <TextCell>{row.original?.metadata?.createdByFullName}</TextCell>
+    ),
   },
   {
     accessorKey: 'Status',
@@ -36,7 +38,7 @@ const columns: ColumnDef<LicenseHistory>[] = [
     header: ({ column }) => (
       <ColumnHeader column={column} clientSideSort label="License #" />
     ),
-    cell: ({ row }) => <TextCell>{row.original.license}</TextCell>,
+    cell: ({ row }) => <TextCell>{row.original.licenseNumber}</TextCell>,
   },
   {
     id: 'Start Date',
@@ -45,7 +47,7 @@ const columns: ColumnDef<LicenseHistory>[] = [
     ),
     cell: ({ row }) => (
       <TextCell>
-        {getSlashedDateString(row.original.startDate.toString())}
+        {getSlashedDateString(row.original?.startDate?.toString() ?? '')}
       </TextCell>
     ),
   },
@@ -56,7 +58,7 @@ const columns: ColumnDef<LicenseHistory>[] = [
     ),
     cell: ({ row }) => (
       <TextCell>
-        {getSlashedDateString(row.original.endDate.toString())}
+        {getSlashedDateString(row.original?.endDate?.toString() ?? '')}
       </TextCell>
     ),
   },

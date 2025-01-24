@@ -424,6 +424,11 @@ const GET_ALLERGIES_ENDPOINT = `${API_URL}/api/allergies/actions/search`
 const PATIENT_CARE_TEAM_ENDPOINT = (patientId: string) =>
   `${API_URL}/api/patients/${patientId}/careteam`
 const GET_STAFF_LICENSE = `${API_URL}/api/stafflicenses/actions/search`
+const ADD_STAFF_LICENSE = (staffId: number) =>
+  `${API_URL}/api/staff/${staffId}/licenses`
+const UPDATE_STAFF_LICENSE = (staffId: number, staffLicenseId: string) =>
+  `${API_URL}/api/staff/${staffId}/licenses/${staffLicenseId}`
+const GET_STAFF_LICENSE_HISTORY_ENDPOINT = `${API_URL}/api/staffdea/history/actions/search`
 const GET_LAB_ORDERS = (appointmentId: string) =>
   `${API_URL}/api/appointments/${appointmentId}/laborders/actions/search`
 const GET_SCRIPT_SURE_SESSION_TOKEN = (partnerShortName: string) =>
@@ -463,7 +468,6 @@ const GET_NOTE_DOCUMENTS_ENDPOINT = (
 ) =>
   `${API_URL}/api/patients/${patientId}/appointments/${appointmentId}/documents/actions/search`
 const GET_STAFF_DEA_ENDPOINT = `${API_URL}/api/staffdea/actions/search`
-const GET_STAFF_LICENSE_HISTORY_ENDPOINT = `${API_URL}/api/staffdea/history/actions/search`
 const ADD_SCHEDULE_REPORT_ENDPOINT = `${API_URL}/api/reporting/schedules`
 const RUN_SCHEDULE_REPORT_JOB_ENDPOINT = `${API_URL}/api/jobmanager/jobs`
 const SAVE_ADDENDUMS_AGAINST_NOTE_ID = (
@@ -793,8 +797,9 @@ export {
   GET_CLAIMS_AUDIT_HISTORY_LIST_ENDPOINT,
   NOTE_SIGN_ENDPOINT,
   GET_STAFF_LICENSE,
+  ADD_STAFF_LICENSE,
+  UPDATE_STAFF_LICENSE,
   GET_STAFF_BY_ID,
-  GET_STAFF_DEA_ENDPOINT,
   GET_STAFF_LICENSE_HISTORY_ENDPOINT,
   GET_LAB_ORDERS,
   GET_CPT_CODES,

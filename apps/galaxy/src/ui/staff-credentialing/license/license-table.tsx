@@ -7,6 +7,7 @@ import { Row } from '@tanstack/react-table'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { DataTable, FormContainer } from '@/components'
+import { Appointment } from '@/types'
 import { getDateString } from '@/ui/schedule/utils'
 import { updateLicenseAction } from '../actions'
 import { addLicenseAction } from '../actions/add-license'
@@ -22,9 +23,9 @@ import {
   StaffData,
 } from '../types'
 
-const DeaTable = ({
-  fetchLicenseList,
+const LicenseTable = ({
   licenses,
+  fetchLicenseList,
   staffData,
 }: {
   licenses: License[]
@@ -40,7 +41,7 @@ const DeaTable = ({
       stateCode: '',
       stateName: '',
       status: undefined,
-      licenseType: LicenseType.DEA,
+      licenseType: LicenseType.License,
       licenseNumber: '',
       startDate: undefined,
       endDate: undefined,
@@ -126,4 +127,4 @@ const DeaTable = ({
   )
 }
 
-export { DeaTable }
+export { LicenseTable }

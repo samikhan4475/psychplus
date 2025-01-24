@@ -13,7 +13,7 @@ interface LicenseHistoryProps {
 const LicenseHistory = ({
   staffId,
 }: PropsWithChildren<LicenseHistoryProps>) => {
-  const { setHistoryRow, historyRow } = useStore()
+  const { activeTab, setHistoryRow, historyRow } = useStore()
 
   return (
     <Dialog.Root
@@ -26,10 +26,10 @@ const LicenseHistory = ({
         <CloseDialogTrigger />
 
         <Dialog.Title className="font-sans -tracking-[0.25px]">
-          DEA History for Alabama
+          {activeTab} History for {historyRow?.stateName}
         </Dialog.Title>
 
-        <LicenseHistoryTable />
+        <LicenseHistoryTable staffId={staffId} />
       </Dialog.Content>
     </Dialog.Root>
   )

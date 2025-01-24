@@ -3,12 +3,12 @@
 import { PropsWithChildren } from 'react'
 import { Flex, Text } from '@radix-ui/themes'
 
-const DEAHeader = ({ children }: PropsWithChildren) => {
+const LicenseHeader = ({ children }: PropsWithChildren) => {
   return (
     <Flex direction="column" gap="1" className="bg-pp-bg-accent">
       <Flex className="bg-white" p="2" align="center">
         <Text size="4" weight="medium" className="w-[120px]">
-          DEA
+          License
         </Text>
       </Flex>
       {children}
@@ -16,4 +16,4 @@ const DEAHeader = ({ children }: PropsWithChildren) => {
   )
 }
 
-export { DEAHeader }
+export { LicenseHeader }
