@@ -1,20 +1,14 @@
 'use client'
 
 import { SharedCode } from '@/types'
+import { SubstanceUseHxWidgetSchemaType } from '@/ui/substance-use-hx/substance-use-hx-widget/substance-use-hx-schema'
 import { mapValuesToLabels } from '@/utils'
 import { LabelAndValue } from '../../shared'
 
 interface TobaccoProps {
-  data: {
-    smokePacks?: string
-    smokingCessationOption?: string
-    tobaccoChewSmoke?: string
-    counselingOption?: string
-    smokingCessationDiscussionDuration?: string
-    otherTobacco?: string
-  }
-  tobaccoTreatmentCodeset: SharedCode[]
+  data: SubstanceUseHxWidgetSchemaType
   counsellingCodeset: SharedCode[]
+  tobaccoTreatmentCodeset: SharedCode[]
 }
 
 const Tobacco = ({
@@ -22,35 +16,50 @@ const Tobacco = ({
   tobaccoTreatmentCodeset,
   counsellingCodeset,
 }: TobaccoProps) => {
-  const isSmoke = data.tobaccoChewSmoke === 'smoke' && data.smokePacks
+  const {
+    smokePacks,
+    smokingCessationOption,
+    tobaccoChewSmoke,
+    counselingOption,
+    smokingCessationDiscussionDuration,
+    otherTobacco,
+  } = data
+  const isSmoke = tobaccoChewSmoke === 'smoke'
 
-  const smokingCessation = `I have reviewed the risks of continued smoking with the patient and offered
-                Smoking Cessation Options ${
-                  mapValuesToLabels(
-                    [data.smokingCessationOption] as string[],
-                    tobaccoTreatmentCodeset,
-                  ) || ''
-                } and
-                Counseling Options ${
-                  mapValuesToLabels(
-                    [data.counselingOption] as string[],
-                    counsellingCodeset,
-                  ) || ''
-                }.`
+  if (!isSmoke) {
+    return null
+  }
+
+  const smokingCessationLabel = smokingCessationOption
+    ? `"${mapValuesToLabels(
+        [smokingCessationOption] as string[],
+        tobaccoTreatmentCodeset,
+      )}"`
+    : ''
+
+  const counselingOptionLabel = counselingOption
+    ? `"${mapValuesToLabels(
+        [counselingOption] as string[],
+        counsellingCodeset,
+      )}"`
+    : ''
+
+  const smokingCessationText = `I have reviewed the risks of continued smoking with the patient and offered
+                Smoking Cessation Options ${smokingCessationLabel} and
+                Counseling Options ${counselingOptionLabel}.`
   return (
     <>
-      {isSmoke && (
+      {smokePacks && (
+        <LabelAndValue label="Smoke:" value={`Packs a day: ${smokePacks}`} />
+      )}
+      <LabelAndValue value={smokingCessationText} />
+      {smokingCessationDiscussionDuration && (
         <LabelAndValue
-          label="Smoke:"
-          value={`Packs a day: ${data.smokePacks}`}
+          label="Discussed smoking cessation for:"
+          value={smokingCessationDiscussionDuration}
         />
       )}
-      <LabelAndValue value={smokingCessation} />
-      <LabelAndValue
-        label="Discussed smoking cessation for:"
-        value={data.smokingCessationDiscussionDuration}
-      />
-      <LabelAndValue label="Other:" value={data.otherTobacco} />
+      {otherTobacco && <LabelAndValue label="Other:" value={otherTobacco} />}
     </>
   )
 }
