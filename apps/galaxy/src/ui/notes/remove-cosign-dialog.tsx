@@ -8,6 +8,7 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import z from 'zod'
 import { removeToCosignerAction } from './actions/remove-to-cosigner'
+import { useStore } from './store'
 import { useNoteActions } from './use-note-actions'
 
 const schema = z.object({
@@ -33,6 +34,12 @@ const RemoveCosignDialog = ({
     },
   })
 
+  const { fetch, patientId, setSelectedRow } = useStore((state) => ({
+    fetch: state.fetch,
+    patientId: state.patientId,
+    setSelectedRow: state.setSelectedRow,
+  }))
+
   const onSubmit: SubmitHandler<SchemaType> = async () => {
     setLoading(true)
     const payload = validateAndPreparePayload()
@@ -45,9 +52,10 @@ const RemoveCosignDialog = ({
       setLoading(false)
       return
     }
-
+    fetch({ patientId })
     toast.success('Co-signer removed successfully')
     removecloseDialog()
+    setSelectedRow(undefined)
     setLoading(false)
   }
 

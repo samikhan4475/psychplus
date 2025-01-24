@@ -27,7 +27,7 @@ const CosignDialog = ({ isOpen, closeDialog }: CosignDialogProps) => {
         <Dialog.Title size="6" className="font-[600]">
           Send to Co-Signer
         </Dialog.Title>
-        <CosignDialogForm />
+        <CosignDialogForm closeDialog={closeDialog} />
       </Dialog.Content>
     </Dialog.Root>
   )

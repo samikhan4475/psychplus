@@ -21,10 +21,16 @@ const schema = z.object({
 })
 type CosignSchemaType = z.infer<typeof schema>
 
-const CosignDialogForm = () => {
-  const { appointment } = useStore((state) => ({
-    appointment: state.appointment,
-  }))
+const CosignDialogForm = ({ closeDialog }: { closeDialog: () => void }) => {
+  const { appointment, fetch, patientId, setSelectedRow } = useStore(
+    (state) => ({
+      appointment: state.appointment,
+      fetch: state.fetch,
+      patientId: state.patientId,
+      setSelectedRow: state.setSelectedRow,
+    }),
+  )
+
   const { validateAndPreparePayload } = useNoteActions()
 
   const form = useForm<CosignSchemaType>({
@@ -49,6 +55,9 @@ const CosignDialogForm = () => {
       return
     }
 
+    fetch({ patientId })
+    setSelectedRow(undefined)
+    closeDialog()
     toast.success('Successfully sent to co-signer')
   }
 
