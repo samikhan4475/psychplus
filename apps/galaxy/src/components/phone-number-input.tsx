@@ -14,6 +14,7 @@ interface PhoneNumberInputProps {
   placeholder?: string
   autoFocus?: boolean
   className?: string
+  isFormattedValue?: boolean
 }
 
 const PhoneNumberInput = ({
@@ -23,6 +24,7 @@ const PhoneNumberInput = ({
   format = '(###)-###-####',
   className,
   autoFocus,
+  isFormattedValue,
 }: PhoneNumberInputProps) => {
   const form = useFormContext()
 
@@ -47,7 +49,9 @@ const PhoneNumberInput = ({
               name={fieldName}
               value={field.value}
               disabled={field.disabled}
-              onValueChange={({ value }) => field.onChange(value)}
+              onValueChange={({ value, formattedValue }) =>
+                field.onChange(isFormattedValue ? formattedValue : value)
+              }
               onBlur={field.onBlur}
               customInput={TextField.Root}
               getInputRef={field.ref}

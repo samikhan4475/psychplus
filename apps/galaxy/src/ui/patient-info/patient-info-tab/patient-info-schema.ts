@@ -163,7 +163,13 @@ const patientInfoSchema = z
     hasPhoto: z.boolean(),
     chargeKey: optionalString,
     medicalRecordNumber: optionalString,
-    socialSecurityNumber: optionalString,
+    socialSecurityNumber: z.ostring().refine(
+      (val) => {
+        if (!val) return true
+        return val.replace(/[-,_]/g, '').length === 9
+      },
+      { message: 'Must be 9 digits' },
+    ),
     guardian: z
       .object({
         name: z.object({

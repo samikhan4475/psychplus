@@ -3,7 +3,6 @@
 import { Grid } from '@radix-ui/themes'
 import { AgeInput } from './age-input'
 import { CityInput } from './city-input'
-import { ConsentVerifySelect } from './consent-verify-select'
 import { ContactMadeSelect } from './contact-made-select'
 import { CreatedDatePicker } from './created-date-picker'
 import { CreditCardVerifySelect } from './credit-card-verify-select'
@@ -61,7 +60,6 @@ const Filters = () => {
       </Grid>
       {/* Todo in Phase 2 <PracticeSelect /> */}
       <InsuranceVerifySelect />
-      <ConsentVerifySelect />
       <CreditCardVerifySelect />
       <CreatedDatePicker />
       <Grid columns="2" gap="2" align="baseline">

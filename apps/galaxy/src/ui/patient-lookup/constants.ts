@@ -1,4 +1,4 @@
-const PATIENT_LOOKUP_TABLE_PAGE_SIZE = 20
+const PATIENT_LOOKUP_TABLE_PAGE_SIZE = 30
 const PATIENT_LOOKUP_FILTERS_KEY = 'patient-lookup-filters'
 const INVALID_RANGE_ERROR = 'Invalid date range'
 const ALREADY_EXIST_ERROR_MESSAGE =

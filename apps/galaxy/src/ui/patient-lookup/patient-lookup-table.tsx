@@ -1,6 +1,5 @@
 'use client'
 
-import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons'
 import { Flex, ScrollArea, Text } from '@radix-ui/themes'
@@ -14,17 +13,13 @@ const PatientLookupTable = () => {
 
   const addTab = useRootStore((state) => state.addTab)
 
-  const { data, loading, refetch } = useStore((state) => ({
+  const { data, loading, showFilters } = useStore((state) => ({
     data: state.data,
     loading: state.loading,
     sort: state.sort,
     sortData: state.sortData,
-    refetch: state.refetch,
+    showFilters: state.showFilters,
   }))
-
-  useEffect(() => {
-    refetch()
-  }, [refetch])
 
   if (loading) {
     return (
@@ -63,7 +58,7 @@ const PatientLookupTable = () => {
         tdClass="[&:has(.dialog-trigger-cell)]:!p-0"
         tableClass="[&_.rt-ScrollAreaScrollbar]:!hidden"
         theadClass="z-[1]"
-        disablePagination
+        initialPageSize={!showFilters ? 20 : 30}
         isRowSpan
         sticky
       />

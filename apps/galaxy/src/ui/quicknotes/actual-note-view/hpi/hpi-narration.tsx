@@ -108,7 +108,7 @@ const HpiNarration = ({
           {generateNarration()}
         </Text>
         {symptoms?.hpiOther && (
-          <LabelAndValue label="" value={symptoms?.hpiOther} />
+          <LabelAndValue label="Other:" value={symptoms?.hpiOther} />
         )}
       </Flex>
     </BlockContainer>

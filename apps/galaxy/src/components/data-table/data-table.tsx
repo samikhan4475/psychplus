@@ -28,7 +28,7 @@ interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   renderHeader?: (table: ReactTable<TData>) => React.ReactNode
   renderFooter?: (table: ReactTable<TData>) => React.ReactNode
-  initialPageSize?: 10 | 25 | 50 | 100 | 200
+  initialPageSize?: 10 | 20 | 30 | 25 | 50 | 100 | 200
   disablePagination?: boolean
   renderEmpty?: () => React.ReactNode
   onRowClick?: (row: Row<TData>, table: ReactTable<TData>) => void
@@ -86,6 +86,10 @@ const DataTable = <TData, TValue>({
       onRowSelectionChange(table.getSelectedRowModel().flatRows)
     }
   }, [rowSelection])
+
+  useEffect(() => {
+    setPagination((prev) => ({ ...prev, pageSize: initialPageSize }))
+  }, [initialPageSize])
 
   const table = useReactTable({
     data,

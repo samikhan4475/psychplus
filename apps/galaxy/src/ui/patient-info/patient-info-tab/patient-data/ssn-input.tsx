@@ -16,6 +16,7 @@ const SsnInput = () => {
         className={textFieldClassName}
         placeholder="SSN"
         format="###-##-####"
+        isFormattedValue
       />
       <FormFieldError name="socialSecurityNumber" />
     </FormFieldContainer>
