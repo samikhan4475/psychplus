@@ -1,6 +1,7 @@
-import React from 'react'
+import React, { Suspense } from 'react'
 import { Flex, ScrollArea, Text } from '@radix-ui/themes'
 import { getPatientProfileDetails } from '@/api'
+import { LoadingPlaceholder } from '@/components'
 import { ChartNavigation } from '@/ui/chart-navigation'
 import { PatientBanner } from '@/ui/patient-banner'
 import { StoreProvider } from '@/ui/quicknotes/store'
@@ -12,20 +13,19 @@ interface ChartLayoutProps extends React.PropsWithChildren {
 }
 
 const ChartLayout = async ({ children, params }: ChartLayoutProps) => {
-  const payload = {
+  const response = await getPatientProfileDetails({
     isIncludeInsurance: true,
     isIncludeInsuranceVerification: true,
     isIncludeCardVerification: true,
     isIncludeConsentVerification: true,
     patientIds: [params.id],
-  }
-  const response = await getPatientProfileDetails(payload)
+  })
 
   if (response.state === 'error') {
     return <Text>{response.error}</Text>
   }
 
-  const patientResult = response.data[response.data.length - 1]
+  const patientResult = response.data[response.data.length - 1] ?? {}
 
   return (
     <StoreProvider patientId={params.id} patient={patientResult}>
@@ -35,12 +35,29 @@ const ChartLayout = async ({ children, params }: ChartLayoutProps) => {
         gap="1"
         className="bg-pp-bg-accent"
       >
-        <PatientBanner patientId={params.id} user={patientResult} />
+        <Suspense
+          fallback={
+            <Flex className="bg-white h-[146px] border-b border-b-gray-5">
+              <LoadingPlaceholder />
+            </Flex>
+          }
+        >
+          <PatientBanner patientId={params.id} user={patientResult} />
+        </Suspense>
+
         <Flex gap="3" px="2" className="flex-1 overflow-auto">
           <ChartNavigation />
           <ScrollArea className="flex-1">
             <Flex className="flex-1" mb="4">
-              {children}
+              <Suspense
+                fallback={
+                  <Flex className="bg-white h-[146px] border-b border-b-gray-5">
+                    <LoadingPlaceholder />
+                  </Flex>
+                }
+              >
+                {children}
+              </Suspense>
             </Flex>
           </ScrollArea>
         </Flex>

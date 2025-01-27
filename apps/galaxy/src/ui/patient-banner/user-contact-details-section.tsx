@@ -17,7 +17,7 @@ const UserContactDetailsSection = ({ user }: PatientBannerProps) => {
       <LabelAndValue
         label="Address"
         value={
-          user.contactDetails.addresses
+          user?.contactDetails?.addresses
             ? getPatientStreet(user.contactDetails.addresses)
             : undefined
         }
@@ -25,7 +25,7 @@ const UserContactDetailsSection = ({ user }: PatientBannerProps) => {
       <LabelAndValue
         label="City/State/Zip"
         value={
-          user.contactDetails.addresses
+          user?.contactDetails?.addresses
             ? `${getPatientCity(
                 user.contactDetails.addresses,
               )}, ${getPatientState(

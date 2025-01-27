@@ -1,6 +1,7 @@
 'use client'
 
 import { ComponentProps, useMemo } from 'react'
+import { useShallow } from 'zustand/react/shallow'
 import { useStore } from './store'
 import { WidgetComponent } from './types'
 
@@ -8,18 +9,20 @@ type QuickNoteDataProviderProps = ComponentProps<WidgetComponent> & {
   id: string
   component: WidgetComponent
 }
+
 const QuickNoteDataProvider = ({
   id,
   component: Component,
-  data: intialData = [],
+  data: initialData = [],
   ...props
 }: QuickNoteDataProviderProps) => {
-  const data = useStore((state) => state?.widgetsData)
-
+  const widgetData = useStore(
+    useShallow((state) => state.widgetsData?.[id] || initialData),
+  )
   const componentData = useMemo(() => {
-    return data?.[id] ?? intialData
+    return widgetData ?? initialData
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data?.[id]])
+  }, [widgetData])
 
   return <Component {...props} data={componentData} />
 }

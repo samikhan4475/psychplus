@@ -2,6 +2,8 @@
 
 import { useLayoutEffect } from 'react'
 import { Flex, ScrollArea } from '@radix-ui/themes'
+import toast from 'react-hot-toast'
+import { useShallow } from 'zustand/react/shallow'
 import { Appointment, QuickNoteSectionItem } from '@/types'
 import { ActualNoteView } from './actual-note-view/actual-note-view'
 import { QuickNoteDataProvider } from './quick-note-data-provider'
@@ -29,14 +31,17 @@ export function QuickNotesClientView({
   visitSequence,
   widgetsData = [],
 }: QuickNotesViewProps) {
-  const { setWidgetsData, patient } = useStore((state) => ({
-    setWidgetsData: state.setWidgetsData,
-    patient: state.patient,
-  }))
+  const { setWidgetsData, patient } = useStore(
+    useShallow((state) => ({
+      setWidgetsData: state.setWidgetsData,
+      patient: state.patient,
+    })),
+  )
 
   useLayoutEffect(() => {
     setWidgetsData(widgetsData)
-  }, [widgetsData, appointmentId])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [appointmentId])
 
   return (
     <Flex width="100%" direction="column">

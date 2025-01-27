@@ -55,7 +55,7 @@ const CodesWidget = ({
       handleDefaultSubmission(patientId, appointmentId, updatedCodes)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [patientId, appointmentId, appointment])
+  }, [patientId, appointmentId, appointment, initialValues])
 
   const {
     primaryCodeOptions,

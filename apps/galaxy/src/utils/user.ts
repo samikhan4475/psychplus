@@ -7,19 +7,15 @@ const getUserInitials = ({
 }) => firstName.charAt(0) + lastName.charAt(0)
 
 const getUserFullName = (
-  {
-    firstName,
-    middleName,
-    lastName,
-  }: {
+  user: {
     firstName: string
     middleName?: string
     lastName: string
   },
   includeMiddlename = false,
 ) =>
-  middleName && includeMiddlename
-    ? `${firstName} ${middleName} ${lastName}`
-    : `${firstName} ${lastName}`
+  user?.middleName && includeMiddlename
+    ? `${user?.firstName} ${user?.middleName} ${user?.lastName}`
+    : `${user?.firstName} ${user?.lastName}`
 
 export { getUserInitials, getUserFullName }

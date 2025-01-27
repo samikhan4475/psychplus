@@ -50,11 +50,11 @@ const UserInfoSection = ({ user }: PatientBannerProps) => {
           label="Cell"
           value={getMaskedPhoneNumber(
             getPatientPhone(
-              user.contactDetails?.phoneNumbers as PhoneNumber[],
+              user?.contactDetails?.phoneNumbers as PhoneNumber[],
             ) as string,
           )}
         />
-        <LabelAndValue label="Email" value={user.contactDetails?.email} />
+        <LabelAndValue label="Email" value={user?.contactDetails?.email} />
         <LabelAndValue
           label="SSN"
           value={getMaskedSSN(user.socialSecurityNumber)}
