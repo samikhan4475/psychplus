@@ -89,6 +89,7 @@ const baseSchema = z.object({
   timeRangeOne: z.string().optional(),
   timeRangeTwo: z.string().optional(),
   timeRangeThree: z.string().optional(),
+  patientOther: z.string().optional(),
   therapyDetailsModality: codesetOptions.optional(),
   therapyDetailsInterventions: codesetOptions.optional(),
   therapySessionParticipants: TherapySessionParticipantsEnum.optional(),

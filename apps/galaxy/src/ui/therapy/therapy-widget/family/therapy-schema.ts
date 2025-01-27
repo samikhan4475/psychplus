@@ -19,7 +19,9 @@ const FamilyTherapySchema = z.object({
     .refine((val) => val === '' || (Number(val) >= 26 && Number(val) <= 99), {
       message: 'Value must be between 26 and 99',
     }),
-  therapySessionParticipants: TherapySessionParticipantsEnum,
+  therapySessionParticipants: z
+    .string()
+    .min(1, { message: 'Session Participants is required' }),
   therapyDetailsModality: z
     .array(
       z.object({

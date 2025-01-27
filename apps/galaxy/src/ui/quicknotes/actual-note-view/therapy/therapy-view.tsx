@@ -70,11 +70,11 @@ const Therapy = async ({ patientId, visitType }: TherapyProps) => {
           )?.label || 'Unknown time'
     } on this session interacting with ${
       values.therapySessionParticipants === 'Patient&Other' &&
-      values.patientOther
-        ? `Patient & ${values.patientOther}`
+      'patientOther' in values
+        ? `Patient & ${values?.patientOther}`
         : sessionParticipantOptions.find(
             (option) => option.value === values.therapySessionParticipants,
-          )?.label || 'Unknown participants'
+          )?.label ?? 'Unknown participants'
     }. Therapy modalities that were used include but are not limited to ${values.therapyDetailsModality
       .map((modality) => modality.display)
       .join(

@@ -39,7 +39,7 @@ const INITIAL_ADDON_VALUES: ResultType = {
   timeRangeOne: undefined,
   timeRangeTwo: undefined,
   timeRangeThree: undefined,
-  therapySessionParticipants: undefined,
+  therapySessionParticipants: 'PatientsOnly',
   patientOther: undefined,
   therapyDetailsModality: [],
   therapyDetailsInterventions: [],

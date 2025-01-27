@@ -40,8 +40,8 @@ const TherapyClientView = ({ data = [] }: TherapyClientViewProps) => {
                 )?.label ?? 'Unknown time'
           } on this session interacting with ${
             values.therapySessionParticipants === 'Patient&Other' &&
-            values.patientOther
-              ? `Patient & ${values.patientOther}`
+            'patientOther' in values
+              ? `Patient & ${values?.patientOther}`
               : sessionParticipantOptions.find(
                   (option) =>
                     option.value === values.therapySessionParticipants,

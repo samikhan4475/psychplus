@@ -36,6 +36,7 @@ const THERAPY_OPTIONS = [
   'timeRangeTwo',
   'timeRangeThree',
   'therapySessionParticipants',
+  'patientOther',
   'additionalTherapyDetail',
 ]
 
