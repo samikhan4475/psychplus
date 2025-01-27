@@ -17,8 +17,15 @@ import {
 } from './constants'
 import { addOnCodes, getCptCodeMap } from './cpt-code-map'
 
-type resultType = Record<string, BlockType | DateValue>
-const intialAddonValues: resultType = {
+type BlockType = string | undefined | boolean | ModalityTransferenceData[]
+type ResultType = Record<string, BlockType | DateValue>
+
+interface ModalityTransferenceData {
+  value: string
+  display: string
+}
+
+const INITIAL_ADDON_VALUES: ResultType = {
   injection: false,
   drugName: '',
   dose: '',
@@ -26,7 +33,7 @@ const intialAddonValues: resultType = {
   manufacturer: '',
   lotNumber: '',
   expirationDate: '',
-  therapy: '',
+  therapy: false,
   therapyPsychoanalysis: '',
   therapyTimeSpent: undefined,
   timeRangeOne: undefined,
@@ -39,7 +46,7 @@ const intialAddonValues: resultType = {
   transferenceDescription: [],
   psychoanalyticTechnique: [],
   additionalTherapyDetail:
-    'Patient presented with signs of transference, indicating a strong misplacement of feelings associated with unresolved past experiences.  Provider engaged in schema exploration with patient to gain insight regarding patient’s irrational thoughts and maladaptive behavior patterns. Provider encouraged patient to self-reflect to make connections between dysfunctional beliefs, behaviors, and assumptions that may have affected their perception. Continued exploration of irrational thoughts and behaviors is recommended to map all types and directions of transference.',
+    'Patient presented with signs of transference, indicating a strong misplacement of feelings associated with unresolved past experiences. Provider engaged in schema exploration with patient to gain insight regarding patient’s irrational thoughts and maladaptive behavior patterns. Provider encouraged patient to self-reflect to make connections between dysfunctional beliefs, behaviors, and assumptions that may have affected their perception. Continued exploration of irrational thoughts and behaviors is recommended to map all types and directions of transference.',
   additionalPsychoAnalysisDetail:
     'The patient displayed transference that may be the result of unconscious conflicts. The provider encouraged the patient to reflect on past experiences that could be impacting the patient’s life. The provider further explored repressed thoughts with the patient to help the patient become aware of the root causes of their psychological distress. Continued support and discussion of the transference are recommended for continued growth.',
   interactiveComplexity: false,
@@ -69,11 +76,6 @@ const intialAddonValues: resultType = {
   providerType: '',
 }
 
-interface ModalityTransferenceData {
-  value: string
-  display: string
-}
-type BlockType = string | undefined | boolean | ModalityTransferenceData[]
 const transformIn = (
   value: QuickNoteSectionItem[],
   appointmentData?: Appointment[],
@@ -94,11 +96,11 @@ const transformIn = (
     value[0].sectionItem === 'empty' &&
     value[0].sectionItemValue === 'true'
   ) {
-    return intialAddonValues as AddOnWidgetSchemaType
+    return INITIAL_ADDON_VALUES as AddOnWidgetSchemaType
   }
 
-  const result: resultType = {
-    ...intialAddonValues,
+  const result: ResultType = {
+    ...INITIAL_ADDON_VALUES,
     therapyPsychoanalysis,
     therapy,
   }
@@ -144,34 +146,22 @@ const transformOut =
 
     if (!formData) return result
     if (formData.injection) {
-      const injectionSections = transformOutInjectionBlock(transformProps)
-      result.push(...injectionSections)
+      result.push(...transformOutInjectionBlock(transformProps))
     }
     if (formData.interactiveComplexity) {
-      const interactiveComplexitySections =
-        transformOutInteractiveComplexity(transformProps)
-      result.push(...interactiveComplexitySections)
+      result.push(...transformOutInteractiveComplexity(transformProps))
     }
     if (formData.therapy) {
       if (formData.therapyPsychoanalysis === 'psychoanalysis') {
-        const psychoanalysisSections =
-          transformOutPsychoanalysisBlock(transformProps)
-        result.push(...psychoanalysisSections)
+        result.push(...transformOutPsychoanalysisBlock(transformProps))
       } else if (formData.therapyPsychoanalysis === 'neither') {
-        const QuickNotesPayload = {
-          pid: Number(patientId),
-          sectionName: QuickNoteSectionName.Addon,
-          appointmentId: Number(appointmentId),
-        }
-
         result.push({
-          ...QuickNotesPayload,
+          ...createQuickNotesPayload(patientId, appointmentId),
           sectionItem: 'therapyPsychoanalysis',
           sectionItemValue: 'neither',
         })
       } else {
-        const therapySections = transformOutTherapyBlock(transformProps)
-        result.push(...therapySections)
+        result.push(...transformOutTherapyBlock(transformProps))
       }
     }
 
@@ -184,13 +174,8 @@ const transformOut =
     )
 
     if (result.length === 0) {
-      const QuickNotesPayload = {
-        pid: Number(patientId),
-        sectionName: QuickNoteSectionName.Addon,
-        appId: Number(appointmentId),
-      }
       result.push({
-        ...QuickNotesPayload,
+        ...createQuickNotesPayload(patientId, appointmentId),
         sectionItem: 'empty',
         sectionItemValue: 'true',
       })
@@ -200,34 +185,35 @@ const transformOut =
     return result
   }
 
+const createQuickNotesPayload = (patientId: string, appointmentId: string) => ({
+  pid: Number(patientId),
+  sectionName: QuickNoteSectionName.Addon,
+  appId: Number(appointmentId),
+})
+
 const transformOutInjectionBlock = (transformProps: {
   patientId: string
   appointmentId: string
   schema: Record<string, BlockType>
-}) => {
+}): QuickNoteSectionItem[] => {
   const { patientId, appointmentId, schema } = transformProps
-
-  const QuickNotesPayload = {
-    pid: Number(patientId),
-    sectionName: QuickNoteSectionName.Addon,
-    appId: Number(appointmentId),
-  }
 
   const result: QuickNoteSectionItem[] = [
     {
-      ...QuickNotesPayload,
+      ...createQuickNotesPayload(patientId, appointmentId),
       sectionItem: 'injection',
       sectionItemValue: 'true',
     },
   ]
 
   INJECTION_BLOCK_OPTIONS.forEach((option) => {
-    if (schema[option])
+    if (schema[option]) {
       result.push({
-        ...QuickNotesPayload,
+        ...createQuickNotesPayload(patientId, appointmentId),
         sectionItem: option,
         sectionItemValue: String(schema[option]),
       })
+    }
   })
   return result
 }
@@ -236,18 +222,12 @@ const transformOutInteractiveComplexity = (transformProps: {
   patientId: string
   appointmentId: string
   schema: Record<string, BlockType>
-}) => {
+}): QuickNoteSectionItem[] => {
   const { patientId, appointmentId, schema } = transformProps
-
-  const QuickNotesPayload = {
-    pid: Number(patientId),
-    sectionName: QuickNoteSectionName.Addon,
-    appId: Number(appointmentId),
-  }
 
   const result: QuickNoteSectionItem[] = [
     {
-      ...QuickNotesPayload,
+      ...createQuickNotesPayload(patientId, appointmentId),
       sectionItem: 'interactiveComplexity',
       sectionItemValue: 'true',
     },
@@ -256,7 +236,7 @@ const transformOutInteractiveComplexity = (transformProps: {
   INTERACTIVE_COMPLEXITY_BLOCK_OPTIONS.forEach((option) => {
     if (schema[option.field]) {
       result.push({
-        ...QuickNotesPayload,
+        ...createQuickNotesPayload(patientId, appointmentId),
         sectionItem: option.field,
         sectionItemValue: 'true',
       })
@@ -270,22 +250,17 @@ const transformOutTherapyBlock = (transformProps: {
   patientId: string
   appointmentId: string
   schema: Record<string, BlockType>
-}) => {
+}): QuickNoteSectionItem[] => {
   const { patientId, appointmentId, schema } = transformProps
 
-  const QuickNotesPayload = {
-    pid: Number(patientId),
-    sectionName: QuickNoteSectionName.Addon,
-    appId: Number(appointmentId),
-  }
   const result: QuickNoteSectionItem[] = [
     {
-      ...QuickNotesPayload,
+      ...createQuickNotesPayload(patientId, appointmentId),
       sectionItem: 'therapy',
       sectionItemValue: 'true',
     },
     {
-      ...QuickNotesPayload,
+      ...createQuickNotesPayload(patientId, appointmentId),
       sectionItem: 'therapyPsychoanalysis',
       sectionItemValue: 'therapy',
     },
@@ -295,7 +270,7 @@ const transformOutTherapyBlock = (transformProps: {
     const data = schema[option]
     if (data) {
       result.push({
-        ...QuickNotesPayload,
+        ...createQuickNotesPayload(patientId, appointmentId),
         sectionItem: option,
         sectionItemValue: String(data),
       })
@@ -312,7 +287,7 @@ const transformOutTherapyBlock = (transformProps: {
         )
         .join(',')
       result.push({
-        ...QuickNotesPayload,
+        ...createQuickNotesPayload(patientId, appointmentId),
         sectionItem: item,
         sectionItemValue: value,
       })
@@ -326,26 +301,22 @@ const transformOutPsychoanalysisBlock = (transformProps: {
   patientId: string
   appointmentId: string
   schema: Record<string, BlockType>
-}) => {
+}): QuickNoteSectionItem[] => {
   const { patientId, appointmentId, schema } = transformProps
-  const QuickNotesPayload = {
-    pid: Number(patientId),
-    sectionName: QuickNoteSectionName.Addon,
-    appId: Number(appointmentId),
-  }
+
   const result: QuickNoteSectionItem[] = [
     {
-      ...QuickNotesPayload,
+      ...createQuickNotesPayload(patientId, appointmentId),
       sectionItem: 'therapy',
       sectionItemValue: 'true',
     },
     {
-      ...QuickNotesPayload,
+      ...createQuickNotesPayload(patientId, appointmentId),
       sectionItem: 'therapyPsychoanalysis',
       sectionItemValue: 'psychoanalysis',
     },
     {
-      ...QuickNotesPayload,
+      ...createQuickNotesPayload(patientId, appointmentId),
       sectionItem: 'additionalPsychoAnalysisDetail',
       sectionItemValue: String(schema.additionalPsychoAnalysisDetail),
     },
@@ -361,7 +332,7 @@ const transformOutPsychoanalysisBlock = (transformProps: {
         )
         .join(',')
       result.push({
-        ...QuickNotesPayload,
+        ...createQuickNotesPayload(patientId, appointmentId),
         sectionItem: item,
         sectionItemValue: value,
       })
@@ -374,9 +345,10 @@ const transformOutPsychoanalysisBlock = (transformProps: {
 const getCodes = async (
   schema: Record<string, BlockType>,
   visitType: string,
-) => {
+): Promise<CodesWidgetItem[]> => {
   const selectedCodes: CodesWidgetItem[] = []
   const cptCodeMap = getCptCodeMap(visitType)
+
   Object.entries(cptCodeMap).forEach(([key, value]) => {
     const schemaKey = schema?.[key]
     const code =
@@ -390,6 +362,7 @@ const getCodes = async (
       })
     }
   })
+
   return selectedCodes
 }
 

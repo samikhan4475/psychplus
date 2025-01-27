@@ -1,6 +1,7 @@
 import { CodesWidgetItem, CptCodeKeys } from '@/types'
 
 const addOnCodes: CodesWidgetItem[] = [
+  { key: CptCodeKeys.ADD_ONS_KEY, code: '90785' },
   { key: CptCodeKeys.ADD_ONS_KEY, code: '96372' },
   { key: CptCodeKeys.ADD_ONS_KEY, code: '90833' },
   { key: CptCodeKeys.ADD_ONS_KEY, code: '90836' },
