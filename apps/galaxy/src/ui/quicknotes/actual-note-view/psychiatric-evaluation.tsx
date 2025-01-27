@@ -1,5 +1,7 @@
 'use client'
 
+import { CODESETS } from '@/constants'
+import { useCodesetCodes } from '@/hooks'
 import { Appointment, PatientProfile } from '@/types'
 import { getPatientFullName, getSlashedDateString, getTimeLabel } from '@/utils'
 import { useStore } from '../store'
@@ -15,6 +17,11 @@ const PsychiatricEvaluation = ({ appointment, patient }: Props) => {
     cosignerLabel: state.cosignerLabel,
   }))
 
+  const ServicesOffered = useCodesetCodes(CODESETS.ServicesOffered)
+  const service = ServicesOffered.find(
+    (service) => service.value === appointment.service,
+  )?.display
+
   return (
     <BlockContainer heading={appointment.visitNoteTitle ?? ''}>
       <LabelAndValue label="Title:" value={appointment.visitNoteTitle} />
@@ -27,7 +34,7 @@ const PsychiatricEvaluation = ({ appointment, patient }: Props) => {
       <LabelAndValue label="Provider Type:" value={appointment.providerType} />
       <LabelAndValue label="Provider:" value={appointment.providerName} />
       <LabelAndValue label="Location:" value={appointment.locationName} />
-      <LabelAndValue label="Service:" value={appointment.service} />
+      <LabelAndValue label="Service:" value={service} />
       <LabelAndValue
         label="Date:"
         value={getSlashedDateString(appointment.startDate ?? '')}
