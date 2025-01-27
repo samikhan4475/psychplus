@@ -167,7 +167,7 @@ const columns = (
           }}
         />
       ),
-      cell: ({ row }) => <TextCell>{row.original.visitTypeCode}</TextCell>,
+      cell: ({ row }) => <TextCell className="w-[150px]">{row.original.visitTypeCode}</TextCell>,
     },
 
     {
@@ -255,7 +255,7 @@ const columns = (
           }}
         />
       ),
-      cell: ({ row }) => <TextCell>{row.original.providerName}</TextCell>,
+      cell: ({ row }) => <TextCell className="w-[100px]">{row.original.providerName}</TextCell>,
     },
     {
       id: 'cosignerName',
@@ -283,7 +283,7 @@ const columns = (
           }}
         />
       ),
-      cell: ({ row }) => <TextCell>{row.original.diagnosisCodes}</TextCell>,
+      cell: ({ row }) => <TextCell className="w-[300px]">{row.original.diagnosisCodes}</TextCell>,
     },
     {
       id: 'cptCodes',
