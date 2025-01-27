@@ -1,6 +1,6 @@
 import { Text } from '@radix-ui/themes'
 import { Appointment } from '@/types'
-import { formatDateTime } from '@/utils'
+import { formatDateCell, formatTimeCell } from '@/ui/schedule/utils'
 import { BlockContainer } from '../shared'
 
 const Details = ({ data }: { data: Appointment[] }) => {
@@ -8,8 +8,9 @@ const Details = ({ data }: { data: Appointment[] }) => {
     <BlockContainer heading="Follow Up in weeks">
       {data.map((row) => (
         <Text size="1" key={row.appointmentDate}>
-          {formatDateTime(row.appointmentDate, false)} | {row.providerName} |{' '}
-          {row.locationName} | {row.visitType}
+          {formatDateCell(row.appointmentDate, row.locationTimezoneId)}{' '}
+          {formatTimeCell(row.appointmentDate, row.locationTimezoneId)} |{' '}
+          {row.providerName} | {row.locationName} | {row.visitType}
         </Text>
       ))}
     </BlockContainer>
