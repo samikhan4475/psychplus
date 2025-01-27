@@ -4,9 +4,7 @@ import { ComponentType, useEffect } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { Box } from '@radix-ui/themes'
 import { FormProvider } from 'react-hook-form'
-import toast from 'react-hot-toast'
 import {
-  WidgetClearButton,
   WidgetFormContainer,
   WidgetSaveButton,
 } from '@/components'
@@ -80,7 +78,6 @@ const CodesWidget = ({
           <>
             {!isCodesHeader && (
               <>
-                <WidgetClearButton />
                 <WidgetSaveButton />
               </>
             )}

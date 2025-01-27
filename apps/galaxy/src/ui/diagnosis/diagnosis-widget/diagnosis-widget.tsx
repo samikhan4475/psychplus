@@ -5,8 +5,6 @@ import { Flex, Text } from '@radix-ui/themes'
 import {
   TabContentHeading,
   WidgetAddButton,
-  WidgetClearButton,
-  WidgetHxButton,
 } from '@/components'
 import { DiagnosisIcd10Code, FavouriteDiagnosisData } from '@/types'
 import { WorkingDiagnosisView } from '@/ui/diagnosis/diagnosis/diagnosis-widget'
@@ -53,7 +51,6 @@ const DiagnosisWidget = ({
             <WidgetAddButton title="Add Diagnosis">
               <Diagnosis />
             </WidgetAddButton>
-            <WidgetClearButton />
             <DiagnosisSaveButton />
           </Flex>
         </Flex>
