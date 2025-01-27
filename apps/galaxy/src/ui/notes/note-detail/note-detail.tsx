@@ -1,7 +1,7 @@
 import { PropsWithChildren } from 'react'
 import { Box, Flex, Heading, Separator, Text } from '@radix-ui/themes'
 import { LoadingPlaceholder } from '@/components/loading-placeholder'
-import { getPatientFullName, getSlashedDateString } from '@/utils'
+import { getSlashedDateString } from '@/utils'
 import { useStore } from '../store'
 import { groupBySectionName } from '../utils'
 import { CreateNoteDetailView } from './create-note-detail-view'
@@ -17,7 +17,6 @@ const NoteDetail = ({ children }: PropsWithChildren) => {
     appointmentId,
     widgets,
     patient,
-    provider,
     selectedRow,
   } = useStore((state) => ({
     loadingDetail: state.loadingDetail,
@@ -29,7 +28,6 @@ const NoteDetail = ({ children }: PropsWithChildren) => {
     patientId: state.patientId,
     appointmentId: state.appointmentId,
     widgets: state.widgets,
-    provider: state.provider,
     selectedRow: state.selectedRow,
   }))
 
@@ -40,10 +38,6 @@ const NoteDetail = ({ children }: PropsWithChildren) => {
         <LoadingPlaceholder />
       </Flex>
     )
-  }
-  let providerName
-  if (provider) {
-    providerName = getPatientFullName(provider?.legalName)
   }
 
   return (
@@ -98,7 +92,7 @@ const NoteDetail = ({ children }: PropsWithChildren) => {
 
       {noteDetail?.[0]?.signedDate && (
         <Heading size={'3'} my={'1'} weight={'medium'}>
-          E-Signed by: {providerName}, {provider?.legalName?.honors ?? ''} at{' '}
+          E-Signed by: {selectedRow?.signedByUserName}, at{' '}
           {noteDetail?.[0]?.signedDate
             ? getSlashedDateString(noteDetail?.[0]?.signedDate)
             : ''}

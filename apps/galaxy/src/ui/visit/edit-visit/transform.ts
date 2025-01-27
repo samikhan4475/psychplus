@@ -24,7 +24,8 @@ function transformRequestPayload(
     specialistStaffId: 0,
     startDate: mapToUTCString(
       `${data.visitDate}T${data.visitTime}:00[${data.timeZoneId}]`,
-    ),    durationMinutes: 0,
+    ),
+    durationMinutes: 0,
     visitFrequency: 0,
   }
   if (data.isServiceTimeDependent) {

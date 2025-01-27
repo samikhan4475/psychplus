@@ -33,6 +33,8 @@ const NotesCosignerDropdown = ({
         <Select.Trigger className="h-6 w-full" placeholder={placeholder} />
         <Select.Content
           highContrast
+          position="popper"
+          align="center"
           onCloseAutoFocus={(e) => e.preventDefault()}
         >
           {cosigners?.map(({ id, legalName, userId }, ind) => (

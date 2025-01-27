@@ -30,7 +30,6 @@ const NotesWidget = ({
     appointment,
     selectedRow,
     isCreateNoteView,
-    noteDetail,
     setPatientId,
     setData,
     setPatient,
@@ -41,14 +40,11 @@ const NotesWidget = ({
     fetchWidgets,
     fetchNoteDetail,
     fetchAppointments,
-    fetchStaff,
-    fetchProvider,
     fetchAddendumsDetails,
   } = useStore((state) => ({
     isCreateNoteView: state.isCreateNoteView,
     appointment: state.appointment,
     selectedRow: state.selectedRow,
-    noteDetail: state.noteDetail,
     setPatientId: state.setPatientId,
     setData: state.setData,
     setPatient: state.setPatient,
@@ -60,8 +56,6 @@ const NotesWidget = ({
     fetchAppointments: state.fetchAppointments,
     fetchAppointment: state.fetchAppointment,
     fetchWidgets: state.fetchWidgets,
-    fetchStaff: state.fetchStaff,
-    fetchProvider: state.fetchProvider,
     fetchAddendumsDetails: state.fetchAddendumsDetails,
   }))
 
@@ -107,23 +101,18 @@ const NotesWidget = ({
 
   useEffect(() => {
     const fetchData = async () => {
-      if (selectedRow && appointment && noteDetail) {
-        const promises = [
-          fetchStaff(noteDetail[0]?.coSignedByUserId),
-          fetchProvider(noteDetail[0]?.signedByUserId),
-        ]
-        if (selectedRow.notePositionCode !== 'Secondary') {
-          promises.push(
-            fetchWidgets({
-              visitType: selectedRow.visitTypeCode ?? '',
-              visitSequence: selectedRow.visitSequence ?? '',
-              providerType: appointment.providerType ?? '',
-            }),
-          )
-        }
-        await Promise.all(promises)
-        setLoadingDetail(false)
+      if (
+        selectedRow &&
+        appointment &&
+        selectedRow.notePositionCode !== 'Secondary'
+      ) {
+        fetchWidgets({
+          visitType: selectedRow.visitTypeCode ?? '',
+          visitSequence: selectedRow.visitSequence ?? '',
+          providerType: appointment.providerType ?? '',
+        })
       }
+      setLoadingDetail(false)
     }
     fetchData()
     // eslint-disable-next-line react-hooks/exhaustive-deps

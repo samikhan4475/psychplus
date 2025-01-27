@@ -1,5 +1,6 @@
 'use client'
 
+import { PropsWithChildren } from 'react'
 import { useParams, useSearchParams } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Flex } from '@radix-ui/themes'
@@ -7,18 +8,23 @@ import { useForm, type SubmitHandler } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import z from 'zod'
 import { FormContainer } from '@/components'
+import { Appointment } from '@/types'
 import { sanitizeFormData } from '@/utils'
 import { createNoteSchema } from '.'
 import { NoteDocumentsItemList } from '../types'
 import { fileUploadAction } from './action/file-upload-action'
 import { getSignNoteAction } from './action/sign-note-action'
-import { formatDateTime } from './utils'
+import { mapToUTCString } from './utils'
 
 const schema = createNoteSchema
 
 type SchemaType = z.infer<typeof schema>
 
-const CreateNoteForm = ({ children }: React.PropsWithChildren<unknown>) => {
+interface Props extends PropsWithChildren {
+  noteAppointment: Appointment
+}
+
+const CreateNoteForm = ({ children, noteAppointment }: Props) => {
   const searchParams = useSearchParams()
   const patientId = useParams().id as string
   const appointmentId = searchParams.get('id')
@@ -40,7 +46,10 @@ const CreateNoteForm = ({ children }: React.PropsWithChildren<unknown>) => {
 
   const createPayload = (noteDocuments: NoteDocumentsItemList[] = []) => {
     const data = form.getValues()
-    const formattedDateTime = formatDateTime(data)
+
+    const formattedDateTime = mapToUTCString(
+      `${data.date}T${data.time}[${noteAppointment?.locationTimezoneId}]`,
+    )
 
     return {
       patientId,

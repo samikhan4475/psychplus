@@ -26,6 +26,7 @@ const getNavLinks = (
     { label: 'Allergies', href: '/allergies' },
     ...defaultBottomLinks,
     { label: 'Billing History', href: '/billing-history' },
+    { label: 'Notifications', href: '/notifications' },
   ]
 
   const navLinks = [

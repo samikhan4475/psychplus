@@ -1,6 +1,12 @@
+import { parseZonedDateTime } from '@internationalized/date'
 import { FieldValues } from 'react-hook-form'
 import { Cosigner } from '@/types'
 import { SharedCode } from '@/types/codeset'
+
+export function mapToUTCString(date: string): string {
+  const parsedDateTime = parseZonedDateTime(date)
+  return parsedDateTime.toAbsoluteString()
+}
 
 export const formatDateTime = (data: FieldValues) => {
   if (!data?.date || !data?.time) return ''

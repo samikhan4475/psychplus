@@ -4,20 +4,27 @@ import {
   BlockContainer,
   LabelAndValue,
 } from '@/ui/quicknotes/actual-note-view/shared'
-import { getPatientFullName, getSlashedDateString, getTimeLabel } from '@/utils'
+import { convertToTimezone } from '@/ui/visit/utils'
+import { getPatientFullName, getSlashedDateString } from '@/utils'
 import { useStore } from '../store'
 
 const SecondaryNoteResults = () => {
-  const { noteDetail, appointment, cosigner, patient } = useStore((state) => ({
-    noteDetail: state.noteDetail,
-    appointment: state.appointment,
-    cosigner: state.cosigner,
-    patient: state.patient,
-  }))
+  const { noteDetail, appointment, patient, selectedRow } = useStore(
+    (state) => ({
+      noteDetail: state.noteDetail,
+      appointment: state.appointment,
+      patient: state.patient,
+      selectedRow: state.selectedRow,
+    }),
+  )
 
-  let cosignerName, patientName
-  if (cosigner && patient) {
-    cosignerName = getPatientFullName(cosigner?.legalName)
+  const { date, time } = convertToTimezone(
+    noteDetail?.[0]?.signedDate,
+    appointment?.locationTimezoneId,
+  )
+
+  let patientName
+  if (patient) {
     patientName = getPatientFullName(patient?.legalName)
   }
 
@@ -31,25 +38,17 @@ const SecondaryNoteResults = () => {
         label="Note Type:"
         value={noteDetail?.[0].noteTypeCode ?? ''}
       />
-      <LabelAndValue label="Provider:" value={appointment?.providerName} />
+      <LabelAndValue label="Provider:" value={selectedRow?.signedByUserName} />
       <LabelAndValue
         label="Date:"
-        value={
-          noteDetail?.[0]?.signedDate
-            ? getSlashedDateString(noteDetail?.[0]?.signedDate)
-            : ''
-        }
+        value={date ? getSlashedDateString(date) : ''}
       />
-      <LabelAndValue
-        label="Time:"
-        value={
-          noteDetail?.[0]?.signedDate
-            ? getTimeLabel(noteDetail?.[0]?.signedDate)
-            : ''
-        }
-      />
+      <LabelAndValue label="Time:" value={time ? time : ''} />
 
-      <LabelAndValue label="Cosigner:" value={cosignerName} />
+      <LabelAndValue
+        label="Cosigner:"
+        value={selectedRow?.cosignedByUserName}
+      />
       <LabelAndValue label="Visit Type:" value={appointment?.visitType} />
       <LabelAndValue label="Location:" value={appointment?.locationName} />
       <LabelAndValue label="Service:" value={appointment?.service} />

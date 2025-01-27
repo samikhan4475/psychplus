@@ -23,6 +23,7 @@ const NotesPage = async ({ params, searchParams }: NotesPageProps) => {
       getAppointment({
         id: searchParams.id,
         isIncludeCosigners: true,
+        isIncludeLocation: true,
       }),
       getPatientAllergies({
         payload: {

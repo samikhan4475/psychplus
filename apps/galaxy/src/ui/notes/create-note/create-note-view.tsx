@@ -18,7 +18,7 @@ const CreateNoteView = ({
   noteAppointment: Appointment
 }) => {
   return (
-    <CreateNoteForm>
+    <CreateNoteForm noteAppointment={noteAppointment}>
       <CreateNoteHeader id="secondary-note-view-print" />
       <Flex align={'start'} gap={'2'} p={'2'} className="bg-white shadow-2">
         <DatePickerInput

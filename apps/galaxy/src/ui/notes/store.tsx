@@ -7,7 +7,6 @@ import {
   getNoteDetailsAction,
   GetNoteDetailsParams,
   getPatientNotesAction,
-  getStaffAction,
 } from './actions'
 import { getAddendumDetailsAction } from './actions/get-addendum'
 import { getWidgetsArrayByVisitType } from './note-detail/utils'
@@ -36,7 +35,6 @@ interface Store {
   patient?: PatientProfile
   documents?: NoteDocuments
   cosigner?: StaffResource
-  provider?: StaffResource
   selectedRow: PatientNotes | undefined
   selectedRows: PatientNotes[]
   isCreateNoteView: boolean
@@ -56,8 +54,6 @@ interface Store {
   fetchAppointment: (appointmentId: string) => void
   fetchAppointments: (patientId: string, appointmentId: string) => void
   fetchNoteDetail: (payload: GetNoteDetailsParams) => void
-  fetchStaff: (staffId: number) => void
-  fetchProvider: (staffId: number) => void
   setLoadingDetail: (loadingDetail: boolean) => void
   fetch: (
     payload: GetPatientNotesParams,
@@ -179,34 +175,6 @@ const useStore = create<Store>((set, get) => ({
 
     set({
       noteDetail: response.data,
-    })
-  },
-  fetchStaff: async (staffId: number) => {
-    set({
-      error: undefined,
-    })
-    const staff = await getStaffAction(staffId)
-    if (staff.state === 'error') {
-      return set({
-        error: staff.error,
-      })
-    }
-    set({
-      cosigner: staff.data,
-    })
-  },
-  fetchProvider: async (staffId: number) => {
-    set({
-      error: undefined,
-    })
-    const staff = await getStaffAction(staffId)
-    if (staff.state === 'error') {
-      return set({
-        error: staff.error,
-      })
-    }
-    set({
-      provider: staff.data,
     })
   },
 

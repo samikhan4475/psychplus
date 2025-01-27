@@ -7,8 +7,6 @@ import { NewPatient } from '@/types'
 import { AddVisitForm } from './components'
 import { SlotDetails } from './types'
 
-
-
 interface AddVisitProps {
   patient?: NewPatient
   showAddUser?: boolean

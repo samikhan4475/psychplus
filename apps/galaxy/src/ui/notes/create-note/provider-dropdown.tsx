@@ -11,11 +11,11 @@ const ProviderDropdown = ({ appointment }: { appointment?: Appointment }) => {
   const options = [
     {
       label: `${appointment?.providerName}`,
-      value: `${appointment?.providerStaffId}`,
+      value: `${appointment?.providerUserId}`,
     },
   ]
 
-  form.setValue('provider', `${appointment?.providerStaffId}`, {})
+  form.setValue('provider', `${appointment?.providerUserId}`, {})
 
   return (
     <Flex direction="column" gap="1" className={'w-full gap-0.5'}>
@@ -26,8 +26,8 @@ const ProviderDropdown = ({ appointment }: { appointment?: Appointment }) => {
         placeholder=""
         field="provider"
         options={options}
-        defaultValue={`${appointment?.providerStaffId}`}
-        value={`${appointment?.providerStaffId}`}
+        defaultValue={`${appointment?.providerUserId}`}
+        value={`${appointment?.providerUserId}`}
         disabled
         buttonClassName={buttonClassName}
       />
