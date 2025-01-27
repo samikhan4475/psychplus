@@ -43,7 +43,7 @@ const VisitTypeSelect = () => {
     if (locationId && serviceId) {
       setLoading(true)
       getLocationServices({
-        locationId,
+        locationIds: [locationId],
         locationServiceIds: [serviceId],
         includeServiceVisitType: true,
       }).then((res) => {

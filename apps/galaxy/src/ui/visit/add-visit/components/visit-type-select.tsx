@@ -62,7 +62,7 @@ const VisitTypeDropdown = ({ slotDetails }: { slotDetails?: SlotDetails }) => {
       setGroupedVisitTypes({})
       getLocationServices({
         includeServiceVisitType: true,
-        locationId,
+        locationIds: [locationId],
         locationServiceIds: [serviceId],
       }).then((res) => {
         setLoading(false)

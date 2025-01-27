@@ -5,7 +5,7 @@ import * as api from '@/api/api.client'
 import { Service } from '@/types'
 
 const getLocationServices = async (payload: {
-  locationId?: string
+  locationIds?: string[]
   locationServiceIds?: string[]
   includeServiceVisitType?: boolean
   includeServiceUnit?: boolean
