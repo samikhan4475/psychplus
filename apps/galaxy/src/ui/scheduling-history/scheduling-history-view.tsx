@@ -33,7 +33,7 @@ const SchedulingHistoryView = () => {
         title="Billing"
         isOpen={isOpen}
         closeDialog={closeDialog}
-        data={comment ?? []}
+        billingComments={comment ?? []}
       />
     </Flex>
   )

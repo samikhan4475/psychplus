@@ -1,7 +1,9 @@
 import { notFound } from 'next/navigation'
 import { Text } from '@radix-ui/themes'
+import { getPatientStaffCommentsAction } from '@/actions'
 import { getQuickNoteDetailAction } from '@/actions/get-quicknote-detail'
 import { getAppointment } from '@/api'
+import { STAFF_COMMENT_STATUS } from '@/types'
 import { QuickNoteSectionName } from './constants'
 import { QuickNotesClientView } from './quicknotes-client-view.tsx'
 import { getCachedWidgetsByVisitType, getWidgetIds } from './utils'
@@ -48,24 +50,34 @@ const QuickNotesView = async ({
     isPatientAndAppointmentDependent: true,
   })
 
-  const [widgetsResponse, codesResponse, appoinmentCodesResponse] =
-    await Promise.all([
-      getQuickNoteDetailAction(patientId, patientDependentWidgetsIds),
-      getQuickNoteDetailAction(
-        patientId,
-        [QuickNoteSectionName.QuicknoteSectionCodes],
-        false,
-        undefined,
-        true,
-      ),
-      getQuickNoteDetailAction(
-        patientId,
-        patientAndAppointmentDependentWidgetsIds,
-        false,
-        appointmentId,
-        false,
-      ),
-    ])
+  const [
+    widgetsResponse,
+    codesResponse,
+    appoinmentCodesResponse,
+    staffComments,
+  ] = await Promise.all([
+    getQuickNoteDetailAction(patientId, patientDependentWidgetsIds),
+    getQuickNoteDetailAction(
+      patientId,
+      [QuickNoteSectionName.QuicknoteSectionCodes],
+      false,
+      undefined,
+      true,
+    ),
+    getQuickNoteDetailAction(
+      patientId,
+      patientAndAppointmentDependentWidgetsIds,
+      false,
+      appointmentId,
+      false,
+    ),
+    getPatientStaffCommentsAction({
+      appointmentId: Number(appointmentId),
+      recordStatuses: [STAFF_COMMENT_STATUS.Active],
+      isTreatment: true,
+      isBilling: true,
+    }),
+  ])
 
   if (widgetsResponse.state === 'error') {
     return <Text>{widgetsResponse.error}</Text>
@@ -75,6 +87,9 @@ const QuickNotesView = async ({
   }
   if (appoinmentCodesResponse.state === 'error') {
     return <Text>{appoinmentCodesResponse.error}</Text>
+  }
+  if (staffComments.state === 'error') {
+    return <Text>{staffComments.error}</Text>
   }
 
   const widgetsData = [
@@ -92,6 +107,7 @@ const QuickNotesView = async ({
       visitType={visitType}
       widgetsData={widgetsData}
       visitSequence={visitSequence}
+      staffComments={staffComments?.data?.comments}
     />
   )
 }
