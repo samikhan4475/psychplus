@@ -11,6 +11,10 @@ const CLINIC_LOCATIONS_ENDPOINT = `${API_URL}/api/clinics`
 const FACILITY_ADMISSION_ID_ENDPOINT = `${API_URL}/api/facilityadmissionids`
 const LOCATION_SERVICES_ENDPOINT = `${API_URL}/api/locationservices/actions/search`
 const LOCATION_ENDPOINT = `${API_URL}/api/locations/actions/search?orderBy=createdOn%20desc`
+const ADD_USER_SETTINGS = (userId: string) =>
+  `${API_URL}/api/users/${userId}/settings`
+const UPDATE_USER_SETTINGS = (userId: string, settingId: string) =>
+  `${API_URL}/api/users/${userId}/settings/${settingId}`
 const GET_FEATURE_FLAG_ENDPOINT = (featureFlag: string) =>
   `${API_URL}/api/featureflags/${featureFlag}/actions/enabled`
 const VISIT_TYPES_ENDPOINT = `${API_URL}/api/visittypes/actions/search`
@@ -75,6 +79,8 @@ const GET_PATIENT_RELATIONSHIPS = (patientId: string) =>
   `${API_URL}/api/patients/${patientId}/relationships`
 const GET_PATIENT_PREFERRED_PARTNERS = (patientId: string) =>
   `${API_URL}/api/patients/${patientId}/preferredpartners`
+const GET_STAFF_PROFILE_ENDPOINT = (staffId: string) =>
+  `${API_URL}/api/staff/${staffId}`
 const DELETE_STAFF_ENDPOINT = (staffId: string) =>
   `${API_URL}/api/staff/${staffId}`
 const GET_INSURANCE_PAYERS_ENDPOINT = (includePlans: boolean) =>
@@ -601,8 +607,11 @@ export {
   GET_LAB_RESULTS_ENDPOINT,
   NOTE_UPLOAD_FILE,
   GET_NOTE_VIEW_ENDPOINT,
+  ADD_USER_SETTINGS,
+  UPDATE_USER_SETTINGS,
   USER_ENDPOINT,
   GET_PAYMENT_ADJUSTMENT_CODES,
+  GET_STAFF_PROFILE_ENDPOINT,
   DELETE_STAFF_ENDPOINT,
   REFRESH_ENDPOINT,
   GET_CLAIM_SUBMISSION_LIST,

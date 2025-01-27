@@ -107,14 +107,43 @@ interface AddLicensePayload {
   recordStatus: RecordStatus
 }
 
+type PrescriberKeys =
+  | 'Prescriber'
+  | 'New'
+  | 'Refill'
+  | 'Change'
+  | 'Cancel'
+  | 'PharmacyRXRequest'
+  | 'PharmacyRXResponseDenied'
+  | 'Controls'
+  | 'C2'
+  | 'stateCode'
+  | 'stateName'
+
+type PrescriberDataResponse = Record<PrescriberKeys, string>
+interface PrescriberSettingResponse {
+  id: string
+  metadata?: Metadata
+  settingStatusCode: string
+  levelCode: string
+  userId: string
+  categoryCode: string
+  categoryValue: string
+  name: string
+  content: string
+  state: string
+}
 type LicenseHistoryRow = Row<LicenseHistory>
 
 export { CredentialingTab, LicenseStatus, LicenseType, RecordStatus }
 
 export type {
   DEA,
+  PrescriberKeys,
   Filters,
   StaffData,
+  PrescriberSettingResponse,
+  PrescriberDataResponse,
   GetLicensesResponse,
   License,
   LicenseHistory,

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import * as Tabs from '@radix-ui/react-tabs'
-import { Box, Flex, Text } from '@radix-ui/themes'
+import { Box, Flex } from '@radix-ui/themes'
 import toast from 'react-hot-toast'
 import { LoadingPlaceholder, TabsTrigger } from '@/components'
 import { State } from '@/types'
@@ -10,6 +10,7 @@ import { getUsStatesAction } from '../visit/client-actions'
 import { CDSView } from './cds'
 import { DEAView } from './dea'
 import { LicenseView } from './license'
+import { PrescriberSettingsView } from './prescriber-settings'
 import { useStore } from './store'
 import { CredentialingTab } from './types'
 
@@ -80,7 +81,7 @@ const CredentialingTabs = ({ staffId }: { staffId: string }) => {
               />
             </TabsContent>
             <TabsContent value={CredentialingTab.PrescriberSettings}>
-              <Text>Prescriber Settings </Text>
+              <PrescriberSettingsView states={states} />
             </TabsContent>
           </>
         )}

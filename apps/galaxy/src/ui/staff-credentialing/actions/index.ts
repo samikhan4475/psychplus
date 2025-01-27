@@ -1,2 +1,7 @@
+export * from './get-staff'
+export * from './get-prescriber-settings'
+export * from './add-prescriber-settings'
+export * from './update-prescriber-settings'
 export * from './get-licenses'
 export * from './update-license'
+export * from './add-license'
