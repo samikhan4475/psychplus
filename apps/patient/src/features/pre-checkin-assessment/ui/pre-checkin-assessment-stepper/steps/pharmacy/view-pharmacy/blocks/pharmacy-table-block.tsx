@@ -1,71 +1,61 @@
-import React from 'react'
-import { cn } from '@psychplus-v2/utils'
-import { Flex, Table, Text } from '@radix-ui/themes'
+import { cn, getStateFullName } from '@psychplus-v2/utils'
+import { Button, Flex, Table } from '@radix-ui/themes'
 import { Trash2 } from 'lucide-react'
-import { Button } from 'react-aria-components'
-import { EmptyFileIcon, FeatureEmpty } from '@/components-v2'
+import {
+  Badge,
+  ConfirmationDialog,
+  EmptyFileIcon,
+  FeatureEmpty,
+} from '@/components-v2'
+import { setDefaultPharmacyAction } from '@/features/pharmacy/actions'
+import { removePharmacyAction } from '@/features/pharmacy/actions/remove-pharmacy'
+import { PatientPharmacy } from '@/features/pharmacy/types'
 
-const ColumnHeader = ({ children }: { children: React.ReactNode }) => (
-  <Table.ColumnHeaderCell className="h-auto overflow-clip py-2 text-[12px] font-medium">
-    {children}
-  </Table.ColumnHeaderCell>
-)
-
-type medicationTableProps = {
+type PharmacyTableProps = {
   headerClassName?: string
+  pharmacies: PatientPharmacy[]
+  isDawSystemFeatureFlagEnabled?: boolean
 }
 
-const rowData = [
-  {
-    id: 1,
-    pharmacyName: 'Walgreens',
-    address: '13325 Hargrave Rd Houston, TX 77070',
-    city: 'Houston',
-    state: 'Texas',
-    zipCode: '75801',
-    phoneNumber: '--',
-    isPrimary: true,
-  },
-  {
-    id: 2,
-    pharmacyName: 'XYZ',
-    address: '13325 Hargrave Rd Houston, TX 77070',
-    city: 'Houston',
-    state: 'Texas',
-    zipCode: '75801',
-    phoneNumber: '123456789',
-    isPrimary: false,
-  },
-  {
-    id: 3,
-    pharmacyName: 'ABC',
-    address: '13325 Hargrave Rd Houston, TX 77070',
-    city: 'Albany',
-    state: 'Texas',
-    zipCode: '75801',
-    phoneNumber: '123456789',
-    isPrimary: false,
-  },
-]
+const PharmacyTableBlock = ({
+  headerClassName,
+  pharmacies,
+  isDawSystemFeatureFlagEnabled,
+}: PharmacyTableProps) => {
+  let columnsHeadings = [
+    '',
+    'Pharmacy Name',
+    'Address',
+    'City',
+    'State',
+    'Zip Code',
+    'Phone Number',
+    'Actions',
+  ]
 
-const PharmacyTableBlock = ({ headerClassName }: medicationTableProps) => {
+  if (isDawSystemFeatureFlagEnabled) {
+    columnsHeadings = columnsHeadings.filter(
+      (heading) => heading !== '' && heading !== 'Actions',
+    )
+  }
+
   return (
-    <Table.Root variant="ghost" size="2" className="w-full">
-      <Table.Header className={cn('bg-[#EBF3FC]', headerClassName)}>
-        <Table.Row>
-          <ColumnHeader>{''}</ColumnHeader>
-          <ColumnHeader>Pharmacy Name</ColumnHeader>
-          <ColumnHeader>Address</ColumnHeader>
-          <ColumnHeader>City</ColumnHeader>
-          <ColumnHeader>State</ColumnHeader>
-          <ColumnHeader>Zip Code</ColumnHeader>
-          <ColumnHeader>Phone Number</ColumnHeader>
-          <ColumnHeader>Actions</ColumnHeader>
+    <Table.Root variant="surface" size="1" color="red">
+      <Table.Header className={cn('bg-pp-blue-5', headerClassName)}>
+        <Table.Row className="whitespace-nowrap">
+          {columnsHeadings.map((header) => (
+            <Table.ColumnHeaderCell
+              key={header}
+              className="border-pp-gray-2 h-auto border-r font-regular last:border-r-0"
+            >
+              {header}
+            </Table.ColumnHeaderCell>
+          ))}
         </Table.Row>
       </Table.Header>
 
       <Table.Body>
-        {rowData.length === 0 && (
+        {pharmacies.length === 0 ? (
           <Table.Row>
             <Table.Cell colSpan={11}>
               <FeatureEmpty
@@ -74,45 +64,77 @@ const PharmacyTableBlock = ({ headerClassName }: medicationTableProps) => {
               />
             </Table.Cell>
           </Table.Row>
-        )}
-
-        {rowData.map((row) => (
-          <Table.Row key={row.id}>
-            <Table.Cell>
-              {row.isPrimary ? (
-                <Button className={'rounded-[20px] bg-[#194595] px-2'}>
-                  <Text weight="medium" size="2" className="text-white">
-                    Primary
-                  </Text>
-                </Button>
-              ) : (
-                <Button
-                  className={
-                    'rounded-[20px] border-[1px] border-[#194595] px-2'
-                  }
-                >
-                  <Text weight="medium" size="2" className="text-[#194595]">
-                    Make Primary
-                  </Text>
-                </Button>
+        ) : (
+          pharmacies.map((row) => (
+            <Table.Row key={row.pharmacyId}>
+              {!isDawSystemFeatureFlagEnabled && (
+                <Table.Cell className="border-pp-gray-2 border-r">
+                  {row.isPreferred ? (
+                    <Badge
+                      label="Primary"
+                      type="highContrast"
+                      className="w-20"
+                    />
+                  ) : (
+                    <ConfirmationDialog
+                      trigger={
+                        <Button variant="outline" highContrast size="1">
+                          Make Primary
+                        </Button>
+                      }
+                      title="Change Primary Pharmacy"
+                      description="Are you sure you want to change your primary pharmacy?"
+                      saveButtonTitle="Change Primary Pharmacy"
+                      toastTitle="Primary Pharmacy Changed"
+                      confirmAction={() =>
+                        setDefaultPharmacyAction(row.pharmacyId)
+                      }
+                    />
+                  )}
+                </Table.Cell>
               )}
-            </Table.Cell>
-            <Table.Cell>{row.pharmacyName}</Table.Cell>
-            <Table.Cell>{row.address}</Table.Cell>
-            <Table.Cell>{row.city}</Table.Cell>
-            <Table.Cell>{row.state}</Table.Cell>
-            <Table.Cell>{row.zipCode}</Table.Cell>
-            <Table.Cell>{row.phoneNumber}</Table.Cell>
-            <Table.Cell>
-              <Flex justify={'center'} align={'center'}>
-                <Trash2 color="#E5484D" size={18} />
-              </Flex>
-            </Table.Cell>
-          </Table.Row>
-        ))}
+              <Table.Cell className="border-pp-gray-2 border-r">
+                {row.pharmacyName}
+              </Table.Cell>
+              <Table.Cell className="border-pp-gray-2 border-r">
+                {row.pharmacyContactDetails?.addresses?.[0]?.street1 ?? '--'}
+              </Table.Cell>
+              <Table.Cell className="border-pp-gray-2 whitespace-nowrap border-r">
+                {row.pharmacyContactDetails?.addresses?.[0]?.city ?? '--'}
+              </Table.Cell>
+              <Table.Cell className="border-pp-gray-2 whitespace-nowrap border-r">
+                {getStateFullName(
+                  row.pharmacyContactDetails?.addresses?.[0]?.state ?? '',
+                ) ?? '--'}
+              </Table.Cell>
+              <Table.Cell className="border-pp-gray-2 whitespace-nowrap border-r">
+                {row.pharmacyContactDetails?.addresses?.[0]?.postalCode ?? '--'}
+              </Table.Cell>
+              <Table.Cell className="border-pp-gray-2 whitespace-nowrap border-r">
+                {row.pharmacyContactDetails?.phoneNumbers?.[0]?.number ?? '--'}
+              </Table.Cell>
+              {!isDawSystemFeatureFlagEnabled && (
+                <Table.Cell>
+                  <ConfirmationDialog
+                    trigger={
+                      <Flex justify="center" align="center">
+                        <Trash2 color="#E5484D" size={18} />
+                      </Flex>
+                    }
+                    title="Remove Pharmacy"
+                    description="Are you sure you want to remove this pharmacy?"
+                    saveButtonTitle="Remove Pharmacy"
+                    toastTitle="Pharmacy Removed"
+                    confirmAction={() => removePharmacyAction(row.pharmacyId)}
+                  />
+                </Table.Cell>
+              )}
+            </Table.Row>
+          ))
+        )}
       </Table.Body>
     </Table.Root>
   )
 }
 
-export default PharmacyTableBlock
+export { PharmacyTableBlock }

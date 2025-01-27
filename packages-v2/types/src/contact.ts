@@ -3,6 +3,7 @@ import { PhoneNumber } from './phone'
 
 interface ContactDetails {
   email: string
+  emailVerificationStatus?: string
   phoneNumbers?: PhoneNumber[]
   addresses?: PatientAddress[]
   isMailingAddressSameAsPrimary?: boolean

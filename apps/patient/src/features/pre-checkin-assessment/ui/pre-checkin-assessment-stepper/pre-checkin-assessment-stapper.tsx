@@ -6,6 +6,7 @@ import { Box, Flex, Text } from '@radix-ui/themes'
 import { cn } from '@psychplus/ui/cn'
 import { CreditCard } from '@/features/billing/credit-debit-cards/types'
 import { Insurance, InsurancePayer } from '@/features/billing/payments/types'
+import { type PatientPharmacy } from '@/features/pharmacy/types'
 import PreCheckinAssessmentFooterButton from './shared-blocks/pre-checkin-assessment-footer-button'
 import {
   AddInsurance,
@@ -24,13 +25,17 @@ const PreCheckinAssessmentStapper = ({
   patientInsurances,
   creditCards,
   stripeAPIKey,
+  pharmacies,
+  isDawSystemFeatureFlagEnabled,
 }: {
   insurancePayers: InsurancePayer[]
   patientInsurances: Insurance[]
   creditCards: CreditCard[]
   stripeAPIKey: string
+  pharmacies: PatientPharmacy[]
+  isDawSystemFeatureFlagEnabled?: boolean
 }) => {
-  const tabData = [
+  let tabData = [
     { id: 'patient-info', label: 'Patient Info', content: <PatientInfo /> },
     {
       id: 'insurance',
@@ -54,7 +59,16 @@ const PreCheckinAssessmentStapper = ({
       label: 'Allergies/ Medications',
       content: <AllergiesAndMedications />,
     },
-    { id: 'pharmacy', label: 'Pharmacy', content: <Pharmacy /> },
+    {
+      id: 'pharmacy',
+      label: 'Pharmacy',
+      content: (
+        <Pharmacy
+          pharmacies={pharmacies}
+          isDawSystemFeatureFlagEnabled={isDawSystemFeatureFlagEnabled}
+        />
+      ),
+    },
     {
       id: 'presenting-symptoms-HPI',
       label: 'Presenting symptoms (HPI)',
@@ -68,6 +82,19 @@ const PreCheckinAssessmentStapper = ({
     },
     { id: 'questionnaire', label: 'Questionnaire', content: <Questionnaire /> },
   ]
+
+  tabData = tabData.filter((tab) => {
+    if (
+      tab.id === 'pharmacy' &&
+      Array.isArray(pharmacies) &&
+      pharmacies.length === 0 &&
+      isDawSystemFeatureFlagEnabled
+    ) {
+      return false
+    }
+    return true
+  })
+
   const [completedTabs, setCompletedTabs] = useState<string[]>(['patient-info'])
   const [activeTab, setActiveTab] = useState('patient-info')
 

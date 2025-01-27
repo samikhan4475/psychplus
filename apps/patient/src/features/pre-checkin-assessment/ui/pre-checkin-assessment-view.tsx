@@ -1,15 +1,17 @@
 import { CODESETS } from '@psychplus-v2/constants'
 import { STRIPE_PUBLISHABLE_KEY } from '@psychplus-v2/env'
 import { Box } from '@radix-ui/themes'
-import { getCodesets, getProfile } from '@/api'
+import { getCodesets, getIsFeatureFlagEnabled, getProfile } from '@/api'
+import { FeatureFlags } from '@/constants'
+import { ProfileStoreProvider } from '@/features/account/profile/store'
 import { getCreditCards } from '@/features/billing/credit-debit-cards/api'
 import {
   getInsurancePayers,
   getPatientInsurances,
 } from '@/features/billing/payments/api'
+import { getPatientPharmacies } from '@/features/pharmacy/api'
 import { CodesetStoreProvider } from '@/providers'
 import { PreCheckinAssessmentStapper } from './pre-checkin-assessment-stepper/pre-checkin-assessment-stapper'
-import { ProfileStoreProvider } from '@/features/account/profile/store'
 
 const PreCheckinAssessmentView = async () => {
   const [
@@ -18,6 +20,8 @@ const PreCheckinAssessmentView = async () => {
     creditCardsResponse,
     codesets,
     profileResponse,
+    pharmaciesResponse,
+    dawSystemFeatureFlagResponse,
   ] = await Promise.all([
     getInsurancePayers(),
     getPatientInsurances(),
@@ -29,6 +33,8 @@ const PreCheckinAssessmentView = async () => {
       CODESETS.UsStates,
     ]),
     getProfile(),
+    getPatientPharmacies(),
+    getIsFeatureFlagEnabled(FeatureFlags.ehr8973EnableDawMedicationApi),
   ])
 
   if (insurancePayerResponse.state === 'error') {
@@ -43,8 +49,16 @@ const PreCheckinAssessmentView = async () => {
     throw new Error(creditCardsResponse.error)
   }
 
-  if(profileResponse.state === 'error') {
+  if (profileResponse.state === 'error') {
     throw new Error(profileResponse.error)
+  }
+
+  if (pharmaciesResponse.state === 'error') {
+    throw new Error(pharmaciesResponse.error)
+  }
+
+  if (dawSystemFeatureFlagResponse.state === 'error') {
+    throw new Error(dawSystemFeatureFlagResponse.error)
   }
 
   return (
@@ -56,6 +70,8 @@ const PreCheckinAssessmentView = async () => {
             patientInsurances={patientInsurancesResponse.data}
             creditCards={creditCardsResponse.data}
             stripeAPIKey={STRIPE_PUBLISHABLE_KEY}
+            pharmacies={pharmaciesResponse.data}
+            isDawSystemFeatureFlagEnabled={dawSystemFeatureFlagResponse.data}
           />
         </Box>
       </CodesetStoreProvider>

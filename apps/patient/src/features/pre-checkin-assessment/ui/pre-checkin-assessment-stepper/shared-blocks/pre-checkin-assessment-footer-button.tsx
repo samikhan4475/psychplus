@@ -2,6 +2,7 @@
 
 import React from 'react'
 import { Button, Flex } from '@radix-ui/themes'
+import { cn } from '@psychplus/ui/cn'
 
 interface FooterButtonProps {
   activeTab: string
@@ -25,30 +26,35 @@ const PreCheckinAssessmentFooterButton = ({
         className="mx-auto w-full max-w-[1100px] xs:px-5"
       >
         <Button
+          highContrast
           variant="outline"
-          className="bg-white h-[48px] rounded-[40px] border border-[#151b4a] px-14 text-[22px] font-[500] leading-[29px]  text-[#151b4a]"
+          size="2"
+          className={cn(
+            activeTab === 'patient-info' && 'text-black',
+            'mr-4 px-6',
+          )}
           disabled={activeTab === 'patient-info'}
           onClick={onBack}
         >
           Back
         </Button>
         <Flex gap="1" align="center" className="ms-auto flex-1" justify="end">
-          <Button
-            variant="outline"
-            className="bg-white mr-4 h-[48px] rounded-[40px]  !border !border-[#151b4a]  px-14 text-[22px] font-[500] leading-[29px]  text-[#151b4a]"
-          >
+          <Button highContrast variant="outline" size="2" className="mr-4 px-6">
             Save & Exit
           </Button>
           <Button
             variant="outline"
-            className="h-[48px] rounded-[40px] bg-[#EBEBEF] px-14  text-[22px]  font-[700] leading-[29px] text-[#B9BBC6]"
+            color="gray"
+            size="2"
+            className="bg-[#EBEBEF] px-8"
             disabled
           >
             Skip
           </Button>
           <Button
-            variant="outline"
-            className="text-white h-[48px] rounded-[40px] bg-[#151b4a]  px-14 text-[22px]  font-[700]  leading-[29px]"
+            highContrast
+            size="2"
+            className="px-8"
             disabled={activeTab === 'questionnaire'}
             onClick={onNext}
           >

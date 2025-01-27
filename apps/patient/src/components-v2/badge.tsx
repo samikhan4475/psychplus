@@ -24,6 +24,8 @@ const Badge = ({
         return 'border-[#E5484D] bg-[#FFE5E5]'
       case 'basic':
         return 'border-[#B9BBC6] bg-[#F9F9FB] text-[#60646C]'
+      case 'highContrast':
+        return 'border-[#194595] bg-[#194595] text-[white]'
     }
   }
 
@@ -32,6 +34,7 @@ const Badge = ({
       className={cn('rounded-6 border', getBadgeColor(), className)}
       px="2"
       align="center"
+      justify="center"
       gap="1"
     >
       {addIcon && <Icon type={type} label={label} />}

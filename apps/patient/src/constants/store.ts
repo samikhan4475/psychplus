@@ -1,0 +1,3 @@
+const PATIENT_APP_LOCAL_STORAGE_KEY = 'p+-patient-app'
+
+export { PATIENT_APP_LOCAL_STORAGE_KEY }

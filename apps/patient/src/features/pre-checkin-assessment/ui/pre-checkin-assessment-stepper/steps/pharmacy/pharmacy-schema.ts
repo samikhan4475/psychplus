@@ -1,14 +1,15 @@
 import { z } from 'zod'
 
-type pharmacySchemaType = z.infer<typeof pharmacySchema>
+type PharmacySchemaType = z.infer<typeof pharmacySchema>
 
 const pharmacySchema = z.object({
-  pharmacyName: z.string().min(1, { message: "required" }),
-  pharmacyAddress: z.string().min(1, { message: "required" }),
-  city: z.string().min(1, { message: "required" }),
-  state: z.string().min(1, { message: "required" }),
-  pharmacyZipCode: z.string().min(1, { message: "required" }),
-  pharmacyNumber: z.string().min(1, { message: "required" }),
+  id: z.string(),
+  pharmacyName: z.string().min(1, { message: 'Required' }),
+  address: z.string().min(1, { message: 'Required' }),
+  city: z.string().min(1, { message: 'Required' }),
+  state: z.string().min(1, { message: 'Required' }),
+  zipCode: z.string().min(1, { message: 'Required' }),
+  phoneNumber: z.string().min(1, { message: 'Required' }),
 })
 
-export { pharmacySchema, type pharmacySchemaType }
+export { pharmacySchema, type PharmacySchemaType }

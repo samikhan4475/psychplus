@@ -7,19 +7,22 @@ import {
   FormFieldLabel,
 } from '@/components-v2'
 
+const FIELD_ID = 'state'
+
 const StateBlock = () => {
   return (
     <FormFieldContainer className="w-1/4">
       <FormFieldLabel required>State</FormFieldLabel>
       <CodesetFormSelect
         size="3"
-        name="state"
-        placeholder="Select"
-        codeset={CODESETS.Gender}
+        name={FIELD_ID}
+        placeholder="Select state"
+        codeset={CODESETS.UsStates}
+        disabled
       />
-      <FormFieldError name="state" />
+      <FormFieldError name={FIELD_ID} />
     </FormFieldContainer>
   )
 }
 
-export default StateBlock
+export { StateBlock }

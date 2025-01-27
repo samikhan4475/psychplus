@@ -17,6 +17,7 @@ type InputProps = {
   sufix?: React.ReactNode
   type?: string
   max?: string
+  disabled?: boolean
 }
 
 const Input = ({
@@ -28,6 +29,7 @@ const Input = ({
   prefix,
   sufix,
   type,
+  disabled,
   ...props
 }: InputProps) => {
   const form = useFormContext()
@@ -43,6 +45,7 @@ const Input = ({
             size="3"
             placeholder={placeholder}
             className="placeholder:text-[16px]"
+            disabled={disabled}
             {...props}
           />
         </Box>

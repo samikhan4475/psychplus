@@ -11,7 +11,9 @@ interface Address {
   geoCoordinates?: {
     longitude: number
     latitude: number
+    altitude: number
   }
+  timeZoneId?: string
 }
 
 interface PatientAddress extends Address {

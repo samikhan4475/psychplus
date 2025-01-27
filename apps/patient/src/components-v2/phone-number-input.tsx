@@ -12,6 +12,7 @@ interface PhoneNumberInputProps {
   editable?: boolean
   placeholder?: string
   classNames?: string
+  disabled?: boolean
 }
 
 const PhoneNumberInput = ({
@@ -21,6 +22,7 @@ const PhoneNumberInput = ({
   editable,
   placeholder = 'Phone number',
   classNames,
+  disabled,
 }: PhoneNumberInputProps) => {
   const form = useFormContext()
 
@@ -42,7 +44,7 @@ const PhoneNumberInput = ({
             placeholder={placeholder}
             name={name}
             value={field.value}
-            disabled={field.disabled}
+            disabled={disabled}
             onValueChange={({ value }) => field.onChange(value)}
             onBlur={field.onBlur}
             customInput={TextField.Input}
