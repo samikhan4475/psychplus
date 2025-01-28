@@ -24,7 +24,8 @@ const createColumns = (
       cell: ({ row }) => (
         <DateTimeCell className="whitespace-nowrap">
           {formatDateTime(
-            row.original.metadata.updatedOn || row.original.metadata.createdOn,
+            row.original?.metadata?.updatedOn ||
+              row.original?.metadata?.createdOn,
             false,
           )}
         </DateTimeCell>

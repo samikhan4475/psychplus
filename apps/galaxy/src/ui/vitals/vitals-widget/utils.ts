@@ -12,7 +12,7 @@ const roundToTwoDecimals = (value: number) => {
 }
 
 const formatValue = (val: number | string | undefined, unit: string) =>
-  typeof val === 'number' ? `${roundToTwoDecimals(val)} ${unit}` : val || ''
+  typeof val === 'number' ? `${roundToTwoDecimals(val)} ${unit}` : val ?? ''
 
 const getVitalValue = (
   vital: PatientVital,
@@ -158,7 +158,7 @@ const filterVitalsWithin48Hours = (vitals: PatientVital[]) => {
   const cutoffDate = new Date(now.getTime() - 48 * 60 * 60 * 1000)
 
   return vitals.filter((vital) => {
-    const createdAtDate = new Date(vital.metadata.createdOn)
+    const createdAtDate = new Date(vital?.metadata?.createdOn)
     return createdAtDate >= cutoffDate
   })
 }

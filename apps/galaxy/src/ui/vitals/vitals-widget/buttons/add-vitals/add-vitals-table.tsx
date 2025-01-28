@@ -1,7 +1,6 @@
 'use client'
 
 import { Box, Table } from '@radix-ui/themes'
-import { useFormContext } from 'react-hook-form'
 import { DateTimeCell, LongTextCell, TextCell } from '@/components'
 import { cn, formatDateTime } from '@/utils'
 import { UnitSystem, VITAL_TABLE_LABELS } from '../../constants'
@@ -25,12 +24,12 @@ const AddVitalsTable = ({ unitSystem, data }: AddVitalsTableProps) => {
 
             {data?.map((vital, index) => (
               <Table.ColumnHeaderCell
-                key={`${vital.metadata.createdOn} + ${index}`}
+                key={`${vital?.metadata?.createdOn} + ${index}`}
                 className="border-pp-table-border h-6 whitespace-nowrap border border-l-0 px-1 py-0"
               >
                 <DateTimeCell className="w-24">
                   {formatDateTime(
-                    vital.metadata.updatedOn || vital.metadata.createdOn,
+                    vital?.metadata?.updatedOn ?? vital?.metadata?.createdOn,
                     false,
                   )}
                 </DateTimeCell>
