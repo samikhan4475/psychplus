@@ -20,7 +20,7 @@ const monitoringSectionList = [
   },
   {
     labe: 'Fatigue:',
-    key: 'Fatigue',
+    key: 'tmsFatigueBlock',
     detailsKey: 'tmsFatigueBlockDetail',
   },
   {

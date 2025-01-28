@@ -77,7 +77,7 @@ const ThetaBurstSimulation = () => {
         field="burstPattern"
         options={BURST_PATTERN_OPTIONS}
       />
-      <TreatmentRegime />
+      <TreatmentRegime isThetaBurst/>
     </>
   )
 }

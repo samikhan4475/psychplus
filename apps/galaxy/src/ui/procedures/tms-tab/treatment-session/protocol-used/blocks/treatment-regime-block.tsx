@@ -16,7 +16,11 @@ const FREQUENCY_UNIT_OPTIONS = [
   },
 ]
 
-const TreatmentRegime = () => {
+const TreatmentRegime = ({
+  isThetaBurst = false,
+}: {
+  isThetaBurst?: boolean
+}) => {
   return (
     <Flex direction="column">
       <BlockLabel required className="text-1 font-bold">
@@ -25,21 +29,23 @@ const TreatmentRegime = () => {
       <Flex direction="row" gap="1" align="center">
         <NumberInput
           label="Frequency of Sessions"
-          field="thetaBurstFrequencyOfSession"
+          field={
+            isThetaBurst ? 'thetaBurstFrequencyOfSession' : 'frequencyOfSession'
+          }
           className="h-6 w-9"
           required
           showError
         />
         <Text className="text-4">/</Text>
         <SelectInput
-          field="frequencyUnit"
+          field={isThetaBurst ? 'frequencyUnitThetaBurst' : 'frequencyUnit'}
           options={FREQUENCY_UNIT_OPTIONS}
           defaultValue="Week"
           className="mr-3"
         />
         <NumberInput
           label="No. of Planned Sessions"
-          field="plannedSession"
+          field={isThetaBurst ? 'plannedSessionThetaBurst' : 'plannedSession'}
           className="h-6 w-24"
           required
           showError
