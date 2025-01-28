@@ -82,7 +82,7 @@ const QuickNotesSignButton = ({ appointment }: QuickNotesSignButtonProps) => {
     })
 
     if (missingDiagnosisCodes) {
-      toast.error(`Must have ${missingDiagnosisCodes} diagnosis for sign/send`)
+      toast.error(`Must have ${missingDiagnosisCodes} diagnosis to Sign/Send to signature.`)
       return
     }
     saveWorkingDiagnosis(patientId, setWidgetsData, false)

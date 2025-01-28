@@ -1,9 +1,9 @@
 import toast from 'react-hot-toast'
 import { saveWidgetClientAction } from '@/actions'
 import { Appointment, QuickNoteSectionItem } from '@/types'
-import { postEvent, saveAbleWdgets } from '@/utils'
+import { postEvent, saveAbleWdgets, visitTypeToWidgets } from '@/utils'
 import { QuickNoteSectionName } from '../constants'
-import { getWidgetsByVisitType } from '../utils'
+import { getWidgetErrorMessage, getWidgetsByVisitType } from '../utils'
 
 const getWidgetData = (providerType: string) => {
   const urlParams = new URLSearchParams(window.location.search)
@@ -31,7 +31,7 @@ const saveWidgets = async (
 ): Promise<QuickNoteSectionItem[]> => {
   const { widgets } = getWidgetData(appointment.providerType)
 
-  const isValidateAll = await validateAll(widgets)
+  const isValidateAll = await validateAll(widgets, appointment.visitTypeCode)
   if (!isValidateAll) {
     return []
   }
@@ -88,7 +88,7 @@ const saveWidgets = async (
   }
 }
 
-const validateAll = async (widgets: QuickNoteSectionName[]) => {
+const validateAll = async (widgets: QuickNoteSectionName[], visitTypeCode?: string) => {
   const promises = widgets.map((widgetId) => {
     return new Promise<{ success: boolean; widgetId: string }>((resolve) => {
       const handleMessage = (event: MessageEvent) => {
@@ -107,16 +107,39 @@ const validateAll = async (widgets: QuickNoteSectionName[]) => {
   postEvent({ type: 'quicknotes:validateAll' })
   const responses = await Promise.all(promises)
 
-  let widgetErrors = ''
+  let widgetErrors = '';
   responses.forEach((element) => {
     if (!element.success) {
-      widgetErrors += `${element.widgetId.replace('QuicknoteSection', '')}, `
+      widgetErrors += `${element.widgetId.replace('QuicknoteSection', '')}, `;
     }
   })
   widgetErrors = widgetErrors.slice(0, widgetErrors.length - 2)
 
   if (widgetErrors !== '') {
-    toast.error(`Please fill out all required fields in ${widgetErrors}`)
+    let errorKey;
+    switch (true) {       
+      case visitTypeCode === "Tms":
+          errorKey = 'TMS';
+          break;
+
+      case visitTypeCode === "Spravato":
+          errorKey = 'Spravato';
+          break;
+
+      case visitTypeCode === "Ect":
+          errorKey = 'ECT';
+          break;
+
+      case widgetErrors.includes('AddOn'):
+        errorKey = 'AddOn';
+        break;
+  
+      default:
+        break;
+    }
+
+    const objKeys = errorKey as keyof typeof getWidgetErrorMessage;
+    toast.error(`Please fill out all required fields in ${getWidgetErrorMessage[objKeys] || widgetErrors}`)
   }
   return responses.every((element) => element.success)
 }

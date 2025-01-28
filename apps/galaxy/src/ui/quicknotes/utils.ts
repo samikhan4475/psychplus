@@ -319,10 +319,18 @@ const validateDiagnosis = ({
 
 const getCachedWidgetsByVisitType = cache(getWidgetsByVisitType)
 
+const getWidgetErrorMessage = {
+    "Addon": "Add-on.",
+    "Spravato": "Spravato.",
+    "ECT": "ECT.",
+    "TMS": "TMS.",
+}
+
 export {
   getCachedWidgetsByVisitType,
   getWidgetIds,
   modifyWidgetResponse,
   getWidgetsByVisitType,
   validateDiagnosis,
+  getWidgetErrorMessage,
 }
