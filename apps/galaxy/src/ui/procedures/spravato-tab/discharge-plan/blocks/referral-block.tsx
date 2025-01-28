@@ -17,7 +17,7 @@ const ReferralBlock = () => {
         className="mt-2 gap-2 rounded-3 border border-gray-7 p-2"
         direction="column"
       >
-        <BlockLabel className="text-2 font-[600px]">Referral</BlockLabel>
+        <BlockLabel className="text-2 font-[600px]">Referral Description</BlockLabel>
         <TextAreaInput field="referral" className="w-[80%]" />
         <PatientReferralsWidget patientId={id} />
       </Flex>

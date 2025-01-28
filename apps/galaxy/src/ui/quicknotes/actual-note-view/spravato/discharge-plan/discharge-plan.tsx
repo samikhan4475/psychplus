@@ -3,6 +3,7 @@ import { SpravatoWidgetSchemaType } from '@/ui/procedures/spravato-tab/spravato-
 import { ContinueWithCurrentProtocol } from './continue-with-current-protocol'
 import { ContinueWithMaintenance } from './continue-with-maintenance'
 import { DiscontinueTreatment } from './discontinue-treatment'
+import { FollowUpAssessment } from './follow-up-assessment'
 import { Plan } from './plan'
 import { PostTreatmentTransportation } from './post-treatment-transportation'
 import { Referral } from './referral'
@@ -18,6 +19,7 @@ const DischargePlan = ({ data }: { data: SpravatoWidgetSchemaType }) => {
       <ContinueWithMaintenance data={data} />
       <DiscontinueTreatment data={data} />
       <Referral data={data} />
+      <FollowUpAssessment data={data} />
       <PostTreatmentTransportation data={data} />
     </Flex>
   )
