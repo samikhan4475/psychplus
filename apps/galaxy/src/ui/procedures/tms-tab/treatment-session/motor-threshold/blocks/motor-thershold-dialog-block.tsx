@@ -73,9 +73,19 @@ const MotorThresholdDialog = () => {
           >
             <Text className="text-1">MT%</Text>
             <TextField.Root
-              onChange={(e) => setMotorThreshold(+e.target.value)}
-              className="h-[28px] w-[100%]"
               type="number"
+              inputMode="numeric"
+              min={0}
+              max={100}
+              onChange={(e) => {
+                let value = +e.target.value;
+                if (value < 0) value = 0;
+                if (value > 100) value = 100;
+                setMotorThreshold(value);
+              }}
+              value={motorThreshold || ''}
+              className="h-[28px] w-[100%]"
+              placeholder="0-100%"
             />
 
             {showEvidence && (

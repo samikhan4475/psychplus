@@ -25,7 +25,7 @@ const FIELDS = [
     field: 'stimulationLevel',
     symbol: '%',
     disabled: true,
-    format: '####',
+    format: '#####',
   },
 ]
 
