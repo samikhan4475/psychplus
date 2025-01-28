@@ -47,7 +47,7 @@ const PolicyConsentDialog = ({
     const result = await sendPolicyNoticeAction({
       patientId,
       channels: [NotificationType.Email],
-      policyType: Policy.PolicyA,
+      policyType: Policy.PolicyB,
     })
     setIsEmailLoading(false);
     if (result.state === 'error') {
