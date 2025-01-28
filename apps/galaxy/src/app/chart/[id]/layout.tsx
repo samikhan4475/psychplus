@@ -37,7 +37,7 @@ const ChartLayout = async ({ children, params }: ChartLayoutProps) => {
       >
         <Suspense
           fallback={
-            <Flex className="bg-white h-[146px] border-b border-b-gray-5">
+            <Flex direction="column" align="center" justify="center" flexGrow="1" className='h-full'>
               <LoadingPlaceholder />
             </Flex>
           }
@@ -48,15 +48,15 @@ const ChartLayout = async ({ children, params }: ChartLayoutProps) => {
         <Flex gap="3" px="2" className="flex-1 overflow-auto">
           <ChartNavigation />
           <ScrollArea className="flex-1">
-            <Flex className="flex-1" mb="4">
+            <Flex className="flex-1 h-full" mb="4">
               <Suspense
                 fallback={
-                  <Flex className="bg-white h-[146px] border-b border-b-gray-5">
+                  <Flex direction="column" align="center" justify="center" flexGrow="1" className='h-full'>
                     <LoadingPlaceholder />
                   </Flex>
                 }
               >
-                {children}
+                  {children}
               </Suspense>
             </Flex>
           </ScrollArea>
