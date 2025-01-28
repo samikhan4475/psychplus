@@ -7,7 +7,6 @@ import { getWidgetsByVisitType } from '../utils'
 
 const getWidgetData = (providerType: string) => {
   const urlParams = new URLSearchParams(window.location.search)
-  const patientId = urlParams.get('id') as string
   const visitType = urlParams.get('visitType') as string
   const visitSequence = urlParams.get('visitSequence') as string
 
@@ -24,14 +23,13 @@ const getWidgetData = (providerType: string) => {
     providerType,
     visitType,
     visitSequence,
-    patientId,
   }
 }
 
 const saveWidgets = async (
   appointment: Appointment,
 ): Promise<QuickNoteSectionItem[]> => {
-  const { widgets, patientId } = getWidgetData(appointment.providerType)
+  const { widgets } = getWidgetData(appointment.providerType)
 
   const isValidateAll = await validateAll(widgets)
   if (!isValidateAll) {
@@ -72,7 +70,10 @@ const saveWidgets = async (
           t.sectionItem === section.sectionItem,
       ),
   )
-  const payload = { patientId, data: uniqueSections }
+  const payload = {
+    patientId: String(uniqueSections?.[0]?.pid),
+    data: uniqueSections,
+  }
 
   try {
     const result = await saveWidgetClientAction(payload)

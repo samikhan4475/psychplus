@@ -85,10 +85,12 @@ const DrugAlcohol: React.FC<DrugAlcoholProps> = ({
           />
         </>
       )}
-      <LabelAndValue
-        label="Questionnaire:"
-        value={`Pt was agreeable to detailed assessment: ${data.questionnaire}`}
-      />
+      {data.questionnaire && (
+        <LabelAndValue
+          label="Questionnaire:"
+          value={`Pt was agreeable to detailed assessment: ${data.questionnaire}`}
+        />
+      )}
       {data.alcohol === 'yes' && (
         <LabelAndValue
           label="AUDIT:"

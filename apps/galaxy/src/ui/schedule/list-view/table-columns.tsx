@@ -1,7 +1,7 @@
 import { ColumnDef } from '@tanstack/react-table'
 import { ColumnHeader, TextCell } from '@/components'
 import { Appointment } from '@/types'
-import { formatDateOfBirth } from '@/utils'
+import { capitalizeName, formatDateOfBirth } from '@/utils'
 import {
   InsuranceVerificationStatusCell,
   LegalSelectCell,
@@ -105,7 +105,9 @@ const columns: ColumnDef<Appointment>[] = [
       />
     ),
     cell: ({ row }) => (
-      <TextCell className="whitespace-nowrap">{row.original.name}</TextCell>
+      <TextCell className="whitespace-nowrap">
+        {capitalizeName(row.original.name)}
+      </TextCell>
     ),
     enableHiding: false,
   },
