@@ -7,6 +7,7 @@ import {
   FormFieldError,
   FormFieldLabel,
 } from '@/components'
+import { preventInvalidZipInput } from '@/utils'
 import { PatientLookUpSchemaType } from './schema'
 
 const ZipInput = () => {
@@ -19,6 +20,7 @@ const ZipInput = () => {
           size="1"
           placeholder="Zip"
           type="number"
+          onKeyDown={preventInvalidZipInput}
           className="border-pp-gray-2 h-6 w-full border border-solid !outline-none [box-shadow:none]"
           {...form.register('postalCode')}
         />

@@ -8,6 +8,16 @@ interface PatientBody {
   gender: string
   contactInfo: {
     email: string
+    addresses?: {
+      type: string
+      street1: string
+      street2: string
+      city: string
+      state: string
+      country: string
+      postalCode: string
+    }[]
+    isMailingAddressSameAsPrimary: boolean
     phoneNumbers: Array<{
       type: string
       number: string
@@ -22,6 +32,5 @@ interface PatientBody {
     relationship?: string
   }
 }
-
 
 export type { PatientBody }

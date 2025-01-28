@@ -17,10 +17,10 @@ const FirstNameInput = () => {
       <FormFieldLabel required>First Name</FormFieldLabel>
       <TextField.Root
         size="1"
-        {...form.register('firstName')}
+        {...form.register('legalName.firstName')}
         placeholder="Enter First Name"
       />
-      <FormFieldError name="firstName" />
+      <FormFieldError name="legalName.firstName" />
     </FormFieldContainer>
   )
 }

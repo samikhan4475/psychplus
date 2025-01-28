@@ -10,10 +10,10 @@ import { TherapyTableBlock } from '../blocks/therapy-table-block'
 import { ClearButton } from './blocks/clear-button'
 import { TherapySessionParticipantsBlock } from './blocks/session-participants'
 import { TherapyTimeSpentBlock } from './blocks/time-spent'
+import { getInitialValues } from './blocks/utils'
 import { transformOut } from './data'
 import { useTherapyForm } from './therapy-form'
 import { TherapySchemaType } from './therapy-schema'
-import { getInitialValues } from './blocks/utils'
 
 interface TherapyWidgetProps {
   patientId: string
@@ -37,7 +37,7 @@ const IndividualTherapyView = ({
           QuickNoteSectionName.QuicknoteSectionCodes,
         ]}
         widgetId={QuickNoteSectionName.QuickNoteSectionIndividualTherapy}
-        title="Therapy"
+        title="Individual Therapy"
         getData={transformOut(
           patientId,
           appointmentId,

@@ -17,17 +17,19 @@ const MailAddressGroup = () => {
   } = contactDetails
 
   useEffect(() => {
-    resetField('contactDetails.mailingAddress', {
-      defaultValue: {
-        postalCode: isMailingAddressSameAsPrimary ? postalCode : '',
-        type: 'Mailing',
-        street1: isMailingAddressSameAsPrimary ? street1 : '',
-        street2: isMailingAddressSameAsPrimary ? street2 : '',
-        city: isMailingAddressSameAsPrimary ? city : '',
-        state: isMailingAddressSameAsPrimary ? state : '',
-        country: isMailingAddressSameAsPrimary ? country : '',
-      },
-    })
+    if (isMailingAddressSameAsPrimary) {
+      resetField('contactDetails.mailingAddress', {
+        defaultValue: {
+          postalCode: isMailingAddressSameAsPrimary ? postalCode : '',
+          type: 'Mailing',
+          street1: isMailingAddressSameAsPrimary ? street1 : '',
+          street2: isMailingAddressSameAsPrimary ? street2 : '',
+          city: isMailingAddressSameAsPrimary ? city : '',
+          state: isMailingAddressSameAsPrimary ? state : '',
+          country: isMailingAddressSameAsPrimary ? country : '',
+        },
+      })
+    }
   }, [
     isMailingAddressSameAsPrimary,
     city,

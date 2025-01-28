@@ -7,7 +7,7 @@ import {
   FormFieldError,
   FormFieldLabel,
 } from '@/components/form'
-import { cn } from '@/utils'
+import { cn, preventInvalidZipInput } from '@/utils'
 
 interface AddressTextFieldProps
   extends React.ComponentProps<typeof TextField.Root> {
@@ -61,6 +61,7 @@ const AddressTextField = ({
           'border-pp-gray-2 h-6 w-full border border-solid !outline-none [box-shadow:none]',
           className,
         )}
+        onKeyDown={preventInvalidZipInput}
         onChange={handleZipChange}
         {...props}
         {...rest}

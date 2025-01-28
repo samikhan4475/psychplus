@@ -2,13 +2,9 @@ import { Button } from '@radix-ui/themes'
 import { Plus } from 'lucide-react'
 import { AddPatientDialog } from './add-patient-dialog'
 
-interface AddPatientProps {
-  googleApiKey: string
-}
-
-const AddPatient = ({ googleApiKey }: AddPatientProps) => {
+const AddPatient = () => {
   return (
-    <AddPatientDialog googleApiKey={googleApiKey}>
+    <AddPatientDialog>
       <Button size="1" variant="solid" highContrast>
         <Plus size={14} />
         No Email Add Patient

@@ -3,7 +3,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Box, Button, Grid, Text } from '@radix-ui/themes'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import { FormContainer } from '@/components'
+import { AddressFieldsGroup, FormContainer } from '@/components'
 import { NewPatient, Policy } from '@/types'
 import {
   sendPolicyEmailAction,
@@ -20,6 +20,7 @@ import { GuardianFirstNameInput } from './guardian-first-name-input'
 import { GuardianLastNameInput } from './guardian-last-name-input'
 import { GuardianRadio } from './guardian-radio'
 import { LastNameInput } from './last-name-text'
+import { MailingAddressRadio } from './mailing-address-radio'
 import { MiddleNameInput } from './middle-name-text'
 import { PhoneNumberInput } from './phone-number-text'
 import { PolicySection } from './policy-section'
@@ -35,9 +36,11 @@ const AddPatientForm = ({
   const form = useForm<SchemaType>({
     resolver: zodResolver(schema),
     defaultValues: {
-      firstName: '',
-      middleName: '',
-      lastName: '',
+      legalName: {
+        firstName: '',
+        middleName: '',
+        lastName: '',
+      },
       gender: '',
       dateOfBirth: undefined,
       phoneNumber: '',
@@ -45,12 +48,37 @@ const AddPatientForm = ({
       guardianFirstName: '',
       guardianLastName: '',
       hasGuardian: 'no',
+      contactInfo: {
+        addresses: [
+          {
+            type: 'Home',
+            street1: '',
+            street2: '',
+            city: '',
+            state: '',
+            country: '',
+            postalCode: '',
+          },
+          {
+            type: 'Mailing',
+            street1: '',
+            street2: '',
+            city: '',
+            state: '',
+            country: '',
+            postalCode: '',
+          },
+        ],
+        isMailingAddressSameAsPrimary: 'yes',
+      },
     },
   })
-
   const hasGuardian = form.watch('hasGuardian')
   const phone = form.watch('phoneNumber')
   const email = form.watch('email')
+  const isMailingAddressSameAsPrimary = form.watch(
+    'contactInfo.isMailingAddressSameAsPrimary',
+  )
 
   const createPatient = async (
     data: SchemaType,
@@ -58,14 +86,22 @@ const AddPatientForm = ({
     try {
       const body: PatientBody = {
         legalName: {
-          firstName: data.firstName,
-          middleName: data.middleName,
-          lastName: data.lastName,
+          firstName: data.legalName.firstName,
+          middleName: data.legalName.middleName,
+          lastName: data.legalName.lastName,
         },
         dateOfBirth: data.dateOfBirth.toString(),
         gender: data.gender,
         contactInfo: {
           email: data.email,
+          addresses:
+            data.contactInfo.isMailingAddressSameAsPrimary === 'yes'
+              ? data.contactInfo.addresses.filter(
+                  (address) => address.type !== 'Mailing',
+                )
+              : data.contactInfo.addresses,
+          isMailingAddressSameAsPrimary:
+            data.contactInfo.isMailingAddressSameAsPrimary === 'yes',
           phoneNumbers: [
             {
               type: 'Home',
@@ -75,7 +111,9 @@ const AddPatientForm = ({
         },
         password: '',
       }
-
+      if (!data.contactInfo.addresses[0].street1) {
+        delete body.contactInfo.addresses
+      }
       if (hasGuardian === 'yes') {
         body.guardian = {
           name: {
@@ -279,6 +317,35 @@ const AddPatientForm = ({
         </Grid>
       </Box>
 
+      <Box className="border-pp-grey  ml-1 mr-1 mt-2 rounded-[4px] border">
+        <Box className="bg-pp-table-subRows pb-1 pl-2 pr-2 pt-1">
+          <Text size="2" weight={'bold'} className="text-black mb-2 pb-2">
+            Address
+          </Text>
+        </Box>
+
+        <Grid className="mb-2 mt-2 gap-3 pl-2 pr-2">
+          <AddressFieldsGroup
+            columnsPerRow="2"
+            prefix="contactInfo.addresses[0]"
+            addressFieldName="street1"
+            required={false}
+          />
+        </Grid>
+        <Grid className="mb-2 mt-2 gap-3 pl-2 pr-2">
+          <MailingAddressRadio />
+        </Grid>
+        {isMailingAddressSameAsPrimary === 'no' && (
+          <Grid className="mb-2 mt-2 gap-3 pl-2 pr-2">
+            <AddressFieldsGroup
+              columnsPerRow="2"
+              prefix="contactInfo.addresses[1]"
+              addressFieldName="street1"
+              required={false}
+            />
+          </Grid>
+        )}
+      </Box>
       <Box className="mt-4 flex justify-end">
         <Button
           loading={isLoading}

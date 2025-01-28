@@ -3,6 +3,8 @@
 import { PropsWithChildren, useState } from 'react'
 import { Dialog } from '@radix-ui/themes'
 import { CloseDialogTrigger } from '@/components/close-dialog-trigger'
+import { useConstants } from '@/hooks/use-constants'
+import { GooglePlacesContextProvider } from '@/providers/google-places-provider'
 import { NewPatient } from '@/types'
 import { AddPatientForm } from './components'
 
@@ -13,6 +15,7 @@ const AddPatient = ({
   onPatientAdd?: (data: NewPatient) => void
 }>) => {
   const [isOpenDialog, setIsOpenDialog] = useState(false)
+  const { googleApiKey } = useConstants()
 
   return (
     <Dialog.Root
@@ -29,13 +32,14 @@ const AddPatient = ({
         <Dialog.Title className="font-sans -tracking-[0.25px]">
           Add User
         </Dialog.Title>
-
-        <AddPatientForm
-          onPatientAdd={(data: NewPatient) => {
-            onPatientAdd(data)
-            setIsOpenDialog(false)
-          }}
-        />
+        <GooglePlacesContextProvider apiKey={googleApiKey}>
+          <AddPatientForm
+            onPatientAdd={(data: NewPatient) => {
+              onPatientAdd(data)
+              setIsOpenDialog(false)
+            }}
+          />
+        </GooglePlacesContextProvider>
       </Dialog.Content>
     </Dialog.Root>
   )

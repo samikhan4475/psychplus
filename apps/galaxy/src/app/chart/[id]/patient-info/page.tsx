@@ -2,14 +2,13 @@ import { getPatientCreditCards } from '@/actions'
 import { GOOGLE_MAPS_API_KEY, STRIPE_PUBLISHABLE_KEY } from '@/constants'
 import { PatientInfoView } from '@/ui/patient-info'
 import {
+  getInsurancePayersAction,
   getPatientConsentsAction,
   getPatientPoliciesAction,
   getPatientPreferredPartnersAction,
   getPatientProfileAction,
   getPatientRelationshipsAction,
-  getInsurancePayersAction
 } from '@/ui/patient-info/patient-info-tab/actions'
-
 
 interface PatientInfoPageProps {
   params: {
@@ -62,7 +61,6 @@ const PatientInfoPage = async ({ params }: PatientInfoPageProps) => {
   if (insurancePayersResult?.state === 'error') {
     return <div>{insurancePayersResult.error}</div>
   }
-
 
   return (
     <PatientInfoView

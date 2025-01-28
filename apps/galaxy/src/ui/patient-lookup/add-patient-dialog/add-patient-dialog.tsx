@@ -3,20 +3,18 @@
 import { ReactNode, useState } from 'react'
 import { Dialog, Flex, Separator } from '@radix-ui/themes'
 import { Plus, X } from 'lucide-react'
+import { useConstants } from '@/hooks/use-constants'
 import { GooglePlacesContextProvider } from '@/providers/google-places-provider'
 import { AddPatientForm } from './add-patient-form'
 
 interface AddPatientDialogProps {
-  googleApiKey: string
   children: ReactNode
 }
 
-const AddPatientDialog = ({
-  googleApiKey,
-  children,
-}: AddPatientDialogProps) => {
+const AddPatientDialog = ({ children }: AddPatientDialogProps) => {
   const [isOpen, setIsOpen] = useState(false)
   const handleClose = () => setIsOpen(false)
+  const { googleApiKey } = useConstants()
 
   return (
     <Dialog.Root open={isOpen} onOpenChange={(isOpen) => setIsOpen(isOpen)}>
