@@ -53,6 +53,26 @@ const optionalPhoneValidation = z
   .optional()
   .default('')
 
+function validatePatientAddress(
+  data: z.infer<typeof patientInfoSchema>,
+  ctx: z.RefinementCtx,
+) {
+  if (!data.contactDetails.isMailingAddressSameAsPrimary) {
+    const mailingAddressFields: (keyof typeof data.contactDetails.mailingAddress)[] =
+      ['street1', 'city', 'state', 'postalCode']
+
+    for (const field of mailingAddressFields) {
+      if (!data.contactDetails.mailingAddress[field]) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: 'Required',
+          path: [`contactDetails.mailingAddress.${field}`],
+        })
+      }
+    }
+  }
+}
+
 const patientInfoSchema = z
   .object({
     id: z.number(),
@@ -76,7 +96,7 @@ const patientInfoSchema = z
       .object({
         type: z.string().optional().default('DriversLicense'),
         number: requiredString,
-        validIn: optionalString,
+        validIn: requiredString,
         hasFrontImage: z.boolean(),
         hasBackImage: z.boolean().optional(),
       })
@@ -244,22 +264,8 @@ const patientInfoSchema = z
         }
       }
     }
-
     // patientAddress validations
-    if (!data.contactDetails.isMailingAddressSameAsPrimary) {
-      const mailingAddressFields: (keyof typeof data.contactDetails.mailingAddress)[] =
-        ['street1', 'city', 'state', 'postalCode']
-
-      for (const field of mailingAddressFields) {
-        if (!data.contactDetails.mailingAddress[field]) {
-          ctx.addIssue({
-            code: z.ZodIssueCode.custom,
-            message: 'Required',
-            path: [`contactDetails.mailingAddress.${field}`],
-          })
-        }
-      }
-    }
+    validatePatientAddress(data, ctx)
   })
 
 type PatientInfoSchemaType = z.infer<typeof patientInfoSchema>
