@@ -6,7 +6,6 @@ import {
   getCalendarDateLabel,
   getProviderTypeLabel,
 } from '@psychplus-v2/utils'
-import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
 import { searchAppointmentsAction } from '@/features/appointments/search/actions'
 import {
@@ -19,6 +18,7 @@ import type {
 } from '@/features/appointments/search/types'
 import { transformResponseData } from '../actions/data'
 import { getStartOfWeek } from '../utils'
+import { create } from '@/stores/common-store'
 
 interface Store {
   loading: boolean

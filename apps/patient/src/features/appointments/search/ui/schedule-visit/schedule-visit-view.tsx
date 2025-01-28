@@ -292,6 +292,11 @@ const ScheduleVisitView = ({ googleAPIkey }: { googleAPIkey: string }) => {
                   {...form.register('zipCode')}
                   placeholder="Enter ZIP"
                   value={form.watch('zipCode')}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault(); // Prevent default form submission on Enter
+                    }
+                  }}
                 />
                 <FormFieldError name="zipCode" />
               </FormFieldContainer>

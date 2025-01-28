@@ -6,6 +6,7 @@ import { getUserInitials } from '@psychplus-v2/utils'
 import { Avatar, DropdownMenu, Flex, Text } from '@radix-ui/themes'
 import { LogOutIcon, UserIcon, type LucideIcon } from 'lucide-react'
 import { logoutAction } from '@/actions'
+import { resetAllStores } from '@/stores/common-store'
 
 interface UserDropdownMenuProps {
   user: User
@@ -47,6 +48,7 @@ const UserDropdownMenu = ({ user }: UserDropdownMenuProps) => {
           Icon={LogOutIcon}
           onClick={() => {
             logoutAction()
+            resetAllStores()
             localStorage.clear()
             sessionStorage.clear()
           }}
