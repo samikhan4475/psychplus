@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { Checkbox } from '@radix-ui/themes'
 import toast from 'react-hot-toast'
+import { revalidateAction } from '@/actions/revalidate'
 import { PropsWithRow } from '@/components'
 import { StaffComment } from '@/types'
 import { updateStaffCommentAction } from '../../actions'
@@ -31,7 +32,13 @@ const UrgentCell = ({
       setIsLoading(false)
       return
     }
-    toast.success('Comment marked urgent successfully')
+
+    if (checked) {
+      toast.success('Comment marked urgent successfully')
+    } else {
+      toast.success('Comment unmarked urgent successfully')
+    }
+    revalidateAction()
 
     setIsLoading(false)
   }
