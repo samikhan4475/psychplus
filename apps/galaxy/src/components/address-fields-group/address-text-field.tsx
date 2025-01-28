@@ -45,6 +45,21 @@ const AddressTextField = ({
     setValue(field, fieldValue, { shouldValidate: true })
   }
 
+  const preventInvalidZipInput = (
+    event: React.KeyboardEvent<HTMLInputElement>,
+  ) => {
+    if (
+      isZip &&
+      (event.key === 'e' ||
+        event.key === 'E' ||
+        event.key === '+' ||
+        event.key === '-' ||
+        event.key === '.')
+    ) {
+      event.preventDefault()
+    }
+  }
+
   return (
     <FormFieldContainer className={fieldContainerClassName}>
       <FormFieldLabel
