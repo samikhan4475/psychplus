@@ -2,7 +2,7 @@ import { PatientVital } from '../vitals'
 import { LabelAndValue } from './label-and-value'
 
 interface VitalsInfoSectionProps {
-  vitals: PatientVital
+  vitals?: PatientVital
 }
 
 const VitalsInfoSection = ({ vitals }: VitalsInfoSectionProps) => {

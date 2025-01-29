@@ -25,26 +25,35 @@ interface PatientBannerProps {
 const PatientBanner = async ({ patientId, user }: PatientBannerProps) => {
   try {
     const [vitalsResponse, careTeamResponse, pcpResponse, pharmacyResponse] =
-      await Promise.all([
+      await Promise.allSettled([
         getPatientVitalsAction(patientId),
         getPatientCareTeam(patientId),
         getPcpInfoAction(patientId),
         searchPharmaciesAction(patientId, { isOnlyDefaults: true }),
       ])
 
-    if (
-      vitalsResponse.state === 'error' ||
-      careTeamResponse.state === 'error' ||
-      pcpResponse.state === 'error' ||
-      pharmacyResponse.state === 'error'
-    ) {
-      return <Text>Failed to load patient data.</Text>
-    }
+    const vitals =
+      vitalsResponse.status === 'fulfilled' &&
+      vitalsResponse.value.state !== 'error'
+        ? vitalsResponse.value.data[vitalsResponse.value.data.length - 1]
+        : undefined
 
-    const vitals = vitalsResponse.data[vitalsResponse.data.length - 1]
-    const careTeam = careTeamResponse.data.careTeam
-    const pcp = pcpResponse.data[pcpResponse.data.length - 1]
-    const pharmacy = pharmacyResponse.data[0]
+    const careTeam =
+      careTeamResponse.status === 'fulfilled' &&
+      careTeamResponse.value.state !== 'error'
+        ? careTeamResponse.value.data.careTeam
+        : undefined
+
+    const pcp =
+      pcpResponse.status === 'fulfilled' && pcpResponse.value.state !== 'error'
+        ? pcpResponse.value.data[pcpResponse.value.data.length - 1]
+        : undefined
+
+    const pharmacy =
+      pharmacyResponse.status === 'fulfilled' &&
+      pharmacyResponse.value.state !== 'error'
+        ? pharmacyResponse.value.data[0]
+        : undefined
 
     const { creditCardVerificationStatus, insurancePolicies } = user
     const insuranse = insurancePolicies ?? []

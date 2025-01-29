@@ -3,7 +3,7 @@ import { LabelAndValue } from './label-and-value'
 import { ExternalProviderDetail } from '../pcp'
 
 interface PcpInfoSectionProps {
-  pcp: ExternalProviderDetail
+  pcp?: ExternalProviderDetail
 }
 
 const PcpInfoSection = ({ pcp }: PcpInfoSectionProps) => {

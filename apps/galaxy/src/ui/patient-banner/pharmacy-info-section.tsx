@@ -2,11 +2,16 @@ import { Pharmacy } from '../pharmacy/types'
 import { LabelAndValue } from './label-and-value'
 
 interface PharmacyInfoSectionProps {
-  pharmacy: Pharmacy
+  pharmacy?: Pharmacy
 }
 
 const PharmacyInfoSection = ({ pharmacy }: PharmacyInfoSectionProps) => {
-  const pharmacyAddress = pharmacy?.pharmacyContactDetails?.addresses?.[0] ?? {}
+  const pharmacyAddress = pharmacy?.pharmacyContactDetails?.addresses?.[0] ?? {
+    street1: '',
+    city: '',
+    state: '',
+    postalCode: '',
+  }
 
   return (
     <>

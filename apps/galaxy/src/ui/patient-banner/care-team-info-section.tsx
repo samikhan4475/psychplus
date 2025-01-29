@@ -3,10 +3,10 @@ import { getUserFullName } from '@/utils'
 import { LabelAndValue } from './label-and-value'
 
 interface CareTeamInfoSectionProps {
-  careTeam: CareTeamMember[]
+  careTeam?: CareTeamMember[]
 }
 
-const CareTeamInfoSection = ({ careTeam }: CareTeamInfoSectionProps) => {
+const CareTeamInfoSection = ({ careTeam = [] }: CareTeamInfoSectionProps) => {
   const getPrimarySpecialistName = (specialist: string) => {
     const member = careTeam.find(
       (member) => member.primary && member.specialist === specialist,
