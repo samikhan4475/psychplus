@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { Flex, Separator, Text } from '@radix-ui/themes'
 import { SpravatoWidgetSchemaType } from '@/ui/procedures/spravato-tab/spravato-widget-schema'
 import useAddVitals from '@/ui/procedures/spravato-tab/vital-signs/add-vital-signs/blocks/use-add-vitals'
@@ -6,7 +7,11 @@ import { VitalSignsTable } from './vital-signs-table'
 
 const VitalSigns = ({ data }: { data: SpravatoWidgetSchemaType }) => {
   const vitalsData: any = data['vitalSigns' as keyof SpravatoWidgetSchemaType]
-  const { buttonConfig } = useAddVitals(vitalsData ?? [])
+  const { buttonConfig, setIsFirstTime } = useAddVitals(vitalsData ?? [])
+
+  useEffect(() => {
+    setIsFirstTime()
+  }, [vitalsData])
 
   return vitalsData.length > 0 ? (
     <Flex direction="column" gap="1">

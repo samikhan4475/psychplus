@@ -74,6 +74,11 @@ export default (vitalSigns: any, form?: any) => {
     setButtonConfig({ ...newConfig })
   }
 
+  const setIsFirstTime = () => {
+    isFirstTime.current = true
+    currentTimeSlot.current = 0
+  }
+
   useEffect(() => {
     if (vitalSigns.length > 0 && isFirstTime.current) {
       let nextConfig = { ...buttonConfig }
@@ -95,5 +100,6 @@ export default (vitalSigns: any, form?: any) => {
     buttonConfig,
     disableButton,
     generateVitalMessages,
+    setIsFirstTime,
   }
 }
