@@ -30,7 +30,7 @@ const PolicyConsentDialog = ({
     const result = await sendPolicyNoticeAction({
       patientId,
       channels: [NotificationType.Sms],
-      policyType: Policy.PolicyA,
+      policyType: Policy.PolicyB,
     })
     setIsSmsLoading(false);
     if (result.state === 'error') {
