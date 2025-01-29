@@ -20,11 +20,12 @@ const Tobacco = ({
     smokePacks,
     smokingCessationOption,
     tobaccoChewSmoke,
+    tobacco,
     counselingOption,
     smokingCessationDiscussionDuration,
     otherTobacco,
   } = data
-  const isSmoke = tobaccoChewSmoke === 'smoke'
+  const isSmoke = tobacco === 'yes'
 
   if (!isSmoke) {
     return null
@@ -47,10 +48,14 @@ const Tobacco = ({
   const smokingCessationText = `I have reviewed the risks of continued smoking with the patient and offered
                 Smoking Cessation Options ${smokingCessationLabel} and
                 Counseling Options ${counselingOptionLabel}.`
+
   return (
     <>
-      {smokePacks && (
+      {tobaccoChewSmoke === 'smoke' && smokePacks && (
         <LabelAndValue label="Smoke:" value={`Packs a day: ${smokePacks}`} />
+      )}
+      {tobaccoChewSmoke === 'chew' && (
+        <LabelAndValue label="Chew:" value={`Yes`} />
       )}
       <LabelAndValue value={smokingCessationText} />
       {smokingCessationDiscussionDuration && (

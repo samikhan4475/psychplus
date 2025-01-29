@@ -22,7 +22,7 @@ const FamilyPsychNoteDetailView = ({
     initialValue: transformedData.widgetContainerCheckboxField,
   })?.actualNoteViewVisibility
 
-  const relationshipCodeset = useCodesetCodes(CODESETS.Relationship)
+  const relationshipCodeset = useCodesetCodes(CODESETS.PsychHistoryRelation)
 
   if (data.length === 0) return null
   return (

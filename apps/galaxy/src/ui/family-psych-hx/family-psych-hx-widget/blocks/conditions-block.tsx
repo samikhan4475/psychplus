@@ -9,7 +9,7 @@ import FAMILY_PSYCH_BLOCK_OPTIONS from './family-psych-options.json'
 
 const ConditionsBlock = () => {
   const RELATIONSHIP_OPTIONS = mapCodesetToOptions(
-    useCodesetCodes(CODESETS.Relationship),
+    useCodesetCodes(CODESETS.PsychHistoryRelation),
   )
 
   return (

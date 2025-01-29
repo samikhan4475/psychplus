@@ -104,6 +104,8 @@ const CODESETS = {
   HallucinationType: 'PsychPlusPublic.HallucinationType',
   DelusionType: 'PsychPlusPublic.DelusionType',
   CreditCardStatus: 'CreditCardStatus',
+  PatientRelationship: 'PsychPlusPublic.PatientRelationship',
+  PsychHistoryRelation: 'PsychPlusPublic.PsychHistoryRelation',
 }
 export {
   CODESETS,
