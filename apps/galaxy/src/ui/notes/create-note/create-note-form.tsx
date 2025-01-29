@@ -112,7 +112,7 @@ const CreateNoteForm = ({ children, noteAppointment }: Props) => {
       noteDocuments.push({
         sectionName: 'UploadDocument',
         sectionItem: `Secondary, ${file.documentId}, ${file.encounterDocumentSizeInBytes}`,
-        sectionItemValue: file.fileName,
+        sectionItemValue: file.originalFileName,
       })
     })
 

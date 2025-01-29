@@ -163,6 +163,7 @@ interface NoteDocumentResponse {
   patientId: number
   appointmentId: number
   encounterDocumentSizeInBytes: number
+  originalFileName: string
 }
 interface NoteDocumentsItemList {
   sectionName: string
