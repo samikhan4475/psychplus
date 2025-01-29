@@ -1,9 +1,7 @@
 'use client'
 
-import { useEffect } from 'react'
 import { Box, Flex, ScrollArea } from '@radix-ui/themes'
 import { ColumnDef, Row, Table } from '@tanstack/react-table'
-import { format } from 'date-fns'
 import {
   ColumnHeader,
   DataTable,
@@ -14,7 +12,8 @@ import {
 import { CODESETS } from '@/constants'
 import { useCodesetCodes, useHasPermission } from '@/hooks'
 import { SharedCode } from '@/types'
-import { formatDateTime } from '@/utils'
+import { getSlashedDateString } from '@/utils'
+import { convertToTimezone } from '../visit/utils'
 import { getDisplayByValue } from './create-note/utils'
 import { useStore } from './store'
 import { PatientNotes } from './types'
@@ -30,23 +29,30 @@ const getColumns = (codes: SharedCode[], noteTypeCodes: SharedCode[]) => {
       id: 'date',
       accessorKey: 'date',
       header: () => <ColumnHeader label="Date" />,
-      cell: ({ row }) => (
-        <DateTimeCell className="whitespace-nowrap">
-          {row.original.metadata?.createdOn &&
-            format(new Date(row.original.metadata?.createdOn), 'MM/dd/yyy')}
-        </DateTimeCell>
-      ),
+      cell: ({ row }) => {
+        const { date } = convertToTimezone(
+          row.original?.signedDate,
+          row.original?.locationTimeZone,
+        )
+        return (
+          <DateTimeCell className="whitespace-nowrap">
+            {row.original.metadata?.createdOn &&
+              getSlashedDateString(date ? date : '')}
+          </DateTimeCell>
+        )
+      },
     },
     {
       id: 'time',
       accessorKey: 'time',
       header: () => <ColumnHeader label="Time" />,
-      cell: ({ row }) => (
-        <DateTimeCell className="whitespace-nowrap">
-          {row.original.metadata?.createdOn &&
-            format(new Date(row.original.metadata?.createdOn), 'HH:mm')}
-        </DateTimeCell>
-      ),
+      cell: ({ row }) => {
+        const { time } = convertToTimezone(
+          row.original?.signedDate,
+          row.original?.locationTimeZone,
+        )
+        return <DateTimeCell className="whitespace-nowrap">{time}</DateTimeCell>
+      },
     },
     {
       id: 'authors',

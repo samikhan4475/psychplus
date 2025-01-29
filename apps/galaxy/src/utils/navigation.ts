@@ -15,7 +15,7 @@ const getNavLinks = (
       conditions: [!!appointmentId],
     },
     // { label: 'Rating', href: '/rating' },
-    // { label: 'Notifications', href: '/notifications' },
+    { label: 'Notifications', href: '/notifications' },
     // { label: 'Patient Tracking', href: '/patient-tracking' },
   ]
   const baseLinks = [
@@ -26,7 +26,6 @@ const getNavLinks = (
     { label: 'Allergies', href: '/allergies' },
     ...defaultBottomLinks,
     { label: 'Billing History', href: '/billing-history' },
-    { label: 'Notifications', href: '/notifications' },
   ]
 
   const navLinks = [

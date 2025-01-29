@@ -1,7 +1,7 @@
 import { PropsWithChildren } from 'react'
 import { Box, Flex, Heading, Separator, Text } from '@radix-ui/themes'
+import { format } from 'date-fns'
 import { LoadingPlaceholder } from '@/components/loading-placeholder'
-import { getSlashedDateString } from '@/utils'
 import { useStore } from '../store'
 import { groupBySectionName } from '../utils'
 import { CreateNoteDetailView } from './create-note-detail-view'
@@ -79,7 +79,6 @@ const NoteDetail = ({ children }: PropsWithChildren) => {
         )
       )}
       <Box>{children}</Box>
-
       {noteDetail?.[0]?.addendum && (
         <Flex gap="1" direction="column">
           <Heading size="3">Addendum</Heading>
@@ -89,13 +88,10 @@ const NoteDetail = ({ children }: PropsWithChildren) => {
           <Separator className="w-full" mt="1" />
         </Flex>
       )}
-
-      {noteDetail?.[0]?.signedDate && (
-        <Heading size={'3'} my={'1'} weight={'medium'}>
+      {selectedRow?.metadata?.createdOn && (
+        <Heading size="3" my="1" weight="medium">
           E-Signed by: {selectedRow?.signedByUserName}, at{' '}
-          {noteDetail?.[0]?.signedDate
-            ? getSlashedDateString(noteDetail?.[0]?.signedDate)
-            : ''}
+          {format(new Date(selectedRow.metadata.createdOn), 'MM/dd/yyyy HH:mm')}
         </Heading>
       )}
     </Flex>

@@ -3,6 +3,7 @@
 import { PropsWithChildren } from 'react'
 import { useParams, useSearchParams } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { CalendarDate, now, Time } from '@internationalized/date' // Make sure you're using this library correctly
 import { Flex } from '@radix-ui/themes'
 import { useForm, type SubmitHandler } from 'react-hook-form'
 import toast from 'react-hot-toast'
@@ -11,6 +12,7 @@ import { FormContainer } from '@/components'
 import { Appointment } from '@/types'
 import { sanitizeFormData } from '@/utils'
 import { createNoteSchema } from '.'
+import { useStore } from '../store'
 import { NoteDocumentsItemList } from '../types'
 import { fileUploadAction } from './action/file-upload-action'
 import { getSignNoteAction } from './action/sign-note-action'
@@ -25,16 +27,29 @@ interface Props extends PropsWithChildren {
 }
 
 const CreateNoteForm = ({ children, noteAppointment }: Props) => {
+  const { setIsCreateNoteView, setSelectedRow, fetch } = useStore((state) => ({
+    setIsCreateNoteView: state.setIsCreateNoteView,
+    setSelectedRow: state.setSelectedRow,
+    fetch: state.fetch,
+  }))
   const searchParams = useSearchParams()
   const patientId = useParams().id as string
   const appointmentId = searchParams.get('id')
+  const currentTime = now(noteAppointment?.locationTimezoneId ?? '')
+  const defaultDate = new CalendarDate(
+    currentTime.year,
+    currentTime.month,
+    currentTime.day,
+  )
+  const defaultTime = new Time(currentTime.hour, currentTime.minute)
+
   const form = useForm<SchemaType>({
     reValidateMode: 'onChange',
     resolver: zodResolver(schema),
     criteriaMode: 'all',
     defaultValues: {
-      date: undefined,
-      time: undefined,
+      date: defaultDate,
+      time: defaultTime,
       noteTypeCode: '',
       noteTitleCode: '',
       provider: undefined,
@@ -124,6 +139,9 @@ const CreateNoteForm = ({ children, noteAppointment }: Props) => {
     if (result.state === 'success') {
       toast.success('Signed')
       form.reset()
+      setIsCreateNoteView(false)
+      setSelectedRow(undefined)
+      fetch({ patientId })
     } else {
       toast.error(`Error signing note: ${result.error}`)
     }
