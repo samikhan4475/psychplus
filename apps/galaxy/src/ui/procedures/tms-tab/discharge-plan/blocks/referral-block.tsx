@@ -9,9 +9,9 @@ const ReferralBlock = () => {
 
   return (
     <FormFieldContainer>
-      <Text className="text-2 font-medium">Referral</Text>
+      <Text className="text-2 font-medium">Referral Description</Text>
       <TextAreaInput field="referralDetail" className="h-full w-full" />
-      <PatientReferralsWidget patientId={id} hideHeader />
+      <PatientReferralsWidget patientId={id} />
     </FormFieldContainer>
   )
 }
