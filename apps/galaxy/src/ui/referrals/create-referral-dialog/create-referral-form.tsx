@@ -106,6 +106,10 @@ const CreateReferralForm = ({
     }
     toast.success('Created successfully!')
     onClose?.()
+    sendEvent({
+      widgetId: QuickNoteSectionName.QuicknoteSectionReferrals,
+      eventType: 'widget:save',
+    })
     handleCloseDialog()
   }
 

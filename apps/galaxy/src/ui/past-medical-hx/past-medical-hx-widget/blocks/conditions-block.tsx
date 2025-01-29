@@ -105,6 +105,7 @@ const BLOCK_OPTIONS: {
       type: 'date',
       label: 'Date of Conception',
       field: 'pregnantDate',
+      isRequired: false,
     },
   },
   {

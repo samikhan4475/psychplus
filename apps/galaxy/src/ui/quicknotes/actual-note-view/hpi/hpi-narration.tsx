@@ -47,7 +47,7 @@ const HpiNarration = ({
     )
 
     const formattedSymptoms = formatSymptoms(formattedComplaints)
-    narration += ` who reports chief complaints of ` + formattedSymptoms + '.'
+    narration += ` who reports Chief Complaint of ` + formattedSymptoms + '.'
 
     Object.keys(symptoms).forEach((complaint) => {
       if (

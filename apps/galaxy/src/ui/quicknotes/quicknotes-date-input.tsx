@@ -1,11 +1,21 @@
 'use client'
 
-import { getLocalTimeZone, today } from '@internationalized/date'
-import { Flex, Text } from '@radix-ui/themes'
+import { Flex } from '@radix-ui/themes'
 import { DateField, DateInput, DateSegment } from 'react-aria-components'
 import { BlockLabel } from '@/components'
+import { Appointment } from '@/types'
+import { convertToTimezone } from '../visit/utils'
 
-const QuickNotesDateInput = () => {
+interface QuickNotesDateInputProps {
+  appointment: Appointment
+}
+
+const QuickNotesDateInput = ({ appointment }: QuickNotesDateInputProps) => {
+  const { date } = convertToTimezone(
+    appointment.startDate,
+    appointment.locationTimezoneId,
+  )
+
   return (
     <Flex direction="column" gap="1">
       <BlockLabel name="quicknotes-date" orientation="vertical">
@@ -13,7 +23,7 @@ const QuickNotesDateInput = () => {
       </BlockLabel>
       <DateField
         name="quicknotes-date"
-        value={today(getLocalTimeZone())}
+        value={date}
         onChange={undefined}
         onBlur={undefined}
         isRequired

@@ -3,7 +3,8 @@
 import { CODESETS } from '@/constants'
 import { useCodesetCodes } from '@/hooks'
 import { Appointment, PatientProfile } from '@/types'
-import { getPatientFullName, getSlashedDateString, getTimeLabel } from '@/utils'
+import { convertToTimezone } from '@/ui/visit/utils'
+import { getPatientFullName, getSlashedDateString } from '@/utils'
 import { useStore } from '../store'
 import { BlockContainer, LabelAndValue } from './shared'
 
@@ -22,6 +23,11 @@ const PsychiatricEvaluation = ({ appointment, patient }: Props) => {
     (service) => service.value === appointment.service,
   )?.display
 
+  const { time } = convertToTimezone(
+    appointment.startDate,
+    appointment.locationTimezoneId,
+  )
+
   return (
     <BlockContainer heading={appointment.visitNoteTitle ?? ''}>
       <LabelAndValue label="Title:" value={appointment.visitNoteTitle} />
@@ -39,11 +45,8 @@ const PsychiatricEvaluation = ({ appointment, patient }: Props) => {
         label="Date:"
         value={getSlashedDateString(appointment.startDate ?? '')}
       />
-      <LabelAndValue
-        label="Time:"
-        value={getTimeLabel(appointment.startDate ?? '', false)}
-      />
-      <LabelAndValue label="Duration:" value={`${appointment.duration} min`} />
+      <LabelAndValue label="Time:" value={time} />
+      <LabelAndValue label="Duration:" value={`${appointment.duration} mins`} />
       <LabelAndValue
         label="Patient:"
         value={getPatientFullName(patient?.legalName)}

@@ -25,6 +25,7 @@ interface SelectableChipDetailsProps {
   rightLabel?: string
   editable?: boolean
   maxLength?: number
+  isRequired?: boolean
 }
 
 const SelectableChipDetails = ({
@@ -42,6 +43,7 @@ const SelectableChipDetails = ({
   rightLabel,
   editable = true,
   maxLength,
+  isRequired = true,
 }: SelectableChipDetailsProps) => {
   const form = useFormContext()
   const error = form.getFieldState(field, form.formState).error
@@ -94,7 +96,7 @@ const SelectableChipDetails = ({
               <DatePickerInput
                 field={field}
                 isDisabled={disabled}
-                isRequired={true}
+                isRequired={isRequired}
               />
             </Box>
           )}
