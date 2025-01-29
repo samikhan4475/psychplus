@@ -3,6 +3,7 @@
 import { Flex } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
 import { BlockLabel, CheckboxCell } from '@/components'
+import { AlertMessage } from '@/ui/procedures/spravato-tab/sections/alert-message'
 
 const PRECAUTIONS_AND_WARNINGS = [
   {
@@ -58,12 +59,21 @@ const PrecautionAndWarning = () => {
       </BlockLabel>
 
       {PRECAUTIONS_AND_WARNINGS.map((item) => (
-        <CheckboxCell
-          key={item.id}
-          label={item.label}
-          checked={selectedIds.includes(item.id)}
-          onCheckedChange={() => toggleSelected(item.id)}
-        />
+        <Flex direction="column" gap="1" key={item.id}>
+          <CheckboxCell
+            key={item.id}
+            label={item.label}
+            checked={selectedIds.includes(item.id)}
+            onCheckedChange={() => {
+              toggleSelected(item.id)
+            }}
+          />
+          {!form.watch('precautionsAndWarnings').includes(item.id) && (
+            <AlertMessage
+              message={'You will be unable to proceed with this box unchecked.'}
+            />
+          )}
+        </Flex>
       ))}
     </Flex>
   )

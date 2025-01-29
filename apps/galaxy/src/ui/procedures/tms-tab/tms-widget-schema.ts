@@ -1,7 +1,7 @@
 import { z } from 'zod'
 
 type TmsWidgetSchemaType = z.infer<typeof tmsWidgetSchema>
-
+const requiredValues = ["1", "2", "3", "4", "5", "6"];
 const tmsWidgetSchema = z.object({
   tmsSeizureBlock: z.string(),
   tmsSeizureBlockDetail: z.string(),
@@ -49,7 +49,15 @@ const tmsWidgetSchema = z.object({
     }),
   ).min(1, 'required'),
   stimulationLevel: z.string(),
-  precautionsAndWarnings: z.array(z.string()),
+  precautionsAndWarnings: z.array(z.string()).refine(
+    (arr) =>
+      arr.length === requiredValues.length &&
+      arr.every((value) => requiredValues.includes(value)) &&
+      requiredValues.every((value) => arr.includes(value)),
+    {
+      message: `precautionsAndWarnings must contain exactly ${JSON.stringify(requiredValues)} in any order.`,
+    }
+  ),
   tmdSessionNo: z.string(),
   stimulationSite: z.string(),
   coilTypeUsed: z.string(),
