@@ -96,9 +96,14 @@ const AddPatientForm = ({
           email: data.email,
           addresses:
             data.contactInfo.isMailingAddressSameAsPrimary === 'yes'
-              ? data.contactInfo.addresses.filter(
-                  (address) => address.type !== 'Mailing',
-                )
+              ? data.contactInfo.addresses
+                  .filter((address) => address.type !== 'Mailing')
+                  .map((address) =>
+                    address.type === 'Home'
+                      ? [{ ...address, type: 'Mailing' }, address]
+                      : address,
+                  )
+                  .flat()
               : data.contactInfo.addresses,
           isMailingAddressSameAsPrimary:
             data.contactInfo.isMailingAddressSameAsPrimary === 'yes',
