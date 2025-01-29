@@ -46,11 +46,6 @@ const hpiWidgetSchema = z
   .superRefine((data, ctx) => {
     const issues = [
       {
-        condition: 'chiefComplaint',
-        field: 'chiefComplaint',
-        requiredField: 'chiefComplaint',
-      },
-      {
         condition: 'ccOther',
         field: 'chiefComplaint',
         requiredField: 'ccOtherDetails',
@@ -101,6 +96,24 @@ const hpiWidgetSchema = z
         })
       }
     })
+
+    if (
+      data?.chiefComplaint?.length !== 3 &&
+      (data?.hpiOther?.length || 0) < 30
+    ) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ['chiefComplaint'],
+        message:
+          'Must have exactly 3 chief complaints or hpiOther must be 30 characters long',
+      })
+
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ['hpiOther'],
+        message: 'Required',
+      })
+    }
   })
 
 export { hpiWidgetSchema, type HpiWidgetSchemaType }
