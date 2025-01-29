@@ -34,6 +34,11 @@ const PastPsychHxWidget = ({
 
   const { watch } = form
 
+  const defaultInitialValues = {
+    ...getInitialValues(),
+    widgetContainerCheckboxField: watch('widgetContainerCheckboxField'),
+  }
+
   return (
     <FormProvider {...form}>
       <WidgetFormContainer
@@ -53,16 +58,14 @@ const PastPsychHxWidget = ({
         headerRight={
           !isHistoryHeader ? (
             <>
-              <WidgetClearButton defaultInitialValues={getInitialValues} />
+              <WidgetClearButton defaultInitialValues={defaultInitialValues} />
               <WidgetSaveButton />
             </>
           ) : (
-            <>
-              <WidgetClearButton defaultInitialValues={getInitialValues} />
-            </>
+            <WidgetClearButton defaultInitialValues={defaultInitialValues} />
           )
         }
-        formResetValues={getInitialValues()}
+        formResetValues={defaultInitialValues}
         topHeader={isHistoryHeader && <PastPsychHeader />}
       >
         {watch('widgetContainerCheckboxField') === 'show' && (

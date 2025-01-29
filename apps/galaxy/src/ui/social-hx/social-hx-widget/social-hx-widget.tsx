@@ -34,6 +34,10 @@ const SocialHxWidget = ({
   isHistoryHeader = false,
 }: SocialHxWidgetProps) => {
   const form = useSocialHxWidgetForm(initialValue)
+  const defaultInitialValues = {
+    ...getInitialValues(),
+    widgetContainerCheckboxField: form.watch('widgetContainerCheckboxField'),
+  }
 
   return (
     <FormProvider {...form}>
@@ -52,16 +56,14 @@ const SocialHxWidget = ({
         headerRight={
           !isHistoryHeader ? (
             <>
-              <WidgetClearButton defaultInitialValues={getInitialValues} />
+              <WidgetClearButton defaultInitialValues={defaultInitialValues} />
               <WidgetSaveButton />
             </>
           ) : (
-            <>
-              <WidgetClearButton defaultInitialValues={getInitialValues} />
-            </>
+            <WidgetClearButton defaultInitialValues={defaultInitialValues} />
           )
         }
-        formResetValues={getInitialValues()}
+        formResetValues={defaultInitialValues}
         topHeader={isHistoryHeader && <SocialHxHeader />}
       >
         {form.watch('widgetContainerCheckboxField') === 'show' ? (

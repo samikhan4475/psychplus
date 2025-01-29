@@ -27,6 +27,12 @@ const FamilyPsychHxWidget = ({
 }: FamilyPsychHxWidgetProps) => {
   const form = useFamilyPsychHxWidgetForm(initialValue)
   const { watch } = form
+
+  const defaultInitialValues = {
+    ...getInitialValues(),
+    widgetContainerCheckboxField: watch('widgetContainerCheckboxField'),
+  }
+
   return (
     <FormProvider {...form}>
       <WidgetFormContainer
@@ -45,11 +51,11 @@ const FamilyPsychHxWidget = ({
         toggleable={!isHistoryHeader}
         headerRight={
           <>
-            <WidgetClearButton defaultInitialValues={getInitialValues} />
+            <WidgetClearButton defaultInitialValues={defaultInitialValues} />
             {!isHistoryHeader && <WidgetSaveButton />}
           </>
         }
-        formResetValues={getInitialValues()}
+        formResetValues={defaultInitialValues}
         topHeader={isHistoryHeader && <PastFamilyHeader />}
       >
         {watch('widgetContainerCheckboxField') === 'show' && (

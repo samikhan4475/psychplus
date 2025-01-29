@@ -9,7 +9,7 @@ import { CODESETS } from '@/constants'
 import { useCodesetCodes } from '@/hooks'
 import { useStore as useRootStore } from '@/store'
 import { Appointment } from '@/types'
-import { capitalizeName, constructQuickNotesUrl } from '@/utils'
+import { capitalizeName, constructQuickNotesUrl, getPatientMRN } from '@/utils'
 import { useStore as RootStore } from '../store'
 import { useStore } from './store'
 import { columns } from './table-columns'
@@ -80,9 +80,9 @@ const ListViewTable = () => {
 
           addTab({
             href,
-            label: `${capitalizeName(row.original?.name)}-${
-              row.original.patientMrn
-            }-${row.original.appointmentId}`,
+            label: `${capitalizeName(row.original?.name)}-${getPatientMRN(
+              row.original.patientId,
+            )}-${row.original.appointmentId}`,
           })
           router.push(href)
         }}

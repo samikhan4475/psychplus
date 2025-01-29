@@ -43,6 +43,11 @@ const SubstanceUseHxWidget = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
+  const defaultInitialValues = {
+    ...getInitialValues(),
+    widgetContainerCheckboxField: form.watch('widgetContainerCheckboxField'),
+  }
+
   return (
     <FormProvider {...form}>
       <WidgetFormContainer
@@ -61,11 +66,11 @@ const SubstanceUseHxWidget = ({
         toggleable={!isHistoryHeader}
         headerRight={
           <>
-            <WidgetClearButton defaultInitialValues={getInitialValues} />
+            <WidgetClearButton defaultInitialValues={defaultInitialValues} />
             {!isHistoryHeader && <WidgetSaveButton />}
           </>
         }
-        formResetValues={getInitialValues()}
+        formResetValues={defaultInitialValues}
         topHeader={isHistoryHeader && <SubstanceUseHxHxHeader />}
       >
         {form.watch('widgetContainerCheckboxField') === 'show' && (

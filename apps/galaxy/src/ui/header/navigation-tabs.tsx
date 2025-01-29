@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import NextLink from 'next/link'
-import { usePathname, useRouter } from 'next/navigation'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { Cross2Icon } from '@radix-ui/react-icons'
 import { Box, Flex, Text } from '@radix-ui/themes'
 import { useStore } from '@/store'
@@ -49,8 +49,15 @@ const NavigationTab = ({ href, label }: NavigationTabProps) => {
   }))
 
   const pathname = usePathname()
+  const hrefParams = new URLSearchParams(href.split('?')[1])
+  const id = hrefParams.get('id')
+  const appointmentId = useSearchParams().get('id')
+  const baseUrl = href.split('?')[0].split('/').slice(0, 3).join('/')
+
   const isActive =
-    href === '/' ? pathname === href : pathname.startsWith(href.split('?')[0])
+    href === '/'
+      ? pathname === href
+      : pathname.startsWith(baseUrl) && appointmentId === id
 
   return (
     <NextLink

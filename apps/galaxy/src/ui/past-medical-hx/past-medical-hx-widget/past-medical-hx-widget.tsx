@@ -27,6 +27,10 @@ const PastMedicalHxWidget = ({
   isHistoryHeader = false,
 }: PastMedicalHxWidgetProps) => {
   const form = usePastMedicalHxWidgetForm(initialValue)
+  const defaultInitialValues = {
+    ...getInitialValues(),
+    widgetContainerCheckboxField: form.watch('widgetContainerCheckboxField'),
+  }
   return (
     <Flex direction="column" width="100%" gap="2">
       <FormProvider {...form}>
@@ -46,11 +50,11 @@ const PastMedicalHxWidget = ({
           toggleable={!isHistoryHeader}
           headerRight={
             <>
-              <WidgetClearButton defaultInitialValues={getInitialValues} />
+              <WidgetClearButton defaultInitialValues={defaultInitialValues} />
               {!isHistoryHeader && <WidgetSaveButton />}
             </>
           }
-          formResetValues={getInitialValues()}
+          formResetValues={defaultInitialValues}
           topHeader={isHistoryHeader && <PastMedicalHeader />}
         >
           {form.watch('widgetContainerCheckboxField') === 'show' && (
