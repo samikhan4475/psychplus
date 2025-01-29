@@ -26,7 +26,7 @@ const PatientVerification = ({
   const verificationFields: { label: string; status?: string }[] = [
     { label: 'P', status: verificationStatus },
     { label: 'I', status: insuranceVerification },
-    { label: 'C', status: patientConsent },
+    { label: 'P&C', status: patientConsent },
     { label: 'CC', status: creditCardVerificationStatus },
   ]
 
