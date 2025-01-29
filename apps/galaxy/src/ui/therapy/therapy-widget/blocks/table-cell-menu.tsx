@@ -37,7 +37,7 @@ const HeadingCellMenu = ({ data, title }: HeadingCellMenuProps) => {
   return (
     <DropdownMenu.Root>
       <DropdownMenu.Trigger>
-        <PlusIcon className="absolute right-1" size={16} />
+        <PlusIcon className="cursor-pointer absolute right-1" size={16} />
       </DropdownMenu.Trigger>
       <DropdownMenu.Content className="w-[359px]">
         {data.map((item) => {
@@ -72,7 +72,7 @@ const HeadingCellMenu = ({ data, title }: HeadingCellMenuProps) => {
                 </Text>
                 {!isSelected && (
                   <CirclePlus
-                    className="group-hover:text-pp-focus-border"
+                    className="cursor-pointer group-hover:text-pp-focus-border"
                     size={20}
                   />
                 )}
