@@ -34,7 +34,6 @@ const ServiceSelect = () => {
 
   useEffect(() => {
     if (!locationId) return
-    form.resetField('service')
     setLoading(true)
     getLocationServices({ locationIds: [locationId] }).then((res) => {
       setLoading(false)
@@ -63,12 +62,12 @@ const ServiceSelect = () => {
             !!selectedService?.isServiceTimeDependent,
           )
           form.setValue('service', value)
-          form.resetField('providerType')
-          form.resetField('provider')
-          form.resetField('visitType')
-          form.resetField('visitSequence')
-          form.resetField('visitMedium')
-          form.resetField('duration')
+          form.setValue('providerType', '')
+          form.setValue('provider', '')
+          form.setValue('visitType', '')
+          form.setValue('visitSequence', '')
+          form.setValue('visitMedium', '')
+          form.setValue('duration', '')
         }}
         disabled={!isServiceTimeDependent}
         loading={loading}

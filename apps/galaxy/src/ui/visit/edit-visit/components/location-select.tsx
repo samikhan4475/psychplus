@@ -27,7 +27,6 @@ const LocationSelect = ({ states }: { states: StateCodeSet[] }) => {
     const state =
       states.filter((state) => state.stateCode === stateCode)?.[0] || {}
     if (!state.id) return
-    form.resetField('location')
     setLoading(true)
     getClinicLocations(state.id).then((res) => {
       setLoading(false)
@@ -46,6 +45,11 @@ const LocationSelect = ({ states }: { states: StateCodeSet[] }) => {
         options={locations}
         buttonClassName="h-6 w-full"
         field="location"
+        onValueChange={val => {
+          form.setValue('location', val)
+          form.setValue('service', '')
+          form.setValue('providerType', '')
+        }}
         disabled={!isServiceTimeDependent}
         loading={loading}
       />

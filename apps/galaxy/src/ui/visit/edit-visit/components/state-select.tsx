@@ -33,6 +33,10 @@ const StateSelect = ({
         field="state"
         buttonClassName="h-6 w-full"
         options={options}
+        onValueChange={(val) => {
+          form.setValue('state', val)
+          form.setValue('location', '')
+        }}
         disabled={!isServiceTimeDependent}
         loading={loadingStates}
       />

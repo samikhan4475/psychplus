@@ -26,7 +26,6 @@ const ProviderSelect = () => {
 
   useEffect(() => {
     if (!location || !providerType) return
-    form.resetField('provider')
     setLoading(true)
     getProviders({
       locationIds: [location],

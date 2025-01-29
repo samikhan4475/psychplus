@@ -67,6 +67,10 @@ const ProviderTypeSelect = ({
       <SelectInput
         options={options}
         buttonClassName="h-6 w-full"
+        onValueChange={(val) => {
+          form.setValue('providerType', val)
+          form.setValue('provider', '')
+        }}
         field="providerType"
         disabled={
           (!serviceId || !isServiceTimeDependent) &&

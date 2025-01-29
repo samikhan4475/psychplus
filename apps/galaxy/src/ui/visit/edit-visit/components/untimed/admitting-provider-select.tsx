@@ -31,7 +31,6 @@ const AdmittingProviderSelect = ({
   const canChangeAdmittingProvider = useHasPermission('editAdmittingProvider')
 
   useEffect(() => {
-    form.resetField('admittingProvider')
     if (!location || !providerType) return
     setLoading(true)
     getProviders({
