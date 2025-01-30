@@ -98,7 +98,7 @@ const hpiWidgetSchema = z
     })
 
     if (
-      data?.chiefComplaint?.length !== 3 &&
+      data?.chiefComplaint?.length < 3 &&
       (data?.hpiOther?.length || 0) < 30
     ) {
       ctx.addIssue({
