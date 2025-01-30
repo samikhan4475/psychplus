@@ -39,6 +39,9 @@ const SocialHxWidget = ({
     widgetContainerCheckboxField: form.watch('widgetContainerCheckboxField'),
   }
 
+  const isShow =
+    form.watch('widgetContainerCheckboxField') === 'show' || isHistoryHeader
+
   return (
     <FormProvider {...form}>
       <WidgetFormContainer
@@ -66,7 +69,7 @@ const SocialHxWidget = ({
         formResetValues={defaultInitialValues}
         topHeader={isHistoryHeader && <SocialHxHeader />}
       >
-        {form.watch('widgetContainerCheckboxField') === 'show' ? (
+        {isShow ? (
           <>
             <RelationshipStatusBlock />
             <EducationBlock />

@@ -31,6 +31,9 @@ const PastMedicalHxWidget = ({
     ...getInitialValues(),
     widgetContainerCheckboxField: form.watch('widgetContainerCheckboxField'),
   }
+
+  const isShow =
+    form.watch('widgetContainerCheckboxField') === 'show' || isHistoryHeader
   return (
     <Flex direction="column" width="100%" gap="2">
       <FormProvider {...form}>
@@ -57,7 +60,7 @@ const PastMedicalHxWidget = ({
           formResetValues={defaultInitialValues}
           topHeader={isHistoryHeader && <PastMedicalHeader />}
         >
-          {form.watch('widgetContainerCheckboxField') === 'show' && (
+          {isShow && (
             <>
               <ConditionsBlock />
             </>

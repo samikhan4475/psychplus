@@ -48,6 +48,9 @@ const SubstanceUseHxWidget = ({
     widgetContainerCheckboxField: form.watch('widgetContainerCheckboxField'),
   }
 
+  const isShow =
+    form.watch('widgetContainerCheckboxField') === 'show' || isHistoryHeader
+
   return (
     <FormProvider {...form}>
       <WidgetFormContainer
@@ -73,7 +76,7 @@ const SubstanceUseHxWidget = ({
         formResetValues={defaultInitialValues}
         topHeader={isHistoryHeader && <SubstanceUseHxHxHeader />}
       >
-        {form.watch('widgetContainerCheckboxField') === 'show' && (
+        {isShow && (
           <>
             <TobaccoBlock />
             <AlcoholDrugsBlock />

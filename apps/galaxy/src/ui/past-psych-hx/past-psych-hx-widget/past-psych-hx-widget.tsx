@@ -1,7 +1,7 @@
 'use client'
 
 import { Flex } from '@radix-ui/themes'
-import { FormProvider, useFormContext } from 'react-hook-form'
+import { FormProvider } from 'react-hook-form'
 import {
   WidgetClearButton,
   WidgetFormContainer,
@@ -38,6 +38,8 @@ const PastPsychHxWidget = ({
     ...getInitialValues(),
     widgetContainerCheckboxField: watch('widgetContainerCheckboxField'),
   }
+  const isShow =
+    watch('widgetContainerCheckboxField') === 'show' || isHistoryHeader
 
   return (
     <FormProvider {...form}>
@@ -68,7 +70,7 @@ const PastPsychHxWidget = ({
         formResetValues={defaultInitialValues}
         topHeader={isHistoryHeader && <PastPsychHeader />}
       >
-        {watch('widgetContainerCheckboxField') === 'show' && (
+        {isShow && (
           <>
             <Flex align="center" gap="2">
               <PsychHospitalizationsBlock />

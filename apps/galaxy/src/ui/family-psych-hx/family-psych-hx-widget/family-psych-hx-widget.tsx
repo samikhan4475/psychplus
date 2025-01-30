@@ -1,6 +1,6 @@
 'use client'
 
-import { FormProvider, useFormContext } from 'react-hook-form'
+import { FormProvider } from 'react-hook-form'
 import {
   WidgetClearButton,
   WidgetFormContainer,
@@ -33,6 +33,9 @@ const FamilyPsychHxWidget = ({
     widgetContainerCheckboxField: watch('widgetContainerCheckboxField'),
   }
 
+  const isShow =
+    form.watch('widgetContainerCheckboxField') === 'show' || isHistoryHeader
+
   return (
     <FormProvider {...form}>
       <WidgetFormContainer
@@ -58,7 +61,7 @@ const FamilyPsychHxWidget = ({
         formResetValues={defaultInitialValues}
         topHeader={isHistoryHeader && <PastFamilyHeader />}
       >
-        {watch('widgetContainerCheckboxField') === 'show' && (
+        {isShow && (
           <>
             <ConditionsBlock />
             <OtherBlock />
