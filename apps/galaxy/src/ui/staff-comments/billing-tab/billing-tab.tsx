@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect } from 'react'
+import { Flex } from '@radix-ui/themes'
 import { useStore as zustandUseStore } from 'zustand'
 import { SelectOptionType } from '@/types'
 import { AddCommentForm, TabContentHeading } from '../shared'
@@ -28,15 +29,17 @@ const BillingTab = ({ staffOptions }: BillingTabProps) => {
   }, [fetchComments])
 
   return (
-    <>
-      <TabContentHeading title={TAB_TITLE} />
-      <AddCommentForm />
-      <BillingDataTable
-        comments={billingComments ?? []}
-        staffOptions={staffOptions}
-        loading={loading ?? false}
-      />
-    </>
+
+      <Flex direction="column" gap="1">
+        <TabContentHeading title={TAB_TITLE} />
+        <AddCommentForm />
+        <BillingDataTable
+          comments={billingComments ?? []}
+          staffOptions={staffOptions}
+          loading={loading ?? false}
+        />
+      </Flex>
+
   )
 }
 
