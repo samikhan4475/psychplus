@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Flex } from '@radix-ui/themes'
 import { FormProvider } from 'react-hook-form'
 import { WidgetFormContainer, WidgetSaveButton } from '@/components'
@@ -80,6 +80,17 @@ const PhysicalExamWidget = ({
     setNormalChipsSelected([])
   }
 
+  useEffect(() => {
+    setNormalChipsSelected(
+      Object.values(initialValue)
+        .flat()
+        .filter(
+          (value) =>
+            value.includes('Normal') || dependentNormalValues.includes(value),
+        ),
+    )
+  }, [initialValue])
+
   return (
     <FormProvider {...form}>
       <WidgetFormContainer
@@ -115,7 +126,12 @@ const PhysicalExamWidget = ({
           </Flex>
         }
         topHeader={isPhysicalExamTab && <PhysicalExamHeader />}
-        formResetValues={createEmptyFormValues()}
+        formResetValues={{
+          ...createEmptyFormValues(),
+          widgetContainerCheckboxField: form.watch(
+            'widgetContainerCheckboxField',
+          ),
+        }}
         handleOnClear={handleOnClear}
       >
         <GeneralBlock

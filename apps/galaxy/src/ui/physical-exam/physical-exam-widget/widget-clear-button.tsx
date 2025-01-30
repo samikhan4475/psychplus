@@ -20,7 +20,12 @@ const WidgetClearButton = ({
       onClick={(e) => {
         e.preventDefault()
         handleOnClear()
-        form?.reset(createEmptyFormValues)
+        form?.reset({
+          ...createEmptyFormValues(),
+          widgetContainerCheckboxField: form.watch(
+            'widgetContainerCheckboxField',
+          ),
+        })
       }}
     >
       Clear

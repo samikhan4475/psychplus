@@ -39,6 +39,7 @@ const RosWidget = ({ patientId, initialValue }: HpiWidgetProps) => {
         widgetId={QuickNoteSectionName.QuicknoteSectionReviewOfSystem}
         title="ROS (Review of System)"
         getData={transformOut(patientId)}
+        tags={[QuickNoteSectionName.QuicknoteSectionReviewOfSystem]}
         headerRight={
           <>
             <WidgetClearButton defaultInitialValues={getInitialValues} />
