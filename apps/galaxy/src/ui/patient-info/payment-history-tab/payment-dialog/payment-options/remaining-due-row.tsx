@@ -21,8 +21,13 @@ const RemainingDueRow = () => {
         field="paymentType"
         label="Pay Remaining Due (Balance)"
         value={PaymentType.OutstandingBalance}
-        onCheckedChange={() => {
-          setValue('outstandingBalanceAmount', remainingBalance)
+        onCheckedChange={(value) => {
+          setValue(
+            'outstandingBalanceAmount',
+            value?.includes(PaymentType.OutstandingBalance)
+              ? remainingBalance
+              : '',
+          )
         }}
         disabled={!shouldDisable(PaymentType.CustomPayment)}
       />

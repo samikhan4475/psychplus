@@ -79,19 +79,16 @@ const CustomChargeForm = ({
         <ChargeSelect />
         <DescriptionInput />
       </Grid>
-      <Grid columns="4" gap="3">
+      <Grid columns="3" gap="3">
         <UnAppliedBalanceInput />
         <DatePickerField />
         <TimeSelect />
-        <AmountInput />
       </Grid>
-      {transaction && transaction.type === 'Visit' && (
-        <Grid columns="3" className="overflow-hidden rounded-2 shadow-2">
-          <CoPayBlock />
-          <CoInsBlock />
-          <BalanceBlock />
-        </Grid>
-      )}
+      <Grid columns="3" className="overflow-hidden rounded-2 shadow-2">
+        <CoPayBlock />
+        <CoInsBlock />
+        <BalanceBlock />
+      </Grid>
 
       <SaveChargesButton />
     </FormContainer>

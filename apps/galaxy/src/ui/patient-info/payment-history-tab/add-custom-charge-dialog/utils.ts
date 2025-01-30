@@ -2,7 +2,7 @@ import { getCalendarDate } from '@/utils'
 import { PatientTransaction } from '../types'
 
 const toTwoDecimalString = (value?: number): string =>
-  value !== undefined && value !== null ? value.toFixed(2) : ''
+  value !== undefined && value !== null ? value.toFixed(2) : '0.00'
 
 const getInitialValues = (transaction?: Partial<PatientTransaction>) => ({
   type: transaction?.type ?? '',

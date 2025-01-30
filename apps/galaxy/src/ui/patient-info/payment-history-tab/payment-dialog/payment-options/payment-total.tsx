@@ -8,7 +8,7 @@ import { twoDecimal } from '../utils'
 const PaymentTotal = () => {
   const { watch } = useFormContext<PaymentDetailSchemaType>()
   const values = watch([
-    'remainingBalance',
+    'outstandingBalanceAmount',
     'coPayAmount',
     'coInsAmount',
     'customAmount',

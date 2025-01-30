@@ -7,9 +7,19 @@ import { PaymentInput } from './shared'
 const CoInsBlock = () => {
   return (
     <Flex direction="column" className="rounded-2">
-      <Text className="border-b-2 border-r-2 border-indigo-4 bg-indigo-3 px-1 py-0.5 text-1 font-medium">
-        Co-Ins
-      </Text>
+      <Flex
+        gap="1"
+        className="border-b-2 border-indigo-4 bg-indigo-3 px-1 py-0.5"
+        align="center"
+      >
+        <Text size="1" weight="medium">
+          Co-Ins
+        </Text>
+        <FormFieldError
+          name="coInsuranceDue"
+          className="text-[10px] font-bold"
+        />
+      </Flex>
       <Flex gap="2" className="border-r-2 border-indigo-3 p-1">
         <PaymentInput label="Due PT" field="coInsuranceDue" />
         <PaymentInput
@@ -18,8 +28,6 @@ const CoInsBlock = () => {
           disabled
         />
         <PaymentInput label="Paid" field="coInsurancePaid" disabled />
-
-        <FormFieldError name="coInsuranceDue" />
       </Flex>
     </Flex>
   )

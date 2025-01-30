@@ -45,7 +45,6 @@ const PaymentDetailForm = ({
   useEffect(() => {
     form.reset({
       ...form.getValues(),
-      outstandingBalanceAmount: remainingBalance,
       remainingBalance: remainingBalance,
     })
   }, [remainingBalance, form])
