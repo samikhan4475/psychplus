@@ -128,7 +128,7 @@ const PatientInfoTab = ({
             </Flex>
           </ScrollArea>
         </PatientInfoForm>
-        {patient.patientConsent !== "Verified" && (
+        {patient.patientConsent !== "Verified" &&  policyDescriptions?.length > 0 && (
           <PolicyConsentDialog
             open={isPolicyAlertOpen}
             onOpenChange={setIsPolicyAlertOpen}
