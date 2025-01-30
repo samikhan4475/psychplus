@@ -1,5 +1,7 @@
 'use client'
 
+import { CODESETS } from '@/constants'
+import { useCodesetCodes } from '@/hooks'
 import {
   BlockContainer,
   LabelAndValue,
@@ -28,15 +30,23 @@ const SecondaryNoteResults = () => {
     patientName = getPatientFullName(patient?.legalName)
   }
 
+  const selectedNoteTitle = useCodesetCodes(CODESETS.NoteTitle).find(
+    (item) => item.value === noteDetail?.[0].noteTitleCode,
+  )?.display
+
+  const selectedNoteType = useCodesetCodes(CODESETS.NoteType).find(
+    (item) => item.value === noteDetail?.[0].noteTypeCode,
+  )?.display
+
   return (
     <BlockContainer heading="Results">
       <LabelAndValue
         label="Note Title:"
-        value={noteDetail?.[0].noteTitleCode ?? ''}
+        value={selectedNoteTitle ?? noteDetail?.[0].noteTitleCode ?? ''}
       />
       <LabelAndValue
         label="Note Type:"
-        value={noteDetail?.[0].noteTypeCode ?? ''}
+        value={selectedNoteType ?? noteDetail?.[0].noteTypeCode ?? ''}
       />
       <LabelAndValue label="Provider:" value={selectedRow?.signedByUserName} />
       <LabelAndValue
