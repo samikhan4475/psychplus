@@ -1,3 +1,4 @@
+import { useFormContext } from 'react-hook-form'
 import { GroupSelectOption, GroupSelectSection } from '@/components'
 import { useGroupSelection } from '@/hooks/use-group-selection'
 
@@ -42,6 +43,8 @@ const NEURO_BLOCK_OPTIONS: GroupSelectOption<string>[] = [
 ]
 
 const NeuroBlock = () => {
+  const form = useFormContext()
+  const error = form.formState?.errors
   const { handleOptionSelect } = useGroupSelection({
     key: BLOCK_ID,
     value: 'neuNoConcerns',
@@ -52,6 +55,9 @@ const NeuroBlock = () => {
       field={BLOCK_ID}
       options={NEURO_BLOCK_OPTIONS}
       onToggle={handleOptionSelect}
+      chipClassName={`${
+        error?.reviewSystemError?.message ? 'border border-tomato-11' : ''
+      }`}
     />
   )
 }

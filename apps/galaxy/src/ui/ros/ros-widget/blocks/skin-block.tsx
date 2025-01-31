@@ -1,3 +1,4 @@
+import { useFormContext } from 'react-hook-form'
 import { GroupSelectOption, GroupSelectSection } from '@/components'
 import { useGroupSelection } from '@/hooks/use-group-selection'
 
@@ -38,6 +39,8 @@ const SKIN_BLOCK_OPTIONS: GroupSelectOption<string>[] = [
 ]
 
 const SkinBlock = () => {
+  const form = useFormContext()
+  const error = form.formState?.errors
   const { handleOptionSelect } = useGroupSelection({
     key: BLOCK_ID,
     value: 'sknNoConcerns',
@@ -48,6 +51,9 @@ const SkinBlock = () => {
       field={BLOCK_ID}
       options={SKIN_BLOCK_OPTIONS}
       onToggle={handleOptionSelect}
+      chipClassName={`${
+        error?.reviewSystemError?.message ? 'border border-tomato-11' : ''
+      }`}
     />
   )
 }

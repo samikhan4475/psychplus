@@ -1,7 +1,9 @@
 'use client'
 
+import { useSearchParams } from 'next/navigation'
 import { FormProvider } from 'react-hook-form'
 import {
+  FormFieldError,
   WidgetClearButton,
   WidgetFormContainer,
   WidgetSaveButton,
@@ -20,6 +22,7 @@ import {
   SkinBlock,
 } from './blocks'
 import { CheckAllNoConcernCell } from './check-all-no-concern-cell'
+import { ERROR_ID } from './constant'
 import { transformOut } from './data'
 import { useRosWidgetForm } from './ros-widget-form'
 import { RosWidgetSchemaType } from './ros-widget-schema'
@@ -31,7 +34,9 @@ interface HpiWidgetProps {
 }
 
 const RosWidget = ({ patientId, initialValue }: HpiWidgetProps) => {
-  const form = useRosWidgetForm(initialValue)
+  const searchParams = useSearchParams()
+  const visitType = searchParams.get('visitType') || ''
+  const form = useRosWidgetForm(initialValue, visitType)
   return (
     <FormProvider {...form}>
       <WidgetFormContainer
@@ -39,7 +44,6 @@ const RosWidget = ({ patientId, initialValue }: HpiWidgetProps) => {
         widgetId={QuickNoteSectionName.QuicknoteSectionReviewOfSystem}
         title="ROS (Review of System)"
         getData={transformOut(patientId)}
-        tags={[QuickNoteSectionName.QuicknoteSectionReviewOfSystem]}
         headerRight={
           <>
             <WidgetClearButton defaultInitialValues={getInitialValues} />
@@ -59,6 +63,7 @@ const RosWidget = ({ patientId, initialValue }: HpiWidgetProps) => {
         <SkinBlock />
         <MusculoskeletalBlock />
         <NeuroBlock />
+        <FormFieldError name={ERROR_ID} />
       </WidgetFormContainer>
     </FormProvider>
   )

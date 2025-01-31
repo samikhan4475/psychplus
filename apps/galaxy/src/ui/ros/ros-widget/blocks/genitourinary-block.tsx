@@ -1,3 +1,4 @@
+import { useFormContext } from 'react-hook-form'
 import { GroupSelectOption, GroupSelectSection } from '@/components'
 import { useGroupSelection } from '@/hooks/use-group-selection'
 
@@ -34,6 +35,8 @@ const GENITOURINARY_BLOCK_OPTIONS: GroupSelectOption<string>[] = [
 ]
 
 const GenitourinaryBlock = () => {
+  const form = useFormContext()
+  const error = form.formState?.errors
   const { handleOptionSelect } = useGroupSelection({
     key: BLOCK_ID,
     value: 'guNoConcerns',
@@ -44,6 +47,9 @@ const GenitourinaryBlock = () => {
       field={BLOCK_ID}
       options={GENITOURINARY_BLOCK_OPTIONS}
       onToggle={handleOptionSelect}
+      chipClassName={`${
+        error?.reviewSystemError?.message ? 'border border-tomato-11' : ''
+      }`}
     />
   )
 }
