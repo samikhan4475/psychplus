@@ -1,6 +1,6 @@
 import { Flex, Text } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
-import { CheckboxInput } from '@/components'
+import { CheckboxInput, FormFieldError } from '@/components'
 import { INTERACTIVE_COMPLEXITY_BLOCK_OPTIONS } from '../constants'
 
 const InteractiveComplexityBlock = () => {
@@ -36,6 +36,7 @@ const InteractiveComplexityBlock = () => {
           ))}
         </Flex>
       )}
+      <FormFieldError name="interactiveComplexity" />
     </Flex>
   )
 }

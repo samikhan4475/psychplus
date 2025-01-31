@@ -1,36 +1,34 @@
 import { z } from 'zod'
 
-const TherapySessionParticipantsEnum = z.enum(
-  ['PatientsOnly', 'PatientwithPatient/Guardian', 'Patient&Other'],
-  { required_error: 'required' },
-)
-
-type TherapySessionParticipantsEnumType = z.infer<
-  typeof TherapySessionParticipantsEnum
->
-
 const TherapySchema = z
   .object({
-    therapyTimeSpent: z.string().min(1, { message: 'Time Spent is required' }),
+    therapyTimeSpent: z
+      .string()
+      .min(1, { message: 'Therapy time must be entered' }),
     timeRangeOne: z
       .string()
       .optional()
       .refine((val) => !val || (Number(val) >= 16 && Number(val) <= 37), {
-        message: 'Value must be between 16 and 37',
+        message:
+          'Time spent must be specified and must be greater than 16 minutes for Therapy.',
       }),
     timeRangeTwo: z
       .string()
       .optional()
       .refine((val) => !val || (Number(val) >= 38 && Number(val) <= 52), {
-        message: 'Value must be between 38 and 52',
+        message:
+          'Time spent must be specified and must be greater than 38 minutes for Therapy.',
       }),
     timeRangeThree: z
       .string()
       .optional()
       .refine((val) => !val || (Number(val) >= 53 && Number(val) <= 99), {
-        message: 'Value must be between 53 and 99',
+        message:
+          'Time spent must be specified and must be greater than 53 minutes for Therapy ',
       }),
-    therapySessionParticipants: TherapySessionParticipantsEnum,
+    therapySessionParticipants: z
+      .string()
+      .min(1, { message: 'Session Participants must be selected' }),
     patientOther: z.string().optional(),
     therapyDetailsModality: z
       .array(
@@ -39,7 +37,7 @@ const TherapySchema = z
           display: z.string().min(1, { message: 'Display is required' }),
         }),
       )
-      .min(1, { message: 'Therapy Modality is required' }),
+      .min(1, { message: 'Modality must be selected.' }),
     therapyDetailsInterventions: z
       .array(
         z.object({
@@ -47,38 +45,39 @@ const TherapySchema = z
           display: z.string().min(1, { message: 'Display is required' }),
         }),
       )
-      .min(1, { message: 'Interventions is required' }),
-    additionalTherapyDetail: z.string().min(1, { message: 'required' }),
+      .min(1, { message: 'Interventions must be selected.' }),
+    additionalTherapyDetail: z.string().min(1, {
+      message:
+        'Additional details for Therapy must be provided.',
+    }),
   })
   .superRefine((data, ctx) => {
     if (data.therapyTimeSpent === 'timeRangeOne' && !data.timeRangeOne) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         path: ['timeRangeOne'],
-        message: 'Required',
+        message:
+          'Time spent must be specified and must be greater than 16 minutes for Therapy.',
       })
     }
     if (data.therapyTimeSpent === 'timeRangeTwo' && !data.timeRangeTwo) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         path: ['timeRangeTwo'],
-        message: 'Required',
+        message:
+          'Time spent must be specified and must be greater than 38 minutes for Therapy.',
       })
     }
     if (data.therapyTimeSpent === 'timeRangeThree' && !data.timeRangeThree) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         path: ['timeRangeThree'],
-        message: 'Required',
+        message:
+          'Time spent must be specified and must be greater than 53 minutes for Therapy.',
       })
     }
   })
 
 type TherapySchemaType = z.infer<typeof TherapySchema>
 
-export {
-  TherapySchema,
-  type TherapySchemaType,
-  TherapySessionParticipantsEnum,
-  type TherapySessionParticipantsEnumType,
-}
+export { TherapySchema, type TherapySchemaType }

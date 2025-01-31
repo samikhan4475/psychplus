@@ -45,7 +45,7 @@ const TherapyTableBlock = () => {
       !therapyDetailsInterventions.length && interventionError
 
     if (modalityEmpty && interventionEmpty) {
-      return 'Therapy Modality & Interventions are required'
+      return 'Modality & Interventions must be selected'
     }
     if (modalityEmpty) {
       return modalityError

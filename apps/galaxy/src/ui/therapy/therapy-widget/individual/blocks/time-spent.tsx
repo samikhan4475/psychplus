@@ -1,5 +1,7 @@
 import { Flex } from '@radix-ui/themes'
+import { useFormContext } from 'react-hook-form'
 import { FormFieldError, RadioSelectInput } from '@/components'
+import { TherapySchemaType } from '../therapy-schema'
 
 const BLOCK_ID = 'therapyTimeSpent'
 
@@ -25,6 +27,8 @@ export const BLOCK_OPTIONS = [
 ]
 
 const TherapyTimeSpentBlock = () => {
+  const { watch } = useFormContext<TherapySchemaType>()
+  const therapyTimeSpent = watch(BLOCK_ID)
   return (
     <Flex height="24" align="center" gap="4" className="bg-white z-10">
       <RadioSelectInput
@@ -33,7 +37,7 @@ const TherapyTimeSpentBlock = () => {
         options={BLOCK_OPTIONS}
         required
       />
-      <FormFieldError name={BLOCK_ID} />
+      {!therapyTimeSpent && <FormFieldError name={BLOCK_ID} />}
     </Flex>
   )
 }

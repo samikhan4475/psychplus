@@ -1,10 +1,7 @@
 import { DateValue } from 'react-aria-components'
 import { z } from 'zod'
 import { ectWidgetSchema } from '@/ui/procedures/ect-tab/ect-tab-schema'
-import {
-  TherapySchema,
-  TherapySessionParticipantsEnum,
-} from '@/ui/therapy/therapy-widget/individual/therapy-schema'
+import { TherapySchema } from '@/ui/therapy/therapy-widget/individual/therapy-schema'
 
 type AddOnWidgetSchemaType = z.infer<typeof addOnWidgetSchema>
 
@@ -44,10 +41,10 @@ const dateValidation = z.custom<DateValue | null>()
 
 // Injection schema validation
 const injectionSchema = z.object({
-  drugName: z.string().min(1, 'required'),
-  dose: z.string().min(1, 'required'),
-  siteLocations: z.string().min(1, 'required'),
-  manufacturer: z.string().min(1, 'required'),
+  drugName: z.string().min(1, 'Injection drug name must be entered.'),
+  dose: z.string().min(1, 'Injection dose must be specified.'),
+  siteLocations: z.string().min(1, 'Injection site location must be recorded.'),
+  manufacturer: z.string().min(1, 'Injection manufacturer must be recorded.'),
   expirationDate: dateValidation,
 })
 
@@ -59,7 +56,7 @@ const psychoanalysisSchema = z.object({
   psychoanalyticTechnique: codesetOptionsPsychoanalysis.min(1, {
     message: 'Psychoanalytic Technique is required',
   }),
-  additionalPsychoAnalysisDetail: z.string().min(1, 'required'),
+  additionalPsychoAnalysisDetail: z.string().min(1, 'Additional details for Psychoanalysis must be provided.'),
 })
 
 // Base schema validation for all add-on widgets
@@ -92,7 +89,7 @@ const baseSchema = z.object({
   patientOther: z.string().optional(),
   therapyDetailsModality: codesetOptions.optional(),
   therapyDetailsInterventions: codesetOptions.optional(),
-  therapySessionParticipants: TherapySessionParticipantsEnum.optional(),
+  therapySessionParticipants: z.string().optional(),
   additionalTherapyDetail: z.string().optional(),
 
   // psychoanalysis schema
@@ -123,6 +120,23 @@ const baseSchema = z.object({
 })
 
 const addOnWidgetSchema = baseSchema.superRefine(async (data, ctx) => {
+  if (data.interactiveComplexity) {
+    // Interactive Complexity Validation
+    const hasAtLeastOne =
+      data.maladaptiveCommunication ||
+      data.caregiverEmotions ||
+      data.sentinelEvent ||
+      data.languageBarrier
+
+    if (!hasAtLeastOne) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message:
+          'At least one checkbox must be selected under Interactive Complexity.',
+        path: ['interactiveComplexity'],
+      })
+    }
+  }
   if (data.injection) {
     // INJECTION schema validation
     await validateSchema(injectionSchema, data, ctx)

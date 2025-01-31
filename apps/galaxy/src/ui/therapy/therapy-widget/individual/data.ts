@@ -1,10 +1,7 @@
 import { QuickNoteSectionItem } from '@/types'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { transformInHelper, transformOutHelper } from '../therapyUtils'
-import {
-  TherapySchemaType,
-  TherapySessionParticipantsEnum,
-} from './therapy-schema'
+import { TherapySchemaType } from './therapy-schema'
 
 export const transformOut =
   (
@@ -35,8 +32,7 @@ export const transformIn = (
 ): TherapySchemaType => {
   const defaultSchema: TherapySchemaType = {
     therapyTimeSpent: '',
-    therapySessionParticipants:
-      TherapySessionParticipantsEnum.Values.PatientsOnly,
+    therapySessionParticipants: 'PatientsOnly',
     patientOther: '',
     therapyDetailsModality: [],
     therapyDetailsInterventions: [],

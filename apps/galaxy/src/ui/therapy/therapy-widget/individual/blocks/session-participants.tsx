@@ -30,7 +30,9 @@ const TherapySessionParticipantsBlock = () => {
           showIndicator={false}
         />
       )}
-      <FormFieldError name={'therapySessionParticipants'} />
+      {!therapySessionParticipants && (
+        <FormFieldError name={'therapySessionParticipants'} />
+      )}
     </Flex>
   )
 }
