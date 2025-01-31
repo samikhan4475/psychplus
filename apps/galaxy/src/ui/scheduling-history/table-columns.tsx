@@ -11,6 +11,7 @@ import {
   VisitStatusCell,
   VisitTypeCell,
 } from './cells'
+import { VisitIDCell } from './cells/visit-id-cell'
 import { FACILITY_ADMISION_ID_CHECK } from './constants'
 import { SchedulingHistoryData } from './types'
 
@@ -82,7 +83,7 @@ const getSchedulingColumns = (
         />
       ),
 
-      cell: ({ row }) => <TextCell>{row.original.visitId} </TextCell>,
+      cell: VisitIDCell,
     },
     {
       id: 'appointmentDateTime',
