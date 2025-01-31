@@ -1,6 +1,7 @@
-'use server'
+'use client'
 
-import * as api from '@/api'
+import * as api from '@/api/api.client'
+import { GET_PATIENT_SCHEDULING_HISTORY } from '@/api/endpoints'
 import { Sort } from '@/types'
 import { SCHEDULING_HISTORY_LIST_TABLE_PAGE_SIZE } from '../constants'
 import type {
@@ -25,16 +26,14 @@ const getPatientSchedulingHistoryAction = async ({
 > => {
   const offset = (page - 1) * SCHEDULING_HISTORY_LIST_TABLE_PAGE_SIZE
 
-  const url = new URL(api.GET_PATIENT_SCHEDULING_HISTORY(patientId))
+  let url = GET_PATIENT_SCHEDULING_HISTORY(patientId)
+  url += `?limit=${String(
+    SCHEDULING_HISTORY_LIST_TABLE_PAGE_SIZE,
+  )}&offset=${String(offset)}`
   if (sort) {
-    url.searchParams.append('orderBy', `${sort?.column} ${sort?.direction}`)
+    url += `&orderBy=${sort?.column} ${sort?.direction}`
   }
-  url.searchParams.append(
-    'limit',
-    String(SCHEDULING_HISTORY_LIST_TABLE_PAGE_SIZE),
-  )
-  url.searchParams.append('offset', String(offset))
-  const response = await api.POST<SchedulingHistoryData[]>(`${url}`, payload)
+  const response = await api.POST<SchedulingHistoryData[]>(url, payload)
   if (response.state === 'error') {
     return {
       state: 'error',

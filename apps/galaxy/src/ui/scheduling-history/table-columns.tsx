@@ -533,7 +533,7 @@ const getSchedulingColumns = (
           ),
         },
         {
-          id: 'hx',
+          id: 'admission-hx',
           size: 50,
           header: () => (
             <ColumnHeader label="Hx" className="!text-black p-1 !font-medium" />

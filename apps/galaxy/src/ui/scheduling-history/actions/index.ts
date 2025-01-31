@@ -1,4 +1,3 @@
-export * from './get-patient-scheduling-history'
 export * from './get-visit-types'
 export * from './get-patient-facility-history'
 export * from './get-patient-transaction-history'

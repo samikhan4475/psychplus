@@ -1,12 +1,13 @@
+import toast from 'react-hot-toast'
 import { create } from 'zustand'
 import { SelectOptionType, Sort } from '@/types'
 import { getNewSortDir } from '@/utils'
 import {
   getFacilityAdmissionHistoryAction,
-  getPatientSchedulingHistoryAction,
   getPatientTransactionHistoryAction,
   getScheduleStatusHistoryAction,
 } from './actions'
+import { getPatientSchedulingHistoryAction } from './client-actions'
 import type {
   GetSchedulingHistoryListResponse,
   PatientFacilityHistory,
@@ -117,8 +118,10 @@ const useStore = create<Store>((set, get) => ({
       sort: get().sort,
       patientId,
       payload: formValues,
+      page,
     })
     if (result.state === 'error') {
+      toast.error(result.error || 'Failed to fetch scheduling history')
       return set({
         error: result.error,
         loading: false,
@@ -131,6 +134,7 @@ const useStore = create<Store>((set, get) => ({
       pageCache: reset
         ? { [page]: result.data }
         : { ...get().pageCache, [page]: result.data },
+      page,
     })
   },
   sortData: (column) => {

@@ -2,8 +2,7 @@
 
 import { useRouter } from 'next/navigation'
 import { Flex, Text } from '@radix-ui/themes'
-import { Row } from '@tanstack/react-table'
-import { PropsWithRow, TextCell } from '@/components'
+import { PropsWithRow } from '@/components'
 import { useStore as useRootStore } from '@/store'
 import {
   capitalizeName,
@@ -37,7 +36,11 @@ const VisitIDCell = ({ row }: PropsWithRow<SchedulingHistoryData>) => {
   }
   return (
     <Flex align="center" gap="1" p="1" onClick={onRowClick}>
-      <Text className={cn('text-pp-black-3 cursor-pointer')} weight="regular" size="1">
+      <Text
+        className={cn('text-pp-black-3 cursor-pointer')}
+        weight="regular"
+        size="1"
+      >
         {row.original.visitId}
       </Text>
     </Flex>
