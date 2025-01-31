@@ -52,7 +52,7 @@ const TherapyClientView = ({ data = [] }: TherapyClientViewProps) => {
               ', ',
             )}. Interventions that were completed include but are not limited to ${values.therapyDetailsInterventions
             .map((intervention) => intervention.display)
-            .join(', ')}.`
+            .join(', ')}. ${values.additionalTherapyDetail}`
         : ''
 
       const paragraphHeading =
