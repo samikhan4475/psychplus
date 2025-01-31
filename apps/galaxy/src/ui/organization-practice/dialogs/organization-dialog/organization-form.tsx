@@ -46,7 +46,7 @@ const OrganizationForm = ({ data, onCloseModal }: FormProps) => {
       },
     }
 
-    let reqPayload =
+    const reqPayload =
       data && data?.id
         ? {
             ...data,

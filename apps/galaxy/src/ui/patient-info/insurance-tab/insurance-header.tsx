@@ -1,8 +1,12 @@
 'use client'
 
+import { useState } from 'react'
 import { Button, Flex } from '@radix-ui/themes'
 import { Plus } from 'lucide-react'
+import { PermissionAlert } from '@/ui/schedule/shared'
 import { TabContentHeading } from '../shared'
+import { InsurancePermissionMessages } from './constants'
+import { useInsurancePermissions } from './hooks/use-insurance-permissions'
 import { ShowCheckbox } from './show-checkbox'
 import { useStore } from './store'
 
@@ -11,8 +15,14 @@ const InsuranceHeader = () => {
     setAddFormOpen: state.setAddFormOpen,
     isAddFormOpen: state.isAddFormOpen,
   }))
+  const { canAddInsuranceInfo } = useInsurancePermissions()
+  const [isOpen, setIsOpen] = useState<boolean>(false)
 
   const handleAddInsurance = () => {
+    if (!canAddInsuranceInfo) {
+      setIsOpen(true)
+      return
+    }
     if (isAddFormOpen) return
     setAddFormOpen(true)
   }
@@ -37,6 +47,11 @@ const InsuranceHeader = () => {
             </Button>
           </Flex>
         </Flex>
+        <PermissionAlert
+          isOpen={isOpen}
+          onClose={() => setIsOpen(false)}
+          message={InsurancePermissionMessages.addInsurance}
+        />
       </TabContentHeading>
     </Flex>
   )

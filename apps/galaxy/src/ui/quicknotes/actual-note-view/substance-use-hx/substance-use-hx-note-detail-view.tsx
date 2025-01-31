@@ -14,6 +14,10 @@ const SubstanceUseHxNoteDetailView = ({
   visitType,
   visitSequence,
 }: NoteDetailProps) => {
+  const counsellingCodeset = useCodesetCodes(CODESETS.CounsellingOptions)
+  const tobaccoTreatmentCodeset = useCodesetCodes(CODESETS.TobaccoTreatment)
+  const referralTreatmentCodeset = useCodesetCodes(CODESETS.ReferralTreatment)
+
   if (data.length === 0) return null
 
   const transformedData = transformIn(data)
@@ -24,10 +28,6 @@ const SubstanceUseHxNoteDetailView = ({
     visitSequence,
     initialValue: transformedData.widgetContainerCheckboxField,
   })?.actualNoteViewVisibility
-
-  const counsellingCodeset = useCodesetCodes(CODESETS.CounsellingOptions)
-  const tobaccoTreatmentCodeset = useCodesetCodes(CODESETS.TobaccoTreatment)
-  const referralTreatmentCodeset = useCodesetCodes(CODESETS.ReferralTreatment)
 
   return (
     <Details

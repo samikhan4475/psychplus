@@ -15,7 +15,7 @@ import {
 import { DatePickerInput, FormContainer, MultiSelectField } from '@/components'
 import { CODE_NOT_SET, CODESETS } from '@/constants'
 import { useCodesetOptions, useHasPermission } from '@/hooks'
-import { SelectOptionType } from '@/types'
+import { ActionResult, SelectOptionType } from '@/types'
 import { formatDateToISOString, sanitizeFormData } from '@/utils'
 import {
   getOrganizationOptionsAction,
@@ -152,7 +152,7 @@ const LeftPanelFilters = ({ patientId }: { patientId: string }) => {
   ])
 
   const fetchData = async (
-    action: Function,
+    action: () => Promise<ActionResult<SelectOptionType[]>>,
     setter: React.Dispatch<React.SetStateAction<SelectOptionType[]>>,
   ) => {
     const res = await action()

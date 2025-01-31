@@ -5,10 +5,11 @@ import toast from 'react-hot-toast'
 import { addFavoritePharmacyAction } from '../actions'
 
 const StarIconCell = ({ pharmacyId }: { pharmacyId: string }) => {
+  const patientId = useParams().id as string
+
   if (!pharmacyId) {
     return
   }
-  const patientId = useParams().id as string
 
   const handleIconClick = async () => {
     const result = await addFavoritePharmacyAction(pharmacyId, patientId)

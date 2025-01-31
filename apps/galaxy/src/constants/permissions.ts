@@ -1,25 +1,30 @@
 const USER_PERMISSIONS = {
-  sendToPatientQuestionnaireDashboardPage: 'sendToPatientQuestionnaireDashboardPage',
+  sendToPatientQuestionnaireDashboardPage:
+    'sendToPatientQuestionnaireDashboardPage',
   editAdmitReconciliationPopup: 'editAdmitReconciliationPopup',
   changeRelationshipPatientInfo: 'changeRelationshipPatientInfo',
   clickSaveOnEditVisit: 'clickSaveOnEditVisit',
   saveAdmitReconciliationPopup: 'saveAdmitReconciliationPopup',
   changeStatusDiagnosisHistoryPage: 'changeStatusDiagnosisHistoryPage',
-  changeGraphDateRangeQuestionnaireHistoryPage: 'changeGraphDateRangeQuestionnaireHistoryPage',
+  changeGraphDateRangeQuestionnaireHistoryPage:
+    'changeGraphDateRangeQuestionnaireHistoryPage',
   saveDischargeReconciliationPopup: 'saveDischargeReconciliationPopup',
-  changeVisitStatusToCancelledStaffForSelfAppointments: 'changeVisitStatusToCancelledStaffForSelfAppointments',
+  changeVisitStatusToCancelledStaffForSelfAppointments:
+    'changeVisitStatusToCancelledStaffForSelfAppointments',
   copyMyPreviousButtonQuickNotePage: 'copyMyPreviousButtonQuickNotePage',
   starPharmacy: 'starPharmacy',
   savePatient: 'savePatient',
   favoriteMedicationAddMedicationsPage: 'favoriteMedicationAddMedicationsPage',
   makePatientVIPAsProvider: 'makePatientVIPAsProvider',
-  sendQuestionnaireToPatientDashboardPage: 'sendQuestionnaireToPatientDashboardPage',
+  sendQuestionnaireToPatientDashboardPage:
+    'sendQuestionnaireToPatientDashboardPage',
   overrideSelfSchedulePreference: 'overrideSelfSchedulePreference',
   editBillingHistory: 'editBillingHistory',
   saveAddMedicationsPage: 'saveAddMedicationsPage',
   viewPatientInfoHistory: 'viewPatientInfoHistory',
-  addAuthRefInsurancePage: 'addAuthRefInsurancePage',
-  addToNoteButtonHistoryPopupsVisitViewTabs: 'addToNoteButtonHistoryPopupsVisitViewTabs',
+  canAddAuthRefInsurance: 'canAddAuthRefInsurance',
+  addToNoteButtonHistoryPopupsVisitViewTabs:
+    'addToNoteButtonHistoryPopupsVisitViewTabs',
   viewReportEligibility: 'viewReportEligibility',
   bookMultipleSameDayVisitForPatient: 'bookMultipleSameDayVisitForPatient',
   changeStatusVitalsHistory: 'changeStatusVitalsHistory',
@@ -39,7 +44,8 @@ const USER_PERMISSIONS = {
   saveButtonQuickNotePage: 'saveButtonQuickNotePage',
   uploadButtonQuickNotePage: 'uploadButtonQuickNotePage',
   changeVisitStatusToInRoom: 'changeVisitStatusToInRoom',
-  selectProviderNonTimeDependentVisitQuickNotePage: 'selectProviderNonTimeDependentVisitQuickNotePage',
+  selectProviderNonTimeDependentVisitQuickNotePage:
+    'selectProviderNonTimeDependentVisitQuickNotePage',
   dataViewVitalsTab: 'dataViewVitalsTab',
   calendarPopupFollowupTab: 'calendarPopupFollowupTab',
   viewEditUploadImagePatientInfo: 'viewEditUploadImagePatientInfo',
@@ -51,7 +57,7 @@ const USER_PERMISSIONS = {
   sendNoteToCoSign: 'sendNoteToCoSign',
   sendPolicyMessage: 'sendPolicyMessage',
   editDischargeReconciliationPopup: 'editDischargeReconciliationPopup',
-  openInsuranceHistory: 'openInsuranceHistory',
+  canOpenInsuranceHistory: 'canOpenInsuranceHistory',
   addRecommendedPharmacy: 'addRecommendedPharmacy',
   historyQuestionnaireDashboardPage: 'historyQuestionnaireDashboardPage',
   downloadSignedPolicy: 'downloadSignedPolicy',
@@ -59,19 +65,22 @@ const USER_PERMISSIONS = {
   staffCommentAddDeletePaymentPopup: 'staffCommentAddDeletePaymentPopup',
   viewDetailsAllergies: 'viewDetailsAllergies',
   staffCommentAddDeleteEditVisitPopup: 'staffCommentAddDeleteEditVisitPopup',
-  changeTimeAndOrDurationOnlyOfSelfAppointments: 'changeTimeAndOrDurationOnlyOfSelfAppointments',
+  changeTimeAndOrDurationOnlyOfSelfAppointments:
+    'changeTimeAndOrDurationOnlyOfSelfAppointments',
   addVitalsPopup: 'addVitalsPopup',
   copyPreviousButtonQuickNotePage: 'copyPreviousButtonQuickNotePage',
-  addInsuranceInfo: 'addInsuranceInfo',
+  canAddInsuranceInfo: 'canAddInsuranceInfo',
   changeVisitStatusToConfirmedStaff: 'changeVisitStatusToConfirmedStaff',
   changeDateViewQuestionnairePage: 'changeDateViewQuestionnairePage',
   addRelationshipPatientInfo: 'addRelationshipPatientInfo',
   editSelfAppointments: 'editSelfAppointments',
-  changeOtherAppointmentFieldsOfSelfAppointments: 'changeOtherAppointmentFieldsOfSelfAppointments',
+  changeOtherAppointmentFieldsOfSelfAppointments:
+    'changeOtherAppointmentFieldsOfSelfAppointments',
   addCustomCharge: 'addCustomCharge',
   toggleGuardian: 'toggleGuardian',
   clearButtonQuickNotePage: 'clearButtonQuickNotePage',
-  addRecommendedDiagnosisWorkingDiagnosisTab: 'addRecommendedDiagnosisWorkingDiagnosisTab',
+  addRecommendedDiagnosisWorkingDiagnosisTab:
+    'addRecommendedDiagnosisWorkingDiagnosisTab',
   deleteRecommendedPharmacy: 'deleteRecommendedPharmacy',
   clickDownloadButton: 'clickDownloadButton',
   addPaymentCard: 'addPaymentCard',
@@ -85,26 +94,31 @@ const USER_PERMISSIONS = {
   viewLabResults: 'viewLabResults',
   createNoteAddendum: 'createNoteAddendum',
   viewFinancials: 'viewFinancials',
-  signDischargeReconciliationPopupProvider: 'signDischargeReconciliationPopupProvider',
+  signDischargeReconciliationPopupProvider:
+    'signDischargeReconciliationPopupProvider',
   saveAddVitalsPopup: 'saveAddVitalsPopup',
   replyMessageButton: 'replyMessageButton',
   arrowsNextPreviousMarPage: 'arrowsNextPreviousMarPage',
-  eligibilityCheckInsurancePage: 'eligibilityCheckInsurancePage',
+  canAddeligibilityCheckInsurance: 'canAddeligibilityCheckInsurance',
   markAsErrorProviderNotesPage: 'markAsErrorProviderNotesPage',
-  changeVisitStatusToCheckInOfSelfAppointments: 'changeVisitStatusToCheckInOfSelfAppointments',
+  changeVisitStatusToCheckInOfSelfAppointments:
+    'changeVisitStatusToCheckInOfSelfAppointments',
   deleteDiagnosisWorkingDiagnosisTab: 'deleteDiagnosisWorkingDiagnosisTab',
   viewHistoryPCP: 'viewHistoryPCP',
   updateDeductibleRemainingAmount: 'updateDeductibleRemainingAmount',
   verifyEligibilityPopup: 'verifyEligibilityPopup',
   toggleRRI: 'toggleRRI',
   checkEligibilityButtonOnPaymentPopup: 'checkEligibilityButtonOnPaymentPopup',
-  removeFavoriteDiagnosisWorkingDiagnosisTab: 'removeFavoriteDiagnosisWorkingDiagnosisTab',
+  removeFavoriteDiagnosisWorkingDiagnosisTab:
+    'removeFavoriteDiagnosisWorkingDiagnosisTab',
   clickSpecificNoteFromPanelNotesPage: 'clickSpecificNoteFromPanelNotesPage',
   dateRangeMarPage: 'dateRangeMarPage',
-  sendReminderQuestionnaireDashboardPage: 'sendReminderQuestionnaireDashboardPage',
+  sendReminderQuestionnaireDashboardPage:
+    'sendReminderQuestionnaireDashboardPage',
   clickAvailableSlotsInSchedulerView: 'clickAvailableSlotsInSchedulerView',
   clickSaveButtonOnAddVisitPopUp: 'clickSaveButtonOnAddVisitPopUp',
-  clickUserBlockHistoryPopupsVisitViewTabs: 'clickUserBlockHistoryPopupsVisitViewTabs',
+  clickUserBlockHistoryPopupsVisitViewTabs:
+    'clickUserBlockHistoryPopupsVisitViewTabs',
   updateRating: 'updateRating',
   changeCosignerQuickNotePage: 'changeCosignerQuickNotePage',
   saveCharges: 'saveCharges',
@@ -112,7 +126,7 @@ const USER_PERMISSIONS = {
   createAddendumProviderNotesPage: 'createAddendumProviderNotesPage',
   sheetViewVitalsHistory: 'sheetViewVitalsHistory',
   printButtonVisitViewTabs: 'printButtonVisitViewTabs',
-  viewHistoryInsurancePage: 'viewHistoryInsurancePage',
+  canViewHistoryInsurancePage: 'canViewHistoryInsurancePage',
   starRecommendedPharmacy: 'starRecommendedPharmacy',
   rejectNote: 'rejectNote',
   changeStatusVitalsTab: 'changeStatusVitalsTab',
@@ -120,51 +134,81 @@ const USER_PERMISSIONS = {
   changeUnit: 'changeUnit',
   changeRoom: 'changeRoom',
   changeGroup: 'changeGroup',
-  clickAddNewDEAButtonOnCredentialingTabs: "clickAddNewDEAButtonOnCredentialingTabs",
-  clickAddNewCSAButtonOnCredentialingTabs: "clickAddNewCSAButtonOnCredentialingTabs",
-  clickAddNewLicenseButtonOnCredentialingTabs: "clickAddNewLicenseButtonOnCredentialingTabs",
-  clickViewHistoryDEAButtonOnCredentialingTabs: "clickViewHistoryDEAButtonOnCredentialingTabs",
-  clickViewHistoryCSAButtonOnCredentialingTabs: "clickViewHistoryCSAButtonOnCredentialingTabs",
-  clickViewHistoryLincenseButtonOnCredentialingTabs: "clickViewHistoryLincenseButtonOnCredentialingTabs",
-  clickEditDEAButtonOnCredentialingTabs: "clickEditDEAButtonOnCredentialingTabs",
-  clickEditCSAButtonOnCredentialingTabs: "clickEditCSAButtonOnCredentialingTabs",
-  clickEditLicenseButtonOnCredentialingTabs: "clickEditLicenseButtonOnCredentialingTabs",
-  changeVisitStatusToCheckInOfOtherProviderAppointments: 'changeVisitStatusToCheckInOfOtherProviderAppointments',
-  changeVisitStatusToCheckedOutWithOutNote: 'changeVisitStatusToCheckedOutWithOutNote',
-  changeVisitStatusToCancelledStaffForOtherProviderAppointments: 'changeVisitStatusToCancelledStaffForOtherProviderAppointments',
-  editOtherProviderAppointments: "editOtherProviderAppointments",
-  clickDollarIcon: "clickDollarIcon",
-  changeVisitStatusToNoShowForOtherProviderAppointments: "changeVisitStatusToNoShowForOtherProviderAppointments",
-  changeVisitStatusToNoShowForSelfAppointments: "changeVisitStatusToNoShowForSelfAppointments",
-  visitStatusToNoShowForOtherProviderAppointmentsAfterStartTime: "visitStatusToNoShowForOtherProviderAppointmentsAfterStartTime",
+  clickAddNewDEAButtonOnCredentialingTabs:
+    'clickAddNewDEAButtonOnCredentialingTabs',
+  clickAddNewCSAButtonOnCredentialingTabs:
+    'clickAddNewCSAButtonOnCredentialingTabs',
+  clickAddNewLicenseButtonOnCredentialingTabs:
+    'clickAddNewLicenseButtonOnCredentialingTabs',
+  clickViewHistoryDEAButtonOnCredentialingTabs:
+    'clickViewHistoryDEAButtonOnCredentialingTabs',
+  clickViewHistoryCSAButtonOnCredentialingTabs:
+    'clickViewHistoryCSAButtonOnCredentialingTabs',
+  clickViewHistoryLincenseButtonOnCredentialingTabs:
+    'clickViewHistoryLincenseButtonOnCredentialingTabs',
+  clickEditDEAButtonOnCredentialingTabs:
+    'clickEditDEAButtonOnCredentialingTabs',
+  clickEditCSAButtonOnCredentialingTabs:
+    'clickEditCSAButtonOnCredentialingTabs',
+  clickEditLicenseButtonOnCredentialingTabs:
+    'clickEditLicenseButtonOnCredentialingTabs',
+  changeVisitStatusToCheckInOfOtherProviderAppointments:
+    'changeVisitStatusToCheckInOfOtherProviderAppointments',
+  changeVisitStatusToCheckedOutWithOutNote:
+    'changeVisitStatusToCheckedOutWithOutNote',
+  changeVisitStatusToCancelledStaffForOtherProviderAppointments:
+    'changeVisitStatusToCancelledStaffForOtherProviderAppointments',
+  editOtherProviderAppointments: 'editOtherProviderAppointments',
+  clickDollarIcon: 'clickDollarIcon',
+  changeVisitStatusToNoShowForOtherProviderAppointments:
+    'changeVisitStatusToNoShowForOtherProviderAppointments',
+  changeVisitStatusToNoShowForSelfAppointments:
+    'changeVisitStatusToNoShowForSelfAppointments',
+  visitStatusToNoShowForOtherProviderAppointmentsAfterStartTime:
+    'visitStatusToNoShowForOtherProviderAppointmentsAfterStartTime',
   changeLegal: 'changeLegal',
-  changeNonTimedServiceVisitSequence: "changeNonTimedServiceVisitSequence",
-  changeNonTimedServiceVisitMedium: "changeNonTimedServiceVisitMedium",
-  editAdmitDateTime: "editAdmitDateTime",
-  editAdmittingProvider: "editAdmittingProvider",
-  overrideOtherProviderSchedulePreference: "overrideOtherProviderSchedulePreference",
-  clickAddVacationButtonOnAddVisitPopUp: "clickAddVacationButtonOnAddVisitPopUp",
-  clickCalendarViewPlusButton: "clickCalendarViewPlusButton",
-  staffCommentSubsectionFromToBillingEditVisitPopup: "staffCommentSubsectionFromToBillingEditVisitPopup",
+  changeNonTimedServiceVisitSequence: 'changeNonTimedServiceVisitSequence',
+  changeNonTimedServiceVisitMedium: 'changeNonTimedServiceVisitMedium',
+  editAdmitDateTime: 'editAdmitDateTime',
+  editAdmittingProvider: 'editAdmittingProvider',
+  overrideOtherProviderSchedulePreference:
+    'overrideOtherProviderSchedulePreference',
+  clickAddVacationButtonOnAddVisitPopUp:
+    'clickAddVacationButtonOnAddVisitPopUp',
+  clickCalendarViewPlusButton: 'clickCalendarViewPlusButton',
+  staffCommentSubsectionFromToBillingEditVisitPopup:
+    'staffCommentSubsectionFromToBillingEditVisitPopup',
   sendToCosignerButtonNotesPage: 'sendToCosignerButtonNotesPage',
   markAsErrorNotProviderNotesPage: 'markAsErrorNotProviderNotesPage',
   createAddendumNotProviderNotesPage: 'createAddendumNotProviderNotesPage',
   removeCosignerButtonNotesPage: 'removeCosignerButtonNotesPage',
   search90DaysOldNotes: 'search90DaysOldNotes',
   editVisitDuration: 'editVisitDuration',
-  addTheAdmitDateTimeUpTo_30DaysPriorFromTheCurrentDate: 'addTheAdmitDateTimeUpTo_30DaysPriorFromTheCurrentDate',
-  canUncheckOrCheckOwnDeaAlertFromAdminNonAdminView: 'canUncheckOrCheckOwnDeaAlertFromAdminNonAdminView',
-  canUncheckOrCheckOthersDeaAlertFromAdminView: 'canUncheckOrCheckOthersDeaAlertFromAdminView',
-  canClickDeaHistoryIconFromAdminNonAdminView: 'canClickDeaHistoryIconFromAdminNonAdminView',
+  addTheAdmitDateTimeUpTo_30DaysPriorFromTheCurrentDate:
+    'addTheAdmitDateTimeUpTo_30DaysPriorFromTheCurrentDate',
+  canUncheckOrCheckOwnDeaAlertFromAdminNonAdminView:
+    'canUncheckOrCheckOwnDeaAlertFromAdminNonAdminView',
+  canUncheckOrCheckOthersDeaAlertFromAdminView:
+    'canUncheckOrCheckOthersDeaAlertFromAdminView',
+  canClickDeaHistoryIconFromAdminNonAdminView:
+    'canClickDeaHistoryIconFromAdminNonAdminView',
   canClickDeaEditIconFromAdminView: 'canClickDeaEditIconFromAdminView',
-  canUncheckOrCheckOwnCdsAlertFromAdminNonAdminView: 'canUncheckOrCheckOwnCdsAlertFromAdminNonAdminView',
-  canUncheckOrCheckOthersCdsAlertFromAdminView: 'canUncheckOrCheckOthersCdsAlertFromAdminView',
-  canClickCdsHistoryIconFromAdminNonAdminView: 'canClickCdsHistoryIconFromAdminNonAdminView',
+  canUncheckOrCheckOwnCdsAlertFromAdminNonAdminView:
+    'canUncheckOrCheckOwnCdsAlertFromAdminNonAdminView',
+  canUncheckOrCheckOthersCdsAlertFromAdminView:
+    'canUncheckOrCheckOthersCdsAlertFromAdminView',
+  canClickCdsHistoryIconFromAdminNonAdminView:
+    'canClickCdsHistoryIconFromAdminNonAdminView',
   canClickCdsEditIconFromAdminView: 'canClickCdsEditIconFromAdminView',
-  canUncheckOrCheckOwnLicenseAlertFromAdminNonAdminView: 'canUncheckOrCheckOwnLicenseAlertFromAdminNonAdminView',
-  canUncheckOrCheckOthersLicenseAlertFromAdminView: 'canUncheckOrCheckOthersLicenseAlertFromAdminView',
-  canClickLicenseHistoryIconFromAdminNonAdminView: 'canClickLicenseHistoryIconFromAdminNonAdminView',
+  canUncheckOrCheckOwnLicenseAlertFromAdminNonAdminView:
+    'canUncheckOrCheckOwnLicenseAlertFromAdminNonAdminView',
+  canUncheckOrCheckOthersLicenseAlertFromAdminView:
+    'canUncheckOrCheckOthersLicenseAlertFromAdminView',
+  canClickLicenseHistoryIconFromAdminNonAdminView:
+    'canClickLicenseHistoryIconFromAdminNonAdminView',
   canClickLicenseEditIconFromAdminView: 'canClickLicenseEditIconFromAdminView',
+  canSaveInsuranceInfo: 'canSaveInsuranceInfo',
+  canChangeVerificationStatusInsurance: 'canChangeVerificationStatusInsurance',
 }
 
 export { USER_PERMISSIONS }

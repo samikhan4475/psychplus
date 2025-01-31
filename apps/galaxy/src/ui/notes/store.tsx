@@ -65,7 +65,7 @@ interface Store {
     visitSequence: string
     providerType: string
   }) => void
-  updateNotesDetails: (addendum: Addendum | {}) => void
+  updateNotesDetails: (addendum: Addendum | object) => void
   fetchAddendumsDetails: (
     patientId: string,
     appointmentId: string,

@@ -8,12 +8,15 @@ import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { AddressFieldsGroup, FormContainer } from '@/components'
 import { Insurance, InsurancePayer } from '@/types'
+import { PermissionAlert } from '@/ui/schedule/shared'
 import {
   addPolicyAction,
   updatePolicyAction,
   uploadPolicyImage,
 } from '../actions'
-import { AuthAndEligibilityTab } from '../auth-and-eligibility-tab'
+// import { AuthAndEligibilityTab } from '../auth-and-eligibility-tab'
+import { InsurancePermissionMessages } from '../constants'
+import { useInsurancePermissions } from '../hooks/use-insurance-permissions'
 import { ImageCard } from '../shared'
 import { useStore } from '../store'
 import { transformOut } from '../transform'
@@ -94,7 +97,8 @@ const InsuranceForm = memo(
       formState: { isSubmitting },
     } = form
     const watchisPatientPolicyHolder = watch('isPatientPolicyHolder')
-
+    const { canSaveInsuranceInfo } = useInsurancePermissions()
+    const [isOpen, setIsOpen] = useState<boolean>(false)
     useEffect(() => {
       if (!watchisPatientPolicyHolder) {
         registerPolicyHolderFields(register)
@@ -115,6 +119,10 @@ const InsuranceForm = memo(
     }, [insurance, reset])
 
     const onSubmit = async (data: InsuranceSchemaType) => {
+      if (!canSaveInsuranceInfo) {
+        setIsOpen(true)
+        return
+      }
       const payload = transformOut({ insurance, data })
       if (!insurance) delete payload.id
 
@@ -227,8 +235,14 @@ const InsuranceForm = memo(
             <Grid columns="4" gap="3">
               <InsuranceSwitch />
               <PrioritySelect />
-              <PayerSelect insurancePayers={insurancePayers} selectedInsuranceId={selectedInsuranceId}/>
-              <InsurancePlanSelect payers={insurancePayers} selectedInsuranceId={selectedInsuranceId}/>
+              <PayerSelect
+                insurancePayers={insurancePayers}
+                selectedInsuranceId={selectedInsuranceId}
+              />
+              <InsurancePlanSelect
+                payers={insurancePayers}
+                selectedInsuranceId={selectedInsuranceId}
+              />
 
               <MemberIDInput />
               <GroupNumberInput />
@@ -263,6 +277,11 @@ const InsuranceForm = memo(
               ) : null}
             </Grid>
           </Flex>
+          <PermissionAlert
+            isOpen={isOpen}
+            onClose={() => setIsOpen(false)}
+            message={InsurancePermissionMessages.saveInsurance}
+          />
           {/* <AuthAndEligibilityTab /> */}
         </Grid>
       </FormContainer>
