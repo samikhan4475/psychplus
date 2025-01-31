@@ -1,5 +1,4 @@
 'use client'
-
 import { Flex, Separator, Text } from '@radix-ui/themes'
 import { Appointment } from '@/types'
 import { AlertDialog } from './alert-dialog'

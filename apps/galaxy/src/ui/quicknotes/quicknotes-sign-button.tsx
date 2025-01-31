@@ -10,7 +10,6 @@ import { useStore as useGlobalStore } from '@/store'
 import { Appointment } from '@/types'
 import { useStore as useDiagnosisStore } from '@/ui/diagnosis/store'
 import { AlertDialog } from '../alerts'
-import { PolicyConsentDialog } from './policy-consent-dialog'
 import { useStore } from './store'
 import { validateDiagnosis } from './utils'
 
@@ -42,15 +41,12 @@ const QuickNotesSignButton = ({ appointment }: QuickNotesSignButtonProps) => {
     staffId: state.user.staffId,
     staffRoleCode: state.staffResource.staffRoleCode,
   }))
-  const { loading, sign, markAsError, patient, setWidgetsData } = useStore(
-    (state) => ({
-      loading: state.loading,
-      sign: state.sign,
-      setWidgetsData: state.setWidgetsData,
-      markAsError: state.markAsError,
-      patient: state.patient,
-    }),
-  )
+  const { loading, sign, markAsError, setWidgetsData } = useStore((state) => ({
+    loading: state.loading,
+    sign: state.sign,
+    setWidgetsData: state.setWidgetsData,
+    markAsError: state.markAsError,
+  }))
   const isPrescriber = staffRoleCode === STAFF_ROLE_CODE_PRESCRIBER
   const [alertInfo, setAlertInfo] = useState(initialAlertInfo)
 
@@ -69,20 +65,17 @@ const QuickNotesSignButton = ({ appointment }: QuickNotesSignButtonProps) => {
     signedDate: isPrescriber ? new Date().toISOString() : undefined,
     noteTitleCode: appointment.visitNoteTitle,
   }
-  const [isPolicyAlertOpen, setIsPolicyAlertOpen] = useState(false)
 
   const signNoteHandler = async () => {
-    if (patient.patientConsent !== 'Verified') {
-      setIsPolicyAlertOpen(true)
-      return
-    }
-    const missingDiagnosisCodes = await validateDiagnosis({
+    const missingDiagnosisCodes = validateDiagnosis({
       workingDiagnosisData,
       visitType,
     })
 
     if (missingDiagnosisCodes) {
-      toast.error(`Must have ${missingDiagnosisCodes} diagnosis to Sign/Send to signature.`)
+      toast.error(
+        `Must have ${missingDiagnosisCodes} diagnosis to Sign/Send to signature.`,
+      )
       return
     }
     saveWorkingDiagnosis(patientId, setWidgetsData, false)
@@ -168,13 +161,6 @@ const QuickNotesSignButton = ({ appointment }: QuickNotesSignButtonProps) => {
         }}
         loading={loading}
         {...alertInfo}
-      />
-      <PolicyConsentDialog
-        open={isPolicyAlertOpen}
-        onOpenChange={setIsPolicyAlertOpen}
-        title="Warning"
-        message="Patient must sign the policy prior to signing the note. Please send the policy."
-        patientId={patientId}
       />
     </>
   )
