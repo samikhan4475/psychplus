@@ -101,7 +101,7 @@ const ClaimSubmissionDialog = ({
     }
   }
 
-  let submissionStatus = 'Claims Submitted Successfully'
+  let submissionStatus = 'Claim sent for submission'
   if (claimCleanResponses.length > 0 && claimErrorResponses.length > 0) {
     submissionStatus = 'Some Claims Not Submitted'
   } else if (claimErrorResponses.length > 0) {

@@ -14,6 +14,8 @@ interface Store {
   setSelectedPdfFileUrl: (selectedPdfFileUrl: string) => void
   selectedClaimStatus: string
   setSelectedClaimStatus: (selectedClaimStatus: string) => void
+  selectedClaimPrimaryStatus: string
+  setSelectedClaimPrimaryStatus: (selectedClaimStatus: string) => void
   setSelectedClaim: (selectedClaimId: string) => void
   setSelectedPayment: (selectedPaymentId: string, checkNumber: string) => void
   setActiveTab: (tab: Tab) => void
@@ -85,6 +87,9 @@ const useStore = create<Store>((set, get) => ({
   selectedClaimStatus: '',
   setSelectedClaimStatus: (selectedClaimStatus: string) =>
     set(() => ({ selectedClaimStatus: selectedClaimStatus })),
+  selectedClaimPrimaryStatus: '',
+  setSelectedClaimPrimaryStatus: (selectedClaimPrimaryStatus: string) =>
+    set({ selectedClaimPrimaryStatus }),
 }))
 
 export { useStore }
