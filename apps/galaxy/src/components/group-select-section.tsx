@@ -2,6 +2,7 @@
 
 import { Flex } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
+import { cn } from '@/utils'
 import { BlockLabel } from './block-label'
 import { SelectableChip } from './selectable-chip'
 import {
@@ -19,6 +20,7 @@ interface GroupSelectSectionProps<T extends string> {
   onToggle?: (value: string) => void
   editable?: boolean
   chipClassName?: string
+  errorField?: string
 }
 
 interface GroupSelectOption<T extends string> {
@@ -38,10 +40,16 @@ const GroupSelectSection = <T extends string>({
   onToggle,
   editable = true,
   chipClassName,
+  errorField,
 }: GroupSelectSectionProps<T>) => {
   const form = useFormContext()
 
   const values = form.watch(field) as string[]
+
+  let error = undefined
+  if (errorField) {
+    error = form?.formState?.errors?.[errorField]?.message
+  }
 
   const isSelected = (value: string) => {
     return values?.includes(value)
@@ -108,7 +116,7 @@ const GroupSelectSection = <T extends string>({
           selected={isSelected(option.value)}
           onClick={toggleSelected(option.value, option)}
           editable={editable}
-          className={chipClassName}
+          className={cn(chipClassName, error && 'border border-tomato-11')}
         >
           {isSelected(option.value) && option.details && (
             <SelectableChipDetails {...option.details} editable={editable} />

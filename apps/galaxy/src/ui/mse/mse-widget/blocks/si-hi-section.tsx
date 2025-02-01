@@ -1,6 +1,7 @@
-import { Box, Flex } from '@radix-ui/themes'
+import { Flex } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
 import { GroupSelectSection, TextInput, YesNoSelect } from '@/components'
+import { ERROR_ID } from '../constants'
 import { MseGroupDetailSection } from '../history/mse-details/mse-group-detail-section'
 import { MseWidgetSchemaType } from '../mse-widget-schema'
 import { SelectedIndicator } from '../select-indicotor'
@@ -32,6 +33,7 @@ const SiHiSection = ({
         disabled={!!result}
         defaultValue={result ? (result?.[field] as string) : undefined}
         resetOnSameValue={true}
+        errorField={ERROR_ID}
       />
 
       {isYes === 'yes' && (
@@ -60,6 +62,7 @@ const SiHiSection = ({
                     value: `${label.toLowerCase()}UnDisclosed`,
                   },
                 ]}
+                errorField={ERROR_ID}
               />
             )}
             <TextInput

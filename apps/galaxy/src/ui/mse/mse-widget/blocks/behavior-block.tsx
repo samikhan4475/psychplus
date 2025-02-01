@@ -1,4 +1,5 @@
 import { GroupSelectSection } from '@/components'
+import { ERROR_ID } from '../constants'
 import { MseGroupDetailSection } from '../history/mse-details/mse-group-detail-section'
 import { MseWidgetSchemaType } from '../mse-widget-schema'
 import { GroupSelectOption } from '../types'
@@ -45,6 +46,7 @@ const BehaviorBlock = ({ result }: { result?: MseWidgetSchemaType }) => {
           label={BLOCK_TITLE}
           field={BLOCK_ID}
           options={BLOCK_OPTIONS}
+          errorField={ERROR_ID}
         />
       )}
     </>

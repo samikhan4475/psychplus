@@ -13,6 +13,7 @@ interface YesNoSelectProps {
   onChange?: (value: string) => void
   lastOptionIndicator?: boolean
   resetOnSameValue?: boolean
+  errorField?: string
 }
 
 const defaultOptions = [
@@ -38,6 +39,7 @@ const YesNoSelect = ({
   onChange,
   lastOptionIndicator = false,
   resetOnSameValue,
+  errorField,
 }: YesNoSelectProps) => {
   if (isNoFirst) {
     options = reverseDefault
@@ -55,6 +57,7 @@ const YesNoSelect = ({
       onChange={onChange}
       lastOptionIndicator={lastOptionIndicator}
       resetOnSameValue={resetOnSameValue}
+      errorField={errorField}
     />
   )
 }

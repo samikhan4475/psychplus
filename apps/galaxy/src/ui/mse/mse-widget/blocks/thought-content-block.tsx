@@ -3,6 +3,7 @@ import { BlockLabel, GroupSelectSection } from '@/components'
 import { CODESETS } from '@/constants'
 import { useCodesetCodes } from '@/hooks'
 import { cn, mapCodesetToOptions } from '@/utils'
+import { ERROR_ID } from '../constants'
 import { MseGroupDetailSection } from '../history/mse-details/mse-group-detail-section'
 import { type MseWidgetSchemaType } from '../mse-widget-schema'
 import { GroupSelectOption } from '../types'
@@ -65,6 +66,7 @@ const ThoughtContentBlock = ({ result }: { result?: MseWidgetSchemaType }) => {
               <GroupSelectSection
                 field="thoughtContentOther"
                 options={THOUGHT_CONTENT_OTHER_BLOCK_OPTIONS}
+                errorField={ERROR_ID}
               />
             )}
           </>

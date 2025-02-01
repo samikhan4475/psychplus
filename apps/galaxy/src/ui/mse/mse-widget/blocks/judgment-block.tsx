@@ -1,5 +1,6 @@
 import { Flex } from '@radix-ui/themes'
 import { GroupSelectSection } from '@/components'
+import { ERROR_ID } from '../constants'
 import { MseGroupDetailSection } from '../history/mse-details/mse-group-detail-section'
 import { type MseWidgetSchemaType } from '../mse-widget-schema'
 import { GroupSelectOption } from '../types'
@@ -59,11 +60,13 @@ const JudgementBlock = ({ result }: { result?: MseWidgetSchemaType }) => {
                 label="Judgment"
                 field="judgment"
                 options={JUDGEMENT_BLOCK_OPTIONS}
+                errorField={ERROR_ID}
               />
               <GroupSelectSection
                 label="How Tested"
                 field="judgmentHowTested"
                 options={JUDGEMENT_HOWTESTED_BLOCK_OPTIONS}
+                errorField={ERROR_ID}
               />
             </>
           )}

@@ -15,7 +15,13 @@ const WidgetClearButton = () => {
       className="text-black"
       onClick={(e) => {
         e.preventDefault()
-        form?.reset(createEmptyFormValues)
+        form?.reset({
+          ...createEmptyFormValues(),
+          widgetContainerCheckboxField: form.watch(
+            'widgetContainerCheckboxField',
+          ),
+          shouldValidate: form.watch('shouldValidate'),
+        })
       }}
     >
       Clear

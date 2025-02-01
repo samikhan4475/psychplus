@@ -186,4 +186,4 @@ const TabsContent = ({
   )
 }
 
-export { AssessmentPlanView }
+export { AssessmentPlanView, ProviderType }

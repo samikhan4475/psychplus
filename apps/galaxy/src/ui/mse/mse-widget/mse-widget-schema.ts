@@ -1,56 +1,118 @@
 import { z } from 'zod'
+import { ERROR_ID, MSE_ERROR_MESSAGE } from './constants'
 
 type MseWidgetSchemaType = z.infer<typeof mseWidgetSchema>
 const yesNoEnumSchema = z.enum(['yes', 'no', ''])
 
-const mseWidgetSchema = z.object({
-  widgetContainerCheckboxField: z.string().optional(),
-  orientation: z.array(z.string()),
-  appearance: z.array(z.string()),
-  behavior: z.array(z.string()),
-  psychomotor: z.array(z.string()),
-  speech: z.array(z.string()),
-  mood: z.array(z.string()),
-  affect: z.array(z.string()),
-  thoughtProcess: z.array(z.string()),
-  memoryHowTested: z.array(z.string()),
-  memoryRemoteIntactOther: z.array(z.string()),
-  thoughtContentOther: z.array(z.string()),
-  insight: z.array(z.string()),
-  insightHowTested: z.array(z.string()),
-  judgment: z.array(z.string()),
-  judgmentHowTested: z.array(z.string()),
-  intelligence: z.array(z.string()),
-  intelligenceHowTested: z.array(z.string()),
-  schizophreniaDelusionValues: z.array(z.string()),
-  schizophreniaHallucinationsValues: z.array(z.string()),
-  siUnDisclosed: z.array(z.string()),
-  hiUnDisclosed: z.array(z.string()),
-  mmRecentIntactYesNo: yesNoEnumSchema,
-  mmRemoteIntactYesNo: yesNoEnumSchema,
-  tcsiYesNo: yesNoEnumSchema,
-  tchiYesNo: yesNoEnumSchema,
-  tcDelusionsYesNo: yesNoEnumSchema,
-  tcHallucinationsYesNo: yesNoEnumSchema,
-  hiOtherDetails: z.string(),
-  siOtherDetails: z.string(),
-  mmOtherDetails: z.string(),
-  mhtOtherDetails: z.string(),
-  intOtherDetails: z.string(),
-  inthtOtherDetails: z.string(),
-  insOtherDetails: z.string(),
-  inshtOtherDetails: z.string(),
-  jdgOtherDetails: z.string(),
-  jdghtOtherDetails: z.string(),
-  oriOtherDetails: z.string(),
-  appOtherDetails: z.string(),
-  behOtherDetails: z.string(),
-  psyOtherDetails: z.string(),
-  speOtherDetails: z.string(),
-  modOtherDetails: z.string(),
-  affOtherDetails: z.string(),
-  thpOtherDetails: z.string(),
-  tcOtherDetails: z.string(),
-})
+const mseWidgetSchema = z
+  .object({
+    widgetContainerCheckboxField: z.string().optional(),
+    orientation: z.array(z.string()),
+    appearance: z.array(z.string()),
+    behavior: z.array(z.string()),
+    psychomotor: z.array(z.string()),
+    speech: z.array(z.string()),
+    mood: z.array(z.string()),
+    affect: z.array(z.string()),
+    thoughtProcess: z.array(z.string()),
+    memoryHowTested: z.array(z.string()),
+    memoryRemoteIntactOther: z.array(z.string()),
+    thoughtContentOther: z.array(z.string()),
+    insight: z.array(z.string()),
+    insightHowTested: z.array(z.string()),
+    judgment: z.array(z.string()),
+    judgmentHowTested: z.array(z.string()),
+    intelligence: z.array(z.string()),
+    intelligenceHowTested: z.array(z.string()),
+    schizophreniaDelusionValues: z.array(z.string()),
+    schizophreniaHallucinationsValues: z.array(z.string()),
+    siUnDisclosed: z.array(z.string()),
+    hiUnDisclosed: z.array(z.string()),
+    mmRecentIntactYesNo: yesNoEnumSchema,
+    mmRemoteIntactYesNo: yesNoEnumSchema,
+    tcsiYesNo: yesNoEnumSchema,
+    tchiYesNo: yesNoEnumSchema,
+    tcDelusionsYesNo: yesNoEnumSchema,
+    tcHallucinationsYesNo: yesNoEnumSchema,
+    hiOtherDetails: z.string(),
+    siOtherDetails: z.string(),
+    mmOtherDetails: z.string(),
+    mhtOtherDetails: z.string(),
+    intOtherDetails: z.string(),
+    inthtOtherDetails: z.string(),
+    insOtherDetails: z.string(),
+    inshtOtherDetails: z.string(),
+    jdgOtherDetails: z.string(),
+    jdghtOtherDetails: z.string(),
+    oriOtherDetails: z.string(),
+    appOtherDetails: z.string(),
+    behOtherDetails: z.string(),
+    psyOtherDetails: z.string(),
+    speOtherDetails: z.string(),
+    modOtherDetails: z.string(),
+    affOtherDetails: z.string(),
+    thpOtherDetails: z.string(),
+    tcOtherDetails: z.string(),
+    shouldValidate: z.string().optional(),
+  })
+  .superRefine((data, ctx) => {
+    if (data.shouldValidate !== 'yes') return
+
+    const fieldsToValidate = [
+      'orientation',
+      'appearance',
+      'behavior',
+      'psychomotor',
+      'speech',
+      'mood',
+      'affect',
+      'thoughtProcess',
+    ]
+
+    const comboFieldsToValidate = [
+      ['intelligence', 'intelligenceHowTested'],
+      ['insight', 'insightHowTested'],
+      ['judgment', 'judgmentHowTested'],
+      [
+        'memoryRemoteIntactOther',
+        'memoryHowTested',
+        'mmRemoteIntactYesNo',
+        'mmRecentIntactYesNo',
+      ],
+      [
+        'thoughtContentOther',
+        'tcsiYesNo',
+        'tchiYesNo',
+        'tcDelusionsYesNo',
+        'tcHallucinationsYesNo',
+      ],
+    ]
+
+    const isFieldEmpty = (data: any, field: keyof typeof data) =>
+      !data[field] || data[field].length === 0
+
+    const isComboEmpty = (data: any, fields: (keyof typeof data)[]) =>
+      fields.every((field) => isFieldEmpty(data, field))
+
+    if (fieldsToValidate.some((field) => isFieldEmpty(data, field))) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: [ERROR_ID],
+        message: MSE_ERROR_MESSAGE,
+      })
+    }
+
+    comboFieldsToValidate.forEach((fields) => {
+      if (isComboEmpty(data, fields)) {
+        fields.forEach((field) => {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            path: [ERROR_ID],
+            message: MSE_ERROR_MESSAGE,
+          })
+        })
+      }
+    })
+  })
 
 export { mseWidgetSchema, type MseWidgetSchemaType }

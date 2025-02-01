@@ -1,5 +1,6 @@
 import { Flex } from '@radix-ui/themes'
 import { BlockLabel, GroupSelectSection, YesNoSelect } from '@/components'
+import { ERROR_ID } from '../constants'
 import { MseGroupDetailSection } from '../history/mse-details/mse-group-detail-section'
 import { type MseWidgetSchemaType } from '../mse-widget-schema'
 import { GroupSelectOption } from '../types'
@@ -41,6 +42,7 @@ const MemoryBlock = ({ result }: { result?: MseWidgetSchemaType }) => {
             result ? (result?.['mmRecentIntactYesNo'] as string) : undefined
           }
           resetOnSameValue={true}
+          errorField={ERROR_ID}
         />
         <YesNoSelect
           label="Remote Intact"
@@ -50,6 +52,7 @@ const MemoryBlock = ({ result }: { result?: MseWidgetSchemaType }) => {
             result ? (result?.['mmRemoteIntactYesNo'] as string) : undefined
           }
           resetOnSameValue={true}
+          errorField={ERROR_ID}
         />
 
         <>
@@ -72,11 +75,13 @@ const MemoryBlock = ({ result }: { result?: MseWidgetSchemaType }) => {
               <GroupSelectSection
                 field="memoryRemoteIntactOther"
                 options={MEMORY_REMOTE_INTACT_OTHER_BLOCK_OPTIONS}
+                errorField={ERROR_ID}
               />
               <GroupSelectSection
                 label="How Tested"
                 field="memoryHowTested"
                 options={MEMORY_HOW_TESTED_BLOCK_OPTIONS}
+                errorField={ERROR_ID}
               />
             </>
           )}

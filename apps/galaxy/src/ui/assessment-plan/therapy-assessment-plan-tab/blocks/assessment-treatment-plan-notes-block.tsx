@@ -1,4 +1,4 @@
-import { FormFieldContainer, TextAreaInput } from '@/components'
+import { FormFieldContainer, FormFieldError, TextAreaInput } from '@/components'
 
 const AssessmentTreatmentPlanNotesBlock = () => {
   return (
@@ -8,6 +8,7 @@ const AssessmentTreatmentPlanNotesBlock = () => {
         className="h-[64px] w-[664px]"
         placeHolder="Start writing patient plan"
       />
+      <FormFieldError name="assessmentTreatmentPlanNotes" />
     </FormFieldContainer>
   )
 }

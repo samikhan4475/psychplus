@@ -23,6 +23,7 @@ interface RadioSelectSectionProps {
   lastOptionIndicator?: boolean
   resetOnSameValue?: boolean
   optionEnableTag?: string
+  errorField?: string
 }
 
 interface RadioSelectOption {
@@ -44,10 +45,16 @@ const RadioSelectSection = ({
   optionEnableTag,
   lastOptionIndicator = false,
   resetOnSameValue = false,
+  errorField,
 }: RadioSelectSectionProps) => {
   const form = useFormContext()
   const watchedValue = form.watch(field)
   const [value, setValue] = useState<string | undefined>(defaultValue || '')
+
+  let error = undefined
+  if (errorField) {
+    error = form?.formState?.errors?.[errorField]?.message
+  }
 
   useEffect(() => {
     if (disabled) {
@@ -93,6 +100,7 @@ const RadioSelectSection = ({
                   {
                     'border-pp-focus-outline bg-pp-focus-bg': isSelected,
                     'bg-gray-200 cursor-not-allowed opacity-60': shouldDisable,
+                    'border border-tomato-11': error,
                   },
                   { 'cursor-pointer': !disabled && !shouldDisable },
                   { 'cursor-not-allowed bg-gray-4': disabled || shouldDisable },

@@ -1,8 +1,14 @@
 'use client'
 
+import { useEffect } from 'react'
 import { FormProvider } from 'react-hook-form'
-import { WidgetFormContainer, WidgetSaveButton } from '@/components'
+import {
+  FormFieldError,
+  WidgetFormContainer,
+  WidgetSaveButton,
+} from '@/components'
 import { Appointment } from '@/types'
+import { ProviderType } from '@/ui/assessment-plan'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import {
   AffectBlock,
@@ -19,6 +25,7 @@ import {
 import { InsightsBlock } from './blocks/insights-block'
 import { IntelligenceBlock } from './blocks/intelligence'
 import { JudgementBlock } from './blocks/judgment-block'
+import { ERROR_ID } from './constants'
 import { transformOut } from './data'
 import { MseHeader } from './mse-header'
 import { useMseWidgetForm } from './mse-widget-form'
@@ -41,6 +48,19 @@ const MseWidget = ({
 }: MseWidgetProps) => {
   const form = useMseWidgetForm(initialValue)
 
+  useEffect(() => {
+    if (
+      appointment &&
+      [ProviderType.Psychiatry, ProviderType.Therapy].includes(
+        appointment.providerType as ProviderType,
+      )
+    ) {
+      form.setValue('shouldValidate', 'yes')
+    } else {
+      form.setValue('shouldValidate', 'no')
+    }
+  }, [initialValue, appointment])
+
   return (
     <FormProvider {...form}>
       <WidgetFormContainer
@@ -59,7 +79,13 @@ const MseWidget = ({
             {!isMseTab && <WidgetSaveButton />}
           </>
         }
-        formResetValues={createEmptyFormValues()}
+        formResetValues={{
+          ...createEmptyFormValues(),
+          shouldValidate: form.watch('shouldValidate'),
+          widgetContainerCheckboxField: form.watch(
+            'widgetContainerCheckboxField',
+          ),
+        }}
         tags={isMseTab ? [QuickNoteSectionName.QuicknoteSectionMse] : []}
         topHeader={isMseTab && <MseHeader />}
       >
@@ -76,6 +102,7 @@ const MseWidget = ({
         <IntelligenceBlock />
         <InsightsBlock />
         <JudgementBlock />
+        <FormFieldError name={ERROR_ID} />
       </WidgetFormContainer>
     </FormProvider>
   )
