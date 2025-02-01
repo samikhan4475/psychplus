@@ -14,7 +14,11 @@ import { Appointment, BookVisitPayload } from '@/types'
 import { isDirty } from '@/ui/schedule/utils'
 import { cn, getCalendarDate } from '@/utils'
 import { SAVE_APPOINTMENT } from '../../constants'
-import { convertToTimezone, sanitizeFormData } from '../../utils'
+import {
+  convertToTimezone,
+  isVisitRescheduled,
+  sanitizeFormData,
+} from '../../utils'
 import { StaffComments } from '../components/staff-comments'
 import { schema, SchemaType } from '../schema'
 import { useEditVisitStore } from '../store'
@@ -157,6 +161,11 @@ const EditVisitForm = ({
       selectedVisitType,
     )
     const sanitizedData = sanitizeFormData(payload)
+    const isRescheduled = isServiceTimeDependent && isVisitRescheduled(
+      form.formState.dirtyFields,
+      visitDetails.appointmentDate,
+      visitDetails.locationTimezoneId,
+    )
 
     updateVisitAction(sanitizedData).then((res) => {
       setIsSubmitting(false)
@@ -175,7 +184,11 @@ const EditVisitForm = ({
       if (onEdit) {
         onEdit()
       }
-      toast.success('Visit updated successfully')
+      toast.success(
+        isRescheduled
+          ? 'Visit status is set as Rescheduled'
+          : 'Visit updated successfully',
+      )
       onClose()
     })
   }

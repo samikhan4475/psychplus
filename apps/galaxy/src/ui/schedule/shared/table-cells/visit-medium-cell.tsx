@@ -34,18 +34,15 @@ const VisitMediumCell = ({
     useConfirmVisitUpdate()
 
   const { visitMediumOptionsMapper } = useEncounterTypeStore()
-  const options = useMemo(
-    () => {
-      const availableCodes = visitMediumOptionsMapper[appointment.visitType] ?? []
-      return codes
-        .filter((val) => availableCodes.includes(val.value))
-        .map((item) => ({
-          label: item.display,
-          value: item.value,
-        }))
-    },
-    [codes, visitMediumOptionsMapper, appointment.visitType],
-  )
+  const options = useMemo(() => {
+    const availableCodes = visitMediumOptionsMapper[appointment.visitType] ?? []
+    return codes
+      .filter((val) => availableCodes.includes(val.value))
+      .map((item) => ({
+        label: item.display,
+        value: item.value,
+      }))
+  }, [codes, visitMediumOptionsMapper, appointment.visitType])
   const confirmVisitUpdate = (isConfirmed: boolean, status?: number) => {
     const isOverride = status === StatusCode.OverridePermission
     const transformedBody = {
@@ -69,7 +66,11 @@ const VisitMediumCell = ({
     setVisitMedium(val)
     const transformedBody = transformIn(appointment)
     transformedBody.type = val
-    updateVisit(transformedBody, refetch, onUpdateVisitError)
+    updateVisit({
+      body: transformedBody,
+      onSuccess: refetch,
+      onError: onUpdateVisitError,
+    })
   }
 
   return (

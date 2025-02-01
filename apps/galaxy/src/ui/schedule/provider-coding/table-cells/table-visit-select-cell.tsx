@@ -118,7 +118,11 @@ const VisitSequenceSelectCell = ({
     setVisitSequence(val)
     const transformedBody = transformIn(appointment, day.id)
     transformedBody.visitSequenceType = val
-    updateVisit(transformedBody, refetch, onUpdateVisitError)
+    updateVisit({
+      body: transformedBody,
+      onSuccess: refetch,
+      onError: onUpdateVisitError,
+    })
   }
 
   return (

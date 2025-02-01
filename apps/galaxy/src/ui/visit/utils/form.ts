@@ -1,6 +1,7 @@
 import {
   CalendarDate,
   getLocalTimeZone,
+  now,
   parseAbsolute,
   toCalendarDate,
   toTimeZone,
@@ -27,4 +28,22 @@ const convertToTimezone = (
   return { date, time }
 }
 
-export { sanitizeFormData, convertToTimezone }
+const isVisitRescheduled = (
+  dirtyFields: object,
+  originalDate: string,
+  timezone: string,
+) => {
+  const fields = ['visitTime', 'duration', 'frequency', 'paymentResponsibility']
+  const isLimitedToTimeFields = Object.keys(dirtyFields).every((key) =>
+    fields.includes(key),
+  )
+
+  if (!isLimitedToTimeFields) {
+    const baseDate = parseAbsolute(originalDate, timezone)
+    const currentDate = now(timezone)
+    const dateToCompare = currentDate.add({ hours: 24 })
+    return baseDate.compare(dateToCompare) > 0
+  }
+}
+
+export { sanitizeFormData, convertToTimezone, isVisitRescheduled }

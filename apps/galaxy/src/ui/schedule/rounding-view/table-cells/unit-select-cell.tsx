@@ -52,7 +52,7 @@ const UnitSelectCell = ({
           if (changeUnitPermission) {
             const transformedBody = transformIn(appointment)
             transformedBody.unitId = val
-            updateVisit(transformedBody, refetch)
+            updateVisit({ body: transformedBody, onSuccess: refetch })
             return setUnit(val)
           }
           setIsOpen(true)

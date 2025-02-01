@@ -52,7 +52,11 @@ const LegalSelectCell = ({
       setLegalStatus(val)
       const transformedBody = transformIn(appointment)
       transformedBody.admissionLegalStatus = val
-      updateVisit(transformedBody, refetch, onUpdateVisitError)
+      updateVisit({
+        body: transformedBody,
+        onSuccess: refetch,
+        onError: onUpdateVisitError,
+      })
     } else setIsOpen(true)
   }
 

@@ -66,7 +66,11 @@ const TimedVisitSequenceSelect = ({
     setVisitSequence(val)
     const transformedBody = transformIn(appointment)
     transformedBody.visitSequenceType = val
-    updateVisit(transformedBody, refetch, onUpdateVisitError)
+    updateVisit({
+      body: transformedBody,
+      onSuccess: refetch,
+      onError: onUpdateVisitError,
+    })
   }
 
   return (

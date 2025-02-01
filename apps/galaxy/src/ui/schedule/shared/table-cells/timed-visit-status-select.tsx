@@ -23,6 +23,8 @@ const VISIT_STATUS_PERMISSION =
 const RESCHEDULE_ALERT_MESSAGE =
   "The Visit Status cannot be manually changed to 'Rescheduled.'"
 
+const VISIT_STATUS_SUCCESS = 'Visit status is set as Cancel-A'
+
 const TimedVisitStatusSelect = ({
   appointment,
   className,
@@ -122,7 +124,8 @@ const TimedVisitStatusSelect = ({
       isConfirmed,
       body: transformedBody,
       resetValue: () => setVisitStatus(appointment.visitStatus),
-      status,
+      successMessage:
+        visitStatus === 'CancelledA' ? VISIT_STATUS_SUCCESS : undefined,
     })
   }
 
@@ -135,7 +138,13 @@ const TimedVisitStatusSelect = ({
       setVisitStatus(val)
       const transformedBody = transformIn(appointment)
       transformedBody.appointmentStatus = val
-      updateVisit(transformedBody, refetch, onUpdateVisitError)
+
+      updateVisit({
+        body: transformedBody,
+        onSuccess: refetch,
+        onError: onUpdateVisitError,
+        successMessage: val === 'CancelledA' ? VISIT_STATUS_SUCCESS : undefined,
+      })
     } else {
       setAlertMessage(VISIT_STATUS_PERMISSION)
       setIsAlertOpen(true)

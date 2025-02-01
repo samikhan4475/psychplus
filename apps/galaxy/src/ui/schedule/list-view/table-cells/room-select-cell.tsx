@@ -54,7 +54,7 @@ const RoomSelectCell = ({
           if (changeRoomPermission) {
             const transformedBody = transformIn(appointment)
             transformedBody.roomId = val
-            updateVisit(transformedBody, refetch)
+            updateVisit({ body: transformedBody, onSuccess: refetch })
             return setRoom(val)
           }
           setIsOpen(true)

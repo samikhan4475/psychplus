@@ -54,7 +54,7 @@ const GroupSelectCell = ({
           if (changeGroupPermission) {
             const transformedBody = transformIn(appointment)
             transformedBody.groupId = val
-            updateVisit(transformedBody, refetch)
+            updateVisit({ body: transformedBody, onSuccess: refetch })
             return setGroup(val)
           }
           setIsOpen(true)

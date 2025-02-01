@@ -5,10 +5,12 @@ import * as Accordion from '@radix-ui/react-accordion'
 import { ChevronDownIcon, ChevronUpIcon } from '@radix-ui/react-icons'
 import { Box, Button, Flex, Grid, Text } from '@radix-ui/themes'
 import { CODESETS } from '@/constants'
-import { useCodesetCodes } from '@/hooks'
+import { useCodesetCodes, useHasPermission } from '@/hooks'
 import { NewPatient } from '@/types'
 import { AddVisit } from '@/ui/visit/add-visit'
 import { cn, getCodesetDisplayName } from '@/utils'
+import { CLICK_AVAILABLE_SLOTS } from '../constants'
+import { PermissionAlert } from '../shared'
 import { AvailableSlots } from '../types'
 import { useStore } from './store'
 import { AppointmentAvailability, SlotsByDay } from './types'
@@ -53,6 +55,7 @@ const Slots = ({
 
 const AccordionItem = ({ onVisitAdd, provider, value, patient }: Props) => {
   const [isOpen, setIsOpen] = useState<boolean>(false)
+  const [isAlertOpen, setIsAlertOpen] = useState<boolean>(false)
   const { dates, formData, fetchData } = useStore((state) => ({
     dates: state.dates,
     formData: state.formData,
@@ -60,6 +63,9 @@ const AccordionItem = ({ onVisitAdd, provider, value, patient }: Props) => {
   }))
   const codes = useCodesetCodes(CODESETS.SpecialistType)
   const stateCodes = useCodesetCodes(CODESETS.UsStates)
+  const hasPermissionToClickOnAvailableSlots = useHasPermission(
+    'clickAvailableSlotsInSchedulerView',
+  )
   const providerState = provider.clinic?.contact?.addresses?.[0]?.state ?? ''
   const stateLabel = getCodesetDisplayName(providerState, stateCodes)
 
@@ -179,33 +185,50 @@ const AccordionItem = ({ onVisitAdd, provider, value, patient }: Props) => {
                 <Flex direction="column" className="gap-y-2 px-[1.5px]">
                   {provider.allSlotsByDay[`${day.monthAndDay}`]
                     ? provider.allSlotsByDay[`${day.monthAndDay}`]?.map(
-                        (slot) => (
-                          <AddVisit
-                            dateTime={slot.startDate}
-                            timezone={slot.timeZoneId}
-                            onAdd={() => {
-                              fetchData(formData)
-                              onVisitAdd?.()
-                            }}
-                            slotDetails={getSlotDetails(
-                              slot,
-                              provider,
-                              specialistTypeIndex,
-                            )}
-                            isTimed
-                            key={slot.startDate}
-                            patient={patient}
-                          >
-                            <Button
-                              variant="outline"
-                              size="1"
-                              color="gray"
-                              className="text-black text-[12px]"
+                        (slot) => {
+                          if (!hasPermissionToClickOnAvailableSlots) {
+                            return (
+                              <Button
+                                variant="outline"
+                                size="1"
+                                color="gray"
+                                onClick={() => setIsAlertOpen(true)}
+                                key={slot.startDate}
+                                className="text-black text-[12px]"
+                              >
+                                {extractTime(slot.startDate, slot.timeZoneId)}
+                              </Button>
+                            )
+                          }
+
+                          return (
+                            <AddVisit
+                              dateTime={slot.startDate}
+                              timezone={slot.timeZoneId}
+                              onAdd={() => {
+                                fetchData(formData)
+                                onVisitAdd?.()
+                              }}
+                              slotDetails={getSlotDetails(
+                                slot,
+                                provider,
+                                specialistTypeIndex,
+                              )}
+                              isTimed
+                              key={slot.startDate}
+                              patient={patient}
                             >
-                              {extractTime(slot.startDate, slot.timeZoneId)}
-                            </Button>
-                          </AddVisit>
-                        ),
+                              <Button
+                                variant="outline"
+                                size="1"
+                                color="gray"
+                                className="text-black text-[12px]"
+                              >
+                                {extractTime(slot.startDate, slot.timeZoneId)}
+                              </Button>
+                            </AddVisit>
+                          )
+                        },
                       )
                     : null}
                 </Flex>
@@ -214,6 +237,11 @@ const AccordionItem = ({ onVisitAdd, provider, value, patient }: Props) => {
           </Grid>
         </Accordion.Content>
       </Grid>
+      <PermissionAlert
+        isOpen={isAlertOpen}
+        onClose={() => setIsAlertOpen(false)}
+        message={CLICK_AVAILABLE_SLOTS}
+      />
     </Accordion.Item>
   )
 }

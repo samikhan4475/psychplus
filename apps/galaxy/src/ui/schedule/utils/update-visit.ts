@@ -4,6 +4,13 @@ import { Appointment, SharedCode } from '@/types'
 import { TransformedAppointment } from '../types'
 import { sanitizeFormData } from './form'
 
+interface UpdateVisitParams {
+  body: TransformedAppointment
+  onSuccess: () => void
+  onError?: (message: string, status?: number) => void
+  successMessage?: string
+}
+
 const transformIn = (appointment: Appointment): TransformedAppointment => {
   const {
     appointmentId,
@@ -77,15 +84,16 @@ const transformIn = (appointment: Appointment): TransformedAppointment => {
   return transformedData
 }
 
-const updateVisit = async (
-  appointment: TransformedAppointment,
-  onSuccess: () => void,
-  onError?: (message: string, status?: number) => void,
-) => {
-  const body = sanitizeFormData(appointment)
-  const result = await updateVisitAction(body)
+const updateVisit = async ({
+  body,
+  onSuccess,
+  onError,
+  successMessage,
+}: UpdateVisitParams) => {
+  const sanitizedBody = sanitizeFormData(body)
+  const result = await updateVisitAction(sanitizedBody)
   if (result.state === 'success') {
-    toast.success('Visit updated')
+    toast.success(successMessage ?? 'Visit updated')
     onSuccess()
   } else {
     const errorMessage = result.error || 'Failed to update visit'

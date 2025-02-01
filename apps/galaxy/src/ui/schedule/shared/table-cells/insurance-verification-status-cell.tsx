@@ -66,7 +66,11 @@ const InsuranceVerificationStatusCell = ({
     setVerificationStatus(val)
     const transformedBody = transformIn(appointment)
     transformedBody.insuranceVerificationStatusCode = val
-    updateVisit(transformedBody, refetch, onUpdateVisitError)
+    updateVisit({
+      body: transformedBody,
+      onSuccess: refetch,
+      onError: onUpdateVisitError,
+    })
   }
 
   return (

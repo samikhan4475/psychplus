@@ -88,7 +88,11 @@ const NonTimedVisitStatusSelect = ({
     setVisitStatus(val)
     const transformedBody = transformIn(appointment)
     transformedBody.appointmentStatus = val
-    updateVisit(transformedBody, refetch, onUpdateVisitError)
+    updateVisit({
+      body: transformedBody,
+      onSuccess: refetch,
+      onError: onUpdateVisitError,
+    })
   }
 
   const confirmVisitUpdate = (isConfirmed: boolean, status?: number) => {
@@ -114,7 +118,11 @@ const NonTimedVisitStatusSelect = ({
     }
     const transformedBody = transformIn(appointment)
     transformedBody.appointmentStatus = visitStatus
-    updateVisit(transformedBody, refetch, onUpdateVisitError)
+    updateVisit({
+      body: transformedBody,
+      onSuccess: refetch,
+      onError: onUpdateVisitError,
+    })
     setIsOpen(false)
   }
 

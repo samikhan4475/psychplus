@@ -94,7 +94,7 @@ const VisitStatusSelectCell = ({
     setVisitStatus(val)
     const transformedBody = transformIn(appointment, day.id)
     transformedBody.appointmentStatus = val
-    updateVisit(transformedBody, refetch)
+    updateVisit({ body: transformedBody, onSuccess: refetch })
   }
 
   const confirmVisitUpdate = (isConfirmed: boolean, status?: number) => {
@@ -119,7 +119,11 @@ const VisitStatusSelectCell = ({
     }
     const transformedBody = transformIn(appointment, day.id)
     transformedBody.appointmentStatus = visitStatus
-    updateVisit(transformedBody, refetch, onUpdateVisitError)
+    updateVisit({
+      body: transformedBody,
+      onSuccess: refetch,
+      onError: onUpdateVisitError,
+    })
     setIsOpen(false)
   }
 

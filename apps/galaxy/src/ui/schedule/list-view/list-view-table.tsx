@@ -6,7 +6,7 @@ import { ScrollArea } from '@radix-ui/themes'
 import { Row, Table } from '@tanstack/react-table'
 import { DataTable } from '@/components'
 import { CODESETS } from '@/constants'
-import { useCodesetCodes } from '@/hooks'
+import { useCodesetCodes, useHasPermission } from '@/hooks'
 import { useStore as useRootStore } from '@/store'
 import { Appointment } from '@/types'
 import { capitalizeName, constructQuickNotesUrl, getPatientMRN } from '@/utils'
@@ -23,7 +23,7 @@ const DataTableHeader = (table: Table<Appointment>) => {
       column.toggleVisibility(true)
       column.columns.forEach((column) => column.toggleVisibility(true))
     })
-    // set column visiblity
+    // set column visibility
     table
       .getAllColumns()
       .filter(
@@ -42,6 +42,9 @@ const ListViewTable = () => {
   const data = useStore((state) => state.appointments)
   const router = useRouter()
   const addTab = useRootStore((state) => state.addTab)
+  const canChangeInactiveToActiveVisitStatus = useHasPermission(
+    'changeInActiveToActiveVisitStatusForTimedServices',
+  )
   const visitStatusCodes = useCodesetCodes(CODESETS.AppointmentStatus)
 
   const inactiveVisitStatusCodes = useMemo(() => {
@@ -60,7 +63,9 @@ const ListViewTable = () => {
   const isRowDisabled = (row: Row<Appointment>) => {
     const visitStatus = row.getValue('visitStatus') as string
 
-    if (inactiveVisitStatusCodes.includes(visitStatus)) return true
+    if (inactiveVisitStatusCodes.includes(visitStatus)) {
+      return !canChangeInactiveToActiveVisitStatus
+    }
     return false
   }
 

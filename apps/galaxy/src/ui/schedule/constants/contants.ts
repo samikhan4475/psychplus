@@ -131,6 +131,8 @@ const INVALID_RANGE_ERROR = 'Invalid date range'
 
 const OUT_OF_RANGE_ERROR = 'Date must be after 1/1/2000'
 
+const CLICK_AVAILABLE_SLOTS = 'You do not have permission to click on available slots. Please contact your supervisor if you need any further assistance.'
+
 enum StatusCode {
   NoPermission = 406,
   OverridePermission = 428,
@@ -161,4 +163,5 @@ export {
   StatusCode,
   INVALID_RANGE_ERROR,
   OUT_OF_RANGE_ERROR,
+  CLICK_AVAILABLE_SLOTS,
 }

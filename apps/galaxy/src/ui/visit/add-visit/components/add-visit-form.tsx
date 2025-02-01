@@ -236,7 +236,11 @@ const AddVisitForm = ({
         toast.error(res.error || 'Failed to Add Visit')
         return
       }
-      toast.success('Visit added successfully')
+      toast.success(
+        isServiceTimeDependent
+          ? 'Visit status is set as scheduled'
+          : 'Visit created successfully',
+      )
       onAdd?.()
       onClose()
       if (activeTab === TabValue.ProviderCoding) refetchProviderCoding()

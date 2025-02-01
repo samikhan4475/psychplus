@@ -27,6 +27,8 @@ const getLocationListAction = async ({
 
   if (sort) {
     url.searchParams.append('orderBy', `${sort.column} ${sort.direction}`)
+  } else {
+    url.searchParams.append('orderBy', 'createdOn desc')
   }
   const response = await api.POST<Location[]>(url?.toString(), {
     ...defaultPayload,

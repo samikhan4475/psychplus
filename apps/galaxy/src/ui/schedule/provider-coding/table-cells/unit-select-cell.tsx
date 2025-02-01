@@ -5,11 +5,11 @@ import { CHANGE_UNIT_PERMISSION } from '../../constants'
 import { useSchedulerPermissions } from '../../hooks'
 import { PermissionAlert } from '../../shared'
 import { updateVisit } from '../../utils'
+import { DAY_KEYS } from '../constants'
+import { useRefetchAppointments } from '../hooks'
 import { useStore } from '../store'
 import { DayString, MergedRecord } from '../types'
 import { transformIn } from '../util'
-import { useRefetchAppointments } from '../hooks'
-import { DAY_KEYS } from '../constants'
 
 const UnitSelectCell = ({
   row: { original: appointment },
@@ -32,7 +32,7 @@ const UnitSelectCell = ({
 
   const handleChange = async (val: string) => {
     let day: DayString = 'Mon'
-    DAY_KEYS.forEach(dayKey => {
+    DAY_KEYS.forEach((dayKey) => {
       if (appointment.weekDays[dayKey]) {
         day = dayKey
       }
@@ -40,7 +40,7 @@ const UnitSelectCell = ({
     if (changeUnitPermission) {
       const transformedBody = transformIn(appointment, day)
       transformedBody.unitId = val
-      updateVisit(transformedBody, refetch)
+      updateVisit({ body: transformedBody, onSuccess: refetch })
       return setUnit(val)
     }
     setIsOpen(true)

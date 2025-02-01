@@ -6,9 +6,9 @@ import { CHANGE_LEGAL_STATUS } from '../../constants'
 import { useSchedulerPermissions } from '../../hooks'
 import { PermissionAlert } from '../../shared'
 import { updateVisit } from '../../utils'
+import { useRefetchAppointments } from '../hooks'
 import { MergedRecord } from '../types'
 import { transformIn } from '../util'
-import { useRefetchAppointments } from '../hooks'
 
 const LegalSelectCell = ({
   row: { original: appointment },
@@ -25,7 +25,7 @@ const LegalSelectCell = ({
       setLegalStatus(val)
       const transformedBody = transformIn(appointment)
       transformedBody.admissionLegalStatus = val
-      updateVisit(transformedBody, refetch)
+      updateVisit({ body: transformedBody, onSuccess: refetch })
     } else setIsOpen(true)
   }
 

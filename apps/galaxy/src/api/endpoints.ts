@@ -10,7 +10,7 @@ const SEARCH_PATIENTS_ENDPOINT = `${API_URL}/api/patients/search`
 const CLINIC_LOCATIONS_ENDPOINT = `${API_URL}/api/clinics`
 const FACILITY_ADMISSION_ID_ENDPOINT = `${API_URL}/api/facilityadmissionids`
 const LOCATION_SERVICES_ENDPOINT = `${API_URL}/api/locationservices/actions/search`
-const LOCATION_ENDPOINT = `${API_URL}/api/locations/actions/search?orderBy=createdOn%20desc`
+const LOCATION_ENDPOINT = `${API_URL}/api/locations/actions/search`
 const ADD_USER_SETTINGS = (userId: string) =>
   `${API_URL}/api/users/${userId}/settings`
 const UPDATE_USER_SETTINGS = (userId: string, settingId: string) =>

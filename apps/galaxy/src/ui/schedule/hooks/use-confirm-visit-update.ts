@@ -8,6 +8,7 @@ interface VisitUpdateParams {
   body: TransformedAppointment
   resetValue: () => void
   status?: number
+  successMessage?: string
 }
 
 const useConfirmVisitUpdate = () => {
@@ -17,22 +18,27 @@ const useConfirmVisitUpdate = () => {
   })
   const refetch = useRefetchAppointments()
 
-  const onUpdateVisitError =
-    (message: string, status?: number) => {
-      setAlertState({ message, open: true, status })
-    }
+  const onUpdateVisitError = (message: string, status?: number) => {
+    setAlertState({ message, open: true, status })
+  }
 
   const onUpdateVisitConfirm = ({
     isConfirmed,
     body,
     resetValue,
+    successMessage,
   }: VisitUpdateParams) => {
     if (!isConfirmed) {
       resetValue()
       return setAlertState((prev) => ({ ...prev, open: false }))
     }
     const sanitizedBody = sanitizeFormData(body)
-    updateVisit(sanitizedBody, refetch, onUpdateVisitError)
+    updateVisit({
+      body: sanitizedBody,
+      onSuccess: refetch,
+      onError: onUpdateVisitError,
+      successMessage,
+    })
     setAlertState((prev) => ({ ...prev, open: false }))
   }
 

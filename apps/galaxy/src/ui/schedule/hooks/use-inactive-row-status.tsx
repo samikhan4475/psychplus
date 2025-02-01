@@ -1,3 +1,4 @@
+import { useHasPermission } from '@/hooks'
 import { useVisitStatusCodeset } from './use-visit-status-codeset'
 
 const useInactiveRowStatus = (
@@ -5,8 +6,17 @@ const useInactiveRowStatus = (
   isServiceTimeDependent: boolean,
 ) => {
   const inactiveVisitStatusCodes = useVisitStatusCodeset('Inactive')
-  if (!isServiceTimeDependent) return false
-  return inactiveVisitStatusCodes.includes(visitStatus)
+  const canChangeInactiveToActiveVisitStatus = useHasPermission(
+    'changeInActiveToActiveVisitStatusForTimedServices',
+  )
+
+  if (
+    inactiveVisitStatusCodes.includes(visitStatus) &&
+    isServiceTimeDependent
+  ) {
+    return !canChangeInactiveToActiveVisitStatus
+  }
+  return false
 }
 
 export { useInactiveRowStatus }

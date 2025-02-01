@@ -72,7 +72,11 @@ const VisitMediumSelectCell = ({
     setVisitMedium(val)
     const transformedBody = transformIn(appointment, day.id)
     transformedBody.type = val
-    updateVisit(transformedBody, refetch, onUpdateVisitError)
+    updateVisit({
+      body: transformedBody,
+      onSuccess: refetch,
+      onError: onUpdateVisitError,
+    })
   }
 
   return (

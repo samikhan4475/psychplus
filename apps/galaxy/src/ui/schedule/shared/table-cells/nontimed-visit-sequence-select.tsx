@@ -115,7 +115,11 @@ const NonTimedVisitSequenceSelect = ({
     setVisitSequence(val)
     const transformedBody = transformIn(appointment)
     transformedBody.visitSequenceType = val
-    updateVisit(transformedBody, refetch, onUpdateVisitError)
+    updateVisit({
+      body: transformedBody,
+      onSuccess: refetch,
+      onError: onUpdateVisitError,
+    })
   }
 
   const excluded = [...timedVisitSequenceCodes, ...excludedCodes]
