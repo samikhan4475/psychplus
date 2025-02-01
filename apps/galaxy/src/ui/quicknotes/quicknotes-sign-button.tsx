@@ -10,8 +10,7 @@ import { useStore as useGlobalStore } from '@/store'
 import { Appointment } from '@/types'
 import { useStore as useDiagnosisStore } from '@/ui/diagnosis/store'
 import { AlertDialog } from '../alerts'
-import { useStore } from './store'
-import { validateDiagnosis } from './utils'
+import { useStore, validateDiagnosis } from './store'
 
 interface QuickNotesSignButtonProps {
   appointment: Appointment

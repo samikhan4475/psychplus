@@ -294,36 +294,15 @@ const modifyWidgetResponse = (data: QuickNoteSectionItem[] = []) =>
     return acc
   }, {})
 
-const validateDiagnosis = ({
-  workingDiagnosisData,
-  visitType,
-}: {
-  workingDiagnosisData: DiagnosisIcd10Code[]
-  visitType: string
-}) => {
-  const spravatoOrTmsDiagnosisCodes = ['F32.2', 'F32.3', 'F33.2', 'F33.3']
-  const isSpravatoOrTms = [VisitTypeEnum.Spravato, VisitTypeEnum.Tms].includes(
-    visitType as VisitTypeEnum,
-  )
-  const missingDiagnosisCodes = spravatoOrTmsDiagnosisCodes
-    .filter(
-      (code) => !workingDiagnosisData.map((item) => item.code).includes(code),
-    )
-    .join(', ')
 
-  if (isSpravatoOrTms && missingDiagnosisCodes.length) {
-    return missingDiagnosisCodes
-  }
-  return ''
-}
 
 const getCachedWidgetsByVisitType = cache(getWidgetsByVisitType)
 
 const getWidgetErrorMessage = {
-    "Addon": "Add-on.",
-    "Spravato": "Spravato.",
-    "ECT": "ECT.",
-    "TMS": "TMS.",
+  Addon: 'Add-on.',
+  Spravato: 'Spravato.',
+  ECT: 'ECT.',
+  TMS: 'TMS.',
 }
 
 export {
@@ -331,6 +310,5 @@ export {
   getWidgetIds,
   modifyWidgetResponse,
   getWidgetsByVisitType,
-  validateDiagnosis,
   getWidgetErrorMessage,
 }

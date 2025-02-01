@@ -36,6 +36,8 @@ const substanceUseHxWidgetSchema = z
       .enum(['≥ 15 mins', '≥ 31 mins'])
       .optional(),
     otherAlcoholDrugs: z.ostring(),
+    QuicknoteSectionQuestionnaireDast10: z.boolean().optional().default(false),
+    QuicknoteSectionQuestionnaireAudit: z.boolean().optional().default(false),
   })
   .superRefine((data, ctx) => {
     const conditions = [
@@ -47,16 +49,33 @@ const substanceUseHxWidgetSchema = z
       data.inhalants,
     ]
 
-    if (
-      conditions.every(
-        (condition) => condition === false || condition === undefined,
-      ) &&
-      data.drugs === 'yes'
-    ) {
+    if (data.drugs === 'yes') {
+      if (
+        conditions.every(
+          (condition) => condition === false || condition === undefined,
+        )
+      ) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ['drugs'],
+          message: 'Select at least one drug.',
+        })
+      }
+
+      if (!data.QuicknoteSectionQuestionnaireDast10) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ['QuicknoteSectionQuestionnaireDast10'],
+          message: 'Please fill out the Dast questionnaire',
+        })
+      }
+    }
+
+    if (data.alcohol === 'yes' && !data.QuicknoteSectionQuestionnaireAudit) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
-        path: ['drugs'],
-        message: 'Select at least one drug.',
+        path: ['QuicknoteSectionQuestionnaireAudit'],
+        message: 'Please fill out the Audit questionnaire',
       })
     }
   })

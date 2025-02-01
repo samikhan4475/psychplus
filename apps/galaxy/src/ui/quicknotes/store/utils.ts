@@ -1,7 +1,7 @@
 import toast from 'react-hot-toast'
 import { saveWidgetClientAction } from '@/actions'
-import { Appointment, QuickNoteSectionItem } from '@/types'
-import { postEvent, saveAbleWdgets, visitTypeToWidgets } from '@/utils'
+import { Appointment, DiagnosisIcd10Code, QuickNoteSectionItem } from '@/types'
+import { postEvent, saveAbleWdgets, VisitTypeEnum } from '@/utils'
 import { QuickNoteSectionName } from '../constants'
 import { getWidgetErrorMessage, getWidgetsByVisitType } from '../utils'
 
@@ -88,7 +88,10 @@ const saveWidgets = async (
   }
 }
 
-const validateAll = async (widgets: QuickNoteSectionName[], visitTypeCode?: string) => {
+const validateAll = async (
+  widgets: QuickNoteSectionName[],
+  visitTypeCode?: string,
+) => {
   const promises = widgets.map((widgetId) => {
     return new Promise<{ success: boolean; widgetId: string }>((resolve) => {
       const handleMessage = (event: MessageEvent) => {
@@ -107,41 +110,72 @@ const validateAll = async (widgets: QuickNoteSectionName[], visitTypeCode?: stri
   postEvent({ type: 'quicknotes:validateAll' })
   const responses = await Promise.all(promises)
 
-  let widgetErrors = '';
+  let widgetErrors = ''
   responses.forEach((element) => {
     if (!element.success) {
-      widgetErrors += `${element.widgetId.replace('QuicknoteSection', '')}, `;
+      widgetErrors += `${element.widgetId.replace('QuicknoteSection', '')}, `
     }
   })
   widgetErrors = widgetErrors.slice(0, widgetErrors.length - 2)
 
   if (widgetErrors !== '') {
-    let errorKey;
-    switch (true) {       
-      case visitTypeCode === "Tms":
-          errorKey = 'TMS';
-          break;
+    let errorKey
+    switch (true) {
+      case visitTypeCode === 'Tms':
+        errorKey = 'TMS'
+        break
 
-      case visitTypeCode === "Spravato":
-          errorKey = 'Spravato';
-          break;
+      case visitTypeCode === 'Spravato':
+        errorKey = 'Spravato'
+        break
 
-      case visitTypeCode === "Ect":
-          errorKey = 'ECT';
-          break;
+      case visitTypeCode === 'Ect':
+        errorKey = 'ECT'
+        break
 
       case widgetErrors.includes('AddOn'):
-        errorKey = 'AddOn';
-        break;
-  
+        errorKey = 'AddOn'
+        break
+
       default:
-        break;
+        break
     }
 
-    const objKeys = errorKey as keyof typeof getWidgetErrorMessage;
-    toast.error(`Please fill out all required fields in ${getWidgetErrorMessage[objKeys] || widgetErrors}`)
+    const objKeys = errorKey as keyof typeof getWidgetErrorMessage
+    toast.error(
+      `Please fill out all required fields in ${
+        getWidgetErrorMessage[objKeys] || widgetErrors
+      }`,
+    )
   }
   return responses.every((element) => element.success)
 }
 
-export { getWidgetData, saveWidgets }
+const validateDiagnosis = ({
+  workingDiagnosisData,
+  visitType,
+}: {
+  workingDiagnosisData: DiagnosisIcd10Code[]
+  visitType: string
+}) => {
+  const spravatoOrTmsDiagnosisCodes = ['F32.2', 'F32.3', 'F33.2', 'F33.3']
+  const isSpravatoOrTms = [VisitTypeEnum.Spravato, VisitTypeEnum.Tms].includes(
+    visitType as VisitTypeEnum,
+  )
+  const missingDiagnosisCodes = spravatoOrTmsDiagnosisCodes
+    .filter(
+      (code) => !workingDiagnosisData.map((item) => item.code).includes(code),
+    )
+    .join(', ')
+
+  if (isSpravatoOrTms && missingDiagnosisCodes.length) {
+    return `Must have ${missingDiagnosisCodes} diagnosis to Sign/Send to signature.`
+  }
+
+  if (workingDiagnosisData.length === 0) {
+    return 'Select at lease one diagnosis to Sign/Send to signature.'
+  }
+  return ''
+}
+
+export { getWidgetData, saveWidgets, validateDiagnosis }
