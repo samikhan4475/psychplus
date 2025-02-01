@@ -3,6 +3,7 @@ import { Cross1Icon } from '@radix-ui/react-icons'
 import { Box, Text } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
 import { ServiceLinePaymentAdjustment } from '@/ui/revenue-cycle/types'
+import { PaymentListTypes } from '../../types'
 import { AdjustmentField, adjustmentMapping } from '../constants'
 import { SchemaType } from '../schema'
 
@@ -17,10 +18,11 @@ const AdjustmentPill = ({
     adjustmentGroupCode,
     adjustmentAmount,
     adjustmentReasonCode,
+    recordStatus,
     adjustmentStatus,
     remarkCode,
+    id,
   },
-  adjustments,
   serviceLineIndex,
   adjustmentIndex,
 }: AdjustmentPillProps) => {
@@ -28,16 +30,21 @@ const AdjustmentPill = ({
   const writeOffAmount = form.watch(
     `claimServiceLinePayments.${serviceLineIndex}.writeOffAmount`,
   )
-  const removeAdjustment = () => {
-    const updatedAdjustments = adjustments
-      .map((adj, index) => {
-        if (!adj.id && adjustmentIndex === index) return null
-        if (adj.id && index === adjustmentIndex)
-          return { ...adj, recordStatus: 'Inactive' }
-        return adj
-      })
-      .filter((v) => v !== null)
 
+  const paymentStatus = form.watch(`status`)
+  const isRectifiedRow = form.watch(
+    `claimServiceLinePayments.${serviceLineIndex}.isRectifiedRow`,
+  )
+
+  const serviceLinePaymentAdjustments = form.watch(
+    `claimServiceLinePayments.${serviceLineIndex}.serviceLinePaymentAdjustments`,
+  )
+  const removeAdjustment = () => {
+    if (id && serviceLinePaymentAdjustments) {
+      serviceLinePaymentAdjustments[adjustmentIndex].recordStatus = 'Inactive'
+    } else {
+      serviceLinePaymentAdjustments?.splice(adjustmentIndex, 1)
+    }
     const adjustmentKey = `${adjustmentGroupCode}_${adjustmentReasonCode}`
 
     const field = adjustmentMapping[adjustmentKey] as AdjustmentField
@@ -57,24 +64,26 @@ const AdjustmentPill = ({
         `claimServiceLinePayments.${serviceLineIndex}.writeOffAmount`,
         `${+writeOffAmount - +adjustmentAmount}`,
       )
-
     form.setValue(
       `claimServiceLinePayments.${serviceLineIndex}.serviceLinePaymentAdjustments`,
-      updatedAdjustments,
+      serviceLinePaymentAdjustments,
     )
   }
+  if (recordStatus === 'Inactive') return ''
   return (
     <Box className="rounded-full flex min-w-fit items-center bg-blue-4 px-2 py-[2px]">
       <Text className="text-[10px]" weight="medium">
         {adjustmentGroupCode}-{adjustmentReasonCode}
         {remarkCode && `-${remarkCode}`} - {`$${adjustmentAmount}`}
       </Text>
-      <Cross1Icon
-        onClick={removeAdjustment}
-        className="ml-1"
-        width="11"
-        height="11"
-      />
+      {(isRectifiedRow || paymentStatus === PaymentListTypes.Unposted) && (
+        <Cross1Icon
+          onClick={removeAdjustment}
+          className="ml-1"
+          width="11"
+          height="11"
+        />
+      )}
     </Box>
   )
 }

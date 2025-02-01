@@ -66,6 +66,9 @@ interface ClaimServiceLinePayment
   > {
   id?: string
   claimPaymentId?: string
+  rectificationId?: string
+  isRectifiedRow?: boolean
+  isNegativeRow?: boolean
   billedAmount: string
   allowedAmount: string
   paidAmount: string

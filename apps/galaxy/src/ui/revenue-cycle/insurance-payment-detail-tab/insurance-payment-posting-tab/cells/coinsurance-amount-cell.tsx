@@ -2,6 +2,7 @@ import React from 'react'
 import { useFormContext } from 'react-hook-form'
 import { PropsWithRow } from '@/components'
 import { ClaimServiceLinePayment } from '../../../types'
+import { PaymentListTypes } from '../../types'
 import { CO_INSURANCE_ADJUSTMENT, PROCESSED_AS_REVERSAL } from '../constants'
 import { SchemaType } from '../schema'
 import { DollarInput } from './dollar-input'
@@ -19,6 +20,11 @@ const CoInsuranceAmountCell = ({
   const form = useFormContext<SchemaType>()
   const serviceLinePaymentAdjustments = form.watch(
     `claimServiceLinePayments.${row.index}.serviceLinePaymentAdjustments`,
+  )
+
+  const paymentStatus = form.watch(`status`)
+  const isRectifiedRow = form.watch(
+    `claimServiceLinePayments.${row.index}.isRectifiedRow`,
   )
   const processedAsCode = form.watch('processedAsCode')
 
@@ -54,6 +60,7 @@ const CoInsuranceAmountCell = ({
       name={`claimServiceLinePayments.${row.index}.coinsuranceAmount`}
       onBlur={onBlur}
       onInput={onInput}
+      disabled={!isRectifiedRow && paymentStatus === PaymentListTypes.Posted}
       onKeyDown={(e) =>
         amountCheck(e, processedAsCode === PROCESSED_AS_REVERSAL)
       }

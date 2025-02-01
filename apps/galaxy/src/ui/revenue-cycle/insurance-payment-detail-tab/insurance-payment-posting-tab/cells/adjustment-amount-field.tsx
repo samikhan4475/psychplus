@@ -2,6 +2,7 @@ import React, { FormEvent } from 'react'
 import { TextField } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
 import toast from 'react-hot-toast'
+import { PaymentListTypes } from '../../types'
 import { SchemaType } from '../schema'
 import { amountCheck } from './utils'
 
@@ -22,6 +23,12 @@ const AdjustmentAmountField = ({
   const billedAmount = form.watch(
     `claimServiceLinePayments.${rowIndex}.billedAmount`,
   )
+
+  const paymentStatus = form.watch(`status`)
+  const isRectifiedRow = form.watch(
+    `claimServiceLinePayments.${rowIndex}.isRectifiedRow`,
+  )
+
   const onInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target
 
@@ -38,6 +45,7 @@ const AdjustmentAmountField = ({
       onKeyDown={amountCheck}
       name="adjustmentAmount"
       onChange={onChange}
+      disabled={!isRectifiedRow && paymentStatus === PaymentListTypes.Posted}
       onBlur={onBlur}
       onInput={onInput}
       value={value}

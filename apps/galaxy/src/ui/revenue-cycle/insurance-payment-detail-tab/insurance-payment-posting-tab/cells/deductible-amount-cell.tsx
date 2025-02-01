@@ -2,6 +2,7 @@ import React from 'react'
 import { useFormContext } from 'react-hook-form'
 import { PropsWithRow } from '@/components'
 import { ClaimServiceLinePayment } from '../../../types'
+import { PaymentListTypes } from '../../types'
 import { DEDUCTIBLE_ADJUSTMENT, PROCESSED_AS_REVERSAL } from '../constants'
 import { SchemaType } from '../schema'
 import { DollarInput } from './dollar-input'
@@ -20,6 +21,12 @@ const DeductibleAmountCell = ({
   const serviceLinePaymentAdjustments = form.watch(
     `claimServiceLinePayments.${row.index}.serviceLinePaymentAdjustments`,
   )
+
+  const paymentStatus = form.watch(`status`)
+  const isRectifiedRow = form.watch(
+    `claimServiceLinePayments.${row.index}.isRectifiedRow`,
+  )
+
   const processedAsCode = form.watch('processedAsCode')
 
   const onInput = (event: React.ChangeEvent<HTMLInputElement>) =>
@@ -56,6 +63,7 @@ const DeductibleAmountCell = ({
       onInput={onInput}
       name={`claimServiceLinePayments.${row.index}.deductibleAmount`}
       onBlur={onBlur}
+      disabled={!isRectifiedRow && paymentStatus === PaymentListTypes.Posted}
       onKeyDown={(e) =>
         amountCheck(e, processedAsCode === PROCESSED_AS_REVERSAL)
       }

@@ -1,10 +1,11 @@
-import React, { useMemo, useState } from 'react'
+import React, { useState } from 'react'
 import { Flex } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { PropsWithRow } from '@/components'
 import { getAdjustmentCodesAction } from '@/ui/revenue-cycle/actions/get-adjustment-codes'
 import { ClaimServiceLinePayment, InsurancePayment } from '../../../types'
+import { PaymentListTypes } from '../../types'
 import {
   adjustmentMapping,
   PROCESSED_AS_REVERSAL,
@@ -15,7 +16,9 @@ import { AdjustmentAddButton } from './adj-add-button'
 import { AdjustmentAmountField } from './adjustment-amount-field'
 import { AdjustmentCodeField } from './adjustment-code-field'
 import { AdjustmentPill } from './adjustment-pill'
+import { CancelRectifyButton } from './cancel-rectify-button'
 import { ReasonCodeField } from './reason-code-field'
+import { RectifyPaymentButton } from './rectify-payment-button'
 import { RemarkCodeField } from './remark-code-field'
 import {
   getAdjustmentStatus,
@@ -34,6 +37,13 @@ const AdjustmentReasonRemarkCell = ({
 }: AdjustmentReasonRemarkCellProps) => {
   const form = useFormContext<SchemaType>()
   const processedAsCode = form.watch('processedAsCode')
+  const paymentStatus = form.watch('status')
+  const rectificationId = form.watch(
+    `claimServiceLinePayments.${row.index}.rectificationId`,
+  )
+  const isRectifiedRow = form.watch(
+    `claimServiceLinePayments.${row.index}.isRectifiedRow`,
+  )
   const [adjustment, setAdjustment] = useState({
     adjustmentCode: '',
     adjustmentAmount: '',
@@ -50,15 +60,9 @@ const AdjustmentReasonRemarkCell = ({
   const onChangeSelect = (value: string) =>
     setAdjustment((prev) => ({ ...prev, adjustmentCode: value }))
 
-  const serviceLinePaymentAdjustments = useMemo(() => {
-    return (
-      form
-        .watch(
-          `claimServiceLinePayments.${row.index}.serviceLinePaymentAdjustments`,
-        )
-        ?.filter((adj) => adj.recordStatus === 'Active') ?? []
-    )
-  }, [form, row.index])
+  const serviceLinePaymentAdjustments = form.watch(
+    `claimServiceLinePayments.${row.index}.serviceLinePaymentAdjustments`,
+  )
 
   const addAdjustment = () => {
     const { adjustmentCode, reasonCode, adjustmentAmount, remarkCode } =
@@ -185,11 +189,20 @@ const AdjustmentReasonRemarkCell = ({
         className={isLoading ? 'pointer-events-none opacity-70' : ''}
       >
         <AdjustmentCodeField
+          rowIndex={row.index}
           value={adjustment.adjustmentCode}
           onChange={onChangeSelect}
         />
-        <ReasonCodeField value={adjustment.reasonCode} onChange={onChange} />
-        <RemarkCodeField value={adjustment.remarkCode} onChange={onChange} />
+        <ReasonCodeField
+          value={adjustment.reasonCode}
+          rowIndex={row.index}
+          onChange={onChange}
+        />
+        <RemarkCodeField
+          value={adjustment.remarkCode}
+          rowIndex={row.index}
+          onChange={onChange}
+        />
         <AdjustmentAmountField
           onBlur={onBlur}
           rowIndex={row.index}
@@ -207,6 +220,10 @@ const AdjustmentReasonRemarkCell = ({
           paymentAdjustment={adjustment}
         />
       ))}
+      {paymentStatus === PaymentListTypes.Posted &&
+        !rectificationId &&
+        !isRectifiedRow && <RectifyPaymentButton row={row} />}
+      {isRectifiedRow && <CancelRectifyButton row={row} />}
     </Flex>
   )
 }

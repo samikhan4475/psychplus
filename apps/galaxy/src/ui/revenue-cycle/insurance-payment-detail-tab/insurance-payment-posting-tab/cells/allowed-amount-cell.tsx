@@ -3,6 +3,7 @@ import { useFormContext } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { PropsWithRow } from '@/components'
 import { ClaimServiceLinePayment } from '../../../types'
+import { PaymentListTypes } from '../../types'
 import { PROCESSED_AS_REVERSAL, WRITE_OFF_ADJUSTMENT } from '../constants'
 import { SchemaType } from '../schema'
 import { DollarInput } from './dollar-input'
@@ -18,9 +19,14 @@ const AllowedAmountCell = ({ row }: PropsWithRow<ClaimServiceLinePayment>) => {
   const form = useFormContext<SchemaType>()
   const processedAsCode = form.watch('processedAsCode')
 
+  const paymentStatus = form.watch(`status`)
+  const isRectifiedRow = form.watch(
+    `claimServiceLinePayments.${row.index}.isRectifiedRow`,
+  )
   const billedAmount = form.watch(
     `claimServiceLinePayments.${row.index}.billedAmount`,
   )
+
   const allowedAmount = form.watch(
     `claimServiceLinePayments.${row.index}.allowedAmount`,
   )
@@ -98,6 +104,7 @@ const AllowedAmountCell = ({ row }: PropsWithRow<ClaimServiceLinePayment>) => {
       onKeyDown={(e) =>
         amountCheck(e, processedAsCode === PROCESSED_AS_REVERSAL)
       }
+      disabled={!isRectifiedRow && paymentStatus === PaymentListTypes.Posted}
       onInput={onInput}
       onBlur={onBlur}
     />

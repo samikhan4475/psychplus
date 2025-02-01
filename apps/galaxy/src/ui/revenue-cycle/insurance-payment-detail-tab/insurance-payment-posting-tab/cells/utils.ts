@@ -13,6 +13,25 @@ const amountRegex = /^\d{0,3}(\.\d{0,2})?$/
 const negativeAmountRegex = /^-?\d{0,3}(\.\d{0,2})?$/
 const specialKeys = ['Backspace', 'Tab', 'Control', 'Shift', 'Alt']
 
+const getNegativeRow = (
+  row: ClaimServiceLinePayment,
+): ClaimServiceLinePayment => ({
+  ...row,
+  isNegativeRow: true,
+  allowedAmount: -row.allowedAmount + '',
+  paidAmount: -row.paidAmount + '',
+  copayAmount: -row.copayAmount + '',
+  coinsuranceAmount: -row.coinsuranceAmount + '',
+  deductibleAmount: -row.deductibleAmount + '',
+  writeOffAmount: -row.writeOffAmount + '',
+  otherPr: -row.otherPr + '',
+  serviceLinePaymentAdjustments:
+    row.serviceLinePaymentAdjustments?.map((adjustment) => ({
+      ...adjustment,
+      adjustmentAmount: adjustment.adjustmentAmount * -1,
+    })) ?? [],
+})
+
 const removeNegative = (amount: string) => amount?.replace(/-/g, '') ?? amount
 const addDefaultNegative = (event: React.ChangeEvent<HTMLInputElement>) => {
   const { value } = event.target
@@ -219,6 +238,7 @@ const getAdjustmentStatus = ({
   )?.adjustmentStatus ?? DEFAULT_ADJUSTMENT_TYPE
 
 export {
+  getNegativeRow,
   amountCheck,
   getOtherWriteOff,
   addInsuranceAdjustment,

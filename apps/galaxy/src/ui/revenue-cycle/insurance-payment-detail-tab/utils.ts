@@ -26,6 +26,11 @@ const transformInClaimPayments = (
     ),
   })) ?? []
 
+const sortByCptCode = (
+  a: ClaimServiceLinePayment,
+  b: ClaimServiceLinePayment,
+) => (a.cptCode < b.cptCode ? -1 : 1)
+
 const transformInPayment = ({
   paymentDetail,
   adjustmentCodes,
@@ -50,15 +55,17 @@ const transformInPayment = ({
         adjustmentStatus: getAdjustmentStatus(adjustment),
       }),
     )
-
   const updatedPayments = paymentDetail.claimPayments?.map((payment) => ({
     ...payment,
-    claimServiceLinePayments: payment.claimServiceLinePayments.map(
-      (serviceLine: ClaimServiceLinePayment) => ({
+    claimServiceLinePayments: payment.claimServiceLinePayments
+      ?.toSorted(sortByCptCode)
+      .map((serviceLine: ClaimServiceLinePayment) => ({
         ...serviceLine,
-        serviceLinePaymentAdjustments: updateAdjustments(serviceLine),
-      }),
-    ),
+        serviceLinePaymentAdjustments:
+          adjustmentCodes.length > 0
+            ? updateAdjustments(serviceLine)
+            : serviceLine.serviceLinePaymentAdjustments,
+      })),
   }))
 
   return { ...paymentDetail, claimPayments: updatedPayments }

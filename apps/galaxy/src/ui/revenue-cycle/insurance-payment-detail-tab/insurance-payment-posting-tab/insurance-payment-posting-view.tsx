@@ -74,6 +74,11 @@ const InsurancePaymentPostingView = ({
 
       if (result.state === 'success') {
         fetchPaymentDetail(selectedPaymentId)
+        toast.success(
+          `Payment has been successfully ${
+            isPosted === PaymentListTypes.Posted ? 'saved and posted' : 'saved'
+          }`,
+        )
         onCancel()
       } else if (result.state === 'error') {
         toast.error(result.error)
@@ -89,7 +94,6 @@ const InsurancePaymentPostingView = ({
         <InsurancePaymentPostingTable
           paymentDetail={paymentDetail}
           onCancel={onCancel}
-          claimServiceLinePayments={form.getValues('claimServiceLinePayments')}
         />
       </FormContainer>
     </Flex>

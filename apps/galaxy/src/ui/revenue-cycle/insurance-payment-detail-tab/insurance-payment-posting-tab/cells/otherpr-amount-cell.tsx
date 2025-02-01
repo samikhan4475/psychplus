@@ -2,6 +2,7 @@ import React from 'react'
 import { useFormContext } from 'react-hook-form'
 import { PropsWithRow } from '@/components'
 import { ClaimServiceLinePayment } from '@/ui/revenue-cycle/types'
+import { PaymentListTypes } from '../../types'
 import { PROCESSED_AS_REVERSAL } from '../constants'
 import { SchemaType } from '../schema'
 import { DollarInput } from './dollar-input'
@@ -11,6 +12,10 @@ const OtherprAmountCell = ({ row }: PropsWithRow<ClaimServiceLinePayment>) => {
   const form = useFormContext<SchemaType>()
   const processedAsCode = form.watch('processedAsCode')
 
+  const paymentStatus = form.watch(`status`)
+  const isRectifiedRow = form.watch(
+    `claimServiceLinePayments.${row.index}.isRectifiedRow`,
+  )
   const onInput = (event: React.ChangeEvent<HTMLInputElement>) =>
     processedAsCode === PROCESSED_AS_REVERSAL && addDefaultNegative(event)
 
@@ -18,6 +23,7 @@ const OtherprAmountCell = ({ row }: PropsWithRow<ClaimServiceLinePayment>) => {
     <DollarInput
       name={`claimServiceLinePayments.${row.index}.otherPr`}
       onInput={onInput}
+      disabled={!isRectifiedRow && paymentStatus === PaymentListTypes.Posted}
       onKeyDown={(e) =>
         amountCheck(e, processedAsCode === PROCESSED_AS_REVERSAL)
       }

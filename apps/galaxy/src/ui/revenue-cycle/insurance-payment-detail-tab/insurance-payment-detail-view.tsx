@@ -40,12 +40,10 @@ const InsurancePaymentDetailView = () => {
         adjustmentResult.state === 'success' ? adjustmentResult.data : []
 
       setPaymentDetail(
-        adjustmentCodes.length > 0
-          ? transformInPayment({
-              paymentDetail: result.data,
-              adjustmentCodes,
-            })
-          : result.data,
+        transformInPayment({
+          paymentDetail: result.data,
+          adjustmentCodes,
+        }),
       )
     } else if (result.state === 'error') {
       toast.error(result.error)

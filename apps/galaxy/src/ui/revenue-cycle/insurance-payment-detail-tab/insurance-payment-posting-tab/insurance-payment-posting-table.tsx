@@ -3,6 +3,7 @@
 import React from 'react'
 import { Flex, Text } from '@radix-ui/themes'
 import { ColumnDef } from '@tanstack/react-table'
+import { useFormContext } from 'react-hook-form'
 import { ColumnHeader, DataTable, DateCell, TextCell } from '@/components'
 import { formatDate } from '@/utils'
 import { ClaimServiceLinePayment, InsurancePayment } from '../../types'
@@ -20,6 +21,7 @@ import {
 } from './cells'
 import { SaveAndPostButton } from './save-and-post-button'
 import { SaveButton } from './save-button'
+import { SchemaType } from './schema'
 
 const columns = (
   paymentDetail: InsurancePayment,
@@ -173,16 +175,17 @@ const columns = (
 ]
 
 interface InsurancePaymentPostingTableProps {
-  claimServiceLinePayments: ClaimServiceLinePayment[]
   onCancel: () => void
   paymentDetail: InsurancePayment
 }
 
 const InsurancePaymentPostingTable = ({
-  claimServiceLinePayments,
   onCancel,
   paymentDetail,
 }: InsurancePaymentPostingTableProps) => {
+  const form = useFormContext<SchemaType>()
+  const claimServiceLinePayments = form.watch('claimServiceLinePayments')
+  console.log(claimServiceLinePayments)
   return (
     <Flex direction="column">
       <Text mb="1" size="3" weight="bold">
@@ -191,7 +194,7 @@ const InsurancePaymentPostingTable = ({
 
       <DataTable
         tableClass="[&_.rt-ScrollAreaRoot]:pb-2 max-w-[calc(100vw-23px)]"
-        data={claimServiceLinePayments ?? []}
+        data={claimServiceLinePayments}
         columns={columns(paymentDetail)}
         disablePagination
       />
