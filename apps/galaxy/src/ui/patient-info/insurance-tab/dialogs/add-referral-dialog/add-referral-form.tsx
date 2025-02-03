@@ -75,7 +75,7 @@ const AddReferralForm = () => {
         <StartDatePicker />
         <EndDatePicker />
         <VisitType />
-        <FacilitySelect />
+      <FacilitySelect />
         <InsurranceSelect />
         <CptCodeSelect />
         <TotalVistInput />

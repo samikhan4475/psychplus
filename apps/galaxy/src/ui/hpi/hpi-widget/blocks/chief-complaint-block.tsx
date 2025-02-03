@@ -1,6 +1,8 @@
 import { useEffect } from 'react'
 import { useFormContext } from 'react-hook-form'
-import { DetailsType, FormError, GroupSelectSection } from '@/components'
+import toast from 'react-hot-toast'
+import { DetailsType, GroupSelectSection } from '@/components'
+import { HPIVALIDATIONMESSAGE, requiredFields } from '../utils'
 
 const BLOCK_ID = 'chiefComplaint'
 
@@ -90,7 +92,27 @@ const BLOCK_OPTIONS = [
 
 const ChiefComplaintBlock = () => {
   const form = useFormContext()
-  const error = form.formState?.errors
+  const { errors, isSubmitting } = form.formState
+  const watchedFields = form.watch(['hpiOther', ...requiredFields])
+  const hasError = errors?.hpiOther || errors?.chiefComplaint
+
+  useEffect(() => {
+    if (isSubmitting) {
+      const [hpiField, ...remainingFields] = watchedFields
+
+      const nonEmptyFields = Object?.values(remainingFields)?.filter(
+        (value) => Array.isArray(value) && value.length > 0,
+      ).length
+
+      const isHpiOtherValid = (hpiField?.length || 0) >= 30
+
+      const isValid = nonEmptyFields >= 3 || isHpiOtherValid
+
+      if (!isValid) {
+        toast.error(HPIVALIDATIONMESSAGE)
+      }
+    }
+  }, [isSubmitting, watchedFields])
 
   useEffect(() => {
     const subscription = form.watch((value, { name }) => {
@@ -109,9 +131,7 @@ const ChiefComplaintBlock = () => {
         field={BLOCK_ID}
         options={BLOCK_OPTIONS}
         hasChild
-        chipClassName={`${
-          error?.chiefComplaint?.message ? 'border border-tomato-11' : ''
-        }`}
+        chipClassName={`${hasError ? 'border border-tomato-11' : ''}`}
       />
     </>
   )

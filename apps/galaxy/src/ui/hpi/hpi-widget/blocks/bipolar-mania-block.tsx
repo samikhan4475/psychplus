@@ -1,4 +1,6 @@
+import { useFormContext } from 'react-hook-form'
 import { GroupSelectSection } from '@/components'
+import { HpiWidgetSchemaType } from '../hpi-widget-schema'
 
 const BLOCK_ID = 'bipolarMania'
 
@@ -19,6 +21,9 @@ const BLOCK_OPTIONS = [
 ]
 
 const BipolarManiaBlock = () => {
+  const form = useFormContext<HpiWidgetSchemaType>()
+  const error = form.formState?.errors
+  const hasError = error?.hpiOther || error?.chiefComplaint
   return (
     <GroupSelectSection
       label={BLOCK_TITLE}
@@ -26,6 +31,7 @@ const BipolarManiaBlock = () => {
       options={BLOCK_OPTIONS}
       parentField="chiefComplaint"
       valueInParent="ccBipolar/Mania"
+      chipClassName={`${hasError ? 'border border-tomato-11' : ''}`}
     />
   )
 }

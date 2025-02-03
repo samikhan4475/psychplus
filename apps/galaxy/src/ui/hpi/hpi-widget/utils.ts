@@ -1,5 +1,8 @@
 import { HpiWidgetSchemaType } from './hpi-widget-schema'
 
+const HPIVALIDATIONMESSAGE =
+  'Please enter at least 30 characters in free text field OR select at least 3 symptoms (excluding the chief complaint).'
+
 const assignSpecificFields = (
   result: HpiWidgetSchemaType,
 ): Record<string, (value: string) => void> => ({
@@ -473,11 +476,29 @@ const optionsValueToLabel: { [key: string]: string } = {
   schizophrenia: 'Schizophrenia',
   medicationSe: 'Medication SE',
 }
-
+const requiredFields = [
+  'depression',
+  'anxiety',
+  'bipolarMania',
+  'ptsd',
+  'obsession',
+  'bpd',
+  'ocd',
+  'substance',
+  'adhdInattentive',
+  'adhdHyperactive',
+  'autism',
+  'conductDisorder',
+  'dementia',
+  'schizophrenia',
+  'medicationSe',
+] as const
 export {
   assignSpecificFields,
   getInitialValues,
   valueToLabel,
   optionsValueToLabel,
   labels,
+  requiredFields,
+  HPIVALIDATIONMESSAGE,
 }

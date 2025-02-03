@@ -74,7 +74,14 @@ const SCHIZOPHRENIA_BLOCK_OPTIONS = (
 ]
 
 const SchizophreniaBlock = () => {
-  const { watch, setValue, getValues } = useFormContext<HpiWidgetSchemaType>()
+  const {
+    watch,
+    setValue,
+    getValues,
+    formState: { errors },
+  } = useFormContext<HpiWidgetSchemaType>()
+
+  const hasError = errors?.hpiOther || errors?.chiefComplaint
   const schizophreniaValues = watch('schizophrenia')
 
   const DELUSION_OPTIONS = mapCodesetToOptions(
@@ -101,6 +108,7 @@ const SchizophreniaBlock = () => {
       )}
       parentField="chiefComplaint"
       valueInParent="ccSchizophrenia"
+      chipClassName={`${hasError ? 'border border-tomato-11' : ''}`}
     />
   )
 }

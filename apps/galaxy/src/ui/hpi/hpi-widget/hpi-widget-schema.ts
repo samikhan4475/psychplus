@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { HPIVALIDATIONMESSAGE, requiredFields } from './utils'
 
 type HpiWidgetSchemaType = z.infer<typeof hpiWidgetSchema>
 
@@ -44,6 +45,23 @@ const hpiWidgetSchema = z
       .optional(),
   })
   .superRefine((data, ctx) => {
+    const nonEmptyFields = requiredFields.filter(
+      (field) => data[field]?.length > 0,
+    ).length
+
+    if (nonEmptyFields < 3 && (data?.hpiOther?.length || 0) < 30) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ['chiefComplaint'],
+        message: 'Required',
+      })
+
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ['hpiOther'],
+        message:HPIVALIDATIONMESSAGE
+      })
+    }
     const issues = [
       {
         condition: 'ccOther',
@@ -96,24 +114,6 @@ const hpiWidgetSchema = z
         })
       }
     })
-
-    if (
-      data?.chiefComplaint?.length < 3 &&
-      (data?.hpiOther?.length || 0) < 30
-    ) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        path: ['chiefComplaint'],
-        message:
-          'Must have exactly 3 chief complaints or hpiOther must be 30 characters long',
-      })
-
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        path: ['hpiOther'],
-        message: 'Required',
-      })
-    }
   })
 
 export { hpiWidgetSchema, type HpiWidgetSchemaType }

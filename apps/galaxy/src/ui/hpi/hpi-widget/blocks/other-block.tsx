@@ -3,11 +3,13 @@ import { AutoResizeInput, BlockLabel, FormFieldError } from '@/components'
 
 const OtherBlock = () => {
   return (
-    <Flex align="start" gap="2" width="100%">
-      <BlockLabel>Other</BlockLabel>
-      <AutoResizeInput field="hpiOther" />
+    <>
+      <Flex align="start" gap="2" width="100%">
+        <BlockLabel>Other</BlockLabel>
+        <AutoResizeInput field="hpiOther" />
+      </Flex>
       <FormFieldError name="hpiOther" />
-    </Flex>
+    </>
   )
 }
 
