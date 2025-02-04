@@ -214,6 +214,7 @@ const USER_PERMISSIONS = {
   sendToSignatureButtonQuickNotePage: 'sendToSignatureButtonQuickNotePage',
   selectCosignerDisabledQuickNotePage: 'selectCosignerDisabledQuickNotePage',
   selectOtherProviderNonTimeDependentVisitQuickNotePage: 'selectOtherProviderNonTimeDependentVisitQuickNotePage',
+  deleteFollowupTab: "deleteFollowupTab",
 }
 
 export { USER_PERMISSIONS }

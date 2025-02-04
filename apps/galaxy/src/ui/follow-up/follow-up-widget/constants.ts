@@ -61,4 +61,7 @@ const NEXT_OPTIONS = [
   },
 ]
 
-export { NEXT_OPTIONS }
+const DELETE_FOLLOWUP_PERMISSION =
+  'You do not have permission to delete a followup. Please contact your supervisor if you need any further assistance'
+
+export { NEXT_OPTIONS, DELETE_FOLLOWUP_PERMISSION }

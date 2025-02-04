@@ -6,9 +6,12 @@ import { IconButton } from '@radix-ui/themes'
 import { Trash2Icon } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { type PropsWithRow } from '@/components'
+import { useHasPermission } from '@/hooks'
 import { Appointment } from '@/types'
 import { useInactiveRowStatus } from '@/ui/schedule/hooks'
+import { PermissionAlert } from '@/ui/schedule/shared'
 import { cancelAppointmentAction } from '../actions'
+import { DELETE_FOLLOWUP_PERMISSION } from '../constants'
 import { useStore } from '../store'
 
 const RowActionDelete = ({
@@ -16,13 +19,18 @@ const RowActionDelete = ({
 }: PropsWithRow<Appointment>) => {
   const [loading, setLoading] = useState(false)
   const searchParams = useSearchParams()
+  const [isOpen, setIsOpen] = useState<boolean>(false)
   const { search } = useStore((state) => ({ search: state.search }))
+  const canDeleteFollowup = useHasPermission('deleteFollowupTab')
   const isInactiveVisit = useInactiveRowStatus(
     record.visitStatus,
     record.isServiceTimeDependent,
   )
 
   const deleteAppointment = async () => {
+    if (!canDeleteFollowup) {
+      return setIsOpen(true)
+    }
     setLoading(true)
     const response = await cancelAppointmentAction(
       record.patientId,
@@ -42,15 +50,24 @@ const RowActionDelete = ({
   }
 
   return (
-    <IconButton
-      size="1"
-      color="gray"
-      variant="ghost"
-      onClick={deleteAppointment}
-      disabled={loading || isInactiveVisit}
-    >
-      <Trash2Icon color={loading ? 'gray' : 'black'} height="14" width="14" />
-    </IconButton>
+    <>
+      <PermissionAlert
+        isOpen={isOpen}
+        message={DELETE_FOLLOWUP_PERMISSION}
+        onClose={() => {
+          setIsOpen(false)
+        }}
+      />
+      <IconButton
+        size="1"
+        color="gray"
+        variant="ghost"
+        onClick={deleteAppointment}
+        disabled={loading || isInactiveVisit}
+      >
+        <Trash2Icon color={loading ? 'gray' : 'black'} height="14" width="14" />
+      </IconButton>
+    </>
   )
 }
 
