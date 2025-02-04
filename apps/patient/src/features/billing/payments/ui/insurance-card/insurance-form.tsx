@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { ActionErrorState, ActionSuccessState } from '@psychplus-v2/api'
@@ -203,6 +203,15 @@ const InsuranceForm = ({
     hasCardBackImage: insurance?.hasCardBackImage ?? false,
   })
 
+  const hasChanges = () => {
+    const currentValues = form.getValues()
+    return Object.keys(getFormDefaultValues(insurance)).some((key) => {
+      return getFormDefaultValues[key as keyof typeof getFormDefaultValues] !== currentValues[key as keyof typeof currentValues]
+    })
+  }
+  
+  
+
   const form = useForm<SchemaType>({
     resolver: zodResolver(schema),
     reValidateMode: 'onChange',
@@ -241,6 +250,11 @@ const InsuranceForm = ({
   }, [insurance, reset])
 
   const onSubmit = async (data: SchemaType) => {
+    if (!hasChanges()) {
+      onFormClose?.()
+      return
+    }
+
     const payload: InsuranceParams = {
       id: insurance?.id,
       payerName: data.payerName,
