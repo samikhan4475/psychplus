@@ -22,7 +22,7 @@ const WidgetClearButton = <T extends FieldValues>({
   onClear,
 }: WidgetClearButtonProps<T>) => {
   const form = useFormContext<T>()
-  const permission = useHasPermission('canClearWidget')
+  const permission = useHasPermission('clearSelectedOptionsVisitViewTabs')
   const [openAlert, setOpenAlert] = useState(false)
   return (
     <>

@@ -60,11 +60,17 @@ const PastPsychHxWidget = ({
         headerRight={
           !isHistoryHeader ? (
             <>
-              <WidgetClearButton defaultInitialValues={defaultInitialValues} />
-              <WidgetSaveButton />
+              <WidgetClearButton
+                defaultInitialValues={defaultInitialValues}
+                shouldCheckPermission
+              />
+              <WidgetSaveButton shouldCheckPermission />
             </>
           ) : (
-            <WidgetClearButton defaultInitialValues={defaultInitialValues} />
+            <WidgetClearButton
+              defaultInitialValues={defaultInitialValues}
+              shouldCheckPermission
+            />
           )
         }
         formResetValues={defaultInitialValues}

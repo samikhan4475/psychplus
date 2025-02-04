@@ -18,7 +18,7 @@ const ClearButton = ({
   shouldCheckPermission?: boolean
 }) => {
   const form = useFormContext()
-  const permission = useHasPermission('canClearWidget')
+  const permission = useHasPermission('clearSelectedOptionsVisitViewTabs')
   const [openAlert, setOpenAlert] = useState(false)
   return (
     <>

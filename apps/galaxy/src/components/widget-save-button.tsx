@@ -18,7 +18,7 @@ const WidgetSaveButton = ({
   shouldCheckPermission?: boolean
   variant?: 'outline' | 'filled'
 }) => {
-  const permission = useHasPermission('canSaveWidget')
+  const permission = useHasPermission('saveSelectedOptionsVisitViewTabs')
   const [openAlert, setOpenAlert] = useState(false)
 
   return (

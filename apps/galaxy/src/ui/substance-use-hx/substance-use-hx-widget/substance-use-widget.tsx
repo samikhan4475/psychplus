@@ -71,8 +71,11 @@ const SubstanceUseHxWidget = ({
         toggleable={!isHistoryHeader}
         headerRight={
           <>
-            <WidgetClearButton defaultInitialValues={defaultInitialValues} />
-            {!isHistoryHeader && <WidgetSaveButton />}
+            <WidgetClearButton
+              defaultInitialValues={defaultInitialValues}
+              shouldCheckPermission
+            />
+            {!isHistoryHeader && <WidgetSaveButton shouldCheckPermission />}
           </>
         }
         formResetValues={defaultInitialValues}
