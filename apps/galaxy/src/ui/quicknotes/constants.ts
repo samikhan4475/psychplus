@@ -65,4 +65,44 @@ const questionnairesAddToNotesSection = [
   `${QuickNoteSectionName.AddToNoteQuestionnaire}-${QuickNoteSectionName.QuickNoteSectionPcl5}`,
 ]
 
-export { QuickNoteSectionName, questionnairesAddToNotesSection }
+const COPY_PREVIOUS_BUTTON =
+  'You do not have permission to Copy Previous. Please contact your supervisor if you need any further assistance.'
+const PRINT_BUTTON_VISIT_VIEW =
+  'You do not have permission to Print. Please contact your supervisor if you need any further assistance.'
+const COPY_MY_PREVIOUS_BUTTON =
+  'You do not have permission to Copy My Previous. Please contact your supervisor if you need any further assistance.'
+const CLEAR_BUTTON =
+  'You do not have permission to Clear. Please contact your supervisor if you need any further assistance.'
+const SAVE_BUTTON =
+  'You do not have permission to Save. Please contact your supervisor if you need any further assistance.'
+const UPLOAD_BUTTON =
+  'You do not have permission to Upload. Please contact your supervisor if you need any further assistance.'
+const SIGN_BUTTON =
+  'You do not have permission to Sign. Please contact your supervisor if you need any further assistance.'
+const SEND_TO_SIGNATURE_BUTTON =
+  'You do not have permission to Send to Signature. Please contact your supervisor if you need any further assistance.'
+const CHANGE_COSIGNER =
+  'You do not have permission to Change Cosigner. Please contact your supervisor if you need any further assistance.'
+const SELECT_COSIGNER_DISABLED =
+  'You do not have permission to Select Cosigner. Please contact your supervisor if you need any further assistance.'
+const SELECT_PROVIDER_NON_TIME_DEPENDENT_VISIT =
+  'You do not have permission to Select Provider. Please contact your supervisor if you need any further assistance.'
+const SELECT_OTHER_PROVIDER_NON_TIME_DEPENDENT_VISIT =
+  'You do not have permission to Select Other Provider. Please contact your supervisor if you need any further assistance.'
+
+export {
+  QuickNoteSectionName,
+  questionnairesAddToNotesSection,
+  COPY_PREVIOUS_BUTTON,
+  PRINT_BUTTON_VISIT_VIEW,
+  COPY_MY_PREVIOUS_BUTTON,
+  CLEAR_BUTTON,
+  SAVE_BUTTON,
+  UPLOAD_BUTTON,
+  SIGN_BUTTON,
+  SEND_TO_SIGNATURE_BUTTON,
+  CHANGE_COSIGNER,
+  SELECT_COSIGNER_DISABLED,
+  SELECT_PROVIDER_NON_TIME_DEPENDENT_VISIT,
+  SELECT_OTHER_PROVIDER_NON_TIME_DEPENDENT_VISIT,
+}

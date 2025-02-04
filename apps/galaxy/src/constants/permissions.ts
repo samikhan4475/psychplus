@@ -211,6 +211,9 @@ const USER_PERMISSIONS = {
     'changeInActiveToActiveVisitStatusForTimedServices',
   canSaveInsuranceInfo: 'canSaveInsuranceInfo',
   canChangeVerificationStatusInsurance: 'canChangeVerificationStatusInsurance',
+  sendToSignatureButtonQuickNotePage: 'sendToSignatureButtonQuickNotePage',
+  selectCosignerDisabledQuickNotePage: 'selectCosignerDisabledQuickNotePage',
+  selectOtherProviderNonTimeDependentVisitQuickNotePage: 'selectOtherProviderNonTimeDependentVisitQuickNotePage',
 }
 
 export { USER_PERMISSIONS }

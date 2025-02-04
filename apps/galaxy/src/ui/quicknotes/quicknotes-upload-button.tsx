@@ -7,7 +7,9 @@ import { UploadIcon } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { cn, postEvent } from '@/utils'
 import { uploadDocumentAction } from './actions'
-import { QuickNoteSectionName } from './constants'
+import { QuickNoteSectionName, UPLOAD_BUTTON } from './constants'
+import { useQuickNotesPermissions } from './hooks'
+import { PermissionAlert } from './permission-alert'
 
 interface QuickNotesUploadButtonProps {
   isWhiteBg?: boolean
@@ -18,6 +20,9 @@ const QuickNotesUploadButton = ({
   isWhiteBg = false,
   isIcon = true,
 }: QuickNotesUploadButtonProps) => {
+  const [isOpen, setIsOpen] = useState<boolean>(false)
+  const [alertMessage, setAlertMessage] = useState<string>('')
+  const { canUploadButtonQuickNotePage } = useQuickNotesPermissions()
   const [isUploading, setIsUploading] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
   const patientId = useParams().id as string
@@ -69,12 +74,27 @@ const QuickNotesUploadButton = ({
 
   return (
     <>
+      <PermissionAlert
+        isOpen={isOpen}
+        message={alertMessage}
+        onClose={() => {
+          setIsOpen(false)
+          setAlertMessage('')
+        }}
+      />
       <Button
         size="1"
         highContrast={isWhiteBg ? false : true}
         variant={isWhiteBg ? 'outline' : 'solid'}
         color={isWhiteBg ? 'gray' : 'blue'}
-        onClick={triggerFileInput}
+        onClick={() => {
+          if (!canUploadButtonQuickNotePage) {
+            setIsOpen(true)
+            setAlertMessage(UPLOAD_BUTTON)
+            return
+          }
+          triggerFileInput()
+        }}
         disabled={isUploading}
         className={cn({ 'text-black': isWhiteBg })}
       >

@@ -10,6 +10,9 @@ import { useStore as useGlobalStore } from '@/store'
 import { Appointment } from '@/types'
 import { useStore as useDiagnosisStore } from '@/ui/diagnosis/store'
 import { AlertDialog } from '../alerts'
+import { SEND_TO_SIGNATURE_BUTTON, SIGN_BUTTON } from './constants'
+import { useQuickNotesPermissions } from './hooks'
+import { PermissionAlert } from './permission-alert'
 import { useStore, validateDiagnosis } from './store'
 
 interface QuickNotesSignButtonProps {
@@ -36,6 +39,10 @@ const initialAlertInfo = {
 
 const QuickNotesSignButton = ({ appointment }: QuickNotesSignButtonProps) => {
   const { workingDiagnosisData, saveWorkingDiagnosis } = useDiagnosisStore()
+  const [isPermissionAlertOpen, setIsPermissionAlertOpen] =
+    useState<boolean>(false)
+  const [permissionAlertMessage, setPermissionAlertMessage] =
+    useState<string>('')
   const { staffId, staffRoleCode } = useGlobalStore((state) => ({
     staffId: state.user.staffId,
     staffRoleCode: state.staffResource.staffRoleCode,
@@ -46,6 +53,8 @@ const QuickNotesSignButton = ({ appointment }: QuickNotesSignButtonProps) => {
     setWidgetsData: state.setWidgetsData,
     markAsError: state.markAsError,
   }))
+  const { canSignButtonQuickNotePage, canSendToSignatureButtonQuickNotePage } =
+    useQuickNotesPermissions()
   const isPrescriber = staffRoleCode === STAFF_ROLE_CODE_PRESCRIBER
   const [alertInfo, setAlertInfo] = useState(initialAlertInfo)
 
@@ -75,6 +84,15 @@ const QuickNotesSignButton = ({ appointment }: QuickNotesSignButtonProps) => {
       toast.error(
         `Must have ${missingDiagnosisCodes} diagnosis to Sign/Send to signature.`,
       )
+      return
+    }
+    if (isPrescriber && !canSignButtonQuickNotePage) {
+      setIsPermissionAlertOpen(true)
+      setPermissionAlertMessage(SIGN_BUTTON)
+      return
+    } else if (!isPrescriber && !canSendToSignatureButtonQuickNotePage) {
+      setIsPermissionAlertOpen(true)
+      setPermissionAlertMessage(SEND_TO_SIGNATURE_BUTTON)
       return
     }
     saveWorkingDiagnosis(patientId, setWidgetsData, false)
@@ -150,6 +168,15 @@ const QuickNotesSignButton = ({ appointment }: QuickNotesSignButtonProps) => {
         <PenLineIcon height={14} width={14} strokeWidth={2} />
         {isPrescriber ? 'Sign' : 'Send To Sign'}
       </Button>
+
+      <PermissionAlert
+        isOpen={isPermissionAlertOpen}
+        message={permissionAlertMessage}
+        onClose={() => {
+          setIsPermissionAlertOpen(false)
+          setPermissionAlertMessage('')
+        }}
+      />
 
       <AlertDialog
         open={!!alertInfo.show}

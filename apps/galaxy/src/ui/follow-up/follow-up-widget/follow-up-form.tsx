@@ -64,7 +64,7 @@ const FollowUpForm = ({
         return setError(response.error || 'Failed to fetch appointment data')
       }
 
-      const data = response.data[0]
+      const data = response.data?.[0] || {}
       setAppointment(data)
       form.setValue('location', data.locationId)
       form.resetField('providerId', { defaultValue: `${data.providerId}` })

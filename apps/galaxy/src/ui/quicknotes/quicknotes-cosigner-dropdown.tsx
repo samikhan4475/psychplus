@@ -1,9 +1,12 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { Flex, Select, Text, Tooltip } from '@radix-ui/themes'
 import { Cosigner } from '@/types'
 import { filterDefaultCosigner, getPatientFullName } from '@/utils'
+import { CHANGE_COSIGNER, COPY_MY_PREVIOUS_BUTTON } from './constants'
+import { useQuickNotesPermissions } from './hooks'
+import { PermissionAlert } from './permission-alert'
 import { useStore } from './store'
 
 interface QuickNotesCosignerDropdownProps {
@@ -13,6 +16,9 @@ interface QuickNotesCosignerDropdownProps {
 const QuickNotesCosignerDropdown = ({
   cosigners,
 }: QuickNotesCosignerDropdownProps) => {
+  const [isOpen, setIsOpen] = useState<boolean>(false)
+  const [alertMessage, setAlertMessage] = useState<string>('')
+  const { canChangeCosignerQuickNotePage } = useQuickNotesPermissions()
   const uniqueCosigners = Array.from(
     new Map(cosigners.map((item) => [item.id, item])).values(),
   )
@@ -52,7 +58,14 @@ const QuickNotesCosignerDropdown = ({
       </Text>
       <Select.Root
         size="1"
-        onValueChange={(value) => setSignOptions({ coSignedByUserId: value })}
+        onValueChange={(value) => {
+          if (!canChangeCosignerQuickNotePage) {
+            setIsOpen(true)
+            setAlertMessage(CHANGE_COSIGNER)
+            return
+          }
+          setSignOptions({ coSignedByUserId: value })
+        }}
         value={cosignerId || ''}
         defaultValue={cosignerId || ''}
       >
@@ -74,6 +87,14 @@ const QuickNotesCosignerDropdown = ({
           ))}
         </Select.Content>
       </Select.Root>
+      <PermissionAlert
+        isOpen={isOpen}
+        message={alertMessage}
+        onClose={() => {
+          setIsOpen(false)
+          setAlertMessage('')
+        }}
+      />
     </Flex>
   )
 }
