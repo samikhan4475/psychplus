@@ -42,10 +42,8 @@ const TcmWidget = ({
         title={!isTcmTab ? 'TCM' : undefined}
         headerRight={
           <>
-            {!isTcmTab && (
-              <WidgetClearButton defaultInitialValues={defaultValues} />
-            )}
-            {!isTcmTab && <WidgetSaveButton />}
+            {!isTcmTab && <WidgetClearButton defaultInitialValues={defaultValues} />}
+            {!isTcmTab && <WidgetSaveButton shouldCheckPermission/>}
           </>
         }
         formResetValues={defaultValues}

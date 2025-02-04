@@ -25,8 +25,8 @@ const AssessmentPlanWidget = ({ patientId }: AssessmentPlanWidgetProps) => {
         getData={() => []}
         headerRight={
           <>
-            <WidgetClearButton />
-            <WidgetSaveButton />
+            <WidgetClearButton shouldCheckPermission />
+            <WidgetSaveButton shouldCheckPermission />
           </>
         }
       >

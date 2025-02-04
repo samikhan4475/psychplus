@@ -3,7 +3,11 @@
 import { useEffect, useState } from 'react'
 import { Flex } from '@radix-ui/themes'
 import { FormProvider } from 'react-hook-form'
-import { WidgetFormContainer, WidgetSaveButton } from '@/components'
+import {
+  WidgetClearButton,
+  WidgetFormContainer,
+  WidgetSaveButton,
+} from '@/components'
 import { Appointment } from '@/types'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { cn } from '@/utils'
@@ -32,7 +36,6 @@ import { usePhysicalExamWidgetForm } from './physical-exam-widget-form'
 import { type PhysicalExamWidgetSchemaType } from './physical-exam-widget-schema'
 import { createEmptyFormValues } from './physicalExamDefaults'
 import { containsAbnormal, normal } from './utils'
-import { WidgetClearButton } from './widget-clear-button'
 
 interface PhysicalExamWidgetProps {
   patientId: string
@@ -110,8 +113,17 @@ const PhysicalExamWidget = ({
         }
         headerRight={
           <>
-            <WidgetClearButton handleOnClear={handleOnClear} />
-            {!isPhysicalExamTab && <WidgetSaveButton />}
+            <WidgetClearButton
+              onClear={handleOnClear}
+              shouldCheckPermission
+              defaultInitialValues={{
+                ...createEmptyFormValues(),
+                widgetContainerCheckboxField: form.watch(
+                  'widgetContainerCheckboxField',
+                ),
+              }}
+            />
+            {!isPhysicalExamTab && <WidgetSaveButton shouldCheckPermission />}
           </>
         }
         headerLeft={

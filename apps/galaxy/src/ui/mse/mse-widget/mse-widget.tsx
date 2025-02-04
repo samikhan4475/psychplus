@@ -3,6 +3,7 @@
 import { useEffect } from 'react'
 import { FormProvider } from 'react-hook-form'
 import {
+  WidgetClearButton,
   FormFieldError,
   WidgetFormContainer,
   WidgetSaveButton,
@@ -31,7 +32,6 @@ import { MseHeader } from './mse-header'
 import { useMseWidgetForm } from './mse-widget-form'
 import { MseWidgetSchemaType } from './mse-widget-schema'
 import { createEmptyFormValues } from './mseDefaults'
-import { WidgetClearButton } from './widget-clear-button'
 
 interface MseWidgetProps {
   patientId: string
@@ -75,8 +75,11 @@ const MseWidget = ({
         appointment={appointment}
         headerRight={
           <>
-            <WidgetClearButton />
-            {!isMseTab && <WidgetSaveButton />}
+            <WidgetClearButton
+              defaultInitialValues={createEmptyFormValues}
+              shouldCheckPermission
+            />
+            {!isMseTab && <WidgetSaveButton shouldCheckPermission />}
           </>
         }
         formResetValues={{

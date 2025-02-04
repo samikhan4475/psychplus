@@ -39,7 +39,7 @@ const TherapyAssessmentPlanTab = ({
         headerRight={
           <>
             <WidgetClearButton />
-            {!isTherapyAssessmentPlanTab && <WidgetSaveButton />}
+            {!isTherapyAssessmentPlanTab && <WidgetSaveButton shouldCheckPermission/>}
           </>
         }
         tags={

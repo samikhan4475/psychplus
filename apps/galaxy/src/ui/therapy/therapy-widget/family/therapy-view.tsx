@@ -2,10 +2,9 @@
 
 import { useSearchParams } from 'next/navigation'
 import { FormProvider } from 'react-hook-form'
-import { WidgetFormContainer } from '@/components'
+import { WidgetFormContainer, WidgetSaveButton } from '@/components'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { AdditionalTherapyDetailBlock } from '../blocks/additional-therapy-detail'
-import { SaveButton } from '../blocks/save-button'
 import { TherapyTableBlock } from '../blocks/therapy-table-block'
 import { ClearButton } from './blocks/clear-button'
 import { TherapySessionParticipantsBlock } from './blocks/session-participants'
@@ -44,7 +43,7 @@ const FamilyTherapyView = ({ patientId, initialValue }: TherapyWidgetProps) => {
         headerRight={
           <>
             <ClearButton />
-            <SaveButton />
+            <WidgetSaveButton shouldCheckPermission />
           </>
         }
         formResetValues={getFamilyInitialValues()}

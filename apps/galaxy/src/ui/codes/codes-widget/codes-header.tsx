@@ -1,5 +1,5 @@
 import { Flex, Text } from '@radix-ui/themes'
-import { WidgetTabSaveButton } from '@/components'
+import { WidgetSaveButton } from '@/components'
 
 const CodesHeader = () => {
   return (
@@ -15,7 +15,7 @@ const CodesHeader = () => {
       </Flex>
 
       <Flex className="gap-x-2 text-[20px]" align="center">
-        <WidgetTabSaveButton />
+        <WidgetSaveButton variant='filled' shouldCheckPermission/>
       </Flex>
     </Flex>
   )

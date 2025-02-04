@@ -54,8 +54,8 @@ const HpiWidget = ({
         headerRight={
           !isHpiHeader && (
             <>
-              <ClearButton />
-              <WidgetSaveButton />
+              <ClearButton shouldCheckPermission/>
+              <WidgetSaveButton shouldCheckPermission/>
             </>
           )
         }

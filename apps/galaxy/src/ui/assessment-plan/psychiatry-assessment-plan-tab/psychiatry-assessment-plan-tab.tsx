@@ -1,7 +1,11 @@
 'use client'
 
 import { FormProvider } from 'react-hook-form'
-import { WidgetFormContainer, WidgetSaveButton } from '@/components'
+import {
+  WidgetClearButton,
+  WidgetFormContainer,
+  WidgetSaveButton,
+} from '@/components'
 import { QuickNoteSectionItem } from '@/types'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { AssessmentPlanTabs } from '../constants'
@@ -10,10 +14,9 @@ import {
   PatientDiscussionCompletedBlock,
 } from './blocks'
 import { transformIn, transformOut } from './data'
+import { createEmptyFormValues } from './psychiatry-assessment-plan-defaults'
 import { PsychiatryAssessmentPlanHeader } from './psychiatry-assessment-plan-header'
 import { usePsychiatryAssessmentPlanTabForm } from './psychiatry-assessment-plan-tab-form'
-import { WidgetClearButton } from './widget-clear-button'
-import { createEmptyFormValues } from './psychiatry-assessment-plan-defaults'
 
 interface PsychiatryAssessmentPlanTabProps {
   patientId: string
@@ -41,8 +44,13 @@ const PsychiatryAssessmentPlanTab = ({
         getData={transformOut(patientId)}
         headerRight={
           <>
-            <WidgetClearButton />
-            {!isPsychiatryAssessmentPlanTab && <WidgetSaveButton />}
+            <WidgetClearButton
+              shouldCheckPermission
+              defaultInitialValues={createEmptyFormValues}
+            />
+            {!isPsychiatryAssessmentPlanTab && (
+              <WidgetSaveButton shouldCheckPermission />
+            )}
           </>
         }
         tags={

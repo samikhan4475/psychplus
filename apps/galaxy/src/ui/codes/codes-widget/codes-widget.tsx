@@ -80,7 +80,15 @@ const CodesWidget = ({
         title="Codes"
         tags={isCodesHeader ? [QuickNoteSectionName.QuicknoteSectionCodes] : []}
         getData={transformOut(patientId, appointmentId)}
-        headerRight={!isCodesHeader && <WidgetSaveButton />}
+        headerRight={
+          <>
+            {!isCodesHeader && (
+              <>
+                <WidgetSaveButton shouldCheckPermission />
+              </>
+            )}
+          </>
+        }
         topHeader={isCodesHeader && <CodesHeader />}
         isResetDisabled
       >
