@@ -7,6 +7,7 @@ const AssessmentTreatmentPlanNotesBlock = () => {
         field="assessmentTreatmentPlanNotes"
         className="h-[64px] w-[664px]"
         placeHolder="Start writing patient plan"
+        maxLength={4000}
       />
       <FormFieldError name="assessmentTreatmentPlanNotes" />
     </FormFieldContainer>

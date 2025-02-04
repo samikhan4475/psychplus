@@ -11,6 +11,7 @@ interface TextAreaInputProps {
   autoFocus?: boolean
   className?: string
   placeHolder?:string
+  maxLength?: number;
 }
 
 const TextAreaInput = ({
@@ -18,7 +19,8 @@ const TextAreaInput = ({
   field,
   autoFocus,
   className,
-  placeHolder
+  placeHolder,
+  maxLength,
 }: TextAreaInputProps) => {
   const form = useFormContext()
 
@@ -30,6 +32,7 @@ const TextAreaInput = ({
         autoFocus={autoFocus}
         className={cn('h-[var(--chip-height)]', className)}
         placeholder={placeHolder}
+        maxLength={maxLength}
         {...form.register(field)}
       />
     </Flex>
