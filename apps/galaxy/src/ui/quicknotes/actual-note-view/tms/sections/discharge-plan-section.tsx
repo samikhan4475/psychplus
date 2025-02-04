@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useParams } from 'next/navigation'
 import { Flex, Heading, Text } from '@radix-ui/themes'
 import { getPatientReferralsAction } from '@/actions'
+import { useGenericEventListener } from '@/hooks'
 import { PatientReferral } from '@/types'
 import { TmsWidgetSchemaType } from '@/ui/procedures/tms-tab/tms-widget-schema'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
@@ -44,19 +45,27 @@ const DischargePlanSection = ({ data }: Props<TmsWidgetSchemaType>) => {
   const [referalsList, setReferalsList] = useState<PatientReferral[]>([])
   const patientId = useParams().id as string
 
-  useEffect(() => {
-    const getReferals = async () => {
-      const result = await getPatientReferralsAction({
-        patientIds: [patientId],
-        tags: [QuickNoteSectionName.QuicknoteSectionReferrals],
-        payload: getDefaultPayload(),
-      })
-      if (result.state !== 'error') {
-        setReferalsList(result?.data?.referrals)
+  const refetch = useCallback(() => {
+    getPatientReferralsAction({
+      patientIds: [patientId],
+      payload: getDefaultPayload(),
+    }).then((response) => {
+      if (response.state === 'error') {
+        setReferalsList([])
+      } else {
+        setReferalsList(response?.data?.referrals ?? [])
       }
-    }
-    getReferals()
-  }, [])
+    })
+  }, [patientId])
+  useEffect(() => {
+    refetch()
+  }, [refetch])
+
+  useGenericEventListener({
+    onEventTrigger: refetch,
+    eventType: 'widget:save',
+    widgetId: QuickNoteSectionName.QuicknoteSectionReferrals,
+  })
 
   return (
     <Flex direction={'column'} gap={'2'}>
@@ -89,7 +98,10 @@ const DischargePlanSection = ({ data }: Props<TmsWidgetSchemaType>) => {
               )}
             </>
           )}
-          {option.key === 'referral' && <Details data={referalsList} />}
+          {option.key === 'referral' &&
+            data?.dischargePlan?.includes('referral') && (
+              <Details data={referalsList} />
+            )}
         </Flex>
       ))}
     </Flex>
