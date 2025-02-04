@@ -22,7 +22,7 @@ const USER_PERMISSIONS = {
   editBillingHistory: 'editBillingHistory',
   saveAddMedicationsPage: 'saveAddMedicationsPage',
   viewPatientInfoHistory: 'viewPatientInfoHistory',
-  canAddAuthRefInsurance: 'canAddAuthRefInsurance',
+  addAuthRefInsurancePage: 'addAuthRefInsurancePage',
   addToNoteButtonHistoryPopupsVisitViewTabs:
     'addToNoteButtonHistoryPopupsVisitViewTabs',
   viewReportEligibility: 'viewReportEligibility',
@@ -57,7 +57,7 @@ const USER_PERMISSIONS = {
   sendNoteToCoSign: 'sendNoteToCoSign',
   sendPolicyMessage: 'sendPolicyMessage',
   editDischargeReconciliationPopup: 'editDischargeReconciliationPopup',
-  canOpenInsuranceHistory: 'canOpenInsuranceHistory',
+  openInsuranceHistory: 'openInsuranceHistory',
   addRecommendedPharmacy: 'addRecommendedPharmacy',
   historyQuestionnaireDashboardPage: 'historyQuestionnaireDashboardPage',
   downloadSignedPolicy: 'downloadSignedPolicy',
@@ -69,7 +69,7 @@ const USER_PERMISSIONS = {
     'changeTimeAndOrDurationOnlyOfSelfAppointments',
   addVitalsPopup: 'addVitalsPopup',
   copyPreviousButtonQuickNotePage: 'copyPreviousButtonQuickNotePage',
-  canAddInsuranceInfo: 'canAddInsuranceInfo',
+  addInsuranceInfo: 'addInsuranceInfo',
   changeVisitStatusToConfirmedStaff: 'changeVisitStatusToConfirmedStaff',
   changeDateViewQuestionnairePage: 'changeDateViewQuestionnairePage',
   addRelationshipPatientInfo: 'addRelationshipPatientInfo',
@@ -99,7 +99,7 @@ const USER_PERMISSIONS = {
   saveAddVitalsPopup: 'saveAddVitalsPopup',
   replyMessageButton: 'replyMessageButton',
   arrowsNextPreviousMarPage: 'arrowsNextPreviousMarPage',
-  canAddeligibilityCheckInsurance: 'canAddeligibilityCheckInsurance',
+  eligibilityCheckInsurancePage: 'eligibilityCheckInsurancePage',
   markAsErrorProviderNotesPage: 'markAsErrorProviderNotesPage',
   changeVisitStatusToCheckInOfSelfAppointments:
     'changeVisitStatusToCheckInOfSelfAppointments',
@@ -126,7 +126,7 @@ const USER_PERMISSIONS = {
   createAddendumProviderNotesPage: 'createAddendumProviderNotesPage',
   sheetViewVitalsHistory: 'sheetViewVitalsHistory',
   printButtonVisitViewTabs: 'printButtonVisitViewTabs',
-  canViewHistoryInsurancePage: 'canViewHistoryInsurancePage',
+  viewHistoryInsurancePage: 'viewHistoryInsurancePage',
   starRecommendedPharmacy: 'starRecommendedPharmacy',
   rejectNote: 'rejectNote',
   changeStatusVitalsTab: 'changeStatusVitalsTab',
@@ -209,16 +209,15 @@ const USER_PERMISSIONS = {
   canClickLicenseEditIconFromAdminView: 'canClickLicenseEditIconFromAdminView',
   changeInActiveToActiveVisitStatusForTimedServices:
     'changeInActiveToActiveVisitStatusForTimedServices',
-  canSaveInsuranceInfo: 'canSaveInsuranceInfo',
-  canChangeVerificationStatusInsurance: 'canChangeVerificationStatusInsurance',
+  saveInsuranceInfo: 'saveInsuranceInfo',
+  changeVerificationStatusInsurance: 'changeVerificationStatusInsurance',
   sendToSignatureButtonQuickNotePage: 'sendToSignatureButtonQuickNotePage',
   selectCosignerDisabledQuickNotePage: 'selectCosignerDisabledQuickNotePage',
   selectOtherProviderNonTimeDependentVisitQuickNotePage:
     'selectOtherProviderNonTimeDependentVisitQuickNotePage',
   toggleMakePrimaryCard: 'toggleMakePrimaryCard',
   deletePaymentCard: 'deletePaymentCard',
-  selectOtherProviderNonTimeDependentVisitQuickNotePage: 'selectOtherProviderNonTimeDependentVisitQuickNotePage',
-  deleteFollowupTab: "deleteFollowupTab",
+  deleteFollowupTab: 'deleteFollowupTab',
 }
 
 export { USER_PERMISSIONS }

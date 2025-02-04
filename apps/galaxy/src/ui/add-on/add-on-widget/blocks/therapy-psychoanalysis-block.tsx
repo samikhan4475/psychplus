@@ -17,7 +17,7 @@ const THERAPY_PSYCHOANALYSIS_OPTIONS = [
 ]
 
 const TherapyPsychoAnalysisBlock = () => {
-  const { watch } = useFormContext()
+  const { watch, setValue } = useFormContext()
   const therapyPsychoanalysis = watch('therapyPsychoanalysis')
 
   return (
@@ -39,6 +39,14 @@ const TherapyPsychoAnalysisBlock = () => {
           <RadioSelectSection
             field="therapyPsychoanalysis"
             options={THERAPY_PSYCHOANALYSIS_OPTIONS}
+            onChange={(value) => {
+              if (value !== 'therapy') {
+                setValue('therapyTimeSpent', '')
+                setValue('timeRangeOne', '')
+                setValue('timeRangeTwo', '')
+                setValue('timeRangeThree', '')
+              }
+            }}
           />
           {therapyPsychoanalysis === 'therapy' && (
             <>

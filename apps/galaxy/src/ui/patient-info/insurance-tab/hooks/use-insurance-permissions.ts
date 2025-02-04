@@ -1,18 +1,18 @@
 import { useHasPermission } from '@/hooks'
 
 const useInsurancePermissions = () => {
-  const canAddAuthRefInsurance = useHasPermission('canAddAuthRefInsurance')
-  const canOpenInsuranceHistory = useHasPermission('canOpenInsuranceHistory')
-  const canAddInsuranceInfo = useHasPermission('canAddInsuranceInfo')
+  const canAddAuthRefInsurance = useHasPermission('addAuthRefInsurancePage')
+  const canOpenInsuranceHistory = useHasPermission('openInsuranceHistory')
+  const canAddInsuranceInfo = useHasPermission('addInsuranceInfo')
   const canAddeligibilityCheckInsurance = useHasPermission(
-    'canAddeligibilityCheckInsurance',
+    'eligibilityCheckInsurancePage',
   )
   const canViewHistoryInsurancePage = useHasPermission(
-    'canViewHistoryInsurancePage',
+    'viewHistoryInsurancePage',
   )
-  const canSaveInsuranceInfo = useHasPermission('canSaveInsuranceInfo')
+  const canSaveInsuranceInfo = useHasPermission('saveInsuranceInfo')
   const canChangeVerificationStatusInsurance = useHasPermission(
-    'canChangeVerificationStatusInsurance',
+    'changeVerificationStatusInsurance',
   )
 
   return {
