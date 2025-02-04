@@ -19,6 +19,7 @@ const defaultValues : TcmWidgetSchemaType = {
   dcContactMadeBy: "",
   tcmDate: null,
   tcmResults: "",
+  tcmResultCheckBox: true
 }
 
 export { 

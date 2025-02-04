@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { DateValue } from "react-aria-components";
 import { DISABLING_RESULTS } from "./constants";
+import { getDateDifference } from "@/utils";
 
 const dateValidation = z.custom<DateValue | null>();
 
@@ -12,6 +13,7 @@ const tcmWidgetSchema = z
     dcContactMadeBy: z.string().trim().optional(), 
     tcmDate: dateValidation,
     tcmResults: z.string().min(1, { message: 'Please Select an Option' }),
+    tcmResultCheckBox: z.boolean(),
   })
   .refine(
     (data) => data.dcDate !== null,
@@ -57,6 +59,19 @@ const tcmWidgetSchema = z
   )
   .refine(
     (data) => {
+      if (data.dcDate && data.tcmDate) {
+        const diffInDays = getDateDifference(data.tcmDate,data.dcDate);
+        return diffInDays <= 14;
+      }
+      return true;
+    },
+    {
+      message: "Date cannot be more than 14 days after Discharge Date",
+      path: ["tcmDate"],
+    }
+  )
+  .refine(
+    (data) => {
       const isDisabled = DISABLING_RESULTS.includes(data.tcmResults);
       if (!isDisabled) {
         return !!data.dcContactMadeBy?.trim(); 
@@ -66,6 +81,13 @@ const tcmWidgetSchema = z
     {
       message: "Please Enter Contact Name",
       path: ["dcContactMadeBy"],
+    }
+  )
+  .refine(
+    (data) => data.tcmResultCheckBox === true,
+    {
+      message: "Review checkbox must be checked",
+      path: ["tcmResultCheckBox"],
     }
   );
 

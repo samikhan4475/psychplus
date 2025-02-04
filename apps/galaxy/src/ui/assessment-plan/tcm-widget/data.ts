@@ -51,7 +51,7 @@ const transformIn = (
   value: QuickNoteSectionItem[],
   appointmentData?: Appointment,
 ): TcmWidgetSchemaType => {
-  const result: Record<string, string | DateValue | null> = {
+  const result: Record<string, string | DateValue | null | boolean> = {
     dcDate: appointmentData?.dischargeDate
       ? getLocalCalendarDate(appointmentData?.dischargeDate)
       : null,
@@ -60,11 +60,15 @@ const transformIn = (
     dcContactMadeBy: '',
     tcmDate: null,
     tcmResults: '',
+    tcmResultCheckBox: true,
   }
   value.forEach((item) => {
-    result[item.sectionItem as keyof TcmWidgetSchemaType] =
-      item.sectionItemValue
-  })
+    if (item.sectionItem === 'tcmResultCheckBox' && typeof item.sectionItemValue === 'string') {
+      result[item.sectionItem as keyof TcmWidgetSchemaType] = true;
+    } else {
+      result[item.sectionItem as keyof TcmWidgetSchemaType] = item.sectionItemValue;
+    }
+  });
   return result as TcmWidgetSchemaType
 }
 
@@ -77,6 +81,9 @@ const transformOut =
       let newValue = value
       if ((key === 'dcDate' || key === 'tcmDate') && value) {
         newValue = value.toString()
+      }
+      if(key === 'tcmResultCheckBox'){
+        newValue = "true"
       }
       result.push({
         pid: Number(patientId),
