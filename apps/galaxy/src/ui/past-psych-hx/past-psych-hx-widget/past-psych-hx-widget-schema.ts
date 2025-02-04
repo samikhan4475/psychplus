@@ -7,8 +7,8 @@ const conditionalPositiveInt = z.coerce.number().optional()
 const pastPsychHxWidgetSchema = z
   .object({
     widgetContainerCheckboxField: z.string().optional(),
-    psychHospitalizations: conditionalPositiveInt,
-    suicideAttempts: conditionalPositiveInt,
+    psychHospitalizations: z.coerce.number(),
+    suicideAttempts: z.coerce.number(),
     depression: z.oboolean(),
     depressionAge: conditionalPositiveInt,
     anxiety: z.oboolean(),
