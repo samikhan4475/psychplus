@@ -6,8 +6,9 @@ import { PlusCircleIcon } from 'lucide-react'
 import useOnclickOutside from 'react-cool-onclickoutside'
 import { useDebouncedCallback } from 'use-debounce'
 import { LoadingPlaceholder } from '@/components'
+import { useHasPermission } from '@/hooks'
 import { DiagnosisIcd10Code } from '@/types'
-import { SearchButton } from '@/ui/schedule/shared'
+import { PermissionAlert, SearchButton } from '@/ui/schedule/shared'
 import { cn } from '@/utils'
 import { useStore } from '../../store'
 
@@ -69,15 +70,16 @@ const ServiceDiagnosisList = () => {
 }
 
 const SearchDiagnosis = () => {
+  const [isOpen, setIsOpen] = useState(false)
   const { loadingServicesDiagnosis, fetchServiceDiagnosis } = useStore()
   const [showOptions, setShowOptions] = useState(false)
+  const hasPermission = useHasPermission('addDiagnosisWorkingDiagnosisTab')
 
   const handleSearchService = useDebouncedCallback((value: string) => {
     fetchServiceDiagnosis(value)
   }, 500)
 
   const ref = useOnclickOutside(() => setShowOptions(false))
-
   return (
     <Flex align="center" gap="2">
       <Box ref={ref} className="relative">
@@ -99,7 +101,13 @@ const SearchDiagnosis = () => {
             className="min-w-14 !outline-white w-[500px] flex-1 [box-shadow:none]"
             placeholder="Search Diagnosis"
             onChange={(e) => handleSearchService(e.target.value)}
-            onFocus={() => setShowOptions(true)}
+            onFocus={() => {
+              if (hasPermission) {
+                setShowOptions(true)
+              } else {
+                setIsOpen(true)
+              }
+            }}
           />
         </Flex>
 
@@ -116,6 +124,12 @@ const SearchDiagnosis = () => {
         )}
       </Box>
       <SearchButton />
+
+      <PermissionAlert
+        message="You do not have permission to add diagnosis. Please contact your supervisor if you need any further assistance"
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+      />
     </Flex>
   )
 }

@@ -1,8 +1,10 @@
 'use client'
 
-import { PropsWithChildren } from 'react'
+import { PropsWithChildren, useState } from 'react'
 import { Cross2Icon, PlusIcon } from '@radix-ui/react-icons'
 import { Button, Dialog, Flex, Text } from '@radix-ui/themes'
+import { useHasPermission } from '@/hooks'
+import { PermissionAlert } from '@/ui/schedule/shared'
 import { cn } from '@/utils'
 
 type FillOutButtonProps = PropsWithChildren<{
@@ -11,12 +13,44 @@ type FillOutButtonProps = PropsWithChildren<{
   onClose?: () => void
 }>
 
+const WidgetAddButtonUnauthrized = () => {
+  const [isOpen, setIsOpen] = useState(false)
+
+  return (
+    <>
+      <Button
+        onClick={() => setIsOpen(true)}
+        variant="outline"
+        size="1"
+        color="gray"
+        className="text-black"
+      >
+        <Flex justify="between" align="center" gap="1">
+          <PlusIcon height={16} width={16} />
+          <Text>Add</Text>
+        </Flex>
+      </Button>
+
+      <PermissionAlert
+        message="You do not have permission to add diagnosis. Please contact your supervisor if you need any further assistance"
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+      />
+    </>
+  )
+}
+
 const WidgetAddButton = ({
   title,
   children,
   className,
   onClose,
 }: FillOutButtonProps) => {
+  const hasPermission = useHasPermission('addDiagnosisWorkingDiagnosisTab')
+
+  if (!hasPermission) {
+    return <WidgetAddButtonUnauthrized />
+  }
   return (
     <Dialog.Root>
       <Dialog.Trigger>

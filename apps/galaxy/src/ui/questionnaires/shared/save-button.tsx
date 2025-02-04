@@ -1,10 +1,12 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useParams } from 'next/navigation'
 import { Button } from '@radix-ui/themes'
 import { SaveIcon } from 'lucide-react'
+import { useHasPermission } from '@/hooks'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
+import { PermissionAlert } from '@/ui/schedule/shared'
 import { useStore } from '../store'
 
 interface SaveButtonProps {
@@ -14,6 +16,7 @@ interface SaveButtonProps {
 
 const SaveButton = ({ icon = true }: SaveButtonProps) => {
   const patientId = useParams().id as string
+  const [isOpen, setOpen] = useState(false)
   const { initializeQuestionnaires } = useStore()
 
   const questionnaireWedgetIds: QuickNoteSectionName[] = [
@@ -42,15 +45,39 @@ const SaveButton = ({ icon = true }: SaveButtonProps) => {
 
   useEffect(() => {
     window.addEventListener('message', handleEvent)
+
+    return () => {
+      window.removeEventListener('message', handleEvent)
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const className = 'h-auto px-1 py-1 text-[11px] font-[300]'
+
+  const hasPermission = useHasPermission('saveButtonQuickNotePage')
+
   return (
-    <Button type="submit" size="1" highContrast className={className}>
-      {icon && <SaveIcon width={15} height={15} strokeWidth={1.75} />}
-      Save
-    </Button>
+    <>
+      <Button
+        type={hasPermission ? 'submit' : 'button'}
+        size="1"
+        highContrast
+        onClick={() => {
+          if (!hasPermission) {
+            setOpen(true)
+          }
+        }}
+        className={className}
+      >
+        {icon && <SaveIcon width={15} height={15} strokeWidth={1.75} />}
+        Save
+      </Button>
+      <PermissionAlert
+        message="You do not have permission to save. Please contact your supervisor if you need any further assistance"
+        isOpen={isOpen}
+        onClose={() => setOpen(false)}
+      />
+    </>
   )
 }
 

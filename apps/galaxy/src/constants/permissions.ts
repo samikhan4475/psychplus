@@ -6,6 +6,7 @@ const USER_PERMISSIONS = {
   clickSaveOnEditVisit: 'clickSaveOnEditVisit',
   saveAdmitReconciliationPopup: 'saveAdmitReconciliationPopup',
   changeStatusDiagnosisHistoryPage: 'changeStatusDiagnosisHistoryPage',
+  addDiagnosisWorkingDiagnosisTab: 'addDiagnosisWorkingDiagnosisTab',
   changeGraphDateRangeQuestionnaireHistoryPage:
     'changeGraphDateRangeQuestionnaireHistoryPage',
   saveDischargeReconciliationPopup: 'saveDischargeReconciliationPopup',
