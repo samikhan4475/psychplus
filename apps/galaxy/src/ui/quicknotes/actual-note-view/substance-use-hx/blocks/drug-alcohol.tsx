@@ -120,7 +120,7 @@ const DrugAlcohol: React.FC<DrugAlcoholProps> = ({
       {data.briefIntervention && (
         <LabelAndValue
           label="Brief Intervention:"
-          value="Discussed with patient reasons for use of substance, health risk associated with use, how ready and confident the patient is about quitting, gave adviceand discussed the following goal"
+          value={data.briefInterventionDetail}
           className="flex-nowrap"
         />
       )}

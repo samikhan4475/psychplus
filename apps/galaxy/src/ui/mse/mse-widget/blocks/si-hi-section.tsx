@@ -21,6 +21,11 @@ const SiHiSection = ({
     ? (result?.[field] as string)
     : (form.watch(field) as string)
 
+  const unDisclosedField = `${label.toLowerCase()}UnDisclosed`
+  const unDisclosedFieldValue = form.watch(
+    unDisclosedField as keyof MseWidgetSchemaType,
+  )
+
   return (
     <Flex align="center" gap="2">
       <YesNoSelect
@@ -43,11 +48,11 @@ const SiHiSection = ({
             {result ? (
               <MseGroupDetailSection
                 label="Plan"
-                field={`${label.toLowerCase()}UnDisclosed`}
+                field={unDisclosedField}
                 options={[
                   {
                     label: 'Undisclosed',
-                    value: `${label.toLowerCase()}UnDisclosed`,
+                    value: unDisclosedField,
                   },
                 ]}
                 result={result}
@@ -55,22 +60,24 @@ const SiHiSection = ({
             ) : (
               <GroupSelectSection
                 label="Plan"
-                field={`${label.toLowerCase()}UnDisclosed`}
+                field={unDisclosedField}
                 options={[
                   {
                     label: 'Undisclosed',
-                    value: `${label.toLowerCase()}UnDisclosed`,
+                    value: unDisclosedField,
                   },
                 ]}
                 errorField={ERROR_ID}
               />
             )}
-            <TextInput
-              className="pl-0"
-              field={`${label.toLowerCase()}OtherDetails`}
-              autoFocus
-              placeHolder="Add text"
-            />
+            {unDisclosedFieldValue?.length ? (
+              <TextInput
+                className="pl-0"
+                field={`${label.toLowerCase()}OtherDetails`}
+                autoFocus
+                placeHolder="Add text"
+              />
+            ) : null}
           </Flex>
         </>
       )}

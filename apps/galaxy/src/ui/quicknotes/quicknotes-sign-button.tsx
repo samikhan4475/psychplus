@@ -75,15 +75,13 @@ const QuickNotesSignButton = ({ appointment }: QuickNotesSignButtonProps) => {
   }
 
   const signNoteHandler = async () => {
-    const missingDiagnosisCodes = validateDiagnosis({
+    const diagnosisError = validateDiagnosis({
       workingDiagnosisData,
       visitType,
     })
 
-    if (missingDiagnosisCodes) {
-      toast.error(
-        `Must have ${missingDiagnosisCodes} diagnosis to Sign/Send to signature.`,
-      )
+    if (diagnosisError) {
+      toast.error(diagnosisError)
       return
     }
     if (isPrescriber && !canSignButtonQuickNotePage) {

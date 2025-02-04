@@ -52,7 +52,7 @@ const Details = ({
       )}
       {renderIfValue(
         'Legal History:',
-        labelOfValue(data.employed, YesNoSelectOptions),
+        labelOfValue(data.legalHistory, YesNoSelectOptions),
       )}
       {renderIfValue(
         'Living:',

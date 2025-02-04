@@ -52,7 +52,7 @@ const getInitialValues = () => ({
   briefInterventionDetail: undefined,
   referralTreatment: undefined,
   alcoholSubstanceCessationDiscussionDuration: undefined,
-  otherAlcoholDrugs: undefined,
+  otherAlcoholDrugs: '',
 })
 
 export { substanceCptCodes, cptCodeMap, cptCodeKeysToWatch, getInitialValues }
