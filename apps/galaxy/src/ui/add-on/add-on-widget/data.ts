@@ -168,6 +168,13 @@ const transformOut =
       }
     }
 
+    if (result.length === 0) {
+      result.push({
+        ...createQuickNotesPayload(patientId, appointmentId),
+        sectionItem: 'empty',
+        sectionItemValue: 'true',
+      })
+    }
     const selectedCodes = getCodes(schema, visitType)
 
     if (updateCptCodes) {
@@ -188,14 +195,6 @@ const transformOut =
           selectedCodes,
         )),
       )
-    }
-
-    if (result.length === 0) {
-      result.push({
-        ...createQuickNotesPayload(patientId, appointmentId),
-        sectionItem: 'empty',
-        sectionItemValue: 'true',
-      })
     }
 
     return result

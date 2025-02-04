@@ -42,6 +42,7 @@ const RosWidget = ({ patientId, initialValue }: HpiWidgetProps) => {
       <WidgetFormContainer
         patientId={patientId}
         widgetId={QuickNoteSectionName.QuicknoteSectionReviewOfSystem}
+        tags={[QuickNoteSectionName.QuicknoteSectionReviewOfSystem]}
         title="ROS (Review of System)"
         getData={transformOut(patientId)}
         headerRight={
