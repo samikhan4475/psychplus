@@ -213,6 +213,10 @@ const USER_PERMISSIONS = {
   canChangeVerificationStatusInsurance: 'canChangeVerificationStatusInsurance',
   sendToSignatureButtonQuickNotePage: 'sendToSignatureButtonQuickNotePage',
   selectCosignerDisabledQuickNotePage: 'selectCosignerDisabledQuickNotePage',
+  selectOtherProviderNonTimeDependentVisitQuickNotePage:
+    'selectOtherProviderNonTimeDependentVisitQuickNotePage',
+  toggleMakePrimaryCard: 'toggleMakePrimaryCard',
+  deletePaymentCard: 'deletePaymentCard',
   selectOtherProviderNonTimeDependentVisitQuickNotePage: 'selectOtherProviderNonTimeDependentVisitQuickNotePage',
   deleteFollowupTab: "deleteFollowupTab",
 }

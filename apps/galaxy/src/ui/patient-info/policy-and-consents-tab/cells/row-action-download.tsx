@@ -6,6 +6,9 @@ import { GET_PATIENT_CONSENT_SIGNED_PDF_ENDPOINT } from '@/api/endpoints'
 import { downloadFile } from '@/utils/download'
 import { RowActionProps } from '../types'
 import { ActionItem } from './action-item'
+import { useState } from 'react'
+import { useHasPermission } from '@/hooks'
+import { PermissionAlert } from '@/ui/schedule/shared'
 
 const RowActionDownload = ({
   row: {
@@ -15,7 +18,17 @@ const RowActionDownload = ({
   id: actionId,
   disabled,
 }: RowActionProps) => {
-  const handlDownload = async () => {
+  const [isAlertOpen, setIsAlertOpen] = useState(false)
+  const hasPermission = useHasPermission('downloadSignedPolicy')
+
+  const handleClick = () => {
+    if (!hasPermission) {
+      setIsAlertOpen(true)
+    } else {
+      handleDownload()
+    }
+  }
+  const handleDownload = async () => {
     toggleRowClick?.()
     try {
       const endpoint = GET_PATIENT_CONSENT_SIGNED_PDF_ENDPOINT(patientId, id)
@@ -33,12 +46,19 @@ const RowActionDownload = ({
     }
   }
   return (
-    <ActionItem
-      Icon={ArrowDownToLine}
-      title={actionId}
-      disabled={disabled}
-      onClick={handlDownload}
-    />
+    <>
+      <ActionItem
+        Icon={ArrowDownToLine}
+        title={actionId}
+        disabled={disabled}
+        onClick={handleClick}
+      />
+      <PermissionAlert
+        isOpen={isAlertOpen}
+        message="You do not have permission to Download. Please contact your supervisor if you need further assistance."
+        onClose={() => setIsAlertOpen(false)}
+      />
+    </>
   )
 }
 

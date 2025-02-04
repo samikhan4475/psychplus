@@ -8,7 +8,7 @@ import { PaymentMethodSection } from './payment-methods-section'
 
 interface AddCardDialogProps {
   open: boolean
-  onClose(): void
+  onClose (): void
   stripeApiKey: string
   patientId: string
   googleApiKey: string
