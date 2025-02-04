@@ -8,6 +8,7 @@ import { getSortDir } from '@/utils'
 import {
   FacilityAdmissionCell,
   HistoryCell,
+  ServiceOfferedCell,
   VisitStatusCell,
   VisitTypeCell,
 } from './cells'
@@ -157,7 +158,7 @@ const getSchedulingColumns = (
           className="!text-black p-1 !font-medium"
         />
       ),
-      cell: ({ row }) => <TextCell>{row.original.serviceOffered}</TextCell>,
+      cell: ({ row }) => <ServiceOfferedCell row={row} />,
     },
     {
       id: 'providerType',
