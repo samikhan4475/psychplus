@@ -3,7 +3,6 @@
 import { Flex } from '@radix-ui/themes'
 import { Insurance } from '@/types'
 import HistoryButton from './history-button'
-import { RemoveButton } from './remove-button'
 import { SaveButton } from './save-button'
 import StatusDropdown from './status-dropdown'
 
@@ -22,11 +21,6 @@ const FormHeader = ({ insurance, patientId, disabled }: FormHeaderProps) => {
         disabled={disabled || !insurance}
         patientId={patientId}
         policyId={insurance?.id ?? ''}
-      />
-      <RemoveButton
-        insurance={insurance}
-        patientId={patientId}
-        disabled={disabled}
       />
       <SaveButton disabled={disabled} />
     </Flex>

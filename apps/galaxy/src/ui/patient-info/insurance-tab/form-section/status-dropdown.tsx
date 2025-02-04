@@ -31,9 +31,7 @@ const StatusDropdown = () => {
     const option = options.find((option) => option.value === value)
     return option ? option.label : 'Select'
   }
-
   useResetVerificationStatus()
-
   return (
     <>
       <DropdownMenu.Root>

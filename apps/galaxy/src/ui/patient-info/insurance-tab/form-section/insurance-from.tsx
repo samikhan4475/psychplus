@@ -4,6 +4,7 @@ import { memo, useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Flex, Grid } from '@radix-ui/themes'
+import { dequal } from 'dequal'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { AddressFieldsGroup, FormContainer } from '@/components'
@@ -108,13 +109,12 @@ const InsuranceForm = memo(
     }, [register, unregister, watchisPatientPolicyHolder])
 
     useEffect(() => {
-      if (insurance) {
-        reset(getInsuranceFormDefaultValues(insurance))
-      } else {
-        reset({
-          ...getInsuranceFormDefaultValues(),
-          isPatientPolicyHolder: true,
-        })
+      const defaultValues = insurance
+        ? getInsuranceFormDefaultValues(insurance)
+        : { ...getInsuranceFormDefaultValues(), isPatientPolicyHolder: true }
+
+      if (dequal(form.getValues(), defaultValues)) {
+        reset(defaultValues, { keepDefaultValues: true })
       }
     }, [insurance, reset])
 

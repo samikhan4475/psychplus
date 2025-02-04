@@ -6,7 +6,6 @@ import { addFavoritePharmacyAction } from '../actions'
 
 const StarIconCell = ({ pharmacyId }: { pharmacyId: string }) => {
   const patientId = useParams().id as string
-
   if (!pharmacyId) {
     return
   }

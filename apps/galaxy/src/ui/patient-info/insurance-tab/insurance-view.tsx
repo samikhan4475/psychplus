@@ -30,9 +30,7 @@ const InsuranceView = ({
   )
 
   useEffect(() => {
-    if (patientPolicies?.length > 0) {
-      setInsurances(patientPolicies)
-    }
+    setInsurances(patientPolicies ?? [])
   }, [patientPolicies, patientId, setInsurances])
 
   useEffect(() => {
