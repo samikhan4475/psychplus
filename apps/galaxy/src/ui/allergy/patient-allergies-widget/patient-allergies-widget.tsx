@@ -8,7 +8,8 @@ import { AddAllergyButton } from './add-allergy-button'
 import { PatientAllergiesFilterForm } from './patient-allergies-filter-form'
 import { PatientAllergiesHeader } from './patient-allergies-header'
 import { PatientAllergiesTable } from './patient-allergies-table'
-import { StoreProvider } from './store'
+import { useStore } from './store'
+import { useEffect } from 'react'
 
 interface PatientAllergiesWidgetProps {
   patientId: string
@@ -24,11 +25,20 @@ const PatientAllergiesWidget = ({
   const isFeatureFlagEnabled = useFeatureFlagEnabled(
     FEATURE_FLAGS.ehr8973EnableDawMedicationApi,
   )
+  const { allergiesListSearch } = useStore();
+  useEffect(() => {
+    allergiesListSearch(patientId);
+  }, [patientId]);
+  
+  const fetchAllergies = () => {
+    allergiesListSearch(patientId);
+  };
+
   return (
-    <StoreProvider patientId={patientId}>
+    <>
       {isPatientAllergiesTab && (
         <>
-          <PatientAllergiesHeader scriptSureAppUrl={scriptSureAppUrl} />
+          <PatientAllergiesHeader scriptSureAppUrl={scriptSureAppUrl} patientId={patientId} />
           <PatientAllergiesFilterForm patientId={patientId} />
         </>
       )}
@@ -37,7 +47,7 @@ const PatientAllergiesWidget = ({
         title={isPatientAllergiesTab ? '' : 'Allergies'}
         headerRight={
           !isPatientAllergiesTab && (
-            <WidgetAddButton title="Add Allergies" className="max-w-[45vw]">
+            <WidgetAddButton title="Add Allergies" className="max-w-[45vw]" onClose={fetchAllergies}>
               {!isFeatureFlagEnabled ? (
                 <AddAllergy />
               ) : (
@@ -47,9 +57,9 @@ const PatientAllergiesWidget = ({
           )
         }
       >
-        <PatientAllergiesTable />
+        <PatientAllergiesTable patientId={patientId} scriptSureAppUrl={scriptSureAppUrl} />
       </WidgetContainer>
-    </StoreProvider>
+    </>
   )
 }
 

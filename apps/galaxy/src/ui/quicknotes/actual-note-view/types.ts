@@ -1,5 +1,4 @@
 import { Appointment, PatientProfile, QuickNoteSectionItem } from '@/types'
-
 interface Allergy {
   allergyName: string
   allergyType: string

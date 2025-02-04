@@ -29,13 +29,21 @@ const useGetScriptSureIframeUrl = (
         const externalPatientId = externalPatientResponse.data.externalPatientId
         const url = `${scriptSureAppUrl}/widgets/${baseUrl}/${externalPatientId}?sessiontoken=${sessionToken}&darkmode=${darkMode}`
         setIframeUrl(url)
-      } else {
-        toast.error('Failed to fetch data')
+      }
+
+      if (sessionTokenResponse.state === 'error') {
+        toast.error(sessionTokenResponse.error ?? 'Failed to fetch data')
+      }
+
+      if (externalPatientResponse.state === 'error') {
+        toast.error(externalPatientResponse.error ?? 'Failed to fetch data')
       }
       setLoading(false)
     }
 
-    fetchData()
+    if (id) {
+      fetchData()
+    }
   }, [id, scriptSureAppUrl, baseUrl])
 
   return { iframeUrl, loading }

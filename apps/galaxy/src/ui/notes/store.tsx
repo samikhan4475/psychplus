@@ -1,7 +1,6 @@
 import { create } from 'zustand'
 import { getAppointment } from '@/actions'
 import { Appointment, PatientProfile, StaffResource } from '@/types'
-import { Allergy } from '../quicknotes/actual-note-view/types'
 import { getBookedAppointmentsAction } from '../schedule/actions'
 import {
   getNoteDetailsAction,
@@ -19,6 +18,7 @@ import type {
   PatientNotes,
   WidgetType,
 } from './types'
+import { Allergy } from '../quicknotes/actual-note-view/types'
 
 interface Store {
   patientId: string

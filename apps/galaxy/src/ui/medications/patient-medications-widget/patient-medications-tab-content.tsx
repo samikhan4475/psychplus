@@ -9,6 +9,8 @@ import { NotesPrintButton } from '@/ui/notes/notes-print-button'
 import { AddMedication } from '../add-medication'
 import { AddMedicationButton } from './add-medication-button'
 import { SearchMedications } from './search-medications'
+import { useParams } from 'next/navigation'
+import { useStore } from './store'
 
 interface PatientMedicalTabProps {
   tabTitle: string
@@ -24,6 +26,11 @@ const PatientMedicationsTabContent = ({
   const isFeatureFlagEnabled = useFeatureFlagEnabled(
     FEATURE_FLAGS.ehr8973EnableDawMedicationApi,
   )
+  const patientId = useParams().id as string
+  const { fetchPatientMedications } = useStore();
+  const fetchMedications = () => {
+    fetchPatientMedications(patientId);
+  };
   return (
     <Flex id="patient-medications" direction="column">
       <TabContentHeading title={tabTitle} className="whitespace-nowrap">
@@ -31,7 +38,7 @@ const PatientMedicationsTabContent = ({
           <SearchMedications />
           <Flex align="center" gap="2">
             <NotesPrintButton id="patient-medications" />
-            <WidgetAddButton title="Add Medication">
+            <WidgetAddButton title="Add Medication" onClose={fetchMedications}>
               {!isFeatureFlagEnabled ? (
                 <AddMedication />
               ) : (

@@ -5,17 +5,24 @@ import { useFeatureFlagEnabled } from '@/hooks/use-feature-flag-enabled'
 import { AddAllergy } from './add-allergy'
 import { AddAllergyButton } from './add-allergy-button'
 import { PatientAllergiesPrintButton } from './patient-allergies-print-button'
+import { useStore } from './store'
 
 interface PhysicalExamHeaderProps {
-  scriptSureAppUrl: string
+  scriptSureAppUrl: string,
+  patientId: string
 }
 
 const PatientAllergiesHeader = ({
   scriptSureAppUrl,
+  patientId
 }: PhysicalExamHeaderProps) => {
+  const { allergiesListSearch } = useStore();
   const isFeatureFlagEnabled = useFeatureFlagEnabled(
     FEATURE_FLAGS.ehr8973EnableDawMedicationApi,
   )
+  const fetchAllergies = () => {
+    allergiesListSearch(patientId);
+  };
   return (
     <Flex
       justify="between"
@@ -27,7 +34,7 @@ const PatientAllergiesHeader = ({
       </Text>
       <Flex className="gap-x-2 text-[20px]" align="center">
         <PatientAllergiesPrintButton />
-        <WidgetAddButton title="Add Allergies" className="max-w-[45vw]">
+        <WidgetAddButton title="Add Allergies" className="max-w-[45vw]" onClose={fetchAllergies}>
           {!isFeatureFlagEnabled ? (
             <AddAllergy />
           ) : (

@@ -6,9 +6,7 @@ import { Flex } from '@radix-ui/themes'
 import { DateValue } from 'react-aria-components'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import z from 'zod'
-import { useStore as zustandUseStore } from 'zustand'
 import { FormContainer } from '@/components'
-import { formatDateToISOString } from '@/utils'
 import { EndDateField } from './end-date-field'
 import { PharmacyNameSelect } from './pharmacy-name-select'
 import { PharmacySelect } from './pharmacy-select'
@@ -34,9 +32,7 @@ interface UniqueMedications {
 }
 
 const FilterForm = () => {
-  const store = useStore()
-
-  const { data } = zustandUseStore(store, (state) => ({
+  const { data } = useStore((state) => ({
     data: state.data,
   }))
 

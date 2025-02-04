@@ -3,7 +3,6 @@
 import { useEffect } from 'react'
 import { Flex, ScrollArea } from '@radix-ui/themes'
 import { type ColumnDef } from '@tanstack/react-table'
-import { useStore as zustandUseStore } from 'zustand'
 import {
   ColumnHeader,
   DataTable,
@@ -16,8 +15,15 @@ import { getSlashedPaddedDateString } from '@/utils'
 import { ActionsCell, SeverityCell } from './cells'
 import { useStore } from './store'
 import type { AllergyDataResponse } from './types'
+interface PatientAllergiesTableProps {
+  patientId: string;
+  scriptSureAppUrl: string;
+}
 
-const columns: ColumnDef<AllergyDataResponse>[] = [
+  const columns = (
+    scriptSureAppUrl: string,
+  ): ColumnDef<AllergyDataResponse>[] =>
+    [
   {
     id: 'allergy-type',
     header: ({ column }) => (
@@ -87,15 +93,17 @@ const columns: ColumnDef<AllergyDataResponse>[] = [
   {
     id: 'allergy-actions',
     header: ({ column }) => <ColumnHeader column={column} label="Actions" />,
-    cell: ActionsCell,
+    cell: ({ row }) => (
+      <ActionsCell 
+        row={row} 
+        scriptSureAppUrl={scriptSureAppUrl} 
+      />
+    ),
   },
 ]
 
-const PatientAllergiesTable = () => {
-  const store = useStore()
-
-  const { data, allergiesListSearch, allergiesListLoading } = zustandUseStore(
-    store,
+const PatientAllergiesTable = ({ patientId, scriptSureAppUrl }: PatientAllergiesTableProps) => {
+  const { data, allergiesListSearch, allergiesListLoading } = useStore(
     (state) => ({
       data: state.allergiesListData,
       allergiesListLoading: state.allergiesListLoading,
@@ -104,7 +112,7 @@ const PatientAllergiesTable = () => {
   )
 
   useEffect(() => {
-    allergiesListSearch()
+    allergiesListSearch(patientId)
   }, [])
 
   if (allergiesListLoading) {
@@ -117,7 +125,7 @@ const PatientAllergiesTable = () => {
 
   return (
     <ScrollArea>
-      <DataTable data={data ?? []} columns={columns} disablePagination sticky />
+      <DataTable data={data ?? []} columns={columns(scriptSureAppUrl)} disablePagination sticky />
     </ScrollArea>
   )
 }

@@ -34,7 +34,7 @@ const PatientMedicationsTabView = ({
           tabTitle="Current Medications"
           scriptSureAppUrl={scriptSureAppUrl}
         >
-          <PatientMedicationsDataTable />
+          <PatientMedicationsDataTable scriptSureAppUrl={scriptSureAppUrl}/>
         </PatientMedicationsTabContent>
       </TabsContent>
     </Tabs.Root>

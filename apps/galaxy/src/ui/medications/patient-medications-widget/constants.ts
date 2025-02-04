@@ -5,15 +5,15 @@ const EXTERNAL_MEDICATIONS_TAB = 'externalMedications'
 const STATUS_CODESET = [
   {
     label: 'Active',
-    value: 'Active',
+    value: '1',
   },
   {
-    label: 'Pending',
-    value: 'Pending',
+    label: 'Archived',
+    value: '2',
   },
   {
     label: 'Discontinued',
-    value: 'Discontinued',
+    value: '4',
   },
 ]
 const OPTIONS = [

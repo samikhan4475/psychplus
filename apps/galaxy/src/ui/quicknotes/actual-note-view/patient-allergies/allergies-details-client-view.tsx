@@ -3,8 +3,8 @@
 import { useEffect, useState } from 'react'
 import { Text } from '@radix-ui/themes'
 import { getPatientAllergiesAction } from '@/ui/allergy/patient-allergies-widget/client-actions'
-import { AllergyDataResponse } from '@/ui/allergy/patient-allergies-widget/types'
 import { Details } from './details'
+import { AllergyDataResponse } from '@/ui/allergy/patient-allergies-widget/types'
 
 interface AllergiesDetailsViewProps {
   patientId: string
@@ -24,7 +24,6 @@ const AllergiesDetailsClientView = ({
       setData(response?.data ?? [])
     })
   }, [patientId])
-
   if (error) {
     return <Text>{error}</Text>
   }

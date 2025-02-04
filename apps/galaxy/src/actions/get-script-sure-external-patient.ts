@@ -10,7 +10,7 @@ interface ExternalPatientResponse {
 const getScriptSureExternalPatient = async (
   patientId: string,
 ): Promise<api.ActionResult<ExternalPatientResponse>> => {
-  const response = await api.GET<ExternalPatientResponse>(
+  const response = await api.POST<ExternalPatientResponse>(
     api.GET_SCRIPT_SURE_EXTERNAL_PATIENT_ID(patientId),
   )
   if (response.state === 'error') {

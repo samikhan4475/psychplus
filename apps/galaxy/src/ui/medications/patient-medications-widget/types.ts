@@ -13,6 +13,15 @@ interface MedicationDetails {
   directions: string
   quantityQualifier: string
 }
+interface PrescriptionStatus {
+  prescriptionStatusId?: string
+  prescriptionStatusTypeId: string
+  prescriptionId: string
+  name?: string
+  encounterId?: string
+  userId?: string
+  userName?: string
+}
 
 interface PatientMedication {
   prescriptionId: string
@@ -25,7 +34,14 @@ interface PatientMedication {
   isMedicationAsNeeded: boolean
   startDateTime: string
   endDateTime: string
+  patientId:string
+  externalMessageId:string
+  prescriptionStatusTypeId?:string
+  externalPrescriptionId: string
+  messageId:string
+  sentTime:string
   medicationDetails: MedicationDetails
+  prescriptionStatus: PrescriptionStatus
 }
 
 type PatientMedicationRow = Row<PatientMedication>
@@ -33,10 +49,15 @@ type PatientMedicationRow = Row<PatientMedication>
 interface GetPatientMedicationsResponse {
   medications: PatientMedication[]
 }
+interface GetPatientMedicationOrderResponse {
+  pendingOrderId: number,
+  externalPatientId: number
+}
 
 export type {
   PatientMedication,
   PatientMedicationRow,
   GetPatientMedicationsResponse,
   PatientMedicationStatus,
+  GetPatientMedicationOrderResponse
 }

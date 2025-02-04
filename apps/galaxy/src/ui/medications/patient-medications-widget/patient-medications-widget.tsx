@@ -17,7 +17,8 @@ import { AddMedicationButton } from './add-medication-button'
 import { PatientMedicationsDataTable } from './patient-medications-data-table'
 import { PatientMedicationsTabView } from './patient-medications-tab-view'
 import { SearchMedications } from './search-medications'
-import { StoreProvider } from './store'
+import { useStore } from './store'
+import { useEffect } from 'react'
 
 interface PatientMedicationsWidgetProps {
   scriptSureAppUrl: string
@@ -29,12 +30,21 @@ const PatientMedicationsWidget = ({
   const isFeatureFlagEnabled = useFeatureFlagEnabled(
     FEATURE_FLAGS.ehr8973EnableDawMedicationApi,
   )
-  const handleCheckAllChange = () => {}
   const patientId = useParams().id as string
+  const { fetchPatientMedications } = useStore();
+  useEffect(() => {
+    if (patientId) {
+      fetchPatientMedications(patientId);
+    }
+  }, [patientId, fetchPatientMedications]);
+  const handleCheckAllChange = () => { }
   const path = usePathname()
   const tabViewEnabled = path.includes('medications')
+  const fetchMedications = () => {
+    fetchPatientMedications(patientId);
+  };
   return (
-    <StoreProvider patientId={patientId}>
+    <>
       {tabViewEnabled ? (
         <PatientMedicationsTabView scriptSureAppUrl={scriptSureAppUrl} />
       ) : (
@@ -50,7 +60,7 @@ const PatientMedicationsWidget = ({
             headerLeft={
               <>
                 <SearchMedications />
-                <WidgetAddButton title="Add Medication">
+                <WidgetAddButton title="Add Medication" onClose={fetchMedications}>
                   {!isFeatureFlagEnabled ? (
                     <AddMedication />
                   ) : (
@@ -67,11 +77,11 @@ const PatientMedicationsWidget = ({
               </>
             }
           >
-            <PatientMedicationsDataTable />
+            <PatientMedicationsDataTable scriptSureAppUrl={scriptSureAppUrl}/>
           </WidgetContainer>
         </Box>
       )}
-    </StoreProvider>
+    </>
   )
 }
 

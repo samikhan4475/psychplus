@@ -1,8 +1,8 @@
 'use client'
 
 import { Flex } from '@radix-ui/themes'
-import { SCRIPTSURE_BASE_APPLICATION_URL } from '@/constants'
 import { PatientAllergiesWidget } from './patient-allergies-widget'
+import { useStore } from '@/store'
 
 interface PatientAllergiesViewProps {
   patientId: string
@@ -13,13 +13,16 @@ const PatientAllergiesClientView = ({
   patientId,
   isPatientAllergiesTab,
 }: PatientAllergiesViewProps) => {
+  const { constant } = useStore((state) => ({
+    constant: state.constants,
+  }))
   return (
     <Flex direction="column" width="100%">
       <Flex direction="column" gap="2">
         <PatientAllergiesWidget
           patientId={patientId}
           isPatientAllergiesTab={isPatientAllergiesTab}
-          scriptSureAppUrl={SCRIPTSURE_BASE_APPLICATION_URL}
+          scriptSureAppUrl={constant.scriptsureBaseApplicationUrl}
         />
       </Flex>
     </Flex>

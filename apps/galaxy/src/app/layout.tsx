@@ -15,6 +15,7 @@ import {
   APP_ENV,
   CODESETS,
   GOOGLE_MAPS_API_KEY,
+  SCRIPTSURE_BASE_APPLICATION_URL,
   STRIPE_PUBLISHABLE_KEY,
 } from '@/constants'
 import { StoreProvider } from '@/store'
@@ -84,6 +85,7 @@ const RootLayout = async ({ children }: React.PropsWithChildren) => {
     const constants = {
       googleApiKey: GOOGLE_MAPS_API_KEY,
       stripeApiKey: STRIPE_PUBLISHABLE_KEY,
+      scriptsureBaseApplicationUrl: SCRIPTSURE_BASE_APPLICATION_URL,
     }
 
     return (
