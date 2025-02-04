@@ -136,7 +136,7 @@ interface Appointment {
   cptModifiersCodes: CptCode[]
   providerStaffId?: number
   groupTherapyTypeCode: string
-  IsPatientHadAnyCheckedOutVisit?: boolean
+  isPatientHadAnyCheckedOutVisit?: boolean
   isNoteSignedByProviderInLastYear?: boolean
   providerUserId?: number
 }

@@ -240,6 +240,9 @@ importers:
       date-fns:
         specifier: ^2.30.0
         version: 2.30.0
+      dequal:
+        specifier: ^2.0.3
+        version: 2.0.3
       jwt-decode:
         specifier: ^4.0.0
         version: 4.0.0

@@ -14,7 +14,7 @@ type TmsDetailsProps = {
 const TmsDetailClientView = ({ data, appointment }: TmsDetailsProps) => {
   return (
     <ActualNoteDetailsWrapper sectionName={QuickNoteSectionName.ProcedureTMS}>
-      <Details data={transformIn(data ?? [])} appointment={appointment} />
+      <Details data={transformIn(data ?? [], true)} appointment={appointment} />
     </ActualNoteDetailsWrapper>
   )
 }

@@ -45,11 +45,7 @@ const SpravatoWidget = ({
         tags={[QuickNoteSectionName.QuicknoteSectionProcedureSpravato]}
         title={ProcedureTabs.SPRAVATO}
         getData={transformOut(id, appointmentId, appointmentData)}
-        headerRight={
-          <>
-            <WidgetSaveButton />
-          </>
-        }
+        headerRight={<WidgetSaveButton />}
       >
         <DosingSection />
         <PrecautionsAndWarningSection />

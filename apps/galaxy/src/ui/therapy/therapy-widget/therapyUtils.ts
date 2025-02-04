@@ -1,4 +1,9 @@
-import { CodesWidgetItem, CptCodeKeys, QuickNoteSectionItem } from '@/types'
+import {
+  CodesWidgetItem,
+  CptCodeKeys,
+  QuickNoteSectionItem,
+  UpdateCptCodes,
+} from '@/types'
 import { sanitizeFormData } from '@/utils'
 import { manageCodes } from '@/utils/codes'
 import { addOnCodes, getCptCodeMap } from './cpt-code-map'
@@ -52,6 +57,7 @@ export const transformOutHelper = async (
   visitType: string,
   visitSequence: string,
   defaultPayload: Partial<QuickNoteSectionItem>,
+  updateCptCodes?: UpdateCptCodes,
 ): Promise<QuickNoteSectionItem[]> => {
   const result: QuickNoteSectionItem[] = []
   const data = sanitizeFormData(schema)
@@ -82,14 +88,28 @@ export const transformOutHelper = async (
   })
 
   const selectedCodes = getCodes(schema, visitType, visitSequence)
-  const codesResult = await manageCodes(
-    patientId,
-    appointmentId,
-    addOnCodes,
-    selectedCodes,
-  )
 
-  return [...result, ...codesResult]
+  if (updateCptCodes) {
+    const updatedCodes =
+      (await updateCptCodes?.(
+        patientId,
+        appointmentId,
+        addOnCodes,
+        selectedCodes,
+      )) ?? []
+    result.push(...updatedCodes)
+  } else {
+    result.push(
+      ...(await manageCodes(
+        patientId,
+        appointmentId,
+        addOnCodes,
+        selectedCodes,
+      )),
+    )
+  }
+
+  return result
 }
 
 export const transformInHelper = <T>(

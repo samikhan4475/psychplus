@@ -3,6 +3,7 @@ import {
   CodesWidgetItem,
   CptCodeKeys,
   QuickNoteSectionItem,
+  UpdateCptCodes,
 } from '@/types'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { sanitizeFormData } from '@/utils'
@@ -16,8 +17,12 @@ const transformOut =
     appointmentId: string,
     appointmentData: Appointment | null,
   ) =>
-  async (schema: SpravatoWidgetSchemaType) => {
-    const hasPriorActiveVistis = appointmentData?.IsPatientHadAnyCheckedOutVisit
+  async (
+    schema: SpravatoWidgetSchemaType,
+    _isSubmitting?: boolean,
+    updateCptCodes?: UpdateCptCodes,
+  ) => {
+    const hasPriorActiveVistis = appointmentData?.isPatientHadAnyCheckedOutVisit
 
     const result: QuickNoteSectionItem[] = []
     const data = sanitizeFormData(schema)
@@ -66,7 +71,7 @@ const transformOut =
       data.procurementMethod === PrecurementMethod.ONLY_BILL &&
       hasPriorActiveVistis
     ) {
-      addCodes([{ key: CptCodeKeys.PRIMARY_CODE_KEY, code: ' 99215*1' }])
+      addCodes([{ key: CptCodeKeys.PRIMARY_CODE_KEY, code: '99215*1' }])
     }
 
     if (data.procurementMethod === PrecurementMethod.ONLY_BILL) {
@@ -84,17 +89,29 @@ const transformOut =
       data.procurementMethod === PrecurementMethod.ONLY_BILL &&
       hasPriorActiveVistis
     ) {
-      addCodes([{ key: CptCodeKeys.PRIMARY_CODE_KEY, code: ' 99417*4' }])
+      addCodes([{ key: CptCodeKeys.ADD_ONS_KEY, code: '99417*4' }])
+    }
+    if (updateCptCodes) {
+      const updatedCodes =
+        (await updateCptCodes?.(
+          patientId,
+          appointmentId,
+          spravatoCodes,
+          selectedCodes,
+        )) ?? []
+      result.push(...updatedCodes)
+    } else {
+      result.push(
+        ...(await manageCodes(
+          patientId,
+          appointmentId,
+          spravatoCodes,
+          selectedCodes,
+        )),
+      )
     }
 
-    const codesResult = await manageCodes(
-      patientId,
-      appointmentId,
-      spravatoCodes,
-      selectedCodes,
-    )
-
-    return [...result, ...codesResult]
+    return result
   }
 
 const transformIn = (

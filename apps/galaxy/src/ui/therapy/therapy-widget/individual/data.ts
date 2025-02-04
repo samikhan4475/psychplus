@@ -1,4 +1,4 @@
-import { QuickNoteSectionItem } from '@/types'
+import { QuickNoteSectionItem, UpdateCptCodes } from '@/types'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { transformInHelper, transformOutHelper } from '../therapyUtils'
 import { TherapySchemaType } from './therapy-schema'
@@ -10,7 +10,11 @@ export const transformOut =
     visitType: string,
     visitSequence: string,
   ) =>
-  async (schema: TherapySchemaType): Promise<QuickNoteSectionItem[]> => {
+  async (
+    schema: TherapySchemaType,
+    _isSubmitting?: boolean,
+    updateCptCodes?: UpdateCptCodes,
+  ): Promise<QuickNoteSectionItem[]> => {
     const defaultPayload = {
       pid: Number(patientId),
       sectionName: QuickNoteSectionName.QuickNoteSectionIndividualTherapy,
@@ -24,6 +28,7 @@ export const transformOut =
       visitType,
       visitSequence,
       defaultPayload,
+      updateCptCodes,
     )
   }
 

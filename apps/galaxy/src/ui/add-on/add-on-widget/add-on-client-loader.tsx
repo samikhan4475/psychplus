@@ -25,7 +25,6 @@ const AddOnClientLoader = ({
     undefined,
   )
   const [error, setError] = useState<string>('')
-
   useEffect(() => {
     getBookedAppointmentAction(appointment).then((response) => {
       if (response.state === 'error') {

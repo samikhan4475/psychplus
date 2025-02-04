@@ -4,7 +4,6 @@ import { sanitizeFormData } from '@/utils'
 import { TmsWidgetSchemaType } from './tms-widget-schema'
 import { ProtocolTitles, TypeOfThetaBurst } from './treatment-session/types'
 
-
 type TmsValueType = string & string[] & never[]
 
 const handleObjInArray = (key: string, value: string): string => {
@@ -19,25 +18,33 @@ const handleObjInArray = (key: string, value: string): string => {
   }
 }
 
-
 const transformOut =
   (patientId: string) =>
-    (schema: TmsWidgetSchemaType): QuickNoteSectionItem[] => {
-      const result: QuickNoteSectionItem[] = []
-      const data = sanitizeFormData(schema)
-      Object.entries(data).forEach(([key, value]) => {
-        result.push({
-          pid: Number(patientId),
-          sectionName: QuickNoteSectionName.ProcedureTMS,
-          sectionItem: key,
-          sectionItemValue: handleObjInArray(key, value as string),
-        })
+  (schema: TmsWidgetSchemaType): QuickNoteSectionItem[] => {
+    const result: QuickNoteSectionItem[] = []
+    const data = sanitizeFormData(schema)
+    Object.entries(data).forEach(([key, value]) => {
+      result.push({
+        pid: Number(patientId),
+        sectionName: QuickNoteSectionName.ProcedureTMS,
+        sectionItem: key,
+        sectionItemValue: handleObjInArray(key, value as string),
       })
+    })
 
-      return result
+    if (!result.length) {
+      result.push({
+        pid: Number(patientId),
+        sectionName: QuickNoteSectionName.ProcedureTMS,
+        sectionItem: '1',
+        sectionItemValue: '1',
+      })
     }
 
-const transformIn = (value: QuickNoteSectionItem[]) => {
+    return result
+  }
+
+const transformIn = (value: QuickNoteSectionItem[], isActualNote?: boolean) => {
   const result = {
     tmsSeizureBlock: 'no',
     tmsSeizureBlockDetail:
@@ -60,17 +67,20 @@ const transformIn = (value: QuickNoteSectionItem[]) => {
       'Adjusted coil positioning to alleviate discomfort. Provided patient education on scalp care post-session.',
     tmsOtherBlock: 'no',
     tmsOtherBlockDetail: '',
-    dischargePlan: ['continueWithCurrentProtocol'],
+    dischargePlan: ['continueWithCurrentProtocol'] as string[],
     modifyTreatmentPlanDetail: 'maintenance',
-    discontinueTreatmentDetail: 'Patient discontinued treatment due to completion of recommended treatment course',
-    followUpBlock: ['PHQ-9'],
-    referralDetail: 'The patient was referred to a behavioral health specialist for ongoing psychotherapy to address underlying issues contributing to their condition, develop effective coping strategies, and provide comprehensive mental health support',
+    discontinueTreatmentDetail:
+      'Patient discontinued treatment due to completion of recommended treatment course',
+    followUpBlock: ['PHQ-9'] as string[],
+    referralDetail:
+      'The patient was referred to a behavioral health specialist for ongoing psychotherapy to address underlying issues contributing to their condition, develop effective coping strategies, and provide comprehensive mental health support',
     typeOfThetaBurst: TypeOfThetaBurst.ContinuesThetaBurst as string,
     frequency: 'Theta Frequency (5 Hz)',
-    stimulationSite: "DLPFC",
-    coilTypeUsed: "DC",
-    treatmentParameter: "NoAdjustmentsMade",
-    treatmentAdjustmentDetail: 'Minor adjustments to stimulation parameters were made based on patient response and tolerance.',
+    stimulationSite: 'DLPFC',
+    coilTypeUsed: 'DC',
+    treatmentParameter: 'NoAdjustmentsMade',
+    treatmentAdjustmentDetail:
+      'Minor adjustments to stimulation parameters were made based on patient response and tolerance.',
     frequencyOfSession: '1',
     thetaBurstFrequencyOfSession: '5',
     frequencyUnit: 'Week',
@@ -83,27 +93,40 @@ const transformIn = (value: QuickNoteSectionItem[]) => {
     optimalStimulationLevel: '120',
     motorThershold: [],
     stimulationLevel: '0',
-    precautionsAndWarnings: ["1", "2", "3", '4', '5', '6'],
+    precautionsAndWarnings: ['1', '2', '3', '4', '5', '6'] as string[],
     tmdSessionNo: '01',
     burstPattern: 'Intermittent',
     protocol: ProtocolTitles.StandardProtocol as string,
     motorThersholdValue: '0',
-    treatmentAndObservation: ''
+    treatmentAndObservation: '',
+  }
+  if (isActualNote) {
+    ;(Object.keys(result) as Array<keyof typeof result>).forEach((key) => {
+      if (Array.isArray(result[key])) {
+        result[key] = [] as never
+      } else if (typeof result[key] === 'object' && result[key] !== null) {
+        result[key] = {} as never
+      } else {
+        result[key] = '' as never
+      }
+    })
   }
 
   value.forEach((item) => {
     if (item.sectionItem === 'motorThershold') {
-      result[item.sectionItem] = JSON.parse(`[${item.sectionItemValue}]`)
-    }
-    else if (item.sectionItem === 'dischargePlan' || item.sectionItem === 'followUpBlock' || item.sectionItem === 'precautionsAndWarnings' && typeof item.sectionItemValue === 'string') {
-      result[item.sectionItem] = item.sectionItemValue.split(',')
-    }
-    else {
-      result[item.sectionItem as keyof TmsWidgetSchemaType] = item.sectionItemValue as TmsValueType
+      result[item.sectionItem] = JSON.parse(`[${item.sectionItemValue}]`) ?? ''
+    } else if (
+      item.sectionItem === 'dischargePlan' ||
+      item.sectionItem === 'followUpBlock' ||
+      item.sectionItem === 'precautionsAndWarnings'
+    ) {
+      result[item.sectionItem] = item?.sectionItemValue?.split(',') ?? []
+    } else {
+      result[item.sectionItem as keyof TmsWidgetSchemaType] =
+        item.sectionItemValue as TmsValueType
     }
   })
-
-  return result;
+  return result
 }
 
 export { transformIn, transformOut }

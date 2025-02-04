@@ -1,12 +1,11 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
+import { useShallow } from 'zustand/react/shallow'
 import { useStore } from '@/store'
-import {
-  DiagnosisIcd10Code,
-  FavouriteDiagnosisData,
-  QuickNoteSectionItem,
-} from '@/types'
+import { DiagnosisIcd10Code, FavouriteDiagnosisData } from '@/types'
+import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
+import { useStore as useQuicknoteStore } from '@/ui/quicknotes/store'
 import {
   getFavouriteDiagnosisAction,
   getIcd10DiagnosisAction,
@@ -14,12 +13,19 @@ import {
 import { DiagnosisWidget } from './diagnosis-widget'
 
 interface DiagnosisWidgetClientLoaderProps {
-  data?: QuickNoteSectionItem[]
+  patientId: string
 }
-
 const DiagnosisWidgetClientLoader = ({
-  data = [],
+  patientId,
 }: DiagnosisWidgetClientLoaderProps) => {
+  const data = useQuicknoteStore(
+    useShallow(
+      (state) =>
+        state.actualNotewidgetsData[
+          QuickNoteSectionName.QuickNoteSectionDiagnosis
+        ],
+    ),
+  )
   const { staffId } = useStore((state) => ({
     staffId: state.user.staffId,
   }))
@@ -29,7 +35,10 @@ const DiagnosisWidgetClientLoader = ({
   const [favouritesDiagnosisData, setFavouritesDiagnosisData] = useState<
     FavouriteDiagnosisData[]
   >([])
-  const { sectionItemValue } = data?.[0] || {}
+  const sectionItemValue = useMemo(
+    () => data?.[0].sectionItemValue,
+    [data?.[0]],
+  )
 
   useEffect(() => {
     let DiagnosisCodes = sectionItemValue?.split(',') || []
@@ -59,6 +68,7 @@ const DiagnosisWidgetClientLoader = ({
     <DiagnosisWidget
       workingDiagnosis={workingDiagnosisData}
       favouriteDiagnosis={favouritesDiagnosisData}
+      patientId={patientId}
     />
   )
 }

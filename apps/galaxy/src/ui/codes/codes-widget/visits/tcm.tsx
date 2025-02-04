@@ -1,12 +1,15 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
+import toast from 'react-hot-toast'
 import { getQuickNoteDetailAction } from '@/actions/get-quicknote-detail'
-import { SelectOptionType } from '@/types'
+import { useDeepCompareMemo } from '@/hooks/use-deep-compare-memo'
+import { QuickNoteSectionItem, SelectOptionType } from '@/types'
 import { transformIn } from '@/ui/assessment-plan/tcm-widget/data'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { AddonsTable, ModifierTable, PrimaryCodeTable } from '../blocks'
 import { CodesWidgetSchemaType } from '../codes-widget-schema'
 import { VisitProps } from '../types'
+import { restrictedCodesTCM } from '../utils'
 
 const Tcm = ({
   cptAddOnsCodes,
@@ -14,6 +17,8 @@ const Tcm = ({
   cptmodifierCodes,
   appointment,
   patientId,
+  tcmData = [],
+  isQuicknoteView,
 }: VisitProps) => {
   const [updatedPrimaryCodes, setUpdatedPrimaryCodes] = useState([
     ...cptPrimaryCodes,
@@ -21,47 +26,54 @@ const Tcm = ({
   const form = useFormContext<CodesWidgetSchemaType>()
   const [isDisabled, setIsDisabled] = useState(true)
   const formValues = form.getValues()
-  const handleTCMCodes = async () => {
-    const disableCode = (code: SelectOptionType, disabled: boolean) => ({
-      ...code,
-      disabled,
-    })
-    const response = await getQuickNoteDetailAction(patientId, [
-      QuickNoteSectionName.QuicknoteSectionTcm,
-      appointment.appointmentId + '',
-    ])
 
-    const updatedCodes = cptPrimaryCodes.map((code) => {
-      const isSpecificCode = code.value === '99496' || code.value === '99495'
-      if (isSpecificCode) {
-        return disableCode(code, true)
-      }
-      if (response.state === 'success') {
-        const data = transformIn(response?.data)
-        const hasHospitalDetails =
-          data.dcHospitalName !== '' && data.dcHospitalServiceType !== ''
-        const hasPrimaryCodes = formValues.cptPrimaryCodes.length > 0
-        if (hasHospitalDetails && hasPrimaryCodes) {
-          return disableCode(code, true)
-        }
-      }
-      setIsDisabled(false)
-      return disableCode(code, false)
-    })
+  const handleTCMCodes = async () => {
+    let data: QuickNoteSectionItem[] = isQuicknoteView ? memoizedTcmData : []
+    if (!isQuicknoteView) {
+      const response = await getQuickNoteDetailAction(patientId, [
+        QuickNoteSectionName.QuicknoteSectionTcm,
+      ])
+      if (response.state === 'error') return toast.error(response.state)
+      data = response.data
+    }
+
+    const tcmSchema = transformIn(data, appointment)
+    const hasHospitalDetails =
+      !!tcmSchema?.dcHospitalName &&
+      !!tcmSchema?.tcmDate &&
+      !!tcmSchema?.tcmResults
+    const hasPrimaryCodes = formValues.cptPrimaryCodes.length > 0
+    let shouldDisableCodes = hasHospitalDetails && hasPrimaryCodes
+
+    if (
+      hasPrimaryCodes &&
+      !formValues.cptPrimaryCodes.some((code) => restrictedCodesTCM.has(code))
+    ) {
+      shouldDisableCodes = false
+    }
+
+    const updatedCodes = cptPrimaryCodes.map((code) =>
+      restrictedCodesTCM.has(code.value)
+        ? disableCode(code, true)
+        : disableCode(code, shouldDisableCodes),
+    )
+
+    setIsDisabled(false)
     setUpdatedPrimaryCodes(updatedCodes)
   }
 
-  const memoizedCptPrimaryCodes = useMemo(
+  const memoizedCptPrimaryCodes = useDeepCompareMemo(
     () => cptPrimaryCodes,
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [JSON.stringify(cptPrimaryCodes)],
+    [cptPrimaryCodes],
   )
+
+  const memoizedTcmData = useDeepCompareMemo(() => tcmData, [tcmData])
 
   useEffect(() => {
     handleTCMCodes()
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [appointment, patientId, memoizedCptPrimaryCodes])
+  }, [appointment, patientId, memoizedCptPrimaryCodes, memoizedTcmData])
 
   return (
     <>
@@ -71,5 +83,8 @@ const Tcm = ({
     </>
   )
 }
-
+const disableCode = (code: SelectOptionType, disabled: boolean) => ({
+  ...code,
+  disabled,
+})
 export { Tcm }

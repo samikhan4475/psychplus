@@ -2,9 +2,9 @@
 
 import { Flex, ScrollArea } from '@radix-ui/themes'
 import { Appointment, PatientProfile, QuickNoteSectionItem } from '@/types'
-import { QuickNoteDataProvider } from '../quick-note-data-provider'
 import { WidgetType } from '../types'
 import { ActualNoteViewClient } from './actual-note-client'
+import { ActualNoteDataProvider } from './actual-note-data-provider'
 import { NoteViewHeader } from './note-view-header'
 import { PsychiatricEvaluation } from './psychiatric-evaluation'
 
@@ -44,7 +44,7 @@ const ActualNoteView = ({
             if (!ActualNoteComponent) return null
 
             return (
-              <QuickNoteDataProvider
+              <ActualNoteDataProvider
                 key={id}
                 id={id}
                 component={ActualNoteComponent}

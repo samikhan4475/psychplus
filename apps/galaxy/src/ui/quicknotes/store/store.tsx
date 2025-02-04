@@ -5,8 +5,15 @@ import { format } from 'date-fns'
 import toast from 'react-hot-toast'
 import { useStore as zustandUseStore, type StoreApi } from 'zustand'
 import { createStore as zustandCreateStore } from 'zustand/vanilla'
-import { Appointment, PatientProfile, QuickNoteSectionItem } from '@/types'
+import {
+  Appointment,
+  PatientProfile,
+  QuickNoteSectionItem,
+  UpdateCptCodes,
+} from '@/types'
+import { manageCodes } from '@/utils'
 import { signNoteAction } from '../actions'
+import { QuickNoteSectionName } from '../constants'
 import { modifyWidgetResponse } from '../utils'
 import { saveWidgets } from './utils'
 
@@ -36,7 +43,10 @@ interface Store {
   setErrorMessage: (value: string) => void
   setIsErrorAlertOpen: (value: boolean) => void
   widgetsData: Record<string, QuickNoteSectionItem[]>
+  actualNotewidgetsData: Record<string, QuickNoteSectionItem[]>
   setWidgetsData: (data: QuickNoteSectionItem[]) => void
+  setActualNoteWidgetsData: (data: QuickNoteSectionItem[]) => void
+  updateCptCodes: UpdateCptCodes
 }
 
 interface StoreInitialState {
@@ -52,9 +62,46 @@ const createStore = (initialState: StoreInitialState) =>
     patientId: initialState.patientId,
     patient: initialState.patient,
     widgetsData: initialState.widgetsData ?? {},
-    setWidgetsData: (data) => {
-      const newData = modifyWidgetResponse(data)
-      set({ widgetsData: { ...get().widgetsData, ...newData } })
+    setWidgetsData: (data = []) => {
+      const modifiedData = modifyWidgetResponse(data)
+      set({ widgetsData: { ...get().widgetsData, ...modifiedData } })
+    },
+    actualNotewidgetsData: {},
+    setActualNoteWidgetsData: (data = []) => {
+      const modifiedData = modifyWidgetResponse(
+        data?.filter(
+          (item) =>
+            !item?.sectionName?.includes(
+              QuickNoteSectionName.QuicknoteSectionQuestionnaire,
+            ),
+        ),
+      )
+      set({
+        actualNotewidgetsData: {
+          ...get().actualNotewidgetsData,
+          ...modifiedData,
+        },
+      })
+    },
+    updateCptCodes: async (
+      patientId,
+      appointmentId,
+      widgetAllCptCodes,
+      selectedCodes,
+    ) => {
+      const { actualNotewidgetsData, setActualNoteWidgetsData } = get()
+      const cptCodes =
+        actualNotewidgetsData[QuickNoteSectionName.QuicknoteSectionCodes]
+      const data = await manageCodes(
+        patientId,
+        appointmentId,
+        widgetAllCptCodes,
+        selectedCodes,
+        cptCodes,
+        true,
+      )
+      setActualNoteWidgetsData(data)
+      return data
     },
     loading: false,
     showActualNoteView: true,
@@ -71,8 +118,12 @@ const createStore = (initialState: StoreInitialState) =>
       set({ showActualNoteView: !get().showActualNoteView }),
     save: async (appointment) => {
       set({ loading: true })
-      const response = await saveWidgets(appointment)
-      if (response.length) {
+      const data = get().actualNotewidgetsData
+      const widgetsData = Object.entries(data)
+        .map(([, sections]) => sections)
+        .flat()
+      const response = await saveWidgets(appointment, widgetsData)
+      if (response?.length) {
         toast.success('Quicknote saved!')
         get().setWidgetsData(response)
       }
@@ -81,8 +132,12 @@ const createStore = (initialState: StoreInitialState) =>
     sign: async (payload) => {
       try {
         set({ loading: true })
-        const response = await saveWidgets(payload.appointment)
-        if (!response.length) {
+        const data = get().actualNotewidgetsData
+        const widgetsData = Object.entries(data)
+          .map(([, sections]) => sections)
+          .flat()
+        const response = await saveWidgets(payload.appointment, widgetsData)
+        if (!response?.length) {
           set({ loading: false })
           return {
             state: 'error',

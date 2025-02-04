@@ -1,4 +1,4 @@
-import { QuickNoteSectionItem } from '@/types'
+import { QuickNoteSectionItem, UpdateCptCodes } from '@/types'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { getCodes } from './cpt-code-map'
 import { QuestionnaireSchemaType } from './questionnaires-schema'
@@ -32,7 +32,11 @@ const transformOut =
     QuickNoteSectionName: QuickNoteSectionName,
     appointmentId: string,
   ) =>
-  async (schema: QuestionnaireSchemaType): Promise<QuickNoteSectionItem[]> => {
+  async (
+    schema: QuestionnaireSchemaType,
+    isSubmitting = false,
+    updateCptCodes?: UpdateCptCodes,
+  ): Promise<QuickNoteSectionItem[]> => {
     const result: QuickNoteSectionItem[] = []
 
     Object.entries(schema).forEach(([key, value]) => {
@@ -46,9 +50,13 @@ const transformOut =
       }
     })
 
-    const codesResult = appointmentId
-      ? await getCodes(patientId, appointmentId)
-      : []
+    let codesResult: QuickNoteSectionItem[] = []
+    if (isSubmitting) {
+      codesResult = appointmentId
+        ? await getCodes(patientId, appointmentId, updateCptCodes)
+        : []
+    }
+
     return [...result, ...codesResult]
   }
 

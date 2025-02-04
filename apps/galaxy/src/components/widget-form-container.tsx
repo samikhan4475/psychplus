@@ -4,10 +4,13 @@ import { useEffect } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { useFormContext } from 'react-hook-form'
 import toast from 'react-hot-toast'
+import { useDebouncedCallback } from 'use-debounce'
 import { saveWidgetClientAction } from '@/actions'
 import { revalidateAction } from '@/actions/revalidate'
 import { saveWidgetAction } from '@/actions/save-widget'
-import type { Appointment, QuickNoteSectionItem } from '@/types'
+import { useDeepCompareMemo } from '@/hooks/use-deep-compare-memo'
+import type { Appointment, QuickNoteSectionItem, UpdateCptCodes } from '@/types'
+import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { useQuickNoteUpdate } from '@/ui/quicknotes/hooks'
 import { getWidgetContainerCheckboxStateByWidgetId, postEvent } from '@/utils'
 import { WidgetContainer, type WidgetContainerProps } from './widget-container'
@@ -18,12 +21,15 @@ interface WidgetFormContainerProps extends WidgetContainerProps {
   widgetId: string
   getData: (
     schema: any,
+    isSubmitting?: boolean,
+    updateCptCodes?: UpdateCptCodes,
   ) => QuickNoteSectionItem[] | Promise<QuickNoteSectionItem[]>
   appointment?: Appointment
   tags?: string[]
   formResetValues?: any
   widgetContainerCheckboxFieldInitialValue?: string
   handleOnClear?: () => void
+  isResetDisabled?: boolean
 }
 
 const WidgetFormContainer = ({
@@ -35,19 +41,40 @@ const WidgetFormContainer = ({
   formResetValues,
   widgetContainerCheckboxFieldInitialValue,
   handleOnClear,
+  isResetDisabled,
   ...props
 }: WidgetFormContainerProps) => {
   const form = useFormContext()
-  const { updateWidgetsData, isQuickNoteView } = useQuickNoteUpdate()
+  const formValues = form.watch()
+
+  const memoizedValues = useDeepCompareMemo(() => formValues, [formValues])
+
+  const {
+    updateWidgetsData,
+    updateActualNoteWidgetsData,
+    isQuickNoteView,
+    updateCptCodes,
+  } = useQuickNoteUpdate()
   const params = useSearchParams()
   const visitSequence = params.get('visitSequence')
   const visitType = params.get('visitType')
 
   const { isDirty } = form.formState
 
+  const handleActualNoteUpdate = useDebouncedCallback(async (values) => {
+    const data = await getData(values, false, updateCptCodes)
+    updateActualNoteWidgetsData(data)
+  }, 500)
+
+  useEffect(() => {
+    if (Object.keys(memoizedValues ?? {})?.length && isQuickNoteView) {
+      handleActualNoteUpdate(memoizedValues)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [memoizedValues])
   const onSubmit = (shouldToast = true) =>
     form.handleSubmit(async (data) => {
-      const values = await getData(data)
+      const values = await getData(data, true, updateCptCodes)
       const payload = { patientId, data: values, tags }
       const result = await (isQuickNoteView
         ? saveWidgetClientAction
@@ -137,7 +164,9 @@ const WidgetFormContainer = ({
           handleQuickNotesSaveAll(form)
           break
         case 'quicknotes:clear':
-          form.reset({ ...formResetValues })
+          if (!isResetDisabled) {
+            formResetValues ? form.reset(formResetValues) : form.reset()
+          }
           handleOnClear?.()
           break
         default:

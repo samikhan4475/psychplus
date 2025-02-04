@@ -1,4 +1,4 @@
-import { Appointment, SelectOptionType } from '@/types'
+import { Appointment, QuickNoteSectionItem, SelectOptionType } from '@/types'
 
 interface VisitProps {
   cptPrimaryCodes: SelectOptionType[]
@@ -6,6 +6,8 @@ interface VisitProps {
   cptmodifierCodes: SelectOptionType[]
   appointment: Appointment
   patientId: string
+  tcmData?: QuickNoteSectionItem[]
+  isQuicknoteView?: boolean
 }
 
 export type { VisitProps }

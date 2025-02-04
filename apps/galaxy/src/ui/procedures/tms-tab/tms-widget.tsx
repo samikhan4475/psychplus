@@ -38,8 +38,6 @@ const TmsTab = ({
     initializeQuestionnaires: state.initializeQuestionnaires,
   }))
 
-
-
   useEffect(() => {
     initializeQuestionnaires(patientId)
     // eslint-disable-next-line react-hooks/exhaustive-deps

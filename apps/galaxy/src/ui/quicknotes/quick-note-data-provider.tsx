@@ -1,7 +1,7 @@
 'use client'
 
-import { ComponentProps, useMemo } from 'react'
-import { useShallow } from 'zustand/react/shallow'
+import { ComponentProps } from 'react'
+import { useDeepCompareMemo } from '@/hooks/use-deep-compare-memo'
 import { useStore } from './store'
 import { WidgetComponent } from './types'
 
@@ -16,14 +16,12 @@ const QuickNoteDataProvider = ({
   data: initialData = [],
   ...props
 }: QuickNoteDataProviderProps) => {
-  const widgetData = useStore(
-    useShallow((state) => state.widgetsData?.[id] || initialData),
-  )
-  const componentData = useMemo(() => {
+  const widgetData = useStore((state) => state.widgetsData?.[id] || initialData)
+
+  const componentData = useDeepCompareMemo(() => {
     return widgetData ?? initialData
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [widgetData])
-
   return <Component {...props} data={componentData} />
 }
 

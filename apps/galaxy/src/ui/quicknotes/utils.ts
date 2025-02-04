@@ -185,7 +185,6 @@ const widgets: Array<WidgetType> = [
     component: TmsWidgetClientLoader,
     id: QuickNoteSectionName.ProcedureTMS,
     actualNoteComponent: TmsDetailClientView,
-    isClient: true,
   },
   {
     component: TherapyAssessmentPlanClientLoader,
@@ -293,8 +292,6 @@ const modifyWidgetResponse = (data: QuickNoteSectionItem[] = []) =>
     acc[key].push(item)
     return acc
   }, {})
-
-
 
 const getCachedWidgetsByVisitType = cache(getWidgetsByVisitType)
 

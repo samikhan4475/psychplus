@@ -11,27 +11,38 @@ const transformOut =
     const visitSpecificCodesSet = new Set(
       visitSpecificCodes.map((item) => item.code.trim()),
     )
+
+    let lastPrimaryCode: QuickNoteSectionItem | null = null
+    const pid = Number(patientId)
+    const numericAppId = appId ? Number(appId) : undefined
+
     Object.entries(sanitizeFormData(schema)).forEach(
       ([sectionItem, values]) => {
-        Array.isArray(values) &&
-          values.forEach((value) => {
-            const sectionItemObj: QuickNoteSectionItem = {
-              pid: Number(patientId),
-              sectionName: QuickNoteSectionName.QuicknoteSectionCodes,
-              sectionItem,
-              sectionItemValue: value,
-            }
+        if (!Array.isArray(values)) return
 
-            if (
-              (appId && sectionItem === CptCodeKeys.PRIMARY_CODE_KEY) ||
-              visitSpecificCodesSet.has(value)
-            ) {
-              sectionItemObj.appId = Number(appId)
-            }
+        values.forEach((value) => {
+          const sectionItemObj: QuickNoteSectionItem = {
+            pid,
+            sectionName: QuickNoteSectionName.QuicknoteSectionCodes,
+            sectionItem,
+            sectionItemValue: value,
+          }
+
+          if (sectionItem === CptCodeKeys.PRIMARY_CODE_KEY) {
+            lastPrimaryCode = { ...sectionItemObj, appId: numericAppId }
+          } else if (visitSpecificCodesSet.has(value)) {
+            sectionItemObj.appId = numericAppId
             result.push(sectionItemObj)
-          })
+          } else {
+            result.push(sectionItemObj)
+          }
+        })
       },
     )
+
+    if (lastPrimaryCode) {
+      result.push(lastPrimaryCode)
+    }
 
     return result
   }

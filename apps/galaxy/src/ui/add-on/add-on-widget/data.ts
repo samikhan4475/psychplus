@@ -4,6 +4,7 @@ import {
   CodesWidgetItem,
   CptCodeKeys,
   QuickNoteSectionItem,
+  UpdateCptCodes,
 } from '@/types'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { sanitizeFormData } from '@/utils'
@@ -135,6 +136,8 @@ const transformOut =
   (patientId: string, appointmentId: string, visitType: string) =>
   async (
     schema: Record<string, BlockType>,
+    _isSubmitting?: boolean,
+    updateCptCodes?: UpdateCptCodes,
   ): Promise<QuickNoteSectionItem[]> => {
     const result: QuickNoteSectionItem[] = []
     const formData = sanitizeFormData(schema)
@@ -165,13 +168,27 @@ const transformOut =
       }
     }
 
-    const selectedCodes = await getCodes(schema, visitType)
-    const codesResult = await manageCodes(
-      patientId,
-      appointmentId,
-      addOnCodes,
-      selectedCodes,
-    )
+    const selectedCodes = getCodes(schema, visitType)
+
+    if (updateCptCodes) {
+      const updatedCodes =
+        (await updateCptCodes?.(
+          patientId,
+          appointmentId,
+          addOnCodes,
+          selectedCodes,
+        )) ?? []
+      result.push(...updatedCodes)
+    } else {
+      result.push(
+        ...(await manageCodes(
+          patientId,
+          appointmentId,
+          addOnCodes,
+          selectedCodes,
+        )),
+      )
+    }
 
     if (result.length === 0) {
       result.push({
@@ -180,7 +197,6 @@ const transformOut =
         sectionItemValue: 'true',
       })
     }
-    result.push(...codesResult)
 
     return result
   }
@@ -342,10 +358,10 @@ const transformOutPsychoanalysisBlock = (transformProps: {
   return result
 }
 
-const getCodes = async (
+const getCodes = (
   schema: Record<string, BlockType>,
   visitType: string,
-): Promise<CodesWidgetItem[]> => {
+): CodesWidgetItem[] => {
   const selectedCodes: CodesWidgetItem[] = []
   const cptCodeMap = getCptCodeMap(visitType)
 

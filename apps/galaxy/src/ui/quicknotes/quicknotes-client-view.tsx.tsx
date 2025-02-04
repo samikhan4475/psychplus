@@ -2,9 +2,9 @@
 
 import { useLayoutEffect, useState } from 'react'
 import { Flex, ScrollArea } from '@radix-ui/themes'
+import { useShallow } from 'zustand/react/shallow'
 import { TreatmentBillingAlert } from '@/components'
 import { Appointment, QuickNoteSectionItem, StaffComment } from '@/types'
-import { useShallow } from 'zustand/react/shallow'
 import { ActualNoteView } from './actual-note-view/actual-note-view'
 import { QuickNoteDataProvider } from './quick-note-data-provider'
 import { QuickNotesHeader } from './quicknotes-header'
@@ -33,9 +33,10 @@ export function QuickNotesClientView({
   widgetsData = [],
   staffComments = [],
 }: QuickNotesViewProps) {
-  const { setWidgetsData, patient } = useStore(
+  const { setWidgetsData, patient, setActualNoteData } = useStore(
     useShallow((state) => ({
       setWidgetsData: state.setWidgetsData,
+      setActualNoteData: state.setActualNoteWidgetsData,
       patient: state.patient,
     })),
   )
@@ -53,6 +54,7 @@ export function QuickNotesClientView({
   )
   useLayoutEffect(() => {
     setWidgetsData(widgetsData)
+    setActualNoteData(widgetsData)
     if (billingComments.length > 0 || treatmentComments.length > 0) {
       setIsOpen(true)
     } else {
@@ -62,7 +64,7 @@ export function QuickNotesClientView({
   }, [appointmentId])
 
   return (
-    <>
+    <Flex width="100%" direction="column">
       <TreatmentBillingAlert
         title="Staff Comments"
         isOpen={isOpen}
@@ -70,45 +72,41 @@ export function QuickNotesClientView({
         billingComments={billingComments ?? []}
         treatmentComments={treatmentComments ?? []}
       />
-      <Flex width="100%" direction="column">
-        <QuickNotesSaver />
-        <QuickNotesHeader appointment={appointment} />
-        <Flex className="h-full max-h-[calc(100dvh-408px)] w-full">
-          <ScrollArea className="h-full pr-3" type="always">
-            <Flex direction="column" height="100%" gap="2">
-              {widgets.map(({ component: WidgetComponent, id }) => {
-                if (!WidgetComponent) return null
-                return (
-                  <QuickNoteDataProvider
-                    key={id}
-                    id={id}
-                    component={WidgetComponent}
-                    appointment={appointment}
-                    patient={patient}
-                    data={widgetsData?.filter(
-                      ({ sectionName }) => sectionName === id,
-                    )}
-                    patientId={patientId}
-                    visitType={visitType}
-                    appointmentId={appointmentId}
-                    visitSequence={visitSequence}
-                  />
-                )
-              })}
-            </Flex>
-          </ScrollArea>
-          <ActualNoteView
-            patientId={patientId}
-            appointment={appointment}
-            patient={patient}
-            widgets={widgets}
-            data={widgetsData}
-            visitType={visitType}
-            visitSequence={visitSequence}
-            appointmentId={appointmentId}
-          />
-        </Flex>
+      <QuickNotesSaver />
+      <QuickNotesHeader appointment={appointment} />
+      <Flex className="h-full max-h-[calc(100dvh-408px)] w-full">
+        <ScrollArea className="h-full pr-3" type="always">
+          <Flex direction="column" height="100%" gap="2">
+            {widgets.map(({ component: WidgetComponent, id }) => {
+              if (!WidgetComponent) return null
+              return (
+                <QuickNoteDataProvider
+                  key={id}
+                  id={id}
+                  component={WidgetComponent}
+                  appointment={appointment}
+                  patient={patient}
+                  data={widgetsData?.filter((item) => item?.sectionName === id)}
+                  patientId={patientId}
+                  visitType={visitType}
+                  appointmentId={appointmentId}
+                  visitSequence={visitSequence}
+                />
+              )
+            })}
+          </Flex>
+        </ScrollArea>
+        <ActualNoteView
+          patientId={patientId}
+          appointment={appointment}
+          patient={patient}
+          widgets={widgets}
+          data={widgetsData}
+          visitType={visitType}
+          visitSequence={visitSequence}
+          appointmentId={appointmentId}
+        />
       </Flex>
-    </>
+    </Flex>
   )
 }

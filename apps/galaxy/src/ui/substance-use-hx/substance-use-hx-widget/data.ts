@@ -1,6 +1,11 @@
 import { getQuickNoteDetailAction } from '@/actions/get-quicknote-detail'
 import { WidgetContainerCheckboxField } from '@/components'
-import { CodesWidgetItem, CptCodeKeys, QuickNoteSectionItem } from '@/types'
+import {
+  CodesWidgetItem,
+  CptCodeKeys,
+  QuickNoteSectionItem,
+  UpdateCptCodes,
+} from '@/types'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { sanitizeFormData } from '@/utils'
 import { manageCodes } from '@/utils/codes'
@@ -55,8 +60,16 @@ const transformIn = (
 }
 
 const transformOut =
-  (patientId: string, appointmentId: string) =>
-  async (schema: Record<string, undefined>) => {
+  (
+    patientId: string,
+    appointmentId: string,
+    diagnosisData?: QuickNoteSectionItem[],
+  ) =>
+  async (
+    schema: Record<string, undefined>,
+    _isSubmitting?: boolean,
+    updateCptCodes?: UpdateCptCodes,
+  ) => {
     const result: QuickNoteSectionItem[] = []
 
     const selectedCodes: CodesWidgetItem[] = []
@@ -141,15 +154,32 @@ const transformOut =
         })
       }
     })
+    if (updateCptCodes) {
+      const updatedCodes =
+        (await updateCptCodes?.(
+          patientId,
+          appointmentId,
+          substanceCptCodes,
+          selectedCodes,
+        )) ?? []
+      result.push(...updatedCodes)
+    } else {
+      result.push(
+        ...(await manageCodes(
+          patientId,
+          appointmentId,
+          substanceCptCodes,
+          selectedCodes,
+        )),
+      )
+    }
 
-    const codesResult = await manageCodes(
+    const diagnosisSections = await getDiagnosisSections(
+      schema,
       patientId,
-      appointmentId,
-      substanceCptCodes,
-      selectedCodes,
+      diagnosisData,
+      updateCptCodes ? true : false,
     )
-
-    const diagnosisSections = await getDiagnosisSections(schema, patientId)
     if (!result.length) {
       result.push({
         ...QuickNotesPayload,
@@ -157,20 +187,26 @@ const transformOut =
         sectionItemValue: 'true',
       })
     }
-    return [...result, ...codesResult, ...diagnosisSections]
+    return [...result, ...diagnosisSections]
   }
 
 const getDiagnosisSections = async (
   schema: Record<string, undefined>,
   patientId: string,
+  diagnosisData: QuickNoteSectionItem[] = [],
+  isQuicknoteView?: boolean,
 ) => {
-  const response = await getQuickNoteDetailAction(patientId, [
-    QuickNoteSectionName.QuickNoteSectionDiagnosis,
-  ])
-
-  if (response.state === 'error') {
-    return []
+  let data: QuickNoteSectionItem[] = diagnosisData
+  if (!isQuicknoteView) {
+    const response = await getQuickNoteDetailAction(patientId, [
+      QuickNoteSectionName.QuickNoteSectionDiagnosis,
+    ])
+    if (response.state === 'error') {
+      return []
+    }
+    data = response.data
   }
+
   const formData = sanitizeFormData(schema)
   const { tobacco, alcohol, drugs } = formData
   const substanceUseCodes = [
@@ -184,7 +220,7 @@ const getDiagnosisSections = async (
     'F10.10',
   ]
   const diagnosisCodesToAdd =
-    response.data[0]?.sectionItemValue
+    data?.[0]?.sectionItemValue
       .split(',')
       .filter((item) => !substanceUseCodes.includes(item)) || []
   const drugsDiagnosisMap: Record<string, string> = {

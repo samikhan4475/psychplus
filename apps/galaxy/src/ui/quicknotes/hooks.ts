@@ -1,23 +1,46 @@
 'use client'
 
 import { usePathname, useSearchParams } from 'next/navigation'
+import { useShallow } from 'zustand/react/shallow'
+import { QuickNoteSectionItem, UpdateCptCodes } from '@/types'
 import { useStore } from './store'
 import { useHasPermission } from '@/hooks'
 
-const useQuickNoteUpdate = () => {
-  const { setWidgetsData } = useStore((state) => ({
-    setWidgetsData: state.setWidgetsData,
-  }))
+const useQuickNoteUpdate = <T extends QuickNoteSectionItem>(): {
+  updateWidgetsData: (data: T[]) => void
+  updateActualNoteWidgetsData: (data: T[]) => void
+  isQuickNoteView: boolean
+  updateCptCodes?: UpdateCptCodes
+} => {
+  const { setWidgetsData, setActualNoteWidgetsData, updateCptCodes } = useStore(
+    useShallow((state) => ({
+      setActualNoteWidgetsData: state.setActualNoteWidgetsData,
+      setWidgetsData: state.setWidgetsData,
+      updateCptCodes: state.updateCptCodes,
+    })),
+  )
   const searchParams = useSearchParams()
   const pathname = usePathname()
   const appoinmentId = searchParams.get('id') ?? ''
-  const isQuickNoteView = appoinmentId && pathname.includes('quicknotes')
+  const isQuickNoteView = Boolean(
+    appoinmentId && pathname.includes('quicknotes'),
+  )
 
   if (!isQuickNoteView) {
-    return { updateWidgetsData: () => {}, isQuickNoteView }
+    return {
+      updateWidgetsData: () => {},
+      updateActualNoteWidgetsData: () => {},
+      isQuickNoteView,
+      updateCptCodes: undefined,
+    }
   }
 
-  return { updateWidgetsData: setWidgetsData, isQuickNoteView }
+  return {
+    updateWidgetsData: setWidgetsData,
+    updateActualNoteWidgetsData: setActualNoteWidgetsData,
+    updateCptCodes,
+    isQuickNoteView,
+  }
 }
 
 const useQuickNotesPermissions = () => {

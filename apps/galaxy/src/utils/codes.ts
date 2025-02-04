@@ -1,6 +1,7 @@
 import { getQuickNoteDetailAction } from '@/actions/get-quicknote-detail'
 import { CodesWidgetItem, QuickNoteSectionItem, SharedCode } from '@/types'
 import {
+  transformIn,
   transformInAppointmentCodes,
   transformOut,
 } from '@/ui/codes/codes-widget/data'
@@ -11,8 +12,19 @@ const manageCodes = async (
   appointmentId: string,
   widgetAllCptCodes: CodesWidgetItem[],
   selectedCodes: CodesWidgetItem[],
+  defaultCptCodes: QuickNoteSectionItem[] = [],
+  isQuicknoteView?: boolean,
 ): Promise<QuickNoteSectionItem[]> => {
-  const codesData = await fetchCodes(patientId, appointmentId)
+  let codesData: ReturnType<typeof transformIn> = {
+    cptAddonCodes: [],
+    cptmodifierCodes: [],
+    cptPrimaryCodes: [],
+  }
+  if (isQuicknoteView) {
+    codesData = transformIn(defaultCptCodes)
+  } else {
+    codesData = await fetchCodes(patientId, appointmentId)
+  }
   widgetAllCptCodes.forEach(({ key, code }) => {
     codesData[key] = codesData[key].filter(
       (existingCode) => existingCode !== code,

@@ -1,3 +1,3 @@
 export * from './common'
-export * from './spravato-visit'
 export * from './tcm'
+export * from './read-only-visit'

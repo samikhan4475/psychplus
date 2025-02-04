@@ -2,13 +2,17 @@
 
 import { useEffect } from 'react'
 import { Flex, Text } from '@radix-ui/themes'
+import { useDebouncedCallback } from 'use-debounce'
+import { TabContentHeading, WidgetAddButton } from '@/components'
 import {
-  TabContentHeading,
-  WidgetAddButton,
-} from '@/components'
-import { DiagnosisIcd10Code, FavouriteDiagnosisData } from '@/types'
+  DiagnosisIcd10Code,
+  FavouriteDiagnosisData,
+  QuickNoteSectionItem,
+} from '@/types'
 import { WorkingDiagnosisView } from '@/ui/diagnosis/diagnosis/diagnosis-widget'
 import { SearchDiagnosis } from '@/ui/diagnosis/diagnosis/diagnosis-widget/search-diagnosis'
+import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
+import { useQuickNoteUpdate } from '@/ui/quicknotes/hooks'
 import { Diagnosis } from '../diagnosis'
 import { DiagnosisSaveButton } from '../diagnosis/diagnosis-widget/diagnosis-save-button'
 import { useStore } from '../store'
@@ -16,19 +20,51 @@ import { useStore } from '../store'
 interface DiagnosisWidgetProps {
   workingDiagnosis?: DiagnosisIcd10Code[]
   favouriteDiagnosis?: FavouriteDiagnosisData[]
+  patientId?: string
 }
 
 const DiagnosisWidget = ({
   workingDiagnosis,
   favouriteDiagnosis,
+  patientId,
 }: DiagnosisWidgetProps) => {
-  const { updateFavoritesDiagnosis, updateWorkingDiagnosisData } = useStore(
-    (state) => ({
-      fetchWorkingDiagnosis: state.fetchWorkingDiagnosis,
-      updateFavoritesDiagnosis: state.updateFavoritesDiagnosis,
-      updateWorkingDiagnosisData: state.updateWorkingDiagnosisData,
-    }),
+  const { isQuickNoteView, updateActualNoteWidgetsData } = useQuickNoteUpdate()
+  const {
+    updateFavoritesDiagnosis,
+    updateWorkingDiagnosisData,
+    workingDiagnosisData,
+  } = useStore((state) => ({
+    fetchWorkingDiagnosis: state.fetchWorkingDiagnosis,
+    updateFavoritesDiagnosis: state.updateFavoritesDiagnosis,
+    updateWorkingDiagnosisData: state.updateWorkingDiagnosisData,
+    workingDiagnosisData: state.workingDiagnosisData,
+  }))
+
+  const handleDiagnosischange = useDebouncedCallback(
+    (value: QuickNoteSectionItem[]) => {
+      updateActualNoteWidgetsData(value)
+    },
+    1500,
   )
+
+  useEffect(() => {
+    if (isQuickNoteView) {
+      handleDiagnosischange([
+        {
+          pid: Number(patientId),
+          sectionName: QuickNoteSectionName.QuickNoteSectionDiagnosis,
+          sectionItem: 'diagnosis',
+          sectionItemValue:
+            workingDiagnosisData
+              .reduce((acc: string[], { code }) => {
+                if (code !== 'empty') acc.push(code)
+                return acc
+              }, [])
+              .toString() || 'empty',
+        },
+      ])
+    }
+  }, [isQuickNoteView, patientId, workingDiagnosisData])
 
   useEffect(() => {
     workingDiagnosis && updateWorkingDiagnosisData(workingDiagnosis)

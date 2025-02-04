@@ -1,7 +1,13 @@
 import toast from 'react-hot-toast'
-import { saveWidgetClientAction } from '@/actions'
+import { saveWidgetClientAction, updateVisitAction } from '@/actions'
 import { Appointment, DiagnosisIcd10Code, QuickNoteSectionItem } from '@/types'
-import { postEvent, saveAbleWdgets, VisitTypeEnum } from '@/utils'
+import { transformVisitUpdatePayload } from '@/ui/assessment-plan/tcm-widget/data'
+import {
+  postEvent,
+  sanitizeFormData,
+  saveAbleWdgets,
+  VisitTypeEnum,
+} from '@/utils'
 import { QuickNoteSectionName } from '../constants'
 import { getWidgetErrorMessage, getWidgetsByVisitType } from '../utils'
 
@@ -26,62 +32,46 @@ const getWidgetData = (providerType: string) => {
   }
 }
 
+const updateAppointment = (
+  appointment: Appointment,
+  sections: QuickNoteSectionItem[] = [],
+) => {
+  if (appointment.visitTypeCode !== VisitTypeEnum.TransitionalCare) {
+    return undefined
+  }
+  const data = sections.filter(
+    (section) =>
+      section?.sectionName === QuickNoteSectionName.QuicknoteSectionTcm,
+  )
+  return updateVisitAction(
+    sanitizeFormData(transformVisitUpdatePayload(appointment, data)),
+  )
+}
+
 const saveWidgets = async (
   appointment: Appointment,
-): Promise<QuickNoteSectionItem[]> => {
+  sections: QuickNoteSectionItem[],
+) => {
   const { widgets } = getWidgetData(appointment.providerType)
 
   const isValidateAll = await validateAll(widgets, appointment.visitTypeCode)
   if (!isValidateAll) {
     return []
   }
-  //   const widgets = []
-  const promises = widgets.map((widgetId) => {
-    return new Promise<{
-      success: boolean
-      widgetId: string
-      sections: QuickNoteSectionItem[]
-    }>((resolve) => {
-      const handleMessage = (event: MessageEvent) => {
-        if (
-          event.data.type === 'widget:saveAll' &&
-          event.data.widgetId === widgetId
-        ) {
-          window.removeEventListener('message', handleMessage)
-          resolve(event.data)
-        }
-      }
-
-      window.addEventListener('message', handleMessage)
-    })
-  })
-
-  postEvent({ type: 'quicknotes:saveAll' })
-  const responses = await Promise.all(promises)
-  const sections = responses.flatMap((response) => response.sections)
-
-  const uniqueSections = sections.filter(
-    (section, index, self) =>
-      index ===
-      self.findIndex(
-        (t) =>
-          t.sectionName === section.sectionName &&
-          t.sectionItemValue === section.sectionItemValue &&
-          t.sectionItem === section.sectionItem,
-      ),
-  )
   const payload = {
-    patientId: String(uniqueSections?.[0]?.pid),
-    data: uniqueSections,
+    patientId: String(sections?.[0]?.pid),
+    data: sections,
   }
-
   try {
-    const result = await saveWidgetClientAction(payload)
-    if (result.state === 'error') {
+    const [widgetsResult, _] = await Promise.all([
+      saveWidgetClientAction(payload),
+      updateAppointment(appointment, sections),
+    ])
+    if (widgetsResult.state === 'error') {
       toast.error('Failed to save!')
       return []
     }
-    return uniqueSections
+    return sections
   } catch (error) {
     toast.error('Failed to save!')
     return []
@@ -117,7 +107,6 @@ const validateAll = async (
     }
   })
   widgetErrors = widgetErrors.slice(0, widgetErrors.length - 2)
-
   if (widgetErrors !== '') {
     let errorKey
     switch (true) {

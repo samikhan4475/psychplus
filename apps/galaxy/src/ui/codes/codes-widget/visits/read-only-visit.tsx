@@ -1,7 +1,8 @@
+import React from 'react'
 import { AddonsTable, ModifierTable, PrimaryCodeTable } from '../blocks'
 import { VisitProps } from '../types'
 
-const SpravatoVisit = ({
+const ReadOnlyVisit = ({
   cptAddOnsCodes,
   cptPrimaryCodes,
   cptmodifierCodes,
@@ -15,4 +16,4 @@ const SpravatoVisit = ({
   )
 }
 
-export { SpravatoVisit }
+export { ReadOnlyVisit }

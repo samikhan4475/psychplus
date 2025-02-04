@@ -27,11 +27,13 @@ const saveAbleWdgets: QuickNoteSectionName[] = [
   QuickNoteSectionName.QuicknoteSectionMse,
   QuickNoteSectionName.QuicknoteSectionPsychiatryAssessmentPlan,
   QuickNoteSectionName.Addon,
-  QuickNoteSectionName.QuicknoteSectionCodes,
   QuickNoteSectionName.QuicknoteSectionProcedureSpravato,
   QuickNoteSectionName.ProcedureTMS,
   QuickNoteSectionName.QuicknoteSectionTcm,
+  QuickNoteSectionName.QuickNoteSectionFamilyTherapy,
+  QuickNoteSectionName.QuickNoteSectionIndividualTherapy,
   QuickNoteSectionName.QuicknoteSectionProcedureEtcTab,
+  QuickNoteSectionName.QuicknoteSectionCodes,
 ]
 
 const visitTypeToWidgets: Record<VisitTypeEnum, QuickNoteSectionName[]> = {

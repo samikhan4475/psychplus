@@ -4,11 +4,9 @@ import { ComponentType, useEffect } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { Box } from '@radix-ui/themes'
 import { FormProvider } from 'react-hook-form'
-import {
-  WidgetFormContainer,
-  WidgetSaveButton,
-} from '@/components'
-import { Appointment } from '@/types'
+import toast from 'react-hot-toast'
+import { WidgetFormContainer, WidgetSaveButton } from '@/components'
+import { Appointment, QuickNoteSectionItem } from '@/types'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { CodeHistory } from './code-history'
 import { CodesHeader } from './codes-header'
@@ -21,7 +19,7 @@ import {
   getModifiedCptCodes,
   handleDefaultSubmission,
 } from './utils'
-import { CommonVisit, SpravatoVisit, Tcm } from './visits'
+import { CommonVisit, ReadOnlyVisit, Tcm } from './visits'
 
 interface CodesWidgetProps {
   patientId: string
@@ -29,6 +27,7 @@ interface CodesWidgetProps {
   isCodesHeader?: boolean
   initialValues: CodesWidgetSchemaType
   appointment: Appointment
+  tcmData?: QuickNoteSectionItem[]
 }
 
 const CodesWidget = ({
@@ -37,11 +36,16 @@ const CodesWidget = ({
   appointmentId,
   initialValues,
   appointment,
+  tcmData,
 }: CodesWidgetProps) => {
   const params = useSearchParams()
   const form = useCodesWidgetForm(initialValues)
+  const visitType = params.get('visitType') ?? 'Common'
+  const visitSequence = params.get('visitSequence') ?? ''
   const VisitComponent =
-    visitsMap?.[params.get('visitType') ?? ''] ?? visitsMap['common']
+    visitsMap?.[visitType] ??
+    visitsMap?.[`${visitType}${visitSequence}`] ??
+    visitsMap['Common']
 
   useEffect(() => {
     const { isChanged, updatedCodes } = getModifiedCptCodes(
@@ -50,7 +54,8 @@ const CodesWidget = ({
     )
     if (isChanged) {
       form.reset(updatedCodes)
-      handleDefaultSubmission(patientId, appointmentId, updatedCodes)
+      isCodesHeader &&
+        handleDefaultSubmission(patientId, appointmentId, updatedCodes)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [patientId, appointmentId, appointment, initialValues])
@@ -66,6 +71,7 @@ const CodesWidget = ({
     appointment?.cptModifiersCodes,
     initialValues,
   )
+
   return (
     <FormProvider {...form}>
       <WidgetFormContainer
@@ -74,17 +80,9 @@ const CodesWidget = ({
         title="Codes"
         tags={isCodesHeader ? [QuickNoteSectionName.QuicknoteSectionCodes] : []}
         getData={transformOut(patientId, appointmentId)}
-        headerRight={
-          <>
-            {!isCodesHeader && (
-              <>
-                <WidgetSaveButton />
-              </>
-            )}
-          </>
-        }
+        headerRight={!isCodesHeader && <WidgetSaveButton />}
         topHeader={isCodesHeader && <CodesHeader />}
-        formResetValues={initialValues}
+        isResetDisabled
       >
         <Box className="border-pp-focus-bg relative w-full max-w-[580px] border p-1">
           <CodeHistory cptCodesLookup={cptCodesLookup} />
@@ -95,6 +93,8 @@ const CodesWidget = ({
               cptmodifierCodes={modifierCodeOptions}
               appointment={appointment}
               patientId={patientId}
+              tcmData={tcmData}
+              isQuicknoteView={isCodesHeader ?? true}
             />
           )}
         </Box>
@@ -104,8 +104,10 @@ const CodesWidget = ({
 }
 
 const visitsMap: Record<string, ComponentType<VisitProps>> = {
-  common: CommonVisit,
+  Common: CommonVisit,
   TransitionalCare: Tcm,
-  Spravato: SpravatoVisit,
+  Spravato: ReadOnlyVisit,
+  IndividualPsychotherapyEstablished: ReadOnlyVisit,
+  FamilyPsychotherapy: ReadOnlyVisit,
 }
 export { CodesWidget }

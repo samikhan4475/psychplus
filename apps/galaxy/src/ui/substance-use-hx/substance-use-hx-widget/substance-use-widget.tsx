@@ -8,6 +8,7 @@ import {
   WidgetFormContainer,
   WidgetSaveButton,
 } from '@/components'
+import { QuickNoteSectionItem } from '@/types'
 import { useStore } from '@/ui/questionnaires/store'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { AlcoholDrugsBlock, TobaccoBlock } from './blocks'
@@ -20,6 +21,7 @@ import { getInitialValues } from './utils'
 interface SocialHxWidgetProps {
   patientId: string
   initialValue: SubstanceUseHxWidgetSchemaType
+  diagnosisData?: QuickNoteSectionItem[]
   isHistoryHeader?: boolean
 }
 
@@ -27,11 +29,11 @@ const SubstanceUseHxWidget = ({
   patientId,
   initialValue,
   isHistoryHeader = false,
+  diagnosisData,
 }: SocialHxWidgetProps) => {
   const { initializeQuestionnaires } = useStore((state) => ({
     initializeQuestionnaires: state.initializeQuestionnaires,
   }))
-
   const appointmentId = useSearchParams().get('id') as string
   const form = useSubstanceHxWidgetForm(initialValue)
 
@@ -65,7 +67,7 @@ const SubstanceUseHxWidget = ({
             ? [QuickNoteSectionName.QuickNoteSectionSubstanceUseHx]
             : []
         }
-        getData={transformOut(patientId, appointmentId)}
+        getData={transformOut(patientId, appointmentId, diagnosisData)}
         toggleable={!isHistoryHeader}
         headerRight={
           <>
