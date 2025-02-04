@@ -3,4 +3,15 @@ enum ProviderType {
   Therapist = 2,
 }
 
-export { ProviderType }
+enum NewProviderType {
+  Psychiatrist = 'Psychiatrist',
+  Therapy = 'Therapy',
+  NotSet = 'NotSet',
+  Bcba = 'Bcba',
+  FamilyMedicine = 'FamilyMedicine',
+  Pmnr = 'Pmnr',
+  InternalMedicine = 'InternalMedicine',
+  Anesthesiology = 'Anesthesiology',
+}
+
+export { ProviderType, NewProviderType }

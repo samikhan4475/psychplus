@@ -17,6 +17,7 @@ import { CreditCard } from '@/features/billing/credit-debit-cards/types'
 import { Insurance, InsurancePayer } from '@/features/billing/payments/types'
 import { useToast } from '@/providers'
 import { rescheduleAppointment } from '../actions'
+import { getNewProviderTypeLabel, getProviderTypeLabel } from '@psychplus-v2/utils'
 
 const ChangePaymentMethodDialog = ({
   appointment,
@@ -59,6 +60,7 @@ const ChangePaymentMethodDialog = ({
       serviceId: appointment.serviceId,
       specialistStaffId: appointment.specialist.id,
       specialistTypeCode: appointment.specialistTypeCode,
+      providerType: getNewProviderTypeLabel(getProviderTypeLabel(appointment.specialistTypeCode)),
       type: appointment.type,
       startDate: appointment.startDate,
       duration: appointment.duration,

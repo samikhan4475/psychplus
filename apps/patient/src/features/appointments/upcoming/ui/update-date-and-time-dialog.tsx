@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { getLocalTimeZone, today } from '@internationalized/date'
 import { Appointment } from '@psychplus-v2/types'
-import { getCalendarDateLabel } from '@psychplus-v2/utils'
+import { getCalendarDateLabel, getNewProviderTypeLabel, getProviderTypeLabel } from '@psychplus-v2/utils'
 import { Box, Button, Flex, Tooltip } from '@radix-ui/themes'
 import { Popover } from '@psychplus/ui/popover'
 import { EditIcon, FormError } from '@/components-v2'
@@ -45,6 +45,7 @@ const UpdateDateAndTimeDialog = ({
         appointmentId: appointment.id,
         specialistStaffId: appointment.specialist.id,
         specialistTypeCode: appointment.specialistTypeCode,
+        providerType: getNewProviderTypeLabel(getProviderTypeLabel(appointment.specialistTypeCode)),
         type: appointment.type,
         startDate: selectedSlot?.startDateUtc ?? selectedSlot?.startDate,
         duration: selectedSlot?.duration,

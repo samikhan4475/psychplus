@@ -1,15 +1,15 @@
 'use client'
 
-import { ProviderType } from '@psychplus-v2/constants'
 import { Button, Dialog, Flex } from '@radix-ui/themes'
 import { CloseDialogIcon } from '@/components-v2'
 import { PrimaryProviderAppointedProps } from '@/features/appointments/book/types'
+import { getNewProviderTypeLabel } from '@psychplus-v2/utils'
 
 const PrimaryProviderAppointedDialog = ({
   open,
   setOpen,
   onSubmit,
-  providerType,
+  newProviderType
 }: PrimaryProviderAppointedProps) => {
   const onChangePrimarycard = async () => {
     setOpen(false)
@@ -34,7 +34,7 @@ const PrimaryProviderAppointedDialog = ({
           </Dialog.Title>
           <Dialog.Description size="3" align="center">
             Selected Provider has been appointed as your <br />
-            Primary {ProviderType[providerType]}!
+            Primary {getNewProviderTypeLabel(newProviderType || '')}!
           </Dialog.Description>
           <Flex gap="3" mt="4" justify="end">
             <Button className="bg-[#24366B]" onClick={onChangePrimarycard}>

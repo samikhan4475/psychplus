@@ -6,6 +6,7 @@ import { AppointmentType, ProviderType } from '@psychplus-v2/constants'
 import { API_URL } from '@psychplus-v2/env'
 import { Clinic, Specialist } from '@psychplus-v2/types'
 import type { CurrentLocation } from '@/features/appointments/search/types'
+import { getNewProviderTypeLabel, getProviderTypeLabel } from '@psychplus-v2/utils'
 
 interface AvailabilityApiResponse {
   availableSlots: {
@@ -20,7 +21,7 @@ interface AvailabilityApiResponse {
   specialist: Specialist
   clinic: Clinic
   specialistTypeCode: ProviderType
-  providerType: ProviderType
+  providerType: string | null
 }
 
 interface AppointmentsSearchApiResponse {
@@ -71,6 +72,7 @@ const searchAppointmentsAction = async ({
   const payload = {
     type: type,
     specialistTypeCode: providerType,
+    providerTypeCode: getNewProviderTypeLabel(getProviderTypeLabel(providerType)),
     startingDate: new Date(`${startingDate}, 00:00 AM`).toISOString(),
     maxDaysOutToLook,
     postalCode,

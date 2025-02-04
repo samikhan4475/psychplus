@@ -37,6 +37,7 @@ interface BookedSlot {
   specialist: AppointmentSpecialist
   appointmentType: AppointmentType
   providerType: ProviderType
+  newProviderType: string | null
 }
 
 interface BookSlotButtonProps {
@@ -74,7 +75,7 @@ interface PrimaryProviderAppointedProps {
   open: boolean
   setOpen: (open: boolean) => void
   onSubmit: (open: boolean) => void
-  providerType: ProviderType
+  newProviderType: string | null
 }
 
 interface NewProviderSelectedProps {
@@ -82,7 +83,7 @@ interface NewProviderSelectedProps {
   setOpen: (open: boolean) => void
   onClose: (open: boolean) => void
   specialistStaffId: number
-  providerType: ProviderType
+  newProviderType: string | null
 }
 
 export type {

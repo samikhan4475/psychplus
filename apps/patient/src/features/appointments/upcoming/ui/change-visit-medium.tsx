@@ -8,6 +8,7 @@ import { Button, Dialog, Flex, Text } from '@radix-ui/themes'
 import { CloseDialogIcon, FormError } from '@/components-v2'
 import { useToast } from '@/providers'
 import { rescheduleAppointment } from '../actions'
+import { getNewProviderTypeLabel, getProviderTypeLabel } from '@psychplus-v2/utils'
 
 interface ChangeVisitMediumProp {
   appointment: Appointment
@@ -28,6 +29,7 @@ const ChangeVisitMedium = ({ appointment }: ChangeVisitMediumProp) => {
       appointmentId: appointment.id,
       specialistStaffId: appointment.specialist.id,
       specialistTypeCode: appointment.specialistTypeCode,
+      providerType: getNewProviderTypeLabel(getProviderTypeLabel(appointment.specialistTypeCode)),
       type:
         appointment.type === AppointmentType.InPerson
           ? AppointmentType.Virtual

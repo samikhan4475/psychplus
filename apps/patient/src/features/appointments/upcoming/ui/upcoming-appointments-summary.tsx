@@ -9,7 +9,7 @@ import { GOOGLE_MAPS_API_KEY, STRIPE_PUBLISHABLE_KEY } from '@psychplus-v2/env'
 import {
   formatCurrency,
   getAppointmentTypeLabel,
-  getProviderTypeLabel,
+  getNewProviderTypeLabel,
   getUserFullName,
   withSuspense,
 } from '@psychplus-v2/utils'
@@ -172,8 +172,8 @@ const UpcomingAppointmentsSummaryComponent = async () => {
                       >
                         <Flex>
                           <Text className="text-[14px] text-[#194595]">
-                            {getProviderTypeLabel(
-                              row.specialistTypeCode,
+                            {getNewProviderTypeLabel(
+                              row.providerType,
                             ).toLocaleUpperCase()}
                           </Text>
                           <DotIcon color="gray" />

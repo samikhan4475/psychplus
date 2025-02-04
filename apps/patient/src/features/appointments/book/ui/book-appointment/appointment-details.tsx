@@ -8,7 +8,7 @@ import {
   getDayOfWeekLabel,
   getLocalCalendarDate,
   getMonthLabel,
-  getProviderTypeLabel,
+  getNewProviderTypeLabel,
   getTimeLabel,
   getUserFullName,
 } from '@psychplus-v2/utils'
@@ -17,7 +17,7 @@ import { ProviderAvatar } from '@/components-v2'
 import { BookedAppointmentProps } from '@/features/appointments/book/types'
 
 const AppointmentDetails = ({ bookedSlot }: BookedAppointmentProps) => {
-  const { specialist, clinic, slot, appointmentType, providerType } = bookedSlot
+  const { specialist, clinic, slot, appointmentType, newProviderType } = bookedSlot
 
   const slotDate = getLocalCalendarDate(slot.startDate)
   const isSlotToday = isToday(slotDate, getLocalTimeZone())
@@ -53,7 +53,7 @@ const AppointmentDetails = ({ bookedSlot }: BookedAppointmentProps) => {
         </Flex>
         <Flex gap="5">
           <Text weight="medium" className="text-[13px] text-accent-11">
-            {getProviderTypeLabel(providerType).toLocaleUpperCase()}
+            {getNewProviderTypeLabel(newProviderType || "").toLocaleUpperCase()}
           </Text>
           <Text weight="medium" className="text-[13px] text-accent-11">
             {getAppointmentTypeLabel(appointmentType).toLocaleUpperCase()}

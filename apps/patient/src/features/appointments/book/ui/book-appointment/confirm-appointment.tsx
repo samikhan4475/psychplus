@@ -7,7 +7,7 @@ import {
   getAppointmentTypeLabel,
   getClinicAddressLabel,
   getLocalCalendarDate,
-  getProviderTypeLabel,
+  getNewProviderTypeLabel,
   getUserFullName,
 } from '@psychplus-v2/utils'
 import { Button, Container, Flex, Text } from '@radix-ui/themes'
@@ -25,7 +25,7 @@ const ConfirmAppointment = ({
   bookedSlot,
   mapKey,
 }: ConfirmedAppointmentProps) => {
-  const { specialist, clinic, slot, appointmentType, providerType } = bookedSlot
+  const { specialist, clinic, slot, appointmentType, newProviderType } = bookedSlot
 
   const appointmentConfirmationNotes =
     CONFIRMATION_NOTES.find((c) => c.appointmentType === appointmentType)
@@ -78,7 +78,7 @@ const ConfirmAppointment = ({
 
             <Flex gap="5">
               <Text weight="medium" className="text-[13px] text-[#194595]">
-                {getProviderTypeLabel(providerType).toLocaleUpperCase()}
+                {getNewProviderTypeLabel(newProviderType || '').toLocaleUpperCase()}
               </Text>
               <Text weight="medium" className="text-[13px] text-[#194595]">
                 {getAppointmentTypeLabel(appointmentType).toLocaleUpperCase()}

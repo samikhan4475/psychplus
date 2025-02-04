@@ -34,6 +34,7 @@ const BookAppointmentView = ({
   insurancePayers,
   appointmentId,
   specialistId,
+  newProviderType
 }: {
   appointmentId?: string
   specialistId?: string
@@ -49,6 +50,7 @@ const BookAppointmentView = ({
   careTeam: CareTeamMember[]
   patientInsurances: Insurance[]
   insurancePayers: InsurancePayer[]
+  newProviderType: string | null
 }) => {
   const [bookingSuccessful, setBookingSuccessful] = useState(false)
   const [paymentMethod, setPaymentMethod] = useState<PaymentType>(
@@ -61,6 +63,7 @@ const BookAppointmentView = ({
     slot,
     appointmentType,
     providerType,
+    newProviderType
   }
 
   return (

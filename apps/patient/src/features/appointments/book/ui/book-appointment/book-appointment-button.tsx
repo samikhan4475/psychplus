@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { FormContainer } from '@psychplus-v2/components'
 import { AppointmentType, PaymentType } from '@psychplus-v2/constants'
 import { Consent, DocumentType } from '@psychplus-v2/types'
-import { getProviderTypeLabel } from '@psychplus-v2/utils'
+import { getNewProviderTypeLabel } from '@psychplus-v2/utils'
 import { Button, Checkbox, Flex, Text } from '@radix-ui/themes'
 import { useForm } from 'react-hook-form'
 import z from 'zod'
@@ -53,7 +53,7 @@ const BookAppointmentButton = ({
   creditCards,
   patientInsurances,
 }: BookSlotButtonProps) => {
-  const { specialist, clinic, slot, appointmentType, providerType } = bookedSlot
+  const { specialist, clinic, slot, appointmentType, providerType, newProviderType } = bookedSlot
 
   const [error, setError] = useState<string>('')
   const [loading, setLoading] = useState(false)
@@ -106,7 +106,7 @@ const BookAppointmentButton = ({
 
   const careTeamExists = checkCareTeamExists(
     careTeam,
-    getProviderTypeLabel(providerType),
+    getNewProviderTypeLabel(newProviderType || ""),
   )
   const providerMemberOfCareTeam = isProviderMemberOfCareTeam(
     careTeam,
@@ -152,6 +152,7 @@ const BookAppointmentButton = ({
         appointmentId: Number(appointmentId),
         specialistStaffId: specialist.id,
         specialistTypeCode: providerType,
+        providerType:getNewProviderTypeLabel(newProviderType || ""),
         type: appointmentType,
         startDate: slot.startDateUtc ?? slot.startDate,
         duration: slot.duration,
@@ -171,6 +172,7 @@ const BookAppointmentButton = ({
         locationId: clinic.id,
         specialistStaffId: specialist.id,
         specialistTypeCode: providerType,
+        providerType:getNewProviderTypeLabel(newProviderType || ""),
         type: appointmentType,
         startDate: slot.startDateUtc ?? slot.startDate,
         duration: slot.duration,
@@ -197,7 +199,7 @@ const BookAppointmentButton = ({
       setPolicyAlreadySigned(true)
     }
 
-    const providerTypeLabel = getProviderTypeLabel(providerType)
+    const providerTypeLabel = getNewProviderTypeLabel(newProviderType || "")
     clickTrack({
       productArea: 'Patient',
       productPageKey: 'Portal appointmentBooked',
@@ -320,7 +322,7 @@ const BookAppointmentButton = ({
           setOpen={setOpenNewProviderSelected}
           onClose={setBookingSuccessful}
           specialistStaffId={specialist.id}
-          providerType={providerType}
+          newProviderType={newProviderType}
         />
       )}
 
@@ -329,7 +331,7 @@ const BookAppointmentButton = ({
           open={openPrimaryProviderAppointed}
           setOpen={setOpenPrimaryProviderAppointed}
           onSubmit={setBookingSuccessful}
-          providerType={providerType}
+          newProviderType={newProviderType}
         />
       )}
     </>

@@ -10,6 +10,7 @@ import {
   getCalendarDateLabel,
   getDayOfWeekLabel,
   getMonthLabel,
+  getNewProviderTypeLabel,
   getProviderTypeLabel,
   getTimeLabel,
   getUserFullName,
@@ -62,6 +63,7 @@ type RedirectUrlQueryParams = {
   slot: string
   specialist: string
   clinic: string
+  newProviderType?: string
 }
 
 const getNextAvailableDateLabel = (nextSlotDate: CalendarDate) => {
@@ -223,7 +225,7 @@ const ProviderAvailabilityCard = ({
                 weight="medium"
                 className="text-pp-gray-1 text-[12px] uppercase"
               >
-                {getProviderTypeLabel(data.specialistTypeCode)}
+                {getNewProviderTypeLabel(data.providerType ?? "")}
               </Text>
               <Flex align="center">
                 {Array.from({ length: 5 }, (_, index) => index + 1).map(
@@ -298,6 +300,7 @@ const ProviderAvailabilityCard = ({
                           userConsents={userConsents}
                           clinic={data.clinics[selectedClinic]}
                           specialist={data.specialist}
+                          providerType={data.providerType}
                           slots={data.allSlotsByDay[getCalendarDateLabel(date)]}
                           setShowDifferentStateDialog={
                             setShowDifferentStateDialog
@@ -314,6 +317,7 @@ const ProviderAvailabilityCard = ({
                               getCalendarDateLabel(date)
                             ]
                           }
+                          providerType={data.providerType}
                           setShowDifferentStateDialog={
                             setShowDifferentStateDialog
                           }
@@ -354,6 +358,7 @@ const AppointmentTimeSlots = ({
   specialist: AppointmentSpecialist
   showMore: boolean
   clinic: AppointmentClinic
+  providerType?: string|null
   setShowDifferentStateDialog: (action: DialogAction) => void
 }) => {
   const { appointmentType, providerType } = useStore((state) => ({
@@ -383,6 +388,7 @@ const AppointmentTimeSlots = ({
       appointmentId: searchParams.get('appointmentId')?.toString(),
       appointmentType: JSON.stringify(appointmentType).toString(),
       providerType: JSON.stringify(providerType).toString(),
+      newProviderType: JSON.stringify(rest.providerType),
       slot: JSON.stringify(slot).toString(),
       specialist: JSON.stringify(rest.specialist).toString(),
       clinic: JSON.stringify({

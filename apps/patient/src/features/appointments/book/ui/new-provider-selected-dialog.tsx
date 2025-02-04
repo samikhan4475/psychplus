@@ -1,19 +1,19 @@
 'use client'
 
 import { useState } from 'react'
-import { ProviderType } from '@psychplus-v2/constants'
 import { Button, Dialog, Flex } from '@radix-ui/themes'
 import { CloseDialogIcon, FormError } from '@/components-v2'
 import { changePrimaryProviderCareTeamAction } from '@/features/appointments/book/actions'
 import { NewProviderSelectedProps } from '@/features/appointments/book/types'
 import { useToast } from '@/providers'
+import { getNewProviderTypeLabel } from '@psychplus-v2/utils'
 
 const NewProviderSelectedDialog = ({
   open,
   setOpen,
   onClose,
   specialistStaffId,
-  providerType,
+  newProviderType
 }: NewProviderSelectedProps) => {
   const { toast } = useToast()
   const [loading, setLoading] = useState(false)
@@ -25,8 +25,7 @@ const NewProviderSelectedDialog = ({
 
     const result = await changePrimaryProviderCareTeamAction({
       specialistStaffId,
-      specialistType:
-        ProviderType[providerType] === 'Therapist' ? 'Therapy' : 'Psychiatrist',
+      specialistType: getNewProviderTypeLabel(newProviderType || ''),
     })
 
     if (result.state === 'error') {

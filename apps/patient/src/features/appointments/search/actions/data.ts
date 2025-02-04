@@ -23,7 +23,7 @@ interface AvailabilityApiResponse {
   specialist: Specialist
   clinic: Clinic
   specialistTypeCode: ProviderType
-  providerType: ProviderType
+  providerType: string | null
 }
 
 interface AppointmentsSearchApiResponse {

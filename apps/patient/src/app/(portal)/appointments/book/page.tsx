@@ -32,6 +32,7 @@ const SearchAppointmentsPage = async ({
   const {
     appointmentType,
     providerType,
+    newProviderType,
     slot,
     clinic,
     specialist,
@@ -93,6 +94,7 @@ const SearchAppointmentsPage = async ({
           <BookAppointmentView
             appointmentType={JSON.parse(appointmentType)}
             providerType={JSON.parse(providerType)}
+            newProviderType={newProviderType ? JSON.parse(newProviderType): null}
             slot={JSON.parse(slot)}
             clinic={JSON.parse(clinic)}
             specialist={JSON.parse(specialist)}
