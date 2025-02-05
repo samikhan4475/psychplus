@@ -164,7 +164,7 @@ const validateDiagnosis = ({
   }
 
   if (workingDiagnosisData.length === 0) {
-    return 'Select at lease one diagnosis to Sign/Send to signature.'
+    return 'Select at least one diagnosis to Sign/Send to signature.'
   }
   return ''
 }
