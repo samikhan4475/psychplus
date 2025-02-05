@@ -1,6 +1,6 @@
 'use client'
 
-import { useParams } from 'next/navigation'
+import { useParams  } from 'next/navigation'
 import { Cross2Icon } from '@radix-ui/react-icons'
 import { Dialog, Flex, IconButton, Tooltip } from '@radix-ui/themes'
 import { Edit2Icon } from '@/components/icons'
@@ -26,8 +26,8 @@ const RowActionEdit = ({ scriptSureAppUrl }: RowActionEditProps) => {
   return (
     <Dialog.Root>
       <Dialog.Trigger>
-      <Tooltip content="Edit">
         <IconButton size="1" color="gray" variant="ghost">
+        <Tooltip content="Edit">
           <Flex justify="between" align="center" gap="1">
             <Edit2Icon
               width={16}
@@ -36,8 +36,8 @@ const RowActionEdit = ({ scriptSureAppUrl }: RowActionEditProps) => {
               fill="black"
             />
           </Flex>
+          </Tooltip>
         </IconButton>
-        </Tooltip>
       </Dialog.Trigger>
 
       <Dialog.Content className="relative max-h-[80vh] max-w-[60vw] overflow-y-scroll">
