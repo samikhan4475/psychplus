@@ -27,6 +27,7 @@ const getPatientAllergiesAction = async ({
     }
   }
 
+  console.log("allergies response", response.data)
   return {
     state: 'success',
     data: response.data,

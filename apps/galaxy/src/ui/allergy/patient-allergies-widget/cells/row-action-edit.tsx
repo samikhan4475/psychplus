@@ -1,67 +1,65 @@
 'use client'
 
+import { useParams } from 'next/navigation'
+import { Cross2Icon } from '@radix-ui/react-icons'
+import { Dialog, Flex, IconButton, Tooltip } from '@radix-ui/themes'
 import { Edit2Icon } from '@/components/icons'
 import { FEATURE_FLAGS } from '@/constants'
 import { useFeatureFlagEnabled } from '@/hooks/use-feature-flag-enabled'
-import { Cross2Icon } from '@radix-ui/react-icons'
-import { Dialog, Flex, IconButton } from '@radix-ui/themes'
-import { useParams, usePathname } from 'next/navigation'
 import { AddAllergy } from '../add-allergy'
 import { AddAllergyButton } from '../add-allergy-button'
 import { useStore } from '../store'
+
 interface RowActionEditProps {
   scriptSureAppUrl: string
 }
 const RowActionEdit = ({ scriptSureAppUrl }: RowActionEditProps) => {
   const { id } = useParams<{ id: string }>()
-  const pathname = usePathname()
-  const isPatientAllergiesTab = pathname.includes('quicknotes')
 
   const isFeatureFlagEnabled = useFeatureFlagEnabled(
     FEATURE_FLAGS.ehr8973EnableDawMedicationApi,
   )
-  const { allergiesListSearch } = useStore();
+  const { allergiesListSearch } = useStore()
   const fetchAllergies = () => {
-    allergiesListSearch(id);
-  };
+    allergiesListSearch(id)
+  }
   return (
-    !isPatientAllergiesTab && (
-        <Dialog.Root>
-          <Dialog.Trigger>
-            <IconButton size="1" color="gray" variant="ghost" >
-              <Flex justify="between" align="center" gap="1">
-                <Edit2Icon
-                  width={16}
-                  height={16}
-                  className="cursor-pointer"
-                  fill="black"
-                />
-              </Flex>
-            </IconButton>
-          </Dialog.Trigger>
+    <Dialog.Root>
+      <Dialog.Trigger>
+      <Tooltip content="Edit">
+        <IconButton size="1" color="gray" variant="ghost">
+          <Flex justify="between" align="center" gap="1">
+            <Edit2Icon
+              width={16}
+              height={16}
+              className="cursor-pointer"
+              fill="black"
+            />
+          </Flex>
+        </IconButton>
+        </Tooltip>
+      </Dialog.Trigger>
 
-          <Dialog.Content
-            className="relative max-h-[80vh] max-w-[60vw] overflow-y-scroll">
-            <Flex justify="between" align="center" mb="2">
-              <Dialog.Title
-                size="5"
-                weight="bold"
-                className="text-black m-0 font-sans"
-              >
-                Add Allergies
-              </Dialog.Title>
-              <Dialog.Close className="cursor-pointer" onClick={fetchAllergies}>
-                <Cross2Icon />
-              </Dialog.Close>
-            </Flex>
-            {!isFeatureFlagEnabled ? (
-              <AddAllergy />
-            ) : (
-              <AddAllergyButton scriptSureAppUrl={scriptSureAppUrl} />
-            )}
-          </Dialog.Content>
-        </Dialog.Root>
-    )
+      <Dialog.Content className="relative max-h-[80vh] max-w-[60vw] overflow-y-scroll">
+        <Flex justify="between" align="center" mb="2">
+          <Dialog.Title
+            size="5"
+            weight="bold"
+            className="text-black m-0 font-sans"
+          >
+            Add Allergies
+          </Dialog.Title>
+          <Dialog.Close className="cursor-pointer" onClick={fetchAllergies}>
+            <Cross2Icon />
+          </Dialog.Close>
+        </Flex>
+        {!isFeatureFlagEnabled ? (
+          <AddAllergy />
+        ) : (
+          <AddAllergyButton scriptSureAppUrl={scriptSureAppUrl} />
+        )}
+      </Dialog.Content>
+    </Dialog.Root>
   )
 }
 

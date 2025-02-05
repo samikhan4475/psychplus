@@ -12,8 +12,23 @@ const STATUS_CODESET = [
     value: '2',
   },
   {
+    label: 'Cancelled',
+    value: '3',
+  },
+ 
+  {
     label: 'Discontinued',
     value: '4',
+  },
+ 
+  {
+    label: 'Awaiting Approval',
+    value: '5',
+  },
+ 
+  {
+    label: 'Current Medication',
+    value: '6',
   },
 ]
 const OPTIONS = [

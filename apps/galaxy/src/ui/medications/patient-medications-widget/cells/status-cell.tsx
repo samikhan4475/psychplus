@@ -1,6 +1,6 @@
 import { Flex } from '@radix-ui/themes'
 import { Row } from '@tanstack/react-table'
-import { PatientMedication } from '../types'
+import { PatientMedication, PatientPrescriptionStatus } from '../types'
 import { SelectCell } from '@/components'
 import { STATUS_CODESET } from '../constants'
 import toast from 'react-hot-toast'
@@ -12,10 +12,13 @@ interface StatusCellProps {
   row: Row<PatientMedication>
 }
 
+
 const StatusCell = ({ row: { original } }: StatusCellProps) => {
   const defaultStatus = original.prescriptionStatusTypeId ? original.prescriptionStatusTypeId.toString() : '';
   const [selectedValue, setSelectedValue] = useState(defaultStatus)
   const patientId = useParams().id as string
+  const isCancelledOrAwaitingApproval = 
+  selectedValue === PatientPrescriptionStatus.CANCELLED || selectedValue === PatientPrescriptionStatus.AWAITING_APPROVAL;
 
   const updateMedicationStatus = async (value: string) => {
     setSelectedValue(value)
@@ -44,6 +47,7 @@ const StatusCell = ({ row: { original } }: StatusCellProps) => {
         value={selectedValue}
         onValueChange={updateMedicationStatus}
         options={STATUS_CODESET}
+        disabled={isCancelledOrAwaitingApproval} 
       />
     </Flex>
   )

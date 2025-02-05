@@ -5,6 +5,9 @@ import {
   getScriptSureSessionToken,
 } from '@/actions'
 import { DAWSYS } from '@/constants'
+import { useStore as useAllergiesStore } from '@/ui/allergy/patient-allergies-widget/store'
+import { useStore as useMedicationsStore } from '@/ui/medications/patient-medications-widget/store'
+
 
 const useGetScriptSureIframeUrl = (
   id: string,
@@ -12,6 +15,8 @@ const useGetScriptSureIframeUrl = (
   baseUrl: string,
   darkMode: 'on' | 'off' = 'off',
 ) => {
+  const allergiesListError = useAllergiesStore((state) => state.allergiesListError)
+  const medicationError = useMedicationsStore((state) => state.error)
   const [iframeUrl, setIframeUrl] = useState<string>('')
   const [loading, setLoading] = useState<boolean>(true)
 
@@ -30,10 +35,12 @@ const useGetScriptSureIframeUrl = (
         const url = `${scriptSureAppUrl}/widgets/${baseUrl}/${externalPatientId}?sessiontoken=${sessionToken}&darkmode=${darkMode}`
         setIframeUrl(url)
       }
-
+      
+      
       if (sessionTokenResponse.state === 'error') {
-        toast.error(sessionTokenResponse.error ?? 'Failed to fetch data')
+        toast.error( allergiesListError ?? medicationError ?? sessionTokenResponse.error ?? 'Failed to fetch data')
       }
+
 
       if (externalPatientResponse.state === 'error') {
         toast.error(externalPatientResponse.error ?? 'Failed to fetch data')

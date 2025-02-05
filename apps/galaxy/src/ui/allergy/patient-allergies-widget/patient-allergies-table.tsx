@@ -1,6 +1,5 @@
 'use client'
 
-import { useEffect } from 'react'
 import { Flex, ScrollArea } from '@radix-ui/themes'
 import { type ColumnDef } from '@tanstack/react-table'
 import {
@@ -68,7 +67,7 @@ interface PatientAllergiesTableProps {
     ),
     cell: ({ row }) => (
       <DateCell>
-        {getSlashedPaddedDateString(`${row.original.onsetBegan}`)}
+        { row.original.onsetBegan && getSlashedPaddedDateString(`${row.original.onsetBegan}`)}
       </DateCell>
     ),
   },
@@ -79,7 +78,7 @@ interface PatientAllergiesTableProps {
     ),
     cell: ({ row }) => (
       <DateCell>
-        {getSlashedPaddedDateString(`${row.original.onsetEnded}`)}
+        {row.original.onsetEnded && getSlashedPaddedDateString(`${row.original.onsetEnded}`)}
       </DateCell>
     ),
   },
@@ -102,18 +101,12 @@ interface PatientAllergiesTableProps {
   },
 ]
 
-const PatientAllergiesTable = ({ patientId, scriptSureAppUrl }: PatientAllergiesTableProps) => {
-  const { data, allergiesListSearch, allergiesListLoading } = useStore(
-    (state) => ({
-      data: state.allergiesListData,
-      allergiesListLoading: state.allergiesListLoading,
-      allergiesListSearch: state.allergiesListSearch,
-    }),
-  )
+const PatientAllergiesTable = ({  scriptSureAppUrl }: PatientAllergiesTableProps) => {
+  const { data, allergiesListLoading } = useStore((state) => ({
+    data: state.allergiesListData,
+    allergiesListLoading: state.allergiesListLoading,
+  }))
 
-  useEffect(() => {
-    allergiesListSearch(patientId)
-  }, [])
 
   if (allergiesListLoading) {
     return (

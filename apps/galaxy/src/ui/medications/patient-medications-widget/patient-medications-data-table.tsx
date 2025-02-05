@@ -108,16 +108,17 @@ const PatientMedicationsDataTable = ({
 }: PatientMedicationsDataTableProps) => {
   const patientId = useParams().id as string
 
-  const { data, fetchPatientMedications, loading } = useStore(
+  const { data, fetchPatientMedications, loading,fetchExternalScriptsurePatientId } = useStore(
     (state) => ({
       data: state.data,
       loading: state.loading,
       fetchPatientMedications: state.fetchPatientMedications,
+      fetchExternalScriptsurePatientId: state.fetchExternalScriptsurePatientId
     }),
   )
-
   useEffect(() => {
     fetchPatientMedications(patientId)
+    fetchExternalScriptsurePatientId(patientId)
   }, [fetchPatientMedications])
 
   if (loading) {

@@ -1,7 +1,6 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { Text } from '@radix-ui/themes'
 import { getPatientAllergiesAction } from '@/ui/allergy/patient-allergies-widget/client-actions'
 import { Details } from './details'
 import { AllergyDataResponse } from '@/ui/allergy/patient-allergies-widget/types'
@@ -13,20 +12,19 @@ const AllergiesDetailsClientView = ({
   patientId,
 }: AllergiesDetailsViewProps) => {
   const [data, setData] = useState<AllergyDataResponse[]>([])
-  const [error, setError] = useState('')
+
   useEffect(() => {
     getPatientAllergiesAction({
       payload: { patientIds: [patientId] },
     }).then((response) => {
       if (response.state === 'error') {
-        return setError(response?.error)
+        return
       }
       setData(response?.data ?? [])
     })
   }, [patientId])
-  if (error) {
-    return <Text>{error}</Text>
-  }
+
+  if (data.length === 0) return null
 
   return <Details data={data} />
 }

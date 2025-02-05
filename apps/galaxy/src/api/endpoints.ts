@@ -604,6 +604,10 @@ const GET_ADDENDUMS_AGAINST_NOTE_ID = (
   `${API_URL}/api/patients/${patientId}/encounters/${appointmentId}/notes/${noteId}/addendums`
 const UPDATE_PATIENT_PRESCRIPTIONS_MEDICATIONS = (  patientId: string) =>
   `${API_URL}/api/patients/${patientId}/prescriptions/actions/updatestatus`
+
+const CANCEL_PATIENT_PRESCRIPTIONS = (patientId: string)=>
+  `${API_URL}/api/patients/${patientId}/scriptsureprescriptions/actions/cancel`
+
 const GET_PATIENT_PRESCRIPTIONS_MEDICATION_ORDER = (  patientId: string, prescriptionId: string) =>
   `${API_URL}/api/patients/${patientId}/prescriptions/${prescriptionId}/order`
 export {
@@ -884,4 +888,5 @@ export {
   GET_ADDENDUMS_AGAINST_NOTE_ID,
   UPDATE_PATIENT_PRESCRIPTIONS_MEDICATIONS,
   GET_PATIENT_PRESCRIPTIONS_MEDICATION_ORDER,
+  CANCEL_PATIENT_PRESCRIPTIONS
 }

@@ -17,6 +17,7 @@ const NavigationLinks = () => {
     <Flex>
       <NavigationLink href="/" label="Schedule" />
       <NavigationLink href="/patient-lookup" label="Patient Lookup" />
+      <NavigationLink href="/rx" label="Rx" />
       {isFeatureFlagEnabled && (
         <>
           <NavigationLink href="/revenue-cycle" label="Revenue Cycle" />
@@ -27,7 +28,7 @@ const NavigationLinks = () => {
             href="/pre-visit-assessment"
             label="Pre-visit Assessment"
           />
-          <NavigationLink href="/rx" label="Rx" />
+
         </>
       )}
     </Flex>

@@ -49,6 +49,7 @@ const useStore = create<Store>((set, get) => ({
     formValues: Partial<FilterSchemaType> = {},
   ) => {
     set({
+      data: undefined,
       error: undefined,
       loading: true,
       formValues,

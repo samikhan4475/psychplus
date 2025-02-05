@@ -1,6 +1,8 @@
 import toast from 'react-hot-toast'
 import { saveWidgetClientAction, updateVisitAction } from '@/actions'
 import { Appointment, DiagnosisIcd10Code, QuickNoteSectionItem } from '@/types'
+import { ALLERGIES_ERROR_MESSAGE } from '@/ui/allergy/patient-allergies-widget/constants'
+import { AllergyDataResponse } from '@/ui/allergy/patient-allergies-widget/types'
 import { transformVisitUpdatePayload } from '@/ui/assessment-plan/tcm-widget/data'
 import {
   postEvent,
@@ -167,4 +169,23 @@ const validateDiagnosis = ({
   return ''
 }
 
-export { getWidgetData, saveWidgets, validateDiagnosis }
+const validateAllergies = ({
+  allergiesData = [],
+  visitType,
+}: {
+  allergiesData?: AllergyDataResponse[]
+  visitType: string
+}) => {
+  const allowedVisitType = [
+    VisitTypeEnum.Outpatient,
+    VisitTypeEnum.TransitionalCare,
+  ].includes(visitType as VisitTypeEnum)
+
+  if (allowedVisitType && allergiesData.length === 0) {
+    return ALLERGIES_ERROR_MESSAGE
+  }
+
+  return ''
+}
+
+export { getWidgetData, saveWidgets, validateDiagnosis, validateAllergies }

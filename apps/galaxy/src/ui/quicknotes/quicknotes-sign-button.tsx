@@ -9,8 +9,10 @@ import toast from 'react-hot-toast'
 import { STAFF_ROLE_CODE_PRESCRIBER } from '@/constants'
 import { useStore as useGlobalStore } from '@/store'
 import { Appointment } from '@/types'
+import { useStore as useAllergiesStore } from '@/ui/allergy/patient-allergies-widget/store'
 import { useStore as useDiagnosisStore } from '@/ui/diagnosis/store'
 import { AlertDialog } from '../alerts'
+import { ALLERGIES_ERROR_MESSAGE } from '../allergy/patient-allergies-widget/constants'
 import {
   SEND_TO_SIGNATURE_BUTTON,
   SIGN_BUTTON,
@@ -21,7 +23,7 @@ import {
 } from './constants'
 import { useQuickNotesPermissions } from './hooks'
 import { PolicyConsentDialog } from './policy-consent-dialog'
-import { useStore, validateDiagnosis } from './store'
+import { useStore, validateAllergies, validateDiagnosis } from './store'
 
 interface QuickNotesSignButtonProps {
   appointment: Appointment
@@ -46,6 +48,10 @@ const initialAlertInfo: AlertInfo = {
 }
 
 const QuickNotesSignButton = ({ appointment }: QuickNotesSignButtonProps) => {
+  const { allergiesData, setAllergiesError } = useAllergiesStore((state) => ({
+    allergiesData: state.allergiesListData,
+    setAllergiesError: state.setAllergiesError,
+  }))
   const [isPolicyAlertOpen, setIsPolicyAlertOpen] = useState(false)
   const [alertInfo, setAlertInfo] = useState(initialAlertInfo)
 
@@ -137,6 +143,17 @@ const QuickNotesSignButton = ({ appointment }: QuickNotesSignButtonProps) => {
         message: SIGN_PRIOR_VISIT_TIME_WARNING,
         okButton: { text: 'Proceed', onClick: signNote },
       })
+      return
+    }
+
+    const missingAllergies = validateAllergies({
+      allergiesData,
+      visitType,
+    })
+
+    if (missingAllergies) {
+      setAllergiesError(true)
+      toast.error(ALLERGIES_ERROR_MESSAGE)
       return
     }
 

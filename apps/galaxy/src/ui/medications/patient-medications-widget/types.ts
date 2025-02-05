@@ -54,6 +54,15 @@ interface GetPatientMedicationOrderResponse {
   externalPatientId: number
 }
 
+export enum PatientPrescriptionStatus {
+  ACTIVE = '1',
+  ARCHIVED = '2',
+  CANCELLED = '3',
+  DISCONTINUED = '4',
+  AWAITING_APPROVAL = '5',
+  CURRENT_MEDICATION = '6',
+}
+
 export type {
   PatientMedication,
   PatientMedicationRow,

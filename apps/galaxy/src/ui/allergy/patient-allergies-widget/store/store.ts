@@ -4,11 +4,13 @@ import { getNewSortDir } from '@/utils'
 import { getPatientAllergiesAction } from '../client-actions'
 import type { AllergiesSearchParams, AllergyDataResponse } from '../types'
 
-interface StoreState {
+interface Store {
   allergiesListData?: AllergyDataResponse[]
   allergiesListLoading?: boolean
   allergiesListError?: string
   allergiesListPayload?: AllergiesSearchParams
+  allergiesError: boolean
+  setAllergiesError: (hasAllergies: boolean) => void
   sort?: Sort
   sortData: (column: string) => void
   allergiesListSearch: (
@@ -18,19 +20,28 @@ interface StoreState {
   ) => void
 }
 
-
-const useStore = create<StoreState>()((set, get) => ({
-  allergiesListSearch: async (patientId: string, payload?: AllergiesSearchParams) => {
-    set({
-      allergiesListError: undefined,
-      allergiesListLoading: true,
-      allergiesListPayload: payload,
-    })
-    const { sort } = get()
+const useStore = create<Store>((set, get) => ({
+  allergiesError: false,
+  setAllergiesError: (allergiesError: boolean) => {
+    set({ allergiesError })
+  },
+  allergiesListSearch: async (
+    patientId: string,
+    payload?: AllergiesSearchParams,
+  ) => {
     const updatedPayload = {
       ...payload,
       patientIds: [patientId],
     }
+    set({
+      allergiesListError: undefined,
+      allergiesListLoading: true,
+      allergiesListData: undefined,
+      allergiesListPayload: payload,
+      allergiesError: false,
+    })
+    const { sort } = get()
+
     const result = await getPatientAllergiesAction({
       payload: updatedPayload,
       sort,
@@ -40,6 +51,7 @@ const useStore = create<StoreState>()((set, get) => ({
       return set({
         allergiesListError: result.error,
         allergiesListLoading: false,
+        allergiesListData: [],
       })
     }
     set({
@@ -57,12 +69,12 @@ const useStore = create<StoreState>()((set, get) => ({
         direction: getNewSortDir(column, get().sort),
       },
     })
-    const { allergiesListPayload } = get();
+    const { allergiesListPayload } = get()
     get().allergiesListSearch(
       allergiesListPayload?.patientIds?.[0] || '',
       allergiesListPayload,
-      true
-    );
+      true,
+    )
   },
 }))
 
