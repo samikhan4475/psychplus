@@ -6,62 +6,60 @@ import { CirclePlus, PlusIcon } from 'lucide-react'
 import { useFormContext } from 'react-hook-form'
 import { TherapySchemaType } from '../individual/therapy-schema'
 
-interface ThearpyDataOption {
+interface TherapyDataOption {
   value: string
   display: string
 }
+
 interface HeadingCellMenuProps {
-  data: ThearpyDataOption[]
+  data: TherapyDataOption[]
   title: string
 }
+
 const HeadingCellMenu = ({ data, title }: HeadingCellMenuProps) => {
   const { watch, getValues, setValue } = useFormContext<TherapySchemaType>()
-  const therapyDetailsModality = watch('therapyDetailsModality') || []
-  const therapyDetailsInterventions = watch('therapyDetailsInterventions') || []
+  const therapyDetailsModality: TherapyDataOption[] =
+    watch('therapyDetailsModality') ?? []
+  const therapyDetailsInterventions: TherapyDataOption[] =
+    watch('therapyDetailsInterventions') ?? []
 
-  const addTherapyDetailItem = (item: ThearpyDataOption) => {
-    const fieldName =
-      title === 'Therapy Modality'
-        ? 'therapyDetailsModality'
-        : 'therapyDetailsInterventions'
-    const currentValues = getValues(fieldName) || []
-    const isDuplicate = currentValues.some(
-      (existingItem: ThearpyDataOption) => existingItem.value === item.value,
-    )
-    if (!isDuplicate) {
-      currentValues.push(item)
-      setValue(fieldName, currentValues)
+  const fieldName =
+    title === 'Therapy Modality'
+      ? 'therapyDetailsModality'
+      : 'therapyDetailsInterventions'
+
+  const addTherapyDetailItem = (item: TherapyDataOption) => {
+    const currentValues = getValues(fieldName) ?? []
+    if (
+      !currentValues.some((existingItem) => existingItem.value === item.value)
+    ) {
+      setValue(fieldName, [...currentValues, item])
     }
   }
 
   return (
     <DropdownMenu.Root>
       <DropdownMenu.Trigger>
-        <PlusIcon className="cursor-pointer absolute right-1" size={16} />
+        <PlusIcon className="absolute right-1 cursor-pointer" size={16} />
       </DropdownMenu.Trigger>
       <DropdownMenu.Content className="w-[359px]">
         {data.map((item) => {
-          const isSelected =
-            title === 'Therapy Modality'
-              ? therapyDetailsModality.some(
-                  (selectedItem: ThearpyDataOption) =>
-                    selectedItem.value === item.value,
-                )
-              : therapyDetailsInterventions.some(
-                  (selectedItem: ThearpyDataOption) =>
-                    selectedItem.value === item.value,
-                )
+          const isSelected = (
+            fieldName === 'therapyDetailsModality'
+              ? therapyDetailsModality
+              : therapyDetailsInterventions
+          ).some((selectedItem) => selectedItem.value === item.value)
 
           return (
             <DropdownMenu.Item
+              key={item.value}
+              onClick={() => !isSelected && addTherapyDetailItem(item)}
+              disabled={isSelected}
               className={`w-full px-3 py-2 ${
                 isSelected
                   ? 'text-gray-500 cursor-not-allowed'
                   : 'hover:bg-pp-bg-accent group'
               }`}
-              key={item.value}
-              onClick={() => !isSelected && addTherapyDetailItem(item)}
-              disabled={isSelected}
             >
               <Flex justify="between" gap="2" align="center" width="100%">
                 <Text
@@ -72,7 +70,7 @@ const HeadingCellMenu = ({ data, title }: HeadingCellMenuProps) => {
                 </Text>
                 {!isSelected && (
                   <CirclePlus
-                    className="cursor-pointer group-hover:text-pp-focus-border"
+                    className="group-hover:text-pp-focus-border cursor-pointer"
                     size={20}
                   />
                 )}
