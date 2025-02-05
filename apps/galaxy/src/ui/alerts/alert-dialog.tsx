@@ -33,7 +33,7 @@ const AlertDialog = ({
 }: AlertDialogProps) => {
   return (
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
-      <Dialog.Content className="bg-pp-warning-bg-1 border-pp-warning-border relative max-w-[440px] rounded-2 border p-4 pb-5 [box-shadow:none]">
+      <Dialog.Content className="bg-pp-warning-bg-1 border-pp-warning-border relative max-w-[440px] border ">
         <CloseDialogTrigger />
 
         <Flex direction="row" gap="3" align="start">
@@ -59,12 +59,12 @@ const AlertDialog = ({
                         className="bg-pp-link-text text-white w-[166px]"
                         disabled={loading}
                       >
-                        <Text size="2">{cancelButton?.text ?? 'Cancel'}</Text>
+                        <Text size="2">{cancelButton?.text || 'Cancel'}</Text>
                       </Button>
                     </Dialog.Close>
                   )}
 
-                  {okButton && (
+                  {okButton && okButton?.text && (
                     <Button
                       variant="outline"
                       color="gray"

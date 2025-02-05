@@ -91,6 +91,15 @@ const SELECT_PROVIDER_NON_TIME_DEPENDENT_VISIT =
 const SELECT_OTHER_PROVIDER_NON_TIME_DEPENDENT_VISIT =
   'You do not have permission to Select Other Provider. Please contact your supervisor if you need any further assistance.'
 
+const SIGN_PRIOR_VISIT_TIME_WARNING =
+  'Your note time is prior to visit scheduled time, do you wish to proceed?'
+const SIGN_PROVIDER_NOTE_WARNING =
+  'You are not the provider for this note, therefore you cannot sign this visit'
+const SIGN_PRIMARY_NOTE_EXIST =
+  'Primary note for this visit already exists, if you sign this note, it will mark the existing note as Error.'
+const SIGN_CONSENT_WARNING =
+  'Patient must sign the policy prior to signing the note. Please send the policy.'
+
 export {
   QuickNoteSectionName,
   questionnairesAddToNotesSection,
@@ -106,4 +115,9 @@ export {
   SELECT_COSIGNER_DISABLED,
   SELECT_PROVIDER_NON_TIME_DEPENDENT_VISIT,
   SELECT_OTHER_PROVIDER_NON_TIME_DEPENDENT_VISIT,
+  // sing
+  SIGN_PRIOR_VISIT_TIME_WARNING,
+  SIGN_PROVIDER_NOTE_WARNING,
+  SIGN_PRIMARY_NOTE_EXIST,
+  SIGN_CONSENT_WARNING,
 }

@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
 'use client'
 
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import { useParams, useSearchParams } from 'next/navigation'
 import { Button } from '@radix-ui/themes'
 import { PenLineIcon } from 'lucide-react'
@@ -10,53 +11,62 @@ import { useStore as useGlobalStore } from '@/store'
 import { Appointment } from '@/types'
 import { useStore as useDiagnosisStore } from '@/ui/diagnosis/store'
 import { AlertDialog } from '../alerts'
-import { SEND_TO_SIGNATURE_BUTTON, SIGN_BUTTON } from './constants'
+import {
+  SEND_TO_SIGNATURE_BUTTON,
+  SIGN_BUTTON,
+  SIGN_CONSENT_WARNING,
+  SIGN_PRIMARY_NOTE_EXIST,
+  SIGN_PRIOR_VISIT_TIME_WARNING,
+  SIGN_PROVIDER_NOTE_WARNING,
+} from './constants'
 import { useQuickNotesPermissions } from './hooks'
-import { PermissionAlert } from './permission-alert'
+import { PolicyConsentDialog } from './policy-consent-dialog'
 import { useStore, validateDiagnosis } from './store'
 
 interface QuickNotesSignButtonProps {
   appointment: Appointment
 }
 
-enum AlertType {
-  warning = 'warning',
-  error = 'error',
-  confirmation = 'confirmation',
-  hide = 'hide',
+interface AlertInfo {
+  show: boolean
+  title: string
+  message: string
+  okButton: { text: string; onClick: () => void }
+  cancelButton: { text: string; onClick: () => void }
+  disableClose: boolean
 }
 
-const initialAlertInfo = {
+const initialAlertInfo: AlertInfo = {
+  show: false,
   title: 'Warning',
   message: '',
-  type: AlertType.hide,
-  onProceed: () => {},
-  okButton: { text: 'Ok', onClick: () => {} },
-  cancelButton: { text: 'Cancel', onClick: () => {} },
+  okButton: { text: '', onClick: () => {} },
+  cancelButton: { text: '', onClick: () => {} },
   disableClose: false,
-  show: false,
 }
 
 const QuickNotesSignButton = ({ appointment }: QuickNotesSignButtonProps) => {
+  const [isPolicyAlertOpen, setIsPolicyAlertOpen] = useState(false)
+  const [alertInfo, setAlertInfo] = useState(initialAlertInfo)
+
   const { workingDiagnosisData, saveWorkingDiagnosis } = useDiagnosisStore()
-  const [isPermissionAlertOpen, setIsPermissionAlertOpen] =
-    useState<boolean>(false)
-  const [permissionAlertMessage, setPermissionAlertMessage] =
-    useState<string>('')
   const { staffId, staffRoleCode } = useGlobalStore((state) => ({
     staffId: state.user.staffId,
     staffRoleCode: state.staffResource.staffRoleCode,
   }))
-  const { loading, sign, markAsError, setWidgetsData } = useStore((state) => ({
-    loading: state.loading,
-    sign: state.sign,
-    setWidgetsData: state.setWidgetsData,
-    markAsError: state.markAsError,
-  }))
+  const { loading, sign, markAsError, setWidgetsData, patient } = useStore(
+    (state) => ({
+      loading: state.loading,
+      sign: state.sign,
+      setWidgetsData: state.setWidgetsData,
+      markAsError: state.markAsError,
+      patient: state.patient,
+    }),
+  )
+
   const { canSignButtonQuickNotePage, canSendToSignatureButtonQuickNotePage } =
     useQuickNotesPermissions()
   const isPrescriber = staffRoleCode === STAFF_ROLE_CODE_PRESCRIBER
-  const [alertInfo, setAlertInfo] = useState(initialAlertInfo)
 
   const patientId = useParams().id as string
   const appointmentId = useSearchParams().get('id') as string
@@ -74,51 +84,59 @@ const QuickNotesSignButton = ({ appointment }: QuickNotesSignButtonProps) => {
     noteTitleCode: appointment.visitNoteTitle,
   }
 
+  const showAlert = useCallback((info: Partial<AlertInfo>) => {
+    setAlertInfo({ ...initialAlertInfo, ...info, show: true })
+  }, [])
+
   const signNoteHandler = async () => {
+    if (patient.patientConsent !== 'Verified') {
+      setIsPolicyAlertOpen(true)
+      return
+    }
+
     const diagnosisError = validateDiagnosis({
       workingDiagnosisData,
       visitType,
     })
-
     if (diagnosisError) {
       toast.error(diagnosisError)
       return
     }
-    if (isPrescriber && !canSignButtonQuickNotePage) {
-      setIsPermissionAlertOpen(true)
-      setPermissionAlertMessage(SIGN_BUTTON)
-      return
-    } else if (!isPrescriber && !canSendToSignatureButtonQuickNotePage) {
-      setIsPermissionAlertOpen(true)
-      setPermissionAlertMessage(SEND_TO_SIGNATURE_BUTTON)
-      return
-    }
     saveWorkingDiagnosis(patientId, setWidgetsData, false)
-    if (!isAppointmentProvider && isPrescriber) {
-      setAlertInfo((prev) => ({
-        ...prev,
-        show: true,
-        title: 'Warning',
-        type: AlertType.warning,
-        message:
-          'You are not the provider for this note, therefore you can not sign this visit',
-        disabelClose: true,
-      }))
+
+    if (isPrescriber && !canSignButtonQuickNotePage) {
+      showAlert({
+        title: 'Error',
+        message: SIGN_BUTTON,
+        disableClose: true,
+      })
       return
     }
+
+    if (!isPrescriber && !canSendToSignatureButtonQuickNotePage) {
+      showAlert({
+        title: 'Error',
+        message: SEND_TO_SIGNATURE_BUTTON,
+        disableClose: true,
+      })
+      return
+    }
+
+    if (!isAppointmentProvider && isPrescriber) {
+      showAlert({
+        title: 'Error',
+        message: SIGN_PROVIDER_NOTE_WARNING,
+        disableClose: true,
+      })
+      return
+    }
+
     if (isFutureAppointment) {
-      setAlertInfo((prev) => ({
-        ...prev,
-        show: true,
+      showAlert({
         title: 'Warning',
-        type: AlertType.warning,
-        message:
-          'Your note time is prior to visit scheduled time, do you wish to proceed?',
-        okButton: {
-          text: 'Proceed',
-          onClick: signNote,
-        },
-      }))
+        message: SIGN_PRIOR_VISIT_TIME_WARNING,
+        okButton: { text: 'Proceed', onClick: signNote },
+      })
       return
     }
 
@@ -135,20 +153,11 @@ const QuickNotesSignButton = ({ appointment }: QuickNotesSignButtonProps) => {
     }
 
     if (signResults.error.includes('mark that note as error?')) {
-      setAlertInfo((prev) => ({
-        ...prev,
-        show: true,
-        type: AlertType.confirmation,
-        message:
-          'Primary note for this visit already exists, if you sign this note, it will mark the existing note as Error.',
-        okButton: {
-          text: 'Proceed',
-          onClick: () => {
-            setAlertInfo(initialAlertInfo)
-            markAsError(signPayload)
-          },
-        },
-      }))
+      showAlert({
+        title: 'Warning',
+        message: SIGN_PRIMARY_NOTE_EXIST,
+        okButton: { text: 'Proceed', onClick: () => markAsError(signPayload) },
+      })
       return
     }
 
@@ -167,24 +176,19 @@ const QuickNotesSignButton = ({ appointment }: QuickNotesSignButtonProps) => {
         {isPrescriber ? 'Sign' : 'Send To Sign'}
       </Button>
 
-      <PermissionAlert
-        isOpen={isPermissionAlertOpen}
-        message={permissionAlertMessage}
-        onClose={() => {
-          setIsPermissionAlertOpen(false)
-          setPermissionAlertMessage('')
-        }}
-      />
-
       <AlertDialog
         open={!!alertInfo.show}
-        onOpenChange={(open) => {
-          if (!open) {
-            setAlertInfo(initialAlertInfo)
-          }
-        }}
+        onOpenChange={(open) => !open && setAlertInfo(initialAlertInfo)}
         loading={loading}
         {...alertInfo}
+      />
+
+      <PolicyConsentDialog
+        open={isPolicyAlertOpen}
+        onOpenChange={setIsPolicyAlertOpen}
+        title="Warning"
+        message={SIGN_CONSENT_WARNING}
+        patientId={patientId}
       />
     </>
   )
