@@ -62,6 +62,20 @@ resources:
     cpu: 64m
     memory: 256Mi
 
+behavior:
+  scaleDown:
+    stabilizationWindowSeconds: 1800
+    policies:
+      - type: Pods
+        value: 1
+        periodSeconds: 100
+  scaleUp:
+    stabilizationWindowSeconds: 120
+    policies:
+      - type: Pods
+        value: 1
+        periodSeconds: 60
+
 autoscaling:
   enabled: true
   minReplicas: 1
