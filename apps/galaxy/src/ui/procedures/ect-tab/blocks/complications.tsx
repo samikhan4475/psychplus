@@ -23,6 +23,11 @@ const ComplicationsBlock = () => {
         label={COMPLICATION_LABEL}
         field={COMPLICATION_ID}
         options={complicationOptions}
+        onChange={(value) => {
+          if (value === 'No') {
+            form.setValue('ectComplicationsBlockDetails', '')
+          }
+        }}
         required
       />
       <FormFieldError name={COMPLICATION_ID} />

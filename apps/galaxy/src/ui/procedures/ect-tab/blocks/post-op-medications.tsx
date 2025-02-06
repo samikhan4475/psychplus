@@ -24,6 +24,11 @@ const PostOpMedicationsBlock = () => {
         label={POST_MEDICATION_LABEL}
         field={POST_MEDICATION_OP_ID}
         options={postOpMedicationsOptions}
+        onChange={(value) => {
+          if (value === 'No') {
+            form.setValue('ectPostOpMedicationBlockDetails', '')
+          }
+        }}
         required
       />
       <FormFieldError name={POST_MEDICATION_OP_ID} />
