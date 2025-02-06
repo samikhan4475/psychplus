@@ -19,7 +19,7 @@ const Dissociation = ({ data }: { data: SpravatoWidgetSchemaType }) => {
     ]?.toString()
 
   return (
-    <Flex direction="row" gap="1">
+    <Flex direction="column" gap="1">
       <LabelAndValue
         label="Dissociation"
         value={dissociation === 'no' ? 'No' : 'Yes'}
@@ -32,12 +32,13 @@ const Dissociation = ({ data }: { data: SpravatoWidgetSchemaType }) => {
           />
           <LabelAndValue
             label="Did symptoms resolve within 2-hours of administration?"
-            value={dissociationSymptomsResolved}
+            value={dissociationSymptomsResolved === 'no' ? 'No' : 'Yes'}
           />
           {dissociationSymptomsResolved === 'no' && (
             <LabelAndValue
               label="If greater than 2-hours, specify time since administration"
               value={dissociationTimeSinceAdministration}
+              flexDirection="column"
             />
           )}
         </>

@@ -47,7 +47,7 @@ const OccurrenceBlock = () => {
 
   return (
     adverseEventQuestion === 'yes' && (
-      <Flex direction="row" gap="4">
+      <Flex direction="row" gap="3" wrap="wrap" align="center">
         <RadioSelectSection
           field="occurrenceDuration"
           options={OCCURRANCE_DURATION}

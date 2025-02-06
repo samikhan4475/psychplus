@@ -6,4 +6,12 @@ const getFormValue = (
   defaultValue = '',
 ) => data[field as keyof SpravatoWidgetSchemaType]?.toString() || defaultValue
 
-export { getFormValue }
+const convertToDate = (time: string) => {
+  if (!time) return ''
+  const [hours, minutes] = time.split(':').map(Number)
+  const now = new Date()
+  now.setHours(hours, minutes, 0, 0)
+  return now
+}
+
+export { getFormValue, convertToDate }

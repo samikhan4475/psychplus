@@ -19,7 +19,7 @@ const Sedation = ({ data }: { data: SpravatoWidgetSchemaType }) => {
     ]?.toString()
 
   return (
-    <Flex direction="row" gap="1">
+    <Flex direction="column" gap="1">
       <LabelAndValue
         label="Sedation"
         value={sedation === 'no' ? 'No' : 'Yes'}
@@ -32,12 +32,13 @@ const Sedation = ({ data }: { data: SpravatoWidgetSchemaType }) => {
           />
           <LabelAndValue
             label="Did symptoms resolve within 2-hours of administration?"
-            value={sedationSymptomsResolved}
+            value={sedationSymptomsResolved === 'no' ? 'No' : 'Yes'}
           />
           {sedationSymptomsResolved === 'no' && (
             <LabelAndValue
               label="If greater than 2-hours, specify time since administration"
               value={sedationTimeSinceAdministration}
+              flexDirection="column"
             />
           )}
         </>

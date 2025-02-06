@@ -1,8 +1,9 @@
 import { Flex, Text } from '@radix-ui/themes'
 import { SpravatoWidgetSchemaType } from '@/ui/procedures/spravato-tab/spravato-widget-schema'
+import { formatDate } from '@/utils'
 import { LabelAndValue } from '../shared'
 import { LabelAndValueColumn } from './label-and-value-column'
-import { getFormValue } from './utils'
+import { convertToDate, getFormValue } from './utils'
 
 const Monitoring = ({ data }: { data: SpravatoWidgetSchemaType }) => {
   const zofranAdministrated =
@@ -23,18 +24,27 @@ const Monitoring = ({ data }: { data: SpravatoWidgetSchemaType }) => {
         <>
           <LabelAndValue
             label="Time:"
-            value={getFormValue(data, 'zofranAdministratedTime')}
+            value={formatDate(
+              convertToDate(getFormValue(data, 'zofranAdministratedTime')),
+              'HH:mm',
+            )}
           />
           <LabelAndValue label="Dose:" value={getFormValue(data, 'dose')} />
         </>
       )}
       <LabelAndValue
         label="Time of Spravato Administration:"
-        value={getFormValue(data, 'spravatoAdministrationTime')}
+        value={formatDate(
+          convertToDate(getFormValue(data, 'spravatoAdministrationTime')),
+          'HH:mm',
+        )}
       />
       <LabelAndValue
         label="Time of Treatment Discharge:"
-        value={getFormValue(data, 'dischargeTime')}
+        value={formatDate(
+          convertToDate(getFormValue(data, 'dischargeTime')),
+          'HH:mm',
+        )}
       />
       <LabelAndValue
         label="Total Time Monitored:"

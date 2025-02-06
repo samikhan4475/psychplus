@@ -52,6 +52,14 @@ const AdverseReaction = ({ data }: { data: SpravatoWidgetSchemaType }) => {
   const adverseEventQuestion =
     data['adverseEventQuestion' as keyof SpravatoWidgetSchemaType]?.toString()
 
+  const eventResolution =
+    data['eventResolution' as keyof SpravatoWidgetSchemaType]?.toString()
+
+  const toSentenceCase = (value: string | undefined) => {
+    if (!value) return ''
+    return value.charAt(0).toUpperCase() + value.slice(1).toLowerCase()
+  }
+
   return (
     <Flex direction="column" gap="2">
       <Text className="whitespace-nowrap text-3 font-[600]">
@@ -116,13 +124,7 @@ const AdverseReaction = ({ data }: { data: SpravatoWidgetSchemaType }) => {
           ))}
           <LabelAndValue
             label="Did the Event Resolve?"
-            value={
-              data[
-                'eventResolution' as keyof SpravatoWidgetSchemaType
-              ]?.toString() === 'no'
-                ? 'No'
-                : 'Yes'
-            }
+            value={toSentenceCase(eventResolution)}
           />
         </>
       )}
