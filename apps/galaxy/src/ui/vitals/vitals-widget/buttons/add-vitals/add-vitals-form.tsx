@@ -61,7 +61,8 @@ const AddVitalsForm = ({
   addNewVital,
   vitalsData,
 }: AddVitalsFormProps) => {
-  const { updateWidgetsData } = useQuickNoteUpdate()
+  const { updateWidgetsData, updateActualNoteWidgetsData } =
+    useQuickNoteUpdate()
 
   const {
     data,
@@ -146,6 +147,7 @@ const AddVitalsForm = ({
     }
 
     updateWidgetsData(payload)
+    updateActualNoteWidgetsData(payload)
 
     setQuicknotesData([
       response.data,

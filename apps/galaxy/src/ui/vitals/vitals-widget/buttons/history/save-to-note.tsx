@@ -10,7 +10,8 @@ import { useStore } from '../../store'
 import { PatientVital } from '../../types'
 
 const SaveToNoteButton = ({ patientId }: { patientId: string }) => {
-  const { updateWidgetsData } = useQuickNoteUpdate()
+  const { updateWidgetsData, updateActualNoteWidgetsData } =
+    useQuickNoteUpdate()
   const [loading, setLoading] = useState(false)
 
   const {
@@ -73,6 +74,7 @@ const SaveToNoteButton = ({ patientId }: { patientId: string }) => {
 
     toast.success('Saved!')
     updateWidgetsData(payload)
+    updateActualNoteWidgetsData(payload)
 
     setQuicknotesData(data?.filter((item) => item.addToNote) as PatientVital[])
     setLoading(false)
