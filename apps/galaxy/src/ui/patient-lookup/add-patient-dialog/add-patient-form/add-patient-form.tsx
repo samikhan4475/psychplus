@@ -22,6 +22,7 @@ import { ReferralNameInput } from './referral-name-input'
 import { ReferralSource } from './referral-source'
 import { SaveButton } from './save-button'
 import { addPatientSchema, AddPatientSchemaType } from './schema'
+import { TestPatientCheckbox } from './test-patient-checkbox'
 import { transformOut } from './transform'
 
 interface AddPatientFormProps {
@@ -38,6 +39,7 @@ const AddPatientForm = ({ closeDialog }: AddPatientFormProps) => {
         middleName: '',
         lastName: '',
       },
+      isTest: false,
       dateOfBirth: undefined,
       gender: '',
       referralSource: '',
@@ -92,6 +94,7 @@ const AddPatientForm = ({ closeDialog }: AddPatientFormProps) => {
         <AddressDetails />
         <GuardianFirstNameInput />
         <GuardianLastNameInput />
+        <TestPatientCheckbox />
       </Grid>
       <Separator orientation="horizontal" className="border-pp-grey w-full" />
       <Flex justify="end" gap="2" py="4" className="px-[20px]">

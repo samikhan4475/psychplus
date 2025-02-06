@@ -1,9 +1,9 @@
 import { useRef, useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Box, Button, Grid, Text } from '@radix-ui/themes'
+import { Box, Button, Flex, Grid, Text } from '@radix-ui/themes'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import { AddressFieldsGroup, FormContainer } from '@/components'
+import { AddressFieldsGroup, CheckboxInput, FormContainer } from '@/components'
 import { NewPatient, Policy } from '@/types'
 import {
   sendPolicyEmailAction,
@@ -48,6 +48,7 @@ const AddPatientForm = ({
       guardianFirstName: '',
       guardianLastName: '',
       hasGuardian: 'no',
+      isTest: false,
       contactInfo: {
         addresses: [
           {
@@ -115,6 +116,7 @@ const AddPatientForm = ({
           ],
         },
         password: '',
+        isTest: data.isTest,
       }
       if (!data.contactInfo.addresses[0].street1) {
         delete body.contactInfo.addresses
@@ -258,11 +260,17 @@ const AddPatientForm = ({
   return (
     <FormContainer onSubmit={onSave} form={form}>
       <Box className="border-pp-grey  ml-1 mr-1 mt-2 rounded-[4px] border">
-        <Box className="bg-pp-table-subRows pb-1 pl-2 pr-2 pt-1">
-          <Text size="2" weight={'bold'} className="text-black mb-2 pb-2">
+        <Flex
+          className="bg-pp-table-subRows pb-1 pl-2 pr-2 pt-1"
+          justify="between"
+          gap="2"
+          align="center"
+        >
+          <Text size="2" weight="bold" className="text-black">
             Personal Details
           </Text>
-        </Box>
+          <CheckboxInput label="Test Patient" field="isTest" />
+        </Flex>
 
         <Grid columns="12" className="mb-2 mt-2 gap-3 pl-2 pr-2">
           <Box className="col-span-3">

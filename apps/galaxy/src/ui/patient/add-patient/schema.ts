@@ -79,6 +79,7 @@ const schema = z
     relationship: z.string().optional(),
     patientPolicyA: z.boolean().optional(),
     patientPolicyB: z.boolean().optional(),
+    isTest: z.boolean(),
   })
   .superRefine((data, ctx) => {
     const { dateOfBirth } = data

@@ -31,6 +31,7 @@ interface PatientBody {
     }
     relationship?: string
   }
+  isTest?: boolean
 }
 
 export type { PatientBody }

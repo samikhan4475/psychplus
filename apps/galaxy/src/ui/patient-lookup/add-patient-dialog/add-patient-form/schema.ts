@@ -26,6 +26,7 @@ const addPatientSchema = z
       lastName: nameValidation,
       middleName: optionalNameValidation,
     }),
+    isTest: z.boolean(),
     dateOfBirth: z.string().min(1, 'Required'),
     gender: z.string().min(1, 'Required'),
     referralSource: z.string().optional(),
