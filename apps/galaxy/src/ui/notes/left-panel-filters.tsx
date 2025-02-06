@@ -128,7 +128,9 @@ const LeftPanelFilters = ({ patientId }: { patientId: string }) => {
 
     ninetyDaysAgo.setDate(now.getDate() - 90)
     if (
-      (data.dateFrom && dateFrom < ninetyDaysAgo) ||
+      (data.dateFrom &&
+        dateFrom < ninetyDaysAgo &&
+        !search90DaysOldNotesPermission) ||
       (data.dateTo && dateTo < ninetyDaysAgo && !search90DaysOldNotesPermission)
     ) {
       setIsErrorAlertOpen(true)
