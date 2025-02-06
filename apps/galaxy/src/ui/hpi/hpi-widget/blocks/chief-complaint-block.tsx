@@ -100,13 +100,12 @@ const ChiefComplaintBlock = () => {
     if (isSubmitting) {
       const [hpiField, ...remainingFields] = watchedFields
 
-      const nonEmptyFields = Object?.values(remainingFields)?.filter(
-        (value) => Array.isArray(value) && value.length > 0,
-      ).length
-
+      const totalSymptoms = Object.values(remainingFields)
+        .filter((value) => Array.isArray(value))
+        .reduce((sum, arr) => sum + arr?.length, 0)
       const isHpiOtherValid = (hpiField?.length || 0) >= 30
 
-      const isValid = nonEmptyFields >= 3 || isHpiOtherValid
+      const isValid = totalSymptoms >= 3 || isHpiOtherValid
 
       if (!isValid) {
         toast.error(HPIVALIDATIONMESSAGE)

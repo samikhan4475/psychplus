@@ -1,8 +1,9 @@
 'use client'
 
+import { useEffect, useRef } from 'react'
 import { Box, BoxProps } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
-import { useEffect, useRef } from 'react'
+import { useDebouncedCallback } from 'use-debounce'
 import { cn } from '@/utils'
 
 type AutoResizeInputProps = Omit<
@@ -22,6 +23,13 @@ const AutoResizeInput = ({
 }: AutoResizeInputProps) => {
   const form = useFormContext()
   const ref = useRef<HTMLDivElement>(null)
+  const handleChange = useDebouncedCallback(() => {
+    if (ref.current) {
+      form.setValue(field, ref.current.textContent ?? '', {
+        shouldValidate: true,
+      })
+    }
+  }, 300)
 
   useEffect(() => {
     if (ref.current) {
@@ -29,16 +37,11 @@ const AutoResizeInput = ({
     }
   }, [field, form])
 
-  const handleBlur = () => {
-    if (ref.current) {
-      form.setValue(field, ref.current.textContent ?? '', { shouldValidate: true })
-    }
-  }
-
   return (
     <Box
       ref={ref}
-      onBlur={handleBlur}
+      onInput={handleChange}
+      onBlur={handleChange}
       contentEditable
       spellCheck={spellCheck}
       suppressContentEditableWarning

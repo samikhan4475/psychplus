@@ -41,15 +41,15 @@ const hpiWidgetSchema = z
     hpiOther: z
       .string()
       .trim()
-      .max(200, 'Max 200 characters allowed')
+      .max(4000, 'Max 4000 characters allowed')
       .optional(),
   })
   .superRefine((data, ctx) => {
-    const nonEmptyFields = requiredFields.filter(
-      (field) => data[field]?.length > 0,
-    ).length
+    const totalSymptoms = requiredFields
+      .map((field) => data[field]?.length || 0)
+      .reduce((sum, count) => sum + count, 0)
 
-    if (nonEmptyFields < 3 && (data?.hpiOther?.length || 0) < 30) {
+    if (totalSymptoms < 3 && (data?.hpiOther?.length || 0) < 30) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         path: ['chiefComplaint'],
@@ -59,7 +59,7 @@ const hpiWidgetSchema = z
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         path: ['hpiOther'],
-        message:HPIVALIDATIONMESSAGE
+        message: HPIVALIDATIONMESSAGE,
       })
     }
     const issues = [

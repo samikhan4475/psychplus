@@ -1,7 +1,7 @@
 import { HpiWidgetSchemaType } from './hpi-widget-schema'
 
 const HPIVALIDATIONMESSAGE =
-  'At least three symptoms under the HPI section or enter at least 30 characters in the free text box is required'
+  'Must have 30 characters in this OR 3 symptoms selected from above (other than chief complaint).'
 
 const assignSpecificFields = (
   result: HpiWidgetSchemaType,

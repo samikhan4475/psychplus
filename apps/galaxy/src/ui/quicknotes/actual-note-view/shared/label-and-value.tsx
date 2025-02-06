@@ -12,12 +12,14 @@ interface LabelAndValueProps {
   value?: string | ReactNode
   className?: string
   flexDirection?: string
+  detailsClassName?: string
 }
 const LabelAndValue = ({
   label,
   value,
   className,
   flexDirection = 'row',
+  detailsClassName,
 }: LabelAndValueProps) => {
   if (!value) return null
   return (
@@ -32,9 +34,13 @@ const LabelAndValue = ({
         <Text className="whitespace-nowrap text-1 font-medium">{label}</Text>
       )}
       <Text
-        className={cn('text-1', {
-          'italic text-gray-9': !value,
-        })}
+        className={cn(
+          'text-1',
+          {
+            'italic text-gray-9': !value,
+          },
+          detailsClassName,
+        )}
         weight="regular"
       >
         {value}
