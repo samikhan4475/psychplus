@@ -48,6 +48,7 @@ interface SchedulingHistoryData {
   admissionDateTime: string
   dischargeVisitSequenceDate: string
   appointmentDateTime: string
+  locationTimeZoneId: string
   visitTypeCode: string
   visitSequenceType: string
   visitMedium: string

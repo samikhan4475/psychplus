@@ -2,9 +2,10 @@
 
 import { ColumnDef } from '@tanstack/react-table'
 import { format } from 'date-fns'
-import { ColumnHeader, TextCell } from '@/components'
+import { ColumnHeader, DateTimeCell, TextCell } from '@/components'
 import { Sort } from '@/types'
 import { getSortDir } from '@/utils'
+import { formatDateCell, formatTimeCell } from '../schedule/utils'
 import {
   FacilityAdmissionCell,
   HistoryCell,
@@ -102,12 +103,18 @@ const getSchedulingColumns = (
         />
       ),
       cell: ({ row }) => (
-        <TextCell>
-          {format(
-            new Date(row.original.appointmentDateTime),
-            'MM/dd/yyy HH:mm',
-          )}
-        </TextCell>
+        <div className="flex flex-col">
+          <DateTimeCell>
+            {formatDateCell(
+              row.original.appointmentDateTime,
+              row.original.locationTimeZoneId,
+            )}{' '}
+            {formatTimeCell(
+              row.original.appointmentDateTime,
+              row.original.locationTimeZoneId,
+            )}
+          </DateTimeCell>
+        </div>
       ),
     },
     {
@@ -499,9 +506,9 @@ const getSchedulingColumns = (
               {row.original.facilityAdmissionId !==
                 FACILITY_ADMISION_ID_CHECK &&
                 row.original.admissionDateTime &&
-                format(
-                  new Date(row.original.admissionDateTime),
-                  'MM/dd/yyyy HH:mm',
+                formatDateCell(
+                  row.original.admissionDateTime,
+                  row.original.locationTimeZoneId,
                 )}
             </TextCell>
           ),
