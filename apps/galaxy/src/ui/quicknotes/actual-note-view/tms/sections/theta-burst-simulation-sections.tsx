@@ -8,6 +8,7 @@ type ThetaBurstSimulationSectionProps = {
   typeOfThetaBurst: string
   duration: string
   burstPattern: string
+  intermittentDurationFrom: string
 }
 
 const ThetaBurstSimulationSection = ({
@@ -16,7 +17,10 @@ const ThetaBurstSimulationSection = ({
   typeOfThetaBurst,
   duration,
   burstPattern,
+  intermittentDurationFrom
 }: ThetaBurstSimulationSectionProps) => {
+  const isIntermittent = typeOfThetaBurst === "Intermittent Theta Burst Stimulation (cTBS)";
+  const displayDuration = `${isIntermittent ? intermittentDurationFrom : duration} sec`;
   return (
     <Flex direction={'column'} gap="2">
       <Text className="text-1 font-medium">
@@ -27,7 +31,7 @@ const ThetaBurstSimulationSection = ({
         is adjusted to the patient‘s resting motor threshold.
       </Text>
       <LabelAndValue label="Type of Theta Burst:" value={typeOfThetaBurst} />
-      <LabelAndValue label="Duration:" value={duration} />
+      <LabelAndValue label="Duration:" value={displayDuration} />
       <Text className="text-1 font-medium">Stimulation Parameters</Text>
       <LabelAndValue label="Frequency:" value={'Theta Frequency (5 Hz)'} />
       <LabelAndValue label="Burst Pattern:" value={burstPattern} />
