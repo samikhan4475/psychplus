@@ -42,7 +42,7 @@ const VitalsNoteDetailView = ({ patientId, data }: NoteDetailProps) => {
   }
 
   if (response.length === 0) return null
-  return <Details data={response} />
+  return <Details data={response} className="max-w-[41.9vw]" />
 }
 
 export { VitalsNoteDetailView }

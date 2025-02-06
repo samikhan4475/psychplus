@@ -38,7 +38,7 @@ const VitalsView = async ({ patientId }: VitalsProps) => {
     <ActualNoteDetailsWrapper
       sectionName={QuickNoteSectionName.QuickNoteSectionPastMedicalHx}
     >
-      <Details data={result?.data} />
+      <Details data={result?.data} className="max-w-[360px]" />
     </ActualNoteDetailsWrapper>
   )
 }
