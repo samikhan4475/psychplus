@@ -59,7 +59,16 @@ const PaymentDetailForm = ({
       sanitizedFormData,
     )
 
-    const response = await chargePaymentAction(payload)
+    const validPayments = payload.filter(
+      (payment) => payment.amount !== 0 && payment.amount !== undefined,
+    )
+
+    if (validPayments?.length <= 0) {
+      toast.error('Total payment cannot be less than zero')
+      return
+    }
+
+    const response = await chargePaymentAction(validPayments)
 
     if (response.state === 'error') {
       toast.error(response.error ?? 'Error while saving')

@@ -220,6 +220,10 @@ const getDatesForDateRange = (filter: string, period?: Period) => {
   return { startDate: undefined, endDate: undefined }
 }
 
+const isISODate = (dateString: string): boolean => {
+  return /^\d{4}-\d{2}-\d{2}$/.test(dateString)
+}
+
 const formatDateOfBirth = (dob: string) => {
   const date = parseDate(dob)
   const month = String(date.month).padStart(2, '0')
@@ -230,7 +234,12 @@ const formatDateOfBirth = (dob: string) => {
 
 const convertToCalendarDate = (storedDate: DateValue | string) => {
   if (typeof storedDate === 'string') {
-    return parseDate(storedDate)
+    if (isISODate(storedDate)) {
+      return parseDate(storedDate)
+    } else {
+      const datePart = storedDate?.split(' ')[0]
+      return parseDate(datePart)
+    }
   }
   if (storedDate instanceof CalendarDate) {
     return storedDate
