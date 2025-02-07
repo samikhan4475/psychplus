@@ -83,6 +83,7 @@ const CustomEvent = ({
     providerType,
     visitType,
     patientInsuranceVerificationStatus,
+    visitMedium,
   } = event.data as Appointment
   const state = useMemo(
     () => getCodesetDisplayName(stateCode, stateCodes),
@@ -92,6 +93,7 @@ const CustomEvent = ({
     () => getCodesetDisplayName(event.data.service, serviceCodes),
     [event.data.service],
   )
+  const eventContainerClasses = eventContainerClassIndex[visitMedium as VisitType] ?? ''
   const frequency = useMemo(() => {
     const transformedFrequencyCodes = frequencyCodes.map((code) => {
       const value = code?.attributes?.find((attr) => attr.name === 'ResourceId')
@@ -111,7 +113,7 @@ const CustomEvent = ({
     <Popover.Root>
       <Popover.Trigger asChild>
         <Flex
-          className="bg-pp-green-100 h-[100%] w-full"
+          className={cn("h-[100%] w-full", eventContainerClasses)}
           justify="start"
           align="center"
         >

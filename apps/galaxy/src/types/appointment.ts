@@ -139,6 +139,7 @@ interface Appointment {
   isPatientHadAnyCheckedOutVisit?: boolean
   isNoteSignedByProviderInLastYear?: boolean
   providerUserId?: number
+  creditCardVerificationStatus: string
 }
 
 interface BookVisitPayload {

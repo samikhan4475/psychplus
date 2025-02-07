@@ -204,7 +204,7 @@ const DataTable = <TData, TValue>({
                     '!bg-pp-table-subRows': row.getIsSelected(),
                     'bg-pp-table-subRows hover:bg-pp-table-subRows':
                       row.depth > 0,
-                    'bg-gray-3 hover:bg-gray-3': isRowDisabled?.(row),
+                    'bg-gray-5 hover:bg-gray-5': isRowDisabled?.(row),
                   },
                 )}
               >

@@ -15,6 +15,7 @@ import { StateCell } from '../shared/table-cells/state-cell'
 import { formatDateCell, formatTimeCell } from '../utils'
 import {
   ActionsCell,
+  CreditCardCell,
   GroupSelectCell,
   RoomSelectCell,
   UnitSelectCell,
@@ -238,11 +239,7 @@ const columns: ColumnDef<Appointment>[] = [
             label="CC"
           />
         ),
-        cell: ({ row }) => (
-          <TextCell className="pl-1">
-            {row.original.patientCardVerificationStatus ? 'Yes' : 'No'}
-          </TextCell>
-        ),
+        cell: ({ row }) => <CreditCardCell row={row} />,
         enableHiding: false,
       },
     ],
