@@ -5,6 +5,7 @@ import { Box, Flex, Table } from '@radix-ui/themes'
 import { useForm, type SubmitHandler } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { z } from 'zod'
+import { revalidateAction } from '@/actions/revalidate'
 import { saveWidgetAction } from '@/actions/save-widget'
 import { DateTimeCell, FormContainer } from '@/components'
 import { useHasPermission } from '@/hooks'
@@ -83,6 +84,7 @@ const AddVitalsForm = ({
     setIsErrorAlertOpen: state.setIsErrorAlertOpen,
     setAlertErrorMessage: state.setAlertErrorMessage,
   }))
+  const { isQuickNoteView } = useQuickNoteUpdate()
 
   const form = useForm<SchemaType>({
     resolver: zodResolver(schema),
@@ -90,7 +92,6 @@ const AddVitalsForm = ({
   })
 
   const saveAddVitalsPopupPermission = useHasPermission('saveAddVitalsPopup')
-  
   const onSubmit: SubmitHandler<SchemaType> = async (formData) => {
     if (!saveAddVitalsPopupPermission) {
       setIsErrorAlertOpen(true)
@@ -148,6 +149,8 @@ const AddVitalsForm = ({
 
     updateWidgetsData(payload)
     updateActualNoteWidgetsData(payload)
+
+    if (!isQuickNoteView) revalidateAction()
 
     setQuicknotesData([
       response.data,

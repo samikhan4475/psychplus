@@ -33,44 +33,44 @@ const VitalsWidgetLoader = ({
   const vitalsIds = transformIn(initialVitalData ?? []).vitalsId
   useEffect(() => {
     setLoading(true)
-    getPatientVitalsAction({
-      payload: {
-        patientId: patientId,
-      },
-    }).then(async (result) => {
-      if (result.state === 'error') {
-        setError(result.error)
-        setData([])
-        setQuicknotesData([])
-      } else {
-        if (vitalsIds.length === 0 && result?.data.length > 0) {
-          const vitalsWithin48Hours = filterVitalsWithin48Hours(result.data)
+    setData([])
+    setQuicknotesData([])
+    setError('')
 
-          const selectedVitalIds =
-            vitalsWithin48Hours?.map((item) => String(item.id)) ?? []
+    getPatientVitalsAction({ payload: { patientId } })
+      .then(async (result) => {
+        if (result.state === 'error') {
+          setError(result.error)
+          return
+        }
+
+        const vitalsWithin48Hours = filterVitalsWithin48Hours(result.data)
+        const selectedVitalIds = vitalsWithin48Hours.map((item) =>
+          String(item.id),
+        )
+
+        if (vitalsIds.length === 0 && selectedVitalIds.length > 0) {
           const payload = transformOut(patientId)({
             vitalsId: selectedVitalIds,
           })
-
           await saveWidgetAction({ patientId, data: payload })
         }
-        if (!quicknotesData) {
-          setData(
-            result.data?.map((vital) => ({
-              ...vital,
-              addToNote: vitalsIds.includes(String(vital.id)),
-            })),
-          )
-          setQuicknotesData(
-            result.data?.filter((vital) =>
-              vitalsIds.includes(String(vital.id)),
-            ) ?? [],
-          )
-        }
-      }
-      setLoading(false)
-    })
-  }, [])
+        setData(
+          result.data.map((vital) => ({
+            ...vital,
+            addToNote: vitalsIds.includes(String(vital.id)),
+          })),
+        )
+
+        setQuicknotesData(
+          result.data?.filter((vital) =>
+            vitalsIds.includes(String(vital.id)),
+          ) ?? [],
+        )
+      })
+      .catch((err) => setError(err.message))
+      .finally(() => setLoading(false))
+  }, [patientId, initialVitalData])
 
   if (error) {
     return <Text>{error}</Text>
