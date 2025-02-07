@@ -53,7 +53,7 @@ interface AddVisitFormProps {
 
 const AddVisitForm = ({
   showAddUser = true,
-  isTimed = false,
+  isTimed = true,
   dateTime,
   onAdd,
   slotDetails,
