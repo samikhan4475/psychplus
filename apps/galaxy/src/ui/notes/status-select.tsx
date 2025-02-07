@@ -31,4 +31,4 @@ const StatusSelect = ({ disabled = false }: { disabled?: boolean }) => {
 
 const buttonClassName =
   'border-pp-gray-2 w-full h-6 border border-solid !outline-none [box-shadow:none]'
-export { StatusSelect }
+export { StatusSelect, options }

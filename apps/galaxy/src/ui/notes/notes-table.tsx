@@ -15,6 +15,7 @@ import { SharedCode } from '@/types'
 import { getSlashedDateString } from '@/utils'
 import { convertToTimezone } from '../visit/utils'
 import { getDisplayByValue } from './create-note/utils'
+import { options } from './status-select'
 import { useStore } from './store'
 import { PatientNotes } from './types'
 import { getAuthorName } from './utils'
@@ -154,11 +155,16 @@ const getColumns = (codes: SharedCode[], noteTypeCodes: SharedCode[]) => {
       id: 'status',
       accessorKey: 'status',
       header: () => <ColumnHeader label="Note Status" />,
-      cell: ({ row }) => (
-        <Box className="truncate">
-          <TextCell>{row.original.noteStatus}</TextCell>
-        </Box>
-      ),
+      cell: ({ row }) => {
+        const status = options.find(
+          (option) => option.value === row.original.noteStatus,
+        )?.label
+        return (
+          <Box className="truncate">
+            <TextCell>{status ?? ''}</TextCell>
+          </Box>
+        )
+      },
     },
   ]
 
