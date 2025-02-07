@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { Text } from '@radix-ui/themes'
 import { Appointment, QuickNoteSectionItem } from '@/types'
+import { filterAndSort } from '@/utils'
 import { AddOnWidget } from './add-on-widget'
 import { AddOnWidgetSchemaType } from './add-on-widget-schema'
 import { getBookedAppointmentAction } from './client-actions'
@@ -25,12 +26,18 @@ const AddOnClientLoader = ({
     undefined,
   )
   const [error, setError] = useState<string>('')
+  const [otherData, setOtherData] = useState<QuickNoteSectionItem[]>([])
   useEffect(() => {
     getBookedAppointmentAction(appointment).then((response) => {
       if (response.state === 'error') {
         return setError(response?.error)
       }
-      const values = transformIn(data, response?.data, visitType)
+      const [addOndata, otherData] = filterAndSort(
+        data,
+        'additionalTherapyDetail',
+      )
+      const values = transformIn(addOndata, response?.data, visitType)
+      setOtherData(otherData)
       setValues(values)
     })
   }, [appointment, data, visitType])
@@ -46,6 +53,7 @@ const AddOnClientLoader = ({
       patientId={patientId}
       initialValue={values}
       appointment={appointment}
+      otherData={otherData}
     />
   )
 }

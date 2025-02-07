@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { Appointment, QuickNoteSectionItem } from '@/types'
+import { filterAndSort } from '@/utils'
 import { mapAppointmentDurationToData } from '../add-on/utils'
 import { FamilyTherapyView } from './therapy-widget/family'
 import { transformIn as familyTransformIn } from './therapy-widget/family/data'
@@ -25,7 +26,13 @@ const TherapyWidgetClientLoader = ({
   const visitType = useSearchParams().get('visitType') ?? ''
   const [individualInitialValue, setIndividualInitialValue] =
     useState<TherapySchemaType>(getInitialValues())
-
+  const [individualOtherData, setIndividualOtherData] = useState<
+    QuickNoteSectionItem[]
+  >([])
+  const [familyData, familyOtherData] = filterAndSort(
+    data,
+    'additionalTherapyDetail',
+  )
   useEffect(() => {
     const hasTherapyTimeSpent = data.some(
       (item) => item.sectionItem === 'therapyTimeSpent',
@@ -33,8 +40,13 @@ const TherapyWidgetClientLoader = ({
     const durationData = !hasTherapyTimeSpent
       ? mapAppointmentDurationToData(appointment?.duration)
       : {}
+    const [individualData, individualOtherData] = filterAndSort(
+      data,
+      'additionalTherapyDetail',
+    )
+    setIndividualOtherData(individualOtherData)
     setIndividualInitialValue({
-      ...transformIn(data),
+      ...transformIn(individualData),
       ...durationData,
     })
   }, [])
@@ -44,6 +56,7 @@ const TherapyWidgetClientLoader = ({
       <IndividualTherapyView
         patientId={patientId}
         initialValue={individualInitialValue}
+        otherData={individualOtherData}
       />
     )
   }
@@ -52,7 +65,8 @@ const TherapyWidgetClientLoader = ({
     return (
       <FamilyTherapyView
         patientId={patientId}
-        initialValue={familyTransformIn(data ?? [])}
+        initialValue={familyTransformIn(familyData ?? [])}
+        otherData={familyOtherData}
       />
     )
   }

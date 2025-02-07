@@ -2,6 +2,7 @@
 
 import { FormProvider } from 'react-hook-form'
 import { WidgetFormContainer, WidgetSaveButton } from '@/components'
+import { QuickNoteSectionItem } from '@/types'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import {
   AdhdHyperactiveBlock,
@@ -32,12 +33,14 @@ interface HpiWidgetProps {
   patientId: string
   initialValue?: HpiWidgetSchemaType
   isHpiHeader?: boolean
+  otherData?: QuickNoteSectionItem[]
 }
 
 const HpiWidget = ({
   patientId,
   initialValue,
   isHpiHeader,
+  otherData,
 }: HpiWidgetProps) => {
   const form = useHpiWidgetForm(initialValue ?? getInitialValues())
 
@@ -54,8 +57,8 @@ const HpiWidget = ({
         headerRight={
           !isHpiHeader && (
             <>
-              <ClearButton shouldCheckPermission/>
-              <WidgetSaveButton shouldCheckPermission/>
+              <ClearButton shouldCheckPermission />
+              <WidgetSaveButton shouldCheckPermission />
             </>
           )
         }
@@ -78,7 +81,7 @@ const HpiWidget = ({
         <DementiaBlock />
         <SchizophreniaBlock />
         <MedicationSeBlock />
-        <OtherBlock />
+        <OtherBlock data={otherData} />
       </WidgetFormContainer>
     </FormProvider>
   )

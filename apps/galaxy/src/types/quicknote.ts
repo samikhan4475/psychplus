@@ -1,3 +1,5 @@
+import { Metadata } from './metadata'
+
 interface QuickNoteSectionItem {
   id?: string
   pid: number
@@ -7,6 +9,7 @@ interface QuickNoteSectionItem {
   sectionItemValue: string
   encounterType?: string
   isWithOutAppointmentId?: boolean
+  metadata?: Metadata
 }
 
 interface QuickNoteHistory {

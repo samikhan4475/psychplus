@@ -58,5 +58,6 @@ export * from './auto-resize-input'
 export * from './close-dialog-trigger'
 export * from './delete-confirm-dialog'
 export * from './widget-tab-save-button'
-export * from "./multi-select-chip-dropdown"
+export * from './multi-select-chip-dropdown'
 export * from './password-input'
+export * from './read-more-dialog'

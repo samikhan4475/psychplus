@@ -5,6 +5,7 @@ import { AddOnWidget } from '@/ui/add-on/add-on-widget/add-on-widget'
 import { getBookedAppointmentApi } from '@/ui/add-on/add-on-widget/api/booked-appointments-api'
 import { transformIn } from '@/ui/add-on/add-on-widget/data'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
+import { filterAndSort } from '@/utils'
 
 interface PatientAllergiesPageProps {
   params: {
@@ -46,12 +47,11 @@ const PatientAllergiesPage = async ({
     bookedAppointmentResponse.state === 'success'
       ? bookedAppointmentResponse.data
       : []
-
-  const initialValue = transformIn(
+  const [data, otherData] = filterAndSort(
     response.data ?? [],
-    appointmentData,
-    visitType,
+    'additionalTherapyDetail',
   )
+  const initialValue = transformIn(data, appointmentData, visitType)
 
   return (
     <Flex direction="column" width="100%">
@@ -59,6 +59,7 @@ const PatientAllergiesPage = async ({
         patientId={params.id}
         appointment={appointment.data}
         initialValue={initialValue}
+        otherData={otherData}
       />
     </Flex>
   )

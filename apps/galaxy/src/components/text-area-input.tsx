@@ -10,8 +10,9 @@ interface TextAreaInputProps {
   field: string
   autoFocus?: boolean
   className?: string
-  placeHolder?:string
-  maxLength?: number;
+  placeHolder?: string
+  maxLength?: number
+  formContainerClassName?: string
 }
 
 const TextAreaInput = ({
@@ -21,11 +22,16 @@ const TextAreaInput = ({
   className,
   placeHolder,
   maxLength,
+  formContainerClassName,
 }: TextAreaInputProps) => {
   const form = useFormContext()
 
   return (
-    <Flex align="center" gap="2" className="w-full">
+    <Flex
+      align="center"
+      gap="2"
+      className={cn('w-full', formContainerClassName)}
+    >
       {label && <BlockLabel name={field}>{label}</BlockLabel>}
       <TextArea
         size="1"

@@ -1,4 +1,5 @@
 import { cache } from 'react'
+import { QuickNoteSectionItem } from '@/types'
 import { isHospitalCareVisit } from '@/utils'
 import {
   ECTBlock,
@@ -11,6 +12,7 @@ import {
 interface Block {
   component: React.ComponentType<{
     isChecked?: boolean
+    otherData?: QuickNoteSectionItem[]
   }>
   id: string
 }

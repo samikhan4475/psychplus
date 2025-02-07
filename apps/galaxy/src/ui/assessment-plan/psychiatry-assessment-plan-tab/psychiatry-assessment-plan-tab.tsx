@@ -8,6 +8,7 @@ import {
 } from '@/components'
 import { QuickNoteSectionItem } from '@/types'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
+import { filterAndSort } from '@/utils'
 import { AssessmentPlanTabs } from '../constants'
 import {
   AssessmentTreatmentPlanNotesBlock,
@@ -29,8 +30,11 @@ const PsychiatryAssessmentPlanTab = ({
   psychiatryAssessmentPlanData,
   isPsychiatryAssessmentPlanTab = false,
 }: PsychiatryAssessmentPlanTabProps) => {
-  const initialValue = transformIn(psychiatryAssessmentPlanData)
-
+  const [data, restData] = filterAndSort(
+    psychiatryAssessmentPlanData,
+    'assessmentTreatmentPlanNotes',
+  )
+  const initialValue = transformIn(data)
   const form = usePsychiatryAssessmentPlanTabForm(initialValue)
 
   return (
@@ -63,7 +67,7 @@ const PsychiatryAssessmentPlanTab = ({
         }
         formResetValues={createEmptyFormValues()}
       >
-        <AssessmentTreatmentPlanNotesBlock />
+        <AssessmentTreatmentPlanNotesBlock data={restData} />
         <PatientDiscussionCompletedBlock />
       </WidgetFormContainer>
     </FormProvider>

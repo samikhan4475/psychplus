@@ -4,6 +4,7 @@ import { FormProvider } from 'react-hook-form'
 import { WidgetFormContainer, WidgetSaveButton } from '@/components'
 import { QuickNoteSectionItem } from '@/types'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
+import { filterAndSort } from '@/utils'
 import { AssessmentPlanTabs } from '../constants'
 import {
   AssessmentTreatmentPlanNotesBlock,
@@ -25,8 +26,11 @@ const TherapyAssessmentPlanTab = ({
   therapyAssessmentPlanData,
   isTherapyAssessmentPlanTab = false,
 }: TherapyAssessmentPlanTabProps) => {
-  const initialValue = transformIn(therapyAssessmentPlanData)
-
+  const [data, restData] = filterAndSort(
+    therapyAssessmentPlanData,
+    'assessmentTreatmentPlanNotes',
+  )
+  const initialValue = transformIn(data)
   const form = useTherapyAssessmentPlanTabForm(initialValue)
 
   return (
@@ -39,7 +43,9 @@ const TherapyAssessmentPlanTab = ({
         headerRight={
           <>
             <WidgetClearButton />
-            {!isTherapyAssessmentPlanTab && <WidgetSaveButton shouldCheckPermission/>}
+            {!isTherapyAssessmentPlanTab && (
+              <WidgetSaveButton shouldCheckPermission />
+            )}
           </>
         }
         tags={
@@ -51,7 +57,7 @@ const TherapyAssessmentPlanTab = ({
           isTherapyAssessmentPlanTab && <TherapyAssessmentPlanHeader />
         }
       >
-        <AssessmentTreatmentPlanNotesBlock />
+        <AssessmentTreatmentPlanNotesBlock data={restData} />
         <PatientDiscussionCompletedBlock />
       </WidgetFormContainer>
     </FormProvider>

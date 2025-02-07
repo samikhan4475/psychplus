@@ -3,6 +3,7 @@
 import { Flex, Text } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
 import { CheckboxInput, RadioSelectSection } from '@/components'
+import { QuickNoteSectionItem } from '@/types'
 import { AdditionalTherapyDetailBlock } from '@/ui/therapy/therapy-widget/blocks/additional-therapy-detail'
 import { TherapyTableBlock } from '@/ui/therapy/therapy-widget/blocks/therapy-table-block'
 import { TherapySessionParticipantsBlock } from '@/ui/therapy/therapy-widget/individual/blocks/session-participants'
@@ -16,7 +17,12 @@ const THERAPY_PSYCHOANALYSIS_OPTIONS = [
   { label: 'Neither', value: 'neither' },
 ]
 
-const TherapyPsychoAnalysisBlock = () => {
+interface TherapyPsychoAnalysisBlockProps {
+  otherData?: QuickNoteSectionItem[]
+}
+const TherapyPsychoAnalysisBlock = ({
+  otherData,
+}: TherapyPsychoAnalysisBlockProps) => {
   const { watch, setValue } = useFormContext()
   const therapyPsychoanalysis = watch('therapyPsychoanalysis')
 
@@ -56,7 +62,7 @@ const TherapyPsychoAnalysisBlock = () => {
               <TherapyTimeSpentBlock />
               <TherapySessionParticipantsBlock />
               <TherapyTableBlock />
-              <AdditionalTherapyDetailBlock />
+              <AdditionalTherapyDetailBlock otherData={otherData} />
             </>
           )}
           {therapyPsychoanalysis === 'psychoanalysis' && (

@@ -1,5 +1,5 @@
 import { type SortDirection } from '@tanstack/react-table'
-import type { Sort } from '@/types'
+import type { QuickNoteSectionItem, Sort } from '@/types'
 
 const getSortDir = (column: string, sort?: Sort) => {
   if (!sort || sort.column !== column) {
@@ -18,4 +18,29 @@ const getNewSortDir = (column: string, sort?: Sort) => {
   return direction
 }
 
-export { getSortDir, getNewSortDir }
+//This helper is to sort quicknote sectionItem
+const filterAndSort = (
+  data: QuickNoteSectionItem[] = [],
+  filterValue: string,
+) => {
+  const sortedData = data
+    ?.filter((item) => item.sectionItem === filterValue)
+    ?.sort((a, b) => {
+      if (a?.metadata?.updatedOn && b?.metadata?.updatedOn) {
+        return (
+          new Date(b.metadata.updatedOn).getTime() -
+          new Date(a.metadata.updatedOn).getTime()
+        )
+      }
+      return 0
+    })
+
+  const allData = data?.filter((item) => item.sectionItem !== filterValue) ?? []
+  if (sortedData?.[0]) {
+    allData.push(sortedData?.[0])
+  }
+
+  return [allData, sortedData?.reverse()]
+}
+
+export { getSortDir, getNewSortDir, filterAndSort }

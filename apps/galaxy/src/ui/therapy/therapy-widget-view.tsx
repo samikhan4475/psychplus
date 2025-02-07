@@ -3,7 +3,8 @@
 import { useEffect, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { getQuickNoteDetailAction } from '@/actions/get-quicknote-detail'
-import { Appointment } from '@/types'
+import { Appointment, QuickNoteSectionItem } from '@/types'
+import { filterAndSort } from '@/utils'
 import { mapAppointmentDurationToData } from '../add-on/utils'
 import { QuickNoteSectionName } from '../quicknotes/constants'
 import { FamilyTherapyView } from './therapy-widget/family'
@@ -22,9 +23,15 @@ interface TherapyViewProps {
 
 const TherapyWidget = ({ patientId, appointment }: TherapyViewProps) => {
   const [individualInitialValue, setIndividualInitialValue] =
-  useState<TherapySchemaType>(getInitialValues())
+    useState<TherapySchemaType>(getInitialValues())
   const [familyInitialValue, setFamilyInitialValue] =
     useState<FamilyTherapySchemaType>(getFamilyInitialValues())
+  const [individualRestData, setIndividualRestData] = useState<
+    QuickNoteSectionItem[]
+  >([])
+  const [familyRestData, setFamilyRestData] = useState<QuickNoteSectionItem[]>(
+    [],
+  )
   const [error, setError] = useState(false)
   const visitType = useSearchParams().get('visitType') || ''
 
@@ -48,13 +55,23 @@ const TherapyWidget = ({ patientId, appointment }: TherapyViewProps) => {
           return
         }
         const durationData = !individualInitialValue.therapyTimeSpent
-        ? mapAppointmentDurationToData(appointment?.duration)
-        : {}
+          ? mapAppointmentDurationToData(appointment?.duration)
+          : {}
+        const [individualData, individualRestData] = filterAndSort(
+          individualResponse.data ?? [],
+          'additionalTherapyDetail',
+        )
+        setIndividualRestData(individualRestData)
         setIndividualInitialValue({
-          ...transformIn(individualResponse.data),
+          ...transformIn(individualData),
           ...durationData,
         })
-        setFamilyInitialValue(familyTransformIn(familyResponse.data))
+        const [familyData, familyRestData] = filterAndSort(
+          familyResponse.data ?? [],
+          'additionalTherapyDetail',
+        )
+        setFamilyRestData(familyRestData)
+        setFamilyInitialValue(familyTransformIn(familyData))
       } catch (err) {
         setError(true)
         console.error('Error fetching therapy data:', err)
@@ -62,7 +79,7 @@ const TherapyWidget = ({ patientId, appointment }: TherapyViewProps) => {
     }
 
     fetchTherapyData()
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [patientId])
 
   if (error) {
@@ -74,6 +91,7 @@ const TherapyWidget = ({ patientId, appointment }: TherapyViewProps) => {
       <IndividualTherapyView
         patientId={patientId}
         initialValue={individualInitialValue}
+        otherData={individualRestData}
       />
     )
   }
@@ -83,6 +101,7 @@ const TherapyWidget = ({ patientId, appointment }: TherapyViewProps) => {
       <FamilyTherapyView
         patientId={patientId}
         initialValue={familyInitialValue}
+        otherData={familyRestData}
       />
     )
   }

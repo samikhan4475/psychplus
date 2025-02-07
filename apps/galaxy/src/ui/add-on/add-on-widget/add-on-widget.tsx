@@ -4,7 +4,7 @@ import { useSearchParams } from 'next/navigation'
 import { Flex } from '@radix-ui/themes'
 import { FormProvider } from 'react-hook-form'
 import { WidgetFormContainer, WidgetSaveButton } from '@/components'
-import { Appointment } from '@/types'
+import { Appointment, QuickNoteSectionItem } from '@/types'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import {
   getCachedBlocksByVisitType,
@@ -18,10 +18,14 @@ interface AddOnWidgetProps {
   patientId: string
   appointment?: Appointment
   initialValue: AddOnWidgetSchemaType
+  otherData?: QuickNoteSectionItem[]
 }
 
 interface Block {
-  component: React.ComponentType<{ isChecked?: boolean }>
+  component: React.ComponentType<{
+    isChecked?: boolean
+    otherData?: QuickNoteSectionItem[]
+  }>
   id: string
   isChecked?: boolean
 }
@@ -30,6 +34,7 @@ const AddOnWidget = ({
   patientId,
   initialValue,
   appointment,
+  otherData = [],
 }: AddOnWidgetProps) => {
   const searchParams = useSearchParams()
   const visitType = searchParams.get('visitType') || ''
@@ -61,7 +66,11 @@ const AddOnWidget = ({
       >
         <Flex direction="column" gap="2">
           {blocks.map(({ component: BlockComponent, id, isChecked }) => (
-            <BlockComponent key={id} isChecked={isChecked} />
+            <BlockComponent
+              key={id}
+              isChecked={isChecked}
+              otherData={otherData}
+            />
           ))}
         </Flex>
       </WidgetFormContainer>

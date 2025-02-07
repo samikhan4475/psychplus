@@ -3,6 +3,7 @@
 import { useSearchParams } from 'next/navigation'
 import { FormProvider } from 'react-hook-form'
 import { WidgetFormContainer, WidgetSaveButton } from '@/components'
+import { QuickNoteSectionItem } from '@/types'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { AdditionalTherapyDetailBlock } from '../blocks/additional-therapy-detail'
 import { TherapyTableBlock } from '../blocks/therapy-table-block'
@@ -17,11 +18,13 @@ import { TherapySchemaType } from './therapy-schema'
 interface TherapyWidgetProps {
   patientId: string
   initialValue: TherapySchemaType
+  otherData?: QuickNoteSectionItem[]
 }
 
 const IndividualTherapyView = ({
   patientId,
   initialValue,
+  otherData = [],
 }: TherapyWidgetProps) => {
   const form = useTherapyForm(initialValue)
   const appointmentId = useSearchParams().get('id') as string
@@ -54,7 +57,7 @@ const IndividualTherapyView = ({
         <TherapyTimeSpentBlock />
         <TherapySessionParticipantsBlock />
         <TherapyTableBlock />
-        <AdditionalTherapyDetailBlock />
+        <AdditionalTherapyDetailBlock otherData={otherData} />
       </WidgetFormContainer>
     </FormProvider>
   )
