@@ -6,10 +6,12 @@ interface InsuranceInfoSectionProps {
 }
 
 const InsuranceInfoSection = ({ insurance }: InsuranceInfoSectionProps) => {
-  const [primaryPolicy, secondaryPolicy] = insurance.filter(
-    (policy) =>
-      policy.insurancePolicyPriority === 'Primary' ||
-      policy.insurancePolicyPriority === 'Secondary',
+  const primaryPolicy = insurance.find(
+    (policy) => policy.insurancePolicyPriority === 'Primary',
+  )
+
+  const secondaryPolicy = insurance.find(
+    (policy) => policy.insurancePolicyPriority === 'Secondary',
   )
 
   return (
