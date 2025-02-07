@@ -10,6 +10,7 @@ import {
   SelectInput,
 } from '@/components'
 import { SelectOptionType } from '@/types'
+import { isDirty } from '@/ui/schedule/utils'
 import { getPrescriberSettings } from '@/ui/visit/client-actions'
 import { SchemaType } from '../../schema'
 import { useEditVisitStore } from '../../store'
@@ -19,13 +20,20 @@ const DurationSelect = () => {
   const [options, setOptions] = useState<SelectOptionType[]>([])
   const { visitTypes } = useEditVisitStore()
   const [loading, setLoading] = useState<boolean>(false)
+  const { dirtyFields } = form.formState
   const [selectedVisitType, provider, visitSequence, visitMedium] = useWatch({
     control: form.control,
     name: ['visitType', 'provider', 'visitSequence', 'visitMedium'],
   })
 
   useEffect(() => {
-    if (!provider || !selectedVisitType || !visitSequence || !visitMedium)
+    if (
+      !provider ||
+      !selectedVisitType ||
+      !visitSequence ||
+      !visitMedium ||
+      !isDirty(dirtyFields)
+    )
       return
     const visitType = visitTypes.find(
       (type) => type.encouterType === selectedVisitType,
