@@ -2,6 +2,9 @@
 
 import { useMemo, useState } from 'react'
 import { Box, Flex, ScrollArea } from '@radix-ui/themes'
+// import { ResetPasswordButton } from './reset-password-button'
+import { CODESETS } from '@/constants'
+import { useCodesetCodes } from '@/hooks'
 import { GooglePlacesContextProvider } from '@/providers/google-places-provider'
 import {
   PatientConsent,
@@ -9,6 +12,8 @@ import {
   PatientProfile,
   Relationship,
 } from '@/types'
+import { PolicyConsentDialog } from '@/ui/quicknotes/policy-consent-dialog'
+import { useStore } from '@/ui/quicknotes/store'
 import { POLICY_TYPE_A } from '../constants'
 import { TabContentHeading } from '../shared'
 import { AdditionalContactInfoCard } from './additional-contact-info'
@@ -22,11 +27,6 @@ import { PatientHistoryDialog } from './patient-history-dialog'
 import { PatientInfoForm } from './patient-info-form'
 import { PreferredPartnerCard } from './preferred-partner'
 import { RelationshipCard } from './relationship'
-// import { ResetPasswordButton } from './reset-password-button'
-import { CODESETS } from '@/constants'
-import { useCodesetCodes } from '@/hooks'
-import { PolicyConsentDialog } from '@/ui/quicknotes/policy-consent-dialog'
-import { useStore } from '@/ui/quicknotes/store'
 import { SaveButton } from './save-button'
 import { StatusSelect } from './status-selector'
 import { TestPatientCheckbox } from './test-patient-checkbox'
@@ -59,8 +59,8 @@ const PatientInfoTab = ({
   const { patient } = useStore((state) => ({
     patient: state.patient,
   }))
-  const patientConsent = patient.patientConsent !== "Verified";
-  const [isPolicyAlertOpen, setIsPolicyAlertOpen] = useState(patientConsent);
+  const patientConsent = patient.patientConsent === 'Unverifiable'
+  const [isPolicyAlertOpen, setIsPolicyAlertOpen] = useState(patientConsent)
 
   const patientPolicyA = patientConsents?.find(
     (consent) => consent?.type === POLICY_TYPE_A,
@@ -68,18 +68,18 @@ const PatientInfoTab = ({
 
   const policyDescriptions = useMemo(() => {
     const notVerifiedPolicyTypes = patientConsents
-      .filter(policy => policy.verificationStatus !== "Verified")
-      .map(policy => policy.type);
+      .filter((policy) => policy.verificationStatus === 'Unverifiable')
+      .map((policy) => policy.type)
 
     return notVerifiedPolicyTypes
-      .map(type => {
-        const policy = codes.find(code => code.value === type);
+      .map((type) => {
+        const policy = codes.find((code) => code.value === type)
         return policy
-          ? policy.attributes?.find(attr => attr.name === 'PolicyName')?.value
-          : null;
+          ? policy.attributes?.find((attr) => attr.name === 'PolicyName')?.value
+          : null
       })
-      .filter(Boolean);
-  }, [patientConsents]);
+      .filter(Boolean)
+  }, [patientConsents])
 
   return (
     <Box position="relative">
@@ -128,15 +128,18 @@ const PatientInfoTab = ({
             </Flex>
           </ScrollArea>
         </PatientInfoForm>
-        {patient.patientConsent !== "Verified" &&  policyDescriptions?.length > 0 && (
-          <PolicyConsentDialog
-            open={isPolicyAlertOpen}
-            onOpenChange={setIsPolicyAlertOpen}
-            title=''
-            message={`Patient needs to sign policy: ${policyDescriptions.join(", ")}`}
-            patientId={patientId}
-          />
-        )}
+        {patient.patientConsent !== 'Verified' &&
+          policyDescriptions?.length > 0 && (
+            <PolicyConsentDialog
+              open={isPolicyAlertOpen}
+              onOpenChange={setIsPolicyAlertOpen}
+              title=""
+              message={`Patient needs to sign policy: ${policyDescriptions.join(
+                ', ',
+              )}`}
+              patientId={patientId}
+            />
+          )}
       </GooglePlacesContextProvider>
     </Box>
   )

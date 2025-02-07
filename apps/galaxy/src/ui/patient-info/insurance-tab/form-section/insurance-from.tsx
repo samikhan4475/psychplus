@@ -170,7 +170,9 @@ const InsuranceForm = memo(
         return
       }
       toast.success(
-        insurance ? 'Policy updated successfully' : 'Policy added successfully',
+        insurance
+          ? 'Insurance updated successfully'
+          : 'Insurance added successfully',
       )
 
       return onSuccess()

@@ -95,7 +95,7 @@ const QuickNotesSignButton = ({ appointment }: QuickNotesSignButtonProps) => {
   }, [])
 
   const signNoteHandler = async () => {
-    if (patient.patientConsent !== 'Verified') {
+    if (patient.patientConsent === 'Unverifiable') {
       setIsPolicyAlertOpen(true)
       return
     }

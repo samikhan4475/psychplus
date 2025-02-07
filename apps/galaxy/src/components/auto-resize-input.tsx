@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useMemo, useRef } from 'react'
 import { Box, BoxProps } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
 import { useDebouncedCallback } from 'use-debounce'
@@ -23,6 +23,8 @@ const AutoResizeInput = ({
 }: AutoResizeInputProps) => {
   const form = useFormContext()
   const ref = useRef<HTMLDivElement>(null)
+  const value = form.watch(field)
+
   const handleChange = useDebouncedCallback(() => {
     if (ref.current) {
       form.setValue(field, ref.current.textContent ?? '', {
@@ -31,11 +33,14 @@ const AutoResizeInput = ({
     }
   }, 300)
 
-  useEffect(() => {
+  useMemo(() => {
     if (ref.current) {
-      ref.current.textContent = form.watch(field) || ''
+      if (!ref.current?.textContent && value) {
+        ref.current.textContent = value
+      }
     }
-  }, [field, form])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [value, ref.current])
 
   return (
     <Box

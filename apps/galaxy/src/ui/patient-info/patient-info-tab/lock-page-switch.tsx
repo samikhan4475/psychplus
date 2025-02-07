@@ -28,7 +28,6 @@ const LockPageSwitch = ({ patient }: LockPageSwitchProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [patient?.patientTypeEstablishedOrNew, toggleUserLock])
 
-  console.log(isUserLocked, 'ssisUserLocked')
   return (
     <FormFieldContainer className="!sticky top-0 z-[11] -mb-10 ml-28 h-10 w-fit flex-row items-center gap-2">
       <FormFieldLabel className="text-pp-black-3 !text-2">

@@ -1,4 +1,10 @@
-import { PatientAddressType, PatientProfile, PhoneNumberType } from '@/types'
+import {
+  PatientAddressType,
+  PatientProfile,
+  PhoneNumber,
+  PhoneNumberType,
+} from '@/types'
+import { sanitizePhoneNumber } from '@/utils'
 
 function applyClientSideFilters<T>(
   data: T[],
@@ -33,6 +39,20 @@ const initialAddress = {
   postalCode: '',
 }
 
+const getPhoneNumber = (
+  phoneNumbers: PhoneNumber[] = [],
+  type: PhoneNumberType,
+) => {
+  const phoneNumber = phoneNumbers?.find((number) => number.type === type)
+  if (!phoneNumber) {
+    return { ...initialPhone, type }
+  }
+  return {
+    ...phoneNumber,
+    number: sanitizePhoneNumber(phoneNumber?.number ?? ''),
+  }
+}
+
 const getInitialValues = (patient: PatientProfile) => {
   return {
     id: patient?.id,
@@ -61,15 +81,15 @@ const getInitialValues = (patient: PatientProfile) => {
     },
     contactDetails: {
       email: patient?.contactDetails?.email ?? '', // Ensure default value is set
-      homeNumber: patient?.contactDetails?.phoneNumbers?.find(
-        (number) => number.type === 'Home',
-      ) ?? { ...initialPhone, type: 'Home' as PhoneNumberType }, // Ensure initialPhone matches schema
-      workNumber: patient?.contactDetails?.phoneNumbers?.find(
-        (number) => number.type === 'Business',
-      ) ?? { ...initialPhone, type: 'Business' },
-      mobileNumber: patient?.contactDetails?.phoneNumbers?.find(
-        (number) => number.type === 'Contact',
-      ) ?? { ...initialPhone, type: 'Contact' },
+      homeNumber: getPhoneNumber(patient?.contactDetails?.phoneNumbers, 'Home'),
+      workNumber: getPhoneNumber(
+        patient?.contactDetails?.phoneNumbers,
+        'Business',
+      ),
+      mobileNumber: getPhoneNumber(
+        patient?.contactDetails?.phoneNumbers,
+        'Contact',
+      ),
       homeAddress: patient?.contactDetails?.addresses?.find(
         (address) => address.type === 'Home',
       ) ?? { ...initialAddress, type: 'Home' },
