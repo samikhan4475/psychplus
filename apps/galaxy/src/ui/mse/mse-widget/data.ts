@@ -181,6 +181,7 @@ const transformIn = (value?: QuickNoteSectionItem[]): MseWidgetSchemaType => {
   const result = createEmptyFormValues()
 
   value?.forEach((item) => {
+    if (!item.sectionItem) return
     if (item.sectionItem === 'widgetContainerCheckboxField') {
       result.widgetContainerCheckboxField = item.sectionItemValue
     }
