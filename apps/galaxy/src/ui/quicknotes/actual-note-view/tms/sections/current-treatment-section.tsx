@@ -1,6 +1,7 @@
 import React from 'react'
 import { Flex, Text } from '@radix-ui/themes'
 import { TmsWidgetSchemaType } from '@/ui/procedures/tms-tab/tms-widget-schema'
+import { formatReadableString } from '@/utils'
 import { LabelAndValue } from '../../shared'
 
 interface Props<T> {
@@ -18,7 +19,7 @@ const CurrentTreatmentSection = ({ data }: Props<TmsWidgetSchemaType>) => {
       <LabelAndValue label="Coil Type Used:" value={data.coilTypeUsed} />
       <LabelAndValue
         label="Treatment Parameter Adjustments:"
-        value={data.treatmentParameter}
+        value={formatReadableString(data.treatmentParameter)}
       />
       {data.treatmentParameter === 'AdjustmentsMade' && (
         <LabelAndValue label="" value={data.treatmentAdjustmentDetail} />

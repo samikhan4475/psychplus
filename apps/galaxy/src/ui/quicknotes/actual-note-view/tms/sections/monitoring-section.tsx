@@ -67,7 +67,7 @@ const MonitoringSection = ({ data }: Props<TmsWidgetSchemaType>) => {
               value={data[option.key as keyof TmsWidgetSchemaType] as string}
             />
             {data[option.key as keyof TmsWidgetSchemaType] === 'yes' && (
-              <Text>
+              <Text className="text-1" weight="regular">
                 {data[option.detailsKey as keyof TmsWidgetSchemaType] as string}
               </Text>
             )}

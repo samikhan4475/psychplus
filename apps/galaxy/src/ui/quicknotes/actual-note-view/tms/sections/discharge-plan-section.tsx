@@ -6,6 +6,7 @@ import { useGenericEventListener } from '@/hooks'
 import { PatientReferral } from '@/types'
 import { TmsWidgetSchemaType } from '@/ui/procedures/tms-tab/tms-widget-schema'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
+import { capitalizeFirstLetter, formatReadableString } from '@/utils'
 import { Details } from '../../referrals/details'
 import { getDefaultPayload } from '../../referrals/utils'
 import { LabelAndValue } from '../../shared'
@@ -80,11 +81,13 @@ const DischargePlanSection = ({ data }: Props<TmsWidgetSchemaType>) => {
               {option.detailKey && option.key === 'modifyTreatmentPlan' ? (
                 <Text className="text-1 font-medium">
                   Treatment plan will be modified to begin the{' '}
-                  {
-                    data[
-                      option.detailKey as keyof TmsWidgetSchemaType
-                    ] as string
-                  }
+                  {capitalizeFirstLetter(
+                    formatReadableString(
+                      data[
+                        option.detailKey as keyof TmsWidgetSchemaType
+                      ] as string,
+                    ),
+                  )}{' '}
                   Protocol.
                 </Text>
               ) : (

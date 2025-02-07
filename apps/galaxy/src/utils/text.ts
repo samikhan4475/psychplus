@@ -15,9 +15,16 @@ const capitalizeName = (name: string) => {
   return nameParts.join(' ')
 }
 
+function formatReadableString(input: string): string {
+  return input
+    .replace(/([A-Z])/g, " $1")
+    .trim();
+}
+
 export {
   truncateString,
   decodeUrlString,
   capitalizeFirstLetter,
   capitalizeName,
+  formatReadableString
 }
