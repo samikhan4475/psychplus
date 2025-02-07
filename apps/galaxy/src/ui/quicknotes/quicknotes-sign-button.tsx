@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 'use client'
 
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useParams, useSearchParams } from 'next/navigation'
 import { Button } from '@radix-ui/themes'
 import { PenLineIcon } from 'lucide-react'
@@ -60,13 +60,15 @@ const QuickNotesSignButton = ({ appointment }: QuickNotesSignButtonProps) => {
     staffId: state.user.staffId,
     staffRoleCode: state.staffResource.staffRoleCode,
   }))
-  const { loading, sign, markAsError, setWidgetsData, patient } = useStore(
+  const { loading, sign, markAsError, setWidgetsData, patient, isMarkedAsError, setMarkedStatus } = useStore(
     (state) => ({
       loading: state.loading,
       sign: state.sign,
       setWidgetsData: state.setWidgetsData,
       markAsError: state.markAsError,
+      isMarkedAsError: state.isMarkedAsError,
       patient: state.patient,
+      setMarkedStatus: state.setMarkedStatus,
     }),
   )
 
@@ -93,6 +95,13 @@ const QuickNotesSignButton = ({ appointment }: QuickNotesSignButtonProps) => {
   const showAlert = useCallback((info: Partial<AlertInfo>) => {
     setAlertInfo({ ...initialAlertInfo, ...info, show: true })
   }, [])
+
+  useEffect(() => {
+    if(isMarkedAsError) {
+      setAlertInfo({ ...initialAlertInfo, show: false })
+      setMarkedStatus(false)
+    }
+  }, [isMarkedAsError, setMarkedStatus])
 
   const signNoteHandler = async () => {
     if (patient.patientConsent === 'Unverifiable') {

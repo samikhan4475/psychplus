@@ -47,6 +47,8 @@ interface Store {
   setWidgetsData: (data: QuickNoteSectionItem[]) => void
   setActualNoteWidgetsData: (data: QuickNoteSectionItem[]) => void
   updateCptCodes: UpdateCptCodes
+  setMarkedStatus: (payload: boolean) => void
+  isMarkedAsError?: boolean
 }
 
 interface StoreInitialState {
@@ -162,21 +164,30 @@ const createStore = (initialState: StoreInitialState) =>
         }
       }
     },
+    setMarkedStatus: (payload) => {
+      set({ isMarkedAsError: payload })
+    },
     markAsError: async (payload) => {
-      set({ loading: true })
-      const { coSignedByUserId } = get().signOptions || {}
-      const body = {
-        ...payload,
-        coSignedByUserId,
-        isError: true,
+      try {
+        set({ loading: true })
+        const { coSignedByUserId } = get().signOptions || {}
+        const body = {
+          ...payload,
+          coSignedByUserId,
+          isError: true,
+        }
+        const signResults = await signNoteAction(body)
+        if (signResults.state === 'success') {
+          toast.success('Quicknote signed!')
+          return
+        }
+        toast.error(signResults.error)
+        set({ loading: false, isMarkedAsError: true })
+      } catch (e) {
+        set({ loading: false, isMarkedAsError: true })
+        toast.error(`${e}`)
+        return;
       }
-      const signResults = await signNoteAction(body)
-      set({ loading: false })
-      if (signResults.state === 'success') {
-        toast.success('Quicknote signed!')
-        return
-      }
-      toast.error(signResults.error)
     },
 
     unsavedChanges: {},
