@@ -4,7 +4,12 @@ import { useLayoutEffect, useState } from 'react'
 import { Flex, ScrollArea } from '@radix-ui/themes'
 import { useShallow } from 'zustand/react/shallow'
 import { TreatmentBillingAlert } from '@/components'
-import { Appointment, QuickNoteSectionItem, StaffComment } from '@/types'
+import {
+  Appointment,
+  PatientConsent,
+  QuickNoteSectionItem,
+  StaffComment,
+} from '@/types'
 import { ActualNoteView } from './actual-note-view/actual-note-view'
 import { QuickNoteDataProvider } from './quick-note-data-provider'
 import { QuickNotesHeader } from './quicknotes-header'
@@ -19,6 +24,7 @@ interface QuickNotesViewProps {
   readonly widgets: WidgetType[]
   readonly visitType: string
   readonly visitSequence: string
+  readonly patientConsents: PatientConsent[]
   readonly widgetsData: QuickNoteSectionItem[]
   staffComments: StaffComment[]
 }
@@ -29,6 +35,7 @@ export function QuickNotesClientView({
   appointment,
   widgets,
   visitType,
+  patientConsents,
   visitSequence,
   widgetsData = [],
   staffComments = [],
@@ -73,7 +80,10 @@ export function QuickNotesClientView({
         treatmentComments={treatmentComments ?? []}
       />
       <QuickNotesSaver />
-      <QuickNotesHeader appointment={appointment} />
+      <QuickNotesHeader
+        appointment={appointment}
+        patientConsents={patientConsents}
+      />
       <Flex className="h-full max-h-[calc(100dvh-408px)] w-full">
         <ScrollArea className="h-full pr-3" type="always">
           <Flex direction="column" height="100%" gap="2">

@@ -1,12 +1,12 @@
 'use client'
 
+import { useState } from 'react'
+import { Button, Dialog, Flex, Text } from '@radix-ui/themes'
+import { TriangleAlert } from 'lucide-react'
+import toast from 'react-hot-toast'
 import { sendPolicyNoticeAction } from '@/actions'
 import { CloseDialogTrigger } from '@/components'
 import { NotificationType, Policy } from '@/types'
-import { Button, Dialog, Flex, Text } from '@radix-ui/themes'
-import { TriangleAlert } from 'lucide-react'
-import { useState } from 'react'
-import toast from 'react-hot-toast'
 
 interface PolicyConsentDialogProps {
   open: boolean
@@ -23,41 +23,39 @@ const PolicyConsentDialog = ({
   message,
   patientId,
 }: PolicyConsentDialogProps) => {
-  const [isSmsLoading, setIsSmsLoading] = useState(false);
-  const [isEmailLoading, setIsEmailLoading] = useState(false);
-  const sendSms = async () => {
-    setIsSmsLoading(true);
-    const result = await sendPolicyNoticeAction({
-      patientId,
-      channels: [NotificationType.Sms],
-      policyType: Policy.PolicyB,
-    })
-    setIsSmsLoading(false);
-    if (result.state === 'error') {
-      toast.error('Failed to send text')
-      return
-    }
+  const [isLoading, setIsLoading] = useState(false)
 
-    toast.success('Text sent!')
-    onOpenChange(false);
+  const hasCustomerInitiation = message?.includes('Customer Initiation')
+  const hasPatientInitiation = message?.includes('Patient Initiation')
+  const policiesToSend: Policy[] = []
+
+  if (hasCustomerInitiation) policiesToSend.push(Policy.PolicyA)
+  if (hasPatientInitiation) policiesToSend.push(Policy.PolicyB)
+
+  const sendPolicyNotice = async (channels: NotificationType[]) => {
+    setIsLoading(true)
+    for (const policyType of policiesToSend) {
+      const result = await sendPolicyNoticeAction({
+        patientId,
+        channels,
+        policyType,
+      })
+      if (result.state === 'error') {
+        toast.error(
+          `Failed to send ${
+            channels.includes(NotificationType.Sms) ? 'text' : 'email'
+          }`,
+        )
+        return
+      }
+    }
+    setIsLoading(false)
+    toast.success(
+      `${channels.includes(NotificationType.Sms) ? 'Text' : 'Email'} sent!`,
+    )
+    onOpenChange(false)
   }
 
-  const sendEmail = async () => {
-    setIsEmailLoading(true);
-    const result = await sendPolicyNoticeAction({
-      patientId,
-      channels: [NotificationType.Email],
-      policyType: Policy.PolicyB,
-    })
-    setIsEmailLoading(false);
-    if (result.state === 'error') {
-      toast.error('Failed to send email')
-      return
-    }
-
-    toast.success('Email sent!')
-    onOpenChange(false);
-  }
   return (
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
       <Dialog.Content className="bg-pp-warning-bg-1 border-pp-warning-border relative max-w-[440px] rounded-2 border p-4 pb-5 [box-shadow:none]">
@@ -79,8 +77,8 @@ const PolicyConsentDialog = ({
               <Button
                 variant="outline"
                 color="gray"
-                onClick={sendEmail}
-                disabled={isEmailLoading}
+                onClick={() => sendPolicyNotice([NotificationType.Email])}
+                disabled={isLoading}
                 className="bg-white text-pp-black-3 w-[166px]"
               >
                 <Text size="2">{'Via Email'}</Text>
@@ -88,8 +86,8 @@ const PolicyConsentDialog = ({
               <Button
                 variant="outline"
                 color="gray"
-                onClick={sendSms}
-                disabled={isSmsLoading}
+                onClick={() => sendPolicyNotice([NotificationType.Sms])}
+                disabled={isLoading}
                 className="bg-pp-link-text text-white w-[166px]"
               >
                 <Text size="2">{'Via Sms'}</Text>

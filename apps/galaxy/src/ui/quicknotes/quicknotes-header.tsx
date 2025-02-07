@@ -1,7 +1,7 @@
 'use client'
 
 import { Flex, Separator, Text } from '@radix-ui/themes'
-import { Appointment } from '@/types'
+import { Appointment, PatientConsent } from '@/types'
 import { AlertDialog } from './alert-dialog'
 import { QuickNotesClearButton } from './quicknotes-clear-button'
 import { QuickNotesCopyMyPreviousButton } from './quicknotes-copy-my-previous-button'
@@ -25,9 +25,13 @@ import { QuickNotesVisitTypeDropdown } from './quicknotes-visit-type-dropdown'
 
 interface QuickNotesHeaderProps {
   appointment: Appointment
+  patientConsents: PatientConsent[]
 }
 
-const QuickNotesHeader = ({ appointment }: QuickNotesHeaderProps) => {
+const QuickNotesHeader = ({
+  appointment,
+  patientConsents,
+}: QuickNotesHeaderProps) => {
   return (
     <Flex
       direction="column"
@@ -46,7 +50,10 @@ const QuickNotesHeader = ({ appointment }: QuickNotesHeaderProps) => {
           <QuickNotesClearButton />
           <QuickNotesSaveButton appointment={appointment} />
           <QuickNotesUploadButton />
-          <QuickNotesSignButton appointment={appointment} />
+          <QuickNotesSignButton
+            appointment={appointment}
+            patientConsents={patientConsents}
+          />
         </Flex>
       </Flex>
       <Separator className="w-full" />

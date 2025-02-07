@@ -1,14 +1,15 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 'use client'
 
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useMemo, useEffect, useState } from 'react'
 import { useParams, useSearchParams } from 'next/navigation'
 import { Button } from '@radix-ui/themes'
 import { PenLineIcon } from 'lucide-react'
 import toast from 'react-hot-toast'
-import { STAFF_ROLE_CODE_PRESCRIBER } from '@/constants'
+import { CODESETS, STAFF_ROLE_CODE_PRESCRIBER } from '@/constants'
+import { useCodesetCodes } from '@/hooks'
 import { useStore as useGlobalStore } from '@/store'
-import { Appointment } from '@/types'
+import { Appointment, PatientConsent } from '@/types'
 import { useStore as useAllergiesStore } from '@/ui/allergy/patient-allergies-widget/store'
 import { useStore as useDiagnosisStore } from '@/ui/diagnosis/store'
 import { AlertDialog } from '../alerts'
@@ -16,7 +17,6 @@ import { ALLERGIES_ERROR_MESSAGE } from '../allergy/patient-allergies-widget/con
 import {
   SEND_TO_SIGNATURE_BUTTON,
   SIGN_BUTTON,
-  SIGN_CONSENT_WARNING,
   SIGN_PRIMARY_NOTE_EXIST,
   SIGN_PRIOR_VISIT_TIME_WARNING,
   SIGN_PROVIDER_NOTE_WARNING,
@@ -27,6 +27,7 @@ import { useStore, validateAllergies, validateDiagnosis } from './store'
 
 interface QuickNotesSignButtonProps {
   appointment: Appointment
+  patientConsents: PatientConsent[]
 }
 
 interface AlertInfo {
@@ -47,7 +48,10 @@ const initialAlertInfo: AlertInfo = {
   disableClose: false,
 }
 
-const QuickNotesSignButton = ({ appointment }: QuickNotesSignButtonProps) => {
+const QuickNotesSignButton = ({
+  appointment,
+  patientConsents,
+}: QuickNotesSignButtonProps) => {
   const { allergiesData, setAllergiesError } = useAllergiesStore((state) => ({
     allergiesData: state.allergiesListData,
     setAllergiesError: state.setAllergiesError,
@@ -71,7 +75,22 @@ const QuickNotesSignButton = ({ appointment }: QuickNotesSignButtonProps) => {
       setMarkedStatus: state.setMarkedStatus,
     }),
   )
+  const codes = useCodesetCodes(CODESETS.PatientConsentPolicyType)
+  const policyDescriptions = useMemo(() => {
+    const notVerifiedPolicyTypes = patientConsents
+      .filter((policy) => policy.verificationStatus !== 'Verified')
+      .map((policy) => policy.type)
 
+    return notVerifiedPolicyTypes
+      .map((type) => {
+        const policy = codes.find((code) => code.value === type)
+        return policy
+          ? policy.attributes?.find((attr) => attr.name === 'PolicyName')?.value
+          : null
+      })
+      .filter(Boolean)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [patientConsents])
   const { canSignButtonQuickNotePage, canSendToSignatureButtonQuickNotePage } =
     useQuickNotesPermissions()
   const isPrescriber = staffRoleCode === STAFF_ROLE_CODE_PRESCRIBER
@@ -213,7 +232,7 @@ const QuickNotesSignButton = ({ appointment }: QuickNotesSignButtonProps) => {
         open={isPolicyAlertOpen}
         onOpenChange={setIsPolicyAlertOpen}
         title="Warning"
-        message={SIGN_CONSENT_WARNING}
+        message={`Patient needs to sign policy: ${policyDescriptions.join(", ")}`}
         patientId={patientId}
       />
     </>

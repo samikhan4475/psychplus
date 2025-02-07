@@ -4,6 +4,7 @@ import { getPatientStaffCommentsAction } from '@/actions'
 import { getQuickNoteDetailAction } from '@/actions/get-quicknote-detail'
 import { getAppointment } from '@/api'
 import { STAFF_COMMENT_STATUS } from '@/types'
+import { getPatientConsentsAction } from '../patient-info/patient-info-tab/actions'
 import { QuickNoteSectionName } from './constants'
 import { QuickNotesClientView } from './quicknotes-client-view.tsx'
 import { getCachedWidgetsByVisitType, getWidgetIds } from './utils'
@@ -52,11 +53,13 @@ const QuickNotesView = async ({
 
   const [
     widgetsResponse,
+    consentsResult,
     codesResponse,
     appoinmentCodesResponse,
     staffComments,
   ] = await Promise.all([
     getQuickNoteDetailAction(patientId, patientDependentWidgetsIds),
+    getPatientConsentsAction(patientId),
     getQuickNoteDetailAction(
       patientId,
       [QuickNoteSectionName.QuicknoteSectionCodes],
@@ -82,6 +85,9 @@ const QuickNotesView = async ({
   if (widgetsResponse.state === 'error') {
     return <Text>{widgetsResponse.error}</Text>
   }
+  if (consentsResult.state === 'error') {
+    return <div>{consentsResult.error}</div>
+  }
   if (codesResponse.state === 'error') {
     return <Text>{codesResponse.error}</Text>
   }
@@ -103,6 +109,7 @@ const QuickNotesView = async ({
       patientId={patientId}
       appointmentId={appointmentId}
       appointment={appointmentResult.data}
+      patientConsents={consentsResult.data}
       widgets={widgets}
       visitType={visitType}
       widgetsData={widgetsData}
