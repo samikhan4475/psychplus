@@ -1,5 +1,6 @@
 'use client'
 
+import { useMemo } from 'react'
 import { Flex } from '@radix-ui/themes'
 import { CODESETS } from '@/constants'
 import { useCodesetOptions } from '@/hooks'
@@ -13,15 +14,20 @@ import {
   getSlashedPaddedDateString,
   getUserFullName,
 } from '@/utils'
-import { PatientVital } from '../vitals'
+import { useStore } from '../vitals'
 import { LabelAndValue } from './label-and-value'
 
 interface PatientBannerProps {
   user: PatientProfile
-  vitals?: PatientVital
 }
 
-const UserInfoSection = ({ user, vitals }: PatientBannerProps) => {
+const UserInfoSection = ({ user }: PatientBannerProps) => {
+  const { data } = useStore()
+  const vital = useMemo(
+    () => (data && data?.length > 0 ? data?.[0] : null),
+    [data],
+  )
+
   const statusOptions = useCodesetOptions(CODESETS.CustomerStatus)
   const patientStatus = statusOptions?.find(
     (item) => item?.value === user.status,
@@ -67,7 +73,7 @@ const UserInfoSection = ({ user, vitals }: PatientBannerProps) => {
         />
         <LabelAndValue
           label="BP"
-          value={formatBloodPressure(vitals?.systolic, vitals?.diastolic)}
+          value={formatBloodPressure(vital?.systolic, vital?.diastolic)}
         />
       </Flex>
     </>

@@ -82,7 +82,7 @@ const useStore = create<StoreState>((set, get) => ({
     if (handleQuicknotesLoading) set({ quicknotesLoading: true })
     else set({ loading: true })
 
-    set({ error: undefined })
+    set({ error: undefined, data: undefined })
 
     const result = await getPatientVitalsAction({
       payload: {

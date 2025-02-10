@@ -6,6 +6,7 @@ import {
   getPatientVitalsAction,
   getPcpInfoAction,
 } from './actions'
+import { BmiValue } from './bmi-value'
 import { CareTeamInfoSection } from './care-team-info-section'
 import { InsuranceInfoSection } from './insurance-info-section'
 import { LabelAndValue } from './label-and-value'
@@ -35,7 +36,7 @@ const PatientBanner = async ({ patientId, user }: PatientBannerProps) => {
     const vitals =
       vitalsResponse.status === 'fulfilled' &&
       vitalsResponse.value.state !== 'error'
-        ? vitalsResponse.value.data
+        ? vitalsResponse.value.data?.[0]
         : undefined
 
     const careTeam =
@@ -76,12 +77,12 @@ const PatientBanner = async ({ patientId, user }: PatientBannerProps) => {
         <Flex mr="6">
           <UserAvatar user={user} />
         </Flex>
-        <UserInfoSection user={user} vitals={vitals} />
+        <UserInfoSection user={user} />
         <Flex direction="column" className="gap-[2px] md:flex-1">
           <VitalsInfoSection vitals={vitals} />
         </Flex>
         <Flex direction="column" className="gap-[2px] md:flex-1">
-          <LabelAndValue label="BMI" value={vitals?.bodyMassIndex} />
+          <BmiValue />
           <LabelAndValue
             label="CC on file"
             value={isCreditCardOnFile(creditCardVerificationStatus)}
