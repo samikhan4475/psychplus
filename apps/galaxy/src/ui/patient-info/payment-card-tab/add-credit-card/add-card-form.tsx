@@ -17,6 +17,7 @@ import {
 import { CreditCardType } from '@/constants'
 import { AllowedCards, CreditCard } from '@/types'
 import { cn, zipCodeSchema } from '@/utils'
+import { beautifyErrorMessage } from '@/utils/error'
 import { addPatientCardAction, setPrimaryPatientCard } from '../actions'
 import { BillingAddress } from './billing-address'
 import { CardDetails } from './card-details'
@@ -138,7 +139,9 @@ const AddCardForm = ({
     })
 
     if (result.state === 'error') {
-      setError(result.error ?? 'Could not add credit card')
+      setError(
+        beautifyErrorMessage(result?.error) ?? 'Could not add credit card',
+      )
       return
     }
 
