@@ -15,11 +15,13 @@ const SchedulerView = ({
   noOfDays = 13,
   patient,
   onVisitAdd,
+  offsetStartDate,
 }: {
   showFollowUpFilter?: boolean
   noOfDays?: number
   patient?: NewPatient
   onVisitAdd?: () => void
+  offsetStartDate?: string
 }) => {
   const { fetchAvailableSlots, loading } = useStore((state) => ({
     fetchAvailableSlots: state.fetchAppointments,
@@ -43,7 +45,7 @@ const SchedulerView = ({
         >
           <SchedulerFilterGroup showFollowUpFilter={showFollowUpFilter} />
 
-          <DayHeader noOfDays={noOfDays} />
+          <DayHeader noOfDays={noOfDays} offsetStartDate={offsetStartDate} />
         </Flex>
         {loading ? (
           <Flex height="100%" align="center">

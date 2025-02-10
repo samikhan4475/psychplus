@@ -1,14 +1,17 @@
 'use client'
 
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { Cross1Icon } from '@radix-ui/react-icons'
 import { Button, Dialog, Flex } from '@radix-ui/themes'
 import { Plus } from 'lucide-react'
+import { useFormContext, useWatch } from 'react-hook-form'
 import { NewPatient } from '@/types'
 import {
   DateStepper as SchedulerDateStepper,
   SchedulerView,
 } from '@/ui/schedule/scheduler-view'
+import { SchemaType } from '../schema'
+import { getOffsetStartDate } from '../utils'
 
 const CloseDialogIcon = () => (
   <Dialog.Close className="absolute right-3 top-3 cursor-pointer">
@@ -25,11 +28,25 @@ const CloseDialogIcon = () => (
 const CalenderView = ({
   onVisitAdd,
   patient,
+  appointmentDate,
 }: {
   onVisitAdd: () => void
   patient: undefined | NewPatient
+  appointmentDate: undefined | string
 }) => {
+  const form = useFormContext<SchemaType>()
   const [isOpen, setIsOpen] = useState(false)
+  const next = useWatch({
+    control: form.control,
+    name: 'next',
+  })
+  const offsetStartDate = useMemo(() => {
+    const offsetStartDate = getOffsetStartDate(
+      next,
+      appointmentDate ?? new Date().toISOString(),
+    )
+    return offsetStartDate
+  }, [appointmentDate, next])
 
   return (
     <Dialog.Root
@@ -66,6 +83,7 @@ const CalenderView = ({
           noOfDays={6}
           patient={patient}
           onVisitAdd={onVisitAdd}
+          offsetStartDate={offsetStartDate}
         />
       </Dialog.Content>
     </Dialog.Root>

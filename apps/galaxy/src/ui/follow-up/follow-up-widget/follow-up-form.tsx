@@ -141,6 +141,7 @@ const FollowUpForm = ({
 
         <CreateFollowUpButton loading={loading} onSubmit={onSubmit} />
         <CalenderView
+          appointmentDate={appointment?.appointmentDate}
           onVisitAdd={() =>
             search({
               patientIds: [Number(patientId)],

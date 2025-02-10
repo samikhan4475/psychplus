@@ -1,22 +1,38 @@
 'use client'
 
 import { useEffect } from 'react'
+import { parseAbsoluteToLocal, startOfWeek } from '@internationalized/date'
 import { Box, Flex, Grid, Text } from '@radix-ui/themes'
 import { addDays } from 'date-fns'
 import { cn } from '@/utils'
+import { START_OF_WEEK_LOCALE } from '../constants'
 import { NavigationButton } from './navigation-button'
 import { useStore } from './store'
 import { getCurrentWeekStart } from './utils'
 
-const DayHeader = ({ noOfDays = 13 }: { noOfDays?: number }) => {
+const DayHeader = ({
+  offsetStartDate,
+  noOfDays = 13,
+}: {
+  offsetStartDate?: string
+  noOfDays?: number
+}) => {
   const appointmentDates = useStore((state) => state.dates)
   const setAppointmentDates = useStore((state) => state.setDates)
   const serverProviderAvailabilities = useStore((state) => state.data)
 
   useEffect(() => {
-    const currentDate = getCurrentWeekStart()
-    setAppointmentDates(currentDate, noOfDays)
-  }, [setAppointmentDates, noOfDays])
+    if (offsetStartDate) {
+      const weekStartDate = startOfWeek(
+        parseAbsoluteToLocal(offsetStartDate),
+        START_OF_WEEK_LOCALE,
+      )
+      setAppointmentDates(new Date(weekStartDate.toAbsoluteString()), noOfDays)
+    } else {
+      const currentDate = getCurrentWeekStart()
+      setAppointmentDates(currentDate, noOfDays)
+    }
+  }, [setAppointmentDates, noOfDays, offsetStartDate])
 
   const handleForwardNavigation = () => {
     const nextDay = addDays(appointmentDates[0].date, 1)
@@ -29,7 +45,12 @@ const DayHeader = ({ noOfDays = 13 }: { noOfDays?: number }) => {
   }
 
   return (
-    <Grid columns="16" className="pl-2.5 pr-5 mt-[7px]" position="sticky" top="0">
+    <Grid
+      columns="16"
+      className="mt-[7px] pl-2.5 pr-5"
+      position="sticky"
+      top="0"
+    >
       <Flex align="center">
         <Text className="text-pp-black-3 col-span-2 text-[14px] font-bold">{`${serverProviderAvailabilities.length} Providers`}</Text>
       </Flex>
