@@ -1,15 +1,10 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { Flex, Text } from '@radix-ui/themes'
-import { PropsWithRow } from '@/components'
+import { Flex } from '@radix-ui/themes'
+import { PropsWithRow, TextCell } from '@/components'
 import { useStore as useRootStore } from '@/store'
-import {
-  capitalizeName,
-  cn,
-  constructQuickNotesUrl,
-  getPatientMRN,
-} from '@/utils'
+import { capitalizeName, constructQuickNotesUrl, getPatientMRN } from '@/utils'
 import { useStore as useQuickNotesStore } from '../../quicknotes/store'
 import { SchedulingHistoryData } from '../types'
 
@@ -36,13 +31,9 @@ const VisitIDCell = ({ row }: PropsWithRow<SchedulingHistoryData>) => {
   }
   return (
     <Flex align="center" gap="1" p="1" onClick={onRowClick}>
-      <Text
-        className={cn('text-pp-black-3 cursor-pointer')}
-        weight="regular"
-        size="1"
-      >
+      <TextCell className="truncate" wrapperClass="w-full">
         {row.original.visitId}
-      </Text>
+      </TextCell>
     </Flex>
   )
 }

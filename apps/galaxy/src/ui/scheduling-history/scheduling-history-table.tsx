@@ -34,13 +34,11 @@ const SchedulingHistoryTable = () => {
             <LoadingPlaceholder />
           </Flex>
         ) : (
-          <Box className="min-w-max">
-            <DataTable
-              columns={column(isTCMVisitType, sort, sortData)}
-              data={data?.list ?? []}
-              isRowSpan
-            />
-          </Box>
+          <DataTable
+            columns={column(isTCMVisitType, sort, sortData)}
+            data={data?.list ?? []}
+            isRowSpan
+          />
         )}
       </ScrollArea>
     </Flex>

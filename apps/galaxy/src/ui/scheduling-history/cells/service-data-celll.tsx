@@ -19,7 +19,7 @@ const ServiceOfferedCell = ({ row }: PropsWithRow<SchedulingHistoryData>) => {
 
   return (
     <Flex align="center" gap="1" p="1">
-      <TextCell>{label}</TextCell>
+      <TextCell className="truncate" wrapperClass="w-full">{label}</TextCell>
     </Flex>
   )
 }

@@ -1,7 +1,6 @@
 'use client'
 
 import React from 'react'
-import { Flex } from '@radix-ui/themes'
 import { PropsWithRow, TextCell } from '@/components'
 import { CODESETS } from '@/constants'
 import { useCodesetOptions } from '@/hooks'
@@ -15,9 +14,10 @@ const VisitTypeCell = ({ row }: PropsWithRow<SchedulingHistoryData>) => {
   )
 
   return (
-    <Flex align="center" gap="1" p="1">
-      <TextCell className="capitalize">{`${vistTypeCode?.label}, ${visitSequenceType}, ${visitMedium}`}</TextCell>
-    </Flex>
+    <TextCell
+      className="truncate capitalize"
+      wrapperClass="w-full"
+    >{`${vistTypeCode?.label}, ${visitSequenceType}, ${visitMedium}`}</TextCell>
   )
 }
 

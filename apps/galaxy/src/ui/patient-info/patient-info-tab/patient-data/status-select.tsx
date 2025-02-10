@@ -12,7 +12,12 @@ const StatusSelect = () => {
       <FormFieldLabel className="!text-1" required>
         Status
       </FormFieldLabel>
-      <CodesetSelect name="status" codeset={CODESETS.CustomerStatus} size="1" />
+      <CodesetSelect
+        name="status"
+        disabled
+        codeset={CODESETS.CustomerStatus}
+        size="1"
+      />
       <FormFieldError name="status" />
     </FormFieldContainer>
   )

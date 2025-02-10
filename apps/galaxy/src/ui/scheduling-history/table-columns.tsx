@@ -149,7 +149,11 @@ const getSchedulingColumns = (
           className="!text-black p-1 !font-medium"
         />
       ),
-      cell: ({ row }) => <TextCell>{row.original.locationName}</TextCell>,
+      cell: ({ row }) => (
+        <TextCell className="truncate" wrapperClass="w-full">
+          {row.original.locationName}
+        </TextCell>
+      ),
     },
     {
       id: 'serviceOffered',
@@ -198,7 +202,11 @@ const getSchedulingColumns = (
           className="!text-black p-1 !font-medium"
         />
       ),
-      cell: ({ row }) => <TextCell>{row.original.providerName} </TextCell>,
+      cell: ({ row }) => (
+        <TextCell className="truncate" wrapperClass="w-full">
+          {row.original.providerName}
+        </TextCell>
+      ),
     },
     {
       id: 'cosignerName',

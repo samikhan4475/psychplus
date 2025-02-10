@@ -64,8 +64,8 @@ const PatientBanner = async ({ patientId, user }: PatientBannerProps) => {
     return (
       <Flex
         gap="3"
-        py="4"
-        px="5"
+        py="2"
+        px="3"
         wrap="wrap"
         direction={{
           md: 'row',
@@ -76,22 +76,27 @@ const PatientBanner = async ({ patientId, user }: PatientBannerProps) => {
         <Flex mr="6">
           <UserAvatar user={user} />
         </Flex>
-        <UserInfoSection user={user} />
+        <UserInfoSection user={user} vitals={vitals} />
         <Flex direction="column" className="gap-[2px] md:flex-1">
           <VitalsInfoSection vitals={vitals} />
         </Flex>
         <Flex direction="column" className="gap-[2px] md:flex-1">
+          <LabelAndValue label="BMI" value={vitals?.bodyMassIndex} />
           <LabelAndValue
             label="CC on file"
             value={isCreditCardOnFile(creditCardVerificationStatus)}
           />
           <PatientVerification patientVerifications={user} />
+        </Flex>
+        <Flex direction="column" className="gap-[2px] md:flex-1">
           <InsuranceInfoSection insurance={insuranse} />
           <UserContactDetailsSection user={user} />
         </Flex>
         <Flex direction="column" className="gap-[2px] md:flex-1">
           <CareTeamInfoSection careTeam={careTeam} />
           <PcpInfoSection pcp={pcp} />
+        </Flex>
+        <Flex direction="column" className="gap-[2px] md:flex-1">
           <PharmacyInfoSection pharmacy={pharmacy} />
         </Flex>
       </Flex>

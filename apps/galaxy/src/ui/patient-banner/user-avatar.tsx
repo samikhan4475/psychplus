@@ -10,7 +10,7 @@ const UserAvatar = ({ user }: UserAvatarProps) => {
     ? `/ehr/api/patients/${user.id}/profileimage`
     : undefined
 
-  return <Avatar src={avatarSrc} fallback="NA" size="7" highContrast />
+  return <Avatar src={avatarSrc} fallback="NA" size="6" highContrast />
 }
 
 export { UserAvatar }
