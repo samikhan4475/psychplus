@@ -15,7 +15,9 @@ const transformOut =
         pid: Number(patientId),
         sectionName: QuickNoteSectionName.QuickNoteSectionSocialHx,
         sectionItem: key,
-        sectionItemValue: value,
+        sectionItemValue: Array.isArray(value)
+          ? value?.join(', ')
+          : String(value),
       })
     })
 
@@ -33,11 +35,18 @@ const transformOut =
 const transformIn = (
   value: QuickNoteSectionItem[],
 ): SocialHxWidgetSchemaType => {
-  const result: Record<string, string> = getInitialValues()
+  const result: Record<string, string | string[]> = getInitialValues()
 
   value.forEach((item) => {
-    result[item.sectionItem as keyof SocialHxWidgetSchemaType] =
-      item.sectionItemValue
+    const key = item.sectionItem as keyof SocialHxWidgetSchemaType
+    if (key === 'traumaHx') {
+      result[key] =
+        typeof item?.sectionItemValue === 'string'
+          ? item?.sectionItemValue?.split(',')?.map((v) => v.trim())
+          : []
+    } else {
+      result[key] = item.sectionItemValue
+    }
   })
   return result as SocialHxWidgetSchemaType
 }

@@ -1,4 +1,4 @@
-import { RadioSelectSection } from '@/components'
+import { GroupSelectSection } from '@/components'
 
 const BLOCK_ID = 'traumaHx'
 
@@ -21,7 +21,7 @@ const TRAUMA_HX_BLOCK_OPTIONS = [
 
 const TraumaHxBlock = () => {
   return (
-    <RadioSelectSection
+    <GroupSelectSection
       label={BLOCK_TITLE}
       field={BLOCK_ID}
       options={TRAUMA_HX_BLOCK_OPTIONS}

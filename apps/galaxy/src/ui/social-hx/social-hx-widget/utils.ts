@@ -7,7 +7,7 @@ const getInitialValues = (): SocialHxWidgetSchemaType => ({
   employed: undefined,
   legalHistory: undefined,
   living: undefined,
-  traumaHx: undefined,
+  traumaHx: [],
   other: '',
 })
 

@@ -3,7 +3,6 @@ import {
   SocialHxLiving,
   SocialHxProfessionalEducation,
   SocialHxRelationStatus,
-  SocialHxTraumaHx,
 } from './types'
 
 type SocialHxWidgetSchemaType = z.infer<typeof socialHxWidgetSchema>
@@ -35,13 +34,7 @@ const socialHxWidgetSchema = z.object({
       SocialHxLiving.Homeless,
     ])
     .optional(),
-  traumaHx: z
-    .enum([
-      SocialHxTraumaHx.Physical,
-      SocialHxTraumaHx.Sexual,
-      SocialHxTraumaHx.Emotional,
-    ])
-    .optional(),
+  traumaHx: z.array(z.string()),
   other: z.string().optional(),
 })
 

@@ -60,7 +60,11 @@ const Details = ({
       )}
       {renderIfValue(
         'Trauma Hx:',
-        labelOfValue(data.traumaHx, TRAUMA_HX_BLOCK_OPTIONS),
+        data?.traumaHx?.length
+          ? data?.traumaHx
+              ?.map((item) => labelOfValue(item, TRAUMA_HX_BLOCK_OPTIONS))
+              .join(', ')
+          : undefined,
       )}
       {renderIfValue('Other:', data.other)}
     </BlockContainer>
