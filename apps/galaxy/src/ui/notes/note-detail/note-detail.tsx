@@ -2,6 +2,7 @@ import { PropsWithChildren } from 'react'
 import { Box, Flex, Heading, Separator, Text } from '@radix-ui/themes'
 import { format } from 'date-fns'
 import { LoadingPlaceholder } from '@/components/loading-placeholder'
+import { PsychiatricEvaluation } from '@/ui/quicknotes/actual-note-view/psychiatric-evaluation'
 import { useStore } from '../store'
 import { groupBySectionName } from '../utils'
 import { CreateNoteDetailView } from './create-note-detail-view'
@@ -54,29 +55,37 @@ const NoteDetail = ({ children }: PropsWithChildren) => {
           noteDocuments={groupedData['UploadDocument']}
         />
       ) : (
-        widgets.map(
-          ({ id, actualNoteDetailComponent: ActualNoteDetailComponent }) => {
-            if (!ActualNoteDetailComponent) return null
+        <>
+          {patient && appointment && (
+            <PsychiatricEvaluation
+              patient={patient}
+              appointment={appointment}
+            />
+          )}
+          {widgets.map(
+            ({ id, actualNoteDetailComponent: ActualNoteDetailComponent }) => {
+              if (!ActualNoteDetailComponent) return null
 
-            const dataForWidget = groupedData[id] || []
-            return (
-              <Box key={id}>
-                <ActualNoteDetailComponent
-                  data={dataForWidget}
-                  appointments={appointments}
-                  allergies={allergies}
-                  appointment={appointment}
-                  patientId={patientId}
-                  appointmentId={appointmentId}
-                  patient={patient}
-                  groupedData={groupedData}
-                  visitSequence={selectedRow?.visitSequence ?? ''}
-                  visitType={selectedRow?.visitTypeCode ?? ''}
-                />
-              </Box>
-            )
-          },
-        )
+              const dataForWidget = groupedData[id] || []
+              return (
+                <Box key={id}>
+                  <ActualNoteDetailComponent
+                    data={dataForWidget}
+                    appointments={appointments}
+                    allergies={allergies}
+                    appointment={appointment}
+                    patientId={patientId}
+                    appointmentId={appointmentId}
+                    patient={patient}
+                    groupedData={groupedData}
+                    visitSequence={selectedRow?.visitSequence ?? ''}
+                    visitType={selectedRow?.visitTypeCode ?? ''}
+                  />
+                </Box>
+              )
+            },
+          )}
+        </>
       )}
       <Box>{children}</Box>
       {noteDetail?.[0]?.addendum && (

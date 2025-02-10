@@ -9,7 +9,7 @@ const getPcpInfoAction = async (
   const payload = {
     relationships: ['PrimaryCare'],
     isIncludeExternalProvider: true,
-    patientIds: patientId,
+    patientId: patientId,
   }
   const response = await api.POST<ExternalProviderDetail[]>(
     api.FETCH_EXTERNAL_PROVIDER_WITH_PATIENT_ENDPOINT(),
