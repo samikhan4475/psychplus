@@ -2,7 +2,7 @@ import { GroupSelectSection } from '@/components'
 
 const BLOCK_ID = 'traumaHx'
 
-const BLOCK_TITLE = 'Trauma Hx'
+const BLOCK_TITLE = 'Trauma History'
 
 const TRAUMA_HX_BLOCK_OPTIONS = [
   {

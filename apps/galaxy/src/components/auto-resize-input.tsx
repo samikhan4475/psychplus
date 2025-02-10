@@ -34,11 +34,14 @@ const AutoResizeInput = ({
   }, 300)
 
   useMemo(() => {
-    if (ref.current) {
-      if (!ref.current?.textContent && value) {
-        ref.current.textContent = value
-      }
+    if (!ref.current) return
+    if (
+      (!ref.current?.textContent && value) ||
+      (ref.current?.textContent && !value)
+    ) {
+      ref.current.textContent = value
     }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value, ref.current])
 

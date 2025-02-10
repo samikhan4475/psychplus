@@ -59,7 +59,7 @@ const Details = ({
         labelOfValue(data.living, LIVING_BLOCK_OPTIONS),
       )}
       {renderIfValue(
-        'Trauma Hx:',
+        'Trauma History:',
         data?.traumaHx?.length
           ? data?.traumaHx
               ?.map((item) => labelOfValue(item, TRAUMA_HX_BLOCK_OPTIONS))
