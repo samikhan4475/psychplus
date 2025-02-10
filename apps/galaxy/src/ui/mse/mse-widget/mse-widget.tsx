@@ -3,8 +3,8 @@
 import { useEffect } from 'react'
 import { FormProvider } from 'react-hook-form'
 import {
-  WidgetClearButton,
   FormFieldError,
+  WidgetClearButton,
   WidgetFormContainer,
   WidgetSaveButton,
 } from '@/components'
@@ -48,18 +48,23 @@ const MseWidget = ({
 }: MseWidgetProps) => {
   const form = useMseWidgetForm(initialValue)
 
+  const mseShouldValidate =
+    appointment &&
+    [ProviderType.Psychiatry, ProviderType.Therapy].includes(
+      appointment.providerType as ProviderType,
+    )
   useEffect(() => {
-    if (
-      appointment &&
-      [ProviderType.Psychiatry, ProviderType.Therapy].includes(
-        appointment.providerType as ProviderType,
-      )
-    ) {
-      form.setValue('shouldValidate', 'yes')
-    } else {
-      form.setValue('shouldValidate', 'no')
-    }
+    form.reset({
+      ...form.getValues(),
+      shouldValidate: mseShouldValidate ? 'yes' : 'no',
+    })
   }, [initialValue, appointment])
+
+  const defaultInitialValues = {
+    ...createEmptyFormValues(),
+    shouldValidate: mseShouldValidate ? 'yes' : 'no',
+    widgetContainerCheckboxField: form.watch('widgetContainerCheckboxField'),
+  }
 
   return (
     <FormProvider {...form}>
@@ -76,19 +81,13 @@ const MseWidget = ({
         headerRight={
           <>
             <WidgetClearButton
-              defaultInitialValues={createEmptyFormValues}
+              defaultInitialValues={defaultInitialValues}
               shouldCheckPermission
             />
             {!isMseTab && <WidgetSaveButton shouldCheckPermission />}
           </>
         }
-        formResetValues={{
-          ...createEmptyFormValues(),
-          shouldValidate: form.watch('shouldValidate'),
-          widgetContainerCheckboxField: form.watch(
-            'widgetContainerCheckboxField',
-          ),
-        }}
+        formResetValues={defaultInitialValues}
         tags={isMseTab ? [QuickNoteSectionName.QuicknoteSectionMse] : []}
         topHeader={isMseTab && <MseHeader />}
       >

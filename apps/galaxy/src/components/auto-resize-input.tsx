@@ -51,7 +51,7 @@ const AutoResizeInput = ({
       spellCheck={spellCheck}
       suppressContentEditableWarning
       className={cn(
-        'border-pp-gray-8 min-w-48 max-h-52 max-w-2xl overflow-y-auto overflow-x-hidden rounded-1 border border-solid px-1 py-[1px] text-1 outline-offset-1 outline-accent-8 focus:outline-2',
+        'border-pp-gray-8 min-w-48 max-h-52 max-w-2xl overflow-y-auto overflow-x-hidden rounded-1 border border-solid px-1 py-[1px] text-1 outline-offset-1 outline-accent-8 focus:outline-2 [&::-webkit-scrollbar-thumb]:rounded-2 [&::-webkit-scrollbar-thumb]:bg-grayA-8 [&::-webkit-scrollbar-track]:rounded-2 [&::-webkit-scrollbar-track]:bg-grayA-3 [&::-webkit-scrollbar]:[width:6px]',
         {
           'whitespace-nowrap': resize === 'horizontal',
         },

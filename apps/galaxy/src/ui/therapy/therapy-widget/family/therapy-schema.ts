@@ -40,7 +40,8 @@ const FamilyTherapySchema = z.object({
     .min(1, { message: 'Interventions is required' }),
   additionalTherapyDetail: z
     .string()
-    .min(1, { message: 'Additional Therapy Detail is required' }),
+    .min(1, { message: 'Additional Therapy Detail is required' })
+    .max(4000, 'Max 4000 characters are allowed'),
 })
 
 export {

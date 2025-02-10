@@ -2,6 +2,7 @@ import { QuickNoteSectionItem } from '@/types'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { MseWidgetSchemaType } from './mse-widget-schema'
 import { createEmptyFormValues } from './mseDefaults'
+import { validateYesNoEnum } from './utils'
 
 const QUICKNOTE_SECTION_NAME = 'QuicknoteSectionMse'
 
@@ -187,39 +188,45 @@ const transformIn = (value?: QuickNoteSectionItem[]): MseWidgetSchemaType => {
     }
     if (item.sectionItem.includes('schizophreniaHallucinationsValues')) {
       result.schizophreniaHallucinationsValues =
-        item.sectionItemValue.split(',')
+        item?.sectionItemValue?.split(',')
     }
     if (item.sectionItem.includes('schizophreniaDelusionValues')) {
-      result.schizophreniaDelusionValues = item.sectionItemValue.split(',')
+      result.schizophreniaDelusionValues = item?.sectionItemValue?.split(',')
     }
     if (item.sectionItem.includes('YesNo')) {
       switch (item.sectionItem) {
         case 'tcsiYesNo':
-          result.tcsiYesNo = item.sectionItemValue as 'yes' | 'no' | ''
+          result.tcsiYesNo = validateYesNoEnum(item.sectionItemValue) as
+            | 'yes'
+            | 'no'
+            | ''
           break
         case 'tchiYesNo':
-          result.tchiYesNo = item.sectionItemValue as 'yes' | 'no' | ''
+          result.tchiYesNo = validateYesNoEnum(item.sectionItemValue) as
+            | 'yes'
+            | 'no'
+            | ''
           break
         case 'tcDelusionsYesNo':
-          result.tcDelusionsYesNo = item.sectionItemValue as 'yes' | 'no' | ''
+          result.tcDelusionsYesNo = validateYesNoEnum(item.sectionItemValue) as
+            | 'yes'
+            | 'no'
+            | ''
           break
         case 'tcHallucinationsYesNo':
-          result.tcHallucinationsYesNo = item.sectionItemValue as
-            | 'yes'
-            | 'no'
-            | ''
+          result.tcHallucinationsYesNo = validateYesNoEnum(
+            item.sectionItemValue,
+          ) as 'yes' | 'no' | ''
           break
         case 'mmRecentIntactYesNo':
-          result.mmRecentIntactYesNo = item.sectionItemValue as
-            | 'yes'
-            | 'no'
-            | ''
+          result.mmRecentIntactYesNo = validateYesNoEnum(
+            item.sectionItemValue,
+          ) as 'yes' | 'no' | ''
           break
         case 'mmRemoteIntactYesNo':
-          result.mmRemoteIntactYesNo = item.sectionItemValue as
-            | 'yes'
-            | 'no'
-            | ''
+          result.mmRemoteIntactYesNo = validateYesNoEnum(
+            item.sectionItemValue,
+          ) as 'yes' | 'no' | ''
           break
         default:
           break
@@ -227,63 +234,64 @@ const transformIn = (value?: QuickNoteSectionItem[]): MseWidgetSchemaType => {
     }
 
     if (item.sectionItem.includes('Other')) {
+      const otherValue = item.sectionItemValue ?? ''
       switch (item.sectionItem) {
         case 'mmOtherDetails':
-          result.mmOtherDetails = item.sectionItemValue
+          result.mmOtherDetails = otherValue
           break
         case 'mhtOtherDetails':
-          result.mhtOtherDetails = item.sectionItemValue
+          result.mhtOtherDetails = otherValue
           break
         case 'intOtherDetails':
-          result.intOtherDetails = item.sectionItemValue
+          result.intOtherDetails = otherValue
           break
         case 'inthtOtherDetails':
-          result.inthtOtherDetails = item.sectionItemValue
+          result.inthtOtherDetails = otherValue
           break
         case 'insOtherDetails':
-          result.insOtherDetails = item.sectionItemValue
+          result.insOtherDetails = otherValue
           break
         case 'inshtOtherDetails':
-          result.inshtOtherDetails = item.sectionItemValue
+          result.inshtOtherDetails = otherValue
           break
         case 'jdgOtherDetails':
-          result.jdgOtherDetails = item.sectionItemValue
+          result.jdgOtherDetails = otherValue
           break
         case 'jdghtOtherDetails':
-          result.jdghtOtherDetails = item.sectionItemValue
+          result.jdghtOtherDetails = otherValue
           break
         case 'oriOtherDetails':
-          result.oriOtherDetails = item.sectionItemValue
+          result.oriOtherDetails = otherValue
           break
         case 'appOtherDetails':
-          result.appOtherDetails = item.sectionItemValue
+          result.appOtherDetails = otherValue
           break
         case 'behOtherDetails':
-          result.behOtherDetails = item.sectionItemValue
+          result.behOtherDetails = otherValue
           break
         case 'psyOtherDetails':
-          result.psyOtherDetails = item.sectionItemValue
+          result.psyOtherDetails = otherValue
           break
         case 'speOtherDetails':
-          result.speOtherDetails = item.sectionItemValue
+          result.speOtherDetails = otherValue
           break
         case 'modOtherDetails':
-          result.modOtherDetails = item.sectionItemValue
+          result.modOtherDetails = otherValue
           break
         case 'affOtherDetails':
-          result.affOtherDetails = item.sectionItemValue
+          result.affOtherDetails = otherValue
           break
         case 'thpOtherDetails':
-          result.thpOtherDetails = item.sectionItemValue
+          result.thpOtherDetails = otherValue
           break
         case 'tcOtherDetails':
-          result.tcOtherDetails = item.sectionItemValue
+          result.tcOtherDetails = otherValue
           break
         case 'hiOtherDetails':
-          result.hiOtherDetails = item.sectionItemValue
+          result.hiOtherDetails = otherValue
           break
         case 'siOtherDetails':
-          result.siOtherDetails = item.sectionItemValue
+          result.siOtherDetails = otherValue
           break
         default:
           break
@@ -293,71 +301,113 @@ const transformIn = (value?: QuickNoteSectionItem[]): MseWidgetSchemaType => {
 
     switch (prefix) {
       case ExamPrefixes.ORIENTATION:
-        result.orientation.push(valueToSchemaPe[item.sectionItem])
+        if (valueToSchemaPe[item.sectionItem]) {
+          result.orientation.push(valueToSchemaPe[item.sectionItem])
+        }
         break
       case ExamPrefixes.APPEARANCE:
-        result.appearance.push(valueToSchemaPe[item.sectionItem])
+        if (valueToSchemaPe[item.sectionItem]) {
+          result.appearance.push(valueToSchemaPe[item.sectionItem])
+        }
         break
       case ExamPrefixes.BEHAVIOR:
-        result.behavior.push(valueToSchemaPe[item.sectionItem])
+        if (valueToSchemaPe[item.sectionItem]) {
+          result.behavior.push(valueToSchemaPe[item.sectionItem])
+        }
         break
       case ExamPrefixes.PSYCHOMOTOR:
-        result.psychomotor.push(valueToSchemaPe[item.sectionItem])
+        if (valueToSchemaPe[item.sectionItem]) {
+          result.psychomotor.push(valueToSchemaPe[item.sectionItem])
+        }
         break
       case ExamPrefixes.SPEECH:
-        result.speech.push(valueToSchemaPe[item.sectionItem])
+        if (valueToSchemaPe[item.sectionItem]) {
+          result.speech.push(valueToSchemaPe[item.sectionItem])
+        }
         break
       case ExamPrefixes.MOOD:
-        result.mood.push(valueToSchemaPe[item.sectionItem])
+        if (valueToSchemaPe[item.sectionItem]) {
+          result.mood.push(valueToSchemaPe[item.sectionItem])
+        }
         break
       case ExamPrefixes.AFFECT:
-        result.affect.push(valueToSchemaPe[item.sectionItem])
+        if (valueToSchemaPe[item.sectionItem]) {
+          result.affect.push(valueToSchemaPe[item.sectionItem])
+        }
         break
       case ExamPrefixes.THOUGHT_PROCESS:
-        result.thoughtProcess.push(valueToSchemaPe[item.sectionItem])
+        if (valueToSchemaPe[item.sectionItem]) {
+          result.thoughtProcess.push(valueToSchemaPe[item.sectionItem])
+        }
         break
       case ExamPrefixes.MEMORY_HOW_TESTED:
-        result.memoryHowTested.push(valueToSchemaPe[item.sectionItem])
+        if (valueToSchemaPe[item.sectionItem]) {
+          result.memoryHowTested.push(valueToSchemaPe[item.sectionItem])
+        }
         break
       case ExamPrefixes.INTELLIGENCE:
-        result.intelligence.push(valueToSchemaPe[item.sectionItem])
+        if (valueToSchemaPe[item.sectionItem]) {
+          result.intelligence.push(valueToSchemaPe[item.sectionItem])
+        }
         break
       case ExamPrefixes.INTELLIGENCE_HOW_TESTED:
-        result.intelligenceHowTested.push(valueToSchemaPe[item.sectionItem])
+        if (valueToSchemaPe[item.sectionItem]) {
+          result.intelligenceHowTested.push(valueToSchemaPe[item.sectionItem])
+        }
         break
       case ExamPrefixes.INSIGHT:
-        result.insight.push(valueToSchemaPe[item.sectionItem])
+        if (valueToSchemaPe[item.sectionItem]) {
+          result.insight.push(valueToSchemaPe[item.sectionItem])
+        }
         break
       case ExamPrefixes.INSIGHT_HOW_TESTED:
-        result.insightHowTested.push(valueToSchemaPe[item.sectionItem])
+        if (valueToSchemaPe[item.sectionItem]) {
+          result.insightHowTested.push(valueToSchemaPe[item.sectionItem])
+        }
         break
       case ExamPrefixes.JUDGMENT:
-        result.judgment.push(valueToSchemaPe[item.sectionItem])
+        if (valueToSchemaPe[item.sectionItem]) {
+          result.judgment.push(valueToSchemaPe[item.sectionItem])
+        }
         break
       case ExamPrefixes.JUDGMENT_HOW_TESTED:
-        result.judgmentHowTested.push(valueToSchemaPe[item.sectionItem])
+        if (valueToSchemaPe[item.sectionItem]) {
+          result.judgmentHowTested.push(valueToSchemaPe[item.sectionItem])
+        }
         break
       case ExamPrefixes.MEMORY:
-        result.memoryRemoteIntactOther.push(valueToSchemaPe[item.sectionItem])
+        if (valueToSchemaPe[item.sectionItem]) {
+          result.memoryRemoteIntactOther.push(valueToSchemaPe[item.sectionItem])
+        }
         break
       case ExamPrefixes.THOUGHT_CONTENT:
-        result.thoughtContentOther.push(valueToSchemaPe[item.sectionItem])
+        if (valueToSchemaPe[item.sectionItem]) {
+          result.thoughtContentOther.push(valueToSchemaPe[item.sectionItem])
+        }
         break
       case ExamPrefixes.THOUGHT_CONTENT_SI:
-        result.siUnDisclosed.push(valueToSchemaPe[item.sectionItem])
+        if (valueToSchemaPe[item.sectionItem]) {
+          result.siUnDisclosed.push(valueToSchemaPe[item.sectionItem])
+        }
         break
       case ExamPrefixes.THOUGHT_CONTENT_HI:
-        result.hiUnDisclosed.push(valueToSchemaPe[item.sectionItem])
+        if (valueToSchemaPe[item.sectionItem]) {
+          result.hiUnDisclosed.push(valueToSchemaPe[item.sectionItem])
+        }
         break
       case ExamPrefixes.SCHIZOPHRENIA_DELUSION:
-        result.schizophreniaDelusionValues.push(
-          valueToSchemaPe[item.sectionItem],
-        )
+        if (valueToSchemaPe[item.sectionItem]) {
+          result.schizophreniaDelusionValues.push(
+            valueToSchemaPe[item.sectionItem],
+          )
+        }
         break
       case ExamPrefixes.SCHIZOPHRENIA_HALLUCINATIONS:
-        result.schizophreniaHallucinationsValues.push(
-          valueToSchemaPe[item.sectionItem],
-        )
+        if (valueToSchemaPe[item.sectionItem]) {
+          result.schizophreniaHallucinationsValues.push(
+            valueToSchemaPe[item.sectionItem],
+          )
+        }
         break
       default:
         break

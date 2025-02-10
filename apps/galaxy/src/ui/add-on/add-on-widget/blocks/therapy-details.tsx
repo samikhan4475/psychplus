@@ -1,8 +1,7 @@
 'use client'
 
-import { Flex, TextArea } from '@radix-ui/themes'
-import { useFormContext } from 'react-hook-form'
-import { BlockLabel, FormFieldError } from '@/components'
+import { Flex } from '@radix-ui/themes'
+import { AutoResizeInput, BlockLabel, FormFieldError } from '@/components'
 
 interface TherapyDetailProps {
   field: string
@@ -10,18 +9,15 @@ interface TherapyDetailProps {
 }
 
 const TherapyDetail = ({ field, label }: TherapyDetailProps) => {
-  const form = useFormContext()
-
   return (
     <Flex gap="2" align="start">
       <BlockLabel name={field} required>
         {label}
       </BlockLabel>
       <Flex direction={'column'}>
-        <TextArea
-          size="1"
-          className="h-[90px] w-[800px] flex-grow"
-          {...form.register(field)}
+        <AutoResizeInput
+          field={field}
+          className="min-h-[90px] min-w-[800px] resize"
         />
         <FormFieldError name={field} />
       </Flex>

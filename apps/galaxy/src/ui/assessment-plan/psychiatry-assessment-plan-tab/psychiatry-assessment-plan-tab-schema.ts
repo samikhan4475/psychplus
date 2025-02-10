@@ -9,7 +9,8 @@ const psychiatryAssessmentPlanTabSchema = z.object({
   patientDiscussionCompleted: z.enum(['yes', 'no']),
   assessmentTreatmentPlanNotes: z
     .string()
-    .min(30, ASSESSMENT_PLAN_ERROR_MESSAGE),
+    .min(30, ASSESSMENT_PLAN_ERROR_MESSAGE)
+    .max(4000, 'Max 4000 characters are allowed'),
 })
 
 export {

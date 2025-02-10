@@ -1,10 +1,10 @@
 import { Flex } from '@radix-ui/themes'
 import {
+  AutoResizeInput,
   BlockLabel,
   FormFieldContainer,
   FormFieldError,
   ReadMoreDialog,
-  TextAreaInput,
 } from '@/components'
 import { QuickNoteSectionItem } from '@/types'
 
@@ -21,10 +21,9 @@ const AdditionalTherapyDetailBlock = ({
       </BlockLabel>
       <Flex className="w-full max-w-full flex-grow flex-col">
         <Flex direction="row" gap="1" align="end" width="100%">
-          <TextAreaInput
+          <AutoResizeInput
+            className="min-h-[80px] min-w-[765px] resize"
             field="additionalTherapyDetail"
-            className="mb-4 h-[90px] w-full max-w-full flex-grow"
-            formContainerClassName="!w-fit"
           />
           <ReadMoreDialog data={otherData} />
         </Flex>
