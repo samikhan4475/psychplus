@@ -10,6 +10,7 @@ const Details = ({
   data: PatientVital[]
   className?: string
 }) => {
+  if (data.length === 0) return null
   return (
     <BlockContainer heading="Vitals">
       {data.length > 0 && (

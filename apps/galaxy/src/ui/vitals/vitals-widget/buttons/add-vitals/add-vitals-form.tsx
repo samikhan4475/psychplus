@@ -1,5 +1,6 @@
 'use client'
 
+import { useEffect } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Box, Flex, Table } from '@radix-ui/themes'
 import { useForm, type SubmitHandler } from 'react-hook-form'
@@ -91,6 +92,9 @@ const AddVitalsForm = ({
     reValidateMode: 'onChange',
   })
 
+  const heightInCm = Number(form.watch('height') ?? 0)
+  const weight = Number(form.watch('weight') ?? 0)
+
   const saveAddVitalsPopupPermission = useHasPermission('saveAddVitalsPopup')
   const onSubmit: SubmitHandler<SchemaType> = async (formData) => {
     if (!saveAddVitalsPopupPermission) {
@@ -158,6 +162,14 @@ const AddVitalsForm = ({
     ])
   }
 
+  useEffect(() => {
+    if (heightInCm && weight) {
+      const height = heightInCm / 100
+      const bmi = weight / (height * height)
+      form.setValue('bmi', bmi.toFixed(2))
+    }
+  }, [heightInCm, weight])
+
   return (
     <FormContainer form={form} onSubmit={onSubmit}>
       <Box className="w-full">
@@ -188,6 +200,7 @@ const AddVitalsForm = ({
                       field={getFormField(label) as SchemaType}
                       className="w-[87px]"
                       unit={getUnitValue(label, unitSystem)}
+                      disabled={label === VITAL_TABLE_LABELS.bmi}
                     />
                   )}
                 </Table.Cell>

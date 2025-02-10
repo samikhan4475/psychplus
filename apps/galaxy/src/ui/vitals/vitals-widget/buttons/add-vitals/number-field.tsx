@@ -8,10 +8,12 @@ const NumberField = ({
   field,
   unit,
   className,
+  disabled,
 }: {
   field: SchemaType
   unit?: string
   className?: string
+  disabled?: boolean
 }) => {
   const form = useFormContext()
   return (
@@ -22,6 +24,7 @@ const NumberField = ({
         step="0.01"
         {...form.register(field as string)}
         className={cn('h-full', className)}
+        disabled={disabled}
       />
       {unit && <FormFieldLabel>{unit}</FormFieldLabel>}
     </FormFieldContainer>

@@ -35,7 +35,7 @@ const PatientBanner = async ({ patientId, user }: PatientBannerProps) => {
     const vitals =
       vitalsResponse.status === 'fulfilled' &&
       vitalsResponse.value.state !== 'error'
-        ? vitalsResponse.value.data[vitalsResponse.value.data.length - 1]
+        ? vitalsResponse.value.data
         : undefined
 
     const careTeam =
