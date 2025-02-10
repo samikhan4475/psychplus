@@ -45,7 +45,7 @@ const InsuranceView = ({
   return (
     <Flex direction="column" ref={scrollRef} gap="1">
       <InsuranceHeader />
-      <ScrollArea className="max-h-[calc(100dvh-375px)]">
+      <ScrollArea className="max-h-[calc(100dvh-320px)]">
         <Flex direction="column" gap="1">
           {(filteredInsurances && filteredInsurances?.length > 0) ||
           isAddFormOpen ? (

@@ -84,7 +84,7 @@ export function QuickNotesClientView({
         appointment={appointment}
         patientConsents={patientConsents}
       />
-      <Flex className="h-full max-h-[calc(100dvh-408px)] w-full">
+      <Flex className="h-full max-h-[calc(100dvh-355px)] w-full">
         <ScrollArea className="h-full pr-3" type="always">
           <Flex direction="column" height="100%" gap="2">
             {widgets.map(({ component: WidgetComponent, id }) => {

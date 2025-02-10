@@ -54,7 +54,7 @@ const InsurancePlanSelect = ({
 
       <SelectInput
         field="insurancePlanId"
-        placeholder="Select Plan"
+        placeholder={payerName ? `Select Plan` : `Select payer to enable`}
         disabled={loading || !plans || !!selectedInsuranceId}
         options={options}
         buttonClassName="border-pp-gray-2 w-full h-7 border border-solid !outline-none [box-shadow:none]"

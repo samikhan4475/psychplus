@@ -1,60 +1,54 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { Checkbox, Flex, Text } from '@radix-ui/themes'
+import { Flex, Select } from '@radix-ui/themes'
 import { useStore } from './store'
+import { FilterOptions } from './types'
 
 const ShowCheckbox = () => {
   const { setFilteredInsurances } = useStore((state) => ({
     setFilteredInsurances: state.setFilteredInsurances,
   }))
 
-  const [status, setStatus] = useState({ active: true, inactive: false })
+  const [filterValue, setFilterValue] = useState<FilterOptions>(
+    FilterOptions.ALL,
+  )
 
   useEffect(() => {
-    setFilteredInsurances(status.active, status.inactive)
-  }, [status, setFilteredInsurances])
+    setFilteredInsurances(filterValue)
+  }, [filterValue, setFilteredInsurances])
 
-  const handleStatusChange = (
-    type: 'active' | 'inactive',
-    checked: boolean | 'indeterminate',
-  ) => {
-    setStatus((prev) => ({ ...prev, [type]: checked }))
+  const handleFilterChange = (value: FilterOptions) => {
+    console.log('Selected filter:', value)
+    setFilterValue(value)
   }
 
   return (
     <Flex direction="row" gap="2" align="center">
-      <Text size="1" weight="medium">
-        Show
-      </Text>
-
-      <Text as="label" size="1">
-        <Flex gap="1">
-          <Checkbox
-            size="1"
-            highContrast
-            checked={status.active}
-            onCheckedChange={(checked) => handleStatusChange('active', checked)}
-          />
-          Active
-        </Flex>
-      </Text>
-
-      <Text as="label" size="1">
-        <Flex gap="1">
-          <Checkbox
-            size="1"
-            highContrast
-            checked={status.inactive}
-            onCheckedChange={(checked) =>
-              handleStatusChange('inactive', checked)
-            }
-          />
-          Inactive
-        </Flex>
-      </Text>
+      <Select.Root
+        size="1"
+        defaultValue={FilterOptions.ALL}
+        onValueChange={handleFilterChange}
+      >
+        <Select.Trigger className="min-w-28" />
+        <Select.Content highContrast position="popper">
+          <Select.Group>
+            {filterOptionsArray.map(({ label, value }) => (
+              <Select.Item key={value} value={value}>
+                {label}
+              </Select.Item>
+            ))}
+          </Select.Group>
+        </Select.Content>
+      </Select.Root>
     </Flex>
   )
 }
+
+const filterOptionsArray = [
+  { label: 'All', value: FilterOptions.ALL },
+  { label: 'Active', value: FilterOptions.ACTIVE },
+  { label: 'Inactive', value: FilterOptions.INACTIVE },
+]
 
 export { ShowCheckbox }

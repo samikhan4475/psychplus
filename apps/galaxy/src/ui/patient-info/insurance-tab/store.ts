@@ -1,21 +1,18 @@
 import { create } from 'zustand'
 import { Insurance } from '@/types'
+import { FilterOptions } from './types'
 
 interface Store {
   insurances?: Insurance[]
   filteredInsurances?: Insurance[]
   error?: string
+  filterValue: FilterOptions
   loading?: boolean
-  activeStatus: boolean | null
-  inactiveStatus: boolean | null
   patientBilling?: string
   setPatientBilling: (status: string) => void
   isAddFormOpen: boolean
   setAddFormOpen: (value: boolean) => void
-  setFilteredInsurances: (
-    isActive: boolean | null,
-    isInactive: boolean | null,
-  ) => void
+  setFilteredInsurances: (value: FilterOptions) => void
   setInsurances: (insurances: Insurance[]) => void
 }
 
@@ -25,45 +22,31 @@ const useStore = create<Store>((set, get) => ({
   isAddFormOpen: false,
   error: undefined,
   loading: undefined,
-  activeStatus: true,
-  inactiveStatus: false,
+  filterValue: FilterOptions.ALL,
   patientBilling: 'self-pay',
   setAddFormOpen: (value) => set({ isAddFormOpen: value }),
   setPatientBilling: (value) => set({ patientBilling: value }),
-
   setInsurances: (patientInsurances: Insurance[]) => {
     set({ error: undefined, loading: true })
     set({ insurances: patientInsurances, loading: false })
-    const { activeStatus, inactiveStatus } = get()
-    get().setFilteredInsurances(activeStatus, inactiveStatus)
+    const { filterValue } = get()
+    get().setFilteredInsurances(filterValue)
   },
-  setFilteredInsurances: (
-    isActive: boolean | null,
-    isInactive: boolean | null,
-  ) => {
+  setFilteredInsurances: (value: FilterOptions) => {
     const allInsurances = get().insurances || []
 
-    const filterActive = isActive === true
-    const filterInactive = isInactive === true
-    const filteredInsurances = allInsurances.filter((insurance) => {
-      const isInsuranceActive = insurance.isActive
-      if (!filterActive && !filterInactive) {
-        return false
-      }
-      if (filterActive && !filterInactive) {
-        return isInsuranceActive
-      }
-      if (!filterActive && filterInactive) {
-        return !isInsuranceActive
-      }
-
-      return true
-    })
+    const filteredInsurances =
+      value === FilterOptions.ALL
+        ? allInsurances
+        : allInsurances?.filter((insurance) =>
+            value === FilterOptions.ACTIVE
+              ? insurance.isActive
+              : !insurance.isActive,
+          )
 
     set({
       filteredInsurances,
-      activeStatus: isActive,
-      inactiveStatus: isInactive,
+      filterValue: value,
     })
   },
 }))

@@ -3,6 +3,12 @@
 import { Row } from '@tanstack/react-table'
 import { PatientAddress } from '@/types'
 
+export enum FilterOptions {
+  ALL = 'all',
+  ACTIVE = 'active',
+  INACTIVE = 'inactive',
+}
+
 interface InsuranceParams {
   payerName: string
   insurancePlanId: string

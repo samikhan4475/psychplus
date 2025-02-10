@@ -54,7 +54,7 @@ const PaymentHistoryTab = ({ patientId }: PaymentHistoryTabProps) => {
         <PaymentHeader data={data} patientId={patientId} />
         <Flex direction="column" gap="1" className="bg-white w-full py-1">
           <FilterForm patientId={patientId} />
-          <Flex direction="column" pl="2" className="h-[calc(100dvh_-_440px)]">
+          <Flex direction="column" pl="2" className="h-[calc(100dvh_-_390px)]">
             <PaymentHistoryTable />
             <PaymentHistoryTablePagination />
           </Flex>

@@ -102,7 +102,7 @@ const PatientInfoTab = ({
               <SaveButton />
             </Flex>
           </TabContentHeading>
-          <ScrollArea className="max-h-[calc(100dvh-375px)]">
+          <ScrollArea className="max-h-[calc(100dvh-340px)]">
             <Flex direction="column" gap="2">
               <CreateUserCard
                 patientId={patientId}

@@ -43,7 +43,7 @@ const getInsuranceFormDefaultValues = (insurance?: Insurance) => ({
   hasCardFrontImage: insurance?.hasCardFrontImage ?? false,
   hasCardBackImage: insurance?.hasCardBackImage ?? false,
   verificationStatus: insurance?.verificationStatus ?? 'Pending',
-  isActive: insurance?.isActive ?? false,
+  isActive: insurance?.isActive ?? true,
   ...getPolicyHolderDefaults(insurance),
   ...getAddressDefaults(insurance),
 })
