@@ -93,7 +93,7 @@ const PhysicalExamWidget = ({
         ),
     )
   }, [initialValue])
-
+  const viewWidgetContainerCheckboxField = form.watch('widgetContainerCheckboxField');
   return (
     <FormProvider {...form}>
       <WidgetFormContainer
@@ -128,13 +128,14 @@ const PhysicalExamWidget = ({
         }
         headerLeft={
           <Flex className={cn(isPhysicalExamTab && 'ml-[-11px]')}>
-            <CheckAllNormalCell
-              onSelectAllNormal={handleSelectAllNormal}
-              checked={
-                normalChipsSelected.length === normal.length &&
-                !containsAbnormal(normalChipsSelected)
-              }
-            />
+            {viewWidgetContainerCheckboxField === "show" && (
+              <CheckAllNormalCell
+                onSelectAllNormal={handleSelectAllNormal}
+                checked={
+                  normalChipsSelected.length === normal.length &&
+                  !containsAbnormal(normalChipsSelected)
+                }
+              />)}
           </Flex>
         }
         topHeader={isPhysicalExamTab && <PhysicalExamHeader />}
@@ -146,71 +147,75 @@ const PhysicalExamWidget = ({
         }}
         handleOnClear={handleOnClear}
       >
-        <GeneralBlock
-          normalChipsSelected={normalChipsSelected}
-          setNormalChipsSelected={setNormalChipsSelected}
-        />
-        <SkinBlock
-          normalChipsSelected={normalChipsSelected}
-          setNormalChipsSelected={setNormalChipsSelected}
-        />
-        <HeentBlock
-          normalChipsSelected={normalChipsSelected}
-          setNormalChipsSelected={setNormalChipsSelected}
-        />
-        <NeckBlock
-          normalChipsSelected={normalChipsSelected}
-          setNormalChipsSelected={setNormalChipsSelected}
-        />
-        <LymphNodesBlock
-          normalChipsSelected={normalChipsSelected}
-          setNormalChipsSelected={setNormalChipsSelected}
-        />
-        <ChestBlock
-          normalChipsSelected={normalChipsSelected}
-          setNormalChipsSelected={setNormalChipsSelected}
-        />
-        <CardiovascularCvsBlock
-          normalChipsSelected={normalChipsSelected}
-          setNormalChipsSelected={setNormalChipsSelected}
-        />
-        <LungsBlock
-          normalChipsSelected={normalChipsSelected}
-          setNormalChipsSelected={setNormalChipsSelected}
-        />
-        <GastrointestinalGiBlock
-          normalChipsSelected={normalChipsSelected}
-          setNormalChipsSelected={setNormalChipsSelected}
-        />
-        <GynecologicalGynBlock
-          normalChipsSelected={normalChipsSelected}
-          setNormalChipsSelected={setNormalChipsSelected}
-        />
-        <GenitourinaryGuBlock
-          normalChipsSelected={normalChipsSelected}
-          setNormalChipsSelected={setNormalChipsSelected}
-        />
-        <CentralNervousSystemCnsBlock
-          normalChipsSelected={normalChipsSelected}
-          setNormalChipsSelected={setNormalChipsSelected}
-        />
-        <PeMusculoskeletalBlock
-          normalChipsSelected={normalChipsSelected}
-          setNormalChipsSelected={setNormalChipsSelected}
-        />
-        <NutritionBlock
-          normalChipsSelected={normalChipsSelected}
-          setNormalChipsSelected={setNormalChipsSelected}
-        />
-        <PsychiatricBlock
-          normalChipsSelected={normalChipsSelected}
-          setNormalChipsSelected={setNormalChipsSelected}
-        />
-        <CranialNervesExamBlock
-          normalChipsSelected={normalChipsSelected}
-          setNormalChipsSelected={setNormalChipsSelected}
-          dependentNormalValues={dependentNormalValues}
-        />
+        {viewWidgetContainerCheckboxField === "show" && (
+          <>
+            <GeneralBlock
+              normalChipsSelected={normalChipsSelected}
+              setNormalChipsSelected={setNormalChipsSelected}
+            />
+            <SkinBlock
+              normalChipsSelected={normalChipsSelected}
+              setNormalChipsSelected={setNormalChipsSelected}
+            />
+            <HeentBlock
+              normalChipsSelected={normalChipsSelected}
+              setNormalChipsSelected={setNormalChipsSelected}
+            />
+            <NeckBlock
+              normalChipsSelected={normalChipsSelected}
+              setNormalChipsSelected={setNormalChipsSelected}
+            />
+            <LymphNodesBlock
+              normalChipsSelected={normalChipsSelected}
+              setNormalChipsSelected={setNormalChipsSelected}
+            />
+            <ChestBlock
+              normalChipsSelected={normalChipsSelected}
+              setNormalChipsSelected={setNormalChipsSelected}
+            />
+            <CardiovascularCvsBlock
+              normalChipsSelected={normalChipsSelected}
+              setNormalChipsSelected={setNormalChipsSelected}
+            />
+            <LungsBlock
+              normalChipsSelected={normalChipsSelected}
+              setNormalChipsSelected={setNormalChipsSelected}
+            />
+            <GastrointestinalGiBlock
+              normalChipsSelected={normalChipsSelected}
+              setNormalChipsSelected={setNormalChipsSelected}
+            />
+            <GynecologicalGynBlock
+              normalChipsSelected={normalChipsSelected}
+              setNormalChipsSelected={setNormalChipsSelected}
+            />
+            <GenitourinaryGuBlock
+              normalChipsSelected={normalChipsSelected}
+              setNormalChipsSelected={setNormalChipsSelected}
+            />
+            <CentralNervousSystemCnsBlock
+              normalChipsSelected={normalChipsSelected}
+              setNormalChipsSelected={setNormalChipsSelected}
+            />
+            <PeMusculoskeletalBlock
+              normalChipsSelected={normalChipsSelected}
+              setNormalChipsSelected={setNormalChipsSelected}
+            />
+            <NutritionBlock
+              normalChipsSelected={normalChipsSelected}
+              setNormalChipsSelected={setNormalChipsSelected}
+            />
+            <PsychiatricBlock
+              normalChipsSelected={normalChipsSelected}
+              setNormalChipsSelected={setNormalChipsSelected}
+            />
+            <CranialNervesExamBlock
+              normalChipsSelected={normalChipsSelected}
+              setNormalChipsSelected={setNormalChipsSelected}
+              dependentNormalValues={dependentNormalValues}
+            />
+          </>
+        )}
       </WidgetFormContainer>
     </FormProvider>
   )
