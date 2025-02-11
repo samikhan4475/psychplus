@@ -130,12 +130,13 @@ const getFirstDayOfWeek = (today?: Date): Date => {
   }
   const dayOfWeek = today.getDay()
   const firstDayOfWeek = new Date(today)
-  if (dayOfWeek !== 0) {
-    firstDayOfWeek.setDate(today.getDate() - dayOfWeek)
-  }
+
+  const offset = dayOfWeek === 0 ? -6 : 1 - dayOfWeek
+  firstDayOfWeek.setDate(today.getDate() + offset)
 
   return firstDayOfWeek
 }
+
 
 function getLastDayOfWeek(date?: Date) {
   if (!date) {

@@ -111,7 +111,7 @@ const renderLanguageAndLocation = (
     {appointmentType === 'In-Person' && (
       <Flex gap="1">
         <Flex mt="1">
-          <LocationMarkerIcon />
+          Location:
         </Flex>
         <ClinicsDropDown
           clinics={staffWithClinicsAndSlots.clinicWithSlots}
@@ -124,7 +124,7 @@ const renderLanguageAndLocation = (
     {appointmentType === 'In-Person' && (
       <Flex align="start" className="w-52 flex-wrap justify-between" gap="2">
         <Flex align="end" className="gap-[17px]">
-            <DistanceIcon />
+            Distance:
             <Text className="text-[#575759] text-[14px]">
               {
                 staffWithClinicsAndSlots.clinicWithSlots.find(
