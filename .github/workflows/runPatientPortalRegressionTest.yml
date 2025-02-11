@@ -1,0 +1,91 @@
+name: Run Patient Portal Regression Tests
+
+on:
+  workflow_dispatch:
+    inputs:
+      Environment:
+        type: environment
+        description: 'Select the environment to run tests against.'
+        required: true
+        default: development
+      Domain:
+        type: string
+        description: 'Write the domain of the environment. (i.e: https://ui.staging.psychplus.dev | https://ui-pr-1195.ode.psychplus.dev)'
+        required: true
+    
+jobs:
+  trigger-workflow:
+    permissions:
+      contents: write      
+      actions: read        
+      issues: write       
+      pull-requests: write 
+    environment: ${{ inputs.environment }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install Python Dependencies
+        run: |
+          sudo apt-get install -y python3-pip
+          pip3 install pyjwt cryptography
+
+      - name: Generate JWT for GitHub App
+        id: generate-jwt
+        run: |
+          cat <<EOF > generate_jwt.py
+          import jwt, time, os
+          
+          from cryptography.hazmat.primitives import serialization
+          
+          # Load the private key
+          private_key = """${{ secrets.GHAPP_PRIVATE_KEY }}""".encode()
+          
+          # Deserialize the private key
+          private_key_obj = serialization.load_pem_private_key(private_key, password=None)
+          
+          # Define the JWT payload
+          payload = {
+              "iat": int(time.time()),
+              "exp": int(time.time()) + 600,
+              "iss": "${{ secrets.GHAPP_REG_APP_ID }}"
+          }
+          
+          # Create the JWT
+          encoded_jwt = jwt.encode(payload, private_key_obj, algorithm="RS256")
+          
+          # Output the JWT for further use
+          # print(f"::set-output name=jwt::{encoded_jwt}")
+          with open(os.getenv('GITHUB_OUTPUT'), 'a') as fh:
+              fh.write(f"jwt={encoded_jwt}\n")
+          EOF
+          python3 generate_jwt.py
+
+      - name: Request Installation Access Token
+        id: request-token
+        run: |
+          JWT_TOKEN=${{ steps.generate-jwt.outputs.jwt }}
+          
+          RESPONSE=$(curl -s -X POST \
+          -H "Authorization: Bearer $JWT_TOKEN" \
+          -H "Accept: application/vnd.github.v3+json" \
+          https://api.github.com/app/installations/${{ secrets.GHAPP_REG_INSTALL_ID }}/access_tokens)
+
+          ACCESS_TOKEN=$(echo $RESPONSE | jq -r .token)
+          echo "token=$ACCESS_TOKEN" >> $GITHUB_OUTPUT
+
+      - name: Trigger workflow in another repo
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ steps.request-token.outputs.token }}
+          script: |
+            github.rest.repos.createDispatchEvent({
+              owner: 'Psychplus',
+              repo: 'RegressionTests',
+              event_type: 'run-patient-portal-regression-test',
+              client_payload: {
+                base_url: '${{ inputs.Domain }}',
+                env_name: '${{ inputs.Environment }}'
+              }
+            })
