@@ -14,11 +14,13 @@ import {
 
 interface Store {
   data: AvailableSlotsEvent<Appointment>[]
+  appointmentsMap: Map<string, AvailableSlotsEvent<Appointment>[]>
   weekStartDate: DateValue
   error?: string
   loading?: boolean
   formData?: AppointmentParams
   fetchData: (body?: AppointmentParams) => void
+  fetchWeekOnNavigate: (start: DateValue, end: DateValue) => void
   addWeek: () => void
   subtractWeek: () => void
   setStartDate: (date: DateValue) => void
@@ -26,6 +28,7 @@ interface Store {
 
 const useStore = create<Store>((set, get) => ({
   data: [],
+  appointmentsMap: new Map(),
   error: undefined,
   loading: undefined,
   formData: undefined,
@@ -36,8 +39,10 @@ const useStore = create<Store>((set, get) => ({
       loading: true,
       formData: body,
     })
-    const startingDate = getDateString(getCurrentWeekStartDate())
-    const params = { startingDate, ...(body?? {})}
+    const { weekStartDate, appointmentsMap } = get()
+    const startingDate = getDateString(weekStartDate)
+    const endingDate = getDateString(weekStartDate.add({ days: 7 }))
+    const params = { startingDate, endingDate, ...(body ?? {}) }
     const result = await getBookedAppointmentsAction({
       ...params,
       isServiceTimeDependant: true,
@@ -50,22 +55,67 @@ const useStore = create<Store>((set, get) => ({
         loading: false,
       })
     }
+    // revalidate cache on filter
+    appointmentsMap.clear()
+    const key = `${startingDate}-${endingDate}`
+    const transformedData = transformInBookedAppointments(result.data)
+    appointmentsMap.set(key, transformedData)
     set({
       loading: false,
       data: transformInBookedAppointments(result.data),
     })
   },
-  addWeek: () => {
-    const currentStartDate = get().weekStartDate
+  fetchWeekOnNavigate: async (start, end) => {
     set({
-      weekStartDate: getNextWeekStart(currentStartDate),
+      error: undefined,
+      loading: true,
+    })
+    const startingDate = getDateString(start)
+    const endingDate = getDateString(end)
+    const { formData, appointmentsMap } = get()
+    const key = `${startingDate}-${endingDate}`
+    if (appointmentsMap.has(key)) {
+      return set({
+        loading: false,
+        data: appointmentsMap.get(key),
+      })
+    }
+    const result = await getBookedAppointmentsAction({
+      startingDate,
+      endingDate,
+      isServiceTimeDependant: true,
+      isShowActiveVisits: true,
+      ...(formData ?? {}),
+    })
+    if (result.state === 'error') {
+      toast.error(result.error || 'Failed to retrieve appointments')
+      return set({
+        error: result.error,
+        loading: false,
+      })
+    }
+    const transformedData = transformInBookedAppointments(result.data)
+    appointmentsMap.set(key, transformedData)
+    set({
+      loading: false,
+      data: transformedData,
     })
   },
-  subtractWeek: () => {
-    const currentStartDate = get().weekStartDate
+  addWeek: () => {
+    const { weekStartDate: currentStartDate, fetchWeekOnNavigate } = get()
+    const nextWeekStart = getNextWeekStart(currentStartDate)
     set({
-      weekStartDate: getPreviousWeekStart(currentStartDate),
+      weekStartDate: nextWeekStart,
     })
+    fetchWeekOnNavigate(nextWeekStart, nextWeekStart.add({ days: 7 }))
+  },
+  subtractWeek: () => {
+    const { weekStartDate: currentStartDate, fetchWeekOnNavigate } = get()
+    const previousWeekStart = getPreviousWeekStart(currentStartDate)
+    set({
+      weekStartDate: previousWeekStart,
+    })
+    fetchWeekOnNavigate(previousWeekStart, previousWeekStart.add({ days: 7 }))
   },
   setStartDate: (date: DateValue) => {
     set({

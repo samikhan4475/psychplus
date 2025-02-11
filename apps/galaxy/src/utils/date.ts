@@ -75,7 +75,7 @@ const getCalendarDate = (dateString?: string): CalendarDate => {
 }
 
 const getSlashedDateString = (
-  date: CalendarDate | string,
+  date: DateValue | string,
   truncateYear = false,
 ) => {
   if (typeof date === 'string') {

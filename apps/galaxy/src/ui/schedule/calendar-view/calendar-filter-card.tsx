@@ -1,25 +1,22 @@
 import { useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { startOfWeek } from '@internationalized/date'
 import { Flex } from '@radix-ui/themes'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { FormContainer } from '@/components'
 import { sanitizeFormData } from '@/utils'
-import { START_OF_WEEK_LOCALE } from '../constants'
 import { useProviderId } from '../hooks'
 import { CalenderViewSchemaType } from '../types'
-import { getDateString, isDirty } from '../utils'
+import { isDirty } from '../utils'
 import { calenderViewSchema } from './calender-view-schema'
 import { ClearFilterButton } from './clear-filter-button'
 import {
-  EndDateInput,
+  DateRangeInput,
   GenderSelect,
   LanguageSelect,
   LocationDropdown,
   ProviderDropdown,
   ProviderTypeDropdown,
   ServiceDropdown,
-  StartDateInput,
   StateSelect,
   VisitMediumDropdown,
 } from './filter-fields'
@@ -30,8 +27,7 @@ import { useStore } from './store'
 
 const CalendarFilterCard = () => {
   const [isPartialFilterView, setIsPartialFilterView] = useState<boolean>(true)
-  const { setStartDate, fetchData } = useStore((state) => ({
-    setStartDate: state.setStartDate,
+  const { fetchData } = useStore((state) => ({
     fetchData: state.fetchData,
   }))
   const providerId = useProviderId()
@@ -40,8 +36,6 @@ const CalendarFilterCard = () => {
     resolver: zodResolver(calenderViewSchema),
     criteriaMode: 'all',
     defaultValues: {
-      startingDate: undefined,
-      endingDate: undefined,
       stateIds: [],
       locationIds: [],
       serviceIds: [],
@@ -59,13 +53,7 @@ const CalendarFilterCard = () => {
     if (!isDirty(dirtyFields)) return
     const transformedData = {
       ...data,
-      startingDate: getDateString(data.startingDate),
-      endingDate: getDateString(data.endingDate),
       providerIds: data.providerIds ? [Number(data.providerIds)] : [],
-    }
-    if (data.startingDate) {
-      const weekStartDate = startOfWeek(data.startingDate, START_OF_WEEK_LOCALE)
-      setStartDate(weekStartDate)
     }
     const sanitizedData = sanitizeFormData(transformedData)
     fetchData(sanitizedData)
@@ -87,8 +75,7 @@ const CalendarFilterCard = () => {
     <Flex className="bg-white z-10 rounded-[4px] px-2.5 shadow-3">
       <FormContainer form={form} onSubmit={onSubmit}>
         <Flex className="sticky top-0" wrap="wrap" gap="2" align="start" py="1">
-          <StartDateInput />
-          <EndDateInput />
+          <DateRangeInput />
           <StateSelect />
           <LocationDropdown />
           <ServiceDropdown />

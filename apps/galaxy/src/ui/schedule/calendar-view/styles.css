@@ -54,3 +54,17 @@
   margin-right: 20px !important;
   pointer-events: none !important;
 }
+
+.react-aria-CalendarGridBody tr:has(td[aria-selected='true']) {
+  background-color: #d9e2fc !important;
+}
+
+.react-aria-CalendarGridBody tr:has(td[aria-selected='true']) > td:first-child {
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+}
+
+.react-aria-CalendarGridBody tr:has(td[aria-selected='true']) > td:last-child {
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+}
