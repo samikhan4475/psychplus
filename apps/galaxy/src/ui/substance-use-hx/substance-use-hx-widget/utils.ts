@@ -48,7 +48,6 @@ const getInitialValues = () => ({
   inhalants: undefined,
   inhalantsDetails: undefined,
   questionnaire: undefined,
-  briefIntervention: undefined,
   briefInterventionDetail: undefined,
   referralTreatment: undefined,
   alcoholSubstanceCessationDiscussionDuration: undefined,

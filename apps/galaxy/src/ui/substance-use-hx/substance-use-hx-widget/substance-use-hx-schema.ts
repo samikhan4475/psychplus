@@ -29,8 +29,7 @@ const substanceUseHxWidgetSchema = z
     inhalants: z.oboolean(),
     inhalantsDetails: z.ostring(),
     questionnaire: z.enum(['yes', 'no']).optional(),
-    briefIntervention: z.oboolean(),
-    briefInterventionDetail: z.ostring(),
+    briefInterventionDetail: z.string(),
     referralTreatment: z.array(z.string()).optional(),
     alcoholSubstanceCessationDiscussionDuration: z
       .enum(['≥ 15 mins', '≥ 31 mins'])
@@ -40,6 +39,9 @@ const substanceUseHxWidgetSchema = z
     QuicknoteSectionQuestionnaireAudit: z.boolean().optional().default(false),
   })
   .superRefine((data, ctx) => {
+    const isAlcoholYes = data.alcohol === 'yes'
+    const isDrugYes = data.drugs === 'yes'
+    const isQuestionnaireYes = data.questionnaire === 'yes'
     const conditions = [
       data.opioids,
       data.sedative,
@@ -49,7 +51,7 @@ const substanceUseHxWidgetSchema = z
       data.inhalants,
     ]
 
-    if (data.drugs === 'yes') {
+    if (isDrugYes) {
       if (
         conditions.every(
           (condition) => condition === false || condition === undefined,
@@ -62,7 +64,7 @@ const substanceUseHxWidgetSchema = z
         })
       }
 
-      if (!data.QuicknoteSectionQuestionnaireDast10) {
+      if (!data.QuicknoteSectionQuestionnaireDast10 && isQuestionnaireYes) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
           path: ['QuicknoteSectionQuestionnaireDast10'],
@@ -71,11 +73,33 @@ const substanceUseHxWidgetSchema = z
       }
     }
 
-    if (data.alcohol === 'yes' && !data.QuicknoteSectionQuestionnaireAudit) {
+    if (
+      isAlcoholYes &&
+      isQuestionnaireYes &&
+      !data.QuicknoteSectionQuestionnaireAudit
+    ) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         path: ['QuicknoteSectionQuestionnaireAudit'],
         message: 'Please fill out the Audit questionnaire',
+      })
+    }
+
+    if (isAlcoholYes || isDrugYes) {
+      if (!data.referralTreatment?.length) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ['referralTreatment'],
+          message: 'Please select at least one referral to treatment',
+        })
+      }
+    }
+
+    if (!data.briefInterventionDetail) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ['briefInterventionDetail'],
+        message: 'Please fill out the brief intervention details',
       })
     }
   })

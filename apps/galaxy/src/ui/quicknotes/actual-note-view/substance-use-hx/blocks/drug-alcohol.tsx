@@ -117,7 +117,7 @@ const DrugAlcohol: React.FC<DrugAlcoholProps> = ({
           className="flex-nowrap"
         />
       )}
-      {data.briefIntervention && (
+      {data.briefInterventionDetail && (
         <LabelAndValue
           label="Brief Intervention:"
           value={data.briefInterventionDetail}

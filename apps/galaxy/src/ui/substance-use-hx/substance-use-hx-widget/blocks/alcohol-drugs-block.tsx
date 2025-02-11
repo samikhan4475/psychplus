@@ -1,4 +1,8 @@
+'use client'
+
+import { useEffect } from 'react'
 import { Flex, Text } from '@radix-ui/themes'
+import { useFormContext } from 'react-hook-form'
 import { RadioSelectSection, TextInput } from '@/components'
 import { AlcoholBlock } from './alcohol-block'
 import { BriefInterventionDetail } from './brief-intervention-block'
@@ -6,9 +10,19 @@ import { DrugsBlock } from './drugs-block'
 import { QuestionnairesBlock } from './questionnaires-block'
 import { ReferralTreatmentBlock } from './referral-treatement-block'
 
-
-
 const AlcoholDrugsBlock = () => {
+  const { watch, setValue } = useFormContext()
+  const drugs = watch('drugs')
+  const alcohol = watch('alcohol')
+  const duration = watch('alcoholSubstanceCessationDiscussionDuration')
+
+  useEffect(() => {
+    if ((drugs === 'yes' || alcohol === 'yes') && !duration) {
+      setValue('alcoholSubstanceCessationDiscussionDuration', '≥ 15 mins')
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [drugs, alcohol, duration])
+
   return (
     <Flex
       direction="column"
@@ -20,7 +34,7 @@ const AlcoholDrugsBlock = () => {
         Screening for drug/alcohol use:
       </Text>
 
-      <AlcoholBlock/>
+      <AlcoholBlock />
       <DrugsBlock />
 
       <QuestionnairesBlock />

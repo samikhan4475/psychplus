@@ -24,7 +24,6 @@ const TOBACCO_DRUGS_ALCOHOL_QUESTIONNAIRE = [
   'referralTreatment',
   'alcoholSubstanceCessationDiscussionDuration',
   'otherAlcoholDrugs',
-  'briefIntervention',
 ]
 
 export {

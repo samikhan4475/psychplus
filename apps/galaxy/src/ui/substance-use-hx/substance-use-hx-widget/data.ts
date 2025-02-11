@@ -37,8 +37,6 @@ const transformIn = (
     if (key === 'referralTreatment') {
       const list = itemValue.split(',')
       result[key] = list || []
-    } else if (key === 'briefIntervention') {
-      result[key] = itemValue === 'true' ? true : false
     } else if (key === 'briefInterventionDetail') {
       result[key] = itemValue
     } else if (key === 'widgetContainerCheckboxField') {
@@ -80,7 +78,6 @@ const transformOut =
     }
 
     if (schema.alcohol === 'no' && schema.drugs === 'no') {
-      schema['briefIntervention'] = undefined
       schema['briefInterventionDetail'] = undefined
     }
     if (schema.tobacco === 'no') {
@@ -249,7 +246,7 @@ const getDiagnosisSections = async (
     {
       pid: Number(patientId),
       sectionName: QuickNoteSectionName.QuickNoteSectionDiagnosis,
-      sectionItem: 'diagnosisCodes',
+      sectionItem: 'diagnosis',
       sectionItemValue: sectionItemValue || 'empty',
     },
   ]
