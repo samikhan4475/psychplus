@@ -1,14 +1,22 @@
 'use client'
 
 import { useEffect } from 'react'
-import { useParams } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import { Box, Flex, ScrollArea } from '@radix-ui/themes'
+import { Row } from '@tanstack/react-table'
 import { DataTable, LoadingPlaceholder } from '@/components'
+import { useStore as useRootStore } from '@/store'
+import { capitalizeName, constructQuickNotesUrl, getPatientMRN } from '@/utils'
+import { useStore as useQuickNotesStore } from '../quicknotes/store'
 import { FilterForm } from './filter-form'
 import { useStore } from './store'
 import { getSchedulingColumns as column } from './table-columns'
+import { SchedulingHistoryData } from './types'
 
 const SchedulingHistoryTable = () => {
+  const router = useRouter()
+  const addTab = useRootStore((state) => state.addTab)
+  const patient = useQuickNotesStore((state) => state.patient)
   const { id } = useParams<{ id: string }>()
   const {
     data,
@@ -25,6 +33,22 @@ const SchedulingHistoryTable = () => {
     fetchSchedulingHistory(id)
   }, [id])
 
+  const onRowCLick = (row: Row<SchedulingHistoryData>) => {
+    const href = constructQuickNotesUrl(
+      Number(id),
+      row.original.appointmentId,
+      row.original.visitTypeCode,
+      row.original.visitSequenceType,
+    )
+
+    const label = `${capitalizeName(
+      `${patient?.legalName?.firstName ?? ''} ${
+        patient?.legalName?.lastName ?? ''
+      }`,
+    )}-${getPatientMRN(patient.id)}-${row.original.appointmentId}`
+    addTab({ href, label })
+    router.push(href)
+  }
   return (
     <Flex direction="column" className="gap-1">
       <FilterForm />
@@ -34,11 +58,14 @@ const SchedulingHistoryTable = () => {
             <LoadingPlaceholder />
           </Flex>
         ) : (
-          <DataTable
-            columns={column(isTCMVisitType, sort, sortData)}
-            data={data?.list ?? []}
-            isRowSpan
-          />
+          <Box className="min-w-max">
+            <DataTable
+              onRowClick={onRowCLick}
+              columns={column(isTCMVisitType, sort, sortData)}
+              data={data?.list ?? []}
+              isRowSpan
+            />
+          </Box>
         )}
       </ScrollArea>
     </Flex>

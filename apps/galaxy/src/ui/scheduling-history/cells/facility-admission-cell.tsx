@@ -10,9 +10,12 @@ import { SchedulingHistoryData } from '../types'
 const FacilityAdmissionCell = ({
   row,
 }: PropsWithRow<SchedulingHistoryData>) => {
+  const handleClick = (e: React.MouseEvent) => {
+    e.stopPropagation()
+  }
   return (
     <Popover.Root>
-      <Popover.Trigger>
+      <Popover.Trigger onClick={handleClick}>
         <Flex justify="center" p="1">
           <CounterClockwiseClockIcon className="text-black cursor-pointer" />
         </Flex>
@@ -21,7 +24,7 @@ const FacilityAdmissionCell = ({
         <Flex className="w-full gap-1.5" direction="column">
           <Flex justify="between" align="center" gap="2">
             <Heading size="4">Facility Admission Hx</Heading>
-            <Popover.Close>
+            <Popover.Close onClick={handleClick}>
               <X
                 size={24}
                 strokeWidth={2}
