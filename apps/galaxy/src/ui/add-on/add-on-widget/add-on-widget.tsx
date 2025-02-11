@@ -45,9 +45,11 @@ const AddOnWidget = ({
     getCachedBlocksByVisitType(visitType, visitSequence) || []
   ).filter((block): block is Block => block !== undefined)
 
-  const durationData = !initialValue.therapyTimeSpent
-    ? mapAppointmentDurationToData(appointment?.duration)
-    : {}
+  const durationData =
+    !initialValue.therapyTimeSpent &&
+    initialValue.therapyPsychoanalysis === 'therapy'
+      ? mapAppointmentDurationToData(appointment?.duration)
+      : {}
 
   const form = useAddOnWidgetForm({
     ...initialValue,
