@@ -48,7 +48,8 @@ const getInitialValues = () => ({
   inhalants: undefined,
   inhalantsDetails: undefined,
   questionnaire: undefined,
-  briefInterventionDetail: undefined,
+  briefInterventionDetail:
+    'Discussed with patient reasons for use of substance, health risk associated with use, how ready and confident the patient is about quitting, gave advice and discussed the following goal',
   referralTreatment: undefined,
   alcoholSubstanceCessationDiscussionDuration: undefined,
   otherAlcoholDrugs: '',

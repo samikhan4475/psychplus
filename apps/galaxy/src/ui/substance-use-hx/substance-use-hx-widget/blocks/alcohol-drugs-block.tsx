@@ -38,21 +38,22 @@ const AlcoholDrugsBlock = () => {
       <AlcoholBlock />
       <DrugsBlock />
 
-      <QuestionnairesBlock />
-      <BriefInterventionDetail
-        label="Brief Intervention"
-        defaultValue="Discussed with patient reasons for use of substance, health risk associated with use, how ready and confident the patient is about quitting, gave advice and discussed the following goal"
-      />
-      <ReferralTreatmentBlock />
-      <RadioSelectSection
-        label="Discussed alcohol/substance use cessation for"
-        field="alcoholSubstanceCessationDiscussionDuration"
-        options={[
-          { label: '≥ 15 mins', value: '≥ 15 mins' },
-          { label: '≥ 31 mins', value: '≥ 31 mins' },
-        ]}
-      />
-      <AlcoholOtherBlock />
+      {(watch('alcohol') === 'yes' || watch('drugs') === 'yes') && (
+        <>
+          <QuestionnairesBlock />
+          <BriefInterventionDetail label="Brief Intervention" />
+          <ReferralTreatmentBlock />
+          <RadioSelectSection
+            label="Discussed alcohol/substance use cessation for"
+            field="alcoholSubstanceCessationDiscussionDuration"
+            options={[
+              { label: '≥ 15 mins', value: '≥ 15 mins' },
+              { label: '≥ 31 mins', value: '≥ 31 mins' },
+            ]}
+          />
+          <AlcoholOtherBlock />
+        </>
+      )}
     </Flex>
   )
 }

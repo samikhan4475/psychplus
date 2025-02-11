@@ -32,7 +32,8 @@ const substanceUseHxWidgetSchema = z
     inhalants: z.oboolean(),
     inhalantsDetails: z.ostring(),
     questionnaire: z.enum(['yes', 'no']).optional(),
-    briefInterventionDetail: z.string(),
+
+    briefInterventionDetail: z.string().optional(),
     referralTreatment: z.array(z.string()).optional(),
     alcoholSubstanceCessationDiscussionDuration: z
       .enum(['≥ 15 mins', '≥ 31 mins'])
@@ -99,14 +100,14 @@ const substanceUseHxWidgetSchema = z
           message: 'Please select at least one referral to treatment',
         })
       }
-    }
 
-    if (!data.briefInterventionDetail) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        path: ['briefInterventionDetail'],
-        message: 'Please fill out the brief intervention details',
-      })
+      if (!data.briefInterventionDetail) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ['briefInterventionDetail'],
+          message: 'Please fill out the brief intervention details',
+        })
+      }
     }
   })
 
