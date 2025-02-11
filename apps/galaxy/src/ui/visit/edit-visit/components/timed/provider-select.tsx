@@ -39,7 +39,7 @@ const ProviderSelect = () => {
       setOptions(
         res.data.map((provider: Provider) => ({
           value: `${provider.id}`,
-          label: `${provider.firstName} ${provider.lastName}`,
+          label: `${provider.firstName} ${provider.lastName}, ${provider.honors}`,
         })),
       )
     })

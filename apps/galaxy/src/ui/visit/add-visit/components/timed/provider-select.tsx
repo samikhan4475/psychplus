@@ -35,7 +35,7 @@ const ProviderDropdown = () => {
       if (res.state === 'error') return setOptions([])
       setOptions(
         res.data.map((provider: Provider) => ({
-          label: `${provider.firstName} ${provider.lastName}`,
+          label: `${provider.firstName} ${provider.lastName}, ${provider.honors}`,
           value: `${provider.id}`,
         })),
       )

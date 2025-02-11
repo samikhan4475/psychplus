@@ -8,17 +8,18 @@ interface User {
   firstName: string
   lastName: string
   email: string
+  honors?: string
 }
 
 interface UserResponse {
-  id: number,
-  metadata: Metadata,
-  username: string,
-  legalName:LegalName,
-  userRoleCode: string,
-  contactInfo: ContactDetails,
-  staffId: number,
-  patientId: number,
+  id: number
+  metadata: Metadata
+  username: string
+  legalName: LegalName
+  userRoleCode: string
+  contactInfo: ContactDetails
+  staffId: number
+  patientId: number
   userRoles: Role[]
 }
 
