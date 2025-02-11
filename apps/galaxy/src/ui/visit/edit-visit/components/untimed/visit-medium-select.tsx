@@ -13,7 +13,7 @@ import { useEditVisitStore } from '../../store'
 const VisitMediumSelect = () => {
   const form = useFormContext<SchemaType>()
   const { groupedVisitTypes } = useEditVisitStore()
-  const codes = useCodesetCodes(CODESETS.AppointmentType)
+  const codes = useCodesetCodes(CODESETS.VisitMedium)
   const visitType = useWatch({
     control: form.control,
     name: 'visitType',

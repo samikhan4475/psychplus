@@ -9,16 +9,24 @@ import {
   FormFieldLabel,
   SelectInput,
 } from '@/components'
+import { CODESETS } from '@/constants'
+import { useCodesetCodes } from '@/hooks'
 import { VisitType } from '@/types'
 import { getLocationServices } from '../../client-actions'
 import { SchemaType } from '../schema'
 import { useAddVisitStore } from '../store'
-import { transformNonTimedVisitTypes } from '../transform'
+import {
+  transformNonTimedVisitTypes,
+  transformTimedVisitTypes,
+} from '../transform'
 import { SlotDetails } from '../types'
+import { getCodesetDisplayName } from '@/utils'
 
 const VisitTypeDropdown = ({ slotDetails }: { slotDetails?: SlotDetails }) => {
   const form = useFormContext<SchemaType>()
   const [loading, setLoading] = useState<boolean>(false)
+  const visitMediumCodes = useCodesetCodes(CODESETS.VisitMedium)
+  const visitSequenceCodes = useCodesetCodes(CODESETS.VisitSequence)
   const { visitTypes, setVisitTypes, setGroupedVisitTypes } = useAddVisitStore()
   const [
     dateOfAdmission,
@@ -76,7 +84,10 @@ const VisitTypeDropdown = ({ slotDetails }: { slotDetails?: SlotDetails }) => {
           setGroupedVisitTypes(groupedVisitTypes)
           setVisitTypes(filteredVisitTypes)
         } else {
-          setVisitTypes(res.data[0]?.serviceVisitTypes ?? [])
+          const serviceVisitTypes = transformTimedVisitTypes(
+            res.data[0]?.serviceVisitTypes ?? [],
+          )
+          setVisitTypes(serviceVisitTypes ?? [])
         }
       })
     }
@@ -84,14 +95,18 @@ const VisitTypeDropdown = ({ slotDetails }: { slotDetails?: SlotDetails }) => {
 
   const options = useMemo(
     () =>
-      visitTypes.map((visitType) => ({
-        label: isServiceTimeDependent
-          ? `${visitType.typeOfVisit} | ${visitType.visitSequence} | ${visitType.visitMedium}`
-          : visitType.typeOfVisit,
-        value: isServiceTimeDependent
-          ? visitType.encouterType
-          : visitType.visitTypeCode,
-      })),
+      visitTypes.map((visitType) => {
+        const medium = getCodesetDisplayName(visitType.visitMedium, visitMediumCodes)
+        const sequence = getCodesetDisplayName(visitType.visitSequence, visitSequenceCodes)
+        return {
+          label: isServiceTimeDependent
+            ? `${visitType.typeOfVisit} | ${sequence} | ${medium}`
+            : visitType.typeOfVisit,
+          value: isServiceTimeDependent
+            ? visitType.encouterType
+            : visitType.visitTypeCode,
+        }
+      }),
     [visitTypes, isServiceTimeDependent],
   )
 

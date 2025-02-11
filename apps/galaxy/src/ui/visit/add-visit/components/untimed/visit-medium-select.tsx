@@ -25,7 +25,7 @@ const VisitMediumSelect = () => {
         'visitType',
       ],
     })
-  const codes = useCodesetCodes(CODESETS.AppointmentType)
+  const codes = useCodesetCodes(CODESETS.VisitMedium)
 
   const isDisabled =
     !patient ||

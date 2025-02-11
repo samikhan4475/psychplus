@@ -11,7 +11,7 @@ const VisitServiceSelect = () => {
       <CodesetSelect
         size="1"
         name="visitService"
-        codeset={CODESETS.VisitSequenceType}
+        codeset={CODESETS.VisitSequence}
       />
     </FormFieldContainer>
   )

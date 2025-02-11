@@ -105,8 +105,28 @@ const transformNonTimedVisitTypes = (data: VisitType[]) => {
 
   return {
     groupedVisitTypes,
-    filteredVisitTypes,
+    filteredVisitTypes: filteredVisitTypes.toSorted((a, b) => {
+      if (a.typeOfVisit > b.typeOfVisit) return 1
+      else if (a.typeOfVisit < b.typeOfVisit) return -1
+      return 0
+    }),
   }
 }
 
-export { transformRequestPayload, transformNonTimedVisitTypes }
+const transformTimedVisitTypes = (data: VisitType[]) => {
+  return data.sort((a, b) => {
+    if (a.typeOfVisit < b.typeOfVisit) return -1
+    else if (a.typeOfVisit > b.typeOfVisit) return 1
+    else if (a.visitSequence < b.visitSequence) return -1
+    else if (a.visitSequence > b.visitSequence) return 1
+    else if (a.visitMedium < b.visitMedium) return -1
+    else if (a.visitMedium > b.visitMedium) return 1
+    return 0
+  })
+}
+
+export {
+  transformRequestPayload,
+  transformNonTimedVisitTypes,
+  transformTimedVisitTypes,
+}

@@ -9,14 +9,19 @@ import {
   FormFieldLabel,
   SelectInput,
 } from '@/components'
+import { CODESETS } from '@/constants'
+import { useCodesetCodes } from '@/hooks'
 import { getLocationServices } from '@/ui/visit/client-actions'
-import { transformNonTimedVisitTypes } from '../../add-visit/transform'
+import { getCodesetDisplayName } from '@/utils'
+import { transformNonTimedVisitTypes, transformTimedVisitTypes } from '../../add-visit/transform'
 import { SchemaType } from '../schema'
 import { useEditVisitStore } from '../store'
 
 const VisitTypeSelect = () => {
   const form = useFormContext<SchemaType>()
   const [loading, setLoading] = useState<boolean>(false)
+  const visitMediumCodes = useCodesetCodes(CODESETS.VisitMedium)
+  const visitSequenceCodes = useCodesetCodes(CODESETS.VisitSequence)
   const { visitTypes, setVisitTypes, setGroupedVisitTypes } =
     useEditVisitStore()
 
@@ -58,7 +63,9 @@ const VisitTypeSelect = () => {
           setGroupedVisitTypes(groupedVisitTypes)
           setVisitTypes(filteredVisitTypes)
         } else {
-          const serviceVisitTypes = res.data[0]?.serviceVisitTypes ?? []
+          const serviceVisitTypes = transformTimedVisitTypes(
+            res.data[0]?.serviceVisitTypes ?? [],
+          )
           setVisitTypes(serviceVisitTypes)
           const selectedVisitType = serviceVisitTypes.find(
             (vt) =>
@@ -75,14 +82,24 @@ const VisitTypeSelect = () => {
 
   const options = useMemo(
     () =>
-      visitTypes.map((visitType) => ({
-        label: isServiceTimeDependent
-          ? `${visitType.typeOfVisit} | ${visitType.visitSequence} | ${visitType.visitMedium}`
-          : visitType.typeOfVisit,
-        value: isServiceTimeDependent
-          ? visitType.encouterType
-          : visitType.visitTypeCode,
-      })),
+      visitTypes.map((visitType) => {
+        const medium = getCodesetDisplayName(
+          visitType.visitMedium,
+          visitMediumCodes,
+        )
+        const sequence = getCodesetDisplayName(
+          visitType.visitSequence,
+          visitSequenceCodes,
+        )
+        return {
+          label: isServiceTimeDependent
+            ? `${visitType.typeOfVisit} | ${sequence} | ${medium}`
+            : visitType.typeOfVisit,
+          value: isServiceTimeDependent
+            ? visitType.encouterType
+            : visitType.visitTypeCode,
+        }
+      }),
     [visitTypes, isServiceTimeDependent],
   )
 

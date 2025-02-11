@@ -19,7 +19,7 @@ const VisitSequenceSelect = () => {
   const form = useFormContext<SchemaType>()
   const [loading, setLoading] = useState<boolean>(false)
   const [service, setService] = useState<Service>()
-  const codes = useCodesetCodes(CODESETS.VisitSequenceType)
+  const codes = useCodesetCodes(CODESETS.VisitSequence)
   const providerCodes = useCodesetCodes(CODESETS.ProviderType)
   const { groupedVisitTypes } = useAddVisitStore()
   const [

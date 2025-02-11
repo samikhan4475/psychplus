@@ -15,8 +15,6 @@ const CODESETS = {
   Language: 'Language',
   SpecialistType: 'SpecialistType',
   ProviderType: 'ProviderType',
-  AppointmentType: 'AppointmentType',
-  VisitSequenceType: 'VisitSequenceType',
   VisitRepeatFrequency: 'VisitRepeatFrequency',
   AdmissionLegalStatus: 'AdmissionLegalStatus',
   RaceAndEthnicity: 'cdc.PH_RaceAndEthnicity_CDC',
