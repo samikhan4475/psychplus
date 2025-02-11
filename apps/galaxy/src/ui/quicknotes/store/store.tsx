@@ -177,16 +177,17 @@ const createStore = (initialState: StoreInitialState) =>
           isError: true,
         }
         const signResults = await signNoteAction(body)
+        set({ loading: false })
         if (signResults.state === 'success') {
           toast.success('Quicknote signed!')
           return
         }
+        set({ isMarkedAsError: true })
         toast.error(signResults.error)
-        set({ loading: false, isMarkedAsError: true })
       } catch (e) {
         set({ loading: false, isMarkedAsError: true })
         toast.error(`${e}`)
-        return;
+        return
       }
     },
 

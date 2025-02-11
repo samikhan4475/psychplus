@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 'use client'
 
-import { useCallback, useMemo, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useParams, useSearchParams } from 'next/navigation'
 import { Button } from '@radix-ui/themes'
 import { PenLineIcon } from 'lucide-react'
@@ -64,17 +64,23 @@ const QuickNotesSignButton = ({
     staffId: state.user.staffId,
     staffRoleCode: state.staffResource.staffRoleCode,
   }))
-  const { loading, sign, markAsError, setWidgetsData, patient, isMarkedAsError, setMarkedStatus } = useStore(
-    (state) => ({
-      loading: state.loading,
-      sign: state.sign,
-      setWidgetsData: state.setWidgetsData,
-      markAsError: state.markAsError,
-      isMarkedAsError: state.isMarkedAsError,
-      patient: state.patient,
-      setMarkedStatus: state.setMarkedStatus,
-    }),
-  )
+  const {
+    loading,
+    sign,
+    markAsError,
+    setWidgetsData,
+    patient,
+    isMarkedAsError,
+    setMarkedStatus,
+  } = useStore((state) => ({
+    loading: state.loading,
+    sign: state.sign,
+    setWidgetsData: state.setWidgetsData,
+    markAsError: state.markAsError,
+    isMarkedAsError: state.isMarkedAsError,
+    patient: state.patient,
+    setMarkedStatus: state.setMarkedStatus,
+  }))
   const codes = useCodesetCodes(CODESETS.PatientConsentPolicyType)
   const policyDescriptions = useMemo(() => {
     const notVerifiedPolicyTypes = patientConsents
@@ -89,7 +95,7 @@ const QuickNotesSignButton = ({
           : null
       })
       .filter(Boolean)
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [patientConsents])
   const { canSignButtonQuickNotePage, canSendToSignatureButtonQuickNotePage } =
     useQuickNotesPermissions()
@@ -116,7 +122,7 @@ const QuickNotesSignButton = ({
   }, [])
 
   useEffect(() => {
-    if(isMarkedAsError) {
+    if (isMarkedAsError) {
       setAlertInfo({ ...initialAlertInfo, show: false })
       setMarkedStatus(false)
     }
@@ -201,7 +207,13 @@ const QuickNotesSignButton = ({
       showAlert({
         title: 'Warning',
         message: SIGN_PRIMARY_NOTE_EXIST,
-        okButton: { text: 'Proceed', onClick: () => markAsError(signPayload) },
+        okButton: {
+          text: 'Proceed',
+          onClick: () => {
+            setAlertInfo(initialAlertInfo)
+            markAsError(signPayload)
+          },
+        },
       })
       return
     }
@@ -232,7 +244,9 @@ const QuickNotesSignButton = ({
         open={isPolicyAlertOpen}
         onOpenChange={setIsPolicyAlertOpen}
         title="Warning"
-        message={`Patient needs to sign policy: ${policyDescriptions.join(", ")}`}
+        message={`Patient needs to sign policy: ${policyDescriptions.join(
+          ', ',
+        )}`}
         patientId={patientId}
       />
     </>
