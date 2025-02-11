@@ -1,4 +1,6 @@
 import { DateValue, today } from '@internationalized/date'
+import { Service, SharedCode } from '@/types'
+import { ProviderType, ServiceType } from '../types'
 
 const calculateAge = (date?: string | Date) => {
   const today = new Date()
@@ -53,4 +55,71 @@ const isDatePriorTo30Days = (date: DateValue) => {
   return isPrior30Days
 }
 
-export { calculateAge, generateTimeIntervals, isDatePriorTo30Days }
+const transformProviderTypes = (codes: SharedCode[], service: Service) => {
+  return codes
+    .filter((providerType) => {
+      switch (providerType.value as ProviderType) {
+        case ProviderType.Psychiatrist:
+          return [
+            ServiceType.AssistedLivingFacility,
+            ServiceType.CouplesFamilyTherapy,
+            ServiceType.Ect,
+            ServiceType.EmergencyRoom,
+            ServiceType.GroupTherapy,
+            ServiceType.InpatientBehaviorHealthResidential,
+            ServiceType.InpatientMedical,
+            ServiceType.InpatientPsych,
+            ServiceType.InpatientRehab,
+            ServiceType.InpatientSubstanceUseResidential,
+            ServiceType.IntensiveOutpatient,
+            ServiceType.IntermediateCareFacility,
+            ServiceType.NursingFacility,
+            ServiceType.PartialHospital,
+            ServiceType.Psychiatry,
+            ServiceType.SkilledNursingFacility,
+            ServiceType.Spravato,
+            ServiceType.Therapy,
+            ServiceType.Tms,
+          ].includes(service.serviceOffered as ServiceType)
+        case ProviderType.Therapist:
+          return [
+            ServiceType.AssistedLivingFacility,
+            ServiceType.CouplesFamilyTherapy,
+            ServiceType.EmergencyRoom,
+            ServiceType.GroupTherapy,
+            ServiceType.InpatientBehaviorHealthResidential,
+            ServiceType.InpatientMedical,
+            ServiceType.InpatientPsych,
+            ServiceType.InpatientRehab,
+            ServiceType.InpatientSubstanceUseResidential,
+            ServiceType.IntensiveOutpatient,
+            ServiceType.IntermediateCareFacility,
+            ServiceType.NursingFacility,
+            ServiceType.PartialHospital,
+            ServiceType.SkilledNursingFacility,
+            ServiceType.Therapy,
+          ].includes(service.serviceOffered as ServiceType)
+        case ProviderType.Bcba:
+          return service.serviceOffered === ServiceType.Aba
+        case ProviderType.Anesthesiology:
+        case ProviderType.FamilyMedicine:
+        case ProviderType.InternalMedicine:
+        case ProviderType.NotSet:
+        case ProviderType.Pmnr:
+          return false
+        default:
+          return false
+      }
+    })
+    .map((code) => ({
+      label: code.display,
+      value: code.value,
+    }))
+}
+
+export {
+  calculateAge,
+  generateTimeIntervals,
+  isDatePriorTo30Days,
+  transformProviderTypes,
+}

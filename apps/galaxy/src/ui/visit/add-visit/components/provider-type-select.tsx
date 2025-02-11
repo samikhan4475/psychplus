@@ -8,11 +8,11 @@ import {
 } from '@/components'
 import { CODESETS } from '@/constants'
 import { useCodesetCodes } from '@/hooks'
-import { ProviderType, ServiceType } from '../../types'
 import { SchemaType } from '../schema'
 import { useAddVisitStore } from '../store'
+import { transformProviderTypes } from '../util'
 
-const ProviderTypeDropdown = ({ isDisabled }: { isDisabled?: boolean}) => {
+const ProviderTypeDropdown = ({ isDisabled }: { isDisabled?: boolean }) => {
   const form = useFormContext<SchemaType>()
   const codes = useCodesetCodes(CODESETS.ProviderType)
   const { services } = useAddVisitStore()
@@ -25,37 +25,7 @@ const ProviderTypeDropdown = ({ isDisabled }: { isDisabled?: boolean}) => {
     const service = services.find((s) => s.id === serviceId)
     if (!service?.serviceOffered) return []
 
-    const filteredOptions = codes.filter((providerType) => {
-      if (
-        [
-          ProviderType.NotSet,
-          ProviderType.FamilyMedicine,
-          ProviderType.InternalMedicine,
-          ProviderType.Anesthesiology,
-        ].includes(providerType.value as ProviderType)
-      )
-        return false
-      switch (service?.serviceOffered) {
-        case ServiceType.Aba:
-          return providerType.value === ProviderType.Bcba
-        case ServiceType.Therapy:
-        case ServiceType.CouplesFamilyTherapy:
-        case ServiceType.GroupTherapy:
-          return (
-            providerType.value === ProviderType.Therapist ||
-            providerType.value === ProviderType.Psychiatrist
-          )
-        default:
-          return ![ProviderType.Bcba, ProviderType.Therapist].includes(
-            providerType.value as ProviderType,
-          )
-      }
-    })
-
-    return filteredOptions.map((code) => ({
-      label: code.display,
-      value: code.value,
-    }))
+    return transformProviderTypes(codes, service)
   }, [codes, services, serviceId])
 
   return (
