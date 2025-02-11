@@ -10,6 +10,7 @@ interface Consent {
   signingDate: string
   latestIssuanceDate: string
   isNeedsNewSignature: boolean
+  verificationStatus?: string
 }
 
 export type { Consent }

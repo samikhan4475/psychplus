@@ -25,6 +25,7 @@ interface InsuranceParams {
   policyHolderDateOfBirth?: string
   policyHolderRelationship?: string
   policyHolderSocialSecurityNumber?: string
+  verificationStatus?: string
   isActive: boolean
   id?: string
 }

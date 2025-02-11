@@ -283,9 +283,12 @@ const InsuranceForm = ({
 
     if (!insurance) delete payload.id
 
+    const verificationStatus =  insurance?.insurancePolicyPriority === data?.insurancePolicyPriority
+    ? insurance?.verificationStatus : "Pending"
+
     //handle the case where insurance is being edited
     const insuranceResponse = insurance
-      ? await updateInsuranceAction(payload)
+      ? await updateInsuranceAction({...payload, verificationStatus:verificationStatus})
       : await addInsuranceAction(payload)
 
     if (insuranceResponse.state === 'error') {

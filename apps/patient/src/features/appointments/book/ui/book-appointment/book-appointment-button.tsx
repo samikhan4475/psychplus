@@ -78,11 +78,16 @@ const BookAppointmentButton = ({
   })
 
   const checkIfPolicyBSigned = (fetchedUserConsents: Consent[]) =>
-    !!fetchedUserConsents.find((consent) => consent.type === 'PolicyB')
+    !!fetchedUserConsents.find((consent) => {
+      if (consent.type === 'PolicyB') {
+        return consent.verificationStatus === 'Verified'
+      }
+    })
 
   const [policyAlreadySigned, setPolicyAlreadySigned] = useState(
     checkIfPolicyBSigned(userConsents),
   )
+  
 
   const stateCode = useStore((state) => state.stateCode)
   useEffect(() => {
