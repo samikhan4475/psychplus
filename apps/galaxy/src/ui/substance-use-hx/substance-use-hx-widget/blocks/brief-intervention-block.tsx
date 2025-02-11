@@ -24,25 +24,21 @@ const BriefInterventionDetail = ({
   }, [])
 
   return (
-    (form.watch('alcohol') === 'yes' || form.watch('drugs') === 'yes') && (
-      <Flex align="center">
-        <BlockLabel name={FORM_KEY} required>
-          {label}
-        </BlockLabel>
+    <Flex align="center">
+      <BlockLabel name={FORM_KEY} required>
+        {label}
+      </BlockLabel>
 
-        <TextArea
-          size="1"
-          className="w-[800px] flex-grow"
-          {...form.register(FORM_KEY)}
-        />
+      <TextArea
+        size="1"
+        className="w-[800px] flex-grow"
+        {...form.register(FORM_KEY)}
+      />
 
-        {error ? (
-          <Text className="pl-1 text-[12px] text-tomato-11">
-            {error.message}
-          </Text>
-        ) : null}
-      </Flex>
-    )
+      {error ? (
+        <Text className="pl-1 text-[12px] text-tomato-11">{error.message}</Text>
+      ) : null}
+    </Flex>
   )
 }
 
