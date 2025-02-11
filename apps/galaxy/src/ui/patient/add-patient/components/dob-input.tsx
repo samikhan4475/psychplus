@@ -9,6 +9,7 @@ const DobInput = () => {
     <FormFieldContainer>
       <FormFieldLabel required>Date of Birth</FormFieldLabel>
       <DatePickerInput
+        yearFormat="YYYY"
         field="dateOfBirth"
         maxValue={today(getLocalTimeZone())}
       />

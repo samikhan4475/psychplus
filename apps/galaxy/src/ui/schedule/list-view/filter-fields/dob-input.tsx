@@ -9,6 +9,7 @@ const DateOfBirthInput = () => {
     <FormFieldContainer className="flex-1">
       <FieldLabel>DOB</FieldLabel>
       <DatePickerInput
+        yearFormat="YYYY"
         maxValue={today(getLocalTimeZone())}
         field="dateOfBirth"
         dateInputClass="h-6"
