@@ -150,6 +150,7 @@ const valueToSchemaPe: { [key: string]: string } = {
   SD_Erotomania: 'Erotomania',
   SD_Persecutory: 'Persecutory',
   SD_Jealous: 'Jealous',
+  SD_Paranoid: 'Paranoid',
   SD_Bizarre: 'Bizarre',
   SD_Mixed: 'Mixed',
   SD_Nihilistic: 'Nihilistic',
@@ -180,7 +181,6 @@ const schemaToValue: { [key: string]: string } = Object.entries(
 
 const transformIn = (value?: QuickNoteSectionItem[]): MseWidgetSchemaType => {
   const result = createEmptyFormValues()
-
   value?.forEach((item) => {
     if (!item.sectionItem) return
     if (item.sectionItem === 'widgetContainerCheckboxField') {
