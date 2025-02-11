@@ -29,6 +29,7 @@ const NotesWidget = ({
   const {
     appointment,
     selectedRow,
+    setSelectedRow,
     isCreateNoteView,
     setPatientId,
     setData,
@@ -45,6 +46,7 @@ const NotesWidget = ({
     isCreateNoteView: state.isCreateNoteView,
     appointment: state.appointment,
     selectedRow: state.selectedRow,
+    setSelectedRow: state.setSelectedRow,
     setPatientId: state.setPatientId,
     setData: state.setData,
     setPatient: state.setPatient,
@@ -64,6 +66,7 @@ const NotesWidget = ({
     setPatientId(patientId)
     setPatient(PatientProfile)
     setAllergies(allergies)
+    setSelectedRow(undefined)
   }, [])
 
   useEffect(() => {
