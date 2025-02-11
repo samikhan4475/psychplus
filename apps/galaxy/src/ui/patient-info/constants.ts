@@ -5,6 +5,7 @@ const POLICY_AND_CONSENTS_TAB = 'policy-and-consents'
 const PAYMENT_HISTORY_TAB = 'payment-hx'
 const PAYMENT_CARDS_TAB = 'payment-cards'
 const POLICY_TYPE_A = 'PolicyA'
+const POLICY_TYPE_B = 'PolicyB'
 
 export {
   PATIENT_INFO_TAB,
@@ -14,4 +15,5 @@ export {
   PAYMENT_HISTORY_TAB,
   PAYMENT_CARDS_TAB,
   POLICY_TYPE_A,
+  POLICY_TYPE_B,
 }

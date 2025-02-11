@@ -15,11 +15,13 @@ import { PolicySection } from './policy-section'
 interface CreateUserCardProps {
   patientId: string
   patientPolicyAStatus?: string
+  patientPolicyBStatus?: string
 }
 
 const CreateUserCard = ({
   patientId,
   patientPolicyAStatus,
+  patientPolicyBStatus,
 }: CreateUserCardProps) => {
   return (
     <Flex direction="column" className="bg-white overflow-hidden rounded-1">
@@ -38,6 +40,7 @@ const CreateUserCard = ({
         <PolicySection
           patientId={patientId}
           patientPolicyAStatus={patientPolicyAStatus}
+          patientPolicyBStatus={patientPolicyBStatus}
         />
       </Grid>
     </Flex>

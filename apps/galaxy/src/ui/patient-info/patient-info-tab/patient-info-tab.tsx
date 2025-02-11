@@ -14,7 +14,7 @@ import {
 } from '@/types'
 import { PolicyConsentDialog } from '@/ui/quicknotes/policy-consent-dialog'
 import { useStore } from '@/ui/quicknotes/store'
-import { POLICY_TYPE_A } from '../constants'
+import { POLICY_TYPE_A, POLICY_TYPE_B } from '../constants'
 import { TabContentHeading } from '../shared'
 import { AdditionalContactInfoCard } from './additional-contact-info'
 import { AlternativeInfoCard } from './alternate-info'
@@ -65,6 +65,9 @@ const PatientInfoTab = ({
   const patientPolicyA = patientConsents?.find(
     (consent) => consent?.type === POLICY_TYPE_A,
   )
+  const patientPolicyB = patientConsents.find(
+    (consent) => consent.type === POLICY_TYPE_B,
+  )
 
   const policyDescriptions = useMemo(() => {
     const notVerifiedPolicyTypes = patientConsents
@@ -107,6 +110,7 @@ const PatientInfoTab = ({
               <CreateUserCard
                 patientId={patientId}
                 patientPolicyAStatus={patientPolicyA?.verificationStatus}
+                patientPolicyBStatus={patientPolicyB?.verificationStatus}
               />
               <PatientDataCard
                 patientId={patientId}

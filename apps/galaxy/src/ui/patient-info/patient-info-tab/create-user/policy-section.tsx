@@ -18,11 +18,13 @@ import { useStore } from '../../store'
 interface PolicySectionProps {
   patientId: string
   patientPolicyAStatus?: string
+  patientPolicyBStatus?: string
 }
 
 const PolicySection = ({
   patientId,
   patientPolicyAStatus,
+  patientPolicyBStatus,
 }: PolicySectionProps) => {
   const store = useStore()
   const { isUserLocked } = zustandUseStore(store, (state) => ({
@@ -92,8 +94,12 @@ const PolicySection = ({
     >
       <Flex gap="1" align="center" width="100%">
         {renderStatusIcon(patientPolicyAStatus)}
+        <Text className="text-1" weight="medium" mr="2">
+          Policy A
+        </Text>
+        {renderStatusIcon(patientPolicyBStatus)}
         <Text className="text-1" weight="medium">
-          Patient Policy A
+          Policy B
         </Text>
       </Flex>
       <Flex justify="end" gap="2" width="100%">
