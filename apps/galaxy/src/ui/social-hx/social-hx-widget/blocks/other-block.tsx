@@ -1,19 +1,14 @@
-import { Flex, TextField } from '@radix-ui/themes'
-import { useFormContext } from 'react-hook-form'
-import { BlockLabel } from '@/components'
-import { SocialHxWidgetSchemaType } from '../social-hx-widget-schema'
+import { Flex } from '@radix-ui/themes'
+import { AutoResizeInput, BlockLabel, FormFieldError } from '@/components'
 
 const OtherBlock = () => {
-  const form = useFormContext<SocialHxWidgetSchemaType>()
-
   return (
-    <Flex align="center" gap="2">
+    <Flex align="start" gap="2">
       <BlockLabel>Other</BlockLabel>
-      <TextField.Root
-        size="1"
-        className="w-full max-w-lg"
-        {...form.register('other')}
-      ></TextField.Root>
+      <Flex align="start" gap="1" width="100%" direction="column">
+        <AutoResizeInput field="other" className="w-full max-w-lg" />
+        <FormFieldError name="other" />
+      </Flex>
     </Flex>
   )
 }

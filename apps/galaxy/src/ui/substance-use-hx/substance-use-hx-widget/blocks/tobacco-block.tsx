@@ -1,6 +1,6 @@
 import { Flex } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
-import { RadioSelectSection, TextInput, YesNoSelect } from '@/components'
+import { RadioSelectSection, YesNoSelect } from '@/components'
 import { type SubstanceUseHxWidgetSchemaType } from '../substance-use-hx-schema'
 import {
   SMOKE_PACKS_ID,
@@ -12,6 +12,7 @@ import {
   TOBACCO_LABEL,
 } from './constants'
 import { SmokingCessationBlock } from './smoking-cessation-block'
+import { TobaccoOtherBlock } from './tobacco-other-block'
 
 const TobaccoBlock = () => {
   const form = useFormContext<SubstanceUseHxWidgetSchemaType>()
@@ -39,7 +40,7 @@ const TobaccoBlock = () => {
               />
             )}
             <SmokingCessationBlock />
-            <TextInput label="Other" field="otherTobacco" />
+            <TobaccoOtherBlock />
           </>
         )}
       </Flex>

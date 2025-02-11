@@ -3,7 +3,7 @@ import { z } from 'zod'
 const limitedStringSchema = z
   .string()
   .trim()
-  .max(30, 'Max 30 characters are allowed.')
+  .max(500, 'Max 500 characters are allowed.')
 
 type PhysicalExamWidgetSchemaType = z.infer<typeof physicalExamWidgetSchema>
 

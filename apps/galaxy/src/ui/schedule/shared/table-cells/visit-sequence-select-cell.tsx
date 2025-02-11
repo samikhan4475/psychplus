@@ -8,7 +8,7 @@ import { NonTimedVisitSequenceSelect } from './nontimed-visit-sequence-select'
 const VisitSequenceSelectCell = ({
   row: { original: appointment },
 }: PropsWithRow<Appointment>) => {
-  const codes = useCodesetCodes(CODESETS.VisitSequenceType)
+  const codes = useCodesetCodes(CODESETS.VisitSequence)
   if (appointment.isServiceTimeDependent) {
     return (
       <TextCell>

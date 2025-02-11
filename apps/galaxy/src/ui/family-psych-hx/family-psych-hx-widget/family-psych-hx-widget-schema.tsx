@@ -25,7 +25,7 @@ const familyPsychHxWidgetSchema = z
     alcoholUseDisorderRelation: stringArray,
     dementia: booleanOptional,
     dementiaRelation: stringArray,
-    other: stringOptional,
+    other: z.string().max(4000, 'Max 4000 characters are allowed').optional(),
   })
   .superRefine((data, ctx) => {
     const issues = [

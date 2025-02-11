@@ -15,7 +15,7 @@ const TherapySessionParticipantsBlock = () => {
   const therapySessionParticipants = watch('therapySessionParticipants')
 
   return (
-    <Flex align="center" height="24" gap="4">
+    <Flex align="center" height="24" gap="4" wrap="wrap">
       <RadioSelectSection
         label="Session Participant"
         field="therapySessionParticipants"

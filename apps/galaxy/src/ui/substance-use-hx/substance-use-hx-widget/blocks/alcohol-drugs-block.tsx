@@ -3,8 +3,9 @@
 import { useEffect } from 'react'
 import { Flex, Text } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
-import { RadioSelectSection, TextInput } from '@/components'
+import { RadioSelectSection } from '@/components'
 import { AlcoholBlock } from './alcohol-block'
+import { AlcoholOtherBlock } from './alcohol-other-block'
 import { BriefInterventionDetail } from './brief-intervention-block'
 import { DrugsBlock } from './drugs-block'
 import { QuestionnairesBlock } from './questionnaires-block'
@@ -51,7 +52,7 @@ const AlcoholDrugsBlock = () => {
           { label: '≥ 31 mins', value: '≥ 31 mins' },
         ]}
       />
-      <TextInput label="Other" field="otherAlcoholDrugs" />
+      <AlcoholOtherBlock />
     </Flex>
   )
 }

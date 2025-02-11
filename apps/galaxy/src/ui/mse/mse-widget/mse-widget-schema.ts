@@ -34,25 +34,82 @@ const mseWidgetSchema = z
     tchiYesNo: yesNoEnumSchema,
     tcDelusionsYesNo: yesNoEnumSchema,
     tcHallucinationsYesNo: yesNoEnumSchema,
-    hiOtherDetails: z.string(),
-    siOtherDetails: z.string(),
-    mmOtherDetails: z.string(),
-    mhtOtherDetails: z.string(),
-    intOtherDetails: z.string(),
-    inthtOtherDetails: z.string(),
-    insOtherDetails: z.string(),
-    inshtOtherDetails: z.string(),
-    jdgOtherDetails: z.string(),
-    jdghtOtherDetails: z.string(),
-    oriOtherDetails: z.string(),
-    appOtherDetails: z.string(),
-    behOtherDetails: z.string(),
-    psyOtherDetails: z.string(),
-    speOtherDetails: z.string(),
-    modOtherDetails: z.string(),
-    affOtherDetails: z.string(),
-    thpOtherDetails: z.string(),
-    tcOtherDetails: z.string(),
+    hiOtherDetails: z
+      .string()
+      .max(500, 'Max 500 characters are allowed')
+      .optional(),
+    siOtherDetails: z
+      .string()
+      .max(500, 'Max 500 characters are allowed')
+      .optional(),
+    mmOtherDetails: z
+      .string()
+      .max(500, 'Max 500 characters are allowed')
+      .optional(),
+    mhtOtherDetails: z
+      .string()
+      .max(500, 'Max 500 characters are allowed')
+      .optional(),
+    intOtherDetails: z
+      .string()
+      .max(500, 'Max 500 characters are allowed')
+      .optional(),
+    inthtOtherDetails: z
+      .string()
+      .max(500, 'Max 500 characters are allowed')
+      .optional(),
+    insOtherDetails: z
+      .string()
+      .max(500, 'Max 500 characters are allowed')
+      .optional(),
+    inshtOtherDetails: z
+      .string()
+      .max(500, 'Max 500 characters are allowed')
+      .optional(),
+    jdgOtherDetails: z
+      .string()
+      .max(500, 'Max 500 characters are allowed')
+      .optional(),
+    jdghtOtherDetails: z
+      .string()
+      .max(500, 'Max 500 characters are allowed')
+      .optional(),
+    oriOtherDetails: z
+      .string()
+      .max(500, 'Max 500 characters are allowed')
+      .optional(),
+    appOtherDetails: z
+      .string()
+      .max(500, 'Max 500 characters are allowed')
+      .optional(),
+    behOtherDetails: z
+      .string()
+      .max(500, 'Max 500 characters are allowed')
+      .optional(),
+    psyOtherDetails: z
+      .string()
+      .max(500, 'Max 500 characters are allowed')
+      .optional(),
+    speOtherDetails: z
+      .string()
+      .max(500, 'Max 500 characters are allowed')
+      .optional(),
+    modOtherDetails: z
+      .string()
+      .max(500, 'Max 500 characters are allowed')
+      .optional(),
+    affOtherDetails: z
+      .string()
+      .max(500, 'Max 500 characters are allowed')
+      .optional(),
+    thpOtherDetails: z
+      .string()
+      .max(500, 'Max 500 characters are allowed')
+      .optional(),
+    tcOtherDetails: z
+      .string()
+      .max(500, 'Max 500 characters are allowed')
+      .optional(),
     shouldValidate: z.string().optional(),
   })
   .superRefine((data, ctx) => {

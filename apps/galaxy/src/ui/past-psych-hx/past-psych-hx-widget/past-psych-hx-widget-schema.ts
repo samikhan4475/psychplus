@@ -44,7 +44,10 @@ const pastPsychHxWidgetSchema = z
     intellectualDisability: z.oboolean(),
     intellectualDisabilityAge: conditionalPositiveInt,
     other: z.oboolean(),
-    otherDetails: z.ostring(),
+    otherDetails: z
+      .string()
+      .max(500, 'Max 500 characters are allowed')
+      .optional(),
   })
   .superRefine((data, ctx) => {
     const issues = [

@@ -1,12 +1,12 @@
 import { Box, Flex, Text } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
 import { cn } from '@/utils'
+import { AutoResizeInput } from './auto-resize-input'
 import { MultiSelectField } from './checkbox-multiselect'
 import { ChipList } from './chip-list'
 import { DatePickerInput } from './date-picker-input'
 import { NumberInput } from './number-input'
 import { SelectInput } from './select-input'
-import { TextInput } from './text-input'
 
 type DetailsType = 'text' | 'number' | 'select' | 'date' | 'multi-select'
 
@@ -71,12 +71,12 @@ const SelectableChipDetails = ({
             </Text>
           )}
           {type === 'text' && (
-            <TextInput
+            <AutoResizeInput
               field={field}
               disabled={disabled}
-              autoFocus={!form.watch(field)}
-              placeHolder={placeHolder}
               maxLength={maxLength}
+              autoFocus={!form.watch(field)}
+              placeholder={placeHolder}
             />
           )}
           {type === 'number' && (
@@ -133,13 +133,7 @@ const SelectableChipDetails = ({
 
 const SelectedIndicator = () => {
   return (
-    <Box
-      className="border-l-pp-focus-outline h-0 
-  w-0
-  border-y-[4px]
-  border-l-[5px]
-  border-y-transparent"
-    ></Box>
+    <Box className="border-l-pp-focus-outline h-0 w-0 border-y-[4px] border-l-[5px] border-y-transparent" />
   )
 }
 

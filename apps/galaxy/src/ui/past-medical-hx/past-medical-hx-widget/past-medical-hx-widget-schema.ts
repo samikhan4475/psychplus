@@ -46,7 +46,7 @@ const pastMedicalHxWidgetSchema = z
     gonorrhea: z.oboolean(),
     gastricBypass: z.oboolean(),
     other: z.oboolean(),
-    otherDetails: z.ostring(),
+    otherDetails: z.string().max(500, 'Max 500 characters are allowed').optional(),
   })
 
   .refine(

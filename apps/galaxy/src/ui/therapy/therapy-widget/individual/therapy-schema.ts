@@ -29,7 +29,10 @@ const TherapySchema = z
     therapySessionParticipants: z
       .string()
       .min(1, { message: 'Session Participants must be selected' }),
-    patientOther: z.string().optional(),
+    patientOther: z
+      .string()
+      .max(500, 'Max 500 characters are allowed')
+      .optional(),
     therapyDetailsModality: z
       .array(
         z.object({

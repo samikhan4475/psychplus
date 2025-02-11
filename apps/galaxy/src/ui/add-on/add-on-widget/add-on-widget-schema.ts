@@ -56,7 +56,10 @@ const psychoanalysisSchema = z.object({
   psychoanalyticTechnique: codesetOptionsPsychoanalysis.min(1, {
     message: 'Psychoanalytic Technique is required',
   }),
-  additionalPsychoAnalysisDetail: z.string().min(1, 'Additional details for Psychoanalysis must be provided.'),
+  additionalPsychoAnalysisDetail: z
+    .string()
+    .min(1, 'Additional details for Psychoanalysis must be provided.')
+    .max(4000, 'Max 4000 characters are allowed'),
 })
 
 // Base schema validation for all add-on widgets

@@ -35,7 +35,7 @@ const socialHxWidgetSchema = z.object({
     ])
     .optional(),
   traumaHx: z.array(z.string()),
-  other: z.string().optional(),
+  other: z.string().max(4000, 'Max 4000 characters are allowed').optional(),
 })
 
 export { socialHxWidgetSchema, type SocialHxWidgetSchemaType }

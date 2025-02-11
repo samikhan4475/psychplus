@@ -22,16 +22,46 @@ const createRosWidgetSchema = (visitType: string) =>
       skin: z.array(z.string()),
       musculoskeletal: z.array(z.string()),
       neuro: z.array(z.string()),
-      ctOtherDetails: z.string().trim().optional(),
-      entOtherDetails: z.string().trim().optional(),
-      eyesOtherDetails: z.string().trim().optional(),
-      cvsOtherDetails: z.string().trim().optional(),
-      resOtherDetails: z.string().trim().optional(),
-      giOtherDetails: z.string().trim().optional(),
-      guOtherDetails: z.string().trim().optional(),
-      msuOtherDetails: z.string().trim().optional(),
-      sknOtherDetails: z.string().trim().optional(),
-      neuOtherDetails: z.string().trim().optional(),
+      ctOtherDetails: z
+        .string()
+        .max(500, 'Max 500 characters are allowed')
+        .optional(),
+      entOtherDetails: z
+        .string()
+        .max(500, 'Max 500 characters are allowed')
+        .optional(),
+      eyesOtherDetails: z
+        .string()
+        .max(500, 'Max 500 characters are allowed')
+        .optional(),
+      cvsOtherDetails: z
+        .string()
+        .max(500, 'Max 500 characters are allowed')
+        .optional(),
+      resOtherDetails: z
+        .string()
+        .max(500, 'Max 500 characters are allowed')
+        .optional(),
+      giOtherDetails: z
+        .string()
+        .max(500, 'Max 500 characters are allowed')
+        .optional(),
+      guOtherDetails: z
+        .string()
+        .max(500, 'Max 500 characters are allowed')
+        .optional(),
+      msuOtherDetails: z
+        .string()
+        .max(500, 'Max 500 characters are allowed')
+        .optional(),
+      sknOtherDetails: z
+        .string()
+        .max(500, 'Max 500 characters are allowed')
+        .optional(),
+      neuOtherDetails: z
+        .string()
+        .max(500, 'Max 500 characters are allowed')
+        .optional(),
       reviewSystemError: z.string().optional(),
     })
     .refine(

@@ -26,22 +26,22 @@ const hpiWidgetSchema = z
     ccOtherDetails: z
       .string()
       .trim()
-      .max(30, 'Max 30 characters allowed')
+      .max(500, 'Max 500 characters are allowed')
       .optional(),
     subOtherDetails: z
       .string()
       .trim()
-      .max(30, 'Max 30 characters allowed')
+      .max(500, 'Max 500 characters are allowed')
       .optional(),
     medOtherDetails: z
       .string()
       .trim()
-      .max(30, 'Max 30 characters allowed')
+      .max(500, 'Max 500 characters are allowed')
       .optional(),
     hpiOther: z
       .string()
       .trim()
-      .max(4000, 'Max 4000 characters allowed')
+      .max(4000, 'Max 4000 characters are allowed')
       .optional(),
   })
   .superRefine((data, ctx) => {
@@ -49,7 +49,7 @@ const hpiWidgetSchema = z
       .map((field) => data[field]?.length || 0)
       .reduce((sum, count) => sum + count, 0)
 
-    if (totalSymptoms < 3 && (data?.hpiOther?.length || 0) < 30) {
+    if (totalSymptoms < 3 && (data?.hpiOther?.length || 0) < 500) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         path: ['chiefComplaint'],

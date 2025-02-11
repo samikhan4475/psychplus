@@ -22,7 +22,7 @@ const AdditionalTherapyDetailBlock = ({
       <Flex className="w-full max-w-full flex-grow flex-col">
         <Flex direction="row" gap="1" align="end" width="100%">
           <AutoResizeInput
-            className="min-h-[80px] min-w-[765px] resize"
+            className="min-h-[80px] min-w-[765px]"
             field="additionalTherapyDetail"
           />
           <ReadMoreDialog data={otherData} />

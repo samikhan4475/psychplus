@@ -17,7 +17,7 @@ const AssessmentTreatmentPlanNotesBlock = ({
     <FormFieldContainer className="flex w-auto flex-col gap-2">
       <Flex direction="row" gap="1" align="end" width="100%">
         <AutoResizeInput
-          className="min-h-[80px] w-full resize"
+          className="min-h-[80px] w-full"
           field="assessmentTreatmentPlanNotes"
         />
         <ReadMoreDialog data={data} />

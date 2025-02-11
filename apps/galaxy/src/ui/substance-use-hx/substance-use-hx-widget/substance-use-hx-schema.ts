@@ -13,7 +13,10 @@ const substanceUseHxWidgetSchema = z
     smokingCessationDiscussionDuration: z
       .enum(['≥ 3 mins', '≥ 11 mins'])
       .optional(),
-    otherTobacco: z.string().optional(),
+    otherTobacco: z
+      .string()
+      .max(4000, 'Max 4000 characters are allowed')
+      .optional(),
     alcohol: z.enum(['yes', 'no']).optional(),
     drugs: z.enum(['yes', 'no']).optional(),
     opioids: z.oboolean(),
@@ -34,7 +37,10 @@ const substanceUseHxWidgetSchema = z
     alcoholSubstanceCessationDiscussionDuration: z
       .enum(['≥ 15 mins', '≥ 31 mins'])
       .optional(),
-    otherAlcoholDrugs: z.ostring(),
+    otherAlcoholDrugs: z
+      .string()
+      .max(4000, 'Max 4000 characters are allowed')
+      .optional(),
     QuicknoteSectionQuestionnaireDast10: z.boolean().optional().default(false),
     QuicknoteSectionQuestionnaireAudit: z.boolean().optional().default(false),
   })
