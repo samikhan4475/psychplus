@@ -30,7 +30,7 @@ export const LockScreenProvider = ({
 
     const resetTimer = () => {
       clearTimeout(timer)
-      timer = setTimeout(lockScreen, 10 * 60 * 2000) // 20 minutes
+      timer = setTimeout(lockScreen, 10 * 60 * 6000) // 60 minutes
     }
 
     const activityEvents = [
