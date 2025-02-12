@@ -6,7 +6,6 @@ import { Avatar, DropdownMenu, Flex, Text } from '@radix-ui/themes'
 import {
   LogOutIcon,
   MessageCircleQuestionIcon,
-  UserIcon,
   type LucideIcon,
 } from 'lucide-react'
 import { logoutAction } from '@/actions'
@@ -34,7 +33,7 @@ const UserDropdownMenu = ({ user }: UserDropdownMenuProps) => {
             />
           </button>
           <Text weight="medium" size="1">
-            {`${user.firstName} ${user.lastName}, ${user.honors}`}
+            {`${user?.firstName ?? ""} ${user?.lastName ?? ""}, ${user?.honors ?? ""}`}
           </Text>
           <TriangleDownIcon />
         </Flex>
@@ -45,8 +44,8 @@ const UserDropdownMenu = ({ user }: UserDropdownMenuProps) => {
         className="rounded-1 px-1 pb-1 shadow-3 [&_.rt-DropdownMenuViewport]:p-0"
       >
         <Flex direction="column" px="2" pt="1">
-          <Text className="text-[14px] text-accent-12">{`${user.firstName} ${user.lastName}, ${user.honors}`}</Text>
-          <Text className="-mt-1 text-[13px] text-gray-11">{user.email}</Text>
+          <Text className="text-[14px] text-accent-12">{`${user?.firstName ?? ""} ${user?.lastName ?? ""}, ${user?.honors ?? ""}`}</Text>
+          <Text className="-mt-1 text-[13px] text-gray-11">{user?.email}</Text>
         </Flex>
         <DropdownMenu.Separator className="m-1" />
         <NextLink href="#">
