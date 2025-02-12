@@ -44,7 +44,7 @@ const ListViewTable = () => {
   const addTab = useRootStore((state) => state.addTab)
   const visitStatusCodes = useCodesetCodes(CODESETS.AppointmentStatus)
 
-  const inactiveVisitStatusCodes = useMemo(() => {
+  const statusCodes = useMemo(() => {
     return visitStatusCodes
       .filter((code) => {
         const group = code.attributes?.[0].value ?? ''
@@ -59,6 +59,7 @@ const ListViewTable = () => {
 
   const isRowDisabled = (row: Row<Appointment>) => {
     const visitStatus = row.getValue('visitStatus') as string
+    const inactiveVisitStatusCodes = statusCodes.filter(code => code !== 'CheckedOut')
     return inactiveVisitStatusCodes.includes(visitStatus)
   }
 

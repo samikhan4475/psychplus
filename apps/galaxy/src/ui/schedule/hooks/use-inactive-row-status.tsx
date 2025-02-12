@@ -5,7 +5,11 @@ const useInactiveRowStatus = (
   visitStatus: string,
   isServiceTimeDependent: boolean,
 ) => {
-  const inactiveVisitStatusCodes = useVisitStatusCodeset('Inactive')
+  const statusCodes = useVisitStatusCodeset('Inactive')
+  const inactiveVisitStatusCodes = statusCodes.filter(
+    (code) => code !== 'CheckedOut',
+  )
+
   const canChangeInactiveToActiveVisitStatus = useHasPermission(
     'changeInActiveToActiveVisitStatusForTimedServices',
   )
