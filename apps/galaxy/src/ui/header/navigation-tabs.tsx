@@ -5,6 +5,7 @@ import NextLink from 'next/link'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { Cross2Icon } from '@radix-ui/react-icons'
 import { Box, Flex, Text } from '@radix-ui/themes'
+import { ScrollBar } from '@/components/scroll-bar'
 import { useStore } from '@/store'
 import { cn } from '@/utils'
 
@@ -17,21 +18,23 @@ const NavigationTabs = () => {
   }, [])
 
   if (!mounted) {
-    return <Flex px="5" className="h-[38px] bg-accent-12" />
+    return <Flex px="5" className="min-h-[38px] bg-accent-12" />
   }
 
   return (
-    <Flex
+    <ScrollBar
       px="5"
       align="end"
       gap="2"
-      className="text-white h-[38px] bg-accent-12"
+      className={cn(
+        'text-white min-h-[38px] whitespace-nowrap bg-accent-12 pb-0'
+      )}
     >
       <NavigationTab href="/" label="Schedule" />
       {tabs.map((tab) => (
         <NavigationTab key={tab.href} href={tab.href} label={tab.label} />
       ))}
-    </Flex>
+    </ScrollBar>
   )
 }
 
@@ -64,14 +67,15 @@ const NavigationTab = ({ href, label }: NavigationTabProps) => {
       href={href}
       prefetch={false}
       className={cn(
-        'text-white hover:bg-white bg-pp-focus-bg flex cursor-pointer items-center gap-2 overflow-hidden rounded-t-2 px-2 py-1 no-underline',
+        'flex cursor-pointer items-center gap-2 rounded-t-2 px-2 py-1 no-underline transition-colors',
         {
-          'hover:bg-white cursor-default bg-[#FCFDFF] text-accent-12': isActive,
-        },
+          'text-white bg-pp-focus-bg hover:bg-white': !isActive,
+          'cursor-default bg-[#FCFDFF] text-accent-12': isActive,
+        }
       )}
     >
       <Text className="text-pp-black-1 text-[11px] font-[600]">{label}</Text>
-      {href !== '/' ? (
+      {href !== '/' && (
         <Flex
           align="center"
           justify="center"
@@ -79,7 +83,7 @@ const NavigationTab = ({ href, label }: NavigationTabProps) => {
             'rounded-full text-white h-[20px] w-[20px] cursor-pointer transition-colors hover:bg-gray-3',
             {
               'text-gray-9 hover:bg-gray-3 hover:text-gray-11': isActive,
-            },
+            }
           )}
           onClick={(e) => {
             e.preventDefault()
@@ -97,20 +101,17 @@ const NavigationTab = ({ href, label }: NavigationTabProps) => {
               if (isLastTab && prevTab) {
                 return router.replace(prevTab.href)
               }
-
               if (!isLastTab && nextTab) {
                 return router.replace(nextTab.href)
               }
-
               return router.replace('/')
             }
           }}
         >
           <Cross2Icon className="text-pp-black-1" width={12} height={12} />
         </Flex>
-      ) : (
-        <Box className="h-[20px]" />
       )}
+      {href === '/' && <Box className="h-[20px]" />}
     </NextLink>
   )
 }

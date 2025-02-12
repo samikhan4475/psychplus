@@ -14,9 +14,11 @@ const getUserFullName = (
     honors?: string
   },
   includeMiddlename = false,
-) =>
-  user?.middleName && includeMiddlename
-    ? `${user?.firstName} ${user?.middleName} ${user?.lastName}, ${user?.honors}`
-    : `${user?.firstName} ${user?.lastName}, ${user?.honors}`
+) => {
+  const name = includeMiddlename && user.middleName
+    ? `${user.firstName} ${user.middleName} ${user.lastName}`
+    : `${user.firstName} ${user.lastName}`
+  return user.honors ? `${name}, ${user.honors}` : name
+}
 
 export { getUserInitials, getUserFullName }

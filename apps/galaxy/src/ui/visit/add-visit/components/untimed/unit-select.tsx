@@ -13,7 +13,6 @@ const UnitDropdown = () => {
     legal,
     patient,
     state,
-    service,
     location,
     dateOfAdmission,
     admittingProvider,
@@ -25,28 +24,28 @@ const UnitDropdown = () => {
       'legal',
       'patient',
       'state',
-      'service',
       'location',
       'dateOfAdmission',
       'admittingProvider',
       'providerType',
     ],
   })
+
   const isDisabled =
     !patient ||
     !state ||
-    !service ||
     !location ||
     !legal ||
     !dateOfAdmission ||
     !admittingProvider ||
-    !providerType 
-    
+    !providerType
+
   const fetchOptions = useCallback(() => {
     if (!serviceId)
       return Promise.resolve({ state: 'success' as const, data: [] })
     return getUnitsGroupsAction({ serviceId, isUnit: true })
   }, [serviceId])
+
   return (
     <FormFieldContainer className="flex-1">
       <FormFieldLabel>Unit</FormFieldLabel>

@@ -48,7 +48,7 @@ const SelectInput = <T extends string>({
 
   const findLabel = (value: T) => {
     const selectedOption = options.find((option) => option.value === value)
-    return selectedOption ? selectedOption?.label : ''
+    return selectedOption ? selectedOption.label : ''
   }
 
   return (
@@ -87,7 +87,17 @@ const SelectInput = <T extends string>({
                 variant="surface"
               />
               <Select.Content position="popper" align="center" highContrast>
-                {items}
+                {options.length > 0 ? (
+                  items
+                ) : (
+                  <Select.Item
+                    value="no-data"
+                    disabled
+                    className="bg-white h-6 justify-center p-0 text-center text-1"
+                  >
+                    No data
+                  </Select.Item>
+                )}
               </Select.Content>
             </Select.Root>
           )

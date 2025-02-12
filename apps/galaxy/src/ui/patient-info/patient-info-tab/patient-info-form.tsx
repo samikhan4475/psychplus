@@ -9,8 +9,9 @@ import { useStore as zustandUseStore } from 'zustand'
 import { updatePatientProfileAction } from '@/actions'
 import { ActionResult } from '@/api/api'
 import { FormContainer } from '@/components'
+import { useStore as useRootStore } from '@/store'
 import type { PatientProfile } from '@/types'
-import { sanitizeFormData } from '@/utils'
+import { sanitizeFormData, updateTabLabel } from '@/utils'
 import { useStore } from '../store'
 import {
   updatePatientDrivingLicenseImageAction,
@@ -38,6 +39,10 @@ const PatientInfoForm = ({
   const router = useRouter()
   const store = useStore()
   const disabled = zustandUseStore(store, (state) => state.isUserLocked)
+  const { tabs, updateTab } = useRootStore((state) => ({
+    tabs: state.tabs,
+    updateTab: state.updateTab,
+  }))
 
   const form = useForm<PatientInfoSchemaType>({
     disabled: disabled,
@@ -60,6 +65,13 @@ const PatientInfoForm = ({
     if (result.state === 'error') {
       toast.error(result.error ?? 'Failed to update patient profile')
     } else if (result.state === 'success') {
+      const {
+        id,
+        legalName: { firstName, lastName },
+      } = result.data
+      const tab = updateTabLabel(tabs, id, `${firstName} ${lastName}`)
+      updateTab(tab)
+
       const imageUploadPromises: Promise<ActionResult<void>>[] = []
 
       if (driverLicenseImage) {

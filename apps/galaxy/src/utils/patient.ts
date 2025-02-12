@@ -23,7 +23,6 @@ const GENDER_ABBREVIATIONS: Record<Gender, GenderAbbreviation> = {
 const getPatientFirstName = (name: LegalName) => name?.firstName ?? ''
 
 const getPatientLastName = (name: LegalName) => name?.lastName ?? ''
-const getPatienHonors = (name: LegalName) => name?.honors ?? ''
 
 const getPatientMiddleName = (name: LegalName) => name?.middleName ?? ''
 
@@ -32,9 +31,7 @@ const filterDefaultCosigner = (cosigners: Cosigner[]) => {
 }
 
 const getPatientFullName = (name: LegalName) =>
-  `${getPatientFirstName(name)} ${getPatientLastName(name)}, ${getPatienHonors(
-    name,
-  )}`
+  `${getPatientFirstName(name)} ${getPatientLastName(name)}`
 
 const getPatientMRN = (id: number) => {
   const diff = PADDED_MRN_LENGTH - String(id).length

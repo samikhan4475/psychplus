@@ -22,7 +22,7 @@ const NonTimedVisitForm = () => {
       <Flex
         direction="column"
         p="2"
-        className="border-pp-focus-bg rounded-[4px] border border-[2px]"
+        className="border-pp-focus-bg rounded-[4px] border-[2px]"
         gap="3"
       >
         <Text className='text-[14px] font-[500]'>Create New Facility Admission ID</Text>
