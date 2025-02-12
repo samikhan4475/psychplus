@@ -1,7 +1,6 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { Text } from '@radix-ui/themes'
 import { Appointment, QuickNoteSectionItem } from '@/types'
 import { filterAndSort } from '@/utils'
 import { AddOnWidget } from './add-on-widget'
@@ -22,31 +21,25 @@ const AddOnClientLoader = ({
   visitType,
   data = [],
 }: AddOnClientLoaderProps) => {
-  const [values, setValues] = useState<AddOnWidgetSchemaType | undefined>(
-    undefined,
-  )
-  const [error, setError] = useState<string>('')
+  const [values, setValues] = useState<AddOnWidgetSchemaType>({})
   const [otherData, setOtherData] = useState<QuickNoteSectionItem[]>([])
   useEffect(() => {
     getBookedAppointmentAction(appointment).then((response) => {
+      let responseData: Appointment[] = []
       if (response.state === 'error') {
-        return setError(response?.error)
+        responseData = []
+      } else {
+        responseData = response?.data
       }
       const [addOndata, otherData] = filterAndSort(
         data,
         'additionalTherapyDetail',
       )
-      const values = transformIn(addOndata, response?.data, visitType)
+      const values = transformIn(addOndata, responseData, visitType)
       setOtherData(otherData)
       setValues(values)
     })
   }, [appointment, data, visitType])
-
-  if (error) {
-    return <Text>{error}</Text>
-  }
-
-  if (!values) return null
 
   return (
     <AddOnWidget

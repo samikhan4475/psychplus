@@ -83,9 +83,13 @@ const transformIn = (
   visitType?: string,
 ): AddOnWidgetSchemaType => {
   const therapy = visitType
-    ? ['Outpatient', 'EdVisit', 'TransitionalCare', 'Spravato'].includes(
-        visitType,
-      )
+    ? [
+        'Outpatient',
+        'ResidentCare',
+        'EdVisit',
+        'TransitionalCare',
+        'Spravato',
+      ].includes(visitType)
     : false
 
   let therapyPsychoanalysis = 'therapy'

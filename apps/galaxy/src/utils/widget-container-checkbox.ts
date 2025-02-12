@@ -10,6 +10,7 @@ interface WidgetContainerCheckboxState {
 
 const disabledHistoriesWidgetsVisitTypesBySequenceNew = [
   'Outpatient',
+  'ResidentCare',
   'TransitionalCare',
   'IndividualPsychotherapy',
   'FamilyPsychotherapy',

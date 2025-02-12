@@ -10,6 +10,7 @@ import { Specialist } from '@/ui/schedule/types'
 
 enum VisitTypes {
   Outpatient = 'Outpatient',
+  ResidentCare = 'ResidentCare',
   EdVisit = 'EdVisit',
   TransitionalCare = 'TransitionalCare',
   IndividualPsychotherapy = 'IndividualPsychotherapy',

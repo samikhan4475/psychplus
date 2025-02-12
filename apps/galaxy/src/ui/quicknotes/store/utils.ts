@@ -178,6 +178,7 @@ const validateAllergies = ({
 }) => {
   const allowedVisitType = [
     VisitTypeEnum.Outpatient,
+    VisitTypeEnum.ResidentCare,
     VisitTypeEnum.TransitionalCare,
   ].includes(visitType as VisitTypeEnum)
 

@@ -64,6 +64,7 @@ const blocks: Block[] = [
 
 const visitTypeToBlocks: Record<string, string[]> = {
   Outpatient: ['InjectionBlock', 'TherapyPsychoAnalysisBlock'],
+  ResidentCare: ['InjectionBlock', 'TherapyPsychoAnalysisBlock'],
   EdVisit: ['InjectionBlock', 'TherapyPsychoAnalysisBlock'],
   TransitionalCare: ['InjectionBlock', 'TherapyPsychoAnalysisBlock'],
   'HospitalCare/Initial': [
@@ -102,7 +103,9 @@ const getBlocksByVisitType = (visitType: string, visitSequence: string) => {
       const block = blocks.find((block) => block.id === id)
       if (
         block?.id === 'TherapyPsychoAnalysisBlock' &&
-        ['Outpatient', 'EdVisit', 'TransitionalCare'].includes(visitType)
+        ['Outpatient', 'EdVisit', 'TransitionalCare', 'ResidentCare'].includes(
+          visitType,
+        )
       ) {
         return {
           ...block,
