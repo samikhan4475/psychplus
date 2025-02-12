@@ -22,7 +22,7 @@ import {
   type PatientInfoSchemaType,
 } from './patient-info-schema'
 import { transformOut } from './transform'
-import { getInitialValues } from './utils'
+import { cleanPayload, getInitialValues, isEmptyDriverLicense } from './utils'
 
 interface PatientInfoFormProps {
   patient: PatientProfile
@@ -59,8 +59,21 @@ const PatientInfoForm = ({
       profileImage,
       driverLicenseImage,
     )
+    if (
+      !isEmptyDriverLicense(payload.driversLicense) &&
+      !payload?.driversLicense?.number
+    ) {
+      form.setError('driversLicense.number', {
+        type: 'required',
+        message: 'required',
+      })
+      return
+    }
 
-    const result = await updatePatientProfileAction(patient?.id, payload)
+    const result = await updatePatientProfileAction(
+      patient?.id,
+      cleanPayload(payload),
+    )
 
     if (result.state === 'error') {
       toast.error(result.error ?? 'Failed to update patient profile')

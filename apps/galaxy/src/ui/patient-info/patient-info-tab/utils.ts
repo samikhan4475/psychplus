@@ -39,6 +39,23 @@ const initialAddress = {
   postalCode: '',
 }
 
+const  isEmptyDriverLicense = (driverObj:PatientProfile['driversLicense']) =>  {
+  if (!driverObj || typeof driverObj !== 'object') return true;
+
+  const { type, ...rest } = driverObj;
+
+  return Object.values(rest).every(value => !value);
+}
+
+
+const cleanPayload = (payload: PatientProfile) => {
+  if (isEmptyDriverLicense(payload.driversLicense)) {
+    delete payload.driversLicense;
+  }
+  return payload;
+}
+
+
 const getPhoneNumber = (
   phoneNumbers: PhoneNumber[] = [],
   type: PhoneNumberType,
@@ -96,8 +113,8 @@ const getInitialValues = (patient: PatientProfile) => {
       mailingAddress: patient?.contactDetails?.isMailingAddressSameAsPrimary
         ? { ...initialAddress, type: 'Mailing' as PatientAddressType }
         : patient?.contactDetails?.addresses?.find(
-            (address) => address.type === 'Mailing',
-          ) ?? { ...initialAddress, type: 'Mailing' }, // Ensure mailingAddress has a fallback
+          (address) => address.type === 'Mailing',
+        ) ?? { ...initialAddress, type: 'Mailing' }, // Ensure mailingAddress has a fallback
       isMailingAddressSameAsPrimary:
         patient?.contactDetails?.isMailingAddressSameAsPrimary ?? true,
     },
@@ -115,17 +132,17 @@ const getInitialValues = (patient: PatientProfile) => {
     alternateOrPreviousContactDetails:
       patient?.alternateOrPreviousContactDetails
         ? {
-            homeAddress:
-              patient?.alternateOrPreviousContactDetails?.addresses?.find(
-                (addr) => addr.type === 'Home',
-              ) ?? { ...initialAddress, type: 'Home' },
-          }
+          homeAddress:
+            patient?.alternateOrPreviousContactDetails?.addresses?.find(
+              (addr) => addr.type === 'Home',
+            ) ?? { ...initialAddress, type: 'Home' },
+        }
         : {
-            homeAddress: {
-              ...initialAddress,
-              type: 'Home' as PatientAddressType,
-            },
+          homeAddress: {
+            ...initialAddress,
+            type: 'Home' as PatientAddressType,
           },
+        },
     language: patient?.language ?? '',
     languageAbility: patient?.languageAbility ?? '',
     languageProficiency: patient?.languageProficiency ?? '',
@@ -150,4 +167,4 @@ const getInitialValues = (patient: PatientProfile) => {
   }
 }
 
-export { applyClientSideFilters, getInitialValues }
+export { applyClientSideFilters, getInitialValues, cleanPayload, isEmptyDriverLicense }

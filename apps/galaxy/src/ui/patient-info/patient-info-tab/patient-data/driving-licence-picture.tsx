@@ -29,6 +29,7 @@ const DrivingLicensePicture = ({
     setDriverLicenseImage(file)
     const url = file ? URL.createObjectURL(file) : ''
     setDrivingLicenseImageUrl(url)
+    form.setValue('driversLicense.hasFrontImage', !!file)
   }
 
   return (

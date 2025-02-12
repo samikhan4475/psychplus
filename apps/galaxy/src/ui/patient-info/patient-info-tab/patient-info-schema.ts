@@ -95,8 +95,8 @@ const patientInfoSchema = z
     driversLicense: z
       .object({
         type: z.string().optional().default('DriversLicense'),
-        number: requiredString,
-        validIn: requiredString,
+        number: z.string().optional(),
+        validIn: z.string().optional(),
         hasFrontImage: z.boolean(),
         hasBackImage: z.boolean().optional(),
       })
