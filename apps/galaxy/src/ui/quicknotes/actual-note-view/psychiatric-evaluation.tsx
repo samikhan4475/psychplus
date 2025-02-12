@@ -27,7 +27,7 @@ const PsychiatricEvaluation = ({ appointment, patient }: Props) => {
     (service) => service.value === appointment.service,
   )?.display
 
-  const { time } = convertToTimezone(
+  const { date, time } = convertToTimezone(
     appointment.startDate,
     appointment.locationTimezoneId,
   )
@@ -51,10 +51,7 @@ const PsychiatricEvaluation = ({ appointment, patient }: Props) => {
       <LabelAndValue label="Cosigner:" value={cosignerLabel ?? ''} />
       <LabelAndValue label="Location:" value={appointment.locationName} />
       <LabelAndValue label="Service:" value={service} />
-      <LabelAndValue
-        label="Date:"
-        value={getSlashedPaddedDateString(appointment.startDate ?? '', false)}
-      />
+      <LabelAndValue label="Date:" value={getSlashedPaddedDateString(date)} />
       <LabelAndValue label="Time:" value={time} />
       <LabelAndValue label="Duration:" value={`${appointment.duration} mins`} />
       <LabelAndValue label="Visit #:" value={appointment.encounterNumber} />
