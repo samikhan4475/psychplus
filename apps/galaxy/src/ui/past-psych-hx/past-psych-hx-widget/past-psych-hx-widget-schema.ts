@@ -3,11 +3,16 @@ import { z } from 'zod'
 type PastPsychHxWidgetSchemaType = z.infer<typeof pastPsychHxWidgetSchema>
 
 const conditionalPositiveInt = z.coerce.number().optional()
+const nonZeroNumber = z.string().regex(/^\d+$/, "Required")
+.refine((val) => Number(val) > 0, {
+  message: "Must be greater than zero",
+});
+
 
 const pastPsychHxWidgetSchema = z.object({
   widgetContainerCheckboxField: z.string().optional(),
-  psychHospitalizations: z.coerce.number(),
-  suicideAttempts: z.coerce.number(),
+  psychHospitalizations: nonZeroNumber,
+  suicideAttempts: nonZeroNumber,
   depression: z.oboolean(),
   depressionAge: conditionalPositiveInt,
   anxiety: z.oboolean(),
