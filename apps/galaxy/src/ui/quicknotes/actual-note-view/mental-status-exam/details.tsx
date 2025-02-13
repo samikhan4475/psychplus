@@ -31,15 +31,15 @@ const Details = ({
     memoryRemoteIntactOther: 'Memory',
     schizophreniaDelusionValues: 'Thought Content Delusion',
     schizophreniaHallucinationsValues: 'Thought Content Hallucinations',
-    tcsiYesNo: 'Thought Content Si',
-    tchiYesNo: 'Thought Content Hi',
+    tcsiYesNo: 'Thought Content Suicidal Ideation',
+    tchiYesNo: 'Thought Content Homicidal Ideation',
     thoughtContentOther: 'Thought Content',
     tcDelusionsYesNo: 'Thought Content Delusions',
     tcHallucinationsYesNo: 'Thought Content Hallucinations',
     mmRecentIntactYesNo: 'Memory Recent Intact',
     mmRemoteIntactYesNo: 'Memory Remote Intact',
-    siUnDisclosed: 'Thought Content Si',
-    hiUnDisclosed: 'Thought Content Hi',
+    siUnDisclosed: 'Thought Content Suicidal Ideation Plan',
+    hiUnDisclosed: 'Thought Content Homicidal Ideation Plan',
   }
 
   const reorderedData = reorderObjectKeys(data, [...desiredOrderMse])

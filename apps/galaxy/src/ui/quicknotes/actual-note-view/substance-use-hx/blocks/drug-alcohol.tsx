@@ -41,6 +41,7 @@ const DrugAlcohol: React.FC<DrugAlcoholProps> = ({
     (acc, item) => acc + Number(item.sectionItemValue),
     0,
   )
+  const showBlock = data.drugs === 'yes' || data.alcohol === 'yes'
   return (
     <Flex direction="column">
       {data.alcohol && (
@@ -85,7 +86,7 @@ const DrugAlcohol: React.FC<DrugAlcoholProps> = ({
           />
         </>
       )}
-      {data.questionnaire && (
+      {showBlock && data.questionnaire && (
         <LabelAndValue
           label="Questionnaire:"
           value={`Pt was agreeable to detailed assessment: ${data.questionnaire}`}
@@ -117,27 +118,32 @@ const DrugAlcohol: React.FC<DrugAlcoholProps> = ({
           className="flex-nowrap"
         />
       )}
-      {data.briefInterventionDetail && (
-        <LabelAndValue
-          label="Brief Intervention:"
-          value={data.briefInterventionDetail}
-          className="flex-nowrap"
-        />
-      )}
 
-      <LabelAndValue
-        label="Referral Treatment:"
-        value={mapValuesToLabels(
-          data.referralTreatment as string[],
-          referralTreatmentCodeset,
-        )}
-      />
-      <LabelAndValue
-        label="Discussed alcohol/substance use cessation for:"
-        value={data.alcoholSubstanceCessationDiscussionDuration}
-      />
-      {data.otherAlcoholDrugs && (
-        <LabelAndValue label="Other:" value={data.otherAlcoholDrugs} />
+      {showBlock && (
+        <>
+          {data.briefInterventionDetail && (
+            <LabelAndValue
+              label="Brief Intervention:"
+              value={data.briefInterventionDetail}
+              className="flex-nowrap"
+            />
+          )}
+
+          <LabelAndValue
+            label="Referral Treatment:"
+            value={mapValuesToLabels(
+              data.referralTreatment as string[],
+              referralTreatmentCodeset,
+            )}
+          />
+          <LabelAndValue
+            label="Discussed alcohol/substance use cessation for:"
+            value={data.alcoholSubstanceCessationDiscussionDuration}
+          />
+          {data.otherAlcoholDrugs && (
+            <LabelAndValue label="Other:" value={data.otherAlcoholDrugs} />
+          )}
+        </>
       )}
     </Flex>
   )
