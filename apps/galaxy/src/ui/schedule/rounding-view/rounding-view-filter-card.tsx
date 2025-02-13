@@ -129,12 +129,12 @@ const RoundingViewFilterCard = () => {
     const transformedData = {
       ...data,
       startingDate: getDateString(startingDate),
-      endingDate: getDateString(endingDate),
+      endingDate: getDateString(endingDate?.add({days: 1})),
       dateOfBirth: getCalendarDateLabel(dateOfBirth),
       dateOfAdmissionStart: getDateString(dateOfAdmissionStart),
-      dateOfAdmissionEnd: getDateString(dateOfAdmissionEnd),
+      dateOfAdmissionEnd: getDateString(dateOfAdmissionEnd?.add({days: 1})),
       lastCoverageDateStart: getDateString(lastCoverageDateStart),
-      lastCoverageDateEnd: getDateString(lastCoverageDateEnd),
+      lastCoverageDateEnd: getDateString(lastCoverageDateEnd?.add({ days: 1})),
       patientStatuses: patientStatuses ? [patientStatuses] : [],
       providerIds: [],
     }

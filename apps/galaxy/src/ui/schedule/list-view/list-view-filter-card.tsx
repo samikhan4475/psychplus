@@ -22,7 +22,6 @@ import { useStore as useRootStore } from '../store'
 import {
   getCalendarDateLabel,
   getDateString,
-  getUtcDateWithoutTime,
   getUtcTime,
   isDirty,
 } from '../utils'
@@ -138,13 +137,17 @@ const ListViewFilterCard = () => {
     if (!isDirty(dirtyFields)) return
     const transformedData = {
       ...data,
-      startingDate: getUtcDateWithoutTime(data.startingDate),
-      endingDate: getUtcDateWithoutTime(data.endingDate),
+      startingDate: getDateString(data.startingDate),
+      endingDate: getDateString(data.endingDate?.add({ days: 1 })),
       dateOfBirth: getCalendarDateLabel(data.dateOfBirth),
       dateOfAdmissionStart: getDateString(data.dateOfAdmissionStart),
-      dateOfAdmissionEnd: getDateString(data.dateOfAdmissionStart),
+      dateOfAdmissionEnd: getDateString(
+        data.dateOfAdmissionStart?.add({ days: 1 }),
+      ),
       lastCoverageDateStart: getDateString(data.lastCoverageDateStart),
-      lastCoverageDateEnd: getDateString(data.lastCoverageDateStart),
+      lastCoverageDateEnd: getDateString(
+        data.lastCoverageDateStart?.add({ days: 1 }),
+      ),
       patientStatuses: data.patientStatuses ? [data.patientStatuses] : [],
       bookedAppointmentTime: getUtcTime(data.bookedAppointmentTime),
       providerIds: data.providerIds ? [Number(data.providerIds)] : [],

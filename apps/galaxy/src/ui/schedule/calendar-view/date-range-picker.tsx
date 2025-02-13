@@ -72,7 +72,7 @@ function DateRangePickerInput<T extends DateValue>({
       <FieldError>{errorMessage}</FieldError>
       <Popover className="bg-white pointer-events-auto rounded-[6px] p-3 shadow-[0px_7px_29px_rgba(100,100,111,0.2)]">
         <Dialog>
-          <Calendar>
+          <Calendar className='calendar-grid-container'>
             <Flex justify="between" className="mb-2" align="center">
               <Button
                 slot="previous"
