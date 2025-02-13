@@ -63,6 +63,8 @@ const ListViewTable = () => {
     return inactiveVisitStatusCodes.includes(visitStatus)
   }
 
+  const isTestPatient = (row: Row<Appointment>) => row.original.isTestPatient
+
   return (
     <ScrollArea
       className="bg-white h-full flex-1 px-2.5 py-2"
@@ -90,6 +92,7 @@ const ListViewTable = () => {
         disablePagination
         columns={columns}
         isRowDisabled={isRowDisabled}
+        isTestPatient={isTestPatient}
         data={data}
         renderHeader={DataTableHeader}
         isRowSpan
