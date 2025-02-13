@@ -8,9 +8,11 @@ import { mapCodesetToOptions } from '@/utils'
 import FAMILY_PSYCH_BLOCK_OPTIONS from './family-psych-options.json'
 
 const ConditionsBlock = () => {
-  const RELATIONSHIP_OPTIONS = mapCodesetToOptions(
-    useCodesetCodes(CODESETS.PsychHistoryRelation),
+  const RoleCodes = useCodesetCodes(CODESETS.Relationship).filter(
+    (item) => item.groupingCode === 'PRIMARY',
   )
+
+  const RELATIONSHIP_OPTIONS = mapCodesetToOptions(RoleCodes)
 
   return (
     <Flex gap="2" wrap="wrap">

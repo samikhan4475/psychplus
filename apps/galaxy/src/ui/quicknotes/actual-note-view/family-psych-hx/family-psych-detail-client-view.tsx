@@ -29,7 +29,9 @@ const FamilyPsychDetailClientView = ({
     initialValue: transformedData.widgetContainerCheckboxField,
   })?.actualNoteViewVisibility
 
-  const relationshipCodeset = useCodesetCodes(CODESETS.PsychHistoryRelation)
+  const RELATIONSHIP_OPTIONS = useCodesetCodes(CODESETS.Relationship).filter(
+    (item) => item.groupingCode === 'PRIMARY',
+  )
 
   return (
     <ActualNoteDetailsWrapper
@@ -38,7 +40,7 @@ const FamilyPsychDetailClientView = ({
       <Details
         data={transformedData}
         actualNoteViewVisibility={actualNoteViewVisibility}
-        relationshipCodeset={relationshipCodeset}
+        relationshipCodeset={RELATIONSHIP_OPTIONS}
       />
     </ActualNoteDetailsWrapper>
   )
