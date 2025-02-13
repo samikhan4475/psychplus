@@ -27,6 +27,7 @@ const BannerAppointmentButton = ({
           appointmentType: appointmentType,
           zipCode: '77070',
           state: 'Texas',
+          stateCode: 'TX',
         },
       }),
     )

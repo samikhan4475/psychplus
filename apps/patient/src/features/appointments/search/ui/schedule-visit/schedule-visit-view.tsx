@@ -216,6 +216,7 @@ const ScheduleVisitView = ({ googleAPIkey }: { googleAPIkey: string }) => {
           appointmentType: data.appointmentType,
           zipCode: data.zipCode,
           state: data.state,
+          stateCode: zipStates?.[0]?.code,
         }
         sessionStorage.setItem(
           APPOINTMENTS_SEARCH_SESSION_KEY,
@@ -233,6 +234,7 @@ const ScheduleVisitView = ({ googleAPIkey }: { googleAPIkey: string }) => {
         appointmentType: data.appointmentType,
         zipCode: data.zipCode,
         state: data.state,
+        stateCode: zipStates?.[0]?.code,
       }
       sessionStorage.setItem(
         APPOINTMENTS_SEARCH_SESSION_KEY,
