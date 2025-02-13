@@ -12,22 +12,19 @@ const Details = ({
   data,
   actualNoteViewVisibility,
 }: Props<PastPsychHxWidgetSchemaType>) => {
-  const {
-    psychHospitalizations,
-    suicideAttempts,
-  } = data
+  const { psychHospitalizations, suicideAttempts } = data
 
   const getValue = (
     option: (typeof PAST_PSYCH_CONDITIONS_BLOCK_OPTIONS)[number],
   ) => {
-    if (option.label === 'Other') {
-      return data[option.detailsField as keyof PastPsychHxWidgetSchemaType]
-    }
-    return data[option.field as keyof PastPsychHxWidgetSchemaType]
-      ? `Age Started: ${
-          data[option.detailsField as keyof PastPsychHxWidgetSchemaType]
-        }`
-      : ''
+    const fieldValue = data[option.field as keyof PastPsychHxWidgetSchemaType]
+    const detailsValue =
+      data[option.detailsField as keyof PastPsychHxWidgetSchemaType]
+
+    if (option.label === 'Other') return detailsValue
+    if (fieldValue)
+      return detailsValue !== undefined ? `Age Started: ${detailsValue}` : ''
+    return undefined
   }
 
   return actualNoteViewVisibility ? (
@@ -39,13 +36,18 @@ const Details = ({
         />
         <LabelAndValue label="Suicide Attempts:" value={suicideAttempts} />
       </Flex>
-      {PAST_PSYCH_CONDITIONS_BLOCK_OPTIONS.map((option) => (
-        <LabelAndValue
-          key={option.field}
-          label={`${option.label}:`}
-          value={getValue(option)}
-        />
-      ))}
+      {PAST_PSYCH_CONDITIONS_BLOCK_OPTIONS.map((option) => {
+        const value = getValue(option)
+        const label = value ? `${option.label}:` : option.label
+        return (
+          <LabelAndValue
+            key={option.field}
+            label={label}
+            value={value}
+            allowEmptyValue={value != undefined}
+          />
+        )
+      })}
     </BlockContainer>
   ) : null
 }

@@ -14,7 +14,8 @@ const transformIn = (
     const key = item.sectionItem as keyof FamilyPsychHxWidgetSchemaType
     const relationKey =
       `${item.sectionItem}Relation` as keyof FamilyPsychHxWidgetSchemaType
-    const itemValue = item.sectionItemValue.split(',')
+    const itemValue =
+      item.sectionItemValue === 'empty' ? [] : item.sectionItemValue.split(',')
 
     if (key === 'other') {
       result.other = item.sectionItemValue
@@ -47,17 +48,21 @@ const transformOut =
           sectionItem: key,
           sectionItemValue: value.toString(),
         })
-      }
-      if (!key.includes('Relation') && value) {
+      } else if (
+        !key.includes('Relation') &&
+        value &&
+        key !== 'widgetContainerCheckboxField'
+      ) {
         const relationKey =
           `${key}Relation` as keyof FamilyPsychHxWidgetSchemaType
-        if (formData[relationKey]?.toString()) {
-          result.push({
-            ...defaultPayload,
-            sectionItem: key,
-            sectionItemValue: formData[relationKey]?.toString(),
-          })
-        }
+        result.push({
+          ...defaultPayload,
+          sectionItem: key,
+          sectionItemValue:
+            formData[relationKey] === '' || formData[relationKey] === undefined
+              ? 'empty'
+              : formData[relationKey].toString(),
+        })
       }
     })
     if (formData.widgetContainerCheckboxField) {

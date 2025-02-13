@@ -21,9 +21,10 @@ const transformIn = (
       result[key] = itemValue
     } else if (key === 'other') {
       result.other = true
-      result.otherDetails = itemValue
+      result.otherDetails = itemValue === 'empty' ? '' : itemValue
     } else if (key in result) {
-      result[`${key}Age`] = Number(itemValue)
+      result[`${key}Age`] =
+        itemValue !== 'empty' ? Number(itemValue) : undefined
       result[key] = true
     }
   })
@@ -50,21 +51,27 @@ const transformOut =
           sectionItem: key,
           sectionItemValue: value.toString(),
         })
-      } else if (key === 'other' && value === true && formData.otherDetails) {
+      } else if (key === 'other' && value === true) {
         result.push({
           ...QuickNotesPayload,
           sectionItem: key,
-          sectionItemValue: formData.otherDetails,
+          sectionItemValue: formData.otherDetails ?? 'empty',
         })
-      }
-      if (!key.includes('Age') && value) {
+      } else if (
+        !key.includes('Age') &&
+        value &&
+        key !== 'otherDetails' &&
+        key !== 'widgetContainerCheckboxField'
+      ) {
         const ageKey = `${key}Age` as keyof PastPsychHxWidgetSchemaType
-        if (formData[ageKey]?.toString())
-          result.push({
-            ...QuickNotesPayload,
-            sectionItem: key,
-            sectionItemValue: formData[ageKey]?.toString(),
-          })
+        result.push({
+          ...QuickNotesPayload,
+          sectionItem: key,
+          sectionItemValue:
+            formData[ageKey] === '' || formData[ageKey] === undefined
+              ? 'empty'
+              : formData[ageKey].toString(),
+        })
       }
     })
 

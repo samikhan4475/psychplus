@@ -16,23 +16,29 @@ const renderFamilyPsychHistory = (
   data: FamilyPsychHxWidgetSchemaType,
   relationshipCodeset: SharedCode[],
 ): JSX.Element => {
+  const getValue = (option: (typeof FAMILY_PSYCH_BLOCK_OPTIONS)[number]) => {
+    const value = mapValuesToLabels(
+      data[option.detailsField as FamilyPsychHxKey] as string[],
+      relationshipCodeset,
+    )
+    const fieldValue = data[option.field as keyof FamilyPsychHxWidgetSchemaType]
+
+    if (fieldValue) return value ? `Relationship: ${value}` : ''
+    return undefined
+  }
+
   return (
     <BlockContainer heading="Family Psychiatry History">
       {FAMILY_PSYCH_BLOCK_OPTIONS.map((option) => {
-        const value = mapValuesToLabels(
-          data[option.detailsField as FamilyPsychHxKey] as string[],
-          relationshipCodeset,
-        )
+        const value = getValue(option)
+        const label = value ? `${option.label}:` : option.label
 
         return (
           <LabelAndValue
             key={option.field}
-            label={`${option.label}:`}
-            value={
-              data[option.field as FamilyPsychHxKey]
-                ? `Relationship: ${value}`
-                : ''
-            }
+            label={label}
+            value={value}
+            allowEmptyValue={value != undefined}
           />
         )
       })}

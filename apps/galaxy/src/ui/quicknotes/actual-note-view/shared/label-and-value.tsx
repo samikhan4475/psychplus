@@ -13,6 +13,7 @@ interface LabelAndValueProps {
   className?: string
   flexDirection?: string
   detailsClassName?: string
+  allowEmptyValue?: boolean
 }
 const LabelAndValue = ({
   label,
@@ -20,8 +21,9 @@ const LabelAndValue = ({
   className,
   flexDirection = 'row',
   detailsClassName,
+  allowEmptyValue = false,
 }: LabelAndValueProps) => {
-  if (!value) return null
+  if (!value && !allowEmptyValue) return null
   return (
     <Flex
       direction={flexDirection as FlexDirection}
