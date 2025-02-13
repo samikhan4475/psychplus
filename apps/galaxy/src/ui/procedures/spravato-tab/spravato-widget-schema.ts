@@ -106,10 +106,6 @@ const spravatoWidgetSchema = z
         path: ['postTreatmentSafety'],
       },
       {
-        condition: !data?.certifiedTechnician,
-        path: ['certifiedTechnician'],
-      },
-      {
         condition: !data?.doseAdminstered,
         path: ['doseAdminstered'],
       },

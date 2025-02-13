@@ -13,10 +13,6 @@ const Monitoring = ({ data }: { data: SpravatoWidgetSchemaType }) => {
     <Flex direction="column" gap="1">
       <Text className="whitespace-nowrap text-3 font-[600]">Monitoring</Text>
       <LabelAndValue
-        label="On Site REM Certified Technician:"
-        value={getFormValue(data, 'certifiedTechnicianName', 'Select option')}
-      />
-      <LabelAndValue
         label="Zofran Administered:"
         value={zofranAdministrated === 'no' ? 'No' : 'Yes'}
       />
