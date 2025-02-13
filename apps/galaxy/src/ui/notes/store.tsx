@@ -149,6 +149,7 @@ const useStore = create<Store>((set, get) => ({
       patientIds: [Number(patientId)],
       appointmentIds: [Number(appointmentId)],
       isFollowUp: true,
+      isShowActiveVisits: true,
     })
 
     if (appointments.state === 'error') {

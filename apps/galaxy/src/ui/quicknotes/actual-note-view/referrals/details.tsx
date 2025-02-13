@@ -13,7 +13,6 @@ interface Props<T> {
 }
 
 const Details = ({ data }: Props<PatientReferral>) => {
-  
   const options = useCodesetOptions(CODESETS.ServicesOffered, '', [
     CODE_NOT_SET,
   ])
@@ -29,9 +28,9 @@ const Details = ({ data }: Props<PatientReferral>) => {
   return (
     <BlockContainer heading="Referrals">
       <ScrollArea className="max-h-48 pr-2" scrollbars="vertical">
-        <Flex gap="1" direction="column">
-          {data.map((referral, idx) => (
-            <Text size="1" key={`${referral}-${idx}`}>
+        {data.map((referral, idx) => (
+          <Flex gap="1" direction="column" key={`${referral}-${idx}`}>
+            <Text size="1">
               {[
                 getServiceLabel(options, referral.service),
                 formatDateTime(referral?.referralDate) ?? 'N/A',
@@ -50,11 +49,10 @@ const Details = ({ data }: Props<PatientReferral>) => {
                 formatDateTime(referral?.nextVisit) ?? 'N/A',
                 formatDateTime(referral?.patientVisitHistory) ?? 'N/A',
                 referral?.comments ?? 'N/A',
-
               ].join(' | ')}
             </Text>
-          ))}
-        </Flex>
+          </Flex>
+        ))}
       </ScrollArea>
     </BlockContainer>
   )
