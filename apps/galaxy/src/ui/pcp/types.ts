@@ -17,20 +17,21 @@ export interface PcpViewWithInitialValueProps {
 export type PhoneNumberType = 'Contact' | 'Home' | 'Business'
 
 export interface ContactDetails {
-  phoneNumbers: PhoneNumber[]
+  phoneNumbers?: PhoneNumber[]
   email: string
   isMailingAddressSameAsPrimary?: boolean
-  addresses: PatientAddress[]
+  addresses?: PatientAddress[]
 }
 
 export interface ExternalProvider {
   id?: string
   legalName: LegalName
-  contactDetails: ContactDetails
+  contactDetails?: ContactDetails
   isMailingAddressSameAsHome?: boolean
   metadata?: Metadata
   recordStatus?: string
 }
+
 export interface ServerSearchSelectID {
   id?: string | number
 }

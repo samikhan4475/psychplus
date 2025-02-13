@@ -1,14 +1,14 @@
 import { PatientAddress } from '@/types'
 import { LegalName } from '@/types/name'
-import { ContactDetails, ExternalProvider } from '../types'
+import { ContactDetails } from '../types'
 
 export type OriginalData = {
   firstName: string
   lastName: string
-  credentials: string
-  phone: string
-  email: string
-  fax: string
+  credentials?: string
+  phone?: string
+  email?: string
+  fax?: string
   isMailingAddressSameAsHome: string
   officeAddress: PatientAddress
   mailingAddress: PatientAddress
@@ -20,7 +20,7 @@ export type TransformedData = {
   IsMailingAddressSameAsHome: boolean
 }
 
-export const transformData = (data: OriginalData): ExternalProvider => {
+export const transformData = (data: OriginalData) => {
   const {
     firstName,
     lastName,
@@ -33,7 +33,7 @@ export const transformData = (data: OriginalData): ExternalProvider => {
     mailingAddress,
   } = data
 
-  return {
+  const res = {
     legalName: {
       firstName: firstName,
       lastName: lastName,
@@ -41,10 +41,10 @@ export const transformData = (data: OriginalData): ExternalProvider => {
     },
     contactDetails: {
       phoneNumbers: [
-        { type: 'Contact', number: phone },
-        { type: 'Business', number: fax },
+        { type: 'Contact', number: phone || '' },
+        { type: 'Business', number: fax || '' },
       ],
-      email: email,
+      email: email || '',
       addresses: [
         {
           type: 'Home',
@@ -75,4 +75,16 @@ export const transformData = (data: OriginalData): ExternalProvider => {
     },
     isMailingAddressSameAsHome: isMailingAddressSameAsHome === 'yes',
   }
+
+  res.contactDetails.phoneNumbers = res.contactDetails.phoneNumbers.filter(
+    (phoneNumber) => phoneNumber.number.trim() !== '',
+  )
+  res.contactDetails.addresses = res.contactDetails.addresses.filter(
+    (address) =>
+      address.street1.trim() !== '' &&
+      address.city.trim() !== '' &&
+      address.state.trim() !== '' &&
+      address.postalCode.trim() !== '',
+  )
+  return res
 }

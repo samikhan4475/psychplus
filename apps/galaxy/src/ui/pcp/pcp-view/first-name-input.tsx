@@ -24,7 +24,7 @@ const FirstNameInput = () => {
         <ServerSearchSelect
           fieldName="firstName"
           placeholder=""
-          initialValue={transformData(form.getValues())}
+          initialValue={transformData(form.getValues()) as ExternalProvider}
           fetchResults={fetchExternalProvidersAction}
           formatText={(value: ExternalProvider) => {
             if (typeof value === 'object' && value?.legalName?.firstName) {
@@ -66,37 +66,39 @@ const FirstNameInput = () => {
             form.setValue('credentials', value.legalName.title || '')
             form.setValue(
               'phone',
-              value.contactDetails.phoneNumbers[0]?.number || '',
+              value?.contactDetails?.phoneNumbers?.[0]?.number || '',
             )
             form.setValue(
               'fax',
-              value.contactDetails.phoneNumbers[1]?.number || '',
+              value?.contactDetails?.phoneNumbers?.[1]?.number || '',
             )
-            form.setValue('email', value.contactDetails.email)
+            form.setValue('email', value?.contactDetails?.email)
             form.setValue(
               'isMailingAddressSameAsHome',
               value.isMailingAddressSameAsHome ? 'yes' : 'no',
             )
             form.setValue('officeAddress', {
-              type: value?.contactDetails.addresses[0]?.type as z.infer<
+              type: value?.contactDetails?.addresses?.[0]?.type as z.infer<
                 typeof pcpAddressTypeEnum
               >,
-              street1: value.contactDetails.addresses[0]?.street1 || '',
-              street2: value.contactDetails.addresses[0]?.street2 || '',
-              city: value.contactDetails.addresses[0]?.city || '',
-              state: value.contactDetails.addresses[0]?.state || '',
-              postalCode: value.contactDetails.addresses[0]?.postalCode || '',
+              street1: value?.contactDetails?.addresses?.[0]?.street1 || '',
+              street2: value?.contactDetails?.addresses?.[0]?.street2 || '',
+              city: value?.contactDetails?.addresses?.[0]?.city || '',
+              state: value?.contactDetails?.addresses?.[0]?.state || '',
+              postalCode:
+                value?.contactDetails?.addresses?.[0]?.postalCode || '',
               country: 'US',
             })
             form.setValue('mailingAddress', {
-              type: value?.contactDetails.addresses[0]?.type as z.infer<
+              type: value?.contactDetails?.addresses?.[0]?.type as z.infer<
                 typeof pcpAddressTypeEnum
               >,
-              street1: value.contactDetails.addresses[1]?.street1 || '',
-              street2: value.contactDetails.addresses[1]?.street2 || '',
-              city: value.contactDetails.addresses[1]?.city || '',
-              state: value.contactDetails.addresses[1]?.state || '',
-              postalCode: value.contactDetails.addresses[1]?.postalCode || '',
+              street1: value?.contactDetails?.addresses?.[1]?.street1 || '',
+              street2: value?.contactDetails?.addresses?.[1]?.street2 || '',
+              city: value?.contactDetails?.addresses?.[1]?.city || '',
+              state: value?.contactDetails?.addresses?.[1]?.state || '',
+              postalCode:
+                value?.contactDetails?.addresses?.[1]?.postalCode || '',
               country: 'US',
             })
           }}

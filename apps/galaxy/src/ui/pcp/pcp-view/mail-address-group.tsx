@@ -2,7 +2,6 @@
 
 import { Flex, Text } from '@radix-ui/themes'
 import { AddressFieldsGroup } from '@/components/'
-import { MailAddressRadio } from './mail-address-radio'
 
 const MailAddressGroup = () => {
   return (
@@ -13,6 +12,7 @@ const MailAddressGroup = () => {
         </Text>
       </Flex>
       <AddressFieldsGroup
+        required={false}
         columnsPerRow="2"
         direction="row"
         addressFieldName="street1"

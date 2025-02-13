@@ -6,11 +6,6 @@ export const pcpAddressTypeEnum = z.enum([
   'Mailing',
   'Billing',
 ])
-const requiredString = z
-  .string()
-  .min(1, 'Required')
-  .max(128, { message: 'Cannot exceed 128 characters' })
-
 const optionalString = z
   .string()
   .max(128, { message: 'Cannot exceed 128 characters' })
@@ -22,7 +17,7 @@ const zipCodeRegex = /(^\d{5}$)|(^\d{5}-\d{4}$)|^$/
 const zipCodeValidation = z
   .string()
   .regex(zipCodeRegex, 'Invalid zip code!')
-  .min(1, 'Required')
+  .optional()
   .default('')
 
 const pcpSchema = z
@@ -31,18 +26,18 @@ const pcpSchema = z
     id: z.string().optional(),
     firstName: z.string().min(1, 'Required'),
     lastName: z.string().min(1, 'Required'),
-    credentials: z.string().min(1, 'Required'),
-    phone: z.string().min(1, 'Required').length(10, 'Invalid phone number'),
-    email: z.string().min(1, 'Required').email(),
-    fax: z.string().min(1, 'Required').length(10, 'Invalid fax number'),
+    credentials: z.string().optional(),
+    phone: z.string().optional(),
+    email: z.string().optional(),
+    fax: z.string().optional(),
     isMailingAddressSameAsHome: z.enum(['yes', 'no']),
     officeAddress: z.object({
       type: pcpAddressTypeEnum.default('Home'),
-      street1: requiredString,
+      street1: optionalString,
       street2: optionalString,
-      city: requiredString,
-      state: requiredString,
-      country: requiredString.default('US'),
+      city: optionalString,
+      state: optionalString,
+      country: optionalString.default('US'),
       postalCode: zipCodeValidation,
     }),
     mailingAddress: z.object({
@@ -60,23 +55,13 @@ const pcpSchema = z
     }),
   })
   .superRefine((data, ctx) => {
-    if (data.isMailingAddressSameAsHome === 'no') {
-      const mailingAddressFields: (keyof typeof data.mailingAddress)[] = [
-        'street1',
-        'city',
-        'state',
-        'postalCode',
-      ]
-
-      for (const field of mailingAddressFields) {
-        if (!data.mailingAddress[field]) {
-          ctx.addIssue({
-            code: z.ZodIssueCode.custom,
-            message: 'Required',
-            path: [`mailingAddress.${field}`],
-          })
-        }
-      }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/i
+    if (data.email && !emailRegex.test(data.email)) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'email is not valid',
+        path: [`email`],
+      })
     }
   })
 

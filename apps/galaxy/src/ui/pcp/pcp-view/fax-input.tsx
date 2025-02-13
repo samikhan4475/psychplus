@@ -12,7 +12,7 @@ const FaxInput = () => {
   return (
     <Flex className="col-span-2">
       <FormFieldContainer className="w-full">
-        <FormFieldLabel required>Fax</FormFieldLabel>
+        <FormFieldLabel>Fax</FormFieldLabel>
         <PhoneNumberInputBase field="fax" placeholder="Fax Number" />
         <FormFieldError name="fax" />
       </FormFieldContainer>

@@ -10,6 +10,7 @@ const OfficeAddressGroup = () => {
         Office Address
       </Text>
       <AddressFieldsGroup
+        required={false}
         columnsPerRow="2"
         direction="row"
         prefix="officeAddress"

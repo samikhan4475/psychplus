@@ -217,7 +217,7 @@ const QuickNotesSignButton = ({
       })
       return
     }
-
+    toast.error(signResults.error)
     setAlertInfo(initialAlertInfo)
   }
 

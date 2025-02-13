@@ -8,6 +8,7 @@ import { SendToPatientButton } from '@/ui/questionnaires/shared'
 import { FillOutButton } from '@/ui/questionnaires/shared/fill-out'
 import { useStore } from '@/ui/questionnaires/store'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
+import { QUESTIONNAIRE_DESCRIPTION } from './constants'
 
 type QuestionnaireRowProps = {
   sectionName: QuickNoteSectionName
@@ -84,11 +85,23 @@ const QuestionnairesBlock: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [histories, form.watch('alcohol'), form.watch('drugs')])
 
+  const checked = form.watch(['drugs', 'alcohol', 'questionnaire'])
+
+  useEffect(() => {
+    if (auditHistories.length) {
+      form.setValue(QuickNoteSectionName.QuickNoteSectionAudit, true)
+    }
+    if (DastHistories.length) {
+      form.setValue(QuickNoteSectionName.QuickNoteSectionDast10, true)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [JSON.stringify(checked)])
+
   return (
     <>
       <YesNoSelect
         label="Questionnaire"
-        description="Pt was agreeable to detailed assessment"
+        description={QUESTIONNAIRE_DESCRIPTION}
         field="questionnaire"
         isNoFirst
       />
