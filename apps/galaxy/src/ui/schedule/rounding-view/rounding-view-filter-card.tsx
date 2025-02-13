@@ -86,7 +86,7 @@ const RoundingViewFilterCard = () => {
       visitType: '',
       visitSequence: '',
       visitMedium: '',
-      appointmentStatus: '',
+      appointmentStatuses: [],
       patientInsuranceVerificationStatus: '',
       diagnosisCode: '',
       cptCode: '',

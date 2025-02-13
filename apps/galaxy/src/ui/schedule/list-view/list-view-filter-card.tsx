@@ -101,7 +101,7 @@ const ListViewFilterCard = () => {
       visitType: '',
       visitSequence: '',
       visitMedium: '',
-      appointmentStatus: '',
+      appointmentStatuses: [],
       patientInsuranceVerificationStatus: '',
       diagnosisCode: '',
       insuranceAuthorizationNumber: '',

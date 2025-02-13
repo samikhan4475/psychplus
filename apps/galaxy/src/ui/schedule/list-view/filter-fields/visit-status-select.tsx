@@ -1,15 +1,18 @@
 'use client'
 
 import { useMemo } from 'react'
-import { SelectInput } from '@/components'
+import { useFormContext } from 'react-hook-form'
+import { MultiSelectField } from '@/components'
 import { CODESETS } from '@/constants'
 import { useCodesetCodes } from '@/hooks'
 import { useFiltersContext } from '../../context'
+import { BookedAppointmentsSchemaType } from '../../schema'
 import { FieldLabel, FormFieldContainer } from '../../shared'
 import { SchedulerFilters } from '../../types'
 import { sortVisitStatusCodes } from '../../utils'
 
 const VisitStatusSelect = () => {
+  const form = useFormContext<BookedAppointmentsSchemaType>()
   const { filters } = useFiltersContext()
   const codes = useCodesetCodes(CODESETS.AppointmentStatus)
   const options = useMemo(() => sortVisitStatusCodes(codes), [codes])
@@ -18,12 +21,14 @@ const VisitStatusSelect = () => {
   return (
     <FormFieldContainer>
       <FieldLabel>Visit Status</FieldLabel>
-      <SelectInput
-        field="appointmentStatus"
+      <MultiSelectField
+        defaultValues={form.watch('appointmentStatuses')}
         options={options}
-        placeholder="Select"
-        buttonClassName="w-full h-6"
-        className="h-full flex-1"
+        className="flex-1"
+        onChange={(values) => {
+          form.setValue('appointmentStatuses', values, { shouldDirty: true })
+        }}
+        menuClassName="w-[155px]"
       />
     </FormFieldContainer>
   )

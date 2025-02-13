@@ -34,7 +34,7 @@ const bookedAppointmentsSchema = z
     visitType: z.string().optional(),
     visitSequence: z.string().optional(),
     visitMedium: z.string().optional(),
-    appointmentStatus: z.string().optional(),
+    appointmentStatuses: arrayOfIdsValidation,
     patientInsuranceVerificationStatus: z.string().optional(),
     diagnosisCode: z.string().optional(),
     insuranceAuthorizationNumber: z.string().optional(),

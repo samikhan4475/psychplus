@@ -62,7 +62,7 @@ const defaultValues = {
   visitType: '',
   visitSequence: '',
   visitMedium: '',
-  appointmentStatus: '',
+  appointmentStatuses: [],
   patientInsuranceVerificationStatus: '',
   diagnosisCode: '',
   cptCode: '',

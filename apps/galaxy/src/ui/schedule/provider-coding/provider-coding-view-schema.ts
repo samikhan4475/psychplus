@@ -27,7 +27,11 @@ const providerCodingViewSchema = z
     visitType: z.string().optional(),
     visitSequence: z.string().optional(),
     visitMedium: z.string().optional(),
-    appointmentStatus: z.string().optional(),
+    appointmentStatuses: z
+      .array(z.string())
+      .refine((value) => value.every((item) => typeof item === 'string'), {
+        message: 'Array must be empty or contain only strings',
+      }),
     patientInsuranceVerificationStatus: z.string().optional(),
     diagnosisCode: z.string().optional(),
     cptCode: z.string().optional(),

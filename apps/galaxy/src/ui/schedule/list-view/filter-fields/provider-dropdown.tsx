@@ -1,13 +1,15 @@
 'use client'
 
-import { getProvidersOptionsAction } from '../../client-actions'
+import { useCallback } from 'react'
 import { AsyncSelect } from '@/components'
+import { getProvidersOptionsAction } from '../../client-actions'
 import { useFiltersContext } from '../../context'
 import { FieldLabel, FormFieldContainer } from '../../shared'
 import { SchedulerFilters } from '../../types'
 
 const ProviderDropdown = () => {
   const { filters } = useFiltersContext()
+  const fetchOptions = useCallback(() => getProvidersOptionsAction(), [])
   if (!filters.includes(SchedulerFilters.Provider)) return null
 
   return (
@@ -16,7 +18,7 @@ const ProviderDropdown = () => {
       <AsyncSelect
         field="providerIds"
         placeholder="Select"
-        fetchOptions={getProvidersOptionsAction}
+        fetchOptions={fetchOptions}
         buttonClassName="w-full h-6 truncate max-w-[10px] min-w-full"
         className="h-full flex-1"
       />
