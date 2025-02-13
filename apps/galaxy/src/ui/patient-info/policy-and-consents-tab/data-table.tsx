@@ -12,6 +12,10 @@ import { type PatientConsent } from '@/types'
 import { PolicyDescriptionCell, StatusCell } from './cells'
 import { ActionCell } from './cells/action-cell'
 
+function formatPolicyString(input: string): string {
+  return input.replace(/(Policy)(\w+)/, "$1 $2");
+}
+
 const columns: ColumnDef<PatientConsent>[] = [
   {
     id: 'policy-description',
@@ -23,7 +27,7 @@ const columns: ColumnDef<PatientConsent>[] = [
     id: 'policy-type',
     accessorKey: 'type',
     header: () => <ColumnHeader label="Policy Type" />,
-    cell: ({ row }) => <TextCell>{row.original.type}</TextCell>,
+    cell: ({ row }) => <TextCell>{formatPolicyString(row.original.type)}</TextCell>,
   },
   {
     id: 'organization-practice',

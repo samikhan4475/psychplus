@@ -40,11 +40,11 @@ const QuickNotesHeader = ({
       position="sticky"
       top="0"
     >
-      <Flex align="center" justify="between" wrap="wrap" p="2">
+      <Flex align="center" justify="start" wrap="wrap" p="2">
         <Text size="4" weight="medium">
           Quick Notes
         </Text>
-        <Flex gap="2" wrap="wrap">
+        <Flex gap="2" wrap="wrap" mx={'auto'}>
           <QuickNotesViewNoteButton />
           <QuickNotesCopyMyPreviousButton appointment={appointment} />
           <QuickNotesClearButton />
