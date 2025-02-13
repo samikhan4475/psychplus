@@ -4,6 +4,7 @@ type TrackRequest = {
   productPageKey: string
   clickAction: string
   clickActionData?: string
+  refererUrl?: string
 }
 
 export type { TrackRequest }

@@ -6,12 +6,14 @@ import { TrackRequest } from './types'
 const clickTrack = async (request: TrackRequest) => {
   if (!request.sessionId) {
     let sessionId = localStorage.getItem('sessionId')
+    const mid = localStorage.getItem('mid')
     if (!sessionId) {
       sessionId = uuidv4()
       localStorage.setItem('sessionId', sessionId)
     }
 
     request.sessionId = sessionId
+    request.refererUrl = mid ? `MID:${mid}` : request.refererUrl ?? ""
   }
   return handleRequest<TrackRequest>(
     fetch('/api/clicktrack', {

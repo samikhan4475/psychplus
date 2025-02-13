@@ -48,8 +48,13 @@ const ScheduleAppointmentListClient = ({
   usePublishLoaded(SCHEDULE_APPOINTMENT_LIST)
   usePublishSize(SCHEDULE_APPOINTMENT_LIST, ref)
   useSubscribeClosePopover(SCHEDULE_APPOINTMENT_LIST)
-
+  
   const searchParams = useSearchParams()
+  const mid = searchParams.get('mid') || "";
+
+  if (typeof window !== "undefined") {
+    localStorage.setItem("mid", mid);
+  }
 
   const {
     filters,

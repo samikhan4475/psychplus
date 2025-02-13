@@ -64,7 +64,7 @@ const SlotComponent = ({
 
   const state = searchParams.get('state')
   
-
+  
   function setBookedSlotDetails(slot: Slot) {
     setBookedSlot({
       clinic: clinicWithSlots?.clinic,
