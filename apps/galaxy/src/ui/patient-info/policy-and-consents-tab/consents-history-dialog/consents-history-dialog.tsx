@@ -4,6 +4,7 @@ import { Dialog } from '@radix-ui/themes'
 import { X } from 'lucide-react'
 import { ActionItem } from '../cells/action-item'
 import { RowActionProps } from '../types'
+import { formatPolicyString } from '../utils'
 import { HistoryDataTable } from './history-table'
 
 const ConsentsHistoryDialog = ({
@@ -26,7 +27,7 @@ const ConsentsHistoryDialog = ({
         <Dialog.Close className="absolute right-6 top-6 cursor-pointer">
           <X size={20} strokeWidth={1.5} />
         </Dialog.Close>
-        <Dialog.Title>{type} History</Dialog.Title>
+        <Dialog.Title>{formatPolicyString(type)} History</Dialog.Title>
         <HistoryDataTable consents={consents ?? []} />
       </Dialog.Content>
     </Dialog.Root>
