@@ -1,12 +1,14 @@
 'use client'
 
 import { useEffect } from 'react'
+import { useParams } from 'next/navigation'
 import { Flex, ScrollArea } from '@radix-ui/themes'
 import { DataTable, LoadingPlaceholder } from '@/components'
 import { columns } from './columns'
 import { useStore } from './store'
 
 const OrganizationStaffListTable = () => {
+  const { id } = useParams<{ id: string }>()
   const { search, data, loading, sort, sortData } = useStore((state) => ({
     data: state.data,
     loading: state.loading,
@@ -16,7 +18,9 @@ const OrganizationStaffListTable = () => {
   }))
 
   useEffect(() => {
-    search()
+    search({
+      organizationsIds: [id],
+    })
   }, [])
 
   if (loading) {
@@ -30,7 +34,7 @@ const OrganizationStaffListTable = () => {
   return (
     <ScrollArea>
       <DataTable
-        data={data?.organizations ?? []}
+        data={data?.staff ?? []}
         columns={columns(sort, sortData)}
         disablePagination
         sticky

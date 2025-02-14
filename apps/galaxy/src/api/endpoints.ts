@@ -67,6 +67,9 @@ const NOTE_MARK_ERROR_ENDPOINT = (
 
 const GET_CLINICS_ENDPOINT = `${API_URL}/api/clinics`
 const GET_PROVIDERS_ENDPOINT = `${API_URL}/api/staff/search`
+const ADD_STAFF_ENDPOINT = `${API_URL}/api/staff`
+const UPDATE_STAFF_ENDPOINT = (staffId: string) =>
+  `${API_URL}/api/staff/${staffId}`
 const GET_VISIT_TYPE_ENDPOINT = `${API_URL}/api/encounters/actions/search`
 const GET_PAYMENT_ADJUSTMENT_CODES = `${API_URL}/api/paymentadjustmentcodes/actions/search`
 const GET_FACILITY_ADMISSION_IDS_ENDPOINT = (patientId: number) =>
@@ -871,6 +874,8 @@ export {
   GET_ALL_QUICK_NOTE_DOCUMENT,
   DOWNLOAD_QUICK_NOTE_DOCUMENT,
   DELETE_QUICK_NOTE_DOCUMENT,
+  ADD_STAFF_ENDPOINT,
+  UPDATE_STAFF_ENDPOINT,
   ADD_ORGANIZATION_PRACTICE_ENDPOINT,
   FORGOT_PASSWORD_ENDPOINT,
   DOWNLOAD_LAB_ORDER_DOCUMENT,

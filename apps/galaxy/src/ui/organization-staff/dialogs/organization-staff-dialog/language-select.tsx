@@ -1,20 +1,29 @@
-'use client'
-
+import React from 'react'
+import { useFormContext } from 'react-hook-form'
 import {
-  CodesetSelect,
   FormFieldContainer,
   FormFieldError,
   FormFieldLabel,
+  MultiSelectField,
 } from '@/components'
 import { CODESETS } from '@/constants'
+import { useCodesetOptions } from '@/hooks'
+import { SchemaType } from './schema'
 
 const LanguageSelect = () => {
+  const form = useFormContext<SchemaType>()
+  const options = useCodesetOptions(CODESETS.Language)
   return (
-    <FormFieldContainer className="flex w-full">
+    <FormFieldContainer>
       <FormFieldLabel required>Language</FormFieldLabel>
-      <CodesetSelect
-        name="language"
-        codeset={CODESETS.ClaimFiltrationDateType}
+      <MultiSelectField
+        onChange={(vals) =>
+          form.setValue('language', vals, {
+            shouldDirty: true,
+          })
+        }
+        defaultValues={form.watch('language')}
+        options={options}
       />
       <FormFieldError name="language" />
     </FormFieldContainer>

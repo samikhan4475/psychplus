@@ -1,12 +1,14 @@
 'use client'
 
+import { useParams } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons'
-import { Button, Grid } from '@radix-ui/themes'
+import { Button, Flex, Grid } from '@radix-ui/themes'
+import { DateValue } from 'react-aria-components'
 import { useForm, type SubmitHandler } from 'react-hook-form'
 import { z } from 'zod'
 import { FormContainer } from '@/components'
-import { sanitizeFormData } from '@/utils'
+import { formatDate, sanitizeFormData } from '@/utils'
 import { ClearButton } from './clear-button'
 import { CredntialsSelect } from './credentials-select'
 import { DobField } from './dob-date-field'
@@ -26,28 +28,33 @@ import { RoleSelect } from './role-select'
 import { StaffTypeSelect } from './staff-type-select'
 import { StatusSelect } from './status-select'
 import { useStore } from './store'
-import { SupervisedBySelect } from './supervised-by-select'
-import { StaffSearchParams } from './types'
-import { VirtualWaitRoomSelect } from './virtual-wait-room-select'
+import { transformOut } from './utils'
+import { VirtualWaitRoomField } from './virtual-wait-room-field'
 
 const schema = z.object({
-  firstname: z.string().optional(),
-  lastname: z.string().optional(),
-  individualNpi: z.string().optional(),
-  practice: z.string().optional(),
+  firstName: z.string().optional(),
+  lastName: z.string().optional(),
+  dateOfBirth: z.custom<DateValue>().optional(),
+  honors: z.array(z.string()).optional(),
+  providerType: z.string().optional(),
   phone: z.string().optional(),
   email: z.string().optional(),
+  npi: z.string().optional(),
+  roleCodes: z.array(z.string()).optional(),
+  gender: z.string().optional(),
+  spokenLanguage: z.string().optional(),
+  statuses: z.array(z.string()).optional(),
+  staffType: z.string().optional(),
+  organizationsIds: z.array(z.string()).optional(),
+  practicesIds: z.array(z.string()).optional(),
+  providerAttributionCodes: z.array(z.string()).optional(),
   address1: z.string().optional(),
-  address2: z.string().optional(),
-  city: z.string().optional(),
-  state: z.string().optional(),
-  zip: z.string().optional(),
-  status: z.string().optional(),
 })
 
 type SchemaType = z.infer<typeof schema>
 
 const OrganizationStaffListFilterForm = () => {
+  const { id } = useParams<{ id: string }>()
   const { search, showFilters } = useStore((state) => ({
     search: state.search,
     showFilters: state.showFilters,
@@ -57,45 +64,56 @@ const OrganizationStaffListFilterForm = () => {
     resolver: zodResolver(schema),
     reValidateMode: 'onChange',
     defaultValues: {
-      firstname: '',
-      lastname: '',
-      individualNpi: '',
-      practice: '',
+      address1: '',
+      firstName: '',
+      lastName: '',
+      dateOfBirth: undefined,
+      npi: '',
       phone: '',
       email: '',
-      address1: '',
-      address2: '',
-      city: '',
-      state: '',
-      zip: '',
-      status: '',
+      statuses: [''],
+      gender: '',
+      spokenLanguage: '',
+      honors: [''],
+      organizationsIds: [id],
+      roleCodes: [''],
+      staffType: '',
+      providerType: '',
+      practicesIds: [''],
+      providerAttributionCodes: [''],
     },
   })
 
   const onSubmit: SubmitHandler<SchemaType> = (data) => {
     const formattedData = {
       ...data,
+      isIncludeOrganizations: true,
+      isIncludePractices: true,
+      organizationsIds: [id],
+      dateOfBirth:
+        data.dateOfBirth &&
+        formatDate(data.dateOfBirth.toString(), 'yyyy-MM-dd'),
     }
-    const cleanedData = sanitizeFormData(formattedData) as StaffSearchParams
-    return search(cleanedData)
+
+    const cleanedData = sanitizeFormData(formattedData)
+    return search(transformOut(cleanedData), 1, true)
   }
 
   return (
     <FormContainer
-      className="bg-white flex flex-wrap gap-4 rounded-b-2 rounded-t-1 px-2 py-1 shadow-2"
+      className="bg-white gap-2 px-2 py-3"
       form={form}
       onSubmit={onSubmit}
     >
-      <Grid columns="12" gap="2" className="flex">
+      <Grid columns="6" gap="2" className="col-span-full" align="baseline">
         <FirstNameField />
         <LastNameField />
         <StaffTypeSelect />
         <RoleSelect />
         <CredntialsSelect />
-        <SupervisedBySelect />
-      </Grid>
-      <Grid columns="12" gap="2" className="flex">
         <OrganizationSelect />
+      </Grid>
+      <Grid columns="6" gap="2" className="col-span-full" align="baseline">
         <PracticeSelect />
         <IndividualNPIField />
         <StatusSelect />
@@ -103,22 +121,24 @@ const OrganizationStaffListFilterForm = () => {
         <GenderSelect />
         <LanguageSelect />
       </Grid>
-      <Grid columns="8" gap="2" className="flex">
+      <Grid columns="6" gap="2" className="col-span-full" align="baseline">
         {showFilters && (
           <>
             <ProviderPreferenceSelect />
             <EmailField />
             <PhoneField />
-            <VirtualWaitRoomSelect />
+            <VirtualWaitRoomField />
             <HomeAddressField />
           </>
         )}
 
-        <FiltersToggleButton />
-        <ClearButton />
-        <Button highContrast size="1" type="submit">
-          <MagnifyingGlassIcon strokeWidth={2} />
-        </Button>
+        <Flex>
+          <FiltersToggleButton />
+          <ClearButton />
+          <Button highContrast size="1" type="submit">
+            <MagnifyingGlassIcon strokeWidth={2} />
+          </Button>
+        </Flex>
       </Grid>
     </FormContainer>
   )

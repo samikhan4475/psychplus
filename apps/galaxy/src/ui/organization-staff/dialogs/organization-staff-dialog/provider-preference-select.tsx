@@ -1,13 +1,30 @@
 'use client'
 
-import { CodesetSelect, FormFieldContainer, FormFieldLabel } from '@/components'
+import { useFormContext } from 'react-hook-form'
+import {
+  FormFieldContainer,
+  FormFieldLabel,
+  MultiSelectField,
+} from '@/components'
 import { CODESETS } from '@/constants'
+import { useCodesetOptions } from '@/hooks'
+import { SchemaType } from './schema'
 
 const ProviderPreferenceSelect = () => {
+  const form = useFormContext<SchemaType>()
+  const options = useCodesetOptions(CODESETS.ProviderAttributions)
   return (
     <FormFieldContainer className="flex w-full">
       <FormFieldLabel>Provider Preference</FormFieldLabel>
-      <CodesetSelect name="status" codeset={CODESETS.ClaimFiltrationDateType} />
+      <MultiSelectField
+        onChange={(vals) =>
+          form.setValue('providerAttributions', vals, {
+            shouldDirty: true,
+          })
+        }
+        defaultValues={form.watch('providerAttributions')}
+        options={options}
+      />
     </FormFieldContainer>
   )
 }

@@ -1,6 +1,6 @@
 'use client'
 
-import { TextInput } from '@/components'
+import { PhoneNumberInput } from '@/components'
 import {
   FormFieldContainer,
   FormFieldError,
@@ -13,7 +13,7 @@ const PhoneField = () => {
       <FormFieldLabel className="pb-[3px]" required>
         Phone
       </FormFieldLabel>
-      <TextInput field="phone" className="h-6 w-full" />
+      <PhoneNumberInput field="phone" className="h-6 w-full" />
       <FormFieldError name="phone" />
     </FormFieldContainer>
   )

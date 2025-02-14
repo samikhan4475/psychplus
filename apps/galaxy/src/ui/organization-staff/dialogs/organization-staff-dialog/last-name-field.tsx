@@ -13,8 +13,8 @@ const LastNameField = () => {
       <FormFieldLabel className="pb-[3px]" required>
         Last Name
       </FormFieldLabel>
-      <TextInput field="lastname" className="h-6 w-full" />
-      <FormFieldError name="lastname" />
+      <TextInput field="lastName" className="h-6 w-full" />
+      <FormFieldError name="lastName" />
     </FormFieldContainer>
   )
 }

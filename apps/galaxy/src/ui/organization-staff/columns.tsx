@@ -1,10 +1,17 @@
 import { type ColumnDef } from '@tanstack/react-table'
 import { ColumnHeader, TextCell } from '@/components'
 import { Sort } from '@/types'
-import { getSortDir } from '@/utils'
+import { formatDateOfBirth, getSortDir } from '@/utils'
 import { ActionsCell } from './actions-cell'
 import { HxStatusCell } from './hx-status-cell'
+import { StaffRoleCell } from './staff-role-cell'
 import { Staff } from './types'
+import {
+  getHomeAddress,
+  getJoinedOrganizations,
+  getJoinedPractices,
+  uniqueStaffType,
+} from './utils'
 
 const columns = (
   sort?: Sort,
@@ -26,7 +33,7 @@ const columns = (
       cell: ({ row }) => <HxStatusCell row={row} />,
     },
     {
-      id: 'firstname',
+      id: 'legalName.firstName',
       header: ({ column }) => (
         <ColumnHeader
           label="First Name"
@@ -37,10 +44,12 @@ const columns = (
           }}
         />
       ),
-      cell: ({ row }) => <TextCell>{row.original.firstname}</TextCell>,
+      cell: ({ row }) => (
+        <TextCell>{row.original.legalName.firstName}</TextCell>
+      ),
     },
     {
-      id: 'middlename',
+      id: 'legalName.middleName',
       header: ({ column }) => (
         <ColumnHeader
           label="Middle Name"
@@ -52,10 +61,12 @@ const columns = (
           }}
         />
       ),
-      cell: ({ row }) => <TextCell>{row.original.middlename}</TextCell>,
+      cell: ({ row }) => (
+        <TextCell>{row.original.legalName.middleName}</TextCell>
+      ),
     },
     {
-      id: 'lastname',
+      id: 'legalName.lastName',
       header: ({ column }) => (
         <ColumnHeader
           label="Last Name"
@@ -67,10 +78,10 @@ const columns = (
           }}
         />
       ),
-      cell: ({ row }) => <TextCell>{row.original.lastname}</TextCell>,
+      cell: ({ row }) => <TextCell>{row.original.legalName.lastName}</TextCell>,
     },
     {
-      id: 'staffType',
+      id: 'staffTypes',
       header: ({ column }) => (
         <ColumnHeader
           label="Staff Type"
@@ -81,7 +92,9 @@ const columns = (
           }}
         />
       ),
-      cell: ({ row }) => <TextCell>{row.original.staffType}</TextCell>,
+      cell: ({ row }) => (
+        <TextCell>{uniqueStaffType(row.original.staffTypes)}</TextCell>
+      ),
     },
     {
       id: 'staffRoleCode',
@@ -95,10 +108,10 @@ const columns = (
           }}
         />
       ),
-      cell: ({ row }) => <TextCell>{row.original.staffRoleCode}</TextCell>,
+      cell: ({ row }) => <StaffRoleCell row={row} />,
     },
     {
-      id: 'credentials',
+      id: 'legalName.honors',
       header: ({ column }) => (
         <ColumnHeader
           label="Credentials"
@@ -109,25 +122,10 @@ const columns = (
           }}
         />
       ),
-      cell: ({ row }) => <TextCell>{row.original.credentials}</TextCell>,
-    },
-
-    {
-      id: 'supervisedBy',
-      header: ({ column }) => (
-        <ColumnHeader
-          label="Supervised By"
-          sortable
-          sortDir={getSortDir(column.id, sort)}
-          onClick={() => {
-            onSort?.(column.id)
-          }}
-        />
-      ),
-      cell: ({ row }) => <TextCell>{row.original.credentials}</TextCell>,
+      cell: ({ row }) => <TextCell>{row.original.legalName.honors}</TextCell>,
     },
     {
-      id: 'organization',
+      id: 'organizationIds',
       header: ({ column }) => (
         <ColumnHeader
           label="Organization"
@@ -138,10 +136,14 @@ const columns = (
           }}
         />
       ),
-      cell: ({ row }) => <TextCell>{row.original.organization}</TextCell>,
+      cell: ({ row }) => (
+        <TextCell>
+          {getJoinedOrganizations(row.original.staffOrganizations)}
+        </TextCell>
+      ),
     },
     {
-      id: 'practice',
+      id: 'practiceIds',
       header: ({ column }) => (
         <ColumnHeader
           label="Practice"
@@ -152,10 +154,14 @@ const columns = (
           }}
         />
       ),
-      cell: ({ row }) => <TextCell>{row.original.practice}</TextCell>,
+      cell: ({ row }) => (
+        <TextCell className="w-[200px]">
+          {getJoinedPractices(row.original.staffPractice)}
+        </TextCell>
+      ),
     },
     {
-      id: 'individualNpi',
+      id: 'npi',
       header: ({ column }) => (
         <ColumnHeader
           label="Individual NPI"
@@ -166,7 +172,7 @@ const columns = (
           }}
         />
       ),
-      cell: ({ row }) => <TextCell>{row.original.individualNpi}</TextCell>,
+      cell: ({ row }) => <TextCell>{row.original.npi}</TextCell>,
     },
     {
       id: 'status',
@@ -183,7 +189,7 @@ const columns = (
       cell: ({ row }) => <TextCell>{row.original.status}</TextCell>,
     },
     {
-      id: 'dob',
+      id: 'dateOfBirth',
       header: ({ column }) => (
         <ColumnHeader
           label="DOB"
@@ -194,7 +200,9 @@ const columns = (
           }}
         />
       ),
-      cell: ({ row }) => <TextCell>{row.original.dob}</TextCell>,
+      cell: ({ row }) => (
+        <TextCell>{formatDateOfBirth(row.original.dateOfBirth)}</TextCell>
+      ),
     },
     {
       id: 'gender',
@@ -211,7 +219,7 @@ const columns = (
       cell: ({ row }) => <TextCell>{row.original.gender}</TextCell>,
     },
     {
-      id: 'language',
+      id: 'spokenLanguages',
       header: ({ column }) => (
         <ColumnHeader
           label="Language"
@@ -222,10 +230,14 @@ const columns = (
           }}
         />
       ),
-      cell: ({ row }) => <TextCell>{row.original.language}</TextCell>,
+      cell: ({ row }) => (
+        <TextCell className="w-[200px]">
+          {row.original.spokenLanguages?.toLocaleString()}
+        </TextCell>
+      ),
     },
     {
-      id: 'providerPreference',
+      id: 'providerAttributions',
       header: ({ column }) => (
         <ColumnHeader
           label="Provider Preference"
@@ -237,11 +249,11 @@ const columns = (
         />
       ),
       cell: ({ row }) => (
-        <TextCell>{row.original.provviderPreference}</TextCell>
+        <TextCell>{row.original.providerAttributions.join(', ')}</TextCell>
       ),
     },
     {
-      id: 'email',
+      id: 'contactInfo.email',
       header: ({ column }) => (
         <ColumnHeader
           label="Email"
@@ -252,10 +264,10 @@ const columns = (
           }}
         />
       ),
-      cell: ({ row }) => <TextCell>{row.original.email}</TextCell>,
+      cell: ({ row }) => <TextCell>{row.original.contactInfo?.email}</TextCell>,
     },
     {
-      id: 'phone',
+      id: 'phoneContact',
       header: ({ column }) => (
         <ColumnHeader
           label="Phone"
@@ -266,10 +278,10 @@ const columns = (
           }}
         />
       ),
-      cell: ({ row }) => <TextCell>{row.original.phone}</TextCell>,
+      cell: ({ row }) => <TextCell>{row.original.phoneContact}</TextCell>,
     },
     {
-      id: 'virtualWaitRoom',
+      id: 'virtualRoomLink',
       header: ({ column }) => (
         <ColumnHeader
           label="Virtual Wait Room"
@@ -280,10 +292,10 @@ const columns = (
           }}
         />
       ),
-      cell: ({ row }) => <TextCell>{row.original.virtualWaitRoom}</TextCell>,
+      cell: ({ row }) => <TextCell>{row.original.virtualRoomLink}</TextCell>,
     },
     {
-      id: 'homeAddress',
+      id: 'contactInfo.addresses',
       header: ({ column }) => (
         <ColumnHeader
           label="Home Address"
@@ -294,7 +306,7 @@ const columns = (
           }}
         />
       ),
-      cell: ({ row }) => <TextCell>{row.original.homeAddress}</TextCell>,
+      cell: ({ row }) => <TextCell>{getHomeAddress(row.original)}</TextCell>,
     },
     {
       id: 'actions',

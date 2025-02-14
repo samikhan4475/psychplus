@@ -6,12 +6,23 @@ import { ORGANIZATIONS_STAFF_LIST_TABLE_PAGE_SIZE } from '../constants'
 import type { GetStaffListResponse, Staff, StaffSearchParams } from '../types'
 
 interface GetOrganizationsListParams {
-  payload?: StaffSearchParams
+  payload?: Partial<StaffSearchParams>
   page?: number
   sort?: Sort
 }
 
-const getAllOrganizationsListAction = async ({
+const defaultPayload = {
+  isIncludeBiography: true,
+  isExcludeSelf: true,
+  isIncludeAttributions: true,
+  isIncludeOrganizations: true,
+  isIncludePractices: true,
+  isIncludeMetadataResourceChangeControl: true,
+  isIncludeMetadataResourceIds: true,
+  isIncludeMetadataResourceStatus: true,
+}
+
+const getAllOrganizationStaffListAction = async ({
   payload,
   page = 1,
   sort,
@@ -32,6 +43,7 @@ const getAllOrganizationsListAction = async ({
   }
 
   const response = await api.POST<Staff[]>(`${url}`, {
+    ...defaultPayload,
     ...payload,
   })
 
@@ -45,10 +57,10 @@ const getAllOrganizationsListAction = async ({
   return {
     state: 'success',
     data: {
-      organizations: response.data,
+      staff: response.data,
       total: Number(response.headers.get('psychplus-totalresourcecount')),
     },
   }
 }
 
-export { getAllOrganizationsListAction }
+export { getAllOrganizationStaffListAction }

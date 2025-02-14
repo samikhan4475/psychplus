@@ -5,13 +5,13 @@ import { CODESETS } from '@/constants'
 
 const GenderSelect = () => {
   return (
-    <FormFieldContainer className="flex-row items-center gap-1">
+    <FormFieldContainer className="flex-row items-center gap-2">
       <FormFieldLabel className="!text-1">Gender</FormFieldLabel>
       <CodesetSelect
-        name="status"
-        codeset={CODESETS.ClaimFiltrationDateType}
+        name="gender"
+        codeset={CODESETS.Gender}
         size="1"
-        className="w-[101px]"
+        className="w-[calc(100%-50px)]"
       />
     </FormFieldContainer>
   )

@@ -1,9 +1,11 @@
+import { useParams } from 'next/navigation'
 import { Button } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
 import { SchemaType } from './organization-staff-list-filter-form'
 import { useStore } from './store'
 
 const ClearButton = () => {
+  const { id } = useParams<{ id: string }>()
   const { search } = useStore((state) => ({
     search: state.search,
   }))
@@ -13,26 +15,30 @@ const ClearButton = () => {
   const onClear = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault()
     form.reset({
-      firstname: '',
-      lastname: '',
-      individualNpi: '',
-      practice: '',
+      address1: '',
+      firstName: '',
+      lastName: '',
+      dateOfBirth: undefined,
+      npi: '',
       phone: '',
       email: '',
-      address1: '',
-      address2: '',
-      city: '',
-      state: '',
-      zip: '',
-      status: '',
+      statuses: [''],
+      gender: '',
+      spokenLanguage: '',
+      honors: [''],
+      roleCodes: [''],
+      staffType: '',
+      providerType: '',
+      practicesIds: [''],
+      providerAttributionCodes: [''],
     })
-    return search()
+    return search({ organizationsIds: [id] })
   }
 
   return (
     <Button
       color="gray"
-      className="text-black"
+      className="text-black mr-2"
       size="1"
       variant="outline"
       type="button"

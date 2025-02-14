@@ -13,8 +13,8 @@ const FirstNameField = () => {
       <FormFieldLabel className="pb-[3px]" required>
         First Name
       </FormFieldLabel>
-      <TextInput field="firstname" className="h-6 w-full" />
-      <FormFieldError name="firstname" />
+      <TextInput field="firstName" className="h-6 w-full" />
+      <FormFieldError name="firstName" />
     </FormFieldContainer>
   )
 }

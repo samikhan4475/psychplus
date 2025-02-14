@@ -10,10 +10,10 @@ const EmailField = () => {
 
   return (
     <FormFieldContainer className="flex-row items-center gap-2">
-      <FormFieldLabel className="ml-2 !text-1">Email</FormFieldLabel>
+      <FormFieldLabel className="!text-1">Email</FormFieldLabel>
       <TextField.Root
         size="1"
-        className="border-pp-gray-2 h-6 w-[130px] border border-solid !outline-none [box-shadow:none]"
+        className="border-pp-gray-2 h-6 w-full border border-solid !outline-none [box-shadow:none]"
         {...form.register('email')}
         placeholder="Search"
       />

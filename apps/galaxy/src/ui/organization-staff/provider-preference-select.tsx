@@ -5,13 +5,13 @@ import { CODESETS } from '@/constants'
 
 const ProviderPreferenceSelect = () => {
   return (
-    <FormFieldContainer className="flex-row items-center gap-1">
+    <FormFieldContainer className="flex-row items-center gap-2">
       <FormFieldLabel className="!text-1">Provider Preference</FormFieldLabel>
       <CodesetSelect
-        name="status"
-        codeset={CODESETS.ClaimFiltrationDateType}
+        name="providerAttributionCodes.[0]"
+        codeset={CODESETS.ProviderAttributions}
         size="1"
-        className="w-[101px]"
+        className="w-[calc(100%-120px)]"
       />
     </FormFieldContainer>
   )

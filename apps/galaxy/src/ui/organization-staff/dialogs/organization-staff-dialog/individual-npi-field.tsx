@@ -13,8 +13,8 @@ const IndividualNpiField = () => {
       <FormFieldLabel className="pb-[3px]" required>
         Individual NPI
       </FormFieldLabel>
-      <TextInput field="individualNpi" className="h-6 w-full" />
-      <FormFieldError name="individualNpi" />
+      <TextInput field="npi" className="h-6 w-full" placeHolder="Add NPI" />
+      <FormFieldError name="npi" />
     </FormFieldContainer>
   )
 }

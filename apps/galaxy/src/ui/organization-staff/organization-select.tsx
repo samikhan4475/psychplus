@@ -1,17 +1,18 @@
 'use client'
 
-import { CodesetSelect, FormFieldContainer, FormFieldLabel } from '@/components'
-import { CODESETS } from '@/constants'
+import { AsyncSelect, FormFieldContainer, FormFieldLabel } from '@/components'
+import { getOrganizationOptionsAction } from './actions'
 
 const OrganizationSelect = () => {
   return (
     <FormFieldContainer className="flex-row items-center gap-1">
       <FormFieldLabel className="!text-1">Organization</FormFieldLabel>
-      <CodesetSelect
-        name="status"
-        codeset={CODESETS.ClaimFiltrationDateType}
-        size="1"
-        className="w-[101px]"
+      <AsyncSelect
+        field="organizationsIds.[0]"
+        fetchOptions={getOrganizationOptionsAction}
+        className="w-full"
+        disabled
+        buttonClassName="border-pp-gray-2 h-6 w-full border border-solid !outline-none [box-shadow:none]"
       />
     </FormFieldContainer>
   )

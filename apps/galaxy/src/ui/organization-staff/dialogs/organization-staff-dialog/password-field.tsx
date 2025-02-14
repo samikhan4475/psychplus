@@ -1,24 +1,29 @@
 'use client'
 
-import { Button, Flex } from '@radix-ui/themes'
-import { TextInput } from '@/components'
+import { Button, Flex, TextField } from '@radix-ui/themes'
+import { useFormContext } from 'react-hook-form'
 import {
   FormFieldContainer,
   FormFieldError,
   FormFieldLabel,
 } from '@/components/form'
 import { ShuffelIcon } from '@/components/icons'
+import { SchemaType } from './schema'
 
 const PasswordField = () => {
-  const onReset = () => {}
-
+  const form = useFormContext<SchemaType>()
   return (
     <Flex className="gap-3">
       <FormFieldContainer className="flex-1 gap-0">
         <FormFieldLabel className="pb-[3px]" required>
           Password
         </FormFieldLabel>
-        <TextInput field="password" className="h-6 w-full" />
+        <TextField.Root
+          size="1"
+          className="border-pp-gray-2 h-6 w-full border border-solid !outline-none [box-shadow:none]"
+          {...form.register('password')}
+          type="password"
+        />
         <FormFieldError name="password" />
       </FormFieldContainer>
       <Button
@@ -27,7 +32,7 @@ const PasswordField = () => {
         size="1"
         variant="outline"
         type="button"
-        onClick={onReset}
+        disabled
       >
         <ShuffelIcon width={15} height={15} />
         Reset Password

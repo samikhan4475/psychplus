@@ -10,11 +10,11 @@ const FirstNameField = () => {
 
   return (
     <FormFieldContainer className="flex-row items-center gap-2">
-      <FormFieldLabel className="ml-2 !text-1">First Name</FormFieldLabel>
+      <FormFieldLabel className="!text-1">First Name</FormFieldLabel>
       <TextField.Root
         size="1"
-        className="border-pp-gray-2 h-6 w-[130px] border border-solid !outline-none [box-shadow:none]"
-        {...form.register('firstname')}
+        className="border-pp-gray-2 h-6 w-full border border-solid !outline-none [box-shadow:none]"
+        {...form.register('firstName')}
         placeholder="Name"
       />
     </FormFieldContainer>

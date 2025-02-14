@@ -12,7 +12,11 @@ const GenderSelect = () => {
   return (
     <FormFieldContainer className="flex w-full">
       <FormFieldLabel required>Gender</FormFieldLabel>
-      <CodesetSelect name="gender" codeset={CODESETS.ClaimFiltrationDateType} />
+      <CodesetSelect
+        name="gender"
+        codeset={CODESETS.Gender}
+        className="text-1"
+      />
       <FormFieldError name="gender" />
     </FormFieldContainer>
   )

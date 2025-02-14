@@ -1,20 +1,24 @@
 import { create } from 'zustand'
 import { Sort } from '@/types'
 import { getNewSortDir } from '@/utils'
-import { getAllOrganizationsListAction } from './actions'
+import { getAllOrganizationStaffListAction } from './actions'
 import { GetStaffListResponse, StaffSearchParams } from './types'
 
 interface Store {
   data?: GetStaffListResponse
   loading?: boolean
   error?: string
-  payload?: StaffSearchParams
+  payload?: Partial<StaffSearchParams>
   page: number
   sort?: Sort
   pageCache: Record<number, GetStaffListResponse>
   showFilters: boolean
   toggleFilters: () => void
-  search: (payload?: StaffSearchParams, page?: number, reset?: boolean) => void
+  search: (
+    payload?: Partial<StaffSearchParams>,
+    page?: number,
+    reset?: boolean,
+  ) => void
   sortData: (column: string) => void
   next: () => void
   prev: () => void
@@ -28,13 +32,17 @@ const useStore = create<Store>((set, get) => ({
   sort: undefined,
   showFilters: true,
   toggleFilters: () => set({ showFilters: !get().showFilters }),
-  search: async (payload?: StaffSearchParams, page = 1, reset = false) => {
+  search: async (
+    payload?: Partial<StaffSearchParams>,
+    page = 1,
+    reset = false,
+  ) => {
     set({
       error: undefined,
       loading: true,
       payload: payload,
     })
-    const result = await getAllOrganizationsListAction({
+    const result = await getAllOrganizationStaffListAction({
       payload,
       sort: get().sort,
       page,

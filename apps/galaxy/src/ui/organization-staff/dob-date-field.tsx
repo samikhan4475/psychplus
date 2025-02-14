@@ -9,10 +9,14 @@ import {
 
 const DobField = () => {
   return (
-    <FormFieldContainer className="flex-row items-center gap-1">
+    <FormFieldContainer className="flex-row items-center gap-2">
       <FormFieldLabel>DOB</FormFieldLabel>
       <I18nProvider locale="en-US">
-        <DatePickerInput field="fromDate" className="w-[101px]" />
+        <DatePickerInput
+          field="dateOfBirth"
+          className="w-full"
+          yearFormat="YYYY"
+        />
       </I18nProvider>
     </FormFieldContainer>
   )

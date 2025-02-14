@@ -5,13 +5,13 @@ import { CODESETS } from '@/constants'
 
 const StatusSelect = () => {
   return (
-    <FormFieldContainer className="flex-row items-center gap-1">
+    <FormFieldContainer className="flex-row items-center gap-2">
       <FormFieldLabel className="!text-1">Status</FormFieldLabel>
       <CodesetSelect
-        name="status"
-        codeset={CODESETS.ClaimFiltrationDateType}
+        name="statuses.[0]"
+        codeset={CODESETS.RecordStatus}
         size="1"
-        className="w-[101px]"
+        className="w-[calc(100%-45px)]"
       />
     </FormFieldContainer>
   )

@@ -5,13 +5,13 @@ import { CODESETS } from '@/constants'
 
 const LanguageSelect = () => {
   return (
-    <FormFieldContainer className="flex-row items-center gap-1">
+    <FormFieldContainer className="flex-row items-center gap-2">
       <FormFieldLabel className="!text-1">Language</FormFieldLabel>
       <CodesetSelect
-        name="status"
-        codeset={CODESETS.ClaimFiltrationDateType}
+        name="spokenLanguage"
+        codeset={CODESETS.Language}
         size="1"
-        className="w-[101px]"
+        className="w-[calc(100%-65px)]"
       />
     </FormFieldContainer>
   )
