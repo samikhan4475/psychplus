@@ -8,7 +8,7 @@ import { formatDateToISOString } from '@/utils'
 import { Filter } from './filter'
 import { FiltersButton } from './filter-button'
 import { MessageSearch } from './message-search'
-import { NewEmailButton } from './new-email-button'
+import { NewMessageButton } from './new-message-button'
 import { schema, SchemaType } from './schema'
 import { useStore } from './store'
 import { ActiveComponent, messageStatus, SecureMessagesTab } from './types'
@@ -81,7 +81,7 @@ const MessageHeader = () => {
             showFilter={showFilter}
             onClick={() => setShowFilter(!showFilter)}
           />
-          <NewEmailButton
+          <NewMessageButton
             onClick={() => {
               setPreviewSecureMessage({ activeTab, secureMessage: null })
               setActiveComponent(ActiveComponent.COMPOSE_MAIL)

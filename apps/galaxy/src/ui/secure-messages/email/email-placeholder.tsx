@@ -23,7 +23,7 @@ const EmailPlaceHolder = () => {
       <Text align="center" className="text-pp-gray-3 mt-4">
         Have something in mind?
         <br />
-        Write a new email.
+        Write a new message.
       </Text>
       <Button
         variant="outline"
@@ -34,7 +34,7 @@ const EmailPlaceHolder = () => {
           setActiveComponent(ActiveComponent.COMPOSE_MAIL)
         }}
       >
-        <PlusIcon /> New Email
+        <PlusIcon /> New Message
       </Button>
     </Flex>
   )

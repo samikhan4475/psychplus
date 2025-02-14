@@ -1,4 +1,5 @@
 import { VisitTypes } from '@/types'
+import { Tabs } from '@/ui/messages/types'
 
 const getNavLinks = (
   appointmentId: string | null,
@@ -134,6 +135,42 @@ const getStaffNavLinks = (staffId: string | null) => {
   ]
 }
 
+const getInboxNavLinks = (isSecureMessagingFeatureEnabled: boolean) => {
+  return [
+    {
+      label: 'Messages',
+      conditions: [isSecureMessagingFeatureEnabled],
+      links: [
+        {
+          label: 'Inbox',
+          tab: Tabs.INBOX,
+        },
+        {
+          label: 'Sent',
+          tab: Tabs.SENT,
+        },
+        {
+          label: 'Archived',
+          tab: Tabs.ARCHIVED,
+        },
+        {
+          label: 'Draft',
+          tab: Tabs.DRAFT,
+        },
+      ],
+    },
+    {
+      label: 'Notes',
+      links: [
+        {
+          label: 'Pending Notes',
+          tab: Tabs.PENDING_NOTES,
+        },
+      ],
+    },
+  ]
+}
+
 const constructQuickNotesUrl = (
   patientId: number,
   appointmentId: number,
@@ -262,4 +299,5 @@ export {
   isHospitalCareVisit,
   getStaffNavLinks,
   getManagementNavLinks,
+  getInboxNavLinks,
 }

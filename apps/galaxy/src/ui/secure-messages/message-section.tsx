@@ -18,7 +18,7 @@ const MessageSection = () => {
   }, [activeComponent])
 
   return (
-    <Flex className="border-pp-gray-2 border-t">
+    <Flex className="border-pp-gray-2 border-t w-full bg-white">
       <Flex
         className="border-pp-gray-2 h-[100vh] w-[42%]  border-r pr-1 pt-1"
         direction="column"

@@ -19,6 +19,7 @@ const InboxLink = ({ href, label }: InboxLinkProps) => {
   )
 
   if (!isFeatureFlagEnabled) return
+
   return (
     <NextLink
       href={href}
