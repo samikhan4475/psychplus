@@ -37,7 +37,8 @@ interface DataTableProps<TData, TValue> {
   isRowSpan?: boolean // Use rowspan to prevent table layout issues. Nested columns apply only when the optional `isRowSpan` prop is true, as data tables don't support them directly.
   theadClass?: string
   isRowDisabled?: (row: Row<TData>) => boolean
-  isTestPatient?: (row: Row<TData>) => boolean
+  isTestResource?: (row: Row<TData>) => boolean
+  isRowHighlightedRed?: (row: Row<TData>) => boolean
   thClass?: string
   tdClass?: string
   tableClass?: string
@@ -67,7 +68,8 @@ const DataTable = <TData, TValue>({
   tableRowClass,
   stickyRow = false,
   isRowDisabled,
-  isTestPatient,
+  isTestResource,
+  isRowHighlightedRed,
   defaultSorting = [],
 }: DataTableProps<TData, TValue>) => {
   const [sorting, setSorting] = useState<SortingState>(defaultSorting)
@@ -206,9 +208,11 @@ const DataTable = <TData, TValue>({
                     '!bg-pp-table-subRows': row.getIsSelected(),
                     'bg-pp-table-subRows hover:bg-pp-table-subRows':
                       row.depth > 0,
+                    'bg-pp-red/30 hover:bg-pp-red/30':
+                      isRowHighlightedRed?.(row),
+                    'bg-pp-yellow-1/30 hover:bg-pp-yellow-1/30':
+                      isTestResource?.(row),
                     'bg-gray-5 hover:bg-gray-5': isRowDisabled?.(row),
-                    'bg-pp-yellow-1 hover:bg-pp-yellow-1':
-                      isTestPatient?.(row),
                   },
                 )}
               >

@@ -59,8 +59,16 @@ const ListViewTable = () => {
 
   const isRowDisabled = (row: Row<Appointment>) => {
     const visitStatus = row.getValue('visitStatus') as string
-    const inactiveVisitStatusCodes = statusCodes.filter(code => code !== 'CheckedOut')
+    const inactiveVisitStatusCodes = statusCodes.filter(
+      (code) => code !== 'CheckedOut',
+    )
     return inactiveVisitStatusCodes.includes(visitStatus)
+  }
+
+  const isTcmVisit = (row: Row<Appointment>) => {
+    const isTcmVisit = row.original.visitTypeCode === 'TransitionalCare'
+    const visitStatus = row.original.visitStatus
+    return isTcmVisit && visitStatus !== 'CheckedOut'
   }
 
   const isTestPatient = (row: Row<Appointment>) => row.original.isTestPatient
@@ -92,7 +100,8 @@ const ListViewTable = () => {
         disablePagination
         columns={columns}
         isRowDisabled={isRowDisabled}
-        isTestPatient={isTestPatient}
+        isTestResource={isTestPatient}
+        isRowHighlightedRed={isTcmVisit}
         data={data}
         renderHeader={DataTableHeader}
         isRowSpan
