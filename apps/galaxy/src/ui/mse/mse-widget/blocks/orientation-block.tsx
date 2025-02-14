@@ -31,6 +31,7 @@ const BLOCK_OPTIONS: GroupSelectOption<string>[] = [
     details: {
       type: 'text',
       field: 'oriOtherDetails',
+      maxLength: 500,
     },
   },
 ]

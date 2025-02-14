@@ -104,7 +104,11 @@ const HpiNarration = ({
   return (
     <BlockContainer heading="History of Present Illness/Presenting Symptoms">
       <Flex direction="column">
-        <Text size="1" weight="regular">
+        <Text
+          size="1"
+          weight="regular"
+          className="whitespace-pre-wrap break-words"
+        >
           {generateNarration()}
         </Text>
         {symptoms?.hpiOther && (

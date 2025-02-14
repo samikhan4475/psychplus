@@ -1,5 +1,6 @@
 import toast from 'react-hot-toast'
 import { saveWidgetClientAction, updateVisitAction } from '@/actions'
+import { CustomToaster as customContentToaster } from '@/components/custom-content-toast'
 import { Appointment, DiagnosisIcd10Code, QuickNoteSectionItem } from '@/types'
 import { ALLERGIES_ERROR_MESSAGE } from '@/ui/allergy/patient-allergies-widget/constants'
 import { AllergyDataResponse } from '@/ui/allergy/patient-allergies-widget/types'
@@ -11,7 +12,7 @@ import {
   VisitTypeEnum,
 } from '@/utils'
 import { QuickNoteSectionName } from '../constants'
-import { getWidgetErrorMessage, getWidgetsByVisitType } from '../utils'
+import { getWidgetErrorDetails, getWidgetsByVisitType } from '../utils'
 
 const getWidgetData = (providerType: string) => {
   const urlParams = new URLSearchParams(window.location.search)
@@ -53,12 +54,15 @@ const updateAppointment = (
 const saveWidgets = async (
   appointment: Appointment,
   sections: QuickNoteSectionItem[],
+  shouldValidate = false,
 ) => {
   const { widgets } = getWidgetData(appointment.providerType)
 
-  const isValidateAll = await validateAll(widgets, appointment.visitTypeCode)
-  if (!isValidateAll) {
-    return []
+  if (shouldValidate) {
+    const isValidateAll = await validateAll(widgets, appointment.visitTypeCode)
+    if (!isValidateAll) {
+      return { validationFailed: true, data: [] }
+    }
   }
   const payload = {
     patientId: String(sections?.[0]?.pid),
@@ -71,12 +75,12 @@ const saveWidgets = async (
     ])
     if (widgetsResult.state === 'error') {
       toast.error('Failed to save!')
-      return []
+      return { validationFailed: false, data: [] }
     }
-    return sections
+    return { data: sections, validationFailed: false }
   } catch (error) {
     toast.error('Failed to save!')
-    return []
+    return { validationFailed: false, data: [] }
   }
 }
 
@@ -131,13 +135,12 @@ const validateAll = async (
       default:
         break
     }
-
-    const objKeys = errorKey as keyof typeof getWidgetErrorMessage
-    toast.error(
-      `Please fill out all required fields in ${
-        getWidgetErrorMessage[objKeys] || widgetErrors
-      }`,
-    )
+    const details = getWidgetErrorDetails(errorKey, widgetErrors)
+    customContentToaster({
+      title: 'Validation Error',
+      message: `Please fill out all required fields in`,
+      details,
+    })
   }
   return responses.every((element) => element.success)
 }

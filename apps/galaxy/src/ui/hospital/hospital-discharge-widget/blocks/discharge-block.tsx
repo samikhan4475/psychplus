@@ -1,10 +1,9 @@
 'use client'
-import {
-  RadioSelectSection, SelectableChipDetails,
-} from '@/components'
-import { useFormContext } from 'react-hook-form'
-import { HospitalDischargeWidgetSchemaType } from '../hospital-discharge-widget-schema'
+
 import { Flex } from '@radix-ui/themes'
+import { useFormContext } from 'react-hook-form'
+import { RadioSelectSection, SelectableChipDetails } from '@/components'
+import { HospitalDischargeWidgetSchemaType } from '../hospital-discharge-widget-schema'
 
 const BLOCK_ID = 'dischargeType'
 const BLOCK_LABEL = 'Discharge Type'
@@ -24,7 +23,7 @@ const BLOCK_OPTIONS = [
   },
   {
     label: 'Transfer',
-    value: 'Transfer'
+    value: 'Transfer',
   },
   {
     label: 'Other',
@@ -43,15 +42,16 @@ const DischargeTypeBlock = () => {
         options={BLOCK_OPTIONS}
         lastOptionIndicator={true}
       />
-      {dischargeType == "Other" &&
+      {dischargeType === 'Other' && (
         <SelectableChipDetails
-          key={"dischargeTypeDescription"}
-          label={"Text"}
-          type={'text'}
-          field={"dischargeTypeDescription"}
+          key="dischargeTypeDescription"
+          label="Text"
+          type="text"
+          field="dischargeTypeDescription"
+          maxLength={500}
           showIndicator={false}
         />
-      }
+      )}
     </Flex>
   )
 }

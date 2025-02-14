@@ -17,6 +17,7 @@ const THOUGHT_CONTENT_OTHER_BLOCK_OPTIONS: GroupSelectOption<string>[] = [
     details: {
       type: 'text',
       field: 'tcOtherDetails',
+      maxLength: 500,
     },
   },
 ]

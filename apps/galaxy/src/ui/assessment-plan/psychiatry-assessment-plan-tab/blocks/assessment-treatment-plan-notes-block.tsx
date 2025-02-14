@@ -19,6 +19,7 @@ const AssessmentTreatmentPlanNotesBlock = ({
         <AutoResizeInput
           className="min-h-[80px] w-full"
           field="assessmentTreatmentPlanNotes"
+          maxLength={4000}
         />
         <ReadMoreDialog data={data} />
       </Flex>

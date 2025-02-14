@@ -24,6 +24,7 @@ const AdditionalTherapyDetailBlock = ({
           <AutoResizeInput
             className="min-h-[80px] min-w-[765px]"
             field="additionalTherapyDetail"
+            maxLength={4000}
           />
           <ReadMoreDialog data={otherData} />
         </Flex>

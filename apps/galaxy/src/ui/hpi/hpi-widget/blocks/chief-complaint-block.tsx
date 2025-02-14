@@ -1,14 +1,18 @@
 import { useEffect } from 'react'
 import { useFormContext } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import { DetailsType, GroupSelectSection } from '@/components'
+import {
+  DetailsType,
+  GroupSelectOption,
+  GroupSelectSection,
+} from '@/components'
 import { HPIVALIDATIONMESSAGE, requiredFields } from '../utils'
 
 const BLOCK_ID = 'chiefComplaint'
 
 const BLOCK_TITLE = 'Chief Complaint'
 
-const BLOCK_OPTIONS = [
+const BLOCK_OPTIONS: GroupSelectOption<string>[] = [
   {
     label: 'Depression',
     value: 'ccDepression',
@@ -86,6 +90,7 @@ const BLOCK_OPTIONS = [
     details: {
       type: 'text' as DetailsType,
       field: 'ccOtherDetails',
+      maxLength: 500,
     },
   },
 ]
@@ -97,20 +102,24 @@ const ChiefComplaintBlock = () => {
   const hasError = errors?.hpiOther || errors?.chiefComplaint
 
   useEffect(() => {
-    if (isSubmitting) {
-      const [hpiField, ...remainingFields] = watchedFields
+    const [hpiField, ...remainingFields] = watchedFields
 
-      const totalSymptoms = Object.values(remainingFields)
-        .filter((value) => Array.isArray(value))
-        .reduce((sum, arr) => sum + arr?.length, 0)
-      const isHpiOtherValid = (hpiField?.length || 0) >= 30
+    const totalSymptoms = Object.values(remainingFields ?? [])
+      .filter((value) => Array.isArray(value))
+      .reduce((sum, arr) => sum + arr?.length, 0)
 
-      const isValid = totalSymptoms >= 3 || isHpiOtherValid
+    const isHpiOtherValid = (hpiField?.length || 0) >= 30
+    const isValid = totalSymptoms >= 3 || isHpiOtherValid
 
-      if (!isValid) {
-        toast.error(HPIVALIDATIONMESSAGE)
-      }
+    if (!isValid && isSubmitting) {
+      toast.error(HPIVALIDATIONMESSAGE)
     }
+
+    if (isValid && Object.keys(form.formState.errors).length > 0) {
+      form.clearErrors(['chiefComplaint', 'hpiOther'])
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSubmitting, watchedFields])
 
   useEffect(() => {
@@ -124,15 +133,13 @@ const ChiefComplaintBlock = () => {
   }, [form])
 
   return (
-    <>
-      <GroupSelectSection
-        label={BLOCK_TITLE}
-        field={BLOCK_ID}
-        options={BLOCK_OPTIONS}
-        hasChild
-        chipClassName={`${hasError ? 'border border-tomato-11' : ''}`}
-      />
-    </>
+    <GroupSelectSection
+      label={BLOCK_TITLE}
+      field={BLOCK_ID}
+      options={BLOCK_OPTIONS}
+      hasChild
+      chipClassName={`${hasError ? 'border border-tomato-11' : ''}`}
+    />
   )
 }
 

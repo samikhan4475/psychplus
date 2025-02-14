@@ -27,6 +27,7 @@ const INTELLIGENCE_HOWTESTED_BLOCK_OPTIONS: GroupSelectOption<string>[] = [
     details: {
       type: 'text',
       field: 'inthtOtherDetails',
+      maxLength: 500,
     },
   },
 ]

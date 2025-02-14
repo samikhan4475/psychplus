@@ -1,5 +1,5 @@
 import { cache } from 'react'
-import { DiagnosisIcd10Code, QuickNoteSectionItem } from '@/types'
+import { QuickNoteSectionItem } from '@/types'
 import { HpiWidgetClientLoader } from '@/ui/hpi/hpi-widget/hpi-widget-client-loader'
 import { isHospitalCareVisit, VisitTypeEnum, visitTypeToWidgets } from '@/utils'
 import { AddOnClientLoader } from '../add-on/add-on-widget/add-on-client-loader'
@@ -294,11 +294,52 @@ const modifyWidgetResponse = (data: QuickNoteSectionItem[] = []) =>
 
 const getCachedWidgetsByVisitType = cache(getWidgetsByVisitType)
 
-const getWidgetErrorMessage = {
+const widgetErrorsMap = {
   Addon: 'Add-on.',
   Spravato: 'Spravato.',
   ECT: 'ECT.',
   TMS: 'TMS.',
+  HPI: 'HPI.',
+  PastPsychHx: 'Past Psych History.',
+  ReviewOfSystem: 'Review of System.',
+  Mse: 'Mental Status Exam.',
+  PsychiatryAssessmentPlan: 'Psychiatry Assessment/Plan.',
+  Vital: 'Vitals.',
+  HospitalInitial: 'Hospital Initial.',
+  HospitalOrders: 'Hospital Orders.',
+  FamilyPsychHx: 'Family Psychiatry History.',
+  IndividualTherapy: 'Individual Therapy.',
+  FamilyTherapy: 'Family Therapy.',
+  PastMedicalHx: 'Past Medical History.',
+  SocialHx: 'Social History.',
+  SubstanceUseHx: 'Substance Use History.',
+  PhysicalExam: 'Physical Exam.',
+  TherapyAssessmentPlan: 'Therapy Assessment/Plan.',
+  FamilyInternalMedicineAssessmentPlan:
+    'Family Internal Medicine Assessment/Plan.',
+  PatientAllergies: 'Patient Allergies.',
+  AssessmentPlan: 'Assessment Plan.',
+  FollowUps: 'Follow Ups.',
+  HospitalDischarge: 'Hospital Discharge.',
+  AdmittingDiagnosis: 'Admitting Diagnosis.',
+  WorkingDischargeDiagnosis: 'Working Discharge Diagnosis.',
+}
+
+const getWidgetErrorDetails = (
+  errorKey: string | undefined,
+  widgetError: string,
+) => {
+  const errors = widgetError
+    ?.split(',')
+    ?.map(
+      (item) =>
+        widgetErrorsMap?.[item?.trim() as keyof typeof widgetErrorsMap] ??
+        item?.trim(),
+    )
+  return [
+    widgetErrorsMap?.[errorKey as keyof typeof widgetErrorsMap],
+    ...errors,
+  ].filter(Boolean)
 }
 
 export {
@@ -306,5 +347,5 @@ export {
   getWidgetIds,
   modifyWidgetResponse,
   getWidgetsByVisitType,
-  getWidgetErrorMessage,
+  getWidgetErrorDetails,
 }

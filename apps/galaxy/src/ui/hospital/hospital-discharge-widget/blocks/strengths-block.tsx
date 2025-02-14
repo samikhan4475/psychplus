@@ -1,10 +1,9 @@
 'use client'
-import {
-  GroupSelectSection, SelectableChipDetails,
-} from '@/components'
+
 import { Flex } from '@radix-ui/themes'
-import { HospitalDischargeWidgetSchemaType } from '../hospital-discharge-widget-schema'
 import { useFormContext } from 'react-hook-form'
+import { GroupSelectSection, SelectableChipDetails } from '@/components'
+import { HospitalDischargeWidgetSchemaType } from '../hospital-discharge-widget-schema'
 
 const BLOCK_ID = 'strengths'
 const BLOCK_LABEL = 'Strengths'
@@ -20,7 +19,7 @@ const BLOCK_OPTIONS = [
   },
   {
     label: 'Make Decisions',
-    value: 'Make Decisions'
+    value: 'Make Decisions',
   },
   {
     label: 'Communicate',
@@ -36,12 +35,12 @@ const BLOCK_OPTIONS = [
   },
   {
     label: 'Health',
-    value: 'Health'
+    value: 'Health',
   },
   {
     label: 'Other',
-    value: 'Other'
-  }
+    value: 'Other',
+  },
 ]
 
 const StrengthsBlock = () => {
@@ -54,14 +53,16 @@ const StrengthsBlock = () => {
         label={BLOCK_LABEL}
         hasChild
       />
-      {form.watch(BLOCK_ID).includes("Other") && <SelectableChipDetails
-        key={"strengthsOtherDescription"}
-        label={"Text"}
-        type={'text'}
-        field={"strengthsOtherDescription"}
-        showIndicator={false}
-      />
-      }
+      {form.watch(BLOCK_ID).includes('Other') && (
+        <SelectableChipDetails
+          key="strengthsOtherDescription"
+          label="Text"
+          type="text"
+          field="strengthsOtherDescription"
+          showIndicator={false}
+          maxLength={500}
+        />
+      )}
     </Flex>
   )
 }

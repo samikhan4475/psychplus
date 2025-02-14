@@ -22,7 +22,7 @@ const LN_OPTIONS: GroupSelectOption<string>[] = [
     details: {
       type: 'text',
       field: 'lnOtherDetails',
-      maxLength: 30,
+      maxLength: 500,
     },
   },
 ]

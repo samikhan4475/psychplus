@@ -30,12 +30,13 @@ const ActivityBlock = () => {
         options={BLOCK_OPTIONS}
         lastOptionIndicator={true}
       />
-      {activity == 'Other' && (
+      {activity === 'Other' && (
         <SelectableChipDetails
-          key={'activityOtherDescription'}
-          label={'Text'}
-          type={'text'}
-          field={'activityOtherDescription'}
+          key="activityOtherDescription"
+          label="Text"
+          type="text"
+          field="activityOtherDescription"
+          maxLength={500}
           showIndicator={false}
         />
       )}

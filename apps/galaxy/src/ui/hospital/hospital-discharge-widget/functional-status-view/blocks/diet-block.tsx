@@ -1,8 +1,9 @@
 'use client'
+
+import { Flex } from '@radix-ui/themes'
+import { useFormContext } from 'react-hook-form'
 import { RadioSelectSection, SelectableChipDetails } from '@/components'
 import { HospitalDischargeWidgetSchemaType } from '../../hospital-discharge-widget-schema'
-import { useFormContext } from 'react-hook-form'
-import { Flex } from '@radix-ui/themes'
 
 const BLOCK_ID = 'diet'
 const BLOCK_LABEL = 'Diet'
@@ -37,15 +38,16 @@ const DietBlock = () => {
         options={BLOCK_OPTIONS}
         lastOptionIndicator={true}
       />
-      {diet == "Other" &&
+      {diet === 'Other' && (
         <SelectableChipDetails
-          key={"dietOtherDescription"}
-          label={"Text"}
-          type={'text'}
-          field={"dietOtherDescription"}
+          key="dietOtherDescription"
+          label="Text"
+          type="text"
+          field="dietOtherDescription"
+          maxLength={500}
           showIndicator={false}
         />
-      }
+      )}
     </Flex>
   )
 }

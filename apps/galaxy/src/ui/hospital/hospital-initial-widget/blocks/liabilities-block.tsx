@@ -19,6 +19,7 @@ const LIABILITIES_OPTIONS: GroupSelectOption<string>[] =
       details: {
         type: 'text',
         field: 'liabilitiesOtherDetails',
+        maxLength: 500,
       },
     }),
   }))

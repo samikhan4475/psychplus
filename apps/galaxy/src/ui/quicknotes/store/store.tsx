@@ -11,7 +11,7 @@ import {
   QuickNoteSectionItem,
   UpdateCptCodes,
 } from '@/types'
-import { manageCodes } from '@/utils'
+import { manageCodes, sendEvent } from '@/utils'
 import { signNoteAction } from '../actions'
 import { QuickNoteSectionName } from '../constants'
 import { modifyWidgetResponse } from '../utils'
@@ -125,10 +125,14 @@ const createStore = (initialState: StoreInitialState) =>
       const widgetsData = Object.entries(data)
         .map(([, sections]) => sections)
         .flat()
-      const response = await saveWidgets(appointment, widgetsData)
-      if (response?.length) {
+      const response = await saveWidgets(appointment, widgetsData, false)
+      if (response?.data?.length) {
+        sendEvent({
+          eventType: 'quicknotes:clearErrors',
+          widgetId: QuickNoteSectionName.QuicknoteSectionHPI,
+        })
         toast.success('Quicknote saved!')
-        get().setWidgetsData(response)
+        get().setWidgetsData(response.data)
       }
       set({ loading: false })
     },
@@ -139,15 +143,24 @@ const createStore = (initialState: StoreInitialState) =>
         const widgetsData = Object.entries(data)
           .map(([, sections]) => sections)
           .flat()
-        const response = await saveWidgets(payload.appointment, widgetsData)
-        if (!response?.length) {
+        const response = await saveWidgets(
+          payload.appointment,
+          widgetsData,
+          true,
+        )
+        if (response?.validationFailed) {
+          set({ loading: false })
+          return
+        }
+        if (!response?.data?.length) {
           set({ loading: false })
           return {
             state: 'error',
             error: 'Failed to save widgets',
           }
         }
-        get().setWidgetsData(response)
+
+        get().setWidgetsData(response?.data)
         const { coSignedByUserId } = get().signOptions || {}
         const body = {
           ...payload,

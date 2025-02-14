@@ -15,7 +15,8 @@ const OtherBlock = ({ data }: OtherBlockProps) => {
     <>
       <Flex align="start" gap="2" width="100%">
         <BlockLabel>Other</BlockLabel>
-        <AutoResizeInput field="hpiOther" /> <ReadMoreDialog data={data} />
+        <AutoResizeInput field="hpiOther" maxLength={4000} />
+        <ReadMoreDialog data={data} />
       </Flex>
       <FormFieldError name="hpiOther" />
     </>

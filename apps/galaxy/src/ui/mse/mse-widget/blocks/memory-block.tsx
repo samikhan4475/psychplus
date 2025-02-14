@@ -25,6 +25,7 @@ const MEMORY_HOW_TESTED_BLOCK_OPTIONS: GroupSelectOption<string>[] = [
     details: {
       type: 'text',
       field: 'mhtOtherDetails',
+      maxLength: 500,
     },
   },
 ]

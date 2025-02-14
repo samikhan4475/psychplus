@@ -38,7 +38,7 @@ const GI_OPTIONS: GroupSelectOption<string>[] = [
     details: {
       type: 'text',
       field: 'giOtherDetails',
-      maxLength: 30,
+      maxLength: 500,
     },
   },
 ]

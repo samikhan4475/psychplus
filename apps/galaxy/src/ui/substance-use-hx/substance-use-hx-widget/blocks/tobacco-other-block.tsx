@@ -11,7 +11,7 @@ const TobaccoOtherBlock = () => {
     <FormFieldContainer className="w-full">
       <Flex align="start" gap="2" width="100%">
         <BlockLabel>Other</BlockLabel>
-        <AutoResizeInput field="otherTobacco" />
+        <AutoResizeInput field="otherTobacco" maxLength={4000} />
       </Flex>
       <FormFieldError name="otherTobacco" />
     </FormFieldContainer>

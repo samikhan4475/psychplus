@@ -18,6 +18,7 @@ const SHORT_TERM_GOALS_OPTIONS: GroupSelectOption<string>[] =
       details: {
         type: 'text',
         field: 'stgOtherDetails',
+        maxLength: 500,
       },
     }),
   }))

@@ -1,12 +1,16 @@
 import { useFormContext } from 'react-hook-form'
-import { DetailsType, GroupSelectSection } from '@/components'
+import {
+  DetailsType,
+  GroupSelectOption,
+  GroupSelectSection,
+} from '@/components'
 import { HpiWidgetSchemaType } from '../hpi-widget-schema'
 
 const BLOCK_ID = 'medicationSe'
 
 const BLOCK_TITLE = 'Medication SE'
 
-const BLOCK_OPTIONS = [
+const BLOCK_OPTIONS: GroupSelectOption<string>[] = [
   { label: 'GI Upset', value: 'medGiUpset' },
   { label: 'Sexual SE', value: 'medSexualSe' },
   { label: 'Weight Gain', value: 'medWeightGain' },
@@ -25,6 +29,7 @@ const BLOCK_OPTIONS = [
     details: {
       type: 'text' as DetailsType,
       field: 'medOtherDetails',
+      maxLength: 500,
     },
   },
 ]

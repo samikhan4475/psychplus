@@ -30,11 +30,12 @@ const SocialFunctioningWNLBlock = () => {
       />
       {socialFunctioningWNL === 'No' && (
         <SelectableChipDetails
-          key={'socialFunctioningWNLDescription'}
-          label={'Text'}
-          type={'text'}
-          field={'socialFunctioningWNLDescription'}
+          key="socialFunctioningWNLDescription"
+          label="Text"
+          type="text"
+          field="socialFunctioningWNLDescription"
           showIndicator={false}
+          maxLength={500}
         />
       )}
     </Flex>

@@ -49,7 +49,7 @@ const hpiWidgetSchema = z
       .map((field) => data[field]?.length || 0)
       .reduce((sum, count) => sum + count, 0)
 
-    if (totalSymptoms < 3 && (data?.hpiOther?.length || 0) < 500) {
+    if (totalSymptoms < 3 && (data?.hpiOther?.length || 0) < 30) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         path: ['chiefComplaint'],

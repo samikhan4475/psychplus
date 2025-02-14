@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { useFormContext } from 'react-hook-form'
 import toast from 'react-hot-toast'
@@ -10,7 +10,6 @@ import { revalidateAction } from '@/actions/revalidate'
 import { saveWidgetAction } from '@/actions/save-widget'
 import { useDeepCompareMemo } from '@/hooks/use-deep-compare-memo'
 import type { Appointment, QuickNoteSectionItem, UpdateCptCodes } from '@/types'
-import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { useQuickNoteUpdate } from '@/ui/quicknotes/hooks'
 import { getWidgetContainerCheckboxStateByWidgetId, postEvent } from '@/utils'
 import { WidgetContainer, type WidgetContainerProps } from './widget-container'
@@ -46,7 +45,8 @@ const WidgetFormContainer = ({
 }: WidgetFormContainerProps) => {
   const form = useFormContext()
   const formValues = form.watch()
-
+  const [loading, setLoading] = useState(false)
+  const [shouldValidate, setShouldValidate] = useState(false)
   const memoizedValues = useDeepCompareMemo(() => formValues, [formValues])
 
   const {
@@ -70,11 +70,19 @@ const WidgetFormContainer = ({
     if (Object.keys(memoizedValues ?? {})?.length && isQuickNoteView) {
       handleActualNoteUpdate(memoizedValues)
     }
+    if (!shouldValidate) {
+      form.clearErrors()
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [memoizedValues])
-  const onSubmit = (shouldToast = true) =>
-    form.handleSubmit(async (data) => {
-      const values = await getData(data, true, updateCptCodes)
+
+  const onSubmit =
+    (shouldToast = true) =>
+    async (event: React.FormEvent) => {
+      event.preventDefault()
+      setLoading(true)
+      form.clearErrors()
+      const values = await getData(form.getValues(), true, updateCptCodes)
       const payload = { patientId, data: values, tags }
       const result = await (isQuickNoteView
         ? saveWidgetClientAction
@@ -90,8 +98,10 @@ const WidgetFormContainer = ({
         if (shouldToast) {
           toast.error('Failed to save!')
         }
+        setLoading(false)
         return
       }
+
       postEvent({
         type: 'widget:save',
         widgetId: widgetId,
@@ -101,11 +111,12 @@ const WidgetFormContainer = ({
       if (isQuickNoteView) {
         revalidateAction()
       }
-
+      setLoading(false)
+      setShouldValidate(false)
       if (shouldToast) {
         toast.success('Saved!')
       }
-    })
+    }
 
   const saveWidget = async (
     event: MessageEvent,
@@ -159,6 +170,7 @@ const WidgetFormContainer = ({
           break
         case 'quicknotes:validateAll':
           handleQuickNotesValidateAll(form)
+          setShouldValidate(true)
           break
         case 'quicknotes:saveAll':
           handleQuickNotesSaveAll(form)
@@ -168,6 +180,11 @@ const WidgetFormContainer = ({
             formResetValues ? form.reset(formResetValues) : form.reset()
           }
           handleOnClear?.()
+          setShouldValidate(false)
+          break
+        case 'quicknotes:clearErrors':
+          form.clearErrors()
+          setShouldValidate(false)
           break
         default:
           break
@@ -198,8 +215,8 @@ const WidgetFormContainer = ({
     })
   return (
     <form onSubmit={onSubmit()}>
-      <fieldset disabled={form.formState.isSubmitting}>
-        {form.formState.isSubmitting && <WidgetLoadingOverlay />}
+      <fieldset disabled={form.formState.isSubmitting || loading}>
+        {(form.formState.isSubmitting || loading) && <WidgetLoadingOverlay />}
         <WidgetContainer
           {...props}
           toggleableChecked={widgetContainerCheckboxState?.checked}

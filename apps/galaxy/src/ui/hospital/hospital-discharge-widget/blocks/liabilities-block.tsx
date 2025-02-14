@@ -1,10 +1,9 @@
 'use client'
-import {
-  GroupSelectSection, SelectableChipDetails,
-} from '@/components'
+
 import { Flex } from '@radix-ui/themes'
-import { HospitalDischargeWidgetSchemaType } from '../hospital-discharge-widget-schema'
 import { useFormContext } from 'react-hook-form'
+import { GroupSelectSection, SelectableChipDetails } from '@/components'
+import { HospitalDischargeWidgetSchemaType } from '../hospital-discharge-widget-schema'
 
 const BLOCK_ID = 'liabilites'
 const BLOCK_LABEL = 'Liabilites'
@@ -20,7 +19,7 @@ const BLOCK_OPTIONS = [
   },
   {
     label: 'Severe Symptoms',
-    value: 'Severe Symptoms'
+    value: 'Severe Symptoms',
   },
   {
     label: 'Poor Support',
@@ -42,14 +41,16 @@ const LiabilitiesBlock = () => {
         label={BLOCK_LABEL}
         hasChild
       />
-      {form.watch(BLOCK_ID).includes("Other") && <SelectableChipDetails
-        key={"liabilitesOtherDescription"}
-        label={"Text"}
-        type={'text'}
-        field={"liabilitesOtherDescription"}
-        showIndicator={false}
-      />
-      }
+      {form.watch(BLOCK_ID).includes('Other') && (
+        <SelectableChipDetails
+          key="liabilitesOtherDescription"
+          label="Text"
+          type="text"
+          field="liabilitesOtherDescription"
+          showIndicator={false}
+          maxLength={500}
+        />
+      )}
     </Flex>
   )
 }

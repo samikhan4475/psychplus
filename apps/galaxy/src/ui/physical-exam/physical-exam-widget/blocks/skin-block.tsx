@@ -30,7 +30,7 @@ const SKN_OPTIONS: GroupSelectOption<string>[] = [
     details: {
       type: 'text',
       field: 'sknOtherDetails',
-      maxLength: 30,
+      maxLength: 500,
     },
   },
 ]

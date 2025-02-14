@@ -9,7 +9,6 @@ interface GroupSelectOption<T extends string> {
   radioOption?: SelectOptionType[]
   isTooltip?: boolean
 }
-
 interface SelectableChipDetailsProps {
   type: DetailsType
   label?: string
@@ -17,11 +16,11 @@ interface SelectableChipDetailsProps {
   options?: { label: string; value: string }[]
   format?: string
   isDisabled?: boolean
+  maxLength?: number
 }
 export interface MseHistoryParams {
   historyCreatedFrom?: string
   historyCreatedTo?: string
   username?: string
 }
-
 export type { GroupSelectOption }

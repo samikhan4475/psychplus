@@ -43,6 +43,7 @@ const BLOCK_OPTIONS: GroupSelectOption<string>[] = [
     details: {
       type: 'text',
       field: 'psyOtherDetails',
+      maxLength: 500,
     },
   },
 ]

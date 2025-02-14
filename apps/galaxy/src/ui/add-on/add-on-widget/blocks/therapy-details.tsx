@@ -18,6 +18,7 @@ const TherapyDetail = ({ field, label }: TherapyDetailProps) => {
         <AutoResizeInput
           field={field}
           className="min-h-[90px] min-w-[800px] resize"
+          maxLength={4000}
         />
         <FormFieldError name={field} />
       </Flex>

@@ -19,6 +19,7 @@ const PRECAUTIONS_OPTIONS: GroupSelectOption<string>[] =
       details: {
         type: 'text',
         field: 'precautionsOtherDetails',
+        maxLength: 500,
       },
     }),
   }))

@@ -15,7 +15,7 @@ const transformIn = (
     const key = item.sectionItem
     const itemValue = item.sectionItemValue
     if (['psychHospitalizations', 'suicideAttempts'].includes(key)) {
-      result[key] = Number(itemValue)
+      result[key] = itemValue
       // This field is used to toggle widget data on actual noteview
     } else if (key === 'widgetContainerCheckboxField') {
       result[key] = itemValue

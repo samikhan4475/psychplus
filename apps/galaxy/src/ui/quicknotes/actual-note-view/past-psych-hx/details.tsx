@@ -44,7 +44,7 @@ const Details = ({
             key={option.field}
             label={label}
             value={value}
-            allowEmptyValue={value != undefined}
+            allowEmptyValue={value !== undefined}
           />
         )
       })}

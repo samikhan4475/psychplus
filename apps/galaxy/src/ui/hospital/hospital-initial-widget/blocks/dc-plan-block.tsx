@@ -18,6 +18,7 @@ const DcPlanOPTIONS: GroupSelectOption<string>[] =
       details: {
         type: 'text',
         field: 'dcplanOtherDetails',
+        maxLength: 500,
       },
     }),
   }))

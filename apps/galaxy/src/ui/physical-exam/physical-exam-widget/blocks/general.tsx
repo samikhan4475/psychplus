@@ -34,7 +34,7 @@ const GN_OPTIONS: GroupSelectOption<string>[] = [
     details: {
       type: 'text',
       field: 'gnOtherDetails',
-      maxLength: 30,
+      maxLength: 500,
     },
   },
 ]

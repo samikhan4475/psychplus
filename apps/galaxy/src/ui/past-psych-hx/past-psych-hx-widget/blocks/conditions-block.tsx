@@ -106,6 +106,7 @@ const ConditionsBlock = () => {
             type: option.field === 'other' ? 'text' : 'number',
             label: option.field === 'other' ? '' : 'Age Started',
             field: option.detailsField,
+            maxLength: option.field === 'other' ? 500 : undefined,
           }}
         />
       ))}

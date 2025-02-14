@@ -38,7 +38,7 @@ const CNS_OPTIONS: GroupSelectOption<string>[] = [
     details: {
       type: 'text',
       field: 'cnsOtherDetails',
-      maxLength: 30,
+      maxLength: 500,
     },
   },
 ]

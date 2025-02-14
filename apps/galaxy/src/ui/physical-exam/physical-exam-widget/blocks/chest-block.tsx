@@ -38,7 +38,7 @@ const CHS_OPTIONS: GroupSelectOption<string>[] = [
     details: {
       type: 'text',
       field: 'chsOtherDetails',
-      maxLength: 30,
+      maxLength: 500,
     },
   },
 ]

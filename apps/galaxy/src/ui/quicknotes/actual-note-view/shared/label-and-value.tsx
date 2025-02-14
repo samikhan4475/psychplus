@@ -37,7 +37,7 @@ const LabelAndValue = ({
       )}
       <Text
         className={cn(
-          'text-1',
+          'whitespace-pre-wrap break-words text-1',
           {
             'italic text-gray-9': !value,
           },

@@ -18,6 +18,7 @@ const INTERACTIVE_COMPLEXITY_BLOCK_OPTIONS = HospitalInitialFieldMapping.filter(
     details: {
       type: 'text',
       field: 'precautionsOtherDetails',
+      maxLength: 500,
     },
   }),
 }))

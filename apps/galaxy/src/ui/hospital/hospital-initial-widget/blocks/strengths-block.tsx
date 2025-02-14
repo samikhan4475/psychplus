@@ -19,6 +19,7 @@ const STRENGTHS_OPTIONS: GroupSelectOption<string>[] =
       details: {
         type: 'text',
         field: 'strengthsOtherDetails',
+        maxLength: 500,
       },
     }),
   }))

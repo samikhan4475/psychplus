@@ -27,6 +27,7 @@ const BLOCK_OPTIONS: GroupSelectOption<string>[] = [
     details: {
       type: 'text',
       field: 'behOtherDetails',
+      maxLength: 500,
     },
   },
 ]

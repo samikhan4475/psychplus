@@ -164,6 +164,7 @@ const BLOCK_OPTIONS: {
       type: 'text',
       label: '',
       field: 'otherDetails',
+      maxLength: 500,
     },
   },
 ]

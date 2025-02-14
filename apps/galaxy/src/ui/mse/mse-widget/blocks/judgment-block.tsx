@@ -30,6 +30,7 @@ const JUDGEMENT_HOWTESTED_BLOCK_OPTIONS: GroupSelectOption<string>[] = [
     details: {
       type: 'text',
       field: 'jdghtOtherDetails',
+      maxLength: 500,
     },
   },
 ]
