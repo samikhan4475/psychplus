@@ -36,11 +36,7 @@ const TherapyBlock = ({ data }: { data: AddOnWidgetSchemaType }) => {
       Interventions completed include: ${formatList(
         data.therapyDetailsInterventions || [],
       )}.
-      ${data.additionalTherapyDetail}
-      Patient presented with signs of transference, indicating a strong misplacement of feelings associated with unresolved past experiences.
-      Provider engaged in schema exploration to gain insight into the patient's irrational thoughts and maladaptive behavior patterns,
-      encouraging self-reflection to connect dysfunctional beliefs, behaviors, and assumptions.
-      Continued exploration of irrational thoughts and behaviors is recommended.`}
+      ${data.additionalTherapyDetail}`}
       />
     </Flex>
   )
