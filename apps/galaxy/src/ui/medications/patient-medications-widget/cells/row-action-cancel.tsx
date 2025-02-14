@@ -21,11 +21,10 @@ const RowActionCancel = ({ row }: RowActionRefreshProps) => {
     writtenDate,
     prescriptionStatusTypeId,
   } = row.original
-  const { externalPatientId, data, updateStatus } =
+  const { externalPatientId, fetchPatientMedications } =
     useStore((state) => ({
       externalPatientId: state.externalPatientId,
-      data: state.data,
-      updateStatus: state.updateStatus,
+      fetchPatientMedications: state.fetchPatientMedications
     }))
 
   const disabled =
@@ -44,16 +43,8 @@ const RowActionCancel = ({ row }: RowActionRefreshProps) => {
       })
 
       if (result.state === 'success') {
-        toast.success('Prescription  Cancelled Successfully')
-        if (data) {
-          const updatedData = {
-            ...data,
-            medications: data.medications.filter(
-              (med) => med.externalPrescriptionId !== externalPrescriptionId,
-            ),
-          }
-          updateStatus(updatedData) 
-        }
+        toast.success('Prescription Cancelled Successfully')
+        fetchPatientMedications(patientId)
         return
       } else if (result.state === 'error') {
         toast.error('Unable to Cancel Prescription')

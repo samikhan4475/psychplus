@@ -9,6 +9,7 @@ interface Allergy {
 }
 
 interface NoteDetailProps {
+  isNoteView: boolean
   allergies?: Allergy[]
   data: QuickNoteSectionItem[]
   appointments?: Appointment[]

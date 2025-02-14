@@ -1,5 +1,6 @@
 'use client'
 
+import { useEffect } from 'react'
 import { useParams, usePathname } from 'next/navigation'
 import { Box, Flex } from '@radix-ui/themes'
 import {
@@ -18,7 +19,6 @@ import { PatientMedicationsDataTable } from './patient-medications-data-table'
 import { PatientMedicationsTabView } from './patient-medications-tab-view'
 import { SearchMedications } from './search-medications'
 import { useStore } from './store'
-import { useEffect } from 'react'
 
 interface PatientMedicationsWidgetProps {
   scriptSureAppUrl: string
@@ -31,18 +31,18 @@ const PatientMedicationsWidget = ({
     FEATURE_FLAGS.ehr8973EnableDawMedicationApi,
   )
   const patientId = useParams().id as string
-  const { fetchPatientMedications } = useStore();
+  const { fetchPatientMedications, isPmpReviewed, setPmpReviewed } = useStore()
   useEffect(() => {
     if (patientId) {
-      fetchPatientMedications(patientId);
+      fetchPatientMedications(patientId)
     }
-  }, [patientId, fetchPatientMedications]);
-  const handleCheckAllChange = () => { }
+  }, [patientId, fetchPatientMedications])
   const path = usePathname()
   const tabViewEnabled = path.includes('medications')
   const fetchMedications = () => {
-    fetchPatientMedications(patientId);
-  };
+    fetchPatientMedications(patientId)
+  }
+
   return (
     <>
       {tabViewEnabled ? (
@@ -60,7 +60,10 @@ const PatientMedicationsWidget = ({
             headerLeft={
               <>
                 <SearchMedications />
-                <WidgetAddButton title="Add Medication" onClose={fetchMedications}>
+                <WidgetAddButton
+                  title="Add Medication"
+                  onClose={fetchMedications}
+                >
                   {!isFeatureFlagEnabled ? (
                     <AddMedication />
                   ) : (
@@ -70,14 +73,14 @@ const PatientMedicationsWidget = ({
                 <Flex>
                   <CheckboxCell
                     label="PMP is reviewed"
-                    checked={false}
-                    onCheckedChange={handleCheckAllChange}
+                    checked={isPmpReviewed}
+                    onCheckedChange={(checked) => setPmpReviewed(!!checked)}
                   />
                 </Flex>
               </>
             }
           >
-            <PatientMedicationsDataTable scriptSureAppUrl={scriptSureAppUrl}/>
+            <PatientMedicationsDataTable scriptSureAppUrl={scriptSureAppUrl} />
           </WidgetContainer>
         </Box>
       )}

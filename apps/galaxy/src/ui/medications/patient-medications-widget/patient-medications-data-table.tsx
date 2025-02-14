@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react'
+import React, { useEffect } from 'react'
 import { Flex, ScrollArea } from '@radix-ui/themes'
 import { type ColumnDef } from '@tanstack/react-table'
 import {
@@ -16,6 +16,7 @@ import { useStore } from './store'
 import type { PatientMedication } from './types'
 import { useParams } from 'next/navigation'
 import { StatusCell } from './cells/status-cell'
+import { useShallow } from 'zustand/react/shallow'
 
 const columns = (
   scriptSureAppUrl: string,
@@ -86,7 +87,7 @@ const columns = (
       id: 'medication-status',
       accessorKey: 'medicationStatus',
       header: () => <ColumnHeader label="Status" />,
-      cell: ({ row }) => <StatusCell row={row}  />
+      cell: ({ row }) => <StatusCell row={row} />
     },
     {
       id: 'medication-actions',
@@ -103,23 +104,23 @@ const columns = (
 interface PatientMedicationsDataTableProps {
   scriptSureAppUrl: string
 }
-const PatientMedicationsDataTable = ({
+const PatientMedicationsDataTable = React.memo(({
   scriptSureAppUrl,
 }: PatientMedicationsDataTableProps) => {
   const patientId = useParams().id as string
 
-  const { data, fetchPatientMedications, loading,fetchExternalScriptsurePatientId } = useStore(
-    (state) => ({
+  const { data, fetchPatientMedications, loading, fetchExternalScriptsurePatientId } = useStore(
+    useShallow((state) => ({
       data: state.data,
       loading: state.loading,
       fetchPatientMedications: state.fetchPatientMedications,
       fetchExternalScriptsurePatientId: state.fetchExternalScriptsurePatientId
-    }),
+    })),
   )
   useEffect(() => {
     fetchPatientMedications(patientId)
     fetchExternalScriptsurePatientId(patientId)
-  }, [fetchPatientMedications])
+  }, [fetchPatientMedications, fetchExternalScriptsurePatientId])
 
   if (loading) {
     return (
@@ -139,6 +140,8 @@ const PatientMedicationsDataTable = ({
       />
     </ScrollArea>
   )
-}
+})
+
+PatientMedicationsDataTable.displayName = "PatientMedicationsDataTable"
 
 export { PatientMedicationsDataTable }

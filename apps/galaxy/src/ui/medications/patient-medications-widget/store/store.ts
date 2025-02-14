@@ -1,6 +1,8 @@
-import { create } from 'zustand'
 import toast from 'react-hot-toast'
+import { create } from 'zustand'
 import { getScriptSureExternalPatient } from '@/actions'
+import { saveWidgetAction } from '@/actions/save-widget'
+import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { getPatientMedicationsAction } from '../client-actions'
 import type { GetPatientMedicationsResponse } from '../types'
 
@@ -10,9 +12,12 @@ interface StoreState {
   loading?: boolean
   error?: string
   externalPatientId?: number
+  isPmpReviewed: boolean
+  setPmpReviewed: (value: boolean) => void
   fetchPatientMedications: (patientId: string) => void
   fetchExternalScriptsurePatientId: (patientId: string) => void
   updateStatus: (updatedMedication: GetPatientMedicationsResponse) => void
+  saveIsPmpReviewedForMedication: (patientId: string) => Promise<void>
 }
 
 const useStore = create<StoreState>((set, get) => ({
@@ -21,7 +26,8 @@ const useStore = create<StoreState>((set, get) => ({
   data: undefined,
   loading: false,
   error: undefined,
-
+  isPmpReviewed: false,
+  setPmpReviewed: (value: boolean) => set({ isPmpReviewed: value }),
   updateStatus: (updatedMedication: GetPatientMedicationsResponse) => {
     set({
       data: updatedMedication,
@@ -61,6 +67,25 @@ const useStore = create<StoreState>((set, get) => ({
       data: result.data,
       loading: false,
     })
+  },
+
+  saveIsPmpReviewedForMedication: async (patientId) => {
+    const isPmpReviewed = get().isPmpReviewed
+    const response = await saveWidgetAction({
+      patientId,
+      data: [
+        {
+          pid: Number(patientId),
+          sectionName: QuickNoteSectionName.QuicknoteSectionMedications,
+          sectionItem: 'isPmpReviewed',
+          sectionItemValue: isPmpReviewed ? 'Yes' : 'No',
+        },
+      ],
+    })
+
+    if (response.state === 'error') {
+      toast.error(response.error)
+    }
   },
 }))
 

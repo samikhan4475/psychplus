@@ -1,12 +1,10 @@
+import {
+  Metadata,
+  QuickNoteSectionItem
+} from '@/types'
 import { type Row } from '@tanstack/react-table'
 import { DateValue } from 'react-aria-components'
-import {
-  Appointment,
-  Metadata,
-  PatientProfile,
-  QuickNoteSectionItem,
-} from '@/types'
-import { Allergy } from '../quicknotes/actual-note-view/types'
+import { NoteDetailProps } from '../quicknotes/actual-note-view/types'
 import { QuickNoteSectionName } from '../quicknotes/constants'
 
 type GroupedBySectionName = Record<string, QuickNoteSectionItem[]>
@@ -102,18 +100,7 @@ interface EncounterSignedNoteDetail {
 }
 
 type WidgetType = {
-  actualNoteDetailComponent: React.ComponentType<{
-    allergies?: Allergy[]
-    data: QuickNoteSectionItem[]
-    appointments?: Appointment[]
-    appointment?: Appointment
-    patientId: string
-    appointmentId: string
-    patient?: PatientProfile
-    groupedData?: GroupedBySectionName
-    visitSequence: string
-    visitType: string
-  }>
+  actualNoteDetailComponent: React.ComponentType<NoteDetailProps>
   id: QuickNoteSectionName
   providerTypes?: string[]
 }
@@ -187,22 +174,6 @@ interface GetPatientNotesParams {
 }
 
 export type {
-  PatientNotes,
-  PatientNoteRow,
-  GetPatientNotesResponse,
-  NoteDetail,
-  GroupedBySectionName,
-  WidgetType,
-  EncounterSignedNoteDetail,
-  CreateSignNoteParams,
-  QuickNoteSectionItemPayload,
-  PayloadType,
-  NoteDocuments,
-  EncounterSignedNote,
-  GetNoteDocumentParams,
-  NoteDocument,
-  Addendum,
-  NoteDocumentsItemList,
-  NoteDocumentResponse,
-  GetPatientNotesParams,
+  Addendum, CreateSignNoteParams, EncounterSignedNote, EncounterSignedNoteDetail, GetNoteDocumentParams, GetPatientNotesParams, GetPatientNotesResponse, GroupedBySectionName, NoteDetail, NoteDocument, NoteDocumentResponse, NoteDocuments, NoteDocumentsItemList, PatientNoteRow, PatientNotes, PayloadType, QuickNoteSectionItemPayload, WidgetType
 }
+

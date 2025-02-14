@@ -298,4 +298,5 @@ const visitTypeToWidgets: Record<VisitTypeEnum, QuickNoteSectionName[]> = {
     QuickNoteSectionName.QuicknoteSectionCodes,
   ],
 }
+
 export { visitTypeToWidgets, saveAbleWdgets, VisitTypeEnum }

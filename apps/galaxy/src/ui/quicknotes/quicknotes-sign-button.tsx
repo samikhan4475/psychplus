@@ -1,20 +1,23 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 'use client'
 
-import { useCallback, useEffect, useMemo, useState } from 'react'
-import { useParams, useSearchParams } from 'next/navigation'
-import { Button } from '@radix-ui/themes'
-import { PenLineIcon } from 'lucide-react'
-import toast from 'react-hot-toast'
 import { CODESETS, STAFF_ROLE_CODE_PRESCRIBER } from '@/constants'
 import { useCodesetCodes } from '@/hooks'
 import { useStore as useGlobalStore } from '@/store'
 import { Appointment, PatientConsent } from '@/types'
 import { useStore as useDiagnosisStore } from '@/ui/diagnosis/store'
+import { useStore as useMedicationStore } from '@/ui/medications/patient-medications-widget/store'
+import { VisitTypeEnum } from '@/utils'
+import { Button } from '@radix-ui/themes'
+import { PenLineIcon } from 'lucide-react'
+import { useParams, useSearchParams } from 'next/navigation'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import toast from 'react-hot-toast'
 import { AlertDialog } from '../alerts'
 import {
   SEND_TO_SIGNATURE_BUTTON,
   SIGN_BUTTON,
+  SIGN_PMP_WARNING,
   SIGN_PRIMARY_NOTE_EXIST,
   SIGN_PRIOR_VISIT_TIME_WARNING,
   SIGN_PROVIDER_NOTE_WARNING,
@@ -22,6 +25,7 @@ import {
 import { useQuickNotesPermissions } from './hooks'
 import { PolicyConsentDialog } from './policy-consent-dialog'
 import { useStore, validateDiagnosis } from './store'
+import { PatientMedication } from '../medications/patient-medications-widget/types'
 
 interface QuickNotesSignButtonProps {
   appointment: Appointment
@@ -41,8 +45,8 @@ const initialAlertInfo: AlertInfo = {
   show: false,
   title: 'Warning',
   message: '',
-  okButton: { text: '', onClick: () => {} },
-  cancelButton: { text: '', onClick: () => {} },
+  okButton: { text: '', onClick: () => { } },
+  cancelButton: { text: '', onClick: () => { } },
   disableClose: false,
 }
 
@@ -58,6 +62,16 @@ const QuickNotesSignButton = ({
     staffId: state.user.staffId,
     staffRoleCode: state.staffResource.staffRoleCode,
   }))
+  const {
+    data: medicationData,
+    isPmpReviewed,
+    saveIsPmpReviewedForMedication,
+  } = useMedicationStore((state) => ({
+    data: state.data,
+    isPmpReviewed: state.isPmpReviewed,
+    saveIsPmpReviewedForMedication: state.saveIsPmpReviewedForMedication,
+  }))
+
   const {
     loading,
     sign,
@@ -102,7 +116,7 @@ const QuickNotesSignButton = ({
 
   const patientId = useParams().id as string
   const appointmentId = useSearchParams().get('id') as string
-  const visitType = useSearchParams().get('visitType') as string
+  const visitType = useSearchParams().get('visitType') as VisitTypeEnum
   const isAppointmentProvider = appointment.providerStaffId === staffId
   const isFutureAppointment =
     appointment?.startDate && new Date(appointment.startDate) > new Date()
@@ -128,11 +142,30 @@ const QuickNotesSignButton = ({
     }
   }, [isMarkedAsError, setMarkedStatus])
 
+  const checkIfPmpReviewRequired = (
+    medications: PatientMedication[] | undefined,
+  ) => {
+    const hasControlledSubstanceMedication = medications?.some(
+      (med) => med.isControlledSubstance === true,
+    )
+
+    if (hasControlledSubstanceMedication) {
+      return !isPmpReviewed;
+    }
+    return false;
+  }
+
   const signNoteHandler = async () => {
     if (patient.patientConsent === 'Unverifiable') {
       setIsPolicyAlertOpen(true)
       return
     }
+
+    if (checkIfPmpReviewRequired(medicationData?.medications)) {
+      toast.error(SIGN_PMP_WARNING)
+      return
+    }
+    saveIsPmpReviewedForMedication(patientId)
 
     const diagnosisError = validateDiagnosis({
       workingDiagnosisData,

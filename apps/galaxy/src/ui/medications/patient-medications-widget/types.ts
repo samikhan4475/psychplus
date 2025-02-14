@@ -36,12 +36,13 @@ interface PatientMedication {
   endDateTime: string
   patientId:string
   externalMessageId:string
-  prescriptionStatusTypeId?:string
+  prescriptionStatusTypeId?:number
   externalPrescriptionId: string
   messageId:string
   sentTime:string
   medicationDetails: MedicationDetails
   prescriptionStatus: PrescriptionStatus
+  isControlledSubstance: boolean
 }
 
 type PatientMedicationRow = Row<PatientMedication>

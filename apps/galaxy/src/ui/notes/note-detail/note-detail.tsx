@@ -70,6 +70,7 @@ const NoteDetail = ({ children }: PropsWithChildren) => {
               return (
                 <Box key={id}>
                   <ActualNoteDetailComponent
+                    isNoteView={true}
                     data={dataForWidget}
                     appointments={appointments}
                     allergies={allergies}

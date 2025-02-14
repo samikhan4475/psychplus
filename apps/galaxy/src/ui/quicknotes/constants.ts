@@ -99,6 +99,8 @@ const SIGN_PRIMARY_NOTE_EXIST =
   'Primary note for this visit already exists, if you sign this note, it will mark the existing note as Error.'
 const SIGN_CONSENT_WARNING =
   'Patient must sign the policy prior to signing the note. Please send the policy.'
+const SIGN_PMP_WARNING =
+  "'PMP is reviewed' checkbox is required for controlled substances."
 
 export {
   QuickNoteSectionName,
@@ -120,4 +122,5 @@ export {
   SIGN_PROVIDER_NOTE_WARNING,
   SIGN_PRIMARY_NOTE_EXIST,
   SIGN_CONSENT_WARNING,
+  SIGN_PMP_WARNING,
 }
