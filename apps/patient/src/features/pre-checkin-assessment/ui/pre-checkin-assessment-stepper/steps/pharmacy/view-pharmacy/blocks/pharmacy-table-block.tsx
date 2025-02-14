@@ -110,7 +110,12 @@ const PharmacyTableBlock = ({
               <Table.Cell className="border-pp-gray-2 whitespace-nowrap border-r">
                 {row.pharmacyContactDetails?.addresses?.[0]?.postalCode ?? '--'}
               </Table.Cell>
-              <Table.Cell className="border-pp-gray-2 whitespace-nowrap border-r">
+              <Table.Cell
+                className={cn(
+                  'border-pp-gray-2 whitespace-nowrap border-r',
+                  isDawSystemFeatureFlagEnabled && 'border-r-0',
+                )}
+              >
                 {row.pharmacyContactDetails?.phoneNumbers?.[0]?.number ?? '--'}
               </Table.Cell>
               {!isDawSystemFeatureFlagEnabled && (

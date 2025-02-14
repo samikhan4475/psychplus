@@ -1,13 +1,17 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect } from 'react'
 import * as Tabs from '@radix-ui/react-tabs'
-import { Box, Flex, Text } from '@radix-ui/themes'
-import { cn } from '@psychplus/ui/cn'
+import { Box, Text } from '@radix-ui/themes'
 import { CreditCard } from '@/features/billing/credit-debit-cards/types'
 import { Insurance, InsurancePayer } from '@/features/billing/payments/types'
-import { type PatientPharmacy } from '@/features/pharmacy/types'
-import PreCheckinAssessmentFooterButton from './shared-blocks/pre-checkin-assessment-footer-button'
+import { PatientPharmacy } from '@/features/pharmacy/types'
+import { PreCheckinAssessmentTabs } from '@/features/pre-checkin-assessment/constants'
+import { useStore } from '@/features/pre-checkin-assessment/store'
+import { PreCheckinAssessmentTab } from '@/features/pre-checkin-assessment/types'
+import { filterTabs } from '@/features/pre-checkin-assessment/utils'
+import { PreCheckinAssessmentFooter } from '../pre-checkin-assessment-footer'
+import { PreCheckinAssessmentHeader } from '../pre-checkin-assessment-header'
 import {
   AddInsurance,
   AllergiesAndMedications,
@@ -20,6 +24,15 @@ import {
   ReviewOfSystems,
 } from './steps'
 
+type PreCheckinAssessmentStapperProps = {
+  insurancePayers: InsurancePayer[]
+  patientInsurances: Insurance[]
+  creditCards: CreditCard[]
+  stripeAPIKey: string
+  pharmacies: PatientPharmacy[]
+  isDawSystemFeatureFlagEnabled?: boolean
+}
+
 const PreCheckinAssessmentStapper = ({
   insurancePayers,
   patientInsurances,
@@ -27,19 +40,28 @@ const PreCheckinAssessmentStapper = ({
   stripeAPIKey,
   pharmacies,
   isDawSystemFeatureFlagEnabled,
-}: {
-  insurancePayers: InsurancePayer[]
-  patientInsurances: Insurance[]
-  creditCards: CreditCard[]
-  stripeAPIKey: string
-  pharmacies: PatientPharmacy[]
-  isDawSystemFeatureFlagEnabled?: boolean
-}) => {
-  let tabData = [
-    { id: 'patient-info', label: 'Patient Info', content: <PatientInfo /> },
+}: PreCheckinAssessmentStapperProps) => {
+  const {
+    activeTab,
+    hydrated,
+    setIsDawSystemFeatureFlagEnabled,
+    setPharmacies,
+  } = useStore()
+
+  useEffect(() => {
+    setPharmacies(pharmacies)
+    setIsDawSystemFeatureFlagEnabled(isDawSystemFeatureFlagEnabled)
+  }, [pharmacies, isDawSystemFeatureFlagEnabled])
+
+  if (!hydrated) return
+
+  let tabs: PreCheckinAssessmentTab[] = [
     {
-      id: 'insurance',
-      label: 'Insurance',
+      id: PreCheckinAssessmentTabs.PatientInfo,
+      content: <PatientInfo />,
+    },
+    {
+      id: PreCheckinAssessmentTabs.Insurance,
       content: (
         <AddInsurance
           insurancePayers={insurancePayers}
@@ -48,20 +70,17 @@ const PreCheckinAssessmentStapper = ({
       ),
     },
     {
-      id: 'payment',
-      label: 'Payment',
+      id: PreCheckinAssessmentTabs.Payment,
       content: (
         <Payment creditCards={creditCards} stripeApiKey={stripeAPIKey} />
       ),
     },
     {
-      id: 'allergies',
-      label: 'Allergies/ Medications',
+      id: PreCheckinAssessmentTabs.AllergiesAndMedications,
       content: <AllergiesAndMedications />,
     },
     {
-      id: 'pharmacy',
-      label: 'Pharmacy',
+      id: PreCheckinAssessmentTabs.Pharmacy,
       content: (
         <Pharmacy
           pharmacies={pharmacies}
@@ -70,155 +89,42 @@ const PreCheckinAssessmentStapper = ({
       ),
     },
     {
-      id: 'presenting-symptoms-HPI',
-      label: 'Presenting symptoms (HPI)',
+      id: PreCheckinAssessmentTabs.PresentingSymptomsHPI,
       content: <PresentingSymptoms />,
     },
-    { id: 'histories', label: 'Histories', content: <Histories /> },
     {
-      id: 'review-of-Systems',
-      label: 'Review  of Systems',
+      id: PreCheckinAssessmentTabs.Histories,
+      content: <Histories />,
+    },
+    {
+      id: PreCheckinAssessmentTabs.ReviewOfSystems,
       content: <ReviewOfSystems />,
     },
-    { id: 'questionnaire', label: 'Questionnaire', content: <Questionnaire /> },
+    {
+      id: PreCheckinAssessmentTabs.Questionnaire,
+      content: <Questionnaire />,
+    },
   ]
 
-  tabData = tabData.filter((tab) => {
-    if (
-      tab.id === 'pharmacy' &&
-      Array.isArray(pharmacies) &&
-      pharmacies.length === 0 &&
-      isDawSystemFeatureFlagEnabled
-    ) {
-      return false
-    }
-    return true
-  })
-
-  const [completedTabs, setCompletedTabs] = useState<string[]>(['patient-info'])
-  const [activeTab, setActiveTab] = useState('patient-info')
-
-  const handleTabChange = (value: string) => {
-    setActiveTab(value)
-    if (!completedTabs.includes(value)) {
-      setCompletedTabs([...completedTabs, value])
-    }
-  }
-  const handleNext = () => {
-    const currentIndex = tabData.findIndex((tab) => tab.id === activeTab)
-    if (currentIndex < tabData.length - 1) {
-      handleTabChange(tabData[currentIndex + 1].id)
-    }
-  }
-
-  const handleBack = () => {
-    const currentIndex = tabData.findIndex((tab) => tab.id === activeTab)
-    if (currentIndex > 0) {
-      handleTabChange(tabData[currentIndex - 1].id)
-    }
-  }
-
-  const getTabTriggerColor = (
-    activeTab: string,
-    tabId: string,
-    completedTabs: string[],
-  ) => {
-    if (activeTab === tabId) return 'bg-[#194595]'
-    if (completedTabs.includes(tabId)) return 'bg-[#24366b]'
-    return 'bg-[#d1daea]'
-  }
-
-  const getTabIndicatorColor = (
-    activeTab: string,
-    tabId: string,
-    completedTabs: string[],
-  ) => {
-    if (activeTab === tabId) {
-      return 'border-[6px] border-[#24366B]'
-    }
-    if (completedTabs.includes(tabId)) {
-      return 'bg-[#24366B] border-[#24366B]'
-    }
-    return ''
-  }
-
-  const getTabLabelColor = (
-    activeTab: string,
-    tabId: string,
-    completedTabs: string[],
-  ) => {
-    if (activeTab === tabId) {
-      return 'text-[#1C2024]'
-    }
-    if (completedTabs.includes(tabId)) {
-      return 'text-[#1C2024]'
-    }
-    return 'text-[#60646c]'
-  }
+  tabs = filterTabs({ tabs, pharmacies, isDawSystemFeatureFlagEnabled })
 
   return (
     <>
       <Box className="py-8">
-        <Text className="mx-auto flex justify-center pb-6 text-[32px] font-[600] leading-[40px] text-[#151b4a]">
+        <Text
+          className="mx-auto flex justify-center pb-6 font-[600] text-[#151b4a]"
+          size="5"
+        >
           Pre Check-in Assessment
         </Text>
-        <Flex direction="column" align="center">
-          <Tabs.Root
-            defaultValue="patient-info"
-            value={activeTab}
-            onValueChange={handleTabChange}
-            className="w-full "
-          >
-            <Tabs.List className="flex w-full gap-3">
-              {tabData.map((tab) => (
-                <Flex
-                  key={tab.id}
-                  direction="column"
-                  className="flex-1 gap-2"
-                  align="center"
-                >
-                  <Tabs.Trigger
-                    value={tab.id}
-                    id={tab.id}
-                    className={cn(
-                      'h-1 w-full cursor-pointer rounded-4',
-                      getTabTriggerColor(activeTab, tab.id, completedTabs),
-                    )}
-                  />
-                  <Flex width="100%" gap="1">
-                    <Box
-                      className={cn(
-                        'rounded-full h-[15px] w-[15px] border-[3px] border-[#D1DAEA]',
-                        getTabIndicatorColor(activeTab, tab.id, completedTabs),
-                      )}
-                    ></Box>
-
-                    <Text
-                      className={cn(
-                        'text-[12px] font-medium',
-                        getTabLabelColor(activeTab, tab.id, completedTabs),
-                      )}
-                    >
-                      {tab.label}
-                    </Text>
-                  </Flex>
-                </Flex>
-              ))}
-            </Tabs.List>
-
-            {tabData.map((tab) => (
-              <Tabs.Content key={tab.id} value={tab.id} className="mt-6 pb-28">
-                {tab.content}
-              </Tabs.Content>
-            ))}
-          </Tabs.Root>
-        </Flex>
+        <Tabs.Root value={activeTab} className="w-full">
+          <PreCheckinAssessmentHeader tabs={tabs} />
+          <Tabs.Content className="mt-6 pb-28" value={activeTab}>
+            {tabs.find((tab) => tab.id === activeTab)?.content}
+          </Tabs.Content>
+        </Tabs.Root>
       </Box>
-      <PreCheckinAssessmentFooterButton
-        activeTab={activeTab}
-        onNext={handleNext}
-        onBack={handleBack}
-      />
+      <PreCheckinAssessmentFooter />
     </>
   )
 }

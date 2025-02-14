@@ -22,7 +22,10 @@ const Pharmacy = ({
       direction="column"
     >
       {shouldShowAddView ? (
-        <AddPharmacy toggleAddPharmacyForm={toggleAddPharmacyForm} />
+        <AddPharmacy
+          pharmacies={pharmacies}
+          toggleAddPharmacyForm={toggleAddPharmacyForm}
+        />
       ) : (
         <ViewPharmacy
           pharmacies={pharmacies}

@@ -1,30 +1,19 @@
 import React from 'react'
-import { useFormContext } from 'react-hook-form'
-import {
-  FormFieldContainer,
-  FormFieldError,
-  FormFieldLabel,
-  ZipcodeInput,
-} from '@/components-v2'
 import { getPlaceholder } from '@/features/account/profile/utils'
-import { PharmacySchemaType } from '../../pharmacy-schema'
+import Input from '../../../../shared-blocks/input'
 
 const FIELD_ID = 'zipCode'
 
 const ZipCodeBlock = () => {
-  const form = useFormContext<PharmacySchemaType>()
   return (
-    <FormFieldContainer className="flex-1">
-      <FormFieldLabel required>Zip Code</FormFieldLabel>
-      <ZipcodeInput
-        size="3"
-        {...form.register(FIELD_ID)}
-        value={form.watch(FIELD_ID)}
-        placeholder={getPlaceholder(FIELD_ID)}
-        disabled
-      />
-      <FormFieldError name={FIELD_ID} />
-    </FormFieldContainer>
+    <Input
+      placeholder={getPlaceholder(FIELD_ID)}
+      label="Zip Code"
+      field={FIELD_ID}
+      required
+      className="w-1/4"
+      disabled
+    />
   )
 }
 

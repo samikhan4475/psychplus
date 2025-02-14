@@ -19,12 +19,14 @@ import {
 } from '@/components-v2'
 import { getPlaceholder } from '@/features/account/profile/utils'
 import { addInsuranceAction } from '@/features/billing/payments/actions'
+import { useStore } from '../../../../store'
 import PreCheckinAssessmentImageUploader from '../../shared-blocks/pre-checkin-assessment-image-uploader'
 import { patientSchema, patientSchemaType } from './patient-info-schema'
 import { StateSelect } from './state-select'
 
 const PatientInfo = () => {
   const router = useRouter()
+  const { isSaveButtonPressed, save } = useStore()
 
   const form = useForm<patientSchemaType>({
     resolver: zodResolver(patientSchema),
@@ -32,6 +34,7 @@ const PatientInfo = () => {
   })
 
   const onSuccess = (data: PatientProfile) => {
+    save()
     router.refresh()
   }
 
@@ -79,6 +82,8 @@ const PatientInfo = () => {
       form={form}
       submitAction={submitAction}
       onSuccess={onSuccess}
+      isEdit={false}
+      isExternalSavePressed={isSaveButtonPressed}
     >
       <Flex direction="column" gap="3" className="w-full" mb="4">
         <Flex
@@ -341,7 +346,7 @@ const PatientInfo = () => {
                 <FormFieldLabel required>City</FormFieldLabel>
                 <TextFieldInput size="3" placeholder="Enter city" disabled />
               </FormFieldContainer>
-              <StateSelect name="state 2" /> 
+              <StateSelect name="state 2" />
 
               <FormFieldContainer className="flex-1">
                 <FormFieldLabel required>Zip Code</FormFieldLabel>

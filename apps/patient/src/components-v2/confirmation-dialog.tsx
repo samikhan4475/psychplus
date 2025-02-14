@@ -2,7 +2,6 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { cn } from '@psychplus-v2/utils'
 import { Button, Dialog, Flex } from '@radix-ui/themes'
 import { CloseDialogIcon, FormError } from '@/components-v2'
 import { useToast } from '@/providers'
@@ -89,7 +88,7 @@ const ConfirmationDialog = <T extends { state: string; error?: string }>({
 
           <Button
             color={hasRemoveOrDelete ? 'tomato' : 'blue'}
-            className={cn(!hasRemoveOrDelete && 'bg-[#24366B]')}
+            highContrast={!hasRemoveOrDelete}
             onClick={onConfrim}
             disabled={loading}
           >

@@ -64,7 +64,7 @@ const PreCheckinAssessmentView = async () => {
   return (
     <ProfileStoreProvider profile={profileResponse.data}>
       <CodesetStoreProvider codesets={codesets}>
-        <Box className="mx-auto w-[1000px]">
+        <Box className="mx-auto w-[1200px]">
           <PreCheckinAssessmentStapper
             insurancePayers={insurancePayerResponse.data}
             patientInsurances={patientInsurancesResponse.data}
