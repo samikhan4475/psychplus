@@ -90,12 +90,12 @@ const getColumns = (codes: SharedCode[], noteTypeCodes: SharedCode[]) => {
       ),
     },
     {
-      id: 'visit-title',
-      accessorKey: 'visitTitle',
-      header: () => <ColumnHeader label="Visit Title" />,
+      id: 'note-title',
+      accessorKey: 'noteTitleCode',
+      header: () => <ColumnHeader label="Note Title" />,
       cell: ({ row }) => (
         <Box className="truncate">
-          <TextCell>{row.original.visitTitle}</TextCell>
+          <TextCell>{row.original.noteTitleCode}</TextCell>
         </Box>
       ),
     },

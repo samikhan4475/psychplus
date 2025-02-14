@@ -75,6 +75,11 @@ const QuickNotesSignButton = ({
     patient: state.patient,
     setMarkedStatus: state.setMarkedStatus,
   }))
+
+  const noteTypeCodes = useCodesetCodes(CODESETS.NoteType).find(
+    (code) => code.groupingCode === 'Primary',
+  )
+
   const codes = useCodesetCodes(CODESETS.PatientConsentPolicyType)
   const policyDescriptions = useMemo(() => {
     const notVerifiedPolicyTypes = patientConsents
@@ -109,6 +114,7 @@ const QuickNotesSignButton = ({
     signedByUserId: appointment.providerUserId ?? staffId,
     signedDate: isPrescriber ? new Date().toISOString() : undefined,
     noteTitleCode: appointment.visitNoteTitle,
+    noteTypeCode: noteTypeCodes?.value,
   }
 
   const showAlert = useCallback((info: Partial<AlertInfo>) => {

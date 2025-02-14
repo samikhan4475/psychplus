@@ -11,6 +11,7 @@ interface signNoteActionParams {
   isError?: boolean
   coSignedByUserId?: string
   noteTitleCode?: string
+  noteTypeCode?: string
 }
 
 interface signNoteActionPayload {
@@ -20,6 +21,7 @@ interface signNoteActionPayload {
   noteTitleCode?: string
   signedDate?: string
   coSignedByUserId?: string
+  noteTypeCode?: string
 }
 
 const signNoteAction = async (
@@ -33,6 +35,7 @@ const signNoteAction = async (
     coSignedByUserId,
     signedByUserId,
     noteTitleCode,
+    noteTypeCode,
   } = signPayload
 
   const url = new URL(api.NOTE_SIGN_ENDPOINT(patientId, appointmentId))
@@ -43,6 +46,7 @@ const signNoteAction = async (
     signedByUserId,
     noteTitleCode,
     signedDate,
+    noteTypeCode,
   }
 
   if (coSignedByUserId) {

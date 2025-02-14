@@ -22,6 +22,7 @@ interface SignPayloadProps {
   appointmentId: string
   signedByUserId: number
   appointment: Appointment
+  noteTypeCode?: string
 }
 
 interface Store {

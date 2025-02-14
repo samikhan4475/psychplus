@@ -37,6 +37,7 @@ interface PatientNotes {
   serviceOffered: string
   visitTypeCode: string
   noteTypeCode?: string
+  noteTitleCode?: string
   notePositionCode: string
   cosignedByUserId?: number
   locationTimeZone?: string
