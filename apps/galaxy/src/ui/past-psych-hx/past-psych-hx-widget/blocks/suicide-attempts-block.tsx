@@ -1,11 +1,8 @@
-import { FormFieldError, NumberInput } from '@/components'
+import { NumberInput } from '@/components'
 
 const SuicideAttemptsBlock = () => {
   return (
-    <>
-    <NumberInput format="##" label="Suicide Attempts" field="suicideAttempts" required />
-    <FormFieldError name="suicideAttempts" />
-    </>
+    <NumberInput format="##" label="Suicide Attempts" field="suicideAttempts" />
   )
 }
 
