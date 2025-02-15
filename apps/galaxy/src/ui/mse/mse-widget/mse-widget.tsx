@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect } from 'react'
+import { useSearchParams } from 'next/navigation'
 import { FormProvider } from 'react-hook-form'
 import {
   FormFieldError,
@@ -47,6 +48,8 @@ const MseWidget = ({
   appointment,
 }: MseWidgetProps) => {
   const form = useMseWidgetForm(initialValue)
+  const visitSequence = useSearchParams().get('visitSequence') || ''
+  const showHowTested = ['New', 'Initial'].includes(visitSequence)
 
   const mseShouldValidate =
     appointment &&
@@ -57,6 +60,7 @@ const MseWidget = ({
     form.reset({
       ...form.getValues(),
       shouldValidate: mseShouldValidate ? 'yes' : 'no',
+      showHowTested: showHowTested ? 'yes' : 'no',
     })
   }, [initialValue, appointment])
 

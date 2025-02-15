@@ -1,3 +1,4 @@
+import { useSearchParams } from 'next/navigation'
 import { Flex } from '@radix-ui/themes'
 import { BlockLabel, GroupSelectSection, YesNoSelect } from '@/components'
 import { ERROR_ID } from '../constants'
@@ -31,6 +32,8 @@ const MEMORY_HOW_TESTED_BLOCK_OPTIONS: GroupSelectOption<string>[] = [
 ]
 
 const MemoryBlock = ({ result }: { result?: MseWidgetSchemaType }) => {
+  const visitSequence = useSearchParams().get('visitSequence') || ''
+  const showHowTested = ['New', 'Initial'].includes(visitSequence)
   return (
     <Flex gap="2">
       <BlockLabel>Memory</BlockLabel>
@@ -64,12 +67,14 @@ const MemoryBlock = ({ result }: { result?: MseWidgetSchemaType }) => {
                 options={MEMORY_REMOTE_INTACT_OTHER_BLOCK_OPTIONS}
                 result={result}
               />
-              <MseGroupDetailSection
-                label="How Tested"
-                field="memoryHowTested"
-                options={MEMORY_HOW_TESTED_BLOCK_OPTIONS}
-                result={result}
-              />
+              {showHowTested && (
+                <MseGroupDetailSection
+                  label="How Tested"
+                  field="memoryHowTested"
+                  options={MEMORY_HOW_TESTED_BLOCK_OPTIONS}
+                  result={result}
+                />
+              )}
             </>
           ) : (
             <>
@@ -78,12 +83,14 @@ const MemoryBlock = ({ result }: { result?: MseWidgetSchemaType }) => {
                 options={MEMORY_REMOTE_INTACT_OTHER_BLOCK_OPTIONS}
                 errorField={ERROR_ID}
               />
-              <GroupSelectSection
-                label="How Tested"
-                field="memoryHowTested"
-                options={MEMORY_HOW_TESTED_BLOCK_OPTIONS}
-                errorField={ERROR_ID}
-              />
+              {showHowTested && (
+                <GroupSelectSection
+                  label="How Tested"
+                  field="memoryHowTested"
+                  options={MEMORY_HOW_TESTED_BLOCK_OPTIONS}
+                  errorField={ERROR_ID}
+                />
+              )}
             </>
           )}
         </>

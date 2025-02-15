@@ -1,3 +1,4 @@
+import { useSearchParams } from 'next/navigation'
 import { Flex } from '@radix-ui/themes'
 import { GroupSelectSection } from '@/components'
 import { ERROR_ID } from '../constants'
@@ -34,6 +35,9 @@ const INSIGHTS_HOWTESTED_BLOCK_OPTIONS: GroupSelectOption<string>[] = [
 ]
 
 const InsightsBlock = ({ result }: { result?: MseWidgetSchemaType }) => {
+  const visitSequence = useSearchParams().get('visitSequence') || ''
+  const showHowTested = ['New', 'Initial'].includes(visitSequence)
+
   return (
     <Flex gap="2">
       <Flex align="center" gap="2" wrap="wrap">
@@ -46,12 +50,14 @@ const InsightsBlock = ({ result }: { result?: MseWidgetSchemaType }) => {
                 options={INSIGHTS_BLOCK_OPTIONS}
                 result={result}
               />
-              <MseGroupDetailSection
-                label="How Tested"
-                field="insightHowTested"
-                options={INSIGHTS_HOWTESTED_BLOCK_OPTIONS}
-                result={result}
-              />
+              {showHowTested && (
+                <MseGroupDetailSection
+                  label="How Tested"
+                  field="insightHowTested"
+                  options={INSIGHTS_HOWTESTED_BLOCK_OPTIONS}
+                  result={result}
+                />
+              )}
             </>
           ) : (
             <>
@@ -61,12 +67,14 @@ const InsightsBlock = ({ result }: { result?: MseWidgetSchemaType }) => {
                 options={INSIGHTS_BLOCK_OPTIONS}
                 errorField={ERROR_ID}
               />
-              <GroupSelectSection
-                label="How Tested"
-                field="insightHowTested"
-                options={INSIGHTS_HOWTESTED_BLOCK_OPTIONS}
-                errorField={ERROR_ID}
-              />
+              {showHowTested && (
+                <GroupSelectSection
+                  label="How Tested"
+                  field="insightHowTested"
+                  options={INSIGHTS_HOWTESTED_BLOCK_OPTIONS}
+                  errorField={ERROR_ID}
+                />
+              )}
             </>
           )}
         </>

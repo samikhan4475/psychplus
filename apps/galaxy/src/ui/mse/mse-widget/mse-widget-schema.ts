@@ -111,6 +111,7 @@ const mseWidgetSchema = z
       .max(500, 'Max 500 characters are allowed')
       .optional(),
     shouldValidate: z.string().optional(),
+    showHowTested: z.string().optional(),
   })
   .superRefine((data, ctx) => {
     if (data.shouldValidate !== 'yes') return
@@ -170,6 +171,29 @@ const mseWidgetSchema = z
         })
       }
     })
+
+    if (data.showHowTested === 'yes') {
+      const {
+        insightHowTested,
+        memoryHowTested,
+        judgmentHowTested,
+        intelligenceHowTested,
+      } = data
+
+      if (
+        insightHowTested.length === 0 ||
+        memoryHowTested.length === 0 ||
+        judgmentHowTested.length === 0 ||
+        intelligenceHowTested.length === 0
+      ) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: [ERROR_ID],
+          message:
+            MSE_ERROR_MESSAGE + ' and please select how tested from each row.',
+        })
+      }
+    }
   })
 
 export { mseWidgetSchema, type MseWidgetSchemaType }
