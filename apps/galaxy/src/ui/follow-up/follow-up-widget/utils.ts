@@ -1,5 +1,5 @@
 import { parseAbsoluteToLocal } from '@internationalized/date'
-import { Appointment, BookVisitPayload } from '@/types'
+import { Appointment, BookVisitPayload, VisitTypes } from '@/types'
 import { NEXT_OPTIONS } from './constants'
 
 const removeEmptyValues = (obj: Record<string, any>): Record<string, any> => {
@@ -78,6 +78,20 @@ const getOffsetStartDate = (next: string, date: string) => {
   return parsedDate.toDate().toISOString()
 }
 
+const getEncounterType = (appointment: Appointment) => {
+  const followEncounterTypes = [
+    VisitTypes.Outpatient,
+    VisitTypes.EdVisit,
+    VisitTypes.TransitionalCare,
+  ]
+
+  if (followEncounterTypes.includes(appointment.visitTypeCode as VisitTypes)) {
+    return VisitTypes.Outpatient
+  } else {
+    return appointment.visitTypeCode
+  }
+}
+
 const transformIn = (appointment: Appointment) => {
   let payload: Omit<
     BookVisitPayload,
@@ -89,7 +103,7 @@ const transformIn = (appointment: Appointment) => {
     locationId: appointment.locationId,
     serviceId: appointment.serviceId,
     providerType: appointment.providerType,
-    encounterType: appointment.visitTypeCode,
+    encounterType: getEncounterType(appointment),
     visitSequenceType: appointment.visitSequence,
     type: appointment.visitMedium,
     paymentResponsibilityTypeCode: appointment.paymentResponsibility,
