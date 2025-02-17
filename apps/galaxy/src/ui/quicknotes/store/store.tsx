@@ -150,7 +150,10 @@ const createStore = (initialState: StoreInitialState) =>
         )
         if (response?.validationFailed) {
           set({ loading: false })
-          return
+          return {
+            state: 'error',
+            error: 'Validation error',
+          }
         }
         if (!response?.data?.length) {
           set({ loading: false })

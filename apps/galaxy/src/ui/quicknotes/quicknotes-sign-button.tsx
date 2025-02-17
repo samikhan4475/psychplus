@@ -225,6 +225,11 @@ const QuickNotesSignButton = ({
       return
     }
 
+    if (signResults?.error?.includes('Validation error')) {
+      setAlertInfo({ ...initialAlertInfo, show: false })
+      return
+    }
+
     if (signResults.error.includes('mark that note as error?')) {
       showAlert({
         title: 'Warning',
