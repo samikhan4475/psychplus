@@ -22,6 +22,18 @@ enum VisitTypes {
   HospitalCareSubsequent = 'HospitalCare/Subsequent',
   HospitalCareDischarge = 'HospitalCare/Discharge',
   HospitalCareInitialDischarge = 'HospitalCare/InitialDischarge',
+  GroupTherapy = 'GroupTherapy',
+  KetamineFourVisit = 'KetamineIV',
+}
+
+enum VisitSequenceTypes {
+  Discharge = 'Discharge',
+  Establish = 'Establish',
+  Na = 'NA',
+  InitialDischarge = 'InitialDischarge',
+  Initial = 'Initial',
+  New = 'New',
+  Subsequent = 'Subsequent',
 }
 
 type PaymentType =
@@ -218,4 +230,5 @@ export {
   type PaymentType,
   type CptCode,
   VisitTypes,
+  VisitSequenceTypes,
 }

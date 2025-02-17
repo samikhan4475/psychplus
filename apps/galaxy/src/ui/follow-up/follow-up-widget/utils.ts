@@ -1,5 +1,10 @@
 import { parseAbsoluteToLocal } from '@internationalized/date'
-import { Appointment, BookVisitPayload, VisitTypes } from '@/types'
+import {
+  Appointment,
+  BookVisitPayload,
+  VisitSequenceTypes,
+  VisitTypes,
+} from '@/types'
 import { NEXT_OPTIONS } from './constants'
 
 const removeEmptyValues = (obj: Record<string, any>): Record<string, any> => {
@@ -92,6 +97,19 @@ const getEncounterType = (appointment: Appointment) => {
   }
 }
 
+const getVisitSequence = (appointment: Appointment) => {
+  switch (appointment.visitTypeCode) {
+    case VisitTypes.Spravato:
+    case VisitTypes.Tms:
+    case VisitTypes.Ect:
+    case VisitTypes.GroupTherapy:
+    case VisitTypes.KetamineFourVisit:
+      return VisitSequenceTypes.Na
+    default:
+      return VisitSequenceTypes.Establish
+  }
+}
+
 const transformIn = (appointment: Appointment) => {
   let payload: Omit<
     BookVisitPayload,
@@ -104,7 +122,7 @@ const transformIn = (appointment: Appointment) => {
     serviceId: appointment.serviceId,
     providerType: appointment.providerType,
     encounterType: getEncounterType(appointment),
-    visitSequenceType: appointment.visitSequence,
+    visitSequenceType: getVisitSequence(appointment),
     type: appointment.visitMedium,
     paymentResponsibilityTypeCode: appointment.paymentResponsibility,
     isFollowup: true,
