@@ -33,7 +33,7 @@ const PolicyAndConsentsTab = ({
   return (
     <Flex direction="column" width="100%" className="gap-0.5">
       <TabContentHeading title={TAB_TITLE} />
-      <FilterForm />
+      <FilterForm patientId={patientId} />
       <DataTable loading={loading} consents={filteredConsents ?? []} />
     </Flex>
   )

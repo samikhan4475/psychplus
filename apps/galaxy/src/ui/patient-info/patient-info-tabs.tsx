@@ -1,5 +1,7 @@
 'use client'
 
+import { useEffect } from 'react'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import * as Tabs from '@radix-ui/react-tabs'
 import { Flex } from '@radix-ui/themes'
 import { useStore as zustandUseStore } from 'zustand'
@@ -54,18 +56,40 @@ const PatientInfoTabs = ({
   insurancePayers,
   patientPolicies,
 }: PatientInfoTabsProps) => {
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
   const store = useStore()
+  const router = useRouter()
   const { activeTab, setActiveTab } = zustandUseStore(store, (state) => ({
     activeTab: state.activeTab,
     setActiveTab: state.setActiveTab,
     showPatientHistory: state.showPatientHistory,
   }))
 
+  useEffect(() => {
+    const tabFromQuery = searchParams.get('tab')
+    if (tabFromQuery) {
+      setActiveTab(tabFromQuery)
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams])
+
+  const handleTabChange = (newTab: string) => {
+    if (newTab === activeTab) return
+
+    const params = new URLSearchParams(searchParams.toString())
+    params.set('tab', newTab)
+
+    router.replace(`${pathname}?${params.toString()}`, { scroll: false })
+    setActiveTab(newTab)
+  }
+
   return (
     <Tabs.Root
       className="flex w-full flex-col"
       value={activeTab}
-      onValueChange={setActiveTab}
+      onValueChange={handleTabChange}
     >
       <Flex className="z-50">
         <Tabs.List>
@@ -104,9 +128,7 @@ const PatientInfoTabs = ({
         />
       </TabsContent>
       <TabsContent value={PAYMENT_HISTORY_TAB}>
-        <PaymentHistoryTab
-          patientId={patientId}
-        />
+        <PaymentHistoryTab patientId={patientId} />
       </TabsContent>
       <TabsContent value={PAYMENT_CARDS_TAB}>
         <PaymentCardsTab

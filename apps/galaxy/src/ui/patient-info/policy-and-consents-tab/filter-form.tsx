@@ -10,6 +10,7 @@ import { ConsentStatus } from '@/types'
 import { applyClientSideFilters } from '../patient-info-tab/utils'
 import { IssuanceSelect } from './issuance-select'
 import { PolicyTypeSelect } from './policy-type-select'
+import { RefreshButton } from './refresh-button'
 import { StatusSelect } from './status-select'
 import { useStore } from './store'
 
@@ -21,7 +22,10 @@ const schema = z.object({
 
 type PatientConsentSchemaType = z.infer<typeof schema>
 
-const FilterForm = () => {
+interface FilterFormProps {
+  patientId: string
+}
+const FilterForm = ({ patientId }: FilterFormProps) => {
   const { consents, setFilteredConsents } = useStore((state) => ({
     consents: state.consents,
     setFilteredConsents: state.setFilteredConsents,
@@ -82,6 +86,7 @@ const FilterForm = () => {
         <Button type="submit" size="1" highContrast>
           <Search height={14} width={14} />
         </Button>
+        <RefreshButton patientId={patientId} />
       </Flex>
     </FormContainer>
   )

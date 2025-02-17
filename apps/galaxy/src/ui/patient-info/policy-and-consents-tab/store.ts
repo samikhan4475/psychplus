@@ -7,7 +7,10 @@ interface Store {
   loading?: boolean
   filteredConsents: PatientConsent[]
   setFilteredConsents: (consents: PatientConsent[]) => void
-  setConsents: (patientConsents: PatientConsent[]) => void
+  setConsents: (
+    patientConsents: PatientConsent[],
+    filteredConsents?: PatientConsent[],
+  ) => void
 }
 
 const useStore = create<Store>((set, get) => ({
@@ -15,7 +18,7 @@ const useStore = create<Store>((set, get) => ({
   filteredConsents: [],
   error: undefined,
   loading: undefined,
-  setConsents: (patientConsents: PatientConsent[]) => {
+  setConsents: (patientConsents, filteredConsents) => {
     set({
       error: undefined,
       loading: true,
@@ -23,7 +26,7 @@ const useStore = create<Store>((set, get) => ({
 
     set({
       consents: patientConsents,
-      filteredConsents: patientConsents,
+      filteredConsents: filteredConsents ?? patientConsents,
       loading: false,
     })
   },
