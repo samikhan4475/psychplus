@@ -228,7 +228,6 @@ const getDiagnosisSections = async (
     pcp: 'F16.10',
     inhalants: 'F18.10',
   }
-  if (tobacco === 'yes') diagnosisCodesToAdd.push('F17.200')
   if (alcohol === 'yes') diagnosisCodesToAdd.push('F10.10')
   if (drugs === 'yes')
     Object.entries(drugsDiagnosisMap).forEach(([key, code]) => {
@@ -236,6 +235,7 @@ const getDiagnosisSections = async (
         diagnosisCodesToAdd.push(code)
       }
     })
+  if (tobacco === 'yes') diagnosisCodesToAdd.push('F17.200')
 
   const sectionItemValue = String(
     diagnosisCodesToAdd.filter(
@@ -247,7 +247,7 @@ const getDiagnosisSections = async (
       pid: Number(patientId),
       sectionName: QuickNoteSectionName.QuickNoteSectionDiagnosis,
       sectionItem: 'diagnosis',
-      sectionItemValue: sectionItemValue || 'empty',
+      sectionItemValue: sectionItemValue,
     },
   ]
 

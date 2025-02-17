@@ -49,6 +49,8 @@ const substanceUseHxWidgetSchema = z
     const isAlcoholYes = data.alcohol === 'yes'
     const isDrugYes = data.drugs === 'yes'
     const isQuestionnaireYes = data.questionnaire === 'yes'
+    const isTobaccoYes = data.tobacco === 'yes';
+    const isSmokeSelected = data.tobaccoChewSmoke === 'smoke';
     const conditions = [
       data.opioids,
       data.sedative,
@@ -107,6 +109,45 @@ const substanceUseHxWidgetSchema = z
           path: ['briefInterventionDetail'],
           message: 'Please fill out the brief intervention details',
         })
+      }
+    }
+    if (isTobaccoYes) {
+      if (!data.tobaccoChewSmoke) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ['tobaccoChewSmoke'],
+          message: 'Required',
+        });
+      }
+      if (!data.smokingCessationOption) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ['smokingCessationOption'],
+          message: 'Please select cessation option',
+        });
+      }
+      if (!data.counselingOption) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ['counselingOption'],
+          message: 'Please select counseling option',
+        });
+      }
+      if (!data.smokingCessationDiscussionDuration) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ['smokingCessationDiscussionDuration'],
+          message: 'Please choose cessation discussion duration',
+        });
+      }
+    }
+    if(isSmokeSelected){
+      if (!data.smokePacks) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ['smokePacks'],
+          message: 'Required',
+        });
       }
     }
   })
