@@ -23,7 +23,10 @@ const defaultPayLoad = {
   isIncludeMetadataResourceChangeControl: true,
   isIncludeMetadataResourceIds: true,
   isIncludeMetadataResourceStatus: true,
-  claimStatusCodes: [patientStatementSlaimStatusCodes.BILLED_TO_PATIENT],
+  claimStatusCodes: [
+    patientStatementSlaimStatusCodes.BILLED_TO_PATIENT,
+    patientStatementSlaimStatusCodes.PATIENT_RESPONSIBILITY,
+  ],
   recordStatuses: [patientStatementRecordStatuses.ACTIVE],
   isGroupedByPatient: true,
   includeServiceLinePayment: true,

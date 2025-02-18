@@ -4,6 +4,7 @@ enum insurancePaymentRecordStatuses {
 
 enum patientStatementSlaimStatusCodes {
   BILLED_TO_PATIENT = 'BilledToPatient',
+  PATIENT_RESPONSIBILITY = 'PatientResponsibility',
 }
 
 enum patientStatementRecordStatuses {
