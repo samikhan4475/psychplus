@@ -46,11 +46,14 @@ interface DataTableProps<TData, TValue> {
   selectFirstRow?: boolean
   stickyRow?: boolean
   defaultSorting?: SortingState
+  defaultExpanded?: ExpandedState
+  tRowClass?: string
 }
 
 const DataTable = <TData, TValue>({
   data,
   columns,
+  defaultExpanded = {},
   renderHeader,
   renderFooter,
   initialPageSize = 50,
@@ -71,6 +74,7 @@ const DataTable = <TData, TValue>({
   isTestResource,
   isRowHighlightedRed,
   defaultSorting = [],
+  tRowClass,
 }: DataTableProps<TData, TValue>) => {
   const [sorting, setSorting] = useState<SortingState>(defaultSorting)
   const [pagination, setPagination] = useState<PaginationState>({
@@ -83,7 +87,7 @@ const DataTable = <TData, TValue>({
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = useState(initialRowSelection)
-  const [expanded, setExpanded] = useState<ExpandedState>({})
+  const [expanded, setExpanded] = useState<ExpandedState>(defaultExpanded)
 
   useEffect(() => {
     if (onRowSelectionChange) {
@@ -212,6 +216,7 @@ const DataTable = <TData, TValue>({
                       isRowHighlightedRed?.(row),
                     'bg-pp-yellow-1/30 hover:bg-pp-yellow-1/30':
                       isTestResource?.(row),
+                    'bg-white': tRowClass && row.depth > 0,
                     'bg-gray-5 hover:bg-gray-5': isRowDisabled?.(row),
                   },
                 )}
@@ -223,6 +228,7 @@ const DataTable = <TData, TValue>({
                       'border-pp-table-border last:border-r-pp-gray-2 first:border-l-pp-gray-2 group-last/row-hover:!border-b-pp-gray-2 h-5 border-b border-l border-r-0 px-1 py-0.5 last:border-r group-last/row-hover:first:rounded-bl-1 group-last/row-hover:last:rounded-br-1',
                       {
                         'bg-white sticky left-0 z-10': stickyRow && index === 0,
+                        'bg-gray-3': tRowClass && row.depth === 0,
                       },
                       tdClass,
                     )}

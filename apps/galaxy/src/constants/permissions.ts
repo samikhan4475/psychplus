@@ -210,7 +210,8 @@ const USER_PERMISSIONS = {
   canClickLicenseEditIconFromAdminView: 'canClickLicenseEditIconFromAdminView',
   saveSelectedOptionsVisitViewTabs: 'saveSelectedOptionsVisitViewTabs',
   clearSelectedOptionsVisitViewTabs: 'clearSelectedOptionsVisitViewTabs',
-  changeInActiveToActiveVisitStatusForTimedServices: 'changeInActiveToActiveVisitStatusForTimedServices',
+  changeInActiveToActiveVisitStatusForTimedServices:
+    'changeInActiveToActiveVisitStatusForTimedServices',
   canSaveInsuranceInfo: 'canSaveInsuranceInfo',
   canChangeVerificationStatusInsurance: 'canChangeVerificationStatusInsurance',
   saveInsuranceInfo: 'saveInsuranceInfo',

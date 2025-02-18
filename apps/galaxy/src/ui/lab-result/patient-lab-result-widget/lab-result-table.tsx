@@ -38,7 +38,9 @@ const LabResultTable = () => {
         isRowSpan
         disablePagination
         sticky
+        tRowClass="bg-gray-3"
         stickyRow={true}
+        defaultExpanded={true}
         tableClass="[&_.rt-ScrollAreaScrollbar]:!hidden"
       />
     </ScrollArea>
