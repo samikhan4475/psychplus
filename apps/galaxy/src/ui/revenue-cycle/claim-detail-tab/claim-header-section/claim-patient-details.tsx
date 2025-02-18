@@ -89,25 +89,25 @@ const PatientClaimDetails = () => {
         <LabelAndValue label="Account Number" value={accountNumber} />
       </Grid>
       <Grid columns="4" gap="3" rows="repeat(2)" className="w-3/5">
-        <LabelAndValue label="Billed" value={`$ ${billedAmt.toFixed(2)}`} />
+        <LabelAndValue label="Billed" value={`$${billedAmt.toFixed(2)}`} />
         <LabelAndValue
           label="Secondary Paid"
-          value={`$ ${secondaryPaid.toFixed(2)}`}
+          value={`$${secondaryPaid.toFixed(2)}`}
         />
         <LabelAndValue
           label="Write Off"
-          value={`$ ${totalWriteOff.toFixed(2)}`}
+          value={`$${totalWriteOff.toFixed(2)}`}
         />
         <LabelAndValue label="Last Modified By" value={updatedByName} />
         <LabelAndValue
           label="Primary Paid"
-          value={`$ ${primaryPaid.toFixed(2)}`}
+          value={`$${primaryPaid.toFixed(2)}`}
         />
         <LabelAndValue
           label="Patient Paid"
-          value={`$ ${patientPaid.toFixed(2)}`}
+          value={`$${patientPaid.toFixed(2)}`}
         />
-        <LabelAndValue label="Balance" value={`$ ${amountDue?.toFixed(2)}`} />
+        <LabelAndValue label="Balance" value={`$${amountDue?.toFixed(2)}`} />
         <LabelAndValue label="Claim Status" value={claimStatus} />
       </Grid>
     </Flex>
