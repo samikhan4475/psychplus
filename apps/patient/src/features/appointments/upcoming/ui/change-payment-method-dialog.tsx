@@ -16,8 +16,7 @@ import {
 import { CreditCard } from '@/features/billing/credit-debit-cards/types'
 import { Insurance, InsurancePayer } from '@/features/billing/payments/types'
 import { useToast } from '@/providers'
-import { rescheduleAppointment } from '../actions'
-import { getNewProviderTypeLabel, getProviderTypeLabel } from '@psychplus-v2/utils'
+import { changeAppointmentPaymentMethod } from '../actions/change-appointment-payment-method'
 
 const ChangePaymentMethodDialog = ({
   appointment,
@@ -55,17 +54,9 @@ const ChangePaymentMethodDialog = ({
       return
     }
 
-    const result = await rescheduleAppointment({
+    const result = await changeAppointmentPaymentMethod({
       appointmentId: appointment.id,
-      serviceId: appointment.serviceId,
-      specialistStaffId: appointment.specialist.id,
-      specialistTypeCode: appointment.specialistTypeCode,
-      providerType: getNewProviderTypeLabel(getProviderTypeLabel(appointment.specialistTypeCode)),
-      type: appointment.type,
-      startDate: appointment.startDate,
-      duration: appointment.duration,
-      locationId: appointment.clinic.id,
-      isSelfPay: paymentMethod === PaymentType.SelfPay,
+      paymentMethod: paymentMethod === PaymentType.SelfPay ? 'SelfPay' : 'Insurance',
     })
 
     if (result.state === 'error') {
