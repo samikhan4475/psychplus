@@ -438,6 +438,11 @@ const ADD_STAFF_LICENSE = (staffId: number) =>
 const UPDATE_STAFF_LICENSE = (staffId: number, staffLicenseId: string) =>
   `${API_URL}/api/staff/${staffId}/licenses/${staffLicenseId}`
 const GET_STAFF_LICENSE_HISTORY_ENDPOINT = `${API_URL}/api/staffdea/history/actions/search`
+const GET_NEAR_TO_EXPIRE_STAFF_LICENSE_ENDPOINT = (
+  staffId: number,
+  lookForwardDays: number = 90,
+) =>
+  `${API_URL}/api/staff/${staffId}/licenses/actions/expirynotification?lookForwardDays=${lookForwardDays}`
 const GET_LAB_ORDERS = (appointmentId: string) =>
   `${API_URL}/api/appointments/${appointmentId}/laborders/actions/search`
 const GET_SCRIPT_SURE_SESSION_TOKEN = (partnerShortName: string) =>
@@ -820,6 +825,7 @@ export {
   UPDATE_STAFF_LICENSE,
   GET_STAFF_BY_ID,
   GET_STAFF_LICENSE_HISTORY_ENDPOINT,
+  GET_NEAR_TO_EXPIRE_STAFF_LICENSE_ENDPOINT,
   GET_LAB_ORDERS,
   GET_CPT_CODES,
   DIAGNOSIS_SEARCH_ICD10CODES_ENDPOINT,

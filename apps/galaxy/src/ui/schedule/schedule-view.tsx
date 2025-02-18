@@ -4,6 +4,7 @@ import { PropsWithChildren, useEffect } from 'react'
 import { Flex, Heading, Tabs } from '@radix-ui/themes'
 import { FEATURE_FLAGS } from '@/constants'
 import { useFeatureFlagEnabled } from '@/hooks/use-feature-flag-enabled'
+import { LicenseExpiryAlert } from '../staff-credentialing/license-expiry-alert'
 import { CalendarView } from './calendar-view'
 import { SchedulerActionButtonGroup } from './components/header'
 import { ListView } from './list-view'
@@ -15,7 +16,7 @@ import { SchedulerView } from './scheduler-view'
 import { useEncounterTypeStore, useStore } from './store'
 import { TabValue } from './types'
 
-const ScheduleView = () => {
+const ScheduleView = ({ isInitialLogin }: { isInitialLogin: boolean }) => {
   const isFeatureFlagEnabled = useFeatureFlagEnabled(
     FEATURE_FLAGS.ehr11786EnableGalaxySecondPhaseFeatures,
   )
@@ -40,6 +41,7 @@ const ScheduleView = () => {
           <Heading className="text-xl font-semibold">Schedule</Heading>
           <TabsList isFeatureFlagEnabled={isFeatureFlagEnabled} />
         </Flex>
+        <LicenseExpiryAlert isInitialLogin={isInitialLogin} />
         <ViewHeader selectedTab={activeTab} />
         <SchedulerActionButtonGroup />
       </Flex>

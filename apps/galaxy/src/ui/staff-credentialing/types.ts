@@ -79,6 +79,14 @@ interface UpdateLicensePayload extends Omit<License, 'startDate' | 'endDate'> {
   endDate: string | undefined
 }
 
+interface NearToExpireLicenseResponse {
+  staffId: number;
+  type: LicenseType;
+  userId: number;
+  legalName: LegalName;
+  licenses: License[];
+}
+
 interface LicenseHistory {
   createdAt: DateValue
   user: string
@@ -151,4 +159,5 @@ export type {
   LicenseHistoryRow,
   AddLicensePayload,
   UpdateLicensePayload,
+  NearToExpireLicenseResponse
 }
