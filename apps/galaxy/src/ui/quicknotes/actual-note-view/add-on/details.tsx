@@ -9,9 +9,7 @@ import { TherapyBlock } from './blocks/therapy'
 const Details = ({ data }: { data: AddOnWidgetSchemaType }) => {
   const interactiveComplexityValue =
     data.interactiveComplexity &&
-    `
-      Interactive complexity was involved in this session, including:
-      ${[
+    `Interactive complexity was involved in this session, including: ${[
         'maladaptiveCommunication',
         'caregiverEmotions',
         'sentinelEvent',
