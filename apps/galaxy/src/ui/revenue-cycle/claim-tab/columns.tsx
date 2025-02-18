@@ -10,6 +10,7 @@ import { getSortDir } from '@/utils'
 import { formatDate } from '@/utils/date'
 import { formatAmount, getInsurancePayerName } from '../utils'
 import { ActionsCell } from './actions-cell'
+import { CellCPTCodes } from './cell-cpt-codes'
 import { ClaimNumberCell } from './table-row-claim-number-cell'
 import { NoteSignedStatusCell } from './table-row-note-signed-status-cell'
 
@@ -167,7 +168,9 @@ const columns = (
           }}
         />
       ),
-      cell: ({ row }) => <TextCell className="w-[150px]">{row.original.visitTypeCode}</TextCell>,
+      cell: ({ row }) => (
+        <TextCell className="w-[150px]">{row.original.visitTypeCode}</TextCell>
+      ),
     },
 
     {
@@ -255,7 +258,9 @@ const columns = (
           }}
         />
       ),
-      cell: ({ row }) => <TextCell className="w-[100px]">{row.original.providerName}</TextCell>,
+      cell: ({ row }) => (
+        <TextCell className="w-[100px]">{row.original.providerName}</TextCell>
+      ),
     },
     {
       id: 'cosignerName',
@@ -283,7 +288,9 @@ const columns = (
           }}
         />
       ),
-      cell: ({ row }) => <TextCell className="w-[300px]">{row.original.diagnosisCodes}</TextCell>,
+      cell: ({ row }) => (
+        <TextCell className="w-[300px]">{row.original.diagnosisCodes}</TextCell>
+      ),
     },
     {
       id: 'cptCodes',
@@ -297,9 +304,7 @@ const columns = (
           }}
         />
       ),
-      cell: ({ row }) => (
-        <TextCell className="w-[400px]">{row.original.cptCodes}</TextCell>
-      ),
+      cell: ({ row }) => <CellCPTCodes row={row} />,
     },
     {
       id: 'cmdId',

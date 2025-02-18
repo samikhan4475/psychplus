@@ -132,7 +132,7 @@ const ClaimDetailView = ({ claimId }: ClaimDetailViewProps) => {
       const transformedClaimData = transformClaimData(claimResponse.data)
       form.reset(transformedClaimData)
     } else {
-      toast('Failed to fetch claim data')
+      toast.error('Failed to fetch claim data')
     }
   }
   useEffect(() => {
@@ -196,6 +196,15 @@ const ClaimDetailView = ({ claimId }: ClaimDetailViewProps) => {
   }
   const onAddNewServiceLine = () => {
     const timeZone = getLocalTimeZone()
+    const claimServiceLines = form.getValues('claimServiceLines')
+    const activeClaimServiceLines = claimServiceLines.filter(
+      (charge: ClaimServiceLine) => charge.recordStatus !== 'Deleted',
+    )
+    if (activeClaimServiceLines.length > 24) {
+      toast.error('Cannot add more then 25 service lines')
+      return
+    }
+
     const activeDiagnoses = form
       .getValues('claimDiagnosis')
       .filter((diagnosis) => diagnosis.recordStatus !== 'Deleted')
