@@ -4,6 +4,7 @@ import { useState } from 'react'
 import NextLink from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { EnvelopeClosedIcon } from '@radix-ui/react-icons'
 import { Flex, Heading, Text, TextField } from '@radix-ui/themes'
 import { useForm, type SubmitHandler } from 'react-hook-form'
 import { z } from 'zod'
@@ -44,7 +45,7 @@ const LoginPage = () => {
 
   const onSubmit: SubmitHandler<SchemaType> = async (data) => {
     setError(undefined)
-    setIsLoading(true);
+    setIsLoading(true)
 
     return loginAction({
       username: data.username.trim(),
@@ -52,7 +53,7 @@ const LoginPage = () => {
       next: searchParams?.get('next') ?? null,
     }).then((result) => {
       if (result?.state === 'error') {
-        setIsLoading(false);
+        setIsLoading(false)
         setError(result.error)
       }
     })
@@ -80,8 +81,8 @@ const LoginPage = () => {
           justify="center"
           px="5"
           py="5"
-          className="bg-white w-full max-w-[450px] min-h-[300] rounded-3 shadow-3"
-          >
+          className="bg-white min-h-[300px] w-full max-w-[450px] rounded-3 shadow-3"
+        >
           <Heading weight="medium" mb="4">
             Log in
           </Heading>
@@ -94,20 +95,29 @@ const LoginPage = () => {
                 </FormFieldLabel>
                 <TextField.Root
                   size="2"
+                  placeholder="Email"
                   id={LOGIN_FORM_EMAIL_INPUT}
                   {...form.register('username')}
                   radius="full"
-                  />
+                >
+                  <TextField.Slot>
+                    <EnvelopeClosedIcon height="16" width="16" />
+                  </TextField.Slot>
+                </TextField.Root>
                 <FormFieldError name="username" />
               </FormFieldContainer>
               <FormFieldContainer>
-                <PasswordInput field="password" label="Password" />
+                <PasswordInput
+                  field="password"
+                  label="Password"
+                  placeHolder="Password"
+                />
                 <Flex align="start">
                   <NextLink
                     href="/forgot-password"
                     prefetch={false}
                     className="ml-auto"
-                    >
+                  >
                     <Text className="text-[12px] text-accent-12 underline-offset-2 hover:underline">
                       Forgot password?
                     </Text>
@@ -122,7 +132,7 @@ const LoginPage = () => {
               highContrast
               loading={isLoading}
               radius="full"
-              >
+            >
               Log in
             </FormSubmitButton>
           </FormContainer>
