@@ -36,6 +36,7 @@ const tmsWidgetSchema = z.object({
   frequencyOfSession: z.string().min(1, 'required'),
   thetaBurstFrequencyOfSession: z.string(),
   frequencyUnit: z.string(),
+  frequencyUnitThetaBurst: z.string(),
   plannedSession: z.string().min(1, 'required'),
   plannedSessionThetaBurst: z.string().min(1, 'required'),
   durationFrom: z.string().min(1, 'required'),

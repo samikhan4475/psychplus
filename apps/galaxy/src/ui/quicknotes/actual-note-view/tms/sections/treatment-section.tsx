@@ -31,7 +31,7 @@ const TreatmentSection = ({
     ),
     [ProtocolTitles.ThetaBurstStimulation]: (
       <ThetaBurstSimulationSection
-        frequencyOfSessions={`${data.thetaBurstFrequencyOfSession}/${data.frequencyUnit}`}
+        frequencyOfSessions={`${data.thetaBurstFrequencyOfSession}/${data?.frequencyUnitThetaBurst}`}
         noOfPlannedSessions={data.plannedSessionThetaBurst}
         typeOfThetaBurst={data.typeOfThetaBurst}
         duration={`${data.durationFrom} sec - ${data.durationTo}`}

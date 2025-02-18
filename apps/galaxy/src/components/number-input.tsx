@@ -20,7 +20,8 @@ interface NumberInputProps {
   showError?: boolean
   min?: number
   max?: number
-  isAllowed?: (values: any) => boolean;
+  isAllowed?: (values: any) => boolean
+  onValueChange?: (value: string) => void
 }
 
 const NumberInput = ({
@@ -35,7 +36,8 @@ const NumberInput = ({
   showError = false,
   min,
   max,
-  isAllowed
+  isAllowed,
+  onValueChange,
 }: NumberInputProps) => {
   const form = useFormContext()
 
@@ -63,11 +65,11 @@ const NumberInput = ({
   }
 
   const handleOnBlur = (value: string, onChange: (value: string) => void) => {
-    const numericValue = parseInt(value, 10);
+    const numericValue = parseInt(value, 10)
     if (min !== undefined && numericValue < min) {
-      onChange(min?.toString() || '');
+      onChange(min?.toString() || '')
     }
-  };
+  }
   return (
     <Flex align="center" gap="2">
       {label && (
@@ -94,13 +96,15 @@ const NumberInput = ({
               value={field.value}
               disabled={field.disabled || disabled}
               onValueChange={({ value }) =>
-                handleOnValueChange(value, field.onChange)
+                onValueChange
+                  ? onValueChange(value)
+                  : handleOnValueChange(value, field.onChange)
               }
               onBlur={() => handleOnBlur(field.value, field.onChange)}
               customInput={TextField.Root}
               getInputRef={field.ref}
               className={cn('h-[var(--chip-height)]', className)}
-              {...(isAllowed && { isAllowed })} 
+              {...(isAllowed && { isAllowed })}
             />
           )
         }}

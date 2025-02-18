@@ -68,6 +68,15 @@ const ContinueWithMaintainance = () => {
               field="continueWithMaintainanceBlock.treatmentFrequency"
               format="#"
               placeholder=""
+              onValueChange={(value) => {
+                const currentBlock = form.getValues(
+                  'continueWithMaintainanceBlock',
+                )
+                form.setValue('continueWithMaintainanceBlock', {
+                  treatmentFrequency: value,
+                  treatmentPerUnit: currentBlock?.treatmentPerUnit ?? '',
+                })
+              }}
             />
             <FormFieldError name="continueWithMaintainanceBlock.treatmentFrequency" />
           </FormFieldContainer>
@@ -75,6 +84,15 @@ const ContinueWithMaintainance = () => {
           <SelectInput
             field="continueWithMaintainanceBlock.treatmentPerUnit"
             options={TREATMENT_PER_UNIT}
+            onValueChange={(value) => {
+              const currentBlock = form.getValues(
+                'continueWithMaintainanceBlock',
+              )
+              form.setValue('continueWithMaintainanceBlock', {
+                ...currentBlock,
+                treatmentPerUnit: value,
+              })
+            }}
           />
         </Flex>
       </Flex>

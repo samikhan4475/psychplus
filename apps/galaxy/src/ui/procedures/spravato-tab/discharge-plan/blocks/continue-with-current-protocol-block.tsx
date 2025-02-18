@@ -68,6 +68,15 @@ const ContinueWithCurrentProtocol = () => {
               field="continueWithCurrentProtocolBlock.treatmentFrequency"
               format="#"
               placeholder=""
+              onValueChange={(value) => {
+                const currentBlock = form.getValues(
+                  'continueWithCurrentProtocolBlock',
+                )
+                form.setValue('continueWithCurrentProtocolBlock', {
+                  treatmentFrequency: value,
+                  treatmentPerUnit: currentBlock?.treatmentPerUnit ?? '',
+                })
+              }}
             />
             <FormFieldError name="continueWithCurrentProtocolBlock.treatmentFrequency" />
           </FormFieldContainer>
@@ -75,6 +84,15 @@ const ContinueWithCurrentProtocol = () => {
           <SelectInput
             field="continueWithCurrentProtocolBlock.treatmentPerUnit"
             options={TREATMENT_PER_UNIT}
+            onValueChange={(value) => {
+              const currentBlock = form.getValues(
+                'continueWithCurrentProtocolBlock',
+              )
+              form.setValue('continueWithCurrentProtocolBlock', {
+                ...currentBlock,
+                treatmentPerUnit: value,
+              })
+            }}
           />
         </Flex>
       </Flex>
