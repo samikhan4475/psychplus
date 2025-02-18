@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { EyeOpenIcon } from '@radix-ui/react-icons'
-import { IconButton, Tooltip } from '@radix-ui/themes'
+import { IconButton, Spinner, Tooltip } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { DOWNLOAD_HCFA_FILE_ENDPOINT } from '@/api/endpoints'
@@ -48,18 +48,18 @@ const DownloadHcfaActionCell = ({ item }: ActionsCellProps) => {
       setLoading(false)
     }
   }
-  
+
   return (
     <Tooltip content="View HCFA file">
-      <IconButton
-        variant="ghost"
-        onClick={previewHcfaFile}
-        className="text-black"
-        loading={loading}
-        type="button"
-      >
-        <EyeOpenIcon height={18} />
-      </IconButton>
+      {loading ? (
+        <Spinner size={'1'} />
+      ) : (
+        <EyeOpenIcon
+          height={18}
+          onClick={previewHcfaFile}
+          className="cursor-pointer"
+        />
+      )}
     </Tooltip>
   )
 }
