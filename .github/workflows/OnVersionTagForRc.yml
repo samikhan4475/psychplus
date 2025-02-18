@@ -154,7 +154,7 @@ jobs:
     secrets: inherit
 
   patient_portal_regression_test:
-    needs: [build-variables, deploy_patient]
+    needs: [build_variables, deploy_patient]
     uses: ./.github/workflows/runPatientPortalRegressionTest.yml
     with:
       environment: staging
