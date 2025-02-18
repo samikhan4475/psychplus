@@ -23,12 +23,16 @@ const InsurancePaymentDetailView = () => {
     selectedPaymentId: state.selectedPayments[state.activeTab],
   }))
 
-  const paymentPostingClaim = useStore(
-    (state) => state.paymentPostingClaim[activeTab],
-  )
+  const { paymentPostingClaim, setPaymentPostingClaim, claimPaymentDeleted } =
+    useStore((state) => ({
+      paymentPostingClaim: state.paymentPostingClaim[activeTab],
+      setPaymentPostingClaim: state.setPaymentPostingClaim,
+      claimPaymentDeleted: state.claimPaymentDeleted,
+    }))
 
   const fetchPaymentDetail = async (checkId: string) => {
     setIsLoading(true)
+    setPaymentPostingClaim(activeTab)
     const result = await getPaymentDetailAction(checkId)
     if (result.state === 'success') {
       const adjustmentResult = await getAdjustmentCodesAction({
@@ -54,7 +58,7 @@ const InsurancePaymentDetailView = () => {
   useEffect(() => {
     if (!activeTab.includes(RevenueCycleTab.CheckDetails)) return
     fetchPaymentDetail(selectedPaymentId)
-  }, [selectedPaymentId, activeTab])
+  }, [selectedPaymentId, activeTab, claimPaymentDeleted])
 
   if (isLoading) return <LoadingPlaceholder className="bg-white min-h-[46vh]" />
 

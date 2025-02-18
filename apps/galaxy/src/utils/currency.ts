@@ -4,7 +4,7 @@ const USDollar = new Intl.NumberFormat('en-US', {
 })
 
 const formatCurrency = (value?: number) => {
-  if (!value) return '$00.00'
+  if (!value) return '$0.00'
   return USDollar.format(value)
 }
 

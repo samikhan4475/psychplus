@@ -64,11 +64,11 @@ const PatientClaimDetails = () => {
       isInitialRender.current = false
       return
     }
-    const claimBalance =  billedAmt - (primaryPaid + secondaryPaid + patientPaid + totalWriteOff)
+    const claimBalance =
+      billedAmt - (primaryPaid + secondaryPaid + patientPaid + totalWriteOff)
     setValue('amountDue', claimBalance)
   }, [billedAmt])
 
-  
   const claimStatuses = useCodesetCodes(CODESETS.ClaimStatus)
 
   const claimStatus = claimStatusCode
@@ -107,7 +107,7 @@ const PatientClaimDetails = () => {
           label="Patient Paid"
           value={`$ ${patientPaid.toFixed(2)}`}
         />
-        <LabelAndValue label="Balance" value={amountDue?.toFixed(2)} />
+        <LabelAndValue label="Balance" value={`$ ${amountDue?.toFixed(2)}`} />
         <LabelAndValue label="Claim Status" value={claimStatus} />
       </Grid>
     </Flex>

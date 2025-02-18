@@ -155,12 +155,15 @@ const PaymentCheckTable = ({ paymentDetail }: PaymentCheckHeaderProps) => {
   )
 
   useEffect(() => {
-    setClaimPayments(
+    const claimPayments =
       paymentListType === PaymentListTypes.All
         ? paymentDetail.claimPayments
         : paymentDetail.claimPayments?.filter(
             (payment) => payment.status === paymentListType,
-          ) ?? [],
+          )
+    setClaimPayments(
+      claimPayments?.filter((payment) => payment.recordStatus !== 'Deleted') ??
+        [],
     )
   }, [paymentListType])
   const claimStatusCodes = useCodesetCodes(CODESETS.ClaimStatus)

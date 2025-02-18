@@ -17,6 +17,8 @@ interface Store {
   sort?: Sort
   pageCache: Record<number, GetInsurancePaymentListResponse>
   paymentPostingClaim: Record<string, Partial<ClaimPayment> | undefined>
+  claimPaymentDeleted: boolean
+  setClaimPaymentDeleted: () => void
   setPaymentPostingClaim: (
     paymentId: string,
     postingClaim?: Partial<ClaimPayment>,
@@ -37,6 +39,9 @@ const useStore = create<Store>((set, get) => ({
   page: 1,
   pageCache: {},
   sort: undefined,
+  claimPaymentDeleted: false,
+  setClaimPaymentDeleted: () =>
+    set({ claimPaymentDeleted: !get().claimPaymentDeleted }),
   paymentPostingClaim: {},
   setPaymentPostingClaim: (
     paymentId: string,
