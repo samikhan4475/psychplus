@@ -444,7 +444,19 @@ const transformOut =
         })
       }
 
-      Array.isArray(value) &&
+      if (Array.isArray(value)) {
+        const validationRules: { [key: string]: string } = {
+          siUnDisclosed: 'tcsiYesNo',
+          hiUnDisclosed: 'tchiYesNo',
+          schizophreniaDelusionValues: 'tcDelusionsYesNo',
+          schizophreniaHallucinationsValues: 'tcHallucinationsYesNo',
+        }
+
+        const keyValue = validationRules[key] as keyof MseWidgetSchemaType
+
+        if (value.length && keyValue && schema[keyValue] !== 'yes') {
+          return
+        }
         value.forEach((item) => {
           result.push({
             pid: Number(patientId),
@@ -453,7 +465,9 @@ const transformOut =
             sectionItemValue: '1',
           })
         })
+      }
     })
+
     if (!result.length) {
       result.push({
         sectionItem: '2',
