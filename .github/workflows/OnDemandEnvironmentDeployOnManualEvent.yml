@@ -141,3 +141,12 @@ jobs:
       env_namespace: ${{ needs.build-configuration.outputs.env_namespace }}
       ingress_url: ui-pr-${{ github.event.inputs.pr_number }}.ode.psychplus.dev
     secrets: inherit
+
+  patient_portal_regression_test:
+    if: ${{ github.event_name == 'workflow_dispatch' }}
+    needs: [build-configuration, deploy_patient]
+    uses: ./.github/workflows/runPatientPortalRegressionTest.yml
+    with:
+      environment: development
+      domain: https://ui-pr-${{ github.event.inputs.pr_number }}.ode.psychplus.dev
+    secrets: inherit

@@ -1,14 +1,14 @@
 name: Run Patient Portal Regression Tests
 
 on:
-  workflow_dispatch:
+  workflow_call:
     inputs:
-      Environment:
-        type: environment
+      environment:
+        type: string
         description: 'Select the environment to run tests against.'
         required: true
         default: development
-      Domain:
+      domain:
         type: string
         description: 'Write the domain of the environment. (i.e: https://ui.staging.psychplus.dev | https://ui-pr-1195.ode.psychplus.dev)'
         required: true
@@ -85,7 +85,7 @@ jobs:
               repo: 'RegressionTests',
               event_type: 'run-patient-portal-regression-test',
               client_payload: {
-                base_url: '${{ inputs.Domain }}',
-                env_name: '${{ inputs.Environment }}'
+                base_url: '${{ inputs.domain }}',
+                env_name: '${{ inputs.environment }}'
               }
             })
