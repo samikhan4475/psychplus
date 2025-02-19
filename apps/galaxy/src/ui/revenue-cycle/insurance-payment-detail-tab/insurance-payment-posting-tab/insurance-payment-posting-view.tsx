@@ -1,17 +1,20 @@
 'use client'
 
-import React, { BaseSyntheticEvent } from 'react'
+import React, { BaseSyntheticEvent, useEffect, useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Flex } from '@radix-ui/themes'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import { FormContainer } from '@/components'
+import { FormContainer, LoadingPlaceholder } from '@/components'
+import { getClaimServiceLinePaymentsAction } from '../../actions'
 import { addClaimPaymentAction } from '../../actions/add-claim-payment'
+import { getAdjustmentCodesAction } from '../../actions/get-adjustment-codes'
 import { updateClaimPaymentAction } from '../../actions/update-claim-payment'
 import { useStore } from '../../insurance-payment-tab/store'
 import { useStore as useTabStore } from '../../store'
 import { InsurancePayment } from '../../types'
 import { PaymentListTypes } from '../types'
+import { transformInServiceLines } from '../utils'
 import { transformInDefault, transformOut } from './data'
 import { InsurancePaymentClaimSummary } from './insurance-payment-claim-summary'
 import { InsurancePaymentPostingTable } from './insurance-payment-posting-table'
@@ -34,11 +37,17 @@ const InsurancePaymentPostingView = ({
     setPaymentPostingClaim: state.setPaymentPostingClaim,
     paymentPostingClaim: state.paymentPostingClaim[activeTab],
   }))
+
+  const [isLoading, setIsLoading] = useState(
+    !paymentPostingClaim?.claimServiceLines,
+  )
+
   const form = useForm<SchemaType>({
     resolver: zodResolver(schema),
     reValidateMode: 'onChange',
     defaultValues: transformInDefault(selectedPaymentId, paymentPostingClaim),
   })
+
   const onSubmit = async (data: SchemaType, event?: BaseSyntheticEvent) => {
     const { name } = (event?.nativeEvent as SubmitEvent)
       .submitter as HTMLButtonElement
@@ -86,6 +95,42 @@ const InsurancePaymentPostingView = ({
     }
   }
   const onCancel = () => setPaymentPostingClaim(activeTab)
+
+  const getServiceLines = async (claimPaymentId: string) => {
+    setIsLoading(true)
+    const result = await getClaimServiceLinePaymentsAction({ claimPaymentId })
+    if (result.state === 'success') {
+      const adjustmentResult = await getAdjustmentCodesAction({
+        practiceIds: [paymentDetail.practiceId],
+        recordStatuses: ['Active'],
+      })
+      const adjustmentCodes =
+        adjustmentResult.state === 'success' ? adjustmentResult.data : []
+      form.setValue(
+        'claimServiceLinePayments',
+        transformInServiceLines({ serviceLines: result.data, adjustmentCodes }),
+      )
+    } else if (result.state === 'error') {
+      toast.error(result.error ?? 'Failed to get service lines')
+    }
+
+    setIsLoading(false)
+  }
+
+  useEffect(() => {
+    if (
+      paymentPostingClaim?.claimServiceLinePayments &&
+      paymentPostingClaim?.id
+    )
+      getServiceLines(paymentPostingClaim?.id)
+  }, [])
+
+  if (isLoading)
+    return (
+      <Flex height="100%" align="center" justify="center">
+        <LoadingPlaceholder />
+      </Flex>
+    )
 
   return (
     <Flex gapY="4" direction="column">

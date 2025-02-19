@@ -2,15 +2,14 @@ import { SharedCode } from '@/types'
 import {
   ClaimPayment,
   ClaimServiceLinePayment,
-  InsurancePayment,
   ServiceLinePaymentAdjustment,
 } from '../types'
 import { getClaimStatusDisplay } from '../utils'
 import { adjustmentMapping } from './insurance-payment-posting-tab/constants'
 import { PaymentAdjustment } from './types'
 
-interface TransformInPaymentParams {
-  paymentDetail: InsurancePayment
+interface TransformInServiceLinesParams {
+  serviceLines: ClaimServiceLinePayment[]
   adjustmentCodes: PaymentAdjustment[]
 }
 
@@ -25,16 +24,15 @@ const transformInClaimPayments = (
       payment.claimStatusCode,
     ),
   })) ?? []
-
 const sortByCptCode = (
   a: ClaimServiceLinePayment,
   b: ClaimServiceLinePayment,
 ) => (a.cptCode < b.cptCode ? -1 : 1)
 
-const transformInPayment = ({
-  paymentDetail,
+const transformInServiceLines = ({
+  serviceLines,
   adjustmentCodes,
-}: TransformInPaymentParams) => {
+}: TransformInServiceLinesParams) => {
   const getAdjustmentStatus = (adjustment: ServiceLinePaymentAdjustment) => {
     const matchingCode = adjustmentCodes.find(
       (code) =>
@@ -55,20 +53,29 @@ const transformInPayment = ({
         adjustmentStatus: getAdjustmentStatus(adjustment),
       }),
     )
-  const updatedPayments = paymentDetail.claimPayments?.map((payment) => ({
-    ...payment,
-    claimServiceLinePayments: payment.claimServiceLinePayments
-      ?.toSorted(sortByCptCode)
-      .map((serviceLine: ClaimServiceLinePayment) => ({
-        ...serviceLine,
-        serviceLinePaymentAdjustments:
-          adjustmentCodes.length > 0
-            ? updateAdjustments(serviceLine)
-            : serviceLine.serviceLinePaymentAdjustments,
-      })),
-  }))
 
-  return { ...paymentDetail, claimPayments: updatedPayments }
+  const updatedServiceLines = serviceLines
+    ?.toSorted(sortByCptCode)
+    ?.map((serviceLine) => ({
+      ...serviceLine,
+      billedAmount:
+        String(serviceLine.totalAmount ?? '') ||
+        String(serviceLine.billedAmount ?? ''),
+      allowedAmount: String(serviceLine.allowedAmount ?? ''),
+      modifierCode1: serviceLine.modifierCode1 ?? '',
+      modifierCode2: serviceLine.modifierCode2 ?? '',
+      modifierCode3: serviceLine.modifierCode3 ?? '',
+      modifierCode4: serviceLine.modifierCode4 ?? '',
+      paidAmount: String(serviceLine.paidAmount ?? ''),
+      copayAmount: String(serviceLine.copayAmount ?? ''),
+      coinsuranceAmount: String(serviceLine.coinsuranceAmount ?? ''),
+      deductibleAmount: String(serviceLine.deductibleAmount ?? ''),
+      otherPr: String(serviceLine.otherPr ?? ''),
+      writeOffAmount: String(serviceLine.writeOffAmount ?? ''),
+      serviceLinePaymentAdjustments: updateAdjustments(serviceLine),
+    }))
+
+  return updatedServiceLines
 }
 
 const getPaymentDisplay = (
@@ -83,4 +90,9 @@ const getPaymentDisplay = (
   return codeSetLookup[codeValue] ?? codeValue
 }
 
-export { getPaymentDisplay, transformInPayment, transformInClaimPayments }
+export {
+  getPaymentDisplay,
+  sortByCptCode,
+  transformInServiceLines,
+  transformInClaimPayments,
+}

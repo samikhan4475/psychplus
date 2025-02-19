@@ -79,6 +79,8 @@ const UPDATE_STAFF_ENDPOINT = (staffId: string) =>
   `${API_URL}/api/staff/${staffId}`
 const GET_VISIT_TYPE_ENDPOINT = `${API_URL}/api/encounters/actions/search`
 const GET_PAYMENT_ADJUSTMENT_CODES = `${API_URL}/api/paymentadjustmentcodes/actions/search`
+const GET_CLAIM_PAYMENTS = `${API_URL}/api/claimpayments/actions/search`
+const GET_CLAIM_SERVICELINE_PAYMENTS = `${API_URL}/api/claimservicelinepayments/actions/search`
 const GET_FACILITY_ADMISSION_IDS_ENDPOINT = (patientId: number) =>
   `${API_URL}/api/patients/${patientId}/appointments/actions/facilityadmitids`
 const GET_LAB_RESULTS_ENDPOINT = (patientId: string) =>
@@ -633,6 +635,8 @@ export {
   GET_NOTE_VIEW_ENDPOINT,
   ADD_USER_SETTINGS,
   UPDATE_USER_SETTINGS,
+  GET_CLAIM_PAYMENTS,
+  GET_CLAIM_SERVICELINE_PAYMENTS,
   USER_ENDPOINT,
   GET_PAYMENT_ADJUSTMENT_CODES,
   GET_STAFF_PROFILE_ENDPOINT,

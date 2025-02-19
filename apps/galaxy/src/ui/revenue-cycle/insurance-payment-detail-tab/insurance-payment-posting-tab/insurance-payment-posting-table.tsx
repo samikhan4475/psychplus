@@ -185,7 +185,7 @@ const InsurancePaymentPostingTable = ({
 }: InsurancePaymentPostingTableProps) => {
   const form = useFormContext<SchemaType>()
   const claimServiceLinePayments = form.watch('claimServiceLinePayments')
-  console.log(claimServiceLinePayments)
+
   return (
     <Flex direction="column">
       <Text mb="1" size="3" weight="bold">

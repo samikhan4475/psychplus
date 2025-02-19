@@ -1,7 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-import { Pencil1Icon } from '@radix-ui/react-icons'
 import { IconButton } from '@radix-ui/themes'
 import { Trash2 } from 'lucide-react'
 import toast from 'react-hot-toast'

@@ -92,7 +92,8 @@ const transformOut = (
         serviceLinePaymentAdjustments:
           serviceLine.serviceLinePaymentAdjustments?.map((adj) => ({
             ...adj,
-            claimServiceLinePaymentId: serviceLine.claimServiceLineId ?? null,
+            claimServiceLinePaymentId:
+              serviceLine.id ?? serviceLine.claimServiceLineId ?? null,
           })) ?? [],
       })) ?? [],
     dateOfServiceFrom:

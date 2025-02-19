@@ -1,10 +1,18 @@
 import React, { useEffect, useState } from 'react'
 import * as Accordion from '@radix-ui/react-accordion'
 import { ColumnDef } from '@tanstack/react-table'
-import { ColumnHeader, DataTable, DateCell, TextCell } from '@/components'
+import toast from 'react-hot-toast'
+import {
+  ColumnHeader,
+  DataTable,
+  DateCell,
+  LoadingPlaceholder,
+  TextCell,
+} from '@/components'
 import { CODESETS } from '@/constants'
 import { useCodesetCodes } from '@/hooks'
 import { formatDate } from '@/utils'
+import { getClaimPaymentsAction } from '../actions'
 import { ClaimPayment, InsurancePayment } from '../types'
 import { addSpaceToCamelCase } from '../utils'
 import { ActionsCell } from './actions-cell'
@@ -147,25 +155,38 @@ interface PaymentCheckHeaderProps {
 }
 
 const PaymentCheckTable = ({ paymentDetail }: PaymentCheckHeaderProps) => {
-  const [claimPayments, setClaimPayments] = useState(
-    paymentDetail.claimPayments,
-  )
+  const [isLoading, setIsLoading] = useState(true)
+  const [claimPayments, setClaimPayments] = useState<ClaimPayment[]>([])
   const [paymentListType, setPaymentListType] = useState<PaymentListTypes>(
     PaymentListTypes.All,
   )
 
+  const fetchClaimPayments = async () => {
+    setIsLoading(true)
+    const result = await getClaimPaymentsAction(paymentDetail.id)
+    if (result.state === 'success') {
+      setClaimPayments(result.data ?? [])
+    } else if (result.state === 'error') {
+      toast.error(result.error)
+    }
+    setIsLoading(false)
+  }
   useEffect(() => {
-    const claimPayments =
-      paymentListType === PaymentListTypes.All
-        ? paymentDetail.claimPayments
-        : paymentDetail.claimPayments?.filter(
-            (payment) => payment.status === paymentListType,
-          )
-    setClaimPayments(
-      claimPayments?.filter((payment) => payment.recordStatus !== 'Deleted') ??
-        [],
-    )
+    if (claimPayments?.length === 0) {
+      fetchClaimPayments()
+    } else {
+      const claimPayments =
+        paymentListType === PaymentListTypes.All
+          ? paymentDetail.claimPayments
+          : paymentDetail.claimPayments?.filter(
+              (payment) =>
+                payment.status === paymentListType &&
+                payment.recordStatus !== 'Deleted',
+            )
+      setClaimPayments(claimPayments ?? [])
+    }
   }, [paymentListType])
+
   const claimStatusCodes = useCodesetCodes(CODESETS.ClaimStatus)
 
   return (
@@ -182,12 +203,16 @@ const PaymentCheckTable = ({ paymentDetail }: PaymentCheckHeaderProps) => {
             paymentListType={paymentListType}
             setPaymentListType={setPaymentListType}
           />
-          <DataTable
-            data={transformInClaimPayments(claimStatusCodes, claimPayments)}
-            columns={columns}
-            disablePagination
-            tableClass="[&_.rt-ScrollAreaRoot]:pb-2 max-w-[calc(100vw-23px)]"
-          />
+          {isLoading ? (
+            <LoadingPlaceholder className="bg-white min-h-[23vh]" />
+          ) : (
+            <DataTable
+              data={transformInClaimPayments(claimStatusCodes, claimPayments)}
+              columns={columns}
+              disablePagination
+              tableClass="[&_.rt-ScrollAreaRoot]:pb-2 max-w-[calc(100vw-23px)]"
+            />
+          )}
         </Accordion.AccordionContent>
       </Accordion.Item>
     </Accordion.Root>
