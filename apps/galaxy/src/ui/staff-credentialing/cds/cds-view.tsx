@@ -57,7 +57,6 @@ const CDSView = ({
   return (
     <Flex direction="column" width="100%" gap="1">
       <CDSHeader />
-      <LicenseHistory staffId={staffId} />
 
       {loading ? (
         <LoadingPlaceholder className="bg-white min-h-[46vh]" />

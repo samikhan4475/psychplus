@@ -7,15 +7,12 @@ import { DateValue } from 'react-aria-components'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import z from 'zod'
 import { FormContainer } from '@/components'
-import { LicenseStatus } from '../../types'
 import { FromDateField } from './from-date-field'
-import { LicenseStatusSelect } from './license-status-select'
 import { ToDateField } from './to-date-field'
 
 const schema = z.object({
-  dateFrom: z.custom<DateValue>().optional(),
-  dateTo: z.custom<DateValue>().optional(),
-  status: z.nativeEnum(LicenseStatus).optional(),
+  historyCreatedFrom: z.custom<DateValue>().optional(),
+  historyCreatedTo: z.custom<DateValue>().optional(),
 })
 type LicenseHistorySchemaType = z.infer<typeof schema>
 
@@ -27,9 +24,8 @@ const FilterForm = ({
   const form = useForm<LicenseHistorySchemaType>({
     resolver: zodResolver(schema),
     defaultValues: {
-      dateFrom: undefined,
-      dateTo: undefined,
-      status: undefined,
+      historyCreatedFrom: undefined,
+      historyCreatedTo: undefined,
     },
   })
   const onSubmit: SubmitHandler<LicenseHistorySchemaType> = (filters) => {
@@ -37,20 +33,22 @@ const FilterForm = ({
   }
   return (
     <FormContainer
-      className="bg-white flex-row gap-1.5 rounded-b-2 rounded-t-1 py-1"
+      className="bg-white flex-row gap-1.5 rounded-b-2 rounded-t-1 py-1 items-center"
       form={form}
       onSubmit={onSubmit}
     >
       <FromDateField />
       <ToDateField />
-      <LicenseStatusSelect />
       <Button
         color="gray"
         className="text-black"
         size="1"
         variant="outline"
         type="button"
-        onClick={() => form.reset()}
+        onClick={() => {
+          form.reset()
+          getHistory({})
+        }}
       >
         Clear
       </Button>

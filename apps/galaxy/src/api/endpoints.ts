@@ -443,12 +443,13 @@ const ADD_STAFF_LICENSE = (staffId: number) =>
   `${API_URL}/api/staff/${staffId}/licenses`
 const UPDATE_STAFF_LICENSE = (staffId: number, staffLicenseId: string) =>
   `${API_URL}/api/staff/${staffId}/licenses/${staffLicenseId}`
-const GET_STAFF_LICENSE_HISTORY_ENDPOINT = `${API_URL}/api/staffdea/history/actions/search`
+const GET_STAFF_LICENSE_HISTORY_ENDPOINT = (staffLicenseId: string) =>
+  `${API_URL}/api/stafflicenses/${staffLicenseId}/history/actions/search`
 const GET_NEAR_TO_EXPIRE_STAFF_LICENSE_ENDPOINT = (
   staffId: number,
-  lookForwardDays: number = 90,
+  lookForwardDays = 90,
 ) =>
-  `${API_URL}/api/staff/${staffId}/licenses/actions/expirynotification?lookForwardDays=${lookForwardDays}`
+  `${API_URL}/api/staff/${staffId}/licenses/actions/expirynotification/${lookForwardDays}`
 const GET_LAB_ORDERS = (appointmentId: string) =>
   `${API_URL}/api/appointments/${appointmentId}/laborders/actions/search`
 const GET_SCRIPT_SURE_SESSION_TOKEN = (partnerShortName: string) =>
@@ -615,13 +616,16 @@ const GET_ADDENDUMS_AGAINST_NOTE_ID = (
   noteId: string,
 ) =>
   `${API_URL}/api/patients/${patientId}/encounters/${appointmentId}/notes/${noteId}/addendums`
-const UPDATE_PATIENT_PRESCRIPTIONS_MEDICATIONS = (  patientId: string) =>
+const UPDATE_PATIENT_PRESCRIPTIONS_MEDICATIONS = (patientId: string) =>
   `${API_URL}/api/patients/${patientId}/prescriptions/actions/updatestatus`
 
-const CANCEL_PATIENT_PRESCRIPTIONS = (patientId: string)=>
+const CANCEL_PATIENT_PRESCRIPTIONS = (patientId: string) =>
   `${API_URL}/api/patients/${patientId}/scriptsureprescriptions/actions/cancel`
 
-const GET_PATIENT_PRESCRIPTIONS_MEDICATION_ORDER = (  patientId: string, prescriptionId: string) =>
+const GET_PATIENT_PRESCRIPTIONS_MEDICATION_ORDER = (
+  patientId: string,
+  prescriptionId: string,
+) =>
   `${API_URL}/api/patients/${patientId}/prescriptions/${prescriptionId}/order`
 export {
   GET_LAB_RESULTS_ENDPOINT,
@@ -908,5 +912,5 @@ export {
   GET_ADDENDUMS_AGAINST_NOTE_ID,
   UPDATE_PATIENT_PRESCRIPTIONS_MEDICATIONS,
   GET_PATIENT_PRESCRIPTIONS_MEDICATION_ORDER,
-  CANCEL_PATIENT_PRESCRIPTIONS
+  CANCEL_PATIENT_PRESCRIPTIONS,
 }

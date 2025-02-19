@@ -53,7 +53,6 @@ const DEAView = ({
   return (
     <Flex direction="column" width="100%" gap="1">
       <DEAHeader />
-      <LicenseHistory staffId={staffId} />
 
       {loading ? (
         <LoadingPlaceholder className="bg-white min-h-[46vh]" />

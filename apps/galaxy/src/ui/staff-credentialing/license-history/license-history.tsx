@@ -29,7 +29,7 @@ const LicenseHistory = ({
           {activeTab} History for {historyRow?.stateName}
         </Dialog.Title>
 
-        <LicenseHistoryTable staffId={staffId} />
+        <LicenseHistoryTable />
       </Dialog.Content>
     </Dialog.Root>
   )

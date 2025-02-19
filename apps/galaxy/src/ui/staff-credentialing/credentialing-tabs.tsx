@@ -10,6 +10,7 @@ import { getUsStatesAction } from '../visit/client-actions'
 import { CDSView } from './cds'
 import { DEAView } from './dea'
 import { LicenseView } from './license'
+import { LicenseHistory } from './license-history'
 import { PrescriberSettingsView } from './prescriber-settings'
 import { useStore } from './store'
 import { CredentialingTab } from './types'
@@ -39,6 +40,8 @@ const CredentialingTabs = ({ staffId }: { staffId: string }) => {
         }}
         className="flex w-full flex-col"
       >
+        <LicenseHistory staffId={staffId} />
+
         <Flex className="z-50">
           <Tabs.List>
             <TabsTrigger value={CredentialingTab.License}>
