@@ -1,26 +1,44 @@
 'use client'
 
-import { useCallback } from 'react'
-import { AsyncSelect } from '@/components'
+import { useEffect, useState } from 'react'
+import { useFormContext } from 'react-hook-form'
+import { MultiSelectField } from '@/components'
 import { getProvidersOptionsAction } from '../../client-actions'
 import { useFiltersContext } from '../../context'
+import { BookedAppointmentsSchemaType } from '../../schema'
 import { FieldLabel, FormFieldContainer } from '../../shared'
-import { SchedulerFilters } from '../../types'
+import { Option, SchedulerFilters } from '../../types'
 
 const ProviderDropdown = () => {
+  const [loading, setLoading] = useState<boolean>(false)
+  const [options, setOptions] = useState<Option[]>([])
+  const form = useFormContext<BookedAppointmentsSchemaType>()
   const { filters } = useFiltersContext()
-  const fetchOptions = useCallback(() => getProvidersOptionsAction(), [])
+
+  useEffect(() => {
+    setLoading(true)
+    getProvidersOptionsAction().then((response) => {
+      setLoading(false)
+      if (response.state === 'error') setOptions([])
+      else setOptions(response.data)
+    })
+  }, [])
+
   if (!filters.includes(SchedulerFilters.Provider)) return null
 
   return (
     <FormFieldContainer className="flex-1">
       <FieldLabel>Provider</FieldLabel>
-      <AsyncSelect
-        field="providerIds"
-        placeholder="Select"
-        fetchOptions={fetchOptions}
-        buttonClassName="w-full h-6 truncate max-w-[10px] min-w-full"
-        className="h-full flex-1"
+      <MultiSelectField
+        defaultValues={form.watch('providerIds')}
+        options={options}
+        className="flex-1"
+        onChange={(values) => {
+          form.setValue('providerIds', values, { shouldDirty: true })
+        }}
+        menuClassName="w-[155px]"
+        loading={loading}
+        disabled={loading}
       />
     </FormFieldContainer>
   )

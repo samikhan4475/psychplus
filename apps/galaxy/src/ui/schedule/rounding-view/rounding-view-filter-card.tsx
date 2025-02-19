@@ -29,6 +29,7 @@ import { DiagnosisInput } from './diagnosis-input'
 import { DateOfBirthInput } from './dob-input'
 import { EndDateInput } from './end-date-input'
 import { GenderSelect } from './gender-select'
+import { InsuranceFilters } from './insurance-filters'
 import { InsuranceVerificationSelect } from './insurance-verification'
 import { LastCoverageDateRange } from './last-coverage-date-range'
 import { LegalStatusSelect } from './legal-status-select'
@@ -45,7 +46,6 @@ import { VisitMediumSelect } from './visit-medium-select'
 import { VisitSequenceSelect } from './visit-sequence-select'
 import { VisitStatusSelect } from './visit-status'
 import { VisitTypeSelect } from './visit-type-select'
-import { InsuranceFilters } from './insurance-filters'
 
 const RoundingViewFilterCard = () => {
   const [filters, setFilters] = useState<string[]>(ROUNDING_FILTERS)
@@ -73,21 +73,21 @@ const RoundingViewFilterCard = () => {
       age: undefined,
       gender: '',
       dateOfBirth: undefined,
-      patientStatuses: '',
+      patientStatuses: [],
       locationIds: [],
       serviceIds: [],
-      providerType: '',
-      unitId: '',
-      roomId: '',
+      providerTypes: [],
+      unitIds: [],
+      roomIds: [],
       stateIds: [],
-      groupId: '',
-      primaryInsuranceName: '',
-      secondaryInsuranceName: '',
-      visitType: '',
-      visitSequence: '',
-      visitMedium: '',
+      groupIds: [],
+      primaryInsuranceNames: [],
+      secondaryInsuranceNames: [],
+      visitTypes: [],
+      visitSequences: [],
+      visitMediums: [],
       appointmentStatuses: [],
-      patientInsuranceVerificationStatus: '',
+      patientInsuranceVerificationStatuses: [],
       diagnosisCode: '',
       cptCode: '',
       dateOfAdmissionStart: undefined,
@@ -96,14 +96,14 @@ const RoundingViewFilterCard = () => {
       lengthOfStayMax: undefined,
       lastCoverageDateStart: undefined,
       lastCoverageDateEnd: undefined,
-      legalStatus: '',
+      legalStatuses: [],
       copayDueMin: undefined,
       copayDueMax: undefined,
       coInsuranceDueMin: undefined,
       coInsuranceDueMax: undefined,
       balanceDueMin: undefined,
       balanceDueMax: undefined,
-      noteSignedStatus: '',
+      noteSignedStatuses: [],
     },
   })
   const { dirtyFields } = form.formState
@@ -124,18 +124,16 @@ const RoundingViewFilterCard = () => {
       dateOfAdmissionEnd,
       lastCoverageDateStart,
       lastCoverageDateEnd,
-      patientStatuses,
     } = data
     const transformedData = {
       ...data,
       startingDate: getDateString(startingDate),
-      endingDate: getDateString(endingDate?.add({days: 1})),
+      endingDate: getDateString(endingDate?.add({ days: 1 })),
       dateOfBirth: getCalendarDateLabel(dateOfBirth),
       dateOfAdmissionStart: getDateString(dateOfAdmissionStart),
-      dateOfAdmissionEnd: getDateString(dateOfAdmissionEnd?.add({days: 1})),
+      dateOfAdmissionEnd: getDateString(dateOfAdmissionEnd?.add({ days: 1 })),
       lastCoverageDateStart: getDateString(lastCoverageDateStart),
-      lastCoverageDateEnd: getDateString(lastCoverageDateEnd?.add({ days: 1})),
-      patientStatuses: patientStatuses ? [patientStatuses] : [],
+      lastCoverageDateEnd: getDateString(lastCoverageDateEnd?.add({ days: 1 })),
       providerIds: [],
     }
 

@@ -2,7 +2,7 @@
 
 import { useMemo } from 'react'
 import { useFormContext } from 'react-hook-form'
-import { SelectInput } from '@/components'
+import { MultiSelectField } from '@/components'
 import { ServiceGroup } from '@/types'
 import { useFiltersContext } from '../context'
 import { BookedAppointmentsSchemaType } from '../schema'
@@ -18,9 +18,9 @@ const GroupDropdown = ({
   loading: boolean
 }) => {
   const { filters } = useFiltersContext()
-  const { watch } = useFormContext<BookedAppointmentsSchemaType>()
+  const { watch, setValue } = useFormContext<BookedAppointmentsSchemaType>()
   const services = watch('serviceIds')
-  const groupOptions = useMemo(
+  const options = useMemo(
     () =>
       groups.map((group) => ({
         label: group.group,
@@ -33,14 +33,16 @@ const GroupDropdown = ({
   return (
     <FormFieldContainer className="h-full">
       <FieldLabel>Group</FieldLabel>
-      <SelectInput
-        field="groupId"
-        placeholder="Select"
-        options={groupOptions}
-        disabled={services.length === 0}
-        buttonClassName="w-full h-6"
-        className="h-full flex-1"
+      <MultiSelectField
+        defaultValues={watch('groupIds')}
+        options={options}
+        className="flex-1"
+        onChange={(values) => {
+          setValue('groupIds', values, { shouldDirty: true })
+        }}
+        menuClassName="w-[155px]"
         loading={loading}
+        disabled={services.length === 0}
       />
     </FormFieldContainer>
   )

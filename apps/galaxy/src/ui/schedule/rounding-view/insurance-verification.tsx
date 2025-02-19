@@ -1,16 +1,19 @@
 'use client'
 
 import { useMemo } from 'react'
-import { SelectInput } from '@/components'
+import { useFormContext } from 'react-hook-form'
+import { MultiSelectField } from '@/components'
 import { CODESETS } from '@/constants'
 import { useCodesetCodes } from '@/hooks'
 import { useFiltersContext } from '../context'
+import { BookedAppointmentsSchemaType } from '../schema'
 import { FieldLabel, FormFieldContainer } from '../shared'
 import { SchedulerFilters } from '../types'
 
 const InsuranceVerificationSelect = () => {
   const { filters } = useFiltersContext()
   const codes = useCodesetCodes(CODESETS.BillingVerificationStatus)
+  const form = useFormContext<BookedAppointmentsSchemaType>()
   const options = useMemo(
     () =>
       codes
@@ -22,8 +25,8 @@ const InsuranceVerificationSelect = () => {
           return +aValue - +bValue
         })
         .map((item) => ({
-          label: item.display,
           value: item.value,
+          label: item.display,
         })),
     [codes],
   )
@@ -33,12 +36,15 @@ const InsuranceVerificationSelect = () => {
   return (
     <FormFieldContainer>
       <FieldLabel>Ins Verification</FieldLabel>
-      <SelectInput
-        field="patientInsuranceVerificationStatus"
-        placeholder="Select"
+      <MultiSelectField
+        defaultValues={form.watch('patientInsuranceVerificationStatuses')}
+        className="flex-1"
         options={options}
-        buttonClassName="w-full h-6"
-        className="h-full flex-1"
+        onChange={(values) => {
+          form.setValue('patientInsuranceVerificationStatuses', values, {
+            shouldDirty: true,
+          })
+        }}
       />
     </FormFieldContainer>
   )

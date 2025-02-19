@@ -2,13 +2,13 @@
 
 import { useMemo } from 'react'
 import { useFormContext } from 'react-hook-form'
-import { SelectInput } from '@/components'
+import { MultiSelectField } from '@/components'
 import { ServiceUnit } from '@/types'
 import { useFiltersContext } from '../context'
 import { BookedAppointmentsSchemaType } from '../schema'
 import { SchedulerFilters } from '../types'
-import { FormFieldContainer } from './form-field-container'
 import { FieldLabel } from './field-label'
+import { FormFieldContainer } from './form-field-container'
 
 const UnitDropdown = ({
   units,
@@ -18,9 +18,9 @@ const UnitDropdown = ({
   loading: boolean
 }) => {
   const { filters } = useFiltersContext()
-  const { watch } = useFormContext<BookedAppointmentsSchemaType>()
+  const { watch, setValue } = useFormContext<BookedAppointmentsSchemaType>()
   const services = watch('serviceIds')
-  const unitOptions = useMemo(
+  const options = useMemo(
     () =>
       units.map((unit) => ({
         label: unit.unit,
@@ -33,14 +33,16 @@ const UnitDropdown = ({
   return (
     <FormFieldContainer className="h-full">
       <FieldLabel>Unit</FieldLabel>
-      <SelectInput
-        field="unitId"
-        placeholder="Select"
-        options={unitOptions}
-        disabled={services.length === 0}
-        buttonClassName="w-full h-6"
-        className="h-full flex-1"
+      <MultiSelectField
+        defaultValues={watch('unitIds')}
+        options={options}
+        className="flex-1"
+        onChange={(values) => {
+          setValue('unitIds', values, { shouldDirty: true })
+        }}
+        menuClassName="w-[155px]"
         loading={loading}
+        disabled={services.length === 0}
       />
     </FormFieldContainer>
   )

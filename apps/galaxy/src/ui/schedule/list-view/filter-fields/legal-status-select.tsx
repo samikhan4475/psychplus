@@ -1,25 +1,32 @@
 'use client'
 
-import { CodesetSelect } from '@/components'
+import { useFormContext } from 'react-hook-form'
+import { MultiSelectField } from '@/components'
 import { CODE_NOT_SET, CODESETS } from '@/constants'
+import { useCodesetOptions } from '@/hooks'
 import { useFiltersContext } from '../../context'
+import { BookedAppointmentsSchemaType } from '../../schema'
+import { FieldLabel } from '../../shared'
 import { FormFieldContainer } from '../../shared/form-field-container'
 import { SchedulerFilters } from '../../types'
-import { FieldLabel } from '../../shared'
 
 const LegalStatusSelect = () => {
+  const form = useFormContext<BookedAppointmentsSchemaType>()
+  const options = useCodesetOptions(CODESETS.LegalStatus, '', [CODE_NOT_SET])
   const { filters } = useFiltersContext()
   if (!filters.includes(SchedulerFilters.Legal)) return null
 
   return (
     <FormFieldContainer>
       <FieldLabel>Legal</FieldLabel>
-      <CodesetSelect
-        name="legalStatus"
-        codeset={CODESETS.LegalStatus}
-        exclude={[CODE_NOT_SET]}
+      <MultiSelectField
+        options={options}
+        defaultValues={form.watch('legalStatuses')}
+        onChange={(values) => {
+          form.setValue('legalStatuses', values, { shouldDirty: true })
+        }}
         className="flex-1"
-        size="1"
+        menuClassName="w-[155px]"
       />
     </FormFieldContainer>
   )

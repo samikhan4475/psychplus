@@ -1,8 +1,10 @@
 'use client'
 
-import { SelectInput } from '@/components'
+import { useFormContext } from 'react-hook-form'
+import { MultiSelectField } from '@/components'
 import { SelectOptionType } from '@/types'
 import { useFiltersContext } from '../../context'
+import { BookedAppointmentsSchemaType } from '../../schema'
 import { FieldLabel, FormFieldContainer } from '../../shared'
 import { SchedulerFilters } from '../../types'
 
@@ -14,18 +16,21 @@ const PrimaryInsuranceDropdown = ({
   loading: boolean
 }) => {
   const { filters } = useFiltersContext()
+  const form = useFormContext<BookedAppointmentsSchemaType>()
   if (!filters.includes(SchedulerFilters.PrimaryInsurance)) return null
 
   return (
     <FormFieldContainer className="h-full">
       <FieldLabel>Primary Insurance</FieldLabel>
-      <SelectInput
-        field={'primaryInsuranceName'}
-        placeholder="Select"
+      <MultiSelectField
+        defaultValues={form.watch('primaryInsuranceNames')}
         options={options}
+        className="flex-1"
+        onChange={(values) => {
+          form.setValue('primaryInsuranceNames', values, { shouldDirty: true })
+        }}
+        menuClassName="w-[155px]"
         loading={loading}
-        buttonClassName="w-full h-6 truncate max-w-[10px] min-w-full"
-        className="h-full flex-1"
       />
     </FormFieldContainer>
   )

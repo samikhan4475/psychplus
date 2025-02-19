@@ -54,7 +54,7 @@ const SchedulerFilterGroup = ({
       stateIds: [],
       locationIds: [],
       serviceIds: [],
-      staffIds: providerId ?? '',
+      staffIds: providerId ? [providerId] : [],
       specialistTypeCode: '',
       gender: '',
       language: '',
@@ -75,7 +75,7 @@ const SchedulerFilterGroup = ({
     const transformedData = {
       ...data,
       startingDate: getDateString(data.startingDate),
-      staffIds: data.staffIds ? [Number(data.staffIds)] : [],
+      staffIds: data.staffIds ? data.staffIds.map((id) => Number(id)) : [],
       maxDaysOutToLook: getMaxDaysOutToLookFor(
         data.startingDate,
         data.endingDate,

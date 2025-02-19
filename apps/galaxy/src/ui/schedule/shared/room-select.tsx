@@ -2,13 +2,13 @@
 
 import { useMemo } from 'react'
 import { useFormContext } from 'react-hook-form'
-import { SelectInput } from '@/components'
+import { MultiSelectField } from '@/components'
 import { ServiceRoom } from '@/types'
 import { useFiltersContext } from '../context'
 import { BookedAppointmentsSchemaType } from '../schema'
 import { SchedulerFilters } from '../types'
-import { FormFieldContainer } from './form-field-container'
 import { FieldLabel } from './field-label'
+import { FormFieldContainer } from './form-field-container'
 
 const RoomSelect = ({
   rooms,
@@ -18,9 +18,9 @@ const RoomSelect = ({
   loading: boolean
 }) => {
   const { filters } = useFiltersContext()
-  const { watch } = useFormContext<BookedAppointmentsSchemaType>()
+  const { watch, setValue } = useFormContext<BookedAppointmentsSchemaType>()
   const services = watch('serviceIds')
-  const roomOptions = useMemo(
+  const options = useMemo(
     () =>
       rooms.map((room) => ({
         label: room.room,
@@ -33,14 +33,16 @@ const RoomSelect = ({
   return (
     <FormFieldContainer className="h-full">
       <FieldLabel>Room</FieldLabel>
-      <SelectInput
-        field="roomId"
-        placeholder="Select"
-        options={roomOptions}
-        disabled={services.length === 0}
-        buttonClassName="w-full h-6"
-        className="h-full flex-1"
+      <MultiSelectField
+        defaultValues={watch('roomIds')}
+        options={options}
+        className="flex-1"
+        onChange={(values) => {
+          setValue('roomIds', values, { shouldDirty: true })
+        }}
+        menuClassName="w-[155px]"
         loading={loading}
+        disabled={services.length === 0}
       />
     </FormFieldContainer>
   )
