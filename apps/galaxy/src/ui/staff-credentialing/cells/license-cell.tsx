@@ -1,9 +1,10 @@
+import { Flex } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
-import { PropsWithRow, TextCell } from '@/components'
-import { InputCell } from '@/ui/reports/add-template-dialog/input-cell'
+import { FormFieldError, PropsWithRow, TextCell } from '@/components'
 import { SchemaType } from '../schema'
 import { useStore } from '../store'
 import { License } from '../types'
+import { InputCell } from './input-cell'
 
 const LicenseCell = ({ row }: PropsWithRow<License>) => {
   const { editingRow } = useStore()
@@ -14,9 +15,16 @@ const LicenseCell = ({ row }: PropsWithRow<License>) => {
     row.original.stateCode === editingRow?.stateCode &&
     row.original.licenseType === editingRow?.licenseType
   return isInEdit ? (
-    <InputCell field={`licenseNumber`} defaultValue={license} />
+    <Flex direction="column" className="flex-1">
+      <InputCell
+        field="licenseNumber"
+        defaultValue={license}
+        className="w-full flex-1"
+      />
+      <FormFieldError name="licenseNumber" />
+    </Flex>
   ) : (
-    <TextCell className='pl-1'>{row.original.licenseNumber}</TextCell>
+    <TextCell className="pl-1">{row.original.licenseNumber}</TextCell>
   )
 }
 

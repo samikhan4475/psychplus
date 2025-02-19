@@ -54,7 +54,9 @@ const columns = (
     id: 'alert',
     size: 50,
     header: () => <ColumnHeader label="Alert" />,
-    cell: AlertCell,
+    cell: ({ row }) => (
+      <AlertCell row={row} showPermissionAlert={showPermissionAlert} />
+    ),
   },
   {
     id: 'actions-column',
