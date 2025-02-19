@@ -4,12 +4,15 @@ import { PropsWithChildren } from 'react'
 import * as Tabs from '@radix-ui/react-tabs'
 import { TabsTrigger } from '@/components'
 import { ClinicTimeTab } from './clinic-time-tab'
-import { ForwardingMessageTab } from './forwarding-message-tab'
 import { ClinicScheduleTabs } from './constants'
+import { ForwardingMessageTab } from './forwarding-message-tab'
 import { useStore } from './store'
 import { VacationTimeTab } from './vacation-time-tab'
 
-const ClinicScheduleView = () => {
+interface ClinicScheduleViewProps {
+  staffId: string
+}
+const ClinicScheduleView = ({ staffId }: ClinicScheduleViewProps) => {
   const { activeTab, setActiveTab } = useStore()
 
   return (
@@ -33,7 +36,7 @@ const ClinicScheduleView = () => {
         <ClinicTimeTab />
       </TabsContent>
       <TabsContent value={ClinicScheduleTabs.VacationTime}>
-        <VacationTimeTab />
+        <VacationTimeTab staffId={staffId} />
       </TabsContent>
       <TabsContent value={ClinicScheduleTabs.ForwardingInbox}>
         <ForwardingMessageTab />

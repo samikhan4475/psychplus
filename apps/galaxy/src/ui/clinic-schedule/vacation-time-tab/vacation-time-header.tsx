@@ -2,10 +2,12 @@
 
 import { Flex } from '@radix-ui/themes'
 import { TabContentHeading } from '@/components'
-import { ActiveVisitDialog } from './active-visit-dialog'
 import { AddVacationButton } from './add-vacation-button'
 
-const VacationTimeHeader = () => {
+interface VacationTimeHeaderProps {
+  staffId: string
+}
+const VacationTimeHeader = ({ staffId }: VacationTimeHeaderProps) => {
   return (
     <TabContentHeading
       title="Vacation Time"
@@ -13,8 +15,7 @@ const VacationTimeHeader = () => {
     >
       <Flex flexGrow="1" justify="end" align="center">
         <Flex align="center" gap="2">
-          <ActiveVisitDialog />
-          <AddVacationButton />
+          <AddVacationButton staffId={staffId} />
         </Flex>
       </Flex>
     </TabContentHeading>

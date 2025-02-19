@@ -9,9 +9,9 @@ const ClearButton = () => {
   const form = useFormContext<VacationTimeSchemaType>()
   const handleClear = () => {
     form.reset({
-      CreatedFrom: undefined,
-      CreatedTo: undefined,
-      recordStatus: '',
+      fromDate: undefined,
+      toDate: undefined,
+      status: '',
     })
   }
 

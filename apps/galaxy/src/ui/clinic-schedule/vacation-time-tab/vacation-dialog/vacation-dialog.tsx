@@ -3,13 +3,19 @@
 import React, { PropsWithChildren, useState } from 'react'
 import { Cross1Icon } from '@radix-ui/react-icons'
 import { Dialog, IconButton } from '@radix-ui/themes'
+import { VacationTime } from '../types'
 import { VacationForm } from './vacation-form'
 
 interface VacationDialogProps {
   title: string
+  staffId: string
+  vacation?: VacationTime
 }
+
 const VacationDialog = ({
   title,
+  staffId,
+  vacation,
   children,
 }: PropsWithChildren<VacationDialogProps>) => {
   const [isOpen, setIsOpen] = useState(false)
@@ -25,7 +31,11 @@ const VacationDialog = ({
           </IconButton>
         </Dialog.Close>
         <Dialog.Title>{title}</Dialog.Title>
-        <VacationForm />
+        <VacationForm
+          staffId={staffId}
+          vacation={vacation}
+          onClose={() => onToggle(false)}
+        />
       </Dialog.Content>
     </Dialog.Root>
   )

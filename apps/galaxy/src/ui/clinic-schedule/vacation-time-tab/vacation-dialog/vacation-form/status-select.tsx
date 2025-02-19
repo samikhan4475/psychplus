@@ -1,7 +1,12 @@
 'use client'
 
 import React from 'react'
-import { CodesetSelect, FormFieldContainer, FormFieldLabel } from '@/components'
+import {
+  CodesetSelect,
+  FormFieldContainer,
+  FormFieldError,
+  FormFieldLabel,
+} from '@/components'
 import { CODESETS } from '@/constants'
 
 const StatusSelect = () => {
@@ -14,6 +19,7 @@ const StatusSelect = () => {
         codeset={CODESETS.VacationStatus}
         className="w-full"
       />
+      <FormFieldError name="vacationStatus" />
     </FormFieldContainer>
   )
 }

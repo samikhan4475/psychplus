@@ -1,16 +1,21 @@
 'use client'
 
-import { Flex, IconButton } from '@radix-ui/themes'
-import { CloseIcon } from '@/components/icons'
+import { Flex } from '@radix-ui/themes'
+import { PropsWithRow } from '@/components'
+import { ActiveVisitDialog } from '../../shared'
 import { EditVacationButton } from '../edit-vacation-button'
+import { VacationTime } from '../types'
 
-const ActionCell = () => {
+const ActionCell = ({
+  row: { original: vacation },
+}: PropsWithRow<VacationTime>) => {
   return (
-    <Flex gap="1">
-      <IconButton variant="ghost">
-        <CloseIcon width={16} height={16} />
-      </IconButton>
-      <EditVacationButton />
+    <Flex gap="2" align="center" width="100%">
+      <EditVacationButton vacation={vacation} />
+      <ActiveVisitDialog
+        filters={vacation}
+        isDisabled={!vacation.isActiveClinicVisitPresent}
+      />
     </Flex>
   )
 }

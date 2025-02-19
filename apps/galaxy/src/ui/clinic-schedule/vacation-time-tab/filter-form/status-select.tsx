@@ -10,7 +10,7 @@ const StatusSelect = () => {
       <FormFieldLabel>Status</FormFieldLabel>
       <CodesetSelect
         size="1"
-        name="recordStatus"
+        name="status"
         codeset={CODESETS.VacationStatus}
         className="w-[120px]"
       />

@@ -1,44 +1,42 @@
 'use server'
 
 import * as api from '@/api'
-import { VacationsTime } from '../types'
+import { VACATION_LIST_TABLE_PAGE_SIZE } from '../constant'
+import { transformInVacations } from '../transform'
+import { GetVacationsListParams, VacationTime } from '../types'
 
-const getVacationTimeList = async (): Promise<
-  api.ActionResult<VacationsTime[]>
-> => {
-  const response = await new Promise<api.NetworkResult<VacationsTime[]>>(
-    (resolve) => {
-      setTimeout(() => {
-        resolve({ state: 'success', data } as api.NetworkResult<
-          VacationsTime[]
-        >)
-      }, 2000)
-    },
-  )
-
+const defaultPayload = {
+  isIncludeMetadataResourceChangeControl: true,
+  isIncludeMetadataResourceIds: true,
+  isIncludeMetadataResourceStatus: true,
+}
+const getVacationTimeList = async ({
+  formValues,
+  sort,
+  page = 1,
+}: GetVacationsListParams): Promise<api.ActionResult<VacationTime[]>> => {
+  const offset = (page - 1) * VACATION_LIST_TABLE_PAGE_SIZE
+  const url = new URL(api.GET_STAFF_VACATION_ENDPOINT)
+  url.searchParams.append('limit', String(VACATION_LIST_TABLE_PAGE_SIZE))
+  url.searchParams.append('offset', String(offset))
+  if (sort) {
+    url.searchParams.append('orderBy', `${sort.column} ${sort.direction}`)
+  }
+  const response = await api.POST<VacationTime[]>(url?.toString(), {
+    ...defaultPayload,
+    ...formValues,
+  })
   if (response.state === 'error') {
     return {
       state: 'error',
       error: response.error,
     }
   }
-
   return {
     state: 'success',
-    data: response.data,
-    total: 20,
+    data: transformInVacations(response.data),
+    total: Number(response.headers.get('psychplus-totalresourcecount')),
   }
 }
-
-const data: VacationsTime[] = [...Array(20)].map((_, index) => ({
-  id: index + 1,
-  endDateTime: `2023-01-${10 + index} 00:00`,
-  startDateTime: `2023-01-${10 + index} 00:00 `,
-  duration: '10 days',
-  status: 'Active',
-  recordStatus: 'Success',
-  staffId: index,
-  vacationStatus: 'Completed',
-}))
 
 export { getVacationTimeList }

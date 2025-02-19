@@ -1,26 +1,23 @@
 import { create } from 'zustand'
 import { Sort } from '@/types'
-import { getNewSortDir } from '@/utils'
 import { getVacationTimeList } from './actions'
-import { VacationTimeSchemaType } from './filter-form/schema'
-import { VacationsTime } from './types'
+import { GetVacationFilters, VacationTime } from './types'
 
 interface Store {
-  data?: VacationsTime[]
+  data?: VacationTime[]
   total: number
   error?: string
   sort?: Sort
   loading?: boolean
   page: number
   showFilters: boolean
-  formValues?: Partial<VacationTimeSchemaType>
-  pageCache: Record<number, VacationsTime[]>
+  formValues?: Partial<GetVacationFilters>
+  pageCache: Record<number, VacationTime[]>
   fetchLocationTimeList: (
-    formValues?: Partial<VacationTimeSchemaType>,
+    formValues?: Partial<GetVacationFilters>,
     page?: number,
     reset?: boolean,
   ) => void
-  sortData: (column: string) => void
   next: () => void
   prev: () => void
   jumpToPage: (page: number) => void
@@ -40,7 +37,7 @@ const useStore = create<Store>()((set, get) => ({
   pageCache: {},
   toggleFilters: () => set({ showFilters: !get().showFilters }),
   fetchLocationTimeList: async (
-    formValues: Partial<VacationTimeSchemaType> = {},
+    formValues: Partial<GetVacationFilters> = {},
     page = 1,
     reset = false,
   ) => {
@@ -50,7 +47,11 @@ const useStore = create<Store>()((set, get) => ({
       formValues,
     })
 
-    const result = await getVacationTimeList()
+    const result = await getVacationTimeList({
+      formValues,
+      page,
+      sort: get().sort,
+    })
 
     if (result.state === 'error') {
       return set({
@@ -58,7 +59,6 @@ const useStore = create<Store>()((set, get) => ({
         loading: false,
       })
     }
-
     set({
       data: result.data,
       total: result.total,
@@ -105,18 +105,8 @@ const useStore = create<Store>()((set, get) => ({
     }
     get().fetchLocationTimeList(get().formValues, page)
   },
-  sortData: (column) => {
-    set({
-      sort: {
-        column,
-        direction: getNewSortDir(column, get().sort),
-      },
-    })
-
-    get().fetchLocationTimeList(get().formValues, 1, true)
-  },
   refetch: () => {
-    get().fetchLocationTimeList(get().formValues, get().page, true)
+    get().fetchLocationTimeList(get().formValues, 1, true)
   },
 }))
 

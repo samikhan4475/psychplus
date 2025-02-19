@@ -6,15 +6,19 @@ import {
   FormFieldContainer,
   FormFieldLabel,
 } from '@/components'
-import { ToTimeInput } from './to-time-input'
+import { TimeSelect } from '../../shared'
 
 const ToDatePicker = () => {
   return (
     <FormFieldContainer className="col-span-2">
       <FormFieldLabel>To Date & Time</FormFieldLabel>
       <Flex gap="2">
-        <DatePickerInput field="toDate" className="flex-1" />
-        <ToTimeInput />
+        <DatePickerInput
+          field="endDateTime"
+          granularity="day"
+          className="flex-1"
+        />
+        <TimeSelect field="toTime" />
       </Flex>
     </FormFieldContainer>
   )

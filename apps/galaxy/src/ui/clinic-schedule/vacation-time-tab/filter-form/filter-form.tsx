@@ -3,6 +3,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { FormContainer } from '@/components'
+import { formatDateToISOString, sanitizeFormData } from '@/utils'
 import { useStore } from '../store'
 import { ClearButton } from './clear-button'
 import { FromDatePicker } from './from-date-picker'
@@ -18,15 +19,24 @@ const FilterForm = () => {
   const form = useForm<VacationTimeSchemaType>({
     resolver: zodResolver(schema),
     defaultValues: {
-      CreatedFrom: undefined,
-      CreatedTo: undefined,
-      recordStatus: '',
+      fromDate: undefined,
+      toDate: undefined,
+      status: '',
     },
   })
 
-  const onSubmit: SubmitHandler<VacationTimeSchemaType> = (data) => {
-    console.log(data)
-    return fetchLocationTimeList()
+  const onSubmit: SubmitHandler<VacationTimeSchemaType> = ({
+    fromDate,
+    toDate,
+    ...data
+  }) => {
+    const payload = sanitizeFormData({
+      ...data,
+      fromDate: formatDateToISOString(fromDate) ?? '',
+      toDate: formatDateToISOString(toDate, true) ?? '',
+    })
+
+    return fetchLocationTimeList(payload, 1, true)
   }
 
   return (

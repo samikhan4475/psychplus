@@ -25,8 +25,15 @@ const STATES_BY_COUNTRY_ENDPOINT = (countryCode: string) =>
   `${API_URL}/api/countries/${countryCode}/states`
 const ADD_VACATION = (staffId: string) =>
   `${API_URL}/api/staff/${staffId}/vacations`
+const EDIT_VACATION_ENDPOINT = (staffId: string, vacationId: number) =>
+  `${API_URL}/api/staff/${staffId}/vacations/${vacationId}`
 const PATIENT_PROFILE_ENDPOINT = (id: string) =>
   `${API_URL}/api/patients/${id}/profile`
+const GET_STAFF_VACATION_ENDPOINT = `${API_URL}/api/vacations/actions/search`
+const GET_STAFF_VACATION_HISTORY_ENDPOINT = (vacationId: string) =>
+  `${API_URL}/api/vacations/${vacationId}/history/actions/search`
+const UPDATE_STAFF_VACATION_ENDPOINT = (staffId: number, vacationId: number) =>
+  `${API_URL}/api/staff/${staffId}/vacations/${vacationId}`
 const NOTE_DETAILS_SEARCH_ENDPOINT = `${API_URL}/api/notedetails/actions/search`
 const NOTE_DETAILS_HISTORY_ENDPOINT = `${API_URL}/api/notedetails/history/search`
 const PCP_HISTORY_ENDPOINT = `${API_URL}/api/externalproviders/actions/relationships/history/search`
@@ -376,7 +383,6 @@ const DELETE_PATIENT_APPOINTMENT_ENDPOINT = (
   patientId: number,
   appointmentId: number,
 ) => `${API_URL}/api/patients/${patientId}/appointments/${appointmentId}`
-
 const SEARCH_FAVOURITE_DIAGNOSIS_ENDPOINT = `${API_URL}/api/staff/self/diagnoses/actions/favorites/search`
 const FAVOURITE_DIAGNOSIS_ENDPOINT = (icd10Code: string) =>
   `${API_URL}/api/staff/self/icd10codes/${icd10Code}/actions/favorites`
@@ -577,7 +583,6 @@ const DOWNLOAD_QUICK_NOTE_DOCUMENT = (
   `${API_URL}/api/patients/${patientId}/appointments/${appointmentId}/documents/${documentId}/actions/download`
 const DELETE_QUICK_NOTE_DOCUMENT = (patientId: number, appointmentId: number) =>
   `${API_URL}/api/patients/${patientId}/appointments/${appointmentId}/documents`
-
 const DOWNLOAD_LAB_ORDER_DOCUMENT = (
   appointmentId: string,
   orderId: string,
@@ -644,6 +649,9 @@ export {
   ADD_SERVICE_ENDPOINT,
   UPDATE_CLAIM_PAYMENT,
   ADD_MASTER_FEE_SCHEDULE_ENDPOINT,
+  GET_STAFF_VACATION_ENDPOINT,
+  GET_STAFF_VACATION_HISTORY_ENDPOINT,
+  UPDATE_STAFF_VACATION_ENDPOINT,
   MASTER_FEE_SCHEDULE_ENDPOINT,
   GET_CLEARNING_HOUSE_RECEIVERS,
   SESSION_ENDPOINT,
@@ -657,6 +665,7 @@ export {
   FEATURE_FLAGS,
   STATES_BY_COUNTRY_ENDPOINT,
   ADD_VACATION,
+  EDIT_VACATION_ENDPOINT,
   GET_PATIENT_NOTIFICATIONS_ENDPOINT,
   SENT_TO_COSIGNER_NOTE_ENDPOINT,
   PATIENT_PROFILE_ENDPOINT,

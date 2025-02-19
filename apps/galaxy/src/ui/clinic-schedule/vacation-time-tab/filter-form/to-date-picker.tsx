@@ -10,7 +10,7 @@ const ToDatePicker = () => {
   return (
     <FormFieldContainer className="flex-row items-center gap-1">
       <FormFieldLabel>To</FormFieldLabel>
-      <DatePickerInput field="CreatedTo" className="w-[154px]" />
+      <DatePickerInput field="toDate" className="w-[154px]" />
     </FormFieldContainer>
   )
 }

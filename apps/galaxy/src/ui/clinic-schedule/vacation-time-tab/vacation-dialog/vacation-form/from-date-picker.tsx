@@ -6,15 +6,19 @@ import {
   FormFieldContainer,
   FormFieldLabel,
 } from '@/components'
-import { FromTimeInput } from './form-time-input'
+import { TimeSelect } from '../../shared'
 
 const FromDatePicker = () => {
   return (
     <FormFieldContainer className="col-span-2">
       <FormFieldLabel>From Date & Time</FormFieldLabel>
       <Flex gap="2">
-        <DatePickerInput field="fromDate" className="flex-1" />
-        <FromTimeInput />
+        <DatePickerInput
+          field="startDateTime"
+          granularity="day"
+          className="flex-1"
+        />
+        <TimeSelect field="fromTime" />
       </Flex>
     </FormFieldContainer>
   )

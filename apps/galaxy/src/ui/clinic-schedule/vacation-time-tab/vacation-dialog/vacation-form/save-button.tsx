@@ -1,11 +1,10 @@
 'use client'
 
-import React from 'react'
 import { Button } from '@radix-ui/themes'
 
 const SaveButton = () => {
   return (
-    <Button size="1" highContrast>
+    <Button size="2" highContrast type="submit">
       Save
     </Button>
   )

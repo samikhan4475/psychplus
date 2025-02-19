@@ -1,33 +1,35 @@
 import { ColumnDef } from '@tanstack/react-table'
 import { ColumnHeader, TextCell } from '@/components'
+import { formatDateTime } from '@/utils'
 import { ActionCell, StatusCell } from './cells'
-import { VacationsTime } from './types'
+import { VacationTime } from './types'
 
-const columns: ColumnDef<VacationsTime>[] = [
+const columns: ColumnDef<VacationTime>[] = [
   {
     accessorKey: 'startDateTime',
-    size: 15,
     header: ({ column }) => (
       <ColumnHeader clientSideSort column={column} label="From Date/Time" />
     ),
     cell: ({ row: { original } }) => (
-      <TextCell>{original.startDateTime}</TextCell>
+      <TextCell>
+        {formatDateTime(original.startDateTime ?? 'N/A', false)}
+      </TextCell>
     ),
   },
   {
     accessorKey: 'endDateTime',
-    size: 15,
     header: ({ column }) => (
       <ColumnHeader clientSideSort column={column} label="To Date/Time" />
     ),
     cell: ({ row: { original } }) => (
-      <TextCell>{original.endDateTime}</TextCell>
+      <TextCell>
+        {formatDateTime(original.endDateTime ?? 'N/A', false)}
+      </TextCell>
     ),
   },
   {
     id: 'duration',
     accessorKey: 'duration',
-    size: 15,
     header: ({ column }) => (
       <ColumnHeader clientSideSort column={column} label="Duration" />
     ),
@@ -36,7 +38,6 @@ const columns: ColumnDef<VacationsTime>[] = [
   {
     id: 'status',
     accessorKey: 'status',
-    size: 1,
     header: ({ column }) => (
       <ColumnHeader clientSideSort column={column} label="Status" />
     ),
@@ -44,7 +45,7 @@ const columns: ColumnDef<VacationsTime>[] = [
   },
   {
     id: 'action',
-    size: 1,
+    size: 10,
     header: () => <ColumnHeader label="Action" className="!font-medium" />,
     cell: ActionCell,
   },
