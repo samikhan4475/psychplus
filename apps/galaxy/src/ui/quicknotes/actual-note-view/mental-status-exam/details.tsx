@@ -6,11 +6,6 @@ import { BlockContainer, LabelAndValue } from '../shared'
 import { renderDataWithOther } from '../utils'
 import { desiredOrderMse, mseValueMapping, reorderObjectKeys } from './utils'
 
-interface Props<T> {
-  data: T
-  actualNoteViewVisibility?: boolean
-}
-
 const labelMapping: Record<string, string> = {
   orientation: 'Orientation',
   appearance: 'Appearance',
@@ -41,48 +36,113 @@ const labelMapping: Record<string, string> = {
   hiUnDisclosed: 'Thought Content Homicidal Ideation Plan',
 }
 
-const Details = ({
-  data,
-  actualNoteViewVisibility,
-}: Props<MseWidgetSchemaType>) => {
-  const visitSequence = useSearchParams().get('visitSequence') || ''
-  const showHowTested = ['New', 'Initial'].includes(visitSequence)
+interface Props {
+  data: MseWidgetSchemaType
+  actualNoteViewVisibility?: boolean
+}
 
+enum VisitType {
+  New = 'New',
+  Initial = 'Initial',
+}
+
+interface ValidationRule {
+  dependentKey: keyof MseWidgetSchemaType
+  value: string
+  otherKey: keyof MseWidgetSchemaType
+}
+
+const validationRules: Record<string, ValidationRule> = {
+  siUnDisclosed: {
+    dependentKey: 'tcsiYesNo',
+    value: 'yes',
+    otherKey: 'siOtherDetails',
+  },
+  hiUnDisclosed: {
+    dependentKey: 'tchiYesNo',
+    value: 'yes',
+    otherKey: 'hiOtherDetails',
+  },
+}
+
+const RenderArrayValue: React.FC<{
+  label: string
+  value: string[]
+  fieldKey: string
+  data: MseWidgetSchemaType
+}> = ({ label, value, fieldKey, data }) => {
+  const sortedValues = mseValueMapping[fieldKey]
+    ? value
+        .slice()
+        .sort(
+          (a, b) =>
+            mseValueMapping[fieldKey].indexOf(a) -
+            mseValueMapping[fieldKey].indexOf(b),
+        )
+    : value
+
+  return (
+    <LabelAndValue
+      label={`${label}:`}
+      value={renderDataWithOther(fieldKey, sortedValues, data)}
+    />
+  )
+}
+
+const Details = ({ data, actualNoteViewVisibility = false }: Props) => {
+  const visitSequence = useSearchParams().get('visitSequence') || ''
+  const showHowTested = Object.values(VisitType).includes(
+    visitSequence as VisitType,
+  )
   const reorderedData = reorderObjectKeys(data, [...desiredOrderMse])
 
-  return actualNoteViewVisibility ? (
+  if (!actualNoteViewVisibility) return null
+
+  return (
     <BlockContainer heading="Mental Status Exam">
       {Object.entries(reorderedData).map(([key, value]) => {
         const label = labelMapping[key] || key.replace(/([A-Z])/g, ' $1')
-        if (label.includes('How Tested') && !showHowTested) return null
+
+        if (label.includes('How Tested') && !showHowTested) {
+          return null
+        }
 
         if (Array.isArray(value) && value.length > 0) {
-          let sortedValues = value
+          return (
+            <RenderArrayValue
+              key={key}
+              label={label}
+              value={value}
+              fieldKey={key}
+              data={reorderedData}
+            />
+          )
+        }
 
-          if (mseValueMapping[key]) {
-            const sortingCriteria = (a: string, b: string) =>
-              mseValueMapping[key].indexOf(a) - mseValueMapping[key].indexOf(b)
-            sortedValues = value.slice().sort(sortingCriteria)
-          }
+        if (typeof value === 'string' && ['yes', 'no'].includes(value)) {
+          return <LabelAndValue key={key} label={`${label}:`} value={value} />
+        }
 
+        const validationRule = validationRules[key]
+        if (
+          Array.isArray(value) &&
+          validationRule &&
+          reorderedData[validationRule.dependentKey] === validationRule.value
+        ) {
+          const otherDetail = reorderedData[validationRule.otherKey] as string
           return (
             <LabelAndValue
               key={key}
               label={`${label}:`}
-              value={renderDataWithOther(key, sortedValues, reorderedData)}
+              value={`Disclosed, ${otherDetail}`}
             />
           )
-        } else if (
-          typeof value === 'string' &&
-          (value === 'yes' || value === 'no')
-        ) {
-          return <LabelAndValue key={key} label={`${label}:`} value={value} />
         }
 
         return null
       })}
     </BlockContainer>
-  ) : null
+  )
 }
 
 export { Details }
