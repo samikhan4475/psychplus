@@ -5,7 +5,7 @@ import {
   VerificationStatus,
   type PatientConsent,
 } from '@/types'
-import { getSlashedPaddedDateString } from '@/utils'
+import { convertToTimeZoneDate, getSlashedPaddedDateString } from '@/utils'
 import { AddRelationshipRequestBody } from './actions'
 import { AddRelationshipSchemaType } from './add-relationship-dialog/schema'
 import { PatientInfoSchemaType } from './patient-info-schema'
@@ -105,14 +105,22 @@ const patientConsentTransformIn = (
   > = {}
 
   data.forEach((consent) => {
-    const { id, latestIssuanceDate, issuanceDate, signingDate, type, ...rest } =
-      consent
+    const {
+      id,
+      latestIssuanceDate,
+      issuanceDate,
+      signingDate,
+      timeZoneId,
+      type,
+      ...rest
+    } = consent
 
     const formattedConsent: PatientConsent = {
       id: String(id),
       latestIssuanceDate: formatDate(latestIssuanceDate),
       issuanceDate: formatDate(issuanceDate),
-      signingDate: formatDate(signingDate),
+      signingDate: formatDate(convertToTimeZoneDate(signingDate, timeZoneId)),
+      timeZoneId,
       type,
       ...rest,
     }

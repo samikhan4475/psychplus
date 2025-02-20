@@ -37,6 +37,7 @@ interface PatientConsent {
   status?: ConsentStatus
   isNeedsNewSignature: boolean
   consents?: PatientConsent[]
+  timeZoneId: string
 }
 
 export {

@@ -281,6 +281,17 @@ function convertToTimeZoneTime(
   return fractionalHour
 }
 
+const convertToTimeZoneDate = (date: string, timezoneId: string) => {
+  try {
+    const zonedDate = parseAbsolute(date, timezoneId)
+    const month = `${zonedDate.month}`.padStart(2, '0')
+    const day = `${zonedDate.day}`.padStart(2, '0')
+    return `${month}/${day}/${zonedDate.year}`
+  } catch (error) {
+    return date
+  }
+}
+
 const isDateInRange = (
   date: DateValue,
   startDate: DateValue,
@@ -365,6 +376,7 @@ export {
   generateTimeOptions,
   getDateDifference,
   convertToTimeZoneTime,
+  convertToTimeZoneDate,
   isDateInRange,
   formatUTCDate,
 }
