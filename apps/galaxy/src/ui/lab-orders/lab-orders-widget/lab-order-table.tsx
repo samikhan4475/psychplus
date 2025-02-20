@@ -4,7 +4,6 @@ import { useEffect } from 'react'
 import { useParams, useSearchParams } from 'next/navigation'
 import { Flex, ScrollArea } from '@radix-ui/themes'
 import { type ColumnDef } from '@tanstack/react-table'
-import { format } from 'date-fns'
 import {
   ColumnHeader,
   DataTable,
@@ -16,6 +15,7 @@ import { LabOrders } from '@/types'
 import { LabTestCell, ResultsCell, StatusCell } from './cells'
 import { ActionsCell } from './cells/actions-cell'
 import { useStore } from './store'
+import { formatUTCDate } from '@/utils'
 
 const columns: ColumnDef<LabOrders>[] = [
   {
@@ -25,9 +25,7 @@ const columns: ColumnDef<LabOrders>[] = [
       <ColumnHeader column={column} clientSideSort label="Order Date" />
     ),
     cell: ({ row }) => (
-      <DateTimeCell>
-        {format(new Date(row.original.labOrderDate), 'MM/dd/yyyy HH:mm')}
-      </DateTimeCell>
+      <DateTimeCell>{formatUTCDate(row.original.labOrderDate)}</DateTimeCell>
     ),
   },
   {
