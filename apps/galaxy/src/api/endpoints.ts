@@ -468,16 +468,16 @@ const UPDATE_PAYER_PLAN = (payerId: string, insuranceid: string) =>
 const GET_PAYERS = `${API_URL}/api/insurance/payers?includePlans=false&includeInactive=false&includeTest=false&publicViewable=true&offset=0&limit=0`
 const ADD_PAYER = () => `${API_URL}/api/insurance/payers`
 const PAYER_PLAN_BY_ID = (id: string) => `${API_URL}/api/insurance/plans/${id}`
-const GET_PAYER_PLAN_ADDRESS = (id: string) =>
-  `${API_URL}/api/insurance/payers/${id}/addresses`
-const UPDATE_PAYER_PLAN_ADDRESS = (payerId: string, payerAddressId: string) =>
-  `${API_URL}/api/insurance/payers/${payerId}/addresses/${payerAddressId}`
-const ADD_PAYER_PLAN_ADDRESS = (payerId: string) =>
-  `${API_URL}/api/insurance/payers/${payerId}/addresses`
+const GET_PAYER_PLAN_ADDRESS = (insurancePlanId: string) =>
+  `${API_URL}/api/insurance/insuranceplans/${insurancePlanId}/addresses`
+const UPDATE_PAYER_PLAN_ADDRESS = (insurancePlanId: string, payerAddressId: string) =>
+  `${API_URL}/api/insurance/insuranceplans/${insurancePlanId}/addresses/${payerAddressId}`
+const ADD_PAYER_PLAN_ADDRESS = (insurancePlanId: string) =>
+  `${API_URL}/api/insurance/insuranceplans/${insurancePlanId}/addresses`
 const DELETE_PAYER_PLAN = (payerId: string, insurancePlanId: string) =>
   `${API_URL}/api/insurance/payers/${payerId}/insuranceplans/${insurancePlanId}`
-const DELETE_PAYER_PLAN_ADDRESS = (payerId: string, payerAddressId: string) =>
-  `${API_URL}/api/insurance/payers/${payerId}/addresses/${payerAddressId}`
+const DELETE_PAYER_PLAN_ADDRESS = (insurancePlanId: string, payerAddressId: string) =>
+  `${API_URL}/api/insurance/insuranceplans/${insurancePlanId}/addresses/${payerAddressId}`
 const GET_DETAILED_NOTE_ENDPOINT = (patientId: string) =>
   `${API_URL}/api/patients/${patientId}/detailednotes/actions/search`
 const GET_NOTE_VIEW_ENDPOINT = (

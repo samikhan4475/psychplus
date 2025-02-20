@@ -64,6 +64,7 @@ const EditPayerPlanDetail = ({
       fetchPayerData(selectPayerPlanId)
     }
   }
+
   return (
     <FormContainer form={form} onSubmit={onSubmit} className="bg-white">
       <Flex direction="column" gap="2" className="flex-1">
@@ -86,7 +87,7 @@ const EditPayerPlanDetail = ({
         </Flex>
 
         <PayerPlanForm isEditMode={true} />
-        <PayerPlanAddressView payerId={form.getValues('payerId')} />
+        <PayerPlanAddressView payerId={form.getValues('id')} />
       </Flex>
     </FormContainer>
   )
