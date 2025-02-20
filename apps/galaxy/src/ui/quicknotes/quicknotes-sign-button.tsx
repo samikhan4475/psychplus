@@ -1,19 +1,20 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 'use client'
 
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useParams, useSearchParams } from 'next/navigation'
+import { Button } from '@radix-ui/themes'
+import { PenLineIcon } from 'lucide-react'
+import toast from 'react-hot-toast'
 import { CODESETS, STAFF_ROLE_CODE_PRESCRIBER } from '@/constants'
 import { useCodesetCodes } from '@/hooks'
 import { useStore as useGlobalStore } from '@/store'
 import { Appointment, PatientConsent } from '@/types'
 import { useStore as useDiagnosisStore } from '@/ui/diagnosis/store'
 import { useStore as useMedicationStore } from '@/ui/medications/patient-medications-widget/store'
-import { VisitTypeEnum } from '@/utils'
-import { Button } from '@radix-ui/themes'
-import { PenLineIcon } from 'lucide-react'
-import { useParams, useSearchParams } from 'next/navigation'
-import { useCallback, useEffect, useMemo, useState } from 'react'
-import toast from 'react-hot-toast'
+import { filterDefaultCosigner, VisitTypeEnum } from '@/utils'
 import { AlertDialog } from '../alerts'
+import { PatientMedication } from '../medications/patient-medications-widget/types'
 import {
   SEND_TO_SIGNATURE_BUTTON,
   SIGN_BUTTON,
@@ -25,7 +26,6 @@ import {
 import { useQuickNotesPermissions } from './hooks'
 import { PolicyConsentDialog } from './policy-consent-dialog'
 import { useStore, validateDiagnosis } from './store'
-import { PatientMedication } from '../medications/patient-medications-widget/types'
 
 interface QuickNotesSignButtonProps {
   appointment: Appointment
@@ -45,8 +45,8 @@ const initialAlertInfo: AlertInfo = {
   show: false,
   title: 'Warning',
   message: '',
-  okButton: { text: '', onClick: () => { } },
-  cancelButton: { text: '', onClick: () => { } },
+  okButton: { text: '', onClick: () => {} },
+  cancelButton: { text: '', onClick: () => {} },
   disableClose: false,
 }
 
@@ -79,6 +79,7 @@ const QuickNotesSignButton = ({
     setWidgetsData,
     patient,
     isMarkedAsError,
+    signOptions,
     setMarkedStatus,
   } = useStore((state) => ({
     loading: state.loading,
@@ -86,9 +87,16 @@ const QuickNotesSignButton = ({
     setWidgetsData: state.setWidgetsData,
     markAsError: state.markAsError,
     isMarkedAsError: state.isMarkedAsError,
+    signOptions: state.signOptions,
     patient: state.patient,
     setMarkedStatus: state.setMarkedStatus,
   }))
+
+  const coSignedByUserId =
+    signOptions.coSignedByUserId !== undefined &&
+    signOptions.coSignedByUserId !== null
+      ? String(signOptions.coSignedByUserId)
+      : String(filterDefaultCosigner(appointment.cosigners || [])?.id || '')
 
   const noteTypeCodes = useCodesetCodes(CODESETS.NoteType).find(
     (code) => code.groupingCode === 'Primary',
@@ -129,6 +137,7 @@ const QuickNotesSignButton = ({
     signedDate: isPrescriber ? new Date().toISOString() : undefined,
     noteTitleCode: appointment.visitNoteTitle,
     noteTypeCode: noteTypeCodes?.value,
+    coSignedByUserId,
   }
 
   const showAlert = useCallback((info: Partial<AlertInfo>) => {
@@ -150,9 +159,9 @@ const QuickNotesSignButton = ({
     )
 
     if (hasControlledSubstanceMedication) {
-      return !isPmpReviewed;
+      return !isPmpReviewed
     }
-    return false;
+    return false
   }
 
   const signNoteHandler = async () => {

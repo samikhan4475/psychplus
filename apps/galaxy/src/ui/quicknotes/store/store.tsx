@@ -164,13 +164,7 @@ const createStore = (initialState: StoreInitialState) =>
         }
 
         get().setWidgetsData(response?.data)
-        const { coSignedByUserId } = get().signOptions || {}
-        const body = {
-          ...payload,
-          coSignedByUserId,
-        }
-
-        const signResults = await signNoteAction(body)
+        const signResults = await signNoteAction(payload)
         set({ loading: false })
         return signResults
       } catch (error) {
@@ -187,10 +181,8 @@ const createStore = (initialState: StoreInitialState) =>
     markAsError: async (payload) => {
       try {
         set({ loading: true })
-        const { coSignedByUserId } = get().signOptions || {}
         const body = {
           ...payload,
-          coSignedByUserId,
           isError: true,
         }
         const signResults = await signNoteAction(body)
