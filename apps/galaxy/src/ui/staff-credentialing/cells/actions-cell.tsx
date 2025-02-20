@@ -7,6 +7,7 @@ import {
 import { Flex, IconButton } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
 import { TableEditIcon } from '@/components/icons'
+import { cn } from '@/utils'
 import { useLicensePermissions } from '../hooks/useLicensePermission'
 import { SchemaType } from '../schema'
 import { useStore } from '../store'
@@ -38,6 +39,7 @@ const ActionsCell = ({
         <>
           <IconButton
             variant="ghost"
+            disabled={!row.id}
             onClick={() => {
               if (canViewHistory) setHistoryRow(row)
               else {
@@ -45,7 +47,11 @@ const ActionsCell = ({
               }
             }}
           >
-            <CounterClockwiseClockIcon className="text-black cursor-pointer" />
+            <CounterClockwiseClockIcon
+              className={cn('text-black cursor-pointer', {
+                'cursor-not-allowed': !row.id,
+              })}
+            />
           </IconButton>
           <IconButton
             variant="ghost"

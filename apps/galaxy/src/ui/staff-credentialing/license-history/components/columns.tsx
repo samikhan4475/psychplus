@@ -12,39 +12,55 @@ import { License } from '../../types'
 
 const columns: ColumnDef<License>[] = [
   {
-    accessorFn: (row) => row.metadata?.createdOn,
+    accessorFn: (row) => row.metadata?.updatedOn ?? row.metadata?.createdOn,
     id: 'history-date-time',
     header: ({ column }) => (
       <ColumnHeader column={column} clientSideSort label="Date/Time" />
     ),
     enableSorting: true,
-    cell: ({ row }) => (
-      <Flex justify="between" width="100%" align="center" className="px-1">
-        <DateCell>
-          {getSlashedPaddedDateString(row.original?.metadata?.createdOn ?? '')}
-        </DateCell>
-        <DateCell className="text-pp-gray-1">
-          {getTimeLabel(row.original?.metadata?.createdOn ?? '')}
-        </DateCell>
-      </Flex>
-    ),
+    cell: ({ row }) => {
+      const { createdOn, updatedOn } = row.original?.metadata || {}
+      return (
+        <Flex justify="between" width="100%" align="center" className="px-1">
+          <DateCell>
+            {getSlashedPaddedDateString(updatedOn ?? createdOn)}
+          </DateCell>
+          <DateCell className="text-pp-gray-1">
+            {getTimeLabel(updatedOn ?? createdOn ?? '')}
+          </DateCell>
+        </Flex>
+      )
+    },
     sortingFn: (a, b) => {
-      const timeA = parseAbsoluteToLocal(a.original?.metadata?.createdOn ?? '')
-      const timeB = parseAbsoluteToLocal(b.original?.metadata?.createdOn ?? '')
+      const timeA = parseAbsoluteToLocal(
+        a.original?.metadata?.updatedOn ??
+          a.original?.metadata?.createdOn ??
+          '',
+      )
+      const timeB = parseAbsoluteToLocal(
+        b.original?.metadata?.updatedOn ??
+          b.original?.metadata?.createdOn ??
+          '',
+      )
       return timeA.compare(timeB)
     },
   },
   {
-    accessorFn: (row) => row.metadata?.createdByFullName,
+    accessorFn: (row) =>
+      row.metadata?.updatedByFullName ?? row.metadata?.createdByFullName,
     id: 'history-user',
     header: ({ column }) => (
       <ColumnHeader column={column} clientSideSort label="User" />
     ),
-    cell: ({ row }) => (
-      <TextCell className="pl-1">
-        {row.original?.metadata?.createdByFullName}
-      </TextCell>
-    ),
+    cell: ({ row }) => {
+      const { createdByFullName, updatedByFullName } =
+        row.original?.metadata || {}
+      return (
+        <TextCell className="pl-1">
+          {updatedByFullName ?? createdByFullName ?? ''}
+        </TextCell>
+      )
+    },
   },
   {
     accessorKey: 'licenseNumber',
