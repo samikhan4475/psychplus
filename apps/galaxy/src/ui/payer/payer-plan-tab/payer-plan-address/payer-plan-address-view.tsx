@@ -10,11 +10,11 @@ const PayerPlanAddressView = ({ payerId }: PayerPlanAddressProps) => {
     <>
       <Flex
         align="center"
-        justify="between"
+        justify="start"
         p="2"
         className="bg-white -mt-[1px]"
       >
-        <Text className="text-[16px] font-[600] text-accent-12">
+        <Text className="text-[16px] font-[600] text-accent-12 mr-3">
           Payer Plan Address
         </Text>
         <PayerPlanAddressDialog

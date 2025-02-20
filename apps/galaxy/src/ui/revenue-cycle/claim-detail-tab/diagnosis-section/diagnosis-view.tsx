@@ -11,7 +11,7 @@ import { SearchDiagnosisInput } from './search-diagnosis-input'
 const DiagnosisView = () => {
   const form = useFormContext<ClaimUpdateSchemaType>()
   const { getValues } = form
-  const claimDiagnosis = form.watch('claimDiagnosis')
+  const claimDiagnosis = form.watch('claimDiagnosis') ?? []
   const isDisabled = form.formState.disabled
   const handleSelectedItem = (selectedItem: DiagnosisIcd10Code) => {
     const currentDiagnosisList = getValues('claimDiagnosis')

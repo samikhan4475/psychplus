@@ -40,7 +40,7 @@ const PayerPlanAddressDialog = ({
           </IconButton>
         ) : (
           <Button size="1" highContrast>
-            <PlusIcon /> Add Payer Address
+            <PlusIcon /> Add New
           </Button>
         )}
       </Dialog.Trigger>

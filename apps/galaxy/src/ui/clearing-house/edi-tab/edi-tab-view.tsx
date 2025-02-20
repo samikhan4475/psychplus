@@ -9,7 +9,7 @@ import { EdiListTablePagination } from './edi-list-table-pagination'
 const EdiTabView = () => {
   return (
     <Flex direction="column" className="gap-0.5">
-      <TabContentHeading title="Ins. Plan EDI Setup">
+      <TabContentHeading title="Insurance Plan EDI Setup">
         <EdiDialog />
       </TabContentHeading>
 

@@ -104,6 +104,8 @@ const CODESETS = {
   CreditCardStatus: 'CreditCardStatus',
   PatientRelationship: 'PsychPlusPublic.PatientRelationship',
   PsychHistoryRelation: 'PsychPlusPublic.PsychHistoryRelation',
+  PlaceOfService: 'PsychPlusPublic.PlaceOfService',
+
 }
 export {
   CODESETS,

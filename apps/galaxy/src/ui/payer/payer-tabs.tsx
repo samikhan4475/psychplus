@@ -34,11 +34,6 @@ const PayerTabView = () => {
       >
         <Flex className="z-50">
           <Tabs.List>
-            <TabsTrigger value={PayerTabs.Group}>{PayerTabs.Group}</TabsTrigger>
-            <TabsTrigger value={PayerTabs.Payer}>{PayerTabs.Payer}</TabsTrigger>
-            <TabsTrigger value={PayerTabs.PayerType}>
-              {PayerTabs.PayerType}
-            </TabsTrigger>
             <TabsTrigger value={PayerTabs.Plan}>{PayerTabs.Plan}</TabsTrigger>
             <TabsTrigger value={PayerTabs.EDI}>{PayerTabs.EDI}</TabsTrigger>
             {closeableTabs.map((tab) => (
@@ -48,9 +43,6 @@ const PayerTabView = () => {
             ))}
           </Tabs.List>
         </Flex>
-        <TabsContent value={PayerTabs.Group}>Group</TabsContent>
-        <TabsContent value={PayerTabs.Payer}>Payer</TabsContent>
-        <TabsContent value={PayerTabs.PayerType}>PayerType</TabsContent>
         <TabsContent value={PayerTabs.Plan}>
           <PayerPlanTabView />
         </TabsContent>

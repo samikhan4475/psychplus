@@ -7,8 +7,8 @@ import React, {
 } from 'react'
 import toast from 'react-hot-toast'
 import { getClinicsOptionsAction } from '@/actions'
-import { getPOSCodesOptions } from '@/actions/get-poscodes'
-import { getStaffOptionsAction } from '@/actions/get-staff'
+import { CODESETS } from '@/constants'
+import { useCodesetCodes } from '@/hooks'
 import { SelectOptionType, StaffResource } from '@/types'
 import { getStaffActions } from './claim-detail-tab/actions/get-service-staff'
 
@@ -31,6 +31,12 @@ interface RevCycleProviderProps {
 }
 
 export const RevCycleProvider = ({ children }: RevCycleProviderProps) => {
+  const codes = useCodesetCodes(CODESETS.PlaceOfSerivce) ?? []
+  const posCodes = useMemo(
+    () => codes.map(({ display, value }) => ({ label: display, value })),
+    [codes],
+  )
+
   const [staffData, setStaffData] = useState<SelectOptionType[]>([])
   const [locationsData, setLocationsData] = useState<SelectOptionType[]>([])
   const [posCodesData, setPOSCodesData] = useState<SelectOptionType[]>([])
@@ -39,38 +45,31 @@ export const RevCycleProvider = ({ children }: RevCycleProviderProps) => {
 
   const fetchClaimOptionsData = useCallback(async () => {
     setLoading(true)
-    const [staffResult, locationsResult, posCodesResult, selectedStaffResult] =
-      await Promise.all([
-        getStaffOptionsAction(),
-        getClinicsOptionsAction(),
-        getPOSCodesOptions(),
-        getStaffActions(),
-      ])
-    if (staffResult.state === 'success') {
-      setStaffData(staffResult.data)
-    } else {
-      toast.error(staffResult.error ?? 'Error fetching staff data')
-    }
-
+    const [locationsResult, selectedStaffResult] = await Promise.all([
+      getClinicsOptionsAction(),
+      getStaffActions(),
+    ])
     if (locationsResult.state === 'success') {
       setLocationsData(locationsResult.data)
     } else {
       toast.error(locationsResult.error ?? 'Error fetching locations data')
     }
 
-    if (posCodesResult.state === 'success') {
-      setPOSCodesData(posCodesResult.data)
-    } else {
-      toast.error(posCodesResult.error ?? 'Error fetching POS codes')
-    }
-
     if (selectedStaffResult.state === 'success') {
-      setSelectedStaffData(selectedStaffResult.data)
+      const staffData = selectedStaffResult.data ?? []
+      setSelectedStaffData(staffData)
+      const transformedData = staffData.map((data) => ({
+        value: data.id.toString(),
+        label: data.legalName.firstName,
+      }))
+      setStaffData(transformedData)
     } else {
       toast.error(
         selectedStaffResult.error ?? 'Error fetching selected staff data',
       )
     }
+
+    setPOSCodesData(posCodes)
   }, [])
 
   const value = useMemo(
