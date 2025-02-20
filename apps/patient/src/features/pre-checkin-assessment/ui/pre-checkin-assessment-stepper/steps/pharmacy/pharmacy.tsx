@@ -1,8 +1,9 @@
 'user client'
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Flex } from '@radix-ui/themes'
 import { type PatientPharmacy } from '@/features/pharmacy/types'
+import { useStore } from '@/features/pre-checkin-assessment/store'
 import { AddPharmacy } from './add-pharmacy'
 import { ViewPharmacy } from './view-pharmacy'
 
@@ -13,8 +14,13 @@ const Pharmacy = ({
   pharmacies: PatientPharmacy[]
   isDawSystemFeatureFlagEnabled?: boolean
 }) => {
+  const { isSaveButtonPressed, save } = useStore()
   const [shouldShowAddView, setShouldShowAddView] = useState(false)
   const toggleAddPharmacyForm = () => setShouldShowAddView((prev) => !prev)
+
+  useEffect(() => {
+    if (isSaveButtonPressed) save()
+  }, [isSaveButtonPressed])
 
   return (
     <Flex

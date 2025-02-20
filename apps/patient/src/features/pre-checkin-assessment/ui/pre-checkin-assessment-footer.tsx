@@ -53,10 +53,10 @@ const PreCheckinAssessmentFooter = () => {
             Save & Exit
           </Button>
           <Button
+            highContrast
             variant="outline"
-            color="gray"
             size="2"
-            className="bg-[#EBEBEF] px-8"
+            className="px-8"
             onClick={skip}
           >
             Skip

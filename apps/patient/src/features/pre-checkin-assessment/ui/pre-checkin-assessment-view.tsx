@@ -9,6 +9,8 @@ import {
   getInsurancePayers,
   getPatientInsurances,
 } from '@/features/billing/payments/api'
+import { getNoteDetails } from '@/features/note/api'
+import { NoteSectionName } from '@/features/note/constants'
 import { getPatientPharmacies } from '@/features/pharmacy/api'
 import { CodesetStoreProvider } from '@/providers'
 import { PreCheckinAssessmentStapper } from './pre-checkin-assessment-stepper/pre-checkin-assessment-stapper'
@@ -61,6 +63,22 @@ const PreCheckinAssessmentView = async () => {
     throw new Error(dawSystemFeatureFlagResponse.error)
   }
 
+  const noteDetailsResponse = await getNoteDetails({
+    patientId: profileResponse.data.id,
+    sectionName: [
+      NoteSectionName.NoteSectionGad7,
+      NoteSectionName.NoteSectionPhq9,
+      NoteSectionName.NoteSectionPcl5,
+      NoteSectionName.NoteSectionAudit,
+      NoteSectionName.NoteSectionDast10,
+      NoteSectionName.NoteSectionHamD,
+    ],
+  })
+
+  if (noteDetailsResponse.state === 'error') {
+    throw new Error(noteDetailsResponse.error)
+  }
+
   return (
     <ProfileStoreProvider profile={profileResponse.data}>
       <CodesetStoreProvider codesets={codesets}>
@@ -72,6 +90,7 @@ const PreCheckinAssessmentView = async () => {
             stripeAPIKey={STRIPE_PUBLISHABLE_KEY}
             pharmacies={pharmaciesResponse.data}
             isDawSystemFeatureFlagEnabled={dawSystemFeatureFlagResponse.data}
+            questionnaireData={noteDetailsResponse.data}
           />
         </Box>
       </CodesetStoreProvider>

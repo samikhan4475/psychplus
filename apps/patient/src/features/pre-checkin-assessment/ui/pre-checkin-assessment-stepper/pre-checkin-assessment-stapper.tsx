@@ -5,6 +5,7 @@ import * as Tabs from '@radix-ui/react-tabs'
 import { Box, Text } from '@radix-ui/themes'
 import { CreditCard } from '@/features/billing/credit-debit-cards/types'
 import { Insurance, InsurancePayer } from '@/features/billing/payments/types'
+import { NoteSectionItem } from '@/features/note/types'
 import { PatientPharmacy } from '@/features/pharmacy/types'
 import { PreCheckinAssessmentTabs } from '@/features/pre-checkin-assessment/constants'
 import { useStore } from '@/features/pre-checkin-assessment/store'
@@ -20,7 +21,7 @@ import {
   Payment,
   Pharmacy,
   PresentingSymptoms,
-  Questionnaire,
+  QuestionnaireView,
   ReviewOfSystems,
 } from './steps'
 
@@ -31,6 +32,7 @@ type PreCheckinAssessmentStapperProps = {
   stripeAPIKey: string
   pharmacies: PatientPharmacy[]
   isDawSystemFeatureFlagEnabled?: boolean
+  questionnaireData: NoteSectionItem[]
 }
 
 const PreCheckinAssessmentStapper = ({
@@ -40,6 +42,7 @@ const PreCheckinAssessmentStapper = ({
   stripeAPIKey,
   pharmacies,
   isDawSystemFeatureFlagEnabled,
+  questionnaireData,
 }: PreCheckinAssessmentStapperProps) => {
   const {
     activeTab,
@@ -102,7 +105,7 @@ const PreCheckinAssessmentStapper = ({
     },
     {
       id: PreCheckinAssessmentTabs.Questionnaire,
-      content: <Questionnaire />,
+      content: <QuestionnaireView data={questionnaireData} />,
     },
   ]
 

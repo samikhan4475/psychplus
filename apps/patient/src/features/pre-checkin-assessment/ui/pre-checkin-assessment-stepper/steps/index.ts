@@ -1,9 +1,9 @@
-export { PatientInfo } from './patient-info/patient-info';
-export { AddInsurance } from './add-insurance/add-insurance';
-export { Payment } from './payment/payment';
-export { AllergiesAndMedications } from './allergies-and-medications/allergies-and-medications';
-export { Pharmacy } from './pharmacy/pharmacy';
-export { PresentingSymptoms } from './presenting-symptoms/presenting-symptoms';
-export { Histories } from './histories/histories';
-export { ReviewOfSystems } from './review-of-systems/review-of-systems';
-export { Questionnaire } from './questionnaire/questionnaire';
+export { PatientInfo } from './patient-info/patient-info'
+export { AddInsurance } from './add-insurance/add-insurance'
+export { Payment } from './payment/payment'
+export { AllergiesAndMedications } from './allergies-and-medications/allergies-and-medications'
+export { Pharmacy } from './pharmacy/pharmacy'
+export { PresentingSymptoms } from './presenting-symptoms/presenting-symptoms'
+export { Histories } from './histories/histories'
+export { ReviewOfSystems } from './review-of-systems/review-of-systems'
+export * from './questionnaire'

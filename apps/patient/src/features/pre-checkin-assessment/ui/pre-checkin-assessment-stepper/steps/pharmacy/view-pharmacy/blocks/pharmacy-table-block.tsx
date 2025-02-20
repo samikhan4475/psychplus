@@ -73,7 +73,7 @@ const PharmacyTableBlock = ({
                     <Badge
                       label="Primary"
                       type="highContrast"
-                      className="w-20"
+                      className="w-24"
                     />
                   ) : (
                     <ConfirmationDialog
