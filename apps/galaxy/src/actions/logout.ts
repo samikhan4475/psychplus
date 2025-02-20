@@ -3,9 +3,10 @@
 import { redirect } from 'next/navigation'
 import { clearAuthCookies } from '@/utils/auth'
 
-const logoutAction = () => {
+const logoutAction = (redirectPath?: string) => {
+  const path = redirectPath ? `/login?next=${redirectPath}` : '/login'
   clearAuthCookies()
-  redirect('/login')
+  redirect(path)
 }
 
 export { logoutAction }

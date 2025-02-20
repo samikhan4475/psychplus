@@ -1,10 +1,12 @@
+'use server'
+
 import type {
   AuthResponse,
   AuthSession,
   RefreshRequest,
   UserResponse,
 } from '@/types'
-import { getAuthCookies } from '@/utils/auth'
+import { getAuthCookies, setAuthCookies } from '@/utils/auth'
 import * as api from './api'
 import { REFRESH_ENDPOINT, SESSION_ENDPOINT, USER_ENDPOINT } from './endpoints'
 import { createAuthzHeader } from './headers'
@@ -34,6 +36,30 @@ const apiGetSession = async (): Promise<SessionResult> => {
   } catch (e) {
     return [false, null]
   }
+}
+
+const refreshAccessToken = async (): Promise<boolean> => {
+  const auth = getAuthCookies()
+
+  if (!auth) return false
+
+  const refreshBuffer = 5 * 60 * 1000 // 5 minutes before expiry
+  const timeoutDuration =
+    new Date(auth.accessTokenExpiry).getTime() - Date.now() - refreshBuffer
+
+  if (timeoutDuration <= 0) {
+    try {
+      const session = await apiRefreshSession({
+        userId: auth.user.userId,
+        refreshToken: auth.refreshToken,
+      })
+      setAuthCookies(session)
+      return true
+    } catch (error) {
+      return false
+    }
+  }
+  return true
 }
 
 const apiRefreshSession = async (
@@ -71,4 +97,4 @@ const apiRefreshSession = async (
   return session
 }
 
-export { apiGetSession, apiRefreshSession }
+export { apiGetSession, apiRefreshSession, refreshAccessToken }

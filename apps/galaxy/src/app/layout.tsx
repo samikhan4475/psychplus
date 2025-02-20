@@ -44,7 +44,7 @@ const RootLayout = async ({ children }: React.PropsWithChildren) => {
     <html lang="en" className={cn(josefin.variable)}>
       <body>
         <Toaster
-         position="top-center"
+          position="top-center"
           toastOptions={{
             duration: 5000,
           }}

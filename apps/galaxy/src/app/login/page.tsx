@@ -19,6 +19,7 @@ import {
   NavLogo,
   PasswordInput,
 } from '@/components'
+import { appendSearchParams } from '@/utils/params'
 
 const LOGIN_FORM_EMAIL_INPUT = 'login-form-email-input'
 
@@ -50,7 +51,9 @@ const LoginPage = () => {
     return loginAction({
       username: data.username.trim(),
       password: data.password.trim(),
-      next: searchParams?.get('next') ?? null,
+      next:
+        appendSearchParams(searchParams?.get('next'), searchParams, 'next') ??
+        null,
     }).then((result) => {
       if (result?.state === 'error') {
         setIsLoading(false)

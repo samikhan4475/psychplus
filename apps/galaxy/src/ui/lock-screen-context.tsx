@@ -2,7 +2,8 @@
 
 import React, { useEffect, useRef } from 'react'
 import { usePathname, useSearchParams } from 'next/navigation'
-import { lockScreenAction } from '@/actions'
+import { lockScreenAction, logoutAction } from '@/actions'
+import { refreshAccessToken } from '@/api/session'
 import { appendSearchParams } from '@/utils/params'
 
 export const LockScreenProvider = ({
@@ -14,8 +15,27 @@ export const LockScreenProvider = ({
   const prevPathRef = useRef<string | null>(null)
   const searchParams = useSearchParams()
 
+  useEffect(() => {
+    const timeoutId = setInterval(checkRefreshToken, 5 * 60 * 1000)
+    return () => {
+      clearInterval(timeoutId)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   const lockScreen = () => {
     lockScreenAction(prevPathRef.current ?? '/')
+  }
+
+  const checkRefreshToken = async () => {
+    const refreshed = await refreshAccessToken()
+    if (!refreshed) {
+      const pathWithParams = appendSearchParams(
+        prevPathRef.current,
+        searchParams,
+      )
+      logoutAction(pathWithParams as string)
+    }
   }
 
   useEffect(() => {

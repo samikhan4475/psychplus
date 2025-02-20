@@ -7,11 +7,14 @@ const appendSearchParams = (
 
   let updatedUrl = baseUrl
 
-  searchParams?.forEach((value, key) => {
-    if (value && (!excludeParam || key !== excludeParam)) {
-      updatedUrl += `${updatedUrl.includes('?') ? '&' : '?'}${key}=${value}`
-    }
-  })
+  if (searchParams) {
+    Array.from(searchParams.entries()).forEach(([key, value]) => {
+      if (value && (!excludeParam || key !== excludeParam)) {
+        if (updatedUrl.includes(key)) return
+        updatedUrl += `${updatedUrl.includes('?') ? '&' : '?'}${key}=${value}`
+      }
+    })
+  }
 
   return updatedUrl
 }
