@@ -5,13 +5,13 @@ interface PaymentCardsProps {
   stripeApiKey: string
   patientId: string
   googleApiKey: string
-  patientCards:CreditCard[]
+  patientCards: CreditCard[]
 }
 const PaymentCardsTab = ({
   stripeApiKey,
   patientId,
   googleApiKey,
-  patientCards
+  patientCards,
 }: PaymentCardsProps) => {
   return (
     <PaymentCardView

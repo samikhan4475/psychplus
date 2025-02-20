@@ -129,7 +129,11 @@ const transformIn = (
         false: false,
         undefined: '',
       }
-      result[key] = jsonValue[itemValue] ?? itemValue
+      if (key === 'therapy') {
+        result[key] = therapy ? jsonValue[itemValue] || therapy : false
+      } else {
+        result[key] = jsonValue[itemValue] ?? itemValue
+      }
     }
   })
 

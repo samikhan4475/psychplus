@@ -68,7 +68,13 @@ const ListViewTable = () => {
   const isTcmVisit = (row: Row<Appointment>) => {
     const isTcmVisit = row.original.visitTypeCode === 'TransitionalCare'
     const visitStatus = row.original.visitStatus
-    return isTcmVisit && visitStatus !== 'CheckedOut'
+    if (isTcmVisit) {
+      if (row.original.isTcmBlockComplete) {
+        return false
+      }
+      return visitStatus !== 'CheckedOut'
+    }
+    return false
   }
 
   const isTestPatient = (row: Row<Appointment>) => row.original.isTestPatient

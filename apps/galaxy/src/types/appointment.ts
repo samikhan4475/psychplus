@@ -154,6 +154,7 @@ interface Appointment {
   providerUserId?: number
   creditCardVerificationStatus: string
   isTestPatient: boolean
+  isTcmBlockComplete: boolean
 }
 
 interface BookVisitPayload {

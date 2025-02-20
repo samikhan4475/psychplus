@@ -95,6 +95,7 @@ const transformOut =
         sectionName: QuickNoteSectionName.QuicknoteSectionTcm,
         sectionItem: key,
         sectionItemValue: newValue as string,
+        appId: Number(appointmentId),
       })
     })
     const selectedCodes: CodesWidgetItem[] = []
@@ -130,6 +131,7 @@ const transformOut =
         sectionName: QuickNoteSectionName.QuicknoteSectionTcm,
         sectionItem: '1',
         sectionItemValue: '1',
+        appId: Number(appointmentId),
       })
     }
     if (updateCptCodes) {

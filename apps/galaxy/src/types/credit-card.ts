@@ -12,6 +12,7 @@ interface CreditCard {
   expireYear: number
   billingAddress: PatientAddress
   cardKey: string
+  cardStatus: string
   isPrimary: boolean
 }
 
