@@ -44,6 +44,7 @@ const AlcoholDrugsBlock = () => {
           <BriefInterventionDetail label="Brief Intervention" />
           <ReferralTreatmentBlock />
           <RadioSelectSection
+            required
             label="Discussed alcohol/substance use cessation for"
             field="alcoholSubstanceCessationDiscussionDuration"
             options={[

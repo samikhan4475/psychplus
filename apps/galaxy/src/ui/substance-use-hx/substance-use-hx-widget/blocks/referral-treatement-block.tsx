@@ -19,7 +19,9 @@ const ReferralTreatmentBlock = () => {
 
   return (
     <FormFieldContainer className="flex-row gap-1">
-      <FormFieldLabel className="!text-1">Referral to Treatment</FormFieldLabel>
+      <FormFieldLabel className="!text-1" required>
+        Referral to Treatment
+      </FormFieldLabel>
       <SelectableChipDetails
         hideSelectedCount={true}
         type={'multi-select' as DetailsType}
