@@ -6,6 +6,7 @@ const PsychHospitalizationsBlock = () => {
       format="##"
       label="Psych Hospitalizations"
       field="psychHospitalizations"
+      required
     />
   )
 }
