@@ -19,7 +19,7 @@ const schema = z
     locationIds: arrayOfIdsValidation,
     serviceIds: arrayOfIdsValidation,
     staffIds: arrayOfIdsValidation,
-    specialistTypeCode: z.string().optional(),
+    providerTypes: arrayOfIdsValidation,
     gender: z.string().optional(),
     language: z.string().optional(),
     type: z.string().optional(),

@@ -1,39 +1,30 @@
 'use client'
 
-import { useMemo } from 'react'
-import { SelectInput } from '@/components'
+import { Flex } from '@radix-ui/themes'
+import { useFormContext } from 'react-hook-form'
+import { MultiSelectField } from '@/components'
 import { CODE_NOT_SET, CODESETS } from '@/constants'
-import { useCodesetCodes } from '@/hooks'
+import { useCodesetOptions } from '@/hooks'
 import { FieldLabel, FormFieldContainer } from '../../shared'
+import { SchemaType } from '../filter-actions-group'
 
 const ProviderTypeDropdown = () => {
-  const codes = useCodesetCodes(CODESETS.ProviderType)
-  const options = useMemo(
-    () =>
-      codes
-        .filter((code) => code.value !== CODE_NOT_SET)
-        .map((code) => {
-          const value =
-            code.attributes?.find((attr) => attr.name === 'ResourceId')
-              ?.value ?? ''
-          return {
-            label: code.display,
-            value,
-          }
-        }),
-    [codes],
-  )
+  const form = useFormContext<SchemaType>()
+  const options = useCodesetOptions(CODESETS.ProviderType, '', [CODE_NOT_SET])
 
   return (
     <FormFieldContainer>
       <FieldLabel>Provider Type</FieldLabel>
-      <SelectInput
-        field="specialistTypeCode"
-        options={options}
-        placeholder="Select"
-        buttonClassName="w-full h-6"
-        className="h-full flex-1"
-      />
+      <Flex className="flex-1">
+        <MultiSelectField
+          defaultValues={form.watch('providerTypes')}
+          options={options}
+          className="flex-1"
+          onChange={(values) => {
+            form.setValue('providerTypes', values, { shouldDirty: true })
+          }}
+        />
+      </Flex>
     </FormFieldContainer>
   )
 }

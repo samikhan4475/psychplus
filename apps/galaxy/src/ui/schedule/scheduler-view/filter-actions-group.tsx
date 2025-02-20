@@ -55,7 +55,7 @@ const SchedulerFilterGroup = ({
       locationIds: [],
       serviceIds: [],
       staffIds: providerId ? [providerId] : [],
-      specialistTypeCode: '',
+      providerTypes: [],
       gender: '',
       language: '',
       type: '',
