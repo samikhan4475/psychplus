@@ -1,14 +1,28 @@
 import { ColumnDef } from '@tanstack/react-table'
 import { ColumnHeader, TextCell } from '@/components'
 import { getSlashedDateString } from '@/utils'
-import { License } from '../../types'
+import { PrescriberSettingResponse } from '../../types'
 
-const columns: ColumnDef<License>[] = [
+const columns: ColumnDef<PrescriberSettingResponse>[] = [
   {
-    accessorKey: 'Date/Time',
+    accessorKey: 'name',
     size: 200,
     header: ({ column }) => (
-      <ColumnHeader column={column} clientSideSort label="Date/Time" />
+      <ColumnHeader column={column} clientSideSort label="Name" />
+    ),
+    cell: ({ row }) => <TextCell>{row.original.name.split('_')[1]}</TextCell>,
+  },
+  {
+    accessorKey: 'content',
+    header: ({ column }) => (
+      <ColumnHeader column={column} clientSideSort label="Value" />
+    ),
+    cell: ({ row }) => <TextCell>{row.original.content}</TextCell>,
+  },
+  {
+    accessorKey: 'metadata.createdOn',
+    header: ({ column }) => (
+      <ColumnHeader column={column} clientSideSort label="Updated On" />
     ),
     cell: ({ row }) => (
       <TextCell>
@@ -17,49 +31,12 @@ const columns: ColumnDef<License>[] = [
     ),
   },
   {
-    accessorKey: 'User',
-    size: 200,
+    accessorKey: 'metadata.createdByFullName',
     header: ({ column }) => (
-      <ColumnHeader column={column} clientSideSort label="User" />
+      <ColumnHeader column={column} clientSideSort label="Updated By" />
     ),
     cell: ({ row }) => (
-      <TextCell>{row.original?.metadata?.createdByFullName}</TextCell>
-    ),
-  },
-  {
-    accessorKey: 'Status',
-    header: ({ column }) => (
-      <ColumnHeader column={column} clientSideSort label="Status" />
-    ),
-    cell: ({ row }) => <TextCell>{row.original.status}</TextCell>,
-  },
-  {
-    accessorKey: 'License #',
-    header: ({ column }) => (
-      <ColumnHeader column={column} clientSideSort label="License #" />
-    ),
-    cell: ({ row }) => <TextCell>{row.original.licenseNumber}</TextCell>,
-  },
-  {
-    id: 'Start Date',
-    header: ({ column }) => (
-      <ColumnHeader clientSideSort column={column} label="Start Date" />
-    ),
-    cell: ({ row }) => (
-      <TextCell>
-        {getSlashedDateString(row.original?.startDate?.toString() ?? '')}
-      </TextCell>
-    ),
-  },
-  {
-    id: 'End Date',
-    header: ({ column }) => (
-      <ColumnHeader clientSideSort column={column} label="End Date" />
-    ),
-    cell: ({ row }) => (
-      <TextCell>
-        {getSlashedDateString(row.original?.endDate?.toString() ?? '')}
-      </TextCell>
+      <TextCell>{row.original.metadata?.createdByFullName ?? ''}</TextCell>
     ),
   },
 ]

@@ -1,28 +1,50 @@
 'use client'
 
-import { PropsWithChildren } from 'react'
-import { Dialog } from '@radix-ui/themes'
+import { PropsWithChildren, useState } from 'react'
+import { Popover, Text } from '@radix-ui/themes'
 import { PropsWithRow } from '@/components'
-import { CloseDialogTrigger } from '@/components/close-dialog-trigger'
+import { useHasPermission } from '@/hooks'
+import { PermissionAlert } from '../permission-alert'
 import { PrescriberDataResponse } from '../types'
 import { PrescriberHistoryTable } from './components/prescriber-history-table'
 
-const PrescriberHistoryDialog = ({
+const PrescriberHistoryPopover = ({
   row,
   children,
 }: PropsWithChildren<PropsWithRow<PrescriberDataResponse>>) => {
+  const viewHistoryPermission = useHasPermission(
+    'canClickPrescriberHistoryIconFromAdminNonAdminView',
+  )
+  
+  const [isOpen, setIsOpen] = useState(false)
+  const [isOpenPermissionAlert, setIsOpenPermissionAlert] = useState(false)
+  const onOpen = (value: boolean) => {
+    if (!viewHistoryPermission) setIsOpenPermissionAlert(true)
+    else {
+      setIsOpen(value)
+    }
+  }
+
   return (
-    <Dialog.Root>
-      <Dialog.Trigger>{children}</Dialog.Trigger>
-      <Dialog.Content className="relative max-w-[700px]">
-        <CloseDialogTrigger />
-        <Dialog.Title className="font-sans -tracking-[0.25px]">
-          Prescriber History for {row.original.stateName}
-        </Dialog.Title>
-        <PrescriberHistoryTable />
-      </Dialog.Content>
-    </Dialog.Root>
+    <>
+      <PermissionAlert
+        isOpen={isOpenPermissionAlert}
+        message={
+          'You do not have permission to view Prescriber History. Please contact your supervisor if you need any further assistance.'
+        }
+        onClose={() => setIsOpenPermissionAlert(false)}
+      />
+      <Popover.Root open={isOpen} onOpenChange={onOpen}>
+        <Popover.Trigger>{children}</Popover.Trigger>
+        <Popover.Content className="z-10 flex-col p-1">
+          <Text size="3" weight="medium">
+            Prescriber settings history 
+          </Text>
+          <PrescriberHistoryTable row={row} />
+        </Popover.Content>
+      </Popover.Root>
+    </>
   )
 }
 
-export { PrescriberHistoryDialog }
+export { PrescriberHistoryPopover }

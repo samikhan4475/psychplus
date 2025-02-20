@@ -263,6 +263,7 @@ const GET_CLAIMS_AUDIT_HISTORY_LIST_ENDPOINT = `${API_URL}/api/claims/history`
 const GET_CLAIMS_LIST_ENDPOINT = `${API_URL}/api/claims/actions/search`
 const EXPORT_CLAIMS_LIST_ENDPOINT = (fileFormat: string) =>
   `${API_URL}/api/claims/actions/export/${fileFormat}`
+const SETTINGS_HISTORY_ENDPOINT = `${API_URL}/api/settings/actions/history/search`
 const EXPORT_SUBMISSIONS_LIST_ENDPOINT = (fileFormat: string) =>
   `${API_URL}/api/claimssubmissions/actions/export/${fileFormat}`
 const EXPORT_PAYMENTS_LIST_ENDPOINT = (fileFormat: string) =>
@@ -801,6 +802,7 @@ export {
   SEARCH_STAFF_ENDPOINT,
   GET_PATIENT_REFERRALS_ENDPOINT,
   GET_PATIENT_REFERRALS_HISTORY_ENDPOINT,
+  SETTINGS_HISTORY_ENDPOINT,
   GET_SELF_STAFF_DETAILS_ENDPOINT,
   UPDATE_PATIENT_REFERRAL_ENDPOINT,
   GET_APPOINTMENT,
