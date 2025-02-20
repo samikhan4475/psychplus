@@ -14,7 +14,7 @@ const DateTimeCell = ({
     <Flex width="100%" justify="between" align="center">
       <DateCell>{getSlashedPaddedDateString(commentedOn ?? '')}</DateCell>
       <DateCell className="text-pp-gray-1">
-        {getTimeLabel(commentedOn ?? '')}
+        {getTimeLabel(commentedOn ?? '', false)}
       </DateCell>
     </Flex>
   )
