@@ -78,6 +78,7 @@ const QuickNotesCosignerDropdown = ({
         )}
         <Select.Content
           highContrast
+          position="popper"
           onCloseAutoFocus={(e) => e.preventDefault()}
         >
           {uniqueCosigners?.map(({ id, legalName }, ind) => (
