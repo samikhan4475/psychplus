@@ -19,7 +19,7 @@ type AutoResizeInputProps = Omit<
 
 const AutoResizeInput = ({
   field,
-  spellCheck = false,
+  spellCheck = true,
   className,
   resize = 'both',
   disabled,

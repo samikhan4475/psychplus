@@ -6,6 +6,7 @@ import {
   QuickNoteSectionItem,
   UpdateCptCodes,
 } from '@/types'
+import { validateYesNoEnum } from '@/ui/mse/mse-widget/utils'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { sanitizeFormData } from '@/utils'
 import { manageCodes } from '@/utils/codes'
@@ -41,6 +42,8 @@ const transformIn = (
       result[key] = itemValue
     } else if (key === 'widgetContainerCheckboxField') {
       result[key] = itemValue
+    } else if (key === 'questionnaire') {
+      result[key] = validateYesNoEnum(itemValue?.toLowerCase())
     } else if (TOBACCO_DRUGS_ALCOHOL_QUESTIONNAIRE.includes(key)) {
       result[key] = itemValue
     } else if (TOBACCO_OPTIONS.includes(key)) {

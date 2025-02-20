@@ -7,6 +7,10 @@ const validateYesNoEnum = (value: string): string => {
     case '0':
     case '':
       return ''
+    case 'true':
+      return 'yes'
+    case 'false':
+      return 'no'
     default:
       return value.toLowerCase()
   }
