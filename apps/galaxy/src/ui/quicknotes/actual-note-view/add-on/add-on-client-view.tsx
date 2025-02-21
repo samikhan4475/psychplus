@@ -8,10 +8,11 @@ import { Details } from './details'
 
 type AddOnClientViewProps = {
   data?: QuickNoteSectionItem[]
+  visitType?: string
 }
 
-const AddOnClientView = ({ data = [] }: AddOnClientViewProps) => {
-  const addOndata = transformIn(data)
+const AddOnClientView = ({ visitType, data = [] }: AddOnClientViewProps) => {
+  const addOndata = transformIn(data, [], visitType)
 
   return (
     <ActualNoteDetailsWrapper sectionName={QuickNoteSectionName.Addon}>

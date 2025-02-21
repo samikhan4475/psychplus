@@ -28,7 +28,7 @@ const TherapyBlock = ({ data }: { data: AddOnWidgetSchemaType }) => {
 
       <LabelAndValue
         value={`Conducted Therapy in this session interacting with ${sessionParticipants} for ${
-          data?.[data.therapyTimeSpent as keyof typeof data]
+          data?.[data?.therapyTimeSpent as keyof typeof data] ?? ''
         } minutes.
       Therapy modalities used include: ${formatList(
         data.therapyDetailsModality || [],

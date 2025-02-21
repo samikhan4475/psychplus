@@ -108,9 +108,7 @@ const WidgetFormContainer = ({
         success: true,
       })
       updateWidgetsData?.(values)
-      if (isQuickNoteView) {
-        revalidateAction()
-      }
+      revalidateAction()
       setLoading(false)
       setShouldValidate(false)
       if (shouldToast) {
