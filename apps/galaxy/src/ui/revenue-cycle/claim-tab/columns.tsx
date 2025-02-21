@@ -45,11 +45,15 @@ const columns = (
           }}
         />
       ),
-      cell: ({ row }) => (
-        <DateTimeCell className="w-[80px]">
-          {formatDate(`${row.original.dateOfServiceFrom}`, 'MM/dd/yyyy')}
-        </DateTimeCell>
-      ),
+      cell: ({ row }) => {
+        return (
+          row.original.dateOfServiceFrom && (
+            <DateTimeCell>
+              {formatDate(`${row.original.dateOfServiceFrom}`, 'MM/dd/yyyy')}
+            </DateTimeCell>
+          )
+        )
+      },
     },
     {
       id: 'patientName',
