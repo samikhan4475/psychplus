@@ -1,5 +1,5 @@
 import { Path } from 'react-hook-form'
-import { Encounter, SelectOptionType, StaffResource } from '@/types'
+import { Encounter, Metadata, SelectOptionType, StaffResource } from '@/types'
 import { ServiceSchemaType } from './add-service-dialog'
 
 interface Question {
@@ -51,5 +51,35 @@ interface ServicePayload {
   locationType: string
   isServiceTimeDependent: boolean
 }
+interface LocationService {
+  id: number
+  locationType: string
+  locationName: string
+  service: string
+  pos: number
+  meta?: Metadata
+  taxonomy: string
+  primaryAddress1: string
+  address2?: string
+  city: string
+  state: string
+  zip: string
+  psychPlusPolicy?: string
+  reminder?: string
+  provNotes: string
+  ptVisits: string
+  ehrCode?: string
+  maxBookingFrequency?: number
+  cosignerType?: string
+  cosigner: string
+  primaryProvider?: string
+  status: string
+}
 
-export { CosignerType, Services, type Question, type ServicePayload }
+export {
+  CosignerType,
+  Services,
+  type LocationService,
+  type Question,
+  type ServicePayload,
+}

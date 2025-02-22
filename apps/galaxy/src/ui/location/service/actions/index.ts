@@ -1,3 +1,5 @@
 export * from './get-cosigners'
 export * from './get-visit-types'
 export * from './add-service-action'
+export * from './get-history-data'
+export * from './get-service-list'

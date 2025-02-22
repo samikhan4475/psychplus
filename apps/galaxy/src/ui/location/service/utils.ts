@@ -1,5 +1,6 @@
 import { Encounter, Location, SharedCode, StaffResource } from '@/types'
 import { ServiceSchemaType } from './add-service-dialog'
+import { ServiceFiltersSchemaType } from './filter-form/schema'
 import { CosignerType } from './types'
 
 const getAttributeValue = (code: SharedCode, name: string) =>
@@ -69,4 +70,26 @@ const getInitialValues = (location: Location): ServiceSchemaType => ({
   isPrimaryProviderRequired: '',
 })
 
-export { getAttributeValue, getCosigner, getInitialValues, getVisitTypesByIds }
+const getInitialFilterValues = (): ServiceFiltersSchemaType => ({
+  address: '',
+  coSigner: '',
+  coSignerType: '',
+  id: '',
+  locationName: '',
+  locationType: '',
+  maxBookingFrequency: '',
+  pos: '',
+  primaryProvider: '',
+  recordStatuses: '',
+  service: '',
+  taxonomy: '',
+  visitType: '',
+})
+
+export {
+  getAttributeValue,
+  getCosigner,
+  getInitialValues,
+  getVisitTypesByIds,
+  getInitialFilterValues,
+}

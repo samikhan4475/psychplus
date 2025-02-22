@@ -77,5 +77,19 @@ const transformOutService = (
     zipCode: isClaimAddress ? locationAddress.postalCode : zipCode,
   })
 }
+const transformInOptions = (
+  options: SelectOptionType[] = [],
+): SelectOptionType[] => [
+  {
+    value: 'NotSet',
+    label: 'Select',
+  },
+  ...options,
+]
 
-export { transformInCosigers, transformOutService, transformInServices }
+export {
+  transformInCosigers,
+  transformOutService,
+  transformInServices,
+  transformInOptions,
+}

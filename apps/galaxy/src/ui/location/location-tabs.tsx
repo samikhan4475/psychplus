@@ -1,9 +1,10 @@
 'use client'
 
 import * as Tabs from '@radix-ui/react-tabs'
-import { Box, Flex, Text } from '@radix-ui/themes'
+import { Box, Flex } from '@radix-ui/themes'
 import { TabsTrigger } from '@/components'
 import { LocationView } from './location-tab'
+import { ServiceView } from './service'
 
 interface LocationTabsProps {
   googleApiKey: string
@@ -26,7 +27,7 @@ const LocationTabs = ({ googleApiKey }: LocationTabsProps) => {
           <LocationView googleApiKey={googleApiKey} />
         </Tabs.Content>
         <Tabs.Content value="service">
-          <Text>Service</Text>
+          <ServiceView />
         </Tabs.Content>
       </Tabs.Root>
     </Box>
