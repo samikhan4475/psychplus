@@ -3,7 +3,12 @@
 import { ColumnDef } from '@tanstack/react-table'
 import { ColumnHeader, TextCell } from '@/components'
 import { Sort } from '@/types'
-import { formatCurrency, formatDateTime, getSortDir } from '@/utils'
+import {
+  concatDateTimeAndFormat,
+  formatCurrency,
+  formatDateTime,
+  getSortDir,
+} from '@/utils'
 import { ActionsCell, CollapseCell } from './cells'
 import { PatientTransaction } from './types'
 
@@ -34,7 +39,10 @@ const columns = (
       cell: ({ row }) => (
         <TextCell className="truncate">
           {row?.original?.chargeDate &&
-            formatDateTime(row?.original?.chargeDate)}
+            concatDateTimeAndFormat(
+              row?.original?.chargeDate,
+              row?.original?.chargeTime,
+            )}
         </TextCell>
       ),
     },
@@ -216,7 +224,7 @@ const columns = (
       cell: ({ row }) => (
         <TextCell className="truncate">
           {row.original?.metadata?.updatedOn &&
-            formatDateTime(row.original?.metadata?.updatedOn)}
+            formatDateTime(row.original?.metadata?.updatedOn, false)}
         </TextCell>
       ),
     },

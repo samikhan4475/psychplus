@@ -350,6 +350,16 @@ const formatUTCDate = (
   )
   return format(adjustedDate, dateFormat)
 }
+const concatDateTimeAndFormat = (
+  date: string,
+  time?: string,
+) => {
+  const dateTimeString = time
+    ? `${date?.split('T')[0]}T${time}:00Z`
+    : date
+  return formatDateTime(dateTimeString, false)
+}
+
 
 export {
   getCalendarDate,
@@ -379,4 +389,5 @@ export {
   convertToTimeZoneDate,
   isDateInRange,
   formatUTCDate,
+  concatDateTimeAndFormat
 }
