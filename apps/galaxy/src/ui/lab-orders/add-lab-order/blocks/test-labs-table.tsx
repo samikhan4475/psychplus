@@ -5,7 +5,7 @@ import { ColumnHeader } from './column-header'
 import { TestLabItem } from './test-lab-item'
 import { TestLabsType } from './types'
 
-const TestLabsTable = () => {
+const TestLabsTable = ({ isFormDisabled }: { isFormDisabled: boolean }) => {
   const {
     getSearchedTestLabs,
     testLabsList,
@@ -27,6 +27,7 @@ const TestLabsTable = () => {
               testLabsList={testLabsList}
               onClickTestLabItem={onClickTestLabItem}
               loading={loading}
+              isFormDisabled={isFormDisabled}
             />
           }
         />

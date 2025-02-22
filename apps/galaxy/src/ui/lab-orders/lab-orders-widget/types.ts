@@ -23,6 +23,7 @@ type LabOrderPayload = {
   labTestName?: string
   location?: string
   labTestCode?: string
+  idList?: string[]
 }
 interface LabDocument {
   id: string

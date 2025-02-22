@@ -17,11 +17,13 @@ const AddDiagnosisDropDown = ({
   diagnosisList,
   onClickDiagnosisItem,
   loading,
+  isFormDisabled,
 }: {
   diagnosisList: DiagnosisType[]
   getSearchedDiagnosis: (value: string) => void
   onClickDiagnosisItem: (value: DiagnosisType) => void
   loading: boolean
+  isFormDisabled: boolean
 }) => {
   const form = useFormContext<LabOrderSchemaType>()
 
@@ -33,7 +35,7 @@ const AddDiagnosisDropDown = ({
 
   return (
     <DropdownMenu.Root>
-      <DropdownMenu.Trigger>
+      <DropdownMenu.Trigger disabled={isFormDisabled}>
         <PlusIcon />
       </DropdownMenu.Trigger>
       <DropdownMenu.Content align="end" className="w-[386px]">

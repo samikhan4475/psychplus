@@ -1,3 +1,4 @@
+import { DateValue } from 'react-aria-components'
 import { z } from 'zod'
 
 type LabOrderSchemaType = z.infer<typeof labOrderSchema>
@@ -77,7 +78,7 @@ const labOrderSchema = z
       .default([]),
 
     labOrderId: z.string().optional(),
-    orderDate: z.string().optional(),
+    orderDate: z.custom<DateValue>().optional(),
     orderTime: z.string().optional(),
     labLocation: z.string().optional(),
     labLocationData: z

@@ -1,5 +1,6 @@
+import { parseDate } from '@internationalized/date'
 import { LabOrders } from '@/types'
-import { formatDate, getTimeLabel } from '@/utils'
+import { formatDate, formatUTCDate, getTimeLabel } from '@/utils'
 import { LabOrderSchemaType } from './lab-order-schema'
 
 const transformIn = (labOrderData: Partial<LabOrders>) => {
@@ -12,9 +13,9 @@ const transformIn = (labOrderData: Partial<LabOrders>) => {
     labOrderStatus: labOrderData ? labOrderData.orderStatus : 'Draft',
     isFasting: labOrderData?.isFasting ? 'yes' : 'no',
     isPSCHold: labOrderData?.isPscHold ? 'yes' : 'no',
-    orderDate: formatDate(labOrderData?.labOrderDate ?? new Date()),
+    orderDate: parseDate(formatDate(labOrderData?.labOrderDate ?? new Date())),
     orderTime: getTimeLabel(
-      labOrderData?.labOrderDate ?? new Date().toLocaleString(),
+      formatUTCDate(labOrderData?.labOrderDate ?? new Date().toLocaleString()),
       false,
     ),
     labOrderId: labOrderData?.id,

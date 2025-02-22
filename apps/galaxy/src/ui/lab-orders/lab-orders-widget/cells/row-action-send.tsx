@@ -8,17 +8,22 @@ import {
   getLabOrderRequisition,
   placeLabOrderApi,
 } from '../../add-lab-order/api'
+import { ConfirmationDialog } from '../../add-lab-order/blocks/confirmation-dialog'
 
 const RowActionSend = ({
   orderId,
   labLocationName,
+  orderStatus,
 }: {
   orderId: string
   labLocationName: string
+  orderStatus: string
 }) => {
   const [disabled, setDisabled] = useState(false)
+  const [isOpen, setIsOpen] = useState(false)
 
   const onClickSend = async () => {
+    setIsOpen(false)
     setDisabled(true)
     const requisitionResponse = await getLabOrderRequisition(orderId)
     if (requisitionResponse.state === 'success') {
@@ -34,20 +39,30 @@ const RowActionSend = ({
     setDisabled(false)
   }
 
+  const onClickConfirm = () => setIsOpen(true)
+
   return (
-    labLocationName === 'Quest' && (
-      <IconButton
-        size="1"
-        color="gray"
-        variant="ghost"
-        type="button"
-        onClick={onClickSend}
-        disabled={disabled}
-      >
-        <Tooltip content="Place Order">
-          <SendHorizontal color="black" width={16} height={16} />
-        </Tooltip>
-      </IconButton>
+    labLocationName === 'Quest' &&
+    orderStatus !== 'OrderSubmitted' && (
+      <>
+        <IconButton
+          size="1"
+          color="gray"
+          variant="ghost"
+          type="button"
+          onClick={onClickConfirm}
+          disabled={disabled}
+        >
+          <Tooltip content="Place Order">
+            <SendHorizontal color="black" width={16} height={16} />
+          </Tooltip>
+        </IconButton>
+        <ConfirmationDialog
+          open={isOpen}
+          onClose={setIsOpen}
+          onClick={onClickSend}
+        />
+      </>
     )
   )
 }

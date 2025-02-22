@@ -27,8 +27,11 @@ const useLabOrderForm = (
   const [loadingSubmit, setLoadingSubmit] = useState(false)
   const [loadingPlaceOrder, setLoadingPlaceOrder] = useState(false)
 
+  const isFormDisabled = labOrderData.labOrderStatus === 'OrderSubmitted'
+
   const form = useForm<LabOrderSchemaType>({
     resolver: zodResolver(labOrderSchema),
+    disabled: isFormDisabled,
     reValidateMode: 'onChange',
     defaultValues: labOrderData,
   })
@@ -205,7 +208,6 @@ const useLabOrderForm = (
         labTests:
           labTestResult.state === 'success' ? [...labTestResult.data] : [],
       }
-      updateLabOrdersList(updatedLabOrder) //local
       if (isPlaceOrder) {
         const requisitionResponse = await getLabOrderRequisition(result.data.id)
         if (requisitionResponse.state === 'success') {
@@ -223,6 +225,7 @@ const useLabOrderForm = (
       } else {
         toast.success('Saved!')
       }
+      updateLabOrdersList(updatedLabOrder) //local
     } else {
       toast.error('Error while saving!')
     }
@@ -231,7 +234,7 @@ const useLabOrderForm = (
     setLoadingPlaceOrder(false)
   }
 
-  const onClickPlaceOrder = (e: any) => {
+  const onClickPlaceOrder = (e: React.MouseEvent<HTMLButtonElement>) => {
     form.handleSubmit(
       (data) => {
         setLoadingPlaceOrder(true)
@@ -246,7 +249,14 @@ const useLabOrderForm = (
     onSaveOrder(data)
   }
 
-  return { form, onSubmit, onClickPlaceOrder, loadingPlaceOrder, loadingSubmit }
+  return {
+    form,
+    onSubmit,
+    onClickPlaceOrder,
+    loadingPlaceOrder,
+    loadingSubmit,
+    isFormDisabled,
+  }
 }
 
 export { useLabOrderForm }

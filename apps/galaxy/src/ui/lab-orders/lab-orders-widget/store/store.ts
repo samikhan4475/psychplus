@@ -27,6 +27,7 @@ interface StoreState {
   testLabResult: LabResult[]
   setTestLabResult: (labResult: LabResult[]) => void
   updateLabOrdersList: (labOrder: LabOrders) => void
+  deleteLabOrder: (labOrder: LabOrders) => void
   updateLabOrderTestList: (orderId: string, testId: string) => void
   deleteLabOrders: (labOrder: LabResult) => void
   pageCache: Record<number, LabOrderResponseList>
@@ -36,6 +37,7 @@ interface StoreState {
   setAppointmentId: (appointmentId: string) => void
   page: number
   appointmentId: string
+  fetchLabOrderByIds: (appointmentId: string, payload: LabOrderPayload) => void
 }
 
 const useStore = create<StoreState>((set, get) => ({
@@ -133,12 +135,52 @@ const useStore = create<StoreState>((set, get) => ({
         loading: false,
       })
     } else {
+      const labOrders = result.data.labOrders?.filter(
+        (laborder) => laborder.recordStatus === 'Active',
+      )
+
+      const labOrdersData = {
+        ...result.data,
+        labOrders,
+      }
+
       set({
-        data: result.data,
+        data: labOrdersData,
         loading: false,
         pageCache: reset
-          ? { [page]: result.data }
-          : { ...get().pageCache, [page]: result.data },
+          ? { [page]: labOrdersData }
+          : { ...get().pageCache, [page]: labOrdersData },
+      })
+    }
+  },
+
+  fetchLabOrderByIds: async (appointmentId, payload) => {
+    set({ error: undefined })
+    const result = await getLabOrdersAction({ appointmentId, payload })
+
+    if (result.state === 'error') {
+      set({
+        error: result.error,
+        loading: false,
+      })
+    } else {
+      const { data } = get()
+      result.data.labOrders.forEach((labOrder) => {
+        const index = data.labOrders.findIndex(
+          (item) => item.id === labOrder.id,
+        )
+
+        if (index === -1) return
+
+        const newLabOrders = [...data.labOrders]
+        newLabOrders[index] = { ...labOrder }
+
+        set({
+          data: {
+            ...data,
+            labOrders: [...newLabOrders],
+          },
+        })
       })
     }
   },
@@ -174,6 +216,22 @@ const useStore = create<StoreState>((set, get) => ({
       }
       set({
         data: newData,
+      })
+    }
+  },
+  deleteLabOrder: (labOrder) => {
+    const { data } = get()
+    const index =
+      data?.labOrders.findIndex((item) => item.id === labOrder.id) ?? 0
+
+    if (index !== -1) {
+      const newLabOrders = [...data.labOrders]
+      newLabOrders.splice(index, 1)
+      set({
+        data: {
+          ...data,
+          labOrders: newLabOrders,
+        },
       })
     }
   },

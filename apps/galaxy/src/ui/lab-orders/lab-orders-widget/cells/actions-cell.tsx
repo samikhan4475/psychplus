@@ -2,7 +2,7 @@ import { AdaptiveRowActionsCell, type RowAction } from '@/components'
 import { LabOrders } from '@/types'
 import { AddLabOrderView } from '../../add-lab-order'
 import { LabOrderRow } from '../types'
-import { RowActionAdd } from './row-action-add'
+import { RowActionDelete } from './row-action-delete'
 import { RowActionSend } from './row-action-send'
 
 const rowActions: RowAction<LabOrders>[] = [
@@ -12,6 +12,7 @@ const rowActions: RowAction<LabOrders>[] = [
       <RowActionSend
         orderId={row.original.id}
         labLocationName={row.original?.orderingLab?.name}
+        orderStatus={row.original.orderStatus}
       />
     ),
   },
@@ -19,6 +20,16 @@ const rowActions: RowAction<LabOrders>[] = [
     id: '',
     render: ({ row }) => (
       <AddLabOrderView isEdit={true} labOrderData={row.original} />
+    ),
+  },
+  {
+    id: 'lab-orders-row-action-delete',
+    render: ({ row }) => (
+      <RowActionDelete
+        orderId={row.original.id}
+        labLocationName={row.original?.orderingLab?.name}
+        orderStatus={row.original.orderStatus}
+      />
     ),
   },
 ]

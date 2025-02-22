@@ -6,7 +6,7 @@ import { ColumnHeader } from './column-header'
 import { DiagnosisItem } from './diagnosis-item'
 import { DiagnosisType } from './types'
 
-const DiagnosisTable = () => {
+const DiagnosisTable = ({ isFormDisabled }: { isFormDisabled: boolean }) => {
   const {
     getSearchedDiagnosis,
     diagnosisList,
@@ -29,6 +29,7 @@ const DiagnosisTable = () => {
               diagnosisList={diagnosisList}
               onClickDiagnosisItem={onClickDiagnosisItem}
               loading={loading}
+              isFormDisabled={isFormDisabled}
             />
           }
         />
