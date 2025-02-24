@@ -31,8 +31,12 @@ const getColumns = (codes: SharedCode[], noteTypeCodes: SharedCode[]) => {
       accessorKey: 'date',
       header: () => <ColumnHeader label="Date" />,
       cell: ({ row }) => {
+        const visitDate =
+          row.original.notePositionCode === 'Primary'
+            ? row.original?.appointmentDateTime
+            : row.original?.signedDate
         const { date } = convertToTimezone(
-          row.original?.signedDate,
+          visitDate,
           row.original?.locationTimeZone,
         )
         return (
@@ -48,8 +52,12 @@ const getColumns = (codes: SharedCode[], noteTypeCodes: SharedCode[]) => {
       accessorKey: 'time',
       header: () => <ColumnHeader label="Time" />,
       cell: ({ row }) => {
+        const visitTime =
+          row.original.notePositionCode === 'Primary'
+            ? row.original?.appointmentDateTime
+            : row.original?.signedDate
         const { time } = convertToTimezone(
-          row.original?.signedDate,
+          visitTime,
           row.original?.locationTimeZone,
         )
         return <DateTimeCell className="whitespace-nowrap">{time}</DateTimeCell>

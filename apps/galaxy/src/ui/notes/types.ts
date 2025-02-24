@@ -39,6 +39,7 @@ interface PatientNotes {
   notePositionCode: string
   cosignedByUserId?: number
   locationTimeZone?: string
+  appointmentDateTime?: string
 }
 
 type PayloadType = {
