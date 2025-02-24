@@ -56,6 +56,7 @@ const CODESETS = {
   ReferralSource: 'ReferralSource',
   ParameterAdjustmentStatus: 'ParameterAdjustmentStatus',
   LicenseStatus: 'LicenseStatus',
+  FileFormatType: 'FileFormatType',
 
   // PsychPlusPublic Codesets
   TMSCoilType: 'PsychPlusPublic.TMSCoilType',

@@ -4,12 +4,14 @@ import { cn } from '@/utils'
 interface TabContentHeadingProps {
   title: string
   className?: string
+  beforeTitle?: React.ReactNode
 }
 
 const TabContentHeading = ({
   title,
   children,
   className = '',
+  beforeTitle,
 }: React.PropsWithChildren<TabContentHeadingProps>) => {
   return (
     <Flex
@@ -17,6 +19,7 @@ const TabContentHeading = ({
       p="2"
       className={cn('bg-white -mt-[1px] border border-gray-5', className)}
     >
+      {beforeTitle && <Flex mr="2">{beforeTitle}</Flex>}
       <Text className="text-[16px] font-[600] text-accent-12">{title}</Text>
       {children}
     </Flex>

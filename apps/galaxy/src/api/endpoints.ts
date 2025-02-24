@@ -621,7 +621,18 @@ const GET_ADDENDUMS_AGAINST_NOTE_ID = (
   `${API_URL}/api/patients/${patientId}/encounters/${appointmentId}/notes/${noteId}/addendums`
 const UPDATE_PATIENT_PRESCRIPTIONS_MEDICATIONS = (patientId: string) =>
   `${API_URL}/api/patients/${patientId}/prescriptions/actions/updatestatus`
-
+const GET_ASSIGNING_AUTHORITIES_WITH_OPTIONAL_CODSET_CODES = `${API_URL}/api/codeset/actions/search`
+const GET_CODSET_CODES = (assigningAuthorityId: string, codesetId: string) =>
+  `${API_URL}/api/codeset/assigningauthorities/${assigningAuthorityId}/codesets/${codesetId}/codes/actions/search`
+const UPDATE_CODSET_CODE = (
+  assigningAuthorityId: string,
+  codesetId: string,
+  codeId: string,
+) =>
+  `${API_URL}/api/codeset/authorities/${assigningAuthorityId}/codesets/${codesetId}/codes/${codeId}`
+const ADD_ASSIGNING_AUTHORITY = `${API_URL}/api/codeset/authorities`
+const ADD_CODSET_CODE = (assigningAuthorityId: string, codesetId: string) =>
+  `${API_URL}/api/codeset/authorities/${assigningAuthorityId}/codesets/${codesetId}/codes`
 const CANCEL_PATIENT_PRESCRIPTIONS = (patientId: string) =>
   `${API_URL}/api/patients/${patientId}/scriptsureprescriptions/actions/cancel`
 
@@ -630,6 +641,22 @@ const GET_PATIENT_PRESCRIPTIONS_MEDICATION_ORDER = (
   prescriptionId: string,
 ) =>
   `${API_URL}/api/patients/${patientId}/prescriptions/${prescriptionId}/order`
+const ADD_CODSET = (assigningAuthorityId: string) =>
+  `${API_URL}/api/codeset/authorities/${assigningAuthorityId}/codesets`
+const ADD_CODSET_CODE_ATTRIBUTES = (
+  assigningAuthorityId: string,
+  codesetId: string,
+  codeId: string,
+) =>
+  `${API_URL}/api/codeset/authorities/${assigningAuthorityId}/codesets/${codesetId}/codes/${codeId}/attributes`
+
+const UPDATE_CODSET_CODE_ATTRIBUTES = (
+  assigningAuthorityId: string,
+  codesetId: string,
+  codeId: string,
+  attributeId: string,
+) =>
+  `${API_URL}/api/codeset/authorities/${assigningAuthorityId}/codesets/${codesetId}/codes/${codeId}/attributes/${attributeId}`
 
 const GET_SELF_USER_SETTINGS = `${API_URL}/api/users/self/settings`
 
@@ -925,9 +952,17 @@ export {
   UPDATE_PRACTICE_ENDPOINT,
   GET_PRACTICE_HISTORY_ENDPOINT,
   GET_ADDENDUMS_AGAINST_NOTE_ID,
+  GET_ASSIGNING_AUTHORITIES_WITH_OPTIONAL_CODSET_CODES,
+  GET_CODSET_CODES,
+  UPDATE_CODSET_CODE,
+  ADD_ASSIGNING_AUTHORITY,
+  ADD_CODSET_CODE,
   UPDATE_PATIENT_PRESCRIPTIONS_MEDICATIONS,
   GET_PATIENT_PRESCRIPTIONS_MEDICATION_ORDER,
   CANCEL_PATIENT_PRESCRIPTIONS,
+  ADD_CODSET,
+  ADD_CODSET_CODE_ATTRIBUTES,
+  UPDATE_CODSET_CODE_ATTRIBUTES,
   GET_SELF_USER_SETTINGS,
   ADD_SELF_USER_SETTINGS,
   UPDATE_SELF_USER_SETTINGS,

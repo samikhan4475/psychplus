@@ -290,6 +290,10 @@ const getManagementNavLinks = (type: string | null, id: string | null) => {
       label: 'Organization and Practice',
       href: `${baseHref}/organization-practice`,
     },
+    {
+      label: 'Assigning Authorities',
+      href: `${baseHref}/assigning-authorities`,
+    },
   ]
 }
 
