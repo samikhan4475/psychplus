@@ -10,7 +10,7 @@ const transformIn = (
 ): QuestionnaireSchemaType => {
   const result: QuestionnaireSchemaType = {}
   for (let i = 1; i <= totalQuestions; i++) {
-    result[`Q${i}`] = ''
+    result[`Q${i}`] = '0'
   }
 
   let value = data
