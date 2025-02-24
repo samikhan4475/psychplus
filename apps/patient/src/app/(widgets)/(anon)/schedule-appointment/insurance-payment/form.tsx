@@ -9,6 +9,7 @@ import { Flex, Text } from '@radix-ui/themes'
 import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js'
 import { z } from 'zod'
 import {
+  BookAppointmentPayload,
   CardSide,
   InsurancePayers,
   InsurancePlans,
@@ -61,6 +62,7 @@ const InsurancePaymentForm = ({
   const [hasInsurance, setHasInsurance] = useState(true)
   const { bookedSlot, patient } = useStore()
   const [bookSlotState, setBookSlotState] = useState<BookedSlot>()
+
   useEffect(() => {
     setBookSlotState(bookedSlot)
   }, [bookedSlot])
@@ -129,7 +131,9 @@ const InsurancePaymentForm = ({
       bookSlotState?.startDate ?? new Date(),
     ).toISOString()
 
-    bookAppointment({
+    const patientMid = localStorage.getItem('mid')
+    
+    const payload : BookAppointmentPayload = {
       locationId: bookSlotState?.clinic?.id ?? 0,
       specialistStaffId: bookSlotState?.specialist?.id ?? 0,
       specialistTypeCode: bookSlotState?.specialistTypeCode ?? 0,
@@ -138,7 +142,16 @@ const InsurancePaymentForm = ({
       duration: bookSlotState?.duration || 0,
       isFollowup: true,
       serviceId: bookSlotState?.servicesOffered?.[0],
-    })
+      providerType: bookSlotState?.specialistTypeCode === 1 ? 'Psychiatrist' : 'Therapy',
+      isSelfPay: hasInsurance ? false : true,
+      stateCode: bookSlotState?.state
+    }
+
+    if (patientMid) {
+      payload.marketingCampaignId = patientMid as string
+    }
+
+    bookAppointment(payload)
       .then(() => {
         const providerType =
           bookedSlot?.specialistTypeCode === 1

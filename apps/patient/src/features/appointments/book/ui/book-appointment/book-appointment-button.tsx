@@ -20,7 +20,7 @@ import {
   FormFieldLabel,
   FormSubmitButton,
 } from '@/components-v2'
-import { bookAppointmentAction } from '@/features/appointments/book/actions'
+import { bookAppointmentAction, BookAppointmentParams } from '@/features/appointments/book/actions'
 import { BookSlotButtonProps } from '@/features/appointments/book/types'
 import { isProviderMemberOfCareTeam } from '@/features/appointments/book/utils'
 import { useStore } from '@/features/appointments/search/store'
@@ -173,7 +173,8 @@ const BookAppointmentButton = ({
         return
       }
     } else {
-      const result = await bookAppointmentAction({
+      const mid = localStorage.getItem('mid')
+      const payload:BookAppointmentParams = {
         locationId: clinic.id,
         specialistStaffId: specialist.id,
         specialistTypeCode: providerType,
@@ -184,12 +185,21 @@ const BookAppointmentButton = ({
         serviceId: slot.servicesOffered?.[0],
         isSelfPay: paymentMethod === PaymentType.SelfPay,
         stateCode: stateCode,
-      })
+      }
+
+      if (mid) {
+        payload.marketingCampaignId = mid
+      }
+
+      const result = await bookAppointmentAction(payload)
 
       if (result.state === 'error') {
         setError(result.error as string)
         setLoading(false)
         return
+      }
+      if (mid) {
+        localStorage.removeItem('mid')
       }
     }
 

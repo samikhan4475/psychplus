@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { use, useEffect, useState } from 'react'
 import NextLink from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -47,6 +47,13 @@ const LoginPage = () => {
       password: '',
     },
   })
+
+  useEffect(() => {
+    const mid = searchParams.get('mid')
+    if (mid) {
+      localStorage.setItem('mid', mid)
+    }
+  }, [searchParams.get('mid')])
 
   const onSubmit: SubmitHandler<SchemaType> = async (data) => {
     setError(undefined)

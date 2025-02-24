@@ -11,8 +11,11 @@ const ExistingPatient = () => {
   const { publish } = usePubsub()
 
   const onLoginClick = () => {
+    const mid = localStorage.getItem('mid');
+    const url = mid ? `${getLoginRedirectUrl()}?mid=${mid}` : getLoginRedirectUrl();
+    
     publish(`${SCHEDULE_APPOINTMENT_DIALOG}:existing-login`, {
-      url: getLoginRedirectUrl(),
+      url: url,
     })
 
     clickTrack({
@@ -38,12 +41,12 @@ const ExistingPatient = () => {
       ) : (
         <Text as="p" size="5" className="pt-5 font-regular">
           To login, please{' '}
-          <a
+          <button
             className="cursor-pointer font-bold hover:underline"
             onClick={onLoginClick}
           >
             click here
-          </a>
+          </button>
         </Text>
       )}
     </Box>

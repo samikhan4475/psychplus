@@ -46,6 +46,10 @@ type BookAppointmentPayload = {
   duration: number
   isFollowup: boolean
   serviceId?: string
+  marketingCampaignId?: string
+  providerType?:string
+  isSelfPay?: boolean
+  stateCode?: string
 }
 
 type MetaData = {

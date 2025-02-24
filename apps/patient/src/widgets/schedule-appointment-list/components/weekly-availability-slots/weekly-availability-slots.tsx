@@ -74,6 +74,7 @@ const SlotComponent = ({
       startDate: slot.startDate,
       duration: slot.duration,
       servicesOffered: slot.servicesOffered,
+      state: state ?? '',
     })
 
     if (filters.appointmentType !== "Virtual") {

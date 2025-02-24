@@ -38,6 +38,7 @@ import { getPlaceholder } from '@/features/account/profile/utils'
 import { useValidateNewPassword } from '@/hooks'
 import { preverifySignupAction, sendSignupOtpAction } from '../actions'
 import { VerifyOtpForm } from './verify-otp-form'
+import { useSearchParams } from 'next/navigation'
 
 const schema = z
   .object({
@@ -110,6 +111,14 @@ const SignupForm = () => {
     visible: false,
     type: DocumentType.TERMS_AND_CONDITIONS,
   })
+  const searchParams = useSearchParams()
+
+  useEffect(() => {
+    const mid = searchParams.get('mid')
+    if (mid) {
+      localStorage.setItem('mid', mid)
+    }
+  }, [searchParams.get('mid')])
 
   const today = getCalendarDate()
 
