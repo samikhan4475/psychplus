@@ -11,6 +11,7 @@ import {
 } from '@/features/billing/payments/api'
 import { getNoteDetails } from '@/features/note/api'
 import { NoteSectionName } from '@/features/note/constants'
+import { NoteStoreProvider } from '@/features/note/store'
 import { getPatientPharmacies } from '@/features/pharmacy/api'
 import { CodesetStoreProvider } from '@/providers'
 import { PreCheckinAssessmentStapper } from './pre-checkin-assessment-stepper/pre-checkin-assessment-stapper'
@@ -33,6 +34,7 @@ const PreCheckinAssessmentView = async () => {
       CODESETS.InsuranceRelationship,
       CODESETS.InsurancePolicyPriority,
       CODESETS.UsStates,
+      CODESETS.Relationship,
     ]),
     getProfile(),
     getPatientPharmacies(),
@@ -82,17 +84,18 @@ const PreCheckinAssessmentView = async () => {
   return (
     <ProfileStoreProvider profile={profileResponse.data}>
       <CodesetStoreProvider codesets={codesets}>
-        <Box className="mx-auto w-[1200px]">
-          <PreCheckinAssessmentStapper
-            insurancePayers={insurancePayerResponse.data}
-            patientInsurances={patientInsurancesResponse.data}
-            creditCards={creditCardsResponse.data}
-            stripeAPIKey={STRIPE_PUBLISHABLE_KEY}
-            pharmacies={pharmaciesResponse.data}
-            isDawSystemFeatureFlagEnabled={dawSystemFeatureFlagResponse.data}
-            questionnaireData={noteDetailsResponse.data}
-          />
-        </Box>
+        <NoteStoreProvider notes={noteDetailsResponse.data}>
+          <Box className="mx-auto w-[1200px]">
+            <PreCheckinAssessmentStapper
+              insurancePayers={insurancePayerResponse.data}
+              patientInsurances={patientInsurancesResponse.data}
+              creditCards={creditCardsResponse.data}
+              stripeAPIKey={STRIPE_PUBLISHABLE_KEY}
+              pharmacies={pharmaciesResponse.data}
+              isDawSystemFeatureFlagEnabled={dawSystemFeatureFlagResponse.data}
+            />
+          </Box>
+        </NoteStoreProvider>
       </CodesetStoreProvider>
     </ProfileStoreProvider>
   )

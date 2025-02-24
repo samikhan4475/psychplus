@@ -9,7 +9,7 @@ import { loadStripe } from '@stripe/stripe-js'
 import {
   EmptyFileIcon,
   FeatureEmpty,
-  FieldPlaceholder,
+  TriggerButton,
   PaymentMethodsAccordionItem,
 } from '@/components-v2'
 import { CreditCard } from '@/features/billing/credit-debit-cards/types'
@@ -70,9 +70,7 @@ const PaymentMethodAccordion = ({
     insurancePriority = InsurancePolicyPriority.Tertiary
   }
 
-  const trigger = (
-    <FieldPlaceholder>+ Add New Credit/Debit Card</FieldPlaceholder>
-  )
+  const trigger = <TriggerButton title="Add New Credit/Debit Card" />
 
   useEffect(() => {
     setSelectedCreditCard(creditCards.length > 0 ? creditCards[0] : undefined)
@@ -121,12 +119,12 @@ const PaymentMethodAccordion = ({
                     <Flex
                       width="100%"
                       justify="center"
-                      className="-mt-12 mb-8"
+                      className="-mt-10 mb-8"
                       onClick={() =>
                         setInsuranceOpenStateValue('Add/Edit Insurance')
                       }
                     >
-                      <FieldPlaceholder>+ Add New Insurance</FieldPlaceholder>
+                      <TriggerButton title="Add New Insurance" />
                     </Flex>
                   </>
                 )}

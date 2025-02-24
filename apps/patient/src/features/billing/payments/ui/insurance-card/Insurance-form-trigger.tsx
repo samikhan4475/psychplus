@@ -46,7 +46,11 @@ const InsuranceFormTrigger = ({
               {insurance.payerName}
             </Heading>
 
-            <Text className="text-white rounded-[6px] bg-[#3D4149] px-3 py-[3px] text-[12px]">
+            <Text
+              className={`rounded-[12px] border px-2 py-[2px] text-[12px] font-medium ${getPolicyStyles(
+                insurance.insurancePolicyPriority,
+              )}`}
+            >
               {insurance.insurancePolicyPriority}
             </Text>
           </Flex>
@@ -83,13 +87,13 @@ const InsuranceFormTrigger = ({
         </Flex>
 
         <Flex align="center" gap="5">
-          <Text className="text-[12px] relative text-[#60646C] after:text-[32px] after-ml-[9px] after:leading-[4px] after:content-['.'] after:absolute after:top-[-1px] after:ml-[9px] last:after:hidden">
-            <span className="font-medium text-[#1C2024]">Effective Date: </span>
+          <Text className="after-ml-[9px] relative text-[12px] text-[#60646C] after:absolute after:top-[-1px] after:ml-[9px] after:text-[32px] after:leading-[4px] after:content-['.'] last:after:hidden">
+            <Text className="font-medium text-[#1C2024]">Effective Date: </Text>
             {getSlashedDateString(insurance.effectiveDate)}
           </Text>
 
-          <Text className="text-[12px] relative text-[#60646C] after:text-[32px] after-ml-[9px] after:leading-[4px] after:content-['.'] after:absolute after:top-[-1px] after:ml-[9px] last:after:hidden">
-            <span className="font-medium text-[#1C2024]">Term Date: </span>{' '}
+          <Text className="after-ml-[9px] relative text-[12px] text-[#60646C] after:absolute after:top-[-1px] after:ml-[9px] after:text-[32px] after:leading-[4px] after:content-['.'] last:after:hidden">
+            <Text className="font-medium text-[#1C2024]">Term Date: </Text>
             {getSlashedDateString(insurance.terminationDate)}
           </Text>
 
@@ -99,12 +103,18 @@ const InsuranceFormTrigger = ({
               <span className="font-medium text-[#1C2024]">
                 Primary Holder Name:{' '}
               </span>{' '}
-              { insurance.policyHolderName?.firstName } { insurance.policyHolderName?.lastName }
+              {insurance.policyHolderName?.firstName}{' '}
+              {insurance.policyHolderName?.lastName}
             </Text>
             
             : null
           }
-          
+          {insurance.policyHolderRelationship && (
+            <Text className="after-ml-[9px] relative text-[12px] text-[#60646C] after:absolute after:top-[-1px] after:ml-[9px] after:text-[32px] after:leading-[4px] after:content-['.'] last:after:hidden">
+              <Text className="font-medium text-[#1C2024]">Relationship: </Text>
+              {insurance.policyHolderRelationship}
+            </Text>
+          )}
         </Flex>
       </Box>
 
@@ -119,12 +129,24 @@ const InsuranceFormTrigger = ({
               insurance.insurancePolicyPriority as InsurancePolicyPriority
             }
             onFormClose={toggleUpdateFormTrigger}
+            formHeading="Edit Insurance"
           />
         </Box>
       )}
     </>
   )
   return trigger
+}
+
+const getPolicyStyles = (policyPriority: string) => {
+  switch (policyPriority) {
+    case 'Primary':
+      return 'border-[#0C7792] bg-[#E7F9FB] text-[#0C7792]'
+    case 'Secondary':
+      return 'border-[#5746AF] bg-[#F5F2FF] text-[#5746AF]'
+    default:
+      return 'border-[#60646C] bg-[#EBEBEF] text-[#60646C]'
+  }
 }
 
 export { InsuranceFormTrigger }

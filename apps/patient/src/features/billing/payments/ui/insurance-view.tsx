@@ -3,29 +3,16 @@ import { Flex } from '@radix-ui/themes'
 import { getCodesets } from '@/api'
 import { FeatureContainer } from '@/components-v2'
 import {
-  getCreditCards,
   getInsurancePayers,
   getPatientInsurances,
-  getPaymentHistory,
-  getStripeApiKey,
 } from '@/features/billing/payments/api'
 import { CodesetStoreProvider } from '@/providers'
 import { InsuranceCard } from './insurance-card'
 
 const InsuranceView = async () => {
-  const [
-    creditCardsResponse,
-    stripeApiKeyResponse,
-    insurancePayerResponse,
-    patientInsurancesResponse,
-    paymentHistoryResponse,
-  ] = await Promise.all([
-    getCreditCards(),
-    getStripeApiKey(),
-    getInsurancePayers(),
-    getPatientInsurances(),
-    getPaymentHistory(),
-  ])
+  const [insurancePayerResponse, patientInsurancesResponse] = await Promise.all(
+    [getInsurancePayers(), getPatientInsurances()],
+  )
 
   const codesets = await getCodesets([
     CODESETS.InsuranceRelationship,
@@ -33,24 +20,12 @@ const InsuranceView = async () => {
     CODESETS.InsurancePolicyPriority,
   ])
 
-  if (creditCardsResponse.state === 'error') {
-    throw new Error(creditCardsResponse.error)
-  }
-
-  if (stripeApiKeyResponse.state === 'error') {
-    throw new Error(stripeApiKeyResponse.error)
-  }
-
   if (insurancePayerResponse.state === 'error') {
     throw new Error(insurancePayerResponse.error)
   }
 
   if (patientInsurancesResponse.state === 'error') {
     throw new Error(patientInsurancesResponse.error)
-  }
-
-  if (paymentHistoryResponse.state === 'error') {
-    throw new Error(paymentHistoryResponse.error)
   }
 
   return (

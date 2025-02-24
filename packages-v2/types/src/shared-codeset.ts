@@ -18,4 +18,4 @@ interface SharedCodeAttribute {
 
 type CodesetCache = Record<string, SharedCodeset>
 
-export type { SharedCodeset, CodesetCache }
+export type { SharedCodeset, CodesetCache, SharedCode }

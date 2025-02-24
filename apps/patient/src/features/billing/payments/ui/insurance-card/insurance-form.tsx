@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { ActionErrorState, ActionSuccessState } from '@psychplus-v2/api'
@@ -25,6 +25,7 @@ import {
   FormFieldContainer,
   FormFieldError,
   FormFieldLabel,
+  FormHeading,
   SSNInput,
   ToggleableForm,
 } from '@/components-v2'
@@ -137,8 +138,8 @@ interface InsuranceFormProps {
   insurance?: Insurance
   trigger?: React.ReactNode
   onFormClose?: () => void
-  onAddInsuranceClick?: (value: string) => void
   isReadOnly?: boolean
+  formHeading?: string
 }
 
 const InsuranceForm = ({
@@ -146,8 +147,8 @@ const InsuranceForm = ({
   insurance,
   trigger,
   onFormClose,
-  onAddInsuranceClick,
   isReadOnly = false,
+  formHeading,
 }: InsuranceFormProps) => {
   const [cardFrontImage, setCardFrontImage] = useState<File | undefined>(
     undefined,
@@ -206,11 +207,12 @@ const InsuranceForm = ({
   const hasChanges = () => {
     const currentValues = form.getValues()
     return Object.keys(getFormDefaultValues(insurance)).some((key) => {
-      return getFormDefaultValues[key as keyof typeof getFormDefaultValues] !== currentValues[key as keyof typeof currentValues]
+      return (
+        getFormDefaultValues[key as keyof typeof getFormDefaultValues] !==
+        currentValues[key as keyof typeof currentValues]
+      )
     })
   }
-  
-  
 
   const form = useForm<SchemaType>({
     resolver: zodResolver(schema),
@@ -283,12 +285,17 @@ const InsuranceForm = ({
 
     if (!insurance) delete payload.id
 
-    const verificationStatus =  insurance?.insurancePolicyPriority === data?.insurancePolicyPriority
-    ? insurance?.verificationStatus : "Pending"
+    const verificationStatus =
+      insurance?.insurancePolicyPriority === data?.insurancePolicyPriority
+        ? insurance?.verificationStatus
+        : 'Pending'
 
     //handle the case where insurance is being edited
     const insuranceResponse = insurance
-      ? await updateInsuranceAction({...payload, verificationStatus:verificationStatus})
+      ? await updateInsuranceAction({
+          ...payload,
+          verificationStatus: verificationStatus,
+        })
       : await addInsuranceAction(payload)
 
     if (insuranceResponse.state === 'error') {
@@ -380,6 +387,7 @@ const InsuranceForm = ({
           : undefined
       }
     >
+      <FormHeading title={formHeading ?? 'Add Insurance'} />
       <FormFieldContainer className="w-full">
         <FormFieldLabel>Insurance Card</FormFieldLabel>
         <Flex direction={{ initial: 'column', sm: 'row' }} width="100%" gap="3">

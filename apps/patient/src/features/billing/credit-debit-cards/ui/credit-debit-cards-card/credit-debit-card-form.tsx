@@ -10,9 +10,9 @@ import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js'
 import { useForm } from 'react-hook-form'
 import {
   ConsentView,
-  CreditDebitCardsIcon,
   FormFieldContainer,
   FormFieldLabel,
+  FormHeading,
   ToggleableForm,
 } from '@/components-v2'
 import { useProfileStore } from '@/features/account/profile/store'
@@ -152,30 +152,8 @@ const CreditCardForm = ({
         }}
         documentType={showConsentView.type}
       />
-
+      <FormHeading title="Add Card" />
       <Flex gap="4" direction="column" className="w-full">
-        <Flex
-          className="w-full rounded-1 border border-gray-6"
-          px="2"
-          py="1"
-          align="center"
-          justify="between"
-          gap="2"
-        >
-          <Text size="2" weight="medium" className="whitespace-nowrap">
-            We accept all major Credit & Debit Cards
-          </Text>
-
-          <Flex>
-            <CreditDebitCardsIcon />
-          </Flex>
-        </Flex>
-
-        <Flex className="w-full  rounded-t-1 bg-[#F0F4FF]" px="2" py="2">
-          <Text size="2" weight="medium">
-            Credit & Debit Card Details
-          </Text>
-        </Flex>
         <FormFieldContainer className="w-5/12">
           <FormFieldLabel required>Card Number</FormFieldLabel>
           <Box

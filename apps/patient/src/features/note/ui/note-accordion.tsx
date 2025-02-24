@@ -6,30 +6,40 @@ import { Flex, Text } from '@radix-ui/themes'
 import { ChevronDown } from 'lucide-react'
 import { Badge } from '@/components-v2'
 import { NoteSectionName } from '../constants'
-import { NoteData } from '../types'
+import { NoteData, NoteSectionItem } from '../types'
 
-interface NoteAccordionProps {
-  title: string
-  isCompleted?: boolean
-  labels: string[]
-  data: NoteData[]
+interface NoteAccordionContentProps<T extends NoteSectionItem | NoteData> {
+  data: T[]
+  handleSave: () => void
+  labels?: T extends NoteData ? string[] : never
   sectionName: NoteSectionName
-  content?: (
-    labels: string[],
-    data: NoteData[],
-    sectionName: NoteSectionName,
-    onSave: () => void,
-  ) => React.ReactNode | undefined
+  isEdit?: boolean
 }
 
-const NoteAccordion = ({
+interface NoteAccordionProps<T extends NoteSectionItem | NoteData> {
+  title: string
+  isCompleted?: boolean
+  data: T[]
+  sectionName: NoteSectionName
+  labels?: T extends NoteData ? string[] : never
+  content?: ({
+    data,
+    handleSave,
+    labels,
+    isEdit,
+  }: NoteAccordionContentProps<T>) => React.ReactNode | undefined
+  isEdit?: boolean
+}
+
+const NoteAccordion = <T extends NoteSectionItem | NoteData>({
   title,
   content,
-  labels,
   data,
+  labels,
   sectionName,
   isCompleted = false,
-}: NoteAccordionProps) => {
+  isEdit = true,
+}: NoteAccordionProps<T>) => {
   const [isOpen, setIsOpen] = useState(false)
 
   const handleSave = () => {
@@ -77,7 +87,7 @@ const NoteAccordion = ({
         </Accordion.Header>
         {isOpen && (
           <Accordion.Content className="rounded-b-2 border-x border-b border-[#DDDDE3] p-4">
-            {content?.(labels, data, sectionName, handleSave)}
+            {content?.({ data, handleSave, labels, sectionName, isEdit })}
           </Accordion.Content>
         )}
       </Accordion.Item>
@@ -85,4 +95,4 @@ const NoteAccordion = ({
   )
 }
 
-export { NoteAccordion }
+export { NoteAccordion, type NoteAccordionContentProps }

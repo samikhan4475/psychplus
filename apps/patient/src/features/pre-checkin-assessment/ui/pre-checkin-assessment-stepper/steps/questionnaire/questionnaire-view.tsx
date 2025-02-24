@@ -2,7 +2,6 @@
 
 import { Flex } from '@radix-ui/themes'
 import { NoteSectionName } from '@/features/note/constants/constants.ts'
-import { NoteSectionItem } from '@/features/note/types/types.ts'
 import { Dast10, Gad7, HamD, Pcl5, Phq9 } from './blocks'
 import { Audit } from './blocks/audit'
 
@@ -15,20 +14,13 @@ const sectionComponents = {
   [NoteSectionName.NoteSectionHamD]: HamD,
 }
 
-const QuestionnaireView = ({ data }: { data: NoteSectionItem[] }) => {
+const QuestionnaireView = () => {
   return (
     <Flex gap="4" direction="column">
       {Object.entries(sectionComponents).map(([sectionName, Component]) => {
         if (!Component) return null
 
-        return (
-          <Component
-            key={sectionName}
-            data={
-              data?.filter((record) => record.sectionName === sectionName) ?? []
-            }
-          />
-        )
+        return <Component key={sectionName} />
       })}
     </Flex>
   )

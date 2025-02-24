@@ -56,7 +56,8 @@ const ChangePaymentMethodDialog = ({
 
     const result = await changeAppointmentPaymentMethod({
       appointmentId: appointment.id,
-      paymentMethod: paymentMethod === PaymentType.SelfPay ? 'SelfPay' : 'Insurance',
+      paymentMethod:
+        paymentMethod === PaymentType.SelfPay ? 'SelfPay' : 'Insurance',
     })
 
     if (result.state === 'error') {

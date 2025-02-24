@@ -4,7 +4,7 @@ import { useForm, UseFormReturn } from 'react-hook-form'
 import {
   createQuestionnaireSchema,
   QuestionnaireSchemaType,
-} from './questionnaires-schema'
+} from './questionnaire-schema'
 
 const calculateTotalFilledQuestions = (data: any): number => {
   return Object.values(data).filter(
@@ -17,6 +17,7 @@ const useQuestionnaireForm = (
   totalQuestions: number,
 ): UseFormReturn<QuestionnaireSchemaType> & {
   totalFilledQuestions: number
+  isCompleted: boolean
 } => {
   const schema = createQuestionnaireSchema(totalQuestions)
 
@@ -27,10 +28,13 @@ const useQuestionnaireForm = (
   })
 
   const [totalFilledQuestions, setTotalFilledQuestions] = useState<number>(0)
+  const [isCompleted, setIsCompleted] = useState<boolean>(
+    totalQuestions === totalFilledQuestions,
+  )
 
   useEffect(() => {
     const filledQuestions = calculateTotalFilledQuestions(initialValues)
-
+    setIsCompleted(filledQuestions === totalQuestions)
     setTotalFilledQuestions(filledQuestions)
   }, [])
 
@@ -47,6 +51,7 @@ const useQuestionnaireForm = (
   return {
     ...form,
     totalFilledQuestions,
+    isCompleted,
   }
 }
 

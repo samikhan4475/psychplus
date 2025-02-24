@@ -1,7 +1,7 @@
 'use client'
 
 import { createContext, useContext, useRef } from 'react'
-import type { CodesetCache } from '@psychplus-v2/types'
+import type { CodesetCache, SharedCode } from '@psychplus-v2/types'
 import { useStore, type StoreApi } from 'zustand'
 import { createCodesetStore, type CodesetStore } from '@/stores'
 
@@ -52,9 +52,19 @@ const useCodeDisplay = (codeSet: string, code?: string) => {
     ?.display
 }
 
+function mapCodesetToOptions(
+  codeset: SharedCode[],
+): { label: string; value: string }[] {
+  return codeset.map(({ display, ...rest }) => ({
+    label: display,
+    ...rest,
+  }))
+}
+
 export {
   CodesetStoreProvider,
   useCodesetStore,
   useCodesetCodes,
   useCodeDisplay,
+  mapCodesetToOptions,
 }

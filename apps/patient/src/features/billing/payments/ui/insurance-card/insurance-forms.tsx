@@ -1,11 +1,11 @@
-import { EmptyFileIcon, FeatureEmpty, FieldPlaceholder } from '@/components-v2'
+import { cn } from '@psychplus-v2/utils'
 import { Flex, Separator } from '@radix-ui/themes'
+import { EmptyFileIcon, FeatureEmpty, TriggerButton } from '@/components-v2'
 import { InsurancePolicyPriority } from '@/features/billing/payments/constants'
 import { Insurance, InsurancePayer } from '@/features/billing/payments/types'
+import { VerificationStatus } from '@/types'
 import { InsuranceForm } from './insurance-form'
 import { InsuranceFormTrigger } from './Insurance-form-trigger'
-import { cn } from '@psychplus-v2/utils'
-import { VerificationStatus } from '@/types'
 
 interface InsuranceFormProps {
   insurancePayers: InsurancePayer[]
@@ -58,22 +58,24 @@ const InsuranceForms = ({
           ))}
         </Flex>
       ) : (
-        <FeatureEmpty description="No insurance added yet" Icon={EmptyFileIcon} />
+        <FeatureEmpty
+          description="No insurance added yet"
+          Icon={EmptyFileIcon}
+        />
       )}
 
-      
       <InsuranceForm
         insurancePriority={insurancePriority}
         insurancePayers={insurancePayers}
         trigger={
-          <Flex 
-            width="100%" 
-            justify={patientInsurances.length < 1 ? 'center' : 'start'} 
+          <Flex
+            width="100%"
+            justify={patientInsurances.length < 1 ? 'center' : 'start'}
             className={cn({
               '-mt-12': patientInsurances.length < 1,
             })}
           >
-            <FieldPlaceholder>+ Add New Insurance</FieldPlaceholder>
+            <TriggerButton title="Add New Insurance" />
           </Flex>
         }
       />

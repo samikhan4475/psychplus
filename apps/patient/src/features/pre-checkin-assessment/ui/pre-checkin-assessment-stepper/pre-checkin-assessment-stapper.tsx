@@ -5,7 +5,6 @@ import * as Tabs from '@radix-ui/react-tabs'
 import { Box, Text } from '@radix-ui/themes'
 import { CreditCard } from '@/features/billing/credit-debit-cards/types'
 import { Insurance, InsurancePayer } from '@/features/billing/payments/types'
-import { NoteSectionItem } from '@/features/note/types'
 import { PatientPharmacy } from '@/features/pharmacy/types'
 import { PreCheckinAssessmentTabs } from '@/features/pre-checkin-assessment/constants'
 import { useStore } from '@/features/pre-checkin-assessment/store'
@@ -14,12 +13,12 @@ import { filterTabs } from '@/features/pre-checkin-assessment/utils'
 import { PreCheckinAssessmentFooter } from '../pre-checkin-assessment-footer'
 import { PreCheckinAssessmentHeader } from '../pre-checkin-assessment-header'
 import {
-  AddInsurance,
   AllergiesAndMedications,
   Histories,
+  InsuranceView,
   PatientInfo,
-  Payment,
-  Pharmacy,
+  PaymentView,
+  PharmacyView,
   PresentingSymptoms,
   QuestionnaireView,
   ReviewOfSystems,
@@ -32,7 +31,6 @@ type PreCheckinAssessmentStapperProps = {
   stripeAPIKey: string
   pharmacies: PatientPharmacy[]
   isDawSystemFeatureFlagEnabled?: boolean
-  questionnaireData: NoteSectionItem[]
 }
 
 const PreCheckinAssessmentStapper = ({
@@ -42,7 +40,6 @@ const PreCheckinAssessmentStapper = ({
   stripeAPIKey,
   pharmacies,
   isDawSystemFeatureFlagEnabled,
-  questionnaireData,
 }: PreCheckinAssessmentStapperProps) => {
   const {
     activeTab,
@@ -66,7 +63,7 @@ const PreCheckinAssessmentStapper = ({
     {
       id: PreCheckinAssessmentTabs.Insurance,
       content: (
-        <AddInsurance
+        <InsuranceView
           insurancePayers={insurancePayers}
           patientInsurances={patientInsurances}
         />
@@ -75,7 +72,7 @@ const PreCheckinAssessmentStapper = ({
     {
       id: PreCheckinAssessmentTabs.Payment,
       content: (
-        <Payment creditCards={creditCards} stripeApiKey={stripeAPIKey} />
+        <PaymentView creditCards={creditCards} stripeApiKey={stripeAPIKey} />
       ),
     },
     {
@@ -85,7 +82,7 @@ const PreCheckinAssessmentStapper = ({
     {
       id: PreCheckinAssessmentTabs.Pharmacy,
       content: (
-        <Pharmacy
+        <PharmacyView
           pharmacies={pharmacies}
           isDawSystemFeatureFlagEnabled={isDawSystemFeatureFlagEnabled}
         />
@@ -105,7 +102,7 @@ const PreCheckinAssessmentStapper = ({
     },
     {
       id: PreCheckinAssessmentTabs.Questionnaire,
-      content: <QuestionnaireView data={questionnaireData} />,
+      content: <QuestionnaireView />,
     },
   ]
 

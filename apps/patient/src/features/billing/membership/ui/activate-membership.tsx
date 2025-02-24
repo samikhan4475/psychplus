@@ -23,7 +23,7 @@ import {
 } from '@/components-v2'
 import { getCreditCardExpiry } from '@/features/billing/credit-debit-cards/utils'
 import { useToast } from '@/providers'
-import { CreditCard } from '../../payments/types'
+import { CreditCard } from '../../credit-debit-cards/types'
 import {
   activateMembership,
   createSubscriptionAction,

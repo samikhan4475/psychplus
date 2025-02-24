@@ -6,6 +6,7 @@ import {
   ProviderType,
 } from '@psychplus-v2/constants'
 import { GOOGLE_MAPS_API_KEY, STRIPE_PUBLISHABLE_KEY } from '@psychplus-v2/env'
+import { Appointment } from '@psychplus-v2/types'
 import {
   formatCurrency,
   getAppointmentTypeLabel,
@@ -27,9 +28,9 @@ import {
   ShieldFlashLineIcon,
 } from '@/components-v2'
 import { ChangeVisitMedium } from '@/features/appointments/upcoming/ui/change-visit-medium.tsx'
+import { getCreditCards } from '@/features/billing/credit-debit-cards/api'
 import { sortCreditCardsByPrimary } from '@/features/billing/credit-debit-cards/utils'
 import {
-  getCreditCards,
   getInsurancePayers,
   getPatientInsurances,
 } from '@/features/billing/payments/api'
@@ -47,7 +48,7 @@ import { ChangePaymentMethodDialog } from './change-payment-method-dialog'
 import { JoinVirtualCallBtn } from './join-virtual-call-button'
 import { PayCopayButton } from './pay-copay-button'
 import { UpdateDateAndTimeDialog } from './update-date-and-time-dialog'
-import { Appointment } from '@psychplus-v2/types'
+import { ProfileStoreProvider } from '@/features/account/profile/store'
 
 const UpcomingAppointmentsSummaryComponent = async () => {
   const [
@@ -106,11 +107,7 @@ const UpcomingAppointmentsSummaryComponent = async () => {
       <CardContainer className="p-0">
         <FeatureEmpty
           title="No Upcoming Appointments"
-          action={
-            <ScheduleAppointmentButton
-              className="justify-center"
-            />
-          }
+          action={<ScheduleAppointmentButton className="justify-center" />}
           Icon={CalendarDaysIcon}
         />
       </CardContainer>
@@ -119,183 +116,183 @@ const UpcomingAppointmentsSummaryComponent = async () => {
 
   const getPaymentType = (row: Appointment) => {
     if (row.isSelfPay) {
-      return PaymentType.SelfPay;
+      return PaymentType.SelfPay
     }
     if (patientVerification.primaryInsuranceName) {
-      return patientVerification.primaryInsuranceName;
+      return patientVerification.primaryInsuranceName
     }
-    return "Select Insurance";
-  };
+    return 'Select Insurance'
+  }
 
   return (
-    <CodesetStoreProvider codesets={codesets}>
-      <GooglePlacesContextProvider apiKey={GOOGLE_MAPS_API_KEY}>
-        <Flex direction="column" gap="4">
-          {upcomingAppointments.map((row) => (
-            <CardContainer key={row.id}>
-              <CancelAppointment appointmentId={row.id} />
-              <Flex direction="column" gap="3">
-                <Flex
-                  direction={{ initial: 'column', xs: 'row' }}
-                  gap="5"
-                  className="justify-between"
-                >
-                  <Flex gap="3">
-                    <ProviderAvatar provider={row.specialist} size="6" />
-                    <Flex direction="column">
-                      <Flex align="center" gap="3">
-                        <Text className="text-[20px] font-[600] leading-6 -tracking-[0.25px] text-[#24366B] xs:text-[24px] sm:text-[28px]">
-                          {getUserFullName(row.specialist.legalName)}
-                          {row.specialist.legalName.honors &&
-                            `, ${row.specialist.legalName.honors}`}
-                        </Text>
-                        <AppointmentEditButton
-                          appointmentType={
-                            row.type === 'InPerson'
-                              ? AppointmentType.InPerson
-                              : AppointmentType.Virtual
-                          }
-                          providerType={
-                            row.specialistTypeCode === 1
-                              ? ProviderType.Psychiatrist
-                              : ProviderType.Therapist
-                          }
-                          appointmentId={row.id}
-                          specialistId={row.specialist.id}
-                        />
-                      </Flex>
-                      <Flex
-                        mt="1"
-                        direction={{ initial: 'row', xs: 'row' }}
-                        align="center"
-                        gap="3"
-                      >
-                        <Flex>
-                          <Text className="text-[14px] text-[#194595]">
-                            {getNewProviderTypeLabel(
-                              row.providerType,
-                            ).toLocaleUpperCase()}
+    <ProfileStoreProvider profile={profileResponse.data}>
+      <CodesetStoreProvider codesets={codesets}>
+        <GooglePlacesContextProvider apiKey={GOOGLE_MAPS_API_KEY}>
+          <Flex direction="column" gap="4">
+            {upcomingAppointments.map((row) => (
+              <CardContainer key={row.id}>
+                <CancelAppointment appointmentId={row.id} />
+                <Flex direction="column" gap="3">
+                  <Flex
+                    direction={{ initial: 'column', xs: 'row' }}
+                    gap="5"
+                    className="justify-between"
+                  >
+                    <Flex gap="3">
+                      <ProviderAvatar provider={row.specialist} size="6" />
+                      <Flex direction="column">
+                        <Flex align="center" gap="3">
+                          <Text className="text-[20px] font-[600] leading-6 -tracking-[0.25px] text-[#24366B] xs:text-[24px] sm:text-[28px]">
+                            {getUserFullName(row.specialist.legalName)}
+                            {row.specialist.legalName.honors &&
+                              `, ${row.specialist.legalName.honors}`}
                           </Text>
-                          <DotIcon color="gray" />
-                          <Text className="whitespace-nowrap text-[14px] text-[#194595]">
-                            {getAppointmentTypeLabel(
-                              row.type,
-                            ).toLocaleUpperCase()}{' '}
-                            VISIT
-                          </Text>
+                          <AppointmentEditButton
+                            appointmentType={
+                              row.type === 'InPerson'
+                                ? AppointmentType.InPerson
+                                : AppointmentType.Virtual
+                            }
+                            providerType={
+                              row.specialistTypeCode === 1
+                                ? ProviderType.Psychiatrist
+                                : ProviderType.Therapist
+                            }
+                            appointmentId={row.id}
+                            specialistId={row.specialist.id}
+                          />
                         </Flex>
-                        <Flex className="flex-1">
-                          <ChangeVisitMedium appointment={row} />
+                        <Flex
+                          mt="1"
+                          direction={{ initial: 'row', xs: 'row' }}
+                          align="center"
+                          gap="3"
+                        >
+                          <Flex>
+                            <Text className="text-[14px] text-[#194595]">
+                              {getNewProviderTypeLabel(
+                                row.providerType,
+                              ).toLocaleUpperCase()}
+                            </Text>
+                            <DotIcon color="gray" />
+                            <Text className="whitespace-nowrap text-[14px] text-[#194595]">
+                              {getAppointmentTypeLabel(
+                                row.type,
+                              ).toLocaleUpperCase()}{' '}
+                              VISIT
+                            </Text>
+                          </Flex>
+                          <Flex className="flex-1">
+                            <ChangeVisitMedium appointment={row} />
+                          </Flex>
                         </Flex>
-                      </Flex>
-                      <Flex gap="3" align="center">
-                        <AppointmentTimeLabel appointment={row} />
-                        <UpdateDateAndTimeDialog appointment={row} />
+                        <Flex gap="3" align="center">
+                          <AppointmentTimeLabel appointment={row} />
+                          <UpdateDateAndTimeDialog appointment={row} />
+                        </Flex>
                       </Flex>
                     </Flex>
                   </Flex>
-                </Flex>
 
-                <Flex
-                  wrap="wrap"
-                  direction="column"
-                  className="lg:ml-20"
-                  gap={{ initial: '2', xs: '3' }}
-                >
-                  <Flex align="center" gap="2" ml={{ initial: '0', xs: '3' }}>
-                    <Flex align="center" gap="1">
-                      {row.isSelfPay && <CreditDebitCardIcon />}
-                      {!row.isSelfPay && (
-                        <ShieldFlashLineIcon />
+                  <Flex
+                    wrap="wrap"
+                    direction="column"
+                    className="lg:ml-20"
+                    gap={{ initial: '2', xs: '3' }}
+                  >
+                    <Flex align="center" gap="2" ml={{ initial: '0', xs: '3' }}>
+                      <Flex align="center" gap="1">
+                        {row.isSelfPay && <CreditDebitCardIcon />}
+                        {!row.isSelfPay && <ShieldFlashLineIcon />}
+                        {!row.isSelfPay &&
+                          !patientVerification.hasInsurance &&
+                          ''}
+
+                        <Text className="text-[12px] xs:text-[15px]">
+                          {getPaymentType(row)}
+                        </Text>
+                        {!row.isSelfPay &&
+                          patientVerification.primaryInsuranceName && (
+                            <Badge
+                              label={
+                                patientVerification.patientInsuranceVerification
+                              }
+                              type={mapVerificationStatusToChipVariant(
+                                patientVerification?.patientInsuranceVerification,
+                              )}
+                              addIcon
+                            />
+                          )}
+                      </Flex>
+                      <ChangePaymentMethodDialog
+                        appointment={row}
+                        creditCards={sortCreditCardsByPrimary(
+                          creditCardResponse.data,
+                        )}
+                        stripeApiKey={STRIPE_PUBLISHABLE_KEY}
+                        patientInsurances={patientInsurancesResponse.data}
+                        insurancePayers={insurancePayerResponse.data}
+                      />
+                    </Flex>
+
+                    <Flex align="center" gap="1" ml={{ initial: '0', xs: '3' }}>
+                      <ParentLineIcon />
+                      <Text className="text-[12px] xs:text-[15px]">{`Copay: ${formatCurrency(
+                        row.coPay,
+                      )}`}</Text>
+                      {!row?.isCopayPaid && row.coPay > 0 && (
+                        <PayCopayButton
+                          creditCards={creditCardResponse.data}
+                          user={profileResponse.data}
+                          appointmentId={row.id}
+                          copay={row.coPay}
+                        />
                       )}
-                      {!row.isSelfPay &&
-                        !patientVerification.hasInsurance &&
-                        ''}
 
-                      <Text className="text-[12px] xs:text-[15px]">
-                        {getPaymentType(row)}
-                      </Text>
-                      {!row.isSelfPay &&
-                        patientVerification.primaryInsuranceName && (
-                          <Badge
-                            label={
-                              patientVerification.patientInsuranceVerification
-                            }
-                            type={mapVerificationStatusToChipVariant(
-                              patientVerification?.patientInsuranceVerification,
-                            )}
-                            addIcon
+                      {row.isCopayPaid && row.coPay > 0 && (
+                        <Badge label="Paid" type="success" addIcon={true} />
+                      )}
+                    </Flex>
+                  </Flex>
+
+                  <Flex
+                    wrap="wrap"
+                    gap="3"
+                    align="center"
+                    justify="end"
+                    className="w-full"
+                    mt="2"
+                    direction={{ initial: 'column', xs: 'row' }}
+                  >
+                    <Flex width={{ initial: '100%', xs: 'auto' }}>
+                      {row?.virtualRoomLink &&
+                        row.type === AppointmentType.Virtual && (
+                          <JoinVirtualCallBtn
+                            virtualRoomLink={row?.virtualRoomLink}
+                            appointment={row}
                           />
                         )}
+                      {row.type === AppointmentType.InPerson && (
+                        <Link
+                          href={getClinicAddressDirectionMapUrl(
+                            row.clinic.contact?.addresses,
+                          )}
+                          target="_blank"
+                        >
+                          <Button highContrast className="w-full bg-[#194595]">
+                            Get Direction
+                          </Button>
+                        </Link>
+                      )}
                     </Flex>
-                    <ChangePaymentMethodDialog
-                      appointment={row}
-                      creditCards={sortCreditCardsByPrimary(
-                        creditCardResponse.data,
-                      )}
-                      stripeApiKey={STRIPE_PUBLISHABLE_KEY}
-                      patientInsurances={patientInsurancesResponse.data}
-                      insurancePayers={insurancePayerResponse.data}
-                    />
-                  </Flex>
-
-                  <Flex align="center" gap="1" ml={{ initial: '0', xs: '3' }}>
-                    <ParentLineIcon />
-                    <Text className="text-[12px] xs:text-[15px]">{`Copay: ${formatCurrency(
-                      row.coPay,
-                    )}`}</Text>
-                    {!row?.isCopayPaid && row.coPay > 0 && (
-                      <PayCopayButton
-                        creditCards={creditCardResponse.data}
-                        user={profileResponse.data}
-                        appointmentId={row.id}
-                        copay={row.coPay}
-                      />
-                    )}
-
-                    {row.isCopayPaid && row.coPay > 0 && (
-                      <Badge label="Paid" type="success" addIcon={true} />
-                    )}
                   </Flex>
                 </Flex>
-
-                <Flex
-                  wrap="wrap"
-                  gap="3"
-                  align="center"
-                  justify="end"
-                  className="w-full"
-                  mt="2"
-                  direction={{ initial: 'column', xs: 'row' }}
-                >
-                  <Flex width={{ initial: '100%', xs: 'auto' }}>
-                    {row?.virtualRoomLink &&
-                      row.type === AppointmentType.Virtual && (
-                        <JoinVirtualCallBtn
-                          virtualRoomLink={row?.virtualRoomLink}
-                          appointment={row}
-                        />
-                      )}
-                    {row.type === AppointmentType.InPerson && (
-                      <Link
-                        href={getClinicAddressDirectionMapUrl(
-                          row.clinic.contact?.addresses,
-                        )}
-                        target="_blank"
-                      >
-                        <Button highContrast className="w-full bg-[#194595]">
-                          Get Direction
-                        </Button>
-                      </Link>
-                    )}
-                  </Flex>
-                </Flex>
-              </Flex>
-            </CardContainer>
-          ))}
-        </Flex>
-      </GooglePlacesContextProvider>
-    </CodesetStoreProvider>
+              </CardContainer>
+            ))}
+          </Flex>
+        </GooglePlacesContextProvider>
+      </CodesetStoreProvider>
+    </ProfileStoreProvider>
   )
 }
 

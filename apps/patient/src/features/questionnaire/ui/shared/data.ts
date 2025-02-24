@@ -1,6 +1,6 @@
 import { NoteSectionName } from '@/features/note/constants'
 import { NoteSectionItem } from '@/features/note/types'
-import { QuestionnaireSchemaType } from './questionnaires-schema'
+import { QuestionnaireSchemaType } from './questionnaire-schema'
 
 const transformIn = (
   data: NoteSectionItem[],

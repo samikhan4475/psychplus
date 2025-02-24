@@ -1,8 +1,8 @@
 import NextLink from 'next/link'
 import { CaretRightIcon } from '@radix-ui/react-icons'
-import { Button, Flex, Text } from '@radix-ui/themes'
+import { Flex, Text } from '@radix-ui/themes'
 import { ShieldAlertIcon, ShieldCheckIcon } from 'lucide-react'
-import { FeatureEmpty } from '@/components-v2'
+import { FeatureEmpty, TriggerButton } from '@/components-v2'
 import { Insurance } from '../../payments/types'
 
 interface InsuranceSummaryProps {
@@ -17,9 +17,7 @@ const InsuranceSummary = ({ data }: InsuranceSummaryProps) => {
         action={
           <Flex className="justify-center">
             <NextLink href="/billing/insurance">
-              <Button highContrast className="justify-center">
-                Add Insurance
-              </Button>
+              <TriggerButton title="Add Insurance" className="justify-center" />
             </NextLink>
           </Flex>
         }

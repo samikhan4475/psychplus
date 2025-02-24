@@ -1,7 +1,7 @@
 import { Flex } from '@radix-ui/themes'
 import { getProfile } from '@/api'
 import { FeatureContainer, FeatureHeading } from '@/components-v2'
-import { getCreditCards, getStripeApiKey } from '../../payments/api'
+import { getCreditCards, getStripeApiKey } from '../../credit-debit-cards/api'
 import { getMembership } from '../api'
 import { MembershipCard } from './membership-card'
 
@@ -35,7 +35,6 @@ const MembershipView = async () => {
   }
   return (
     <Flex direction="column" gap="5">
-      <FeatureHeading>Membership</FeatureHeading>
       <FeatureContainer>
         <MembershipCard
           membership={membershipResponse.data}

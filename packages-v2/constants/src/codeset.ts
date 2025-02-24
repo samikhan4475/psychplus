@@ -21,6 +21,7 @@ const CODESETS = {
   LanguageProficiency: 'HL7v3.LanguageAbilityProficiency',
   LanguageAbility: 'HL7v3.LanguageAbilityMode',
   Religion: 'HL7v3.ReligiousAffiliation',
+  Relationship: 'HL7v3.RoleCode',
 }
 
 export {
