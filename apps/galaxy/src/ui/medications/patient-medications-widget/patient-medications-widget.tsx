@@ -12,7 +12,6 @@ import {
 } from '@/components'
 import { FEATURE_FLAGS } from '@/constants'
 import { useFeatureFlagEnabled } from '@/hooks/use-feature-flag-enabled'
-import { FeatureFlag } from '@/types/feature-flag'
 import { AddMedication } from '../add-medication'
 import { AddMedicationButton } from './add-medication-button'
 import { PatientMedicationsDataTable } from './patient-medications-data-table'
@@ -20,33 +19,37 @@ import { PatientMedicationsTabView } from './patient-medications-tab-view'
 import { SearchMedications } from './search-medications'
 import { useStore } from './store'
 
-interface PatientMedicationsWidgetProps {
-  scriptSureAppUrl: string
-}
-
-const PatientMedicationsWidget = ({
-  scriptSureAppUrl,
-}: PatientMedicationsWidgetProps) => {
+const PatientMedicationsWidget = () => {
   const isFeatureFlagEnabled = useFeatureFlagEnabled(
     FEATURE_FLAGS.ehr8973EnableDawMedicationApi,
   )
+  const pathname = usePathname()
+  const isQuickNoteView = pathname.includes('quicknotes')
   const patientId = useParams().id as string
-  const { fetchPatientMedications, isPmpReviewed, setPmpReviewed } = useStore()
+
+  const { isPmpReviewed, setPmpReviewed, fetchPatientMedications, fetchScriptSureSessionToken } = useStore()
+
   useEffect(() => {
-    if (patientId) {
-      fetchPatientMedications(patientId)
-    }
-  }, [patientId, fetchPatientMedications])
+    if (!patientId) return;
+    const fetchAllData = async () => {
+      await Promise.all([
+        fetchScriptSureSessionToken(),
+        fetchPatientMedications(patientId, isQuickNoteView),
+      ]);
+    };
+    fetchAllData();
+  }, [patientId, fetchPatientMedications, fetchScriptSureSessionToken]);
+
   const path = usePathname()
   const tabViewEnabled = path.includes('medications')
   const fetchMedications = () => {
-    fetchPatientMedications(patientId)
+    fetchPatientMedications(patientId, isQuickNoteView)
   }
 
   return (
     <>
       {tabViewEnabled ? (
-        <PatientMedicationsTabView scriptSureAppUrl={scriptSureAppUrl} />
+        <PatientMedicationsTabView />
       ) : (
         <Box position="relative" width="100%">
           <WidgetContainer
@@ -67,7 +70,7 @@ const PatientMedicationsWidget = ({
                   {!isFeatureFlagEnabled ? (
                     <AddMedication />
                   ) : (
-                    <AddMedicationButton scriptSureAppUrl={scriptSureAppUrl} />
+                    <AddMedicationButton />
                   )}
                 </WidgetAddButton>
                 <Flex>
@@ -80,7 +83,7 @@ const PatientMedicationsWidget = ({
               </>
             }
           >
-            <PatientMedicationsDataTable scriptSureAppUrl={scriptSureAppUrl} />
+            <PatientMedicationsDataTable />
           </WidgetContainer>
         </Box>
       )}

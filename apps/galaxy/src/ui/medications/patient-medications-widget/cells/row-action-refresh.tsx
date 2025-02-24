@@ -2,34 +2,49 @@
 
 import { Dialog, Flex, IconButton, Tooltip } from '@radix-ui/themes'
 import { RefreshCw } from 'lucide-react'
-import { PatientMedication } from '../types'
+import { PatientMedication, PatientPrescriptionStatus } from '../types'
 import { getPatientMedicationOrderAction } from '../actions'
-import { useParams } from 'next/navigation'
+import { useParams, usePathname } from 'next/navigation'
 import { useState } from 'react'
 import toast from 'react-hot-toast'
 import { useFeatureFlagEnabled } from '@/hooks/use-feature-flag-enabled'
 import { FEATURE_FLAGS } from '@/constants'
 import { useStore } from '../store'
+import { useStore as globalStore } from '@/store'
 import { AddMedication } from '../../add-medication'
 import { Cross2Icon } from '@radix-ui/react-icons'
-import { useGetOrderIdScriptSureIframeUrl } from '../get-orderid-script-sure-iframe-url'
 import { Row } from '@tanstack/react-table'
 import { PatientMedicationIframe } from '../patient-medication-iframe'
 
 interface RowActionRefreshProps {
   row: Row<PatientMedication>
-  scriptSureAppUrl: string
 }
 
 const RowActionRefresh = ({
   row,
-  scriptSureAppUrl
 }: RowActionRefreshProps) => {
+  const {
+    prescriptionStatusTypeId,
+  } = row.original;
+
   const { original: record } = row
   const patientId = useParams().id as string
+  const isDisabled =
+    prescriptionStatusTypeId?.toString() !== PatientPrescriptionStatus.ACTIVE;
+  const isFeatureFlagEnabled = useFeatureFlagEnabled(
+    FEATURE_FLAGS.ehr8973EnableDawMedicationApi,
+  )
+  const pathname = usePathname()
+  const isQuickNoteSection = pathname.includes('quicknotes')
+  const { fetchPatientMedications, scriptSureSessionToken } = useStore();
+
   const [isLoading, setIsLoading] = useState(false)
-  const [pendingOrderId, setPendingOrderId] = useState<number>()
-  const [externalPatientId, setExternalPatientId] = useState<number>()
+  const [isOpen, setIsOpen] = useState<boolean>(false)
+  const [iframeUrl, setIframeUrl] = useState<string>("")
+  const { constant } = globalStore((state) => ({
+    constant: state.constants,
+  }))
+
   const onRefresh = async () => {
     setIsLoading(true)
     const result = await getPatientMedicationOrderAction({
@@ -38,35 +53,25 @@ const RowActionRefresh = ({
     })
 
     if (result.state === 'success') {
-      const { pendingOrderId, externalPatientId } = result.data
-      toast.success('Successfully loaded')
-      setPendingOrderId(pendingOrderId)
-      setExternalPatientId(externalPatientId)
-
+      const { pendingOrderId, externalPatientId } = result.data;
+      const iframeUrl =
+        `${constant.scriptsureBaseApplicationUrl}/widgets/prescription/${externalPatientId}/${pendingOrderId}?sessiontoken=${scriptSureSessionToken}&darkmode=off`
+      setIframeUrl(iframeUrl)
+      setIsOpen(true)
     } else if (result.state === 'error') {
       toast.error(result.error ?? 'Failed to load')
     }
     setIsLoading(false)
   }
-  const isFeatureFlagEnabled = useFeatureFlagEnabled(
-    FEATURE_FLAGS.ehr8973EnableDawMedicationApi,
-  )
-  const { fetchPatientMedications } = useStore();
-  const fetchMedications = () => {
-    fetchPatientMedications(patientId);
+
+  const refreshMedications = () => {
+    fetchPatientMedications(patientId, isQuickNoteSection);
   };
-  const { iframeUrl, isOpen } = useGetOrderIdScriptSureIframeUrl(
-    patientId,
-    pendingOrderId,
-    externalPatientId,
-    scriptSureAppUrl,
-    'prescription',
-  )
 
   return (
     <>
       <Tooltip content="Re-Prescribe">
-        <IconButton size="1" color="gray" variant="ghost" onClick={onRefresh} disabled={isLoading}>
+        <IconButton size="1" color="gray" variant="ghost" onClick={onRefresh} disabled={isLoading || isDisabled}>
           <RefreshCw size={18} color="black" />
         </IconButton>
       </Tooltip>
@@ -81,7 +86,7 @@ const RowActionRefresh = ({
             >
               Add Medication
             </Dialog.Title>
-            <Dialog.Close className="cursor-pointer" onClick={fetchMedications}>
+            <Dialog.Close className="cursor-pointer" onClick={refreshMedications}>
               <Cross2Icon />
             </Dialog.Close>
           </Flex>

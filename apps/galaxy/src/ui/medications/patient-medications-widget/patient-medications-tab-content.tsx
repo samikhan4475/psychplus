@@ -15,13 +15,11 @@ import { useStore } from './store'
 interface PatientMedicalTabProps {
   tabTitle: string
   children?: React.ReactNode
-  scriptSureAppUrl: string
 }
 
 const PatientMedicationsTabContent = ({
   tabTitle,
-  children,
-  scriptSureAppUrl,
+  children
 }: PatientMedicalTabProps) => {
   const isFeatureFlagEnabled = useFeatureFlagEnabled(
     FEATURE_FLAGS.ehr8973EnableDawMedicationApi,
@@ -42,7 +40,7 @@ const PatientMedicationsTabContent = ({
               {!isFeatureFlagEnabled ? (
                 <AddMedication />
               ) : (
-                <AddMedicationButton scriptSureAppUrl={scriptSureAppUrl} />
+                <AddMedicationButton />
               )}
             </WidgetAddButton>
           </Flex>

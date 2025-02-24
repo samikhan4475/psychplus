@@ -1,7 +1,7 @@
 import { Text } from '@radix-ui/themes'
 import { QuickNoteSectionItem } from '@/types'
 import { useStore } from '@/ui/medications/patient-medications-widget/store'
-import { PatientMedication } from '@/ui/medications/patient-medications-widget/types'
+import { PatientMedication, PatientPrescriptionStatus } from '@/ui/medications/patient-medications-widget/types'
 import { BlockContainer } from '../shared'
 
 interface Props {
@@ -29,7 +29,7 @@ const Details = ({ data, isNoteView, medicationData }: Props) => {
   return (
     <BlockContainer heading="Medications">
       {finalIsPmpReviewed && <Text size="1"> PMP is Reviewed </Text>}
-      {medicationData?.filter(medication => medication.prescriptionStatusTypeId === 1).map((medication) => (
+      {medicationData?.filter(medication => medication.prescriptionStatusTypeId === Number(PatientPrescriptionStatus.ACTIVE) || Number(PatientPrescriptionStatus.CURRENT_MEDICATION)).map((medication) => (
         <Text size="1" key={medication.drugDescription}>
           {formatMedicationsDetails(medication)}
         </Text>

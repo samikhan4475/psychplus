@@ -9,10 +9,7 @@ import { useParams } from 'next/navigation'
 import { AddMedication } from '../../add-medication'
 import { AddMedicationButton } from '../add-medication-button'
 import { useStore } from '../store'
-interface RowActionEditProps {
-  scriptSureAppUrl: string
-}
-const RowActionEdit = ({ scriptSureAppUrl }: RowActionEditProps) => {
+const RowActionEdit = () => {
   const isFeatureFlagEnabled = useFeatureFlagEnabled(
     FEATURE_FLAGS.ehr8973EnableDawMedicationApi,
   )
@@ -55,7 +52,7 @@ const RowActionEdit = ({ scriptSureAppUrl }: RowActionEditProps) => {
         {!isFeatureFlagEnabled ? (
           <AddMedication />
         ) : (
-          <AddMedicationButton scriptSureAppUrl={scriptSureAppUrl} />
+          <AddMedicationButton />
         )}
       </Dialog.Content>
     </Dialog.Root>

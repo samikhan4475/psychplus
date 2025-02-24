@@ -4,23 +4,21 @@ import { AdaptiveRowActionsCell, RowAction } from '@/components'
 import { RowActionRefresh } from './row-action-refresh'
 import { RowActionCancel } from './row-action-cancel'
 
-const getRowActions = (scriptSureAppUrl: string, row: Row<PatientMedication>): RowAction<PatientMedication>[] => [
+const rowActions: RowAction<PatientMedication>[] = [
   {
     id: 'pharmacy-list-row-action-cancel',
-    render: () => <RowActionCancel  row={row} />,
+    render: RowActionCancel,
   },
   {
     id: 'pharmacy-list-row-action-refresh',
-    render: () => <RowActionRefresh scriptSureAppUrl={scriptSureAppUrl} row={row} />,
+    render: RowActionRefresh,
   },
 ]
 interface ActionsCellProps {
-  row: Row<PatientMedication>,
-  scriptSureAppUrl: string
+  row: Row<PatientMedication>
 }
 
-const ActionsCell = ({ row, scriptSureAppUrl }: ActionsCellProps) => {
-  const rowActions = getRowActions(scriptSureAppUrl, row)
+const ActionsCell = ({ row }: ActionsCellProps) => {
   return <AdaptiveRowActionsCell actions={rowActions} row={row} />
 }
 

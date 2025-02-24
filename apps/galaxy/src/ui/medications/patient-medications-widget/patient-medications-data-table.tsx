@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { Flex, ScrollArea } from '@radix-ui/themes'
 import { type ColumnDef } from '@tanstack/react-table'
 import {
@@ -14,13 +14,10 @@ import { ActionsCell } from './cells'
 import { PharmacyCell } from './cells/pharmacy-cell'
 import { useStore } from './store'
 import type { PatientMedication } from './types'
-import { useParams } from 'next/navigation'
 import { StatusCell } from './cells/status-cell'
 import { useShallow } from 'zustand/react/shallow'
 
-const columns = (
-  scriptSureAppUrl: string,
-): ColumnDef<PatientMedication>[] =>
+const columns: ColumnDef<PatientMedication>[] =
   [
     {
       id: 'medication-drug',
@@ -93,34 +90,17 @@ const columns = (
       id: 'medication-actions',
       accessorKey: 'medicationActions',
       header: () => <ColumnHeader label="Actions" />,
-      cell: ({ row }) => (
-        <ActionsCell
-          row={row}
-          scriptSureAppUrl={scriptSureAppUrl}
-        />
-      )
+      cell: ({ row }) => <ActionsCell row={row} />
     },
   ]
-interface PatientMedicationsDataTableProps {
-  scriptSureAppUrl: string
-}
-const PatientMedicationsDataTable = React.memo(({
-  scriptSureAppUrl,
-}: PatientMedicationsDataTableProps) => {
-  const patientId = useParams().id as string
 
-  const { data, fetchPatientMedications, loading, fetchExternalScriptsurePatientId } = useStore(
+const PatientMedicationsDataTable = () => {
+  const { data, loading } = useStore(
     useShallow((state) => ({
       data: state.data,
-      loading: state.loading,
-      fetchPatientMedications: state.fetchPatientMedications,
-      fetchExternalScriptsurePatientId: state.fetchExternalScriptsurePatientId
+      loading: state.loading
     })),
   )
-  useEffect(() => {
-    fetchPatientMedications(patientId)
-    fetchExternalScriptsurePatientId(patientId)
-  }, [fetchPatientMedications, fetchExternalScriptsurePatientId])
 
   if (loading) {
     return (
@@ -134,14 +114,13 @@ const PatientMedicationsDataTable = React.memo(({
     <ScrollArea>
       <DataTable
         data={data?.medications ?? []}
-        columns={columns(scriptSureAppUrl)}
+        columns={columns}
         disablePagination
         sticky
       />
     </ScrollArea>
   )
-})
+}
 
-PatientMedicationsDataTable.displayName = "PatientMedicationsDataTable"
 
 export { PatientMedicationsDataTable }

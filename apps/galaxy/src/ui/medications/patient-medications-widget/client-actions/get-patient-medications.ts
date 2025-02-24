@@ -6,16 +6,18 @@ import type { GetPatientMedicationsResponse, PatientMedication } from '../types'
 
 interface GetPatientMedicationsParams {
   patientIds: string[]
+  medicationStatuses?: string[]
 }
 
 const getPatientMedicationsAction = async ({
   patientIds,
+  medicationStatuses
 }: GetPatientMedicationsParams): Promise<
   api.ActionResult<GetPatientMedicationsResponse>
 > => {
   const response = await api.POST<PatientMedication[]>(
     GET_PATIENT_MEDICATIONS(),
-    { patientIds },
+    { patientIds,medicationStatuses },
   )
   if (response.state === 'error') {
     return {

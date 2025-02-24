@@ -9,12 +9,7 @@ import {
 import { PatientMedicationsDataTable } from './patient-medications-data-table'
 import { PatientMedicationsTabContent } from './patient-medications-tab-content'
 
-interface PatientMedicationsTabViewProps {
-  scriptSureAppUrl: string
-}
-const PatientMedicationsTabView = ({
-  scriptSureAppUrl,
-}: PatientMedicationsTabViewProps) => {
+const PatientMedicationsTabView = () => {
   return (
     <Tabs.Root
       defaultValue={CURRENT_MEDICATIONS_TAB}
@@ -32,9 +27,8 @@ const PatientMedicationsTabView = ({
       <TabsContent value={CURRENT_MEDICATIONS_TAB}>
         <PatientMedicationsTabContent
           tabTitle="Current Medications"
-          scriptSureAppUrl={scriptSureAppUrl}
         >
-          <PatientMedicationsDataTable scriptSureAppUrl={scriptSureAppUrl}/>
+          <PatientMedicationsDataTable />
         </PatientMedicationsTabContent>
       </TabsContent>
     </Tabs.Root>
