@@ -630,6 +630,15 @@ const GET_PATIENT_PRESCRIPTIONS_MEDICATION_ORDER = (
   prescriptionId: string,
 ) =>
   `${API_URL}/api/patients/${patientId}/prescriptions/${prescriptionId}/order`
+
+const GET_SELF_USER_SETTINGS = `${API_URL}/api/users/self/settings`
+
+const ADD_SELF_USER_SETTINGS = `${API_URL}/api/users/self/settings`
+
+const UPDATE_SELF_USER_SETTINGS = (settingId: string) => `${API_URL}/api/users/self/settings/${settingId}`
+
+const SELF_USER_BULK_SETTINGS = `${API_URL}/api/users/self/bulksettings`
+
 export {
   GET_LAB_RESULTS_ENDPOINT,
   NOTE_UPLOAD_FILE,
@@ -919,4 +928,8 @@ export {
   UPDATE_PATIENT_PRESCRIPTIONS_MEDICATIONS,
   GET_PATIENT_PRESCRIPTIONS_MEDICATION_ORDER,
   CANCEL_PATIENT_PRESCRIPTIONS,
+  GET_SELF_USER_SETTINGS,
+  ADD_SELF_USER_SETTINGS,
+  UPDATE_SELF_USER_SETTINGS,
+  SELF_USER_BULK_SETTINGS,
 }

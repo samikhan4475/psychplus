@@ -5,7 +5,6 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Flex, Grid } from '@radix-ui/themes'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { FormContainer } from '@/components'
-import { sanitizeFormData } from '@/utils'
 import { LIST_VIEW_FILTERS } from '../constants'
 import { FiltersContext } from '../context'
 import { useProviderId } from '../hooks'
@@ -19,12 +18,8 @@ import {
   FiltersButtonsGroup,
 } from '../shared'
 import { useStore as useRootStore } from '../store'
-import {
-  getCalendarDateLabel,
-  getDateString,
-  getUtcTime,
-  isDirty,
-} from '../utils'
+import { getDateString, getLocalTime } from '../utils'
+import { getDefaultValues } from './default-values'
 import {
   AgeInput,
   AuthorizationNumberInput,
@@ -56,17 +51,31 @@ import {
   VisitTypeSelect,
 } from './filter-fields'
 import { useStore } from './store'
+import {
+  transformFilterValues,
+  transformParamsToFilterValues,
+  transformSettingToFilterValues,
+} from './transform'
 
 const ListViewFilterCard = () => {
   const [filters, setFilters] = useState<string[]>(LIST_VIEW_FILTERS)
-  const { fetchData } = useStore((state) => ({
-    fetchData: state.fetchAppointments,
-  }))
+  const {
+    fetchAppointments,
+    fetchAppointmentsWithSettings,
+    fetchUserSetting,
+    updateUserFilterSettings,
+    persistedFormData,
+    setPersistedFormData,
+    loading,
+    isSettingsSaving,
+  } = useStore()
+  const [hasHydrated, setHasHydrated] = useState<boolean>(false)
   const { cachedFilters, saveFilters } = useRootStore((state) => ({
     cachedFilters: state.cachedFiltersList,
     saveFilters: state.saveListFilters,
   }))
   const providerId = useProviderId()
+  const defaultValues = getDefaultValues(providerId)
   const ctxValue = useMemo(
     () => ({
       filters,
@@ -78,95 +87,70 @@ const ListViewFilterCard = () => {
   const form = useForm<BookedAppointmentsSchemaType>({
     resolver: zodResolver(bookedAppointmentsSchema),
     criteriaMode: 'all',
-    defaultValues: {
-      startingDate: undefined,
-      endingDate: undefined,
-      bookedAppointmentTime: undefined,
-      name: '',
-      age: undefined,
-      gender: '',
-      dateOfBirth: undefined,
-      patientStatuses: [],
-      stateIds: [],
-      locationIds: [],
-      serviceIds: [],
-      providerTypes: [],
-      providerIds: providerId ? [providerId] : [],
-      unitIds: [],
-      roomIds: [],
-      groupIds: [],
-      primaryInsuranceNames: [],
-      secondaryInsuranceNames: [],
-      visitTypes: [],
-      visitSequences: [],
-      visitMediums: [],
-      appointmentStatuses: [],
-      patientInsuranceVerificationStatuses: [],
-      diagnosisCode: '',
-      insuranceAuthorizationNumber: '',
-      cptCode: '',
-      dateOfAdmissionStart: undefined,
-      dateOfAdmissionEnd: undefined,
-      lengthOfStayMin: undefined,
-      lengthOfStayMax: undefined,
-      lastCoverageDateStart: undefined,
-      lastCoverageDateEnd: undefined,
-      legalStatuses: [],
-      copayDueMin: undefined,
-      copayDueMax: undefined,
-      copayPaid: undefined,
-      coInsuranceDueMin: undefined,
-      coInsuranceDueMax: undefined,
-      coInsurancePaid: undefined,
-      balanceDueMin: undefined,
-      balanceDueMax: undefined,
-      balancePaid: undefined,
-      noteSignedStatuses: [],
-    },
+    defaultValues,
+    disabled: loading || isSettingsSaving,
   })
 
-  const { dirtyFields } = form.formState
+  useEffect(() => {
+    useStore.persist.rehydrate()
+    setHasHydrated(true)
+  }, [])
 
   useEffect(() => {
+    if (!hasHydrated) return
+    const fetchData = async () => {
+      const map = await fetchUserSetting()
+      if (persistedFormData) {
+        const filterValues = transformParamsToFilterValues(persistedFormData)
+        form.reset({ ...defaultValues, ...filterValues })
+        applyFilters(filterValues)
+      } else if (map && map.size > 0) {
+        const filterValues = transformSettingToFilterValues(map)
+        form.reset({ ...defaultValues, ...filterValues })
+        fetchAppointmentsWithSettings(map)
+      } else if (providerId) {
+        fetchAppointments({ providerIds: [Number(providerId)] })
+      }
+    }
     if (cachedFilters.length > 0) {
       setFilters(cachedFilters)
     }
-  }, [])
+    fetchData()
+  }, [hasHydrated])
+
+  const applyFilters = (
+    data: BookedAppointmentsSchemaType,
+    persist?: boolean,
+  ) => {
+    const transformedData = transformFilterValues(data)
+    if (persist) {
+      setPersistedFormData(transformedData)
+    }
+    fetchAppointments(transformedData, 1)
+  }
 
   const onSubmit: SubmitHandler<BookedAppointmentsSchemaType> = (data) => {
-    if (!isDirty(dirtyFields)) return
-    const transformedData = {
-      ...data,
-      startingDate: getDateString(data.startingDate),
-      endingDate: getDateString(data.endingDate?.add({ days: 1 })),
-      dateOfBirth: getCalendarDateLabel(data.dateOfBirth),
-      dateOfAdmissionStart: getDateString(data.dateOfAdmissionStart),
-      dateOfAdmissionEnd: getDateString(
-        data.dateOfAdmissionStart?.add({ days: 1 }),
-      ),
-      lastCoverageDateStart: getDateString(data.lastCoverageDateStart),
-      lastCoverageDateEnd: getDateString(
-        data.lastCoverageDateStart?.add({ days: 1 }),
-      ),
-      bookedAppointmentTime: getUtcTime(data.bookedAppointmentTime),
-      providerIds: data.providerIds?.length
-        ? data.providerIds.map((id) => Number(id))
-        : [],
-      copayDueMax: data.copayDueMin,
-      coInsuranceDueMax: data.coInsuranceDueMin,
-      balanceDueMax: data.balanceDueMin,
-      lengthOfStayMax: data.lengthOfStayMin,
-    }
-    const sanitizedData = sanitizeFormData(transformedData)
-    fetchData(sanitizedData, 1)
+    applyFilters(data, true)
   }
 
   const resetFilters = () => {
-    if (!isDirty(dirtyFields)) return
-    form.reset()
+    form.reset(defaultValues)
+    const providerDefaults = { providerIds: [Number(providerId)] }
+    setPersistedFormData(providerDefaults)
     if (providerId) {
-      fetchData({ providerIds: [Number(providerId)] })
+      fetchAppointments(providerDefaults)
     }
+  }
+
+  const saveSettings = () => {
+    const values = form.getValues()
+    const transformedValues = transformFilterValues(values)
+    updateUserFilterSettings({
+      ...transformedValues,
+      lastCoverageDateStart: getDateString(values.lastCoverageDateStart),
+      lastCoverageDateEnd: getDateString(values.lastCoverageDateEnd),
+      bookedAppointmentTime: getLocalTime(values.bookedAppointmentTime),
+    })
   }
 
   return (
@@ -214,7 +198,10 @@ const ListViewFilterCard = () => {
               <AuthorizationNumberInput />
               <LegalStatusSelect />
               <NoteSignedSelect />
-              <FiltersButtonsGroup resetFilters={resetFilters}>
+              <FiltersButtonsGroup
+                resetFilters={resetFilters}
+                saveSettings={saveSettings}
+              >
                 <AddFiltersPopover
                   view="List View"
                   onSave={saveFilters}

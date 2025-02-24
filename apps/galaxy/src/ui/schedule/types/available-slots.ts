@@ -220,7 +220,7 @@ interface AppointmentParams {
   startingDate?: string
   endingDate?: string
   name?: string
-  age?: number
+  age?: number | null
   gender?: string
   dateOfBirth?: string
   patientStatuses?: string[]
@@ -228,37 +228,43 @@ interface AppointmentParams {
   serviceIds?: string[]
   stateIds?: string[]
   providerIds?: number[]
-  providerType?: string
-  unitId?: string
-  room?: string
-  groupId?: string
-  primaryInsuranceName?: string
-  secondaryInsuranceName?: string
-  visitType?: string
-  visitSequence?: string
-  visitMedium?: string
+  providerTypes?: string[]
+  unitIds?: string[]
+  roomIds?: string[]
+  groupIds?: string[]
+  primaryInsuranceNames?: string[]
+  secondaryInsuranceNames?: string[]
+  visitTypes?: string[]
+  visitSequences?: string[]
+  visitMediums?: string[]
   visitStatus?: string
-  patientInsuranceVerificationStatus?: string
+  patientInsuranceVerificationStatuses?: string[]
   diagnosisCode?: string
   cptCode?: string
   dateOfAdmissionStart?: string
   dateOfAdmissionEnd?: string
-  lengthOfStayMin?: number
-  lengthOfStayMax?: number
+  lengthOfStayMin?: number | null
+  lengthOfStayMax?: number | null
   lastCoverageDateStart?: string
   lastCoverageDateEnd?: string
-  legalStatus?: string
-  copayDueMin?: number
-  copayDueMax?: number
-  coInsuranceDueMin?: number
-  coInsuranceDueMax?: number
-  balanceDueMin?: number
-  balanceDueMax?: number
+  legalStatuses?: string[]
+  copayDueMin?: number | null
+  copayDueMax?: number | null
+  copayPaid?: number | null
+  coInsuranceDueMin?: number | null
+  coInsuranceDueMax?: number | null
+  coInsurancePaid?: number | null
+  balanceDueMin?: number | null
+  balanceDueMax?: number | null
+  balancePaid?: number | null
   noteSigned?: string
   isFollowUp?: boolean
   isServiceTimeDependant?: boolean
   isShowActiveVisits?: boolean
   includePatientTransactions?: boolean
+  bookedAppointmentTime?: string
+  appointmentStatuses?: string[]
+  noteSignedStatuses?: string[]
 }
 
 interface ProviderCoding {
@@ -296,6 +302,7 @@ interface AvailableSlotsParams {
   locationIds?: string[]
   staffIds?: number[]
   specialistTypeCode?: string
+  providerTypes?: string[]
   gender?: string
   language?: string
   isFirstResponder?: boolean

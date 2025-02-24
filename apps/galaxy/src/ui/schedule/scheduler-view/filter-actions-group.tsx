@@ -1,16 +1,14 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { getLocalTimeZone, startOfWeek, today } from '@internationalized/date'
+import { startOfWeek } from '@internationalized/date'
 import { Flex } from '@radix-ui/themes'
-import { DateValue } from 'react-aria-components'
 import { SubmitHandler, useForm } from 'react-hook-form'
-import z from 'zod'
 import { FormContainer } from '@/components'
 import { sanitizeFormData } from '@/utils'
 import { START_OF_WEEK_LOCALE } from '../constants'
 import { useProviderId } from '../hooks'
-import { getDateString, isDirty } from '../utils'
 import { ClearFilterButton } from './clear-filter-button'
+import { getDefaultValues } from './default-value'
 import {
   EndDateInput,
   GenderSelect,
@@ -24,13 +22,17 @@ import {
   VisitMediumSelect,
 } from './filter-fields'
 import { HideFiltersButton } from './hide-filters-button'
-import { schema } from './schema'
+import { SaveSettingsButton } from './save-settings-button'
+import { schema, SchemaType } from './schema'
 import { SearchButton } from './search-button'
 import { ShowFiltersButton } from './show-filters-button'
 import { useStore } from './store'
+import {
+  transformFilterValues,
+  transformParamsToFilterValues,
+  transformSettingToFilterValues,
+} from './transform'
 import { getCurrentWeekStart } from './utils'
-
-type SchemaType = z.infer<typeof schema>
 
 const SchedulerFilterGroup = ({
   showFollowUpFilter = false,
@@ -39,49 +41,54 @@ const SchedulerFilterGroup = ({
 }) => {
   const [isPartialFilterView, setIsPartialFilterView] =
     useState<boolean>(showFollowUpFilter)
-  const { fetchData, setDates } = useStore((state) => ({
-    setDates: state.setDates,
-    fetchData: state.fetchAppointments,
-  }))
+  const {
+    setDates,
+    fetchAppointments,
+    fetchUserSettings,
+    fetchDataWithSettings,
+    updateUserFilterSettings,
+    loading,
+    persistedFormData,
+    setPersistedFormData,
+    isSettingsSaving,
+  } = useStore()
+  const [hasHydrated, setHasHydrated] = useState<boolean>(false)
   const providerId = useProviderId()
+  const defaultValues = getDefaultValues(providerId)
 
   const form = useForm<SchemaType>({
     resolver: zodResolver(schema),
     criteriaMode: 'all',
-    defaultValues: {
-      startingDate: undefined,
-      endingDate: undefined,
-      stateIds: [],
-      locationIds: [],
-      serviceIds: [],
-      staffIds: providerId ? [providerId] : [],
-      providerTypes: [],
-      gender: '',
-      language: '',
-      type: '',
-    },
+    defaultValues,
+    disabled: loading || isSettingsSaving,
   })
 
-  const getMaxDaysOutToLookFor = (start?: DateValue, end?: DateValue) => {
-    if (!end) return
-    const startingDate = start ? start : today(getLocalTimeZone())
-    return Math.abs(end.compare(startingDate)) + 1
-  }
+  useEffect(() => {
+    useStore.persist.rehydrate()
+    setHasHydrated(true)
+  }, [])
 
-  const { dirtyFields } = form.formState
-
-  const onSubmit: SubmitHandler<SchemaType> = (data) => {
-    if (!isDirty(dirtyFields)) return
-    const transformedData = {
-      ...data,
-      startingDate: getDateString(data.startingDate),
-      staffIds: data.staffIds ? data.staffIds.map((id) => Number(id)) : [],
-      maxDaysOutToLook: getMaxDaysOutToLookFor(
-        data.startingDate,
-        data.endingDate,
-      ),
+  useEffect(() => {
+    if (!hasHydrated) return
+    const fetchSlots = async () => {
+      const map = await fetchUserSettings()
+      if (persistedFormData && !showFollowUpFilter) {
+        const filterValues = transformParamsToFilterValues(persistedFormData)
+        form.reset(filterValues)
+        applyFilters(filterValues)
+      } else if (map && map.size > 0 && !showFollowUpFilter) {
+        const filterValues = transformSettingToFilterValues(map)
+        form.reset({ ...defaultValues, ...filterValues })
+        fetchDataWithSettings(map)
+      } else if (providerId) {
+        fetchAppointments({ staffIds: [Number(providerId)] })
+      }
     }
+    fetchSlots()
+  }, [hasHydrated])
 
+  const applyFilters = (data: SchemaType, persist?: boolean) => {
+    const transformedData = transformFilterValues(data)
     if (data.startingDate) {
       const weekStartDateValue = startOfWeek(
         data.startingDate,
@@ -91,17 +98,31 @@ const SchedulerFilterGroup = ({
     }
     const sanitizedData = sanitizeFormData(transformedData)
     delete sanitizedData.endingDate
-    fetchData(sanitizedData)
+    if (persist) {
+      setPersistedFormData(sanitizedData)
+    }
+    fetchAppointments(sanitizedData)
+  }
+
+  const onSubmit: SubmitHandler<SchemaType> = (data) => {
+    applyFilters(data, true)
   }
 
   const resetFilters = () => {
-    if (!isDirty(dirtyFields)) return
-    form.reset()
+    form.reset(defaultValues)
+    const currentDate = getCurrentWeekStart()
+    setDates(currentDate, 13)
+    const providerDefaults = { staffIds: [Number(providerId)] }
+    setPersistedFormData(providerDefaults)
     if (providerId) {
-      const currentDate = getCurrentWeekStart()
-      setDates(currentDate, 13)
-      fetchData({ staffIds: [Number(providerId)] })
+      fetchAppointments(providerDefaults)
     }
+  }
+
+  const saveSettings = () => {
+    const values = form.getValues()
+    const transformedValues = transformFilterValues(values)
+    updateUserFilterSettings(transformedValues)
   }
 
   return (
@@ -137,6 +158,7 @@ const SchedulerFilterGroup = ({
               {isPartialFilterView && (
                 <>
                   <ClearFilterButton onClick={resetFilters} />
+                  <SaveSettingsButton onClick={saveSettings} />
                   <SearchButton />
                   <ShowFiltersButton
                     onClick={() => setIsPartialFilterView(false)}
@@ -156,6 +178,7 @@ const SchedulerFilterGroup = ({
                   onClick={() => setIsPartialFilterView(true)}
                 />
                 <ClearFilterButton onClick={resetFilters} />
+                <SaveSettingsButton onClick={saveSettings} />
                 <SearchButton />
               </Flex>
             </Flex>

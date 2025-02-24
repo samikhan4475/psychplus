@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 import { MultiSelectField } from '@/components'
+import { getLocationServicesAction } from '../../client-actions'
 import { useServiceCodesMap } from '../../hooks'
 import { FieldLabel, FormFieldContainer } from '../../shared'
 import { Option, type CalenderViewSchemaType } from '../../types'
 import { getServiceFilterOptions } from '../../utils'
-import { getLocationServicesAction } from '../../client-actions'
 
 const ServiceDropdown = () => {
   const form = useFormContext<CalenderViewSchemaType>()
@@ -34,7 +34,9 @@ const ServiceDropdown = () => {
         defaultValues={services}
         options={getServiceFilterOptions(mappedServices, servicesOptions)}
         className="flex-1"
-        onChange={(values) => form.setValue('serviceIds', values)}
+        onChange={(values) =>
+          form.setValue('serviceIds', values, { shouldDirty: true })
+        }
         menuClassName="w-[155px]"
         loading={loading}
       />

@@ -12,8 +12,8 @@ const calenderViewSchema = z
     locationIds: arrayOfIdsValidation,
     serviceIds: arrayOfIdsValidation,
     providerIds: z.string().optional(),
-    visitMedium: z.string().optional(),
-    providerType: z.string().optional(),
+    visitMediums: z.string().optional(),
+    providerTypes: z.string().optional(),
     gender: z.string().optional(),
     providerLanguage: z.string().optional(),
   })

@@ -3,11 +3,11 @@
 import { useFormContext } from 'react-hook-form'
 import { MultiSelectField } from '@/components'
 import { CODESETS } from '@/constants'
-import { useCodesetOptions } from '@/hooks'
 import { useFiltersContext } from '../../context'
 import { BookedAppointmentsSchemaType } from '../../schema'
 import { FieldLabel, FormFieldContainer } from '../../shared'
 import { SchedulerFilters } from '../../types'
+import { useCodesetOptions } from '@/hooks'
 
 const NoteSignedSelect = () => {
   const { filters } = useFiltersContext()

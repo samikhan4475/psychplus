@@ -28,7 +28,9 @@ const CoPayInputRange = () => {
         placeholder="$ Paid"
         type="number"
         {...form.register('copayPaid', {
-          setValueAs: (val) => val || undefined,
+          setValueAs: (val) => {
+            return val || undefined
+          },
         })}
       />
     </FormFieldContainer>

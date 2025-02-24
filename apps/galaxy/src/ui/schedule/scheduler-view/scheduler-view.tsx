@@ -1,10 +1,8 @@
 'use client'
 
-import { useEffect } from 'react'
 import { Flex, ScrollArea } from '@radix-ui/themes'
 import { LoadingPlaceholder } from '@/components'
 import { NewPatient } from '@/types'
-import { useProviderId } from '../hooks'
 import { DayHeader } from './day-header'
 import { SchedulerFilterGroup } from './filter-actions-group'
 import { ProvidersAccordionMenu } from './providers-accordion-menu'
@@ -23,16 +21,9 @@ const SchedulerView = ({
   onVisitAdd?: () => void
   offsetStartDate?: string
 }) => {
-  const { fetchAvailableSlots, loading } = useStore((state) => ({
-    fetchAvailableSlots: state.fetchAppointments,
+  const { loading } = useStore((state) => ({
     loading: state.loading,
   }))
-  const providerId = useProviderId()
-
-  useEffect(() => {
-    if (!providerId) return
-    fetchAvailableSlots({ staffIds: [Number(providerId)] })
-  }, [])
 
   return (
     <Flex direction="column" className="h-full">

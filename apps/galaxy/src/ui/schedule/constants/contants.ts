@@ -1,4 +1,4 @@
-import { VisitStatusCodes } from "../types/schedule"
+import { VisitStatusCodes } from '../types/schedule'
 
 const ROUNDING_FILTERS = [
   'Provider Type',
@@ -53,8 +53,8 @@ const LIST_VIEW_FILTERS = [
 const ROUNDING_FILTERS_KEY = 'rounding-filters'
 
 const NOTE_SIGNED: Record<string, boolean> = {
-  'yes': true,
-  'no': false,
+  yes: true,
+  no: false,
 }
 
 const PROVIDER_CODING_FILTERS = [
@@ -105,25 +105,35 @@ const SUBSEQUENT_VISIT_STATUS: string[] = [
   VisitStatusCodes.TransferToOther,
 ]
 
-const CHANGE_UNIT_PERMISSION = 'You do not have permission to change unit. Please contact your supervisor if you need any further assistance.'
+const CHANGE_UNIT_PERMISSION =
+  'You do not have permission to change unit. Please contact your supervisor if you need any further assistance.'
 
-const CHANGE_GROUP_PERMISSION = 'You do not have permission to change group. Please contact your supervisor if you need any further assistance.'
+const CHANGE_GROUP_PERMISSION =
+  'You do not have permission to change group. Please contact your supervisor if you need any further assistance.'
 
-const CHANGE_ROOM_PERMISSION = 'You do not have permission to change group. Please contact your supervisor if you need any further assistance.'
+const CHANGE_ROOM_PERMISSION =
+  'You do not have permission to change group. Please contact your supervisor if you need any further assistance.'
 
-const CHANGE_LEGAL_STATUS = 'You do not have permission to change legal status. Please contact your supervisor if you need any further assistance.'
+const CHANGE_LEGAL_STATUS =
+  'You do not have permission to change legal status. Please contact your supervisor if you need any further assistance.'
 
-const CHANGE_NON_TIMED_SEQUENCE = 'You do not have permission to change visit sequence for non-time dependent service. Please contact your supervisor if you need any further assistance.'
+const CHANGE_NON_TIMED_SEQUENCE =
+  'You do not have permission to change visit sequence for non-time dependent service. Please contact your supervisor if you need any further assistance.'
 
-const CHANGE_NON_TIMED_MEDIUM = 'You do not have permission to change visit medium for non-timed service. Please contact your supervisor if you need any further assistance.'
+const CHANGE_NON_TIMED_MEDIUM =
+  'You do not have permission to change visit medium for non-timed service. Please contact your supervisor if you need any further assistance.'
 
-const CLICK_PLUS_BUTTON_CALENDAR = 'You do not have permission to add visit from calendar view. Please contact your supervisor if you need any further assistance.'
+const CLICK_PLUS_BUTTON_CALENDAR =
+  'You do not have permission to add visit from calendar view. Please contact your supervisor if you need any further assistance.'
 
-const CLICK_DOWNLOAD_OR_PRINT_BUTTON = 'You do not have permission to click on download or print button. Please contact your supervisor if you need any further assistance.'
+const CLICK_DOWNLOAD_OR_PRINT_BUTTON =
+  'You do not have permission to click on download or print button. Please contact your supervisor if you need any further assistance.'
 
-const EDIT_APPOINTMENT = 'You do not have permission to edit an appointment. Please contact your supervisor if you need any further assistance.'
+const EDIT_APPOINTMENT =
+  'You do not have permission to edit an appointment. Please contact your supervisor if you need any further assistance.'
 
-const CLICK_DOLLAR_ICON = 'You do not have permission to view payment details. Please contact your supervisor if you need any further assistance.'
+const CLICK_DOLLAR_ICON =
+  'You do not have permission to view payment details. Please contact your supervisor if you need any further assistance.'
 
 const SCHEDULER_PAGE_SIZE_LIMIT = 100
 
@@ -131,12 +141,23 @@ const INVALID_RANGE_ERROR = 'Invalid date range'
 
 const OUT_OF_RANGE_ERROR = 'Date must be after 1/1/2000'
 
-const CLICK_AVAILABLE_SLOTS = 'You do not have permission to click on available slots. Please contact your supervisor if you need any further assistance.'
+const CLICK_AVAILABLE_SLOTS =
+  'You do not have permission to click on available slots. Please contact your supervisor if you need any further assistance.'
+
+const LIST_VIEW_FILTERS_KEY = 'ListViewFilters'
+const CALENDAR_VIEW_FILTERS_KEY = 'CalendarViewFilters'
+const SCHEDULER_VIEW_FILTERS_KEY = 'SchedulerViewFilters'
 
 enum StatusCode {
   NoPermission = 406,
   OverridePermission = 428,
   ProceedConfirmation = 412,
+}
+
+enum CategoryValue {
+  ListView = 'FieldValue_Sch_ListView',
+  CalendarView = 'FieldValue_Sch_CalendarView',
+  SchedulerView = 'FieldValue_Sch_SchedulerView',
 }
 
 export {
@@ -164,4 +185,8 @@ export {
   INVALID_RANGE_ERROR,
   OUT_OF_RANGE_ERROR,
   CLICK_AVAILABLE_SLOTS,
+  CategoryValue,
+  LIST_VIEW_FILTERS_KEY,
+  CALENDAR_VIEW_FILTERS_KEY,
+  SCHEDULER_VIEW_FILTERS_KEY,
 }

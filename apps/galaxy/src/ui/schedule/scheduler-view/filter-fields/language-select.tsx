@@ -1,20 +1,17 @@
 'use client'
 
-import { CodesetSelect } from '@/components'
+import { DropdownSelect } from '@/components'
 import { CODESETS } from '@/constants'
-import { FormFieldContainer } from '../../shared/form-field-container'
+import { useCodesetOptions } from '@/hooks'
 import { FieldLabel } from '../../shared'
+import { FormFieldContainer } from '../../shared/form-field-container'
 
 const LanguageSelect = () => {
+  const options = useCodesetOptions(CODESETS.Language)
   return (
     <FormFieldContainer className="flex-1">
       <FieldLabel>Language</FieldLabel>
-      <CodesetSelect
-        name="language"
-        codeset={CODESETS.Language}
-        size="1"
-        className="flex-1"
-      />
+      <DropdownSelect field="language" options={options} shouldDirty />
     </FormFieldContainer>
   )
 }

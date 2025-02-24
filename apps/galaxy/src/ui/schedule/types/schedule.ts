@@ -1,4 +1,5 @@
 import { Metadata } from '@/types'
+import { CalendarDate, Time } from '@internationalized/date'
 
 interface BookedAppointment {
   appointmentType?: string
@@ -72,6 +73,9 @@ enum VisitStatusCodes {
   TransferToOther = 'TransferToOther',
 }
 
-export type { BookedAppointment }
+type FilterValue = string | number | CalendarDate | string[] | Time
+
+
+export type { BookedAppointment, FilterValue }
 
 export { VisitStatusCodes }

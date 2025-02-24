@@ -1,6 +1,7 @@
 import { getLocalTimeZone, parseAbsolute, startOfWeek, today } from '@internationalized/date'
 import { AppointmentDate, SlotsByDay } from './types'
 import { START_OF_WEEK_LOCALE } from '../constants'
+import { DateValue } from 'react-aria-components'
 
 const extractDate = (dateString: string, timezone: string) => {
   const zonedDate = parseAbsolute(dateString, timezone)
@@ -43,10 +44,17 @@ const getCurrentWeekStart = (): Date => {
   return new Date(weekStartDate.toString())
 }
 
+  const getMaxDaysOutToLookFor = (start?: DateValue, end?: DateValue) => {
+    if (!end) return
+    const startingDate = start ? start : today(getLocalTimeZone())
+    return Math.abs(end.compare(startingDate)) + 1
+  }
+
 export {
   extractDate,
   currentWeekTotalSlots,
   extractTime,
   nextWeekTotalSlots,
   getCurrentWeekStart,
+  getMaxDaysOutToLookFor,
 }

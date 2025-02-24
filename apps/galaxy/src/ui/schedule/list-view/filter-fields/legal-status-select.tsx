@@ -12,8 +12,10 @@ import { SchedulerFilters } from '../../types'
 
 const LegalStatusSelect = () => {
   const form = useFormContext<BookedAppointmentsSchemaType>()
-  const options = useCodesetOptions(CODESETS.LegalStatus, '', [CODE_NOT_SET])
   const { filters } = useFiltersContext()
+  const options = useCodesetOptions(CODESETS.LegalStatus, undefined, [
+    CODE_NOT_SET,
+  ])
   if (!filters.includes(SchedulerFilters.Legal)) return null
 
   return (

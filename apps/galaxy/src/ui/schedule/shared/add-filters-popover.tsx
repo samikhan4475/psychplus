@@ -41,7 +41,7 @@ const AddFiltersPopover = ({
     <Popover.Root>
       <Popover.Trigger className='px-0'>
         <Button
-          className="text-pp-text-primary-base bg-white text-[12px] font-[500] [box-shadow:none]"
+          className="text-pp-text-primary-base bg-white text-[12px] font-[500] [box-shadow:none] gap-x-0"
           size="1"
           variant="outline"
         >

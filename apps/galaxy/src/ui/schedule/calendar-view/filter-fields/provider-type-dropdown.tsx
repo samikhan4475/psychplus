@@ -1,18 +1,16 @@
-import { CodesetSelect } from '@/components'
+import { DropdownSelect } from '@/components'
 import { CODE_NOT_SET, CODESETS } from '@/constants'
+import { useCodesetOptions } from '@/hooks'
 import { FieldLabel, FormFieldContainer } from '../../shared'
 
 const ProviderTypeDropdown = () => {
+  const options = useCodesetOptions(CODESETS.ProviderType, undefined, [
+    CODE_NOT_SET,
+  ])
   return (
     <FormFieldContainer>
       <FieldLabel>Provider Type</FieldLabel>
-      <CodesetSelect
-        codeset={CODESETS.ProviderType}
-        size="1"
-        exclude={[CODE_NOT_SET]}
-        className='flex-1'
-        name="providerType"
-      />
+      <DropdownSelect field="providerTypes" options={options} shouldDirty />
     </FormFieldContainer>
   )
 }

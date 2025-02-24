@@ -1,4 +1,4 @@
-import { SelectInput } from '@/components'
+import { DropdownSelect } from '@/components'
 import { CODESETS } from '@/constants'
 import { useCodesetCodes } from '@/hooks'
 import { FieldLabel, FormFieldContainer } from '../../shared'
@@ -13,13 +13,7 @@ const VisitMediumDropdown = () => {
   return (
     <FormFieldContainer>
       <FieldLabel>Visit Medium</FieldLabel>
-      <SelectInput
-        field="visitMedium"
-        placeholder="Select"
-        options={options}
-        buttonClassName="h-6 w-full"
-        className="h-full flex-1"
-      />
+      <DropdownSelect field="visitMediums" options={options} shouldDirty />
     </FormFieldContainer>
   )
 }

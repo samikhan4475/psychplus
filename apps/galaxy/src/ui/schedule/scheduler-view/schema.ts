@@ -66,4 +66,6 @@ const schema = z
     }
   })
 
-export { schema }
+type SchemaType = z.infer<typeof schema>
+
+export { schema, type SchemaType }

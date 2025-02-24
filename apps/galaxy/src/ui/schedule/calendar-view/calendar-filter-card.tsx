@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Flex } from '@radix-ui/themes'
 import { SubmitHandler, useForm } from 'react-hook-form'
@@ -6,9 +6,9 @@ import { FormContainer } from '@/components'
 import { sanitizeFormData } from '@/utils'
 import { useProviderId } from '../hooks'
 import { CalenderViewSchemaType } from '../types'
-import { isDirty } from '../utils'
 import { calenderViewSchema } from './calender-view-schema'
 import { ClearFilterButton } from './clear-filter-button'
+import { getDefaultValues } from './default-values'
 import {
   DateRangeInput,
   GenderSelect,
@@ -21,50 +21,89 @@ import {
   VisitMediumDropdown,
 } from './filter-fields'
 import { HideFiltersButton } from './hide-filters-button'
+import { SaveSettingsButton } from './save-settings-button'
 import { SearchButton } from './search-button'
 import { ShowFiltersButton } from './show-filters-button'
 import { useStore } from './store'
+import {
+  transformFilterValues,
+  transformParamsToFilterValues,
+  transformSettingToFilterValues,
+} from './transform'
 
 const CalendarFilterCard = () => {
-  const [isPartialFilterView, setIsPartialFilterView] = useState<boolean>(true)
-  const { fetchData } = useStore((state) => ({
-    fetchData: state.fetchData,
-  }))
+  const [isPartialFilterView, setIsPartialFilterView] = useState<boolean>(false)
+  const {
+    fetchData,
+    fetchUserSetting,
+    fetchDataWithSettings,
+    updateUserFilterSettings,
+    loading,
+    persistedFormData,
+    setPersistedFormData,
+    isSettingsSaving,
+  } = useStore()
+  const [hasHydrated, setHasHydrated] = useState<boolean>(false)
   const providerId = useProviderId()
+  const defaultValues = getDefaultValues(providerId)
 
   const form = useForm<CalenderViewSchemaType>({
     resolver: zodResolver(calenderViewSchema),
     criteriaMode: 'all',
-    defaultValues: {
-      stateIds: [],
-      locationIds: [],
-      serviceIds: [],
-      providerIds: providerId ?? '',
-      visitMedium: '',
-      providerType: '',
-      gender: '',
-      providerLanguage: '',
-    },
+    defaultValues: defaultValues,
+    disabled: loading || isSettingsSaving,
   })
 
-  const { dirtyFields } = form.formState
+  useEffect(() => {
+    useStore.persist.rehydrate()
+    setHasHydrated(true)
+  }, [])
 
-  const onSubmit: SubmitHandler<CalenderViewSchemaType> = async (data) => {
-    if (!isDirty(dirtyFields)) return
-    const transformedData = {
-      ...data,
-      providerIds: data.providerIds ? [Number(data.providerIds)] : [],
+  useEffect(() => {
+    if (!hasHydrated) return
+    const fetchCalendarViewData = async () => {
+      const map = await fetchUserSetting()
+      if (persistedFormData) {
+        const filterValues = transformParamsToFilterValues(persistedFormData)
+        form.reset(filterValues)
+        applyFilters(filterValues)
+      } else if (map && map.size > 0) {
+        const filterValues = transformSettingToFilterValues(map)
+        form.reset({ ...defaultValues, ...filterValues })
+        fetchDataWithSettings(map)
+      } else if (providerId) {
+        fetchData({ providerIds: [Number(providerId)] })
+      }
     }
+    fetchCalendarViewData()
+  }, [hasHydrated])
+
+  const applyFilters = (data: CalenderViewSchemaType, persist?: boolean) => {
+    const transformedData = transformFilterValues(data)
     const sanitizedData = sanitizeFormData(transformedData)
+    if (persist) {
+      setPersistedFormData(sanitizedData)
+    }
     fetchData(sanitizedData)
   }
 
+  const onSubmit: SubmitHandler<CalenderViewSchemaType> = async (data) => {
+    applyFilters(data, true)
+  }
+
   const resetFilters = () => {
-    if (!isDirty(dirtyFields)) return
-    form.reset()
+    form.reset(defaultValues)
+    const providerDefaults = { providerIds: [Number(providerId)] }
+    setPersistedFormData(providerDefaults)
     if (providerId) {
-      fetchData({ providerIds: [Number(providerId)] })
+      fetchData(providerDefaults)
     }
+  }
+
+  const saveSettings = () => {
+    const values = form.getValues()
+    const transformedValues = transformFilterValues(values)
+    updateUserFilterSettings(transformedValues)
   }
 
   const FilterButton = isPartialFilterView
@@ -87,6 +126,7 @@ const CalendarFilterCard = () => {
                 onClick={() => setIsPartialFilterView(!isPartialFilterView)}
               />
               <ClearFilterButton onClick={resetFilters} />
+              <SaveSettingsButton onClick={saveSettings} />
               <SearchButton />
             </Flex>
           )}
@@ -101,6 +141,7 @@ const CalendarFilterCard = () => {
                 onClick={() => setIsPartialFilterView(!isPartialFilterView)}
               />
               <ClearFilterButton onClick={resetFilters} />
+              <SaveSettingsButton onClick={saveSettings} />
               <SearchButton />
             </Flex>
           </Flex>

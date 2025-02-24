@@ -8,23 +8,42 @@ import { SearchButton } from '../shared'
 
 interface Props {
   resetFilters?: () => void
+  saveSettings?: () => void
 }
 
-const FiltersButtonsGroup = ({ children, resetFilters }: PropsWithChildren<Props>) => {
+const FiltersButtonsGroup = ({
+  children,
+  resetFilters,
+  saveSettings,
+}: PropsWithChildren<Props>) => {
   const form = useFormContext<BookedAppointmentsSchemaType>()
 
   return (
-    <Flex align="start" gap="2" justify='end' className='-col-end-1'>
+    <Flex align="start" gap="2" justify="end" className="-col-end-1">
       {children}
       <Button
         variant="outline"
         color="gray"
-        type='button'
+        className='text-black'
+        type="button"
         size="1"
         onClick={resetFilters}
       >
         Clear
       </Button>
+      {saveSettings && (
+        <Button
+          variant="outline"
+          color="gray"
+          className='text-black'
+          type="button"
+          size="1"
+          onClick={saveSettings}
+        >
+          Save Selection
+        </Button>
+      )}
+
       <SearchButton disabled={form.formState.isSubmitting} />
     </Flex>
   )

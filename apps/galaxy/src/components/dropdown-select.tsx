@@ -15,6 +15,8 @@ interface DropdownSelectProps {
   buttonClassName?: string
   menuClassName?: string
   disabled?: boolean
+  shouldDirty?: boolean
+  loading?: boolean
 }
 const DropdownSelect = ({
   options,
@@ -24,6 +26,8 @@ const DropdownSelect = ({
   className,
   menuClassName,
   disabled,
+  shouldDirty = false,
+  loading,
 }: DropdownSelectProps) => {
   const form = useFormContext()
   const ref = useRef<HTMLButtonElement>(null)
@@ -39,7 +43,13 @@ const DropdownSelect = ({
   return (
     <Flex className={cn('flex-1', className)}>
       <DropdownMenu.Root>
-        <DropdownMenu.Trigger disabled={disabled}>
+        <DropdownMenu.Trigger
+          disabled={disabled}
+          className={cn({
+            'loading hide-default-select-icon relative overflow-x-hidden':
+              loading,
+          })}
+        >
           <Button
             variant="outline"
             color="gray"
@@ -52,7 +62,7 @@ const DropdownSelect = ({
             )}
           >
             {findLabel(value) ?? placeholder}
-            <DropdownMenu.TriggerIcon />
+            <DropdownMenu.TriggerIcon className={cn({ hidden: loading })} />
           </Button>
         </DropdownMenu.Trigger>
         <DropdownMenu.Content
@@ -75,7 +85,7 @@ const DropdownSelect = ({
                 },
               )}
               onSelect={() => {
-                form.setValue(field, opt?.value)
+                form.setValue(field, opt?.value, { shouldDirty })
               }}
             >
               <Flex justify="start" align="center" px="3" position="relative">

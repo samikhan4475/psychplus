@@ -5,6 +5,7 @@ import {
   getLocalTimeZone,
   parseAbsolute,
   startOfWeek,
+  toCalendarDate,
   toCalendarDateTime,
   today,
 } from '@internationalized/date'
@@ -97,6 +98,17 @@ const getUtcTime = (time?: TimeValue) => {
   return `${hourInUtc}:${minutesInUtc}:${secondsInUtc}`
 }
 
+const getLocalTime = (time?: TimeValue) => {
+  if (!time) return undefined
+  const calendarDate = today(getLocalTimeZone())
+  const calendarDateTime = toCalendarDateTime(calendarDate, time)
+  const date = calendarDateTime.toDate(getLocalTimeZone())
+  const hour = `${date.getHours()}`.padStart(2, '0')
+  const minutes = `${date.getMinutes()}`.padStart(2, '0')
+  const seconds = `${date.getSeconds()}`.padStart(2, '0')
+  return `${hour}:${minutes}:${seconds}`
+}
+
 const getDateTimeString = (
   date?: DateValue | null,
   time?: TimeValue | null,
@@ -126,6 +138,9 @@ const convertToZonedDate = (date: string, timezone: string): Date => {
   return new Date(year, month - 1, day, hour, minute)
 }
 
+const getCalendarDateFromUtc = (date?: string): CalendarDate | undefined =>
+  date ? toCalendarDate(parseAbsolute(date, getLocalTimeZone())) : undefined
+
 export {
   getCurrentLocalDate,
   getCurrentWeekStartDate,
@@ -141,4 +156,6 @@ export {
   getCalendarDateLabel,
   getUtcTime,
   getUtcDateWithoutTime,
+  getLocalTime,
+  getCalendarDateFromUtc,
 }

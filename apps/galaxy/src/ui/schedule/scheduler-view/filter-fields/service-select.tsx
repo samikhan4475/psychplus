@@ -37,7 +37,9 @@ const ServiceMultiSelect = () => {
         defaultValues={services}
         options={getServiceFilterOptions(mappedServices, servicesOptions)}
         className="flex-1"
-        onChange={(values) => form.setValue('serviceIds', values)}
+        onChange={(values) =>
+          form.setValue('serviceIds', values, { shouldDirty: true })
+        }
         menuClassName="w-[155px]"
         loading={loading}
       />

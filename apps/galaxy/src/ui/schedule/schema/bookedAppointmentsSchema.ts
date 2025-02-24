@@ -5,6 +5,7 @@ import { INVALID_RANGE_ERROR, OUT_OF_RANGE_ERROR } from '../constants'
 import { validateDate } from '../utils'
 
 const dateValidation = z.custom<DateValue>()
+const numericFieldsValidation = z.coerce.number().optional().nullable()
 const arrayOfIdsValidation = z
   .array(z.string())
   .refine((value) => value.every((item) => typeof item === 'string'), {
@@ -16,10 +17,10 @@ const bookedAppointmentsSchema = z
     startingDate: dateValidation.optional(),
     endingDate: dateValidation.optional(),
     name: z.string().optional(),
-    age: z.coerce.number().positive('Invalid age').optional(),
+    age: z.coerce.number().positive('Invalid age').optional().nullable(),
     gender: z.string().optional(),
     stateIds: arrayOfIdsValidation,
-    bookedAppointmentTime: z.custom<TimeValue>(),
+    bookedAppointmentTime: z.custom<TimeValue>().optional(),
     dateOfBirth: dateValidation.optional(),
     patientStatuses: arrayOfIdsValidation,
     locationIds: arrayOfIdsValidation,
@@ -41,20 +42,20 @@ const bookedAppointmentsSchema = z
     cptCode: z.string().optional(),
     dateOfAdmissionStart: dateValidation.optional(),
     dateOfAdmissionEnd: dateValidation.optional(),
-    lengthOfStayMin: z.coerce.number().optional(),
-    lengthOfStayMax: z.coerce.number().optional(),
+    lengthOfStayMin: numericFieldsValidation,
+    lengthOfStayMax: numericFieldsValidation,
     lastCoverageDateStart: dateValidation.optional(),
     lastCoverageDateEnd: dateValidation.optional(),
     legalStatuses: arrayOfIdsValidation,
-    copayDueMin: z.coerce.number().optional(),
-    copayDueMax: z.coerce.number().optional(),
-    copayPaid: z.coerce.number().optional(),
-    coInsuranceDueMin: z.coerce.number().optional(),
-    coInsuranceDueMax: z.coerce.number().optional(),
-    coInsurancePaid: z.coerce.number().optional(),
-    balanceDueMin: z.coerce.number().optional(),
-    balanceDueMax: z.coerce.number().optional(),
-    balancePaid: z.coerce.number().optional(),
+    copayDueMin: numericFieldsValidation,
+    copayDueMax: numericFieldsValidation,
+    copayPaid: numericFieldsValidation,
+    coInsuranceDueMin: numericFieldsValidation,
+    coInsuranceDueMax: numericFieldsValidation,
+    coInsurancePaid: numericFieldsValidation,
+    balanceDueMin: numericFieldsValidation,
+    balanceDueMax: numericFieldsValidation,
+    balancePaid: numericFieldsValidation,
     noteSignedStatuses: arrayOfIdsValidation,
   })
   .superRefine((data, ctx) => {

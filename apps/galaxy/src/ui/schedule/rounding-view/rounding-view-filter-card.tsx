@@ -135,6 +135,7 @@ const RoundingViewFilterCard = () => {
       lastCoverageDateStart: getDateString(lastCoverageDateStart),
       lastCoverageDateEnd: getDateString(lastCoverageDateEnd?.add({ days: 1 })),
       providerIds: [],
+      bookedAppointmentTime: '',
     }
 
     const sanitizedParams = sanitizeFormData(transformedData)

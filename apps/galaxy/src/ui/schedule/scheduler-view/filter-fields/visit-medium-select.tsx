@@ -1,17 +1,14 @@
-import { CodesetSelect } from '@/components'
+import { DropdownSelect } from '@/components'
 import { CODESETS } from '@/constants'
+import { useCodesetOptions } from '@/hooks'
 import { FieldLabel, FormFieldContainer } from '../../shared'
 
 const VisitMediumSelect = () => {
+  const options = useCodesetOptions(CODESETS.VisitMedium)
   return (
     <FormFieldContainer>
       <FieldLabel>Visit Medium</FieldLabel>
-      <CodesetSelect
-        name="type"
-        className="flex-1"
-        codeset={CODESETS.VisitMedium}
-        size="1"
-      />
+      <DropdownSelect field="type" options={options} shouldDirty />
     </FormFieldContainer>
   )
 }
