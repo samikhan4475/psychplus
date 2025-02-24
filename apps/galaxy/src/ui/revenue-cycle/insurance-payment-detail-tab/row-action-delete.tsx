@@ -8,6 +8,7 @@ import { DeleteConfirmDialog, type PropsWithRow } from '@/components'
 import { deletePaymentClaimAction } from '../actions/delete-payment-claim'
 import { useStore } from '../insurance-payment-tab/store'
 import { ClaimPayment } from '../types'
+import { PaymentListTypes } from './types'
 
 const RowActionDelete = ({
   row: { original: payment },
@@ -20,10 +21,7 @@ const RowActionDelete = ({
   )
   const deleteRecord = async () => {
     setLoading(true)
-    const result = await deletePaymentClaimAction({
-      paymentId: payment.paymentId,
-      claimPaymentId: payment.id,
-    })
+    const result = await deletePaymentClaimAction(payment.id)
     if (result.state === 'error') {
       toast.error(result.error ?? 'Failed to delete the record')
     } else if (result.state === 'success') {
@@ -45,7 +43,7 @@ const RowActionDelete = ({
       loading={loading}
       title="claim payment"
     >
-      <IconButton variant="ghost" color="gray" type="button">
+      <IconButton variant="ghost" disabled={payment.status === PaymentListTypes.Posted} color="gray" type="button">
         <Trash2 width={16} height={16} />
       </IconButton>
     </DeleteConfirmDialog>

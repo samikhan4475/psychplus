@@ -16,7 +16,7 @@ const validatePayment = ({
   const checkAmount = paymentDetail.amount
 
   let checkAmountExceeded = ''
-
+  let totalPaid = 0
   for (const serviceLine of claimPayment.claimServiceLinePayments) {
     if (!serviceLine.serviceLinePaymentAdjustments) continue
 
@@ -26,7 +26,9 @@ const validatePayment = ({
       0,
     )
     const paidAmount = parseFloat(serviceLine.paidAmount)
-    const totalPaid = sumOfAdjustments + paidAmount
+    const sumOfPaid = sumOfAdjustments + paidAmount
+
+    totalPaid += sumOfPaid
 
     if (totalPaid > checkAmount) {
       checkAmountExceeded = `Sum of all the amounts in service lines should not exceed the check amount`
@@ -37,7 +39,7 @@ const validatePayment = ({
   if (checkAmountExceeded) return checkAmountExceeded
 
   // validation for service lines the sum of all amounts should not exceed the billed amount
-  let serviceLineAmountExceeded = ''
+  const serviceLineAmountExceeded: number[] = []
 
   for (const [
     index,
@@ -50,23 +52,23 @@ const validatePayment = ({
         adj.recordStatus !== 'Inactive' ? acc + adj.adjustmentAmount : acc,
       0,
     )
+    const allowedAmount = +serviceLine.allowedAmount
     const billedAmount = parseFloat(serviceLine.billedAmount)
     const paidAmount = parseFloat(removeNegative(serviceLine.paidAmount))
     const totalPaid = +removeNegative(`${sumOfAdjustments}`) + paidAmount
 
-    if (totalPaid > billedAmount) {
-      serviceLineAmountExceeded = `Sum of all the amounts should not exceed billed amount - Service Line (${
-        index + 1
-      })`
-      break
+    if (totalPaid > billedAmount && allowedAmount) {
+      serviceLineAmountExceeded.push(index + 1)
     }
   }
 
-  if (serviceLineAmountExceeded) return serviceLineAmountExceeded
+  if (serviceLineAmountExceeded.length > 0)
+    return `Sum of all the amounts should not exceed billed amount - Service Line (${serviceLineAmountExceeded.join(
+      ', ',
+    )})`
 
   // need to check if sum of all the amounts are equal to billed amount
-
-  let amountAdjustedEqually = ''
+  const amountAdjustedEqually: number[] = []
 
   for (const [
     index,
@@ -80,21 +82,23 @@ const validatePayment = ({
           adj.recordStatus !== 'Inactive' ? acc + adj.adjustmentAmount : acc,
         0,
       ) ?? 0
+
+    const allowedAmount = +serviceLine.allowedAmount
     const billedAmount = parseFloat(serviceLine.billedAmount)
     const sumOfAmounts =
       +removeNegative(`${sumOfAdjustments}`) +
       +removeNegative(serviceLine.paidAmount) +
       +removeNegative(serviceLine.otherPr)
 
-    if (sumOfAmounts.toFixed(2) !== billedAmount.toFixed(2)) {
-      amountAdjustedEqually = `Billed Amount is not adjusted properly - Service Line (${
-        index + 1
-      })`
-      break
+    if (sumOfAmounts.toFixed(2) !== billedAmount.toFixed(2) && allowedAmount) {
+      amountAdjustedEqually.push(index + 1)
     }
   }
 
-  if (amountAdjustedEqually) return amountAdjustedEqually
+  if (amountAdjustedEqually.length > 0)
+    return `Billed Amount is not adjusted properly - Service Line (${amountAdjustedEqually.join(
+      ', ',
+    )})`
 
   return ''
 }

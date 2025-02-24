@@ -294,6 +294,7 @@ const GET_PATIENT_HISOTRY_PROFILE_IMAGE_ENDPOINT = (
 ) => `/ehr/api/patients/${patientId}/history/${historyId}/profileimage`
 const ADD_CLAIM_PAYMENT = (paymentId: string) =>
   `${API_URL}/api/payments/${paymentId}/claimpayments`
+const DELETE_CLAIM_PAYMENT = (claimPaymentId:string)=>`${API_URL}/api/claimpayments/${claimPaymentId}`
 const UPDATE_CLAIM_PAYMENT = (paymentId: string, claimPaymentId: string) =>
   `${API_URL}/api/payments/${paymentId}/claimpayments/${claimPaymentId}`
 const GET_PATIENT_HISOTRY_DRIVING_LICENSE_IMAGE_ENDPOINT = (
@@ -705,6 +706,7 @@ export {
   CLINIC_LOCATIONS_ENDPOINT,
   FACILITY_ADMISSION_ID_ENDPOINT,
   LOCATION_SERVICES_ENDPOINT,
+  DELETE_CLAIM_PAYMENT,
   LOCATION_ENDPOINT,
   VISIT_TYPES_ENDPOINT,
   FEATURE_FLAGS,

@@ -165,26 +165,22 @@ const PaymentCheckTable = ({ paymentDetail }: PaymentCheckHeaderProps) => {
     setIsLoading(true)
     const result = await getClaimPaymentsAction(paymentDetail.id)
     if (result.state === 'success') {
-      setClaimPayments(result.data ?? [])
+      const filteredClaimPayments =
+        paymentListType === PaymentListTypes.All
+          ? result.data?.filter((payment) => payment.recordStatus !== 'Deleted')
+          : result.data?.filter(
+              (payment) =>
+                payment.status === paymentListType &&
+                payment.recordStatus !== 'Deleted',
+            )
+      setClaimPayments(filteredClaimPayments ?? [])
     } else if (result.state === 'error') {
       toast.error(result.error)
     }
     setIsLoading(false)
   }
   useEffect(() => {
-    if (claimPayments?.length === 0) {
       fetchClaimPayments()
-    } else {
-      const claimPayments =
-        paymentListType === PaymentListTypes.All
-          ? paymentDetail.claimPayments
-          : paymentDetail.claimPayments?.filter(
-              (payment) =>
-                payment.status === paymentListType &&
-                payment.recordStatus !== 'Deleted',
-            )
-      setClaimPayments(claimPayments ?? [])
-    }
   }, [paymentListType])
 
   const claimStatusCodes = useCodesetCodes(CODESETS.ClaimStatus)
