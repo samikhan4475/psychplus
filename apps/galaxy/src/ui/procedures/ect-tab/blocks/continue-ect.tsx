@@ -17,6 +17,10 @@ const BLOCK_OPTIONS = [
     label: 'Maintenance',
     value: 'Maintenance',
   },
+  {
+    label: 'Hold Future Treatments',
+    value: 'HoldFutureTreatments',
+  }
 ]
 
 const ContinueEctBlock = () => {

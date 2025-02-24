@@ -119,7 +119,7 @@ const transformIn = (value: QuickNoteSectionItem[]): EctWidgetSchemaType => {
     ectPostOpMedicationBlockDetails: '',
     ectComplicationsBlock: '',
     ectComplicationsBlockDetails: '',
-    ectAssessment: '',
+    ectAssessment: 'Patient tolerated the procedure well and no significant concerns were noted',
     ectContinuePBlock: '',
     anesthesiologist: '',
     machineName:'Mecta'

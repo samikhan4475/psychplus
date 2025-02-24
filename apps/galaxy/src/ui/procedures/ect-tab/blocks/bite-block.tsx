@@ -5,13 +5,13 @@ const BLOCK_LABEL = 'Bite Block'
 
 const BLOCK_OPTIONS = [
   {
-    label: 'No',
-    value: 'No',
-  },
-  {
     label: 'Yes',
     value: 'Yes',
   },
+  {
+    label: 'No',
+    value: 'No',
+  }
 ]
 
 const BiteBlock = () => {
