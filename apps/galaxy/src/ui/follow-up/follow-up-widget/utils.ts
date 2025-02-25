@@ -96,6 +96,19 @@ const getEncounterType = (appointment: Appointment) => {
     return appointment.visitTypeCode
   }
 }
+const getDurationMinutes = (
+  appointment: Appointment,
+  defaultDuration: string,
+): number => {
+  switch (appointment.visitTypeCode) {
+    case VisitTypes.Tms:
+    case VisitTypes.Spravato:
+    case VisitTypes.KetamineFourVisit:
+      return appointment.appointmentDuration
+    default:
+      return Number(defaultDuration)
+  }
+}
 
 const getVisitSequence = (appointment: Appointment) => {
   switch (appointment.visitTypeCode) {
@@ -110,7 +123,7 @@ const getVisitSequence = (appointment: Appointment) => {
   }
 }
 
-const transformIn = (appointment: Appointment) => {
+const transformIn = (appointment: Appointment, defaultDuration?: string) => {
   let payload: Omit<
     BookVisitPayload,
     'isOverridePermissionProvided' | 'isProceedPermissionProvided'
@@ -135,7 +148,9 @@ const transformIn = (appointment: Appointment) => {
   if (appointment.isServiceTimeDependent) {
     payload = {
       ...payload,
-      durationMinutes: appointment.appointmentDuration ?? 0,
+      durationMinutes: defaultDuration
+        ? getDurationMinutes(appointment, defaultDuration)
+        : appointment.appointmentDuration,
       dischargeDate: appointment.dischargeDate,
       dischargeLocation: appointment.dischargeLocationName,
       isEdVisit: appointment.isEdDischarge,

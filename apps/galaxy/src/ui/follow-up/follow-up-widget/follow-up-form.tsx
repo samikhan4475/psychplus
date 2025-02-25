@@ -18,6 +18,7 @@ import { NextDropdown } from './form-fields/next-dropdown'
 import { schema, SchemaType } from './schema'
 import { useStore } from './store'
 import { getOffsetStartDate, sanitizeFormData, transformIn } from './utils'
+import { getProviderDefaultDuration } from './client-actions'
 
 const FollowUpForm = ({
   patientId,
@@ -74,13 +75,16 @@ const FollowUpForm = ({
     fetchAppointmentData()
   }, [patientId, appointmentId])
 
-  const onSubmit: SubmitHandler<SchemaType> = (data) => {
+  const onSubmit: SubmitHandler<SchemaType> = async (data) => {
+    const response = await getProviderDefaultDuration(appointment!)
+    if (response.state === 'error') return
+    const duration = response.data
     const offsetStartDate = getOffsetStartDate(
       data.next,
       appointment?.appointmentDate ?? new Date().toISOString(),
     )
 
-    const transformedAppointment = transformIn(appointment!)
+    const transformedAppointment = transformIn(appointment!, duration)
     const payload: BookVisitPayload = {
       ...transformedAppointment,
       startDate: offsetStartDate,

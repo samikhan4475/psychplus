@@ -642,6 +642,9 @@ const GET_PATIENT_PRESCRIPTIONS_MEDICATION_ORDER = (
   prescriptionId: string,
 ) =>
   `${API_URL}/api/patients/${patientId}/prescriptions/${prescriptionId}/order`
+
+const DOWNLOAD_LIST_VIEW_DATA = `${API_URL}/api/appointments/actions/download`
+
 const ADD_CODSET = (assigningAuthorityId: string) =>
   `${API_URL}/api/codeset/authorities/${assigningAuthorityId}/codesets`
 const ADD_CODSET_CODE_ATTRIBUTES = (
@@ -962,6 +965,7 @@ export {
   UPDATE_PATIENT_PRESCRIPTIONS_MEDICATIONS,
   GET_PATIENT_PRESCRIPTIONS_MEDICATION_ORDER,
   CANCEL_PATIENT_PRESCRIPTIONS,
+  DOWNLOAD_LIST_VIEW_DATA,
   ADD_CODSET,
   ADD_CODSET_CODE_ATTRIBUTES,
   UPDATE_CODSET_CODE_ATTRIBUTES,

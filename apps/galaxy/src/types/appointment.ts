@@ -223,6 +223,15 @@ interface BookVisitResponse {
   isSelfPay: boolean
 }
 
+enum FileTypes {
+  Xml = 'Xml',
+  Json = 'Json',
+  Csv = 'Csv',
+  Xlsx = 'Xlsx',
+  Pdf = 'Pdf',
+  Txt = 'Txt',
+}
+
 export {
   type Appointment,
   type BookVisitPayload,
@@ -232,4 +241,5 @@ export {
   type CptCode,
   VisitTypes,
   VisitSequenceTypes,
+  FileTypes
 }

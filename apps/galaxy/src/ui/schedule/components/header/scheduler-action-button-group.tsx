@@ -1,20 +1,40 @@
 import { useState } from 'react'
+import { getLocalTimeZone, today } from '@internationalized/date'
 import { Button, Flex, IconButton } from '@radix-ui/themes'
 import { DownloadIcon, Plus } from 'lucide-react'
 import { PrinterIcon } from '@/components/icons'
 import { FEATURE_FLAGS } from '@/constants'
 import { useHasPermission } from '@/hooks'
 import { useFeatureFlagEnabled } from '@/hooks/use-feature-flag-enabled'
+import { FileTypes } from '@/types'
 import { AddVisit } from '@/ui/visit/add-visit'
+import { downloadAppointmentsAction } from '../../client-actions'
 import { CLICK_DOWNLOAD_OR_PRINT_BUTTON } from '../../constants'
+import { useStore as listViewStore } from '../../list-view/store'
 import { PermissionAlert } from '../../shared'
+import { getDateString } from '../../utils'
+import { DownloadButton } from './download-button'
 
 const SchedulerActionButtonGroup = () => {
   const isFeatureFlagEnabled = useFeatureFlagEnabled(
     FEATURE_FLAGS.ehr11786EnableGalaxySecondPhaseFeatures,
   )
   const hasPermissionToDownloadOrPrint = useHasPermission('clickDownloadButton')
+  const { page, formData } = listViewStore()
   const [isOpen, setIsOpen] = useState<boolean>(false)
+
+  const handleDownload = () => {
+    if (hasPermissionToDownloadOrPrint) {
+      const body = {
+        ...formData,
+        startingDate:
+          formData?.startingDate ?? getDateString(today(getLocalTimeZone())),
+      }
+      downloadAppointmentsAction({ type: FileTypes.Xlsx, params: body, page })
+    } else {
+      setIsOpen(true)
+    }
+  }
 
   return (
     <>
@@ -47,19 +67,9 @@ const SchedulerActionButtonGroup = () => {
             >
               <PrinterIcon />
             </IconButton>
-            <IconButton
-              variant="outline"
-              onClick={
-                hasPermissionToDownloadOrPrint
-                  ? undefined
-                  : () => setIsOpen(true)
-              }
-              className="text-black h-6 rounded-[2px] [box-shadow:inset_0_0_0_0.5px_#9E9898CC]"
-            >
-              <DownloadIcon width={16} height={16} />
-            </IconButton>
           </>
         )}
+        <DownloadButton onClick={handleDownload} />
       </Flex>
     </>
   )
