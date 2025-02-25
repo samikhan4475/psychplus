@@ -36,7 +36,7 @@ const AddTestLabsDropDown = ({
   return (
     <DropdownMenu.Root>
       <DropdownMenu.Trigger disabled={isFormDisabled}>
-        <PlusIcon />
+        <PlusIcon className='cursor-pointer'/>
       </DropdownMenu.Trigger>
       <DropdownMenu.Content align="end" className="w-[386px]">
         <Flex
