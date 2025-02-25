@@ -46,7 +46,7 @@ export default (vitalSigns: any, form?: any) => {
     if (previousTimeSLot === currentTimeSlot.current) {
       newConfig[previousTimeSLot] = { ...nextConfig }
     } else {
-      newConfig[previousTimeSLot].showMessage = true
+      newConfig[previousTimeSLot].showMessage = nextConfig.showMessage
       newConfig[previousTimeSLot].information = nextConfig.information
       newConfig[previousTimeSLot].treatmentStatus = nextConfig.treatmentStatus
       newConfig[currentTimeSlot.current] = {
@@ -88,7 +88,7 @@ export default (vitalSigns: any, form?: any) => {
           isCurrentVitalsGood(+item.systolic, +item.diastolic),
         )
         nextConfig = { ...nextConfig, ...newConfig }
-        isFirstTime.current = !(vitalSigns.length - 1 === index)
+        isFirstTime.current = vitalSigns.length - 1 !== index
       })
       setButtonConfig({ ...nextConfig })
     } else {

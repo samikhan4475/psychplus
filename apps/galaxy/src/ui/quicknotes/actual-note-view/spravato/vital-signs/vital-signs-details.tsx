@@ -14,9 +14,11 @@ const VitalSignsDetails = ({
           <Text weight="medium" size="1">
             {item.treatmentLabel}
           </Text>
-          <Text className="text-pp-text-sub" weight="regular" size="1">
-            {item.information}
-          </Text>
+          {item?.showMessage && (
+            <Text className="text-pp-text-sub" weight="regular" size="1">
+              {item.information}
+            </Text>
+          )}
         </React.Fragment>
       ))}
     </Flex>
