@@ -77,12 +77,12 @@ const PatientBanner = async ({ patientId, user }: PatientBannerProps) => {
         <Flex mr="6">
           <UserAvatar user={user} />
         </Flex>
-        <UserInfoSection user={user} />
+        <UserInfoSection user={user} vitals={vitals} />
         <Flex direction="column" className="gap-[2px] md:flex-1">
           <VitalsInfoSection vitals={vitals} />
         </Flex>
         <Flex direction="column" className="gap-[2px] md:flex-1">
-          <BmiValue />
+          <BmiValue vitals={vitals} />
           <LabelAndValue
             label="CC on file"
             value={isCreditCardOnFile(creditCardVerificationStatus)}

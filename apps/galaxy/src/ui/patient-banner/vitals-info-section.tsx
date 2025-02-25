@@ -12,14 +12,12 @@ const VitalsInfoSection = ({ vitals }: VitalsInfoSectionProps) => {
   const { data, setData } = useStore()
 
   useEffect(() => {
-    if (vitals) {
-      setData([{ ...vitals }, ...(data ?? [])])
-    }
-  }, [])
+    setData(vitals ? [{ ...vitals }] : [])
+  }, [vitals])
 
   const vital = useMemo(
-    () => (data && data?.length > 0 ? data?.[0] : null),
-    [data],
+    () => (data && data?.length > 0 ? data?.[0] : vitals ?? null),
+    [data, vitals],
   )
 
   const formatHeightInInches = (heightCm?: number) =>

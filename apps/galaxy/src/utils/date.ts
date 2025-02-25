@@ -336,10 +336,7 @@ const getDateDifference = (dateObjEnd: DateValue, dateObjStart: DateValue) => {
   return differenceInCalendarDays(endDateObj, startDateObj)
 }
 
-const formatUTCDate = (
-  dateString: string,
-  dateFormat: string = 'MM/dd/yyyy HH:mm',
-) => {
+const formatUTCDate = (dateString: string, dateFormat = 'MM/dd/yyyy HH:mm') => {
   const utcDate = new Date(dateString)
   const adjustedDate = new Date(
     utcDate.getUTCFullYear(),
@@ -350,16 +347,13 @@ const formatUTCDate = (
   )
   return format(adjustedDate, dateFormat)
 }
-const concatDateTimeAndFormat = (
-  date: string,
-  time?: string,
-) => {
-  const dateTimeString = time
-    ? `${date?.split('T')[0]}T${time}:00Z`
+const concatDateTimeAndFormat = (date: string, time?: string) => {
+  const formattedTime = time ? time?.slice(0, 5) : undefined
+  const dateTimeString = formattedTime
+    ? `${date.split('T')[0]}T${formattedTime}:00Z`
     : date
   return formatDateTime(dateTimeString, false)
 }
-
 
 export {
   getCalendarDate,
@@ -389,5 +383,5 @@ export {
   convertToTimeZoneDate,
   isDateInRange,
   formatUTCDate,
-  concatDateTimeAndFormat
+  concatDateTimeAndFormat,
 }

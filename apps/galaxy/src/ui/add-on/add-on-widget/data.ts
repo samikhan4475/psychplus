@@ -109,7 +109,6 @@ const transformIn = (
     therapyPsychoanalysis,
     therapy,
   }
-
   value.forEach((item) => {
     const key = item.sectionItem
     const itemValue = item.sectionItemValue
@@ -130,7 +129,7 @@ const transformIn = (
         undefined: '',
       }
       if (key === 'therapy') {
-        result[key] = therapy ? jsonValue[itemValue] || therapy : false
+        result[key] = therapy ? jsonValue[itemValue] ?? therapy : false
       } else {
         result[key] = jsonValue[itemValue] ?? itemValue
       }
@@ -174,6 +173,12 @@ const transformOut =
       } else {
         result.push(...transformOutTherapyBlock(transformProps))
       }
+    } else {
+      result.push({
+        ...createQuickNotesPayload(patientId, appointmentId),
+        sectionItem: 'therapy',
+        sectionItemValue: 'false',
+      })
     }
 
     if (result.length === 0) {
@@ -204,7 +209,6 @@ const transformOut =
         )),
       )
     }
-
     return result
   }
 

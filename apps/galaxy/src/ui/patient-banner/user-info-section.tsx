@@ -14,17 +14,18 @@ import {
   getSlashedPaddedDateString,
   getUserFullName,
 } from '@/utils'
-import { useStore } from '../vitals'
+import { PatientVital, useStore } from '../vitals'
 import { LabelAndValue } from './label-and-value'
 
 interface PatientBannerProps {
   user: PatientProfile
+  vitals?: PatientVital
 }
 
-const UserInfoSection = ({ user }: PatientBannerProps) => {
+const UserInfoSection = ({ user, vitals }: PatientBannerProps) => {
   const { data } = useStore()
   const vital = useMemo(
-    () => (data && data?.length > 0 ? data?.[0] : null),
+    () => (data && data?.length > 0 ? data?.[0] : vitals ?? null),
     [data],
   )
 

@@ -1,7 +1,6 @@
 import { Text } from '@radix-ui/themes'
 import { getQuickNoteDetailAction } from '@/actions/get-quicknote-detail'
 import { Appointment } from '@/types'
-import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { filterAndSort } from '@/utils'
 import { AddOnWidget } from './add-on-widget'
 import { getBookedAppointmentApi } from './api/booked-appointments-api'
@@ -21,12 +20,7 @@ const AddOnLoader = async ({
   appointmentId,
 }: AddOnLoaderProps) => {
   const [response, appointmentResponse] = await Promise.all([
-    getQuickNoteDetailAction(
-      patientId,
-      [QuickNoteSectionName.Addon],
-      false,
-      appointmentId,
-    ),
+    getQuickNoteDetailAction(patientId, [], false, appointmentId),
     getBookedAppointmentApi(appointment),
   ])
 

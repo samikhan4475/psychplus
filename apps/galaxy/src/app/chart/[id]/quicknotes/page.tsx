@@ -1,5 +1,7 @@
 import { QuickNotesView } from '@/ui/quicknotes'
 
+export const dynamic = 'force-dynamic' // Ensures the component is always fresh
+export const revalidate = 0 // Disables Next.js caching
 interface QuickNotesPageProps {
   params: {
     id: string
