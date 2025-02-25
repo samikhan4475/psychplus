@@ -30,6 +30,7 @@ interface NoteData {
   question: string
   value: number
   options: Option[]
+  headingLabels?: string[]
 }
 
 export type { NoteSectionItem, NoteAccordion, NoteData }

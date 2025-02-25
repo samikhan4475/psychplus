@@ -18,6 +18,7 @@ interface QuestionnairesViewProps {
   labels: string[]
   questions: NoteData[]
   sectionName: NoteSectionName
+  showNumbering?: boolean
 }
 
 const QuestionnairesView = ({
@@ -25,6 +26,7 @@ const QuestionnairesView = ({
   labels,
   questions,
   sectionName,
+  showNumbering = true,
 }: QuestionnairesViewProps) => {
   const { getNoteData } = useNoteStore((state) => ({
     getNoteData: state.getNoteData,
@@ -47,6 +49,7 @@ const QuestionnairesView = ({
         labels={labels}
         sectionName={sectionName}
         content={renderQuestionnaireForm}
+        showNumbering={showNumbering}
       />
     </FormProvider>
   )
@@ -58,6 +61,7 @@ const renderQuestionnaireForm = ({
   sectionName,
   handleSave,
   isEdit,
+  showNumbering,
 }: NoteAccordionContentProps<NoteData>) => (
   <QuestionnaireForm
     labels={labels ?? []}
@@ -65,6 +69,7 @@ const renderQuestionnaireForm = ({
     sectionName={sectionName}
     handleSave={handleSave}
     isEdit={isEdit}
+    showNumbering={showNumbering}
   />
 )
 

@@ -14,6 +14,7 @@ interface NoteAccordionContentProps<T extends NoteSectionItem | NoteData> {
   labels?: T extends NoteData ? string[] : never
   sectionName: NoteSectionName
   isEdit?: boolean
+  showNumbering?: boolean
 }
 
 interface NoteAccordionProps<T extends NoteSectionItem | NoteData> {
@@ -27,8 +28,10 @@ interface NoteAccordionProps<T extends NoteSectionItem | NoteData> {
     handleSave,
     labels,
     isEdit,
+    showNumbering,
   }: NoteAccordionContentProps<T>) => React.ReactNode | undefined
   isEdit?: boolean
+  showNumbering?: boolean
 }
 
 const NoteAccordion = <T extends NoteSectionItem | NoteData>({
@@ -39,6 +42,7 @@ const NoteAccordion = <T extends NoteSectionItem | NoteData>({
   sectionName,
   isCompleted = false,
   isEdit = true,
+  showNumbering = true,
 }: NoteAccordionProps<T>) => {
   const [isOpen, setIsOpen] = useState(false)
 
@@ -87,7 +91,14 @@ const NoteAccordion = <T extends NoteSectionItem | NoteData>({
         </Accordion.Header>
         {isOpen && (
           <Accordion.Content className="rounded-b-2 border-x border-b border-[#DDDDE3] p-4">
-            {content?.({ data, handleSave, labels, sectionName, isEdit })}
+            {content?.({
+              data,
+              handleSave,
+              labels,
+              sectionName,
+              isEdit,
+              showNumbering,
+            })}
           </Accordion.Content>
         )}
       </Accordion.Item>

@@ -25,7 +25,12 @@ interface QuestionnairesFormYBocsProps {
 const YBocsTab = ({ patientId, data }: QuestionnairesFormYBocsProps) => {
   const appointmentId = useSearchParams().get('id') as string
   const totalQuestions = YBOCS_TABLES.length
-  const initialValue = transformIn(data, totalQuestions)
+  const initialValue = transformIn(
+    data.filter(
+      (item) => item.sectionName === QuickNoteSectionName.QuickNoteSectionYbcos,
+    ) || [],
+    totalQuestions,
+  )
   const { totalScore, ...form } = useQuestionnaireForm(
     initialValue,
     totalQuestions,

@@ -22,7 +22,7 @@ const transformIn = (
 }
 
 const transformOut =
-  (patientId: string, appId: string, QuickNoteSectionName: NoteSectionName) =>
+  (patientId: string, QuickNoteSectionName: NoteSectionName) =>
   async (schema: QuestionnaireSchemaType): Promise<NoteSectionItem[]> => {
     const result: NoteSectionItem[] = []
 
@@ -30,7 +30,6 @@ const transformOut =
       if (value !== '') {
         result.push({
           pid: Number(patientId),
-          appId: Number(appId),
           sectionName: QuickNoteSectionName,
           sectionItem: key,
           sectionItemValue: value?.toString() || '',

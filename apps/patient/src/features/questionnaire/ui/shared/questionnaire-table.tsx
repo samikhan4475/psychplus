@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box, Flex, Table, Text } from '@radix-ui/themes'
+import { Box, Flex, Text } from '@radix-ui/themes'
 import { cn } from '@psychplus/ui/cn'
 import { NoteData } from '@/features/note/types'
 import { RadioButton } from './radio-button'
@@ -7,78 +7,89 @@ import { RadioButton } from './radio-button'
 interface QuestionnaireTableProps {
   data: NoteData[]
   labels: string[]
-  classNameHeaderCell?: string
-  classNameCell?: string
   disabled?: boolean
+  showNumbering?: boolean
 }
 
 const QuestionnaireTable = ({
   data,
   labels,
-  classNameHeaderCell,
-  classNameCell,
   disabled = false,
+  showNumbering = true,
 }: QuestionnaireTableProps) => {
   return (
     <Box className="w-full">
-      <Table.Root variant="ghost" size="1">
-        <Table.Header className={cn(classNameHeaderCell && 'bg-[#F7F9FC]')}>
-          <Table.Row className="border-b-0">
-            <Table.ColumnHeaderCell width="50%" pl="0">
-              <Text weight="medium" size="2">
-                {labels?.[0]}
-              </Text>
-            </Table.ColumnHeaderCell>
+      <Flex>
+        <Box className="w-1/2">
+          <Text weight="medium" size="2" className="line-clamp-4">
+            {labels?.[0]}
+          </Text>
+        </Box>
+        {labels?.slice(1).map((label) => (
+          <Box key={label} className="flex-1 justify-center text-center">
+            <Text weight="medium" size="2" className="line-clamp-4">
+              {label}
+            </Text>
+          </Box>
+        ))}
+      </Flex>
 
-            {labels?.slice(1).map((label) => (
-              <Table.ColumnHeaderCell
-                key={label}
-                width={`${50 / (labels.length - 1)}%`}
-                className={`text-center ${classNameHeaderCell}`}
-              >
-                <Text weight="medium" size="2">
-                  {label}
-                </Text>
-              </Table.ColumnHeaderCell>
-            ))}
-          </Table.Row>
-        </Table.Header>
-
-        <Table.Body className="px-7">
-          {data.map((item, index) => (
-            <Table.Row
-              key={item.id}
+      {data.map((item, index) => (
+        <Box key={item.id}>
+          {item.headingLabels && (
+            <Flex
+              my="2"
+              className="w-full bg-[#EEF2F6] px-2 py-1"
               align="center"
-              className={cn(index % 2 === 1 && 'bg-[#F9F9FB]', 'border-0')}
             >
-              <Table.Cell width="50%" className="border-0">
-                <Flex align="center" gap="1">
-                  <Text className="text-[13px]">{index + 1}.</Text>
-                  <Text className="text-[13px]">{item.question}</Text>
-                </Flex>
-              </Table.Cell>
-              {item.options?.map((option, colIndex) => (
-                <Table.Cell
-                  key={`${item.id}-${colIndex}`}
-                  width={`${50 / (labels.length - 1)}%`}
-                  className={classNameCell}
-                >
-                  {option.value && (
-                    <Flex justify="center" align="center">
-                      <RadioButton
-                        className="bg-0 rounded-0 border-0"
-                        field={`${item.id}`}
-                        options={[option]}
-                        disabled={disabled}
-                      />
-                    </Flex>
-                  )}
-                </Table.Cell>
+              <Box className="w-1/2">
+                <Text className="text-center text-[13px]" weight="medium">
+                  {item.headingLabels?.[0]}
+                </Text>
+              </Box>
+              {item.headingLabels?.slice(1)?.map((label) => (
+                <Box key={label} className="flex-1 justify-center text-center">
+                  <Text className="line-clamp-4 text-[13px]" weight="medium">
+                    {label}
+                  </Text>
+                </Box>
               ))}
-            </Table.Row>
-          ))}
-        </Table.Body>
-      </Table.Root>
+            </Flex>
+          )}
+          <Flex
+            className={cn(
+              'items-center border-0 py-2',
+              index % 2 === 1 ? 'bg-[#F9F9FB]' : '',
+            )}
+          >
+            <Box className="w-1/2 pl-2">
+              <Flex gap="1">
+                {showNumbering && (
+                  <Text className="text-[13px]">{index + 1}.</Text>
+                )}
+                <Text
+                  className="text-[13px]"
+                  dangerouslySetInnerHTML={{ __html: item.question }}
+                />
+              </Flex>
+            </Box>
+            {item.options?.map((option, colIndex) => (
+              <Box
+                key={`${item.id}-${colIndex}`}
+                className="flex flex-1 items-center justify-center text-center"
+              >
+                {option.value && (
+                  <RadioButton
+                    field={`${item.id}`}
+                    options={[option]}
+                    disabled={disabled}
+                  />
+                )}
+              </Box>
+            ))}
+          </Flex>
+        </Box>
+      ))}
     </Box>
   )
 }

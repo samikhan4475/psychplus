@@ -51,7 +51,7 @@ const InsuranceFormTrigger = ({
                 insurance.insurancePolicyPriority,
               )}`}
             >
-              {insurance.insurancePolicyPriority}
+              {insurance.insurancePolicyPriority.toLocaleUpperCase()}
             </Text>
           </Flex>
 

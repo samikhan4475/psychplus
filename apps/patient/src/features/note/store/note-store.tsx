@@ -1,6 +1,6 @@
 'use client'
 
-import { createContext, useContext, useRef } from 'react'
+import { createContext, useContext, useEffect, useRef } from 'react'
 import { create, useStore, type StoreApi } from 'zustand'
 import { persist } from 'zustand/middleware'
 import { NoteSectionName } from '../constants'
@@ -45,11 +45,11 @@ const NoteStoreProvider = ({
   notes,
   children,
 }: React.PropsWithChildren<NoteStoreProviderProps>) => {
-  const storeRef = useRef<StoreApi<NoteStore>>()
+  const storeRef = useRef<StoreApi<NoteStore>>(createNoteStore(notes))
 
-  if (!storeRef.current) {
-    storeRef.current = createNoteStore(notes)
-  }
+  useEffect(() => {
+    storeRef.current.setState({ notes })
+  }, [notes])
 
   return (
     <NoteStoreContext.Provider value={storeRef.current}>

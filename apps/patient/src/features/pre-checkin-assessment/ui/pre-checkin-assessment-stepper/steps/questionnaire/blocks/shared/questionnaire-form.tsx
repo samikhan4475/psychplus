@@ -1,5 +1,4 @@
 import React from 'react'
-import { useSearchParams } from 'next/navigation'
 import { NoteFormContainer } from '@/components-v2'
 import { useProfileStore } from '@/features/account/profile/store'
 import { NoteSectionName } from '@/features/note/constants'
@@ -13,8 +12,7 @@ interface QuestionnairesFormProps {
   isEdit?: boolean
   handleSave?: () => void
   sectionName: NoteSectionName
-  classNameHeaderCell?: string
-  classNameCell?: string
+  showNumbering?: boolean
 }
 
 const QuestionnaireForm = ({
@@ -23,31 +21,23 @@ const QuestionnaireForm = ({
   isEdit = true,
   handleSave,
   sectionName,
-  classNameHeaderCell,
-  classNameCell,
+  showNumbering = true,
 }: QuestionnairesFormProps) => {
-  const params = useSearchParams()
-  const appointmentId = params.get('id')
   const { profile } = useProfileStore((state) => ({
     profile: state.profile,
   }))
 
   return (
     <NoteFormContainer
-      getData={transformOut(
-        String(profile.id),
-        String(appointmentId),
-        sectionName,
-      )}
+      getData={transformOut(String(profile.id), sectionName)}
       onSave={handleSave}
       isEdit={isEdit}
     >
       <QuestionnaireTable
         labels={labels}
         data={data}
-        classNameHeaderCell={classNameHeaderCell}
-        classNameCell={classNameCell}
         disabled={!isEdit}
+        showNumbering={showNumbering}
       />
     </NoteFormContainer>
   )
