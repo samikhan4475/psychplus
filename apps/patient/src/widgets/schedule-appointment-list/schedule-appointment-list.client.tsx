@@ -187,7 +187,7 @@ const ScheduleAppointmentListClient = ({
       }
     }
 
-    if (debouncedZipCode) {
+    if (debouncedZipCode && debouncedZipCode.length === 5) {
       fetchZipcodeInfo(debouncedZipCode)
     }
   }, [debouncedZipCode])

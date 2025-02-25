@@ -1,6 +1,6 @@
 'use client'
 
-import { ChangeEvent, useState } from 'react'
+import { ChangeEvent, useRef, useState } from 'react'
 import { zipCodeSchema } from '@psychplus-v2/utils'
 import * as ToggleGroup from '@radix-ui/react-toggle-group'
 import { Button, Flex, Text, TextField } from '@radix-ui/themes'
@@ -137,12 +137,18 @@ const NewPatient = ({ onclose, mapKey }: NewPatientProps) => {
     return `${year}-${month}-${day}`
   }
 
+  const lastZipCode = useRef<string | null>(null)
+
   const handleZipCodeChange = async (event: ChangeEvent<HTMLInputElement>) => {
     const zipCode = event.target.value.slice(0, 5)
+
+    if (lastZipCode.current === zipCode) return
+
     form.setValue('zipCode', zipCode)
     form.setValue('state', '')
 
-    if (zipCode) {
+    if (zipCode.length === 5) {
+      lastZipCode.current = zipCode
       const response = await getZipcodeInfo(zipCode, mapKey)
       const states = response.data
       const options = states.map((state) => {
@@ -312,8 +318,14 @@ const NewPatient = ({ onclose, mapKey }: NewPatientProps) => {
                 placeholder="ZIP Code"
                 data-testid="zip-code-input"
                 {...form.register('zipCode')}
+                onChange={(e) => {
+                  if (e.target.value.length <= 5) {
+                    handleZipCodeChange(e)
+                  }
+                }}
                 className="h-[45px] w-[200px] rounded-6 text-4"
-                onChange={handleZipCodeChange}
+                value={form.watch('zipCode')}
+                maxLength={5}
               />
             </Flex>
             <Flex direction="column" className="font-regular">

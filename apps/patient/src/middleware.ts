@@ -7,6 +7,7 @@ import {
 } from '@psychplus-v2/auth'
 import { API_URL } from '@psychplus-v2/env'
 import { createHeaders } from '@psychplus-v2/headers'
+import { HEADER_PSYCHPLUS_APPLICATION } from '@psychplus/utils/constants'
 
 export const config = {
   matcher: ['/((?!_next/static|_next/image|favicon.ico).*)', { source: '/' }],
@@ -32,6 +33,8 @@ export const middleware = async (request: NextRequest) => {
   }
 
   if (request.nextUrl.pathname.startsWith('/widgets')) {
+    const headers = createHeaders(request.headers)
+    headers.set(HEADER_PSYCHPLUS_APPLICATION, 'p+website-ui')
     // Skip middleware for widget requests.
     return NextResponse.next()
   }

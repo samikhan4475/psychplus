@@ -164,7 +164,8 @@ const ScheduleVisitView = ({ googleAPIkey }: { googleAPIkey: string }) => {
   }, [zipStates])
 
   useEffect(() => {
-    getZipCodeInfoApi(form.watch('zipCode'))
+    const zipcode = form.watch('zipCode')?.trim()
+    getZipCodeInfoApi(zipcode)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [form, form.watch('zipCode')])
 

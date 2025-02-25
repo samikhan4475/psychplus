@@ -27,6 +27,10 @@ import { CrossIcon } from '@/components'
 import { WarningIcon } from '@/components/icons/warning-icon'
 import { useStore } from '@/widgets/schedule-appointment-list/store'
 import { getLoginRedirectUrl } from '@/widgets/schedule-appointment-list/utils'
+import { getCodeSet } from '@psychplus/codeset/api.client'
+import { Code } from '@psychplus/codeset'
+import { Select } from '@psychplus/ui/select'
+import { ChevronDownIcon } from 'lucide-react'
 
 const schema = z
   .object({
@@ -35,6 +39,7 @@ const schema = z
     dateOfBirth: validate.requiredString,
     phoneNumber: validate.phoneNumber,
     email: validate.email,
+    gender:z.string(),
     password: validate.passwordStrong,
     isParentOrGuardian: z.boolean().default(false),
     guardianFirstName: z.string().optional(),
@@ -99,6 +104,16 @@ const PersonalDetailsForm = () => {
   const [alertError, setAlertError] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
   const { publish, subscribe } = usePubsub()
+  const [genders, setGenders] = useState<Code[]>()
+
+  useEffect(() => {
+    getCodeSet('Gender').then((res) => {
+      const genders = res.codes
+      setGenders(genders)
+    }).catch((err) => {
+      console.error(err)
+    })
+  }, [])
 
   useEffect(() => {
     return subscribe<{ code: string }>(`${OTP_DIALOG}:submit`, (data) => {
@@ -139,6 +154,7 @@ const PersonalDetailsForm = () => {
         dateOfBirth: form.getValues().dateOfBirth,
         password: form.getValues().password,
         passwordConfirm: form.getValues().password,
+        gender: form.getValues().gender,
         ...guardianField,
       })
         .then((res) => {
@@ -295,6 +311,32 @@ const PersonalDetailsForm = () => {
           </Flex>
 
           <Flex className="flex-col sm:flex-row" gap="4">
+          <Flex direction="column" gap="1" className="w-full">
+              <Text>Gender</Text>
+              <Select.Root
+                size="3"
+                {...form.register('gender')}
+                value={form.watch('gender')}
+                onValueChange={(value) => {
+                  form.setValue('gender', value)
+                }}
+              >
+                <Select.Trigger
+                  placeholder={"Select gender"}
+                  className="h-14 w-full whitespace-nowrap rounded-[4px] border border-[#b9bbc6] px-[10px] py-2 text-[16px] font-regular text-[#1c2024] placeholder-[#1C2024]"
+                >
+                  {form.watch('gender') ? form.watch('gender') : 'Select gender'}
+                  <ChevronDownIcon className="absolute right-3 top-1/2 -translate-y-1/2 transform" />
+                </Select.Trigger>
+                <Select.Content align="end" position="popper" highContrast>
+                  {genders?.map((gender) => (
+                    <Select.Item key={gender.code} value={gender.code}>
+                      <Text size="4">{gender.display}</Text>
+                    </Select.Item>
+                  ))}
+                </Select.Content>
+              </Select.Root>
+            </Flex>
             <Flex direction="column" gap="1" className="w-full">
               <Text>Date of birth</Text>
               <FormTextInput
