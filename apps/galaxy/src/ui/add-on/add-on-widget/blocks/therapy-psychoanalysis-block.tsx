@@ -62,7 +62,7 @@ const TherapyPsychoAnalysisBlock = ({
               <TherapyTimeSpentBlock />
               <TherapySessionParticipantsBlock />
               <TherapyTableBlock />
-              <AdditionalTherapyDetailBlock otherData={otherData} />
+              <AdditionalTherapyDetailBlock otherData={otherData} required />
             </>
           )}
           {therapyPsychoanalysis === 'psychoanalysis' && (

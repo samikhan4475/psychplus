@@ -10,13 +10,15 @@ import { QuickNoteSectionItem } from '@/types'
 
 interface AdditionalTherapyDetailBlockProps {
   otherData?: QuickNoteSectionItem[]
+  required?: boolean
 }
 const AdditionalTherapyDetailBlock = ({
   otherData,
+  required,
 }: AdditionalTherapyDetailBlockProps) => {
   return (
     <FormFieldContainer className="flex flex-grow flex-row items-start justify-start">
-      <BlockLabel className="flex-none self-start" required>
+      <BlockLabel className="flex-none self-start" required={required}>
         Additional Therapy Details
       </BlockLabel>
       <Flex className="w-full max-w-full flex-grow flex-col">

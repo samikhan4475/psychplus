@@ -41,8 +41,7 @@ export const transformIn = (
     therapySessionParticipants: '',
     therapyDetailsModality: [],
     therapyDetailsInterventions: [],
-    additionalTherapyDetail:
-      'Provider observed ongoing distortions within the couples/family unit, indicating a strong projection of misplaced feelings among one another.  Provider engaged in further exploration with the family to gain insight regarding their family unit’s ongoing relationships and reactions, to include maladaptive beliefs, behaviors and assumptions that may be associated with their unrealistic expectations for one another.  The provider encouraged clear and concise communication among all members present to facilitate a better understanding and expectation for one another.  Continued exploration of irrational beliefs, thoughts and behaviors is recommended to further analyze and process all types and directions of transference present within the family system. ',
+    additionalTherapyDetail: '',
   }
 
   return transformInHelper(value, defaultSchema)

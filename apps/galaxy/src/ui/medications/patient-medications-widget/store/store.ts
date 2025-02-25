@@ -81,7 +81,7 @@ const useStore = create<StoreState>((set, get) => ({
       if (response.state === 'success') {
         set({ scriptSureSessionToken: response.data });
       } else {
-        toast.error('Failed to fetch session token');
+        toast.error(response.error ?? 'Failed to fetch scriptsure session token');
       }
   },
 

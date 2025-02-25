@@ -51,10 +51,8 @@ const TherapySchema = z
       .min(1, { message: 'Interventions must be selected.' }),
     additionalTherapyDetail: z
       .string()
-      .min(1, {
-        message: 'Additional details for Therapy must be provided.',
-      })
-      .max(4000, 'Max 4000 characters are allowed'),
+      .max(4000, 'Max 4000 characters are allowed')
+      .optional(),
   })
   .superRefine((data, ctx) => {
     if (data.therapyTimeSpent === 'timeRangeOne' && !data.timeRangeOne) {
