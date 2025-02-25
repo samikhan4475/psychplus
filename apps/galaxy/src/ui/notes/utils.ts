@@ -5,7 +5,7 @@ const getAuthorName = (note: PatientNotes) => {
   const {
     signedByUserId,
     signedByUserName,
-    coSignedDate,
+    cosignedDate,
     signedDate,
     cosignedByUserName,
   } = note
@@ -14,23 +14,23 @@ const getAuthorName = (note: PatientNotes) => {
     ? `${createdByFullName} (as the scribe)`
     : ''
 
-  const coSignedText = coSignedDate ? `, ${cosignedByUserName || ''}` : ''
+  const coSignedText = cosignedDate ? `, ${cosignedByUserName || ''}` : ''
   const signedName = signedDate ? `, ${signedByUserName || ''}` : ''
   const pendingText = signedDate ? '' : '"Pending"'
 
   if (createdBy === signedByUserId) {
-    return coSignedDate
+    return cosignedDate
       ? `${signedByUserName || ''}${coSignedText}`
       : signedByUserName || ''
   }
 
   if (signedDate) {
-    return coSignedDate
+    return cosignedDate
       ? `${cssNameText}${signedName}${coSignedText}`
       : `${cssNameText}${signedName}`
   }
 
-  return coSignedDate
+  return cosignedDate
     ? `${cssNameText}${pendingText}${coSignedText}`
     : `${cssNameText}, ${pendingText}`
 }

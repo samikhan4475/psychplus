@@ -17,7 +17,7 @@ interface PatientNotes {
   signedBy: string
   signedDate: string
   cosignedByUserName: string
-  coSignedDate: string
+  cosignedDate: string
   visitType: string
   visitSequence: string
   visitMedium: string

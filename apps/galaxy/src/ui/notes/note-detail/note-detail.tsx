@@ -3,6 +3,7 @@ import { Box, Flex, Heading, Separator, Text } from '@radix-ui/themes'
 import { format } from 'date-fns'
 import { LoadingPlaceholder } from '@/components/loading-placeholder'
 import { PsychiatricEvaluation } from '@/ui/quicknotes/actual-note-view/psychiatric-evaluation'
+import { convertToTimeZoneDate } from '@/utils'
 import { useStore } from '../store'
 import { groupBySectionName } from '../utils'
 import { CreateNoteDetailView } from './create-note-detail-view'
@@ -101,7 +102,16 @@ const NoteDetail = ({ children }: PropsWithChildren) => {
       {selectedRow?.metadata?.createdOn && (
         <Heading size="3" my="1" weight="medium">
           E-Signed by: {selectedRow?.signedByUserName}, at{' '}
-          {format(new Date(selectedRow.metadata.createdOn), 'MM/dd/yyyy HH:mm')}
+          {format(new Date(selectedRow.metadata.createdOn), 'MM/dd/yyyy')}
+        </Heading>
+      )}
+      {selectedRow?.cosignedDate && (
+        <Heading size="3" my="1" weight="medium">
+          E-Signed by Co-Signer: {selectedRow?.cosignedByUserName}, at{' '}
+          {convertToTimeZoneDate(
+            selectedRow.cosignedDate,
+            selectedRow.locationTimeZone ?? '',
+          )}
         </Heading>
       )}
     </Flex>
