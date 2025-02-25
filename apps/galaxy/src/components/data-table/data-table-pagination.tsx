@@ -1,6 +1,6 @@
 'use client'
 
-import { Button, Flex } from '@radix-ui/themes'
+import { Button, Flex, Text } from '@radix-ui/themes'
 import { DOTS, usePagination } from '@/hooks/use-pagination'
 import { cn } from '@/utils'
 
@@ -10,6 +10,7 @@ interface DataTablePaginationProps {
   pageSize: number // number of items per page
   loading: boolean
   page: number
+  showTotal?: boolean
   next: () => void
   prev: () => void
   jumpToPage: (page: number) => void
@@ -21,6 +22,7 @@ const DataTablePagination = ({
   loading,
   page,
   pageSize,
+  showTotal = false,
   next,
   prev,
   jumpToPage,
@@ -49,6 +51,7 @@ const DataTablePagination = ({
       justify="end"
       className={cn('border-pp-gray-2 h-12 border', className)}
     >
+      {showTotal && <Text className='text-[14px] px-1'>TOTAL: {total}</Text>}
       <PaginationButton onClick={prev} disabled={!hasPrev || loading}>
         Previous
       </PaginationButton>

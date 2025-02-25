@@ -1,6 +1,7 @@
+import { Flex, Text } from '@radix-ui/themes'
 import { DataTablePagination } from '@/components'
-import { useStore } from './store'
 import { SCHEDULER_PAGE_SIZE_LIMIT } from '../constants'
+import { useStore } from './store'
 
 const ListViewPagination = () => {
   const { loading, page, total, next, prev, jumpToPage } = useStore(
@@ -16,6 +17,7 @@ const ListViewPagination = () => {
   return (
     <DataTablePagination
       total={total}
+      showTotal
       loading={loading ?? false}
       page={page}
       pageSize={SCHEDULER_PAGE_SIZE_LIMIT}
