@@ -42,8 +42,8 @@ const useCodesetStore = <T,>(selector: (store: CodesetStore) => T): T => {
 
 const useCodesetCodes = (name: string) => {
   const codesetCache = useCodesetStore((state) => state.codesets)
-  const key = name.includes('.') ? name.split('.')[1] : name
-  return codesetCache[key].codes ?? []
+  const key = name?.includes('.') ? name.split('.')[1] : name
+  return codesetCache[key]?.codes ?? []
 }
 
 const useCodeDisplay = (codeSet: string, code?: string) => {

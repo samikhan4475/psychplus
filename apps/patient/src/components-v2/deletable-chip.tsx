@@ -18,7 +18,7 @@ const DeletableChip = ({
   return (
     <Flex
       className={cn(
-        'bg-pp-table-subRows border-pp-table-subRows rounded-full h-fit border pl-1.5 pr-1',
+        'bg-pp-gray-4 border-pp-gray-4 rounded-item h-fit border pl-1.5 pr-1 mx-1',
         className,
       )}
       onClick={(e) => e.stopPropagation()}

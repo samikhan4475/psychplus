@@ -33,6 +33,7 @@ interface ToggleableFormProps<T extends FieldValues, Response> {
   triggerClassName?: string
   onFormClose?: () => void
   isEdit?: boolean
+  isComponentClose?: boolean
   isExternalSavePressed?: boolean
 }
 
@@ -52,6 +53,7 @@ const ToggleableForm = <T extends FieldValues, R>({
   onFormClose,
   isEdit = true,
   isExternalSavePressed = false,
+  isComponentClose = true,
 }: React.PropsWithChildren<ToggleableFormProps<T, R>>) => {
   const { toast } = useToast()
   const [open, setOpen] = useState(!trigger)
@@ -83,7 +85,7 @@ const ToggleableForm = <T extends FieldValues, R>({
     }
 
     if (result.state === 'success') {
-      if (isEdit) setOpen(false)
+      if (isEdit && isComponentClose) setOpen(false)
       form.reset(noResetValues ? undefined : form.getValues())
 
       if (toastData) {

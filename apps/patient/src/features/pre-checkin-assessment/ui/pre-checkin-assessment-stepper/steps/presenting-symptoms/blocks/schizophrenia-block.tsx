@@ -1,67 +1,73 @@
+'use client'
+
 import React from 'react'
 import { Flex, Text } from '@radix-ui/themes'
+import { useFormContext } from 'react-hook-form'
 import PillBlock from '../../../shared-blocks/pill-block'
 
-const schizophreniaBlock = [
+const BLOCK_TITLE = 'Schizophrenia'
+
+const SCHIZOPHRENIA_BLOCK_OPTIONS = [
   {
-    id: 51,
-    name: 'Paranoid delusions',
-    isSelected: false,
+    label: 'Delusion',
+    value: 'schDelusion',
   },
   {
-    id: 52,
-    name: 'auditory hallucinations',
-    isSelected: true,
+    label: 'Hallucination',
+    value: 'schHallucination',
   },
   {
-    id: 53,
-    name: 'disorganized',
-    isSelected: false,
+    label: 'Disorganized',
+    value: 'schDisorganized',
   },
   {
-    id: 54,
-    name: 'anhedonia',
-    isSelected: false,
+    label: 'Anhedonia',
+    value: 'schAnhedonia',
   },
   {
-    id: 55,
-    name: 'avolution',
-    isSelected: false,
+    label: 'Avolition',
+    value: 'schAvolition',
   },
   {
-    id: 56,
-    name: 'catatonia',
-    isSelected: false,
+    label: 'Catatonia',
+    value: 'schCatatonia',
   },
   {
-    id: 57,
-    name: 'suicidal thoughts',
-    isSelected: false,
+    label: 'Suicidal Thoughts',
+    value: 'schSuicidalThoughts',
   },
   {
-    id: 58,
-    name: 'homicidal thoughts',
-    isSelected: false,
+    label: 'Homicidal Thoughts',
+    value: 'schHomicidalThoughts',
   },
 ]
 
 const SchizophreniaBlock = () => {
+  const { watch } = useFormContext()
+  const selected: string[] = watch('schizophrenia') || []
+
   return (
     <Flex className="w-full" direction="column" gap="2" justify="start">
       <Text className="text-[16px] font-medium text-[#151B4A] lg:text-[18px]">
-        Schizophrenia
+        {BLOCK_TITLE}
       </Text>
-      <Flex gap="3" wrap={'wrap'}>
-        {schizophreniaBlock.map((issue) => (
-          <PillBlock
-            data={issue}
-            fontSize={'14px'}
-            rounded={2}
-            key={issue.name}
-            fontWeight="light"
-            bgColor="pp-gray-5"
-          />
-        ))}
+      <Flex gap="3" wrap="wrap">
+        {SCHIZOPHRENIA_BLOCK_OPTIONS.map((option) => {
+          const isSelected = selected.includes(option.value)
+          return (
+            <PillBlock
+              key={option.value}
+              data={option}
+              isSelected={isSelected}
+              fontSize="14px"
+              rounded={2}
+              fontWeight="light"
+              bgColor="pp-gray-5"
+              formField="schizophrenia"
+              complaintValue="ccSchizophrenia"
+            />
+          )
+        })}
       </Flex>
     </Flex>
   )

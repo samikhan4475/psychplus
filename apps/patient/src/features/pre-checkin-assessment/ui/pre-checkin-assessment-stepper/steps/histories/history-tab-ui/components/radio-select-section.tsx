@@ -6,7 +6,7 @@ import * as RadioGroup from '@radix-ui/react-radio-group'
 import { Flex, Text } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
 import { BlockDescription } from './block-description'
-import { BlockLabel } from './block-label'
+import { BlockLabel } from '@/components-v2/block-label'
 
 interface RadioSelectSectionProps {
   label?: string

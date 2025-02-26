@@ -5,31 +5,30 @@ import { Flex, Text } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
 import PillBlock from '../../../shared-blocks/pill-block'
 
-const dementiaOptions = [
-  { label: 'Memory Loss', value: 'demMemoryLoss' },
-  { label: 'Confusion', value: 'demConfusion' },
-  {
-    label: 'Difficulty with Activities of Daily Living',
-    value: 'demDifficultyWithAdls',
-  },
-  { label: 'Wandering', value: 'demWandering' },
-  { label: 'Agitation', value: 'demAgitation' },
-  { label: 'Auditory Hallucinations', value: 'demAh' },
-  { label: 'Visual Hallucinations', value: 'demVh' },
-  { label: 'Parkinson Symptoms', value: 'demParkinsonSymptoms' },
-]
+const autismData = {
+  title: 'Autism',
+  options: [
+    { label: 'Delayed Milestones', value: 'autDelayedMilestones' },
+    { label: 'Repetitive/Restrictive Behaviors', value: 'autRepetitive' },
+    { label: 'Regression', value: 'autRegression' },
+    { label: 'Social/Communication Issues', value: 'autSocial' },
+    { label: 'Aversions/Special Interests', value: 'autAversions' },
+    { label: 'Masking', value: 'autMasking' },
+    { label: 'Emotional Dysregulations', value: 'autEmotionalDysregulation' },
+  ],
+}
 
-const DementiaBlock = () => {
+const AutismBlock = () => {
   const { watch } = useFormContext()
-  const selected: string[] = watch('dementia') || []
+  const selected: string[] = watch('autism') || []
 
   return (
     <Flex className="w-full" direction="column" gap="2" justify="start">
       <Text className="text-[16px] font-medium text-[#151B4A] lg:text-[18px]">
-        Dementia
+        {autismData.title}
       </Text>
       <Flex gap="3" wrap="wrap">
-        {dementiaOptions.map((option) => {
+        {autismData.options.map((option) => {
           const isSelected = selected.includes(option.value)
           return (
             <PillBlock
@@ -40,8 +39,8 @@ const DementiaBlock = () => {
               rounded={2}
               fontWeight="light"
               bgColor="pp-gray-5"
-              formField="dementia"
-              complaintValue="ccDementia"
+              formField="autism"
+              complaintValue="ccAutism"
             />
           )
         })}
@@ -50,4 +49,4 @@ const DementiaBlock = () => {
   )
 }
 
-export default DementiaBlock
+export default AutismBlock

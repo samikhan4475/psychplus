@@ -1,77 +1,49 @@
+'use client'
+
 import React from 'react'
 import { Flex, Text } from '@radix-ui/themes'
+import { useFormContext } from 'react-hook-form'
 import PillBlock from '../../../shared-blocks/pill-block'
 
-const anxietyBlock = [
-  {
-    id: 11,
-    name: 'Feeling Anxious',
-    isSelected: false,
-  },
-  {
-    id: 12,
-    name: 'Worrying',
-    isSelected: true,
-  },
-  {
-    id: 13,
-    name: 'Restless',
-    isSelected: false,
-  },
-  {
-    id: 14,
-    name: 'Fatigue',
-    isSelected: false,
-  },
-  {
-    id: 15,
-    name: 'Muscle Tension',
-    isSelected: false,
-  },
-  {
-    id: 16,
-    name: 'Irritable',
-    isSelected: false,
-  },
-  {
-    id: 17,
-    name: 'Social anxiety',
-    isSelected: false,
-  },
-  {
-    id: 18,
-    name: 'panic attacks',
-    isSelected: false,
-  },
-  {
-    id: 19,
-    name: 'abnormal fears',
-    isSelected: false,
-  },
-  {
-    id: 20,
-    name: 'Phobia',
-    isSelected: false,
-  },
+const anxietyOptions = [
+  { label: 'Feeling Anxious', value: 'anxFeelingAnxious' },
+  { label: 'Worrying', value: 'anxWorrying' },
+  { label: 'Restless', value: 'anxRestless' },
+  { label: 'Fatigue', value: 'anxFatigue' },
+  { label: 'Muscle Tension', value: 'anxMuscleTension' },
+  { label: 'Irritable', value: 'anxIrritable' },
+  { label: 'Social Anxiety', value: 'anxSocialAnxiety' },
+  { label: 'Panic Attacks', value: 'anxPanicAttacks' },
+  { label: 'Phobia', value: 'anxPhobia' },
+  { label: 'Abnormal Fear', value: 'anxAbnormalFear' },
 ]
 
 const AnxietyBlock = () => {
+  const { watch } = useFormContext()
+  const selected: string[] = watch('anxiety') || []
+
   return (
     <Flex className="w-full" direction="column" gap="2" justify="start">
       <Text className="text-[16px] font-medium text-[#151B4A] lg:text-[18px]">
         Anxiety
       </Text>
-      <Flex gap="3" wrap={'wrap'}>
-        {anxietyBlock.map((issue) => (
-          <PillBlock
-            data={issue}
-            fontSize={'14px'}
-            rounded={2}
-            key={issue.name}
-            fontWeight="light"
-            bgColor="pp-gray-5"
-          />
-        ))}
+      <Flex gap="3" wrap="wrap">
+        {anxietyOptions.map((option) => {
+          const isSelected = selected.includes(option.value)
+          return (
+            <PillBlock
+              key={option.value}
+              data={option}
+              isSelected={isSelected}
+              fontSize="14px"
+              rounded={2}
+              fontWeight="light"
+              bgColor="pp-gray-5"
+              formField="anxiety"
+              complaintValue="ccAnxiety"
+            />
+          )
+        })}
       </Flex>
     </Flex>
   )

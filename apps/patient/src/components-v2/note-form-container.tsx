@@ -13,12 +13,14 @@ type NoteFormContainerProps = React.PropsWithChildren<{
   getData: (schema: any) => NoteSectionItem[] | Promise<NoteSectionItem[]>
   onSave?: () => void
   isEdit?: boolean
+  isComponentClose?: boolean
 }>
 
 const NoteFormContainer = ({
   getData,
   onSave,
   isEdit,
+  isComponentClose,
   children,
 }: NoteFormContainerProps) => {
   const { toast } = useToast()
@@ -50,6 +52,7 @@ const NoteFormContainer = ({
       onFormClose={onSave}
       onSuccess={onSuccess}
       isEdit={isEdit}
+      isComponentClose={isComponentClose}
     >
       {children}
     </ToggleableForm>

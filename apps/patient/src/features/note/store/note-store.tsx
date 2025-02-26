@@ -51,6 +51,10 @@ const NoteStoreProvider = ({
     storeRef.current.setState({ notes })
   }, [notes])
 
+  useEffect(() => {
+    (storeRef.current as StoreApi<NoteStore>).getState().setNotes(notes)
+  }, [notes])
+
   return (
     <NoteStoreContext.Provider value={storeRef.current}>
       {children}

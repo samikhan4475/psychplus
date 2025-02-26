@@ -1,65 +1,132 @@
+'use client'
+
 import React from 'react'
 import { Flex, Text } from '@radix-ui/themes'
+import { useFormContext } from 'react-hook-form'
 import PillBlock from '../../../shared-blocks/pill-block'
 
-const complaints = [
+type DetailsType = 'text'
+
+interface GroupSelectOption<T> {
+  label: string
+  value: T
+  fieldName?: string
+  details?: {
+    type: DetailsType
+    field: string
+    maxLength: number
+  }
+}
+
+const complaintsList: GroupSelectOption<string>[] = [
   {
-    name: 'Depression',
-    isSelected: true,
+    label: 'Depression',
+    value: 'ccDepression',
+    fieldName: 'depression',
   },
   {
-    name: 'Anxiety',
-    isSelected: true,
+    label: 'Anxiety',
+    value: 'ccAnxiety',
+    fieldName: 'anxiety',
   },
   {
-    name: 'ADHD',
-    isSelected: false,
+    label: 'Bipolar/Mania',
+    value: 'ccBipolar/Mania',
+    fieldName: 'bipolarMania',
   },
   {
-    name: 'Dementia',
-    isSelected: false,
+    label: 'PTSD',
+    value: 'ccPtsd',
+    fieldName: 'ptsd',
   },
   {
-    name: 'OCD',
-    isSelected: false,
+    label: 'Obsession/OCD',
+    value: 'ccObsession',
+    fieldName: 'obsession',
   },
   {
-    name: 'PTSD',
-    isSelected: true,
+    label: 'BPD',
+    value: 'ccBpd',
+    fieldName: 'bpd',
   },
   {
-    name: 'Bipolar',
-    isSelected: false,
+    label: 'Substance',
+    value: 'ccSubstance',
+    fieldName: 'substance',
   },
   {
-    name: 'Compulsion',
-    isSelected: true,
+    label: 'ADHD Inattentive',
+    value: 'ccAdhdi',
+    fieldName: 'adhdInattentive',
   },
   {
-    name: 'Schizophrenia',
-    isSelected: true,
+    label: 'ADHD Hyperactive',
+    value: 'ccAdhdh',
+    fieldName: 'adhdHyperactive',
+  },
+  {
+    label: 'Autism',
+    value: 'ccAutism',
+    fieldName: 'autism',
+  },
+  {
+    label: 'Conduct Disorder',
+    value: 'ccConductDisorder',
+    fieldName: 'conductDisorder',
+  },
+  {
+    label: 'Dementia',
+    value: 'ccDementia',
+    fieldName: 'dementia',
+  },
+  {
+    label: 'Schizophrenia',
+    value: 'ccSchizophrenia',
+    fieldName: 'schizophrenia',
+  },
+  {
+    label: 'Medication SE',
+    value: 'ccMedicationSe',
+    fieldName: 'medicationSe',
+  },
+  {
+    label: 'Other',
+    value: 'ccOther',
+    details: {
+      type: 'text',
+      field: 'ccOtherDetails',
+      maxLength: 500,
+    },
   },
 ]
 
 const Complaints = () => {
+  const { watch } = useFormContext()
+  const selectedComplaints: string[] = watch('chiefComplaint') || []
+
   return (
-    <>
-      <Text className="text-[16px] font-medium capitalize text-[#151B4A] lg:text-[18px]">
+    <Flex>
+      <Text className="w-32 text-[16px] font-medium capitalize text-[#151B4A] lg:text-[18px]">
         Chief Complaint
       </Text>
-      <Flex gap="3" className="overflow-x-auto">
-        {complaints.map((complaint) => (
-          <PillBlock
-            key={complaint.name}
-            data={complaint}
-            fontSize={'16px'}
-            rounded={6}
-            fontWeight="medium"
-            bgColor="none"
-          />
-        ))}
+      <Flex wrap="wrap" gap="3">
+        {complaintsList.map((option) => {
+          const isSelected = selectedComplaints.includes(option.value)
+          return (
+            <PillBlock
+              key={option.value}
+              data={option}
+              isSelected={isSelected}
+              fontSize="14px"
+              rounded={6}
+              fontWeight="medium"
+              bgColor="none"
+              formField="chiefComplaint"
+            />
+          )
+        })}
       </Flex>
-    </>
+    </Flex>
   )
 }
 

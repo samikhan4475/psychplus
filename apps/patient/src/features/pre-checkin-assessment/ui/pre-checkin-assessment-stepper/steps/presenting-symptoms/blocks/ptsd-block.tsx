@@ -1,77 +1,49 @@
+'use client'
+
 import React from 'react'
 import { Flex, Text } from '@radix-ui/themes'
+import { useFormContext } from 'react-hook-form'
 import PillBlock from '../../../shared-blocks/pill-block'
 
-const ptsdBlock = [
-  {
-    id: 31,
-    name: 'traumatic event',
-    isSelected: false,
-  },
-  {
-    id: 32,
-    name: 'intrusive memories',
-    isSelected: true,
-  },
-  {
-    id: 33,
-    name: 'nightmares',
-    isSelected: false,
-  },
-  {
-    id: 34,
-    name: 'night terrors',
-    isSelected: false,
-  },
-  {
-    id: 35,
-    name: 'flashbacks',
-    isSelected: false,
-  },
-  {
-    id: 36,
-    name: 'dissociative episodes',
-    isSelected: false,
-  },
-  {
-    id: 37,
-    name: 'hyper vigilance',
-    isSelected: false,
-  },
-  {
-    id: 38,
-    name: 'avoidance',
-    isSelected: false,
-  },
-  {
-    id: 39,
-    name: 'startled',
-    isSelected: false,
-  },
-  {
-    id: 40,
-    name: 'detachment',
-    isSelected: false,
-  },
+const ptsdOptions = [
+  { label: 'Traumatic Event', value: 'ptsTraumaticEvent' },
+  { label: 'Intrusive Memories', value: 'ptsIntrusiveMemories' },
+  { label: 'Nightmares', value: 'ptsNightmares' },
+  { label: 'Night Terrors', value: 'ptsNightTerrors' },
+  { label: 'Flashbacks', value: 'ptsFlashbacks' },
+  { label: 'Dissociative Episodes', value: 'ptsDissociativeEpisodes' },
+  { label: 'Hypervigilance', value: 'ptsHypervigilance' },
+  { label: 'Avoidance', value: 'ptsAvoidance' },
+  { label: 'Startled', value: 'ptsStartled' },
+  { label: 'Detachment', value: 'ptsDetachment' },
 ]
 
 const PtsdBlock = () => {
+  const { watch } = useFormContext()
+  const selected: string[] = watch('ptsd') || []
+
   return (
     <Flex className="w-full" direction="column" gap="2" justify="start">
       <Text className="text-[16px] font-medium text-[#151B4A] lg:text-[18px]">
         PTSD
       </Text>
-      <Flex gap="3" wrap={'wrap'}>
-        {ptsdBlock.map((issue) => (
-          <PillBlock
-            data={issue}
-            fontSize={'14px'}
-            rounded={2}
-            key={issue.name}
-            fontWeight="light"
-            bgColor="pp-gray-5"
-          />
-        ))}
+      <Flex gap="3" wrap="wrap">
+        {ptsdOptions.map((option) => {
+          const isSelected = selected.includes(option.value)
+          return (
+            <PillBlock
+              key={option.value}
+              data={option}
+              isSelected={isSelected}
+              fontSize="14px"
+              rounded={2}
+              fontWeight="light"
+              bgColor="pp-gray-5"
+              formField="ptsd"
+              complaintValue='ccPtsd'
+            />
+          )
+        })}
       </Flex>
     </Flex>
   )

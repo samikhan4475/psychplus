@@ -1,8 +1,8 @@
 'use client'
 
 import { useFormContext } from 'react-hook-form'
-import { SelectableChip } from './selectable-chip'
-import { SelectableChipDetails } from './selectable-chip-details'
+import { SelectableChip } from '@/components-v2/selectable-chip'
+import { SelectableChipDetails } from '@/components-v2/selectable-chip-details'
 
 type SelectableChipProps = Omit<
   React.ComponentProps<typeof SelectableChip>,

@@ -1,5 +1,5 @@
+import { MultiSelectChip } from '@/components-v2/multi-select-chip'
 import React from 'react'
-import { MultiSelectChip } from '../../components/multi-select-chip'
 
 const RELATIONSHIP_OPTIONS = [
   { label: 'Parent', value: 'parent' },

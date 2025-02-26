@@ -1,7 +1,7 @@
 import React from 'react'
 import { Box, Flex } from '@radix-ui/themes'
-import { SelectableChipDetailsProps } from '../../components/selectable-chip-details'
 import { SingleSelectChip } from '../../components/single-select-chip'
+import { SelectableChipDetailsProps } from '@/components-v2/selectable-chip-details'
 
 const BLOCK_OPTIONS: {
   label: string

@@ -1,5 +1,6 @@
+import { SelectInput } from '@/components-v2/select-input'
 import { Box, Flex, Text } from '@radix-ui/themes'
-import { SelectInput } from '../components/select-input'
+
 
 const SMOKING_CESSATION_OPTIONS = [
   { label: 'Nicotine Replacement', value: 'nicotine' },
