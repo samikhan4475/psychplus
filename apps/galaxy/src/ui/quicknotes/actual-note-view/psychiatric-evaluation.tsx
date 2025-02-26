@@ -4,11 +4,7 @@ import { CODESETS } from '@/constants'
 import { useCodesetCodes, useCodesetOptions } from '@/hooks'
 import { Appointment, PatientProfile } from '@/types'
 import { convertToTimezone } from '@/ui/visit/utils'
-import {
-  getPatientFullName,
-  getSlashedDateString,
-  getSlashedPaddedDateString,
-} from '@/utils'
+import { getPatientFullName, getSlashedPaddedDateString } from '@/utils'
 import { useStore } from '../store'
 import { BlockContainer, LabelAndValue } from './shared'
 
@@ -40,30 +36,31 @@ const PsychiatricEvaluation = ({ appointment, patient }: Props) => {
   return (
     <BlockContainer heading={appointment.visitNoteTitle ?? ''}>
       <LabelAndValue label="Title:" value={appointment.visitNoteTitle} />
-      <LabelAndValue label="Visit Type:" value={appointment?.visitType} />
       <LabelAndValue
-        label="Visit Sequence:"
-        value={appointment.visitSequence}
+        label="Visit Type:"
+        value={`${appointment?.visitType} | ${appointment?.visitSequence} | ${appointment?.type}`}
       />
       <LabelAndValue label="Provider Type:" value={providerTypeLabel} />
-      <LabelAndValue label="Visit Medium:" value={appointment.type} />
       <LabelAndValue label="Provider:" value={appointment.providerName} />
       <LabelAndValue label="Cosigner:" value={cosignerLabel ?? ''} />
-      <LabelAndValue label="Location:" value={appointment.locationName} />
-      <LabelAndValue label="Service:" value={service} />
-      <LabelAndValue label="Date:" value={getSlashedPaddedDateString(date)} />
-      <LabelAndValue label="Time:" value={time} />
-      <LabelAndValue label="Duration:" value={`${appointment.duration} mins`} />
-      <LabelAndValue label="Visit #:" value={appointment.encounterNumber} />
       <LabelAndValue
-        label="Patient:"
+        label="Location/Service:"
+        value={`${appointment.locationName} | ${service}`}
+      />
+      <LabelAndValue
+        label="Date/Time:"
+        value={`${getSlashedPaddedDateString(date)} ${time}`}
+      />
+      <LabelAndValue label="Duration:" value={`${appointment.duration} mins`} />
+      <LabelAndValue
+        label="Patient Name:"
         value={getPatientFullName(patient?.legalName)}
       />
       <LabelAndValue
         label="DOB:"
-        value={getSlashedPaddedDateString(patient.birthdate as string, true)}
+        value={getSlashedPaddedDateString(patient.birthdate, true)}
       />
-      <LabelAndValue label="MRN:" value={patient.medicalRecordNumber} />
+      <LabelAndValue label="Visit ID:" value={appointment.encounterNumber} />
     </BlockContainer>
   )
 }
