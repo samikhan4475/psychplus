@@ -1,6 +1,7 @@
 'use client'
 
 import { PropsWithChildren, useEffect, useRef, useState } from 'react'
+import { cn } from '@psychplus-v2/utils'
 import { ChevronDownIcon, Cross2Icon } from '@radix-ui/react-icons'
 import {
   Box,
@@ -11,8 +12,7 @@ import {
   Text,
 } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
-import { cn } from '@psychplus-v2/utils'
-import { FormFieldContainer } from '@/components-v2'
+import { FormFieldContainer } from './form'
 
 interface MultiSelectOption {
   value: string
@@ -37,7 +37,7 @@ const getDisplayLabel = (
 ) => {
   if (selectedValues.length === 1) {
     return (
-      <Box className="truncate inline">
+      <Box className="inline truncate">
         {options.find((option) => option.value === selectedValues[0])?.label ??
           ''}
       </Box>
@@ -129,9 +129,10 @@ const MultiSelectField = ({
           >
             <Button
               color="gray"
+              radius="medium"
               variant="outline"
               className={cn(
-                'text-black !bg-white border-pp-gray-2 relative flex h-6 w-full cursor-default items-center !justify-between border border-solid px-1.5 pr-5 [box-shadow:none]',
+                'text-black !bg-white relative flex h-5 w-full cursor-default items-center !justify-between border border-solid border-gray-8 px-1.5 pr-5 [box-shadow:none]',
                 {
                   '!bg-pp-states-disabled': disable,
                 },
@@ -159,13 +160,13 @@ const MultiSelectField = ({
         </Box>
         <DropdownMenu.Content
           className={cn(
-            `w-full min-w-[100px] rounded-1 shadow-3 [&__.rt-BaseMenuViewport]:p-2`,
+            `w-full min-w-max max-w-[100vw] rounded-1 shadow-3 [&__.rt-BaseMenuViewport]:p-2`,
             menuClassName,
           )}
           style={{
-            minWidth: ref?.current?.clientWidth,
+            width: ref?.current?.clientWidth,
           }}
-          align="start"
+          align="center"
         >
           {!options?.length ? (
             <DropdownMenu.Item

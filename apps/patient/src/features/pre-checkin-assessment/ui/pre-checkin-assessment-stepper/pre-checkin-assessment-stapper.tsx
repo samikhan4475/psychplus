@@ -14,7 +14,7 @@ import { PreCheckinAssessmentFooter } from '../pre-checkin-assessment-footer'
 import { PreCheckinAssessmentHeader } from '../pre-checkin-assessment-header'
 import {
   AllergiesAndMedications,
-  Histories,
+  HistoriesView,
   InsuranceView,
   PatientInfo,
   PaymentView,
@@ -94,7 +94,7 @@ const PreCheckinAssessmentStapper = ({
     },
     {
       id: PreCheckinAssessmentTabs.Histories,
-      content: <Histories />,
+      content: <HistoriesView />,
     },
     {
       id: PreCheckinAssessmentTabs.ReviewOfSystems,

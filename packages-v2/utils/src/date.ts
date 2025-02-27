@@ -2,7 +2,7 @@ import {
   CalendarDate,
   DateFormatter,
   getDayOfWeek,
-  getLocalTimeZone,
+  parseDate,
   type DateValue,
 } from '@internationalized/date'
 
@@ -137,6 +137,35 @@ const convertUtcISOToLocalISOString = (
   return iosDate
 }
 
+const isISODate = (dateString: string): boolean => {
+  return /^\d{4}-\d{2}-\d{2}$/.test(dateString)
+}
+
+const convertDateField = (field: DateValue | null | undefined) => {
+  return field ? convertToCalendarDate(field) : null
+}
+
+const convertToCalendarDate = (storedDate: DateValue | string) => {
+  if (typeof storedDate === 'string') {
+    if (isISODate(storedDate)) {
+      return parseDate(storedDate)
+    } else {
+      const datePart = storedDate?.split(' ')[0]
+      return parseDate(datePart)
+    }
+  }
+  if (storedDate instanceof CalendarDate) {
+    return storedDate
+  }
+
+  const { year, month, day } = storedDate as {
+    year: number
+    month: number
+    day: number
+  }
+  return new CalendarDate(year, month, day)
+}
+
 export {
   getCalendarDate,
   getLocalCalendarDate,
@@ -149,4 +178,6 @@ export {
   getTimeLabel,
   getSlashedDateString,
   convertUtcISOToLocalISOString,
+  convertToCalendarDate,
+  convertDateField,
 }

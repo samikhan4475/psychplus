@@ -1,6 +1,7 @@
 import { cn } from '@psychplus-v2/utils'
 import { Box, Flex, Text } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
+import { BlockLabel } from './block-label'
 import { MultiSelectField } from './checkbox-multiselect'
 import { ChipList } from './chip-list'
 import { DatePickerInput } from './date-picker-input'
@@ -22,6 +23,8 @@ interface SelectableChipDetailsProps {
   isDisabled?: boolean
   isOptionsChip?: boolean
   className?: string
+  maxLength?: number
+  isRequired?: boolean
 }
 
 const SelectableChipDetails = ({
@@ -36,6 +39,8 @@ const SelectableChipDetails = ({
   className,
   isOptionsChip,
   hideSelectedCount = false,
+  maxLength,
+  isRequired = true,
 }: SelectableChipDetailsProps) => {
   const form = useFormContext()
   const error = form.getFieldState(field, form.formState).error
@@ -44,60 +49,55 @@ const SelectableChipDetails = ({
     <>
       <Flex position="relative" align="center">
         {showIndicator && <SelectedIndicator />}
-        <Flex
-          align="center"
-          className={cn(
-            'bg-pp-focus-bg-2 rounded-2 border border-[#E3EBF6] bg-[#F7F9FC] px-2 py-1',
-            className,
-          )}
-        >
-          {label && (
-            <Text
-              weight="medium"
-              mr="1"
-              className="whitespace-nowrap text-[14px]"
-            >
-              {label}
-            </Text>
-          )}
-          {type === 'text' && (
-            <TextInput
-              field={field}
-              disabled={isDisabled}
-              autoFocus={!form.watch(field)}
-              placeHolder={placeHolder}
-            />
-          )}
-          {type === 'number' && (
-            <NumberInput
-              format={format}
-              field={field}
-              className="focus:border-pp-focus-outline w-[45px] rounded-2 border border-[#E3EBF6] outline-none focus:outline-none"
-              autoFocus
-              placeholder={placeHolder}
-            />
-          )}
-          {type === 'select' && <SelectInput field={field} options={options} />}
-          {type === 'date' && (
-            <Box className="w-[100px]">
+        {type === 'text' ? (
+          <TextInput
+            field={field}
+            disabled={isDisabled}
+            autoFocus={!form.watch(field)}
+            placeHolder={placeHolder}
+            maxLength={maxLength}
+            className="w-[250px]"
+          />
+        ) : (
+          <Flex
+            align="center"
+            className={cn(
+              'bg-pp-focus-bg-2 h-8 rounded-2 border border-gray-8 bg-[#F7F9FC] px-2 py-1',
+              className,
+            )}
+          >
+            {label && <BlockLabel className="mr-1">{label}</BlockLabel>}
+            {type === 'number' && (
+              <NumberInput
+                format={format}
+                field={field}
+                className="focus:border-pp-focus-outline w-[38px] rounded-2 border border-gray-8 outline-none focus:outline-none"
+                autoFocus
+                placeholder={placeHolder}
+              />
+            )}
+            {type === 'select' && (
+              <SelectInput field={field} options={options} />
+            )}
+            {type === 'date' && (
               <DatePickerInput
                 field={field}
                 isDisabled={isDisabled}
-                isRequired={true}
+                isRequired={isRequired}
               />
-            </Box>
-          )}
-          {type === 'multi-select' && (
-            <MultiSelectField
-              onChange={(vals) =>
-                form.setValue(field, vals, { shouldDirty: true })
-              }
-              options={options || []}
-              defaultValues={form.watch(field)}
-              hideSelectedCount={hideSelectedCount}
-            />
-          )}
-        </Flex>
+            )}
+            {type === 'multi-select' && (
+              <MultiSelectField
+                onChange={(vals) =>
+                  form.setValue(field, vals, { shouldDirty: true })
+                }
+                options={options || []}
+                defaultValues={form.watch(field)}
+                hideSelectedCount={hideSelectedCount}
+              />
+            )}
+          </Flex>
+        )}
         {error ? (
           <Text className="pl-1 text-[12px] text-tomato-11">
             {error.message}

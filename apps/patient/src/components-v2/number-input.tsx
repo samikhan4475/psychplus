@@ -38,7 +38,6 @@ const NumberInput = ({
           return (
             <PatternFormat
               autoFocus={autoFocus}
-              size={1}
               id={fieldName}
               type="text"
               inputMode="numeric"
@@ -51,9 +50,8 @@ const NumberInput = ({
               disabled={field.disabled || disabled}
               onValueChange={({ value }) => field.onChange(value)}
               onBlur={field.onBlur}
-              // customInput={TextField.Root}
               getInputRef={field.ref}
-              className={cn('h-[var(--chip-height)]', className)}
+              className={cn('h-5 px-2 py-1 text-[12px]', className)}
             />
           )
         }}

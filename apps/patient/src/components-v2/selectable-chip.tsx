@@ -1,7 +1,8 @@
 'use client'
 
 import { cn } from '@psychplus-v2/utils'
-import { Flex, Text, Tooltip } from '@radix-ui/themes'
+import { Flex, Tooltip } from '@radix-ui/themes'
+import { BlockLabel } from './block-label'
 
 interface SelectableChipProps {
   label: string
@@ -19,15 +20,7 @@ const SelectableChip = ({
   isTooltip = false,
   tooltipContent,
 }: React.PropsWithChildren<SelectableChipProps>) => {
-  const chipContent = (
-    <Text
-      className={cn('select-none text-[14px]', {
-        bg: '#194595',
-      })}
-    >
-      {label}
-    </Text>
-  )
+  const chipContent = <BlockLabel>{label}</BlockLabel>
 
   return (
     <>
@@ -36,7 +29,7 @@ const SelectableChip = ({
         onClick={onClick}
         align="center"
         className={cn(
-          'h-[var(--chip-height)] cursor-pointer rounded-2 border border-[#E3EBF6] bg-[#F7F9FC] px-2 py-1',
+          'h-8 cursor-pointer rounded-2 border border-gray-8 bg-[#F7F9FC] px-2 py-1',
           {
             'text-white bg-[#194595]': selected,
           },

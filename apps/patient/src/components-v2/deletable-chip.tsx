@@ -18,14 +18,14 @@ const DeletableChip = ({
   return (
     <Flex
       className={cn(
-        'bg-pp-gray-4 border-pp-gray-4 rounded-item h-fit border pl-1.5 pr-1 mx-1',
+        'rounded-item border border-gray-8 bg-[#F7F9FC] pl-1.5 pr-1',
         className,
       )}
       onClick={(e) => e.stopPropagation()}
       align="center"
       gap="1"
     >
-      <Text as="span" className="truncate text-[11px]" weight="medium">
+      <Text as="span" className="truncate text-[11px]">
         {content}
       </Text>
       <IconButton

@@ -1,19 +1,18 @@
 import z from 'zod'
 
 const booleanOptional = z.boolean().optional()
-const stringOptional = z.string().optional()
 const stringArrayOptional = z.array(z.string()).optional()
-const familySchema = z.object({
+
+const familyPsychHxSchema = z.object({
+  widgetContainerCheckboxField: z.string().optional(),
   depression: booleanOptional,
   depressionRelation: stringArrayOptional,
   anxiety: booleanOptional,
   anxietyRelation: stringArrayOptional,
   completedSuicide: booleanOptional,
   completedSuicideRelation: stringArrayOptional,
-
   schizophrenia: booleanOptional,
   schizophreniaRelation: stringArrayOptional,
-
   ocd: booleanOptional,
   ocdRelation: stringArrayOptional,
   bipolarDisorder: booleanOptional,
@@ -22,9 +21,9 @@ const familySchema = z.object({
   alcoholUseDisorderRelation: stringArrayOptional,
   dementia: booleanOptional,
   dementiaRelation: stringArrayOptional,
-  other: stringOptional,
+  other: z.string().max(4000, 'Max 4000 characters are allowed').optional(),
 })
 
-type FamilySchemaType = z.infer<typeof familySchema>
+type FamilyPsychHxSchemaType = z.infer<typeof familyPsychHxSchema>
 
-export { familySchema, type FamilySchemaType }
+export { familyPsychHxSchema, type FamilyPsychHxSchemaType }

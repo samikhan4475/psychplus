@@ -21,11 +21,9 @@ const BlockLabel = ({
 }: React.PropsWithChildren<BlockLabelProps>) => {
   const labelContent = (
     <Text
-      size="1"
-      weight="medium"
       as="label"
       htmlFor={name}
-      className={cn('text-nowrap flex items-center', className, {
+      className={cn('text-nowrap flex items-center text-[13px]', className, {
         'min-h-[var(--chip-height)]': orientation === 'horizontal',
       })}
     >
