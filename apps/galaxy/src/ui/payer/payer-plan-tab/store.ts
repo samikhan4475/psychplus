@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { Sort } from '@/types'
+import { SharedCode, Sort } from '@/types'
 import {
   PayerPlanAddressResponse,
   PayerPlanFilter,
@@ -30,7 +30,7 @@ interface Store {
     page?: number,
     reset?: boolean,
   ) => void
-  searchAddress: (payerId: string) => void
+  searchAddress: (payerId: string,states:SharedCode[]) => void
 }
 
 const useStore = create<Store>((set, get) => ({
@@ -68,11 +68,11 @@ const useStore = create<Store>((set, get) => ({
         : { ...get().pageCache, [page]: result.data },
     })
   },
-  searchAddress: async (payerId) => {
+  searchAddress: async (payerId,states) => {
     set({
       addressLoading: true,
     })
-    const result = await getPayersPlanAddressesListAction(payerId)
+    const result = await getPayersPlanAddressesListAction(payerId,states)
     if (result.state === 'error') {
       return set({
         addressData: [],

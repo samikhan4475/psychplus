@@ -5,6 +5,8 @@ import { Flex, ScrollArea } from '@radix-ui/themes'
 import { DataTable, LoadingPlaceholder } from '@/components'
 import { useStore } from '../store'
 import { columns } from './table-columns'
+import { useCodesetCodes } from '@/hooks'
+import { CODESETS } from '@/constants'
 
 interface PayerPlanAddressProps {
   payerId: string | undefined
@@ -16,8 +18,9 @@ const PayerPlanAddressTable = ({ payerId }: PayerPlanAddressProps) => {
     addressData: state.addressData,
     addressLoading: state.addressLoading,
   }))
+  const stateCodes = useCodesetCodes(CODESETS.UsStates)
   useEffect(() => {
-    if (payerId) searchAddress(payerId)
+    if (payerId) searchAddress(payerId,stateCodes)
   }, [payerId])
 
   if (addressLoading) {
@@ -27,6 +30,7 @@ const PayerPlanAddressTable = ({ payerId }: PayerPlanAddressProps) => {
       </Flex>
     )
   }
+
   return (
     <ScrollArea>
       <DataTable

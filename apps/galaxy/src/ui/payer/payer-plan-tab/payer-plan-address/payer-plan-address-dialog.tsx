@@ -4,6 +4,8 @@ import { useState } from 'react'
 import { Pencil1Icon, PlusIcon } from '@radix-ui/react-icons'
 import { Button, Dialog, IconButton } from '@radix-ui/themes'
 import { CloseDialogTrigger } from '@/components/close-dialog-trigger'
+import { CODESETS } from '@/constants'
+import { useCodesetCodes } from '@/hooks'
 import { PayerPlanAddressResponse } from '@/types'
 import { useStore } from '../store'
 import { PayerPlanAddressForm } from './payer-plan-address-form'
@@ -24,9 +26,11 @@ const PayerPlanAddressDialog = ({
   }))
   const [open, setOpen] = useState(false)
 
+  const states = useCodesetCodes(CODESETS.UsStates)
+
   const onOpenChange = (open: boolean) => {
     if (!open) {
-      searchAddress(payerId)
+      searchAddress(payerId, states)
     }
     setOpen(open)
   }
@@ -47,7 +51,7 @@ const PayerPlanAddressDialog = ({
       <Dialog.Content className="relative max-w-[900px]">
         <CloseDialogTrigger />
         <Dialog.Title className="font-sans -tracking-[0.25px]">
-          {isEditMode ? 'Edit' : 'Add'} Payer Address
+          {isEditMode ? 'Edit' : 'Add'} Plan Address
         </Dialog.Title>
         <PayerPlanAddressForm
           data={data}

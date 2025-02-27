@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button, Flex, Text } from '@radix-ui/themes'
 import { SaveIcon } from 'lucide-react'
@@ -11,12 +11,14 @@ import {
   AddressFieldsGroup,
   CheckboxInput,
   FormContainer,
+  LoadingPlaceholder,
   TextInput,
 } from '@/components'
 import { PayerPlanAddressResponse } from '@/types'
 import { sanitizeFormData } from '@/utils'
 import {
   addPayerPlanAddressAction,
+  getPayerPlanAddressById,
   updatePayerPlanAddressAction,
 } from '../../actions'
 
@@ -42,19 +44,40 @@ const PayerPlanAddressForm = ({
   payerId,
   onCloseModal,
 }: PayerPlanAddressFormProps) => {
+  const [loading, setLoading] = useState(false)
   const form = useForm<SchemaType>({
     resolver: zodResolver(addressSchema),
     defaultValues: {
-      address1: data?.address?.street1 ?? '',
-      address2: data?.address?.street2 ?? '',
-      city: data?.address?.city ?? '',
-      state: data?.address?.state ?? '',
-      zip: data?.address?.postalCode ?? '',
-      status: data?.recoredStatus === 'Active',
+      address1: '',
+      address2: '',
+      city: '',
+      state: '',
+      zip: '',
+      status: true,
     },
   })
 
   useEffect(() => {
+    if (data?.id && payerId) {
+      ;(async () => {
+        setLoading(true)
+        const result = await getPayerPlanAddressById(payerId, data?.id)
+        if (result.state === 'success') {
+          const { street1, street2, postalCode } = result.data.address
+          form.reset({
+            ...result.data.address,
+            status: result.data.recoredStatus === 'Active',
+            address1: street1,
+            address2: street2,
+            zip: postalCode,
+          })
+        } else if (result.state === 'error') {
+          toast.error(result.error ?? 'Failed to get payer plan address')
+        }
+        setLoading(false)
+      })()
+    }
+
     if (isEditMode) {
       form.setFocus('address2')
     }
@@ -91,6 +114,8 @@ const PayerPlanAddressForm = ({
       onCloseModal(false)
     }
   }
+
+  if (loading) return <LoadingPlaceholder className="min-h-[27vh]" />
 
   return (
     <FormContainer onSubmit={onsubmit} form={form}>

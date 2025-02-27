@@ -2,6 +2,8 @@ import { Flex, IconButton } from '@radix-ui/themes'
 import { Row } from '@tanstack/react-table'
 import toast from 'react-hot-toast'
 import { DeleteIcon } from '@/components/icons'
+import { CODESETS } from '@/constants'
+import { useCodesetCodes } from '@/hooks'
 import { PayerPlanAddressResponse } from '@/types'
 import { deletePayerPlanAddressRecord } from '../../actions'
 import { useStore } from '../store'
@@ -17,7 +19,7 @@ const ActionsCell = ({ row, payerId }: ActionsCellProps) => {
     searchAddress: state.searchAddress,
     addressData: state.addressData,
   }))
-
+  const states = useCodesetCodes(CODESETS.UsStates)
   const handleDeletePayerPlanAddress = async () => {
     const { id } = row.original
     const result = await deletePayerPlanAddressRecord(payerId, id)
@@ -25,7 +27,7 @@ const ActionsCell = ({ row, payerId }: ActionsCellProps) => {
       toast.error(result.error ?? 'Failed to delete Payer Plan address')
     } else if (result.state === 'success') {
       toast.success('Payer Plan address deleted successfully')
-      searchAddress(payerId)
+      searchAddress(payerId, states)
     }
   }
 
