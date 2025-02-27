@@ -1,21 +1,47 @@
 'use client'
 
-import { FormFieldContainer, FormFieldLabel, SelectInput } from '@/components'
-import { useRevCycleDataProvider } from '../../revCycleContext'
+import { Flex, Text } from '@radix-ui/themes'
+import { useFormContext } from 'react-hook-form'
+import { cn } from '@/utils'
+import { SearchClaimProviders } from './search-billing-provider'
+import { ClaimUpdateSchemaType } from '../schema'
 
 const OrderingProvider = () => {
-  const { staffData } = useRevCycleDataProvider()
+  const form = useFormContext<ClaimUpdateSchemaType>()
+  const isDisabled = form.formState.disabled
+
+  const orderingProvider = form.getValues('orderingProviderName')
+  const defaultorderingProvider: string | undefined = orderingProvider
+    ? `${orderingProvider.firstName} ${orderingProvider.lastName}`
+    : undefined
+
+  const handleSelect = (
+    selectedItem: { value: string; label: string } | null,
+  ) => {
+    if (selectedItem) {
+      form.setValue('orderingProviderId', selectedItem.value, {
+        shouldValidate: true,
+        shouldDirty: true,
+      })
+    } else {
+      form.setValue('orderingProviderId', '', { shouldValidate: true })
+    }
+  }
+
   return (
-    <FormFieldContainer>
-      <FormFieldLabel>Ordering Provider</FormFieldLabel>
-      <SelectInput
-        field="orderingProviderId"
-        placeholder="Select"
-        options={staffData}
-        buttonClassName="w-full h-6"
-        className="h-full flex-1"
+    <Flex direction={'column'}>
+      <Flex align="center" className={cn('text-[11px]')}>
+        <Text as="label" wrap="nowrap" weight="medium">
+          Ordering Provider
+        </Text>
+      </Flex>
+      <SearchClaimProviders
+        placeholder="Search Ordering Provider"
+        onSelectItem={handleSelect}
+        defaultValue={defaultorderingProvider}
+        disabled={isDisabled}
       />
-    </FormFieldContainer>
+    </Flex>
   )
 }
 

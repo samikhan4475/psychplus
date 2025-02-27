@@ -32,7 +32,6 @@ const getRowIndex = (
 
 const columns = (
   claimServiceLines: ClaimServiceLine[],
-  staffData?: StaffResource | undefined,
 ): ColumnDef<ClaimServiceLine>[] => {
   const rowIndexMap = createRowIndexMap(claimServiceLines)
 
@@ -78,10 +77,7 @@ const columns = (
         />
       ),
       cell: ({ row }) => (
-        <TableCellProcedure
-          rowIndex={getRowIndex(rowIndexMap, row)}
-          selectedStaff={staffData}
-        />
+        <TableCellProcedure rowIndex={getRowIndex(rowIndexMap, row)} />
       ),
 
       enableHiding: true,

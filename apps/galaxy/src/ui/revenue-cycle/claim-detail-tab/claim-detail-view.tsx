@@ -115,8 +115,12 @@ const ClaimDetailView = ({ claimId }: ClaimDetailViewProps) => {
         }),
       ),
     }
+    const { claimInsurancePolicies, ...formattedClaimDataWithoutPolicies } =
+      formattedClaimData
 
-    const sanitizeClaimData = sanitizeFormData(formattedClaimData)
+    const sanitizeClaimData = sanitizeFormData(
+      formattedClaimDataWithoutPolicies,
+    )
     await updateClaimAction(data.id ?? '', sanitizeClaimData)
     toast.success('Record has been saved successfully')
     fetchClaimData(claimId)

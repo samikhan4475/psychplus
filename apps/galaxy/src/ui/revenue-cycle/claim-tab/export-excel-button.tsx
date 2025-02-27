@@ -35,6 +35,9 @@ const ExportExcelButton = () => {
       dateType: data.dateType ? data.dateType : 'DateOfService',
       fromDate: formatDateToISOString(data.fromDate),
       toDate: formatDateToISOString(data.toDate, true),
+      isIncludePatient: true,
+      isIncludeDiagnosis: true,
+      isIncludeServiceLine: true,
     }
     const payload = sanitizeFormData(formattedData)
     const endpoint = EXPORT_CLAIMS_LIST_ENDPOINT(FileFormats.EXCEL)

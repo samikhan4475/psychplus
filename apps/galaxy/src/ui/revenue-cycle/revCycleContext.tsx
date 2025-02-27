@@ -10,7 +10,6 @@ import { getClinicsOptionsAction } from '@/actions'
 import { CODESETS } from '@/constants'
 import { useCodesetCodes } from '@/hooks'
 import { SelectOptionType, StaffResource } from '@/types'
-import { getStaffActions } from './claim-detail-tab/actions/get-service-staff'
 
 interface RevCycleContextType {
   staffData?: SelectOptionType[]
@@ -19,7 +18,8 @@ interface RevCycleContextType {
   locationsData?: SelectOptionType[]
   posCodesData?: SelectOptionType[]
   fetchClaimOptionsData: () => void
-  selectedStaffData?: StaffResource[]
+  selectedStaffData?: StaffResource
+  setSelectedStaffData: (data: StaffResource) => void
 }
 
 const RevCycleContext = createContext<RevCycleContextType | undefined>(
@@ -37,52 +37,32 @@ export const RevCycleProvider = ({ children }: RevCycleProviderProps) => {
     [codes],
   )
 
-  const [staffData, setStaffData] = useState<SelectOptionType[]>([])
   const [locationsData, setLocationsData] = useState<SelectOptionType[]>([])
   const [posCodesData, setPOSCodesData] = useState<SelectOptionType[]>([])
-  const [selectedStaffData, setSelectedStaffData] = useState<StaffResource[]>()
+  const [selectedStaffData, setSelectedStaffData] = useState<StaffResource>()
   const [loading, setLoading] = useState<boolean>(false)
 
   const fetchClaimOptionsData = useCallback(async () => {
     setLoading(true)
-    const [locationsResult, selectedStaffResult] = await Promise.all([
-      getClinicsOptionsAction(),
-      getStaffActions(),
-    ])
+    const [locationsResult] = await Promise.all([getClinicsOptionsAction()])
     if (locationsResult.state === 'success') {
       setLocationsData(locationsResult.data)
     } else {
       toast.error(locationsResult.error ?? 'Error fetching locations data')
     }
-
-    if (selectedStaffResult.state === 'success') {
-      const staffData = selectedStaffResult.data ?? []
-      setSelectedStaffData(staffData)
-      const transformedData = staffData.map((data) => ({
-        value: data.id.toString(),
-        label: data.legalName.firstName,
-      }))
-      setStaffData(transformedData)
-    } else {
-      toast.error(
-        selectedStaffResult.error ?? 'Error fetching selected staff data',
-      )
-    }
-
     setPOSCodesData(posCodes)
   }, [])
 
   const value = useMemo(
     () => ({
-      staffData,
       locationsData,
       posCodesData,
       selectedStaffData,
+      setSelectedStaffData,
       loading,
       fetchClaimOptionsData,
     }),
     [
-      staffData,
       locationsData,
       posCodesData,
       selectedStaffData,
@@ -90,6 +70,7 @@ export const RevCycleProvider = ({ children }: RevCycleProviderProps) => {
       fetchClaimOptionsData,
     ],
   )
+
   return (
     <RevCycleContext.Provider value={value}>
       {children}
@@ -100,7 +81,7 @@ export const RevCycleProvider = ({ children }: RevCycleProviderProps) => {
 export const useRevCycleDataProvider = (): RevCycleContextType => {
   const context = useContext(RevCycleContext)
   if (!context) {
-    throw new Error('Error while using Revcycle context.')
+    throw new Error('Error while using RevCycle context.')
   }
   return context
 }

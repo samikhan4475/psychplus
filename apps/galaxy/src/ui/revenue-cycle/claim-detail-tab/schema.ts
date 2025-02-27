@@ -119,7 +119,12 @@ const claimInsurancePoliciesSchema = z.object({
   verificationStatus: z.string().optional(),
   policyHolderRelationship: z.string().optional(),
 })
-
+const providerSchema = z.object({
+  firstName: z.string(),
+  middleName: z.string().optional(),
+  lastName: z.string(),
+  honors: z.string().optional(),
+})
 // Define Claim update Schema
 const claimUpdateSchema = z
   .object({
@@ -129,7 +134,7 @@ const claimUpdateSchema = z
     appointmentId: z.number().optional(),
     claimNumber: z.string(),
     locationId: z.string().optional(),
-    renderingProviderId: z.string().optional(),
+    renderingProviderId: z.string().min(1, 'Select Rendering Provider'),
     attendingProviderId: z.string().optional(),
     supervisingProviderId: z.string().optional(),
     orderingProviderId: z.string().optional(),
@@ -194,6 +199,11 @@ const claimUpdateSchema = z
     claimInsurancePolicies: z.array(claimInsurancePoliciesSchema),
     claimServiceLines: z.array(claimServiceLinesSchema),
     updatedByName: z.string().optional(),
+    renderingProviderName: providerSchema.optional(),
+    attendingProviderName: providerSchema.optional(),
+    supervisingProviderName: providerSchema.optional(),
+    orderingProviderName: providerSchema.optional(),
+    referringProviderName: providerSchema.optional(),
     claimDiagnosis: z
       .array(claimDiagnosisSchema)
 

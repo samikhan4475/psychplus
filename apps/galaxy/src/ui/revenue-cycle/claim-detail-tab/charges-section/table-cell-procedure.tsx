@@ -9,20 +9,21 @@ import {
   ServiceMasterFeeScheduleResponse,
   StaffResource,
 } from '@/types'
-import { getServiceMasterFeeSchedule } from '../actions'
+import { useRevCycleDataProvider } from '../../revCycleContext'
+import { getServiceMasterFeeSchedule, getStaffById } from '../actions'
 import { ClaimUpdateSchemaType } from '../schema'
 import { SearchProcedureCodes } from './procedure-code-search'
 
 interface TableCellProcedureProps {
   rowIndex: number
-  selectedStaff: StaffResource | undefined
 }
 
 const TableCellProcedure: React.FC<TableCellProcedureProps> = ({
   rowIndex,
-  selectedStaff,
 }) => {
   const form = useFormContext<ClaimUpdateSchemaType>()
+  const { selectedStaffData, setSelectedStaffData } = useRevCycleDataProvider()
+
   const handleProcedureCodeSelected = async (selectedItem: CodeItem) => {
     const { code } = selectedItem
     const result = await fetchAndProcessCPTData(code)
@@ -63,10 +64,17 @@ const TableCellProcedure: React.FC<TableCellProcedureProps> = ({
       if (response.length > 0) {
         const apiResponse = response[0]
         const category = apiResponse.category ?? ''
-        const medicareAmount = getAmountBasedOnHonors(
-          selectedStaff,
-          apiResponse,
-        )
+        const renderingProviderId = form.getValues('renderingProviderId')
+        let staffData = selectedStaffData
+
+        if (!staffData && renderingProviderId) {
+          const staffResponse = await getStaffById(Number(renderingProviderId))
+          if (staffResponse.state === 'success') {
+            staffData = staffResponse.data
+            setSelectedStaffData(staffData)
+          }
+        }
+        const medicareAmount = getAmountBasedOnHonors(staffData, apiResponse)
         return { medicareAmount, category }
       } else {
         return null

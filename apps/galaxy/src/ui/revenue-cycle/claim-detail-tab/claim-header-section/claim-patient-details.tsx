@@ -3,6 +3,7 @@ import { Flex, Grid, Text } from '@radix-ui/themes'
 import { useFormContext, useWatch } from 'react-hook-form'
 import { CODESETS } from '@/constants'
 import { useCodesetCodes } from '@/hooks'
+import { StoreProvider } from '@/store'
 import { ClaimServiceLine } from '@/types'
 import { cn } from '@/utils'
 import { getClaimStatusDisplay } from '../../utils'
@@ -70,7 +71,6 @@ const PatientClaimDetails = () => {
   }, [billedAmt])
 
   const claimStatuses = useCodesetCodes(CODESETS.ClaimStatus)
-
   const claimStatus = claimStatusCode
     ? getClaimStatusDisplay(claimStatuses, claimStatusCode)
     : claimStatusCode

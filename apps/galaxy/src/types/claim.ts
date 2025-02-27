@@ -1,5 +1,5 @@
 import { DateValue } from 'react-aria-components'
-import { ContactDetails, User } from './'
+import { ContactDetails, LegalName, User } from './'
 import { Metadata } from './metadata'
 
 interface ClaimServiceLine {
@@ -401,10 +401,15 @@ interface ClaimUpdateApiResponse {
   claimNumber?: string
   locationId?: string
   renderingProviderId?: number | null
+  renderingProviderName?: LegalName
   attendingProviderId?: number | null
+  attendingProviderName?: LegalName
   supervisingProviderId?: number | null
+  supervisingProviderName?: LegalName
   orderingProviderId?: number | null
+  orderingProviderName?: LegalName
   referringProviderId?: number | null
+  referringProviderName?: LegalName
   patientId?: number
   placeOfService?: string
   dateOfServiceFrom?: string
