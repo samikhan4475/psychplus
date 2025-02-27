@@ -9,12 +9,13 @@ import { Details } from './details'
 type TmsDetailsProps = {
   appointment?: Appointment
   data?: QuickNoteSectionItem[]
+  patientId:string
 }
 
-const TmsDetailClientView = ({ data, appointment }: TmsDetailsProps) => {
+const TmsDetailClientView = ({ data, appointment,patientId }: TmsDetailsProps) => {
   return (
     <ActualNoteDetailsWrapper sectionName={QuickNoteSectionName.ProcedureTMS}>
-      <Details data={transformIn(data ?? [], true)} appointment={appointment} />
+      <Details data={transformIn(data ?? [], true)} appointment={appointment} patientId={patientId}/>
     </ActualNoteDetailsWrapper>
   )
 }

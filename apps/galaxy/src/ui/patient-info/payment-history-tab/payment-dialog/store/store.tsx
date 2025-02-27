@@ -1,8 +1,9 @@
+import { createContext, useContext, useRef } from 'react'
 import { getPatientCreditCards } from '@/actions'
 import { CreditCard } from '@/types'
-import { PaymentMap } from '../types'
-import { create } from './create-resetable-store'
-
+import { PaymentMap } from '../../types'
+import { useStore as zustandUseStore, type StoreApi } from 'zustand'
+import { createStore as zustandCreateStore } from 'zustand/vanilla'
 interface Store {
   patientCards?: CreditCard[]
   error?: string
@@ -16,8 +17,9 @@ interface Store {
   openAddCardDialog: boolean
 }
 
-const useStore = create<Store>()((set) => ({
-  patientCards: undefined,
+const createStore = () =>
+  zustandCreateStore<Store>()((set, get) => ({
+    patientCards: undefined,
   error: undefined,
   loading: undefined,
   coPayMap: {},
@@ -48,6 +50,33 @@ const useStore = create<Store>()((set) => ({
   openAddCardDialog: false,
   toggleAddCardDialog: () =>
     set((state) => ({ openAddCardDialog: !state.openAddCardDialog })),
-}))
+  }))
 
-export { useStore }
+  const StoreContext = createContext<StoreApi<Store> | undefined>(undefined)
+  
+const StoreProvider = ({ children }: React.PropsWithChildren) => {
+  const storeRef = useRef<StoreApi<Store>>()
+
+  if (!storeRef.current) {
+    storeRef.current = createStore()
+  }
+
+  return (
+    <StoreContext.Provider value={storeRef.current}>
+      {children}
+    </StoreContext.Provider>
+  )
+}
+  
+  const useStore = <T,>(selector: (store: Store) => T): T => {
+    const context = useContext(StoreContext)
+  
+    if (!context) {
+      throw new Error(`useStore must be use within StoreProvider`)
+    }
+  
+    return zustandUseStore(context, selector)
+  }
+
+
+  export { StoreProvider, useStore, createStore }

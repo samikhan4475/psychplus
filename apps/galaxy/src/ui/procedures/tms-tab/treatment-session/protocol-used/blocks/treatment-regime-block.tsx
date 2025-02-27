@@ -1,5 +1,6 @@
 import { Flex, Text } from '@radix-ui/themes'
 import { BlockLabel, NumberInput, SelectInput } from '@/components'
+import { ProtocolTitles } from '../../types'
 
 const FREQUENCY_UNIT_OPTIONS = [
   {
@@ -15,12 +16,30 @@ const FREQUENCY_UNIT_OPTIONS = [
     value: 'Month',
   },
 ]
+type fieldKeys = {
+  unit: string
+  frequencyOfSession: string
+  plannedSession: string
+}
 
-const TreatmentRegime = ({
-  isThetaBurst = false,
-}: {
-  isThetaBurst?: boolean
-}) => {
+const fields: Partial<Record<ProtocolTitles, fieldKeys>> = {
+  [ProtocolTitles.ThetaBurstStimulation]: {
+    frequencyOfSession: 'thetaBurstFrequencyOfSession',
+    plannedSession: 'plannedSessionThetaBurst',
+    unit: 'frequencyUnitThetaBurst',
+  },
+  [ProtocolTitles.DTMSProtocol]: {
+    frequencyOfSession: 'dtmsFrequencyOfSession',
+    plannedSession: 'dtmsPlannedSession',
+    unit: 'dtmsFrequencyUnit',
+  },
+  [ProtocolTitles.MaintenanceProtocol]: {
+    frequencyOfSession: 'frequencyOfSession',
+    plannedSession: 'plannedSession',
+    unit: 'frequencyUnit',
+  },
+}
+const TreatmentRegime = ({ name }: { name: ProtocolTitles }) => {
   return (
     <Flex direction="column">
       <BlockLabel required className="text-1 font-bold">
@@ -29,23 +48,21 @@ const TreatmentRegime = ({
       <Flex direction="row" gap="1" align="center">
         <NumberInput
           label="Frequency of Sessions"
-          field={
-            isThetaBurst ? 'thetaBurstFrequencyOfSession' : 'frequencyOfSession'
-          }
+          field={fields?.[name]?.frequencyOfSession ?? ''}
           className="h-6 w-9"
           required
           showError
         />
         <Text className="text-4">/</Text>
         <SelectInput
-          field={isThetaBurst ? 'frequencyUnitThetaBurst' : 'frequencyUnit'}
+          field={fields?.[name]?.unit}
           options={FREQUENCY_UNIT_OPTIONS}
           defaultValue="Week"
           className="mr-3"
         />
         <NumberInput
           label="No. of Planned Sessions"
-          field={isThetaBurst ? 'plannedSessionThetaBurst' : 'plannedSession'}
+          field={fields?.[name]?.plannedSession ?? ''}
           className="h-6 w-24"
           required
           showError

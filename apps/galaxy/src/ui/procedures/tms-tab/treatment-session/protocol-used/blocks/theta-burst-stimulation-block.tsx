@@ -1,7 +1,7 @@
 import { Flex, Text } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
 import { BlockLabel, RadioSelectSection, TextInput } from '@/components'
-import { TypeOfThetaBurst } from '../../types'
+import { ProtocolTitles, TypeOfThetaBurst } from '../../types'
 import { UnitInput } from '../../unit-input'
 import { TreatmentRegime } from './treatment-regime-block'
 
@@ -77,7 +77,7 @@ const ThetaBurstSimulation = () => {
         field="burstPattern"
         options={BURST_PATTERN_OPTIONS}
       />
-      <TreatmentRegime isThetaBurst/>
+      <TreatmentRegime name={ProtocolTitles.ThetaBurstStimulation} />
     </>
   )
 }

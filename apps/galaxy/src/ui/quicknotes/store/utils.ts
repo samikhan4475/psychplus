@@ -145,6 +145,21 @@ const validateAll = async (
   return responses.every((element) => element.success)
 }
 
+const visitTypeDiagnosisMap: Partial<Record<VisitTypeEnum, string[]>> = {
+  [VisitTypeEnum.Spravato]: ['F32.1', 'F32.2', 'F32.3', 'F33.2', 'F33.3'],
+  [VisitTypeEnum.Tms]: [
+    'F32.2',
+    'F32.3',
+    'F33.2',
+    'F33.3',
+    'F42.2',
+    'F42.3',
+    'F42.4',
+    'F42.8',
+    'F42.9',
+  ],
+}
+
 const validateDiagnosis = ({
   workingDiagnosisData,
   visitType,
@@ -152,23 +167,21 @@ const validateDiagnosis = ({
   workingDiagnosisData: DiagnosisIcd10Code[]
   visitType: string
 }) => {
-  const spravatoOrTmsDiagnosisCodes = ['F32.2', 'F32.3', 'F33.2', 'F33.3']
-  const isSpravatoOrTms = [VisitTypeEnum.Spravato, VisitTypeEnum.Tms].includes(
-    visitType as VisitTypeEnum,
+  const requiredCodes = visitTypeDiagnosisMap[visitType as VisitTypeEnum] ?? []
+  const hasValidDiagnosis = workingDiagnosisData?.some(({ code }) =>
+    requiredCodes.includes(code),
   )
-  const missingDiagnosisCodes = spravatoOrTmsDiagnosisCodes
-    .filter(
-      (code) => !workingDiagnosisData.map((item) => item.code).includes(code),
-    )
-    .join(', ')
 
-  if (isSpravatoOrTms && missingDiagnosisCodes.length) {
-    return `Must have ${missingDiagnosisCodes} diagnosis to Sign/Send to signature.`
+  if (requiredCodes.length > 0 && !hasValidDiagnosis) {
+    return `Must have one of the following diagnoses: ${requiredCodes.join(
+      ', ',
+    )} to Sign/Send to signature.`
   }
 
   if (workingDiagnosisData.length === 0) {
     return 'Select at least one diagnosis to Sign/Send to signature.'
   }
+
   return ''
 }
 

@@ -1,6 +1,7 @@
 import { Text } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
 import { BlockLabel } from '@/components'
+import { ProtocolTitles } from '../../types'
 import { TreatmentRegime } from './treatment-regime-block'
 
 const MaintenanceProtocol = () => {
@@ -15,7 +16,7 @@ const MaintenanceProtocol = () => {
         treatment course, spaced out over an extended period of time depending
         on the patient&lsquo;s individual needs and response to treatment.
       </Text>
-      <TreatmentRegime />
+      <TreatmentRegime name={ProtocolTitles.MaintenanceProtocol} />
     </>
   )
 }

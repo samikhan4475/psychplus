@@ -14,7 +14,10 @@ const getQuestionnairesHistories = async ({
 }: GetQuestionnairesHistoriesParams): Promise<
   api.ActionResult<QuickNoteHistory[]>
 > => {
-  const historiesSections = [QuickNoteSectionName.QuickNoteSectionPhq9]
+  const historiesSections = [
+    QuickNoteSectionName.QuickNoteSectionPhq9,
+    QuickNoteSectionName.QuickNoteSectionYbcos,
+  ]
 
   const response = await api.POST<QuickNoteHistory[]>(
     NOTE_DETAILS_HISTORY_ENDPOINT,

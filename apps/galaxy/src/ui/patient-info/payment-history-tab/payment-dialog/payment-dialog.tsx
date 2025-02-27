@@ -5,8 +5,8 @@ import { Dialog } from '@radix-ui/themes'
 import { X } from 'lucide-react'
 import { useConstants } from '@/hooks/use-constants'
 import { Appointment } from '@/types'
-import { resetAllStores } from './create-resetable-store'
 import { PaymentSection } from './payment-section'
+import { StoreProvider } from './store'
 
 interface Props {
   patientId: string
@@ -24,7 +24,6 @@ const PaymentDialog = ({
   const handleClose = () => {
     setOpen((prev) => !prev)
     onClose?.()
-    resetAllStores()
   }
   const { googleApiKey, stripeApiKey } = useConstants()
 
@@ -32,9 +31,6 @@ const PaymentDialog = ({
     <Dialog.Root
       open={open}
       onOpenChange={(dialogState) => {
-        if (!dialogState) {
-          resetAllStores()
-        }
         setOpen(dialogState)
       }}
     >
@@ -46,13 +42,15 @@ const PaymentDialog = ({
         <Dialog.Title size="5" className="!mb-0 font-[600]">
           Payment Details
         </Dialog.Title>
-        <PaymentSection
-          onClose={handleClose}
-          patientId={patientId}
-          googleApiKey={googleApiKey}
-          stripeApiKey={stripeApiKey}
-          appointment={appointment}
-        />
+        <StoreProvider>
+          <PaymentSection
+            onClose={handleClose}
+            patientId={patientId}
+            googleApiKey={googleApiKey}
+            stripeApiKey={stripeApiKey}
+            appointment={appointment}
+          />
+        </StoreProvider>
       </Dialog.Content>
     </Dialog.Root>
   )

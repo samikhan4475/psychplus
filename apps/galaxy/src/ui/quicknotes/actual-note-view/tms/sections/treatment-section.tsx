@@ -4,6 +4,7 @@ import { Appointment } from '@/types'
 import { TmsWidgetSchemaType } from '@/ui/procedures/tms-tab/tms-widget-schema'
 import { ProtocolTitles } from '@/ui/procedures/tms-tab/treatment-session/types'
 import {
+  DTMSProtocolSection,
   MaintenanceProtocolSection,
   SaintSection,
   StandardProtocolSection,
@@ -37,6 +38,15 @@ const TreatmentSection = ({
         duration={`${data.durationFrom} sec - ${data.durationTo}`}
         burstPattern={data.burstPattern}
         intermittentDurationFrom={data.intermittentDurationFrom}
+      />
+    ),
+    [ProtocolTitles.DTMSProtocol]: (
+      <DTMSProtocolSection
+        frequencyOfSessions={`${data.dtmsFrequencyOfSession}/${data?.dtmsFrequencyUnit}`}
+        noOfPlannedSessions={data.dtmsPlannedSession}
+        frequency={data?.dtmsStimulationFrequency}
+        interTrainInterval={data?.dtmsStimulationInterTrainInterval}
+        pulseTrainDuration={data?.dtmsStimulationPulseTrainDuration}
       />
     ),
   }

@@ -1,7 +1,7 @@
 import { z } from 'zod'
 
 type TmsWidgetSchemaType = z.infer<typeof tmsWidgetSchema>
-const requiredValues = ["1", "2", "3", "4", "5", "6"];
+const requiredValues = ['1', '2', '3', '4', '5', '6']
 const tmsWidgetSchema = z.object({
   tmsSeizureBlock: z.string(),
   tmsSeizureBlockDetail: z.string(),
@@ -43,23 +43,29 @@ const tmsWidgetSchema = z.object({
   intermittentDurationFrom: z.string().min(1, 'required'),
   durationTo: z.string().min(1, 'required'),
   optimalStimulationLevel: z.string(),
-  motorThershold: z.array(
-    z.object({
-      dateTime: z.string(),
-      user: z.string(),
-      motorThersholdPercent: z.string(),
-    }),
-  ).min(1, 'required'),
+  motorThershold: z
+    .array(
+      z.object({
+        dateTime: z.string(),
+        user: z.string(),
+        motorThersholdPercent: z.string(),
+      }),
+    )
+    .min(1, 'required'),
   stimulationLevel: z.string(),
-  precautionsAndWarnings: z.array(z.string()).refine(
-    (arr) =>
-      arr.length === requiredValues.length &&
-      arr.every((value) => requiredValues.includes(value)) &&
-      requiredValues.every((value) => arr.includes(value)),
-    {
-      message: `precautionsAndWarnings must contain exactly ${JSON.stringify(requiredValues)} in any order.`,
-    }
-  ),
+  precautionsAndWarnings: z
+    .array(z.string())
+    .refine(
+      (arr) =>
+        arr.length === requiredValues.length &&
+        arr.every((value) => requiredValues.includes(value)) &&
+        requiredValues.every((value) => arr.includes(value)),
+      {
+        message: `precautionsAndWarnings must contain exactly ${JSON.stringify(
+          requiredValues,
+        )} in any order.`,
+      },
+    ),
   tmdSessionNo: z.string(),
   stimulationSite: z.string(),
   coilTypeUsed: z.string(),
@@ -69,6 +75,12 @@ const tmsWidgetSchema = z.object({
   treatmentAndObservation: z.string().min(1, 'required'),
   protocol: z.string(),
   motorThersholdValue: z.string(),
+  dtmsStimulationFrequency: z.string().min(1, 'required'),
+  dtmsStimulationPulseTrainDuration: z.string().min(1, 'required'),
+  dtmsStimulationInterTrainInterval: z.string().min(1, 'required'),
+  dtmsFrequencyOfSession: z.string().min(1, 'required'),
+  dtmsPlannedSession: z.string().min(1, 'required'),
+  dtmsFrequencyUnit: z.string().min(1, 'required'),
 })
 
 export { tmsWidgetSchema, type TmsWidgetSchemaType }

@@ -6,6 +6,7 @@ import { BlockLabel } from '@/components'
 import { ProtocolTitles } from '../types'
 import {
   AcceleratedProtocol,
+  DTMSProtocol,
   MaintenanceProtocol,
   ProtocolSelection,
   StandardProtocol,
@@ -17,6 +18,7 @@ const ProtocolsViews: {
 } = {
   [ProtocolTitles.StandardProtocol]: StandardProtocol,
   [ProtocolTitles.AcceleratedProtocol]: AcceleratedProtocol,
+  [ProtocolTitles.DTMSProtocol]: DTMSProtocol,
   [ProtocolTitles.MaintenanceProtocol]: MaintenanceProtocol,
   [ProtocolTitles.ThetaBurstStimulation]: ThetaBurstSimulation,
 }
@@ -30,7 +32,7 @@ const ProtocolUsed = () => {
 
   return (
     <Flex direction="column" gap="2">
-      <BlockLabel className="text-2 font-[600]">Protocol Used</BlockLabel>
+      <BlockLabel className="text-2 font-[600]">Protocol UsedSSS</BlockLabel>
       <Flex direction="row" gap="1">
         {Object.values(ProtocolTitles).map((item) => (
           <ProtocolSelection key={item} protocolTitle={item} />

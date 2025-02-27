@@ -1,6 +1,7 @@
 export enum ProtocolTitles {
   StandardProtocol = 'Standard Protocol',
   AcceleratedProtocol = 'SAINT Protocol',
+  DTMSProtocol = 'DTMS Protocol',
   MaintenanceProtocol = 'Maintenance Protocol',
   ThetaBurstStimulation = 'Theta Burst Stimulation',
 }

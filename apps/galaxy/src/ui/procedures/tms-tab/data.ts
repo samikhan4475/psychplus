@@ -99,6 +99,12 @@ const transformIn = (value: QuickNoteSectionItem[], isActualNote?: boolean) => {
     protocol: ProtocolTitles.StandardProtocol as string,
     motorThersholdValue: '0',
     treatmentAndObservation: '',
+    dtmsStimulationFrequency: '10',
+    dtmsStimulationPulseTrainDuration: '2',
+    dtmsStimulationInterTrainInterval: '20',
+    dtmsFrequencyOfSession: '5',
+    dtmsPlannedSession: '',
+    dtmsFrequencyUnit: 'Week',
   }
   if (isActualNote) {
     ;(Object.keys(result) as Array<keyof typeof result>).forEach((key) => {

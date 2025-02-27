@@ -21,25 +21,27 @@ const AddOnClientLoader = ({
   visitType,
   data = [],
 }: AddOnClientLoaderProps) => {
+  const [appointmentData, setAppointmentData] = useState<Appointment[]>([])
   const [values, setValues] = useState<AddOnWidgetSchemaType>({})
   const [otherData, setOtherData] = useState<QuickNoteSectionItem[]>([])
+
   useEffect(() => {
     getBookedAppointmentAction(appointment).then((response) => {
-      let responseData: Appointment[] = []
-      if (response.state === 'error') {
-        responseData = []
-      } else {
-        responseData = response?.data
+      if (response.state !== 'error') {
+        setAppointmentData(response.data)
       }
-      const [addOndata, otherData] = filterAndSort(
-        data,
-        'additionalTherapyDetail',
-      )
-      const values = transformIn(addOndata, responseData, visitType)
-      setOtherData(otherData)
-      setValues(values)
     })
-  }, [appointment, data, visitType])
+  }, [appointment])
+
+  useEffect(() => {
+    const [addOndata, otherData] = filterAndSort(
+      data,
+      'additionalTherapyDetail',
+    )
+    setOtherData(otherData)
+    const transformedValues = transformIn(addOndata, appointmentData, visitType)
+    setValues(transformedValues)
+  }, [data, visitType, appointmentData])
 
   return (
     <AddOnWidget

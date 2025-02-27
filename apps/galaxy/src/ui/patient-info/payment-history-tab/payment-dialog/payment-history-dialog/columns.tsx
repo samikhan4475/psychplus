@@ -1,7 +1,7 @@
 import { ColumnDef } from '@tanstack/react-table'
 import { ColumnHeader, LongTextCell, TextCell } from '@/components'
 import { Sort } from '@/types'
-import { formatCurrency, formatDateTime, getSortDir } from '@/utils'
+import { concatDateTimeAndFormat, formatCurrency, getSortDir } from '@/utils'
 import { PatientTransaction } from '../../types'
 
 const columns = (
@@ -23,7 +23,11 @@ const columns = (
     ),
     cell: ({ row }) => (
       <TextCell className="truncate">
-        {row?.original?.chargeDate && formatDateTime(row?.original?.chargeDate)}
+        {row?.original?.chargeDate &&
+          concatDateTimeAndFormat(
+            row?.original?.chargeDate,
+            row?.original?.chargeTime,
+          )}
       </TextCell>
     ),
   },

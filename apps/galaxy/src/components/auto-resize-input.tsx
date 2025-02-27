@@ -50,12 +50,9 @@ const AutoResizeInput = ({
 
   useEffect(() => {
     if (!ref.current) return
-
+    const currentValue = decodeHtmlToText(ref.current.innerHTML)
     const formattedValue = encodeTextToHtml(value ?? '')
-    if (
-      (!ref.current.innerHTML && formattedValue) ||
-      (ref.current.innerHTML && !formattedValue)
-    ) {
+    if (currentValue !== value) {
       ref.current.innerHTML = formattedValue
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
