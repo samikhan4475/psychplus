@@ -1,4 +1,4 @@
-FROM node:20.11.0-alpine3.18 AS alpine
+FROM node:22-alpine3.21 AS alpine
 
 # Setup pnpm on alpine base
 FROM alpine AS base
