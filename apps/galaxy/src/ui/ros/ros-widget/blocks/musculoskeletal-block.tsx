@@ -16,7 +16,7 @@ const MUSCULORSKELETAL_BLOCK_OPTIONS: GroupSelectOption<string>[] = [
     value: 'msuMyalgias',
   },
   {
-    label: 'Joint/musicle stiffness',
+    label: 'Joint/muscle stiffness',
     value: 'msuJointMuscleStiffness',
   },
   {
