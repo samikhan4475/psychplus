@@ -6,6 +6,7 @@ import { EthnicitySelect } from './ethnicity-select'
 import { GenderExpressionSelect } from './gender-expression-select'
 import { GenderOrientationSelect } from './gender-orientation-select'
 import { GenderSelect } from './gender-select'
+import { LanguageAbilitySelect } from './language-ability-select'
 import { LanguageSelect } from './language-select'
 import { MotherMaidenNameInput } from './maiden-name-input'
 import { PreferredNameInput } from './preferred-name-input'
@@ -38,6 +39,7 @@ const DescriptiveCard = () => {
           <ReligionSelect />
           <MotherMaidenNameInput />
           <LanguageSelect />
+          <LanguageAbilitySelect />
           <ProficiencySelect />
         </Flex>
         <Flex align="start" gap="2">
