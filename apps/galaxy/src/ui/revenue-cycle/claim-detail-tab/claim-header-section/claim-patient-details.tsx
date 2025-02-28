@@ -54,7 +54,6 @@ const PatientClaimDetails = () => {
   const secondaryPaid = form.watch('secondaryPaid') ?? 0.0
   const totalWriteOff = form.watch('totalWriteOff') ?? 0.0
   const patientPaid = form.watch('patientPaid') ?? 0.0
-
   useEffect(() => {
     const billedAmount = calculateBilledAmount(claimServiceLines)
     setValue('totalAmount', billedAmount)
@@ -81,14 +80,14 @@ const PatientClaimDetails = () => {
         columns="2"
         gap="3"
         rows="repeat(2)"
-        className=" border-pp-border mr-2 w-2/5 border-r border-solid"
+        className=" border-pp-border w- mr-2 w-1/3 border-r border-solid"
       >
         <LabelAndValue label="Patient Name" value={patientName} />
         <LabelAndValue label="Gender" value={gender} />
         <LabelAndValue label="DOB" value={formatDateOfBirth(dob)} />
         <LabelAndValue label="Account Number" value={accountNumber} />
       </Grid>
-      <Grid columns="4" gap="3" rows="repeat(2)" className="w-3/5">
+      <Grid columns="4" gap="2" rows="repeat(2)" className="w-2/3">
         <LabelAndValue label="Billed" value={`$${billedAmt.toFixed(2)}`} />
         <LabelAndValue
           label="Secondary Paid"

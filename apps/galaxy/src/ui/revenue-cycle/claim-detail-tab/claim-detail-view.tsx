@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { CalendarDate, getLocalTimeZone, today } from '@internationalized/date'
 import * as Accordion from '@radix-ui/react-accordion'
-import { Flex } from '@radix-ui/themes'
+import { Box, Flex, ScrollArea } from '@radix-ui/themes'
 import { DateValue } from 'react-aria-components'
 import { SubmitHandler, useFieldArray, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
@@ -20,6 +20,7 @@ import {
 } from '@/utils'
 import { CLAIM_PAYMENT_STATUSES, ENABLE_FORM_STATUSES } from '../constants'
 import { useStore } from '../store'
+import { ClaimDetailsTab } from '../types'
 import { AccidentAndLabView } from './accident-lab-section'
 import { getClaimById } from './actions/get-service-claim'
 import { updateClaimAction } from './actions/update-claim'
@@ -36,8 +37,12 @@ import {
   ClaimInsuranceHeaders,
   ClaimInsuranceTable,
 } from './claim-insurances-section'
+import { ClaimNotesHeaderActions, ClaimNotesTable } from './claim-notes-section'
+import { ClaimDeletedNotesDialog } from './claim-notes-section/claim-notes-deleted-dialog'
+import { ClaimNotesDialog } from './claim-notes-section/claim-notes-dialog'
 import { DiagnosisView } from './diagnosis-section'
 import { claimUpdateSchema, ClaimUpdateSchemaType } from './schema'
+import { useStore as ClaimDetailStore } from './store'
 import { SubmissionInformationView } from './submission-information-section'
 import { SubmissionResponseTable } from './submission-response-section'
 
@@ -51,6 +56,9 @@ const ClaimDetailView = ({ claimId }: ClaimDetailViewProps) => {
       selectedClaimPrimaryStatus: state.selectedClaimPrimaryStatus,
     }),
   )
+  const { openAlertModal } = ClaimDetailStore((state) => ({
+    openAlertModal: state.openAlertModal,
+  }))
   const [openItems, setOpenItems] = useState<string[]>([
     'Billing Provider',
     'Accidents And Labs',
@@ -60,8 +68,11 @@ const ClaimDetailView = ({ claimId }: ClaimDetailViewProps) => {
     'Submission Information',
     'Submission Response',
     'Insurances',
+    'Notes',
   ])
-
+  const [openNotesDialog, setOpenNotesDialog] = useState<boolean>(false)
+  const [openDeletedNotesDialog, setOpenDeletedNotesDialog] =
+    useState<boolean>(false)
   const form = useForm<ClaimUpdateSchemaType>({
     disabled:
       !ENABLE_FORM_STATUSES.includes(selectedClaimStatus) ||
@@ -142,6 +153,9 @@ const ClaimDetailView = ({ claimId }: ClaimDetailViewProps) => {
   useEffect(() => {
     if (claimId) {
       fetchClaimData(claimId)
+    }
+    return () => {
+      openAlertModal(false)
     }
   }, [])
 
@@ -251,62 +265,98 @@ const ClaimDetailView = ({ claimId }: ClaimDetailViewProps) => {
     append(newServiceLine)
   }
   return (
-    <FormContainer form={form} onSubmit={onSubmit} className="bg-pp-bg-accent ">
-      <ClaimDetailHeader />
-      <ClaimActions claimId={claimId} />
-      <PatientClaimDetails />
-      <Flex direction="column" className="bg-white overflow-hidden rounded-1">
-        <Accordion.Root
-          type="multiple"
-          className="w-full"
-          value={openItems}
-          onValueChange={handleAccordionChange}
-        >
-          <ClaimAccordionItem title="Billing Provider">
-            <BillingProviderView />
-          </ClaimAccordionItem>
-
-          <ClaimAccordionItem
-            title="Insurances"
-            buttons={<ClaimInsuranceHeaders />}
-          >
-            <ClaimInsuranceTable />
-          </ClaimAccordionItem>
-          <ClaimAccordionItem title="Diagnosis">
-            <DiagnosisView />
-          </ClaimAccordionItem>
-          <ClaimAccordionItem
-            title="Charges"
-            buttons={<ChargesHeaderAction onAddNew={onAddNewServiceLine} />}
-          >
-            <ChargesTableView />
-          </ClaimAccordionItem>
-
-          <ClaimAccordionItem title="Accidents And Labs">
-            <AccidentAndLabView />
-          </ClaimAccordionItem>
-
-          <Flex gap="3" className="flex-1">
-            <ClaimAccordionItem
-              title="Authorizations and Referrals"
-              className="flex-1"
+    <Box>
+      {openNotesDialog && (
+        <ClaimNotesDialog
+          isEditMode={false}
+          claimId={claimId}
+          openNotesDialog={openNotesDialog}
+          handleCloseModal={() => setOpenNotesDialog(false)}
+        />
+      )}
+      {openDeletedNotesDialog && (
+        <ClaimDeletedNotesDialog
+          claimId={claimId}
+          openDialog={openDeletedNotesDialog}
+          handleCloseModal={() => setOpenDeletedNotesDialog(false)}
+        />
+      )}
+      <FormContainer
+        form={form}
+        onSubmit={onSubmit}
+        className="bg-pp-bg-accent "
+      >
+        <ClaimDetailHeader />
+        <ClaimActions claimId={claimId} />
+        <PatientClaimDetails />
+        <Flex direction="column" className="bg-white overflow-hidden rounded-1">
+          <ScrollArea scrollbars="vertical" className="max-h-[63vh]">
+            <Accordion.Root
+              type="multiple"
+              className="w-full"
+              value={openItems}
+              onValueChange={handleAccordionChange}
             >
-              <AuthAndReferralsView />
-            </ClaimAccordionItem>
+              <ClaimAccordionItem title={ClaimDetailsTab.BillingProvider}>
+                <BillingProviderView />
+              </ClaimAccordionItem>
 
-            <ClaimAccordionItem
-              title="Submission Information"
-              className="flex-1"
-            >
-              <SubmissionInformationView />
-            </ClaimAccordionItem>
-          </Flex>
-          <ClaimAccordionItem title="Submission Response">
-            <SubmissionResponseTable />
-          </ClaimAccordionItem>
-        </Accordion.Root>
-      </Flex>
-    </FormContainer>
+              <ClaimAccordionItem
+                title={ClaimDetailsTab.Insurances}
+                buttons={<ClaimInsuranceHeaders />}
+              >
+                <ClaimInsuranceTable />
+              </ClaimAccordionItem>
+              <ClaimAccordionItem title={ClaimDetailsTab.Diagnosis}>
+                <DiagnosisView />
+              </ClaimAccordionItem>
+              <ClaimAccordionItem
+                title={ClaimDetailsTab.Charges}
+                buttons={<ChargesHeaderAction onAddNew={onAddNewServiceLine} />}
+              >
+                <ChargesTableView />
+              </ClaimAccordionItem>
+
+              <ClaimAccordionItem title={ClaimDetailsTab.AccidentsAndLabs}>
+                <AccidentAndLabView />
+              </ClaimAccordionItem>
+
+              <Flex gap="3" className="flex-1">
+                <ClaimAccordionItem
+                  title={ClaimDetailsTab.AuthorizationsAndReferrals}
+                  className="flex-1"
+                >
+                  <AuthAndReferralsView />
+                </ClaimAccordionItem>
+
+                <ClaimAccordionItem
+                  title={ClaimDetailsTab.SubmissionInformation}
+                  className="flex-1"
+                >
+                  <SubmissionInformationView />
+                </ClaimAccordionItem>
+              </Flex>
+              <ClaimAccordionItem title={ClaimDetailsTab.SubmissionResponse}>
+                <SubmissionResponseTable />
+              </ClaimAccordionItem>
+              <ClaimAccordionItem
+                title={ClaimDetailsTab.Notes}
+                buttons={
+                  <ClaimNotesHeaderActions
+                    handleOpenModal={() => setOpenNotesDialog(true)}
+                    handleOpenDeletedModal={() =>
+                      setOpenDeletedNotesDialog(true)
+                    }
+                  />
+                }
+              >
+                <ClaimNotesTable claimId={claimId} />
+              </ClaimAccordionItem>
+            </Accordion.Root>
+          </ScrollArea>
+        </Flex>
+      </FormContainer>
+    </Box>
   )
 }
 

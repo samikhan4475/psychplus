@@ -294,7 +294,8 @@ const GET_PATIENT_HISOTRY_PROFILE_IMAGE_ENDPOINT = (
 ) => `/ehr/api/patients/${patientId}/history/${historyId}/profileimage`
 const ADD_CLAIM_PAYMENT = (paymentId: string) =>
   `${API_URL}/api/payments/${paymentId}/claimpayments`
-const DELETE_CLAIM_PAYMENT = (claimPaymentId:string)=>`${API_URL}/api/claimpayments/${claimPaymentId}`
+const DELETE_CLAIM_PAYMENT = (claimPaymentId: string) =>
+  `${API_URL}/api/claimpayments/${claimPaymentId}`
 const UPDATE_CLAIM_PAYMENT = (paymentId: string, claimPaymentId: string) =>
   `${API_URL}/api/payments/${paymentId}/claimpayments/${claimPaymentId}`
 const GET_PATIENT_HISOTRY_DRIVING_LICENSE_IMAGE_ENDPOINT = (
@@ -472,13 +473,19 @@ const ADD_PAYER = () => `${API_URL}/api/insurance/payers`
 const PAYER_PLAN_BY_ID = (id: string) => `${API_URL}/api/insurance/plans/${id}`
 const GET_PAYER_PLAN_ADDRESS = (insurancePlanId: string) =>
   `${API_URL}/api/insurance/insuranceplans/${insurancePlanId}/addresses`
-const UPDATE_PAYER_PLAN_ADDRESS = (insurancePlanId: string, payerAddressId: string) =>
+const UPDATE_PAYER_PLAN_ADDRESS = (
+  insurancePlanId: string,
+  payerAddressId: string,
+) =>
   `${API_URL}/api/insurance/insuranceplans/${insurancePlanId}/addresses/${payerAddressId}`
 const ADD_PAYER_PLAN_ADDRESS = (insurancePlanId: string) =>
   `${API_URL}/api/insurance/insuranceplans/${insurancePlanId}/addresses`
 const DELETE_PAYER_PLAN = (payerId: string, insurancePlanId: string) =>
   `${API_URL}/api/insurance/payers/${payerId}/insuranceplans/${insurancePlanId}`
-const DELETE_PAYER_PLAN_ADDRESS = (insurancePlanId: string, payerAddressId: string) =>
+const DELETE_PAYER_PLAN_ADDRESS = (
+  insurancePlanId: string,
+  payerAddressId: string,
+) =>
   `${API_URL}/api/insurance/insuranceplans/${insurancePlanId}/addresses/${payerAddressId}`
 const GET_DETAILED_NOTE_ENDPOINT = (patientId: string) =>
   `${API_URL}/api/patients/${patientId}/detailednotes/actions/search`
@@ -643,6 +650,14 @@ const GET_PATIENT_PRESCRIPTIONS_MEDICATION_ORDER = (
 ) =>
   `${API_URL}/api/patients/${patientId}/prescriptions/${prescriptionId}/order`
 
+const ADD_CLAIM_NOTES = (claimId: string) =>
+  `${API_URL}/api/claims/${claimId}/notes`
+const UPDATE_CLAIM_NOTES = (claimId: string, notesId: string) =>
+  `${API_URL}/api/claims/${claimId}/notes/${notesId}`
+const GET_CLAIM_NOTES_LIST = `${API_URL}/api/claimnotes/actions/search`
+const DELETE_CLAIM_NOTES = (noteId: string, claimId: string) =>
+  `${API_URL}/api/claims/${claimId}/notes/${noteId}`
+const GET_CLAIMS_CLAIM_NOTES_HISTORY = `${API_URL}/api/claimnotes/actions/history/search`
 const DOWNLOAD_LIST_VIEW_DATA = `${API_URL}/api/appointments/actions/download`
 
 const ADD_CODSET = (assigningAuthorityId: string) =>
@@ -666,7 +681,8 @@ const GET_SELF_USER_SETTINGS = `${API_URL}/api/users/self/settings`
 
 const ADD_SELF_USER_SETTINGS = `${API_URL}/api/users/self/settings`
 
-const UPDATE_SELF_USER_SETTINGS = (settingId: string) => `${API_URL}/api/users/self/settings/${settingId}`
+const UPDATE_SELF_USER_SETTINGS = (settingId: string) =>
+  `${API_URL}/api/users/self/settings/${settingId}`
 
 const SELF_USER_BULK_SETTINGS = `${API_URL}/api/users/self/bulksettings`
 
@@ -965,6 +981,11 @@ export {
   UPDATE_PATIENT_PRESCRIPTIONS_MEDICATIONS,
   GET_PATIENT_PRESCRIPTIONS_MEDICATION_ORDER,
   CANCEL_PATIENT_PRESCRIPTIONS,
+  ADD_CLAIM_NOTES,
+  UPDATE_CLAIM_NOTES,
+  GET_CLAIM_NOTES_LIST,
+  DELETE_CLAIM_NOTES,
+  GET_CLAIMS_CLAIM_NOTES_HISTORY,
   DOWNLOAD_LIST_VIEW_DATA,
   ADD_CODSET,
   ADD_CODSET_CODE_ATTRIBUTES,

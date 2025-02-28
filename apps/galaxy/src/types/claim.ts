@@ -554,6 +554,43 @@ interface ClaimSubmissionResponse {
   payerControlNumber?: string
   receiverName?: string
 }
+
+interface ClaimNotesFilter {
+  claimId: string
+  recordStatuses: string[]
+  isAlert: boolean[]
+}
+
+interface ClaimNotesResponse {
+  id?: string
+  metadata?: Metadata
+  claimId?: string
+  note?: string
+  effectiveDateFrom?: string
+  effectiveDateTo?: string
+  isAlert?: boolean
+  recordStatus?: string
+}
+interface AddClaimNotes {
+  id?: string
+  claimId: string
+  note: string
+  effectiveDateTo?: string | null
+  effectiveDateFrom?: string | null
+  isAlert?: boolean
+  recordStatus?: string
+
+}
+interface UpdateClaimNotes {
+  id?: string
+  claimId: string
+  note: string
+  effectiveDateTo?: string | null
+  effectiveDateFrom?: string | null
+  isAlert?: boolean
+  recordStatus?: string
+
+}
 export type {
   Claim,
   ClaimUpdate,
@@ -570,4 +607,8 @@ export type {
   ClaimDiagnosisApiResponse,
   ServiceMasterFeeScheduleResponse,
   ClaimSubmissionResponse,
+  ClaimNotesResponse,
+  AddClaimNotes,
+  UpdateClaimNotes,
+  ClaimNotesFilter,
 }

@@ -36,7 +36,17 @@ enum claimNoteSignedStatuses {
   SIGNED_PENDING = 'signedPending',
   COSIGNED = 'cosigned',
 }
-
+enum ClaimDetailsTab {
+  BillingProvider = 'Billing Provider',
+  AccidentsAndLabs = 'Accidents And Labs',
+  Diagnosis = 'Diagnosis',
+  Charges = 'Charges',
+  AuthorizationsAndReferrals = 'Authorizations and Referrals',
+  SubmissionInformation = 'Submission Information',
+  SubmissionResponse = 'Submission Response',
+  Insurances = 'Insurances',
+  Notes = 'Notes',
+}
 interface PaymentAttachments {
   id: string
   metadata?: Metadata
@@ -344,6 +354,11 @@ interface ClaimAuditHistoryFilterFormProps {
   onFilterSubmit: (data: ClaimAuditHistoryPayload) => void
 }
 
+interface ClaimNoteHistoryPayload {
+  claimNoteId: string
+  isIncludeCreateHistory: boolean
+}
+
 export {
   RevenueCycleTab,
   FileFormats,
@@ -351,6 +366,7 @@ export {
   patientStatementSlaimStatusCodes,
   patientStatementRecordStatuses,
   claimNoteSignedStatuses,
+  ClaimDetailsTab,
   type GetSubmissionResponse,
   type UpdateClaimPaymentPayload,
   type ClaimServiceLinePayment,
@@ -378,4 +394,5 @@ export {
   type ClaimAuditHistory,
   type ClaimAuditHistoryPayload,
   type ClaimAuditHistoryFilterFormProps,
+  type ClaimNoteHistoryPayload,
 }
