@@ -5,7 +5,7 @@ import { getAgeFromDate } from '@/utils'
 const insuranceSchema = z
   .object({
     payerName: z.string().min(1, 'Required'),
-    insurancePlanId: z.string().min(1, 'Required'),
+    insurancePlanId: z.string().min(1, 'Required, Select Payer To Enable'),
     effectiveDate: z.string().min(1, 'Required'),
     terminationDate: z.string().min(1, 'Required'),
     memberId: z.string().trim().min(1, 'Required').max(16, 'Invalid Member ID'),
