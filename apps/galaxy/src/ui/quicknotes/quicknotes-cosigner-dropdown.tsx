@@ -32,7 +32,7 @@ const QuickNotesCosignerDropdown = ({
 
   const getLabel = (value: string) => {
     const selectedOption = uniqueCosigners.find(
-      (option) => option?.userId === String(value),
+      (option) => String(option?.userId) === value,
     )
     return selectedOption?.legalName
       ? getPatientFullName(selectedOption?.legalName)
@@ -43,7 +43,7 @@ const QuickNotesCosignerDropdown = ({
     signOptions.coSignedByUserId !== undefined &&
     signOptions.coSignedByUserId !== null
       ? String(signOptions.coSignedByUserId)
-      : String(filterDefaultCosigner(uniqueCosigners || [])?.userId || '')
+      : String(filterDefaultCosigner(uniqueCosigners || [])?.userId ?? '')
 
   const label = getLabel(cosignerId)
 
