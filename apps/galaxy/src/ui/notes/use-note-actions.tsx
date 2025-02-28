@@ -17,7 +17,6 @@ interface UseNoteActionsReturn {
 }
 
 const useNoteActions = (): UseNoteActionsReturn => {
-  const patientId = useParams().id as string
   const { selectedRow } = useStore((state) => ({
     selectedRow: state.selectedRow,
   }))
@@ -28,20 +27,15 @@ const useNoteActions = (): UseNoteActionsReturn => {
       return null
     }
 
-    if (!patientId) {
-      toast.error('Patient ID is missing')
-      return null
-    }
-
     return {
-      patientId,
+      patientId: selectedRow.patientId,
       appointmentId: selectedRow.appointmentId,
       noteId: selectedRow.id,
     }
   }
 
   return {
-    patientId,
+    patientId: selectedRow?.patientId ?? '',
     note: selectedRow,
     validateAndPreparePayload,
   }

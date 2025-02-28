@@ -6,6 +6,7 @@ import { TriangleAlert, X } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { markToErrorAction } from './actions/mark-error'
 import { useStore } from './store'
+import { Tabs } from './types'
 import { useNoteActions } from './use-note-actions'
 
 interface MarkErrorDialogProps {
@@ -18,10 +19,15 @@ const MarkErrorDialog = ({
   removecloseDialog,
 }: MarkErrorDialogProps) => {
   const [loading, setLoading] = useState(false)
-  const { fetch, patientId } = useStore((state) => ({
-    fetch: state.fetch,
-    patientId: state.patientId,
-  }))
+  const { fetch, patientId, isInboxNotes, fetchStaffNotes, tab } = useStore(
+    (state) => ({
+      fetch: state.fetch,
+      patientId: state.patientId,
+      tab: state.tab,
+      isInboxNotes: state.isInboxNotes,
+      fetchStaffNotes: state.fetchStaffNotes,
+    }),
+  )
   const { validateAndPreparePayload } = useNoteActions()
 
   const handleSubmit = async () => {
@@ -40,7 +46,13 @@ const MarkErrorDialog = ({
     }
 
     toast.success('Marked as error successfully')
-    fetch({ patientId })
+    const statuses =
+      tab === Tabs.PENDING_NOTES ? ['pending'] : ['SignedPending']
+    isInboxNotes
+      ? fetchStaffNotes({
+          status: statuses,
+        })
+      : fetch({ patientId })
     removecloseDialog()
     setLoading(false)
   }

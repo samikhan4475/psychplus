@@ -166,6 +166,10 @@ const getInboxNavLinks = (isSecureMessagingFeatureEnabled: boolean) => {
           label: 'Pending Notes',
           tab: Tabs.PENDING_NOTES,
         },
+        {
+          label: 'Pending Cosigner Notes',
+          tab: Tabs.PENDING_COSIGNER_NOTES,
+        },
       ],
     },
   ]

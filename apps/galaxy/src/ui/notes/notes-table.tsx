@@ -14,18 +14,66 @@ import { useCodesetCodes, useHasPermission } from '@/hooks'
 import { SharedCode } from '@/types'
 import { getSlashedDateString } from '@/utils'
 import { convertToTimezone } from '../visit/utils'
+import { TableHeaderCheckboxCell, TableRowCheckboxCell } from './cells'
 import { getDisplayByValue } from './create-note/utils'
 import { options } from './status-select'
 import { useStore } from './store'
 import { PatientNotes } from './types'
 import { getAuthorName } from './utils'
 
-const getColumns = (codes: SharedCode[], noteTypeCodes: SharedCode[]) => {
+const getColumns = (
+  codes: SharedCode[],
+  noteTypeCodes: SharedCode[],
+  isInboxNotes: boolean,
+  serviceCodes: SharedCode[],
+  noteTitleCodes: SharedCode[],
+  onRowCheckBoxSelect: (
+    row?: Row<PatientNotes>,
+    table?: Table<PatientNotes>,
+    isChecked?: boolean,
+  ) => void,
+) => {
   const getStateDisplayName = (codes: SharedCode[], state: string) => {
     return codes.find((element) => element.value === state)?.display
   }
 
   const columns: ColumnDef<PatientNotes>[] = [
+    ...(isInboxNotes
+      ? [
+          {
+            id: 'select',
+            header: ({ table }: { table: Table<PatientNotes> }) => (
+              <Flex className="justify-center">
+                <TableHeaderCheckboxCell
+                  checked={table.getIsAllPageRowsSelected()}
+                  // onCheckedChange={table.toggleAllPageRowsSelected}
+                  onCheckedChange={(isChecked) => {
+                    table.toggleAllPageRowsSelected(isChecked)
+                    if (!isChecked) {
+                      onRowCheckBoxSelect(undefined, table, false) // Ensure empty array
+                    } else {
+                      onRowCheckBoxSelect(undefined, table, true)
+                    }
+                  }}
+                />
+              </Flex>
+            ),
+            cell: ({ row }: { row: Row<PatientNotes> }) => (
+              <Box className="justify-center">
+                <TableRowCheckboxCell
+                  checked={row.getIsSelected()}
+                  // onCheckedChange={row.toggleSelected}
+                  onCheckedChange={(isChecked) => {
+                    row.toggleSelected(isChecked)
+                    onRowCheckBoxSelect(row, undefined, isChecked)
+                  }}
+                />
+              </Box>
+            ),
+          },
+        ]
+      : []),
+
     {
       id: 'date',
       accessorKey: 'date',
@@ -63,6 +111,23 @@ const getColumns = (codes: SharedCode[], noteTypeCodes: SharedCode[]) => {
         return <DateTimeCell className="whitespace-nowrap">{time}</DateTimeCell>
       },
     },
+    ...(isInboxNotes
+      ? [
+          {
+            id: 'patientName',
+            accessorKey: 'patientName',
+            header: () => <ColumnHeader label="Patient Name" />,
+            cell: ({ row }: { row: Row<PatientNotes> }) => {
+              const patientName = `${row.original.patientName?.firstName} ${row.original.patientName?.lastName}`
+              return (
+                <DateTimeCell className="whitespace-nowrap">
+                  {patientName ?? ''}
+                </DateTimeCell>
+              )
+            },
+          },
+        ]
+      : []),
     {
       id: 'authors',
       accessorKey: 'time',
@@ -88,7 +153,7 @@ const getColumns = (codes: SharedCode[], noteTypeCodes: SharedCode[]) => {
     {
       id: 'visit-type',
       accessorKey: 'visitType',
-      header: () => <ColumnHeader label="Visit Type" />,
+      header: () => <ColumnHeader label="Visit Display" />,
       cell: ({ row }) => (
         <Box className="truncate">
           <TextCell>
@@ -103,7 +168,12 @@ const getColumns = (codes: SharedCode[], noteTypeCodes: SharedCode[]) => {
       header: () => <ColumnHeader label="Note Title" />,
       cell: ({ row }) => (
         <Box className="truncate">
-          <TextCell>{row.original.noteTitleCode}</TextCell>
+          <TextCell>
+            {getDisplayByValue(
+              row.original?.noteTitleCode || '',
+              noteTitleCodes,
+            )}
+          </TextCell>
         </Box>
       ),
     },
@@ -123,7 +193,12 @@ const getColumns = (codes: SharedCode[], noteTypeCodes: SharedCode[]) => {
       header: () => <ColumnHeader label="Service" />,
       cell: ({ row }) => (
         <Box className="truncate">
-          <TextCell>{row.original.serviceOffered}</TextCell>
+          <TextCell>
+            {getDisplayByValue(
+              row.original?.serviceOffered || '',
+              serviceCodes,
+            )}
+          </TextCell>
         </Box>
       ),
     },
@@ -139,26 +214,31 @@ const getColumns = (codes: SharedCode[], noteTypeCodes: SharedCode[]) => {
         </Box>
       ),
     },
-    {
-      id: 'practice',
-      accessorKey: 'practice',
-      header: () => <ColumnHeader label="Practice" />,
-      cell: ({ row }) => (
-        <Box className="truncate">
-          <TextCell>{row.original.practiceName}</TextCell>
-        </Box>
-      ),
-    },
-    {
-      id: 'organization',
-      accessorKey: 'organization',
-      header: () => <ColumnHeader label="Organization" />,
-      cell: ({ row }) => (
-        <Box className="truncate">
-          <TextCell>{row.original.organizationName}</TextCell>
-        </Box>
-      ),
-    },
+    ...(!isInboxNotes
+      ? [
+          {
+            id: 'practice',
+            accessorKey: 'practice',
+            header: () => <ColumnHeader label="Practice" />,
+            cell: ({ row }: { row: Row<PatientNotes> }) => (
+              <Box className="truncate">
+                <TextCell>{row.original.practiceName}</TextCell>
+              </Box>
+            ),
+          },
+          {
+            id: 'organization',
+            accessorKey: 'organization',
+            header: () => <ColumnHeader label="Organization" />,
+            cell: ({ row }: { row: Row<PatientNotes> }) => (
+              <Box className="truncate">
+                <TextCell>{row.original.organizationName}</TextCell>
+              </Box>
+            ),
+          },
+        ]
+      : []),
+
     {
       id: 'status',
       accessorKey: 'status',
@@ -179,7 +259,7 @@ const getColumns = (codes: SharedCode[], noteTypeCodes: SharedCode[]) => {
   return columns
 }
 
-const NotesTable = ({ patientId }: { patientId: string }) => {
+const NotesTable = () => {
   const clickSpecificNoteFromPanelPermission = useHasPermission(
     'clickSpecificNoteFromPanelNotesPage',
   )
@@ -188,18 +268,26 @@ const NotesTable = ({ patientId }: { patientId: string }) => {
     data,
     loading,
     setSelectedRow,
+    selectedRows,
+    setSelectedRows,
     setIsErrorAlertOpen,
     setErrorMessage,
+    isInboxNotes,
   } = useStore((state) => ({
     data: state.data,
     loading: state.loading,
+    selectedRows: state.selectedRows,
     setSelectedRow: state.setSelectedRow,
+    setSelectedRows: state.setSelectedRows,
     setIsErrorAlertOpen: state.setIsErrorAlertOpen,
     setErrorMessage: state.setErrorMessage,
+    isInboxNotes: state.isInboxNotes,
   }))
 
   const codes = useCodesetCodes(CODESETS.UsStates)
   const noteTypeCodes = useCodesetCodes(CODESETS.NoteType)
+  const noteTitleCodes = useCodesetCodes(CODESETS.NoteTitle)
+  const serviceCodes = useCodesetCodes(CODESETS.ServicesOffered)
 
   const onRowSelect = (row: Row<PatientNotes>, table: Table<PatientNotes>) => {
     table.setRowSelection({ [row.id]: true })
@@ -212,6 +300,35 @@ const NotesTable = ({ patientId }: { patientId: string }) => {
       return
     }
     setSelectedRow(row.original)
+    setSelectedRows([row.original])
+  }
+
+  const onRowCheckBoxSelect = (
+    row?: Row<PatientNotes>,
+    table?: Table<PatientNotes>,
+    isChecked?: boolean,
+  ) => {
+    if (table && isChecked) {
+      setSelectedRows(data?.notes || [])
+      setSelectedRow(undefined)
+      return
+    }
+
+    if (table && !isChecked) {
+      setSelectedRows([])
+      return
+    }
+
+    if (row && isChecked) {
+      setSelectedRow(undefined)
+    }
+
+    if (row) {
+      const result = isChecked
+        ? [...(selectedRows || []), row.original]
+        : selectedRows?.filter((note) => note.id !== row.original.id) || []
+      setSelectedRows(result)
+    }
   }
 
   if (loading) {
@@ -225,7 +342,14 @@ const NotesTable = ({ patientId }: { patientId: string }) => {
   return (
     <ScrollArea className="pb-2">
       <DataTable
-        columns={getColumns(codes, noteTypeCodes)}
+        columns={getColumns(
+          codes,
+          noteTypeCodes,
+          isInboxNotes,
+          serviceCodes,
+          noteTitleCodes,
+          onRowCheckBoxSelect,
+        )}
         data={data?.notes || []}
         onRowClick={onRowSelect}
       />

@@ -1,7 +1,8 @@
-'use server'
+'use client'
 
-import * as api from '@/api'
+import * as api from '@/api/api.client'
 import { NoteDetail } from '../types'
+import { GET_NOTE_VIEW_ENDPOINT } from '@/api/endpoints'
 
 interface GetNoteDetailsParams {
   patientId: string
@@ -18,7 +19,7 @@ const getNoteDetailsAction = async (
   const { patientId, appointmentId, ...restPayload } = payload
 
   const response = await api.POST(
-    api.GET_NOTE_VIEW_ENDPOINT(patientId, appointmentId || null),
+    GET_NOTE_VIEW_ENDPOINT(patientId, appointmentId || null),
     restPayload,
   )
 

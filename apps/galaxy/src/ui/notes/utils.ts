@@ -35,6 +35,15 @@ const getAuthorName = (note: PatientNotes) => {
     : `${cssNameText}, ${pendingText}`
 }
 
+function removeEmptyValues<T extends object>(obj: T) {
+  return Object.fromEntries(
+    Object.entries(obj).filter(
+      ([, value]) =>
+        !(Array.isArray(value) && value.length === 1 && value[0] === '') &&
+        value !== '',
+    ),
+  )
+}
 const groupBySectionName = (
   encounterSignedNote: NoteDetail,
 ): GroupedBySectionName => {
@@ -56,4 +65,4 @@ const groupBySectionName = (
   return result || {}
 }
 
-export { getAuthorName, groupBySectionName }
+export { getAuthorName, groupBySectionName, removeEmptyValues }

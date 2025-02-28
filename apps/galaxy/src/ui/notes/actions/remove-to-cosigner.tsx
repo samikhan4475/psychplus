@@ -1,7 +1,8 @@
-'use server'
+'use client'
 
-import * as api from '@/api'
+import * as api from '@/api/api.client'
 import { ApiResponse } from '../create-note/types'
+import { REMOVE_TO_COSIGNER_NOTE_ENDPOINT } from '@/api/endpoints'
 
 interface RemoveToCosignerParams {
   patientId: string
@@ -10,7 +11,7 @@ interface RemoveToCosignerParams {
 }
 
 const removeToCosignerAction = async (payload: RemoveToCosignerParams) => {
-  const endpoint = api.REMOVE_TO_COSIGNER_NOTE_ENDPOINT(
+  const endpoint = REMOVE_TO_COSIGNER_NOTE_ENDPOINT(
     payload.patientId,
     payload.appointmentId,
     payload.noteId,

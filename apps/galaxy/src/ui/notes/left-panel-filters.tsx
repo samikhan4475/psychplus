@@ -7,25 +7,27 @@ import { DateValue } from 'react-aria-components'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import z from 'zod'
-import {
-  getClinicsOptionsAction,
-  getProvidersOptionsAction,
-  getUsStatesOptionsAction,
-} from '@/actions'
 import { DatePickerInput, FormContainer, MultiSelectField } from '@/components'
 import { CODE_NOT_SET, CODESETS } from '@/constants'
 import { useCodesetOptions, useHasPermission } from '@/hooks'
 import { ActionResult, SelectOptionType } from '@/types'
 import { formatDateToISOString, sanitizeFormData } from '@/utils'
+import '../patient-lookup/actions'
 import {
-  getOrganizationOptionsAction,
-  getPracticesOptionsAction,
-} from '../patient-lookup/actions'
-import { getVisitTypesAction } from '../scheduling-history/actions'
+  getClinicsOptionsAction,
+  getProvidersOptionsAction,
+  getUsStatesOptionsAction,
+} from '../schedule/client-actions'
+import { getVisitTypesAction } from '../scheduling-history/client-actions/get-visit-types'
 import { ClearButton } from './clear-button'
+import { getOrganizationOptionsAction } from './client-actions/get-organization-options'
+import { getPracticesOptionsAction } from './client-actions/get-practices-options'
 import { NoteTypeDropdown } from './note-detail-note-type-dropdown'
+import { PatientNameInput } from './patient-name-input'
 import { StatusSelect } from './status-select'
 import { useStore } from './store'
+import { Tabs } from './types'
+import { removeEmptyValues } from './utils'
 
 const emptyOrStringArray = z
   .array(z.string())
@@ -36,6 +38,7 @@ const emptyOrStringArray = z
 const schema = z.object({
   dateFrom: z.custom<DateValue>(),
   dateTo: z.custom<DateValue>(),
+  patientName: z.string().optional().default(''),
   author: emptyOrStringArray,
   visitType: emptyOrStringArray,
   visitTitle: emptyOrStringArray,
@@ -54,7 +57,7 @@ const today = new Date()
 const threeeMonthsAgo = new Date()
 threeeMonthsAgo.setMonth(today.getMonth() - 3)
 
-const LeftPanelFilters = ({ patientId }: { patientId: string }) => {
+const LeftPanelFilters = ({ patientId }: { patientId?: string }) => {
   const search90DaysOldNotesPermission = useHasPermission(
     'search90DaysOldNotes',
   )
@@ -83,21 +86,30 @@ const LeftPanelFilters = ({ patientId }: { patientId: string }) => {
       organization: [],
       noteType: '',
       status: '',
+      patientName: '',
     },
   })
 
   const {
     fetch,
+    fetchStaffNotes,
     loading,
     setSelectedRow,
     setIsErrorAlertOpen,
     setErrorMessage,
+    isInboxNotes,
+    tab,
+    setSelectedRows,
   } = useStore((state) => ({
     fetch: state.fetch,
+    fetchStaffNotes: state.fetchStaffNotes,
     loading: state.loading,
     setSelectedRow: state.setSelectedRow,
     setIsErrorAlertOpen: state.setIsErrorAlertOpen,
     setErrorMessage: state.setErrorMessage,
+    isInboxNotes: state.isInboxNotes,
+    tab: state.tab,
+    setSelectedRows: state.setSelectedRows,
   }))
 
   const onSubmit: SubmitHandler<NotesFilterSchemaType> = (data) => {
@@ -113,12 +125,13 @@ const LeftPanelFilters = ({ patientId }: { patientId: string }) => {
       authorIds: data.author.map(Number),
       visitTypeIds: data.visitType.map(Number),
       locationIds: data.location,
-      locationServicesIds: data.service,
+      locationServicesOffered: data.service,
       stateIds: data.state,
       practiceIds: data.practice,
       organizationIds: data.organization,
-      status: data.status,
+      status: [data.status],
       noteTypeCode: data.noteType,
+      patientName: data.patientName,
     }
     const now = new Date()
     const dateFrom = new Date(payload.dateFrom)
@@ -139,8 +152,19 @@ const LeftPanelFilters = ({ patientId }: { patientId: string }) => {
       )
       return
     }
-    fetch(sanitizeFormData(payload))
+
+    if (patientId && !isInboxNotes) {
+      fetch(sanitizeFormData(payload))
+    } else if (isInboxNotes) {
+      const statuses =
+        tab === Tabs.PENDING_NOTES ? ['pending'] : ['SignedPending']
+      fetchStaffNotes(
+        removeEmptyValues(sanitizeFormData({ ...payload, status: statuses })),
+      )
+    }
+
     setSelectedRow(undefined)
+    setSelectedRows([])
   }
 
   const [locations, setLocations] = useState<SelectOptionType[]>([])
@@ -196,9 +220,16 @@ const LeftPanelFilters = ({ patientId }: { patientId: string }) => {
             isDisabled={loading}
           />
         </Box>
-        <Box className="col-span-3">
-          <NoteTypeDropdown />
-        </Box>
+        {isInboxNotes && (
+          <Box className="col-span-2">
+            <PatientNameInput isDisabled={loading} />
+          </Box>
+        )}
+        {!isInboxNotes && (
+          <Box className="col-span-3">
+            <NoteTypeDropdown disabled={loading} />
+          </Box>
+        )}
         <Box className="col-span-2">
           <MultiSelectField
             defaultValues={form.watch('author') ?? []}
@@ -245,27 +276,33 @@ const LeftPanelFilters = ({ patientId }: { patientId: string }) => {
             disabled={loading}
           />
         </Box>
-        <Box className="col-span-2">
-          <MultiSelectField
-            defaultValues={form.watch('practice') ?? []}
-            onChange={(vals) => form.setValue('practice', vals)}
-            label="Practice"
-            options={practices}
-            disabled={loading}
-          />
-        </Box>
-        <Box className="col-span-2">
-          <MultiSelectField
-            defaultValues={form.watch('organization') ?? []}
-            onChange={(vals) => form.setValue('organization', vals)}
-            label="Organization"
-            options={organizations}
-            disabled={loading}
-          />
-        </Box>
-        <Box className="col-span-2">
-          <StatusSelect disabled={loading} />
-        </Box>
+        {!isInboxNotes && (
+          <Box className="col-span-2">
+            <MultiSelectField
+              defaultValues={form.watch('practice') ?? []}
+              onChange={(vals) => form.setValue('practice', vals)}
+              label="Practice"
+              options={practices}
+              disabled={loading}
+            />
+          </Box>
+        )}
+        {!isInboxNotes && (
+          <Box className="col-span-2">
+            <MultiSelectField
+              defaultValues={form.watch('organization') ?? []}
+              onChange={(vals) => form.setValue('organization', vals)}
+              label="Organization"
+              options={organizations}
+              disabled={loading}
+            />
+          </Box>
+        )}
+        {!isInboxNotes && (
+          <Box className="col-span-2">
+            <StatusSelect disabled={loading} isInboxNotes={isInboxNotes} />
+          </Box>
+        )}
 
         <Box className="col-span-2">
           <Flex className=" h-full items-end justify-end" gap="1">

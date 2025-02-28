@@ -1,18 +1,37 @@
 'use client'
 
 import { createContext, useContext, useRef } from 'react'
+import toast from 'react-hot-toast'
 import { useStore as zustandUseStore, type StoreApi } from 'zustand'
 import { createStore as zustandCreateStore } from 'zustand/vanilla'
+import { getStaffNotesAction } from '../notes/actions'
 import { Tabs, type Store, type StoreInitialState } from './types'
 
 const createStore = (initialState: StoreInitialState) =>
   zustandCreateStore<Store>()((set, get) => ({
     visitedTabs: new Set([Tabs.PENDING_NOTES]),
+    notesData: [],
+    loading: false,
     activeTab: initialState.tab ?? Tabs.PENDING_NOTES,
     setActiveTab: (activeTab: string) => {
       const visitedTabs = get().visitedTabs
       visitedTabs.add(activeTab)
       set({ activeTab, visitedTabs })
+    },
+    fetchNotes: async (status: string[]) => {
+      set({ notesData: [], loading: true })
+      try {
+        const notes = await getStaffNotesAction({ status })
+        if (notes.state === 'error') {
+          set({ notesData: [], loading: false })
+          toast.error(notes.error)
+          return
+        }
+        set({ notesData: notes.data.notes, loading: false })
+      } catch (error) {
+        set({ notesData: [], loading: false })
+        toast.error('Error fetching notes')
+      }
     },
   }))
 

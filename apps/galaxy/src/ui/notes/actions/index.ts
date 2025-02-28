@@ -1,3 +1,5 @@
 export * from './get-patient-notes'
 export * from './get-note-details'
 export * from './get-staff'
+export * from './get-notes'
+export * from './sign-inbox-note-action'

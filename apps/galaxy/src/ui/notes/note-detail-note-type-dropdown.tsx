@@ -2,7 +2,7 @@ import { Flex } from '@radix-ui/themes'
 import { CodesetSelect, FormFieldError, FormFieldLabel } from '@/components'
 import { CODESETS } from '@/constants'
 
-const NoteTypeDropdown = () => {
+const NoteTypeDropdown = ({ disabled = false }: { disabled?: boolean }) => {
   return (
     <Flex direction="column" className={'w-full gap-0.5'}>
       <FormFieldLabel className="text-1 leading-[16px]">
@@ -13,6 +13,7 @@ const NoteTypeDropdown = () => {
         codeset={CODESETS.NoteType}
         size="1"
         className="h-6 w-full"
+        disabled={disabled}
       />
       <FormFieldError name="noteType" />
     </Flex>

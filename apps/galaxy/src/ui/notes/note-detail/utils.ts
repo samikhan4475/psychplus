@@ -1,3 +1,4 @@
+import { cache } from 'react'
 import { AddOnDetailView } from '@/ui/quicknotes/actual-note-view/add-on/add-on-detail-view'
 import { CodesNoteDetailsView } from '@/ui/quicknotes/actual-note-view/codes/codes-note-details-view'
 import { EctNoteDetailView } from '@/ui/quicknotes/actual-note-view/ect/ect-note-detail-view'
@@ -23,7 +24,7 @@ import { SubstanceUseHxNoteDetailView } from '@/ui/quicknotes/actual-note-view/s
 import { TcmNoteDetailView } from '@/ui/quicknotes/actual-note-view/tcm/tcm-note-detail-view'
 import { TherapyAssessmentPlanNoteDetailView } from '@/ui/quicknotes/actual-note-view/therapy-assessment-plan/therapy-assessment-plan-note-detail-view'
 import { TherapyClientView } from '@/ui/quicknotes/actual-note-view/therapy/therapy-client-view'
-import { TmsDetailClientView } from '@/ui/quicknotes/actual-note-view/tms/tms-detail-client-view'
+import { TmsNoteDetailView } from '@/ui/quicknotes/actual-note-view/tms/tms-note-detail-view'
 import { VitalsNoteDetailView } from '@/ui/quicknotes/actual-note-view/vitals/vitals-note-detail-view'
 import { WorkingDiagnosisNoteDetailView } from '@/ui/quicknotes/actual-note-view/working-diagnosis/working-diagnosis-note-detail-view'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
@@ -117,7 +118,7 @@ const widgetsArray: Array<WidgetType> = [
   },
   {
     id: QuickNoteSectionName.ProcedureTMS,
-    actualNoteDetailComponent: TmsDetailClientView,
+    actualNoteDetailComponent: TmsNoteDetailView,
   },
   {
     id: QuickNoteSectionName.QuicknoteSectionTherapyAssessmentPlan,
@@ -192,4 +193,6 @@ const getWidgetsArrayByVisitType = (
   return widgetsForVisitType
 }
 
-export { getWidgetsArrayByVisitType }
+const getCachedWidgetsByVisitType = cache(getWidgetsArrayByVisitType)
+
+export { getWidgetsArrayByVisitType, getCachedWidgetsByVisitType }

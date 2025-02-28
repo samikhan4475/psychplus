@@ -1,7 +1,8 @@
-'use server'
+'use client'
 
-import * as api from '@/api'
+import * as api from '@/api/api.client'
 import { ApiResponse } from '../create-note/types'
+import { NOTE_MARK_ERROR_ENDPOINT } from '@/api/endpoints'
 
 interface MarkErrorParams {
   patientId?: string
@@ -10,7 +11,7 @@ interface MarkErrorParams {
 }
 
 const markToErrorAction = async (payload: MarkErrorParams) => {
-  const endpoint = api.NOTE_MARK_ERROR_ENDPOINT(
+  const endpoint = NOTE_MARK_ERROR_ENDPOINT(
     payload.appointmentId,
     payload.noteId,
     payload.patientId,

@@ -9,6 +9,7 @@ import toast from 'react-hot-toast'
 import z from 'zod'
 import { removeToCosignerAction } from './actions/remove-to-cosigner'
 import { useStore } from './store'
+import { Tabs } from './types'
 import { useNoteActions } from './use-note-actions'
 
 const schema = z.object({
@@ -34,10 +35,21 @@ const RemoveCosignDialog = ({
     },
   })
 
-  const { fetch, patientId, setSelectedRow } = useStore((state) => ({
+  const {
+    fetch,
+    patientId,
+    setSelectedRow,
+    isInboxNotes,
+    fetchStaffNotes,
+    tab,
+  } = useStore((state) => ({
     fetch: state.fetch,
     patientId: state.patientId,
     setSelectedRow: state.setSelectedRow,
+    tab: state.tab,
+
+    isInboxNotes: state.isInboxNotes,
+    fetchStaffNotes: state.fetchStaffNotes,
   }))
 
   const onSubmit: SubmitHandler<SchemaType> = async () => {
@@ -52,7 +64,13 @@ const RemoveCosignDialog = ({
       setLoading(false)
       return
     }
-    fetch({ patientId })
+    const statuses =
+      tab === Tabs.PENDING_NOTES ? ['pending'] : ['SignedPending']
+    isInboxNotes
+      ? fetchStaffNotes({
+          status: statuses,
+        })
+      : fetch({ patientId })
     toast.success('Co-signer removed successfully')
     removecloseDialog()
     setSelectedRow(undefined)

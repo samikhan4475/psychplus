@@ -61,6 +61,7 @@ const NoteDetail = ({ children }: PropsWithChildren) => {
             <PsychiatricEvaluation
               patient={patient}
               appointment={appointment}
+              cosignerLabel={selectedRow?.cosignedByUserName}
             />
           )}
           {widgets.map(
@@ -99,10 +100,10 @@ const NoteDetail = ({ children }: PropsWithChildren) => {
           <Separator className="w-full" mt="1" />
         </Flex>
       )}
-      {selectedRow?.metadata?.createdOn && (
+      {selectedRow?.signedDate && (
         <Heading size="3" my="1" weight="medium">
           E-Signed by: {selectedRow?.signedByUserName}, at{' '}
-          {format(new Date(selectedRow.metadata.createdOn), 'MM/dd/yyyy')}
+          {format(new Date(selectedRow.signedDate), 'MM/dd/yyyy')}
         </Heading>
       )}
       {selectedRow?.cosignedDate && (

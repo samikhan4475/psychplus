@@ -31,7 +31,11 @@ const InboxNavigation = () => {
   return (
     <Box className="bg-white mb-4 mt-1 w-[160px] rounded-1 shadow-2">
       <ScrollArea>
-        <Accordion.Root className=" mb-2 rounded-1 p-2" type="multiple">
+        <Accordion.Root
+          className=" mb-2 rounded-1 p-2"
+          type="multiple"
+          defaultValue={['Notes']}
+        >
           {navLinks.map((widget) => {
             const shouldRender =
               !widget.conditions || widget.conditions.every(Boolean)
@@ -108,7 +112,7 @@ const NavigationLink = ({
       className={cn(
         'text-pp-text-sub bg-white hover:bg-pp-focus-bg justify-start rounded-1 px-2 py-1 text-left text-[11.5px]',
         {
-          'bg-pp-focus-bg text-pp-black-3 font-[600]': isActive,
+          'bg-pp-focus-bg text-pp-black-3 px-2 py-5 font-[600]': isActive,
         },
       )}
       style={{ textAlign: 'left' }}

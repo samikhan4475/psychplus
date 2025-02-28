@@ -14,12 +14,6 @@ interface InboxLinkProps {
 const InboxLink = ({ href, label }: InboxLinkProps) => {
   const addTab = useStore((state) => state.addTab)
 
-  const isFeatureFlagEnabled = useFeatureFlagEnabled(
-    FEATURE_FLAGS.ehr11786EnableGalaxySecondPhaseFeatures,
-  )
-
-  if (!isFeatureFlagEnabled) return
-
   return (
     <NextLink
       href={href}

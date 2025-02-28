@@ -1,22 +1,33 @@
 'use client'
 
+import { CrossCircledIcon } from '@radix-ui/react-icons'
 import { Button } from '@radix-ui/themes'
 import { WarningIcon } from '@/components/icons'
 import { useHasPermission } from '@/hooks'
 import { useCosignDialog } from './hooks'
+import { MarkErrorDialog } from './mark-error-dialog'
 import { RemoveCosignDialog } from './remove-cosign-dialog'
 import { useStore } from './store'
+import { Tabs } from './types'
 
 const NotesRemoveConsignerButton = () => {
   const { isOpen, closeDialog, openDialog } = useCosignDialog()
 
-  const { selectedRow, setErrorMessage, setIsErrorAlertOpen } = useStore(
-    (state) => ({
-      setErrorMessage: state.setErrorMessage,
-      setIsErrorAlertOpen: state.setIsErrorAlertOpen,
-      selectedRow: state.selectedRow,
-    }),
-  )
+  const {
+    selectedRow,
+    setErrorMessage,
+    setIsErrorAlertOpen,
+    isInboxNotes,
+    tab,
+  } = useStore((state) => ({
+    setErrorMessage: state.setErrorMessage,
+    tab: state.tab,
+
+    isInboxNotes: state.isInboxNotes,
+    setIsErrorAlertOpen: state.setIsErrorAlertOpen,
+    selectedRow: state.selectedRow,
+  }))
+
   const removeCosignerButtonPermission = useHasPermission(
     'removeCosignerButtonNotesPage',
   )
@@ -37,6 +48,7 @@ const NotesRemoveConsignerButton = () => {
 
     openDialog()
   }
+
   return (
     <>
       <Button
@@ -47,10 +59,19 @@ const NotesRemoveConsignerButton = () => {
         onClick={handleClick}
         disabled={selectedRow?.cosignedByUserId ? false : true}
       >
-        <WarningIcon width={16} height={16} />
-        Remove Cosigner
+        {isInboxNotes ? (
+          <CrossCircledIcon width={13} height={13} color="gray" />
+        ) : (
+          <WarningIcon width={16} height={16} />
+        )}
+        {isInboxNotes ? 'Reject' : 'Remove Cosigner'}
       </Button>
-      <RemoveCosignDialog isOpen={isOpen} removecloseDialog={closeDialog} />
+
+      {tab === Tabs.PENDING_COSIGNER_NOTES ? (
+        <RemoveCosignDialog isOpen={isOpen} removecloseDialog={closeDialog} />
+      ) : (
+        <MarkErrorDialog isOpen={isOpen} removecloseDialog={closeDialog} />
+      )}
     </>
   )
 }

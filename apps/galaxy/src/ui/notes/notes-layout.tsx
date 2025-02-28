@@ -8,17 +8,27 @@ import { LeftPanelActions } from './left-panel-actions'
 import { LeftPanelFilters } from './left-panel-filters'
 import { NoteDetailsSection } from './note-detail'
 import { NotesTable } from './notes-table'
+import { RightPanelActions } from './right-panel-actions'
 
-const scrollClass = `max-h-[calc(100dvh_-_325px)] flex-1 [&>.rt-ScrollAreaViewport>div]:w-auto`
-const NotesLayout = ({ patientId }: { patientId: string }) => {
+const scrollClass = `flex-1 [&>.rt-ScrollAreaViewport>div]:w-auto`
+const NotesLayout = ({
+  patientId,
+  isInboxNotes,
+}: {
+  patientId?: string
+  isInboxNotes: boolean
+}) => {
   const [isVisible, setIsVisible] = useState<boolean>(true)
 
+  const maxHeight = isInboxNotes
+    ? 'max-h-[calc(100dvh_-_200px)]'
+    : 'max-h-[calc(100dvh_-_300px)]'
   return (
     <Flex className="w-full flex-1" gap={'1'}>
       <ScrollArea
         scrollbars="vertical"
         type="hover"
-        className={cn(`${scrollClass}`, 'max-w-[660px]')}
+        className={cn(`${scrollClass} ${maxHeight}`, 'max-w-[660px]')}
       >
         <Flex className={cn('w-full gap-1')} direction={'column'}>
           <Flex
@@ -27,6 +37,7 @@ const NotesLayout = ({ patientId }: { patientId: string }) => {
             className="bg-white p-2 shadow-2"
           >
             <LeftPanelActions>
+              {isInboxNotes && <RightPanelActions showButtons={false} />}
               <IconButton
                 className={cn(
                   'text-black h-6 w-6 gap-x-1 border border-mauve-4 px-[6px]',
@@ -45,11 +56,15 @@ const NotesLayout = ({ patientId }: { patientId: string }) => {
             {isVisible && <LeftPanelFilters patientId={patientId} />}
           </Flex>
           <Box className="bg-white p-2 shadow-2">
-            <NotesTable patientId={patientId} />
+            <NotesTable />
           </Box>
         </Flex>
       </ScrollArea>
-      <ScrollArea scrollbars="vertical" type="hover" className={scrollClass}>
+      <ScrollArea
+        scrollbars="vertical"
+        type="hover"
+        className={cn(`${scrollClass} ${maxHeight}`)}
+      >
         <Flex className={cn('w-full gap-1')} direction={'column'}>
           <NoteDetailsSection />
         </Flex>

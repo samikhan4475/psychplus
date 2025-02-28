@@ -56,7 +56,7 @@ const Header = async () => {
         className="text-white bg-accent-11"
       >
         <NavigationLinks />
-        <InboxLink href="/inbox?tab=pending-notes" label="Messages" />
+        <InboxLink href="/inbox?tab=pending-notes" label="Inbox" />
       </Flex>
       <NavigationTabs />
     </>

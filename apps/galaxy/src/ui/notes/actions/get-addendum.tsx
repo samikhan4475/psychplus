@@ -1,7 +1,8 @@
-'use server'
+'use client'
 
-import * as api from '@/api'
+import * as api from '@/api/api.client'
 import { Addendum } from '../types'
+import { GET_ADDENDUMS_AGAINST_NOTE_ID } from '@/api/endpoints'
 
 const getAddendumDetailsAction = async (
   patientId: string,
@@ -9,7 +10,7 @@ const getAddendumDetailsAction = async (
   noteId: string,
 ): Promise<api.ActionResult<Addendum>> => {
   const response = await api.GET(
-    api.GET_ADDENDUMS_AGAINST_NOTE_ID(patientId, appointmentId ?? '', noteId),
+    GET_ADDENDUMS_AGAINST_NOTE_ID(patientId, appointmentId ?? '', noteId),
   )
 
   if (response.state === 'error') {

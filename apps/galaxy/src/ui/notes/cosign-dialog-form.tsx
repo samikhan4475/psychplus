@@ -14,6 +14,7 @@ import {
 import { sendToCosignerAction } from './actions/sent-to-cosigner'
 import { NotesCosignerDropdown } from './note-detail/note-cosigner-dropdown'
 import { useStore } from './store'
+import { Tabs } from './types'
 import { useNoteActions } from './use-note-actions'
 
 const schema = z.object({
@@ -22,14 +23,23 @@ const schema = z.object({
 type CosignSchemaType = z.infer<typeof schema>
 
 const CosignDialogForm = ({ closeDialog }: { closeDialog: () => void }) => {
-  const { appointment, fetch, patientId, setSelectedRow } = useStore(
-    (state) => ({
-      appointment: state.appointment,
-      fetch: state.fetch,
-      patientId: state.patientId,
-      setSelectedRow: state.setSelectedRow,
-    }),
-  )
+  const {
+    appointment,
+    fetch,
+    patientId,
+    setSelectedRow,
+    isInboxNotes,
+    fetchStaffNotes,
+    tab,
+  } = useStore((state) => ({
+    appointment: state.appointment,
+    fetch: state.fetch,
+    fetchStaffNotes: state.fetchStaffNotes,
+    tab: state.tab,
+    patientId: state.patientId,
+    setSelectedRow: state.setSelectedRow,
+    isInboxNotes: state.isInboxNotes,
+  }))
 
   const { validateAndPreparePayload } = useNoteActions()
 
@@ -54,8 +64,14 @@ const CosignDialogForm = ({ closeDialog }: { closeDialog: () => void }) => {
       toast.error(result.error || 'Failed to send to co-signer')
       return
     }
+    const statuses =
+      tab === Tabs.PENDING_NOTES ? ['pending'] : ['SignedPending']
+    isInboxNotes
+      ? fetchStaffNotes({
+          status: statuses,
+        })
+      : fetch({ patientId })
 
-    fetch({ patientId })
     setSelectedRow(undefined)
     closeDialog()
     toast.success('Successfully sent to co-signer')

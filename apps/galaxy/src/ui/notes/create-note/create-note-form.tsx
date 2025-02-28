@@ -13,7 +13,7 @@ import { Appointment } from '@/types'
 import { sanitizeFormData } from '@/utils'
 import { createNoteSchema } from '.'
 import { useStore } from '../store'
-import { NoteDocumentsItemList } from '../types'
+import { NoteDocumentsItemList, Tabs } from '../types'
 import { fileUploadAction } from './action/file-upload-action'
 import { getSignNoteAction } from './action/sign-note-action'
 import { mapToUTCString } from './utils'
@@ -27,10 +27,20 @@ interface Props extends PropsWithChildren {
 }
 
 const CreateNoteForm = ({ children, noteAppointment }: Props) => {
-  const { setIsCreateNoteView, setSelectedRow, fetch } = useStore((state) => ({
+  const {
+    setIsCreateNoteView,
+    setSelectedRow,
+    fetch,
+    isInboxNotes,
+    fetchStaffNotes,
+    tab,
+  } = useStore((state) => ({
     setIsCreateNoteView: state.setIsCreateNoteView,
     setSelectedRow: state.setSelectedRow,
     fetch: state.fetch,
+    isInboxNotes: state.isInboxNotes,
+    fetchStaffNotes: state.fetchStaffNotes,
+    tab: state.tab,
   }))
   const searchParams = useSearchParams()
   const patientId = useParams().id as string
@@ -141,7 +151,13 @@ const CreateNoteForm = ({ children, noteAppointment }: Props) => {
       form.reset()
       setIsCreateNoteView(false)
       setSelectedRow(undefined)
-      fetch({ patientId })
+      const statuses =
+        tab === Tabs.PENDING_NOTES ? ['pending'] : ['SignedPending']
+      isInboxNotes
+        ? fetchStaffNotes({
+            status: statuses,
+          })
+        : fetch({ patientId })
     } else {
       toast.error(`Error signing note: ${result.error}`)
     }

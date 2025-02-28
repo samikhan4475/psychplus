@@ -1,12 +1,13 @@
-'use server'
+'use client'
 
-import * as api from '@/api'
+import * as api from '@/api/api.client'
+import { GET_APPOINTMENT_COSIGNERS_ENDPOINT } from '@/api/endpoints';
 
 const getCosignersOptionsAction = async (
   appointmentId: number,
 ): Promise<api.ActionResult<{ label: string; value: string }[]>> => {
   const response = await api.POST<any[]>( //any will update in APi integration PR
-    api.GET_APPOINTMENT_COSIGNERS_ENDPOINT(appointmentId),
+    GET_APPOINTMENT_COSIGNERS_ENDPOINT(appointmentId),
   )
 
   if (response.state === 'error') {

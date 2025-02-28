@@ -5,7 +5,7 @@ import { Flex } from '@radix-ui/themes'
 import { LoadingPlaceholder } from '@/components'
 import { PatientVital } from '@/ui/vitals'
 import { transformIn } from '@/ui/vitals/data'
-import { getPatientVitalsAction } from '@/ui/vitals/vitals-widget/actions'
+import { getPatientVitalsAction } from '@/ui/vitals/vitals-widget/client-actions/get-patient-vitals'
 import { NoteDetailProps } from '../types'
 import { Details } from './details'
 

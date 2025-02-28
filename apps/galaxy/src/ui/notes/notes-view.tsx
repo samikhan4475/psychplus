@@ -4,11 +4,14 @@ import { NotesWidget } from './notes-widget'
 import { PatientNotes } from './types'
 
 interface NotesViewProps {
-  patientId: string
+  patientId?: string
   noteAppointment?: Appointment
   patientNotes: PatientNotes[]
-  PatientProfile: PatientProfile
-  allergies: Allergy[]
+  PatientProfile?: PatientProfile
+  allergies?: Allergy[]
+  loading?: boolean
+  isInboxNotes?: boolean
+  tab?: string
 }
 
 const NotesView = ({
@@ -17,6 +20,9 @@ const NotesView = ({
   patientNotes,
   PatientProfile,
   allergies,
+  loading = false,
+  isInboxNotes = false,
+  tab = undefined,
 }: NotesViewProps) => {
   return (
     <NotesWidget
@@ -25,6 +31,9 @@ const NotesView = ({
       patientNotes={patientNotes}
       PatientProfile={PatientProfile}
       allergies={allergies}
+      isInboxNotes={isInboxNotes}
+      loading={loading}
+      tab={tab}
     />
   )
 }

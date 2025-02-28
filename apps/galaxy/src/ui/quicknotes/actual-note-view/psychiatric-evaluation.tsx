@@ -5,19 +5,19 @@ import { useCodesetCodes, useCodesetOptions } from '@/hooks'
 import { Appointment, PatientProfile } from '@/types'
 import { convertToTimezone } from '@/ui/visit/utils'
 import { getPatientFullName, getSlashedPaddedDateString } from '@/utils'
-import { useStore } from '../store'
 import { BlockContainer, LabelAndValue } from './shared'
 
 interface Props {
   appointment: Appointment
   patient: PatientProfile
+  cosignerLabel?: string
 }
 
-const PsychiatricEvaluation = ({ appointment, patient }: Props) => {
-  const { cosignerLabel } = useStore((state) => ({
-    cosignerLabel: state.cosignerLabel,
-  }))
-
+const PsychiatricEvaluation = ({
+  appointment,
+  patient,
+  cosignerLabel,
+}: Props) => {
   const ServicesOffered = useCodesetCodes(CODESETS.ServicesOffered)
   const service = ServicesOffered.find(
     (service) => service.value === appointment.service,

@@ -11,7 +11,18 @@ const options = [
   { label: 'Error', value: 'Error' },
 ]
 
-const StatusSelect = ({ disabled = false }: { disabled?: boolean }) => {
+const pendingNotesOptions = [
+  { label: 'Pending', value: 'Pending' },
+  { label: 'Signed/Pending', value: 'SignedPending' },
+]
+
+const StatusSelect = ({
+  disabled = false,
+  isInboxNotes,
+}: {
+  disabled?: boolean
+  isInboxNotes: boolean
+}) => {
   return (
     <Flex direction="column" className={'w-full gap-0.5'}>
       <FormFieldLabel className="text-1 leading-[16px]">
@@ -20,7 +31,7 @@ const StatusSelect = ({ disabled = false }: { disabled?: boolean }) => {
       <SelectInput
         field="status"
         placeholder="Select"
-        options={options}
+        options={isInboxNotes ? pendingNotesOptions : options}
         buttonClassName={buttonClassName}
         disabled={disabled}
       />

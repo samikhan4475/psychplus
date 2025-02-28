@@ -59,6 +59,7 @@ const AddendumButton = ({ onClick }: AddendumButtonProps) => {
       size="1"
       className="text-black"
       onClick={handleClick}
+      disabled={!selectedRow}
     >
       <PlusIcon className="text-pp-gray-3" width={16} height={16} />
       Addendum

@@ -2,6 +2,7 @@
 
 import { Flex, ScrollArea } from '@radix-ui/themes'
 import { Appointment, PatientProfile, QuickNoteSectionItem } from '@/types'
+import { useStore } from '../store'
 import { WidgetType } from '../types'
 import { ActualNoteViewClient } from './actual-note-client'
 import { ActualNoteDataProvider } from './actual-note-data-provider'
@@ -28,6 +29,9 @@ const ActualNoteView = ({
   appointmentId,
   data = [],
 }: ActualNoteViewProps) => {
+  const { cosignerLabel } = useStore((state) => ({
+    cosignerLabel: state.cosignerLabel,
+  }))
   return (
     <ActualNoteViewClient>
       <ScrollArea className="max-w-96 min-w-96 h-full">
@@ -39,7 +43,11 @@ const ActualNoteView = ({
           className="bg-white"
           direction="column"
         >
-          <PsychiatricEvaluation patient={patient} appointment={appointment} />
+          <PsychiatricEvaluation
+            patient={patient}
+            appointment={appointment}
+            cosignerLabel={cosignerLabel}
+          />
           {widgets.map(({ id, actualNoteComponent: ActualNoteComponent }) => {
             if (!ActualNoteComponent) return null
 

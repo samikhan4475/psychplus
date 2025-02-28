@@ -1,14 +1,18 @@
 import { create } from 'zustand'
 import { getAppointment } from '@/actions'
 import { Appointment, PatientProfile, StaffResource } from '@/types'
-import { getBookedAppointmentsAction } from '../schedule/actions'
+import { getPatientAllergiesAction } from '../allergy/patient-allergies-widget/client-actions'
+import { Allergy } from '../quicknotes/actual-note-view/types'
+import { getBookedAppointmentsAction } from '../schedule/client-actions'
 import {
   getNoteDetailsAction,
   GetNoteDetailsParams,
   getPatientNotesAction,
+  getStaffNotesAction,
 } from './actions'
 import { getAddendumDetailsAction } from './actions/get-addendum'
-import { getWidgetsArrayByVisitType } from './note-detail/utils'
+import { getPatientProfileAction } from './client-actions/get-patient-profile'
+import { getCachedWidgetsByVisitType } from './note-detail/utils'
 import type {
   Addendum,
   GetPatientNotesParams,
@@ -18,7 +22,6 @@ import type {
   PatientNotes,
   WidgetType,
 } from './types'
-import { Allergy } from '../quicknotes/actual-note-view/types'
 
 interface Store {
   patientId: string
@@ -40,7 +43,11 @@ interface Store {
   isCreateNoteView: boolean
   errorMessage: string
   isErrorAlertOpen: boolean
+  isInboxNotes: boolean
+  addAddendum: boolean
+  tab?: string
   setPatientId: (id: string) => void
+  setTab: (tab?: string) => void
   setData: (data: GetPatientNotesResponse) => void
   setAllergies: (allergies: Allergy[]) => void
   setPatient: (patient: PatientProfile) => void
@@ -49,13 +56,23 @@ interface Store {
   setSelectedRows: (value: PatientNotes[]) => void
   setAppointment: (value: Appointment) => void
   setIsCreateNoteView: (value: boolean) => void
+  setAddAddendum: (addAddendum: boolean) => void
   setErrorMessage: (value: string) => void
   setIsErrorAlertOpen: (value: boolean) => void
+  setIsInboxNotes: (value: boolean) => void
   fetchAppointment: (appointmentId: string) => void
+  fetchPatient: (patientId: string) => void
+  fetchPatientAllergies: (patientId: string) => void
   fetchAppointments: (patientId: string, appointmentId: string) => void
   fetchNoteDetail: (payload: GetNoteDetailsParams) => void
   setLoadingDetail: (loadingDetail: boolean) => void
+  setLoading: (loading: boolean) => void
   fetch: (
+    payload: GetPatientNotesParams,
+    page?: number,
+    reset?: boolean,
+  ) => void
+  fetchStaffNotes: (
     payload: GetPatientNotesParams,
     page?: number,
     reset?: boolean,
@@ -75,6 +92,7 @@ interface Store {
 
 const useStore = create<Store>((set, get) => ({
   patientId: '',
+  addAddendum: false,
   appointmentId: '',
   data: undefined,
   loading: false,
@@ -87,13 +105,18 @@ const useStore = create<Store>((set, get) => ({
   selectedRow: undefined,
   selectedRows: [],
   isErrorAlertOpen: false,
+  isInboxNotes: false,
   errorMessage: '',
   isCreateNoteView: false,
+  tab: undefined,
+  setAddAddendum: (addAddendum) => set({ addAddendum }),
   setData: (data) => set({ data }),
+  setTab: (tab) => set({ tab }),
   setAllergies: (allergies) => set({ allergies }),
   setPatient: (patient) => set({ patient }),
   setPatientId: (patientId) => set({ patientId }),
   setLoadingDetail: (loadingDetail) => set({ loadingDetail }),
+  setLoading: (loading) => set({ loading }),
   setAppointment: (appointment) => set({ appointment }),
   setAppointmentId: (appointmentId) => set({ appointmentId }),
   setSelectedRow: (selectedRow) => set({ selectedRow }),
@@ -101,12 +124,68 @@ const useStore = create<Store>((set, get) => ({
   setIsCreateNoteView: (isCreateNoteView) => set({ isCreateNoteView }),
   setErrorMessage: (errorMessage) => set({ errorMessage }),
   setIsErrorAlertOpen: (isErrorAlertOpen) => set({ isErrorAlertOpen }),
+  setIsInboxNotes: (isInboxNotes) => set({ isInboxNotes }),
+  fetchPatient: async (patientId: string) => {
+    set({
+      error: undefined,
+    })
+
+    const patient = await getPatientProfileAction(patientId)
+
+    if (patient.state === 'error') {
+      return set({
+        error: patient.error,
+      })
+    }
+
+    set({
+      patient: patient.data,
+    })
+  },
+  fetchPatientAllergies: async (patientId: string) => {
+    set({
+      error: undefined,
+    })
+
+    const payload = {
+      patientIds: [patientId],
+    }
+
+    const allergies = await getPatientAllergiesAction({ payload })
+
+    if (allergies.state === 'error') {
+      return set({
+        error: allergies.error,
+      })
+    }
+
+    set({
+      allergies: allergies.data,
+    })
+  },
   fetch: async (payload) => {
     set({
       error: undefined,
       loading: true,
     })
     const result = await getPatientNotesAction(payload)
+    if (result.state === 'error') {
+      return set({
+        error: result.error,
+        loading: false,
+      })
+    }
+    set({
+      data: result.data,
+      loading: false,
+    })
+  },
+  fetchStaffNotes: async (payload) => {
+    set({
+      error: undefined,
+      loading: true,
+    })
+    const result = await getStaffNotesAction(payload)
     if (result.state === 'error') {
       return set({
         error: result.error,
@@ -181,7 +260,7 @@ const useStore = create<Store>((set, get) => ({
 
   fetchWidgets: ({ visitType, visitSequence, providerType }) => {
     set({ loadingDetail: true, error: undefined })
-    const widgetsArray = getWidgetsArrayByVisitType(
+    const widgetsArray = getCachedWidgetsByVisitType(
       visitType,
       visitSequence,
       providerType,

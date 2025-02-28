@@ -1,9 +1,6 @@
-import {
-  Metadata,
-  QuickNoteSectionItem
-} from '@/types'
 import { type Row } from '@tanstack/react-table'
 import { DateValue } from 'react-aria-components'
+import { Metadata, QuickNoteSectionItem } from '@/types'
 import { NoteDetailProps } from '../quicknotes/actual-note-view/types'
 import { QuickNoteSectionName } from '../quicknotes/constants'
 
@@ -40,6 +37,7 @@ interface PatientNotes {
   cosignedByUserId?: number
   locationTimeZone?: string
   appointmentDateTime?: string
+  patientName?: PatientName
 }
 
 type PayloadType = {
@@ -78,6 +76,15 @@ interface CreateSignNoteParams {
   patientId: string
   appointmentId: string | null
   payload: NoteObject
+}
+
+interface InboxSignNoteParams {
+  patientId: string
+  appointmentId: string
+  noteId: string
+  payload: {
+    signDateTime: string
+  }
 }
 interface GetNoteDocumentParams {
   patientId: string
@@ -161,20 +168,46 @@ interface NoteDocumentsItemList {
 }
 
 interface GetPatientNotesParams {
-  patientId: string
+  patientId?: string
   dateFrom?: string
   dateTo?: string
   authorIds?: number[]
   visitTypeIds?: number[]
   locationIds?: string[]
-  locationServicesIds?: string[]
+  locationServicesOffered?: string[]
   stateIds?: string[]
   practiceIds?: string[]
   organizationIds?: string[]
-  status?: string
+  status?: string[]
+  patientName?: string
+}
+
+interface PatientName {
+  firstName: string
+  lastName: string
+}
+export enum Tabs {
+  PENDING_COSIGNER_NOTES = 'pendingCosign',
+  PENDING_NOTES = 'pending',
 }
 
 export type {
-  Addendum, CreateSignNoteParams, EncounterSignedNote, EncounterSignedNoteDetail, GetNoteDocumentParams, GetPatientNotesParams, GetPatientNotesResponse, GroupedBySectionName, NoteDetail, NoteDocument, NoteDocumentResponse, NoteDocuments, NoteDocumentsItemList, PatientNoteRow, PatientNotes, PayloadType, QuickNoteSectionItemPayload, WidgetType
+  Addendum,
+  CreateSignNoteParams,
+  EncounterSignedNote,
+  EncounterSignedNoteDetail,
+  GetNoteDocumentParams,
+  GetPatientNotesParams,
+  GetPatientNotesResponse,
+  GroupedBySectionName,
+  NoteDetail,
+  NoteDocument,
+  NoteDocumentResponse,
+  NoteDocuments,
+  NoteDocumentsItemList,
+  PatientNoteRow,
+  PatientNotes,
+  QuickNoteSectionItemPayload,
+  WidgetType,
+  InboxSignNoteParams,
 }
-

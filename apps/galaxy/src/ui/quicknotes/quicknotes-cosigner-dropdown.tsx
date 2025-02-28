@@ -20,7 +20,7 @@ const QuickNotesCosignerDropdown = ({
   const [alertMessage, setAlertMessage] = useState<string>('')
   const { canChangeCosignerQuickNotePage } = useQuickNotesPermissions()
   const uniqueCosigners = Array.from(
-    new Map(cosigners.map((item) => [item.id, item])).values(),
+    new Map(cosigners.map((item) => [item.userId, item])).values(),
   )
   const { signOptions, setSignOptions, setCosignerLabel } = useStore(
     (state) => ({
@@ -32,7 +32,7 @@ const QuickNotesCosignerDropdown = ({
 
   const getLabel = (value: string) => {
     const selectedOption = uniqueCosigners.find(
-      (option) => option?.id === Number(value),
+      (option) => option?.userId === String(value),
     )
     return selectedOption?.legalName
       ? getPatientFullName(selectedOption?.legalName)
@@ -43,7 +43,7 @@ const QuickNotesCosignerDropdown = ({
     signOptions.coSignedByUserId !== undefined &&
     signOptions.coSignedByUserId !== null
       ? String(signOptions.coSignedByUserId)
-      : String(filterDefaultCosigner(uniqueCosigners || [])?.id || '')
+      : String(filterDefaultCosigner(uniqueCosigners || [])?.userId || '')
 
   const label = getLabel(cosignerId)
 
@@ -81,8 +81,8 @@ const QuickNotesCosignerDropdown = ({
           position="popper"
           onCloseAutoFocus={(e) => e.preventDefault()}
         >
-          {uniqueCosigners?.map(({ id, legalName }, ind) => (
-            <Select.Item key={`${id}-${ind}`} value={String(id)}>
+          {uniqueCosigners?.map(({ id, legalName, userId }, ind) => (
+            <Select.Item key={`${id}-${ind}`} value={String(userId)}>
               {getPatientFullName(legalName)}
             </Select.Item>
           ))}

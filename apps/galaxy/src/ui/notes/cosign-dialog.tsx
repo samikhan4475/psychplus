@@ -7,10 +7,11 @@ import { CosignDialogForm } from './cosign-dialog-form'
 
 interface CosignDialogProps {
   isOpen?: boolean
+  title: string
   closeDialog: () => void
 }
 
-const CosignDialog = ({ isOpen, closeDialog }: CosignDialogProps) => {
+const CosignDialog = ({ isOpen, closeDialog, title }: CosignDialogProps) => {
   return (
     <Dialog.Root
       open={isOpen}
@@ -25,7 +26,7 @@ const CosignDialog = ({ isOpen, closeDialog }: CosignDialogProps) => {
           <X size={20} strokeWidth={1.5} />
         </Dialog.Close>
         <Dialog.Title size="6" className="font-[600]">
-          Send to Co-Signer
+          {title}
         </Dialog.Title>
         <CosignDialogForm closeDialog={closeDialog} />
       </Dialog.Content>

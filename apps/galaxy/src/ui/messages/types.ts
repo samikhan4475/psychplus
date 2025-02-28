@@ -1,3 +1,5 @@
+import { PatientNotes } from '../notes/types'
+
 enum Tabs {
   INBOX = 'inbox',
   DRAFT = 'draft',
@@ -15,7 +17,10 @@ enum Tabs {
 interface Store {
   visitedTabs: Set<string>
   activeTab: string
+  loading: boolean
+  notesData: PatientNotes[]
   setActiveTab: (activeTab: string) => void
+  fetchNotes: (status: string[]) => Promise<void>
 }
 
 interface StoreInitialState {

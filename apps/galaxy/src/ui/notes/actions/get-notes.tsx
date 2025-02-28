@@ -1,20 +1,17 @@
 'use client'
 
 import * as api from '@/api/api.client'
+import { GET_NOTES_ENDPOINT } from '@/api/endpoints'
 import type {
   GetPatientNotesParams,
   GetPatientNotesResponse,
   PatientNotes,
 } from '../types'
-import { GET_DETAILED_NOTE_ENDPOINT } from '@/api/endpoints'
 
-const getPatientNotesAction = async (
+const getStaffNotesAction = async (
   payload: GetPatientNotesParams,
 ): Promise<api.ActionResult<GetPatientNotesResponse>> => {
-  const response = await api.POST(
-    `${GET_DETAILED_NOTE_ENDPOINT(payload.patientId)}`,
-    payload,
-  )
+  const response = await api.POST(`${GET_NOTES_ENDPOINT()}`, payload)
 
   if (response.state === 'error') {
     return {
@@ -31,4 +28,4 @@ const getPatientNotesAction = async (
   }
 }
 
-export { getPatientNotesAction }
+export { getStaffNotesAction }
