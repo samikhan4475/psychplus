@@ -21,8 +21,7 @@ const SchedulerActionButtonGroup = () => {
     FEATURE_FLAGS.ehr11786EnableGalaxySecondPhaseFeatures,
   )
   const hasPermissionToDownloadOrPrint = useHasPermission('clickDownloadButton')
-  const { page, formData } = useListViewStore((state) => ({
-    page: state.page,
+  const { formData } = useListViewStore((state) => ({
     formData: state.formData,
   }))
   const [isOpen, setIsOpen] = useState<boolean>(false)
@@ -38,7 +37,6 @@ const SchedulerActionButtonGroup = () => {
       downloadAppointmentsAction({
         type: FileTypes.Xlsx,
         params: sanitizedBody,
-        page,
       })
     } else {
       setIsOpen(true)
@@ -64,19 +62,15 @@ const SchedulerActionButtonGroup = () => {
         </AddVisit>
 
         {isFeatureFlagEnabled && (
-          <>
-            <IconButton
-              variant="outline"
-              onClick={
-                hasPermissionToDownloadOrPrint
-                  ? undefined
-                  : () => setIsOpen(true)
-              }
-              className="h-6 rounded-[2px] [box-shadow:inset_0_0_0_0.5px_#9E9898CC]"
-            >
-              <PrinterIcon />
-            </IconButton>
-          </>
+          <IconButton
+            variant="outline"
+            onClick={
+              hasPermissionToDownloadOrPrint ? undefined : () => setIsOpen(true)
+            }
+            className="h-6 rounded-[2px] [box-shadow:inset_0_0_0_0.5px_#9E9898CC]"
+          >
+            <PrinterIcon />
+          </IconButton>
         )}
         <DownloadButton onClick={handleDownload} />
       </Flex>
