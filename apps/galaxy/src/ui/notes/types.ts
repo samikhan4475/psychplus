@@ -187,7 +187,7 @@ interface PatientName {
   lastName: string
 }
 export enum Tabs {
-  PENDING_COSIGNER_NOTES = 'pendingCosign',
+  PENDING_COSIGNER_NOTES = 'SignedPending',
   PENDING_NOTES = 'pending',
 }
 

@@ -154,7 +154,7 @@ const LeftPanelFilters = ({ patientId }: { patientId?: string }) => {
     }
 
     if (patientId && !isInboxNotes) {
-      fetch(sanitizeFormData(payload))
+      fetch(removeEmptyValues(sanitizeFormData(payload)))
     } else if (isInboxNotes) {
       const statuses =
         tab === Tabs.PENDING_NOTES ? ['pending'] : ['SignedPending']

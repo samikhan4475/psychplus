@@ -49,6 +49,13 @@ const NotesRemoveConsignerButton = () => {
     openDialog()
   }
 
+  const dialogToShow =
+    isInboxNotes && tab === Tabs.PENDING_NOTES ? (
+      <MarkErrorDialog isOpen={isOpen} removecloseDialog={closeDialog} />
+    ) : (
+      <RemoveCosignDialog isOpen={isOpen} removecloseDialog={closeDialog} />
+    )
+
   return (
     <>
       <Button
@@ -66,12 +73,7 @@ const NotesRemoveConsignerButton = () => {
         )}
         {isInboxNotes ? 'Reject' : 'Remove Cosigner'}
       </Button>
-
-      {tab === Tabs.PENDING_COSIGNER_NOTES ? (
-        <RemoveCosignDialog isOpen={isOpen} removecloseDialog={closeDialog} />
-      ) : (
-        <MarkErrorDialog isOpen={isOpen} removecloseDialog={closeDialog} />
-      )}
+      {dialogToShow}
     </>
   )
 }

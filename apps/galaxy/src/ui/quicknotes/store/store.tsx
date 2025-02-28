@@ -23,6 +23,7 @@ interface SignPayloadProps {
   signedByUserId: number
   appointment: Appointment
   noteTypeCode?: string
+  signedDate?: string
 }
 
 interface Store {
@@ -186,9 +187,13 @@ const createStore = (initialState: StoreInitialState) =>
           isError: true,
         }
         const signResults = await signNoteAction(body)
+
         set({ loading: false })
         if (signResults.state === 'success') {
-          toast.success('Quicknote signed!')
+          const toastMessage = payload.signedDate
+            ? 'Quicknote signed!'
+            : 'Quicknote send to signed!'
+          toast.success(toastMessage)
           return
         }
         set({ isMarkedAsError: true })

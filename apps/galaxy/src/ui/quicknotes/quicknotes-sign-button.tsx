@@ -229,8 +229,9 @@ const QuickNotesSignButton = ({
     const signResults = await sign(signPayload)
 
     if (signResults.state === 'success') {
+      const toastMessage = isPrescriber ? 'signed' : 'send to signed'
       setAlertInfo(initialAlertInfo)
-      toast.success('Quicknote signed!')
+      toast.success(`Quicknote ${toastMessage}!`)
       return
     }
 
