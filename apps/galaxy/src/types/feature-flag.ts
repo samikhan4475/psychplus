@@ -25,6 +25,10 @@ interface FeatureFlagProps {
   environmentCodes: string[]
 }
 
+interface FeatureFlagData {
+  enabled: boolean
+  expiry: number
+}
 enum RecordStatus {
   ACTIVE = 'Active',
 }
@@ -39,4 +43,4 @@ interface FeatureFlag {
   environments: Environment[]
 }
 
-export { type FeatureFlag, type FeatureFlagProps, RecordStatus }
+export type { FeatureFlag, FeatureFlagProps, FeatureFlagData, RecordStatus }

@@ -1,22 +1,31 @@
 import * as api from '@/api'
-import { FeatureFlag, FeatureFlagProps } from '@/types/feature-flag'
+import { FLAG_EXPIRY_MS, MAIN_PAGE_FEATURE_FLAGS } from '@/constants'
 
-const getFeatureFlags = async (payload: FeatureFlagProps) => {
-  const response = await api.POST<FeatureFlag[]>(api.FEATURE_FLAGS, payload)
+const getFeatureFlags = async () => {
+  const flagNames = Object.values(MAIN_PAGE_FEATURE_FLAGS)
+  const now = Date.now()
 
-  if (response.state === 'error') {
-    return {
-      state: 'error',
-      error: response.error,
-    }
-  }
+  const responses = await Promise.allSettled(
+    flagNames.map((shortName) =>
+      api.POST<boolean>(api.GET_FEATURE_FLAGS_BY_SHORTNAME_ENDPOINT(shortName)),
+    ),
+  )
 
-  const result = response.data
-    .filter((featureFlag) => featureFlag.environments[0].isEnabledDefault)
-    .map((featureFlag) => featureFlag.shortName)
+  const updatedFlags = flagNames.reduce<
+    Record<string, { enabled: boolean; expiry: number }>
+  >((acc, shortName, index) => {
+    const result = responses[index]
+    const isEnabled =
+      result.status === 'fulfilled' && result.value.state === 'success'
+        ? result.value.data
+        : false
+
+    acc[shortName] = { enabled: isEnabled, expiry: now + FLAG_EXPIRY_MS }
+    return acc
+  }, {})
   return {
     state: 'success',
-    data: result || [],
+    data: updatedFlags,
   }
 }
 

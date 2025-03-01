@@ -75,10 +75,7 @@ const RootLayout = async ({ children }: React.PropsWithChildren) => {
         getUserPermissions(),
         getLoggedInUser(),
         getStaffResource(),
-        getFeatureFlags({
-          recordStatuses: [RecordStatus.ACTIVE],
-          environmentCodes: [APP_ENV],
-        }),
+        getFeatureFlags(),
       ])
 
     const userType = await getUserType(`${user.id}`)

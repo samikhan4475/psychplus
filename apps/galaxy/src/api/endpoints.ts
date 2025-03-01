@@ -23,6 +23,8 @@ const ADD_SERVICE_ENDPOINT = (locationId: string) =>
 const FEATURE_FLAGS = `${API_URL}/api/featureflags/actions/search`
 const STATES_BY_COUNTRY_ENDPOINT = (countryCode: string) =>
   `${API_URL}/api/countries/${countryCode}/states`
+const GET_FEATURE_FLAGS_BY_SHORTNAME_ENDPOINT = (shortName: string) =>
+  `${API_URL}/api/featureflags/${shortName}/actions/enabled`
 const ADD_VACATION = (staffId: string) =>
   `${API_URL}/api/staff/${staffId}/vacations`
 const EDIT_VACATION_ENDPOINT = (staffId: string, vacationId: number) =>
@@ -1004,4 +1006,5 @@ export {
   SELF_USER_BULK_SETTINGS,
   GET_NOTES_ENDPOINT,
   INBOX_SIGN_NOTE_ENDPOINT,
+  GET_FEATURE_FLAGS_BY_SHORTNAME_ENDPOINT,
 }

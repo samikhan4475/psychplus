@@ -4,6 +4,7 @@ import { Tabs } from '@/ui/messages/types'
 const getNavLinks = (
   appointmentId: string | null,
   visitType: string | null,
+  isFeatureLabOrdersFlagEnabled: boolean,
 ) => {
   const defaultBottomLinks = [
     { label: 'Patient Info', href: '/patient-info' },
@@ -25,6 +26,11 @@ const getNavLinks = (
     { label: 'Diagnosis', href: '/diagnosis' },
     { label: 'Medications', href: '/medications' },
     { label: 'Allergies', href: '/allergies' },
+    {
+      label: 'Lab Orders',
+      href: '/lab-orders',
+      conditions: [isFeatureLabOrdersFlagEnabled],
+    },
     ...defaultBottomLinks,
     { label: 'Billing History', href: '/billing-history' },
   ]
@@ -39,7 +45,11 @@ const getNavLinks = (
     { label: 'Add On', href: '/add-on' },
     { label: 'Codes', href: '/codes' },
     { label: 'Diagnosis', href: '/diagnosis' },
-    { label: 'Lab Orders', href: '/lab-orders' },
+    {
+      label: 'Lab Orders',
+      href: '/lab-orders',
+      conditions: [isFeatureLabOrdersFlagEnabled],
+    },
     { label: 'Review of System', href: '/ros' },
     { label: 'Vitals', href: '/vitals' },
     { label: 'Physical Exam', href: '/physical-exam' },

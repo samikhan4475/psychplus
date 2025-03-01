@@ -1,12 +1,13 @@
 'use server'
 
 import * as api from '@/api'
-import { FeatureFlag, FeatureFlagProps } from '@/types/feature-flag'
 
-const getFeatureFlagsAction = async (
-  payload: FeatureFlagProps,
-): Promise<api.ActionResult<FeatureFlag[]>> => {
-  const response = await api.POST<FeatureFlag[]>(api.FEATURE_FLAGS, payload)
+const getFeatureFlagAction = async (
+  shortName: string,
+): Promise<api.ActionResult<boolean>> => {
+  const response = await api.POST<boolean>(
+    api.GET_FEATURE_FLAGS_BY_SHORTNAME_ENDPOINT(shortName),
+  )
 
   if (response.state === 'error') {
     return {
@@ -21,4 +22,4 @@ const getFeatureFlagsAction = async (
   }
 }
 
-export { getFeatureFlagsAction }
+export { getFeatureFlagAction }

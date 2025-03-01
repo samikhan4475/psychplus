@@ -4,6 +4,8 @@ import { useMemo } from 'react'
 import NextLink from 'next/link'
 import { useParams, usePathname, useSearchParams } from 'next/navigation'
 import { Box, Flex, ScrollArea } from '@radix-ui/themes'
+import { FEATURE_FLAGS } from '@/constants'
+import { useFeatureFlagEnabled } from '@/hooks/use-feature-flag-enabled'
 import { cn, getNavLinks } from '@/utils'
 
 const ChartNavigation = () => {
@@ -11,10 +13,13 @@ const ChartNavigation = () => {
   const appointmentId = searchParams.get('id')
   const visitType = searchParams.get('visitType')
   const visitSequence = searchParams.get('visitSequence')
+  const isFeatureLabOrdersFlagEnabled = useFeatureFlagEnabled(
+    FEATURE_FLAGS.ehr4907LabOrdersAndResults,
+  )
 
   const navLinks = useMemo(
-    () => getNavLinks(appointmentId, visitType),
-    [appointmentId, visitType],
+    () => getNavLinks(appointmentId, visitType, isFeatureLabOrdersFlagEnabled),
+    [appointmentId, visitType, isFeatureLabOrdersFlagEnabled],
   )
 
   return (

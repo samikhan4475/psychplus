@@ -4,10 +4,12 @@ import { createContext, useContext, useRef } from 'react'
 import { useStore as zustandUseStore, type StoreApi } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
 import { createStore as zustandCreateStore } from 'zustand/vanilla'
-import { GALAXY_APP_LOCAL_STORAGE_KEY } from '@/constants'
+import { getFeatureFlagAction } from '@/actions/get-feature-flag'
+import { FLAG_EXPIRY_MS, GALAXY_APP_LOCAL_STORAGE_KEY } from '@/constants'
 import type {
   CodesetCache,
   Constants,
+  FeatureFlagData,
   RolePermission,
   StaffResource,
   UserResponse as User,
@@ -23,12 +25,14 @@ interface Store {
   staffResource: StaffResource
   codesets: CodesetCache
   permissions: Record<string, RolePermission>
-  featureFlags?: string[]
+  featureFlags?: Record<string, FeatureFlagData>
   constants: Constants
   tabs: NavigationTab[]
   addTab: (tab: NavigationTab) => void
   removeTab: (name: string) => void
   updateTab: (tab: NavigationTab) => void
+  checkFeatureFlag: (shortName: string) => boolean | undefined
+  fetchFeatureFlag: (shortName: string) => Promise<boolean>
 }
 
 interface StoreInitialState {
@@ -36,7 +40,7 @@ interface StoreInitialState {
   staffResource: StaffResource
   codesets: CodesetCache
   permissions: Record<string, RolePermission>
-  featureFlags?: string[]
+  featureFlags?: Record<string, FeatureFlagData>
   constants: Constants
 }
 
@@ -54,6 +58,26 @@ const createStore = (initialState: StoreInitialState) =>
         addTab: (tab) => set(addTabReducer(tab)),
         removeTab: (name) => set(removeTabReducer(name)),
         updateTab: (tab) => set(updateTabReducer(tab)),
+        checkFeatureFlag: (shortName) => {
+          const flag = get().featureFlags?.[shortName]
+          return flag && flag.expiry > Date.now() ? flag.enabled : undefined
+        },
+        fetchFeatureFlag: async (shortName) => {
+          const response = await getFeatureFlagAction(shortName)
+          let enabled = false
+          if (response.state === 'success') {
+            enabled = response.data
+          }
+          const expiry = Date.now() + FLAG_EXPIRY_MS
+          set((state) => ({
+            featureFlags: {
+              ...state.featureFlags,
+              [shortName]: { enabled, expiry },
+            },
+          }))
+
+          return enabled
+        },
       }),
       {
         name: GALAXY_APP_LOCAL_STORAGE_KEY,
