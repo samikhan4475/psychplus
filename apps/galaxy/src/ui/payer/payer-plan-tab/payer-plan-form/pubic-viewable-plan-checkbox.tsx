@@ -10,7 +10,7 @@ const PublicViewablePlan = () => {
       <CheckboxInput
         field="isPublicViewable"
         label="Public Viewable Plan"
-        checked={form.getValues('isPublicViewable')}
+        checked={form.watch('isPublicViewable')}
       />
     </FormFieldContainer>
   )

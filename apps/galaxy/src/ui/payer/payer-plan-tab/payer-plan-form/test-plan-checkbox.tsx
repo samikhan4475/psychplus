@@ -9,7 +9,7 @@ const TestPlanCheckbox = () => {
       <CheckboxInput
         field="isTest"
         label="Mark this as a Test Plan"
-        checked={form.getValues('isTest')}
+        checked={form.watch('isTest')}
       />
     </FormFieldContainer>
   )
