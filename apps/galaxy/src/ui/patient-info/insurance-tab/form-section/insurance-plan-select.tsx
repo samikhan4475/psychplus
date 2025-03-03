@@ -19,15 +19,12 @@ const InsurancePlanSelect = ({
   payers: InsurancePayer[]
   selectedInsuranceId?: string
 }) => {
-  const { setValue } = useFormContext();
   const [loading, setLoading] = useState(false)
   const [plans, setPlans] = useState<InsurancePlan[]>()
   const payerName = useWatch({ name: 'payerName' })
 
   useEffect(() => {
     if (!payerName) {
-      setPlans([])
-      setValue('insurancePlanId', '')
       return
     }
 
@@ -43,9 +40,8 @@ const InsurancePlanSelect = ({
         setPlans(res.data.plans)
       }
       setLoading(false)
-      setValue('insurancePlanId', '')
     })
-  }, [payerName, payers, setValue])
+  }, [payerName, payers])
 
   const options = plans?.map((plan) => ({
     label: plan.name,

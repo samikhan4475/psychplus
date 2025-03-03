@@ -7,6 +7,7 @@ import {
   SelectInput,
 } from '@/components'
 import { InsurancePayer } from '@/types'
+import { useFormContext } from 'react-hook-form'
 
 interface PayerSelectProps {
   insurancePayers: InsurancePayer[]
@@ -14,6 +15,8 @@ interface PayerSelectProps {
 }
 
 const PayerSelect = ({ insurancePayers, selectedInsuranceId }: PayerSelectProps) => {
+  const { setValue } = useFormContext();
+
   return (
     <FormFieldContainer className="w-full">
       <FormFieldLabel className="!text-1" required>
@@ -28,6 +31,10 @@ const PayerSelect = ({ insurancePayers, selectedInsuranceId }: PayerSelectProps)
             value: item.name,
           })) ?? []
         }
+        onValueChange={(value) => {
+          setValue('payerName', value);
+          setValue('insurancePlanId', '');
+        }}
         placeholder="Select payer"
         disabled={!!selectedInsuranceId}
       />
