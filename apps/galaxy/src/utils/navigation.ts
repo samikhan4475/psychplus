@@ -281,7 +281,7 @@ const getManagementNavLinks = (type: string | null, id: string | null) => {
       href: `${baseHref}/staff`,
     },
     {
-      label: 'Clearing House Setup',
+      label: 'Clearinghouse Setup',
       href: `${baseHref}/clearinghouse`,
     },
     {

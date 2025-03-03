@@ -53,7 +53,7 @@ const columns = (
       id: 'email',
       header: ({ column }) => (
         <ColumnHeader
-          label="Email"
+          label="User Email"
           sortable
           sortDir={getSortDir(column.id, sort)}
           onClick={() => {
@@ -67,7 +67,7 @@ const columns = (
       id: 'submitterId',
       header: ({ column }) => (
         <ColumnHeader
-          label="Submitter Id"
+          label="Submitter ID"
           sortable
           sortDir={getSortDir(column.id, sort)}
           onClick={() => {

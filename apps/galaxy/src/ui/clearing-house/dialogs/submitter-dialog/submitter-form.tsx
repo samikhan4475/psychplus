@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Box, Grid } from '@radix-ui/themes'
+import { Box, Grid, Text } from '@radix-ui/themes'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { AddressFieldsGroup, FormContainer } from '@/components'
@@ -109,7 +109,10 @@ const SubmitterForm = ({ data, onCloseModal }: SubmitterFormProps) => {
           </Box>
         </Grid>
 
-        <AddressFieldsGroup columnsPerRow="2" title="Primary Address" />
+        <Text weight="medium" className="text-pp-black-3 text-[14px]">
+          Primary Address
+        </Text>
+        <AddressFieldsGroup columnsPerRow="2"/>
       </Box>
 
       <SubmitFormButton />

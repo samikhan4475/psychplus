@@ -10,8 +10,8 @@ interface Store {
 }
 
 const useStore = create<Store>((set, get) => ({
-  activeTab: CodingTab.ICD,
-  viewedTabs: new Set([CodingTab.ICD]),
+  activeTab: CodingTab.CPT,
+  viewedTabs: new Set([CodingTab.CPT]),
   setActiveTab: (activeTab) => {
     const viewedTabs = get().viewedTabs
     viewedTabs.add(activeTab)

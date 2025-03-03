@@ -1,7 +1,7 @@
 'use client'
 
 import * as Tabs from '@radix-ui/react-tabs'
-import { Box, Flex, Text } from '@radix-ui/themes'
+import { Box, Flex } from '@radix-ui/themes'
 import { TabsTrigger } from '@/components'
 import { MasterFeeScheduleTabView } from './master-fee-schedule-tab'
 import { PosTabView } from './pos-tab'
@@ -17,29 +17,19 @@ const CodingTabs = () => {
   return (
     <Box className="flex-1 px-1 pt-1">
       <Tabs.Root
-        defaultValue={CodingTab.ICD}
+        defaultValue={CodingTab.CPT}
         value={activeTab}
         onValueChange={setActiveTab}
         className="flex w-full flex-col"
       >
         <Flex className="z-50">
           <Tabs.List>
-            <TabsTrigger value={CodingTab.ICD}>{CodingTab.ICD}</TabsTrigger>
             <TabsTrigger value={CodingTab.CPT}>{CodingTab.CPT}</TabsTrigger>
-            <TabsTrigger value={CodingTab.Modifier}>
-              {CodingTab.Modifier}
-            </TabsTrigger>
             <TabsTrigger value={CodingTab.POS}>{CodingTab.POS}</TabsTrigger>
           </Tabs.List>
         </Flex>
-        <TabsContent value={CodingTab.ICD}>
-          <Text>ICD </Text>
-        </TabsContent>
         <TabsContent value={CodingTab.CPT}>
           <MasterFeeScheduleTabView />
-        </TabsContent>
-        <TabsContent value={CodingTab.Modifier}>
-          <Text>Modifier </Text>
         </TabsContent>
         <TabsContent value={CodingTab.POS}>
           <PosTabView />

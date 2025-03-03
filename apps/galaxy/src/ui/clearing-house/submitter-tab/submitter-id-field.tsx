@@ -10,7 +10,7 @@ const SubmitterIdField = () => {
       <TextInput
         field="submitterId"
         className="w-full"
-        placeHolder="Search by id"
+        placeHolder="Search by ID"
       />
     </FormFieldContainer>
   )

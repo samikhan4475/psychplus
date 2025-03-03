@@ -2,22 +2,22 @@ import { create } from 'zustand'
 import { RevenueCycleTab } from './types'
 
 type Tab = RevenueCycleTab | string
-
+interface ClaimData {
+  claimId: string
+  claimStatus: string
+  claimPrimaryStatus: string
+}
 interface Store {
   activeTab: Tab
   viewedTabs: Set<Tab>
   closeableTabs: Set<Tab>
-  selectedClaimId: string
+  selectedClaimData: Record<string, ClaimData>
   selectedPayments: Record<string, string>
   selectedPdfFileUrl: string
   prevTab: Tab
   setSelectedPdfFileUrl: (selectedPdfFileUrl: string) => void
-  selectedClaimStatus: string
-  setSelectedClaimStatus: (selectedClaimStatus: string) => void
-  selectedClaimPrimaryStatus: string
-  setSelectedClaimPrimaryStatus: (selectedClaimStatus: string) => void
-  setSelectedClaim: (selectedClaimId: string) => void
   setSelectedPayment: (selectedPaymentId: string, checkNumber: string) => void
+  setSelectedClaimsData: (claimNumber: string, claimData: ClaimData) => void
   setActiveTab: (tab: Tab) => void
   closeTab: (tab: Tab) => void
 }
@@ -63,7 +63,6 @@ const useStore = create<Store>((set, get) => ({
       activeTab: get().prevTab ?? RevenueCycleTab.Claim,
       closeableTabs: updatedCloseableTabs,
       viewedTabs: updatedViewedTabs,
-      selectedClaimId: '',
       selectedPayments: tab.includes(RevenueCycleTab.CheckDetails)
         ? Object.fromEntries(
             Object.entries(get().selectedPayments).filter(
@@ -71,11 +70,15 @@ const useStore = create<Store>((set, get) => ({
             ),
           )
         : get().selectedPayments,
+      selectedClaimData: tab.includes(RevenueCycleTab.ClaimDetails)
+        ? Object.fromEntries(
+            Object.entries(get().selectedClaimData).filter(
+              ([key]) => tab !== key,
+            ),
+          )
+        : get().selectedClaimData,
     })
   },
-  selectedClaimId: '',
-  setSelectedClaim: (selectedClaimId: string) =>
-    set(() => ({ selectedClaimId: selectedClaimId })),
   selectedPayments: {},
   setSelectedPayment: (selectedPaymentId, checkNumber) =>
     set(() => ({
@@ -84,12 +87,14 @@ const useStore = create<Store>((set, get) => ({
         [checkNumber]: selectedPaymentId,
       },
     })),
-  selectedClaimStatus: '',
-  setSelectedClaimStatus: (selectedClaimStatus: string) =>
-    set(() => ({ selectedClaimStatus: selectedClaimStatus })),
-  selectedClaimPrimaryStatus: '',
-  setSelectedClaimPrimaryStatus: (selectedClaimPrimaryStatus: string) =>
-    set({ selectedClaimPrimaryStatus }),
+  selectedClaimData: {},
+  setSelectedClaimsData: (claimNumber, claimData) =>
+    set(() => ({
+      selectedClaimData: {
+        ...get().selectedClaimData,
+        [claimNumber]: claimData,
+      },
+    })),
 }))
 
 export { useStore }

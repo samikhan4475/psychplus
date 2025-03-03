@@ -23,7 +23,7 @@ const ReceiverDialog = ({ data }: DialogProps) => {
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
       {data ? <EditReceiverButton /> : <AddReceiverButton />}
 
-      <Dialog.Content className="relative max-w-[1000px]">
+      <Dialog.Content className="relative max-w-[1000px] !overflow-visible">
         <CloseDialogTrigger />
 
         <Dialog.Title className="font-sans -tracking-[0.25px]">

@@ -24,7 +24,7 @@ const columns = (
       id: 'clearingHouseName',
       header: ({ column }) => (
         <ColumnHeader
-          label="Name"
+          label="Clearinghouse Name"
           sortable
           sortDir={getSortDir(column.id, sort)}
           onClick={() => {

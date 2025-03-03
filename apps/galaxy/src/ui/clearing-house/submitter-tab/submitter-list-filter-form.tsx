@@ -82,18 +82,19 @@ const SubmitterListFilterForm = () => {
         <UserNameField />
         <EmailField />
         <SubmitterIdField />
-        <ContactPersonField />
+        <AddressFieldsGroup
+          className="flex-row"
+          columnsPerRow="2"
+          required={false}
+          isFilter
+          fieldContainerClassName="flex-row"
+          stateFieldContainerClassName="w-[80%]"
+        />
       </Grid>
       <Grid columns="12" gap="2" className="flex">
         <Flex className="col-span-7 gap-2">
-          <AddressFieldsGroup
-            className="flex-row"
-            columnsPerRow="2"
-            required={false}
-            isFilter
-            fieldContainerClassName="flex-row"
-            stateFieldContainerClassName="w-[80%]"
-          />
+          <ContactPersonField />
+
           <PhoneField />
           <FaxField />
           <ResetButton />

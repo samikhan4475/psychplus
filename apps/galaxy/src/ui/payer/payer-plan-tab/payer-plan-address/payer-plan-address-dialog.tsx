@@ -43,7 +43,7 @@ const PayerPlanAddressDialog = ({
             <Pencil1Icon width={16} height={16} className="text-pp-gray-1" />
           </IconButton>
         ) : (
-          <Button size="1" highContrast>
+          <Button size="1" className=" text-[#000000] bg-[#ffffff] [box-shadow:inset_0_0_0_0.5px_#9E9898CC]">
             <PlusIcon /> Add New
           </Button>
         )}

@@ -31,9 +31,6 @@ const ClearingHouseTabs = () => {
             <TabsTrigger value={ClearingHouseTab.Submitter}>
               {ClearingHouseTab.Submitter}
             </TabsTrigger>
-            <TabsTrigger value={ClearingHouseTab.EDI}>
-              {ClearingHouseTab.EDI}
-            </TabsTrigger>
           </Tabs.List>
         </Flex>
         <TabsContent value={ClearingHouseTab.Receiver}>
@@ -41,9 +38,6 @@ const ClearingHouseTabs = () => {
         </TabsContent>
         <TabsContent value={ClearingHouseTab.Submitter}>
           <SubmitterTabView />
-        </TabsContent>
-        <TabsContent value={ClearingHouseTab.EDI}>
-          <EdiTabView />
         </TabsContent>
       </Tabs.Root>
     </Box>

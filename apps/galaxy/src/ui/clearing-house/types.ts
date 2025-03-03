@@ -3,7 +3,6 @@ import { ClearingHouseReceiver } from '@/types'
 enum ClearingHouseTab {
   Receiver = 'Receiver',
   Submitter = 'Submitter',
-  EDI = 'Insurance Plan EDI Setup',
 }
 
 enum RecordStatuses {

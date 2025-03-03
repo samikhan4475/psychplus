@@ -20,17 +20,17 @@ const RevenueCycleTabs = () => {
     closeableTabs,
     closeTab,
     setActiveTab,
-    selectedClaimId,
     selectedPdfFileUrl,
+    selectedClaimData,
   } = useStore((state) => ({
     closeableTabs: Array.from(state.closeableTabs),
     activeTab: state.activeTab,
     setActiveTab: state.setActiveTab,
     closeTab: state.closeTab,
-    selectedClaimId: state.selectedClaimId,
     selectedPdfFileUrl: state.selectedPdfFileUrl,
+    selectedClaimData: state.selectedClaimData,
   }))
-
+  const claimTabsContent = Object.keys(selectedClaimData)
   // Claim# 1234, Check# 1234, tabId is 1234
   const tabId = activeTab?.split(' ')[1]
   return (
@@ -80,9 +80,13 @@ const RevenueCycleTabs = () => {
         <TabsContent value={RevenueCycleTab.PatientStatement}>
           <PatientStatementsTabView />
         </TabsContent>
-        <TabsContent value={`${RevenueCycleTab.ClaimDetails} ${tabId}`}>
-          <ClaimDetailView claimId={selectedClaimId} />
-        </TabsContent>
+        {claimTabsContent.map((tabid) => {
+          return (
+            <TabsContent value={`${tabid}`} key={tabid}>
+              <ClaimDetailView />
+            </TabsContent>
+          )
+        })}
         <TabsContent value={`${RevenueCycleTab.CheckDetails} ${tabId}`}>
           <InsurancePaymentDetailView />
         </TabsContent>
@@ -93,7 +97,6 @@ const RevenueCycleTabs = () => {
     </Box>
   )
 }
-
 const TabsContent = ({
   value,
   children,
@@ -102,9 +105,10 @@ const TabsContent = ({
   children: React.ReactNode
 }) => {
   const viewedTabs = useStore((state) => state.viewedTabs)
+  const forceMount = viewedTabs.has(value) ? true : undefined
   return (
     <Tabs.Content
-      forceMount={viewedTabs.has(value) ? true : undefined}
+      forceMount={forceMount}
       value={value}
       className="hidden flex-1 flex-col gap-2 data-[state=active]:flex"
     >

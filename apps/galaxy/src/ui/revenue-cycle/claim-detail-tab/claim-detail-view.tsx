@@ -6,7 +6,7 @@ import { Box, Flex, ScrollArea } from '@radix-ui/themes'
 import { DateValue } from 'react-aria-components'
 import { SubmitHandler, useFieldArray, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import { FormContainer } from '@/components'
+import { FormContainer, LoadingPlaceholder } from '@/components'
 import {
   ClaimServiceLine,
   ClaimServiceLineApiResponse,
@@ -46,19 +46,15 @@ import { useStore as ClaimDetailStore } from './store'
 import { SubmissionInformationView } from './submission-information-section'
 import { SubmissionResponseTable } from './submission-response-section'
 
-interface ClaimDetailViewProps {
-  claimId: string
-}
-const ClaimDetailView = ({ claimId }: ClaimDetailViewProps) => {
-  const { selectedClaimStatus, selectedClaimPrimaryStatus } = useStore(
-    (state) => ({
-      selectedClaimStatus: state.selectedClaimStatus,
-      selectedClaimPrimaryStatus: state.selectedClaimPrimaryStatus,
-    }),
-  )
+const ClaimDetailView = () => {
+  const { selectedClaimData } = useStore((state) => ({
+    activeTab: state.activeTab,
+    selectedClaimData: state.selectedClaimData[state.activeTab],
+  }))
   const { openAlertModal } = ClaimDetailStore((state) => ({
     openAlertModal: state.openAlertModal,
   }))
+  const { claimStatus, claimPrimaryStatus, claimId } = selectedClaimData ?? {}
   const [openItems, setOpenItems] = useState<string[]>([
     'Billing Provider',
     'Accidents And Labs',
@@ -75,8 +71,8 @@ const ClaimDetailView = ({ claimId }: ClaimDetailViewProps) => {
     useState<boolean>(false)
   const form = useForm<ClaimUpdateSchemaType>({
     disabled:
-      !ENABLE_FORM_STATUSES.includes(selectedClaimStatus) ||
-      CLAIM_PAYMENT_STATUSES.includes(selectedClaimPrimaryStatus),
+      !ENABLE_FORM_STATUSES.includes(claimStatus) ||
+      CLAIM_PAYMENT_STATUSES.includes(claimPrimaryStatus),
     resolver: zodResolver(claimUpdateSchema),
     reValidateMode: 'onChange',
     defaultValues: {
@@ -84,7 +80,6 @@ const ClaimDetailView = ({ claimId }: ClaimDetailViewProps) => {
       claimDiagnosis: [],
     },
   })
-
   const { control } = form
   const { append } = useFieldArray({
     control,
@@ -264,6 +259,7 @@ const ClaimDetailView = ({ claimId }: ClaimDetailViewProps) => {
 
     append(newServiceLine)
   }
+
   return (
     <Box>
       {openNotesDialog && (
