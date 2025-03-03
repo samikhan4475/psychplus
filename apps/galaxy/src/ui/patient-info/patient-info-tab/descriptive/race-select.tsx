@@ -3,7 +3,7 @@ import {
   FormFieldContainer,
   FormFieldLabel,
 } from '@/components'
-import { CODE_RACE, CODESETS, ETHNICITIES_GROUPING_CODES } from '@/constants'
+import { CODE_RACE, CODESETS, RACES_GROUPING_CODES } from '@/constants'
 
 const RaceSelect = () => {
   return (
@@ -13,7 +13,7 @@ const RaceSelect = () => {
       <CodesetGroupMultiSelect
         name="races"
         codeset={CODESETS.RaceAndEthnicity}
-        groupingCodes={ETHNICITIES_GROUPING_CODES}
+        groupingCodes={RACES_GROUPING_CODES}
         size="1"
         exclude={[CODE_RACE]}
       />
