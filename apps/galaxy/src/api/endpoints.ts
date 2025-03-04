@@ -637,6 +637,22 @@ const GET_ADDENDUMS_AGAINST_NOTE_ID = (
   noteId: string,
 ) =>
   `${API_URL}/api/patients/${patientId}/encounters/${appointmentId}/notes/${noteId}/addendums`
+const GET_FORWARDING_MESSAGE_LIST_ENDPOINT = `${API_URL}/api/securemessaging/forwards/actions/search`
+const UPDATE_FORWARDING_MESSAGE_ENDPOINT = (
+  userId: number,
+  messageId: string,
+) => `${API_URL}/api/users/${userId}/securemessaging/forwards/${messageId}`
+const DELETE_FORWARDING_MESSAGE_ENDPOINT = (
+  userId: number,
+  messageId: string,
+) => `${API_URL}/api/users/${userId}/securemessaging/forwards/${messageId}`
+const ADD_FORWARD_MESSAGE_ENDPOINT = (userId: number) =>
+  `${API_URL}/api/users/${userId}/securemessaging/forwards`
+const HISTORY_FORWARDING_MESSAGE_ENDPOINT = (
+  userId: number,
+  messageForwardingId: string,
+) =>
+  `${API_URL}/api/users/${userId}/securemessaging/forwards/${messageForwardingId}/history/actions/search`
 const UPDATE_PATIENT_PRESCRIPTIONS_MEDICATIONS = (patientId: string) =>
   `${API_URL}/api/patients/${patientId}/prescriptions/actions/updatestatus`
 const GET_ASSIGNING_AUTHORITIES_WITH_OPTIONAL_CODSET_CODES = `${API_URL}/api/codeset/actions/search`
@@ -983,6 +999,11 @@ export {
   UPDATE_PRACTICE_ENDPOINT,
   GET_PRACTICE_HISTORY_ENDPOINT,
   GET_ADDENDUMS_AGAINST_NOTE_ID,
+  GET_FORWARDING_MESSAGE_LIST_ENDPOINT,
+  UPDATE_FORWARDING_MESSAGE_ENDPOINT,
+  DELETE_FORWARDING_MESSAGE_ENDPOINT,
+  HISTORY_FORWARDING_MESSAGE_ENDPOINT,
+  ADD_FORWARD_MESSAGE_ENDPOINT,
   GET_ASSIGNING_AUTHORITIES_WITH_OPTIONAL_CODSET_CODES,
   GET_CODSET_CODES,
   UPDATE_CODSET_CODE,

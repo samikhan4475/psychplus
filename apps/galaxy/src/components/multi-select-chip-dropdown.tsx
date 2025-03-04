@@ -24,6 +24,7 @@ interface MuliSelectChipDropdownProps {
   disabled?: boolean
   className?: string
   showOptionsAtBottom?: boolean
+  shouldTrigger?: boolean
 }
 
 const MultiSelectChipDropdown = ({
@@ -32,6 +33,7 @@ const MultiSelectChipDropdown = ({
   disabled,
   className,
   showOptionsAtBottom = false,
+  shouldTrigger = false,
 }: MuliSelectChipDropdownProps) => {
   const form = useFormContext()
   const [searchValue, setSearchValue] = useState('')
@@ -44,16 +46,18 @@ const MultiSelectChipDropdown = ({
     (value: string) => {
       const newValue = [...selected, value]
       form.setValue(name, newValue)
+      shouldTrigger && form.trigger(name)
     },
-    [selected, form, name],
+    [selected, form, name, shouldTrigger],
   )
 
   const removeValue = useCallback(
     (value: string) => {
       const newValue = selected.filter((item) => item !== value)
       form.setValue(name, newValue)
+      shouldTrigger && form.trigger(name)
     },
-    [selected, form, name],
+    [selected, form, name, shouldTrigger],
   )
 
   const filteredOptions = useMemo(() => {

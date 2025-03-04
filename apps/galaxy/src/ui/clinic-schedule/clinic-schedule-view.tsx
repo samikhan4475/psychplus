@@ -10,9 +10,11 @@ import { useStore } from './store'
 import { VacationTimeTab } from './vacation-time-tab'
 
 interface ClinicScheduleViewProps {
+  userId: string
   staffId: string
 }
-const ClinicScheduleView = ({ staffId }: ClinicScheduleViewProps) => {
+
+const ClinicScheduleView = ({ staffId, userId }: ClinicScheduleViewProps) => {
   const { activeTab, setActiveTab } = useStore()
 
   return (
@@ -39,7 +41,7 @@ const ClinicScheduleView = ({ staffId }: ClinicScheduleViewProps) => {
         <VacationTimeTab staffId={staffId} />
       </TabsContent>
       <TabsContent value={ClinicScheduleTabs.ForwardingInbox}>
-        <ForwardingMessageTab />
+        <ForwardingMessageTab userId={Number(userId)} />
       </TabsContent>
     </Tabs.Root>
   )

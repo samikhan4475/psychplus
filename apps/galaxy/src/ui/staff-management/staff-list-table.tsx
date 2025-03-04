@@ -377,7 +377,7 @@ const StaffListTable = () => {
         tableRowClass="h-[28px]"
         data={data?.staff ?? []}
         onRowClick={(row) => {
-          const href = `/staff/${row.original.id}/dashboard`
+          const href = `/staff/${row.original.id}/dashboard?id=${row.original.userId}`
           addTab({
             href,
             label: `${row.original?.legalName?.firstName} ${row.original.legalName?.lastName} - ${row.original.id}`,

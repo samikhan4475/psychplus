@@ -2,7 +2,7 @@
 
 import { useMemo } from 'react'
 import NextLink from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useSearchParams } from 'next/navigation'
 import { Box, Flex, ScrollArea } from '@radix-ui/themes'
 import { cn, getStaffNavLinks } from '@/utils'
 
@@ -11,6 +11,8 @@ interface StaffNavigationProps {
 }
 
 const StaffNavigation = ({ staffId }: StaffNavigationProps) => {
+  const searchParams = useSearchParams()
+  const userId = searchParams.get('id')
   const navLinks = useMemo(() => getStaffNavLinks(staffId), [staffId])
 
   return (
@@ -18,7 +20,11 @@ const StaffNavigation = ({ staffId }: StaffNavigationProps) => {
       <ScrollArea>
         <Flex direction="column">
           {navLinks.map((widget) => (
-            <NavigationLink key={widget.label} href={widget.href}>
+            <NavigationLink
+              key={widget.label}
+              href={widget.href}
+              userId={userId}
+            >
               {widget.label}
             </NavigationLink>
           ))}
@@ -30,10 +36,12 @@ const StaffNavigation = ({ staffId }: StaffNavigationProps) => {
 
 interface NavigationLinkProps {
   href?: string
+  userId: string | null
 }
 
 const NavigationLink = ({
   href,
+  userId,
   children,
 }: React.PropsWithChildren<NavigationLinkProps>) => {
   const pathname = usePathname()
@@ -44,7 +52,7 @@ const NavigationLink = ({
 
   return (
     <NextLink
-      href={href}
+      href={userId ? `${href}?id=${userId}` : href}
       className={cn(
         'px-2 py-1 text-[11.5px] first:rounded-t-1 hover:bg-accent-2',
         {

@@ -1,1 +1,5 @@
-export * from "./forwarding-messages"
+export * from './forwarding-messages'
+export * from './forward-status-history'
+export * from './get-staff-option'
+export * from './update-forwarding-message'
+export * from './add-forwarding-message'
