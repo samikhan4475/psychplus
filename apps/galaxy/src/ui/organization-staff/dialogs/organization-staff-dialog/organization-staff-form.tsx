@@ -60,16 +60,14 @@ const OrganizationStaffForm = ({ data, onCloseModal }: FormProps) => {
       },
     ]
 
-    if (formData.isMailingAddressSameAsHome === 'yes') {
-      addresses.push({
-        type: 'Mailing',
-        street1: formData.mailing.street1,
-        street2: formData.mailing.street2,
-        city: formData.mailing.city,
-        state: formData.mailing.state,
-        postalCode: formData.mailing.postalCode,
-      })
-    }
+    addresses.push({
+      type: 'Mailing',
+      street1: formData.mailing.street1,
+      street2: formData.mailing.street2,
+      city: formData.mailing.city,
+      state: formData.mailing.state,
+      postalCode: formData.mailing.postalCode,
+    })
 
     let reqPayload: Partial<Staff> = {
       ...formData,
@@ -98,7 +96,7 @@ const OrganizationStaffForm = ({ data, onCloseModal }: FormProps) => {
       staffUserRoleIds: [formData.staffUserRoleIds],
     }
 
-    if (data && data?.id) {
+    if (data) {
       reqPayload = {
         staffId: Number(data?.id),
         userId: data.userId,
@@ -136,6 +134,8 @@ const OrganizationStaffForm = ({ data, onCloseModal }: FormProps) => {
         providerAttributions: formData.providerAttributions,
         organizationIds: formData.organizationIds,
         practiceIds: formData.practiceIds,
+        isMailingAddressSameAsPrimary:
+          formData.isMailingAddressSameAsHome === 'yes',
       }
       delete reqPayload.password
     } else {
@@ -146,10 +146,9 @@ const OrganizationStaffForm = ({ data, onCloseModal }: FormProps) => {
 
     const sanitizedPayload = sanitizeFormData(reqPayload)
 
-    const response =
-      data && data.id
-        ? await updateStaffAction(sanitizedPayload, data?.id)
-        : await addStaffAction(sanitizedPayload)
+    const response = data
+      ? await updateStaffAction(sanitizedPayload, data?.id)
+      : await addStaffAction(sanitizedPayload)
 
     if (response.state === 'error') {
       toast.error(response.error)

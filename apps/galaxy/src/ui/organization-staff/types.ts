@@ -76,6 +76,7 @@ interface Staff extends StaffResource {
   title: string
   email: string
   specialists: number[]
+  isMailingAddressSameAsPrimary?: boolean
 }
 
 interface GetStaffListResponse {
