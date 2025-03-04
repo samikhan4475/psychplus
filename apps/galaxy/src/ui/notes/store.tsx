@@ -26,7 +26,7 @@ import type {
 interface Store {
   patientId: string
   appointmentId: string
-  data?: GetPatientNotesResponse
+  data: GetPatientNotesResponse | undefined
   loading?: boolean
   loadingDetail?: boolean
   error?: string
@@ -46,9 +46,15 @@ interface Store {
   isInboxNotes: boolean
   addAddendum: boolean
   tab?: string
+  page: number
+  formData?: GetPatientNotesParams
+  pageCache: Record<number, GetPatientNotesResponse | undefined>
+  next: (payload: GetPatientNotesParams) => void
+  prev: (payload: GetPatientNotesParams) => void
+  jumpToPage: (payload: GetPatientNotesParams, page: number) => void
   setPatientId: (id: string) => void
   setTab: (tab?: string) => void
-  setData: (data: GetPatientNotesResponse) => void
+  setData: (data: GetPatientNotesResponse | undefined) => void
   setAllergies: (allergies: Allergy[]) => void
   setPatient: (patient: PatientProfile) => void
   setAppointmentId: (id: string) => void
@@ -109,6 +115,9 @@ const useStore = create<Store>((set, get) => ({
   errorMessage: '',
   isCreateNoteView: false,
   tab: undefined,
+  page: 1,
+  pageCache: {},
+  formData: undefined,
   setAddAddendum: (addAddendum) => set({ addAddendum }),
   setData: (data) => set({ data }),
   setTab: (tab) => set({ tab }),
@@ -180,12 +189,13 @@ const useStore = create<Store>((set, get) => ({
       loading: false,
     })
   },
-  fetchStaffNotes: async (payload) => {
+  fetchStaffNotes: async (payload, page = 1, reset = false) => {
     set({
       error: undefined,
+      formData: payload,
       loading: true,
     })
-    const result = await getStaffNotesAction(payload)
+    const result = await getStaffNotesAction({ ...payload, page })
     if (result.state === 'error') {
       return set({
         error: result.error,
@@ -195,6 +205,10 @@ const useStore = create<Store>((set, get) => ({
     set({
       data: result.data,
       loading: false,
+      pageCache: reset
+        ? { [page]: result.data }
+        : { ...get().pageCache, [page]: result.data },
+      page,
     })
   },
   fetchAppointment: async (appointmentId: string) => {
@@ -302,6 +316,40 @@ const useStore = create<Store>((set, get) => ({
     }
 
     updateNotesDetails(response.data)
+  },
+  next: (payload) => {
+    const page = get().page + 1
+    if (get().pageCache[page]) {
+      return set({
+        data: get().pageCache[page],
+        page,
+      })
+    }
+    get().fetchStaffNotes(payload, page)
+  },
+  prev: (payload) => {
+    const page = get().page - 1
+    if (get().pageCache[page]) {
+      return set({
+        data: get().pageCache[page],
+        page,
+      })
+    }
+    get().fetchStaffNotes(payload, page)
+  },
+  jumpToPage: (payload, page: number) => {
+    if (page < 1) {
+      return
+    }
+
+    if (get().pageCache[page]) {
+      return set({
+        data: get().pageCache[page],
+        page,
+      })
+    }
+
+    get().fetchStaffNotes(payload, page)
   },
 }))
 

@@ -497,8 +497,7 @@ const DELETE_PAYER_PLAN_ADDRESS = (
   `${API_URL}/api/insurance/insuranceplans/${insurancePlanId}/addresses/${payerAddressId}`
 const GET_DETAILED_NOTE_ENDPOINT = (patientId?: string) =>
   `${API_URL}/api/patients/${patientId}/detailednotes/actions/search`
-const GET_NOTES_ENDPOINT = () =>
-  `${API_URL}/api/staff/self/notes/actions/search`
+const GET_NOTES_ENDPOINT = `${API_URL}/api/staff/self/notes/actions/search`
 const GET_NOTE_VIEW_ENDPOINT = (
   patientId: string,
   appointmentId: string | null,

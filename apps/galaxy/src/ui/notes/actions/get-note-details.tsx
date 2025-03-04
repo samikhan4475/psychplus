@@ -1,8 +1,8 @@
 'use client'
 
 import * as api from '@/api/api.client'
-import { NoteDetail } from '../types'
 import { GET_NOTE_VIEW_ENDPOINT } from '@/api/endpoints'
+import { NoteDetail } from '../types'
 
 interface GetNoteDetailsParams {
   patientId: string

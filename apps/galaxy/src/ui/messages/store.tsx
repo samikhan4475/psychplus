@@ -10,8 +10,8 @@ import { Tabs, type Store, type StoreInitialState } from './types'
 const createStore = (initialState: StoreInitialState) =>
   zustandCreateStore<Store>()((set, get) => ({
     visitedTabs: new Set([Tabs.PENDING_NOTES]),
-    notesData: [],
-    loading: false,
+    notesData: undefined,
+    loading: true,
     activeTab: initialState.tab ?? Tabs.PENDING_NOTES,
     setActiveTab: (activeTab: string) => {
       const visitedTabs = get().visitedTabs
@@ -19,19 +19,14 @@ const createStore = (initialState: StoreInitialState) =>
       set({ activeTab, visitedTabs })
     },
     fetchNotes: async (status: string[]) => {
-      set({ notesData: [], loading: true })
-      try {
-        const notes = await getStaffNotesAction({ status })
-        if (notes.state === 'error') {
-          set({ notesData: [], loading: false })
-          toast.error(notes.error)
-          return
-        }
-        set({ notesData: notes.data.notes, loading: false })
-      } catch (error) {
-        set({ notesData: [], loading: false })
-        toast.error('Error fetching notes')
+      set({ notesData: undefined, loading: true })
+      const notes = await getStaffNotesAction({ status })
+      if (notes.state === 'error') {
+        set({ notesData: undefined, loading: false })
+        toast.error(notes.error)
+        return
       }
+      set({ notesData: notes.data, loading: false })
     },
   }))
 

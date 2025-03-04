@@ -13,14 +13,15 @@ import { CODESETS } from '@/constants'
 import { useCodesetCodes, useHasPermission } from '@/hooks'
 import { SharedCode } from '@/types'
 import { getSlashedDateString } from '@/utils'
+import { getTimeZoneAbbreviation } from '../schedule/utils'
 import { convertToTimezone } from '../visit/utils'
 import { TableHeaderCheckboxCell, TableRowCheckboxCell } from './cells'
+import { NOTES_TABLE_PAGE_SIZE } from './constants'
 import { getDisplayByValue } from './create-note/utils'
 import { options } from './status-select'
 import { useStore } from './store'
 import { PatientNotes } from './types'
 import { getAuthorName } from './utils'
-import { getTimeZoneAbbreviation } from '../schedule/utils'
 
 const getColumns = (
   codes: SharedCode[],
@@ -33,7 +34,7 @@ const getColumns = (
     table?: Table<PatientNotes>,
     isChecked?: boolean,
   ) => void,
-  timeZoneCodeSets:SharedCode[],
+  timeZoneCodeSets: SharedCode[],
 ) => {
   const getStateDisplayName = (codes: SharedCode[], state: string) => {
     return codes.find((element) => element.value === state)?.display
@@ -97,10 +98,13 @@ const getColumns = (
       id: 'time',
       accessorKey: 'time',
       header: ({ table }) => {
-        const firstRow = table.getRowModel().rows[0]?.original;
+        const firstRow = table.getRowModel().rows[0]?.original
         const locationTimeZoneAbbreviation = firstRow?.locationTimeZone
-          ? getTimeZoneAbbreviation(firstRow.locationTimeZone,timeZoneCodeSets) || "CST"
-          : "CST";
+          ? getTimeZoneAbbreviation(
+              firstRow.locationTimeZone,
+              timeZoneCodeSets,
+            ) || 'CST'
+          : 'CST'
 
         return <ColumnHeader label={`Time (${locationTimeZoneAbbreviation})`} />
       },
@@ -356,6 +360,7 @@ const NotesTable = () => {
         )}
         data={data?.notes || []}
         onRowClick={onRowSelect}
+        initialPageSize={NOTES_TABLE_PAGE_SIZE}
       />
     </ScrollArea>
   )

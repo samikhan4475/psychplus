@@ -1,0 +1,3 @@
+const NOTES_TABLE_PAGE_SIZE = 100
+
+export { NOTES_TABLE_PAGE_SIZE }

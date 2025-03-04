@@ -37,7 +37,7 @@ const NotesPage = async ({ params, searchParams }: NotesPageProps) => {
     noteAppointment.state === 'error' ? undefined : noteAppointment.data
 
   const patientNotesData =
-    patientNotes.state === 'error' ? [] : patientNotes.data.notes
+    patientNotes.state === 'error' ? undefined : patientNotes.data
 
   const patientAllergiesData =
     patientAllergies.state === 'error' ? [] : patientAllergies.data

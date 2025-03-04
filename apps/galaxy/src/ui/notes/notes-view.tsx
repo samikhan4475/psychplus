@@ -1,12 +1,12 @@
 import { Appointment, PatientProfile } from '@/types'
 import { Allergy } from '../quicknotes/actual-note-view/types'
 import { NotesWidget } from './notes-widget'
-import { PatientNotes } from './types'
+import { GetPatientNotesResponse } from './types'
 
 interface NotesViewProps {
   patientId?: string
   noteAppointment?: Appointment
-  patientNotes: PatientNotes[]
+  patientNotes: GetPatientNotesResponse | undefined
   PatientProfile?: PatientProfile
   allergies?: Allergy[]
   loading?: boolean

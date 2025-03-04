@@ -1,4 +1,4 @@
-import { PatientNotes } from '../notes/types'
+import { GetPatientNotesResponse } from '../notes/types'
 
 enum Tabs {
   INBOX = 'inbox',
@@ -18,7 +18,7 @@ interface Store {
   visitedTabs: Set<string>
   activeTab: string
   loading: boolean
-  notesData: PatientNotes[]
+  notesData: GetPatientNotesResponse | undefined
   setActiveTab: (activeTab: string) => void
   fetchNotes: (status: string[]) => Promise<void>
 }

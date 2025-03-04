@@ -1,10 +1,8 @@
 import { useEffect, useState } from 'react'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { CalendarDate } from '@internationalized/date'
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons'
 import { Box, Button, Flex, Grid } from '@radix-ui/themes'
 import { DateValue } from 'react-aria-components'
-import { SubmitHandler, useForm } from 'react-hook-form'
+import { SubmitHandler, useFormContext } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import z from 'zod'
 import { DatePickerInput, FormContainer, MultiSelectField } from '@/components'
@@ -53,42 +51,11 @@ const schema = z.object({
 
 type NotesFilterSchemaType = z.infer<typeof schema>
 
-const today = new Date()
-const threeeMonthsAgo = new Date()
-threeeMonthsAgo.setMonth(today.getMonth() - 3)
-
 const LeftPanelFilters = ({ patientId }: { patientId?: string }) => {
+  const form = useFormContext<NotesFilterSchemaType>()
   const search90DaysOldNotesPermission = useHasPermission(
     'search90DaysOldNotes',
   )
-
-  const form = useForm<NotesFilterSchemaType>({
-    resolver: zodResolver(schema),
-    criteriaMode: 'all',
-    defaultValues: {
-      dateFrom: new CalendarDate(
-        threeeMonthsAgo.getFullYear(),
-        threeeMonthsAgo.getMonth() + 1,
-        threeeMonthsAgo.getDate(),
-      ),
-      dateTo: new CalendarDate(
-        today.getFullYear(),
-        today.getMonth() + 1,
-        today.getDate(),
-      ),
-      author: [],
-      visitType: [],
-      visitTitle: [],
-      location: [],
-      service: [],
-      state: [],
-      practice: [],
-      organization: [],
-      noteType: '',
-      status: '',
-      patientName: '',
-    },
-  })
 
   const {
     fetch,
@@ -317,4 +284,4 @@ const LeftPanelFilters = ({ patientId }: { patientId?: string }) => {
   )
 }
 
-export { LeftPanelFilters, type NotesFilterSchemaType }
+export { LeftPanelFilters, schema, type NotesFilterSchemaType }

@@ -9,12 +9,12 @@ import { CreateNoteView } from './create-note'
 import { NotesHeader } from './notes-header'
 import { NotesLayout } from './notes-layout'
 import { useStore } from './store'
-import { PatientNotes, Tabs } from './types'
+import { GetPatientNotesResponse, Tabs } from './types'
 
 interface NotesViewProps {
   patientId?: string
   noteAppointment?: Appointment
-  patientNotes: PatientNotes[]
+  patientNotes: GetPatientNotesResponse | undefined
   PatientProfile?: PatientProfile
   allergies?: Allergy[]
   loading: boolean
@@ -78,7 +78,7 @@ const NotesWidget = ({
   }))
 
   useEffect(() => {
-    setData({ notes: patientNotes })
+    setData(patientNotes)
     setTab(tab)
     if (patientId && PatientProfile && allergies) {
       setPatientId(patientId)

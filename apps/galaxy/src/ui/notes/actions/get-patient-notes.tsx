@@ -1,12 +1,12 @@
 'use client'
 
 import * as api from '@/api/api.client'
+import { GET_DETAILED_NOTE_ENDPOINT } from '@/api/endpoints'
 import type {
   GetPatientNotesParams,
   GetPatientNotesResponse,
   PatientNotes,
 } from '../types'
-import { GET_DETAILED_NOTE_ENDPOINT } from '@/api/endpoints'
 
 const getPatientNotesAction = async (
   payload: GetPatientNotesParams,
@@ -27,6 +27,7 @@ const getPatientNotesAction = async (
     state: 'success',
     data: {
       notes: response.data as PatientNotes[],
+      total: Number(response.headers.get('psychplus-totalresourcecount')),
     },
   }
 }

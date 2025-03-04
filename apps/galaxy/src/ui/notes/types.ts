@@ -96,6 +96,7 @@ type PatientNoteRow = Row<PatientNotes>
 
 interface GetPatientNotesResponse {
   notes: PatientNotes[]
+  total: number
 }
 
 interface EncounterSignedNoteDetail {
@@ -180,6 +181,7 @@ interface GetPatientNotesParams {
   organizationIds?: string[]
   status?: string[]
   patientName?: string
+  page?: number
 }
 
 interface PatientName {

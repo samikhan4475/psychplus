@@ -24,6 +24,7 @@ const getPatientNotes = async (
     state: 'success',
     data: {
       notes: response.data as PatientNotes[],
+      total: Number(response.headers.get('psychplus-totalresourcecount')),
     },
   }
 }
