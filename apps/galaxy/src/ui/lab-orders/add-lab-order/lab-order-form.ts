@@ -27,7 +27,9 @@ const useLabOrderForm = (
   const [loadingSubmit, setLoadingSubmit] = useState(false)
   const [loadingPlaceOrder, setLoadingPlaceOrder] = useState(false)
 
-  const isFormDisabled = labOrderData.labOrderStatus === 'OrderSubmitted'
+  const isFormDisabled =
+    labOrderData?.labLocationData?.name === 'Quest' &&
+    labOrderData.labOrderStatus === 'OrderSubmitted'
 
   const form = useForm<LabOrderSchemaType>({
     resolver: zodResolver(labOrderSchema),

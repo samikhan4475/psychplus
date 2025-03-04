@@ -1,13 +1,18 @@
 'use server'
 
 import * as api from '@/api'
+import { DiagnosisIcd10Code } from '@/types'
 
 const getDiagnosisLimit = async (
-  payload: any,
+  payload: {
+    codeOrDescription?: string
+    recordStatuses?: string[]
+    diagnosisCodes?: string[]
+  },
   offset: number = 0,
-  limit: number = 10,
-): Promise<api.ActionResult<any>> => {
-  const response = await api.POST<any>(
+  limit: number = 0,
+): Promise<api.ActionResult<DiagnosisIcd10Code[]>> => {
+  const response = await api.POST<DiagnosisIcd10Code[]>(
     `${api.DIAGNOSIS_SEARCH_ICD10CODES_ENDPOINT}?offset=${offset}&limit=${limit}`,
     { ...payload },
   )
@@ -18,25 +23,19 @@ const getDiagnosisLimit = async (
     }
   }
 
-  return {
-    state: 'success',
-    data: response.data,
-  }
-}
+  const diagnosisCodes = payload?.diagnosisCodes || []
+  let data = response.data
 
-const addDiagnosis = async (payload: any): Promise<api.ActionResult<any>> => {
-  const response = await api.POST<any>(api.ADD_LAB_DIAGNOSIS, payload)
-  if (response.state === 'error') {
-    return {
-      state: 'error',
-      error: response.error,
-    }
+  if (diagnosisCodes.length > 0) {
+    data = response.data.toSorted((a, b) => {
+      return diagnosisCodes.indexOf(a.code) - diagnosisCodes.indexOf(b.code)
+    })
   }
 
   return {
     state: 'success',
-    data: response.data,
+    data,
   }
 }
 
-export { getDiagnosisLimit, addDiagnosis }
+export { getDiagnosisLimit }

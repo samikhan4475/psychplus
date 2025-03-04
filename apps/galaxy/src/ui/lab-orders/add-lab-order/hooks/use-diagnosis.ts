@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react'
-import { useSearchParams } from 'next/navigation'
+import { useParams, useSearchParams } from 'next/navigation'
 import { useFormContext } from 'react-hook-form'
+import toast from 'react-hot-toast'
 import { useDebouncedCallback } from 'use-debounce'
+import { getQuickNotesWorkingDiagnosis } from '@/ui/diagnosis/diagnosis/actions/get-working-diagnosis'
 import { getDiagnosis, getDiagnosisLimit } from '../api'
 import { DiagnosisType } from '../blocks/types'
 import { LabOrderSchemaType } from '../lab-order-schema'
@@ -14,6 +16,7 @@ export default () => {
   const form = useFormContext<LabOrderSchemaType>()
   const orderId = form.watch('labOrderId') ?? ''
   const selectedDiagnosisList = form.watch('diagnosis')
+  const { id } = useParams<{ id: string }>()
 
   const onClickDelete = (index: number) => {
     const newSelectedDiagnosisList = [...selectedDiagnosisList]
@@ -25,7 +28,7 @@ export default () => {
     if (value === '') return
     setLoading(true)
     const payload = { codeOrDescription: value, recordStatuses: ['Active'] }
-    const result = await getDiagnosisLimit(payload)
+    const result = await getDiagnosisLimit(payload, 0, 10)
     if (result.state === 'success') setDiagnosisList(result?.data ?? [])
     setLoading(false)
   }, 500)
@@ -52,8 +55,40 @@ export default () => {
     }
   }
 
+  const getQuickNoteDiagnosis = async () => {
+    setTableLoading(true)
+    const response = await getQuickNotesWorkingDiagnosis({ patientId: id })
+    if (response.state === 'success') {
+      const { sectionItemValue } = response.data?.[0] || {}
+      const diagnosisCodes = sectionItemValue?.split(',') || []
+      if (sectionItemValue !== 'empty' && diagnosisCodes?.length > 0) {
+        const diagnoseResponse = await getDiagnosisLimit({
+          diagnosisCodes,
+        })
+        if (diagnoseResponse.state === 'success') {
+          setDiagnosisList(diagnoseResponse?.data ?? [])
+          if (diagnoseResponse?.data?.length) {
+            const diagnosises = diagnoseResponse?.data?.map((item) => ({
+              ...item,
+              checked: true,
+              newDignoses: true,
+            }))
+            form.setValue('diagnosis', diagnosises)
+          }
+        }
+      }
+    } else {
+      toast.error('Failed to fetch diagnosis')
+    }
+    setTableLoading(false)
+  }
+
   useEffect(() => {
-    if (orderId && appointmentId) getPatientDiagnosis()
+    if (orderId && appointmentId) {
+      getPatientDiagnosis()
+    } else {
+      getQuickNoteDiagnosis()
+    }
   }, [])
 
   return {
