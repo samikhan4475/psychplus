@@ -13,6 +13,7 @@ import { FileFormats } from '../types'
 import { useStore } from './store'
 import { SchemaType } from './submission-filter-form'
 import { TabValue } from './types'
+import { ConfirmationDialog } from '../dialogs/confirmation-dialog'
 
 const defaultPayLoad = {
   isIncludePatientInsurancePolicy: true,
@@ -30,9 +31,11 @@ const defaultPayLoad = {
 const ExportExcelButton = () => {
   const form = useForm<SchemaType>()
   const [isExporting, setIsExporting] = useState(false)
+  const [isOpen, setIsOpen] = useState(false)
   const selectedTab = useStore((state) => state.selectedTab)
   const onExport = async () => {
     setIsExporting(true)
+    onOpen()
     const data = form.getValues()
     const formattedData = {
       ...data,
@@ -50,18 +53,30 @@ const ExportExcelButton = () => {
     await downloadFile(endpoint, fileName, 'POST', payload)
     setIsExporting(false)
   }
+
+  const onOpen = () => setIsOpen(!isOpen)
+
   return (
-    <Button
-      className="absolute -top-[84px] right-2"
-      size="1"
-      highContrast
-      type="button"
-      disabled={isExporting}
-      onClick={onExport}
-    >
-      <FileIcon />
-      Export Excel
-    </Button>
+    <>
+      <ConfirmationDialog
+        heading="Confirmation"
+        isOpen={isOpen}
+        onConfirmation={onExport}
+        closeDialog={onOpen}
+        content="Are you sure you want to download the Report?"
+      />
+      <Button
+        className="absolute -top-[84px] right-2"
+        size="1"
+        highContrast
+        type="button"
+        disabled={isExporting}
+        onClick={onOpen}
+      >
+        <FileIcon />
+        Export Excel
+      </Button>
+    </>
   )
 }
 

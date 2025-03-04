@@ -7,6 +7,7 @@ import { useForm } from 'react-hook-form'
 import { EXPORT_CLAIMS_LIST_ENDPOINT } from '@/api/endpoints'
 import { formatDateToISOString, sanitizeFormData } from '@/utils'
 import { downloadFile } from '@/utils/download'
+import { ConfirmationDialog } from '../dialogs/confirmation-dialog'
 import { FileFormats } from '../types'
 import { SchemaType } from './claims-list-filter-form'
 
@@ -25,8 +26,10 @@ const defaultPayLoad = {
 const ExportExcelButton = () => {
   const form = useForm<SchemaType>()
   const [isExporting, setIsExporting] = useState(false)
+  const [isOpen, setIsOpen] = useState(false)
   const onExport = async () => {
     setIsExporting(true)
+    onOpen()
     const data = form.getValues()
     const formattedData = {
       ...data,
@@ -44,18 +47,30 @@ const ExportExcelButton = () => {
     await downloadFile(endpoint, `Claims Report`, 'POST', payload)
     setIsExporting(false)
   }
+
+  const onOpen = () => setIsOpen(!isOpen)
+
   return (
-    <Button
-      className="absolute right-2 top-2"
-      size="1"
-      highContrast
-      type="button"
-      disabled={isExporting}
-      onClick={onExport}
-    >
-      <FileIcon />
-      Export Excel
-    </Button>
+    <>
+      <ConfirmationDialog
+        heading="Confirmation"
+        isOpen={isOpen}
+        onConfirmation={onExport}
+        closeDialog={onOpen}
+        content="Are you sure you want to download the Report?"
+      />
+      <Button
+        className="absolute right-2 top-2"
+        size="1"
+        highContrast
+        type="button"
+        disabled={isExporting}
+        onClick={onOpen}
+      >
+        <FileIcon />
+        Export Excel
+      </Button>
+    </>
   )
 }
 

@@ -13,12 +13,15 @@ import {
   InsurancePaymentSearchParams,
 } from '../types'
 import { SchemaType } from './insurance-payment-list-filter-form'
+import { ConfirmationDialog } from '../dialogs/confirmation-dialog'
 
 const ExportExcelButton = () => {
   const form = useForm<SchemaType>()
   const [isExporting, setIsExporting] = useState(false)
+  const [isOpen, setIsOpen] = useState(false)
   const onExport = async () => {
     setIsExporting(true)
+    onOpen()
     const data = form.getValues()
     const formattedData = {
       ...data,
@@ -33,18 +36,31 @@ const ExportExcelButton = () => {
     await downloadFile(endpoint, `Insurance Payments Report`, 'POST', payload)
     setIsExporting(false)
   }
+
+  const onOpen = () => setIsOpen(!isOpen)
+
   return (
-    <Button
+    <>
+     <ConfirmationDialog
+        heading="Confirmation"
+        isOpen={isOpen}
+        onConfirmation={onExport}
+        closeDialog={onOpen}
+        content="Are you sure you want to download the Report?"
+      />
+        <Button
       className="absolute right-2 top-2 z-10"
       size="1"
       highContrast
       type="button"
       disabled={isExporting}
-      onClick={onExport}
+      onClick={onOpen}
     >
       <FileIcon />
       Export Excel
     </Button>
+    </>
+  
   )
 }
 
