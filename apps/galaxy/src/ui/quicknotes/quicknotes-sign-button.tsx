@@ -96,7 +96,7 @@ const QuickNotesSignButton = ({
     signOptions.coSignedByUserId !== undefined &&
     signOptions.coSignedByUserId !== null
       ? String(signOptions.coSignedByUserId)
-      : String(filterDefaultCosigner(appointment.cosigners || [])?.id || '')
+      : String(filterDefaultCosigner(appointment.cosigners || [])?.userId || '')
 
   const noteTypeCodes = useCodesetCodes(CODESETS.NoteType).find(
     (code) => code.groupingCode === 'Primary',
@@ -133,7 +133,7 @@ const QuickNotesSignButton = ({
     patientId,
     appointmentId,
     appointment,
-    signedByUserId: appointment.providerUserId ?? staffId,
+    signedByUserId: appointment.providerUserId,
     signedDate: isPrescriber ? new Date().toISOString() : undefined,
     noteTitleCode: appointment.visitNoteTitle,
     noteTypeCode: noteTypeCodes?.value,

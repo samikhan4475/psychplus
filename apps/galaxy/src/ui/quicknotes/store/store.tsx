@@ -20,7 +20,7 @@ import { saveWidgets } from './utils'
 interface SignPayloadProps {
   patientId: string
   appointmentId: string
-  signedByUserId: number
+  signedByUserId?: number
   appointment: Appointment
   noteTypeCode?: string
   signedDate?: string

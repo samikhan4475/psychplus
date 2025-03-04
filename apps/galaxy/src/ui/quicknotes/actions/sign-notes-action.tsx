@@ -6,7 +6,7 @@ import { QuickNoteSectionItem } from '@/types'
 interface signNoteActionParams {
   patientId: string
   appointmentId: string
-  signedByUserId: number
+  signedByUserId?: number
   signedDate?: string
   isError?: boolean
   coSignedByUserId?: string
@@ -17,7 +17,7 @@ interface signNoteActionParams {
 interface signNoteActionPayload {
   patientId: number
   appointmentId: number
-  signedByUserId: number
+  signedByUserId?: number
   noteTitleCode?: string
   signedDate?: string
   coSignedByUserId?: string

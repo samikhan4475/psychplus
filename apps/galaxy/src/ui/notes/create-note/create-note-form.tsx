@@ -9,6 +9,8 @@ import { useForm, type SubmitHandler } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import z from 'zod'
 import { FormContainer } from '@/components'
+import { STAFF_ROLE_CODE_PRESCRIBER } from '@/constants'
+import { useStore as useGlobalStore } from '@/store'
 import { Appointment } from '@/types'
 import { sanitizeFormData } from '@/utils'
 import { createNoteSchema } from '.'
@@ -27,6 +29,10 @@ interface Props extends PropsWithChildren {
 }
 
 const CreateNoteForm = ({ children, noteAppointment }: Props) => {
+  const { staffRoleCode } = useGlobalStore((state) => ({
+    staffRoleCode: state.staffResource.staffRoleCode,
+  }))
+  const isPrescriber = staffRoleCode === STAFF_ROLE_CODE_PRESCRIBER
   const {
     setIsCreateNoteView,
     setSelectedRow,
@@ -83,7 +89,7 @@ const CreateNoteForm = ({ children, noteAppointment }: Props) => {
       noteTypeCode: data.noteTypeCode,
       noteTitleCode: data.noteTitleCode,
       coSignedByUserId: data.cosigner,
-      signedDate: formattedDateTime,
+      signedDate: isPrescriber ? formattedDateTime : undefined,
       encounterSignedNoteDetails: [
         {
           sectionName: 'CreateNote',
@@ -145,9 +151,9 @@ const CreateNoteForm = ({ children, noteAppointment }: Props) => {
       appointmentId,
       payload: cleanedPayload,
     })
-
+    const toastMessage = isPrescriber ? 'Signed' : 'Send to Signed'
     if (result.state === 'success') {
-      toast.success('Signed')
+      toast.success(toastMessage)
       form.reset()
       setIsCreateNoteView(false)
       setSelectedRow(undefined)
@@ -159,7 +165,7 @@ const CreateNoteForm = ({ children, noteAppointment }: Props) => {
           })
         : fetch({ patientId })
     } else {
-      toast.error(`Error signing note: ${result.error}`)
+      toast.error(`Error ${toastMessage} note: ${result.error}`)
     }
   }
   return (
