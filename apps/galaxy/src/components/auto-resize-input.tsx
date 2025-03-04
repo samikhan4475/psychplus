@@ -34,7 +34,7 @@ const AutoResizeInput = ({
   const value = form.watch(field)
   const [isEmpty, setIsEmpty] = useState(!value)
 
-  const handleChange = useDebouncedCallback(() => {
+  const handleChange = () => {
     if (ref.current && !disabled) {
       const { innerHTML } = ref.current
       const contentHTML = decodeHtmlToText(innerHTML)
@@ -46,16 +46,16 @@ const AutoResizeInput = ({
         form.trigger(field)
       }
     }
-  }, 300)
+  }
 
   useEffect(() => {
     if (!ref.current) return
+
     const currentValue = decodeHtmlToText(ref.current.innerHTML)
     const formattedValue = encodeTextToHtml(value ?? '')
-    if (currentValue !== value) {
+    if (currentValue?.trim() !== value?.trim()) {
       ref.current.innerHTML = formattedValue
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value, ref.current])
 
   useEffect(() => {
