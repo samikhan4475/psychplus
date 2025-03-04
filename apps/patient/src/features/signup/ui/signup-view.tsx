@@ -1,8 +1,9 @@
+import { SharedCode } from '@psychplus-v2/types'
 import { Flex } from '@radix-ui/themes'
 import { AnonHeader } from '@/components-v2'
 import { SignupForm } from './signup-from'
 
-const SignupView = () => {
+const SignupView = ({ genderCodes }: { genderCodes: SharedCode[] }) => {
   return (
     <Flex direction="column" width="100%">
       <AnonHeader />
@@ -15,7 +16,7 @@ const SignupView = () => {
         px="5"
         className="flex-1 py-20"
       >
-        <SignupForm />
+        <SignupForm genderCodes={genderCodes} />
       </Flex>
     </Flex>
   )

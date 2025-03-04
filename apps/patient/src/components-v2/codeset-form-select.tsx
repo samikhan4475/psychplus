@@ -1,5 +1,5 @@
 'use client'
- 
+
 import { useState } from 'react'
 import { cn } from '@psychplus-v2/utils'
 import { Select } from '@radix-ui/themes'
@@ -12,6 +12,7 @@ interface CodesetFormSelectProps
   codeset: string
   exclude?: string[]
   placeholder?: string
+  className?: string
 }
 
 const CodesetFormSelect = ({
@@ -19,13 +20,14 @@ const CodesetFormSelect = ({
   codeset,
   exclude,
   placeholder,
+  className,
   ...selectProps
 }: CodesetFormSelectProps) => {
   const form = useFormContext()
   const [resetSelectedValue, setResetSelectedValue] = useState(true)
   const codes = useCodesetCodes(codeset)
   const selectedValue = form.watch(name)
- 
+
   const items = codes
     .filter((code) => !exclude?.includes(code.value))
     .map((code) => (
@@ -34,8 +36,9 @@ const CodesetFormSelect = ({
         value={code.value}
         className={cn(
           'hover:bg-[#151B4A] hover:text-[white]',
-          selectedValue === code.value && resetSelectedValue
-            && 'bg-[#151B4A] text-[white]',
+          selectedValue === code.value &&
+            resetSelectedValue &&
+            'bg-[#151B4A] text-[white]',
         )}
         onMouseOver={() => setResetSelectedValue(false)}
       >
@@ -65,8 +68,8 @@ const CodesetFormSelect = ({
               variant="soft"
               radius="full"
               className={cn(
-                'outline outline-1 outline-gray-7 font-[400] text-gray-12',
-                selectProps.disabled ? 'bg-gray-3 text-gray-11' : 'bg-[white]',
+                'font-[400] text-gray-12 outline outline-1 outline-gray-7',
+                selectProps.disabled ? 'bg-gray-3 text-gray-11' : 'bg-[white]', className
               )}
               onClick={() => setResetSelectedValue(true)}
             />

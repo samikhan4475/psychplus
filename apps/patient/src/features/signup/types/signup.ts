@@ -10,6 +10,7 @@ interface SignupUserParams {
   guardian?: {
     name: LegalName
   }
+  gender: string
   termsOfServiceConsentOn: string
   hipaaConsentOn: string
   privacyPolicyConsentOn: string

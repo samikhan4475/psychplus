@@ -87,6 +87,7 @@ const VerifyOtpForm = ({
           },
         ],
       },
+      gender: formData.gender,
       password: formData.newPassword,
       confirmPassword: formData.confirmPassword,
       otpCode: data.otpCode,

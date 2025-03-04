@@ -13,6 +13,7 @@ interface SelectInputProps<T> extends React.ComponentProps<typeof Select.Root> {
   buttonClassName?: string
   className?: string
   tooltip?: boolean
+  variant?: 'classic' | 'surface' | 'soft' | 'ghost'
 }
 
 const SelectInput = <T extends string>({
@@ -24,6 +25,7 @@ const SelectInput = <T extends string>({
   buttonClassName,
   onValueChange,
   tooltip,
+  variant,
   ...selectProps
 }: SelectInputProps<T>) => {
   const form = useFormContext()
@@ -61,6 +63,7 @@ const SelectInput = <T extends string>({
               {...selectProps}
             >
               <Select.Trigger
+                variant={variant ?? 'surface'}
                 //@ts-ignore
                 placeholder={placeholder}
                 title={tooltip && selectedLabel ? selectedLabel : ''}

@@ -2,9 +2,10 @@
 
 import { useEffect, useState } from 'react'
 import NextLink from 'next/link'
+import { useSearchParams } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { FormContainer } from '@psychplus-v2/components'
-import { DocumentType } from '@psychplus-v2/types'
+import { DocumentType, SharedCode } from '@psychplus-v2/types'
 import {
   getAgeFromDate,
   getCalendarDate,
@@ -34,11 +35,11 @@ import {
   PhoneNumberInput,
   RadioGroupItem,
 } from '@/components-v2'
+import { SelectInput } from '@/components-v2/select-input'
 import { getPlaceholder } from '@/features/account/profile/utils'
 import { useValidateNewPassword } from '@/hooks'
 import { preverifySignupAction, sendSignupOtpAction } from '../actions'
 import { VerifyOtpForm } from './verify-otp-form'
-import { useSearchParams } from 'next/navigation'
 
 const schema = z
   .object({
@@ -47,6 +48,7 @@ const schema = z
     dateOfBirth: z.string().trim().min(1, 'Required'),
     phoneNumber: z.string().trim().length(10, 'Invalid phone number'),
     email: z.string().email().trim(),
+    gender: z.string().trim().min(1, 'Required'),
     newPassword: z
       .string()
       .min(1, 'Required')
@@ -104,7 +106,7 @@ const schema = z
 
 export type SchemaType = z.infer<typeof schema>
 
-const SignupForm = () => {
+const SignupForm = ({ genderCodes }: { genderCodes: SharedCode[] }) => {
   const [error, setError] = useState<string>()
   const [openVerifyDialog, setOpenVerifyDialog] = useState(false)
   const [showConsentView, setShowConsentView] = useState({
@@ -131,6 +133,7 @@ const SignupForm = () => {
       dateOfBirth: '',
       phoneNumber: '',
       email: '',
+      gender: '',
       newPassword: '',
       confirmPassword: '',
       userAgreed: false,
@@ -196,6 +199,7 @@ const SignupForm = () => {
     setOpenVerifyDialog(true)
   }
 
+
   return (
     <Flex
       direction="column"
@@ -257,6 +261,20 @@ const SignupForm = () => {
               />
             </FormField>
           </Flex>
+          <FormField name="gender" label="Gender" containerClassName="flex-1">
+            <SelectInput
+              size="3"
+              field="gender"
+              placeholder={'Select gender'}
+              buttonClassName="font-[400] text-gray-12 h-[30px] 
+              text-[14px] w-full [&_span]:bg-red-500 bg-[white] outline outline-1 outline-gray-7"
+              options={genderCodes.map((code) => ({
+                label: code.display,
+                value: code.value,
+              }))}
+              variant="soft"
+            />
+          </FormField>
           <FormField name="email" label="Email">
             <TextFieldInput
               {...form.register('email')}
