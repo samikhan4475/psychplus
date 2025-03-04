@@ -195,18 +195,20 @@ const AccordionItem = ({ onVisitAdd, provider, value, patient }: Props) => {
                       (slot) => {
                         if (!hasPermissionToClickOnAvailableSlots) {
                           return (
-                            <Tooltip content={`Location Time: ${extractTime(slot.startDate, slot.timeZoneId)} (${getTimeZoneAbbreviation(slot.timeZoneId, timeZoneCodeSets)})`} key={slot.startDate}>
-                              <Button
-                                variant="outline"
-                                size="1"
-                                color="gray"
-                                onClick={() => setIsAlertOpen(true)}
-                                key={slot.startDate}
-                                className="text-black text-[12px]"
-                              >
-                                {extractTime(slot.startDate, timeZoneSetting.content)}
-                              </Button>
-                            </Tooltip>
+                            <Button
+                              variant="outline"
+                              size="1"
+                              color="gray"
+                              onClick={() => setIsAlertOpen(true)}
+                              key={slot.startDate}
+                              className="text-black text-[12px]"
+                            >
+                              <Tooltip content={`Location Time: ${extractTime(slot.startDate, slot.timeZoneId)} (${getTimeZoneAbbreviation(slot.timeZoneId, timeZoneCodeSets)})`} key={slot.startDate}>
+                                <Text className='w-full'>
+                                  {extractTime(slot.startDate, timeZoneSetting.content)}
+                                </Text>
+                              </Tooltip>
+                            </Button>
                           )
                         }
 
@@ -227,16 +229,19 @@ const AccordionItem = ({ onVisitAdd, provider, value, patient }: Props) => {
                             key={slot.startDate}
                             patient={patient}
                           >
-                            <Tooltip content={`Location Time: ${extractTime(slot.startDate, slot.timeZoneId)} (${getTimeZoneAbbreviation(slot.timeZoneId, timeZoneCodeSets)})`}>
-                              <Button
-                                variant="outline"
-                                size="1"
-                                color="gray"
-                                className="text-black text-[12px]"
-                              >
-                                {extractTime(slot.startDate, timeZoneSetting.content)}
-                              </Button>
-                            </Tooltip>
+                            <Button
+                              variant="outline"
+                              size="1"
+                              color="gray"
+                              className="text-black text-[12px]"
+                            >
+                              <Tooltip
+                                content={`Location Time: ${extractTime(slot.startDate, slot.timeZoneId)} (${getTimeZoneAbbreviation(slot.timeZoneId, timeZoneCodeSets)})`}>
+                                <Text className='w-full'>
+                                  {extractTime(slot.startDate, timeZoneSetting.content)}
+                                </Text>
+                              </Tooltip>
+                            </Button>
                           </AddVisit>
                         )
                       },
