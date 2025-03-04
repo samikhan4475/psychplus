@@ -1,26 +1,68 @@
-import React, { useState } from 'react'
-import { Box, Button, Flex, Text } from '@radix-ui/themes'
-import ReviewOfSystemsSection from './blocks/review-of-systems-section'
+'use client'
+
+import React from 'react'
+import { Box, Flex, Text } from '@radix-ui/themes'
+import { FormProvider } from 'react-hook-form'
+import { NoteFormContainer } from '@/components-v2'
+import { useProfileStore } from '@/features/account/profile/store'
+import { NoteSectionName } from '@/features/note/constants'
+import { useNoteStore } from '@/features/note/store'
+import {
+  CardiovascularBlock,
+  ConstitutionalBlock,
+  EntMouthBlock,
+  EyesBlock,
+  GastrointestinalBlock,
+  GenitourinaryBlock,
+  MusculoskeletalBlock,
+  NeuroBlock,
+  RespiratoryBlock,
+  SkinBlock,
+} from './blocks'
+import { CheckAllNoConcernCell } from './blocks/check-all-no-concern-cell'
+import { transformIn, transformOut } from './data'
+import { useRosForm } from './review-of-systems-widget-form'
 
 const ReviewOfSystems: React.FC = () => {
+  const { profile } = useProfileStore((state) => ({
+    profile: state.profile,
+  }))
+
+  const { getNoteData } = useNoteStore((state) => ({
+    getNoteData: state.getNoteData,
+  }))
+  const data = getNoteData(NoteSectionName.NoteSectionReviewOfSystem)
+  const initialValue = transformIn(data)
+
+  const form = useRosForm(initialValue)
   return (
-    <Box className="bg-white rounded-2 border border-[#D9E2FC] p-6 pb-8">
-      <Flex align="center" className="mb-4 flex-col gap-[19px] sm:flex-row">
-        <Text className="text-black text-[32px] font-[600]  leading-8">
-          Review of Systems
-        </Text>
-        <Button
-          color="blue"
-          variant="outline"
-          className="bg-white h-[28px] content-center rounded-[100px] border border-[#194595] px-3 text-[12px] font-[600] text-[#194595] "
-        >
-          No Concerns
-        </Button>
-      </Flex>
-      <Box className="gap:4 grid grid-cols-1 md:grid-cols-2 md:gap-6">
-        <ReviewOfSystemsSection />
-      </Box>
-    </Box>
+    <FormProvider {...form}>
+      <NoteFormContainer
+        getData={transformOut(String(profile.id))}
+        isComponentClose={false}
+      >
+        <Box className="bg-white rounded-2 border border-[#D9E2FC] p-6 pb-8">
+          <Flex align="center" className="mb-4 flex-col gap-[19px] sm:flex-row">
+            <Text className="text-black text-[32px] font-[600]  leading-8">
+              Review of Systems
+            </Text>
+            <CheckAllNoConcernCell form={form} />
+          </Flex>
+          <Box className="gap:4 grid grid-cols-1 md:grid-cols-2 md:gap-6">
+            <ConstitutionalBlock />
+            <EntMouthBlock />
+            <EyesBlock />
+            <CardiovascularBlock />
+            <RespiratoryBlock />
+            <GastrointestinalBlock />
+            <GenitourinaryBlock />
+            <SkinBlock />
+            <MusculoskeletalBlock />
+            <NeuroBlock />
+          </Box>
+        </Box>
+      </NoteFormContainer>
+    </FormProvider>
   )
 }
 export { ReviewOfSystems }

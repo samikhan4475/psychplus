@@ -34,6 +34,7 @@ interface PillBlockProps {
   rounded: number
   fontSize: string
   fontWeight: 'bold' | 'light' | 'regular' | 'medium'
+  onToggle?: (value: string) => void
   bgColor: string
   formField: string
   complaintValue?: string
@@ -46,6 +47,7 @@ const PillBlock = ({
   rounded,
   fontSize,
   fontWeight,
+  onToggle,
   bgColor,
   formField,
   complaintValue,
@@ -60,7 +62,10 @@ const PillBlock = ({
       ? selected.filter((v) => v !== data.value)
       : [...selected, data.value]
     setValue(formField, updatedSelections)
-
+    if (onToggle) {
+      onToggle(data.value)
+      return
+    }
     if (formField !== 'chiefComplaint') {
       const complaintKey = complaintValue
       if (complaintKey) {
