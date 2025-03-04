@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import * as Popover from '@radix-ui/react-popover'
-import { Box, Flex, Heading, Text } from '@radix-ui/themes'
+import { Box, Flex, Heading, Text, Tooltip } from '@radix-ui/themes'
 import format from 'date-fns/format'
 import { type EventProps } from 'react-big-calendar'
 import { CODESETS } from '@/constants'
@@ -11,6 +11,8 @@ import { AvailableSlotsEvent } from '../types'
 import { EditVisitDetailsButton } from './edit-visit-details-button'
 import { OpenPatientChartButton } from './open-patient-chart-button'
 import { VisitStatusDropdown } from './visit-status-dropdown'
+import { useUserSettingStore } from '../store'
+import { convertToZonedDate, formatTimeCell, getTimeZoneAbbreviation } from '../utils'
 
 // TODO: add all the VisitType enum values
 enum VisitType {
@@ -43,7 +45,6 @@ const AppointmentEvent = ({
     eventContainerClassIndex[visitMedium as VisitType] ?? ''
   const startTime = format(new Date(event.start), 'HH:mm')
   const endTime = format(new Date(event.end), 'HH:mm')
-
   return (
     <>
       <Box
@@ -108,6 +109,26 @@ const CustomEvent = ({
       transformedFrequencyCodes,
     )
   }, [event.data.appointmentInterval, frequencyCodes])
+  const { timeZoneSetting } = useUserSettingStore((state) => ({
+    timeZoneSetting: state.timeZoneSetting(),
+  }))
+
+  const locationStartTime = formatTimeCell(
+    event.data.appointmentDate,
+    event.data.locationTimezoneId
+  )
+
+  const locationStartDateTime = convertToZonedDate(
+    event.data.appointmentDate,
+    event.data.locationTimezoneId
+    )
+  const timeZoneCodeSets = useCodesetCodes(CODESETS.TimeZoneId).filter(
+    (code) => code.groupingCode === 'US',
+  )
+  const preferredTimeZoneAbbreviation = getTimeZoneAbbreviation(timeZoneSetting.content,timeZoneCodeSets)
+  const duration = event.data.appointmentDuration ?? 20
+  const locationEndDate = new Date(locationStartDateTime.getTime() + duration * 60000)
+  const locationEndTime = format(new Date(locationEndDate), 'HH:mm')
 
   return (
     <Popover.Root>
@@ -143,7 +164,12 @@ const CustomEvent = ({
             <Flex className="mb-2.5 gap-x-1 text-[14px]">
               <Text className="font-[510]">{name}</Text>
               <Text className="text-pp-text-sub font-[510]">
-                {appointmentDate} {startTime}
+                {appointmentDate} 
+                <Tooltip content={`Location Time: ${locationStartTime} (${preferredTimeZoneAbbreviation})`}>
+                  <Text className='ml-1 cursor-pointer'>
+                   {startTime}
+                  </Text>
+                </Tooltip>
               </Text>
             </Flex>
             <Flex className="gap-x-7 text-[12px]">
@@ -194,9 +220,11 @@ const CustomEvent = ({
                 </Flex>
                 <Flex className="gap-x-1">
                   <Text className="font-[510]">Appointment Time</Text>
-                  <Text className="text-pp-text-sub">
-                    {startTime + ' - ' + endTime}
-                  </Text>
+                  <Tooltip content={`Location Time: ${locationStartTime} - ${locationEndTime} (${preferredTimeZoneAbbreviation})`}>
+                    <Text className="text-pp-text-sub cursor-pointer">
+                      {startTime + ' - ' + endTime}
+                    </Text>
+                  </Tooltip>
                 </Flex>
                 <Flex className="gap-x-1">
                   <Text className="font-[510]">Frequency</Text>

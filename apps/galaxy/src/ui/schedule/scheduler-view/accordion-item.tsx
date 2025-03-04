@@ -3,7 +3,7 @@
 import { useMemo, useState } from 'react'
 import * as Accordion from '@radix-ui/react-accordion'
 import { ChevronDownIcon, ChevronUpIcon } from '@radix-ui/react-icons'
-import { Box, Button, Flex, Grid, Text } from '@radix-ui/themes'
+import { Box, Button, Flex, Grid, Text, Tooltip } from '@radix-ui/themes'
 import { CODESETS } from '@/constants'
 import { useCodesetCodes, useHasPermission } from '@/hooks'
 import { NewPatient } from '@/types'
@@ -15,6 +15,8 @@ import { AvailableSlots } from '../types'
 import { useStore } from './store'
 import { AppointmentAvailability, SlotsByDay } from './types'
 import { currentWeekTotalSlots, extractTime, nextWeekTotalSlots } from './utils'
+import { useUserSettingStore } from '../store'
+import { getTimeZoneAbbreviation } from '../utils'
 
 interface Props {
   onVisitAdd?: () => void
@@ -85,7 +87,12 @@ const AccordionItem = ({ onVisitAdd, provider, value, patient }: Props) => {
   const displayInSingleSection = dates.length === 7 || isOpen
   const thisWeekDays = dates.slice(0, dates.length / 2)
   const nextWeekDays = dates.slice(dates.length / 2)
-
+  const { timeZoneSetting } = useUserSettingStore((state) => ({
+    timeZoneSetting: state.timeZoneSetting(),
+  }))
+  const timeZoneCodeSets = useCodesetCodes(CODESETS.TimeZoneId).filter(
+    (code) => code.groupingCode === 'US',
+  )
   return (
     <Accordion.Item value={value}>
       <Grid columns="16" className="ml-2.5 mr-[20px]">
@@ -185,9 +192,10 @@ const AccordionItem = ({ onVisitAdd, provider, value, patient }: Props) => {
                 <Flex direction="column" className="gap-y-2 px-[1.5px]">
                   {provider.allSlotsByDay[`${day.monthAndDay}`]
                     ? provider.allSlotsByDay[`${day.monthAndDay}`]?.map(
-                        (slot) => {
-                          if (!hasPermissionToClickOnAvailableSlots) {
-                            return (
+                      (slot) => {
+                        if (!hasPermissionToClickOnAvailableSlots) {
+                          return (
+                            <Tooltip content={`Location Time: ${extractTime(slot.startDate, slot.timeZoneId)} (${getTimeZoneAbbreviation(slot.timeZoneId, timeZoneCodeSets)})`} key={slot.startDate}>
                               <Button
                                 variant="outline"
                                 size="1"
@@ -196,40 +204,43 @@ const AccordionItem = ({ onVisitAdd, provider, value, patient }: Props) => {
                                 key={slot.startDate}
                                 className="text-black text-[12px]"
                               >
-                                {extractTime(slot.startDate, slot.timeZoneId)}
+                                {extractTime(slot.startDate, timeZoneSetting.content)}
                               </Button>
-                            )
-                          }
+                            </Tooltip>
+                          )
+                        }
 
-                          return (
-                            <AddVisit
-                              dateTime={slot.startDate}
-                              timezone={slot.timeZoneId}
-                              onAdd={() => {
-                                fetchData(formData)
-                                onVisitAdd?.()
-                              }}
-                              slotDetails={getSlotDetails(
-                                slot,
-                                provider,
-                                specialistTypeIndex,
-                              )}
-                              isTimed
-                              key={slot.startDate}
-                              patient={patient}
-                            >
+                        return (
+                          <AddVisit
+                            dateTime={slot.startDate}
+                            timezone={slot.timeZoneId}
+                            onAdd={() => {
+                              fetchData(formData)
+                              onVisitAdd?.()
+                            }}
+                            slotDetails={getSlotDetails(
+                              slot,
+                              provider,
+                              specialistTypeIndex,
+                            )}
+                            isTimed
+                            key={slot.startDate}
+                            patient={patient}
+                          >
+                            <Tooltip content={`Location Time: ${extractTime(slot.startDate, slot.timeZoneId)} (${getTimeZoneAbbreviation(slot.timeZoneId, timeZoneCodeSets)})`}>
                               <Button
                                 variant="outline"
                                 size="1"
                                 color="gray"
                                 className="text-black text-[12px]"
                               >
-                                {extractTime(slot.startDate, slot.timeZoneId)}
+                                {extractTime(slot.startDate, timeZoneSetting.content)}
                               </Button>
-                            </AddVisit>
-                          )
-                        },
-                      )
+                            </Tooltip>
+                          </AddVisit>
+                        )
+                      },
+                    )
                     : null}
                 </Flex>
               </Box>

@@ -20,6 +20,7 @@ import { options } from './status-select'
 import { useStore } from './store'
 import { PatientNotes } from './types'
 import { getAuthorName } from './utils'
+import { getTimeZoneAbbreviation } from '../schedule/utils'
 
 const getColumns = (
   codes: SharedCode[],
@@ -32,6 +33,7 @@ const getColumns = (
     table?: Table<PatientNotes>,
     isChecked?: boolean,
   ) => void,
+  timeZoneCodeSets:SharedCode[],
 ) => {
   const getStateDisplayName = (codes: SharedCode[], state: string) => {
     return codes.find((element) => element.value === state)?.display
@@ -94,7 +96,14 @@ const getColumns = (
     {
       id: 'time',
       accessorKey: 'time',
-      header: () => <ColumnHeader label="Time" />,
+      header: ({ table }) => {
+        const firstRow = table.getRowModel().rows[0]?.original;
+        const locationTimeZoneAbbreviation = firstRow?.locationTimeZone
+          ? getTimeZoneAbbreviation(firstRow.locationTimeZone,timeZoneCodeSets) || "CST"
+          : "CST";
+
+        return <ColumnHeader label={`Time (${locationTimeZoneAbbreviation})`} />
+      },
       cell: ({ row }) => {
         const { time } = convertToTimezone(
           row.original?.appointmentDateTime,
@@ -280,7 +289,9 @@ const NotesTable = () => {
   const noteTypeCodes = useCodesetCodes(CODESETS.NoteType)
   const noteTitleCodes = useCodesetCodes(CODESETS.NoteTitle)
   const serviceCodes = useCodesetCodes(CODESETS.ServicesOffered)
-
+  const timeZoneCodeSets = useCodesetCodes(CODESETS.TimeZoneId).filter(
+    (code) => code.groupingCode === 'US',
+  )
   const onRowSelect = (row: Row<PatientNotes>, table: Table<PatientNotes>) => {
     table.setRowSelection({ [row.id]: true })
 
@@ -341,6 +352,7 @@ const NotesTable = () => {
           serviceCodes,
           noteTitleCodes,
           onRowCheckBoxSelect,
+          timeZoneCodeSets,
         )}
         data={data?.notes || []}
         onRowClick={onRowSelect}

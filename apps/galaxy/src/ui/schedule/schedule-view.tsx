@@ -13,7 +13,7 @@ import { RoundingView } from './rounding-view'
 import { ViewHeader } from './schedule-view-header'
 import { TabsList } from './schedule-view-tabs-list'
 import { SchedulerView } from './scheduler-view'
-import { useEncounterTypeStore, useStore } from './store'
+import { useEncounterTypeStore, useStore, useUserSettingStore } from './store'
 import { TabValue } from './types'
 
 const ScheduleView = ({ isInitialLogin }: { isInitialLogin: boolean }) => {
@@ -30,6 +30,12 @@ const ScheduleView = ({ isInitialLogin }: { isInitialLogin: boolean }) => {
     fetchVisitEncounterTypes()
   }, [])
 
+  const { fetchUserSettings } = useUserSettingStore((state) => ({
+    fetchUserSettings: state.fetchUserSettings,
+  }))
+  useEffect(() => {
+    fetchUserSettings()
+  }, [])
   return (
     <Tabs.Root
       value={activeTab}

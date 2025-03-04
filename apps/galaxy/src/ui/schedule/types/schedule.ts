@@ -75,7 +75,16 @@ enum VisitStatusCodes {
 
 type FilterValue = string | number | CalendarDate | string[] | Time
 
+interface UserSetting {
+  id?: string
+  settingStatusCode?:string
+  levelCode?:string
+  categoryCode?:string
+  categoryValue?:string
+  name:string
+  content:string
+}
 
-export type { BookedAppointment, FilterValue }
+export type { BookedAppointment, FilterValue, UserSetting }
 
 export { VisitStatusCodes }

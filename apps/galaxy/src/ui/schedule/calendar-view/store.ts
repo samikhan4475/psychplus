@@ -10,7 +10,7 @@ import {
 } from '@/constants'
 import { AddSelfUserSettingBody, Appointment, UserSetting } from '@/types'
 import { sanitizeFormData } from '@/utils'
-import { getBookedAppointmentsAction } from '../actions'
+import { getBookedAppointmentsAction, getUserSettingsAction } from '../actions'
 import {
   addSelfUserSettings,
   getSelfUserSettings,
@@ -27,6 +27,8 @@ import {
   getStringifiedValue,
 } from '../utils'
 import { transformSettingToParams } from './transform'
+import { UserSetting as GlobalUserSetting } from '../types'
+import { format } from 'date-fns'
 
 interface Store {
   data: AvailableSlotsEvent<Appointment>[]
@@ -38,6 +40,7 @@ interface Store {
   formData?: AppointmentParams
   persistedFormData?: AppointmentParams
   setting?: UserSetting
+  preferredSettings?: GlobalUserSetting
   settingMap: Map<string, UserSetting>
   fetchData: (body?: AppointmentParams) => void
   fetchWeekOnNavigate: (start: DateValue, end: DateValue) => void
@@ -48,6 +51,7 @@ interface Store {
   fetchDataWithSettings: (map: Map<string, UserSetting>) => void
   updateUserFilterSettings: (params: AppointmentParams) => void
   setPersistedFormData: (data: AppointmentParams) => void
+  fetchUserSettings: () => void
 }
 
 const useStore = create<Store>()(
@@ -62,15 +66,28 @@ const useStore = create<Store>()(
       formData: undefined,
       persistedFormData: undefined,
       setting: undefined,
+      preferredSettings: undefined,
       settingMap: new Map<string, UserSetting>(),
       weekStartDate: getCurrentWeekStartDate(),
+      fetchUserSettings: async () => {
+        const result = await getUserSettingsAction()
+        if (result.state === 'error') {
+          return toast.error(result.error)
+        }
+        const preferredTimezone = result?.data.find(setting => setting.name === 'TimeZoneId')
+        set({ preferredSettings: preferredTimezone })
+      },
       fetchData: async (body) => {
         set({
           error: undefined,
           loading: true,
           formData: body,
         })
-        const { weekStartDate, appointmentsMap } = get()
+        const { preferredSettings, weekStartDate, appointmentsMap } = get()
+        if (!preferredSettings) {
+          await get().fetchUserSettings()
+        }
+        const updatedPreferredSettings = get().preferredSettings
         const startingDate = getDateString(weekStartDate)
         const endingDate = getDateString(weekStartDate.add({ days: 7 }))
         const params = { startingDate, endingDate, ...(body ?? {}) }
@@ -89,11 +106,11 @@ const useStore = create<Store>()(
         // revalidate cache on filter
         appointmentsMap.clear()
         const key = `${startingDate}-${endingDate}`
-        const transformedData = transformInBookedAppointments(result.data)
+        const transformedData = transformInBookedAppointments(result.data, updatedPreferredSettings?.content)
         appointmentsMap.set(key, transformedData)
         set({
           loading: false,
-          data: transformInBookedAppointments(result.data),
+          data: transformInBookedAppointments(result.data, updatedPreferredSettings?.content),
         })
       },
       fetchWeekOnNavigate: async (start, end) => {
@@ -103,7 +120,7 @@ const useStore = create<Store>()(
         })
         const startingDate = getDateString(start)
         const endingDate = getDateString(end)
-        const { formData, appointmentsMap } = get()
+        const { formData, appointmentsMap, preferredSettings } = get()
         const key = `${startingDate}-${endingDate}`
         if (appointmentsMap.has(key)) {
           return set({
@@ -125,7 +142,7 @@ const useStore = create<Store>()(
             loading: false,
           })
         }
-        const transformedData = transformInBookedAppointments(result.data)
+        const transformedData = transformInBookedAppointments(result.data, preferredSettings?.content)
         appointmentsMap.set(key, transformedData)
         set({
           loading: false,
@@ -257,15 +274,24 @@ const useStore = create<Store>()(
   ),
 )
 
-const transformInBookedAppointments = (data: Appointment[]) =>
+const transformInBookedAppointments = (data: Appointment[], preferredTimezone?: string) =>
   data.map((appointment) => {
     const duration = appointment.appointmentDuration ?? 20
     const start = convertToZonedDate(
       appointment.appointmentDate,
+      preferredTimezone ? preferredTimezone : appointment.locationTimezoneId,
+    )
+    const locationStartTime = convertToZonedDate(
+      appointment.appointmentDate,
       appointment.locationTimezoneId,
     )
+    const formattedLocationStartTime = format(new Date(locationStartTime), 'HH:mm')
+
     const end = new Date(start.getTime() + duration * 60000)
-    const title = `${appointment.name} (${appointment.visitType})`
+    const locationEndDate = new Date(locationStartTime.getTime() + duration * 60000)
+    const formattedLocationEndTime = format(new Date(locationEndDate), 'HH:mm')
+
+    const title = `${appointment.name} (${appointment.visitType}) Location Time: ${formattedLocationStartTime} - ${formattedLocationEndTime}`
 
     return {
       start,

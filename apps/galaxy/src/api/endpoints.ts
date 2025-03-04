@@ -711,6 +711,7 @@ const UPDATE_SELF_USER_SETTINGS = (settingId: string) =>
   `${API_URL}/api/users/self/settings/${settingId}`
 
 const SELF_USER_BULK_SETTINGS = `${API_URL}/api/users/self/bulksettings`
+const GET_CURRENT_USER_SETTINGS = `${API_URL}/api/users/self/settings`
 
 export {
   GET_LAB_RESULTS_ENDPOINT,
@@ -1028,4 +1029,5 @@ export {
   GET_NOTES_ENDPOINT,
   INBOX_SIGN_NOTE_ENDPOINT,
   GET_FEATURE_FLAGS_BY_SHORTNAME_ENDPOINT,
+  GET_CURRENT_USER_SETTINGS,
 }

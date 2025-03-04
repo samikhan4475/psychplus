@@ -9,6 +9,7 @@ import {
 import { convertToTimezone } from '@/ui/visit/utils'
 import { getPatientFullName, getSlashedDateString } from '@/utils'
 import { useStore } from '../store'
+import { getTimeZoneAbbreviation } from '@/ui/schedule/utils'
 
 const SecondaryNoteResults = () => {
   const { noteDetail, appointment, patient, selectedRow } = useStore(
@@ -38,6 +39,12 @@ const SecondaryNoteResults = () => {
     (item) => item.value === noteDetail?.[0].noteTypeCode,
   )?.display
 
+  const timeZoneCodeSets = useCodesetCodes(CODESETS.TimeZoneId).filter(
+    (code) => code.groupingCode === 'US',
+  )
+
+  const locationTimezoneAbbreviation = appointment ? getTimeZoneAbbreviation(appointment?.locationTimezoneId,timeZoneCodeSets) : ""
+
   return (
     <BlockContainer heading="Results">
       <LabelAndValue
@@ -53,7 +60,7 @@ const SecondaryNoteResults = () => {
         label="Date:"
         value={date ? getSlashedDateString(date) : ''}
       />
-      <LabelAndValue label="Time:" value={time ? time : ''} />
+      <LabelAndValue label="Time:" value={time ? time + ` (${locationTimezoneAbbreviation})`  : ''} />
 
       <LabelAndValue
         label="Cosigner:"

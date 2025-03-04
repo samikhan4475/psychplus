@@ -106,6 +106,7 @@ const CODESETS = {
   PatientRelationship: 'PsychPlusPublic.PatientRelationship',
   PsychHistoryRelation: 'PsychPlusPublic.PsychHistoryRelation',
   PlaceOfService: 'PsychPlusPublic.PlaceOfService',
+  TimeZoneId: 'PsychPlusPublic.TimeZoneId',
 
 }
 export {

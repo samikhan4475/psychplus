@@ -6,6 +6,7 @@ import { Appointment, PatientProfile } from '@/types'
 import { convertToTimezone } from '@/ui/visit/utils'
 import { getPatientFullName, getSlashedPaddedDateString } from '@/utils'
 import { BlockContainer, LabelAndValue } from './shared'
+import { getTimeZoneAbbreviation } from '@/ui/schedule/utils'
 
 interface Props {
   appointment: Appointment
@@ -32,6 +33,10 @@ const PsychiatricEvaluation = ({
   const providerTypeLabel =
     options?.find((opt) => opt?.value === appointment.providerType)?.label ??
     'N/A'
+    const timeZoneCodeSets = useCodesetCodes(CODESETS.TimeZoneId).filter(
+      (code) => code.groupingCode === 'US',
+    )
+    const locationTimeZoneAbbreviation = getTimeZoneAbbreviation(appointment.locationTimezoneId,timeZoneCodeSets)
 
   return (
     <BlockContainer heading={appointment.visitNoteTitle ?? ''}>
@@ -49,7 +54,7 @@ const PsychiatricEvaluation = ({
       />
       <LabelAndValue
         label="Date/Time:"
-        value={`${getSlashedPaddedDateString(date)} ${time}`}
+        value={`${getSlashedPaddedDateString(date)} ${time} (${locationTimeZoneAbbreviation})`}
       />
       <LabelAndValue label="Duration:" value={`${appointment.duration} mins`} />
       <LabelAndValue
