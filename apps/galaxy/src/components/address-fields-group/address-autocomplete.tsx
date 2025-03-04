@@ -7,7 +7,7 @@ import React, {
   useState,
   type ChangeEvent,
 } from 'react'
-import { Button, Flex, Text, TextField } from '@radix-ui/themes'
+import { Button, Flex, Popover, Text, TextField } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
 import usePlacesAutocomplete, {
   getDetails,
@@ -161,22 +161,29 @@ const GooglePlacesAutocomplete = ({
         <FormFieldLabel required={required} className={labelClassName}>
           {label}
         </FormFieldLabel>
-        <TextField.Root
-          size="1"
-          id={address1Field}
-          disabled={disabled}
-          ref={autocompleteFieldRef}
-          value={value}
-          onChange={handleInput}
-          placeholder={placeholder}
-          onFocus={() => setShowSuggestions(true)}
-          className={cn(
-            'border-pp-gray-2 h-6 w-full border border-solid !outline-none [box-shadow:none]',
-            className,
-          )}
-        />
-        {status === 'OK' && showSuggestions && (
-          <ul className="bg-white absolute top-full z-50 flex w-full flex-col overflow-x-hidden rounded-2 shadow-3">
+        <Popover.Root open={status === 'OK' && showSuggestions}>
+          <TextField.Root
+            size="1"
+            id={address1Field}
+            disabled={disabled}
+            ref={autocompleteFieldRef}
+            value={value}
+            onChange={handleInput}
+            placeholder={placeholder}
+            onFocus={() => setShowSuggestions(true)}
+            className={cn(
+              'border-pp-gray-2 h-6 w-full border border-solid !outline-none [box-shadow:none]',
+              className,
+            )}
+          />
+          <Popover.Trigger>
+            <Flex className="-mt-2 h-0 w-full" />
+          </Popover.Trigger>
+          <Popover.Content
+            onOpenAutoFocus={(e) => e.preventDefault()}
+            className="flex flex-col !rounded-1 !p-0"
+            size="1"
+          >
             {data.map(
               ({
                 place_id,
@@ -200,8 +207,9 @@ const GooglePlacesAutocomplete = ({
                 </Button>
               ),
             )}
-          </ul>
-        )}
+          </Popover.Content>
+        </Popover.Root>
+
         {state?.error && (
           <Text size="1" color="red">
             {state.error.message}
