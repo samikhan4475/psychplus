@@ -208,6 +208,7 @@ const widgets: Array<WidgetType> = [
     component: SpravatoWidgetClientLoader,
     id: QuickNoteSectionName.QuicknoteSectionProcedureSpravato,
     actualNoteComponent: SpravatoDetailClientView,
+    isPatientAndAppointmentDependent: true,
   },
   {
     component: HospitalDischargeClientLoader,

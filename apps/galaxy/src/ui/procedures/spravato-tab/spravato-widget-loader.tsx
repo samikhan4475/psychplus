@@ -14,9 +14,12 @@ const SpravatoWidgetLoader = async ({
   appointmentId,
 }: SpravatoWidgetLoaderProps) => {
   const [response, appointmentResult] = await Promise.all([
-    getQuickNoteDetailAction(patientId, [
-      QuickNoteSectionName.QuicknoteSectionProcedureSpravato,
-    ]),
+    getQuickNoteDetailAction(
+      patientId,
+      [QuickNoteSectionName.QuicknoteSectionProcedureSpravato],
+      false,
+      appointmentId,
+    ),
     getAppointment({ id: appointmentId as string }),
   ])
 

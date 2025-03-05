@@ -34,6 +34,7 @@ const transformOut =
       if (key !== 'newVitalSign') {
         result.push({
           pid: Number(patientId),
+          appId: Number(appointmentId),
           sectionName: QuickNoteSectionName.QuicknoteSectionProcedureSpravato,
           sectionItem: key,
           sectionItemValue: newValue as string,
@@ -144,6 +145,8 @@ const transformIn = (
     dizzinessAndVertigo: 'no',
     increasedInBloodPressure: 'no',
     lethargy: 'no',
+    lotNumber: '',
+    totalTimeMonitored: '',
     nauseaAndVomiting: 'no',
     respiratoryChanges: 'no',
     adverseEventQuestion: 'no',

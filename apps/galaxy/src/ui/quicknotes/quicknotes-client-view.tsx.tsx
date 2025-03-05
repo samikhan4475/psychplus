@@ -60,8 +60,8 @@ export function QuickNotesClientView({
     (comment) => comment.isTreatmentComment && comment.isUrgentComment,
   )
   useLayoutEffect(() => {
-    setWidgetsData(widgetsData)
-    setActualNoteData(widgetsData)
+    setWidgetsData(widgetsData, true)
+    setActualNoteData(widgetsData, true)
     if (billingComments.length > 0 || treatmentComments.length > 0) {
       setIsOpen(true)
     } else {

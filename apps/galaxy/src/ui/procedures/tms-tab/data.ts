@@ -103,7 +103,7 @@ const transformIn = (value: QuickNoteSectionItem[], isActualNote?: boolean) => {
     dtmsStimulationPulseTrainDuration: '2',
     dtmsStimulationInterTrainInterval: '20',
     dtmsFrequencyOfSession: '5',
-    dtmsPlannedSession: '',
+    dtmsPlannedSession: '00',
     dtmsFrequencyUnit: 'Week',
   }
   if (isActualNote) {

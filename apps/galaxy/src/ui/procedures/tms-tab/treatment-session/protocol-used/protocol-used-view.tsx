@@ -32,7 +32,7 @@ const ProtocolUsed = () => {
 
   return (
     <Flex direction="column" gap="2">
-      <BlockLabel className="text-2 font-[600]">Protocol UsedSSS</BlockLabel>
+      <BlockLabel className="text-2 font-[600]">Protocol Used</BlockLabel>
       <Flex direction="row" gap="1">
         {Object.values(ProtocolTitles).map((item) => (
           <ProtocolSelection key={item} protocolTitle={item} />

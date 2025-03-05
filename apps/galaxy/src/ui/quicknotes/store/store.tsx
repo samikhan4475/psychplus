@@ -46,8 +46,14 @@ interface Store {
   setIsErrorAlertOpen: (value: boolean) => void
   widgetsData: Record<string, QuickNoteSectionItem[]>
   actualNotewidgetsData: Record<string, QuickNoteSectionItem[]>
-  setWidgetsData: (data: QuickNoteSectionItem[]) => void
-  setActualNoteWidgetsData: (data: QuickNoteSectionItem[]) => void
+  setWidgetsData: (
+    data: QuickNoteSectionItem[],
+    overwriteExisting?: boolean,
+  ) => void
+  setActualNoteWidgetsData: (
+    data: QuickNoteSectionItem[],
+    overwriteExisting?: boolean,
+  ) => void
   updateCptCodes: UpdateCptCodes
   setMarkedStatus: (payload: boolean) => void
   isMarkedAsError?: boolean
@@ -65,13 +71,17 @@ const createStore = (initialState: StoreInitialState) =>
   zustandCreateStore<Store>()((set, get) => ({
     patientId: initialState.patientId,
     patient: initialState.patient,
-    widgetsData: initialState.widgetsData ?? {},
-    setWidgetsData: (data = []) => {
+    widgetsData: {},
+    setWidgetsData: (data = [], overwriteExisting = false) => {
       const modifiedData = modifyWidgetResponse(data)
-      set({ widgetsData: { ...get().widgetsData, ...modifiedData } })
+      set({
+        widgetsData: overwriteExisting
+          ? modifiedData
+          : { ...get().widgetsData, ...modifiedData },
+      })
     },
     actualNotewidgetsData: {},
-    setActualNoteWidgetsData: (data = []) => {
+    setActualNoteWidgetsData: (data = [], overwriteExisting = false) => {
       const modifiedData = modifyWidgetResponse(
         data?.filter(
           (item) =>
@@ -80,11 +90,11 @@ const createStore = (initialState: StoreInitialState) =>
             ),
         ),
       )
+
       set({
-        actualNotewidgetsData: {
-          ...get().actualNotewidgetsData,
-          ...modifiedData,
-        },
+        actualNotewidgetsData: overwriteExisting
+          ? modifiedData
+          : { ...get().actualNotewidgetsData, ...modifiedData },
       })
     },
     updateCptCodes: async (

@@ -1,3 +1,4 @@
+import { useSearchParams } from 'next/navigation'
 import { Button, Dialog } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
 import { formatDateTime, getTimeLabel } from '@/utils'
@@ -12,6 +13,8 @@ const SaveButton = ({
 }) => {
   const form = useFormContext<SpravatoWidgetSchemaType>()
 
+  const appId = Number(useSearchParams().get('id'))
+
   const onClick = () => {
     const vitalSigns: any = [...form.watch('vitalSigns')]
     const newVitalSign = { ...form.watch('newVitalSign') }
@@ -21,6 +24,7 @@ const SaveButton = ({
     vitalSigns.unshift({
       ...newVitalSign,
       vitalSignDateTime: formatDateTime(new Date().toISOString(), false),
+      appId,
       // timeSlot: `${timeSlot}`,
     })
     if (vitalSigns.length === 1) {

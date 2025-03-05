@@ -7,7 +7,11 @@ import { VitalSignsTable } from './vital-signs-table'
 
 const VitalSigns = ({ data }: { data: SpravatoWidgetSchemaType }) => {
   const vitalsData: any = data['vitalSigns' as keyof SpravatoWidgetSchemaType]
-  const { buttonConfig, setIsFirstTime } = useAddVitals(vitalsData ?? [])
+  const { buttonConfig, setIsFirstTime } = useAddVitals(
+    vitalsData ?? [],
+    undefined,
+    true,
+  )
 
   useEffect(() => {
     setIsFirstTime()
