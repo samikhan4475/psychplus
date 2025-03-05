@@ -1,5 +1,6 @@
 enum NoteSectionName {
   NoteSectionQuestionnaire = 'QuicknoteSectionQuestionnaire',
+  NoteSectionDashboard = 'QuicknoteSectionDashboard',
   NoteSectionHPI = 'QuicknoteSectionHPI',
   NoteSectionReviewOfSystem = 'QuicknoteSectionReviewOfSystem',
   NoteSectionDast10 = 'QuicknoteSectionQuestionnaireDast10',

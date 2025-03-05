@@ -17,11 +17,21 @@ const sectionComponents = {
   [NoteSectionName.NoteSectionHamD]: HamD,
 }
 
-const QuestionnaireView = () => {
+const QuestionnaireView = ({
+  questionnaireSectionsToShowOnPreCheckin,
+}: {
+  questionnaireSectionsToShowOnPreCheckin: NoteSectionName[]
+}) => {
   return (
     <Flex gap="4" direction="column">
       {Object.entries(sectionComponents).map(([sectionName, Component]) => {
-        if (!Component) return null
+        if (
+          !Component ||
+          !questionnaireSectionsToShowOnPreCheckin.includes(
+            sectionName as NoteSectionName,
+          )
+        )
+          return null
 
         return <Component key={sectionName} />
       })}

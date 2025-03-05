@@ -23,9 +23,7 @@ const QuestionnaireForm = ({
   sectionName,
   showNumbering = true,
 }: QuestionnairesFormProps) => {
-  const { profile } = useProfileStore((state) => ({
-    profile: state.profile,
-  }))
+  const profile = useProfileStore((state) => state.profile)
 
   return (
     <NoteFormContainer

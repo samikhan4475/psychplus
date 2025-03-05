@@ -5,11 +5,12 @@ import * as Tabs from '@radix-ui/react-tabs'
 import { Box, Text } from '@radix-ui/themes'
 import { CreditCard } from '@/features/billing/credit-debit-cards/types'
 import { Insurance, InsurancePayer } from '@/features/billing/payments/types'
+import { NoteSectionName } from '@/features/note/constants'
 import { PatientPharmacy } from '@/features/pharmacy/types'
 import { PreCheckinAssessmentTabs } from '@/features/pre-checkin-assessment/constants'
 import { useStore } from '@/features/pre-checkin-assessment/store'
 import { PreCheckinAssessmentTab } from '@/features/pre-checkin-assessment/types'
-import { filterTabs } from '@/features/pre-checkin-assessment/utils'
+import { getTabsToShow } from '@/features/pre-checkin-assessment/utils'
 import { PreCheckinAssessmentFooter } from '../pre-checkin-assessment-footer'
 import { PreCheckinAssessmentHeader } from '../pre-checkin-assessment-header'
 import {
@@ -31,6 +32,7 @@ type PreCheckinAssessmentStapperProps = {
   stripeAPIKey: string
   pharmacies: PatientPharmacy[]
   isDawSystemFeatureFlagEnabled?: boolean
+  questionnaireSectionsToShowOnPreCheckin: NoteSectionName[]
 }
 
 const PreCheckinAssessmentStapper = ({
@@ -40,22 +42,32 @@ const PreCheckinAssessmentStapper = ({
   stripeAPIKey,
   pharmacies,
   isDawSystemFeatureFlagEnabled,
+  questionnaireSectionsToShowOnPreCheckin,
 }: PreCheckinAssessmentStapperProps) => {
-  const {
-    activeTab,
-    hydrated,
-    setIsDawSystemFeatureFlagEnabled,
-    setPharmacies,
-  } = useStore()
+  const { activeTab, hydrated, setTabsToShow, tabsToShow, setActiveTab } =
+    useStore()
 
   useEffect(() => {
-    setPharmacies(pharmacies)
-    setIsDawSystemFeatureFlagEnabled(isDawSystemFeatureFlagEnabled)
-  }, [pharmacies, isDawSystemFeatureFlagEnabled])
+    const tabs = getTabsToShow({
+      tabs: Object.values(PreCheckinAssessmentTabs),
+      pharmacies,
+      isDawSystemFeatureFlagEnabled,
+      questionnaireSectionsToShowOnPreCheckin,
+    })
+
+    if (!tabs.includes(activeTab))
+      setActiveTab(tabs[0] as PreCheckinAssessmentTabs)
+
+    setTabsToShow(tabs as PreCheckinAssessmentTabs[])
+  }, [
+    pharmacies,
+    isDawSystemFeatureFlagEnabled,
+    questionnaireSectionsToShowOnPreCheckin,
+  ])
 
   if (!hydrated) return
 
-  let tabs: PreCheckinAssessmentTab[] = [
+  const tabs: PreCheckinAssessmentTab[] = [
     {
       id: PreCheckinAssessmentTabs.PatientInfo,
       content: <PatientInfo />,
@@ -102,11 +114,15 @@ const PreCheckinAssessmentStapper = ({
     },
     {
       id: PreCheckinAssessmentTabs.Questionnaire,
-      content: <QuestionnaireView />,
+      content: (
+        <QuestionnaireView
+          questionnaireSectionsToShowOnPreCheckin={
+            questionnaireSectionsToShowOnPreCheckin
+          }
+        />
+      ),
     },
-  ]
-
-  tabs = filterTabs({ tabs, pharmacies, isDawSystemFeatureFlagEnabled })
+  ].filter((tab) => tabsToShow.includes(tab.id))
 
   return (
     <>

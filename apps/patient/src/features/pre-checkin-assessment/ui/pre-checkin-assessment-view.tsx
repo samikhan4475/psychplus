@@ -15,6 +15,7 @@ import { NoteStoreProvider } from '@/features/note/store'
 import { getPatientPharmacies } from '@/features/pharmacy/api'
 import { CodesetStoreProvider } from '@/providers'
 import { PreCheckinAssessmentStapper } from './pre-checkin-assessment-stepper/pre-checkin-assessment-stapper'
+import { questionnairesToShowOnPreCheckin } from './pre-checkin-assessment-stepper/steps/questionnaire/utils'
 
 const PreCheckinAssessmentView = async () => {
   const [
@@ -67,20 +68,24 @@ const PreCheckinAssessmentView = async () => {
     throw new Error(dawSystemFeatureFlagResponse.error)
   }
 
+  const questionnaireDashboardResponse = await getNoteDetails({
+    patientId: profileResponse.data.id,
+    sectionName: [NoteSectionName.NoteSectionDashboard],
+  })
+
+  if (questionnaireDashboardResponse.state === 'error') {
+    throw new Error(questionnaireDashboardResponse.error)
+  }
+
+  const questionnaireSectionsToShowOnPreCheckin =
+    questionnairesToShowOnPreCheckin(questionnaireDashboardResponse.data)
+
   const noteDetailsResponse = await getNoteDetails({
     patientId: profileResponse.data.id,
     sectionName: [
-      NoteSectionName.NoteSectionGad7,
-      NoteSectionName.NoteSectionPhq9,
-      NoteSectionName.NoteSectionPcl5,
-      NoteSectionName.NoteSectionYbocs,
-      NoteSectionName.NoteSectionAudit,
-      NoteSectionName.NoteSectionDast10,
-      NoteSectionName.NoteSectionHamD,
+      ...questionnaireSectionsToShowOnPreCheckin,
       NoteSectionName.NoteSectionHPI,
       NoteSectionName.NoteSectionReviewOfSystem,
-      NoteSectionName.NoteSectionSnapIV,
-      NoteSectionName.NoteSectionAims,
       NoteSectionName.NoteSectionFamilyPsychHx,
     ],
   })
@@ -101,6 +106,9 @@ const PreCheckinAssessmentView = async () => {
               stripeAPIKey={STRIPE_PUBLISHABLE_KEY}
               pharmacies={pharmaciesResponse.data}
               isDawSystemFeatureFlagEnabled={dawSystemFeatureFlagResponse.data}
+              questionnaireSectionsToShowOnPreCheckin={
+                questionnaireSectionsToShowOnPreCheckin
+              }
             />
           </Box>
         </NoteStoreProvider>

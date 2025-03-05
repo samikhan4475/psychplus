@@ -1,13 +1,11 @@
 import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
-import { PatientPharmacy } from '@/features/pharmacy/types'
 import {
   PRE_CHECKIN_ASSESSMENT_KEY,
   PreCheckinAssessmentTabs,
   SaveAction,
   TabDirection,
 } from '../constants'
-import { shouldIncludeTab } from '../utils'
 
 interface Store {
   activeTab: PreCheckinAssessmentTabs
@@ -26,13 +24,8 @@ interface Store {
     isSkip?: boolean,
   ) => Promise<void>
   setHydrated: (hydrated: boolean) => void
-  pharmacies: PatientPharmacy[]
-  setPharmacies: (pharmacies: PatientPharmacy[]) => void
-  isDawSystemFeatureFlagEnabled: boolean
-  setIsDawSystemFeatureFlagEnabled: (
-    isDawSystemFeatureFlagEnabled?: boolean,
-  ) => void
-  isPreCheckinAssessmentCompleted: () => boolean
+  tabsToShow: PreCheckinAssessmentTabs[]
+  setTabsToShow: (tabsToShow: PreCheckinAssessmentTabs[]) => void
 }
 
 const useStore = create<Store>()(
@@ -53,10 +46,9 @@ const useStore = create<Store>()(
       setSaveButtonPressed: (pressed) => set({ isSaveButtonPressed: pressed }),
       setSaveAction: (action) => set({ saveAction: action }),
       skip: () => {
-        const { handleTabNavigation, activeTab } = get()
+        const { handleTabNavigation, activeTab, tabsToShow } = get()
         handleTabNavigation(TabDirection.Next, true)
-        if (activeTab === PreCheckinAssessmentTabs.Questionnaire)
-          window.location.replace('/')
+        if (activeTab === tabsToShow.at(-1)) window.location.replace('/')
       },
       save: async () => {
         const { saveAction, handleTabNavigation } = get()
@@ -70,48 +62,24 @@ const useStore = create<Store>()(
           markTabAsCompleted,
           setSaveButtonPressed,
           setSaveAction,
-          isDawSystemFeatureFlagEnabled,
-          pharmacies,
+          tabsToShow,
         } = get()
-        const tabs = Object.values(PreCheckinAssessmentTabs).filter((tab) =>
-          shouldIncludeTab({
-            tabId: tab,
-            pharmacies,
-            isDawSystemFeatureFlagEnabled,
-          }),
-        )
-        const currentIndex = tabs.findIndex((tab) => tab === activeTab)
+        const currentIndex = tabsToShow.findIndex((tab) => tab === activeTab)
         const newIndex =
           direction === TabDirection.Next ? currentIndex + 1 : currentIndex - 1
 
-        if (newIndex >= 0 && newIndex < tabs.length)
-          setActiveTab(tabs[newIndex])
+        if (newIndex >= 0 && newIndex < tabsToShow.length)
+          setActiveTab(tabsToShow[newIndex])
 
-        if (!isSkip && currentIndex >= 0 && currentIndex < tabs.length)
-          markTabAsCompleted(tabs[currentIndex])
+        if (!isSkip && currentIndex >= 0 && currentIndex < tabsToShow.length)
+          markTabAsCompleted(tabsToShow[currentIndex])
 
         setSaveButtonPressed(false)
         setSaveAction(null)
       },
       setHydrated: (hydrated) => set({ hydrated }),
-      pharmacies: [],
-      setPharmacies: (pharmacies) => set({ pharmacies }),
-      isDawSystemFeatureFlagEnabled: false,
-      setIsDawSystemFeatureFlagEnabled: (isDawSystemFeatureFlagEnabled) =>
-        set({ isDawSystemFeatureFlagEnabled }),
-      isPreCheckinAssessmentCompleted: () => {
-        const { completedTabs, pharmacies, isDawSystemFeatureFlagEnabled } =
-          get()
-        const totalTabs = Object.values(PreCheckinAssessmentTabs).filter(
-          (tab) =>
-            shouldIncludeTab({
-              tabId: tab,
-              pharmacies,
-              isDawSystemFeatureFlagEnabled,
-            }),
-        )
-        return completedTabs.length === totalTabs.length
-      },
+      tabsToShow: [],
+      setTabsToShow: (tabsToShow) => set({ tabsToShow }),
     }),
     {
       name: PRE_CHECKIN_ASSESSMENT_KEY,

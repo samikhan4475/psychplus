@@ -71,7 +71,7 @@ const SelectableChipDetails = ({
               <NumberInput
                 format={format}
                 field={field}
-                className="focus:border-pp-focus-outline w-[38px] rounded-2 border border-gray-8 outline-none focus:outline-none"
+                className="focus:border-pp-focus-outline h-5 w-[38px] rounded-2 border border-gray-8 outline-none focus:outline-none"
                 autoFocus
                 placeholder={placeHolder}
               />

@@ -1,17 +1,20 @@
+import { NoteSectionName } from '../note/constants'
 import { PatientPharmacy } from '../pharmacy/types'
 import { PreCheckinAssessmentTabs } from './constants'
-import { PreCheckinAssessmentTab, SharedCode } from './types'
+import { SharedCode } from './types'
 
-type FilterTabProps = {
-  tabs: PreCheckinAssessmentTab[]
+type TabsToShowProps = {
+  tabs: string[]
   pharmacies: PatientPharmacy[]
   isDawSystemFeatureFlagEnabled?: boolean
+  questionnaireSectionsToShowOnPreCheckin: NoteSectionName[]
 }
 
 type FilterCommonProps = {
   tabId: string
   pharmacies: PatientPharmacy[]
   isDawSystemFeatureFlagEnabled?: boolean
+  questionnaireSectionsToShowOnPreCheckin: NoteSectionName[]
 }
 
 function mapCodesetToOptions(
@@ -23,24 +26,26 @@ function mapCodesetToOptions(
   }))
 }
 
-const filterTabs = ({
+const getTabsToShow = ({
   tabs,
   pharmacies,
   isDawSystemFeatureFlagEnabled,
-}: FilterTabProps) => {
-  return tabs.filter((tab) =>
+  questionnaireSectionsToShowOnPreCheckin,
+}: TabsToShowProps) =>
+  tabs.filter((tab) =>
     shouldIncludeTab({
-      tabId: tab.id,
+      tabId: tab,
       pharmacies,
       isDawSystemFeatureFlagEnabled,
+      questionnaireSectionsToShowOnPreCheckin,
     }),
   )
-}
 
 const shouldIncludeTab = ({
   tabId,
   pharmacies,
   isDawSystemFeatureFlagEnabled,
+  questionnaireSectionsToShowOnPreCheckin,
 }: FilterCommonProps) => {
   if (
     tabId === PreCheckinAssessmentTabs.Pharmacy &&
@@ -50,7 +55,15 @@ const shouldIncludeTab = ({
   ) {
     return false
   }
+
+  if (
+    tabId === PreCheckinAssessmentTabs.Questionnaire &&
+    questionnaireSectionsToShowOnPreCheckin?.length === 0
+  ) {
+    return false
+  }
+
   return true
 }
 
-export { filterTabs, shouldIncludeTab, mapCodesetToOptions }
+export { getTabsToShow, shouldIncludeTab, mapCodesetToOptions }

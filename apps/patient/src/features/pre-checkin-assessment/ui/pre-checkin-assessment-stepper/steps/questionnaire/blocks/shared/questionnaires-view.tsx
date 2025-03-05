@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import React, { useMemo } from 'react'
 import { FormProvider } from 'react-hook-form'
 import { NoteSectionName } from '@/features/note/constants/constants'
 import { useNoteStore } from '@/features/note/store'
@@ -28,12 +28,13 @@ const QuestionnairesView = ({
   sectionName,
   showNumbering = true,
 }: QuestionnairesViewProps) => {
-  const { getNoteData } = useNoteStore((state) => ({
-    getNoteData: state.getNoteData,
-  }))
+  const getNoteData = useNoteStore((state) => state.getNoteData)
   const data = getNoteData(sectionName)
   const totalQuestions = questions.length
-  const initialValue = transformIn(data, sectionName)
+  const initialValue = useMemo(
+    () => transformIn(data, sectionName),
+    [data, sectionName],
+  )
   const { totalFilledQuestions, ...form } = useQuestionnaireForm(
     initialValue,
     totalQuestions,

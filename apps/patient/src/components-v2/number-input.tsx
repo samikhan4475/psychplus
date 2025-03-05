@@ -51,7 +51,10 @@ const NumberInput = ({
               onValueChange={({ value }) => field.onChange(value)}
               onBlur={field.onBlur}
               getInputRef={field.ref}
-              className={cn('h-5 px-2 py-1 text-[12px]', className)}
+              className={cn(
+                'h-[var(--chip-height)] px-2 py-1 text-[12px]',
+                className,
+              )}
             />
           )
         }}

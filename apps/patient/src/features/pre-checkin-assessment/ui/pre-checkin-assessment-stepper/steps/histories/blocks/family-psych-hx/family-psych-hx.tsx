@@ -7,9 +7,7 @@ import { NoteSectionItem } from '@/features/note/types'
 import { NoteAccordion, NoteAccordionContentProps } from '@/features/note/ui'
 
 const FamilyPsychHx = () => {
-  const { getNoteData } = useNoteStore((state) => ({
-    getNoteData: state.getNoteData,
-  }))
+  const getNoteData = useNoteStore((state) => state.getNoteData)
   const data = getNoteData(NoteSectionName.NoteSectionFamilyPsychHx)
 
   return (

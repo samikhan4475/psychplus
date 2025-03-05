@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { Flex } from '@radix-ui/themes'
 import { FormProvider } from 'react-hook-form'
 import { NoteFormContainer } from '@/components-v2'
@@ -15,11 +15,9 @@ interface FamilyPsychHxProps {
 }
 
 const FamilyPsychHxView = ({ onSave, isEdit }: FamilyPsychHxProps) => {
-  const { getNoteData } = useNoteStore((state) => ({
-    getNoteData: state.getNoteData,
-  }))
+  const getNoteData = useNoteStore((state) => state.getNoteData)
   const data = getNoteData(NoteSectionName.NoteSectionFamilyPsychHx)
-  const initialValue = transformIn(data)
+  const initialValue = useMemo(() => transformIn(data), [data])
   const form = useFamilyPsychHxForm(initialValue)
   const { profile } = useProfileStore((state) => ({
     profile: state.profile,
