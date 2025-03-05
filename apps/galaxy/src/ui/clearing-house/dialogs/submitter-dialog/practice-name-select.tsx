@@ -9,7 +9,7 @@ const PracticeNameSelect = () => {
       <FormFieldLabel required>Practice Name</FormFieldLabel>
       <AsyncSelect
         field="practiceId"
-        buttonClassName="w-full h-6"
+        buttonClassName="w-full  text-1"
         required
         fetchOptions={getPracticeIdsAction}
       />

@@ -9,7 +9,7 @@ const ReceiverSelect = () => {
       <FormFieldLabel required>Receiver</FormFieldLabel>
       <AsyncSelect
         field="receiverId"
-        buttonClassName="w-full h-6"
+        buttonClassName="w-full text-1"
         required
         fetchOptions={getReceiverListOptionsAction}
       />

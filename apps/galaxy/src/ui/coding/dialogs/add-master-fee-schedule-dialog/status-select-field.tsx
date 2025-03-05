@@ -15,6 +15,7 @@ const StatusSelectField = () => {
         name="recordStatus"
         codeset={CODESETS.RecordStatus}
         size="1"
+        exclude={['Deleted', 'Archived']}
       />
       <FormFieldError name="recordStatus" />
     </FormFieldContainer>

@@ -11,6 +11,7 @@ const StatusSelectField = () => {
         codeset={CODESETS.RecordStatus}
         size="1"
         className="w-[101px]"
+        exclude={['Deleted', 'Archived']}
       />
     </FormFieldContainer>
   )
