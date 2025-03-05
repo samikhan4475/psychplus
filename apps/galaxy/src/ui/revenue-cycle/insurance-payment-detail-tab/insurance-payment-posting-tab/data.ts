@@ -1,17 +1,17 @@
-import { ClaimPayment, UpdateClaimPaymentPayload } from '../../types'
+import { ClaimServiceLine } from '@/types'
+import {
+  ClaimPayment,
+  ClaimServiceLinePayment,
+  UpdateClaimPaymentPayload,
+} from '../../types'
 import { PaymentListTypes } from '../types'
 import { PROCESSED_AS_REVERSAL } from './constants'
 
-const transformInDefault = (
-  paymentPostingId: string,
-  paymentPostingClaim?: Partial<ClaimPayment>,
-) => {
-  if (!paymentPostingClaim) return {}
-  const serviceLines =
-    paymentPostingClaim?.claimServiceLinePayments ??
-    paymentPostingClaim?.claimServiceLines ??
-    []
-  const claimServiceLinePayments = serviceLines?.map((serviceLine) => ({
+const transformServiceLines = (
+  serviceLines: ClaimServiceLinePayment[] | ClaimServiceLine[],
+  paymentPostingClaim: Partial<ClaimPayment>,
+) =>
+  serviceLines?.map((serviceLine) => ({
     ...serviceLine,
     chargeId: serviceLine.chargeId ?? '',
     claimPaymentId: paymentPostingClaim.claimId ? paymentPostingClaim.id : '',
@@ -33,6 +33,20 @@ const transformInDefault = (
     otherPr: String(serviceLine.otherPr ?? ''),
     writeOffAmount: String(serviceLine.writeOffAmount ?? ''),
   }))
+
+const transformInDefault = (
+  paymentPostingId: string,
+  paymentPostingClaim?: Partial<ClaimPayment>,
+) => {
+  if (!paymentPostingClaim) return {}
+  const serviceLines =
+    paymentPostingClaim?.claimServiceLinePayments ??
+    paymentPostingClaim?.claimServiceLines ??
+    []
+  const claimServiceLinePayments = transformServiceLines(
+    serviceLines,
+    paymentPostingClaim,
+  )
 
   return {
     ...paymentPostingClaim,
@@ -113,4 +127,4 @@ const transformOut = (
   return updatedModel
 }
 
-export { transformInDefault, transformOut }
+export { transformInDefault, transformOut, transformServiceLines }

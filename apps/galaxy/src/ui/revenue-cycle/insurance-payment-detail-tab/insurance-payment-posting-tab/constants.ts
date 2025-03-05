@@ -4,6 +4,14 @@ const WRITE_OFF_ADJUSTMENT = {
   adjustmentStatus: 'WriteOff',
 } as const
 
+
+
+const paymentSourceMapping = {
+  ProcessedAsPrimary: 'Primary',
+  ProcessedAsSecondary: 'Secondary',
+  ProcessedAsTertiary: 'Tertiary',
+} as const
+
 const DEDUCTIBLE_ADJUSTMENT = {
   adjustmentGroupCode: 'PR',
   adjustmentReasonCode: '1',
@@ -47,6 +55,7 @@ export {
   WRITE_OFF_ADJUSTMENT,
   DEFAULT_ADJUSTMENT_TYPE,
   CO_INSURANCE_ADJUSTMENT,
+  paymentSourceMapping,
   DEDUCTIBLE_ADJUSTMENT,
   CO_PAY_ADJUSTMENT,
   adjustmentMapping,

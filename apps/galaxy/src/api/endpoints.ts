@@ -344,6 +344,7 @@ const ADD_ORGANIZATION_ENDPOINT = `${API_URL}/api/organizations`
 const UPDATE_ORGANIZATION_ENDPOINT = (organizationId: string) =>
   `${API_URL}/api/organizations/${organizationId}`
 const GET_INSURANCE_PAYERS_LIST_ENDPOINT = `${API_URL}/api/insurance/plans/actions/search`
+const GET_PAYMENT_SERVICELINES_ENDPOINT = `${API_URL}/api/claimservicelinepayments/actions/search`
 const GET_PRACTICES_ENDPOINT = `${API_URL}/api/practices/actions/search`
 const GET_PATIENT_VITALS_ENDPOINT = `${API_URL}/api/patientvitalsigns/actions/search`
 const ADD_PATIENT_VITAL_ENDPOINT = (patientId: string) =>
@@ -824,6 +825,7 @@ export {
   DELETE_PATIENT_CREDIT_CARD,
   ADD_PATIENT_CREDIT_CARD,
   GET_CLAIMS_LIST_ENDPOINT,
+  GET_PAYMENT_SERVICELINES_ENDPOINT,
   GET_CLAIM_SUBMISSION_HISTORY,
   DELETE_CLAIM_ENDPOINT,
   GET_PATIENT_POLICIES,

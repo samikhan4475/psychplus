@@ -9,8 +9,8 @@ import {
   WRITE_OFF_ADJUSTMENT,
 } from '../constants'
 
-const amountRegex = /^\d{0,3}(\.\d{0,2})?$/
-const negativeAmountRegex = /^-?\d{0,3}(\.\d{0,2})?$/
+const amountRegex = /^\d{0,10}(\.\d{0,2})?$/
+const negativeAmountRegex = /^-?\d{0,10}(\.\d{0,2})?$/
 const specialKeys = ['Backspace', 'Tab', 'Control', 'Shift', 'Alt']
 
 const getNegativeRow = (

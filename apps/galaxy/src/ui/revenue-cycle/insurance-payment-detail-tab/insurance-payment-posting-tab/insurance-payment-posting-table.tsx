@@ -1,11 +1,21 @@
 'use client'
 
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Flex, Text } from '@radix-ui/themes'
 import { ColumnDef } from '@tanstack/react-table'
 import { useFormContext } from 'react-hook-form'
-import { ColumnHeader, DataTable, DateCell, TextCell } from '@/components'
-import { formatDate } from '@/utils'
+import toast from 'react-hot-toast'
+import {
+  ColumnHeader,
+  DataTable,
+  DateCell,
+  LoadingPlaceholder,
+  TextCell,
+} from '@/components'
+import { formatDate, sanitizeFormData } from '@/utils'
+import { getPaymentServiceLinesAction } from '../../actions'
+import { useStore } from '../../insurance-payment-tab/store'
+import { useStore as useTabStore } from '../../store'
 import { ClaimServiceLinePayment, InsurancePayment } from '../../types'
 import CancelButton from './cancel-button'
 import {
@@ -19,6 +29,7 @@ import {
   PaidAmountCell,
   WriteoffAmountCell,
 } from './cells'
+import { transformServiceLines } from './data'
 import { SaveAndPostButton } from './save-and-post-button'
 import { SaveButton } from './save-button'
 import { SchemaType } from './schema'
@@ -184,7 +195,46 @@ const InsurancePaymentPostingTable = ({
   paymentDetail,
 }: InsurancePaymentPostingTableProps) => {
   const form = useFormContext<SchemaType>()
-  const claimServiceLinePayments = form.watch('claimServiceLinePayments')
+
+  const [loading, setLoading] = useState(true)
+
+  const activeTab = useTabStore((state) => state.activeTab)
+
+  const paymentPostingClaim = useStore(
+    (state) => state.paymentPostingClaim[activeTab],
+  )
+  const processedAsCode = form.watch('processedAsCode')
+
+  useEffect(() => {
+      ;(async () => {
+        setLoading(true)
+        const payload = sanitizeFormData({
+          processedAsCode,
+          claimNumber: paymentPostingClaim?.claimNumber,
+          claimPaymentId: paymentPostingClaim?.paymentId ?  paymentPostingClaim?.id : '',
+        })
+
+        const result = await getPaymentServiceLinesAction(payload)
+
+        if (result.state === 'success') {
+          form.setValue(
+            'claimServiceLinePayments',
+            transformServiceLines(
+              result.data,
+              paymentPostingClaim ?? {},
+            ) as ClaimServiceLinePayment[],
+          )
+        } else {
+          toast.error(result.error ?? 'Failed to get service lines')
+        }
+
+        setLoading(false)
+      })()
+    
+  }, [processedAsCode])
+  if (loading)
+    return <LoadingPlaceholder className="min-h-[30vh] min-w-[300px]" />
+  const serviceLines = form.watch('claimServiceLinePayments')
 
   return (
     <Flex direction="column">
@@ -194,7 +244,7 @@ const InsurancePaymentPostingTable = ({
 
       <DataTable
         tableClass="[&_.rt-ScrollAreaRoot]:pb-2 max-w-[calc(100vw-23px)]"
-        data={claimServiceLinePayments}
+        data={serviceLines}
         columns={columns(paymentDetail)}
         disablePagination
       />
