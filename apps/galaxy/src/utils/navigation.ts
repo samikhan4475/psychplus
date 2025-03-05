@@ -196,9 +196,11 @@ const constructQuickNotesUrl = (
   }&visitSequence=${visitSequence ?? ''}`
 }
 
-const isHospitalCareVisit = (visitType: string | null) => {
-  return visitType?.includes('HospitalCare')
-}
+const isHospitalCareVisit = (visitType: string | null) =>
+  !!visitType &&
+  ['HospitalCare', 'PhpCare', 'NursingHomeCare'].some((type) =>
+    visitType.includes(type),
+  )
 
 const getManagementNavLinks = (type: string | null, id: string | null) => {
   const baseHref = `/management`

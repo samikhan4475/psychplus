@@ -45,6 +45,7 @@ const DateTimeOfAdmission = ({
                 onChange={(value) => {
                   if (canEditAdmissionDateTime) {
                     form.setValue('dateOfAdmission', value)
+                    return
                   }
                   setIsOpen(true)
                 }}
@@ -62,6 +63,7 @@ const DateTimeOfAdmission = ({
                     form.setValue('timeOfAdmission', value, {
                       shouldDirty: true,
                     })
+                    return
                   }
                   setIsOpen(true)
                 }}
