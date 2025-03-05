@@ -23,7 +23,7 @@ const columns: ColumnDef<ClaimAuditHistory>[] = [
     ),
     cell: ({ row }) => (
       <TextCell className="w-[120px]">
-        {formatDateTime(row.original.metadata.updatedOn)}
+        {formatDateTime(row.original.metadata.updatedOn ?? row.original.metadata.createdOn)}
       </TextCell>
     ),
   },
@@ -35,7 +35,7 @@ const columns: ColumnDef<ClaimAuditHistory>[] = [
     ),
     cell: ({ row }) => (
       <TextCell className="w-[120px]">
-        {row.original.metadata.updatedByFullName}
+        {row.original.metadata.updatedByFullName ?? row.original.metadata.createdByFullName ?? ''}
       </TextCell>
     ),
   },

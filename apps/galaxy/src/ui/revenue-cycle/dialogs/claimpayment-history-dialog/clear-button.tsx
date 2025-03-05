@@ -3,7 +3,8 @@
 import { Button } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
 import { ClaimAuditHistoryFilterFormProps } from '../../types'
-import { SchemaType } from './claim-audit-history-filter-form'
+import { SchemaType } from '../insurance-payment-history-dialog/insurance-payment-history-filter-form'
+
 
 const ClearButton = ({ onFilterSubmit }: ClaimAuditHistoryFilterFormProps) => {
   const form = useFormContext<SchemaType>()

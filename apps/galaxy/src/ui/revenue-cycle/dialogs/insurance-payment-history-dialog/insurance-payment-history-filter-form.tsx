@@ -12,9 +12,9 @@ import {
   ClaimAuditHistoryFilterFormProps,
   ClaimAuditHistoryPayload,
 } from '../../types'
-import { ClearButton } from './clear-button'
-import { FromDateField } from './from-date-field'
-import { ToDateField } from './to-date-field'
+import { ClearButton } from '../claimpayment-history-dialog/clear-button'
+import { FromDateField } from '../claimpayment-history-dialog/from-date-field'
+import { ToDateField } from '../claimpayment-history-dialog/to-date-field'
 
 const schema = z.object({
   dateFrom: z.custom<DateValue>().nullable(),
@@ -23,7 +23,7 @@ const schema = z.object({
 
 type SchemaType = z.infer<typeof schema>
 
-const ClaimAuditHistoryFilterForm = ({
+const InsurancePaymentHistoryFilterForm = ({
   onFilterSubmit,
 }: ClaimAuditHistoryFilterFormProps) => {
   const form = useForm<SchemaType>({
@@ -43,7 +43,7 @@ const ClaimAuditHistoryFilterForm = ({
     const payloadSanitized = sanitizeFormData(
       payload,
     ) as ClaimAuditHistoryPayload
-    onFilterSubmit(payloadSanitized)
+    return onFilterSubmit(payloadSanitized)
   }
 
   return (
@@ -62,4 +62,4 @@ const ClaimAuditHistoryFilterForm = ({
   )
 }
 
-export { ClaimAuditHistoryFilterForm, type SchemaType }
+export { InsurancePaymentHistoryFilterForm, type SchemaType }

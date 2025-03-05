@@ -349,9 +349,14 @@ interface ClaimAuditHistoryPayload {
   dateTo?: string
   claimId?: string
 }
+interface PaymentHistoryPayload {
+  dateFrom?: string
+  dateTo?: string
+  id: string
+}
 
 interface ClaimAuditHistoryFilterFormProps {
-  onFilterSubmit: (data: ClaimAuditHistoryPayload) => void
+  onFilterSubmit: (data?: ClaimAuditHistoryPayload) => void
 }
 
 interface ClaimNoteHistoryPayload {
@@ -368,6 +373,7 @@ export {
   claimNoteSignedStatuses,
   ClaimDetailsTab,
   type GetSubmissionResponse,
+  type PaymentHistoryPayload,
   type UpdateClaimPaymentPayload,
   type ClaimServiceLinePayment,
   type ServiceLinePaymentAdjustment,

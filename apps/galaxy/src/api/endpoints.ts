@@ -262,6 +262,11 @@ const GET_RESPONSE_HISTORY_LIST_ENDPOINT = `${API_URL}/api/claimssubmissions/res
 const GET_RESPONSE_HISTORY_DETAIL_LIST_ENDPOINT = (id: string) =>
   `${API_URL}/api/claimssubmissions/responses/${id}/details/actions/search`
 const GET_CLAIMS_AUDIT_HISTORY_LIST_ENDPOINT = `${API_URL}/api/claims/history`
+const GET_PAYMENTS_HISTORY_LIST_ENDPOINT = (paymentId: string) =>
+  `${API_URL}/api/payments/${paymentId}/history/actions/search`
+
+const GET_CLAIMPAYMENTS_HISTORY_LIST_ENDPOINT = (claimPaymentId:string)=>
+  `${API_URL}/api/claimpayments/${claimPaymentId}/history/actions/search`
 const GET_CLAIMS_LIST_ENDPOINT = `${API_URL}/api/claims/actions/search`
 const EXPORT_CLAIMS_LIST_ENDPOINT = (fileFormat: string) =>
   `${API_URL}/api/claims/actions/export/${fileFormat}`
@@ -726,6 +731,8 @@ export {
   DELETE_STAFF_ENDPOINT,
   REFRESH_ENDPOINT,
   GET_CLAIM_SUBMISSION_LIST,
+  GET_CLAIMPAYMENTS_HISTORY_LIST_ENDPOINT,
+  GET_PAYMENTS_HISTORY_LIST_ENDPOINT,
   ADD_CLAIM_PAYMENT,
   GET_FEATURE_FLAG_ENDPOINT,
   PRESCRIBER_DIRECTORY_ENDPOINT,

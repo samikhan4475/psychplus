@@ -3,6 +3,7 @@ import { AdaptiveRowActionsCell, type RowAction } from '@/components'
 import { ClaimPayment } from '../types'
 import { RowActionDelete } from './row-action-delete'
 import { RowActionEdit } from './row-action-edit'
+import { RowActionHistory } from './row-action-history'
 
 const rowActions: RowAction<ClaimPayment>[] = [
   {
@@ -12,6 +13,10 @@ const rowActions: RowAction<ClaimPayment>[] = [
   {
     id: 'check-list-row-action-delete',
     render: RowActionDelete,
+  },
+  {
+    id: 'check-list-row-action-history',
+    render: RowActionHistory,
   },
 ]
 
