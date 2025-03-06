@@ -1,6 +1,9 @@
 import { ClearingHouseSubmitter } from '../../types'
 
-const defaultValues = (data?: ClearingHouseSubmitter | null) => {
+const defaultValues = (
+  data?: ClearingHouseSubmitter | null,
+  practiceId?: string | undefined,
+) => {
   return {
     id: data?.id ?? '',
     name: data?.name ?? '',
@@ -14,7 +17,7 @@ const defaultValues = (data?: ClearingHouseSubmitter | null) => {
     password: data?.password ?? '',
     submitterId: data?.submitterId ?? '',
     contactPerson: data?.contactPerson ?? '',
-    practiceId: data?.practiceId ?? '',
+    practiceId: data?.practiceId ?? practiceId,
     receiverId: data?.receiverId ?? '',
     address1: data?.addressLine1 ?? '',
     address2: data?.addressLine2 ?? '',

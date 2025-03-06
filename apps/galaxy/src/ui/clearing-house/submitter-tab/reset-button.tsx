@@ -1,11 +1,14 @@
 'use client'
 
+import { useSearchParams } from 'next/navigation'
 import { Button } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
 import { useStore } from './store'
 import { SchemaType } from './submitter-list-filter-form'
 
 const ResetButton = () => {
+  const searchParams = useSearchParams()
+  const practiceId = searchParams.get('practice')
   const { search } = useStore((state) => ({
     search: state.search,
   }))
@@ -27,7 +30,9 @@ const ResetButton = () => {
       phone: '',
       fax: '',
     })
-    return search({})
+    return search({
+      practiceId: practiceId ?? '',
+    })
   }
   return (
     <Button

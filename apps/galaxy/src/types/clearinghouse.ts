@@ -30,6 +30,7 @@ interface ClearingHouseReceiver {
   zip: string
   recordStatus: string
   isSupportMultipleDirectory: boolean
+  practiceId?: string
 }
 
 export type { ClearingHouseReceiver }

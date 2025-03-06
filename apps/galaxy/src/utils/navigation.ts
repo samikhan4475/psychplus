@@ -202,7 +202,11 @@ const isHospitalCareVisit = (visitType: string | null) =>
     visitType.includes(type),
   )
 
-const getManagementNavLinks = (type: string | null, id: string | null) => {
+const getManagementNavLinks = (
+  type: string | null,
+  id: string | null,
+  practiceId: string | null,
+) => {
   const baseHref = `/management`
 
   if (type === 'organizations') {
@@ -235,8 +239,10 @@ const getManagementNavLinks = (type: string | null, id: string | null) => {
     ]
   }
 
-  if (type === 'practices') {
-    const practiceBase = `${baseHref}/organization-practice/practices/${id}`
+  if (type === 'practices' || practiceId) {
+    const practiceBase = `${baseHref}/organization-practice/practices/${
+      id ?? practiceId
+    }`
     return [
       {
         label: 'Profile',
@@ -252,7 +258,7 @@ const getManagementNavLinks = (type: string | null, id: string | null) => {
       },
       {
         label: 'Clearing House Setup',
-        href: `${practiceBase}/staff`,
+        href: `/management/clearinghouse/?practice=${id ?? practiceId}`,
       },
       {
         label: 'Plan List',

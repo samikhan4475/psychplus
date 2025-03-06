@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect } from 'react'
+import { useSearchParams } from 'next/navigation'
 import { Flex, ScrollArea } from '@radix-ui/themes'
 import { type ColumnDef } from '@tanstack/react-table'
 import {
@@ -220,6 +221,8 @@ const columns = (
 }
 
 const ReceiverListTable = () => {
+  const searchParams = useSearchParams()
+  const practiceId = searchParams.get('practice')
   const { data, search, loading, sort, sortData } = useStore((state) => ({
     data: state.data,
     loading: state.loading,
@@ -229,8 +232,9 @@ const ReceiverListTable = () => {
   }))
 
   useEffect(() => {
-    search({})
-  }, [])
+    const payload = practiceId ? { practiceId: practiceId ?? '' } : {}
+    search(payload)
+  }, [practiceId])
 
   if (loading) {
     return (

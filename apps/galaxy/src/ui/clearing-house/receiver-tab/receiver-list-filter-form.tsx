@@ -1,5 +1,6 @@
 'use client'
 
+import { useSearchParams } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Flex, Grid } from '@radix-ui/themes'
 import { useForm, type SubmitHandler } from 'react-hook-form'
@@ -34,6 +35,8 @@ const schema = z.object({
 type SchemaType = z.infer<typeof schema>
 
 const ReceiverListFilterForm = () => {
+  const searchParams = useSearchParams()
+  const practiceId = searchParams.get('practice')
   const { search } = useStore((state) => ({
     search: state.search,
   }))
@@ -59,6 +62,7 @@ const ReceiverListFilterForm = () => {
   const onSubmit: SubmitHandler<SchemaType> = (data) => {
     const formattedData = {
       ...data,
+      practiceId: practiceId ?? '',
     }
     const cleanedData = sanitizeFormData(
       formattedData,

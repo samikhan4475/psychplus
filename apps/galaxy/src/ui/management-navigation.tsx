@@ -2,13 +2,18 @@
 
 import { useMemo } from 'react'
 import NextLink from 'next/link'
-import { useParams, usePathname } from 'next/navigation'
+import { useParams, usePathname, useSearchParams } from 'next/navigation'
 import { Box, Flex, ScrollArea } from '@radix-ui/themes'
 import { cn, getManagementNavLinks } from '@/utils'
 
 const ManagementNavigation = () => {
   const { id, type } = useParams<{ id: string; type: string }>()
-  const navLinks = useMemo(() => getManagementNavLinks(type, id), [type, id])
+  const searchParams = useSearchParams()
+  const practiceId = searchParams.get('practice')
+  const navLinks = useMemo(
+    () => getManagementNavLinks(type, id, practiceId),
+    [type, id, practiceId],
+  )
   return (
     <Box className="bg-white w-[160px] rounded-1 shadow-2">
       <ScrollArea>
@@ -33,10 +38,14 @@ const NavigationLink = ({
   children,
 }: React.PropsWithChildren<NavigationLinkProps>) => {
   const pathname = usePathname()
+  const searchParams = useSearchParams()
+  const practiceId = searchParams.get('practice')
 
   href = href ? href : `/management`
 
-  const isActive = pathname === href
+  const isActive = practiceId
+    ? `${pathname}/?practice=${practiceId}` === href
+    : pathname === href
 
   return (
     <NextLink

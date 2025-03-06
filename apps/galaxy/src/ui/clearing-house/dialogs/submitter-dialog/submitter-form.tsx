@@ -1,3 +1,4 @@
+import { useSearchParams } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Box, Grid, Text } from '@radix-ui/themes'
 import { useForm } from 'react-hook-form'
@@ -27,12 +28,14 @@ interface SubmitterFormProps {
 }
 
 const SubmitterForm = ({ data, onCloseModal }: SubmitterFormProps) => {
+  const searchParams = useSearchParams()
+  const practiceId = searchParams.get('practice')
   const { search } = useStore((state) => ({
     search: state.search,
   }))
   const form = useForm<SchemaType>({
     resolver: zodResolver(schema),
-    defaultValues: defaultValues(data),
+    defaultValues: defaultValues(data, practiceId ?? ''),
   })
 
   const onSave = async (formData: SchemaType) => {
@@ -62,7 +65,9 @@ const SubmitterForm = ({ data, onCloseModal }: SubmitterFormProps) => {
       onCloseModal(false)
       form.reset()
       toast.success('Record has been saved successfully')
-      search({})
+      search({
+        practiceId: practiceId ?? '',
+      })
     }
   }
 

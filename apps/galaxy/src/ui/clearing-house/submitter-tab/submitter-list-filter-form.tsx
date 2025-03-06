@@ -1,5 +1,6 @@
 'use client'
 
+import { useSearchParams } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons'
 import { Button, Flex, Grid } from '@radix-ui/themes'
@@ -36,6 +37,8 @@ const schema = z.object({
 type SchemaType = z.infer<typeof schema>
 
 const SubmitterListFilterForm = () => {
+  const searchParams = useSearchParams()
+  const practiceId = searchParams.get('practice')
   const { search } = useStore((state) => ({
     search: state.search,
   }))
@@ -64,6 +67,7 @@ const SubmitterListFilterForm = () => {
       ...data,
       addressLine1: data.address1,
       addressLine2: data.address2,
+      practiceId: practiceId,
     }
     const cleanedData = sanitizeFormData(
       formattedData,
