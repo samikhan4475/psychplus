@@ -18,7 +18,7 @@ const RadioButton = ({
       onValueChange={(newValue) => setUnitSystem(newValue as UnitSystem)}
       className="flex flex-row gap-3"
     >
-      {[UnitSystem.Metric, UnitSystem.English].map((value) => {
+      {[UnitSystem.English, UnitSystem.Metric].map((value) => {
         const isSelected = value === unitSystem
 
         return (

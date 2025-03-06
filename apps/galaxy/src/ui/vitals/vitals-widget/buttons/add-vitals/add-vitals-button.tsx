@@ -23,7 +23,7 @@ const AddVitalsButton = ({
   title: string
   patientId: string
 }) => {
-  const [unitSystem, setUnitSystem] = useState(UnitSystem.Metric)
+  const [unitSystem, setUnitSystem] = useState(UnitSystem.English)
   const [addNewRecord, setAddNewRecord] = useState(false)
 
   const { error, setError } = useStore((state) => ({
