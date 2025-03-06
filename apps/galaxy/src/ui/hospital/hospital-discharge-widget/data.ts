@@ -1,7 +1,9 @@
 import { QuickNoteSectionItem } from '@/types'
 import { HospitalDischargeWidgetSchemaType } from './hospital-discharge-widget-schema'
+import { transformIn as initialTransformIn } from '../hospital-initial-widget/data'
 import { sanitizeFormData } from '@/utils'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
+import { HospitalInitialFieldMapping } from '../hospital-initial-widget/constants'
 export const hospitalDischargeKeys = [
   {
     label: 'Antipsychotics:',
@@ -70,8 +72,22 @@ export const hospitalDischargeKeys = [
     key: 'dischargeTimeSpent',
   },
 ]
+const mapValuesFromInitialHospitalData = (
+  initialHospitalData: string[] | undefined,
+  existingDischargeValues: string[]
+): string[] => {
+  if (!Array.isArray(initialHospitalData)) return existingDischargeValues;
+
+  const initialHospitalValues = initialHospitalData
+    .map((value) => HospitalInitialFieldMapping.find((mapping) => mapping.value === value)?.label)
+    .filter((label): label is string => label !== undefined);
+
+  return Array.from(new Set([...existingDischargeValues, ...initialHospitalValues]));
+};
+
 const transformIn = (
   value: QuickNoteSectionItem[],
+  initialValue?: QuickNoteSectionItem[],
 ): HospitalDischargeWidgetSchemaType => {
   const converToObject = [
     'antiPsychoticOptions',
@@ -81,10 +97,10 @@ const transformIn = (
   const result = {
     antiPsychotics: "",
     antiPsychoticOptions: [],
-    strengths: [],
-    strengthsOtherDescription:'',
-    liabilites: [],
-    liabilitesOtherDescription:'',
+    strengths: [] as string[],
+    strengthsOtherDescription: '',
+    liabilites: [] as string[],
+    liabilitesOtherDescription: '',
     hospitalCourse: "Admission factors were reviewed during their hospitalization. Pt started to gradually improve, his mood gradually improved and symptoms improved. Pt’s affect got better and he became much more redirectable. Pt tolerated the medications well and denied SE to meds. Pt started to attend therapy, including individual and group therapy. Pt was seen at discharge and denied SI/HI. Was able to contract for safety. Pt is at risk for worsening symptoms without treatment and we discussed a safety plan, emergency procedures, Medications risks and SE were also discussed",
     physicalConditionWNL: "",
     physicalConditionDescription: "",
@@ -104,13 +120,18 @@ const transformIn = (
     followUp: "",
     dischargeTimeSpent: "",
   }
-  
   value.forEach((item) => {
     result[item.sectionItem as keyof HospitalDischargeWidgetSchemaType] =
       converToObject.includes(item.sectionItem)
         ? JSON.parse(item.sectionItemValue)
         : item.sectionItemValue
   })
+  if(initialValue){
+  const initialHospitalData = initialTransformIn(initialValue)
+
+  result.strengths = mapValuesFromInitialHospitalData(initialHospitalData.strengths, result.strengths);
+  result.liabilites = mapValuesFromInitialHospitalData(initialHospitalData.liabilities, result.liabilites);
+  }
 
   return result as HospitalDischargeWidgetSchemaType;
 

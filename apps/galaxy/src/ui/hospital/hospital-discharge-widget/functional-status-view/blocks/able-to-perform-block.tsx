@@ -28,6 +28,7 @@ const AbleToPerformADLBlock = () => {
         options={BLOCK_OPTIONS}
         label={BLOCK_LABEL}
         lastOptionIndicator={true}
+        errorField={BLOCK_ID}
       />
       {ableToPerformADL === 'No' && (
         <SelectableChipDetails

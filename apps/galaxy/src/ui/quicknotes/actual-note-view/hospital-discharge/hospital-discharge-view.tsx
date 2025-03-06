@@ -10,19 +10,24 @@ type HospitalDischargeProps = {
 }
 
 const HospitalDischargeView = async ({ patientId }: HospitalDischargeProps) => {
-  const response = await getQuickNoteDetailAction(patientId, [
-    QuickNoteSectionName.QuicknoteSectionHospitalDischarge,
+  const [response, initialDataResponse] = await Promise.all([
+    getQuickNoteDetailAction(patientId, [QuickNoteSectionName.QuicknoteSectionHospitalDischarge]),
+    getQuickNoteDetailAction(patientId, [QuickNoteSectionName.QuickNoteSectionHospitalInitial]),
   ])
 
   if (response.state === 'error') {
     return <Text>{response.error}</Text>
+  }
+  
+  if (initialDataResponse.state === 'error') {
+    return <Text>{initialDataResponse.error}</Text>
   }
 
   return (
     <ActualNoteDetailsWrapper
       sectionName={QuickNoteSectionName.QuicknoteSectionHospitalDischarge}
     >
-      <Details data={transformIn(response.data)} />
+      <Details data={transformIn(response.data,initialDataResponse.data)} />
     </ActualNoteDetailsWrapper>
   )
 }

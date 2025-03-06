@@ -21,14 +21,16 @@ interface HospitalDischargeWidget {
   patientId: string
   isHospitalDischargeTab: boolean
   hospitalDischargeData: QuickNoteSectionItem[]
+  hospitalInitialData: QuickNoteSectionItem[]
 }
 
 const HospitalDischargeTab = ({
   patientId,
   isHospitalDischargeTab,
   hospitalDischargeData,
+  hospitalInitialData
 }: HospitalDischargeWidget) => {
-  const initialValue = transformIn(hospitalDischargeData)
+  const initialValue = transformIn(hospitalDischargeData,hospitalInitialData)  
   const form = useHospitalDischargeWidgetForm(initialValue)
 
   return (

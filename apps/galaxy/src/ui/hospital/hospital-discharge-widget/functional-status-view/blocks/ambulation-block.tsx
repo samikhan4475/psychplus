@@ -27,6 +27,7 @@ const AmbulationWNLBlock = () => {
         options={BLOCK_OPTIONS}
         label={BLOCK_LABEL}
         lastOptionIndicator={true}
+        errorField={BLOCK_ID}
       />
       {ambulationWNL === 'No' && (
         <SelectableChipDetails

@@ -19,6 +19,7 @@ import {
 } from './blocks'
 import { transformIn, transformOut } from './data'
 import { useHospitalInitialWidgetForm } from './hospital-initial-widget-form'
+import { hospitalInitialWidgetSchema } from './hospital-initial-widget-schema'
 
 interface HospitalWidgetProps {
   patientId: string

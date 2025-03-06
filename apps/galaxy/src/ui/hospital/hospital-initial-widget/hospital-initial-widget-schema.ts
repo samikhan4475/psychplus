@@ -1,16 +1,13 @@
 import { z } from 'zod'
 
-type HospitalInitialWidgetSchemaType = z.infer<
-  typeof hospitalInitialWidgetSchema
->
 
 const hospitalInitialWidgetSchema = z.object({
-  strengths: z.array(z.string()),
-  liabilities: z.array(z.string()),
-  needForLevelOfCare: z.array(z.string()),
-  shortTermGoals: z.array(z.string()),
+  strengths: z.array(z.string()).min(2,"Required"),
+  liabilities: z.array(z.string()).min(2,"Required"),
+  needForLevelOfCare: z.array(z.string()).min(1,"Please Select atleast one option"),
+  shortTermGoals: z.array(z.string()).min(1,"Required"),
   precautions: z.array(z.string()),
-  dcPlan: z.array(z.string()),
+  dcPlan: z.array(z.string()).min(1,"Required"),
   strengthsOtherDetails: z
     .string()
     .trim()
@@ -29,5 +26,6 @@ const hospitalInitialWidgetSchema = z.object({
     .trim()
     .max(500, 'Max 500 characters are allowed'),
 })
+type HospitalInitialWidgetSchemaType = z.infer< typeof hospitalInitialWidgetSchema>
 
 export { hospitalInitialWidgetSchema, type HospitalInitialWidgetSchemaType }

@@ -3,6 +3,8 @@ import {
   HospitalInitialFieldMapping,
   HospitalInitialPrefixes,
 } from '../constants'
+import { useFormContext } from 'react-hook-form'
+import { HospitalInitialWidgetSchemaType } from '../hospital-initial-widget-schema'
 
 const BLOCK_ID = 'liabilities'
 
@@ -25,6 +27,8 @@ const LIABILITIES_OPTIONS: GroupSelectOption<string>[] =
   }))
 
 const LiabilitiesBlock = ({ editable }: { editable?: boolean }) => {
+  const { formState: { errors } } = useFormContext<HospitalInitialWidgetSchemaType>();
+  const hasError = errors?.liabilities
   return (
     <GroupSelectSection
       label={BLOCK_TITLE}
@@ -32,6 +36,7 @@ const LiabilitiesBlock = ({ editable }: { editable?: boolean }) => {
       options={LIABILITIES_OPTIONS}
       hasChild
       editable={editable}
+      chipClassName={`${hasError ? 'border border-tomato-11' : ''}`}
     />
   )
 }

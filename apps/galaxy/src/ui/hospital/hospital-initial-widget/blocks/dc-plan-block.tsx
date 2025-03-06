@@ -3,6 +3,8 @@ import {
   HospitalInitialFieldMapping,
   HospitalInitialPrefixes,
 } from '../constants'
+import { useFormContext } from 'react-hook-form'
+import { HospitalInitialWidgetSchemaType } from '../hospital-initial-widget-schema'
 
 const BLOCK_ID = 'dcPlan'
 
@@ -24,6 +26,8 @@ const DcPlanOPTIONS: GroupSelectOption<string>[] =
   }))
 
 const DcPlanBlock = ({ editable }: { editable?: boolean }) => {
+  const { formState: { errors } } = useFormContext<HospitalInitialWidgetSchemaType>();
+  const hasError = errors?.dcPlan
   return (
     <GroupSelectSection
       label={BLOCK_TITLE}
@@ -31,6 +35,7 @@ const DcPlanBlock = ({ editable }: { editable?: boolean }) => {
       options={DcPlanOPTIONS}
       hasChild
       editable={editable}
+      chipClassName={`${hasError ? 'border border-tomato-11' : ''}`}
     />
   )
 }

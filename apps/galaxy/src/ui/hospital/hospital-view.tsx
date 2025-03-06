@@ -56,6 +56,7 @@ const HospitalView = ({
           patientId={patientId}
           isHospitalDischargeTab={true}
           hospitalDischargeData={hospitalDischargeData}
+          hospitalInitialData={hospitalInitialData}
         />
       </TabsContent>
     </Tabs.Root>

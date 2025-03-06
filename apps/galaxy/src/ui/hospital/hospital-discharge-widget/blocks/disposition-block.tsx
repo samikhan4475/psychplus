@@ -51,6 +51,7 @@ const DispositionBlock = () => {
         label={BLOCK_LABEL}
         field={BLOCK_ID}
         options={BLOCK_OPTIONS}
+        errorField={BLOCK_ID}
       />
   )
 }

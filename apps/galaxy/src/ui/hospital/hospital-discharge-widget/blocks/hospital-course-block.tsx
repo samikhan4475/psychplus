@@ -2,6 +2,7 @@ import { Flex } from '@radix-ui/themes'
 import {
   BlockLabel,
   FormFieldContainer,
+  FormFieldError,
   TextAreaInput,
 } from '@/components'
 
@@ -16,6 +17,7 @@ const HospitalCourseBlock = () => {
           field="hospitalCourse"
           className="h-[90px] w-[600px]"
         />
+      <FormFieldError name='hospitalCourse'  />
       </Flex>
     </FormFieldContainer>
   )

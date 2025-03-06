@@ -18,8 +18,12 @@ const BLOCK_OPTIONS = [
     value: 'Request Early',
   },
   {
-    label: 'AMA',
-    value: 'AMA',
+    label: 'AMA - Patient Request',
+    value: 'AMA - Patient Request',
+  },
+  {
+    label: 'AMA - Court Dismissed',
+    value: 'AMA - Court Dismissed',
   },
   {
     label: 'Transfer',
@@ -41,6 +45,7 @@ const DischargeTypeBlock = () => {
         field={BLOCK_ID}
         options={BLOCK_OPTIONS}
         lastOptionIndicator={true}
+        errorField={BLOCK_ID}
       />
       {dischargeType === 'Other' && (
         <SelectableChipDetails

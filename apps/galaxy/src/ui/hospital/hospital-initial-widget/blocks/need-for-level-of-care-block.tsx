@@ -1,6 +1,6 @@
 import { Flex, Text } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
-import { CheckboxInput } from '@/components'
+import { CheckboxInput, FormFieldError } from '@/components'
 import {
   HospitalInitialFieldMapping,
   HospitalInitialPrefixes,
@@ -39,7 +39,6 @@ const NeedForLevelOfCareBlock = ({
 
     form.setValue('needForLevelOfCare', updatedFields)
   }
-
   return (
     <Flex
       direction="column"
@@ -66,6 +65,7 @@ const NeedForLevelOfCareBlock = ({
             labelClassName="max-w-max"
           />
         ))}
+        <FormFieldError name="needForLevelOfCare" />
       </Flex>
     </Flex>
   )

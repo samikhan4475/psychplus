@@ -29,6 +29,7 @@ const ActivityBlock = () => {
         field={BLOCK_ID}
         options={BLOCK_OPTIONS}
         lastOptionIndicator={true}
+        errorField={BLOCK_ID}
       />
       {activity === 'Other' && (
         <SelectableChipDetails

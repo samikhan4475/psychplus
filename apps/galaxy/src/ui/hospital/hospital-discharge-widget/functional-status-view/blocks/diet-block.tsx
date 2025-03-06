@@ -37,6 +37,7 @@ const DietBlock = () => {
         field={BLOCK_ID}
         options={BLOCK_OPTIONS}
         lastOptionIndicator={true}
+        errorField={BLOCK_ID}
       />
       {diet === 'Other' && (
         <SelectableChipDetails

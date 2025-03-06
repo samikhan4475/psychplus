@@ -27,6 +27,7 @@ const PhysicalConditionBlock = () => {
         options={BLOCK_OPTIONS}
         label={BLOCK_LABEL}
         lastOptionIndicator={true}
+        errorField={BLOCK_ID}
       />
       {physicalCondtion === 'No' && (
         <SelectableChipDetails

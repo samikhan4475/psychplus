@@ -45,6 +45,7 @@ const BLOCK_OPTIONS = [
 
 const StrengthsBlock = () => {
   const form = useFormContext<HospitalDischargeWidgetSchemaType>()
+  const hasError = form.formState.errors?.strengths
   return (
     <Flex>
       <GroupSelectSection
@@ -52,6 +53,7 @@ const StrengthsBlock = () => {
         options={BLOCK_OPTIONS}
         label={BLOCK_LABEL}
         hasChild
+        chipClassName={`${hasError ? 'border border-tomato-11' : ''}`}
       />
       {form.watch(BLOCK_ID).includes('Other') && (
         <SelectableChipDetails
