@@ -17,7 +17,6 @@ const ClaimProcessedSelect = () => {
     )
   }
 
-  
   return (
     <FormFieldContainer>
       <FormFieldLabel>Claim Processed as</FormFieldLabel>

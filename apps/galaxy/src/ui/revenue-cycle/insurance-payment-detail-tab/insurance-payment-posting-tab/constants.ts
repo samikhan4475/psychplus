@@ -4,12 +4,13 @@ const WRITE_OFF_ADJUSTMENT = {
   adjustmentStatus: 'WriteOff',
 } as const
 
-
-
 const paymentSourceMapping = {
   ProcessedAsPrimary: 'Primary',
   ProcessedAsSecondary: 'Secondary',
   ProcessedAsTertiary: 'Tertiary',
+  ProcessedAsPrimaryAndForwarded: 'Primary',
+  ProcessedAsSecondaryAndForwarded: 'Secondary',
+  ProcessedAsTertiaryAndForwarded: 'Tertiary',
 } as const
 
 const DEDUCTIBLE_ADJUSTMENT = {

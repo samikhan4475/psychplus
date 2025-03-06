@@ -82,6 +82,12 @@ const transformOut = (
     ProcessedAsPrimary: paymentClaim?.primaryPatientInsurancePolicyId ?? '',
     ProcessedAsSecondary: paymentClaim?.secondaryPatientInsurancePolicyId ?? '',
     ProcessedAsTertiary: paymentClaim?.tertiaryPatientInsurancePolicyId ?? '',
+    ProcessedAsPrimaryAndForwarded:
+      paymentClaim?.primaryPatientInsurancePolicyId ?? '',
+    ProcessedAsSecondaryAndForwarded:
+      paymentClaim?.secondaryPatientInsurancePolicyId ?? '',
+    ProcessedAsTertiaryAndForwarded:
+      paymentClaim?.tertiaryPatientInsurancePolicyId ?? '',
   }
 
   const insurancePolicyId =
