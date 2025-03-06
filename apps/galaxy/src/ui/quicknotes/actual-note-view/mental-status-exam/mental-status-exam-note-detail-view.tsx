@@ -1,5 +1,7 @@
 'use client'
 
+import { CODESETS } from '@/constants'
+import { useCodesetCodes } from '@/hooks'
 import { transformIn } from '@/ui/mse/mse-widget/data'
 import { getWidgetContainerCheckboxStateByWidgetId } from '@/utils'
 import { QuickNoteSectionName } from '../../constants'
@@ -13,6 +15,8 @@ const MentalStatusExamNoteDetailView = ({
   appointment,
 }: NoteDetailProps) => {
   if (data.length === 0) return null
+  const delusionTypeCodeset = useCodesetCodes(CODESETS.DelusionType)
+  const hallucinationTypeCodeset = useCodesetCodes(CODESETS.HallucinationType)
 
   const transformedData = transformIn(data)
 
@@ -27,6 +31,8 @@ const MentalStatusExamNoteDetailView = ({
     <Details
       data={transformIn(data)}
       actualNoteViewVisibility={actualNoteViewVisibility}
+      delusionTypeCodeset={delusionTypeCodeset}
+      hallucinationTypeCodeset={hallucinationTypeCodeset}
     />
   )
 }

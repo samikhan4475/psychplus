@@ -143,33 +143,6 @@ const valueToSchemaPe: { [key: string]: string } = {
   JDGHT_RecentDecisionMaking: 'jdghtRecentDecisionMaking',
   JDGHT_SevereSymptoms: 'jdghtSevereSymptoms',
   JDGHT_Other: 'jdghtOther',
-
-  // SH
-  SD_Grandiose: 'Grandiose',
-  SD_OfReference: 'OfReference',
-  SD_Erotomania: 'Erotomania',
-  SD_Persecutory: 'Persecutory',
-  SD_Jealous: 'Jealous',
-  SD_Paranoid: 'Paranoid',
-  SD_Bizarre: 'Bizarre',
-  SD_Mixed: 'Mixed',
-  SD_Nihilistic: 'Nihilistic',
-  SD_ThoughtBroadcasting: 'ThoughtBroadcasting',
-  SD_Guilt: 'Guilt',
-  SD_ThoughtInsertion: 'ThoughtInsertion',
-  SD_Persecution: 'Persecution',
-  SD_Unspecified: 'Unspecified',
-  SD_Infidelity: 'Infidelity',
-  SD_MisidentificationSyndrome: 'MisidentificationSyndrome',
-
-  //DH
-
-  SH_Auditory: 'Auditory',
-  SH_Visual: 'Visual',
-  SH_Olfactory: 'Olfactory',
-  SH_Tactile: 'Tactile',
-  SH_Gustatory: 'Gustatory',
-  SH_Somatic: 'Somatic',
 }
 
 const schemaToValue: { [key: string]: string } = Object.entries(
@@ -424,7 +397,12 @@ const transformOut =
 
     Object.entries(schema).forEach(([key, value]) => {
       if (
-        (key.includes('Other') || key.includes('YesNo')) &&
+        ([
+          'schizophreniaHallucinationsValues',
+          'schizophreniaDelusionValues',
+        ].includes(key) ||
+          key.includes('Other') ||
+          key.includes('YesNo')) &&
         value.length > 0
       ) {
         result.push({
@@ -444,7 +422,13 @@ const transformOut =
         })
       }
 
-      if (Array.isArray(value)) {
+      if (
+        ![
+          'schizophreniaHallucinationsValues',
+          'schizophreniaDelusionValues',
+        ].includes(key) &&
+        Array.isArray(value)
+      ) {
         const validationRules: { [key: string]: string } = {
           siUnDisclosed: 'tcsiYesNo',
           hiUnDisclosed: 'tchiYesNo',

@@ -1,10 +1,16 @@
 'use client'
 
 import { useSearchParams } from 'next/navigation'
+import { SharedCode } from '@/types'
 import { MseWidgetSchemaType } from '@/ui/mse/mse-widget/mse-widget-schema'
 import { BlockContainer, LabelAndValue } from '../shared'
 import { renderDataWithOther } from '../utils'
-import { desiredOrderMse, mseValueMapping, reorderObjectKeys } from './utils'
+import {
+  desiredOrderMse,
+  formatDelusionsAndHallucinationsValues,
+  mseValueMapping,
+  reorderObjectKeys,
+} from './utils'
 
 const labelMapping: Record<string, string> = {
   orientation: 'Orientation',
@@ -39,6 +45,8 @@ const labelMapping: Record<string, string> = {
 interface Props {
   data: MseWidgetSchemaType
   actualNoteViewVisibility?: boolean
+  delusionTypeCodeset: SharedCode[]
+  hallucinationTypeCodeset: SharedCode[]
 }
 
 enum VisitType {
@@ -66,11 +74,22 @@ const validationRules: Record<string, ValidationRule> = {
 }
 
 const RenderArrayValue: React.FC<{
+  key: string
   label: string
   value: string[]
   fieldKey: string
   data: MseWidgetSchemaType
-}> = ({ label, value, fieldKey, data }) => {
+  hallucinationTypeCodeset: SharedCode[]
+  delusionTypeCodeset: SharedCode[]
+}> = ({
+  key,
+  label,
+  value,
+  fieldKey,
+  data,
+  hallucinationTypeCodeset,
+  delusionTypeCodeset,
+}) => {
   const sortedValues = mseValueMapping[fieldKey]
     ? value
         .slice()
@@ -81,6 +100,32 @@ const RenderArrayValue: React.FC<{
         )
     : value
 
+  if (key === 'schizophreniaHallucinationsValues') {
+    return (
+      <LabelAndValue
+        key={key}
+        label={`${label}:`}
+        value={formatDelusionsAndHallucinationsValues(
+          sortedValues,
+          hallucinationTypeCodeset,
+        )}
+      />
+    )
+  }
+
+  if (key === 'schizophreniaDelusionValues') {
+    return (
+      <LabelAndValue
+        key={key}
+        label={`${label}:`}
+        value={formatDelusionsAndHallucinationsValues(
+          sortedValues,
+          delusionTypeCodeset,
+        )}
+      />
+    )
+  }
+
   return (
     <LabelAndValue
       label={`${label}:`}
@@ -89,7 +134,12 @@ const RenderArrayValue: React.FC<{
   )
 }
 
-const Details = ({ data, actualNoteViewVisibility = false }: Props) => {
+const Details = ({
+  data,
+  actualNoteViewVisibility = false,
+  delusionTypeCodeset,
+  hallucinationTypeCodeset,
+}: Props) => {
   const visitSequence = useSearchParams().get('visitSequence') || ''
   const showHowTested = Object.values(VisitType).includes(
     visitSequence as VisitType,
@@ -115,6 +165,8 @@ const Details = ({ data, actualNoteViewVisibility = false }: Props) => {
               value={value}
               fieldKey={key}
               data={reorderedData}
+              hallucinationTypeCodeset={hallucinationTypeCodeset}
+              delusionTypeCodeset={delusionTypeCodeset}
             />
           )
         }

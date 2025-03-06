@@ -1,5 +1,7 @@
 'use client'
 
+import { CODESETS } from '@/constants'
+import { useCodesetCodes } from '@/hooks'
 import { Appointment, QuickNoteSectionItem } from '@/types'
 import { transformIn } from '@/ui/mse/mse-widget/data'
 import { getWidgetContainerCheckboxStateByWidgetId } from '@/utils'
@@ -30,6 +32,9 @@ const MentalStatusExamClientView = ({
     providerType: appointment.providerType,
   })?.actualNoteViewVisibility
 
+  const delusionTypeCodeset = useCodesetCodes(CODESETS.DelusionType)
+  const hallucinationTypeCodeset = useCodesetCodes(CODESETS.HallucinationType)
+
   return (
     <ActualNoteDetailsWrapper
       sectionName={QuickNoteSectionName.QuicknoteSectionMse}
@@ -37,6 +42,8 @@ const MentalStatusExamClientView = ({
       <Details
         data={transformedData}
         actualNoteViewVisibility={actualNoteViewVisibility}
+        delusionTypeCodeset={delusionTypeCodeset}
+        hallucinationTypeCodeset={hallucinationTypeCodeset}
       />
     </ActualNoteDetailsWrapper>
   )

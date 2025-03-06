@@ -1,3 +1,6 @@
+import { SharedCode } from '@/types'
+import { replaceValueWithLabel } from '@/utils'
+
 export const mseValueMapping: Record<string, string[]> = {
   orientation: ['oriName', 'oriPlace', 'oriDate', 'oriTime', 'oriOther'],
   appearance: [
@@ -171,3 +174,22 @@ export const desiredOrderMse = [
   'affOtherDetails',
   'thpOtherDetails',
 ] as const
+
+export const formatDelusionsAndHallucinationsValues = (
+  values: string[],
+  codeset?: SharedCode[],
+) => {
+  const count = values.length
+  if (count === 0) return ''
+
+  let updatedValues = values
+
+  if (codeset)
+    updatedValues = values.map((item) => {
+      return replaceValueWithLabel(item, codeset)
+    })
+
+  if (count === 1) return updatedValues?.[0]
+
+  return updatedValues?.map((value) => value).join(', ')
+}
