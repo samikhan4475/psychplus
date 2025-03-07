@@ -24,6 +24,11 @@ const theratimeSpentCodes1 = {
   timeRangeThree: '90838*1',
 }
 const therapyPsychoanalysisCodes = { psychoanalysis: '90845' }
+const defaultCptCodeMap = {
+  injection: '96372',
+  therapyTimeSpent: theratimeSpentCodes,
+  therapyPsychoanalysis: therapyPsychoanalysisCodes,
+}
 
 const getCptCodeMap = (visitType: string) => {
   let cptCodeMap: {
@@ -42,8 +47,10 @@ const getCptCodeMap = (visitType: string) => {
       }
       break
     case 'HospitalCare':
+    case 'NursingHomeCare':
+    case 'PhpCare':
       cptCodeMap = {
-        ...cptCodeMap,
+        ...defaultCptCodeMap,
         ect: '90837',
       }
       break
@@ -63,11 +70,7 @@ const getCptCodeMap = (visitType: string) => {
       cptCodeMap = {}
       break
     default:
-      cptCodeMap = {
-        injection: '96372',
-        therapyTimeSpent: theratimeSpentCodes,
-        therapyPsychoanalysis: therapyPsychoanalysisCodes,
-      }
+      cptCodeMap = defaultCptCodeMap
       break
   }
   return cptCodeMap
