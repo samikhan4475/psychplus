@@ -19,6 +19,10 @@ const disabledHistoriesWidgetsVisitTypesBySequenceNew = [
 const disabledHistoriesWidgetsVisitTypes = [
   'HospitalCare/Initial',
   'HospitalCare/InitialDischarge',
+  'PhpCare/InitialDischarge',
+  'PhpCare/Initial',
+  'NursingHomeCareInitialDischarge',
+  'NursingHomeCare/Initial',
 ]
 
 const historiesWidgetsIds = [

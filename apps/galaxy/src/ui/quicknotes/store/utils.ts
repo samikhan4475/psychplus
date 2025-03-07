@@ -105,7 +105,6 @@ const validateAll = async (
   })
   postEvent({ type: 'quicknotes:validateAll' })
   const responses = await Promise.all(promises)
-
   let widgetErrors = ''
   responses.forEach((element) => {
     if (!element.success) {

@@ -36,6 +36,8 @@ const saveAbleWdgets: QuickNoteSectionName[] = [
   QuickNoteSectionName.QuicknoteSectionMse,
   QuickNoteSectionName.QuicknoteSectionPsychiatryAssessmentPlan,
   QuickNoteSectionName.Addon,
+  QuickNoteSectionName.QuickNoteSectionHospitalInitial,
+  QuickNoteSectionName.QuicknoteSectionHospitalDischarge,
   QuickNoteSectionName.QuicknoteSectionProcedureSpravato,
   QuickNoteSectionName.ProcedureTMS,
   QuickNoteSectionName.QuicknoteSectionTcm,

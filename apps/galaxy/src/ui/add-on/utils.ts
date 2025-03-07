@@ -62,26 +62,30 @@ const blocks: Block[] = [
   },
 ]
 
+// These blocks are for Add On 
+
+const commonBlocks = ['InjectionBlock', 'TherapyPsychoAnalysisBlock']
+const extendedBlocks = [...commonBlocks, 'ECTBlock']
+
 const visitTypeToBlocks: Record<string, string[]> = {
-  Outpatient: ['InjectionBlock', 'TherapyPsychoAnalysisBlock'],
-  ResidentCare: ['InjectionBlock', 'TherapyPsychoAnalysisBlock'],
-  EdVisit: ['InjectionBlock', 'TherapyPsychoAnalysisBlock'],
-  TransitionalCare: ['InjectionBlock', 'TherapyPsychoAnalysisBlock'],
-  'HospitalCare/Initial': [
-    'InjectionBlock',
-    'TherapyPsychoAnalysisBlock',
-    'ECTBlock',
-  ],
-  'HospitalCare/Subsequent': [
-    'InjectionBlock',
-    'TherapyPsychoAnalysisBlock',
-    'ECTBlock',
-  ],
-  'HospitalCare/Discharge': ['InjectionBlock', 'TherapyPsychoAnalysisBlock'],
-  'HospitalCare/InitialDischarge': [
-    'InjectionBlock',
-    'TherapyPsychoAnalysisBlock',
-  ],
+  Outpatient: commonBlocks,
+  ResidentCare: commonBlocks,
+  EdVisit: commonBlocks,
+  TransitionalCare: commonBlocks,
+  'HospitalCare/Initial': extendedBlocks,
+  'HospitalCare/Subsequent': extendedBlocks,
+  'HospitalCare/Discharge': commonBlocks,
+  'HospitalCare/InitialDischarge': commonBlocks,
+
+  'NursingHomeCare/Initial': extendedBlocks,
+  'NursingHomeCare/Subsequent': extendedBlocks,
+  'NursingHomeCare/Discharge': commonBlocks,
+  'NursingHomeCare/InitialDischarge': commonBlocks,
+
+  'PhpCare/Initial': extendedBlocks,
+  'PhpCare/Subsequent': extendedBlocks,
+  'PhpCare/Discharge': commonBlocks,
+  'PhpCare/InitialDischarge': commonBlocks,
   IndividualPsychotherapy: ['InteractiveComplexityBlock'],
   FamilyPsychotherapy: ['InteractiveComplexityBlock'],
   Spravato: ['TherapyBlock'],
