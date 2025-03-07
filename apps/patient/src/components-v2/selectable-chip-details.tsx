@@ -62,7 +62,7 @@ const SelectableChipDetails = ({
           <Flex
             align="center"
             className={cn(
-              'bg-pp-focus-bg-2 h-8 rounded-2 border border-gray-8 bg-[#F7F9FC] px-2 py-1',
+              'bg-pp-focus-bg-2 h-8 rounded-6 border border-gray-8 bg-[#F7F9FC] px-2 py-1',
               className,
             )}
           >

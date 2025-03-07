@@ -33,4 +33,4 @@ interface NoteData {
   headingLabels?: string[]
 }
 
-export type { NoteSectionItem, NoteAccordion, NoteData }
+export type { NoteSectionItem, NoteAccordion, NoteData, Option }

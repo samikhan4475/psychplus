@@ -39,20 +39,20 @@ const QuestionnaireTable = ({
           {item.headingLabels && (
             <Flex
               my="2"
-              className="w-full bg-[#EEF2F6] px-2 py-1"
+              className="w-full rounded-1 bg-[#EEF2F6] px-2 py-1"
               align="center"
             >
-              <Box className="w-1/2">
+              <Flex className="w-1/2">
                 <Text className="text-center text-[13px]" weight="medium">
                   {item.headingLabels?.[0]}
                 </Text>
-              </Box>
+              </Flex>
               {item.headingLabels?.slice(1)?.map((label) => (
-                <Box key={label} className="flex-1 justify-center text-center">
+                <Flex key={label} className="flex-1 justify-center text-center">
                   <Text className="line-clamp-4 text-[13px]" weight="medium">
                     {label}
                   </Text>
-                </Box>
+                </Flex>
               ))}
             </Flex>
           )}

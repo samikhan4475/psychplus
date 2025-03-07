@@ -37,7 +37,6 @@ const TextInput = ({
       )}
       <TextFieldInput
         required={required}
-        radius="large"
         autoFocus={autoFocus}
         disabled={disabled}
         className={cn('h-8 text-[13px]', className)}

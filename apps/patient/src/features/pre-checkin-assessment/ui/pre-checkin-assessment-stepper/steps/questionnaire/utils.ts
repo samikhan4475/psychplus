@@ -4,14 +4,14 @@ import { NoteSectionItem } from '@/features/note/types'
 const QuestionnaireQuestionToSectionName: Record<string, NoteSectionName> = {
   Q1: NoteSectionName.NoteSectionPhq9,
   Q2: NoteSectionName.NoteSectionGad7,
-  Q3: NoteSectionName.NoteSectionSnapIV,
-  Q4: NoteSectionName.NoteSectionPcl5,
+  Q3: NoteSectionName.NoteSectionPcl5,
+  Q4: NoteSectionName.NoteSectionSnapIV,
   Q5: NoteSectionName.NoteSectionYbocs,
-  Q6: NoteSectionName.NoteSectionAims,
-  Q7: NoteSectionName.NoteSectionAudit,
-  Q8: NoteSectionName.NoteSectionDast10,
-  Q9: NoteSectionName.NoteSectionHamD,
-  Q10: NoteSectionName.NoteSectionMoca,
+  Q6: NoteSectionName.NoteSectionAudit,
+  Q7: NoteSectionName.NoteSectionAims,
+  Q8: NoteSectionName.NoteSectionHamD,
+  Q9: NoteSectionName.NoteSectionMoca,
+  Q10: NoteSectionName.NoteSectionDast10,
 }
 
 const questionnairesToShowOnPreCheckin = (

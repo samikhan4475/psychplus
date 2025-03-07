@@ -23,13 +23,13 @@ const SelectableChip = ({
   const chipContent = <BlockLabel>{label}</BlockLabel>
 
   return (
-    <>
+    <Flex className="flex flex-wrap items-start">
       <Flex
         px="1"
         onClick={onClick}
         align="center"
         className={cn(
-          'h-8 cursor-pointer rounded-2 border border-gray-8 bg-[#F7F9FC] px-2 py-1',
+          'h-8 cursor-pointer rounded-6 border border-gray-8 bg-[#F7F9FC] px-2 py-1',
           {
             'text-white bg-[#194595]': selected,
           },
@@ -41,8 +41,8 @@ const SelectableChip = ({
           chipContent
         )}
       </Flex>
-      {children}
-    </>
+      <Flex className="flex min-w-0 grow flex-wrap gap-2">{children}</Flex>
+    </Flex>
   )
 }
 

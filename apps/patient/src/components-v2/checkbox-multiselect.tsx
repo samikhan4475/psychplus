@@ -129,10 +129,10 @@ const MultiSelectField = ({
           >
             <Button
               color="gray"
-              radius="medium"
+              radius="full"
               variant="outline"
               className={cn(
-                'text-black !bg-white relative flex h-5 w-full cursor-default items-center !justify-between border border-solid border-gray-8 px-1.5 pr-5 [box-shadow:none]',
+                'text-black relative flex h-5 w-full cursor-default items-center !justify-between border border-solid border-gray-8 !bg-[white] px-1.5 pr-5 [box-shadow:none]',
                 {
                   '!bg-pp-states-disabled': disable,
                 },

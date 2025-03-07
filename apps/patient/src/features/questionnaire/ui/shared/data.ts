@@ -5,12 +5,14 @@ import { QuestionnaireSchemaType } from './questionnaire-schema'
 const transformIn = (
   data: NoteSectionItem[],
   section?: NoteSectionName,
+  result: QuestionnaireSchemaType = {},
 ): QuestionnaireSchemaType => {
-  const result: QuestionnaireSchemaType = {}
-
   let value = data
   if (section)
     value = value.filter((item) => item.sectionName === section) || []
+
+  if (Object.keys(result).length > 0)
+    value = value.filter((item) => Object.hasOwn(result, item.sectionItem))
 
   value?.forEach((item: NoteSectionItem) => {
     if (item.sectionItem) {
