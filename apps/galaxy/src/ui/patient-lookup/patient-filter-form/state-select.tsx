@@ -14,7 +14,7 @@ const StateSelect = () => {
     <FormFieldContainer className="flex-row gap-1">
       <FormFieldLabel className="!text-1">Residence (State)</FormFieldLabel>
       <DropdownSelect
-        field="state"
+        field="stateCode"
         options={options}
         buttonClassName="flex-1"
       />

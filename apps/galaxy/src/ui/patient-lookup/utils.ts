@@ -41,7 +41,7 @@ const getInitialValues = (): PatientLookUpSchemaType => {
     pastVisitStatus: '',
     nextVisitStatus: '',
     organizations: [],
-    state: '',
+    stateCode: '',
   }
 }
 

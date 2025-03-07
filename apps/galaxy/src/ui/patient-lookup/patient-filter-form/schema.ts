@@ -65,7 +65,7 @@ const patientLookupSchema = z
     contactMadeStatuses: z.string().trim().optional(),
     insurancePolicyIds: z.array(z.string()).optional(),
     organizations: z.array(z.string()).optional(),
-    state: z.string().trim().optional(),
+    stateCode: z.string().trim().optional(),
   })
   .superRefine((data, ctx) => {
     const { patientCreatedFrom, patientCreatedTo } = data
