@@ -7,7 +7,7 @@ const defaultPayload = {
   isIncludeMetadataResourceChangeControl: true,
   isIncludeMetadataResourceIds: true,
   isIncludeMetadataResourceStatus: true,
-  isIncludeCreateHistory: true,
+  isIncludeCreateHistory: false,
 }
 const getPaymentHistoryListAction = async (
   payload: PaymentHistoryPayload,

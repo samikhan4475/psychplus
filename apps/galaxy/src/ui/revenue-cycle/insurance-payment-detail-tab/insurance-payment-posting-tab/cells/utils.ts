@@ -181,20 +181,36 @@ const addInsuranceAdjustment = ({
     adjustmentAmount,
   })
 }
-
 const removeInsuranceAdjustment = ({
   serviceLinePaymentAdjustments,
   adjustmentGroupCode,
   adjustmentReasonCode,
 }: AdjustmentType) => {
-  const clonedAdjustments = structuredClone(serviceLinePaymentAdjustments)
+  if (!serviceLinePaymentAdjustments) return []
 
-  return clonedAdjustments?.map((adjustment) =>
-    adjustment.adjustmentGroupCode === adjustmentGroupCode &&
-    adjustment.adjustmentReasonCode === adjustmentReasonCode &&
-    adjustment.recordStatus !== 'Inactive'
-      ? { ...adjustment, recordStatus: 'Inactive' }
-      : adjustment,
+  const matchingAdjustment = serviceLinePaymentAdjustments.find(
+    (adjustment) =>
+      adjustment.adjustmentGroupCode === adjustmentGroupCode &&
+      adjustment.adjustmentReasonCode === adjustmentReasonCode &&
+      adjustment.recordStatus !== 'Inactive',
+  )
+
+  if (matchingAdjustment?.id) {
+    return serviceLinePaymentAdjustments.map((adjustment) =>
+      adjustment.adjustmentGroupCode === adjustmentGroupCode &&
+      adjustment.adjustmentReasonCode === adjustmentReasonCode &&
+      adjustment.recordStatus !== 'Inactive'
+        ? { ...adjustment, recordStatus: 'Inactive' }
+        : adjustment,
+    )
+  }
+
+  return serviceLinePaymentAdjustments.filter(
+    (adj) =>
+      !(
+        adj.adjustmentGroupCode === adjustmentGroupCode &&
+        adj.adjustmentReasonCode === adjustmentReasonCode
+      ),
   )
 }
 

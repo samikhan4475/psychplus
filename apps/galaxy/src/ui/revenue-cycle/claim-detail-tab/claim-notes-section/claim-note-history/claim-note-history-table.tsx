@@ -86,7 +86,7 @@ const ClaimNoteHistoryTable = ({ claimNoteId }: { claimNoteId?: string }) => {
     setLoading(true)
     const reqPayload = {
       claimNoteId: claimNoteId,
-      isIncludeCreateHistory: true,
+      isIncludeCreateHistory: false,
     }
     const response = await getClaimNoteHistoryAction(reqPayload)
     setLoading(false)
