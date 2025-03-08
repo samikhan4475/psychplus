@@ -15,8 +15,8 @@ const QuickNotesDuration = ({ duration }: Props) => {
       <TextField.Root
         size="1"
         disabled
-        className='max-w-16'
-        value={`${duration} mins`}
+        className="w-16"
+        value={duration ? `${duration} mins` : 'N/A'}
       />
     </Flex>
   )
