@@ -11,14 +11,19 @@ const StaffLocationView = () => {
   return (
     <Flex
       gap="1"
-      className="bg-pp-bg-accent flex-1 !overflow-hidden"
+      className=" h-[calc(100dvh-155px)] flex-1 !overflow-hidden"
       direction="column"
     >
       <TabContentHeading title="Add Location">
         <StaffLocationFilter />
       </TabContentHeading>
-      <StaffLocationTable />
-      <StaffLocationListPagination />
+      <Flex
+        direction="column"
+        className="bg-white flex-1 !overflow-hidden rounded-1 pt-2 shadow-2"
+      >
+        <StaffLocationTable />
+        <StaffLocationListPagination />
+      </Flex>
     </Flex>
   )
 }

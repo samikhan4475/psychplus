@@ -131,8 +131,8 @@ const getStaffNavLinks = (staffId: string | null) => {
       href: `${baseHref}/tracking`,
     },
     {
-      label: 'Location/Region',
-      href: `${baseHref}/location-region`,
+      label: 'Location',
+      href: `${baseHref}/location`,
     },
     {
       label: 'Treatment Team',

@@ -1,4 +1,4 @@
-import { Metadata } from '@/types'
+import { Metadata, Service } from '@/types'
 
 interface GeoCoordinates {
   longitude: number
@@ -43,6 +43,7 @@ interface Location {
   locationSeqNumber: number
   isDefault: boolean
   timeZoneId: string
+  locationServices?: Service[]
 }
 interface StaffLocation {
   id: string

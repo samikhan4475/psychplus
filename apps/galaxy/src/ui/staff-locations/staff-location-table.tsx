@@ -14,7 +14,7 @@ import {
 import { Sort } from '@/types'
 import { getSortDir } from '@/utils'
 import { getScriptSurePermissionAction } from './actions/get-scriptsure-permission-action'
-import { StatusCell } from './cells'
+import { ServiceCell, StatusCell } from './cells'
 import { useStore } from './store'
 import { StaffLocation } from './types'
 
@@ -54,10 +54,10 @@ const columns = (
       ),
     },
     {
-      id: 'noindex',
+      id: 'service',
       header: ({ column }) => (
         <ColumnHeader
-          label="Region"
+          label="Service"
           sortable
           sortDir={getSortDir(column.id, sort)}
           onClick={() => {
@@ -65,7 +65,7 @@ const columns = (
           }}
         />
       ),
-      cell: ({ row }) => <TextCell>--</TextCell>,
+      cell: ServiceCell,
     },
     {
       id: 'npi',
@@ -93,7 +93,9 @@ const columns = (
           }}
         />
       ),
-      cell: ({ row }) => <TextCell>{row.original.externalProviderId}</TextCell>,
+      cell: ({ row }) => (
+        <TextCell>{row.original?.externalProviderId}</TextCell>
+      ),
     },
     {
       id: 'address',
@@ -201,12 +203,13 @@ const StaffLocationTable = () => {
   }
 
   return (
-    <ScrollArea className="bg-white max-w-[calc(100vw-188px)]">
+    <ScrollArea className="h-full flex-1 p-2 pt-0">
       <DataTable
         data={data?.staffLocations ?? []}
         columns={columns(sort, sortData)}
         disablePagination
         sticky
+        theadClass="z-[1]"
       />
     </ScrollArea>
   )

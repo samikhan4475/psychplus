@@ -8,7 +8,6 @@ const getScriptSurePermissionAction = async (): Promise<
 > => {
   const url = new URL(api.GET_FEATURE_FLAG_ENDPOINT(DEFAULT_FLAG))
   const response = await api.POST<boolean>(`${url}`)
-
   if (response.state === 'error') {
     return {
       state: 'error',

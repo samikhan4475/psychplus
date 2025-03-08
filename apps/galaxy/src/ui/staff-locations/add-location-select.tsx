@@ -58,7 +58,6 @@ const AddLocationSelect = () => {
         allowMultiple
         label="Select Location"
         disabled={!stateName}
-        defaultValue={stateName}
         onRowClick={onOptionClick}
         fetchOptions={getStateLocationAction}
       />

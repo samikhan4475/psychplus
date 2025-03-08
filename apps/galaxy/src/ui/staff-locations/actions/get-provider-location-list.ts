@@ -14,6 +14,7 @@ const defaultPayLoad = {
   isIncludeMetadataResourceChangeControl: true,
   isIncludeMetadataResourceIds: true,
   isIncludeMetadataResourceStatus: true,
+  isIncludeExternalProviderId: true,
 }
 
 const getProviderLocationListAction = async ({

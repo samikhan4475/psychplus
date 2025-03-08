@@ -20,7 +20,7 @@ const StaffLocationListPagination = () => {
 
   return (
     <DataTablePagination
-      className="bg-white"
+      className="bg-white rounded-b-1 border-0 border-t"
       total={data.total}
       loading={loading ?? false}
       page={page}
