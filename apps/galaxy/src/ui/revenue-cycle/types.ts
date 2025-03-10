@@ -238,6 +238,12 @@ interface ClaimListSearchParams {
   isIncludeMetadataResourceChangeControl?: boolean
   isIncludeMetadataResourceIds?: boolean
   isIncludeMetadataResourceStatus?: boolean
+  isIncludePatientInsurancePolicy?: boolean
+  isIncludeClaimValidation?: boolean
+  isIncludePatientAppointments?: boolean
+  isIncludePatient?: boolean
+  isIncludeDiagnosis?: boolean
+  isIncludeServiceLine?: boolean
   patientId?: string
   insuranceId?: string
   claimId?: string

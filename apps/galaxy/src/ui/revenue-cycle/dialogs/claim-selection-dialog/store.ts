@@ -19,7 +19,13 @@ interface Store {
   ) => void
   sortData: (column: string) => void
 }
-
+const defaultPayload = {
+  isIncludePatientInsurancePolicy: false,
+  isIncludeClaimValidation: false,
+  isIncludePatientAppointments: false,
+  isIncludeDiagnosis: false,
+  isIncludeServiceLine: false,
+}
 const useStore = create<Store>((set, get) => ({
   claimsListData: undefined,
   page: 1,
@@ -33,10 +39,13 @@ const useStore = create<Store>((set, get) => ({
     set({
       claimsListError: undefined,
       claimsListLoading: true,
-      claimsListPayload: payload,
+      claimsListPayload: { ...defaultPayload, ...payload },
     })
     const result = await getClaimsListAction({
-      payload,
+      payload: {
+        ...defaultPayload,
+        ...payload,
+      },
       sort: get().sort,
       page,
     })
