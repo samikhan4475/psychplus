@@ -17,6 +17,7 @@ const getProvidersOptionsAction = async ({
     roleCodes: [STAFF_ROLE_CODE_PRESCRIBER],
     locationIds: [locationId],
     providerType,
+    isResultsForNameList: true,
   }
 
   const response = await api.POST<StaffResource[]>(

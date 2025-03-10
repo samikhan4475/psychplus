@@ -11,6 +11,7 @@ const getStaffOptionsAction = async (): Promise<
 > => {
   const result = await api.POST<StaffResource[]>(GET_STAFF_ENDPOINT, {
     roleCodes: [STAFF_ROLE_CODE_PRESCRIBER],
+    isResultsForNameList: true,
   })
 
   if (result.state === 'error') {

@@ -9,6 +9,7 @@ const getStaffOptionsAction = async (): Promise<
 > => {
   const result = await api.POST<StaffResource[]>(api.GET_STAFF_ENDPOINT, {
     roleCodes: ['1', '2'],
+    isResultsForNameList: true,
   })
 
   if (result.state === 'error') {
