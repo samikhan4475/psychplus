@@ -44,7 +44,9 @@ const DateTimeOfAdmission = ({
                 dateInputClass="h-6 w-full"
                 onChange={(value) => {
                   if (canEditAdmissionDateTime) {
-                    form.setValue('dateOfAdmission', value)
+                    form.setValue('dateOfAdmission', value, {
+                      shouldDirty: true,
+                    })
                     return
                   }
                   setIsOpen(true)
