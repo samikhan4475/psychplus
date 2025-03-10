@@ -29,6 +29,7 @@ const config = {
         'pp-gray-4': '#B9BBC6',
         'pp-gray-5': '#F7F9FC',
         'pp-gray-6': '#888888',
+        'pp-chip-1': '#EEF2F6',
       },
       borderRadius: {
         full: '100%',

@@ -132,26 +132,21 @@ const MultiSelectField = ({
               radius="full"
               variant="outline"
               className={cn(
-                'text-black relative flex h-5 w-full cursor-default items-center !justify-between border border-solid border-gray-8 !bg-[white] px-1.5 pr-5 [box-shadow:none]',
+                'text-black relative flex h-6 w-full cursor-default items-center !justify-between border border-solid border-gray-8 !bg-[white] px-1.5 [box-shadow:none]',
                 {
                   '!bg-pp-states-disabled': disable,
                 },
               )}
             >
               {hideSelectedCount || selectedValues.length < 1 ? (
-                <Text
-                  as="span"
-                  className="text-[12px] font-regular text-grayA-10"
-                >
-                  {placeholder}
-                </Text>
+                <Text className="text-[12px] font-regular">{placeholder}</Text>
               ) : (
                 <Tag>{getDisplayLabel(selectedValues, options)}</Tag>
               )}
               <ChevronDownIcon
                 width={14}
                 height={14}
-                className={cn('absolute right-[3px] top-0 h-full', {
+                className={cn('h-full', {
                   'pointer-events-none': disable,
                 })}
               />

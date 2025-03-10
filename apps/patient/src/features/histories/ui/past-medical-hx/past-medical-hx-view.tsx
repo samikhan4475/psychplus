@@ -1,24 +1,23 @@
 import React, { useMemo } from 'react'
-import { Flex } from '@radix-ui/themes'
 import { FormProvider } from 'react-hook-form'
 import { NoteFormContainer } from '@/components-v2'
 import { useProfileStore } from '@/features/account/profile/store'
 import { NoteSectionName } from '@/features/note/constants'
 import { useNoteStore } from '@/features/note/store'
-import { ConditionsBlock, OtherBlock } from './blocks'
+import { ConditionsBlock } from './blocks'
 import { transformIn, transformOut } from './data'
-import { useFamilyPsychHxForm } from './family-psych-hx-form'
+import { usePastMedicalHxForm } from './past-medical-hx-form'
 
-interface FamilyPsychHxProps {
+interface PastMedicalHxProps {
   onSave?: () => void
   isEdit?: boolean
 }
 
-const FamilyPsychHxView = ({ onSave, isEdit }: FamilyPsychHxProps) => {
+const PastMedicalHxView = ({ onSave, isEdit }: PastMedicalHxProps) => {
   const getNoteData = useNoteStore((state) => state.getNoteData)
-  const data = getNoteData(NoteSectionName.NoteSectionFamilyPsychHx)
+  const data = getNoteData(NoteSectionName.NoteSectionPastMedicalHx)
   const initialValue = useMemo(() => transformIn(data), [data])
-  const form = useFamilyPsychHxForm(initialValue)
+  const form = usePastMedicalHxForm(initialValue)
   const profile = useProfileStore((state) => state.profile)
 
   return (
@@ -28,13 +27,10 @@ const FamilyPsychHxView = ({ onSave, isEdit }: FamilyPsychHxProps) => {
         onSave={onSave}
         isEdit={isEdit}
       >
-        <Flex gap="2" wrap="wrap" direction="column">
-          <ConditionsBlock />
-          <OtherBlock />
-        </Flex>
+        <ConditionsBlock />
       </NoteFormContainer>
     </FormProvider>
   )
 }
 
-export { FamilyPsychHxView }
+export { PastMedicalHxView }

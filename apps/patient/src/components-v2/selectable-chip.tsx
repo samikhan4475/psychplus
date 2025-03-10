@@ -29,7 +29,7 @@ const SelectableChip = ({
         onClick={onClick}
         align="center"
         className={cn(
-          'h-8 cursor-pointer rounded-6 border border-gray-8 bg-[#F7F9FC] px-2 py-1',
+          'h-8 cursor-pointer rounded-6 border border-gray-8 bg-[white] px-2 py-1',
           {
             'text-white bg-[#194595]': selected,
           },

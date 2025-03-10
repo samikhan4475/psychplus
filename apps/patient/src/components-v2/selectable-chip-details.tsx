@@ -62,7 +62,7 @@ const SelectableChipDetails = ({
           <Flex
             align="center"
             className={cn(
-              'bg-pp-focus-bg-2 h-8 rounded-6 border border-gray-8 bg-[#F7F9FC] px-2 py-1',
+              'bg-pp-chip-1 h-8 rounded-6 border border-gray-8 px-2 py-1',
               className,
             )}
           >
@@ -71,8 +71,7 @@ const SelectableChipDetails = ({
               <NumberInput
                 format={format}
                 field={field}
-                className="focus:border-pp-focus-outline h-5 w-[38px] rounded-2 border border-gray-8 outline-none focus:outline-none"
-                autoFocus
+                className="focus:border-pp-focus-outline h-6 w-[38px] rounded-6 border border-gray-8 bg-[white] outline-none focus:outline-none"
                 placeholder={placeHolder}
               />
             )}

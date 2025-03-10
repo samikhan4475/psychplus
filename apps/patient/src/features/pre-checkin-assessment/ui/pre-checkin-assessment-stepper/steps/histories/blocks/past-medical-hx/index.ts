@@ -1,2 +1,1 @@
-export * from './family-psych-hx'
 export * from './past-medical-hx'
