@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useSearchParams } from 'next/navigation'
 import { Flex, Text } from '@radix-ui/themes'
 import { isBefore } from 'date-fns'
 import { useDebounce } from 'use-debounce'
@@ -65,6 +65,7 @@ const ScheduleAppointmentListClient = ({
     setFilteredStaffAppointmentAvailabilities,
     handleFiltersChange,
     setCurrentWeekReel,
+    patient,
   } = useStore()
 
   const [staffWithClinicsAndSlotsState, setStaffWithClinicsAndSlotsState] =
@@ -130,6 +131,7 @@ const ScheduleAppointmentListClient = ({
         maxDaysOutToLook,
         staffIds: staffIdParam ? [staffIdParam] : [],
         state: filters.state,
+        patientDateOfBirth: patient?.dateOfBirth,
       },
       filters.appointmentType === 'In-Person',
     ).then((data) => {
@@ -208,7 +210,6 @@ const ScheduleAppointmentListClient = ({
   }
 
   return (
-    <>
       <Flex direction="column" className="w-full" ref={ref}>
         <FilterPanel stateOptions={stateOptions} />
         <Flex
@@ -278,7 +279,6 @@ const ScheduleAppointmentListClient = ({
           )}
         </Flex>
       </Flex>
-    </>
   )
 }
 

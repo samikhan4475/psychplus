@@ -35,6 +35,7 @@ type AppointmentAvailabilityPayload = {
   maxDaysOutToLook?: number
   specificDay?: string
   state?: string
+  patientDateOfBirth?: string
 }
 
 type BookAppointmentPayload = {
