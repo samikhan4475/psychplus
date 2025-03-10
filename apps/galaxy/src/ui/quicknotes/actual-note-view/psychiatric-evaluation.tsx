@@ -28,7 +28,6 @@ const PsychiatricEvaluation = ({
     appointment.startDate,
     appointment.locationTimezoneId,
   )
-
   const options = useCodesetOptions(CODESETS.ProviderType)
   const providerTypeLabel =
     options?.find((opt) => opt?.value === appointment.providerType)?.label ??

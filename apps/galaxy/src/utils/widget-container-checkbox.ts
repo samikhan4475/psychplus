@@ -21,7 +21,7 @@ const disabledHistoriesWidgetsVisitTypes = [
   'HospitalCare/InitialDischarge',
   'PhpCare/InitialDischarge',
   'PhpCare/Initial',
-  'NursingHomeCareInitialDischarge',
+  'NursingHomeCare/InitialDischarge',
   'NursingHomeCare/Initial',
 ]
 
