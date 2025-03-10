@@ -76,7 +76,7 @@ const columns: ColumnDef<Relationship>[] = [
   },
   {
     id: 'rri',
-    header: () => <ColumnHeader label="RRI" />,
+    header: () => <ColumnHeader label="RRI (Request to Release Information)" />,
     cell: RriCell,
   },
   {

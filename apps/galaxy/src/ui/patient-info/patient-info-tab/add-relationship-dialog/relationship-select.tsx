@@ -16,7 +16,7 @@ const RelationshipSelect = () => {
       </FormFieldLabel>
       <CodesetSelect
         name="relationship"
-        codeset={CODESETS.PatientRelationship}
+        codeset={CODESETS.Relationship}
         size="1"
       />
       <FormFieldError name="relationship" />

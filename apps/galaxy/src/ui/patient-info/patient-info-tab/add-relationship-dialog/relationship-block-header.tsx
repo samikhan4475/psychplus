@@ -15,5 +15,9 @@ const RelationshipBlockHeader = () => {
   )
 }
 
-const titles = ['Emergency Contact', 'RRI', 'Guardian']
+const titles = [
+  'Emergency Contact',
+  'RRI (Request to Release Information)',
+  'Guardian',
+]
 export { RelationshipBlockHeader }

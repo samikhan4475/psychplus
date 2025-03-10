@@ -24,7 +24,7 @@ const RRIHistory = ({ data }: RRIHistoryProps) => {
 
       <Popover.Content className="w-72 px-0 py-2">
         <Heading size="2" weight="medium" className="px-2">
-          RRI
+          RRI (Request to Release Information)
         </Heading>
         <RRITable data={data ?? []} />
       </Popover.Content>

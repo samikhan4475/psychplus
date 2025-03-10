@@ -23,7 +23,7 @@ const AddRelationshipDialog = ({ patientId }: AddRelationshipDialogProps) => {
           <Plus size={14} /> Add
         </Button>
       </Dialog.Trigger>
-      <Dialog.Content className="relative max-w-[630px] !overflow-visible rounded-3 p-6">
+      <Dialog.Content className="relative max-w-[700px] !overflow-visible rounded-3 p-6">
         <Dialog.Close className="absolute right-6 top-6 cursor-pointer">
           <X size={20} strokeWidth={1.5} />
         </Dialog.Close>

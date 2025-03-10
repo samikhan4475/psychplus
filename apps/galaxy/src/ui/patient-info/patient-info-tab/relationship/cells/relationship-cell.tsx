@@ -33,7 +33,7 @@ const RelationshipCell = ({
   return (
     <CodesetSelectCell
       onValueChange={updateGuardianRelationship}
-      codeset={CODESETS.PatientRelationship}
+      codeset={CODESETS.Relationship}
       value={selectedValue}
     />
   )
