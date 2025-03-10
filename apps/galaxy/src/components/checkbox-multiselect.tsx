@@ -58,6 +58,7 @@ interface Props {
   disabled?: boolean
   hideSelectedCount?: boolean
   loading?: boolean
+  includeAllOption?: boolean
 }
 
 const MultiSelectField = ({
@@ -71,11 +72,12 @@ const MultiSelectField = ({
   disabled = false,
   hideSelectedCount = false,
   loading = false,
+  includeAllOption = false,
 }: Props) => {
   const [selectedValues, setSelectedValues] = useState<string[]>(
     defaultValues ?? [],
   )
-
+  const [selectAll, setSelectAll] = useState<boolean>(false)
   const form = useFormContext()
   const {
     formState: { disabled: formDisable, isSubmitting },
@@ -92,8 +94,20 @@ const MultiSelectField = ({
       : [...selectedValues, value]
 
     setSelectedValues(tempSelectedValues)
+    if (includeAllOption) {
+      setSelectAll(tempSelectedValues.length === options.length)
+    }
 
     onChange?.(tempSelectedValues)
+  }
+  const handleSelectAllChange = () => {
+    const isAllSelected = !selectAll
+    setSelectAll(isAllSelected)
+    const updatedSelectedValues = isAllSelected
+      ? options.map((option) => option.value)
+      : []
+    setSelectedValues(updatedSelectedValues)
+    onChange?.(updatedSelectedValues)
   }
 
   useEffect(() => {
@@ -101,6 +115,7 @@ const MultiSelectField = ({
   }, [defaultValues])
 
   const onClose = () => {
+    setSelectAll(false)
     setSelectedValues([])
     onChange?.([])
   }
@@ -171,7 +186,7 @@ const MultiSelectField = ({
           }}
           align="center"
         >
-          {!options?.length ? (
+          {!options.length ? (
             <DropdownMenu.Item
               className="bg-white h-6 justify-center p-0 text-center text-1"
               onSelect={(e) => e.preventDefault()}
@@ -180,33 +195,51 @@ const MultiSelectField = ({
               No data
             </DropdownMenu.Item>
           ) : (
-            options?.map((item) => (
-              <DropdownMenu.Item
-                className={cn('bg-white h-6 p-0', {
-                  'bg-red-1': selectedValues.includes(item.value),
-                })}
-                key={item.value}
-                onSelect={(e) => e.preventDefault()}
-              >
-                <Text
-                  as="label"
-                  size="1"
-                  className="text-black w-full cursor-pointer gap-x-2 p-0 text-[14px]"
+            <>
+              {includeAllOption && (
+                <DropdownMenu.Item className="bg-white h-6 p-0">
+                  <Text
+                    as="label"
+                    size="1"
+                    className="text-black w-full cursor-pointer gap-x-2 p-0 text-[14px]"
+                  >
+                    <Flex gap="2" align="center" height="100%">
+                      <Checkbox
+                        color="indigo"
+                        size="2"
+                        highContrast
+                        checked={selectAll}
+                        onCheckedChange={handleSelectAllChange}
+                      />
+                      All
+                    </Flex>
+                  </Text>
+                </DropdownMenu.Item>
+              )}
+              {options.map((item) => (
+                <DropdownMenu.Item
+                  key={item.value}
+                  className="bg-white h-6 p-0"
                 >
-                  <Flex gap="2" align="center" height="100%">
-                    <Checkbox
-                      color="indigo"
-                      size="2"
-                      highContrast
-                      checked={selectedValues.includes(item.value)}
-                      onCheckedChange={() => handleChange(item.value)}
-                      key={item.value}
-                    />
-                    {item.label}
-                  </Flex>
-                </Text>
-              </DropdownMenu.Item>
-            ))
+                  <Text
+                    as="label"
+                    size="1"
+                    className="text-black w-full cursor-pointer gap-x-2 p-0 text-[14px]"
+                  >
+                    <Flex gap="2" align="center" height="100%">
+                      <Checkbox
+                        color="indigo"
+                        size="2"
+                        highContrast
+                        checked={selectedValues.includes(item.value)}
+                        onCheckedChange={() => handleChange(item.value)}
+                      />
+                      {item.label}
+                    </Flex>
+                  </Text>
+                </DropdownMenu.Item>
+              ))}
+            </>
           )}
         </DropdownMenu.Content>
       </DropdownMenu.Root>

@@ -6,7 +6,7 @@ import { AsyncSelect, FormFieldContainer, FormFieldLabel } from '@/components'
 const InsuranceSelect = () => {
   return (
     <FormFieldContainer className="flex-row items-center gap-1">
-      <FormFieldLabel>Insurance</FormFieldLabel>
+      <FormFieldLabel className="!text-1">Insurance</FormFieldLabel>
       <AsyncSelect
         field="insuranceId"
         placeholder="Select"

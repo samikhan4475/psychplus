@@ -24,6 +24,7 @@ const ClaimListTable = () => {
     sortData: state.sortData,
   }))
 
+
   useEffect(() => {
     if (activeTab === RevenueCycleTab.Claim) {      
       claimsListSearch({})

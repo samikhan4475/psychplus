@@ -35,12 +35,11 @@ const getClaimsListAction = async ({
   if (sort) {
     url.searchParams.append('orderBy', `${sort.column} ${sort.direction}`)
   }
-
   const response = await api.POST<Claim[]>(`${url}`, {
     ...defaultPayLoad,
     ...payload,
   })
-
+ 
   if (response.state === 'error') {
     return {
       state: 'error',
