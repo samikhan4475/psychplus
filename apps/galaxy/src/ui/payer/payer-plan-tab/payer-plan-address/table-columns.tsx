@@ -41,6 +41,13 @@ const columns = (payerId: string): ColumnDef<PayerPlanAddressResponse>[] => {
       ),
     },
     {
+      id: 'isDefaultLocation',
+      header: () => <ColumnHeader label="Default Address" />,
+      cell: ({ row }) => (
+        <TextCell>{row.original?.isDefaultLocation ? "Yes" : 'No'}</TextCell>
+      ),
+    },
+    {
       id: 'actions',
       header: () => <ColumnHeader label="Actions" />,
       cell: ({ row }) => <ActionsCell row={row} payerId={payerId}/>,

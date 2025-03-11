@@ -105,6 +105,7 @@ interface Address {
 interface PayerPlanAddressResponse {
   id: string
   metadata?: Metadata
+  isDefaultLocation: boolean
   recoredStatus: string
   address: Address
 }
