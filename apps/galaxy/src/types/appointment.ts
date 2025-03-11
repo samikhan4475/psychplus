@@ -155,6 +155,7 @@ interface Appointment {
   creditCardVerificationStatus: string
   isTestPatient: boolean
   isTcmBlockComplete: boolean
+  isRequiredPolicy?: boolean
 }
 
 interface BookVisitPayload {
@@ -241,5 +242,5 @@ export {
   type CptCode,
   VisitTypes,
   VisitSequenceTypes,
-  FileTypes
+  FileTypes,
 }
