@@ -87,6 +87,7 @@ const PreCheckinAssessmentView = async () => {
       NoteSectionName.NoteSectionHPI,
       NoteSectionName.NoteSectionReviewOfSystem,
       NoteSectionName.NoteSectionFamilyPsychHx,
+      NoteSectionName.NoteSectionSocialHx,
       NoteSectionName.NoteSectionPastMedicalHx,
     ],
   })

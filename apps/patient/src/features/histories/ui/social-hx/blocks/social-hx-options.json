@@ -1,0 +1,80 @@
+[
+  {
+    "options": [
+      {
+        "label": "Single",
+        "value": "single"
+      },
+      {
+        "label": "Divorced/Separated",
+        "value": "divorcedSeparated"
+      },
+      {
+        "label": "Dating",
+        "value": "dating"
+      },
+      {
+        "label": "Married",
+        "value": "married"
+      }
+    ],
+    "field": "relationshipStatus",
+    "heading": "Relationship Status:"
+  },
+  {
+    "options": [
+      {
+        "label": "In School",
+        "value": "inSchool"
+      },
+      {
+        "label": "HS/GED",
+        "value": "hsGed"
+      },
+      {
+        "label": "College",
+        "value": "college"
+      },
+      {
+        "label": "None",
+        "value": "none"
+      }
+    ],
+    "field": "professionalEducation",
+    "heading": "Professional Education:"
+  },
+  {
+    "options": [
+      { "label": "Yes", "value": "yes" },
+      { "label": "No", "value": "no" }
+    ],
+    "field": "employed",
+    "heading": "Employed:"
+  },
+  {
+    "options": [
+      { "label": "Yes", "value": "yes" },
+      { "label": "No", "value": "no" }
+    ],
+    "field": "legalHistory",
+    "heading": "Legal History:"
+  },
+  {
+    "options": [
+      {
+        "label": "Alone",
+        "value": "alone"
+      },
+      {
+        "label": "With Family",
+        "value": "withFamily"
+      },
+      {
+        "label": "Homeless",
+        "value": "homeless"
+      }
+    ],
+    "field": "living",
+    "heading": "Living:"
+  }
+]

@@ -10,6 +10,7 @@ interface SelectableChipProps {
   onClick: () => void
   isTooltip?: boolean
   tooltipContent?: string
+  className?: string
 }
 
 const SelectableChip = ({
@@ -19,6 +20,7 @@ const SelectableChip = ({
   onClick,
   isTooltip = false,
   tooltipContent,
+  className,
 }: React.PropsWithChildren<SelectableChipProps>) => {
   const chipContent = <BlockLabel>{label}</BlockLabel>
 
@@ -33,6 +35,7 @@ const SelectableChip = ({
           {
             'text-white bg-[#194595]': selected,
           },
+          className,
         )}
       >
         {isTooltip ? (
