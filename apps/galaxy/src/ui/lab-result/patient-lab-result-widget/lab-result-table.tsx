@@ -4,7 +4,7 @@ import { useEffect } from 'react'
 import { useParams } from 'next/navigation'
 import { ScrollArea } from '@radix-ui/themes'
 import { DataTable, LoadingPlaceholder } from '@/components'
-import { Columns } from './columns'
+import { Columns, processSubRows } from './columns'
 import { useStore } from './store'
 import { updateResultsKey } from './utils'
 
@@ -27,14 +27,20 @@ const LabResultTable = () => {
   if (loading) {
     return <LoadingPlaceholder className="bg-white h-full" />
   }
+
+  const processedData = updateResultsKey(data || [])?.map((test) => ({
+    ...test,
+    subRows: processSubRows(test.subRows || []),
+  }))
+
   return (
     <ScrollArea
       scrollbars="both"
       className="bg-white max-w-[calc(100vw_-_198px)] overflow-auto p-2"
     >
       <DataTable
-        data={updateResultsKey(data || [])}
-        columns={Columns(updateResultsKey(data || []))}
+        data={processedData}
+        columns={Columns(processedData)}
         isRowSpan
         disablePagination
         sticky

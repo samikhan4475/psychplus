@@ -161,7 +161,7 @@ function formatDateToISOString(
 
 const formatDate = (
   date: Date | null | undefined | string,
-  dateFormat = 'yyyy-MM-dd',
+  dateFormat = 'MM/dd/yyyy',
 ): string => {
   if (!date) return ''
   if (typeof date === 'string') date = new Date(date)

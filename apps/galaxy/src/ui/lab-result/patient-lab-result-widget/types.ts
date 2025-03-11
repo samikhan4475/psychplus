@@ -1,4 +1,4 @@
-import { Metadata } from 'next/types'
+import { Metadata } from '@/types'
 
 export interface LabResults {
   resultId: string
@@ -24,4 +24,18 @@ export interface LabResultsPayload {
   dateTo?: string
   labTestName?: string
   patientId: string
+}
+
+export type GroupedResultsByDate = {
+  [date: string]: LabResults
+}
+
+export interface LabResultSubRow {
+  resultName: string
+  resultsByDate: GroupedResultsByDate
+}
+
+export interface LabResultResponseTransformed
+  extends Omit<LabResultResponse, 'results'> {
+  subRows: LabResultSubRow[]
 }
