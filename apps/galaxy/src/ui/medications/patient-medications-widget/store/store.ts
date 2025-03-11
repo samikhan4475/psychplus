@@ -1,11 +1,17 @@
 import toast from 'react-hot-toast'
 import { create } from 'zustand'
-import { getScriptSureExternalPatient, getScriptSureSessionToken } from '@/actions'
+import {
+  getScriptSureExternalPatient,
+  getScriptSureSessionToken,
+} from '@/actions'
 import { saveWidgetAction } from '@/actions/save-widget'
+import { DAWSYS } from '@/constants'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { getPatientMedicationsAction } from '../client-actions'
-import { PatientPrescriptionStatus, type GetPatientMedicationsResponse } from '../types'
-import { DAWSYS } from '@/constants'
+import {
+  PatientPrescriptionStatus,
+  type GetPatientMedicationsResponse,
+} from '../types'
 
 interface StoreState {
   patientId?: string
@@ -16,8 +22,11 @@ interface StoreState {
   isPmpReviewed: boolean
   scriptSureSessionToken?: string
   setPmpReviewed: (value: boolean) => void
-  setScriptSureSessionToken: (token: string) => void; 
-  fetchPatientMedications: (patientId: string, showOnlyActiveMedications?:boolean) => void
+  setScriptSureSessionToken: (token: string) => void
+  fetchPatientMedications: (
+    patientId: string,
+    showOnlyActiveMedications?: boolean,
+  ) => void
   fetchExternalScriptsurePatientId: (patientId: string) => void
   updateStatus: (updatedMedication: GetPatientMedicationsResponse) => void
   saveIsPmpReviewedForMedication: (patientId: string) => Promise<void>
@@ -38,7 +47,8 @@ const useStore = create<StoreState>((set, get) => ({
       data: updatedMedication,
     })
   },
-  setScriptSureSessionToken: (token: string) => set({ scriptSureSessionToken: token }),
+  setScriptSureSessionToken: (token: string) =>
+    set({ scriptSureSessionToken: token }),
   fetchExternalScriptsurePatientId: async (patientId: string) => {
     const response = await getScriptSureExternalPatient(patientId)
 
@@ -50,7 +60,10 @@ const useStore = create<StoreState>((set, get) => ({
       externalPatientId: response.data.externalPatientId,
     })
   },
-  fetchPatientMedications: async (patientId: string, showOnlyActiveMedications?:boolean) => {
+  fetchPatientMedications: async (
+    patientId: string,
+    showOnlyActiveMedications?: boolean,
+  ) => {
     set({
       patientId,
       error: undefined,
@@ -60,8 +73,17 @@ const useStore = create<StoreState>((set, get) => ({
 
     const result = await getPatientMedicationsAction({
       patientIds: [patientId],
-      medicationStatuses: showOnlyActiveMedications ? [PatientPrescriptionStatus.ACTIVE, PatientPrescriptionStatus.CURRENT_MEDICATION] : [],
+      medicationStatuses: showOnlyActiveMedications
+        ? [
+            PatientPrescriptionStatus.ACTIVE,
+            PatientPrescriptionStatus.CURRENT_MEDICATION,
+          ]
+        : [],
     })
+
+    if (get().patientId !== patientId) {
+      return
+    }
 
     if (result.state === 'error') {
       return set({
@@ -76,13 +98,13 @@ const useStore = create<StoreState>((set, get) => ({
     })
   },
   fetchScriptSureSessionToken: async () => {
-      set({ scriptSureSessionToken: undefined });
-      const response = await getScriptSureSessionToken(DAWSYS);
-      if (response.state === 'success') {
-        set({ scriptSureSessionToken: response.data });
-      } else {
-        toast.error(response.error ?? 'Failed to fetch scriptsure session token');
-      }
+    set({ scriptSureSessionToken: undefined })
+    const response = await getScriptSureSessionToken(DAWSYS)
+    if (response.state === 'success') {
+      set({ scriptSureSessionToken: response.data })
+    } else {
+      toast.error(response.error ?? 'Failed to fetch scriptsure session token')
+    }
   },
 
   saveIsPmpReviewedForMedication: async (patientId) => {

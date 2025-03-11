@@ -36,7 +36,7 @@ const ReadMoreDialog = ({
           className="h-full max-h-64 w-full p-2"
           scrollbars="vertical"
         >
-          <Text size="1" className="whitespace-pre break-all">
+          <Text size="1" className="whitespace-pre-wrap break-words">
             {data?.map((item) => item?.sectionItemValue)?.join('')}
           </Text>
         </ScrollArea>

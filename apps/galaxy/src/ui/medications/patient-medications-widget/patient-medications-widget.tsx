@@ -27,18 +27,28 @@ const PatientMedicationsWidget = () => {
   const isQuickNoteView = pathname.includes('quicknotes')
   const patientId = useParams().id as string
 
-  const { isPmpReviewed, setPmpReviewed, fetchPatientMedications, fetchScriptSureSessionToken } = useStore()
+  const {
+    isPmpReviewed,
+    setPmpReviewed,
+    fetchPatientMedications,
+    fetchScriptSureSessionToken,
+  } = useStore((state) => ({
+    isPmpReviewed: state.isPmpReviewed,
+    setPmpReviewed: state.setPmpReviewed,
+    fetchPatientMedications: state.fetchPatientMedications,
+    fetchScriptSureSessionToken: state.fetchScriptSureSessionToken,
+  }))
 
   useEffect(() => {
-    if (!patientId) return;
+    if (!patientId) return
     const fetchAllData = async () => {
       await Promise.all([
         fetchScriptSureSessionToken(),
         fetchPatientMedications(patientId, isQuickNoteView),
-      ]);
-    };
-    fetchAllData();
-  }, [patientId, fetchPatientMedications, fetchScriptSureSessionToken]);
+      ])
+    }
+    fetchAllData()
+  }, [patientId, fetchPatientMedications, fetchScriptSureSessionToken])
 
   const path = usePathname()
   const tabViewEnabled = path.includes('medications')
