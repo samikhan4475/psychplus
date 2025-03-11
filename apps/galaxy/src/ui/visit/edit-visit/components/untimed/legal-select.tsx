@@ -6,7 +6,7 @@ import {
   FormFieldError,
   FormFieldLabel,
 } from '@/components'
-import { CODESETS } from '@/constants'
+import { CODE_NOT_SET, CODESETS } from '@/constants'
 
 const LegalSelect = ({
   isPsychiatristVisitTypeSequence,
@@ -20,6 +20,7 @@ const LegalSelect = ({
         name="legal"
         disabled={isPsychiatristVisitTypeSequence}
         codeset={CODESETS.AdmissionLegalStatus}
+        exclude={[CODE_NOT_SET]}
         size="1"
         className="h-6 w-full"
       />
