@@ -58,10 +58,9 @@ const useStore = create<Store>((set, get) => ({
         data: undefined,
       })
     }
-    set({
-      data: result.data,
-      loading: false,
-      pageCache: reset
+
+    set({  page,          data: result.data,     
+                 loading: false, pageCache: reset
         ? { [page]: result.data }
         : { ...get().pageCache, [page]: result.data },
     })
@@ -81,10 +80,12 @@ const useStore = create<Store>((set, get) => ({
   prev: () => {
     const page = get().page - 1
 
-    set({
-      data: get().pageCache[page],
-      page,
-    })
+
+    if (get().pageCache[page]) { return set({page,  data:    get().pageCache[page] })}
+
+    get().search(get().payload, page)
+
+
   },
   sortData: (column) => {
     set({

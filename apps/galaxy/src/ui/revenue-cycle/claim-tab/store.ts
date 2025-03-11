@@ -52,6 +52,7 @@ const useStore = create<Store>((set, get) => ({
     set({
       claimsListData: result.data,
       claimsListLoading: false,
+      page,
       pageCache: reset
         ? { [page]: result.data }
         : { ...get().pageCache, [page]: result.data },
@@ -72,10 +73,14 @@ const useStore = create<Store>((set, get) => ({
   prev: () => {
     const page = get().page - 1
 
-    set({
-      claimsListData: get().pageCache[page],
-      page,
-    })
+    if (get().pageCache[page]) {
+      return set({
+        page,
+        claimsListData: get().pageCache[page],
+      })
+    }
+
+    get().claimsListSearch(get().claimsListPayload, page)
   },
   sortData: (column) => {
     set({
