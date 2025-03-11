@@ -175,6 +175,7 @@ const patientInfoSchema = z
     languageAbility: optionalString,
     languageProficiency: optionalString,
     religion: optionalString,
+    referralName: optionalString,
     races: emptyOrStringArray,
     ethnicities: emptyOrStringArray,
     preferredLanguage: z.string().optional(),

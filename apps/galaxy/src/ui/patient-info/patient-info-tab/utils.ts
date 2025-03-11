@@ -119,6 +119,7 @@ const getInitialValues = (patient: PatientProfile) => {
         patient?.contactDetails?.isMailingAddressSameAsPrimary ?? true,
     },
     cmdId: patient?.cmdId ?? '',
+    referralName: patient?.referralName ?? '',
     motherMaidenName: patient?.motherMaidenName ?? '',
     alternateOrPreviousName: {
       firstName: patient?.alternateOrPreviousName?.firstName ?? '',
