@@ -3,7 +3,7 @@
 import React, { useState } from 'react'
 import { FileIcon } from '@radix-ui/react-icons'
 import { Button } from '@radix-ui/themes'
-import { useForm } from 'react-hook-form'
+import { useFormContext } from 'react-hook-form'
 import { EXPORT_PAYMENTS_LIST_ENDPOINT } from '@/api/endpoints'
 import { formatDateToISOString, sanitizeFormData } from '@/utils'
 import { downloadFile } from '@/utils/download'
@@ -16,7 +16,7 @@ import { SchemaType } from './insurance-payment-list-filter-form'
 import { ConfirmationDialog } from '../dialogs/confirmation-dialog'
 
 const ExportExcelButton = () => {
-  const form = useForm<SchemaType>()
+  const form = useFormContext<SchemaType>()
   const [isExporting, setIsExporting] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
   const onExport = async () => {

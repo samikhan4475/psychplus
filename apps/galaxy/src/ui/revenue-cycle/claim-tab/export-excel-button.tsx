@@ -3,7 +3,7 @@
 import React, { useState } from 'react'
 import { FileIcon } from '@radix-ui/react-icons'
 import { Button } from '@radix-ui/themes'
-import { useForm } from 'react-hook-form'
+import { useFormContext } from 'react-hook-form'
 import { EXPORT_CLAIMS_LIST_ENDPOINT } from '@/api/endpoints'
 import { formatDateToISOString, sanitizeFormData } from '@/utils'
 import { downloadFile } from '@/utils/download'
@@ -16,7 +16,7 @@ const defaultPayLoad = {
   isIncludePatientInsurancePolicy: true,
   isIncludeClaimValidation: true,
   isIncludePatientAppointments: true,
-  isSystemRejected: true,
+  isSystemRejected: false,
   isIncludeLocation: true,
   isIncludeMetadataResourceChangeControl: true,
   isIncludeMetadataResourceIds: true,
@@ -24,9 +24,10 @@ const defaultPayLoad = {
 }
 
 const ExportExcelButton = () => {
-  const form = useForm<SchemaType>()
+  const form = useFormContext<SchemaType>()
   const [isExporting, setIsExporting] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
+
   const onExport = async () => {
     setIsExporting(true)
     onOpen()

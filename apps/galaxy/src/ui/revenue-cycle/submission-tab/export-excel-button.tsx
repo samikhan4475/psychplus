@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 import { FileIcon } from '@radix-ui/react-icons'
 import { Button } from '@radix-ui/themes'
 import { DateValue } from 'react-aria-components'
-import { useForm } from 'react-hook-form'
+import { useFormContext } from 'react-hook-form'
 import { EXPORT_SUBMISSIONS_LIST_ENDPOINT } from '@/api/endpoints'
 import { InsurancePolicyPriority } from '@/types'
 import { formatDateToISOString, sanitizeFormData } from '@/utils'
@@ -29,7 +29,7 @@ const defaultPayLoad = {
 }
 
 const ExportExcelButton = () => {
-  const form = useForm<SchemaType>()
+  const form = useFormContext<SchemaType>()
   const [isExporting, setIsExporting] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
   const selectedTab = useStore((state) => state.selectedTab)
