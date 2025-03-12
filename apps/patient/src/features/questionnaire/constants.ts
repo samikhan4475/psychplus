@@ -9,8 +9,12 @@ import { QUESTIONS as PHQ9_QUESTIONS } from '@/features/questionnaire/ui/phq-9/c
 import { QUESTIONS as SNAPIV_QUESTIONS } from '@/features/questionnaire/ui/snap-iv/constants'
 import { QUESTIONS as YBOCS_QUESTIONS } from '@/features/questionnaire/ui/y-bocs/constants'
 import { NoteSectionName } from '../note/constants'
+import { mocaMapping, questionnaireMapping } from './ui'
+import { aimsMapping } from './ui/aims/data'
+import { QuestionnaireSchemaType } from './ui/shared/questionnaire-schema'
+import { snapIvMapping } from './ui/snap-iv/data'
 
-const SECTION_QUESTIONS_MAP: Partial<Record<NoteSectionName, number>> = {
+const TOTAL_QUESTIONS = {
   [NoteSectionName.NoteSectionPhq9]: PHQ9_QUESTIONS.length,
   [NoteSectionName.NoteSectionGad7]: GAD7_QUESTIONS.length,
   [NoteSectionName.NoteSectionSnapIV]: SNAPIV_QUESTIONS.length,
@@ -23,4 +27,18 @@ const SECTION_QUESTIONS_MAP: Partial<Record<NoteSectionName, number>> = {
   [NoteSectionName.NoteSectionMoca]: MOCA_QUESTIONS.length,
 }
 
-export { SECTION_QUESTIONS_MAP }
+const SECTION_QUESTIONS_MAPPING: Partial<
+  Record<NoteSectionName, QuestionnaireSchemaType>
+> = {
+  ...Object.fromEntries(
+    Object.entries(TOTAL_QUESTIONS).map(([sectionName, totalQuestions]) => [
+      sectionName,
+      questionnaireMapping(totalQuestions),
+    ]),
+  ),
+  [NoteSectionName.NoteSectionSnapIV]: snapIvMapping,
+  [NoteSectionName.NoteSectionMoca]: mocaMapping,
+  [NoteSectionName.NoteSectionAims]: aimsMapping,
+}
+
+export { SECTION_QUESTIONS_MAPPING, TOTAL_QUESTIONS }

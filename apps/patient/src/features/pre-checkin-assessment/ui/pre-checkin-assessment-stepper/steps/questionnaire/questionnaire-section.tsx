@@ -7,12 +7,12 @@ import { NoteSectionName } from '@/features/note/constants/constants.ts'
 import { useNoteStore } from '@/features/note/store'
 import { NoteAccordion } from '@/features/note/ui'
 import {
+  getQuestionnaireMapping,
   getTotalQuestions,
   transformIn,
   transformOut,
   useQuestionnaireForm,
 } from '@/features/questionnaire'
-import { result as mocaMapping } from '@/features/questionnaire/ui/moca'
 
 const QuestionnaireSection = ({
   name,
@@ -26,12 +26,11 @@ const QuestionnaireSection = ({
   const getNoteData = useNoteStore((state) => state.getNoteData)
   const profileId = useProfileStore((state) => state.profile.id)
 
-  const questionnaireMapping =
-    name === NoteSectionName.NoteSectionMoca ? mocaMapping : {}
+  const questionnaireData = getNoteData(name)
   const initialValue = transformIn(
-    getNoteData(name),
+    questionnaireData,
     name,
-    questionnaireMapping,
+    getQuestionnaireMapping(name),
   )
   const totalQuestions = getTotalQuestions(name)
   const { totalFilledQuestions, ...form } = useQuestionnaireForm(
@@ -43,7 +42,7 @@ const QuestionnaireSection = ({
     <FormProvider {...form}>
       <NoteAccordion
         title={title}
-        isCompleted={totalFilledQuestions === totalQuestions}
+        isCompleted={questionnaireData?.length > 0}
         content={(props) =>
           renderQuestionnaireSection({
             ...props,

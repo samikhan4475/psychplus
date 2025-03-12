@@ -1,21 +1,21 @@
 import { QuestionnaireSchemaType } from '../shared/questionnaire-schema'
 
-const result: QuestionnaireSchemaType = {
-  VisuospatialExecutiveQ1: '',
-  VisuospatialExecutiveQ2: '',
-  VisuospatialExecutiveQ3: '',
-  NamingQ4: '',
-  NamingQ5: '',
-  NamingQ6: '',
-  AttentionQ7: '',
-  AttentionQ8: '',
-  AttentionQ9: '',
-  AttentionQ10: '',
-  LanguageQ11: '',
-  LanguageQ12: '',
-  LanguageQ13: '',
-  AbstractionQ14: '',
-  AbstractionQ15: '',
+const mocaMapping: QuestionnaireSchemaType = {
+  VisuospatialExecutiveQ1: '1',
+  VisuospatialExecutiveQ2: '1', //default selection according to MLD is 1
+  VisuospatialExecutiveQ3: '3', //default selection according to MLD is 3
+  NamingQ4: '1',
+  NamingQ5: '1',
+  NamingQ6: '1',
+  AttentionQ7: '1',
+  AttentionQ8: '1',
+  AttentionQ9: '1',
+  AttentionQ10: '3',
+  LanguageQ11: '1',
+  LanguageQ12: '1',
+  LanguageQ13: '1',
+  AbstractionQ14: '1',
+  AbstractionQ15: '1',
   MemoryFaceQ1: '',
   MemoryVelvetQ1: '',
   MemoryChurchQ1: '',
@@ -43,4 +43,4 @@ const result: QuestionnaireSchemaType = {
   OrientationCityQ1: '',
 }
 
-export { result }
+export { mocaMapping }

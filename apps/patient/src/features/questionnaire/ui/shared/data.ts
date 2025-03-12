@@ -42,4 +42,13 @@ const transformOut =
     return result
   }
 
-export { transformIn, transformOut }
+const questionnaireMapping = (totalQuestions: number) => {
+  const result: QuestionnaireSchemaType = {}
+  for (let i = 1; i <= totalQuestions; i++) {
+    result[`Q${i}`] = '0'
+  }
+
+  return result
+}
+
+export { transformIn, transformOut, questionnaireMapping }
