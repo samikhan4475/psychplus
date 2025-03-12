@@ -1,5 +1,6 @@
 import { BLOCK_OPTIONS } from '@/ui/past-medical-hx/past-medical-hx-widget/blocks'
 import { PastMedicalHxWidgetSchemaType } from '@/ui/past-medical-hx/past-medical-hx-widget/past-medical-hx-widget-schema'
+import { getSlashedPaddedDateString } from '@/utils'
 import { BlockContainer, LabelAndValue } from '../shared'
 
 interface Props<T> {
@@ -24,7 +25,9 @@ const Details = ({
       {data.pregnantDate && (
         <LabelAndValue
           label="Pregnant:"
-          value={`Date of Conception: ${data.pregnantDate}`}
+          value={`Date of Conception: ${getSlashedPaddedDateString(
+            String(data.pregnantDate),
+          )}`}
         />
       )}
       {data.breastFeedingDaysPostPartum && (
