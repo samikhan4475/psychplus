@@ -26,7 +26,6 @@ const VisitSequenceSelect = ({
   const [loading, setLoading] = useState<boolean>(false)
   const [options, setOptions] = useState<SelectOptionType[]>()
   const codes = useCodesetCodes(CODESETS.VisitSequence)
-  const visitStatusCodes = useCodesetCodes(CODESETS.AppointmentStatus)
   const providerCodes = useCodesetCodes(CODESETS.ProviderType)
   const { groupedVisitTypes } = useEditVisitStore()
   const [serviceId, providerType, facilityAdmissionId, visitType, visitMedium] =
@@ -54,14 +53,6 @@ const VisitSequenceSelect = ({
     })
   }, [serviceId])
 
-  const isNonActiveVisitStatus = useMemo(() => {
-    return visitStatusCodes
-      .find((code) => code.value === visitDetails.visitStatus)
-      ?.attributes?.find(
-        (attr) => attr.name === 'Group' && attr.value === 'Inactive',
-      )
-  }, [visitDetails.visitStatus, visitStatusCodes])
-
   const visitSequenceCodes = useMemo(
     () =>
       codes.filter((code) =>
@@ -82,15 +73,27 @@ const VisitSequenceSelect = ({
           return true
         }
         if (
-          visitDetails.visitSequence === 'Subsequent' &&
-          isNonActiveVisitStatus
+          (visitDetails.visitSequence === 'Initial' && isPrimaryProviderType) ||
+          visitDetails.visitSequence === 'InitialDischarge'
         ) {
-          return ['Initial', 'Discharge'].includes(code.value)
+          return ['Initial', 'InitialDischarge'].includes(code.value)
         }
-        if (!isPrimaryProviderType) {
-          return !['Discharge', 'InitialDischarge'].includes(code.value)
+        if (
+          visitDetails.visitSequence === 'Initial' &&
+          !isPrimaryProviderType
+        ) {
+          return code.value === 'Initial'
         }
-        return !['Initial', 'New'].includes(code.value)
+        if (
+          (visitDetails.visitSequence === 'Subsequent' &&
+            isPrimaryProviderType) ||
+          visitDetails.visitSequence === 'Discharge'
+        ) {
+          return ['Subsequent', 'Discharge'].includes(code.value)
+        }
+        if (visitDetails.visitSequence === 'Subsequent') {
+          return code.value === 'Subsequent'
+        }
       })
       setOptions(
         filteredOptions

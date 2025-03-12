@@ -1,5 +1,7 @@
 import { Box } from '@radix-ui/themes'
 import { Appointment } from '@/types'
+import { DischargeDate } from '@/ui/visit/components'
+import { SchemaType } from '../../schema'
 import { PaymentResponsibilitySelect } from '../payment-responsibility-select'
 import { ProviderTypeSelect } from '../provider-type-select'
 import { VisitTypeSelect } from '../visit-type-select'
@@ -7,7 +9,6 @@ import { AdmittingProviderSelect } from './admitting-provider-select'
 import { AuthDate } from './auth-date'
 import { AuthNumberText } from './auth-number-text'
 import { DateTimeOfAdmission } from './date-time-of-admission'
-import { DischargeDate } from './discharge-date'
 import { FacilityAdmissionText } from './facility-admission-id-text'
 import { GroupSelect } from './group-select'
 import { InsuranceVerificationSelect } from './insurance-verification-select'
@@ -51,7 +52,7 @@ const UntimedVisitForm = ({
         />
       </Box>
       <Box className="col-span-3">
-        <DischargeDate />
+        <DischargeDate<SchemaType> />
       </Box>
 
       <Box className="col-span-4">

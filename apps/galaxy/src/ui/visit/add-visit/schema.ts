@@ -1,5 +1,7 @@
+import { getLocalTimeZone, today } from '@internationalized/date'
 import { DateValue } from 'react-aria-components'
 import z, { RefinementCtx } from 'zod'
+import { VisitSequenceTypes } from '@/types'
 
 const schema = z
   .object({
@@ -112,6 +114,53 @@ const schema = z
           })
         }
       })
+
+      if (data.dischargeDate) {        
+        const isDischargeDateGreaterThanToday = data.dischargeDate.compare(today(getLocalTimeZone())) > 0
+        
+        const admissionDateOffset = data.dateOfAdmission?.compare(today(getLocalTimeZone()))
+        
+        const isAdmissionDateGreaterThanToday = admissionDateOffset
+          ? admissionDateOffset > 0
+          : false
+
+        if (
+          isDischargeDateGreaterThanToday && !isAdmissionDateGreaterThanToday
+        ) {
+          _ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            path: ['dischargeDate'],
+            message: 'Discharge date cannot be greater than today',
+          })
+        }
+      }
+
+      if (data.dischargeDate && data.dateOfAdmission) {
+        const isDischargeDateLessThanAdmissionDate = data.dischargeDate.compare(data.dateOfAdmission) < 0
+        
+        if (isDischargeDateLessThanAdmissionDate) {
+          _ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            path: ['dischargeDate'],
+            message: 'Discharge date cannot be less than date of admission',
+          })
+        }
+      }
+
+      if (data.dischargeDate && data.dateOfAdmission && data.visitSequence) {
+        const isDischargeDateGreaterThanAdmissionDate = data.dischargeDate.compare(data.dateOfAdmission) !== 0
+
+        if (
+          data.visitSequence === VisitSequenceTypes.InitialDischarge &&
+          isDischargeDateGreaterThanAdmissionDate
+        ) {
+          _ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            path: ['dischargeDate'],
+            message: 'Discharge date cannot be greater than date of admission',
+          })
+        }
+      }
     }
 
     if (data.isServiceTimeDependent) {

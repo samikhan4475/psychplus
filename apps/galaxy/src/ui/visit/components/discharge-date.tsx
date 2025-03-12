@@ -3,13 +3,12 @@
 import { useEffect } from 'react'
 import { getLocalTimeZone, today } from '@internationalized/date'
 import { Flex } from '@radix-ui/themes'
-import { useFormContext, useWatch } from 'react-hook-form'
+import { FieldValues, useFormContext, useWatch } from 'react-hook-form'
 import { DatePickerInput } from '@/components'
 import { FormFieldLabel } from '@/components/form'
-import { SchemaType } from '../../schema'
 
-const DischargeDate = () => {
-  const form = useFormContext<SchemaType>()
+const DischargeDate = <T extends object>() => {
+  const form = useFormContext()
 
   const [dateOfAdmission, patient, state, service, location, visitSequence] =
     useWatch({
@@ -31,11 +30,11 @@ const DischargeDate = () => {
     }
   }, [visitSequence])
 
+  const dateToday = today(getLocalTimeZone())
   const minValue =
-    dateOfAdmission && dateOfAdmission > today(getLocalTimeZone())
-      ? undefined
-      : dateOfAdmission
-  const maxValue = today(getLocalTimeZone())
+    dateOfAdmission && dateOfAdmission > dateToday ? undefined : dateOfAdmission
+  const maxValue =
+    dateOfAdmission && dateOfAdmission > dateToday ? undefined : dateToday
   const isDisabled = !patient || !state || !service || !location
 
   return (

@@ -53,6 +53,9 @@ function transformRequestPayload(
       admissionDate: mapToUTCString(
         `${data.dateOfAdmission}T${data.timeOfAdmission}:00[${data.timeZoneId}]`,
       ),
+      dischargeDate: data.dischargeDate
+        ? data.dischargeDate.toString()
+        : undefined,
       visitFrequency: data.visitFrequency ? parseInt(data.visitFrequency) : 0,
       appointmentStatus: data.visitStatus,
       insuranceVerificationStatusCode: data.insuranceVerificationStatus,

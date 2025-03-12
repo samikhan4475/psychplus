@@ -4,7 +4,6 @@ import { AdmittingProviderSelector } from './admitting-provider-select'
 import { AuthDate } from './auth-date'
 import { AuthNumberInput } from './auth-number-text'
 import { DateTimeOfAdmission } from './date-time-of-admission'
-import { DischargeDate } from './discharge-date'
 import { GroupDropdown } from './group-select'
 import { LegalDropdown } from './legal-select'
 import { PaymentResponsibilitySelect } from './payment-responsibility-select'
@@ -15,6 +14,8 @@ import { VisitMediumSelect } from './visit-medium-select'
 import { VisitSequenceSelect } from './visit-sequence-select'
 import { VisitStatusSelect } from './visit-status-select'
 import { ProviderTypeSelect } from './provider-type-select'
+import { DischargeDate } from '@/ui/visit/components'
+import { SchemaType } from '../../schema'
 
 const NonTimedVisitForm = () => {
   return (
@@ -29,7 +30,7 @@ const NonTimedVisitForm = () => {
         <Flex gap="2" align="start">
           <DateTimeOfAdmission />
           <AdmittingProviderSelector />
-          <DischargeDate />
+          <DischargeDate<SchemaType> />
         </Flex>
         <Flex gap="2" align="start">
           <ProviderTypeSelect />

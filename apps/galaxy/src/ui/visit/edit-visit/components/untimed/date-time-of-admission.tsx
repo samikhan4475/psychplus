@@ -20,7 +20,6 @@ const DateTimeOfAdmission = ({
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const timeSlots = useMemo(() => generateTimeIntervals(), [])
   const canEditAdmissionDateTime = useHasPermission('editAdmitDateTime')
-
   const options = timeSlots.map((v) => ({
     value: v.value,
     label: v.label,
@@ -47,9 +46,9 @@ const DateTimeOfAdmission = ({
                     form.setValue('dateOfAdmission', value, {
                       shouldDirty: true,
                     })
-                    return
+                  } else {
+                    setIsOpen(true)
                   }
-                  setIsOpen(true)
                 }}
               />
               <FormFieldError name="dateOfAdmission" />
@@ -65,9 +64,9 @@ const DateTimeOfAdmission = ({
                     form.setValue('timeOfAdmission', value, {
                       shouldDirty: true,
                     })
-                    return
+                  } else {
+                    setIsOpen(true)
                   }
-                  setIsOpen(true)
                 }}
               />
               <FormFieldError name="timeOfAdmission" />
