@@ -47,7 +47,6 @@ const useLabOrderForm = (
     orderStatus: data.labOrderStatus,
     billType: data.labBillingType,
     labOrderNumber: data?.labOrderNumber,
-    orderingStaffName: data?.orderingStaffName,
     labOrderDate: orderSentDateTime,
     OrderingStaffId: data?.providerDetail?.providerStaffId,
     labId: form.getValues('labLocationData')?.id ?? '',

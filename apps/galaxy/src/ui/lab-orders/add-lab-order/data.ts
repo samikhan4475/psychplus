@@ -13,7 +13,9 @@ const transformIn = (labOrderData: Partial<LabOrders>) => {
     labOrderStatus: labOrderData ? labOrderData.orderStatus : 'Draft',
     isFasting: labOrderData?.isFasting ? 'yes' : 'no',
     isPSCHold: labOrderData?.isPscHold ? 'yes' : 'no',
-    orderDate: parseDate(formatDate(labOrderData?.labOrderDate ?? new Date())),
+    orderDate: parseDate(
+      formatDate(labOrderData?.labOrderDate ?? new Date(), 'yyyy-MM-dd'),
+    ),
     orderTime: getTimeLabel(
       formatUTCDate(labOrderData?.labOrderDate ?? new Date().toLocaleString()),
       false,
@@ -23,7 +25,6 @@ const transformIn = (labOrderData: Partial<LabOrders>) => {
     labLocation: labOrderData ? labOrderData?.orderingLab?.id : '',
     specimenList: [],
     labOrderNumber: labOrderData?.labOrderNumber,
-    orderingStaffName: labOrderData?.orderingStaffName,
   } as LabOrderSchemaType
 }
 

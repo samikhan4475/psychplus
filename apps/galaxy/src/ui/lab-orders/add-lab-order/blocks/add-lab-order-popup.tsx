@@ -33,7 +33,7 @@ const AddLabOrderPopup = ({
         <Dialog.Title size="5" weight="bold">
           {isEdit ? 'Edit Lab Order' : 'Add Lab Order'}
         </Dialog.Title>
-        <AddLabOrderForm labOrderData={labOrderData} setOpen={setOpen} />
+        <AddLabOrderForm labOrderData={labOrderData}  setOpen={setOpen} />
       </Dialog.Content>
     </Dialog.Root>
   )

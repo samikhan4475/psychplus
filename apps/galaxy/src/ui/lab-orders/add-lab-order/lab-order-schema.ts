@@ -95,7 +95,6 @@ const labOrderSchema = z
     isPSCHold: z.string().optional(),
     specimenList: specimenSchema,
     labQuestions: z.any({}).optional(),
-    orderingStaffName: z.string().optional(),
     labOrderNumber: z.number().optional(),
   })
   .superRefine((data, ctx) => {
