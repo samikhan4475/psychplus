@@ -12,10 +12,10 @@ import {
   TextCell,
 } from '@/components'
 import { LabOrders } from '@/types'
+import { formatUTCDate } from '@/utils'
 import { LabTestCell, ResultsCell, StatusCell } from './cells'
 import { ActionsCell } from './cells/actions-cell'
 import { useStore } from './store'
-import { formatUTCDate } from '@/utils'
 
 const columns: ColumnDef<LabOrders>[] = [
   {
@@ -42,7 +42,12 @@ const columns: ColumnDef<LabOrders>[] = [
     header: ({ column }) => (
       <ColumnHeader column={column} clientSideSort label="Ordered By" />
     ),
-    cell: ({ row }) => <TextCell>{row.original.orderingStaffName}</TextCell>,
+    cell: ({ row }) => (
+      <TextCell>
+        {row.original?.orderingStaffName?.firstName ?? ''}{' '}
+        {row.original?.orderingStaffName?.lastName ?? ''}
+      </TextCell>
+    ),
   },
   {
     id: 'labTests',

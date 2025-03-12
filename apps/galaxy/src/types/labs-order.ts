@@ -5,6 +5,7 @@ import { Appointment } from './appointment'
 import { ContactDetails } from './contact'
 import { Metadata } from './metadata'
 import { PatientProfile } from './patient'
+import { LegalName } from './name'
 
 interface LabTestAnswer {
   id: string
@@ -85,7 +86,7 @@ interface LabOrders {
   appointmentId: number
   statusCode: string
   orderingStaffId: number
-  orderingStaffName: string
+  orderingStaffName: LegalName
   billType: string
   isFasting: boolean
   isLabDraw: boolean
