@@ -18,6 +18,8 @@ const InboxNoteSignButton = ({ label }: { label: string }) => {
     selectedRow,
     selectedRows,
     tab,
+    page,
+    formData,
     fetchStaffNotes,
   } = useStore((state) => ({
     setErrorMessage: state.setErrorMessage,
@@ -28,6 +30,8 @@ const InboxNoteSignButton = ({ label }: { label: string }) => {
     fetchStaffNotes: state.fetchStaffNotes,
     setSelectedRow: state.setSelectedRow,
     setSelectedRows: state.setSelectedRows,
+    page: state.page,
+    formData: state.formData,
   }))
 
   const handleClick = async () => {
@@ -70,9 +74,7 @@ const InboxNoteSignButton = ({ label }: { label: string }) => {
     if (result.every((r) => r.state === 'success')) {
       setLoading(false)
       toast.success('Signed')
-      fetchStaffNotes({
-        status: statuses,
-      })
+      fetchStaffNotes({ ...formData, status: statuses }, page, true)
       setSelectedRow(undefined)
       setSelectedRows([])
     } else {

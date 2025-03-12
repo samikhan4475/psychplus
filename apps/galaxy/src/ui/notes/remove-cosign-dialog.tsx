@@ -42,12 +42,15 @@ const RemoveCosignDialog = ({
     isInboxNotes,
     fetchStaffNotes,
     tab,
+    page,
+    formData,
   } = useStore((state) => ({
     fetch: state.fetch,
     patientId: state.patientId,
     setSelectedRow: state.setSelectedRow,
     tab: state.tab,
-
+    page: state.page,
+    formData: state.formData,
     isInboxNotes: state.isInboxNotes,
     fetchStaffNotes: state.fetchStaffNotes,
   }))
@@ -67,9 +70,7 @@ const RemoveCosignDialog = ({
     const statuses =
       tab === Tabs.PENDING_NOTES ? ['pending'] : ['SignedPending']
     isInboxNotes
-      ? fetchStaffNotes({
-          status: statuses,
-        })
+      ? fetchStaffNotes({ ...formData, status: statuses }, page, true)
       : fetch({ patientId })
     toast.success('Co-signer removed successfully')
     removecloseDialog()

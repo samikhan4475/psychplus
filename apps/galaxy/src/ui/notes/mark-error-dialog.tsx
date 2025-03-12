@@ -19,15 +19,23 @@ const MarkErrorDialog = ({
   removecloseDialog,
 }: MarkErrorDialogProps) => {
   const [loading, setLoading] = useState(false)
-  const { fetch, patientId, isInboxNotes, fetchStaffNotes, tab } = useStore(
-    (state) => ({
-      fetch: state.fetch,
-      patientId: state.patientId,
-      tab: state.tab,
-      isInboxNotes: state.isInboxNotes,
-      fetchStaffNotes: state.fetchStaffNotes,
-    }),
-  )
+  const {
+    fetch,
+    patientId,
+    isInboxNotes,
+    fetchStaffNotes,
+    tab,
+    page,
+    formData,
+  } = useStore((state) => ({
+    fetch: state.fetch,
+    patientId: state.patientId,
+    tab: state.tab,
+    isInboxNotes: state.isInboxNotes,
+    fetchStaffNotes: state.fetchStaffNotes,
+    page: state.page,
+    formData: state.formData,
+  }))
   const { validateAndPreparePayload } = useNoteActions()
 
   const handleSubmit = async () => {
@@ -49,9 +57,7 @@ const MarkErrorDialog = ({
     const statuses =
       tab === Tabs.PENDING_NOTES ? ['pending'] : ['SignedPending']
     isInboxNotes
-      ? fetchStaffNotes({
-          status: statuses,
-        })
+      ? fetchStaffNotes({ ...formData, status: statuses }, page, true)
       : fetch({ patientId })
     removecloseDialog()
     setLoading(false)
