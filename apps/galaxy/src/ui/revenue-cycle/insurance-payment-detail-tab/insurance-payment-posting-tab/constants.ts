@@ -4,6 +4,13 @@ const WRITE_OFF_ADJUSTMENT = {
   adjustmentStatus: 'WriteOff',
 } as const
 
+const allowedAmountKeys: string[] = [
+  'ProcessedAsSecondary',
+  'ProcessedAsTertiary',
+  'ProcessedAsSecondaryAndForwarded',
+  'ProcessedAsTertiaryAndForwarded',
+]
+
 const paymentSourceMapping = {
   ProcessedAsPrimary: 'Primary',
   ProcessedAsSecondary: 'Secondary',
@@ -61,5 +68,6 @@ export {
   CO_PAY_ADJUSTMENT,
   adjustmentMapping,
   PROCESSED_AS_REVERSAL,
+  allowedAmountKeys,
   type AdjustmentField,
 }

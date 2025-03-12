@@ -215,13 +215,13 @@ const InsurancePaymentPostingTable = ({
         })
 
         const result = await getPaymentServiceLinesAction(payload)
-
         if (result.state === 'success') {
           form.setValue(
             'claimServiceLinePayments',
             transformServiceLines(
               result.data,
               paymentPostingClaim ?? {},
+              processedAsCode
             ) as ClaimServiceLinePayment[],
           )
         } else {

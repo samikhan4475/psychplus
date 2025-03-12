@@ -4,7 +4,11 @@ import toast from 'react-hot-toast'
 import { PropsWithRow } from '@/components'
 import { ClaimServiceLinePayment } from '../../../types'
 import { PaymentListTypes } from '../../types'
-import { PROCESSED_AS_REVERSAL, WRITE_OFF_ADJUSTMENT } from '../constants'
+import {
+  allowedAmountKeys,
+  PROCESSED_AS_REVERSAL,
+  WRITE_OFF_ADJUSTMENT,
+} from '../constants'
 import { SchemaType } from '../schema'
 import { DollarInput } from './dollar-input'
 import {
@@ -104,7 +108,11 @@ const AllowedAmountCell = ({ row }: PropsWithRow<ClaimServiceLinePayment>) => {
       onKeyDown={(e) =>
         amountCheck(e, processedAsCode === PROCESSED_AS_REVERSAL)
       }
-      disabled={!isRectifiedRow && paymentStatus === PaymentListTypes.Posted}
+      disabled={
+        !isRectifiedRow &&
+        (paymentStatus === PaymentListTypes.Posted ||
+          allowedAmountKeys.includes(processedAsCode))
+      }
       onInput={onInput}
       onBlur={onBlur}
     />

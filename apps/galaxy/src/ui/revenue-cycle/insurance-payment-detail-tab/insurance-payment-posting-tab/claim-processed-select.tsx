@@ -2,11 +2,13 @@ import React from 'react'
 import { useFormContext } from 'react-hook-form'
 import { CodesetSelect, FormFieldContainer, FormFieldLabel } from '@/components'
 import { CODESETS } from '@/constants'
+import { PaymentListTypes } from '../types'
 import { paymentSourceMapping } from './constants'
 import { SchemaType } from './schema'
 
 const ClaimProcessedSelect = () => {
   const form = useFormContext<SchemaType>()
+  const status = form.getValues('status')
   const onChange = (value: string) => {
     form.reset()
     form.setValue('processedAsCode', value)
@@ -22,6 +24,7 @@ const ClaimProcessedSelect = () => {
       <FormFieldLabel>Claim Processed as</FormFieldLabel>
       <CodesetSelect
         name="processedAsCode"
+        disabled={status === PaymentListTypes.Posted}
         codeset={CODESETS.ProcessedAsCode}
         size="1"
         onValueChange={onChange}

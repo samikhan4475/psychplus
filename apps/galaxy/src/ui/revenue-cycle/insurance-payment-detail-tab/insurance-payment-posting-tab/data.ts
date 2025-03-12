@@ -5,11 +5,12 @@ import {
   UpdateClaimPaymentPayload,
 } from '../../types'
 import { PaymentListTypes } from '../types'
-import { PROCESSED_AS_REVERSAL } from './constants'
+import { allowedAmountKeys, PROCESSED_AS_REVERSAL } from './constants'
 
 const transformServiceLines = (
   serviceLines: ClaimServiceLinePayment[] | ClaimServiceLine[],
   paymentPostingClaim: Partial<ClaimPayment>,
+  processedAsCode?: string,
 ) =>
   serviceLines?.map((serviceLine) => ({
     ...serviceLine,
@@ -21,7 +22,9 @@ const transformServiceLines = (
     billedAmount:
       String(serviceLine.totalAmount ?? '') ||
       String(serviceLine.billedAmount ?? ''),
-    allowedAmount: String(serviceLine.allowedAmount ?? ''),
+    allowedAmount: allowedAmountKeys.includes(processedAsCode ?? '')
+      ? String(serviceLine.billedAmount)
+      : String(serviceLine.allowedAmount ?? ''),
     modifierCode1: serviceLine.modifierCode1 ?? '',
     modifierCode2: serviceLine.modifierCode2 ?? '',
     modifierCode3: serviceLine.modifierCode3 ?? '',

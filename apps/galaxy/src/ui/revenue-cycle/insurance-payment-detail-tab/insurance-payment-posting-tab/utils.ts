@@ -1,4 +1,4 @@
-import { ClaimPayment, InsurancePayment } from '../../types'
+import { ClaimPayment, ClaimServiceLinePayment, InsurancePayment } from '../../types'
 import { removeNegative } from './cells/utils'
 
 interface ValidatePaymentParams {
@@ -51,4 +51,9 @@ const validatePayment = ({ claimPayment, paymentDetail }: ValidatePaymentParams)
   return '';
 };
 
-export { validatePayment }
+
+const rectifiedRowExists = (
+  claimServiceLinePayments: ClaimServiceLinePayment[],
+): boolean => claimServiceLinePayments.some((row) => row['isRectifiedRow'])
+
+export { validatePayment,rectifiedRowExists }
