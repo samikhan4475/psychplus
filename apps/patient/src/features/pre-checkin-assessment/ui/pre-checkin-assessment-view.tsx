@@ -1,5 +1,5 @@
 import { CODESETS } from '@psychplus-v2/constants'
-import { STRIPE_PUBLISHABLE_KEY } from '@psychplus-v2/env'
+import { GOOGLE_MAPS_API_KEY, STRIPE_PUBLISHABLE_KEY } from '@psychplus-v2/env'
 import { Box } from '@radix-ui/themes'
 import { getCodesets, getIsFeatureFlagEnabled, getProfile } from '@/api'
 import { FeatureFlags } from '@/constants'
@@ -13,7 +13,7 @@ import { getNoteDetails } from '@/features/note/api'
 import { NoteSectionName } from '@/features/note/constants'
 import { NoteStoreProvider } from '@/features/note/store'
 import { getPatientPharmacies } from '@/features/pharmacy/api'
-import { CodesetStoreProvider } from '@/providers'
+import { CodesetStoreProvider, GooglePlacesContextProvider } from '@/providers'
 import { PreCheckinAssessmentStapper } from './pre-checkin-assessment-stepper/pre-checkin-assessment-stapper'
 import { questionnairesToShowOnPreCheckin } from './pre-checkin-assessment-stepper/steps/questionnaire/utils'
 
@@ -98,8 +98,9 @@ const PreCheckinAssessmentView = async () => {
 
   return (
     <ProfileStoreProvider profile={profileResponse.data}>
-      <CodesetStoreProvider codesets={codesets}>
-        <NoteStoreProvider notes={noteDetailsResponse.data}>
+      <GooglePlacesContextProvider apiKey={GOOGLE_MAPS_API_KEY}>
+        <CodesetStoreProvider codesets={codesets}>
+          <NoteStoreProvider notes={noteDetailsResponse.data}>
           <Box className="mx-auto w-[1200px]">
             <PreCheckinAssessmentStapper
               insurancePayers={insurancePayerResponse.data}
@@ -115,6 +116,7 @@ const PreCheckinAssessmentView = async () => {
           </Box>
         </NoteStoreProvider>
       </CodesetStoreProvider>
+      </GooglePlacesContextProvider>
     </ProfileStoreProvider>
   )
 }

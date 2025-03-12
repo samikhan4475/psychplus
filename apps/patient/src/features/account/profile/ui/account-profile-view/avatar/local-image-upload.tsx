@@ -13,12 +13,17 @@ import {
 import { ImageIcon, RefreshCwIcon } from 'lucide-react'
 import { CloseDialogIcon } from '@/components-v2'
 import { updateProfileImage } from './api'
+import { useRouter } from 'next/navigation'
 
 const LocalImageUpload = () => {
   const [uploading, setUploading] = useState(false)
   const [uploadError, setUploadError] = useState(false)
   const [imgSrc, setImgSrc] = useState<File | null>(null)
   const [previewImage, setPreviewImage] = useState<string | null>(null)
+
+  const [open, setOpen] = useState(false)
+
+  const router = useRouter()
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files?.[0]) {
@@ -39,7 +44,8 @@ const LocalImageUpload = () => {
       setUploading(false)
 
       if (response.ok) {
-        window.location.reload()
+        setOpen(false)
+        router.refresh()
       } else {
         setUploadError(true)
       }
@@ -52,7 +58,7 @@ const LocalImageUpload = () => {
   }
 
   return (
-    <Dialog.Root>
+    <Dialog.Root open={open} onOpenChange={setOpen}>
       <Dialog.Trigger>
         <button>
           <Tooltip content="Upload picture" delayDuration={250}>

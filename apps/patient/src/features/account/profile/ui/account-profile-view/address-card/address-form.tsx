@@ -93,9 +93,7 @@ const AddressForm = ({
         'secondaryStreet2',
       ])
   }, [form, mailingSameAsPrimary])
-
-  console.log(form.getValues())
-  console.log(form.formState.errors)
+  
   const submitAction = (data: AddressSchemaType) => {
     const primaryAddressData: PatientAddress = {
       type: 'Home',

@@ -124,10 +124,27 @@ const STATE_ABBREVIATIONS: Record<string, string> = {
   'Us Minor Outlying Islands': 'UM',
 }
 
+const createAddress = (
+  type: 'Primary' | 'Secondary',
+  data: Record<string, any>,
+): PatientAddress => {
+  const prefix = type.toLowerCase()
+  return {
+    type: type === 'Primary' ? 'Home' : 'Mailing',
+    street1: data[`${prefix}Street1`] ?? '',
+    street2: data[`${prefix}Street2`] ?? '',
+    city: data[`${prefix}City`] ?? '',
+    state: data[`${prefix}State`] ?? '',
+    postalCode: data[`${prefix}PostalCode`] ?? '',
+    country: data[`${prefix}Country`] ?? 'US',
+  }
+}
+
 export {
   getStateAbbreviation,
   getStateFullName,
   areAddressesEqual,
   getClinicAddressLabel,
   getBillingAddressLabel,
+  createAddress,
 }

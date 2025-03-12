@@ -1,6 +1,6 @@
 'use client'
 
-import { createContext, useContext, useMemo, useState } from 'react'
+import { createContext, useContext, useEffect, useMemo, useState } from 'react'
 import Script from 'next/script'
 
 interface GooglePlacesContextType {
@@ -19,21 +19,30 @@ const GooglePlacesContextProvider = ({
   apiKey,
   children,
 }: React.PropsWithChildren<GooglePlacesContextProviderProps>) => {
-  const [loaded, setLoaded] = useState(false)
+  const [loaded, setLoaded] = useState(
+    typeof window !== 'undefined' && !!window.google,
+  )
+  
+
+  useEffect(() => {
+    if (window.google) {
+      setLoaded(true)
+    }
+  }, [])
 
   const contextValue = useMemo(() => ({ loaded }), [loaded])
 
   return (
     <GooglePlacesContext.Provider value={contextValue}>
-      <Script
-        async
-        defer
-        strategy="afterInteractive"
-        onReady={() => {
-          setLoaded(true)
-        }}
-        src={`https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places`}
-      />
+      {!loaded && (
+        <Script
+          async
+          defer
+          strategy="afterInteractive"
+          src={`https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places`}
+          onLoad={() => setLoaded(true)}
+        />
+      )}
       {children}
     </GooglePlacesContext.Provider>
   )

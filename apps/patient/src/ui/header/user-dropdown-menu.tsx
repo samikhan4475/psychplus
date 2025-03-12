@@ -18,7 +18,7 @@ const UserDropdownMenu = ({ user }: UserDropdownMenuProps) => {
       <DropdownMenu.Trigger className="hidden sm:block">
         <button className="rounded-full focus:outline-accent-9">
           <Avatar
-            src="/api/patients/self/profileimage" //TODO replace with hasPhoto check
+            src={`/api/patients/self/profileimage?v=${Date.now()}`} //TODO replace with hasPhoto check
             fallback={getUserInitials(user)}
             radius="full"
             size="4"

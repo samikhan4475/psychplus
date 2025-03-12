@@ -1,16 +1,17 @@
 import { useCallback, useRef, useState } from 'react'
 import { Avatar, Button, Dialog, Flex, Text, Tooltip } from '@radix-ui/themes'
-import { CameraIcon } from 'lucide-react'
 import Webcam from 'react-webcam'
 import { CloseDialogIcon } from '@/components-v2'
-import { updateProfileImage } from './api'
+import CameraIcon from '@/components-v2/icons/camera-icon'
+import { updateProfileImage } from '@/features/account/profile/ui/account-profile-view/avatar/api'
 import { useRouter } from 'next/navigation'
 
-const WebcamImageUpload = () => {
+const PreCheckinWebcamImageUpload = () => {
   const [uploading, setUploading] = useState(false)
   const [uploadError, setUploadError] = useState(false)
   const [imgSrc, setImgSrc] = useState<string | null>(null)
   const webcamRef = useRef<Webcam>(null)
+
   const [open, setOpen] = useState(false)
 
   const router = useRouter()
@@ -24,28 +25,27 @@ const WebcamImageUpload = () => {
   }, [webcamRef])
 
   const handleUpload = async () => {
-    if (imgSrc) {
-      setUploadError(false)
-      setUploading(true)
+    if (!imgSrc) return
+    setUploadError(false)
+    setUploading(true)
 
-      const formData = new FormData()
+    const formData = new FormData()
 
-      const res = await fetch(imgSrc)
-      const blob = await res.blob()
-      const file = new File([blob], 'avatar.jpeg', { type: 'image/jpeg' })
+    const res = await fetch(imgSrc)
+    const blob = await res.blob()
+    const file = new File([blob], 'avatar.jpeg', { type: 'image/jpeg' })
 
-      formData.append('file', file)
+    formData.append('file', file)
 
-      const response = await updateProfileImage(formData)
+    const response = await updateProfileImage(formData)
 
-      setUploading(false)
+    setUploading(false)
 
-      if (response.ok) {
-        setOpen(false)
-        router.refresh()
-      } else {
-        setUploadError(true)
-      }
+    if (response.ok) {
+      setOpen(false)
+      router.refresh()
+    } else {
+      setUploadError(true)
     }
   }
 
@@ -54,12 +54,8 @@ const WebcamImageUpload = () => {
       <Dialog.Trigger>
         <button>
           <Tooltip content="Take picture" delayDuration={250}>
-            <Flex
-              align="center"
-              justify="center"
-              className="rounded-full text-white h-[28px] w-[28px] cursor-pointer bg-accent-12"
-            >
-              <CameraIcon strokeWidth={1.5} className="h-[18px] w-[18px]" />
+            <Flex align="center" justify="center" className="cursor-pointer">
+              <CameraIcon />
             </Flex>
           </Tooltip>
         </button>
@@ -139,4 +135,4 @@ const WebcamImageUpload = () => {
   )
 }
 
-export { WebcamImageUpload }
+export { PreCheckinWebcamImageUpload }

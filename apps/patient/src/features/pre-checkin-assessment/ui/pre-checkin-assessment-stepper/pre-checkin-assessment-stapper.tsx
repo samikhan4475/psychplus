@@ -11,8 +11,7 @@ import { PreCheckinAssessmentTabs } from '@/features/pre-checkin-assessment/cons
 import { useStore } from '@/features/pre-checkin-assessment/store'
 import { PreCheckinAssessmentTab } from '@/features/pre-checkin-assessment/types'
 import { getTabsToShow } from '@/features/pre-checkin-assessment/utils'
-import { PreCheckinAssessmentFooter } from '../pre-checkin-assessment-footer'
-import { PreCheckinAssessmentHeader } from '../pre-checkin-assessment-header'
+import { PreCheckinAssessmentFooter } from './shared-blocks/pre-checkin-assessment-footer'
 import {
   AllergiesAndMedications,
   HistoriesView,
@@ -24,6 +23,7 @@ import {
   QuestionnaireView,
   ReviewOfSystems,
 } from './steps'
+import { PreCheckinAssessmentHeader } from './shared-blocks/pre-checkin-assessment-header'
 
 type PreCheckinAssessmentStapperProps = {
   insurancePayers: InsurancePayer[]

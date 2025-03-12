@@ -1,36 +1,27 @@
 'use client'
 
-import React, { useState } from 'react'
-import Image from 'next/image'
-import { CameraIcon, EyeOpenIcon } from '@radix-ui/react-icons'
-import { Box, Flex } from '@radix-ui/themes'
+import React from 'react'
+import { getUserInitials } from '@psychplus-v2/utils'
+import { Avatar, Box, Flex } from '@radix-ui/themes'
+import { usePatientForm } from '../steps/patient-info/hooks/use-patient-form'
+import { PreCheckinImageUpload } from './pre-checkin-image-upload'
+import PreCheckinViewImage from './pre-checkin-view-image'
+import { PreCheckinWebcamImageUpload } from './pre-checkin-webcam-image-upload'
 
 const PreCheckinAssessmentImageUploader = () => {
-  const [image, setImage] = useState<string | null>(null)
-
-  const handleImageUpload = (event: any) => {
-    const file = event.target.files[0]
-    if (file) {
-      setImage(URL.createObjectURL(file))
-    }
-  }
+  const { profile } = usePatientForm()
 
   return (
     <Flex className="items-center" direction="column" gap="2">
-      <Box className="rounded-full relative h-24 w-24 overflow-hidden border-2 border-[#BFD8E9]">
-        {image ? (
-          <Image
-            src={image}
-            alt="Profile"
-            width={20}
-            height={20}
-            className="h-full w-full object-cover"
-          />
-        ) : (
-          <Flex className="text-gray-400 h-full items-center justify-center">
-            <CameraIcon className="h-8 w-8" />
-          </Flex>
-        )}
+      <Box className="rounded-full relative h-24 w-24 overflow-hidden">
+        <Avatar
+          src={profile.hasPhoto ? `/api/patients/self/profileimage?t=${Date.now()}` : undefined}
+          size="7"
+          alt=""
+          fallback={profile.legalName ? getUserInitials(profile.legalName) : ''}
+          highContrast
+          className="border-2 border-[#BFD8E9]"
+        />
       </Box>
       <Flex
         direction="row"
@@ -38,22 +29,13 @@ const PreCheckinAssessmentImageUploader = () => {
         gap="3"
       >
         <Flex align="center" justify="center">
-          {' '}
-          <EyeOpenIcon className="h-auto w-4 cursor-pointer" />
+          <PreCheckinViewImage />
         </Flex>
         <Flex align="center" justify="center">
-          <label>
-            <input
-              type="file"
-              className="hidden"
-              onChange={handleImageUpload}
-            />
-            <CameraIcon className="h-auto w-4 cursor-pointer" />
-          </label>
+          <PreCheckinImageUpload />
         </Flex>
         <Flex align="center" justify="center">
-          {' '}
-          <CameraIcon className="h-auto w-4 cursor-pointer" />
+          <PreCheckinWebcamImageUpload />
         </Flex>
       </Flex>
     </Flex>

@@ -15,7 +15,7 @@ const ProfileAvatar = () => {
         <Box position="relative">
           <Avatar
             src={
-              profile.hasPhoto ? '/api/patients/self/profileimage' : undefined
+              profile.hasPhoto ? `/api/patients/self/profileimage?t=${Date.now()}` : undefined
             }
             size="9"
             alt=""
