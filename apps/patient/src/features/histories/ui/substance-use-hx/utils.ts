@@ -1,0 +1,33 @@
+const getInitialValues = () => ({
+  completedSuicide: false,
+  completedSuicideRelation: [],
+  anxiety: false,
+  anxietyRelation: [],
+  depression: false,
+  depressionRelation: [],
+  ocd: false,
+  cocaine: false,
+  cocaineDetails: '',
+  ocdRelation: [],
+  bipolarDisorder: false,
+  bipolarDisorderRelation: [],
+  schizophrenia: false,
+  schizophreniaRelation: [],
+  alcoholUseDisorder: false,
+  alcoholUseDisorderRelation: [],
+  dementia: false,
+  dementiaRelation: [],
+  inhalants: false,
+  inhalantsDetails: '',
+  opioidsDetails:'',
+  opioids: false,
+  sedative: false,
+  sedativeDetails: '',
+  amphetamine: false,
+  amphetamineDetails: '',
+  pcp: false,
+  pcpDetails: '',
+
+})
+
+export { getInitialValues }

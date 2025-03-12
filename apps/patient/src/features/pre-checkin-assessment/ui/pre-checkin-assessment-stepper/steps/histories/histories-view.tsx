@@ -2,12 +2,14 @@
 
 import { Flex } from '@radix-ui/themes'
 import { NoteSectionName } from '@/features/note/constants/constants'
-import { FamilyPsychHx } from './blocks'
+import { FamilyPsychHx, PastPsychHx, SubstanceUseHx } from './blocks'
 import { SocialHx } from './blocks/social-hx'
 import { PastMedicalHx } from './blocks/past-medical-hx'
 
 const sectionComponents = {
+  [NoteSectionName.NoteSectionPastPsychHx]: PastPsychHx,
   [NoteSectionName.NoteSectionFamilyPsychHx]: FamilyPsychHx,
+  [NoteSectionName.NoteSectionSubstanceUseHx]: SubstanceUseHx,
   [NoteSectionName.NoteSectionSocialHx]: SocialHx,
   [NoteSectionName.NoteSectionPastMedicalHx]: PastMedicalHx,
 }

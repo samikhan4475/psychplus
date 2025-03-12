@@ -71,7 +71,10 @@ const SelectableChipDetails = ({
               <NumberInput
                 format={format}
                 field={field}
-                className="focus:border-pp-focus-outline h-6 w-[38px] rounded-6 border border-gray-8 bg-[white] outline-none focus:outline-none"
+                className={cn(
+                  'focus:border-pp-focus-outline h-6 w-[38px] rounded-6 border border-gray-8 bg-[white] outline-none focus:outline-none',
+                  className,
+                )}
                 placeholder={placeHolder}
               />
             )}

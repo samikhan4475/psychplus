@@ -15,6 +15,7 @@ interface NumberInputProps {
   autoFocus?: boolean
   className?: string
   disabled?: boolean
+  required?: boolean
 }
 
 const NumberInput = ({
@@ -25,12 +26,17 @@ const NumberInput = ({
   className,
   autoFocus,
   disabled,
+  required,
 }: NumberInputProps) => {
   const form = useFormContext()
 
   return (
-    <Flex align="center" gap="2">
-      {label && <BlockLabel name={fieldName}>{label}</BlockLabel>}
+    <Flex align="start" gap="2" direction={'column'} className="w-full">
+      {label && (
+        <BlockLabel name={fieldName} required={required}>
+          {label}
+        </BlockLabel>
+      )}
       <Controller
         control={form.control}
         name={fieldName}
