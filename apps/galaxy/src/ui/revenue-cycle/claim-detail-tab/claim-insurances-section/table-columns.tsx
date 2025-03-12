@@ -1,10 +1,14 @@
 import { ColumnDef } from '@tanstack/react-table'
 import { ColumnHeader, TextCell } from '@/components'
 import { InsuranceClaimPolicy, Sort } from '@/types'
+import { InsuranceStatusColumnCell } from './insurance-status-cell'
 import { ActionsCell } from './table-action-cell'
 import { TableCellCoverage } from './table-cell-coverage'
 
-const columns = ( editRowId: number | null,setEditRowId: (id: number | null) => void): ColumnDef<InsuranceClaimPolicy>[] => {
+const columns = (
+  editRowId: number | null,
+  setEditRowId: (id: number | null) => void,
+): ColumnDef<InsuranceClaimPolicy>[] => {
   return [
     {
       id: 'coverage',
@@ -56,7 +60,9 @@ const columns = ( editRowId: number | null,setEditRowId: (id: number | null) => 
           label="Relationship"
         />
       ),
-      cell: ({ row }) => <TextCell>{row.original?.policyHolderRelationship}</TextCell>,
+      cell: ({ row }) => (
+        <TextCell>{row.original?.policyHolderRelationship}</TextCell>
+      ),
 
       enableHiding: true,
     },
@@ -98,7 +104,7 @@ const columns = ( editRowId: number | null,setEditRowId: (id: number | null) => 
           label="Status"
         />
       ),
-      cell: ({ row }) => <TextCell>{row.original?.claimStatus}</TextCell>,
+      cell: ({ row }) => <InsuranceStatusColumnCell row={row} />,
 
       enableHiding: true,
     },

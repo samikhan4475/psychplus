@@ -8,14 +8,16 @@ import { ResponseHistoryTablePagination } from './response-history-table-paginat
 
 const ResponseHistoryTabView = () => {
   return (
-    <Flex direction="column" className="gap-0.5">
-      <TabContentHeading title="Response History" />
-      <Flex direction="column" gap="1" className="bg-white w-full py-1">
-        <ResponseHistoryFilterForm />
-        <ResponseHistoryListTable />
-        <ResponseHistoryTablePagination />
-      </Flex>
-    </Flex>
+    <>
+      <Flex direction="column" className="relative gap-0.5" width="100%">
+        <TabContentHeading title="Response History" />
+        </Flex>
+        <Flex direction="column" gap="1" className="bg-white w-full py-1 flex-1">
+          <ResponseHistoryFilterForm />
+          <ResponseHistoryListTable />
+          <ResponseHistoryTablePagination />
+        </Flex>
+    </>
   )
 }
 

@@ -8,16 +8,22 @@ import { PayerPlanTablePagination } from './table/payer-table-pagination'
 
 const PayerPlanTabView = () => {
   return (
-    <Flex direction="column" gap="2" className="flex-1">
+    <>
       <PayerPlanTabHeader title="Plan">
         <PayerPlanDialog />
       </PayerPlanTabHeader>
-      <Flex direction="column" gap="1" className="bg-white w-full py-1">
+      <Flex direction="column" className="relative gap-0.5" width="100%">
         <PayerListFilterForm />
+      </Flex>
+      <Flex
+        gapY="2"
+        direction="column"
+        className="bg-white flex-1 !overflow-hidden"
+      >
         <PayerPlanListTable />
         <PayerPlanTablePagination />
       </Flex>
-    </Flex>
+    </>
   )
 }
 

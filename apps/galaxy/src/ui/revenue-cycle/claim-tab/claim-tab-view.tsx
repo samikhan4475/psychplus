@@ -8,14 +8,20 @@ import { ClaimsListTablePagination } from './claims-list-table-pagination'
 
 const ClaimTabView = () => {
   return (
-    <Flex direction="column" className="relative gap-0.5" width="100%">
-      <TabContentHeading title="Claims" />
-      <ClaimListFilterForm />
-      <Flex direction="column" className="bg-white w-full">
+    <>
+      <Flex direction="column" className="relative gap-0.5" width="100%">
+        <TabContentHeading title="Claims" />
+        <ClaimListFilterForm />
+      </Flex>
+      <Flex
+        gapY="2"
+        direction="column"
+        className="bg-white flex-1 !overflow-hidden"
+      >
         <ClaimListTable />
         <ClaimsListTablePagination />
       </Flex>
-    </Flex>
+    </>
   )
 }
 

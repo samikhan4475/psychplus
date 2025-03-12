@@ -25,12 +25,12 @@ const PayerTabView = () => {
   }))
   const tabId = activeTab?.split('#')[1]
   return (
-    <Box className="flex-1 px-1 pt-1">
+    <Box className="flex-1 flex px-1 pt-1">
       <Tabs.Root
         defaultValue={PayerTabs.Plan}
         value={activeTab}
         onValueChange={setActiveTab}
-        className="flex w-full flex-col"
+        className="flex w-full flex-col flex-1"
       >
         <Flex className="z-50">
           <Tabs.List>

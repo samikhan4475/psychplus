@@ -34,12 +34,12 @@ const RevenueCycleTabs = () => {
   // Claim# 1234, Check# 1234, tabId is 1234
   const tabId = activeTab?.split(' ')[1]
   return (
-    <Box className="flex-1 px-3 pt-4">
+    <Box className="flex-1 flex px-3 pt-4">
       <Tabs.Root
         defaultValue={RevenueCycleTab.Claim}
         value={activeTab}
         onValueChange={setActiveTab}
-        className="flex w-full flex-col"
+        className="flex w-full flex-col flex-1"
       >
         <Flex className="z-50">
           <Tabs.List>

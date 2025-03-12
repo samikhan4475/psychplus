@@ -8,14 +8,16 @@ import { PatientStatementsListTablePagination } from './patient-statements-list-
 
 const PatientStatementsTabView = () => {
   return (
-    <Flex direction="column" className="gap-0.5">
-      <TabContentHeading title="Patient Statements" />
-      <Flex direction="column" gap="1" className="bg-white w-full py-1">
+    <>
+      <Flex direction="column" className="gap-0.5">
+        <TabContentHeading title="Patient Statements" />
+      </Flex>
+      <Flex direction="column" gap="1" className="bg-white w-full py-1 flex-1">
         <PatientStatementsListFilterForm />
         <PatientStatementsListTable />
         <PatientStatementsListTablePagination />
       </Flex>
-    </Flex>
+    </>
   )
 }
 
