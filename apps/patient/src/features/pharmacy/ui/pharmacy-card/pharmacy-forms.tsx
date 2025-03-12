@@ -22,22 +22,26 @@ const PharmacyForms = ({
             pharmacies={pharmacies}
             isDawSystemFeatureFlagEnabled={isDawSystemFeatureFlagEnabled}
           />
-          <PharmacyForm
-            trigger={trigger}
-            pharmacies={pharmacies}
-            triggerClassName="justify-start items-start"
-          />
+          {!isDawSystemFeatureFlagEnabled && (
+            <PharmacyForm
+              trigger={trigger}
+              pharmacies={pharmacies}
+              triggerClassName="justify-start items-start"
+            />
+          )}
         </Flex>
       ) : (
         <FeatureEmpty
           description="No pharmacy added yet"
           Icon={EmptyFileIcon}
           action={
-            <PharmacyForm
-              pharmacies={pharmacies}
-              trigger={trigger}
-              triggerClassName="justify-center"
-            />
+            !isDawSystemFeatureFlagEnabled && (
+              <PharmacyForm
+                pharmacies={pharmacies}
+                trigger={trigger}
+                triggerClassName="justify-center"
+              />
+            )
           }
         />
       )}

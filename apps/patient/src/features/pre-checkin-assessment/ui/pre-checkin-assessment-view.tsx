@@ -110,7 +110,7 @@ const PreCheckinAssessmentView = async () => {
               creditCards={creditCardsResponse.data}
               stripeAPIKey={STRIPE_PUBLISHABLE_KEY}
               pharmacies={pharmaciesResponse.data}
-              isDawSystemFeatureFlagEnabled={dawSystemFeatureFlagResponse.data}
+              isDawSystemFeatureFlagEnabled={true} //Currently we have to remove DAW system feature flag dependency
               questionnaireSectionsToShowOnPreCheckin={
                 questionnaireSectionsToShowOnPreCheckin
               }

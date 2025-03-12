@@ -5,14 +5,14 @@ import { SharedCode } from './types'
 
 type TabsToShowProps = {
   tabs: string[]
-  pharmacies: PatientPharmacy[]
+  pharmacies?: PatientPharmacy[]
   isDawSystemFeatureFlagEnabled?: boolean
   questionnaireSectionsToShowOnPreCheckin: NoteSectionName[]
 }
 
 type FilterCommonProps = {
   tabId: string
-  pharmacies: PatientPharmacy[]
+  pharmacies?: PatientPharmacy[]
   isDawSystemFeatureFlagEnabled?: boolean
   questionnaireSectionsToShowOnPreCheckin: NoteSectionName[]
 }

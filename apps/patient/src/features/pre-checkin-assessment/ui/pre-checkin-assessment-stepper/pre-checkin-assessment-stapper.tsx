@@ -50,8 +50,6 @@ const PreCheckinAssessmentStapper = ({
   useEffect(() => {
     const tabs = getTabsToShow({
       tabs: Object.values(PreCheckinAssessmentTabs),
-      pharmacies,
-      isDawSystemFeatureFlagEnabled,
       questionnaireSectionsToShowOnPreCheckin,
     })
 
@@ -59,11 +57,7 @@ const PreCheckinAssessmentStapper = ({
       setActiveTab(tabs[0] as PreCheckinAssessmentTabs)
 
     setTabsToShow(tabs as PreCheckinAssessmentTabs[])
-  }, [
-    pharmacies,
-    isDawSystemFeatureFlagEnabled,
-    questionnaireSectionsToShowOnPreCheckin,
-  ])
+  }, [questionnaireSectionsToShowOnPreCheckin])
 
   if (!hydrated) return
 
