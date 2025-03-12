@@ -30,6 +30,10 @@ const AdmittingProviderSelect = ({
   })
   const canChangeAdmittingProvider = useHasPermission('editAdmittingProvider')
 
+  const dependencyArray = isPsychiatristVisitTypeSequence
+    ? [location]
+    : [location, providerType]
+
   useEffect(() => {
     if (!location || !providerType) return
     setLoading(true)
@@ -49,7 +53,7 @@ const AdmittingProviderSelect = ({
         })),
       )
     })
-  }, [location, providerType])
+  }, dependencyArray)
 
   return (
     <FormFieldContainer>

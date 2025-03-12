@@ -9,7 +9,6 @@ import {
 import { CODESETS } from '@/constants'
 import { useCodesetCodes } from '@/hooks'
 import { transformProviderTypes } from '../../add-visit/util'
-import { ProviderType, ServiceType } from '../../types'
 import { SchemaType } from '../schema'
 import { useEditVisitStore } from '../store'
 
@@ -39,7 +38,9 @@ const ProviderTypeSelect = ({
         options={options}
         buttonClassName="h-6 w-full"
         onValueChange={(val) => {
-          form.setValue('providerType', val)
+          form.setValue('providerType', val, {
+            shouldDirty: true,
+          })
           form.setValue('provider', '')
         }}
         field="providerType"

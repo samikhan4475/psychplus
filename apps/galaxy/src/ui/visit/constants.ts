@@ -30,6 +30,9 @@ const CHANGE_STAFF_COMMENT_SUBSECTION_TO_BILLING =
 const ADD_DELETE_STAFF_COMMENT_EDIT_VISIT_POPUP =
   'You do not have permission to Add or Delete Staff Comments. Please contact your supervisor if you need any further assistance.'
 
+const DC_DATE_VALIDATION_ALERT_MESSAGE =
+  'Discharge date can NOT be more than 14 days from the current date, please adjust the date to proceed'
+
 export {
   TCM,
   TCMTypeOfVisit,
@@ -43,4 +46,5 @@ export {
   EDIT_DATE_TIME_OF_ADMISSION,
   CHANGE_STAFF_COMMENT_SUBSECTION_TO_BILLING,
   ADD_DELETE_STAFF_COMMENT_EDIT_VISIT_POPUP,
+  DC_DATE_VALIDATION_ALERT_MESSAGE,
 }
