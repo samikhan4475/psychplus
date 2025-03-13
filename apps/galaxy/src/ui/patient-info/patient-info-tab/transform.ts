@@ -123,6 +123,9 @@ const patientConsentTransformIn = (
       timeZoneId,
       type,
       ...rest,
+      latestIssuanceDateWithoutFormatting: latestIssuanceDate,
+      issuanceDateWithoutFormatting: issuanceDate,
+      signingDateWithoutFormatting: signingDate,
     }
 
     if (!consentMap[type]) {

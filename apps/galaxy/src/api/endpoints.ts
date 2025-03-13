@@ -265,7 +265,7 @@ const GET_CLAIMS_AUDIT_HISTORY_LIST_ENDPOINT = `${API_URL}/api/claims/history`
 const GET_PAYMENTS_HISTORY_LIST_ENDPOINT = (paymentId: string) =>
   `${API_URL}/api/payments/${paymentId}/history/actions/search`
 
-const GET_CLAIMPAYMENTS_HISTORY_LIST_ENDPOINT = (claimPaymentId:string)=>
+const GET_CLAIMPAYMENTS_HISTORY_LIST_ENDPOINT = (claimPaymentId: string) =>
   `${API_URL}/api/claimpayments/${claimPaymentId}/history/actions/search`
 const GET_CLAIMS_LIST_ENDPOINT = `${API_URL}/api/claims/actions/search`
 const EXPORT_CLAIMS_LIST_ENDPOINT = (fileFormat: string) =>
@@ -718,6 +718,9 @@ const UPDATE_SELF_USER_SETTINGS = (settingId: string) =>
 const SELF_USER_BULK_SETTINGS = `${API_URL}/api/users/self/bulksettings`
 const GET_CURRENT_USER_SETTINGS = `${API_URL}/api/users/self/settings`
 
+const ELECTRONICALLY_SIGN_POLICY_ENDPOINT = (patientId: string) =>
+  `${API_URL}/api/patients/${patientId}/consents`
+
 export {
   GET_LAB_RESULTS_ENDPOINT,
   NOTE_UPLOAD_FILE,
@@ -1034,6 +1037,7 @@ export {
   ADD_SELF_USER_SETTINGS,
   UPDATE_SELF_USER_SETTINGS,
   SELF_USER_BULK_SETTINGS,
+  ELECTRONICALLY_SIGN_POLICY_ENDPOINT,
   GET_NOTES_ENDPOINT,
   INBOX_SIGN_NOTE_ENDPOINT,
   GET_FEATURE_FLAGS_BY_SHORTNAME_ENDPOINT,

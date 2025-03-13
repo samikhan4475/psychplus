@@ -125,6 +125,7 @@ const PatientInfoTabs = ({
         <PolicyAndConsentsTab
           patientId={patientId}
           patientConsents={patientConsents}
+          patientProfile={patientProfile}
         />
       </TabsContent>
       <TabsContent value={PAYMENT_HISTORY_TAB}>

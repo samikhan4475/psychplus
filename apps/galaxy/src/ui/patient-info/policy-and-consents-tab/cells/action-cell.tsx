@@ -6,6 +6,7 @@ import { RowActionDownload } from './row-action-download'
 import { RowActionEmail } from './row-action-email'
 import { RowActionHistory } from './row-action-history'
 import { RowActionMessage } from './row-action-message'
+import { RowActionSign } from './row-action-sign'
 
 const ActionCell = ({ row }: PropsWithRow<PatientConsent>) => {
   const { signingDate, status } = row.original
@@ -16,6 +17,10 @@ const ActionCell = ({ row }: PropsWithRow<PatientConsent>) => {
       id: 'Message',
       render: (props) =>
         !signingDate || isPending ? <RowActionMessage {...props} /> : null,
+    },
+    {
+      id: 'Sign',
+      render: (props) => <RowActionSign {...props} />,
     },
     {
       id: 'Email',

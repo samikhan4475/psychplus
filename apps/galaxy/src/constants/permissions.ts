@@ -223,7 +223,9 @@ const USER_PERMISSIONS = {
   toggleMakePrimaryCard: 'toggleMakePrimaryCard',
   deletePaymentCard: 'deletePaymentCard',
   deleteFollowupTab: 'deleteFollowupTab',
-  canClickPrescriberHistoryIconFromAdminNonAdminView:'canClickPrescriberHistoryIconFromAdminNonAdminView'
+  canClickPrescriberHistoryIconFromAdminNonAdminView:
+    'canClickPrescriberHistoryIconFromAdminNonAdminView',
+  canUploadSignedPolicy: 'canUploadSignedPolicy',
 }
 
 export { USER_PERMISSIONS }
