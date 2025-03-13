@@ -1,3 +1,4 @@
+export * from './auto-resize-input.tsx'
 export * from './under-construction'
 export * from './loading-placeholder'
 export * from './card-container'

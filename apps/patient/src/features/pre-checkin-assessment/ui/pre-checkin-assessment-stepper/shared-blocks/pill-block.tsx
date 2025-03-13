@@ -96,7 +96,7 @@ const PillBlock = ({
   const bgClass = isSelected ? '' : colorMap[bgColor] || 'bg-default'
 
   return (
-    <Flex className="flex-row">
+    <Flex className="flex-row items-center">
       <Flex
         onClick={handleToggle}
         className={`cursor-pointer rounded-${rounded} border ${
@@ -113,7 +113,9 @@ const PillBlock = ({
         </Text>
       </Flex>
       {isSelected && data.details && (
-        <SelectableChipDetails {...data.details} />
+        <Flex className="items-center">
+          <SelectableChipDetails {...data.details} />
+        </Flex>
       )}
     </Flex>
   )

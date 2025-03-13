@@ -7,7 +7,7 @@ import { ChipList } from './chip-list'
 import { DatePickerInput } from './date-picker-input'
 import { NumberInput } from './number-input'
 import { SelectInput } from './select-input'
-import { TextInput } from './text-input'
+import { AutoResizeInput } from './auto-resize-input'
 
 type DetailsType = 'text' | 'number' | 'select' | 'date' | 'multi-select'
 
@@ -50,14 +50,13 @@ const SelectableChipDetails = ({
       <Flex position="relative" align="center">
         {showIndicator && <SelectedIndicator />}
         {type === 'text' ? (
-          <TextInput
-            field={field}
-            disabled={isDisabled}
-            autoFocus={!form.watch(field)}
-            placeHolder={placeHolder}
-            maxLength={maxLength}
-            className="w-[250px]"
-          />
+          <AutoResizeInput
+          field={field}
+          disabled={isDisabled}
+          maxLength={maxLength}
+          autoFocus={!form.watch(field)}
+          placeholder={placeHolder}
+        />
         ) : (
           <Flex
             align="center"

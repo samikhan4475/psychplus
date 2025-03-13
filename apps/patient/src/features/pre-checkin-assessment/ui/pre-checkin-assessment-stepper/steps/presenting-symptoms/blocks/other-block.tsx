@@ -1,5 +1,5 @@
 import { Flex, Text } from '@radix-ui/themes'
-import { TextInput } from '@/components-v2/text-input'
+import { AutoResizeInput } from '@/components-v2'
 
 const OtherBlock = () => {
   return (
@@ -10,8 +10,8 @@ const OtherBlock = () => {
       >
         Other
       </Text>
-      <TextInput
-        field="hpiOther"
+      <AutoResizeInput
+        field={'hpiOther'}
         className="border-gray-300 rounded-md focus:ring-blue-500 border px-3 py-2 transition-all duration-200 focus:outline-none focus:ring-2"
       />
     </Flex>
