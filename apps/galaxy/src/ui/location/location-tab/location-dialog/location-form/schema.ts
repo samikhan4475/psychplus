@@ -33,6 +33,7 @@ const locationSchema = z.object({
       .regex(zipCodeRegex, 'Invalid zip code!')
       .min(1, 'Required'),
   }),
+  locationGoogleLink: z.string().url('Invalid link').or(z.literal('')),
 })
 
 type LocationSchemaType = z.infer<typeof locationSchema>

@@ -17,7 +17,7 @@ const ZipInput = () => {
       <FormFieldLabel>Zip</FormFieldLabel>
       <TextField.Root
         size="1"
-        placeholder="Add Postal Code"
+        placeholder="Enter Postal Code"
         {...form.register('zip')}
       />
       <FormFieldError name="zip" />

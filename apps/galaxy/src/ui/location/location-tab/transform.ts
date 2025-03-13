@@ -1,8 +1,8 @@
 import { SelectOptionType } from '@/types'
-import { sanitizeFormData } from '@/utils'
 import { LocationFormSchemaType } from './filter-form'
 import { LocationSchemaType } from './location-dialog/location-form'
 import { LocationFilter, LocationFormBody } from './types'
+import { sanitizeFormData } from './utils'
 
 const transformOutLocation = ({
   address: {
@@ -33,15 +33,19 @@ const transformOutFilters = ({
   stateCode,
   recordStatuses,
   locationType,
+  isGoogleLinkStatus,
   ...data
 }: LocationFormSchemaType): LocationFilter =>
   sanitizeFormData({
-    locationType: locationType !== 'NotSet' ? locationType : undefined,
+    locationType: transformOutOption(locationType),
     recordStatuses:
-      recordStatuses && recordStatuses !== 'NotSet'
+      transformOutOption(recordStatuses) && recordStatuses
         ? [recordStatuses]
         : undefined,
-    stateCode: stateCode !== 'NotSet' ? stateCode : undefined,
+    stateCode: transformOutOption(stateCode),
+    isGoogleLinkStatus: transformOutOption(isGoogleLinkStatus)
+      ? transformOutOption(isGoogleLinkStatus) === 'yes'
+      : undefined,
     ...data,
   })
 
@@ -54,5 +58,8 @@ const transformInOptions = (
   },
   ...options,
 ]
+
+const transformOutOption = (value = '') =>
+  value === 'NotSet' ? undefined : value
 
 export { transformOutLocation, transformInOptions, transformOutFilters }

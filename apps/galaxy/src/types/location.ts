@@ -19,6 +19,7 @@ interface Location {
   address: ClinicAddress
   cityId: string
   stateId: string
+  locationGoogleLink?: string
 }
 
 interface LocationSearchParams {
@@ -40,6 +41,5 @@ interface LocationSearchParams {
   recordStatuses: string[]
   isIncludeTestLocations: boolean
 }
-
 
 export type { Location, LocationSearchParams }

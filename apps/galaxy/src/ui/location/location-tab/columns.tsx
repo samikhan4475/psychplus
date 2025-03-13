@@ -2,7 +2,7 @@ import { ColumnDef } from '@tanstack/react-table'
 import { ColumnHeader, LongTextCell, TextCell } from '@/components'
 import { Location, Sort } from '@/types'
 import { getSortDir } from '@/utils'
-import { ActionCell, StateCell, StatusCell } from './cells'
+import { ActionCell, GMBCell, StateCell, StatusCell } from './cells'
 
 const columns = (
   googleApiKey: string,
@@ -134,6 +134,7 @@ const columns = (
         <LongTextCell>{original.fax?.number ?? 'N/A'}</LongTextCell>
       ),
     },
+
     {
       id: 'status',
       accessorKey: 'recordStatus',
@@ -141,6 +142,14 @@ const columns = (
         <ColumnHeader label="Status" column={column} clientSideSort />
       ),
       cell: StatusCell,
+    },
+    {
+      id: 'locationGoogleLink',
+      accessorKey: 'locationGoogleLink',
+      header: ({ column }) => (
+        <ColumnHeader label="GMB Link" column={column} clientSideSort />
+      ),
+      cell: GMBCell,
     },
     {
       id: 'actions',

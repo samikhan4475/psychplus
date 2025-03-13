@@ -9,8 +9,12 @@ interface GetLocationListParams {
 }
 
 interface LocationFilter
-  extends Omit<LocationFormSchemaType, 'recordStatuses'> {
+  extends Omit<
+    LocationFormSchemaType,
+    'recordStatuses' | 'isGoogleLinkStatus'
+  > {
   recordStatuses?: string[]
+  isGoogleLinkStatus?: boolean
 }
 
 interface GetLocationListResponse {
@@ -32,6 +36,7 @@ interface LocationFormBody {
   address: Address
   locationNameGenerated?: string
   id?: string
+  locationGoogleLink?: string
 }
 
 export type {

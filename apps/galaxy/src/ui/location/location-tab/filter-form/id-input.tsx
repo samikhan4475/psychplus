@@ -17,7 +17,7 @@ const IdInput = () => {
       <FormFieldLabel>ID</FormFieldLabel>
       <TextField.Root
         size="1"
-        placeholder="Add ID"
+        placeholder="Enter ID"
         {...form.register('locationNameGenerated')}
       />
       <FormFieldError name="locationNameGenerated" />

@@ -9,6 +9,7 @@ const LocationFormSchema = z.object({
   recordStatuses: z.string().optional(),
   Phone: z.string().optional(),
   stateCode: z.string().optional(),
+  isGoogleLinkStatus: z.string().optional(),
 })
 
 type LocationFormSchemaType = z.infer<typeof LocationFormSchema>

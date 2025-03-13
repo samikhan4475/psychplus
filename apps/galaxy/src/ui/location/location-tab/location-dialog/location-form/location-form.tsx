@@ -1,7 +1,7 @@
 'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Grid } from '@radix-ui/themes'
+import { Grid, Separator } from '@radix-ui/themes'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { FormContainer } from '@/components'
@@ -10,6 +10,7 @@ import { addLocationAction, updateLocationAction } from '../../../actions'
 import { transformOutLocation } from '../../transform'
 import { getInitialLocationValues } from '../../utils'
 import { FaxInput } from './fax-input'
+import { GMBInput } from './gmb-input'
 import { LocationGeneratedName } from './location-generated-name'
 import { LocationTypeRadio } from './location-type-radio'
 import { NameInput } from './name-input'
@@ -60,6 +61,11 @@ const LocationForm = ({ location, isEditable, onClose }: FormDataType) => {
         <TestLocationInput />
         <LocationGeneratedName />
         <PrimaryAddress />
+        <Separator
+          orientation="horizontal"
+          className="col-span-full mt-1 w-full"
+        />
+        <GMBInput />
         <SaveButton isEditable={isEditable} />
       </Grid>
     </FormContainer>

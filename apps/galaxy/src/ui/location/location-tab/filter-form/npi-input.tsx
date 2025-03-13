@@ -18,7 +18,7 @@ const NpiInput = () => {
       <Box className="relative">
         <TextField.Root
           size="1"
-          placeholder="Add NPI"
+          placeholder="Enter NPI"
           {...form.register('npi')}
         />
         <FormFieldError name="npi" className="absolute" />

@@ -7,6 +7,7 @@ import { useStore } from '../store'
 import { transformOutFilters } from '../transform'
 import { getInitialValues } from '../utils'
 import { ClearButton } from './clear-button'
+import { GMBSelect } from './gmb-select'
 import { IdInput } from './id-input'
 import { LocationTypeSelect } from './location-type-select'
 import { NameInput } from './name-input'
@@ -51,6 +52,7 @@ const FilterForm = () => {
       <NpiInput />
       <PhoneInput />
       <StatusSelect />
+      <GMBSelect />
       <ClearButton />
       <SubmitButton />
     </FormContainer>

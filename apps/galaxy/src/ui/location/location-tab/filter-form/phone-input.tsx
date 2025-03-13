@@ -17,7 +17,7 @@ const PhoneInput = () => {
       <FormFieldLabel>Phone</FormFieldLabel>
       <TextField.Root
         size="1"
-        placeholder="Add Phone"
+        placeholder="Enter Phone"
         {...form.register('Phone')}
       />
       <FormFieldError name="Phone" />

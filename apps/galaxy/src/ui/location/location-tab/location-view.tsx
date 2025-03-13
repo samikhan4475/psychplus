@@ -29,7 +29,7 @@ const LocationView = ({ googleApiKey }: LocationViewProps) => {
       <Flex
         direction="column"
         height="100%"
-        className="bg-white h-[calc(100dvh-302px)] rounded-1 shadow-2"
+        className="bg-white h-[calc(100dvh-308px)] rounded-1 shadow-2"
       >
         <LocationTable googleApiKey={googleApiKey} />
         <LocationTablePagination />

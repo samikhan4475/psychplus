@@ -12,6 +12,7 @@ const getInitialValues = (): LocationFormSchemaType => {
     recordStatuses: '',
     stateCode: '',
     Phone: '',
+    isGoogleLinkStatus: '',
   }
 }
 const getInitialLocationValues = (location?: Location): LocationSchemaType => {
@@ -39,10 +40,29 @@ const getInitialLocationValues = (location?: Location): LocationSchemaType => {
     },
     locationNameGenerated: location?.locationNameGenerated ?? '',
     id: location?.id ?? '',
+    locationGoogleLink: location?.locationGoogleLink ?? '',
   }
 }
 
 const getServiceLabel = (options: SelectOptionType[], value: string) =>
   options?.find((option) => option.value === value)?.label
 
-export { getServiceLabel, getInitialValues, getInitialLocationValues }
+function sanitizeFormData<T extends object>(obj: T): T {
+  return Object.fromEntries(
+    Object.entries(obj).filter(
+      ([_, value]) =>
+        value !== undefined &&
+        value !== null &&
+        value !== '' &&
+        value?.length !== 0 &&
+        value !== 'undefined',
+    ),
+  ) as T
+}
+
+export {
+  getServiceLabel,
+  getInitialValues,
+  getInitialLocationValues,
+  sanitizeFormData,
+}

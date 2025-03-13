@@ -17,7 +17,7 @@ const NameInput = () => {
       <FormFieldLabel>Location Name</FormFieldLabel>
       <TextField.Root
         size="1"
-        placeholder="Add Name"
+        placeholder="Enter name"
         {...form.register('locationName')}
       />
       <FormFieldError name="locationName" />
