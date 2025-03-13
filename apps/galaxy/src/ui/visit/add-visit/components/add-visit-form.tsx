@@ -161,8 +161,9 @@ const AddVisitForm = ({
       gender: newPatient.gender ?? '',
       medicalRecordNumber: newPatient.patientMrn ?? '',
       status: newPatient.patientStatus ?? '',
-      state: newPatient.state ?? '',
+      state: newPatient?.state ?? '',
     })
+    form.setValue('state', newPatient?.state?? '')
     setNewPatient(newPatient)
   }
 

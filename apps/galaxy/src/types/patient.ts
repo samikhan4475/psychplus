@@ -1,3 +1,4 @@
+import { PatientAddress } from './address'
 import type { ContactDetails } from './contact'
 import { GenderExpression, GenderOrientation, GenderPronoun } from './gender'
 import { PatientGuardian } from './guardian'
@@ -113,6 +114,7 @@ interface NewPatient {
           number: string
         },
       ]
+      addresses: PatientAddress[]
     }
     staffId?: number
     patientId?: number

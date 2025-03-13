@@ -239,12 +239,13 @@ const AddPatientForm = ({
     form.reset()
   }
 
-  const onPatientAddSuccess = (resData: NewPatient) => {
+  const onPatientAddSuccess = (resData: NewPatient, state?: string) => {
     const data = form.getValues()
     onPatientAdd({
       ...resData,
       dob: data.dateOfBirth.toString(),
       gender: data.gender,
+      state,
     })
   }
 
@@ -253,7 +254,10 @@ const AddPatientForm = ({
     const resData = await createPatient(data)
     setIsLoading(false)
     if (!resData?.accessToken) return
-    onPatientAddSuccess(resData)
+    const homeAddress = data.contactInfo?.addresses?.find(
+      (address) => address.type === 'Home',
+    )
+    onPatientAddSuccess(resData, homeAddress?.state)
     form.reset()
   }
 
