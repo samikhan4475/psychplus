@@ -6,22 +6,20 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { useStore as zustandUseStore } from 'zustand'
 import { FormContainer } from '@/components'
-import { createStaffCommentAction } from '../actions'
+import { addStaffCommentAction } from '../actions'
 import { BILLING_TAB } from '../constants'
 import { AddCommentField, commentSchema, CommentSchemaType } from '../shared'
 import { useStore } from '../store'
 
 const AddCommentForm = () => {
   const store = useStore()
-  const { fetchComments, activeTab, appointmentId } = zustandUseStore(
-    store,
-    (state) => ({
+  const { fetchComments, activeTab, appointmentId, patientId } =
+    zustandUseStore(store, (state) => ({
       fetchComments: state.fetchComments,
       activeTab: state.activeTab,
       patientId: state.patientId,
       appointmentId: state.appointmentId,
-    }),
-  )
+    }))
 
   const form = useForm<CommentSchemaType>({
     resolver: zodResolver(commentSchema),
@@ -37,12 +35,13 @@ const AddCommentForm = () => {
 
     const requestData = {
       ...data,
-      appointmentId: Number(appointmentId),
+      appointmentId: appointmentId ? Number(appointmentId) : 0,
       isTreatmentComment: !isBilling,
       isBillingComment: isBilling,
+      patientId,
     }
 
-    const result = await createStaffCommentAction(requestData)
+    const result = await addStaffCommentAction(requestData)
 
     if (result.state === 'error') {
       toast.error(result.error)

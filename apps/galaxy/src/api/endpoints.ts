@@ -149,6 +149,8 @@ const DELETE_STAFF_COMMENT_ENDPOINT = (commentId: number) =>
   `${API_URL}/api/staffcomments/${commentId}`
 const CREATE_STAFF_COMMENT_ENDPOINT = (appointmentId: number) =>
   `${API_URL}/api/appointments/${appointmentId}/staffcomments`
+const ADD_STAFF_COMMENT_ENDPOINT = (patientId: string) =>
+  `${API_URL}/api/patients/${patientId}/staffcomments`
 const Update_STAFF_COMMENT_ENDPOINT = (commentId: number) =>
   `${API_URL}/api/staffcomments/${commentId}`
 const GET_AVAILABLE_APPOINTMENT_ENDPOINT = `${API_URL}/api/schedules/availability/search`
@@ -1042,4 +1044,5 @@ export {
   INBOX_SIGN_NOTE_ENDPOINT,
   GET_FEATURE_FLAGS_BY_SHORTNAME_ENDPOINT,
   GET_CURRENT_USER_SETTINGS,
+  ADD_STAFF_COMMENT_ENDPOINT,
 }

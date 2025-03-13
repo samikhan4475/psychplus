@@ -75,7 +75,7 @@ const QuickNotesView = async ({
       false,
     ),
     getPatientStaffCommentsAction({
-      appointmentId: Number(appointmentId),
+      patientId,
       recordStatuses: [STAFF_COMMENT_STATUS.Active],
       isTreatment: true,
       isBilling: true,

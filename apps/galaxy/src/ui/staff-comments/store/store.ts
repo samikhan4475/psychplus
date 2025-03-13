@@ -54,7 +54,7 @@ const createStore = (init: StoreInit) => {
 
       const result = await getPatientStaffCommentsAction({
         ...formValues,
-        appointmentId: Number(get().appointmentId),
+        patientId: get().patientId,
       })
 
       if (result.state === 'error') {

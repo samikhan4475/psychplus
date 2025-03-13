@@ -1,11 +1,11 @@
-import { VisitTypes } from '@/types'
+import { ChartNavLink, VisitTypes } from '@/types'
 import { Tabs } from '@/ui/messages/types'
 
 const getNavLinks = (
   appointmentId: string | null,
   visitType: string | null,
   isFeatureLabOrdersFlagEnabled: boolean,
-) => {
+): ChartNavLink[] => {
   const defaultBottomLinks = [
     { label: 'Patient Info', href: '/patient-info' },
     { label: 'Referrals', href: '/referrals' },
@@ -14,7 +14,6 @@ const getNavLinks = (
     {
       label: 'Staff Comments',
       href: '/staff-comments',
-      conditions: [!!appointmentId],
     },
     // { label: 'Rating', href: '/rating' },
     { label: 'Notifications', href: '/notifications' },
