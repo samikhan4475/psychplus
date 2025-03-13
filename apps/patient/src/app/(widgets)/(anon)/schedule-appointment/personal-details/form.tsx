@@ -336,6 +336,11 @@ const PersonalDetailsForm = () => {
                   ))}
                 </Select.Content>
               </Select.Root>
+              {form.formState.errors.gender?.message && (
+                <Text size="2" color="red">
+                  {form.formState.errors.gender?.message}
+                </Text>
+              )}
             </Flex>
             <Flex direction="column" gap="1" className="w-full">
               <Text>Date of birth</Text>
