@@ -3,7 +3,7 @@
 import NextLink from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Flex } from '@radix-ui/themes'
-import { FEATURE_FLAGS } from '@/constants'
+import { FEATURE_FLAGS, MAIN_PAGE_FEATURE_FLAGS } from '@/constants'
 import { useFeatureFlagEnabled } from '@/hooks/use-feature-flag-enabled'
 import { useStore } from '@/store'
 import { cn } from '@/utils'
@@ -13,14 +13,20 @@ const NavigationLinks = () => {
   const isFeatureFlagEnabled = useFeatureFlagEnabled(
     FEATURE_FLAGS.ehr11786EnableGalaxySecondPhaseFeatures,
   )
+  const isRCMFlagEnabled = useFeatureFlagEnabled(
+    MAIN_PAGE_FEATURE_FLAGS.ehr7246EnableClaimManagementTab,
+  )
   return (
     <Flex>
       <NavigationLink href="/" label="Schedule" />
       <NavigationLink href="/patient-lookup" label="Patient Lookup" />
       <NavigationLink href="/rx" label="Rx" />
+      {isRCMFlagEnabled && (
+        <NavigationLink href="/revenue-cycle" label="Revenue Cycle" />
+      )}
+
       {isFeatureFlagEnabled && (
         <>
-          <NavigationLink href="/revenue-cycle" label="Revenue Cycle" />
           <NavigationLink href="/experience" label="Experience" />
           <NavigationLink href="/auto-text" label="Auto Text" />
           <NavigationLink href="/management" label="Management" />
@@ -28,7 +34,6 @@ const NavigationLinks = () => {
             href="/pre-visit-assessment"
             label="Pre-visit Assessment"
           />
-
         </>
       )}
     </Flex>
