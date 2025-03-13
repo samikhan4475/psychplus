@@ -1,6 +1,6 @@
 import { CODESETS } from '@psychplus-v2/constants'
+import { Box, Text } from '@radix-ui/themes'
 import { GOOGLE_MAPS_API_KEY, STRIPE_PUBLISHABLE_KEY } from '@psychplus-v2/env'
-import { Box } from '@radix-ui/themes'
 import { getCodesets, getIsFeatureFlagEnabled, getProfile } from '@/api'
 import { FeatureFlags } from '@/constants'
 import { ProfileStoreProvider } from '@/features/account/profile/store'
@@ -9,6 +9,10 @@ import {
   getInsurancePayers,
   getPatientInsurances,
 } from '@/features/billing/payments/api'
+import {
+  getPatientAllergies,
+  getPatientMedications,
+} from '@/features/medications/api'
 import { getNoteDetails } from '@/features/note/api'
 import { NoteSectionName } from '@/features/note/constants'
 import { NoteStoreProvider } from '@/features/note/store'
@@ -26,6 +30,8 @@ const PreCheckinAssessmentView = async () => {
     profileResponse,
     pharmaciesResponse,
     dawSystemFeatureFlagResponse,
+    patientMedicationsResponse,
+    patientAllergiesResponse,
   ] = await Promise.all([
     getInsurancePayers(),
     getPatientInsurances(),
@@ -42,30 +48,40 @@ const PreCheckinAssessmentView = async () => {
     getProfile(),
     getPatientPharmacies(),
     getIsFeatureFlagEnabled(FeatureFlags.ehr8973EnableDawMedicationApi),
+    getPatientMedications(),
+    getPatientAllergies(),
   ])
 
   if (insurancePayerResponse.state === 'error') {
-    throw new Error(insurancePayerResponse.error)
+    return <Text>{insurancePayerResponse.error}</Text>
   }
 
   if (patientInsurancesResponse.state === 'error') {
-    throw new Error(patientInsurancesResponse.error)
+    return <Text>{patientInsurancesResponse.error}</Text>
   }
 
   if (creditCardsResponse.state === 'error') {
-    throw new Error(creditCardsResponse.error)
+    return <Text>{creditCardsResponse.error}</Text>
   }
 
   if (profileResponse.state === 'error') {
-    throw new Error(profileResponse.error)
+    return <Text>{profileResponse.error}</Text>
   }
 
   if (pharmaciesResponse.state === 'error') {
-    throw new Error(pharmaciesResponse.error)
+    return <Text>{pharmaciesResponse.error}</Text>
   }
 
   if (dawSystemFeatureFlagResponse.state === 'error') {
-    throw new Error(dawSystemFeatureFlagResponse.error)
+    return <Text>{dawSystemFeatureFlagResponse.error}</Text>
+  }
+
+  if (patientMedicationsResponse.state === 'error') {
+    return <Text>{patientMedicationsResponse.error}</Text>
+  }
+
+  if (patientAllergiesResponse.state === 'error') {
+    return <Text>{patientAllergiesResponse.error}</Text>
   }
 
   const questionnaireDashboardResponse = await getNoteDetails({
@@ -74,7 +90,7 @@ const PreCheckinAssessmentView = async () => {
   })
 
   if (questionnaireDashboardResponse.state === 'error') {
-    throw new Error(questionnaireDashboardResponse.error)
+    return <Text>{questionnaireDashboardResponse.error}</Text>
   }
 
   const questionnaireSectionsToShowOnPreCheckin =
@@ -95,7 +111,7 @@ const PreCheckinAssessmentView = async () => {
   })
 
   if (noteDetailsResponse.state === 'error') {
-    throw new Error(noteDetailsResponse.error)
+    return <Text>{noteDetailsResponse.error}</Text>
   }
 
   return (
@@ -110,6 +126,8 @@ const PreCheckinAssessmentView = async () => {
               creditCards={creditCardsResponse.data}
               stripeAPIKey={STRIPE_PUBLISHABLE_KEY}
               pharmacies={pharmaciesResponse.data}
+              medications={patientMedicationsResponse.data}
+              allergies={patientAllergiesResponse.data}
               isDawSystemFeatureFlagEnabled={true} //Currently we have to remove DAW system feature flag dependency
               questionnaireSectionsToShowOnPreCheckin={
                 questionnaireSectionsToShowOnPreCheckin

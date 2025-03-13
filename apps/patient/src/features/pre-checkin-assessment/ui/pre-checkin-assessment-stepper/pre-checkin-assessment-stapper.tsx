@@ -5,6 +5,10 @@ import * as Tabs from '@radix-ui/react-tabs'
 import { Box, Text } from '@radix-ui/themes'
 import { CreditCard } from '@/features/billing/credit-debit-cards/types'
 import { Insurance, InsurancePayer } from '@/features/billing/payments/types'
+import {
+  AllergyDataResponse,
+  PatientMedication,
+} from '@/features/medications/types'
 import { NoteSectionName } from '@/features/note/constants'
 import { PatientPharmacy } from '@/features/pharmacy/types'
 import { PreCheckinAssessmentTabs } from '@/features/pre-checkin-assessment/constants'
@@ -25,13 +29,15 @@ import {
 } from './steps'
 import { PreCheckinAssessmentHeader } from './shared-blocks/pre-checkin-assessment-header'
 
-type PreCheckinAssessmentStapperProps = {
+interface PreCheckinAssessmentStapperProps {
   insurancePayers: InsurancePayer[]
   patientInsurances: Insurance[]
   creditCards: CreditCard[]
   stripeAPIKey: string
   pharmacies: PatientPharmacy[]
-  isDawSystemFeatureFlagEnabled?: boolean
+  medications: PatientMedication[]
+  allergies: AllergyDataResponse[]
+  isDawSystemFeatureFlagEnabled: boolean
   questionnaireSectionsToShowOnPreCheckin: NoteSectionName[]
 }
 
@@ -41,6 +47,8 @@ const PreCheckinAssessmentStapper = ({
   creditCards,
   stripeAPIKey,
   pharmacies,
+  medications,
+  allergies,
   isDawSystemFeatureFlagEnabled,
   questionnaireSectionsToShowOnPreCheckin,
 }: PreCheckinAssessmentStapperProps) => {
@@ -83,7 +91,12 @@ const PreCheckinAssessmentStapper = ({
     },
     {
       id: PreCheckinAssessmentTabs.AllergiesAndMedications,
-      content: <AllergiesAndMedications />,
+      content: (
+        <AllergiesAndMedications
+          medications={medications}
+          allergies={allergies}
+        />
+      ),
     },
     {
       id: PreCheckinAssessmentTabs.Pharmacy,

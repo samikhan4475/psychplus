@@ -1,20 +1,26 @@
 import React from 'react'
 import { Flex } from '@radix-ui/themes'
-import { useForm } from 'react-hook-form'
-import { ToggleableForm } from '@/components-v2'
-import { ToggleableFormContext } from '@/components-v2/toggleable-form/context'
-import CommentBlock from './blocks/comment-block'
-import DoseBlock from './blocks/dose-block'
-import FrequencyBlock from './blocks/frequency-block'
+import { PatientMedication } from '@/features/medications/types/medications'
 import { HeadingBlock } from './blocks/heading-block'
 import MedicationTable from './blocks/medication-table'
-import PrescribedDateBlock from './blocks/prescribed-date-block'
-import RouteBlock from './blocks/route-block'
-import SearchBlock from './blocks/search-block'
-import StatusBlock from './blocks/status-block'
 
-const MedicationView = () => {
-  const form = useForm()
+// import { useForm } from 'react-hook-form'
+// import { ToggleableForm } from '@/components-v2'
+// import { ToggleableFormContext } from '@/components-v2/toggleable-form/context'
+// import CommentBlock from './blocks/comment-block'
+// import DoseBlock from './blocks/dose-block'
+// import FrequencyBlock from './blocks/frequency-block'
+// import PrescribedDateBlock from './blocks/prescribed-date-block'
+// import RouteBlock from './blocks/route-block'
+// import SearchBlock from './blocks/search-block'
+// import StatusBlock from './blocks/status-block'
+
+interface MedicationViewProps {
+  medications: PatientMedication[]
+}
+
+const MedicationView: React.FC<MedicationViewProps> = ({ medications }) => {
+  // const form = useForm()
 
   return (
     <Flex
@@ -22,7 +28,7 @@ const MedicationView = () => {
       gap="1"
       direction="column"
     >
-      <ToggleableForm
+      {/* <ToggleableForm
         form={form}
         submitAction={async (data) => {
           return {
@@ -32,9 +38,9 @@ const MedicationView = () => {
         onSuccess={(data) => {
           console.log('')
         }}
-      >
-        <HeadingBlock />
-        <SearchBlock />
+      > */}
+      <HeadingBlock />
+      {/* <SearchBlock />
         <Flex align={'center'} gap={'4'} className="w-full">
           <DoseBlock />
           <StatusBlock />
@@ -45,12 +51,12 @@ const MedicationView = () => {
         </Flex>
         <Flex className="mb-3 w-full">
           <PrescribedDateBlock />
-        </Flex>
-        <Flex className="mt-10" direction={'column'} gap={'2'} width={'100%'}>
-          <MedicationTable />
-          <CommentBlock />
-        </Flex>
-      </ToggleableForm>
+        </Flex>*/}
+      <Flex className="mt-4" direction={'column'} gap={'2'} width={'100%'}>
+        <MedicationTable medications={medications} />
+        {/* <CommentBlock /> */}
+      </Flex>
+      {/* </ToggleableForm> */}
     </Flex>
   )
 }

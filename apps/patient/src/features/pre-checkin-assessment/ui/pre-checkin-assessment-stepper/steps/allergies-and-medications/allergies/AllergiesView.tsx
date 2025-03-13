@@ -1,19 +1,26 @@
 import React from 'react'
 import { Flex } from '@radix-ui/themes'
-import { useForm } from 'react-hook-form'
-import { ToggleableForm } from '@/components-v2'
-import { ToggleableFormContext } from '@/components-v2/toggleable-form/context'
-import MedicationTable from '../medication/blocks/medication-table'
-import CommentBlock from './blocks/comment-block'
+import { AllergyDataResponse } from '@/features/medications/types'
+import AllergiesTable from '../medication/blocks/allergies-table'
 import { HeadingBlock } from './blocks/heading-block'
-import ObservationBlock from './blocks/observation-block'
-import ReactionBlock from './blocks/reaction-block'
-import SearchBlock from './blocks/search-block'
-import SeverityBlock from './blocks/severity-block'
-import StatusBlock from './blocks/status-block'
 
-const AllergiesView = () => {
-  const form = useForm()
+// Comment out for phase 2
+// import { useForm } from 'react-hook-form'
+// import { ToggleableForm } from '@/components-v2'
+// import { ToggleableFormContext } from '@/components-v2/toggleable-form/context'
+// import CommentBlock from './blocks/comment-block'
+// import ObservationBlock from './blocks/observation-block'
+// import ReactionBlock from './blocks/reaction-block'
+// import SearchBlock from './blocks/search-block'
+// import SeverityBlock from './blocks/severity-block'
+// import StatusBlock from './blocks/status-block'
+
+interface AllergiesViewProps {
+  allergies: AllergyDataResponse[]
+}
+
+const AllergiesView: React.FC<AllergiesViewProps> = ({ allergies }) => {
+  // const form = useForm()
 
   return (
     <Flex
@@ -21,7 +28,7 @@ const AllergiesView = () => {
       gap="1"
       direction="column"
     >
-      <ToggleableForm
+      {/* <ToggleableForm
         form={form}
         submitAction={async (data) => {
           return {
@@ -31,9 +38,9 @@ const AllergiesView = () => {
         onSuccess={(data) => {
           console.log('')
         }}
-      >
-        <HeadingBlock />
-        <SearchBlock />
+      > */}
+      <HeadingBlock />
+      {/* <SearchBlock />
         <Flex align={'center'} gap={'4'} className="w-full">
           <SeverityBlock />
           <StatusBlock />
@@ -41,12 +48,12 @@ const AllergiesView = () => {
         <Flex align={'center'} gap={'4'} className="mb-3 w-full">
           <ReactionBlock />
           <ObservationBlock />
-        </Flex>
-        <Flex className="mt-10" direction={'column'} gap={'2'} width={'100%'}>
-          <MedicationTable />
-          <CommentBlock />
-        </Flex>
-      </ToggleableForm>
+        </Flex> */}
+      <Flex className="mt-4" direction={'column'} gap={'2'} width={'100%'}>
+        <AllergiesTable allergies={allergies} />
+        {/* <CommentBlock /> */}
+      </Flex>
+      {/* </ToggleableForm> */}
     </Flex>
   )
 }
