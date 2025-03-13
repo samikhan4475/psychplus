@@ -32,10 +32,6 @@ const BpdBlock = () => {
               key={option.value}
               data={option}
               isSelected={isSelected}
-              fontSize="14px"
-              rounded={2}
-              fontWeight="light"
-              bgColor="pp-gray-5"
               formField="bpd"
               complaintValue='ccBpd'
             />

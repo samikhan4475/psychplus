@@ -1,8 +1,8 @@
 import { Flex, Text } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
 import { DetailsType } from '@/components-v2/selectable-chip-details'
-import PillBlock from '../../../shared-blocks/pill-block'
 import { useGroupSelection } from '@/hooks/use-group-selection'
+import PillBlock from '../../../shared-blocks/pill-block'
 
 const BLOCK_ID = 'constitutional'
 const BLOCK_TITLE = 'Constitutional'
@@ -45,11 +45,7 @@ const ConstitutionalBlock = () => {
               key={option.value}
               data={option}
               isSelected={isSelected}
-              fontSize="14px"
               onToggle={handleOptionSelect}
-              rounded={2}
-              fontWeight="light"
-              bgColor="pp-gray-5"
               formField={BLOCK_ID}
             />
           )

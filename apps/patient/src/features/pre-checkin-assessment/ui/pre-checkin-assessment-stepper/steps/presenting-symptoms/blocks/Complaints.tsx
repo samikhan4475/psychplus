@@ -117,10 +117,6 @@ const Complaints = () => {
               key={option.value}
               data={option}
               isSelected={isSelected}
-              fontSize="14px"
-              rounded={6}
-              fontWeight="medium"
-              bgColor="none"
               formField="chiefComplaint"
             />
           )

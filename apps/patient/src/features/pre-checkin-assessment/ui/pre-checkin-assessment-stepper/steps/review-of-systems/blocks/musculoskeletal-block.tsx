@@ -58,10 +58,6 @@ const MusculoskeletalBlock = () => {
               data={option}
               isSelected={isSelected}
               onToggle={handleOptionSelect}
-              fontSize="14px"
-              rounded={2}
-              fontWeight="light"
-              bgColor="pp-gray-5"
               formField={BLOCK_ID}
             />
           )

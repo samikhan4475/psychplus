@@ -31,11 +31,7 @@ interface PillBlockProps {
     }
   }
   isSelected: boolean
-  rounded: number
-  fontSize: string
-  fontWeight: 'bold' | 'light' | 'regular' | 'medium'
   onToggle?: (value: string) => void
-  bgColor: string
   formField: string
   complaintValue?: string
   relatedField?: string
@@ -44,11 +40,7 @@ interface PillBlockProps {
 const PillBlock = ({
   data,
   isSelected,
-  rounded,
-  fontSize,
-  fontWeight,
   onToggle,
-  bgColor,
   formField,
   complaintValue,
   relatedField,
@@ -89,25 +81,19 @@ const PillBlock = ({
     }
   }
 
-  const colorMap: Record<string, string> = {
-    'pp-gray-5': 'bg-pp-gray-5',
-    'pp-blue-3': 'bg-pp-blue-3',
-  }
-  const bgClass = isSelected ? '' : colorMap[bgColor] || 'bg-default'
-
   return (
     <Flex className="flex-row items-center">
       <Flex
         onClick={handleToggle}
-        className={`cursor-pointer rounded-${rounded} border ${
+        className={`cursor-pointer rounded-6 border border-gray-8 bg-[white] px-4 py-2 ${
           isSelected
             ? 'text-white border-pp-blue-3 bg-pp-blue-3'
-            : `border-pp-gray-4 ${bgClass}`
-        } px-[10px] py-[6px]`}
+            : `border-pp-gray-4`
+        } `}
       >
         <Text
-          className={`whitespace-nowrap text-[${fontSize}] capitalize`}
-          weight={fontWeight}
+          className={`text-[14}] whitespace-nowrap capitalize`}
+          weight={'medium'}
         >
           {data.label}
         </Text>
