@@ -1,4 +1,3 @@
-import { Flex, Text } from '@radix-ui/themes'
 import { DataTablePagination } from '@/components'
 import { SCHEDULER_PAGE_SIZE_LIMIT } from '../constants'
 import { useStore } from './store'

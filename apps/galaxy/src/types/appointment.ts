@@ -149,6 +149,7 @@ interface Appointment {
   cptModifiersCodes: CptCode[]
   providerStaffId?: number
   groupTherapyTypeCode: string
+  paymentErrorMessage?:string
   isPatientHadAnyCheckedOutVisit?: boolean
   isNoteSignedByProviderInLastYear?: boolean
   providerUserId?: number

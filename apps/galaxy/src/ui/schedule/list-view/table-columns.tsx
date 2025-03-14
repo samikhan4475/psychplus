@@ -20,6 +20,7 @@ import {
   RoomSelectCell,
   TimeCell,
   UnitSelectCell,
+  CopayDueCell,
   VerificationStatusCell,
   VisitMediumCell,
 } from './table-cells'
@@ -436,9 +437,7 @@ const columns : ColumnDef<Appointment>[] =
               label="Due"
             />
           ),
-          cell: ({ row }) => (
-            <TextCell hasPayment>{row.original.copayDue}</TextCell>
-          ),
+          cell: CopayDueCell,
           enableHiding: true,
         },
         {
