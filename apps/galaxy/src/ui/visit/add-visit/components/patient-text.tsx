@@ -2,7 +2,7 @@ import { parseDate } from '@internationalized/date'
 import { TextField } from '@radix-ui/themes'
 import { FormFieldContainer, FormFieldLabel } from '@/components'
 import { NewPatient } from '@/types'
-import { getAgeFromDate } from '@/utils'
+import { formatDate, getAgeFromDate } from '@/utils'
 
 const PatientText = ({ patient }: { patient: NewPatient }) => {
   const {
@@ -15,12 +15,14 @@ const PatientText = ({ patient }: { patient: NewPatient }) => {
   const name = `${legalName.firstName} ${
     legalName.middleName ? legalName.middleName + ' ' : ''
   }${legalName.lastName}`
-  const age = dob ? getAgeFromDate(parseDate(dob)) : ''
+  const age = dob
+    ? getAgeFromDate(parseDate(formatDate(dob, 'yyyy-MM-dd')))
+    : ''
   const value = [
     name && `${name}`,
     age && `${age} yo`,
     gender && `${gender[0]}`,
-    dob && `| ${dob}`,
+    dob && `| ${formatDate(dob, 'MM-dd-yyyy') ?? ''}`,
     patientMrn && `| ${patientMrn}`,
     patientStatus && `| ${patientStatus}`,
   ]
