@@ -235,10 +235,17 @@ const useStore = create<Store>((set, get) => ({
   prev: () => {
     const page = get().page - 1
 
-    set({
-      data: get().pageCache[page],
+    if (get().pageCache[page]) {
+      return set({
+        data: get().pageCache[page],
+        page,
+      })
+    }
+    get().fetchSchedulingHistory(
+      get().patientId,
+      get().schedulingHistoryPayload,
       page,
-    })
+    )
   },
   jumpToPage: (page: number) => {
     if (page < 1) {
