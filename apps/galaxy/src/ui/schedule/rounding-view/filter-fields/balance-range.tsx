@@ -2,34 +2,32 @@
 
 import { TextField } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
-import { useFiltersContext } from '../context'
-import { BookedAppointmentsSchemaType } from '../schema'
-import { FieldLabel, FormFieldContainer } from '../shared'
-import { SchedulerFilters } from '../types'
+import { useFiltersContext } from '../../context'
+import { BookedAppointmentsSchemaType } from '../../schema'
+import { FieldLabel, FormFieldContainer } from '../../shared'
+import { SchedulerFilters } from '../../types'
 
-const CoInsuranceRange = () => {
+const BalanceRange = () => {
   const form = useFormContext<BookedAppointmentsSchemaType>()
   const { filters } = useFiltersContext()
-  if (!filters.includes(SchedulerFilters.CoInsurance)) return null
+  if (!filters.includes(SchedulerFilters.Balance)) return null
 
   return (
     <FormFieldContainer>
-      <FieldLabel className="min-w-10">Co-Ins</FieldLabel>
+      <FieldLabel>Balance</FieldLabel>
       <TextField.Root
-        className="h-6"
         size="1"
         placeholder="$ From"
         type="number"
-        {...form.register('coInsuranceDueMin', {
+        {...form.register('balanceDueMin', {
           setValueAs: (val) => val || undefined,
         })}
       />
       <TextField.Root
-        className="h-6"
         size="1"
         placeholder="$ To"
         type="number"
-        {...form.register('coInsuranceDueMax', {
+        {...form.register('balanceDueMax', {
           setValueAs: (val) => val || undefined,
         })}
       />
@@ -37,4 +35,4 @@ const CoInsuranceRange = () => {
   )
 }
 
-export { CoInsuranceRange }
+export { BalanceRange }

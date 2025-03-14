@@ -2,8 +2,8 @@
 
 import { useFormContext } from 'react-hook-form'
 import { DatePickerInput } from '@/components'
-import { BookedAppointmentsSchemaType } from '../schema'
-import { FieldLabel, FormFieldContainer } from '../shared'
+import { BookedAppointmentsSchemaType } from '../../schema'
+import { FieldLabel, FormFieldContainer } from '../../shared'
 
 const EndDateInput = () => {
   const form = useFormContext<BookedAppointmentsSchemaType>()

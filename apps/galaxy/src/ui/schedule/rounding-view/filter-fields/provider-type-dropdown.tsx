@@ -5,10 +5,10 @@ import { useFormContext } from 'react-hook-form'
 import { MultiSelectField } from '@/components'
 import { CODE_NOT_SET, CODESETS } from '@/constants'
 import { useCodesetOptions } from '@/hooks'
-import { useFiltersContext } from '../context'
-import { BookedAppointmentsSchemaType } from '../schema'
-import { FieldLabel, FormFieldContainer } from '../shared'
-import { SchedulerFilters } from '../types'
+import { useFiltersContext } from '../../context'
+import { BookedAppointmentsSchemaType } from '../../schema'
+import { FieldLabel, FormFieldContainer } from '../../shared'
+import { SchedulerFilters } from '../../types'
 
 const ProviderTypeDropdown = () => {
   const { filters } = useFiltersContext()

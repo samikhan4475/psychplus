@@ -3,8 +3,8 @@
 import { CalendarDate } from '@internationalized/date'
 import { useFormContext } from 'react-hook-form'
 import { DatePickerInput } from '@/components'
-import { BookedAppointmentsSchemaType } from '../schema'
-import { FieldLabel, FormFieldContainer } from '../shared'
+import { BookedAppointmentsSchemaType } from '../../schema'
+import { FieldLabel, FormFieldContainer } from '../../shared'
 
 const StartDateInput = () => {
   const form = useFormContext<BookedAppointmentsSchemaType>()

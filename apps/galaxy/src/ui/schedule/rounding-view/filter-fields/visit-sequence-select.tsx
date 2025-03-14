@@ -4,11 +4,11 @@ import { MultiSelectField } from '@/components'
 import { CODESETS } from '@/constants'
 import { useCodesetOptions } from '@/hooks'
 import { useFormContext } from 'react-hook-form'
-import { useFiltersContext } from '../context'
-import { useVisitSequenceCodeset } from '../hooks'
-import { BookedAppointmentsSchemaType } from '../schema'
-import { FieldLabel, FormFieldContainer } from '../shared'
-import { SchedulerFilters } from '../types'
+import { useFiltersContext } from '../../context'
+import { useVisitSequenceCodeset } from '../../hooks'
+import { BookedAppointmentsSchemaType } from '../../schema'
+import { FieldLabel, FormFieldContainer } from '../../shared'
+import { SchedulerFilters } from '../../types'
 
 const VisitSequenceSelect = () => {
   const form = useFormContext<BookedAppointmentsSchemaType>()

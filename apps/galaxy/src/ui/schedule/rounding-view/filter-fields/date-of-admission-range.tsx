@@ -1,15 +1,15 @@
 'use client'
 
 import { Flex } from '@radix-ui/themes'
-import { useFiltersContext } from '../context'
+import { useFiltersContext } from '../../context'
 import {
   DateRangeEnd,
   DateRangeError,
   DateRangeStart,
   FieldLabel,
   FormFieldContainer,
-} from '../shared'
-import { SchedulerFilters } from '../types'
+} from '../../shared'
+import { SchedulerFilters } from '../../types'
 
 const DateOfAdmissionRange = () => {
   const { filters } = useFiltersContext()

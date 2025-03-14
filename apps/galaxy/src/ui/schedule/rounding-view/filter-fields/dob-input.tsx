@@ -2,7 +2,7 @@
 
 import { getLocalTimeZone, today } from '@internationalized/date'
 import { DatePickerInput } from '@/components'
-import { FieldLabel, FormFieldContainer } from '../shared'
+import { FieldLabel, FormFieldContainer } from '../../shared'
 
 const DateOfBirthInput = () => {
   return (

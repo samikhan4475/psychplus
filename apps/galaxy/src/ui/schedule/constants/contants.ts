@@ -147,6 +147,7 @@ const CLICK_AVAILABLE_SLOTS =
 const LIST_VIEW_FILTERS_KEY = 'ListViewFilters'
 const CALENDAR_VIEW_FILTERS_KEY = 'CalendarViewFilters'
 const SCHEDULER_VIEW_FILTERS_KEY = 'SchedulerViewFilters'
+const ROUNDING_VIEW_FILTERS_KEY = 'RoundingViewFilters'
 
 enum StatusCode {
   NoPermission = 406,
@@ -158,6 +159,7 @@ enum CategoryValue {
   ListView = 'FieldValue_Sch_ListView',
   CalendarView = 'FieldValue_Sch_CalendarView',
   SchedulerView = 'FieldValue_Sch_SchedulerView',
+  RoundingView = 'FieldValue_Sch_RoundingView',
 }
 
 export {
@@ -189,4 +191,5 @@ export {
   LIST_VIEW_FILTERS_KEY,
   CALENDAR_VIEW_FILTERS_KEY,
   SCHEDULER_VIEW_FILTERS_KEY,
+  ROUNDING_VIEW_FILTERS_KEY,
 }

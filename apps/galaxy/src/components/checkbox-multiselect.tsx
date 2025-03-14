@@ -197,7 +197,10 @@ const MultiSelectField = ({
           ) : (
             <>
               {includeAllOption && (
-                <DropdownMenu.Item className="bg-white h-6 p-0">
+                <DropdownMenu.Item
+                  className="bg-white h-6 p-0"
+                  onSelect={(e) => e.preventDefault()}
+                >
                   <Text
                     as="label"
                     size="1"
@@ -220,6 +223,7 @@ const MultiSelectField = ({
                 <DropdownMenu.Item
                   key={item.value}
                   className="bg-white h-6 p-0"
+                  onSelect={(e) => e.preventDefault()}
                 >
                   <Text
                     as="label"

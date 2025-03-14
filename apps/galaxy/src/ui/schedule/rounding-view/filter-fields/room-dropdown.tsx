@@ -1,9 +1,9 @@
 'use client'
 
 import { FormFieldLabel, SelectInput } from '@/components'
-import { FormFieldContainer } from '../shared'
-import { useFiltersContext } from '../context'
-import { SchedulerFilters } from '../types'
+import { FormFieldContainer } from '../../shared'
+import { useFiltersContext } from '../../context'
+import { SchedulerFilters } from '../../types'
 
 const options = [
   {

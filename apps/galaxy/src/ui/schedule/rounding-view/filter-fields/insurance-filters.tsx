@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 import { SelectOptionType } from '@/types'
-import { getInsurancePlanOptionsAction } from '../client-actions'
+import { getInsurancePlanOptionsAction } from '../../client-actions'
 import { PrimaryInsuranceDropdown } from './primary-insurance-select'
 import { SecondaryInsuranceDropdown } from './secondary-insurance-select'
 

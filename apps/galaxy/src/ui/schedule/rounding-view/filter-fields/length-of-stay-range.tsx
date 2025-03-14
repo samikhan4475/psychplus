@@ -2,10 +2,10 @@
 
 import { TextField } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
-import { FieldLabel, FormFieldContainer } from '../shared'
-import { useFiltersContext } from '../context'
-import { BookedAppointmentsSchemaType } from '../schema'
-import { SchedulerFilters } from '../types'
+import { FieldLabel, FormFieldContainer } from '../../shared'
+import { useFiltersContext } from '../../context'
+import { BookedAppointmentsSchemaType } from '../../schema'
+import { SchedulerFilters } from '../../types'
 
 const LengthOfStayRange = () => {
   const form = useFormContext<BookedAppointmentsSchemaType>()

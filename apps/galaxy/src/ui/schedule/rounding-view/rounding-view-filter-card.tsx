@@ -5,7 +5,6 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Flex, Grid } from '@radix-ui/themes'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { FormContainer } from '@/components'
-import { sanitizeFormData } from '@/utils'
 import { ROUNDING_FILTERS } from '../constants'
 import { FiltersContext } from '../context'
 import {
@@ -18,42 +17,68 @@ import {
   FiltersButtonsGroup,
 } from '../shared'
 import { useStore as useRootStore } from '../store'
-import { getCalendarDateLabel, getDateString, isDirty } from '../utils'
-import { AgeInput } from './age-input'
-import { BalanceRange } from './balance-range'
-import { CoInsuranceRange } from './co-insurance-range'
-import { CoPayRange } from './copay-range'
-import { CptCodeInput } from './cpt-code-input'
-import { DateOfAdmissionRange } from './date-of-admission-range'
-import { DiagnosisInput } from './diagnosis-input'
-import { DateOfBirthInput } from './dob-input'
-import { EndDateInput } from './end-date-input'
-import { GenderSelect } from './gender-select'
-import { InsuranceFilters } from './insurance-filters'
-import { InsuranceVerificationSelect } from './insurance-verification'
-import { LastCoverageDateRange } from './last-coverage-date-range'
-import { LegalStatusSelect } from './legal-status-select'
-import { LengthOfStayRange } from './length-of-stay-range'
-import { LocationDropdown } from './location-dropdown'
-import { NameInput } from './name-input'
-import { NoteSignedSelect } from './note-signed-select'
-import { PatientStatusSelect } from './patient-status-select'
-import { ProviderTypeDropdown } from './provider-type-dropdown'
-import { ServiceDropdown } from './service-dropdown'
-import { StartDateInput } from './start-date-input'
+import { defaultValues } from './default-values'
+import {
+  AgeInput,
+  BalanceRange,
+  CoInsuranceRange,
+  CoPayRange,
+  CptCodeInput,
+  DateOfAdmissionRange,
+  DateOfBirthInput,
+  DiagnosisInput,
+  EndDateInput,
+  GenderSelect,
+  InsuranceFilters,
+  InsuranceVerificationSelect,
+  LastCoverageDateRange,
+  LegalStatusSelect,
+  LengthOfStayRange,
+  LocationDropdown,
+  NameInput,
+  NoteSignedSelect,
+  PatientStatusSelect,
+  ProviderTypeDropdown,
+  ServiceDropdown,
+  StartDateInput,
+  VisitMediumSelect,
+  VisitSequenceSelect,
+  VisitStatusSelect,
+  VisitTypeSelect,
+} from './filter-fields'
 import { useStore } from './store'
-import { VisitMediumSelect } from './visit-medium-select'
-import { VisitSequenceSelect } from './visit-sequence-select'
-import { VisitStatusSelect } from './visit-status'
-import { VisitTypeSelect } from './visit-type-select'
+import {
+  transformFilterValues,
+  transformParamsToFilterValues,
+  transformSettingToFilterValues,
+} from './transform'
 
 const RoundingViewFilterCard = () => {
   const [filters, setFilters] = useState<string[]>(ROUNDING_FILTERS)
+  const [hasHydrated, setHasHydrated] = useState<boolean>(false)
   const { cachedFilters, saveFilters } = useRootStore((state) => ({
     cachedFilters: state.cachedFiltersRounding,
     saveFilters: state.saveRoundingFilters,
   }))
-  const fetchData = useStore((state) => state.fetchAppointments)
+  const {
+    fetchData,
+    loading,
+    isSettingsSaving,
+    fetchUserSetting,
+    persistedFormData,
+    setPersistedFormData,
+    fetchAppointmentsWithSettings,
+    updateUserFilterSettings,
+  } = useStore((state) => ({
+    fetchData: state.fetchAppointments,
+    loading: state.loading,
+    isSettingsSaving: state.isSettingsSaving,
+    fetchUserSetting: state.fetchUserSetting,
+    persistedFormData: state.persistedFormData,
+    setPersistedFormData: state.setPersistedFormData,
+    fetchAppointmentsWithSettings: state.fetchAppointmentsWithSettings,
+    updateUserFilterSettings: state.updateUserFilterSettings,
+  }))
 
   const ctxValue = useMemo(
     () => ({
@@ -66,85 +91,58 @@ const RoundingViewFilterCard = () => {
   const form = useForm<BookedAppointmentsSchemaType>({
     resolver: zodResolver(bookedAppointmentsSchema),
     criteriaMode: 'all',
-    defaultValues: {
-      startingDate: undefined,
-      endingDate: undefined,
-      name: '',
-      age: undefined,
-      gender: '',
-      dateOfBirth: undefined,
-      patientStatuses: [],
-      locationIds: [],
-      serviceIds: [],
-      providerTypes: [],
-      unitIds: [],
-      roomIds: [],
-      stateIds: [],
-      groupIds: [],
-      primaryInsuranceNames: [],
-      secondaryInsuranceNames: [],
-      visitTypes: [],
-      visitSequences: [],
-      visitMediums: [],
-      appointmentStatuses: [],
-      patientInsuranceVerificationStatuses: [],
-      diagnosisCode: '',
-      cptCode: '',
-      dateOfAdmissionStart: undefined,
-      dateOfAdmissionEnd: undefined,
-      lengthOfStayMin: undefined,
-      lengthOfStayMax: undefined,
-      lastCoverageDateStart: undefined,
-      lastCoverageDateEnd: undefined,
-      legalStatuses: [],
-      copayDueMin: undefined,
-      copayDueMax: undefined,
-      coInsuranceDueMin: undefined,
-      coInsuranceDueMax: undefined,
-      balanceDueMin: undefined,
-      balanceDueMax: undefined,
-      noteSignedStatuses: [],
-    },
+    defaultValues,
+    disabled: loading || isSettingsSaving,
   })
-  const { dirtyFields } = form.formState
 
   useEffect(() => {
+    useStore.persist.rehydrate()
+    setHasHydrated(true)
+  }, [])
+
+  useEffect(() => {
+    if (!hasHydrated) return
+    const fetchData = async () => {
+      const map = await fetchUserSetting()
+      if (persistedFormData) {
+        const filterValues = transformParamsToFilterValues(persistedFormData)
+        form.reset({ ...defaultValues, ...filterValues })
+        applyFilters(filterValues)
+      } else if (map && map.size > 0) {
+        const filterValues = transformSettingToFilterValues(map)
+        form.reset({ ...defaultValues, ...filterValues })
+        fetchAppointmentsWithSettings(map)
+      }
+    }
     if (cachedFilters.length > 0) {
       setFilters(cachedFilters)
     }
-  }, [])
+    fetchData()
+  }, [hasHydrated])
+
+  const applyFilters = (
+    data: BookedAppointmentsSchemaType,
+    persist?: boolean,
+  ) => {
+    const transformedData = transformFilterValues(data)
+    if (persist) {
+      setPersistedFormData(transformedData)
+    }
+    fetchData(transformedData, 1)
+  }
 
   const onSubmit: SubmitHandler<BookedAppointmentsSchemaType> = (data) => {
-    if (!isDirty(dirtyFields)) return
-    const {
-      startingDate,
-      endingDate,
-      dateOfBirth,
-      dateOfAdmissionStart,
-      dateOfAdmissionEnd,
-      lastCoverageDateStart,
-      lastCoverageDateEnd,
-    } = data
-    const transformedData = {
-      ...data,
-      startingDate: getDateString(startingDate),
-      endingDate: getDateString(endingDate?.add({ days: 1 })),
-      dateOfBirth: getCalendarDateLabel(dateOfBirth),
-      dateOfAdmissionStart: getDateString(dateOfAdmissionStart),
-      dateOfAdmissionEnd: getDateString(dateOfAdmissionEnd?.add({ days: 1 })),
-      lastCoverageDateStart: getDateString(lastCoverageDateStart),
-      lastCoverageDateEnd: getDateString(lastCoverageDateEnd?.add({ days: 1 })),
-      providerIds: [],
-      bookedAppointmentTime: '',
-    }
-
-    const sanitizedParams = sanitizeFormData(transformedData)
-    fetchData(sanitizedParams, 1)
+    applyFilters(data, true)
   }
 
   const resetFilters = () => {
-    if (!isDirty(dirtyFields)) return
-    form.reset()
+    form.reset(defaultValues)
+  }
+
+  const saveSettings = () => {
+    const values = form.getValues()
+    const transformedValues = transformFilterValues(values)
+    updateUserFilterSettings(transformedValues)
   }
 
   return (
@@ -190,7 +188,10 @@ const RoundingViewFilterCard = () => {
               <CoInsuranceRange />
               <BalanceRange />
               <NoteSignedSelect />
-              <FiltersButtonsGroup resetFilters={resetFilters}>
+              <FiltersButtonsGroup
+                resetFilters={resetFilters}
+                saveSettings={saveSettings}
+              >
                 <AddFiltersPopover
                   view="Rounding View"
                   onSave={saveFilters}

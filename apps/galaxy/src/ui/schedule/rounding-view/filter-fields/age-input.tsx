@@ -3,8 +3,8 @@
 import { Flex, TextField } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
 import { FormFieldError } from '@/components'
-import { BookedAppointmentsSchemaType } from '../schema'
-import { FieldLabel, FormFieldContainer } from '../shared'
+import { BookedAppointmentsSchemaType } from '../../schema'
+import { FieldLabel, FormFieldContainer } from '../../shared'
 
 const AgeInput = () => {
   const form = useFormContext<BookedAppointmentsSchemaType>()

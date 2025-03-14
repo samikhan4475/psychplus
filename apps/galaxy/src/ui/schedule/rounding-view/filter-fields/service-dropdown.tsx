@@ -3,12 +3,12 @@
 import { useEffect, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 import { MultiSelectField } from '@/components'
-import { useServiceCodesMap } from '../hooks'
-import { FieldLabel, FormFieldContainer } from '../shared'
-import { Option } from '../types'
-import { getServiceFilterOptions } from '../utils'
-import { getLocationServicesAction } from '../client-actions'
-import { BookedAppointmentsSchemaType } from '../schema'
+import { useServiceCodesMap } from '../../hooks'
+import { FieldLabel, FormFieldContainer } from '../../shared'
+import { Option } from '../../types'
+import { getServiceFilterOptions } from '../../utils'
+import { getLocationServicesAction } from '../../client-actions'
+import { BookedAppointmentsSchemaType } from '../../schema'
 
 const ServiceDropdown = () => {
   const form = useFormContext<BookedAppointmentsSchemaType>()

@@ -68,7 +68,16 @@ const ListViewFilterCard = () => {
     setPersistedFormData,
     loading,
     isSettingsSaving,
-  } = useStore()
+  } = useStore((state) => ({
+    fetchAppointments: state.fetchAppointments,
+    fetchAppointmentsWithSettings: state.fetchAppointmentsWithSettings,
+    fetchUserSetting: state.fetchUserSetting,
+    updateUserFilterSettings: state.updateUserFilterSettings,
+    persistedFormData: state.persistedFormData,
+    setPersistedFormData: state.setPersistedFormData,
+    loading: state.loading,
+    isSettingsSaving: state.isSettingsSaving,
+  }))
   const [hasHydrated, setHasHydrated] = useState<boolean>(false)
   const { cachedFilters, saveFilters } = useRootStore((state) => ({
     cachedFilters: state.cachedFiltersList,

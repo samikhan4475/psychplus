@@ -17,6 +17,8 @@ interface DropdownSelectProps {
   disabled?: boolean
   shouldDirty?: boolean
   loading?: boolean
+  fieldValue?: string
+  onValueChange?: (val: string) => void
 }
 const DropdownSelect = ({
   options,
@@ -28,10 +30,12 @@ const DropdownSelect = ({
   disabled,
   shouldDirty = false,
   loading,
+  fieldValue,
+  onValueChange,
 }: DropdownSelectProps) => {
   const form = useFormContext()
   const ref = useRef<HTMLButtonElement>(null)
-  const value = form.watch(field)
+  const value = fieldValue? fieldValue: form.watch(field)
   const findLabel = useCallback(
     (value: string) => {
       const selectedOption = options?.find((option) => option?.value === value)
@@ -85,7 +89,11 @@ const DropdownSelect = ({
                 },
               )}
               onSelect={() => {
-                form.setValue(field, opt?.value, { shouldDirty })
+                if (onValueChange) {
+                  onValueChange(opt.value)
+                } else {
+                  form.setValue(field, opt?.value, { shouldDirty })
+                }
               }}
             >
               <Flex justify="start" align="center" px="3" position="relative">

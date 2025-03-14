@@ -4,8 +4,8 @@ import { useFormContext } from 'react-hook-form'
 import { MultiSelectField } from '@/components'
 import { CODESETS } from '@/constants'
 import { useCodesetOptions } from '@/hooks'
-import { BookedAppointmentsSchemaType } from '../schema'
-import { FieldLabel, FormFieldContainer } from '../shared'
+import { BookedAppointmentsSchemaType } from '../../schema'
+import { FieldLabel, FormFieldContainer } from '../../shared'
 
 const PatientStatusSelect = () => {
   const form = useFormContext<BookedAppointmentsSchemaType>()

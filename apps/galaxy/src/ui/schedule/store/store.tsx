@@ -59,7 +59,7 @@ const useStore = create<Store>()(
       name: ROUNDING_FILTERS_KEY,
       storage: createJSONStorage(() => sessionStorage),
       partialize: (state) => ({
-        cachedFilters: state.cachedFiltersRounding,
+        cachedFiltersRounding: state.cachedFiltersRounding,
         cachedFiltersList: state.cachedFiltersList,
         activeTab: state.activeTab,
       }),

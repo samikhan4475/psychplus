@@ -2,8 +2,8 @@
 
 import { TextField } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
-import { FieldLabel, FormFieldContainer } from '../shared'
-import { BookedAppointmentsSchemaType } from '../schema'
+import { FieldLabel, FormFieldContainer } from '../../shared'
+import { BookedAppointmentsSchemaType } from '../../schema'
 
 const NameInput = () => {
   const form = useFormContext<BookedAppointmentsSchemaType>()
