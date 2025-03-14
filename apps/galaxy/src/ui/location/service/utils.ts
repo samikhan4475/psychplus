@@ -1,11 +1,42 @@
-import { Encounter, Location, SharedCode, StaffResource } from '@/types'
+import {
+  Encounter,
+  Location,
+  SelectOptionType,
+  SharedCode,
+  StaffResource,
+} from '@/types'
 import { ServiceSchemaType } from './add-service-dialog'
 import { ServiceFiltersSchemaType } from './filter-form/schema'
-import { CosignerType } from './types'
+import { CosignerType, PrimayProviderType, Services } from './types'
 
 const getAttributeValue = (code: SharedCode, name: string) =>
   code?.attributes?.find((attr) => attr?.name === name)?.value
 
+const isMaxBookingFrequencyDisabled = (serviceOffered?: string) => {
+  if (!serviceOffered) {
+    return true
+  }
+  return [
+    Services.Psychiatry,
+    Services.Therapy,
+    Services.GroupTherapy,
+    Services.CouplesFamilyTherapy,
+  ].includes(serviceOffered as Services)
+}
+
+const getMaxBookingFrequency = (service: string, code: SharedCode) => {
+  const maxBookingFrequency =
+    getAttributeValue(code, 'MaxBookingFrequency') ?? ''
+  const { CouplesFamilyTherapy, GroupTherapy, Psychiatry, Therapy } = Services
+  if (
+    [CouplesFamilyTherapy, GroupTherapy, Psychiatry, Therapy].includes(
+      service as Services,
+    )
+  ) {
+    return maxBookingFrequency
+  }
+  return ''
+}
 const getCosigner = (
   cosigners: StaffResource[],
   cosignerId?: string,
@@ -36,6 +67,18 @@ const getVisitTypesByIds = (visitTypes: Encounter[], visitIds: number[]) =>
     }
     return result
   }, [] as Encounter[]) ?? []
+
+const getPrimaryProviderTypeOptions = (
+  providerTypes: SelectOptionType[],
+): SelectOptionType[] =>
+  providerTypes?.filter((item) =>
+    [
+      PrimayProviderType.InternalMedicine,
+      PrimayProviderType.PMNR,
+      PrimayProviderType.Psychiatrist,
+      PrimayProviderType.FamilyMedicine,
+    ].includes(item?.value as PrimayProviderType),
+  )
 
 const getInitialValues = (location: Location): ServiceSchemaType => ({
   locationId: location?.id,
@@ -92,4 +135,7 @@ export {
   getInitialValues,
   getVisitTypesByIds,
   getInitialFilterValues,
+  isMaxBookingFrequencyDisabled,
+  getMaxBookingFrequency,
+  getPrimaryProviderTypeOptions,
 }

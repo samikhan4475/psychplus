@@ -1,13 +1,16 @@
 'use client'
 
 import { Path, useFormContext } from 'react-hook-form'
-import { FormFieldContainer, FormFieldLabel, SelectInput } from '@/components'
+import {
+  FormFieldContainer,
+  FormFieldError,
+  FormFieldLabel,
+  SelectInput,
+} from '@/components'
 import { CODESETS } from '@/constants'
 import { getCodeAttributeBoolean, useCodesetCodes } from '@/hooks'
 import { transformInServices } from '../../transform'
-import { Services } from '../../types'
-import { getAttributeValue } from '../../utils'
-import { maxBookingFrequencyMap } from './data'
+import { getAttributeValue, getMaxBookingFrequency } from '../../utils'
 import { ServiceSchemaType } from './schema'
 
 const ServiceSelect = () => {
@@ -21,8 +24,10 @@ const ServiceSelect = () => {
     if (selectedCode) {
       const values = {
         serviceOffered: selectedServiceValue,
-        maxBookingFrequencyInSlot:
-          maxBookingFrequencyMap[selectedServiceValue as Services] ?? '0',
+        maxBookingFrequencyInSlot: getMaxBookingFrequency(
+          selectedServiceValue,
+          selectedCode,
+        ),
         isServiceTimeDependent: getCodeAttributeBoolean(
           selectedCode,
           'IsTimeDependent',
@@ -36,6 +41,7 @@ const ServiceSelect = () => {
         )
           ? 'yes'
           : 'no',
+        serviceVisitTypes: [],
       }
       Object.entries(values)?.forEach(([key, value]) => {
         setValue(key as Path<ServiceSchemaType>, value)
@@ -45,7 +51,7 @@ const ServiceSelect = () => {
 
   return (
     <FormFieldContainer className="col-span-3 gap-1">
-      <FormFieldLabel>Service</FormFieldLabel>
+      <FormFieldLabel required>Service</FormFieldLabel>
       <SelectInput
         options={transformInServices(codes, locationType)}
         field="serviceOffered"
@@ -53,6 +59,7 @@ const ServiceSelect = () => {
         buttonClassName="w-full h-7"
         size="1"
       />
+      <FormFieldError name="serviceOffered" />
     </FormFieldContainer>
   )
 }

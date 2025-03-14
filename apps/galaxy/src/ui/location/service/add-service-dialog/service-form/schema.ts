@@ -3,13 +3,16 @@ import z from 'zod'
 const schema = z
   .object({
     locationId: z.string(),
-    serviceOffered: z.string(),
+    serviceOffered: z.string().min(1, 'Required'),
     locationName: z.string(),
     servicePlace: z.string().optional(),
     taxonomy: z.string().optional(),
     primaryProviderType: z.string().optional(),
     isPrimaryProviderRequired: z.string().optional(),
-    maxBookingFrequencyInSlot: z.string().min(0, 'Required'),
+    maxBookingFrequencyInSlot: z
+      .string()
+      .min(1, 'Required')
+      .refine((val) => Number(val) > 0, { message: 'Must be greater than 0' }),
     isClaimAddress: z.boolean(),
     isPolicyRequired: z.string(),
     isReminderForNotes: z.string(),

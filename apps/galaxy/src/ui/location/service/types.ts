@@ -21,6 +21,13 @@ enum Services {
   GroupTherapy = 'GroupTherapy',
 }
 
+enum PrimayProviderType {
+  PMNR = 'Pmnr',
+  Psychiatrist = 'Psychiatrist',
+  InternalMedicine = 'InternalMedicine',
+  FamilyMedicine = 'FamilyMedicine',
+}
+
 interface ServicePayload {
   locationId: string
   locationName: string
@@ -79,6 +86,7 @@ interface LocationService {
 export {
   CosignerType,
   Services,
+  PrimayProviderType,
   type LocationService,
   type Question,
   type ServicePayload,

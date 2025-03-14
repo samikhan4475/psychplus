@@ -1,5 +1,4 @@
-import { SelectOptionType } from '@/types'
-import { Question, Services } from '../../types'
+import { Question } from '../../types'
 
 const questions: Question[] = [
   {
@@ -54,43 +53,4 @@ const questions: Question[] = [
   },
 ]
 
-const maxBookingFrequencyMap: Record<Services, string> = {
-  [Services.Psychiatry]: '3',
-  [Services.Therapy]: '1',
-  [Services.CouplesFamilyTherapy]: '1',
-  [Services.GroupTherapy]: '10',
-}
-
-const maxBookingDataMap: Record<
-  Services,
-  {
-    options: SelectOptionType[]
-    isDisabled?: boolean
-  }
-> = {
-  [Services.Psychiatry]: {
-    options: [
-      { label: '1', value: '1' },
-      { label: '2', value: '2' },
-      { label: '3', value: '3' },
-    ],
-  },
-  [Services.Therapy]: {
-    options: [{ label: '1', value: '1' }],
-
-    isDisabled: true,
-  },
-  [Services.CouplesFamilyTherapy]: {
-    options: [{ label: '1', value: '1' }],
-
-    isDisabled: true,
-  },
-  [Services.GroupTherapy]: {
-    options: [
-      { label: '3', value: '3' },
-      { label: '10', value: '10' },
-    ],
-  },
-}
-
-export { questions, maxBookingDataMap, maxBookingFrequencyMap }
+export { questions }

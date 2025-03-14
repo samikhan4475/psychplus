@@ -1,6 +1,5 @@
 'use client'
 
-import { useEffect } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Grid, Separator } from '@radix-ui/themes'
 import { SubmitHandler, useForm } from 'react-hook-form'
@@ -31,11 +30,7 @@ interface ServiceFormProps {
   onClose: () => void
 }
 const ServiceForm = ({ location, onClose }: ServiceFormProps) => {
-  const {
-    fetchVisitTypes,
-    cosigners = [],
-    visitTypes = [],
-  } = useStore((state) => ({
+  const { cosigners = [], visitTypes = [] } = useStore((state) => ({
     fetchVisitTypes: state.fetchVisitTypes,
     visitTypes: state.visitTypes,
     cosigners: state.cosigners,
@@ -60,11 +55,7 @@ const ServiceForm = ({ location, onClose }: ServiceFormProps) => {
     toast.success('Service added successfully!')
     onClose()
   }
-  useEffect(() => {
-    if (location?.locationType) {
-      fetchVisitTypes(location.locationType)
-    }
-  }, [fetchVisitTypes, location])
+
   return (
     <FormContainer form={form} onSubmit={onSubmit}>
       <Grid columns="1" gap="2">

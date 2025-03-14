@@ -13,12 +13,13 @@ import { LocationService } from './types'
 interface Store {
   data?: LocationService[]
   visitTypes: Encounter[]
+  visitTypesLoading: boolean
   error?: string
   total: number
   cosigners: StaffResource[]
   loading: boolean
   cosignersLoading: boolean
-  fetchVisitTypes: (locationType: string) => void
+  fetchVisitTypes: (serviceOffered: string) => void
   fetchCosigners: () => void
   providerOptions: SelectOptionType[]
   formValues?: Partial<ServiceFiltersSchemaType>
@@ -44,6 +45,7 @@ const useStore = create<Store>()((set, get) => ({
   total: 20,
   page: 1,
   cosignersLoading: false,
+  visitTypesLoading: false,
   providerOptions: [],
   loading: false,
   pageCache: {},
@@ -70,14 +72,14 @@ const useStore = create<Store>()((set, get) => ({
     })
   },
 
-  fetchVisitTypes: async (locationType: string) => {
-    set({ loading: true })
-    const response = await getVisitTypesAction(locationType)
+  fetchVisitTypes: async (serviceOffered: string) => {
+    set({ visitTypesLoading: true })
+    const response = await getVisitTypesAction(serviceOffered)
     if (response.state === 'error') {
-      set({ loading: false })
+      set({ visitTypesLoading: false })
       return toast.error(response?.error)
     }
-    set({ loading: false, visitTypes: response?.data ?? [] })
+    set({ visitTypesLoading: false, visitTypes: response?.data ?? [] })
   },
 
   fetchCosigners: async () => {

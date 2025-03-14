@@ -1,8 +1,8 @@
 'use client'
 
 import { Text } from '@radix-ui/themes'
+import { PrimaryProviderTypeSelect } from './primary-provider-type-select'
 import { QuestionRadioSelect } from './question-radio-select'
-import { SelectProviderSelect } from './select-provider-select'
 import { SimilarVisitCheck } from './similar-visit-checkbox'
 
 const QuestionBlock = () => {
@@ -11,7 +11,7 @@ const QuestionBlock = () => {
       <Text size="2" className="text-pp-black-3 font-bold">
         Questions
       </Text>
-      <SelectProviderSelect />
+      <PrimaryProviderTypeSelect />
       <QuestionRadioSelect />
       <SimilarVisitCheck />
     </>

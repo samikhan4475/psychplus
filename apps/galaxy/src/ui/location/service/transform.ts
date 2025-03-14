@@ -1,3 +1,4 @@
+import { getCodeAttributeBoolean } from '@/hooks'
 import {
   ClinicAddress,
   Encounter,
@@ -8,7 +9,7 @@ import {
 import { getPatientFullName, sanitizeFormData } from '@/utils'
 import { ServiceSchemaType } from './add-service-dialog'
 import { ServicePayload } from './types'
-import { getCosigner, getVisitTypesByIds } from './utils'
+import { getAttributeValue, getCosigner, getVisitTypesByIds } from './utils'
 
 const transformInCosigers = (data: StaffResource[]) => {
   return data.map((item) => {
@@ -24,13 +25,14 @@ const transformInServices = (
   codes: SharedCode[],
   locationType: string,
 ): SelectOptionType[] =>
-  codes
-    ?.filter((code) =>
-      code?.attributes
-        ?.find((attr) => attr.name === 'LocationType')
-        ?.value?.includes(locationType),
-    )
-    .map(({ value, display: label }) => ({ label, value }))
+  codes?.reduce((acc: SelectOptionType[], code) => {
+    const locationTypes = getAttributeValue(code, 'LocationType')
+    const isActive = getCodeAttributeBoolean(code, 'IsActive')
+    if (locationTypes?.includes(locationType) && isActive) {
+      acc.push({ label: code.display, value: code.value })
+    }
+    return acc
+  }, [])
 
 const transformOutService = (
   cosigners: StaffResource[],

@@ -4,10 +4,10 @@ import * as api from '@/api'
 import { Encounter } from '@/types'
 
 const getVisitTypesAction = async (
-  locationType: string,
+  serviceOffered: string,
 ): Promise<api.ActionResult<Encounter[]>> => {
   const response = await api.POST<Encounter[]>(api.GET_VISIT_TYPE_ENDPOINT, {
-    locationType,
+    servicesOffered: [serviceOffered],
   })
 
   if (response.state === 'error') {
