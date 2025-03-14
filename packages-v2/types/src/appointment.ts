@@ -20,6 +20,7 @@ interface Appointment {
   isCopayPaid: boolean
   isSelfPay: boolean
   serviceId: string
+  isQuickNoteSigned: boolean
 }
 
 export type { Appointment }

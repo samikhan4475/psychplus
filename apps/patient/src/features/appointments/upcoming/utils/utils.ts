@@ -26,4 +26,12 @@ const mapVerificationStatusToChipVariant = (
   return mapping[status]
 }
 
-export { getClinicAddressDirectionMapUrl, mapVerificationStatusToChipVariant }
+const isWithin48HoursUTC = (appointmentDate: string) => {
+  if (!appointmentDate) return false;
+  const appointmentTimeUTC = new Date(appointmentDate).getTime();
+  const nowUTC = Date.now();
+  const hoursDifference = (appointmentTimeUTC - nowUTC) / (1000 * 60 * 60);
+  return hoursDifference > 0 && hoursDifference <= 48;
+};
+
+export { getClinicAddressDirectionMapUrl, mapVerificationStatusToChipVariant, isWithin48HoursUTC }
