@@ -60,9 +60,12 @@ const formatTimeCell = (date: string, timezoneId: string) => {
   return `${hours}:${minutes}`
 }
 
-const getDateString = (date?: DateValue | null): string | undefined => {
+const getDateString = (
+  date?: DateValue | null,
+  timezoneId: string = getLocalTimeZone(),
+): string | undefined => {
   if (date) {
-    const dateOb = date.toDate(getLocalTimeZone())
+    const dateOb = date.toDate(timezoneId)
     return dateOb.toISOString()
   }
   return undefined

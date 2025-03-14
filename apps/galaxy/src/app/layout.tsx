@@ -12,14 +12,12 @@ import {
 import { getFeatureFlags } from '@/api/get-feature-flags'
 import { getUserType } from '@/api/get-user-type'
 import {
-  APP_ENV,
   CODESETS,
   GOOGLE_MAPS_API_KEY,
   SCRIPTSURE_BASE_APPLICATION_URL,
   STRIPE_PUBLISHABLE_KEY,
 } from '@/constants'
 import { StoreProvider } from '@/store'
-import { RecordStatus } from '@/types/feature-flag'
 import { Header } from '@/ui/header'
 import { LockScreenProvider } from '@/ui/lock-screen-context'
 import { cn } from '@/utils'

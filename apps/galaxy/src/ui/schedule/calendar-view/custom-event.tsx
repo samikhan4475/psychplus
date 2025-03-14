@@ -4,33 +4,33 @@ import { Box, Flex, Heading, Text, Tooltip } from '@radix-ui/themes'
 import format from 'date-fns/format'
 import { type EventProps } from 'react-big-calendar'
 import { CODESETS } from '@/constants'
+import { VisitMediumEnum } from '@/enum/visit-type'
 import { useCodesetCodes } from '@/hooks'
 import { Appointment } from '@/types'
 import { cn, getCodesetDisplayName } from '@/utils'
+import { useUserSettingStore } from '../store'
 import { AvailableSlotsEvent } from '../types'
+import {
+  convertToZonedDate,
+  formatTimeCell,
+  getTimeZoneAbbreviation,
+} from '../utils'
 import { EditVisitDetailsButton } from './edit-visit-details-button'
 import { OpenPatientChartButton } from './open-patient-chart-button'
 import { VisitStatusDropdown } from './visit-status-dropdown'
-import { useUserSettingStore } from '../store'
-import { convertToZonedDate, formatTimeCell, getTimeZoneAbbreviation } from '../utils'
-
-// TODO: add all the VisitType enum values
-enum VisitType {
-  InPerson = 'InPerson',
-  TeleVisit = 'TeleVisit',
-  Unavailable = 'unavailable',
-}
 
 const eventSeparatorClassIndex = {
-  [VisitType.InPerson]: 'bg-pp-accent-mint',
-  [VisitType.Unavailable]: 'bg-pp-states-error',
-  [VisitType.TeleVisit]: 'bg-pp-states-info',
+  [VisitMediumEnum.InPerson]: 'bg-pp-accent-mint',
+  [VisitMediumEnum.Unavailable]: 'bg-pp-states-error',
+  [VisitMediumEnum.TeleVisit]: 'bg-pp-states-info',
+  [VisitMediumEnum.Either]: 'bg-pp-states-info',
 }
 
 const eventContainerClassIndex = {
-  [VisitType.InPerson]: 'bg-pp-green-100',
-  [VisitType.Unavailable]: 'bg-pp-red-100',
-  [VisitType.TeleVisit]: 'bg-pp-blue-100',
+  [VisitMediumEnum.InPerson]: 'bg-pp-green-100',
+  [VisitMediumEnum.Unavailable]: 'bg-pp-red-100',
+  [VisitMediumEnum.TeleVisit]: 'bg-pp-blue-100',
+  [VisitMediumEnum.Either]: 'bg-primary-100',
 }
 
 const AppointmentEvent = ({
@@ -40,9 +40,9 @@ const AppointmentEvent = ({
 }) => {
   const { visitMedium, name } = event.data as Appointment
   const eventSeparatorClasses =
-    eventSeparatorClassIndex[visitMedium as VisitType] ?? ''
+    eventSeparatorClassIndex[visitMedium as VisitMediumEnum] ?? ''
   const eventContainerClasses =
-    eventContainerClassIndex[visitMedium as VisitType] ?? ''
+    eventContainerClassIndex[visitMedium as VisitMediumEnum] ?? ''
   const startTime = format(new Date(event.start), 'HH:mm')
   const endTime = format(new Date(event.end), 'HH:mm')
   return (
@@ -88,13 +88,16 @@ const CustomEvent = ({
   } = event.data as Appointment
   const state = useMemo(
     () => getCodesetDisplayName(stateCode, stateCodes),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [stateCode],
   )
   const service = useMemo(
     () => getCodesetDisplayName(event.data.service, serviceCodes),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [event.data.service],
   )
-  const eventContainerClasses = eventContainerClassIndex[visitMedium as VisitType] ?? ''
+  const eventContainerClasses =
+    eventContainerClassIndex[visitMedium as VisitMediumEnum] ?? ''
   const frequency = useMemo(() => {
     const transformedFrequencyCodes = frequencyCodes.map((code) => {
       const value = code?.attributes?.find((attr) => attr.name === 'ResourceId')
@@ -115,26 +118,31 @@ const CustomEvent = ({
 
   const locationStartTime = formatTimeCell(
     event.data.appointmentDate,
-    event.data.locationTimezoneId
+    event.data.locationTimezoneId,
   )
 
   const locationStartDateTime = convertToZonedDate(
     event.data.appointmentDate,
-    event.data.locationTimezoneId
-    )
+    event.data.locationTimezoneId,
+  )
   const timeZoneCodeSets = useCodesetCodes(CODESETS.TimeZoneId).filter(
     (code) => code.groupingCode === 'US',
   )
-  const preferredTimeZoneAbbreviation = getTimeZoneAbbreviation(timeZoneSetting.content,timeZoneCodeSets)
+  const preferredTimeZoneAbbreviation = getTimeZoneAbbreviation(
+    timeZoneSetting.content,
+    timeZoneCodeSets,
+  )
   const duration = event.data.appointmentDuration ?? 20
-  const locationEndDate = new Date(locationStartDateTime.getTime() + duration * 60000)
+  const locationEndDate = new Date(
+    locationStartDateTime.getTime() + duration * 60000,
+  )
   const locationEndTime = format(new Date(locationEndDate), 'HH:mm')
 
   return (
     <Popover.Root>
       <Popover.Trigger asChild>
         <Flex
-          className={cn("h-[100%] w-full", eventContainerClasses)}
+          className={cn('h-[100%] w-full', eventContainerClasses)}
           justify="start"
           align="center"
         >
@@ -164,11 +172,11 @@ const CustomEvent = ({
             <Flex className="mb-2.5 gap-x-1 text-[14px]">
               <Text className="font-[510]">{name}</Text>
               <Text className="text-pp-text-sub font-[510]">
-                {appointmentDate} 
-                <Tooltip content={`Location Time: ${locationStartTime} (${preferredTimeZoneAbbreviation})`}>
-                  <Text className='ml-1 cursor-pointer'>
-                   {startTime}
-                  </Text>
+                {appointmentDate}
+                <Tooltip
+                  content={`Location Time: ${locationStartTime} (${preferredTimeZoneAbbreviation})`}
+                >
+                  <Text className="ml-1 cursor-pointer">{startTime}</Text>
                 </Tooltip>
               </Text>
             </Flex>
@@ -220,7 +228,9 @@ const CustomEvent = ({
                 </Flex>
                 <Flex className="gap-x-1">
                   <Text className="font-[510]">Appointment Time</Text>
-                  <Tooltip content={`Location Time: ${locationStartTime} - ${locationEndTime} (${preferredTimeZoneAbbreviation})`}>
+                  <Tooltip
+                    content={`Location Time: ${locationStartTime} - ${locationEndTime} (${preferredTimeZoneAbbreviation})`}
+                  >
                     <Text className="text-pp-text-sub cursor-pointer">
                       {startTime + ' - ' + endTime}
                     </Text>

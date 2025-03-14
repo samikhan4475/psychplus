@@ -1,4 +1,5 @@
 import { cache } from 'react'
+import { VisitTypeEnum } from '@/enum'
 import { AddOnDetailView } from '@/ui/quicknotes/actual-note-view/add-on/add-on-detail-view'
 import { CodesNoteDetailsView } from '@/ui/quicknotes/actual-note-view/codes/codes-note-details-view'
 import { EctNoteDetailView } from '@/ui/quicknotes/actual-note-view/ect/ect-note-detail-view'
@@ -28,7 +29,7 @@ import { TmsNoteDetailView } from '@/ui/quicknotes/actual-note-view/tms/tms-note
 import { VitalsNoteDetailView } from '@/ui/quicknotes/actual-note-view/vitals/vitals-note-detail-view'
 import { WorkingDiagnosisNoteDetailView } from '@/ui/quicknotes/actual-note-view/working-diagnosis/working-diagnosis-note-detail-view'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
-import { isHospitalCareVisit, VisitTypeEnum, visitTypeToWidgets } from '@/utils'
+import { isHospitalCareVisit, visitTypeToWidgets } from '@/utils'
 import { WidgetType } from '../types'
 
 enum ProviderType {

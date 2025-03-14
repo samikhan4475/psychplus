@@ -4,6 +4,10 @@
   "include": ["src"],
   "exclude": ["node_modules"],
   "compilerOptions": {
-    "types": ["node"]
+    "types": ["node"],
+    "paths": {
+      "@psychplus/ui/*": ["../../packages/ui/src/*"],
+      "@psychplus/utils/constants": ["../../packages/utils/src/constants"]
+    }
   }
 }

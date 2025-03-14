@@ -1,3 +1,4 @@
+import { VisitMediumEnum } from '@/enum'
 import { Clinic, PatientAddress } from '@/types'
 import { Specialist } from '../types'
 
@@ -6,15 +7,9 @@ enum ProviderType {
   Therapist = 2,
 }
 
-enum AppointmentType {
-  Virtual = 'TeleVisit',
-  InPerson = 'InPerson',
-  Either = 'Either',
-}
-
 interface AvailabilityApiResponse {
   availableSlots: {
-    type: AppointmentType
+    type: VisitMediumEnum
     isPlusSlot: boolean
     duration: number
     startDate: string

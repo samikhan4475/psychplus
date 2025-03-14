@@ -682,6 +682,7 @@ const GET_PATIENT_PRESCRIPTIONS_MEDICATION_ORDER = (
   prescriptionId: string,
 ) =>
   `${API_URL}/api/patients/${patientId}/prescriptions/${prescriptionId}/order`
+const GET_ACS_INFO = `${API_URL}/api/staff/self/communications/actions/accesstoken`
 
 const ADD_CLAIM_NOTES = (claimId: string) =>
   `${API_URL}/api/claims/${claimId}/notes`
@@ -719,6 +720,7 @@ const UPDATE_SELF_USER_SETTINGS = (settingId: string) =>
 
 const SELF_USER_BULK_SETTINGS = `${API_URL}/api/users/self/bulksettings`
 const GET_CURRENT_USER_SETTINGS = `${API_URL}/api/users/self/settings`
+const GET_CURRENT_USER_SETTINGS_SEARCH = `${API_URL}/api/users/self/settings/actions/search`
 
 const ELECTRONICALLY_SIGN_POLICY_ENDPOINT = (patientId: string) =>
   `${API_URL}/api/patients/${patientId}/consents`
@@ -1026,6 +1028,7 @@ export {
   UPDATE_PATIENT_PRESCRIPTIONS_MEDICATIONS,
   GET_PATIENT_PRESCRIPTIONS_MEDICATION_ORDER,
   CANCEL_PATIENT_PRESCRIPTIONS,
+  GET_ACS_INFO,
   ADD_CLAIM_NOTES,
   UPDATE_CLAIM_NOTES,
   GET_CLAIM_NOTES_LIST,
@@ -1044,5 +1047,6 @@ export {
   INBOX_SIGN_NOTE_ENDPOINT,
   GET_FEATURE_FLAGS_BY_SHORTNAME_ENDPOINT,
   GET_CURRENT_USER_SETTINGS,
+  GET_CURRENT_USER_SETTINGS_SEARCH,
   ADD_STAFF_COMMENT_ENDPOINT,
 }

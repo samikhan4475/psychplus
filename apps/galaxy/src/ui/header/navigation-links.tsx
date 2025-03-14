@@ -13,6 +13,11 @@ const NavigationLinks = () => {
   const isFeatureFlagEnabled = useFeatureFlagEnabled(
     FEATURE_FLAGS.ehr11786EnableGalaxySecondPhaseFeatures,
   )
+
+  const isAvfeatureFlagEnabled = useFeatureFlagEnabled(
+    MAIN_PAGE_FEATURE_FLAGS.ehr9475AudioVideoTelemedicine,
+  )
+
   const isRCMFlagEnabled = useFeatureFlagEnabled(
     MAIN_PAGE_FEATURE_FLAGS.ehr7246EnableClaimManagementTab,
   )
@@ -35,6 +40,9 @@ const NavigationLinks = () => {
             label="Pre-visit Assessment"
           />
         </>
+      )}
+      {isAvfeatureFlagEnabled && (
+        <NavigationLink href="/call" label="Audio/Video" />
       )}
     </Flex>
   )

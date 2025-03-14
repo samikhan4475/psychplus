@@ -1,6 +1,6 @@
 'use client'
 
-import { use, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import NextLink from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -58,11 +58,20 @@ const LoginPage = () => {
   const onSubmit: SubmitHandler<SchemaType> = async (data) => {
     setError(undefined)
     sessionStorage.clear()
+    const otherParams = new URLSearchParams(searchParams)
+    otherParams.delete('next')
+    const nextUrl = searchParams.get('next')
+    let next = null
+    if (nextUrl) {
+      const hasParams = otherParams.toString() !== ''
+      const paramString = hasParams ? `?${otherParams.toString()}` : ''
+      next = `${nextUrl}${paramString}`
+    }
 
     return loginAction({
       username: data.username.trim(),
       password: data.password.trim(),
-      next: searchParams.get('next'),
+      next,
     }).then((result) => {
       if (result?.state === 'error') {
         setError(result.error)

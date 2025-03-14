@@ -4,7 +4,8 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@psychplus/ui/*": ["../../packages/ui/src/*"]
     },
     "allowImportingTsExtensions": true
   },

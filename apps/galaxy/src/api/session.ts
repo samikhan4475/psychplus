@@ -4,11 +4,15 @@ import type {
   AuthResponse,
   AuthSession,
   RefreshRequest,
-  UserResponse,
+  StaffResource,
 } from '@/types'
 import { getAuthCookies, setAuthCookies } from '@/utils/auth'
 import * as api from './api'
-import { REFRESH_ENDPOINT, SESSION_ENDPOINT, USER_ENDPOINT } from './endpoints'
+import {
+  GET_SELF_STAFF_DETAILS_ENDPOINT,
+  REFRESH_ENDPOINT,
+  SESSION_ENDPOINT,
+} from './endpoints'
 import { createAuthzHeader } from './headers'
 
 type SessionResult = [boolean, AuthSession | null]
@@ -74,9 +78,12 @@ const apiRefreshSession = async (
     throw refreshResponse
   }
 
-  const userResponse = await api.GET<UserResponse>(USER_ENDPOINT, {
-    headers: createAuthzHeader(refreshResponse.data.accessToken),
-  })
+  const userResponse = await api.GET<StaffResource>(
+    GET_SELF_STAFF_DETAILS_ENDPOINT,
+    {
+      headers: createAuthzHeader(refreshResponse.data.accessToken),
+    },
+  )
 
   if (userResponse.state === 'error') {
     throw userResponse
@@ -85,6 +92,7 @@ const apiRefreshSession = async (
   const session = {
     user: {
       userId: refreshResponse.data.userId,
+      staffId: userResponse.data.id,
       firstName: userResponse.data.legalName.firstName,
       lastName: userResponse.data.legalName.lastName,
       email: userResponse.data.contactInfo.email,

@@ -3,7 +3,7 @@
 import { redirect } from 'next/navigation'
 import { jwtDecode } from 'jwt-decode'
 import * as api from '@/api'
-import type { AuthRequest, AuthResponse, UserResponse } from '@/types'
+import type { AuthRequest, AuthResponse, StaffResource } from '@/types'
 import { setAuthCookies } from '@/utils/auth'
 
 const STAFF_ROLE = 'Staff'
@@ -28,9 +28,12 @@ const loginAction = async ({
     }
   }
 
-  const userResponse = await api.GET<UserResponse>(api.USER_ENDPOINT, {
-    headers: api.createAuthzHeader(loginResponse.data.accessToken),
-  })
+  const userResponse = await api.GET<StaffResource>(
+    api.GET_SELF_STAFF_DETAILS_ENDPOINT,
+    {
+      headers: api.createAuthzHeader(loginResponse.data.accessToken),
+    },
+  )
 
   if (userResponse.state === 'error') {
     return {
@@ -55,6 +58,7 @@ const loginAction = async ({
   const session = {
     user: {
       userId: loginResponse.data.userId,
+      staffId: userResponse.data.id,
       firstName: userResponse.data.legalName.firstName,
       lastName: userResponse.data.legalName.lastName,
       honors: userResponse.data.legalName.honors,

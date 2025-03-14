@@ -12,6 +12,20 @@ interface UserSetting {
   content: string
 }
 
+interface SettingSearchFilters {
+  isIncludeMetadataResourceChangeControl?: boolean
+  isIncludeMetadataResourceIds?: boolean
+  isIncludeMetadataResourceStatus?: boolean
+  isHierarchicalQuery?: boolean
+  settingStatusCode?: string
+  levelCodes?: string[]
+  userId?: 0
+  categoryCodes?: string[]
+  categoryValue?: string
+  categoryValues?: string[]
+  name?: string
+}
+
 type AddSelfUserSettingBody = Omit<UserSetting, 'id' | 'metadata' | 'userId'>
 
-export type { UserSetting, AddSelfUserSettingBody }
+export type { UserSetting, AddSelfUserSettingBody, SettingSearchFilters }

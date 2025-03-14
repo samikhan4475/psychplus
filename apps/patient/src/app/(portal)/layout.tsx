@@ -1,4 +1,3 @@
-import './base.css'
 import { type Metadata } from 'next'
 import { Josefin_Sans, Spectral } from 'next/font/google'
 import { getAuthCookies } from '@psychplus-v2/auth'
@@ -7,6 +6,7 @@ import { cn } from '@psychplus-v2/utils'
 import { Flex, Theme } from '@radix-ui/themes'
 import { ToastProvider } from '@/providers'
 import { Header } from '@/ui'
+import './base.css'
 
 export const metadata: Metadata = {
   title: 'PsychPlus | Mental Health Care Covered by Your Insurance',
@@ -27,10 +27,10 @@ const josefin = Josefin_Sans({
   variable: '--font-josefin',
 })
 
-const RootLayout = ({ children }: { children: React.ReactNode }) => {
+const RootLayout = async ({ children }: { children: React.ReactNode }) => {
   const auth = getAuthCookies()
 
-  return (
+  const content = (
     <html lang="en" className={cn(spectral.variable, josefin.variable)}>
       <body>
         {auth ? (
@@ -60,6 +60,8 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
       </body>
     </html>
   )
+
+  return content
 }
 
 export default RootLayout

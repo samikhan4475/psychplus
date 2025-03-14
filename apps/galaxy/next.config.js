@@ -6,6 +6,11 @@ const config = {
   swcMinify: true,
   output: 'standalone',
   transpilePackages: [],
+  webpack: (config) => {
+    config.resolve.alias['@azure/communication-calling'] =
+      '@azure/communication-calling/dist-esm/sdk.bundle.js'
+    return config
+  },
 }
 
 module.exports = config

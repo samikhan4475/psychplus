@@ -5,12 +5,15 @@
   "scripts": {
     "build": "next build",
     "clean": "rimraf .next .turbo *.tsbuildinfo node_modules",
-    "dev": "next dev -p 8002",
+    "dev": "next dev -p 8002 --turbo",
     "lint:next": "next lint",
     "lint": "tsc --noEmit && eslint \"src/**/*.ts*\"",
     "lint:fix": "tsc --noEmit && eslint --fix \"src/**/*.ts*\""
   },
   "dependencies": {
+    "@azure/communication-calling": "^1.33.1",
+    "@azure/communication-common": "^2.3.1",
+    "@azure/communication-react": "^1.24.0",
     "@hookform/resolvers": "^3.3.2",
     "@internationalized/date": "^3.5.2",
     "@psychplus-v2/api": "^0.1.0",
@@ -48,6 +51,7 @@
     "@stripe/react-stripe-js": "^2.4.0",
     "@stripe/stripe-js": "^2.3.0",
     "@vis.gl/react-google-maps": "^1.1.0",
+    "date-fns": "^2.30.0",
     "html-react-parser": "^5.1.10",
     "jwt-decode": "^4.0.0",
     "lucide-react": "0.373.0",

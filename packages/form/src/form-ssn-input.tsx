@@ -9,7 +9,7 @@ type SsnInputProps = UseFormFieldProps & {
 }
 
 const FormSsnInput = React.forwardRef<HTMLInputElement, SsnInputProps>(
-  (props) => {
+  (props, ref) => {
     const { formFieldProps, childProps } = useFormField(props)
 
     return (

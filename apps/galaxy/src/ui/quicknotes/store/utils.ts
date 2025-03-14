@@ -1,16 +1,12 @@
 import toast from 'react-hot-toast'
 import { saveWidgetClientAction, updateVisitAction } from '@/actions'
 import { CustomToaster as customContentToaster } from '@/components/custom-content-toast'
+import { VisitTypeEnum } from '@/enum'
 import { Appointment, DiagnosisIcd10Code, QuickNoteSectionItem } from '@/types'
 import { ALLERGIES_ERROR_MESSAGE } from '@/ui/allergy/patient-allergies-widget/constants'
 import { AllergyDataResponse } from '@/ui/allergy/patient-allergies-widget/types'
 import { transformVisitUpdatePayload } from '@/ui/assessment-plan/tcm-widget/data'
-import {
-  postEvent,
-  sanitizeFormData,
-  saveAbleWdgets,
-  VisitTypeEnum,
-} from '@/utils'
+import { postEvent, sanitizeFormData, saveAbleWdgets } from '@/utils'
 import { QuickNoteSectionName } from '../constants'
 import { getWidgetErrorDetails, getWidgetsByVisitType } from '../utils'
 

@@ -9,6 +9,7 @@ interface User {
   lastName: string
   email: string
   honors?: string
+  staffId: string
 }
 
 interface UserResponse {

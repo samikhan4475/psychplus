@@ -8,6 +8,11 @@ const config = {
   env: {
     APP_ENV: process.env.APP_ENV,
   },
+  webpack: (config) => {
+    config.resolve.alias['@azure/communication-calling'] =
+      '@azure/communication-calling/dist-esm/sdk.bundle.js'
+    return config
+  },
   experimental: {
     missingSuspenseWithCSRBailout: false,
   },
