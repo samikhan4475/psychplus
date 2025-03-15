@@ -16,10 +16,12 @@ type SchemaType = z.infer<typeof schema>
 
 interface InitiatePasswordResetFormProps {
   onSuccess: (email: string) => void
+  reset: string | null
 }
 
 const InitiatePasswordResetForm = ({
   onSuccess,
+  reset,
 }: InitiatePasswordResetFormProps) => {
   const [error, setError] = useState<string>()
 
@@ -50,7 +52,7 @@ const InitiatePasswordResetForm = ({
     >
       <Flex direction="column" gap="2" mb="4">
         <Heading weight="medium" className="text-[36px] text-accent-12">
-          Forgot Password
+          {reset ? 'Reset Password' : 'Forgot Password'}
         </Heading>
         <Text className="text-gray-11">
           Enter the email you used to create your account.

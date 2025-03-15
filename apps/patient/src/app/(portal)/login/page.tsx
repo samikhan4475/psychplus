@@ -38,6 +38,7 @@ type SchemaType = z.infer<typeof schema>
 const LoginPage = () => {
   const searchParams = useSearchParams()
   const [error, setError] = useState<string>()
+  const [isResetPassword, setIsResetPassword] = useState(false)
 
   const form = useForm<SchemaType>({
     resolver: zodResolver(schema),
@@ -75,6 +76,11 @@ const LoginPage = () => {
     }).then((result) => {
       if (result?.state === 'error') {
         setError(result.error)
+        if (result.error.includes('expired')) {
+          setIsResetPassword(true)
+        } else {
+          setIsResetPassword(false)
+        }
       }
     })
   }
@@ -128,12 +134,12 @@ const LoginPage = () => {
                     <Flex align="start">
                       <FormFieldError name="password" />
                       <NextLink
-                        href="/forgot-password"
+                        href={isResetPassword ? "/forgot-password?reset=true" : "/forgot-password"}
                         prefetch={false}
                         className="ml-auto"
                       >
                         <Text className="text-[14px] text-accent-12 underline-offset-2 hover:underline">
-                          Forgot password?
+                          {isResetPassword ? 'Reset password?' : 'Forgot password?'}
                         </Text>
                       </NextLink>
                     </Flex>

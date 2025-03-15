@@ -5,9 +5,14 @@ import { Flex } from '@radix-ui/themes'
 import { AnonHeader } from '@/components-v2'
 import { InitiatePasswordResetForm } from './initiate-password-reset-form'
 import { PasswordResetForm } from './password-reset-form'
+import { useSearchParams } from 'next/navigation'
 
 const ForgotPasswordPage = () => {
   const [email, setEmail] = useState<string>()
+
+  const searchParams = useSearchParams()
+
+  const reset = searchParams.get('reset')
 
   return (
     <Flex direction="column" width="100%">
@@ -21,8 +26,8 @@ const ForgotPasswordPage = () => {
         px="5"
         className="flex-1 py-20"
       >
-        {!email ? <InitiatePasswordResetForm onSuccess={setEmail} /> : null}
-        {email ? <PasswordResetForm email={email} /> : null}
+        {!email ? <InitiatePasswordResetForm onSuccess={setEmail} reset={reset} /> : null}
+        {email ? <PasswordResetForm email={email} reset={reset} /> : null}
       </Flex>
     </Flex>
   )

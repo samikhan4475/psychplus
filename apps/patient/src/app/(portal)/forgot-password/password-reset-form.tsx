@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { FormContainer } from '@psychplus-v2/components'
 import { cn } from '@psychplus-v2/utils'
-import { Flex, Heading, Text, TextFieldInput } from '@radix-ui/themes'
+import { Flex, Heading, Text } from '@radix-ui/themes'
 import { CheckIcon, Loader2Icon, XIcon } from 'lucide-react'
 import { useForm, type SubmitHandler } from 'react-hook-form'
 import z from 'zod'
@@ -38,11 +38,12 @@ type SchemaType = z.infer<typeof schema>
 
 interface PasswordResetFormProps {
   email: string
+  reset: string | null
 }
 
 type CodeSendStatus = 'success' | 'error' | 'idle' | 'sending'
 
-const PasswordResetForm = ({ email }: PasswordResetFormProps) => {
+const PasswordResetForm = ({ email, reset }: PasswordResetFormProps) => {
   const { toast } = useToast()
   const router = useRouter()
   const [resendStatus, setResendStatus] = useState<CodeSendStatus>('idle')
@@ -109,7 +110,7 @@ const PasswordResetForm = ({ email }: PasswordResetFormProps) => {
     >
       <Flex direction="column" gap="2" mb="4">
         <Heading weight="medium" className="text-[36px] text-accent-12">
-          Forgot Password
+          {reset ? 'Reset' : 'Forgot'} Password
         </Heading>
         <Flex direction="column" gap="4">
           <Text className="text-gray-11">
