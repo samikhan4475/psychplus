@@ -223,7 +223,7 @@ function organizeSlotsByDate(slots: Slot[] | undefined, startingDate: string) {
 const renderStaffName = (staff: Staff | undefined) =>
   `${staff?.legalName?.title || ''} ${staff?.legalName?.firstName || ''} ${
     staff?.legalName?.lastName || ''
-  } ${staff?.legalName?.honors || ''}`
+  }, ${staff?.legalName?.honors || ''}`
 
 const renderProfileImage = (
   profileImage: string | undefined,

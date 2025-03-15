@@ -64,7 +64,6 @@ const ProviderWithClinicAndWeeklyAvailability = ({
               )}
               <Text className="text-xs pt-[1px] font-medium text-[#1C2024]">
                 {staffWithClinicsAndSlots.staff.rating?.valueOf()}
-                <Text className="text-normal text-[#60646C]">(10)</Text>
               </Text>
             </Flex>
 
