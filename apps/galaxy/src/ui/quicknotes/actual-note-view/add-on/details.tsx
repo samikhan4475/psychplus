@@ -5,26 +5,27 @@ import { BlockContainer, LabelAndValue } from '../shared'
 import { InjectionDetails } from './blocks/injection-block'
 import { PsychoanalysisBlock } from './blocks/psychoanalysis'
 import { TherapyBlock } from './blocks/therapy'
+import { TherapyECTBlock } from './blocks/therapy-ect-block'
 
 const Details = ({ data }: { data: AddOnWidgetSchemaType }) => {
   const interactiveComplexityValue =
     data.interactiveComplexity &&
     `Interactive complexity was involved in this session, including: ${[
-        'maladaptiveCommunication',
-        'caregiverEmotions',
-        'sentinelEvent',
-        'languageBarrier',
-      ]
-        .map((field) => {
-          const key = field as keyof typeof data
-          return data[key]
-            ? INTERACTIVE_COMPLEXITY_BLOCK_OPTIONS.find(
-                (item) => item.field === field,
-              )?.label
-            : null
-        })
-        .filter(Boolean)
-        .join('; ')}`
+      'maladaptiveCommunication',
+      'caregiverEmotions',
+      'sentinelEvent',
+      'languageBarrier',
+    ]
+      .map((field) => {
+        const key = field as keyof typeof data
+        return data[key]
+          ? INTERACTIVE_COMPLEXITY_BLOCK_OPTIONS.find(
+              (item) => item.field === field,
+            )?.label
+          : null
+      })
+      .filter(Boolean)
+      .join('; ')}`
 
   return (
     <BlockContainer heading="Add On">
@@ -33,7 +34,7 @@ const Details = ({ data }: { data: AddOnWidgetSchemaType }) => {
 
         <TherapyBlock data={data} />
         <PsychoanalysisBlock data={data} />
-
+        <TherapyECTBlock data={data} />
         {interactiveComplexityValue && (
           <LabelAndValue
             label="Interactive Complexity"

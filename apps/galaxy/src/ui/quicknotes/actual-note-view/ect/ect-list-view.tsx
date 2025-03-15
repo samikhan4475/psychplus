@@ -1,30 +1,27 @@
 import { Flex, Text } from '@radix-ui/themes'
-import { EctWidgetSchemaType } from '@/ui/procedures/ect-tab/ect-tab-schema'
 import { LabelAndValue } from '../shared'
 
-interface EctListViewProps {
+interface EctListViewProps<T extends object> {
   label?: string
   keys: { label: string; key: string }[]
-  data: EctWidgetSchemaType
+  data: T
   anesthesiologistCodes?: Record<string, string>
 }
 
 const secondsToAddIn = ['ectSettingBlockDuration', 'ectSeizureDuration']
 
-const EctListView = ({
+const EctListView = <T extends object>({
   label,
   keys,
   data,
   anesthesiologistCodes,
-}: EctListViewProps) => (
+}: EctListViewProps<T>) => (
   <Flex direction="column">
     {label && (
       <Text className="whitespace-nowrap text-1 font-medium">{label}</Text>
     )}
     {keys.map((option) => {
-      const value = option.key
-        ? data[option.key as keyof EctWidgetSchemaType]
-        : ''
+      const value = option.key ? data[option.key as keyof T] : ''
       const displayValue =
         option.key === 'anesthesiologist' && anesthesiologistCodes
           ? anesthesiologistCodes[value as string] || value
@@ -35,9 +32,9 @@ const EctListView = ({
           key={option.label}
           label={option.label}
           value={
-            secondsToAddIn.includes(option.key)
+            (secondsToAddIn.includes(option.key)
               ? `${displayValue} seconds`
-              : displayValue
+              : displayValue) as string
           }
         />
       )

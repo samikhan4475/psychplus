@@ -11,6 +11,7 @@ import { sanitizeFormData } from '@/utils'
 import { manageCodes } from '@/utils/codes'
 import { AddOnWidgetSchemaType } from './add-on-widget-schema'
 import {
+  ECT_OPTIONS,
   INJECTION_BLOCK_OPTIONS,
   INTERACTIVE_COMPLEXITY_BLOCK_OPTIONS,
   THERAPY_OPTIONS,
@@ -129,7 +130,7 @@ const transformIn = (
         undefined: '',
       }
       if (key === 'therapy') {
-        result[key] = therapy ? jsonValue[itemValue] ?? therapy : false
+        result[key] = itemValue in jsonValue ? jsonValue[itemValue] : therapy
       } else {
         result[key] = jsonValue[itemValue] ?? itemValue
       }
@@ -160,6 +161,9 @@ const transformOut =
     }
     if (formData.interactiveComplexity) {
       result.push(...transformOutInteractiveComplexity(transformProps))
+    }
+    if (formData.ect) {
+      result.push(...transformOutECT(transformProps))
     }
     if (formData.therapy) {
       if (formData.therapyPsychoanalysis === 'psychoanalysis') {
@@ -217,6 +221,34 @@ const createQuickNotesPayload = (patientId: string, appointmentId: string) => ({
   sectionName: QuickNoteSectionName.Addon,
   appId: Number(appointmentId),
 })
+
+const transformOutECT = (transformProps: {
+  patientId: string
+  appointmentId: string
+  schema: Record<string, BlockType>
+}): QuickNoteSectionItem[] => {
+  const { patientId, appointmentId, schema } = transformProps
+
+  const result: QuickNoteSectionItem[] = [
+    {
+      ...createQuickNotesPayload(patientId, appointmentId),
+      sectionItem: 'ect',
+      sectionItemValue: 'true',
+    },
+  ]
+
+  ECT_OPTIONS.forEach((option) => {
+    if (schema[option]) {
+      result.push({
+        ...createQuickNotesPayload(patientId, appointmentId),
+        sectionItem: option,
+        sectionItemValue: String(schema[option]),
+      })
+    }
+  })
+
+  return result
+}
 
 const transformOutInjectionBlock = (transformProps: {
   patientId: string

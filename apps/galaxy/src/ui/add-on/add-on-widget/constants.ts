@@ -47,9 +47,31 @@ const THERAPY_PSYCHOANALYSIS_TABLE_DATA = [
   'psychoanalyticTechnique',
 ]
 
+const ECT_OPTIONS = [
+  'seriesMaintenance',
+  'series',
+  'maintenance',
+  'biteblock',
+  'timeOut',
+  'timeOfProcedure',
+  'ectTypeBlock',
+  'ectSettingBlockPw',
+  'ectSettingBlockFrequency',
+  'ectSettingBlockDuration',
+  'ectSettingBlockCurrent',
+  'ectSeizureDuration',
+  'ectPostOpMedicationBlock',
+  'ectPostOpMedicationBlockDetails',
+  'ectComplicationsBlock',
+  'ectComplicationsBlockDetails',
+  'ectAssessment',
+  'ectContinuePBlock',
+  'anesthesiologist',
+]
 export {
   INJECTION_BLOCK_OPTIONS,
   INTERACTIVE_COMPLEXITY_BLOCK_OPTIONS,
   THERAPY_OPTIONS,
   THERAPY_PSYCHOANALYSIS_TABLE_DATA,
+  ECT_OPTIONS,
 }

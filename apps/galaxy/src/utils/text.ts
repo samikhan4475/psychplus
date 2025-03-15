@@ -52,6 +52,9 @@ function encodeTextToHtml(text: string) {
     .replace(/\t/g, '&emsp;')
 }
 
+const getStringValue = (val: unknown): string =>
+  typeof val === 'string' ? val : ''
+
 export {
   truncateString,
   decodeUrlString,
@@ -60,4 +63,5 @@ export {
   formatReadableString,
   encodeTextToHtml,
   decodeHtmlToText,
+  getStringValue,
 }
