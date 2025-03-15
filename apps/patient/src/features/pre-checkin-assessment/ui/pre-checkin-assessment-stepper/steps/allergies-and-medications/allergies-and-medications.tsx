@@ -1,5 +1,7 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Flex } from '@radix-ui/themes'
+import { useProfileStore } from '@/features/account/profile/store'
+import { useStore } from '@/features/pre-checkin-assessment/store'
 import {
   AllergyDataResponse,
   PatientMedication,
@@ -16,6 +18,13 @@ const AllergiesAndMedications: React.FC<AllergiesAndMedicationsProps> = ({
   medications,
   allergies,
 }) => {
+  const { isSaveButtonPressed, save } = useStore()
+  const patientId = useProfileStore((state) => state.profile.id)
+
+  useEffect(() => {
+    if (isSaveButtonPressed) save({ patientId })
+  }, [isSaveButtonPressed])
+  
   return (
     <Flex direction={'column'} gap={'5'}>
       <AllergiesView allergies={allergies} />

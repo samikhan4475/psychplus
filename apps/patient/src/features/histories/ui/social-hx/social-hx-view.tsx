@@ -11,7 +11,7 @@ import { transformIn, transformOut } from './data'
 import { useSocialHxForm } from './social-hx-form'
 
 interface SocialHxProps {
-  onSave?: () => void
+  onSave?: () => Promise<void>
   isEdit?: boolean
 }
 

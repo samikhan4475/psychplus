@@ -2,6 +2,7 @@
 
 import React, { useEffect } from 'react'
 import { FeatureCard, FeatureContainer } from '@/components-v2'
+import { useProfileStore } from '@/features/account/profile/store'
 import { type PatientPharmacy } from '@/features/pharmacy/types'
 import { PharmacyForms } from '@/features/pharmacy/ui/pharmacy-card/pharmacy-forms'
 import { useStore } from '@/features/pre-checkin-assessment/store'
@@ -14,9 +15,10 @@ const PharmacyView = ({
   isDawSystemFeatureFlagEnabled?: boolean
 }) => {
   const { isSaveButtonPressed, save } = useStore()
+  const patientId = useProfileStore((state) => state.profile.id)
 
   useEffect(() => {
-    if (isSaveButtonPressed) save()
+    if (isSaveButtonPressed) save({ patientId })
   }, [isSaveButtonPressed])
 
   return (

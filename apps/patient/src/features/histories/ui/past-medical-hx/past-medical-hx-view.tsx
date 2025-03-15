@@ -9,7 +9,7 @@ import { transformIn, transformOut } from './data'
 import { usePastMedicalHxForm } from './past-medical-hx-form'
 
 interface PastMedicalHxProps {
-  onSave?: () => void
+  onSave?: () => Promise<void>
   isEdit?: boolean
 }
 

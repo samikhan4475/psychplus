@@ -64,7 +64,7 @@ const renderQuestionnaireSection = ({
   Component,
 }: {
   sectionName: string
-  handleSave: () => void
+  handleSave: () => Promise<void>
   isEdit?: boolean
   patientId: string
   Component: React.FC

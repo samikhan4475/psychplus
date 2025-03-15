@@ -15,7 +15,7 @@ const Content = ({
   className,
   children,
 }: React.PropsWithChildren<ContentProps>) => {
-  const { open, isEdit } = useToggleableFormContext()
+  const { open, isEdit, allowExternalSave } = useToggleableFormContext()
 
   if (!open) {
     return null
@@ -30,7 +30,7 @@ const Content = ({
     >
       {children}
       <ErrorMessage />
-      {isEdit && (
+      {isEdit && !allowExternalSave && (
         <Flex gap="2">
           <SaveButton />
           <CancelButton />

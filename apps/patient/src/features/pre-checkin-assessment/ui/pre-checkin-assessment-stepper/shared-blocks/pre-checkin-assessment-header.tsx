@@ -48,7 +48,7 @@ const PreCheckinAssessmentHeader = ({
                   <Circle size="8px" strokeWidth="4px" fill="white" />
                 ) : (
                   activeTab !== tab.id &&
-                  completedTabs.includes(tab.id) && (
+                  completedTabs?.includes(tab.id) && (
                     <Check strokeWidth="3.5px" color="white" />
                   )
                 )}
@@ -68,14 +68,14 @@ const getTabStyles = (
   completedTabs: PreCheckinAssessmentTabs[],
 ) => {
   const isActive = activeTab === tabId
-  const isCompleted = completedTabs.includes(tabId)
+  const isCompleted = completedTabs?.includes(tabId)
 
   let backgroundColor = ''
 
   if (isActive) {
     backgroundColor = 'bg-[#194595]'
   } else if (isCompleted) {
-    backgroundColor = 'bg-[#24366b]'
+    backgroundColor = 'bg-pp-gray-1'
   } else {
     backgroundColor = 'bg-[#D1DAEA]'
   }
@@ -84,11 +84,12 @@ const getTabStyles = (
     trigger: cn('h-1 w-full cursor-pointer rounded-4', backgroundColor),
     indicator: cn(
       'rounded-full flex h-[15px] w-[15px] flex-shrink-0 items-center justify-center border-2 border-[#D1DAEA]',
-      isActive || isCompleted ? 'bg-[#24366B] border-[#24366B]' : '',
+      isCompleted ? 'bg-pp-gray-1 border-pp-gray-1' : '',
+      isActive ? 'bg-pp-blue-3 border-pp-blue-3' : '',
     ),
     label: cn(
       'text-[12px] font-medium',
-      isActive || isCompleted ? 'text-[#1C2024]' : 'text-[#60646c]',
+      isActive ? 'text-black' : 'text-pp-gray-1',
     ),
   }
 }

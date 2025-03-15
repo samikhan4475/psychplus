@@ -11,16 +11,20 @@ import { ToggleableForm } from './toggleable-form'
 
 type NoteFormContainerProps = React.PropsWithChildren<{
   getData: (schema: any) => NoteSectionItem[] | Promise<NoteSectionItem[]>
-  onSave?: () => void
+  onSave?: () => Promise<void>
+  onError?: () => Promise<void>
   isEdit?: boolean
-  isComponentClose?: boolean
+  isExternalSavePressed?: boolean
+  allowExternalSave?: boolean
 }>
 
 const NoteFormContainer = ({
   getData,
   onSave,
+  onError,
   isEdit,
-  isComponentClose,
+  isExternalSavePressed,
+  allowExternalSave,
   children,
 }: NoteFormContainerProps) => {
   const { toast } = useToast()
@@ -34,11 +38,12 @@ const NoteFormContainer = ({
     return addNoteDetails(values)
   }
 
-  const onSuccess = (data: NoteSectionItem[]) => {
-    toast({
-      type: 'success',
-      title: 'Saved',
-    })
+  const onSuccess = async (data: NoteSectionItem[]) => {
+    if (!allowExternalSave)
+      toast({
+        type: 'success',
+        title: 'Saved',
+      })
 
     saveNoteData(data, data[0].sectionName as NoteSectionName)
 
@@ -49,10 +54,11 @@ const NoteFormContainer = ({
     <ToggleableForm
       form={form}
       submitAction={submitAction}
-      onFormClose={onSave}
       onSuccess={onSuccess}
       isEdit={isEdit}
-      isComponentClose={isComponentClose}
+      isExternalSavePressed={isExternalSavePressed}
+      allowExternalSave={allowExternalSave}
+      onError={onError}
     >
       {children}
     </ToggleableForm>

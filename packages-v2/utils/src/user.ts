@@ -1,3 +1,6 @@
+import { UserSettingName } from '@psychplus-v2/constants'
+import { UserSettings } from '@psychplus-v2/types'
+
 const getUserInitials = ({
   firstName,
   lastName,
@@ -22,4 +25,16 @@ const getUserFullName = (
     ? `${firstName} ${middleName} ${lastName}`
     : `${firstName} ${lastName}`
 
-export { getUserInitials, getUserFullName }
+const extractUserSetting = (
+  userSettings: UserSettings[] | undefined,
+  settingName: UserSettingName,
+) => {
+  const settingObj = userSettings?.find((item) => item.name === settingName)
+
+  if (settingObj)
+    return { ...settingObj, content: JSON.parse(settingObj.content) }
+
+  return null
+}
+
+export { getUserInitials, getUserFullName, extractUserSetting }

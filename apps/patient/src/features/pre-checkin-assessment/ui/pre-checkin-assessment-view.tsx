@@ -1,8 +1,10 @@
-import { CODESETS } from '@psychplus-v2/constants'
-import { Box, Text } from '@radix-ui/themes'
+import { CODESETS, UserSettingName } from '@psychplus-v2/constants'
 import { GOOGLE_MAPS_API_KEY, STRIPE_PUBLISHABLE_KEY } from '@psychplus-v2/env'
+import { extractUserSetting } from '@psychplus-v2/utils'
+import { Box, Text } from '@radix-ui/themes'
 import { getCodesets, getIsFeatureFlagEnabled, getProfile } from '@/api'
 import { FeatureFlags } from '@/constants'
+import { getUserSettings } from '@/features/account/profile/api'
 import { ProfileStoreProvider } from '@/features/account/profile/store'
 import { getCreditCards } from '@/features/billing/credit-debit-cards/api'
 import {
@@ -96,30 +98,42 @@ const PreCheckinAssessmentView = async () => {
   const questionnaireSectionsToShowOnPreCheckin =
     questionnairesToShowOnPreCheckin(questionnaireDashboardResponse.data)
 
-  const noteDetailsResponse = await getNoteDetails({
-    patientId: profileResponse.data.id,
-    sectionName: [
-      ...questionnaireSectionsToShowOnPreCheckin,
-      NoteSectionName.NoteSectionHPI,
-      NoteSectionName.NoteSectionReviewOfSystem,
-      NoteSectionName.NoteSectionFamilyPsychHx,
-      NoteSectionName.NoteSectionSubstanceUseHx,
-      NoteSectionName.NoteSectionPastPsychHx,
-      NoteSectionName.NoteSectionSocialHx,
-      NoteSectionName.NoteSectionPastMedicalHx,
-    ],
-  })
+  const [noteDetailsResponse, userSettingsResponse] = await Promise.all([
+    getNoteDetails({
+      patientId: profileResponse.data.id,
+      sectionName: [
+        ...questionnaireSectionsToShowOnPreCheckin,
+        NoteSectionName.NoteSectionHPI,
+        NoteSectionName.NoteSectionReviewOfSystem,
+        NoteSectionName.NoteSectionFamilyPsychHx,
+        NoteSectionName.NoteSectionSubstanceUseHx,
+        NoteSectionName.NoteSectionPastPsychHx,
+        NoteSectionName.NoteSectionSocialHx,
+        NoteSectionName.NoteSectionPastMedicalHx,
+      ],
+    }),
+    getUserSettings(profileResponse.data.id),
+  ])
 
   if (noteDetailsResponse.state === 'error') {
     return <Text>{noteDetailsResponse.error}</Text>
   }
+
+  if (userSettingsResponse.state === 'error') {
+    return <Text>{userSettingsResponse.error}</Text>
+  }
+
+  const preCheckInProgress = extractUserSetting(
+    userSettingsResponse.data,
+    UserSettingName.PreCheckIn,
+  )
 
   return (
     <ProfileStoreProvider profile={profileResponse.data}>
       <GooglePlacesContextProvider apiKey={GOOGLE_MAPS_API_KEY}>
         <CodesetStoreProvider codesets={codesets}>
           <NoteStoreProvider notes={noteDetailsResponse.data}>
-          <Box className="mx-auto w-[1200px]">
+          <Box className="mx-auto w-[1200px]" mt="9">
             <PreCheckinAssessmentStapper
               insurancePayers={insurancePayerResponse.data}
               patientInsurances={patientInsurancesResponse.data}
@@ -132,6 +146,14 @@ const PreCheckinAssessmentView = async () => {
               questionnaireSectionsToShowOnPreCheckin={
                 questionnaireSectionsToShowOnPreCheckin
               }
+              preCheckInProgress={{
+                preCheckInCompletedTabs:
+                  preCheckInProgress?.content?.preCheckInCompletedTabs,
+                isPreCheckInCompleted:
+                  preCheckInProgress?.content?.isPreCheckInCompleted,
+                activeTab: preCheckInProgress?.content?.activeTab,
+                id: String(preCheckInProgress?.id),
+              }}
             />
           </Box>
         </NoteStoreProvider>

@@ -5,10 +5,13 @@ import {
   CODESETS,
   PaymentType,
   ProviderType,
+  UserSettingName,
 } from '@psychplus-v2/constants'
 import { GOOGLE_MAPS_API_KEY, STRIPE_PUBLISHABLE_KEY } from '@psychplus-v2/env'
 import { Appointment } from '@psychplus-v2/types'
 import {
+  cn,
+  extractUserSetting,
   formatCurrency,
   getAppointmentTypeLabel,
   getNewProviderTypeLabel,
@@ -16,18 +19,20 @@ import {
   withSuspense,
 } from '@psychplus-v2/utils'
 import { Button, Flex, Text } from '@radix-ui/themes'
-import { CalendarDaysIcon, DotIcon } from 'lucide-react'
+import { CalendarDaysIcon, ChevronRightIcon, DotIcon } from 'lucide-react'
 import { getCodesets, getConsents, getProfile } from '@/api'
 import {
   Badge,
   CardContainer,
   CreditDebitCardIcon,
   FeatureEmpty,
+  FileLineIcon,
   LoadingPlaceholder,
   ParentLineIcon,
   ProviderAvatar,
   ShieldFlashLineIcon,
 } from '@/components-v2'
+import { getUserSettings } from '@/features/account/profile/api'
 import { ProfileStoreProvider } from '@/features/account/profile/store'
 import { ChangeVisitMedium } from '@/features/appointments/upcoming/ui/change-visit-medium.tsx'
 import { getCreditCards } from '@/features/billing/credit-debit-cards/api'
@@ -65,9 +70,19 @@ const UpcomingAppointmentsSummaryComponent = async () => {
     getConsents(),
   ])
 
-  const [insurancePayerResponse, patientInsurancesResponse] = await Promise.all(
-    [getInsurancePayers(), getPatientInsurances()],
-  )
+  if (profileResponse.state === 'error') {
+    return <Text>{profileResponse.error}</Text>
+  }
+
+  const [
+    insurancePayerResponse,
+    patientInsurancesResponse,
+    userSettingsResponse,
+  ] = await Promise.all([
+    getInsurancePayers(),
+    getPatientInsurances(),
+    getUserSettings(profileResponse.data.id),
+  ])
 
   if (insurancePayerResponse.state === 'error') {
     throw new Error(insurancePayerResponse.error)
@@ -96,8 +111,8 @@ const UpcomingAppointmentsSummaryComponent = async () => {
     throw new Error(creditCardResponse.error)
   }
 
-  if (profileResponse.state === 'error') {
-    throw new Error(profileResponse.error)
+  if (userSettingsResponse.state === 'error') {
+    return <Text>{userSettingsResponse.error}</Text>
   }
 
   const upcomingAppointments = upcomingAppointmentResponse.data.appointments
@@ -126,6 +141,10 @@ const UpcomingAppointmentsSummaryComponent = async () => {
     return 'Select Insurance'
   }
 
+  const preCheckInProgress = extractUserSetting(
+    userSettingsResponse.data,
+    UserSettingName.PreCheckIn,
+  )
   const shouldShowPreCheckinAssessment =
     process.env.API_URL !== 'https://api.psychplus.io'
 
@@ -288,24 +307,41 @@ const UpcomingAppointmentsSummaryComponent = async () => {
                         !row?.isQuickNoteSigned &&
                         shouldShowPreCheckinAssessment && (
                           <Flex gap="2" align="center">
-                            <Image
-                              src={'/images/precheckin.svg'}
-                              width={15}
-                              height={15}
-                              alt=""
-                            />
-                            <Text className="whitespace-nowrap text-[16px] xs:text-[15px]">
+                            <FileLineIcon />
+                            <Text className="text-[12px] xs:text-[15px]">
                               Pre-Visit Assessment
                             </Text>
-                            <Badge label={'Not Completed'} type={'warning'} />
-                            <Link href={'/pre-checkin-assessment'}>
-                              <Button
-                                highContrast
-                                className="w-full bg-[#194595]"
-                              >
-                                Fill Now
-                              </Button>
-                            </Link>
+                            <Badge
+                              label={
+                                preCheckInProgress?.content
+                                  ?.isPreCheckInCompleted
+                                  ? 'Completed'
+                                  : 'Not Completed'
+                              }
+                              type={
+                                preCheckInProgress?.content
+                                  ?.isPreCheckInCompleted
+                                  ? 'success'
+                                  : 'warning'
+                              }
+                              addIcon={true}
+                              className={cn(
+                                !preCheckInProgress?.content
+                                  ?.isPreCheckInCompleted && 'h-8 text-[14px]',
+                              )}
+                            />
+                            {!preCheckInProgress?.content
+                              ?.isPreCheckInCompleted && (
+                              <Link href={'/pre-checkin-assessment'}>
+                                <Button
+                                  highContrast
+                                  className="w-full bg-[#194595]"
+                                >
+                                  Fill Now
+                                  <ChevronRightIcon height="16" width="16" />
+                                </Button>
+                              </Link>
+                            )}
                           </Flex>
                         )}
                       <Flex>

@@ -26,6 +26,7 @@ interface ToastContextType {
 }
 
 const ToastContext = createContext<ToastContextType | undefined>(undefined)
+let toastFn: ((data: ToastData) => void) | null = null
 
 const ToastProvider = ({ children }: React.PropsWithChildren) => {
   const [open, setOpen] = useState(false)
@@ -47,7 +48,7 @@ const ToastProvider = ({ children }: React.PropsWithChildren) => {
     }, 100)
   }, [])
 
-  const toastType = data ? data.type ?? 'info' : undefined
+  toastFn = toast
 
   const contextValue = useMemo(() => ({ toast }), [toast])
 
@@ -71,7 +72,7 @@ const ToastProvider = ({ children }: React.PropsWithChildren) => {
           </Toast.Close>
 
           <Flex align="center" gap="3">
-            {renderToastType(toastType)}
+            {renderToastType(data?.type)}
             <Flex direction="column" gap="1">
               {data?.title ? (
                 <Toast.Title className="text-[14px] font-medium text-slate-12 [grid-area:_title]">
@@ -98,13 +99,13 @@ const ToastProvider = ({ children }: React.PropsWithChildren) => {
             </Toast.Action>
           ) : null}
         </Toast.Root>
-        <Toast.Viewport className="fixed bottom-0 right-0 z-50 m-0 flex w-[390px] max-w-[100vw] list-none flex-col gap-[10px] p-[var(--viewport-padding)] outline-none [--viewport-padding:_25px]" />
+        <Toast.Viewport className="fixed right-0 top-0 z-50 m-0 flex w-[390px] max-w-[100vw] list-none flex-col gap-[10px] p-[var(--viewport-padding)] outline-none [--viewport-padding:_25px]" />
       </ToastContext.Provider>
     </Toast.Provider>
   )
 }
 
-const renderToastType = (toastType: ToastData['type']) => {
+const renderToastType = (toastType?: ToastData['type']) => {
   if (toastType === 'success') {
     return (
       <Flex
@@ -113,6 +114,17 @@ const renderToastType = (toastType: ToastData['type']) => {
         className="rounded-full h-[30px] w-[30px] min-w-[30px] bg-green-3"
       >
         <CheckIcon width={20} height={20} className="text-green-10" />
+      </Flex>
+    )
+  }
+  if (toastType === 'error') {
+    return (
+      <Flex
+        align="center"
+        justify="center"
+        className="rounded-full h-[30px] w-[30px] min-w-[30px] bg-red-3"
+      >
+        <XIcon width={20} height={20} className="text-red-10" />
       </Flex>
     )
   }
@@ -128,4 +140,8 @@ const useToast = () => {
   return context
 }
 
-export { ToastProvider, useToast, type ToastData }
+const customToast = (data: ToastData) => {
+  if (toastFn) toastFn(data)
+}
+
+export { ToastProvider, useToast, customToast, type ToastData, renderToastType }

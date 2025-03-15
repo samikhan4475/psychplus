@@ -1,7 +1,7 @@
 import React from 'react'
 import { Flex } from '@radix-ui/themes'
+import { FeatureCard } from '@/components-v2'
 import { PatientMedication } from '@/features/medications/types/medications'
-import { HeadingBlock } from './blocks/heading-block'
 import MedicationTable from './blocks/medication-table'
 
 // import { useForm } from 'react-hook-form'
@@ -19,14 +19,14 @@ interface MedicationViewProps {
   medications: PatientMedication[]
 }
 
-const MedicationView: React.FC<MedicationViewProps> = ({ medications }) => {
+const MedicationView = ({ medications }: MedicationViewProps) => {
   // const form = useForm()
 
   return (
-    <Flex
-      className="bg-white rounded-[8px] border border-[#d9e2fc] px-5 pb-9 pt-7"
-      gap="1"
-      direction="column"
+    <FeatureCard
+      title="Medications"
+      contentClassName="gap-3 relative"
+      showTitleInsideCard
     >
       {/* <ToggleableForm
         form={form}
@@ -39,7 +39,7 @@ const MedicationView: React.FC<MedicationViewProps> = ({ medications }) => {
           console.log('')
         }}
       > */}
-      <HeadingBlock />
+
       {/* <SearchBlock />
         <Flex align={'center'} gap={'4'} className="w-full">
           <DoseBlock />
@@ -52,12 +52,12 @@ const MedicationView: React.FC<MedicationViewProps> = ({ medications }) => {
         <Flex className="mb-3 w-full">
           <PrescribedDateBlock />
         </Flex>*/}
-      <Flex className="mt-4" direction={'column'} gap={'2'} width={'100%'}>
+      <Flex direction={'column'} gap={'2'} width={'100%'}>
         <MedicationTable medications={medications} />
         {/* <CommentBlock /> */}
       </Flex>
       {/* </ToggleableForm> */}
-    </Flex>
+    </FeatureCard>
   )
 }
 

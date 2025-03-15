@@ -33,9 +33,9 @@ interface ToggleableFormProps<T extends FieldValues, Response> {
   triggerClassName?: string
   onFormClose?: () => void
   isEdit?: boolean
-  isComponentClose?: boolean
   isExternalSavePressed?: boolean
-  setExternalSavePressed?: (isPressed: boolean) => void
+  resetExternalSaveState?: () => Promise<void>
+  allowExternalSave?: boolean
 }
 
 const ToggleableForm = <T extends FieldValues, R>({
@@ -54,8 +54,8 @@ const ToggleableForm = <T extends FieldValues, R>({
   onFormClose,
   isEdit = true,
   isExternalSavePressed = false,
-  setExternalSavePressed,
-  isComponentClose = true,
+  resetExternalSaveState,
+  allowExternalSave = false,
 }: React.PropsWithChildren<ToggleableFormProps<T, R>>) => {
   const { toast } = useToast()
   const [open, setOpen] = useState(!trigger)
@@ -69,11 +69,11 @@ const ToggleableForm = <T extends FieldValues, R>({
 
   useEffect(() => {
     if (!isExternalSavePressed) return;
-    if (isExternalSavePressed) {
+    if (isExternalSavePressed && allowExternalSave) {
       const handleExternalSave = async () => {
         const isValid = await form.trigger()
         if (!isValid) {
-          setExternalSavePressed?.(false)
+          await resetExternalSaveState?.()
           return
         }
  
@@ -82,7 +82,7 @@ const ToggleableForm = <T extends FieldValues, R>({
  
       handleExternalSave()
     }
-  }, [isExternalSavePressed])
+  }, [isExternalSavePressed, allowExternalSave])
 
   const onSubmit: SubmitHandler<T> = async (data, e) => {
     e?.preventDefault()
@@ -95,7 +95,7 @@ const ToggleableForm = <T extends FieldValues, R>({
     }
 
     if (result.state === 'success') {
-      if (isEdit && isComponentClose) setOpen(false)
+      if (isEdit && !allowExternalSave) setOpen(false)
       form.reset(noResetValues ? undefined : form.getValues())
 
       if (toastData) {
@@ -119,8 +119,19 @@ const ToggleableForm = <T extends FieldValues, R>({
       hasTrigger: !!trigger,
       onFormClose: onFormClose,
       isEdit: isEdit,
+      allowExternalSave: allowExternalSave,
     }),
-    [open, setOpen, error, setError, disabled, trigger, onFormClose, isEdit],
+    [
+      open,
+      setOpen,
+      error,
+      setError,
+      disabled,
+      trigger,
+      onFormClose,
+      isEdit,
+      allowExternalSave,
+    ],
   )
 
   return (

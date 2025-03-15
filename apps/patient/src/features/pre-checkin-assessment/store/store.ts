@@ -1,5 +1,11 @@
+import { UserSettingName } from '@psychplus-v2/constants'
 import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
+import {
+  saveUserSettings,
+  updateUserSettings,
+} from '@/features/account/profile/actions'
+import { customToast } from '@/providers'
 import {
   PRE_CHECKIN_ASSESSMENT_KEY,
   PreCheckinAssessmentTabs,
@@ -8,62 +14,135 @@ import {
 } from '../constants'
 
 interface Store {
+  preCheckInSettingsId: string
+  tabsToShow: PreCheckinAssessmentTabs[]
   activeTab: PreCheckinAssessmentTabs
   completedTabs: PreCheckinAssessmentTabs[]
-  isSaveButtonPressed: boolean
+  isPreCheckInCompleted: boolean
   saveAction: SaveAction | null
+  isSaveButtonDisabled: boolean
+  isSaveButtonPressed: boolean
   hydrated: boolean
-  setActiveTab: (activeTab: PreCheckinAssessmentTabs) => void
-  markTabAsCompleted: (tab: PreCheckinAssessmentTabs) => void
-  setSaveButtonPressed: (pressed: boolean) => void
+
+  setPreCheckInSettingsId: (id: string) => void
+  setTabsToShow: (tabs: PreCheckinAssessmentTabs[]) => void
+  setActiveTab: (tab: PreCheckinAssessmentTabs) => void
+  setCompletedTabs: (tabs: PreCheckinAssessmentTabs[]) => void
+  setIsPreCheckInCompleted: (status: boolean) => void
   setSaveAction: (action: SaveAction | null) => void
-  save: () => Promise<void>
-  skip: () => void
-  handleTabNavigation: (
-    direction: TabDirection,
-    isSkip?: boolean,
-  ) => Promise<void>
-  setHydrated: (hydrated: boolean) => void
-  tabsToShow: PreCheckinAssessmentTabs[]
-  setTabsToShow: (tabsToShow: PreCheckinAssessmentTabs[]) => void
+  setIsSaveButtonDisabled: (disabled: boolean) => void
+  setIsSaveButtonPressed: (pressed: boolean) => void
+  setHydrated: (status: boolean) => void
+
+  markTabAsCompleted: (tab: PreCheckinAssessmentTabs) => void
+  save: (params: {
+    patientId: number
+    isTabCompleted?: boolean
+  }) => Promise<void>
+  handleTabNavigation: (direction: TabDirection) => Promise<void>
+  resetSaveButtonState: () => Promise<void>
 }
 
 const useStore = create<Store>()(
   persist(
     (set, get) => ({
+      preCheckInSettingsId: '',
+      tabsToShow: [],
       activeTab: PreCheckinAssessmentTabs.PatientInfo,
       completedTabs: [],
-      isSaveButtonPressed: false,
+      isPreCheckInCompleted: false,
       saveAction: null,
+      isSaveButtonDisabled: false,
+      isSaveButtonPressed: false,
       hydrated: false,
-      setActiveTab: (activeTab) => set({ activeTab }),
+
+      setPreCheckInSettingsId: (id) => set({ preCheckInSettingsId: id }),
+      setTabsToShow: (tabs) => set({ tabsToShow: tabs }),
+      setActiveTab: (tab) => set({ activeTab: tab }),
+      setCompletedTabs: (tabs) => set({ completedTabs: tabs }),
+      setIsPreCheckInCompleted: (status) =>
+        set({ isPreCheckInCompleted: status }),
+      setSaveAction: (action) => set({ saveAction: action }),
+      setIsSaveButtonDisabled: (disabled) =>
+        set({ isSaveButtonDisabled: disabled }),
+      setIsSaveButtonPressed: (pressed) =>
+        set({ isSaveButtonPressed: pressed }),
+      setHydrated: (status) => set({ hydrated: status }),
+
       markTabAsCompleted: (tab) =>
         set((state) => ({
-          completedTabs: state.completedTabs.includes(tab)
-            ? state.completedTabs
-            : [...state.completedTabs, tab],
+          completedTabs: getTabsWithCompletion(tab, state.completedTabs),
         })),
-      setSaveButtonPressed: (pressed) => set({ isSaveButtonPressed: pressed }),
-      setSaveAction: (action) => set({ saveAction: action }),
-      skip: () => {
-        const { handleTabNavigation, activeTab, tabsToShow } = get()
-        handleTabNavigation(TabDirection.Next, true)
-        if (activeTab === tabsToShow.at(-1)) window.location.replace('/')
+      save: async ({ patientId, isTabCompleted = true }) => {
+        const {
+          saveAction,
+          handleTabNavigation,
+          resetSaveButtonState,
+          tabsToShow,
+          activeTab,
+          markTabAsCompleted,
+          completedTabs,
+          preCheckInSettingsId,
+        } = get()
+
+        const updatedTabs = isTabCompleted
+          ? getTabsWithCompletion(activeTab, completedTabs)
+          : completedTabs
+        const isPreCheckInCompleted = tabsToShow.length === updatedTabs.length
+
+        const payload = {
+          settingStatusCode: 'Active',
+          levelCode: 'User',
+          categoryCode: 'Resource',
+          categoryValue: String(patientId),
+          name: UserSettingName.PreCheckIn,
+          content: JSON.stringify({
+            preCheckInCompletedTabs: updatedTabs,
+            isPreCheckInCompleted,
+            activeTab:
+              saveAction === SaveAction.Next && activeTab !== tabsToShow.at(-1)
+                ? tabsToShow[
+                    tabsToShow.findIndex((tab) => tab === activeTab) + 1
+                  ]
+                : activeTab,
+          }),
+        }
+        const apiCall =
+          preCheckInSettingsId === undefined ||
+          preCheckInSettingsId === null ||
+          preCheckInSettingsId === 'undefined'
+            ? () => saveUserSettings(payload)
+            : () => updateUserSettings(payload, preCheckInSettingsId)
+
+        const res = await apiCall()
+        if (res.state === 'error') {
+          customToast({
+            type: 'error',
+            title: res.error ?? 'Failed to save',
+          })
+          resetSaveButtonState()
+          return
+        }
+
+        set({ preCheckInSettingsId: res?.data?.id })
+        customToast({ type: 'success', title: 'Saved!' })
+
+        if (isTabCompleted && !completedTabs.includes(activeTab))
+          markTabAsCompleted(activeTab)
+        if (saveAction === SaveAction.Next)
+          await handleTabNavigation(TabDirection.Next)
+        resetSaveButtonState()
+        set({ isPreCheckInCompleted: isPreCheckInCompleted })
       },
-      save: async () => {
-        const { saveAction, handleTabNavigation } = get()
-        await handleTabNavigation(TabDirection.Next)
-        if (saveAction === SaveAction.Exit) window.location.href = '/'
-      },
-      handleTabNavigation: async (direction: TabDirection, isSkip = false) => {
+      handleTabNavigation: async (direction: TabDirection) => {
         const {
           activeTab,
           setActiveTab,
-          markTabAsCompleted,
-          setSaveButtonPressed,
-          setSaveAction,
           tabsToShow,
+          resetSaveButtonState,
+          completedTabs,
         } = get()
+        const isPreCheckInCompleted = tabsToShow.length === completedTabs.length
         const currentIndex = tabsToShow.findIndex((tab) => tab === activeTab)
         const newIndex =
           direction === TabDirection.Next ? currentIndex + 1 : currentIndex - 1
@@ -71,23 +150,29 @@ const useStore = create<Store>()(
         if (newIndex >= 0 && newIndex < tabsToShow.length)
           setActiveTab(tabsToShow[newIndex])
 
-        if (!isSkip && currentIndex >= 0 && currentIndex < tabsToShow.length)
-          markTabAsCompleted(tabsToShow[currentIndex])
+        resetSaveButtonState()
 
-        setSaveButtonPressed(false)
-        setSaveAction(null)
+        if (
+          (direction === TabDirection.Next &&
+            activeTab === tabsToShow.at(-1) &&
+            !isPreCheckInCompleted) ||
+          newIndex < 0
+        ) {
+          window.location.replace('/')
+        }
       },
-      setHydrated: (hydrated) => set({ hydrated }),
-      tabsToShow: [],
-      setTabsToShow: (tabsToShow) => set({ tabsToShow }),
+      resetSaveButtonState: async () =>
+        set({
+          isSaveButtonDisabled: false,
+          isSaveButtonPressed: false,
+          saveAction: null,
+        }),
     }),
     {
       name: PRE_CHECKIN_ASSESSMENT_KEY,
       storage: createJSONStorage(() => localStorage),
       onRehydrateStorage: () => (state) => {
-        if (state) {
-          state.setHydrated(true)
-        }
+        if (state) state.setHydrated(true)
       },
       partialize: (state) => ({
         activeTab: state.activeTab,
@@ -97,5 +182,14 @@ const useStore = create<Store>()(
     },
   ),
 )
+
+const getTabsWithCompletion = (
+  activeTab: PreCheckinAssessmentTabs,
+  completedTabs: PreCheckinAssessmentTabs[],
+) => {
+  return completedTabs.includes(activeTab)
+    ? completedTabs
+    : [...completedTabs, activeTab]
+}
 
 export { useStore }

@@ -229,11 +229,14 @@ const AddressCard = () => {
       width="100%"
       align="start"
       gap="4"
-      className="bg-white mt-4 rounded-[8px] border border-[#d9e2fc] px-5 pb-9 pt-7"
+      className="bg-white mt-4 rounded-[8px] border border-gray-5 px-5 pb-9 pt-7"
       ref={ref}
     >
       <Flex direction="column" className="mb-3 flex-1">
-        <Text className="h-[35px] text-[20px] font-medium text-[#1C2024]">
+        <Text
+          className="h-[35px] text-[20px] font-medium text-black"
+          mb="2"
+        >
           Primary Address
         </Text>
 
@@ -270,7 +273,6 @@ const AddressCard = () => {
           <TextFieldInput
             {...form.register('primaryStreet2')}
             size="3"
-            className="border-pp-gray-7 px-3"
             placeholder={getPlaceholder('primaryAddress 2')}
           />
           <FormFieldError name="primaryStreet2" />
@@ -282,7 +284,6 @@ const AddressCard = () => {
             <TextFieldInput
               {...form.register('primaryCity')}
               size="3"
-              className="border-pp-gray-7 px-3"
               placeholder="Enter city"
               disabled
             />
@@ -294,7 +295,6 @@ const AddressCard = () => {
             <TextFieldInput
               {...form.register('primaryState')}
               size="3"
-              className="border-pp-gray-7 px-3"
               placeholder="Enter state"
               disabled
             />
@@ -306,7 +306,6 @@ const AddressCard = () => {
             <TextFieldInput
               {...form.register('primaryPostalCode')}
               size="3"
-              className="border-pp-gray-7 px-3"
               placeholder="Enter ZIP code"
               disabled
             />
@@ -316,7 +315,7 @@ const AddressCard = () => {
       </Flex>
 
       <Flex direction="column" className="flex-1">
-        <Flex className="flex-1" gap="2" align="center">
+        <Flex className="flex-1" gap="2" align="center" mb="2">
           <Text className="whitespace-nowrap text-[20px] font-medium text-[#1C2024]">
             Mailing Address
           </Text>
@@ -406,7 +405,6 @@ const AddressCard = () => {
           <TextFieldInput
             {...form.register('secondaryStreet2')}
             size="3"
-            className="border-pp-gray-7 px-3"
             disabled={form.watch('isMailingAddressSameAsPrimary')}
             placeholder={getPlaceholder('mailingAddress 2')}
           />
@@ -419,7 +417,6 @@ const AddressCard = () => {
             <TextFieldInput
               {...form.register('secondaryCity')}
               size="3"
-              className="border-pp-gray-7 px-3"
               placeholder="Enter city"
               disabled
             />
@@ -431,7 +428,6 @@ const AddressCard = () => {
             <TextFieldInput
               {...form.register('secondaryState')}
               size="3"
-              className="border-pp-gray-7 px-3"
               placeholder="Enter state"
               disabled
             />
@@ -443,7 +439,6 @@ const AddressCard = () => {
             <TextFieldInput
               {...form.register('secondaryPostalCode')}
               size="3"
-              className="border-pp-gray-7 px-3"
               placeholder="Enter ZIP code"
               disabled
             />

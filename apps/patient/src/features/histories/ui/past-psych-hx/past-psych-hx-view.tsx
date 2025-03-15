@@ -14,7 +14,7 @@ import { transformIn, transformOut } from './data'
 import { usePastPsychHxForm } from './past-psych-hx-form'
 
 interface PastPsychHxProps {
-  onSave?: () => void
+  onSave?: () => Promise<void>
   isEdit?: boolean
 }
 

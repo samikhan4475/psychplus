@@ -7,7 +7,7 @@ import { ChevronDown } from 'lucide-react'
 import { Badge } from '@/components-v2'
 
 interface NoteAccordionContentProps {
-  handleSave: () => void
+  handleSave: () => Promise<void>
 }
 
 interface NoteAccordionProps {
@@ -25,7 +25,7 @@ const NoteAccordion = ({
 }: NoteAccordionProps) => {
   const [isOpen, setIsOpen] = useState(false)
 
-  const handleSave = () => {
+  const handleSave = async () => {
     setIsOpen(false)
   }
 

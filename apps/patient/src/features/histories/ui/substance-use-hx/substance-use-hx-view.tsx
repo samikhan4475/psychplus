@@ -10,7 +10,7 @@ import { transformIn, transformOut } from './data'
 import { useSubstanceUseHxForm } from './substance-use-hx-form'
 
 interface SubstanceUseHxProps {
-  onSave?: () => void
+  onSave?: () => Promise<void>
   isEdit?: boolean
 }
 

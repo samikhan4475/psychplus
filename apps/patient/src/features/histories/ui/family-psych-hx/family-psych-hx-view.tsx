@@ -10,7 +10,7 @@ import { transformIn, transformOut } from './data'
 import { useFamilyPsychHxForm } from './family-psych-hx-form'
 
 interface FamilyPsychHxProps {
-  onSave?: () => void
+  onSave?: () => Promise<void>
   isEdit?: boolean
 }
 

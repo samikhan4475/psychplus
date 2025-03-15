@@ -1,8 +1,8 @@
 import React from 'react'
 import { Flex } from '@radix-ui/themes'
+import { FeatureCard } from '@/components-v2'
 import { AllergyDataResponse } from '@/features/medications/types'
-import AllergiesTable from '../medication/blocks/allergies-table'
-import { HeadingBlock } from './blocks/heading-block'
+import AllergiesTable from './blocks/allergies-table'
 
 // Comment out for phase 2
 // import { useForm } from 'react-hook-form'
@@ -23,10 +23,10 @@ const AllergiesView: React.FC<AllergiesViewProps> = ({ allergies }) => {
   // const form = useForm()
 
   return (
-    <Flex
-      className="bg-white rounded-[8px] border border-[#d9e2fc] px-5 pb-9 pt-7"
-      gap="1"
-      direction="column"
+    <FeatureCard
+      title="Allergies"
+      contentClassName="gap-3 relative"
+      showTitleInsideCard
     >
       {/* <ToggleableForm
         form={form}
@@ -39,7 +39,6 @@ const AllergiesView: React.FC<AllergiesViewProps> = ({ allergies }) => {
           console.log('')
         }}
       > */}
-      <HeadingBlock />
       {/* <SearchBlock />
         <Flex align={'center'} gap={'4'} className="w-full">
           <SeverityBlock />
@@ -49,12 +48,12 @@ const AllergiesView: React.FC<AllergiesViewProps> = ({ allergies }) => {
           <ReactionBlock />
           <ObservationBlock />
         </Flex> */}
-      <Flex className="mt-4" direction={'column'} gap={'2'} width={'100%'}>
+      <Flex direction={'column'} gap={'2'} width={'100%'}>
         <AllergiesTable allergies={allergies} />
         {/* <CommentBlock /> */}
       </Flex>
       {/* </ToggleableForm> */}
-    </Flex>
+    </FeatureCard>
   )
 }
 

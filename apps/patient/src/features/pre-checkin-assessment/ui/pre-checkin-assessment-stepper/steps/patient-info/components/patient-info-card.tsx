@@ -5,6 +5,7 @@ import { Flex, Text, TextFieldInput } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
 import {
   CodesetFormSelect,
+  FeatureCard,
   FormFieldContainer,
   FormFieldError,
   FormFieldLabel,
@@ -19,14 +20,11 @@ const PatientInfoCard = () => {
   const hasGuardian = useMemo(() => form.watch('hasGuardian'), [form])
 
   return (
-    <Flex
-      className="bg-white rounded-[8px] border border-[#d9e2fc] px-5 pb-9 pt-7"
-      gap="1"
-      direction="column"
+    <FeatureCard
+      title="Patient Info"
+      contentClassName="gap-3 relative"
+      showTitleInsideCard
     >
-      <Text className="mb-1 text-[20px] font-medium text-[#1C2024]">
-        Patient Info
-      </Text>
       <Flex className="w-full " direction="row" gap="2">
         <Flex direction="column" className="w-32">
           <Flex direction="column" className="w-24">
@@ -39,7 +37,6 @@ const PatientInfoCard = () => {
               <FormFieldLabel required>First Name</FormFieldLabel>
               <TextFieldInput
                 size="3"
-                className="border-pp-gray-7 px-3"
                 {...form.register('firstName')}
                 placeholder={getPlaceholder('firstName')}
               />
@@ -50,7 +47,6 @@ const PatientInfoCard = () => {
               <FormFieldLabel>Middle Name</FormFieldLabel>
               <TextFieldInput
                 size="3"
-                className="border-pp-gray-7 px-3"
                 {...form.register('middleName')}
                 placeholder={getPlaceholder('middleName')}
               />
@@ -61,7 +57,6 @@ const PatientInfoCard = () => {
               <FormFieldLabel required>Last Name</FormFieldLabel>
               <TextFieldInput
                 size="3"
-                className="border-pp-gray-7 px-3"
                 {...form.register('lastName')}
                 placeholder={getPlaceholder('lastName')}
               />
@@ -75,8 +70,9 @@ const PatientInfoCard = () => {
                 type="date"
                 max="9999-12-31"
                 data-testid="birth-date"
-                className="border-pp-gray-7 px-3 pr-4"
+                className="ml-[-13px]"
               />
+
               <FormFieldError name="birthdate" />
             </FormFieldContainer>
           </Flex>
@@ -98,8 +94,8 @@ const PatientInfoCard = () => {
               <TextFieldInput
                 {...form.register('email')}
                 size="3"
-                className="border-pp-gray-7 px-3"
                 placeholder={getPlaceholder('emailAddress')}
+                disabled
               />
               <FormFieldError name="email" />
             </FormFieldContainer>
@@ -109,7 +105,6 @@ const PatientInfoCard = () => {
                 <CodesetFormSelect
                   size="3"
                   name="gender"
-                  className="outline-pp-gray-7 px-3"
                   placeholder="Select"
                   codeset={CODESETS.Gender}
                 />
@@ -164,14 +159,13 @@ const PatientInfoCard = () => {
             </Flex>
           </Flex>
           {hasGuardian && (
-            <Flex className="w-1/2" gap="1">
+            <Flex className="w-1/2" gap="3">
               <FormFieldContainer className="w-full">
                 <FormFieldLabel required={hasGuardian}>
                   Guardian First Name
                 </FormFieldLabel>
                 <TextFieldInput
                   size="3"
-                  className="border-pp-gray-7 px-3"
                   {...form.register('guardianFirstName')}
                   placeholder={getPlaceholder('guardianFirstName')}
                 />
@@ -184,7 +178,6 @@ const PatientInfoCard = () => {
                 </FormFieldLabel>
                 <TextFieldInput
                   size="3"
-                  className="border-pp-gray-7 px-3"
                   {...form.register('guardianLastName')}
                   placeholder={getPlaceholder('guardianLastName')}
                 />
@@ -194,7 +187,7 @@ const PatientInfoCard = () => {
           )}
         </Flex>
       </Flex>
-    </Flex>
+    </FeatureCard>
   )
 }
 

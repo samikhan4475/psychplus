@@ -15,4 +15,11 @@ type SharedCode = {
   groupingCode?: string
 }
 
-export { type PreCheckinAssessmentTab, type SharedCode }
+interface PreCheckInStatus {
+  preCheckInCompletedTabs: PreCheckinAssessmentTabs[]
+  isPreCheckInCompleted: boolean
+  activeTab: PreCheckinAssessmentTabs
+  id: string
+}
+
+export type { PreCheckinAssessmentTab, SharedCode, PreCheckInStatus }

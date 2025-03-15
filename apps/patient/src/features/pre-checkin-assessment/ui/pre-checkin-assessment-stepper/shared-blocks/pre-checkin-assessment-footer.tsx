@@ -1,10 +1,9 @@
 'use client'
 
 import React from 'react'
+import { cn } from '@psychplus-v2/utils'
 import { Button, Flex } from '@radix-ui/themes'
-import { cn } from '@psychplus/ui/cn'
 import {
-  PreCheckinAssessmentTabs,
   SaveAction,
   TabDirection,
 } from '@/features/pre-checkin-assessment/constants'
@@ -12,12 +11,15 @@ import { useStore } from '@/features/pre-checkin-assessment/store'
 
 const PreCheckinAssessmentFooter = () => {
   const {
+    tabsToShow,
     activeTab,
-    setSaveButtonPressed,
+    setIsSaveButtonPressed,
     setSaveAction,
     handleTabNavigation,
-    skip,
+    isSaveButtonDisabled,
+    setIsSaveButtonDisabled,
   } = useStore()
+  const isLastTab = activeTab === tabsToShow.at(-1)
 
   return (
     <Flex
@@ -27,51 +29,62 @@ const PreCheckinAssessmentFooter = () => {
     >
       <Flex align="center" justify="between" className="w-full max-w-[1200px]">
         <Button
-          highContrast
+          color="gray"
           variant="outline"
           size="2"
-          className={cn(
-            activeTab === PreCheckinAssessmentTabs.PatientInfo && 'text-black',
-            'mr-4 px-6',
-          )}
-          disabled={activeTab === PreCheckinAssessmentTabs.PatientInfo}
-          onClick={() => handleTabNavigation(TabDirection.Back, true)}
+          className={cn(!isSaveButtonDisabled && 'text-black', 'px-6')}
+          disabled={isSaveButtonDisabled}
+          onClick={() => handleTabNavigation(TabDirection.Back)}
         >
           Back
         </Button>
-        <Flex gap="1" align="center" className="ms-auto flex-1" justify="end">
+        <Flex gap="2" align="center" className="ms-auto flex-1" justify="end">
+          {!isLastTab && (
+            <Button
+              color="gray"
+              variant="outline"
+              size="2"
+              className={cn(
+                !isSaveButtonDisabled && 'text-black',
+                'w-24 items-center',
+              )}
+              onClick={() => handleTabNavigation(TabDirection.Next)}
+              disabled={isSaveButtonDisabled}
+            >
+              Next
+            </Button>
+          )}
+          {!isLastTab && (
+            <Button
+              color="gray"
+              variant="outline"
+              size="2"
+              className={cn(
+                !isSaveButtonDisabled && 'text-black',
+                'w-24 items-center',
+              )}
+              onClick={() => {
+                setIsSaveButtonDisabled(true)
+                setIsSaveButtonPressed(true)
+              }}
+              disabled={isSaveButtonDisabled}
+            >
+              Save
+            </Button>
+          )}
           <Button
             highContrast
-            variant="outline"
             size="2"
-            className="mr-4 px-6"
+            className="px-4"
             onClick={() => {
-              setSaveButtonPressed(true)
-              setSaveAction(SaveAction.Exit)
-            }}
-          >
-            Save & Exit
-          </Button>
-          <Button
-            highContrast
-            variant="outline"
-            size="2"
-            className="px-8"
-            onClick={skip}
-          >
-            Skip
-          </Button>
-          <Button
-            highContrast
-            size="2"
-            className="px-8"
-            onClick={() => {
-              setSaveButtonPressed(true)
+              setIsSaveButtonDisabled(true)
+              setIsSaveButtonPressed(true)
               setSaveAction(SaveAction.Next)
             }}
+            disabled={isSaveButtonDisabled}
           >
-            {activeTab === PreCheckinAssessmentTabs.Questionnaire
-              ? 'Save'
+            {activeTab === tabsToShow.at(-1)
+              ? 'Save & Complete'
               : 'Save & Next'}
           </Button>
         </Flex>

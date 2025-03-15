@@ -1,7 +1,11 @@
 'use client'
 
+import { useEffect, useMemo } from 'react'
 import { Flex } from '@radix-ui/themes'
+import { useProfileStore } from '@/features/account/profile/store'
 import { NoteSectionName } from '@/features/note/constants/constants.ts'
+import { useNoteStore } from '@/features/note/store'
+import { useStore } from '@/features/pre-checkin-assessment/store'
 import {
   Aims,
   Audit,
@@ -24,6 +28,21 @@ const QuestionnaireView = ({
   const visibleSections = sectionComponents.filter((sectionComponent) =>
     questionnaireSectionsToShowOnPreCheckin.includes(sectionComponent.name),
   )
+  const getNoteData = useNoteStore((state) => state.getNoteData)
+  const { isSaveButtonPressed, save } = useStore()
+  const patientId = useProfileStore((state) => state.profile.id)
+  const isCompleted = useMemo(() => {
+    return visibleSections.every((section) => {
+      const sectionData = getNoteData(section.name) || []
+      return sectionData.some(
+        (item) => !(item.sectionItem === '1' && item.sectionItemValue === '1'),
+      )
+    })
+  }, [visibleSections])
+
+  useEffect(() => {
+    if (isSaveButtonPressed) save({ isTabCompleted: isCompleted, patientId })
+  }, [isSaveButtonPressed])
 
   return (
     <Flex gap="4" direction="column">

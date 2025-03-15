@@ -13,9 +13,14 @@ import { NoteSectionName } from '@/features/note/constants'
 import { PatientPharmacy } from '@/features/pharmacy/types'
 import { PreCheckinAssessmentTabs } from '@/features/pre-checkin-assessment/constants'
 import { useStore } from '@/features/pre-checkin-assessment/store'
-import { PreCheckinAssessmentTab } from '@/features/pre-checkin-assessment/types'
+import {
+  PreCheckinAssessmentTab,
+  PreCheckInStatus,
+} from '@/features/pre-checkin-assessment/types'
 import { getTabsToShow } from '@/features/pre-checkin-assessment/utils'
 import { PreCheckinAssessmentFooter } from './shared-blocks/pre-checkin-assessment-footer'
+import { PreCheckinAssessmentHeader } from './shared-blocks/pre-checkin-assessment-header'
+import { PreCheckInCompletion } from './shared-blocks/pre-checkin-completion'
 import {
   AllergiesAndMedications,
   HistoriesView,
@@ -27,7 +32,6 @@ import {
   QuestionnaireView,
   ReviewOfSystems,
 } from './steps'
-import { PreCheckinAssessmentHeader } from './shared-blocks/pre-checkin-assessment-header'
 
 interface PreCheckinAssessmentStapperProps {
   insurancePayers: InsurancePayer[]
@@ -39,6 +43,7 @@ interface PreCheckinAssessmentStapperProps {
   allergies: AllergyDataResponse[]
   isDawSystemFeatureFlagEnabled: boolean
   questionnaireSectionsToShowOnPreCheckin: NoteSectionName[]
+  preCheckInProgress: PreCheckInStatus
 }
 
 const PreCheckinAssessmentStapper = ({
@@ -51,9 +56,30 @@ const PreCheckinAssessmentStapper = ({
   allergies,
   isDawSystemFeatureFlagEnabled,
   questionnaireSectionsToShowOnPreCheckin,
+  preCheckInProgress,
 }: PreCheckinAssessmentStapperProps) => {
-  const { activeTab, hydrated, setTabsToShow, tabsToShow, setActiveTab } =
-    useStore()
+  const {
+    activeTab,
+    hydrated,
+    setTabsToShow,
+    tabsToShow,
+    setActiveTab,
+    setCompletedTabs,
+    setIsPreCheckInCompleted,
+    setPreCheckInSettingsId,
+    preCheckInSettingsId,
+    isPreCheckInCompleted,
+  } = useStore()
+
+  useEffect(() => {
+    if (preCheckInSettingsId) return
+    setIsPreCheckInCompleted(preCheckInProgress?.isPreCheckInCompleted)
+    setCompletedTabs(preCheckInProgress?.preCheckInCompletedTabs ?? [])
+    setActiveTab(
+      preCheckInProgress?.activeTab ?? PreCheckinAssessmentTabs.PatientInfo,
+    )
+    setPreCheckInSettingsId(preCheckInProgress?.id)
+  }, [preCheckInProgress])
 
   useEffect(() => {
     const tabs = getTabsToShow({
@@ -62,7 +88,7 @@ const PreCheckinAssessmentStapper = ({
     })
 
     if (!tabs.includes(activeTab))
-      setActiveTab(tabs[0] as PreCheckinAssessmentTabs)
+      setActiveTab(PreCheckinAssessmentTabs.PatientInfo)
 
     setTabsToShow(tabs as PreCheckinAssessmentTabs[])
   }, [questionnaireSectionsToShowOnPreCheckin])
@@ -133,21 +159,26 @@ const PreCheckinAssessmentStapper = ({
 
   return (
     <>
-      <Box className="py-8">
-        <Text
-          className="mx-auto flex justify-center pb-6 font-[600] text-[#151b4a]"
-          size="5"
-        >
-          Pre Check-in Assessment
-        </Text>
-        <Tabs.Root value={activeTab} className="w-full">
-          <PreCheckinAssessmentHeader tabs={tabs} />
-          <Tabs.Content className="mt-6 pb-28" value={activeTab}>
-            {tabs.find((tab) => tab.id === activeTab)?.content}
-          </Tabs.Content>
-        </Tabs.Root>
-      </Box>
-      <PreCheckinAssessmentFooter />
+      {isPreCheckInCompleted ? (
+        <PreCheckInCompletion />
+      ) : (
+        <>
+          <Text
+            className="mx-auto flex justify-center pb-6 font-[600] text-[#151b4a]"
+            size="5"
+          >
+            Pre Check-in Assessment
+          </Text>
+          <Tabs.Root value={activeTab} className="w-full">
+            <PreCheckinAssessmentHeader tabs={tabs} />
+            <Tabs.Content className="mt-6 pb-28" value={activeTab}>
+              {tabs.find((tab) => tab.id === activeTab)?.content}
+            </Tabs.Content>
+          </Tabs.Root>
+
+          <PreCheckinAssessmentFooter />
+        </>
+      )}
     </>
   )
 }

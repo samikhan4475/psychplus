@@ -11,6 +11,7 @@ interface ToggleableFormContextType {
   hasTrigger?: boolean
   onFormClose?: () => void
   isEdit?: boolean
+  allowExternalSave?: boolean
 }
 
 const ToggleableFormContext = createContext<

@@ -32,7 +32,7 @@ const Badge = ({
   return (
     <Flex
       className={cn(
-        'items-center rounded-6 border px-2 py-[2px]',
+        'items-center rounded-6 border px-2 py-[2px] text-[12px]',
         getBadgeColor(),
         className,
       )}
@@ -42,7 +42,7 @@ const Badge = ({
     >
       {addIcon && <Icon type={type} label={label} />}
 
-      <Text className="whitespace-nowrap text-[12px]" weight="regular">
+      <Text className="whitespace-nowrap" weight="regular">
         {label}
       </Text>
     </Flex>
