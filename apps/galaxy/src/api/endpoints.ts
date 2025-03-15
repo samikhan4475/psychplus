@@ -346,6 +346,7 @@ const ADD_ORGANIZATION_ENDPOINT = `${API_URL}/api/organizations`
 const UPDATE_ORGANIZATION_ENDPOINT = (organizationId: string) =>
   `${API_URL}/api/organizations/${organizationId}`
 const GET_INSURANCE_PAYERS_LIST_ENDPOINT = `${API_URL}/api/insurance/plans/actions/search`
+const IMPORT_ERA_ENDPOINT = `${API_URL}/api/receivers/responses/actions/claimeraimport`
 const GET_PAYMENT_SERVICELINES_ENDPOINT = `${API_URL}/api/claimservicelinepayments/actions/search`
 const GET_PRACTICES_ENDPOINT = `${API_URL}/api/practices/actions/search`
 const GET_PATIENT_VITALS_ENDPOINT = `${API_URL}/api/patientvitalsigns/actions/search`
@@ -741,6 +742,7 @@ export {
   GET_CLAIM_SUBMISSION_LIST,
   GET_CLAIMPAYMENTS_HISTORY_LIST_ENDPOINT,
   GET_PAYMENTS_HISTORY_LIST_ENDPOINT,
+  IMPORT_ERA_ENDPOINT,
   ADD_CLAIM_PAYMENT,
   GET_FEATURE_FLAG_ENDPOINT,
   PRESCRIBER_DIRECTORY_ENDPOINT,
