@@ -13,6 +13,10 @@ enum QueryByNextDays {
   Disregard = 'Disregard',
 }
 
+enum ReferralSource {
+  Hospital = 'Hospital',
+}
+
 interface PatientRaw {
   id: number
   metadata: Metadata
@@ -66,6 +70,7 @@ interface SortCodesetOptions {
 }
 export {
   QueryByNextDays,
+  ReferralSource,
   type Patient,
   type PatientRaw,
   type SearchPatientsData,

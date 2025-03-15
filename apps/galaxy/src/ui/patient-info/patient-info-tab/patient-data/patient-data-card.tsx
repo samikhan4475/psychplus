@@ -15,6 +15,7 @@ import { LicenseStateSelect } from './license-state-select'
 import { MrnInput } from './mrn-input'
 import { ProfilePicture } from './profile-picture'
 import { ReferralOrganizationInput } from './referral-organization-input'
+import { ReferralSource } from './referral-source'
 import { SsnInput } from './ssn-input'
 import { StatusSelect } from './status-select'
 
@@ -54,6 +55,7 @@ const PatientDataCard = ({
             <StatusSelect />
             <LicenseInput />
             <LicenseStateSelect />
+            <ReferralSource />
             <ReferralOrganizationInput />
           </Grid>
         </Flex>

@@ -87,6 +87,7 @@ interface PatientProfile {
   dateOfBirth?: string
   patientTypeEstablishedOrNew?: string
   referralName?: string
+  referralSource?: string
 }
 
 interface PatientHistoryParams {

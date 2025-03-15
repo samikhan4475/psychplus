@@ -113,13 +113,14 @@ const getInitialValues = (patient: PatientProfile) => {
       mailingAddress: patient?.contactDetails?.isMailingAddressSameAsPrimary
         ? { ...initialAddress, type: 'Mailing' as PatientAddressType }
         : patient?.contactDetails?.addresses?.find(
-          (address) => address.type === 'Mailing',
-        ) ?? { ...initialAddress, type: 'Mailing' }, // Ensure mailingAddress has a fallback
+            (address) => address.type === 'Mailing',
+          ) ?? { ...initialAddress, type: 'Mailing' }, // Ensure mailingAddress has a fallback
       isMailingAddressSameAsPrimary:
         patient?.contactDetails?.isMailingAddressSameAsPrimary ?? true,
     },
     cmdId: patient?.cmdId ?? '',
     referralName: patient?.referralName ?? '',
+    referralSource: patient?.referralSource ?? '',
     motherMaidenName: patient?.motherMaidenName ?? '',
     alternateOrPreviousName: {
       firstName: patient?.alternateOrPreviousName?.firstName ?? '',
@@ -133,17 +134,17 @@ const getInitialValues = (patient: PatientProfile) => {
     alternateOrPreviousContactDetails:
       patient?.alternateOrPreviousContactDetails
         ? {
-          homeAddress:
-            patient?.alternateOrPreviousContactDetails?.addresses?.find(
-              (addr) => addr.type === 'Home',
-            ) ?? { ...initialAddress, type: 'Home' },
-        }
+            homeAddress:
+              patient?.alternateOrPreviousContactDetails?.addresses?.find(
+                (addr) => addr.type === 'Home',
+              ) ?? { ...initialAddress, type: 'Home' },
+          }
         : {
-          homeAddress: {
-            ...initialAddress,
-            type: 'Home' as PatientAddressType,
+            homeAddress: {
+              ...initialAddress,
+              type: 'Home' as PatientAddressType,
+            },
           },
-        },
     language: patient?.language ?? '',
     languageAbility: patient?.languageAbility ?? '',
     languageProficiency: patient?.languageProficiency ?? '',
@@ -168,4 +169,9 @@ const getInitialValues = (patient: PatientProfile) => {
   }
 }
 
-export { applyClientSideFilters, getInitialValues, cleanPayload, isEmptyDriverLicense }
+export {
+  applyClientSideFilters,
+  getInitialValues,
+  cleanPayload,
+  isEmptyDriverLicense,
+}

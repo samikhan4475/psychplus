@@ -1,4 +1,5 @@
 import z from 'zod'
+import { ReferralSource } from '../../types'
 
 const phoneNumberTypeEnum = z.enum(['Contact', 'Home', 'Business'])
 const zipCodeRegex = /(^\d{5}$)|(^\d{5}-\d{4}$)|^$/
@@ -29,7 +30,7 @@ const addPatientSchema = z
     isTest: z.boolean(),
     dateOfBirth: z.string().min(1, 'Required'),
     gender: z.string().min(1, 'Required'),
-    referralSource: z.string().optional(),
+    referralSource: z.string().min(1, 'Required'),
     password: z.string().optional(),
     email: z.string().optional(),
     referralName: optionalNameValidation,
@@ -81,13 +82,6 @@ const addPatientSchema = z
       .optional(),
   })
   .superRefine((data, ctx) => {
-    if (data.referralSource && !data.referralName) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        path: ['referralName'],
-        message: 'Required',
-      })
-    }
     if (
       (data.guardian?.name?.lastName && !data.guardian?.name?.firstName) ||
       (data.guardian?.name?.firstName && !data.guardian?.name?.lastName)
