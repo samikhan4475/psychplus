@@ -85,16 +85,13 @@ const PillBlock = ({
     <Flex className="flex-row items-center">
       <Flex
         onClick={handleToggle}
-        className={`cursor-pointer rounded-6 border border-gray-8 bg-[white] px-4 py-2 ${
+        className={`cursor-pointer rounded-6 border border-gray-8 bg-[white] px-2 py-1 ${
           isSelected
             ? 'text-white border-pp-blue-3 bg-pp-blue-3'
             : `border-pp-gray-4`
         } `}
       >
-        <Text
-          className={`text-[14}] whitespace-nowrap capitalize`}
-          weight={'medium'}
-        >
+        <Text className={'whitespace-nowrap text-[12px] capitalize'}>
           {data.label}
         </Text>
       </Flex>

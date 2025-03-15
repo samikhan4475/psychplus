@@ -25,7 +25,7 @@ const SingleSelectChip = ({ field, details, ...props }: SingleSelectChip) => {
   }
 
   return (
-    <SelectableChip selected={isSelected} onClick={toggleSelected} {...props}>
+    <SelectableChip selected={isSelected} onClick={toggleSelected} {...props} >
       {isSelected && details && <SelectableChipDetails {...details} />}
     </SelectableChip>
   )

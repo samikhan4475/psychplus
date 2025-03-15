@@ -105,11 +105,11 @@ const Complaints = () => {
   const selectedComplaints: string[] = watch('chiefComplaint') || []
 
   return (
-    <Flex>
-      <Text className="w-32 text-[16px] font-medium capitalize text-[#151B4A] lg:text-[18px]">
+    <Flex className="w-full" direction="column" gap="2" justify="start">
+      <Text className="text-[16px] font-medium text-[#151B4A] lg:text-[18px]">
         Chief Complaint
       </Text>
-      <Flex wrap="wrap" gap="3">
+      <Flex gap="3" wrap="wrap">
         {complaintsList.map((option) => {
           const isSelected = selectedComplaints.includes(option.value)
           return (

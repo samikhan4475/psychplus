@@ -58,6 +58,7 @@ const CheckAllNoConcernCell: React.FC<CheckAllNoConcernCellProps> = ({
       type="button"
       onClick={handleCheckAllChange}
       variant="outline"
+      highContrast
       className={buttonClass}
     >
       No Concerns

@@ -25,7 +25,7 @@ const SelectableChip = ({
   const chipContent = <BlockLabel>{label}</BlockLabel>
 
   return (
-    <Flex className="flex flex-wrap items-start">
+    <Flex className="flex flex-wrap">
       <Flex
         px="1"
         onClick={onClick}
@@ -44,7 +44,7 @@ const SelectableChip = ({
           chipContent
         )}
       </Flex>
-      <Flex className="flex min-w-0 grow flex-wrap gap-2">{children}</Flex>
+      <Flex className="flex min-w-0 grow flex-wrap gap-2 flex-row items-center justify-center">{children}</Flex>
     </Flex>
   )
 }

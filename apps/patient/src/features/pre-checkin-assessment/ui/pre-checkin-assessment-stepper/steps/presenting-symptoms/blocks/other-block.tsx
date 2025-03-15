@@ -10,10 +10,7 @@ const OtherBlock = () => {
       >
         Other
       </Text>
-      <AutoResizeInput
-        field={'hpiOther'}
-        className="border-gray-300 rounded-md focus:ring-blue-500 border px-3 py-2 transition-all duration-200 focus:outline-none focus:ring-2"
-      />
+      <AutoResizeInput field={'hpiOther'} maxLength={500} />
     </Flex>
   )
 }

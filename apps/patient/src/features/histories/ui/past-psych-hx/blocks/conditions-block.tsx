@@ -1,7 +1,6 @@
-import { SingleSelectChip } from '@/components-v2'
 import { Flex } from '@radix-ui/themes'
+import { SingleSelectChip } from '@/components-v2'
 import { PAST_PSYCH_BLOCK_OPTIONS } from '../constants'
-
 
 const ConditionsBlock = () => {
   return (

@@ -23,7 +23,7 @@ const BlockLabel = ({
     <Text
       as="label"
       htmlFor={name}
-      className={cn('text-nowrap flex items-center text-[13px]', className, {
+      className={cn('text-nowrap flex text-[12px]', className, {
         'min-h-[var(--chip-height)]': orientation === 'horizontal',
       })}
     >
