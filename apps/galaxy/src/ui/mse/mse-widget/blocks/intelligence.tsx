@@ -1,15 +1,18 @@
 import { useSearchParams } from 'next/navigation'
 import { Flex } from '@radix-ui/themes'
-import { GroupSelectSection } from '@/components'
+import { GroupSelectSection, RadioSelectSection } from '@/components'
 import { ERROR_ID } from '../constants'
 import { MseGroupDetailSection } from '../history/mse-details/mse-group-detail-section'
 import { MseWidgetSchemaType } from '../mse-widget-schema'
 import { GroupSelectOption } from '../types'
 
-const INTELLIGENCE_BLOCK_OPTIONS: GroupSelectOption<string>[] = [
+const INTELLIGENCE_BLOCK_RADIO_OPTIONS = [
   { label: 'Below Average', value: 'intBelowAverage' },
   { label: 'Average', value: 'intAverage' },
   { label: 'Above Average', value: 'intAboveAverage' },
+]
+
+const INTELLIGENCE_BLOCK_OPTIONS: GroupSelectOption<string>[] = [
   {
     label: 'Other',
     value: 'intOther',
@@ -59,8 +62,13 @@ const IntelligenceBlock = ({ result }: { result?: MseWidgetSchemaType }) => {
             </>
           ) : (
             <>
+              <RadioSelectSection
+                label={'Intelligence'}
+                field={'intelligenceRadio'}
+                options={INTELLIGENCE_BLOCK_RADIO_OPTIONS}
+                errorField={ERROR_ID}
+              />
               <GroupSelectSection
-                label="Intelligence"
                 field="intelligence"
                 options={INTELLIGENCE_BLOCK_OPTIONS}
                 errorField={ERROR_ID}

@@ -1,14 +1,12 @@
 import { useSearchParams } from 'next/navigation'
 import { Flex } from '@radix-ui/themes'
-import { GroupSelectSection } from '@/components'
+import { GroupSelectSection, RadioSelectSection } from '@/components'
 import { ERROR_ID } from '../constants'
 import { MseGroupDetailSection } from '../history/mse-details/mse-group-detail-section'
 import { type MseWidgetSchemaType } from '../mse-widget-schema'
 import { GroupSelectOption } from '../types'
 
 const INSIGHTS_BLOCK_OPTIONS: GroupSelectOption<string>[] = [
-  { label: 'Poor', value: 'insPoor' },
-  { label: 'Fair', value: 'insFair' },
   {
     label: 'Other',
     value: 'insOther',
@@ -32,6 +30,11 @@ const INSIGHTS_HOWTESTED_BLOCK_OPTIONS: GroupSelectOption<string>[] = [
       maxLength: 500,
     },
   },
+]
+
+const INSIGHTS_BLOCK_RADIO_OPTIONS = [
+  { label: 'Poor', value: 'insPoor' },
+  { label: 'Fair', value: 'insFair' },
 ]
 
 const InsightsBlock = ({ result }: { result?: MseWidgetSchemaType }) => {
@@ -61,8 +64,13 @@ const InsightsBlock = ({ result }: { result?: MseWidgetSchemaType }) => {
             </>
           ) : (
             <>
+              <RadioSelectSection
+                label={'Insight'}
+                field={'insightRadio'}
+                options={INSIGHTS_BLOCK_RADIO_OPTIONS}
+                errorField={ERROR_ID}
+              />
               <GroupSelectSection
-                label="Insight"
                 field="insight"
                 options={INSIGHTS_BLOCK_OPTIONS}
                 errorField={ERROR_ID}

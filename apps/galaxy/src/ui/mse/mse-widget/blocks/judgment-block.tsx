@@ -1,14 +1,12 @@
 import { useSearchParams } from 'next/navigation'
 import { Flex } from '@radix-ui/themes'
-import { GroupSelectSection } from '@/components'
+import { GroupSelectSection, RadioSelectSection } from '@/components'
 import { ERROR_ID } from '../constants'
 import { MseGroupDetailSection } from '../history/mse-details/mse-group-detail-section'
 import { type MseWidgetSchemaType } from '../mse-widget-schema'
 import { GroupSelectOption } from '../types'
 
 const JUDGEMENT_BLOCK_OPTIONS: GroupSelectOption<string>[] = [
-  { label: 'Poor', value: 'jdgPoor' },
-  { label: 'Fair', value: 'jdgFair' },
   {
     label: 'Other',
     value: 'jdgOther',
@@ -17,6 +15,11 @@ const JUDGEMENT_BLOCK_OPTIONS: GroupSelectOption<string>[] = [
       field: 'jdgOtherDetails',
     },
   },
+]
+
+const JUDGEMENT_BLOCK_RADIO_OPTIONS = [
+  { label: 'Poor', value: 'jdgPoor' },
+  { label: 'Fair', value: 'jdgFair' },
 ]
 
 const JUDGEMENT_HOWTESTED_BLOCK_OPTIONS: GroupSelectOption<string>[] = [
@@ -62,8 +65,13 @@ const JudgementBlock = ({ result }: { result?: MseWidgetSchemaType }) => {
             </>
           ) : (
             <>
+              <RadioSelectSection
+                label={'Judgment'}
+                field={'JudgmentRadio'}
+                options={JUDGEMENT_BLOCK_RADIO_OPTIONS}
+                errorField={ERROR_ID}
+              />
               <GroupSelectSection
-                label="Judgment"
                 field="judgment"
                 options={JUDGEMENT_BLOCK_OPTIONS}
                 errorField={ERROR_ID}

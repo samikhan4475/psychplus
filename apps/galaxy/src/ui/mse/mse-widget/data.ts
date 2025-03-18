@@ -18,6 +18,7 @@ enum ExamPrefixes {
   THOUGHT_CONTENT = 'TC',
   MEMORY_HOW_TESTED = 'MHT',
   INTELLIGENCE = 'INT',
+  INTELLIGENCE_RADIO = 'INTRD',
   INTELLIGENCE_HOW_TESTED = 'INTHT',
   INSIGHT = 'INS',
   INSIGHT_HOW_TESTED = 'INSHT',
@@ -165,6 +166,15 @@ const transformIn = (value?: QuickNoteSectionItem[]): MseWidgetSchemaType => {
     }
     if (item.sectionItem.includes('schizophreniaDelusionValues')) {
       result.schizophreniaDelusionValues = item?.sectionItemValue?.split(',')
+    }
+    if (item.sectionItem.includes('intelligenceRadio')) {
+      result.intelligenceRadio = item.sectionItemValue
+    }
+    if (item.sectionItem.includes('insightRadio')) {
+      result.insightRadio = item.sectionItemValue
+    }
+    if (item.sectionItem.includes('JudgmentRadio')) {
+      result.JudgmentRadio = item.sectionItemValue
     }
     if (item.sectionItem.includes('YesNo')) {
       switch (item.sectionItem) {
@@ -390,10 +400,25 @@ const transformIn = (value?: QuickNoteSectionItem[]): MseWidgetSchemaType => {
   return result
 }
 
+const updateArray = (array: string[], value: string | undefined) => {
+  if (value) {
+    const otherValue = array.find((item) => item.includes('Other'))
+    const otherIndex = array.indexOf(otherValue as string)
+    if (otherIndex !== -1) {
+      array.splice(0, array.length, otherValue as string, value)
+    } else {
+      array.splice(0, array.length, value)
+    }
+  }
+}
+
 const transformOut =
   (patientId: string) =>
   (schema: MseWidgetSchemaType): QuickNoteSectionItem[] => {
     const result: QuickNoteSectionItem[] = []
+    updateArray(schema.intelligence, schema.intelligenceRadio)
+    updateArray(schema.judgment, schema.JudgmentRadio)
+    updateArray(schema.insight, schema.insightRadio)
 
     Object.entries(schema).forEach(([key, value]) => {
       if (
@@ -402,6 +427,7 @@ const transformOut =
           'schizophreniaDelusionValues',
         ].includes(key) ||
           key.includes('Other') ||
+          key.includes('Radio') ||
           key.includes('YesNo')) &&
         value.length > 0
       ) {
@@ -460,7 +486,6 @@ const transformOut =
         sectionItemValue: '2',
       })
     }
-
     return result
   }
 

@@ -48,4 +48,7 @@ export const createEmptyFormValues = (): MseWidgetSchemaType => ({
   thpOtherDetails: '',
   tcOtherDetails: '',
   widgetContainerCheckboxField: '',
+  intelligenceRadio: '',
+  insightRadio: '',
+  JudgmentRadio: '',
 })

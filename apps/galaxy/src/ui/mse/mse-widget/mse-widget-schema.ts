@@ -23,6 +23,9 @@ const mseWidgetSchema = z
     judgment: z.array(z.string()),
     judgmentHowTested: z.array(z.string()),
     intelligence: z.array(z.string()),
+    intelligenceRadio: z.string(),
+    insightRadio: z.string(),
+    JudgmentRadio: z.string(),
     intelligenceHowTested: z.array(z.string()),
     schizophreniaDelusionValues: z.array(z.string()),
     schizophreniaHallucinationsValues: z.array(z.string()),
@@ -128,9 +131,9 @@ const mseWidgetSchema = z
     ]
 
     const comboFieldsToValidate = [
-      ['intelligence', 'intelligenceHowTested'],
-      ['insight', 'insightHowTested'],
-      ['judgment', 'judgmentHowTested'],
+      ['intelligence', 'intelligenceHowTested', 'intelligenceRadio'],
+      ['insight', 'insightHowTested', 'insightRadio'],
+      ['judgment', 'judgmentHowTested', 'JudgmentRadio'],
       [
         'memoryRemoteIntactOther',
         'memoryHowTested',
