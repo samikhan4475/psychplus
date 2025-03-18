@@ -330,18 +330,18 @@ const UpcomingAppointmentsSummaryComponent = async () => {
                                   ?.isPreCheckInCompleted && 'h-8 text-[14px]',
                               )}
                             />
-                            {!preCheckInProgress?.content
-                              ?.isPreCheckInCompleted && (
-                              <Link href={'/pre-checkin-assessment'}>
-                                <Button
-                                  highContrast
-                                  className="w-full bg-[#194595]"
-                                >
-                                  Fill Now
-                                  <ChevronRightIcon height="16" width="16" />
-                                </Button>
-                              </Link>
-                            )}
+                            <Link href={'/pre-checkin-assessment'}>
+                              <Button
+                                highContrast
+                                className="w-full bg-[#194595]"
+                              >
+                                {preCheckInProgress?.content
+                                  ?.isPreCheckInCompleted
+                                  ? 'Edit'
+                                  : 'Fill Now'}
+                                <ChevronRightIcon height="16" width="16" />
+                              </Button>
+                            </Link>
                           </Flex>
                         )}
                       <Flex>
