@@ -1,7 +1,6 @@
 'use client'
 
 import { useMemo } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
 import * as Accordion from '@radix-ui/react-accordion'
 import {
   Box,
@@ -15,18 +14,38 @@ import { FEATURE_FLAGS } from '@/constants'
 import { useFeatureFlagEnabled } from '@/hooks/use-feature-flag-enabled'
 import { cn, getInboxNavLinks } from '@/utils'
 import { useStore } from './messages/store'
-import { Tabs } from './messages/types'
+
+type InboxNavLinks = {
+  label: string
+  conditions?: boolean[]
+  links: {
+    label: string
+    tab: string
+    unreadCount?: number
+  }[]
+}[]
 
 const InboxNavigation = () => {
-  const searchParams = useSearchParams()
-  const router = useRouter()
+  const { activeTab, setActiveTab, fetchUnreadCount, unreadCount } = useStore(
+    (state) => ({
+      activeTab: state.activeTab,
+      setActiveTab: state.setActiveTab,
+      fetchUnreadCount: state.fetchUnreadCount,
+      unreadCount: state.unreadCount,
+    }),
+  )
 
   const isFeatureFlagEnabled = useFeatureFlagEnabled(
     FEATURE_FLAGS.ehr11786EnableGalaxySecondPhaseFeatures,
   )
-  const navLinks = useMemo(() => getInboxNavLinks(isFeatureFlagEnabled), [])
-  const { activeTab, setActiveTab } = useStore((state) => state)
-  const tabParam = searchParams.get('tab') as Tabs
+  const navLinks: InboxNavLinks = useMemo(
+    () =>
+      getInboxNavLinks({
+        isFeatureFlagEnabled,
+        unreadCount,
+      }),
+    [unreadCount],
+  )
 
   return (
     <Box className="bg-white mb-4 mt-1 w-[160px] rounded-1 shadow-2">
@@ -34,7 +53,7 @@ const InboxNavigation = () => {
         <Accordion.Root
           className=" mb-2 rounded-1 p-2"
           type="multiple"
-          defaultValue={['Notes']}
+          defaultValue={['Messages', 'Notes']}
         >
           {navLinks.map((widget) => {
             const shouldRender =
@@ -43,7 +62,7 @@ const InboxNavigation = () => {
             if (!shouldRender) return null
 
             const isSectionActive = widget.links?.filter((link) => {
-              return link?.tab === tabParam
+              return link?.tab === activeTab
             }).length
 
             return (
@@ -81,13 +100,10 @@ const InboxNavigation = () => {
                       key={link.label}
                       onClick={() => {
                         setActiveTab(link.tab)
-                        const params = new URLSearchParams(
-                          window.location.search,
-                        )
-                        params.set('tab', link.tab)
-                        router.push(`?${params.toString()}`, {})
+                        fetchUnreadCount()
                       }}
                       isActive={link.tab === activeTab}
+                      unreadCount={link.unreadCount ?? 0}
                     >
                       {link.label}
                     </NavigationLink>
@@ -106,7 +122,12 @@ const NavigationLink = ({
   onClick,
   children,
   isActive,
-}: React.PropsWithChildren<{ onClick: () => void; isActive: boolean }>) => {
+  unreadCount = 0,
+}: React.PropsWithChildren<{
+  onClick: () => void
+  isActive: boolean
+  unreadCount: number
+}>) => {
   return (
     <Button
       className={cn(
@@ -119,6 +140,16 @@ const NavigationLink = ({
       onClick={onClick}
     >
       {children}
+      {unreadCount > 0 && (
+        <Box className="inline-block">
+          <Box
+            as="span"
+            className="text-white text-xs bg-pp-states-error rounded-full min-w-6  mx-1 flex items-center justify-center px-1 text-1 font-medium"
+          >
+            {unreadCount}
+          </Box>
+        </Box>
+      )}
     </Button>
   )
 }

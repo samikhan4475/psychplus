@@ -11,6 +11,7 @@ import {
   LoadingPlaceholder,
 } from '@/components'
 import { useStore as globalStore } from '@/store'
+import { useStore as useMessagesStore } from '../../messages/store'
 import { updateChannelAction } from '../actions'
 import { PAGE_SIZE } from '../contants'
 import { useStore } from '../store'
@@ -33,15 +34,32 @@ const SecureMessagesTable = () => {
     next,
     prev,
     page,
-    activeTab,
     setActiveComponent,
     jumpToPage,
-  } = useStore((state) => state)
+  } = useStore((state) => ({
+    secureMessages: state.secureMessages,
+    setSecureMessages: state.setSecureMessages,
+    setPreviewSecureMessage: state.setPreviewSecureMessage,
+    loading: state.loading,
+    total: state.total,
+    next: state.next,
+    prev: state.prev,
+    page: state.page,
+    setActiveComponent: state.setActiveComponent,
+    jumpToPage: state.jumpToPage,
+  }))
+  const { activeTab, unreadCount, setUnreadCount } = useMessagesStore(
+    (state) => ({
+      activeTab: state.activeTab,
+      unreadCount: state.unreadCount,
+      setUnreadCount: state.setUnreadCount,
+    }),
+  )
   const user = globalStore((state) => state.user)
 
   const DataTableFooter = useMemo(() => {
     return (
-      <Flex py="2" align="center" width="100%" justify="end">
+      <Flex p="2" align="center" width="100%" justify="end">
         <DataTablePagination
           jumpToPage={jumpToPage}
           page={page}
@@ -129,7 +147,10 @@ const SecureMessagesTable = () => {
 
   const onClickSecureMessage = useCallback(
     async (secureMessage: SecureMessage) => {
-      setPreviewSecureMessage({ secureMessage, activeTab })
+      setPreviewSecureMessage({
+        secureMessage,
+        activeTab: activeTab as SecureMessagesTab,
+      })
 
       if (activeTab === SecureMessagesTab.DRAFT) {
         setActiveComponent(ActiveComponent.DRAFT)
@@ -154,6 +175,7 @@ const SecureMessagesTable = () => {
           if (result.state === 'error') {
             toast.error('Failed to update channel')
           } else {
+            if (!channel.isRead) setUnreadCount(unreadCount - 1)
             channel.isRead = true
             const updatedMessages = secureMessages.map((msg) =>
               msg.id === secureMessage.id ? secureMessage : msg,
@@ -180,7 +202,7 @@ const SecureMessagesTable = () => {
     <DataTable
       data={validSecureMessages}
       columns={columns}
-      tableClass="bg-white mt-4"
+      tableClass="bg-white mt-4 px-2"
       renderFooter={() => DataTableFooter}
       onRowClick={(row: Row<SecureMessage>, table) => {
         onClickSecureMessage(row.original)

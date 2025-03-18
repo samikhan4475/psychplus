@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import {
   ArrowLeftIcon,
   ChevronLeftIcon,
@@ -7,16 +7,20 @@ import {
 import { Button, Flex } from '@radix-ui/themes'
 import { Text } from 'react-aria-components'
 import toast from 'react-hot-toast'
-import { ArchiveIcon, MailIcon } from '@/components/icons'
+import { ArchiveIcon } from '@/components/icons'
 import { useStore as globalStore } from '@/store'
 import { cn } from '@/utils'
+import { useStore as useMessagesStore } from '../../../messages/store'
 import { updateChannelAction } from '../../actions'
 import { PAGE_SIZE } from '../../contants'
 import { useStore } from '../../store'
 import { ActiveComponent, RecordStatus, SecureMessagesTab } from '../../types'
+import { MarkAsReadButton } from './mark-as-read-button'
+import { MarkAsUnreadButton } from './mark-as-unread-button'
 
 const ViewMessageHeader = () => {
   const user = globalStore((state) => state.user)
+  const fetchUnreadCount = useMessagesStore((state) => state.fetchUnreadCount)
   const {
     secureMessages = [],
     page,
@@ -27,7 +31,17 @@ const ViewMessageHeader = () => {
     prev,
     setActiveComponent,
     activeTab,
-  } = useStore((state) => state)
+  } = useStore((state) => ({
+    secureMessages: state.secureMessages,
+    page: state.page,
+    total: state.total,
+    previewSecureMessage: state.previewSecureMessage,
+    setPreviewSecureMessage: state.setPreviewSecureMessage,
+    next: state.next,
+    prev: state.prev,
+    setActiveComponent: state.setActiveComponent,
+    activeTab: state.activeTab,
+  }))
 
   const [currentActiveMessage, setCurrentActiveMessage] = useState(1)
 
@@ -40,6 +54,12 @@ const ViewMessageHeader = () => {
       setCurrentActiveMessage((page - 1) * PAGE_SIZE + findIndex + 1)
     }
   }, [secureMessages, previewSecureMessage.secureMessage?.id, page])
+
+  const channel = useMemo(() => {
+    return previewSecureMessage?.secureMessage?.channels?.find(
+      (channel) => channel.receiverUserId === user.id,
+    )
+  }, [previewSecureMessage?.secureMessage?.channels])
 
   const nextMessageHandler = async () => {
     const totalMessagesLoaded = (page - 1) * PAGE_SIZE + secureMessages.length
@@ -90,9 +110,6 @@ const ViewMessageHeader = () => {
   }
 
   const onSubmit = async (type: string) => {
-    const channel = previewSecureMessage?.secureMessage?.channels?.find(
-      (channel) => channel.receiverUserId === user.id,
-    )
     if (channel?.id && previewSecureMessage?.secureMessage?.id) {
       const payload = {
         ...channel,
@@ -112,9 +129,30 @@ const ViewMessageHeader = () => {
 
       if (result.state === 'error') {
         toast.error(result.error || 'Failed to update channel')
+        return
+      }
+      const updatedChannels =
+        previewSecureMessage?.secureMessage?.channels?.map((ch) =>
+          ch.id === channel.id ? { ...ch, ...payload } : ch,
+        )
+      setPreviewSecureMessage({
+        ...previewSecureMessage,
+        secureMessage: {
+          ...previewSecureMessage.secureMessage,
+          channels: updatedChannels,
+        },
+      })
+
+      if (type === 'messageStatus') {
+        fetchUnreadCount()
       }
     }
   }
+
+  const isInboxOrArchived = [
+    SecureMessagesTab.INBOX,
+    SecureMessagesTab.ARCHIVED,
+  ].includes(activeTab)
 
   return (
     <Flex
@@ -150,24 +188,16 @@ const ViewMessageHeader = () => {
             />
           </Button>
         )}
-        {activeTab !== SecureMessagesTab.SENT &&
-          activeTab !== SecureMessagesTab.DRAFT && (
-            <Button
-              className="hover:bg-pp-table-subRows h-[16px] rounded-2 bg-transparent p-[2px] [box-shadow:none]"
-              type="button"
-              onClick={(e) => {
-                e?.stopPropagation()
-                onSubmit('messageStatus')
-              }}
-            >
-              <MailIcon
-                onClick={() => onSubmit('messageStatus')}
-                width={16}
-                height={16}
-                className="fill-pp-icon-sub"
-              />
-            </Button>
-          )}
+        {isInboxOrArchived && (
+          <>
+            {isInboxOrArchived && channel?.isRead && (
+              <MarkAsUnreadButton onSubmit={onSubmit} />
+            )}
+            {isInboxOrArchived && !channel?.isRead && (
+              <MarkAsReadButton onSubmit={onSubmit} />
+            )}
+          </>
+        )}
       </Flex>
       <Flex align="center" gap="4" className="pr-6">
         <Text>

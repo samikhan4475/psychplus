@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react'
+import React, { act, useEffect, useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Flex } from '@radix-ui/themes'
 import { DateValue } from 'react-aria-components'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { FormContainer } from '@/components'
 import { formatDateToISOString } from '@/utils'
+import { useStore as useMessagesStore } from '../messages/store'
 import { Filter } from './filter'
 import { FiltersButton } from './filter-button'
 import { MessageSearch } from './message-search'
@@ -14,19 +15,36 @@ import { useStore } from './store'
 import { ActiveComponent, messageStatus, SecureMessagesTab } from './types'
 import { sanitizeFormData } from './utils'
 
-const MessageHeader = () => {
+const MessageHeader = ({ tab }: { tab: string }) => {
   const [showFilter, setShowFilter] = useState(false)
+  const { activeTab } = useMessagesStore((state) => ({
+    activeTab: state.activeTab,
+  }))
 
   const {
     search,
     setActiveComponent,
-    activeTab,
     page,
     setPreviewSecureMessage,
-  } = useStore((state) => state)
+    setActiveTab,
+  } = useStore((state) => ({
+    search: state.search,
+    setActiveComponent: state.setActiveComponent,
+    page: state.page,
+    setPreviewSecureMessage: state.setPreviewSecureMessage,
+    setActiveTab: state.setActiveTab,
+  }))
 
   useEffect(() => {
-    search({ messageStatus: activeTab }, page, true)
+    if (tab === activeTab)
+      search({ messageStatus: activeTab as SecureMessagesTab }, page, true)
+
+    setPreviewSecureMessage({
+      activeTab: activeTab as SecureMessagesTab,
+      secureMessage: null,
+    })
+    setActiveComponent(ActiveComponent.NEW_EMAIL_PLACEHOLDER)
+    setActiveTab(tab as SecureMessagesTab)
   }, [activeTab, search])
 
   const form = useForm<SchemaType>({
@@ -42,7 +60,7 @@ const MessageHeader = () => {
   const onSubmit: SubmitHandler<SchemaType> = (data) => {
     const cleanedPayload = {
       ...data,
-      messageStatus: activeTab,
+      messageStatus: activeTab as SecureMessagesTab,
       to: data.to ? formatDateToISOString(data.to as DateValue) : undefined,
       from: data.from
         ? formatDateToISOString(data.from as DateValue, true)
@@ -76,18 +94,19 @@ const MessageHeader = () => {
         className=" bg-white h-9 w-full p-2"
       >
         <MessageSearch />
-        <Flex gap="2">
-          <FiltersButton
-            showFilter={showFilter}
-            onClick={() => setShowFilter(!showFilter)}
-          />
-          <NewMessageButton
-            onClick={() => {
-              setPreviewSecureMessage({ activeTab, secureMessage: null })
-              setActiveComponent(ActiveComponent.COMPOSE_MAIL)
-            }}
-          />
-        </Flex>
+        <FiltersButton
+          showFilter={showFilter}
+          onClick={() => setShowFilter(!showFilter)}
+        />
+        <NewMessageButton
+          onClick={() => {
+            setPreviewSecureMessage({
+              activeTab: activeTab as SecureMessagesTab,
+              secureMessage: null,
+            })
+            setActiveComponent(ActiveComponent.COMPOSE_MAIL)
+          }}
+        />
       </Flex>
       {showFilter && <Filter />}
     </FormContainer>

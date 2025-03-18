@@ -6,6 +6,8 @@ import {
   createForwardMessageAction,
   getAllSecureMessagesAction,
 } from './actions'
+import { getEmrDirectAccountStatus } from './client-actions/get-emr-direct-account-status'
+import { getUnreadCountAction } from './client-actions/get-unread-count'
 import { SchemaType } from './schema'
 import {
   ActiveComponent,

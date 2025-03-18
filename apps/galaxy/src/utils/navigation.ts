@@ -144,15 +144,22 @@ const getStaffNavLinks = (staffId: string | null) => {
   ]
 }
 
-const getInboxNavLinks = (isSecureMessagingFeatureEnabled: boolean) => {
+const getInboxNavLinks = ({
+  isFeatureFlagEnabled,
+  unreadCount,
+}: {
+  isFeatureFlagEnabled: boolean
+  unreadCount: number
+}) => {
   return [
     {
       label: 'Messages',
-      conditions: [isSecureMessagingFeatureEnabled],
+      conditions: [isFeatureFlagEnabled],
       links: [
         {
           label: 'Inbox',
           tab: Tabs.INBOX,
+          unreadCount,
         },
         {
           label: 'Sent',

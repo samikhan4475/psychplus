@@ -155,6 +155,8 @@ const Update_STAFF_COMMENT_ENDPOINT = (commentId: number) =>
   `${API_URL}/api/staffcomments/${commentId}`
 const GET_AVAILABLE_APPOINTMENT_ENDPOINT = `${API_URL}/api/schedules/availability/search`
 const GET_SECURE_MESSAGES = `${API_URL}/api/users/self/securemessaging/messages/actions/search`
+const GET_UNREAD_COUNT_SECURE_MESSAGES = `${API_URL}/api/users/self/securemessaging/messages/actions/unreadcount`
+const GET_USER_EMR_DIRECT_STATUS_SECURE_MESSAGES = `${API_URL}/api/users/self/securemessaging/messages/validateemrdirect`
 const UPDATE_MESSAGE = (messageId: string) =>
   `${API_URL}/api/users/self/securemessaging/messages/${messageId}`
 const UPDATE_CHANNEL_MESSAGES_STATUS = (messageId: string, channelId: string) =>
@@ -816,6 +818,8 @@ export {
   Update_STAFF_COMMENT_ENDPOINT,
   GET_AVAILABLE_APPOINTMENT_ENDPOINT,
   GET_SECURE_MESSAGES,
+  GET_UNREAD_COUNT_SECURE_MESSAGES,
+  GET_USER_EMR_DIRECT_STATUS_SECURE_MESSAGES,
   SEND_SECURE_MESSAGE,
   CREATE_FORWARD_SECURE_MESSAGE,
   GET_RECIPIENT_SECURE_MESSAGE,

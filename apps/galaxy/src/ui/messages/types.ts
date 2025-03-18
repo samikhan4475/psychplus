@@ -1,10 +1,10 @@
 import { GetPatientNotesResponse } from '../notes/types'
 
 enum Tabs {
-  INBOX = 'inbox',
-  DRAFT = 'draft',
-  SENT = 'sent',
-  ARCHIVED = 'archived',
+  INBOX = 'Inbox',
+  DRAFT = 'Draft',
+  SENT = 'Sent',
+  ARCHIVED = 'Archived',
   PENDING_VISITS = 'pending-visits',
   PENDING_COSIGNER_NOTES = 'pending-cosigner-notes',
   PENDING_NOTES = 'pending-notes',
@@ -20,6 +20,11 @@ interface Store {
   loading: boolean
   notesData: GetPatientNotesResponse | undefined
   setActiveTab: (activeTab: string) => void
+  isEmrDirectUser: boolean | undefined
+  fetchEmrDirectStatus: () => Promise<boolean>
+  unreadCount: number
+  setUnreadCount: (unreadCount: number) => void
+  fetchUnreadCount: () => Promise<number>
   fetchNotes: (status: string[]) => Promise<void>
 }
 

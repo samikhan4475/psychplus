@@ -8,6 +8,7 @@ import { FormFieldError } from '@/components'
 import { cn } from '@/utils'
 import 'react-tag-autocomplete/example/src/styles.css'
 import { SendExternalTitle } from '.'
+import { useStore as useMessagesStore } from '../../messages/store'
 import {
   getAllChannelsAgainstMessageIdAction,
   updateChannelAction,
@@ -28,7 +29,13 @@ const ExternalRecipientsEmails = ({
   setExternalRecipientsTag,
 }: ExternalRecipientProps) => {
   const form = useFormContext<SendMessageSchemaType>()
-  const { previewSecureMessage, activeComponent } = useStore((state) => state)
+  const { previewSecureMessage, activeComponent } = useStore((state) => ({
+    previewSecureMessage: state.previewSecureMessage,
+    activeComponent: state.activeComponent,
+  }))
+  const { isEmrDirectUser } = useMessagesStore((state) => ({
+    isEmrDirectUser: state.isEmrDirectUser,
+  }))
 
   const handleReply = () => {
     const { externalEmailAddress: email } =
@@ -198,6 +205,7 @@ const ExternalRecipientsEmails = ({
             onInput={handleChange}
             onAdd={setExternalRecipients}
             onDelete={removeExternalRecipients}
+            isDisabled={!isEmrDirectUser}
             collapseOnSelect
             noOptionsText="No Matches"
             placeholderText=""
@@ -205,7 +213,10 @@ const ExternalRecipientsEmails = ({
             renderInput={({ className, ...inputProps }) => (
               <input
                 {...inputProps}
-                className={cn(className, 'flex-grow outline-none')}
+                className={cn(className, 'flex-grow outline-none ', {
+                  'disabled:bg-transparent': !isEmrDirectUser,
+                })}
+                disabled={!isEmrDirectUser}
               />
             )}
             renderTag={({

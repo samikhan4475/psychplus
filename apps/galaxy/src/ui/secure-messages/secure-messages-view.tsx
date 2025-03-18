@@ -2,8 +2,8 @@
 
 import { MessageSection } from './message-section'
 
-const SecureMessagesView = () => {
-  return <MessageSection />
+const SecureMessagesView = ({ tab }: { tab: string }) => {
+  return <MessageSection tab={tab} />
 }
 
 export { SecureMessagesView }

@@ -2,14 +2,32 @@ import { PropsWithChildren, useEffect } from 'react'
 import { Tabs } from '@radix-ui/themes'
 import { InboxNavigation } from '../inbox-navigation'
 import { NotesView } from '../notes/notes-view'
+import { SecureMessagesView } from '../secure-messages/secure-messages-view'
 import { useStore } from './store'
 import { Tabs as TabsEnum } from './types'
 
 const MessagesTabs = () => {
-  const { activeTab, setActiveTab, fetchNotes, notesData, loading } = useStore(
-    (state) => state,
-  )
-
+  const {
+    activeTab,
+    fetchUnreadCount,
+    fetchEmrDirectStatus,
+    fetchNotes,
+    notesData,
+    loading,
+    setActiveTab,
+  } = useStore((state) => ({
+    activeTab: state.activeTab,
+    fetchUnreadCount: state.fetchUnreadCount,
+    fetchEmrDirectStatus: state.fetchEmrDirectStatus,
+    setActiveTab: state.setActiveTab,
+    fetchNotes: state.fetchNotes,
+    notesData: state.notesData,
+    loading: state.loading,
+  }))
+  useEffect(() => {
+    fetchUnreadCount()
+    fetchEmrDirectStatus()
+  }, [])
   useEffect(() => {
     const status =
       activeTab === TabsEnum.PENDING_NOTES ? ['pending'] : ['SignedPending']
@@ -26,6 +44,18 @@ const MessagesTabs = () => {
       className="flex w-full flex-1 gap-3 overflow-y-auto"
     >
       <InboxNavigation />
+      <TabsContent value={TabsEnum.INBOX}>
+        <SecureMessagesView tab={TabsEnum.INBOX} />
+      </TabsContent>
+      <TabsContent value={TabsEnum.SENT}>
+        <SecureMessagesView tab={TabsEnum.SENT} />
+      </TabsContent>
+      <TabsContent value={TabsEnum.ARCHIVED}>
+        <SecureMessagesView tab={TabsEnum.ARCHIVED} />
+      </TabsContent>
+      <TabsContent value={TabsEnum.DRAFT}>
+        <SecureMessagesView tab={TabsEnum.DRAFT} />
+      </TabsContent>
       <TabsContent value={TabsEnum.PENDING_NOTES}>
         <NotesView
           patientNotes={notesData}
