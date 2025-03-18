@@ -11,8 +11,9 @@ const PolicyFilesRenderer = ({ policyType }: { policyType?: string }) => {
   const policyFileNames = code?.attributes
     ?.find((el) => el.name === 'ParameterName')
     ?.value.split('|')
+
   useEffect(() => {
-    if (!policyFileNames || mergedContent) return
+    if (!policyFileNames) return
     const fetchPolicyContent = async () => {
       const contentPromises = policyFileNames.map((fileName) =>
         getPolicyHtmlContent(fileName),
@@ -25,12 +26,14 @@ const PolicyFilesRenderer = ({ policyType }: { policyType?: string }) => {
           }
           return ''
         })
-        .join('<br /')
+        .join('<br />')
       setMergedContent(combinedContent)
     }
     fetchPolicyContent()
-  }, [policyFileNames, mergedContent])
+  }, [policyFileNames])
+
   if (!mergedContent) return <LoadingPlaceholder />
+
   return (
     <iframe
       srcDoc={mergedContent}

@@ -127,9 +127,16 @@ const patientConsentTransformIn = (
       issuanceDateWithoutFormatting: issuanceDate,
       signingDateWithoutFormatting: signingDate,
     }
-
     if (!consentMap[type]) {
-      consentMap[type] = { ...formattedConsent, consents: [] }
+      if (formattedConsent.verificationStatus === VerificationStatus.Verified) {
+        formattedConsent.status = ConsentStatus.Yes
+        consentMap[type] = {
+          ...formattedConsent,
+          consents: [{ ...formattedConsent }],
+        }
+      } else {
+        consentMap[type] = { ...formattedConsent, consents: [] }
+      }
     } else {
       switch (formattedConsent.verificationStatus) {
         case VerificationStatus.Pending:
@@ -146,7 +153,6 @@ const patientConsentTransformIn = (
       consentMap[type].consents!.push(formattedConsent)
     }
   })
-
   Object.values(consentMap).forEach((consent) => {
     const isLatestSigned = !!consent.signingDate && !consent.isNeedsNewSignature
     const hasSignedConsent = consent.consents?.some(

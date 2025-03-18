@@ -4,7 +4,7 @@ import * as api from '@/api'
 import { PatientConsent } from '@/types'
 
 const electronicallySignPolicy = async (
-  policy: Omit<PatientConsent, 'status'>,
+  policy: PatientConsent,
 ): Promise<api.ActionResult<PatientConsent>> => {
   const response = await api.POST<PatientConsent>(
     api.ELECTRONICALLY_SIGN_POLICY_ENDPOINT(policy.patientId),

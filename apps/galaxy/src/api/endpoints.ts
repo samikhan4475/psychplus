@@ -728,6 +728,9 @@ const GET_CURRENT_USER_SETTINGS_SEARCH = `${API_URL}/api/users/self/settings/act
 const ELECTRONICALLY_SIGN_POLICY_ENDPOINT = (patientId: string) =>
   `${API_URL}/api/patients/${patientId}/consents`
 
+const GET_SHARED_POLICY_FILE = (fileName: string) =>
+  `${API_URL}/SharedContent/documents/${fileName}.html`
+
 export {
   GET_LAB_RESULTS_ENDPOINT,
   NOTE_UPLOAD_FILE,
@@ -1053,6 +1056,7 @@ export {
   INBOX_SIGN_NOTE_ENDPOINT,
   GET_FEATURE_FLAGS_BY_SHORTNAME_ENDPOINT,
   GET_CURRENT_USER_SETTINGS,
+  GET_SHARED_POLICY_FILE,
   GET_CURRENT_USER_SETTINGS_SEARCH,
   ADD_STAFF_COMMENT_ENDPOINT,
 }
