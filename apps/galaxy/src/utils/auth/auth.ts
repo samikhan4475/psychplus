@@ -5,13 +5,15 @@ import {
   ACCESS_TOKEN_COOKIE,
   ACCESS_TOKEN_EXPIRY_COOKIE,
   APP_ENV,
+  PRACTICE_ID_COOKIE,
   REFRESH_TOKEN_COOKIE,
   ROOT_DOMAIN,
   SCRIPTSURE_SESSION_COOKIE,
   SCRIPTSURE_SESSION_CREATED_AT_COOKIE,
+  SESSION_ID_COOKIE,
   USER_COOKIE,
 } from '@/constants'
-import type { AuthSession } from '@/types'
+import type { AuthSession, AuthSessionIds } from '@/types'
 
 const getAuthCookies = (): AuthSession | undefined => {
   const accessToken = cookies().get(ACCESS_TOKEN_COOKIE)?.value
@@ -144,6 +146,14 @@ const clearAuthCookies = () => {
     name: SCRIPTSURE_SESSION_CREATED_AT_COOKIE,
     domain,
   })
+  cookies().delete({
+    name: SESSION_ID_COOKIE,
+    domain,
+  })
+  cookies().delete({
+    name: PRACTICE_ID_COOKIE,
+    domain,
+  })
 }
 
 const clearAuthCookiesResponse = (response: NextResponse) => {
@@ -177,7 +187,42 @@ const clearAuthCookiesResponse = (response: NextResponse) => {
     domain: ROOT_DOMAIN,
   })
 
+  response.cookies.delete({
+    name: SESSION_ID_COOKIE,
+    domain: ROOT_DOMAIN,
+  })
+
+  response.cookies.delete({
+    name: PRACTICE_ID_COOKIE,
+    domain: ROOT_DOMAIN,
+  })
+
   return response
+}
+
+const setSessionIdsCookies = (value: AuthSessionIds) => {
+  const domain = ROOT_DOMAIN ? ROOT_DOMAIN : undefined
+  const secure = APP_ENV === 'production'
+  const sameSite = 'lax'
+  const httpOnly = true
+
+  if (value.sessionId) {
+    cookies().set(SESSION_ID_COOKIE, value.sessionId, {
+      secure,
+      httpOnly,
+      sameSite,
+      domain,
+    })
+  }
+
+  if (value.sessionPracticeId) {
+    cookies().set(PRACTICE_ID_COOKIE, value.sessionPracticeId, {
+      secure,
+      httpOnly,
+      sameSite,
+      domain,
+    })
+  }
 }
 
 export {
@@ -186,4 +231,5 @@ export {
   clearAuthCookies,
   setAuthCookiesResponse,
   clearAuthCookiesResponse,
+  setSessionIdsCookies,
 }

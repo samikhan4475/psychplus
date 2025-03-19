@@ -3,14 +3,10 @@
 import { TextField } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
 import { FormFieldContainer, FormFieldLabel } from '@/components'
-import { ReferralSource } from '../../types'
 import { AddPatientSchemaType } from './schema'
 
 const ReferralNameInput = () => {
   const form = useFormContext<AddPatientSchemaType>()
-
-  if (form.watch('referralSource') !== ReferralSource.Hospital) return null
-
   return (
     <FormFieldContainer className="gap-1">
       <FormFieldLabel className="!text-1">Referral Organization</FormFieldLabel>

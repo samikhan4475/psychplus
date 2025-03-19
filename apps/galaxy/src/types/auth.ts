@@ -59,6 +59,11 @@ interface RefreshRequest {
   refreshToken: string
 }
 
+interface AuthSessionIds {
+  sessionId?: string
+  sessionPracticeId?: string
+}
+
 export type {
   User,
   UserResponse,
@@ -67,4 +72,5 @@ export type {
   AuthSession,
   RefreshRequest,
   UserType,
+  AuthSessionIds,
 }

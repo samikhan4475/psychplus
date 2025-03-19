@@ -42,6 +42,9 @@ export const middleware = async (request: NextRequest) => {
             headers.get('Psychplus-AppVersion') ?? '1.0.0',
           'Psychplus-RunEnvironment':
             headers.get('Psychplus-RunEnvironment') ?? 'development',
+          'PsychPlus-SessionPracticeId':
+            headers.get('PsychPlus-SessionPracticeId') ?? '',
+          'PsychPlus-SessionId': headers.get('PsychPlus-SessionId') ?? '',
         },
       },
     ).catch((e) => {

@@ -3,8 +3,13 @@
 import { redirect } from 'next/navigation'
 import { jwtDecode } from 'jwt-decode'
 import * as api from '@/api'
-import type { AuthRequest, AuthResponse, StaffResource } from '@/types'
-import { setAuthCookies } from '@/utils/auth'
+import type {
+  AuthRequest,
+  AuthResponse,
+  AuthSessionIds,
+  StaffResource,
+} from '@/types'
+import { setAuthCookies, setSessionIdsCookies } from '@/utils/auth'
 
 const STAFF_ROLE = 'Staff'
 
@@ -28,12 +33,13 @@ const loginAction = async ({
     }
   }
 
-  const userResponse = await api.GET<StaffResource>(
-    api.GET_SELF_STAFF_DETAILS_ENDPOINT,
-    {
-      headers: api.createAuthzHeader(loginResponse.data.accessToken),
-    },
-  )
+  const url = new URL(api.GET_SELF_STAFF_DETAILS_ENDPOINT)
+
+  url.searchParams.append('isIncludePractice', 'true')
+
+  const userResponse = await api.GET<StaffResource>(url.toString(), {
+    headers: api.createAuthzHeader(loginResponse.data.accessToken),
+  })
 
   if (userResponse.state === 'error') {
     return {
@@ -53,6 +59,18 @@ const loginAction = async ({
       state: 'error',
       error: 'Invalid credentials',
     }
+  }
+
+  const sessionId = userResponse.headers.get('psychplus-sessionid') ?? undefined
+  const practiceId = userResponse?.data?.practiceIds?.[0] ?? undefined
+
+  const sessionIdCookies: AuthSessionIds = {
+    ...(sessionId && { sessionId }),
+    ...(practiceId && { sessionPracticeId: practiceId }),
+  }
+
+  if (Object.keys(sessionIdCookies).length) {
+    setSessionIdsCookies(sessionIdCookies)
   }
 
   const session = {

@@ -11,9 +11,7 @@ import { CODESETS } from '@/constants'
 const ReferralSource = () => {
   return (
     <FormFieldContainer className="gap-1">
-      <FormFieldLabel className="!text-1" required>
-        Referral Source
-      </FormFieldLabel>
+      <FormFieldLabel className="!text-1">Referral Source</FormFieldLabel>
       <CodesetSelect
         codeset={CODESETS.ReferralSource}
         size="1"

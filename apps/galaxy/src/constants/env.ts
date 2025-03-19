@@ -34,6 +34,8 @@ const SCRIPTSURE_SESSION_COOKIE =
 const SCRIPTSURE_SESSION_CREATED_AT_COOKIE =
   process.env.SCRIPTSURE_SESSION_CREATED_AT_COOKIE ??
   'p+_staff_scriptsure_session_created_at'
+const SESSION_ID_COOKIE = process.env.SESSION_ID_COOKIE ?? 'p+_session_id'
+const PRACTICE_ID_COOKIE = process.env.PRACTICE_ID_COOKIE ?? 'p+_practice_id'
 
 //Stripe
 const STRIPE_API_KEY = process.env.STRIPE_API_KEY ?? ''
@@ -60,4 +62,6 @@ export {
   STRIPE_API_KEY,
   STRIPE_PUBLISHABLE_KEY,
   GOOGLE_MAPS_API_KEY,
+  SESSION_ID_COOKIE,
+  PRACTICE_ID_COOKIE,
 }
