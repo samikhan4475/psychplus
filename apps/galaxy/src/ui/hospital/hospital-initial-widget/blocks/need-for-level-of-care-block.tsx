@@ -1,6 +1,7 @@
 import { Flex, Text } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
 import { CheckboxInput, FormFieldError } from '@/components'
+import { cn } from '@/utils'
 import {
   HospitalInitialFieldMapping,
   HospitalInitialPrefixes,
@@ -39,13 +40,21 @@ const NeedForLevelOfCareBlock = ({
 
     form.setValue('needForLevelOfCare', updatedFields)
   }
+
+  const {
+    formState: { errors },
+  } = form
+  const hasError = errors?.needForLevelOfCare
+
   return (
     <Flex
       direction="column"
       gap="2"
       px="2"
       py="2"
-      className="w-[75%] rounded-3 border border-gray-7"
+      className={cn('w-[75%] rounded-3 border border-gray-7', {
+        'border-red-7': hasError,
+      })}
     >
       <Text className="cursor-default" weight="medium">
         {BLOCK_TITLE}
