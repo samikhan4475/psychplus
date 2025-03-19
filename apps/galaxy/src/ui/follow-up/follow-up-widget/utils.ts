@@ -5,6 +5,7 @@ import {
   VisitSequenceTypes,
   VisitTypes,
 } from '@/types'
+import { isHospitalCareVisit } from '@/utils'
 import { NEXT_OPTIONS } from './constants'
 
 const removeEmptyValues = (obj: Record<string, any>): Record<string, any> => {
@@ -176,10 +177,22 @@ const transformIn = (appointment: Appointment, defaultDuration?: string) => {
   return payload
 }
 
+const shouldDisableFollowUpButton = (
+  visitType: string,
+  visitSequence: VisitSequenceTypes,
+): boolean => {
+  if (!isHospitalCareVisit(visitType)) return false;
+
+  return (
+    visitSequence === VisitSequenceTypes.Discharge ||
+    visitSequence === VisitSequenceTypes.InitialDischarge
+  );
+};
 export {
   removeEmptyValues,
   getEndDate,
   transformIn,
   getOffsetStartDate,
   sanitizeFormData,
+  shouldDisableFollowUpButton
 }
