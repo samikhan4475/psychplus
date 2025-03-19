@@ -13,6 +13,7 @@ import { useStore } from './store'
 import { SubmissionTabView } from './submission-tab'
 import { RevenueCycleTab } from './types'
 import { FileView } from './view-file-tab'
+import { DenialTabView } from './denial-tab'
 
 const RevenueCycleTabs = () => {
   const {
@@ -58,6 +59,9 @@ const RevenueCycleTabs = () => {
             <TabsTrigger value={RevenueCycleTab.PatientStatement}>
               {RevenueCycleTab.PatientStatement}
             </TabsTrigger>
+            <TabsTrigger value={RevenueCycleTab.DenialManagement}>
+              {RevenueCycleTab.DenialManagement}
+            </TabsTrigger>
             {closeableTabs.map((tab) => (
               <TabsTrigger onClose={() => closeTab(tab)} key={tab} value={tab}>
                 {tab}
@@ -79,6 +83,9 @@ const RevenueCycleTabs = () => {
         </TabsContent>
         <TabsContent value={RevenueCycleTab.PatientStatement}>
           <PatientStatementsTabView />
+        </TabsContent>
+        <TabsContent value={RevenueCycleTab.DenialManagement}>
+          <DenialTabView />
         </TabsContent>
         {claimTabsContent.map((tabid) => {
           return (

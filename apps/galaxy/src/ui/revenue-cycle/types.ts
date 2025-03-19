@@ -10,6 +10,7 @@ enum RevenueCycleTab {
   ClaimDetails = 'Claim#',
   CheckDetails = 'Check#',
   ViewFile = 'File',
+  DenialManagement = 'Denial Management',
 }
 
 enum FileFormats {
