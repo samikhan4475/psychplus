@@ -23,11 +23,11 @@ const ClaimInsuranceTable = () => {
     return claimInsurancePolicies.map((insurance) => ({
       ...insurance,
       viewHcfa:
-        (primaryStatusCode === 'NewCharge' &&
+        (!!primaryStatusCode?.trim() &&
           insurance.insurancePolicyPriority === 'Primary') ||
-        (secondaryStatusCode === 'NewCharge' &&
+        (!!secondaryStatusCode?.trim() &&
           insurance.insurancePolicyPriority === 'Secondary') ||
-        (tertiaryStatusCode === 'NewCharge' &&
+        (!!tertiaryStatusCode?.trim() &&
           insurance.insurancePolicyPriority === 'Tertiary'),
     })) as InsuranceClaimPolicy[]
   }, [claimInsurancePolicies])
