@@ -1,0 +1,3 @@
+const PAGE_SIZE_LIMIT = 100
+
+export { PAGE_SIZE_LIMIT }

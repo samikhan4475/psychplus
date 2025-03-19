@@ -319,6 +319,10 @@ const getManagementNavLinks = (
       href: `${baseHref}/organization-practice`,
     },
     {
+      label: 'Credentialing',
+      href: `${baseHref}/credentialing`,
+    },
+    {
       label: 'Assigning Authorities',
       href: `${baseHref}/assigning-authorities`,
     },
