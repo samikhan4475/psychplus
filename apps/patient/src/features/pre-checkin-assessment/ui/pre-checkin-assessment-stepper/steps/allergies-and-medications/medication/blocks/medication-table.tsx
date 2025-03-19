@@ -1,6 +1,7 @@
 import React from 'react'
-import { cn, getSlashedDateString } from '@psychplus-v2/utils'
+import { cn } from '@psychplus-v2/utils'
 import { Table } from '@radix-ui/themes'
+import { format } from 'date-fns'
 import { EmptyFileIcon, FeatureEmpty } from '@/components-v2'
 import { PatientMedication } from '@/features/medications/types/medications'
 
@@ -53,10 +54,10 @@ const MedicationTable = ({ medications }: medicationTableProps) => {
                 {row.quantityValue}
               </Table.Cell>
               <Table.Cell className="border-pp-gray-2 border-r">
-                {getSlashedDateString(row.writtenDate)}
+                {format(new Date(row.writtenDate), 'MM/dd/yyyy')}
               </Table.Cell>
               <Table.Cell className="border-pp-gray-2">
-                {getSlashedDateString(row.endDateTime)}
+                {format(new Date(row.endDateTime), 'MM/dd/yyyy')}
               </Table.Cell>
             </Table.Row>
           ))
