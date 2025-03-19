@@ -23,6 +23,7 @@ import {
   CopayDueCell,
   VerificationStatusCell,
   VisitMediumCell,
+  CoinsuranceDueCell,
 } from './table-cells'
 
 const columns : ColumnDef<Appointment>[] = 
@@ -481,9 +482,7 @@ const columns : ColumnDef<Appointment>[] =
               label="Due"
             />
           ),
-          cell: ({ row }) => (
-            <TextCell hasPayment>{row.original.coInsuranceDue}</TextCell>
-          ),
+          cell: CoinsuranceDueCell,
         },
         {
           id: 'coIns-paid',
