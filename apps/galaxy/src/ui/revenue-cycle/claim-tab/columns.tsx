@@ -242,12 +242,13 @@ const columns = (
         />
       ),
       cell: ({ row }) => (
-        <LongTextCell>
+        <LongTextCell className="w-[150px]">
           {getInsurancePayerName(
             'Secondary',
             row.original.claimInsurancePolicies ?? [],
           )}
         </LongTextCell>
+       
       ),
     },
     {

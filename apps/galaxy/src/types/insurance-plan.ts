@@ -9,6 +9,7 @@ interface InsurancePlan {
   isPublicViewable: boolean
   payerType: string
   effectiveDate?: string
+  payerId?: string
 }
 
 export type { InsurancePlan }

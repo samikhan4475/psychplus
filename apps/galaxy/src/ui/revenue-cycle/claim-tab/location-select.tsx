@@ -1,17 +1,20 @@
 'use client'
 
-import { getClinicsOptionsAction } from '@/actions'
-import { AsyncSelect, FormFieldContainer, FormFieldLabel } from '@/components'
+import { FormFieldContainer, FormFieldLabel, SelectInput } from '@/components'
+import { useRevCycleDataProvider } from '../revCycleContext'
 
 const LocationSelect = () => {
+  const { locationsData } = useRevCycleDataProvider()
+
   return (
     <FormFieldContainer className="flex-row items-center gap-1">
       <FormFieldLabel>Location</FormFieldLabel>
-      <AsyncSelect
+      <SelectInput
         field="locationId"
         placeholder="Select"
-        fetchOptions={getClinicsOptionsAction}
-        buttonClassName="w-[101px]"
+        options={locationsData}
+        buttonClassName="w-full h-6"
+        className="h-full flex-1"
       />
     </FormFieldContainer>
   )
