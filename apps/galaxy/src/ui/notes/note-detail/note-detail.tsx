@@ -42,6 +42,10 @@ const NoteDetail = ({ children }: PropsWithChildren) => {
     )
   }
 
+  const supervisedByText = selectedRow?.supervisedBy
+    ? `supervised by: ${selectedRow?.supervisedBy}`
+    : ''
+
   return (
     <Flex
       gap="1"
@@ -102,7 +106,7 @@ const NoteDetail = ({ children }: PropsWithChildren) => {
       )}
       {selectedRow?.signedDate && (
         <Heading size="3" my="1" weight="medium">
-          E-Signed by: {selectedRow?.signedByUserName}, at{' '}
+          E-Signed by: {selectedRow?.signedByUserName}, {supervisedByText} at{' '}
           {format(new Date(selectedRow.signedDate), 'MM/dd/yyyy')}
         </Heading>
       )}

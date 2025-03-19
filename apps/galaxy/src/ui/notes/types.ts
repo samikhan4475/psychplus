@@ -38,6 +38,8 @@ interface PatientNotes {
   locationTimeZone?: string
   appointmentDateTime?: string
   patientName?: PatientName
+  secondaryNoteCreationDateTimeByUser?: string
+  supervisedBy?: string
 }
 
 type PayloadType = {
@@ -58,6 +60,7 @@ interface NoteObject {
   noteTitleCode?: string
   coSignedByUserId?: string
   signedDate?: string
+  secondaryNoteCreationDateTimeByUser?: string
   encounterSignedNoteDetails: QuickNoteSectionItemPayload[]
 }
 

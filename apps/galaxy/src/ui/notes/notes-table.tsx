@@ -82,8 +82,13 @@ const getColumns = (
       accessorKey: 'date',
       header: () => <ColumnHeader label="Date" />,
       cell: ({ row }) => {
+        const visitTime =
+          row.original.notePositionCode === 'Primary'
+            ? row.original?.appointmentDateTime
+            : row.original?.secondaryNoteCreationDateTimeByUser
+
         const { date } = convertToTimezone(
-          row.original?.appointmentDateTime,
+          visitTime,
           row.original?.locationTimeZone,
         )
         return (
@@ -109,8 +114,12 @@ const getColumns = (
         return <ColumnHeader label={`Time (${locationTimeZoneAbbreviation})`} />
       },
       cell: ({ row }) => {
+        const visitTime =
+          row.original.notePositionCode === 'Primary'
+            ? row.original?.appointmentDateTime
+            : row.original?.secondaryNoteCreationDateTimeByUser
         const { time } = convertToTimezone(
-          row.original?.appointmentDateTime,
+          visitTime,
           row.original?.locationTimeZone,
         )
         return <DateTimeCell className="whitespace-nowrap">{time}</DateTimeCell>

@@ -90,6 +90,7 @@ const CreateNoteForm = ({ children, noteAppointment }: Props) => {
       noteTitleCode: data.noteTitleCode,
       coSignedByUserId: data.cosigner,
       signedDate: isPrescriber ? formattedDateTime : undefined,
+      secondaryNoteCreationDateTimeByUser: formattedDateTime,
       encounterSignedNoteDetails: [
         {
           sectionName: 'CreateNote',
