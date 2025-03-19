@@ -5,11 +5,11 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Flex, Grid } from '@radix-ui/themes'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { FormContainer } from '@/components'
-import { sanitizeFormData } from '@/utils'
 import { PROVIDER_CODING_FILTERS } from '../constants'
 import { FiltersContext } from '../context'
 import { AddFiltersPopover, FiltersButtonsGroup } from '../shared'
-import { getCalendarDateLabel, getDateString } from '../utils'
+import { useStore as useRootStore } from '../store'
+import { defaultValues } from './default-values'
 import { Age } from './filter-fields/age'
 import { BalanceRange } from './filter-fields/bal-range'
 import { CoInsuranceRange } from './filter-fields/co-ins-range'
@@ -42,60 +42,39 @@ import {
   providerCodingViewSchema,
 } from './provider-coding-view-schema'
 import { useStore } from './store'
-
-const defaultValues = {
-  startingDate: undefined,
-  endingDate: undefined,
-  name: '',
-  age: undefined,
-  gender: '',
-  dateOfBirth: undefined,
-  patientStatuses: '',
-  locationIds: '',
-  serviceIds: [],
-  providerType: '',
-  unitId: '',
-  roomId: '',
-  groupId: '',
-  primaryInsuranceName: '',
-  secondaryInsuranceName: '',
-  visitType: '',
-  visitSequence: '',
-  visitMedium: '',
-  appointmentStatuses: [],
-  patientInsuranceVerificationStatus: '',
-  diagnosisCode: '',
-  cptCode: '',
-  dateOfAdmissionStart: undefined,
-  dateOfAdmissionEnd: undefined,
-  lengthOfStayMin: undefined,
-  lengthOfStayMax: undefined,
-  lastCoverageDateStart: undefined,
-  lastCoverageDateEnd: undefined,
-  legalStatus: '',
-  copayDueMin: undefined,
-  copayDueMax: undefined,
-  coInsuranceDueMin: undefined,
-  coInsuranceDueMax: undefined,
-  balanceDueMin: undefined,
-  balanceDueMax: undefined,
-  noteSignedStatus: '',
-  facilityAdmissionIds: '',
-}
+import {
+  transformFilterValues,
+  transformParamsToFilterValues,
+  transformSettingToFilterValues,
+} from './transform'
 
 const ProviderCodingFilters = () => {
   const [filters, setFilters] = useState<string[]>(PROVIDER_CODING_FILTERS)
-  const {
-    providerCodingFilters,
-    saveProviderCodingFilters,
-    fetchProviderCodingView,
-    setFormData,
-  } = useStore((state) => ({
-    providerCodingFilters: state.providerCodingFilters,
-    saveProviderCodingFilters: state.saveProviderCodingFilters,
-    fetchProviderCodingView: state.fetchProviderCodingView,
-    setFormData: state.setFormData,
+  const [hasHydrated, setHasHydrated] = useState<boolean>(false)
+  const { cachedFilters, saveFilters } = useRootStore((state) => ({
+    cachedFilters: state.providerCodingFilters,
+    saveFilters: state.saveProviderCodingFilters,
   }))
+  const {
+    fetchProviderCodingView,
+    updateUserFilterSettings,
+    fetchUserSetting,
+    persistedFormData,
+    setPersistedFormData,
+    fetchAppointmentsWithSettings,
+    loading,
+    isSettingsSaving,
+  } = useStore((state) => ({
+    fetchProviderCodingView: state.fetchProviderCodingView,
+    updateUserFilterSettings: state.updateUserFilterSettings,
+    fetchUserSetting: state.fetchUserSetting,
+    persistedFormData: state.persistedFormData,
+    setPersistedFormData: state.setPersistedFormData,
+    fetchAppointmentsWithSettings: state.fetchAppointmentsWithSettings,
+    loading: state.loading,
+    isSettingsSaving: state.isSettingsSaving,
+  }))
+
   const ctxValue = useMemo(
     () => ({
       filters,
@@ -105,54 +84,58 @@ const ProviderCodingFilters = () => {
   )
 
   useEffect(() => {
-    if (providerCodingFilters.length > 0) {
-      setFilters(providerCodingFilters)
-    }
+    useStore.persist.rehydrate()
+    setHasHydrated(true)
   }, [])
+
+  useEffect(() => {
+    if (!hasHydrated) return
+
+    const fetchData = async () => {
+      const map = await fetchUserSetting()
+      if (persistedFormData) {
+        const filterValues = transformParamsToFilterValues(persistedFormData)
+        form.reset({ ...defaultValues, ...filterValues })
+        applyFilters(filterValues)
+      } else if (map && map.size > 0) {
+        const filterValues = transformSettingToFilterValues(map)
+        form.reset({ ...defaultValues, ...filterValues })
+        fetchAppointmentsWithSettings(map)
+      }
+    }
+
+    if (cachedFilters.length > 0) {
+      setFilters(cachedFilters)
+    }
+
+    fetchData()
+  }, [hasHydrated])
 
   const form = useForm<ProviderCodingSchema>({
     resolver: zodResolver(providerCodingViewSchema),
     criteriaMode: 'all',
-    defaultValues: { ...defaultValues },
+    defaultValues,
+    disabled: loading || isSettingsSaving,
   })
 
-  const { isDirty } = form.formState
+  const applyFilters = (data: ProviderCodingSchema, persist?: boolean) => {
+    const transformedData = transformFilterValues(data)
 
-  const onSubmit: SubmitHandler<ProviderCodingSchema> = (data) => {
-    if (!isDirty) return
-    const {
-      startingDate,
-      endingDate,
-      dateOfBirth,
-      dateOfAdmissionStart,
-      dateOfAdmissionEnd,
-      lastCoverageDateStart,
-      lastCoverageDateEnd,
-    } = data
-    const transformedData = {
-      ...data,
-      startingDate: getDateString(startingDate),
-      endingDate: getDateString(endingDate?.add({days: 1})),
-      dateOfBirth: getCalendarDateLabel(dateOfBirth),
-      dateOfAdmissionStart: getDateString(dateOfAdmissionStart),
-      dateOfAdmissionEnd: getDateString(dateOfAdmissionEnd?.add({days: 1})),
-      lastCoverageDateStart: getDateString(lastCoverageDateStart),
-      lastCoverageDateEnd: getDateString(lastCoverageDateEnd?.add({ days: 1})),
-      locationIds: data.locationIds ? [data.locationIds] : [],
-      facilityAdmissionIds: data.facilityAdmissionIds
-        ? [data.facilityAdmissionIds]
-        : '',
+    if (persist) {
+      setPersistedFormData(transformedData)
     }
 
-    const sanitizedParams = sanitizeFormData(transformedData)
-    setFormData(sanitizedParams)
-    return fetchProviderCodingView(sanitizedParams)
+    fetchProviderCodingView(transformedData)
   }
 
-  const resetFilters = () => {
-    if (!isDirty) return
-    form.reset()
-    setFormData({})
+  const onSubmit: SubmitHandler<ProviderCodingSchema> = (data) => {
+    applyFilters(data, true)
+  }
+
+  const saveSettings = () => {
+    const values = form.getValues()
+    const transformedValues = transformFilterValues(values)
+    updateUserFilterSettings(transformedValues)
   }
 
   return (
@@ -196,10 +179,13 @@ const ProviderCodingFilters = () => {
               <BalanceRange />
               <NoteSignedDropdown />
               <FacilityAdmissionIdSelect />
-              <FiltersButtonsGroup resetFilters={resetFilters}>
+              <FiltersButtonsGroup
+                resetFilters={() => form.reset(defaultValues)}
+                saveSettings={saveSettings}
+              >
                 <AddFiltersPopover
                   view="Provider Coding"
-                  onSave={saveProviderCodingFilters}
+                  onSave={saveFilters}
                   viewFilters={PROVIDER_CODING_FILTERS}
                 />
               </FiltersButtonsGroup>

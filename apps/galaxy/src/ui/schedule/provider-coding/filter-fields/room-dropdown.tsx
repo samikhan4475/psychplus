@@ -33,7 +33,7 @@ const RoomSelect = ({
     <FormFieldContainer className="h-full">
       <FieldLabel>Room</FieldLabel>
       <SelectInput
-        field="roomId"
+        field="roomIds"
         placeholder="Select"
         options={roomOptions}
         disabled={services.length === 0}

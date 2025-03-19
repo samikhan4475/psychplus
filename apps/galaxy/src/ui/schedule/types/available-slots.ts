@@ -265,6 +265,7 @@ interface AppointmentParams {
   bookedAppointmentTime?: string
   appointmentStatuses?: string[]
   noteSignedStatuses?: string[]
+  facilityAdmissionIds?: string[]
 }
 
 interface ProviderCoding {

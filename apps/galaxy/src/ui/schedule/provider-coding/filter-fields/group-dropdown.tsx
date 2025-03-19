@@ -33,7 +33,7 @@ const GroupSelect = ({
     <FormFieldContainer className="h-full">
       <FieldLabel>Group</FieldLabel>
       <SelectInput
-        field="groupId"
+        field="groupIds"
         placeholder="Select"
         options={groupOptions}
         disabled={services.length === 0}

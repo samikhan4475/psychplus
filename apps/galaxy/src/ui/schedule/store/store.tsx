@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
-import { ROUNDING_FILTERS_KEY } from '../constants'
+import { CACHED_FILTERS_KEY } from '../constants'
 import { TabValue } from '../types'
 
 interface Store {
@@ -56,11 +56,12 @@ const useStore = create<Store>()(
       },
     }),
     {
-      name: ROUNDING_FILTERS_KEY,
+      name: CACHED_FILTERS_KEY,
       storage: createJSONStorage(() => sessionStorage),
       partialize: (state) => ({
         cachedFiltersRounding: state.cachedFiltersRounding,
         cachedFiltersList: state.cachedFiltersList,
+        providerCodingFilters: state.providerCodingFilters,
         activeTab: state.activeTab,
       }),
     },

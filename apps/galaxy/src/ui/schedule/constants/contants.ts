@@ -50,8 +50,6 @@ const LIST_VIEW_FILTERS = [
   'Note Signed',
 ]
 
-const ROUNDING_FILTERS_KEY = 'rounding-filters'
-
 const NOTE_SIGNED: Record<string, boolean> = {
   yes: true,
   no: false,
@@ -148,6 +146,7 @@ const LIST_VIEW_FILTERS_KEY = 'ListViewFilters'
 const CALENDAR_VIEW_FILTERS_KEY = 'CalendarViewFilters'
 const SCHEDULER_VIEW_FILTERS_KEY = 'SchedulerViewFilters'
 const ROUNDING_VIEW_FILTERS_KEY = 'RoundingViewFilters'
+const PROVIDER_CODING_VIEW_FILTERS_KEY = 'ProviderCodingViewFilters'
 
 enum StatusCode {
   NoPermission = 406,
@@ -160,11 +159,13 @@ enum CategoryValue {
   CalendarView = 'FieldValue_Sch_CalendarView',
   SchedulerView = 'FieldValue_Sch_SchedulerView',
   RoundingView = 'FieldValue_Sch_RoundingView',
+  ProviderCodingView = 'FieldValue_Sch_ProviderCodingView',
 }
+
+const CACHED_FILTERS_KEY='cached-filters-key'
 
 export {
   ROUNDING_FILTERS,
-  ROUNDING_FILTERS_KEY,
   PROVIDER_CODING_FILTERS,
   LIST_VIEW_FILTERS,
   NOTE_SIGNED,
@@ -192,4 +193,6 @@ export {
   CALENDAR_VIEW_FILTERS_KEY,
   SCHEDULER_VIEW_FILTERS_KEY,
   ROUNDING_VIEW_FILTERS_KEY,
+  PROVIDER_CODING_VIEW_FILTERS_KEY,
+  CACHED_FILTERS_KEY,
 }

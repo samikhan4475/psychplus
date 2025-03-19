@@ -20,7 +20,7 @@ const SecondaryInsuranceDropdown = ({
     <FormFieldContainer className="h-full">
       <FieldLabel className="w-min">Secondary Insurance</FieldLabel>
       <SelectInput
-        field="secondaryInsuranceName"
+        field="secondaryInsuranceNames"
         placeholder="Select"
         options={options}
         loading={loading}

@@ -34,7 +34,7 @@ const InsuranceVerificationDropdown = () => {
     <FormFieldContainer>
       <FieldLabel>Ins Verification</FieldLabel>
       <SelectInput
-        field="patientInsuranceVerificationStatus"
+        field="patientInsuranceVerificationStatuses"
         placeholder="Select"
         options={options}
         buttonClassName="w-full h-6"

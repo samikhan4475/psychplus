@@ -33,7 +33,7 @@ const UnitSelect = ({
     <FormFieldContainer className="h-full">
       <FieldLabel>Unit</FieldLabel>
       <SelectInput
-        field="unitId"
+        field="unitIds"
         placeholder="Select"
         options={unitOptions}
         disabled={services.length === 0}
