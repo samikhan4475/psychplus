@@ -22,4 +22,5 @@ data:
   scriptSureSessionCookieCreateAt: 'p+_scriptsure_session_created_at'
   apiUrl: 'https://api-pr-2000.ode.psychplus.dev'
   authApiUrl: 'https://auth-pr-2000.ode.psychplus.dev'
+  serviceUrlsWebsocketService: 'wss://websocketservice-pr-2000.ode.psychplus.dev'
   APP_ENV: 'development'

@@ -170,6 +170,14 @@
        key: scriptSurePatientPortalUserPassword
 
 
+  # CONFIG: WEBSOCKETSERVICE
+
+  - name: WEBSOCKETSERVICE_URL
+    valueFrom:
+      configMapKeyRef:
+        name: app-config
+        key: serviceUrlsWebsocketService
+
   # SECRETS: Stripe
 
   - name: STRIPE_PUBLISHABLE_KEY
