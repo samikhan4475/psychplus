@@ -2,7 +2,7 @@
 
 import { useSearchParams } from 'next/navigation'
 import { getPracticeIdsAction } from '@/actions'
-import { AsyncSelect, FormFieldContainer, FormFieldLabel } from '@/components'
+import { AsyncSelect, FormFieldContainer, FormFieldError, FormFieldLabel } from '@/components'
 
 const PracticeNameSelect = () => {
   const searchParams = useSearchParams()
@@ -17,6 +17,7 @@ const PracticeNameSelect = () => {
         fetchOptions={getPracticeIdsAction}
         disabled={!!practiceId}
       />
+      <FormFieldError name='practiceId' />
     </FormFieldContainer>
   )
 }

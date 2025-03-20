@@ -1,7 +1,7 @@
 'use client'
 
 import { getReceiverListOptionsAction } from '@/actions'
-import { AsyncSelect, FormFieldContainer, FormFieldLabel } from '@/components'
+import { AsyncSelect, FormFieldContainer, FormFieldError, FormFieldLabel } from '@/components'
 
 const ReceiverSelect = () => {
   return (
@@ -13,6 +13,7 @@ const ReceiverSelect = () => {
         required
         fetchOptions={getReceiverListOptionsAction}
       />
+      <FormFieldError name='receiverId' />
     </FormFieldContainer>
   )
 }

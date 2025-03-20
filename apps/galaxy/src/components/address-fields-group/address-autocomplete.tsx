@@ -211,7 +211,7 @@ const GooglePlacesAutocomplete = ({
         </Popover.Root>
 
         {state?.error && (
-          <Text size="1" color="red">
+          <Text size="1" mt='2' color="red">
             {state.error.message}
           </Text>
         )}
