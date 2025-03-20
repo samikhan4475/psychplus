@@ -11,10 +11,8 @@ import {
   addTestLabsApi,
   editLabOrderApi,
   editSpecimenApi,
-  getLabOrderRequisition,
-  placeLabOrderApi,
 } from './api'
-import { SpecimenData } from './blocks/types'
+import { LabOrderStatusEnum, SpecimenData } from './blocks/types'
 import { labOrderSchema, LabOrderSchemaType } from './lab-order-schema'
 
 const useLabOrderForm = (
@@ -29,7 +27,7 @@ const useLabOrderForm = (
 
   const isFormDisabled =
     labOrderData?.labLocationData?.name === 'Quest' &&
-    labOrderData.labOrderStatus === 'OrderSubmitted'
+    labOrderData.labOrderStatus !== LabOrderStatusEnum.Unsigned
 
   const form = useForm<LabOrderSchemaType>({
     resolver: zodResolver(labOrderSchema),
@@ -51,7 +49,6 @@ const useLabOrderForm = (
     OrderingStaffId: data?.providerDetail?.providerStaffId,
     labId: form.getValues('labLocationData')?.id ?? '',
     isFasting: data.isFasting === 'yes',
-    isPscHold: data.isPSCHold === 'yes',
     IsTest: true,
     locationId: 0,
     orderingLab: {
@@ -63,8 +60,8 @@ const useLabOrderForm = (
   const labTestAction = async (orderId: string, isEdit: boolean) => {
     const labQuestions = form.getValues('labQuestions')
 
-    const updatedTests = form.getValues('testLabs')?.map((item: any) => {
-      const { id, isNewTestLab, metadata, ...rest } = item
+    const updatedTests = form.getValues('testLabs')?.map((item) => {
+      const { id, isNewTestLab, ...rest } = item
 
       const extraParam = isEdit && !isNewTestLab ? { id } : {}
 
@@ -98,7 +95,6 @@ const useLabOrderForm = (
     })
 
     const result = await addTestLabsApi(updatedTests)
-    console.log(result, 'resultresultresultresultresult')
     return result
   }
 
@@ -125,8 +121,7 @@ const useLabOrderForm = (
       })
 
     if (activeDiagnostics.length > 0) {
-      const diagnosisResult = await addDiagnosis(activeDiagnostics)
-      console.log(diagnosisResult, 'diagnosisResultdiagnosisResult')
+      await addDiagnosis(activeDiagnostics)
     }
   }
 
@@ -189,10 +184,7 @@ const useLabOrderForm = (
     }
   }
 
-  const onSaveOrder = async (
-    data: LabOrderSchemaType,
-    isPlaceOrder?: boolean,
-  ) => {
+  const onSaveOrder = async (data: LabOrderSchemaType) => {
     const result = await labOrderAction(data)
     if (result.state === 'success') {
       const specimenList = form.getValues('specimenList')
@@ -209,26 +201,11 @@ const useLabOrderForm = (
         labTests:
           labTestResult.state === 'success' ? [...labTestResult.data] : [],
       }
-      if (isPlaceOrder) {
-        const requisitionResponse = await getLabOrderRequisition(result.data.id)
-        if (requisitionResponse.state === 'success') {
-          const placeOrderResponse = await placeLabOrderApi(result.data.id)
-          if (placeOrderResponse.state === 'success') {
-            toast.success('Order Placed!')
-          } else {
-            toast.error(
-              placeOrderResponse?.error ?? 'Error while placing order',
-            )
-          }
-        } else {
-          toast.error(requisitionResponse?.error ?? 'Error while placing order')
-        }
-      } else {
-        toast.success('Saved!')
-      }
+
+      toast.success('Saved!')
       updateLabOrdersList(updatedLabOrder) //local
     } else {
-      toast.error('Error while saving!')
+      toast.error(result?.error ?? 'Error while saving!')
     }
     setOpen(false)
     setLoadingSubmit(false)
@@ -236,13 +213,14 @@ const useLabOrderForm = (
   }
 
   const onClickPlaceOrder = (e: React.MouseEvent<HTMLButtonElement>) => {
-    form.handleSubmit(
-      (data) => {
-        setLoadingPlaceOrder(true)
-        onSaveOrder(data, true)
-      },
-      (error) => console.log(error),
-    )(e)
+    const labOrderStatus = form.getValues('labOrderStatus')
+    if (labOrderStatus === LabOrderStatusEnum.Unsigned) {
+      form.setValue('labOrderStatus', 'Signed')
+    }
+    form.handleSubmit((data) => {
+      setLoadingPlaceOrder(true)
+      onSaveOrder(data)
+    })(e)
   }
 
   const onSubmit: SubmitHandler<LabOrderSchemaType> = async (data) => {

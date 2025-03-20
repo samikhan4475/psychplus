@@ -7,8 +7,8 @@ import { useLabOrderForm } from '../lab-order-form'
 import { BillType } from './bill-type'
 import { ConfirmationDialog } from './confirmation-dialog'
 import { DiagnosisTable } from './diagnosis-table'
+import { FastingOption } from './fasting-option'
 import { LabsLocationDropdown } from './lab-location-dropdown'
-import { LabRadioOptions } from './lab-radio-options'
 import { OrderDateTime } from './order-date-time'
 import { ProviderDropdown } from './provider-dropdown'
 import { SpecimenForm } from './specimen'
@@ -35,32 +35,26 @@ const AddLabOrderForm = ({
   const [isOpenConfirmDialog, setIsOpenConfirmDialog] = useState(false)
 
   const labOrderId = form.getValues('labOrderId')
-  const labLocationData = form.watch('labLocationData')
 
   const onClickConfirmPlaceOrder = () => setIsOpenConfirmDialog(true)
 
   return (
-    <FormContainer
-      onSubmit={onSubmit}
-      onError={(error) => console.log(error)}
-      form={form}
-    >
+    <FormContainer onSubmit={onSubmit} form={form}>
       <Flex direction="column" gap="4" className="flex">
+        <LabsLocationDropdown />
         <Flex direction="row">
           <TestLabsTable isFormDisabled={isFormDisabled} />
           <DiagnosisTable isFormDisabled={isFormDisabled} />
         </Flex>
         <Flex direction="row" gap="3">
           <OrderDateTime />
-          <LabsLocationDropdown />
           <Status />
           <ProviderDropdown />
+          <BillType />
         </Flex>
 
         <Flex direction="row" gap="3">
-          <BillType />
-          <LabRadioOptions field="isFasting" title="Fasting" />
-          <LabRadioOptions field="isPSCHold" title="PSC Hold" />
+          <FastingOption />
         </Flex>
 
         <TestQuestionsView />
@@ -75,16 +69,15 @@ const AddLabOrderForm = ({
           >
             <Text size="1">Save</Text>
           </FormSubmitButton>
-          {labLocationData?.name === 'Quest' && !isFormDisabled && (
-            <Button
-              className="bg-pp-black-1 h-8 rounded-2 px-3 py-1.5 text-1 text-[white]"
-              type="button"
-              onClick={onClickConfirmPlaceOrder}
-              loading={loadingPlaceOrder}
-            >
-              Place Order
-            </Button>
-          )}
+          <Button
+            className="bg-pp-black-1 h-8 rounded-2 px-3 py-1.5 text-1 text-[white]"
+            type="button"
+            onClick={onClickConfirmPlaceOrder}
+            loading={loadingPlaceOrder}
+            disabled={loadingPlaceOrder || isFormDisabled}
+          >
+            Sign
+          </Button>
         </Flex>
         <ConfirmationDialog
           open={isOpenConfirmDialog}

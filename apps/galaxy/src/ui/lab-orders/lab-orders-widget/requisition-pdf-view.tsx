@@ -5,7 +5,7 @@ import { LabDocument } from './types'
 import { ViewDocumentButton } from './view-document-button'
 
 interface RequistionPdfViewProps {
-  requisitionPdfDetails: LabDocument
+  requisitionPdfDetails?: LabDocument
 }
 const RequisitionPdfView = ({
   requisitionPdfDetails,
@@ -15,7 +15,7 @@ const RequisitionPdfView = ({
 
   return (
     <ViewDocumentButton
-      pdfDetails={requisitionPdfDetails}
+      pdfDetails={requisitionPdfDetails ?? null}
       appointmentId={appointmentId}
       buttonText="Requisition File"
       title="Requisition PDF"

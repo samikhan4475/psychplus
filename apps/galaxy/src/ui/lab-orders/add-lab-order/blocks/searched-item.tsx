@@ -22,7 +22,7 @@ const SearchedItem = ({
           {title}
         </Text>
       </Flex>
-      <Flex flexGrow="1" className="justify-end">
+      <Flex flexGrow="1" className="justify-end" align="center">
         <PlusCircledIcon
           width={20}
           height={20}

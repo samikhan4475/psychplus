@@ -1,11 +1,10 @@
 import { CalendarDate } from '@internationalized/date'
 import { DateValue } from 'react-aria-components'
-import { LabOrderStatus } from '@/ui/lab-orders/lab-orders-widget/types'
 import { Appointment } from './appointment'
 import { ContactDetails } from './contact'
 import { Metadata } from './metadata'
-import { PatientProfile } from './patient'
 import { LegalName } from './name'
+import { PatientProfile } from './patient'
 
 interface LabTestAnswer {
   id: string
@@ -29,6 +28,7 @@ interface LabTest {
   temperatureType: string
   papIndicator: string
   labTestAnswers: LabTestAnswer[]
+  testCode?: string
 }
 
 interface LabResult {
@@ -78,44 +78,44 @@ interface LabDocument {
 }
 
 interface LabOrders {
-  id: string
-  labOrderNumber: number
-  metadata: Metadata
-  labId: string
-  patientId: number
-  appointmentId: number
-  statusCode: string
-  orderingStaffId: number
-  orderingStaffName: LegalName
-  billType: string
-  isFasting: boolean
-  isLabDraw: boolean
-  orderType: string
-  orderSendStatus: boolean
-  orderSentDateTime: string
-  isPscHold: boolean
-  isTest: boolean
+  id?: string
+  labOrderNumber?: number
+  metadata?: Metadata
+  labId?: string
+  patientId?: string
+  appointmentId: string
+  statusCode?: string
+  orderingStaffId?: number
+  orderingStaffName?: LegalName
+  billType?: string
+  isFasting?: boolean
+  isLabDraw?: boolean
+  orderType?: string
+  orderSendStatus?: boolean
+  orderSentDateTime?: string
+  isPscHold?: boolean
+  isTest?: boolean
   labOrderDate: string
-  labNotes: string
-  orderingLab: {
-    id: string
-    metadata: Metadata
-    recordStatus: string
-    name: string
-    locationName: string
-    locationId: string
-    consolidatorId: string
-    labGroupId: string
-    contactDetails: ContactDetails
-    isTest: boolean
+  labNotes?: string
+  orderingLab?: {
+    id?: string
+    metadata?: Metadata
+    recordStatus?: string
+    name?: string
+    locationName?: string
+    locationId?: string
+    consolidatorId?: string
+    labGroupId?: string
+    contactDetails?: ContactDetails
+    isTest?: boolean
   }
-  labTests: LabTest[]
-  labResults: LabResult[]
-  labDocuments: LabDocument[]
-  patient: PatientProfile
-  appointment: Appointment
-  recordStatus: string
-  orderStatus: LabOrderStatus
+  labTests?: LabTest[]
+  labResults?: LabResult[]
+  labDocuments?: LabDocument[]
+  patient?: PatientProfile
+  appointment?: Appointment
+  recordStatus?: string
+  orderStatus?: string
 }
 interface LabOrderResponseList {
   labOrders: LabOrders[]

@@ -46,7 +46,7 @@ const ProviderDropdown = () => {
       <AsyncSelect
         field="providerName"
         fetchOptions={fetchOptions}
-        buttonClassName="flex-1 h-7 w-[208px]"
+        buttonClassName="flex-1 h-7 w-[180px]"
         disabled
       />
       <FormFieldError name="providerName" />

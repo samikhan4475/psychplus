@@ -50,7 +50,7 @@ const TestLabItem = ({
   return (
     <Table.Row>
       <TableRow
-        title={testLabData?.testName ?? ''}
+        title={`${testLabData?.testCode ?? ''} ${testLabData?.testName ?? ''}`}
         onDelete={onClickDelete}
         disabled={disabled}
       />

@@ -3,19 +3,17 @@ import { DateValue } from 'react-aria-components'
 import { LabOrders, LegalName, Metadata } from '@/types'
 
 type LabOrderStatus =
-  | 'Draft'
+  | 'Unsigned'
+  | 'Signed'
+  | 'SignedNotSent'
+  | 'SignedSent'
   | 'ResultReceived'
-  | 'OrderCompleted'
-  | 'Submission Pending'
-  | 'PreOrder'
-  | 'Cancelled'
-  | 'Pending'
 
 type LabOrderRow = Row<LabOrders>
 type LabResultRow = Row<LabResult>
 
 type LabOrderPayload = {
-  appointmentIds: string[]
+  appointmentIds?: string[]
   patientId: string[]
   orderStatus?: string
   orderCreatedDate?: DateValue | null | string

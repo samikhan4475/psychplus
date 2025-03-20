@@ -15,7 +15,9 @@ const SpecimenAccordionTrigger = ({ index }: { index: number }) => {
   const [disabled, setDisabled] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
 
-  const onClickDeleteConfirm = async (e: any) => {
+  const onClickDeleteConfirm = async (
+    e: React.MouseEvent,
+  ) => {
     e.preventDefault()
     setDisabled(true)
     const newSpecimenList = [...specimenList]

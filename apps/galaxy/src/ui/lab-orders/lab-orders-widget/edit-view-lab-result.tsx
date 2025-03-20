@@ -34,13 +34,12 @@ const EditViewLabResult = ({
   setSelectedTestName,
   shouldEditLabResult,
 }: LabResultsProps) => {
-  const {
-    orderingLab: { name: orderingLabName },
-    orderStatus,
-  } = row.original
+  const { orderStatus } = row.original
+
+  const orderingLab = row?.original?.orderingLab
 
   const shouldAddLabResult =
-    orderingLabName === OrderingLabName.PsychPlus &&
+    orderingLab?.name === OrderingLabName.PsychPlus &&
     orderStatus === OrderStatus.OrderCompleted
 
   const {
@@ -103,8 +102,12 @@ const EditViewLabResult = ({
   }
 
   useEffect(() => {
-    if (row.original.labTests.length > 0 && !selectedTestId) {
-      handleLabTest(row.original.labTests[0])
+    if (
+      row.original?.labTests &&
+      row.original?.labTests.length > 0 &&
+      !selectedTestId
+    ) {
+      handleLabTest(row.original?.labTests[0])
     }
   }, [])
 
@@ -113,7 +116,7 @@ const EditViewLabResult = ({
       const response = await addLabOrdersResultAction(
         payload,
         appointmentId,
-        row.original.id,
+        row.original?.id ?? '',
       )
       if (response.state === 'error') {
         toast.error('Error Adding lab result')
@@ -129,7 +132,7 @@ const EditViewLabResult = ({
       const response = await updateLabOrdersResultAction(
         payload,
         appointmentId,
-        row.original.id,
+        row.original?.id ?? '',
         payload.id ?? '',
       )
 
@@ -168,13 +171,12 @@ const EditViewLabResult = ({
     form.reset({ labResults: newRow })
   }
 
-  const shouldShowButtons = (): boolean => {
-    return row.original.labTests.length > 0 && !!editAbleLabResults
-  }
+  const shouldShowButtons = (): boolean =>
+    !!row.original?.labTests?.length && !!editAbleLabResults
 
   return (
     <FormContainer form={form} onSubmit={onSubmit}>
-      {row.original.labTests.length === 0 ? (
+      {row.original?.labTests?.length === 0 ? (
         <Text className="flex items-center justify-center">No Test Found</Text>
       ) : (
         <>
@@ -191,7 +193,7 @@ const EditViewLabResult = ({
             </Box>
           )}
           <LabTestHeader
-            labTests={row.original.labTests}
+            labTests={row.original?.labTests ?? []}
             selectedTestId={selectedTestId}
             handleLabTest={handleLabTest}
           />

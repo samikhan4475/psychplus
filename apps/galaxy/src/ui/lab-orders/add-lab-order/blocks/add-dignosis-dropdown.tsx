@@ -36,7 +36,7 @@ const AddDiagnosisDropDown = ({
   return (
     <DropdownMenu.Root>
       <DropdownMenu.Trigger disabled={isFormDisabled}>
-        <PlusIcon className='cursor-pointer' />
+        <PlusIcon className="cursor-pointer" />
       </DropdownMenu.Trigger>
       <DropdownMenu.Content align="end" className="w-[386px]">
         <Flex
@@ -74,7 +74,7 @@ const AddDiagnosisDropDown = ({
                 disabled={
                   selectedDiagnosisList &&
                   selectedDiagnosisList.length > 0 &&
-                  selectedDiagnosisList.find((e: any) => e.id === item.id) !==
+                  selectedDiagnosisList.find((e) => e.id === item.id) !==
                     undefined
                 }
               />

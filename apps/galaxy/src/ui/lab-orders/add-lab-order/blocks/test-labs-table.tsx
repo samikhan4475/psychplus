@@ -1,19 +1,18 @@
 import { Table } from '@radix-ui/themes'
+import { useFormContext } from 'react-hook-form'
 import useTestLabs from '../hooks/use-test-labs'
+import { LabOrderSchemaType } from '../lab-order-schema'
 import { AddTestLabsDropDown } from './add-test-labs-dropdown'
 import { ColumnHeader } from './column-header'
 import { TestLabItem } from './test-lab-item'
 import { TestLabsType } from './types'
 
 const TestLabsTable = ({ isFormDisabled }: { isFormDisabled: boolean }) => {
-  const {
-    getSearchedTestLabs,
-    testLabsList,
-    selectedTestLabList,
-    onClickTestLabItem,
-    onClickDelete,
-    loading,
-  } = useTestLabs()
+  const { selectedTestLabList, onClickTestLabItem, onClickDelete } =
+    useTestLabs()
+
+  const form = useFormContext<LabOrderSchemaType>()
+  const labLocationData = form.watch('labLocationData')
 
   return (
     <Table.Root className="flex-grow">
@@ -23,11 +22,8 @@ const TestLabsTable = ({ isFormDisabled }: { isFormDisabled: boolean }) => {
           field="testLabs"
           rightComponent={
             <AddTestLabsDropDown
-              getSearchedTestLabs={getSearchedTestLabs}
-              testLabsList={testLabsList}
               onClickTestLabItem={onClickTestLabItem}
-              loading={loading}
-              isFormDisabled={isFormDisabled}
+              isFormDisabled={isFormDisabled || !labLocationData}
             />
           }
         />

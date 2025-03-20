@@ -2,20 +2,19 @@
 
 import { useState } from 'react'
 import { useSearchParams } from 'next/navigation'
-import { IconButton, Tooltip } from '@radix-ui/themes'
+import { IconButton } from '@radix-ui/themes'
 import toast from 'react-hot-toast'
 import { deleteLabOrderApi } from '../../add-lab-order/api'
+import { LabOrderStatusEnum } from '../../add-lab-order/blocks/types'
 import { DeleteDialog } from '../delete-dialogue/delete-dialogue'
 import { useStore } from '../store'
 
 const RowActionDelete = ({
   orderId,
-  labLocationName,
   orderStatus,
 }: {
   orderId: string
-  labLocationName: string
-  orderStatus: string
+  orderStatus?: string
 }) => {
   const [disabled, setDisabled] = useState(false)
   const appointmentId = useSearchParams().get('id') ?? ''
@@ -34,8 +33,7 @@ const RowActionDelete = ({
     setDisabled(false)
   }
 
-  if (labLocationName === 'Quest' && orderStatus === 'OrderSubmitted')
-    return null
+  if (orderStatus !== LabOrderStatusEnum.Unsigned) return null
 
   return (
     <IconButton

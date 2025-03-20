@@ -4,8 +4,8 @@ import * as api from '@/api'
 
 const getLabOrderRequisition = async (
   orderId: string,
-): Promise<api.ActionResult<{}>> => {
-  const response = await api.POST<{}>(
+): Promise<api.ActionResult<void>> => {
+  const response = await api.POST<void>(
     api.LAB_ORDER_GET_REQUISITION(orderId),
     {},
   )
@@ -18,7 +18,7 @@ const getLabOrderRequisition = async (
 
   return {
     state: 'success',
-    data: {},
+    data: undefined,
   }
 }
 

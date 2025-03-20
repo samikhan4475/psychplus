@@ -85,6 +85,7 @@ const labOrderSchema = z
       .object({
         id: z.string().optional(),
         name: z.string().optional(),
+        consolidatorId: z.string().optional(),
       })
       .optional(),
     labBillingType: z.string().optional(),
@@ -92,7 +93,6 @@ const labOrderSchema = z
     providerName: z.string().optional(),
     providerDetail: z.any().optional(),
     isFasting: z.string().optional(),
-    isPSCHold: z.string().optional(),
     specimenList: specimenSchema,
     labQuestions: z.any({}).optional(),
     labOrderNumber: z.number().optional(),
@@ -110,10 +110,6 @@ const labOrderSchema = z
       {
         condition: !data?.isFasting,
         path: ['isFasting'],
-      },
-      {
-        condition: !data?.isPSCHold,
-        path: ['isPSCHold'],
       },
       {
         condition: !data?.labBillingType,

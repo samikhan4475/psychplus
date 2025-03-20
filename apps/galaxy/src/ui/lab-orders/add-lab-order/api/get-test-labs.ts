@@ -3,8 +3,15 @@
 import * as api from '@/api'
 import { TestLabsType } from '../blocks/types'
 
+type LabTestsPayload = {
+  testNames?: string[]
+  testCodes?: string[]
+  isIncludeDefaultOnly?: boolean
+  consolidatorIds?: string[]
+}
+
 const getTestLabs = async (
-  payload: any = {},
+  payload: LabTestsPayload,
   limit?: number,
 ): Promise<api.ActionResult<TestLabsType[]>> => {
   const url = limit

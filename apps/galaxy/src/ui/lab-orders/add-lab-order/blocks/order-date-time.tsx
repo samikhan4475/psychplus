@@ -19,7 +19,7 @@ const OrderDateTime = () => {
       <Flex direction="row" className="gap-[6px]">
         <Flex direction="column" className="gap-1">
           <I18nProvider locale="en-US">
-            <DatePickerInput field="orderDate" className="h-7 w-[117px]" />
+            <DatePickerInput field="orderDate" className="h-7 w-[98px]" />
           </I18nProvider>
           <FormFieldError name="orderDate" />
         </Flex>
@@ -27,9 +27,8 @@ const OrderDateTime = () => {
           field="orderTime"
           label=""
           hourCycle={24}
-          dateInputClass="h-7 w-[117px]"
+          dateInputClass="h-7 w-[98px]"
           onChange={(value) => {
-            console.log(value.toString())
             form.setValue(
               'orderTime',
               `${value.toString().split(':')[0]}:${

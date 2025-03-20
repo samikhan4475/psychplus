@@ -1,6 +1,6 @@
 'use client'
 
-import { Dialog, Flex, Text } from '@radix-ui/themes'
+import { Dialog, Flex } from '@radix-ui/themes'
 import { X } from 'lucide-react'
 import { CancelButton } from './cancel-button'
 import { DeleteButton } from './delete-button'
@@ -8,7 +8,7 @@ import { DeleteButton } from './delete-button'
 interface DeleteDialogProps {
   open: boolean
   onClose: (value: boolean) => void
-  onClick: (e?: any) => void
+  onClick: (e: React.MouseEvent<HTMLButtonElement>) => void
 }
 
 const DeleteDialog = ({ onClose, open, onClick }: DeleteDialogProps) => {

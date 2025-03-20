@@ -102,7 +102,7 @@ const useStore = create<StoreState>((set, get) => ({
 
     const updatedLabOrders = data.labOrders.map((labOrder) => {
       if (labOrder.id === labResult.orderId) {
-        const updatedLabResults = labOrder.labResults.map((result) =>
+        const updatedLabResults = labOrder?.labResults?.map((result) =>
           result.id === labResult.id ? { ...result, ...labResult } : result,
         )
         return {
@@ -242,7 +242,7 @@ const useStore = create<StoreState>((set, get) => ({
       if (labOrder.id === labResult.orderId) {
         return {
           ...labOrder,
-          labResults: labOrder.labResults.filter(
+          labResults: labOrder?.labResults?.filter(
             (result) => result.id !== labResult.id,
           ),
         }
@@ -265,7 +265,7 @@ const useStore = create<StoreState>((set, get) => ({
   updateLabOrderTestList: (orderId, testId) => {
     const { data } = get()
     const index = data.labOrders.findIndex((e) => e.id === orderId)
-    const newLabTests = data.labOrders[index]?.labTests.map((item) => {
+    const newLabTests = data?.labOrders[index]?.labTests?.map((item) => {
       if (item.id === testId) {
         return {
           ...item,
@@ -277,7 +277,7 @@ const useStore = create<StoreState>((set, get) => ({
     const newLabOrders = [...data.labOrders]
     newLabOrders[index] = {
       ...newLabOrders[index],
-      labTests: [...newLabTests],
+      labTests: [...(newLabTests ?? [])],
     }
     const newData = {
       ...data,

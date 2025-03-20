@@ -13,7 +13,7 @@ const LabTestCell = ({ row }: ActionsCellProps) => {
     .filter((item) => item.recordStatus === 'Active')
     .map((item) => item.testName)
     .join(', ')
-    .slice(0, 40)
+
   return <LongTextCell className="w-[300px]">{testNames}</LongTextCell>
 }
 export { LabTestCell }

@@ -16,8 +16,8 @@ const RowActionSend = ({
   orderStatus,
 }: {
   orderId: string
-  labLocationName: string
-  orderStatus: string
+  labLocationName?: string
+  orderStatus?: string
 }) => {
   const [disabled, setDisabled] = useState(false)
   const [isOpen, setIsOpen] = useState(false)

@@ -9,10 +9,13 @@ import { LabOrdersWidget } from './lab-orders-widget/lab-orders-widget'
 import { useStore } from './lab-orders-widget/store'
 
 interface LabOrderHeaderProps {
-  IsLabOrderHeader: boolean
+  IsLabOrderHeader?: boolean
+  patientId?: string
+  appointmentId?: string
+  showFilters?: boolean
 }
 
-const LabOrdersView = ({ IsLabOrderHeader }: LabOrderHeaderProps) => {
+const LabOrdersView = ({ IsLabOrderHeader = true, showFilters = false }: LabOrderHeaderProps) => {
   const { activeTab, setActiveTab } = useStore()
 
   return (
@@ -34,7 +37,7 @@ const LabOrdersView = ({ IsLabOrderHeader }: LabOrderHeaderProps) => {
       </Flex>
 
       <TabsContent value={LabOrdersTabs.LAB_ORDERS}>
-        <LabOrdersWidget IsLabOrderHeader={IsLabOrderHeader} />
+        <LabOrdersWidget IsLabOrderHeader={IsLabOrderHeader} showFilters={showFilters} />
       </TabsContent>
       <TabsContent value={LabOrdersTabs.LAB_RESULTS}>
         <PatientLabResultView />

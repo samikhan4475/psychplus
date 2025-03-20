@@ -47,7 +47,9 @@ const DiagnosisItem = ({
   return (
     <Table.Row>
       <TableRow
-        title={diagnosisData?.description ?? ''}
+        title={`${diagnosisData?.code ?? ''} ${
+          diagnosisData?.description ?? ''
+        }`}
         onDelete={onClickDelete}
         disabled={disabled}
       />

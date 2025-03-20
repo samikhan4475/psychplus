@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { Flex } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
 import { ActionResult } from '@/api'
@@ -15,6 +15,7 @@ type Options = {
 
 const LabsLocationDropdown = () => {
   const form = useFormContext<LabOrderSchemaType>()
+  const labOrderId = form.watch('labOrderId')
 
   const [labLocations, setLabLocations] = useState<Options[]>([])
 
@@ -38,13 +39,23 @@ const LabsLocationDropdown = () => {
       return Promise.resolve({ state: 'success', data: [] })
     }, [])
 
+  useEffect(() => {
+    if (!labOrderId) {
+      const questLab = labLocations.find((item) => item?.label === 'Quest')
+      if (questLab) {
+        form.setValue('labLocation', questLab?.value)
+        form.setValue('labLocationData', questLab?.data)
+      }
+    }
+  }, [labLocations, labOrderId])
+
   return (
-    <Flex direction="column" gap="1" className="flex-1">
+    <Flex direction="row" gap="1" className="flex-1">
       <BlockLabel required>Lab Location</BlockLabel>
       <AsyncSelect
         field="labLocation"
         fetchOptions={fetchOptions}
-        buttonClassName="flex-1 w-[144px] h-7"
+        buttonClassName="w-[231px] h-7"
         onValueChange={(value) => {
           form.setValue('labLocation', value)
           form.setValue(

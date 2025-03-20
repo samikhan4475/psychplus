@@ -1,6 +1,7 @@
 import { parseDate } from '@internationalized/date'
 import { LabOrders } from '@/types'
 import { formatDate, formatUTCDate, getTimeLabel } from '@/utils'
+import { LabOrderStatusEnum } from './blocks/types'
 import { LabOrderSchemaType } from './lab-order-schema'
 
 const transformIn = (labOrderData: Partial<LabOrders>) => {
@@ -9,10 +10,9 @@ const transformIn = (labOrderData: Partial<LabOrders>) => {
     testLabs: labOrderData
       ? labOrderData?.labTests?.filter((item) => item.recordStatus === 'Active')
       : [],
-    labBillingType: labOrderData ? labOrderData.billType : 'Client',
-    labOrderStatus: labOrderData ? labOrderData.orderStatus : 'Draft',
+    labBillingType: labOrderData?.billType,
+    labOrderStatus: labOrderData?.orderStatus ?? LabOrderStatusEnum.Unsigned,
     isFasting: labOrderData?.isFasting ? 'yes' : 'no',
-    isPSCHold: labOrderData?.isPscHold ? 'yes' : 'no',
     orderDate: parseDate(
       formatDate(labOrderData?.labOrderDate ?? new Date(), 'yyyy-MM-dd'),
     ),

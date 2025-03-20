@@ -15,6 +15,7 @@ import { FamilyPsychHxClientLoader } from '../family-psych-hx/family-psych-hx-wi
 import { FollowUpWidgetLoader } from '../follow-up/follow-up-widget-client-loader'
 import { HospitalDischargeClientLoader } from '../hospital/hospital-discharge-widget/hospital-discharge-client-loader'
 import { HospitalInitialClientLoader } from '../hospital/hospital-initial-widget/hospital-initial-client-loader'
+import { LabOrdersWidget } from '../lab-orders/lab-orders-widget'
 import { PatientMedicationsClientLoader } from '../medications/patient-medications-client-loader'
 import { MseWidgetClientLoader } from '../mse/mse-widget/mse-widget-client-loader'
 import { PastMedicalHxClientLoader } from '../past-medical-hx/past-medical-hx-widget/past-medical-hx-client-loader'
@@ -40,6 +41,7 @@ import { FollowUpClient } from './actual-note-view/follow-up/follow-up-client-vi
 import { HospitalDischargeClientView } from './actual-note-view/hospital-discharge/hospital-discharge-client-view'
 import { HospitalInitialClientView } from './actual-note-view/hospital-initial/hospital-initial-client-view'
 import { HpiDetailClientView } from './actual-note-view/hpi/hpi-detail-client-view'
+import { LabOrderClient } from './actual-note-view/lab-orders'
 import { MedicationsClientView } from './actual-note-view/medications/medications-client-view'
 import { MentalStatusExamClientView } from './actual-note-view/mental-status-exam/mental-status-exam-client-view'
 import { PastMedicalHxClientView } from './actual-note-view/past-medical-hx/past-medical-hx-client-view'
@@ -231,6 +233,12 @@ const widgets: Array<WidgetType> = [
     id: QuickNoteSectionName.QuicknoteSectionCodes,
     actualNoteComponent: CodesDetailsClientView,
     isPatientAndAppointmentDependent: true,
+  },
+  {
+    component: LabOrdersWidget,
+    id: QuickNoteSectionName.QuicknoteSectionLabOrders,
+    actualNoteComponent: LabOrderClient,
+    isClient: true,
   },
 ]
 

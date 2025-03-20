@@ -3,18 +3,12 @@ import { LabOrders } from '@/types'
 import { AddLabOrderView } from '../../add-lab-order'
 import { LabOrderRow } from '../types'
 import { RowActionDelete } from './row-action-delete'
-import { RowActionSend } from './row-action-send'
+import { RowResultAttachment } from './row-result-attachment'
 
 const rowActions: RowAction<LabOrders>[] = [
   {
-    id: 'lab-orders-row-action-send',
-    render: ({ row }) => (
-      <RowActionSend
-        orderId={row.original.id}
-        labLocationName={row.original?.orderingLab?.name}
-        orderStatus={row.original.orderStatus}
-      />
-    ),
+    id: 'row-results-attachment',
+    render: RowResultAttachment,
   },
   {
     id: '',
@@ -26,8 +20,7 @@ const rowActions: RowAction<LabOrders>[] = [
     id: 'lab-orders-row-action-delete',
     render: ({ row }) => (
       <RowActionDelete
-        orderId={row.original.id}
-        labLocationName={row.original?.orderingLab?.name}
+        orderId={row.original?.id ?? ''}
         orderStatus={row.original.orderStatus}
       />
     ),

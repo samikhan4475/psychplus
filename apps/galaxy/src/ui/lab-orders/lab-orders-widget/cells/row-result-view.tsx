@@ -17,14 +17,13 @@ interface LabResultsProps {
 }
 
 const RowResultView = ({ row }: LabResultsProps) => {
-  const {
-    orderingLab: { name: orderingLabName },
-    orderStatus,
-  } = row.original
+  const { orderStatus } = row.original
+
+  const orderingLab = row?.original?.orderingLab
 
   const shouldEditLabResult =
     orderStatus === OrderStatus.ResultReceived &&
-    orderingLabName === OrderingLabName.PsychPlus
+    orderingLab?.name === OrderingLabName.PsychPlus
   const { setSelectedTestId } = useStore()
   const [selectedTestName, setSelectedTestName] = useState('')
 

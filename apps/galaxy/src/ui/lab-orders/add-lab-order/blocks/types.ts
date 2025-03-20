@@ -20,9 +20,10 @@ interface TestLabsType {
   labTestCode?: string
   labTestCodeType?: string
   labAssignedCode?: string
+  isNewTestLab?: boolean
   labTestAnswers?: LabTestAnswers[]
   askAtOrderEntries?: Question[]
-  isNewTestLab?: boolean
+  labTestId?: string
 }
 
 interface DiagnosisType {
@@ -171,6 +172,14 @@ enum ControlType {
   FreeText = 'FreeText',
 }
 
+enum LabOrderStatusEnum {
+  Unsigned = 'Unsigned',
+  Signed = 'Signed',
+  SignedNotSent = 'SignedNotSent',
+  SignedSent = 'SignedSent',
+  ResultReceived = 'ResultReceived',
+}
+
 export {
   type TestLabsType,
   type DiagnosisType,
@@ -182,4 +191,5 @@ export {
   type LabOrder,
   type SpecimenData,
   ControlType,
+  LabOrderStatusEnum,
 }

@@ -9,8 +9,9 @@ const Status = () => {
       <CodesetSelect
         name="labOrderStatus"
         size="1"
-        className="h-7 w-[144px]"
+        className="h-7 w-[180px]"
         codeset={CODESETS.LabOrderStatus}
+        disabled
       />
       <FormFieldError name="labOrderStatus" />
     </Flex>

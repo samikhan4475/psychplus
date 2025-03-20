@@ -9,7 +9,7 @@ const StartDateTime = ({ index }: { index: number }) => {
 
   return (
     <Flex direction="column" gap="1" width="33%">
-      <BlockLabel required>Start Date & time</BlockLabel>
+      <BlockLabel required>Start Date & Time</BlockLabel>
       <Flex direction="row" gap="1">
         <Flex direction="column" gap="1">
           <TextField.Root

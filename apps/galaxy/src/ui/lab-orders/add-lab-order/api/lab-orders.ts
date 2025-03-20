@@ -4,10 +4,10 @@ import * as api from '@/api'
 import { LabOrders } from '@/types'
 
 const addLabOrderApi = async (
-  payload: any,
+  payload: LabOrders,
 ): Promise<api.ActionResult<LabOrders>> => {
   const response = await api.POST<LabOrders>(
-    api.LAB_ORDER(payload.appointmentId),
+    api.LAB_ORDER(Number(payload.appointmentId)),
     {
       ...payload,
     },

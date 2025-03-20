@@ -8,9 +8,15 @@ import { LabOrdersFilterForm } from './lab-orders-filter-form'
 import { LabOrdersHeader } from './lab-orders-header'
 
 interface LabOrderHeaderProps {
-  IsLabOrderHeader: boolean
+  IsLabOrderHeader?: boolean
+  patientId?: string
+  appointmentId?: string
+  showFilters?: boolean
 }
-const LabOrdersWidget = ({ IsLabOrderHeader }: LabOrderHeaderProps) => {
+const LabOrdersWidget = ({
+  IsLabOrderHeader = false,
+  showFilters = false,
+}: LabOrderHeaderProps) => {
   return (
     <>
       {IsLabOrderHeader && <LabOrdersHeader />}
@@ -19,7 +25,7 @@ const LabOrdersWidget = ({ IsLabOrderHeader }: LabOrderHeaderProps) => {
         title={!IsLabOrderHeader ? 'Lab Orders' : ''}
         headerRight={!IsLabOrderHeader ? <AddLabOrdersButton /> : null}
       >
-        <LabOrdersFilterForm />
+        {showFilters && <LabOrdersFilterForm />}
         <LabOrderTable />
         <LabOrderTablePagination />
       </WidgetContainer>

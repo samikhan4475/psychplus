@@ -31,7 +31,7 @@ export type SchemaType = z.infer<typeof schema>
 const LabOrdersFilterForm = () => {
   const searchParams = useSearchParams()
   const { fetch } = useStore()
-  const appointmentId = searchParams.get('id')
+  const appointmentId = searchParams.get('id') ?? '0'
 
   const { id } = useParams<{ id: string }>()
 
@@ -59,7 +59,7 @@ const LabOrdersFilterForm = () => {
       labTestCode: '',
     })
     fetch(appointmentId!, {
-      appointmentIds: [appointmentId!],
+      ...(appointmentId !== '0' ? { appointmentIds: [appointmentId] } : {}),
       patientId: [id],
     })
   }
@@ -72,14 +72,12 @@ const LabOrdersFilterForm = () => {
       )[0],
     }
     const sanitizedData = sanitizeFormData(formattedData)
-    if (appointmentId) {
-      const payload = {
-        appointmentIds: [appointmentId],
-        patientId: [id],
-        ...sanitizedData,
-      }
-      fetch(appointmentId, payload)
+    const payload = {
+      ...(appointmentId !== '0' ? { appointmentIds: [appointmentId] } : {}),
+      patientId: [id],
+      ...sanitizedData,
     }
+    fetch(appointmentId, payload)
   }
 
   return (

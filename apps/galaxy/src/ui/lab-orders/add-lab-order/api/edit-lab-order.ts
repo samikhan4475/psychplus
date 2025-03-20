@@ -5,10 +5,10 @@ import { LabOrders } from '@/types'
 
 const editLabOrderApi = async (
   orderId: string,
-  payload: any,
+  payload: LabOrders,
 ): Promise<api.ActionResult<LabOrders>> => {
   const response = await api.PUT<LabOrders>(
-    `${api.LAB_ORDER(payload.appointmentId)}/${orderId}`,
+    `${api.LAB_ORDER(Number(payload.appointmentId))}/${orderId}`,
     {
       ...payload,
     },

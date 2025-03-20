@@ -10,8 +10,8 @@ const deleteDiagnosisApi = async ({
   appointmentId: number | string
   orderId: string
   diagnosisId: number | string
-}): Promise<api.ActionResult<any>> => {
-  const response = await api.DELETE<any>(
+}): Promise<api.ActionResult<void>> => {
+  const response = await api.DELETE<void>(
     api.DELETE_DIAGNOSIS(appointmentId, orderId, diagnosisId),
   )
   if (response.state === 'error') {
@@ -23,7 +23,7 @@ const deleteDiagnosisApi = async ({
 
   return {
     state: 'success',
-    data: response.data,
+    data: undefined,
   }
 }
 

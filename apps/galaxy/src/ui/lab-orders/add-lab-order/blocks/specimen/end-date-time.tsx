@@ -9,7 +9,7 @@ const EndDateTime = ({ index }: { index: number }) => {
 
   return (
     <Flex direction="column" gap="1" width="33%">
-      <BlockLabel required>End Date & time</BlockLabel>
+      <BlockLabel required>End Date & Time</BlockLabel>
       <Flex direction="row" gap="1">
         <Flex direction="column" gap="1">
           <TextField.Root

@@ -1,7 +1,6 @@
 import { type Row } from '@tanstack/react-table'
-import { AdaptiveRowActionsCell, type RowAction } from '@/components'
+import { AdaptiveRowActionsCell } from '@/components'
 import { LabOrders } from '@/types'
-import { RowResultAttachment } from './row-result-attachment'
 import { RowResultView } from './row-result-view'
 
 type LabOrderRow = Row<LabOrders>
@@ -11,27 +10,17 @@ interface ActionsCellProps {
 }
 
 const ResultsCell = ({ row }: ActionsCellProps) => {
-  const labDocuments = row.original.labDocuments || []
-  const rowActions: RowAction<LabOrders>[] =
-    labDocuments.length === 0
-      ? [
-          {
-            id: 'row-results-view',
-            render: RowResultView,
-          },
-        ]
-      : [
-          {
-            id: 'row-results-view',
-            render: RowResultView,
-          },
-          {
-            id: 'row-results-attachment',
-            render: RowResultAttachment,
-          },
-        ]
-
-  return <AdaptiveRowActionsCell actions={rowActions} row={row} />
+  return (
+    <AdaptiveRowActionsCell
+      actions={[
+        {
+          id: 'row-results-view',
+          render: RowResultView,
+        },
+      ]}
+      row={row}
+    />
+  )
 }
 
 export { ResultsCell }

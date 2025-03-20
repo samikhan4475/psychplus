@@ -5,7 +5,7 @@ import { LabDocument } from './types'
 import { ViewDocumentButton } from './view-document-button'
 
 interface ResultsPdfViewProps {
-  resultPdfDetails: LabDocument
+  resultPdfDetails?: LabDocument
 }
 const ResultsPdfView = ({ resultPdfDetails }: ResultsPdfViewProps) => {
   const searchParams = useSearchParams()
@@ -13,7 +13,7 @@ const ResultsPdfView = ({ resultPdfDetails }: ResultsPdfViewProps) => {
 
   return (
     <ViewDocumentButton
-      pdfDetails={resultPdfDetails}
+      pdfDetails={resultPdfDetails ?? null}
       appointmentId={appointmentId}
       buttonText="View Results"
       title="Results PDF"
