@@ -21,6 +21,14 @@ interface Appointment {
   isSelfPay: boolean
   serviceId: string
   isQuickNoteSigned: boolean
+  cptAddonCodes: CptCode[]
 }
 
-export type { Appointment }
+interface CptCode {
+  code: string
+  display?: string
+  isDefault?: boolean
+  isDisabled?: boolean
+}
+
+export type { Appointment, CptCode }

@@ -18,6 +18,8 @@ enum NoteSectionName {
   NoteSectionPastMedicalHx = 'QuicknoteSectionPastMedicalHx',
   NoteSectionSocialHx = 'QuicknoteSectionSocialHx',
   NoteSectionSubstanceUseHx = 'QuicknoteSectionSubstanceUseHx',
+  NoteSectionCodes = 'QuicknoteSectionCodes',
+  NoteSectionDiagnosis = 'QuicknoteSectionDiagnosis',
 }
 
 export { NoteSectionName }

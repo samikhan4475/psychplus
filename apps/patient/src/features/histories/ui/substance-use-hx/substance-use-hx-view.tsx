@@ -26,7 +26,10 @@ const SubstanceUseHxView = ({ onSave, isEdit }: SubstanceUseHxProps) => {
   return (
     <FormProvider {...form}>
       <NoteFormContainer
-        getData={transformOut(String(profile.id))}
+        getData={transformOut(
+          String(profile.id),
+          getNoteData(NoteSectionName.NoteSectionDiagnosis),
+        )}
         onSave={onSave}
         isEdit={isEdit}
       >

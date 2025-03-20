@@ -105,6 +105,7 @@ const PreCheckinAssessmentView = async () => {
         NoteSectionName.NoteSectionPastPsychHx,
         NoteSectionName.NoteSectionSocialHx,
         NoteSectionName.NoteSectionPastMedicalHx,
+        NoteSectionName.NoteSectionDiagnosis,
       ],
     }),
     getUserSettings(profileResponse.data.id),

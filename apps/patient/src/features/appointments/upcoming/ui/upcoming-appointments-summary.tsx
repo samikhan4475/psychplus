@@ -325,10 +325,7 @@ const UpcomingAppointmentsSummaryComponent = async () => {
                                   : 'warning'
                               }
                               addIcon={true}
-                              className={cn(
-                                !preCheckInProgress?.content
-                                  ?.isPreCheckInCompleted && 'h-8 text-[14px]',
-                              )}
+                              className="h-8 text-[14px]"
                             />
                             <Link href={'/pre-checkin-assessment?edit=true'}>
                               <Button

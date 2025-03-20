@@ -1,5 +1,7 @@
+import { UpdateCptCodes } from '@/features/codes/types'
 import { NoteSectionName } from '@/features/note/constants'
 import { NoteSectionItem } from '@/features/note/types'
+import { getCodes } from './cpt-code-map'
 import { QuestionnaireSchemaType } from './questionnaire-schema'
 
 const transformIn = (
@@ -24,22 +26,28 @@ const transformIn = (
 }
 
 const transformOut =
-  (patientId: string, QuickNoteSectionName: NoteSectionName) =>
-  async (schema: QuestionnaireSchemaType): Promise<NoteSectionItem[]> => {
+  (patientId: string, NoteSectionName: NoteSectionName) =>
+  async (
+    schema: QuestionnaireSchemaType,
+    updateCptCodes?: UpdateCptCodes,
+  ): Promise<NoteSectionItem[]> => {
     const result: NoteSectionItem[] = []
+    let codesResult: NoteSectionItem[] = []
 
     Object.entries(schema).forEach(([key, value]) => {
       if (value !== '') {
         result.push({
           pid: Number(patientId),
-          sectionName: QuickNoteSectionName,
+          sectionName: NoteSectionName,
           sectionItem: key,
           sectionItemValue: value?.toString() || '',
         })
       }
     })
 
-    return result
+    codesResult = await getCodes(patientId, updateCptCodes)
+
+    return [...result, ...codesResult]
   }
 
 const questionnaireMapping = (totalQuestions: number) => {

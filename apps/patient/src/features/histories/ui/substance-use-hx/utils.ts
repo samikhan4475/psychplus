@@ -1,3 +1,5 @@
+import { CodesWidgetItem, CptCodeKeys } from '@/features/codes/types'
+
 const getInitialValues = () => ({
   completedSuicide: false,
   completedSuicideRelation: [],
@@ -30,4 +32,11 @@ const getInitialValues = () => ({
 
 })
 
-export { getInitialValues }
+const substanceCptCodes: CodesWidgetItem[] = [
+  { key: CptCodeKeys.ADD_ONS_KEY, code: '99406' },
+  { key: CptCodeKeys.ADD_ONS_KEY, code: '99407' },
+  { key: CptCodeKeys.ADD_ONS_KEY, code: '99408' },
+  { key: CptCodeKeys.ADD_ONS_KEY, code: '99409' },
+]
+
+export { getInitialValues, substanceCptCodes }

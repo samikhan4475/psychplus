@@ -81,6 +81,13 @@ const transformOut =
           sectionItemValue: 'true',
         })
       }
+      if (formData.widgetContainerCheckboxField) {
+        result.push({
+          ...QuickNotesPayload,
+          sectionItem: 'widgetContainerCheckboxField',
+          sectionItemValue: formData.widgetContainerCheckboxField,
+        })
+      }
 
       return result
     }
