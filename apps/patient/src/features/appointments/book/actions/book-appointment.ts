@@ -14,9 +14,11 @@ export interface BookAppointmentParams {
   reason?: string
   serviceId?: string
   isSelfPay?: boolean
-  stateCode:string
+  stateCode: string
   providerType?: string
   marketingCampaignId?: string
+  patientResidingStateCode: string
+  appointmentSource:string
 }
 
 const bookAppointmentAction = async ({
@@ -30,7 +32,9 @@ const bookAppointmentAction = async ({
   isSelfPay,
   stateCode,
   providerType,
-  marketingCampaignId
+  marketingCampaignId,
+  patientResidingStateCode,
+  appointmentSource,
 }: BookAppointmentParams) => {
   const result = await api.POST(`${API_URL}/api/appointments/book`, {
     locationId,
@@ -43,7 +47,9 @@ const bookAppointmentAction = async ({
     isSelfPay,
     stateCode,
     providerType,
-    marketingCampaignId
+    marketingCampaignId,
+    patientResidingStateCode,
+    appointmentSource,
   })
 
   if (result.state === 'error') {

@@ -2,19 +2,22 @@
 
 import React, { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { getLocalTimeZone, today } from '@internationalized/date'
 import { Appointment } from '@psychplus-v2/types'
-import { getCalendarDateLabel, getNewProviderTypeLabel, getProviderTypeLabel } from '@psychplus-v2/utils'
+import {
+  getNewProviderTypeLabel,
+  getProviderTypeLabel,
+} from '@psychplus-v2/utils'
 import { Box, Button, Flex, Tooltip } from '@radix-ui/themes'
 import { Popover } from '@psychplus/ui/popover'
 import { EditIcon, FormError } from '@/components-v2'
+import { useProfileStore } from '@/features/account/profile/store'
 import { useToast } from '@/providers'
 import { useStore } from '../../search/store'
 import { AppointmentSlot } from '../../search/types'
 import { DaysHeader } from '../../search/ui/search-appointments-view/days-header'
+import { getStartOfWeek } from '../../search/utils'
 import { rescheduleAppointment } from '../actions'
 import { AvailabilityList } from './availability-list'
-import { getStartOfWeek } from '../../search/utils'
 
 interface SearchAppointmentsViewProps {
   appointment: Appointment
@@ -36,6 +39,9 @@ const UpdateDateAndTimeDialog = ({
   const { setStartingDate } = useStore((state) => ({
     setStartingDate: state.setStartingDate,
   }))
+  const { profile } = useProfileStore((state) => ({
+    profile: state.profile,
+  }))
 
   const onSave = async () => {
     setLoading(true)
@@ -45,7 +51,9 @@ const UpdateDateAndTimeDialog = ({
         appointmentId: appointment.id,
         specialistStaffId: appointment.specialist.id,
         specialistTypeCode: appointment.specialistTypeCode,
-        providerType: getNewProviderTypeLabel(getProviderTypeLabel(appointment.specialistTypeCode)),
+        providerType: getNewProviderTypeLabel(
+          getProviderTypeLabel(appointment.specialistTypeCode),
+        ),
         type: appointment.type,
         startDate: selectedSlot?.startDateUtc ?? selectedSlot?.startDate,
         duration: selectedSlot?.duration,
@@ -53,6 +61,11 @@ const UpdateDateAndTimeDialog = ({
         serviceId: selectedSlot?.servicesOffered[0],
         isSelfPay: appointment.isSelfPay,
         stateCode:appointment.clinic.contact.addresses?.[0]?.state,
+        appointmentSource: 'PatientPortal',
+        patientResidingStateCode:
+          profile?.contactDetails?.addresses?.filter(
+            (address) => address.type === 'Home',
+          )?.[0]?.state || '',
       })
 
       if (result.state === 'error') {

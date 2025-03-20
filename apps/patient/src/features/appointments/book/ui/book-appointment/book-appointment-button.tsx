@@ -28,6 +28,7 @@ import { checkCareTeamExists } from '@/features/appointments/search/utils'
 import { rescheduleAppointment } from '@/features/appointments/upcoming/actions'
 import { NewProviderSelectedDialog } from '../new-provider-selected-dialog'
 import { PrimaryProviderAppointedDialog } from '../primary-provider-appointed-dialog'
+import { useProfileStore } from '@/features/account/profile/store'
 
 const errorMessage = 'You must agree to the above policies'
 const schema = z.object({
@@ -68,6 +69,11 @@ const BookAppointmentButton = ({
     visible: false,
     type: DocumentType.PRIVACY_PRACTICE,
   })
+
+  const { profile } = useProfileStore((state) => ({
+    profile: state.profile,
+  }))
+
 
   const form = useForm<SchemaType>({
     resolver: zodResolver(schema),
@@ -165,6 +171,8 @@ const BookAppointmentButton = ({
         locationId: clinic.id,
         isSelfPay: paymentMethod === PaymentType.SelfPay,
         stateCode: stateCode,
+        patientResidingStateCode: profile?.contactDetails?.addresses?.filter(address => address.type === 'Home')?.[0]?.state || '',
+        appointmentSource: 'PatientPortal',
       })
 
       if (result.state === 'error') {
@@ -185,6 +193,8 @@ const BookAppointmentButton = ({
         serviceId: slot.servicesOffered?.[0],
         isSelfPay: paymentMethod === PaymentType.SelfPay,
         stateCode: stateCode,
+        patientResidingStateCode: profile?.contactDetails?.addresses?.filter(address => address.type === 'Home')?.[0]?.state || '',
+        appointmentSource: 'PatientPortal',
       }
 
       if (mid) {

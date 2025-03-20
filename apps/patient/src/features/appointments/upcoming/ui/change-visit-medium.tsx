@@ -9,6 +9,7 @@ import { CloseDialogIcon, FormError } from '@/components-v2'
 import { useToast } from '@/providers'
 import { rescheduleAppointment } from '../actions'
 import { getNewProviderTypeLabel, getProviderTypeLabel } from '@psychplus-v2/utils'
+import { useProfileStore } from '@/features/account/profile/store'
 
 interface ChangeVisitMediumProp {
   appointment: Appointment
@@ -20,7 +21,9 @@ const ChangeVisitMedium = ({ appointment }: ChangeVisitMediumProp) => {
   const { toast } = useToast()
   const [loading, setLoading] = useState(false)
   const router = useRouter()
-
+  const { profile } = useProfileStore((state) => ({
+    profile: state.profile,
+  }))
   const onConfirmation = async () => {
     setError(undefined)
     setLoading(true)
@@ -40,6 +43,8 @@ const ChangeVisitMedium = ({ appointment }: ChangeVisitMediumProp) => {
       serviceId: appointment.serviceId,
       isSelfPay: appointment.isSelfPay,
       stateCode:appointment.clinic.contact.addresses?.[0]?.state,
+      appointmentSource: 'PatientPortal',
+      patientResidingStateCode: profile?.contactDetails?.addresses?.filter(address => address.type === 'Home')?.[0]?.state || '',
     })
 
     if (result.state === 'error') {

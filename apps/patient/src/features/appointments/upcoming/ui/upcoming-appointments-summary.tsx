@@ -330,7 +330,7 @@ const UpcomingAppointmentsSummaryComponent = async () => {
                                   ?.isPreCheckInCompleted && 'h-8 text-[14px]',
                               )}
                             />
-                            <Link href={'/pre-checkin-assessment'}>
+                            <Link href={'/pre-checkin-assessment?edit=true'}>
                               <Button
                                 highContrast
                                 className="w-full bg-[#194595]"

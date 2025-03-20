@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react'
 import * as Tabs from '@radix-ui/react-tabs'
-import { Box, Text } from '@radix-ui/themes'
+import { Text } from '@radix-ui/themes'
 import { CreditCard } from '@/features/billing/credit-debit-cards/types'
 import { Insurance, InsurancePayer } from '@/features/billing/payments/types'
 import {
@@ -32,6 +32,7 @@ import {
   QuestionnaireView,
   ReviewOfSystems,
 } from './steps'
+import { useSearchParams } from "next/navigation";
 
 interface PreCheckinAssessmentStapperProps {
   insurancePayers: InsurancePayer[]
@@ -58,6 +59,9 @@ const PreCheckinAssessmentStapper = ({
   questionnaireSectionsToShowOnPreCheckin,
   preCheckInProgress,
 }: PreCheckinAssessmentStapperProps) => {
+  const searchParams = useSearchParams();
+  const editMode = searchParams.get("edit");
+
   const {
     activeTab,
     hydrated,
@@ -156,10 +160,9 @@ const PreCheckinAssessmentStapper = ({
       ),
     },
   ].filter((tab) => tabsToShow.includes(tab.id))
-
   return (
     <>
-      {isPreCheckInCompleted ? (
+      {!editMode && isPreCheckInCompleted ? (
         <PreCheckInCompletion />
       ) : (
         <>

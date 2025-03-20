@@ -16,6 +16,8 @@ interface RescheduleAppointmentParams {
   isSelfPay?: boolean
   stateCode?: string
   providerType?: string
+  patientResidingStateCode: string
+  appointmentSource:string
 }
 
 interface RescheduleAppointmentApiResponse {
@@ -33,7 +35,9 @@ const rescheduleAppointment = async ({
   locationId,
   isSelfPay,
   stateCode,
-  providerType
+  providerType,
+  patientResidingStateCode,
+  appointmentSource,
 }: RescheduleAppointmentParams) => {
   const result = await api.PATCH<RescheduleAppointmentApiResponse>(
     `${API_URL}/api/appointments/${appointmentId}`,
@@ -47,7 +51,9 @@ const rescheduleAppointment = async ({
       serviceId,
       isSelfPay,
       stateCode,
-      providerType
+      providerType,
+      appointmentSource,
+      patientResidingStateCode,
     },
   )
 
