@@ -8,6 +8,7 @@ interface DollarInputProps {
   placeholder?: string
   onKeyDown?: (event: React.KeyboardEvent<HTMLInputElement>) => void
   onInput?: (event: React.ChangeEvent<HTMLInputElement>) => void
+  onPaste?: (event: React.ClipboardEvent<HTMLInputElement>) => void
   onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void
   className?: string
   disabled?: boolean
@@ -18,6 +19,7 @@ const DollarInput = ({
   placeholder = '0.00',
   onKeyDown,
   onInput,
+  onPaste,
   onBlur,
   className,
   disabled = false,
@@ -31,6 +33,7 @@ const DollarInput = ({
       disabled={disabled}
       onKeyDown={onKeyDown}
       onBlur={onBlur}
+      onPaste={onPaste}
       variant="soft"
       placeholder={placeholder}
       className={`h-4 !rounded-[0px] !border-transparent bg-transparent !outline-none ${className}`}

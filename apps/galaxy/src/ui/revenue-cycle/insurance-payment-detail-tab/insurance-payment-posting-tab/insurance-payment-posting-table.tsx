@@ -12,7 +12,7 @@ import {
   LoadingPlaceholder,
   TextCell,
 } from '@/components'
-import { formatDate, sanitizeFormData } from '@/utils'
+import { formatDate, formatValueWithDecimals, sanitizeFormData } from '@/utils'
 import { getPaymentServiceLinesAction } from '../../actions'
 import { useStore } from '../../insurance-payment-tab/store'
 import { useStore as useTabStore } from '../../store'
@@ -95,7 +95,7 @@ const columns = (
     cell: ({ row }) => (
       <TextCell className="flex w-[108px] items-center">
         <Text className="mr-1 text-[12px]">$</Text>
-        {row.original.billedAmount}
+        {formatValueWithDecimals(row.original.billedAmount)}
       </TextCell>
     ),
   },
@@ -206,31 +206,32 @@ const InsurancePaymentPostingTable = ({
   const processedAsCode = form.watch('processedAsCode')
 
   useEffect(() => {
-      ;(async () => {
-        setLoading(true)
-        const payload = sanitizeFormData({
-          processedAsCode,
-          claimNumber: paymentPostingClaim?.claimNumber,
-          claimPaymentId: paymentPostingClaim?.paymentId ?  paymentPostingClaim?.id : '',
-        })
+    ;(async () => {
+      setLoading(true)
+      const payload = sanitizeFormData({
+        processedAsCode,
+        claimNumber: paymentPostingClaim?.claimNumber,
+        claimPaymentId: paymentPostingClaim?.paymentId
+          ? paymentPostingClaim?.id
+          : '',
+      })
 
-        const result = await getPaymentServiceLinesAction(payload)
-        if (result.state === 'success') {
-          form.setValue(
-            'claimServiceLinePayments',
-            transformServiceLines(
-              result.data,
-              paymentPostingClaim ?? {},
-              processedAsCode
-            ) as ClaimServiceLinePayment[],
-          )
-        } else {
-          toast.error(result.error ?? 'Failed to get service lines')
-        }
+      const result = await getPaymentServiceLinesAction(payload)
+      if (result.state === 'success') {
+        form.setValue(
+          'claimServiceLinePayments',
+          transformServiceLines(
+            result.data,
+            paymentPostingClaim ?? {},
+            processedAsCode,
+          ) as ClaimServiceLinePayment[],
+        )
+      } else {
+        toast.error(result.error ?? 'Failed to get service lines')
+      }
 
-        setLoading(false)
-      })()
-    
+      setLoading(false)
+    })()
   }, [processedAsCode])
   if (loading)
     return <LoadingPlaceholder className="min-h-[30vh] min-w-[300px]" />

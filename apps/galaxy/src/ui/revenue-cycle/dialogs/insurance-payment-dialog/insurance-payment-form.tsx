@@ -111,6 +111,8 @@ const InsurancePaymentForm = ({
       }
     }
 
+    delete reqPayload['claimPayments']
+
     const sanitizedPayload = sanitizeFormData(reqPayload)
 
     const response =

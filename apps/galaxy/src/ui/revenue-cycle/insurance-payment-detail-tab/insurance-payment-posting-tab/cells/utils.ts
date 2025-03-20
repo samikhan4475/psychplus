@@ -1,3 +1,4 @@
+import React from 'react'
 import {
   ClaimServiceLinePayment,
   ServiceLinePaymentAdjustment,
@@ -11,7 +12,7 @@ import {
 
 const amountRegex = /^\d{0,10}(\.\d{0,2})?$/
 const negativeAmountRegex = /^-?\d{0,10}(\.\d{0,2})?$/
-const specialKeys = ['Backspace', 'Tab', 'Control', 'Shift', 'Alt']
+const specialKeys = ['Backspace', 'Tab', 'Shift', 'Alt']
 
 const getNegativeRow = (
   row: ClaimServiceLinePayment,
@@ -39,9 +40,24 @@ const addDefaultNegative = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.target.value = '-' + value
   }
 }
+
+const amountPaste = (
+  e: React.ClipboardEvent<HTMLInputElement>,
+  allowNegative = false,
+) => {
+  e.preventDefault()
+  const pastedValue = e.clipboardData.getData('text/plain')
+  let trimmedValue = pastedValue.trim()
+  const validationRegex = allowNegative ? negativeAmountRegex : amountRegex
+  if (!validationRegex.test(trimmedValue)) return e.preventDefault()
+  if (allowNegative && !trimmedValue.startsWith('-'))
+    trimmedValue = '-' + trimmedValue
+  return trimmedValue
+}
+
 const amountCheck = (
   e: React.KeyboardEvent<HTMLInputElement>,
-  allowNegative?: boolean,
+  allowNegative = false,
 ) => {
   const newValue = e.currentTarget.value + e.key
   if (specialKeys.includes(e.key)) return
@@ -49,7 +65,7 @@ const amountCheck = (
   if (!newValue.startsWith('-') && allowNegative) {
     e.currentTarget.value = '-'
   }
-  if (!validationRegex.test(newValue)) return e.preventDefault()
+  if (!validationRegex.test(newValue) && !e.ctrlKey) return e.preventDefault()
 }
 
 interface AdjustmentParams {
@@ -256,6 +272,7 @@ const getAdjustmentStatus = ({
 export {
   getNegativeRow,
   amountCheck,
+  amountPaste,
   getOtherWriteOff,
   addInsuranceAdjustment,
   getAdjustmentStatus,

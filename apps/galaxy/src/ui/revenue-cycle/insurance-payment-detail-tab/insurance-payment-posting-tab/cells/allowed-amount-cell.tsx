@@ -2,6 +2,7 @@ import React from 'react'
 import { useFormContext } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { PropsWithRow } from '@/components'
+import { formatValueWithDecimals } from '@/utils'
 import { ClaimServiceLinePayment } from '../../../types'
 import { PaymentListTypes } from '../../types'
 import {
@@ -15,6 +16,7 @@ import {
   addDefaultNegative,
   addInsuranceAdjustment,
   amountCheck,
+  amountPaste,
   getOtherWriteOff,
   removeNegative,
 } from './utils'
@@ -22,7 +24,7 @@ import {
 const AllowedAmountCell = ({ row }: PropsWithRow<ClaimServiceLinePayment>) => {
   const form = useFormContext<SchemaType>()
   const processedAsCode = form.watch('processedAsCode')
-
+  const isReversal = processedAsCode === PROCESSED_AS_REVERSAL
   const paymentStatus = form.watch(`status`)
   const isRectifiedRow = form.watch(
     `claimServiceLinePayments.${row.index}.isRectifiedRow`,
@@ -42,7 +44,7 @@ const AllowedAmountCell = ({ row }: PropsWithRow<ClaimServiceLinePayment>) => {
   const onInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target
 
-    if (processedAsCode === PROCESSED_AS_REVERSAL) addDefaultNegative(event)
+    if (isReversal) addDefaultNegative(event)
 
     if (parseFloat(removeNegative(value)) > parseFloat(billedAmount)) {
       toast.error(`Allowed Amount cannot be greater than billed amount`)
@@ -76,10 +78,9 @@ const AllowedAmountCell = ({ row }: PropsWithRow<ClaimServiceLinePayment>) => {
       )
       form.setValue(`claimServiceLinePayments.${row.index}.paidAmount`, ``)
     } else {
-      const finalAdjustmentAmount =
-        processedAsCode === PROCESSED_AS_REVERSAL
-          ? -+adjustmentAmount
-          : +adjustmentAmount
+      const finalAdjustmentAmount = isReversal
+        ? -+adjustmentAmount
+        : +adjustmentAmount
 
       const updatedAdjustments = addInsuranceAdjustment({
         adjustmentAmount: finalAdjustmentAmount,
@@ -101,13 +102,24 @@ const AllowedAmountCell = ({ row }: PropsWithRow<ClaimServiceLinePayment>) => {
       )
     }
   }
+  const onPaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
+    const pastedAmount = amountPaste(e, isReversal)
+    if (!pastedAmount) return
+    if (+removeNegative(pastedAmount) > +billedAmount) {
+      toast.error(`Allowed amount cannot be greater than billed amount`)
+      return e.preventDefault()
+    }
 
+    form.setValue(
+      `claimServiceLinePayments.${row.index}.allowedAmount`,
+      pastedAmount,
+    )
+  }
   return (
     <DollarInput
       name={`claimServiceLinePayments.${row.index}.allowedAmount`}
-      onKeyDown={(e) =>
-        amountCheck(e, processedAsCode === PROCESSED_AS_REVERSAL)
-      }
+      onKeyDown={(e) => amountCheck(e, isReversal)}
+      onPaste={onPaste}
       disabled={
         !isRectifiedRow &&
         (paymentStatus === PaymentListTypes.Posted ||

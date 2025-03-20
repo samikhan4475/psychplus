@@ -58,11 +58,12 @@ const columns = (
           }}
         />
       ),
-      cell: ({ row }) => (
-        <DateCell>
-          {formatDate(`${row.original.dateOfServiceFrom}`, 'MM/dd/yyyy')}
-        </DateCell>
-      ),
+      cell: ({ row }) =>
+        row.original.dateOfServiceFrom && (
+          <DateCell>
+            {formatDate(`${row.original.dateOfServiceFrom}`, 'MM/dd/yyyy')}
+          </DateCell>
+        ),
     },
     {
       id: 'patientName',
