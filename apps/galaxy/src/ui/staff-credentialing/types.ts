@@ -49,6 +49,7 @@ interface DEA {
 
 interface License {
   id: string
+  legalName: LegalName
   metadata?: Metadata
   stateCode: string
   stateId?: string
@@ -62,16 +63,12 @@ interface License {
   isAlertCheck: boolean
   recordStatus: RecordStatus
   isCDSState?: boolean
+  userId: number
 }
 
-interface GetLicensesResponse {
-  staffId: number
-  userId: number
-  legalName: LegalName
-  licenses: (Omit<License, 'startDate' | 'endDate'> & {
-    startDate: string | undefined
-    endDate: string | undefined
-  })[]
+type GetLicensesResponse = Omit<License, 'startDate' | 'endDate'> & {
+  startDate: string | undefined
+  endDate: string | undefined
 }
 
 interface UpdateLicensePayload extends Omit<License, 'startDate' | 'endDate'> {
@@ -80,11 +77,11 @@ interface UpdateLicensePayload extends Omit<License, 'startDate' | 'endDate'> {
 }
 
 interface NearToExpireLicenseResponse {
-  staffId: number;
-  type: LicenseType;
-  userId: number;
-  legalName: LegalName;
-  licenses: License[];
+  staffId: number
+  type: LicenseType
+  userId: number
+  legalName: LegalName
+  licenses: License[]
 }
 
 interface LicenseHistory {
@@ -159,5 +156,5 @@ export type {
   LicenseHistoryRow,
   AddLicensePayload,
   UpdateLicensePayload,
-  NearToExpireLicenseResponse
+  NearToExpireLicenseResponse,
 }

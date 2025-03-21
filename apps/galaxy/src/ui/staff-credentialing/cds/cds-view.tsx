@@ -6,9 +6,8 @@ import { CODESETS } from '@/constants'
 import { useCodesetCodes } from '@/hooks'
 import { State } from '@/types'
 import { getLicensesAction, GetLicensesParams } from '../actions'
-import { LicenseHistory } from '../license-history'
 import { transformData } from '../transform'
-import { License, LicenseType, StaffData } from '../types'
+import { License, LicenseType } from '../types'
 import { CDSHeader } from './cds-header'
 import { CDSTable } from './cds-table'
 
@@ -22,7 +21,6 @@ const CDSView = ({
   loadingStates: boolean
 }) => {
   const [loading, setLoading] = useState<boolean>(false)
-  const [staffData, setStaffData] = useState<StaffData>(null)
   const [licenses, setLicenses] = useState<License[]>([])
   const stateCodes = useCodesetCodes(CODESETS.UsStates)
 
@@ -43,15 +41,15 @@ const CDSView = ({
       toast.error(result.error || 'Error while fetching Licenses')
       return
     }
-    const { licenses = [], ...rest } = result.data
+    const licenses = result.data
     const data = transformData({
       states,
       licenses,
       licenseType: LicenseType.CDS,
       stateCodes,
+      providerStaffId: parseInt(staffId),
     })
     setLicenses(data)
-    setStaffData(rest)
   }
 
   return (
@@ -61,11 +59,7 @@ const CDSView = ({
       {loading ? (
         <LoadingPlaceholder className="bg-white min-h-[46vh]" />
       ) : (
-        <CDSTable
-          licenses={licenses}
-          fetchLicenseList={fetchLicenseList}
-          staffData={staffData}
-        />
+        <CDSTable licenses={licenses} fetchLicenseList={fetchLicenseList} />
       )}
     </Flex>
   )

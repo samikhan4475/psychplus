@@ -4,9 +4,8 @@ import toast from 'react-hot-toast'
 import { LoadingPlaceholder } from '@/components'
 import { State } from '@/types'
 import { getLicensesAction, GetLicensesParams } from '../actions'
-import { LicenseHistory } from '../license-history'
 import { transformData } from '../transform'
-import { License, LicenseType, StaffData } from '../types'
+import { License, LicenseType, RecordStatus } from '../types'
 import { LicenseHeader } from './license-header'
 import { LicenseTable } from './license-table'
 
@@ -20,7 +19,6 @@ const LicenseView = ({
   loadingStates: boolean
 }) => {
   const [loading, setLoading] = useState<boolean>(false)
-  const [staffData, setStaffData] = useState<StaffData>(null)
   const [licenses, setLicenses] = useState<License[]>([])
 
   useEffect(() => {
@@ -32,7 +30,7 @@ const LicenseView = ({
     const payload: GetLicensesParams = {
       providerStaffIds: [parseInt(staffId)],
       licenseTypes: [LicenseType.License],
-      recordStatuses: ['Active'],
+      recordStatuses: [RecordStatus.Active],
     }
     const result = await getLicensesAction(payload)
     setLoading(false)
@@ -40,14 +38,14 @@ const LicenseView = ({
       toast.error(result.error || 'Error while fetching Licenses')
       return
     }
-    const { licenses = [], ...rest } = result.data
+    const licenses = result.data
     const data = transformData({
       states,
       licenses,
       licenseType: LicenseType.License,
+      providerStaffId: parseInt(staffId),
     })
     setLicenses(data)
-    setStaffData(rest)
   }
 
   return (
@@ -57,11 +55,7 @@ const LicenseView = ({
       {loading ? (
         <LoadingPlaceholder className="bg-white min-h-[46vh]" />
       ) : (
-        <LicenseTable
-          licenses={licenses}
-          fetchLicenseList={fetchLicenseList}
-          staffData={staffData}
-        />
+        <LicenseTable licenses={licenses} fetchLicenseList={fetchLicenseList} />
       )}
     </Flex>
   )

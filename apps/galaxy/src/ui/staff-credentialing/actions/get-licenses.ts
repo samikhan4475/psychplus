@@ -15,7 +15,7 @@ export interface GetLicensesParams {
 
 const getLicensesAction = async (
   payload?: GetLicensesParams,
-): Promise<api.ActionResult<GetLicensesResponse>> => {
+): Promise<api.ActionResult<GetLicensesResponse[]>> => {
   const response = await api.POST<GetLicensesResponse[]>(
     api.GET_STAFF_LICENSE,
     payload,
@@ -28,17 +28,7 @@ const getLicensesAction = async (
   }
   return {
     state: 'success',
-    data: response.data[0]
-      ? response.data[0]
-      : {
-          licenses: [],
-          legalName: {
-            firstName: '',
-            lastName: '',
-          },
-          staffId: payload?.providerStaffIds?.[0] ?? 0,
-          userId: 0,
-        },
+    data: response.data.length ? response.data : [],
   }
 }
 

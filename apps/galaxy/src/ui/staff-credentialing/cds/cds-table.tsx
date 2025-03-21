@@ -7,28 +7,20 @@ import { Row } from '@tanstack/react-table'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { DataTable, FormContainer } from '@/components'
-import { getDateString } from '@/ui/schedule/utils'
+import { getCalendarDateLabel } from '@/utils'
 import { addLicenseAction, updateLicenseAction } from '../actions'
 import { columns } from '../columns'
 import { PermissionAlert } from '../permission-alert'
 import { schema, SchemaType } from '../schema'
 import { useStore } from '../store'
-import {
-  License,
-  LicenseStatus,
-  LicenseType,
-  RecordStatus,
-  StaffData,
-} from '../types'
+import { License, LicenseStatus, LicenseType, RecordStatus } from '../types'
 
 const CDSTable = ({
   licenses,
   fetchLicenseList,
-  staffData,
 }: {
   licenses: License[]
   fetchLicenseList: () => void
-  staffData: StaffData
 }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const [alertMessage, setAlertMessage] = useState<string>('')
@@ -57,25 +49,33 @@ const CDSTable = ({
         ...editingRow,
         ...rowToUpdate,
         id: editingRow.id,
-        startDate: getDateString(rowToUpdate.startDate),
-        endDate: getDateString(rowToUpdate.endDate),
-        providerStaffId: staffData?.staffId ?? 0,
+        endDate: rowToUpdate.endDate
+          ? getCalendarDateLabel(rowToUpdate.endDate)
+          : undefined,
+        startDate: rowToUpdate.startDate
+          ? getCalendarDateLabel(rowToUpdate.startDate)
+          : undefined,
+        providerStaffId: editingRow.providerStaffId ?? 0,
         recordStatus: RecordStatus.Active,
       }
-      res = await updateLicenseAction(staffData?.staffId ?? 0, payload)
+      res = await updateLicenseAction(editingRow.providerStaffId ?? 0, payload)
     } else {
       const payload = {
         stateCode: editingRow.stateCode,
         licenseNumber: rowToUpdate.licenseNumber ?? '',
-        licenseType: rowToUpdate.licenseType,
         isAlertCheck: rowToUpdate.isAlertCheck,
+        licenseType: rowToUpdate.licenseType,
         status: rowToUpdate.status ?? LicenseStatus.Na,
-        startDate: getDateString(rowToUpdate.startDate),
-        endDate: getDateString(rowToUpdate.endDate),
-        providerStaffId: staffData?.staffId ?? 0,
+        startDate: rowToUpdate.startDate
+          ? getCalendarDateLabel(rowToUpdate.startDate)
+          : undefined,
+        endDate: rowToUpdate.endDate
+          ? getCalendarDateLabel(rowToUpdate.endDate)
+          : undefined,
         recordStatus: RecordStatus.Active,
+        providerStaffId: editingRow.providerStaffId ?? 0,
       }
-      res = await addLicenseAction(staffData?.staffId ?? 0, payload)
+      res = await addLicenseAction(editingRow.providerStaffId ?? 0, payload)
     }
     if (res.state === 'error') {
       toast.error(res.error ?? 'Failed to update license')
@@ -100,7 +100,7 @@ const CDSTable = ({
   }
 
   return (
-    <FormContainer form={form} onSubmit={onSubmit}>
+    <FormContainer form={form} onSubmit={onSubmit} className="bg-white">
       <PermissionAlert
         isOpen={isOpen}
         message={alertMessage}
@@ -109,18 +109,16 @@ const CDSTable = ({
           setAlertMessage('')
         }}
       />
-      <ScrollArea className="bg-white min-h-[150px] max-w-[calc(100vw_-_198px)] p-2">
-        <DataTable
-          columns={columns(onSubmit, showPermissionAlert)}
-          data={licenses}
-          tdClass="!p-0"
-          isRowSpan
-          sticky
-          disablePagination
-          tableRowClass="border-b border-red-200"
-          isRowDisabled={isRowDisabled}
-        />
-      </ScrollArea>
+      <DataTable
+        columns={columns(onSubmit, showPermissionAlert)}
+        data={licenses}
+        tdClass="!p-0"
+        isRowSpan
+        sticky
+        disablePagination
+        tableRowClass="border-b border-red-200"
+        isRowDisabled={isRowDisabled}
+      />
     </FormContainer>
   )
 }

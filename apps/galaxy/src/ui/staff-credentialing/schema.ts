@@ -15,7 +15,6 @@ const schema = z
   })
   .superRefine((data, ctx) => {
     const requiredFields = [
-      { field: 'status', message: 'Required' },
       { field: 'licenseType', message: 'Required' },
       { field: 'licenseNumber', message: 'Required' },
       { field: 'startDate', message: 'Required' },
@@ -31,6 +30,13 @@ const schema = z
         })
       }
     })
+    if (data.startDate && data.endDate && data.endDate <= data.startDate) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ['endDate'],
+        message: 'End date must be greater than start date',
+      })
+    }
   })
 
 type SchemaType = z.infer<typeof schema>

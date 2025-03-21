@@ -1,25 +1,21 @@
 import { Flex } from '@radix-ui/themes'
-import { useFormContext } from 'react-hook-form'
-import { FormFieldError, PropsWithRow, TextCell } from '@/components'
-import { SchemaType } from '../schema'
+import { FormFieldError, PropsWithRow, TextCell, TextInput } from '@/components'
 import { useStore } from '../store'
 import { License } from '../types'
-import { InputCell } from './input-cell'
 
 const LicenseCell = ({ row }: PropsWithRow<License>) => {
-  const { editingRow } = useStore()
-  const { watch } = useFormContext<SchemaType>()
-  const license = watch(`licenseNumber`)
-
+  const editingRow = useStore((store) => store.editingRow)
   const isInEdit =
     row.original.stateCode === editingRow?.stateCode &&
     row.original.licenseType === editingRow?.licenseType
   return isInEdit ? (
     <Flex direction="column" className="flex-1">
-      <InputCell
-        field="licenseNumber"
-        defaultValue={license}
-        className="w-full flex-1"
+      <TextInput
+        field={'licenseNumber'}
+        placeHolder="Enter Text"
+        className={
+          'border-pp-gray-2 h-6 w-full border border-solid !outline-none [box-shadow:none]'
+        }
       />
       <FormFieldError name="licenseNumber" />
     </Flex>

@@ -11,7 +11,7 @@ export interface GetLicenseHistoryParams {
 
 const getLicenseHistoryAction = async (
   payload: GetLicenseHistoryParams,
-): Promise<api.ActionResult<GetLicensesResponse>> => {
+): Promise<api.ActionResult<GetLicensesResponse[]>> => {
   const response = await api.POST<GetLicensesResponse[]>(
     api.GET_STAFF_LICENSE_HISTORY_ENDPOINT(payload.id),
     payload,
@@ -24,17 +24,7 @@ const getLicenseHistoryAction = async (
   }
   return {
     state: 'success',
-    data: response.data?.[0]
-      ? response.data[0]
-      : {
-          licenses: [],
-          legalName: {
-            firstName: '',
-            lastName: '',
-          },
-          staffId: 0,
-          userId: 0,
-        },
+    data: response.data.length ? response.data : [],
   }
 }
 

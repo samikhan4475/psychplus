@@ -3,7 +3,6 @@
 import { useState } from 'react'
 import { Box, Dialog, Text } from '@radix-ui/themes'
 import { CloseDialogTrigger } from '@/components/close-dialog-trigger'
-import { WarningIcon } from '@/components/icons'
 import { CircleWarningIcon } from '@/components/icons/circle-warning-icon'
 import { LicenseType } from '../types'
 import { LicenseExpiryTable } from './components'
@@ -51,7 +50,7 @@ const LicenseExpiryAlert = ({ isInitialLogin }: LicenseExpiryAlertProps) => {
         <Dialog.Title className="items-center text-center font-sans -tracking-[0.25px]">
           <Text>Licenses Expiring Within 90 Days</Text>
         </Dialog.Title>
-        <Box className='mb-2 text-center'>
+        <Box className="mb-2 text-center">
           <Text className="mt-2 text-center">
             The following {type} are set to expire within the next 90 days.
             Please review the details and ensure timely renewal:

@@ -4,13 +4,13 @@ import { useEffect, useState } from 'react'
 import { Flex, ScrollArea } from '@radix-ui/themes'
 import toast from 'react-hot-toast'
 import { DataTable, LoadingPlaceholder } from '@/components'
+import { getDateString } from '@/ui/schedule/utils'
 import { getCalendarDate } from '@/utils'
 import { getLicenseHistoryAction, GetLicenseHistoryParams } from '../../actions'
 import { useStore } from '../../store'
 import { License } from '../../types'
 import { columns } from './columns'
 import { FilterForm, LicenseHistorySchemaType } from './filter-form'
-import { getDateString } from '@/ui/schedule/utils'
 
 const LicenseHistoryTable = () => {
   const [licenses, setLicenses] = useState<License[]>([])
@@ -39,7 +39,7 @@ const LicenseHistoryTable = () => {
       toast.error(result.error ?? 'Error while fetching history')
       return
     }
-    const { licenses = [] } = result.data
+    const licenses = result.data
     const data = licenses.map((license) => {
       return {
         ...license,

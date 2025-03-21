@@ -1,6 +1,12 @@
 import { SharedCode, State } from '@/types'
 import { getCalendarDate } from '@/utils'
-import { License, LicenseStatus, LicenseType, RecordStatus } from './types'
+import {
+  GetLicensesResponse,
+  License,
+  LicenseStatus,
+  LicenseType,
+  RecordStatus,
+} from './types'
 
 function transformData({
   states,
@@ -8,15 +14,14 @@ function transformData({
   licenses,
   licenseType,
   stateCodes,
+  providerStaffId,
 }: {
   states: State[]
   statusFilter?: LicenseStatus
   licenseType: LicenseType
-  licenses: (Omit<License, 'startDate' | 'endDate'> & {
-    startDate: string | undefined
-    endDate: string | undefined
-  })[]
+  licenses: GetLicensesResponse[]
   stateCodes?: SharedCode[]
+  providerStaffId: number
 }): License[] {
   const transformedData = states.map((state) => {
     const stateCode = stateCodes?.find(
@@ -26,10 +31,12 @@ function transformData({
           (attribute) => attribute.name === 'CDS' && attribute.value === 'true',
         ),
     )
-    const license = licenses.find((l) => l.stateCode === state.stateCode)
+    const license = licenses.find(
+      (l) => l.stateCode === state.stateCode,
+    ) as GetLicensesResponse
     return {
-      licenseType,
       ...license,
+      licenseType,
       isCDSState: !!stateCode,
       id: license?.id ?? '',
       stateName: state.stateName,
@@ -39,7 +46,7 @@ function transformData({
         ? getCalendarDate(license?.startDate)
         : undefined,
       endDate: license?.endDate ? getCalendarDate(license?.endDate) : undefined,
-      providerStaffId: license?.providerStaffId ?? 0,
+      providerStaffId: license?.providerStaffId ?? providerStaffId,
       licenseNumber: license?.licenseNumber ?? '',
       status: license?.status ?? LicenseStatus.Na,
       isAlertCheck: license?.isAlertCheck ?? false,
