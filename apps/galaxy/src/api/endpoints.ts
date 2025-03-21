@@ -731,6 +731,8 @@ const ELECTRONICALLY_SIGN_POLICY_ENDPOINT = (patientId: string) =>
 const GET_SHARED_POLICY_FILE = (fileName: string) =>
   `${API_URL}/SharedContent/documents/${fileName}.html`
 
+const GET_USERS_SELF_TOP_BAR_INFORMATION_ENDPOINT = `${API_URL}/api/users/self/topbarinformation`
+
 export {
   GET_LAB_RESULTS_ENDPOINT,
   NOTE_UPLOAD_FILE,
@@ -1059,4 +1061,5 @@ export {
   GET_SHARED_POLICY_FILE,
   GET_CURRENT_USER_SETTINGS_SEARCH,
   ADD_STAFF_COMMENT_ENDPOINT,
+  GET_USERS_SELF_TOP_BAR_INFORMATION_ENDPOINT,
 }

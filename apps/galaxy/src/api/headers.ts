@@ -32,11 +32,11 @@ const createHeaders = (init?: HeadersInit) => {
     headers.set(HEADER_AUTHORIZATION, `${BEARER_AUTHENTICATION} ${token}`)
   }
 
-  if (sessionId && !headers.get(HEADER_PSYCHPLUS_SESSION_ID)) {
+  if (sessionId) {
     headers.set(HEADER_PSYCHPLUS_SESSION_ID, `${sessionId}`)
   }
 
-  if (practiceId && !headers.get(HEADER_PSYCHPLUS_SESSION_PRACTICE_ID)) {
+  if (practiceId) {
     headers.set(HEADER_PSYCHPLUS_SESSION_PRACTICE_ID, `${practiceId}`)
   }
 

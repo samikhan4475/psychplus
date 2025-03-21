@@ -20,6 +20,8 @@ const getAuthCookies = (): AuthSession | undefined => {
   const refreshToken = cookies().get(REFRESH_TOKEN_COOKIE)?.value
   const accessTokenExpiry = cookies().get(ACCESS_TOKEN_EXPIRY_COOKIE)?.value
   const userJson = cookies().get(USER_COOKIE)?.value
+  const sessionId = cookies().get(SESSION_ID_COOKIE)?.value
+  const practiceId = cookies().get(PRACTICE_ID_COOKIE)?.value
 
   if (!accessToken || !refreshToken || !accessTokenExpiry || !userJson) {
     return undefined
@@ -33,6 +35,8 @@ const getAuthCookies = (): AuthSession | undefined => {
       accessToken,
       refreshToken,
       accessTokenExpiry,
+      sessionId,
+      practiceId,
     }
   } catch {
     return undefined

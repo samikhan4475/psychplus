@@ -40,7 +40,7 @@ const PRACTICE_ID_COOKIE = process.env.PRACTICE_ID_COOKIE ?? 'p+_practice_id'
 //Stripe
 const STRIPE_API_KEY = process.env.STRIPE_API_KEY ?? ''
 const STRIPE_PUBLISHABLE_KEY = process.env.STRIPE_PUBLISHABLE_KEY ?? ''
-
+const WEBSOCKETSERVICE_URL = process.env.WEBSOCKETSERVICE_URL ?? ''
 export {
   APP_CODE,
   APP_VERSION,
@@ -64,4 +64,5 @@ export {
   GOOGLE_MAPS_API_KEY,
   SESSION_ID_COOKIE,
   PRACTICE_ID_COOKIE,
+  WEBSOCKETSERVICE_URL,
 }

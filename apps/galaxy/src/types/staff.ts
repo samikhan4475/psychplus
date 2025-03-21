@@ -31,5 +31,13 @@ interface Provider {
   lastName: string
   honors?: string
 }
-export type { StaffResource, Provider }
+
+interface StaffTopBarInfoResponse {
+  userId: number
+  userName: string
+  userFullName: LegalName
+  inboxTotalCount: number
+}
+
+export type { StaffResource, Provider, StaffTopBarInfoResponse }
 export { STAFF_COMMENT_STATUS }

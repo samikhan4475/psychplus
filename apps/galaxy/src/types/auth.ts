@@ -47,6 +47,8 @@ interface AuthSession {
   accessToken: string
   refreshToken: string
   accessTokenExpiry: string
+  practiceId?: string
+  sessionId?: string
 }
 
 interface UserType {

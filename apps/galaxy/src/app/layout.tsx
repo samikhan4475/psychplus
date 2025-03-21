@@ -16,7 +16,9 @@ import {
   GOOGLE_MAPS_API_KEY,
   SCRIPTSURE_BASE_APPLICATION_URL,
   STRIPE_PUBLISHABLE_KEY,
+  WEBSOCKETSERVICE_URL
 } from '@/constants'
+import { WebSocketProvider } from '@/providers/websocket-provider'
 import { StoreProvider } from '@/store'
 import { Header } from '@/ui/header'
 import { LockScreenProvider } from '@/ui/lock-screen-context'
@@ -55,7 +57,9 @@ const RootLayout = async ({ children }: React.PropsWithChildren) => {
           {auth ? <Header /> : null}
           <Flex direction="column" className="flex-1 overflow-y-auto">
             {auth ? (
-              <LockScreenProvider>{children}</LockScreenProvider>
+              <LockScreenProvider>
+                <WebSocketProvider>{children}</WebSocketProvider>
+              </LockScreenProvider>
             ) : (
               children
             )}
@@ -81,6 +85,7 @@ const RootLayout = async ({ children }: React.PropsWithChildren) => {
       googleApiKey: GOOGLE_MAPS_API_KEY,
       stripeApiKey: STRIPE_PUBLISHABLE_KEY,
       scriptsureBaseApplicationUrl: SCRIPTSURE_BASE_APPLICATION_URL,
+      webSocketUrl: WEBSOCKETSERVICE_URL,
     }
 
     return (
