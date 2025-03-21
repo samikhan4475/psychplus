@@ -26,6 +26,7 @@ const schema = z.object({
   npi: z.string().optional(),
   phone: z.string().optional(),
   serviceLevelCodes: z.array(z.string()).optional(),
+  status: z.string().optional(),
 })
 type FilterSchemaType = z.infer<typeof schema>
 
@@ -45,6 +46,7 @@ const PharmacyFilterForm = () => {
       phone: undefined,
       npi: undefined,
       serviceLevelCodes: [],
+      status:undefined
     },
     mode: 'onBlur',
   })
@@ -63,6 +65,7 @@ const PharmacyFilterForm = () => {
       phone: '',
       npi: '',
       serviceLevelCodes: [],
+      status:''
     })
     fetchPatientPharmacies()
   }
@@ -83,10 +86,10 @@ const PharmacyFilterForm = () => {
           field="zip"
           label="ZIP"
           placeholder="Search"
-          format="#####"
+          format="##########"
         />
         <PhoneNumberInput field="phone" label="Phone" placeholder="Search" />
-        <NumberInput field="npi" label="NPI" placeholder="Search" />
+        <NumberInput field="npi"  label="NPI" placeholder="Search" format="##########" />
         <ServiceLevelSelect label="Service Level" />
         <PharmacyStatusSelect />
         <ClearFilterButton handleReset={handleReset} />

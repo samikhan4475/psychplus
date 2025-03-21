@@ -16,7 +16,6 @@ const PharmacyStatusSelect = () => {
         buttonClassName="border-pp-gray-2 w-[122px] h-6 border border-solid !outline-none [box-shadow:none]"
         options={options}
         tooltip
-        disabled
       />
     </FormFieldContainer>
   )
