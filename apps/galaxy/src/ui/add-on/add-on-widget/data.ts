@@ -114,10 +114,14 @@ const transformIn = (
     const key = item.sectionItem
     const itemValue = item.sectionItemValue
 
-    if (THERAPY_PSYCHOANALYSIS_TABLE_DATA.includes(key)) {
-      const columnData = itemValue.split(',')
+    if (
+      THERAPY_PSYCHOANALYSIS_TABLE_DATA.includes(key) &&
+      itemValue !== null &&
+      itemValue !== undefined
+    ) {
+      const columnData = itemValue?.split(',')
       const modifiedData = columnData
-        .map((data) => {
+        ?.map((data) => {
           const [value, display] = data.split('|')
           return { value, display }
         })

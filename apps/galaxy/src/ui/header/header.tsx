@@ -1,6 +1,6 @@
 import { PlusCircledIcon } from '@radix-ui/react-icons'
 import { Button, Flex } from '@radix-ui/themes'
-import { getTopBarInformationAction } from '@/actions'
+import { getUserInitialInformationAction } from '@/actions/get-users-initial-information'
 import { NavLogo } from '@/components'
 import { getAuthCookies } from '@/utils/auth'
 import { AddPatient } from '../patient/add-patient'
@@ -12,11 +12,11 @@ import { UserDropdownMenu } from './user-dropdown-menu'
 
 const Header = async () => {
   const auth = getAuthCookies()!
-  const userTopBarResponse = await getTopBarInformationAction()
+  const userInitialInformationResponse = await getUserInitialInformationAction()
   const count =
-    userTopBarResponse?.state === 'error'
+    userInitialInformationResponse?.state === 'error'
       ? 0
-      : userTopBarResponse?.data?.inboxTotalCount ?? 0
+      : userInitialInformationResponse?.data?.inboxTotalCount ?? 0
 
   return (
     <>

@@ -39,5 +39,22 @@ interface StaffTopBarInfoResponse {
   inboxTotalCount: number
 }
 
-export type { StaffResource, Provider, StaffTopBarInfoResponse }
+interface UserSelfInitialInformation {
+  userId: number
+  userName: string
+  userFullName: LegalName
+  inboxTotalCount: number
+  userRoles: string[]
+  isTestUser: boolean
+  isUserHasProfileImage: boolean
+  staffId: number
+  staffRoleId: number
+}
+
+export type {
+  StaffResource,
+  Provider,
+  StaffTopBarInfoResponse,
+  UserSelfInitialInformation,
+}
 export { STAFF_COMMENT_STATUS }

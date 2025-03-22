@@ -15,7 +15,7 @@
     "@psychplus-v2/api": "^0.1.0",
     "@psychplus-v2/env": "^0.1.0",
     "@psychplus-v2/headers": "^0.1.0",
-    "next": "^14.0.4",
+    "next": "^14.2.25",
     "react": "^18.2.0",
     "utility-types": "^3.11.0"
   },
