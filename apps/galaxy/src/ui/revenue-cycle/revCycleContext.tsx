@@ -9,6 +9,7 @@ import toast from 'react-hot-toast'
 import { getClinicsOptionsAction } from '@/actions'
 import { CODESETS } from '@/constants'
 import { useCodesetCodes } from '@/hooks'
+import { useDeepCompareMemo } from '@/hooks/use-deep-compare-memo'
 import { SelectOptionType, StaffResource } from '@/types'
 
 interface RevCycleContextType {
@@ -32,11 +33,21 @@ interface RevCycleProviderProps {
 
 export const RevCycleProvider = ({ children }: RevCycleProviderProps) => {
   const codes = useCodesetCodes(CODESETS.PlaceOfSerivce) ?? []
-  const posCodes = useMemo(
-    () => codes.map(({ display, value }) => ({ label: display, value })),
-    [codes],
-  )
+  const posCodes = useDeepCompareMemo(() => {
+    return codes
+      .map(({ display, value, attributes }) => {
+        const submissionCode =
+          attributes?.find((attr) => attr.name === 'SubmissionCode')?.value ??
+          ''
+        const formattedCode = submissionCode.padStart(2, '0')
 
+        return {
+          label: formattedCode ? `${formattedCode}-${display}` : display,
+          value,
+        }
+      })
+      .sort((a, b) => a.label.localeCompare(b.label))
+  }, [codes])
   const [locationsData, setLocationsData] = useState<SelectOptionType[]>([])
   const [posCodesData, setPOSCodesData] = useState<SelectOptionType[]>([])
   const [selectedStaffData, setSelectedStaffData] = useState<StaffResource>()

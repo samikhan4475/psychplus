@@ -579,7 +579,6 @@ interface AddClaimNotes {
   effectiveDateFrom?: string | null
   isAlert?: boolean
   recordStatus?: string
-
 }
 interface UpdateClaimNotes {
   id?: string
@@ -589,9 +588,74 @@ interface UpdateClaimNotes {
   effectiveDateFrom?: string | null
   isAlert?: boolean
   recordStatus?: string
+}
 
+interface ClaimAddApiRequest {
+  id?: string
+  recordStatus?: string
+  practiceId?: string
+  appointmentId?: number
+  claimNumber?: string
+  locationId: string
+  billingLocationId: string
+  renderingProviderId?: number | null
+  patientAccountNumber: string
+  patientName: string
+  patientDateOfBirth: string
+  patientGender: string
+  placeOfService: string
+  patientId?: number
+  dateOfServiceFrom?: string
+  dateOfServiceTo?: string
+  claimType?: string
+  authorizationNumber?: string
+  referralNumber?: string
+  clinicalLaboratoryImprovementAmendmentsNumber?: string
+  claimNotes?: string
+  payerClaimControlNumber?: string
+  primaryStatusCode?: string
+  secondaryStatusCode?: string
+  tertiaryStatusCode?: string
+  patientStatusCode?: string
+  createFrom?: string
+  deletedReason?: string
+  totalAmount?: number
+  amountDue?: number
+  primaryPaid?: number
+  secondaryPaid?: number
+  tertiaryPaid?: number
+  patientPaid?: number
+  totalWriteOff?: number
+  claimStatusCode?: string
+  submissionBatchId?: string
+  primaryPatientInsurancePolicyId?: string
+  secondaryPatientInsurancePolicyId?: string
+  tertiaryPatientInsurancePolicyId?: string
+  updatedByName?: string
+  claimDiagnosis: ClaimDiagnosis[]
+  claimServiceLines: ClaimAddServiceLine[]
+}
+interface ClaimAddServiceLine {
+  recordStatus?: string
+  cptCode?: string
+  cptDescription?: string
+  modifierCode1?: string
+  modifierCode2?: string
+  sequenceNo?: number
+  dateOfServiceFrom?: string
+  dateOfServiceTo?: string
+  units?: number
+  unitAmount?: number
+  totalAmount?: number
+  deletedReason?: string
+}
+interface ProfessionalClaimServiceLine
+  extends Omit<ClaimAddServiceLine, 'dateOfServiceFrom' | 'dateOfServiceTo'> {
+  dateOfServiceFrom?: DateValue;
+  dateOfServiceTo?: DateValue;
 }
 export type {
+  ProfessionalClaimServiceLine,
   Claim,
   ClaimUpdate,
   CodeItem,
@@ -611,4 +675,6 @@ export type {
   AddClaimNotes,
   UpdateClaimNotes,
   ClaimNotesFilter,
+  ClaimAddApiRequest,
+  ClaimAddServiceLine
 }

@@ -1,6 +1,6 @@
 'use client'
 
-import { Flex } from '@radix-ui/themes'
+import { Box, Flex } from '@radix-ui/themes'
 import { TabContentHeading } from '@/components'
 import { InsurancePaymentDialog } from '../dialogs'
 import { InsurancePaymentListFilterForm } from './insurance-payment-list-filter-form'
@@ -9,7 +9,7 @@ import { InsurancePaymentListTablePagination } from './insurance-payment-list-ta
 
 const InsurancePaymentTabView = () => {
   return (
-    <>
+    <Box className='relative'>
       <Flex direction="column" className="relative gap-0.5">
         <TabContentHeading title="Insurance Payment">
           <Flex className="ml-auto mr-[110px] w-[70px]">
@@ -22,7 +22,7 @@ const InsurancePaymentTabView = () => {
         <InsurancePaymentListTable />
         <InsurancePaymentListTablePagination />
       </Flex>
-    </>
+    </Box>
   )
 }
 

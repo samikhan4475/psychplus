@@ -723,6 +723,8 @@ const UPDATE_SELF_USER_SETTINGS = (settingId: string) =>
 
 const SELF_USER_BULK_SETTINGS = `${API_URL}/api/users/self/bulksettings`
 const GET_CURRENT_USER_SETTINGS = `${API_URL}/api/users/self/settings`
+const ADD_CLAIM = `${API_URL}/api/claims`
+const SELF_PRACTICES = `${API_URL}/api/users/self/practices?includePermissions=false`
 const GET_CURRENT_USER_SETTINGS_SEARCH = `${API_URL}/api/users/self/settings/actions/search`
 
 const ELECTRONICALLY_SIGN_POLICY_ENDPOINT = (patientId: string) =>
@@ -1058,6 +1060,8 @@ export {
   INBOX_SIGN_NOTE_ENDPOINT,
   GET_FEATURE_FLAGS_BY_SHORTNAME_ENDPOINT,
   GET_CURRENT_USER_SETTINGS,
+  ADD_CLAIM,
+  SELF_PRACTICES,
   GET_SHARED_POLICY_FILE,
   GET_CURRENT_USER_SETTINGS_SEARCH,
   ADD_STAFF_COMMENT_ENDPOINT,

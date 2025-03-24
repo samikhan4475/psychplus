@@ -1,7 +1,13 @@
 import React, { useMemo, useState } from 'react'
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons'
-import { Box, Flex, ScrollArea, Text, TextField } from '@radix-ui/themes'
-import useOnclickOutside from 'react-cool-onclickoutside'
+import {
+  Box,
+  Flex,
+  Popover,
+  ScrollArea,
+  Text,
+  TextField,
+} from '@radix-ui/themes'
 import toast from 'react-hot-toast'
 import { useDebouncedCallback } from 'use-debounce'
 import { DiagnosisIcd10Code } from '@/types'
@@ -46,6 +52,7 @@ const SearchDiagnosisInput = ({
 
   const handleSearchService = useDebouncedCallback(async (value: string) => {
     if (value.length < 2) return
+    setOpen(true)
     setLoadingDiagnosis(true)
     const response = await getIcd10Diagnosis({
       CodeOrDescription: value,
@@ -60,7 +67,7 @@ const SearchDiagnosisInput = ({
     toast('Error fetching diagnosis data')
   }, 500)
 
-  const ref = useOnclickOutside(() => setOpen(false))
+  // const ref = useOnclickOutside(() => setOpen(false))
 
   const handleSelectItem = (item: DiagnosisIcd10Code) => {
     setOpen(false)
@@ -80,44 +87,39 @@ const SearchDiagnosisInput = ({
         onSelectItem={handleSelectItem}
       />
     )
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [diagnosisDataList, loadingDiagnosis])
 
   return (
-    <Box ref={ref}>
-      <Flex
-        className={cn(
-          'w-full flex-wrap overflow-y-auto rounded-2 border border-gray-7 ',
-        )}
-        align="center"
-        gap="1"
-        pl="1"
-      >
-        <TextField.Root
-          size="1"
-          className="min-w-14 !outline-white w-[500px] flex-1 flex-row-reverse [box-shadow:none]"
-          placeholder={placeholder}
-          onChange={(e) => handleSearchService(e.target.value)}
-          onFocus={() => setOpen(true)}
+    <Popover.Root open={open} onOpenChange={setOpen}>
+      <Box>
+        <Flex
+          className="w-full cursor-text flex-wrap overflow-y-auto rounded-2 border border-gray-7"
+          align="center"
+          gap="1"
+          pl="1"
+          onClick={() => setOpen(true)}
         >
-          <TextField.Slot>
-            <MagnifyingGlassIcon height="16" width="16" />
-          </TextField.Slot>
-        </TextField.Root>
-      </Flex>
-
-      {open && (
-        <Box position="relative">
-          <ScrollArea
-            className={
-              'bg-white !absolute z-50 mx-auto h-auto max-h-40 w-[500px] rounded-[25px] p-2 shadow-3'
-            }
+          <TextField.Root
+            size="1"
+            className="min-w-14 !outline-white w-[500px] flex-1 flex-row-reverse [box-shadow:none]"
+            placeholder={placeholder}
+            onChange={(e) => handleSearchService(e.target.value)}
+            onFocus={() => setOpen(true)}
           >
-            {memoizedDiagnosisList}
-          </ScrollArea>
-        </Box>
-      )}
-    </Box>
+            <TextField.Slot>
+              <MagnifyingGlassIcon height="16" width="16" />
+            </TextField.Slot>
+          </TextField.Root>
+        </Flex>
+        <Popover.Trigger>
+          <Flex className=" h-0 w-full" />
+        </Popover.Trigger>
+      </Box>
+
+      <Popover.Content align="start" sideOffset={5} className="z-[9999]">
+        <ScrollArea className=" max-h-40 ">{memoizedDiagnosisList}</ScrollArea>
+      </Popover.Content>
+    </Popover.Root>
   )
 }
 

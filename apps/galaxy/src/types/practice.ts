@@ -1,3 +1,4 @@
+import { UserResponse } from './auth'
 import { Metadata } from './metadata'
 
 interface Practice {
@@ -13,4 +14,14 @@ interface Practice {
   taxonomy: string
 }
 
-export type { Practice }
+interface SelfPractice {
+  id: string
+  recordStatus: string
+  practiceOrganizationType: string
+  shortName: string
+  displayName: string
+  taxonomy: string
+  users: UserResponse[]
+}
+
+export type { Practice, SelfPractice }

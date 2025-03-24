@@ -61,7 +61,6 @@ const ExportExcelButton = () => {
         content="Are you sure you want to download the Report?"
       />
       <Button
-        className="absolute right-2 top-2"
         size="1"
         highContrast
         type="button"

@@ -16,7 +16,6 @@ import { ClaimListSearchParams } from '../types'
 import { ClaimNumberField } from './claim-number-field'
 import { ClaimStatusDropDown } from './claim-status-field'
 import { DateTypeSelect } from './date-type-select'
-import { ExportExcelButton } from './export-excel-button'
 import { FromDateField } from './from-date-field'
 import { InsuranceSelect } from './insurance-select'
 import { LocationSelect } from './location-select'
@@ -104,7 +103,6 @@ const ClaimListFilterForm = () => {
       form={form}
       onSubmit={onSubmit}
     >
-      <ExportExcelButton />
       <ClaimNumberField />
       <PatientIdField />
       <InsuranceSelect />

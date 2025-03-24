@@ -43,7 +43,9 @@ const ProvidersList = ({
       )}
     >
       <Tooltip content={<Text className="select-text"> {option.label}</Text>}>
-        <Text className="line-clamp-2 w-[400px] text-[11px]">{option.label}</Text>
+        <Text className="line-clamp-2 w-[400px] text-[11px]">
+          {option.label}
+        </Text>
       </Tooltip>
     </Flex>
   ))
@@ -53,7 +55,7 @@ const SearchClaimProviders = ({
   placeholder,
   onSelectItem,
   defaultValue,
-  disabled,
+  disabled = false,
 }: DropdownMenuSearchProps) => {
   const [providersDataList, setProvidersDataList] = useState<
     SelectOptionType[]
@@ -107,12 +109,15 @@ const SearchClaimProviders = ({
     if (loadingProviders) {
       return (
         <Flex height="100%" align="center" justify="center">
-          <LoadingPlaceholder className='mt-3'/>
+          <LoadingPlaceholder className="mt-3" />
         </Flex>
       )
     }
+    if (!inputValue) {
+      return <Text className=" text-1">Please type to search</Text>
+    }
     if (providersDataList.length === 0) {
-      return <Text>No data found</Text>
+      return <Text className=" text-1">No data found</Text>
     }
     return (
       <ProvidersList
@@ -133,8 +138,10 @@ const SearchClaimProviders = ({
         pl="1"
       >
         <TextField.Root
+          tabIndex={-1}
+          autoFocus={false}
           size="1"
-          className="min-w-14 !outline-white w-[500px] flex-1 flex-row-reverse [box-shadow:none]"
+          className="min-w-14 !outline-white w-[500px] flex-1 flex-row-reverse !text-1 [box-shadow:none]"
           placeholder={placeholder}
           onChange={handleChange}
           onBlur={handleBlur}

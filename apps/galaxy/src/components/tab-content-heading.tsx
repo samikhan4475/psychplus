@@ -15,6 +15,7 @@ const TabContentHeading = ({
 }: React.PropsWithChildren<TabContentHeadingProps>) => {
   return (
     <Flex
+      justify="between"
       align="center"
       p="2"
       className={cn('bg-white -mt-[1px] border border-gray-5', className)}
