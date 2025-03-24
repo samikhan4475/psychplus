@@ -6,8 +6,8 @@ import {
   FormFieldLabel,
   SelectInput,
 } from '@/components'
-import { CODESETS } from '@/constants'
-import { useCodesetCodes } from '@/hooks'
+import { CODE_NOT_SET, CODESETS } from '@/constants'
+import { useCodesetCodes, useCodesetOptions } from '@/hooks'
 import { transformProviderTypes } from '../../add-visit/util'
 import { SchemaType } from '../schema'
 import { useEditVisitStore } from '../store'
@@ -20,6 +20,9 @@ const ProviderTypeSelect = ({
   const form = useFormContext<SchemaType>()
   const { services } = useEditVisitStore()
   const codes = useCodesetCodes(CODESETS.ProviderType)
+  const codesetOptions = useCodesetOptions(CODESETS.ProviderType, undefined, [
+    CODE_NOT_SET,
+  ])
   const [serviceId, isServiceTimeDependent] = useWatch({
     control: form.control,
     name: ['service', 'isServiceTimeDependent'],
@@ -31,11 +34,12 @@ const ProviderTypeSelect = ({
 
     return transformProviderTypes(codes, service)
   }, [codes, serviceId, services])
+
   return (
     <FormFieldContainer className="flex-1">
       <FormFieldLabel required>Provider Type</FormFieldLabel>
       <SelectInput
-        options={options}
+        options={isServiceTimeDependent ? options : codesetOptions}
         buttonClassName="h-6 w-full"
         onValueChange={(val) => {
           form.setValue('providerType', val, {

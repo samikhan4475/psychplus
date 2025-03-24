@@ -6,19 +6,22 @@ import {
   FormFieldLabel,
   SelectInput,
 } from '@/components'
-import { CODESETS } from '@/constants'
-import { useCodesetCodes } from '@/hooks'
+import { CODE_NOT_SET, CODESETS } from '@/constants'
+import { useCodesetCodes, useCodesetOptions } from '@/hooks'
 import { SchemaType } from '../schema'
 import { useAddVisitStore } from '../store'
 import { transformProviderTypes } from '../util'
 
 const ProviderTypeDropdown = ({ isDisabled }: { isDisabled?: boolean }) => {
   const form = useFormContext<SchemaType>()
+  const codesetOptions = useCodesetOptions(CODESETS.ProviderType, undefined, [
+    CODE_NOT_SET,
+  ])
   const codes = useCodesetCodes(CODESETS.ProviderType)
   const { services } = useAddVisitStore()
-  const serviceId = useWatch({
+  const [isServiceTimeDependent, serviceId] = useWatch({
     control: form.control,
-    name: 'service',
+    name: ['isServiceTimeDependent', 'service'],
   })
 
   const options = useMemo(() => {
@@ -33,7 +36,7 @@ const ProviderTypeDropdown = ({ isDisabled }: { isDisabled?: boolean }) => {
       <FormFieldLabel required>Provider Type</FormFieldLabel>
       <SelectInput
         field="providerType"
-        options={options}
+        options={isServiceTimeDependent ? options : codesetOptions}
         buttonClassName="h-6 w-full"
         disabled={isDisabled}
       />
