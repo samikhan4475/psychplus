@@ -17,7 +17,7 @@ const JoinVirtualCallBtn = ({
   appointment: row,
 }: AppointmentJoinCallProps) => {
   const router = useRouter()
-  const [isButtonDisabled, setIsButtonDisabled] = useState(false)
+  const [isButtonDisabled, setIsButtonDisabled] = useState(true)
   const appointmentDateTime = new Date(row.startDate)
 
   useEffect(() => {

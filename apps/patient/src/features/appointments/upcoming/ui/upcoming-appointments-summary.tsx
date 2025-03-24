@@ -395,13 +395,12 @@ const UpcomingAppointmentsSummaryComponent = async () => {
                           />
                         )}
                       <Flex>
-                        {row?.virtualRoomLink &&
-                          row.type === AppointmentType.Virtual && (
-                            <JoinVirtualCallBtn
-                              virtualRoomLink={row?.virtualRoomLink}
-                              appointment={row}
-                            />
-                          )}
+                        {row.type === AppointmentType.Virtual && (
+                          <JoinVirtualCallBtn
+                            virtualRoomLink={row?.virtualRoomLink}
+                            appointment={row}
+                          />
+                        )}
                         {row.type === AppointmentType.InPerson && (
                           <Link
                             href={getClinicAddressDirectionMapUrl(
