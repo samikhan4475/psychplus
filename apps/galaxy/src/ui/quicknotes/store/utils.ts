@@ -141,7 +141,14 @@ const validateAll = async (
 }
 
 const visitTypeDiagnosisMap: Partial<Record<VisitTypeEnum, string[]>> = {
-  [VisitTypeEnum.Spravato]: ['F32.1', 'F32.2', 'F32.3', 'F33.2', 'F33.3'],
+  [VisitTypeEnum.Spravato]: [
+    'F32.1',
+    'F32.2',
+    'F32.3',
+    'F33.1',
+    'F33.2',
+    'F33.3',
+  ],
   [VisitTypeEnum.Tms]: [
     'F32.2',
     'F32.3',
