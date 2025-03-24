@@ -13,7 +13,7 @@ const ClearButton = () => {
   }))
   const handleClear = () => {
     form.reset(getInitialFilterValues())
-    return fetchServices(getInitialFilterValues(), 1, true)
+    return fetchServices({}, 1, true)
   }
   return (
     <Button

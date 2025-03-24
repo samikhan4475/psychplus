@@ -5,6 +5,7 @@ import { useFormContext } from 'react-hook-form'
 import { PropsWithRow } from '@/components'
 import { DeleteIcon } from '@/components/icons'
 import { Encounter } from '@/types'
+import { constructVisitId } from '../../utils'
 import { ServiceSchemaType } from '../service-form/schema'
 
 const ActionCell = ({ row: { original } }: PropsWithRow<Encounter>) => {
@@ -13,7 +14,7 @@ const ActionCell = ({ row: { original } }: PropsWithRow<Encounter>) => {
   const handleDelete = () =>
     form.setValue(
       'serviceVisitTypes',
-      selectedVisits?.filter((id) => id !== original?.id),
+      selectedVisits?.filter((id) => id !== constructVisitId(original)),
       { shouldValidate: true },
     )
 

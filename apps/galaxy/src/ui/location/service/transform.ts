@@ -1,23 +1,30 @@
 import { getCodeAttributeBoolean } from '@/hooks'
-import {
-  ClinicAddress,
-  Encounter,
-  SelectOptionType,
-  SharedCode,
-  StaffResource,
-} from '@/types'
+import { Cosigner, Encounter, SelectOptionType, SharedCode } from '@/types'
 import { getPatientFullName, sanitizeFormData } from '@/utils'
 import { ServiceSchemaType } from './add-service-dialog'
-import { ServicePayload } from './types'
-import { getAttributeValue, getCosigner, getVisitTypesByIds } from './utils'
+import { ServiceFiltersSchemaType } from './filter-form'
+import { ServiceFiltersPayload, ServicePaylod } from './types'
+import {
+  getAttributeValue,
+  getCosigner,
+  getFilteredOptionValue,
+  getVisitTypesByIds,
+} from './utils'
 
-const transformInCosigers = (data: StaffResource[]) => {
+const transformInCosigers = (data: Cosigner[]) => {
   return data.map((item) => {
     const label = getPatientFullName(item?.legalName)
     return {
       label,
       value: String(item?.id),
     }
+  })
+}
+const transformInPOSOptions = (codes: SharedCode[]): SelectOptionType[] => {
+  return codes?.map((code) => {
+    const submissionCode = String(getAttributeValue(code, 'SubmissionCode'))
+    const label = `${submissionCode?.padStart(2, '0')} - ${code.display}`
+    return { label, value: submissionCode }
   })
 }
 
@@ -35,9 +42,8 @@ const transformInServices = (
   }, [])
 
 const transformOutService = (
-  cosigners: StaffResource[],
+  cosigners: Cosigner[],
   visitTypes: Encounter[],
-  locationAddress: ClinicAddress,
   {
     isPolicyRequired,
     isReminderForNotes,
@@ -48,16 +54,15 @@ const transformOutService = (
     cosigner: coSignerId,
     coSignerType,
     serviceVisitTypes,
-    isClaimAddress,
-    zip: zipCode,
-    address1,
-    address2,
+    zip: postalCode,
+    address1: street1,
+    address2: street2,
     state,
     city,
     isServiceTimeDependent,
     ...data
   }: ServiceSchemaType,
-): ServicePayload => {
+): Partial<ServicePaylod> => {
   return sanitizeFormData({
     ...data,
     isPolicyRequired: isPolicyRequired === 'yes',
@@ -68,17 +73,19 @@ const transformOutService = (
     maxBookingFrequencyInSlot: Number(maxBookingFrequencyInSlot),
     isServiceTimeDependent: isServiceTimeDependent === 'yes',
     coSignerType,
-    coSignerId,
+    coSignerId: coSignerId ? Number(coSignerId) : undefined,
     cosigner: getCosigner(cosigners, coSignerId, coSignerType),
     serviceVisitTypes: getVisitTypesByIds(visitTypes, serviceVisitTypes),
-    isClaimAddress,
-    address1: isClaimAddress ? locationAddress.street1 : address1,
-    address2: isClaimAddress ? locationAddress.street2 : address2,
-    city: isClaimAddress ? locationAddress.city : city,
-    state: isClaimAddress ? locationAddress.state : state,
-    zipCode: isClaimAddress ? locationAddress.postalCode : zipCode,
+    address: {
+      city,
+      state,
+      street1,
+      street2,
+      postalCode,
+    },
   })
 }
+
 const transformInOptions = (
   options: SelectOptionType[] = [],
 ): SelectOptionType[] => [
@@ -89,9 +96,40 @@ const transformInOptions = (
   ...options,
 ]
 
+const transformOutServiceFilters = ({
+  providerType,
+  coSignerType,
+  locationType,
+  recordStatus,
+  serviceOffered,
+  servicePlace,
+  taxonomy,
+  visitTypeName,
+  maxBookingFrequency,
+  cosignerId,
+  ...value
+}: ServiceFiltersSchemaType): ServiceFiltersPayload => {
+  const recordStatusValue = getFilteredOptionValue(recordStatus)
+  return sanitizeFormData({
+    providerType: getFilteredOptionValue(providerType),
+    coSignerType: getFilteredOptionValue(coSignerType),
+    locationType: getFilteredOptionValue(locationType),
+    recordStatuses: recordStatusValue ? [recordStatusValue] : undefined,
+    serviceOffered: getFilteredOptionValue(serviceOffered),
+    servicePlace: getFilteredOptionValue(servicePlace),
+    taxonomy: getFilteredOptionValue(taxonomy),
+    visitTypeName: getFilteredOptionValue(visitTypeName),
+    maxBookingFrequency: getFilteredOptionValue(maxBookingFrequency),
+    cosignerId: getFilteredOptionValue(cosignerId),
+    ...value,
+  })
+}
+
 export {
   transformInCosigers,
   transformOutService,
   transformInServices,
   transformInOptions,
+  transformInPOSOptions,
+  transformOutServiceFilters,
 }

@@ -27,7 +27,7 @@ const LocationTabs = ({ googleApiKey }: LocationTabsProps) => {
           <LocationView googleApiKey={googleApiKey} />
         </Tabs.Content>
         <Tabs.Content value="service">
-          <ServiceView />
+          <ServiceView googleApiKey={googleApiKey} />
         </Tabs.Content>
       </Tabs.Root>
     </Box>

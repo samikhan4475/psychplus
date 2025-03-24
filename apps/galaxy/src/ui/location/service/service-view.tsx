@@ -6,7 +6,10 @@ import { ServiceHeader } from './service-header'
 import { ServiceTable } from './service-table'
 import { ServiceTablePagination } from './service-table-pagination'
 
-const ServiceView = () => {
+interface ServiceViewProps {
+  googleApiKey: string
+}
+const ServiceView = ({ googleApiKey }: ServiceViewProps) => {
   return (
     <Flex
       direction="column"
@@ -20,7 +23,7 @@ const ServiceView = () => {
         direction="column"
         className="bg-white flex-1 !overflow-hidden rounded-1 pt-2 shadow-2"
       >
-        <ServiceTable />
+        <ServiceTable googleApiKey={googleApiKey} />
         <ServiceTablePagination />
       </Flex>
     </Flex>

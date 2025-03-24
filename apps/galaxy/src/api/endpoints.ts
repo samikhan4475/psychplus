@@ -734,6 +734,14 @@ const UPDATE_SELF_USER_SETTINGS = (settingId: string) =>
   `${API_URL}/api/users/self/settings/${settingId}`
 
 const SELF_USER_BULK_SETTINGS = `${API_URL}/api/users/self/bulksettings`
+const GET_LOCATION_SERVICES_ENDPOINT = `${API_URL}/api/locationservices/actions/search`
+const DELETE_SERVICES_ENDPOINT = (locationId: string, serviceId: string) =>
+  `${API_URL}/api/locations/${locationId}/services/${serviceId}`
+const UPDATE_SERVICE_ENDPOINT = (locationId: string, serviceId: string) =>
+  `${API_URL}/api/locations/${locationId}/services/${serviceId}`
+
+const GET_SERVICE_HISTORY = (serviceId: string) =>
+  `${API_URL}/api/services/${serviceId}/history/actions/search`
 const GET_CURRENT_USER_SETTINGS = `${API_URL}/api/users/self/settings`
 const ADD_CLAIM = `${API_URL}/api/claims`
 const SELF_PRACTICES = `${API_URL}/api/users/self/practices?includePermissions=false`
@@ -1071,6 +1079,10 @@ export {
   ADD_SELF_USER_SETTINGS,
   UPDATE_SELF_USER_SETTINGS,
   SELF_USER_BULK_SETTINGS,
+  GET_LOCATION_SERVICES_ENDPOINT,
+  DELETE_SERVICES_ENDPOINT,
+  UPDATE_SERVICE_ENDPOINT,
+  GET_SERVICE_HISTORY,
   ELECTRONICALLY_SIGN_POLICY_ENDPOINT,
   GET_NOTES_ENDPOINT,
   INBOX_SIGN_NOTE_ENDPOINT,

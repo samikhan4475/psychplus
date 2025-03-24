@@ -17,7 +17,7 @@ const columns = (
         <ColumnHeader label="ID" column={column} clientSideSort />
       ),
       cell: ({ row: { original } }) => (
-        <LongTextCell className="max-w-44">
+        <LongTextCell className="max-w-36">
           {original?.locationNameGenerated}
         </LongTextCell>
       ),
@@ -53,7 +53,7 @@ const columns = (
         />
       ),
       cell: ({ row: { original } }) => (
-        <LongTextCell className="max-w-44">{original?.name}</LongTextCell>
+        <LongTextCell className="max-w-36">{original?.name}</LongTextCell>
       ),
     },
     {

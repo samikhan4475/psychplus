@@ -1,17 +1,21 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useMemo } from 'react'
 import { ScrollArea } from '@radix-ui/themes'
 import { DataTable, LoadingPlaceholder } from '@/components'
 import { columns } from './columns'
 import { useStore } from './store'
 
-const ServiceTable = () => {
+interface ServiceTableProps {
+  googleApiKey: string
+}
+const ServiceTable = ({ googleApiKey }: ServiceTableProps) => {
   const { data, loading, fetchServices } = useStore((state) => ({
     data: state.data,
     loading: state.loading,
     fetchServices: state.fetchServices,
   }))
+  const tableColumns = useMemo(() => columns(googleApiKey), [googleApiKey])
 
   useEffect(() => {
     fetchServices()
@@ -27,7 +31,7 @@ const ServiceTable = () => {
     >
       <DataTable
         data={data ?? []}
-        columns={columns}
+        columns={tableColumns}
         sticky
         theadClass="z-[1]"
         isRowSpan

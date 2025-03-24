@@ -9,7 +9,7 @@ const CosignerTypeSelect = () => {
   const option = useCodesetOptions(CODESETS.CosignerType, '', [CODE_NOT_SET])
   return (
     <FormFieldContainer className="flex-row gap-1">
-      <FormFieldLabel>Cosigner Type</FormFieldLabel>
+      <FormFieldLabel>Co-Signer Type</FormFieldLabel>
       <SelectInput
         field="coSignerType"
         options={transformInOptions(option)}

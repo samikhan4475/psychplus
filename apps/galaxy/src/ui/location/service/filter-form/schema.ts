@@ -1,19 +1,19 @@
 import { z } from 'zod'
 
 const serviceFiltersSchema = z.object({
-  id: z.string().optional(),
   locationType: z.string().optional(),
   locationName: z.string().optional(),
-  service: z.string().optional(),
-  pos: z.string().optional(),
-  primaryProvider: z.string().optional(),
+  serviceOffered: z.string().optional(),
+  servicePlace: z.string().optional(),
+  providerType: z.string().optional(),
   coSignerType: z.string().optional(),
-  coSigner: z.string().optional(),
+  cosignerId: z.string().optional(),
   maxBookingFrequency: z.string().optional(),
-  visitType: z.string().optional(),
+  visitTypeName: z.string().optional(),
   address: z.string().optional(),
-  recordStatuses: z.string().optional(),
+  recordStatus: z.string().optional(),
   taxonomy: z.string().optional(),
+  maxBookingFrequencyInSlot: z.ostring(),
 })
 
 type ServiceFiltersSchemaType = z.infer<typeof serviceFiltersSchema>

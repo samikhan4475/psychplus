@@ -12,7 +12,7 @@ const AddressInput = () => {
       <FormFieldLabel>Address</FormFieldLabel>
       <TextField.Root
         size="1"
-        placeholder="Search by address"
+        placeholder="Enter a address"
         {...form.register('address')}
         className="w-full"
       />

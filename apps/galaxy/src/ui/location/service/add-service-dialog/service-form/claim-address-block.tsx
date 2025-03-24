@@ -3,14 +3,14 @@
 import { Flex, RadioGroup, Text } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
 import { AddressFieldsGroup } from '@/components'
-import { ClinicAddress } from '@/types'
+import { ServiceClaimAddress } from '../../types'
 import { ServiceSchemaType } from './schema'
 
 interface ClaimAddressBlockProps {
-  address: ClinicAddress
+  claimAddress?: Partial<ServiceClaimAddress>
 }
 
-const ClaimAddressBlock = ({ address }: ClaimAddressBlockProps) => {
+const ClaimAddressBlock = ({ claimAddress }: ClaimAddressBlockProps) => {
   const form = useFormContext<ServiceSchemaType>()
   const isClaimAddress = form.watch('isClaimAddress')
 
@@ -18,11 +18,13 @@ const ClaimAddressBlock = ({ address }: ClaimAddressBlockProps) => {
     const isClaimAddress = value === 'Yes'
     form.setValue('isClaimAddress', isClaimAddress)
     if (isClaimAddress) {
-      form.setValue('address1', address?.street1 ?? '')
-      form.setValue('address2', address?.street2 ?? '')
-      form.setValue('city', address?.city ?? '')
-      form.setValue('state', address?.state ?? '')
-      form.setValue('zip', address?.postalCode ?? '')
+      form.setValue('address1', claimAddress?.street1 ?? '')
+      form.setValue('address2', claimAddress?.street2 ?? '')
+      form.setValue('city', claimAddress?.city ?? '')
+      form.setValue('state', claimAddress?.state ?? '')
+      form.setValue('zip', claimAddress?.postalCode ?? '')
+      form.setValue('stateId', claimAddress?.stateId ?? '')
+      form.setValue('cityId', claimAddress?.cityId ?? '')
       form.trigger(['address1', 'address2', 'city', 'state', 'zip'])
     } else {
       form.setValue('address1', '')
@@ -30,6 +32,8 @@ const ClaimAddressBlock = ({ address }: ClaimAddressBlockProps) => {
       form.setValue('city', '')
       form.setValue('state', '')
       form.setValue('zip', '')
+      form.setValue('stateId', '')
+      form.setValue('cityId', '')
     }
   }
 

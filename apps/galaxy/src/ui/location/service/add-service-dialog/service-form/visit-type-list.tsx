@@ -7,24 +7,26 @@ import { LoadingPlaceholder } from '@/components'
 import { Encounter } from '@/types'
 import { cn } from '@/utils'
 import { useStore } from '../../store'
+import { constructVisitId } from '../../utils'
 import { ServiceSchemaType } from './schema'
 
 const VisitTypeList = () => {
   const { visitTypes, loading } = useStore((state) => ({
     visitTypes: state.visitTypes,
-    loading: state.loading,
+    loading: state.visitTypesLoading,
   }))
   const form = useFormContext<ServiceSchemaType>()
   const selectedVisits = form.watch('serviceVisitTypes') ?? []
 
   const handleToggleVisit = (visit: Encounter) => {
-    let visitIds = [...selectedVisits]
-    if (selectedVisits.includes(visit?.id)) {
-      visitIds = visitIds.filter((id) => id !== visit?.id)
+    let visits = [...selectedVisits]
+    const visitId = constructVisitId(visit)
+    if (selectedVisits.includes(visitId)) {
+      visits = visits.filter((item) => item !== visitId)
     } else {
-      visitIds.unshift(visit.id)
+      visits.unshift(visitId)
     }
-    form.setValue('serviceVisitTypes', visitIds, { shouldValidate: true })
+    form.setValue('serviceVisitTypes', visits, { shouldValidate: true })
   }
   if (loading) {
     return <LoadingPlaceholder className="min-h-32" />
@@ -53,7 +55,7 @@ const VisitTypeList = () => {
               'bg-white hover:bg-pp-bg-accent cursor-pointer rounded-1 px-3',
               {
                 'cursor-not-allowed opacity-40': selectedVisits.includes(
-                  item.id,
+                  constructVisitId(item),
                 ),
               },
             )}

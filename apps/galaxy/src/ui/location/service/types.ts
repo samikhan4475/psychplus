@@ -1,6 +1,7 @@
 import { Path } from 'react-hook-form'
-import { Encounter, Metadata, SelectOptionType, StaffResource } from '@/types'
+import { ClinicAddress, SelectOptionType, Service, Sort } from '@/types'
 import { ServiceSchemaType } from './add-service-dialog'
+import { ServiceFiltersSchemaType } from './filter-form'
 
 interface Question {
   label: string
@@ -13,7 +14,10 @@ interface Question {
 enum CosignerType {
   Location = 'Location',
 }
-
+enum LocationType {
+  Facility = 'Facility',
+  Clinic = 'Clinic',
+}
 enum Services {
   Psychiatry = 'Psychiatry',
   Therapy = 'Therapy',
@@ -28,66 +32,43 @@ enum PrimayProviderType {
   FamilyMedicine = 'FamilyMedicine',
 }
 
-interface ServicePayload {
-  locationId: string
-  locationName: string
-  servicePlace?: string
-  serviceOffered: string
-  cityId?: string
-  stateId?: string
-  taxonomy?: string
-  isClaimAddress: boolean
-  isPolicyRequired: boolean
-  isReminderForNotes: boolean
-  isReminderForVisit: boolean
-  isPatientSeenEveryDay: boolean
-  isAutomaticBilling: boolean
-  billingUsageType: string
-  coSignerType: string
-  coSignerId?: string
-  maxBookingFrequencyInSlot: number
-  isRequiresMedicalVisit: boolean
-  primaryProviderType?: string
-  address1?: string
-  address2?: string
-  zipCode?: string
-  city?: string
-  state?: string
-  cosigner?: StaffResource
-  serviceVisitTypes: Partial<Encounter>[]
-  locationType: string
-  isServiceTimeDependent: boolean
+enum BillingUsageType {
+  CodingOnly = 'CodingOnly',
+  EHRCoding = 'EHRCoding',
 }
-interface LocationService {
-  id: number
-  locationType: string
-  locationName: string
-  service: string
-  pos: number
-  meta?: Metadata
-  taxonomy: string
-  primaryAddress1: string
-  address2?: string
-  city: string
-  state: string
-  zip: string
-  psychPlusPolicy?: string
-  reminder?: string
-  provNotes: string
-  ptVisits: string
-  ehrCode?: string
-  maxBookingFrequency?: number
-  cosignerType?: string
-  cosigner: string
-  primaryProvider?: string
-  status: string
+
+enum RecordStatus {
+  Active = 'Active',
+  Inactive = 'Inactive',
+}
+interface ServiceFiltersPayload extends ServiceFiltersSchemaType {
+  recordStatuses?: string[]
+}
+interface GetLocationServicesListParams {
+  formValues?: Partial<ServiceFiltersPayload>
+  page?: number
+  sort?: Sort
+}
+
+interface ServicePaylod extends Omit<Service, 'address'> {
+  address: Partial<ClinicAddress>
+}
+
+interface ServiceClaimAddress extends ClinicAddress {
+  stateId: string
+  cityId: string
 }
 
 export {
   CosignerType,
   Services,
   PrimayProviderType,
-  type LocationService,
+  BillingUsageType,
+  RecordStatus,
+  LocationType,
   type Question,
-  type ServicePayload,
+  type GetLocationServicesListParams,
+  type ServiceFiltersPayload,
+  type ServicePaylod,
+  type ServiceClaimAddress,
 }

@@ -3,13 +3,14 @@
 import * as api from '@/api'
 import { ServicePaylod } from '../types'
 
-const addServiceAction = async (
+const updateServiceAction = async (
   locationId: string,
-  payload: Partial<ServicePaylod>,
+  serviceId: string,
+  data: Partial<ServicePaylod>,
 ): Promise<api.ActionResult<ServicePaylod>> => {
-  const response = await api.POST<ServicePaylod>(
-    api.ADD_SERVICE_ENDPOINT(locationId),
-    payload,
+  const response = await api.PUT<ServicePaylod>(
+    api.UPDATE_SERVICE_ENDPOINT(locationId, serviceId),
+    data,
   )
   if (response.state === 'error') {
     return {
@@ -17,6 +18,8 @@ const addServiceAction = async (
       error: response.error,
     }
   }
+
   return { state: 'success', data: response.data }
 }
-export { addServiceAction }
+
+export { updateServiceAction }

@@ -1,3 +1,4 @@
+import { ClinicAddress } from './address'
 import { ContactDetails } from './contact'
 import { Metadata } from './metadata'
 import { LegalName } from './name'
@@ -53,15 +54,18 @@ interface Service {
   id: string
   metadata: Metadata
   locationId: string
+  locationName: string
+  locationType: string
   servicePlace: string
   serviceOffered: string
   cityId: string
   stateId: string
+  locationCityId: string
+  locationStateId: string
   taxonomy: string
   isClaimAddress: boolean
-  address1: string
-  address2: string
-  zipCode: string
+  address: ClinicAddress
+  locationAddress: ClinicAddress
   isPolicyRequired: boolean
   isReminderForNotes: boolean
   isReminderForVisit: boolean
@@ -73,10 +77,10 @@ interface Service {
   maxBookingFrequencyInSlot: number
   isRequiresMedicalVisit: boolean
   primaryProviderType: string
+  billingUsageType: string
   isServiceTimeDependent: boolean
-  city: string
-  state: string
   cosigner: Cosigner
+  status: string
   serviceUnits?: ServiceUnit[]
   serviceRooms?: ServiceRoom[]
   serviceGroups?: ServiceGroup[]

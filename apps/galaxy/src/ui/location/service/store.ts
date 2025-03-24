@@ -1,36 +1,35 @@
 import toast from 'react-hot-toast'
 import { create } from 'zustand'
-import { Encounter, SelectOptionType, Sort, StaffResource } from '@/types'
+import { Cosigner, Encounter, SelectOptionType, Service, Sort } from '@/types'
 import { getNewSortDir } from '@/utils'
 import {
   getCosignersAction,
   getServiceList,
   getVisitTypesAction,
 } from './actions'
-import { ServiceFiltersSchemaType } from './filter-form'
-import { LocationService } from './types'
+import { RecordStatus, ServiceFiltersPayload } from './types'
 
 interface Store {
-  data?: LocationService[]
+  data?: Service[]
   visitTypes: Encounter[]
   visitTypesLoading: boolean
   error?: string
   total: number
-  cosigners: StaffResource[]
+  cosigners: Cosigner[]
   loading: boolean
   cosignersLoading: boolean
   fetchVisitTypes: (serviceOffered: string) => void
   fetchCosigners: () => void
   providerOptions: SelectOptionType[]
-  formValues?: Partial<ServiceFiltersSchemaType>
+  formValues?: Partial<ServiceFiltersPayload>
   fetchServices: (
-    formValues?: Partial<ServiceFiltersSchemaType>,
+    formValues?: Partial<ServiceFiltersPayload>,
     page?: number,
     reset?: boolean,
   ) => void
   showFilters: boolean
   toggleFilters: () => void
-  pageCache: Record<number, LocationService[]>
+  pageCache: Record<number, Service[]>
   next: () => void
   prev: () => void
   sortData: (column: string) => void
@@ -57,7 +56,15 @@ const useStore = create<Store>()((set, get) => ({
       loading: true,
       formValues,
     })
-    const result = await getServiceList()
+    const result = await getServiceList({
+      page,
+      formValues: {
+        ...formValues,
+        ...(!formValues?.recordStatuses?.length
+          ? { recordStatuses: [RecordStatus.Active, RecordStatus.Inactive] }
+          : {}),
+      },
+    })
     if (result.state === 'error') {
       return set({ error: result.error, loading: false })
     }

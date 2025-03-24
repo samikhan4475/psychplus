@@ -1,5 +1,6 @@
 'use client'
 
+import { useEffect } from 'react'
 import { Path, useFormContext } from 'react-hook-form'
 import {
   FormFieldContainer,
@@ -10,12 +11,18 @@ import {
 import { CODESETS } from '@/constants'
 import { getCodeAttributeBoolean, useCodesetCodes } from '@/hooks'
 import { transformInServices } from '../../transform'
-import { getAttributeValue, getMaxBookingFrequency } from '../../utils'
+import {
+  getAttributeValue,
+  getMaxBookingFrequency,
+  getYesNoValue,
+} from '../../utils'
 import { ServiceSchemaType } from './schema'
 
 const ServiceSelect = () => {
   const { setValue, watch } = useFormContext<ServiceSchemaType>()
   const locationType = watch('locationType')
+  const serviceOffered = watch('serviceOffered')
+  const isPrimaryProviderRequired = watch('isPrimaryProviderRequired')
   const codes = useCodesetCodes(CODESETS.ServicesOffered)
   const onValueChange = (selectedServiceValue: string) => {
     const selectedCode = codes.find(
@@ -28,19 +35,13 @@ const ServiceSelect = () => {
           selectedServiceValue,
           selectedCode,
         ),
-        isServiceTimeDependent: getCodeAttributeBoolean(
-          selectedCode,
-          'IsTimeDependent',
-        )
-          ? 'yes'
-          : 'no',
+        isServiceTimeDependent: getYesNoValue(
+          getCodeAttributeBoolean(selectedCode, 'IsTimeDependent'),
+        ),
         servicePlace: getAttributeValue(selectedCode, 'PlaceOfService'),
-        isPrimaryProviderRequired: getCodeAttributeBoolean(
-          selectedCode,
-          'IsPrimaryProviderRequired',
-        )
-          ? 'yes'
-          : 'no',
+        isPrimaryProviderRequired: getYesNoValue(
+          getCodeAttributeBoolean(selectedCode, 'IsPrimaryProviderRequired'),
+        ),
         serviceVisitTypes: [],
       }
       Object.entries(values)?.forEach(([key, value]) => {
@@ -49,6 +50,20 @@ const ServiceSelect = () => {
     }
   }
 
+  useEffect(() => {
+    const selectedCode = codes?.find(
+      (service) => service?.value === serviceOffered,
+    )
+    if (selectedCode && !isPrimaryProviderRequired) {
+      setValue(
+        'isPrimaryProviderRequired',
+        getYesNoValue(
+          getCodeAttributeBoolean(selectedCode, 'IsPrimaryProviderRequired'),
+        ),
+        { shouldValidate: true },
+      )
+    }
+  }, [serviceOffered, codes, isPrimaryProviderRequired, setValue])
   return (
     <FormFieldContainer className="col-span-3 gap-1">
       <FormFieldLabel required>Service</FormFieldLabel>

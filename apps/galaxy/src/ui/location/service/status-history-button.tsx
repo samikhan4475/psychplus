@@ -4,7 +4,10 @@ import { Flex, IconButton, Popover, Text } from '@radix-ui/themes'
 import { ClockIcon } from '@/components/icons'
 import { StatusHistoryTable } from './status-history-table'
 
-const StatusHistoryButton = () => {
+interface StatusHistoryButtonProps {
+  serviceId: string
+}
+const StatusHistoryButton = ({ serviceId }: StatusHistoryButtonProps) => {
   return (
     <Popover.Root>
       <Popover.Trigger>
@@ -15,7 +18,7 @@ const StatusHistoryButton = () => {
       <Popover.Content className="w-96 p-2">
         <Flex gap="1" direction="column" height="100%">
           <Text className="text-[16px] font-[600]">Status Hx</Text>
-          <StatusHistoryTable />
+          <StatusHistoryTable serviceId={serviceId} />
         </Flex>
       </Popover.Content>
     </Popover.Root>

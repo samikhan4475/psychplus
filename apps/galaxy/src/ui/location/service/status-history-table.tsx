@@ -11,22 +11,25 @@ import {
   LongTextCell,
   TextCell,
 } from '@/components'
-import { getServiceStatusHistory } from './actions'
-import { LocationService } from './types'
+import { Service } from '@/types'
+import { formatDateTime } from '@/utils'
+import { getServiceHistoryAction } from './actions'
 
-const columns: ColumnDef<LocationService>[] = [
+const columns: ColumnDef<Service>[] = [
   {
     id: 'user',
     header: ({ column }) => <ColumnHeader column={column} label="User" />,
     cell: ({ row: { original } }) => (
-      <LongTextCell>{original?.locationName ?? ''}</LongTextCell>
+      <LongTextCell>{original?.metadata?.createdByFullName ?? ''}</LongTextCell>
     ),
   },
   {
     id: 'dateTime',
     header: ({ column }) => <ColumnHeader column={column} label="Date/Time" />,
     cell: ({ row: { original } }) => (
-      <TextCell>{original?.state ?? 'N/A'}</TextCell>
+      <TextCell>
+        {formatDateTime(original?.metadata?.createdOn) ?? 'N/A'}
+      </TextCell>
     ),
   },
   {
@@ -36,21 +39,24 @@ const columns: ColumnDef<LocationService>[] = [
   },
 ]
 
-const StatusHistoryTable = () => {
-  const [loading, setLoading] = useState(false)
-  const [data, setData] = useState<LocationService[]>([])
+interface StatusHistoryTableProps {
+  serviceId: string
+}
+const StatusHistoryTable = ({ serviceId }: StatusHistoryTableProps) => {
+  const [loading, setLoading] = useState(true)
+  const [data, setData] = useState<Service[]>([])
 
   useEffect(() => {
-    setLoading(true)
-    getServiceStatusHistory().then((response) => {
-      if (response.state === 'error') {
-        setLoading(false)
-        return toast.error(response?.error)
-      }
-      setData(response?.data ?? [])
-      setLoading(false)
-    })
-  }, [])
+    getServiceHistoryAction(serviceId)
+      .then((response) => {
+        if (response.state === 'error') {
+          setLoading(false)
+          return toast.error(response?.error)
+        }
+        setData(response?.data ?? [])
+      })
+      .finally(() => setLoading(false))
+  }, [serviceId])
 
   if (loading) {
     return <LoadingPlaceholder className="min-h-32" />

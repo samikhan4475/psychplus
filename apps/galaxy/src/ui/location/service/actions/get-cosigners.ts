@@ -2,12 +2,10 @@
 
 import * as api from '@/api'
 import { STAFF_ROLE_CODE_PRESCRIBER } from '@/constants'
-import { StaffResource } from '@/types'
+import { Cosigner } from '@/types'
 
-const getCosignersAction = async (): Promise<
-  api.ActionResult<StaffResource[]>
-> => {
-  const response = await api.POST<StaffResource[]>(api.GET_STAFF_ENDPOINT, {
+const getCosignersAction = async (): Promise<api.ActionResult<Cosigner[]>> => {
+  const response = await api.POST<Cosigner[]>(api.GET_STAFF_ENDPOINT, {
     roleCodes: [STAFF_ROLE_CODE_PRESCRIBER],
   })
 

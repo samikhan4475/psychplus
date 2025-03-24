@@ -32,7 +32,11 @@ const VisitDropdown = () => {
           highContrast
           disabled={!service || visitTypesLoading}
         >
-          {visitTypesLoading ? <Spinner /> : <Plus width={12} height={12} />}
+          {visitTypesLoading ? (
+            <Spinner size="1" />
+          ) : (
+            <Plus width={12} height={12} />
+          )}
         </IconButton>
       </Popover.Trigger>
       <Popover.Content

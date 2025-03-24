@@ -5,15 +5,17 @@ import { FormFieldContainer, FormFieldLabel } from '@/components/form'
 import { CODESETS } from '@/constants'
 import { useCodesetOptions } from '@/hooks'
 import { transformInOptions } from '../transform'
+import { getLocationTypeOptions } from '../utils'
 
 const LocationTypeSelect = () => {
-  const option = useCodesetOptions(CODESETS.LocationType)
+  const codes = useCodesetOptions(CODESETS.LocationType)
+  const options = getLocationTypeOptions(codes)
   return (
     <FormFieldContainer className="flex-row gap-1">
       <FormFieldLabel>Location Type</FormFieldLabel>
       <SelectInput
+        options={transformInOptions(options)}
         field="locationType"
-        options={transformInOptions(option)}
         size="1"
         buttonClassName="w-[120px]"
       />

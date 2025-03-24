@@ -1,25 +1,32 @@
 'use client'
 
+import { useMemo } from 'react'
+import { useFormContext } from 'react-hook-form'
 import { FormFieldContainer, FormFieldLabel, SelectInput } from '@/components'
-import { SelectOptionType } from '@/types'
 import { transformInOptions } from '../transform'
+import { generateMaxBookingFrequencyOptions } from '../utils'
+import { ServiceFiltersSchemaType } from './schema'
 
 const MaxBookingFrequencySelect = () => {
+  const form = useFormContext<ServiceFiltersSchemaType>()
+  const maxBookingFrequencyInSlot = form.watch('maxBookingFrequencyInSlot')
+
+  const options = useMemo(
+    () => generateMaxBookingFrequencyOptions(maxBookingFrequencyInSlot),
+    [maxBookingFrequencyInSlot],
+  )
+
   return (
     <FormFieldContainer className="flex-row gap-1">
       <FormFieldLabel>Max Booking Frequency</FormFieldLabel>
       <SelectInput
         options={transformInOptions(options)}
         field="maxBookingFrequency"
-        size="1"
         buttonClassName="w-[120px]"
+        size="1"
       />
     </FormFieldContainer>
   )
 }
 
-const options: SelectOptionType[] = [...Array(11)].map((_, i) => ({
-  value: String(i),
-  label: String(i),
-}))
 export { MaxBookingFrequencySelect }

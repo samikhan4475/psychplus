@@ -5,11 +5,15 @@ import { Grid, Separator } from '@radix-ui/themes'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { FormContainer } from '@/components'
-import { Location } from '@/types'
-import { addServiceAction } from '../../actions'
+import { Location, Service } from '@/types'
+import { addServiceAction, updateServiceAction } from '../../actions'
 import { useStore } from '../../store'
 import { transformOutService } from '../../transform'
-import { getInitialValues } from '../../utils'
+import {
+  getInitialValues,
+  getLocationInfo,
+  getServiceClaimAddress,
+} from '../../utils'
 import { ClaimAddressBlock } from './claim-address-block'
 import { CosignerSelect } from './cosigner-select'
 import { CosignerTypeSelect } from './cosigner-type-select'
@@ -26,41 +30,37 @@ import { TimeDependentSelect } from './time-dependent-select'
 import { VisitTypeTable } from './visit-type-table'
 
 interface ServiceFormProps {
-  location: Location
+  location?: Location
+  service?: Service
   onClose: () => void
 }
-const ServiceForm = ({ location, onClose }: ServiceFormProps) => {
+const ServiceForm = ({ location, service, onClose }: ServiceFormProps) => {
   const { cosigners = [], visitTypes = [] } = useStore((state) => ({
-    fetchVisitTypes: state.fetchVisitTypes,
     visitTypes: state.visitTypes,
     cosigners: state.cosigners,
   }))
   const form = useForm<ServiceSchemaType>({
     mode: 'onChange',
     resolver: zodResolver(schema),
-    defaultValues: getInitialValues(location),
+    defaultValues: getInitialValues(location, service),
   })
-
   const onSubmit: SubmitHandler<ServiceSchemaType> = async (data) => {
-    const payload = transformOutService(
-      cosigners,
-      visitTypes,
-      location.address,
-      data,
-    )
-    const response = await addServiceAction(payload)
+    const payload = transformOutService(cosigners, visitTypes, data)
+    const response = await (service?.id
+      ? updateServiceAction(data.locationId, service.id, payload)
+      : addServiceAction(data.locationId, payload))
+
     if (response.state === 'error') {
       return toast.error(response?.error)
     }
-    toast.success('Service added successfully!')
+    toast.success(`Service ${service?.id ? 'updated' : 'added'} successfully!`)
     onClose()
   }
-
   return (
     <FormContainer form={form} onSubmit={onSubmit}>
       <Grid columns="1" gap="2">
         <Grid columns="11" gap="2">
-          <LocationInfoInput location={location} />
+          <LocationInfoInput info={getLocationInfo(location, service)} />
           <ServiceSelect />
           <PlaceOfServiceInput />
         </Grid>
@@ -77,8 +77,10 @@ const ServiceForm = ({ location, onClose }: ServiceFormProps) => {
           <CosignerTypeSelect />
           <CosignerSelect options={cosigners ?? []} />
         </Grid>
-        <ClaimAddressBlock address={location?.address ?? ''} />
-        <VisitTypeTable visitTypes={visitTypes} />
+        <ClaimAddressBlock
+          claimAddress={getServiceClaimAddress(location, service)}
+        />
+        <VisitTypeTable />
       </Grid>
       <SaveButton />
     </FormContainer>

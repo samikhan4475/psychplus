@@ -3,14 +3,14 @@
 import { useEffect } from 'react'
 import { useFormContext } from 'react-hook-form'
 import { FormFieldContainer, FormFieldLabel, SelectInput } from '@/components'
-import { StaffResource } from '@/types'
+import { Cosigner } from '@/types'
 import { useStore } from '../../store'
 import { transformInCosigers } from '../../transform'
 import { CosignerType } from '../../types'
 import { ServiceSchemaType } from './schema'
 
 interface CosignerSelectProps {
-  options: StaffResource[]
+  options: Cosigner[]
 }
 const CosignerSelect = ({ options }: CosignerSelectProps) => {
   const form = useFormContext<ServiceSchemaType>()

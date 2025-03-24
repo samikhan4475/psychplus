@@ -1,131 +1,174 @@
 import { ColumnDef } from '@tanstack/react-table'
 import { ColumnHeader, LongTextCell, TextCell } from '@/components'
-import { ActionCell, StatusCell } from './cells'
-import { LocationService } from './types'
+import { Service } from '@/types'
+import { getPatientFullName } from '@/utils'
+import {
+  ActionCell,
+  EhrCell,
+  POSCell,
+  PrimaryProviderCell,
+  ServiceCell,
+  ServiceVisitTypeCell,
+  StateCell,
+  StatusCell,
+  TaxonomyCell,
+} from './cells'
+import { YesNoBlock } from './yes-no-block'
 
-const columns: ColumnDef<LocationService>[] = [
+const columns = (googleApiKey: string): ColumnDef<Service>[] => [
   {
-    id: 'id',
-    header: ({ column }) => (
-      <ColumnHeader clientSideSort column={column} label="ID" />
-    ),
-    cell: ({ row }) => <TextCell>{row.original.id}</TextCell>,
-  },
-  {
-    id: 'location-type',
+    id: 'locationType',
+    accessorKey: 'locationType',
     header: ({ column }) => (
       <ColumnHeader clientSideSort column={column} label="Location Type" />
     ),
-    cell: ({ row }) => <TextCell>{row.original.locationType}</TextCell>,
+    cell: ({ row: { original } }) => (
+      <TextCell>{original?.locationType}</TextCell>
+    ),
   },
-
   {
-    id: 'location-name',
+    id: 'locationName',
+    accessorKey: 'locationName',
     header: ({ column }) => (
       <ColumnHeader clientSideSort column={column} label="Location Name" />
     ),
-    cell: ({ row }) => <TextCell>{row.original.locationName}</TextCell>,
+    cell: ({ row: { original } }) => (
+      <LongTextCell className="min-w-32 max-w-36">
+        {original?.locationName}
+      </LongTextCell>
+    ),
   },
   {
-    id: 'service',
+    id: 'serviceOffered',
+    accessorKey: 'serviceOffered',
     header: ({ column }) => (
       <ColumnHeader clientSideSort column={column} label="Service" />
     ),
-    cell: ({ row }) => <TextCell>{row.original.service}</TextCell>,
+    cell: ServiceCell,
   },
   {
-    id: 'pos',
+    id: 'servicePlace',
+    accessorKey: 'servicePlace',
     header: ({ column }) => (
       <ColumnHeader clientSideSort column={column} label="POS" />
     ),
-    cell: ({ row }) => <TextCell>{row.original.pos}</TextCell>,
+    cell: POSCell,
   },
   {
     id: 'taxonomy',
+    accessorKey: 'taxonomy',
     header: ({ column }) => (
       <ColumnHeader clientSideSort column={column} label="Taxonomy" />
     ),
-    cell: ({ row }) => <LongTextCell>{row.original.taxonomy}</LongTextCell>,
+    cell: TaxonomyCell,
   },
   {
-    id: 'primaryAddress1',
+    id: 'serviceVisitTypes',
+    accessorKey: 'serviceVisitTypes',
+    header: ({ column }) => (
+      <ColumnHeader clientSideSort column={column} label="Visit Type" />
+    ),
+    cell: ServiceVisitTypeCell,
+  },
+  {
+    id: 'address1',
+    accessorKey: 'address.street1',
     header: ({ column }) => (
       <ColumnHeader clientSideSort column={column} label="Primary Address1" />
     ),
-    cell: ({ row }) => <TextCell>{row.original.primaryAddress1}</TextCell>,
+    cell: ({ row: { original } }) => (
+      <LongTextCell>{original?.address?.street1 ?? 'N/A'}</LongTextCell>
+    ),
   },
 
   {
-    id: 'address',
+    id: 'address2',
+    accessorKey: 'address.street2',
     header: ({ column }) => (
       <ColumnHeader clientSideSort column={column} label="Address2" />
     ),
-    cell: ({ row }) => <TextCell>{row.original.address2}</TextCell>,
+    cell: ({ row: { original } }) => (
+      <LongTextCell className="min-w-24 max-w-32">
+        {original?.address?.street2 ?? 'N/A'}
+      </LongTextCell>
+    ),
   },
   {
     id: 'city',
+    accessorKey: 'address.city',
     header: ({ column }) => (
       <ColumnHeader clientSideSort column={column} label="City" />
     ),
-    cell: ({ row }) => <TextCell>{row.original.city}</TextCell>,
+    cell: ({ row: { original } }) => (
+      <LongTextCell className="min-w-24 max-w-32">
+        {original?.address?.city}
+      </LongTextCell>
+    ),
   },
   {
-    id: 'state',
+    id: 'address.state',
+    accessorKey: 'state',
     header: ({ column }) => (
       <ColumnHeader clientSideSort column={column} label="State" />
     ),
-    cell: ({ row }) => <TextCell>{row.original.state}</TextCell>,
+    cell: StateCell,
   },
   {
-    id: 'zip',
+    id: 'zipCode',
+    accessorKey: 'address.postalCode',
     header: ({ column }) => (
       <ColumnHeader clientSideSort column={column} label="ZIP" />
     ),
-    cell: ({ row }) => <TextCell>{row.original.zip}</TextCell>,
+    cell: ({ row: { original } }) => (
+      <TextCell>{original?.address?.postalCode}</TextCell>
+    ),
   },
   {
-    id: 'psychPlusPolicy',
+    id: 'isPolicyRequired',
+    accessorKey: 'isPolicyRequired',
     header: ({ column }) => (
       <ColumnHeader clientSideSort column={column} label="PsychPlus Policy" />
     ),
-    cell: ({ row }) => <TextCell>{row.original.psychPlusPolicy}</TextCell>,
+    cell: ({ row: { original } }) => (
+      <YesNoBlock value={original?.isPolicyRequired} />
+    ),
   },
   {
     id: 'reminder',
-    header: ({ column }) => <ColumnHeader column={column} label="Reminder" />,
+    header: ({ column }) => <ColumnHeader column={column} label="Reminders" />,
     columns: [
       {
-        accessorKey: 'provNotes',
+        id: 'isReminderForNotes',
+        accessorKey: 'isReminderForNotes',
         header: ({ column }) => (
           <ColumnHeader clientSideSort column={column} label="Prov. Notes" />
         ),
-        cell: ({ row }) => (
-          <TextCell>{row.original.provNotes ?? 'N/A'}</TextCell>
+        cell: ({ row: { original } }) => (
+          <YesNoBlock value={original?.isReminderForNotes} />
         ),
-        enableHiding: false,
       },
       {
-        accessorKey: 'ptVisits',
+        id: 'isReminderForVisit',
+        accessorKey: 'isReminderForVisit',
         header: ({ column }) => (
           <ColumnHeader clientSideSort column={column} label="Pt. Visits" />
         ),
-        cell: ({ row }) => (
-          <TextCell>{row.original.ptVisits ?? 'N/A'}</TextCell>
+        cell: ({ row: { original } }) => (
+          <YesNoBlock value={original?.isReminderForVisit} />
         ),
-        enableHiding: false,
       },
     ],
   },
-
   {
-    id: 'ehrCode',
+    id: 'billingUsageType',
     header: ({ column }) => (
       <ColumnHeader clientSideSort column={column} label="EHR Code" />
     ),
-    cell: ({ row }) => <TextCell>{row.original.ehrCode}</TextCell>,
+    cell: EhrCell,
   },
   {
-    id: 'maxBookingFrequency',
+    id: 'maxBookingFrequencyInSlot',
+    accessorKey: 'maxBookingFrequencyInSlot',
     header: ({ column }) => (
       <ColumnHeader
         clientSideSort
@@ -133,33 +176,47 @@ const columns: ColumnDef<LocationService>[] = [
         label="Max Booking Frequency"
       />
     ),
-    cell: ({ row }) => <TextCell>{row.original.maxBookingFrequency}</TextCell>,
+    cell: ({ row: { original } }) => (
+      <TextCell>{original?.maxBookingFrequencyInSlot}</TextCell>
+    ),
   },
+
   {
     id: 'cosignerType',
+    accessorKey: 'coSignerType',
+
     header: ({ column }) => (
-      <ColumnHeader clientSideSort column={column} label="Cosigner Type" />
+      <ColumnHeader clientSideSort column={column} label="Co-Signer Type" />
     ),
-    cell: ({ row }) => <TextCell>{row.original.cosignerType}</TextCell>,
+    cell: ({ row: { original } }) => (
+      <TextCell>{original?.coSignerType}</TextCell>
+    ),
   },
   {
     id: 'cosigner',
+    accessorKey: 'cosigner.legalName.firstName',
     header: ({ column }) => (
-      <ColumnHeader clientSideSort column={column} label="Cosigner" />
+      <ColumnHeader clientSideSort column={column} label="Co-Signer" />
     ),
-    cell: ({ row }) => <TextCell>{row.original.cosigner}</TextCell>,
+    cell: ({ row: { original } }) => (
+      <LongTextCell>
+        {getPatientFullName(original?.cosigner?.legalName) ?? 'N/A'}
+      </LongTextCell>
+    ),
   },
   {
-    id: 'primaryProvider',
+    id: 'primaryProviderType',
+    accessorKey: 'primaryProviderType',
+
     header: ({ column }) => (
       <ColumnHeader clientSideSort column={column} label="Primary Provider" />
     ),
-    cell: ({ row }) => <TextCell>{row.original.primaryProvider}</TextCell>,
+    cell: PrimaryProviderCell,
   },
   {
     id: 'status',
     header: ({ column }) => (
-      <ColumnHeader clientSideSort column={column} label="Status" />
+      <ColumnHeader clientSideSort column={column} label="Service status" />
     ),
     cell: StatusCell,
   },
@@ -168,7 +225,7 @@ const columns: ColumnDef<LocationService>[] = [
     header: ({ column }) => (
       <ColumnHeader clientSideSort column={column} label="Actions" />
     ),
-    cell: ({ row }) => <ActionCell />,
+    cell: ({ row }) => <ActionCell row={row} googleApiKey={googleApiKey} />,
   },
 ]
 

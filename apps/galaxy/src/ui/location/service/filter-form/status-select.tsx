@@ -13,9 +13,9 @@ const StatusSelect = () => {
   ])
   return (
     <FormFieldContainer className="flex-row gap-1">
-      <FormFieldLabel>Status</FormFieldLabel>
+      <FormFieldLabel>Service status</FormFieldLabel>
       <SelectInput
-        field="recordStatuses"
+        field="recordStatus"
         options={transformInOptions(option)}
         size="1"
         buttonClassName="w-[120px]"

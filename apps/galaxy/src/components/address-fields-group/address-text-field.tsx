@@ -34,7 +34,7 @@ const AddressTextField = ({
 }: AddressTextFieldProps) => {
   const { register, setValue, watch } = useFormContext()
 
-  const { onChange, ...rest } = register(field, { disabled: disabled })
+  const { onChange, ...rest } = register(field)
 
   const handleZipChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const fieldValue = e.target.value
@@ -78,6 +78,7 @@ const AddressTextField = ({
         )}
         onKeyDown={preventInvalidZipInput}
         onChange={handleZipChange}
+        disabled={disabled}
         {...props}
         {...rest}
       />

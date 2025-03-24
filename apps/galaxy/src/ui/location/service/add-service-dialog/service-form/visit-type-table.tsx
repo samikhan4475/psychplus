@@ -6,6 +6,8 @@ import { ColumnDef } from '@tanstack/react-table'
 import { useFormContext } from 'react-hook-form'
 import { DataTable } from '@/components'
 import { Encounter } from '@/types'
+import { useStore } from '../../store'
+import { constructVisitId } from '../../utils'
 import { ActionCell, VisitTypeCell, VisitTypeHeaderCell } from '../cells'
 import { ServiceSchemaType } from './schema'
 import { VisitDropdown } from './visit-dropdown'
@@ -25,14 +27,18 @@ const columns: ColumnDef<Encounter>[] = [
   },
 ]
 
-interface VisitTypeTableProps {
-  visitTypes?: Encounter[]
-}
-const VisitTypeTable = ({ visitTypes }: VisitTypeTableProps) => {
+const VisitTypeTable = () => {
+  const { visitTypes = [] } = useStore((state) => ({
+    visitTypes: state.visitTypes,
+    visitTypesLoading: state.visitTypesLoading,
+  }))
   const form = useFormContext<ServiceSchemaType>()
   const visitsIds = form.watch('serviceVisitTypes')
   const data = useMemo(
-    () => visitTypes?.filter(({ id }) => visitsIds?.includes(id)) ?? [],
+    () =>
+      visitTypes?.filter((item) =>
+        visitsIds?.includes(constructVisitId(item)),
+      ) ?? [],
     [visitsIds, visitTypes],
   )
 
