@@ -1,14 +1,19 @@
 import { TextField } from '@radix-ui/themes'
 import { FormFieldContainer, FormFieldLabel } from '@/components'
+import { CODESETS } from '@/constants'
+import { useCodesetCodes } from '@/hooks'
 import { Appointment } from '@/types'
 import { getSlashedDateString } from '@/utils'
+import { getGenderShortName } from '../../utils'
 
 const PatientText = ({ visitDetails }: { visitDetails: Appointment }) => {
+  const genderCodes = useCodesetCodes(CODESETS.Gender)
   const dob = getSlashedDateString(visitDetails?.dob)
   const value = [
     visitDetails?.name && `${visitDetails.name}`,
     visitDetails?.age && `${visitDetails.age} yo`,
-    visitDetails?.gender && `${visitDetails.gender?.[0]}`,
+    visitDetails?.gender &&
+      getGenderShortName(genderCodes, visitDetails.gender),
     dob && `| ${dob}`,
     visitDetails?.patientMrn && `| ${visitDetails.patientMrn}`,
     visitDetails?.patientStatus && `| ${visitDetails.patientStatus}`,

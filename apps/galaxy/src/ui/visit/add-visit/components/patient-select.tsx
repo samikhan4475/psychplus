@@ -10,6 +10,7 @@ import { useCodesetCodes } from '@/hooks'
 import { getSlashedPaddedDateString } from '@/utils'
 import { searchPatientsAction } from '../../actions'
 import { Patient } from '../../types'
+import { getGenderShortName } from '../../utils'
 import { SchemaType } from '../schema'
 import { SlotDetails } from '../types'
 import { calculateAge } from '../util'
@@ -19,6 +20,7 @@ import { StateChangeAlert } from './state-change-alert'
 const PatientSelect = ({ slotDetails }: { slotDetails?: SlotDetails }) => {
   const form = useFormContext<SchemaType>()
   const statusCodes = useCodesetCodes(CODESETS.CustomerStatus)
+  const genderCodes = useCodesetCodes(CODESETS.Gender)
   const [isOpen, setIsOpen] = useState<boolean>(false)
 
   const mappedStatuses: { [key: string]: string } = useMemo(() => {
@@ -35,7 +37,7 @@ const PatientSelect = ({ slotDetails }: { slotDetails?: SlotDetails }) => {
       value.middleName,
       value.lastName,
       value.birthdate ? calculateAge(value.birthdate) : '',
-      value.gender,
+      getGenderShortName(genderCodes, value.gender),
       value.birthdate
         ? `| ${getSlashedPaddedDateString(value.birthdate, true)}`
         : '',

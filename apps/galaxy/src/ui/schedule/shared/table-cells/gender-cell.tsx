@@ -4,7 +4,7 @@ const genderMapper: { [key: string]: string } = {
   NotSpecified: 'N',
   Male: 'M',
   Female: 'F',
-  Undetermined: 'U',
+  Undetermined: 'A',
 }
 
 const GenderCell = ({ value }: { value: string }) => {

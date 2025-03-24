@@ -3,6 +3,9 @@ import { TextField } from '@radix-ui/themes'
 import { FormFieldContainer, FormFieldLabel } from '@/components'
 import { NewPatient } from '@/types'
 import { formatDate, getAgeFromDate } from '@/utils'
+import { getGenderShortName } from '../../utils'
+import { useCodesetCodes } from '@/hooks'
+import { CODESETS } from '@/constants'
 
 const PatientText = ({ patient }: { patient: NewPatient }) => {
   const {
@@ -12,6 +15,7 @@ const PatientText = ({ patient }: { patient: NewPatient }) => {
     patientMrn = '',
     patientStatus = '',
   } = patient
+  const genderCodes = useCodesetCodes(CODESETS.Gender)
   const name = `${legalName.firstName} ${
     legalName.middleName ? legalName.middleName + ' ' : ''
   }${legalName.lastName}`
@@ -21,7 +25,7 @@ const PatientText = ({ patient }: { patient: NewPatient }) => {
   const value = [
     name && `${name}`,
     age && `${age} yo`,
-    gender && `${gender[0]}`,
+    getGenderShortName(genderCodes, gender),
     dob && `| ${formatDate(dob, 'MM-dd-yyyy') ?? ''}`,
     patientMrn && `| ${patientMrn}`,
     patientStatus && `| ${patientStatus}`,
