@@ -9,6 +9,7 @@ const defaultPayload = {
   isIncludeMetadataResourceStatus: true,
   isIncludeClaim: true,
   isIncludeServiceLinePayment: true,
+  isIncludePatient:true
 }
 
 const getClaimPaymentsAction = async (

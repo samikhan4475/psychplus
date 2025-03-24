@@ -132,7 +132,17 @@ interface InsurancePayment {
   paymentAttachments: PaymentAttachments[]
   claimPayments: ClaimPayment[]
 }
-interface ClaimPayment extends Claim {
+
+interface PatientName {
+  firstName: string
+  middleName: string
+  lastName: string
+  preferredName: string
+  title: string
+  suffix: string
+  honors: string
+}
+interface ClaimPayment extends Omit<Claim, 'patientName'> {
   metadata: Metadata
   recordStatus: string
   paymentId: string
@@ -149,7 +159,8 @@ interface ClaimPayment extends Claim {
   billedAmount: string
   allowedAmount: string
   paidAmount: string
-  copayAmount: string
+  copayAmount:string
+  patientName?: Partial<PatientName>
   coinsuranceAmount: string
   deductibleAmount: string
   otherPr: string

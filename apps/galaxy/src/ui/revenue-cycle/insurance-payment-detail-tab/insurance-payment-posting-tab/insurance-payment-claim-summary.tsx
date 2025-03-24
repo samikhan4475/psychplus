@@ -8,9 +8,10 @@ import { getClaimById } from '../../claim-detail-tab/actions'
 import { ClaimProcessedSelect } from './claim-processed-select'
 import { ClaimStatus } from './claim-status'
 import { ClaimSummaryCard } from './claim-summary-card'
+import { ClaimPayment } from '../../types'
 
 interface InsurancePaymentClaimSummaryProps {
-  claim?: Partial<Claim>
+  claim?: Partial<Claim | ClaimPayment>
 }
 
 interface ClaimHeaderInfo {

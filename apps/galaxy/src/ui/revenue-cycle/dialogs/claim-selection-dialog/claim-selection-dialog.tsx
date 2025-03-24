@@ -30,7 +30,11 @@ const ClaimSelectionDialog = () => {
       setIsConfirmationDialog(claim)
     } else {
       setIsOpenDialog(false)
-      setPaymentPostingClaim(activeTab, claim)
+      
+      setPaymentPostingClaim(activeTab, {
+        ...claim,
+        patientName: { firstName: claim.patientName },
+      })
     }
   }
 

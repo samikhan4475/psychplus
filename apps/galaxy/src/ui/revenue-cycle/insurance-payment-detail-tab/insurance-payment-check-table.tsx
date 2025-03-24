@@ -63,7 +63,9 @@ const columns: ColumnDef<ClaimPayment>[] = [
     header: ({ column }) => (
       <ColumnHeader column={column} label="Patient Name" />
     ),
-    cell: ({ row }) => <TextCell>--</TextCell>,
+    cell: ({ row }) => (
+      <TextCell>{`${row.original.patientName?.firstName ?? ''} ${row.original.patientName?.lastName ?? ''}`}</TextCell>
+    ),
   },
   {
     id: 'processedAsCode',
@@ -180,7 +182,7 @@ const PaymentCheckTable = ({ paymentDetail }: PaymentCheckHeaderProps) => {
     setIsLoading(false)
   }
   useEffect(() => {
-      fetchClaimPayments()
+    fetchClaimPayments()
   }, [paymentListType])
 
   const claimStatusCodes = useCodesetCodes(CODESETS.ClaimStatus)
