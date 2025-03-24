@@ -4,12 +4,14 @@ import NextLink from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Flex } from '@radix-ui/themes'
 import { FEATURE_FLAGS, MAIN_PAGE_FEATURE_FLAGS } from '@/constants'
+import { useHasPermission } from '@/hooks'
 import { useFeatureFlagEnabled } from '@/hooks/use-feature-flag-enabled'
 import { useStore } from '@/store'
 import { cn } from '@/utils'
 import { PatientLookupDropdown } from './patient-lookup-dropdown'
 
 const NavigationLinks = () => {
+  const hasPermission = useHasPermission('mainTabManagementPermission')
   const isFeatureFlagEnabled = useFeatureFlagEnabled(
     FEATURE_FLAGS.ehr11786EnableGalaxySecondPhaseFeatures,
   )
@@ -26,6 +28,9 @@ const NavigationLinks = () => {
       <NavigationLink href="/" label="Schedule" />
       <NavigationLink href="/patient-lookup" label="Patient Lookup" />
       <NavigationLink href="/rx" label="Rx" />
+      {hasPermission && (
+        <NavigationLink href="/management" label="Management" />
+      )}
       {isRCMFlagEnabled && (
         <NavigationLink href="/revenue-cycle" label="Revenue Cycle" />
       )}
@@ -34,7 +39,6 @@ const NavigationLinks = () => {
         <>
           <NavigationLink href="/experience" label="Experience" />
           <NavigationLink href="/auto-text" label="Auto Text" />
-          <NavigationLink href="/management" label="Management" />
           <NavigationLink
             href="/pre-visit-assessment"
             label="Pre-visit Assessment"

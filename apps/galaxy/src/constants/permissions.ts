@@ -226,6 +226,7 @@ const USER_PERMISSIONS = {
   canClickPrescriberHistoryIconFromAdminNonAdminView:
     'canClickPrescriberHistoryIconFromAdminNonAdminView',
   canUploadSignedPolicy: 'canUploadSignedPolicy',
+  mainTabManagementPermission: 'mainTabManagementPermission',
 }
 
 export { USER_PERMISSIONS }
