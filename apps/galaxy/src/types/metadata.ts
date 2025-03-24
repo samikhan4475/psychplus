@@ -5,6 +5,9 @@ interface Metadata {
   updatedOn?: string
   updatedBy?: number
   updatedByFullName?: string
+  deletedOn?: string
+  deletedBy?: number
+  deletedByFullName?: string
 }
 
 export type { Metadata }

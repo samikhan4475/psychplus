@@ -68,6 +68,7 @@ interface CptCode {
 interface Appointment {
   id: number
   appointmentId: number
+  appointmentEncounterNo: string
   app_id?: string
   metadata: Metadata
   appointmentDate: string
@@ -149,7 +150,7 @@ interface Appointment {
   cptModifiersCodes: CptCode[]
   providerStaffId?: number
   groupTherapyTypeCode: string
-  paymentErrorMessage?:string
+  paymentErrorMessage?: string
   isPatientHadAnyCheckedOutVisit?: boolean
   isNoteSignedByProviderInLastYear?: boolean
   providerUserId?: number

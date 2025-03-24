@@ -7,7 +7,9 @@ import { Flex } from '@radix-ui/themes'
 import { useStore as zustandUseStore } from 'zustand'
 import { TabsTrigger } from '@/components'
 import {
+  Appointment,
   CreditCard,
+  Facesheet,
   Insurance,
   InsurancePayer,
   PatientConsent,
@@ -16,6 +18,7 @@ import {
   Relationship,
 } from '@/types'
 import {
+  FACESHEET,
   INSURANCE_TAB,
   PATIENT_INFO_HISTORY_TAB,
   PATIENT_INFO_TAB,
@@ -23,6 +26,7 @@ import {
   PAYMENT_HISTORY_TAB,
   POLICY_AND_CONSENTS_TAB,
 } from './constants'
+import { FacesheetTab } from './facesheet-tab'
 import { InsuranceTab } from './insurance-tab'
 import { PatientInfoHistoryTab } from './patient-info-history-tab'
 import { PatientInfoTab } from './patient-info-tab'
@@ -42,6 +46,8 @@ interface PatientInfoTabsProps {
   patientCards: CreditCard[]
   insurancePayers: InsurancePayer[]
   patientPolicies: Insurance[]
+  patientFacesheet: Facesheet[]
+  patientVisits: Appointment[]
 }
 
 const PatientInfoTabs = ({
@@ -55,6 +61,8 @@ const PatientInfoTabs = ({
   patientCards,
   insurancePayers,
   patientPolicies,
+  patientFacesheet,
+  patientVisits,
 }: PatientInfoTabsProps) => {
   const pathname = usePathname()
   const searchParams = useSearchParams()
@@ -100,6 +108,7 @@ const PatientInfoTabs = ({
           </TabsTrigger>
           <TabsTrigger value={PAYMENT_HISTORY_TAB}>Payment Hx</TabsTrigger>
           <TabsTrigger value={PAYMENT_CARDS_TAB}>Payment Cards</TabsTrigger>
+          <TabsTrigger value={FACESHEET}>Facesheet</TabsTrigger>
         </Tabs.List>
         <Flex className="flex-1 border-b border-gray-5" />
       </Flex>
@@ -141,6 +150,13 @@ const PatientInfoTabs = ({
       </TabsContent>
       <TabsContent value={PATIENT_INFO_HISTORY_TAB}>
         <PatientInfoHistoryTab />
+      </TabsContent>
+      <TabsContent value={FACESHEET}>
+        <FacesheetTab
+          patientProfile={patientProfile}
+          patientFacesheet={patientFacesheet}
+          patientVisits={patientVisits}
+        />
       </TabsContent>
     </Tabs.Root>
   )

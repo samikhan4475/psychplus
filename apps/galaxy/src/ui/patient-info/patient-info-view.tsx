@@ -1,7 +1,9 @@
 'use client'
 
 import {
+  Appointment,
   CreditCard,
+  Facesheet,
   Insurance,
   InsurancePayer,
   PatientConsent,
@@ -23,6 +25,8 @@ interface PatientInfoViewProps {
   patientCards: CreditCard[]
   insurancePayers: InsurancePayer[]
   patientPolicies: Insurance[]
+  patientFacesheet: Facesheet[]
+  patientVisits: Appointment[]
 }
 
 const PatientInfoView = ({
@@ -36,6 +40,8 @@ const PatientInfoView = ({
   patientCards,
   insurancePayers,
   patientPolicies,
+  patientFacesheet,
+  patientVisits,
 }: PatientInfoViewProps) => {
   return (
     <StoreProvider>
@@ -50,6 +56,8 @@ const PatientInfoView = ({
         patientCards={patientCards}
         insurancePayers={insurancePayers}
         patientPolicies={patientPolicies}
+        patientFacesheet={patientFacesheet}
+        patientVisits={patientVisits}
       />
     </StoreProvider>
   )

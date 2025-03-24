@@ -214,6 +214,18 @@ const DELETE_PATIENT_RELATIONSHIP_ENDPOINT = (
 const SEARCH_AVAILABLE_APPOINTMENT_SLOTS_ENDPOINT = `${API_URL}/api/schedules/availability/search`
 const GET_PATIENT_CREDIT_CARDS = (patientId: string) =>
   `${API_URL}/api/patients/${patientId}/creditcards?includeInactive=true`
+const GET_PATIENT_FACESHEET = (patientId: string) =>
+  `${API_URL}/api/patients/${patientId}/facesheets/actions/search`
+const UPLOAD_PATIENT_FACESHEET = (patientId: string) =>
+  `${API_URL}/api/patients/${patientId}/facesheets/actions/uploadimage`
+const UPDATE_PATIENT_FACESHEET = (
+  patientId: number,
+  patientFaceSheetId: string,
+) => `${API_URL}/api/patients/${patientId}/facesheets/${patientFaceSheetId}`
+const GET_PATIENT_FACESHEET_IMAGE = (
+  patientId: number,
+  patientFaceSheetId: string,
+) => `/api/patients/${patientId}/facesheets/${patientFaceSheetId}/images`
 const SET_PRIMARY_PATIENT_CREDIT_CARD = (
   patientId: number,
   creditCardId: number,
@@ -841,6 +853,10 @@ export {
   SEARCH_AVAILABLE_APPOINTMENT_SLOTS_ENDPOINT,
   GET_PATIENT_CONSENT_SIGNED_PDF_ENDPOINT,
   GET_PATIENT_CREDIT_CARDS,
+  GET_PATIENT_FACESHEET,
+  UPLOAD_PATIENT_FACESHEET,
+  UPDATE_PATIENT_FACESHEET,
+  GET_PATIENT_FACESHEET_IMAGE,
   SET_PRIMARY_PATIENT_CREDIT_CARD,
   DELETE_PATIENT_CREDIT_CARD,
   ADD_PATIENT_CREDIT_CARD,

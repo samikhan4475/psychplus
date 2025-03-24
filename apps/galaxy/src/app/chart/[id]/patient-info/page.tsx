@@ -4,10 +4,12 @@ import { PatientInfoView } from '@/ui/patient-info'
 import {
   getInsurancePayersAction,
   getPatientConsentsAction,
+  getPatientFacesheet,
   getPatientPoliciesAction,
   getPatientPreferredPartnersAction,
   getPatientProfileAction,
   getPatientRelationshipsAction,
+  getPatientVisitsAction,
 } from '@/ui/patient-info/patient-info-tab/actions'
 
 interface PatientInfoPageProps {
@@ -23,16 +25,20 @@ const PatientInfoPage = async ({ params }: PatientInfoPageProps) => {
     patientRelationshipsResult,
     preferredPartnerResult,
     patientCardsResult,
+    patientFacesheetResult,
     insurancePayersResult,
     patientPoliciesResult,
+    patientVisitsResult,
   ] = await Promise.all([
     getPatientProfileAction(params.id),
     getPatientConsentsAction(params.id),
     getPatientRelationshipsAction(params.id),
     getPatientPreferredPartnersAction(params.id),
     getPatientCreditCards(params.id),
+    getPatientFacesheet(params.id),
     getInsurancePayersAction(),
     getPatientPoliciesAction(params.id),
+    getPatientVisitsAction(params.id),
   ])
 
   if (profileResult.state === 'error') {
@@ -61,6 +67,12 @@ const PatientInfoPage = async ({ params }: PatientInfoPageProps) => {
   if (insurancePayersResult?.state === 'error') {
     return <div>{insurancePayersResult.error}</div>
   }
+  if (patientFacesheetResult?.state === 'error') {
+    return <div>{patientFacesheetResult.error}</div>
+  }
+  if (patientVisitsResult?.state === 'error') {
+    return <div>{patientVisitsResult.error}</div>
+  }
 
   return (
     <PatientInfoView
@@ -72,6 +84,8 @@ const PatientInfoPage = async ({ params }: PatientInfoPageProps) => {
       patientRelationships={patientRelationshipsResult.data}
       patientConsents={consentsResult.data}
       patientCards={patientCardsResult.data}
+      patientFacesheet={patientFacesheetResult.data}
+      patientVisits={patientVisitsResult.data}
       insurancePayers={insurancePayersResult.data}
       patientPolicies={patientPoliciesResult.data}
     />
