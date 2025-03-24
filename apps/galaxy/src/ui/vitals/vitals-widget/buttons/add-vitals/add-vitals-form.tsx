@@ -18,6 +18,7 @@ import { UnitSystem, VITAL_TABLE_LABELS } from '../../constants'
 import { useStore } from '../../store'
 import { PatientVital } from '../../types'
 import {
+  calculateBMI,
   createVitalsObject,
   getFormField,
   getUnitValue,
@@ -92,7 +93,7 @@ const AddVitalsForm = ({
     reValidateMode: 'onChange',
   })
 
-  const heightInCm = Number(form.watch('height') ?? 0)
+  const height = Number(form.watch('height') ?? 0)
   const weight = Number(form.watch('weight') ?? 0)
 
   const saveAddVitalsPopupPermission = useHasPermission('saveAddVitalsPopup')
@@ -112,6 +113,7 @@ const AddVitalsForm = ({
 
       return
     }
+    delete formData.bmi
 
     const vitalData = {
       ...removeNaNValues({
@@ -163,12 +165,15 @@ const AddVitalsForm = ({
   }
 
   useEffect(() => {
-    if (heightInCm && weight) {
-      const height = heightInCm / 100
-      const bmi = weight / (height * height)
-      form.setValue('bmi', bmi.toFixed(2))
+    if (height && weight) {
+      const bmi = calculateBMI({
+        height,
+        weight,
+        unitSystem,
+      })
+      form.setValue('bmi', bmi)
     }
-  }, [heightInCm, weight])
+  }, [height, weight])
 
   return (
     <FormContainer form={form} onSubmit={onSubmit}>

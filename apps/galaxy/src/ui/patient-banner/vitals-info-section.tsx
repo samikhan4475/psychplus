@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useMemo } from 'react'
+import { useMemo } from 'react'
 import { PatientVital, useStore } from '../vitals'
 import { LabelAndValue } from './label-and-value'
 
@@ -9,11 +9,7 @@ interface VitalsInfoSectionProps {
 }
 
 const VitalsInfoSection = ({ vitals }: VitalsInfoSectionProps) => {
-  const { data, setData } = useStore()
-
-  useEffect(() => {
-    setData(vitals ? [{ ...vitals }] : [])
-  }, [vitals])
+  const { data } = useStore()
 
   const vital = useMemo(
     () => (data && data?.length > 0 ? data?.[0] : vitals ?? null),

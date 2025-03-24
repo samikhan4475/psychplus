@@ -25,7 +25,8 @@ const getVitalValue = (
     VITAL_TABLE_LABELS,
     (vital: PatientVital) => number | string | undefined
   > = {
-    [VITAL_TABLE_LABELS.height]: (v) => (isMetric ? v.heightCm : v.heightFt),
+    [VITAL_TABLE_LABELS.height]: (v) =>
+      isMetric ? v.heightCm : v.heightInches,
     [VITAL_TABLE_LABELS.weight]: (v) =>
       isMetric ? v.weightKilograms : v.weightPounds,
     [VITAL_TABLE_LABELS.temperature]: (v) =>
@@ -60,7 +61,7 @@ const getUnitValue = (label: VITAL_TABLE_LABELS, unitSystem: UnitSystem) => {
 
   switch (label) {
     case VITAL_TABLE_LABELS.height:
-      return isMetric ? 'cm' : 'ft'
+      return isMetric ? 'cm' : 'in'
     case VITAL_TABLE_LABELS.weight:
       return isMetric ? 'kg' : 'lbs'
     case VITAL_TABLE_LABELS.temperature:
@@ -117,7 +118,7 @@ function createVitalsObject(vital: SchemaType, unitSystem: UnitSystem) {
     updatedVital.bodyTemperatureC = Number(vital.temperature)
     updatedVital.headCircumferenceCm = Number(vital.headCircumference)
   } else {
-    updatedVital.heightFt = Number(vital.height)
+    updatedVital.heightInches = Number(vital.height)
     updatedVital.weightPounds = Number(vital.weight)
     updatedVital.bodyTemperatureF = Number(vital.temperature)
     updatedVital.headCircumferenceIn = Number(vital.headCircumference)
@@ -163,6 +164,24 @@ const filterVitalsWithin48Hours = (vitals: PatientVital[]) => {
   })
 }
 
+function calculateBMI({
+  weight,
+  height,
+  unitSystem = UnitSystem.Metric,
+}: {
+  weight: number
+  height: number
+  unitSystem: UnitSystem
+}) {
+  if (unitSystem === UnitSystem.Metric) {
+    const heightInMeters = height / 100
+    return (weight / (heightInMeters * heightInMeters)).toFixed(2)
+  }
+  if (unitSystem === UnitSystem.English) {
+    return ((weight * 703) / (height * height)).toFixed(2)
+  }
+}
+
 export {
   getVitalValue,
   roundToTwoDecimals,
@@ -174,4 +193,5 @@ export {
   mapErrorMessage,
   getVitalRowHeightClass,
   filterVitalsWithin48Hours,
+  calculateBMI,
 }
