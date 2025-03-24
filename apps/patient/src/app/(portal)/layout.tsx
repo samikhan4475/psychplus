@@ -40,23 +40,25 @@ const RootLayout = async ({ children }: { children: React.ReactNode }) => {
             requireAuth
           />
         ) : null}
-        <Theme accentColor="blue" radius="full" asChild>
-          <Flex
-            direction="column"
-            height="100%"
-            width="100%"
-            className="overflow-y-auto"
-          >
-            {auth ? <Header /> : null}
+        <ToastProvider>
+          <Theme accentColor="blue" radius="full" asChild>
             <Flex
-              className={cn('mt-[var(--header-height)] flex-1', {
-                'mt-0': !auth,
-              })}
+              direction="column"
+              height="100%"
+              width="100%"
+              className="overflow-y-auto"
             >
-              <ToastProvider>{children}</ToastProvider>
+              {auth ? <Header /> : null}
+              <Flex
+                className={cn('mt-[var(--header-height)] flex-1', {
+                  'mt-0': !auth,
+                })}
+              >
+                {children}
+              </Flex>
             </Flex>
-          </Flex>
-        </Theme>
+          </Theme>
+        </ToastProvider>
       </body>
     </html>
   )

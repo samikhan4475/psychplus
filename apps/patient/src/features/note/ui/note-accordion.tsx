@@ -36,12 +36,17 @@ const NoteAccordion = ({
   return (
     <Accordion.Root type="single">
       <Accordion.Item value={title}>
-        <Accordion.Header className="group flex items-center justify-between">
+        <Accordion.Trigger
+          asChild
+          onClick={() => {
+            toggleAccordion()
+          }}
+        >
           <Flex
             align="center"
             justify="between"
             p="2"
-            className="w-full rounded-2 border border-[#DDDDE3] bg-[#EEF2F6]"
+            className="border-pp-gray-2 bg-pp-blue-2 group w-full cursor-pointer rounded-2 border"
           >
             <Text size="3" weight="medium">
               {title}
@@ -50,24 +55,18 @@ const NoteAccordion = ({
               {isCompleted && (
                 <Badge label="Completed" type="success" className="h-5" />
               )}
-              <Accordion.Trigger
-                onClick={() => {
-                  toggleAccordion()
-                }}
-              >
-                <ChevronDown
-                  height={20}
-                  width={20}
-                  strokeWidth={2}
-                  className={`group-data-[state=${
-                    isOpen ? 'open' : 'closed'
-                  }]:rotate-180`}
-                  aria-hidden
-                />
-              </Accordion.Trigger>
+              <ChevronDown
+                height={20}
+                width={20}
+                strokeWidth={2}
+                className={`group-data-[state=${
+                  isOpen ? 'open' : 'closed'
+                }]:rotate-180`}
+                aria-hidden
+              />
             </Flex>
           </Flex>
-        </Accordion.Header>
+        </Accordion.Trigger>
         {isOpen && (
           <Accordion.Content className="rounded-b-2 border-x border-b border-[#DDDDE3] p-4">
             {content?.({ handleSave })}

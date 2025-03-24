@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useMemo } from 'react'
+import React from 'react'
 import { Box, Flex, Text } from '@radix-ui/themes'
 import { FormProvider } from 'react-hook-form'
 import { NoteFormContainer } from '@/components-v2'
@@ -37,22 +37,22 @@ const ReviewOfSystems: React.FC = () => {
 
   const form = useRosForm(initialValue)
   const { isSaveButtonPressed, save, resetSaveButtonState } = useStore()
-  const isCompleted = useMemo(() => {
-    return (
-      data.filter(
+
+  const onSave = async () => {
+    const isCompleted =
+      getNoteData(NoteSectionName.NoteSectionReviewOfSystem).filter(
         (item) =>
           !(item.sectionItem === 'empty' && item.sectionItemValue === 'true'),
       ).length > 0
-    )
-  }, [getNoteData])
+
+    save({ isTabCompleted: isCompleted, patientId: profile.id })
+  }
 
   return (
     <FormProvider {...form}>
       <NoteFormContainer
         getData={transformOut(String(profile.id))}
-        onSave={() =>
-          save({ isTabCompleted: isCompleted, patientId: profile.id })
-        }
+        onSave={onSave}
         onError={resetSaveButtonState}
         isExternalSavePressed={isSaveButtonPressed}
         allowExternalSave

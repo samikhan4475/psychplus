@@ -1,31 +1,93 @@
-import { Button, Flex, Text } from '@radix-ui/themes'
-import { ChevronRightIcon } from 'lucide-react'
-import { Badge, FileLineIcon } from '@/components-v2'
+'use client'
 
-const UpcomingSummaryPreVisitAssessment = () => {
+import { Button, Dialog, Flex, Text } from '@radix-ui/themes'
+import { ChevronRightIcon } from 'lucide-react'
+import { Badge, CloseDialogIcon, FileLineIcon } from '@/components-v2'
+import { NoteStoreProvider } from '@/features/note/store'
+import { NoteSectionItem } from '@/features/note/types'
+import { PreCheckinAssessmentView } from '@/features/pre-checkin-assessment'
+import { useStore } from '@/features/pre-checkin-assessment/store'
+import { PreCheckinAssessmentStapperProps } from '@/features/pre-checkin-assessment/types'
+
+const UpcomingSummaryPreVisitAssessment = ({
+  insurancePayers,
+  patientInsurances,
+  creditCards,
+  stripeAPIKey,
+  pharmacies,
+  medications,
+  allergies,
+  notes,
+  questionnaireSectionsToShowOnPreCheckin,
+  preCheckInProgress,
+}: PreCheckinAssessmentStapperProps & { notes: NoteSectionItem[] }) => {
+  const {
+    isPreCheckInCompleted,
+    showCompletionScreen,
+    setShowCompletionScreen,
+  } = useStore()
+  const completed =
+    isPreCheckInCompleted ?? preCheckInProgress?.isPreCheckInCompleted
+
   return (
-    <Flex gap="1" width={{ initial: '100%', xs: 'auto' }} align="center">
-      <Flex gap="1" align="center">
+    <NoteStoreProvider notes={notes}>
+      <Flex gap="2" align="center">
         <FileLineIcon />
-        <Text className="whitespace-nowrap text-[12px] xs:text-[15px]">
-          Pre-Visit Assessment
-        </Text>
+        <Text className="text-[12px] xs:text-[15px]">Pre-Visit Assessment</Text>
+        <Badge
+          label={completed ? 'Completed' : 'Not Completed'}
+          type={completed ? 'success' : 'warning'}
+          addIcon={true}
+          className="h-8 text-[14px]"
+        />
+        <Dialog.Root
+          onOpenChange={(open) => {
+            if (open === false) setShowCompletionScreen(false)
+          }}
+        >
+          <Dialog.Trigger>
+            <Button highContrast className="bg-[#194595]" radius="full">
+              <Flex gap="1" align="center">
+                <Text className="whitespace-nowrap text-[11px] xs:text-[15px]">
+                  {completed ? 'Edit' : 'Fill Now'}
+                </Text>
+                <ChevronRightIcon height="16" width="16" />
+              </Flex>
+            </Button>
+          </Dialog.Trigger>
+
+          <Dialog.Content className="relative flex h-[700px] max-w-[1200px] flex-col overflow-hidden">
+            <CloseDialogIcon />
+            {!showCompletionScreen && (
+              <Dialog.Title className="font-sans -tracking-[0.25px]">
+                Pre Check-in Assessment
+              </Dialog.Title>
+            )}
+            <PreCheckinAssessmentView
+              insurancePayers={insurancePayers}
+              patientInsurances={patientInsurances}
+              creditCards={creditCards}
+              stripeAPIKey={stripeAPIKey}
+              pharmacies={pharmacies}
+              medications={medications}
+              allergies={allergies}
+              isDawSystemFeatureFlagEnabled={true} //Currently we have to remove DAW system feature flag dependency
+              questionnaireSectionsToShowOnPreCheckin={
+                questionnaireSectionsToShowOnPreCheckin
+              }
+              preCheckInProgress={{
+                preCheckInCompletedTabs:
+                  preCheckInProgress?.preCheckInCompletedTabs,
+                isPreCheckInCompleted:
+                  preCheckInProgress?.isPreCheckInCompleted,
+                activeTab: preCheckInProgress?.activeTab,
+                id: String(preCheckInProgress?.id),
+              }}
+            />
+          </Dialog.Content>
+        </Dialog.Root>
       </Flex>
-      <Badge
-        label="Not Completed"
-        type="warning"
-        addIcon={true}
-        className="h-[32px]"
-      />
-      <Button highContrast className="bg-[#194595]" radius="full">
-        <Flex gap="1" align="center">
-          <Text className="whitespace-nowrap text-[11px] xs:text-[15px]">
-            Fill Now
-          </Text>
-          <ChevronRightIcon height="16" width="16" />
-        </Flex>
-      </Button>
-    </Flex>
+    </NoteStoreProvider>
   )
 }
 

@@ -1,4 +1,3 @@
-import Image from 'next/image'
 import Link from 'next/link'
 import {
   AppointmentType,
@@ -10,7 +9,6 @@ import {
 import { GOOGLE_MAPS_API_KEY, STRIPE_PUBLISHABLE_KEY } from '@psychplus-v2/env'
 import { Appointment } from '@psychplus-v2/types'
 import {
-  cn,
   extractUserSetting,
   formatCurrency,
   getAppointmentTypeLabel,
@@ -19,14 +17,13 @@ import {
   withSuspense,
 } from '@psychplus-v2/utils'
 import { Button, Flex, Text } from '@radix-ui/themes'
-import { CalendarDaysIcon, ChevronRightIcon, DotIcon } from 'lucide-react'
+import { CalendarDaysIcon, DotIcon } from 'lucide-react'
 import { getCodesets, getConsents, getProfile } from '@/api'
 import {
   Badge,
   CardContainer,
   CreditDebitCardIcon,
   FeatureEmpty,
-  FileLineIcon,
   LoadingPlaceholder,
   ParentLineIcon,
   ProviderAvatar,
@@ -41,6 +38,14 @@ import {
   getInsurancePayers,
   getPatientInsurances,
 } from '@/features/billing/payments/api'
+import {
+  getPatientAllergies,
+  getPatientMedications,
+} from '@/features/medications/api'
+import { getNoteDetails } from '@/features/note/api'
+import { NoteSectionName } from '@/features/note/constants'
+import { getPatientPharmacies } from '@/features/pharmacy/api'
+import { questionnairesToShowOnPreCheckin } from '@/features/pre-checkin-assessment/ui/steps/questionnaire/utils'
 import { CodesetStoreProvider, GooglePlacesContextProvider } from '@/providers'
 import { ScheduleAppointmentButton } from '../../search'
 import { getUpcomingAppointments } from '../api'
@@ -55,6 +60,7 @@ import { CancelAppointment } from './cancel-appointment'
 import { ChangePaymentMethodDialog } from './change-payment-method-dialog'
 import { JoinVirtualCallBtn } from './join-virtual-call-button'
 import { PayCopayButton } from './pay-copay-button'
+import { UpcomingSummaryPreVisitAssessment } from './upcoming-summary-pre-visit-assessment'
 import { UpdateDateAndTimeDialog } from './update-date-and-time-dialog'
 
 const UpcomingAppointmentsSummaryComponent = async () => {
@@ -97,6 +103,9 @@ const UpcomingAppointmentsSummaryComponent = async () => {
     CODESETS.Gender,
     CODESETS.UsStates,
     CODESETS.InsurancePolicyPriority,
+    CODESETS.DelusionType,
+    CODESETS.HallucinationType,
+    CODESETS.Relationship,
   ])
 
   if (userConsentsResponse.state === 'error') {
@@ -114,6 +123,60 @@ const UpcomingAppointmentsSummaryComponent = async () => {
   if (userSettingsResponse.state === 'error') {
     return <Text>{userSettingsResponse.error}</Text>
   }
+
+  const [
+    questionnaireDashboardResponse,
+    pharmaciesResponse,
+    // dawSystemFeatureFlagResponse,
+    patientMedicationsResponse,
+    patientAllergiesResponse,
+  ] = await Promise.all([
+    getNoteDetails({
+      patientId: profileResponse.data.id,
+      sectionName: [NoteSectionName.NoteSectionDashboard],
+    }),
+    getPatientPharmacies(),
+    // getIsFeatureFlagEnabled(FeatureFlags.ehr8973EnableDawMedicationApi), commenting this out for 2nd phase
+    getPatientMedications(),
+    getPatientAllergies(),
+  ])
+
+  if (questionnaireDashboardResponse.state === 'error') {
+    return <Text>{questionnaireDashboardResponse.error}</Text>
+  }
+
+  const questionnaireSectionsToShowOnPreCheckin =
+    questionnairesToShowOnPreCheckin(questionnaireDashboardResponse.data)
+
+  const noteDetailsResponse = await getNoteDetails({
+    patientId: profileResponse.data.id,
+    sectionName: [
+      ...questionnaireSectionsToShowOnPreCheckin,
+      NoteSectionName.NoteSectionHPI,
+      NoteSectionName.NoteSectionReviewOfSystem,
+      NoteSectionName.NoteSectionFamilyPsychHx,
+      NoteSectionName.NoteSectionSubstanceUseHx,
+      NoteSectionName.NoteSectionPastPsychHx,
+      NoteSectionName.NoteSectionSocialHx,
+      NoteSectionName.NoteSectionPastMedicalHx,
+      NoteSectionName.NoteSectionDiagnosis,
+    ],
+  })
+
+  if (noteDetailsResponse.state === 'error') {
+    return <Text>{noteDetailsResponse.error}</Text>
+  }
+
+  const pharmacies =
+    pharmaciesResponse.state === 'error' ? [] : pharmaciesResponse.data
+  const medications =
+    patientMedicationsResponse.state === 'error'
+      ? []
+      : patientMedicationsResponse.data
+  const allergies =
+    patientAllergiesResponse.state === 'error'
+      ? []
+      : patientAllergiesResponse.data
 
   const upcomingAppointments = upcomingAppointmentResponse.data.appointments
   const patientVerification =
@@ -306,40 +369,30 @@ const UpcomingAppointmentsSummaryComponent = async () => {
                       {isWithin48Hour &&
                         !row?.isQuickNoteSigned &&
                         shouldShowPreCheckinAssessment && (
-                          <Flex gap="2" align="center">
-                            <FileLineIcon />
-                            <Text className="text-[12px] xs:text-[15px]">
-                              Pre-Visit Assessment
-                            </Text>
-                            <Badge
-                              label={
+                          <UpcomingSummaryPreVisitAssessment
+                            insurancePayers={insurancePayerResponse.data}
+                            patientInsurances={patientInsurancesResponse.data}
+                            creditCards={creditCardResponse.data}
+                            stripeAPIKey={STRIPE_PUBLISHABLE_KEY}
+                            pharmacies={pharmacies}
+                            medications={medications}
+                            allergies={allergies}
+                            notes={noteDetailsResponse.data}
+                            isDawSystemFeatureFlagEnabled={true} //Currently we have to remove DAW system feature flag dependency
+                            questionnaireSectionsToShowOnPreCheckin={
+                              questionnaireSectionsToShowOnPreCheckin
+                            }
+                            preCheckInProgress={{
+                              preCheckInCompletedTabs:
                                 preCheckInProgress?.content
-                                  ?.isPreCheckInCompleted
-                                  ? 'Completed'
-                                  : 'Not Completed'
-                              }
-                              type={
+                                  ?.preCheckInCompletedTabs,
+                              isPreCheckInCompleted:
                                 preCheckInProgress?.content
-                                  ?.isPreCheckInCompleted
-                                  ? 'success'
-                                  : 'warning'
-                              }
-                              addIcon={true}
-                              className="h-8 text-[14px]"
-                            />
-                            <Link href={'/pre-checkin-assessment?edit=true'}>
-                              <Button
-                                highContrast
-                                className="w-full bg-[#194595]"
-                              >
-                                {preCheckInProgress?.content
-                                  ?.isPreCheckInCompleted
-                                  ? 'Edit'
-                                  : 'Fill Now'}
-                                <ChevronRightIcon height="16" width="16" />
-                              </Button>
-                            </Link>
-                          </Flex>
+                                  ?.isPreCheckInCompleted,
+                              activeTab: preCheckInProgress?.content?.activeTab,
+                              id: String(preCheckInProgress?.id),
+                            }}
+                          />
                         )}
                       <Flex>
                         {row?.virtualRoomLink &&

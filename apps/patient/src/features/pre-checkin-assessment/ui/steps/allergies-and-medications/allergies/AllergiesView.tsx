@@ -1,30 +1,30 @@
 import React from 'react'
 import { Flex } from '@radix-ui/themes'
-import { FeatureCard } from '@/components-v2'
-import { PatientMedication } from '@/features/medications/types/medications'
-import MedicationTable from './blocks/medication-table'
+import { EmptyFileIcon, FeatureCard, FeatureEmpty } from '@/components-v2'
+import { AllergyDataResponse } from '@/features/medications/types'
+import AllergiesTable from './blocks/allergies-table'
 
+// Comment out for phase 2
 // import { useForm } from 'react-hook-form'
 // import { ToggleableForm } from '@/components-v2'
 // import { ToggleableFormContext } from '@/components-v2/toggleable-form/context'
 // import CommentBlock from './blocks/comment-block'
-// import DoseBlock from './blocks/dose-block'
-// import FrequencyBlock from './blocks/frequency-block'
-// import PrescribedDateBlock from './blocks/prescribed-date-block'
-// import RouteBlock from './blocks/route-block'
+// import ObservationBlock from './blocks/observation-block'
+// import ReactionBlock from './blocks/reaction-block'
 // import SearchBlock from './blocks/search-block'
+// import SeverityBlock from './blocks/severity-block'
 // import StatusBlock from './blocks/status-block'
 
-interface MedicationViewProps {
-  medications: PatientMedication[]
+interface AllergiesViewProps {
+  allergies: AllergyDataResponse[]
 }
 
-const MedicationView = ({ medications }: MedicationViewProps) => {
+const AllergiesView: React.FC<AllergiesViewProps> = ({ allergies }) => {
   // const form = useForm()
 
   return (
     <FeatureCard
-      title="Medications"
+      title="Allergies"
       contentClassName="gap-3 relative"
       showTitleInsideCard
     >
@@ -39,21 +39,24 @@ const MedicationView = ({ medications }: MedicationViewProps) => {
           console.log('')
         }}
       > */}
-
       {/* <SearchBlock />
         <Flex align={'center'} gap={'4'} className="w-full">
-          <DoseBlock />
+          <SeverityBlock />
           <StatusBlock />
         </Flex>
-        <Flex align={'center'} gap={'4'} className="w-full">
-          <FrequencyBlock />
-          <RouteBlock />
-        </Flex>
-        <Flex className="mb-3 w-full">
-          <PrescribedDateBlock />
-        </Flex>*/}
+        <Flex align={'center'} gap={'4'} className="mb-3 w-full">
+          <ReactionBlock />
+          <ObservationBlock />
+        </Flex> */}
       <Flex direction={'column'} gap={'2'} width={'100%'}>
-        <MedicationTable medications={medications} />
+        {allergies?.length === 0 ? (
+          <FeatureEmpty
+            description="No Allergies added yet"
+            Icon={EmptyFileIcon}
+          />
+        ) : (
+          <AllergiesTable allergies={allergies} />
+        )}
         {/* <CommentBlock /> */}
       </Flex>
       {/* </ToggleableForm> */}
@@ -61,4 +64,4 @@ const MedicationView = ({ medications }: MedicationViewProps) => {
   )
 }
 
-export default MedicationView
+export default AllergiesView

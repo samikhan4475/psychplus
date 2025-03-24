@@ -1,8 +1,8 @@
 import { Flex, Text } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
 import { DetailsType } from '@/components-v2/selectable-chip-details'
-import PillBlock from '../../../shared-blocks/pill-block'
 import { useGroupSelection } from '@/hooks/use-group-selection'
+import PillBlock from '../../../shared-blocks/pill-block'
 
 const BLOCK_ID = 'skin'
 

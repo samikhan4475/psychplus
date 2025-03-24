@@ -32,7 +32,7 @@ const PharmacyForms = ({
         </Flex>
       ) : (
         <FeatureEmpty
-          description="No pharmacy added yet"
+          description="No Pharmacy added yet"
           Icon={EmptyFileIcon}
           action={
             !isDawSystemFeatureFlagEnabled && (

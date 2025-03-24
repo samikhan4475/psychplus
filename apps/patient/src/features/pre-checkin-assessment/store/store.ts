@@ -18,11 +18,12 @@ interface Store {
   tabsToShow: PreCheckinAssessmentTabs[]
   activeTab: PreCheckinAssessmentTabs
   completedTabs: PreCheckinAssessmentTabs[]
-  isPreCheckInCompleted: boolean
+  isPreCheckInCompleted: boolean | undefined
   saveAction: SaveAction | null
   isSaveButtonDisabled: boolean
   isSaveButtonPressed: boolean
   hydrated: boolean
+  showCompletionScreen: boolean
 
   setPreCheckInSettingsId: (id: string) => void
   setTabsToShow: (tabs: PreCheckinAssessmentTabs[]) => void
@@ -33,8 +34,8 @@ interface Store {
   setIsSaveButtonDisabled: (disabled: boolean) => void
   setIsSaveButtonPressed: (pressed: boolean) => void
   setHydrated: (status: boolean) => void
+  setShowCompletionScreen: (showCompletionScreen: boolean) => void
 
-  markTabAsCompleted: (tab: PreCheckinAssessmentTabs) => void
   save: (params: {
     patientId: number
     isTabCompleted?: boolean
@@ -50,11 +51,12 @@ const useStore = create<Store>()(
       tabsToShow: [],
       activeTab: PreCheckinAssessmentTabs.PatientInfo,
       completedTabs: [],
-      isPreCheckInCompleted: false,
+      isPreCheckInCompleted: undefined,
       saveAction: null,
       isSaveButtonDisabled: false,
       isSaveButtonPressed: false,
       hydrated: false,
+      showCompletionScreen: false,
 
       setPreCheckInSettingsId: (id) => set({ preCheckInSettingsId: id }),
       setTabsToShow: (tabs) => set({ tabsToShow: tabs }),
@@ -68,11 +70,9 @@ const useStore = create<Store>()(
       setIsSaveButtonPressed: (pressed) =>
         set({ isSaveButtonPressed: pressed }),
       setHydrated: (status) => set({ hydrated: status }),
+      setShowCompletionScreen: (showCompletionScreen) =>
+        set({ showCompletionScreen }),
 
-      markTabAsCompleted: (tab) =>
-        set((state) => ({
-          completedTabs: getTabsWithCompletion(tab, state.completedTabs),
-        })),
       save: async ({ patientId, isTabCompleted = true }) => {
         const {
           saveAction,
@@ -80,15 +80,19 @@ const useStore = create<Store>()(
           resetSaveButtonState,
           tabsToShow,
           activeTab,
-          markTabAsCompleted,
           completedTabs,
           preCheckInSettingsId,
         } = get()
 
-        const updatedTabs = isTabCompleted
-          ? getTabsWithCompletion(activeTab, completedTabs)
-          : completedTabs
-        const isPreCheckInCompleted = tabsToShow.length === updatedTabs.length
+        const updatedTabs = getTabsWithCompletion(
+          activeTab,
+          completedTabs,
+          isTabCompleted,
+        )
+
+        const isPreCheckInCompleted = tabsToShow.every((item) =>
+          updatedTabs.includes(item),
+        )
 
         const payload = {
           settingStatusCode: 'Active',
@@ -126,13 +130,13 @@ const useStore = create<Store>()(
 
         set({ preCheckInSettingsId: res?.data?.id })
         customToast({ type: 'success', title: 'Saved!' })
-
-        if (isTabCompleted && !completedTabs.includes(activeTab))
-          markTabAsCompleted(activeTab)
+        set({ completedTabs: updatedTabs })
+        set({ isPreCheckInCompleted: isPreCheckInCompleted })
         if (saveAction === SaveAction.Next)
           await handleTabNavigation(TabDirection.Next)
         resetSaveButtonState()
-        set({ isPreCheckInCompleted: isPreCheckInCompleted })
+        if (isPreCheckInCompleted && activeTab === tabsToShow.at(-1))
+          set({ showCompletionScreen: true })
       },
       handleTabNavigation: async (direction: TabDirection) => {
         const {
@@ -142,7 +146,9 @@ const useStore = create<Store>()(
           resetSaveButtonState,
           completedTabs,
         } = get()
-        const isPreCheckInCompleted = tabsToShow.length === completedTabs.length
+        const isPreCheckInCompleted = tabsToShow.every((item) =>
+          completedTabs.includes(item),
+        )
         const currentIndex = tabsToShow.findIndex((tab) => tab === activeTab)
         const newIndex =
           direction === TabDirection.Next ? currentIndex + 1 : currentIndex - 1
@@ -186,10 +192,14 @@ const useStore = create<Store>()(
 const getTabsWithCompletion = (
   activeTab: PreCheckinAssessmentTabs,
   completedTabs: PreCheckinAssessmentTabs[],
+  isTabCompleted: boolean,
 ) => {
-  return completedTabs.includes(activeTab)
-    ? completedTabs
-    : [...completedTabs, activeTab]
+  if (isTabCompleted)
+    return completedTabs.includes(activeTab)
+      ? completedTabs
+      : [...completedTabs, activeTab]
+
+  return completedTabs.filter((tab) => tab !== activeTab)
 }
 
 export { useStore }

@@ -57,23 +57,13 @@ const ToastProvider = ({ children }: React.PropsWithChildren) => {
       <ToastContext.Provider value={contextValue}>
         {children}
         <Toast.Root
-          className="data-[state=open]:animate-slideIn data-[state=closed]:animate-hide data-[swipe=end]:animate-swipeOut rounded-md bg-white relative grid grid-cols-[auto_max-content] items-center gap-x-[15px] rounded-2 p-4 shadow-3 [grid-template-areas:_'title_action'_'description_action'] data-[swipe=cancel]:translate-x-0 data-[swipe=move]:translate-x-[var(--radix-toast-swipe-move-x)] data-[swipe=cancel]:transition-[transform_200ms_ease-out]"
+          className="rounded-md bg-white data-[state=closed]:animate-hide data-[state=open]:animate-slideIn data-[swipe=end]:animate-swipeOut grid grid-cols-[auto_max-content] items-center gap-x-[15px] p-[15px] shadow-[0_4px_12px_rgba(0,0,0,0.15)] [grid-template-areas:_'title_action'_'description_action'] data-[swipe=cancel]:translate-x-0 data-[swipe=move]:translate-x-[var(--radix-toast-swipe-move-x)] data-[swipe=cancel]:transition-[transform_200ms_ease-out]"
           open={open}
           onOpenChange={setOpen}
         >
-          <Toast.Close aria-label="Close" asChild>
-            <Flex
-              align="center"
-              justify="center"
-              className="rounded-full absolute right-1 top-1 h-[30px] w-[30px] cursor-pointer text-gray-7 transition-colors hover:bg-gray-2 hover:text-gray-10"
-            >
-              <XIcon width={18} height={18} strokeWidth={1.5} />
-            </Flex>
-          </Toast.Close>
-
-          <Flex align="center" gap="3">
+          <Flex align="center" className="space-x-3">
             {renderToastType(data?.type)}
-            <Flex direction="column" gap="1">
+            <Flex direction="column" className="space-x-1">
               {data?.title ? (
                 <Toast.Title className="text-[14px] font-medium text-slate-12 [grid-area:_title]">
                   {data.title}
@@ -99,7 +89,8 @@ const ToastProvider = ({ children }: React.PropsWithChildren) => {
             </Toast.Action>
           ) : null}
         </Toast.Root>
-        <Toast.Viewport className="fixed right-0 top-0 z-50 m-0 flex w-[390px] max-w-[100vw] list-none flex-col gap-[10px] p-[var(--viewport-padding)] outline-none [--viewport-padding:_25px]" />
+
+        <Toast.Viewport className="fixed left-1/2 top-0 !z-[9999999999] m-0 flex w-[390px] max-w-[100vw] -translate-x-1/2 transform list-none flex-col gap-2.5 p-[var(--viewport-padding)] outline-none [--viewport-padding:_25px]" />
       </ToastContext.Provider>
     </Toast.Provider>
   )

@@ -63,8 +63,8 @@ const NoteFormContainer = ({
         title: 'Saved',
       })
 
-    saveNoteData(data, data[0].sectionName as NoteSectionName)
     await Promise.all([
+      saveNoteData(data, data[0].sectionName as NoteSectionName),
       handleNoteDetails(noteCodesRef.current),
       handleNoteDetails(noteDiagnosisRef.current),
     ])

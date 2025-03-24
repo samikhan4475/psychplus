@@ -21,21 +21,21 @@ const PresentingSymptoms = () => {
   const data = getNoteData(NoteSectionName.NoteSectionHPI)
   const initialValue = useMemo(() => transformIn(data), [data])
   const form = useHpiWidgetForm(initialValue ?? getInitialValues())
-  const isCompleted = useMemo(() => {
-    return (
-      data.filter(
+
+  const onSave = async () => {
+    const isCompleted =
+      getNoteData(NoteSectionName.NoteSectionHPI).filter(
         (item) => !(item.sectionItem === '1' && item.sectionItemValue === '1'),
       ).length > 0
-    )
-  }, [getNoteData])
+
+    save({ isTabCompleted: isCompleted, patientId: profile.id })
+  }
 
   return (
     <FormProvider {...form}>
       <NoteFormContainer
         getData={transformOut(String(profile.id))}
-        onSave={() =>
-          save({ isTabCompleted: isCompleted, patientId: profile.id })
-        }
+        onSave={onSave}
         onError={resetSaveButtonState}
         isExternalSavePressed={isSaveButtonPressed}
         allowExternalSave
