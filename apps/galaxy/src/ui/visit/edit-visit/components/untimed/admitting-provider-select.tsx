@@ -24,22 +24,17 @@ const AdmittingProviderSelect = ({
   const [loading, setLoading] = useState<boolean>(false)
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const [options, setOptions] = useState<SelectOptionType[]>([])
-  const [location, providerType] = useWatch({
+  const [location] = useWatch({
     control: form.control,
     name: ['location', 'providerType'],
   })
   const canChangeAdmittingProvider = useHasPermission('editAdmittingProvider')
 
-  const dependencyArray = isPsychiatristVisitTypeSequence
-    ? [location]
-    : [location, providerType]
-
   useEffect(() => {
-    if (!location || !providerType) return
+    if (!location) return
     setLoading(true)
     getProviders({
       locationIds: [location],
-      providerType: providerType,
     }).then((res) => {
       setLoading(false)
       if (res.state === 'error') {
@@ -53,7 +48,7 @@ const AdmittingProviderSelect = ({
         })),
       )
     })
-  }, dependencyArray)
+  }, [location])
 
   return (
     <FormFieldContainer>

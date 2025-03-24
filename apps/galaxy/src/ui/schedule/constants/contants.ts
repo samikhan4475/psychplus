@@ -85,17 +85,21 @@ const START_OF_WEEK_LOCALE = 'fr-FR'
 
 const INITIAL_VISIT_STATUS: string[] = [
   VisitStatusCodes.Seen,
+  VisitStatusCodes.SeenDcByPrimary,
   VisitStatusCodes.SeenByOther,
   VisitStatusCodes.Absent,
   VisitStatusCodes.Error,
   VisitStatusCodes.Unseen,
+  VisitStatusCodes.UnseenDcByPrimary,
 ]
 
 const INITIAL_DISCHARGE_VISIT_STATUS: string[] = [
   VisitStatusCodes.Seen,
+  VisitStatusCodes.SeenDcByPrimary,
   VisitStatusCodes.Absent,
   VisitStatusCodes.Error,
   VisitStatusCodes.Unseen,
+  VisitStatusCodes.UnseenDcByPrimary,
 ]
 
 const SUBSEQUENT_VISIT_STATUS: string[] = [
@@ -162,7 +166,7 @@ enum CategoryValue {
   ProviderCodingView = 'FieldValue_Sch_ProviderCodingView',
 }
 
-const CACHED_FILTERS_KEY='cached-filters-key'
+const CACHED_FILTERS_KEY = 'cached-filters-key'
 
 export {
   ROUNDING_FILTERS,

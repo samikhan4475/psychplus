@@ -67,11 +67,6 @@ const NonTimedVisitStatusSelect = ({
           (value) => !SUBSEQUENT_VISIT_STATUS.includes(value),
         ),
       )
-    } else if (staffId === appointment.providerId) {
-      setExclude([
-        VisitStatusCodes.UnseenDcByPrimary,
-        VisitStatusCodes.SeenDcByPrimary,
-      ])
     }
   }, [
     staffId,

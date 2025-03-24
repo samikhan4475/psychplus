@@ -101,9 +101,23 @@ const transformProviderTypes = (codes: SharedCode[], service: Service) => {
           ].includes(service.serviceOffered as ServiceType)
         case ProviderType.Bcba:
           return service.serviceOffered === ServiceType.Aba
-        case ProviderType.Anesthesiology:
-        case ProviderType.FamilyMedicine:
         case ProviderType.InternalMedicine:
+        case ProviderType.FamilyMedicine:
+          return [
+            ServiceType.PartialHospital,
+            ServiceType.IntensiveOutpatient,
+            ServiceType.EmergencyRoom,
+            ServiceType.InpatientPsych,
+            ServiceType.InpatientMedical,
+            ServiceType.InpatientRehab,
+            ServiceType.InpatientSubstanceUseResidential,
+            ServiceType.InpatientBehaviorHealthResidential,
+            ServiceType.AssistedLivingFacility,
+            ServiceType.NursingFacility,
+            ServiceType.SkilledNursingFacility,
+            ServiceType.IntermediateCareFacility,
+          ].includes(service.serviceOffered as ServiceType)
+        case ProviderType.Anesthesiology:
         case ProviderType.NotSet:
         case ProviderType.Pmnr:
           return false
