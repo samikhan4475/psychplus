@@ -15,8 +15,14 @@ const validatePayment = ({ claimPayment, paymentDetail }: ValidatePaymentParams)
   const amountAdjustedEqually: number[] = [];
 
   for (const [index, serviceLine] of claimPayment.claimServiceLinePayments.entries()) {
-    if (!serviceLine.serviceLinePaymentAdjustments) continue;
+    if (serviceLine.rectificationId) continue
 
+    const paidAmount = parseFloat(removeNegative(serviceLine.paidAmount));
+    totalPaid += paidAmount;
+
+    if (totalPaid > checkAmount) return 'Sum of all the amounts in service lines should not exceed the check amount';
+
+    if (!serviceLine.serviceLinePaymentAdjustments) continue;
     const sumOfAdjustments = serviceLine.serviceLinePaymentAdjustments.reduce(
       (acc, adj) => (adj.recordStatus !== 'Inactive' ? acc + adj.adjustmentAmount : acc),
       0
@@ -24,11 +30,8 @@ const validatePayment = ({ claimPayment, paymentDetail }: ValidatePaymentParams)
     
     const allowedAmount = +serviceLine.allowedAmount;
     const billedAmount = parseFloat(serviceLine.billedAmount);
-    const paidAmount = parseFloat(removeNegative(serviceLine.paidAmount));
     const totalPaidForServiceLine = +removeNegative(`${sumOfAdjustments}`) + paidAmount;
 
-    totalPaid += paidAmount;
-    if (totalPaid > checkAmount) return 'Sum of all the amounts in service lines should not exceed the check amount';
 
     if (totalPaidForServiceLine > billedAmount && allowedAmount) {
       serviceLineAmountExceeded.push(index + 1);
