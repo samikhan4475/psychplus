@@ -4,6 +4,7 @@ import React from 'react'
 import { PropsWithRow, TextCell } from '@/components'
 import { CODESETS } from '@/constants'
 import { useCodesetOptions } from '@/hooks'
+import { VisitSequenceTypes } from '@/types'
 import { SchedulingHistoryData } from '../types'
 
 const VisitTypeCell = ({ row }: PropsWithRow<SchedulingHistoryData>) => {
@@ -14,10 +15,11 @@ const VisitTypeCell = ({ row }: PropsWithRow<SchedulingHistoryData>) => {
   )
 
   return (
-    <TextCell
-      className="truncate capitalize"
-      wrapperClass="w-full"
-    >{`${vistTypeCode?.label}, ${visitSequenceType}, ${visitMedium}`}</TextCell>
+    <TextCell className="truncate capitalize" wrapperClass="w-full">
+      {visitSequenceType === VisitSequenceTypes.Na
+        ? `${vistTypeCode?.label}, ${visitMedium}`
+        : `${vistTypeCode?.label}, ${visitSequenceType}, ${visitMedium}`}
+    </TextCell>
   )
 }
 
