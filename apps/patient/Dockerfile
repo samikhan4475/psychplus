@@ -29,6 +29,7 @@ FROM base AS builder
     RUN pnpm install --frozen-lockfile
 
     ENV NEXT_TELEMETRY_DISABLED 1
+    ENV NODE_OPTIONS="--max-old-space-size=8192"
 
     # Build
     COPY --from=pruner /app/out/full/ .

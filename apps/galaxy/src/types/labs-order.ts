@@ -110,6 +110,7 @@ interface LabOrders {
     isTest?: boolean
   }
   labTests?: LabTest[]
+  isResultSigned?: boolean
   labResults?: LabResult[]
   labDocuments?: LabDocument[]
   patient?: PatientProfile

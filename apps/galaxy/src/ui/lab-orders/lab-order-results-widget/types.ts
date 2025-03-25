@@ -53,7 +53,7 @@ interface LabDocument {
 }
 
 interface SignedOrderPayload {
-  orderIds: (number | string)[]
+  orderIds: (string | undefined)[]
   resultSignedByStaffId: number
   isResultSigned: boolean
 }
