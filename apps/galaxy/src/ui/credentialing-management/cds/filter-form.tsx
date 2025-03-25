@@ -1,8 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { FormContainer } from '@/components'
-import { sanitizeFormData } from '@/ui/visit/utils'
-import { getCalendarDateLabel } from '@/utils'
 import { schema, SchemaType } from '../schema'
 import { AlertSelect } from '../shared/alert-select'
 import { ClearFilterFormButton } from '../shared/clear-filter-form-button'
@@ -17,24 +15,24 @@ import { transformFilters } from '../transform'
 import { Filters, LicenseType } from '../types'
 import { useStore } from './store'
 
-const LicenseFilterForm = () => {
+const CDSFilterForm = () => {
   const { search } = useStore((state) => ({ search: state.search }))
   const form = useForm<SchemaType>({
     resolver: zodResolver(schema),
     reValidateMode: 'onChange',
     defaultValues: {
-      endDate: undefined,
+      state: '',
       licenseNumber: '',
+      status: '',
       providerStaffId: '',
       startDate: undefined,
-      state: '',
-      status: '',
+      endDate: undefined,
       isAlert: '',
     },
   })
 
   const onSubmit: SubmitHandler<SchemaType> = (data) => {
-    const sanitizedData = transformFilters(data, LicenseType.License)
+    const sanitizedData = transformFilters(data, LicenseType.CDS)
     return search(sanitizedData, 1, true)
   }
   const onClear = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
@@ -44,12 +42,12 @@ const LicenseFilterForm = () => {
   }
   return (
     <FormContainer
-      className="bg-white flex-none flex-row flex-wrap gap-1.5 rounded-b-2 rounded-t-1 px-2 py-1 shadow-2"
       form={form}
       onSubmit={onSubmit}
+      className="bg-white flex-none flex-row flex-wrap gap-1.5 rounded-b-2 rounded-t-1 px-2 py-1 shadow-2"
     >
       <ProviderSelect />
-      <StateSelect />
+      <StateSelect isCDSTab />
       <StatusSelect />
       <LicenseText />
       <StartDateField />
@@ -61,4 +59,4 @@ const LicenseFilterForm = () => {
   )
 }
 
-export { LicenseFilterForm, type SchemaType }
+export { CDSFilterForm, type SchemaType }

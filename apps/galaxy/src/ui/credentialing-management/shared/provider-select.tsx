@@ -1,5 +1,5 @@
 import { useCallback } from 'react'
-import { getProvidersOptionsAction } from '@/actions'
+import { getProvidersOptionsAction } from '../client-actions/get-provider-options'
 import { AsyncSelect, FormFieldContainer, FormFieldLabel } from '@/components'
 
 const ProviderSelect = () => {

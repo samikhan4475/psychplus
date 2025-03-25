@@ -28,12 +28,12 @@ interface Filters {
   providerStaffIds?: number[]
   stateCodes?: string[]
   license?: string
-  statuses?: LicenseStatus[] | null
+  statuses?: string[] | null
   licenseTypes: LicenseType[]
   startDate?: string | null
   endDate?: string | null
   recordStatuses?: string[]
-  isAlert?: string
+  isAlert?: boolean
   isUseTodayEndDateFilter?: boolean
 }
 

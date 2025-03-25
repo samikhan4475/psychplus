@@ -17,36 +17,38 @@ import { transformFilters } from '../transform'
 import { Filters, LicenseType } from '../types'
 import { useStore } from './store'
 
-const LicenseFilterForm = () => {
+const DEAFilterForm = () => {
   const { search } = useStore((state) => ({ search: state.search }))
   const form = useForm<SchemaType>({
     resolver: zodResolver(schema),
     reValidateMode: 'onChange',
     defaultValues: {
-      endDate: undefined,
-      licenseNumber: '',
       providerStaffId: '',
-      startDate: undefined,
       state: '',
+      licenseNumber: '',
+      startDate: undefined,
+      endDate: undefined,
       status: '',
       isAlert: '',
     },
   })
 
   const onSubmit: SubmitHandler<SchemaType> = (data) => {
-    const sanitizedData = transformFilters(data, LicenseType.License)
+    const sanitizedData = transformFilters(data, LicenseType.DEA)
     return search(sanitizedData, 1, true)
   }
+
   const onClear = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault()
     form.reset()
     return search({} as Filters, 1, true)
   }
+
   return (
     <FormContainer
       className="bg-white flex-none flex-row flex-wrap gap-1.5 rounded-b-2 rounded-t-1 px-2 py-1 shadow-2"
-      form={form}
       onSubmit={onSubmit}
+      form={form}
     >
       <ProviderSelect />
       <StateSelect />
@@ -61,4 +63,4 @@ const LicenseFilterForm = () => {
   )
 }
 
-export { LicenseFilterForm, type SchemaType }
+export { DEAFilterForm, type SchemaType }

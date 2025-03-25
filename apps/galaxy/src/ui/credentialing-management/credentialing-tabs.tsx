@@ -7,6 +7,8 @@ import toast from 'react-hot-toast'
 import { LoadingPlaceholder, TabsTrigger } from '@/components'
 import { State } from '@/types'
 import { getUsStatesAction } from '../visit/client-actions'
+import { CDSView } from './cds'
+import { DEAView } from './dea'
 import { StateLicenseView } from './state-license'
 import { useStore } from './store'
 import { CredentialingTab } from './types'
@@ -59,8 +61,12 @@ const CredentialingTabs = () => {
           <TabsContent value={CredentialingTab.StateLicense}>
             <StateLicenseView states={states} loadingStates={loadingStates} />
           </TabsContent>
-          <TabsContent value={CredentialingTab.DEA}>DEA</TabsContent>
-          <TabsContent value={CredentialingTab.CDS}>CDS</TabsContent>
+          <TabsContent value={CredentialingTab.DEA}>
+            <DEAView states={states} loadingStates={loadingStates} />
+          </TabsContent>
+          <TabsContent value={CredentialingTab.CDS}>
+            <CDSView states={states} loadingStates={loadingStates} />
+          </TabsContent>
         </>
       )}
     </Tabs.Root>

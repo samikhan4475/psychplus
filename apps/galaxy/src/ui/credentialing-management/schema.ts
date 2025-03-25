@@ -1,5 +1,6 @@
 import { DateValue } from 'react-aria-components'
 import z from 'zod'
+import { LicenseStatus } from './types'
 
 const schema = z.object({
   endDate: z.custom<DateValue>().optional(),
