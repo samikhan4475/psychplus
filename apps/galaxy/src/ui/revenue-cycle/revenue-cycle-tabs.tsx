@@ -5,6 +5,7 @@ import { Box, Flex } from '@radix-ui/themes'
 import { TabsTrigger } from '@/components'
 import { ClaimDetailView } from './claim-detail-tab'
 import { ClaimTabView } from './claim-tab'
+import { DenialTabView } from './denial-tab'
 import { InsurancePaymentDetailView } from './insurance-payment-detail-tab'
 import { InsurancePaymentTabView } from './insurance-payment-tab'
 import { PatientStatementsTabView } from './patient-statements-tab'
@@ -13,7 +14,6 @@ import { useStore } from './store'
 import { SubmissionTabView } from './submission-tab'
 import { RevenueCycleTab } from './types'
 import { FileView } from './view-file-tab'
-import { DenialTabView } from './denial-tab'
 
 const RevenueCycleTabs = () => {
   const {
@@ -35,12 +35,12 @@ const RevenueCycleTabs = () => {
   // Claim# 1234, Check# 1234, tabId is 1234
   const tabId = activeTab?.split(' ')[1]
   return (
-    <Box className="flex-1 flex px-3 pt-4">
+    <Box className="flex flex-1 px-3 pt-4">
       <Tabs.Root
         defaultValue={RevenueCycleTab.Claim}
         value={activeTab}
         onValueChange={setActiveTab}
-        className="flex w-full flex-col flex-1"
+        className="flex w-full flex-1 flex-col"
       >
         <Flex className="z-50">
           <Tabs.List>
@@ -98,7 +98,7 @@ const RevenueCycleTabs = () => {
           <InsurancePaymentDetailView />
         </TabsContent>
         <TabsContent value={`${RevenueCycleTab.ViewFile} ${tabId}`}>
-          <FileView url={selectedPdfFileUrl} />
+          <FileView url={selectedPdfFileUrl[tabId]} />
         </TabsContent>
       </Tabs.Root>
     </Box>

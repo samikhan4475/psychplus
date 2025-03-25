@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { EyeOpenIcon } from '@radix-ui/react-icons'
-import { IconButton, Spinner, Tooltip } from '@radix-ui/themes'
+import { Spinner, Tooltip } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { DOWNLOAD_HCFA_FILE_ENDPOINT } from '@/api/endpoints'
@@ -15,10 +15,12 @@ interface ActionsCellProps {
 
 const DownloadHcfaActionCell = ({ item }: ActionsCellProps) => {
   const form = useFormContext<ClaimUpdateSchemaType>()
-  const { setSelectedPdfFileUrl, setActiveTab } = useRootStore((state) => ({
-    setActiveTab: state.setActiveTab,
-    setSelectedPdfFileUrl: state.setSelectedPdfFileUrl,
-  }))
+  const { setSelectedPdfFileUrl, setActiveTab, selectedPdfFileUrl } =
+    useRootStore((state) => ({
+      setActiveTab: state.setActiveTab,
+      setSelectedPdfFileUrl: state.setSelectedPdfFileUrl,
+      selectedPdfFileUrl: state.selectedPdfFileUrl,
+    }))
   const [loading, setLoading] = useState(false)
   const previewHcfaFile = async () => {
     const claimId = form.getValues('id')
@@ -37,8 +39,11 @@ const DownloadHcfaActionCell = ({ item }: ActionsCellProps) => {
         true,
       )
       if (url) {
-        setActiveTab('File ' + getRandomId())
-        setSelectedPdfFileUrl(url)
+        const tabId = getRandomId()
+        const selectedObject = selectedPdfFileUrl
+        selectedObject[tabId] = url
+        setSelectedPdfFileUrl(selectedObject)
+        setActiveTab('File ' + tabId)
       }
     } catch (error) {
       const message =

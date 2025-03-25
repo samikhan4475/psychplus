@@ -13,10 +13,12 @@ const ViewHcfaButton = () => {
     state.filterInsurancePolicyPriority,
   ])
 
-  const { setSelectedPdfFileUrl, setActiveTab } = useRootStore((state) => ({
-    setActiveTab: state.setActiveTab,
-    setSelectedPdfFileUrl: state.setSelectedPdfFileUrl,
-  }))
+  const { setSelectedPdfFileUrl, setActiveTab, selectedPdfFileUrl } =
+    useRootStore((state) => ({
+      setActiveTab: state.setActiveTab,
+      setSelectedPdfFileUrl: state.setSelectedPdfFileUrl,
+      selectedPdfFileUrl: state.selectedPdfFileUrl,
+    }))
 
   const previewHcfaFile = async () => {
     if (selectedRows.length === 0) {
@@ -38,8 +40,11 @@ const ViewHcfaButton = () => {
         true,
       )
       if (url) {
-        setActiveTab('File ' + getRandomId())
-        setSelectedPdfFileUrl(url)
+        const tabId = getRandomId()
+        const selectedObject = selectedPdfFileUrl
+        selectedObject[tabId] = url
+        setSelectedPdfFileUrl(selectedObject)
+        setActiveTab('File ' + tabId)
       }
     } catch (error) {
       const message =

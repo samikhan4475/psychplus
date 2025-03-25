@@ -7,15 +7,20 @@ interface ClaimData {
   claimStatus: string
   claimPrimaryStatus: string
 }
+
+interface selectedPdfFileUrl {
+  [key: string]: string
+}
+
 interface Store {
   activeTab: Tab
   viewedTabs: Set<Tab>
   closeableTabs: Set<Tab>
   selectedClaimData: Record<string, ClaimData>
   selectedPayments: Record<string, string>
-  selectedPdfFileUrl: string
+  selectedPdfFileUrl: selectedPdfFileUrl
   prevTab: Tab
-  setSelectedPdfFileUrl: (selectedPdfFileUrl: string) => void
+  setSelectedPdfFileUrl: (selectedPdfFileUrl: selectedPdfFileUrl) => void
   setSelectedPayment: (selectedPaymentId: string, checkNumber: string) => void
   setSelectedClaimsData: (claimNumber: string, claimData: ClaimData) => void
   setActiveTab: (tab: Tab) => void
@@ -37,8 +42,8 @@ const useStore = create<Store>((set, get) => ({
   insurancePayers: [],
   clinics: [],
   claimsListData: undefined,
-  selectedPdfFileUrl: '',
-  setSelectedPdfFileUrl: (selectedPdfFileUrl: string) =>
+  selectedPdfFileUrl: {},
+  setSelectedPdfFileUrl: (selectedPdfFileUrl: selectedPdfFileUrl) =>
     set(() => ({ selectedPdfFileUrl: selectedPdfFileUrl })),
   setActiveTab: (activeTab) => {
     const viewedTabs = get().viewedTabs

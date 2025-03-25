@@ -13,10 +13,12 @@ import { getRandomId, previewFile } from '../../utils'
 import { useStore } from './store'
 
 const FooterDialog = ({ patientId }: { patientId: number }) => {
-  const { setSelectedPdfFileUrl, setActiveTab } = useRootStore((state) => ({
-    setActiveTab: state.setActiveTab,
-    setSelectedPdfFileUrl: state.setSelectedPdfFileUrl,
-  }))
+  const { setSelectedPdfFileUrl, setActiveTab, selectedPdfFileUrl } =
+    useRootStore((state) => ({
+      setActiveTab: state.setActiveTab,
+      setSelectedPdfFileUrl: state.setSelectedPdfFileUrl,
+      selectedPdfFileUrl: state.selectedPdfFileUrl,
+    }))
   const [previewLoading, setPreviewLoading] = useState(false)
   const [loading, setLoading] = useState(false)
   const { selectedStatements, setSelectedStatements } = useStore((state) => ({
@@ -70,8 +72,11 @@ const FooterDialog = ({ patientId }: { patientId: number }) => {
         true,
       )
       if (url) {
-        setActiveTab('File ' + getRandomId())
-        setSelectedPdfFileUrl(url)
+        const tabId = getRandomId()
+        const selectedObject = selectedPdfFileUrl
+        selectedObject[tabId] = url
+        setSelectedPdfFileUrl(selectedObject)
+        setActiveTab('File ' + tabId)
       }
     } catch (error) {
       const message =
