@@ -2,15 +2,15 @@ import { create } from 'zustand'
 import { LabOrderResponseList, LabOrders, LabResult } from '@/types'
 import { getLabOrdersAction } from '../actions'
 import { LabOrdersTabs } from '../constant'
-import { LabOrderPayload } from '../types'
+import { LabOrderPayload  } from '../types'
 
 interface StoreState {
   data: LabOrderResponseList
   loading: boolean
   error?: string
   payload?: LabOrderPayload
-  activeTab: string
-  viewedTabs: Set<string>
+  activeTab: string,
+  viewedTabs: Set<string>,
   fetch: (
     appointmentId: string,
     payload: LabOrderPayload,
@@ -38,6 +38,7 @@ interface StoreState {
   page: number
   appointmentId: string
   fetchLabOrderByIds: (appointmentId: string, payload: LabOrderPayload) => void
+
 }
 
 const useStore = create<StoreState>((set, get) => ({
@@ -49,6 +50,8 @@ const useStore = create<StoreState>((set, get) => ({
     total: 0,
   },
   testLabResult: [],
+  selectedRow: undefined,
+  selectedRows: [],
   setTestLabResult: (labResult) => {
     set({
       testLabResult: labResult,
@@ -66,10 +69,10 @@ const useStore = create<StoreState>((set, get) => ({
       editAbleLabResults: labResult,
     })
   },
-
   loading: true,
   error: undefined,
   payload: undefined,
+  labOrderPayload: undefined,
   activeTab: LabOrdersTabs.LAB_ORDERS,
   viewedTabs: new Set([LabOrdersTabs.LAB_ORDERS]),
   addLabResult: (labResult) => {
@@ -128,7 +131,6 @@ const useStore = create<StoreState>((set, get) => ({
   fetch: async (appointmentId, payload, page = 1, reset = false) => {
     set({ error: undefined, loading: true, payload })
     const result = await getLabOrdersAction({ appointmentId, payload, page })
-
     if (result.state === 'error') {
       set({
         error: result.error,

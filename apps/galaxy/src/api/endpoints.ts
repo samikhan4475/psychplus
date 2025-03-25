@@ -743,6 +743,10 @@ const UPDATE_SERVICE_ENDPOINT = (locationId: string, serviceId: string) =>
 const GET_SERVICE_HISTORY = (serviceId: string) =>
   `${API_URL}/api/services/${serviceId}/history/actions/search`
 const GET_CURRENT_USER_SETTINGS = `${API_URL}/api/users/self/settings`
+const GET_LAB_ORDER_RESULTS  =
+  `${API_URL}/api/laborders/actions/search`
+const ADD_SIGNED_LAB_ORDERS =
+  `${API_URL}/api/laborders/actions/signed`
 const ADD_CLAIM = `${API_URL}/api/claims`
 const SELF_PRACTICES = `${API_URL}/api/users/self/practices?includePermissions=false`
 const GET_CURRENT_USER_SETTINGS_SEARCH = `${API_URL}/api/users/self/settings/actions/search`
@@ -1093,5 +1097,7 @@ export {
   GET_SHARED_POLICY_FILE,
   GET_CURRENT_USER_SETTINGS_SEARCH,
   ADD_STAFF_COMMENT_ENDPOINT,
+  GET_LAB_ORDER_RESULTS,
+  ADD_SIGNED_LAB_ORDERS,
   GET_USERS_SELF_INITIAL_INFORMATION_ENDPOINT,
 }

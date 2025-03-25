@@ -12,6 +12,8 @@ enum Tabs {
   DRAFT_NOTES = 'draft-notes',
   LAB_ORDERS = 'lab-orders',
   MEDICATION_ORDERS = 'medication-orders',
+  LAB_RESULTS = 'lab-results',
+
 }
 
 interface Store {

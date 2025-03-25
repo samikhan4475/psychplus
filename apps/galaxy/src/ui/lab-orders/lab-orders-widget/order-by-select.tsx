@@ -12,7 +12,7 @@ const OrderBySelect = () => {
         placeholder="Select"
         fetchOptions={getProvidersOptionsAction}
         buttonClassName="w-full h-6"
-        className="h-full flex-1"
+        className="h-full w-[144px] flex-1"
       />
     </FormFieldContainer>
   )

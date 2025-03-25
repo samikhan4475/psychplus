@@ -188,6 +188,19 @@ const getInboxNavLinks = ({
         },
       ],
     },
+    {
+      label: 'Orders',
+      links: [
+        {
+          label: 'Lab Results',
+          tab: Tabs.LAB_RESULTS,
+        },
+        {
+          label: 'Medication Orders',
+          tab: Tabs.MEDICATION_ORDERS,
+        },
+      ],
+    },
   ]
 }
 

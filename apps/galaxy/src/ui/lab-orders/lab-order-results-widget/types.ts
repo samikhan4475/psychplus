@@ -2,42 +2,23 @@ import { Row } from '@tanstack/react-table'
 import { DateValue } from 'react-aria-components'
 import { LabOrders, LegalName, Metadata } from '@/types'
 
-type LabOrderStatus =
-  | 'Unsigned'
-  | 'Signed'
-  | 'SignedNotSent'
-  | 'SignedSent'
-  | 'ResultReceived'
 
 type LabOrderRow = Row<LabOrders>
-type LabResultRow = Row<LabResult>
 
-type LabOrderPayload = {
-  appointmentIds?: string[]
-  patientId: string[]
+
+type LabOrderResultPayload = {
+  patientId?: string[]
   orderStatus?: string
   orderCreatedDate?: DateValue | null | string
   orderingStaffId?: string
   labTestName?: string
   location?: string
   labTestCode?: string
-  idList?: string[]
+  idList?: string[],
+  isIncludePatient?:boolean
+  isResultSigned?:boolean
 }
 
-interface LabDocument {
-  id: string
-  metadata?: Metadata
-  orderId: string
-  documentType?: string
-  documentUrl: string
-  documentName?: string
-  recordStatus?: string
-}
-
-export enum LabOrderPdf {
-  ResultsPdf = 'ResultsPdf',
-  RequisitionPdf = 'RequisitionPdf',
-}
 interface LabResult {
   id: string
   metadata: Metadata
@@ -61,6 +42,22 @@ interface LabResult {
   patientLegalName: LegalName
 }
 
+interface LabDocument {
+  id: string
+  metadata?: Metadata
+  orderId: string
+  documentType?: string
+  documentUrl: string
+  documentName?: string
+  recordStatus?: string
+}
+
+interface SignedOrderPayload {
+  orderIds: (number | string)[]
+  resultSignedByStaffId: number
+  isResultSigned: boolean
+}
+
 export enum FlagStatus {
   High = 'H',
   Low = 'L',
@@ -82,13 +79,18 @@ export enum OrderingLabName {
 export enum OrderStatus {
   OrderCompleted = 'OrderCompleted',
   ResultReceived = 'ResultReceived',
+  Unsigned = 'Unsigned'
+}
+
+export enum LabOrderPdf {
+  ResultsPdf = 'ResultsPdf',
+  RequisitionPdf = 'RequisitionPdf',
 }
 
 export type {
   LabOrderRow,
-  LabOrderStatus,
-  LabOrderPayload,
   LabResult,
-  LabResultRow,
-  LabDocument
+  LabOrderResultPayload,
+  LabDocument,
+  SignedOrderPayload
 }
