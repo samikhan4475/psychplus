@@ -34,7 +34,7 @@ const YBocView = ({ data }: QuestionnairesFormYBocsProps) => {
             </Text>
             {YBOCS_TABLES.map((table) => {
               const { id } = table
-              return <QuestionnairesFormYBocsDataTable key={id} {...table} />
+              return <QuestionnairesFormYBocsDataTable key={id} {...table} disabled />
             })}
 
             <Box mt="2">

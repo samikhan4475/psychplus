@@ -31,12 +31,13 @@ const ServiceStatusSelect = () => {
   }, [form, status, emergencyStatusOnly, allowEmergencyStatus])
   return (
     <FormFieldContainer>
-      <FormFieldLabel>Service Status</FormFieldLabel>
+      <FormFieldLabel>Service Priority Status</FormFieldLabel>
       <SelectInput
         options={statusOptions}
         field="servicesStatus"
         size="1"
         buttonClassName="w-full border-pp-gray-2 h-6 border border-solid !outline-none [box-shadow:none]"
+        disabled
       />
       <FormFieldError name="servicesStatus" />
     </FormFieldContainer>

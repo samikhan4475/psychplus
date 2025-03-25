@@ -2,13 +2,14 @@
 
 import React, {
   createContext,
+  useCallback,
   useContext,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from 'react'
-import toast from 'react-hot-toast'
-import { getUserSessionAction } from '@/actions'
+import { getUserAuthAction, getUserSessionAction } from '@/actions'
 import { useConstants } from '@/hooks/use-constants'
 import { webSocketEventBus } from '@/lib/websocket-event-bus'
 import { WebSocketEventType } from '@/types'
@@ -37,15 +38,20 @@ export const WebSocketProvider = ({
   >('connecting')
   const wsRef = useRef<WebSocket | null>(null)
   const reconnectAttempts = useRef(0)
-  const maxReconnectAttempts = 10
+  const maxReconnectAttempts = 100
   const pingIntervalRef = useRef<NodeJS.Timeout | null>(null)
+  const isLoggedOut = useRef(false)
 
-  const connectWebSocket = () => {
+  const connectWebSocket = useCallback(() => {
     if (reconnectAttempts.current >= maxReconnectAttempts) {
       console.error('Max reconnect attempts reached.')
       return
     }
 
+    if (isLoggedOut.current) {
+      console.log('Socket will not reconnect due to logout.')
+      return
+    }
     setConnectionStatus('connecting')
     const ws = new WebSocket(webSocketUrl)
     wsRef.current = ws
@@ -56,6 +62,7 @@ export const WebSocketProvider = ({
       const userSessionResponse = await getUserSessionAction()
       if (userSessionResponse.state === 'error') {
         console.log('Failed to authenticate WebSocket')
+        isLoggedOut.current = true
         ws.close()
         return
       }
@@ -77,7 +84,7 @@ export const WebSocketProvider = ({
       if (!pingIntervalRef.current) {
         pingIntervalRef.current = setInterval(() => {
           console.log('sending ping')
-          sendMessage(WebSocketEventType.Ping)
+          sendMessage(WebSocketEventType.Pong)
         }, 29000)
       }
     }
@@ -89,14 +96,18 @@ export const WebSocketProvider = ({
           webSocketEventBus.emit(data.id, data)
         }
       } catch (_) {
-        console.log('Invalid WebSocket message:', event.data)
+        console.warn('Invalid WebSocket message:', event.data)
       }
     }
 
     ws.onclose = () => {
       setConnectionStatus('disconnected')
+      if (isLoggedOut.current) {
+        console.log('WebSocket will not reconnect due to logout.')
+        return
+      }
 
-      const delay = Math.min(1000 * 2 ** reconnectAttempts.current, 30000) // Exponential backoff up to 30s
+      const delay = 3000
       console.log(
         `WebSocket closed. Reconnecting in ${delay / 1000} seconds...`,
       )
@@ -109,12 +120,19 @@ export const WebSocketProvider = ({
       setTimeout(connectWebSocket, delay)
     }
 
-    ws.onerror = (event) => {
-      console.error('WebSocket Error:', event)
+    ws.onerror = async (event) => {
+      console.warn('WebSocket Error:', event)
+
+      const auth = await getUserAuthAction()
+      if (!auth) {
+        isLoggedOut.current = true
+      }
       ws.close()
     }
-  }
+  }, [])
+
   useEffect(() => {
+    isLoggedOut.current = false
     connectWebSocket()
     return () => {
       if (wsRef.current) {
@@ -124,24 +142,26 @@ export const WebSocketProvider = ({
     }
   }, [])
 
-  const sendMessage = (type: WebSocketEventType, payload: object = {}) => {
-    if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
-      if (payload && Object.keys(payload)?.length > 0) {
+  const sendMessage = useCallback(
+    (type: WebSocketEventType, payload: object = {}) => {
+      if (wsRef.current?.readyState === WebSocket.OPEN) {
         wsRef.current.send(JSON.stringify({ type, ...payload }))
-      } else {
-        wsRef.current.send(JSON.stringify(type))
       }
-    }
-  }
+    },
+    [],
+  )
+  const ctxValue = useMemo(
+    () => ({
+      sendMessage,
+      connectionStatus,
+    }),
+    [sendMessage, connectionStatus],
+  )
 
   console.log('Socket ' + connectionStatus)
+
   return (
-    <WebSocketContext.Provider
-      value={{
-        sendMessage,
-        connectionStatus,
-      }}
-    >
+    <WebSocketContext.Provider value={ctxValue}>
       {children}
     </WebSocketContext.Provider>
   )

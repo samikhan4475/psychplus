@@ -2,9 +2,10 @@ import { Button, Dialog, Flex } from '@radix-ui/themes'
 
 interface ConfirmDialogProps {
   confirm?: (confirm: boolean) => void
+  error?: string
 }
 
-const ConfirmDialog = ({ confirm }: ConfirmDialogProps) => {
+const ConfirmDialog = ({ confirm, error }: ConfirmDialogProps) => {
   return (
     <Dialog.Root
       open={confirm !== undefined}
@@ -17,8 +18,10 @@ const ConfirmDialog = ({ confirm }: ConfirmDialogProps) => {
       <Dialog.Content className="max-w-[450px]">
         <Dialog.Title>Are you sure?</Dialog.Title>
         <Dialog.Description>
-          A referral already exists for this service within the last 90 days.
+          {error ??
+            'A referral already exists for this service within the last 90 days.'}
         </Dialog.Description>
+
         <Flex gap="3" justify="center" mt="5">
           <Dialog.Close>
             <Button

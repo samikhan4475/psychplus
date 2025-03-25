@@ -7,8 +7,16 @@ const isPrescriber = (staff?: StaffResource) =>
 const isReferralDeleted = (resourceStatus = '') =>
   resourceStatus === ReferralStatuses.Deleted
 
+const isReferralEditAble = (resourceStatus = '') =>
+  resourceStatus !== ReferralStatuses.Pending &&
+  resourceStatus !== ReferralStatuses.Incomplete
+
+const isReferralSignAble = (resourceStatus = '') =>
+  resourceStatus !== ReferralStatuses.Unsigned
+
 const isContactMadeScheduledOrCancelled = (ContactMadeStatus = '') =>
-  ContactMadeStatus ===  ContactMadeStatuses.Scheduled || ContactMadeStatus ===   ContactMadeStatuses.Cancelled
+  ContactMadeStatus === ContactMadeStatuses.Scheduled ||
+  ContactMadeStatus === ContactMadeStatuses.Cancelled
 
 const getDefaultContactMadeStatuses = () => [
   ContactMadeStatuses.NotSet,
@@ -22,4 +30,26 @@ const getDefaultContactMadeStatuses = () => [
   ContactMadeStatuses.SecondAttempt,
   ContactMadeStatuses.ThirdAttempt,
 ]
-export { isPrescriber, isReferralDeleted, getDefaultContactMadeStatuses ,isContactMadeScheduledOrCancelled}
+
+const getDefaultReferralStatuses = () => [
+  ReferralStatuses.Pending,
+  ReferralStatuses.Incomplete,
+  ReferralStatuses.Completed,
+  ReferralStatuses.Unsigned,
+]
+
+const getDefaultActualNoteViewStatuses = () => [
+  ReferralStatuses.Pending,
+  ReferralStatuses.Incomplete,
+  ReferralStatuses.Completed,
+]
+export {
+  isPrescriber,
+  isReferralDeleted,
+  getDefaultContactMadeStatuses,
+  isContactMadeScheduledOrCancelled,
+  getDefaultReferralStatuses,
+  isReferralEditAble,
+  isReferralSignAble,
+  getDefaultActualNoteViewStatuses,
+}

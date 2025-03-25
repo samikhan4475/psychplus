@@ -1,10 +1,13 @@
 'use client'
 
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { Dialog, Flex, IconButton, Separator } from '@radix-ui/themes'
 import { PencilLine, X } from 'lucide-react'
 import { PatientReferral } from '@/types'
-import { isReferralDeleted } from '../patient-referrals-widget/utils'
+import {
+  isReferralDeleted,
+  isReferralEditAble,
+} from '../patient-referrals-widget/utils'
 import { EditReferralForm } from './edit-referral-form'
 
 interface EditReferralDialogProps {
@@ -15,10 +18,16 @@ interface EditReferralDialogProps {
 const EditReferralDialog = ({ referral, onClose }: EditReferralDialogProps) => {
   const [isOpen, setIsOpen] = useState(false)
   const handleClose = () => setIsOpen(false)
+  const isDisabled = useMemo(
+    () =>
+      isReferralDeleted(referral.resourceStatus) ||
+      isReferralEditAble(referral.resourceStatus),
+    [referral.resourceStatus],
+  )
 
   return (
     <Dialog.Root open={isOpen} onOpenChange={(isOpen) => setIsOpen(isOpen)}>
-      <Dialog.Trigger disabled={isReferralDeleted(referral?.resourceStatus)}>
+      <Dialog.Trigger disabled={isDisabled}>
         <IconButton
           size="1"
           color="gray"

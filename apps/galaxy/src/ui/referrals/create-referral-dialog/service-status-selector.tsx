@@ -32,7 +32,9 @@ const ServiceStatusSelect = () => {
 
   return (
     <FormFieldContainer>
-      <FormFieldLabel className="!text-1">Service Status</FormFieldLabel>
+      <FormFieldLabel className="!text-1">
+        Service Priority Status
+      </FormFieldLabel>
       <SelectInput
         options={statusOptions}
         field="servicesStatus"

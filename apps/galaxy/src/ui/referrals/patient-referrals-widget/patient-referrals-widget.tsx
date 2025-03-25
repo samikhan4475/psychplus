@@ -21,7 +21,6 @@ const PatientReferralsWidget = ({
 }: PatientReferralsWidgetProps) => {
   const searchParams = useSearchParams()
   const appointmentId = searchParams.get('id') ?? ''
-
   return (
     <StoreProvider
       patientId={patientId}

@@ -10,7 +10,7 @@ const DOBDatePicker = () => {
   return (
     <FormFieldContainer className="flex-row gap-1">
       <FormFieldLabel className="!text-1">DOB</FormFieldLabel>
-      <DatePickerInput field="dateOfBirth" />
+      <DatePickerInput field="dateOfBirth" yearFormat="YYYY" />
     </FormFieldContainer>
   )
 }

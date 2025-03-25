@@ -18,6 +18,7 @@ interface NumericInputProps {
   prefix?: string
   maxLimit?: number
   allowNegative?: boolean
+  containerClassName?: string
 }
 
 const NumericInput = ({
@@ -30,12 +31,13 @@ const NumericInput = ({
   decimalScale = 2,
   prefix = '$',
   maxLimit = 1000,
+  containerClassName,
   allowNegative = true,
 }: NumericInputProps) => {
   const form = useFormContext()
 
   return (
-    <Flex align="center" gap="2">
+    <Flex align="center" gap="2" className={containerClassName}>
       {label && <BlockLabel name={fieldName}>{label}</BlockLabel>}
       <Controller
         control={form.control}

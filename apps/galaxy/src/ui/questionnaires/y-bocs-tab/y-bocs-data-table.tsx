@@ -7,12 +7,14 @@ interface QuestionnairesFormYBocsDataTableProps {
   id: string
   question: string
   labels: string[]
+  disabled?: boolean
 }
 
 const QuestionnairesFormYBocsDataTable = ({
   id,
   question,
   labels,
+  disabled = false,
 }: QuestionnairesFormYBocsDataTableProps) => {
   return (
     <Table.Root variant="ghost" size="1" className="w-full">
@@ -49,6 +51,7 @@ const QuestionnairesFormYBocsDataTable = ({
                 className="bg-0 rounded-0 border-0"
                 field={`${id}`}
                 options={[option]}
+                disabled={disabled}
               />
             </Table.Cell>
           ))}

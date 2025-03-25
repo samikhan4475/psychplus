@@ -1,18 +1,7 @@
-import { ContactMadeStatuses } from '@/types'
+import { getDefaultActualNoteViewStatuses } from '@/ui/referrals/patient-referrals-widget/utils'
 
 const getDefaultPayload = () => ({
-  contactStatusList: [
-    ContactMadeStatuses.NotSet,
-    ContactMadeStatuses.Pending,
-    ContactMadeStatuses.AuthInProcess,
-    ContactMadeStatuses.AttemptedContact,
-    ContactMadeStatuses.Refused,
-    ContactMadeStatuses.Scheduled,
-    ContactMadeStatuses.Cancelled,
-    ContactMadeStatuses.Admitted,
-    ContactMadeStatuses.SecondAttempt,
-    ContactMadeStatuses.ThirdAttempt,
-  ],
+  resourceStatusList: getDefaultActualNoteViewStatuses(),
 })
 
 export { getDefaultPayload }

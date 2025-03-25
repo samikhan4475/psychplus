@@ -18,9 +18,9 @@ const columns: ColumnDef<PatientReferral>[] = [
     header: () => <ColumnHeader label="Name" />,
     cell: ({ row: { original } }) => {
       return (
-        <TextCell>
+        <LongTextCell className="min-w-20">
           {original?.patientName && getPatientFullName(original?.patientName)}
-        </TextCell>
+        </LongTextCell>
       )
     },
   },
@@ -37,9 +37,9 @@ const columns: ColumnDef<PatientReferral>[] = [
     id: 'secondaryInsurance',
     header: () => <ColumnHeader label="Secondary Insurance" />,
     cell: ({ row: { original } }) => (
-      <TextCell>
+      <LongTextCell>
         {getSecondaryInsuranceName(original.paitentInsurancePolicies)}
-      </TextCell>
+      </LongTextCell>
     ),
   },
   {
@@ -65,9 +65,7 @@ const columns: ColumnDef<PatientReferral>[] = [
     id: 'initiated-by',
     header: () => <ColumnHeader label="Initiated By" />,
     cell: ({ row: { original } }) => (
-      <TextCell className="truncate">
-        {original?.metadata?.createdByFullName}
-      </TextCell>
+      <LongTextCell>{original?.metadata?.createdByFullName}</LongTextCell>
     ),
   },
   {
@@ -139,9 +137,7 @@ const columns: ColumnDef<PatientReferral>[] = [
       <ColumnHeader column={column} clientSideSort label="Updated By" />
     ),
     cell: ({ row: { original: referral } }) => (
-      <TextCell className="truncate">
-        {referral?.metadata?.createdByFullName}
-      </TextCell>
+      <LongTextCell>{referral?.metadata?.createdByFullName}</LongTextCell>
     ),
   },
 ]

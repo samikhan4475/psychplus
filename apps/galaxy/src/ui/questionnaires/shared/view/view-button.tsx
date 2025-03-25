@@ -29,6 +29,7 @@ const ViewButton = ({
       <Button
         size="1"
         color="gray"
+        type="button"
         variant={justIcon ? 'ghost' : 'surface'}
         highContrast
         className="h-auto px-1 py-1 text-[11px] font-[300]"

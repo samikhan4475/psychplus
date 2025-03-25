@@ -20,6 +20,7 @@ const MRNInput = () => {
           placeholder="MRN"
           decimalScale={0}
           maxLimit={Number('9'.repeat(8))}
+          containerClassName="w-full"
           className="border-pp-gray-2 h-6 w-full border border-solid !outline-none [box-shadow:none]"
         />
       </Flex>

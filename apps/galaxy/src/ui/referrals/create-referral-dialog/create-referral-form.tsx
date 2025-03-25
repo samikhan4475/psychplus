@@ -22,7 +22,7 @@ import { SaveButton } from './save-button'
 import { ServiceSelect } from './service-select'
 import { ServiceStatusSelect } from './service-status-selector'
 
-const REFERRAL_90_DAYS_ERROR = '90 days'
+const REFERRAL_90_DAYS_ERROR = 'already exist'
 
 const schema = z.object({
   patientId: z.string(),
@@ -87,12 +87,12 @@ const CreateReferralForm = ({
       toast.error(error)
       return
     }
-
+    setError(error)
     const confirmed = await new Promise<boolean>((resolve) => {
       setConfirm(() => resolve)
     })
     setConfirm(undefined)
-
+    setError(undefined)
     if (!confirmed) {
       return
     }
@@ -136,7 +136,6 @@ const CreateReferralForm = ({
 
   return (
     <FormContainer form={form} onSubmit={onSubmit}>
-      <FormError message={error} />
       <Grid columns="2" gap="2">
         <ServiceSelect />
         <ServiceStatusSelect />
@@ -151,7 +150,7 @@ const CreateReferralForm = ({
         <CancelButton />
         <SaveButton />
       </Flex>
-      <ConfirmDialog confirm={confirm} />
+      <ConfirmDialog confirm={confirm} error={error} />
     </FormContainer>
   )
 }

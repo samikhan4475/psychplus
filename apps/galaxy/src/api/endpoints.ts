@@ -405,6 +405,10 @@ const UPDATE_PATIENT_REFERRAL_ENDPOINT = (
   patientId: number,
   referralId: number,
 ) => `${API_URL}/api/patients/${patientId}/referrals/${referralId}`
+const SIGN_PATIENT_REFERRAL_ENDPOINT = (
+  patientId: number,
+  referralId: number,
+) => `${API_URL}/api/patients/${patientId}/referrals/${referralId}/actions/sign`
 const GET_APPOINTMENT = (appointmentId: string) =>
   `${API_URL}/api/appointments/${appointmentId}`
 const CREATE_PATIENT_REFERRAL_ENDPOINT = (patientId: string) =>
@@ -1100,4 +1104,5 @@ export {
   GET_LAB_ORDER_RESULTS,
   ADD_SIGNED_LAB_ORDERS,
   GET_USERS_SELF_INITIAL_INFORMATION_ENDPOINT,
+  SIGN_PATIENT_REFERRAL_ENDPOINT,
 }

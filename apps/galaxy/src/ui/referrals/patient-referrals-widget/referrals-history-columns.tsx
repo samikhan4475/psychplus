@@ -1,7 +1,7 @@
 'use client'
 
 import { ColumnDef } from '@tanstack/react-table'
-import { ColumnHeader, TextCell } from '@/components'
+import { ColumnHeader, LongTextCell, TextCell } from '@/components'
 import { PatientReferral } from '@/types'
 import { formatDate, formatDateTime, getPatientFullName } from '@/utils'
 import { ReferralStatusCell, ServiceNameCell } from './cells'
@@ -33,7 +33,11 @@ const columns: ColumnDef<PatientReferral>[] = [
     id: 'service status',
     accessorKey: 'servicesStatus',
     header: ({ column }) => (
-      <ColumnHeader column={column} clientSideSort label="Service Status" />
+      <ColumnHeader
+        column={column}
+        clientSideSort
+        label="Service Priority Status"
+      />
     ),
     cell: ({ row: { original: referral } }) => (
       <TextCell>{referral?.servicesStatus}</TextCell>
@@ -94,6 +98,14 @@ const columns: ColumnDef<PatientReferral>[] = [
       <ColumnHeader column={column} clientSideSort label="Referral Status" />
     ),
     cell: ({ row }) => <ReferralStatusCell row={row} disabled />,
+  },
+  {
+    id: 'comments',
+    accessorKey: 'comments',
+    header: () => <ColumnHeader label="Comments" />,
+    cell: ({ row: { original: referral } }) => (
+      <LongTextCell className="max-w-24">{referral?.comments}</LongTextCell>
+    ),
   },
   {
     id: 'updated-at',

@@ -20,6 +20,7 @@ const AgeInput = () => {
           placeholder="Age"
           maxLimit={1000}
           decimalScale={0}
+          containerClassName="w-full"
           className="border-pp-gray-2 h-6 w-full border border-solid !outline-none [box-shadow:none]"
         />
       </Flex>

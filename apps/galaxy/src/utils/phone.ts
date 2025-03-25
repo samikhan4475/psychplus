@@ -15,7 +15,7 @@ function getMaskedPhoneNumber(input: string): string {
   }
 
   if (centralOfficeCode) {
-    result += `-${centralOfficeCode}`
+    result += ` ${centralOfficeCode}`
   }
 
   if (lineNumber) {

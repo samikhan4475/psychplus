@@ -59,8 +59,13 @@ const columns = (isTabView = false): ColumnDef<PatientReferral>[] => [
     id: 'service status',
     accessorKey: 'servicesStatus',
     header: ({ column }) => (
-      <ColumnHeader column={column} clientSideSort label="Service Status" />
+      <ColumnHeader
+        column={column}
+        clientSideSort
+        label="Service Priority Status"
+      />
     ),
+
     cell: ({ row: { original: referral } }) => (
       <TextCell>{referral?.servicesStatus}</TextCell>
     ),

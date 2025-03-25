@@ -18,6 +18,10 @@ enum ContactMadeStatuses {
 
 enum ReferralStatuses {
   Deleted = 'Deleted',
+  Incomplete = 'Incomplete',
+  Completed = 'Completed',
+  Pending = 'Pending',
+  Unsigned = 'Unsigned',
 }
 interface PatientReferral {
   paitentInsurancePolicies?: Insurance[]

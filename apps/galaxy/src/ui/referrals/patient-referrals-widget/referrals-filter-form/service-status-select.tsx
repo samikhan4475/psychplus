@@ -16,7 +16,9 @@ const ServiceStatusSelect = () => {
 
   return (
     <FormFieldContainer className="flex-1 flex-row gap-1">
-      <FormFieldLabel className="!text-1">Service Status</FormFieldLabel>
+      <FormFieldLabel className="!text-1">
+        Service Priority Status
+      </FormFieldLabel>
       <MultiSelectField
         options={options}
         defaultValues={form.getValues('serviceStatuses')}

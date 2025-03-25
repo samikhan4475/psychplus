@@ -8,7 +8,7 @@ import type { GetStaffListResponse, Staff } from '../types'
 
 const defaultPayload = {
   isIncludeBiography: true,
-  isExcludeSelf: true,
+  isExcludeSelf: false,
   isIncludeAttributions: true,
   isIncludeOrganizations: true,
   isIncludePractices: true,

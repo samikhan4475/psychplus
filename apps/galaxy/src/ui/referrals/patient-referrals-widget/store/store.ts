@@ -12,7 +12,7 @@ import type {
   PatientReferral,
   PatientReferralsPayload,
 } from '../types'
-import { getDefaultContactMadeStatuses } from '../utils'
+import { getDefaultReferralStatuses } from '../utils'
 
 interface StoreInit {
   patientId: string
@@ -87,7 +87,7 @@ const createStore = (init: StoreInit) => {
       const payload = {
         ...formValues,
         ...(appointmentId && !get().isTabView
-          ? { contactStatusList: getDefaultContactMadeStatuses() }
+          ? { resourceStatusList: getDefaultReferralStatuses() }
           : {}),
       }
       const result = await searchPatientReferralsAction({
