@@ -17,7 +17,7 @@ import { updateProfileImage } from '@/features/account/profile/ui/account-profil
 import { useToast } from '@/providers'
 import { useRouter } from 'next/navigation'
 
-const PreCheckinImageUpload = () => {
+const PreCheckinImageUpload = ({ setAvatarKey }: { setAvatarKey:(value: number | ((prev: number) => number)) => void  }) => {
   const [uploading, setUploading] = useState(false)
   const [uploadError, setUploadError] = useState(false)
   const [previewImage, setPreviewImage] = useState<string | null>(null)
@@ -51,6 +51,7 @@ const PreCheckinImageUpload = () => {
       if (response.ok) {
         setOpen(false)
         router.refresh()
+        setTimeout(() => setAvatarKey((prev) => prev + 1), 1000)
       }
     } catch (error) {
       setUploadError(true)

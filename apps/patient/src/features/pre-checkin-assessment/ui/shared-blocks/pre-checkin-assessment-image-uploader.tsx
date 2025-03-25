@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import React, { useState } from 'react'
 import { getUserInitials } from '@psychplus-v2/utils'
 import { Avatar, Box, Flex } from '@radix-ui/themes'
 import { usePatientForm } from '../steps/patient-info/hooks/use-patient-form'
@@ -10,12 +10,14 @@ import { PreCheckinWebcamImageUpload } from './pre-checkin-webcam-image-upload'
 
 const PreCheckinAssessmentImageUploader = () => {
   const { profile } = usePatientForm()
+  const [avatarKey, setAvatarKey] = useState(0);
 
   return (
     <Flex className="items-center" direction="column" gap="2">
       <Box className="rounded-full relative h-24 w-24 overflow-hidden">
         <Avatar
-          src={profile.hasPhoto ? `/api/patients/self/profileimage?t=${Date.now()}` : undefined}
+          key={avatarKey}
+          src={`/api/patients/self/profileimage?t=${Date.now()}`}
           size="7"
           alt=""
           fallback={profile.legalName ? getUserInitials(profile.legalName) : ''}
@@ -32,10 +34,10 @@ const PreCheckinAssessmentImageUploader = () => {
           <PreCheckinViewImage />
         </Flex>
         <Flex align="center" justify="center">
-          <PreCheckinImageUpload />
+          <PreCheckinImageUpload setAvatarKey={setAvatarKey} />
         </Flex>
         <Flex align="center" justify="center">
-          <PreCheckinWebcamImageUpload />
+          <PreCheckinWebcamImageUpload setAvatarKey={setAvatarKey} />
         </Flex>
       </Flex>
     </Flex>

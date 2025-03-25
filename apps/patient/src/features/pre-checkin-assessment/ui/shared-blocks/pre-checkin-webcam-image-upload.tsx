@@ -6,7 +6,7 @@ import CameraIcon from '@/components-v2/icons/camera-icon'
 import { updateProfileImage } from '@/features/account/profile/ui/account-profile-view/avatar/api'
 import { useRouter } from 'next/navigation'
 
-const PreCheckinWebcamImageUpload = () => {
+const PreCheckinWebcamImageUpload = ({ setAvatarKey }: { setAvatarKey:(value: number | ((prev: number) => number)) => void  }) => {
   const [uploading, setUploading] = useState(false)
   const [uploadError, setUploadError] = useState(false)
   const [imgSrc, setImgSrc] = useState<string | null>(null)
@@ -44,6 +44,7 @@ const PreCheckinWebcamImageUpload = () => {
     if (response.ok) {
       setOpen(false)
       router.refresh()
+      setTimeout(() => setAvatarKey((prev) => prev + 1), 1000)
     } else {
       setUploadError(true)
     }
