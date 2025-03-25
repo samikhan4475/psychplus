@@ -20,12 +20,19 @@ const InsurancePaymentDetailView = () => {
     selectedPaymentId: state.selectedPayments[state.activeTab],
   }))
 
-  const { paymentPostingClaim, setPaymentPostingClaim, claimPaymentDeleted } =
-    useStore((state) => ({
-      paymentPostingClaim: state.paymentPostingClaim[activeTab],
-      setPaymentPostingClaim: state.setPaymentPostingClaim,
-      claimPaymentDeleted: state.claimPaymentDeleted,
-    }))
+  const {
+    paymentPostingClaim,
+    setPaymentPostingClaim,
+    claimPaymentDeleted,
+    data,
+    updateCurrentPageData,
+  } = useStore((state) => ({
+    paymentPostingClaim: state.paymentPostingClaim[activeTab],
+    setPaymentPostingClaim: state.setPaymentPostingClaim,
+    claimPaymentDeleted: state.claimPaymentDeleted,
+    data: state.data,
+    updateCurrentPageData: state.updateCurrentPageData,
+  }))
 
   const fetchPaymentDetail = async (checkId: string) => {
     setIsLoading(true)
@@ -33,6 +40,14 @@ const InsurancePaymentDetailView = () => {
     const result = await getPaymentDetailAction(checkId)
     if (result.state === 'success') {
       setPaymentDetail(result.data)
+      const updatedPayments = (data?.insurancePayments ?? []).map((insurance) =>
+        insurance.id === result.data?.id ? result.data : insurance,
+      )
+      updateCurrentPageData({
+        ...data,
+        insurancePayments: updatedPayments,
+        total: data?.total ?? 0,
+      })
     } else if (result.state === 'error') {
       toast.error(result.error)
     }

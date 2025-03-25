@@ -23,6 +23,9 @@ interface Store {
     paymentId: string,
     postingClaim?: Partial<ClaimPayment>,
   ) => void
+  updateCurrentPageData: (
+    updatedData: GetInsurancePaymentListResponse,
+  ) => Promise<void>
   jumpToPage: (page: number) => void
   search: (
     payload?: InsurancePaymentSearchParams,
@@ -87,6 +90,16 @@ const useStore = create<Store>((set, get) => ({
       pageCache: reset
         ? { [page]: result.data }
         : { ...get().pageCache, [page]: result.data },
+    })
+  },
+  updateCurrentPageData: async (updatedData) => {
+    const { page, pageCache } = get()
+    set({
+      data: updatedData,
+      pageCache: {
+        ...pageCache,
+        [page]: updatedData,
+      },
     })
   },
   next: () => {
