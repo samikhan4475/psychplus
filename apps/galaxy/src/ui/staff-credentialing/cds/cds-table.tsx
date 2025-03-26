@@ -112,6 +112,7 @@ const CDSTable = ({
       <DataTable
         columns={columns(onSubmit, showPermissionAlert)}
         data={licenses}
+        theadClass='z-10'
         tdClass="!p-0"
         isRowSpan
         sticky

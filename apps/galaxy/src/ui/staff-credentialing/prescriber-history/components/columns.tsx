@@ -1,6 +1,7 @@
+import { Flex } from '@radix-ui/themes'
 import { ColumnDef } from '@tanstack/react-table'
-import { ColumnHeader, TextCell } from '@/components'
-import { getSlashedDateString } from '@/utils'
+import { ColumnHeader, DateCell, TextCell } from '@/components'
+import { getSlashedPaddedDateString, getTimeLabel } from '@/utils'
 import { PrescriberSettingResponse } from '../../types'
 
 const columns: ColumnDef<PrescriberSettingResponse>[] = [
@@ -24,11 +25,19 @@ const columns: ColumnDef<PrescriberSettingResponse>[] = [
     header: ({ column }) => (
       <ColumnHeader column={column} clientSideSort label="Updated On" />
     ),
-    cell: ({ row }) => (
-      <TextCell>
-        {getSlashedDateString(row.original?.metadata?.createdOn ?? '')}
-      </TextCell>
-    ),
+    cell: ({ row: { original } }) => {
+      const { createdOn } = original?.metadata || {}
+      return (
+        <Flex justify="between" width="100%" align="center" className="px-1">
+          <DateCell className="w-[55px]">
+            {getSlashedPaddedDateString(createdOn)}
+          </DateCell>
+          <DateCell className="text-pp-gray-1 w-[55px]">
+            {getTimeLabel(createdOn ?? '')}
+          </DateCell>
+        </Flex>
+      )
+    },
   },
   {
     accessorKey: 'metadata.createdByFullName',

@@ -2,7 +2,6 @@
 
 import { useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { ScrollArea } from '@radix-ui/themes'
 import { Row } from '@tanstack/react-table'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
@@ -112,6 +111,7 @@ const DeaTable = ({
       <DataTable
         columns={columns(onSubmit, showPermissionAlert)}
         data={licenses}
+        theadClass='z-10'
         tdClass="!p-0 first:bg-white"
         isRowSpan
         sticky

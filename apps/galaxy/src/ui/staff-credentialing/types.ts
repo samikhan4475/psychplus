@@ -71,6 +71,16 @@ type GetLicensesResponse = Omit<License, 'startDate' | 'endDate'> & {
   endDate: string | undefined
 }
 
+interface GetLicensesHistoryResponse {
+  staffId: number
+  userId: number
+  legalName: LegalName
+  licenses: (Omit<License, 'startDate' | 'endDate'> & {
+    startDate: string | undefined
+    endDate: string | undefined
+  })[]
+}
+
 interface UpdateLicensePayload extends Omit<License, 'startDate' | 'endDate'> {
   startDate: string | undefined
   endDate: string | undefined
@@ -81,7 +91,7 @@ interface NearToExpireLicenseResponse {
   type: LicenseType
   userId: number
   legalName: LegalName
-  licenses: License[]
+  licenses: GetLicensesResponse[]
 }
 
 interface LicenseHistory {
@@ -150,6 +160,7 @@ export type {
   PrescriberSettingResponse,
   PrescriberDataResponse,
   GetLicensesResponse,
+  GetLicensesHistoryResponse,
   License,
   LicenseHistory,
   LicenseHistoryResponse,

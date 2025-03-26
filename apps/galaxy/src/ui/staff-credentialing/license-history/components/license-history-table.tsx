@@ -39,7 +39,7 @@ const LicenseHistoryTable = () => {
       toast.error(result.error ?? 'Error while fetching history')
       return
     }
-    const licenses = result.data
+    const { licenses = [] } = result.data
     const data = licenses.map((license) => {
       return {
         ...license,

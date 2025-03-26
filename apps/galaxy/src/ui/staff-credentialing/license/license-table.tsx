@@ -113,6 +113,7 @@ const LicenseTable = ({
       <DataTable
         columns={columns(onSubmit, showPermissionAlert)}
         data={licenses}
+        theadClass='z-10'
         tdClass="!p-0 first:bg-white"
         isRowSpan
         sticky

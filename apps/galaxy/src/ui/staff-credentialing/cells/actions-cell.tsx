@@ -69,7 +69,7 @@ const ActionsCell = ({
               form.setValue('licenseNumber', row.licenseNumber)
               form.setValue('startDate', row.startDate as DateValue)
               form.setValue('endDate', row.endDate as DateValue)
-              form.setValue('isAlertCheck', row.isAlertCheck ?? true)
+              form.setValue('isAlertCheck', row.id ? row.isAlertCheck : true)
             }}
           >
             <TableEditIcon height={18} />
@@ -79,6 +79,7 @@ const ActionsCell = ({
         <>
           <IconButton
             variant="ghost"
+            onMouseDown={(e) => e.preventDefault()}
             onClick={() => {
               setEditingRow(null)
               form.reset()
@@ -88,6 +89,7 @@ const ActionsCell = ({
           </IconButton>
           <IconButton
             variant="ghost"
+            onMouseDown={(e) => e.preventDefault()}
             onClick={form.handleSubmit((data) => onSubmit(data))}
           >
             <CheckboxIcon width={22} height={18} />

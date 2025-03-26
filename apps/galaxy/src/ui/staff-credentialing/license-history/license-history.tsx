@@ -1,18 +1,11 @@
 'use client'
 
-import { PropsWithChildren } from 'react'
 import { Dialog } from '@radix-ui/themes'
 import { CloseDialogTrigger } from '@/components/close-dialog-trigger'
 import { useStore } from '../store'
 import { LicenseHistoryTable } from './components'
 
-interface LicenseHistoryProps {
-  staffId: string
-}
-
-const LicenseHistory = ({
-  staffId,
-}: PropsWithChildren<LicenseHistoryProps>) => {
+const LicenseHistory = () => {
   const { activeTab, setHistoryRow, historyRow } = useStore()
 
   return (

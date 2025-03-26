@@ -1,7 +1,7 @@
 'use server'
 
 import * as api from '@/api'
-import { GetLicensesResponse } from '../types'
+import { GetLicensesHistoryResponse } from '../types'
 
 export interface GetLicenseHistoryParams {
   id: string
@@ -11,8 +11,8 @@ export interface GetLicenseHistoryParams {
 
 const getLicenseHistoryAction = async (
   payload: GetLicenseHistoryParams,
-): Promise<api.ActionResult<GetLicensesResponse[]>> => {
-  const response = await api.POST<GetLicensesResponse[]>(
+): Promise<api.ActionResult<GetLicensesHistoryResponse>> => {
+  const response = await api.POST<GetLicensesHistoryResponse[]>(
     api.GET_STAFF_LICENSE_HISTORY_ENDPOINT(payload.id),
     payload,
   )
@@ -24,7 +24,17 @@ const getLicenseHistoryAction = async (
   }
   return {
     state: 'success',
-    data: response.data.length ? response.data : [],
+    data: response.data?.[0]
+      ? response.data[0]
+      : {
+          licenses: [],
+          legalName: {
+            firstName: '',
+            lastName: '',
+          },
+          staffId: 0,
+          userId: 0,
+        },
   }
 }
 

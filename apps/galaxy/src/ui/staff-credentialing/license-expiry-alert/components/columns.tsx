@@ -1,19 +1,20 @@
+import { parseAbsoluteToLocal } from '@internationalized/date'
 import { ColumnDef } from '@tanstack/react-table'
 import { ColumnHeader, TextCell } from '@/components'
 import { getSlashedDateString } from '@/utils'
-import { License } from '../../types'
+import { GetLicensesResponse } from '../../types'
 import { StateNameCell } from './state-name-cell'
 
-const columns: ColumnDef<License>[] = [
+const columns: ColumnDef<GetLicensesResponse>[] = [
   {
-    accessorKey: 'states',
+    accessorKey: 'stateCode',
     header: ({ column }) => (
       <ColumnHeader column={column} clientSideSort label="State" />
     ),
     cell: StateNameCell,
   },
   {
-    accessorKey: 'License #',
+    accessorKey: 'licenseNumber',
     header: ({ column }) => (
       <ColumnHeader column={column} clientSideSort label="License #" />
     ),
@@ -22,15 +23,25 @@ const columns: ColumnDef<License>[] = [
     ),
   },
   {
-    id: 'End Date',
+    id: 'end-date',
+    accessorKey: 'endDate',
     header: ({ column }) => (
-      <ColumnHeader clientSideSort column={column} label="License Expiration Date" />
+      <ColumnHeader
+        clientSideSort
+        column={column}
+        label="License Expiration Date"
+      />
     ),
     cell: ({ row }) => (
       <TextCell>
         {getSlashedDateString(row.original?.endDate?.toString() ?? '')}
       </TextCell>
     ),
+    sortingFn: (a, b) => {
+      const timeA = parseAbsoluteToLocal(a.original?.endDate ?? '')
+      const timeB = parseAbsoluteToLocal(b.original?.endDate ?? '')
+      return timeA.compare(timeB)
+    },
   },
 ]
 

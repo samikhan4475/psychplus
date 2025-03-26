@@ -40,7 +40,7 @@ const CredentialingTabs = ({ staffId }: { staffId: string }) => {
         }}
         className="flex w-full flex-col"
       >
-        <LicenseHistory staffId={staffId} />
+        <LicenseHistory />
 
         <Flex className="z-50">
           <Tabs.List>

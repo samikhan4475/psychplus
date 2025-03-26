@@ -2,10 +2,10 @@
 
 import { Flex, ScrollArea } from '@radix-ui/themes'
 import { DataTable } from '@/components'
-import { License } from '../../types'
+import { GetLicensesResponse } from '../../types'
 import { columns } from './columns'
 
-const LicenseExpiryTable = ({ data }: { data: License[] }) => {
+const LicenseExpiryTable = ({ data }: { data: GetLicensesResponse[] }) => {
   return (
     <Flex direction="column" className="gap-1">
       <ScrollArea className="bg-white max-w-[calc(100vw_-_198px)] py-2">

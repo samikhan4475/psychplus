@@ -1,1 +1,1 @@
-export * from './license-history-table'
+export * from './license-expiry-table'
