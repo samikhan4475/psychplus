@@ -754,6 +754,7 @@ const ADD_SIGNED_LAB_ORDERS =
 const ADD_CLAIM = `${API_URL}/api/claims`
 const SELF_PRACTICES = `${API_URL}/api/users/self/practices?includePermissions=false`
 const GET_CURRENT_USER_SETTINGS_SEARCH = `${API_URL}/api/users/self/settings/actions/search`
+const GET_DISTRIBUTION_GROUPS= `${API_URL}/api/usergroups/action/search`
 
 const ELECTRONICALLY_SIGN_POLICY_ENDPOINT = (patientId: string) =>
   `${API_URL}/api/patients/${patientId}/consents`
@@ -1110,6 +1111,7 @@ export {
   GET_LAB_ORDER_RESULTS,
   ADD_SIGNED_LAB_ORDERS,
   GET_USERS_SELF_INITIAL_INFORMATION_ENDPOINT,
+  GET_DISTRIBUTION_GROUPS,
   DELETE_STAFF_VIDEO_ENDPOINT,
   SIGN_PATIENT_REFERRAL_ENDPOINT,
 }

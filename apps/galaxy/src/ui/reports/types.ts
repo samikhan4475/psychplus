@@ -1,4 +1,4 @@
-import { Code, MetadataCodeset } from "@/types"
+import { Code, Metadata, MetadataCodeset } from "@/types"
 
 
 export interface TemplateParameter {
@@ -65,9 +65,30 @@ interface SchedulingReport {
     reportTemplateId: string | undefined;
     scheduleParameterValue: string;
   }[];
-  distributionGroup: string[];
+  distributionGroup: {
+    distributionGroupId: string;
+    reportScheduleId?: string;
+  }[];
   jobId?: string
 }
+
+interface UserGroup {
+  id: string;
+  metadata: Metadata;
+  recordStatus: string;
+  shortName: string;
+  displayName: string;
+}
+interface GetReportListResponse {
+  report: string
+  total: number
+}
+interface GeneratedReportParams {
+  templateId: string
+  reportType: string
+  data?: ReportFilterParameters[] 
+}
+
 export enum CODE_PARAM_ATTRIBUTES {
   DATA_TYPE = 'DataType',
   TEXTBOX = 'TextBox',
@@ -103,4 +124,16 @@ export enum STAFF_SELECTION {
   STAFF_SELECTION_SPECIALIST_TYPE = 'StaffSelectionSpecialistType',
   SPECIALIST_TYPE = 'SpecialistType',
 }
-export type { Template, Parameter, CodeSetIndex, ReportFilterParameters, ParameterCodeSet, StaffDataOptions, ScheduleJob, SchedulingReport }
+export type {
+  Template,
+  Parameter,
+  CodeSetIndex,
+  ReportFilterParameters,
+  ParameterCodeSet,
+  StaffDataOptions,
+  ScheduleJob,
+  SchedulingReport,
+  UserGroup,
+  GeneratedReportParams,
+  GetReportListResponse
+}

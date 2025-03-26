@@ -3,9 +3,10 @@ import { PlusIcon } from '@radix-ui/react-icons';
 
 interface AddRowButtonProps {
   onAddRow: () => void;
+  disabled?: boolean;
 }
 
-const AddRowButton = ({ onAddRow }: AddRowButtonProps) => (
+const AddRowButton = ({ onAddRow, disabled }: AddRowButtonProps) => (
   <Flex gap="2" align="center" className="text-[12px] py-2">
     <Text className="!text-1" weight="medium">Run Parameters</Text>
     <Button
@@ -14,6 +15,7 @@ const AddRowButton = ({ onAddRow }: AddRowButtonProps) => (
       type='button'
       className="h-6 cursor-pointer bg-white px-2 text-[12px] text-black"
       onClick={onAddRow}
+      disabled={disabled} 
     >
       <PlusIcon width={12} height={12} />
       Add

@@ -4,23 +4,34 @@ import {
   FormFieldContainer,
   FormFieldError,
   FormFieldLabel,
+  MultiSelectField,
 } from '@/components'
-import { TagsMultiSelect } from '../add-template-dialog/tag-multi-select'
+import { SelectOptionType } from '@/types'
+import { ScheduleTemplateSchemaType } from './schedule-report-form'
+import { useFormContext } from 'react-hook-form'
 
-const DistributionGroupsSelect = () => {
+interface DistributionGroupsSelectProps{
+  distributionGroupsOptions: SelectOptionType[],
+  isLoading: boolean
+}
+const DistributionGroupsSelect = ({distributionGroupsOptions , isLoading}:DistributionGroupsSelectProps) => {
+  const form = useFormContext<ScheduleTemplateSchemaType>()
 
   return (
     <FormFieldContainer className="w-full">
       <FormFieldLabel className="!text-1 mt-3" required>
         Distribution Groups
       </FormFieldLabel>
-      <TagsMultiSelect
-        name="distributionGroups"
-        codeset="testCodeset"
-        placeholder="Select codes"
-        disabled
+      <MultiSelectField
+        defaultValues={form.watch('distributionGroups')}
+        options={distributionGroupsOptions}
+        onChange={(values) => form.setValue('distributionGroups', values)}
+        className="w-full"
+        placeholder={isLoading ? "Loading..." : "Search by keyword"}
+        disabled={isLoading}
+        
       />
-      <FormFieldError name="code" />
+      <FormFieldError name="distributionGroups" />
     </FormFieldContainer>
   )
 }

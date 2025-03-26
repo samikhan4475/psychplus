@@ -26,7 +26,7 @@ const CollapsedSidebar = ({ toggleSidebar }: SidebarProps) => {
           <ChevronRightIcon />
         </Flex>
 
-        <AddTemplateButton isCollapsed={true} />
+        <AddTemplateButton />
       </Flex>
     </Box>
   );

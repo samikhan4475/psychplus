@@ -1,10 +1,10 @@
 'use client';
 
-import { LoadingPlaceholder } from '@/components';
+import { LoadingPlaceholder, TabsTrigger } from '@/components';
 import { Code } from '@/types';
-import { Box, Flex, ScrollArea } from '@radix-ui/themes';
+import * as Tabs from '@radix-ui/react-tabs';
+import { Flex } from '@radix-ui/themes';
 import { useEffect } from 'react';
-import { TabItem } from './reports-tabs-item';
 import { ReportsTemplateTabs } from './reports-template-tabs';
 import { useStore } from './store';
 
@@ -15,8 +15,8 @@ const ReportsTabs = () => {
     fetchReportsAndTemplates();
     fetchStaffData();
   }, [fetchReportsAndTemplates, fetchStaffData]);
-  
-  const filteredReports = reports.filter(report => 
+
+  const filteredReports = reports.filter(report =>
     report.code === 'Provider' || report.codeAttributes?.every(attr => attr.content !== '99')
   );
 
@@ -34,25 +34,28 @@ const ReportsTabs = () => {
     );
   }
   return (
-    <Flex className="w-full rounded-1 shadow-2 overflow-hidden " mb="4">
-      <Box className="w-56 mx-1 my-0 bg-white ">
-        <ScrollArea >
-          <Flex direction="column" className="p-2 gap-1">
+    <Flex className="w-full rounded-1 shadow-2 overflow-hidden ">
+      <Tabs.Root
+        className="flex w-full flex-col"
+      >
+        <Flex direction="row" className="gap-1">
+          <Tabs.List>
             {filteredReports.map((item) => (
-              <TabItem
-                key={item.code}
-                displayName={item.displayName}
-                isActive={selectedReport?.code === item.code}
-                onClick={() => handleTabClick(item)}
-              />
+              <TabsTrigger value={item.code} onClick={() => handleTabClick(item)} key={item.code}>
+                {item.displayName}
+              </TabsTrigger>
             ))}
-          </Flex>
-        </ScrollArea>
-      </Box>
-
-      {selectedReport &&
-        <ReportsTemplateTabs />
-      }
+          </Tabs.List>
+        </Flex>
+        <Tabs.Content
+          value={selectedReport ? selectedReport.code : ""}
+          className="flex flex-1 flex-col gap-2 data-[state=active]:flex"
+        >
+          {selectedReport &&
+            <ReportsTemplateTabs />
+          }
+        </Tabs.Content>
+      </Tabs.Root>
     </Flex>
   );
 };

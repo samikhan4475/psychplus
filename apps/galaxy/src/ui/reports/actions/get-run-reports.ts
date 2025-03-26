@@ -1,22 +1,27 @@
 'use server'
 
 import * as api from '@/api'
-import { ReportFilterParameters } from '../types'
+import { GeneratedReportParams, GetReportListResponse } from '../types'
+import { REPORT_LIST_TABLE_PAGE_SIZE } from '../constans'
 
-interface GeneratedReportParams {
-  templateId: string
-  reportType: string
-  data: ReportFilterParameters[] 
+interface GetRunReportParams {
+  payload: GeneratedReportParams
+  page?: number
 }
 
 const getRunReportAction = async ({
-  templateId,
-  reportType,
-  data,
-}: GeneratedReportParams): Promise<
-  api.ActionResult<string>
+  payload,
+  page = 1,
+}: GetRunReportParams): Promise<
+  api.ActionResult<GetReportListResponse>
 > => {
-  const result = await api.POST<string>(api.GET_TEMPLATE_REPORT(templateId,reportType), data)
+  const offset = (page - 1) * REPORT_LIST_TABLE_PAGE_SIZE
+
+  const url = new URL(api.GET_TEMPLATE_REPORT(payload.templateId,payload?.reportType))
+  url.searchParams.append('limit', String(REPORT_LIST_TABLE_PAGE_SIZE))
+  url.searchParams.append('offset', String(offset))
+
+  const result = await api.POST<string>(`${url}`, payload.data)
 
   if (result.state === 'error') {
     return {
@@ -27,7 +32,10 @@ const getRunReportAction = async ({
 
   return {
     state: 'success',
-    data: result.data
+    data: {
+      report: result.data,
+      total: Number(result.headers.get('psychplus-totalresourcecount')),
+    },
   }
 }
 

@@ -6,7 +6,7 @@ import { TemplateTitleHeader } from './template-title-header';
 
 const TemplateContent = () => {
   return (
-    <Box className="flex-1 bg-gray-50 m-1 bg-white">
+    <Box className="flex-1 bg-gray-50 mx-1 mb-0">
       <TemplateTitleHeader />
       <GeneratedReport />
     </Box>

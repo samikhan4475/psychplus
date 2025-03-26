@@ -8,44 +8,61 @@ import {
   getPatientsOptionsAction,
   getReportParametersTypeAction,
   getReportsAction,
+  getRunReportAction,
   getStaffAction,
   getTemplatesAction,
 } from './actions'
 import {
+  GeneratedReportParams,
   Parameter,
   ReportFilterParameters,
   StaffDataOptions,
   Template,
 } from './types'
+import toast from 'react-hot-toast'
 
 interface Store {
   reports: Code[]
   loading: boolean
+  generateReportLoading: boolean
   error: string | null
   templates: Template[]
   templateFilters: Parameter | null
   selectedReport: Code | null
   selectedTemplate: Template | null
   generatedReport: string | null
+  totalRecords: number
   filtersData: ReportFilterParameters[] | null
   staffData: StaffDataOptions[] | null
   insuranceData: SelectOptionType[] | null
   patientData: SelectOptionType[] | null
   cosignerData: SelectOptionType[] | null
+  page: number
+  pageCache: Record<number, string>
+  payload: GeneratedReportParams
   fetchReportsAndTemplates: () => void
   setSelectedReport: (code: Code) => void
   setSelectedTemplate: (template: Template | null) => void
   setGeneratedReport: (report: string | null) => void
   fetchStaffData: () => void
   setFiltersData: (data: ReportFilterParameters[] | null) => void
+  search: (
+    payload: GeneratedReportParams,
+    page?: number,
+    reset?: boolean,
+  ) => void
+  next: () => void
+  prev: () => void
+  jumpToPage: (page: number) => void
 }
 
-const useStore = create<Store>((set) => ({
+const useStore = create<Store>((set, get) => ({
   reports: [],
   error: null,
   templates: [],
   templateFilters: null,
   loading: false,
+  generateReportLoading: false,
   selectedReport: null,
   selectedTemplate: null,
   generatedReport: null,
@@ -54,7 +71,82 @@ const useStore = create<Store>((set) => ({
   insuranceData: null,
   patientData: null,
   cosignerData: null,
+  payload: {
+    templateId: "",
+    reportType: "",
+    data: []
+  },
+  page: 1,
+  pageCache: {},
+  totalRecords: 0,
+  search: async (
+    payload: GeneratedReportParams,
+    page = 1,
+    reset = false,
+  ) => {
+    set({
+      error: undefined,
+      generateReportLoading:true,
+      payload: payload,
+    })
+    const result = await getRunReportAction({
+      payload,
+      page,
+    })
 
+    if (result.state === 'error') {
+      toast.error(
+        result.error ?? 'Failed to generate report:'
+      );
+      return set({
+        error: result.error,
+        generateReportLoading: false
+      })
+    }
+    set({
+      generatedReport: result.data.report,
+      totalRecords: result.data.total,
+      generateReportLoading: false,
+      pageCache: reset
+        ? { [page]: result.data.report }
+        : { ...get().pageCache, [page]: result.data.report },
+    })
+  },
+  next: () => {
+    const page = get().page + 1
+
+    if (get().pageCache[page]) {
+      return set({
+        generatedReport: get().pageCache[page],
+        page,
+      })
+    }
+
+    get().search(get().payload, page)
+    set({ page })
+  },
+  prev: () => {
+    const page = get().page - 1
+
+    set({
+      generatedReport: get().pageCache[page],
+      page,
+    })
+  },
+  jumpToPage: (page: number) => {
+    if (page < 1) {
+      return
+    }
+
+    if (get().pageCache[page]) {
+      return set({
+        generatedReport: get().pageCache[page],
+        page,
+      })
+    }
+    set({ page })
+    get().search(get().payload, page)
+  },
   fetchReportsAndTemplates: async () => {
     set({ loading: true, error: null })
 

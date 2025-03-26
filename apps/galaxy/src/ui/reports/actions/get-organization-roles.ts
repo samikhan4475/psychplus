@@ -1,14 +1,12 @@
 'use server'
 
 import * as api from '@/api'
+import { UserGroup } from '../types'
 
 const getOrganizationRolesAction = async (): Promise<
-  api.ActionResult<string>
+  api.ActionResult<UserGroup[]>
 > => {
-  const result = await api.POST<string>(api.GET_ORGANIZATION_ROLES, {
-    organizationId : "F9E87082-3FC2-4D65-A0B7-810F0A18C59E", // will be replaced when we get data from BE
-    includeRole : true,
-  })
+  const result = await api.POST<UserGroup[]>(api.GET_DISTRIBUTION_GROUPS,{})
 
   if (result.state === 'error') {
     return {

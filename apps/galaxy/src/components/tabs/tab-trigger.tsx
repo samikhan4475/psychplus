@@ -6,17 +6,20 @@ const TabsTrigger = ({
   value,
   children,
   onClose,
+  onClick,
   disabled = false,
 }: {
   value: string
   children: React.ReactNode
   onClose?: () => void
+  onClick?: () => void
   disabled?: boolean
 }) => (
   <Tabs.Trigger
     value={value}
     disabled={disabled}
     className="data-[state=active]:border-b-white data-[state=active]:bg-white border border-l-0 border-accent-6 border-b-gray-5 bg-accent-4 p-0 px-2 py-1 text-[12px] text-gray-12 first:border-l data-[state=active]:cursor-default data-[state=active]:border-gray-5 data-[state=active]:font-[600] data-[state=active]:text-accent-12"
+    onClick={onClick}
   >
     <Flex align="center" gap="2">
       {children}

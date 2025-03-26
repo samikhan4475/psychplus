@@ -37,9 +37,11 @@ const ParametersTable = () => {
     return parameterErrors[numericKey]?.parameterCode;
   });
 
+  const isAddDisabled = fields.length > 0 && !watch(`parameters.${fields.length - 1}.parameterCode`);
+
   return (
     <>
-      <AddRowButton onAddRow={addRow} />
+      <AddRowButton onAddRow={addRow} disabled={isAddDisabled}/>
       <DataTable columns={createColumns(move, remove, fields.length)} data={fields} />
       {firstErrorKey && (
         <FormFieldError name={`parameters.${firstErrorKey}.parameterCode`} />
