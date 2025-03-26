@@ -208,8 +208,6 @@ const UpcomingAppointmentsSummaryComponent = async () => {
     userSettingsResponse.data,
     UserSettingName.PreCheckIn,
   )
-  const shouldShowPreCheckinAssessment =
-    process.env.API_URL !== 'https://api.psychplus.io'
 
   return (
     <ProfileStoreProvider profile={profileResponse.data}>
@@ -358,8 +356,7 @@ const UpcomingAppointmentsSummaryComponent = async () => {
                       align="center"
                       justify={
                         isWithin48Hour &&
-                        !row?.isQuickNoteSigned &&
-                        shouldShowPreCheckinAssessment
+                        !row?.isQuickNoteSigned 
                           ? 'between'
                           : 'end'
                       }
@@ -367,8 +364,7 @@ const UpcomingAppointmentsSummaryComponent = async () => {
                       mt="2"
                     >
                       {isWithin48Hour &&
-                        !row?.isQuickNoteSigned &&
-                        shouldShowPreCheckinAssessment && (
+                        !row?.isQuickNoteSigned && (
                           <UpcomingSummaryPreVisitAssessment
                             insurancePayers={insurancePayerResponse.data}
                             patientInsurances={patientInsurancesResponse.data}
