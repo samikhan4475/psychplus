@@ -1,9 +1,19 @@
 'use client'
 
-import { Button } from '@radix-ui/themes'
+import { Row } from '@tanstack/react-table'
+import { Patient } from '@/ui/patient-lookup/types'
+import { PatientCardDialog } from '../patient-card/patient-card-dialog'
 
-const ActionsCell = () => {
-  return <Button highContrast size="1" type="button" className="w-10 text-white">Link</Button>
+interface ActionsCellProps {
+  row: Row<Patient>
+  patientId: string
 }
-export { ActionsCell }
-
+const ActionCell = ({ row, patientId }: ActionsCellProps) => {
+  return (
+    <PatientCardDialog
+      survivorPatientId={patientId}
+      nonSurvivorPatientId={row?.original.id.toString()}
+    />
+  )
+}
+export { ActionCell }

@@ -96,6 +96,7 @@ const CODESETS = {
   SpecimenCollectionMethod: 'HL7v2.SpecimenCollectionMethod',
   InjectionAddon: 'PsychPlusPublic.InjectionAddon',
   InjectionSite: 'PsychPlusPublic.InjectionSite',
+  PatientLinkSection:'PatientLinkSection',
   CosignerType: 'CosignerType',
   CounsellingOptions: 'PsychPlusPublic.CounsellingOptions',
   TobaccoTreatment: 'PsychPlusPublic.TobaccoTreatment',

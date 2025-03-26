@@ -2,14 +2,19 @@
 
 import { Button } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
-import { SchemaType } from './link-account-form'
+import { useStore } from '../../store'
+import { LinkAccountSchemaType } from './link-account-form'
 
 const ResetButton = () => {
-  const form = useFormContext<SchemaType>()
+  const { search } = useStore((state) => ({
+    search: state.search,
+  }))
+  const form = useFormContext<LinkAccountSchemaType>()
 
   const onClear = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault()
     form.reset()
+    search({})
   }
   return (
     <Button

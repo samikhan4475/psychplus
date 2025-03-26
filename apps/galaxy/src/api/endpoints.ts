@@ -566,6 +566,15 @@ const UPDATE_LAB_ORDERS_RESULT_ENDPOINT = (
   id: string,
 ) =>
   `${API_URL}/api/appointments/${appointmentId}/laborders/${orderId}/labresults/${id}`
+const LINK_PATIENT_ACCOUNT = (
+  survivorPatientId: string,
+  nonSurvivorPatientId: string,
+) =>
+  `${API_URL}/api/patients/${survivorPatientId}/links/${nonSurvivorPatientId}`
+const GET_PATIENT_LINKS = (patientId: string) =>
+  `${API_URL}/api/patients/${patientId}/links`
+const DELETE_PATIENT_LINKS = (linkedAccountId: string) =>
+  `${API_URL}/api/patientlinks/${linkedAccountId}`
 
 const GET_USER_TYPE = (userId: string) => `${API_URL}/api/users/${userId}/type`
 
@@ -1021,11 +1030,14 @@ export {
   NOTE_MARK_ERROR_ENDPOINT,
   UPDATE_LAB_ORDERS_RESULT_ENDPOINT,
   DOWNLOAD_CLAIM_SUBMISSION_HISTORY_ENDPOINT,
+  LINK_PATIENT_ACCOUNT,
+  GET_PATIENT_LINKS,
+  DELETE_PATIENT_LINKS,
+  ADD_LAB_ORDERS_RESULT_ENDPOINT,
+  GET_TREATMENT_TEAM_VISITS,
   ADD_ORGANIZATION_ENDPOINT,
   UPDATE_ORGANIZATION_ENDPOINT,
   GET_ORGANIZATION_HX_STATUS_ENDPOINT,
-  ADD_LAB_ORDERS_RESULT_ENDPOINT,
-  GET_TREATMENT_TEAM_VISITS,
   GET_NOTE_DOCUMENTS_ENDPOINT,
   GET_STAFF_USER_ENDPOINT,
   GET_NOTE_DOCUMENT_ENDPOINT,

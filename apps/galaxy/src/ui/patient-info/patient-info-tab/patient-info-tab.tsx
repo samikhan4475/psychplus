@@ -31,6 +31,7 @@ import { SaveButton } from './save-button'
 import { StatusSelect } from './status-selector'
 import { TestPatientCheckbox } from './test-patient-checkbox'
 import { AddressCard } from './user-address'
+import { LinkAccountCard } from './link-account'
 
 const TAB_TITLE = 'Patient Info'
 
@@ -118,7 +119,7 @@ const PatientInfoTab = ({
                 setDriverLicenseImage={setDriverLicenseImage}
               />
               <AddressCard />
-              {/* PHASE 2 item - <LinkAccountCard patientId={patientId} lintAccounts={[]} /> */}
+              <LinkAccountCard patientId={patientId} lintAccounts={[]} />
               <PreferredPartnerCard
                 preferredPartners={patientPreferredPartners ?? []}
               />

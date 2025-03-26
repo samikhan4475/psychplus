@@ -1,19 +1,35 @@
 'use client'
 
-import { IconButton } from '@radix-ui/themes'
-import { Trash2 } from 'lucide-react'
+import { Button } from '@radix-ui/themes'
+import { Row } from '@tanstack/react-table'
+import toast from 'react-hot-toast'
+import { PatientLink } from '@/types'
+import { deleteLinkAccount } from '../actions'
 
-const ActionsCell = () => {
-  const onDeleteRelation = async () => {}
+interface ActionsCellProps {
+  row: Row<PatientLink>
+  refetchList: () => void
+}
+const ActionsCell = ({ row, refetchList }: ActionsCellProps) => {
+  const handleDeleteLinkAccount = async () => {
+    const { id } = row.original
+    const result = await deleteLinkAccount(id.toString())
+    if (result.state === 'error') {
+      toast.error(result.error ?? 'Failed to delete linked account')
+    } else {
+      toast.success('Link Account deleted successfully')
+      refetchList()
+    }
+  }
   return (
-    <IconButton
+    <Button
+      type="button"
       size="1"
-      variant="ghost"
-      color="gray"
-      onClick={onDeleteRelation}
+      highContrast
+      onClick={handleDeleteLinkAccount}
     >
-      <Trash2 width={16} height={16} className="text-pp-gray-1" />
-    </IconButton>
+      Unlink
+    </Button>
   )
 }
 export { ActionsCell }

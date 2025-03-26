@@ -1,3 +1,5 @@
+'use server'
+
 import * as api from '@/api'
 import { PatientProfile } from '@/types'
 

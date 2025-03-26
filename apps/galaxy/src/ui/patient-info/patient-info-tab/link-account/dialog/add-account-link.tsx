@@ -1,24 +1,28 @@
 'use client'
 
 import { useState } from 'react'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { Box, Button, Dialog } from '@radix-ui/themes'
+import { Button, Dialog } from '@radix-ui/themes'
 import { X } from 'lucide-react'
-import { SubmitHandler, useForm } from 'react-hook-form'
-import z from 'zod'
-import { FormFieldContainer, FormSubmitButton } from '@/components'
 import { ShuffelIcon } from '@/components/icons'
 import { LinkAccountForm } from './filters/link-account-form'
 import { AddLinkAccountTable } from './table'
 
 interface AddAccountLinkDialogProps {
   patientId: string
+  onCloseModal: (open: boolean) => void
 }
-const AddAccountLink = ({ patientId }: AddAccountLinkDialogProps) => {
+const AddAccountLink = ({
+  patientId,
+  onCloseModal,
+}: AddAccountLinkDialogProps) => {
   const [openDialog, setOpenDialog] = useState(false)
 
+  const handleCloseModal = (openDialog: boolean) => {
+    setOpenDialog(openDialog)
+    onCloseModal(true)
+  }
   return (
-    <Dialog.Root open={openDialog} onOpenChange={setOpenDialog}>
+    <Dialog.Root open={openDialog} onOpenChange={handleCloseModal}>
       <Dialog.Trigger>
         <Button
           color="gray"
@@ -37,12 +41,7 @@ const AddAccountLink = ({ patientId }: AddAccountLinkDialogProps) => {
           Link Account
         </Dialog.Title>
         <LinkAccountForm />
-        <AddLinkAccountTable />
-        <Box className="mt-4 flex justify-end">
-          <Button type="button" size="1" highContrast>
-            Save
-          </Button>
-        </Box>
+        <AddLinkAccountTable patientId={patientId} />
       </Dialog.Content>
     </Dialog.Root>
   )

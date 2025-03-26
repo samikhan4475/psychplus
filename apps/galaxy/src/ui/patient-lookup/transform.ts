@@ -80,6 +80,7 @@ const transformResponseData = (data: PatientProfile[]): Patient[] =>
         : 'None',
       insurance: getPatientInsuranceName(item?.insurancePolicies),
       ...item,
+      patientLastLoginDateTime:item?.patientLastLoginDateTime
     }),
   )
 
