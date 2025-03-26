@@ -10,7 +10,7 @@ import {
 const OrderDateField = () => {
   return (
     <FormFieldContainer className="flex-row items-center gap-1">
-      <FormFieldLabel>Order Date</FormFieldLabel>
+      <FormFieldLabel>Date</FormFieldLabel>
       <I18nProvider locale="en-US">
         <DatePickerInput field="orderCreatedDate" className="w-[120px]" />
       </I18nProvider>

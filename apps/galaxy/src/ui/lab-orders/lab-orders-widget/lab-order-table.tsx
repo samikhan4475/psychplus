@@ -25,30 +25,26 @@ const getColumns: (appointmentId: string) => ColumnDef<LabOrders>[] = (
       id: 'labOrderDate',
       accessorKey: 'labOrderDate',
       header: ({ column }) => (
-        <ColumnHeader column={column} clientSideSort label="Order Date" />
+        <ColumnHeader column={column} clientSideSort label="Date/Time" />
       ),
       cell: ({ row }) => (
-        <DateTimeCell>{formatUTCDate(row.original.labOrderDate)}</DateTimeCell>
+        <DateTimeCell>
+          {formatUTCDate(row.original.labOrderDate, 'MM/dd/yy HH:mm')}
+        </DateTimeCell>
       ),
-    },
-    {
-      id: 'labOrderNumber',
-      accessorKey: 'labOrderNumber',
-      header: ({ column }) => (
-        <ColumnHeader column={column} clientSideSort label="Lab Order Number" />
-      ),
-      cell: ({ row }) => <TextCell>{row.original.labOrderNumber}</TextCell>,
     },
     {
       id: 'orderingStaffName',
       accessorKey: 'orderingStaffName',
       header: ({ column }) => (
-        <ColumnHeader column={column} clientSideSort label="Ordered By" />
+        <ColumnHeader column={column} clientSideSort label="Provider" />
       ),
       cell: ({ row }) => (
         <TextCell>
           {row.original?.orderingStaffName?.firstName ?? ''}{' '}
           {row.original?.orderingStaffName?.lastName ?? ''}
+          {', '}
+          {row.original?.orderingStaffName?.honors ?? ''}
         </TextCell>
       ),
     },
@@ -56,7 +52,7 @@ const getColumns: (appointmentId: string) => ColumnDef<LabOrders>[] = (
       id: 'labTests',
       accessorKey: 'labTests',
       header: ({ column }) => (
-        <ColumnHeader column={column} clientSideSort label="Test/Panel" />
+        <ColumnHeader column={column} clientSideSort label="Test" />
       ),
       cell: ({ row }) => <LabTestCell row={row} />,
     },
@@ -64,7 +60,7 @@ const getColumns: (appointmentId: string) => ColumnDef<LabOrders>[] = (
       id: 'orderingLab.name',
       accessorKey: 'orderingLab.name',
       header: ({ column }) => (
-        <ColumnHeader column={column} clientSideSort label="Lab Location" />
+        <ColumnHeader column={column} clientSideSort label="Location" />
       ),
       cell: ({ row }) => <TextCell>{row.original?.orderingLab?.name}</TextCell>,
     },
@@ -73,16 +69,17 @@ const getColumns: (appointmentId: string) => ColumnDef<LabOrders>[] = (
       accessorKey: 'orderStatus',
       header: ({ column }) => (
         <ColumnHeader
-          label="Status"
+          label="Lab Status"
           column={column}
           className="!text-black p-1 !font-medium"
+          clientSideSort
         />
       ),
       cell: ({ row }) => <StatusCell row={row} />,
     },
     {
       id: 'results',
-      size: 50,
+      size: 150,
       header: () => <ColumnHeader label="Result" />,
       cell: ({ row }) => <ResultsCell row={row} />,
     },

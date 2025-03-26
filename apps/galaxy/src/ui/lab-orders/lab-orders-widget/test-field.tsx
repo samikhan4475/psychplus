@@ -10,7 +10,7 @@ const TestField = () => {
 
   return (
     <FormFieldContainer className="flex-row items-center gap-1">
-      <FormFieldLabel>Test</FormFieldLabel>
+      <FormFieldLabel>Test Name</FormFieldLabel>
       <TextField.Root
         size="1"
         placeholder="Test name"

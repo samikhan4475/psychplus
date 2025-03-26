@@ -1,7 +1,6 @@
 import { ReactNode, useState } from 'react'
 import { Cross2Icon } from '@radix-ui/react-icons'
-import { Dialog, Flex, ScrollArea, Tooltip } from '@radix-ui/themes'
-import { FileText } from 'lucide-react'
+import { Dialog, Flex, ScrollArea, Text, Tooltip } from '@radix-ui/themes'
 
 interface LabResultDialogProps {
   title?: string
@@ -26,7 +25,9 @@ const LabResultDialog = ({
     <Dialog.Root open={isOpen} onOpenChange={handleOpenChange}>
       <Tooltip content="View Results" side="top" align="center">
         <Dialog.Trigger>
-          <FileText width={16} height={16} color="black" />
+          <Text size="1" weight="regular" className="text-pp-blue">
+            View Results
+          </Text>
         </Dialog.Trigger>
       </Tooltip>
       <Dialog.Content className="relative max-h-[80vh] max-w-[70vw] overflow-y-scroll">

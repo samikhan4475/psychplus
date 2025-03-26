@@ -9,7 +9,6 @@ import { useForm, type SubmitHandler } from 'react-hook-form'
 import { z } from 'zod'
 import { FormContainer } from '@/components'
 import { formatDateToISOString, sanitizeFormData } from '@/utils'
-import { CptCodeField } from './cpt-code-field'
 import { LocationSelect } from './location-select'
 import { OrderBySelect } from './order-by-select'
 import { OrderDateField } from './order-date-field'
@@ -90,7 +89,6 @@ const LabOrdersFilterForm = () => {
       <OrderBySelect />
       <LocationSelect />
       <TestField />
-      <CptCodeField />
       <StatusSelect />
 
       <Button

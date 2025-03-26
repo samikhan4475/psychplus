@@ -6,7 +6,7 @@ import { CODESETS } from '@/constants'
 const StatusSelect = () => {
   return (
     <FormFieldContainer className="flex-row items-center gap-1">
-      <FormFieldLabel>Status</FormFieldLabel>
+      <FormFieldLabel>Lab Status</FormFieldLabel>
       <CodesetSelect
         name="orderStatus"
         size="1"

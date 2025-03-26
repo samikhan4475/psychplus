@@ -204,10 +204,10 @@ const useLabOrderForm = (
 
       toast.success('Saved!')
       updateLabOrdersList(updatedLabOrder) //local
+      setOpen(false)
     } else {
       toast.error(result?.error ?? 'Error while saving!')
     }
-    setOpen(false)
     setLoadingSubmit(false)
     setLoadingPlaceOrder(false)
   }

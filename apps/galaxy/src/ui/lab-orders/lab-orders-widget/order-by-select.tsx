@@ -6,7 +6,7 @@ import { AsyncSelect, FormFieldContainer, FormFieldLabel } from '@/components'
 const OrderBySelect = () => {
   return (
     <FormFieldContainer className="flex-row items-center gap-1">
-      <FormFieldLabel>Ordered By</FormFieldLabel>
+      <FormFieldLabel>Provider</FormFieldLabel>
       <AsyncSelect
         field="orderingStaffId"
         placeholder="Select"
