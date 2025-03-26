@@ -121,6 +121,7 @@ export const usePatientForm = () => {
         lastName: data.lastName,
       },
       birthdate: data.birthdate.toString(),
+      gender: data.gender,
       socialSecurityNumber: data.socialSecurityNumber,
       contactDetails: {
         ...profile.contactDetails,
