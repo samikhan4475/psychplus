@@ -35,12 +35,12 @@ import {
 import { getCurrentWeekStart } from './utils'
 
 const SchedulerFilterGroup = ({
-  showFollowUpFilter = false,
+  isFollowup = false,
 }: {
-  showFollowUpFilter: boolean
+  isFollowup: boolean
 }) => {
   const [isPartialFilterView, setIsPartialFilterView] =
-    useState<boolean>(showFollowUpFilter)
+    useState<boolean>(isFollowup)
   const {
     setDates,
     fetchAppointments,
@@ -72,11 +72,11 @@ const SchedulerFilterGroup = ({
     if (!hasHydrated) return
     const fetchSlots = async () => {
       const map = await fetchUserSettings()
-      if (persistedFormData && !showFollowUpFilter) {
+      if (persistedFormData && !isFollowup) {
         const filterValues = transformParamsToFilterValues(persistedFormData)
         form.reset(filterValues)
         applyFilters(filterValues)
-      } else if (map && map.size > 0 && !showFollowUpFilter) {
+      } else if (map && map.size > 0 && !isFollowup) {
         const filterValues = transformSettingToFilterValues(map)
         form.reset({ ...defaultValues, ...filterValues })
         fetchDataWithSettings(map)
@@ -134,7 +134,7 @@ const SchedulerFilterGroup = ({
           py="1"
           className="bg-white sticky top-0"
         >
-          {showFollowUpFilter ? (
+          {isFollowup ? (
             <Flex gap="2" align="start">
               <StateSelect />
               <LocationDropdown />

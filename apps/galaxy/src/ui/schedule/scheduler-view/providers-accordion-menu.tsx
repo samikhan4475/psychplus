@@ -9,9 +9,11 @@ import { useStore } from './store'
 const ProvidersAccordionMenu = ({
   onVisitAdd,
   patient,
+  isFollowup
 }: {
   onVisitAdd?: () => void
   patient: undefined | NewPatient
+  isFollowup: boolean
 }) => {
   const appointmentAvailabilities = useStore((state) => state.data)
 
@@ -25,6 +27,7 @@ const ProvidersAccordionMenu = ({
             value={`${providerAvailability.specialist.id}-${providerAvailability.clinic.id}`}
             patient={patient}
             onVisitAdd={onVisitAdd}
+            isFollowup={isFollowup}
           />
         ))
       ) : (

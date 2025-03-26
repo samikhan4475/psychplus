@@ -103,6 +103,9 @@ const SIGN_CONSENT_WARNING =
 const SIGN_PMP_WARNING =
   "'PMP is reviewed' checkbox is required for controlled substances."
 
+const SIGN_FOLLOW_UP_WARNING =
+  '"Patient did not want to follow up for this service" reason is required'
+
 export {
   QuickNoteSectionName,
   questionnairesAddToNotesSection,
@@ -124,4 +127,5 @@ export {
   SIGN_PRIMARY_NOTE_EXIST,
   SIGN_CONSENT_WARNING,
   SIGN_PMP_WARNING,
+  SIGN_FOLLOW_UP_WARNING,
 }

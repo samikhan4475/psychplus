@@ -9,8 +9,10 @@ import {
 } from '@/components'
 import { getClinicsOptionsAction } from '@/ui/schedule/client-actions'
 import { SchemaType } from '../schema'
+import { useStore } from '../store'
 
 const LocationDropdown = ({ disabled }: { disabled: boolean }) => {
+  const isFollowupDenied  = useStore(state => state.isFollowupDenied)
   const form = useFormContext<SchemaType>()
   return (
     <FormFieldContainer className="flex-row gap-1">
@@ -21,7 +23,7 @@ const LocationDropdown = ({ disabled }: { disabled: boolean }) => {
         fetchOptions={getClinicsOptionsAction}
         buttonClassName="w-full h-6"
         className="w-[150px]"
-        disabled={disabled}
+        disabled={disabled || isFollowupDenied}
         onValueChange={(value) => {
           if (value === '') return
           form.setValue('location', value)

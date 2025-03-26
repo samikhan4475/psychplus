@@ -7,6 +7,8 @@ const schema = z
     providerId: z.string().optional(),
     isOverridePermissionProvided: z.boolean().optional().default(false),
     isProceedPermissionProvided: z.boolean().optional().default(false),
+    reason: z.string().optional(),
+    isPatientWilling: z.boolean().optional(),
   })
   .superRefine((data, ctx) => {
     if (!data.location)

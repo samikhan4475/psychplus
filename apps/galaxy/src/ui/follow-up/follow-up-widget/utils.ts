@@ -1,4 +1,9 @@
-import { parseAbsoluteToLocal } from '@internationalized/date'
+import {
+  getLocalTimeZone,
+  parseAbsolute,
+  parseAbsoluteToLocal,
+  toCalendarDateTime,
+} from '@internationalized/date'
 import {
   Appointment,
   BookVisitPayload,
@@ -177,6 +182,12 @@ const transformIn = (appointment: Appointment, defaultDuration?: string) => {
   return payload
 }
 
+const getCalendarDateTimeFromUTC = (date?: string) => {
+  return date
+    ? toCalendarDateTime(parseAbsolute(date, getLocalTimeZone()))
+    : undefined
+}
+
 const shouldDisableFollowUpButton = (
   visitType: string,
   visitSequence: VisitSequenceTypes,
@@ -188,11 +199,29 @@ const shouldDisableFollowUpButton = (
     visitSequence === VisitSequenceTypes.InitialDischarge
   );
 };
+
+const getDefaultNext = (visitType: string) => {
+  switch (visitType) {
+    case VisitTypes.IndividualPsychotherapy:
+    case VisitTypes.FamilyPsychotherapy:
+    case VisitTypes.GroupTherapy:
+    case VisitTypes.Tms:
+    case VisitTypes.Spravato:
+    case VisitTypes.Ect:
+    case VisitTypes.KetamineFourVisit:
+      return "1 week" 
+    default:
+      return "4 week"
+  }
+}
+
 export {
   removeEmptyValues,
   getEndDate,
   transformIn,
   getOffsetStartDate,
   sanitizeFormData,
-  shouldDisableFollowUpButton
+  getCalendarDateTimeFromUTC,
+  shouldDisableFollowUpButton,
+  getDefaultNext,
 }

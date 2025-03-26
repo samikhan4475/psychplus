@@ -12,6 +12,7 @@ import { useCodesetCodes } from '@/hooks'
 import { useStore as useGlobalStore } from '@/store'
 import { Appointment, PatientConsent } from '@/types'
 import { useStore as useDiagnosisStore } from '@/ui/diagnosis/store'
+import { useStore as useFollowupStore } from '@/ui/follow-up/follow-up-widget/store'
 import { useStore as useMedicationStore } from '@/ui/medications/patient-medications-widget/store'
 import { filterDefaultCosigner } from '@/utils'
 import { AlertDialog } from '../alerts'
@@ -19,6 +20,7 @@ import { PatientMedication } from '../medications/patient-medications-widget/typ
 import {
   SEND_TO_SIGNATURE_BUTTON,
   SIGN_BUTTON,
+  SIGN_FOLLOW_UP_WARNING,
   SIGN_PMP_WARNING,
   SIGN_PRIMARY_NOTE_EXIST,
   SIGN_PRIOR_VISIT_TIME_WARNING,
@@ -27,6 +29,7 @@ import {
 import { useQuickNotesPermissions } from './hooks'
 import { PolicyConsentDialog } from './policy-consent-dialog'
 import { useStore, validateDiagnosis } from './store'
+import { SignPayloadProps } from './types'
 
 interface QuickNotesSignButtonProps {
   appointment: Appointment
@@ -71,6 +74,20 @@ const QuickNotesSignButton = ({
     data: state.data,
     isPmpReviewed: state.isPmpReviewed,
     saveIsPmpReviewedForMedication: state.saveIsPmpReviewedForMedication,
+  }))
+
+  const {
+    isFollowupDeniedWithoutReason,
+    updateFollowupDenialStatus,
+    isFollowupRequired,
+    getAutoFollowupDate,
+    refetchFollowup,
+  } = useFollowupStore((state) => ({
+    isFollowupDeniedWithoutReason: state.isFollowupDeniedWithoutReason,
+    updateFollowupDenialStatus: state.updateFollowupDenialStatus,
+    isFollowupRequired: state.isFollowupRequired,
+    getAutoFollowupDate: state.getAutoFollowupDate,
+    refetchFollowup: state.search,
   }))
 
   const {
@@ -130,7 +147,7 @@ const QuickNotesSignButton = ({
   const isFutureAppointment =
     appointment?.startDate && new Date(appointment.startDate) > new Date()
 
-  const signPayload = {
+  const signPayload: SignPayloadProps = {
     patientId,
     appointmentId,
     appointment,
@@ -165,6 +182,27 @@ const QuickNotesSignButton = ({
     return false
   }
 
+  const updateSignPayloadForAutoFollowup = () => {
+    if (isFollowupRequired()) {
+      signPayload.isAllowedFollowupForNextAvailableSlot = true
+      signPayload.autoFollowUpDate = getAutoFollowupDate(
+        appointment.visitTypeCode ?? '',
+      )
+    }
+  }
+
+  const saveFollowupDeniedStatus = () => {
+    updateFollowupDenialStatus({
+      appointmentId: Number(appointmentId),
+      shouldShowToast: false,
+    })
+  }
+
+  const handleAutoFollowupGeneration = () => {
+    saveFollowupDeniedStatus()
+    updateSignPayloadForAutoFollowup()
+  }
+
   const signNoteHandler = async () => {
     if (
       appointment?.isRequiredPolicy &&
@@ -173,6 +211,16 @@ const QuickNotesSignButton = ({
       setIsPolicyAlertOpen(true)
       return
     }
+
+    if (isFollowupDeniedWithoutReason()) {
+      showAlert({
+        title: 'Validation Error',
+        message: SIGN_FOLLOW_UP_WARNING,
+        disableClose: true,
+      })
+      return
+    }
+    handleAutoFollowupGeneration()
 
     if (checkIfPmpReviewRequired(medicationData?.medications)) {
       toast.error(SIGN_PMP_WARNING)
@@ -229,12 +277,20 @@ const QuickNotesSignButton = ({
     signNote()
   }
 
+  const refetchFollowupOnSign = () => {
+    refetchFollowup({
+      patientIds: [Number(patientId)],
+      appointmentIds: [Number(appointmentId)],
+    })
+  }
+
   const signNote = async () => {
     const signResults = await sign(signPayload)
 
     if (signResults.state === 'success') {
       const toastMessage = isPrescriber ? 'signed' : 'send to signed'
       setAlertInfo(initialAlertInfo)
+      refetchFollowupOnSign()
       toast.success(`Quicknote ${toastMessage}!`)
       return
     }
@@ -250,9 +306,9 @@ const QuickNotesSignButton = ({
         message: SIGN_PRIMARY_NOTE_EXIST,
         okButton: {
           text: 'Proceed',
-          onClick: () => {
+          onClick: async () => {
             setAlertInfo(initialAlertInfo)
-            markAsError(signPayload)
+            markAsError(signPayload, refetchFollowupOnSign)
           },
         },
       })

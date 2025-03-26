@@ -157,6 +157,9 @@ interface Appointment {
   creditCardVerificationStatus: string
   isTestPatient: boolean
   isTcmBlockComplete: boolean
+  isFollowupExistsWithin12Weeks: boolean
+  isFollowupDenied?: boolean
+  followUpDenialReason?: string
   isRequiredPolicy?: boolean
 }
 

@@ -3,9 +3,18 @@
 import { NoteDetailProps } from '../types'
 import { Details } from './details'
 
-const FollowUpNoteDetailView = ({ appointments }: NoteDetailProps) => {
-  if (appointments?.length === 0) return null
-  return <Details data={appointments || []} />
+const FollowUpNoteDetailView = ({
+  appointments,
+  appointment,
+}: NoteDetailProps) => {
+
+  return (
+    <Details
+      data={appointments || []}
+      isFollowupDenied={appointment?.isFollowupDenied ?? false}
+      followupDenialReason={appointment?.followUpDenialReason ?? ''}
+    />
+  )
 }
 
 export { FollowUpNoteDetailView }

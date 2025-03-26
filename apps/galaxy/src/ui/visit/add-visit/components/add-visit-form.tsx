@@ -49,6 +49,7 @@ interface AddVisitFormProps {
   patient?: NewPatient
   slotDetails?: SlotDetails
   isSlot?: boolean
+  isFollowup: boolean
 }
 
 const AddVisitForm = ({
@@ -60,6 +61,7 @@ const AddVisitForm = ({
   timezone,
   onClose,
   patient,
+  isFollowup,
 }: AddVisitFormProps) => {
   const [newPatient, setNewPatient] = useState<NewPatient>()
   const { staffId } = useGlobalStore((state) => state.user)
@@ -221,7 +223,7 @@ const AddVisitForm = ({
       data,
       selectedVisitType,
     )
-    const sanitizedData = sanitizeFormData(payload)
+    const sanitizedData = sanitizeFormData({...payload, isFollowup})
 
     bookVisitAction(sanitizedData).then((res) => {
       setIsLoading(false)

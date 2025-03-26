@@ -11,6 +11,7 @@ import {
 import { Appointment, SelectOptionType } from '@/types'
 import { getProvidersOptionsAction } from '../client-actions/get-provider-options'
 import { SchemaType } from '../schema'
+import { useStore } from '../store'
 
 const ProviderDropdown = ({
   appointment,
@@ -20,6 +21,7 @@ const ProviderDropdown = ({
   disabled: boolean
 }) => {
   const form = useFormContext<SchemaType>()
+  const isFollowupDenied = useStore(state => state.isFollowupDenied)
   const [options, setOptions] = useState<SelectOptionType[]>([])
   const [loading, setLoading] = useState<boolean>(false)
   const [location, providerId] = useWatch({
@@ -54,7 +56,7 @@ const ProviderDropdown = ({
           }
         }}
         className="w-[150px]"
-        disabled={disabled}
+        disabled={disabled || isFollowupDenied}
         loading={loading}
       />
       <FormFieldError name="providerId" className="self-center" />

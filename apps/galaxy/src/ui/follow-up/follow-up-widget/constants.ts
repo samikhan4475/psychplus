@@ -64,4 +64,11 @@ const NEXT_OPTIONS = [
 const DELETE_FOLLOWUP_PERMISSION =
   'You do not have permission to delete a followup. Please contact your supervisor if you need any further assistance'
 
-export { NEXT_OPTIONS, DELETE_FOLLOWUP_PERMISSION }
+const FOLLOW_UP_DENIED_REASON_ERROR =
+  'Please provide reason for not creating follow up'
+
+export {
+  NEXT_OPTIONS,
+  DELETE_FOLLOWUP_PERMISSION,
+  FOLLOW_UP_DENIED_REASON_ERROR,
+}

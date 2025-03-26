@@ -11,6 +11,7 @@ import {
   SchedulerView,
 } from '@/ui/schedule/scheduler-view'
 import { SchemaType } from '../schema'
+import { useStore } from '../store'
 import { getOffsetStartDate } from '../utils'
 
 const CloseDialogIcon = () => (
@@ -35,6 +36,7 @@ const CalenderView = ({
   appointmentDate: undefined | string
 }) => {
   const form = useFormContext<SchemaType>()
+  const isFollowupDenied = useStore((state) => state.isFollowupDenied)
   const [isOpen, setIsOpen] = useState(false)
   const next = useWatch({
     control: form.control,
@@ -58,9 +60,10 @@ const CalenderView = ({
       <Dialog.Trigger>
         <Button
           color="gray"
-          className="text-black"
+          className="text-black data-[disabled=true]:bg-pp-states-disabled data-[disabled=true]:text-pp-dark-grey"
           size="1"
           variant="outline"
+          disabled={isFollowupDenied}
           type="button"
         >
           <Plus width={16} height={16} />
@@ -79,7 +82,7 @@ const CalenderView = ({
         </Dialog.Title>
 
         <SchedulerView
-          showFollowUpFilter={true}
+          isFollowup={true}
           noOfDays={6}
           patient={patient}
           onVisitAdd={onVisitAdd}

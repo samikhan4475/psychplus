@@ -14,24 +14,19 @@ import {
 import { manageCodes, sendEvent } from '@/utils'
 import { signNoteAction } from '../actions'
 import { QuickNoteSectionName } from '../constants'
+import { SignPayloadProps } from '../types'
 import { modifyWidgetResponse } from '../utils'
 import { saveWidgets } from './utils'
-
-interface SignPayloadProps {
-  patientId: string
-  appointmentId: string
-  signedByUserId?: number
-  appointment: Appointment
-  noteTypeCode?: string
-  signedDate?: string
-}
 
 interface Store {
   loading: boolean
   patient: PatientProfile
   save: (appointment: Appointment) => void
   sign: (payload: SignPayloadProps) => Promise<any>
-  markAsError: (payload: SignPayloadProps) => void
+  markAsError: (
+    payload: SignPayloadProps,
+    onSuccess?: () => void,
+  ) => Promise<void>
   cosignerLabel?: string
   setCosignerLabel: (value: string) => void
   unsavedChanges: Record<string, boolean>
@@ -189,7 +184,7 @@ const createStore = (initialState: StoreInitialState) =>
     setMarkedStatus: (payload) => {
       set({ isMarkedAsError: payload })
     },
-    markAsError: async (payload) => {
+    markAsError: async (payload, onSuccess) => {
       try {
         set({ loading: true })
         const body = {
@@ -204,6 +199,7 @@ const createStore = (initialState: StoreInitialState) =>
             ? 'Quicknote signed!'
             : 'Quicknote send to signed!'
           toast.success(toastMessage)
+          onSuccess?.()
           return
         }
         set({ isMarkedAsError: true })

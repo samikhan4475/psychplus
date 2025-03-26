@@ -761,6 +761,9 @@ const ELECTRONICALLY_SIGN_POLICY_ENDPOINT = (patientId: string) =>
 const GET_SHARED_POLICY_FILE = (fileName: string) =>
   `${API_URL}/SharedContent/documents/${fileName}.html`
 
+const UPDATE_FOLLOW_UP_DENIAL_STATUS = (appointmentId: number) =>
+  `${API_URL}/api/appointments/${appointmentId}/actions/followupstatus`
+
 const GET_USERS_SELF_INITIAL_INFORMATION_ENDPOINT = `${API_URL}/api/users/self/initialinformation`
 
 export {
@@ -1087,6 +1090,7 @@ export {
   ADD_SELF_USER_SETTINGS,
   UPDATE_SELF_USER_SETTINGS,
   SELF_USER_BULK_SETTINGS,
+  UPDATE_FOLLOW_UP_DENIAL_STATUS,
   GET_LOCATION_SERVICES_ENDPOINT,
   DELETE_SERVICES_ENDPOINT,
   UPDATE_SERVICE_ENDPOINT,

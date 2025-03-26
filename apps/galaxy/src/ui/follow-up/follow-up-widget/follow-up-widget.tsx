@@ -18,9 +18,7 @@ const FollowUpWidget = ({ patientId }: FollowUpProps) => {
 
   const appointmentId = searchParams.get('id') || '0'
 
-  const { search } = useStore((state) => ({
-    search: state.search,
-  }))
+  const search  = useStore((state) => state.search) 
 
   useEffect(() => {
     search({
@@ -31,11 +29,9 @@ const FollowUpWidget = ({ patientId }: FollowUpProps) => {
 
   return (
     <Flex className="h-full w-full" direction="column">
-      <FollowUpHeader />
-
+      <FollowUpHeader appointmentId={appointmentId} />
       <WidgetContainer>
         <FollowUpForm patientId={patientId} appointmentId={appointmentId} />
-
         <FollowUpTable />
       </WidgetContainer>
     </Flex>

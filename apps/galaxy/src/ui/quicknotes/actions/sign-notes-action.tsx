@@ -12,6 +12,8 @@ interface signNoteActionParams {
   coSignedByUserId?: string
   noteTitleCode?: string
   noteTypeCode?: string
+  isAllowedFollowupForNextAvailableSlot?: boolean
+  autoFollowUpDate?: string
 }
 
 interface signNoteActionPayload {
@@ -22,6 +24,8 @@ interface signNoteActionPayload {
   signedDate?: string
   coSignedByUserId?: string
   noteTypeCode?: string
+  isAllowedFollowupForNextAvailableSlot?: boolean
+  autoFollowUpDate?: string
 }
 
 const signNoteAction = async (
@@ -36,6 +40,8 @@ const signNoteAction = async (
     signedByUserId,
     noteTitleCode,
     noteTypeCode,
+    isAllowedFollowupForNextAvailableSlot,
+    autoFollowUpDate,
   } = signPayload
 
   const url = new URL(api.NOTE_SIGN_ENDPOINT(patientId, appointmentId))
@@ -48,14 +54,20 @@ const signNoteAction = async (
     signedDate,
     noteTypeCode,
   }
+  const shouldAutoGenerateFollowup =
+    isAllowedFollowupForNextAvailableSlot && autoFollowUpDate
 
   if (coSignedByUserId) {
     payload['coSignedByUserId'] = coSignedByUserId
   }
 
+  const requestBody = shouldAutoGenerateFollowup
+    ? { ...payload, isAllowedFollowupForNextAvailableSlot, autoFollowUpDate }
+    : payload
+
   const response = await api.PUT<QuickNoteSectionItem[]>(
     url.toString(),
-    payload,
+    requestBody,
   )
   if (response.state === 'error') {
     return {

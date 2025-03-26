@@ -15,6 +15,7 @@ interface AddVisitProps {
   timezone?: string
   isTimed?: boolean
   slotDetails?: SlotDetails
+  isFollowup?: boolean
 }
 
 const AddVisit = ({
@@ -26,6 +27,7 @@ const AddVisit = ({
   isTimed,
   patient,
   showAddUser,
+  isFollowup = false,
 }: PropsWithChildren<AddVisitProps>) => {
   const [isOpen, setIsOpen] = useState(false)
 
@@ -54,6 +56,7 @@ const AddVisit = ({
           onClose={() => setIsOpen(false)}
           patient={patient}
           showAddUser={showAddUser}
+          isFollowup={isFollowup}
         />
       </Dialog.Content>
     </Dialog.Root>

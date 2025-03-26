@@ -21,6 +21,7 @@ interface Props {
   provider: AppointmentAvailability
   value: string
   patient: undefined | NewPatient
+  isFollowup: boolean
 }
 
 const Slots = ({
@@ -53,7 +54,13 @@ const Slots = ({
   </Flex>
 )
 
-const AccordionItem = ({ onVisitAdd, provider, value, patient }: Props) => {
+const AccordionItem = ({
+  onVisitAdd,
+  provider,
+  value,
+  patient,
+  isFollowup,
+}: Props) => {
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const [isAlertOpen, setIsAlertOpen] = useState<boolean>(false)
   const { dates, formData, fetchData } = useStore((state) => ({
@@ -218,6 +225,7 @@ const AccordionItem = ({ onVisitAdd, provider, value, patient }: Props) => {
                             isTimed
                             key={slot.startDate}
                             patient={patient}
+                            isFollowup={isFollowup}
                           >
                             <Button
                               variant="outline"

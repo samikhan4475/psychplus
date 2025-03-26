@@ -9,13 +9,13 @@ import { ProvidersAccordionMenu } from './providers-accordion-menu'
 import { useStore } from './store'
 
 const SchedulerView = ({
-  showFollowUpFilter = false,
+  isFollowup = false,
   noOfDays = 13,
   patient,
   onVisitAdd,
   offsetStartDate,
 }: {
-  showFollowUpFilter?: boolean
+  isFollowup?: boolean
   noOfDays?: number
   patient?: NewPatient
   onVisitAdd?: () => void
@@ -34,7 +34,7 @@ const SchedulerView = ({
           top="0"
           className="bg-white z-10"
         >
-          <SchedulerFilterGroup showFollowUpFilter={showFollowUpFilter} />
+          <SchedulerFilterGroup isFollowup={isFollowup} />
 
           <DayHeader noOfDays={noOfDays} offsetStartDate={offsetStartDate} />
         </Flex>
@@ -43,7 +43,7 @@ const SchedulerView = ({
             <LoadingPlaceholder />
           </Flex>
         ) : (
-          <ProvidersAccordionMenu patient={patient} onVisitAdd={onVisitAdd} />
+          <ProvidersAccordionMenu isFollowup={isFollowup} patient={patient} onVisitAdd={onVisitAdd} />
         )}
       </ScrollArea>
     </Flex>

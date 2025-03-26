@@ -20,4 +20,17 @@ type WidgetType = {
   isPatientAndAppointmentDependent?: boolean
 }
 
-export type { WidgetType, WidgetComponent }
+interface SignPayloadProps {
+  patientId: string
+  appointmentId: string
+  signedByUserId?: number
+  appointment: Appointment
+  noteTypeCode?: string
+  isAllowedFollowupForNextAvailableSlot?: boolean
+  autoFollowUpDate?: string
+  signedDate?: string
+  noteTitleCode?: string
+  coSignedByUserId?: string
+}
+
+export type { WidgetType, WidgetComponent, SignPayloadProps }
