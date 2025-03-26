@@ -3,20 +3,24 @@ import { TextField } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
 import { FormFieldContainer, FormFieldLabel } from '@/components'
 import { SchemaType } from './schema'
+import { getAgeFromDate } from '@/utils'
 
-const BioField = () => {
+const AgeField = () => {
   const form = useFormContext<SchemaType>()
+  const dob = form.watch('dob')
+  const age = dob ? getAgeFromDate(dob) : 18
+
   return (
     <FormFieldContainer>
-      <FormFieldLabel>Bio Text</FormFieldLabel>
+      <FormFieldLabel>Age</FormFieldLabel>
       <TextField.Root
         size="1"
-        maxLength={128}
+        disabled
         className="border-pp-gray-2 w-full border border-solid !outline-none [box-shadow:none] "
-        {...form.register('biography')}
+        value={age}
       />
     </FormFieldContainer>
   )
 }
 
-export { BioField }
+export { AgeField }

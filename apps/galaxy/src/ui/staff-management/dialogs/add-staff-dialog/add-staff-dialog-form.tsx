@@ -3,8 +3,8 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Flex, Grid } from '@radix-ui/themes'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import { FormContainer } from '@/components'
-import { formatDate, formatDateToISOString, sanitizeFormData } from '@/utils'
+import { CheckboxInput, FormContainer } from '@/components'
+import { getPaddedDateString, sanitizeFormData } from '@/utils'
 import { addStaffAction } from '../../actions/add-staff'
 import { useStore } from '../../store'
 import { Staff } from '../../types'
@@ -33,6 +33,7 @@ import { StaffSaveButton } from './staff-save-button'
 import { StaffTypeSelect } from './staff-type-select'
 import { StatusSelect } from './status-select'
 import { SupervisedByField } from './supervised-by-field'
+import { TimeZoneSelect } from './time-zone-select'
 import { VirtualWaitRoomField } from './virtual-wait-room-field'
 
 interface AddStaffDialogFormProps {
@@ -48,11 +49,11 @@ const AddStaffDialogForm = ({ handleOpen, staff }: AddStaffDialogFormProps) => {
     defaultValues: getInitialValues(staff),
   })
   const onSubmit: SubmitHandler<SchemaType> = async (data) => {
-    const formattedDate = formatDateToISOString(data.dateOfBirth)
     const finalData = {
       ...data,
-      dateOfBirth:
-        typeof formattedDate === 'string' ? formatDate(formattedDate) : null,
+      dateOfBirth: data.dateOfBirth
+        ? getPaddedDateString(data.dateOfBirth)
+        : null,
     }
     const sanatizedData = sanitizeFormData(finalData)
 
@@ -68,6 +69,9 @@ const AddStaffDialogForm = ({ handleOpen, staff }: AddStaffDialogFormProps) => {
   }
   return (
     <FormContainer form={form} className="gap-2" onSubmit={onSubmit}>
+      <Flex justify="end">
+        <CheckboxInput label="Add as test provider" field="isTest" />
+      </Flex>
       <Grid columns="3" gap="2">
         <FirstNameField />
         <MiddleNameField />
@@ -105,6 +109,9 @@ const AddStaffDialogForm = ({ handleOpen, staff }: AddStaffDialogFormProps) => {
       </Grid>
       <HomeAddressGroup />
       <MailingAddressGroup />
+      <Grid columns="3" gap="2" align="baseline">
+        <TimeZoneSelect />
+      </Grid>
       <StaffSaveButton />
     </FormContainer>
   )

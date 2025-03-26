@@ -54,9 +54,11 @@ const transformInStaffList = async (staffList: Staff[]): Promise<Staff[]> => {
       practiceIds: staff.practiceIds.map(
         (id) => practiceLookup[id]?.label || id,
       ),
-      providerAttributions: staff.providerAttributions.map(
-        (id) => practiceLookup[id]?.label || id,
-      ),
+      providerAttributions: staff.providerAttributions
+        ? staff.providerAttributions.map(
+            (id) => practiceLookup[id]?.label || id,
+          )
+        : [],
       staffUserRoleIds: staff.staffUserRoleIds.map(
         (id) => roleLookup[id]?.label || id,
       ),

@@ -108,13 +108,15 @@ const schema = z
       .string()
       .min(1, { message: 'Required' })
       .min(10, { message: 'NPI must be 10 characters' }),
-    status: z.string(),
+    status: requiredString,
     providerAttributions: z.array(z.string()).optional(),
     staffUserRoleIds: z.array(z.string().min(1, { message: 'Required' })),
     virtualRoomLink: optionalString,
     staffType: optionalString,
     organizationIds: z.array(z.string().min(1, { message: 'Required' })),
     practiceIds: z.array(z.string().min(1, { message: 'Required' })),
+    timeZonePreference: requiredString,
+    isTest: z.boolean(),
   })
   .superRefine((data, ctx) => {
     const { addresses, isMailingAddressSameAsPrimary } = data.contactInfo

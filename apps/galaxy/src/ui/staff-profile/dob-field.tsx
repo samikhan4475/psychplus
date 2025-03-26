@@ -6,8 +6,8 @@ import { FormFieldContainer, FormFieldLabel } from '@/components/form'
 const DobField = () => {
   return (
     <FormFieldContainer>
-      <FormFieldLabel>DOB</FormFieldLabel>
-      <DatePickerInput isRequired={false} field="dob" />
+      <FormFieldLabel required>DOB</FormFieldLabel>
+      <DatePickerInput field="dob" />
     </FormFieldContainer>
   )
 }

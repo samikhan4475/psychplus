@@ -10,21 +10,44 @@ const MailingAddressGroup = () => {
   const isMailingAddressSameAsPrimary = watch(
     'contactInfo.isMailingAddressSameAsPrimary',
   )
+  const contactInfo = watch('contactInfo')
+
+  const {
+    city,
+    country,
+    postalCode,
+    state,
+    street1,
+    street2,
+    type,
+    timeZoneId,
+  } = contactInfo.addresses[0]
 
   useEffect(() => {
     resetField('contactInfo.addresses.1', {
       defaultValue: {
-        postalCode: '',
+        postalCode: isMailingAddressSameAsPrimary ? postalCode : '',
         type: 'Mailing',
-        street1: '',
-        street2: '',
-        city: '',
-        state: '',
-        country: '',
-        timeZoneId: '',
+        street1: isMailingAddressSameAsPrimary ? street1 : '',
+        street2: isMailingAddressSameAsPrimary ? street2 : '',
+        city: isMailingAddressSameAsPrimary ? city : '',
+        state: isMailingAddressSameAsPrimary ? state : '',
+        country: isMailingAddressSameAsPrimary ? country : '',
+        timeZoneId: isMailingAddressSameAsPrimary ? timeZoneId : '',
       },
     })
-  }, [isMailingAddressSameAsPrimary, resetField])
+  }, [
+    isMailingAddressSameAsPrimary,
+    city,
+    country,
+    postalCode,
+    state,
+    street1,
+    street2,
+    type,
+    timeZoneId,
+    resetField,
+  ])
 
   return (
     <>

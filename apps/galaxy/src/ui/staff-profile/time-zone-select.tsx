@@ -7,19 +7,19 @@ import {
 } from '@/components'
 import { CODESETS } from '@/constants'
 
-const StatusSelect = () => {
+const TimeZoneSelect = () => {
   return (
     <FormFieldContainer>
-      <FormFieldLabel required>Status</FormFieldLabel>
+      <FormFieldLabel required>Time Zone Preferences</FormFieldLabel>
       <CodesetSelect
         size="1"
-        codeset={CODESETS.RecordStatus}
-        exclude={['Archived', 'Deleted']}
-        name="status"
+        codeset={CODESETS.TimeZoneId}
+        groupingCodes={['US']}
+        name="timeZonePreference"
       />
-      <FormFieldError name="status" />
+      <FormFieldError name="timeZonePreference" />
     </FormFieldContainer>
   )
 }
 
-export { StatusSelect }
+export { TimeZoneSelect }

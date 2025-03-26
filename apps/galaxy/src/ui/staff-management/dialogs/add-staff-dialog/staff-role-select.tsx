@@ -12,6 +12,9 @@ import { SchemaType } from './schema'
 const StaffRoleSelect = () => {
   const form = useFormContext<SchemaType>()
   const roles = useStore((state) => state.dropDownOptions.roles)
+  const staffType = form.watch('staffType')
+  const filteredRoles = roles.filter((role) => role.value === staffType)
+
   return (
     <FormFieldContainer>
       <FormFieldLabel required>Role</FormFieldLabel>
@@ -20,8 +23,8 @@ const StaffRoleSelect = () => {
           form.setValue('staffUserRoleIds.0', value)
           form.setValue('staffType', value)
         }}
-        options={roles}
-        disabled={roles.length === 0}
+        options={filteredRoles}
+        disabled={filteredRoles.length === 0 || staffType === undefined}
         buttonClassName="border-pp-gray-2 h-6 w-full border border-solid !outline-none [box-shadow:none]"
       />
       <FormFieldError name="staffUserRoleIds.[0]" />

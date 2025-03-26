@@ -9,22 +9,46 @@ import { TabContentHeading } from './tab-content-heading'
 const MailingAddressGroup = () => {
   const { watch, resetField } = useFormContext<SchemaType>()
   const isMailingAddressSameAsPrimary = watch('isMailingAddressSameAsPrimary')
+  const addresses = watch('addresses')
+
+  const {
+    city,
+    country,
+    postalCode,
+    state,
+    street1,
+    street2,
+    type,
+    timeZoneId,
+  } = addresses[0]
 
   useEffect(() => {
     if (isMailingAddressSameAsPrimary)
       resetField('addresses.1', {
         defaultValue: {
-          postalCode: '',
+          postalCode: isMailingAddressSameAsPrimary ? postalCode : '',
           type: 'Mailing',
-          street1: '',
-          street2: '',
-          city: '',
-          state: '',
-          country: '',
-          timeZoneId: '',
+          street1: isMailingAddressSameAsPrimary ? street1 : '',
+          street2: isMailingAddressSameAsPrimary ? street2 : '',
+          city: isMailingAddressSameAsPrimary ? city : '',
+          state: isMailingAddressSameAsPrimary ? state : '',
+          country: isMailingAddressSameAsPrimary ? country : '',
+          timeZoneId: isMailingAddressSameAsPrimary ? timeZoneId : '',
         },
       })
-  }, [isMailingAddressSameAsPrimary, resetField])
+  }, [
+    isMailingAddressSameAsPrimary,
+    city,
+    country,
+    postalCode,
+    state,
+    street1,
+    street2,
+    type,
+    timeZoneId,
+    resetField,
+  ])
+
   return (
     <Box>
       <TabContentHeading title="Mailing Address">
@@ -34,6 +58,7 @@ const MailingAddressGroup = () => {
         disabled={isMailingAddressSameAsPrimary}
         prefix="addresses.1"
         addressFieldName="street1"
+        columnsPerRow="1"
       />
     </Box>
   )

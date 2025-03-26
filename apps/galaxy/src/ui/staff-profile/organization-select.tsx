@@ -16,7 +16,7 @@ interface OrganizationSelectProps {
 const OrganizationSelect = ({ organizations }: OrganizationSelectProps) => {
   return (
     <FormFieldContainer>
-      <FormFieldLabel required>Organization</FormFieldLabel>
+      <FormFieldLabel required>Primary Organization</FormFieldLabel>
       <SelectInput
         options={organizations}
         disabled={organizations.length === 0}

@@ -15,7 +15,10 @@ const getStaffAction = async ({
   staffId,
   languageOptions,
 }: getStaffActionParams): Promise<api.ActionResult<StaffUpdatePayload>> => {
-  const response = await api.GET<Staff>(api.DELETE_STAFF_ENDPOINT(staffId))
+  const url = new URL(api.DELETE_STAFF_ENDPOINT(staffId))
+  url.searchParams.append('isIncludeOrganization', 'true')
+  url.searchParams.append('isIncludePractice', 'true')
+  const response = await api.GET<Staff>(`${url}`)
   if (response.state === 'error') {
     return {
       state: 'error',

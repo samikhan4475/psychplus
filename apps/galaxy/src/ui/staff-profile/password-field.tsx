@@ -5,7 +5,7 @@ import { FormFieldContainer, FormFieldLabel } from '@/components'
 const PasswordField = () => {
   return (
     <FormFieldContainer className="w-full">
-      <FormFieldLabel>Password</FormFieldLabel>
+      <FormFieldLabel>Passcode</FormFieldLabel>
       <TextField.Root
         size="1"
         disabled

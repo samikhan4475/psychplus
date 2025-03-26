@@ -64,7 +64,7 @@ interface Staff {
   gender: string
   socialSecurityNumber: string
   userRoleId: string
-  isTest: boolean
+  isTest?: boolean
   contactInfo: ContactInfo
   language: string[]
   preferredLanguage: string
@@ -90,8 +90,10 @@ interface Staff {
   organizationIds: string[]
   practiceIds: string[]
   spokenLanguages: string[]
-  providerAttributions: string[]
+  providerAttributions?: string[]
   staffUserRoleIds: string[]
+  hasBioVideo?: boolean
+  timeZonePreference: string
 }
 
 interface StaffSearchParams extends Staff {

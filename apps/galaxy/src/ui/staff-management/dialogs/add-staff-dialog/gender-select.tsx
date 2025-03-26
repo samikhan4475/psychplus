@@ -1,5 +1,10 @@
 import React from 'react'
-import { CodesetSelect, FormFieldContainer, FormFieldLabel } from '@/components'
+import {
+  CodesetSelect,
+  FormFieldContainer,
+  FormFieldError,
+  FormFieldLabel,
+} from '@/components'
 import { CODESETS } from '@/constants'
 
 const GenderSelect = () => {
@@ -7,6 +12,7 @@ const GenderSelect = () => {
     <FormFieldContainer>
       <FormFieldLabel required>Gender</FormFieldLabel>
       <CodesetSelect size="1" codeset={CODESETS.Gender} name="gender" />
+      <FormFieldError name="gender" />
     </FormFieldContainer>
   )
 }

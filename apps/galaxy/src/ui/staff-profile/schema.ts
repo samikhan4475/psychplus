@@ -70,7 +70,7 @@ const schema = z
       .min(1, { message: 'Minimum 1 is required' }),
     virtualRoomLink: optionalString,
     biography: optionalString,
-    title: optionalString,
+    title: requiredString,
     address: optionalString,
     address2: optionalString,
     country: optionalString,
@@ -91,17 +91,28 @@ const schema = z
     supervisedBy: optionalString,
     supervisorStaffId: z.string(),
     specialists: z.array(requiredString),
-    providerAttributions: z.array(requiredString),
+    providerAttributions: z.array(z.string()).optional(),
     organizationIds: z.array(requiredString),
     practiceIds: z.array(requiredString),
     isMailingAddressSameAsPrimary: z.boolean(),
+    timeZonePreference: requiredString,
+    hasBioVideo: z.boolean(),
+    staffTypeIds: z.array(requiredString),
   })
   .superRefine((data, ctx) => {
-    const { addresses, isMailingAddressSameAsPrimary } = data
+    const { addresses, isMailingAddressSameAsPrimary, hasBioVideo } = data
 
     validateAddressFields(addresses[0], '0', ctx)
     if (!isMailingAddressSameAsPrimary)
       validateAddressFields(addresses[1], '1', ctx)
+
+    if (!hasBioVideo) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'Bio video is required',
+        path: ['hasBioVideo'],
+      })
+    }
   })
 
 type SchemaType = z.infer<typeof schema>

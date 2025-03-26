@@ -1,4 +1,6 @@
+import toast from 'react-hot-toast'
 import { getLocalCalendarDate } from '@/utils'
+import { uploadStaffVideoAction } from './actions/upload-staff-video'
 import { StaffUpdatePayload } from './types'
 
 const removeTypeAndCompare = (address1: object, address2: object) => {
@@ -28,6 +30,7 @@ const getInitialValues = (staff?: Partial<StaffUpdatePayload>) => ({
   staffRoleId: (staff?.staffRoleId && String(staff?.staffRoleId)) ?? '',
   status: staff?.status ?? '',
   staffUserRoleIds: staff?.staffUserRoleIds ?? [],
+  staffTypeIds: staff?.staffUserRoleIds ?? [],
   firstName: staff?.firstName ?? '',
   lastName: staff?.lastName ?? '',
   dob: (staff?.dob && getLocalCalendarDate(staff?.dob as string)) ?? undefined,
@@ -43,13 +46,35 @@ const getInitialValues = (staff?: Partial<StaffUpdatePayload>) => ({
   supervisedBy: staff?.supervisedBy ?? '',
   supervisorStaffId: staff?.supervisorStaffId ?? '',
   specialists: staff?.specialists ?? [''],
-  providerAttributions: staff?.providerAttributions ?? [''],
+  providerAttributions: staff?.providerAttributions ?? [],
   organizationIds: staff?.organizationIds ?? [''],
   practiceIds: staff?.practiceIds ?? [''],
   isMailingAddressSameAsPrimary:
     staff?.addresses && staff.addresses.length > 1
       ? removeTypeAndCompare(staff.addresses[0], staff.addresses[1])
       : false,
+  timeZonePreference: staff?.timeZonePreference,
+  hasBioVideo: staff?.hasBioVideo,
 })
 
-export { getInitialValues }
+const handleUploadBioVideo = async (bioVideo: File, staffId: string) => {
+  const formData = new FormData()
+  formData.append('file', bioVideo)
+  const uploadBioVideoResponse = await uploadStaffVideoAction({
+    staffId,
+    data: formData,
+  })
+
+  if (uploadBioVideoResponse.state === 'error') {
+    toast.error(
+      uploadBioVideoResponse.error ??
+        'There was a problem uploading the report. Please try again.',
+    )
+    return false
+  }
+
+  toast.success('Bio Video Uploaded')
+  return true
+}
+
+export { getInitialValues, handleUploadBioVideo }

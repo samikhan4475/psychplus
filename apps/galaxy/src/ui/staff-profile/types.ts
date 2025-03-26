@@ -34,11 +34,20 @@ interface StaffUpdatePayload {
   supervisedBy?: string
   supervisorStaffId: string
   specialists: string[]
-  providerAttributions: string[]
+  providerAttributions?: string[]
   addresses?: Address[]
   organizationIds: string[]
   practiceIds: string[]
   isMailingAddressSameAsPrimary: boolean
+  timeZonePreference: string
+  hasBioVideo?: boolean
+  staffTypeIds?: string[]
+}
+
+export enum Credentials {
+  LCSW_A = 'LCSW-A',
+  LMFT_A = 'LMFT-A',
+  LPC_A = 'LPC-A',
 }
 
 export { type StaffUpdatePayload }

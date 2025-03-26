@@ -8,10 +8,12 @@ import toast from 'react-hot-toast'
 import { FormContainer, TabContentHeading } from '@/components'
 import { GooglePlacesContextProvider } from '@/providers/google-places-provider'
 import { useStore as useRootStore } from '@/store'
-import { formatDate, formatDateToISOString, sanitizeFormData } from '@/utils'
+import { getPaddedDateString, sanitizeFormData } from '@/utils'
 import { OrganizationOptions } from '../staff-management/types'
 import { updateStaffAction } from './actions/update-staff'
+import { AgeField } from './age-field'
 import { BioField } from './bio-field'
+import { BioVideoField } from './bio-video-field'
 import { CredentialsSelect } from './credentials-select'
 import { transformOut } from './data'
 import { DobField } from './dob-field'
@@ -35,6 +37,8 @@ import { schema, SchemaType } from './schema'
 import { StaffRoleSelect } from './staff-role-select'
 import { StaffTypeSelect } from './staff-type-select'
 import { StatusSelect } from './status-select'
+import { SupervisedByField } from './supervised-by-fields'
+import { TimeZoneSelect } from './time-zone-select'
 import { StaffUpdatePayload } from './types'
 import { getInitialValues } from './utils'
 import { VirtualWaitRoomField } from './virtual-wait-room-field'
@@ -55,11 +59,11 @@ const StaffProfileForm = ({
     reValidateMode: 'onSubmit',
     defaultValues: getInitialValues(staff),
   })
+
   const onSubmit: SubmitHandler<SchemaType> = async (data) => {
-    const formattedDate = formatDateToISOString(data.dob)
     const finalData = {
       ...data,
-      dob: typeof formattedDate === 'string' ? formatDate(formattedDate) : null,
+      dob: data.dob ? getPaddedDateString(data.dob) : null,
     }
     const sanatizedData = sanitizeFormData(finalData)
 
@@ -96,34 +100,44 @@ const StaffProfileForm = ({
             <FirstNameField />
             <MiddleNameField />
             <LastNameField />
-            <StaffTypeSelect staffs={selectOptions.staffs} />
-            <StaffRoleSelect roles={selectOptions.roles} />
-            <CredentialsSelect />
-          </Grid>
-          <Grid columns="6" gap="2">
-            <OrganizationSelect organizations={selectOptions.organizations} />
-            <PracticeSelect practices={selectOptions.practices} />
-            <IndividualNpiField />
-            <StatusSelect />
             <DobField />
+            <AgeField />
             <GenderSelect />
           </Grid>
           <Grid columns="6" gap="2">
             <LanguageSelect />
-            <ProviderPreferenceSelect />
             <EmailField />
             <PhoneField />
+            <Box className="col-span-2">
+              <VirtualWaitRoomField />
+            </Box>
             <Flex className="mb-auto gap-x-2">
               <PasswordField /> <ResetPasswordButton />
             </Flex>
-            <VirtualWaitRoomField />
-            <Box className="col-span-2">
-              <BioField />
-            </Box>
+          </Grid>
+          <Grid columns="2" gap="2">
+            <IndividualNpiField />
+            <BioVideoField />
+          </Grid>
+          <Grid columns="2" gap="2">
+            <BioField />
           </Grid>
           <Grid columns="2" gap="2" mt="1">
             <HomeAddressGroup />
             <MailingAddressGroup />
+          </Grid>
+          <Grid columns="6" gap="2">
+            <OrganizationSelect organizations={selectOptions.organizations} />
+            <StaffTypeSelect staffs={selectOptions.staffs} />
+            <StaffRoleSelect roles={selectOptions.roles} />
+            <CredentialsSelect />
+            <SupervisedByField />
+            <StatusSelect />
+          </Grid>
+          <Grid columns="6" gap="2">
+            <PracticeSelect practices={selectOptions.practices} />
+            <ProviderPreferenceSelect />
+            <TimeZoneSelect />
           </Grid>
         </Flex>
       </FormContainer>

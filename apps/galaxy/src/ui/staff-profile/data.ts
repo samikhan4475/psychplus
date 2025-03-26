@@ -1,5 +1,3 @@
-import { CODESETS } from '@/constants'
-import { useCodesetOptions } from '@/hooks'
 import { SelectOptionType } from '@/types'
 import { Address, Staff } from '../staff-management/types'
 import { StaffUpdatePayload } from './types'
@@ -75,6 +73,10 @@ const transformIn = (
     phoneContact,
     bio,
     userId,
+    hasBioVideo,
+    timeZonePreference,
+    supervisedBy,
+    providerAttributions,
   } = data
   const {
     firstName = '',
@@ -118,6 +120,7 @@ const transformIn = (
     staffRoleId: '1',
     status: status ?? '',
     staffUserRoleIds,
+    staffTypeIds: staffUserRoleIds ?? [],
     firstName,
     lastName,
     dob: dateOfBirth ?? '',
@@ -142,13 +145,15 @@ const transformIn = (
     gender,
     email,
     phoneContact: phoneNumber,
-    supervisedBy: supervisorStaffId,
+    supervisedBy: supervisedBy,
     supervisorStaffId,
     specialists: [],
-    providerAttributions: data.providerAttributions || [],
+    providerAttributions: providerAttributions || [],
     organizationIds,
     practiceIds,
     isMailingAddressSameAsPrimary,
+    timeZonePreference: timeZonePreference || '',
+    hasBioVideo: hasBioVideo,
   }
 }
 

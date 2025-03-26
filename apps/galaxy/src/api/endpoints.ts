@@ -760,6 +760,8 @@ const ELECTRONICALLY_SIGN_POLICY_ENDPOINT = (patientId: string) =>
 
 const GET_SHARED_POLICY_FILE = (fileName: string) =>
   `${API_URL}/SharedContent/documents/${fileName}.html`
+const DELETE_STAFF_VIDEO_ENDPOINT = (staffId: string) =>
+  `${API_URL}/api/staff/${staffId}/biovideo`
 
 const UPDATE_FOLLOW_UP_DENIAL_STATUS = (appointmentId: number) =>
   `${API_URL}/api/appointments/${appointmentId}/actions/followupstatus`
@@ -1108,5 +1110,6 @@ export {
   GET_LAB_ORDER_RESULTS,
   ADD_SIGNED_LAB_ORDERS,
   GET_USERS_SELF_INITIAL_INFORMATION_ENDPOINT,
+  DELETE_STAFF_VIDEO_ENDPOINT,
   SIGN_PATIENT_REFERRAL_ENDPOINT,
 }

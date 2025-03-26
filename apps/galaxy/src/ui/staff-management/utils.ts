@@ -112,10 +112,11 @@ const getInitialValues = (staff?: Partial<Staff>) => ({
   npi: staff?.npi ?? '',
   status: staff?.status ?? '',
   virtualRoomLink: staff?.virtualRoomLink ?? '',
-  providerAttributions: staff?.providerAttributions ?? [''],
+  providerAttributions: staff?.providerAttributions ?? [],
   staffUserRoleIds: staff?.staffUserRoleIds ?? [''],
   organizationIds: staff?.organizationIds ?? [''],
   practiceIds: staff?.practiceIds ?? [''],
+  isTest: staff?.isTest ?? false,
 })
 
 const createOptionsLookup = (options: SelectOptionType[]) =>

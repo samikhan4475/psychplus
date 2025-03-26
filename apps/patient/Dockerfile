@@ -2,70 +2,70 @@ FROM node:22-alpine3.21 AS alpine
 
 # Setup pnpm on alpine base
 FROM alpine AS base
-    ENV PNPM_HOME="/pnpm"
-    ENV PATH="$PNPM_HOME:$PATH"
-    RUN npm i -g corepack@latest
-    RUN corepack enable
-    RUN pnpm install turbo --global
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+RUN npm i -g corepack@latest
+RUN corepack enable
+RUN pnpm install turbo --global
 
 # Prune workspace
 FROM base AS pruner
-    # Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
-    RUN apk update && apk add --no-cache
-    WORKDIR /app
-    COPY . .
-    RUN turbo prune --scope=@psychplus/patient-app --docker
+# Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
+RUN apk update && apk add --no-cache
+WORKDIR /app
+COPY . .
+RUN turbo prune --scope=@psychplus/patient-app --docker
 
 # Build app
 FROM base AS builder
-    RUN apk update && apk add --no-cache
-    WORKDIR /app
+RUN apk update && apk add --no-cache
+WORKDIR /app
 
-    # First install the dependencies (as they change less often)
-    # [peter] temp until figured out: COPY .gitignore .gitignore
-    COPY --from=pruner /app/out/json/ .
-    COPY --from=pruner /app/out/pnpm-lock.yaml ./pnpm-lock.yaml
-    COPY --from=pruner /app/out/pnpm-workspace.yaml ./pnpm-workspace.yaml
-    RUN pnpm install --frozen-lockfile
+# First install the dependencies (as they change less often)
+# [peter] temp until figured out: COPY .gitignore .gitignore
+COPY --from=pruner /app/out/json/ .
+COPY --from=pruner /app/out/pnpm-lock.yaml ./pnpm-lock.yaml
+COPY --from=pruner /app/out/pnpm-workspace.yaml ./pnpm-workspace.yaml
+RUN pnpm install --frozen-lockfile
 
-    ENV NEXT_TELEMETRY_DISABLED 1
-    ENV NODE_OPTIONS="--max-old-space-size=8192"
+ENV NEXT_TELEMETRY_DISABLED 1
+ENV NODE_OPTIONS="--max-old-space-size=8192"
 
-    # Build
-    COPY --from=pruner /app/out/full/ .
-    COPY turbo.json turbo.json
+# Build
+COPY --from=pruner /app/out/full/ .
+COPY turbo.json turbo.json
 
-    # Uncomment and use build args to enable remote caching
-    # ARG TURBO_TEAM
-    # ENV TURBO_TEAM=$TURBO_TEAM
+# Uncomment and use build args to enable remote caching
+# ARG TURBO_TEAM
+# ENV TURBO_TEAM=$TURBO_TEAM
 
-    # ARG TURBO_TOKEN
-    # ENV TURBO_TOKEN=$TURBO_TOKEN
+# ARG TURBO_TOKEN
+# ENV TURBO_TOKEN=$TURBO_TOKEN
 
-    ENV APP_CODE p+patient-ui
-    ENV APP_PATH ""
+ENV APP_CODE p+patient-ui
+ENV APP_PATH ""
 
-    RUN turbo run build --filter=@psychplus/patient-app...
+RUN turbo run build --filter=@psychplus/patient-app...
 
 # Run app
 FROM alpine AS runner
-    WORKDIR /app
+WORKDIR /app
 
-    # Don't run production as root
-    RUN addgroup --system --gid 1001 nodejs
-    RUN adduser --system --uid 1001 nextjs
-    USER nextjs
+# Don't run production as root
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs
+USER nextjs
 
-    COPY --from=builder /app/apps/patient/next.config.js .
-    COPY --from=builder /app/apps/patient/package.json .
+COPY --from=builder /app/apps/patient/next.config.js .
+COPY --from=builder /app/apps/patient/package.json .
 
-    # Automatically leverage output traces to reduce image size
-    # https://nextjs.org/docs/advanced-features/output-file-tracing
-    COPY --from=builder --chown=nextjs:nodejs /app/apps/patient/.next/standalone ./
-    COPY --from=builder --chown=nextjs:nodejs /app/apps/patient/.next/static ./apps/patient/.next/static
-    COPY --from=builder --chown=nextjs:nodejs /app/apps/patient/public ./apps/patient/public
+# Automatically leverage output traces to reduce image size
+# https://nextjs.org/docs/advanced-features/output-file-tracing
+COPY --from=builder --chown=nextjs:nodejs /app/apps/patient/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/apps/patient/.next/static ./apps/patient/.next/static
+COPY --from=builder --chown=nextjs:nodejs /app/apps/patient/public ./apps/patient/public
 
-    EXPOSE 3000
-    ENV PORT 3000
+EXPOSE 3000
+ENV PORT 3000
 
-    CMD ["node", "apps/patient/server.js"]
+CMD ["node", "apps/patient/server.js"]

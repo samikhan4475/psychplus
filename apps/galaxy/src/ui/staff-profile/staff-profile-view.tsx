@@ -10,6 +10,7 @@ import { useCodesetOptions } from '@/hooks'
 import { getStaffRolesOrganizationAction } from '../staff-management/actions/get-organization-staff-roles'
 import { OrganizationOptions } from '../staff-management/types'
 import { getStaffAction } from './actions/get-staff'
+import { getUserTimeZoneSettingsActions } from './actions/get-user-timezone-settings'
 import { StaffProfileForm } from './staff-profile-form'
 import { StaffUpdatePayload } from './types'
 
@@ -31,9 +32,10 @@ const StaffProfileView = ({ googleApiKey }: StaffProfileViewProps) => {
   })
   useEffect(() => {
     if (id && typeof id === 'string')
-      getStaffAction({ staffId: id, languageOptions }).then((result) => {
+      getStaffAction({ staffId: id, languageOptions }).then(async (result) => {
         if (result.state === 'success') {
           setStaff(result.data)
+          await getUserSetting(result.data.userId)
           setLoading(false)
         } else if (result.state === 'error') {
           toast.error(result.error)
@@ -48,6 +50,35 @@ const StaffProfileView = ({ googleApiKey }: StaffProfileViewProps) => {
       }
     })
   }, [])
+
+  const getUserSetting = async (userId: string) => {
+    setLoading(true)
+    const userSettingResponse = await getUserTimeZoneSettingsActions({
+      userId: userId,
+      level: 'User',
+      categoryValue: 'PreferredTimeZone',
+    })
+    if (
+      userSettingResponse.state === 'success' &&
+      userSettingResponse.data.length > 0 &&
+      userSettingResponse.data[0].content
+    ) {
+      const timeZonePreference = userSettingResponse.data[0].content
+
+      setStaff((prevStaff) => {
+        if (prevStaff) {
+          return {
+            ...prevStaff,
+            timeZonePreference,
+          }
+        }
+        return prevStaff
+      })
+    } else if (userSettingResponse.state === 'error')
+      toast.error(userSettingResponse.error ?? 'Error fetching user settings')
+
+    setLoading(false)
+  }
 
   return (
     <Flex
