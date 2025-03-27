@@ -5,7 +5,8 @@ import { GET_STAFF_ENDPOINT } from '@/api/endpoints'
 import type { Provider } from '../types'
 
 interface GetProviderResponse {
-  id?: number
+  id: number
+  userId: number
   avatar?: string
   legalName: {
     firstName: string
@@ -36,6 +37,7 @@ const getProviders = async (payload: {
     state: 'success',
     data: response.data.map((provider) => ({
       id: provider.id,
+      userId: provider.userId,
       avatar: provider.avatar,
       firstName: provider.legalName.firstName,
       lastName: provider.legalName.lastName,

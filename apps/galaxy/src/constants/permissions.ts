@@ -225,6 +225,12 @@ const USER_PERMISSIONS = {
   deleteFollowupTab: 'deleteFollowupTab',
   canClickPrescriberHistoryIconFromAdminNonAdminView:
     'canClickPrescriberHistoryIconFromAdminNonAdminView',
+  clickSaveMangStaffPrefAdminViewNonAdmin:
+    'clickSaveMangStaffPrefAdminViewNonAdmin',
+  clickHxMangStaffPrefAdminViewNonAdmin:
+    'clickHxMangStaffPrefAdminViewNonAdmin',
+  clickApproveMangStaffPrefAdminViewNonAdmin:
+    'clickApproveMangStaffPrefAdminViewNonAdmin',
   canUploadSignedPolicy: 'canUploadSignedPolicy',
   mainTabManagementPermission: 'mainTabManagementPermission',
 }

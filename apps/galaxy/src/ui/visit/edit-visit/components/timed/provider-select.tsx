@@ -13,11 +13,14 @@ import { SelectOptionType } from '@/types'
 import { getProviders } from '@/ui/visit/client-actions'
 import { Provider } from '../../../types'
 import { SchemaType } from '../../schema'
+import { useEditVisitStore } from '../../store'
 
 const ProviderSelect = () => {
   const form = useFormContext<SchemaType>()
   const [loading, setLoading] = useState<boolean>(false)
+  const [providers, setProviders] = useState<Provider[]>([])
   const [options, setOptions] = useState<SelectOptionType[]>([])
+  const { setUserId } = useEditVisitStore()
 
   const [providerType, location] = useWatch({
     control: form.control,
@@ -36,6 +39,7 @@ const ProviderSelect = () => {
         toast.error(res.error || 'Failed to fetch providers')
         return setOptions([])
       }
+      setProviders(res.data || [])
       setOptions(
         res.data.map((provider: Provider) => ({
           value: `${provider.id}`,
@@ -53,6 +57,12 @@ const ProviderSelect = () => {
         buttonClassName="h-6 w-full"
         field="provider"
         loading={loading}
+        onValueChange={(value) => {
+          form.setValue('provider', value)
+          setUserId(
+            providers.find((provider) => provider.id === +value)?.userId ?? 0,
+          )
+        }}
       />
       <FormFieldError name="provider" />
     </FormFieldContainer>

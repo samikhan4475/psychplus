@@ -25,6 +25,7 @@ interface Block {
   component: React.ComponentType<{
     isChecked?: boolean
     otherData?: QuickNoteSectionItem[]
+    appointment?: Appointment
   }>
   id: string
   isChecked?: boolean
@@ -72,6 +73,7 @@ const AddOnWidget = ({
               key={id}
               isChecked={isChecked}
               otherData={otherData}
+              appointment={appointment}
             />
           ))}
         </Flex>

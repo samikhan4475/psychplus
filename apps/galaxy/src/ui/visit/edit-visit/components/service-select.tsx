@@ -18,7 +18,7 @@ import { useEditVisitStore } from '../store'
 const ServiceSelect = () => {
   const form = useFormContext<SchemaType>()
   const [loading, setLoading] = useState<boolean>(false)
-  const { services, setServices } = useEditVisitStore()
+  const { services, setServices, setUserId } = useEditVisitStore()
   const serviceCodes = useCodesetCodes(CODESETS.ServicesOffered)
 
   const [locationId, isServiceTimeDependent] = useWatch({
@@ -64,6 +64,7 @@ const ServiceSelect = () => {
           form.setValue('service', value)
           form.setValue('providerType', '')
           form.setValue('provider', '')
+          setUserId(0)
           form.setValue('visitType', '')
           form.setValue('visitSequence', '')
           form.setValue('visitMedium', '')

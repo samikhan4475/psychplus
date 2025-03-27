@@ -2,9 +2,10 @@ import { useState } from 'react'
 import { now, parseAbsolute } from '@internationalized/date'
 import { Flex } from '@radix-ui/themes'
 import { CodesetSelectCell } from '@/components'
-import { CODESETS } from '@/constants'
-import { useStore as useGlobalStore } from '@/store'
+import { CODESETS, SettingStatusCode } from '@/constants'
+import { useStore as useGlobalStore, useStore } from '@/store'
 import { Appointment, RolePermission } from '@/types'
+import { getPreferenceSettings } from '@/ui/staff-preferences/client-actions'
 import { StatusCode } from '../../constants'
 import {
   useConfirmVisitUpdate,
@@ -25,6 +26,8 @@ const RESCHEDULE_ALERT_MESSAGE =
 
 const VISIT_STATUS_SUCCESS = 'Visit status is set as Cancel-A'
 
+const STATUS_PATIENT_IN_ROOM = 'The patient is in room'
+
 const TimedVisitStatusSelect = ({
   appointment,
   className,
@@ -32,6 +35,7 @@ const TimedVisitStatusSelect = ({
   appointment: Appointment
   className?: string
 }) => {
+  const userId = useStore((state) => state.user.id)
   const [visitStatus, setVisitStatus] = useState<string>(
     appointment?.visitStatus,
   )
@@ -139,11 +143,27 @@ const TimedVisitStatusSelect = ({
       const transformedBody = transformIn(appointment)
       transformedBody.appointmentStatus = val
 
+      let successMessage = undefined
+      if (val === 'InRoom') {
+        const payload = {
+          userId,
+          categoryValues: ['StaffPreference'],
+          name: 'PatientIsInRoomValue',
+          settingStatusCode: SettingStatusCode.Active,
+        }
+        const res = await getPreferenceSettings(payload)
+        if (res.state === 'success' && res.data?.[0]?.content === 'Yes') {
+          successMessage = STATUS_PATIENT_IN_ROOM
+        }
+      } else if (val === 'CancelledA') {
+        successMessage = VISIT_STATUS_SUCCESS
+      }
+
       updateVisit({
         body: transformedBody,
         onSuccess: refetch,
         onError: onUpdateVisitError,
-        successMessage: val === 'CancelledA' ? VISIT_STATUS_SUCCESS : undefined,
+        successMessage,
       })
     } else {
       setAlertMessage(VISIT_STATUS_PERMISSION)

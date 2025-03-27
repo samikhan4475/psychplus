@@ -6,6 +6,11 @@ interface EncounterToService {
   locationType: string
   serviceOffered: string
 }
+interface CPTPrimaryCode {
+  code: string
+  isDefault: boolean
+  isDisabled: boolean
+}
 
 interface Encounter {
   id: number
@@ -20,6 +25,9 @@ interface Encounter {
   resourceStatus: string
   visitTypeCode?: string
   encounterToServices: EncounterToService[]
+  visitDurationsInMinutes?: number[]
+  visitNoteTitle: string
+  cptPrimaryCodes?: CPTPrimaryCode[]
 }
 
-export type { Metadata, EncounterToService, Encounter }
+export type { CPTPrimaryCode, EncounterToService, Encounter }

@@ -12,11 +12,16 @@ import { SelectOptionType } from '@/types'
 import { getProviders } from '../../../client-actions'
 import { Provider } from '../../../types'
 import { SchemaType } from '../../schema'
+import { useAddVisitStore } from '../../store'
 
 const ProviderDropdown = () => {
   const form = useFormContext<SchemaType>()
   const [loading, setLoading] = useState<boolean>(false)
+  const [providers, setProviders] = useState<Provider[]>([])
   const [options, setOptions] = useState<SelectOptionType[]>([])
+  const { setUserId } = useAddVisitStore((store) => ({
+    setUserId: store.setUserId,
+  }))
 
   const [providerType, location] = useWatch({
     control: form.control,
@@ -33,6 +38,7 @@ const ProviderDropdown = () => {
     }).then((res) => {
       setLoading(false)
       if (res.state === 'error') return setOptions([])
+      setProviders(res.data || [])
       setOptions(
         res.data.map((provider: Provider) => ({
           label: `${provider.firstName} ${provider.lastName}, ${provider.honors}`,
@@ -51,6 +57,12 @@ const ProviderDropdown = () => {
         buttonClassName="h-6 w-full"
         disabled={!providerType}
         loading={loading}
+        onValueChange={(value) => {
+          form.setValue('provider', value)
+          setUserId(
+            providers.find((provider) => provider.id === +value)?.userId,
+          )
+        }}
       />
       <FormFieldError name="provider" />
     </FormFieldContainer>

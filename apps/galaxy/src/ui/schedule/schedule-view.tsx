@@ -5,6 +5,7 @@ import { Flex, Heading, Tabs } from '@radix-ui/themes'
 import { FEATURE_FLAGS } from '@/constants'
 import { useFeatureFlagEnabled } from '@/hooks/use-feature-flag-enabled'
 import { LicenseExpiryAlert } from '../staff-credentialing/license-expiry-alert'
+import { PreferencesApprovalAlert } from '../staff-preferences/staff-preference-approval-alert'
 import { CalendarView } from './calendar-view'
 import { SchedulerActionButtonGroup } from './components/header'
 import { ListView } from './list-view'
@@ -48,6 +49,7 @@ const ScheduleView = ({ isInitialLogin }: { isInitialLogin: boolean }) => {
           <TabsList isFeatureFlagEnabled={isFeatureFlagEnabled} />
         </Flex>
         <LicenseExpiryAlert isInitialLogin={isInitialLogin} />
+        <PreferencesApprovalAlert isInitialLogin={isInitialLogin} />
         <ViewHeader selectedTab={activeTab} />
         <SchedulerActionButtonGroup />
       </Flex>

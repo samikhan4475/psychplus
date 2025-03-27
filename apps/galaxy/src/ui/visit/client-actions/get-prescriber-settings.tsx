@@ -2,6 +2,7 @@
 
 import * as api from '@/api/api.client'
 import { GET_PROVIDER_SETTINGS_ENDPOINT } from '@/api/endpoints'
+import { LevelCode } from '@/constants'
 import { Metadata } from '@/types'
 
 interface GetPrescriberSettingsResponse {
@@ -25,7 +26,8 @@ const getPrescriberSettings = async (payload: {
     {
       categoryValue: 'ProviderDefaults',
       settingStatusCode: 'Active',
-      levelCodes: ['System'],
+      isHierarchicalQuery: true,
+      levelCodes: [LevelCode.System, LevelCode.User],
       ...payload,
     },
   )

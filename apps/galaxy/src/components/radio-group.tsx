@@ -9,6 +9,8 @@ interface RadioGroupProps {
   className?: string
   defaultValue?: string
   onValueChange?: (value: string) => void
+  wrapperClassName?: string
+  disabled?: boolean
 }
 
 interface RadioGroupOption {
@@ -22,6 +24,8 @@ const RadioGroup = ({
   className,
   defaultValue,
   onValueChange,
+  wrapperClassName,
+  disabled = false,
 }: RadioGroupProps) => {
   const form = useFormContext()
 
@@ -34,11 +38,12 @@ const RadioGroup = ({
           onValueChange ? onValueChange(value) : form.setValue(field, value) // Inline handling
       }
       value={defaultValue ?? value}
-      className="flex gap-1.5"
+      className={cn('flex gap-1.5', wrapperClassName)}
+      disabled={disabled}
     >
       {options.map((option) => {
         const isSelected = value === option.value
-        const id = `radio-option-${option.value}`
+        const id = `radio-option-${field}-${option.value}`
 
         return (
           <Text

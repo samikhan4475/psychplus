@@ -75,6 +75,7 @@ interface Patient {
 
 interface Provider {
   id?: number
+  userId?: number
   avatar?: string
   firstName: string
   lastName: string

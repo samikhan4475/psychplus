@@ -1,5 +1,5 @@
 import { cache } from 'react'
-import { QuickNoteSectionItem } from '@/types'
+import { Appointment, QuickNoteSectionItem } from '@/types'
 import { isHospitalCareVisit } from '@/utils'
 import {
   ECTBlock,
@@ -13,6 +13,7 @@ interface Block {
   component: React.ComponentType<{
     isChecked?: boolean
     otherData?: QuickNoteSectionItem[]
+    appointment?: Appointment
   }>
   id: string
 }
@@ -62,7 +63,7 @@ const blocks: Block[] = [
   },
 ]
 
-// These blocks are for Add On 
+// These blocks are for Add On
 
 const commonBlocks = ['InjectionBlock', 'TherapyPsychoAnalysisBlock']
 const extendedBlocks = [...commonBlocks, 'ECTBlock']

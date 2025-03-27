@@ -756,10 +756,12 @@ const UPDATE_SERVICE_ENDPOINT = (locationId: string, serviceId: string) =>
 const GET_SERVICE_HISTORY = (serviceId: string) =>
   `${API_URL}/api/services/${serviceId}/history/actions/search`
 const GET_CURRENT_USER_SETTINGS = `${API_URL}/api/users/self/settings`
-const GET_LAB_ORDER_RESULTS  =
-  `${API_URL}/api/laborders/actions/search`
-const ADD_SIGNED_LAB_ORDERS =
-  `${API_URL}/api/laborders/actions/signed`
+const ADD_BULK_USER_SETTINGS = (userId: number) =>
+  `${API_URL}/api/users/${userId}/bulksettings`
+const UPDATE_BULK_USER_SETTINGS = (userId: number) =>
+  `${API_URL}/api/users/${userId}/bulksettings`
+const GET_LAB_ORDER_RESULTS = `${API_URL}/api/laborders/actions/search`
+const ADD_SIGNED_LAB_ORDERS = `${API_URL}/api/laborders/actions/signed`
 const ADD_CLAIM = `${API_URL}/api/claims`
 const SELF_PRACTICES = `${API_URL}/api/users/self/practices?includePermissions=false`
 const GET_CURRENT_USER_SETTINGS_SEARCH = `${API_URL}/api/users/self/settings/actions/search`
@@ -1105,6 +1107,8 @@ export {
   ADD_SELF_USER_SETTINGS,
   UPDATE_SELF_USER_SETTINGS,
   SELF_USER_BULK_SETTINGS,
+  ADD_BULK_USER_SETTINGS,
+  UPDATE_BULK_USER_SETTINGS,
   UPDATE_FOLLOW_UP_DENIAL_STATUS,
   GET_LOCATION_SERVICES_ENDPOINT,
   DELETE_SERVICES_ENDPOINT,

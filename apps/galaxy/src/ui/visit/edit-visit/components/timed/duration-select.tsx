@@ -18,17 +18,17 @@ import { useEditVisitStore } from '../../store'
 const DurationSelect = () => {
   const form = useFormContext<SchemaType>()
   const [options, setOptions] = useState<SelectOptionType[]>([])
-  const { visitTypes } = useEditVisitStore()
+  const { visitTypes, userId } = useEditVisitStore()
   const [loading, setLoading] = useState<boolean>(false)
   const { dirtyFields } = form.formState
-  const [selectedVisitType, provider, visitSequence, visitMedium] = useWatch({
+  const [selectedVisitType, visitSequence, visitMedium] = useWatch({
     control: form.control,
-    name: ['visitType', 'provider', 'visitSequence', 'visitMedium'],
+    name: ['visitType', 'visitSequence', 'visitMedium'],
   })
 
   useEffect(() => {
     if (
-      !provider ||
+      !userId ||
       !selectedVisitType ||
       !visitSequence ||
       !visitMedium ||
@@ -40,16 +40,14 @@ const DurationSelect = () => {
     )
     setLoading(true)
     const name = `${visitType?.visitTypeCode}_${visitSequence}_${visitMedium}`
-    getPrescriberSettings({ userId: provider ? +provider : 0, name }).then(
-      (res) => {
-        setLoading(false)
-        if (res.state === 'error') {
-          return toast.error(res.error || 'Failed to fetch staff preferences')
-        }
-        form.setValue('duration', res.data?.[0]?.content ?? '')
-      },
-    )
-  }, [provider, visitTypes, selectedVisitType, visitSequence, visitMedium])
+    getPrescriberSettings({ userId: userId || 0, name }).then((res) => {
+      setLoading(false)
+      if (res.state === 'error') {
+        return toast.error(res.error || 'Failed to fetch staff preferences')
+      }
+      form.setValue('duration', res.data?.[0]?.content ?? '')
+    })
+  }, [userId, visitTypes, selectedVisitType, visitSequence, visitMedium])
 
   useEffect(() => {
     if (!selectedVisitType) {

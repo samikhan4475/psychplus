@@ -2,6 +2,8 @@ import { create } from 'zustand'
 import { Service, VisitType } from '@/types'
 
 interface AddVisitStore {
+  userId: number | undefined
+  setUserId: (userId: number | undefined) => void
   services: Service[]
   setServices: (services: Service[]) => void
   visitTypes: VisitType[]
@@ -11,6 +13,8 @@ interface AddVisitStore {
 }
 
 export const useAddVisitStore = create<AddVisitStore>((set) => ({
+  userId: undefined,
+  setUserId: (userId) => set({ userId }),
   services: [],
   setServices: (services) => set({ services }),
   visitTypes: [],

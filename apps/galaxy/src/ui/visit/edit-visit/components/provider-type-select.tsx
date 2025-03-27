@@ -18,7 +18,7 @@ const ProviderTypeSelect = ({
   isPsychiatristVisitTypeSequence?: boolean
 }) => {
   const form = useFormContext<SchemaType>()
-  const { services } = useEditVisitStore()
+  const { services, setUserId } = useEditVisitStore()
   const codes = useCodesetCodes(CODESETS.ProviderType)
   const codesetOptions = useCodesetOptions(CODESETS.ProviderType, undefined, [
     CODE_NOT_SET,
@@ -46,6 +46,7 @@ const ProviderTypeSelect = ({
             shouldDirty: true,
           })
           form.setValue('provider', '')
+          setUserId(0)
         }}
         field="providerType"
         disabled={

@@ -3,28 +3,26 @@
 import { Flex, Text } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
 import { CheckboxInput, RadioSelectSection } from '@/components'
-import { QuickNoteSectionItem } from '@/types'
+import { Appointment, QuickNoteSectionItem } from '@/types'
 import { AdditionalTherapyDetailBlock } from '@/ui/therapy/therapy-widget/blocks/additional-therapy-detail'
 import { TherapyTableBlock } from '@/ui/therapy/therapy-widget/blocks/therapy-table-block'
 import { TherapySessionParticipantsBlock } from '@/ui/therapy/therapy-widget/individual/blocks/session-participants'
 import { TherapyTimeSpentBlock } from '@/ui/therapy/therapy-widget/individual/blocks/time-spent'
+import { useTherapyPsychoAnalysisOptions } from '../hook'
 import { PsychoAnalysisBlock } from './psychoanalysis-block'
 import { TherapyDetail } from './therapy-details'
 
-const THERAPY_PSYCHOANALYSIS_OPTIONS = [
-  { label: 'Therapy', value: 'therapy' },
-  { label: 'Psychoanalysis', value: 'psychoanalysis' },
-  { label: 'Neither', value: 'neither' },
-]
-
 interface TherapyPsychoAnalysisBlockProps {
   otherData?: QuickNoteSectionItem[]
+  appointment?: Appointment
 }
 const TherapyPsychoAnalysisBlock = ({
   otherData,
+  appointment,
 }: TherapyPsychoAnalysisBlockProps) => {
   const { watch, setValue } = useFormContext()
   const therapyPsychoanalysis = watch('therapyPsychoanalysis')
+  const options = useTherapyPsychoAnalysisOptions({ appointment })
 
   return (
     <Flex
@@ -44,7 +42,7 @@ const TherapyPsychoAnalysisBlock = ({
         <>
           <RadioSelectSection
             field="therapyPsychoanalysis"
-            options={THERAPY_PSYCHOANALYSIS_OPTIONS}
+            options={options}
             onChange={(value) => {
               if (value !== 'therapy') {
                 setValue('therapyTimeSpent', '')

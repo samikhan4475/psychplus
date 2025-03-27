@@ -28,4 +28,11 @@ interface SettingSearchFilters {
 
 type AddSelfUserSettingBody = Omit<UserSetting, 'id' | 'metadata' | 'userId'>
 
-export type { UserSetting, AddSelfUserSettingBody, SettingSearchFilters }
+type AddOthersSettingBody = Omit<UserSetting, 'id' | 'metadata'>
+
+export type {
+  UserSetting,
+  AddSelfUserSettingBody,
+  AddOthersSettingBody,
+  SettingSearchFilters,
+}
