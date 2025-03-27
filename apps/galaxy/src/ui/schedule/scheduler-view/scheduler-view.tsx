@@ -10,6 +10,7 @@ import { useStore } from './store'
 
 const SchedulerView = ({
   isFollowup = false,
+  consultationDate,
   noOfDays = 13,
   patient,
   onVisitAdd,
@@ -20,6 +21,7 @@ const SchedulerView = ({
   patient?: NewPatient
   onVisitAdd?: () => void
   offsetStartDate?: string
+  consultationDate?: string
 }) => {
   const { loading } = useStore((state) => ({
     loading: state.loading,
@@ -43,7 +45,12 @@ const SchedulerView = ({
             <LoadingPlaceholder />
           </Flex>
         ) : (
-          <ProvidersAccordionMenu isFollowup={isFollowup} patient={patient} onVisitAdd={onVisitAdd} />
+          <ProvidersAccordionMenu
+            consultationDate={consultationDate}
+            isFollowup={isFollowup}
+            patient={patient}
+            onVisitAdd={onVisitAdd}
+          />
         )}
       </ScrollArea>
     </Flex>

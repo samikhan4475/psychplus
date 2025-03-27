@@ -83,6 +83,7 @@ const CalenderView = ({
 
         <SchedulerView
           isFollowup={true}
+          consultationDate={appointmentDate}
           noOfDays={6}
           patient={patient}
           onVisitAdd={onVisitAdd}

@@ -22,6 +22,7 @@ interface Props {
   value: string
   patient: undefined | NewPatient
   isFollowup: boolean
+  consultationDate?: string
 }
 
 const Slots = ({
@@ -60,6 +61,7 @@ const AccordionItem = ({
   value,
   patient,
   isFollowup,
+  consultationDate,
 }: Props) => {
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const [isAlertOpen, setIsAlertOpen] = useState<boolean>(false)
@@ -226,6 +228,7 @@ const AccordionItem = ({
                             key={slot.startDate}
                             patient={patient}
                             isFollowup={isFollowup}
+                            consultationDate={consultationDate}
                           >
                             <Button
                               variant="outline"

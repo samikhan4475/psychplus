@@ -50,6 +50,7 @@ interface AddVisitFormProps {
   slotDetails?: SlotDetails
   isSlot?: boolean
   isFollowup: boolean
+  consultationDate?: string
 }
 
 const AddVisitForm = ({
@@ -62,6 +63,7 @@ const AddVisitForm = ({
   onClose,
   patient,
   isFollowup,
+  consultationDate,
 }: AddVisitFormProps) => {
   const [newPatient, setNewPatient] = useState<NewPatient>()
   const { staffId } = useGlobalStore((state) => state.user)
@@ -165,7 +167,7 @@ const AddVisitForm = ({
       status: newPatient.patientStatus ?? '',
       state: newPatient?.state ?? '',
     })
-    form.setValue('state', newPatient?.state?? '')
+    form.setValue('state', newPatient?.state ?? '')
     setNewPatient(newPatient)
   }
 
@@ -223,7 +225,11 @@ const AddVisitForm = ({
       data,
       selectedVisitType,
     )
-    const sanitizedData = sanitizeFormData({...payload, isFollowup})
+    const sanitizedData = sanitizeFormData({
+      ...payload,
+      isFollowup,
+      consultationDate,
+    })
 
     bookVisitAction(sanitizedData).then((res) => {
       setIsLoading(false)

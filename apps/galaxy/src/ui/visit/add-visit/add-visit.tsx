@@ -16,6 +16,7 @@ interface AddVisitProps {
   isTimed?: boolean
   slotDetails?: SlotDetails
   isFollowup?: boolean
+  consultationDate?: string
 }
 
 const AddVisit = ({
@@ -28,6 +29,7 @@ const AddVisit = ({
   patient,
   showAddUser,
   isFollowup = false,
+  consultationDate,
 }: PropsWithChildren<AddVisitProps>) => {
   const [isOpen, setIsOpen] = useState(false)
 
@@ -57,6 +59,7 @@ const AddVisit = ({
           patient={patient}
           showAddUser={showAddUser}
           isFollowup={isFollowup}
+          consultationDate={consultationDate}
         />
       </Dialog.Content>
     </Dialog.Root>
