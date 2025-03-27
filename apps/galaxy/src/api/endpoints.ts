@@ -769,6 +769,7 @@ const GET_DISTRIBUTION_GROUPS= `${API_URL}/api/usergroups/action/search`
 
 const ELECTRONICALLY_SIGN_POLICY_ENDPOINT = (patientId: string) =>
   `${API_URL}/api/patients/${patientId}/consents`
+const GET_REFILL_REQUESTS = `${API_URL}/api/pharmacyNotifications/actions/search`
 
 const GET_SHARED_POLICY_FILE = (fileName: string) =>
   `${API_URL}/SharedContent/documents/${fileName}.html`
@@ -1124,6 +1125,7 @@ export {
   GET_SHARED_POLICY_FILE,
   GET_CURRENT_USER_SETTINGS_SEARCH,
   ADD_STAFF_COMMENT_ENDPOINT,
+  GET_REFILL_REQUESTS,
   GET_LAB_ORDER_RESULTS,
   ADD_SIGNED_LAB_ORDERS,
   GET_USERS_SELF_INITIAL_INFORMATION_ENDPOINT,

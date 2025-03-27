@@ -46,7 +46,7 @@ const InboxLabOrderResultHeader = () => {
       toast.error("No orders selected!")
       return
     }
-    const orderIds = selectedRows.map((row) => row.id)
+    const orderIds = selectedRows.map((row) => row.id as number | string)
     const payload : SignedOrderPayload = {
       orderIds,
       resultSignedByStaffId: staffId,

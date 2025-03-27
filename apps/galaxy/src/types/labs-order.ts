@@ -117,12 +117,24 @@ interface LabOrders {
   appointment?: Appointment
   recordStatus?: string
   orderStatus?: string
+  isResultSigned?: boolean
 }
 interface LabOrderResponseList {
   labOrders: LabOrders[]
   total: number
 }
 
+interface RefillOrderResponseList {
+  refillOrders: RefillOrders[]
+  total: number
+}
+
+interface RefillOrders {
+  notificationDateTime:string,
+  patientFirstName:string,
+  patientLastName:string,
+
+}
 export {
   type LabOrders,
   type LabTest,

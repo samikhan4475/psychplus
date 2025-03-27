@@ -5,6 +5,7 @@ import { NotesView } from '../notes/notes-view'
 import { SecureMessagesView } from '../secure-messages/secure-messages-view'
 import { useStore } from './store'
 import { Tabs as TabsEnum } from './types'
+import { MedicationOrderView } from '../medication-orders'
 import { InboxLabOrder } from '../lab-orders'
 
 const MessagesTabs = () => {
@@ -73,6 +74,9 @@ const MessagesTabs = () => {
           tab={status}
         />
       </TabsContent>
+      <TabsContent value={TabsEnum.MEDICATION_ORDERS}>
+        <MedicationOrderView />
+        </TabsContent>
       <TabsContent value={TabsEnum.LAB_RESULTS}>
         <InboxLabOrder />
       </TabsContent>
