@@ -2,9 +2,7 @@ import { Row } from '@tanstack/react-table'
 import { DateValue } from 'react-aria-components'
 import { LabOrders, LegalName, Metadata } from '@/types'
 
-
 type LabOrderRow = Row<LabOrders>
-
 
 type LabOrderResultPayload = {
   patientId?: string[]
@@ -14,9 +12,9 @@ type LabOrderResultPayload = {
   labTestName?: string
   location?: string
   labTestCode?: string
-  idList?: string[],
-  isIncludePatient?:boolean
-  isResultSigned?:boolean
+  idList?: string[]
+  isIncludePatient?: boolean
+  isResultSigned?: boolean
 }
 
 interface LabResult {
@@ -53,7 +51,7 @@ interface LabDocument {
 }
 
 interface SignedOrderPayload {
-  orderIds: (string | undefined)[]
+  orderIds: (string | number)[]
   resultSignedByStaffId: number
   isResultSigned: boolean
 }
@@ -79,7 +77,7 @@ export enum OrderingLabName {
 export enum OrderStatus {
   OrderCompleted = 'OrderCompleted',
   ResultReceived = 'ResultReceived',
-  Unsigned = 'Unsigned'
+  Unsigned = 'Unsigned',
 }
 
 export enum LabOrderPdf {
@@ -92,5 +90,5 @@ export type {
   LabResult,
   LabOrderResultPayload,
   LabDocument,
-  SignedOrderPayload
+  SignedOrderPayload,
 }

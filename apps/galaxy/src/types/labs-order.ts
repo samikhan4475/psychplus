@@ -117,7 +117,6 @@ interface LabOrders {
   appointment?: Appointment
   recordStatus?: string
   orderStatus?: string
-  isResultSigned?: boolean
 }
 interface LabOrderResponseList {
   labOrders: LabOrders[]
@@ -130,10 +129,9 @@ interface RefillOrderResponseList {
 }
 
 interface RefillOrders {
-  notificationDateTime:string,
-  patientFirstName:string,
-  patientLastName:string,
-
+  notificationDateTime: string
+  patientFirstName: string
+  patientLastName: string
 }
 export {
   type LabOrders,
