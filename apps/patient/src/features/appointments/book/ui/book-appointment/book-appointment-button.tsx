@@ -5,19 +5,13 @@ import { useRouter } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { FormContainer } from '@psychplus-v2/components'
 import { AppointmentType, PaymentType } from '@psychplus-v2/constants'
-import { Consent, DocumentType } from '@psychplus-v2/types'
 import { getNewProviderTypeLabel } from '@psychplus-v2/utils'
-import { Button, Checkbox, Flex, Text } from '@radix-ui/themes'
+import { Button, Flex, Text } from '@radix-ui/themes'
 import { useForm } from 'react-hook-form'
 import z from 'zod'
 import { clickTrack } from '@psychplus/utils/tracking'
-import { addPolicyConsent } from '@/actions'
 import {
-  ConsentView,
   FormError,
-  FormFieldContainer,
-  FormFieldError,
-  FormFieldLabel,
   FormSubmitButton,
 } from '@/components-v2'
 import { bookAppointmentAction, BookAppointmentParams } from '@/features/appointments/book/actions'
@@ -30,17 +24,7 @@ import { NewProviderSelectedDialog } from '../new-provider-selected-dialog'
 import { PrimaryProviderAppointedDialog } from '../primary-provider-appointed-dialog'
 import { useProfileStore } from '@/features/account/profile/store'
 
-const errorMessage = 'You must agree to the above policies'
-const schema = z.object({
-  userAgreed: z.coerce.boolean().refine(
-    (value) => {
-      return value
-    },
-    {
-      message: errorMessage,
-    },
-  ),
-})
+const schema = z.object({})
 
 type SchemaType = z.infer<typeof schema>
 
@@ -48,7 +32,6 @@ const BookAppointmentButton = ({
   appointmentId,
   bookedSlot,
   careTeam,
-  userConsents,
   setBookingSuccessful,
   paymentMethod,
   creditCards,
@@ -61,59 +44,24 @@ const BookAppointmentButton = ({
 
   const router = useRouter()
 
-  const [openNewProviderSelected, setOpenNewProviderSelected] = useState(false)
-  const [openPrimaryProviderAppointed, setOpenPrimaryProviderAppointed] =
-    useState(false)
-
-  const [showConsentView, setShowConsentView] = useState({
-    visible: false,
-    type: DocumentType.PRIVACY_PRACTICE,
-  })
-
   const { profile } = useProfileStore((state) => ({
     profile: state.profile,
   }))
 
+  const [openNewProviderSelected, setOpenNewProviderSelected] = useState(false)
+  const [openPrimaryProviderAppointed, setOpenPrimaryProviderAppointed] =
+    useState(false)
 
   const form = useForm<SchemaType>({
     resolver: zodResolver(schema),
     reValidateMode: 'onChange',
-    defaultValues: {
-      userAgreed: false,
-    },
   })
-
-  const checkIfPolicyBSigned = (fetchedUserConsents: Consent[]) =>
-    !!fetchedUserConsents.find((consent) => {
-      if (consent.type === 'PolicyB') {
-        return consent.verificationStatus === 'Verified'
-      }
-    })
-
-  const [policyAlreadySigned, setPolicyAlreadySigned] = useState(
-    checkIfPolicyBSigned(userConsents),
-  )
   
 
   const stateCode = useStore((state) => state.stateCode)
   useEffect(() => {
     setError('')
   }, [paymentMethod, patientInsurances])
-
-  useEffect(() => {
-    setPolicyAlreadySigned(checkIfPolicyBSigned(userConsents))
-    form.setValue('userAgreed', policyAlreadySigned)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userConsents, policyAlreadySigned])
-
-  useEffect(() => {
-    const checkIfPolicyBSigned = (fetchedUserConsents: Consent[]) =>
-      !!fetchedUserConsents.find((consent) => consent.type === 'PolicyB')
-
-    setPolicyAlreadySigned(checkIfPolicyBSigned(userConsents))
-    form.setValue('userAgreed', policyAlreadySigned)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userConsents])
 
   const careTeamExists = checkCareTeamExists(
     careTeam,
@@ -143,11 +91,6 @@ const BookAppointmentButton = ({
       creditCards?.length === 0)
 
   const bookSlot = async () => {
-    if (!form.getValues().userAgreed) {
-      setError(errorMessage)
-      return
-    }
-
     if (
       paymentMethod === PaymentType.Insurance &&
       !patientInsurances?.length &&
@@ -213,17 +156,6 @@ const BookAppointmentButton = ({
       }
     }
 
-    if (!policyAlreadySigned) {
-      const result = await addPolicyConsent({ type: 'PolicyB' })
-
-      if (result.state === 'error') {
-        setError(result.error as string)
-        setLoading(false)
-        return
-      }
-      setPolicyAlreadySigned(true)
-    }
-
     const providerTypeLabel = getNewProviderTypeLabel(newProviderType || "")
     clickTrack({
       productArea: 'Patient',
@@ -238,80 +170,9 @@ const BookAppointmentButton = ({
     router.refresh()
   }
 
-  const handleConsentView = (type: DocumentType) => {
-    setShowConsentView({ visible: true, type })
-  }
-  const userAgreedValue = (checked: boolean) => {
-    form.setValue('userAgreed', checked)
-    if (!checked) {
-      setError('You must agree to the above policies')
-    } else {
-      setError('')
-    }
-    if (form.formState.isSubmitted) form.trigger('userAgreed')
-  }
-
   return (
     <>
-      <ConsentView
-        open={showConsentView.visible}
-        setOpen={(open) =>
-          setShowConsentView({ ...showConsentView, visible: open })
-        }
-        documentType={showConsentView.type}
-      />
-
       <FormContainer form={form} onSubmit={bookSlot}>
-        {!policyAlreadySigned && (
-          <FormFieldContainer my="4">
-            <Flex direction="row" gap="2" align="center">
-              <Checkbox
-                id="terms-and-conditions-checkbox"
-                size="3"
-                disabled={checkBoxDisabled}
-                onCheckedChange={(checked: boolean) => userAgreedValue(checked)}
-                {...form.register('userAgreed')}
-                highContrast
-              />
-              <FormFieldLabel className="text-[14px] font-[400]">
-                I agree to electronically sign the{' '}
-                <Button
-                  type="button"
-                  className="bg-transparent px-2 pt-[5px]"
-                  variant="ghost"
-                  onClick={() =>
-                    handleConsentView(DocumentType.PRIVACY_PRACTICE)
-                  }
-                >
-                  Notice of Privacy Practice,
-                </Button>{' '}
-                <Button
-                  type="button"
-                  className="bg-transparent px-2 pt-[5px]"
-                  variant="ghost"
-                  onClick={() =>
-                    handleConsentView(DocumentType.PATIENT_SERVICE_AGREEMENT)
-                  }
-                >
-                  Patient Service Agreement,
-                </Button>{' '}
-                and{' '}
-                <Button
-                  type="button"
-                  className="bg-transparent px-2 pt-[5px]"
-                  variant="ghost"
-                  onClick={() =>
-                    handleConsentView(DocumentType.CONSENT_FOR_TREATMENT)
-                  }
-                >
-                  Consent for Treatment
-                </Button>
-              </FormFieldLabel>
-            </Flex>
-            <FormFieldError name="userAgreed" />
-          </FormFieldContainer>
-        )}
-
         <FormError message={error} />
         <Flex mt="2" gap="4">
           <Button

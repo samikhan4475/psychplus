@@ -6,7 +6,7 @@ import {
   PaymentType,
   ProviderType,
 } from '@psychplus-v2/constants'
-import { CareTeamMember, Clinic, Consent } from '@psychplus-v2/types'
+import { CareTeamMember, Clinic } from '@psychplus-v2/types'
 import { Box, Flex } from '@radix-ui/themes'
 import {
   AppointmentSlot,
@@ -28,7 +28,6 @@ const BookAppointmentView = ({
   mapKey,
   stripeApiKey,
   creditCards,
-  userConsents,
   careTeam,
   patientInsurances,
   insurancePayers,
@@ -46,7 +45,6 @@ const BookAppointmentView = ({
   mapKey: string
   stripeApiKey: string
   creditCards: CreditCard[]
-  userConsents: Consent[]
   careTeam: CareTeamMember[]
   patientInsurances: Insurance[]
   insurancePayers: InsurancePayer[]
@@ -86,7 +84,6 @@ const BookAppointmentView = ({
               specialistId={specialistId}
               bookedSlot={bookedSlot}
               careTeam={careTeam}
-              userConsents={userConsents}
               setBookingSuccessful={setBookingSuccessful}
               paymentMethod={paymentMethod}
               creditCards={creditCards}

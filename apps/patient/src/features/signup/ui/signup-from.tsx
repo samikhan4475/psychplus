@@ -109,10 +109,7 @@ export type SchemaType = z.infer<typeof schema>
 const SignupForm = ({ genderCodes }: { genderCodes: SharedCode[] }) => {
   const [error, setError] = useState<string>()
   const [openVerifyDialog, setOpenVerifyDialog] = useState(false)
-  const [showConsentView, setShowConsentView] = useState({
-    visible: false,
-    type: DocumentType.TERMS_AND_CONDITIONS,
-  })
+  const [showConsentView, setShowConsentView] = useState(false)
   const searchParams = useSearchParams()
 
   useEffect(() => {
@@ -199,7 +196,6 @@ const SignupForm = ({ genderCodes }: { genderCodes: SharedCode[] }) => {
     setOpenVerifyDialog(true)
   }
 
-
   return (
     <Flex
       direction="column"
@@ -211,11 +207,10 @@ const SignupForm = ({ genderCodes }: { genderCodes: SharedCode[] }) => {
         setDialogOpen={setOpenVerifyDialog}
       />
       <ConsentView
-        open={showConsentView.visible}
+        open={showConsentView}
         setOpen={(open) => {
-          setShowConsentView({ ...showConsentView, visible: open })
+          setShowConsentView(open)
         }}
-        documentType={showConsentView.type}
       />
       <Heading weight="medium" className="text-[36px] text-accent-12" mb="4">
         Create Account
@@ -353,31 +348,15 @@ const SignupForm = ({ genderCodes }: { genderCodes: SharedCode[] }) => {
                 highContrast
               />
               <FormFieldLabel className="text-[14px] font-[400]">
-                I agree to electronically sign the{'  '}
+                I agree to electronically sign all the {' '}
                 <Button
                   className="bg-transparent px-2 pt-[5px]"
                   variant="ghost"
                   onClick={() =>
-                    setShowConsentView({
-                      visible: true,
-                      type: DocumentType.TERMS_AND_CONDITIONS,
-                    })
+                    setShowConsentView(true)
                   }
                 >
-                  Terms of Service
-                </Button>{' '}
-                and{' '}
-                <Button
-                  className="bg-transparent px-2 pt-[5px]"
-                  variant="ghost"
-                  onClick={() =>
-                    setShowConsentView({
-                      visible: true,
-                      type: DocumentType.PRIVACY_POLICY,
-                    })
-                  }
-                >
-                  Privacy Policy.
+                  Policies
                 </Button>
               </FormFieldLabel>
             </Flex>

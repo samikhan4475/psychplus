@@ -45,7 +45,6 @@ interface BookSlotButtonProps {
   specialistId?: string
   bookedSlot: BookedSlot
   careTeam: CareTeamMember[]
-  userConsents: Consent[]
   setBookingSuccessful: (value: boolean) => void
   paymentMethod: PaymentType
   creditCards: CreditCard[]

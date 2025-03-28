@@ -3,7 +3,7 @@ import { Button, Dialog, Flex, Text } from '@radix-ui/themes'
 import { XIcon } from 'lucide-react'
 
 const CloseDialogIcon = () => (
-  <Dialog.Close className="absolute right-3 top-3 cursor-pointer">
+  <Dialog.Close className="absolute right-3 top-2 cursor-pointer">
     <Flex
       align="center"
       justify="center"
