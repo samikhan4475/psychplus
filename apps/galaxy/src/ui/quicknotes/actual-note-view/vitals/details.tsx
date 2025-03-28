@@ -15,7 +15,7 @@ const Details = ({
     <BlockContainer heading="Vitals">
       {data.length > 0 && (
         <Flex className={className}>
-          <VitalsTable data={data} unitSystem={UnitSystem.Metric} />
+          <VitalsTable data={data} unitSystem={UnitSystem.English} />
         </Flex>
       )}
     </BlockContainer>

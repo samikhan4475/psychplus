@@ -15,6 +15,7 @@ interface VitalsTableProps {
 const createColumns = (
   showAddToNote: boolean,
   editStatusCell: boolean,
+  unitSystem: UnitSystem,
 ): ColumnDef<PatientVital>[] => {
   const vitalsColumns: ColumnDef<PatientVital>[] = [
     {
@@ -42,7 +43,7 @@ const createColumns = (
           {getVitalValue(
             row.original,
             VITAL_TABLE_LABELS.bloodPressure,
-            UnitSystem.Metric,
+            unitSystem,
           )}
         </TextCell>
       ),
@@ -56,7 +57,7 @@ const createColumns = (
           {getVitalValue(
             row.original,
             VITAL_TABLE_LABELS.heartRate,
-            UnitSystem.Metric,
+            unitSystem,
           )}
         </TextCell>
       ),
@@ -70,7 +71,7 @@ const createColumns = (
           {getVitalValue(
             row.original,
             VITAL_TABLE_LABELS.respiratoryRate,
-            UnitSystem.Metric,
+            unitSystem,
           )}
         </TextCell>
       ),
@@ -78,13 +79,13 @@ const createColumns = (
     {
       id: 'vital-temp',
       accessorKey: 'vital-temp',
-      header: () => <ColumnHeader clientSideSort label="Temp (C)" />,
+      header: () => <ColumnHeader clientSideSort label="Temp (F)" />,
       cell: ({ row }) => (
         <TextCell>
           {getVitalValue(
             row.original,
             VITAL_TABLE_LABELS.temperature,
-            UnitSystem.Metric,
+            unitSystem,
           )}
         </TextCell>
       ),
@@ -92,41 +93,33 @@ const createColumns = (
     {
       id: 'vital-weight',
       accessorKey: 'vital-weight',
-      header: () => <ColumnHeader clientSideSort label="Weight (kg)" />,
+      header: () => <ColumnHeader clientSideSort label="Weight (lbs)" />,
       cell: ({ row }) => (
         <TextCell>
-          {getVitalValue(
-            row.original,
-            VITAL_TABLE_LABELS.weight,
-            UnitSystem.Metric,
-          )}
+          {getVitalValue(row.original, VITAL_TABLE_LABELS.weight, unitSystem)}
         </TextCell>
       ),
     },
     {
       id: 'vital-height',
       accessorKey: 'vital-height',
-      header: () => <ColumnHeader clientSideSort label="Height (cm)" />,
+      header: () => <ColumnHeader clientSideSort label="Height (in)" />,
       cell: ({ row }) => (
         <TextCell>
-          {getVitalValue(
-            row.original,
-            VITAL_TABLE_LABELS.height,
-            UnitSystem.Metric,
-          )}
+          {getVitalValue(row.original, VITAL_TABLE_LABELS.height, unitSystem)}
         </TextCell>
       ),
     },
     {
       id: 'vital-hc',
       accessorKey: 'vital-hc',
-      header: () => <ColumnHeader clientSideSort label="HC (cm)" />,
+      header: () => <ColumnHeader clientSideSort label="HC (in)" />,
       cell: ({ row }) => (
         <TextCell>
           {getVitalValue(
             row.original,
             VITAL_TABLE_LABELS.headCircumference,
-            UnitSystem.Metric,
+            unitSystem,
           )}
         </TextCell>
       ),
@@ -140,7 +133,7 @@ const createColumns = (
           {getVitalValue(
             row.original,
             VITAL_TABLE_LABELS.pulseOximetry,
-            UnitSystem.Metric,
+            unitSystem,
           )}
         </TextCell>
       ),
@@ -156,7 +149,7 @@ const createColumns = (
           {getVitalValue(
             row.original,
             VITAL_TABLE_LABELS.o2Concentration,
-            UnitSystem.Metric,
+            unitSystem,
           )}
         </TextCell>
       ),
@@ -167,11 +160,7 @@ const createColumns = (
       header: () => <ColumnHeader clientSideSort label="BMI" />,
       cell: ({ row }) => (
         <TextCell>
-          {getVitalValue(
-            row.original,
-            VITAL_TABLE_LABELS.bmi,
-            UnitSystem.Metric,
-          )}
+          {getVitalValue(row.original, VITAL_TABLE_LABELS.bmi, unitSystem)}
         </TextCell>
       ),
     },
@@ -198,7 +187,11 @@ const VitalsTable = ({
   showAddToNote = false,
   editStatusCell = true,
 }: VitalsTableProps) => {
-  const columns = createColumns(showAddToNote, editStatusCell)
+  const columns = createColumns(
+    showAddToNote,
+    editStatusCell,
+    UnitSystem.English,
+  )
   return <DataTable data={data} columns={columns} disablePagination sticky />
 }
 

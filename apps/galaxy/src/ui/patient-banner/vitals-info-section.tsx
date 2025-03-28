@@ -16,17 +16,11 @@ const VitalsInfoSection = ({ vitals }: VitalsInfoSectionProps) => {
     [data, vitals],
   )
 
-  const formatHeightInInches = (heightCm?: number) =>
-    heightCm ? (heightCm * 0.39).toFixed(2) : undefined
-
   return (
     <>
       <LabelAndValue label="HR" value={vital?.pulseRate} />
       <LabelAndValue label="Temp (F)" value={vital?.bodyTemperatureF} />
-      <LabelAndValue
-        label="Height (in)"
-        value={formatHeightInInches(vital?.heightCm)}
-      />
+      <LabelAndValue label="Height (in)" value={vital?.heightInches} />
       <LabelAndValue
         label="Weight (lbs)"
         value={vital?.weightPounds?.toFixed(2)}

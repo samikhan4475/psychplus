@@ -22,7 +22,6 @@ interface PatientVital {
   weightKilograms?: number
   heightCm?: number
   heightInches?: number
-  heightFt?: number
   bodyTemperatureC?: number
   bodyTemperatureF?: number
   headCircumferenceCm?: number
