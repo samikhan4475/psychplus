@@ -8,6 +8,7 @@ import { AddVisit } from '../visit/add-visit'
 import { InboxLink } from './inbox-link'
 import { NavigationLinks } from './navigation-links'
 import { NavigationTabs } from './navigation-tabs'
+import { ScrollAlert } from './scroll-alert'
 import { UserDropdownMenu } from './user-dropdown-menu'
 
 const Header = async () => {
@@ -23,6 +24,7 @@ const Header = async () => {
       <header className="bg-white p-2">
         <Flex align="center" justify="between" px="5">
           <NavLogo />
+          <ScrollAlert />
           <Flex height="100%" align="center" gap="2">
             <AddPatient>
               <Button

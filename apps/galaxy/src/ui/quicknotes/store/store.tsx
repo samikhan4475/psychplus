@@ -138,6 +138,7 @@ const createStore = (initialState: StoreInitialState) =>
           widgetId: QuickNoteSectionName.QuicknoteSectionHPI,
         })
         toast.success('Quicknote saved!')
+        set({ unsavedChanges: {} })
         get().setWidgetsData(response.data)
       }
       set({ loading: false })
@@ -171,7 +172,7 @@ const createStore = (initialState: StoreInitialState) =>
 
         get().setWidgetsData(response?.data)
         const signResults = await signNoteAction(payload)
-        set({ loading: false })
+        set({ loading: false, unsavedChanges: {} })
         return signResults
       } catch (error) {
         set({ loading: false })
