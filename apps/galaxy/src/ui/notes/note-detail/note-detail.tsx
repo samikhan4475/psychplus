@@ -3,7 +3,7 @@ import { Box, Flex, Heading, Separator, Text } from '@radix-ui/themes'
 import { format } from 'date-fns'
 import { LoadingPlaceholder } from '@/components/loading-placeholder'
 import { PsychiatricEvaluation } from '@/ui/quicknotes/actual-note-view/psychiatric-evaluation'
-import { convertToTimeZoneDate } from '@/utils'
+import { convertToTimeZoneDate, getSlashedPaddedDateString } from '@/utils'
 import { useStore } from '../store'
 import { groupBySectionName } from '../utils'
 import { CreateNoteDetailView } from './create-note-detail-view'
@@ -43,7 +43,7 @@ const NoteDetail = ({ children }: PropsWithChildren) => {
   }
 
   const supervisedByText = selectedRow?.supervisedBy
-    ? `supervised by: ${selectedRow?.supervisedBy}`
+    ? `, supervised by ${selectedRow?.supervisedBy}`
     : ''
 
   return (
@@ -106,16 +106,18 @@ const NoteDetail = ({ children }: PropsWithChildren) => {
       )}
       {selectedRow?.signedDate && (
         <Heading size="3" my="1" weight="medium">
-          E-Signed by: {selectedRow?.signedByUserName}, {supervisedByText} at{' '}
-          {format(new Date(selectedRow.signedDate), 'MM/dd/yyyy')}
+          E-Signed by: {selectedRow?.signedByUserName} {supervisedByText} at{' '}
+          {getSlashedPaddedDateString(selectedRow.signedDate)}
         </Heading>
       )}
       {selectedRow?.cosignedDate && (
         <Heading size="3" my="1" weight="medium">
           E-Signed by Co-Signer: {selectedRow?.cosignedByUserName}, at{' '}
-          {convertToTimeZoneDate(
-            selectedRow.cosignedDate,
-            selectedRow.locationTimeZone ?? '',
+          {getSlashedPaddedDateString(
+            convertToTimeZoneDate(
+              selectedRow.cosignedDate,
+              selectedRow.locationTimeZone ?? '',
+            ),
           )}
         </Heading>
       )}
