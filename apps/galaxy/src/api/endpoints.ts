@@ -94,7 +94,7 @@ const GET_PATIENT_RELATIONSHIPS = (patientId: string) =>
 const GET_PATIENT_PREFERRED_PARTNERS = (patientId: string) =>
   `${API_URL}/api/patients/${patientId}/preferredpartners`
 const GET_STAFF_PROFILE_ENDPOINT = (staffId: string) =>
-  `${API_URL}/api/staff/${staffId}`
+  `${API_URL}/api/staff/${staffId}?isIncludePractice=false&isIncludeOrganization=true`
 const DELETE_STAFF_ENDPOINT = (staffId: string) =>
   `${API_URL}/api/staff/${staffId}`
 const GET_INSURANCE_PAYERS_ENDPOINT = (includePlans: boolean) =>
@@ -363,6 +363,8 @@ const GET_INSURANCE_PAYERS_LIST_ENDPOINT = `${API_URL}/api/insurance/plans/actio
 const IMPORT_ERA_ENDPOINT = `${API_URL}/api/receivers/responses/actions/claimeraimport`
 const GET_PAYMENT_SERVICELINES_ENDPOINT = `${API_URL}/api/claimservicelinepayments/actions/search`
 const GET_PRACTICES_ENDPOINT = `${API_URL}/api/practices/actions/search`
+const GET_STAFF_ORGANIZATIONS_ENDPOINT = (staffId: string) =>
+  `${API_URL}/api/users/${staffId}/organizations?includeRecordMetadata=false`
 const GET_PATIENT_VITALS_ENDPOINT = `${API_URL}/api/patientvitalsigns/actions/search`
 const ADD_PATIENT_VITAL_ENDPOINT = (patientId: string) =>
   `${API_URL}/api/patients/${patientId}/vitalsigns`
@@ -661,8 +663,14 @@ const DELETE_PHARMACY = (pharmacyId: string, patientId: string) =>
 const PRIORITY_PHARMACY = (pharmacyId: string, patientId: string) =>
   `${API_URL}/api/patients/${patientId}/pharmacies/${pharmacyId}/actions/default`
 const GET_ORGANIZATION_PRACTICES_ENDPOINT = `${API_URL}/api/practices/actions/search`
+const GET_STAFF_ORGANIZATION_PRACTICES_ENDPOINT = (staffId: string) =>
+  `${API_URL}/api/users/${staffId}/practices`
 const UPDATE_PRACTICE_ENDPOINT = (organizationId: string, practiceId: string) =>
   `${API_URL}/api/organizations/${organizationId}/practices/${practiceId}`
+const ATTACH_PRACTICE_STAFF_ENDPOINT = (staffId: string, practiceId: string) =>
+  `${API_URL}/api/users/${staffId}/practices/${practiceId}/actions/associate`
+const DETACH_PRACTICE_STAFF_ENDPOINT = (staffId: string, practiceId: string) =>
+  `${API_URL}/api/users/${staffId}/practices/${practiceId}/actions/deassociate`
 const GET_PRACTICE_HISTORY_ENDPOINT = (practiceId: string) =>
   `${API_URL}/api/practices/${practiceId}/history/actions/search`
 
@@ -765,7 +773,7 @@ const ADD_SIGNED_LAB_ORDERS = `${API_URL}/api/laborders/actions/signed`
 const ADD_CLAIM = `${API_URL}/api/claims`
 const SELF_PRACTICES = `${API_URL}/api/users/self/practices?includePermissions=false`
 const GET_CURRENT_USER_SETTINGS_SEARCH = `${API_URL}/api/users/self/settings/actions/search`
-const GET_DISTRIBUTION_GROUPS= `${API_URL}/api/usergroups/action/search`
+const GET_DISTRIBUTION_GROUPS = `${API_URL}/api/usergroups/action/search`
 
 const ELECTRONICALLY_SIGN_POLICY_ENDPOINT = (patientId: string) =>
   `${API_URL}/api/patients/${patientId}/consents`
@@ -1108,6 +1116,9 @@ export {
   ADD_SELF_USER_SETTINGS,
   UPDATE_SELF_USER_SETTINGS,
   SELF_USER_BULK_SETTINGS,
+  GET_STAFF_ORGANIZATION_PRACTICES_ENDPOINT,
+  ATTACH_PRACTICE_STAFF_ENDPOINT,
+  DETACH_PRACTICE_STAFF_ENDPOINT,
   ADD_BULK_USER_SETTINGS,
   UPDATE_BULK_USER_SETTINGS,
   UPDATE_FOLLOW_UP_DENIAL_STATUS,
@@ -1132,4 +1143,5 @@ export {
   GET_DISTRIBUTION_GROUPS,
   DELETE_STAFF_VIDEO_ENDPOINT,
   SIGN_PATIENT_REFERRAL_ENDPOINT,
+  GET_STAFF_ORGANIZATIONS_ENDPOINT,
 }

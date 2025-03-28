@@ -33,7 +33,7 @@ const PermissionAlert = ({
           </Flex>
           <Box className="flex-1">
             <AlertDialog.Cancel
-              className="min-w-5 min-h-5 ml-auto"
+              className="min-w-5 min-h-5 ml-auto cursor-pointer"
               onClick={onClose}
             >
               <Cross1Icon strokeWidth={1.5} className="text-pp-icon-sub" />

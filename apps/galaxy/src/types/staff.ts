@@ -16,6 +16,7 @@ interface StaffResource {
   rating: number
   avatar?: string
   userId?: string
+  staffUserRoleIds?: string[]
   practiceIds?: string[]
 }
 

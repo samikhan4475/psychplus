@@ -1,0 +1,59 @@
+import { useEffect, useState } from 'react'
+import { CounterClockwiseClockIcon } from '@radix-ui/react-icons'
+import { Flex, Heading, Popover } from '@radix-ui/themes'
+import { X } from 'lucide-react'
+import { PropsWithRow } from '@/components'
+import { Practice } from '@/ui/organization-practice/types'
+import { getAllPracticeHxListAction } from '../actions'
+import { HistoryDataTable } from './history-table'
+
+const PracticesHistoryDialog = ({ row }: PropsWithRow<Practice>) => {
+  const [practiceHx, setPracticeHx] = useState<Practice[]>([])
+  const [loading, setLoading] = useState(false)
+
+  useEffect(() => {
+    const fetchPracticeHistory = async () => {
+      setLoading(true)
+      if (!row.original.id) return
+
+      const response = await getAllPracticeHxListAction(row.original.id)
+      if (response.state === 'success') {
+        setPracticeHx(response.data)
+        setLoading(false)
+      } else {
+        setLoading(false)
+      }
+    }
+
+    fetchPracticeHistory()
+  }, [row.original.id])
+
+  return (
+    <Flex>
+      <Popover.Root>
+        <Flex align="center" gap="1" p="1" width="100%">
+          <Popover.Trigger>
+            <CounterClockwiseClockIcon className="text-black cursor-pointer" />
+          </Popover.Trigger>
+          <Popover.Content className="min-w-[373px] rounded-[10px] p-2 shadow-2">
+            <Flex className="w-full gap-1.5" direction="column">
+              <Flex justify="between" align="center" gap="2">
+                <Heading size="4">Status Hx</Heading>
+                <Popover.Close>
+                  <X
+                    size={24}
+                    strokeWidth={2}
+                    className="text-black cursor-pointer"
+                  />
+                </Popover.Close>
+              </Flex>
+              <HistoryDataTable data={practiceHx} loading={loading} />
+            </Flex>
+          </Popover.Content>
+        </Flex>
+      </Popover.Root>
+    </Flex>
+  )
+}
+
+export { PracticesHistoryDialog }

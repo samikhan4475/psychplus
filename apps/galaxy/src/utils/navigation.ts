@@ -138,6 +138,10 @@ const getStaffNavLinks = (staffId: string | null) => {
       href: `${baseHref}/treatment-team`,
     },
     {
+      label: 'Organization & Practice',
+      href: `${baseHref}/organization-practice`,
+    },
+    {
       label: 'Practice',
       href: `${baseHref}/practice`,
     },
