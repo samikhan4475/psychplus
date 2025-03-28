@@ -204,7 +204,7 @@ const NewPatient = ({ onclose, mapKey }: NewPatientProps) => {
       clickActionData: 'Clicked Search',
     })
 
-    const url = `/schedule-appointment?${queryString}`
+    const url = `/schedule?${queryString}`
     publish(`${SCHEDULE_APPOINTMENT_DIALOG}:appointment-search`, { url })
   }
 
