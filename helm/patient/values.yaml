@@ -66,11 +66,11 @@ resources:
 
 behavior:
   scaleDown:
-    stabilizationWindowSeconds: 1800
+    stabilizationWindowSeconds: 3600
     policies:
       - type: Pods
         value: 1
-        periodSeconds: 100
+        periodSeconds: 1800
   scaleUp:
     stabilizationWindowSeconds: 120
     policies:
@@ -88,7 +88,7 @@ autoscaling:
 startupProbeEnabled: false
 startupProbe:
   httpGet:
-    path: /healthz/liveness_CF796DFC-2BE3-415f-9F86-63C29517DF8B
+    path: /health/liveness_CF796DFC-2BE3-415f-9F86-63C29517DF8B
     port: http
   periodSeconds: 30
   timeoutSeconds: 30
@@ -96,7 +96,7 @@ startupProbe:
 livenessProbeEnabled: false
 livenessProbe:
   httpGet:
-    path: /healthz/liveness_CF796DFC-2BE3-415f-9F86-63C29517DF8B
+    path: /health/liveness_CF796DFC-2BE3-415f-9F86-63C29517DF8B
     port: http
   periodSeconds: 10
   timeoutSeconds: 5
@@ -104,7 +104,7 @@ livenessProbe:
 readinessProbeEnabled: false
 readinessProbe:
   httpGet:
-    path: /healthz/readiness_CF796DFC-2BE3-415f-9F86-63C29517DF8B
+    path: /health/readiness_CF796DFC-2BE3-415f-9F86-63C29517DF8B
     port: http
   periodSeconds: 10
   timeoutSeconds: 5
