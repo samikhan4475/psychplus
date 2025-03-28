@@ -240,6 +240,7 @@ const visitTypeToWidgets: Record<VisitTypeEnum, QuickNoteSectionName[]> = {
     QuickNoteSectionName.QuicknoteSectionCodes,
   ],
   [VisitTypeEnum.HospitalCareDischarge]: [
+    QuickNoteSectionName.QuickNoteSectionDiagnosis,
     QuickNoteSectionName.QuicknoteSectionAdmittingDiagnosis,
     QuickNoteSectionName.QuicknoteSectionWorkingDischargeDiagnosis,
     QuickNoteSectionName.QuicknoteSectionHPI,

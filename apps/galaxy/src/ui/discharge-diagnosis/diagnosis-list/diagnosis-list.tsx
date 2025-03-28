@@ -11,25 +11,21 @@ import { LoadingPlaceholder } from '@/components'
 import { useHasPermission } from '@/hooks'
 import { DiagnosisIcd10Code } from '@/types'
 import { PermissionAlert } from '@/ui/schedule/shared'
-import { useStore } from '../../store'
+import { useStore } from '../store'
 
-interface WorkingDiagnosisViewProps {
+interface DiagnosisListProps {
   width?: string
-  isDisabled?: boolean
 }
 
-const WorkingDiagnosisView = ({
-  width,
-  isDisabled,
-}: WorkingDiagnosisViewProps) => {
+const DiagnosisList = ({ width = '100%' }: DiagnosisListProps) => {
   const [isOpen, setIsOpen] = useState({
     show: false,
     message: '',
   })
   const {
-    workingDiagnosisData,
-    updateWorkingDiagnosisData,
-    deleteWorkingDiagnosis,
+    workingDischargeDiagnosisData,
+    updateWorkingDischargeDiagnosisData,
+    deleteWorkingDisrchargeDiagnosis,
     markDiagnosisFavorites,
     favouriteDiagnosisData,
     loadingWorkingDiagnosis,
@@ -58,7 +54,7 @@ const WorkingDiagnosisView = ({
       )
       return
     }
-    deleteWorkingDiagnosis(item)
+    deleteWorkingDisrchargeDiagnosis(item)
   }
 
   const onFavouriteClick = (item: DiagnosisIcd10Code, isFavourite: boolean) => {
@@ -80,10 +76,10 @@ const WorkingDiagnosisView = ({
   const onDragEnd = (result: DropResult) => {
     const { source, destination } = result
     if (!destination || destination.index === source.index) return
-    const updatedData = [...workingDiagnosisData]
+    const updatedData = [...workingDischargeDiagnosisData]
     const [movedItem] = updatedData.splice(source.index, 1)
     updatedData.splice(destination.index, 0, movedItem)
-    updateWorkingDiagnosisData(updatedData)
+    updateWorkingDischargeDiagnosisData(updatedData)
   }
 
   const isItemFavorite = (code: string) => {
@@ -92,7 +88,7 @@ const WorkingDiagnosisView = ({
 
   if (loadingWorkingDiagnosis) {
     return (
-      <Flex direction="column" p="5" gap="2" width={width || '100%'}>
+      <Flex direction="column" p="5" gap="2" width={width}>
         <LoadingPlaceholder />
       </Flex>
     )
@@ -107,18 +103,17 @@ const WorkingDiagnosisView = ({
               direction="column"
               p="2"
               gap="2"
-              width={width || '100%'}
+              width={width}
               ref={provided.innerRef}
               {...provided.droppableProps}
             >
-              {workingDiagnosisData.map((item, index) => {
+              {workingDischargeDiagnosisData.map((item, index) => {
                 const isFavourite = isItemFavorite(item.code)
                 return (
                   <Draggable
                     key={item.code}
                     draggableId={item.code}
                     index={index}
-                    isDragDisabled={isDisabled}
                   >
                     {(provided) => (
                       <Flex
@@ -154,8 +149,8 @@ const WorkingDiagnosisView = ({
                             <Trash2
                               height="14"
                               width="14"
-                              cursor={isDisabled ? 'not-allowed' : 'pointer'}
-                              onClick={() => !isDisabled && onTrashClick(item)}
+                              cursor="pointer"
+                              onClick={() => onTrashClick(item)}
                             />
                             <StarIcon
                               stroke={isFavourite ? '#A0B6DC' : '#0F6CBD'}
@@ -163,9 +158,8 @@ const WorkingDiagnosisView = ({
                               strokeWidth="1"
                               height="15"
                               width="15"
-                              cursor={isDisabled ? 'not-allowed' : 'pointer'}
+                              cursor="pointer"
                               onClick={() =>
-                                !isDisabled &&
                                 onFavouriteClick(item, isFavourite)
                               }
                             />
@@ -181,7 +175,6 @@ const WorkingDiagnosisView = ({
           )}
         </Droppable>
       </DragDropContext>
-
       <PermissionAlert
         message={isOpen.message}
         isOpen={isOpen.show}
@@ -191,4 +184,4 @@ const WorkingDiagnosisView = ({
   )
 }
 
-export { WorkingDiagnosisView }
+export { DiagnosisList }

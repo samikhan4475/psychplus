@@ -11,6 +11,7 @@ import { TcmWidgetClientLoader } from '../assessment-plan/tcm-widget/tcm-widget-
 import { TherapyAssessmentPlanClientLoader } from '../assessment-plan/therapy-assessment-plan-tab/therapy-assessment-plan-client-loader'
 import { CodesWidgetClientLoader } from '../codes/codes-widget/codes-widget-client-loader'
 import { DiagnosisWidgetClientLoader } from '../diagnosis/diagnosis-widget/diagnosis-client-loader'
+import { DischargeDiagnosisClientLoader } from '../discharge-diagnosis/discharge-diagnosis-widget/discharge-diagnosis-client-loader'
 import { FamilyPsychHxClientLoader } from '../family-psych-hx/family-psych-hx-widget/family-psych-hx-client-loader'
 import { FollowUpWidgetLoader } from '../follow-up/follow-up-widget-client-loader'
 import { HospitalDischargeClientLoader } from '../hospital/hospital-discharge-widget/hospital-discharge-client-loader'
@@ -62,6 +63,7 @@ import { TmsDetailClientView } from './actual-note-view/tms/tms-detail-client-vi
 import { UploadedDocumentClientView } from './actual-note-view/uploaded-documents/uploaded-document-client-view'
 import { VitalsNoteClientView } from './actual-note-view/vitals/vitals-note-client-view'
 import { WorkingDiagnosisClientView } from './actual-note-view/working-diagnosis/working-diagnosis-client-view '
+import { WorkingDischargeDiagnosisClientView } from './actual-note-view/working-discharge-diagnosis'
 import { QuickNoteSectionName } from './constants'
 import { WidgetType } from './types'
 
@@ -107,6 +109,11 @@ const widgets: Array<WidgetType> = [
     component: DiagnosisWidgetClientLoader,
     id: QuickNoteSectionName.QuickNoteSectionDiagnosis,
     actualNoteComponent: WorkingDiagnosisClientView,
+  },
+  {
+    component: DischargeDiagnosisClientLoader,
+    id: QuickNoteSectionName.QuicknoteSectionWorkingDischargeDiagnosis,
+    actualNoteComponent: WorkingDischargeDiagnosisClientView,
   },
   {
     component: AddOnClientLoader,

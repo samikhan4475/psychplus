@@ -5,7 +5,6 @@ import { DiagnosisWidget } from './diagnosis-widget'
 import { DiagnosisSaveButton } from './diagnosis-widget/diagnosis-save-button'
 import { SearchDiagnosis } from './diagnosis-widget/search-diagnosis'
 
-
 const Diagnosis = () => {
   return (
     <>

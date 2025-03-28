@@ -1,0 +1,5 @@
+export * from './get-favorite-diagnosis'
+export * from './get-icd10-diagnosis'
+export * from './get-working-discharge-diagnosis'
+export * from './add-favorite-diagnosis'
+export * from './delete-favorite-diagnosis'

@@ -1,9 +1,10 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useMemo } from 'react'
+import { useSearchParams } from 'next/navigation'
 import { Flex, Text } from '@radix-ui/themes'
 import { useDebouncedCallback } from 'use-debounce'
-import { TabContentHeading, WidgetAddButton } from '@/components'
+import { WidgetAddButton } from '@/components'
 import {
   DiagnosisIcd10Code,
   FavouriteDiagnosisData,
@@ -15,6 +16,7 @@ import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { useQuickNoteUpdate } from '@/ui/quicknotes/hooks'
 import { Diagnosis } from '../diagnosis'
 import { DiagnosisSaveButton } from '../diagnosis/diagnosis-widget/diagnosis-save-button'
+import { shouldDisableDiagnosisActions } from '../diagnosis/utils'
 import { useStore } from '../store'
 
 interface DiagnosisWidgetProps {
@@ -29,6 +31,13 @@ const DiagnosisWidget = ({
   patientId,
 }: DiagnosisWidgetProps) => {
   const { isQuickNoteView, updateActualNoteWidgetsData } = useQuickNoteUpdate()
+  const searchParams = useSearchParams()
+  const visitType = searchParams.get('visitType') ?? ''
+  const visitSequence = searchParams.get('visitSequence') ?? ''
+  const isDisabled = useMemo(
+    () => shouldDisableDiagnosisActions(visitType, visitSequence),
+    [visitType, visitSequence],
+  )
   const {
     updateFavoritesDiagnosis,
     updateWorkingDiagnosisData,
@@ -74,27 +83,29 @@ const DiagnosisWidget = ({
   }, [workingDiagnosis, favouriteDiagnosis])
 
   return (
-    <>
-      <TabContentHeading title="">
-        <Flex className="flex-none">
-          <Text className="text-[16px] font-[600]">Working Diagnosis</Text>
-        </Flex>
-        <Flex justify="between" align="center" width="100%">
-          <Flex pl="4" gap="2" align="center">
-            <SearchDiagnosis />
+    <Flex className="bg-white" direction="column">
+      <Flex justify="between" p="2" className="bg-white border border-gray-5">
+        <Text className="flex-none text-[16px] font-[600]">
+          {isDisabled ? 'Admitting' : 'Working'} Diagnosis
+        </Text>
+        {!isDisabled && (
+          <Flex justify="between" align="center" width="100%">
+            <Flex pl="4" gap="2" align="center">
+              <SearchDiagnosis />
+            </Flex>
+            <Flex gap="2">
+              <WidgetAddButton title="Add Diagnosis">
+                <Diagnosis />
+              </WidgetAddButton>
+              <DiagnosisSaveButton />
+            </Flex>
           </Flex>
-          <Flex gap="2">
-            <WidgetAddButton title="Add Diagnosis">
-              <Diagnosis />
-            </WidgetAddButton>
-            <DiagnosisSaveButton />
-          </Flex>
-        </Flex>
-      </TabContentHeading>
-      <Flex className="bg-white">
-        <WorkingDiagnosisView />
+        )}
       </Flex>
-    </>
+      <Flex className="bg-white">
+        <WorkingDiagnosisView isDisabled={isDisabled} />
+      </Flex>
+    </Flex>
   )
 }
 

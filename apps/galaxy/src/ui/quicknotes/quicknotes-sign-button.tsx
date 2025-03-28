@@ -13,10 +13,12 @@ import { useCodesetCodes } from '@/hooks'
 import { useStore as useGlobalStore } from '@/store'
 import { Appointment, PatientConsent } from '@/types'
 import { useStore as useDiagnosisStore } from '@/ui/diagnosis/store'
+import { useStore as useDischargeDiagnosisStore } from '@/ui/discharge-diagnosis/store'
 import { useStore as useFollowupStore } from '@/ui/follow-up/follow-up-widget/store'
 import { useStore as useMedicationStore } from '@/ui/medications/patient-medications-widget/store'
 import { filterDefaultCosigner } from '@/utils'
 import { AlertDialog } from '../alerts'
+import { shouldDisableDiagnosisActions } from '../diagnosis/diagnosis/utils'
 import { PatientMedication } from '../medications/patient-medications-widget/types'
 import {
   SEND_TO_SIGNATURE_BUTTON,
@@ -62,6 +64,7 @@ const QuickNotesSignButton = ({
   const [isPolicyAlertOpen, setIsPolicyAlertOpen] = useState(false)
   const [alertInfo, setAlertInfo] = useState(initialAlertInfo)
 
+  const { workingDischargeDiagnosisData } = useDischargeDiagnosisStore()
   const { workingDiagnosisData, saveWorkingDiagnosis } = useDiagnosisStore()
   const { staffId, staffRoleCode } = useGlobalStore((state) => ({
     staffId: state.user.staffId,
@@ -115,7 +118,7 @@ const QuickNotesSignButton = ({
     signOptions.coSignedByUserId !== undefined &&
     signOptions.coSignedByUserId !== null
       ? String(signOptions.coSignedByUserId)
-      : String(filterDefaultCosigner(appointment.cosigners || [])?.userId || '')
+      : String(filterDefaultCosigner(appointment.cosigners ?? [])?.userId ?? '')
 
   const noteTypeCodes = useCodesetCodes(CODESETS.NoteType).find(
     (code) => code.groupingCode === 'Primary',
@@ -144,6 +147,11 @@ const QuickNotesSignButton = ({
   const patientId = useParams().id as string
   const appointmentId = useSearchParams().get('id') as string
   const visitType = useSearchParams().get('visitType') as VisitTypeEnum
+  const visitSequence = useSearchParams().get('visitSequence') ?? ''
+  const isHospitalDischargeView = useMemo(
+    () => shouldDisableDiagnosisActions(visitType, visitSequence),
+    [visitType, visitSequence],
+  )
   const isAppointmentProvider = appointment.providerStaffId === staffId
   const isFutureAppointment =
     appointment?.startDate && new Date(appointment.startDate) > new Date()
@@ -230,14 +238,16 @@ const QuickNotesSignButton = ({
     saveIsPmpReviewedForMedication(patientId)
 
     const diagnosisError = validateDiagnosis({
-      workingDiagnosisData,
+      workingDiagnosisData: isHospitalDischargeView
+        ? workingDischargeDiagnosisData
+        : workingDiagnosisData,
       visitType,
     })
     if (diagnosisError) {
-      toast.error(diagnosisError)
-      return
+      return toast.error(diagnosisError)
     }
-    saveWorkingDiagnosis(patientId, setWidgetsData, false)
+    !isHospitalDischargeView &&
+      saveWorkingDiagnosis(patientId, setWidgetsData, false)
 
     if (isPrescriber && !canSignButtonQuickNotePage) {
       showAlert({

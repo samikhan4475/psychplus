@@ -2,7 +2,9 @@ import { useEffect, useMemo, useState } from 'react'
 import { Flex } from '@radix-ui/themes'
 import { CodesetSelectCell } from '@/components'
 import { CODESETS } from '@/constants'
+import { useStore as useRootStore } from '@/store'
 import { Appointment } from '@/types'
+import { constructQuickNotesUrl, isHospitalCareVisit } from '@/utils'
 import { CHANGE_NON_TIMED_SEQUENCE, StatusCode } from '../../constants'
 import {
   useConfirmVisitUpdate,
@@ -24,6 +26,7 @@ const NonTimedVisitSequenceSelect = ({
   const [visitSequence, setVisitSequence] = useState<string>(
     appointment.visitSequence,
   )
+  const removeTab = useRootStore((state) => state.removeTab)
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const [excludedCodes, setExcludedCodes] = useState<string[]>([])
   const timedVisitSequenceCodes = useVisitSequenceCodeset('TimedServices')
@@ -115,9 +118,18 @@ const NonTimedVisitSequenceSelect = ({
     setVisitSequence(val)
     const transformedBody = transformIn(appointment)
     transformedBody.visitSequenceType = val
+    const href = constructQuickNotesUrl(
+      appointment.patientId,
+      appointment.appointmentId,
+      appointment.visitTypeCode,
+      appointment.visitSequence,
+    )
     updateVisit({
       body: transformedBody,
-      onSuccess: refetch,
+      onSuccess: () => {
+        isHospitalCareVisit(appointment?.visitTypeCode ?? '') && removeTab(href)
+        refetch()
+      },
       onError: onUpdateVisitError,
     })
   }

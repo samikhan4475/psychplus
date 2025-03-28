@@ -4,8 +4,12 @@ import { Tabs } from '@/ui/messages/types'
 const getNavLinks = (
   appointmentId: string | null,
   visitType: string | null,
+  visitSequence: string | null,
   isFeatureLabOrdersFlagEnabled: boolean,
 ): ChartNavLink[] => {
+  if (isHospitalCareVisit(visitType)) {
+    visitType = `${visitType}/${visitSequence}`
+  }
   const defaultBottomLinks = [
     { label: 'Patient Info', href: '/patient-info' },
     { label: 'Referrals', href: '/referrals' },
@@ -43,7 +47,16 @@ const getNavLinks = (
     { label: 'Mental Status Exam', href: '/mse' },
     { label: 'Add On', href: '/add-on' },
     { label: 'Codes', href: '/codes' },
-    { label: 'Diagnosis', href: '/diagnosis' },
+    {
+      label: 'Diagnosis',
+      href: '/diagnosis',
+      conditions: [visitType !== VisitTypes.HospitalCareDischarge],
+    },
+    {
+      label: 'Working Discharge Diagnosis',
+      href: '/discharge-diagnosis',
+      conditions: [visitType === VisitTypes.HospitalCareDischarge],
+    },
     {
       label: 'Lab Orders',
       href: '/lab-orders',

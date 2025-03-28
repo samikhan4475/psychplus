@@ -28,6 +28,7 @@ import { TherapyClientView } from '@/ui/quicknotes/actual-note-view/therapy/ther
 import { TmsNoteDetailView } from '@/ui/quicknotes/actual-note-view/tms/tms-note-detail-view'
 import { VitalsNoteDetailView } from '@/ui/quicknotes/actual-note-view/vitals/vitals-note-detail-view'
 import { WorkingDiagnosisNoteDetailView } from '@/ui/quicknotes/actual-note-view/working-diagnosis/working-diagnosis-note-detail-view'
+import { WorkingDischargeDiagnosisNoteDetailView } from '@/ui/quicknotes/actual-note-view/working-discharge-diagnosis/working-discharge-diagnosis-note-detail-view'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { isHospitalCareVisit, visitTypeToWidgets } from '@/utils'
 import { WidgetType } from '../types'
@@ -91,6 +92,10 @@ const widgetsArray: Array<WidgetType> = [
   {
     id: QuickNoteSectionName.QuickNoteSectionDiagnosis,
     actualNoteDetailComponent: WorkingDiagnosisNoteDetailView,
+  },
+  {
+    id: QuickNoteSectionName.QuicknoteSectionWorkingDischargeDiagnosis,
+    actualNoteDetailComponent: WorkingDischargeDiagnosisNoteDetailView,
   },
   {
     id: QuickNoteSectionName.Addon,

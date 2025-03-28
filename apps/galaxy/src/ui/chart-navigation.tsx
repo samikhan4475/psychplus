@@ -18,8 +18,14 @@ const ChartNavigation = () => {
   )
 
   const navLinks = useMemo(
-    () => getNavLinks(appointmentId, visitType, isFeatureLabOrdersFlagEnabled),
-    [appointmentId, visitType, isFeatureLabOrdersFlagEnabled],
+    () =>
+      getNavLinks(
+        appointmentId,
+        visitType,
+        visitSequence,
+        isFeatureLabOrdersFlagEnabled,
+      ),
+    [appointmentId, visitType, isFeatureLabOrdersFlagEnabled, visitSequence],
   )
 
   return (
