@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useParams } from 'next/navigation'
 import { Button } from '@radix-ui/themes'
 import { SaveIcon } from 'lucide-react'
+import { revalidateAction } from '@/actions/revalidate'
 import { Appointment } from '@/types'
 import { useStore as useDiagnosisStore } from '@/ui/diagnosis/store'
 import { SAVE_BUTTON } from './constants'
@@ -36,6 +37,7 @@ const QuickNotesSaveButton = ({
     try {
       saveWorkingDiagnosis(patientId, setWidgetsData, false)
       await save(appointment)
+      revalidateAction(false)
     } catch (error) {
       console.error('Failed to save quick notes', error)
     }

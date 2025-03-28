@@ -1,7 +1,11 @@
 import { Text } from '@radix-ui/themes'
 import { QuickNoteSectionItem } from '@/types'
 import { useStore } from '@/ui/medications/patient-medications-widget/store'
-import { PatientMedication, PatientPrescriptionStatus } from '@/ui/medications/patient-medications-widget/types'
+import {
+  PatientMedication,
+  PatientPrescriptionStatus,
+} from '@/ui/medications/patient-medications-widget/types'
+import { formatDate } from '@/utils'
 import { BlockContainer } from '../shared'
 
 interface Props {
@@ -11,8 +15,24 @@ interface Props {
 }
 
 const formatMedicationsDetails = (medication: PatientMedication) => {
-  const { drugDescription, medicationDetails } = medication
-  return `${drugDescription} ${medicationDetails.strength} ${medicationDetails.directions}`
+  const {
+    drugDescription,
+    medicationDetails,
+    quantityValue,
+    refills,
+    writtenDate,
+    endDateTime,
+  } = medication
+  return [
+    drugDescription ?? 'N/A',
+    medicationDetails?.strength ?? 'N/A',
+    medicationDetails?.directions ?? 'N/A',
+    quantityValue ?? 'N/A',
+    refills ?? 'N/A',
+    formatDate(writtenDate) ?? 'N/A',
+    formatDate(endDateTime) ?? 'N/A',
+    medicationDetails?.providerName ?? 'N/A',
+  ]?.join(' | ')
 }
 
 const Details = ({ data, isNoteView, medicationData }: Props) => {
@@ -29,11 +49,18 @@ const Details = ({ data, isNoteView, medicationData }: Props) => {
   return (
     <BlockContainer heading="Medications">
       {finalIsPmpReviewed && <Text size="1"> PMP is Reviewed </Text>}
-      {medicationData?.filter(medication => medication.prescriptionStatusTypeId === Number(PatientPrescriptionStatus.ACTIVE) || Number(PatientPrescriptionStatus.CURRENT_MEDICATION)).map((medication) => (
-        <Text size="1" key={medication.drugDescription}>
-          {formatMedicationsDetails(medication)}
-        </Text>
-      ))}
+      {medicationData
+        ?.filter(
+          (medication) =>
+            medication.prescriptionStatusTypeId ===
+              Number(PatientPrescriptionStatus.ACTIVE) ||
+            Number(PatientPrescriptionStatus.CURRENT_MEDICATION),
+        )
+        .map((medication) => (
+          <Text size="1" key={medication.drugDescription}>
+            {formatMedicationsDetails(medication)}
+          </Text>
+        ))}
     </BlockContainer>
   )
 }

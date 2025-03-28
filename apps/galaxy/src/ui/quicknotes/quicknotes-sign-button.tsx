@@ -6,6 +6,7 @@ import { useParams, useSearchParams } from 'next/navigation'
 import { Button } from '@radix-ui/themes'
 import { PenLineIcon } from 'lucide-react'
 import toast from 'react-hot-toast'
+import { revalidateAction } from '@/actions/revalidate'
 import { CODESETS, STAFF_ROLE_CODE_PRESCRIBER } from '@/constants'
 import { VisitTypeEnum } from '@/enum'
 import { useCodesetCodes } from '@/hooks'
@@ -316,6 +317,7 @@ const QuickNotesSignButton = ({
     }
     toast.error(signResults.error)
     setAlertInfo(initialAlertInfo)
+    revalidateAction(false)
   }
 
   return (
