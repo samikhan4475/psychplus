@@ -30,7 +30,7 @@ const FilloutCurrentTab = ({
         {children}
       </Flex>
       <Flex gap="2" justify="end" mt="2">
-        <Button
+        {/* <Button
           size="1"
           color="gray"
           variant="surface"
@@ -41,7 +41,7 @@ const FilloutCurrentTab = ({
           }}
         >
           Request Patient to Fill
-        </Button>
+        </Button> */}
         <SaveButton isGhost />
       </Flex>
     </Flex>

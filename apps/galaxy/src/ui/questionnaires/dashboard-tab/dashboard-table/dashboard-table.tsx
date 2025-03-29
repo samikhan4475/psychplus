@@ -50,11 +50,11 @@ const createColumns = (
       />
     ),
   },
-  {
-    id: 'send-to-patient',
-    header: () => <ColumnHeader label="Send to Patient" />,
-    cell: ActionsCell,
-  },
+  // {
+  //   id: 'send-to-patient',
+  //   header: () => <ColumnHeader label="Send to Patient" />,
+  //   cell: ActionsCell,
+  // },
 ]
 
 const DashboardTable = ({ patientId, data }: DashboardTableProps) => {

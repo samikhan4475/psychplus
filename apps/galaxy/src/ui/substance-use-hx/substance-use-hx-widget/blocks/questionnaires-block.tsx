@@ -50,7 +50,7 @@ const QuestionnaireRow = ({
           )}
         </Flex>
         <Flex align="center" gap="2">
-          <SendToPatientButton />
+          {/* <SendToPatientButton /> */}
           <FillOutButton sectionName={sectionName} data={[]} />
         </Flex>
       </Flex>
