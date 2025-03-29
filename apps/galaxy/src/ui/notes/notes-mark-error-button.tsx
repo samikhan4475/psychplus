@@ -13,13 +13,19 @@ const NotesMarkErrorButton = () => {
 
   const { isOpen, closeDialog, openDialog } = useCosignDialog()
 
-  const { selectedRow, appointment, setErrorMessage, setIsErrorAlertOpen } =
-    useStore((state) => ({
-      selectedRow: state.selectedRow,
-      appointment: state.appointment,
-      setErrorMessage: state.setErrorMessage,
-      setIsErrorAlertOpen: state.setIsErrorAlertOpen,
-    }))
+  const {
+    selectedRow,
+    appointment,
+    setErrorMessage,
+    setIsErrorAlertOpen,
+    isInboxNotes,
+  } = useStore((state) => ({
+    selectedRow: state.selectedRow,
+    appointment: state.appointment,
+    setErrorMessage: state.setErrorMessage,
+    setIsErrorAlertOpen: state.setIsErrorAlertOpen,
+    isInboxNotes: state.isInboxNotes,
+  }))
 
   const markAsErrorNotProviderPermission = useHasPermission(
     'markAsErrorNotProviderNotesPage',
@@ -64,7 +70,7 @@ const NotesMarkErrorButton = () => {
         onClick={handleClick}
       >
         <WarningIcon width={16} height={16} />
-        Mark as Error
+        {isInboxNotes ? 'Reject' : 'Mark as Error'}
       </Button>
       {isOpen && (
         <MarkErrorDialog isOpen={isOpen} removecloseDialog={closeDialog} />

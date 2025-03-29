@@ -5,28 +5,20 @@ import { Button } from '@radix-ui/themes'
 import { WarningIcon } from '@/components/icons'
 import { useHasPermission } from '@/hooks'
 import { useCosignDialog } from './hooks'
-import { MarkErrorDialog } from './mark-error-dialog'
 import { RemoveCosignDialog } from './remove-cosign-dialog'
 import { useStore } from './store'
-import { Tabs } from './types'
 
 const NotesRemoveConsignerButton = () => {
   const { isOpen, closeDialog, openDialog } = useCosignDialog()
 
-  const {
-    selectedRow,
-    setErrorMessage,
-    setIsErrorAlertOpen,
-    isInboxNotes,
-    tab,
-  } = useStore((state) => ({
-    setErrorMessage: state.setErrorMessage,
-    tab: state.tab,
+  const { selectedRow, setErrorMessage, setIsErrorAlertOpen, isInboxNotes } =
+    useStore((state) => ({
+      setErrorMessage: state.setErrorMessage,
 
-    isInboxNotes: state.isInboxNotes,
-    setIsErrorAlertOpen: state.setIsErrorAlertOpen,
-    selectedRow: state.selectedRow,
-  }))
+      isInboxNotes: state.isInboxNotes,
+      setIsErrorAlertOpen: state.setIsErrorAlertOpen,
+      selectedRow: state.selectedRow,
+    }))
 
   const removeCosignerButtonPermission = useHasPermission(
     'removeCosignerButtonNotesPage',
@@ -49,13 +41,6 @@ const NotesRemoveConsignerButton = () => {
     openDialog()
   }
 
-  const dialogToShow =
-    isInboxNotes && tab === Tabs.PENDING_NOTES ? (
-      <MarkErrorDialog isOpen={isOpen} removecloseDialog={closeDialog} />
-    ) : (
-      <RemoveCosignDialog isOpen={isOpen} removecloseDialog={closeDialog} />
-    )
-
   return (
     <>
       <Button
@@ -64,7 +49,6 @@ const NotesRemoveConsignerButton = () => {
         size="1"
         className="text-black"
         onClick={handleClick}
-        disabled={selectedRow?.cosignedByUserId ? false : true}
       >
         {isInboxNotes ? (
           <CrossCircledIcon width={13} height={13} color="gray" />
@@ -73,7 +57,7 @@ const NotesRemoveConsignerButton = () => {
         )}
         {isInboxNotes ? 'Reject' : 'Remove Cosigner'}
       </Button>
-      {dialogToShow}
+      <RemoveCosignDialog isOpen={isOpen} removecloseDialog={closeDialog} />
     </>
   )
 }
