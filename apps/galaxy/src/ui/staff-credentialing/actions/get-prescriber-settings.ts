@@ -1,9 +1,7 @@
 'use server'
 
 import * as api from '@/api'
-import { State } from '@/types'
-import { transformIn } from '../prescriber-settings/data'
-import { PrescriberDataResponse, PrescriberSettingResponse } from '../types'
+import { PrescriberSettingResponse } from '../types'
 
 const payload = {
   isIncludeMetadataResourceChangeControl: true,
@@ -16,12 +14,14 @@ const payload = {
   categoryValue: 'PrescriberSettings',
 }
 
-const getPrescriberSettings = async (
-  states: State[],
-): Promise<api.ActionResult<PrescriberDataResponse[]>> => {
+const getPrescriberSettings = async ({
+  userId,
+}: {
+  userId: number
+}): Promise<api.ActionResult<PrescriberSettingResponse[]>> => {
   const response = await api.POST<PrescriberSettingResponse[]>(
     api.GET_PROVIDER_SETTINGS_ENDPOINT,
-    payload,
+    { ...payload, userId },
   )
   if (response.state === 'error') {
     return {
@@ -31,7 +31,7 @@ const getPrescriberSettings = async (
   }
   return {
     state: 'success',
-    data: transformIn(response.data, states),
+    data: response.data,
   }
 }
 

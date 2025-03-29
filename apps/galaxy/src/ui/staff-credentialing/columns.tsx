@@ -1,3 +1,4 @@
+import { CalendarDate } from '@internationalized/date'
 import { ColumnDef } from '@tanstack/react-table'
 import { ColumnHeader } from '@/components'
 import { ActionsCell } from './cells/actions-cell'
@@ -15,7 +16,7 @@ const columns = (
   showPermissionAlert: (isOpen: boolean, message: string) => void,
 ): ColumnDef<License>[] => [
   {
-    accessorKey: 'states',
+    accessorKey: 'stateName',
     size: 200,
     header: ({ column }) => (
       <ColumnHeader column={column} clientSideSort label="States" />
@@ -24,13 +25,11 @@ const columns = (
   },
   {
     accessorKey: 'status',
-    header: ({ column }) => (
-      <ColumnHeader column={column} clientSideSort label="Status" />
-    ),
+    header: ({ column }) => <ColumnHeader column={column} label="Status" />,
     cell: StatusCell,
   },
   {
-    accessorKey: 'license',
+    accessorKey: 'licenseNumber',
     header: ({ column }) => (
       <ColumnHeader column={column} clientSideSort label="License #" />
     ),
@@ -38,25 +37,46 @@ const columns = (
   },
   {
     id: 'startDate',
+    accessorKey: 'startDate',
     header: ({ column }) => (
       <ColumnHeader clientSideSort column={column} label="Start Date" />
     ),
     cell: StartDateCell,
+    sortingFn: (a, b) => {
+      return (
+        a.original?.startDate?.compare(b.original?.startDate as CalendarDate) ??
+        0
+      )
+    },
   },
   {
     id: 'endDate',
+    accessorKey: 'endDate',
     header: ({ column }) => (
       <ColumnHeader clientSideSort column={column} label="End Date" />
     ),
     cell: EndDateCell,
+    sortingFn: (a, b) => {
+      return (
+        a.original?.endDate?.compare(b.original?.endDate as CalendarDate) ?? 0
+      )
+    },
   },
   {
     id: 'alert',
+    accessorKey: 'isAlertCheck',
     size: 50,
-    header: () => <ColumnHeader label="Alert" />,
+    header: ({ column }) => (
+      <ColumnHeader column={column} label="Alert" clientSideSort />
+    ),
     cell: ({ row }) => (
       <AlertCell row={row} showPermissionAlert={showPermissionAlert} />
     ),
+    sortingFn: (a, b) => {
+      return (
+        (b.original?.isAlertCheck ? 1 : 0) - (a.original?.isAlertCheck ? 1 : 0)
+      )
+    },
   },
   {
     id: 'actions-column',

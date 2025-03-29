@@ -32,8 +32,8 @@ const columns: ColumnDef<PrescriberSettingResponse>[] = [
           <DateCell className="w-[55px]">
             {getSlashedPaddedDateString(createdOn)}
           </DateCell>
-          <DateCell className="text-pp-gray-1 w-[55px]">
-            {getTimeLabel(createdOn ?? '')}
+          <DateCell className="text-pp-gray-1">
+            {getTimeLabel(createdOn ?? '', false)}
           </DateCell>
         </Flex>
       )

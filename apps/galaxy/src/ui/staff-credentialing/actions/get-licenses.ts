@@ -1,11 +1,10 @@
 'use server'
 
 import * as api from '@/api'
-import { GetLicensesResponse, LicenseStatus, LicenseType } from '../types'
+import { GetLicensesResponse, LicenseType } from '../types'
 
 export interface GetLicensesParams {
   providerStaffIds: number[]
-  statuses?: LicenseStatus[] | null
   licenseTypes: LicenseType[]
   locationStateIds?: string[] | null
   startDate?: string | null

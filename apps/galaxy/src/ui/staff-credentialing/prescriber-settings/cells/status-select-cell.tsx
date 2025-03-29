@@ -1,4 +1,3 @@
-import React from 'react'
 import toast from 'react-hot-toast'
 import { PropsWithRow, SelectCell } from '@/components'
 import {
@@ -8,9 +7,10 @@ import {
 import { PrescriberDataResponse, PrescriberKeys } from '../../types'
 
 interface StatusSelectCellProps extends PropsWithRow<PrescriberDataResponse> {
-  getPrescriberData: () => void
+  getPrescriberData: () => Promise<void>
   value: string
   userId: string
+  disabled?: boolean
 }
 
 const statusOptions = [
@@ -23,6 +23,7 @@ const StatusSelectCell = ({
   userId,
   row,
   getPrescriberData,
+  disabled,
 }: StatusSelectCellProps) => {
   const contentCode = row.original[value as PrescriberKeys]
 
@@ -49,11 +50,11 @@ const StatusSelectCell = ({
       toast.error(result.error)
     }
   }
-  const disabled =
+  const isDisabled =
     row.original.Prescriber.includes('No') && value !== 'Prescriber'
   return (
     <SelectCell
-      disabled={disabled}
+      disabled={isDisabled || disabled}
       value={content}
       options={statusOptions}
       onValueChange={onChange}

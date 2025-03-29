@@ -3,7 +3,9 @@ import { SharedCode } from '@/types'
 import { useCodesetCodes } from '.'
 
 const getCodeAttributeBoolean = (code: SharedCode, name?: string) =>
-  code?.attributes?.find((attr) => attr?.name === name)?.value === 'True'
+  ['True', 'true'].includes(
+    code?.attributes?.find((attr) => attr?.name === name)?.value ?? '',
+  )
 
 const useCodesetOptions = (
   codeset: string,

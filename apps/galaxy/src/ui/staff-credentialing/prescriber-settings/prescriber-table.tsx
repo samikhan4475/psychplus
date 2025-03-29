@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useParams } from 'next/navigation'
 import { ColumnDef } from '@tanstack/react-table'
 import toast from 'react-hot-toast'
@@ -8,18 +8,26 @@ import {
   LoadingPlaceholder,
   TextCell,
 } from '@/components'
+import { CODESETS } from '@/constants'
+import { useCodesetCodes } from '@/hooks'
 import { State } from '@/types'
-import { getPrescriberSettings, getStaffAction } from '../actions'
-import { PrescriberDataResponse } from '../types'
+import { Staff } from '@/ui/staff-management/types'
+import {
+  getLicensesAction,
+  getPrescriberSettings,
+  getStaffAction,
+} from '../actions'
+import { LicenseType, PrescriberDataResponse } from '../types'
 import { StatusSelectCell } from './cells'
 import { ActionsCell } from './cells/actions-cell'
+import { transformIn } from './data'
 
 const columns = (
-  userId: string,
-  getPrescriberData: () => void,
+  getPrescriberData: () => Promise<void>,
+  userId = '',
 ): ColumnDef<PrescriberDataResponse>[] => [
   {
-    accessorKey: 'states',
+    accessorKey: 'stateName',
     size: 200,
     header: ({ column }) => (
       <ColumnHeader column={column} clientSideSort label="States" />
@@ -29,7 +37,7 @@ const columns = (
     ),
   },
   {
-    accessorKey: 'prescriber',
+    accessorKey: 'Prescriber',
     size: 200,
     header: ({ column }) => (
       <ColumnHeader column={column} clientSideSort label="Prescriber" />
@@ -44,7 +52,7 @@ const columns = (
     ),
   },
   {
-    accessorKey: 'new',
+    accessorKey: 'New',
     size: 200,
     header: ({ column }) => (
       <ColumnHeader column={column} clientSideSort label="New" />
@@ -59,7 +67,7 @@ const columns = (
     ),
   },
   {
-    accessorKey: 'refill',
+    accessorKey: 'Refill',
     size: 200,
     header: ({ column }) => (
       <ColumnHeader column={column} clientSideSort label="Refill" />
@@ -74,7 +82,7 @@ const columns = (
     ),
   },
   {
-    accessorKey: 'change',
+    accessorKey: 'Change',
     size: 200,
     header: ({ column }) => (
       <ColumnHeader column={column} clientSideSort label="Change" />
@@ -89,7 +97,7 @@ const columns = (
     ),
   },
   {
-    accessorKey: 'cancel',
+    accessorKey: 'Cancel',
     size: 200,
     header: ({ column }) => (
       <ColumnHeader column={column} clientSideSort label="Cancel" />
@@ -104,7 +112,7 @@ const columns = (
     ),
   },
   {
-    accessorKey: 'pharmacyrxrequest',
+    accessorKey: 'PharmacyRXRequest',
     size: 200,
     header: ({ column }) => (
       <ColumnHeader column={column} clientSideSort label="PharmacyRXRequest" />
@@ -119,7 +127,7 @@ const columns = (
     ),
   },
   {
-    accessorKey: 'pharmacyrxresponsedenied',
+    accessorKey: 'PharmacyRXResponseDenied',
     size: 200,
     header: ({ column }) => (
       <ColumnHeader
@@ -138,7 +146,7 @@ const columns = (
     ),
   },
   {
-    accessorKey: 'controls',
+    accessorKey: 'Controls',
     size: 200,
     header: ({ column }) => (
       <ColumnHeader column={column} clientSideSort label="Controls" />
@@ -149,11 +157,12 @@ const columns = (
         userId={userId}
         row={row}
         value="Controls"
+        disabled
       />
     ),
   },
   {
-    accessorKey: 'c2',
+    accessorKey: 'C2',
     size: 200,
     header: ({ column }) => (
       <ColumnHeader column={column} clientSideSort label="C2" />
@@ -164,6 +173,7 @@ const columns = (
         userId={userId}
         row={row}
         value="C2"
+        disabled
       />
     ),
   },
@@ -178,43 +188,60 @@ interface PrescriberTableProps {
   states: State[]
 }
 const PrescriberTable = ({ states }: PrescriberTableProps) => {
+  const stateCodes = useCodesetCodes(CODESETS.UsStates)
   const [loading, setLoading] = useState(true)
   const [prescriberData, setPrescriberData] = useState<
     PrescriberDataResponse[]
   >([])
-  const [userId, setUserId] = useState('')
-
+  const [staff, setStaff] = useState<Staff>()
   const { id } = useParams() as { id: string }
 
   const getPrescriberData = async () => {
     setLoading(true)
-    const result = await getPrescriberSettings(states)
-    if (result.state === 'success') {
-      setPrescriberData(result.data)
-    } else if (result.state === 'error') {
-      toast.error(result.error)
+
+    let staffData = staff
+    if (!staffData) {
+      const staffRes = await getStaffAction(id)
+      if (staffRes.state === 'error') {
+        toast.error(staffRes.error)
+        return
+      }
+      staffData = staffRes.data
+      setStaff(staffData)
     }
+
+    const result = await getPrescriberSettings({ userId: +staffData.userId })
+    if (result.state === 'error') {
+      toast.error(result.error)
+      return
+    }
+
+    const licenseRes = await getLicensesAction({
+      licenseTypes: [LicenseType.DEA, LicenseType.CDS],
+      providerStaffIds: [+id],
+      recordStatuses: ['Active'],
+    })
+    if (licenseRes.state === 'error') {
+      toast.error(licenseRes.error)
+      return
+    }
+
+    setPrescriberData(
+      transformIn(result.data, states, stateCodes, licenseRes.data, staffData),
+    )
     setLoading(false)
   }
 
   useEffect(() => {
-    ;(async () => {
-      const result = await getStaffAction(id)
-      if (result.state === 'success') {
-        const { userId } = result.data
-        setUserId(userId)
-        await getPrescriberData()
-      } else if (result.state === 'error') {
-        toast.error(result.error)
-      }
-    })()
+    getPrescriberData()
   }, [])
 
   if (loading) return <LoadingPlaceholder className="bg-white min-h-[46vh]" />
   return (
     <DataTable
-      columns={columns(userId, getPrescriberData)}
+      columns={columns(getPrescriberData, staff?.userId)}
       data={prescriberData}
+      theadClass="z-10"
       tdClass="!p-0 first:bg-white"
       isRowSpan
       sticky

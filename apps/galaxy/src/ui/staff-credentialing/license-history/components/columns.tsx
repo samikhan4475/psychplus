@@ -26,7 +26,7 @@ const columns: ColumnDef<License>[] = [
             {getSlashedPaddedDateString(updatedOn ?? createdOn)}
           </DateCell>
           <DateCell className="text-pp-gray-1">
-            {getTimeLabel(updatedOn ?? createdOn ?? '')}
+            {getTimeLabel(updatedOn ?? createdOn ?? '', false)}
           </DateCell>
         </Flex>
       )
