@@ -160,7 +160,10 @@ const LeftPanelFilters = ({ patientId }: { patientId?: string }) => {
         fetchData(getClinicsOptionsAction, setLocations),
         fetchData(getUsStatesOptionsAction, setStates),
         fetchData(getVisitTypesAction, setVisitTypes),
-        fetchData(getProvidersOptionsAction, setProviders),
+        fetchData(
+          () => getProvidersOptionsAction(undefined, true),
+          setProviders,
+        ),
         fetchData(getPracticesOptionsAction, setPractices),
         fetchData(getOrganizationOptionsAction, setOrganizations),
       ])

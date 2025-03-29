@@ -8,6 +8,7 @@ import { sanitizeFormData } from '@/utils'
 
 const getProvidersOptionsAction = async (
   providerType?: string,
+  useUserId: boolean = false,
 ): Promise<api.ActionResult<{ label: string; value: string }[]>> => {
   const body = {
     roleCodes: [STAFF_ROLE_CODE_PRESCRIBER],
@@ -34,7 +35,7 @@ const getProvidersOptionsAction = async (
 
   const transformedData = response.data.map((data) => ({
     label: `${data.legalName.firstName} ${data.legalName.lastName}, ${data.legalName.honors}`,
-    value: String(data.id),
+    value: useUserId ? String(data.userId) : String(data.id),
   }))
 
   return {
