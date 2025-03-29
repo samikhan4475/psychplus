@@ -18,7 +18,7 @@ const transformServiceLines = (
     claimPaymentId: paymentPostingClaim.claimId ? paymentPostingClaim.id : '',
     dateOfServiceFrom: serviceLine.dateOfServiceFrom ?? '',
     dateOfServiceTo: serviceLine.dateOfServiceTo ?? '',
-    claimServiceLineId: serviceLine.id,
+    claimServiceLineId: serviceLine.claimServiceLineId,
     billedAmount:
       String(serviceLine.totalAmount ?? '') ||
       String(serviceLine.billedAmount ?? ''),
@@ -99,7 +99,7 @@ const transformOut = (
 
   const updatedModel: UpdateClaimPaymentPayload = {
     ...claimPayment,
-    id: claimPayment.id || null,
+    id: claimPayment.id ? claimPayment.id :  null,
     insurancePolicyId,
     claimServiceLinePayments:
       claimPayment.claimServiceLinePayments?.map((serviceLine) => ({
@@ -129,10 +129,12 @@ const transformOut = (
     delete updatedModel.insurancePolicyId
 
   if (!updatedModel.id)
+   {
     updatedModel.claimServiceLinePayments?.forEach((serviceLine) => {
       delete serviceLine['claimPaymentId']
       delete serviceLine['id']
     })
+   }
   return updatedModel
 }
 

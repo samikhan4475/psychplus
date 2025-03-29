@@ -18,6 +18,7 @@ import {
   amountCheck,
   amountPaste,
   getOtherWriteOff,
+  removeInsuranceAdjustment,
   removeNegative,
 } from './utils'
 
@@ -82,13 +83,22 @@ const AllowedAmountCell = ({ row }: PropsWithRow<ClaimServiceLinePayment>) => {
         ? -+adjustmentAmount
         : +adjustmentAmount
 
-      const updatedAdjustments = addInsuranceAdjustment({
-        adjustmentAmount: finalAdjustmentAmount,
-        adjustmentGroupCode: WRITE_OFF_ADJUSTMENT.adjustmentGroupCode,
-        adjustmentReasonCode: WRITE_OFF_ADJUSTMENT.adjustmentReasonCode,
-        serviceLinePaymentAdjustments: serviceLinePaymentAdjustments ?? [],
-        claimPayment: row.original,
-      })
+      const updatedAdjustments =
+        finalAdjustmentAmount === 0
+          ? removeInsuranceAdjustment({
+              adjustmentGroupCode: WRITE_OFF_ADJUSTMENT.adjustmentGroupCode,
+              adjustmentReasonCode: WRITE_OFF_ADJUSTMENT.adjustmentReasonCode,
+              serviceLinePaymentAdjustments:
+                serviceLinePaymentAdjustments ?? [],
+            })
+          : addInsuranceAdjustment({
+              adjustmentAmount: finalAdjustmentAmount,
+              adjustmentGroupCode: WRITE_OFF_ADJUSTMENT.adjustmentGroupCode,
+              adjustmentReasonCode: WRITE_OFF_ADJUSTMENT.adjustmentReasonCode,
+              serviceLinePaymentAdjustments:
+                serviceLinePaymentAdjustments ?? [],
+              claimPayment: row.original,
+            })
 
       const otherAdjustments = getOtherWriteOff(serviceLinePaymentAdjustments)
 

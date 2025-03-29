@@ -90,11 +90,8 @@ const getOtherWriteOff = (
   serviceLinePaymentAdjustments
     ?.reduce(
       (acc, adjustment) =>
-        adjustment.adjustmentGroupCode !==
-          WRITE_OFF_ADJUSTMENT.adjustmentGroupCode &&
         adjustment.recordStatus !== 'Inactive' &&
-        adjustment.adjustmentReasonCode !==
-          WRITE_OFF_ADJUSTMENT.adjustmentReasonCode
+        adjustment.adjustmentStatus === WRITE_OFF_ADJUSTMENT.adjustmentStatus
           ? acc + +adjustment.adjustmentAmount
           : acc,
       0,
@@ -111,7 +108,6 @@ const updateOrAddAdjustment = ({
 }: AdjustmentType) => {
   if (!adjustmentGroupCode || !adjustmentReasonCode || !adjustmentAmount)
     return serviceLinePaymentAdjustments
-
   const parsedAdjustmentAmount = isNaN(adjustmentAmount) ? 0 : adjustmentAmount
 
   const existingAdjustmentIndex = (

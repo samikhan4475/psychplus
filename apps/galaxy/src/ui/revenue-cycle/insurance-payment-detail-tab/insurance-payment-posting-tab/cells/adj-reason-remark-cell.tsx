@@ -64,7 +64,7 @@ const AdjustmentReasonRemarkCell = ({
     `claimServiceLinePayments.${row.index}.serviceLinePaymentAdjustments`,
   )
 
-  const addAdjustment = () => {
+  const addAdjustment = async () => {
     const { adjustmentCode, reasonCode, adjustmentAmount, remarkCode } =
       adjustment
     const { billedAmount } = row.original
@@ -77,6 +77,25 @@ const AdjustmentReasonRemarkCell = ({
         `Adjustment amount can't be greater than billed amount $${billedAmount}`,
       )
     } else {
+      let adjustmentStatus
+      if (!adjustmentMapping[`${adjustmentCode}_${reasonCode}`]) {
+        setIsLoading(true)
+        const result = await getAdjustmentCodesAction({
+          practiceIds: [paymentDetail?.practiceId],
+          recordStatuses: ['Active'],
+        })
+
+        if (result.state === 'success') {
+          adjustmentStatus = getAdjustmentStatus({
+            adjustmentCodes: result.data,
+            adjustmentGroupCode: adjustmentCode,
+            adjustmentReasonCode: reasonCode,
+          })
+        } else if (result.state === 'error') {
+          toast.error(result.error ?? 'Failed to get adjustment status')
+        }
+      }
+
       const finalAdjustmentAmount =
         processedAsCode === PROCESSED_AS_REVERSAL
           ? -+adjustmentAmount
@@ -87,6 +106,7 @@ const AdjustmentReasonRemarkCell = ({
         adjustmentReasonCode: reasonCode,
         adjustmentGroupCode: adjustmentCode,
         remarkCode: remarkCode,
+        adjustmentStatus,
         serviceLinePaymentAdjustments,
       })
 
@@ -104,7 +124,7 @@ const AdjustmentReasonRemarkCell = ({
         const finalAllowedAmount =
           processedAsCode === PROCESSED_AS_REVERSAL
             ? -+allowedAmount
-            : +adjustmentAmount
+            : +allowedAmount
         const otherAdjustments = getOtherWriteOff(serviceLinePaymentAdjustments)
         form.setValue(
           `claimServiceLinePayments.${row.index}.writeOffAmount`,
@@ -148,6 +168,7 @@ const AdjustmentReasonRemarkCell = ({
         adjustmentGroupCode: adjustmentCode,
         adjustmentReasonCode: reasonCode,
       })
+
       const finalAdjustmentAmount =
         processedAsCode === PROCESSED_AS_REVERSAL
           ? -+adjustmentAmount
@@ -176,7 +197,7 @@ const AdjustmentReasonRemarkCell = ({
 
       setIsLoading(false)
     } else if (result.state === 'error') {
-      toast.error(result.error)
+      toast.error(result.error ?? 'Failed to get adjustment status')
       setIsLoading(false)
     }
   }
