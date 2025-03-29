@@ -19,7 +19,7 @@ import { TabValue } from './types'
 
 const ScheduleView = ({ isInitialLogin }: { isInitialLogin: boolean }) => {
   const isFeatureFlagEnabled = useFeatureFlagEnabled(
-    FEATURE_FLAGS.ehr11786EnableGalaxySecondPhaseFeatures,
+    FEATURE_FLAGS.ehr7795RoundingAndProviderView,
   )
   const { activeTab, setActiveTab } = useStore((state) => ({
     activeTab: state.activeTab,

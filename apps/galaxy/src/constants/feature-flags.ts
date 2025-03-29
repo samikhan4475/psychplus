@@ -2,6 +2,7 @@ enum FEATURE_FLAGS {
   ehr8973EnableDawMedicationApi = 'ehr8973EnableDawMedicationApi',
   ehr11786EnableGalaxySecondPhaseFeatures = 'ehr11786EnableGalaxySecondPhaseFeatures',
   ehr4907LabOrdersAndResults = 'ehr4907LabOrdersAndResults',
+  ehr7795RoundingAndProviderView = 'ehr7795RoundingAndProviderView',
 }
 // Prefetching for layout and main pages
 enum MAIN_PAGE_FEATURE_FLAGS {
