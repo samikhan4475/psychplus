@@ -29,7 +29,7 @@ const BipolarManiaBlock = () => {
       label={BLOCK_TITLE}
       field={BLOCK_ID}
       options={BLOCK_OPTIONS}
-      parentField="chiefComplaint"
+      // parentField="chiefComplaint"
       valueInParent="ccBipolar/Mania"
       chipClassName={`${hasError ? 'border border-tomato-11' : ''}`}
     />

@@ -49,7 +49,7 @@ const MedicationsBlock = () => {
               data={option}
               isSelected={isSelected}
               formField="medicationSe"
-              complaintValue="ccMedicationSe"
+              // complaintValue="ccMedicationSe"
             />
           )
         })}

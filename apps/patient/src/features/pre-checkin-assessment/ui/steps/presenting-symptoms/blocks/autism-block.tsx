@@ -36,7 +36,7 @@ const AutismBlock = () => {
               data={option}
               isSelected={isSelected}
               formField="autism"
-              complaintValue="ccAutism"
+              // complaintValue="ccAutism"
             />
           )
         })}

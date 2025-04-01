@@ -8,6 +8,7 @@ import {
   appendMuliSelectOptions,
   formatOthersDetail,
   formatSymptoms,
+  hasValues,
   otherDetailsMap,
   schizophreniaMap,
 } from './utils'
@@ -30,13 +31,9 @@ const HpiNarration = ({
   const generateNarration = () => {
     const chiefComplaints = symptoms.chiefComplaint || []
 
-    if (!chiefComplaints.length && !symptoms?.hpiOther) return ''
+    if (!hasValues) return ''
 
     let narration = ` ${patient.name} is a ${patient.age}-year-old, ${patient.gender}`
-
-    if (!chiefComplaints.length && symptoms.hpiOther) {
-      return narration
-    }
 
     const { key, detailsKey } = otherDetailsMap['chiefComplaint']
     const formattedComplaints = formatOthersDetail(
@@ -47,7 +44,9 @@ const HpiNarration = ({
     )
 
     const formattedSymptoms = formatSymptoms(formattedComplaints)
-    narration += ` who reports Chief Complaint of ` + formattedSymptoms + '.'
+    if (chiefComplaints.length) {
+      narration += ` who reports Chief Complaint of ` + formattedSymptoms + '.'
+    }
 
     Object.keys(symptoms).forEach((complaint) => {
       if (

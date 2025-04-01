@@ -40,7 +40,7 @@ const AdhdInattentiveBlock = () => {
               data={option}
               isSelected={isSelected}
               formField="adhdInattentive"
-              complaintValue="ccAdhdi"
+              // complaintValue="ccAdhdi"
             />
           )
         })}

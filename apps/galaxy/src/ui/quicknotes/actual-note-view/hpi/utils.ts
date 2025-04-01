@@ -101,6 +101,17 @@ function getGenderValue(genderValue?: string): string {
   return genderValue.toLowerCase()
 }
 
+function hasValues(data: HpiWidgetSchemaType): boolean {
+  return Object.values(data).some((value) => {
+    if (Array.isArray(value)) {
+      return value.length > 0
+    } else if (typeof value === 'string') {
+      return value.trim().length > 0
+    }
+    return false
+  })
+}
+
 export {
   formatSymptoms,
   formatOthersDetail,
@@ -108,4 +119,5 @@ export {
   appendMuliSelectOptions,
   schizophreniaMap,
   getGenderValue,
+  hasValues,
 }

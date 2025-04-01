@@ -36,7 +36,7 @@ const PtsdBlock = () => {
               data={option}
               isSelected={isSelected}
               formField="ptsd"
-              complaintValue='ccPtsd'
+              // complaintValue='ccPtsd'
             />
           )
         })}

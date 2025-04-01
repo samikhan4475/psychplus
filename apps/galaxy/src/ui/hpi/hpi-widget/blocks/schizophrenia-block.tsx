@@ -106,7 +106,7 @@ const SchizophreniaBlock = () => {
         DELUSION_OPTIONS,
         HALLUCINATIONS_OPTIONS,
       )}
-      parentField="chiefComplaint"
+      // parentField="chiefComplaint"
       valueInParent="ccSchizophrenia"
       chipClassName={`${hasError ? 'border border-tomato-11' : ''}`}
     />

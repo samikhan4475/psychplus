@@ -36,7 +36,7 @@ const AdhdHyperactiveBlock = () => {
               data={option}
               isSelected={isSelected}
               formField="adhdHyperactive"
-              complaintValue='ccAdhdh'
+              // complaintValue='ccAdhdh'
             />
           )
         })}

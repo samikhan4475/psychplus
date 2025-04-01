@@ -37,7 +37,7 @@ const ManiaBlock = () => {
               data={option}
               isSelected={isSelected}
               formField="bipolarMania"
-              complaintValue='ccBipolar/Mania'
+              // complaintValue='ccBipolar/Mania'
             />
           )
         })}

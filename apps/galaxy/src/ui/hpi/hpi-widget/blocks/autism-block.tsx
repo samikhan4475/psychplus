@@ -26,7 +26,7 @@ const AutismBlock = () => {
       label={BLOCK_TITLE}
       field={BLOCK_ID}
       options={BLOCK_OPTIONS}
-      parentField="chiefComplaint"
+      // parentField="chiefComplaint"
       valueInParent="ccAutism"
       chipClassName={`${hasError ? 'border border-tomato-11' : ''}`}
     />

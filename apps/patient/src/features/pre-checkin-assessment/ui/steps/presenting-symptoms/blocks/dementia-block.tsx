@@ -37,7 +37,7 @@ const DementiaBlock = () => {
               data={option}
               isSelected={isSelected}
               formField="dementia"
-              complaintValue="ccDementia"
+              // complaintValue="ccDementia"
             />
           )
         })}

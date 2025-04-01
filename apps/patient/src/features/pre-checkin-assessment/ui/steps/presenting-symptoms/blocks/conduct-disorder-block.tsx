@@ -39,7 +39,7 @@ const ConductDisorderBlock = () => {
               data={option}
               isSelected={isSelected}
               formField="conductDisorder"
-              complaintValue='ccConductDisorder'
+              // complaintValue='ccConductDisorder'
             />
           )
         })}

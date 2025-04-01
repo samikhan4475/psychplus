@@ -45,7 +45,7 @@ const SubstanceBlock = () => {
               data={option}
               isSelected={isSelected}
               formField="substance"
-              complaintValue='ccSubstance'
+              // complaintValue='ccSubstance'
             />
           )
         })}

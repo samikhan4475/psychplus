@@ -36,7 +36,7 @@ const AnxietyBlock = () => {
               data={option}
               isSelected={isSelected}
               formField="anxiety"
-              complaintValue="ccAnxiety"
+              // complaintValue="ccAnxiety"
             />
           )
         })}

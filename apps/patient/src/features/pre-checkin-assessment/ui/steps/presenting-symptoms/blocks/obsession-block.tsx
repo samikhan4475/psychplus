@@ -36,7 +36,7 @@ const ObsessionBlock = () => {
               data={option}
               isSelected={isSelected}
               formField="obsession"
-              complaintValue='ccObsession'
+              // complaintValue='ccObsession'
             />
           )
         })}

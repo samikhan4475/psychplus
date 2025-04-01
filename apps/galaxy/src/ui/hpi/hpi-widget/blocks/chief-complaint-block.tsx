@@ -137,7 +137,7 @@ const ChiefComplaintBlock = () => {
       label={BLOCK_TITLE}
       field={BLOCK_ID}
       options={BLOCK_OPTIONS}
-      hasChild
+      // hasChild
       chipClassName={`${hasError ? 'border border-tomato-11' : ''}`}
     />
   )

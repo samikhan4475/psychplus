@@ -60,7 +60,7 @@ const SchizophreniaBlock = () => {
               data={option}
               isSelected={isSelected}
               formField="schizophrenia"
-              complaintValue="ccSchizophrenia"
+              // complaintValue="ccSchizophrenia"
             />
           )
         })}

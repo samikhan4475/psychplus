@@ -29,7 +29,7 @@ const PtsdBlock = () => {
       label={BLOCK_TITLE}
       field={BLOCK_ID}
       options={BLOCK_OPTIONS}
-      parentField="chiefComplaint"
+      // parentField="chiefComplaint"
       valueInParent="ccPtsd"
       chipClassName={`${hasError ? 'border border-tomato-11' : ''}`}
     />
