@@ -60,7 +60,7 @@ const AnxietyBlock = () => {
       field={BLOCK_ID}
       options={BLOCK_OPTIONS}
       // parentField="chiefComplaint"
-      valueInParent="ccAnxiety"
+      // valueInParent="ccAnxiety"
       chipClassName={`${hasError ? 'border border-tomato-11' : ''}`}
     />
   )

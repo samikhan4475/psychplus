@@ -31,7 +31,7 @@ const DementiaBlock = () => {
       field={BLOCK_ID}
       options={BLOCK_OPTIONS}
       // parentField="chiefComplaint"
-      valueInParent="ccDementia"
+      // valueInParent="ccDementia"
       chipClassName={`${hasError ? 'border border-tomato-11' : ''}`}
     />
   )

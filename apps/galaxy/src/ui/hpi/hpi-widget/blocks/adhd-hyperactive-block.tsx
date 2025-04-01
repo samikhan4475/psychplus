@@ -59,8 +59,8 @@ const AdhdHyperactiveBlock = () => {
       label={BLOCK_TITLE}
       field={BLOCK_ID}
       options={BLOCK_OPTIONS}
-      parentField="chiefComplaint"
-      valueInParent="ccAdhdh"
+      // parentField="chiefComplaint"
+      // valueInParent="ccAdhdh"
       chipClassName={`${hasError ? 'border border-tomato-11' : ''}`}
     />
   )

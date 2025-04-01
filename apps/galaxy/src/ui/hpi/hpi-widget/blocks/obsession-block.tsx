@@ -30,7 +30,7 @@ const ObsessionBlock = () => {
       field={BLOCK_ID}
       options={BLOCK_OPTIONS}
       // parentField="chiefComplaint"
-      valueInParent="ccObsession"
+      // valueInParent="ccObsession"
       chipClassName={`${hasError ? 'border border-tomato-11' : ''}`}
     />
   )

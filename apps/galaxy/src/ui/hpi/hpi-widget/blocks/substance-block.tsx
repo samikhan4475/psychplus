@@ -42,7 +42,7 @@ const SubstanceBlock = () => {
       field={BLOCK_ID}
       options={BLOCK_OPTIONS}
       // parentField="chiefComplaint"
-      valueInParent="ccSubstance"
+      // valueInParent="ccSubstance"
       chipClassName={`${hasError ? 'border border-tomato-11' : ''}`}
     />
   )

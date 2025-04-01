@@ -31,7 +31,7 @@ const HpiNarration = ({
   const generateNarration = () => {
     const chiefComplaints = symptoms.chiefComplaint || []
 
-    if (!hasValues) return ''
+    if (!hasValues(symptoms)) return ''
 
     let narration = ` ${patient.name} is a ${patient.age}-year-old, ${patient.gender}`
 

@@ -56,7 +56,7 @@ const AdhdInattentiveBlock = () => {
       field={BLOCK_ID}
       options={BLOCK_OPTIONS}
       // parentField="chiefComplaint"
-      valueInParent="ccAdhdi"
+      // valueInParent="ccAdhdi"
       chipClassName={`${hasError ? 'border border-tomato-11' : ''}`}
     />
   )
