@@ -336,6 +336,15 @@ interface ResponseHistoryPayload {
   createdOn?: string
 }
 
+interface DenialListPayload {
+  checkNumber: string
+  claimNumber: string
+  dateOfServiceFrom: DateValue | string
+  dateOfServiceTo: DateValue | string
+  icn: string
+  insuranceName: string
+}
+
 interface ResponseHistoryDetail {
   id: string
   metadata: Metadata
@@ -373,6 +382,38 @@ interface PaymentHistoryPayload {
   id: string
 }
 
+interface ResolvedByName {
+  firstName: string
+  middleName: string
+  lastName: string
+  preferredName: string
+  title: string
+  suffix: string
+  honors: string
+}
+
+interface DenialServiceLine {
+  claimServiceLinePaymentId: string
+  metadata: Metadata
+  insuranceName: string
+  checkNumber: string
+  checkDate: string
+  dateOfServiceFrom: DateValue | string
+  dateOfServiceTo: DateValue | string
+  processedAsCode: string
+  icn: string
+  deniedReason: string
+  isResolved: boolean
+  claimNumber: string
+  resolvedByUserId: number
+  resolvedByName: ResolvedByName
+  resolvedDate: string
+}
+interface DenialListResponse {
+  denialList: DenialServiceLine[]
+  total: number
+}
+
 interface ClaimAuditHistoryFilterFormProps {
   onFilterSubmit: (data?: ClaimAuditHistoryPayload) => void
 }
@@ -391,6 +432,9 @@ export {
   claimNoteSignedStatuses,
   ClaimDetailsTab,
   type GetSubmissionResponse,
+  type DenialServiceLine,
+  type DenialListResponse,
+  type DenialListPayload,
   type PaymentHistoryPayload,
   type UpdateClaimPaymentPayload,
   type ClaimServiceLinePayment,

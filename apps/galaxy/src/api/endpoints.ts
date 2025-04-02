@@ -275,6 +275,9 @@ const DOWNLOAD_CLAIM_SUBMISSION_HISTORY_ENDPOINT = (submissionId: string) =>
 const GET_PATIENT_STATEMENTS_LIST_ENDPOINT = `${API_URL}/api/billingstatements/actions/search`
 const DOWNLOAD_HCFA_FILE_ENDPOINT = `${API_URL}/api/claimssubmissions/actions/previewclaimform`
 const GET_RESPONSE_HISTORY_LIST_ENDPOINT = `${API_URL}/api/claimssubmissions/responses/actions/search`
+const GET_DENIAL_LIST_ENDPOINT = `${API_URL}/api/billingdenials/actions/search`
+const RESOLVE_DENIAL_ENDPOINT = (claimServiceLinePaymentId: string) =>
+  `${API_URL}/api/claimservicelinepayments/${claimServiceLinePaymentId}/actions/resolve`
 const GET_RESPONSE_HISTORY_DETAIL_LIST_ENDPOINT = (id: string) =>
   `${API_URL}/api/claimssubmissions/responses/${id}/details/actions/search`
 const GET_CLAIMS_AUDIT_HISTORY_LIST_ENDPOINT = `${API_URL}/api/claims/history`
@@ -291,6 +294,8 @@ const EXPORT_SUBMISSIONS_LIST_ENDPOINT = (fileFormat: string) =>
   `${API_URL}/api/claimssubmissions/actions/export/${fileFormat}`
 const EXPORT_PAYMENTS_LIST_ENDPOINT = (fileFormat: string) =>
   `${API_URL}/api/payments/actions/export/${fileFormat}`
+const EXPORT_DENIAL_LIST_ENDPOINT = (fileFormat: string) =>
+  `${API_URL}/api/billingdenials/actions/export/${fileFormat}`
 const CLAIM_SUBMIT_ENDPOINT = `${API_URL}/api/claimssubmissions/actions/srcubandsubmit`
 const GET_CLAIM_SUBMISSION_LIST = `${API_URL}/api/claimssubmissions/actions/search`
 const CLAIM_SUBMISSION_REJECTION_DETAIL_ENDPOINT = (claimId: string) =>
@@ -863,6 +868,7 @@ export {
   GET_INSURANCE_PAYER_PLANS,
   GET_USER_PERMISSIONS_ENDPOINT,
   SEARCH_LOCATION_SERVICES_ENDPOINT,
+  EXPORT_DENIAL_LIST_ENDPOINT,
   SEARCH_BOOKED_APPOINTMENTS_ENDPOINT,
   BOOK_APPOINTMENT,
   UPDATE_APPOINTMENT,
@@ -930,6 +936,8 @@ export {
   UPDATE_PATIENT_PROFILE_IMAGE_ENDPOINT,
   UPDATE_PATIENT_DRIVING_LICENSE_IMAGE_ENDPOINT,
   GET_INSURANCE_PAYMENT_LIST_ENDPOINT,
+  GET_DENIAL_LIST_ENDPOINT,
+  RESOLVE_DENIAL_ENDPOINT,
   GET_CLAIM_SUBMISSION_HISTORY_DETAIL,
   DELETE_INSURANCE_PAYMENT_ENDPOINT,
   GET_PATIENT_PROFILE_IMAGE_ENDPOINT,

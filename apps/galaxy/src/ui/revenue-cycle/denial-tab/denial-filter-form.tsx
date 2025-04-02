@@ -7,18 +7,20 @@ import { DateValue } from 'react-aria-components'
 import { useForm, type SubmitHandler } from 'react-hook-form'
 import { z } from 'zod'
 import { FormContainer } from '@/components'
+import { formatDateToISOString, sanitizeFormData } from '@/utils'
+import { DenialListPayload } from '../types'
 import { CheckNumberField } from './check-number-field'
 import { ClaimNumberField } from './claim-number-field'
 import { FromDateField } from './from-date-field'
 import { IcnField } from './icn-field'
 import { InsuranceNameField } from './insurance-name-field'
 import { ResetButton } from './reset-button'
+import { useStore } from './store'
 import { ToDateField } from './to-date-field'
-import { useStore } from '../response-history-tab/store'
 
 const schema = z.object({
-  fromDate: z.custom<DateValue>().nullable(),
-  toDate: z.custom<DateValue>().nullable(),
+  dateOfServiceFrom: z.custom<DateValue>().nullable(),
+  dateOfServiceTo: z.custom<DateValue>().nullable(),
   claimNumber: z.string().optional(),
   checkNumber: z.string().trim().optional(),
   insuranceName: z.string().optional(),
@@ -39,8 +41,13 @@ const DenialFilterForm = () => {
   })
 
   const onSubmit: SubmitHandler<SchemaType> = (data) => {
-    // API Implementation will be done here
-    search()
+    const formattedData = {
+      ...data,
+      dateOfServiceFrom: formatDateToISOString(data.dateOfServiceFrom),
+      dateOfServiceTo: formatDateToISOString(data.dateOfServiceTo, true),
+    }
+    const cleanedData = sanitizeFormData(formattedData) as DenialListPayload
+    return search(cleanedData)
   }
 
   return (

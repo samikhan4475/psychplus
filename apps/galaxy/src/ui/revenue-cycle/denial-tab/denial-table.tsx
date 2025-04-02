@@ -6,28 +6,21 @@ import { type ColumnDef } from '@tanstack/react-table'
 import {
   ColumnHeader,
   DataTable,
+  DateCell,
   LoadingPlaceholder,
   TextCell,
 } from '@/components'
 import { Sort } from '@/types'
-import { getSortDir } from '@/utils'
-import { ResponseHistoryRecord } from '../types'
+import { formatDate, getSortDir } from '@/utils'
+import { DenialServiceLine } from '../types'
 import { ActionsCell } from './actions-cell'
-import { CollapseCell } from './collapse-cell'
-import { useStore } from '../response-history-tab/store'
-
+import { useStore } from './store'
 
 const columns = (
   sort?: Sort,
   onSort?: (column: string) => void,
-): ColumnDef<ResponseHistoryRecord>[] => {
+): ColumnDef<DenialServiceLine>[] => {
   return [
-    {
-      id: 'hx',
-      maxSize: 50,
-      header: () => <ColumnHeader label="Hx" />,
-      cell: CollapseCell,
-    },
     {
       id: 'insuranceName',
       header: ({ column }) => (
@@ -40,7 +33,9 @@ const columns = (
           }}
         />
       ),
-      cell: ({ row }) => <TextCell>--</TextCell>,
+      cell: ({ row }) => (
+        <TextCell>{row.original.insuranceName ?? ''}</TextCell>
+      ),
     },
     {
       id: 'checkNumber',
@@ -54,7 +49,7 @@ const columns = (
           }}
         />
       ),
-      cell: ({ row }) => <TextCell>--</TextCell>,
+      cell: ({ row }) => <TextCell>{row.original.checkNumber ?? ''}</TextCell>,
     },
     {
       id: 'checkDate',
@@ -68,7 +63,12 @@ const columns = (
           }}
         />
       ),
-      cell: ({ row }) => <TextCell>--</TextCell>,
+      cell: ({ row }) =>
+        row.original.checkDate && (
+          <DateCell>
+            {formatDate(`${row.original.checkDate}`, 'MM/dd/yyyy')}
+          </DateCell>
+        ),
     },
     {
       id: 'claimNumber',
@@ -82,7 +82,7 @@ const columns = (
           }}
         />
       ),
-      cell: ({ row }) => <TextCell>--</TextCell>,
+      cell: ({ row }) => <TextCell>{row.original.claimNumber}</TextCell>,
     },
     {
       id: 'dateOfServiceFrom',
@@ -96,7 +96,12 @@ const columns = (
           }}
         />
       ),
-      cell: ({ row }) => <TextCell>--</TextCell>,
+      cell: ({ row }) =>
+        row.original.dateOfServiceFrom && (
+          <DateCell>
+            {formatDate(`${row.original.dateOfServiceFrom}`, 'MM/dd/yyyy')}
+          </DateCell>
+        ),
     },
     {
       id: 'dateOfServiceTo',
@@ -110,10 +115,15 @@ const columns = (
           }}
         />
       ),
-      cell: ({ row }) => <TextCell>--</TextCell>,
+      cell: ({ row }) =>
+        row.original.dateOfServiceTo && (
+          <DateCell>
+            {formatDate(`${row.original.dateOfServiceTo}`, 'MM/dd/yyyy')}
+          </DateCell>
+        ),
     },
     {
-      id: 'processedAs',
+      id: 'processedAsCode',
       header: ({ column }) => (
         <ColumnHeader
           label="Processed as"
@@ -124,10 +134,10 @@ const columns = (
           }}
         />
       ),
-      cell: ({ row }) => <TextCell>--</TextCell>,
+      cell: ({ row }) => <TextCell>{row.original.processedAsCode}</TextCell>,
     },
     {
-      id: 'denialReason',
+      id: 'deniedReason',
       header: ({ column }) => (
         <ColumnHeader
           label="Denial Reason"
@@ -138,10 +148,10 @@ const columns = (
           }}
         />
       ),
-      cell: ({ row }) => <TextCell>--</TextCell>,
+      cell: ({ row }) => <TextCell>{row.original.deniedReason}</TextCell>,
     },
     {
-      id: 'icnNumber',
+      id: 'icn',
       header: ({ column }) => (
         <ColumnHeader
           label="ICN #"
@@ -152,10 +162,10 @@ const columns = (
           }}
         />
       ),
-      cell: ({ row }) => <TextCell>--</TextCell>,
+      cell: ({ row }) => <TextCell>{row.original.icn}</TextCell>,
     },
     {
-      id: 'resolveStatus',
+      id: 'isResolved',
       header: ({ column }) => (
         <ColumnHeader
           label="Resolve Status"
@@ -166,10 +176,10 @@ const columns = (
           }}
         />
       ),
-      cell: ({ row }) => <TextCell>--</TextCell>,
+      cell: ({ row }) => <TextCell>{row.original.isResolved ? 'Resolved' : 'Pending'}</TextCell>,
     },
     {
-      id: 'resolvedBy',
+      id: 'resolvedByName',
       header: ({ column }) => (
         <ColumnHeader
           label="Resolved by"
@@ -180,7 +190,11 @@ const columns = (
           }}
         />
       ),
-      cell: ({ row }) => <TextCell>--</TextCell>,
+      cell: ({ row }) => (
+        <TextCell>{`${row.original.resolvedByName?.firstName ?? ''} ${
+          row.original.resolvedByName?.lastName ?? ''
+        }`}</TextCell>
+      ),
     },
     {
       id: 'resolvedDate',
@@ -194,7 +208,12 @@ const columns = (
           }}
         />
       ),
-      cell: ({ row }) => <TextCell>--</TextCell>,
+      cell: ({ row }) =>
+        row.original.resolvedDate && (
+          <DateCell>
+            {formatDate(`${row.original.resolvedDate}`, 'MM/dd/yyyy')}
+          </DateCell>
+        ),
     },
     {
       id: 'action',
@@ -237,7 +256,7 @@ const DenialListTable = () => {
   return (
     <ScrollArea>
       <DataTable
-        data={data?.responseHistory ?? []}
+        data={data?.denialList ?? []}
         columns={columns(sort, sortData)}
         disablePagination
         sticky

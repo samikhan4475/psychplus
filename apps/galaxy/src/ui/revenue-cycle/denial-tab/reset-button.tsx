@@ -3,7 +3,7 @@
 import { Button } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
 import { SchemaType } from './denial-filter-form'
-import { useStore } from '../response-history-tab/store'
+import { useStore } from './store'
 
 
 const ResetButton = () => {

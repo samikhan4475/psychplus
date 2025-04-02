@@ -12,7 +12,7 @@ const ToDateField = () => {
     <FormFieldContainer className="flex-row items-center gap-1">
       <FormFieldLabel>Date of Service To</FormFieldLabel>
       <I18nProvider locale="en-US">
-        <DatePickerInput field="toDate" className="w-[101px]" />
+        <DatePickerInput field="dateOfServiceTo" className="w-[101px]" />
       </I18nProvider>
     </FormFieldContainer>
   )

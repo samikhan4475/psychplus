@@ -1,8 +1,8 @@
 'use client'
 
 import { DataTablePagination } from '@/components'
-import { RESPONSE_HISTORY_TABLE_PAGE_SIZE } from '../constants'
-import { useStore } from '../response-history-tab/store'
+import { DENIAL_TABLE_PAGE_SIZE } from '../constants'
+import { useStore } from './store'
 
 
 
@@ -25,7 +25,7 @@ const DenialPagination = () => {
       total={data.total}
       loading={loading ?? false}
       page={page}
-      pageSize={RESPONSE_HISTORY_TABLE_PAGE_SIZE}
+      pageSize={DENIAL_TABLE_PAGE_SIZE}
       next={next}
       prev={prev}
       jumpToPage={jumpToPage}

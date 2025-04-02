@@ -18,6 +18,8 @@ export * from './get-insurance-plan-options'
 export * from './get-payment-servicelines'
 export * from './get-claim-payments'
 export * from './get-claim-serviceline-payments'
+export * from './get-denial-list-action'
+export * from './resolve-denial-action'
 export * from './add-claim'
 export * from './get-practice'
 export * from "./get-payer-plan-option"

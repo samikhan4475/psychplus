@@ -1,22 +1,25 @@
-import { Button } from '@radix-ui/themes'
-import { PropsWithRow } from '@/components'
-import { ResponseHistoryRecord } from '../types'
+import { type Row } from '@tanstack/react-table'
+import { AdaptiveRowActionsCell, type RowAction } from '@/components'
 
-const ActionsCell = ({ row }: PropsWithRow<ResponseHistoryRecord>) => {
-  const onResolve = () => {
-    // API Implementation will be done here
-  }
+import { RowActionResolve } from './row-action-resolve'
+import { DenialServiceLine } from '../types'
 
-  return (
-    <Button
-      highContrast
-      size="1"
-      type="button"
-      onClick={onResolve}
-    >
-      Resolve
-    </Button>
-  )
+
+type DenialRow = Row<DenialServiceLine>
+
+const rowActions: RowAction<DenialServiceLine>[] = [
+  {
+    id: 'denial-list-row-action-resolve',
+    render: RowActionResolve,
+  },
+]
+
+interface ActionsCellProps {
+  row: DenialRow
+}
+
+const ActionsCell = ({ row }: ActionsCellProps) => {
+  return <AdaptiveRowActionsCell actions={rowActions} row={row} />
 }
 
 export { ActionsCell }
