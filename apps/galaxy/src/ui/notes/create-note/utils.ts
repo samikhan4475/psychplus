@@ -35,7 +35,6 @@ export const formatValue = (value?: string): string => {
     .split(' ')
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
     .join('')
-
   return formatted
 }
 
@@ -45,6 +44,18 @@ export const getDisplayByValue = (
 ): string | undefined => {
   const foundItem = data.find((item) => item.value === value)
   return foundItem?.display
+}
+
+export const getNoteTypeTitle = (
+  value: string,
+  data: SharedCode[],
+): string | undefined => {
+  const foundItem = data.find((item) => item.value === value)
+
+  return (
+    foundItem?.attributes?.find((attr) => attr.name === 'NoteTitle')?.value ??
+    foundItem?.value
+  )
 }
 
 export const filterDefaultCosigner = (cosigners: Cosigner[]) => {

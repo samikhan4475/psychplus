@@ -11,6 +11,7 @@ const NoteTypeDropdown = () => {
       <CodesetSelect
         name="noteTypeCode"
         codeset={CODESETS.NoteType}
+        groupingCodes={['Secondary']}
         size="1"
         className="h-6 w-full"
       />
