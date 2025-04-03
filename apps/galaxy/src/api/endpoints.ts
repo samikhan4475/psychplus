@@ -734,6 +734,7 @@ const DELETE_CLAIM_NOTES = (noteId: string, claimId: string) =>
   `${API_URL}/api/claims/${claimId}/notes/${noteId}`
 const GET_CLAIMS_CLAIM_NOTES_HISTORY = `${API_URL}/api/claimnotes/actions/history/search`
 const DOWNLOAD_LIST_VIEW_DATA = `${API_URL}/api/appointments/actions/download`
+const DOWNLOAD_PATIENTS_LIST_VIEW_DATA = `${API_URL}/api/patients/actions/searchexport`
 
 const ADD_CODSET = (assigningAuthorityId: string) =>
   `${API_URL}/api/codeset/authorities/${assigningAuthorityId}/codesets`
@@ -1117,6 +1118,7 @@ export {
   DELETE_CLAIM_NOTES,
   GET_CLAIMS_CLAIM_NOTES_HISTORY,
   DOWNLOAD_LIST_VIEW_DATA,
+  DOWNLOAD_PATIENTS_LIST_VIEW_DATA,
   ADD_CODSET,
   ADD_CODSET_CODE_ATTRIBUTES,
   UPDATE_CODSET_CODE_ATTRIBUTES,
