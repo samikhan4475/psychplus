@@ -72,9 +72,13 @@ const NavigationLink = ({
   children,
 }: React.PropsWithChildren<NavigationLinkProps>) => {
   const pathname = usePathname()
-  const { id } = useParams<{ id: string }>()
+  const { id, apptId } = useParams<{ id: string; apptId?: string }>()
 
-  href = href ? `/chart/${id}${href}` : `/chart/${id}`
+  const isVisitView = Boolean(apptId || appointmentId)
+
+  href = href
+    ? `/chart/${id}${isVisitView ? `/appointment/${apptId}${href}` : href}`
+    : `/chart/${id}`
 
   const isActive = pathname === href
 
