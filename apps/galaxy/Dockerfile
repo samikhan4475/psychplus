@@ -42,7 +42,7 @@ FROM base AS builder
     # ARG TURBO_TOKEN
     # ENV TURBO_TOKEN=$TURBO_TOKEN
 
-    RUN turbo run build --filter=@psychplus/galaxy-app...
+    RUN turbo run build --filter=@psychplus/galaxy-app... --no-cache
 
 # Run app
 FROM alpine AS runner
