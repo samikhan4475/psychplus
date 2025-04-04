@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useMemo } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { FormProvider } from 'react-hook-form'
 import {
@@ -9,6 +9,7 @@ import {
   WidgetSaveButton,
 } from '@/components'
 import { QuickNoteSectionItem } from '@/types'
+import { shouldDisableDiagnosisActions } from '@/ui/diagnosis/diagnosis/utils'
 import { useStore } from '@/ui/questionnaires/store'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { AlcoholDrugsBlock, TobaccoBlock } from './blocks'
@@ -34,7 +35,14 @@ const SubstanceUseHxWidget = ({
   const { initializeQuestionnaires } = useStore((state) => ({
     initializeQuestionnaires: state.initializeQuestionnaires,
   }))
-  const appointmentId = useSearchParams().get('id') as string
+  const searchParams = useSearchParams()
+  const appointmentId = searchParams.get('id') as string
+  const visitType = searchParams.get('visitType') ?? ''
+  const visitSequence = searchParams.get('visitSequence') ?? ''
+  const isHospitalDischargeView = useMemo(
+    () => shouldDisableDiagnosisActions(visitType, visitSequence),
+    [visitType, visitSequence],
+  )
   const form = useSubstanceHxWidgetForm(initialValue)
 
   useEffect(() => {
@@ -67,7 +75,12 @@ const SubstanceUseHxWidget = ({
             ? [QuickNoteSectionName.QuickNoteSectionSubstanceUseHx]
             : []
         }
-        getData={transformOut(patientId, appointmentId, diagnosisData)}
+        getData={transformOut(
+          patientId,
+          appointmentId,
+          diagnosisData,
+          isHospitalDischargeView,
+        )}
         toggleable={!isHistoryHeader}
         headerRight={
           <>

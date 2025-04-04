@@ -65,6 +65,7 @@ const transformOut =
     patientId: string,
     appointmentId: string,
     diagnosisData?: QuickNoteSectionItem[],
+    isHospitalDischargeView?: boolean,
   ) =>
   async (
     schema: Record<string, undefined>,
@@ -179,6 +180,7 @@ const transformOut =
       patientId,
       diagnosisData,
       updateCptCodes ? true : false,
+      isHospitalDischargeView,
     )
     if (!result.length) {
       result.push({
@@ -195,12 +197,14 @@ const getDiagnosisSections = async (
   patientId: string,
   diagnosisData: QuickNoteSectionItem[] = [],
   isQuicknoteView?: boolean,
+  isHospitalDischargeView?: boolean,
 ) => {
+  const sectionName = isHospitalDischargeView
+    ? QuickNoteSectionName.QuicknoteSectionWorkingDischargeDiagnosis
+    : QuickNoteSectionName.QuickNoteSectionDiagnosis
   let data: QuickNoteSectionItem[] = diagnosisData
   if (!isQuicknoteView) {
-    const response = await getQuickNoteDetailAction(patientId, [
-      QuickNoteSectionName.QuickNoteSectionDiagnosis,
-    ])
+    const response = await getQuickNoteDetailAction(patientId, [sectionName])
     if (response.state === 'error') {
       return []
     }
@@ -248,7 +252,7 @@ const getDiagnosisSections = async (
   const diagnosisCodesToAddSet = [
     {
       pid: Number(patientId),
-      sectionName: QuickNoteSectionName.QuickNoteSectionDiagnosis,
+      sectionName,
       sectionItem: 'diagnosis',
       sectionItemValue: sectionItemValue,
     },

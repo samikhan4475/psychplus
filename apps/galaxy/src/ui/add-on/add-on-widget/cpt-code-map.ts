@@ -6,6 +6,7 @@ const addOnCodes: CodesWidgetItem[] = [
   { key: CptCodeKeys.ADD_ONS_KEY, code: '90833' },
   { key: CptCodeKeys.ADD_ONS_KEY, code: '90836' },
   { key: CptCodeKeys.ADD_ONS_KEY, code: '90838' },
+  { key: CptCodeKeys.ADD_ONS_KEY, code: '90837' },
   { key: CptCodeKeys.ADD_ONS_KEY, code: '90845' },
   { key: CptCodeKeys.ADD_ONS_KEY, code: '90833*1' },
   { key: CptCodeKeys.ADD_ONS_KEY, code: '90836*1' },

@@ -150,26 +150,27 @@ const WorkingDiagnosisView = ({
                               {item.code} {item.description}
                             </Text>
                           </Flex>
-                          <Flex align="center" gap="2">
-                            <Trash2
-                              height="14"
-                              width="14"
-                              cursor={isDisabled ? 'not-allowed' : 'pointer'}
-                              onClick={() => !isDisabled && onTrashClick(item)}
-                            />
-                            <StarIcon
-                              stroke={isFavourite ? '#A0B6DC' : '#0F6CBD'}
-                              {...(isFavourite ? { fill: '#A0B6DC' } : {})}
-                              strokeWidth="1"
-                              height="15"
-                              width="15"
-                              cursor={isDisabled ? 'not-allowed' : 'pointer'}
-                              onClick={() =>
-                                !isDisabled &&
-                                onFavouriteClick(item, isFavourite)
-                              }
-                            />
-                          </Flex>
+                          {!isDisabled && (
+                            <Flex align="center" gap="2">
+                              <Trash2
+                                height="14"
+                                width="14"
+                                cursor="pointer"
+                                onClick={() => onTrashClick(item)}
+                              />
+                              <StarIcon
+                                stroke={isFavourite ? '#A0B6DC' : '#0F6CBD'}
+                                {...(isFavourite ? { fill: '#A0B6DC' } : {})}
+                                strokeWidth="1"
+                                height="15"
+                                width="15"
+                                cursor="pointer"
+                                onClick={() =>
+                                  onFavouriteClick(item, isFavourite)
+                                }
+                              />
+                            </Flex>
+                          )}
                         </Flex>
                       </Flex>
                     )}
