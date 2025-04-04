@@ -4,6 +4,8 @@ import { useMemo } from 'react'
 import NextLink from 'next/link'
 import { usePathname, useSearchParams } from 'next/navigation'
 import { Box, Flex, ScrollArea } from '@radix-ui/themes'
+import { FEATURE_FLAGS } from '@/constants'
+import { useFeatureFlagEnabled } from '@/hooks/use-feature-flag-enabled'
 import { cn, getStaffNavLinks } from '@/utils'
 
 interface StaffNavigationProps {
@@ -13,21 +15,35 @@ interface StaffNavigationProps {
 const StaffNavigation = ({ staffId }: StaffNavigationProps) => {
   const searchParams = useSearchParams()
   const userId = searchParams.get('id')
-  const navLinks = useMemo(() => getStaffNavLinks(staffId), [staffId])
+
+  const isFeatureFlagEnabled = useFeatureFlagEnabled(
+    FEATURE_FLAGS.ehr11786EnableGalaxySecondPhaseFeatures,
+  )
+  const navLinks = useMemo(
+    () => getStaffNavLinks(staffId, isFeatureFlagEnabled),
+    [staffId, isFeatureFlagEnabled],
+  )
 
   return (
     <Box className="bg-white mb-4 w-[160px] rounded-1 shadow-2">
       <ScrollArea>
         <Flex direction="column">
-          {navLinks.map((widget) => (
-            <NavigationLink
-              key={widget.label}
-              href={widget.href}
-              userId={userId}
-            >
-              {widget.label}
-            </NavigationLink>
-          ))}
+          {navLinks.map((widget) => {
+            const shouldRender =
+              !widget.conditions || widget.conditions.every(Boolean)
+
+            if (!shouldRender) return null
+
+            return (
+              <NavigationLink
+                key={widget.label}
+                href={widget.href}
+                userId={userId}
+              >
+                {widget.label}
+              </NavigationLink>
+            )
+          })}
         </Flex>
       </ScrollArea>
     </Box>

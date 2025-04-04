@@ -94,29 +94,33 @@ const getNavLinks = (
   return baseLinks
 }
 
-const getStaffNavLinks = (staffId: string | null) => {
+const getStaffNavLinks = (
+  staffId: string | null,
+  isFeatureFlagEnabled: boolean,
+) => {
   const baseHref = `/staff/${staffId}`
 
   return [
     {
       label: 'Dashboard',
       href: `${baseHref}/dashboard`,
+      conditions: [isFeatureFlagEnabled],
     },
     {
       label: 'Profile',
       href: `${baseHref}/profile`,
     },
     {
+      label: 'Organization & Practice',
+      href: `${baseHref}/organization-practice`,
+    },
+    {
+      label: 'Location',
+      href: `${baseHref}/location`,
+    },
+    {
       label: 'Credentialing',
       href: `${baseHref}/credentialing`,
-    },
-    {
-      label: 'License',
-      href: `${baseHref}/license`,
-    },
-    {
-      label: 'Malpractice',
-      href: `${baseHref}/malpractice`,
     },
     {
       label: 'Preferences',
@@ -125,42 +129,52 @@ const getStaffNavLinks = (staffId: string | null) => {
     {
       label: 'Clinic Schedule',
       href: `${baseHref}/clinic-schedule`,
-    },
-    {
-      label: 'Forward Inbox',
-      href: `${baseHref}/forward-inbox`,
+      conditions: [isFeatureFlagEnabled],
     },
     {
       label: 'Groups',
       href: `${baseHref}/groups`,
+      conditions: [isFeatureFlagEnabled],
     },
     {
       label: 'Billing',
       href: `${baseHref}/billing`,
-    },
-    {
-      label: 'Policy',
-      href: `${baseHref}/policy`,
-    },
-    {
-      label: 'Tracking',
-      href: `${baseHref}/tracking`,
-    },
-    {
-      label: 'Location',
-      href: `${baseHref}/location`,
+      conditions: [isFeatureFlagEnabled],
     },
     {
       label: 'Treatment Team',
       href: `${baseHref}/treatment-team`,
+      conditions: [isFeatureFlagEnabled],
     },
     {
-      label: 'Organization & Practice',
-      href: `${baseHref}/organization-practice`,
+      label: 'License',
+      href: `${baseHref}/license`,
+      conditions: [isFeatureFlagEnabled],
+    },
+    {
+      label: 'Malpractice',
+      href: `${baseHref}/malpractice`,
+      conditions: [isFeatureFlagEnabled],
+    },
+    {
+      label: 'Forward Inbox',
+      href: `${baseHref}/forward-inbox`,
+      conditions: [isFeatureFlagEnabled],
+    },
+    {
+      label: 'Policy',
+      href: `${baseHref}/policy`,
+      conditions: [isFeatureFlagEnabled],
+    },
+    {
+      label: 'Tracking',
+      href: `${baseHref}/tracking`,
+      conditions: [isFeatureFlagEnabled],
     },
     {
       label: 'Practice',
       href: `${baseHref}/practice`,
+      conditions: [isFeatureFlagEnabled],
     },
   ]
 }
