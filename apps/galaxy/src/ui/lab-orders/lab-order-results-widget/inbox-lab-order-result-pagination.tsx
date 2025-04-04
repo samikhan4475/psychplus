@@ -1,18 +1,14 @@
 'use client'
 
 import { DataTablePagination } from '@/components'
-import { usePaginatedTableState } from '../lab-order-results-widget/hooks/usePaginatedTableState'
 import { LABS_ORDER_TABLE_PAGE_SIZE } from './constant'
 import { useStore } from './store'
-
-const LabOrderTablePagination = () => {
+import { usePaginatedTableState } from './hooks/usePaginatedTableState'
+const InboxLabOrderTablePagination = () => {
   const store = useStore()
-  const { total, loading, page, next, prev, jumpToPage } =
-    usePaginatedTableState(store)
+  const { total, loading, page, next, prev, jumpToPage } = usePaginatedTableState(store)
 
-  if (!total) {
-    return null
-  }
+  if (!total) return null
 
   return (
     <DataTablePagination
@@ -28,4 +24,4 @@ const LabOrderTablePagination = () => {
   )
 }
 
-export { LabOrderTablePagination }
+export { InboxLabOrderTablePagination }

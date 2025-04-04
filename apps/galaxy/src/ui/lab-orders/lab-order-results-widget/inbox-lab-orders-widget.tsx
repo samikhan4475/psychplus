@@ -5,6 +5,7 @@ import { InboxLabOrderResultHeader } from './inbox-lab-order-result-header'
 import { Flex } from '@radix-ui/themes'
 import { InboxLabOrdersFilterForm } from './inbox-lab-orders-filter-form'
 import { InboxLabOrderTable } from './inbox-lab-order-table'
+import { InboxLabOrderTablePagination } from './inbox-lab-order-result-pagination'
 
 
 const InboxLabOrderWidget = () => {
@@ -17,7 +18,7 @@ const InboxLabOrderWidget = () => {
         <InboxLabOrderResultHeader />
         <InboxLabOrdersFilterForm />
         <InboxLabOrderTable />
-        <LabOrderTablePagination />
+        <InboxLabOrderTablePagination />
       </Flex>
   )
 }

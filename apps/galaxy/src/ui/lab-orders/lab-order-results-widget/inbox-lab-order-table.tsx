@@ -19,6 +19,8 @@ import { InboxOrderActionsCell } from './cells/inbox-order-actions-cell'
 import { TableHeaderCheckboxCell } from './cells/table-header-checkbox-cell'
 import { TableRowCheckboxCell } from './cells/table-row-checkbox-cell'
 import { OrderStatus } from './types'
+import {  STAFF_ROLE_CODE_PRESCRIBER } from '@/constants'
+import { useStore as useGlobalStore } from '@/store'
 const getColumns = (
   onRowCheckBoxSelect: (
     row?: Row<LabOrders>,
@@ -70,7 +72,7 @@ const getColumns = (
       header: ({ column }) => (
         <ColumnHeader column={column} clientSideSort label="Patient Name" />
       ),
-      cell: ({ row }) => <TextCell>{`${row.original.patient?.legalName?.firstName} ${row.original.patient?.legalName?.lastName} `}</TextCell>,
+      cell: ({ row }) => <TextCell className={row.original?.isResultAbnormal ? 'text-red-9' : ''} >{`${row.original.patient?.legalName?.firstName} ${row.original.patient?.legalName?.lastName} `}</TextCell>,
     },
     {
       id: 'labOrderNumber',
@@ -149,6 +151,11 @@ const InboxLabOrderTable = () => {
     setSelectedRows: state.setSelectedRows,
   }));
 
+  const { staffId, staffRoleCode } = useGlobalStore((state) => ({
+        staffId: state.user.staffId,
+        staffRoleCode: state.staffResource.staffRoleCode,
+      }))
+  const isPrescriber = staffRoleCode === STAFF_ROLE_CODE_PRESCRIBER
   const { id } = useParams<{ id: string }>()
 
   const onRowCheckBoxSelect = (
@@ -186,9 +193,10 @@ const InboxLabOrderTable = () => {
 
   useEffect(() => {
     const payload = {
-      orderStatus: OrderStatus.Unsigned,
+      orderStatus: OrderStatus.ResultReceived,
       isIncludePatient: true,
-      isResultSigned: false
+      isResultSigned: false,
+      orderingStaffId: isPrescriber ? String(staffId) : '',
     };
 
     fetchLabOrderResults(payload);

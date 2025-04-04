@@ -11,6 +11,7 @@ const getProvidersOptionsAction = async (
   const body = {
     roleCodes: [STAFF_ROLE_CODE_PRESCRIBER],
     providerType,
+    isIncludeTestProviders:false
   }
 
   const response = await api.POST<StaffResource[]>(

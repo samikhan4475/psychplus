@@ -9,7 +9,7 @@ interface ResultsPdfViewProps {
 }
 const ResultsPdfView = ({ resultPdfDetails }: ResultsPdfViewProps) => {
   const searchParams = useSearchParams()
-  const appointmentId = searchParams.get('id')
+  const appointmentId = searchParams.get('id') ?? '0'
 
   return (
     <ViewDocumentButton

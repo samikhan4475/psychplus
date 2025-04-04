@@ -6,6 +6,7 @@ import {
   FormFieldLabel,
 } from '@/components'
 import { CODESETS } from '@/constants'
+import { OrderStatus } from '@/ui/lab-orders/lab-orders-widget/types'
 
 const StatusSelectField = () => {
   return (

@@ -117,6 +117,7 @@ interface LabOrders {
   appointment?: Appointment
   recordStatus?: string
   orderStatus?: string
+  isResultAbnormal?: boolean
 }
 interface LabOrderResponseList {
   labOrders: LabOrders[]
