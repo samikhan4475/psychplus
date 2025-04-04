@@ -24,11 +24,7 @@ const createColumns = (
       header: () => <ColumnHeader clientSideSort label="Date/Time" />,
       cell: ({ row }) => (
         <DateTimeCell className="whitespace-nowrap">
-          {formatDateTime(
-            row.original?.metadata?.updatedOn ||
-              row.original?.metadata?.createdOn,
-            false,
-          )}
+          {formatDateTime(row.original?.metadata?.createdOn, false)}
         </DateTimeCell>
       ),
     },

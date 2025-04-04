@@ -28,10 +28,7 @@ const AddVitalsTable = ({ unitSystem, data }: AddVitalsTableProps) => {
                 className="border-pp-table-border h-6 whitespace-nowrap border border-l-0 px-1 py-0"
               >
                 <DateTimeCell className="w-24">
-                  {formatDateTime(
-                    vital?.metadata?.updatedOn ?? vital?.metadata?.createdOn,
-                    false,
-                  )}
+                  {formatDateTime(vital?.metadata?.createdOn, false)}
                 </DateTimeCell>
               </Table.ColumnHeaderCell>
             ))}
