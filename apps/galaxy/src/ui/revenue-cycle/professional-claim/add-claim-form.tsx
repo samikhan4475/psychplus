@@ -51,8 +51,8 @@ const AddClaimForm = ({ onCloseModal }: AddClaimFormProps) => {
         },
       ],
     },
-    mode: "onChange",
-    reValidateMode: "onChange",
+    mode: 'onChange',
+    reValidateMode: 'onChange',
   })
   const { control } = form
   const { append } = useFieldArray({
@@ -83,6 +83,7 @@ const AddClaimForm = ({ onCloseModal }: AddClaimFormProps) => {
         (sum, line) => sum + (Number(line.totalAmount) || 0),
         0,
       ),
+      primaryStatusCode: 'NewCharge',
       claimServiceLines: (formData.claimServiceLines ?? []).map((line) => ({
         ...line,
         dateOfServiceFrom: getDateString(line.dateOfServiceFrom),

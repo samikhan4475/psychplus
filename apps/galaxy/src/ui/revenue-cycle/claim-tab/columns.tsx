@@ -67,7 +67,7 @@ const columns = (
           }}
         />
       ),
-      cell: ({ row }) => <TextCell>{row.original.patientName}</TextCell>,
+      cell: ({ row }) => <LongTextCell className="w-[150px]">{row.original.patientName}</LongTextCell>,
     },
     {
       id: 'patientStatusCode',
@@ -221,12 +221,12 @@ const columns = (
         />
       ),
       cell: ({ row }) => (
-        <TextCell>
+        <LongTextCell className="w-[150px]">
           {getInsurancePayerName(
             'Primary',
             row.original.claimInsurancePolicies ?? [],
           )}
-        </TextCell>
+        </LongTextCell>
       ),
     },
     {
@@ -248,7 +248,6 @@ const columns = (
             row.original.claimInsurancePolicies ?? [],
           )}
         </LongTextCell>
-       
       ),
     },
     {

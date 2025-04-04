@@ -3,6 +3,7 @@
 import { Cross1Icon } from '@radix-ui/react-icons'
 import { Box, Flex, Text } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
+import toast from 'react-hot-toast'
 import { FormFieldError } from '@/components'
 import { DiagnosisIcd10Code } from '@/types'
 import { ClaimUpdateSchemaType } from '../schema'
@@ -15,6 +16,10 @@ const DiagnosisView = () => {
   const isDisabled = form.formState.disabled
   const handleSelectedItem = (selectedItem: DiagnosisIcd10Code) => {
     const currentDiagnosisList = getValues('claimDiagnosis')
+    if (currentDiagnosisList.length > 11) {
+      toast.error('Cannot add more then 12 diagnosis codes')
+      return
+    }
     // check if diag code exist dont add
     const isExist = currentDiagnosisList.some(
       (diagnosis) => diagnosis.diagnosisCode === selectedItem.code,
@@ -105,6 +110,7 @@ const DiagnosisView = () => {
         <SearchDiagnosisInput
           placeholder="ICD-10 Codes"
           onSelectItem={handleSelectedItem}
+          claimDiagnosis={claimDiagnosis ?? []}
         />
       </Flex>
       <Flex align="center" justify="start" gap="2" mt="2">

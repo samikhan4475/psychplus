@@ -6,6 +6,7 @@ import { DOSFromCell } from './dos-from-cell'
 import { DOSToCell } from './dos-to-cell'
 import { ModifierCellSelect } from './modifiers-cell'
 import { ProcedureCell } from './procedure-cell'
+import { UnitAmountCell } from './unit-amount'
 import { UnitsCell } from './units-cell'
 
 const columns = (
@@ -81,7 +82,19 @@ const columns = (
 
       enableHiding: true,
     },
-
+    {
+      id: 'unitAmount',
+      accessorKey: 'unitAmount',
+      header: ({ column }) => (
+        <ColumnHeader
+          className="!text-black justfy-center !font-medium"
+          column={column}
+          label="Amount"
+        />
+      ),
+      cell: ({ row }) => <UnitAmountCell rowIndex={row.index} />,
+      enableHiding: true,
+    },
     {
       id: 'actions-column',
       accessorKey: 'actions-column',

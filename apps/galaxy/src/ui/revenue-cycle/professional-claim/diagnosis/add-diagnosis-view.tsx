@@ -27,6 +27,7 @@ const AddClaimDiagnosisView = () => {
     )
 
     if (isExist) {
+      toast.error('Duplicated diagnosis codes are not allowed')
       return
     }
 
@@ -39,6 +40,24 @@ const AddClaimDiagnosisView = () => {
     const updatedDiagnoses = [...currentDiaList, newSelectedItem]
     form.setValue('claimDiagnosis', updatedDiagnoses)
     form.trigger(`claimDiagnosis`)
+
+    // update pointers as well
+    const claimServiceLines = form.getValues('claimServiceLines') ?? []
+    claimServiceLines.forEach((item) => {
+      if (newSelectedItem.sequenceNo === 1) {
+        item.diagnosisPointer1 = newSelectedItem.sequenceNo.toString()
+      }
+      if (newSelectedItem.sequenceNo === 2) {
+        item.diagnosisPointer2 = newSelectedItem.sequenceNo.toString()
+      }
+      if (newSelectedItem.sequenceNo === 3) {
+        item.diagnosisPointer3 = newSelectedItem.sequenceNo.toString()
+      }
+      if (newSelectedItem.sequenceNo === 4) {
+        item.diagnosisPointer4 = newSelectedItem.sequenceNo.toString()
+      }
+    })
+    form.setValue(`claimServiceLines`, claimServiceLines)
   }
   const handleRemoveDiagnosis = (diagnosisCode?: string) => {
     const claimDiagnosis = [...getValues('claimDiagnosis')]
@@ -57,6 +76,7 @@ const AddClaimDiagnosisView = () => {
         <SearchDiagnosisInput
           placeholder="ICD-10 Codes"
           onSelectItem={handleSelectedDiagnosis}
+          claimDiagnosis={claimDiagnosis ?? []}
         />
       </Flex>
       <FormFieldError name={`claimDiagnosis`} />
