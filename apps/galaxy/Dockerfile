@@ -42,7 +42,10 @@ COPY turbo.json turbo.json
 # ARG TURBO_TOKEN
 # ENV TURBO_TOKEN=$TURBO_TOKEN
 
-RUN turbo run build --filter=@psychplus/galaxy-app... --no-cache
+ENV APP_CODE p+galaxy-ui
+ENV APP_PATH ehr
+
+RUN turbo run build --filter=@psychplus/galaxy-app...
 
 # Run app
 FROM alpine AS runner
