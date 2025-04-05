@@ -1,28 +1,41 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { useFormContext } from 'react-hook-form'
+import { useFormContext, useWatch } from 'react-hook-form'
 import { MultiSelectField } from '@/components'
 import { getProvidersOptionsAction } from '../../client-actions'
 import { useFiltersContext } from '../../context'
 import { BookedAppointmentsSchemaType } from '../../schema'
 import { FieldLabel, FormFieldContainer } from '../../shared'
 import { Option, SchedulerFilters } from '../../types'
+import { getSelectedOptions } from '../../utils'
 
 const ProviderDropdown = () => {
   const [loading, setLoading] = useState<boolean>(false)
   const [options, setOptions] = useState<Option[]>([])
   const form = useFormContext<BookedAppointmentsSchemaType>()
+  const [stateIds, locationIds] = useWatch({
+    control: form.control,
+    name: ['stateIds', 'locationIds'],
+  })
+
   const { filters } = useFiltersContext()
 
   useEffect(() => {
     setLoading(true)
-    getProvidersOptionsAction().then((response) => {
+    getProvidersOptionsAction({ stateIds, locationIds }).then((response) => {
       setLoading(false)
       if (response.state === 'error') setOptions([])
-      else setOptions(response.data)
+      else {
+        const selectedProviders = form.getValues('providerIds')
+        setOptions(response.data)
+        form.setValue(
+          'providerIds',
+          getSelectedOptions(selectedProviders, response.data),
+        )
+      }
     })
-  }, [])
+  }, [stateIds, locationIds])
 
   if (!filters.includes(SchedulerFilters.Provider)) return null
 

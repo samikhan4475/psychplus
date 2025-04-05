@@ -6,14 +6,20 @@ import { STAFF_ROLE_CODE_PRESCRIBER } from '@/constants'
 import { StaffResource } from '@/types'
 import { sanitizeFormData } from '@/utils'
 
+interface GetProviderOptionsParams {
+  providerType: string
+  locationIds: string[]
+  stateIds: string[]
+}
+
 const getProvidersOptionsAction = async (
-  providerType?: string,
-  useUserId: boolean = false,
+  params?: Partial<GetProviderOptionsParams>,
+  useUserId = false,
 ): Promise<api.ActionResult<{ label: string; value: string }[]>> => {
   const body = {
     roleCodes: [STAFF_ROLE_CODE_PRESCRIBER],
-    providerType,
     isResultsForNameList: true,
+    ...(params ?? {}),
   }
 
   const response = await api.POST<StaffResource[]>(

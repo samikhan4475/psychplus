@@ -1,3 +1,4 @@
+import { ProviderType } from '@/ui/visit/types'
 import { VisitStatusCodes } from '../types/schedule'
 
 const ROUNDING_FILTERS = [
@@ -168,6 +169,14 @@ enum CategoryValue {
 
 const CACHED_FILTERS_KEY = 'cached-filters-key'
 
+const EXCLUDED_PROVIDER_TYPES: string[] = [
+  ProviderType.Anesthesiology,
+  ProviderType.Bcba,
+  ProviderType.FamilyMedicine,
+  ProviderType.NotSet,
+  ProviderType.Pmnr,
+]
+
 export {
   ROUNDING_FILTERS,
   PROVIDER_CODING_FILTERS,
@@ -199,4 +208,5 @@ export {
   ROUNDING_VIEW_FILTERS_KEY,
   PROVIDER_CODING_VIEW_FILTERS_KEY,
   CACHED_FILTERS_KEY,
+  EXCLUDED_PROVIDER_TYPES,
 }

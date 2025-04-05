@@ -3,14 +3,19 @@
 import { Flex } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
 import { MultiSelectField } from '@/components'
-import { CODE_NOT_SET, CODESETS } from '@/constants'
+import { CODESETS } from '@/constants'
 import { useCodesetOptions } from '@/hooks'
+import { EXCLUDED_PROVIDER_TYPES } from '../../constants'
 import { FieldLabel, FormFieldContainer } from '../../shared'
 import { SchemaType } from '../filter-actions-group'
 
 const ProviderTypeDropdown = () => {
   const form = useFormContext<SchemaType>()
-  const options = useCodesetOptions(CODESETS.ProviderType, '', [CODE_NOT_SET])
+  const options = useCodesetOptions(
+    CODESETS.ProviderType,
+    '',
+    EXCLUDED_PROVIDER_TYPES,
+  )
 
   return (
     <FormFieldContainer>

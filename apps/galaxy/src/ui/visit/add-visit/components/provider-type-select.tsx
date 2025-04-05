@@ -6,17 +6,20 @@ import {
   FormFieldLabel,
   SelectInput,
 } from '@/components'
-import { CODE_NOT_SET, CODESETS } from '@/constants'
+import { CODESETS } from '@/constants'
 import { useCodesetCodes, useCodesetOptions } from '@/hooks'
+import { EXCLUDED_PROVIDER_TYPES } from '@/ui/schedule/constants'
 import { SchemaType } from '../schema'
 import { useAddVisitStore } from '../store'
 import { transformProviderTypes } from '../util'
 
 const ProviderTypeDropdown = ({ isDisabled }: { isDisabled?: boolean }) => {
   const form = useFormContext<SchemaType>()
-  const codesetOptions = useCodesetOptions(CODESETS.ProviderType, undefined, [
-    CODE_NOT_SET,
-  ])
+  const codesetOptions = useCodesetOptions(
+    CODESETS.ProviderType,
+    undefined,
+    EXCLUDED_PROVIDER_TYPES,
+  )
   const codes = useCodesetCodes(CODESETS.ProviderType)
   const { services } = useAddVisitStore()
   const [isServiceTimeDependent, serviceId] = useWatch({

@@ -13,4 +13,27 @@ const getServiceFilterOptions = (
   }))
 }
 
-export { isDirty, getServiceFilterOptions }
+const getSelectedOptions = (
+  defaultSelections: string[],
+  options: SelectOptionType[],
+): string[] => {
+  return defaultSelections.filter((selection) =>
+    options.find((option) => option.value === selection),
+  )
+}
+
+const getSelectedOption = (
+  defaultSelection: string,
+  options: SelectOptionType[],
+): string => {
+  return (
+    options.find((option) => option.value === defaultSelection)?.value ?? ''
+  )
+}
+
+export {
+  isDirty,
+  getServiceFilterOptions,
+  getSelectedOptions,
+  getSelectedOption,
+}
