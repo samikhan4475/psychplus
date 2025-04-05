@@ -2,7 +2,11 @@
 
 import { Flex } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
-import { GroupSelectSection, SelectableChipDetails } from '@/components'
+import {
+  FormFieldError,
+  GroupSelectSection,
+  SelectableChipDetails,
+} from '@/components'
 import { HospitalDischargeWidgetSchemaType } from '../hospital-discharge-widget-schema'
 
 const BLOCK_ID = 'strengths'
@@ -65,6 +69,7 @@ const StrengthsBlock = () => {
           maxLength={500}
         />
       )}
+      <FormFieldError className="ml-2" name="strengths" />
     </Flex>
   )
 }
