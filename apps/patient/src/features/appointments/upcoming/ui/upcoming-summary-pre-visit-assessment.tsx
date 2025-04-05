@@ -6,8 +6,10 @@ import { Badge, CloseDialogIcon, FileLineIcon } from '@/components-v2'
 import { NoteStoreProvider } from '@/features/note/store'
 import { NoteSectionItem } from '@/features/note/types'
 import { PreCheckinAssessmentView } from '@/features/pre-checkin-assessment'
+import { PreCheckinAssessmentTabs } from '@/features/pre-checkin-assessment/constants'
 import { useStore } from '@/features/pre-checkin-assessment/store'
 import { PreCheckinAssessmentStapperProps } from '@/features/pre-checkin-assessment/types'
+import { getTabsToShow } from '@/features/pre-checkin-assessment/utils'
 
 const UpcomingSummaryPreVisitAssessment = ({
   insurancePayers,
@@ -25,6 +27,9 @@ const UpcomingSummaryPreVisitAssessment = ({
     isPreCheckInCompleted,
     showCompletionScreen,
     setShowCompletionScreen,
+    tabsToShow,
+    completedTabs,
+    setActiveTab,
   } = useStore()
   const completed =
     isPreCheckInCompleted ?? preCheckInProgress?.isPreCheckInCompleted
@@ -43,6 +48,28 @@ const UpcomingSummaryPreVisitAssessment = ({
         <Dialog.Root
           onOpenChange={(open) => {
             if (open === false) setShowCompletionScreen(false)
+            if (open === true) {
+              const tabs =
+                tabsToShow.length > 0
+                  ? tabsToShow
+                  : getTabsToShow({
+                      tabs: Object.values(PreCheckinAssessmentTabs),
+                      questionnaireSectionsToShowOnPreCheckin,
+                    })
+
+              const firstEmptyTab = tabs?.find(
+                (tab) =>
+                  !completedTabs?.includes(tab as PreCheckinAssessmentTabs),
+              )
+              const initialTab =
+                completed || !preCheckInProgress.activeTab
+                  ? PreCheckinAssessmentTabs.PatientInfo
+                  : preCheckInProgress.activeTab
+
+              setActiveTab(
+                (firstEmptyTab as PreCheckinAssessmentTabs) ?? initialTab,
+              )
+            }
           }}
         >
           <Dialog.Trigger>

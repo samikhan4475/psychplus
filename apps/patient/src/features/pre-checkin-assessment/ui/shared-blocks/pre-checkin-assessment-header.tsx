@@ -33,15 +33,11 @@ const PreCheckinAssessmentHeader = ({
           <Flex
             key={tab.id}
             direction="column"
-            className="flex-1 gap-2"
+            className="flex-1 cursor-pointer gap-2"
             align="center"
+            onClick={() => handleTabChange(tab.id)}
           >
-            <Tabs.Trigger
-              value={tab.id}
-              id={tab.id}
-              className={trigger}
-              onClick={() => handleTabChange(tab.id)}
-            />
+            <Tabs.Trigger value={tab.id} id={tab.id} className={trigger} />
             <Flex width="100%" gap="1">
               <Box className={indicator}>
                 {activeTab === tab.id ? (

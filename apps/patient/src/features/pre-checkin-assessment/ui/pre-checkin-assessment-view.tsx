@@ -42,7 +42,6 @@ const PreCheckinAssessmentView = ({
     hydrated,
     setTabsToShow,
     tabsToShow,
-    setActiveTab,
     setCompletedTabs,
     setIsPreCheckInCompleted,
     setPreCheckInSettingsId,
@@ -54,9 +53,6 @@ const PreCheckinAssessmentView = ({
     if (preCheckInSettingsId) return
     setIsPreCheckInCompleted(preCheckInProgress?.isPreCheckInCompleted)
     setCompletedTabs(preCheckInProgress?.preCheckInCompletedTabs ?? [])
-    setActiveTab(
-      preCheckInProgress?.activeTab ?? PreCheckinAssessmentTabs.PatientInfo,
-    )
     setPreCheckInSettingsId(preCheckInProgress?.id)
   }, [preCheckInProgress])
 
@@ -65,9 +61,6 @@ const PreCheckinAssessmentView = ({
       tabs: Object.values(PreCheckinAssessmentTabs),
       questionnaireSectionsToShowOnPreCheckin,
     })
-
-    if (!tabs.includes(activeTab))
-      setActiveTab(PreCheckinAssessmentTabs.PatientInfo)
 
     setTabsToShow(tabs as PreCheckinAssessmentTabs[])
   }, [questionnaireSectionsToShowOnPreCheckin])
