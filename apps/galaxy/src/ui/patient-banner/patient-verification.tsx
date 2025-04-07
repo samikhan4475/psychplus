@@ -1,12 +1,11 @@
 import { Flex, Text } from '@radix-ui/themes'
-import { CloseIcon, QuestionIcon, TickIcon } from '@/components/icons'
 import { PatientProfile } from '@/types'
 
-const icons: Record<string, JSX.Element> = {
-  Pending: <QuestionIcon height={11} width={11} />,
-  Verified: <TickIcon height={11} width={11} />,
-  Unverifiable: <CloseIcon height={11} width={11} />,
-  Active: <TickIcon height={11} width={11} />,
+const colors: Record<string, string> = {
+  Pending: 'pp-blue',
+  Verified: 'pp-states-success',
+  Unverifiable: 'pp-states-error',
+  Active: 'pp-states-success',
 }
 
 interface PatientVerificationProps {
@@ -16,22 +15,17 @@ interface PatientVerificationProps {
 const PatientVerification = ({
   patientVerifications,
 }: PatientVerificationProps) => {
-  const {
-    verificationStatus,
-    patientConsent,
-    insuranceVerification,
-    creditCardVerificationStatus,
-  } = patientVerifications
+  const { verificationStatus, patientConsent, creditCardVerificationStatus } =
+    patientVerifications
 
   const verificationFields: { label: string; status?: string }[] = [
-    { label: 'P', status: verificationStatus },
-    { label: 'I', status: insuranceVerification },
-    { label: 'P&C', status: patientConsent },
-    { label: 'CC', status: creditCardVerificationStatus },
+    { label: 'Profile', status: verificationStatus },
+    { label: 'Policy', status: patientConsent },
+    { label: 'Credit', status: creditCardVerificationStatus },
   ]
 
-  const getIcon = (status?: string) =>
-    icons[status || 'Unverifiable'] || <CloseIcon height={11} width={11} />
+  const getColor = (status?: string) =>
+    colors[status || 'Unverifiable'] || 'pp-states-error'
 
   return (
     <Flex gap="1" className="whitespace-nowrap">
@@ -39,8 +33,9 @@ const PatientVerification = ({
       <Flex gap="1" align="center">
         {verificationFields.map(({ label, status }) => (
           <Flex key={label} align="center" gap="2px">
-            <Text className="text-[11.5px]">{label}</Text>
-            {getIcon(status)}
+            <Text className={`text-[11.5px] text-${getColor(status)}`}>
+              {label}
+            </Text>
           </Flex>
         ))}
       </Flex>

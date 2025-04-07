@@ -1,20 +1,13 @@
 'use client'
 
-import { useMemo } from 'react'
-import { PatientVital, useStore } from '../vitals'
+import { PatientVital } from '../vitals'
 import { LabelAndValue } from './label-and-value'
 
 interface BmiValueProps {
-  vitals?: PatientVital
+  vital?: PatientVital
 }
 
-const BmiValue = ({ vitals }: BmiValueProps) => {
-  const { data } = useStore()
-  const vital = useMemo(
-    () => (data && data?.length > 0 ? data?.[0] : vitals ?? null),
-    [data, vitals],
-  )
-
+const BmiValue = ({ vital }: BmiValueProps) => {
   return <LabelAndValue label="BMI" value={vital?.bodyMassIndex} />
 }
 

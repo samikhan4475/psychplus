@@ -153,7 +153,7 @@ const transformBulkAddUpdate = (
     } else if (
       !cptSetting?.content &&
       vt.selectedCPTCode &&
-      vt.defaultCPTCode != vt.selectedCPTCode
+      vt.defaultCPTCode !== vt.selectedCPTCode
     ) {
       dataToAdd.push({
         levelCode: LevelCode.User,

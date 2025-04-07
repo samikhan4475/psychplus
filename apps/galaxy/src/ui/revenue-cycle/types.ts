@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { DateValue } from 'react-aria-components'
 import { Claim, ClaimServiceLine, Metadata } from '@/types'
 

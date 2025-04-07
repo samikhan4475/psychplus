@@ -38,7 +38,7 @@ const renderFamilyPsychHistory = (
             key={option.field}
             label={label}
             value={value}
-            allowEmptyValue={value != undefined}
+            allowEmptyValue={value !== undefined}
           />
         )
       })}

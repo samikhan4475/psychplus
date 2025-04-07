@@ -14,10 +14,10 @@ const MentalStatusExamNoteDetailView = ({
   visitSequence,
   appointment,
 }: NoteDetailProps) => {
-  if (data.length === 0) return null
+
   const delusionTypeCodeset = useCodesetCodes(CODESETS.DelusionType)
   const hallucinationTypeCodeset = useCodesetCodes(CODESETS.HallucinationType)
-
+  if (data.length === 0) return null
   const transformedData = transformIn(data)
 
   const actualNoteViewVisibility = getWidgetContainerCheckboxStateByWidgetId({

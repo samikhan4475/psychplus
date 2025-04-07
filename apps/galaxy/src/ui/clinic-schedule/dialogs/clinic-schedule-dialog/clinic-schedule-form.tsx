@@ -2,7 +2,11 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Flex, Text } from '@radix-ui/themes'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { FormContainer, FormSubmitButton } from '@/components'
-import { AddServiceBlock, AddTelestateBlock, AgeGroupBlock } from './form-blocks'
+import {
+  AddServiceBlock,
+  AddTelestateBlock,
+  AgeGroupBlock,
+} from './form-blocks'
 import {
   DaySelect,
   EndDateInput,
@@ -54,7 +58,7 @@ const ClinicScheduleForm = ({
         <StatusSelect />
         <PublicViewSelect />
       </Flex>
-      <Flex gap='1'>
+      <Flex gap="1">
         <AddServiceBlock />
         <AgeGroupBlock />
       </Flex>

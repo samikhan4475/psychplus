@@ -1,110 +1,142 @@
+import React from 'react'
 import { Flex, Text } from '@radix-ui/themes'
+import { CloseIcon, TickIcon } from '@/components/icons'
 import { PatientProfile } from '@/types'
-import { searchPharmaciesAction } from '../pharmacy/actions'
-import {
-  getPatientCareTeam,
-  getPatientVitalsAction,
-  getPcpInfoAction,
-} from './actions'
-import { BmiValue } from './bmi-value'
+import { formatUTCDate, getUserFullName } from '@/utils'
+import { getPatientDemographicsAction } from './actions/get-patient-demographics'
 import { CareTeamInfoSection } from './care-team-info-section'
 import { InsuranceInfoSection } from './insurance-info-section'
 import { LabelAndValue } from './label-and-value'
 import { PatientVerification } from './patient-verification'
-import { PcpInfoSection } from './pcp-info-section'
-import { PharmacyInfoSection } from './pharmacy-info-section'
+import { ResidingState } from './residing-state'
 import { UserAvatar } from './user-avatar'
-import { UserContactDetailsSection } from './user-contact-details-section'
 import { UserInfoSection } from './user-info-section'
 import { VitalsInfoSection } from './vitals-info-section'
 
-interface PatientBannerProps {
+interface PatientDemographicsProps {
   patientId: string
+  appointmentId?: string
   user: PatientProfile
 }
 
-const PatientBanner = async ({ patientId, user }: PatientBannerProps) => {
-  try {
-    const [vitalsResponse, careTeamResponse, pcpResponse, pharmacyResponse] =
-      await Promise.allSettled([
-        getPatientVitalsAction(patientId),
-        getPatientCareTeam(patientId),
-        getPcpInfoAction(patientId),
-        searchPharmaciesAction(patientId, { isOnlyDefaults: true }),
-      ])
-
-    const vitals =
-      vitalsResponse.status === 'fulfilled' &&
-      vitalsResponse.value.state !== 'error'
-        ? vitalsResponse.value.data?.[0]
-        : undefined
-
-    const careTeam =
-      careTeamResponse.status === 'fulfilled' &&
-      careTeamResponse.value.state !== 'error'
-        ? careTeamResponse.value.data.careTeam
-        : undefined
-
-    const pcp =
-      pcpResponse.status === 'fulfilled' && pcpResponse.value.state !== 'error'
-        ? pcpResponse.value.data[pcpResponse.value.data.length - 1]
-        : undefined
-
-    const pharmacy =
-      pharmacyResponse.status === 'fulfilled' &&
-      pharmacyResponse.value.state !== 'error'
-        ? pharmacyResponse.value.data[0]
-        : undefined
-
-    const { creditCardVerificationStatus, insurancePolicies } = user
-    const insuranse = insurancePolicies ?? []
-
-    const isCreditCardOnFile = (status?: string): string =>
-      status === 'Active' ? 'Yes' : 'No'
-
-    return (
-      <Flex
-        gap="3"
-        py="2"
-        px="3"
-        wrap="wrap"
-        direction={{
-          md: 'row',
-        }}
-        justify="start"
-        className="bg-white border-b border-b-gray-5"
-      >
-        <Flex mr="6">
-          <UserAvatar user={user} />
-        </Flex>
-        <UserInfoSection user={user} vitals={vitals} />
-        <Flex direction="column" className="gap-[2px] md:flex-1">
-          <VitalsInfoSection vitals={vitals} />
-        </Flex>
-        <Flex direction="column" className="gap-[2px] md:flex-1">
-          <BmiValue vitals={vitals} />
-          <LabelAndValue
-            label="CC on file"
-            value={isCreditCardOnFile(creditCardVerificationStatus)}
-          />
-          <PatientVerification patientVerifications={user} />
-        </Flex>
-        <Flex direction="column" className="gap-[2px] md:flex-1">
-          <InsuranceInfoSection insurance={insuranse} />
-          <UserContactDetailsSection user={user} />
-        </Flex>
-        <Flex direction="column" className="gap-[2px] md:flex-1">
-          <CareTeamInfoSection careTeam={careTeam} />
-          <PcpInfoSection pcp={pcp} />
-        </Flex>
-        <Flex direction="column" className="gap-[2px] md:flex-1">
-          <PharmacyInfoSection pharmacy={pharmacy} />
-        </Flex>
+const PatientInfoSection = ({
+  user,
+  error,
+}: {
+  user: PatientProfile
+  error?: string
+}) => {
+  return (
+    <Flex
+      gap="3"
+      py="2"
+      px="3"
+      wrap="wrap"
+      direction={{ md: 'row' }}
+      justify="start"
+      className="bg-white"
+    >
+      <Flex mr="6">
+        <UserAvatar user={user} />
       </Flex>
-    )
-  } catch (error) {
-    return <Text>Error loading patient banner</Text>
+      <UserInfoSection user={user} />
+      {error && <Text>{error}</Text>}
+    </Flex>
+  )
+}
+const PatientBanner = async ({
+  patientId,
+  appointmentId = '',
+  user,
+}: PatientDemographicsProps) => {
+  const response = await getPatientDemographicsAction({
+    patientId,
+    appointmentId,
+  })
+
+  if (response.state === 'error') {
+    return <PatientInfoSection user={user} error={response.error} />
   }
+
+  const patientDemographicsData = response.data
+
+  return (
+    <Flex
+      gap="3"
+      py="2"
+      px="3"
+      wrap="wrap"
+      direction={{ md: 'row' }}
+      justify="start"
+      className="bg-white border-b border-b-gray-5"
+    >
+      <PatientInfoSection user={user} />
+      <Flex direction="column" className="gap-[2px] md:flex-1">
+        <VitalsInfoSection
+          vitals={patientDemographicsData?.vitals?.[0]}
+          patientId={patientId}
+        />
+      </Flex>
+      <Flex direction="column" className="gap-[2px] md:flex-1">
+        <InsuranceInfoSection insurance={user?.insurancePolicies || []} />
+        <PatientVerification patientVerifications={user} />
+        <ResidingState
+          stateCode={patientDemographicsData?.appointment?.stateCode ?? ''}
+        />
+      </Flex>
+      <Flex direction="column" className="gap-[2px] md:flex-1">
+        <CareTeamInfoSection careTeam={patientDemographicsData?.careTeam} />
+        <LabelAndValue
+          label="PCP"
+          value={
+            patientDemographicsData?.externalProviders?.[0]?.legalName
+              ? getUserFullName(
+                  patientDemographicsData?.externalProviders[0]?.legalName,
+                )
+              : 'N/A'
+          }
+        />
+      </Flex>
+      <Flex direction="column" className="gap-[2px] md:flex-1">
+        <LabelAndValue
+          label="Allergies"
+          value={
+            patientDemographicsData?.allergies?.length
+              ? patientDemographicsData?.allergies
+                  .map((el) => el.allergyName)
+                  .join(', ')
+              : 'No known Allergies'
+          }
+          showValueInsideTooltip
+        />
+        <LabelAndValue
+          label="Pharmacy Name"
+          value={
+            patientDemographicsData?.pharmacies?.[0]?.pharmacyName ?? 'N/A'
+          }
+        />
+        <Flex gap="1" className="whitespace-nowrap" align="center">
+          <Text className="text-[11.5px] font-[600]">Primary Note Signed</Text>
+          {patientDemographicsData?.appointment?.isQuickNoteSigned ? (
+            <TickIcon height={11} width={11} />
+          ) : (
+            <CloseIcon height={11} width={11} />
+          )}
+        </Flex>
+        <LabelAndValue
+          label="Last Seen"
+          value={
+            patientDemographicsData?.appointment?.startDate &&
+            patientDemographicsData?.appointment?.providerFullName
+              ? `${formatUTCDate(
+                  patientDemographicsData?.appointment?.startDate,
+                )} ${patientDemographicsData?.appointment?.providerFullName}`
+              : 'N/A'
+          }
+        />
+      </Flex>
+    </Flex>
+  )
 }
 
 export { PatientBanner }

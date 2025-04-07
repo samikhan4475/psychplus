@@ -1,47 +1,62 @@
-import { Text } from '@radix-ui/themes'
+import { Flex, Text } from '@radix-ui/themes'
 import { getQuickNoteDetailAction } from '@/actions/get-quicknote-detail'
-import { Appointment } from '@/types'
+import { getAppointment } from '@/api'
+import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { filterAndSort } from '@/utils'
 import { AddOnWidget } from './add-on-widget'
 import { getBookedAppointmentApi } from './api/booked-appointments-api'
 import { transformIn } from './data'
 
-interface AddOnLoaderProps {
+interface PatientAddOnLoaderProps {
   patientId: string
-  appointment?: Appointment
+  appointmentId: string
   visitType: string
-  appointmentId?: string
 }
 
 const AddOnLoader = async ({
   patientId,
-  appointment,
-  visitType,
   appointmentId,
-}: AddOnLoaderProps) => {
-  const [response, appointmentResponse] = await Promise.all([
-    getQuickNoteDetailAction(patientId, [], false, appointmentId),
-    getBookedAppointmentApi(appointment),
+  visitType,
+}: PatientAddOnLoaderProps) => {
+  const appointment = await getAppointment({ id: appointmentId })
+
+  if (appointment.state === 'error') {
+    return <Text>Appointment with {appointmentId} not found</Text>
+  }
+
+  const [response, bookedAppointmentResponse] = await Promise.all([
+    getQuickNoteDetailAction(
+      patientId,
+      [QuickNoteSectionName.Addon],
+      false,
+      appointmentId,
+    ),
+    getBookedAppointmentApi(appointment.data),
   ])
 
   if (response.state === 'error') {
-    return <Text>{response.error}</Text>
+    return <Text>Add On Fail: {response.error}</Text>
   }
+
   const appointmentData =
-    appointmentResponse.state === 'success' ? appointmentResponse.data : []
+    bookedAppointmentResponse.state === 'success'
+      ? bookedAppointmentResponse.data
+      : []
   const [data, otherData] = filterAndSort(
-    response.state === 'success' ? response.data : [],
+    response.data ?? [],
     'additionalTherapyDetail',
   )
   const initialValue = transformIn(data, appointmentData, visitType)
 
   return (
-    <AddOnWidget
-      patientId={patientId}
-      appointment={appointment}
-      initialValue={initialValue}
-      otherData={otherData}
-    />
+    <Flex direction="column" width="100%">
+      <AddOnWidget
+        patientId={patientId}
+        appointment={appointment.data}
+        initialValue={initialValue}
+        otherData={otherData}
+      />
+    </Flex>
   )
 }
 

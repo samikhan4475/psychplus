@@ -1,1 +1,1 @@
-export * from './patient-info-view'
+export { PatientInfoLoader as PatientInfoView } from './patient-info-loader'

@@ -51,7 +51,7 @@ const AntiPsychoticBlock = () => {
                 lastOptionIndicator={true}
                 errorField={BLOCK_ID}
             />
-            {antiPsychotics == "≥ 2" &&
+            {antiPsychotics === "≥ 2" &&
                 <Flex className={cn('bg-pp-focus-bg-2 rounded-1 pl-1 flex-row')}>
                     <Text
                         weight="medium"

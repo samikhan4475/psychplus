@@ -9,8 +9,8 @@ const getDiagnosisLimit = async (
     recordStatuses?: string[]
     diagnosisCodes?: string[]
   },
-  offset: number = 0,
-  limit: number = 0,
+  offset= 0,
+  limit = 0,
 ): Promise<api.ActionResult<DiagnosisIcd10Code[]>> => {
   const response = await api.POST<DiagnosisIcd10Code[]>(
     `${api.DIAGNOSIS_SEARCH_ICD10CODES_ENDPOINT}?offset=${offset}&limit=${limit}`,

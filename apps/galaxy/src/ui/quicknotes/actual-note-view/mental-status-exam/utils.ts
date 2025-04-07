@@ -97,10 +97,6 @@ export const mseValueMapping: Record<string, string[]> = {
   hiUnDisclosed: [],
 }
 
-type ReorderObjectKeys<T> = {
-  [K in keyof T]: T[K]
-}
-
 export const reorderObjectKeys = <T extends Record<string, unknown>>(
   obj: T,
   order: (keyof T)[],

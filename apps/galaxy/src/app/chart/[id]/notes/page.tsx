@@ -1,59 +1,35 @@
-import { Text } from '@radix-ui/themes'
-import {
-  getAppointment,
-  getPatientAllergies,
-  getPatientNotes,
-  getPatientProfile,
-} from '@/api'
-import { NotesView } from '@/ui/notes'
+import { Suspense } from 'react'
+import { Flex } from '@radix-ui/themes'
+import { LoadingPlaceholder } from '@/components'
+import { NotesWidgetView } from '@/ui/notes'
 
 interface NotesPageProps {
   params: {
     id: string
+    apptId: string
   }
   searchParams: {
     id: string
   }
 }
 
-const NotesPage = async ({ params, searchParams }: NotesPageProps) => {
-  const [patientNotes, noteAppointment, patientAllergies, patientProfile] =
-    await Promise.all([
-      getPatientNotes({ patientId: params.id }),
-      getAppointment({
-        id: searchParams.id,
-        isIncludeCosigners: true,
-        isIncludeLocation: true,
-      }),
-      getPatientAllergies({
-        payload: {
-          patientIds: [params.id],
-        },
-      }),
-      getPatientProfile(params.id),
-    ])
-
-  const appointmentData =
-    noteAppointment.state === 'error' ? undefined : noteAppointment.data
-
-  const patientNotesData =
-    patientNotes.state === 'error' ? undefined : patientNotes.data
-
-  const patientAllergiesData =
-    patientAllergies.state === 'error' ? [] : patientAllergies.data
-
-  if (patientProfile.state === 'error') {
-    return <Text>{patientProfile.error}</Text>
-  }
-
+const NotesPage = ({ params, searchParams }: NotesPageProps) => {
   return (
-    <NotesView
-      patientId={params.id}
-      noteAppointment={appointmentData}
-      patientNotes={patientNotesData}
-      PatientProfile={patientProfile.data}
-      allergies={patientAllergiesData}
-    />
+    <Suspense
+      fallback={
+        <Flex
+          direction="column"
+          align="center"
+          justify="center"
+          flexGrow="1"
+          className="h-full"
+        >
+          <LoadingPlaceholder />
+        </Flex>
+      }
+    >
+      <NotesWidgetView patientId={params.id} appointmentId={searchParams.id} />
+    </Suspense>
   )
 }
 

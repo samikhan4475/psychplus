@@ -9,6 +9,7 @@ import { StoreProvider } from '@/ui/quicknotes/store'
 interface ChartLayoutProps extends React.PropsWithChildren {
   params: {
     id: string
+    apptId: string
   }
 }
 
@@ -37,7 +38,13 @@ const ChartLayout = async ({ children, params }: ChartLayoutProps) => {
       >
         <Suspense
           fallback={
-            <Flex direction="column" align="center" justify="center" flexGrow="1" className='h-full'>
+            <Flex
+              direction="column"
+              align="center"
+              justify="center"
+              flexGrow="1"
+              className="h-full"
+            >
               <LoadingPlaceholder />
             </Flex>
           }
@@ -48,15 +55,21 @@ const ChartLayout = async ({ children, params }: ChartLayoutProps) => {
         <Flex gap="3" px="2" className="flex-1 overflow-auto">
           <ChartNavigation />
           <ScrollArea className="flex-1">
-            <Flex className="flex-1 h-full" mb="4">
+            <Flex className="h-full flex-1" mb="4">
               <Suspense
                 fallback={
-                  <Flex direction="column" align="center" justify="center" flexGrow="1" className='h-full'>
+                  <Flex
+                    direction="column"
+                    align="center"
+                    justify="center"
+                    flexGrow="1"
+                    className="h-full"
+                  >
                     <LoadingPlaceholder />
                   </Flex>
                 }
               >
-                  {children}
+                {children}
               </Suspense>
             </Flex>
           </ScrollArea>

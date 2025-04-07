@@ -1,6 +1,5 @@
 'use client'
 
-import { useMemo } from 'react'
 import { Flex } from '@radix-ui/themes'
 import { CODESETS } from '@/constants'
 import { useCodesetOptions } from '@/hooks'
@@ -9,56 +8,59 @@ import {
   getAgeFromDate,
   getCalendarDate,
   getMaskedPhoneNumber,
-  getMaskedSSN,
+  getPatientCity,
   getPatientPhone,
+  getPatientPostalCode,
+  getPatientState,
+  getPatientStreet,
   getSlashedPaddedDateString,
   getUserFullName,
 } from '@/utils'
-import { PatientVital, useStore } from '../vitals'
 import { LabelAndValue } from './label-and-value'
 
 interface PatientBannerProps {
   user: PatientProfile
-  vitals?: PatientVital
 }
 
-const UserInfoSection = ({ user, vitals }: PatientBannerProps) => {
-  const { data } = useStore()
-  const vital = useMemo(
-    () => (data && data?.length > 0 ? data?.[0] : vitals ?? null),
-    [data],
-  )
-
+const UserInfoSection = ({ user }: PatientBannerProps) => {
+  
   const statusOptions = useCodesetOptions(CODESETS.CustomerStatus)
   const patientStatus = statusOptions?.find(
     (item) => item?.value === user.status,
   )
-  const formatBloodPressure = (systolic?: number, diastolic?: number) =>
-    systolic && diastolic ? `${systolic}/${diastolic}` : undefined
+
+  const address = `
+            ${
+              user?.contactDetails?.addresses
+                ? getPatientStreet(user?.contactDetails?.addresses)
+                : undefined
+            }
+                ${getPatientCity(
+                  user?.contactDetails?.addresses,
+                )}, ${getPatientState(
+    user?.contactDetails?.addresses,
+  )} ${getPatientPostalCode(user?.contactDetails?.addresses)}
+            
+         `
 
   return (
     <>
       <Flex direction="column" className="gap-[2px] md:flex-1">
-        <LabelAndValue label="Name" value={getUserFullName(user.legalName)} />
         <LabelAndValue
-          label="Age/Gender"
-          value={`${getAgeFromDate(getCalendarDate(user.birthdate))} yo/${
-            user.gender
-          }`}
+          label="Identity"
+          value={user?.legalName?.firstName ? `${getUserFullName(user.legalName)} ${getAgeFromDate(
+            getCalendarDate(user.birthdate),
+          )} yo ${user?.gender?.charAt(0)}` : ''}
         />
-        <LabelAndValue label="Orientation" value={user.genderOrientation} />
-        <LabelAndValue label="Pronouns" value={user.genderPronoun} />
+        <LabelAndValue label="Language" value={user.language} />
+        <LabelAndValue label="User Status" value={patientStatus?.label} />
+        <LabelAndValue label="MRN" value={user.medicalRecordNumber} />
       </Flex>
       <Flex direction="column" className="gap-[2px] md:flex-1">
-        <LabelAndValue label="Language" value={user.language} />
-        <LabelAndValue label="Status" value={patientStatus?.label} />
-        <LabelAndValue label="MRN" value={user.medicalRecordNumber} />
         <LabelAndValue
           label="DOB"
           value={getSlashedPaddedDateString(user.birthdate, true)}
         />
-      </Flex>
-      <Flex direction="column" className="gap-[2px] md:flex-1">
         <LabelAndValue
           label="Cell"
           value={getMaskedPhoneNumber(
@@ -68,14 +70,7 @@ const UserInfoSection = ({ user, vitals }: PatientBannerProps) => {
           )}
         />
         <LabelAndValue label="Email" value={user?.contactDetails?.email} />
-        <LabelAndValue
-          label="SSN"
-          value={getMaskedSSN(user.socialSecurityNumber)}
-        />
-        <LabelAndValue
-          label="BP"
-          value={formatBloodPressure(vital?.systolic, vital?.diastolic)}
-        />
+        <LabelAndValue label="Address" value={address} showValueInsideTooltip />
       </Flex>
     </>
   )

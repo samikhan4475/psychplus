@@ -161,6 +161,9 @@ interface Appointment {
   isFollowupDenied?: boolean
   followUpDenialReason?: string
   isRequiredPolicy?: boolean
+  isPrimaryNoteSigned?: boolean
+  providerFullName?: string
+  isQuickNoteSigned?: boolean
 }
 
 interface BookVisitPayload {

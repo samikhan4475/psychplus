@@ -108,7 +108,7 @@ const ChangePassword = () => {
           </Flex>
           <Flex className="mb-4">
             <Text size="2">
-              Didn't received the code?{' '}
+              Didn&#39;t receive the code?{' '}
               <ResendButton email={decodeUrlString(email)} />
             </Text>
           </Flex>

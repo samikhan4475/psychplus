@@ -1,30 +1,79 @@
 'use client'
 
-import { useMemo } from 'react'
-import { PatientVital, useStore } from '../vitals'
+import { useEffect, useMemo, useState } from 'react'
+import { genericEventBus } from '@/lib/generic-event-bus'
+import { GenericPayload } from '@/types'
+import { PatientVital } from '../vitals'
+import { BmiValue } from './bmi-value'
 import { LabelAndValue } from './label-and-value'
 
+type VitalsEventPayload = {
+  vitals?: PatientVital
+  type?: string
+}
 interface VitalsInfoSectionProps {
   vitals?: PatientVital
+  patientId: string
 }
 
-const VitalsInfoSection = ({ vitals }: VitalsInfoSectionProps) => {
-  const { data } = useStore()
+const VitalsInfoSection = ({
+  vitals: initialVitals,
+  patientId,
+}: VitalsInfoSectionProps) => {
+  const [eventVitals, setEventVitals] = useState<PatientVital | undefined>()
+  useEffect(() => {
+    const handleUpdateVitals = (
+      message?: GenericPayload<VitalsEventPayload>,
+    ) => {
+      if (message?.type === 'vitals' && message?.vitals) {
+        setEventVitals(message.vitals)
+      }
+    }
+    const eventType = `${patientId}`
+    genericEventBus.on(`${patientId}`, handleUpdateVitals)
+
+    return () => {
+      genericEventBus.off(eventType)
+    }
+  }, [])
 
   const vital = useMemo(
-    () => (data && data?.length > 0 ? data?.[0] : vitals ?? null),
-    [data, vitals],
+    () => eventVitals ?? initialVitals,
+    [eventVitals, initialVitals],
   )
+
+  const formatHeightInInches = (heightCm?: number) =>
+    heightCm ? (heightCm * 0.39).toFixed(2) : undefined
 
   return (
     <>
-      <LabelAndValue label="HR" value={vital?.pulseRate} />
-      <LabelAndValue label="Temp (F)" value={vital?.bodyTemperatureF} />
-      <LabelAndValue label="Height (in)" value={vital?.heightInches} />
       <LabelAndValue
-        label="Weight (lbs)"
-        value={vital?.weightPounds?.toFixed(2)}
+        label="BP"
+        value={
+          vital?.systolic && vital?.diastolic
+            ? `${vital.systolic}/${vital.diastolic} mm Hg`
+            : undefined
+        }
       />
+      <LabelAndValue
+        label="HR/Temp"
+        value={
+          vital?.pulseRate && vital?.bodyTemperatureC
+            ? `${vital.pulseRate} / ${vital.bodyTemperatureF} F `
+            : undefined
+        }
+      />
+      <LabelAndValue
+        label="Height/Weight"
+        value={
+          vital?.heightCm && vital.weightPounds
+            ? `${formatHeightInInches(
+                vital?.heightCm,
+              )} / ${vital?.weightPounds?.toFixed(2)} lb`
+            : undefined
+        }
+      />
+      <BmiValue vital={vital} />
     </>
   )
 }

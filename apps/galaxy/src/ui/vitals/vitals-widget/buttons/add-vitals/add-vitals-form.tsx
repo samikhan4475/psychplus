@@ -10,6 +10,7 @@ import { revalidateAction } from '@/actions/revalidate'
 import { saveWidgetAction } from '@/actions/save-widget'
 import { DateTimeCell, FormContainer } from '@/components'
 import { useHasPermission } from '@/hooks'
+import { genericEventBus } from '@/lib/generic-event-bus'
 import { useQuickNoteUpdate } from '@/ui/quicknotes/hooks'
 import { transformOut } from '@/ui/vitals/data'
 import { cn, formatDateTime, sanitizeFormData } from '@/utils'
@@ -162,6 +163,10 @@ const AddVitalsForm = ({
       response.data,
       ...((quicknotesData || []) as PatientVital[]),
     ])
+    genericEventBus.emit(`${patientId}`, {
+      type: 'vitals',
+      vitals: response.data,
+    })
   }
 
   useEffect(() => {

@@ -244,7 +244,7 @@ const constructQuickNotesUrl = (
   visitType: string | undefined,
   visitSequence: string,
 ) => {
-  return `/chart/${patientId}/appointment/${appointmentId}/quicknotes?id=${appointmentId}&visitType=${
+  return `/p-chart/${patientId}/${appointmentId}/quicknotes?id=${appointmentId}&visitType=${
     visitType ?? ''
   }&visitSequence=${visitSequence ?? ''}`
 }

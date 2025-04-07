@@ -73,21 +73,22 @@ const NavigationLink = ({
 }: React.PropsWithChildren<NavigationLinkProps>) => {
   const pathname = usePathname()
   const { id, apptId } = useParams<{ id: string; apptId?: string }>()
-
+  let fullHref = href
   const isVisitView = Boolean(apptId || appointmentId)
+  if (isVisitView) {
+    fullHref = `/p-chart/${id}/${appointmentId}${href}`
+  } else {
+    fullHref = `/chart/${id}${href}`
+  }
 
-  href = href
-    ? `/chart/${id}${isVisitView ? `/appointment/${apptId}${href}` : href}`
-    : `/chart/${id}`
-
-  const isActive = pathname === href
+  const isActive = pathname === fullHref
 
   return (
     <NextLink
       href={
         appointmentId
-          ? `${href}?id=${appointmentId}&visitType=${visitType}&visitSequence=${visitSequence}`
-          : href
+          ? `${fullHref}?id=${appointmentId}&visitType=${visitType}&visitSequence=${visitSequence}`
+          : fullHref
       }
       className={cn(
         'px-2 py-1 text-[11.5px] first:rounded-t-1 hover:bg-accent-2',

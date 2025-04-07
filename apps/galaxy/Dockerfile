@@ -67,5 +67,4 @@ COPY --from=builder --chown=nextjs:nodejs /app/apps/galaxy/public ./apps/galaxy/
 
 EXPOSE 3004
 ENV PORT 3004
-
 CMD ["node", "apps/galaxy/server.js"]

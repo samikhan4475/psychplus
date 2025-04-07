@@ -13,5 +13,15 @@ type WebSocketEvents = {
   [WebSocketEventType.ScrollMessage]: { sv?: string }
   [WebSocketEventType.ScrollAlert]: { sv?: string }
 }
+type GenericPayload<T = Record<string, unknown>> = T | undefined
 
-export { WebSocketEventType, type WebSocketEvents }
+type GenerictEvents = {
+  [eventType: string]: GenericPayload
+}
+
+export {
+  WebSocketEventType,
+  type WebSocketEvents,
+  type GenerictEvents,
+  type GenericPayload,
+}

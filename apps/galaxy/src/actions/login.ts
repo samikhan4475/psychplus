@@ -80,7 +80,7 @@ const loginAction = async ({
       firstName: userResponse.data.legalName.firstName,
       lastName: userResponse.data.legalName.lastName,
       honors: userResponse.data.legalName.honors,
-      email: userResponse.data.contactInfo.email,
+      email: request?.username,
     },
     accessToken: loginResponse.data.accessToken,
     refreshToken: loginResponse.data.refreshToken,

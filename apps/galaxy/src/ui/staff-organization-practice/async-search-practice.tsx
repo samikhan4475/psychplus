@@ -105,7 +105,7 @@ const AsyncSearchPracticeSelect = ({
         <MagnifyingGlassIcon
           className={cn(
             'text-pp-gray-1 absolute left-1 top-1/2 -translate-y-1/2',
-            !!!organizationId ? 'bg-gray-3 text-gray-11' : 'bg-[white]',
+            !organizationId ? 'bg-gray-3 text-gray-11' : 'bg-[white]',
           )}
           height="16"
           width="16"
@@ -114,7 +114,7 @@ const AsyncSearchPracticeSelect = ({
           className="border-pp-gray-2 h-6 w-[300px] border border-solid bg-[white] pl-5 !outline-none [box-shadow:none] disabled:bg-gray-3 disabled:text-gray-11"
           placeholder="Search & Add Practice"
           onChange={onChange}
-          disabled={!!!organizationId}
+          disabled={!organizationId}
           onClick={() => setShowOptions(true)}
         />
       </Flex>
