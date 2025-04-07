@@ -17,6 +17,7 @@ const InsuranceSelect = () => {
         placeholder="Search"
         valueKey="value"
         className="h-5 w-[210px]"
+        truncateText={25}
       />
     </FormFieldContainer>
   )

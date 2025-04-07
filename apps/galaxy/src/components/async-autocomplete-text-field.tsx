@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons'
 import {
   Box,
@@ -10,6 +10,7 @@ import {
   Separator,
   Text,
   TextField,
+  Tooltip,
 } from '@radix-ui/themes'
 import { Controller, useFormContext } from 'react-hook-form'
 import toast from 'react-hot-toast'
@@ -17,6 +18,7 @@ import { useDebouncedCallback } from 'use-debounce'
 import { type ActionResult } from '@/api'
 import { SelectOptionType } from '@/types'
 import { cn, truncateString } from '@/utils'
+import { LoadingPlaceholder } from './loading-placeholder'
 
 interface AsyncAutoCompleteTextFieldProps {
   placeholder?: string
@@ -42,10 +44,14 @@ const AsyncAutoCompleteTextField = ({
   const [results, setResults] = useState<SelectOptionType[]>([])
   const [loading, setLoading] = useState(false)
   const [selectedLabel, setSelectedLabel] = useState(form.getValues(field))
+  const [focusedIndex, setFocusedIndex] = useState(-1)
+
+  const listRef = useRef<HTMLDivElement>(null)
 
   const handleSearchService = useDebouncedCallback(async (value: string) => {
     if (value.length < 2) return
     setLoading(true)
+    setResults([])
     const response = await fetchDataAction(value)
     if (response.state === 'success') {
       setResults(response.data || [])
@@ -54,6 +60,7 @@ const AsyncAutoCompleteTextField = ({
       setResults([])
     }
     setLoading(false)
+    setFocusedIndex(-1)
   }, 300)
 
   const onOpenChange = (open: boolean) => {
@@ -61,6 +68,43 @@ const AsyncAutoCompleteTextField = ({
       setOpen(open)
     }
   }
+
+  const handleKeyDown = (event: React.KeyboardEvent) => {
+    if (!open) return
+
+    switch (event.key) {
+      case 'ArrowDown':
+        setFocusedIndex((prev) => (prev < results.length - 1 ? prev + 1 : prev))
+        event.preventDefault()
+        break
+
+      case 'ArrowUp':
+        setFocusedIndex((prev) => (prev > 0 ? prev - 1 : prev))
+        event.preventDefault()
+        break
+
+      case 'Enter':
+        if (focusedIndex !== -1) {
+          handleSelect(results[focusedIndex])
+        }
+        event.preventDefault()
+        break
+
+      case 'Escape':
+        setOpen(false)
+        event.preventDefault()
+        break
+
+      default:
+        break
+    }
+  }
+
+  useEffect(() => {
+    if (!listRef.current || focusedIndex === -1) return
+    const focusedItem = listRef.current.children[focusedIndex] as HTMLElement
+    focusedItem?.scrollIntoView({ block: 'nearest' })
+  }, [focusedIndex])
 
   const renderTrigger = () => (
     <Box
@@ -72,9 +116,15 @@ const AsyncAutoCompleteTextField = ({
       )}
     >
       {form.watch(field) ? (
-        <Text className="text-gray-200 px-2 text-1">
-          {truncateText ? truncateString(selectedLabel, 10) : selectedLabel}
-        </Text>
+        <Tooltip
+          content={<Text className="select-text"> {selectedLabel}</Text>}
+        >
+          <Text className="text-gray-200 px-2 text-1">
+            {truncateText
+              ? truncateString(selectedLabel, truncateText)
+              : selectedLabel}
+          </Text>
+        </Tooltip>
       ) : (
         <Text className="px-2 text-1 text-gray-9">{placeholder}</Text>
       )}
@@ -82,24 +132,26 @@ const AsyncAutoCompleteTextField = ({
       <MagnifyingGlassIcon className="mr-2" height="16" width="16" />
     </Box>
   )
-
-  const renderItem = (item: SelectOptionType) => (
+  const renderItem = (item: SelectOptionType, index: number) => (
     <Box
       key={item.value}
-      className="hover:bg-pp-black-1 rounded hover:text-white cursor-pointer px-2 py-1"
+      className={cn(
+        'rounded cursor-pointer px-2 py-1',
+        focusedIndex === index
+          ? 'bg-pp-black-1 text-white'
+          : 'hover:bg-pp-black-1 hover:text-white',
+      )}
       onClick={() => handleSelect(item)}
     >
       <Text size="2">{item.label}</Text>
     </Box>
   )
-
   const handleSelect = (item: SelectOptionType) => {
     const value = valueKey === 'value' ? item.value : item.label
     form.setValue(field, value)
     setSelectedLabel(item.label)
     setOpen(false)
   }
-
   return (
     <Controller
       name={field}
@@ -109,7 +161,10 @@ const AsyncAutoCompleteTextField = ({
           <Popover.Trigger disabled={disabled}>
             {renderTrigger()}
           </Popover.Trigger>
-          <Popover.Content className="shadow-lg rounded-lg bg-white w-full max-w-xs border-0 p-0">
+          <Popover.Content
+            className="shadow-lg rounded-lg bg-white w-full max-w-xs border-0 p-0"
+            onKeyDown={handleKeyDown}
+          >
             <Flex className="border-b p-2">
               <TextField.Root
                 size="1"
@@ -126,14 +181,11 @@ const AsyncAutoCompleteTextField = ({
             </Flex>
             <Separator color="gray" size="4" />
             {loading && (
-              <Text size="2" color="gray">
-                Loading...
-              </Text>
+              <LoadingPlaceholder className="bg-white min-h-[10vh]" />
             )}
-
             {results.length > 0 && (
               <ScrollArea className="max-h-[250px]">
-                {results.map(renderItem)}
+                <Box ref={listRef}>{results.map(renderItem)}</Box>
               </ScrollArea>
             )}
           </Popover.Content>
