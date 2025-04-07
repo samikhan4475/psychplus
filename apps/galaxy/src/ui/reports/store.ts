@@ -1,3 +1,4 @@
+import toast from 'react-hot-toast'
 import { create } from 'zustand'
 import {
   getInsurancePayersOptionsAction,
@@ -19,11 +20,11 @@ import {
   StaffDataOptions,
   Template,
 } from './types'
-import toast from 'react-hot-toast'
 
 interface Store {
   reports: Code[]
   loading: boolean
+  fetchTemplateLoading: boolean
   generateReportLoading: boolean
   error: string | null
   templates: Template[]
@@ -41,6 +42,7 @@ interface Store {
   pageCache: Record<number, string>
   payload: GeneratedReportParams
   fetchReportsAndTemplates: () => void
+  fetchTemplates: () => void
   setSelectedReport: (code: Code) => void
   setSelectedTemplate: (template: Template | null) => void
   setGeneratedReport: (report: string | null) => void
@@ -62,6 +64,7 @@ const useStore = create<Store>((set, get) => ({
   templates: [],
   templateFilters: null,
   loading: false,
+  fetchTemplateLoading: false,
   generateReportLoading: false,
   selectedReport: null,
   selectedTemplate: null,
@@ -72,21 +75,17 @@ const useStore = create<Store>((set, get) => ({
   patientData: null,
   cosignerData: null,
   payload: {
-    templateId: "",
-    reportType: "",
-    data: []
+    templateId: '',
+    reportType: '',
+    data: [],
   },
   page: 1,
   pageCache: {},
   totalRecords: 0,
-  search: async (
-    payload: GeneratedReportParams,
-    page = 1,
-    reset = false,
-  ) => {
+  search: async (payload: GeneratedReportParams, page = 1, reset = false) => {
     set({
       error: undefined,
-      generateReportLoading:true,
+      generateReportLoading: true,
       payload: payload,
     })
     const result = await getRunReportAction({
@@ -95,12 +94,10 @@ const useStore = create<Store>((set, get) => ({
     })
 
     if (result.state === 'error') {
-      toast.error(
-        result.error ?? 'Failed to generate report:'
-      );
+      toast.error(result.error ?? 'Failed to generate report:')
       return set({
         error: result.error,
-        generateReportLoading: false
+        generateReportLoading: false,
       })
     }
     set({
@@ -171,6 +168,22 @@ const useStore = create<Store>((set, get) => ({
       set({
         error: 'Failed to fetch data',
         loading: false,
+      })
+    }
+  },
+  fetchTemplates: async () => {
+    set({ fetchTemplateLoading: true })
+
+    const templatesResult = await getTemplatesAction()
+    if (templatesResult.state === 'success') {
+      set({
+        templates: templatesResult.data || [],
+        fetchTemplateLoading: false,
+      })
+    } else {
+      toast.error(templatesResult.error ?? 'Failed to fetch data')
+      set({
+        fetchTemplateLoading: false,
       })
     }
   },

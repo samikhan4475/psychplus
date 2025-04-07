@@ -1,7 +1,7 @@
 'use client'
 
-import { Button, Text } from '@radix-ui/themes'
 import { useState } from 'react'
+import { Button, Text } from '@radix-ui/themes'
 import { ScheduleReportDialog } from './schedule-report-dialog'
 
 const ScheduleReportButton = () => {
@@ -15,9 +15,11 @@ const ScheduleReportButton = () => {
         color="gray"
         type="button"
         onClick={onOpen}
-        className="text-black 'w-fit h-[24px] py-1 px-2 flex items-center justify-center"
+        className="text-black 'w-fit flex h-[24px] items-center justify-center px-2 py-1"
       >
-        <Text className="text-[12px] font-regular text-pp-black-1">Schedule Report</Text>
+        <Text className="text-pp-black-1 text-[12px] font-regular">
+          Schedule Report
+        </Text>
       </Button>
       <ScheduleReportDialog open={open} onClose={onClose} />
     </>

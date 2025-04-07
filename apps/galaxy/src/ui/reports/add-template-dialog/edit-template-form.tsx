@@ -31,7 +31,7 @@ const EditTemplateForm = ({ defaultValues, onClose }: EditTemplateFormProps) => 
     mode: 'onChange',
   });
 
-  const fetchReportsAndTemplates = useStore((state) => state.fetchReportsAndTemplates);
+  const fetchTemplates = useStore((state) => state.fetchTemplates);
   const setSelectedTemplate = useStore((state) => state.setSelectedTemplate);
 
   const onSubmit: SubmitHandler<EditTemplateSchemaType> = async (data) => {
@@ -52,7 +52,7 @@ const EditTemplateForm = ({ defaultValues, onClose }: EditTemplateFormProps) => 
     }
 
     if (editTemplateResponse.state === "success") {
-      fetchReportsAndTemplates();
+      fetchTemplates();
       setSelectedTemplate(null);
       if (onClose) onClose();
     } else {

@@ -3,7 +3,6 @@
 import { Flex, Text } from '@radix-ui/themes'
 import { EditTemplateButton } from './edit-template-button'
 import { ReportViewButton } from './report-view-button'
-import { ScheduleViewButton } from './schedule-view-button'
 import { useStore } from './store'
 import { DynamicTemplateFilters } from './template-filters-form'
 
@@ -21,9 +20,7 @@ const TemplateTitleHeader = () => {
           <Text className="px-2" weight="medium">
             {selectedTemplate?.displayName || 'No template selected'}
           </Text>
-          <ReportViewButton isActive />{' '}
-          {/* Temporarily set to active for testing purposes. Will be dynamically controlled in future updates. */}
-          <ScheduleViewButton />
+          <ReportViewButton isActive />
         </Flex>
         <EditTemplateButton />
       </Flex>

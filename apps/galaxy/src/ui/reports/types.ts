@@ -1,14 +1,13 @@
-import { Code, Metadata, MetadataCodeset } from "@/types"
-
+import { Code, Metadata, MetadataCodeset } from '@/types'
 
 export interface TemplateParameter {
-  id?: string;
-  parameterCode: string;
-  displayName: string;
-  resourceStatus: string;
-  reportTemplateId?: string;
-  displayOrder: number;
-  runValue?: string;
+  id?: string
+  parameterCode: string
+  displayName: string
+  resourceStatus: string
+  reportTemplateId?: string
+  displayOrder: number
+  runValue?: string
 }
 
 interface Template {
@@ -17,7 +16,7 @@ interface Template {
   displayName: string
   reportCategoryCode: string
   isAdhocAllowed?: boolean
-  parameters?: TemplateParameter[];
+  parameters?: TemplateParameter[]
   permittedRoles?: string[]
 }
 
@@ -42,42 +41,42 @@ interface Parameter {
 }
 
 interface ReportFilterParameters {
-  id: string;
-  runValue: string;
+  id: string
+  runValue: string
 }
 interface StaffDataOptions {
-  value: string;
-  label: string;
+  value: string
+  label: string
 }
 interface ScheduleJob {
-  id?: string,
-  cronScheduleDefinition: string,
-  runHistoryExpireDays: number,
-  shortName?: Date | string | null,
+  id?: string
+  cronScheduleDefinition: string
+  runHistoryExpireDays: number
+  shortName?: Date | string | null
   displayName?: string
 }
 interface SchedulingReport {
-  templateId?: string;
-  beginOn: string | null;
-  terminateOn?: string| null;
+  templateId?: string
+  beginOn: string | null
+  terminateOn?: string | null
   parameters: {
-    templateParameterId: string;
-    reportTemplateId: string | undefined;
-    scheduleParameterValue: string;
-  }[];
+    templateParameterId: string
+    reportTemplateId: string | undefined
+    scheduleParameterValue: string
+  }[]
   distributionGroup: {
-    distributionGroupId: string;
-    reportScheduleId?: string;
-  }[];
+    distributionGroupId: string
+    reportScheduleId?: string
+  }[]
   jobId?: string
 }
 
 interface UserGroup {
-  id: string;
-  metadata: Metadata;
-  recordStatus: string;
-  shortName: string;
-  displayName: string;
+  id: string
+  metadata: Metadata
+  recordStatus: string
+  shortName: string
+  displayName: string
 }
 interface GetReportListResponse {
   report: string
@@ -86,21 +85,21 @@ interface GetReportListResponse {
 interface GeneratedReportParams {
   templateId: string
   reportType: string
-  data?: ReportFilterParameters[] 
+  data?: ReportFilterParameters[]
 }
 
 export enum CODE_PARAM_ATTRIBUTES {
   DATA_TYPE = 'DataType',
   TEXTBOX = 'TextBox',
   DATE = 'Date',
-  SELECTION = 'Selection'
+  SELECTION = 'Selection',
 }
 
 export enum REPORT_TYPE {
   HTML = 'HTML',
   CSV = 'CSV',
   PDF = 'PDF',
-  EXCEL = 'EXCEL'
+  EXCEL = 'EXCEL',
 }
 export enum STATUS {
   ACTIVE = 'Active',
@@ -111,18 +110,27 @@ export enum INTERVAL {
   DAY = 'day',
   WEEK = 'week',
   MONTH = 'month',
-  YEAR = 'year'
+  YEAR = 'year',
 }
 export enum REPEAT_INTERVAL {
   NOREPEAT = 'notrepeat',
   ONE = '1',
   TWO = '2',
   THREE = '3',
-  SIX = '6'
+  SIX = '6',
 }
 export enum STAFF_SELECTION {
   STAFF_SELECTION_SPECIALIST_TYPE = 'StaffSelectionSpecialistType',
   SPECIALIST_TYPE = 'SpecialistType',
+}
+
+export enum REPORT_PARAMETER_CODE {
+  STAFF_SELECTION_LIST = 'StaffSelectionList',
+  SPECIALLIST_TYPE_LIST = 'SpecialistTypeList',
+  STAFF_LIST = 'StaffList',
+  INSURANCE_LIST = 'InsuranceList',
+  PATIENT_LIST = 'PatientList',
+  COSIGNER_LIST = 'CosignerList',
 }
 export type {
   Template,
@@ -135,5 +143,5 @@ export type {
   SchedulingReport,
   UserGroup,
   GeneratedReportParams,
-  GetReportListResponse
+  GetReportListResponse,
 }

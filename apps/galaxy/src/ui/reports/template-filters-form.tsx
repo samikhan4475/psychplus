@@ -14,9 +14,12 @@ import { ScheduleReportButton } from './schedule-report-button'
 import { useStore } from './store'
 import { TemplateFilterDatePicker } from './template-filter-datepicker'
 import { TemplateFilterInput } from './template-filter-input'
+import { TemplatePatientSelect } from './template-patients-select'
 import { TemplateSelect } from './template-select'
+import { TemplateStaffSelect } from './template-staff-select'
 import {
   CODE_PARAM_ATTRIBUTES,
+  REPORT_PARAMETER_CODE,
   REPORT_TYPE,
   STAFF_SELECTION,
   TemplateParameter,
@@ -40,11 +43,9 @@ const DynamicTemplateFilters = () => {
   const {
     selectedTemplate,
     templateFilters,
-    staffData,
     generatedReport,
     setFiltersData,
     insuranceData,
-    patientData,
     cosignerData,
     search,
   } = useStore()
@@ -115,7 +116,7 @@ const DynamicTemplateFilters = () => {
 
     if (
       reportParameterCode === STAFF_SELECTION.STAFF_SELECTION_SPECIALIST_TYPE ||
-      reportParameterCode === 'SpecialistTypeList'
+      reportParameterCode === REPORT_PARAMETER_CODE.SPECIALLIST_TYPE_LIST
     ) {
       matchingCodeset = codesetIndex[STAFF_SELECTION.SPECIALIST_TYPE]
     } else {
@@ -124,24 +125,24 @@ const DynamicTemplateFilters = () => {
 
     if (
       !matchingCodeset?.codes &&
-      reportParameterCode !== 'StaffSelectionList' &&
-      reportParameterCode !== 'StaffList' &&
-      reportParameterCode !== 'InsuranceList' &&
-      reportParameterCode !== 'PatientList' &&
-      reportParameterCode !== 'CosignerList'
+      reportParameterCode !== REPORT_PARAMETER_CODE.STAFF_SELECTION_LIST &&
+      reportParameterCode !== REPORT_PARAMETER_CODE.STAFF_LIST &&
+      reportParameterCode !== REPORT_PARAMETER_CODE.INSURANCE_LIST &&
+      reportParameterCode !== REPORT_PARAMETER_CODE.PATIENT_LIST &&
+      reportParameterCode !== REPORT_PARAMETER_CODE.COSIGNER_LIST
     ) {
       return []
     }
 
     switch (reportParameterCode) {
-      case 'StaffSelectionList':
-      case 'StaffList':
-        return staffData
-      case 'InsuranceList':
+      case REPORT_PARAMETER_CODE.STAFF_SELECTION_LIST:
+      case REPORT_PARAMETER_CODE.STAFF_LIST:
+        return []
+      case REPORT_PARAMETER_CODE.INSURANCE_LIST:
         return insuranceData
-      case 'PatientList':
-        return patientData
-      case 'CosignerList':
+      case REPORT_PARAMETER_CODE.PATIENT_LIST:
+        return []
+      case REPORT_PARAMETER_CODE.COSIGNER_LIST:
         return cosignerData
       default:
         return matchingCodeset.codes.map(
@@ -204,16 +205,34 @@ const DynamicTemplateFilters = () => {
                   />
                 )}
 
-                {isSelect && (
-                  <TemplateSelect
+                {isSelect && item.parameterCode === 'StaffList' && (
+                  <TemplateStaffSelect
                     title={item.displayName}
+                    name={`reportTemplateParameters.${i}.runValue`}
                     isMultiple={isMultiple}
-                    options={computeOptions(codesetIndex, item.parameterCode)}
-                    {...register(`reportTemplateParameters.${i}.runValue`, {
-                      required: 'This field is required',
-                    })}
                   />
                 )}
+
+                {isSelect && item.parameterCode === 'PatientList' && (
+                  <TemplatePatientSelect
+                    title={item.displayName}
+                    name={`reportTemplateParameters.${i}.runValue`}
+                    isMultiple={isMultiple}
+                  />
+                )}
+
+                {isSelect &&
+                  item.parameterCode !== 'StaffList' &&
+                  item.parameterCode !== 'PatientList' && (
+                    <TemplateSelect
+                      title={item.displayName}
+                      isMultiple={isMultiple}
+                      options={computeOptions(codesetIndex, item.parameterCode)}
+                      {...register(`reportTemplateParameters.${i}.runValue`, {
+                        required: 'This field is required',
+                      })}
+                    />
+                  )}
 
                 {!isString && !isDate && !isSelect && (
                   <TemplateFilterInput

@@ -30,7 +30,7 @@ const AddTemplateForm = ({ onClose }: AddTemplateFormProps) => {
     mode: 'onChange',
   });
 
-  const fetchReportsAndTemplates = useStore((state) => state.fetchReportsAndTemplates);
+  const fetchTemplates = useStore((state) => state.fetchTemplates);
   const setSelectedTemplate = useStore((state) => state.setSelectedTemplate);
 
   const onSubmit: SubmitHandler<AddTemplateSchemaType> = async (data) => {
@@ -51,7 +51,7 @@ const AddTemplateForm = ({ onClose }: AddTemplateFormProps) => {
       }
 
       toast.success('Template and report uploaded successfully!');
-      fetchReportsAndTemplates();
+      fetchTemplates();
       setSelectedTemplate(null);
       if (onClose) onClose();
     } else {
