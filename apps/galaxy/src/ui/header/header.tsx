@@ -65,7 +65,7 @@ const Header = async () => {
       >
         <NavigationLinks />
         <InboxLink
-          href="/inbox?tab=pending-notes"
+          href="/inbox"
           label="Inbox"
           inboxCountTotal={count}
         />

@@ -189,7 +189,6 @@ const getInboxNavLinks = ({
   return [
     {
       label: 'Messages',
-      conditions: [isFeatureFlagEnabled],
       links: [
         {
           label: 'Inbox',
