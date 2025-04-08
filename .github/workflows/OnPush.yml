@@ -18,5 +18,5 @@ jobs:
     needs: [build-configuration]
     steps:
       - run: echo "PUSH- github=${{ needs.which-projects.outputs.github }} helm=${{ needs.which-projects.outputs.helm }} k8s=${{ needs.which-projects.outputs.k8s }}"
-      - run: echo "platform=${{ needs.which-projects.outputs.platform }} clinical=${{ needs.which-projects.outputs.clinical }} patient=${{ needs.which-projects.outputs.patient }} revcycle=${{ needs.which-projects.outputs.revcycle }}"
+      - run: echo "patient=${{ needs.which-projects.outputs.patient }} galaxy=${{ needs.which-projects.outputs.galaxy }}"
       - run: echo "env_namespace=${{ needs.build-configuration.outputs.env_namespace }}"

@@ -1,1 +1,0 @@
-export * from './treatment-alert-dialog-widget.server'

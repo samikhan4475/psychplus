@@ -1,1 +1,0 @@
-export const FORM_FIELD_CLASSES = 'h-7 text-[12px]'

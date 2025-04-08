@@ -1,35 +1,13 @@
 version: '3'
 
 services:
-  platform:
-    container_name: platform
+  galaxy:
+    container_name: galaxy
     build:
       context: .
-      dockerfile: ./apps/platform/Dockerfile
-      args:
-        - DISABLE_APP_PATH=true
+      dockerfile: ./apps/galaxy/Dockerfile
     environment:
-      - APP_CODE=p+platform-ui
-      - APP_PATH=platform
-      - APP_VERSION=1.0.0
-      - APP_ENV=development
-      - PATIENT_URL=http://localhost:8002
-      - CLINICAL_URL=http://localhost:8001
-      - REVCYCLE_URL=http://localhost:8003
-      - PLATFORM_URL=http://localhost:8000
-      - API_URL=https://api-pr-2000.ode.psychplus.dev
-      - LOGIN_ENDPOINT=https://auth-pr-2000.ode.psychplus.dev/login
-    ports:
-      - 8000:3099
-    networks:
-      - psychplus
-  clinical:
-    container_name: clinical
-    build:
-      context: .
-      dockerfile: ./apps/clinical/Dockerfile
-    environment:
-      - APP_CODE=p+clinical-ui
+      - APP_CODE=p+galaxy-ui
       - APP_PATH=galaxy
       - APP_VERSION=1.0.0
       - APP_ENV=development
@@ -43,6 +21,7 @@ services:
       - 8001:3001
     networks:
       - psychplus
+
   patient:
     container_name: patient
     build:
@@ -63,28 +42,6 @@ services:
       - LOGIN_ENDPOINT=https://auth-pr-2000.ode.psychplus.dev/login
     ports:
       - 8002:3000
-    networks:
-      - psychplus
-  revcycle:
-    container_name: revcycle
-    build:
-      context: .
-      dockerfile: ./apps/revcycle/Dockerfile
-      args:
-        - DISABLE_APP_PATH=true
-    environment:
-      - APP_CODE=p+revcycle-ui
-      - APP_PATH=platform
-      - APP_VERSION=1.0.0
-      - APP_ENV=development
-      - PATIENT_URL=http://localhost:8002
-      - CLINICAL_URL=http://localhost:8001
-      - REVCYCLE_URL=http://localhost:8003
-      - PLATFORM_URL=http://localhost:8000
-      - API_URL=https://api-pr-2000.ode.psychplus.dev
-      - LOGIN_ENDPOINT=https://auth-pr-2000.ode.psychplus.dev/login
-    ports:
-      - 8003:3002
     networks:
       - psychplus
 

@@ -9,25 +9,25 @@ on:
           required: true
 
       outputs:
-        build_configuration: 
+        build_configuration:
           value: ${{ jobs.build_variables.outputs.build_configuration }}
-        build_version_prefix: 
+        build_version_prefix:
           value: ${{ jobs.build_variables.outputs.build_version_prefix }}
-        build_version: 
+        build_version:
           value: ${{ jobs.build_variables.outputs.build_version }}
-        build_assembly_file_version: 
+        build_assembly_file_version:
           value: ${{ jobs.build_variables.outputs.build_assembly_file_version }}
-        build_full_version: 
+        build_full_version:
           value: ${{ jobs.build_variables.outputs.build_full_version }}
-        env_namespace: 
+        env_namespace:
           value: ${{ jobs.build_variables.outputs.env_namespace }}
-        image_tag: 
+        image_tag:
           value: ${{ jobs.build_variables.outputs.image_tag }}
-        deployment_url_domain: 
+        deployment_url_domain:
           value: ${{ jobs.build_variables.outputs.deployment_url_domain }}
-        deployment_url_subdomain: 
+        deployment_url_subdomain:
           value: ${{ jobs.build_variables.outputs.deployment_url_subdomain }}
-        
+
 jobs:
   build_variables:
     name: Set Build variables
@@ -52,16 +52,16 @@ jobs:
             $build_configuration = "Debug"
             echo "build_configuration=$build_configuration" >> $env:GITHUB_OUTPUT
             echo "output build_configuration: $build_configuration"
-            
+
             $build_configuration = 'Debug'
             $build_major_version = '0'
             $build_minor_version = '0'
             $build_patch_version = '1'
             $build_prerelease_label = 'ode'
-            $build_prerelease_counter = $env:GITHUB_RUN_NUMBER 
+            $build_prerelease_counter = $env:GITHUB_RUN_NUMBER
             $build_ci_counter = $env:GITHUB_RUN_NUMBER
             $build_unique_id = Get-Date -Format yyyyMMddHHmmssfffffff
-            
+
             $build_version_prefix = "$build_major_version.$build_minor_version.$build_patch_version"
             echo "build_version_prefix=$build_version_prefix" >> $env:GITHUB_OUTPUT
             echo "output build_version_prefix: $build_version_prefix"
@@ -92,5 +92,3 @@ jobs:
             $image_tag = "ui-ode-pr-${{ inputs.pull_request_id }}"
             echo "image_tag=$image_tag" >> $env:GITHUB_OUTPUT
             echo "output image_tag: $image_tag"
-            
-

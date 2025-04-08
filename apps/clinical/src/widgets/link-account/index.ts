@@ -1,1 +1,0 @@
-export * from './link-account-widget.client'

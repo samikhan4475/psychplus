@@ -37,27 +37,6 @@ jobs:
           echo "build_version=$build_version" >> "$GITHUB_OUTPUT"
           echo "build_full_version=$build_full_version" >> "$GITHUB_OUTPUT"
 
-  build_push_platform:
-    needs: [build_variables]
-    uses: ./.github/workflows/subtaskBuildPushImage.yml
-    with:
-      environment: staging
-      project: platform
-      image_tag:  ${{ needs.build_variables.outputs.image_tag }}
-      release_tag: ${{ needs.build_variables.outputs.release_tag }}
-    secrets: inherit
-
-  build_push_clinical:
-    needs: [build_variables]
-    uses: ./.github/workflows/subtaskBuildPushImage.yml
-    with:
-      environment: staging
-      project: clinical
-      image_tag:  ${{ needs.build_variables.outputs.image_tag }}
-      release_tag: ${{ needs.build_variables.outputs.release_tag }}
-    secrets: inherit
-
-
   build_push_patient:
     needs: [build_variables]
     uses: ./.github/workflows/subtaskBuildPushImage.yml
@@ -76,42 +55,6 @@ jobs:
       project: galaxy
       image_tag:  ${{ needs.build_variables.outputs.image_tag }}
       release_tag: ${{ needs.build_variables.outputs.release_tag }}
-    secrets: inherit
-
-  build_push_revcycle:
-    needs: [build_variables]
-    uses: ./.github/workflows/subtaskBuildPushImage.yml
-    with:
-      environment: staging
-      project: revcycle
-      image_tag:  ${{ needs.build_variables.outputs.image_tag }}
-      release_tag: ${{ needs.build_variables.outputs.release_tag }}
-    secrets: inherit
-
-  deploy_platform:
-    needs: [build_variables, build_push_platform]
-    uses: ./.github/workflows/subtaskDeployHelmChart.yml
-    with:
-      environment: staging
-      project: platform
-      helm_chart_version: ${{ needs.build_variables.outputs.build_version }}
-      helm_app_version: ${{ needs.build_variables.outputs.build_full_version }}
-      image_tag: ${{ needs.build_variables.outputs.image_tag }}
-      env_namespace: env-staging
-      ingress_url: ui.staging.psychplus.dev
-    secrets: inherit
-
-  deploy_clinical:
-    needs: [build_variables, build_push_clinical]
-    uses: ./.github/workflows/subtaskDeployHelmChart.yml
-    with:
-      environment: staging
-      project: clinical
-      helm_chart_version: ${{ needs.build_variables.outputs.build_version }}
-      helm_app_version: ${{ needs.build_variables.outputs.build_full_version }}
-      image_tag: ${{ needs.build_variables.outputs.image_tag }}
-      env_namespace: env-staging
-      ingress_url: ui.staging.psychplus.dev
     secrets: inherit
 
   deploy_patient:
@@ -133,19 +76,6 @@ jobs:
     with:
       environment: staging
       project: galaxy
-      helm_chart_version: ${{ needs.build_variables.outputs.build_version }}
-      helm_app_version: ${{ needs.build_variables.outputs.build_full_version }}
-      image_tag: ${{ needs.build_variables.outputs.image_tag }}
-      env_namespace: env-staging
-      ingress_url: ui.staging.psychplus.dev
-    secrets: inherit
-
-  deploy_revcycle:
-    needs: [build_variables, build_push_revcycle]
-    uses: ./.github/workflows/subtaskDeployHelmChart.yml
-    with:
-      environment: staging
-      project: revcycle
       helm_chart_version: ${{ needs.build_variables.outputs.build_version }}
       helm_app_version: ${{ needs.build_variables.outputs.build_full_version }}
       image_tag: ${{ needs.build_variables.outputs.image_tag }}

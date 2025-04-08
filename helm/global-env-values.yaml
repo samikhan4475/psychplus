@@ -46,18 +46,6 @@
         name: app-config
         key: reactAppPatientUrl
 
-  - name: REVCYCLE_URL
-    valueFrom:
-      configMapKeyRef:
-        name: app-config
-        key: reactAppRevCycleUrl
-
-  - name: PLATFORM_URL
-    valueFrom:
-      configMapKeyRef:
-        name: app-config
-        key: reactAppPlatformUrl
-
   # CONFIG: AUTH
 
   - name: AUTH_API_URL
