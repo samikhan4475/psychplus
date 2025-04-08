@@ -64,23 +64,23 @@ resources:
 
 behavior:
   scaleDown:
-    stabilizationWindowSeconds: 3600
+    stabilizationWindowSeconds: 7200
     policies:
       - type: Pods
         value: 1
-        periodSeconds: 1800
+        periodSeconds: 3600
   scaleUp:
-    stabilizationWindowSeconds: 120
+    stabilizationWindowSeconds: 60
     policies:
       - type: Pods
-        value: 1
+        value: 2
         periodSeconds: 60
 
 autoscaling:
   enabled: true
   minReplicas: 1
   maxReplicas: 30
-  targetCPUUtilizationPercentage: 80
+  targetCPUUtilizationPercentage: 60
   targetMemoryUtilizationPercentage: 80
 
 startupProbeEnabled: false
