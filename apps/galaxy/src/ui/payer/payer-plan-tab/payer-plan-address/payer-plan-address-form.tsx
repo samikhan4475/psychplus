@@ -20,6 +20,7 @@ import {
   getPayerPlanAddressById,
   updatePayerPlanAddressAction,
 } from '../../actions'
+import { useStore } from '../store'
 import { DefaultAddressCheckbox } from './default-address-checkbox'
 import { StatusCheckbox } from './status-checkbox'
 
@@ -48,6 +49,9 @@ const PayerPlanAddressForm = ({
 }: PayerPlanAddressFormProps) => {
   const [loading, setLoading] = useState(false)
   const [defaultConfirmationOpen, setDefaultConfirmationOpen] = useState(false)
+  const { addressData } = useStore((state) => ({
+    addressData: state.addressData,
+  }))
 
   const form = useForm<SchemaType>({
     resolver: zodResolver(addressSchema),
@@ -58,7 +62,7 @@ const PayerPlanAddressForm = ({
       state: '',
       zip: '',
       status: true,
-      isDefaultLocation: false,
+      isDefaultLocation: addressData.length === 0,
     },
   })
 

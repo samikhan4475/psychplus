@@ -13,7 +13,7 @@ import {
 
 interface Store {
   data?: PayerPlanListResponse
-  addressData?: PayerPlanAddressResponse[]
+  addressData: PayerPlanAddressResponse[]
   addressLoading?: boolean
   loading?: boolean
   error?: string
