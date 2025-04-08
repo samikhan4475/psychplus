@@ -66,11 +66,11 @@ resources:
 
 behavior:
   scaleDown:
-    stabilizationWindowSeconds: 7200
+    stabilizationWindowSeconds: 3600
     policies:
       - type: Pods
         value: 1
-        periodSeconds: 3600
+        periodSeconds: 1800
   scaleUp:
     stabilizationWindowSeconds: 60
     policies:
