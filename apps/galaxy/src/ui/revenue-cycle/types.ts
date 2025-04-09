@@ -35,8 +35,9 @@ enum claimNoteSignedStatuses {
   SIGNED = 'signed',
   NONE = 'none',
   PENDING = 'pending',
-  SIGNED_PENDING = 'signedPending',
+  SIGNED_PENDING = 'signedpending',
   COSIGNED = 'cosigned',
+  ERROR ='error'
 }
 enum ClaimDetailsTab {
   BillingProvider = 'Billing Provider',

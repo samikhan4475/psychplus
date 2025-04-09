@@ -787,7 +787,11 @@ const GET_REFILL_REQUESTS = `${API_URL}/api/pharmacyNotifications/actions/search
 
 const GET_SHARED_POLICY_FILE = (fileName: string) =>
   `${API_URL}/SharedContent/documents/${fileName}.html`
-const GET_PATIENT_DEMOGRAPHICS = (patientId: string, appointmentId?:string) =>
+const SEARCH_PATIENT_APPOINTMENTS = (patientId: string) =>
+  `${API_URL}/api/patients/${patientId}/appointments/actions/search`
+const LINK_CLAIM = (claimId: string, appointmentId: string) =>
+  `${API_URL}/api/claims/${claimId}/appointments/${appointmentId}/actions/link`
+const GET_PATIENT_DEMOGRAPHICS = (patientId: string, appointmentId?: string) =>
   `${API_URL}/api/patients/${patientId}/demographics?appointmentId=${appointmentId}`
 const DELETE_STAFF_VIDEO_ENDPOINT = (staffId: string) =>
   `${API_URL}/api/staff/${staffId}/biovideo`
@@ -796,7 +800,6 @@ const UPDATE_FOLLOW_UP_DENIAL_STATUS = (appointmentId: number) =>
   `${API_URL}/api/appointments/${appointmentId}/actions/followupstatus`
 
 const GET_USERS_SELF_INITIAL_INFORMATION_ENDPOINT = `${API_URL}/api/users/self/initialinformation`
-
 
 export {
   GET_LAB_RESULTS_ENDPOINT,
@@ -1149,6 +1152,8 @@ export {
   GET_SHARED_POLICY_FILE,
   GET_CURRENT_USER_SETTINGS_SEARCH,
   ADD_STAFF_COMMENT_ENDPOINT,
+  SEARCH_PATIENT_APPOINTMENTS,
+  LINK_CLAIM,
   GET_PATIENT_DEMOGRAPHICS,
   GET_REFILL_REQUESTS,
   GET_LAB_ORDER_RESULTS,

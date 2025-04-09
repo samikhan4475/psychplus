@@ -241,6 +241,11 @@ enum FileTypes {
   Txt = 'Txt',
 }
 
+interface PatientAppointments extends Partial<Appointment> {
+  status: string
+  type: string
+  diagnoses: string[]
+}
 export {
   type Appointment,
   type BookVisitPayload,
@@ -248,6 +253,7 @@ export {
   type Diagnosis,
   type PaymentType,
   type CptCode,
+  type PatientAppointments,
   VisitTypes,
   VisitSequenceTypes,
   FileTypes,

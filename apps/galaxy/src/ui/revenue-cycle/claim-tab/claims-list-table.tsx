@@ -38,7 +38,6 @@ const ClaimListTable = () => {
       </Flex>
     )
   }
-
   return (
     <ScrollArea className="h-full p-2">
       <DataTable
