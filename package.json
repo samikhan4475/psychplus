@@ -19,11 +19,5 @@
     "rimraf": "^5.0.5",
     "turbo": "^1.10.16"
   },
-  "browserslist": [
-    "last 1 version",
-    "> 1%",
-    "maintained node versions",
-    "not dead"
-  ],
   "packageManager": "pnpm@8.6.3"
 }
