@@ -56,6 +56,7 @@ interface Store {
   next: () => void
   prev: () => void
   jumpToPage: (page: number) => void
+  resetData: () => void
 }
 
 const useStore = create<Store>((set, get) => ({
@@ -239,6 +240,9 @@ const useStore = create<Store>((set, get) => ({
 
   setFiltersData: (data: any) => {
     set({ filtersData: data })
+  },
+  resetData: () => {
+    set({ generatedReport: null, page: 1, pageCache: {}, totalRecords: 0 })
   },
 }))
 

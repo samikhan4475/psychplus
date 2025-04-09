@@ -1,32 +1,41 @@
-'use client';
+'use client'
 
-import { MedicalReportIcon } from '@/components/icons';
-import { Box, Flex, ScrollArea, Text } from '@radix-ui/themes';
-import { AddTemplateButton } from './add-template-button';
-import { TabItem } from './reports-tabs-item';
-import { useStore } from './store';
-
+import { Box, Flex, ScrollArea, Text } from '@radix-ui/themes'
+import { MedicalReportIcon } from '@/components/icons'
+import { AddTemplateButton } from './add-template-button'
+import { TabItem } from './reports-tabs-item'
+import { useStore } from './store'
 
 const ExpandedSidebar = () => {
-  const { setSelectedTemplate, templates, selectedReport, selectedTemplate, setGeneratedReport } = useStore();
+  const {
+    setSelectedTemplate,
+    templates,
+    selectedReport,
+    selectedTemplate,
+    setGeneratedReport,
+    resetData,
+  } = useStore()
 
   const filteredTemplates = templates.filter(
-    (template) => template.reportCategoryCode === selectedReport?.code
-  );
+    (template) => template.reportCategoryCode === selectedReport?.code,
+  )
 
   const handleTemplateClick = (template: any) => {
-    setSelectedTemplate(template);
-    setGeneratedReport(null);
-  };
+    setSelectedTemplate(template)
+    resetData()
+    setGeneratedReport(null)
+  }
 
   return (
-    <Box className="w-[224px] transition-all duration-300 relative bg-white flex flex-col h-full">
-      <ScrollArea className='h-[80vh]'>
-        <Flex direction="column" className="p-2 gap-1 h-full">
+    <Box className="bg-white relative flex h-full w-[224px] flex-col transition-all duration-300">
+      <ScrollArea className="h-[80vh]">
+        <Flex direction="column" className="h-full gap-1 p-2">
           <Flex align="center" className="my-2" justify="between">
             <Flex align="center">
               <MedicalReportIcon />
-              <Text className="text-pp-black-3 font-medium ml-1">{selectedReport?.displayName}</Text>
+              <Text className="text-pp-black-3 ml-1 font-medium">
+                {selectedReport?.displayName}
+              </Text>
             </Flex>
             <AddTemplateButton />
           </Flex>
@@ -41,8 +50,7 @@ const ExpandedSidebar = () => {
         </Flex>
       </ScrollArea>
     </Box>
-  );
-};
+  )
+}
 
-export { ExpandedSidebar };
-
+export { ExpandedSidebar }

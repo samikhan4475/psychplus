@@ -33,9 +33,10 @@ const TemplateSelect = ({
           options={options}
           loading={isLoading}
           disabled={isLoading}
+          includeAllOption
           className="border-pp-gray-2 h-6  w-full min-w-[120px] text-left"
           onChange={(values) => setValue(name, values)}
-          menuClassName="min-w-[155px] max-w-[450px]"
+          menuClassName=""
         />
       ) : (
         <SelectInput
