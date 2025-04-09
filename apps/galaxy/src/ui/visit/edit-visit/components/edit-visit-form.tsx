@@ -10,7 +10,7 @@ import {
   LoadingPlaceholder,
 } from '@/components'
 import { useHasPermission } from '@/hooks'
-import { Appointment, BookVisitPayload } from '@/types'
+import { Appointment, BookVisitPayload, VisitSequenceTypes } from '@/types'
 import { isDirty } from '@/ui/schedule/utils'
 import { cn, getCalendarDate } from '@/utils'
 import { SAVE_APPOINTMENT } from '../../constants'
@@ -160,12 +160,20 @@ const EditVisitForm = ({
       data,
       selectedVisitType,
     )
+    if (
+      visitDetails.visitSequence === VisitSequenceTypes.Discharge &&
+      form.getValues('visitSequence') === VisitSequenceTypes.Subsequent
+    ) {
+      delete payload.dischargeDate
+    }
     const sanitizedData = sanitizeFormData(payload)
-    const isRescheduled = isServiceTimeDependent && isVisitRescheduled(
-      form.formState.dirtyFields,
-      visitDetails.appointmentDate,
-      visitDetails.locationTimezoneId,
-    )
+    const isRescheduled =
+      isServiceTimeDependent &&
+      isVisitRescheduled(
+        form.formState.dirtyFields,
+        visitDetails.appointmentDate,
+        visitDetails.locationTimezoneId,
+      )
 
     updateVisitAction(sanitizedData).then((res) => {
       setIsSubmitting(false)

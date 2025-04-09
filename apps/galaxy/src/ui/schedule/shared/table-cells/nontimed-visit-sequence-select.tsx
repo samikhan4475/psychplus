@@ -3,7 +3,7 @@ import { Flex } from '@radix-ui/themes'
 import { CodesetSelectCell } from '@/components'
 import { CODESETS } from '@/constants'
 import { useStore as useRootStore } from '@/store'
-import { Appointment } from '@/types'
+import { Appointment, VisitSequenceTypes } from '@/types'
 import { constructQuickNotesUrl, isHospitalCareVisit } from '@/utils'
 import { CHANGE_NON_TIMED_SEQUENCE, StatusCode } from '../../constants'
 import {
@@ -104,6 +104,12 @@ const NonTimedVisitSequenceSelect = ({
       isProceedPermissionProvided: !isOverride,
       visitSequenceType: visitSequence,
     }
+    if (
+      visitSequence === VisitSequenceTypes.Subsequent &&
+      appointment.visitSequence === VisitSequenceTypes.Discharge
+    ) {
+      delete transformedBody.dischargeDate
+    }
     onUpdateVisitConfirm({
       isConfirmed,
       body: transformedBody,
@@ -124,6 +130,12 @@ const NonTimedVisitSequenceSelect = ({
       appointment.visitTypeCode,
       appointment.visitSequence,
     )
+    if (
+      appointment.visitSequence === VisitSequenceTypes.Discharge &&
+      val === VisitSequenceTypes.Subsequent
+    ) {
+      delete transformedBody.dischargeDate
+    }
     updateVisit({
       body: transformedBody,
       onSuccess: () => {
