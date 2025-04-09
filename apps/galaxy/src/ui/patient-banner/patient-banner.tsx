@@ -3,6 +3,7 @@ import { Flex, Text } from '@radix-ui/themes'
 import { CloseIcon, TickIcon } from '@/components/icons'
 import { PatientProfile } from '@/types'
 import { formatUTCDate, getUserFullName } from '@/utils'
+import { ExternalProviderDetail } from '../pcp'
 import { getPatientDemographicsAction } from './actions/get-patient-demographics'
 import { CareTeamInfoSection } from './care-team-info-section'
 import { InsuranceInfoSection } from './insurance-info-section'
@@ -60,6 +61,11 @@ const PatientBanner = async ({
 
   const patientDemographicsData = response.data
 
+  const primaryCareExternalProviderLegalName =
+    patientDemographicsData?.externalProviders?.find(
+      (provider) => provider.relationship === 'PrimaryCare',
+    )?.externalProvider?.legalName
+
   return (
     <Flex
       gap="3"
@@ -89,10 +95,8 @@ const PatientBanner = async ({
         <LabelAndValue
           label="PCP"
           value={
-            patientDemographicsData?.externalProviders?.[0]?.legalName
-              ? getUserFullName(
-                  patientDemographicsData?.externalProviders[0]?.legalName,
-                )
+            primaryCareExternalProviderLegalName
+              ? getUserFullName(primaryCareExternalProviderLegalName)
               : 'N/A'
           }
         />
@@ -140,3 +144,4 @@ const PatientBanner = async ({
 }
 
 export { PatientBanner }
+ 

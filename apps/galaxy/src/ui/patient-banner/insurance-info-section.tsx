@@ -1,5 +1,5 @@
 import { Flex, Text, Tooltip } from '@radix-ui/themes'
-import { Insurance, VerificationStatus } from '@/types'
+import { Insurance, InsurancePolicyPriority, VerificationStatus } from '@/types'
 import { cn } from '@/utils'
 
 interface InsuranceInfoSectionProps {
@@ -7,39 +7,50 @@ interface InsuranceInfoSectionProps {
 }
 
 const InsuranceInfoSection = ({ insurance }: InsuranceInfoSectionProps) => {
-  const primaryPolicy = insurance.find(
-    (policy) => policy.insurancePolicyPriority === 'Primary',
+  const primary = insurance?.find(
+    (i) => i.insurancePolicyPriority === InsurancePolicyPriority.Primary,
   )
-  const secondaryPolicy = insurance.find(
-    (policy) => policy.insurancePolicyPriority === 'Secondary',
+  const secondary = insurance?.find(
+    (i) => i.insurancePolicyPriority === InsurancePolicyPriority.Secondary,
   )
+  const hasInsurance = primary || secondary
 
   return (
-    <Flex gap="1" className="whitespace-nowrap">
+    <Flex gap="1" className="items-center whitespace-nowrap">
       <Text className="text-[11.5px] font-[600]">Insurance</Text>
-      {primaryPolicy && secondaryPolicy ? (
+
+      {hasInsurance ? (
         <>
-          <Text
-            className={cn(
-              `text-[11.5px] text-${getVerificationColor(
-                primaryPolicy.verificationStatus,
-              )}`,
-            )}
-          >
-            {primaryPolicy.policyName}
-          </Text>
-          <Text className={cn('text-pp-gray-1 text-[11.5px]')}>/</Text>
-          <Tooltip content={secondaryPolicy.policyName}>
+          {primary && (
             <Text
               className={cn(
-                `max-w-20 truncate text-[11.5px] text-${getVerificationColor(
-                  secondaryPolicy.verificationStatus,
-                )}`,
+                'text-[11.5px]',
+                `text-${getVerificationColor(primary.verificationStatus)}`,
               )}
             >
-              {secondaryPolicy.policyName}
+              {primary.policyName}
             </Text>
-          </Tooltip>
+          )}
+
+          {secondary && (
+            <>
+              {primary && (
+                <Text className="text-pp-gray-1 text-[11.5px]">/</Text>
+              )}
+              <Tooltip content={secondary.policyName}>
+                <Text
+                  className={cn(
+                    'max-w-20 truncate text-[11.5px]',
+                    `text-${getVerificationColor(
+                      secondary.verificationStatus,
+                    )}`,
+                  )}
+                >
+                  {secondary.policyName}
+                </Text>
+              </Tooltip>
+            </>
+          )}
         </>
       ) : (
         <Text className="text-[11.5px] italic text-gray-9">N/A</Text>

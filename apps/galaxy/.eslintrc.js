@@ -18,6 +18,9 @@ const config = {
     '@typescript-eslint/no-empty-function': 'warn',
     '@next/next/no-html-link-for-pages': 'off',
     'import/no-anonymous-default-export': 'off',
+    '@typescript-eslint/no-unused-expressions': 'off',
+    '@typescript-eslint/no-explicit-any': 'warn',
+    '@typescript-eslint/no-require-imports': 'off',
   },
   settings: {
     react: {

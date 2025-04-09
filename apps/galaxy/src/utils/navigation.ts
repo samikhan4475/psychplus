@@ -17,7 +17,7 @@ const getNavLinks = (
     { label: 'Pharmacy', href: '/pharmacy' },
     {
       label: 'Staff Comments',
-      href: '/staff-comments',
+      href: appointmentId ? '/staffs-comments' : '/staff-comments',
     },
     // { label: 'Rating', href: '/rating' },
     { label: 'Notifications', href: '/notifications' },

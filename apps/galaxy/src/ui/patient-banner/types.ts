@@ -1,6 +1,6 @@
 import { Appointment, StaffResource } from '@/types'
 import { CareTeamMember } from '@/types/care-team'
-import { ExternalProvider } from '../pcp'
+import { ExternalProvider, ExternalProviderDetail } from '../pcp'
 import { Pharmacy } from '../pharmacy/types'
 import { Allergy } from '../quicknotes/actual-note-view/types'
 import { PatientVital } from '../vitals'
@@ -33,7 +33,7 @@ interface PatientDemographicResponse {
   vitals: PatientVital[]
   careTeam: CareTeamMember[]
   allergies: Allergy[]
-  externalProviders: ExternalProvider[]
+  externalProviders: ExternalProviderDetail[]
   pharmacies: Pharmacy[]
   appointment?: Appointment
 }
