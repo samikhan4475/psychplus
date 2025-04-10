@@ -125,9 +125,11 @@ const downloadPDFFile = async (
 const handleUploadReport = async (
   definitionPayloadUrl: File,
   templateId: string,
+  IsNewFileAttached?: boolean,
 ) => {
   const formData = new FormData()
   formData.append('file', definitionPayloadUrl)
+  formData.append('IsNewFileAttached', String(IsNewFileAttached))
   const reportResponse = await addTemplateReportAction({
     templateId,
     data: formData,

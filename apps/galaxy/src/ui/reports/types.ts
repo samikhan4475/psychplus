@@ -64,7 +64,7 @@ interface SchedulingReport {
     reportTemplateId: string | undefined
     scheduleParameterValue: string
   }[]
-  distributionGroup: {
+  distributionGroups: {
     distributionGroupId: string
     reportScheduleId?: string
   }[]

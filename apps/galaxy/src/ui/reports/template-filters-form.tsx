@@ -4,6 +4,7 @@ import { useEffect } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Flex } from '@radix-ui/themes'
 import { SubmitHandler, useForm } from 'react-hook-form'
+import toast from 'react-hot-toast'
 import z from 'zod'
 import { FormContainer } from '@/components'
 import { useStore as useGlobalStore } from '@/store'
@@ -12,8 +13,10 @@ import { ReportExportButtons } from './report-export-buttons'
 import { RunReportButton } from './run-report-button'
 import { ScheduleReportButton } from './schedule-report-button'
 import { useStore } from './store'
+import { TemplateCosignerSelect } from './template-cosigner-select'
 import { TemplateFilterDatePicker } from './template-filter-datepicker'
 import { TemplateFilterInput } from './template-filter-input'
+import { TemplateInsuranceSelect } from './template-insurance-select'
 import { TemplatePatientSelect } from './template-patients-select'
 import { TemplateSelect } from './template-select'
 import { TemplateStaffSelect } from './template-staff-select'
@@ -33,6 +36,7 @@ const schema = z.object({
         .union([z.string(), z.array(z.string())])
         .optional()
         .default(''),
+      parameterCode: z.string(),
     }),
   ),
 })
@@ -45,9 +49,8 @@ const DynamicTemplateFilters = () => {
     templateFilters,
     generatedReport,
     setFiltersData,
-    insuranceData,
-    cosignerData,
     search,
+    resetData,
   } = useStore()
   const codesetIndex = useGlobalStore((state) => state.codesets)
   const reportTemplateFilters: TemplateParameter[] =
@@ -139,11 +142,11 @@ const DynamicTemplateFilters = () => {
       case REPORT_PARAMETER_CODE.STAFF_LIST:
         return []
       case REPORT_PARAMETER_CODE.INSURANCE_LIST:
-        return insuranceData
+        return []
       case REPORT_PARAMETER_CODE.PATIENT_LIST:
         return []
       case REPORT_PARAMETER_CODE.COSIGNER_LIST:
-        return cosignerData
+        return []
       default:
         return matchingCodeset.codes.map(
           (code: { value: string; display: string }) => ({
@@ -155,6 +158,20 @@ const DynamicTemplateFilters = () => {
   }
 
   const onSubmit: SubmitHandler<SchemaType> = async (data) => {
+    const startDateParam = data.reportTemplateParameters.find(
+      (param) => param.parameterCode === 'StartDate',
+    )
+    const endDateParam = data.reportTemplateParameters.find(
+      (param) => param.parameterCode === 'EndDate',
+    )
+
+    if (startDateParam && endDateParam) {
+      if (endDateParam.runValue < startDateParam.runValue) {
+        toast.error('End date cannot be before start date')
+        return
+      }
+    }
+
     const formattedData = data.reportTemplateParameters.map((param) => ({
       id: param.id,
       runValue: Array.isArray(param.runValue)
@@ -169,6 +186,7 @@ const DynamicTemplateFilters = () => {
       data: formattedData,
       reportType: REPORT_TYPE.CSV,
     }
+    resetData()
 
     return search(payload)
   }
@@ -221,9 +239,27 @@ const DynamicTemplateFilters = () => {
                   />
                 )}
 
+                {isSelect && item.parameterCode === 'CosignerList' && (
+                  <TemplateCosignerSelect
+                    title={item.displayName}
+                    name={`reportTemplateParameters.${i}.runValue`}
+                    isMultiple={isMultiple}
+                  />
+                )}
+
+                {isSelect && item.parameterCode === 'InsuranceList' && (
+                  <TemplateInsuranceSelect
+                    title={item.displayName}
+                    name={`reportTemplateParameters.${i}.runValue`}
+                    isMultiple={isMultiple}
+                  />
+                )}
+
                 {isSelect &&
                   item.parameterCode !== 'StaffList' &&
-                  item.parameterCode !== 'PatientList' && (
+                  item.parameterCode !== 'PatientList' &&
+                  item.parameterCode !== 'CosignerList' &&
+                  item.parameterCode !== 'InsuranceList' && (
                     <TemplateSelect
                       title={item.displayName}
                       isMultiple={isMultiple}

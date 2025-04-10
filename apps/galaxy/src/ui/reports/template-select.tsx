@@ -1,5 +1,6 @@
 'use client'
 
+import { useEffect, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 import {
   FormFieldContainer,
@@ -23,7 +24,31 @@ const TemplateSelect = ({
   isMultiple,
   isLoading,
 }: TemplateSelectProps) => {
-  const { register, setValue, watch } = useFormContext()
+  const { register, setValue, watch, getValues } = useFormContext()
+  const [selectedOptions, setSelectedOptions] = useState<string[]>(
+    getValues(name),
+  )
+
+  const handleOnChange = (values: string[]) => {
+    const allValues = options.map((option) => option.value)
+
+    if (
+      values.length === allValues.length &&
+      values.every((v) => allValues.includes(v))
+    ) {
+      setSelectedOptions(values)
+      setValue(name, 'all')
+    } else {
+      setValue(name, values)
+    }
+  }
+
+  useEffect(() => {
+    if (getValues(name) === undefined || getValues(name).length === 0) {
+      setSelectedOptions([])
+    }
+  }, [getValues(name)])
+
   return (
     <FormFieldContainer className="flex-row items-center gap-1">
       <FormFieldLabel className="!text-1">{title}</FormFieldLabel>
@@ -34,9 +59,9 @@ const TemplateSelect = ({
           loading={isLoading}
           disabled={isLoading}
           includeAllOption
+          defaultValues={selectedOptions}
           className="border-pp-gray-2 h-6  w-full min-w-[120px] text-left"
-          onChange={(values) => setValue(name, values)}
-          menuClassName=""
+          onChange={handleOnChange}
         />
       ) : (
         <SelectInput

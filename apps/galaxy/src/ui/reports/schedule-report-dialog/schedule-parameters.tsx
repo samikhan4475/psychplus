@@ -2,6 +2,8 @@ import { Flex } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
 import { useStore as useGlobalStore } from '@/store'
 import { useStore } from '../store'
+import { TemplateCosignerSelect } from '../template-cosigner-select'
+import { TemplateInsuranceSelect } from '../template-insurance-select'
 import { TemplatePatientSelect } from '../template-patients-select'
 import { TemplateSelect } from '../template-select'
 import { TemplateStaffSelect } from '../template-staff-select'
@@ -9,8 +11,7 @@ import { CODE_PARAM_ATTRIBUTES, STAFF_SELECTION } from '../types'
 import { DurationSelection } from './duration-selection'
 
 const ScheduleParameters = () => {
-  const { selectedTemplate, insuranceData, cosignerData, templateFilters } =
-    useStore()
+  const { selectedTemplate, templateFilters } = useStore()
   const codesets = useGlobalStore((state) => state.codesets)
   const codeParametersType = templateFilters?.codes || []
   const form = useFormContext()
@@ -62,11 +63,11 @@ const ScheduleParameters = () => {
       case 'StaffList':
         return []
       case 'InsuranceList':
-        return insuranceData
+        return []
       case 'PatientList':
         return []
       case 'CosignerList':
-        return cosignerData
+        return []
       default:
         return matchingCodeset.codes.map(
           (code: { value: string; display: string }) => ({
@@ -97,9 +98,28 @@ const ScheduleParameters = () => {
                 isMultiple={isMultiple}
               />
             )}
+
+            {isSelect && param.parameterCode === 'CosignerList' && (
+              <TemplateCosignerSelect
+                title={param.displayName}
+                name={`reportTemplateParameters.${i}.runValue`}
+                isMultiple={isMultiple}
+              />
+            )}
+
+            {isSelect && param.parameterCode === 'InsuranceList' && (
+              <TemplateInsuranceSelect
+                title={param.displayName}
+                name={`reportTemplateParameters.${i}.runValue`}
+                isMultiple={isMultiple}
+              />
+            )}
+
             {isSelect &&
               param.parameterCode !== 'StaffList' &&
-              param.parameterCode !== 'PatientList' && (
+              param.parameterCode !== 'PatientList' &&
+              param.parameterCode !== 'CosignerList' &&
+              param.parameterCode !== 'InsuranceList' && (
                 <TemplateSelect
                   title={param.displayName}
                   isMultiple={isMultiple}

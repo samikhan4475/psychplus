@@ -148,7 +148,7 @@ const ScheduleReportForm = ({ onSuccess }: ScheduleReportFormProps) => {
             ? formatDateToISOString(data.terminateOn)
             : null,
           parameters: updatedParameters,
-          distributionGroup: transformedDistributionGroups,
+          distributionGroups: transformedDistributionGroups,
           jobId: runScheduleJobResponse.data.id,
         }
 
