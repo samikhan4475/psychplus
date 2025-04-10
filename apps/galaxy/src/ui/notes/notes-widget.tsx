@@ -110,11 +110,6 @@ const NotesWidget = ({
         const promises = [
           fetchNoteDetail(payload),
           fetchAppointment(selectedRow.appointmentId),
-          fetchAddendumsDetails(
-            selectedRow.patientId,
-            selectedRow?.appointmentId,
-            selectedRow?.id,
-          ),
         ]
         if (selectedRow.notePositionCode !== 'Secondary') {
           promises.push(
@@ -130,6 +125,11 @@ const NotesWidget = ({
         }
 
         await Promise.all(promises)
+        fetchAddendumsDetails(
+          selectedRow.patientId,
+          selectedRow?.appointmentId,
+          selectedRow?.id,
+        )
       }
     }
     fetchData()
