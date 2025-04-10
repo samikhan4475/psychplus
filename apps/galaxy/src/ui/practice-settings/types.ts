@@ -1,3 +1,4 @@
+import { Metadata } from '@/types'
 
 enum PracticeSettingsTab {
   SCHEDULING = 'Scheduling',
@@ -5,14 +6,24 @@ enum PracticeSettingsTab {
   USERS = 'Users',
 }
 
-interface Credentialing {
-  manager: string
-  addedOn: string
+interface ManagerName {
+  firstName: string
+  middleName: string
+  lastName: string
+  preferredName: string
+  title: string
+  suffix: string
+  honors: string
 }
 
+interface CredentialingManager {
+  id: string
+  practiceId: string
+  managerStaffId: number
+  status: string
+  isAlertCheck: boolean
+  metadata: Metadata
+  managerName: Partial<ManagerName>
+}
 
-export {
-  PracticeSettingsTab,
-  type Credentialing
-};
-
+export { PracticeSettingsTab, type CredentialingManager }

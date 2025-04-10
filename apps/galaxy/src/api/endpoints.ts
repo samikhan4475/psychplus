@@ -800,6 +800,14 @@ const UPDATE_FOLLOW_UP_DENIAL_STATUS = (appointmentId: number) =>
   `${API_URL}/api/appointments/${appointmentId}/actions/followupstatus`
 
 const GET_USERS_SELF_INITIAL_INFORMATION_ENDPOINT = `${API_URL}/api/users/self/initialinformation`
+const GET_PRACTICES_LICENSE_MANAGERS_ENDPOINT = (practiceId: string) =>
+  `${API_URL}/api/practices/${practiceId}/licensemanagers/actions/search`
+const ADD_PRACTICES_LICENSE_MANAGERS_ENDPOINT = (practiceId: string) =>
+  `${API_URL}/api/practices/${practiceId}/licensemanagers`
+const UPDATE_PRACTICES_LICENSE_MANAGERS_ENDPOINT = (
+  practiceId: string,
+  managerId: string,
+) => `${API_URL}/api/practices/${practiceId}/licensemanagers/${managerId}`
 
 export {
   GET_LAB_RESULTS_ENDPOINT,
@@ -1163,4 +1171,7 @@ export {
   DELETE_STAFF_VIDEO_ENDPOINT,
   SIGN_PATIENT_REFERRAL_ENDPOINT,
   GET_STAFF_ORGANIZATIONS_ENDPOINT,
+  GET_PRACTICES_LICENSE_MANAGERS_ENDPOINT,
+  ADD_PRACTICES_LICENSE_MANAGERS_ENDPOINT,
+  UPDATE_PRACTICES_LICENSE_MANAGERS_ENDPOINT,
 }

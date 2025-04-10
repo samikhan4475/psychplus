@@ -1,11 +1,41 @@
-import { CodesetSelectCell, PropsWithRow } from '@/components'
-import { CODESETS } from '@/constants'
+import { useState } from 'react'
+import { useParams } from 'next/navigation'
 import { CounterClockwiseClockIcon } from '@radix-ui/react-icons'
 import { Flex, Heading, Popover } from '@radix-ui/themes'
 import { X } from 'lucide-react'
-import { Credentialing } from '../../types'
+import { toast } from 'react-hot-toast'
+import { PropsWithRow, SelectCell } from '@/components'
+import { updateCredentialingManagerAction } from '../../actions'
+import { CredentialingManager } from '../../types'
 
-const CredentialingHistoryDialog = ({ row }: PropsWithRow<Credentialing>) => {
+const statuses = [
+  { value: 'Active', label: 'Active' },
+  { value: 'Inactive', label: 'Inactive' },
+]
+
+const CredentialingHistoryDialog = ({
+  row,
+}: PropsWithRow<CredentialingManager>) => {
+  const { id } = useParams<{ id: string; type: string }>()
+  const [status, setStatus] = useState(row.original.status)
+  const [loading, setLoading] = useState(false)
+
+  const onStatusChange = async (value: string) => {
+    setLoading(true)
+    const result = await updateCredentialingManagerAction(id, row.original.id, {
+      ...row.original,
+      status: value,
+    })
+    if (result.state === 'error') {
+      toast.error(result.error)
+      setLoading(false)
+      return
+    }
+    toast.success('Status Updated Successfully')
+    setStatus(value)
+    setLoading(false)
+  }
+
   return (
     <Flex>
       <Popover.Root>
@@ -29,9 +59,12 @@ const CredentialingHistoryDialog = ({ row }: PropsWithRow<Credentialing>) => {
           </Popover.Content>
         </Flex>
       </Popover.Root>
-      <CodesetSelectCell
-        codeset={CODESETS.RecordStatus}
-        className="flex-1 min-w-[125px]"
+      <SelectCell
+        options={statuses}
+        className="min-w-[125px] flex-1"
+        onValueChange={onStatusChange}
+        value={status}
+        disabled={loading}
       />
     </Flex>
   )

@@ -1,15 +1,30 @@
 'use client'
 
-import { type PropsWithRow } from '@/components'
-import { Checkbox } from '@radix-ui/themes'
 import { useState } from 'react'
-import { Credentialing } from '../types'
+import { Checkbox } from '@radix-ui/themes'
+import { type PropsWithRow } from '@/components'
+import { CredentialingManager } from '../types'
+import { useStore } from './store'
 
 const RowActionEdit = ({
   row: { original: record },
-}: PropsWithRow<Credentialing>) => {
-  const [alert, setAlert] = useState(true);
+}: PropsWithRow<CredentialingManager>) => {
+  const { setData, data } = useStore((state) => ({
+    setData: state.setData,
+    data: state.data,
+  }))
+  const [alert, setAlert] = useState(record.isAlertCheck)
   const handleCheckboxChange = (checked: boolean) => {
+    const newData = data.map((item) => {
+      if (item.id === record.id) {
+        return {
+          ...item,
+          isAlertCheck: checked,
+        }
+      }
+      return item
+    })
+    setData(newData)
     setAlert(checked)
   }
   return (
