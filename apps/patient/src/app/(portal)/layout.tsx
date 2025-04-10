@@ -7,6 +7,7 @@ import { Flex, Theme } from '@radix-ui/themes'
 import { ToastProvider } from '@/providers'
 import { Header } from '@/ui'
 import './base.css'
+import Head from 'next/head'
 
 export const metadata: Metadata = {
   title: 'PsychPlus | Mental Health Care Covered by Your Insurance',
@@ -32,7 +33,27 @@ const RootLayout = async ({ children }: { children: React.ReactNode }) => {
 
   const content = (
     <html lang="en" className={cn(spectral.variable, josefin.variable)}>
+      <Head>
+        {/* Google Tag Manager Script */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+                  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+                  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+                  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+                  })(window,document,'script','dataLayer','GTM-WL4ZLDTL');`,
+          }}
+        />
+      </Head>
       <body>
+        <noscript>
+          <iframe 
+          src="https://www.googletagmanager.com/ns.html?id=GTM-WL4ZLDTL" 
+          height="0" 
+          width="0" 
+          style={{display:"none",visibility:'hidden'}}
+          ></iframe>
+        </noscript>
         {auth ? (
           <SessionRefresher
             expiry={auth.accessTokenExpiry}
