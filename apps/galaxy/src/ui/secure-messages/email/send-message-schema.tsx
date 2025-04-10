@@ -60,14 +60,14 @@ const sendMessageSchema = z
   .refine(
     (data) => {
       return (
-        (data.internalEmails?.length || 0) > 0 ||
-        (data.externalEmails?.length || 0) > 0 ||
-        (data.userRecipients?.length || 0) > 0
+        (data.internalEmails ?? []).length > 0 ||
+        (data.externalEmails ?? []).length > 0 ||
+        (data.userRecipients ?? []).length > 0
       )
     },
     {
       message:
-        'At least one email is required from internal, external, or user recipients.',
+        'At least one email is required from internal or external recipients.',
       path: ['internalEmails'],
     },
   )

@@ -82,7 +82,7 @@ const UserRecipientsEmails = ({
       }
       if (userRecipient?.id) {
         const tag = {
-          value: secureMessage.senderEmail || '',
+          value: secureMessage.senderEmail ?? '',
           label: `${secureMessage?.senderName?.firstName} ${secureMessage?.senderName?.lastName} <${secureMessage.senderEmail}>`,
         }
         setUserEmailSuggestions([userRecipient])
@@ -139,7 +139,7 @@ const UserRecipientsEmails = ({
   const handleDraft = async () => {
     setUserRecipientsTag([])
     setUserEmailSuggestions([])
-    const channels = previewSecureMessage?.secureMessage?.channels || []
+    const channels = previewSecureMessage?.secureMessage?.channels ?? []
     const patientTags = channels
       .filter(
         (item) =>
@@ -148,7 +148,7 @@ const UserRecipientsEmails = ({
       )
       .map((item) => ({
         label: `${item.receiverName.firstName} ${item.receiverName.lastName} <${item.receiverEmail}>`,
-        value: item.receiverEmail || '',
+        value: item.receiverEmail ?? '',
       }))
 
     const allUpdatedRecipients = []
@@ -205,7 +205,7 @@ const UserRecipientsEmails = ({
         const userRecipientsResponse = await fetchRecipientSuggestions(keyword)
         if (userRecipientsResponse?.length) {
           const tags = userRecipientsResponse.map((recipient) => ({
-            value: recipient?.contactInfo?.email || '',
+            value: recipient?.contactInfo?.email ?? '',
             label: `${recipient?.legalName?.firstName} ${recipient?.legalName?.lastName} <${recipient?.contactInfo?.email}>`,
           }))
           setUserEmailSuggestionsTags(tags)
@@ -224,7 +224,7 @@ const UserRecipientsEmails = ({
         suggestion.contactInfo?.email === tag.value,
     )
     if (userEmailSuggestion) {
-      const existingUserRecipients = form.getValues('userRecipients') || []
+      const existingUserRecipients = form.getValues('userRecipients') ?? []
       const updatedRecipients = [
         ...existingUserRecipients,
         {
@@ -239,7 +239,7 @@ const UserRecipientsEmails = ({
 
   const handleOnDelete = async (index: number) => {
     if (activeComponent === ActiveComponent.DRAFT) {
-      const channels = previewSecureMessage?.secureMessage?.channels || []
+      const channels = previewSecureMessage?.secureMessage?.channels ?? []
       const channel = channels.find(
         (item, index) =>
           item.sendMode === EmailRecipientTypes.INTERNAL &&
@@ -271,7 +271,7 @@ const UserRecipientsEmails = ({
     <>
       <Flex
         direction="row"
-        className="border-pp-gray-4 min-h-[40px]  border-b"
+        className="border-pp-gray-4 hidden min-h-[40px] border-b"
         align={'center'}
         position="relative"
       >
