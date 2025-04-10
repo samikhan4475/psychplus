@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import NextLink from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -9,6 +9,7 @@ import { Flex, Heading, Text, TextField } from '@radix-ui/themes'
 import { useForm, type SubmitHandler } from 'react-hook-form'
 import { z } from 'zod'
 import { loginAction } from '@/actions'
+import { clearAuthCookieAction } from '@/actions/clear-cookie-action'
 import {
   FormContainer,
   FormError,
@@ -34,6 +35,10 @@ const LoginPage = () => {
   const searchParams = useSearchParams()
   const [error, setError] = useState<string>()
   const [isLoading, setIsLoading] = useState<boolean>(false)
+
+  useEffect(() => {
+    clearAuthCookieAction()
+  }, [])
 
   const form = useForm<SchemaType>({
     resolver: zodResolver(schema),

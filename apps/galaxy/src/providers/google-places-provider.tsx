@@ -34,7 +34,7 @@ const GooglePlacesContextProvider = ({
         }}
         src={`https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places`}
       />
-      {children}
+      {loaded && children}
     </GooglePlacesContext.Provider>
   )
 }
