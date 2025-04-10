@@ -12,7 +12,7 @@ const schema = z.object({
 
 type SchemaType = z.infer<typeof schema>
 
-const StaffLocationFilter = () => {
+const StaffLocationFilter = ({ staffId }: { staffId: string }) => {
   const form = useForm<SchemaType>({
     resolver: zodResolver(schema),
     reValidateMode: 'onSubmit',
@@ -30,7 +30,7 @@ const StaffLocationFilter = () => {
       onSubmit={onSubmit}
     >
       <StateSelect />
-      <AddLocationSelect />
+      <AddLocationSelect staffId={staffId} />
     </FormContainer>
   )
 }

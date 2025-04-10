@@ -5,6 +5,7 @@ import * as Tabs from '@radix-ui/react-tabs'
 import { Box, Flex } from '@radix-ui/themes'
 import toast from 'react-hot-toast'
 import { LoadingPlaceholder, TabsTrigger } from '@/components'
+import { useStore as useGlobalStore } from '@/store'
 import { State } from '@/types'
 import { getUsStatesAction } from '../visit/client-actions'
 import { CDSView } from './cds'
@@ -15,9 +16,17 @@ import { PrescriberSettingsView } from './prescriber-settings'
 import { useStore } from './store'
 import { CredentialingTab } from './types'
 
-const CredentialingTabs = ({ staffId }: { staffId: string }) => {
+const CredentialingTabs = (props: {
+  isProfileView?: boolean
+  staffId?: string
+}) => {
   const { activeTab, setActiveTab, setEditingRow } = useStore((state) => state)
+  const { user } = useGlobalStore((state) => ({ user: state.user }))
   const [states, setStates] = useState<State[]>([])
+  const staffId =
+    props.isProfileView && !props.staffId
+      ? `${user.staffId}`
+      : props.staffId || ''
   const [loadingStates, setLoadingStates] = useState<boolean>(false)
   useEffect(() => {
     setLoadingStates(true)
@@ -84,7 +93,7 @@ const CredentialingTabs = ({ staffId }: { staffId: string }) => {
               />
             </TabsContent>
             <TabsContent value={CredentialingTab.PrescriberSettings}>
-              <PrescriberSettingsView states={states} />
+              <PrescriberSettingsView states={states} staffId={staffId} />
             </TabsContent>
           </>
         )}

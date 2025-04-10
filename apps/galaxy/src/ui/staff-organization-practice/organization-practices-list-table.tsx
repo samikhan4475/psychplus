@@ -14,7 +14,7 @@ import { ActionsCell } from './cells'
 import { useStore } from './store'
 import { Practice } from './types'
 
-const columns: ColumnDef<Practice>[] = [
+const columns = (userId: string): ColumnDef<Practice>[] => [
   {
     id: 'organizationDisplayName',
     accessorKey: 'organizationDisplayName',
@@ -86,12 +86,11 @@ const columns: ColumnDef<Practice>[] = [
   {
     id: 'actions',
     header: () => <ColumnHeader label="Actions" />,
-    cell: ActionsCell,
+    cell: ({ row }) => <ActionsCell row={row} userId={userId} />,
   },
 ]
 
-const OrganizationPracticesListTable = () => {
-  const { id } = useParams<{ id: string }>()
+const OrganizationPracticesListTable = ({ userId }: { userId: string }) => {
   const { search, data, loading } = useStore((state) => ({
     data: state.data,
     loading: state.loading,
@@ -100,9 +99,9 @@ const OrganizationPracticesListTable = () => {
 
   useEffect(() => {
     search({
-      staffuserId: parseInt(id),
+      staffuserId: parseInt(userId),
     })
-  }, [id])
+  }, [userId])
 
   if (loading) {
     return (
@@ -117,7 +116,7 @@ const OrganizationPracticesListTable = () => {
       <ScrollArea className="rounded p-1">
         <DataTable
           data={data || []}
-          columns={columns}
+          columns={columns(userId)}
           disablePagination
           tableClass="bg-white [&_.rt-ScrollAreaScrollbar]:!hidden"
         />

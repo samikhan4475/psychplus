@@ -9,11 +9,11 @@ interface Payload {
 
 const attachPracticeAction = async (
   payload: Payload,
-  staffId: string,
+  userId: string,
   id: string,
 ): Promise<api.ActionResult<Practice>> => {
   const response = await api.POST<Practice>(
-    api.ATTACH_PRACTICE_STAFF_ENDPOINT(staffId, id),
+    api.ATTACH_PRACTICE_STAFF_ENDPOINT(userId, id),
     payload,
   )
 

@@ -170,7 +170,7 @@ const columns = (
   ]
 }
 
-const StaffLocationTable = () => {
+const StaffLocationTable = ({ staffId }: { staffId: string }) => {
   const { data, search, loading, sort, sortData, setSureScriptEnabled } =
     useStore((state) => ({
       setSureScriptEnabled: state.setSureScriptEnabled,
@@ -180,7 +180,6 @@ const StaffLocationTable = () => {
       sort: state.sort,
       sortData: state.sortData,
     }))
-  const { id } = useParams()
 
   useEffect(() => {
     ;(async () => {
@@ -192,7 +191,7 @@ const StaffLocationTable = () => {
       }
     })()
 
-    if (id && typeof id === 'string') search({ staffId: id })
+    if (staffId && typeof staffId === 'string') search({ staffId })
   }, [])
   if (loading) {
     return (

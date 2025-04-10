@@ -15,10 +15,10 @@ import { SubmitFormButton } from './submit-form-button'
 interface FormProps {
   data: Practice
   onClose: (open: boolean) => void
+  userId: string
 }
 
-const OrganizationStaffForm = ({ data, onClose }: FormProps) => {
-  const { id } = useParams<{ id: string }>()
+const OrganizationStaffForm = ({ data, onClose, userId }: FormProps) => {
   const { search } = useStore((state) => ({
     search: state.search,
   }))
@@ -30,7 +30,7 @@ const OrganizationStaffForm = ({ data, onClose }: FormProps) => {
   const onSave = async () => {
     onClose(false)
     search({
-      staffuserId: parseInt(id),
+      staffuserId: parseInt(userId),
     })
   }
 
@@ -39,8 +39,8 @@ const OrganizationStaffForm = ({ data, onClose }: FormProps) => {
       <Box className="ml-1 mr-1 mt-2 pl-2 pr-2">
         <OrganizationSelect />
         <Box className="border-pp-gray-8 mb-2 mt-2 gap-3 rounded-[4px] border p-2">
-          <SearchAddPracticeSelect />
-          <PracticesListTable data={data} />
+          <SearchAddPracticeSelect userId={userId} />
+          <PracticesListTable data={data} userId={userId} />
         </Box>
       </Box>
       <SubmitFormButton />

@@ -16,7 +16,7 @@ interface Store {
   error?: string
   setStaff: (setStaff: StaffResource) => void
   search: (payload: Partial<Practice>) => void
-  searchStaffOrganizations: (staffId: string) => void
+  searchStaffOrganizations: (userId: string) => void
   searchDialogPractices: (payload: Partial<Practice>) => void
 }
 const useStore = create<Store>((set, get) => ({
@@ -46,8 +46,8 @@ const useStore = create<Store>((set, get) => ({
       loading: false,
     })
   },
-  searchStaffOrganizations: async (staffId: string) => {
-    const result = await getStaffOrganizationsAction(staffId)
+  searchStaffOrganizations: async (userId: string) => {
+    const result = await getStaffOrganizationsAction(userId)
     if (result.state === 'error') {
       return set({
         staffOrganizations: [],

@@ -8,19 +8,18 @@ import { attachPracticeAction } from './actions'
 import { AsyncSearchPracticeSelect } from './async-search-practice'
 import { useStore } from './store'
 
-const PracticeSelect = () => {
+const PracticeSelect = ({ userId }: { userId: string }) => {
   const { search, staff } = useStore((state) => ({
     search: state.search,
     staff: state.staff,
   }))
-  const { id } = useParams<{ id: string }>()
   const onOptionClicked = async (option: SelectOptionType) => {
-    if (id) {
+    if (userId) {
       const response = await attachPracticeAction(
         {
           roleIds: staff?.staffUserRoleIds ?? [],
         },
-        id,
+        userId,
         option.value,
       )
 
@@ -30,7 +29,7 @@ const PracticeSelect = () => {
       }
 
       search({
-        staffuserId: parseInt(id),
+        staffuserId: parseInt(userId),
       })
       toast.success('The practice is successfully attached')
     }

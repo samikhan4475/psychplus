@@ -27,7 +27,7 @@ const NavigationTabs = () => {
       align="end"
       gap="2"
       className={cn(
-        'text-white min-h-[38px] whitespace-nowrap bg-accent-12 pb-0'
+        'text-white min-h-[38px] whitespace-nowrap bg-accent-12 pb-0',
       )}
     >
       <NavigationTab href="/" label="Schedule" />
@@ -71,7 +71,7 @@ const NavigationTab = ({ href, label }: NavigationTabProps) => {
         {
           'text-white bg-pp-focus-bg hover:bg-white': !isActive,
           'cursor-default bg-[#FCFDFF] text-accent-12': isActive,
-        }
+        },
       )}
     >
       <Text className="text-pp-black-1 text-[11px] font-[600]">{label}</Text>
@@ -83,7 +83,7 @@ const NavigationTab = ({ href, label }: NavigationTabProps) => {
             'rounded-full text-white h-[20px] w-[20px] cursor-pointer transition-colors hover:bg-gray-3',
             {
               'text-gray-9 hover:bg-gray-3 hover:text-gray-11': isActive,
-            }
+            },
           )}
           onClick={(e) => {
             e.preventDefault()

@@ -15,7 +15,7 @@ const schema = z.object({
 
 type SchemaType = z.infer<typeof schema>
 
-const PracticesHeading = () => {
+const PracticesHeading = ({ userId }: { userId: string }) => {
   const form = useForm<SchemaType>({
     resolver: zodResolver(schema),
     reValidateMode: 'onChange',
@@ -41,7 +41,7 @@ const PracticesHeading = () => {
           onSubmit={onSubmit}
         >
           <OrganizationSelect />
-          <PracticeSelect />
+          <PracticeSelect userId={userId} />
         </FormContainer>
       </Flex>
     </Flex>

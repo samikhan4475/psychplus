@@ -1,21 +1,20 @@
 'use client'
 
+import { useRouter } from 'next/navigation'
 import { TriangleDownIcon } from '@radix-ui/react-icons'
 import { Avatar, DropdownMenu, Flex, Text } from '@radix-ui/themes'
-import {
-  LogOutIcon,
-  MessageCircleQuestionIcon,
-  type LucideIcon,
-} from 'lucide-react'
+import { CircleUser, LogOutIcon, type LucideIcon } from 'lucide-react'
 import { logoutAction } from '@/actions'
-import type { User } from '@/types'
-import { getUserInitials } from '@/utils'
+import { useStore } from '@/store'
+import { getUserFullName, getUserInitials } from '@/utils'
 
-interface UserDropdownMenuProps {
-  user: User
-}
+const UserDropdownMenu = () => {
+  const router = useRouter()
+  const { addTab, user } = useStore((state) => ({
+    user: state.user,
+    addTab: state.addTab,
+  }))
 
-const UserDropdownMenu = ({ user }: UserDropdownMenuProps) => {
   return (
     <DropdownMenu.Root modal={false}>
       <DropdownMenu.Trigger className="hidden sm:block">
@@ -23,7 +22,7 @@ const UserDropdownMenu = ({ user }: UserDropdownMenuProps) => {
           <button className="rounded-full focus:outline-accent-9">
             <Avatar
               src={undefined}
-              fallback={getUserInitials(user)}
+              fallback={getUserInitials(user.legalName)}
               radius="full"
               size="2"
               alt=""
@@ -32,7 +31,7 @@ const UserDropdownMenu = ({ user }: UserDropdownMenuProps) => {
             />
           </button>
           <Text weight="medium" size="1">
-            {`${user?.firstName ?? ""} ${user?.lastName ?? ""}, ${user?.honors ?? ""}`}
+            {getUserFullName(user.legalName)}
           </Text>
           <TriangleDownIcon />
         </Flex>
@@ -43,9 +42,27 @@ const UserDropdownMenu = ({ user }: UserDropdownMenuProps) => {
         className="rounded-1 px-1 pb-1 shadow-3 [&_.rt-DropdownMenuViewport]:p-0"
       >
         <Flex direction="column" px="2" pt="1">
-          <Text className="text-[14px] text-accent-12">{`${user?.firstName ?? ""} ${user?.lastName ?? ""}, ${user?.honors ?? ""}`}</Text>
-          <Text className="-mt-1 text-[13px] text-gray-11">{user?.email}</Text>
+          <Text className="text-[14px] text-accent-12">
+            {getUserFullName(user.legalName)}
+          </Text>
+          <Text className="-mt-1 text-[13px] text-gray-11">
+            {user?.contactInfo.email}
+          </Text>
         </Flex>
+        <DropdownMenu.Separator className="m-1" />
+        <MenuItem
+          Icon={CircleUser}
+          onClick={() => {
+            const href = `/user/profile`
+            addTab({
+              href,
+              label: `${user?.legalName?.firstName} ${user.legalName?.lastName} - ${user.staffId}`,
+            })
+            router.push(href)
+          }}
+        >
+          Profile
+        </MenuItem>
         <DropdownMenu.Separator className="m-1" />
         <MenuItem
           Icon={LogOutIcon}

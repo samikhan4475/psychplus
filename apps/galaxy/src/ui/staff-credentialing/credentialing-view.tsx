@@ -1,7 +1,13 @@
 import { CredentialingTabs } from './credentialing-tabs'
 
-const CredentialingView = ({ staffId }: { staffId: string }) => {
-  return <CredentialingTabs staffId={staffId} />
+const CredentialingView = ({
+  isProfileView,
+  staffId,
+}: {
+  isProfileView?: boolean
+  staffId?: string
+}) => {
+  return <CredentialingTabs isProfileView={isProfileView} staffId={staffId} />
 }
 
 export { CredentialingView }

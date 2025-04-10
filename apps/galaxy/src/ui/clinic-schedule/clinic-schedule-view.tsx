@@ -3,6 +3,7 @@
 import { PropsWithChildren } from 'react'
 import * as Tabs from '@radix-ui/react-tabs'
 import { TabsTrigger } from '@/components'
+import { useStore as useGlobalStore } from '@/store'
 import { ClinicTimeTab } from './clinic-time-tab'
 import { ClinicScheduleTabs } from './constants'
 import { ForwardingMessageTab } from './forwarding-message-tab'
@@ -10,12 +11,17 @@ import { useStore } from './store'
 import { VacationTimeTab } from './vacation-time-tab'
 
 interface ClinicScheduleViewProps {
-  userId: string
-  staffId: string
+  userId?: string
+  staffId?: string
+  isProfileView?: boolean
 }
 
-const ClinicScheduleView = ({ staffId, userId }: ClinicScheduleViewProps) => {
+const ClinicScheduleView = (props: ClinicScheduleViewProps) => {
   const { activeTab, setActiveTab } = useStore()
+  const { user } = useGlobalStore((state) => ({ user: state.user }))
+
+  const userId = props.isProfileView ? user.id : props.userId
+  const staffId = props.isProfileView ? `${user.staffId}` : props.staffId || ''
 
   return (
     <Tabs.Root

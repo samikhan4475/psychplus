@@ -9,10 +9,14 @@ import { useFeatureFlagEnabled } from '@/hooks/use-feature-flag-enabled'
 import { cn, getStaffNavLinks } from '@/utils'
 
 interface StaffNavigationProps {
-  staffId: string
+  staffId?: string
+  isNonAdminProfileView?: boolean
 }
 
-const StaffNavigation = ({ staffId }: StaffNavigationProps) => {
+const StaffNavigation = ({
+  isNonAdminProfileView,
+  staffId,
+}: StaffNavigationProps) => {
   const searchParams = useSearchParams()
   const userId = searchParams.get('id')
 
@@ -20,8 +24,13 @@ const StaffNavigation = ({ staffId }: StaffNavigationProps) => {
     FEATURE_FLAGS.ehr11786EnableGalaxySecondPhaseFeatures,
   )
   const navLinks = useMemo(
-    () => getStaffNavLinks(staffId, isFeatureFlagEnabled),
-    [staffId, isFeatureFlagEnabled],
+    () =>
+      getStaffNavLinks({
+        isNonAdminProfileView,
+        isFeatureFlagEnabled,
+        staffId,
+      }),
+    [isFeatureFlagEnabled, isNonAdminProfileView, staffId],
   )
 
   return (

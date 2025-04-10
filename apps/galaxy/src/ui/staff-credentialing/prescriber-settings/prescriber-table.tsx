@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import { useParams } from 'next/navigation'
 import { ColumnDef } from '@tanstack/react-table'
 import toast from 'react-hot-toast'
 import {
@@ -186,22 +185,22 @@ const columns = (
 ]
 interface PrescriberTableProps {
   states: State[]
+  staffId: string
 }
-const PrescriberTable = ({ states }: PrescriberTableProps) => {
+const PrescriberTable = ({ states, staffId }: PrescriberTableProps) => {
   const stateCodes = useCodesetCodes(CODESETS.UsStates)
   const [loading, setLoading] = useState(true)
   const [prescriberData, setPrescriberData] = useState<
     PrescriberDataResponse[]
   >([])
   const [staff, setStaff] = useState<Staff>()
-  const { id } = useParams() as { id: string }
 
   const getPrescriberData = async () => {
     setLoading(true)
 
     let staffData = staff
     if (!staffData) {
-      const staffRes = await getStaffAction(id)
+      const staffRes = await getStaffAction(staffId)
       if (staffRes.state === 'error') {
         toast.error(staffRes.error)
         return
@@ -218,7 +217,7 @@ const PrescriberTable = ({ states }: PrescriberTableProps) => {
 
     const licenseRes = await getLicensesAction({
       licenseTypes: [LicenseType.DEA, LicenseType.CDS],
-      providerStaffIds: [+id],
+      providerStaffIds: [+staffId],
       recordStatuses: ['Active'],
     })
     if (licenseRes.state === 'error') {

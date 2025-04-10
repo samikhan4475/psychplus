@@ -8,7 +8,7 @@ import { useStore } from './store'
 import { TreatmentTeamTab } from './types'
 import { VisitsView } from './visits/visit-view'
 
-const TreatmentTeamTabs = () => {
+const TreatmentTeamTabs = (props: { isProfileView?: boolean }) => {
   const { activeTab, setActiveTab } = useStore((state) => ({
     activeTab: state.activeTab,
     setActiveTab: state.setActiveTab,
@@ -39,7 +39,7 @@ const TreatmentTeamTabs = () => {
           </Tabs.List>
         </Flex>
         <TabsContent value={TreatmentTeamTab.Visits}>
-          <VisitsView />
+          <VisitsView isProfileView={props.isProfileView} />
         </TabsContent>
         <TabsContent value={TreatmentTeamTab.Care_Teams}>
           <CareTeamsView />

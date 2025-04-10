@@ -12,8 +12,8 @@ import { Practice } from '../types'
 
 const RowActionDeletePractice = ({
   row: { original: record },
-}: PropsWithRow<Practice>) => {
-  const { id } = useParams<{ id: string }>()
+  userId,
+}: PropsWithRow<Practice> & { userId: string }) => {
   const { staff, searchDialogPractices } = useStore((state) => ({
     staff: state.staff,
     searchDialogPractices: state.searchDialogPractices,
@@ -27,7 +27,7 @@ const RowActionDeletePractice = ({
       {
         roleIds: staff?.staffUserRoleIds ?? [],
       },
-      id,
+      userId,
       record.id,
     )
 
@@ -37,7 +37,7 @@ const RowActionDeletePractice = ({
     }
     searchDialogPractices({
       organizationId: record.organizationId,
-      staffuserId: parseInt(id),
+      staffuserId: parseInt(userId),
     })
     setOpen(false)
     setLoading(false)

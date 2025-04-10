@@ -4,11 +4,17 @@ import { TabContentHeading } from '@/components'
 import { State } from '@/types'
 import { PrescriberTable } from './prescriber-table'
 
-const PrescriberSettingsView = ({ states }: { states: State[] }) => {
+const PrescriberSettingsView = ({
+  states,
+  staffId,
+}: {
+  states: State[]
+  staffId: string
+}) => {
   return (
     <Flex direction="column" width="100%" gap="1">
       <TabContentHeading title="Prescriber Settings" />
-      <PrescriberTable states={states} />
+      <PrescriberTable states={states} staffId={staffId} />
     </Flex>
   )
 }

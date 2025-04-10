@@ -14,7 +14,7 @@ import { useStore } from '../store'
 import { Practice } from '../types'
 import { RowActionDeletePractice } from './row-action-delete'
 
-const columns: ColumnDef<Practice>[] = [
+const columns = (userId: string): ColumnDef<Practice>[] => [
   {
     id: 'displayName',
     header: ({ column }) => (
@@ -70,15 +70,15 @@ const columns: ColumnDef<Practice>[] = [
   {
     id: 'actions',
     header: () => <ColumnHeader label="" />,
-    cell: ({ row }) => <RowActionDeletePractice row={row} />,
+    cell: ({ row }) => <RowActionDeletePractice row={row} userId={userId} />,
   },
 ]
 
 interface PracticesListTableProps {
   data: Practice
+  userId: string
 }
-const PracticesListTable = ({ data }: PracticesListTableProps) => {
-  const { id } = useParams<{ id: string }>()
+const PracticesListTable = ({ data, userId }: PracticesListTableProps) => {
   const { searchDialogPractices, dialogTableData, dialogTableLoading } =
     useStore((state) => ({
       dialogTableData: state.dialogTableData,
@@ -89,7 +89,7 @@ const PracticesListTable = ({ data }: PracticesListTableProps) => {
   useEffect(() => {
     searchDialogPractices({
       organizationId: data?.organizationId ?? '',
-      staffuserId: parseInt(id),
+      staffuserId: parseInt(userId),
     })
   }, [data?.organizationId])
 
@@ -106,7 +106,7 @@ const PracticesListTable = ({ data }: PracticesListTableProps) => {
       <ScrollArea className="rounded p-1">
         <DataTable
           data={dialogTableData || []}
-          columns={columns}
+          columns={columns(userId)}
           tableClass="bg-white [&_.rt-ScrollAreaScrollbar]:!hidden"
         />
       </ScrollArea>

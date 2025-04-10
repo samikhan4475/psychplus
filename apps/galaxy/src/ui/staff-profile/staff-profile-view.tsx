@@ -7,6 +7,7 @@ import toast from 'react-hot-toast'
 import { LoadingPlaceholder } from '@/components'
 import { CODESETS } from '@/constants'
 import { useCodesetOptions } from '@/hooks'
+import { useStore as useGlobalStore } from '@/store'
 import { getStaffRolesOrganizationAction } from '../staff-management/actions/get-organization-staff-roles'
 import { OrganizationOptions } from '../staff-management/types'
 import { getStaffAction } from './actions/get-staff'
@@ -16,11 +17,17 @@ import { StaffUpdatePayload } from './types'
 
 interface StaffProfileViewProps {
   googleApiKey: string
+  isProfileView?: boolean
 }
 
-const StaffProfileView = ({ googleApiKey }: StaffProfileViewProps) => {
+const StaffProfileView = ({
+  googleApiKey,
+  isProfileView,
+}: StaffProfileViewProps) => {
   const [staff, setStaff] = useState<StaffUpdatePayload>()
-  const { id } = useParams()
+  const { user } = useGlobalStore((state) => ({ user: state.user }))
+  const params = useParams()
+  const id = isProfileView ? `${user.staffId}` : params.id
   const [loading, setLoading] = useState(false)
   const languageOptions = useCodesetOptions(CODESETS.Language)
 

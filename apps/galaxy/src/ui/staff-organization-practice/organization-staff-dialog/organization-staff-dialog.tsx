@@ -10,9 +10,10 @@ import { OrganizationStaffForm } from './organization-staff-form'
 
 interface DialogProps {
   data: Practice
+  userId: string
 }
 
-const OrganizationStaffDialog = ({ data }: DialogProps) => {
+const OrganizationStaffDialog = ({ data, userId }: DialogProps) => {
   const [open, setOpen] = useState(false)
 
   const onOpenChange = (open: boolean) => {
@@ -30,7 +31,11 @@ const OrganizationStaffDialog = ({ data }: DialogProps) => {
           Edit Organization & Practice
         </Dialog.Title>
 
-        <OrganizationStaffForm data={data} onClose={onOpenChange} />
+        <OrganizationStaffForm
+          data={data}
+          onClose={onOpenChange}
+          userId={userId}
+        />
       </Dialog.Content>
     </Dialog.Root>
   )

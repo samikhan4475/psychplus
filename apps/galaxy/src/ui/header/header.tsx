@@ -12,7 +12,6 @@ import { ScrollAlert } from './scroll-alert'
 import { UserDropdownMenu } from './user-dropdown-menu'
 
 const Header = async () => {
-  const auth = getAuthCookies()!
   const userInitialInformationResponse = await getUserInitialInformationAction()
   const count =
     userInitialInformationResponse?.state === 'error'
@@ -51,7 +50,7 @@ const Header = async () => {
               </Button>
             </AddVisit>
             <Flex height="100%" align="center" gap="3" ml="2">
-              <UserDropdownMenu user={auth.user} />
+              <UserDropdownMenu />
             </Flex>
           </Flex>
         </Flex>

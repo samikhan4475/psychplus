@@ -6,6 +6,7 @@ import { Flex } from '@radix-ui/themes'
 import { SubmitHandler } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { LoadingPlaceholder } from '@/components'
+import { useStore as useGlobalStore } from '@/store'
 import { getStaffAction } from '../staff-credentialing/actions'
 import { addBulkPreferenceSettings } from './client-actions/add-bulk-preference-settings'
 import { updateBulkPreferenceSettings } from './client-actions/update-bulk-preference-settings'
@@ -14,9 +15,11 @@ import { StaffPreferencesForm } from './staff-preferences-form'
 import { useStore } from './store'
 import { transformBulkAddUpdate } from './transform'
 
-const StaffPreferencesView = () => {
-  const [userId, setUserId] = useState<number>(0)
-  const { id } = useParams<{ id: string }>()
+const StaffPreferencesView = (props: { isProfileView?: boolean }) => {
+  const { user } = useGlobalStore((state) => ({ user: state.user }))
+  const [userId, setUserId] = useState<number>(user.id)
+  const params = useParams<{ id: string }>()
+  const staffId = props.isProfileView ? `${user?.staffId}` : params.id
 
   const { fetchPreferences, loadingPreferences, mappedPreferences } = useStore(
     (state) => ({
@@ -29,16 +32,20 @@ const StaffPreferencesView = () => {
 
   useEffect(() => {
     ;(async () => {
-      const result = await getStaffAction(id)
-      if (result.state === 'error') {
-        return toast.error(result.error)
-      }
-      const userId = +result.data.userId
-      setUserId(userId)
+      if (props.isProfileView) {
+        await fetchPreferences({ userId: user.id })
+      } else {
+        const result = await getStaffAction(staffId)
+        if (result.state === 'error') {
+          return toast.error(result.error)
+        }
+        const userId = +result.data.userId
+        setUserId(userId)
 
-      await fetchPreferences({ userId })
+        await fetchPreferences({ userId })
+      }
     })()
-  }, [id])
+  }, [user.id, staffId])
 
   const onSubmit: SubmitHandler<SchemaType> = async (data) => {
     const { dataToAdd, dataToUpdate } = transformBulkAddUpdate(
@@ -77,7 +84,7 @@ const StaffPreferencesView = () => {
       ) : (
         <StaffPreferencesForm
           userId={userId}
-          providerId={id}
+          providerId={staffId}
           onSubmit={onSubmit}
         />
       )}

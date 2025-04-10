@@ -4,10 +4,11 @@ import { Practice } from '../types'
 
 interface ActionsCellProps {
   row: Row<Practice>
+  userId: string
 }
 
-const ActionsCell = ({ row }: ActionsCellProps) => {
-  return <RowActionEdit row={row} />
+const ActionsCell = ({ row, userId }: ActionsCellProps) => {
+  return <RowActionEdit row={row} userId={userId} />
 }
 
 export { ActionsCell }

@@ -94,11 +94,17 @@ const getNavLinks = (
   return baseLinks
 }
 
-const getStaffNavLinks = (
-  staffId: string | null,
-  isFeatureFlagEnabled: boolean,
-) => {
-  const baseHref = `/staff/${staffId}`
+const getStaffNavLinks = ({
+  isNonAdminProfileView,
+  isFeatureFlagEnabled,
+  staffId,
+}: {
+  isNonAdminProfileView?: boolean
+  isFeatureFlagEnabled: boolean
+
+  staffId?: string | null
+}) => {
+  const baseHref = isNonAdminProfileView ? `/user` : `/staff/${staffId}`
 
   return [
     {

@@ -11,7 +11,7 @@ import { createProviderLocationAction } from './actions/create-provider-location
 import { SchemaType } from './staff-location-filters'
 import { useStore } from './store'
 
-const AddLocationSelect = () => {
+const AddLocationSelect = ({ staffId }: { staffId: string }) => {
   const { search, sureScriptEnabled } = useStore((state) => ({
     search: state.search,
     sureScriptEnabled: state.sureScriptEnabled,
@@ -19,11 +19,10 @@ const AddLocationSelect = () => {
 
   const form = useFormContext<SchemaType>()
   const stateName = form.watch('stateName')
-  const { id } = useParams()
   const onOptionClick = async (option: SelectOptionType) => {
-    if (id && typeof id === 'string') {
+    if (staffId && typeof staffId === 'string') {
       const result = await createProviderLocationAction({
-        staffId: id,
+        staffId,
         locationId: option.value,
       })
 
@@ -32,7 +31,7 @@ const AddLocationSelect = () => {
 
         if (sureScriptEnabled) {
           const prescriberResult = await createPrescriberDirectoryAction({
-            staffId: id,
+            staffId,
             locationId: option.value,
           })
 
@@ -46,7 +45,7 @@ const AddLocationSelect = () => {
         toast.error(result.error)
       }
 
-      search({ staffId: id }, 1, true)
+      search({ staffId }, 1, true)
     }
   }
   return (
