@@ -5,6 +5,7 @@ import { SessionRefresher } from '@psychplus-v2/auth/components'
 import { cn } from '@psychplus-v2/utils'
 import { Flex, Theme } from '@radix-ui/themes'
 import { ToastProvider } from '@/providers'
+import { WebSocketProvider } from '@/providers/websocket-provider'
 import { Header } from '@/ui'
 import './base.css'
 import Head from 'next/head'
@@ -62,23 +63,25 @@ const RootLayout = async ({ children }: { children: React.ReactNode }) => {
           />
         ) : null}
         <ToastProvider>
-          <Theme accentColor="blue" radius="full" asChild>
-            <Flex
-              direction="column"
-              height="100%"
-              width="100%"
-              className="overflow-y-auto"
-            >
-              {auth ? <Header /> : null}
+          <WebSocketProvider>
+            <Theme accentColor="blue" radius="full" asChild>
               <Flex
-                className={cn('mt-[var(--header-height)] flex-1', {
-                  'mt-0': !auth,
-                })}
+                direction="column"
+                height="100%"
+                width="100%"
+                className="overflow-y-auto"
               >
-                {children}
+                {auth ? <Header /> : null}
+                <Flex
+                  className={cn('mt-[var(--header-height)] flex-1', {
+                    'mt-0': !auth,
+                  })}
+                >
+                  {children}
+                </Flex>
               </Flex>
-            </Flex>
-          </Theme>
+            </Theme>
+          </WebSocketProvider>
         </ToastProvider>
       </body>
     </html>

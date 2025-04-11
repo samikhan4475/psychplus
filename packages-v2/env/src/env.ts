@@ -8,6 +8,7 @@ const PATIENT_APP_URL = process.env.PATIENT_URL ?? ''
 const PROVIDER_APP_URL = process.env.CLINICAL_URL ?? ''
 const API_URL = process.env.API_URL ?? ''
 const AUTH_URL = process.env.AUTH_API_URL ?? ''
+const WEBSOCKETSERVICE_URL = process.env.WEBSOCKETSERVICE_URL ?? ''
 
 // Scriptsure
 const SCRIPTSURE_EMAIL = process.env.SCRIPTSURE_PATIENT_PORTAL_USER_EMAIL ?? ''
@@ -47,6 +48,7 @@ export {
   PROVIDER_APP_URL,
   API_URL,
   AUTH_URL,
+  WEBSOCKETSERVICE_URL,
   SCRIPTSURE_EMAIL,
   SCRIPTSURE_API_KEY,
   SCRIPTSURE_SECRET,
