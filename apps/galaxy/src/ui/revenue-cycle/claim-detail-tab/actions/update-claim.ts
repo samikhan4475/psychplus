@@ -11,11 +11,11 @@ const updateClaimAction = async (
     api.UPDATE_CLAIM(claimId),
     payload,
   )
-
   if (result.state === 'error') {
     return {
       state: 'error',
       error: result.error,
+      status: result.status,
     }
   }
   return {

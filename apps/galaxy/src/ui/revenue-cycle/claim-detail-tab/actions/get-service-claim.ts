@@ -9,7 +9,6 @@ const getClaimById = async (
   const response = await api.GET<ClaimUpdateApiResponse>(
     api.GET_CLAIM_BY_ID(claimId),
   )
-
   if (response.state === 'error') {
     return {
       state: 'error',

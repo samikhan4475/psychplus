@@ -41,16 +41,21 @@ import { ClaimNotesHeaderActions, ClaimNotesTable } from './claim-notes-section'
 import { ClaimDeletedNotesDialog } from './claim-notes-section/claim-notes-deleted-dialog'
 import { ClaimNotesDialog } from './claim-notes-section/claim-notes-dialog'
 import { DiagnosisView } from './diagnosis-section'
+import { LoadClaimConfrimationDialog } from './load-claim-confirmation-dialog'
 import { claimUpdateSchema, ClaimUpdateSchemaType } from './schema'
 import { useStore as ClaimDetailStore } from './store'
 import { SubmissionInformationView } from './submission-information-section'
 import { SubmissionResponseTable } from './submission-response-section'
+import { metadata } from '@/app/layout'
 
 const ClaimDetailView = () => {
-  const { selectedClaimData } = useStore((state) => ({
-    activeTab: state.activeTab,
-    selectedClaimData: state.selectedClaimData[state.activeTab],
-  }))
+  const { selectedClaimData, setSelectedClaimsData, activeTab } = useStore(
+    (state) => ({
+      activeTab: state.activeTab,
+      selectedClaimData: state.selectedClaimData[state.activeTab],
+      setSelectedClaimsData: state.setSelectedClaimsData,
+    }),
+  )
   const { openAlertModal } = ClaimDetailStore((state) => ({
     openAlertModal: state.openAlertModal,
   }))
@@ -67,6 +72,7 @@ const ClaimDetailView = () => {
     'Notes',
   ])
   const [openNotesDialog, setOpenNotesDialog] = useState<boolean>(false)
+  const [reloadClaimDialog, setReloadClaimDialog] = useState<boolean>(false)
   const [openDeletedNotesDialog, setOpenDeletedNotesDialog] =
     useState<boolean>(false)
   const form = useForm<ClaimUpdateSchemaType>({
@@ -123,13 +129,23 @@ const ClaimDetailView = () => {
     }
     const { claimInsurancePolicies, ...formattedClaimDataWithoutPolicies } =
       formattedClaimData
-
     const sanitizeClaimData = sanitizeFormData(
       formattedClaimDataWithoutPolicies,
     )
-    await updateClaimAction(data.id ?? '', sanitizeClaimData)
-    toast.success('Record has been saved successfully')
-    fetchClaimData(claimId)
+    const result = await updateClaimAction(data.id ?? '', sanitizeClaimData)
+    if (result.state === 'error') {
+      if (
+        result.status === 500 &&
+        result.error.includes('ResourceModifiedByAnotherUserException')
+      ) {
+        setReloadClaimDialog(true)
+      } else {
+        toast.error(result.error)
+      }
+    } else {
+      toast.success('Record has been saved successfully')
+      fetchClaimData(claimId)
+    }
   }
 
   const handleAccordionChange = (value: string[]) => {
@@ -140,6 +156,15 @@ const ClaimDetailView = () => {
     const claimResponse = await getClaimById(claimId)
     if (claimResponse.state === 'success') {
       const transformedClaimData = transformClaimData(claimResponse.data)
+      setSelectedClaimsData(activeTab, {
+        claimId: claimId,
+        claimStatus: transformedClaimData.claimStatusCode
+          ? transformedClaimData.claimStatusCode
+          : '',
+        claimPrimaryStatus: transformedClaimData.primaryStatusCode
+          ? transformedClaimData.primaryStatusCode
+          : '',
+      })
       form.reset(transformedClaimData)
     } else {
       toast.error('Failed to fetch claim data')
@@ -259,7 +284,10 @@ const ClaimDetailView = () => {
 
     append(newServiceLine)
   }
-
+  const handleReloadClaim = () => {
+    fetchClaimData(claimId)
+    setReloadClaimDialog(false)
+  }
   return (
     <Box>
       {openNotesDialog && (
@@ -275,6 +303,13 @@ const ClaimDetailView = () => {
           claimId={claimId}
           openDialog={openDeletedNotesDialog}
           handleCloseModal={() => setOpenDeletedNotesDialog(false)}
+        />
+      )}
+      {reloadClaimDialog && (
+        <LoadClaimConfrimationDialog
+          isOpen={reloadClaimDialog}
+          onConfirm={handleReloadClaim}
+          toggleOpen={() => setReloadClaimDialog(false)}
         />
       )}
       <FormContainer

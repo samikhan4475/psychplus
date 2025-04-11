@@ -125,6 +125,19 @@ const providerSchema = z.object({
   lastName: z.string(),
   honors: z.string().optional(),
 })
+
+const metadataSchema = z.object({
+  createdOn: z.string(),
+  createdBy: z.number().optional(),
+  createdByFullName: z.string().optional(),
+  updatedOn: z.string().optional(),
+  updatedBy: z.number().optional(),
+  updatedByFullName: z.string().optional(),
+  deletedOn: z.string().optional(),
+  deletedBy: z.number().optional(),
+  deletedByFullName: z.string().optional(),
+})
+
 // Define Claim update Schema
 const claimUpdateSchema = z
   .object({
@@ -204,6 +217,7 @@ const claimUpdateSchema = z
     supervisingProviderName: providerSchema.optional(),
     orderingProviderName: providerSchema.optional(),
     referringProviderName: providerSchema.optional(),
+    metadata: metadataSchema.optional(),
     claimDiagnosis: z
       .array(claimDiagnosisSchema)
 

@@ -16,6 +16,7 @@ import { AddClaimDiagnosisView } from './diagnosis'
 import { PatientSelect } from './patient-select'
 import { ProvidersView } from './providers'
 import { addClaimSchema, ClaimAddSchemaType } from './schema'
+import { useStore } from '../claim-tab/store'
 
 const getDateString = (date?: DateValue): string | undefined =>
   date ? getCalendarDateLabel(date) : undefined
@@ -25,6 +26,12 @@ interface AddClaimFormProps {
 }
 
 const AddClaimForm = ({ onCloseModal }: AddClaimFormProps) => {
+
+  const { claimsListSearch, claimsListPayload } = useStore((state) => ({
+      claimsListSearch: state.claimsListSearch,
+      claimsListPayload: state.claimsListPayload,
+    }))
+
   const form = useForm<ClaimAddSchemaType>({
     resolver: zodResolver(addClaimSchema),
     defaultValues: {
@@ -98,6 +105,7 @@ const AddClaimForm = ({ onCloseModal }: AddClaimFormProps) => {
       return
     }
     if (response.state === 'success') {
+      claimsListSearch(claimsListPayload)
       onCloseModal(false)
       form.reset()
       toast.success('Record has been saved successfully')
