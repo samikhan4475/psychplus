@@ -39,7 +39,6 @@ import { BookedSlot, useStore } from '@/widgets/schedule-appointment-list/store'
 
 type SchemaType = z.infer<typeof baseSchema>
 const baseSchema = z.object({
-  cardHolderName: validate.nullableString,
   insurancePayerId: validate.nullableString,
   insurancePlanId: validate.nullableString,
   memberId: validate.nullableString,
@@ -79,13 +78,7 @@ const InsurancePaymentForm = ({
     })
   }
 
-  const cardSchema = z.object({
-    cardHolderName: isCreditCardRequired
-      ? validate.requiredString
-      : validate.nullableString,
-  })
-
-  const schema = baseSchema.merge(insuranceSchema).merge(cardSchema)
+  const schema = baseSchema.merge(insuranceSchema)
 
   const form = useForm({ schema })
 
@@ -107,13 +100,11 @@ const InsurancePaymentForm = ({
     setIsLoading(true)
     setFormError(undefined)
 
-    if (data.cardHolderName) {
-      const cardSubmitted = await handleCardSubmit(data)
+      const cardSubmitted = await handleCardSubmit()
       if (!cardSubmitted) {
         setIsLoading(false)
         return
       }
-    }
 
     if (hasInsurance) {
       const policySubmitted = await handlePolicySubmit(data)
@@ -174,7 +165,7 @@ const InsurancePaymentForm = ({
       })
   }
 
-  const handleCardSubmit = async (data: SchemaType) => {
+  const handleCardSubmit = async () => {
     if (!stripe || !elements) {
       alert("Stripe.js hasn't loaded yet.")
       return false
@@ -193,12 +184,11 @@ const InsurancePaymentForm = ({
 
       const { paymentMethod } = result
 
-      if (data.cardHolderName) {
         try {
           await addCreditCard({
             patientId: patient?.id ?? 0,
             cardType: paymentMethod?.card?.brand ?? '',
-            name: data.cardHolderName,
+            name: patient?.legalName?.firstName + ' ' + patient?.legalName?.lastName,
             numberLastFour: paymentMethod?.card?.last4 ?? '',
             isActive: true,
             isPrimary: true,
@@ -215,7 +205,6 @@ const InsurancePaymentForm = ({
 
           return false
         }
-      }
     }
 
     return true
@@ -473,19 +462,6 @@ const InsurancePaymentForm = ({
       </Flex>
 
       <Flex direction="column" gap="1">
-        <Text as="p" className="text-[14px] font-medium">
-          <Text>Cardholder Name</Text>
-          {isCreditCardRequired && <Text className="text-[#f14545]">*</Text>}
-        </Text>
-        <FormTextInput
-          type="text"
-          label=""
-          placeholder="Cardholder Name"
-          className="h-[56px] w-full px-1"
-          data-testid="cardholder-name"
-          {...form.register('cardHolderName')}
-        />
-
         <Text as="p" className="mt-3 text-[14px] font-medium">
           <Text>Cardholder Details</Text>
           {isCreditCardRequired && <Text className="text-[#f14545]">*</Text>}

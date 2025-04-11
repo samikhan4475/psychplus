@@ -263,9 +263,7 @@ const convertUtcToLocalTimeInSlots = (data: StaffAppointmentAvailabilities) => {
 }
 
 function getLoginRedirectUrl() {
-  return APP_ENV === 'production'
-    ? 'https://ui.psychplus.io/login'
-    : 'https://ui.staging.psychplus.dev/login'
+  return 'https://ui.psychplus.io/login'
 }
 
 export {
