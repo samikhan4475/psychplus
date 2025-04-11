@@ -2,11 +2,11 @@
 
 import { ScrollArea } from '@radix-ui/themes'
 import { DataTable, LoadingPlaceholder } from '@/components'
-import { columnsForTableView } from './columns'
+import { Columns, processSubRows } from './columns'
 import { useStore } from './store'
-import { getTableData } from './utils'
+import { updateResultsKey } from './utils'
 
-const LabResultTable = () => {
+const LabResultSheet = () => {
   const { data, loading } = useStore((state) => ({
     data: state.data,
     loading: state.loading,
@@ -16,7 +16,10 @@ const LabResultTable = () => {
     return <LoadingPlaceholder className="bg-white h-full" />
   }
 
-  const processedData = getTableData(data ?? [])
+  const processedData = updateResultsKey(data ?? [])?.map((test) => ({
+    ...test,
+    subRows: processSubRows(test.subRows || []),
+  }))
 
   return (
     <ScrollArea
@@ -25,12 +28,17 @@ const LabResultTable = () => {
     >
       <DataTable
         data={processedData}
-        columns={columnsForTableView()}
+        columns={Columns(processedData)}
+        isRowSpan
         disablePagination
         sticky
+        tRowClass="bg-gray-3"
+        stickyRow={true}
+        defaultExpanded={true}
+        tableClass="[&_.rt-ScrollAreaScrollbar]:!hidden"
       />
     </ScrollArea>
   )
 }
 
-export { LabResultTable }
+export { LabResultSheet }

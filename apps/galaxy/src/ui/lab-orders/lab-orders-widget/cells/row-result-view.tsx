@@ -51,7 +51,6 @@ const RowResultView = ({ row }: LabResultsProps) => {
           row={row}
           form={form}
           setSelectedTestName={setSelectedTestName}
-          selectedTestName={selectedTestName}
         />
       </LabResultDialog>
     </IconButton>

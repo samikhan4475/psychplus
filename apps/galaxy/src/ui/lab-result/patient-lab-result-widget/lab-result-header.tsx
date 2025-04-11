@@ -7,9 +7,14 @@ import { ListIcon, SignalIcon } from 'lucide-react'
 interface LabResultHeaderProps {
   activeTab: string
   setActiveTab: (tab: string) => void
+  isQuickNoteView?: boolean
 }
 
-const LabResultHeader = ({ activeTab, setActiveTab }: LabResultHeaderProps) => {
+const LabResultHeader = ({
+  activeTab,
+  setActiveTab,
+  isQuickNoteView,
+}: LabResultHeaderProps) => {
   return (
     <Flex
       className="bg-white rounded-1"
@@ -19,36 +24,40 @@ const LabResultHeader = ({ activeTab, setActiveTab }: LabResultHeaderProps) => {
       width="100%"
     >
       <Flex width="100%" className="flex-1 items-center space-x-4">
-        <Text className="text-pp-black-1 flex  items-center gap-x-[11px] text-[20px] font-bold">
+        <Text
+          size={!isQuickNoteView ? '5' : '3'}
+          weight={!isQuickNoteView ? 'bold' : 'medium'}
+          className="text-pp-black-1 flex  items-center gap-x-[11px]"
+        >
           Lab Results
         </Text>
-        <Tabs.Root
-          value={activeTab}
-          onValueChange={setActiveTab}
-          className="flex flex-col"
-          defaultValue="SheetView"
-        >
-          <Flex justify="between">
-            <Tabs.List>
-              <Flex direction="row" justify="between">
-                <Flex gap="2">
-                  <TabsTrigger value="SheetView">
+        {!isQuickNoteView && (
+          <Tabs.Root
+            value={activeTab}
+            onValueChange={setActiveTab}
+            className="flex flex-col"
+            defaultValue="SheetView"
+          >
+            <Flex justify="between">
+              <Tabs.List>
+                <Flex gap="2" direction="row" justify="between">
+                  <TabsTrigger value="TableView">
                     <Flex align="center" gap="2">
                       <ListIcon size={16} />
+                      Table View
+                    </Flex>
+                  </TabsTrigger>
+                  <TabsTrigger value="SheetView">
+                    <Flex align="center" gap="2">
+                      <SignalIcon size={14} />
                       Sheet View
                     </Flex>
                   </TabsTrigger>
-                  <TabsTrigger value="DataView">
-                    <Flex align="center" gap="2">
-                      <SignalIcon size={14} />
-                      Data View
-                    </Flex>
-                  </TabsTrigger>
                 </Flex>
-              </Flex>
-            </Tabs.List>
-          </Flex>
-        </Tabs.Root>
+              </Tabs.List>
+            </Flex>
+          </Tabs.Root>
+        )}
       </Flex>
     </Flex>
   )

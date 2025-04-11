@@ -1,14 +1,11 @@
 import { ColumnDef } from '@tanstack/react-table'
-import { ColumnHeader, TextCell } from '@/components'
-import { formatDate } from '@/utils/date'
+import { ColumnHeader, DateTimeCell, TextCell } from '@/components'
+import { LabResult } from '@/types'
+import { formatDate, formatUTCDate } from '@/utils/date'
 import { CollapseCell } from './cells/collapse-cell'
-import {
-  GroupedResultsByDate,
-  LabResultResponseTransformed,
-  LabResults,
-} from './types'
+import { GroupedResultsByDate, LabResultResponseTransformed } from './types'
 
-const processSubRows = (subRows: LabResults[]) => {
+const processSubRows = (subRows: LabResult[]) => {
   const groupedResults: Record<string, GroupedResultsByDate> = {}
 
   subRows.forEach((subRow) => {
@@ -19,14 +16,18 @@ const processSubRows = (subRows: LabResults[]) => {
       groupedResults[resultName] = {}
     }
 
-    const existingResult = groupedResults[resultName][observationTime]
+    const existingResult =
+      groupedResults[resultName][observationTime?.toString() ?? '']
 
-    if (
-      !existingResult ||
-      new Date(existingResult.metadata.createdOn) <
-        new Date(subRow.metadata.createdOn)
-    ) {
-      groupedResults[resultName][observationTime] = subRow
+    if (observationTime) {
+      const verifiedDate =
+        existingResult?.metadata &&
+        subRow?.metadata &&
+        new Date(existingResult.metadata.createdOn) <
+          new Date(subRow.metadata.createdOn)
+      if (!existingResult || verifiedDate) {
+        groupedResults[resultName][observationTime.toString()] = subRow
+      }
     }
   })
 
@@ -84,4 +85,59 @@ const Columns = (
   ]
 }
 
-export { Columns, processSubRows }
+const columnsForTableView = (): ColumnDef<LabResult>[] => [
+  {
+    id: 'test-name',
+    header: ({ column }) => (
+      <ColumnHeader column={column} clientSideSort label="Test" />
+    ),
+    cell: ({ row }) => <TextCell>{row.original?.testName}</TextCell>,
+    size: 150,
+  },
+  {
+    id: 'dateTime',
+    header: ({ column }) => (
+      <ColumnHeader column={column} clientSideSort label="Date/Time" />
+    ),
+    cell: ({ row }) =>
+      row.original?.observationTime && (
+        <DateTimeCell>
+          {formatUTCDate(
+            row.original?.observationTime.toString(),
+            'MM/dd/yy HH:mm',
+          )}
+        </DateTimeCell>
+      ),
+    size: 50,
+  },
+  {
+    id: 'location',
+    header: () => <ColumnHeader clientSideSort label="Location" />,
+    cell: ({ row }) => <TextCell>{row.original?.labName}</TextCell>,
+    size: 50,
+  },
+  {
+    id: 'results',
+    header: ({ column }) => (
+      <ColumnHeader column={column} clientSideSort label="Results" />
+    ),
+    cell: ({ row }) => (
+      <TextCell>
+        {row.original?.resultValue} {row.original?.resultUnit}
+      </TextCell>
+    ),
+    size: 50,
+  },
+  {
+    id: 'referenceRange',
+    header: () => <ColumnHeader clientSideSort label="Reference Range" />,
+    cell: ({ row }) => (
+      <TextCell>
+        {row.original?.recomendedValue} {row.original?.resultUnit}
+      </TextCell>
+    ),
+    size: 50,
+  },
+]
+
+export { Columns, processSubRows, columnsForTableView }

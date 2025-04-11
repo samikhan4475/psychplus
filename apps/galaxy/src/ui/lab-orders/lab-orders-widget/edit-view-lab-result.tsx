@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { Box, Button, Flex, Text } from '@radix-ui/themes'
 import { Row } from '@tanstack/react-table'
@@ -9,6 +9,8 @@ import toast from 'react-hot-toast'
 import { DataTable, FormContainer } from '@/components'
 import { LabOrders, LabResult, LabTest } from '@/types'
 import { getCalendarDate, sanitizeFormData } from '@/utils'
+import { useStore as useLabResultsStore } from '../../lab-result/patient-lab-result-widget/store'
+import { LabOrderStatusEnum } from '../add-lab-order/blocks/types'
 import { updateLabOrdersResultAction } from './actions'
 import { addLabOrdersResultAction } from './actions/add-lab-order-result'
 import { CancelButton } from './cancel-button'
@@ -18,13 +20,12 @@ import { getColumns } from './results-table-columns'
 import { SaveButton } from './save-button'
 import { SchemaType } from './schema'
 import { useStore } from './store'
-import { OrderingLabName, OrderStatus } from './types'
+import { OrderingLabName } from './types'
 
 interface LabResultsProps {
   row: Row<LabOrders>
   form: UseFormReturn<SchemaType>
   setSelectedTestName: React.Dispatch<React.SetStateAction<string>>
-  selectedTestName: string
   shouldEditLabResult: boolean
 }
 
@@ -34,13 +35,14 @@ const EditViewLabResult = ({
   setSelectedTestName,
   shouldEditLabResult,
 }: LabResultsProps) => {
+  const [loadingSave, setLoadingSave] = useState(false)
   const { orderStatus } = row.original
 
   const orderingLab = row?.original?.orderingLab
 
   const shouldAddLabResult =
     orderingLab?.name === OrderingLabName.PsychPlus &&
-    orderStatus === OrderStatus.OrderCompleted
+    orderStatus === LabOrderStatusEnum.Signed
 
   const {
     setLabResult,
@@ -52,6 +54,10 @@ const EditViewLabResult = ({
     testLabResult,
     setTestLabResult,
   } = useStore()
+
+  const { updateLabResults } = useLabResultsStore((state) => ({
+    updateLabResults: state.updateLabResults,
+  }))
   const searchParams = useSearchParams()
   const appointmentId = searchParams.get('id')
   const newRow = {
@@ -71,7 +77,7 @@ const EditViewLabResult = ({
   const handleLabTest = (test: LabTest) => {
     setSelectedTestId(test.id)
     setSelectedTestName(test.testName)
-    const labResults = row?.original?.labResults || []
+    const labResults = row?.original?.labResults ?? []
 
     if (shouldAddLabResult) {
       setEditAbleLabResults(newRow)
@@ -114,23 +120,25 @@ const EditViewLabResult = ({
   const handleAddLabResult = async (payload: LabResult) => {
     if (appointmentId) {
       const response = await addLabOrdersResultAction(
-        payload,
+        { ...payload, orderId: row.original.id },
         appointmentId,
         row.original?.id ?? '',
       )
       if (response.state === 'error') {
         toast.error('Error Adding lab result')
       } else {
-        addLabResult(response.data as LabResult)
+        addLabResult(response.data)
+        updateLabResults(response.data)
         toast.success('Result Added successfully against lab order')
       }
     }
+    setLoadingSave(false)
   }
 
   const hanldeEditLabResult = async (payload: LabResult) => {
     if (appointmentId) {
       const response = await updateLabOrdersResultAction(
-        payload,
+        { ...payload, orderId: row.original.id },
         appointmentId,
         row.original?.id ?? '',
         payload.id ?? '',
@@ -140,12 +148,15 @@ const EditViewLabResult = ({
         toast.error('Error updating lab result')
       } else {
         setLabResult(response?.data)
+        updateLabResults(response.data)
         toast.success('Result updated successfully against lab order')
       }
     }
+    setLoadingSave(false)
   }
 
   const onSubmit = async (data: SchemaType) => {
+    setLoadingSave(true)
     const payload = transformOut(data.labResults, selectedTestId)
     const formattedData = sanitizeFormData(payload)
     if (editAbleLabResults?.id === '') {
@@ -209,7 +220,7 @@ const EditViewLabResult = ({
       {shouldShowButtons() && (
         <Flex className="mt-3 justify-end gap-3">
           <CancelButton onCancel={handleCancel} />
-          <SaveButton />
+          <SaveButton loading={loadingSave} />
         </Flex>
       )}
     </FormContainer>

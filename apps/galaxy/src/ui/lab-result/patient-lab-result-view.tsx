@@ -5,7 +5,7 @@ const PatientLabResultView = () => {
   return (
     <Flex direction="column" width="100%">
       <Flex direction="column" gap="2">
-        <LabResultWidget />
+        <LabResultWidget isQuickNoteView={false} />
       </Flex>
     </Flex>
   )

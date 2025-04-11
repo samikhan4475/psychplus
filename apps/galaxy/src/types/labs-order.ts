@@ -50,6 +50,10 @@ interface LabResult {
   resultValueType?: string
   valueDescription?: string
   recordStatus?: string
+  resultId?: string
+  resultUnit?: string
+  labName?: string
+  testName?: string
 }
 
 interface LabResultPayload {

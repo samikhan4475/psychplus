@@ -1,7 +1,8 @@
-import { LabResultResponse, LabResults } from './types'
+import { LabResult } from '@/types'
+import { LabResultResponse } from './types'
 
 export type LabResultResponseUpdated = Omit<LabResultResponse, 'results'> & {
-  subRows: LabResults[]
+  subRows: LabResult[]
 }
 
 const updateResultsKey = (
@@ -12,6 +13,22 @@ const updateResultsKey = (
     subRows: result.results,
     results: undefined,
   }))
+}
+
+const getTableData = (labResultsResponse: LabResultResponse[]) => {
+  let results: LabResult[] = []
+  if (labResultsResponse?.length > 0)
+    labResultsResponse?.forEach((labResultResponse) => {
+      results = [
+        ...results,
+        ...labResultResponse.results.map((result) => ({
+          ...result,
+          testName: labResultResponse?.testName ?? '',
+        })),
+      ]
+    })
+
+  return results
 }
 
 interface FormattedData {
@@ -28,4 +45,4 @@ const removeEmptyValues = (obj: FormattedData) => {
   )
 }
 
-export { updateResultsKey, removeEmptyValues }
+export { updateResultsKey, removeEmptyValues, getTableData }

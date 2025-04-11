@@ -1,4 +1,5 @@
 import React from 'react'
+import { getLocalTimeZone, today } from '@internationalized/date'
 import { Row } from '@tanstack/react-table'
 import { format } from 'date-fns'
 import { DatePickerInput, DateTimeCell } from '@/components'
@@ -13,7 +14,10 @@ const ObservationTimeFieldCell = ({ row }: TextFieldCellProps) => {
   const { editAbleLabResults } = useStore()
   const isAddingOrEditing = editAbleLabResults?.id === row.original.id
   return isAddingOrEditing ? (
-    <DatePickerInput field="labResults.observationTime" />
+    <DatePickerInput
+      field="labResults.observationTime"
+      maxValue={today(getLocalTimeZone())}
+    />
   ) : (
     <DateTimeCell>
       {row.original.observationTime &&

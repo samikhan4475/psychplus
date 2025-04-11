@@ -34,6 +34,14 @@ const getColumns: (appointmentId: string) => ColumnDef<LabOrders>[] = (
       ),
     },
     {
+      id: 'labOrderNumber',
+      accessorKey: 'labOrderNumber',
+      header: ({ column }) => (
+        <ColumnHeader column={column} clientSideSort label="Lab Order Number" />
+      ),
+      cell: ({ row }) => <TextCell>{row.original.labOrderNumber}</TextCell>,
+    },
+    {
       id: 'orderingStaffName',
       accessorKey: 'orderingStaffName',
       header: ({ column }) => (

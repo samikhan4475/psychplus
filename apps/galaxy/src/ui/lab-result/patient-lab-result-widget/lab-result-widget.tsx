@@ -1,32 +1,62 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useParams } from 'next/navigation'
 import { TabsContent } from '@radix-ui/react-tabs'
 import * as Tabs from '@radix-ui/react-tabs'
-import { Box, Flex } from '@radix-ui/themes'
+import { Flex } from '@radix-ui/themes'
 import { LabResultFilterForm } from './lab-result-filter-form'
 import { LabResultHeader } from './lab-result-header'
+import { LabResultSheet } from './lab-result-sheet'
 import { LabResultTable } from './lab-result-table'
+import { useStore } from './store'
 
-const LabResultWidget = () => {
-  const [activeTab, setActiveTab] = useState('SheetView')
+interface LabResultWidgetProps {
+  isQuickNoteView?: boolean
+  patientId?: string
+  appointmentId?: string
+}
+
+const LabResultWidget = ({ isQuickNoteView = true }: LabResultWidgetProps) => {
+  const [activeTab, setActiveTab] = useState('TableView')
+
+  const patientId = useParams().id as string
+
+  const { fetchLabResults } = useStore((state) => ({
+    fetchLabResults: state.fetchLabResults,
+  }))
+
+  useEffect(() => {
+    fetchLabResults({
+      resourceStatusList: ['Active'],
+      patientId: patientId,
+      isIncludeLabOrder: true,
+      isIncludeLabLocation: true,
+      isIncludeTests: true,
+    })
+  }, [])
+
   return (
     <Flex
       direction="column"
       width="100%"
-      className="bg-white h-[calc(100dvh_-_278px)] rounded-1 shadow-2"
+      className="bg-white  rounded-1 shadow-2"
     >
-      <Flex gap="1" direction="column" mb="1">
-        <LabResultHeader activeTab={activeTab} setActiveTab={setActiveTab} />
-        <LabResultFilterForm />
+      <Flex gap="1" direction="column">
+        <LabResultHeader
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
+          isQuickNoteView={isQuickNoteView}
+        />
+        {!isQuickNoteView && <LabResultFilterForm />}
       </Flex>
 
       <Tabs.Root value={activeTab} onValueChange={setActiveTab}>
-        <TabsContent value="SheetView">
-          {activeTab === 'SheetView' && <LabResultTable />}
+        <TabsContent value="TableView">
+          {activeTab === 'TableView' && <LabResultTable />}
         </TabsContent>
-        <TabsContent value="DataView">
-          {activeTab === 'DataView' && <Box>Will be next phase </Box>}
+        <TabsContent value="SheetView">
+          {activeTab === 'SheetView' && <LabResultSheet />}
         </TabsContent>
       </Tabs.Root>
     </Flex>
