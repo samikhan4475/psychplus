@@ -29,7 +29,7 @@ const getUpcomingAppointments = () => {
   url.searchParams.set('limit', '0')
 
   const requestPayload: UpcomingAppointmentsParams = {
-    maxFutureDays: 14,
+    maxFutureDays: 90,
     includeStaffBio: true,
   }
 
