@@ -31,7 +31,7 @@ const NotesVisitViewPage = ({
         </Flex>
       }
     >
-      <NotesWidgetView patientId={params.id} appointmentId={searchParams.id} />
+      <NotesWidgetView patientId={params.id} appointmentId={searchParams?.id ?? ""} />
     </Suspense>
   )
 }

@@ -7,7 +7,7 @@ interface PharmacyVisitViewPageProps {
   }
 }
 
-const PharmacyVisitViewPage = async ({
+const PharmacyVisitViewPage = ({
   params,
 }: PharmacyVisitViewPageProps) => {
   return <PharmacyView patientId={params.id} />

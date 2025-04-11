@@ -7,7 +7,7 @@ interface PatientAllergiesVisitViewPageProps {
   }
 }
 
-const PatientAllergiesVisitViewPage = async ({ params }: PatientAllergiesVisitViewPageProps) => {
+const PatientAllergiesVisitViewPage =  ({ params }: PatientAllergiesVisitViewPageProps) => {
   return (
     <PatientAllergiesView patientId={params.id} isPatientAllergiesTab={true} />
   )

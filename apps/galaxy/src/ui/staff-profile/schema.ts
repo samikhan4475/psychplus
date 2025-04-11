@@ -100,19 +100,11 @@ const schema = z
     staffTypeIds: z.array(requiredString),
   })
   .superRefine((data, ctx) => {
-    const { addresses, isMailingAddressSameAsPrimary, hasBioVideo } = data
+    const { addresses, isMailingAddressSameAsPrimary } = data
 
     validateAddressFields(addresses[0], '0', ctx)
     if (!isMailingAddressSameAsPrimary)
       validateAddressFields(addresses[1], '1', ctx)
-
-    if (!hasBioVideo) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: 'Bio video is required',
-        path: ['hasBioVideo'],
-      })
-    }
   })
 
 type SchemaType = z.infer<typeof schema>

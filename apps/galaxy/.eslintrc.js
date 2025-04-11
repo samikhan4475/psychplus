@@ -17,6 +17,7 @@ const config = {
     '@typescript-eslint/no-unused-vars': 'warn',
     '@typescript-eslint/no-empty-function': 'warn',
     '@next/next/no-html-link-for-pages': 'off',
+    'react-hooks/exhaustive-deps': 'off',
     'import/no-anonymous-default-export': 'off',
     '@typescript-eslint/no-unused-expressions': 'off',
     '@typescript-eslint/no-explicit-any': 'warn',

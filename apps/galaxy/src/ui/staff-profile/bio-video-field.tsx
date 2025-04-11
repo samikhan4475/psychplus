@@ -62,7 +62,7 @@ const BioVideoField = () => {
 
   return (
     <FormFieldContainer>
-      <FormFieldLabel required>Bio Video</FormFieldLabel>
+      <FormFieldLabel>Bio Video</FormFieldLabel>
       {hasBioVideo || isVideoUploaded ? (
         <Flex
           className="border-pp-gray-2 h-6 w-full rounded-2 border border-solid px-2 !outline-none [box-shadow:none]"

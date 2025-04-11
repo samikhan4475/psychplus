@@ -1,4 +1,3 @@
-import { cache } from 'react'
 import { Appointment, QuickNoteSectionItem } from '@/types'
 import { isHospitalCareVisit } from '@/utils'
 import {
@@ -125,7 +124,7 @@ const getBlocksByVisitType = (visitType: string, visitSequence: string) => {
   return blockForVisitType
 }
 
-const getCachedBlocksByVisitType = cache(getBlocksByVisitType)
+const getCachedBlocksByVisitType = getBlocksByVisitType
 
 export {
   mapAppointmentDurationToData,

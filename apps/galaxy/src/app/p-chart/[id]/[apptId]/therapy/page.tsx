@@ -1,6 +1,4 @@
-import { Text } from '@radix-ui/themes'
-import { getAppointment } from '@/api'
-import { TherapyWidget } from '@/ui/therapy'
+import { TherapyLoader as TherapyWidget } from '@/ui/therapy/therapy-loader'
 
 interface TherapyPageProps {
   params: {
@@ -12,12 +10,8 @@ interface TherapyPageProps {
   }
 }
 
-const TherapyPage = async ({ params, searchParams }: TherapyPageProps) => {
-  const appointment = await getAppointment({ id: searchParams.id })
-  if (appointment.state === 'error') {
-    return <Text>Appointment with {searchParams.id} not found</Text>
-  }
-  return <TherapyWidget patientId={params.id} appointment={appointment.data} />
+const TherapyPage =  ({ params, searchParams }: TherapyPageProps) => {
+  return <TherapyWidget searchParams={searchParams} params={params} />
 }
 
 export default TherapyPage

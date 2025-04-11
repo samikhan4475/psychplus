@@ -4,7 +4,7 @@ interface FollowUpPageProps {
   params: { id: string; apptId: string }
 }
 
-const FollowUpVisitViewPage = async ({ params }: FollowUpPageProps) => {
+const FollowUpVisitViewPage =  ({ params }: FollowUpPageProps) => {
   return <FollowUpView patientId={params.id} />
 }
 

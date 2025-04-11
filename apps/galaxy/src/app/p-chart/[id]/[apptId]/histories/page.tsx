@@ -1,6 +1,6 @@
 import { HistoryView } from '@/ui/histories'
 
-const HistoryVisitViewPage = async () => {
+const HistoryVisitViewPage =  () => {
   return <HistoryView />
 }
 
