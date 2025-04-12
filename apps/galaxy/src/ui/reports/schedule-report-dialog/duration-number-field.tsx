@@ -12,9 +12,11 @@ const NumberOfDuration = () => {
   const previousValues = useRef<{
     forDuration?: string
     durationInterval?: string
+    numberOfDuration?: string
   }>({
     forDuration: undefined,
     durationInterval: undefined,
+    numberOfDuration: undefined,
   })
 
   const getMaxValue = (interval: string) => {
@@ -50,6 +52,17 @@ const NumberOfDuration = () => {
       previousValues.current = { forDuration, durationInterval }
     }
   }, [forDuration, durationInterval, form])
+
+  useEffect(() => {
+    const currentNumberOfDuration = form.getValues('numberOfDuration')
+
+    if (
+      previousValues.current.numberOfDuration === undefined &&
+      currentNumberOfDuration
+    ) {
+      form.setValue('numberOfDuration', currentNumberOfDuration)
+    }
+  }, [form])
 
   const tooltipBody = (
     <Text size="1" className="text-pp-warning-black-text ">

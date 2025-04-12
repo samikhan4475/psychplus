@@ -1,7 +1,7 @@
 import { Box, Text } from '@radix-ui/themes';
 import ReportName from './report-name';
 import ScheduleParameters from './schedule-parameters';
-import DataDetail from './data-detail';
+import { DataDetail } from './data-detail';
 
 const DataRangeAndParameter = () => {
   return (
@@ -19,4 +19,4 @@ const DataRangeAndParameter = () => {
   );
 };
 
-export default DataRangeAndParameter;
+export { DataRangeAndParameter};

@@ -1,30 +1,29 @@
-'use client';
+'use client'
 
-import { Button } from '@radix-ui/themes';
-import { useFormContext } from 'react-hook-form';
-import { ScheduleTemplateSchemaType } from './schedule-report-form';
+import { Button } from '@radix-ui/themes'
+import { useFormContext } from 'react-hook-form'
+import { ScheduleTemplateSchemaType } from './schedule-report-form'
 
 const RemoveEndDateButton = () => {
-  const form = useFormContext<ScheduleTemplateSchemaType>();
-  const endDate = form.watch('terminateOn');
+  const form = useFormContext<ScheduleTemplateSchemaType>()
+  const endDate = form.watch('terminateOn')
 
   const handleClearEndDate = () => {
-    form.resetField('terminateOn');
-  };
+    form.resetField('terminateOn')
+  }
 
-  if (!endDate) return null;
+  if (!endDate) return null
 
   return (
     <Button
       size="1"
-      variant='ghost'
-      className="text-pp-blue cursor-pointer w-[100px] ml-1"
+      variant="ghost"
+      className="text-pp-blue ml-1 w-[130px] cursor-pointer"
       onClick={handleClearEndDate}
     >
       Remove End Date
     </Button>
-  );
-};
+  )
+}
 
-export { RemoveEndDateButton };
-
+export { RemoveEndDateButton }

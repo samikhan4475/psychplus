@@ -18,6 +18,9 @@ const ReportsTabs = () => {
     setGeneratedReport,
     setSelectedTemplate,
     fetchStaffData,
+    setScheduleReports,
+    resetPageCache,
+    resetScheduledReportPageCache,
     resetData,
   } = useStore()
 
@@ -37,6 +40,9 @@ const ReportsTabs = () => {
     resetData()
     setSelectedTemplate(null)
     setGeneratedReport(null)
+    setScheduleReports(undefined)
+    resetPageCache()
+    resetScheduledReportPageCache()
   }
 
   if (loading) {

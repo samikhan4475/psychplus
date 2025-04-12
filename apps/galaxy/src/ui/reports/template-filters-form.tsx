@@ -34,8 +34,9 @@ const schema = z.object({
       id: z.string(),
       runValue: z
         .union([z.string(), z.array(z.string())])
-        .optional()
-        .default(''),
+        .refine((value) => value !== '', {
+          message: 'Required',
+        }),
       parameterCode: z.string(),
     }),
   ),
@@ -196,7 +197,6 @@ const DynamicTemplateFilters = () => {
       <FormContainer form={form} onSubmit={onSubmit}>
         <Flex
           direction="row"
-          align="center"
           className="bg-white shadow-light-08 mt-1 flex-wrap gap-2 px-2 py-2"
         >
           {sortedParameters.map((item, i) => {

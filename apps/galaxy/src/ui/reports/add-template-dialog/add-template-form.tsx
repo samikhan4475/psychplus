@@ -50,17 +50,24 @@ const AddTemplateForm = ({ onClose }: AddTemplateFormProps) => {
     if (!templateData) {
       response = await addTemplateAction(payload)
     } else {
+      const updatedTemplateData = updateExistingTemplateData(
+        templateData,
+        payload,
+      )
+      setTemplateData(updatedTemplateData)
+
       response = await editTemplateAction({
         templateId: templateData.id || '',
-        data: payload,
+        data: updatedTemplateData,
       })
     }
 
     if (response.state === 'success') {
-      setTemplateData(response?.data || null)
+      setTemplateData(response.data)
       const uploadSuccess = await handleUploadReport(
         definitionPayloadUrl,
         response.data?.id ?? '',
+        true,
       )
       if (!uploadSuccess) {
         setLoading(false)
@@ -77,6 +84,31 @@ const AddTemplateForm = ({ onClose }: AddTemplateFormProps) => {
       )
     }
     setLoading(false)
+  }
+
+  function updateExistingTemplateData(
+    original: EditTemplateSchemaType,
+    updated: Partial<AddTemplateSchemaType>,
+  ): EditTemplateSchemaType {
+    return {
+      ...original,
+      ...updated,
+      parameters: updated.parameters
+        ? updated.parameters.map((param, i) => {
+            const updatedParam = {
+              ...param,
+              reportTemplateId: original.parameters?.[0]?.reportTemplateId,
+            }
+
+            if (!param.id && original.parameters?.[i]?.id) {
+              updatedParam.id = original.parameters?.[i]?.id
+            }
+
+            return updatedParam
+          })
+        : original.parameters,
+      permittedRoles: updated.permittedRoles ?? original.permittedRoles,
+    }
   }
 
   return (

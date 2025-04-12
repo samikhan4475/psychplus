@@ -7,7 +7,11 @@ import { TemplateInsuranceSelect } from '../template-insurance-select'
 import { TemplatePatientSelect } from '../template-patients-select'
 import { TemplateSelect } from '../template-select'
 import { TemplateStaffSelect } from '../template-staff-select'
-import { CODE_PARAM_ATTRIBUTES, STAFF_SELECTION } from '../types'
+import {
+  CODE_PARAM_ATTRIBUTES,
+  STAFF_SELECTION,
+  TemplateParameter,
+} from '../types'
 import { DurationSelection } from './duration-selection'
 
 const ScheduleParameters = () => {
@@ -16,6 +20,11 @@ const ScheduleParameters = () => {
   const codeParametersType = templateFilters?.codes || []
   const form = useFormContext()
   const { register } = form
+  const reportTemplateFilters: TemplateParameter[] =
+    selectedTemplate?.parameters || []
+  const sortedParameters: TemplateParameter[] = [...reportTemplateFilters].sort(
+    (a, b) => a.displayOrder - b.displayOrder,
+  )
 
   const getDropdownFields = (code: string) => {
     const codeParam = codeParametersType.find((param) => param.code === code)
@@ -79,14 +88,14 @@ const ScheduleParameters = () => {
   }
   return (
     <Flex direction="row" align="start" className="flex-wrap gap-0.5 py-2">
-      {selectedTemplate?.parameters?.map((param, i) => {
+      {sortedParameters?.map((param, i) => {
         const { isSelect, isMultiple } = getDropdownFields(param.parameterCode)
         return (
           <Flex key={param.id} direction="row" className="gap-x-1">
             {isSelect && param.parameterCode === 'StaffList' && (
               <TemplateStaffSelect
                 title={param.displayName}
-                name={`reportTemplateParameters.${i}.runValue`}
+                name={`parameters.${i}.scheduleParameterValue`}
                 isMultiple={isMultiple}
               />
             )}
@@ -94,7 +103,7 @@ const ScheduleParameters = () => {
             {isSelect && param.parameterCode === 'PatientList' && (
               <TemplatePatientSelect
                 title={param.displayName}
-                name={`reportTemplateParameters.${i}.runValue`}
+                name={`parameters.${i}.scheduleParameterValue`}
                 isMultiple={isMultiple}
               />
             )}
@@ -102,7 +111,7 @@ const ScheduleParameters = () => {
             {isSelect && param.parameterCode === 'CosignerList' && (
               <TemplateCosignerSelect
                 title={param.displayName}
-                name={`reportTemplateParameters.${i}.runValue`}
+                name={`parameters.${i}.scheduleParameterValue`}
                 isMultiple={isMultiple}
               />
             )}
@@ -110,7 +119,7 @@ const ScheduleParameters = () => {
             {isSelect && param.parameterCode === 'InsuranceList' && (
               <TemplateInsuranceSelect
                 title={param.displayName}
-                name={`reportTemplateParameters.${i}.runValue`}
+                name={`parameters.${i}.scheduleParameterValue`}
                 isMultiple={isMultiple}
               />
             )}

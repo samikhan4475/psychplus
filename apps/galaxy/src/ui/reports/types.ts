@@ -8,6 +8,8 @@ export interface TemplateParameter {
   reportTemplateId?: string
   displayOrder: number
   runValue?: string
+  scheduleParameterValue?: string | string[]
+  templateParameterId?: string
 }
 
 interface Template {
@@ -87,6 +89,69 @@ interface GeneratedReportParams {
   reportType: string
   data?: ReportFilterParameters[]
 }
+interface GetScheduleReportListResponse {
+  scheduleReports: ScheduledReport[]
+  total: number
+}
+interface ScheduleReportListParams {
+  templateIds: string[]
+  jobIds?: string[]
+}
+
+type ParsedCron = {
+  beginDate: Date
+  repeatInterval: string
+  scheduleDays: string[]
+  intervalOption: string
+  repeatCount: string
+}
+
+type ScheduledReport = {
+  id: string
+  metadata?: Metadata
+  resourceStatus: string
+  templateId: string
+  beginOn: string
+  terminateOn: string
+  jobId: string
+  parameters: TemplateParameter[]
+  repeatSchedule: string
+  scheduledOn: string
+  dataRange: string
+  distributionGroups: DistributionGroup[]
+  repeatCount: string
+  repeatInterval: string
+  intervalOption: string
+  scheduleDays: string
+  forDuration: string
+  numberOfDuration: string
+  durationInterval: string
+  isSchedule: boolean
+  reportTemplateId: string
+  reportTemplateName: string
+  isEnabled: boolean
+  cronScheduleJobDefinition: string
+  cronExpressionDescription: string
+}
+
+interface DistributionGroup {
+  id: string
+  metadata: Metadata
+  resourceStatus: string
+  reportScheduleId: string
+  distributionGroupId: string
+  distributionGroupDisplayName: string
+}
+
+type Schedule = {
+  beginOn: string | null
+  repeatSchedule: string | null
+  scheduledOn: string | null
+  dataRange: string | null
+  terminateOn: string | null
+  distributionGroups: string | null
+  resourceStatus?: string
+}
 
 export enum CODE_PARAM_ATTRIBUTES {
   DATA_TYPE = 'DataType',
@@ -124,6 +189,11 @@ export enum STAFF_SELECTION {
   SPECIALIST_TYPE = 'SpecialistType',
 }
 
+export enum VIEW_TYPE {
+  REPORT = 'report',
+  SCHEDULE = 'schedule',
+}
+
 export enum REPORT_PARAMETER_CODE {
   STAFF_SELECTION_LIST = 'StaffSelectionList',
   SPECIALLIST_TYPE_LIST = 'SpecialistTypeList',
@@ -144,4 +214,9 @@ export type {
   UserGroup,
   GeneratedReportParams,
   GetReportListResponse,
+  Schedule,
+  ScheduleReportListParams,
+  ScheduledReport,
+  GetScheduleReportListResponse,
+  ParsedCron,
 }

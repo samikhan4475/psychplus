@@ -1,17 +1,16 @@
-import { FormFieldContainer, FormFieldLabel } from '@/components';
-import { DurationInterval } from './duration-interval';
-import { NumberOfDuration } from './duration-number-field';
-import { ForSelect } from './for-select';
+import { FormFieldContainer, FormFieldLabel } from '@/components'
+import { DurationInterval } from './duration-interval'
+import { NumberOfDuration } from './duration-number-field'
+import { ForSelect } from './for-select'
 
 const DurationSelection = () => {
   return (
-    <FormFieldContainer className='flex-row items-start gap-2 ml-1'>
+    <FormFieldContainer className="ml-1 mt-1 flex-row items-start gap-2">
       <ForSelect />
       <NumberOfDuration />
       <DurationInterval />
     </FormFieldContainer>
-  );
-};
+  )
+}
 
-export { DurationSelection };
-
+export { DurationSelection }

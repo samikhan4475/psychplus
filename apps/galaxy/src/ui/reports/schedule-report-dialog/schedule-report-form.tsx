@@ -5,20 +5,23 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import z from 'zod'
 import { FormContainer } from '@/components'
-import { SelectOptionType } from '@/types'
+import { ActionResult, SelectOptionType } from '@/types'
 import { formatDateToISOString } from '@/utils'
 import {
   addScheduleReportAction,
+  editScheduleReportAction,
   getOrganizationRolesAction,
   runScheduleReportAction,
+  updateScheduleJobAction,
 } from '../actions'
 import { useStore } from '../store'
-import { REPEAT_INTERVAL, UserGroup } from '../types'
+import { ScheduledReport, ScheduleJob, SchedulingReport } from '../types'
 import {
   formatJobData,
   generateCronExpression,
   processParameters,
 } from '../utils'
+import { defaultValues } from './default-values'
 import { DistributionGroupsSelect } from './distribution-groups'
 import { ScheduleReportButton } from './schedule-report-button'
 import { ScheduleReportIntervals } from './schedule-report-intervals'
@@ -36,21 +39,23 @@ const schema = z
     forDuration: z.string().min(1, 'Required'),
     numberOfDuration: z.string().optional(),
     durationInterval: z.string().min(1, 'Required'),
-    scheduleDays: z.any().optional(),
+    scheduleDays: z.array(z.string()).optional(),
     intervalOption: z.string().optional(),
     isSchedule: z.boolean().optional(),
-    parameters: z.array(
-      z.object({
-        id: z.string(),
-        scheduleParameterValue: z
-          .union([z.string(), z.array(z.string())])
-          .optional()
-          .default(''),
-        reportTemplateId: z.string(),
-        parameterCode: z.string(),
-      }),
-    ),
+    parameters: z
+      .array(
+        z.object({
+          id: z.string(),
+          scheduleParameterValue: z
+            .union([z.string(), z.array(z.string())])
+            .optional(),
+          reportTemplateId: z.string().optional(),
+          parameterCode: z.string().optional(),
+        }),
+      )
+      .optional(),
     distributionGroups: z.array(z.string()).min(1, 'required'),
+    isEnabled: z.boolean().optional(),
   })
   .refine(
     (data) =>
@@ -74,9 +79,13 @@ const schema = z
 type ScheduleTemplateSchemaType = z.infer<typeof schema>
 interface ScheduleReportFormProps {
   onSuccess?: () => void
+  scheduleData?: ScheduledReport
 }
-const ScheduleReportForm = ({ onSuccess }: ScheduleReportFormProps) => {
-  const { selectedTemplate } = useStore()
+const ScheduleReportForm = ({
+  onSuccess,
+  scheduleData,
+}: ScheduleReportFormProps) => {
+  const { selectedTemplate, searchScheduledReports } = useStore()
   const [distributionGroupOptions, setDistributionGroupOptions] = useState<
     SelectOptionType[]
   >([])
@@ -84,20 +93,7 @@ const ScheduleReportForm = ({ onSuccess }: ScheduleReportFormProps) => {
 
   const form = useForm<ScheduleTemplateSchemaType>({
     resolver: zodResolver(schema),
-    defaultValues: {
-      beginOn: undefined,
-      terminateOn: undefined,
-      repeatCount: REPEAT_INTERVAL.NOREPEAT,
-      repeatInterval: '',
-      intervalOption: '',
-      scheduleDays: '',
-      forDuration: '',
-      numberOfDuration: '',
-      durationInterval: '',
-      isSchedule: false,
-      parameters: selectedTemplate?.parameters || [],
-      distributionGroups: [],
-    },
+    defaultValues: defaultValues(selectedTemplate, scheduleData),
     mode: 'onChange',
   })
 
@@ -105,70 +101,81 @@ const ScheduleReportForm = ({ onSuccess }: ScheduleReportFormProps) => {
     const transformedDistributionGroups =
       data.distributionGroups.length > 0
         ? data.distributionGroups.map((id) => ({
+            id,
             distributionGroupId: id,
             reportScheduleId: id,
           }))
         : []
 
-    try {
-      const beginDate = new Date(
-        data.beginOn.year,
-        data.beginOn.month - 1,
-        data.beginOn.day,
-      )
-      const cronScheduleDefinition = generateCronExpression({
-        beginDate,
-        repeatInterval: data.repeatInterval,
-        scheduleDays: data.scheduleDays,
-        intervalOption: data.intervalOption,
-        repeatCount: data.repeatCount,
+    const beginDate = new Date(
+      data.beginOn.year,
+      data.beginOn.month - 1,
+      data.beginOn.day,
+    )
+    const cronScheduleDefinition = generateCronExpression({
+      beginDate,
+      repeatInterval: data.repeatInterval,
+      scheduleDays: data.scheduleDays,
+      intervalOption: data.intervalOption,
+      repeatCount: data.repeatCount,
+    })
+
+    const formattedJobData = formatJobData(
+      cronScheduleDefinition,
+      selectedTemplate,
+      data?.numberOfDuration ?? '',
+    )
+
+    let jobResponse: ActionResult<ScheduleJob> | null = null
+
+    if (!scheduleData) {
+      jobResponse = await runScheduleReportAction(formattedJobData)
+    } else {
+      jobResponse = await updateScheduleJobAction({
+        jobId: scheduleData.jobId,
+        data: formattedJobData,
       })
+    }
 
-      const formattedJobData = formatJobData(
-        cronScheduleDefinition,
-        selectedTemplate,
+    if (jobResponse?.state === 'success') {
+      const updatedParameters = processParameters(
+        data.parameters ? data.parameters : [],
+        selectedTemplate?.id,
+        data.numberOfDuration ?? '',
+        data.durationInterval ?? '',
+        data.forDuration ?? '',
       )
-      const runScheduleJobResponse = await runScheduleReportAction(
-        formattedJobData,
-      )
 
-      if (runScheduleJobResponse?.state === 'success') {
-        const updatedParameters = processParameters(
-          data.parameters,
-          selectedTemplate?.id,
-          data.numberOfDuration ?? '',
-          data.durationInterval ?? '',
-          data.forDuration ?? '',
-        )
-
-        const formattedScheduleData = {
-          templateId: selectedTemplate?.id,
-          beginOn: formatDateToISOString(data.beginOn),
-          terminateOn: data.terminateOn
-            ? formatDateToISOString(data.terminateOn)
-            : null,
-          parameters: updatedParameters,
-          distributionGroups: transformedDistributionGroups,
-          jobId: runScheduleJobResponse.data.id,
-        }
-
-        const schedulingResponse = await addScheduleReportAction(
-          formattedScheduleData,
-        )
-        if (schedulingResponse?.state === 'success') {
-          toast.success('Report Scheduled Successfully')
-          onSuccess?.()
-        } else {
-          toast.error(
-            schedulingResponse?.error ?? 'Oops! Schedule report failed',
-          )
-        }
-      } else {
-        toast.error(runScheduleJobResponse?.error ?? 'Run schedule job failed')
+      const formattedScheduleData = {
+        templateId: selectedTemplate?.id,
+        beginOn: formatDateToISOString(data.beginOn),
+        terminateOn: data.terminateOn
+          ? formatDateToISOString(data.terminateOn)
+          : null,
+        parameters: updatedParameters,
+        distributionGroups: transformedDistributionGroups,
+        jobId: jobResponse.data.id,
+        isEnabled: data.isEnabled,
       }
-    } catch (error) {
-      toast.error('An error occurred while scheduling the report')
-      console.error(error)
+      let scheduleResponse: ActionResult<SchedulingReport> | null = null
+      if (!scheduleData) {
+        scheduleResponse = await addScheduleReportAction(formattedScheduleData)
+      } else {
+        scheduleResponse = await editScheduleReportAction({
+          scheduleId: scheduleData.id || '',
+          data: formattedScheduleData,
+        })
+      }
+
+      if (scheduleResponse?.state === 'success') {
+        toast.success('Report Scheduled Successfully')
+        onSuccess?.()
+        searchScheduledReports({ templateIds: [selectedTemplate?.id ?? ''] })
+      } else {
+        toast.error(scheduleResponse?.error ?? 'Oops! Schedule report failed')
+      }
+    } else {
+      toast.error(jobResponse?.error ?? 'Run schedule job failed')
     }
   }
   useEffect(() => {

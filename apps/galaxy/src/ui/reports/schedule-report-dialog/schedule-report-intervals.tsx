@@ -3,13 +3,13 @@
 import { Flex, Text } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
 import { INTERVAL, REPEAT_INTERVAL } from '../types'
-import DataRangeAndParameter from './data-range-and-parameter'
 import { EndDate } from './end-date-input'
 import { IntervalButtonGroup } from './interval-button-group'
 import { RepeatSelect } from './repeat-select'
 import { ScheduleTemplateSchemaType } from './schedule-report-form'
 import { StartDate } from './start-date-input'
 import { WeekdaysSelect } from './week-days-select'
+import { DataRangeAndParameter } from './data-range-and-parameter'
 
 const ScheduleReportIntervals = () => {
   const form = useFormContext<ScheduleTemplateSchemaType>();

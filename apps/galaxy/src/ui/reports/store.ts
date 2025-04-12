@@ -10,15 +10,20 @@ import {
   getReportParametersTypeAction,
   getReportsAction,
   getRunReportAction,
+  getScheduledReportsListAction,
   getStaffAction,
   getTemplatesAction,
 } from './actions'
 import {
   GeneratedReportParams,
+  GetScheduleReportListResponse,
   Parameter,
   ReportFilterParameters,
+  ScheduledReport,
+  ScheduleReportListParams,
   StaffDataOptions,
   Template,
+  VIEW_TYPE,
 } from './types'
 
 interface Store {
@@ -26,6 +31,7 @@ interface Store {
   loading: boolean
   fetchTemplateLoading: boolean
   generateReportLoading: boolean
+  scheduleReportLoading: boolean
   error: string | null
   templates: Template[]
   templateFilters: Parameter | null
@@ -39,14 +45,24 @@ interface Store {
   patientData: SelectOptionType[] | null
   cosignerData: SelectOptionType[] | null
   page: number
+  scheduleReportPage: number
   pageCache: Record<number, string>
+  scheduledReportPageCache: Record<number, GetScheduleReportListResponse>
   payload: GeneratedReportParams
+  scheduledReportPayload: ScheduleReportListParams
+  scheduleReports?: GetScheduleReportListResponse
+  viewType: VIEW_TYPE.REPORT | VIEW_TYPE.SCHEDULE
+  setViewType: (type: VIEW_TYPE.REPORT | VIEW_TYPE.SCHEDULE) => void
   fetchReportsAndTemplates: () => void
   fetchTemplates: () => void
   setSelectedReport: (code: Code) => void
   setSelectedTemplate: (template: Template | null) => void
+  setScheduleReports: (
+    scheduledReports: GetScheduleReportListResponse | undefined,
+  ) => void
   setGeneratedReport: (report: string | null) => void
-  fetchStaffData: () => void
+  resetPageCache: () => void
+  resetScheduledReportPageCache: () => void
   setFiltersData: (data: ReportFilterParameters[] | null) => void
   search: (
     payload: GeneratedReportParams,
@@ -57,6 +73,15 @@ interface Store {
   prev: () => void
   jumpToPage: (page: number) => void
   resetData: () => void
+  searchScheduledReports: (
+    scheduledReportPayload: ScheduleReportListParams,
+    scheduleReportPage?: number,
+    scheduleReportReset?: boolean,
+  ) => void
+  nextScheduledReport: () => void
+  prevScheduledReport: () => void
+  jumpToPageScheduleReport: (page: number) => void
+  fetchStaffData: () => void
 }
 
 const useStore = create<Store>((set, get) => ({
@@ -67,6 +92,7 @@ const useStore = create<Store>((set, get) => ({
   loading: false,
   fetchTemplateLoading: false,
   generateReportLoading: false,
+  scheduleReportLoading: false,
   selectedReport: null,
   selectedTemplate: null,
   generatedReport: null,
@@ -82,7 +108,19 @@ const useStore = create<Store>((set, get) => ({
   },
   page: 1,
   pageCache: {},
+  scheduledReportPageCache: {},
   totalRecords: 0,
+  viewType: VIEW_TYPE.REPORT,
+  scheduleReports: undefined,
+  scheduledReportPayload: {
+    templateIds: [],
+    jobIds: [],
+  },
+  scheduleReportPage: 1,
+  setViewType: (type) => set({ viewType: type }),
+  resetPageCache: () => {
+    set({ pageCache: {}, page: 1 })
+  },
   search: async (payload: GeneratedReportParams, page = 1, reset = false) => {
     set({
       error: undefined,
@@ -144,6 +182,87 @@ const useStore = create<Store>((set, get) => ({
     }
     set({ page })
     get().search(get().payload, page)
+  },
+  resetScheduledReportPageCache: () => {
+    set({
+      scheduledReportPageCache: {},
+      scheduleReportPage: 1,
+      scheduleReports: undefined,
+    })
+  },
+  searchScheduledReports: async (
+    scheduledReportPayload: ScheduleReportListParams,
+    scheduleReportPage = 1,
+    reset = false,
+  ) => {
+    set({
+      error: undefined,
+      scheduleReportLoading: true,
+      scheduledReportPayload: scheduledReportPayload,
+    })
+    const result = await getScheduledReportsListAction({
+      scheduledReportPayload,
+      scheduleReportPage,
+    })
+
+    if (result.state === 'error') {
+      toast.error(result.error ?? 'Failed to get schedule reports')
+      return set({
+        error: result.error,
+        scheduleReportLoading: false,
+      })
+    }
+    set({
+      scheduleReports: result.data,
+      scheduleReportLoading: false,
+      scheduledReportPageCache: reset
+        ? { [scheduleReportPage]: result.data }
+        : {
+            ...get().scheduledReportPageCache,
+            [scheduleReportPage]: result.data,
+          },
+    })
+  },
+  nextScheduledReport: () => {
+    const scheduleReportPage = get().scheduleReportPage + 1
+
+    if (get().scheduledReportPageCache[scheduleReportPage]) {
+      return set({
+        scheduleReports: get().scheduledReportPageCache[scheduleReportPage],
+        scheduleReportPage,
+      })
+    }
+
+    get().searchScheduledReports(
+      get().scheduledReportPayload,
+      scheduleReportPage,
+    )
+    set({ scheduleReportPage })
+  },
+  prevScheduledReport: () => {
+    const scheduleReportPage = get().scheduleReportPage - 1
+
+    set({
+      scheduleReports: get().scheduledReportPageCache[scheduleReportPage],
+      scheduleReportPage,
+    })
+  },
+  jumpToPageScheduleReport: (scheduleReportPage: number) => {
+    if (scheduleReportPage < 1) {
+      return
+    }
+
+    if (get().scheduledReportPageCache[scheduleReportPage]) {
+      return set({
+        scheduleReports: get().scheduledReportPageCache[scheduleReportPage],
+        scheduleReportPage,
+      })
+    }
+    set({ scheduleReportPage })
+    get().searchScheduledReports(
+      get().scheduledReportPayload,
+      scheduleReportPage,
+    )
   },
   fetchReportsAndTemplates: async () => {
     set({ loading: true, error: null })
@@ -243,6 +362,11 @@ const useStore = create<Store>((set, get) => ({
   },
   resetData: () => {
     set({ generatedReport: null, page: 1, pageCache: {}, totalRecords: 0 })
+  },
+  setScheduleReports: (
+    scheduleReports: GetScheduleReportListResponse | undefined,
+  ) => {
+    set({ scheduleReports: scheduleReports })
   },
 }))
 

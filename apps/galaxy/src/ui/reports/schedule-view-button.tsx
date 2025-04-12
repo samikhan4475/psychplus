@@ -1,21 +1,23 @@
 'use client'
 
-import { cn } from '@/utils'
 import { Button, Text } from '@radix-ui/themes'
+import { cn } from '@/utils'
+import { useStore } from './store'
+import { VIEW_TYPE } from './types'
 
-interface ScheduleViewButtonProps {
-  isActive?: boolean
-}
-const ScheduleViewButton = ({ isActive }: ScheduleViewButtonProps) => {
+const ScheduleViewButton = () => {
+  const { viewType, setViewType } = useStore()
+
   return (
     <Button
       type="button"
       variant="outline"
       color="gray"
       size="2"
+      onClick={() => setViewType(VIEW_TYPE.SCHEDULE)}
       className={cn(
-        'tw-fit h-[24px] py-1 px-2 flex items-center justify-center text-black',
-        { 'bg-pp-link-text text-white': isActive },
+        'tw-fit text-black flex h-[24px] items-center justify-center px-2 py-1',
+        { 'bg-pp-link-text text-white': viewType === VIEW_TYPE.SCHEDULE },
       )}
     >
       <Text className="text-[12px] font-regular ">Schedules View</Text>

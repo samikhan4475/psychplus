@@ -1,5 +1,5 @@
-import { FormFieldContainer, FormFieldError, SelectInput } from '@/components';
-import { intervalOptions } from './constants';
+import { FormFieldContainer, FormFieldError, SelectInput } from '@/components'
+import { durationIntervalOptions } from './constants'
 
 const DurationInterval = () => {
   return (
@@ -8,12 +8,11 @@ const DurationInterval = () => {
         field="durationInterval"
         className="w-full"
         buttonClassName="min-w-[120px] h-6 border-pp-gray-2 rounded-2 !outline-none"
-        options={intervalOptions}
+        options={durationIntervalOptions}
       />
       <FormFieldError name="durationInterval" />
     </FormFieldContainer>
-  );
-};
+  )
+}
 
-export { DurationInterval };
-
+export { DurationInterval }

@@ -1,6 +1,7 @@
 import toast from 'react-hot-toast'
+import { displayName } from 'react-quill'
 import { addTemplateReportAction } from './actions'
-import { ParameterCodeSet, ReportFilterParameters } from './types'
+import { ParameterCodeSet, ParsedCron, ReportFilterParameters } from './types'
 
 export const parseGeneratedReport = (report: string) => {
   const lines = report.trim().split('\n')
@@ -125,14 +126,14 @@ const downloadPDFFile = async (
 const handleUploadReport = async (
   definitionPayloadUrl: File,
   templateId: string,
-  IsNewFileAttached?: boolean,
+  isNewFileAttached: boolean,
 ) => {
   const formData = new FormData()
   formData.append('file', definitionPayloadUrl)
-  formData.append('IsNewFileAttached', String(IsNewFileAttached))
   const reportResponse = await addTemplateReportAction({
     templateId,
     data: formData,
+    isNewFileAttached,
   })
 
   if (reportResponse.state === 'error') {
@@ -238,7 +239,8 @@ const processParameters = (
   return parameters.map((param) => {
     if (
       param.parameterCode === 'EndDate' ||
-      param.parameterCode === 'StartDate'
+      param.parameterCode === 'StartDate' ||
+      param.scheduleParameterValue.includes('::')
     ) {
       return {
         templateParameterId: param.id,
@@ -258,15 +260,116 @@ const processParameters = (
   })
 }
 
+function getRandomThreeDigit(): number {
+  if (typeof window !== 'undefined' && window.crypto?.getRandomValues) {
+    const array = new Uint32Array(1)
+    window.crypto.getRandomValues(array)
+    return (array[0] % 900) + 100
+  } else {
+    return 0
+  }
+}
+
 const formatJobData = (
   cronScheduleDefinition: string,
   selectedTemplate: any,
-) => ({
-  cronScheduleDefinition,
-  runHistoryExpireDays: 90,
-  shortName: new Date(),
-  displayName: selectedTemplate?.displayName,
-})
+  numberOfDuration: string,
+) => {
+  const updatedParameters =
+    selectedTemplate?.parameters?.map((param: any) => ({
+      ...param,
+      shortName: param.displayName + numberOfDuration + +getRandomThreeDigit(),
+      defaultValueContent: '',
+    })) || []
+
+  return {
+    cronScheduleDefinition,
+    runHistoryExpireDays: 45,
+    shortName: displayName + numberOfDuration + getRandomThreeDigit(),
+    category: 'Reporter',
+    scheduleType: 'Cron',
+    displayName: selectedTemplate?.displayName,
+    taskDefinitions: [
+      {
+        displayName: selectedTemplate?.displayName,
+        implementationKey: 'ReportingJob',
+        parameters: updatedParameters,
+        defaultValueContent: ' ',
+      },
+    ],
+  }
+}
+
+const dayMapReverse: { [key: string]: string } = {
+  '0': 'Sunday',
+  '1': 'Monday',
+  '2': 'Tuesday',
+  '3': 'Wednesday',
+  '4': 'Thursday',
+  '5': 'Friday',
+  '6': 'Saturday',
+}
+
+const decryptCronExpression = (cron: string): ParsedCron => {
+  const [minuteStr, hourStr, dayOfMonth, month, dayOfWeek] = cron.split(' ')
+
+  const minute = parseInt(minuteStr, 10)
+  const hour = parseInt(hourStr, 10)
+
+  const now = new Date()
+  now.setHours(hour)
+  now.setMinutes(minute)
+  now.setSeconds(0)
+  now.setMilliseconds(0)
+
+  let repeatInterval = ''
+  let scheduleDays: string[] = []
+  let intervalOption = ''
+  let repeatCount = '1'
+
+  if (dayOfWeek !== '*' && dayOfMonth === '*' && month === '*') {
+    repeatInterval = 'week'
+    scheduleDays = dayOfWeek.split(',').map((d) => dayMapReverse[d])
+  } else if (month.includes('/')) {
+    repeatInterval = 'month'
+    intervalOption = dayOfMonth
+    repeatCount = month.split('/')[1]
+  } else if (dayOfMonth !== '*' && month !== '*') {
+    repeatInterval = 'year'
+    intervalOption = dayOfMonth
+  } else {
+    repeatInterval = 'week'
+  }
+
+  return {
+    beginDate: now,
+    repeatInterval,
+    scheduleDays,
+    intervalOption,
+    repeatCount,
+  }
+}
+
+const getScheduleText = (repeatInterval: string, scheduleDays: string[]) => {
+  if (repeatInterval === 'day') {
+    return `Every day ${scheduleDays.join(', ')}`
+  }
+
+  if (repeatInterval === 'week') {
+    return `Weekly On ${scheduleDays.join(', ')}`
+  }
+
+  if (repeatInterval === 'month') {
+    return 'Monthly'
+  }
+
+  if (repeatInterval === 'year') {
+    return 'Annually'
+  }
+
+  return 'Not scheduled'
+}
+
 export {
   truncateFileName,
   getFieldType,
@@ -276,4 +379,6 @@ export {
   generateCronExpression,
   processParameters,
   formatJobData,
+  decryptCronExpression,
+  getScheduleText,
 }

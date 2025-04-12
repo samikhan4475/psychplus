@@ -800,6 +800,11 @@ const UPDATE_FOLLOW_UP_DENIAL_STATUS = (appointmentId: number) =>
   `${API_URL}/api/appointments/${appointmentId}/actions/followupstatus`
 
 const GET_USERS_SELF_INITIAL_INFORMATION_ENDPOINT = `${API_URL}/api/users/self/initialinformation`
+const GET_SCHEDULES_REPORTS = `${API_URL}/api/reporting/schedules/actions/search`
+const DISABLE_SCHEDULE_REPORT_JOB = (jobId: string) =>
+  `${API_URL}/api/jobmanager/jobs/${jobId}/actions/disable`
+const ENABLE_SCHEDULE_REPORT_JOB = (jobId: string) =>
+  `${API_URL}/api/jobmanager/jobs/${jobId}/actions/enable`
 const GET_PRACTICES_LICENSE_MANAGERS_ENDPOINT = (practiceId: string) =>
   `${API_URL}/api/practices/${practiceId}/licensemanagers/actions/search`
 const ADD_PRACTICES_LICENSE_MANAGERS_ENDPOINT = (practiceId: string) =>
@@ -808,6 +813,10 @@ const UPDATE_PRACTICES_LICENSE_MANAGERS_ENDPOINT = (
   practiceId: string,
   managerId: string,
 ) => `${API_URL}/api/practices/${practiceId}/licensemanagers/${managerId}`
+const EDIT_SCHEDULE_REPORT_ENDPOINT = (scheduleId: string) =>
+  `${API_URL}/api/reporting/schedules/${scheduleId}`
+const UPDATE_SCHEDULE_REPORT_JOB_ENDPOINT = (jobId: string) =>
+  `${API_URL}/api/jobmanager/jobs/${jobId}`
 
 export {
   GET_LAB_RESULTS_ENDPOINT,
@@ -1174,4 +1183,9 @@ export {
   GET_PRACTICES_LICENSE_MANAGERS_ENDPOINT,
   ADD_PRACTICES_LICENSE_MANAGERS_ENDPOINT,
   UPDATE_PRACTICES_LICENSE_MANAGERS_ENDPOINT,
+  GET_SCHEDULES_REPORTS,
+  DISABLE_SCHEDULE_REPORT_JOB,
+  ENABLE_SCHEDULE_REPORT_JOB,
+  EDIT_SCHEDULE_REPORT_ENDPOINT,
+  UPDATE_SCHEDULE_REPORT_JOB_ENDPOINT,
 }

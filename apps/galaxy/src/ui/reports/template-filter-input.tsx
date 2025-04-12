@@ -1,34 +1,32 @@
 'use client'
 
+import { Flex, TextField } from '@radix-ui/themes'
+import { useFormContext } from 'react-hook-form'
 import {
   FormFieldContainer,
   FormFieldError,
   FormFieldLabel,
-} from '@/components';
-import { TextField } from '@radix-ui/themes';
-import { useFormContext } from 'react-hook-form';
+} from '@/components'
 
 type TemplateInputProps = {
-  title: string;
-  name: string;
-};
+  title: string
+  name: string
+}
 
 const TemplateFilterInput = ({ title, name }: TemplateInputProps) => {
-  const { register } = useFormContext();
+  const { register } = useFormContext()
 
   return (
-    <FormFieldContainer className="w-full flex-row items-center gap-1">
-      <FormFieldLabel className="!text-1">
+    <FormFieldContainer className="w-full flex-row items-center justify-start gap-1">
+      <FormFieldLabel className="!text-1" required>
         {title}
       </FormFieldLabel>
-      <TextField.Root
-        size="1"
-        placeholder={title}
-        {...register(name)}
-      />
-      <FormFieldError name={name} />
+      <Flex direction="column">
+        <TextField.Root size="1" placeholder={title} {...register(name)} />
+        <FormFieldError name={name} />
+      </Flex>
     </FormFieldContainer>
   )
 }
 
-export { TemplateFilterInput };
+export { TemplateFilterInput }

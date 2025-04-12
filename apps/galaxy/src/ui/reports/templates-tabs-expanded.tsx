@@ -14,6 +14,9 @@ const ExpandedSidebar = () => {
     selectedTemplate,
     setGeneratedReport,
     resetData,
+    setScheduleReports,
+    resetPageCache,
+    resetScheduledReportPageCache,
   } = useStore()
 
   const filteredTemplates = templates.filter(
@@ -24,6 +27,9 @@ const ExpandedSidebar = () => {
     setSelectedTemplate(template)
     resetData()
     setGeneratedReport(null)
+    setScheduleReports(undefined)
+    resetScheduledReportPageCache()
+    resetPageCache()
   }
 
   return (

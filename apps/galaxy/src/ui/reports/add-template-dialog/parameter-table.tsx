@@ -52,7 +52,8 @@ const ParametersTable = () => {
   const isRowDisabled = (rowIndex: number) => {
     return (
       selectedFieldCodes[rowIndex] !== undefined &&
-      selectedFieldCodes[rowIndex] !== ''
+      selectedFieldCodes[rowIndex] !== '' &&
+      rowIndex !== fields.length - 1
     )
   }
 

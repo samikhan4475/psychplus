@@ -1,15 +1,15 @@
-'use client';
+'use client'
 
-import { Button, Text } from '@radix-ui/themes';
-import { useStore } from './store';
-import { useState } from 'react';
-import { AddTemplateDialog } from './add-template-dialog';
+import { useState } from 'react'
+import { Button, Text } from '@radix-ui/themes'
+import { AddTemplateDialog } from './add-template-dialog'
+import { useStore } from './store'
 
 const EditTemplateButton = () => {
-  const { selectedTemplate } = useStore();  
-  const [open, setOpen] = useState(false);
-  const onOpen = () => setOpen(true);
-  const onClose = () => setOpen(false);
+  const { selectedTemplate } = useStore()
+  const [open, setOpen] = useState(false)
+  const onOpen = () => setOpen(true)
+  const onClose = () => setOpen(false)
 
   return (
     <>
@@ -17,13 +17,17 @@ const EditTemplateButton = () => {
         variant="outline"
         color="gray"
         onClick={onOpen}
-        className="text-black w-fit h-[24px] py-1 mr-2 px-2 flex items-center justify-center"
+        className="text-black flex h-[24px] w-fit items-center justify-center px-2 py-1"
       >
-        <Text className="text-[12px] font-regular text-pp-black-1">Edit</Text>
+        <Text className="text-pp-black-1 text-[12px] font-regular">Edit</Text>
       </Button>
-      <AddTemplateDialog open={open} onClose={onClose} template={selectedTemplate} />
+      <AddTemplateDialog
+        open={open}
+        onClose={onClose}
+        template={selectedTemplate}
+      />
     </>
-  );
-};
+  )
+}
 
-export { EditTemplateButton };
+export { EditTemplateButton }
