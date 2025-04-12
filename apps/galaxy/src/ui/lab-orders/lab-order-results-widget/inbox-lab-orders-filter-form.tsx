@@ -1,13 +1,16 @@
 'use client'
 
+import { useEffect } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons'
 import { Button, Flex } from '@radix-ui/themes'
 import { DateValue } from 'react-aria-components'
 import { useForm, type SubmitHandler } from 'react-hook-form'
+import toast from 'react-hot-toast'
 import { z } from 'zod'
 import { FormContainer } from '@/components'
 import { STAFF_ROLE_CODE_PRESCRIBER } from '@/constants'
+import { useHasPermission } from '@/hooks'
 import { useStore as useGlobalStore } from '@/store'
 import { getPaddedDateString, sanitizeFormData } from '@/utils'
 import { LocationSelect } from '../lab-orders-widget/location-select'
@@ -45,15 +48,17 @@ const InboxLabOrdersFilterForm = () => {
     staffRoleCode: state.staffResource.staffRoleCode,
   }))
   const isPrescriber = staffRoleCode === STAFF_ROLE_CODE_PRESCRIBER
-
+  const canOrderBy = useHasPermission('changeOrderByProviderLabResultView')
+  const defaultOrderingStaffId = isPrescriber ? String(staffId) : ''
+  
   const form = useForm<SchemaType>({
     resolver: zodResolver(schema),
     reValidateMode: 'onChange',
     defaultValues: {
-      orderCreatedFromDate: undefined,
-      orderCreatedToDate: undefined,
-      resultObservationFromDate: undefined,
-      resultObservationToDate: undefined,
+      orderCreatedFromDate: null,
+      orderCreatedToDate: null,
+      resultObservationFromDate: null,
+      resultObservationToDate: null,
       labTestName: '',
       orderingLab: '',
       orderStatus: OrderStatus.ResultReceived,
@@ -63,16 +68,33 @@ const InboxLabOrdersFilterForm = () => {
       isResultSigned: false,
     },
   })
+
   const orderStatus = form.watch('orderStatus')
+  const orderByStaff = form.watch('orderingStaffId')
+
+  useEffect(() => {
+    if (orderByStaff && orderByStaff !== String(staffId) && !canOrderBy) {
+      form.setValue('orderingStaffId', defaultOrderingStaffId)
+      toast.error('You do not have permission to change the ordering staff')
+    }
+  }, [orderByStaff, staffId, canOrderBy, defaultOrderingStaffId])
+
+  useEffect(() => {
+    if (orderStatus !== OrderStatus.ResultReceived) {
+      form.setValue('resultObservationFromDate', null)
+      form.setValue('resultObservationToDate', null)
+      form.setValue('isResultSigned', false)
+    }
+  }, [orderStatus])
+
   const onClear = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault()
-    const defaultOrderingStaffId = isPrescriber ? String(staffId) : ''
 
     form.reset({
-      orderCreatedFromDate: undefined,
-      orderCreatedToDate: undefined,
-      resultObservationFromDate: undefined,
-      resultObservationToDate: undefined,
+      orderCreatedFromDate: null,
+      orderCreatedToDate: null,
+      resultObservationFromDate: null,
+      resultObservationToDate: null,
       labTestName: '',
       orderingLab: '',
       orderStatus: OrderStatus.ResultReceived,
@@ -138,9 +160,9 @@ const InboxLabOrdersFilterForm = () => {
           <>
             <OrderResultFromDateField />
             <OrderResultToDateField />
+            <IsReviewedField />
           </>
         )}
-        <IsReviewedField />
         <Button highContrast size="1" type="submit">
           <MagnifyingGlassIcon strokeWidth={2} />
         </Button>

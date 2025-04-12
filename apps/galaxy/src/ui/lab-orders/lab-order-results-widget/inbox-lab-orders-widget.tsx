@@ -1,6 +1,5 @@
 'use client'
 
-import { LabOrderTablePagination } from '../lab-orders-widget/lab-order-pagination-table'
 import { InboxLabOrderResultHeader } from './inbox-lab-order-result-header'
 import { Flex } from '@radix-ui/themes'
 import { InboxLabOrdersFilterForm } from './inbox-lab-orders-filter-form'
@@ -13,7 +12,7 @@ const InboxLabOrderWidget = () => {
       <Flex
         direction="column"
         width="100%"
-        className="bg-white h-[calc(100dvh_-_278px)] rounded-1 shadow-2"
+        className="bg-white min-h-[calc(100dvh_-_278px)] rounded-1 shadow-2"
       >
         <InboxLabOrderResultHeader />
         <InboxLabOrdersFilterForm />

@@ -233,6 +233,7 @@ const USER_PERMISSIONS = {
     'clickApproveMangStaffPrefAdminViewNonAdmin',
   canUploadSignedPolicy: 'canUploadSignedPolicy',
   mainTabManagementPermission: 'mainTabManagementPermission',
+  changeOrderByProviderLabResultView: 'changeOrderByProviderLabResultView'
 }
 
 export { USER_PERMISSIONS }
