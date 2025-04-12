@@ -24,6 +24,17 @@ const TestLabItem = ({
   const form = useFormContext<LabOrderSchemaType>()
   const orderId = form.getValues('labOrderId')
   const { updateLabOrderTestList } = useStore()
+  const labQuestions = form.getValues('labQuestions')
+
+  const removeLabQuestions = () => {
+    if (!Object.keys(labQuestions)?.length) return
+    const filteredLabQuestions = Object.fromEntries(
+      Object.entries(labQuestions).filter(
+        ([key]) => !key.includes(`${testLabData?.labTestCode}`),
+      ),
+    )
+    form.setValue('labQuestions', filteredLabQuestions)
+  }
 
   const onClickDeleteConfirm = async () => {
     setDisabled(true)
@@ -36,9 +47,11 @@ const TestLabItem = ({
       if (result.state === 'success') {
         onDelete(index)
         updateLabOrderTestList(orderId, testLabData?.id ?? '')
+        removeLabQuestions()
       }
     } else {
       onDelete(index)
+      removeLabQuestions()
     }
     setDisabled(false)
   }

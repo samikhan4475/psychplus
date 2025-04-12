@@ -3,6 +3,7 @@ import { useParams, useSearchParams } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
+import { LabOrders } from '@/types'
 import { useStore } from '../lab-orders-widget/store'
 import {
   addDiagnosis,
@@ -11,6 +12,8 @@ import {
   addTestLabsApi,
   editLabOrderApi,
   editSpecimenApi,
+  getLabOrderRequisition,
+  placeLabOrderApi,
 } from './api'
 import { LabOrderStatusEnum, SpecimenData } from './blocks/types'
 import { labOrderSchema, LabOrderSchemaType } from './lab-order-schema'
@@ -184,7 +187,10 @@ const useLabOrderForm = (
     }
   }
 
-  const onSaveOrder = async (data: LabOrderSchemaType) => {
+  const onSaveOrder = async (
+    data: LabOrderSchemaType,
+    isPlaceOrder?: boolean,
+  ) => {
     const result = await labOrderAction(data)
     if (result.state === 'success') {
       const specimenList = form.getValues('specimenList')
@@ -196,14 +202,34 @@ const useLabOrderForm = (
       if (result.isEdit && specimenList.length > 0) {
         await specimenActions()
       }
-      const updatedLabOrder: any = {
+      const updatedLabOrder = {
         ...result.data,
         labTests:
           labTestResult.state === 'success' ? [...labTestResult.data] : [],
       }
 
-      toast.success('Saved!')
-      updateLabOrdersList(updatedLabOrder) //local
+      if (isPlaceOrder && data.labLocationData?.name === 'Quest') {
+        const requisitionResponse = await getLabOrderRequisition(
+          result.data?.id ?? '',
+        )
+        if (requisitionResponse.state === 'success') {
+          const placeOrderResponse = await placeLabOrderApi(
+            result.data?.id ?? '',
+          )
+          if (placeOrderResponse.state === 'success') {
+            toast.success('Order Placed!')
+          } else {
+            toast.error(
+              placeOrderResponse?.error ?? 'Error while placing order',
+            )
+          }
+        } else {
+          toast.error(requisitionResponse?.error ?? 'Error while placing order')
+        }
+      } else {
+        toast.success('Saved!')
+      }
+      updateLabOrdersList(updatedLabOrder as LabOrders) //local
       setOpen(false)
     } else {
       toast.error(result?.error ?? 'Error while saving!')
@@ -219,7 +245,7 @@ const useLabOrderForm = (
     }
     form.handleSubmit((data) => {
       setLoadingPlaceOrder(true)
-      onSaveOrder(data)
+      onSaveOrder(data, true)
     })(e)
   }
 
