@@ -134,10 +134,7 @@ const InboxLabOrdersFilterForm = () => {
       ...sanitizedData,
       isIncludePatient: true,
       isResultSigned: data.isResultSigned,
-      isIncludeResults:
-        data.resultObservationFromDate || data.resultObservationToDate
-          ? true
-          : false,
+      isIncludeResults: !!(data.resultObservationFromDate || data.resultObservationToDate),
     }
     fetchLabOrderResults(payload)
   }

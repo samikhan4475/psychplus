@@ -3,7 +3,7 @@
 import { useEffect } from 'react'
 import { useParams } from 'next/navigation'
 import { Flex, ScrollArea } from '@radix-ui/themes'
-import { type ColumnDef, Table, Row } from '@tanstack/react-table'
+import { Row, Table, type ColumnDef } from '@tanstack/react-table'
 import {
   ColumnHeader,
   DataTable,
@@ -11,22 +11,25 @@ import {
   LoadingPlaceholder,
   TextCell,
 } from '@/components'
-import { LabOrders } from '@/types'
+import { STAFF_ROLE_CODE_PRESCRIBER } from '@/constants'
+import { useStore as useGlobalStore } from '@/store'
+import { LabOrders, Sort } from '@/types'
+import { formatUTCDate, getSortDir } from '@/utils'
 import { LabTestCell, StatusCell } from '../lab-orders-widget/cells'
-import { useStore } from './store'
-import { formatUTCDate } from '@/utils'
 import { InboxOrderActionsCell } from './cells/inbox-order-actions-cell'
 import { TableHeaderCheckboxCell } from './cells/table-header-checkbox-cell'
 import { TableRowCheckboxCell } from './cells/table-row-checkbox-cell'
+import { useStore } from './store'
 import { OrderStatus } from './types'
-import {  STAFF_ROLE_CODE_PRESCRIBER } from '@/constants'
-import { useStore as useGlobalStore } from '@/store'
+
 const getColumns = (
   onRowCheckBoxSelect: (
     row?: Row<LabOrders>,
     table?: Table<LabOrders>,
     isChecked?: boolean,
   ) => void,
+  sort?: Sort,
+  onSort?: (column: string) => void,
 ) => {
   const columns: ColumnDef<LabOrders>[] = [
     {
@@ -44,7 +47,7 @@ const getColumns = (
           }}
         />
       ),
-      maxSize:30,
+      maxSize: 30,
       cell: ({ row }: { row: Row<LabOrders> }) =>
         !row.original.isResultSigned ? (
           <TableRowCheckboxCell
@@ -57,10 +60,18 @@ const getColumns = (
         ) : null,
     },
     {
-      id: 'labOrderDate',
+      id: 'orderDate',
       accessorKey: 'labOrderDate',
       header: ({ column }) => (
-        <ColumnHeader column={column} clientSideSort label="Order Date" />
+        <ColumnHeader
+          column={column}
+          sortable
+          sortDir={getSortDir(column.id, sort)}
+          onClick={() => {
+            onSort?.(column.id)
+          }}
+          label="Order Date"
+        />
       ),
       cell: ({ row }) => (
         <DateTimeCell>{formatUTCDate(row.original.labOrderDate)}</DateTimeCell>
@@ -70,23 +81,51 @@ const getColumns = (
       id: 'patientName',
       accessorKey: 'patientName',
       header: ({ column }) => (
-        <ColumnHeader column={column} clientSideSort label="Patient Name" />
+        <ColumnHeader
+          column={column}
+          sortable
+          sortDir={getSortDir(column.id, sort)}
+          onClick={() => {
+            onSort?.(column.id)
+          }}
+          label="Patient Name"
+        />
       ),
-      cell: ({ row }) => <TextCell className={row.original?.isResultAbnormal ? 'text-red-9' : ''} >{`${row.original.patient?.legalName?.firstName} ${row.original.patient?.legalName?.lastName} `}</TextCell>,
+      cell: ({ row }) => (
+        <TextCell
+          className={row.original?.isResultAbnormal ? 'text-red-9' : ''}
+        >{`${row.original.patient?.legalName?.firstName} ${row.original.patient?.legalName?.lastName} `}</TextCell>
+      ),
     },
     {
       id: 'labOrderNumber',
       accessorKey: 'labOrderNumber',
       header: ({ column }) => (
-        <ColumnHeader column={column} clientSideSort label="Lab Order #" />
+        <ColumnHeader
+          column={column}
+          sortable
+          sortDir={getSortDir(column.id, sort)}
+          onClick={() => {
+            onSort?.(column.id)
+          }}
+          label="Lab Order #"
+        />
       ),
       cell: ({ row }) => <TextCell>{row.original.labOrderNumber}</TextCell>,
     },
     {
-      id: 'orderingStaffName',
-      accessorKey: 'orderingStaffName',
+      id: 'orderedBy',
+      accessorKey: 'orderedBy',
       header: ({ column }) => (
-        <ColumnHeader column={column} clientSideSort label="Ordered By" />
+        <ColumnHeader
+          column={column}
+          sortable
+          sortDir={getSortDir(column.id, sort)}
+          onClick={() => {
+            onSort?.(column.id)
+          }}
+          label="Ordered By"
+        />
       ),
       cell: ({ row }) => (
         <TextCell>
@@ -96,18 +135,34 @@ const getColumns = (
       ),
     },
     {
-      id: 'labTests',
-      accessorKey: 'labTests',
+      id: 'testPanel',
+      accessorKey: 'testPanel',
       header: ({ column }) => (
-        <ColumnHeader column={column} clientSideSort label="Test/Panel" />
+        <ColumnHeader
+          column={column}
+          sortable
+          sortDir={getSortDir(column.id, sort)}
+          onClick={() => {
+            onSort?.(column.id)
+          }}
+          label="Test/Panel"
+        />
       ),
       cell: ({ row }) => <LabTestCell row={row} />,
     },
     {
-      id: 'orderingLab.name',
-      accessorKey: 'orderingLab.name',
+      id: 'orderingLab',
+      accessorKey: 'orderingLab',
       header: ({ column }) => (
-        <ColumnHeader column={column} clientSideSort label="Lab Location" />
+        <ColumnHeader
+          column={column}
+          sortable
+          sortDir={getSortDir(column.id, sort)}
+          onClick={() => {
+            onSort?.(column.id)
+          }}
+          label="Lab Location"
+        />
       ),
       cell: ({ row }) => <TextCell>{row.original?.orderingLab?.name}</TextCell>,
     },
@@ -118,7 +173,11 @@ const getColumns = (
         <ColumnHeader
           label="Status"
           column={column}
-          clientSideSort
+          sortable
+          sortDir={getSortDir(column.id, sort)}
+          onClick={() => {
+            onSort?.(column.id)
+          }}
           className="!text-black p-1 !font-medium"
         />
       ),
@@ -141,7 +200,8 @@ const InboxLabOrderTable = () => {
     loading,
     setSelectedRow,
     selectedRows,
-    setSelectedRows
+    setSelectedRows,
+    sortData,
   } = useStore((state) => ({
     data: state.data,
     fetchLabOrderResults: state.fetchLabOrderResults,
@@ -149,12 +209,13 @@ const InboxLabOrderTable = () => {
     selectedRows: state.selectedRows,
     setSelectedRow: state.setSelectedRow,
     setSelectedRows: state.setSelectedRows,
-  }));
+    sortData: state.sortData,
+  }))
 
   const { staffId, staffRoleCode } = useGlobalStore((state) => ({
-        staffId: state.user.staffId,
-        staffRoleCode: state.staffResource.staffRoleCode,
-      }))
+    staffId: state.user.staffId,
+    staffRoleCode: state.staffResource.staffRoleCode,
+  }))
   const isPrescriber = staffRoleCode === STAFF_ROLE_CODE_PRESCRIBER
   const { id } = useParams<{ id: string }>()
 
@@ -164,32 +225,32 @@ const InboxLabOrderTable = () => {
     isChecked?: boolean,
   ) => {
     if (table && isChecked) {
-      setSelectedRows(data?.labOrders || []);
-      setSelectedRow(undefined);
-      return;
+      setSelectedRows(data?.labOrders || [])
+      setSelectedRow(undefined)
+      return
     }
 
     if (table && !isChecked) {
-      setSelectedRows([]);
-      table.toggleAllPageRowsSelected(false);
-      return;
+      setSelectedRows([])
+      table.toggleAllPageRowsSelected(false)
+      return
     }
 
     if (row && isChecked) {
-      setSelectedRow(undefined);
+      setSelectedRow(undefined)
     }
 
     if (row) {
       const result = isChecked
         ? [...(selectedRows || []), row.original]
-        : selectedRows?.filter((note) => note.id !== row.original.id) || [];
-      setSelectedRows(result);
+        : selectedRows?.filter((note) => note.id !== row.original.id) || []
+      setSelectedRows(result)
     }
 
     if (selectedRows.length === 0) {
-      table?.toggleAllPageRowsSelected(false);
+      table?.toggleAllPageRowsSelected(false)
     }
-  };
+  }
 
   useEffect(() => {
     const payload = {
@@ -197,10 +258,10 @@ const InboxLabOrderTable = () => {
       isIncludePatient: true,
       isResultSigned: false,
       orderingStaffId: isPrescriber ? String(staffId) : '',
-    };
+    }
 
-    fetchLabOrderResults(payload);
-  }, [id]);
+    fetchLabOrderResults(payload)
+  }, [id])
 
   if (loading) {
     return (
@@ -213,9 +274,7 @@ const InboxLabOrderTable = () => {
     <ScrollArea>
       <DataTable
         data={data?.labOrders ?? []}
-        columns={getColumns(
-          onRowCheckBoxSelect,
-        )}
+        columns={getColumns(onRowCheckBoxSelect, undefined, sortData)}
         disablePagination
         sticky
       />

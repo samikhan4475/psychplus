@@ -1,7 +1,8 @@
 import { create } from 'zustand'
-import { LabOrderResponseList, LabOrders } from '@/types'
-import { LabOrderResultPayload } from '../types'
+import { LabOrderResponseList, LabOrders, Sort } from '@/types'
+import { getNewSortDir } from '@/utils'
 import { getLabOrderResults } from '../actions/get-lab-order-results'
+import { LabOrderResultPayload } from '../types'
 
 interface StoreState {
   data: LabOrderResponseList
@@ -14,12 +15,18 @@ interface StoreState {
   pageCache: Record<number, LabOrderResponseList>
   page: number
   isReviewDialogOpen: boolean
+  sort?: Sort
 
   setSelectedRow: (value: LabOrders | undefined) => void
   setSelectedRows: (value: LabOrders[]) => void
-  fetchLabOrderResults: (payload: LabOrderResultPayload, page?: number, reset?: boolean) => void
+  fetchLabOrderResults: (
+    payload: LabOrderResultPayload,
+    page?: number,
+    reset?: boolean,
+  ) => void
   openReviewDialog: () => void
   closeReviewDialog: () => void
+  sortData: (column: string) => void
   next: () => void
   prev: () => void
   jumpToPage: (page: number) => void
@@ -48,7 +55,7 @@ const useStore = create<StoreState>((set, get) => ({
 
   fetchLabOrderResults: async (payload, page = 1, reset = false) => {
     set({ error: undefined, loading: true, payload })
-    const result = await getLabOrderResults({ payload, page })
+    const result = await getLabOrderResults({ payload, page, sort: get().sort, })
     if (result.state === 'error') {
       set({
         error: result.error,
@@ -95,7 +102,15 @@ const useStore = create<StoreState>((set, get) => ({
       })
     }
   },
-
+  sortData: (column) => {
+    set({
+      sort: {
+        column,
+        direction: getNewSortDir(column, get().sort),
+      },
+    })
+    get().fetchLabOrderResults(get().payload!, 1)
+  },
   jumpToPage: (page: number) => {
     if (page < 1) return
 
