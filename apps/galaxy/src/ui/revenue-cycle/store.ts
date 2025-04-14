@@ -6,6 +6,7 @@ interface ClaimData {
   claimId: string
   claimStatus: string
   claimPrimaryStatus: string
+  isClaimPosted?: boolean
 }
 
 interface selectedPdfFileUrl {
@@ -25,6 +26,7 @@ interface Store {
   setSelectedClaimsData: (claimNumber: string, claimData: ClaimData) => void
   setActiveTab: (tab: Tab) => void
   closeTab: (tab: Tab) => void
+  claimRefreshByClaimNumber: (claimNumber: string) => void
 }
 
 function isActiveTabCloseable<T extends Record<string, string | number>>(
@@ -97,9 +99,27 @@ const useStore = create<Store>((set, get) => ({
     set(() => ({
       selectedClaimData: {
         ...get().selectedClaimData,
-        [claimNumber]: claimData,
+        [claimNumber]: {
+          ...claimData,
+          isClaimPosted: false,
+        },
       },
     })),
+  claimRefreshByClaimNumber: (claimNumber) => {
+    const currentData = get().selectedClaimData
+
+    if (!currentData[claimNumber]) return
+
+    set({
+      selectedClaimData: {
+        ...currentData,
+        [claimNumber]: {
+          ...currentData[claimNumber],
+          isClaimPosted: true,
+        },
+      },
+    })
+  },
 }))
 
 export { useStore }

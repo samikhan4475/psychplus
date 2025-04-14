@@ -59,7 +59,8 @@ const ClaimDetailView = () => {
   const { openAlertModal } = ClaimDetailStore((state) => ({
     openAlertModal: state.openAlertModal,
   }))
-  const { claimStatus, claimPrimaryStatus, claimId } = selectedClaimData ?? {}
+  const { claimStatus, claimPrimaryStatus, claimId, isClaimPosted } =
+    selectedClaimData ?? {}
   const [openItems, setOpenItems] = useState<string[]>([
     'Billing Provider',
     'Accidents And Labs',
@@ -179,6 +180,11 @@ const ClaimDetailView = () => {
     }
   }, [])
 
+  useEffect(() => {
+    if (isClaimPosted === true) {
+      fetchClaimData(claimId)
+    }
+  }, [isClaimPosted])
   const transformClaimData = (
     claimData: ClaimUpdateApiResponse,
   ): ClaimUpdate => {

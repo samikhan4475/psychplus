@@ -10,7 +10,7 @@ import { addClaimPaymentAction } from '../../actions/add-claim-payment'
 import { updateClaimPaymentAction } from '../../actions/update-claim-payment'
 import { useStore } from '../../insurance-payment-tab/store'
 import { useStore as useTabStore } from '../../store'
-import { InsurancePayment } from '../../types'
+import { InsurancePayment, UpdateClaimPaymentPayload } from '../../types'
 import { PaymentListTypes } from '../types'
 import { transformInDefault, transformOut } from './data'
 import { InsurancePaymentClaimSummary } from './insurance-payment-claim-summary'
@@ -26,22 +26,22 @@ const InsurancePaymentPostingView = ({
   fetchPaymentDetail,
   paymentDetail,
 }: InsurancePaymentPostingViewProps) => {
-  const { activeTab, selectedPaymentId } = useTabStore((state) => ({
-    activeTab: state.activeTab,
-    selectedPaymentId: state.selectedPayments[state.activeTab],
-  }))
+  const { activeTab, selectedPaymentId, claimRefreshByClaimNumber } =
+    useTabStore((state) => ({
+      activeTab: state.activeTab,
+      selectedPaymentId: state.selectedPayments[state.activeTab],
+      claimRefreshByClaimNumber: state.claimRefreshByClaimNumber,
+    }))
   const { paymentPostingClaim, setPaymentPostingClaim } = useStore((state) => ({
     setPaymentPostingClaim: state.setPaymentPostingClaim,
     paymentPostingClaim: state.paymentPostingClaim[activeTab],
   }))
-
 
   const form = useForm<SchemaType>({
     resolver: zodResolver(schema),
     reValidateMode: 'onChange',
     defaultValues: transformInDefault(selectedPaymentId, paymentPostingClaim),
   })
-
   const onSubmit = async (data: SchemaType, event?: BaseSyntheticEvent) => {
     const { name } = (event?.nativeEvent as SubmitEvent)
       .submitter as HTMLButtonElement
@@ -61,7 +61,6 @@ const InsurancePaymentPostingView = ({
         { ...data, isPostedPayment: name === 'Save_Post', status: isPosted },
         paymentPostingClaim,
       )
-
       const claimPaymentAction = !updatedPayload?.id
         ? addClaimPaymentAction({
             payload: updatedPayload,
@@ -76,6 +75,7 @@ const InsurancePaymentPostingView = ({
       const result = await claimPaymentAction
 
       if (result.state === 'success') {
+        claimRefreshByClaimNumber(`Claim# ${paymentPostingClaim?.claimNumber}`)
         fetchPaymentDetail(selectedPaymentId)
         toast.success(
           `Payment has been successfully ${
