@@ -1,20 +1,24 @@
 'use client'
+
 import React from 'react'
-import { AsyncSelect, FormFieldContainer, FormFieldLabel } from '@/components'
-import { getInsurancePayersOptionsAction } from '@/actions'
+import {
+  AsyncAutoCompleteTextField,
+  FormFieldContainer,
+  FormFieldLabel,
+} from '@/components'
+import { getPayerPlanOptionsAction } from '../actions'
 
 const InsuranceNameSelect = () => {
   return (
     <FormFieldContainer className="flex-row items-center gap-1">
-      <FormFieldLabel className='min-w-fit' >
-        Insurance Name
-      </FormFieldLabel>
-      <AsyncSelect
-        className='w-fit'
+      <FormFieldLabel className="min-w-fit">Insurance Name</FormFieldLabel>
+      <AsyncAutoCompleteTextField
+        fetchDataAction={getPayerPlanOptionsAction}
         field="insuranceId"
-        fetchOptions={getInsurancePayersOptionsAction}
-        buttonClassName="w-[102px]"
-
+        placeholder="Search"
+        valueKey="value"
+        className="h-5 w-[210px]"
+        truncateText={25}
       />
     </FormFieldContainer>
   )
