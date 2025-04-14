@@ -12,6 +12,7 @@ import { DischargePlanView } from './discharge-plan'
 import MonitoringView from './monitoring/monitoring-view'
 import { useTmsWidgetForm } from './tms-widget-form'
 import { TreatmentSessionView } from './treatment-session'
+import { getTMSSessionNumber } from './utils'
 
 interface TmsTabProps {
   patientId: string
@@ -26,11 +27,12 @@ const TmsTab = ({
   questionnaireHistories,
   appointmentData,
 }: TmsTabProps) => {
+  const tmsSessionNo = getTMSSessionNumber(appointmentData)
   const initialValue = transformIn([
     ...procedureTmsData,
     {
       sectionItem: 'tmdSessionNo',
-      sectionItemValue: appointmentData?.encounterNumber?.split('-')[1] || '',
+      sectionItemValue: `${tmsSessionNo}`,
     } as QuickNoteSectionItem,
   ])
   const form = useTmsWidgetForm(initialValue)
@@ -50,11 +52,7 @@ const TmsTab = ({
         tags={[QuickNoteSectionName.ProcedureTMS]}
         title={ProcedureTabs.TMS}
         getData={transformOut(patientId)}
-        headerRight={
-          <>
-            <WidgetSaveButton />
-          </>
-        }
+        headerRight={<WidgetSaveButton />}
       >
         <TreatmentSessionView questionnaireHistories={questionnaireHistories} />
         <MonitoringView />

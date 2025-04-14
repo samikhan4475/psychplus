@@ -1,4 +1,4 @@
-import { QuickNoteSectionItem } from '@/types'
+import { Appointment, QuickNoteSectionItem } from '@/types'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 
 const questionaireSections = [
@@ -21,4 +21,15 @@ const calculateTotalScore = (data: QuickNoteSectionItem[]): number => {
   return totalScore
 }
 
-export { questionaireSections, calculateTotalScore }
+const getTMSSessionNumber = (appointment: Appointment | null | undefined) => {
+  const tmsSessionNo = appointment?.tmsSessionNumbersCount ?? ''
+  if (
+    ['CancelledS', 'CancelledP', 'CancelledA', 'Rescheduled'].includes(
+      appointment?.status ?? '',
+    )
+  )
+    return ''
+  return tmsSessionNo
+}
+
+export { questionaireSections, calculateTotalScore, getTMSSessionNumber }

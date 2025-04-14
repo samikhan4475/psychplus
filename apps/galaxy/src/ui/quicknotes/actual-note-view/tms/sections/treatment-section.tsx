@@ -3,6 +3,7 @@ import { Flex, Heading, Text } from '@radix-ui/themes'
 import { Appointment } from '@/types'
 import { TmsWidgetSchemaType } from '@/ui/procedures/tms-tab/tms-widget-schema'
 import { ProtocolTitles } from '@/ui/procedures/tms-tab/treatment-session/types'
+import { getTMSSessionNumber } from '@/ui/procedures/tms-tab/utils'
 import {
   DTMSProtocolSection,
   MaintenanceProtocolSection,
@@ -50,15 +51,13 @@ const TreatmentSection = ({
       />
     ),
   }
+  const tmsSessionNo = getTMSSessionNumber(appointment)
   return (
     <Flex direction={'column'}>
       <Heading size="3" className="my-1">
         Treatment Session
       </Heading>
-      <LabelAndValue
-        label="TMS Session No:"
-        value={appointment?.encounterNumber?.split('-')[1] || ''}
-      />
+      <LabelAndValue label="TMS Session No:" value={tmsSessionNo} />
       <LabelAndValue label="Protocol Used:" value={data.protocol} />
       <Text className="text-2 font-medium">{data.protocol}:</Text>
       {renderProtocolSection[data.protocol as ProtocolTitles]}

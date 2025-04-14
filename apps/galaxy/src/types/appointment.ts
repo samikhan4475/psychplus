@@ -142,6 +142,8 @@ interface Appointment {
   duration?: number
   visitTypeCode?: string
   encounterNumber?: string
+  tmsSessionNumbersCount?: string
+  status?: string
   type?: string
   specialistTypeCode?: number
   cosigners: Cosigner[]
