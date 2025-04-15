@@ -53,7 +53,10 @@ interface StaffLocation {
   recordStatus: string
   locationId: string
   defaultLocation: boolean
-  location: Location
+  location: Location,
+  activeStartTime: string,
+  activeEndTime: string,
+  serviceLevelCodes: string[]
 }
 
 interface PrescriberDirectoryResponse {
@@ -67,9 +70,21 @@ interface GetStaffLocationListResponse {
   total: number
 }
 
+interface LocationResult {
+  name: string
+  npi:string,
+  phone:PhoneOrFax,
+  address:Address
+}
+
+interface PrescriberPayload{
+  serviceLevelTypes: string[]
+}
 export {
   type Location,
   type StaffLocation,
   type GetStaffLocationListResponse,
   type PrescriberDirectoryResponse,
+  type LocationResult,
+  type PrescriberPayload
 }

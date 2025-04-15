@@ -800,6 +800,8 @@ const UPDATE_FOLLOW_UP_DENIAL_STATUS = (appointmentId: number) =>
   `${API_URL}/api/appointments/${appointmentId}/actions/followupstatus`
 
 const GET_USERS_SELF_INITIAL_INFORMATION_ENDPOINT = `${API_URL}/api/users/self/initialinformation`
+const GET_PROVIDER_PRESCRIBING_DATA = `${API_URL}/api/providerlocations/GetProviderWithPrescribingData`
+
 const GET_SCHEDULES_REPORTS = `${API_URL}/api/reporting/schedules/actions/search`
 const DISABLE_SCHEDULE_REPORT_JOB = (jobId: string) =>
   `${API_URL}/api/jobmanager/jobs/${jobId}/actions/disable`
@@ -1169,6 +1171,7 @@ export {
   GET_SHARED_POLICY_FILE,
   GET_CURRENT_USER_SETTINGS_SEARCH,
   ADD_STAFF_COMMENT_ENDPOINT,
+  GET_PROVIDER_PRESCRIBING_DATA,
   SEARCH_PATIENT_APPOINTMENTS,
   LINK_CLAIM,
   GET_PATIENT_DEMOGRAPHICS,

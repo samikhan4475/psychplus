@@ -15,9 +15,9 @@ const StatusCell = ({
     <Flex
       justify="center"
       align="center"
-      width="100%"
+      className="p-2"
+      gapX="1"
       height="100%"
-      gapX="2"
       onClick={(e) => e.stopPropagation()}
     >
       <StatusCellPopover providerLocationId={id} />

@@ -5,8 +5,6 @@ import toast from 'react-hot-toast'
 import { CODESETS } from '@/constants'
 import { useCodesetOptions } from '@/hooks'
 import { updateStaffLocationAction } from './actions'
-import { disablePrescriberDirectoryAction } from './actions/disable-prescriber-directory'
-import { updatePrescriberDirectoryAction } from './actions/update-prescriber-directory'
 import { useStore } from './store'
 
 interface StatusSelectProps {
@@ -15,9 +13,8 @@ interface StatusSelectProps {
 }
 
 const StatusSelect = ({ recordStatus, locationId }: StatusSelectProps) => {
-  const { search, sureScriptEnabled } = useStore((state) => ({
+  const { search } = useStore((state) => ({
     search: state.search,
-    sureScriptEnabled: state.sureScriptEnabled,
   }))
   const { id } = useParams()
   const onValueChange = async (value: string) => {
@@ -30,21 +27,6 @@ const StatusSelect = ({ recordStatus, locationId }: StatusSelectProps) => {
 
       if (result.state === 'success') {
         toast.success('Status Updated Successfully')
-
-        if (value === 'Inactive' && sureScriptEnabled) {
-          const disablePrescriberResult =
-            await disablePrescriberDirectoryAction({
-              staffId: id,
-              locationId,
-            })
-
-          if (disablePrescriberResult.state === 'success') {
-            toast.success('Prescriber Disabled Successfully')
-          } else if (disablePrescriberResult.state === 'error') {
-            toast.error(disablePrescriberResult.error)
-          }
-        }
-
         search({ staffId: id }, 1, true)
       } else if (result.state === 'error') {
         toast.error(result.error)

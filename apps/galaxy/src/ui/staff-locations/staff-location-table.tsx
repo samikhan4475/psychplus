@@ -8,17 +8,24 @@ import toast from 'react-hot-toast'
 import {
   ColumnHeader,
   DataTable,
+  DateTimeCell,
   LoadingPlaceholder,
   TextCell,
 } from '@/components'
 import { Sort } from '@/types'
-import { getSortDir } from '@/utils'
+import { formatDate, getSortDir } from '@/utils'
 import { getScriptSurePermissionAction } from './actions/get-scriptsure-permission-action'
-import { ServiceCell, StatusCell } from './cells'
+import {
+  ActionsCell,
+  ServiceCell,
+  ServiceLevelsCell,
+  StatusCell,
+} from './cells'
 import { useStore } from './store'
 import { StaffLocation } from './types'
 
 const columns = (
+  refreshData: () => void,
   sort?: Sort,
   onSort?: (column: string) => void,
 ): ColumnDef<StaffLocation>[] => {
@@ -82,10 +89,10 @@ const columns = (
       cell: ({ row }) => <TextCell>{row.original.location?.npi}</TextCell>,
     },
     {
-      id: 'externalProviderId',
+      id: 'serviceLevelCodes',
       header: ({ column }) => (
         <ColumnHeader
-          label="SPI"
+          label="Service Levels"
           sortable
           sortDir={getSortDir(column.id, sort)}
           onClick={() => {
@@ -93,9 +100,7 @@ const columns = (
           }}
         />
       ),
-      cell: ({ row }) => (
-        <TextCell>{row.original?.externalProviderId}</TextCell>
-      ),
+      cell: ServiceLevelsCell,
     },
     {
       id: 'address',
@@ -154,10 +159,63 @@ const columns = (
     },
 
     {
+      id: 'externalProviderId',
+      header: ({ column }) => (
+        <ColumnHeader
+          label="SPI"
+          sortable
+          sortDir={getSortDir(column.id, sort)}
+          onClick={() => {
+            onSort?.(column.id)
+          }}
+        />
+      ),
+      cell: ({ row }) => (
+        <TextCell>{row.original?.externalProviderId}</TextCell>
+      ),
+    },
+    {
+      id: 'activeStartTime',
+      header: ({ column }) => (
+        <ColumnHeader
+          label="Start Date"
+          sortable
+          sortDir={getSortDir(column.id, sort)}
+          onClick={() => {
+            onSort?.(column.id)
+          }}
+        />
+      ),
+      cell: ({ row }) =>
+        row.original.externalProviderId ? (
+          <DateTimeCell>
+            {formatDate(row.original?.activeStartTime)}
+          </DateTimeCell>
+        ) : null,
+    },
+    {
+      id: 'activeEndTime',
+      header: ({ column }) => (
+        <ColumnHeader
+          label="End Date"
+          sortable
+          sortDir={getSortDir(column.id, sort)}
+          onClick={() => {
+            onSort?.(column.id)
+          }}
+        />
+      ),
+      cell: ({ row }) =>
+        row.original.externalProviderId ? (
+          <DateTimeCell>{formatDate(row.original?.activeEndTime)}</DateTimeCell>
+        ) : null,
+    },
+    {
       id: 'status',
       header: ({ column }) => (
         <ColumnHeader
           sortable
+          className="w-full"
           sortDir={getSortDir(column.id, sort)}
           onClick={() => {
             onSort?.(column.id)
@@ -166,6 +224,11 @@ const columns = (
         />
       ),
       cell: StatusCell,
+    },
+    {
+      id: 'action',
+      header: () => <ColumnHeader label="Action" />,
+      cell: ({ row }) => <ActionsCell row={row} refreshData={refreshData} />,
     },
   ]
 }
@@ -193,6 +256,14 @@ const StaffLocationTable = ({ staffId }: { staffId: string }) => {
 
     if (staffId && typeof staffId === 'string') search({ staffId })
   }, [])
+
+  const refreshData = () => {
+    if (staffId && typeof staffId === 'string') {
+      useStore.setState({ pageCache: {} })
+      search({ staffId }, 1, true)
+    }
+  }
+
   if (loading) {
     return (
       <Flex height="100%" align="center" justify="center">
@@ -205,7 +276,7 @@ const StaffLocationTable = ({ staffId }: { staffId: string }) => {
     <ScrollArea className="h-full flex-1 p-2 pt-0">
       <DataTable
         data={data?.staffLocations ?? []}
-        columns={columns(sort, sortData)}
+        columns={columns(refreshData, sort, sortData)}
         disablePagination
         sticky
         theadClass="z-[1]"

@@ -4,3 +4,6 @@ export * from './create-provider-location'
 export * from './get-provider-location-list'
 export * from './get-provider-location-history'
 export * from './update-staff-location'
+export * from "./update-prescriber-directory"
+export * from "./disable-prescriber-directory"
+export * from "./create-prescriber-directory"
