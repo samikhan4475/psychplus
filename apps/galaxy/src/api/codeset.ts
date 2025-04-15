@@ -17,10 +17,15 @@ const getCodesets = async (names: string[]): Promise<CodesetCache> => {
 
   const standardCodesetPromises = Promise.all(
     standardCodesetNames.map((name) => {
-      const [assigningAuthority, codeSystemName] = name.split('.')
+      const [assigningAuthority, codeSystemName, groupingCodeStartsWith] =
+        name.split('.')
 
       return api.GET<Codeset>(
-        STANDARD_CODESET_ENDPOINT(assigningAuthority, codeSystemName),
+        STANDARD_CODESET_ENDPOINT(
+          assigningAuthority,
+          codeSystemName,
+          groupingCodeStartsWith,
+        ),
         {
           next: { revalidate: CODESET_CACHE_SECONDS },
         },
@@ -38,23 +43,29 @@ const getCodesets = async (names: string[]): Promise<CodesetCache> => {
   const codesetCache: CodesetCache = {}
 
   standardCodesetResults.forEach((result) => {
-    if (result.state === 'error') {
-      throw new Error(result.error)
-    }
+    if (result.state === 'error') throw new Error(result.error)
 
-    codesetCache[result.data.codeSystemName] = {
-      name: result.data.codeSystemName,
-      display: result.data.displayName,
-      codes: result.data.codes.map((code) => ({
-        value: code.code,
-        display: code.displayName,
-        attributes: code.codeAttributes?.map((attr) => ({
-          name: attr.name,
-          value: attr.content,
+    const {
+      data: { codeSystemName, displayName, codes },
+    } = result
+
+    const transformed = codes.map(
+      ({ code, displayName, groupingCode, codeAttributes }) => ({
+        value: code,
+        display: displayName,
+        groupingCode,
+        attributes: codeAttributes?.map(({ name, content }) => ({
+          name,
+          value: content,
         })),
-        groupingCode: code.groupingCode,
-      })),
-    }
+      }),
+    )
+
+    const existing = codesetCache[codeSystemName]
+
+    codesetCache[codeSystemName] = existing
+      ? { ...existing, codes: [...existing.codes, ...transformed] }
+      : { name: codeSystemName, display: displayName, codes: transformed }
   })
 
   if (metadataCodesetResults.state === 'error') {

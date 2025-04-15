@@ -57,8 +57,14 @@ const SEND_POLICY_NOTICE_ENDPOINT = (id: string) =>
 const STANDARD_CODESET_ENDPOINT = (
   assigningAuthority: string,
   codeSystemName: string,
-) =>
-  `${API_URL}/api/codeset/authorities/${assigningAuthority}/codesets/${codeSystemName}`
+  groupingCodeStartsWith?: string,
+) => {
+  let url = `${API_URL}/api/codeset/authorities/${assigningAuthority}/codesets/${codeSystemName}`
+  if (groupingCodeStartsWith) {
+    url += `?groupingCodeStartsWith=${groupingCodeStartsWith}`
+  }
+  return url
+}
 const METADATA_CODESET_ENDPOINT = (name: string) =>
   `${API_URL}/api/metadata/codesets/${name}`
 const METADATA_CODESET_ALL_ENDPOINT = `${API_URL}/api/metadata/codesets`
@@ -759,7 +765,8 @@ const ADD_SELF_USER_SETTINGS = `${API_URL}/api/users/self/settings`
 
 const UPDATE_SELF_USER_SETTINGS = (settingId: string) =>
   `${API_URL}/api/users/self/settings/${settingId}`
-
+const DELETE_SELF_USER_SETTINGS = (settingId: string) =>
+  `${API_URL}/api/users/self/settings/${settingId}`
 const SELF_USER_BULK_SETTINGS = `${API_URL}/api/users/self/bulksettings`
 const GET_LOCATION_SERVICES_ENDPOINT = `${API_URL}/api/locationservices/actions/search`
 const DELETE_SERVICES_ENDPOINT = (locationId: string, serviceId: string) =>
@@ -1150,6 +1157,7 @@ export {
   GET_SELF_USER_SETTINGS,
   ADD_SELF_USER_SETTINGS,
   UPDATE_SELF_USER_SETTINGS,
+  DELETE_SELF_USER_SETTINGS,
   SELF_USER_BULK_SETTINGS,
   GET_STAFF_ORGANIZATION_PRACTICES_ENDPOINT,
   ATTACH_PRACTICE_STAFF_ENDPOINT,

@@ -96,7 +96,7 @@ const CODESETS = {
   SpecimenCollectionMethod: 'HL7v2.SpecimenCollectionMethod',
   InjectionAddon: 'PsychPlusPublic.InjectionAddon',
   InjectionSite: 'PsychPlusPublic.InjectionSite',
-  PatientLinkSection:'PatientLinkSection',
+  PatientLinkSection: 'PatientLinkSection',
   CosignerType: 'CosignerType',
   CounsellingOptions: 'PsychPlusPublic.CounsellingOptions',
   TobaccoTreatment: 'PsychPlusPublic.TobaccoTreatment',
@@ -108,6 +108,13 @@ const CODESETS = {
   PsychHistoryRelation: 'PsychPlusPublic.PsychHistoryRelation',
   PlaceOfService: 'PsychPlusPublic.PlaceOfService',
   TimeZoneId: 'PsychPlusPublic.TimeZoneId',
+  Paging: 'PsychPlusPublic.Paging',
+
+  //Standard Codesets having groupingCodeStartsWith at last
+
+  AllergyReaction: 'IHTSDO.SNOMED-CT.AllergicReaction',
+  AllergyType: 'IHTSDO.SNOMED-CT.AllergyType',
+  AllergySeverity: 'IHTSDO.SNOMED-CT.AllergySeverity',
 }
 export {
   CODESETS,

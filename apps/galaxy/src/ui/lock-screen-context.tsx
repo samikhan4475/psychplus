@@ -2,41 +2,15 @@
 
 import React, { useEffect, useRef } from 'react'
 import { usePathname, useSearchParams } from 'next/navigation'
-import { lockScreenAction, logoutAction } from '@/actions'
-import { refreshAccessToken } from '@/api/session'
+import { lockScreenAction } from '@/actions'
 import { appendSearchParams } from '@/utils/params'
 
-export const LockScreenProvider = ({
-  children,
-}: {
-  children: React.ReactNode
-}) => {
+type LockScreenProviderProps = React.PropsWithChildren
+
+export const LockScreenProvider = ({ children }: LockScreenProviderProps) => {
   const pathname = usePathname()
   const prevPathRef = useRef<string | null>(null)
   const searchParams = useSearchParams()
-
-  useEffect(() => {
-    const timeoutId = setInterval(checkRefreshToken, 5 * 60 * 1000)
-    return () => {
-      clearInterval(timeoutId)
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
-  const lockScreen = () => {
-    lockScreenAction(prevPathRef.current ?? '/')
-  }
-
-  const checkRefreshToken = async () => {
-    const refreshed = await refreshAccessToken()
-    if (!refreshed) {
-      const pathWithParams = appendSearchParams(
-        prevPathRef.current,
-        searchParams,
-      )
-      logoutAction(pathWithParams as string)
-    }
-  }
 
   useEffect(() => {
     const pathWithParams = appendSearchParams(pathname, searchParams)
@@ -74,6 +48,10 @@ export const LockScreenProvider = ({
       )
     }
   }, [])
+
+  const lockScreen = () => {
+    lockScreenAction(prevPathRef.current ?? '/')
+  }
 
   return children
 }

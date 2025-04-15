@@ -2,7 +2,6 @@ import { PlusCircledIcon } from '@radix-ui/react-icons'
 import { Button, Flex } from '@radix-ui/themes'
 import { getUserInitialInformationAction } from '@/actions/get-users-initial-information'
 import { NavLogo } from '@/components'
-import { getAuthCookies } from '@/utils/auth'
 import { AddPatient } from '../patient/add-patient'
 import { AddVisit } from '../visit/add-visit'
 import { InboxLink } from './inbox-link'
@@ -10,6 +9,7 @@ import { NavigationLinks } from './navigation-links'
 import { NavigationTabs } from './navigation-tabs'
 import { ScrollAlert } from './scroll-alert'
 import { UserDropdownMenu } from './user-dropdown-menu'
+import { UsersCount } from './users-count'
 
 const Header = async () => {
   const userInitialInformationResponse = await getUserInitialInformationAction()
@@ -25,6 +25,7 @@ const Header = async () => {
           <NavLogo />
           <ScrollAlert />
           <Flex height="100%" align="center" gap="2">
+            <UsersCount />
             <AddPatient>
               <Button
                 variant="outline"
@@ -63,11 +64,7 @@ const Header = async () => {
         className="text-white bg-accent-11"
       >
         <NavigationLinks />
-        <InboxLink
-          href="/inbox"
-          label="Inbox"
-          inboxCountTotal={count}
-        />
+        <InboxLink href="/inbox" label="Inbox" inboxCountTotal={count} />
       </Flex>
       <NavigationTabs />
     </>

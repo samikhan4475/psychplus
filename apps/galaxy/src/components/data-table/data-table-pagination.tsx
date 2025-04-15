@@ -3,6 +3,7 @@
 import { Button, Flex, Text } from '@radix-ui/themes'
 import { DOTS, usePagination } from '@/hooks/use-pagination'
 import { cn } from '@/utils'
+import { PaginationSelectField } from './pagination-select-field'
 
 interface DataTablePaginationProps {
   className?: string
@@ -14,6 +15,7 @@ interface DataTablePaginationProps {
   next: () => void
   prev: () => void
   jumpToPage: (page: number) => void
+  onPageSizeChange?: (pageSize: number) => void
 }
 
 const DataTablePagination = ({
@@ -26,6 +28,7 @@ const DataTablePagination = ({
   next,
   prev,
   jumpToPage,
+  onPageSizeChange,
 }: DataTablePaginationProps) => {
   const paginationRange = usePagination({
     currentPage: page,
@@ -34,7 +37,6 @@ const DataTablePagination = ({
     pageSize,
   })
   const pages = Math.ceil(total / pageSize)
-
   const hasPrev = page !== 1
   const hasNext = page < pages
 
@@ -51,7 +53,13 @@ const DataTablePagination = ({
       justify="end"
       className={cn('border-pp-gray-2 h-12 border', className)}
     >
-      {showTotal && <Text className='text-[14px] px-1'>TOTAL: {total}</Text>}
+      {onPageSizeChange && (
+        <PaginationSelectField
+          onPageSizeChange={onPageSizeChange}
+          pageSize={pageSize}
+        />
+      )}
+      {showTotal && <Text className="px-1 text-[14px]">TOTAL: {total}</Text>}
       <PaginationButton onClick={prev} disabled={!hasPrev || loading}>
         Previous
       </PaginationButton>

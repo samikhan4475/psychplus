@@ -47,7 +47,7 @@ const refreshAccessToken = async (): Promise<boolean> => {
 
   if (!auth) return false
 
-  const refreshBuffer = 5 * 60 * 1000 // 5 minutes before expiry
+  const refreshBuffer = 10 * 60 * 1000 // 10 minutes before expiry
   const timeoutDuration =
     new Date(auth.accessTokenExpiry).getTime() - Date.now() - refreshBuffer
 
@@ -95,7 +95,7 @@ const apiRefreshSession = async (
       staffId: userResponse.data.id,
       firstName: userResponse.data.legalName.firstName,
       lastName: userResponse.data.legalName.lastName,
-      email: userResponse.data.contactInfo.email,
+      email: userResponse?.data?.contactInfo?.email,
     },
     accessToken: refreshResponse.data.accessToken,
     refreshToken: refreshResponse.data.refreshToken,

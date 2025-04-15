@@ -9,10 +9,17 @@ import React, {
   useRef,
   useState,
 } from 'react'
-import { getUserAuthAction, getUserSessionAction } from '@/actions'
+import {
+  getUserAuthAction,
+  getUserSessionAction,
+  logoutAction,
+} from '@/actions'
+import { refreshSessionAction } from '@/actions/refreshSessionAction'
+import { refreshAccessToken } from '@/api/session'
 import { useConstants } from '@/hooks/use-constants'
 import { webSocketEventBus } from '@/lib/websocket-event-bus'
 import { WebSocketEventType } from '@/types'
+import { shouldRefresh } from '@/utils'
 
 type WebSocketContextType = {
   sendMessage: (
@@ -38,7 +45,7 @@ export const WebSocketProvider = ({
   >('connecting')
   const wsRef = useRef<WebSocket | null>(null)
   const reconnectAttempts = useRef(0)
-  const maxReconnectAttempts = 100
+  const maxReconnectAttempts = 7
   const pingIntervalRef = useRef<NodeJS.Timeout | null>(null)
   const isLoggedOut = useRef(false)
 
@@ -59,7 +66,14 @@ export const WebSocketProvider = ({
     ws.onopen = async () => {
       reconnectAttempts.current = 0
 
+      const refreshed = await refreshAccessToken()
+
+      if (!refreshed) {
+        logoutAction('/login')
+      }
+
       const userSessionResponse = await getUserSessionAction()
+
       if (userSessionResponse.state === 'error') {
         console.log('Failed to authenticate WebSocket')
         isLoggedOut.current = true
@@ -68,6 +82,7 @@ export const WebSocketProvider = ({
       }
 
       const { data } = userSessionResponse
+
       if (!data?.sessionId || !data?.refreshToken) {
         ws.close()
         return
@@ -107,7 +122,7 @@ export const WebSocketProvider = ({
         return
       }
 
-      const delay = 3000
+      const delay = 7000
       console.log(
         `WebSocket closed. Reconnecting in ${delay / 1000} seconds...`,
       )
@@ -123,11 +138,17 @@ export const WebSocketProvider = ({
     ws.onerror = async (event) => {
       console.warn('WebSocket Error:', event)
 
-      const auth = await getUserAuthAction()
-      if (!auth) {
-        isLoggedOut.current = true
+      try {
+        const auth = await getUserAuthAction()
+        if (!auth) {
+          isLoggedOut.current = true
+        }
+      } catch (error) {
+        console.error('Error while checking auth after WebSocket error:', error)
+        // Optionally handle the error or notify the user
+      } finally {
+        ws.close()
       }
-      ws.close()
     }
   }, [])
 

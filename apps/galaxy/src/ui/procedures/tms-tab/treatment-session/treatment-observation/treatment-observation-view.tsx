@@ -1,5 +1,5 @@
 import { Flex } from '@radix-ui/themes'
-import { BlockLabel, FormFieldError, TextAreaInput } from '@/components'
+import { AutoResizeInput, BlockLabel, FormFieldError } from '@/components'
 import { QuickNoteHistory } from '@/types'
 import { questionaireSections } from '../../utils'
 import { QuestionaireBlock } from './blocks/questionaire-block'
@@ -14,9 +14,9 @@ const TreatmentObservation = ({ data }: { data: QuickNoteHistory[] }) => {
         <FormFieldError name="treatmentAndObservation" />
       </Flex>
 
-      <TextAreaInput
+      <AutoResizeInput
         field="treatmentAndObservation"
-        className="h- h-16 w-[50%]"
+        className="min-h-16 w-[50%]"
       />
 
       {questionaireSections.map(({ title, sectionName }) => {

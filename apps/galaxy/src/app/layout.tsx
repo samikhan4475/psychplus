@@ -11,12 +11,13 @@ import {
 } from '@/api'
 import { getFeatureFlags } from '@/api/get-feature-flags'
 import { getUserType } from '@/api/get-user-type'
+import { UserSessionRefresher } from '@/components'
 import {
   CODESETS,
   GOOGLE_MAPS_API_KEY,
   SCRIPTSURE_BASE_APPLICATION_URL,
   STRIPE_PUBLISHABLE_KEY,
-  WEBSOCKETSERVICE_URL
+  WEBSOCKETSERVICE_URL,
 } from '@/constants'
 import { WebSocketProvider } from '@/providers/websocket-provider'
 import { StoreProvider } from '@/store'
@@ -57,9 +58,11 @@ const RootLayout = async ({ children }: React.PropsWithChildren) => {
           {auth ? <Header /> : null}
           <Flex direction="column" className="flex-1 overflow-y-auto">
             {auth ? (
-              <LockScreenProvider>
-                <WebSocketProvider>{children}</WebSocketProvider>
-              </LockScreenProvider>
+              <>
+                <WebSocketProvider>
+                  <LockScreenProvider>{children}</LockScreenProvider>
+                </WebSocketProvider>
+              </>
             ) : (
               children
             )}
@@ -97,6 +100,11 @@ const RootLayout = async ({ children }: React.PropsWithChildren) => {
         constants={constants}
         featureFlags={featureFlags.data}
       >
+        <UserSessionRefresher
+          redirectUrl="/login"
+          expiry={auth.accessTokenExpiry}
+          requireAuth
+        />
         {content}
       </StoreProvider>
     )

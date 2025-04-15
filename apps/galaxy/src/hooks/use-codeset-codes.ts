@@ -2,8 +2,22 @@ import { useStore } from '@/store'
 
 const useCodesetCodes = (name: string) => {
   const codesetCache = useStore((state) => state.codesets)
-  const key = name?.includes('.') ? name.split('.')[1] : name
-  return codesetCache[key]?.codes ?? []
+
+  if (!name) return []
+
+  const parts = name.split('.')
+  const [, codeSystemName, groupingPrefix] = parts
+
+  const key = codeSystemName ?? name
+  const allCodes = codesetCache[key]?.codes ?? []
+
+  if (groupingPrefix) {
+    return allCodes.filter((code) =>
+      code.groupingCode?.startsWith(groupingPrefix),
+    )
+  }
+
+  return allCodes
 }
 
 export { useCodesetCodes }

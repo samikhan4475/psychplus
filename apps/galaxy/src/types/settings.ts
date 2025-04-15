@@ -24,6 +24,7 @@ interface SettingSearchFilters {
   categoryValue?: string
   categoryValues?: string[]
   name?: string
+  namePartial?: string
 }
 
 type AddSelfUserSettingBody = Omit<UserSetting, 'id' | 'metadata' | 'userId'>
