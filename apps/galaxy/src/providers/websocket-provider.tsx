@@ -9,17 +9,10 @@ import React, {
   useRef,
   useState,
 } from 'react'
-import {
-  getUserAuthAction,
-  getUserSessionAction,
-  logoutAction,
-} from '@/actions'
-import { refreshSessionAction } from '@/actions/refreshSessionAction'
-import { refreshAccessToken } from '@/api/session'
+import { getUserAuthAction, getUserSessionAction } from '@/actions'
 import { useConstants } from '@/hooks/use-constants'
 import { webSocketEventBus } from '@/lib/websocket-event-bus'
 import { WebSocketEventType } from '@/types'
-import { shouldRefresh } from '@/utils'
 
 type WebSocketContextType = {
   sendMessage: (
@@ -65,12 +58,6 @@ export const WebSocketProvider = ({
 
     ws.onopen = async () => {
       reconnectAttempts.current = 0
-
-      const refreshed = await refreshAccessToken()
-
-      if (!refreshed) {
-        logoutAction('/login')
-      }
 
       const userSessionResponse = await getUserSessionAction()
 
@@ -122,7 +109,7 @@ export const WebSocketProvider = ({
         return
       }
 
-      const delay = 7000
+      const delay = 10000
       console.log(
         `WebSocket closed. Reconnecting in ${delay / 1000} seconds...`,
       )
@@ -147,7 +134,9 @@ export const WebSocketProvider = ({
         console.error('Error while checking auth after WebSocket error:', error)
         // Optionally handle the error or notify the user
       } finally {
-        ws.close()
+        if (wsRef?.current) {
+          ws.close()
+        }
       }
     }
   }, [])

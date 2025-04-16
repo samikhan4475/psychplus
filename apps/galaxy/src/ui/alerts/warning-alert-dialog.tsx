@@ -7,7 +7,7 @@ interface AlertDialogBaseProps {
   isOpen: boolean
   setIsOpen: (isOpen: boolean) => void
   message?: string
-  setMessage: (message: string) => void
+  setMessage?: (message: string) => void
 }
 
 const WarningAlertDialog = ({
@@ -22,7 +22,7 @@ const WarningAlertDialog = ({
       onOpenChange={(isOpen) => {
         if (!isOpen) {
           setIsOpen(false)
-          setMessage('')
+          setMessage?.('')
         }
       }}
     >

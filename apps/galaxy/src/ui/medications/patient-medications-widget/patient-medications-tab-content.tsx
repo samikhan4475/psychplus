@@ -6,9 +6,9 @@ import { TabContentHeading, WidgetAddButton } from '@/components'
 import { FEATURE_FLAGS } from '@/constants'
 import { useFeatureFlagEnabled } from '@/hooks/use-feature-flag-enabled'
 import { FilterForm } from '@/ui/medications/patient-medications-widget/filter-form'
-import { NotesPrintButton } from '@/ui/notes/notes-print-button'
 import { AddMedication } from '../add-medication'
 import { AddMedicationButton } from './add-medication-button'
+import { PrintButton } from './print-button'
 import { SearchMedications } from './search-medications'
 import { useStore } from './store'
 
@@ -37,7 +37,7 @@ const PatientMedicationsTabContent = ({
         <Flex align="center" justify="between" width="100%">
           <SearchMedications />
           <Flex align="center" gap="2">
-            <NotesPrintButton id="patient-medications" />
+            <PrintButton id="patient-medications" />
             <WidgetAddButton title="Add Medication" onClose={fetchMedications}>
               {!isFeatureFlagEnabled ? (
                 <AddMedication />
