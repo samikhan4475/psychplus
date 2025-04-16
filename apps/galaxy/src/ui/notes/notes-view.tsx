@@ -1,6 +1,9 @@
+'use client'
+
 import { Appointment, PatientProfile } from '@/types'
 import { Allergy } from '../quicknotes/actual-note-view/types'
 import { NotesWidget } from './notes-widget'
+import { StoreProvider } from './store'
 import { GetPatientNotesResponse } from './types'
 
 interface NotesViewProps {
@@ -25,16 +28,18 @@ const NotesView = ({
   tab = undefined,
 }: NotesViewProps) => {
   return (
-    <NotesWidget
-      patientId={patientId}
-      noteAppointment={noteAppointment}
-      patientNotes={patientNotes}
-      PatientProfile={PatientProfile}
-      allergies={allergies}
-      isInboxNotes={isInboxNotes}
-      loading={loading}
-      tab={tab}
-    />
+    <StoreProvider>
+      <NotesWidget
+        patientId={patientId}
+        noteAppointment={noteAppointment}
+        patientNotes={patientNotes}
+        PatientProfile={PatientProfile}
+        allergies={allergies}
+        isInboxNotes={isInboxNotes}
+        loading={loading}
+        tab={tab}
+      />
+    </StoreProvider>
   )
 }
 
