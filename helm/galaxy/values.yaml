@@ -18,16 +18,20 @@ podAnnotations:
   config.linkerd.io/proxy-memory-limit: "1Gi"
   config.linkerd.io/proxy-memory-request: "8Mi"
 
-podSecurityContext:
-  fsGroup: 1001
+podSecurityContext: {}
 
-securityContext:
-  capabilities:
-    drop:
-    - ALL
-  readOnlyRootFilesystem: true
-  runAsNonRoot: true
-  runAsUser: 1001
+securityContext: {}
+
+#podSecurityContext:
+#  fsGroup: 1001
+#
+#securityContext:
+#  capabilities:
+#    drop:
+#    - ALL
+#  readOnlyRootFilesystem: true
+#  runAsNonRoot: true
+#  runAsUser: 1001
 
 container:
   portName: http
