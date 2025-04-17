@@ -130,11 +130,20 @@ const PatientBanner = async ({
         <LabelAndValue
           label="Last Seen"
           value={
-            patientDemographicsData?.appointment?.startDate &&
+            patientDemographicsData?.appointment?.lastSeenByProvider &&
             patientDemographicsData?.appointment?.providerFullName
               ? `${formatUTCDate(
-                  patientDemographicsData?.appointment?.startDate,
-                )} ${patientDemographicsData?.appointment?.providerFullName}`
+                  patientDemographicsData?.appointment?.lastSeenByProvider,
+                )} ${
+                  patientDemographicsData?.appointment?.lastSeenByProviderName
+                    ?.firstName
+                } ${
+                  patientDemographicsData?.appointment?.lastSeenByProviderName
+                    ?.lastName
+                }, ${
+                  patientDemographicsData?.appointment?.lastSeenByProviderName
+                    ?.honors
+                } `
               : 'N/A'
           }
         />
@@ -144,4 +153,3 @@ const PatientBanner = async ({
 }
 
 export { PatientBanner }
- 

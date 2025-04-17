@@ -166,6 +166,13 @@ interface Appointment {
   isPrimaryNoteSigned?: boolean
   providerFullName?: string
   isQuickNoteSigned?: boolean
+  lastSeenByProvider?:string
+  lastSeenByProviderName?:{
+    firstName?: string
+    middleName?: string
+    lastName?: string
+    honors?:string
+  }
 }
 
 interface BookVisitPayload {
