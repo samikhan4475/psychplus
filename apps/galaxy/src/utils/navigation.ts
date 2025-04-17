@@ -264,9 +264,25 @@ const isHospitalCareVisit = (visitType: string | null) =>
 const getManagementNavLinks = (
   type: string | null,
   id: string | null,
+  roleId: string | null,
   practiceId: string | null,
 ) => {
   const baseHref = `/management`
+
+  if (roleId && type && id) {
+    const roleBase = `${baseHref}/organization-practice/${type}/${id}/organization-roles-permissions/${roleId}`
+
+    return [
+      {
+        label: 'Profile',
+        href: `${roleBase}/profile`,
+      },
+      {
+        label: 'Permissions',
+        href: `${roleBase}/permissions`,
+      },
+    ]
+  }
 
   if (type === 'organizations') {
     const orgBase = `${baseHref}/organization-practice/organizations/${id}`
@@ -293,7 +309,7 @@ const getManagementNavLinks = (
       },
       {
         label: 'Roles & Permissions',
-        href: `${orgBase}/roles-permissions`,
+        href: `${orgBase}/organization-roles-permissions`,
       },
     ]
   }
@@ -330,10 +346,6 @@ const getManagementNavLinks = (
       {
         label: 'Staff',
         href: `${practiceBase}/staff`,
-      },
-      {
-        label: 'Roles & Permissions',
-        href: `${practiceBase}/roles-permissions`,
       },
     ]
   }

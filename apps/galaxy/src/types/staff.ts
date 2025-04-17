@@ -1,6 +1,7 @@
 import { ContactDetails } from './contact'
 import { Metadata } from './metadata'
 import { LegalName } from './name'
+import { Role } from './roles'
 
 interface StaffResource {
   id: string
@@ -18,7 +19,8 @@ interface StaffResource {
   userId?: string
   staffUserRoleIds?: string[]
   practiceIds?: string[]
-  npi?:string
+  userRoles?: Role[]
+  npi?: string
 }
 
 enum STAFF_COMMENT_STATUS {

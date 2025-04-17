@@ -6,6 +6,7 @@ import { StaffNavigation } from '@/ui/staff-navigation'
 interface StaffLayoutProps extends React.PropsWithChildren {
   params: {
     id: string
+    roleId?: string
   }
 }
 const StaffLayout = ({ children, params }: StaffLayoutProps) => {

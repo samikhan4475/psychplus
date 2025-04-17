@@ -1,6 +1,7 @@
 import { PatientAddress } from './address'
 import { UserResponse } from './auth'
 import { Metadata } from './metadata'
+import { StaffResource } from './staff'
 
 interface Practice {
   id: string
@@ -13,6 +14,7 @@ interface Practice {
   defaultClearinghouseReceiverId: string
   taxId: string
   taxonomy: string
+  users?: StaffResource[]
 }
 
 interface PracticeResource {

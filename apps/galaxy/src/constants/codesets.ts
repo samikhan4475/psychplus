@@ -106,8 +106,10 @@ const CODESETS = {
   CreditCardStatus: 'CreditCardStatus',
   PatientRelationship: 'PsychPlusPublic.PatientRelationship',
   PsychHistoryRelation: 'PsychPlusPublic.PsychHistoryRelation',
+  PermissionSection: 'PsychPlusPublic.PermissionSection',
   PlaceOfService: 'PsychPlusPublic.PlaceOfService',
   TimeZoneId: 'PsychPlusPublic.TimeZoneId',
+  UserActorCategory: 'UserActorCategory',
   Paging: 'PsychPlusPublic.Paging',
 
   //Standard Codesets having groupingCodeStartsWith at last

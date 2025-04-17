@@ -270,6 +270,8 @@ const UPDATE_CLEARING_HOUSE_RECEIVER_ENDPOINT = (id: string) =>
   `${API_URL}/api/clearinghousereceivers/${id}`
 const GET_INSURANCE_PAYMENT_LIST_ENDPOINT = `${API_URL}/api/payments/actions/search`
 const GET_PRACTICE_IDS_LIST_ENDPOINT = `${API_URL}/api/practices/actions/search`
+const GET_PRACTICE_USERS_LIST_ENDPOINT = (userId: string, practiceId: string) =>
+  `${API_URL}/api/practices/${practiceId}/users/${userId}/roles`
 const DELETE_INSURANCE_PAYMENT_ENDPOINT = (id: string) =>
   `${API_URL}/api/payments/${id}`
 const GENERATE_PATIENT_STATEMENTS_ENDPOINT = (fileFormat: string) =>
@@ -357,12 +359,28 @@ const GET_PATIENT_MEDICATIONS = () =>
 const NOTE_UPLOAD_FILE = (patientId: string, appointmentId: string | null) =>
   `${API_URL}/api/patients/${patientId}/appointments/${appointmentId}/documents`
 const GET_ORGANIZATION_ROLES = `${API_URL}/api/organizations/actions/search`
+const GET_USER_ROLES = `${API_URL}/api/userroles/action/search`
+const Add_USER_ROLES = `${API_URL}/api/userroles`
+const UPDATE_USER_ROLES = (roleId: string) =>
+  `${API_URL}/api/userroles/${roleId}`
 const GET_PATIENT_UNPAID_APPOINTMENTS_ENDPOINT = (
   patientId: string,
   paymentType: string,
 ) =>
   `${API_URL}/api/patients/${patientId}/appointments/actions/unpaid/${paymentType}`
 const GET_ORGANIZATIONS_ENDPOINT = `${API_URL}/api/organizations/actions/search`
+const GET_PERMISSIONS_ENDPOINT = `${API_URL}/api/userpermissions/action/search`
+const ASSOCIATE_PERMISSION_ENDPOINT = (
+  userRoleId: string,
+  userPermissionId: string,
+) =>
+  `${API_URL}/api/userroles/${userRoleId}/userpermissions/${userPermissionId}/actions/associate`
+const DIS_ASSOCIATE_PERMISSION_ENDPOINT = (
+  userRoleId: string,
+  userPermissionId: string,
+) =>
+  `${API_URL}/api/userroles/${userRoleId}/userpermissions/${userPermissionId}/actions/dissociate`
+const UPDATE_ROLE_ENDPOINT = (id: string) => `${API_URL}/api/userroles/${id}`
 const GET_ORGANIZATION_HX_STATUS_ENDPOINT = (organizationId: string) =>
   `${API_URL}/api/organizations/${organizationId}/history/actions/search`
 const ADD_ORGANIZATION_PRACTICE_ENDPOINT = (organizationId: string) =>
@@ -1149,6 +1167,11 @@ export {
   UPDATE_PRACTICE_ENDPOINT,
   GET_PRACTICE_HISTORY_ENDPOINT,
   GET_ADDENDUMS_AGAINST_NOTE_ID,
+  GET_USER_ROLES,
+  Add_USER_ROLES,
+  UPDATE_USER_ROLES,
+  GET_PERMISSIONS_ENDPOINT,
+  ASSOCIATE_PERMISSION_ENDPOINT,
   GET_FORWARDING_MESSAGE_LIST_ENDPOINT,
   UPDATE_FORWARDING_MESSAGE_ENDPOINT,
   DELETE_FORWARDING_MESSAGE_ENDPOINT,
@@ -1193,6 +1216,8 @@ export {
   INBOX_SIGN_NOTE_ENDPOINT,
   GET_FEATURE_FLAGS_BY_SHORTNAME_ENDPOINT,
   GET_CURRENT_USER_SETTINGS,
+  UPDATE_ROLE_ENDPOINT,
+  GET_PRACTICE_USERS_LIST_ENDPOINT,
   ADD_CLAIM,
   SELF_PRACTICES,
   GET_SHARED_POLICY_FILE,
@@ -1218,5 +1243,6 @@ export {
   ENABLE_SCHEDULE_REPORT_JOB,
   EDIT_SCHEDULE_REPORT_ENDPOINT,
   UPDATE_SCHEDULE_REPORT_JOB_ENDPOINT,
-  UPDATE_DEFAULT_PAYMENT
+  DIS_ASSOCIATE_PERMISSION_ENDPOINT,
+  UPDATE_DEFAULT_PAYMENT,
 }

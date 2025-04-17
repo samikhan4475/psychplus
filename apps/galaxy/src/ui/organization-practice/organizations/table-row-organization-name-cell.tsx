@@ -14,7 +14,7 @@ const OrganizationNameCell = ({
     const href = `/management/organization-practice/organizations/${organization.id}/organization-profile`
     addTab({
       href,
-      label: organization.displayName,
+      label: `${organization.displayName} (Organization)`,
     })
     router.push(href)
   }

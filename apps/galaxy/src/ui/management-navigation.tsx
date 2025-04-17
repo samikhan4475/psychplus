@@ -7,12 +7,16 @@ import { Box, Flex, ScrollArea } from '@radix-ui/themes'
 import { cn, getManagementNavLinks } from '@/utils'
 
 const ManagementNavigation = () => {
-  const { id, type } = useParams<{ id: string; type: string }>()
+  const { id, type, roleId } = useParams<{
+    id: string
+    type: string
+    roleId: string
+  }>()
   const searchParams = useSearchParams()
   const practiceId = searchParams.get('practice')
   const navLinks = useMemo(
-    () => getManagementNavLinks(type, id, practiceId),
-    [type, id, practiceId],
+    () => getManagementNavLinks(type, id, roleId, practiceId),
+    [type, id, roleId, practiceId],
   )
   return (
     <Box className="bg-white w-[160px] rounded-1 shadow-2">
