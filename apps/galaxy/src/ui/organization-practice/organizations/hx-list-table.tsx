@@ -17,12 +17,6 @@ interface HxListTableProps {
   organizationId: string
 }
 
-interface HxStatus {
-  date: string
-  status: string
-  user: string
-}
-
 const columns: ColumnDef<Organization>[] = [
   {
     id: 'user',

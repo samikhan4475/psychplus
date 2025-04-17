@@ -1,3 +1,4 @@
+import { PatientAddress } from './address'
 import { Metadata } from './metadata'
 
 interface Organization {
@@ -6,6 +7,7 @@ interface Organization {
   shortName: string
   displayName: string
   recordStatus: string
+  organizationAddress?: PatientAddress
 }
 
 export type { Organization }

@@ -16,10 +16,10 @@ const TINField = () => {
       <TextField.Root
         size="1"
         className="border-pp-gray-2 w-full border border-solid !outline-none [box-shadow:none] "
-        {...form.register('tin')}
+        {...form.register('taxId')}
         placeholder="Add TIN"
       />
-      <FormFieldError name="tin" />
+      <FormFieldError name="taxId" />
     </FormFieldContainer>
   )
 }

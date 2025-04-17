@@ -16,10 +16,10 @@ const TaxonomyCodeField = () => {
       <TextField.Root
         size="1"
         className="border-pp-gray-2 w-full border border-solid !outline-none [box-shadow:none] "
-        {...form.register('taxonomyCode')}
+        {...form.register('taxonomy')}
         placeholder="Taxonomy Code"
       />
-      <FormFieldError name="taxonomyCode" />
+      <FormFieldError name="taxonomy" />
     </FormFieldContainer>
   )
 }

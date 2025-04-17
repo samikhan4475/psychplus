@@ -4,11 +4,10 @@ import { Box, Flex, Text } from '@radix-ui/themes'
 import { useFormContext } from 'react-hook-form'
 import { AddressFieldsGroup, CheckboxInput } from '@/components'
 import { FormFieldContainer, FormFieldLabel } from '@/components/form'
-import { OrganizationAddress } from '../../types'
-import { SchemaType } from './schema'
+import { PatientAddress } from '@/types'
 
 interface PrimaryAddressFieldsProps {
-  organizationAddress: OrganizationAddress
+  organizationAddress?: PatientAddress
 }
 
 const PrimaryAddressFields = ({
@@ -16,7 +15,7 @@ const PrimaryAddressFields = ({
 }: PrimaryAddressFieldsProps) => {
   const form = useFormContext()
   const onChange = (value: boolean) => {
-    const fields: (keyof OrganizationAddress)[] = [
+    const fields: (keyof PatientAddress)[] = [
       'street1',
       'street2',
       'city',

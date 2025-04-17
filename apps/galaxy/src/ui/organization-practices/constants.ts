@@ -7,10 +7,6 @@ const STATUS_CODESET = [
     label: 'Inactive',
     value: 'Inactive',
   },
-  {
-    label: 'Error',
-    value: 'Error',
-  },
 ]
 
 export { STATUS_CODESET }

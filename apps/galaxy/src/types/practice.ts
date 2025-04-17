@@ -1,3 +1,4 @@
+import { PatientAddress } from './address'
 import { UserResponse } from './auth'
 import { Metadata } from './metadata'
 
@@ -14,6 +15,32 @@ interface Practice {
   taxonomy: string
 }
 
+interface PracticeResource {
+  id: string
+  metadata: Metadata
+  recordStatus: string
+  practiceOrganizationType: string
+  shortName: string
+  displayName: string
+  taxonomy: string
+  socialSecurityNumber: string
+  defaultClearinghouseReceiverId: string
+  taxId: string
+  practiceAddress: Partial<PatientAddress>
+  practicePaymentAddress: Partial<PatientAddress>
+  npi: string
+  clia: string
+  practicePhone: string
+  practiceFax: string
+  defaultProviderStaffId: number
+  defaultProviderName: string
+  practiceAddressId: string
+  paymentAddressId: string
+  organizationShortName: string
+  organizationDisplayName: string
+  organizationId: string
+}
+
 interface SelfPractice {
   id: string
   recordStatus: string
@@ -24,4 +51,4 @@ interface SelfPractice {
   users: UserResponse[]
 }
 
-export type { Practice, SelfPractice }
+export type { Practice, SelfPractice, PracticeResource }

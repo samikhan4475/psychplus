@@ -5,10 +5,14 @@ const StatusSelect = () => {
   return (
     <FormFieldContainer>
       <FormFieldLabel className="!text-1">Status</FormFieldLabel>
-      <SelectInput size="1" options={STATUS_CODESET} name="status" buttonClassName='w-full h-6' />
+      <SelectInput
+        size="1"
+        options={STATUS_CODESET}
+        name="recordStatus"
+        buttonClassName="w-full h-6"
+      />
     </FormFieldContainer>
   )
 }
 
 export { StatusSelect }
-

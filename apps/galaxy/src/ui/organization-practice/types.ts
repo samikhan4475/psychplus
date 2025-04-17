@@ -68,7 +68,6 @@ interface Organization extends OrganizationRoot {
   locationId: string
   contactPhone: string
   contactEmail: string
-  organizationAddress: OrganizationAddress
   ehrPartner?: boolean
   practicesNames?: string
 }
