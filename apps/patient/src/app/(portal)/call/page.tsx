@@ -27,17 +27,15 @@ const Call = async (props: Props) => {
     return <Text>{acsResponse.error}</Text>
   }
 
-  if (profileResponse.state === 'error') {
-    return <Text>Error in geeting profile info: {profileResponse.error}</Text>
-  }
-
-  const profile = profileResponse.data
-  const user: User = {
-    userId: String(profile.id),
-    firstName: profile.legalName.firstName,
-    lastName: profile.legalName.lastName,
-    email: profile.contactDetails.email,
-  }
+  const user: User | undefined =
+    profileResponse.state === 'success'
+      ? {
+          userId: String(profileResponse?.data?.id),
+          firstName: profileResponse?.data?.legalName.firstName,
+          lastName: profileResponse?.data?.legalName.lastName,
+          email: profileResponse?.data?.contactDetails.email,
+        }
+      : undefined
 
   return (
     <Suspense fallback={<Text>Loading...</Text>}>

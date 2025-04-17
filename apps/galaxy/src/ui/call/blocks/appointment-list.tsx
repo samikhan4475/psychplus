@@ -2,13 +2,13 @@
 
 import { CallAdapterState } from '@azure/communication-react'
 import { Flex, Text } from '@radix-ui/themes'
-import { Appointment } from '@/types'
+import {  WebSocketEvents, WebSocketEventType } from '@/types'
 import { AppointmentInfo } from './appointment-info'
 
 interface AppointmentsListProps {
-  appointments: Appointment[]
-  appointmentId?: number
-  setAppointmentId: (appointmentId: number) => void
+  appointments: WebSocketEvents[WebSocketEventType.CallWaiting][]
+  appointmentId?: string
+  setAppointmentId: (appointmentId: string) => void
   callAdapterState?: CallAdapterState
 }
 
@@ -40,7 +40,7 @@ const AppointmentsList = ({
       </Flex>
       {appointments?.map((item) => (
         <AppointmentInfo
-          key={item.appointmentId}
+          key={item.gv}
           appointment={item}
           appointmentId={appointmentId}
           setAppointmentId={setAppointmentId}

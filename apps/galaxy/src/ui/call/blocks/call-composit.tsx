@@ -12,20 +12,8 @@ import { AcsInfo } from '../types'
 
 interface Props {
   acsInfo: AcsInfo
-  appointmentId: number
-  setCallAdapterState: (state: CallAdapterState) => void
-}
-
-function numberToGUID(number?: number): string {
-  if (!number) return ''
-  const hexString = number.toString(16).padStart(32, '0')
-  return [
-    hexString.slice(0, 8),
-    hexString.slice(8, 12),
-    hexString.slice(12, 16),
-    hexString.slice(16, 20),
-    hexString.slice(20),
-  ].join('-')
+  appointmentId: string
+  setCallAdapterState: (state: CallAdapterState | undefined) => void
 }
 
 const CallCompositeContainer = ({
@@ -37,7 +25,6 @@ const CallCompositeContainer = ({
     return new AzureCommunicationTokenCredential(acsInfo.token)
   }, [acsInfo.token])
 
-  const groupId = useMemo(() => numberToGUID(appointmentId), [appointmentId])
   const adapterArgs = useMemo(() => {
     return {
       userId: {
@@ -45,20 +32,25 @@ const CallCompositeContainer = ({
       },
       displayName: `${acsInfo.staffName.firstName} ${acsInfo.staffName.lastName}`,
       credential,
-      locator: { groupId },
+      locator: { groupId: appointmentId },
     }
   }, [
     acsInfo.externalId,
     acsInfo.staffName.firstName,
     acsInfo.staffName.lastName,
     credential,
-    groupId,
+    appointmentId,
   ])
 
   const callAdapter = useAzureCommunicationCallAdapter(adapterArgs)
 
   useEffect(() => {
     callAdapter?.onStateChange((state) => setCallAdapterState(state))
+
+    return () => {
+      callAdapter?.dispose()
+      setCallAdapterState(undefined)
+    }
   }, [callAdapter, setCallAdapterState])
 
   if (!callAdapter) {

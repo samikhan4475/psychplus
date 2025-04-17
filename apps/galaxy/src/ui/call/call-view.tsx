@@ -1,36 +1,75 @@
 'use client'
 
-import { useState } from 'react'
-import { useSearchParams } from 'next/navigation'
+import { useCallback, useEffect, useState } from 'react'
 import { CallAdapterState } from '@azure/communication-react'
 import { Flex, Text } from '@radix-ui/themes'
+import toast from 'react-hot-toast'
 import { MAIN_PAGE_FEATURE_FLAGS } from '@/constants'
 import { useFeatureFlagEnabled } from '@/hooks/use-feature-flag-enabled'
-import { Appointment } from '@/types'
+import { webSocketEventBus } from '@/lib/websocket-event-bus'
+import { WebSocketEvents, WebSocketEventType } from '@/types'
 import { AppointmentsList, CallCompositeContainer } from './blocks'
 import { AcsInfo } from './types'
 
 interface Props {
   acsInfo: AcsInfo
-  appointments: Appointment[]
 }
 
-const CallView = ({ appointments, acsInfo }: Props) => {
+const CallView = ({ acsInfo }: Props) => {
   const isAvfeatureFlagEnabled = useFeatureFlagEnabled(
     MAIN_PAGE_FEATURE_FLAGS.ehr9475AudioVideoTelemedicine,
   )
+  const [callAdapterState, setCallAdapterState] = useState<
+    CallAdapterState | undefined
+  >()
+  const [appointmentId, setAppointmentId] = useState<string | undefined>()
 
-  const [callAdapterState, setCallAdapterState] = useState<CallAdapterState>()
-  const searchParams = useSearchParams()
-  const appId = searchParams.get('appointmentId') || ''
+  const [appointments, setAppointments] = useState<
+    WebSocketEvents[WebSocketEventType.CallWaiting][]
+  >([])
+  const [uniqueGvs] = useState(() => new Set<string>())
 
-  const isAppointmentIdValid = appointments.some(
-    (appointment) => appointment.appointmentId === Number(appId),
+  const updateAppointments = useCallback(
+    (message: WebSocketEvents[WebSocketEventType.CallWaiting]) => {
+      if (uniqueGvs.has(message.gv)) {
+        return
+      }
+      uniqueGvs.add(message.gv)
+      setAppointments((prev) => [...prev, { ...message, joinedAt: new Date() }])
+    },
+    [uniqueGvs],
   )
 
-  const [appointmentId, setAppointmentId] = useState<number | undefined>(
-    isAppointmentIdValid ? Number(appId) : undefined,
-  )
+  useEffect(() => {
+    webSocketEventBus.on(WebSocketEventType.CallWaiting, updateAppointments)
+
+    return () => {
+      webSocketEventBus.off(WebSocketEventType.CallWaiting)
+    }
+  }, [updateAppointments])
+
+  const removeAppointment = useCallback(() => {
+    setCallAdapterState(undefined)
+    setAppointmentId('')
+    setAppointments((prev) =>
+      prev.filter((appointment) => appointment.gv !== appointmentId),
+    )
+  }, [appointmentId])
+
+  useEffect(() => {
+    const state = callAdapterState?.call?.state
+    const participants = Object.values(
+      callAdapterState?.call?.remoteParticipants || {},
+    )
+
+    if (state === 'Disconnecting') {
+      removeAppointment()
+    }
+    if (state === 'Connected' && participants.length === 0) {
+      toast.error('Patient has left the call')
+      removeAppointment()
+    }
+  }, [appointmentId, callAdapterState, removeAppointment])
 
   if (!isAvfeatureFlagEnabled) {
     return <Text>Feature not enabled</Text>
@@ -61,7 +100,7 @@ const CallView = ({ appointments, acsInfo }: Props) => {
         ) : (
           <Text>
             {appointments.length
-              ? 'Press the “Call” button to start the call.'
+              ? 'Press the "Join" button to start the call.'
               : 'There are currently no patients in the queue.'}
           </Text>
         )}

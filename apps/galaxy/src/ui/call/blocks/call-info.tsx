@@ -3,12 +3,12 @@
 import { useEffect, useState } from 'react'
 import { CallAdapterState } from '@azure/communication-react'
 import { Button, Text } from '@radix-ui/themes'
-import { Appointment } from '@/types'
+import { WebSocketEvents, WebSocketEventType } from '@/types'
 
 interface CallInfoProps {
-  appointment: Appointment
-  appointmentId?: number
-  setAppointmentId: (appointmentId: number) => void
+  appointment: WebSocketEvents[WebSocketEventType.CallWaiting]
+  appointmentId?: string
+  setAppointmentId: (appointmentId: string) => void
   callAdapterState?: CallAdapterState
 }
 
@@ -49,7 +49,7 @@ const CallInfo = ({
   appointmentId,
   callAdapterState,
 }: CallInfoProps) => {
-  const isSelected = appointment.appointmentId === appointmentId
+  const isSelected = appointment.gv === appointmentId
 
   if (!isSelected) {
     return (
@@ -57,9 +57,9 @@ const CallInfo = ({
         size="1"
         highContrast
         className="bg-pp-link-text text-white"
-        onClick={() => setAppointmentId(appointment?.appointmentId)}
+        onClick={() => setAppointmentId(appointment?.gv)}
       >
-        Call
+        Join
       </Button>
     )
   }
@@ -79,7 +79,7 @@ const CallInfo = ({
       size="1"
       highContrast
       className="bg-pp-link-text text-white"
-      onClick={() => setAppointmentId(0)}
+      onClick={() => setAppointmentId('')}
     >
       close
     </Button>

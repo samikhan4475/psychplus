@@ -15,10 +15,22 @@ const getUserFullName = (
   },
   includeMiddlename = false,
 ) => {
-  const name = includeMiddlename && user.middleName
-    ? `${user.firstName} ${user.middleName} ${user.lastName}`
-    : `${user.firstName} ${user.lastName}`
+  const name =
+    includeMiddlename && user.middleName
+      ? `${user.firstName} ${user.middleName} ${user.lastName}`
+      : `${user.firstName} ${user.lastName}`
   return user.honors ? `${name}, ${user.honors}` : name
 }
 
-export { getUserInitials, getUserFullName }
+const getNameInitials = (value?: string) => {
+  if (!value) {
+    return 'UK'
+  }
+  const initials = value
+    .split(' ')
+    .map((name) => name.charAt(0))
+    .join('')
+  return initials
+}
+
+export { getUserInitials, getUserFullName, getNameInitials }

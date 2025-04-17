@@ -1,15 +1,10 @@
 import * as api from '@psychplus-v2/api'
 import { API_URL } from '@psychplus-v2/env'
-import { AcsInfo } from '../types'
+import { AcsInfo, AcsInfoPayload } from '../types'
 
-interface PatientAcsInfoPayload {
-  staffId: string
-  appointmentId: string
-}
-
-const getAcsInfo = (payload: PatientAcsInfoPayload) =>
+const getAcsInfo = (payload: AcsInfoPayload) =>
   api.POST<AcsInfo>(
-    `${API_URL}/api/patients/self/communications/actions/accesstoken`,
+    `${API_URL}/api/communications/actions/anonymousaccesstoken`,
     payload,
   )
 

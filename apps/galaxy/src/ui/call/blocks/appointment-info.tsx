@@ -1,16 +1,54 @@
 'use client'
 
+import { useEffect, useState } from 'react'
 import { CallAdapterState } from '@azure/communication-react'
 import { Avatar, Flex, Text } from '@radix-ui/themes'
-import { Appointment } from '@/types'
-import { formatDateCell, formatTimeCell } from '@/ui/schedule/utils'
-import { cn, getUserInitials } from '@/utils'
+import { WebSocketEvents, WebSocketEventType } from '@/types'
+import { cn, getNameInitials } from '@/utils'
 import { CallInfo } from './call-info'
 
+export const getTimerFromNow = (date: Date): string => {
+  const now = new Date()
+  const diffInMinutes = Math.floor(
+    (now.getTime() - date.getTime()) / (1000 * 60),
+  )
+
+  if (diffInMinutes < 60) {
+    return `${diffInMinutes} min ago`
+  }
+
+  const hours = Math.floor(diffInMinutes / 60)
+  const minutes = diffInMinutes % 60
+  return `${hours}h ${minutes}m ago`
+}
+
+const JoinTime = ({
+  appointment,
+}: {
+  appointment: WebSocketEvents[WebSocketEventType.CallWaiting]
+}) => {
+  const [duration, setDuration] = useState('')
+  useEffect(() => {
+    if (!appointment.joinedAt) return
+    const timer = setInterval(() => {
+      if (appointment.joinedAt) {
+        setDuration(getTimerFromNow(appointment.joinedAt))
+      }
+    }, 10000)
+
+    return () => clearInterval(timer)
+  }, [appointment.joinedAt])
+
+  if (!appointment.joinedAt) return null
+  return (
+    <Text className="inline-block select-none text-[11px]">{duration}</Text>
+  )
+}
+
 interface ApointmentInfoProps {
-  appointment: Appointment
-  appointmentId?: number
-  setAppointmentId: (appointmentId: number) => void
+  appointment: WebSocketEvents[WebSocketEventType.CallWaiting]
+  appointmentId?: string
+  setAppointmentId: (appointmentId: string) => void
   callAdapterState?: CallAdapterState
 }
 
@@ -20,19 +58,9 @@ const AppointmentInfo = ({
   setAppointmentId,
   callAdapterState,
 }: ApointmentInfoProps) => {
-  const appointmentDate = formatDateCell(
-    appointment.appointmentDate,
-    appointment.locationTimezoneId,
-  )
+  const isSelected = appointment.gv === appointmentId
 
-  const appointmentTime = formatTimeCell(
-    appointment.appointmentDate,
-    appointment.locationTimezoneId,
-  )
-
-  const isSelected = appointment.appointmentId === appointmentId
-
-  const [firstName = '', lastName = ''] = appointment.name?.split(' ') ?? []
+  const initials = getNameInitials(appointment.sv)
 
   return (
     <Flex
@@ -48,9 +76,7 @@ const AppointmentInfo = ({
       <Flex gap="2">
         <Avatar
           src={undefined}
-          fallback={
-            appointment.name ? getUserInitials({ firstName, lastName }) : ''
-          }
+          fallback={initials}
           radius="full"
           size="2"
           alt=""
@@ -59,11 +85,9 @@ const AppointmentInfo = ({
         />
         <Flex direction={'column'}>
           <Text className="inline-block select-none text-[11px] font-bold">
-            {appointment.name}
+            {appointment.sv}
           </Text>
-          <Text className="inline-block select-none text-[10px]">
-            {`${appointmentDate} ${appointmentTime}`}
-          </Text>
+          <JoinTime appointment={appointment} />
         </Flex>
       </Flex>
 

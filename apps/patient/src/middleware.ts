@@ -16,6 +16,7 @@ export const config = {
 const SKIP_MIDDLEWARE = [
   '/schedule-appointment/personal-details',
   '/schedule-appointment/insurance-payment',
+  '/call',
 ]
 const REQUIRES_ANON = ['/login', '/forgot-password', '/signup']
 
@@ -26,7 +27,7 @@ export const middleware = async (request: NextRequest) => {
 
   if (request.nextUrl.pathname.startsWith('/pre-checkin-assessment')) {
     const url = request.nextUrl.clone()
-    url.pathname = '/404' 
+    url.pathname = '/404'
     if (process.env.API_URL === 'https://api.psychplus.io') {
       return NextResponse.redirect(url)
     }

@@ -5,6 +5,7 @@ enum WebSocketEventType {
   ScrollMessage = 'ScrollMessage',
   ScrollAlert = 'ScrollAlert',
   Auth = 'Auth',
+  CallWaiting = 'CallWaiting',
   Users = 'Users',
 }
 type WebSocketEvents = {
@@ -13,7 +14,13 @@ type WebSocketEvents = {
   [WebSocketEventType.InboxCount]: { lv?: number }
   [WebSocketEventType.ScrollMessage]: { sv?: string }
   [WebSocketEventType.ScrollAlert]: { sv?: string }
+  [WebSocketEventType.CallWaiting]: {
+    sv?: string
+    gv: string
+    joinedAt?: Date
+  }
   [WebSocketEventType.Users]: { lv?: number }
+
 }
 type GenericPayload<T = Record<string, unknown>> = T | undefined
 
