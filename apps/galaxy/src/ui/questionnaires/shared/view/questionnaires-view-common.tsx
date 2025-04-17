@@ -4,6 +4,7 @@ import { QuickNoteSectionItem } from '@/types'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { AimsView } from './aims-view'
 import { questionnaireViewConstants } from './constant'
+import { CssrsView } from './cssrs-view'
 import { MocaView } from './moca-view'
 import { QuestionnaireViewCommon } from './questionnaires-view'
 import { SnapIvView } from './snap-iv-view'
@@ -35,6 +36,8 @@ const QuestionnaireDetailView = ({
         return <AimsView data={data} />
       case 'QuicknoteSectionQuestionnaireMoca':
         return <MocaView data={data} />
+      case 'QuicknoteSectionQuestionnaireCssrs':
+        return <CssrsView data={data} />
       default:
         return null
     }

@@ -30,13 +30,20 @@ const HistoryView = ({ questionnaire }: HistoryViewProps) => {
     const historiesData = histories[questionnaire] || []
 
     const modifiedData = historiesData.map((history) => {
-      const totalScore = history.data
-        .reduce(
-          (acc: number, curr: QuickNoteSectionItem) =>
-            acc + Number(curr.sectionItemValue),
-          0,
-        )
-        .toString()
+      const totalScore =
+        questionnaire === QuickNoteSectionName.QuickNoteSectionCssrs
+          ? Math.max(
+              ...history.data.map((item: QuickNoteSectionItem) =>
+                Number(item.sectionItemValue),
+              ),
+            ).toString()
+          : history.data
+              .reduce(
+                (acc: number, curr: QuickNoteSectionItem) =>
+                  acc + Number(curr.sectionItemValue),
+                0,
+              )
+              .toString()
       if (selectedDates?.includes(history.createdOn)) {
         return { ...history, addToNote: true, totalScore }
       } else {

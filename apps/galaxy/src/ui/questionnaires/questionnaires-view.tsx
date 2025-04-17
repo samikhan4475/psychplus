@@ -7,6 +7,7 @@ import { XIcon } from 'lucide-react'
 import { QuickNoteSectionItem } from '@/types'
 import { AimsTab } from './aims-tab'
 import { AuditTab } from './audit-tab'
+import { CssrsTab } from './c-ssrs-tab'
 import { QuestionnaireTabs } from './constants'
 import { DashboardTab } from './dashboard-tab'
 import { Dast10Tab } from './dast-10-tab'
@@ -24,10 +25,7 @@ interface QuestionnairesViewProps {
   patientId: string
 }
 
-const QuestionnairesView = ({
-  data,
-  patientId,
-}: QuestionnairesViewProps) => {
+const QuestionnairesView = ({ data, patientId }: QuestionnairesViewProps) => {
   const {
     activeQuestionnaireTab,
     setQuestionnaireActiveTab,
@@ -84,6 +82,9 @@ const QuestionnairesView = ({
           <TabsTrigger value={QuestionnaireTabs.HAM_D_TAB}>
             {QuestionnaireTabs.HAM_D_TAB}
           </TabsTrigger>
+          <TabsTrigger value={QuestionnaireTabs.C_SSRS_TAB}>
+            {QuestionnaireTabs.C_SSRS_TAB}
+          </TabsTrigger>
         </Tabs.List>
         <Flex className="flex-1 border-b border-gray-5" />
       </Flex>
@@ -119,6 +120,9 @@ const QuestionnairesView = ({
       </TabsContent>
       <TabsContent value={QuestionnaireTabs.HAM_D_TAB}>
         <HamDTab patientId={patientId} data={data} />
+      </TabsContent>
+      <TabsContent value={QuestionnaireTabs.C_SSRS_TAB}>
+        <CssrsTab patientId={patientId} data={data} />
       </TabsContent>
     </Tabs.Root>
   )

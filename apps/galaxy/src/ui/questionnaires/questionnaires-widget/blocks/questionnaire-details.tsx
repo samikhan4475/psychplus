@@ -3,13 +3,16 @@ import { Badge, Flex, Text } from '@radix-ui/themes'
 import { format } from 'date-fns'
 import { ListIcon, SignalIcon } from 'lucide-react'
 import { BlockLabel } from '@/components'
-import { QuickNoteHistory } from '@/types'
+import { QuickNoteHistory, QuickNoteSectionItem } from '@/types'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { SCORE_INTERPRETATION_RANGES as AUDIT_SCORE_INTERPRETATION_RANGES } from '../../audit-tab/constants'
 import { QuestionnaireTabs } from '../../constants'
 import { SCORE_INTERPRETATION_RANGES as DAST10_SCORE_INTERPRETATION_RANGES } from '../../dast-10-tab/constants'
 import { SCORE_INTERPRETATION_RANGES as GAD7_SCORE_INTERPRETATION_RANGES } from '../../gad-7-tab/constants'
-import { SCORE_INTERPRETATION_RANGES as HAMD_SCORE_INTERPRETATION_RANGES } from '../../ham-d-tab/constants'
+import {
+  SCORE_INTERPRETATION_RANGES as CSSRS_SCORE_INTERPRETATION_RANGES,
+  SCORE_INTERPRETATION_RANGES as HAMD_SCORE_INTERPRETATION_RANGES,
+} from '../../ham-d-tab/constants'
 import { SCORE_INTERPRETATION_RANGES_ORIENTATION } from '../../moca-tab/constants'
 import { SCORE_INTERPRETATION_RANGES as PCL5_SCORE_INTERPRETATION_RANGES } from '../../pcl-5-tab/constants'
 import { SCORE_INTERPRETATION_RANGES as PHQ9_SCORE_INTERPRETATION_RANGES } from '../../phq-9-tab/constants'
@@ -139,10 +142,17 @@ const QuestionnaireRowDetail = ({
   historiesData?: number
   questionnaire: string
 }) => {
-  const totalScore = option.data.reduce(
-    (acc, item) => acc + Number(item.sectionItemValue),
-    0,
-  )
+  const totalScore =
+    option.sectionName === QuickNoteSectionName.QuickNoteSectionCssrs
+      ? Math.max(
+          ...option.data.map((item: QuickNoteSectionItem) =>
+            Number(item.sectionItemValue),
+          ),
+        )
+      : option.data.reduce(
+          (acc, item) => acc + Number(item.sectionItemValue),
+          0,
+        )
 
   return (
     <Flex key={option.createdOn} gap="2" align="center" className="w-full">
@@ -223,6 +233,7 @@ const scoreInterpretationRanges = (
     [QuestionnaireTabs.DAST_10_TAB]: DAST10_SCORE_INTERPRETATION_RANGES,
     [QuestionnaireTabs.MOCA_TAB]: SCORE_INTERPRETATION_RANGES_ORIENTATION,
     [QuestionnaireTabs.HAM_D_TAB]: HAMD_SCORE_INTERPRETATION_RANGES,
+    [QuestionnaireTabs.C_SSRS_TAB]: CSSRS_SCORE_INTERPRETATION_RANGES,
   }
 
   return rangesMap[label] || []

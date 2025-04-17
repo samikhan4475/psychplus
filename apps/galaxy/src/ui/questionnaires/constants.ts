@@ -12,6 +12,7 @@ enum QuestionnaireTabs {
   DAST_10_TAB = 'DAST-10',
   MOCA_TAB = 'MOCA',
   HAM_D_TAB = 'HAM-D',
+  C_SSRS_TAB = 'C-SSRS',
 }
 
 enum QuestionnairesStatus {
@@ -35,6 +36,7 @@ enum QuestionnairesTitles {
   'DAST-10' = 'Drug Abuse Screening Test (DAST-10)',
   'MOCA' = 'Montreal Cognitive Assessment (MoCA)',
   'HAM-D' = 'Hamilton Depression Rating Scale (HAM-D)',
+  'C-SSRS' = 'Columbia-Suicide Severity Rating Scale (C-SSRS)',
 }
 
 const quickNotesSectionsTitles = {
@@ -58,6 +60,8 @@ const quickNotesSectionsTitles = {
     'Montreal Cognitive Assessment (MoCA)',
   [QuickNoteSectionName.QuickNoteSectionDast10]:
     'Drug Abuse Screening Test (DAST-10)',
+  [QuickNoteSectionName.QuickNoteSectionCssrs]:
+    'Columbia-Suicide Severity Rating Scale (C-SSRS)',
 }
 
 export {

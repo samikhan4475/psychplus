@@ -5,6 +5,7 @@ import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
 import { FilloutSnap4 } from './fill-out-snap4'
 import { FilloutAims } from './fill-out-view-aims'
 import { FilloutCommon } from './fill-out-view-common'
+import { FilloutCssrs } from './fill-out-view-cssrs'
 import { FilloutMoca } from './fill-out-view-moca'
 import { FilloutYboc } from './fill-out-yboc'
 
@@ -24,15 +25,15 @@ const FillOutView = ({ data, sectionName }: FillOutProps) => {
         return <FilloutAims data={data} sectionName={sectionName} />
       case 'QuicknoteSectionQuestionnaireMoca':
         return <FilloutMoca data={data} sectionName={sectionName} />
+      case 'QuicknoteSectionQuestionnaireCssrs':
+        return <FilloutCssrs data={data} sectionName={sectionName} />
       default:
         return <FilloutCommon data={data} sectionName={sectionName} />
     }
   }
 
   return (
-    <FillOutTabsView sectionName={sectionName}>
-      {renderView()}
-    </FillOutTabsView>
+    <FillOutTabsView sectionName={sectionName}>{renderView()}</FillOutTabsView>
   )
 }
 

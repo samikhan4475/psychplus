@@ -84,6 +84,10 @@ const questionnaireViewDta = [
     questionnaireTab: QuestionnaireTabs.MOCA_TAB,
   },
   {
+    sectionName: QuickNoteSectionName.QuickNoteSectionCssrs,
+    questionnaireTab: QuestionnaireTabs.C_SSRS_TAB,
+  },
+  {
     sectionName: QuickNoteSectionName.QuickNoteSectionHamD,
     labels: HAMDLabels,
     questions: HAMDQuestions,

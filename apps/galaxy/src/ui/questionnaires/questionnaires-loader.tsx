@@ -21,6 +21,7 @@ const sections = [
   QuickNoteSectionName.QuickNoteSectionMoca,
   QuickNoteSectionName.QuickNoteSectionAims,
   QuickNoteSectionName.QuickNoteSectionPcl5,
+  QuickNoteSectionName.QuickNoteSectionCssrs,
 ]
 
 const QuestionnairesLoader = async ({

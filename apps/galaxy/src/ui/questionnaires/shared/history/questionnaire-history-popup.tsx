@@ -38,7 +38,7 @@ const QuestionnaireHistory = ({ questionnaire }: QuestionnairesViewProps) => {
           {history.length > 0 && (
             <TabsTrigger value={'View Questionnaires'}>
               View Questionnaires
-              <Cross2Icon cursor='pointer' onClick={() => clearTabs()} />
+              <Cross2Icon cursor="pointer" onClick={() => clearTabs()} />
             </TabsTrigger>
           )}
         </Tabs.List>
