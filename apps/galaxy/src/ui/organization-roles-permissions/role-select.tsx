@@ -10,7 +10,7 @@ const RoleSelect = () => {
       <AsyncSelect
         field="roleId"
         size="1"
-        buttonClassName="w-[101px]"
+        buttonClassName="w-[200px]"
         fetchOptions={getAllRolesListOptionsAction}
       />
     </FormFieldContainer>

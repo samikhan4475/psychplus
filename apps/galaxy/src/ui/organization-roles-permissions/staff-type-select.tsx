@@ -11,7 +11,7 @@ const StaffTypeSelect = () => {
         name="actorCategory"
         codeset={CODESETS.UserActorCategory}
         size="1"
-        className="w-[101px]"
+        className="w-[200px]"
       />
     </FormFieldContainer>
   )

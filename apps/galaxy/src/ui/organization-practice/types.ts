@@ -8,7 +8,7 @@ enum OrganizationPracticeTab {
 interface OrganizationAddress {
   type?: string
   street1: string
-  street2: string
+  street2?: string
   city: string
   state: string
   country?: string
@@ -42,17 +42,6 @@ interface Practice {
   organizationAddress: OrganizationAddress
   organizationId?: string
   organizationDisplayName: string
-}
-
-interface OrganizationAddress {
-  type?: string
-  street1: string
-  street2: string
-  city: string
-  state: string
-  country?: string
-  postalCode: string
-  timeZoneId?: string
 }
 
 interface Organization extends OrganizationRoot {

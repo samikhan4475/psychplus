@@ -15,6 +15,7 @@ interface Practice {
   taxId: string
   taxonomy: string
   users?: StaffResource[]
+  organizationId: string
 }
 
 interface PracticeResource {
