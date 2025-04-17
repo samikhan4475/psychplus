@@ -7,8 +7,8 @@ const MedicationsPage = () => {
     <Flex direction="column" gap="5">
       <FeatureHeading>Medications</FeatureHeading>
       <FeatureContainer>
-        <FeatureCard title="Active Medications" contentClassName="p-0">
-          <ActiveMedicationsTable headerClassName="bg-transparent" />
+        <FeatureCard title="Active Medications" contentClassName="p-2">
+          <ActiveMedicationsTable />
         </FeatureCard>
       </FeatureContainer>
     </Flex>
