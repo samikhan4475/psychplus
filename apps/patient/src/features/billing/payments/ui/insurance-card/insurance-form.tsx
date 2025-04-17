@@ -30,7 +30,7 @@ import {
   ToggleableForm,
 } from '@/components-v2'
 import { getPlaceholder } from '@/features/account/profile/utils'
-import { Insurance, InsurancePayer } from '@/features/billing/payments/types'
+import { InsurancePayer, InsurancePolicy } from '@/features/billing/payments/types'
 import {
   deleteInsurance,
   updateInsuranceAction,
@@ -135,7 +135,7 @@ type SchemaType = z.infer<typeof schema>
 interface InsuranceFormProps {
   insurancePayers: InsurancePayer[]
   insurancePriority?: InsurancePolicyPriority
-  insurance?: Insurance
+  insurance?: InsurancePolicy
   trigger?: React.ReactNode
   onFormClose?: () => void
   isReadOnly?: boolean
@@ -178,7 +178,7 @@ const InsuranceForm = ({
 
   const router = useRouter()
 
-  const getFormDefaultValues = (insurance?: Insurance) => ({
+  const getFormDefaultValues = (insurance?: InsurancePolicy) => ({
     payerName: insurance?.payerName ?? '',
     insurancePlanId: insurance?.insurancePlanId ?? '',
     effectiveDate: insurance?.effectiveDate

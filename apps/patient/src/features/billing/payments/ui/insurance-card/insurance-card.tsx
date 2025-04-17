@@ -5,7 +5,7 @@ import { InsuranceForms } from './insurance-forms'
 
 interface InsuranceCardProps {
   insurancePayers: InsurancePayer[]
-  patientInsurances: Insurance[]
+  patientInsurances: Insurance
 }
 
 const InsuranceCard = ({

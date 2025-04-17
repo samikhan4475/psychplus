@@ -48,7 +48,7 @@ interface BookSlotButtonProps {
   setBookingSuccessful: (value: boolean) => void
   paymentMethod: PaymentType
   creditCards: CreditCard[]
-  patientInsurances?: Insurance[]
+  patientInsurances?: Insurance
 }
 
 interface ConfirmedAppointmentProps {
@@ -61,7 +61,7 @@ interface PaymentMethodProps {
   stripeApiKey: string
   paymentMethod: PaymentType
   setPaymentMethod: (value: PaymentType) => void
-  patientInsurances: Insurance[]
+  patientInsurances: Insurance
   insurancePayers: InsurancePayer[]
   appointmentType?: AppointmentType
 }

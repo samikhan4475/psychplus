@@ -25,7 +25,7 @@ interface PaymentMethodAccordionProps {
   paymentMethod: PaymentType
   stripeApiKey: string
   creditCards: CreditCard[]
-  patientInsurances: Insurance[]
+  patientInsurances: Insurance
   insurancePayers: InsurancePayer[]
 }
 
@@ -47,15 +47,15 @@ const PaymentMethodAccordion = ({
     CreditCard | undefined
   >(creditCards?.[0])
 
-  const hasPrimaryInsurance = patientInsurances.some(
+  const hasPrimaryInsurance = patientInsurances?.policies?.some(
     (insurance) =>
       insurance.insurancePolicyPriority === InsurancePolicyPriority.Primary,
   )
-  const hasSecondaryInsurance = patientInsurances.some(
+  const hasSecondaryInsurance = patientInsurances?.policies?.some(
     (insurance) =>
       insurance.insurancePolicyPriority === InsurancePolicyPriority.Secondary,
   )
-  const hasTertiaryInsurance = patientInsurances.some(
+  const hasTertiaryInsurance = patientInsurances?.policies?.some(
     (insurance) =>
       insurance.insurancePolicyPriority === InsurancePolicyPriority.Tertiary,
   )
@@ -90,9 +90,9 @@ const PaymentMethodAccordion = ({
             title="Insurance on File"
             content={
               <Box>
-                {patientInsurances.length > 0 ? (
+                {patientInsurances?.policies ? (
                   <Flex width="100%" gap="2" direction="column">
-                    {patientInsurances.map((insurance) => (
+                    {patientInsurances.policies.map((insurance) => (
                       <Flex
                         key={insurance.id}
                         p="3"

@@ -85,7 +85,7 @@ const BookAppointmentButton = ({
   const checkBoxDisabled =
     (appointmentType === AppointmentType.Virtual &&
       paymentMethod === PaymentType.Insurance &&
-      patientInsurances?.length === 0) ||
+      patientInsurances?.policies?.length === 0) ||
     (appointmentType === AppointmentType.Virtual &&
       paymentMethod === PaymentType.SelfPay &&
       creditCards?.length === 0)
@@ -93,7 +93,7 @@ const BookAppointmentButton = ({
   const bookSlot = async () => {
     if (
       paymentMethod === PaymentType.Insurance &&
-      !patientInsurances?.length &&
+      !patientInsurances?.policies?.length &&
       appointmentType !== AppointmentType.InPerson
     ) {
       setError('Please add insurance or choose self-pay to book an appointment')

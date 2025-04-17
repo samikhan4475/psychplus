@@ -13,8 +13,18 @@ interface InsurancePlan {
   payerType: string
 }
 
-interface Insurance {
+interface PoliciesMetadata {
+  createdOn: string
+  createdBy: number
+  createdByFullName?: string
+  updatedOn: string
+  updatedBy?: number
+  updatedByFullName?: string
+}
+
+interface InsurancePolicy {
   id: string
+  metadata: PoliciesMetadata
   insurancePlanId: string
   verificationStatus: string
   isActive: boolean
@@ -41,6 +51,15 @@ interface Insurance {
   policyPriority: string
 }
 
+interface Insurance {
+  id: string
+  metadata: PoliciesMetadata
+  patientId: number
+  isSelfPay: boolean
+  policies: InsurancePolicy[]
+}
+
+
 interface InsuranceTag {
   id: string
   name: string
@@ -62,4 +81,6 @@ export {
   type Insurance,
   type InsuranceTag,
   InsuranceChipVariantType,
+  type PoliciesMetadata,
+  type InsurancePolicy
 }

@@ -9,22 +9,22 @@ import { InsuranceFormTrigger } from './Insurance-form-trigger'
 
 interface InsuranceFormProps {
   insurancePayers: InsurancePayer[]
-  patientInsurances: Insurance[]
+  patientInsurances: Insurance
 }
 
 const InsuranceForms = ({
   insurancePayers,
   patientInsurances,
 }: InsuranceFormProps) => {
-  const hasPrimaryInsurance = patientInsurances.some(
+  const hasPrimaryInsurance = patientInsurances.policies?.some(
     (insurance) =>
       insurance.insurancePolicyPriority === InsurancePolicyPriority.Primary,
   )
-  const hasSecondaryInsurance = patientInsurances.some(
+  const hasSecondaryInsurance = patientInsurances.policies?.some(
     (insurance) =>
       insurance.insurancePolicyPriority === InsurancePolicyPriority.Secondary,
   )
-  const hasTertiaryInsurance = patientInsurances.some(
+  const hasTertiaryInsurance = patientInsurances.policies?.some(
     (insurance) =>
       insurance.insurancePolicyPriority === InsurancePolicyPriority.Tertiary,
   )
@@ -41,9 +41,9 @@ const InsuranceForms = ({
 
   return (
     <Flex direction="column" gap="2">
-      {patientInsurances.length > 0 ? (
+      {patientInsurances.policies ? (
         <Flex direction="column" gap="2">
-          {patientInsurances.map((insurance) => (
+          {patientInsurances.policies.map((insurance) => (
             <Flex className="w-full" direction="column" key={insurance.id}>
               <InsuranceFormTrigger
                 isReadOnly={
@@ -70,9 +70,9 @@ const InsuranceForms = ({
         trigger={
           <Flex
             width="100%"
-            justify={patientInsurances.length < 1 ? 'center' : 'start'}
+            justify={!patientInsurances.policies ? 'center' : 'start'}
             className={cn({
-              '-mt-12': patientInsurances.length < 1,
+              '-mt-12': !patientInsurances.policies,
             })}
           >
             <TriggerButton title="Add New Insurance" />

@@ -46,7 +46,7 @@ const BookAppointmentView = ({
   stripeApiKey: string
   creditCards: CreditCard[]
   careTeam: CareTeamMember[]
-  patientInsurances: Insurance[]
+  patientInsurances: Insurance
   insurancePayers: InsurancePayer[]
   newProviderType: string | null
 }) => {

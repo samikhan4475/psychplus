@@ -7,15 +7,16 @@ import { Box, Flex, Heading, Separator, Text } from '@radix-ui/themes'
 import { Badge, DeletableFieldValue, EditableFieldValue } from '@/components-v2'
 import { InsurancePolicyPriority } from '@/features/billing/payments/constants'
 import {
-  Insurance,
   InsuranceChipVariantType,
   InsurancePayer,
+  InsurancePolicy,
+  PoliciesMetadata,
 } from '@/features/billing/payments/types'
 import { deleteInsurance } from '../../actions'
 import { InsuranceForm } from './insurance-form'
 
 interface InsuranceFormTriggerProps {
-  insurance: Insurance
+  insurance: InsurancePolicy
   insurancePayers: InsurancePayer[]
   isReadOnly?: boolean
 }

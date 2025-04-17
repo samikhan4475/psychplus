@@ -28,7 +28,7 @@ const ChangePaymentMethodDialog = ({
   appointment: Appointment
   creditCards: CreditCard[]
   stripeApiKey: string
-  patientInsurances: Insurance[]
+  patientInsurances: Insurance
   insurancePayers: InsurancePayer[]
 }) => {
   const [isOpen, setIsOpen] = useState(false)
@@ -48,7 +48,7 @@ const ChangePaymentMethodDialog = ({
   const onSave = async () => {
     setLoading(true)
 
-    if (paymentMethod === PaymentType.Insurance && !patientInsurances?.length) {
+    if (paymentMethod === PaymentType.Insurance && !patientInsurances?.policies?.length) {
       setError('Please add insurance or choose self-pay to book an appointment')
       setLoading(false)
       return

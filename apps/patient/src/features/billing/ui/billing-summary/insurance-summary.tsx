@@ -6,11 +6,11 @@ import { FeatureEmpty, TriggerButton } from '@/components-v2'
 import { Insurance } from '../../payments/types'
 
 interface InsuranceSummaryProps {
-  data?: Insurance[]
+  data?: Insurance
 }
 
 const InsuranceSummary = ({ data }: InsuranceSummaryProps) => {
-  if (data?.length === 0) {
+  if (!data?.policies) {
     return (
       <FeatureEmpty
         title="No Insurance Added"
@@ -44,7 +44,7 @@ const InsuranceSummary = ({ data }: InsuranceSummaryProps) => {
       <Flex direction="column" align="start" className="flex-1">
         <Flex direction="column" gap="1">
           <Text className="text-[18px] font-[500] leading-3 text-accent-12">
-            {data?.[0].payerName}
+            {data?.policies?.[0].payerName}
           </Text>
         </Flex>
         <NextLink

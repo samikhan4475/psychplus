@@ -12,14 +12,14 @@ const InsuranceView = ({
   patientInsurances,
 }: {
   insurancePayers: InsurancePayer[]
-  patientInsurances: Insurance[]
+  patientInsurances: Insurance
 }) => {
   const { isSaveButtonPressed, save } = useStore()
   const patientId = useProfileStore((state) => state.profile.id)
 
   useEffect(() => {
     if (isSaveButtonPressed)
-      save({ isTabCompleted: patientInsurances.length > 0, patientId })
+      save({ isTabCompleted: patientInsurances?.policies?.length > 0, patientId })
   }, [isSaveButtonPressed])
 
   return (

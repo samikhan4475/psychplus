@@ -32,7 +32,7 @@ interface PreCheckInStatus {
 
 interface PreCheckinAssessmentStapperProps {
   insurancePayers: InsurancePayer[]
-  patientInsurances: Insurance[]
+  patientInsurances: Insurance
   creditCards: CreditCard[]
   stripeAPIKey: string
   pharmacies: PatientPharmacy[]
