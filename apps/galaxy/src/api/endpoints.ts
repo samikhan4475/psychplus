@@ -827,6 +827,13 @@ const EDIT_SCHEDULE_REPORT_ENDPOINT = (scheduleId: string) =>
 const UPDATE_SCHEDULE_REPORT_JOB_ENDPOINT = (jobId: string) =>
   `${API_URL}/api/jobmanager/jobs/${jobId}`
 
+const UPDATE_DEFAULT_PAYMENT = (
+  patientId: string,
+  finanicalDataId: string,
+  isSelfPay: boolean,
+) =>
+  `${API_URL}/api/patients/${patientId}/financialdata/${finanicalDataId}/actions/selfpay/${isSelfPay}`
+
 export {
   GET_LAB_RESULTS_ENDPOINT,
   NOTE_UPLOAD_FILE,
@@ -1199,4 +1206,5 @@ export {
   ENABLE_SCHEDULE_REPORT_JOB,
   EDIT_SCHEDULE_REPORT_ENDPOINT,
   UPDATE_SCHEDULE_REPORT_JOB_ENDPOINT,
+  UPDATE_DEFAULT_PAYMENT
 }

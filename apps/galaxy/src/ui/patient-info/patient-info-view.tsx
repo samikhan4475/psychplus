@@ -4,8 +4,8 @@ import {
   Appointment,
   CreditCard,
   Facesheet,
-  Insurance,
   InsurancePayer,
+  PatientInsuranceInfo,
   PatientConsent,
   PatientPreferredPartner,
   PatientProfile,
@@ -24,7 +24,7 @@ interface PatientInfoViewProps {
   patientConsents: PatientConsent[]
   patientCards: CreditCard[]
   insurancePayers: InsurancePayer[]
-  patientPolicies: Insurance[]
+  insuranceInfo: PatientInsuranceInfo
   patientFacesheet: Facesheet[]
   patientVisits: Appointment[]
 }
@@ -39,7 +39,7 @@ const PatientInfoView = ({
   patientConsents,
   patientCards,
   insurancePayers,
-  patientPolicies,
+  insuranceInfo,
   patientFacesheet,
   patientVisits,
 }: PatientInfoViewProps) => {
@@ -55,7 +55,7 @@ const PatientInfoView = ({
         patientConsents={patientConsents}
         patientCards={patientCards}
         insurancePayers={insurancePayers}
-        patientPolicies={patientPolicies}
+        insuranceInfo={insuranceInfo}
         patientFacesheet={patientFacesheet}
         patientVisits={patientVisits}
       />

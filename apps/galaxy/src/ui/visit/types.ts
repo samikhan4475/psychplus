@@ -59,6 +59,7 @@ interface PatientRaw {
   medicalRecordNumber: string
   status: string
   gender: Gender
+  isSelfPay?: boolean
 }
 
 interface Patient {
@@ -71,6 +72,7 @@ interface Patient {
   medicalRecordNumber: string
   status: string
   contactDetails?: { addresses: Address[] }
+  isSelfPay?: boolean
 }
 
 interface Provider {

@@ -1,27 +1,27 @@
 'use client'
 
 import { GooglePlacesContextProvider } from '@/providers/google-places-provider'
-import { Insurance, InsurancePayer } from '@/types'
+import { InsurancePayer, PatientInsuranceInfo } from '@/types'
 import { InsuranceView } from './insurance-view'
 
 interface InsuranceTabProps {
   patientId: string
   insurancePayers: InsurancePayer[]
-  patientPolicies: Insurance[]
+  insuranceInfo: PatientInsuranceInfo
   googleApiKey: string
 }
 const InsuranceTab = ({
-  patientPolicies,
+  insuranceInfo,
   patientId,
   insurancePayers,
-  googleApiKey
+  googleApiKey,
 }: InsuranceTabProps) => {
   return (
     <GooglePlacesContextProvider apiKey={googleApiKey}>
       <InsuranceView
         insurancePayers={insurancePayers}
         patientId={patientId}
-        patientPolicies={patientPolicies}
+        insuranceInfo={insuranceInfo}
       />
     </GooglePlacesContextProvider>
   )

@@ -10,8 +10,8 @@ import {
   Appointment,
   CreditCard,
   Facesheet,
-  Insurance,
   InsurancePayer,
+  PatientInsuranceInfo,
   PatientConsent,
   PatientPreferredPartner,
   PatientProfile,
@@ -45,7 +45,7 @@ interface PatientInfoTabsProps {
   patientConsents: PatientConsent[]
   patientCards: CreditCard[]
   insurancePayers: InsurancePayer[]
-  patientPolicies: Insurance[]
+  insuranceInfo: PatientInsuranceInfo
   patientFacesheet: Facesheet[]
   patientVisits: Appointment[]
 }
@@ -60,7 +60,7 @@ const PatientInfoTabs = ({
   patientConsents,
   patientCards,
   insurancePayers,
-  patientPolicies,
+  insuranceInfo,
   patientFacesheet,
   patientVisits,
 }: PatientInfoTabsProps) => {
@@ -125,7 +125,7 @@ const PatientInfoTabs = ({
       <TabsContent value={INSURANCE_TAB}>
         <InsuranceTab
           insurancePayers={insurancePayers}
-          patientPolicies={patientPolicies}
+          insuranceInfo={insuranceInfo}
           patientId={patientId}
           googleApiKey={googleApiKey}
         />

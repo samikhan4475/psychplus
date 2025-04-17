@@ -1,12 +1,12 @@
 'use server'
 
 import * as api from '@/api'
-import { Insurance } from '@/types'
+import { PatientInsuranceInfo } from '@/types'
 
 const getPatientPoliciesAction = async (
   patientId: string,
-): Promise<api.ActionResult<Insurance[]>> => {
-  const response = await api.GET<Insurance[]>(
+): Promise<api.ActionResult<PatientInsuranceInfo>> => {
+  const response = await api.GET<PatientInsuranceInfo>(
     api.GET_PATIENT_POLICIES(patientId),
   )
   if (response.state === 'error') {

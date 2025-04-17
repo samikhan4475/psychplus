@@ -6,6 +6,7 @@ import {
   FormFieldLabel,
 } from '@/components'
 import { CODESETS } from '@/constants'
+import { PaymentOptions } from '@/enum'
 import { useCodesetCodes } from '@/hooks'
 import { getSlashedPaddedDateString } from '@/utils'
 import { searchPatientsAction } from '../../actions'
@@ -66,7 +67,14 @@ const PatientSelect = ({ slotDetails }: { slotDetails?: SlotDetails }) => {
         <ServerSearchSelect
           fieldName="patient"
           placeholder="Search patients…"
-          fetchResults={(name: string) => searchPatientsAction({ name: name })}
+          fetchResults={(name: string) =>
+            searchPatientsAction({
+              name,
+              roleCodes: ['1'],
+              IsIncludeInsuranceVerification: true,
+            })
+          }
+          // fetchResults={(name: string) => searchPatientsAction({ name: name })}
           formatText={formatText}
           required
           onChange={(value: Patient) => {
@@ -91,6 +99,12 @@ const PatientSelect = ({ slotDetails }: { slotDetails?: SlotDetails }) => {
               medicalRecordNumber: value.medicalRecordNumber,
               state,
             })
+            form.setValue(
+              'paymentResponsibility',
+              value.isSelfPay
+                ? PaymentOptions.SELF_PAY
+                : PaymentOptions.INSURANCE,
+            )
           }}
         />
         <FormFieldError name="patient" />

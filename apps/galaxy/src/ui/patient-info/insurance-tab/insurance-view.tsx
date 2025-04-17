@@ -3,7 +3,7 @@
 import { useEffect, useRef } from 'react'
 import { Flex, ScrollArea } from '@radix-ui/themes'
 import { EmptyFileIcon } from '@/components/icons'
-import { Insurance, InsurancePayer } from '@/types'
+import { InsurancePayer, PatientInsuranceInfo } from '@/types'
 import { InsuranceForms } from './form-section'
 import { InsuranceHeader } from './insurance-header'
 import { FeatureEmpty } from './shared'
@@ -12,12 +12,12 @@ import { useStore } from './store'
 interface InsuranceViewProps {
   insurancePayers: InsurancePayer[]
   patientId: string
-  patientPolicies: Insurance[]
+  insuranceInfo: PatientInsuranceInfo
 }
 
 const InsuranceView = ({
   insurancePayers,
-  patientPolicies,
+  insuranceInfo,
   patientId,
 }: InsuranceViewProps) => {
   const scrollRef = useRef<HTMLDivElement>(null)
@@ -30,8 +30,8 @@ const InsuranceView = ({
   )
 
   useEffect(() => {
-    setInsurances(patientPolicies ?? [])
-  }, [patientPolicies, patientId, setInsurances])
+    setInsurances(insuranceInfo.policies)
+  }, [insuranceInfo, patientId, setInsurances])
 
   useEffect(() => {
     if (!scrollRef?.current) return
@@ -44,7 +44,7 @@ const InsuranceView = ({
 
   return (
     <Flex direction="column" ref={scrollRef} gap="1">
-      <InsuranceHeader />
+      <InsuranceHeader insuranceInfo={insuranceInfo} />
       <ScrollArea className="max-h-[calc(100dvh-320px)]">
         <Flex direction="column" gap="1">
           {(filteredInsurances && filteredInsurances?.length > 0) ||

@@ -91,7 +91,7 @@ const PatientInfoLoader = async ({
       patientFacesheet={patientFacesheetResult.data}
       patientVisits={patientVisitsResult.data}
       insurancePayers={insurancePayersResult.data}
-      patientPolicies={patientPoliciesResult.data}
+      insuranceInfo={patientPoliciesResult.data}
     />
   )
 }
