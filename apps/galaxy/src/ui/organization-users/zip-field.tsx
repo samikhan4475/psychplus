@@ -12,7 +12,7 @@ const ZipField = () => {
       <FormFieldLabel className="!text-1">Zip</FormFieldLabel>
       <TextField.Root
         size="1"
-        {...form.register('zip')}
+        {...form.register('postalCode')}
         placeholder='Zip Code'
       />
     </FormFieldContainer>

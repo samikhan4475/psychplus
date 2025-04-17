@@ -13,15 +13,15 @@ const PastVisitSelect = () => {
       <FormFieldLabel className="!text-1">Past Visit</FormFieldLabel>
       <CodesetSelect
         codeset={CODESETS.AppointmentStatus}
-        name="pvStatus"
-        className="flex-1 min-w-[72px]"
+        name="pastVisitStatus"
+        className="flex-1 min-w-[72px] h-6"
         size="1"
         placeholder='Status'
       />
       <CodesetSelect
         codeset={CODESETS.QueryByNextDays}
-        name="pvDays"
-        className="flex-1 min-w-[72px]"
+        name="visitHistoryPastDays"
+        className="flex-1 min-w-[72px] h-6"
         size="1"
         placeholder='Days'
       />

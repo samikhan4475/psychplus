@@ -10,7 +10,7 @@ const ToDatepicker = () => {
   return (
     <FormFieldContainer className="flex-1 flex-row gap-2">
       <FormFieldLabel className='text-pp-icon-sub'>To</FormFieldLabel>
-      <DatePickerInput field="to"  className='min-w-[110px]'/>
+      <DatePickerInput field="patientCreatedTo"  className='min-w-[110px]'/>
     </FormFieldContainer>
   )
 }

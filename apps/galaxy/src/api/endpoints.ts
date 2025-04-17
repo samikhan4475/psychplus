@@ -669,6 +669,16 @@ const DELETE_LAB_ORDERS_RESULT_ENDPOINT = (
 
 const LAB_ORDER_GET_REQUISITION = (orderId: string) =>
   `${API_URL}/api/laborders/${orderId}/actions/getrequisition`
+const ATTACH_PRACTICE_TO_PATIENT_ENDPOINT = (
+  patientId: number,
+  practiceId: string,
+) =>
+  `${API_URL}/api/patients/${patientId}/practices/${practiceId}/actions/associate`
+const DISASSOCIATE_PRACTICE_TO_PATIENT_ENDPOINT = (
+  patientId: number,
+  practiceId: string,
+) =>
+  `${API_URL}/api/patients/${patientId}/practices/${practiceId}/actions/dissociate`
 const DELETE_PHARMACY = (pharmacyId: string, patientId: string) =>
   `${API_URL}/api/patients/${patientId}/pharmacies/${pharmacyId}`
 const PRIORITY_PHARMACY = (pharmacyId: string, patientId: string) =>
@@ -1127,6 +1137,8 @@ export {
   DOWNLOAD_LAB_ORDER_DOCUMENT,
   DELETE_LAB_ORDERS_RESULT_ENDPOINT,
   LAB_ORDER_GET_REQUISITION,
+  ATTACH_PRACTICE_TO_PATIENT_ENDPOINT,
+  DISASSOCIATE_PRACTICE_TO_PATIENT_ENDPOINT,
   METADATA_CODESET_ALL_ENDPOINT,
   SEARCH_MODAL_PHARMACIES,
   ADD_PHARMACY,

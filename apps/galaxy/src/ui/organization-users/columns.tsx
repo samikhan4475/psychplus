@@ -1,9 +1,27 @@
 'use client'
 
-import { ColumnHeader, TextCell } from '@/components'
-import { formatDate, formatDateTime } from '@/utils'
 import { ColumnDef } from '@tanstack/react-table'
-import { CollapseCell, ContactMadeSelectCell, PracticeSelectCell } from './cells'
+import { ColumnHeader, LongTextCell, TextCell } from '@/components'
+import { Gender } from '@/types'
+import {
+  getMaskedPhoneNumber,
+  getPatientAge,
+  getPatientCity,
+  getPatientDOB,
+  getPatientFullName,
+  getPatientGender,
+  getPatientInsuranceName,
+  getPatientMRN,
+  getPatientPhone,
+  getPatientPostalCode,
+  getPatientState,
+  getSlashedPaddedDateString,
+} from '@/utils'
+import {
+  CollapseCell,
+  ContactMadeSelectCell,
+  PracticeSelectCell,
+} from './cells'
 import { RowActionDelete } from './row-action-delete'
 import { Users } from './types'
 
@@ -18,184 +36,184 @@ const columns: ColumnDef<Users>[] = [
     id: 'name',
     accessorKey: 'name',
     header: ({ column }) => (
-      <ColumnHeader column={column} label="Name" className="!text-black justify-center !font-medium text-center align-middle"/>
+      <ColumnHeader
+        column={column}
+        label="Name"
+        className="!text-black justify-center text-center align-middle !font-medium"
+      />
     ),
-    cell: ({ row }) => (
-      <TextCell className="truncate">{row.original?.name || 'N/A'}</TextCell>
+    cell: ({ row: { original } }) => (
+      <TextCell className="truncate">
+        {getPatientFullName(original.legalName)}
+      </TextCell>
     ),
   },
   {
     id: 'ptStatus',
     accessorKey: 'ptStatus',
-    header: ({ column }) => (
-      <ColumnHeader column={column} label="Pt Status" />
-    ),
-    cell: ({ row }) => (
-      <TextCell>{row.original?.ptStatus || 'N/A'}</TextCell>
-    ),
+    header: ({ column }) => <ColumnHeader column={column} label="Pt Status" />,
+    cell: ({ row }) => <TextCell>{row.original?.status}</TextCell>,
   },
   {
     id: 'age',
     accessorKey: 'age',
-    header: ({ column }) => (
-      <ColumnHeader column={column} label="Age" />
+    header: ({ column }) => <ColumnHeader column={column} label="Age" />,
+    cell: ({ row }) => (
+      <TextCell>{getPatientAge(row.original?.birthdate)}</TextCell>
     ),
-    cell: ({ row }) => <TextCell>{row.original?.age || 'N/A'}</TextCell>,
     maxSize: 50,
   },
   {
     id: 'gen',
     accessorKey: 'gen',
-    header: ({ column }) => (
-      <ColumnHeader column={column} label="Gen." />
+    header: ({ column }) => <ColumnHeader column={column} label="Gen." />,
+    cell: ({ row: { original } }) => (
+      <TextCell>{getPatientGender(original.gender as Gender)}</TextCell>
     ),
-    cell: ({ row }) => (
-      <TextCell>{row.original?.gen || 'N/A'}</TextCell>
-    ),
-    maxSize: 50
+    maxSize: 50,
   },
   {
     id: 'verify',
     header: ({ column }) => <ColumnHeader column={column} label="Verify" />,
     columns: [
       {
-        id: 'p',
-        header: ({ column }) => (
-          <ColumnHeader
-            label="P"
-          />
+        id: 'verificationStatus',
+        header: () => <ColumnHeader label="P" />,
+        cell: ({ row: { original: patient } }) => (
+          <TextCell>{patient?.verificationStatus}</TextCell>
         ),
-        cell: ({ row }) => <TextCell>{row.original.p}</TextCell>,
       },
       {
-        id: 'pElapsed',
-        header: ({ column }) => (
-          <ColumnHeader
-            label="P-Elapsed"
-          />
+        id: 'patientVerificationTimeElapsed',
+        header: () => <ColumnHeader label="P-Elapsed" />,
+        cell: ({ row: { original: patient } }) => (
+          <TextCell className="truncate">
+            {patient?.patientVerificationTimeElapsed}
+          </TextCell>
         ),
-        cell: ({ row }) => <TextCell>{row.original.pElapsed}</TextCell>,
       },
       {
-        id: 'i',
+        id: 'insuranceVerification',
         size: 50,
-        header: ({ column }) => (
-          <ColumnHeader
-            label="I"
-            column={column}
-          />
+        header: ({ column }) => <ColumnHeader label="I" column={column} />,
+        cell: ({ row: { original: patient } }) => (
+          <TextCell>{patient?.insuranceVerification}</TextCell>
         ),
-        cell: ({ row }) => <TextCell>{row.original.i}</TextCell>,
       },
       {
-        id: 'iElapsed',
-        header: ({ column }) => (
-          <ColumnHeader
-            label="I-Elapsed"
-          />
+        id: 'insuranceVerificationTimeElapsed',
+        header: () => <ColumnHeader label="I-Elapsed" />,
+        cell: ({ row: { original: patient } }) => (
+          <TextCell className="truncate">
+            {patient?.insuranceVerificationTimeElapsed}
+          </TextCell>
         ),
-        cell: ({ row }) => <TextCell>{row.original.iElapsed}</TextCell>,
       },
       {
-        id: 'p&c',
-        header: ({ column }) => (
-          <ColumnHeader
-            label="P&C"
-          />
+        id: 'p-&-c',
+        header: () => <ColumnHeader label="P&C" />,
+        cell: ({ row: { original: patient } }) => (
+          <TextCell>{patient?.patientConsent}</TextCell>
         ),
-        cell: ({ row }) => <TextCell>{row.original.pc}</TextCell>,
       },
       {
         id: 'cc',
-        header: ({ column }) => (
-          <ColumnHeader
-            label="CC"
-          />
+        header: ({ column }) => <ColumnHeader label="CC" />,
+        cell: ({ row: { original: patient } }) => (
+          <TextCell>
+            {patient?.creditCardVerificationStatus === 'Active' ? 'Yes' : 'No'}
+          </TextCell>
         ),
-        cell: ({ row }) => <TextCell>{row.original.cc}</TextCell>,
       },
     ],
   },
   {
     id: 'mrn',
     accessorKey: 'mrn',
-    header: ({ column }) => (
-      <ColumnHeader column={column} label="MRN" />
-    ),
-    cell: ({ row }) => (
-      <TextCell>{row.original?.mrn || 'N/A'}</TextCell>
+    header: ({ column }) => <ColumnHeader column={column} label="MRN" />,
+    cell: ({ row: { original } }) => (
+      <TextCell className="truncate">{getPatientMRN(original?.id)}</TextCell>
     ),
   },
   {
     id: 'dob',
     accessorKey: 'dob',
-    header: ({ column }) => (
-      <ColumnHeader column={column} label="DOB" />
-    ),
-    cell: ({ row }) => (
-      <TextCell>{row.original?.dob ? formatDate(row.original.dob) : 'N/A'}</TextCell>
+    header: () => <ColumnHeader label="DOB" />,
+    cell: ({ row: { original } }) => (
+      <TextCell className="truncate">
+        {getPatientDOB(original?.birthdate)}
+      </TextCell>
     ),
   },
   {
     id: 'phone',
-    accessorKey: 'phone',
-    header: ({ column }) => (
-      <ColumnHeader column={column} label="Phone" />
-    ),
-    cell: ({ row }) => (
-      <TextCell>{row.original?.phone || 'N/A'}</TextCell>
+    accessorKey: 'phoneNumber',
+    header: () => <ColumnHeader label="Phone" />,
+    cell: ({ row: { original } }) => (
+      <TextCell className="truncate">
+        {getMaskedPhoneNumber(
+          getPatientPhone(original?.contactDetails?.phoneNumbers) ?? '',
+        )}
+      </TextCell>
     ),
   },
   {
     id: 'email',
     accessorKey: 'email',
-    header: ({ column }) => (
-      <ColumnHeader column={column} label="Email" />
-    ),
-    cell: ({ row }) => (
-      <TextCell>{row.original?.email || 'N/A'}</TextCell>
+    header: () => <ColumnHeader label="Email" />,
+    cell: ({ row: { original } }) => (
+      <TextCell className="truncate">
+        {original?.contactDetails?.email}
+      </TextCell>
     ),
   },
   {
     id: 'ss',
-    accessorKey: 'ss',
+    accessorKey: 'socialSecurityNumber',
     header: () => <ColumnHeader label="SS" />,
-    cell: ({ row }) => (
-      <TextCell>{row.original?.ss || 'N/A'}</TextCell>
+    cell: ({ row: { original } }) => (
+      <TextCell className="truncate">{original?.socialSecurityNumber}</TextCell>
     ),
   },
   {
     id: 'residenceState',
     accessorKey: 'residenceState',
     header: () => <ColumnHeader label="Residence (State)" />,
-    cell: ({ row }) => (
-      <TextCell>{row.original?.residenceState || 'N/A'}</TextCell>
+    cell: ({ row: { original } }) => (
+      <TextCell>
+        {getPatientState(original?.contactDetails?.addresses)}
+      </TextCell>
     ),
   },
   {
     id: 'city',
     accessorKey: 'city',
     header: () => <ColumnHeader label="City" />,
-    cell: ({ row }) => (
-      <TextCell>{row.original?.city || 'N/A'}</TextCell>
+    cell: ({ row: { original } }) => (
+      <TextCell className="truncate">
+        {getPatientCity(original?.contactDetails?.addresses)}
+      </TextCell>
     ),
   },
   {
     id: 'zip',
     accessorKey: 'zip',
     header: () => <ColumnHeader label="Zip" />,
-    cell: ({ row }) => (
-      <TextCell>{row.original?.zip || 'N/A'}</TextCell>
+    cell: ({ row: { original } }) => (
+      <TextCell>
+        {getPatientPostalCode(original?.contactDetails?.addresses)}
+      </TextCell>
     ),
   },
   {
-    id: 'guardian',
-    accessorKey: 'guardian',
+    id: 'hasGuardian',
+    accessorKey: 'hasGuardian',
     header: () => <ColumnHeader label="Guardian" />,
-    cell: ({ row }) => (
-      <TextCell>{row.original?.guardian || 'N/A'}</TextCell>
+    cell: ({ row: { original: patient } }) => (
+      <TextCell>{patient?.hasGuardian ? 'Yes' : 'No'}</TextCell>
     ),
   },
+  // Need this from BE
   {
     id: 'organization',
     accessorKey: 'organization',
@@ -204,43 +222,52 @@ const columns: ColumnDef<Users>[] = [
       <TextCell>{row.original?.organization || 'N/A'}</TextCell>
     ),
   },
+  // Need this from BE
   {
     id: 'practice',
     accessorKey: 'practice',
     header: () => <ColumnHeader label="Practice" />,
-    cell: ({ row }) => (<PracticeSelectCell />),
+    cell: ({ row }) => <PracticeSelectCell row={row} />,
   },
   {
     id: 'insurance',
     accessorKey: 'insurance',
     header: () => <ColumnHeader label="Insurance" />,
-    cell: ({ row }) => (
-      <TextCell>{row.original?.insurance || 'N/A'}</TextCell>
+    cell: ({ row: { original } }) => (
+      <TextCell className="truncate">
+        {getPatientInsuranceName(original?.insurancePolicies)}
+      </TextCell>
     ),
   },
   {
     id: 'userCreated',
     accessorKey: 'userCreated',
     header: () => <ColumnHeader label="User Created" />,
-    cell: ({ row }) => (
-      <TextCell>{row.original?.userCreated || 'N/A'}</TextCell>
+    cell: ({ row: { original } }) => (
+      <TextCell>
+        {getSlashedPaddedDateString(original?.metadata?.createdOn)}
+      </TextCell>
     ),
   },
   {
     id: 'createdBy',
     accessorKey: 'createdBy',
     header: () => <ColumnHeader label="Created By" />,
-    cell: ({ row }) => (
-      <TextCell>{row.original?.createdBy || 'N/A'}</TextCell>
+    cell: ({ row: { original } }) => (
+      <LongTextCell className="min-w-24">
+        {original.metadata?.createdByFullName}
+      </LongTextCell>
     ),
   },
   {
     id: 'nextVisit',
     accessorKey: 'nextVisit',
     header: () => <ColumnHeader label="Next Visit" />,
-    cell: ({ row }) => (
-      <TextCell>
-        {row.original?.nextVisit ? formatDateTime(row.original.nextVisit) : 'N/A'}
+    cell: ({ row: { original } }) => (
+      <TextCell className="truncate">
+        {original?.upcomingAppointmentDate
+          ? getSlashedPaddedDateString(original.upcomingAppointmentDate)
+          : 'None'}
       </TextCell>
     ),
   },
@@ -248,15 +275,20 @@ const columns: ColumnDef<Users>[] = [
     id: 'visitHx',
     accessorKey: 'visitHx',
     header: () => <ColumnHeader label="Visit Hx" />,
-    cell: ({ row }) => (
-      <TextCell>{row.original?.visitHx || 'N/A'}</TextCell>
+    cell: ({ row: { original } }) => (
+      <TextCell className="truncate">
+        {original?.mostRecentAppointmentDate
+          ? getSlashedPaddedDateString(original.mostRecentAppointmentDate)
+          : 'None'}
+      </TextCell>
     ),
   },
+  // TODO: after action make onchange func
   {
     id: 'contactInitiated',
     accessorKey: 'contactInitiated',
     header: () => <ColumnHeader label="Contact Initiated" />,
-    cell: ({ row }) => (<ContactMadeSelectCell row={row} />),
+    cell: ({ row }) => <ContactMadeSelectCell row={row} />,
   },
   {
     id: 'actions',

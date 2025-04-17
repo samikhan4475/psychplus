@@ -1,18 +1,39 @@
 'use client'
 
-import { getInsurancePayersOptionsAction } from '@/actions'
-import { AsyncSelect, FormFieldContainer, FormFieldLabel } from '@/components'
+import { useEffect, useState } from 'react'
+import { useFormContext } from 'react-hook-form'
+import {
+  FormFieldContainer,
+  FormFieldLabel,
+  MultiSelectField,
+} from '@/components'
+import { SelectOptionType } from '@/types'
+import { getInsurancePlansOptionsAction } from '../patient-lookup/actions'
+import { SchemaType } from './organization-users-list-filter-form'
 
 const InsuranceSelect = () => {
+  const form = useFormContext<SchemaType>()
+  const [insurancePlansOptions, setInsurancePlansOptions] = useState<
+    SelectOptionType[]
+  >([])
+
+  useEffect(() => {
+    getInsurancePlansOptionsAction().then((plansResult) => {
+      if (plansResult.state === 'success') {
+        setInsurancePlansOptions(plansResult.data)
+      }
+    })
+  }, [])
+
+  const insurancePolicies = form.watch('insurancePolicyIds')
   return (
     <FormFieldContainer className="flex-row items-center gap-1">
       <FormFieldLabel className="!text-1">Insurance</FormFieldLabel>
-      <AsyncSelect
-        field="patientInsurancePayerId"
-        placeholder="Select"
-        fetchOptions={getInsurancePayersOptionsAction}
-        buttonClassName="w-[101px] border-pp-gray-2 h-6 border border-solid !outline-none [box-shadow:none]"
-        tooltip
+      <MultiSelectField
+        options={insurancePlansOptions}
+        className="h-6 w-[101px] flex-1"
+        defaultValues={insurancePolicies}
+        onChange={(values) => form.setValue('insurancePolicyIds', values)}
       />
     </FormFieldContainer>
   )

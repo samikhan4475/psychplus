@@ -1,34 +1,43 @@
 'use client'
 
+import { useEffect, useState } from 'react'
+import { useFormContext } from 'react-hook-form'
+import toast from 'react-hot-toast'
 import {
   FormFieldContainer,
   FormFieldLabel,
-  SelectInput
+  MultiSelectField,
 } from '@/components'
 import { SelectOptionType } from '@/types'
-import { useEffect, useState } from 'react'
-import toast from 'react-hot-toast'
-import { getStaffRolesOrganizationAction } from '../staff-management/actions/get-organization-staff-roles'
+import { getAllOrganizationsListAction } from '../organization-practice/actions'
+import { SchemaType } from './organization-users-list-filter-form'
 
 const OrganizationSelect = () => {
   const [organizations, setOrganizations] = useState<SelectOptionType[]>([])
+  const form = useFormContext<SchemaType>()
   useEffect(() => {
-    getStaffRolesOrganizationAction().then((result) => {
+    getAllOrganizationsListAction({}).then((result) => {
       if (result.state === 'success') {
-        setOrganizations(result.data.organizations)
+        const organizationSelect = result.data?.organizations.map((org) => ({
+          value: org.id,
+          label: org.displayName,
+        }))
+        setOrganizations(organizationSelect)
       } else if (result.state === 'error') {
         toast.error(result.error)
       }
     })
   }, [])
+  const organization = form.watch('organizations')
 
   return (
     <FormFieldContainer className="flex-row items-center gap-2">
       <FormFieldLabel className="!text-1">Organization</FormFieldLabel>
-      <SelectInput
+      <MultiSelectField
         options={organizations}
-        field="organizationIds"
-        buttonClassName="border-pp-gray-2 h-6 w-full border border-solid !outline-none [box-shadow:none] min-w-[108px]"
+        defaultValues={organization}
+        onChange={(values) => form.setValue('organizations', values)}
+        className="h-6 min-w-[108px] flex-1"
       />
     </FormFieldContainer>
   )

@@ -1,15 +1,43 @@
 'use client'
 
-import {
-  SelectCell,
-  SelectInput
-} from '@/components'
+import { useEffect, useState } from 'react'
+import toast from 'react-hot-toast'
+import { PropsWithRow, SelectCell } from '@/components'
+import { SelectOptionType } from '@/types'
+import { getPracticesOptionsAction } from '@/ui/patient-lookup/actions'
+import { associatePracticeAction } from '../actions'
+import { Users } from '../types'
 
-const PracticeSelectCell = () => {
+const PracticeSelectCell = ({
+  row: { original: patient },
+}: PropsWithRow<Users>) => {
+  const [practicesOptions, setPracticesOptions] = useState<SelectOptionType[]>(
+    [],
+  )
+  const [selectedValue, setSelectedValue] = useState(patient?.practiceId)
+  useEffect(() => {
+    getPracticesOptionsAction().then((practiceResult) => {
+      if (practiceResult.state === 'success') {
+        setPracticesOptions(practiceResult.data)
+      }
+    })
+  }, [])
+  const associateUserStatus = async (value: string) => {
+    setSelectedValue(value)
+    const result = await associatePracticeAction(patient.id, value)
+    if (result.state === 'success') {
+      toast.success('Successfully updated!')
+    } else if (result.state === 'error') {
+      setSelectedValue(patient?.practiceId ?? '')
+      toast.error(result.error ?? 'Failed to update!')
+    }
+  }
   return (
     <SelectCell
-      options={[]}
-      className='h-4'
+      options={practicesOptions}
+      onValueChange={associateUserStatus}
+      value={selectedValue}
+      className="h-4"
     />
   )
 }

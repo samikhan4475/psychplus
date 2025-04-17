@@ -1,16 +1,16 @@
 'use client'
 
+import { PropsWithRow } from '@/components'
+import { PatientHistoryTable } from '@/ui/patient-lookup/patient-history-table'
 import { Button, Flex, Heading, Popover } from '@radix-ui/themes'
 import { ChevronDownIcon, ChevronRightIcon, X } from 'lucide-react'
-import { PropsWithRow } from '@/components'
 import { Users } from '../types'
-import { OrganizationUserHistoryTable } from '../organization-user-history-table'
 
 const CollapseCell = ({
   row: {
     toggleSelected,
     getIsSelected,
-    original: { id: patientId },
+    original: { id: userId },
   },
 }: PropsWithRow<Users>) => {
   return (
@@ -53,7 +53,7 @@ const CollapseCell = ({
                 />
               </Popover.Close>
             </Flex>
-            <OrganizationUserHistoryTable />
+            <PatientHistoryTable patientId={userId} />
           </Flex>
         </Popover.Content>
       </Popover.Root>

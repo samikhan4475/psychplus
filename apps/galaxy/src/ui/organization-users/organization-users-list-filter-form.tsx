@@ -1,77 +1,119 @@
 'use client'
 
-import { FormContainer } from '@/components'
+import { useParams } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons'
 import { Button, Flex } from '@radix-ui/themes'
+import { DateValue } from 'react-aria-components'
 import { useForm, type SubmitHandler } from 'react-hook-form'
 import { z } from 'zod'
-import { FirstNameField } from './first-name-field'
-import { LastNameField } from './last-name-field'
+import { FormContainer } from '@/components'
+import { formatDateToISOString, sanitizeFormData } from '@/utils'
+import { INVALID_RANGE_ERROR } from '../patient-lookup/constants'
+import { validateDate } from '../patient-lookup/utils'
 import { AgeField } from './age-field'
-import { GenderSelect } from './gender-select'
-import { MRNField } from './mrn-field'
-import { DOBField } from './dob-field'
-import { DateValue } from 'react-aria-components'
 import { CityField } from './city-field'
-import { ZipField } from './zip-field'
-import { StateSelect } from './state-select'
-import { GuardianSelect } from './guardian-select'
-import { PhoneField } from './phone-field'
+import { ClearButton } from './clear-button'
+import { ConsentVerifySelect } from './consent-verify-select'
+import { ContactInitiated } from './contact-initiated-select'
+import { CreditCardVerifySelect } from './credit-card-verify-select'
+import { DOBField } from './dob-field'
 import { EmailField } from './email-field'
-import { SocialSecurityNumberField } from './social-security-number-field'
+import { FilterToggleButton } from './filter-toggle-button'
+import { FirstNameField } from './first-name-field'
+import { GenderSelect } from './gender-select'
+import { GuardianSelect } from './guardian-select'
+import { InsuranceSelect } from './insurance-select'
+import { InsuranceVerifySelect } from './insurance-verify-select'
+import { LastNameField } from './last-name-field'
+import { MRNField } from './mrn-field'
+import { NextVisitSelect } from './next-visit-select'
 import { OrganizationSelect } from './organization-select'
-import { PracticeSelect } from './practice-select'
+import { PastVisitSelect } from './past-visit-select'
 import { PatientStatusSelect } from './patient-status-select'
 import { PatientVerifySelect } from './patient-verify-select'
-import { InsuranceVerifySelect } from './insurance-verify-select'
-import { ConsentVerifySelect } from './consent-verify-select'
-import { CreditCardVerifySelect } from './credit-card-verify-select'
-import { UserCreationGroup } from './user-creation-group'
-import { NextVisitSelect } from './next-visit-select'
-import { ContactInitiated } from './contact-initiated-select'
-import { PastVisitSelect } from './past-visit-select'
-import { InsuranceSelect } from './insurance-select'
-import { ClearButton } from './clear-button'
-import { FilterToggleButton } from './filter-toggle-button'
+import { PhoneField } from './phone-field'
+import { PracticeSelect } from './practice-select'
+import { SocialSecurityNumberField } from './social-security-number-field'
+import { StateSelect } from './state-select'
 import { useStore } from './store'
+import { UsersSearchParam } from './types'
+import { UserCreationGroup } from './user-creation-group'
+import { ZipField } from './zip-field'
 
-const schema = z.object({
-  firstName: z.string().optional(),
-  lastName: z.string().optional(),
-  age: z.string().optional(),
-  gender: z.string().optional(),
-  mrn: z.string().optional(),
-  dob: z.custom<null | DateValue>(),
-  city: z.string().optional(),
-  zip: z.string().optional(),
-  stateId: z.string().optional(),
-  hasGuardian: z.string().optional(),
-  phone: z.string().optional(),
-  email: z.string().optional(),
-  ssn: z.string().optional(),
-  patientStatuses: z.string().optional(),
-  ptVerify: z.string().optional(),
-  inVerify: z.string().optional(),
-  consentVerify: z.string().optional(),
-  ccVerify: z.string().optional(),
-  from: z.custom<null | DateValue>(),
-  to: z.custom<null | DateValue>(),
-  futureVisitsByDays: z.string().optional(),
-  nvStatus: z.string().optional(),
-  nvDays: z.string().optional(),
-  contactMadeStatus: z.string().optional(),
-  pvStatus: z.string().optional(),
-  pvDays: z.string().optional(),
-  patientInsurancePayerId: z.string().optional(),
-  organizationIds: z.string().optional(),
-})
+const zipCodeRegex = /(^\d{5}$)|(^\d{5}-\d{4}$)|^$/
+const phoneRegex = /^(\+?[1-9]\d{9}|^$)$/
+const schema = z
+  .object({
+    firstName: z.string().optional(),
+    lastName: z.string().optional(),
+    age: z.string().optional(),
+    gender: z.string().optional(),
+    mrn: z.string().optional(),
+    dateOfBirth: z.custom<null | DateValue>(),
+    city: z.string().optional(),
+    postalCode: z
+      .string()
+      .trim()
+      .regex(zipCodeRegex, 'Invalid zip code!')
+      .optional(),
+    stateId: z.string().optional(), // Need to add in BE
+    hasGuardian: z.string().optional(),
+    telephone: z
+      .string()
+      .trim()
+      .regex(phoneRegex, 'Invalid phone number')
+      .optional(),
+    email: z.string().optional(),
+    ssn: z.string().optional(),
+    organizations: z.array(z.string()).optional(),
+    practices: z.array(z.string()).optional(),
+    patientStatuses: z.array(z.string()).optional(),
+    verificationStatuses: z.array(z.string()).optional(),
+    insuranceVerificationStatuses: z.array(z.string()).optional(),
+    consentVerificationStatuses: z.array(z.string()).optional(),
+    creditCardVerificationStatuses: z.array(z.string()).optional(),
+    patientCreatedFrom: z.custom<null | DateValue>(),
+    patientCreatedTo: z.custom<null | DateValue>(),
+    futureVisitsByDays: z.string().optional(),
+    nextVisitStatus: z.string().optional(),
+    contactMadeStatuses: z.array(z.string()).optional(),
+    pastVisitStatus: z.string().optional(),
+    visitHistoryPastDays: z.string().optional(),
+    insurancePolicyIds: z.array(z.string()).optional(),
+  })
+  .superRefine((data, ctx) => {
+    const { patientCreatedFrom, patientCreatedTo } = data
+    const isStartDateValid = patientCreatedFrom
+      ? validateDate(patientCreatedFrom, patientCreatedTo)
+      : 0
+    const isEndDateValid = patientCreatedTo
+      ? validateDate(patientCreatedTo, patientCreatedFrom)
+      : 0
+    if (isStartDateValid > 0) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: INVALID_RANGE_ERROR,
+        path: ['patientCreatedFrom'],
+      })
+    }
+
+    if (isEndDateValid < 0) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: INVALID_RANGE_ERROR,
+        path: ['patientCreatedTo'],
+      })
+    }
+  })
 
 type SchemaType = z.infer<typeof schema>
 
 const OrganizationUsersListFilterForm = () => {
-  const { showFilters } = useStore((state) => ({
+  const { id } = useParams<{ id: string }>()
+  const { showFilters, search } = useStore((state) => ({
     showFilters: state.showFilters,
+    search: state.search,
   }))
 
   const form = useForm<SchemaType>({
@@ -83,73 +125,87 @@ const OrganizationUsersListFilterForm = () => {
       age: '',
       gender: '',
       mrn: '',
-      dob: undefined,
+      dateOfBirth: undefined,
       city: '',
-      zip: '',
+      postalCode: '',
       stateId: '',
       hasGuardian: '',
-      phone: '',
+      telephone: '',
       email: '',
       ssn: '',
-      patientStatuses: '',
-      ptVerify: '',
-      inVerify: '',
-      consentVerify: '',
-      ccVerify: '',
-      from: undefined,
-      to: undefined,
+      patientStatuses: [],
+      verificationStatuses: [],
+      insuranceVerificationStatuses: [],
+      consentVerificationStatuses: [],
+      creditCardVerificationStatuses: [],
+      patientCreatedFrom: undefined,
+      patientCreatedTo: undefined,
       futureVisitsByDays: '',
-      nvStatus: '',
-      nvDays: '',
-      contactMadeStatus: '',
-      pvStatus: '',
-      pvDays: '',
-      patientInsurancePayerId: '',
-      organizationIds: '',
+      nextVisitStatus: '',
+      contactMadeStatuses: [],
+      pastVisitStatus: '',
+      visitHistoryPastDays: '',
+      insurancePolicyIds: [],
+      organizations: [],
+      practices: [],
     },
   })
 
   const onSubmit: SubmitHandler<SchemaType> = (data) => {
+    const formattedData = {
+      ...data,
+      organizationIds: [id],
+      dateOfBirth: data.dateOfBirth
+        ? formatDateToISOString(data.dateOfBirth)
+        : '',
+      patientCreatedFrom: data.patientCreatedFrom
+        ? formatDateToISOString(data.patientCreatedFrom)
+        : '',
+      patientCreatedTo: data.patientCreatedTo
+        ? formatDateToISOString(data.patientCreatedTo)
+        : '',
+    }
+    const cleanedData = sanitizeFormData(formattedData) as UsersSearchParam
+
+    search(cleanedData)
   }
 
   return (
     <FormContainer
       form={form}
       onSubmit={onSubmit}
-      className='bg-white rounded-b-2 rounded-t-1 px-2 py-1 shadow-2 '
+      className="bg-white rounded-b-2 rounded-t-1 px-2 py-1 shadow-2 "
     >
       <Flex className="flex-row flex-wrap gap-2">
-        {showFilters &&
-          (
-            <>
-              <FirstNameField />
-              <LastNameField />
-              <AgeField />
-              <GenderSelect />
-              <MRNField />
-              <DOBField />
-              <CityField />
-              <ZipField />
-              <StateSelect />
-              <GuardianSelect />
-              <PhoneField />
-              <EmailField />
-              <SocialSecurityNumberField />
-              <OrganizationSelect />
-              <PracticeSelect />
-              <PatientStatusSelect />
-              <PatientVerifySelect />
-              <InsuranceVerifySelect />
-              <ConsentVerifySelect />
-              <CreditCardVerifySelect />
-              <UserCreationGroup />
-              <NextVisitSelect />
-              <ContactInitiated />
-              <PastVisitSelect />
-              <InsuranceSelect />
-            </>
-          )
-        }
+        {showFilters && (
+          <>
+            <FirstNameField />
+            <LastNameField />
+            <AgeField />
+            <GenderSelect />
+            <MRNField />
+            <DOBField />
+            <CityField />
+            <ZipField />
+            <StateSelect />
+            <GuardianSelect />
+            <PhoneField />
+            <EmailField />
+            <SocialSecurityNumberField />
+            <OrganizationSelect />
+            <PracticeSelect />
+            <PatientStatusSelect />
+            <PatientVerifySelect />
+            <InsuranceVerifySelect />
+            <ConsentVerifySelect />
+            <CreditCardVerifySelect />
+            <UserCreationGroup />
+            <NextVisitSelect />
+            <ContactInitiated />
+            <PastVisitSelect />
+            <InsuranceSelect />
+          </>
+        )}
       </Flex>
 
       <Flex className="flex-row gap-1.5" justify="end" align="center">

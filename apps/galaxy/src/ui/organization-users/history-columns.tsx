@@ -1,8 +1,9 @@
 'use client'
 
-import { ColumnHeader, TextCell } from '@/components'
-import { formatDate, formatDateTime } from '@/utils'
 import { ColumnDef } from '@tanstack/react-table'
+import { ColumnHeader, TextCell } from '@/components'
+import { Gender } from '@/types'
+import { formatDate, formatDateTime, getPatientGender } from '@/utils'
 import { Users } from './types'
 
 export const columns: ColumnDef<Users>[] = [
@@ -17,40 +18,46 @@ export const columns: ColumnDef<Users>[] = [
     accessorKey: 'age',
     header: ({ column }) => <ColumnHeader column={column} label="Age" />,
     cell: ({ row }) => <TextCell>{row.original.age}</TextCell>,
-    maxSize: 50
+    maxSize: 50,
   },
   {
     id: 'gen',
     accessorKey: 'gen',
     header: ({ column }) => <ColumnHeader column={column} label="Gen." />,
-    cell: ({ row }) => <TextCell>{row.original.gen}</TextCell>,
-    maxSize: 50
+    cell: ({ row }) => (
+      <TextCell>{getPatientGender(row.original.gender as Gender)}</TextCell>
+    ),
+    maxSize: 50,
   },
   {
     id: 'dob',
     accessorKey: 'dob',
     header: ({ column }) => <ColumnHeader column={column} label="DOB" />,
     cell: ({ row }) => (
-      <TextCell>{row.original.dob ? formatDate(row.original.dob) : 'N/A'}</TextCell>
+      <TextCell>
+        {row.original.dob ? formatDate(row.original.dob) : 'N/A'}
+      </TextCell>
     ),
   },
   {
     id: 'phone',
     accessorKey: 'phone',
     header: ({ column }) => <ColumnHeader column={column} label="Phone" />,
-    cell: ({ row }) => <TextCell>{row.original.phone}</TextCell>,
+    cell: ({ row }) => <TextCell>{row.original.phoneNumber}</TextCell>,
   },
   {
     id: 'email',
     accessorKey: 'email',
     header: ({ column }) => <ColumnHeader column={column} label="Email" />,
-    cell: ({ row }) => <TextCell>{row.original.email}</TextCell>,
+    cell: ({ row }) => (
+      <TextCell>{row.original.contactDetails?.email}</TextCell>
+    ),
   },
   {
     id: 'ss',
     accessorKey: 'ss',
     header: ({ column }) => <ColumnHeader column={column} label="SS" />,
-    cell: ({ row }) => <TextCell>{row.original.ss}</TextCell>,
+    cell: ({ row }) => <TextCell>{row.original.socialSecurityNumber}</TextCell>,
   },
   {
     id: 'city',
@@ -59,10 +66,12 @@ export const columns: ColumnDef<Users>[] = [
     cell: ({ row }) => <TextCell>{row.original.city}</TextCell>,
   },
   {
-    id: 'residenceState',
-    accessorKey: 'residenceState',
-    header: ({ column }) => <ColumnHeader column={column} label="Residence (State)" />,
-    cell: ({ row }) => <TextCell>{row.original.residenceState}</TextCell>,
+    id: 'residence',
+    accessorKey: 'residence',
+    header: ({ column }) => (
+      <ColumnHeader column={column} label="Residence (State)" />
+    ),
+    cell: ({ row }) => <TextCell>{row.original.residence}</TextCell>,
   },
   {
     id: 'zip',
@@ -71,35 +80,47 @@ export const columns: ColumnDef<Users>[] = [
     cell: ({ row }) => <TextCell>{row.original.zip}</TextCell>,
   },
   {
-    id: 'guardian',
-    accessorKey: 'guardian',
+    id: 'hasGuardian',
+    accessorKey: 'hasGuardian',
     header: ({ column }) => <ColumnHeader column={column} label="Guardian" />,
-    cell: ({ row }) => <TextCell>{row.original.guardian}</TextCell>,
+    cell: ({ row }) => (
+      <TextCell>{row.original.hasGuardian ? 'Yes' : 'No'}</TextCell>
+    ),
   },
   {
     id: 'ptStatus',
     accessorKey: 'ptStatus',
     header: ({ column }) => <ColumnHeader column={column} label="Pt Status" />,
-    cell: ({ row }) => <TextCell>{row.original.ptStatus}</TextCell>,
+    cell: ({ row }) => <TextCell>{row.original.status}</TextCell>,
   },
   {
     id: 'ptVerification',
     accessorKey: 'ptVerification',
-    header: ({ column }) => <ColumnHeader column={column} label="Pt Verification" />,
+    header: ({ column }) => (
+      <ColumnHeader column={column} label="Pt Verification" />
+    ),
     cell: ({ row }) => <TextCell>{row.original.ptVerification}</TextCell>,
   },
   {
     id: 'contactInitiated',
     accessorKey: 'contactInitiated',
-    header: ({ column }) => <ColumnHeader column={column} label="Contact Initiated" />,
+    header: ({ column }) => (
+      <ColumnHeader column={column} label="Contact Initiated" />
+    ),
     cell: ({ row }) => <TextCell>{row.original.contactInitiated}</TextCell>,
   },
   {
     id: 'updatedDate',
     accessorKey: 'updatedDate',
-    header: ({ column }) => <ColumnHeader column={column} label="Updated Date/Time" />,
+    header: ({ column }) => (
+      <ColumnHeader column={column} label="Updated Date/Time" />
+    ),
     cell: ({ row }) => (
-      <TextCell>{row.original.updatedDate ? formatDateTime(row.original.updatedDate) : 'N/A'}</TextCell>
+      <TextCell>
+        {row.original.updatedDate
+          ? formatDateTime(row.original.updatedDate)
+          : 'N/A'}
+      </TextCell>
     ),
   },
   {
