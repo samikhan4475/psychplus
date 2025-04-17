@@ -14,7 +14,7 @@ const PayerAddressFields = () => {
 
     fields.forEach((field, index) => {
       const formValue = value ? form.getValues(formValues[index]) : ''
-      form.setValue(`payer.${field}`, formValue, {
+      form.setValue(`practicePaymentAddress.${field}`, formValue, {
         shouldValidate: false,
       })
     })
@@ -44,7 +44,7 @@ const PayerAddressFields = () => {
         columnsPerRow="2"
         className="flex gap-4"
         addressFieldName="street1"
-        prefix="payer"
+        prefix="practicePaymentAddress"
       />
     </FormFieldContainer>
   )

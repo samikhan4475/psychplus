@@ -11,8 +11,8 @@ const TinField = () => {
   return (
     <FormFieldContainer className="flex-1 gap-0">
       <FormFieldLabel className="pb-[3px]">TIN</FormFieldLabel>
-      <TextInput field="tin" className="h-6 w-full" />
-      <FormFieldError name="tin" />
+      <TextInput field="taxId" className="h-6 w-full" />
+      <FormFieldError name="taxId" />
     </FormFieldContainer>
   )
 }

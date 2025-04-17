@@ -1,6 +1,7 @@
 'use client'
 
-import { TextInput } from '@/components'
+import { getProvidersOptionsAction } from '@/actions'
+import { AsyncSelect } from '@/components'
 import {
   FormFieldContainer,
   FormFieldError,
@@ -11,8 +12,14 @@ const DefProviderField = () => {
   return (
     <FormFieldContainer className="flex-1 gap-0">
       <FormFieldLabel className="pb-[3px]">Def. Provider</FormFieldLabel>
-      <TextInput field="defProvider" className="h-6 w-full" />
-      <FormFieldError name="defProvider" />
+      <AsyncSelect
+        field="defaultProviderStaffId"
+        placeholder="Select"
+        fetchOptions={getProvidersOptionsAction}
+        buttonClassName="w-full h-6"
+        className="h-full flex-1"
+      />
+      <FormFieldError name="defaultProviderStaffId" />
     </FormFieldContainer>
   )
 }

@@ -11,8 +11,8 @@ const PhoneField = () => {
   return (
     <FormFieldContainer className="flex-1 gap-0">
       <FormFieldLabel className="pb-[3px]">Phone Number</FormFieldLabel>
-      <PhoneNumberInput field="contactPhone" className="h-6 w-full" />
-      <FormFieldError name="contactPhone" />
+      <PhoneNumberInput field="practicePhone" className="h-6 w-full" />
+      <FormFieldError name="practicePhone" />
     </FormFieldContainer>
   )
 }

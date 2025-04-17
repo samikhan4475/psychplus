@@ -6,6 +6,7 @@ import { FormContainer } from '@/components'
 import { sanitizeFormData } from '@/utils'
 import { addOrganizationPracticeAction } from '../../actions'
 import { useStore } from '../../organizations/store'
+import { useStore as practiceStore } from '@/ui/organization-practices/store'
 import { Organization, Practice } from '../../types'
 import { CliaField } from './clia-field'
 import { DefProviderField } from './def-provider-field'
@@ -22,26 +23,42 @@ import { StatusSelect } from './status-select'
 import { SubmitFormButton } from './submit-form-button'
 import { TaxonomyCodeField } from './taxonomy-code-field'
 import { TinField } from './tin-field'
+import { updatePracticeAction } from '@/ui/organization-practices/actions'
 
 interface FormProps {
   data: Organization
+  practiceData?: Practice
   onCloseModal: (open: boolean) => void
 }
 
-const PracticeForm = ({ data, onCloseModal }: FormProps) => {
+const PracticeForm = ({ data, onCloseModal, practiceData }: FormProps) => {
   const { search } = useStore((state) => ({
     search: state.search,
   }))
+  const { search: practiceSearchStore } = practiceStore((state) => ({
+    search: state.search,
+  }))
+  let newData;
+  if (practiceData) {
+    newData = {
+      ...practiceData,
+      organizationId: data.id,
+      id: practiceData.id,
+      paymentAddressId: practiceData.paymentAddressId,
+      practiceAddressId: practiceData.practiceAddressId,
+    }
+  } else {
+    newData = { practiceAddress: data.organizationAddress, organizationId: data.id }
+  }
   const form = useForm<SchemaType>({
     resolver: zodResolver(schema),
-    defaultValues: defaultValues(data),
+    defaultValues: defaultValues(newData),
   })
 
   const onSave = async (formData: SchemaType) => {
     const requestPayload: Partial<Practice> = {
       ...formData,
-      displayName: formData.name,
-      shortName: formData.name,
+      shortName: formData.displayName,
       practiceAddress: {
         street1: formData.address1,
         street2: formData.address2 ?? '',
@@ -51,21 +68,27 @@ const PracticeForm = ({ data, onCloseModal }: FormProps) => {
         type: 'Business',
       },
       practicePaymentAddress: {
-        street1: formData.payer.street1 ?? '',
-        street2: formData.payer.street2 ?? '',
-        city: formData.payer.city,
-        state: formData.payer.state,
-        postalCode: formData.payer.postalCode,
+        street1: formData.practicePaymentAddress.street1 ?? '',
+        street2: formData.practicePaymentAddress.street2 ?? '',
+        city: formData.practicePaymentAddress.city,
+        state: formData.practicePaymentAddress.state,
+        postalCode: formData.practicePaymentAddress.postalCode,
         type: 'Business',
       },
     }
 
     const sanitizedPayload = sanitizeFormData(requestPayload)
-
-    const response = await addOrganizationPracticeAction(
-      data.id,
-      sanitizedPayload,
-    )
+    const response =
+      data && practiceData
+        ? await updatePracticeAction(
+          sanitizedPayload,
+          data.id,
+          practiceData?.id,
+        )
+        : await addOrganizationPracticeAction(
+          data.id,
+          sanitizedPayload,
+        )
 
     if (response.state === 'error') {
       toast.error(response.error)
@@ -76,7 +99,11 @@ const PracticeForm = ({ data, onCloseModal }: FormProps) => {
       onCloseModal(false)
       form.reset()
       toast.success('Record has been saved successfully')
-      search()
+      if (practiceData) {
+        practiceSearchStore()
+      } else {
+        search()
+      }
     } else {
       toast.error('Unable to save record')
     }

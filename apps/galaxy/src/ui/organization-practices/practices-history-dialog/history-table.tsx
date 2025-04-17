@@ -1,22 +1,27 @@
 'use client'
 
-import { ColumnHeader, DataTable, LoadingPlaceholder, TextCell } from '@/components'
-import { Practice } from '@/ui/organization-practice/types'
-import { formatDateTime } from '@/utils'
 import { Flex } from '@radix-ui/themes'
 import { ColumnDef } from '@tanstack/react-table'
+import {
+  ColumnHeader,
+  DataTable,
+  LoadingPlaceholder,
+  TextCell,
+} from '@/components'
+import { Practice } from '@/ui/organization-practice/types'
+import { formatDateTime } from '@/utils'
 
 const columns: ColumnDef<Practice>[] = [
   {
     id: 'user',
-    header: ({ column }) => <ColumnHeader label="User" />,
+    header: () => <ColumnHeader label="User" />,
     cell: ({ row }) => (
       <TextCell>{row.original.metadata?.createdByFullName}</TextCell>
     ),
   },
   {
     id: 'date',
-    header: ({ column }) => <ColumnHeader label="Date/Time" />,
+    header: () => <ColumnHeader label="Date/Time" />,
     cell: ({ row }) => (
       <TextCell>
         {row.original.metadata?.createdOn &&
@@ -26,13 +31,13 @@ const columns: ColumnDef<Practice>[] = [
   },
   {
     id: 'status',
-    header: ({ column }) => <ColumnHeader label="Status" />,
+    header: () => <ColumnHeader label="Status" />,
     cell: ({ row }) => <TextCell>{row.original.recordStatus}</TextCell>,
   },
 ]
 
 interface HistoryDataTableProps {
-  data: Practice[],
+  data: Practice[]
   loading?: boolean
 }
 

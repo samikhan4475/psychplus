@@ -1,21 +1,24 @@
 import z from 'zod'
 
 const schema = z.object({
-  name: z.string().min(1, { message: 'Name is required' }),
+  displayName: z.string().min(1, { message: 'Name is required' }),
   npi: z.string().min(1, { message: 'NPI is required' }),
-  tin: z.string().optional(),
-  taxonomyCode: z.string().optional(),
+  taxId: z.string().optional(),
+  taxonomy: z.string().optional(),
+  id: z.string().optional(),
   clia: z.string().optional(),
   organizationId: z.string().optional(),
-  phoneNumber: z.string().optional(),
-  fax: z.string().optional(),
-  defProvider: z.string().optional(),
+  practicePhone: z.string().optional(),
+  practiceFax: z.string().optional(),
+  defaultProviderStaffId: z.string().optional(),
   address1: z.string().min(1, { message: 'Address is required' }),
   address2: z.string().optional(),
   city: z.string().min(1, { message: 'City is required' }),
   state: z.string().min(1, { message: 'State is required' }),
   zip: z.string().min(1, { message: 'Zip is required' }),
-  payer: z.object({
+  practiceAddressId: z.string().optional(),
+  paymentAddressId: z.string().optional(),
+  practicePaymentAddress: z.object({
     street1: z.string().min(1, { message: 'Address is required' }),
     street2: z.string().optional(),
     city: z.string().min(1, { message: 'City is required' }),

@@ -18,7 +18,7 @@ interface OrganizationAddress {
 
 interface Practice {
   id: string
-  metadata: Metadata
+  metadata?: Metadata
   recordStatus: string
   practiceOrganizationType: string
   shortName: string
@@ -33,12 +33,15 @@ interface Practice {
   clia: string
   practicePhone: string
   practiceFax: string
-  defaultProviderStaffId: number
+  defaultProviderStaffId: string
   defaultProviderName: string
   practiceAddressId: string
   paymentAddressId: string
   users: User[]
   tin?: string
+  organizationAddress: OrganizationAddress
+  organizationId?: string
+  organizationDisplayName: string
 }
 
 interface OrganizationAddress {

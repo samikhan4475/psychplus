@@ -11,8 +11,8 @@ const FaxField = () => {
   return (
     <FormFieldContainer className="flex-1 gap-0">
       <FormFieldLabel className="pb-[3px]">Fax</FormFieldLabel>
-      <TextInput field="fax" className="h-6 w-full" />
-      <FormFieldError name="fax" />
+      <TextInput field="practiceFax" className="h-6 w-full" />
+      <FormFieldError name="practiceFax" />
     </FormFieldContainer>
   )
 }

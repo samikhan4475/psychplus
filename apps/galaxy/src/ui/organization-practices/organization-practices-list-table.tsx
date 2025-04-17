@@ -1,17 +1,17 @@
 'use client'
 
+import { useEffect } from 'react'
+import { useParams } from 'next/navigation'
+import { Box, Flex, ScrollArea } from '@radix-ui/themes'
+import { type ColumnDef } from '@tanstack/react-table'
 import {
   ColumnHeader,
   DataTable,
   LoadingPlaceholder,
-  TextCell
+  TextCell,
 } from '@/components'
 import { Sort } from '@/types'
 import { getSortDir } from '@/utils'
-import { Box, Flex, ScrollArea } from '@radix-ui/themes'
-import { type ColumnDef } from '@tanstack/react-table'
-import { useParams } from 'next/navigation'
-import { useEffect } from 'react'
 import { Practice } from '../organization-practice/types'
 import { ActionsCell } from './cells'
 import { PracticesHistoryDialog } from './practices-history-dialog'
@@ -22,8 +22,8 @@ const columns = (
   isPractices?: boolean,
   sort?: Sort,
   onSort?: (column: string) => void,
-): ColumnDef<Practice>[] =>
-  [
+): ColumnDef<Practice>[] => {
+  const baseColumns: ColumnDef<Practice>[] = [
     {
       id: 'displayName',
       header: ({ column }) => (
@@ -58,7 +58,7 @@ const columns = (
       cell: ({ row }) => <TextCell>{row.original.npi}</TextCell>,
     },
     {
-      id: 'tin',
+      id: 'taxId',
       header: ({ column }) => (
         <ColumnHeader
           label="TIN"
@@ -99,8 +99,28 @@ const columns = (
       ),
       cell: ({ row }) => <TextCell>{row.original.clia}</TextCell>,
     },
+  ]
+  if (isPractices) {
+    baseColumns.push({
+      id: 'organizationDisplayName',
+      header: ({ column }) => (
+        <ColumnHeader
+          label="Organization Name"
+          sortable
+          sortDir={getSortDir(column.id, sort)}
+          onClick={() => {
+            onSort?.(column.id)
+          }}
+        />
+      ),
+      cell: ({ row }) => (
+        <TextCell>{row.original.organizationDisplayName}</TextCell>
+      ),
+    })
+  }
+  baseColumns.push(
     {
-      id: 'primaryAddress',
+      id: 'address1',
       header: ({ column }) => (
         <ColumnHeader
           label="Address 1"
@@ -111,10 +131,12 @@ const columns = (
           }}
         />
       ),
-      cell: ({ row }) => <TextCell>{row.original.practiceAddress?.street1 ?? ""}</TextCell>,
+      cell: ({ row }) => (
+        <TextCell>{row.original.practiceAddress?.street1 ?? ''}</TextCell>
+      ),
     },
     {
-      id: 'primaryAddress2',
+      id: 'address2',
       header: ({ column }) => (
         <ColumnHeader
           label="Address 2"
@@ -125,7 +147,9 @@ const columns = (
           }}
         />
       ),
-      cell: ({ row }) => <TextCell>{row.original.practiceAddress?.street2 ?? ""}</TextCell>,
+      cell: ({ row }) => (
+        <TextCell>{row.original.practiceAddress?.street2 ?? ''}</TextCell>
+      ),
     },
     {
       id: 'city',
@@ -139,7 +163,9 @@ const columns = (
           }}
         />
       ),
-      cell: ({ row }) => <TextCell>{row.original.practiceAddress?.city ?? ""}</TextCell>,
+      cell: ({ row }) => (
+        <TextCell>{row.original.practiceAddress?.city ?? ''}</TextCell>
+      ),
     },
     {
       id: 'state',
@@ -153,7 +179,9 @@ const columns = (
           }}
         />
       ),
-      cell: ({ row }) => <TextCell>{row.original.practiceAddress?.state ?? ""}</TextCell>,
+      cell: ({ row }) => (
+        <TextCell>{row.original.practiceAddress?.state ?? ''}</TextCell>
+      ),
     },
     {
       id: 'postalCode',
@@ -167,10 +195,12 @@ const columns = (
           }}
         />
       ),
-      cell: ({ row }) => <TextCell>{row.original.practiceAddress?.postalCode ?? ""}</TextCell>,
+      cell: ({ row }) => (
+        <TextCell>{row.original.practiceAddress?.postalCode ?? ''}</TextCell>
+      ),
     },
     {
-      id: 'phone',
+      id: 'practicePhone',
       header: ({ column }) => (
         <ColumnHeader
           label="Phone"
@@ -184,7 +214,7 @@ const columns = (
       cell: ({ row }) => <TextCell>{row.original.practicePhone}</TextCell>,
     },
     {
-      id: 'fax',
+      id: 'practiceFax',
       header: ({ column }) => (
         <ColumnHeader
           label="Fax"
@@ -198,7 +228,7 @@ const columns = (
       cell: ({ row }) => <TextCell>{row.original.practiceFax}</TextCell>,
     },
     {
-      id: 'payAddress',
+      id: 'payAddress1',
       header: ({ column }) => (
         <ColumnHeader
           label="Pay Address"
@@ -209,10 +239,14 @@ const columns = (
           }}
         />
       ),
-      cell: ({ row }) => <TextCell>{row.original.practicePaymentAddress?.street1 ?? ""}</TextCell>,
+      cell: ({ row }) => (
+        <TextCell>
+          {row.original.practicePaymentAddress?.street1 ?? ''}
+        </TextCell>
+      ),
     },
     {
-      id: 'provider',
+      id: 'defaultProviderName',
       header: ({ column }) => (
         <ColumnHeader
           label="Default Provider"
@@ -223,10 +257,12 @@ const columns = (
           }}
         />
       ),
-      cell: ({ row }) => <TextCell>{row.original.defaultProviderName}</TextCell>,
+      cell: ({ row }) => (
+        <TextCell>{row.original.defaultProviderName}</TextCell>
+      ),
     },
     {
-      id: 'status',
+      id: 'recordStatus',
       header: ({ column }) => (
         <ColumnHeader
           label="Status"
@@ -237,21 +273,23 @@ const columns = (
           }}
         />
       ),
-      cell: ({ row }) => (
-        <PracticesHistoryDialog row={row} />
-      ),
+      cell: ({ row }) => <PracticesHistoryDialog row={row} />,
     },
     {
       id: 'actions',
       header: () => <ColumnHeader label="Actions" />,
       cell: ActionsCell,
     },
-  ]
+  )
+  return baseColumns
+}
 
 interface OrganizationPracticesListTableProps {
   isPractices?: boolean
 }
-const OrganizationPracticesListTable = ({ isPractices }: OrganizationPracticesListTableProps) => {
+const OrganizationPracticesListTable = ({
+  isPractices,
+}: OrganizationPracticesListTableProps) => {
   const { id } = useParams<{ id: string }>()
   const { search, data, loading, sort, sortData } = useStore((state) => ({
     data: state.data,
@@ -261,9 +299,13 @@ const OrganizationPracticesListTable = ({ isPractices }: OrganizationPracticesLi
     sortData: state.sortData,
   }))
   useEffect(() => {
-    search({
-      organizationId: id,
-    })
+    if (!isPractices) {
+      search({
+        organizationId: id,
+      })
+    } else {
+      search()
+    }
   }, [])
 
   if (loading) {
@@ -275,10 +317,10 @@ const OrganizationPracticesListTable = ({ isPractices }: OrganizationPracticesLi
   }
 
   return (
-    <Box className='bg-white rounded p-1 my-1'>
-      <ScrollArea className='p-1 rounded'>
+    <Box className="bg-white rounded my-1 p-1">
+      <ScrollArea className="rounded p-1">
         <DataTable
-          data={isPractices ? [] : data || []}
+          data={data || []}
           columns={columns(isPractices, sort, sortData)}
           disablePagination
           sticky
@@ -290,4 +332,3 @@ const OrganizationPracticesListTable = ({ isPractices }: OrganizationPracticesLi
 }
 
 export { OrganizationPracticesListTable }
-

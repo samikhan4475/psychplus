@@ -1,35 +1,49 @@
 'use client'
 
 import { useState } from 'react'
-import { Dialog } from '@radix-ui/themes'
+import { Dialog, Flex } from '@radix-ui/themes'
+import { LoadingPlaceholder } from '@/components'
 import { CloseDialogTrigger } from '@/components/close-dialog-trigger'
-import { Organization } from '../../types'
+import { Organization, Practice } from '../../types'
 import { AddOrganizationPracticeButton } from './add-organization-practice-button'
 import { PracticeForm } from './practice-form'
 
 interface DialogProps {
-  data: Organization
+  organizationId?: string
+  practiceData?: Practice
 }
 
-const PracticeDialog = ({ data }: DialogProps) => {
+const PracticeDialog = ({ organizationId, practiceData }: DialogProps) => {
   const [open, setOpen] = useState(false)
 
   const onOpenChange = (open: boolean) => {
     setOpen(open)
   }
+  const [organization] = useState<Organization>()
+  const [loading] = useState(false)
 
   return (
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
-      <AddOrganizationPracticeButton />
+      <AddOrganizationPracticeButton practiceData={practiceData} />
 
       <Dialog.Content className="relative max-w-[800px]">
         <CloseDialogTrigger />
 
         <Dialog.Title className="font-sans -tracking-[0.25px]">
-          Add Practice
+          Edit Practice
         </Dialog.Title>
 
-        <PracticeForm data={data} onCloseModal={onOpenChange} />
+        {loading ? (
+          <Flex height="100%" width="100%" align="center" justify="center">
+            <LoadingPlaceholder />
+          </Flex>
+        ) : (
+          <PracticeForm
+            data={organization || ({} as Organization)}
+            practiceData={practiceData}
+            onCloseModal={onOpenChange}
+          />
+        )}
       </Dialog.Content>
     </Dialog.Root>
   )

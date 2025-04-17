@@ -1,20 +1,20 @@
-import { PropsWithRow, SelectCell } from '@/components'
-import { Practice } from '@/ui/organization-practice/types'
+import { useEffect, useState } from 'react'
+import { useParams } from 'next/navigation'
 import { CounterClockwiseClockIcon } from '@radix-ui/react-icons'
 import { Flex, Heading, Popover } from '@radix-ui/themes'
 import { X } from 'lucide-react'
-import { useParams } from 'next/navigation'
-import { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
+import { PropsWithRow, SelectCell } from '@/components'
+import { Practice } from '@/ui/organization-practice/types'
 import { getAllPracticeHxListAction, updatePracticeAction } from '../actions'
 import { STATUS_CODESET } from '../constants'
 import { HistoryDataTable } from './history-table'
 
 const PracticesHistoryDialog = ({ row }: PropsWithRow<Practice>) => {
   const [currentStatus, setCurrentStatus] = useState(row.original.recordStatus)
-  const [practiceHx, setPracticeHx] = useState<Practice[]>([]);
-  const [loading, setLoading] = useState(false);
-  const { id } = useParams<{ id: string }>();
+  const [practiceHx, setPracticeHx] = useState<Practice[]>([])
+  const [loading, setLoading] = useState(false)
+  const { id } = useParams<{ id: string }>()
 
   const handleStatusChange = async (status: string) => {
     setCurrentStatus(status)
@@ -37,20 +37,20 @@ const PracticesHistoryDialog = ({ row }: PropsWithRow<Practice>) => {
 
   useEffect(() => {
     const fetchPracticeHistory = async () => {
-      setLoading(true);
-      if (!row.original.id) return;
+      setLoading(true)
+      if (!row.original.id) return
 
-      const response = await getAllPracticeHxListAction(row.original.id);
+      const response = await getAllPracticeHxListAction(row.original.id)
       if (response.state === 'success') {
-        setPracticeHx(response.data);
-        setLoading(false);
+        setPracticeHx(response.data)
+        setLoading(false)
       } else {
-        setLoading(false);
+        setLoading(false)
       }
-    };
+    }
 
-    fetchPracticeHistory();
-  }, [row.original.id]);
+    fetchPracticeHistory()
+  }, [row.original.id])
 
   return (
     <Flex>
@@ -78,9 +78,10 @@ const PracticesHistoryDialog = ({ row }: PropsWithRow<Practice>) => {
       </Popover.Root>
       <SelectCell
         options={STATUS_CODESET}
-        className="bg-gray-3 text-gray-10 w-[100px]"
+        className="w-[100px] bg-gray-3 text-gray-10"
         onValueChange={handleStatusChange}
         value={currentStatus}
+        disabled
       />
     </Flex>
   )

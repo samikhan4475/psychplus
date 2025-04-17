@@ -1,8 +1,8 @@
-import { OrganizationPracticesView } from '@/ui/organization-practices'
 import { GOOGLE_MAPS_API_KEY } from '@/constants'
+import { OrganizationPracticesMainView } from '@/ui/organization-practices'
 
 const OrganizationPracticesPage = () => {
-  return <OrganizationPracticesView googleApiKey={GOOGLE_MAPS_API_KEY}/>
+  return <OrganizationPracticesMainView googleApiKey={GOOGLE_MAPS_API_KEY} />
 }
 
 export default OrganizationPracticesPage

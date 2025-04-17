@@ -2,12 +2,10 @@
 
 import * as api from '@/api'
 import { Sort } from '@/types'
-import {
-  DEFAULT_STATUSES
-} from '../../organization-practice/constants'
+import { DEFAULT_STATUSES } from '../../organization-practice/constants'
 import type {
   OrganizationsSearchParams,
-  Practice
+  Practice,
 } from '../../organization-practice/types'
 
 interface GetOrganizationsListParams {
@@ -22,19 +20,17 @@ const defaultPayload: OrganizationsSearchParams = {
   isIncludeLocations: true,
   recordStatuses: DEFAULT_STATUSES,
   includePractices: true,
-  includeUsers: true,
-  includeRoles: true,
-  includePermissions: true,
+  includeUsers: false,
+  includeRoles: false,
+  includePermissions: false,
   isIncludePracticeAddressLocation: true,
   isIncludePaymentAddressLocation: true,
 }
 
 const getAllOrganizationPracticesListAction = async ({
   payload,
-  sort
-}: GetOrganizationsListParams): Promise<
-  api.ActionResult<Practice[]>
-> => {
+  sort,
+}: GetOrganizationsListParams): Promise<api.ActionResult<Practice[]>> => {
   const url = new URL(api.GET_ORGANIZATION_PRACTICES_ENDPOINT)
   if (sort) {
     url.searchParams.append('orderBy', `${sort.column} ${sort.direction}`)

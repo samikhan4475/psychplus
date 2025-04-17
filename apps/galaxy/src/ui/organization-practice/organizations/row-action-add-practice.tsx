@@ -7,7 +7,7 @@ import { Organization } from '../types'
 const RowActionAddPractice = ({
   row: { original: organization },
 }: PropsWithRow<Organization>) => {
-  return <PracticeDialog data={organization} />
+  return <PracticeDialog organizationId={organization.id} />
 }
 
 export { RowActionAddPractice }

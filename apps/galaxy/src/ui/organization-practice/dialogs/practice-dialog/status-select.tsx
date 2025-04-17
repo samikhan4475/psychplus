@@ -8,9 +8,9 @@ import {
 } from '@/components'
 
 const options = [
-  { value: 'active', label: 'Active' },
-  { value: 'inactive', label: 'Inactive' },
-  { value: 'error', label: 'Error' },
+  { value: 'Active', label: 'Active' },
+  { value: 'Inactive', label: 'Inactive' },
+  { value: 'Error', label: 'Error' },
 ]
 
 const StatusSelect = () => {

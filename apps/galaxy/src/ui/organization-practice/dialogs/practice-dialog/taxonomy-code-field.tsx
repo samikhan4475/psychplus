@@ -11,8 +11,8 @@ const TaxonomyCodeField = () => {
   return (
     <FormFieldContainer className="flex-1 gap-0">
       <FormFieldLabel className="pb-[3px]">Taxonomy Code</FormFieldLabel>
-      <TextInput field="taxonomyCode" className="h-6 w-full" />
-      <FormFieldError name="taxonomyCode" />
+      <TextInput field="taxonomy" className="h-6 w-full" />
+      <FormFieldError name="taxonomy" />
     </FormFieldContainer>
   )
 }

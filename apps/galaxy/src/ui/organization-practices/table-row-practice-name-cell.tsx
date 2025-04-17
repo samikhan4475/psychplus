@@ -2,7 +2,6 @@ import { useRouter } from 'next/navigation'
 import { Box, Text } from '@radix-ui/themes'
 import { PropsWithRow } from '@/components'
 import { useStore as useRootStore } from '@/store'
-import { PracticeDetails } from './types'
 import { Practice } from '../organization-practice/types'
 
 const PracticeNameCell = ({

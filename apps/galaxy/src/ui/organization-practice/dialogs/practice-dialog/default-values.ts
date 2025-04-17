@@ -1,10 +1,21 @@
-import { Organization } from '../../types'
+import { Practice } from '../../types'
 
-const defaultValues = (data?: Organization) => {
+const defaultValues = (data?: Partial<Practice>) => {
   const { street1, street2, city, state, postalCode } =
-    data?.organizationAddress ?? {}
+    data?.practiceAddress ?? {}
   return {
-    organizationId: data?.id ?? '',
+    id: data?.id ?? '',
+    displayName: data?.displayName ?? '',
+    npi: data?.npi ?? '',
+    taxId: data?.taxId ?? '',
+    taxonomy: data?.taxonomy ?? '',
+    clia: data?.clia ?? '',
+    practicePhone: data?.practicePhone ?? '',
+    practiceFax: data?.practiceFax ?? '',
+    defaultProviderStaffId: data?.defaultProviderStaffId ? data?.defaultProviderStaffId.toString() : '',
+    organizationId: data?.organizationId ?? '',
+    paymentAddressId: data?.paymentAddressId ?? '',
+    practiceAddressId: data?.practiceAddressId ?? '',
     sameAsOrganizationAddress: true,
     sameAsPrimaryAddress: true,
     address1: street1 ?? '',
@@ -12,7 +23,8 @@ const defaultValues = (data?: Organization) => {
     city: city ?? '',
     state: state ?? '',
     zip: postalCode ?? '',
-    payer: {
+    recordStatus: data?.recordStatus ?? '',
+    practicePaymentAddress: {
       street1: street1 ?? '',
       street2: street2 ?? '',
       city: city ?? '',
