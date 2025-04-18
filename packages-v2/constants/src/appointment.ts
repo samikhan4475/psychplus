@@ -4,4 +4,11 @@ enum AppointmentType {
   Either = 'Either',
 }
 
-export { AppointmentType }
+enum AppointmentStatus {
+  CancelledP = 'CancelledP',
+  ConfirmedP = 'ConfirmedP',
+  Scheduled = 'Scheduled',
+  Rescheduled = 'Rescheduled',
+}
+
+export { AppointmentType, AppointmentStatus }

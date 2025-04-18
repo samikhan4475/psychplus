@@ -1,5 +1,11 @@
-import { AppointmentType, NewProviderType, ProviderType } from '@psychplus-v2/constants'
+import {
+  AppointmentType,
+  NewProviderType,
+  ProviderType,
+} from '@psychplus-v2/constants'
+import { Address } from './address'
 import type { Clinic } from './clinic'
+import { LegalName } from './name'
 import type { Specialist } from './provider'
 
 interface Appointment {
@@ -31,4 +37,22 @@ interface CptCode {
   isDisabled?: boolean
 }
 
-export type { Appointment, CptCode }
+interface AppointmentMinimalDetails {
+  status: string
+  type: AppointmentType
+  specialistTypeCode: ProviderType
+  locationId: string
+  locationName: string
+  locationAddress: Address
+  physicianName: LegalName
+  startDate: string
+  endDate: string
+  duration: number
+  isCopayPaid: boolean
+  isPatientHadAnyCheckedOutVisit: boolean
+  isNoteSignedByProviderInLastYear: boolean
+  isPatientNeedsToAddCreditCard: boolean
+  isPatientNeedsToAcceptPolicies: boolean
+}
+
+export type { Appointment, CptCode, AppointmentMinimalDetails }

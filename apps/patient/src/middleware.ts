@@ -39,6 +39,10 @@ export const middleware = async (request: NextRequest) => {
     // Skip middleware for widget requests.
     return NextResponse.next()
   }
+  if (request.nextUrl.pathname.startsWith('/events')) {
+    // Skip middleware for notifications requests.
+    return NextResponse.next()
+  }
   if (request.headers.get('next-action') !== null) {
     // Skip middleware if request is part of a Next server action.
     return NextResponse.next()
