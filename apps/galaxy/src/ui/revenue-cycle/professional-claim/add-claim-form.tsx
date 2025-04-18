@@ -6,8 +6,10 @@ import { DateValue } from 'react-aria-components'
 import { useFieldArray, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { FormContainer, FormSubmitButton } from '@/components'
+import { ClaimAddApiRequest, ClaimUpdateApiResponse } from '@/types'
 import { getCalendarDateLabel, sanitizeFormData } from '@/utils'
 import { addClaimAction, getPracticeAction } from '../actions'
+import { useStore } from '../claim-tab/store'
 import { ClaimDetailsTab } from '../types'
 import { ClaimHeaders } from './add-claim-header'
 import { ChargesTable } from './charges'
@@ -16,7 +18,7 @@ import { AddClaimDiagnosisView } from './diagnosis'
 import { PatientSelect } from './patient-select'
 import { ProvidersView } from './providers'
 import { addClaimSchema, ClaimAddSchemaType } from './schema'
-import { useStore } from '../claim-tab/store'
+import { useStore as ClaimStore } from '../store'
 
 const getDateString = (date?: DateValue): string | undefined =>
   date ? getCalendarDateLabel(date) : undefined
@@ -26,12 +28,10 @@ interface AddClaimFormProps {
 }
 
 const AddClaimForm = ({ onCloseModal }: AddClaimFormProps) => {
-
-  const { claimsListSearch, claimsListPayload } = useStore((state) => ({
-      claimsListSearch: state.claimsListSearch,
-      claimsListPayload: state.claimsListPayload,
-    }))
-
+  const { setActiveTab, setSelectedClaimsData } = ClaimStore((state) => ({
+    setActiveTab: state.setActiveTab,
+    setSelectedClaimsData: state.setSelectedClaimsData,
+  }))
   const form = useForm<ClaimAddSchemaType>({
     resolver: zodResolver(addClaimSchema),
     defaultValues: {
@@ -78,6 +78,17 @@ const AddClaimForm = ({ onCloseModal }: AddClaimFormProps) => {
       }
     })
   }, [])
+
+  const onOpenClaim = (claim: ClaimAddApiRequest) => {
+    const claimTab = `Claim# ${claim.claimNumber}`
+    setActiveTab(claimTab)
+    setSelectedClaimsData(claimTab, {
+      claimId: claim.id ?? '',
+      claimStatus: claim.claimStatusCode ?? '',
+      claimPrimaryStatus: claim.primaryStatusCode ??''
+    })
+  }
+
   const onsubmit = async (formData: ClaimAddSchemaType) => {
     const formattedClaimData = {
       ...formData,
@@ -105,7 +116,7 @@ const AddClaimForm = ({ onCloseModal }: AddClaimFormProps) => {
       return
     }
     if (response.state === 'success') {
-      claimsListSearch(claimsListPayload)
+      onOpenClaim(response.data)
       onCloseModal(false)
       form.reset()
       toast.success('Record has been saved successfully')

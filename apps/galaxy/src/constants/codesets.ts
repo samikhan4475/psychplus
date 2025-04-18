@@ -107,7 +107,6 @@ const CODESETS = {
   PatientRelationship: 'PsychPlusPublic.PatientRelationship',
   PsychHistoryRelation: 'PsychPlusPublic.PsychHistoryRelation',
   PermissionSection: 'PsychPlusPublic.PermissionSection',
-  PlaceOfService: 'PsychPlusPublic.PlaceOfService',
   TimeZoneId: 'PsychPlusPublic.TimeZoneId',
   UserActorCategory: 'UserActorCategory',
   Paging: 'PsychPlusPublic.Paging',
