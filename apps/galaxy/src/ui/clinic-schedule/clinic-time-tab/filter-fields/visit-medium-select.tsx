@@ -8,6 +8,7 @@ const VisitMediumSelect = () => {
       <FormFieldLabel>Visit Medium</FormFieldLabel>
       <CodesetSelect
         codeset={CODESETS.VisitMedium}
+        exclude={['NA']}
         className="flex-1"
         name="visitMedium"
         size="1"

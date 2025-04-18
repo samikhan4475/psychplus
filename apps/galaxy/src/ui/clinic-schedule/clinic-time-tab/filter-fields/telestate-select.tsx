@@ -7,7 +7,7 @@ const TeleStateSelect = () => {
     <FilterFieldContainer>
       <FormFieldLabel>Tele-State</FormFieldLabel>
       <CodesetSelect
-        name="teleState"
+        name="teleStateCode"
         className="flex-1"
         codeset={CODESETS.UsStates}
         size="1"

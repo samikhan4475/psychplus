@@ -223,6 +223,11 @@ const USER_PERMISSIONS = {
   toggleMakePrimaryCard: 'toggleMakePrimaryCard',
   deletePaymentCard: 'deletePaymentCard',
   deleteFollowupTab: 'deleteFollowupTab',
+  clickAddClinicTimeTab: 'clickAddClinicTimeTab',
+  clickEditClinicTimeTab: 'clickEditClinicTimeTab',
+  changeStatusClinicTimeTab: 'changeStatusClinicTimeTab',
+  clickApprovedClinicTimeTab: 'clickApprovedClinicTimeTab',
+  clickActiveVisitClinicTimeTab: 'clickActiveVisitClinicTimeTab',
   canClickPrescriberHistoryIconFromAdminNonAdminView:
     'canClickPrescriberHistoryIconFromAdminNonAdminView',
   clickSaveMangStaffPrefAdminViewNonAdmin:

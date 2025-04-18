@@ -1,14 +1,17 @@
 import { Flex } from '@radix-ui/themes'
-import { ClinicTimeHeader } from './clinic-time-header'
 import { ClinicTimeFilterForm } from './clinic-time-filter-form'
-import { ClinicTimeTable } from './clinic-time-table'
+import { ClinicTimeHeader } from './clinic-time-header'
+import { ClinicTimeTableLoader } from './clinic-time-table-loader'
+import { ClinicTimeTablePagination } from './clinic-time-table-pagination'
+import { PropsWithStaffId } from './types'
 
-const ClinicTimeTab = () => {
+const ClinicTimeTab = ({ staffId }: PropsWithStaffId) => {
   return (
-    <Flex flexGrow="1" direction='column'>
-      <ClinicTimeHeader />
-      <ClinicTimeFilterForm />
-      <ClinicTimeTable />
+    <Flex flexGrow="1" direction="column">
+      <ClinicTimeHeader staffId={staffId} />
+      <ClinicTimeFilterForm staffId={staffId} />
+      <ClinicTimeTableLoader staffId={staffId} />
+      <ClinicTimeTablePagination />
     </Flex>
   )
 }

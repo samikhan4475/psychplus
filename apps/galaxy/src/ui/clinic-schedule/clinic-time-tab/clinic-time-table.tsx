@@ -1,7 +1,8 @@
 import { Box, ScrollArea } from '@radix-ui/themes'
 import { ColumnDef } from '@tanstack/react-table'
-import { ColumnHeader, DataTable, LongTextCell, TextCell } from '@/components'
-import { ClinicTime } from '../types'
+import { ColumnHeader, DataTable, TextCell } from '@/components'
+import { formatDate } from '@/utils'
+import { StateCell } from '../shared'
 import {
   ActionCell,
   AgeGroupCell,
@@ -9,28 +10,49 @@ import {
   ServiceCell,
   StatusSelectCell,
   TelestateCell,
+  TeleStateCosigner,
+  VisitCell,
+  VisitMedium,
 } from './table-cells'
+import { ClinicSchedule } from './types'
+import { extractHoursAndMinsFromTime } from './utils'
 
-const columns: ColumnDef<ClinicTime>[] = [
+interface ClinicScheduleWithApproveButton extends ClinicSchedule {
+  showApproveButton?: boolean
+  showTextStatus?: boolean
+}
+const columns: ColumnDef<ClinicScheduleWithApproveButton>[] = [
   {
     id: 'primary-state',
-    accessorKey: 'primaryState',
+    accessorKey: 'stateCode',
     header: ({ column }) => (
       <ColumnHeader clientSideSort column={column} label="Primary State" />
     ),
-    cell: ({ row }) => <TextCell>{row.original.primaryState}</TextCell>,
+    cell: ({ row }) => <StateCell code={row.original.stateCode} />,
   },
   {
     id: 'primary-location',
-    accessorKey: 'primaryLocation',
+    accessorKey: 'locationName',
     header: ({ column }) => (
       <ColumnHeader clientSideSort column={column} label="Primary Location" />
     ),
-    cell: ({ row }) => <TextCell>{row.original.primaryLocation}</TextCell>,
+    cell: ({ row }) => <TextCell>{row.original.locationName}</TextCell>,
+  },
+  {
+    id: 'cosigner',
+    accessorKey: 'cosignerName',
+    header: ({ column }) => (
+      <ColumnHeader
+        clientSideSort
+        column={column}
+        label="Primary State Cosigner"
+      />
+    ),
+    cell: ({ row }) => <CosignerCell row={row} />,
   },
   {
     id: 'tele-state',
-    accessorKey: 'teleState',
+    accessorKey: 'teleStates',
     header: ({ column }) => (
       <ColumnHeader clientSideSort column={column} label="Tele State" />
     ),
@@ -38,40 +60,63 @@ const columns: ColumnDef<ClinicTime>[] = [
   },
   {
     id: 'service',
-    accessorKey: 'service',
+    accessorKey: 'serviceOffered',
     header: ({ column }) => (
       <ColumnHeader clientSideSort column={column} label="Service" />
     ),
     cell: ({ row }) => <ServiceCell row={row} />,
   },
   {
+    id: 'visit',
+    accessorKey: 'visitTypes',
+    header: ({ column }) => (
+      <ColumnHeader clientSideSort column={column} label="Visit Type" />
+    ),
+    cell: ({ row }) => <VisitCell row={row} />,
+  },
+  {
+    id: 'booking-frequency',
+    accessorKey: 'maxBookingsPerSlot',
+    header: ({ column }) => (
+      <ColumnHeader clientSideSort column={column} label="Booking Frequency" />
+    ),
+    cell: ({ row }) => <TextCell>{row.original.maxBookingsPerSlot}</TextCell>,
+  },
+  {
     id: 'day',
-    accessorKey: 'day',
+    accessorKey: 'dayOfSchedule',
     header: ({ column }) => (
       <ColumnHeader clientSideSort column={column} label="Day" />
     ),
-    cell: ({ row }) => <TextCell>{row.original.day}</TextCell>,
+    cell: ({ row }) => <TextCell>{row.original.dayOfSchedule}</TextCell>,
   },
   {
     id: 'recurrence',
-    accessorKey: 'recurrence',
+    accessorKey: 'weeklyRecurrence',
     header: ({ column }) => (
       <ColumnHeader clientSideSort column={column} label="Recurrence" />
     ),
-    cell: ({ row }) => <TextCell>{row.original.recurrence}</TextCell>,
+    cell: ({ row }) => <TextCell>{row.original.weeklyRecurrence}</TextCell>,
   },
   {
     id: 'timing',
-    accessorKey: 'timing',
+    accessorKey: 'startTime',
     header: ({ column }) => (
       <ColumnHeader clientSideSort column={column} label="Timing" />
     ),
     cell: ({ row }) => (
-      <TextCell className="text-nowrap">{row.original.timing}</TextCell>
+      <TextCell className="text-nowrap">{`${extractHoursAndMinsFromTime(
+        row.original.startTime,
+      )}${
+        row.original.endTime
+          ? ` - ${extractHoursAndMinsFromTime(row.original.endTime)}`
+          : ''
+      }`}</TextCell>
     ),
   },
   {
     id: 'start-end-dates',
+    accessorKey: 'startDate',
     header: ({ column }) => (
       <ColumnHeader
         clientSideSort
@@ -81,17 +126,10 @@ const columns: ColumnDef<ClinicTime>[] = [
     ),
     cell: ({ row }) => (
       <TextCell className="text-nowrap">
-        {row.original.startDate} - {row.original.endDate}
+        {formatDate(row.original.startDate)}{' '}
+        {row.original.endDate && `- ${formatDate(row.original.endDate)}`}
       </TextCell>
     ),
-  },
-  {
-    id: 'booking-frequency',
-    accessorKey: 'bookingFrequency',
-    header: ({ column }) => (
-      <ColumnHeader clientSideSort column={column} label="Booking Frequency" />
-    ),
-    cell: ({ row }) => <TextCell>{row.original.bookingFrequency}</TextCell>,
   },
   {
     id: 'visit-medium',
@@ -99,33 +137,33 @@ const columns: ColumnDef<ClinicTime>[] = [
     header: ({ column }) => (
       <ColumnHeader clientSideSort column={column} label="Visit Medium" />
     ),
-    cell: ({ row }) => <TextCell>{row.original.visitMedium}</TextCell>,
+    cell: ({ row }) => <VisitMedium visit={row.original.visitMedium} />,
   },
   {
     id: 'age-group',
-    accessorKey: 'ageGroup',
+    accessorKey: 'ageGroups',
     header: ({ column }) => (
       <ColumnHeader clientSideSort column={column} label="Age Group" />
     ),
     cell: ({ row }) => <AgeGroupCell row={row} />,
   },
   {
-    id: 'cosigner',
-    accessorKey: 'cosigner',
-    header: ({ column }) => (
-      <ColumnHeader clientSideSort column={column} label="Cosigner" />
-    ),
-    cell: ({ row }) => <CosignerCell row={row} />,
-  },
-  {
     id: 'public-view',
-    accessorKey: 'publicView',
+    accessorKey: 'isPublicViewable',
     header: ({ column }) => (
       <ColumnHeader clientSideSort column={column} label="Public View" />
     ),
     cell: ({ row }) => (
-      <TextCell>{row.original.publicView ? 'Yes' : 'No'}</TextCell>
+      <TextCell>{row.original.isPublicViewable ? 'Yes' : 'No'}</TextCell>
     ),
+  },
+  {
+    id: 'tele-state-cosigner',
+    accessorKey: 'teleStates',
+    header: ({ column }) => (
+      <ColumnHeader clientSideSort column={column} label="Cosigner" />
+    ),
+    cell: ({ row }) => <TeleStateCosigner row={row} />,
   },
   {
     id: 'status',
@@ -133,104 +171,29 @@ const columns: ColumnDef<ClinicTime>[] = [
     header: ({ column }) => (
       <ColumnHeader clientSideSort column={column} label="Status" />
     ),
-    cell: ({ row }) => <StatusSelectCell />,
+    cell: ({ row }) => (
+      <StatusSelectCell
+        row={row}
+        showTextStatus={row.original.showTextStatus}
+      />
+    ),
   },
   {
     id: 'actions-column',
     header: () => <ColumnHeader label="Action" className="!font-medium" />,
-    cell: ({ row }) => <ActionCell row={row} />,
+    cell: ({ row }) => (
+      <ActionCell
+        row={row}
+        showApproveButton={row.original.showApproveButton}
+      />
+    ),
   },
 ]
 
-const data = [
-  {
-    primaryState: 'California',
-    primaryLocation: 'Los Angeles',
-    teleState: 'California',
-    service: 'Outpatient Psychiatry',
-    day: 'Monday',
-    recurrence: 'Weekly',
-    timing: '9:00 AM - 5:00 PM',
-    startDate: '2024-12-01',
-    endDate: '2024-12-31',
-    bookingFrequency: '2',
-    visitMedium: 'In-Person',
-    ageGroup: 'Adult',
-    cosigner: 'Dr. Smith',
-    publicView: true,
-    status: 'Active',
-  },
-  {
-    primaryState: 'Texas',
-    primaryLocation: 'Houston',
-    teleState: 'Texas',
-    service: 'Outpatient Psychiatry',
-    day: 'Tuesday',
-    recurrence: 'Biweekly',
-    timing: '10:00 AM - 3:00 PM',
-    startDate: '2024-12-05',
-    endDate: '2025-01-05',
-    bookingFrequency: '2',
-    visitMedium: 'Virtual',
-    ageGroup: 'Child',
-    cosigner: 'Dr. Johnson',
-    publicView: true,
-    status: 'Active',
-  },
-  {
-    primaryState: 'New York',
-    primaryLocation: 'New York City',
-    teleState: 'New York',
-    service: 'Outpatient Psychiatry',
-    day: 'Wednesday',
-    recurrence: 'Monthly',
-    timing: '1:00 PM - 6:00 PM',
-    startDate: '2024-12-10',
-    endDate: '2025-06-10',
-    bookingFrequency: '2',
-    visitMedium: 'In-Person',
-    ageGroup: 'Adolescent',
-    cosigner: 'Dr. Lee',
-    publicView: false,
-    status: 'Active',
-  },
-  {
-    primaryState: 'Florida',
-    primaryLocation: 'Miami',
-    teleState: 'Florida',
-    service: 'Outpatient Psychiatry',
-    day: 'Thursday',
-    recurrence: 'Weekly',
-    timing: '8:00 AM - 12:00 PM',
-    startDate: '2024-12-02',
-    endDate: '2024-12-30',
-    bookingFrequency: '2',
-    visitMedium: 'In-Person',
-    ageGroup: 'Aolescent',
-    cosigner: 'Dr. Brown',
-    publicView: true,
-    status: 'Active',
-  },
-  {
-    primaryState: 'Illinois',
-    primaryLocation: 'Chicago',
-    teleState: 'Illinois',
-    service: 'Outpatient Psychiatry',
-    day: 'Friday',
-    recurrence: 'Triweekly',
-    timing: '11:00 AM - 4:00 PM',
-    startDate: '2024-12-15',
-    endDate: '2025-02-15',
-    bookingFrequency: '2',
-    visitMedium: 'Virtual',
-    ageGroup: 'Adult',
-    cosigner: 'Dr. Green',
-    publicView: true,
-    status: 'Inactive',
-  },
-]
-
-const ClinicTimeTable = () => {
+interface ClinicTimeTableProps {
+  data: ClinicScheduleWithApproveButton[]
+}
+const ClinicTimeTable = ({ data }: ClinicTimeTableProps) => {
   return (
     <Box p="2" className="bg-white mt-[3px]">
       <ScrollArea

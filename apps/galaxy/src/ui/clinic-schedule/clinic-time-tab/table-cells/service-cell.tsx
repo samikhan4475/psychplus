@@ -1,42 +1,27 @@
 import { Flex } from '@radix-ui/themes'
-import { ColumnDef } from '@tanstack/react-table'
-import {
-  ColumnHeader,
-  LongTextCell,
-  PropsWithRow,
-  TextCell,
-} from '@/components'
-import { ClinicTime } from '../../types'
-import { InfoCellPopover } from '../info-cell-popover'
-
-const columns: ColumnDef<{ service: string }>[] = [
-  {
-    id: 'service',
-    accessorKey: 'service',
-    header: ({ column }) => <ColumnHeader column={column} label="Services" />,
-    cell: ({ row }) => <TextCell>{row.original.service}</TextCell>,
-  },
-]
-
-const data: { service: string }[] = [
-  {
-    service: 'Outpatient Psychiatry',
-  },
-  {
-    service: 'Individual Psychiatry',
-  },
-  {
-    service: 'Psychotherapy',
-  },
-]
+import { PropsWithRow, TextCell } from '@/components'
+import { CODESETS } from '@/constants'
+import { useCodesetCodes } from '@/hooks'
+import { ClinicSchedule } from '../types'
 
 const ServiceCell = ({
   row: { original: clinicTime },
-}: PropsWithRow<ClinicTime>) => {
+}: PropsWithRow<ClinicSchedule>) => {
+  const groupServiceCodes = useCodesetCodes(CODESETS.GroupTherapyType)
+  const serviceOffered = useCodesetCodes(CODESETS.ServicesOffered).find(
+    (code) => code.value === clinicTime.serviceOffered,
+  )
+  const groupTherapy =
+    clinicTime.therapyTypeCode &&
+    groupServiceCodes.find((el) => el.value === clinicTime.therapyTypeCode)
+      ?.display
+
   return (
     <Flex align="center" gapX="1">
-      <InfoCellPopover columns={columns} data={data} />
-      <LongTextCell className="min-w-52">{clinicTime.service}</LongTextCell>
+      <TextCell className="min-w-52">
+        {serviceOffered?.display ?? clinicTime.serviceOffered}
+        {groupTherapy && `, ${groupTherapy}`}
+      </TextCell>
     </Flex>
   )
 }

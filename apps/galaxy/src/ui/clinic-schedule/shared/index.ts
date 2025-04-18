@@ -1,4 +1,5 @@
 export * from './filter-field-container'
 export * from './block-table-container'
 export * from './delete-action-button'
+export * from './state-cell'
 export * from './active-visit-dialog'

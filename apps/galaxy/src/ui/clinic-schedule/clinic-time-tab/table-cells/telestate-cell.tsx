@@ -6,11 +6,12 @@ import {
   PropsWithRow,
   TextCell,
 } from '@/components'
-import { ClinicTime } from '../../types'
+import { CODESETS } from '@/constants'
+import { useCodesetCodes } from '@/hooks'
 import { InfoCellPopover } from '../info-cell-popover'
-import { StateCosigner } from '../types'
+import { ClinicSchedule, StateCosigner } from '../types'
 
-const columns: ColumnDef<StateCosigner>[] = [
+const columns: ColumnDef<Omit<StateCosigner, 'location'>>[] = [
   {
     id: 'telestate',
     accessorKey: 'telestate',
@@ -25,28 +26,27 @@ const columns: ColumnDef<StateCosigner>[] = [
   },
 ]
 
-const data: StateCosigner[] = [
-  {
-    telestate: 'California',
-    cosigner: 'John Smith, MD',
-  },
-  {
-    telestate: 'New York',
-    cosigner: 'John Doe, MD',
-  },
-  {
-    telestate: 'Florida',
-    cosigner: 'John Wick, MD',
-  },
-]
-
 const TelestateCell = ({
   row: { original: clinicTime },
-}: PropsWithRow<ClinicTime>) => {
+}: PropsWithRow<ClinicSchedule>) => {
+  const states = useCodesetCodes(CODESETS.UsStates)
+
+  const data = clinicTime.teleStates?.map((telestate) => ({
+    telestate:
+      states.find((state) => state.value === telestate.stateCode)?.display ??
+      'N/A',
+    cosigner: telestate.cosignerStaffName
+      ? `${telestate.cosignerStaffName?.firstName} ${telestate.cosignerStaffName?.lastName}, ${telestate.cosignerStaffName?.title}`
+      : '',
+  }))
   return (
     <Flex align="center" gapX="1">
-      <InfoCellPopover columns={columns} data={data} />
-      <LongTextCell>{clinicTime.teleState}</LongTextCell>
+      {Boolean(clinicTime.teleStates?.length) && (
+        <InfoCellPopover columns={columns} data={data} />
+      )}
+      <LongTextCell>
+        {data?.map((state) => state.telestate).join(', ')}
+      </LongTextCell>
     </Flex>
   )
 }

@@ -3,9 +3,8 @@ import { DeleteActionButton } from '@/ui/clinic-schedule/shared'
 
 const DeleteTelestateCell = ({ id }: { id: number }) => {
   const { remove } = useFieldArray({
-    name: 'telestates',
+    name: 'teleStates',
   })
-
   return <DeleteActionButton onClick={() => remove(id)} />
 }
 

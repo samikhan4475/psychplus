@@ -6,37 +6,33 @@ import {
   PropsWithRow,
   TextCell,
 } from '@/components'
-import { ClinicTime } from '../../types'
+import { GROUP_OPTIONS } from '../../constants'
 import { InfoCellPopover } from '../info-cell-popover'
+import { ClinicSchedule } from '../types'
 
-const columns: ColumnDef<{ group: string }>[] = [
+const columns: ColumnDef<string>[] = [
   {
     id: 'age-group',
     accessorKey: 'group',
     header: ({ column }) => <ColumnHeader column={column} label="Age Group" />,
-    cell: ({ row }) => <TextCell>{row.original.group}</TextCell>,
-  },
-]
-
-const data: { group: string }[] = [
-  {
-    group: 'Child (5 yo to 12 yo',
-  },
-  {
-    group: 'Adolescent (13 yo to 17 yo)',
-  },
-  {
-    group: 'Adult (18 yo to 54 yo)',
+    cell: ({ row }) => <TextCell>{row.original}</TextCell>,
   },
 ]
 
 const AgeGroupCell = ({
   row: { original: clinicTime },
-}: PropsWithRow<ClinicTime>) => {
+}: PropsWithRow<ClinicSchedule>) => {
+  const data = GROUP_OPTIONS.filter((option) =>
+    clinicTime.ageGroups.find(
+      (group) => group.toLowerCase() === option.value.toLowerCase(),
+    ),
+  ).map((option) => option.label)
   return (
     <Flex align="center" gapX="1">
       <InfoCellPopover columns={columns} data={data} />
-      <LongTextCell className="text-nowrap">{clinicTime.ageGroup}</LongTextCell>
+      <LongTextCell className="text-nowrap">
+        {clinicTime.ageGroups?.join(', ')}
+      </LongTextCell>
     </Flex>
   )
 }

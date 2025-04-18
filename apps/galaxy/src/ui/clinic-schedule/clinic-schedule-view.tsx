@@ -41,7 +41,7 @@ const ClinicScheduleView = (props: ClinicScheduleViewProps) => {
         </TabsTrigger>
       </Tabs.List>
       <TabsContent value={ClinicScheduleTabs.ClinicTime}>
-        <ClinicTimeTab />
+        <ClinicTimeTab staffId={staffId} />
       </TabsContent>
       <TabsContent value={ClinicScheduleTabs.VacationTime}>
         <VacationTimeTab staffId={staffId} />

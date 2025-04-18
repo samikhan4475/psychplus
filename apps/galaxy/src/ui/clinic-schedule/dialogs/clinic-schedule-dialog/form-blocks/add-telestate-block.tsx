@@ -1,7 +1,7 @@
 import { ColumnDef } from '@tanstack/react-table'
 import { useFormContext } from 'react-hook-form'
-import { ColumnHeader, DataTable, LongTextCell } from '@/components'
-import { BlockTableContainer } from '@/ui/clinic-schedule/shared'
+import { ColumnHeader, DataTable } from '@/components'
+import { BlockTableContainer, StateCell } from '@/ui/clinic-schedule/shared'
 import {
   AddTelestateHeader,
   CosignerSelectCell,
@@ -12,15 +12,15 @@ import {
 import { SchemaType } from '../schema'
 
 const columns: ColumnDef<{
-  name: string
+  stateCode: string
   location: string
-  cosigner: string
+  cosignerStaffId?: number
 }>[] = [
   {
     id: 'telestate',
     accessorKey: 'telestate',
-    header: ({ column }) => <AddTelestateHeader />,
-    cell: ({ row }) => <LongTextCell>{row.original.name}</LongTextCell>,
+    header: () => <AddTelestateHeader />,
+    cell: ({ row }) => <StateCell code={row.original.stateCode} />,
   },
   {
     id: 'location',
@@ -30,13 +30,13 @@ const columns: ColumnDef<{
         <ColumnHeader column={column} label="Location" />
       </RequiredColumnHeader>
     ),
-    cell: ({ row }) => <LocationSelectCell />,
+    cell: ({ row }) => <LocationSelectCell index={row.index} />,
   },
   {
     id: 'cosigner',
     accessorKey: 'cosigner',
     header: ({ column }) => <ColumnHeader column={column} label="Cosigner" />,
-    cell: ({ row }) => <CosignerSelectCell />,
+    cell: ({ row }) => <CosignerSelectCell index={row.index} />,
   },
   {
     id: 'delete-action-cell',
@@ -46,12 +46,12 @@ const columns: ColumnDef<{
 
 const AddTelestateBlock = () => {
   const form = useFormContext<SchemaType>()
-  const telestates = form.watch('telestates')
+  const telestates = form.watch('teleStates')
   return (
     <BlockTableContainer>
       <DataTable
         columns={columns}
-        data={telestates}
+        data={telestates ?? []}
         tableClass="[&_.rt-ScrollAreaScrollbar]:!hidden"
         thClass="last-of-type:w-8"
       />

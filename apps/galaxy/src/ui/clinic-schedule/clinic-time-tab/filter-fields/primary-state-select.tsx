@@ -8,7 +8,7 @@ const PrimaryStateSelect = () => {
       <FormFieldLabel>Primary State</FormFieldLabel>
       <CodesetSelect
         codeset={CODESETS.UsStates}
-        name="primaryState"
+        name="primaryStateCode"
         className="flex-1"
         size="1"
       />

@@ -1,23 +1,17 @@
 import { useFieldArray, useFormContext } from 'react-hook-form'
+import { GROUP_OPTIONS } from '../../constants'
 import * as MultiSelectPopover from './multiselect-popover'
 import { SchemaType } from './schema'
-
-const groups = [
-  'Child (5 yo to 12 yo)',
-  'Adolescent (13 yo to 17 yo)',
-  'Adult (18 yo to 54 yo',
-]
 
 const AddAgeGroupPopover = () => {
   const { watch } = useFormContext<SchemaType>()
   const { append } = useFieldArray({
     name: 'groups',
   })
-
   const groupsAdded = watch('groups')
 
   const isGroupAdded = (value: string) =>
-    !!groupsAdded.find((group) => group.group === value)
+    !!groupsAdded.find((group) => group.toLowerCase() === value.toLowerCase())
 
   return (
     <MultiSelectPopover.Root>
@@ -25,14 +19,14 @@ const AddAgeGroupPopover = () => {
         Select Groups
       </MultiSelectPopover.Placeholder>
       <MultiSelectPopover.List>
-        {groups.map((group) => (
+        {GROUP_OPTIONS.map((group) => (
           <MultiSelectPopover.Item
-            key={group}
+            key={group.value}
             onSelect={() =>
-              isGroupAdded(group) ? null : append({ group: group })
+              isGroupAdded(group.value) ? null : append(group.value)
             }
-            disabled={!!isGroupAdded(group)}
-            display={group}
+            disabled={!!isGroupAdded(group.value)}
+            display={group.label}
           />
         ))}
       </MultiSelectPopover.List>

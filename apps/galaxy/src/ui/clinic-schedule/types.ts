@@ -1,4 +1,6 @@
 interface ClinicTime {
+    id:number
+    staffId:number
     primaryState: string
     primaryLocation: string
     teleState: string

@@ -79,7 +79,6 @@ const NOTE_MARK_ERROR_ENDPOINT = (
   patientId?: string,
 ) =>
   `${API_URL}/api/patients/${patientId}/encounters/${appointmentId}/notes/${noteId}/actions/markerror`
-
 const GET_CLINICS_ENDPOINT = `${API_URL}/api/clinics`
 const GET_PROVIDERS_ENDPOINT = `${API_URL}/api/staff/search`
 const ADD_STAFF_ENDPOINT = `${API_URL}/api/staff`
@@ -687,6 +686,16 @@ const DELETE_LAB_ORDERS_RESULT_ENDPOINT = (
 
 const LAB_ORDER_GET_REQUISITION = (orderId: string) =>
   `${API_URL}/api/laborders/${orderId}/actions/getrequisition`
+const GET_CLINIC_SCHEDULES_LIST = (staffId: string) =>
+  `${API_URL}/api/staff/${staffId}/clinictimes/actions/search`
+const ADD_CLINIC_SCHEDULE = (staffId: string) =>
+  `${API_URL}/api/staff/${staffId}/clinictimes`
+const UPDATE_CLINIC_SCHEDULE = (staffId: string, clinicTimeId: string) =>
+  `${API_URL}/api/staff/${staffId}/clinictimes/${clinicTimeId}`
+const UPDATE_CLINIC_SCHEDULE_STATUS = (staffId: string, clinicTimeId: number) =>
+  `${API_URL}/api/staff/${staffId}/clinictimes/${clinicTimeId}/status`
+const GET_CLINIC_STATUS_HISTORY = (staffId: string, clinicTimeId: number) =>
+  `${API_URL}/api/staff/${staffId}/clinictimes/${clinicTimeId}/history/actions/search`
 const ATTACH_PRACTICE_TO_PATIENT_ENDPOINT = (
   patientId: number,
   practiceId: string,
@@ -712,6 +721,11 @@ const DETACH_PRACTICE_STAFF_ENDPOINT = (userId: string, practiceId: string) =>
   `${API_URL}/api/users/${userId}/practices/${practiceId}/actions/deassociate`
 const GET_PRACTICE_HISTORY_ENDPOINT = (practiceId: string) =>
   `${API_URL}/api/practices/${practiceId}/history/actions/search`
+const GET_SERVICES_COSIGNERS = `${API_URL}/api/locationservices/actions/cosigners/search`
+const GET_SERVICE_LOCATIONS = `${API_URL}/api/locations/actions/search/unauthenticated`
+const GET_STAFF_LIST = `${API_URL}/api/staff`
+const GET_LOCATION_COSIGNERS_OF_STATE_SERVICE = (stateCode: string) =>
+  `${API_URL}/api/states/${stateCode}/cosigners/actions/search`
 
 const GET_ADDENDUMS_AGAINST_NOTE_ID = (
   patientId: string,
@@ -1155,9 +1169,18 @@ export {
   DOWNLOAD_LAB_ORDER_DOCUMENT,
   DELETE_LAB_ORDERS_RESULT_ENDPOINT,
   LAB_ORDER_GET_REQUISITION,
+  GET_CLINIC_SCHEDULES_LIST,
+  ADD_CLINIC_SCHEDULE,
+  UPDATE_CLINIC_SCHEDULE,
+  UPDATE_CLINIC_SCHEDULE_STATUS,
+  GET_CLINIC_STATUS_HISTORY,
   ATTACH_PRACTICE_TO_PATIENT_ENDPOINT,
   DISASSOCIATE_PRACTICE_TO_PATIENT_ENDPOINT,
   METADATA_CODESET_ALL_ENDPOINT,
+  GET_SERVICES_COSIGNERS,
+  GET_SERVICE_LOCATIONS,
+  GET_STAFF_LIST,
+  GET_LOCATION_COSIGNERS_OF_STATE_SERVICE,
   SEARCH_MODAL_PHARMACIES,
   ADD_PHARMACY,
   ADD_FAVORITE_PHARMACY,

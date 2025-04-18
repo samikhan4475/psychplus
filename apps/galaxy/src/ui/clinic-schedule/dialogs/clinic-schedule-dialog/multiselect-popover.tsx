@@ -16,10 +16,12 @@ import { cn } from '@/utils'
 const Item = ({
   disabled,
   onSelect,
+  showTooltip = true,
   display,
 }: {
   display: string
   disabled: boolean
+  showTooltip?: boolean
   onSelect?: () => void
 }) => {
   return (
@@ -31,16 +33,22 @@ const Item = ({
       align="center"
       justify="between"
     >
-      <Tooltip content={display} className="z-10">
-        <Text className="line-clamp-1 max-w-[180px] overflow-ellipsis text-[14px]">
-          {display}
-        </Text>
-      </Tooltip>
+      {showTooltip ? (
+        <Tooltip content={display} className="z-10">
+          <Text
+            className={`line-clamp-1 max-w-[180px] overflow-ellipsis text-[14px]`}
+          >
+            {display}
+          </Text>
+        </Tooltip>
+      ) : (
+        <Text className={`text-[14px]`}>{display}</Text>
+      )}
       <PlusCircleIcon
         strokeWidth="2"
         height="20"
         width="20"
-        className="text-pp-black-1"
+        className="text-pp-black-1 shrink-0"
       />
     </Flex>
   )
@@ -52,7 +60,7 @@ const SearchBar = ({ onSearch }: { onSearch: (val: string) => void }) => {
     <Flex direction="column">
       <TextField.Root
         placeholder="Search"
-        className="sticky top-0 border-none text-[12px] outline-none [box-shadow:none] px-1"
+        className="sticky top-0 border-none px-1 text-[12px] outline-none [box-shadow:none]"
         value={value}
         onChange={(e) => {
           onSearch(e.target.value)
@@ -82,7 +90,11 @@ const Placeholder = ({ children }: PropsWithChildren) => {
   )
 }
 
-const Root = ({ children }: PropsWithChildren) => {
+const Root = ({
+  children,
+  disabled,
+  minWidth = '400px',
+}: PropsWithChildren & { disabled?: boolean; minWidth?: string }) => {
   return (
     <Popover.Root>
       <Popover.Trigger>
@@ -91,11 +103,15 @@ const Root = ({ children }: PropsWithChildren) => {
           size="1"
           className="bg-white shadow-ss-focus h-4 w-4"
           type="button"
+          disabled={disabled}
         >
           <Plus color="black" />
         </IconButton>
       </Popover.Trigger>
-      <Popover.Content className="z-10 min-w-[400px] flex-col px-0 py-1">
+      <Popover.Content
+        className={`z-10  flex-col px-0 py-1`}
+        minWidth={minWidth}
+      >
         {children}
       </Popover.Content>
     </Popover.Root>

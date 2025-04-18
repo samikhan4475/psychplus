@@ -35,7 +35,6 @@ const SelectInput = <T extends string>({
   ...selectProps
 }: SelectInputProps<T>) => {
   const form = useFormContext()
-
   const items = options.map((option) => (
     <Select.Item
       key={option.value}
