@@ -9,6 +9,7 @@ const schema = z
     isProceedPermissionProvided: z.boolean().optional().default(false),
     reason: z.string().optional(),
     isPatientWilling: z.boolean().optional(),
+    type: z.string(),
   })
   .superRefine((data, ctx) => {
     if (!data.location)

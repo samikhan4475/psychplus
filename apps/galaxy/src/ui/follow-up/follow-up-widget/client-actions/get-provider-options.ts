@@ -5,18 +5,14 @@ import { GET_STAFF_ENDPOINT } from '@/api/endpoints'
 import { STAFF_ROLE_CODE_PRESCRIBER } from '@/constants'
 import { StaffResource } from '@/types'
 import { sanitizeFormData } from '@/utils'
+import { ProviderOptionParams } from '../../types'
 
-const getProvidersOptionsAction = async ({
-  locationId,
-  providerType,
-}: {
-  locationId: string
-  providerType: string
-}): Promise<api.ActionResult<{ label: string; value: string }[]>> => {
+const getProvidersOptionsAction = async (
+  payload: Partial<ProviderOptionParams>,
+): Promise<api.ActionResult<{ label: string; value: string }[]>> => {
   const body = {
+    ...payload,
     roleCodes: [STAFF_ROLE_CODE_PRESCRIBER],
-    locationIds: [locationId],
-    providerType,
     isResultsForNameList: true,
   }
 

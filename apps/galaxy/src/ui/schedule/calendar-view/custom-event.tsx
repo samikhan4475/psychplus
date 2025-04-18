@@ -24,6 +24,7 @@ const eventSeparatorClassIndex = {
   [VisitMediumEnum.Unavailable]: 'bg-pp-states-error',
   [VisitMediumEnum.TeleVisit]: 'bg-pp-states-info',
   [VisitMediumEnum.Either]: 'bg-pp-states-info',
+  [VisitMediumEnum.Na]: 'bg-pp-states-error',
 }
 
 const eventContainerClassIndex = {
@@ -31,6 +32,7 @@ const eventContainerClassIndex = {
   [VisitMediumEnum.Unavailable]: 'bg-pp-red-100',
   [VisitMediumEnum.TeleVisit]: 'bg-pp-blue-100',
   [VisitMediumEnum.Either]: 'bg-primary-100',
+  [VisitMediumEnum.Na]: 'bg-pp-states-error',
 }
 
 const AppointmentEvent = ({

@@ -27,5 +27,6 @@ enum VisitMediumEnum {
   TeleVisit = 'TeleVisit',
   Unavailable = 'unavailable',
   Either = 'Either',
+  Na = 'NA'
 }
 export { VisitTypeEnum, VisitMediumEnum }

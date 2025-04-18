@@ -9,6 +9,7 @@ import {
   SelectInput,
 } from '@/components'
 import { Appointment, SelectOptionType } from '@/types'
+import { ProviderOptionParams } from '../../types'
 import { getProvidersOptionsAction } from '../client-actions/get-provider-options'
 import { SchemaType } from '../schema'
 import { useStore } from '../store'
@@ -21,7 +22,7 @@ const ProviderDropdown = ({
   disabled: boolean
 }) => {
   const form = useFormContext<SchemaType>()
-  const isFollowupDenied = useStore(state => state.isFollowupDenied)
+  const isFollowupDenied = useStore((state) => state.isFollowupDenied)
   const [options, setOptions] = useState<SelectOptionType[]>([])
   const [loading, setLoading] = useState<boolean>(false)
   const [location, providerId] = useWatch({
@@ -32,10 +33,20 @@ const ProviderDropdown = ({
   useEffect(() => {
     if (!location || !appointment?.providerType) return
     setLoading(true)
-    getProvidersOptionsAction({
-      locationId: location,
-      providerType: appointment?.providerType,
-    }).then((res) => {
+    let payload: Partial<ProviderOptionParams> = {}
+    if (appointment.isServiceTimeDependent) {
+      payload = {
+        locationIds: [location],
+        providerType: appointment.providerType,
+      }
+    } else {
+      payload = {
+        locationIds: [location],
+        maxSlotsLookoutDays: 28,
+        isRequiredStaffWithSlots: true,
+      }
+    }
+    getProvidersOptionsAction(payload).then((res) => {
       setLoading(false)
       if (res.state === 'error') return
       setOptions(res.data)

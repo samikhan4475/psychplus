@@ -7,7 +7,10 @@ import { Location, LocationSearchParams } from '@/types'
 const searchLocationOptionsAction = async (
   params: Partial<LocationSearchParams>,
 ): Promise<api.ActionResult<{ label: string; value: string }[]>> => {
-  const response = await api.POST<Location[]>(`${LOCATION_ENDPOINT}?orderBy=name`, params)
+  const response = await api.POST<Location[]>(
+    `${LOCATION_ENDPOINT}?orderBy=name`,
+    params,
+  )
   if (response.state === 'error') {
     return {
       state: 'error',

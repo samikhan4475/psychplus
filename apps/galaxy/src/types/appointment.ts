@@ -166,6 +166,7 @@ interface Appointment {
   isPrimaryNoteSigned?: boolean
   providerFullName?: string
   isQuickNoteSigned?: boolean
+  isFollowupCreatedforTimedService?: boolean
   lastSeenByProvider?:string
   lastSeenByProviderName?:{
     firstName?: string

@@ -196,6 +196,7 @@ const QuickNotesSignButton = ({
       signPayload.isAllowedFollowupForNextAvailableSlot = true
       signPayload.autoFollowUpDate = getAutoFollowupDate(
         appointment.visitTypeCode ?? '',
+        appointment.isServiceTimeDependent,
       )
     }
   }

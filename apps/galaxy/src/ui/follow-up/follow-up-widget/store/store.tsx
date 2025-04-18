@@ -6,7 +6,11 @@ import { AppointmentParams } from '@/ui/schedule/types'
 import { getDateString } from '@/ui/schedule/utils'
 import { updateFollowupDenialStatus } from '../actions'
 import { FOLLOW_UP_DENIED_REASON_ERROR } from '../constants'
-import { getCalendarDateTimeFromUTC, getDefaultNext } from '../utils'
+import {
+  getCalendarDateTimeFromUTC,
+  getDefaultNext,
+  isFollowupScheduled,
+} from '../utils'
 
 interface StoreState {
   data?: Appointment[]
@@ -37,7 +41,10 @@ interface StoreState {
   isFollowupDeniedWithoutReason: () => boolean
   isFollowupDeniedWithReason: () => boolean
   isFollowupRequired: () => boolean
-  getAutoFollowupDate: (visitTypeCode: string) => string | undefined
+  getAutoFollowupDate: (
+    visitTypeCode: string,
+    isServiceTimeDependent: boolean,
+  ) => string | undefined
 }
 
 const useStore = create<StoreState>((set, get) => ({
@@ -52,7 +59,7 @@ const useStore = create<StoreState>((set, get) => ({
   setData: (data) =>
     set({
       data,
-      isFollowupExists: data.length > 0,
+      isFollowupExists: isFollowupScheduled(data),
     }),
 
   search: async (payload: AppointmentParams) => {
@@ -75,7 +82,7 @@ const useStore = create<StoreState>((set, get) => ({
     set({
       data: result.data,
       loading: false,
-      isFollowupExists: result.data.length > 0,
+      isFollowupExists: isFollowupScheduled(result.data),
     })
   },
 
@@ -160,13 +167,20 @@ const useStore = create<StoreState>((set, get) => ({
     return !isFollowupDenied && !isFollowupExists
   },
 
-  getAutoFollowupDate: (visitTypeCode) => {
-    const defaultFollowupWeeks = getDefaultNext(visitTypeCode).split(' ')[0]
+  getAutoFollowupDate: (visitTypeCode, isServiceTimeDependent) => {
+    const [offset, type] = getDefaultNext(
+      visitTypeCode,
+      isServiceTimeDependent,
+    ).split(' ')
     const appointmentDate = get().appointmentDate
     const calendarDateTime = getCalendarDateTimeFromUTC(appointmentDate)
-    const fourteenDaysFromAppointmentDate = calendarDateTime?.add({
-      weeks: +defaultFollowupWeeks,
-    })
+    const fourteenDaysFromAppointmentDate = calendarDateTime?.add(
+      type === 'week'
+        ? {
+            weeks: +offset,
+          }
+        : { days: +offset },
+    )
     return getDateString(fourteenDaysFromAppointmentDate)
   },
 }))

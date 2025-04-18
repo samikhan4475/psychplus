@@ -7,6 +7,7 @@ import { useForm, type SubmitHandler } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { useShallow } from 'zustand/react/shallow'
 import { FormContainer } from '@/components'
+import { VisitMediumEnum } from '@/enum'
 import { Appointment, BookVisitPayload } from '@/types'
 import { getBookedAppointmentsAction } from '@/ui/schedule/client-actions'
 import { bookVisitAction } from '@/ui/visit/client-actions'
@@ -20,6 +21,7 @@ import {
   FollowupDenialReason,
   LocationDropdown,
   ProviderDropdown,
+  VisitMediumDropdown,
 } from './form-fields'
 import { NextDropdown } from './form-fields/next-dropdown'
 import { schema, SchemaType } from './schema'
@@ -70,6 +72,7 @@ const FollowUpForm = ({
       next: '4 week',
       location: undefined,
       providerId: undefined,
+      type: VisitMediumEnum.TeleVisit,
     },
   })
 
@@ -90,11 +93,16 @@ const FollowUpForm = ({
     setAppointmentDate(data.appointmentDate)
     setFollowupDenialReason(data.followUpDenialReason ?? '')
     setIsFollowupDenied(data.isFollowupDenied ?? false)
+    if (data.isServiceTimeDependent) {
+      form.resetField('providerId', { defaultValue: `${data.providerId}` })
+    }
     form.resetField('next', {
-      defaultValue: getDefaultNext(data.visitTypeCode ?? ''),
+      defaultValue: getDefaultNext(
+        data.visitTypeCode ?? '',
+        data.isServiceTimeDependent,
+      ),
     })
     form.setValue('location', data.locationId)
-    form.resetField('providerId', { defaultValue: `${data.providerId}` })
     setLoading(false)
   }
 
@@ -128,6 +136,9 @@ const FollowUpForm = ({
       visitFrequency: `${sanitizedData.visitFrequency}`,
       isNewAdmissionIdRequired: !appointment?.isServiceTimeDependent,
       consultationDate: appointment?.appointmentDate,
+      type: appointment?.isServiceTimeDependent
+        ? sanitizedData.type
+        : data.type,
     }).then((res) => {
       if (res.state === 'error') {
         if (res.status) {
@@ -170,9 +181,14 @@ const FollowUpForm = ({
         <FollowupDenialReason />
       </Flex>
       <Flex align="center" gap="2">
-        <NextDropdown />
-        <LocationDropdown disabled={loading} />
-        <ProviderDropdown appointment={appointment} disabled={loading} />
+        <NextDropdown appointment={appointment} />
+        {!appointment?.isServiceTimeDependent && (
+          <>
+            <LocationDropdown appointment={appointment} disabled={loading} />
+            <VisitMediumDropdown />
+            <ProviderDropdown appointment={appointment} disabled={loading} />
+          </>
+        )}
 
         <CreateFollowUpButton loading={loading} onSubmit={onSubmit} />
         <CalenderView

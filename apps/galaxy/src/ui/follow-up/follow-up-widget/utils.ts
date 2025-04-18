@@ -10,7 +10,7 @@ import {
   VisitSequenceTypes,
   VisitTypes,
 } from '@/types'
-import { isHospitalCareVisit } from '@/utils'
+import { isHospitalCareVisit, VisitTypeEnum } from '@/utils'
 import { NEXT_OPTIONS } from './constants'
 
 const removeEmptyValues = (obj: Record<string, any>): Record<string, any> => {
@@ -192,15 +192,18 @@ const shouldDisableFollowUpButton = (
   visitType: string,
   visitSequence: VisitSequenceTypes,
 ): boolean => {
-  if (!isHospitalCareVisit(visitType)) return false;
+  if (!isHospitalCareVisit(visitType)) return false
 
   return (
     visitSequence === VisitSequenceTypes.Discharge ||
     visitSequence === VisitSequenceTypes.InitialDischarge
-  );
-};
+  )
+}
 
-const getDefaultNext = (visitType: string) => {
+const getDefaultNext = (visitType: string, isServiceTimeDependent: boolean) => {
+  if (!isServiceTimeDependent) {
+    return '2 day'
+  }
   switch (visitType) {
     case VisitTypes.IndividualPsychotherapy:
     case VisitTypes.FamilyPsychotherapy:
@@ -209,10 +212,27 @@ const getDefaultNext = (visitType: string) => {
     case VisitTypes.Spravato:
     case VisitTypes.Ect:
     case VisitTypes.KetamineFourVisit:
-      return "1 week" 
+      return '1 week'
     default:
-      return "4 week"
+      return '4 week'
   }
+}
+
+const isFollowupScheduled = (data: Appointment[]): boolean => {
+  let isFollowupExists = false
+
+  if (data.length > 0) {
+    if (data[0].isFollowupCreatedforTimedService) {
+      isFollowupExists = true
+    } else {
+      const tcmFollowupVisit = data.find(
+        (followup) => followup.visitTypeCode === VisitTypeEnum.TransitionalCare,
+      )
+      isFollowupExists = !!tcmFollowupVisit
+    }
+  }
+
+  return isFollowupExists
 }
 
 export {
@@ -224,4 +244,5 @@ export {
   getCalendarDateTimeFromUTC,
   shouldDisableFollowUpButton,
   getDefaultNext,
+  isFollowupScheduled,
 }

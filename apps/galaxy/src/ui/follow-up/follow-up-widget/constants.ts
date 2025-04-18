@@ -61,6 +61,33 @@ const NEXT_OPTIONS = [
   },
 ]
 
+const NEXT_OPTIONS_UNTIMED = [
+  {
+    value: '1 day',
+    label: '1 day',
+  },
+  {
+    value: '2 day',
+    label: '2 day',
+  },
+  {
+    value: '3 day',
+    label: '3 day',
+  },
+  {
+    value: '4 day',
+    label: '4 day',
+  },
+  {
+    value: '5 day',
+    label: '5 day',
+  },
+  {
+    value: '6 day',
+    label: '6 day',
+  },
+]
+
 const DELETE_FOLLOWUP_PERMISSION =
   'You do not have permission to delete a followup. Please contact your supervisor if you need any further assistance'
 
@@ -71,4 +98,5 @@ export {
   NEXT_OPTIONS,
   DELETE_FOLLOWUP_PERMISSION,
   FOLLOW_UP_DENIED_REASON_ERROR,
+  NEXT_OPTIONS_UNTIMED,
 }
