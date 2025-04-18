@@ -6,6 +6,7 @@ import { AimsView } from './aims-view'
 import { questionnaireViewConstants } from './constant'
 import { CssrsView } from './cssrs-view'
 import { MocaView } from './moca-view'
+import { Psc17View } from './psc-17-view'
 import { QuestionnaireViewCommon } from './questionnaires-view'
 import { SnapIvView } from './snap-iv-view'
 import { YBocView } from './y-boc-view'
@@ -30,6 +31,8 @@ const QuestionnaireDetailView = ({
     switch (sectionName) {
       case 'QuicknoteSectionQuestionnaireSnapIV':
         return <SnapIvView data={data} />
+      case 'QuicknoteSectionQuestionnairePsc17':
+        return <Psc17View data={data} />
       case 'QuicknoteSectionQuestionnaireYbocs':
         return <YBocView data={data} />
       case 'QuicknoteSectionQuestionnaireAims':

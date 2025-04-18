@@ -16,6 +16,12 @@ import {
 import { SCORE_INTERPRETATION_RANGES_ORIENTATION } from '../../moca-tab/constants'
 import { SCORE_INTERPRETATION_RANGES as PCL5_SCORE_INTERPRETATION_RANGES } from '../../pcl-5-tab/constants'
 import { SCORE_INTERPRETATION_RANGES as PHQ9_SCORE_INTERPRETATION_RANGES } from '../../phq-9-tab/constants'
+import {
+  PSC_17_SECTIONS,
+  SCORE_INTERPRETATION_RANGES_ATTENTION,
+  SCORE_INTERPRETATION_RANGES_EXTERNALIZING,
+  SCORE_INTERPRETATION_RANGES_INTERNALIZING,
+} from '../../psc-17-tab/constants'
 import { getBadgeColor, getRange, ScoreInterpretationRange } from '../../shared'
 import { ViewButton } from '../../shared/view/view-button'
 import {
@@ -218,6 +224,19 @@ const scoreInterpretationRanges = (
         return SCORE_INTERPRETATION_RANGES_OPPOSITION
       case SNAP_IV_SECTIONS.Hyperactivity:
         return SCORE_INTERPRETATION_RANGES_HYPERACTIVITY
+      default:
+        return []
+    }
+  }
+
+  if (label === QuestionnaireTabs.PSC_17_TAB) {
+    switch (sectionName) {
+      case PSC_17_SECTIONS.Attention:
+        return SCORE_INTERPRETATION_RANGES_ATTENTION
+      case PSC_17_SECTIONS.Internalizing:
+        return SCORE_INTERPRETATION_RANGES_INTERNALIZING
+      case PSC_17_SECTIONS.Externalizing:
+        return SCORE_INTERPRETATION_RANGES_EXTERNALIZING
       default:
         return []
     }

@@ -2,6 +2,7 @@ import { PropsWithChildren } from 'react'
 import { QuickNoteSectionItem } from '@/types'
 import { FillOutTabsView } from '@/ui/questionnaires/shared'
 import { QuickNoteSectionName } from '@/ui/quicknotes/constants'
+import { FilloutPsc17 } from './fill-out-psc-17'
 import { FilloutSnap4 } from './fill-out-snap4'
 import { FilloutAims } from './fill-out-view-aims'
 import { FilloutCommon } from './fill-out-view-common'
@@ -19,6 +20,8 @@ const FillOutView = ({ data, sectionName }: FillOutProps) => {
     switch (sectionName) {
       case 'QuicknoteSectionQuestionnaireSnapIV':
         return <FilloutSnap4 data={data} sectionName={sectionName} />
+      case 'QuicknoteSectionQuestionnairePsc17':
+        return <FilloutPsc17 data={data} sectionName={sectionName} />
       case 'QuicknoteSectionQuestionnaireYbocs':
         return <FilloutYboc data={data} sectionName={sectionName} />
       case 'QuicknoteSectionQuestionnaireAims':

@@ -48,6 +48,10 @@ const BLOCK_OPTIONS = [
     label: QuestionnaireTabs.C_SSRS_TAB,
     value: QuickNoteSectionName.QuickNoteSectionCssrs,
   },
+  {
+    label: QuestionnaireTabs.PSC_17_TAB,
+    value: QuickNoteSectionName.QuickNoteSectionPsc17,
+  },
 ]
 
 export { BLOCK_TITLE, BLOCK_OPTIONS }

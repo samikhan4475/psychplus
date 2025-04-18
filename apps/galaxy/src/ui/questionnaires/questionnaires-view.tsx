@@ -16,6 +16,7 @@ import { HamDTab } from './ham-d-tab'
 import { MocaTab } from './moca-tab'
 import { Pcl5Tab } from './pcl-5-tab'
 import { Phq9Tab } from './phq-9-tab'
+import { Psc17Tab } from './psc-17-tab'
 import { SnapIvTab } from './snap-iv-tab'
 import { useStore } from './store'
 import { YBocsTab } from './y-bocs-tab'
@@ -85,6 +86,9 @@ const QuestionnairesView = ({ data, patientId }: QuestionnairesViewProps) => {
           <TabsTrigger value={QuestionnaireTabs.C_SSRS_TAB}>
             {QuestionnaireTabs.C_SSRS_TAB}
           </TabsTrigger>
+          <TabsTrigger value={QuestionnaireTabs.PSC_17_TAB}>
+            {QuestionnaireTabs.PSC_17_TAB}
+          </TabsTrigger>
         </Tabs.List>
         <Flex className="flex-1 border-b border-gray-5" />
       </Flex>
@@ -123,6 +127,9 @@ const QuestionnairesView = ({ data, patientId }: QuestionnairesViewProps) => {
       </TabsContent>
       <TabsContent value={QuestionnaireTabs.C_SSRS_TAB}>
         <CssrsTab patientId={patientId} data={data} />
+      </TabsContent>
+      <TabsContent value={QuestionnaireTabs.PSC_17_TAB}>
+        <Psc17Tab patientId={patientId} data={data} />
       </TabsContent>
     </Tabs.Root>
   )

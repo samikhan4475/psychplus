@@ -14,12 +14,16 @@ interface ScoreInterpretationProps {
   ranges: ScoreInterpretationRange[]
   totalScore: number
   isRanges?: boolean
+  showScoreLabel?: boolean
+  heading?: string
 }
 
 const ScoreInterpretation = ({
   ranges,
   totalScore,
   isRanges = true,
+  showScoreLabel = true,
+  heading = 'Score Interpretation',
 }: ScoreInterpretationProps) => {
   const currentRange = getRange(ranges, totalScore)
 
@@ -32,7 +36,7 @@ const ScoreInterpretation = ({
     >
       <Flex className="" gap="4">
         <Text weight="bold" size="2">
-          Score Interpretation
+          {heading}
         </Text>
         {isRanges &&
           ranges.map((range) => {
@@ -74,7 +78,7 @@ const ScoreInterpretation = ({
         >
           Score {totalScore}
         </Badge>
-        <Text size="1">{currentRange?.label}</Text>
+        {showScoreLabel && <Text size="1">{currentRange?.label}</Text>}
       </Flex>
     </Flex>
   )

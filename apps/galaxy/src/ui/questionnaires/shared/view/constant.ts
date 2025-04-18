@@ -51,6 +51,10 @@ const questionnaireViewDta = [
     questionnaireTab: QuestionnaireTabs.SNAP_IV_TAB,
   },
   {
+    sectionName: QuickNoteSectionName.QuickNoteSectionPsc17,
+    questionnaireTab: QuestionnaireTabs.PSC_17_TAB,
+  },
+  {
     sectionName: QuickNoteSectionName.QuickNoteSectionPcl5,
     labels: PCL5Labels,
     questions: PCL5Questions,

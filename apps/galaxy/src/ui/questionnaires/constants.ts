@@ -13,6 +13,7 @@ enum QuestionnaireTabs {
   MOCA_TAB = 'MOCA',
   HAM_D_TAB = 'HAM-D',
   C_SSRS_TAB = 'C-SSRS',
+  PSC_17_TAB = 'PSC-17',
 }
 
 enum QuestionnairesStatus {
@@ -37,6 +38,7 @@ enum QuestionnairesTitles {
   'MOCA' = 'Montreal Cognitive Assessment (MoCA)',
   'HAM-D' = 'Hamilton Depression Rating Scale (HAM-D)',
   'C-SSRS' = 'Columbia-Suicide Severity Rating Scale (C-SSRS)',
+  'PSC-17' = 'Pediatric Symptom Checklist-17 (PSC-17)',
 }
 
 const quickNotesSectionsTitles = {
@@ -62,6 +64,8 @@ const quickNotesSectionsTitles = {
     'Drug Abuse Screening Test (DAST-10)',
   [QuickNoteSectionName.QuickNoteSectionCssrs]:
     'Columbia-Suicide Severity Rating Scale (C-SSRS)',
+  [QuickNoteSectionName.QuickNoteSectionPsc17]:
+    'Pediatric Symptom Checklist-17 (PSC-17)',
 }
 
 export {
