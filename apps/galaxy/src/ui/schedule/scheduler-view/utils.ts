@@ -1,7 +1,14 @@
-import { getLocalTimeZone, parseAbsolute, startOfWeek, today } from '@internationalized/date'
-import { AppointmentDate, SlotsByDay } from './types'
-import { START_OF_WEEK_LOCALE } from '../constants'
+import {
+  CalendarDate,
+  getLocalTimeZone,
+  parseAbsolute,
+  startOfWeek,
+  today,
+} from '@internationalized/date'
 import { DateValue } from 'react-aria-components'
+import { START_OF_WEEK_LOCALE } from '../constants'
+import { getCalendarDateFromUtc } from '../utils'
+import { AppointmentDate, SlotsByDay } from './types'
 
 const extractDate = (dateString: string, timezone: string) => {
   const zonedDate = parseAbsolute(dateString, timezone)
@@ -23,8 +30,8 @@ const currentWeekTotalSlots = (days: AppointmentDate[], slots: SlotsByDay) => {
 
 const extractTime = (dateString: string, timezone: string) => {
   const zonedCalendarDate = parseAbsolute(dateString, timezone)
-  const hours = `${zonedCalendarDate.hour}`.padStart(2, "0")
-  const minutes = `${zonedCalendarDate.minute}`.padStart(2, "0")
+  const hours = `${zonedCalendarDate.hour}`.padStart(2, '0')
+  const minutes = `${zonedCalendarDate.minute}`.padStart(2, '0')
   return `${hours}:${minutes}`
 }
 
@@ -44,11 +51,15 @@ const getCurrentWeekStart = (): Date => {
   return new Date(weekStartDate.toString())
 }
 
-  const getMaxDaysOutToLookFor = (start?: DateValue, end?: DateValue) => {
-    if (!end) return
-    const startingDate = start ? start : today(getLocalTimeZone())
-    return Math.abs(end.compare(startingDate)) + 1
-  }
+const getMaxDaysOutToLookFor = (start?: DateValue, end?: DateValue) => {
+  if (!end) return
+  const startingDate = start ? start : today(getLocalTimeZone())
+  return Math.abs(end.compare(startingDate)) + 1
+}
+
+const getNext90thDay = (startingDate: string | undefined): CalendarDate =>
+  getCalendarDateFromUtc(startingDate)?.add({ days: 90 }) ??
+  today(getLocalTimeZone()).add({ days: 90 })
 
 export {
   extractDate,
@@ -57,4 +68,5 @@ export {
   nextWeekTotalSlots,
   getCurrentWeekStart,
   getMaxDaysOutToLookFor,
+  getNext90thDay,
 }

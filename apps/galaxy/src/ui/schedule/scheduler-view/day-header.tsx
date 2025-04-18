@@ -1,14 +1,18 @@
 'use client'
 
 import { useEffect } from 'react'
-import { parseAbsoluteToLocal, startOfWeek } from '@internationalized/date'
+import {
+  parseAbsoluteToLocal,
+  parseDate,
+  startOfWeek,
+} from '@internationalized/date'
 import { Box, Flex, Grid, Text } from '@radix-ui/themes'
 import { addDays } from 'date-fns'
 import { cn } from '@/utils'
 import { START_OF_WEEK_LOCALE } from '../constants'
 import { NavigationButton } from './navigation-button'
 import { useStore } from './store'
-import { getCurrentWeekStart } from './utils'
+import { getCurrentWeekStart, getNext90thDay } from './utils'
 
 const DayHeader = ({
   offsetStartDate,
@@ -20,6 +24,10 @@ const DayHeader = ({
   const appointmentDates = useStore((state) => state.dates)
   const setAppointmentDates = useStore((state) => state.setDates)
   const serverProviderAvailabilities = useStore((state) => state.data)
+  const formData = useStore((state) => state.formData)
+  const fetchNext90DaySlots = useStore(
+    (state) => state.fetchNextSlotsOnNavigation,
+  )
 
   useEffect(() => {
     if (offsetStartDate) {
@@ -37,6 +45,15 @@ const DayHeader = ({
   const handleForwardNavigation = () => {
     const nextDay = addDays(appointmentDates[0].date, 1)
     setAppointmentDates(nextDay, noOfDays)
+
+    if (!formData?.maxDaysOutToLook) {
+      const next90thDay = getNext90thDay(formData?.startingDate)
+      const isoDateString = nextDay.toISOString().split("T")[0]
+      const nextCalendarDate = parseDate(isoDateString)
+      if (nextCalendarDate.compare(next90thDay) === 1) {
+        fetchNext90DaySlots(nextDay.toISOString())
+      }
+    }
   }
 
   const handleBackwardNavigation = () => {

@@ -19,7 +19,7 @@ import { CategoryValue, SCHEDULER_VIEW_FILTERS_KEY } from '../constants'
 import { AvailableSlotsParams } from '../types'
 import { getStringifiedValue } from '../utils'
 import { searchAppointmentsAction } from './actions/search-appointments'
-import { transformSettingToParams } from './transform'
+import { mergeRecords, transformSettingToParams } from './transform'
 import { AppointmentAvailability, AppointmentDate } from './types'
 
 interface Store {
@@ -33,11 +33,12 @@ interface Store {
   settingMap: Map<string, UserSetting>
   setDays?: (arg: Date) => void
   fetchAppointments: (params?: AvailableSlotsParams) => void
-  setDates: (value: Date, noOfDays?: number) => void
+  setDates: (value: Date, noOfDays?: number) => AppointmentDate[]
   fetchUserSettings: () => Promise<Map<string, UserSetting> | undefined>
   fetchDataWithSettings: (map: Map<string, UserSetting>) => void
   updateUserFilterSettings: (params: AvailableSlotsParams) => void
   setPersistedFormData: (data: AvailableSlotsParams) => void
+  fetchNextSlotsOnNavigation: (startDate: string) => void
 }
 
 const useStore = create<Store>()(
@@ -77,6 +78,7 @@ const useStore = create<Store>()(
         set({
           dates: createDays(startDate, noOfDays),
         })
+        return createDays(startDate, noOfDays)
       },
       fetchUserSettings: async () => {
         const result = await getSelfUserSettings(CategoryValue.SchedulerView)
@@ -164,6 +166,30 @@ const useStore = create<Store>()(
       setPersistedFormData: (data) => {
         set({
           persistedFormData: data,
+        })
+      },
+      fetchNextSlotsOnNavigation: async (startDate) => {
+        set({
+          error: undefined,
+          loading: true,
+        })
+        const params = { ...(get().formData ?? {}) }
+        const result = await searchAppointmentsAction({
+          ...params,
+          maxDaysOutToLook: 90,
+          startingDate: startDate,
+        })
+        if (result.state === 'error') {
+          toast.error(result.error || 'Failed to retrieve available slots')
+          return set({
+            error: result.error,
+            loading: false,
+          })
+        }
+
+        set({
+          data: mergeRecords([...get().data, ...(result.data || [])]),
+          loading: false,
         })
       },
     }),

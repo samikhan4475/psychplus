@@ -9,6 +9,7 @@ import { UserSetting } from '@/types'
 import { AvailableSlotsParams, FilterValue } from '../types'
 import { getCalendarDateFromUtc, getDateString } from '../utils'
 import { SchemaType } from './schema'
+import { AppointmentAvailability } from './types'
 import { getMaxDaysOutToLookFor } from './utils'
 
 const dateFields = ['startingDate']
@@ -109,10 +110,32 @@ const transformParamsToFilterValues = (
   }
 }
 
+const mergeRecords = (
+  slots: AppointmentAvailability[],
+): AppointmentAvailability[] => {
+  const seenRecords: { [key: string]: AppointmentAvailability } = {}
+  slots.forEach((availability) => {
+    const key = `${availability.specialist.id}-${availability.clinic.id}`
+    if (seenRecords[key]) {
+      seenRecords[key] = {
+        ...seenRecords[key],
+        allSlotsByDay: {
+          ...seenRecords[key].allSlotsByDay,
+          ...availability.allSlotsByDay,
+        },
+      }
+    } else {
+      seenRecords[key] = availability
+    }
+  })
+  return Object.values(seenRecords)
+}
+
 export {
   transformSettingContent,
   transformSettingToParams,
   transformSettingToFilterValues,
   transformFilterValues,
   transformParamsToFilterValues,
+  mergeRecords,
 }

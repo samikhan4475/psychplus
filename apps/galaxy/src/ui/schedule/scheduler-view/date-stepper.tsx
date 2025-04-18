@@ -1,13 +1,19 @@
 'use client'
 
+import { parseDate } from '@internationalized/date'
 import { Box, Flex, Text } from '@radix-ui/themes'
 import { addDays } from 'date-fns'
 import { NavigationButton } from './navigation-button'
 import { useStore } from './store'
+import { getNext90thDay } from './utils'
 
 const DateStepper = ({ noOfDays = 13 }: { noOfDays?: number }) => {
   const appointmentDates = useStore((state) => state.dates)
   const setAppointmentDates = useStore((state) => state.setDates)
+  const formData = useStore((state) => state.formData)
+  const fetchNext90DaySlots = useStore(
+    (state) => state.fetchNextSlotsOnNavigation,
+  )
   const endDateIndex = appointmentDates.length - 1
 
   const stepForward = () => {
@@ -15,7 +21,20 @@ const DateStepper = ({ noOfDays = 13 }: { noOfDays?: number }) => {
       appointmentDates[0].date,
       appointmentDates.length,
     )
-    setAppointmentDates(nextWeekDay, noOfDays)
+    const updatedDays = setAppointmentDates(nextWeekDay, noOfDays)
+
+    if (!formData?.maxDaysOutToLook) {
+      const next90thDay = getNext90thDay(formData?.startingDate)
+      const dayAfter90th = updatedDays.find(({ date }) => {
+        const isoDateString = date.toISOString().split('T')[0]
+        const calendarDate = parseDate(isoDateString)
+        return calendarDate.compare(next90thDay) === 1
+      })
+
+      if (dayAfter90th) {
+        fetchNext90DaySlots(dayAfter90th.date.toISOString())
+      }
+    }
   }
 
   const stepBackward = () => {
